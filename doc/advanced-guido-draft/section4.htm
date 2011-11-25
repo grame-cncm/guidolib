@@ -1,0 +1,403 @@
+<!-- hh: update section numbers: 3.xx -> 4.xx -->
+
+<A NAME="spc"></A>
+<H2> 4 Exact Spacing and Score Formatting</H2>
+
+<H3> 4.1 Page layout and spacing</H3>
+
+<H4> 4.1.1 \units</H4>
+The \units tag specifies the physical units in which absolute 
+dimensions are specified per default.
+
+<P>\units&lt;s>
+
+<P><B><I>Parameters</I></B>
+<UL>
+<LI>
+<I>type<B> </B></I>- one of "mm","cm","m","in","pt","pc","hs".</LI>
+<UL><LI>"mm" - millimeter</LI>
+<LI>"cm" - centimeter</LI>
+<LI>"m" - meter</LI>
+<LI>"in" - inch</LI>
+<LI>"pt" - point</LI>
+<LI>"pc" - pica</LI>
+<LI>"hs" means halfspaces of the current staff.</LI>
+</UL>
+<B><I>Default: "cm"</I></B>
+</UL>
+
+<P><B><I>Range</I></B>: none
+
+<P><B><I>Remarks:</I></B>
+<UL>
+<LI>The \unit tag should be specified at the beginning of the 
+  piece, preferably before the first note of the first voice.
+</UL
+
+<P><B><I>Example:</I></B>
+
+<P>{ [ \units&lt;"in"> ... ] }
+
+<H4>4.1.2 \pageFormat</H4>
+The \pageFormat is used to specify the physical size 
+of the output pages and to define the printable area.
+
+<P>\pageFormat&lt;type>
+<BR>\pageFormat&lt;type,lm,tm,rm,bm>
+<BR>\pageFormat&lt;w,h,lm,tm,rm,bm>
+
+<P><B><I>Parameters:</I></B>
+<UL>
+<LI>
+<B><I>type</I></B>- paper type, one of "A4","A3","letter". </LI>
+
+<LI>
+<B><I>w,h</I></B>: width and height;
+if no units are specfied, the units specified by 
+the \units tag are used.</LI>
+
+<LI>
+<B><I>lm,tm,rm,bm: </I></B>left, top, right, bottom
+page margins; if no units are specfied, the units specified by 
+the \units tag are used.</LI>
+</UL>
+
+<B><I>Defaults:&nbsp;</I></B> 
+If \pageFormat is not specified, "A4" is assumed.
+If the margins are not specified, the following values 
+are assumed as default-values: lm=2cm, rm=2cm, 
+tm=5cm, bm=3cm.
+
+<P><B><I>Range</I></B>: none
+
+<P><B><I>Remarks:</I></B> 
+<UL>
+<LI>
+The \pageFormat tag should be defined at the
+beginning of a piece before the the first note of the first
+voice. Later on, it should only be used at the
+beginning of pages (see \newpage)
+</UL>
+
+<P>
+<B><I>Examples:</I></B>
+
+
+<H4>4.1.3 \newPage</H4>
+
+The \newPage tag is used to specify exact locations 
+for pagebreaks. In pieces with multiple voices (segments),
+it should be consistently used in one specific voice
+(controlling voice).
+
+<P>
+<B><I>Parameters</I></B>: none
+
+<P>
+<B><I>Range</I></B>: none
+
+<P>
+<B><I>Examples:</I></B>
+
+
+<!-- use later for proportional spacing. better name??
+<H4>3.1.?? \spacing</H4>
+
+The \spacing tag relates metrical units (x dimension) to halfspaces (y
+dimension). When this tag is used, automatic spacing is turned off. If
+the \spacing tag is used, it applies to <B>all staves</B>, regardless in
+which voice it was specified. If multiple \spacing tags apply, the one
+with the largest extent will be used.
+
+<P>\spacing&lt;s>
+
+<P><B><I>Parameters:</I></B>
+<UL>
+<LI>
+<B><I>s</I></B> - string of the form "n/m=x", where n/m denotes a metrical
+unit like e.g. 1/4 and x is a float value in halfspaces.</LI>
+
+<BR>Was ist mit &lt;"auto"> ?</UL>
+
+<B><I>Range:</I></B> optional. If a range is specified, automatic spacing
+is turned off for the specified range.
+
+<P><B><I>Remarks: </I></B>The \spacing tag can be used to stretch measures
+or even single notes.
+
+<P><B><I>Examples:</I></B>
+<BR>{ [ \spacing&lt;"1/4=4.5"> c d e f ] } % a quarter note is now 4.5
+halfspaces wide.
+-->
+
+<H4>4.1.4 \space</H4>
+
+The \space tag is used to specify exact horizontal spacing 
+between notational elements. For multiple voices, voice 
+coordination is preseverved in the following way:
+if at a given metrical position, the information 
+provided by the \space tags occuring in the different 
+voices is incompatible, extra space is inserted where 
+needed. This can also happen, if in one of more voices
+no \space information occurs - in which case automatic
+spacing is used for these voices.
+However, spaces specified via \space are never compressed 
+or ignored.
+
+<P>\space&lt;dd>
+
+<P><B><I>Parameters:</I></B>
+<UL>
+<LI>
+<B><I>dd</I></B> - the horizontal distance that is inserted at the current
+position; if no units are specified, halfspaces of the
+current system are taken as default units.
+</LI>
+</UL>
+
+<P>
+<B><I>Range</I></B>: none
+
+<P><B><I>Remarks</I></B>: 
+<UL>
+<LI>
+The \space tag is also used to realise spacing
+before and after barlines, clefs, key signatures, etc.
+</UL>
+
+<P><B><I>Examples:</I></B>
+
+<P>{ [ c \space&lt;10.2> d ]&nbsp; }&nbsp; % forces 10.2 halfspaces between
+the c and the d.
+
+
+
+<H4>4.1.5 \staff</H4>
+
+<!--
+\staff<id,channel,port>
+-->
+
+As in Basic GUIDO,
+the \staff tag is used to assign the current voice to
+a staff. Here, an additional parameter is introduced
+to explicitly specify the vertical spacing between 
+staves.
+
+<P>\staff&lt;id,dy>
+
+<P><B><I>Parameters:</I></B>
+<UL>
+<LI>
+<B><I>id</I></B> (integer; obliatory) - 
+        specifies the number of the staff
+        the current voice is assigned to;
+        staves are numbered 1,2,etc.
+
+<LI>
+<B><I>dy</I></B> - vertical space between bottom line of this staff and
+top line of next staff; if no units are specified,
+the units defined by the \units tags are used.
+</LI>
+
+</UL>
+
+<P>
+<B><I>Range</I></B>: none.
+
+<P><B><I>Semantics:</I></B>
+If <I>dy</I> is specified, it defines the vertical space
+between the bottom line of staff <I>id</I> and
+the top line of the next staff. The next staff
+is the one which occurred next to the first occurrence
+of staff <I>id<</I>.
+
+
+<P><B><I>Remarks:</I></B>
+
+<P><B><I>Examples:</I></B>
+
+
+<H3>4.2 Staff and system layout</H3>
+
+The appearance and format of a system and staff can 
+be specified using the following tags.
+
+
+<H4>4.2.1 \staffFormat</H4>
+The \staffFormat tag can be used to specify the format 
+and size of the current staff.
+
+<P>\staffFormat&lt;style,size>
+
+<P><B><I>Parameters:</I></B>
+<UL>
+<LI>
+<B><I>style</I></B> - either "standard" or "n-line", where 
+n is an integer from 0 to 7(?).</LI>
+<B><I>Default: "standard"</I></B>
+
+<LI>
+<B><I>size</I></B> - a float number, defining the size
+of one halfspace in this system. If no units are specified,
+the units defined by the \units tag are used.
+<B><I>Default: 3pt (= ca. 1.0583mm) </I></B>
+</UL>
+
+<P>
+<B><I>Range:</I></B> none
+
+<P><B><I>Remarks:</I></B> 
+<UL>
+<LI>If the type is n-line, the lines
+are numbered from bottom to top (this is 
+important when using the \clef tag, e.g.).
+</UL>
+    
+<P><B><I>Examples:</I></B>
+
+<!--
+<PRE>What is this?&nbsp;&nbsp;&nbsp; % y ref.pos = lowest staff line</PRE>
+-->
+
+
+<H4>4.2.2 \accol</H4>
+
+The \accol tag is used to group 
+staves into accolades (staff groups).
+
+<P>\accol&lt;id,range,style>
+
+<P><B><I>Parameters:</I></B>
+<UL>
+<LI>
+<B><I>id</I></B> (integer or string; obligatory)
+        - identifier for the accolade group
+        specified by the tag.
+
+<LI>
+<B><I>range</I></B> (string; obligatory) - identifies the staff
+  which are partd of the accolade group
+  specified by this tag; the string is of the form
+  "<i>m-n</i>", where <i>m</i> and <i>n</i> are integers
+  identifying the staves which are part of this
+  accolade group. "<i>m</i>" can be used
+  synonymously to "<i>m-m</i>".
+
+<LI>
+<B><I>type</I></B> (string; optional) -
+  graphical appearance of the accolade
+  brace, one of "standard" = "straightBrace", 
+  "curlyBrace", "thinBrace", "none".
+  <BR><I>Default value:</i> "standard"
+</UL>
+
+<P>
+<B><I>Range</I></B>: none.
+
+
+<P><B><I>Remarks:</I></B>
+<UL>
+<LI>Accolades can arbitrarily
+        overlap but always involve consecutively
+        numbered staves.
+<LI>To specify the vertical spacing within and between
+  accolades, the \staff tag is used.
+</UL>
+
+<P><B><I>Examples:</I></B>
+
+
+
+<H4>4.2.3 \systemFormat</H4>
+The \systemFormat tag is used 
+for specifying which staves are displayed within the 
+system. It allows also to specify a horizontal displacement
+of the beginning of the system w.r.t. the left margin
+of the printable area.
+The \systemFormat
+tag should be used directly after a \newSystem tag.
+
+<P>\systemFormat&lt;staves,dx>
+
+<P><B><I>Parameters:</I></B>
+<UL>
+<LI>
+<B><I>staves </I></B>- A string of the form "1,3,5-8" 
+which specifies which staves to display. Inside this string,
+the staves are referred to by using the id as 
+specified by the \staff tag.
+If not specified, all staves are displayed.</LI>
+
+<LI>
+<B><I>dx</I></B> - The horizontal distance between
+beginning of the current system and the left margin of the printable area.
+If no units are specified, the units defined by the \units
+tag are used.</LI>
+<B><I>Default: 0</I></B>
+</UL>
+
+<P>
+<B><I>Range:</I></B> none
+
+<P><B><I>Remarks:</I></B> none
+
+<P><B><I>Examples:</I></B>
+
+
+<H4>4.2.4 \newSystem</H4>
+The \newSystem tag is used to explicitly specify system 
+breaks. \newSystem needs to be specified only in one voice,
+multiple occurrences at the same metrical position
+are interpreted as a single system break.
+
+<P>\newSystem
+<BR>\newSystem&lt;dy>
+
+<P><B><I>Parameters:</I></B>
+<UL>
+<LI>
+<B><I>dy</I></B> - The vertical distance between the top 
+of the current system to the
+top of the following system. The top of system is 
+given by the top line of the first staff.</LI>
+<BR>
+</UL>
+
+<P>
+<B><I>Range:</I></B> none
+
+<P><B><I>Remarks:</I></B> 
+<UL>
+For indentation of systems, the \systemFormat tag is used.
+</UL>
+
+<P><B><I>Examples:</I></B>
+
+<P>{ [&nbsp; c d e \newSystem c d e], [ c0 d e f \newSystem g h] }
+<BR>% this will create three systems with two staves each.
+
+
+<H4>4.2.4 \staffOff, \staffOn</H4>
+The \staffOff tag makes the current staff invisible
+starting from the position where it occurs
+until the next \staffOn is encountered.
+While the staff is invisible, all notational elements fixed
+to it (notes, rests, dynamic markings, etc.) 
+also become invisible.
+
+<P>\staffOff
+<BR>\staffOn
+
+<P><B><I>Parameters:</I></B> none
+
+<P><B><I>Range:</I></B> none
+
+<P><B><I>Remarks:</I></B> 
+<UL>
+For indentation of systems, the \systemFormat tag is used.
+</UL>
+
+<P><B><I>Examples:</I></B>
+
+

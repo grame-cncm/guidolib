@@ -1,0 +1,2 @@
+libmusicxml2.framework
+guido-max*

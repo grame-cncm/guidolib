@@ -1,0 +1,14 @@
+(* pageFormat-Sample.
+
+   In Version 0.3 all tagparameters can be
+   specified using arbitrary units (mm,cm,in,pt,pc).
+   When using the \pageFormat-Tag, it is recommended,
+   that units are specified, as the default unit
+   is halfspaces (half the space between to lines in
+   a staff).
+   You can use different units for different
+   parameters. *)
+
+[ \pageFormat<14cm,5in,2cm,1in,50mm,10pt>
+   c d e f g \newSystem 
+   c d e f g ]

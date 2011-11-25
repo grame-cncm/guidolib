@@ -1,0 +1,62 @@
+#!/bin/sh
+#
+
+[ $# = 1 ] || (echo usage: $0 VERSION && exit 1)
+
+system=$(uname -s)
+version=$1
+current=$(guidogetversion | cut -d' ' -f3)
+ignorefile=$current/ignore.$version.txt
+
+set $(make validate VERSION=$version | grep -v Validating | grep -v 'new file' | sed -e 's/#..*//' | sed -e 's/^open //')
+
+function show_mac {
+	open $1 $2
+}
+
+function show_linux {
+	xpdf $1 & 2>/dev/null > /dev/null
+	xpdf $2 & 2>/dev/null  > /dev/null
+}
+
+winread="/c/Program Files (x86)/Adobe/Reader 9.0/Reader/AcroRd32.exe"
+function show_windows {
+	"$winread" $(pwd)/$1 &
+	"$winread" $(pwd)/$2 &
+}
+
+
+if [ $system = "Darwin" ]
+then
+	show=show_mac
+	
+elif [ $system = Linux ]
+then
+	show=show_linux
+
+elif [ $system = MINGW32_NT-6.1 ]
+then
+	show=show_windows
+
+else
+	echo undefined system
+	exit 1
+fi
+
+echo > $ignorefile
+while [ $1 ]
+do
+	first=$1
+	shift
+	second=$1
+	shift
+	echo compare $first - $second	
+	$show $first $second
+	echo "false positive ?	[y/n]"
+	read ok
+	[ $ok = "y" ] && echo $first >> $ignorefile
+done
+
+exit 0
+
+

@@ -1,0 +1,13 @@
+% Release 0.8
+
+% beam.gmn
+
+% auto beam-breaking across line breaks
+% beams now are split (almost) correctly, when they
+% cross a linebreak.
+
+  [   \bm( c/16 e2) \bm( e c1) \stemsDown \beam( f g2) \bm (g f1) 
+   \stemsUp  \bm(c/16 d e/8 \newSystem  f ) \bm( c/8 d/16 e f/8 )
+   \bm( c/16 d e/8 f)  \bm(c/16 d e/8. f/16 )  
+   \bm(c/8 \newSystem d/16 e )  c/1 d e ] 
+   

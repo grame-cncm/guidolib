@@ -1,0 +1,10 @@
+GUIDO Max External history
+
+----------------------------------------------------------------
+version 1.01 - Nov. 2011
+- corrects a crash bug with GUIDO Engine v.1.4.6
+
+----------------------------------------------------------------
+version 1.00 - Oct. 2010
+- first release
+

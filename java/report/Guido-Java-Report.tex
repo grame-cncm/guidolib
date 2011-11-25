@@ -1,0 +1,307 @@
+
+\documentclass[a4paper]{article}
+
+\usepackage{pslatex}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{color}
+\usepackage{hyperref}
+%\usepackage{babel}
+
+
+\setlength{\paperheight}{29.7cm}
+\setlength{\textheight}{22cm}
+\setlength{\paperwidth}{21cm}
+\setlength{\textwidth}{15cm}
+\setlength{\columnsep}{1cm}
+
+\setlength{\headheight}{10mm}
+\setlength{\voffset}{-5mm}
+\setlength{\hoffset}{0mm}
+\setlength{\topmargin}{0mm}
+\setlength{\marginparwidth}{0mm}
+\setlength{\parindent}{0pt}
+\setlength{\oddsidemargin}{8mm}
+\setlength{\evensidemargin}{8mm}
+
+
+\setlength\parskip{\medskipamount}
+\setlength\parindent{0pt}
+
+\hypersetup{
+	colorlinks=true,
+	citecolor= blue,
+	linkcolor= blue,
+	urlcolor=blue
+}
+
+\newcommand{\code}[1]			{\texttt{#1}}
+\newcommand{\gline}			{\rule{\linewidth}{.2pt}\\}
+
+
+\makeatletter
+
+\begin{document}
+
+\title{GUIDO Engine Library \\ 
+{\huge The Java Native Interface}}
+
+
+\author{D. Fober\\
+{\small <fober@grame.fr>}
+}
+
+\date{}
+
+\maketitle
+
+%\vspace{5mm}
+\section{Introduction}
+
+The GUIDO Engine Library\footnote{\url{http://guidolib.sourceforge.net}} is a generic, portable library and C/C++ API for the graphical rendering of musical scores. The library is based on the GUIDO Music Notation Format as the underlying data format. It takes account of the conventional music notation system. The engine provides efficient automatic music score layout \cite{RENZ02} although exact score formatting could be specified at notation level. 
+
+The GUIDO Music Notation Format [GMN] is a formal language for score level music representation \cite{hoos98}. It is a plain-text, i.e. readable and platform independent format capable of representing all information contained in conventional musical scores. The basic GUIDO Format is very flexible and can be easily extended and adapted to capture a wide variety of musical features beyond conventional musical notation (CMN). The GUIDO design is strongly influenced by the objective to facilitate an adequate representation of musical material, from tiny motives up to complex symphonic scores. GUIDO is a general purpose musical notation format; the intended range of application includes notation software, compositional and analytical systems and tools, performance systems, and large musical databases.
+
+The GUIDO Engine takes place in the landscape of music notation systems where only a few systems provide similar features \cite{CMN,Hamel98,KUUSK06,lilypond03}. Compared to the other systems, the GUIDO Engine is the only framework that can be embedded into stand alone applications. In order to extend the range of potential applications, a Java Native Interface has been designed. This document presents the issues and the solution proposed to support the GUIDO Engine in a Java Virtual Machine [Java VM]. Next, it gives an overview of the Guido Java Interface, which is similar to the C/C++ API. The full documentation is given in appendix.
+
+
+\section{The GUIDO Java Native Interface}
+
+The main issue to support the GUIDO Engine in a Java Virtual Machine concerns the graphic environment and the way to draw on a graphic device. Actually and at low level, every software component makes use of native graphic device to draw on screen or to any other graphic device (a printer for example). These native devices depend on the host operating system (CGContext on MacOS X, GDI or GDIPlus on Windows, X Window, GTK, Cairo,... on Linux) and although the global features are generally equivalent, the implementation details makes the graphic source code platform dependent and non-portable.
+
+Since a Java Virtual Machine is platform independent, it requires to build an abstract layer over the native devices. With the Java language, this abstract layer is named AWT (Abstract Window Toolkit) and provides platform independence. However, since the GUIDO Engine is also platform independent, it provides its own graphic device abstraction, named  VGDevice (standing for Virtual Graphic Device). Thus the problem with the GUIDO Java Native Interface is to make these two abstract layers living together.
+
+\subsection{The AWT native interface}
+
+The Java 2 upgrade release introduces the \emph{"AWT Native Interface"}, which is an official way to obtain all the information needed about the peer of a Java Canvas so that one can draw directly to the Canvas from a native code library using the drawing routines provided by the operating system.
+
+The first step in hooking up a native rendering library to a Java Canvas is to define a new class that extends Canvas and overrides the paint method. The Java system routes all drawing operations for a Canvas object through the paint method, as it does for all other GUI objects.
+
+The new paint method, to be implemented in the native rendering library, must be declared as \code{public native void}, and the native library itself is loaded at runtime by including a call to \code{System.loadLibrary( "myRenderingLib")} in the static block of the class. \emph{"myRenderingLib"} is the name used for the native shared library.
+
+Here's a simple example of such a class:
+{\small \begin{verbatim}
+import java.awt.*;
+import java.awt.event.*;
+
+public class MyCanvas extends Canvas {
+ 
+    static {
+        System.loadLibrary("myRenderingLib");
+    }
+    public native void paint(Graphics g);
+
+    public static void main(String[] args) {
+        Frame f = new Frame();
+        f.setBounds(0, 0, 500, 110);
+        f.add( new MyCanvas() );
+        f.addWindowListener( new WindowAdapter() {
+            public void windowClosing(WindowEvent ev) { System.exit(0); }
+        } );
+        f.show();
+    }
+}
+\end{verbatim}
+}
+The next step is to run the \code{javah} tool on the \code{MyCanvas} class file above to generate a C/C++ header file that describes the interface to the native paint method that Java expects to be used. \code{javah} is a standard tool included with the Java 2 SDK.
+
+The final step is to write the native rendering method, with an interface that conforms to the header file that \code{javah} generated, and build it as a standard shared library (called myRenderingLib in the above example) by linking it against the jre awt library. This code will call back to the Java VM to get the drawing surface information it needs to access the \code{MyCanvas} peer. Once this information is available, the code can draw directly to \code{MyCanvas} using standard drawing routines supplied by the underlying operating system.
+
+Here is sample source code for a native paint method designed for use in a Solaris X11-based drawing environment and a Java VM where the AWT Native Interface is present:
+
+{\small \begin{verbatim}
+#include "MyCanvas.h"
+#include "jawt_md.h"
+
+/*
+ * Class:     MyCanvas
+ * Method:    paint
+ * Signature: (Ljava/awt/Graphics;)V
+ */
+JNIEXPORT void JNICALL Java_MyCanvas_paint (JNIEnv* env, jobject canvas, jobject graphics)
+{
+    JAWT awt;
+    JAWT_DrawingSurface* ds;
+    JAWT_DrawingSurfaceInfo* dsi;
+    JAWT_X11DrawingSurfaceInfo* dsi_x11;
+    jboolean result;
+    jint lock;
+    GC gc;
+    
+    const char	* testString = " rendered from native code ";
+
+    /* Get the AWT */
+    awt.version = JAWT_VERSION_1_3;
+    if (JAWT_GetAWT(env, &awt) == JNI_FALSE) {
+        printf("AWT Not found\n");
+        return;
+    }
+
+    /* Get the drawing surface */
+    ds = awt.GetDrawingSurface(env, canvas);
+    if (ds == NULL) {
+        printf("NULL drawing surface\n");
+        return;
+    }
+
+    /* Lock the drawing surface */
+    lock = ds->Lock(ds);
+    if((lock & JAWT_LOCK_ERROR) != 0) {
+        printf("Error locking surface\n");
+        awt.FreeDrawingSurface(ds);
+        return;
+    }
+
+    /* Get the drawing surface info */
+    dsi = ds->GetDrawingSurfaceInfo(ds);
+    if (dsi == NULL) {
+        printf("Error getting surface info\n");
+        ds->Unlock(ds);
+        awt.FreeDrawingSurface(ds);
+        return;
+    }
+
+    /* Get the platform-specific drawing info */
+    dsi_x11 = (JAWT_X11DrawingSurfaceInfo*)dsi->platformInfo;
+
+    /* Now paint */
+    gc = XCreateGC(dsi_x11->display, dsi_x11->drawable, 0, 0);
+    XDrawImageString (dsi_x11->display, dsi_x11->drawable, gc,
+                      100, 110, testString, strlen(testString));
+    XFreeGC(dsi_x11->display, gc);
+
+    /* Free the drawing surface info */
+    ds->FreeDrawingSurfaceInfo(dsi);
+
+    /* Unlock the drawing surface */
+    ds->Unlock(ds);
+
+    /* Free the drawing surface */
+    awt.FreeDrawingSurface(ds);
+}
+\end{verbatim}
+}
+The key data structure here is JAWT: it provides access to all the information the native code needs to get the job done. The first part of the native method is boilerplate: it populates the JAWT structure, gets a \code{JAWT\_DrawingSurface} structure, locks the surface (only one drawing engine at a time), then gets a \code{JAWT\_DrawingSurfaceInfo} structure that contains a pointer (in the platformInfo field) to the necessary platform-specific drawing information. It also includes the bounding rectangle of the drawing surface and the current clipping region.
+
+The structure of the information pointed to by platformInfo is defined in a machine-dependent header file called jawt\_md.h. For Solaris/X11 drawing, it includes information about the X11 display and X11 drawable associated with \code{MyCanvas}. After the drawing operations are completed, there is more boilerplate code as \code{JAWT\_DrawingSurfaceInfo} is freed and \code{JAWT\_DrawingSurface} is unlocked and freed.
+
+The corresponding code for the Windows platform would be structured similarly, but would include the version of jawt\_md.h for Windows 32 and the structure located in the platformInfo field of drawing surface info would be cast as a \code{JAWT\_Win32DrawingSurfaceInfo*}. And, of course, the actual drawing operations would need to be changed to those appropriate for the Windows platform.
+
+The problem with the above code (provided by Sun Microsystems, Inc.), is that the \code{jobject graphics} parameter, corresponding to the actual \code{java/awt/Graphics} context is never used. The native graphic context is statically attached to the \code{Canvas} and always addresses the screen device. With this method, a printer graphic context is ignored and thus you cannot send your drawing to a printer.
+
+
+\subsection{The GUIDO Engine native interface}
+
+In order to avoid the above limitation, the GUIDO Engine native interface takes a different approach: it draws using a native device but offscreen, i.e. to a memory bitmap, and next copy this bitmap to a \code{java/awt/Graphics} context, making a real use of the Java \code{paint} method \code{Graphics} parameter. 
+
+First, a Java \code{guidoscore} provides a native method that can be called draw the score and to retrieve the offscreen bitmap data:
+{\small \begin{verbatim}
+/** Draws the score into a bitmap.
+	
+  Draws the score to an offscreen that is next copied to the destination bitmap.
+  @param dst the destination bitmap ARGB array
+  @param w the bitmap width
+  @param h the bitmap height
+  @param desc the score drawing descriptor
+  @param area clipping description
+  @param color the color used to draw the score
+*/
+public native final synchronized int  GetBitmap (int[] dst, int w, int h, 
+                      guidodrawdesc desc, guidopaint area, Color color);
+\end{verbatim}
+}
+Next, the \code{Draw} method makes use of any valid \code{Graphics} context to build an image from the bitmap data and to draw this image in the current graphic context:
+{\small \begin{verbatim}
+public synchronized int  Draw (Graphics g, int w, int h, 
+                     guidodrawdesc desc, guidopaint area, Color color) {
+  class foo implements ImageObserver {
+    public boolean	 imageUpdate(Image img, int flags, int x, int y, int width, int height) 
+                              { return true; }
+  }
+  BufferedImage img = new BufferedImage (w, h, BufferedImage.TYPE_4BYTE_ABGR_PRE);
+  int[] outPixels = new int[w*h];
+  int result = GetBitmap (outPixels, w, h, desc, new guidopaint(), color);
+  img.setRGB( 0, 0, w, h, outPixels, 0, w );
+  g.drawImage (img, 0, 0, new foo());
+  return result;
+}
+\end{verbatim}
+}
+
+The native implementation is completely disconnected from the Java AWT native interface. 
+It uses the GUIDO Engine abstract layer to draw the score offscreen and finally copy the offscreen 
+bitmap data to a Java array.
+
+{\small \begin{verbatim}
+int getBitmap (jint* dstBitmap, int w, int h, GuidoOnDrawDesc& desc, const VGColor& color)
+{
+  /* first uses the VGDevice GUIDO abstraction to draw the score
+     in a platform independent way
+  */
+  VGDevice * dev = gSystem->CreateMemoryDevice (w, h);
+  desc.hdc = dev;
+  dev->SelectFillColor(color);
+  dev->SelectPenColor(color);
+  dev->SetFontColor (color);
+
+  GuidoErrCode err = GuidoOnDraw (&desc);
+  if (err == guidoNoErr)
+    /* the only platform dependent part: the copy of the bitmap
+       that is implemented according to the native VGDevice support */
+    bimap_copy (dev, dstBitmap, w, h);
+  delete dev;
+  return err;
+}
+\end{verbatim}
+}
+
+With this method, any valid Java \code{Graphics} can be used and thus it can draw to a screen device and a printer 
+device as well. The drawback of the method is that it looses the vectorial information, which is not critical for screen devices since no scaling is required, but it may produce low quality output on printers, depending on the printer driver.
+
+
+\section{The GUIDO Java API}
+
+The GUIDO Java API is similar to the GUIDO C/C++ API \cite{devdoc} with an object oriented design. 
+
+It provides java classes to cover the GUIDO data structures:
+\begin{itemize}
+\item guidopageformat: a data structure used to control the default page format strategy of the score layout engine.
+\item guidodate: a guido date expressed as a rational value.
+\item guidopaint: a data structure used for clipping of the drawing.
+\item guidodrawdesc: a data structure used to indicate how to draw a score.
+\item guidolayout: a data structure for setting the engine layout parameters.
+\item guidoelementinfo: a data structure used by the score map API.
+\item guidorect: a rectangle data structure, used by the score map API.
+\item guidosegment: a time segment data structure, used by the score map API.
+\end{itemize}
+
+The main classes to cover the GUIDO API are:
+\begin{itemize}
+\item guido: provides basic information about the GUIDO engine.
+\item guidoscore: the main score API. A guido score has an internal abstract representation (AR) 
+that is converted into a graphic representation (GR).
+The guidoscore class reflects this architecture and provices the methods to build an AR representation 
+from textual music notation, to convert an AR to a GR representation, to control the layout, to draw the score.
+\item guidofactory: provides a set of methods to dynamically create a GUIDO abstract representation.
+\end{itemize}
+
+Additionally, the engine provides information about the relation between the graphic space and the time space. 
+It defines a score map API to collect this information using an an abstract class for graphic map collection: 
+the mapcollector class. The guidoscoremap class defines constants to select various mapping information.
+
+And finally, the engine provides information about how the score time relates to the performance time 
+(i.e. with repetitions, jumps to coda, etc) using 
+an abstract class for time map collection: the timemapcollector. 
+
+
+The GUIDO JNI implements also a transparent support of the MusicXML format \cite{good01}\cite{Fober:04b} via a \emph{weak link} to the MusicXML library\footnote{\url{http://libmusicxml.sourceforge.net}} that provides a converter to the Guido Music Notation format. 
+
+
+\newpage
+\bibliographystyle{IEEEtranS}
+\bibliography{Guido-Java-Report}
+
+
+\end{document}

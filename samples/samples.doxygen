@@ -1,0 +1,22 @@
+
+/*
+	This file documents the GuidoLib samples
+*/
+
+/*!
+
+\page sample Sample code
+
+This section provides examples of the GUIDO library use.
+
+\section ex1 Displaying a score
+\include GuidoDisplay.cpp
+
+
+\section ex2 Building music using the GUIDO Factory
+\include GuidoFactorySample.cpp
+
+
+
+*/
+

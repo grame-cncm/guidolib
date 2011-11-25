@@ -1,0 +1,9 @@
+% Insert your music here
+[
+c d e c |  g&& a h | d c 
+d e | c&& d e  |  c 
+\set<autoSystemBreak="off">
+ d e | c  d e | c d e | c d e | c d e
+% \set<autoSystemBreak="on">
+| c d e | c d  e | c d e | c  \newSystem 
+d e | c d e ]

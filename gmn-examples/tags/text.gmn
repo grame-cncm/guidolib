@@ -1,0 +1,10 @@
+% text.gmn
+%
+% changed features in GUIDO Notation Renderer 0.6:
+% dy-values conform to GUIDO specification : negative is downward,
+% positive is upwards.
+
+[ \pageFormat<w=15cm,h=10cm,lm=3cm,tm=1.5cm,bm=2cm> 
+ 
+  \text<"Hello World!",font="Helvetica",fsize=20pt,textformat="lc",
+        fattrib="b",color="yellow",dy=5hs> \space<0>c d e ]

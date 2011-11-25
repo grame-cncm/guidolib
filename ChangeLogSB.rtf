@@ -1,0 +1,299 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf480
+{\fonttbl\f0\fswiss\fcharset77 Helvetica;\f1\fswiss\fcharset77 Helvetica-Bold;\f2\froman\fcharset77 Times-Roman;
+\f3\fswiss\fcharset77 Helvetica-Oblique;}
+{\colortbl;\red255\green255\blue255;\red208\green54\blue42;\red128\green0\blue0;}
+{\info
+{\title Change log}
+{\author Samuel Brochot}
+{\*\company GRAME}}\paperw11900\paperh16840\margl1440\margr1440\vieww16780\viewh12200\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf0 GUIDO notation history\
+Samuel Brochot\
+\
+-----------------------------------------------------\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+
+\f1\b \cf0 Know issues\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+
+\f0\b0 \cf0 	- a rest in a chord makes the program crash ( "\{_\}" )\
+	- the following combination (proposed in GuidoSceneComposer as "complex" repetition) makes the program crash :\
+		\\repeatBegin<3> (*repeated notes*)  \\repeatEnd<1>( (*end notes 1*) ) \\repeatEnd<2> ( (*end notes 2*) )\
+	- \{\\fermata(e/2), g/4, \\fermata(c2)\} crashes the program
+\f2 \
+
+\f0 \
+-----------------------------------------------------\
+\
+2009-06 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+
+\f1\b \cf0 Fermata
+\f0\b0 \
+	
+\f3\i Former behaviour
+\f0\i0  :\
+	- the fermata is always placed above the staff\
+	- the positioning of the fermata uses as a reference the lower extremity of the arc, and thus looks unaccurate. It should rather refer to the center of the dot. \
+	- if the stem of the note on which it is placed goes down, and the note pitch is lower than f2 (the head does not rise above the staff), then the fermata is placed one linespace above the staff. If the note pitch is equal or higher than f2, the fermata is placed one linespace and a half above the note (center of the note).\
+	- if the stem of the note on which it is placed goes up, the fermata is placed one halfspace above the staff, regardless of the note pitch.\
+	- in case the fermata is placed on a chord, a fermata is superimposed for each note of the chord.\
+	- the use of the fermata on a rest is not implemented\
+	- in case the fermata is not placed above any particular symbol ("\\fermata"), it places itself upon the highest line of the staff\
+\
+	
+\f3\i New behaviour
+\f0\i0  : 19/06/09\
+	- the positioning of the fermata now uses the center of the dot as a reference.\
+	- the fermata is placed one halfspace above the staff when its character appears in or below the staff. For a symbol above the staff, the fermata is placed the interval of a third (one linespace) above (from the center of the note head to the center of the dot)\
+	- in case the fermata is not placed above any particular symbol("fermata"), the fermata's dot is placed one halfspace above the staff.\
+	- the positioning of a fermata upon a rest is now implemented.\
+	- it is now technically possible to place any articulation (tenuto, marcato, accent...) on a rest.\
+\
+	
+\f3\i New behaviour 
+\f0\i0 : 01/07/09\
+	- the fermata now accepts a new parameter : <type>, which can take any of these values : "short", "regular", "long". By default, a fermata is a regular fermata.\
+	- for example, 
+\f1\b \\fermata<type="short">("notes")
+\f0\b0  places a short fermata upon the given notes.\
+note : when placed at the beginning of the parameter list, the tag name "type=" is facultative.\
+\
+	
+\f3\i New behaviour 
+\f0\i0 : 06/07/09\
+	- the fermata now accepts a new parameter : <position>, which can take any of these values : "above", "below". By default, a fermata is placed above a note.\
+	- e.g. : 
+\f1\b \\fermata<type="long", position="below">("notes")
+\f0\b0  places a long fermata below the given notes.\
+	 \
+
+\f1\b Short fermata\
+	
+\f3\i\b0 Former behaviour 
+\f0\i0 :\
+	- not implemented\
+\
+	
+\f3\i New behaviour
+\f0\i0  : 23/06/09\
+	- syntax : \cf2  
+\f1\b \cf3 \\shortFermata(
+\f3\i\b0 "notes"
+\f1\i0\b )\cf0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+
+\f0\b0 \cf0 	- the short fermata behaves exactly like a regular fermata.\
+	- it is technically possible to place a fermata upon a short fermata\
+\
+	
+\f3\i New behaviour
+\f0\i0  : 01/07/09\
+	- the tag \\shortFermata("notes") doesn't exist anymore ; a short fermata is now a fermata with its "type" parameter initialised with "short"\
+	- syntax : 
+\f1\b \cf3 \\fermata<type="short">(
+\f3\i\b0 "notes"
+\f1\i0\b ) 
+\f0\b0 \cf0 \
+	- cf : 
+\f1\b Fermata
+\f0\b0 \
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+
+\f1\b \cf0 Long fermata\
+	
+\f3\i\b0 Former behaviour
+\f0\i0  :\
+	- not implemented\
+\
+	
+\f3\i New behaviour
+\f0\i0  : 02/07/09\
+	- syntax : 
+\f1\b \cf3 \\fermata<type="long">(
+\f3\i\b0 "notes"
+\f1\i0\b )
+\f0\b0 \cf0 , cf 
+\f1\b Fermata
+\f0\b0 \
+\
+\
+
+\f1\b Left-Hand Pizzicato\
+	
+\f3\i\b0 Former behaviour
+\f0\i0  :\
+	- not implemented
+\f1\b \
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+
+\f3\i\b0 \cf0 	New behaviour
+\f0\i0  : 25/06/09\
+	- syntax :\cf3  
+\f1\b \\leftHPizz(
+\f3\i\b0 "notes"
+\f1\i0\b )\cf0 \
+	
+\f0\b0 - the left-hand pizzicato behaves like a fermata\
+	- It is placed one linespace and a half above the staff or above the symbol when this one rises above the staff.\
+\
+	
+\f3\i New behaviour 
+\f0\i0 : 03/07/09\
+	- the tag \\leftHPizz doesn't exist anymore ; a left-hand pizzicato now is a pizzicato with its "type" parameter initialised with "lefthand" ; cf 
+\f1\b Pizzicato
+\f0\b0 \
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+
+\f1\b \cf0 Pizzicato\
+	
+\f3\i\b0 Former behaviour
+\f0\i0  :\
+	- not implemented\
+\
+	
+\f3\i New behaviour
+\f0\i0  : 03/07/09\
+	- syntax : 
+\f1\b \cf3 \\pizz<type>(
+\f3\i\b0 "notes"
+\f1\i0\b )
+\f0\b0 \cf0 \
+	- the "type" parameter can take any of these values : "
+\f1\b lefthand
+\f0\b0 ", "
+\f1\b buzz
+\f0\b0 ", "
+\f1\b snap
+\f0\b0 ". By default, a pizzicato is a left-hand pizzicato.\
+	- e.g. : \\pizz<type="snap">("notes") places a snap ("bartok") pizzicato upon the notes.\
+note : when placed at the beginning of the parameter list, the tag name "type=" is facultative.\
+\
+	
+\f3\i New behaviour
+\f0\i0  : 06/07/09\
+	- the "type" parameter can now take the value "
+\f1\b bartok
+\f0\b0 ", which refers to the same symbol as "snap".\
+\
+
+\f1\b Harmonic\
+	
+\f3\i\b0 Former behaviour :\
+	
+\f0\i0 - not implemented\
+\
+	
+\f3\i New behaviour
+\f0\i0  : 30/06/09\
+	- syntax : 
+\f1\b \cf3 \\harmonic(
+\f3\i\b0 "notes"
+\f1\i0\b )
+\f0\b0 \cf0 \
+\
+
+\f1\b Staccatissimo\
+	
+\f3\i\b0 Former behaviour
+\f0\i0  :\
+	- not implemented, but defined as \\staccmo("notes")\
+\
+	
+\f3\i New behaviour
+\f0\i0  :\
+	- The tag \\staccmo no longer exists, as a staccatissimo is a kind of staccato.\
+	- syntax : \\stacc<type="heavy">("notes"). cf 
+\f1\b Staccato
+\f0\b0 \
+\
+
+\f1\b Staccato\
+	
+\f3\i\b0 Former behaviour
+\f0\i0  :\
+	- syntax : \\stacc("notes")\
+\
+	
+\f3\i New behaviour
+\f0\i0  : 06/07/09\
+	- syntax : 
+\f1\b \cf3 \\stacc<type>(
+\f0\b0 "notes"
+\f1\b )
+\f0\b0 \cf0 \
+	- the staccato now accepts a new parameter, "type", which can take the following values : "regular" (the simple dot), "heavy" (staccatissimo). By default, a staccato is a regular staccato.\
+	- e.g. : \\stacc<type="heavy">("notes") places a staccatissimo upon the given notes.\
+note : when placed at the beginning of the parameter list, the tag name "type=" is facultative.\
+\
+\
+
+\f1\b Mordent\
+	
+\f3\i\b0 Former behaviour
+\f0\i0  :\
+
+\f1\b 	
+\f0\b0 - the mordent is always placed about one octava and a third below the note, its left extremity is aligned with the note head. It should be placed above the staff (regardless of stem direction), and horizontally centered with the note head.\
+
+\f1\b \
+	
+\f3\i\b0 New behaviour 
+\f0\i0 :\
+	- syntax : 
+\f1\b \cf3 \\mord<mode>
+\f0\b0 (\{chord\} \{chord\}...)\cf0 \
+	- each chord should have two voices which specifiy the main and auxiliary note, respectively. Standard and inverse mordents can be realised by specifying these notes accordingly. An extended mordent ("prallprall") is specified by adding a third note to the chord.\
+	- if only one voice is specified, a default mordent is placed upon this note.\
+	- if mode="cautionary" is stated, the cautionary accidentals (between brackets) will be shown.\
+note : when placed at the beginning of the parameter list, the tag name "mode=" is facultative.
+\f1\b \
+\
+Turn\
+	
+\f3\i\b0 Former behaviour
+\f0\i0  :\
+	- the symbol only consists in the text "turn", placed just on the right and below the note head.\
+
+\f1\b \
+	
+\f3\i\b0 New behaviour 
+\f0\i0 :
+\f1\b \
+	
+\f0\b0 - syntax :\cf3  
+\f1\b \\turn<mode>
+\f0\b0 (\{chord\} \{chord\}...)\cf0 \
+	- for turns, each chord should have exactly three voices which specifiy the main, the first and the second auxiliary note, respectively. Standard and inverse turns can be realised by specifying these notes accordingly.\
+	- if only one voice is specified, a default turn is placed upon this note.\
+	- if mode="cautionary" is stated, the cautionary accidentals (between brackets) will be shown.\
+note : when placed at the beginning of the parameter list, the tag name "mode=" is facultative.\
+	- NB : In the case of a "complex" turn (e.g.
+\f1\b  \\turn(\{c, c, d\}
+\f0\b0 ) ), the drawing of the accidental is based on the third note's accidental.
+\f1\b \
+\
+Trill\
+	
+\f3\i\b0 Former behaviour
+\f0\i0  :\
+
+\f1\b 	
+\f0\b0 - the symbol only consists in the text "trill", placed just on the right and below the note head, regardless of the note position.
+\f1\b 	\
+	
+\f3\i\b0 New behaviour 
+\f0\i0 :\
+	- syntax : 
+\f1\b \cf3 \\trill<mode>
+\f0\b0 (\{chord\} \{chord\}...)\cf0 \
+	- each chord should have two voices which specifiy the main and auxiliary note, respectively. Upward and downward trills can be realised by specifying these notes accordingly. Note : there is no specific symbol for downward trills.\
+	- if only one voice is specified, a default trill is placed upon this note.\
+	- if mode="cautionary" is stated, the cautionary accidentals (between brackets) will be shown.\
+note : when placed at the beginning of the parameter list, the tag name "mode=" is facultative.
+\f1\b \
+}

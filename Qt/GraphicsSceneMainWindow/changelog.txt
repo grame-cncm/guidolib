@@ -1,0 +1,4 @@
+GuidoSceneComposer Change Log
+
+version 1.0.0.0 - june 2008
+ - first public version 

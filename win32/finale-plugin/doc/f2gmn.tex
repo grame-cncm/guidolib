@@ -1,0 +1,209 @@
+\documentclass{article}
+\begin{document}
+\title{Finale Plugin: Export to GUIDO Music Notation}
+\author{by Tobias Mann}
+\maketitle
+\section{Introduction}
+The "Export to GUIDO" plugin converts music written in Finale 2001b to
+GUIDO Music Notation. This would normally be done by a stand-alone converter, but
+Finale's file format is not publicly specified. Instead, a plugin SDK is provided
+and documented.\\
+This documentation, however, proved to be incomplete. It was my main source
+of information anyway, along with the example files and the information
+available at http://www.finaletips.nu. Some information was guessed and
+deduced.
+
+\section{Capabilities}
+The plugin is able to write files in the advanced GUIDO format. It can work on
+a music document as a whole or on a selection. A few options
+are available about whether to include a certain kind of information.
+\subsection{What it can export}
+\begin{itemize}
+\item Tone heights (for standard key signatures)
+\item Durations (except for very unusual time signatures such as 37/19)
+\item Tuplets with ratios that are multiples of 2:3 or 4:5
+\item Rests (this deserves special mentioning, see below...) can be exported to
+\verb"_" or \verb"empty", depending on the situation. 
+\item Time and key signatures if recognized. Major/minor information is preserved.
+\item Ties. The plugin represents them with \verb"\tieBegin:" and \verb"\tieEnd:", using
+the midi tone height as a label.
+\item Beams. This is limited to up to two levels of nested \verb"\beam" tags and does not
+work correctly in complicated cases. Still, it should even then improve readability. 
+\end{itemize}
+Multiple layers are represented as segments that are optionally forced into one
+line using the \verb"\staff" tag. Parallel voices forced into one layer are
+split as well, as GUIDO knows no other suitable representation. This does of
+course not apply to (a series of) chords.
+
+\subsection{What it cannot export yet}
+For example:
+\begin{itemize}
+\item Dynamics and articulation (except if one counts beaming): slurs, crescendo, ...
+\item Repetition bars
+\item Text: lyrics, instrument names, title, composer, ...
+\item Cosmetic graphics: stem directions...
+\end{itemize}
+
+\section{A Rest's Tale}
+I've discovered three different ways in which Finale represents rests.
+\begin{itemize}
+\item Rests may be represented as chords with zero notes. This is
+straight-forward and logical, as Finale treats all notes as chords.
+\item Rests may be represented by the ommitance of notes/chords at all.
+This can occur for a measure that is still empty, but also if the notes'
+offsets and durations leave a gap. For example, there might be two voices
+in one single layer, one of them being incomplete.\\
+This case has been the most difficult to implement. Until I discovered this
+manner of rest representation, I thought a one-run export would be possible.
+\item Rests may be single-note chords with a certain flag enabled. I do
+not know the reason for this possibility being in existence.
+\end{itemize}
+I shall call these types chord-, gap- and flag-rests respectively.\\
+Flag-rests are always exported to \verb"_". So are the other types of rests,
+if they occur in the first used layer of a staff. Rests other than flag-rests
+that occur in secondary layers will be exported to \verb"empty".\\
+This seems to be a good approximation of Finale's behaviour (which has no real
+\verb"empties" at it's disposal, though).
+
+\section{How the plugin works}
+\subsection{Overview}
+Finale plugins are DLLs that have been renamed to bear the extension \verb".fxt".
+As described in the PDK reference, each plugin must provide six entry points,
+the one interesting being \verb"FinaleExtensionInvoke" (in our case).
+These entry points make up the first part of the main source file.\\
+\verb"FinaleExtionsionInvoke" first shows a dialog using \verb"FX_dialog". The
+related message handler can be found at the end of the source file.\\
+Using this dialog, the user can (de)select several options, which are stored
+in the global flag field \verb"gmnFormat".\\
+Then \verb"FinaleExtensionInvoke" asks for a destination file name. A proposal is
+derived from the original file name which is read using \verb"GetWindowText".\\
+If the operation is not canceled, \verb"FinaleExtensionInvoke" will call
+\verb"readMusic". \verb"readMusic" builds the bulk of the plugin. It 
+iterates through the selected part of music with a bunch of nested \verb"for"
+loops.
+
+\subsection{Processing order}
+In general, output is written as soon as input is processed. As some
+information must be moved into another context due to organisational differences
+between Finale's data structures and GUIDO, two rearrangement approaches used.\\
+Observe that Finale represents music mainly as a tree (that is linearized by
+\verb"for" loops). On the other hand GUIDO uses a (linear) text string to
+represent a four-level tree.
+\begin{itemize}
+\item In order to deal with gap-rests and implicit polyphony, input is rearranged
+when necessary:
+Whenever \verb"readMusic" encounters a note's time offset that indicates it
+should already have been
+written out, it marks the note to be processed later, when it will be put into
+another voice. These "marks" build up a linked list called \verb"Storage", which
+is filled when a layer is first read and emptied again in the follow-up. 
+\item In order to make the conversion from flags to bracket constructions easier,
+positions within the output stream can be marked for later insertion of text
+(such making the addition of a begin-tag possible, for example). This is currently
+only used for beaming, but capable of multiple labeled markers.
+\end{itemize}
+
+\subsection{How to use w2g}
+\verb"w2g" is an instance of \verb"writeBufferClass" and the start of a linked list of
+the same type. There cannot be other linked lists of this type because \verb"w2g"
+depends on the static variable \verb"writeBufferClass::count", but additional lists
+wouldn't be useful anyway.\\
+\verb"w2g" provides the code to set multiple labeled markers that is mentioned above.
+If you don't need this feature, just call \verb"w2g.write" to write the destination
+file. Don't call \verb"fwrite" directly, as it would scramble output.\\
+To create a marker, just select an unused positive integer value. You may want to
+\verb"define" it next to \verb"M_BEAM". Then mark the current output-stream position
+using \verb"w2g.mark". To insert at this position, use \verb"w2g.insert".
+\verb"w2g.write" will always append to the output stream.\\
+Use \verb"w2g.flush" to delete a marker or, if the second argument is omitted, all
+markers. \verb"flush" and \verb"write" are the only methods that can actually write
+to the destination file. Before closing the file, you should be sure the buffer's
+empty by using \verb"flush" without a marker ID.
+
+\subsection{Description of important functions and macros}
+The following functions are listed as they appear in the source file.
+\begin{description}
+\item[FinaleExtensionEnumerate] creates all menu entries (that is one in total)
+in Finale's plugin menu.
+\item[getDefaultGmnFilename] uses GetWindowText to create a default destination
+file name from the original file name that is shown at Finale's title bar.
+\item[FinaleExtensionInvoke] shows the options dialog and calls
+\verb"readMusic" with the selection to process.
+\item[writeBufferClass::add] appends to the linked buffer list.
+\item[writeBufferClass::removeMark] removes one or all markers.
+\item[writeBufferClass::flush] Calls \verb"removeMark" and then flushes the linked list up
+to the next marker.
+\item[writeBufferClass::write] Writes to the destination file or appends to the linked buffer
+list, if necessary.
+\item[writeBufferClass::mark] sets a marker.
+\item[writeBufferClass::insert] inserts at a marked position.
+\item[Storage::storageDone] Tells if there are unhandled notes in the
+storage queue (see processing order above).
+\item[store] Stores a note for later processing.
+\item[stored] Checks if a given note is in the storage queue.
+\item[keyOffset] Calculates the tone that is equivalent to zero in Finale's
+coding. This depends on the active key signature.
+\item[toneName] Converts a Finale code for tone height into a string, with
+respect to accidentals and flag-rests.
+\item[ksName] Converts a key signature into a GUIDO tag. Major/minor information
+is preserved.
+\item[durName] Converts a duration to GUIDO. 4096 is equivalent to a whole note,
+1024 to a quarter, and so on.
+\item[getTimeSig] Reads the time signature from Finales data structures,
+converting it to a fraction.
+\item[accumulateTS] Calculates a fraction describing the total elapsed time
+up to the current measure. This is done by summing up all the time signatures.
+\item[underfullMeasure] Builds a string that contains an appropriate
+\verb"empty" or \verb"_" for a gap-rest at the end of a measure.
+\item[LIFSET] expands to an \verb"if" clause that checks if an option bit is set.
+\item[LIFNOT] Similarly, checks if the bit is not set.
+\item[LEND] expands to \verb"}". This is for readability only.
+\item[readMusic] gets a destination file name and then iterates through
+Finale's data structures, generating GUIDO code and writing it to that file.\\
+The loops, from outer to inner:
+\begin{itemize}
+\item slot (staff)
+\item layer
+\item measure
+\item entry (chord)
+\item note
+\end{itemize}
+\item[f2gDHandler] processes messages sent to the dialog window, setting
+\verb"gmnFormat" accordingly.
+\end{description}
+
+\section{Finale's data structures}
+I have not yet found any nearly complete documentation about this topic. So this is a
+rather short section.\\
+There is a database for measure-wise and global information. To use it, one needs
+to know the name of a function that loads the desired piece of information, as well
+as correct values for two indices called \verb"cmper" and \verb"inci". \verb"cmper"
+is often a measure number, and \verb"inci" is sometimes unused.
+An example of using these can be found in \verb"getTimeSig".\\
+Most other (thus fine-grain) information is stored in the EXTGF structure and
+dependent structures.
+
+\section{Known bugs}
+\begin{itemize}
+\item Beaming doesn't work correctly in complicated cases.
+\item Some unrecognized input may be ignored without message.
+\end{itemize}
+
+\section{Ideas for improvement}
+The most important task will be the drawing of a map of Finale's data structures, I guess. As there is now
+a running skeleton plugin, understanding Finale's internal music representation and searching for related
+information will become far more important.\\
+As you might have noticed, \verb"readMusic" has become large, but my first attempts to break it down made it even
+less readable. A re-organisation might make (bug-free) extensions to the plugin easier.\\
+It would also be possible to introduce an internal representation for music notation to the plugin, achieving
+a much more elegant architectural design - although I don't think this is really necessary. If one wants to do
+so, it's probably easiest to take this plugin's source as an example and start from scratch.\\
+Last (and probably least) the current user interface is less than optimal and could benefit from some attention.
+
+\end{document}
+
+
+
+
+
+

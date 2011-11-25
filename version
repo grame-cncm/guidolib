@@ -1,0 +1,37 @@
+#!/bin/sh
+# 
+# GuidoLib project
+# version management tool
+#
+
+if [ $# -ne 1 ]
+then
+	echo "usage: version version_num"
+	echo "       version_num format: n.n"
+	exit 1
+fi
+
+ROOT=.
+VERSION=$1
+
+
+echo "moving version number to $VERSION"
+
+CMAKE=$ROOT/cmake/CMakeLists.txt
+echo " updating $CMAKE"
+sed "s/\(set ([A-Z]*VERS[^0-9]*\)[0-9]*\.[0-9]*/\1$VERSION/" $CMAKE > TMP$$
+mv -f TMP$$ $CMAKE
+cmake -G Xcode $ROOT/cmake
+
+DOC=$ROOT/doc/doxygen/Makefile
+echo " updating $DOC"
+sed "s/\(VERSION := \)[0-9]*\.[0-9]*/\1$VERSION/" $DOC > TMP$$
+mv -f TMP$$ $DOC
+
+PKG=$ROOT/package/Makefile
+echo " updating $PKG"
+sed "s/\(VERSION := \)[0-9]*\.[0-9]*/\1$VERSION/" $PKG > TMP$$
+mv -f TMP$$ $PKG
+
+echo "==> change manually GUIDOEngine.cpp, inf.plist and rc files in win32 folder"
+open -t win32/GUIDOEngine.rc src/lib/GUIDOEngine.cpp

@@ -1,0 +1,480 @@
+GUIDO Engine history
+
+----------------------------------------------------------------
+2011-11-25 version 1.4.6
+- memory leaks corrected
+- corrects accidentals management with system bar and implicit bars
+Important note to developers: 
+  up to now, it was possible to release the ARHandler and GRHandler 
+  (using GuidoFreeAR and GuidoFreeGR) in any order but that was a side 
+  effect of memory leaks. Now, you should release them in the reverse 
+  order of allocation (i.e. call GuidoFreeGR first and next GuidoFreeAR)
+
+
+----------------------------------------------------------------
+      version 1.4.5  (not officialy released) 
+- guido font modified - new version is 3.3 (required for correct whole rest rendering)
+- MIDI file export capabilities and new GuidoAR2MIDIFile API
+- incorrect rendering of \alter in chords corrected
+- potential crash with \acc incorrect spec corrected
+- potential crash bug with \text tag corrected
+- change in accidental management to cover octave changes
+  and to comply to the practice described in "Behind Bars" E. Gould p. 79
+- corrects a bug in tuplet display (e.g. strange vertical bar with values like [_/28 c2/16])
+- corrects a scaling bug in tempo rendering (musical form was not visible)
+- duration spec supports absolute time using 'ms' form (e.g. e1*1500ms). 
+  The absolute time is converted to an equivalent music time assuming that a quarter note is 1000mls.
+- new GuidoGetVersionStr API
+- bug in xxxBeg:id xxxEnd:id parsing corrected: id was always null leading to an incorrect rendering
+- new embedded svg device and new GuidoSVGExport API
+
+----------------------------------------------------------------
+2011-07-13 version 1.4.4
+- factory API revised
+- bench tools included but not compiled by default (actually in progress)
+- GDeviceOSX change: defaults now to Quartz coordinates space unless _USE_QD_COORDINATES_
+  is defined. Embedded Quartz device uses QD coordinates.
+- clef change resets current accidentals (as described by Gould in "Behind bars" p.78)
+- key signature lost after clef change corrected (patch by Yu Fan)
+- minimum distance between staves is back to 'uncorrected' version
+  the change introduced by version 1.4.1 results in incorrect mappings
+
+----------------------------------------------------------------
+2011-04-21 version 1.4.3
+- \alter tag support for microtonal accidentals
+- \acc tag: support for style="cautionary"
+- internal restructuration (nvstring almost replaced by std::string)
+
+----------------------------------------------------------------
+2011-03-24 version 1.4.2
+- slices mapping improved to become consistent along each system
+- crash bug corrected: occured whith \noteFormat opened range
+
+----------------------------------------------------------------
+2011-02-11 version 1.4.1
+- minimum distance between staves corrected
+- correct mapping when optimal page fill is off
+
+----------------------------------------------------------------
+2010-10-06 version 1.4.0
+- bug in system mapping: system dates correction
+- bug in page time position corrected (GRPage)
+- GDeviceWin32GDIPlus included in the library
+
+  pending issues: incorrect mapping when optimum page fill is off
+
+----------------------------------------------------------------
+version 1.3.9
+- color scheme move outside rendering (apart when forced)
+- guido font extended (whole rest, 1/64 note flags, perc clef, double bar)
+- dots management corrected and extended 
+- note flags support up to 1/64
+- parser change to support up to 3 dots
+- faster score drawing for Qt
+- beaming improved and corrected for stems direction changes and beaming across multiple staves
+- percussion clef support (\clef<"perc">)
+- barlines position adjusted to staff lines count
+- \doubleBar implemented
+- GuidoQtViewer becomes GuidoEditor, allowing code visualization and edition.
+- \meter position corrected according to staff lines count
+- "parse error line number" bug fixed.
+- new API rolled time to unrolled time mapping support
+- old Guido API and code removed (now unsupported)
+- old mapping API and code removed and replaced with a new one
+- voice number added to ARMusicalObject (for mapping purpose)
+
+----------------------------------------------------------------
+2009-08-25 (version 1.3.8) Samuel Brochot
+- articulations position corrected
+- new articulations added : short/long fermatas, 4 different pizzicati,  
+  harmonics, staccatissimo
+- ornaments implemention : mordents, turn, trill
+  see gmn-examples/new-tags-v1.38 for gmn code examples
+
+----------------------------------------------------------------
+2009-03-04 version 1.3.7
+- bug in \staff management corrected (ARStaff destructor)
+- bug in \meter without params corrected (failure not implemented)
+- bug in float parsing corrected (introduced with Qt support)
+
+----------------------------------------------------------------
+2009-01-08 version 1.3.6
+- bug in volta management corrected
+
+----------------------------------------------------------------
+2008-09-12 version 1.3.5
+- parsed files incorrectly closed
+- library GuidoGetVersionNums corrected (incorrect result)
+
+----------------------------------------------------------------
+2008-06-17 version 1.3.4
+- parser rewritten (no syntax changes)
+  not supported any more:
+	empty tag parameters list:          \tag<>
+	unknown note name:                  i j ... z
+	unknown tag name
+	incorrect sequence specification:   { [ c d e ] ] } or { [ [ c d e ] }
+	absolute notes duration:            was previously parsed but not handled
+  behavior change:
+	escape char in strings:	            '\' was used to encode "  -> \" but now stripped
+- new GuidoParseString API
+- incorrect slice list corrected with repeat sections.
+
+----------------------------------------------------------------
+2007-10-15 (version 1.3.3.4) Yannick Chapuis
+- slur bug in debug mode corrected (kind of memory leak).
+- new antialiased device available from VGSystem (mainly for Win32)
+- finalization propagation when SystemDistribution is kNeverDistrib (DF)
+
+----------------------------------------------------------------
+2007-09-17 (version 1.3.3.3) Yannick Chapuis
+- ExportToFile method removed from VGDevice API - external object
+  created instead.
+
+----------------------------------------------------------------
+2007-09 (version 1.3.3.2) Dominique Fober
+- memory leaks corrections
+
+----------------------------------------------------------------
+2007-08 (version 1.3.3.1) Dominique Fober
+- VGDevice fill color management change
+
+----------------------------------------------------------------
+2005 to 2007 MISSING LOGS (version should have been incremented)
+
+- new graphical devices system (VGDevice/VGSystem/VGFont) included 
+  in library to replace GDevice obsolete management - new API
+  (targets: Win32, OSX, OpenGL, Linux/Gtk, PS. Wx is obsolete)
+- VGDevice Invalidate method added.
+
+----------------------------------------------------------------
+2004-10 (version 1.3.3) Dominique Fober
+
+- default native graphic device included
+- incorrect bb (double flat) symbol corrected (MacOS X only)
+- incorrect ff (double forte) symbol corrected (MacOS X only)
+- incorrect \noteFormat<style="x"> symbol corrected (MacOS X only)
+- \noteFormat<style="noHeads"> layout corrected
+- bug corrected in incorrect tag end handling (crashed with some finale exported guido 
+  files with unreferenced end tags)
+
+----------------------------------------------------------------
+2004-09-15 (version 1.3.2) Dominique Fober
+
+- Introduction of volta.
+- Introductions of 'jump' tags ie:
+	\daCapo
+	\daCapoAlFine
+	\dalSegno
+	\dalSegnoAlFine
+	\daCoda
+	\fine
+- \coda and \segno improvements: support marking strings
+- general improvements of bounding boxes
+- debug of \tempo marking string support
+
+----------------------------------------------------------------
+2004-08 (version 1.3.1) Dominique Fober & Jerome Berthet
+
+* Features, bug fixes:
+
+- Guido Engine:
+	- repeat bars bug fixes.
+	- Introduction of volta.
+
+
+----------------------------------------------------------------
+2004-06 (version 1.3.0) Dominique Fober & Jerome Berthet
+
+* Features, bug fixes:
+
+- Guido Engine:
+	- Text aligmenent bug fixes.
+	- Introduction of Coda and Segno.
+	- The first system of a page does not draw above top margin.
+	- New tempo tag: splitted graphical and musical informations.
+
+- Windows NoteViewer: 
+	- Fixed the adjust page-size bug in graphic export
+
+- MacOS GuidoViewer:
+	- Bitmap export (Jpeg, png...)
+
+* Code:
+
+- Brand new Guido Score Engine API
+- Time to Graphic mapping: GUIDOScoreMap
+- Updated Mac OSX, wxWidgets and Win32 applications
+- Improved "bounding boxes" code.
+
+----------------------------------------------------------------
+2004-04 (version: 1.2.2)  Jerome Berthet
+
+* Features, bug fixes:
+
+- Guido Engine:
+	- Ties and slurs: Automatic positioning.
+	- Articulations (staccato, accent...): Better automatic positionning 
+	- Tuplets: Automatic positioning.
+	- Introduction of breath-marks.
+	- More descriptive Guido Warnings messages.
+	- Pre-implementation of the \accol tag. Guido can now display the 
+	 	 "straightBrace" accolade.
+	- Text positionning ( \text tag ) implementation closer to the Guido specifications. 
+	- Introduction of Longa notes.	
+	- Introduction of diamond heads.
+	- Octava clefs and double treble clefs.
+	- Fixed an alignement problem for beams, during Gif export.
+	- Fixed the intens "ff" and "pp" bugs.
+	- Improved overall speed.
+
+- Windows NoteViewer: 
+	- Fixed a bug that could cause crash after parse error.
+	- Compatibility with Windows 95 / 98 restored. (to test)
+	- Can export Gif files up to 3200x3200 pixels.
+	- Improved Gmn text edit dialog.
+	- Fixed a bug in Gif export
+
+- MacOS  GuidoViewer:
+	- Added alert boxes, can display parse error lines.
+	- Fixed a text alignement bug.
+
+* Code
+	- New API entry point: GuidoGetParseErrorLine(). Allows applications
+	  to know at which line of a guido gmn file a parse error has occured.
+	- Sources compile faster.
+	- Removed a few hundred dynamic_casts.
+	- nvstring class optimization.
+	- fraction class optimization.  	
+
+----------------------------------------------------------------
+2004-03 (version: 1.2.1)  Jerome Berthet 
+
+- Color support for rests.
+- Dotted rests.
+- Removed a possible accent collision.
+
+----------------------------------------------------------------
+2004-01   Dev branch merged to main branch
+
+----------------------------------------------------------------
+2004-01 Jerome Berthet
+
+- GuidoLib changes:
+	- Beaming adjustement on stems seems to be better, but is still not perfect.
+	- Fixed the beaming direction bug.
+	- New Guido Engine entry points, renamed a few others. 
+	- Reference counter mechanism for AR structures, so that several GR structure can 
+	be linked to the same AR.  More flexibility for AR and GR structures manipulation. 
+	See GUIDOEngine.h for more details.
+	- Moved to version 1.2
+
+- Some housekeeping in the GuidoToGif lib and app, gif export works better.
+
+- Improved Mac Viewer: 
+	- Scrollbars, resizing, zooming. 
+	- Score Printing,
+	- Load the musical true-type font from the application bundle.
+	- Moved to version 0.11
+
+- NoteViewer (win32)
+	-Updated to match the changes related to zoom and mapping in
+	the GuidoLib. It has brand new scrollbars.
+	
+	- The PostScript export now works. It looks for the file "guido2_font.eps"
+	to use as a font file embeded in exported eps files.
+
+	- Try to open the "guido2.ttf"  font file from the application directory
+		( it is no longer stored as a resource )
+
+	- Moved to version 0.91
+
+----------------------------------------------------------------
+2003-11-26 Jerome Berthet & Stephane Letz
+
+Implement tempo indications. They can be of 3 types :
+
+	- Textual only like \tempo<"Allegro"> . It will be displayed as a string.
+
+	- BPM like \tempo<"Allegro", "1/4=120">. The string is displayed followed
+	by a note and the bpm value.
+
+	- Note equivalence like \tempo<"Allegro", "1/4=1/8">.
+	The string is displayed followed by a note = another note.
+
+Modified files : ARTempo.h, cpp, GRTempo.h,cpp
+
+----------------------------------------------------------------
+2003-11-07 Jerome Berthet
+
+- MacOS-X multi-documents application that renders gmn files using Quartz, 
+ without using the powerplant framework nor wxWindows.
+
+- The wxWindows application "wxGuidoViewer", when compiled on Windows, now uses 
+the native GDeviceWin32 graphic device. The wxWindows GDeviceWx is unable to
+scale characters (i.e: the accolade), so the score rendering can be somewhat ugly.
+
+- Introduced new VGDevices methods: DrawSymbol() and GetSymbolExtent(), that take 
+a (int symbolID) as a parameter, instead of (const char * s, int inCharCount) 
+strings. They are now free to map this symbolID to they want: a function call, a glyph
+ from a musical font, a bitmap...
+
+- GuidoLib do not use PrintAt() and Text-related functions anymore to display 
+musical glyphs, it uses the new "Symbol" functions.
+	
+- Improved graphic devices classes. Common behavior and members are now 
+shared among all devices classes via their VGDevice base class.
+
+- Removed most of (all?) hard-coded Scriabin musical font character constants
+from GuidoLib classes. Now, each musical symbol is defined by a MusicalSymbolID 
+constant, which no longer has to match a glyph character code in a given musical Font.
+Those new constants are stored in MusicalSymbols.h
+
+- There is now 3 different methods for GRStaff to draw the staff lines:
+	- The original one, that repeats drawing the staff char as many times 
+	 as needed to complete the staff.
+	- One that only draws one char per staff, after an appropriate scale
+	  of the graphic context.
+	- One that simply draws lines, with vector graphics functions.
+
+- A new GuidoFactory API. It allows to build an abstract representation (AR)
+ manually (that is, without the parser). I've split and added several functions
+in GUIDOEngine.cpp, (I also did some code factorization), so it's now simpler and
+easier to use and to understand.
+
+- Every color attributes inside the GuidoLib are now coded as RGBA, where A is
+the transparency (alpha) component. So it's possible, in theory, to draw 
+semi-transparent or invisible symbols on the score. This feature is not (yet?) 
+a part of the Guido Music Notation language specifications, so the behavior of 
+Guido parsers is still undefined if they encounter a RGBA tag, instead of the 
+traditional RGB one.
+
+- Almost everything is ready, inside the Guido sources, to move coordinates
+variables from long to float. Deep-internal calculations are already processed
+using float values. Other coordinate-related parts of Guido now use the 
+"GCoord" type, which is currently defined as a long. It will become a
+float when we decide to move everything to floats.
+
+- Sources are now cleaner and more readable. I've also added Doxygen-style comments, 
+removed type conversions, removed useless #includes, replaced divisions by
+multiplications equivalents, renamed class members variables with a leading 'm', 
+replaced a few int by bool, removed too heavy inlines. The library compiles faster.
+
+- The library no longer draws the white background of pages. Client applications
+must draws their own background.
+
+- New GUIDOEngine functions: GuidoUpdateGRMusic(), GuidoUpdateAllGRMusics()
+- Renamed GuidoParse3() into GuidoParseFileForAR()
+- Renamed GuidoGetNumPages() into GuidoPageCount()
+- Renamed GuidoGetPixelSize() into GuidoConvertToDeviceUnits()
+- Renamed GuidoGetVirtualSize() into GuidoConvertToVirtualUnits()
+
+----------------------------------------------------------------
+2003-07-15 Juergen Kilian
+
+- added unicode support for .gmn files created by the Sibelius2GUIDO
+  Plugin into guido.cpp. Such a unicode file will be converted into
+  std. text file before parsing the content.
+
+----------------------------------------------------------------
+2003-05-09 Juergen Kilian
+
+- added macos/applications/Guido2Midi/Guido2Midi.pbproj for
+  a macos gmn2midi application
+- added linux/applications/Guido2Midi/makefile for
+  a linux gmn2midi application
+- removed an ugly bug in Gmn2MidiParser.cpp::static short note2pcTable
+- added Reload Menu Item to wxGuidoViewer
+
+----------------------------------------------------------------
+2003-05-05 Juergen Kilian
+
+- parser didn't accept multiple tags inside chords 
+[ c \tieBegin d {d \tieEnd, \tieBegin e} e \tieEnd]
+- updated parser_t.c and lexy.c
+
+----------------------------------------------------------------
+2003-03-19 Jerome Berthet
+
+- I had many problems with characters encoding between mac, windows
+  and wxWindows. Currently, 10 music symbols are concerned (char 
+  greater than 127). I've solved those problems with a dirty
+  hack: Mac-Quartz and Mac-wxWindows versions need a FontEncodingConverter, 
+  that uses Apple APIs for character encoding conversion.
+- Removed callstru file. Replaced by GuidoOnDrawDesc.
+- MacOS X Quartz implementation of GDevice.
+- wxWindows implementation of GDevice.
+- std c++ console version of GuidoFeedback (GuidoFeedbackStd.h)
+- Removed some unnecessary #include, fixed some warnings under gcc.
+
+----------------------------------------------------------------
+2003-03-11 Stephane Letz <letz@grame.fr>
+
+Doxygen based documentation of lib-score-engine abstract and graphic classes.
+The Score_Engine_Doxyfile can be used to generate a documentation in HTML format. 
+Doxygen can be found here : http://www.stack.nl/~dimitri/doxygen/
+
+----------------------------------------------------------------
+2003-02-20 Jerome Berthet
+
+- GuidoOnDraw() no more draws as many score pages as it can, but
+only the one given by callstruct.page.
+- Clients can specify the name of text and music fonts to use.
+- Simpler GDevice coordinates system.
+- wxWindows implementation.
+
+----------------------------------------------------------------
+2003-02-05 Jerome Berthet
+
+- Removed all win32 dependencies. and most of non-portable stuff. 
+- Use of c++ standard headers, keywords and assert().
+- Fixed some warnings on Metrowerks codewarrior compiler.
+- The lib-score-engine now compiles on MacOS X.
+
+----------------------------------------------------------------
+2003-01-30 Jerome Berthet
+
+- Definition of error codes constants. Many Guido APIs have 
+changed and now return those new error codes.
+
+- New API: int GuidoInit( GuidoInitDesc * );
+It must be called at least one time before the first call of 
+GuidoParse. Client applications can now provide a Graphic Device
+object and a Feedback object to GuidoInit. The GuidoEngine 
+will then uses those objects for all Graphic-related and user-feedback
+operations. GuidoInit returns an error code.
+
+- Guido font is no more loaded dynamically in the system, because
+this is a too platform-dependant feature. Clients applications 
+should now do it by themself, or ask the user to do it. This could
+also be done by any GuidoLib "installers".
+GuidoInit() returns an error code if the font could not be found.
+
+- Windows-dependant code was moved from "GuidoEngine.cpp" to a new 
+file "GuidoMainWin32.cpp"
+
+- A wxWindows implementation of "GDevice" is in progress. See 
+"GDeviceWx.cpp"
+
+- Global variables "myvariable" have been renamed "gMyVariable", to
+	increase code lisibility.
+
+----------------------------------------------------------------
+2003-01-21 Stephane Letz <letz@grame.fr>
+
+ The parser code has be cleanup up in the following way:
+ 
+ - library specific part of the guido.cpp file have been removed and moved
+ in new files in the corresponding libraries (GUIDOEngine and Guido2Midi).
+ The guido.cpp file should now contain only common code.
+ 
+ - new gd_imp_init and gd_imp_exit entry points have been added in the
+ guido.h file. Their purpose in to allow library implementation of the
+ parser API to have  specific initialization and cleanup code.
+ gd_imp_init and gd_imp_exit functions are called in the parser global
+ gd_init and gd_exit entry points.
+ 
+ - new files GUIDOEngineParser.cpp (GUIDOEngine library) and
+ Gmn2MidiParser.cpp (Gmn2Midi library) have been added.
+ 
+----------------------------------------------------------------

@@ -1,0 +1,14 @@
+% acc-Tag is now supported
+% This can be used to force display of accidentals
+% and also to set the position of an accidental
+
+
+[  \set<autoEndBar="off">
+   \instr<"\acc-Tag used to set position of accidentals",dy=4hs,dx=1.3cm>
+  \key<"G"> \meter<"2/4"> 
+
+   \acc<dy=-2hs,dx=-1hs>( c# ) \space<1cm> 
+   \acc<dx=-1hs>(d&) % set accidental position, including th y-pos!!
+   \acc( f# )   % force a sharp
+   \acc( c2 ) % force a natural sign
+  ]

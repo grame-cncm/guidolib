@@ -1,0 +1,15 @@
+% instr.gmn (\instr-Tag introduces in Release 0.5)
+% 
+% new in GUIDO Notation Renderer 0.6
+% dy-parameter is now GUIDO conform (positive is upwards,
+% negative is downwards)
+%
+% (still) to do in future versions:
+%
+% * alignment, placement of text....
+%
+{ [ \pageFormat<w=20cm,h=10cm,tm=1.5cm> 
+    \instr<"1. Violin",dx=-1.7cm,dy=-0.5cm> \clef<"treble"> c2 d e c ] ,
+  [ \instr<"2. Violin",dx=-1.7cm,dy=-0.5cm> \clef<"treble"> g h/2 g1/4 ],
+  [ \instr<"Viola",dx=-1.7cm,dy=-0.5cm> \clef<"alto"> c g0 a c1 ],
+  [ \instr<"Cello",dx=-1.7cm,dy=-0.5cm> \clef<"bass"> c0/1 ] }	

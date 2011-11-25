@@ -1,0 +1,494 @@
+<!-- hh: update section numbers: 4.xx -> 5.xx -->
+
+<A NAME="marks"></A>
+<H2>
+5 More Articulation Marks, Barline Types and Symbols</H2>
+
+<H3>
+4.1 Articulation marks</H3>
+<A NAME="staccmo"></A>
+<H4>
+4.1.1 \staccmo</H4>
+Marks notes as staccatissimo; affects both notation (looks like a small
+spike) and playback.
+
+<P><I><B>Parameters</B> (in the order of their default positions):</I>
+<UL>
+<LI>
+<B><I>dy</I></B> - vertical distance between center of symbol and center
+of associated note head, in halfspaces of the current system.</LI>
+
+<BR><I>default value:</I> none, see Semantics.
+<LI>
+<B><I>size</I></B> - size of symbol, as a factor relative to the size of
+the note head.</LI>
+
+<BR><I>default value:</I> 1.0</UL>
+<B><I>Range:</I></B> optional
+
+<P><B><I>Semantics:</I></B>
+<UL>
+<LI>
+If no range is specified, applies to the next note.</LI>
+
+<LI>
+If a range is specified, applies to all notes within its range.</LI>
+
+<LI>
+If no <I>dy</I> value is specified, the vertical position is automatically
+determined such that it is above the staff and collisions are avoided.</LI>
+
+<LI>
+
+The size of the symbol depends on the size of the note heads it is associated
+with.</LI>
+</UL>
+<B><I>Remarks:</I></B>
+<UL>
+<LI>
+(none)</LI>
+</UL>
+<B><I>Examples:</I></B>
+<PRE>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \staccmo ...
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \staccmo( ... )</PRE>
+
+<HR><A NAME="accentTen"></A>
+<H4>
+4.1.2 \accentTen</H4>
+Marks notes as accented tenuto; affects both notation (combination of accent
+and tenuto mark) and playback.
+
+<P><I><B>Parameters</B> (in the order of their default positions):</I>
+<UL>
+<LI>
+<B><I>dy</I></B> - vertical distance between center of symbol and center
+of associated note head, in halfspaces of the current system.</LI>
+
+<BR><I>default value:</I> none, see Semantics.
+<LI>
+<B><I>size</I></B> - size of symbol, as a factor relative to the size of
+the note head.</LI>
+
+<BR><I>default value:</I> 1.0</UL>
+<B><I>Range:</I></B> optional
+
+<P><B><I>Semantics:</I></B>
+<UL>
+<LI>
+If no range is specified, applies to the next note.</LI>
+
+<LI>
+If a range is specified, applies to all notes within its range.</LI>
+
+<LI>
+If no <I>dy</I> value is specified, the vertical position is automatically
+determined such that it is above the staff and collisions are avoided.</LI>
+
+<LI>
+The size of the symbol depends on the size of the note heads it is associated
+with.</LI>
+</UL>
+<B><I>Remarks:</I></B>
+<UL>
+<LI>
+(none)</LI>
+</UL>
+<B><I>Examples:</I></B>
+<PRE>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \accentTen ...
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \accentTen( ... )</PRE>
+
+<HR><A NAME="accentStacc"></A>
+<H4>
+4.1.3 \accentStacc</H4>
+Marks notes as accented staccato; affects both notation (combination of
+accent and staccatto dot) and playback.
+
+<P><I><B>Parameters</B> (in the order of their default positions):</I>
+<UL>
+<LI>
+<B><I>dy</I></B> - vertical distance between center of symbol and center
+of associated note head, in halfspaces of the current system.</LI>
+
+<BR><I>default value:</I> none, see Semantics.
+<LI>
+<B><I>size</I></B> - size of symbol, as a factor relative to the size of
+the note head.</LI>
+
+<BR><I>default value:</I> 1.0</UL>
+<B><I>Range:</I></B> optional
+
+<P><B><I>Semantics:</I></B>
+<UL>
+<LI>
+If no range is specified, applies to the next note.</LI>
+
+<LI>
+If a range is specified, applies to all notes within its range.</LI>
+
+<LI>
+
+If no <I>dy</I> value is specified, the vertical position is automatically
+determined such that it is above the staff and collisions are avoided.</LI>
+
+<LI>
+The size of the symbol depends on the size of the note heads it is associated
+with.</LI>
+</UL>
+<B><I>Remarks:</I></B>
+<UL>
+<LI>
+(none)</LI>
+</UL>
+<B><I>Examples:</I></B>
+<PRE>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \accentStacc ...
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \accentStacc( ... )</PRE>
+
+<HR><A NAME="tenStacc"></A>
+<H4>
+4.1.4 \tenStacc</H4>
+Marks notes as tenuto staccato; affects both notation (combination of tenuto
+mark and staccatto dot) and playback.
+
+<P><I><B>Parameters</B> (in the order of their default positions):</I>
+<UL>
+<LI>
+<B><I>dy</I></B> - vertical distance between center of symbol and center
+of associated note head, in halfspaces of the current system.</LI>
+
+<BR><I>default value:</I> none, see Semantics.
+<LI>
+<B><I>size</I></B> - size of symbol, as a factor relative to the size of
+the note head.</LI>
+
+<BR><I>default value:</I> 1.0</UL>
+<B><I>Range:</I></B> optional
+
+<P><B><I>Semantics:</I></B>
+<UL>
+<LI>
+If no range is specified, applies to the next note.</LI>
+
+<LI>
+If a range is specified, applies to all notes within its range.</LI>
+
+<LI>
+
+If no <I>dy</I> value is specified, the vertical position is automatically
+determined such that it is above the staff and collisions are avoided.</LI>
+
+<LI>
+The size of the symbol depends on the size of the note heads it is associated
+with.</LI>
+</UL>
+<B><I>Remarks:</I></B>
+<UL>
+<LI>
+(none)</LI>
+</UL>
+<B><I>Examples:</I></B>
+<PRE>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \tenStacc ...
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \tenStacc( ... )</PRE>
+
+<HR><A NAME="marcatoStacc"></A>
+<H4>
+4.1.5 \marcatoStacc</H4>
+Marks notes marcato staccato; affects both notation (combination of marcato
+mark and staccatto dot) and playback.
+
+<P><I><B>Parameters</B> (in the order of their default positions):</I>
+<UL>
+<LI>
+<B><I>dy</I></B> - vertical distance between center of symbol and center
+of associated note head, in halfspaces of the current system.</LI>
+
+<BR><I>default value:</I> none, see Semantics.
+<LI>
+<B><I>size</I></B> - size of symbol, as a factor relative to the size of
+the note head.</LI>
+
+<BR><I>default value:</I> 1.0</UL>
+<B><I>Range:</I></B> optional
+
+<P><B><I>Semantics:</I></B>
+<UL>
+<LI>
+If no range is specified, applies to the next note.</LI>
+
+<LI>
+If a range is specified, applies to all notes within its range.</LI>
+
+<LI>
+If no <I>dy</I> value is specified, the vertical position is automatically
+determined such that it is above the staff and collisions are avoided.</LI>
+
+<LI>
+
+The size of the symbol depends on the size of the note heads it is associated
+with.</LI>
+</UL>
+<B><I>Remarks:</I></B>
+<UL>
+<LI>
+(none)</LI>
+</UL>
+<B><I>Examples:</I></B>
+<PRE>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \marcatoStacc ...
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \marcatoStacc( ... )</PRE>
+
+<HR>
+<PRE>&nbsp; \hornOpen&nbsp;&nbsp; % small o above note
+&nbsp; \hornClosed % small + above note
+
+&nbsp; \harmonic&nbsp;&nbsp; % small o above note
+&nbsp; %>> for fluttertongue use trem</PRE>
+
+<HR>
+<H3>
+4.2 Barline types</H3>
+
+<PRE>
+<B><I>open issues:
+- use rather \bar with extra style param??
+- distinguish purely graphical forms \bar from those indicating start of measure \measure??
+&nbsp; (could also use \barline, \bar to be consistent w/ Basic GUIDO)
+- need global tag for measure numbering (style, size, on/off, position)?</I></B></PRE>
+<A NAME="thinDoubleBar"></A>
+<H4>
+4.2.1 \thinDoubleBar</H4>
+Indicates the start of a new measure marked with a thin double barline
+at the position where it occurs. Usage analogous to \bar.
+
+<P><I><B>Parameters</B> (in the order of their default positions):</I>
+<UL>
+<LI>
+<B><I>measureNum</I></B> - set measure number to specific value.</LI>
+
+<BR><I>default value:</I> none, see Semantics.</UL>
+<B><I>Range:</I></B> none
+
+<P><B><I>Semantics:</I></B>
+<UL>
+<LI>
+If no <I>measureNum</I> value is specified, the current measure number
+is increased by one.</LI>
+</UL>
+<B><I>Remarks:</I></B>
+<UL>
+<LI>
+Do not use this tag for double lines before key or meter changes, as these
+are automatically inferred from the respective tags.</LI>
+</UL>
+<B><I>Examples:</I></B>
+<PRE>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (see \bar)</PRE>
+
+<HR><A NAME="dottedBar"></A>
+<H4>
+4.2.2 \dottedBar</H4>
+Indicates the start of a new measure marked with a dotted barline at the
+position where it occurs. Usage analogous to \bar.
+
+<P><I><B>Parameters</B> (in the order of their default positions):</I>
+<UL>
+<LI>
+<B><I>measureNum</I></B> - set measure number to specific value.</LI>
+
+<BR><I>default value:</I> none, see Semantics.</UL>
+
+<B><I>Range:</I></B> none
+
+<P><B><I>Semantics:</I></B>
+<UL>
+<LI>
+If no <I>measureNum</I> value is specified, the current measure number
+is increased by one.</LI>
+</UL>
+<B><I>Remarks:</I></B>
+<UL>
+<LI>
+Do not use this tag for dotted lines indicating metric subdivisions within
+bars, use \tactus instead.</LI>
+</UL>
+<B><I>Examples:</I></B>
+<PRE>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (see \bar)</PRE>
+
+<PRE>
+<B><I>open issues:
+
+- use rather \bar with extra style param??
+- distinguish purely graphical forms \bar from those indicating start of measure \measure??
+&nbsp; (could also use \barline, \bar to be consistent w/ Basic GUIDO)
+- need global tag for measure numbering (style, size, on/off, position)?</I></B></PRE>
+
+<PRE>4.2.3&nbsp; \repeatBeginBar, \repeatEndBar, \repeatEndBeginBar</PRE>
+
+<HR><A NAME="barFormat"></A>
+<H4>
+4.2.4 \barFormat</H4>
+
+Controls the graphic appearance of barlines.
+
+<P><I><B>Parameters</B> (in the order of their default positions):</I>
+<UL>
+<LI>
+<B><I>style</I></B> - graphic apperance of barlines</LI>
+
+<BR><I>standard values:</I>
+<UL>
+<LI>
+"staff" - barlines only within staves</LI>
+
+<LI>
+"accolade" - barlines across accolades</LI>
+
+<LI>
+"system" - barlines across whole system</LI>
+
+<!--
+connectDown
+connectUp
+
+specify style for each voice,
+in case of conflicts, "larger" wins
+-->
+
+<LI>
+"mensur" - barlines only between staves, no splitting and tieing of notes
+across barlines</LI>
+</UL>
+<I>default value:</I> "staff"</UL>
+<B><I>Range:</I></B> none
+
+<P><B><I>Semantics:</I></B>
+<UL>
+<LI>
+This tag affects the graphic appearance of all subsequent barlines, across
+all voices.</LI>
+</UL>
+<B><I>Remarks:</I></B>
+<UL>
+<LI>
+(none)</LI>
+</UL>
+<B><I>Examples:</I></B>
+<PRE>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (...)</PRE>
+
+<PRE>
+<B><I>open issues:
+- include default style for \bar (standard, dotted, subdivided, ...) ???</I></B></PRE>
+
+<HR>
+<H3>
+4.3 Miscellaneous</H3>
+<A NAME="udBow"></A>
+<H4>
+4.3.1 \upBow, \downBow</H4>
+Indicates up- and down-bow marks for strings.
+
+
+<P><I><B>Parameters</B> (in the order of their default positions):</I>
+<UL>
+<LI>
+<B><I>dy</I></B> - vertical distance between center of symbol and center
+of associated note head, in halfspaces of the current system.</LI>
+
+<BR><I>default value:</I> none, see Semantics.
+<LI>
+<B><I>size</I></B> - size of symbol, as a factor relative to the size of
+the note head.</LI>
+
+<BR><I>default value:</I> 1.0</UL>
+<B><I>Range:</I></B> optional
+
+<P><B><I>Semantics:</I></B>
+<UL>
+<LI>
+If no range is specified, applies to the next note.</LI>
+
+<LI>
+If a range is specified, applies to all notes within its range.</LI>
+
+<LI>
+If no <I>dy</I> value is specified, the vertical position is automatically
+determined such that it is above the staff and collisions are avoided.</LI>
+
+<LI>
+The size of the symbol depends on the size of the note heads it is associated
+with.</LI>
+</UL>
+<B><I>Remarks:</I></B>
+<UL>
+<LI>
+(none)</LI>
+</UL>
+<B><I>Examples:</I></B>
+<PRE>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \upBow ...
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \downBow( ... )</PRE>
+
+<HR><A NAME="pedalBE"></A>
+<H4>
+4.3.2 \pedalBegin, \pedalEnd</H4>
+Indicates pedal marks for piano.
+
+<P><I><B>Parameters</B> (in the order of their default positions):</I>
+<UL>
+<LI>
+<B><I>dy</I></B> - vertical distance between center of symbol and center
+of associated note head, in halfspaces of the current system.</LI>
+
+<BR><I>default value:</I> none, see Semantics.
+<LI>
+<B><I>size</I></B> - size of symbol, as a factor relative to the size of
+the note head.</LI>
+
+<BR><I>default value:</I> 1.0</UL>
+<B><I>Range:</I></B> none
+
+<P><B><I>Semantics:</I></B>
+<UL>
+<LI>
+\pedalBegin and \pedalEnd occur always as a pair, indicating that the pedal
+is down between the two tags.</LI>
+
+<LI>
+If a range is specified, applies to all notes within its range.</LI>
+
+<LI>
+
+If no <I>dy</I> value is specified, the vertical position is automatically
+determined such that it is below the staff and collisions are avoided.</LI>
+
+<LI>
+The size of the symbol depends on the size of the note heads it is associated
+with.</LI>
+</UL>
+<B><I>Remarks:</I></B>
+<UL>
+<LI>
+(none)</LI>
+</UL>
+<B><I>Examples:</I></B>
+<PRE>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \pedalBegin ... \pedalEnd</PRE>
+
+<HR>
+<PRE>- breathmark, holdmark
+&nbsp; \breathMark
+&nbsp; \holdMark
+&nbsp; % notation: ' / "
+
++ fermata longa
+&nbsp; \fermataLonga(notes)
+&nbsp; \fermataLonga
+&nbsp; % notation: square fermata sign
+
++ repeat measure
+&nbsp; \repeatMeasure&nbsp; % repeats last measure
+&nbsp; \repeatMeasure&lt;n> % same, n times
+&nbsp; % in certain cases,
+
+&nbsp; % notation can be infered from \repeatBegin, \repeatEnd
+
+- miscellaneous signs
+&nbsp; \coda&nbsp; % coda sign (-> kopf)
+&nbsp; \signa&nbsp; % signa sign (-> dal segno al ...)
+&nbsp; % more ??</PRE>
+

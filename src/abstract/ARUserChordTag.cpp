@@ -1,0 +1,139 @@
+/*
+	GUIDO Library
+	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+
+	This library is free software; you can redistribute it and/or
+	modify it under the terms of the GNU Lesser General Public
+	License as published by the Free Software Foundation; either
+	version 2.1 of the License, or (at your option) any later version.
+
+	This library is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+	Lesser General Public License for more details.
+
+	You should have received a copy of the GNU Lesser General Public
+	License along with this library; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+*/
+
+// #include "defines.h"
+
+#include <iostream>
+#include "secureio.h"
+#include "ARUserChordTag.h"
+#include "TagParameterString.h"
+#include "TagParameterInt.h"
+#include "TagParameterList.h"
+#include "ListOfStrings.h"
+
+ListOfTPLs ARUserChordTag::ltpls(1);
+
+ARUserChordTag::ARUserChordTag(const ARUserChordTag * uct)
+{
+	labels = NULL;
+	labeli = NULL;
+	labelistr = NULL;
+
+	if (uct->labels)
+		labels = TagParameterString::cast
+		(uct->labels->getCopy());
+	else if (uct->labeli)
+	{
+		labeli = TagParameterInt::cast
+		(uct->labeli->getCopy());
+
+		if (uct->labelistr)
+		{
+			labelistr = new NVstring(*uct->labelistr);
+		}
+		else
+		{
+			labelistr = new NVstring("intlabel");
+			char buf[100];			
+			snprintf(buf, 100, "%d", labeli->getValue()); 
+			labelistr->append(buf);
+		}
+	}
+}
+
+ARUserChordTag::~ARUserChordTag()
+{
+	delete labels;
+	delete labeli;
+	delete labelistr;
+}
+
+void ARUserChordTag::PrintName(std::ostream &os) const
+{
+	os << "\\splitChord";
+	if (!getRange())
+		os << "Begin";
+}
+
+ARMusicalObject * ARUserChordTag::Copy() const
+{
+	return new ARUserChordTag(this);
+}
+
+const char* ARUserChordTag::getLabelValue() const
+{
+	if (labels)
+		return labels->getValue();
+
+	else if (labeli && labelistr)
+		return labelistr->c_str();
+
+	return "";
+}
+void ARUserChordTag::setTagParameterList(TagParameterList& tpl)
+{
+	if (ltpls.GetCount() == 0)
+	{
+		// create a list of string ...
+
+		ListOfStrings lstrs; // (1); std::vector test impl
+		lstrs.AddTail(("S,label,,o"));
+		lstrs.AddTail(("I,label,,o"));
+		CreateListOfTPLs(ltpls,lstrs);
+	}
+
+	TagParameterList *rtpl = NULL;
+	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
+
+	if (ret>=0 && rtpl)
+	{
+		// we found a match!
+		if (ret == 0)
+		{
+			// then, we now the match for the first ParameterList
+			// GuidoPos pos = rtpl->GetHeadPosition();
+			labels = TagParameterString::cast(rtpl->RemoveHead());
+		}
+		else if (ret == 1)
+		{
+			labeli = TagParameterInt::cast(rtpl->RemoveHead());
+			labelistr = new NVstring("intlabel");
+
+			char buf[100];			
+			snprintf(buf, 100, "%d", labeli->getValue()); 
+			labelistr->append(buf);
+		}
+		delete rtpl;
+	}
+	tpl.RemoveAll();
+}
+
+void ARUserChordTag::PrintParameters(std::ostream & os) const
+{
+	if (labels && labels->TagIsSet())
+	{
+		os << "<label=\"" << labels->getValue() << "\">";
+	}
+	else if (labeli && labeli->TagIsSet())
+	{
+		os << "<label=" << labeli->getValue() << ">";
+	}
+}
+

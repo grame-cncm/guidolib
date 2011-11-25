@@ -1,0 +1,13 @@
+% Release 0.8
+%
+% tieBegin.gmn
+%
+% You can now tie individual chord-notes with
+% other notes.
+
+{ [ \tieBegin d 
+  \meter<"3/4"> \space<1cm> \splitChord<"label1">( { 
+     \stemsDown  \space<1cm>  g, 
+            \headsReverse(d) \tieEnd } )    c   ],
+  [ d \splitChord<"label1">( { \staff<1> \intens<"p",dx=-5hs,dy=-1hs>(
+    \tieBegin h) } )  \stemsUp h \tieEnd  ] }

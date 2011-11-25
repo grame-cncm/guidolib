@@ -1,0 +1,44 @@
+(*
+	this gmn file is intended to check the beaming position when stems are down
+	beaming position needs to be corrected
+	corrected with the library v.1.39
+*)
+{
+[ 
+%  \meter<"4/4"> 
+  \stemsDown (a/16 a a a a g f e c2 a1 f d) 
+  \stemsUp(a a a a g a b c2 d1 f a c2) 
+  \stemsDown \beam(a/32 a a a) \beam(a g f e) \beam(c2 a1 f d)
+
+  \newLine
+  \stemsUp \beam(a a a a) \beam(g a b c2) \beam( d1 f a c2)
+
+  \stemsDown (a1/16 a/8 a/16) 
+  \stemsUp(a/16 a/8 a/16) 
+
+  \stemsDown (d1/16 a/8 c2/16) 
+  \stemsUp(d1/16 a/8 c2/16) 
+
+  (* check for positioning *)
+   \beam(a1/16 a a a) \beam<dy1=8hs>(a a a a)
+  
+  (* these beamings are now corrected *)
+  \stemsUp \beam<dy3=3hs>(d1/16 e/8 \stemsDown a2/16)
+  \stemsDown a2/16 \stemsUp d1/8 e/16 
+  \beam (a1/8 e/16 \newLine d/16 e/8 e ) 
+  \staff<1>  \beam (\stemsDown d1/8 \staff<2> \stemsUp a0/16 f f/8 \stemsDown \staff<1> c1/16 e)
+  a/4 a a
+],
+
+[
+    (* these beamings are now corrected *)
+	\clef<"f"> _*3/4 \staff<1> 
+	\stemsDown d1/8 \staff<2> \stemsUp a0/16 f 
+	f/8 \stemsDown \staff<1> c1/16 e
+	\staff<2> \beam(_/16 c d/8) \beam(c d/16 _) a0/8
+	\stemsDown \beam(\stemsDown \staff<1>d1/8 c/32 \staff<2> \stemsUp a0/32 f/16 \staff<1> \stemsDown d1/8)
+	\staff<2>_*3/4
+	\stemsDown \beam(\stemsDown \staff<1>d1/8 \staff<2> \stemsUp c/32 a0/32 f/16 \staff<1> \stemsDown d1/8)
+	\staff<2> _*3/2
+]
+}

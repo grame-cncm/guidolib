@@ -1,0 +1,4 @@
+build
+tests
+guido.xcodeproj
+guido.pd_darwin

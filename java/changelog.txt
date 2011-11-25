@@ -1,0 +1,23 @@
+GUIDO Engine - JNI history 
+
+----------------------------------------------------------------
+version 1.0.1 - 
+- java init methods declared protected (instead public)
+
+----------------------------------------------------------------
+version 1.0.0 - Nov. 22 2010
+- wrong final declaration removed for various fields in various classes
+- MusicXML format support as file input
+- no more antialiasing parameter in guido.Init method (devices are now always antialiased)
+
+----------------------------------------------------------------
+version 1.0.0b - Sept 1 2010
+- new guidoscore.GetBitmap method
+- no more dependency to Canvas, uses Graphics for drawing via the new native 
+  guidoscore.GetBitmap method and thus supports also printing.
+
+----------------------------------------------------------------
+version 1.0.0a - August 2010
+- first version
+
+----------------------------------------------------------------

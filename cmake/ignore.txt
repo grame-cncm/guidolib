@@ -1,0 +1,15 @@
+*.xcodeproj
+*build
+cmake_install.cmake
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Debug
+Release
+CPack*
+lib
+Makefile
+guidolib.cbp
+versions
+getdepends
+

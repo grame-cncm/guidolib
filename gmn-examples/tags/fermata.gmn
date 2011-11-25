@@ -1,0 +1,11 @@
+% simple GUIDO example
+
+% demonstrating the
+
+% \fermata-Tag
+% fermata with and without range
+
+
+[ \fermata c1*1/8 \fermata(d e f) g/4 g ]
+
+

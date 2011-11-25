@@ -1,0 +1,19 @@
+% title.gmn
+% 
+% Changes from Release 0.5
+%
+%  Parameters for dy now conform to GUIDO specification:
+%  positive values are upwards, negative values are downwards
+%
+[ \pageFormat<w=20cm,h=14cm,mt=3cm>
+  \title<name="A New Piece",font="Architecture",fsize=1cm,
+           fattrib="b", textformat="cc",pageformat="c2",color="0xffff00"> 
+\composer<name="Kai Renz, Op. 1",font="Swiss",dy=4hs> 
+\tempo<"Andante",dy=5hs> \space<1cm> 
+ \clef<type="g2",color="green",size=2> 
+\space<1cm> \meter<"4/4",color="blue"> 
+\i<"p",dy=-13hs> \i<"ff",dy=-8hs,color="red"> 
+\noteFormat<color="green"> c  d e f g a h c2 h1 a g 
+\newSystem \noteFormat<color="black"> c/8 
+\text<"this is a  test", textformat="bl",font="Arial",fsize=20pt,dy=-14hs> d 
+\beam<color="red">( \cresc<type="blabla",color="red">(e f) g)]

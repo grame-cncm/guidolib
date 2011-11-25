@@ -1,0 +1,1847 @@
+<A NAME="basicpos"></A>
+<H2> 5 Exact Positioning and Formatting of 
+        Basic Notation Elements</H2>
+
+In this section, the mechanisms for 
+the exact formatting and positioning of basic 
+notation elements are presented.
+In most cases, the corresponding Basic GUIDO tags are 
+extended with new parameters;
+however, some new tags are introduced
+while extensions of some of the Basic GUIDO tags 
+are discussed in other sections 
+(such as <A HREF="#\text">\text</A>).
+
+<!--
+<H4>
+define reference points and scales for all positionable / sizeable objects.<BR>
+<BR>
+&nbsp; symbols, noteheads:<BR>
+&nbsp; reference point = xy center of symbol</H4>
+-->
+
+<A NAME=intens>
+<H4>5.1 Dynamic markings</H4>
+
+<A NAME="\intens">
+<H4>5.1.1 \intens, \i</H4>
+
+This tag indicates a dynamic marking and associates it 
+with a relative intensity value.
+The \intens tag is associated with the metrical position of 
+the note immediately following it and carries to the next 
+dynamic marking.
+\i and \intens are synonymous.
+
+<!--
+<P><B><I>Call syntax:</I></B>
+
+<P>\intens&lt;m,dx,dy,size>
+<BR>\intens&lt;m,i,dx,dy,size>
+-->
+
+<P><I><B>Parameters</B> (in the order of their default positions):</I>
+
+<UL>
+<LI>
+<B><I>m</I></B> (string; obligatory) 
+- dynamic marking as displayed in a score
+(like "f", "p", "mf", "fp", etc.).
+</LI>
+
+<LI>
+<I><B>i</B></i> (float; optional)
+- relative intensity, a unit-less floating point number
+between 0.0 (minimal intensity) and 1.0 (maximal intensity).
+<BR>
+<I>Default value: unspecified.
+If <i>i</i> is not specified, 
+GUIDO clients may try to infer a value from
+the <I>m</I> parameter or use an application specific 
+default value.
+</I>
+</LI>
+
+<LI>
+<B><I>dx</I></B> (float; optional)
+ - horizontal offset between 
+  center of leftmost character of the marking
+  and center of the following note head; 
+  if no units are specified, the units defined by the 
+  \units tag are used.</LI>
+<BR><I>Default value:</i> 0
+<LI>
+<B><I>dy</I></B> (float; optional)
+- vertical distance between center of 
+  the marking and the bottom staff line;
+  if no units are specified, the units defined by the 
+  \units tag are used. 
+<BR><i>Default value:</i>
+  unspecified; if no <I>dy</I> value is specified, 
+  the vertical position should be automatically determined 
+  such that the marking appears below the staff and 
+  collisions are avoided.</LI>
+
+<LI>
+<B><I>size</I></B> (float; optional) 
+- fontsize in which the marking
+  is displayed; if no units are specified, the 
+  units defined by the \units  tag are used.</LI>
+<BR><i>Default value:</i> 12pt(??)
+</UL>
+
+<P>
+<B><I>Range:</I></B> none
+
+<P>
+<B><I>Remarks:</I></B> (none)
+
+<B><I>Examples:</I></B>
+
+<UL>\intens&lt;m="f", dx=-2.0, dy=2>
+<BR>\intens&lt;m="ff", i=0.99, dy=-5></UL>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...&nbsp;
+
+
+<HR>
+<A NAME="\cresc">
+<A NAME="\dim">
+<A NAME="\decresc">
+<H4>5.1.2 \cresc, \dim, \decresc</H4>
+These tags are used to realise crescendos
+and diminuendos (or decrescendos); \dim and
+\decresc are synonymous. For all three tags,
+two graphical styles exist: one, where the
+marking is displayed as a wedge, and a second,
+where it is displayed as text plus a dashed line
+indicating the range. The beginning dynamic
+marking (and intensity) is taken from the last
+\intens setting (or unspecified, if no \intens
+occurred before in the current voice); the ending
+dynamic marking (and intensity) can be specified
+with these tags.
+
+<!--
+<P>
+<B><I>Call syntax:</I></B>
+
+<P>
+\cresc&lt;m,i,"&lt;", dx1,dy1,dx2,dy2,h,size>
+<BR>\cresc&lt;m,i,"-", dx,dy,size1,size2>
+<BR>\dim&lt;m,i,">", dx1,dy1,dx2,dy2,h,size>
+<BR>\dim&lt;m,i,"-", dx,dy,size1,size2>
+<BR>\decresc&lt;m,i,">", dx1,dy1,dx2,dy2,h,size>
+<BR>\decresc&lt;m,i,"-", dx,dy,size1,size2>
+-->
+
+<!-- dash length / spacing for "-", thickness of lines, 
+     text for "-" style ("dim. -"??), dx/dy for left end of dashed line -->
+
+<P>
+<I><B>Parameters</B> (in the order of their default positions):</I>
+
+<UL>
+<LI>
+<B><I>m</I></B> (string; optional) 
+- dynamic marking (string) as displayed in a score
+(like "f", "p", "mf", "fp", etc.).
+<BR><i>Default value:</i> unspecified
+
+<LI>
+<I><B>i</B></i> (float; optional) 
+- relative intensity at the end of the cresc/dim/decresc;
+a unit-less floating point number
+between 0.0 (minimal intensity) and 1.0 (maximal intensity).
+If this parameter is not specified, 
+<BR><i>Default value:</i> unspecified;
+if <i>m</i> is specified, 
+GUIDO clients may use this for inferring a <i>i</i>
+ value from or use an application specific 
+default value.
+
+<LI>
+<B><I>style</I></B> (string; optional)
+- "&lt;" for \cresc or ">" for \dim, \decresc
+        for using wedge symbols,
+  "-" for textual markings and dashed lines.
+<BR><I>Default value:</I> "&lt;" for \cresc and ">" 
+  for \dim and \decresc.
+  
+<LI>
+<B><I>dx</I></B> (float; optional)
+- horizontal offset between 
+  center of last note head in range
+  and center of first character of 
+  the dynamic marking; 
+  if no units are specified, 
+  the units defined by the \units
+  tag are used.</LI>
+<BR><I>Default value:</I> 0
+
+<LI>
+<B><I>dy</I></B> (float; optional; used only for "-" style)
+-  vertical distance between center of 
+  the dynamic marking 
+  and the bottom staff line;
+  if no units are specified, the units defined by the \units
+  tag are used. 
+  <br><i>Default value:</i>
+  If no <I>dy</I> value is specified, 
+  the vertical position should be automatically determined such 
+  that the marking appears below the staff and collisions are 
+  avoided.</LI>
+
+<LI>
+<B><I>dx1</I></B> (float; optional)
+- for "&lt;" and ">" styles: 
+  horizontal offset between 
+  center of first note head in range
+  and left end of wedge; 
+  for "-" style: 
+  horizontal offset between 
+  center of first note head in range
+  and center of first character of 
+  the string "cresc.", "dim.", or "decresc."; 
+  if no units are specified, 
+  the units defined by the \units
+  tag are used.</LI>
+<BR><I>Default value:</I> 0
+<LI>
+<B><I>dy1</I></B> (float; optional)
+- for "&lt;" and ">" styles: 
+  vertical distance between center of left end of
+  wedge and bottom staff line;
+  for "-" style: 
+  vertical distance between center of dashed line and
+  and bottom staff line;
+  if no units are specified, the units defined by the \units
+  tag are used. 
+<br><i>Default value:</i>
+  If no <I>dy1</I> value is specified, 
+  the vertical position should be automatically determined such 
+  that the wedge appears below the staff and collisions are 
+  avoided.</LI>
+
+<LI>
+<B><I>dx2</I></B> (float; optional)
+- for "&lt;" and ">" styles: 
+  horizontal offset between 
+  center of last note head in range
+  and right end of wedge symbol; 
+  for "-" style: 
+  horizontal offset between 
+  center of last note head in range
+  and right end of dashed line; 
+  if no units are specified, 
+  the units defined by the \units
+  tag are used.</LI>
+<BR><I>Default value:</I> 0
+
+<LI>
+<B><I>dy2</I></B> (float; optional)
+- for "&lt;" and ">" styles: 
+  vertical distance between center of right end of
+  wedge and bottom staff line;
+  for "-" style: 
+  vertical distance between center of right end of
+  dashed line and bottom staff line;
+  if no units are specified, the units defined by the \units
+  tag are used. 
+<BR><I>Default value:</I> unspecified.
+  If no <I>dy2</I> value is specified, 
+  the vertical position is automatically determined such 
+  that the wedge appears below the staff and collisions are 
+  avoided.</LI>
+
+<LI>
+<B><I>h</I></B> (float; optional; used only for "&lt;" and ">" styles)
+  height of the wedge, measured on its open end.
+  If no units are specified, the units defined by the \units
+  tag are used. </LI>
+<BR><I>Default value:</I> 3hs(??)
+
+<LI>
+<B><I>msize</I></B> (float; optional)
+-  fontsize for the dynamic marking specified via
+  the <I>m</I> parameter. If no units are 
+  specified, the units defined by the \units
+  tag are used.</LI>
+<BR><I>Default value:</I> 12pt(??)
+
+<LI>
+<B><I>tsize</I></B> (float; optional; used only for "-" style)
+-  fontsize for the string "cresc", "dim", or "decresc", 
+  indicating the dynamic marking; if no units are 
+  specified, the units defined by the \units
+  tag are used.</LI>
+<BR><I>Default value:</I> 12pt(??)
+
+</UL>
+
+<P><B><I>Range:</I></B> oligatory
+
+<P><B><I>Remarks:</I></B>
+<UL>
+<LI>
+For crescendos and diminuendos the appropriate tags and parameters should
+be used, using \cresc for representing diminuendos or \dim for crescendos
+should be avoided.</LI>
+
+<LI>
+For longer crescendo or diminuendo sections the \crescBegin 
+and \crescEnd, \dimBegin and \dimEnd, or
+\decrescBegin and \decrescEnd tag combinations should be used
+(see below); 
+this applies also for situations, where the crescendo 
+or diminuendo section overlaps with other tagged ranges such 
+as slurs.</LI>
+</UL>
+
+<P>
+<B><I>Examples:</I></B>
+<UL>\cresc&lt;m="p", "&lt;", dx1=0, dy1=2,dy2=-2>
+<BR>\dim&lt;"-",dy=3>
+<BR>...</UL>
+
+
+<HR>
+
+<A NAME="\crescBegin"><A NAME="\dimBegin">
+<A NAME="\descrescBegin">
+<H4>5.1.3\crescBegin, \dimBegin, \decrescBegin</H4>
+These tags indicate the beginning of a crescendo/diminuendo section which
+ends at the next \crescEnd/\dimEnd tag; the crescendo starts from the current
+dynamic marking.
+
+<!--
+<PRE>\crescBegin&lt;"&lt;", dx,dy></PRE>
+<PRE>\crescBegin&lt;"-", dx,dy,size></PRE>
+-->
+
+<I><B>Parameters</B> (in the order of their default positions):</I>
+
+<UL>
+<LI><B><I>style</I></B> (string; optional)
+- same as for \cresc, \dim, \decresc.
+<BR><I>Default value:</I> "&lt;" for \cresc and ">"   for \dim and \decresc.
+
+<LI>
+<B><I>dx</I></B> (float; optional)
+- horizontal offset between 
+  center of last note head in range
+  and center of first character of 
+  the dynamic marking; 
+  if no units are specified, 
+  the units defined by the \units
+  tag are used.</LI>
+<BR><I>Default value:</I> 0
+
+<LI>
+<B><I>dy</I></B> (float; optional; used only for "-" style)
+-  vertical distance between center of 
+  the string "cresc", "dim", or "decresc", indicating
+  the dynamic marking, and the bottom staff line;
+  if no units are specified, the units defined by the \units
+  tag are used. 
+  <br><i>Default value:</i> unspecified.
+  If no <I>dy</I> value is specified, 
+  the vertical position should be automatically determined such 
+  that the marking appears below the staff and collisions are 
+  avoided.</LI>
+
+<LI>
+<B><I>dx1</I></B> (float; optional)
+- for "&lt;" and ">" styles: 
+  horizontal offset between 
+  center of first note head in range
+  and left end of wedge; 
+  for "-" style: 
+  horizontal offset between 
+  center of first note head in range
+  and center of first character of 
+  the string "cresc.", "dim.", or "decresc."; 
+  if no units are specified, 
+  the units defined by the \units
+  tag are used.</LI>
+<BR><I>Default value:</I> 0
+
+<LI>
+<B><I>dy1</I></B> (float; optional)
+- for "&lt;" and ">" styles: 
+  vertical distance between center of left end of
+  wedge and bottom staff line;
+  for "-" style: 
+  vertical distance between center of dashed line and
+  and bottom staff line;
+  if no units are specified, the units defined by the \units
+  tag are used. 
+<br><i>Default value:</i>
+  If no <I>dy1</I> value is specified, 
+  the vertical position should be automatically determined such 
+  that the wedge appears below the staff and collisions are 
+  avoided.</LI>
+
+<LI>
+<B><I>tsize</I></B> (float; optional; used only for "-" style)
+-  fontsize for the string "cresc", "dim", or "decresc", 
+  indicating the dynamic marking; if no units are 
+  specified, the units defined by the \units
+  tag are used.</LI>
+<BR><I>Default value:</I> 12pt(??)
+</UL>
+
+
+<P>
+<B><I>Range:</I></B> none
+
+<p>
+<B><I>Remarks:</I></B> (none)
+
+<P>
+<B><I>Examples:</I></B>
+<UL>\crescBegin&lt;"&lt;",dx=1,dy=-2>
+<BR>\dimBegin&lt;"-",size=2>
+<BR>...</UL>
+
+
+<HR WIDTH="100%">
+<A NAME="\crescEnd">
+<A NAME="\dimEnd">
+<H4>5.1.4 \crescEnd, \dimEnd, \decrescEnd</H4>
+
+These tags indicate the end of a crescendo\diminuendo section which began
+at the last \crescBegin/\dimBegin tag.
+The <i>style</i> attribute (which determines which parameter
+these tags accept) is specified with the
+corresponding \crescBegin / \dimBegin / \decrescBegin
+tags.
+
+<!--
+<PRE>\crescEnd&lt;m,r,dx2,dy2,h,size></PRE>
+&nbsp;\crescEnd&lt;m,r,size>
+-->
+
+
+<P><I><B>Parameters</B> (in the order of their default positions):</I>
+
+<UL>
+<LI>
+<B><I>m</I></B> (string; optional) 
+- dynamic marking (string) as displayed in a score
+(like "f", "p", "mf", "fp", etc.).
+<BR><i>Default value:</i> unspecified
+
+<LI>
+<I><B>i</B></i> (float; optional) 
+- relative intensity at the end of the cresc/dim/decresc;
+a unit-less floating point number
+between 0.0 (minimal intensity) and 1.0 (maximal intensity).
+If this parameter is not specified, 
+<BR><i>Default value:</i> unspecified;
+if <i>m</i> is specified, 
+GUIDO clients may use this for inferring a <i>i</i>
+ value from or use an application specific 
+default value.
+
+<LI>
+<B><I>dx2</I></B> (float; optional)
+- for "&lt;" and ">" styles: 
+  horizontal offset between 
+  center of last note head in range
+  and right end of wedge symbol; 
+  for "-" style: 
+  horizontal offset between 
+  center of last note head in range
+  and right end of dashed line; 
+  if no units are specified, 
+  the units defined by the \units
+  tag are used.</LI>
+<BR><I>Default value:</I> 0
+
+<LI>
+<B><I>dy2</I></B> (float; optional)
+- for "&lt;" and ">" styles: 
+  vertical distance between center of right end of
+  wedge and bottom staff line;
+  for "-" style: 
+  vertical distance between center of right end of
+  dashed line and bottom staff line;
+  if no units are specified, the units defined by the \units
+  tag are used. 
+<BR><I>Default value:</I> unspecified.
+  If no <I>dy2</I> value is specified, 
+  the vertical position is automatically determined such 
+  that the wedge appears below the staff and collisions are 
+  avoided.</LI>
+
+<LI>
+<B><I>h</I></B> (float; optional; used only for "&lt;" and ">" styles)
+  height of the wedge, measured on its open end.
+  If no units are specified, the units defined by the \units
+  tag are used. </LI>
+<BR><I>Default value:</I> 3hs(??)
+
+<LI>
+<B><I>msize</I></B> (float; optional)
+-  fontsize for the dynamic marking specified via
+  the <I>m</I> parameter. If no units are 
+  specified, the units defined by the \units
+  tag are used.</LI>
+<BR><I>Default value:</I> 12pt(??)
+</UL>
+
+<P>
+<B><I>Range:</I></B> none
+ 
+<P>
+<B><I>Remarks:</I></B> (none)
+
+<P>
+<B><I>Examples:</I></B>
+<UL>\crescEnd&lt;"forte",0.9>
+<BR>\dimEnd&lt;"piano",0.1>
+<BR>...</UL>
+
+
+<HR>
+
+<A NAME=tempo>
+<H4>5.2 Tempo indications</H4>
+
+<H4>5.2.1 \tempo</H4>
+This tagis used to indicate tempo markings;
+at the same time it allows to specify the absolute tempo
+for playback.
+
+<!--
+<P>
+<B><I>Call syntax:</I></B>
+
+<P>
+\tempo&lt;m,bpm,dx,dy,size>
+-->
+
+
+<P>
+<I><B>Parameters</B> (in the order of their default positions):</I>
+<UL>
+<LI>
+<B><I>m</I></B> (string; obligatory)
+- tempo marking as it appears in the score, 
+  e.g. "Allegro", "Andante",
+  "slower", "gem&auml;chlich".
+  </LI>
+
+<!-- graphic form 1/4.=60 ?? -->
+
+<LI>
+<B><I>bpm</I></B> (string; optional) 
+- absolute tempo; a string of
+  the form "x/y=n" where x/y is a duration value like 
+  1/4 or 3/8 and n an integer number which
+  indicates the number of these duration values 
+  per minute.</LI>
+<BR><i>Default value:</i> unspecified;
+GUIDO clients may use the <i>m</i> value
+for inferring an absolute tempo or use an 
+application specific default value.
+
+<LI>
+<B><I>dx</I></B> - 
+  horizontal offset between 
+  center of first note head after the tag
+  and center of first character of 
+  the tempo indication <i>m</i>; 
+  if no units are specified, 
+  the units defined by the \units
+  tag are used.</LI>
+<BR><I>Default value:</I> 0
+
+<LI>
+<B><I>dy</I></B> - 
+  vertical distance between the top staff line
+  and the center of the tempo indication <i>m</i>;
+  if no units are specified, the units defined by the \units
+  tag are used. 
+<br><i>Default value:</i>
+If no <I>dy</I> value is specified, 
+  the vertical position shoule be automatically determined such 
+  that the marking appears above the staff and collisions are 
+  avoided.</LI>
+
+<LI>
+<B><I>size</I></B> - 
+  fontsize for the tempo marking specified via
+  the <I>m</I> parameter. If no units are 
+  specified, the units defined by the \units
+  tag are used.</LI>
+<BR><I>default value:</I> 12pt (??)
+</UL>
+
+<P>
+<B><I>Range:</I></B> none
+
+<P>
+<B><I>Remarks:</I></B>
+<UL>
+<LI>
+The \tempo tag is associated with the metrical position of the 
+note immediately following it and carries to the 
+next tempo indication.</LI>
+</UL>
+
+<P>
+<B><I>Examples:</I></B>
+<UL>\tempo&lt;m="presto",dx=1,dy=-5>
+<BR>\tempo&lt;m="andante",bpm="1/8=200",dx=8>
+<BR>...
+</UL>
+
+
+<!-- >>> check/update from here -->
+
+<A NAME="\accel">
+<A NAME="\rit">
+<H4>5.2.2 \accel,\rit</H4>
+These tags indicates an accelerando/ritardando;
+the beginning tempo marking (and absolute tempo) 
+is taken from the last \tempo setting 
+(or unspecified, if no \tempo occurred before 
+in the current voice); the ending
+tempo marking (and absolute tempo) can be specified
+with these tags. The accelerando/ritardando is
+graphically marked by the text "accel."/"rit."
+and a horizontal dashed line indicating the 
+range.
+
+<!--
+<P>\accel&lt;m,bpm,dx,dy,msize,tsize>
+<BR\rit&lt;m,bpm,dx,dy,msize,tsize>
+-->
+
+<P><I><B>Parameters</B> (in the order of their default positions):</I>
+
+<UL>
+<LI>
+<B><I>m</I></B> (string; optional)
+- tempo marking as applied to the last note
+  in the range.
+  <BR><i>Default value:</i> ""
+
+<LI>
+<B><I>bpm</I></B> (string; optional)
+- absolute tempo reached at the beginning
+of the last note in the range; a string of the form "x/y=n"
+where x/y is a duration value like 1/4 or 3/8 and n an integer number 
+which indicates the number of these duration values 
+per minute.
+<BR><i>Default value:</i> unspecified;
+if <i>m</i> is specified, 
+GUIDO clients may use this for inferring an absolute
+tempo or use an application specific default value.
+</LI>
+
+<LI>
+<B><I>dx</I></B> (float; optional) 
+- horizontal offset between 
+  center of first note head in range
+  and center of first character of 
+  the tempo indication <i>m</i>; 
+  if no units are specified, 
+  the units defined by the \units
+  tag are used.</LI>
+<BR><I>Default value:</I> 0
+
+<LI>
+<B><I>dy</I></B> (float; optional)
+-  vertical distance between center of 
+  the tempo indication <i>m</i>
+  and the top staff line;
+  if no units are specified, the units defined by the \units
+  tag are used. 
+<BR><I>Default value:</I> unspeciefied.
+  If no <I>dy</I> value is specified, 
+  the vertical position should be automatically determined such 
+  that the marking appears above the staff and collisions are 
+  avoided.</LI>
+
+<LI>
+<B><I>msize</I></B> (float; optional) 
+- fontsize for the tempo marking specified via
+  the <I>m</I> parameter. If no units are 
+  specified, the units defined by the \units
+  tag are used.</LI>
+<BR><I>Default value:</I> 12pt (??)
+
+<LI>
+<B><I>tsize</I></B> (float; optional)
+- fontsize for the string "accel."/"rit."
+  indicating the accelerando/ritardando.
+  If no units are 
+  specified, the units defined by the \units
+  tag are used.</LI>
+<BR><I>Default value:</I> 12pt (??)
+</UL>
+
+
+<P><B><I>Range: </I></B>obligatory
+
+<P>
+<B><I>Remarks:</I></B>
+<UL>
+<LI>
+For accelerandos and ritardandos the appropriate tags and parameters should
+be used, using \accel for representing ritardandos or \rit for accelerandos
+should be avoided.</LI>
+
+<LI>
+For longer accelerando or ritardando sections the \accelBegin and \accelEnd
+or the \ritBegin and \ritEnd tag combinations should be used; this applies
+also for situations, where the accelerando or ritardando section overlaps
+with other tagged ranges such as slurs.</LI>
+</UL>
+<B><I>Examples:</I></B>
+<BR>...
+
+
+<HR WIDTH="100%">
+
+<A NAME="\accelBegin"></A>
+<A NAME="\ritBegin"></A>
+<H4>5.2.3 \accelBegin, \ritBegin</H4>
+
+These tags indicate the beginning of a accelerando/ritardando section which
+ends at the next \accelEnd/\ritEnd tag; the accelerando/ritardando starts
+from the current tempo.
+
+<!--
+<P>&nbsp;\accelBegin&lt;dx1,dy1,tsize>
+<BR>&nbsp;
+-->
+
+<P><I><B>Parameters</B> (in the order of their default positions):</I>
+<UL>
+<!--
+<LI>
+<B><I>dx</I></B> (float; optional)
+- horizontal distance between center of leftmost note
+head in the group and the the left end of the ritardando/accelerando.
+If no units are specified, the units defined by the \units
+
+<BR><I>default value: 0</I>
+<LI>
+<B><I>dy</I></B> (float; optional)
+- vertical distance between the bottom staffline and the
+right end of the ritardando/accelerando.
+If no units are specified, the units defined by the \units
+tag are used. 
+
+<BR><I>default value:</i> unspecified.
+  If no <I>dy</I> value is specified, 
+  the vertical position should be automatically determined such 
+  that the marking appears above the staff and collisions are 
+  avoided.</LI>
+-->
+
+<LI>
+<B><I>tsize </I></B> (float; optional)
+- fontsize for "accelerando"/"ritardando" marking.
+If no units are specified, the units defined by the \units
+  tag are used. 
+<BR><I>default value:</i> 12pt(??)
+</UL>
+
+<P>
+<B><I>Range:</I></B> (none)
+
+<P>
+<B><I>Remarks:</I></B>
+
+<P>
+<B><I>Examples:</I></B>
+<BR>...
+
+
+<HR WIDTH="100%">
+<A NAME="\accelEnd">
+<A NAME="\ritEnd">
+<H4>5.2.4 \accelEnd, \ritEnd</H4>
+
+These tags indicate the end of an accelerando/ritardando section which
+began at the last \accelBegin/\ritBegin/ritardando tag.
+
+<!--
+<P>\accelEnd&lt;m,bpm,dx2,dy2,msize>
+-->
+
+<P><I><B>Parameters</B> (in the order of their default positions):</I>
+<UL>
+<LI>
+<B><I>m</I></B> (string; optional)
+- tempo marking as applied to the last note
+  in the range.
+  <BR><i>Default value:</i> ""
+
+<LI>
+<B><I>bpm</I></B> (string; optional)
+- absolute tempo reached at the beginning
+of the last note in the range; a string of the form "x/y=n"
+where x/y is a duration value like 1/4 or 3/8 and n an integer number 
+which indicates the number of these duration values 
+per minute.
+<BR><i>Default value:</i> unspecified;
+if <i>m</i> is specified, 
+GUIDO clients may use this for inferring an absolute
+tempo or use an application specific default value.
+</LI>
+
+<LI>
+<B><I>dx</I></B> (float; optional) 
+- horizontal offset between 
+  center of first note head in range
+  and center of first character of 
+  the tempo indication <i>m</i>; 
+  if no units are specified, 
+  the units defined by the \units
+  tag are used.</LI>
+<BR><I>Default value:</I> 0
+
+<LI>
+<B><I>dy</I></B> (float; optional)
+-  vertical distance between center of 
+  the tempo indication <i>m</i>
+  and the top staff line;
+  if no units are specified, the units defined by the \units
+  tag are used. 
+<BR><I>Default value:</I> unspeciefied.
+  If no <I>dy</I> value is specified, 
+  the vertical position should be automatically determined such 
+  that the marking appears above the staff and collisions are 
+  avoided.</LI>
+
+<LI>
+<B><I>msize</I></B> (float; optional) 
+- fontsize for the tempo marking specified via
+  the <I>m</I> parameter. If no units are 
+  specified, the units defined by the \units
+  tag are used.</LI>
+<BR><I>Default value:</I> 12pt (??)
+
+</UL>
+
+<P>
+<B><I>Range:</I></B> (none)
+
+<p>
+<B><I>Remarks:</I></B>
+
+<B><I>Examples:</I></B>
+<BR>...
+
+
+<HR>
+
+<H4>5.3 \instr</H4>
+
+<A NAME="\instr">
+
+<H4>5.3.1 Instrument indications</H4>
+This tag sets defines the instrument for the current 
+voice to and associates it with an an instrument identifier
+used for playback.
+
+<!--
+<P>\instr&lt;m,id,dx,dy,size>
+-->
+
+<P><I><B>Parameters</B> (in the order of their default positions):</I>
+
+<!-- need adjust as well -->
+
+<UL>
+<LI>
+<B><I>m</I></B> (string; obligatory)
+- instrument marking, appears
+  at the beginning of the score for \instr tags
+  which appear before the first note of a voice,
+  above the note following it, if \instr appears
+  within a voice.
+  It is recommended
+  that the standard names or abbreviations 
+  commonly used in scores be used.</LI>
+
+<LI>
+<B><I>id</I></B> (string; optional) 
+- instrument identifier used
+  for specifying a playback instrument.
+  MIDI instruments can be accessed by values
+  of the form "GM n" (for general MIDI instrument number
+  n), where n is an integer between 1 and 128.
+<BR><I>Default value:</I> unspecified.
+GUIDO clients may try to infer an 
+playback instrument from the <i>m</i> parameter
+or use an application specific default value.
+
+
+<LI>
+<B><I>dx</I></B> (float; optional) 
+- when tag appears before first note of voice (case 1):
+  horizontal displacement between 
+  left margin of system and 
+  right margin of the bounding box
+  of instrument marking <i>m</i>;
+  otherwise (case 2): horizontal distance between
+  the center of the head of the next note after the tag
+  and the center of first character of 
+  the instrument indication <i>m</i>; 
+  if no units are specified, 
+  the units defined by the \units
+  tag are used.</LI>
+<BR><I>Default value:</i> 5hs (case 1) / 0 (case 2)
+
+<LI>
+<B><I>dy</I></B> (float; optional) 
+- when tag appears before first note of voice
+  (case 1):
+  vertical distance between center of 
+  the instrument indication <i>m</i>
+  and the center of the staff;
+  otherwise (case 2):
+  vertical distance between center of 
+  the instrument indication <i>m</i>
+  and the top staff line;
+  if no units are specified, the units defined by the \units
+  tag are used. 
+<BR><I>Default value:</i> 
+  0 (case 1) / unspecified (case 2);
+  If in case 2, no <I>dy</I> value is specified, 
+  GUIDO notation clients should automatically determine
+  the vertical position 
+  such that the marking appears above the staff and collisions are 
+  avoided.</LI>
+
+<LI>
+<B><I>size</I></B> (float; optional) 
+- fontsize for the instrument marking specified via
+  the <I>m</I> parameter. If no units are 
+  specified, the units defined by the \units
+  tag are used.</LI>
+<BR><I>default value: 12pt(??)</I>
+</UL>
+
+<P>
+<B><I>Remarks:</I></B>
+
+<P>
+<B><I>Examples:</I></B>
+<BR>...
+
+
+<HR>
+
+<H4>5.4 Slurs and ties</H4>
+
+<A NAME="\slur">
+
+<H4>5.4.1 \slur</H4>
+This tag slurs notes together.
+For slurred chords, only one slur
+is graphically represented. Graphically,
+a model with three control points 
+is assumed, the outermost of which 
+are located at either end of the slur;
+the middle control point is located between
+these on the slur at the point of maximal
+distance between the slur and the straight line
+connecting the two centers of leftmost and
+rightmost note heads in the range.
+
+<!-- need figure to explain position of ctrl points -->
+
+<!--
+<P>
+<B><I>Call syntax:</I></B>
+
+<P>\slur&lt;dx1,dy1, dx2,dy2, r3,h>
+-->
+
+<P>
+<I><B>Parameters</B> (in the order of their default positions):</I>
+
+<UL>
+<B><I>dx1</I></B> (float; optional) 
+- horizontal distance between 
+the center of the first note head in the range 
+and the left end of the tie;
+if no units are specified, 
+the units defined by the \units
+tag are used.
+<BR>
+<I>Default value: 2hs</I>
+
+<LI>
+<B><I>dy1</I></B> (float; optional)
+- vertical distance between 
+the center of the leftmost note head
+and the left end of the slur;
+if no units are specified, 
+the units defined by the \units
+tag are used.
+<BR>
+<I>Default value: 1hs</I>
+
+<!-- same for stemsup and down?? -->
+
+
+<LI>
+<B><I>dx2</I></B> (float; optional) 
+- horizontal distance between the
+center of the last note head in the range 
+and the right end of the tie;
+if no units are specified, 
+the units defined by the \units
+tag are used.
+<BR>
+<I>Default value: -2hs</I>
+
+<LI>
+<B><I>dy2</I></B> (float; optional)
+- vertical distance between 
+center of right note head
+in the range and the right end of the slur;
+if no units are specified, 
+the units defined by the \units
+tag are used.
+<BR>
+<I>Default value: 1hs</I>
+
+<!-- same for stemsup and down?? -->
+
+
+<LI>
+<B><I>r3</I></B> (float; optional) 
+- relative horizontal position
+of the middle control point 
+between the centers of the
+two outmost note heads.
+The value is between 0.0 (leftmost) and 1.0 
+(rightmost);
+the value has no unit.<BR>
+<I>Default value: (determined 
+        by the implementation,
+        dependent on the positions of the 
+        notes in the range)</I>
+
+<LI>
+<B><I>h</I></B> (float; optional)
+- vertical distance between
+the point on the straight line connecting
+the centers of the leftmost and rightmost slurred 
+notes determined by the <i>r3</i> parameter
+and the middle control point;
+if no units are specified, 
+the units defined by the \units
+tag are used.
+<BR>
+<I>Default value: (determined 
+        by the implementation,
+        dependent on the positions of the 
+        notes in the range)
+        </I>
+
+</UL>
+
+<P>
+<B><I>Range:</I></B> obligatory
+
+<P>
+<B><I>Remarks:</I></B>
+<UL>
+<LI>
+\slur should not be used to represent tied notes, for 
+which the \tie tag is to be used.
+</UL>
+<B><I>Examples:</I></B>
+<BR> ...
+
+
+<HR>
+<A NAME="\slurBegin">
+<A NAME="\slurEnd">
+<H4>5.4.2 \slurBegin,\slurEnd</H4>
+Used for representing slurs when the range
+overlaps with ranges of other tags.
+
+<!--
+<P>
+<B><I>Call syntax:</I></B>
+
+<P>\slurBegin&lt;dx1,dy1>
+<BR>\slurEnd&lt;dx2,dy2, r3,h>
+-->
+
+<P>
+<I><B>Parameters</B> (in the order of their default positions):</I>
+
+(see <A HREF="#\slur">\slur</A>.)
+
+<P>
+<B><I>Range:</I></B> none
+
+<P>
+<B><I>Remarks:</I></B>
+<UL>
+<LI>
+\slurBegin&lt;...> ... \slurEnd&lt;...>
+is equivalent to \slur&lt;...>( ... );
+it should only be used if overlapping ranges
+do not allow the latter representation to be used.
+
+<LI>
+(see other remarks for <A HREF="#\slur">\slur</A>.)
+
+</UL>
+<B><I>Examples:</I></B>
+<BR> ...
+
+
+<!--
+thickness of slur -> slurFormat? thickness param?
+-->
+
+
+<A NAME="\tie">
+<H4>5.4.3 \tie</H4>
+This tag ties notes together; it is only
+to be used for two or more notes with identical pitch.
+For tied chords, the number of voices in each chord
+and all pitches have to be be identical; 
+in this case, the voices in all voices are 
+tied, respectively.
+
+<!--
+<P>
+<B><I>Call syntax:</I></B>
+
+<P>\tie&lt;dx1,dy1,dx2, r3,h>
+-->
+
+<P>
+<I><B>Parameters</B> (in the order of their default positions):</I>
+
+<UL>
+<B><I>dx1</I></B> (float; optional) 
+- horizontal distance between 
+the center of the first note head in the range 
+and the left end of the tie;
+if no units are specified, 
+the units defined by the \units
+tag are used.
+<BR>
+<I>Default value: 2hs</I>
+
+<LI>
+<B><I>dy1</I></B> (float; optional)
+- vertical distance between 
+center of the note heads (note that
+the notes have the same pitch)
+and the ends of the tie;
+if no units are specified, 
+the units defined by the \units
+tag are used.
+<BR>
+<I>Default value: 1hs</I>
+
+<!-- same for stemsup and down?? -->
+
+
+<LI>
+<B><I>dx2</I></B> (float; optional) 
+- horizontal distance between the
+center of the last note head in the range 
+and the right end of the tie;
+if no units are specified, 
+the units defined by the \units
+tag are used.
+<BR>
+<I>Default value: -2hs</I>
+
+<LI>
+<B><I>r3</I></B> (float; optional) 
+- relative horizontal position
+of the middle control point (highest
+point of the tie) between the centers of the
+two outmost note heads.
+The value is between 0.0 (leftmost) and 1.0 
+(rightmost); the value has no unit.
+<BR>
+<I>Default value: 0.5</I>
+
+
+<LI>
+<B><I>h</I></B> (float; optional)
+- vertical distance between
+center of the note heads and the
+highest point of the tie;
+if no units are specified, 
+the units defined by the \units
+tag are used.
+<BR>
+<I>default value: 2.5hs</I>
+
+</UL>
+
+<P>
+<B><I>Range:</I></B> obligatory
+
+<P>
+<B><I>Remarks:</I></B>
+<UL>
+<LI>
+If more than two notes appear in the range,
+ties are displayed between each pair of neigbouring
+notes.
+
+<LI>
+All notes in the range have to have identical pitch.</LI>
+
+<LI>
+Ties are neither identical with nor equivalent to slurs 
+between notes with identical pitches. Whereas a slur 
+indicates a grouping, a tie musically merges the notes 
+in its range.
+
+<LI>
+Tied note groups are neither identical with nor equivalent to 
+merged groups. While a merged group corresponds to a single note 
+which is notated as one note symbol, a tied group
+is notated as a number of notes connected by ties.
+
+</UL>
+<B><I>Examples:</I></B>
+<BR> ...
+
+
+
+<HR>
+<A NAME="\tieBegin">
+<A NAME="\tieEnd">
+<H4>5.4.4 \tieBegin,\tieEnd</H4>
+Used for representing ties when the range
+overlaps with ranges of other tags.
+
+<P>
+<B><I>Call syntax:</I></B>
+
+<P>\tieBegin&lt;dx1,dy1>
+<BR>\tieEnd&lt;dx2, r3,h>
+
+<P>
+<I><B>Parameters</B> (in the order of their default positions):</I>
+
+(see <A HREF="#\tie">\tie</A>.)
+
+<P>
+<B><I>Range:</I></B> none
+
+<P>
+<B><I>Remarks:</I></B>
+<UL>
+<LI>
+\tieBegin&lt;...> ... \tieEnd&lt;...>
+is equivalent to \tie&lt;...>( ... );
+it should only be used if overlapping ranges
+do not allow the latter representation to be used.
+
+<LI>
+(see other remarks for <A HREF="#\tie">\tie</A>.)
+
+</UL>
+<B><I>Examples:</I></B>
+<BR> ...
+
+
+<!--
+thickness of tie -> tieFormat? thickness param?
+-->
+
+<HR>
+
+<H4>5.5 Accents and Expressive Markings</H4>
+
+<A NAME="\stacc">
+<A NAME="\ten">
+<A NAME="\marcato">
+<A NAME="\accent">
+
+<H4>5.5.1 \stacc, \ten, \marcato, \accent</H4>
+These tags indicate a staccato/tenuto/marcato/accented
+articulation for a range of notes.
+
+<P>
+<B><I>Call syntax:</I></B>
+
+<P>\stacc&lt;dx,dy,size>
+<BR>\ten&lt;dx,dy,size>
+<BR>\marcato&lt;dx,dy,size>
+<BR>\accent&lt;dx,dy,size>
+
+<P>
+<B><I>Range:</I></B> optional
+
+
+<P>
+<I><B>Parameters</B> (in the order of their default positions):</I>
+
+<UL>
+
+<LI>
+<B><I>dx</I></B> (float; optional)
+- horizontal distance between 
+center of the note head and the center of the corresponding
+articulation symbol;
+if no units are specified, 
+the units defined by the \units
+tag are used.
+<BR><I>default value: 0</I>
+
+<LI>
+<B><I>dy</I></B> (float; optional)
+- vertical distance between 
+center of the note head and the center of the corresponding
+articulation symbol;
+if no units are specified, 
+the units defined by the \units
+tag are used.
+<BR><I>default value: unspecified</I>
+If <i>dy</i> is not specified, 
+GUIDO notation clients should place the dynamic markings 
+such that collisions are avoided and the marking 
+occurs on the side of the notehead opposite the stem,
+if a stem is present.
+</UL>
+
+<P>
+<B><I>Remarks:</I></B> (none)
+<UL>
+<LI>
+If more than one note appear in the range,
+the corresponding articulation is applied to 
+each individual note.
+
+</UL>
+
+
+<P>
+<B><I>Examples:</I></B>
+<BR>...
+
+<!-- hh: need those also without range, then
+  a textual marking is applied
+  furthermore: interpretation (duration, acc)
+  -> player params 
+-->
+  
+
+<!-- >>> -->
+
+<HR>
+
+<H4>5.6 Trills and Ornaments</H4>
+
+<A NAME="\trill"></A>
+<A NAME="\mord"></A>
+<A NAME="\turn"></A>
+
+<H4>5.6.1 \trill, \mord, \turn</I></H4>
+
+These tags indicate trills/mordents/turns;
+they are applied to a range containing one or more 
+chords, where the first voice of each chord specifies
+the principal note and the other voices auxiliary notes.
+
+<P>&nbsp; \trill&lt;speed,dx,dy,size>
+
+<P><I><B>Parameters</B> (in the order of their default positions):</I>
+
+<UL>
+<LI>
+<B><I>speed</I></B> (string; optional) 
+- string of the form "<i>m</i>/<i>n</i>" 
+specifies the ornament to be executed as a sequence
+of <i>m</i>/<i>n</i> notes.
+For trills, alternating notes span the full duration.
+<BR>
+<i>Default value:</i> (not specified,
+  depends on implementation of application.)
+
+<B><I>dx</I></B> (float; optional) 
+- horizontal distance between center of leftmost dot and
+center of note head, in halfspaces of the current system.</LI>
+
+<BR>
+<I>Default value: 2.0</I>
+<LI>
+
+<B><I>dy</I></B> (float; optional)
+- vertical distance between center of dot and center of
+note head, in halfspaces of the current system.</LI>
+
+<BR>
+<I>Default value: none, see Semantics.</I>
+<LI>
+
+<B><I>size</I></B> (float; optioal)
+- size of the symbol, as a factor relative to the size
+of the note head. Cannot be specified with a unit. </LI>
+
+<BR>
+<I>Default value: 1.0</I></UL>
+</UL>
+
+<P>
+<B><I>Range:</I></B> obligatory
+
+<P><B><I>Semantics:</I></B>
+<UL>
+<LI>
+
+If no <I>dy</I> value is specified, the vertical position is automatically
+determined such that it is above the staff and collisions are avoided.</LI>
+</UL>
+<B><I>Remarks:</I></B>
+<UL>
+<LI>
+
+For trills and mordents, each chord should have exactly two voices which
+specifiy the main and auxiliary note, respectively. Upward and downward
+trills as well as standard and inverse mordents can be realised by specifying
+these notes accordingly.</LI>
+
+<LI>
+
+For turns, each chord should have exactly three voices which specifiy the
+main, the first and the second auxiliary note, respectively. Standard and
+inverse turns can be realised by specifying these notes accordingly.</LI>
+</UL>
+
+<B><I>Examples:</I></B>
+<BR>...
+
+
+<HR WIDTH="100%">
+
+<H4>5.7 Tremolo</h4>
+
+<A NAME="\trem">
+<h4>5.7.1 \trem</H4>
+
+This tag indicates tremolo notes.
+Measured tremolo (indicated by slashes through the 
+note stem or below/above the notehead and
+optionally the marking "trem").
+  
+
+<!--
+<P>&nbsp;\trem&lt;n,dy> % n trem beams
+<BR>&nbsp; \trem&lt;i,n,dy> % n trem beams
+-->
+
+<P><I><B>Parameters</B> (in the order of their default positions):</I>
+
+<UL>
+<LI>
+<B><I>style</I></B> (string; optional)
+- string of the form "/", "//", ...
+or "trem/", "trem//", ...
+indicating the number of tremolo beams
+and, if specified, the marking "trem" above
+or below the note (according to the <i>dy</i> parameter).
+<BR><I>default value: ??</I>
+
+<LI>
+<B><I>speed</I></B> (integer; optional)
+- specifies the tremolo to be executed as a sequence of
+1/i notes (does not take units)
+<BR><I>default value: ??</I>
+
+<LI>
+<B><I>dx</I></B> (real; optional)
+- horizontal distance
+between center of notehead
+and center of the "trem" marking;
+if no units are specified, 
+the units defined by the \units
+tag are used.
+<BR><I>default value: 0</I>
+
+<LI>
+<B><I>dy</I></B> (real; optional)
+- vertical distance between 
+center of the note head and the center of 
+the "trem" marking;
+if no units are specified, 
+the units defined by the \units
+tag are used.
+<BR><I>default value: unspecified</I>
+If <i>dy</i> is not specified, 
+GUIDO notation clients should place the 
+"trem" marking 
+such that collisions are avoided and the marking 
+occurs above the staff.
+</UL>
+
+<!--
+slash pos / dots pos / dd (dist betw dots)
+
+-->
+
+<B><I>Remarks:</I></B>
+<UL>
+<LI>
+Fingered tremolo can be realised using \trill.</LI>
+</UL>
+
+<P>
+<B><I>Examples:</I></B>
+<UL>...
+</UL>
+
+
+<HR>
+
+<A NAME="\fermata">
+<H4>3.3.14 \fermata</I></H4>
+
+Indicates a fermata at the current metric position (for use between notes).
+
+<!--
+<P>&nbsp; \fermata&lt;r,dx,dy,size>
+-->
+
+<P><I><B>Parameters</B> (in the order of their default positions):</I>
+<UL>
+<LI>
+<B><I>beat </I></B>- beats of rest during playback</LI>
+
+<LI>
+<B><I>dx</I></B> -&nbsp; horizontal distance between center of leftmost
+character and center of the following note head, in halfspaces of the current
+system.</LI>
+
+<BR><I>default value: 0</I>
+<LI>
+<B><I>dy</I></B> - vertical distance between center of the marking and
+center of the following note head, in halfspaces of the current system.</LI>
+
+<BR><I>default value: none (see Semantics)</I>
+<LI>
+<B><I>size - </I></B>of the symbol, as a factor relative to the size of
+the note head.</LI>
+
+<BR><I>default value: 1.0</I></UL>
+<B><I>Range:</I></B> optional
+
+<P><B><I>Semantics:</I></B>
+<UL>
+<LI>
+If no <I>dy</I> value is specified, the vertical position is automatically
+determined such that it is above the staff and collisions are avoided.</LI>
+</UL>
+<B><I>Remarks:</I></B> (none)
+
+<P><B><I>Examples:</I></B>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...
+<H4>
+<BR>
+<BR>
+
+<!--
+cue
+repititions
+beams
+stems
+barlines and tactus strokes
+title and composer
+
+-->
+
+<HR WIDTH="100%"><A NAME="\grace"></A><I>3.3.15 \grace</I></H4>
+This tag marks notes as grace notes.
+
+<P>\grace&lt;i,format>
+
+<P><I><B>Parameters</B> (in the order of their default positions):</I>
+<UL>
+<LI>
+<B><I>i</I></B> - value 1/i preceeding the first note after notes.</LI>
+
+<LI>
+<B><I>format</I></B> -&nbsp; "/" = slashed, "()" = group bracketed, "(/)"
+= both</LI>
+</UL>
+<B><I>Range:</I></B> optional
+
+<P><B><I>Semantics:</I></B>
+<UL>
+<LI>
+IF</LI>
+</UL>
+<B><I>Remarks:</I></B>
+<UL>
+<LI>
+For grace notes, no durations have to be specified.</LI>
+</UL>
+<B><I>Examples:</I></B>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...
+<H4>
+&nbsp;<BR>
+
+<HR WIDTH="100%"><A NAME="\clef"></A><I>3.3.16 \clef</I></H4>
+This tag sets or hides clef.
+
+<P>\clef&lt;type,size>
+<BR>&nbsp;
+
+<BR><I><B>Parameters</B> (in the order of their default positions):</I>
+<UL>
+<LI>
+<B><I>type</I></B> -"none", "g","f","c","perc" = percussion, "gg" = double
+g-clef,&nbsp; the position within the staff ("1" for lowest line, ...,
+
+"5" for highest line). Optionally, this can be succeeded by "+8","-8",
+
+"+15","-15" for transposed clefs (octave or double octave up or down).</LI>
+
+<BR><B><I>size</I></B> -&nbsp; of the symbol, measured in haplfspaces of
+the current system.</UL>
+<B><I>Range:</I></B> (none)
+
+<P><B><I>Semantics:</I></B>
+<UL>
+<LI>
+IF</LI>
+</UL>
+
+<B><I>Remarks:</I></B>
+<UL>
+<LI>
+
+If the staff-position is omitted, default values of "g2", "f4", "c3" are
+assumed</LI>
+
+<LI>
+For common clefs, the following synonymes can be used:</LI>
+
+
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "treble" = "violino"
+= "g2"
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "bass" = "basso"
+= "f4"
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "tenor" = "c4"
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "alto" = "c3"
+<LI>
+Clefs can appear at the beginnig or in the middle of a voice, the latter
+indicating a clef change.</LI>
+
+<BR>&nbsp;</UL>
+<B><I>Examples:</I></B>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \
+<PRE>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...</PRE>
+
+<PRE>&nbsp;</PRE>
+
+<H4>
+
+
+<HR WIDTH="100%"><A NAME="\meter"></A><I>3.3.17 \meter</I></H4>
+This tag sets the time signature.
+<UL>\meter&lt;sig,size1,size2></UL>
+<I><B>Parameters</B> (in the order of their default positions):</I>
+<UL>
+<LI>
+<B><I>sig</I></B> -&nbsp; of the form "n/m" for positive integers n,m.</LI>
+
+<BR><B><I>size1</I></B> - fontsize of numerator, measured in haplfspaces
+of the current system.
+
+<BR><B><I>size2 </I></B>- fonsize of denominator,&nbsp; measured in haplfspaces
+of the current system.</UL>
+<B><I>Range:</I></B> optional
+
+
+
+<P><B><I>Semantics:</I></B>
+<UL>
+<LI>
+IF</LI>
+</UL>
+
+<B><I>Remarks:</I></B>
+<UL>
+<LI>
+Additionally, the following special time signature can be used:</LI>
+
+
+
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "C" or "c" for
+4/4 with "C" symbol
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "C/" or "c/"
+for 2/2 with alla breve symbol
+<LI>
+The \meter tag can appear at the beginning or in the middle of a voice,
+the latter indicating a change in meter</LI>
+</UL>
+<B><I>Examples:</I></B>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \
+<PRE>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ..</PRE>
+
+<PRE>.</PRE>
+
+<H4>
+
+<HR WIDTH="100%"><A NAME="\key"></A><I>3.3.18 \key</I></H4>
+This tag indicates a key
+
+<P>\key&lt;sig,size1,...,sizeN>
+
+<P>\key&lt;name,size1,...,sizeN>
+
+<P><I><B>Parameters</B> (in the order of their default positions):</I>
+<BR><B><I>Call1:</I></B>
+<UL>
+<LI>
+<B><I>name</I></B> - of the form "n", "n#" or "n&amp;" for any note name
+n. Uppercase and lowercase letters are used to denote major and minor modes,
+respectively.</LI>
+
+<LI>
+<B><I>sizeX</I></B> - fontsize of accidental number X (counting from left
+
+to right), measured in haplfspaces of the current system</LI>
+
+<BR><I>default value: size(X-1)</I></UL>
+<B><I>Call2:</I></B>
+<UL>
+<LI>
+<B><I>sig </I></B>- sets key signature to i sharps, if i is positive, to
+|i| flats, if i is negative. For i=0, the key signature contains no sharps
+or flats.</LI>
+
+<LI>
+<B><I>sizeX </I></B>-&nbsp; fontsize of accidental number X (counting from
+left to right), measured in haplfspaces of the current system.</LI>
+
+<BR><I>default value: size(X-1)</I></UL>
+<B><I>Range:</I></B> optional
+
+
+<P><B><I>Semantics:</I></B>
+
+<P><B><I>Remarks:</I></B>
+<UL>
+<LI>
+The \key tag can appear at the beginning or in the middle of a voice, the
+latter indicating a change in meter; Within one piece, one of the two formats
+of the key-tag should be used consistently.</LI>
+
+<BR>&nbsp;</UL>
+<B><I>Examples:</I></B>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \
+<H4>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...</H4>
+
+<H4>
+&nbsp;<BR>
+<BR>
+
+<HR WIDTH="100%"><A NAME="\oct"></A><I>3.3.19 \oct</I></H4>
+This tag indicates the beginning of a section which is transposed upwards.
+
+<P>\oct&lt;i,dy,size>
+<BR>&nbsp; \oct&lt;i,dx1,dy1,dx2,dy2,size>
+
+<P><I><B>Parameters</B> (in the order of their default positions):</I>
+
+<P><B><I>Call1:</I></B>
+<UL>
+<LI>
+<B><I>transp </I></B>- number of octaves for the transposition</LI>
+
+<LI>
+<B><I>dy</I></B> - vertical distance between center of octave marking and
+
+the top staffline, in halfspaces of the current system.</LI>
+
+
+<BR><I>default value:</I> none, see Semantics.
+<LI>
+<B><I>size</I></B> - fontsize, measured in halfpaces of the current system.</LI>
+
+<BR>&nbsp;</UL>
+<B><I>Call2:</I></B>
+<UL>
+<LI>
+<B><I>transp </I></B>- number of octaves for the transposition</LI>
+
+<LI>
+<B><I>dx1</I></B> - horizontal distance between center of rightmost note
+
+head in the group and the right end of the octave marking measured in halfspaces
+of the current system.</LI>
+
+<BR><I>default value: 0</I>
+<LI>
+<B><I>dy1</I></B> - vertical distance between and the top staffline and
+
+
+the center of the octave marking measured in halfspaces of the current
+system.</LI>
+
+
+<BR><I>default value: none, see Semantics.</I>
+<LI>
+<B><I>dx2 </I></B>- horizontal distance between center of rightmost note
+head in the group and the right end of the octave marking measured in halfspaces
+of the current system.</LI>
+
+<BR><I>default value: 0</I>
+<LI>
+<B><I>dy2 </I></B>- vertical distance between and the top staffline and
+the center of the octave marking measured in halfspaces of the current
+system.</LI>
+
+<BR><I>default value: none, see Semantics.</I>
+<LI>
+<B><I>size</I></B> - fontsize, measured in halfpaces of the current system.</LI>
+</UL>
+<B><I>Range:</I></B> optional
+
+<P><B><I>Semantics:</I></B>
+<UL>
+<LI>
+If no <I>dy/dy1/dy2</I> value is specified, the vertical position is automatically
+determined such that it is above the staff and collisions are avoided.</LI>
+</UL>
+<B><I>Remarks:</I></B>
+<UL>
+<LI>
+Octave transposition does affect the notated pitches such that "\oct&lt;+1>(c1)"
+is pitch-equivalent to "c2".</LI>
+
+<LI>
+Negative numbers i can be used to indicate downward transpositions.</LI>
+
+<LI>
+\oct&lt;+1> corresponds to "8va" in standard notation, \oct&lt;-1> to "8va
+bassa", \oct&lt;+2> to "15ma" etc.</LI>
+</UL>
+<B><I>Examples:</I></B>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \
+<H4>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...</H4>
+
+<BR>
+<BR>

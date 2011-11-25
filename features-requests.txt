@@ -1,0 +1,4 @@
+
+[OK] July 12 2011 - support for microtonal key signature - requested by
+Automatic formatting of tuplets (dy) - requested by Mika (on nov. 2 2011)
+

@@ -1,0 +1,12 @@
+% Release 0.8
+
+% stemsAuto.gmn
+
+% chord-stem-direction is now determined automatically
+% (it can still be set using \stemsDown, \stemsUp or
+% \stemsAuto)
+
+[  \staffFormat<size=2pt> { d/1, f, g }  { e/4,f,a,c2,d } 
+   { d2, c , a1, f, e } 
+    { f,a, h ,c2,f2}  {d1,a,c2, e, f }
+   { f1, a , e2 }   ] 

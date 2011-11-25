@@ -1,0 +1,10 @@
+% doing chords in a "complicated" way (as seperate voices)
+
+{[\staff<1>\stemsUp\meter<"4/4"> e1 e a g],[\staff<1>\meter<"4/4"> \stemsUp h&&1 g c2
+h1],
+[\staff<1>\stemsUp g1 h1 e2 d],
+[\staff<2>\stemsDown\meter<"4/4">
+e0 e a g],
+[\staff<2>\stemsDown g0 g c1 h0],
+[\staff<2>\stemsDown a0 h
+e1 d]}

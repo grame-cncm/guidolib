@@ -1,0 +1,35 @@
+APP_NAME = GuidoQtFontViewer
+QT_LIB_PATH = /Library/Frameworks/
+QT_LIB_OTOOL_PATH =  
+FRAMEWORK_LIST = QtCore QtGui
+QT_CORE_DEPENDANT = QtGui
+QT_FRAMEWORKS_VERSION = 4
+
+
+nothing:
+	@ echo "Note : this makefile is to be used on UNIX only."
+	@ echo "Making bundle..."
+	@ [ -d $(APP_NAME).app/Contents/Frameworks ] || mkdir $(APP_NAME).app/Contents/Frameworks
+	@ $(foreach QTFW,$(FRAMEWORK_LIST), 															\
+		echo "Copying $(QTFW) if necessary ..." ; 													\
+		[ -d $(APP_NAME).app/Contents/Frameworks/$(QTFW).framework ] || cp -Rf $(QT_LIB_PATH)$(QTFW).framework $(APP_NAME).app/Contents/Frameworks ; 	\
+ 	)
+	@ $(foreach QTFW,$(FRAMEWORK_LIST), 												\
+		echo "set the identification names for the framework $(QTFW) ..." ; 							\
+		install_name_tool -id @executable_path/../Frameworks/$(QTFW).framework/Versions/$(QT_FRAMEWORKS_VERSION)/$(QTFW) 	\
+                	$(APP_NAME).app/Contents/Frameworks/$(QTFW).framework/Versions/$(QT_FRAMEWORKS_VERSION)/$(QTFW) ;		\
+	)
+	@ $(foreach QTFW,$(FRAMEWORK_LIST), 											\
+		echo "update the application link to framework $(QTFW) ..." ; 							\
+		install_name_tool -change $(QT_LIB_OTOOL_PATH)$(QTFW).framework/Versions/$(QT_FRAMEWORKS_VERSION)/$(QTFW) 	\
+                 	@executable_path/../Frameworks/$(QTFW).framework/Versions/$(QT_FRAMEWORKS_VERSION)/$(QTFW) 		\
+                 	$(APP_NAME).app/Contents/MacOs/$(APP_NAME) ;								\
+	)
+	@ $(foreach QTFW,$(QT_CORE_DEPENDANT), 											\
+		echo "update the $(QTFW) link to QtCore  ..." ; 								\
+		install_name_tool -change $(QT_LIB_OTOOL_PATH)QtCore.framework/Versions/$(QT_FRAMEWORKS_VERSION)/QtCore		\
+                	 @executable_path/../Frameworks/QtCore.framework/Versions/$(QT_FRAMEWORKS_VERSION)/QtCore		\
+                	 $(APP_NAME).app/Contents/Frameworks/$(QTFW).framework/Versions/$(QT_FRAMEWORKS_VERSION)/$(QTFW) ;	\
+	)
+	@ echo "Done." ;
+	

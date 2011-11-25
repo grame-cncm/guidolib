@@ -1,0 +1,7 @@
+;Guido.def
+
+LIBRARY Guido.mxe
+
+EXPORTS
+	main
+

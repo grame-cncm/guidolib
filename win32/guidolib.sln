@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "noteviewer", "noteviewer\noteviewer.vcproj", "{CBF2A88E-8443-45E1-9266-E041DC3708C7}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fontviewer", "fontviewer\fontviewer.vcproj", "{70607A64-2C32-4510-81F5-21DAD1ACEAD7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CBF2A88E-8443-45E1-9266-E041DC3708C7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CBF2A88E-8443-45E1-9266-E041DC3708C7}.Debug|Win32.Build.0 = Debug|Win32
+		{CBF2A88E-8443-45E1-9266-E041DC3708C7}.Release|Win32.ActiveCfg = Release|Win32
+		{CBF2A88E-8443-45E1-9266-E041DC3708C7}.Release|Win32.Build.0 = Release|Win32
+		{70607A64-2C32-4510-81F5-21DAD1ACEAD7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{70607A64-2C32-4510-81F5-21DAD1ACEAD7}.Debug|Win32.Build.0 = Debug|Win32
+		{70607A64-2C32-4510-81F5-21DAD1ACEAD7}.Release|Win32.ActiveCfg = Release|Win32
+		{70607A64-2C32-4510-81F5-21DAD1ACEAD7}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

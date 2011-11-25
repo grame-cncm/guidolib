@@ -1,0 +1,1306 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Allemand (Allemagne) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
+#ifdef _WIN32
+LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 7, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#endif\r\n"
+    "#include ""res\\gmnview32.rc2""  // Nicht mit Microsoft Visual C++ bearbeitete Ressourcen\r\n"
+    "#include ""l.deu\\afxres.rc""          // Standardkomponenten\r\n"
+    "#include ""l.deu\\afxprint.rc""        // Ressourcen für Drucken/Seitenansicht\r\n"
+    "#endif\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\deu\\ico00001.ico"
+IDI_ICON1               ICON                    "res\\deu\\sal-nv.ico"
+IDR_HTMLTYPE            ICON                    "res\\deu\\icon2.ico"
+IDR_GMNVWTYPE           ICON                    "res\\deu\\ico00002.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXT
+//
+
+HELPTEXT_OLD            TEXT                    "res\\deu\\helptext.bin"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDR_MAINFRAME           BITMAP                  "res\\deu\\Toolbar.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Toolbar
+//
+
+IDR_MAINFRAME TOOLBAR  16, 15
+BEGIN
+    BUTTON      ID_FILE_NEW
+    BUTTON      ID_FILE_OPEN
+    BUTTON      ID_FILE_SAVE
+    SEPARATOR
+    BUTTON      ID_EDIT_CUT
+    BUTTON      ID_EDIT_COPY
+    BUTTON      ID_EDIT_PASTE
+    SEPARATOR
+    BUTTON      ID_FILE_PRINT
+    BUTTON      ID_APP_ABOUT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME_NEEDUPDATE MENU 
+BEGIN
+    POPUP "&Datei"
+    BEGIN
+        MENUITEM "&Neu\tStrg+N",                ID_FILE_NEW
+        MENUITEM "Ö&ffnen...\tStrg+O",          ID_FILE_OPEN
+        MENUITEM SEPARATOR
+        MENUITEM "Sp&ring Parameters",          ID_FILE_SPRINGPARAMETERS
+        MENUITEM "&Virtual Page Size ...",      ID_FILE_VIRTUALPAGE
+        MENUITEM SEPARATOR
+        MENUITEM "Drucker&einrichtung...",      ID_FILE_PRINT_SETUP
+        MENUITEM SEPARATOR
+        MENUITEM "Letzte Datei",                ID_FILE_MRU_FILE1, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "&Beenden",                    ID_APP_EXIT
+    END
+    POPUP "&Ansicht"
+    BEGIN
+        MENUITEM "&Symbolleiste",               ID_VIEW_TOOLBAR
+        MENUITEM "S&tatusleiste",               ID_VIEW_STATUS_BAR
+    END
+    POPUP "&?"
+    BEGIN
+        MENUITEM "Inf&o über GUIDO NoteViewer ...", ID_APP_ABOUT
+        MENUITEM "Getting Help",                ID_HELP
+    END
+END
+
+IDR_HTMLTYPE MENU 
+BEGIN
+    POPUP "&Datei"
+    BEGIN
+        MENUITEM "&Neu\tStrg+N",                ID_FILE_NEW
+        MENUITEM "Ö&ffnen...\tStrg+O",          ID_FILE_OPEN
+        MENUITEM "&Schließen",                  ID_FILE_CLOSE
+        MENUITEM "S&peichern\tStrg+S",          ID_FILE_SAVE
+        MENUITEM "Speichern &unter...",         ID_FILE_SAVE_AS
+        MENUITEM SEPARATOR
+        MENUITEM "Virtual Page Size ...",       ID_FILE_VIRTUALPAGE
+        MENUITEM SEPARATOR
+        MENUITEM "&Drucken...\tStrg+P",         ID_FILE_PRINT
+        MENUITEM "Sei&tenansicht",              ID_FILE_PRINT_PREVIEW
+        MENUITEM "Drucker&einrichtung...",      ID_FILE_PRINT_SETUP
+        MENUITEM SEPARATOR
+        MENUITEM "Letzte Datei",                ID_FILE_MRU_FILE1, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "&Beenden",                    ID_APP_EXIT
+    END
+    POPUP "&Bearbeiten"
+    BEGIN
+        MENUITEM "&Rückgängig\tStrg+Z",         ID_EDIT_UNDO
+        MENUITEM SEPARATOR
+        MENUITEM "&Ausschneiden\tStrg+X",       ID_EDIT_CUT
+        MENUITEM "&Kopieren\tStrg+C",           ID_EDIT_COPY
+        MENUITEM "E&infügen\tStrg+V",           ID_EDIT_PASTE
+    END
+    POPUP "&Ansicht"
+    BEGIN
+        MENUITEM "&Symbolleiste",               ID_VIEW_TOOLBAR
+        MENUITEM "S&tatusleiste",               ID_VIEW_STATUS_BAR
+    END
+    POPUP "&Fenster"
+    BEGIN
+        MENUITEM "Neues &Fenster",              ID_WINDOW_NEW
+        MENUITEM "Über&lappend",                ID_WINDOW_CASCADE
+        MENUITEM "&Nebeneinander",              ID_WINDOW_TILE_HORZ
+        MENUITEM "&Symbole anordnen",           ID_WINDOW_ARRANGE
+    END
+    POPUP "&?"
+    BEGIN
+        MENUITEM "Inf&o über gmnview32...",     ID_APP_ABOUT
+    END
+END
+
+IDR_GMNVWTYPE_NEEDUPDATE MENU 
+BEGIN
+    POPUP "&Datei"
+    BEGIN
+        MENUITEM "&Neu\tStrg+N",                ID_FILE_NEW
+        MENUITEM "Ö&ffnen...\tStrg+O",          ID_FILE_OPEN
+        MENUITEM "&Schließen",                  ID_FILE_CLOSE
+        MENUITEM "S&peichern\tStrg+S",          ID_FILE_SAVE
+        MENUITEM "Speichern &unter...",         ID_FILE_SAVE_AS
+        MENUITEM "Play as MIDI ...",            ID_PLAYASMIDI
+        MENUITEM SEPARATOR
+        MENUITEM "Sp&ring Parameters ...",      ID_FILE_SPRINGPARAMETERS
+        MENUITEM "&Virtual Page Size ...",      ID_FILE_VIRTUALPAGE
+        MENUITEM SEPARATOR
+        MENUITEM "&Drucken...\tStrg+P",         ID_FILE_PRINT
+        MENUITEM "Sei&tenansicht",              ID_FILE_PRINT_PREVIEW
+        MENUITEM "Drucker&einrichtung...",      ID_FILE_PRINT_SETUP
+        MENUITEM SEPARATOR
+        MENUITEM "Letzte Datei",                ID_FILE_MRU_FILE1, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "&Beenden",                    ID_APP_EXIT
+    END
+    POPUP "&Bearbeiten"
+    BEGIN
+        MENUITEM "&Rückgängig\tStrg+Z",         ID_EDIT_UNDO
+        MENUITEM SEPARATOR
+        MENUITEM "&Ausschneiden\tStrg+X",       ID_EDIT_CUT
+        MENUITEM "&Kopieren\tStrg+C",           ID_EDIT_COPY
+        MENUITEM "E&infügen\tStrg+V",           ID_EDIT_PASTE
+    END
+    POPUP "&Ansicht"
+    BEGIN
+        MENUITEM "Edit GMN-Text ...\t^E",       ID_EDIT_GMNTEXT
+        MENUITEM "Goto Page ...\t^G",           ID_VIEW_GOTOPAGE
+        MENUITEM "Zoomfactor ...\t^Z",          ID_VIEW_ZOOM
+        MENUITEM SEPARATOR
+        MENUITEM "&Symbolleiste",               ID_VIEW_TOOLBAR
+        MENUITEM "S&tatusleiste",               ID_VIEW_STATUS_BAR
+    END
+    POPUP "&Fenster"
+    BEGIN
+        MENUITEM "Neues &Fenster",              ID_WINDOW_NEW
+        MENUITEM "Über&lappend",                ID_WINDOW_CASCADE
+        MENUITEM "&Nebeneinander",              ID_WINDOW_TILE_HORZ
+        MENUITEM "&Symbole anordnen",           ID_WINDOW_ARRANGE
+    END
+    POPUP "&?"
+    BEGIN
+        MENUITEM "Inf&o über GUIDO NoteViewer ...", ID_APP_ABOUT
+        MENUITEM "Getting Help",                ID_HELP
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS 
+BEGIN
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    "E",            ID_EDIT_GMNTEXT,        VIRTKEY, CONTROL, NOINVERT
+    "G",            ID_VIEW_GOTOPAGE,       VIRTKEY, CONTROL, NOINVERT
+    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL, NOINVERT
+    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL, NOINVERT
+    "P",            ID_FILE_PRINT,          VIRTKEY, CONTROL, NOINVERT
+    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL, NOINVERT
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT, NOINVERT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT, NOINVERT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY, NOINVERT
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT, NOINVERT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT, NOINVERT
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL, NOINVERT
+    "Z",            ID_VIEW_ZOOM,           VIRTKEY, CONTROL, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ZOOMDIALOG DIALOG  0, 0, 178, 106
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Zoom"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,121,28,50,14
+    PUSHBUTTON      "Abbrechen",IDCANCEL,121,46,50,14
+    CONTROL         "Slider1",IDC_SLIDER1,"msctls_trackbar32",TBS_VERT | TBS_BOTH | WS_TABSTOP,14,7,27,79
+    LTEXT           "Select the zoomfactor for scoredisplay",IDC_STATIC,7,86,164,13
+    LTEXT           "1%",IDC_STATIC,47,73,25,8
+    LTEXT           "500%",IDC_STATIC,44,10,28,12
+    EDITTEXT        IDC_EDITZOOM,51,45,40,13,ES_READONLY
+    LTEXT           "Current zoomfactor",IDC_STATIC,51,36,63,8
+END
+
+IDD_GOTODIALOG DIALOG  0, 0, 230, 68
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Goto Page"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,173,17,50,14
+    PUSHBUTTON      "Abbrechen",IDCANCEL,173,34,50,14
+    CONTROL         "Slider1",IDC_PAGESLIDER,"msctls_trackbar32",TBS_BOTH | WS_TABSTOP,14,15,133,22
+    EDITTEXT        IDC_PAGEEDIT,54,40,40,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Page:",IDC_STATIC,32,42,20,11
+    CTEXT           "Minpage",IDC_MINPAGE,7,7,34,9
+    CTEXT           "Maxpage",IDC_MAXPAGE,128,7,25,10
+END
+
+IDD_VPAGEDIALOG DIALOG  0, 0, 223, 183
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Virtual Page Size"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,166,7,50,14
+    PUSHBUTTON      "Abbrechen",IDCANCEL,166,24,50,14
+    LTEXT           "The virtual page size describes, how big a scorepage is (e.g. how long the stafflines are and howmany systems fit on one page).\nOne Virtual Page is mapped onto one real page when printing.",IDC_STATIC,7,7,136,41
+    LTEXT           "Width",IDC_STATIC,15,108,20,9
+    LTEXT           "Height",IDC_STATIC,15,123,24,9
+    LTEXT           "Left margin",IDC_STATIC,95,77,40,10
+    LTEXT           "Right margin",IDC_STATIC,95,92,45,10
+    LTEXT           "Top margin",IDC_STATIC,95,107,40,10
+    LTEXT           "Bottom margin",IDC_STATIC,95,124,50,10
+    EDITTEXT        IDC_WIDTH,43,106,40,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_HEIGHT,43,122,40,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_MLEFT,145,75,65,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_MRIGHT,145,90,65,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_MTOP,145,105,65,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_MBOTTOM,145,121,65,12,ES_AUTOHSCROLL
+    CONTROL         "Ignore \\pageFormat-Tag",IDC_IGNOREPF,"Button",BS_AUTOCHECKBOX | BS_LEFTTEXT | WS_DISABLED | WS_TABSTOP,119,50,93,11
+    GROUPBOX        "Page Size",IDC_STATIC,7,60,209,107
+    CONTROL         "Default Pagesize",IDC_DEFPAGESIZE,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP,16,74,67,13
+    CONTROL         "This Pagesize",IDC_THISPAGESIZE,"Button",BS_AUTORADIOBUTTON | WS_DISABLED | WS_TABSTOP,16,86,78,14
+    PUSHBUTTON      "Same as Printer-Page",IDC_ASPRINT,15,143,77,18
+END
+
+IDD_HELPDIALOG DIALOG  0, 0, 286, 167
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Help and Readme"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,117,146,50,14
+    EDITTEXT        IDC_HELPTEXT,7,7,272,132,ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_READONLY | WS_VSCROLL | WS_HSCROLL
+END
+
+IDD_GUIDOTEXTDIALOG DIALOG  0, 0, 266, 141
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "GUIDO Music Notation"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "Submit",IDOK,7,120,50,14
+    PUSHBUTTON      "Abbrechen",IDCANCEL,65,120,50,14
+    EDITTEXT        IDC_GMNTEXT,7,7,252,107,ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_WANTRETURN | WS_VSCROLL | WS_HSCROLL
+END
+
+IDD_SPRINGDIALOG DIALOG  0, 0, 178, 106
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Spring-Parameter"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,121,28,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,121,46,50,14
+    CONTROL         "Slider1",IDC_SLIDER1,"msctls_trackbar32",TBS_VERT | TBS_BOTH | WS_TABSTOP,14,7,27,79
+    LTEXT           "Select the springfactor for spacing",IDC_STATIC,7,86,164,13
+    LTEXT           "1.0",IDC_STATIC,47,73,25,8
+    LTEXT           "5.0",IDC_STATIC,44,10,28,12
+    EDITTEXT        IDC_EDITZOOM,51,45,40,13,ES_READONLY
+    LTEXT           "Current springparameter",IDC_STATIC,51,25,63,19
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ZOOMDIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 171
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 99
+    END
+
+    IDD_GOTODIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 223
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 61
+    END
+
+    IDD_VPAGEDIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 216
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 176
+    END
+
+    IDD_HELPDIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 279
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 160
+    END
+
+    IDD_GUIDOTEXTDIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 259
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 134
+    END
+
+    IDD_SPRINGDIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 171
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 99
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_LUPE                CURSOR                  "res\\deu\\cursor1.cur"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDR_MAINFRAME           "GUIDO NoteViewer"
+    IDR_GMNVWTYPE           "\ngmnvw\nGUIDO Music Notation\nGUIDO Music Notation (*.gmn)\n.gmn\nGMNView.Document\nGUIDO Music Notation Document"
+    IDR_HTMLTMPTYPE         "\nhtmlvw\nhtml\nHTML (*.html)\n.html\nHTMLView\nHyertext Markup Language"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_APP_TITLE       "gmnview"
+    AFX_IDS_IDLEMESSAGE     "Bereit"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_INDICATOR_EXT        "ER"
+    ID_INDICATOR_CAPS       "UF"
+    ID_INDICATOR_NUM        "NUM"
+    ID_INDICATOR_SCRL       "RF"
+    ID_INDICATOR_OVR        "ÜB"
+    ID_INDICATOR_REC        "MA"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_FILE_NEW             "Erstellt ein neues Dokument.\nNeu"
+    ID_FILE_OPEN            "Öffnet ein bestehendes Dokument.\nÖffnen"
+    ID_FILE_CLOSE           "Schließt das aktive Dokument.\nSchließen"
+    ID_FILE_SAVE            "Speichert das aktive Dokument.\nSpeichern"
+    ID_FILE_SAVE_AS         "Speichert das aktive Dokument unter neuem Namen.\nSpeichern unter"
+    ID_FILE_PAGE_SETUP      "Ändert die Druckoptionen.\nSeite einrichten"
+    ID_FILE_PRINT_SETUP     "Ändert den Drucker und die Druckoptionen.\nDruckereinrichtung"
+    ID_FILE_PRINT           "Druckt das aktive Dokument.\nDrucken"
+    ID_FILE_PRINT_PREVIEW   "Zeigt ganze Seiten an.\nSeitenansicht"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_APP_ABOUT            "Zeigt Programm-Informationen, Versionsnummer und Copyright an.\nInfo"
+    ID_APP_EXIT             "Verläßt die Anwendung; fragt, ob Dokumente gespeichert werden sollen.\nBeenden"
+    ID_HELP                 "Getting Help"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_FILE_MRU_FILE1       "Öffnet dieses Dokument."
+    ID_FILE_MRU_FILE2       "Öffnet dieses Dokument."
+    ID_FILE_MRU_FILE3       "Öffnet dieses Dokument."
+    ID_FILE_MRU_FILE4       "Öffnet dieses Dokument."
+    ID_FILE_MRU_FILE5       "Öffnet dieses Dokument."
+    ID_FILE_MRU_FILE6       "Öffnet dieses Dokument."
+    ID_FILE_MRU_FILE7       "Öffnet dieses Dokument."
+    ID_FILE_MRU_FILE8       "Öffnet dieses Dokument."
+    ID_FILE_MRU_FILE9       "Öffnet dieses Dokument."
+    ID_FILE_MRU_FILE10      "Öffnet dieses Dokument."
+    ID_FILE_MRU_FILE11      "Öffnet dieses Dokument."
+    ID_FILE_MRU_FILE12      "Öffnet dieses Dokument."
+    ID_FILE_MRU_FILE13      "Öffnet dieses Dokument."
+    ID_FILE_MRU_FILE14      "Öffnet dieses Dokument."
+    ID_FILE_MRU_FILE15      "Öffnet dieses Dokument."
+    ID_FILE_MRU_FILE16      "Öffnet dieses Dokument."
+END
+
+STRINGTABLE 
+BEGIN
+    ID_NEXT_PANE            "Wechselt zum nächsten Fensterausschnitt.\nNächster Ausschnitt"
+    ID_PREV_PANE            "Springt zum vorherigen Fensterausschnitt zurück.\nVorheriger Ausschnitt"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_WINDOW_NEW           "Öffnet ein weiteres Fenster für das aktive Dokument.\nNeues Fenster"
+    ID_WINDOW_ARRANGE       "Ordnet die Symbole im unteren Bereich des Fensters an.\nSymbole anordnen"
+    ID_WINDOW_CASCADE       "Ordnet die Fenster überlappend an.\nÜberlappende Fenster"
+    ID_WINDOW_TILE_HORZ     "Ordnet die Fenster nebeneinander an.\nFenster nebeneinander"
+    ID_WINDOW_TILE_VERT     "Ordnet die Fenster nebeneinander an.\nFenster nebeneinander"
+    ID_WINDOW_SPLIT         "Teilt das aktive Fenster in Ausschnitte.\nTeilen"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_EDIT_CLEAR           "Löscht die Markierung.\nLöschen"
+    ID_EDIT_CLEAR_ALL       "Löscht alles.\nAlles löschen"
+    ID_EDIT_COPY            "Kopiert die Markierung und überträgt sie in die Zwischenablage.\nKopieren"
+    ID_EDIT_CUT             "Entfernt die Markierung und überträgt sie in die Zwischenablage.\nAusschneiden"
+    ID_EDIT_FIND            "Sucht den angegebenen Text.\nSuchen"
+    ID_EDIT_PASTE           "Fügt den Inhalt der Zwischenablage ein.\nEinfügen"
+    ID_EDIT_REPEAT          "Wiederholt die letzte Aktion.\nWiederholen"
+    ID_EDIT_REPLACE         "Ersetzt einen bestimmten Text durch einen anderen.\nErsetzen"
+    ID_EDIT_SELECT_ALL      "Markiert das gesamte Dokument.\nAlles markieren"
+    ID_EDIT_UNDO            "Macht die letzte Aktion rückgängig.\nRückgängig"
+    ID_EDIT_REDO            "Wiederholt die vorher rückgängig gemachte Aktion.\nWiederherstellen"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_VIEW_TOOLBAR         "Blendet die Symbolleiste ein oder aus.\nSymbolleiste ein-/ausschalten"
+    ID_VIEW_STATUS_BAR      "Blendet die Statusleiste ein oder aus.\nStatusleiste ein-/ausschalten"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_SCSIZE          "Ändert die Fenstergröße."
+    AFX_IDS_SCMOVE          "Ändert die Position des Fensters."
+    AFX_IDS_SCMINIMIZE      "Verkleinert das Fenster zu einem Symbol."
+    AFX_IDS_SCMAXIMIZE      "Vergrößert das Fenster zu voller Größe."
+    AFX_IDS_SCNEXTWINDOW    "Wechselt zum nächsten Dokumentfenster."
+    AFX_IDS_SCPREVWINDOW    "Wechselt zum vorherigen Dokumentfenster."
+    AFX_IDS_SCCLOSE         "Schließt das aktive Fenster und fordert zur Dokumentspeicherung auf."
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_SCRESTORE       "Stellt das Fenster in seiner normalen Größe wieder her."
+    AFX_IDS_SCTASKLIST      "Aktiviert die Task-Liste."
+    AFX_IDS_MDICHILD        "Aktiviert dieses Fenster."
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_PREVIEW_CLOSE   "Beendet die Seitenansicht.\nSeitenansicht beenden"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_VIEW_ZOOM            "Vergrößerungsfaktor für die Notendarstellung"
+    ID_FILE_VIRTUALPAGE     "Virtuelle Seitengröße ..."
+    ID_EDIT_GMNTEXT         "Bearbeiten der GUIDO Musik Notation"
+END
+
+#endif    // Allemand (Allemagne) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Anglais (États-Unis) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON1               ICON                    "res\\sal-nv.ico"
+IDR_GMNVWTYPE           ICON                    "res\\ico00002.ico"
+IDR_HTMLTYPE            ICON                    "res\\icon2.ico"
+IDR_MAINFRAME           ICON                    "res\\ico00001.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXT
+//
+
+HELPTEXT_OLD            TEXT                    "res\\deu\\Readme.txt"
+HELPTEXT_0.6            TEXT                    "res\\deu\\bin00001.bin"
+HELPTEXT_0.6A           TEXT                    "res\\deu\\bin00002.bin"
+HELPTEXT_0.8            TEXT                    "res\\deu\\text1.bin"
+HELPTEXT                TEXT                    "res\\deu\\bin00003.bin"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Toolbar
+//
+
+IDR_MAINFRAME TOOLBAR  16, 15
+BEGIN
+    BUTTON      ID_FILE_NEW
+    BUTTON      ID_FILE_OPENEXAMPLES
+    BUTTON      ID_FILE_RELOAD
+    BUTTON      ID_FILE_OPEN
+    BUTTON      ID_FILE_SAVE
+    SEPARATOR
+    BUTTON      ID_EDIT_GMNTEXT
+    SEPARATOR
+    BUTTON      ID_EDIT_CUT
+    BUTTON      ID_EDIT_COPY
+    BUTTON      ID_EDIT_PASTE
+    SEPARATOR
+    BUTTON      ID_FILE_PRINT
+    SEPARATOR
+    BUTTON      ID_APP_ABOUT
+    SEPARATOR
+    BUTTON      ID_PLAYASMIDI
+    BUTTON      ID_FILE_STOPMIDIPLAYBACK
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_GMNVWTYPE MENU 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&New\tCtrl+N",                ID_FILE_NEW
+        MENUITEM "&Open...\tCtrl+O",            ID_FILE_OPEN
+        MENUITEM "Open &Examples ...",          ID_FILE_OPENEXAMPLES
+        MENUITEM "&Reload",                     ID_FILE_RELOAD
+        MENUITEM "&Close",                      ID_FILE_CLOSE
+        MENUITEM "&Save\tCtrl+S",               ID_FILE_SAVE
+        MENUITEM "Save &As...",                 ID_FILE_SAVE_AS
+        MENUITEM "Play as &MIDI",               ID_PLAYASMIDI
+        MENUITEM "Stop MIDI Play&back",         ID_FILE_STOPMIDIPLAYBACK, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "&Import MIDI file ....",      ID_FILE_IMPORTMIDIFILE
+        MENUITEM "Import MuseData fle ...",     ID_FILE_IMPORTMUSEDATAFLE
+        MENUITEM SEPARATOR
+        MENUITEM "Export GI&F File ...\tCtrl+F", ID_FILE_EXPORTGIF
+        MENUITEM SEPARATOR
+        MENUITEM "&Virtual Page Size ...",      ID_FILE_VIRTUALPAGE
+        MENUITEM SEPARATOR
+        MENUITEM "&Adjust Spacing Parameters ...", ID_FILE_ADJUSTSPACINGPARAMETERS
+        MENUITEM "Sp&ring Parameters ...",      ID_FILE_SPRINGPARAMETERS
+        MENUITEM SEPARATOR
+        MENUITEM "&Print...\tCtrl+P",           ID_FILE_PRINT
+        MENUITEM "Print Pre&view",              ID_FILE_PRINT_PREVIEW
+        MENUITEM "P&rint Setup...",             ID_FILE_PRINT_SETUP
+        MENUITEM SEPARATOR
+        MENUITEM "Recent File",                 ID_FILE_MRU_FILE1, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",                       ID_APP_EXIT
+    END
+    POPUP "&Edit"
+    BEGIN
+        MENUITEM "Edit GMN-Text ...\tCtrl+E",   ID_EDIT_GMNTEXT
+        MENUITEM SEPARATOR
+        MENUITEM "&Undo\tCtrl+Z",               ID_EDIT_UNDO
+        MENUITEM SEPARATOR
+        MENUITEM "Cu&t\tCtrl+X",                ID_EDIT_CUT
+        MENUITEM "&Copy\tCtrl+C",               ID_EDIT_COPY
+        MENUITEM "&Paste\tCtrl+V",              ID_EDIT_PASTE
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "Goto Page ...\tCtrl+G",       ID_VIEW_GOTOPAGE
+        MENUITEM "Zoomfactor ...\tCtrl+Z",      ID_VIEW_ZOOM
+        MENUITEM "Test GGS",                    ID_TESTGGS
+        MENUITEM SEPARATOR
+        MENUITEM "Display Springs+Rods",        ID_SPRINGANDROD
+        MENUITEM "Display Force",               ID_VIEW_DISPLAY_FORCE
+        MENUITEM SEPARATOR
+        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
+        MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
+    END
+    POPUP "&Window"
+    BEGIN
+        MENUITEM "&New Window",                 ID_WINDOW_NEW
+        MENUITEM "&Cascade",                    ID_WINDOW_CASCADE
+        MENUITEM "&Tile",                       ID_WINDOW_TILE_HORZ
+        MENUITEM "&Arrange Icons",              ID_WINDOW_ARRANGE
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About GUIDO NoteViewer ...", ID_APP_ABOUT
+        MENUITEM "Getting Help",                ID_HELP
+    END
+END
+
+IDR_MAINFRAME MENU 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&New\tCtrl+N",                ID_FILE_NEW
+        MENUITEM "&Open...\tCtrl+O",            ID_FILE_OPEN
+        MENUITEM "Open &Examples ...",          ID_FILE_OPENEXAMPLES
+        MENUITEM SEPARATOR
+        MENUITEM "&Import MIDI file ....",      ID_FILE_IMPORTMIDIFILE
+        MENUITEM "Import MuseData fle ...",     ID_FILE_IMPORTMUSEDATAFLE
+        MENUITEM SEPARATOR
+        MENUITEM "&Adjust Spacing Parameters",  ID_FILE_ADJUSTSPACINGPARAMETERS
+        MENUITEM SEPARATOR
+        MENUITEM "Sp&ring Parameters ...",      ID_FILE_SPRINGPARAMETERS
+        MENUITEM "&Virtual Page Size ...",      ID_FILE_VIRTUALPAGE
+        MENUITEM SEPARATOR
+        MENUITEM "P&rint Setup...",             ID_FILE_PRINT_SETUP
+        MENUITEM SEPARATOR
+        MENUITEM "Recent File",                 ID_FILE_MRU_FILE1, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",                       ID_APP_EXIT
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "Display Springs+Rods",        ID_SPRINGANDROD
+        MENUITEM "Display Force",               ID_VIEW_DISPLAY_FORCE
+        MENUITEM SEPARATOR
+        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
+        MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About GUIDO NoteViewer ...", ID_APP_ABOUT
+        MENUITEM "Getting Help",                ID_HELP
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS 
+BEGIN
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    "E",            ID_EDIT_GMNTEXT,        VIRTKEY, CONTROL, NOINVERT
+    "F",            ID_FILE_EXPORTGIF,      VIRTKEY, CONTROL, NOINVERT
+    "G",            ID_VIEW_GOTOPAGE,       VIRTKEY, CONTROL, NOINVERT
+    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL, NOINVERT
+    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL, NOINVERT
+    "P",            ID_FILE_PRINT,          VIRTKEY, CONTROL, NOINVERT
+    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL, NOINVERT
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
+    VK_BACK,        57643,                  VIRTKEY, ALT, NOINVERT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT, NOINVERT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY, NOINVERT
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT, NOINVERT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT, NOINVERT
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL, NOINVERT
+    "Z",            ID_VIEW_ZOOM,           VIRTKEY, CONTROL, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOG  0, 0, 244, 108
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About GUIDO NoteViewer"
+FONT 8, "MS Sans Serif"
+BEGIN
+    ICON            IDI_ICON1,IDI_ICON1,4,4,20,20
+    LTEXT           "[ GuidoLib version ]",IDC_VERSIONSTRING,32,40,169,12,SS_NOPREFIX
+    LTEXT           "General Public License (GPL)",IDC_STATIC,32,24,138,12
+    DEFPUSHBUTTON   "OK",IDOK,96,88,52,16,WS_GROUP
+    LTEXT           "http://www.noteserver.org/",IDC_STATIC,32,56,148,11
+    LTEXT           "NoteViewer-Version:",IDC_STATIC,32,8,65,12
+    LTEXT           "[ App version ]",IDC_NVIEWVERSION,100,8,118,12
+    LTEXT           "http://sourceforge.net/projects/guidolib/",IDC_STATIC,32,72,148,12
+END
+
+IDD_GOTODIALOG DIALOG  0, 0, 230, 68
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Goto Page"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,173,17,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,173,34,50,14
+    CONTROL         "Slider1",IDC_PAGESLIDER,"msctls_trackbar32",TBS_BOTH | WS_TABSTOP,14,15,133,22
+    EDITTEXT        IDC_PAGEEDIT,54,40,40,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Page:",IDC_STATIC,32,42,20,11
+    CTEXT           "Minpage",IDC_MINPAGE,7,7,34,9
+    CTEXT           "Maxpage",IDC_MAXPAGE,128,7,25,10
+END
+
+IDD_GUIDOTEXTDIALOG DIALOG  0, 0, 348, 257
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "GUIDO Music Notation"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "Accept",IDOK,4,236,50,14
+    PUSHBUTTON      "Abort",IDCANCEL,64,236,50,14
+    EDITTEXT        IDC_GMNTEXT,7,7,333,221,ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_WANTRETURN | WS_VSCROLL | WS_HSCROLL | NOT WS_TABSTOP
+    PUSHBUTTON      "Test",ID_GMN_APPLY,280,236,50,14
+END
+
+IDD_HELPDIALOG DIALOG  0, 0, 286, 167
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Help and Readme"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,117,146,50,14
+    EDITTEXT        IDC_HELPTEXT,7,7,272,132,ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_READONLY | WS_VSCROLL | WS_HSCROLL
+END
+
+IDD_VPAGEDIALOG DIALOG  0, 0, 223, 183
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Virtual Page Size"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,166,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,166,24,50,14
+    LTEXT           "The virtual page size describes, how big a scorepage is (e.g. how long the stafflines are and howmany systems fit on one page).\nOne Virtual Page is mapped onto one real page when printing.",IDC_STATIC,7,7,136,41
+    LTEXT           "Width",IDC_STATIC,15,108,20,9
+    LTEXT           "Height",IDC_STATIC,15,123,24,9
+    LTEXT           "Left margin",IDC_STATIC,95,77,40,10
+    LTEXT           "Right margin",IDC_STATIC,95,92,45,10
+    LTEXT           "Top margin",IDC_STATIC,95,107,40,10
+    LTEXT           "Bottom margin",IDC_STATIC,95,124,50,10
+    EDITTEXT        IDC_WIDTH,43,106,40,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_HEIGHT,43,122,40,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_MLEFT,145,75,65,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_MRIGHT,145,90,65,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_MTOP,145,105,65,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_MBOTTOM,145,121,65,12,ES_AUTOHSCROLL
+    CONTROL         "Ignore \\pageFormat-Tag",IDC_IGNOREPF,"Button",BS_AUTOCHECKBOX | BS_LEFTTEXT | WS_DISABLED | WS_TABSTOP,119,50,93,11
+    GROUPBOX        "Page Size",IDC_STATIC,7,60,209,107
+    CONTROL         "Default Pagesize",IDC_DEFPAGESIZE,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP,16,74,67,13
+    CONTROL         "This Pagesize",IDC_THISPAGESIZE,"Button",BS_AUTORADIOBUTTON | WS_DISABLED | WS_TABSTOP,16,86,78,14
+    PUSHBUTTON      "Same as Printer-Page",IDC_ASPRINT,15,143,77,18
+END
+
+IDD_ZOOMDIALOG DIALOG  0, 0, 178, 106
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Zoom"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,121,28,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,121,46,50,14
+    CONTROL         "Slider1",IDC_SLIDER1,"msctls_trackbar32",TBS_VERT | TBS_BOTH | WS_TABSTOP,14,7,27,79
+    LTEXT           "Select the zoomfactor for scoredisplay",IDC_STATIC,7,86,164,13
+    LTEXT           "1%",IDC_STATIC,47,73,25,8
+    LTEXT           "500%",IDC_STATIC,44,10,28,12
+    EDITTEXT        IDC_EDITZOOM,51,45,40,13,ES_READONLY
+    LTEXT           "Current zoomfactor",IDC_STATIC,51,36,63,8
+END
+
+IDD_SPRINGDIALOG DIALOG  0, 0, 178, 106
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Spring-Parameter"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,121,28,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,121,46,50,14
+    CONTROL         "Slider1",IDC_SLIDER1,"msctls_trackbar32",TBS_VERT | TBS_BOTH | WS_TABSTOP,14,7,27,79
+    LTEXT           "Select the springfactor for spacing",IDC_STATIC,7,86,164,13
+    LTEXT           "1.0",IDC_STATIC,47,73,25,8
+    LTEXT           "5.0",IDC_STATIC,44,10,28,12
+    EDITTEXT        IDC_EDITSPRING,51,45,40,13,ES_READONLY
+    LTEXT           "Current springparameter",IDC_STATIC,51,25,63,19
+END
+
+IDD_SPACING_PARAMETERS DIALOG  0, 0, 271, 172
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Adjust Spacing Parameters"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,20,146,50,14
+    PUSHBUTTON      "Abort",IDCANCEL,84,146,50,14
+    CONTROL         "Slider1",IDC_OPTFORCE,"msctls_trackbar32",TBS_AUTOTICKS | WS_BORDER | WS_TABSTOP,9,70,181,15
+    LTEXT           "Tight Spacing",IDC_STATIC,13,88,45,8
+    LTEXT           "Loose Spacing",IDC_STATIC,145,86,48,8
+    CONTROL         "Optimum page-fill",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,7,69,10
+    EDITTEXT        IDC_FORCEDISPLAY,195,71,37,13,ES_AUTOHSCROLL | WS_DISABLED
+    LTEXT           "Force-Parameter:",IDC_STATIC,195,61,55,8
+    CONTROL         "Special Rhythm-Spacing",IDC_SPECRHYTHM,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,87,7,93,10
+    CONTROL         "Slider1",IDC_SLIDER_DEF_SYS_DIS,"msctls_trackbar32",TBS_AUTOTICKS | WS_BORDER | WS_TABSTOP,9,111,195,15
+    LTEXT           "Default System Distance:",IDC_STATIC,178,101,80,8
+    EDITTEXT        IDC_DEFAULT_SYS_DIS,209,110,45,12,ES_AUTOHSCROLL | WS_DISABLED
+    LTEXT           "Little Space",IDC_STATIC,8,128,38,8
+    LTEXT           "Much Space",IDC_STATIC,165,129,42,8
+    GROUPBOX        "Distribution of Systems on Page",IDC_STATIC,9,25,148,25
+    CONTROL         "Automatic",IDC_DIS_AUTO,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,17,34,47,10
+    CONTROL         "Always",IDC_DIS_ALWAYS,"Button",BS_AUTORADIOBUTTON,75,34,38,10
+    CONTROL         "Never",IDC_DIS_NEVER,"Button",BS_AUTORADIOBUTTON,118,34,35,10
+END
+
+IDD_M2G_CONVERSION_LOG DIALOG  0, 0, 402, 180
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "MIDI to GMN conversion log"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,35,149,50,14
+    EDITTEXT        IDC_LOGTEXT,11,11,372,125,ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_READONLY | WS_VSCROLL | WS_HSCROLL
+    PUSHBUTTON      "Full log file \n(may be SLOW, \ndepending on file size) ...",IDC_FULLLOG,274,143,99,29,BS_MULTILINE
+END
+
+IDD_EXPORTGIF_DIALOG DIALOG  0, 0, 230, 141
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Export GIF File"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,7,120,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,65,120,50,14
+    GROUPBOX        "",IDC_STATIC,7,2,217,66
+    CONTROL         "Select Zoomfactor",IDC_SELECTZOOM,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,16,12,74,10
+    CONTROL         "Select Pixel Size",IDC_SELECTSIZE,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP,16,32,68,10
+    EDITTEXT        IDC_ZOOMFACTOR,92,12,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_SIZEX,92,32,40,14,ES_AUTOHSCROLL
+    LTEXT           "Width",IDC_STATIC,141,34,20,8
+    EDITTEXT        IDC_SIZEY,92,48,40,14,ES_AUTOHSCROLL
+    LTEXT           "Height",IDC_STATIC,141,50,22,8
+    CONTROL         "Adjust Page Size",IDC_ADJUSTPAGESIZE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,76,69,10
+    LTEXT           "PageNumber:",IDC_STATIC,87,76,43,8
+    EDITTEXT        IDC_PAGENUM,133,74,36,12,ES_AUTOHSCROLL
+    LTEXT           "0.1 - 10",IDC_STATIC,140,16,25,8
+    EDITTEXT        IDC_FILENAMEGIF,7,98,163,13,ES_AUTOHSCROLL
+    LTEXT           "Filename:",IDC_STATIC,7,89,31,8
+    PUSHBUTTON      "Select...",IDC_SELECTFILENAME,173,97,50,14
+    LTEXT           "Pagerange",IDC_PAGERANGE,171,76,36,8
+    LTEXT           "72.27 dpi",IDC_STATIC,184,16,30,8
+END
+
+IDD_MDCONVFAILE DIALOG  0, 0, 245, 122
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "MuseData conversion failed"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,104,102,50,14
+    LTEXT           "The conversion of",IDC_TITLETEXT,5,3,230,8
+    EDITTEXT        IDC_LOGTEXT,6,25,227,70,ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_READONLY | WS_VSCROLL | WS_HSCROLL
+    LTEXT           "Conversion log:",IDC_STATIC,5,14,50,8
+END
+
+IDD_PROGRESS_DIALOG DIALOG  0, 0, 186, 95
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Open File - progress indicator"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "Abort",IDCANCEL,50,75,78,14
+    LTEXT           "Static",IDC_STATUS,11,12,164,53
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 10
+        RIGHTMARGIN, 234
+        VERTGUIDE, 40
+        VERTGUIDE, 125
+        BOTTOMMARGIN, 101
+        HORZGUIDE, 6
+        HORZGUIDE, 25
+        HORZGUIDE, 43
+        HORZGUIDE, 55
+        HORZGUIDE, 72
+    END
+
+    IDD_GOTODIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 223
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 61
+    END
+
+    IDD_GUIDOTEXTDIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 341
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 250
+    END
+
+    IDD_HELPDIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 279
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 160
+    END
+
+    IDD_VPAGEDIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 216
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 176
+    END
+
+    IDD_ZOOMDIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 171
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 99
+    END
+
+    IDD_SPRINGDIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 171
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 99
+    END
+
+    IDD_SPACING_PARAMETERS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 264
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 165
+    END
+
+    IDD_M2G_CONVERSION_LOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 395
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 173
+    END
+
+    IDD_EXPORTGIF_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 223
+        TOPMARGIN, 2
+        BOTTOMMARGIN, 134
+    END
+
+    IDD_MDCONVFAILE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 238
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 115
+    END
+
+    IDD_PROGRESS_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 88
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_LUPE                CURSOR                  "res\\cursor1.cur"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// HTML
+//
+
+IDR_HTML1               HTML                    "res\\deu\\html1.htm"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 0,9,3,0
+ PRODUCTVERSION 0,9,3,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "Comments", "Free software, General Public License (GPL)"
+            VALUE "FileDescription", "GUIDO NoteViewer"
+            VALUE "FileVersion", "0, 9, 3, 0"
+            VALUE "InternalName", "gmnview"
+            VALUE "LegalCopyright", "Copyright (C) 2003-2004 K. Renz, J.Killian, H. Hoos, 2004-2009 Grame"
+            VALUE "LegalTrademarks", "Free software, General Public License (GPL)"
+            VALUE "OriginalFilename", "gmnview.exe"
+            VALUE "ProductName", "GUIDO NoteViewer"
+            VALUE "ProductVersion", "0, 9, 3, 0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDR_MAINFRAME           "GUIDO NoteViewer"
+    IDR_GMNVWTYPE           "\ngmnvw\nGUIDO Music Notation\nGUIDO Music Notation (*.gmn)\n.gmn\nGMNView.Document\nGUIDO Music Notation Document"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_APP_TITLE       "gmnview"
+    AFX_IDS_IDLEMESSAGE     "Ready"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_INDICATOR_EXT        "EXT"
+    ID_INDICATOR_CAPS       "CAP"
+    ID_INDICATOR_NUM        "NUM"
+    ID_INDICATOR_SCRL       "SCRL"
+    ID_INDICATOR_OVR        "OVR"
+    ID_INDICATOR_REC        "REC"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_FILE_NEW             "Create a new document\nNew"
+    ID_FILE_OPEN            "Open an existing document\nOpen"
+    ID_FILE_CLOSE           "Close the active document\nClose"
+    ID_FILE_SAVE            "Save the active document\nSave"
+    ID_FILE_SAVE_AS         "Save the active document with a new name\nSave As"
+    ID_FILE_PAGE_SETUP      "Change the printing options\nPage Setup"
+    ID_FILE_PRINT_SETUP     "Change the printer and printing options\nPrint Setup"
+    ID_FILE_PRINT           "Print the active document\nPrint"
+    ID_FILE_PRINT_PREVIEW   "Display full pages\nPrint Preview"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_APP_ABOUT            "Display program information, version number and copyright\nAbout"
+    ID_APP_EXIT             "Quit the application; prompts to save documents\nExit"
+    ID_HELP                 "Getting Help"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_FILE_MRU_FILE1       "Open this document"
+    ID_FILE_MRU_FILE2       "Open this document"
+    ID_FILE_MRU_FILE3       "Open this document"
+    ID_FILE_MRU_FILE4       "Open this document"
+    ID_FILE_MRU_FILE5       "Open this document"
+    ID_FILE_MRU_FILE6       "Open this document"
+    ID_FILE_MRU_FILE7       "Open this document"
+    ID_FILE_MRU_FILE8       "Open this document"
+    ID_FILE_MRU_FILE9       "Open this document"
+    ID_FILE_MRU_FILE10      "Open this document"
+    ID_FILE_MRU_FILE11      "Open this document"
+    ID_FILE_MRU_FILE12      "Open this document"
+    ID_FILE_MRU_FILE13      "Open this document"
+    ID_FILE_MRU_FILE14      "Open this document"
+    ID_FILE_MRU_FILE15      "Open this document"
+    ID_FILE_MRU_FILE16      "Open this document"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_NEXT_PANE            "Switch to the next window pane\nNext Pane"
+    ID_PREV_PANE            "Switch back to the previous window pane\nPrevious Pane"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_WINDOW_NEW           "Open another window for the active document\nNew Window"
+    ID_WINDOW_ARRANGE       "Arrange icons at the bottom of the window\nArrange Icons"
+    ID_WINDOW_CASCADE       "Arrange windows so they overlap\nCascade Windows"
+    ID_WINDOW_TILE_HORZ     "Arrange windows as non-overlapping tiles\nTile Windows"
+    ID_WINDOW_TILE_VERT     "Arrange windows as non-overlapping tiles\nTile Windows"
+    ID_WINDOW_SPLIT         "Split the active window into panes\nSplit"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_EDIT_CLEAR           "Erase the selection\nErase"
+    ID_EDIT_CLEAR_ALL       "Erase everything\nErase All"
+    ID_EDIT_COPY            "Copy the selection and put it on the Clipboard\nCopy"
+    ID_EDIT_CUT             "Cut the selection and put it on the Clipboard\nCut"
+    ID_EDIT_FIND            "Find the specified text\nFind"
+    ID_EDIT_PASTE           "Insert Clipboard contents\nPaste"
+    ID_EDIT_REPEAT          "Repeat the last action\nRepeat"
+    ID_EDIT_REPLACE         "Replace specific text with different text\nReplace"
+    ID_EDIT_SELECT_ALL      "Select the entire document\nSelect All"
+    ID_EDIT_UNDO            "Undo the last action\nUndo"
+    ID_EDIT_REDO            "Redo the previously undone action\nRedo"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_VIEW_TOOLBAR         "Show or hide the toolbar\nToggle ToolBar"
+    ID_VIEW_STATUS_BAR      "Show or hide the status bar\nToggle StatusBar"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_SCSIZE          "Change the window size"
+    AFX_IDS_SCMOVE          "Change the window position"
+    AFX_IDS_SCMINIMIZE      "Reduce the window to an icon"
+    AFX_IDS_SCMAXIMIZE      "Enlarge the window to full size"
+    AFX_IDS_SCNEXTWINDOW    "Switch to the next document window"
+    AFX_IDS_SCPREVWINDOW    "Switch to the previous document window"
+    AFX_IDS_SCCLOSE         "Close the active window and prompts to save the documents"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_SCRESTORE       "Restore the window to normal size"
+    AFX_IDS_SCTASKLIST      "Activate Task List"
+    AFX_IDS_MDICHILD        "Activate this window"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_PREVIEW_CLOSE   "Close print preview mode\nCancel Preview"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_VIEW_ZOOM            "Select the zoomfactor for the scoredisplay."
+    ID_FILE_VIRTUALPAGE     "Set the size of the virtual page"
+    ID_EDIT_GMNTEXT         "Edit the GUIDO Music Notation as text"
+    ID_SPRINGANDROD         "Switches Spring and Rod Display"
+    ID_STAFFCREATESRODS     "Indicates that the staves create the rods"
+    ID_VOICECREATESRODS     "Indicates that the voice creates Rods"
+    ID_SORTELEMENTS         "Indicates whether elements in the staves are sorted ..."
+    ID_PLAYASMIDI           "Plays current File as a MIDI file\nPlay"
+    ID_FILE_STOPMIDIPLAYBACK "Stops MIDI Playback\nStop Playback"
+    ID_FILE_OPENEXAMPLES    "Open example files\nExampleOpen"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_RELOAD               "Reloads the currently displayed GUIDO-file\nReload"
+    ID_FILE_RELOAD          "Reloads the currently active GUIDO-Description\nReload"
+END
+
+#endif    // Anglais (États-Unis) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
+#ifdef _WIN32
+LANGUAGE 7, 1
+#pragma code_page(1252)
+#endif
+#include "res\gmnview32.rc2"  // Nicht mit Microsoft Visual C++ bearbeitete Ressourcen
+#include "l.deu\afxres.rc"          // Standardkomponenten
+#include "l.deu\afxprint.rc"        // Ressourcen für Drucken/Seitenansicht
+#endif
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

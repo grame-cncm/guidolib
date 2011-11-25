@@ -1,0 +1,106 @@
+/*!
+
+\mainpage The GUIDO Engine Library
+
+
+\section Intro Introduction
+
+The GUIDOLib project aims at the development of a generic, portable library and API for 
+the graphical rendering of musical scores. The library is based on the GUIDO Music Notation 
+format as the underlying data format. It is an open source project covered by the GNU LGPL license.
+
+The project has started in December 2002, based on the source code of the GUIDO NoteViewer 
+developed by Kai Renz.
+
+\section gmn The GUIDO Music Notation
+The GUIDO Music Notation format (GMN) is a general purpose formal language for representing 
+score level music in a platform independent plain text and human readable way. It is based 
+on a conceptually simple but powerful formalism: its design concentrates on general musical 
+concepts (as opposed to graphical features). A key feature of the GUIDO design is adequacy 
+which means that simple musical concepts should be represented in a simple way and only 
+complex notions should require complex representations. This design is reflected by 
+three specification levels: the basic, advanced  and extended GUIDO specifications.
+
+
+\section engine The GUIDO Engine
+The GUIDO Engine operates on a memory representation of the GMN format: 
+the GUIDO Abstract Representation (GAR). This representation is transformed step by step 
+to produce graphical score pages. Two kinds of processing are first applied to the GAR:
+- GAR to GAR transformations which represents a logical layout transformation: part of the
+layout (such as beaming for example) may be computed from the GAR as well as expressed in GAR,
+- the GAR is converted into a GUIDO Semantic Normal Form (GSNF). The GSNF is a
+canonical form such that different semantically equivalent expressions have the same GSNF.
+
+This GSNF is finally converted into a GUIDO Graphic Representation (GGR) that contains the
+necessary layout information and is directly used to draw the music score. This final step 
+includes notably spacing and page breaking algorithms.
+
+Note that although the GMN format allows for precise music formatting (in advanced GUIDO), 
+the GUIDO Engine provides powerful automatic layout capabilities.
+
+
+\section services Main library services
+
+The main services provided by the library are:
+- Score layout: the library provides functions to parse a GMN file and to create the 
+corresponding GAR and GGR. 
+- Score pages access: result of the score layout is a set of pages. The library provides 
+the necessary to change the page size, to query a score pages count, the current page 
+number or the page number corresponding to a given music date.
+- The GUIDO Factory: the GUIDO Engine may be feeded with computer generated music using the 
+GUIDO Factory. The GUIDO Factory API provides a set of functions to create a GAR from scratch and to convert 
+it into a GGR.
+- Mapping: along with the GGR, the GUIDO Engine maintains a tree of graphical music elements. 
+Each element has a bounding box and a date. The library includes the necessary to browse this tree
+and to retrieve elements by date or position.
+
+
+\section devices Graphic devices
+
+First version of the GUIDO Engine was Windows dependent: a Windows HDC type (graphic device 
+context handle) was provided to the GGR objects, that were directly calling Microsoft Windows 
+APIs to draw graphics and text.
+
+For the GUIDO Engine to be platform-independent, and to avoid being restricted 
+to one graphical technology (even a cross-platform one such as pdf, eps 
+or OpenGL ...), the choice has been made to provide a C++ object (called 
+\p VGDevice) to the GGR objects, in place of the previous windows HDC handle.
+
+\p VGDevice is a C++ pure virtual class that declares all methods required by the
+GGR objects to communicate their graphical operations. Implementations of 
+\p VGDevices are provided by clients applications using derived classes so that 
+neither GGR objects nor any part of the GUIDO Engine depends on a particular 
+graphical implementation.
+
+The main advantage is that \p VGDevice derived classes can implement any kind of 
+graphic output: on-screen (platform specific, OpenGL), off-screen (raw 
+bitmaps), files (pdf, svg, postscript), network streams...
+
+\p VGDevices derived classes must provide standard graphic functions (Lines, 
+Arcs, Boxes,Polygons, Text), coordinate transformations (zoom / scaling), and 
+symbolic music symbols handlers (DrawSymbol method). \p VGDevice design makes a 
+clear distinction between text characters and music symbols (although music 
+symbols are generally glyphs in a music font). Music symbols are identified by 
+font-independent constants. This mechanism provides \p VGDevice objects with a 
+higher abstraction level than a pure graphic layer.
+
+Existing implementations of VGDevices:
+\verbatim
+    GDeviceOSX:             MacOS X Quartz implementation.
+    GDeviceWin32:           Windows (gdi)
+    GDeviceWin32GDIPlus:    Windows (gdiplus)
+    CairoDevice:            Linux   (cairo)
+    GDeviceQt:              platform independent - Qt based device
+\endverbatim
+
+VGDevice implementations not maintained:
+\verbatim
+    GDeviceWin2000:         Windows 2000 / XP(gdi+)
+    GDeviceGL:              OpenGL implementation
+    GDeviceGTK:             Linux GTK implementation
+    GDevicePostScript:      EPS files (encapsulated postscript)
+    GDeviceWx:              wxWindows DC implementation.
+\endverbatim
+
+
+*/

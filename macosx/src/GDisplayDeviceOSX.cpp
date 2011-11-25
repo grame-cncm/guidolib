@@ -1,0 +1,69 @@
+/*
+	GUIDO Library
+	Copyright (C) 2003--2006  Grame
+
+	This library is free software; you can redistribute it and/or
+	modify it under the terms of the GNU Lesser General Public
+	License as published by the Free Software Foundation; either
+	version 2.1 of the License, or (at your option) any later version.
+
+	This library is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+	Lesser General Public License for more details.
+
+	You should have received a copy of the GNU Lesser General Public
+	License along with this library; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+*/
+
+/////////////////////////////////////////////////////////////////
+///
+/// 	MacOS X Quartz 2D implementation of VGDevice.
+///
+///	perfs (G3-350): Bach-Inv1.gmn: parse: 240ms, draw: 670ms
+/////////////////////////////////////////////////////////////////
+
+#include <iostream>
+using namespace std;
+
+#include "GDisplayDeviceOSX.h"
+//#include "GSystemOSX.h"
+
+// --------------------------------------------------------------
+//	Onscreen constructor - warning ! default size is 1x1 ! 
+//  Notify the new size before using !
+GDisplayDeviceOSX::GDisplayDeviceOSX( CGContextRef inContext, VGSystem* sys  )
+	:GDeviceOSX(1, 1, sys)
+{
+	// Enternally received context is "kept" in the object
+	mContext = inContext;
+	::CGContextRetain(mContext);
+	
+	Init();
+	
+	// guido hack - must be removed asap
+//	mSys = new GSystemOSX(inContext, NULL, NULL); 
+}
+
+// --------------------------------------------------------------
+GDisplayDeviceOSX::~GDisplayDeviceOSX()
+{
+	::CGContextRelease(mContext);
+}
+
+// --------------------------------------------------------------
+void GDisplayDeviceOSX::NotifySize( int inWidth, int inHeight )
+{ 
+	if ((mPhysicalWidth != inWidth) || (mPhysicalHeight != inHeight))
+	{
+		mPhysicalWidth  = inWidth;
+		mPhysicalHeight = inHeight;
+		
+		// Update context
+#ifdef _USE_QD_COORDINATES_
+		::CGContextTranslateCTM(mContext, 0, -GetHeight());
+#endif
+	}
+}

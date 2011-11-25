@@ -1,0 +1,20 @@
+% demonstrating the use of 4 voices in a single staff
+% used tags: \beam, \stemsUp, \stemsDown, \meter
+
+
+{[\staff<1>\stemsUp\meter<"2/4"> 
+\beam(g2*1/32 e2*1/16 c2*3/32) 
+c2*1/8 \beam(a1*1/16 c2 f2)
+ \beam(g2*1/32 d2*1/16 h1*3/32) 
+d2*1/8 \beam(h1*1/16 d2 g2)],
+
+[\staff<1>\stemsDown\meter<"2/4"> g1*1/8 e1*1/8 
+\beam(g1*1/16 d f a) a1*1/8 e1*1/8 
+\beam(a1*1/16 e g h)],
+
+[\staff<2> \stemsUp \meter<"2/4"> a0*1/4 f0*1/4 
+h0*1/4 c1*1/4],
+
+[\staff<2>\stemsDown \meter<"2/4"> f0*1/4 d0*1/4 
+g0*1/4 a0*1/4]}
+

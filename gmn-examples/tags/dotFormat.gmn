@@ -1,0 +1,6 @@
+% dotFormat-Tag is now supported
+% this tag can be used to specify the location of 
+% dots for notes
+
+[ \instr<"DotFormat-Tag used to specify location of dot",dy=4hs>
+  \dotFormat<dy=-1hs,dx=2hs>( c. ) c.  ]

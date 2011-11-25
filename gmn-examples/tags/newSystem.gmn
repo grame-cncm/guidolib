@@ -1,0 +1,9 @@
+% the \newSystem-tag now supports dy-parameter
+% This can be used to exactly define the distance
+% between two systems.
+
+{[ 
+  c d e f g a h c2 \newSystem<dy=6.15cm> 
+  \text<"Distance between systems set using \newSystem-Tag",dy=18hs>
+  ( c d e f g a h )  c2 ],
+  [ c0 e c e c e c e c e c e c e c e c e ] }

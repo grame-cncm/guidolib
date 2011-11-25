@@ -1,0 +1,27 @@
+% GUIDO NotationRenderer 0.6
+%
+% \staffFormat-Tag is now supported
+%
+% The \staffFormat-Tag can be used to change the appearance
+% of a staff. Parameters:
+% style  "n-line" where n is the number of lines 
+% size   defining the size of 1 halfspace (standard 3pt)
+%        (halfspace is the half the distance between two
+%        lines of the staff)
+%
+% still to do:
+% 
+% some elements do not react to size-parameter
+% end-bar looks funny on staves with n-lines (for n != 5)
+%
+{ 
+  [ \staffFormat<size=3pt> 
+     \text<"Playing with \staffFormat-Tag",dy=18hs,dx=-1cm>
+   ( c d e f g a h c2 ) ],
+  [ \staffFormat<size=5pt>  c d e f g a h c2 ],
+  [ \staffFormat<style="1-line"> \clef<"none"> g g g g g e h ],
+  [ \staffFormat<style="7-line",size=2pt> c d e f g a h c2 ] }
+
+
+
+

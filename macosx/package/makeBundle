@@ -1,0 +1,53 @@
+##############################################################################
+# This makefile contains a re-usable set of targets to build MacOsX bundles  #
+##############################################################################
+
+FWORK_ORG = $(shell otool -L $(APP).app/Contents/MacOs/$(APP) | grep $(FWORK) | sed -e 's/$(FWORK).framework.*//')
+FWORK_ORG_2 = $(shell otool -L $(APP).app/Contents/Frameworks/$(FWORK_1).framework/Versions/$(FWORK_1_VERSION)/$(FWORK_1) | grep $(FWORK_2) | sed -e 's/$(FWORK_2).framework.*//')
+
+##
+# Build a directory if necessary
+# Variables: DIR: path of the directory
+##
+mkdirTry:
+	@ [ -d $(DIR) ] || mkdir -p $(DIR)
+
+##
+# Copy the framework in the bundle 
+# and link the application to the framework.
+#
+# Variables: 	FWORK: name of the framework
+#		FWORK_VERSION: version of the framework
+#		FWORK_PATH: path of the framework (doesn't end with "/")
+#		FWORK_ORG: path of the framework ACCORDING TO OTOOL ( if not empty: ends with "/" )
+#		APP: name of the application
+##
+installFramework:
+	make copyFramework
+	make linkApp2Framework
+
+copyFramework:
+	[ -d $(APP).app/Contents/Frameworks/$(FWORK).framework ] || cp -Rf $(FWORK_PATH)/$(FWORK).framework $(APP).app/Contents/Frameworks
+
+linkApp2Framework:
+	install_name_tool -id @executable_path/../Frameworks/$(FWORK).framework/Versions/$(FWORK_VERSION)/$(FWORK) $(APP).app/Contents/Frameworks/$(FWORK).framework/Versions/$(FWORK_VERSION)/$(FWORK)
+	install_name_tool -change $(FWORK_ORG)$(FWORK).framework/Versions/$(FWORK_VERSION)/$(FWORK) @executable_path/../Frameworks/$(FWORK).framework/Versions/$(FWORK_VERSION)/$(FWORK) $(APP).app/Contents/MacOs/$(APP)
+
+##
+# Link FWORK_1 to FWORK_2 (FWORK_1 depends on 
+# FWORK_2)
+#
+# Variables: 	FWORK_X: name of the framework X
+#		FWORK_X_VERSION: version of the framework X
+#		FWORK_PATH: path of the framework (doesn't end with "/")
+#		FWORK_ORG: path of the framework ACCORDING TO OTOOL ( if not empty: ends with "/" )
+#		APP: name of the application
+##
+linkFramework2Framework:
+	install_name_tool -change $(FWORK_ORG_2)$(FWORK_2).framework/Versions/$(FWORK_2_VERSION)/$(FWORK_2) @executable_path/../Frameworks/$(FWORK_2).framework/Versions/$(FWORK_2_VERSION)/$(FWORK_2) $(APP).app/Contents/Frameworks/$(FWORK_1).framework/Versions/$(FWORK_1_VERSION)/$(FWORK_1)
+
+copyPlugin:
+	[ -d $(APP).app/Contents/Plugins/$(PLUGIN_FOLDER)/$(PLUGIN) ] || cp -Rf $(PLUGIN_PATH)/$(PLUGIN_FOLDER)/$(PLUGIN) $(APP).app/Contents/Plugins/$(PLUGIN_FOLDER)
+
+linkPlugin2Framework:
+	install_name_tool -change $(FWORK_ORG)$(FWORK).framework/Versions/$(FWORK_VERSION)/$(FWORK) @executable_path/../Frameworks/$(FWORK).framework/Versions/$(FWORK_VERSION)/$(FWORK) $(APP).app/Contents/Plugins/$(PLUGIN_FOLDER)/$(PLUGIN)

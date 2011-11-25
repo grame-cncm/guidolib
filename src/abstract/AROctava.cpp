@@ -1,0 +1,97 @@
+/*
+	GUIDO Library
+	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+
+	This library is free software; you can redistribute it and/or
+	modify it under the terms of the GNU Lesser General Public
+	License as published by the Free Software Foundation; either
+	version 2.1 of the License, or (at your option) any later version.
+
+	This library is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+	Lesser General Public License for more details.
+
+	You should have received a copy of the GNU Lesser General Public
+	License along with this library; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+*/
+
+#include <iostream>
+#include "AROctava.h"
+// #include "ARFactory.h"
+#include "TagParameterInt.h"
+#include "ListOfStrings.h"
+#include "TagParameterList.h"
+
+ListOfTPLs AROctava::ltpls(1);
+
+AROctava::AROctava(AROctava * p_saveoct, AROctava * copyoct)
+				: ARMTParameter(-1, copyoct), saveoct(p_saveoct)
+{
+	rangesetting = RANGEDC;
+	noct = NULL;
+	if (copyoct && copyoct->getTPOctava())
+	{
+		noct = TagParameterInt::cast(copyoct->getTPOctava()->getCopy());
+	}
+}
+
+AROctava::~AROctava()
+{
+	delete noct;
+}
+
+int AROctava::getOctava() const
+{
+	return noct ? noct->getValue() : 0;
+}
+
+void AROctava::setTagParameterList(TagParameterList & tpl)
+{
+	if (ltpls.GetCount() == 0)
+	{
+		// create a list of string ...
+
+		ListOfStrings lstrs; // (1); std::vector test impl
+		lstrs.AddTail( ( "I,i,,r"));
+		CreateListOfTPLs(ltpls,lstrs);
+	}
+
+	TagParameterList * rtpl = 0;
+	int ret = MatchListOfTPLsWithTPL(ltpls, tpl, &rtpl);
+
+	if (ret>=0 && rtpl)
+	{
+		// we found a match!
+		if (ret == 0)
+		{
+			noct = TagParameterInt::cast(rtpl->RemoveHead());
+			assert(noct);
+
+		}
+
+		delete rtpl;
+	}
+	else
+	{
+		// failure
+	}
+
+	tpl.RemoveAll();
+
+}
+
+void AROctava::PrintName(std::ostream & os) const
+{
+	os << "\\oct";
+}
+
+void AROctava::PrintParameters(std::ostream & os) const
+{
+	int value = 0;
+	if (noct)
+		value = noct->getValue();
+	os << "<i=" << value << ">";
+}

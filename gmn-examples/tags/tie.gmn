@@ -1,0 +1,11 @@
+% simple GUIDO example
+% demonstrated usage of the
+% \tie-Tag. If used on notes
+% with different pitch-classes,
+% the tie-Tag is ignored.
+
+[ \tie<dx1=0.5hs,dy1=-1.5hs,dx2=-1hs,dy2=-1.5hs,h=-1.2hs>(c1*1/8 c) e f \tie(g/4 g) ]
+
+
+% see simple1.gmn vor further enhacements.
+

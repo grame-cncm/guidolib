@@ -1,0 +1,511 @@
+<html><head><!-- hh: update section numbers: 2.xx -> 3.xx --></head>
+
+<body><a name="note"></a>
+<h2>3 Note Attributes</h2>
+
+<h3>3.1 Note heads and stems</h3>
+
+The following tags control the shape and size of note heads (<a href="#noteFormat">\noteFormat</a>),
+brackets around note heads and chords (<a href="#bracket">\bracket</a>),
+stem lengths, directions, and positions relative to the note heads (<a href="#stemsOff">\stemsOff</a>,
+<a href="#stemsUDA">\stemsUp, \stemsDown, \stemsAuto</a>, <a href="#headsRLC">\headsRight,
+\headsLeft, \headsCenter</a>), and the formatting of grace and cue notes
+<a href="#gcFormat">\graceFormat, \cueFormat</a>). <a name="noteFormat"></a>
+
+<h4>3.1.1 \noteFormat</h4>
+The \noteFormat tag controls the graphical appearance, like shape and size,
+of the note heads. It is also used to put brackets around note heads.
+
+<p><i><b>Parameters</b> (in the order of their default positions):</i>
+</p><ul>
+<li>
+<b><i>style</i></b> - shape of note heads</li>
+
+<br><i>standard values:</i>
+<ul>
+<li>
+"standard" - standard, oval note heads</li>
+
+<li>
+"diamond" - diamond note heads</li>
+
+<li>
+"square" - square note heads</li>
+
+<li>
+"x" - x-shaped note heads</li>
+
+<li>
+"noHeads" - no note heads (only stems, flags and beams)</li>
+
+<li>
+"()" - enclose note heads in round brackets</li>
+
+<li>
+"[]" - enclose note heads in square brackets</li>
+
+<li>
+"&lt;&gt;" - enclose note heads in angled brackets</li>
+
+<li>
+"(<i>S</i>)" - <i>S</i> is one of the styles from above, uses that shape
+and encloses note heads in round brackets</li>
+
+<li>
+"[<i>S</i>]" - <i>S</i> is one of the styles from above, uses that shape
+and encloses note heads in square brackets</li>
+
+<li>
+"&lt;<i>S</i>&gt;" - <i>S</i> is one of the styles from above, uses that shape
+and encloses note heads in angled brackets</li>
+</ul>
+<i>default value:</i> none, see Semantics
+<li>
+<b><i>size</i></b> - size of note heads, as a factor relative to the space
+between the lines of the current staff.</li>
+
+<br><i>default value:</i> none, see Semantics</ul>
+<b><i>Range:</i></b> optional
+
+<p><b><i>Semantics:</i></b>
+</p><ul>
+<li>
+If <i>size</i> or <i>style</i> are not specified when using \noteFormat,
+their current settings remain unaffected. If not modified using \noteFormat,
+the default settings are <i>size</i>=1.0, <i>style</i>="standard".</li>
+
+<li>
+The specified parameters are applied to all notes within the range of \noteFormat,
+or, if no range is specified, until (i) the next \noteFormat tag changing
+that parameter or (ii) the end of the current voice.</li>
+</ul>
+<b><i>Remarks:</i></b>
+<ul>
+<li>
+The form \noteFormat&lt;<i>size</i>&gt; may be used as an abbreviation for
+\noteFormat&lt;size=<i>size</i>&gt;</li>
+
+<li>
+The parameterless form \noteFormat has no effect and should not be used.</li>
+
+<li>
+The absolute size of the note heads is determined by the <i>size</i> parameter
+of \noteFormat and the \staffFormat tag.</li>
+
+<li>
+If the style parameter specifies the use of brackets, these are applied
+to each note head individually.</li>
+
+<li>
+To realise bracketed notes (or chords), alternately the \bracket tag can
+be used.</li>
+
+<li>
+For bracketed dotted notes, the dots are included in the brackets.</li>
+</ul>
+<b><i>Examples:</i></b>
+<pre>        \noteFormat&lt;size=0.75&gt;
+        \noteFormat&lt;0.75&gt;
+        \noteFormat&lt;"x"&gt;
+        \noteFormat&lt;style="diamond",size=1.0&gt;
+        \noteFormat&lt;"()",0.75&gt;
+        \noteFormat&lt;"(x)",0.5&gt;
+        ...</pre>
+
+<hr><a name="headsRLC"></a>
+<h4>
+3.1.2 \headsNormal, \headsReverse, \headsCenter</h4>
+These purely graphical tags control the position of the note heads relative
+to the stems. \headsNormal has the note heads left of downward stems and
+right of upward stems. \headsReverse puts the heads right of downward stems
+and left of upward stems. \headsCenter attaches the stems to the center
+of the note heads (mostly used with diamond- and x-shaped note heads).
+
+<p><b><i>Parameters</i></b>: none
+
+</p><p><b><i>Range:</i></b> optional
+
+</p><p><b><i>Semantics:</i></b>
+</p><ul>
+<li>
+If none of these tags is explicitly specified for a voice, \headsNormal
+is assumed.</li>
+
+<li>
+The head position is applied to all notes within the range of the respective
+tag, or, if no range is specified, until (i) the next \heads* tag occurs
+or (ii) the end of the current voice.</li>
+</ul>
+<b><i>Remarks:</i></b>
+<ul>
+<li>
+\headsCenter is intended mainly for use with x- and diamond-shaped note
+heads.</li>
+</ul>
+<b><i>Examples:</i></b>
+<pre>        \headsLeft( ... )
+        \headsLeft ... \headsRight
+        \noteFormat&lt;"diamond"&gt;( \headsLeft ( ... ) )
+        ...</pre>
+
+<hr><a name="bracket"></a>
+<h4>
+3.1.3 \bracket</h4>
+This graphical tag encloses notes and chords in brackets. Also allows to
+
+
+
+specify only left or right brackets (as for double stops).
+
+<p><i><b>Parameters</b> (in the order of their default positions):</i>
+</p><ul>
+<li>
+<b><i>style</i></b> - type of brackets</li>
+
+<br><i>standard values:</i>
+<ul>
+<li>
+"()" - round brackets left and right</li>
+
+<li>
+"[]" - square brackets left and right</li>
+
+<li>
+"&lt;&gt;" - angled brackets left and right</li>
+
+<li>
+"(","[","&lt;" - single left bracket</li>
+
+<li>
+")","]","&gt;" - single right bracket</li>
+</ul>
+<i>default value:</i> "()"</ul>
+<b><i>Range:</i></b> obligatory
+
+<p><b><i>Semantics:</i></b>
+</p><ul>
+<li>
+Applies the specified bracket type to all notes and chords within its range.</li>
+
+<li>
+For simple notes, brackets are applied to the note head (as with \noteFormat).</li>
+
+<li>
+For chords, the brackets are applied to the chord as a whole, ranging from
+the lowest to the highest voice. To bracket single notes within chords,
+apply bracket to these or use \noteFormat.</li>
+
+<li>
+For dotted notes, the dots are included in the brackets.</li>
+</ul>
+<b><i>Remarks:</i></b>
+<ul>
+<li>
+(none)</li>
+</ul>
+<b><i>Examples:</i></b>
+<pre>        \bracket&lt;"()"&gt;( ... )
+        \bracket&lt;"["&gt;( ... )
+        \bracket( ... )
+        ...</pre>
+<!--
+brackets which don't encompass all voices of a chord
+-> not needed now, later: nested chords
+brackets around sequences ??
+brackets around note heads + accidentals
+ -->
+<hr><a name="stemsOff"></a>
+<h4>
+3.1.4 \stemsOff</h4>
+This graphical tag switches display of note stems and flags off.
+
+<p><b><i>Parameters:</i></b> none
+
+</p><p><b><i>Range:</i></b> optional
+
+</p><p><b><i>Semantics:</i></b>
+</p><ul>
+<li>
+The stems and flags are not displayed for all notes within the
+range, or, if no range is specified, until (i) the next \stemsUp, \stemsDown,
+or \stemsAuto tag occurs or (ii) the end of the current voice.</li>
+</ul>
+<b><i>Remarks:</i></b>
+<ul>
+<li>
+To switch off display of note heads, use \noteFormat.</li>
+<li>
+To switch off display of beams, use \beamsOff (Basic GUIDO).</li>
+</ul>
+<b><i>Examples:</i></b>
+<pre>        \stemsOff ...
+        \stemsOff( ... )</pre>
+
+<hr><a name="stemsUDA"></a>
+<h4>
+3.1.5 \stemsUp, \stemsDown, \stemsAuto</h4>
+These graphical tags determine the direction and length of note stems.
+
+<p><i><b>Parameters</b> (in the order of their default positions):</i>
+</p><ul>
+<li>
+<b><i>length</i></b> - length of stems in halfspaces</li>
+
+<br><i>default value:</i> 7.0 for \stemsAuto; none for \stemsUp, \stemsDown,
+see Semantics</ul>
+<b><i>Range:</i></b> optional
+
+<p><b><i>Semantics:</i></b>
+</p><ul>
+<li>
+If none of these tags is explicitly specified for a voice, \stemsAuto is
+assumed.</li>
+
+<li>
+For \stemsAuto, the usual rules are applied for determining stem directions
+are used.</li>
+
+<li>
+If <i>length</i> is not specified when using \stemsUp or \stemsDown, the
+current settings remains unaffected; for \stemsAuto, a default value of
+<i>length</i>=10.0 is assumed. If not modified using \stemsUp, \stemsDown,
+or \stemsAuto,the default setting are is <i>length</i>=7.0.</li>
+
+<li>
+When the stem length is specified for beamed groups, it is applied only
+to the outermost notes of the group, while the stems of the remaining notes
+
+of the group are determined by the beam position. If the beam position
+is specified with the \beam tag, this overrides the stem length setting.</li>
+
+<li>
+These tags are applied to all notes within their range, or, if no range
+is specified, until (i) the next \stems* tag occurs or (ii) the end of
+the current voice.</li>
+</ul>
+<b><i>Remarks:</i></b>
+<ul>
+<li>
+To switch off display of note stems, use \stemsOff.</li>
+</ul>
+<b><i>Examples:</i></b>
+<pre>        \stemsUp ... \stemsAuto
+        \stemsDown&lt;12&gt;( ... )</pre>
+<!--
+need an additional \stemFormat tag (for global settings?)
+-->
+<hr><a name="gcFormat"></a>
+<h4>
+3.1.6 \graceFormat and \cueFormat</h4>
+The \graceFormat and \cueFormat tags control the graphical appearance of
+grace and cue notes. Their syntax and semantics is completely analogous
+to \noteFormat.
+
+<p><b><i>Parameters:</i></b> (see \noteFormat)
+
+</p><p><b><i>Range:</i></b> optional
+
+</p><p><b><i>Semantics:</i></b>
+</p><ul>
+<li>
+Analogous to \noteFormat. \graceFormat and \cueFormat apply only to grace
+and cue notes, respectively. \noteFormat does not apply to grace and cue
+notes.</li>
+</ul>
+<b><i>Remarks:</i></b>
+<ul>
+<li>
+The forms \graceFormat&lt;<i>size</i>&gt; and \cueFormat&lt;<i>size</i>&gt; may
+be used as abbreviations for \graceFormat&lt;size=<i>size</i>&gt; and \cueFormat&lt;size=<i>size</i>&gt;</li>
+
+<li>
+The parameterless forms \graceFormat and \cueFormat have no effect and
+should not be used.</li>
+
+<li>
+If the style parameter specifies the use of brackets, these are applied
+to each note head individually.</li>
+</ul>
+<b><i>Examples:</i></b>
+<pre>        \graceFormat&lt;size=0.75&gt;
+        \cueFormat&lt;0.75&gt;
+        \cueFormat&lt;"x"&gt;
+        \graceFormat&lt;"()",0.75&gt;
+        ...</pre>
+
+<hr>
+<h3>
+3.2 Dots and Accidentals</h3>
+The following tags control the relative position and size of dots (<a href="#dotFormat">\dotFormat</a>),
+
+and the graphical appearance, positioning and size of accidentals (<a href="#acc">\acc</a>). <a name="dotFormat"></a>
+<h4>
+3.2.1 \dotFormat</h4>
+This tag controls the grapical appearance of dots.
+
+<p><i><b>Parameters</b> (in the order of their default positions):</i>
+</p><ul>
+<li>
+<b><i>dx</i></b> - horizontal distance between center of leftmost dot and
+center of note head, in halfspaces of the current system
+times the relative size of the notehead to 
+which the dot belongs (see \noteFormat).</li>
+
+<br><i>default value:</i> 2.0
+<li>
+<b><i>dy</i></b> - vertical distance between center of dot and center of
+note head, in halfspaces of the current system.</li>
+
+<br><i>default value:</i> none, see Semantics. 
+<li><b><var>size</var></b> - size (diameter) of dot in 
+in halfspaces of the current system
+times the relative size of the notehead to 
+which the dot belongs (see \noteFormat).
+  <br>
+  <i>default value:</i> 0.6(?)
+</li><li>
+
+<b><i>dd</i></b> - horizontal distance between center of dots
+   (for multiple dots) 
+in halfspaces of the current system
+times the relative size of the notehead to 
+which the dot belongs (see \noteFormat)   .</li>
+
+<br><i>default value:</i> 1.0(?)
+</ul>
+<b><i>Range:</i></b> optional
+
+<p><b><i>Semantics:</i></b>
+</p><ul>
+
+<li>
+Applied to dotted notes, this tag determines relative position and size
+of the dots.</li>
+
+<li>
+This tag is applied to all notes within its range, or, if no range is specified,
+until (i) the next \dotFormat tag occurs or (ii) the end of the current
+voice.</li>
+
+<li>
+If <i>dy</i> is not specified, a value of 0.0 is assumed for notes between
+staff lines, 1.0 for notes on staff lines.</li>
+</ul>
+<b><i>Remarks:</i></b>
+<ul>
+<li>
+(none)</li>
+</ul>
+<b><i>Examples:</i></b>
+<pre>        \dotFormat&lt;dx=2.5,dy=-1,size=0.5&gt;(c/2. d&amp;/4.. e&amp;/16)
+        ...</pre>
+
+<hr><a name="acc"></a>
+<h4>
+3.2.2 \acc</h4>
+This tag controls the grapical appearance, positioning and size of accidentals.
+Also forces implicit accidentals to appear in the score.
+
+<p><i><b>Parameters</b> (in the order of their default positions):</i>
+</p><ul>
+<li>
+<b><i>dx</i></b> - horizontal distance between center of rightmost accidental
+and center of note head, 
+in halfspaces of the current system
+times the relative size of the notehead to 
+which the accidental belongs (see \noteFormat).</li>
+
+<br><i>default value:</i> -2.0
+<li>
+<b><i>style</i></b> - allows accidentals to be bracketed.</li>
+
+
+
+
+<br><i>standard values:</i>
+<ul>
+<li>
+"" - no brackets</li>
+
+<li>
+"standard" - no brackets</li>
+
+<li>
+"()" - round brackets</li>
+
+<li>
+"[]" - square brackets</li>
+</ul>
+<i>default value:</i> ""
+<li>
+<b><i>size</i></b> - size of accidental, as a factor relative to the size
+of the note head.</li>
+
+<br><i>default value:</i> 1.0</ul>
+<b><i>Range:</i></b> obligatory
+
+<p><b><i>Semantics:</i></b>
+</p><ul>
+<li>
+Forces implicit accidentals (in particular, natural signs) of all notes
+in its range to be displayed.</li>
+
+<li>
+\acc is a purely graphical tag, it does NOT affect the sounding pitch of
+notes.</li>
+</ul>
+<b><i>Remarks:</i></b>
+<ul>
+<li>
+To display accidentals above or below notes (musica ficta), use the \ficta
+tag.</li>
+</ul>
+<b><i>Examples:</i></b>
+<pre>        \acc(c1/4  c# d&amp;)
+        \acc&lt;dx=-2.0, style="()", size=0.8&gt;(c1##/8)
+        c#1/4 \acc&lt;style="()"&gt;(c)
+        ...</pre>
+
+<hr>
+<pre>  % for ficta noteFormat:
+  %   ref. pos. for acc is center of acc.symbol, dy inst. of dx,
+  %   dy is max (dist from notehead, dist from top of staff)
+
++ ficta (accidentals above noteheads)
+  -&gt; \noteFormat&lt;"ficta",size&gt;
+??  maybe better: \acc&lt;dy,"ficta"&gt;, or even \ficta&lt;dy,style,size&gt;</pre>
+
+<h3>
+3.3 Miscellaneous</h3>
+The following tags control the graphical appearance of tuplets (<a href="#tuplet">\tuplet</a>)
+and ledger lines (<a href="#ledgersOO">\ledgersOn, \ledgersOff</a>,
+and <a href="#ledgerFormat">\ledgerFormat</a>); there
+also tags for marking silent notes (<a href="#silent">\silent</a>); and
+controlling their graphical appearance (<a href="#silentFormat">\silentFormat</a>). <a name="tuplet"></a>
+<h4>
+3.3.1 \tuplet</h4>
+This tag controls the grapical appearance of tuplets.
+
+<p><i><b>Parameters</b> (in the order of their default positions):</i>
+</p><ul>
+<li>
+<b><i>format</i></b> - formatting of the tuplet indication and brace</li>
+
+<br><i>standard values:</i>
+<ul>"" - no tuplet indication, no bracket "<i>x</i>" - tuplet indication
+<i>x</i>, no bracket "<i>x:y</i>" - tuplet indication <i>x:y</i>, no bracket
+"--" - no tuplet indication, just a bracket "-<i>x</i>-" - tuplet indication
+<i>x</i>, with bracket "-<i>x:y</i>-" - tuplet indication <i>x:y</i>, with
+bracket</ul>
+
+
+<p><i>default value:</i> "-<i>x</i>-" for unbeamed groups and where "<i>x</i>"
+for beamed groups; <i>x</i> is inferred from the note durations.
+</p><li>
+<b><i>dy1</i></b> - vertical distance between center of leftmost note head
+in the tuplet group and the left end of the tuplet bracket, measured in
+halfspaces of the current system.</li>
+
+<br><i>default value:</i> none, see Semantics.
+<li>
+<b></b></li></ul></body></html>

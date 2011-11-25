@@ -1,0 +1,11 @@
+% Release 0.8
+
+% headsReverse.gmn
+
+% You can use the \headsReverse-tag to
+% determine the relative positioning of 
+% noteheads with respect to the stem.
+% The \headsNormal-tag places the tags
+% at the "normal" position.
+
+ [  { c, \headsReverse(e), g, \headsReverse(a), c2 } ]

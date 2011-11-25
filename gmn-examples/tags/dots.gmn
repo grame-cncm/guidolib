@@ -1,0 +1,16 @@
+% Release 0.8
+
+% handling of dots is now clarified: 
+% if dots are specified for a note, then the following
+% note has the same duration (including dots), but only if no 
+% other duration  is specified explicitly:
+% [ c. c c ] = [ c/4. c/4. c/4. ]
+% [ c. c. c. ] = [ c/4. c/4. c/4. ] THIS USAGE IS DISCOURAGED
+% [ c. c/4 c ] = [ c/4. c/4 c/4 ]
+
+{  [\bm<color="blue">( \noteFormat<dx=-2hs,color="blue">( 
+   { c/8.,e, g }  c/8 ) ) c/4  c. c c   ], 
+  [  \noteFormat<size=0.4,color="red">( c. )  c. c. % this is actually discouraged 
+] ,
+  [ c/4. c/4 d.. e f ] }
+

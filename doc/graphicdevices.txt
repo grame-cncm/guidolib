@@ -1,0 +1,50 @@
+
+=============================================================================
+  Quick note about Guido graphic devices (GDevices)
+=============================================================================
+
+
+This note describes the mechanism currently used by the Guido Engine Library
+to display graphics. i.e: how to generate visible score pages, starting from
+an internal Guido Graphic Representation structure (Guido GR).
+ 
+In the first version of the GuidoEngine, a Windows HDC type (graphic device 
+context handle) was provided to the GR objects, that were directly calling 
+microsoft APIs to display vector graphics and text.
+
+
+For the GuidoEngine to be platform-independent, and to avoid being restricted 
+to only one graphical technology, (even a cross-platform one such as pdf, eps 
+or OpenGL ...), the choice has been made to provide a c++ object (called 
+VGDevice) to the GR objects, in place of the previous windows HDC handle.
+
+
+VGDevice is a c++ pure virtual class that declares all methods required by the
+GR objects to communicate their graphical operations. Implementations of 
+VGDevices are provided by clients applications via derived classes (i.e: 
+GDevicePostScript, GDeviceWin32...), so that neither GR objects nor any part 
+of the GuidoEngine depend on a particular graphical implementation.
+
+
+The main advantage is that VGDevice derived classes can implement any kind of 
+graphical output : on-screen (platform specific, OpenGL), off-screen (raw 
+bitmaps), files (pdf, svg, postscript), network streams...
+
+
+VGDevices derived classes must provides standard graphical functions (Lines, 
+Arcs, Boxes,Polygons, Text), coordinate transformations (zoom / scaling), and 
+symbolic music symbols handlers (DrawSymbol method). VGDevice design makes a 
+clear distinction between text characters and music symbols (although music 
+symbols are generally glyphs in a music font). Music symbols are identified by 
+font-independent constants (see MusicalSymbols.h). This mechanism provides 
+VGDevice objects with a higher abstraction level than a pure graphic layer.
+
+
+
+Existing implementations of VGDevices:
+
+
+GDeviceOSX:             MacOS X Quartz implementation.
+GDeviceWin32:           Windows (gdi)
+GDeviceWin32GDIPlus:    Windows (gdi+)
+Qt based VGDevice

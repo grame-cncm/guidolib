@@ -1,0 +1,13 @@
+% \fingering-Tag has been introduced. This can
+% be used for piano-scores to indicate fingering.
+% reference-location is the center of the notehead
+%
+[ \fingering<text="1",dy=-2hs,fsize=7pt>( c )
+\fingering<text="2",dy=-2hs,fsize=7pt>( d )
+\fingering<text="3",dy=-2hs,fsize=7pt>( e )
+\fingering<text="1",dy=-2hs,fsize=7pt>( f )
+\fingering<text="2",dy=-3hs,fsize=7pt>( g )
+\fingering<text="3",dy=-4hs,fsize=7pt>( a )
+\fingering<text="4",dy=8hs,fsize=7pt>( h )
+\fingering<text="1",dy=7hs,fsize=7pt>( c2 ) ]
+

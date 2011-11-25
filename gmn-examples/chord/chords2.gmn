@@ -1,0 +1,13 @@
+(* Chord-Sample
+   In Release 0.3 a very simple 
+   collosision detection has been
+   implemented when using chords.
+   The following demonstrates, how
+   notes are shifted so that they do
+   not collide.
+   Please note, that accidentals are
+   not yet treated (but will be in
+   future versions) *)
+
+[ { c/2, f,g,a } { d/1, f, g } ]
+

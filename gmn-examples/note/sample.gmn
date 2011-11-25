@@ -1,0 +1,13 @@
+{ 
+  [ \staffFormat<size=3pt> 
+   \stemsOff  \noteFormat<"x",size=1.3> c d e f g a h c2  ],
+  [ \staffFormat<size=3pt> \noteFormat<style="none">
+ \beamsOff g/16 g f e/8 f  empty/2 b/32 empty/4 f2*1/16. f f ],
+  [ \staffFormat<style="1-line"> \clef<"none">  
+    \meter<"",autoBarlines="off"> \stemsOff g/4 g g g g e h ],
+  [ \staffFormat<size=3pt> c d e f g a h c2 ] 
+}
+
+
+
+

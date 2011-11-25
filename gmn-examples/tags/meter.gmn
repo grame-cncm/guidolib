@@ -1,0 +1,9 @@
+% the meter-Tag now supports new
+% parameter: autoBarlines. This
+% can be used to turn off the
+% automatic introductions of
+% barlines by the meter-tag:
+{ [ 
+    \meter<"C/",autoBarlines="off"> 
+    \text<"Turned off automatic barlines with \meter-Tag",dy=17hs,dx=-1cm>
+    (  c d e f g a h c2 ) ] }
