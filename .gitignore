@@ -1,0 +1,9 @@
+CMakeFiles
+CMakeScripts
+CMakeCache.txt
+cmake_*
+*.xcodeproj
+build
+Debug
+Release
+tmpSrc
