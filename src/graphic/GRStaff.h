@@ -117,8 +117,6 @@ class GRStaffState
 
 		GRStaffState &	getState()								{ return *this; }
 		int				getInstrKeyNumber() const				{ return instrNumKeys; }
-//		void			setMesaureDetune(int pitch, float detune)	{ MeasureDetune[pitch - NOTE_C] = detune; }
-//		float			getMesaureDetune(int pitch) const			{ return MeasureDetune[pitch - NOTE_C]; }
 		void			reset2key();
 
 	protected:
@@ -131,9 +129,7 @@ class GRStaffState
 		bool	keyset;							// flag for if key-sig is given
 		int		numkeys;						// number of accidentals, neede for GRKey.
 		int		KeyArray[NUMNOTES];
-		MeasureAccidentals	fMeasureAccidentals;		
-//		float	MeasureAccidentals[NUMNOTES];	// (renamed: was VorzeichenArray)
-//		float	MeasureDetune[NUMNOTES];
+		MeasureAccidentals	fMeasureAccidentals;
 
 		ARKey * curkey;
 		// clef-Parameter
@@ -297,6 +293,7 @@ class GRStaff : public GRCompositeNotationElement
 		int 			mNoteCount;
 
  	 private:
+		TYPE_TIMEPOSITION	fLastSystemBarChecked;
 		void newMeasure(const TYPE_TIMEPOSITION & tp);
 };
 

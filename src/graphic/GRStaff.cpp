@@ -199,8 +199,6 @@ GRStaffState::GRStaffState()
 	{
 		instrKeyArray[i] = 0; 
 		KeyArray[i] = 0; 
-//		MeasureAccidentals[i] = 0; 
-//		MeasureDetune[i] = 0; 
 	}
 }
 
@@ -214,8 +212,6 @@ void GRStaffState::reset2key()
 {
 	for (int i = 0; i < NUMNOTES; ++i) {
 		fMeasureAccidentals.setPitchClassAccidental (i, KeyArray[i] - instrKeyArray[i]);
-//		MeasureAccidentals[i] = KeyArray[i] - instrKeyArray[i];
-//		MeasureDetune[i] = 0.f;
 	}
 }
 
@@ -270,7 +266,7 @@ GRStaffState & GRStaffState::operator=(const GRStaffState & tmp)
 // ===========================================================================
 
 GRStaff::GRStaff( GRSystemSlice * systemslice ) 
-						: mGrSystem(NULL), mGrSystemSlice( systemslice )
+						: mGrSystem(NULL), mGrSystemSlice( systemslice ), fLastSystemBarChecked(-1,1)
 {
 	mLength = 0;
 	mRelativeTimePositionOfGR = systemslice->getRelativeTimePosition();
@@ -483,18 +479,13 @@ void GRStaff::setKeyParameters(GRKey * inKey)
 		mStaffState.keyset = false;
 		mStaffState.numkeys = 0;
 		for (int i = 0; i < NUMNOTES; ++i)
-		{
-//			mStaffState.MeasureAccidentals[i] = -(mStaffState.instrKeyArray[i]);
 			mStaffState.KeyArray[i] = 0;
-		}
 	 }
 	 else
 	 {
 		mStaffState.keyset = true;
 		mStaffState.curkey = /*dynamic*/static_cast<ARKey *>( inKey->getAbstractRepresentation());
 		mStaffState.numkeys = inKey->getKeyArray(mStaffState.KeyArray);
-//		for (int i = 0; i < NUMNOTES; ++i)
-//			mStaffState.MeasureAccidentals[i] = mStaffState.KeyArray[i] - mStaffState.instrKeyArray[i];
 	 }
 	 mStaffState.reset2key();
 }
@@ -692,6 +683,9 @@ int GRStaff::getNumHelplines(TYPE_PITCH pit, TYPE_REGISTER oct) const
 // ----------------------------------------------------------------------------
 void GRStaff::checkSystemBar(const TYPE_TIMEPOSITION & pos)
 {
+	// whe the position has already been checked, we're in a multivoice staff: don't reset the key again 
+	if (fLastSystemBarChecked == pos)	return;
+	fLastSystemBarChecked = pos;
 	GRSystemSlice * systemslice = getGRSystemSlice();
 	if (systemslice && systemslice->hasSystemBars()) {
 		GRBar* bar = systemslice->getBarAt(pos);
@@ -738,8 +732,7 @@ AccList * GRStaff::askAccidentals( int p_pit, int p_oct, int p_acc, float detune
 // ----------------------------------------------------------------------------
 /* for debug purpose
 */
-void
-GRStaff::DebugPrintState(const char * info) const
+void GRStaff::DebugPrintState(const char * info) const
 {
 /*	static ofstream myof ( "c:\\GRStaff.txt" );
 
