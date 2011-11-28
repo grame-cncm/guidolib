@@ -1,9 +1,0 @@
-build
-tmpSrc
-Info.plist
-*.xcodeproj
-bin
-cmake
-Makefile
-html
-latex
