@@ -1,6 +1,11 @@
 GUIDO Engine history
 
 ----------------------------------------------------------------
+2011-11-25 version 1.4.7
+- corrects crash bug with dynamic editing (supports incomplete tag params list)
+- corrects incorrect accidentals rendering in multi voice staffs
+
+----------------------------------------------------------------
 2011-11-25 version 1.4.6
 - memory leaks corrected
 - corrects accidentals management with system bar and implicit bars
