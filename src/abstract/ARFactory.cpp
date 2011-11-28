@@ -1644,7 +1644,10 @@ void ARFactory::endTag()
 			// sets the Don't Care association 
 			tag->setAssociation(ARMusicalTag::DC);			
 			// redo this so that \text<"bla">(  /i<"p"> ) works in the correct order!
-			assert(mTagParameterList.IsEmpty());
+			if(!mTagParameterList.IsEmpty()) {		// here was an assert
+				// removed to allow dynamic editing
+				mTagParameterList.RemoveAll();
+			}
 			return;
 		}
 
