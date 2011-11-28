@@ -42,13 +42,15 @@ svgout		:= $(patsubst ../%.gmn, $(version)/%.svg, $(gmnfiles))
 leaksout 	:= $(patsubst ../%.gmn, $(version)/$(TOOLPATH)/%.leaks.txt, $(gmnfiles))
 
 allpdf 		 = $(shell [ -d $(version) ] && find $(version) -name "*.pdf")
+allsvg 		 = $(shell [ -d $(version) ] && find $(version) -name "*.svg")
 leaksfiles  := $(patsubst ../%.gmn, $(version)/$(TOOLPATH)/%.leaks.out, $(gmnfiles))
 
-validpdf 	= $(patsubst %.pdf, %.out, $(allpdf))
+validpdf 	= $(patsubst %.pdf, %.outpdf, $(allpdf))
+validsvg 	= $(patsubst %.svg, %.outsvg, $(allsvg))
 
 .PHONY: pdf svg
 
-default : pdf
+default : svg
 
 help:
 	@echo "Makefile for testing the engine output. Available targets are:"
@@ -61,12 +63,20 @@ help:
 
 #########################################################################
 # tools to validate the graphic output, based on pdf conversion
-pdf: forcepdfdate $(pdfout)
-	@./forcepdfdate 20100101120000 $(pdfout)
-
-validate: $(validpdf)
+validate: $(validsvg)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
 	@echo Validating version $(version) with $(VERSION) $(tmp)
+	
+%.outsvg: %.svg
+	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
+	@[ -f  $(tmp) ] || echo $< : new file
+	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
+	@[ -f  $(ignored) ] || (diff $< $(tmp) 2>/dev/null >/dev/null || [ -f  $(tmp) ] && echo "open $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
+
+#########################################################################
+# pdf output generation
+pdf: forcepdfdate $(pdfout)
+	@./forcepdfdate 20100101120000 $(pdfout)
 
 pdfclean: 
 	rm -f $(pdfout)
@@ -74,12 +84,6 @@ pdfclean:
 $(version)/%.pdf: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	$(guido2image) $< $@
-
-%.out: %.pdf
-	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
-	@[ -f  $(tmp) ] || echo $< : new file
-	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
-	@[ -f  $(ignored) ] || (diff $< $(tmp) 2>/dev/null >/dev/null || [ -f  $(tmp) ] && echo "open $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
 
 #########################################################################
 # leaks check tools
@@ -113,7 +117,7 @@ svgclean:
 
 $(version)/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	$(guido2svg) $< 1 > $@
+	-$(guido2svg) $< 1 > __tmp.svg  &&  mv __tmp.svg $@
 
 
 #########################################################################
