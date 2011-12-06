@@ -55,6 +55,22 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_AR2GR__Lguidoengine_guidolayo
 
 /*
  * Class:     guidoengine_guidoscore
+ * Method:    AR2MIDIFile
+ * Signature: (Ljava/lang/String;Lguidoengine/guido2midiparams;)I
+ */
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_AR2MIDIFile
+  (JNIEnv *, jobject, jstring, jobject);
+
+/*
+ * Class:     guidoengine_guidoscore
+ * Method:    SVGExport
+ * Signature: (I)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_guidoengine_guidoscore_SVGExport
+  (JNIEnv *, jobject, jint);
+
+/*
+ * Class:     guidoengine_guidoscore
  * Method:    UpdateGR
  * Signature: ()I
  */

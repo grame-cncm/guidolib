@@ -6,6 +6,15 @@ JAVA  = java
 
 .PHONY: doc
 
+help:
+	@echo  This makefile is intended to manage guido java ressources.
+	@echo  Available targets are:
+	@echo "  class : to compile the jni java code"
+	@echo "  jar   : to build a jni jar file"
+	@echo "  doc   : to build the java documentation"
+	@echo "  headers : to make the native headers"
+	
+
 class : $(CLASS)
 
 jar : guidoengine.jar

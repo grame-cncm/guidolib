@@ -87,6 +87,23 @@ public class guidoscore
 	*/
     public native final synchronized int  AR2GR(guidolayout layout);
 
+	/** Exports an AR representation to a MIDI file
+	
+		@param filename the MIDI file name
+		@param params MIDI export settings
+		@return an error code.
+		@see guido2midiparams
+	*/
+    public native final synchronized int  AR2MIDIFile(String filename, guido2midiparams params);
+
+	/** Exports a graphic representation to SVG
+	
+		@param pagenum the page to be exported
+		@param params MIDI export settings
+		@return a string containing th corresponding SVG code.
+	*/
+    public native final synchronized String  SVGExport(int pagenum);
+
 
 	/** Updates a GR representation
 	
