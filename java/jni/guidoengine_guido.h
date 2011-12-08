@@ -61,7 +61,7 @@ JNIEXPORT jboolean JNICALL Java_guidoengine_guido_xml2gmn__
 
 /*
  * Class:     guidoengine_guido
- * Method:    msucixmlversion
+ * Method:    musicxmlversion
  * Signature: ()Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL Java_guidoengine_guido_musicxmlversion
@@ -69,7 +69,7 @@ JNIEXPORT jstring JNICALL Java_guidoengine_guido_musicxmlversion
 
 /*
  * Class:     guidoengine_guido
- * Method:    msucixml2guidoversion
+ * Method:    musicxml2guidoversion
  * Signature: ()Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL Java_guidoengine_guido_musicxml2guidoversion
