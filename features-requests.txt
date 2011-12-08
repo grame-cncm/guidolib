@@ -1,4 +1,6 @@
 
 [OK] July 12 2011 - support for microtonal key signature - requested by
-Automatic formatting of tuplets (dy) - requested by Mika (on nov. 2 2011)
 
+Automatic formatting of tuplets (dy) - requested by Mika (on nov. 2 2011)
+Accidental cancellation after barline - suggested by Michael Kassler
+Free keys supporting the alter directly as percentage % e.g. \key<"free=f#[25] c&[-25] a[-75];> - suggested by Sadek
