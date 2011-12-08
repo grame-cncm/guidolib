@@ -409,9 +409,10 @@ units.
 	*/
     GUIDOAPI(GuidoErrCode) 	GuidoOnDraw( GuidoOnDrawDesc * desc );
 
-	/** \brief Draws one page of score into a graphic device.
+	/** \brief Exports one page of score to SVG.
 
-		\param desc informations about what to draw and how to draw.
+		\param page the page number.
+		\param out the output stream.
 		\return a Guido error code
 	*/
     GUIDOAPI(GuidoErrCode) 	GuidoSVGExport( const GRHandler handle, int page, std::ostream& out );
