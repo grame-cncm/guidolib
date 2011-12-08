@@ -94,7 +94,7 @@ showleaks: $(leaksfiles)
 
 $(version)/$(TOOLPATH)/%.leaks.txt: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	valgrind --leak-check=full --suppressions=valgrindignored.txt --suppressions=valgrindignored.txt --log-file=$@ $(TOOL) $<
+	valgrind --leak-check=full --suppressions=valgrindignored.txt --log-file=$@ $(TOOL) $<
 
 $(version)/$(TOOLPATH)/%.leaks.out: $(version)/$(TOOLPATH)/%.leaks.txt	
 	@grep $(nodlost) $< > /dev/null || echo "$< : definitely lost bytes"
