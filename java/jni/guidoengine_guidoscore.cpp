@@ -22,10 +22,14 @@
 #include "guidoengine_guidoscore.h"
 #include "guidoengine_native_paint.h"
 #include "guidoengine_bitmap_paint.h"
+
+#define MIDIEXPORT
 #include "GUIDOEngine.h"
+#include "GUIDO2Midi.h"
 #include "map_collectors.h"
 #include "javaIDs.h"
 
+#include <sstream>
 
 // --------------------------------------------------------------------------------------------
 // fields IDs declarations
@@ -49,6 +53,12 @@ extern jfieldID gPageID, gscrollxID, gscrollyID, gsizexID, gsizeyID, gisprintID;
 
 // the guidopaint IDs
 extern jfieldID gEraseID, gLeftID, gRightID, gTopID, gBottomID;
+
+// the guido2midiparams IDs
+extern jfieldID gTempoID, gTicksID, gChanID;
+extern jfieldID gIntensityID, gAccentFactorID, gMarcatoFactorID;
+extern jfieldID gDFactorID, gStaccatoFactorID, gSlurFactorID, gTenutoFactorID, gFermataFactorID;
+extern jfieldID gVoice2ChanID;
 
 
 // --------------------------------------------------------------------------------------------
@@ -201,6 +211,61 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_AR2GR__Lguidoengine_guidolayo
 		env->SetLongField (obj, gGRHandlerID, (long)gr);
 	}
 	return errcode;
+}
+
+/*
+ * Class:     guidoengine_guidoscore
+ * Method:    AR2MIDIFile
+ * Signature: (Ljava/lang/String;Lguidoengine/guido2midiparams;)I
+ */
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_AR2MIDIFile
+  (JNIEnv * env, jobject obj, jstring file, jobject jparams)
+{
+	ARHandler ar = (ARHandler)env->GetLongField (obj, gARHandlerID);
+	GuidoErrCode err = guidoErrInvalidHandle;
+	if (ar) {
+		Guido2MidiParams p;
+		p.fTempo = env->GetIntField (jparams, gTempoID);
+		p.fTicks = env->GetIntField (jparams, gTicksID);
+		p.fChan  = env->GetIntField (jparams, gChanID);
+
+		p.fIntensity	 = env->GetFloatField (jparams, gIntensityID);
+		p.fAccentFactor  = env->GetFloatField (jparams, gAccentFactorID);
+		p.fMarcatoFactor = env->GetFloatField (jparams, gMarcatoFactorID);
+
+		p.fDFactor			= env->GetFloatField (jparams, gDFactorID);
+		p.fStaccatoFactor	= env->GetFloatField (jparams, gStaccatoFactorID);
+		p.fSlurFactor		= env->GetFloatField (jparams, gSlurFactorID);
+		p.fTenutoFactor		= env->GetFloatField (jparams, gTenutoFactorID);
+		p.fFermataFactor	= env->GetFloatField (jparams, gFermataFactorID);
+		
+//		for (int i=0; i<128; i++) {
+//			p.fVChans = ?;
+//		}
+		const char *str  = env->GetStringUTFChars(file, JNI_FALSE);
+		err = GuidoAR2MIDIFile (ar, str, &p);
+		env->ReleaseStringUTFChars(file, str);
+	}
+	return err;
+}
+
+/*
+ * Class:     guidoengine_guidoscore
+ * Method:    SVGExport
+ * Signature: (I)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_guidoengine_guidoscore_SVGExport
+  (JNIEnv * env, jobject obj, jint page)
+{
+	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
+	std::stringstream sstr;
+	GuidoErrCode err = guidoErrInvalidHandle;
+	if (gr) {
+		err = GuidoSVGExport(gr, page, sstr);
+		if (err == guidoNoErr)
+			return env->NewStringUTF(sstr.str().c_str());
+	}
+	return env->NewStringUTF(GuidoGetErrorString(err));
 }
 
 /*
