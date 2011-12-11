@@ -58,6 +58,8 @@ class scorePanel extends Canvas implements Printable {
 	guidoscore m_gmnscore;
 	
 	public scorePanel()						{ m_gmnscore = new guidoscore(); }
+	public guidoscore score()				{ return m_gmnscore; }
+	public boolean opened()					{ return m_gmnscore.fARHandler != 0; }
 	public Dimension getPreferredSize()		{ return new Dimension(500,600); }
 
 
@@ -70,9 +72,7 @@ class scorePanel extends Canvas implements Printable {
 				: new String("Error opening ") + str + ":\n" + guido.GetErrorString (err);
 			if (err == guido.guidoErrParse) {
 				if (guido.xml2gmn() && !gmncode) {
-				System.out.println("try xml 2 guido conversion:");
 					String gmn = guido.xml2gmn(str);
-//				System.out.println(gmn);
 					setGMN (gmn, true);
 					return;
 				}	
@@ -127,6 +127,8 @@ class guidoviewerGUI extends JFrame {
     String	 m_Title = "Guido Viewer Java";
 	Menu     m_fileMenu = new Menu("File");		// declare and create new menu
     MenuItem m_openItem = new MenuItem("Open");	// create new menu item
+    MenuItem m_midiexportItem = new MenuItem("Export to MIDI file");	// create new menu item
+    MenuItem m_svgexportItem = new MenuItem("Export to SVG");	// create new menu item
     MenuItem m_printItem = new MenuItem("Print");	// create new menu item
     MenuItem m_quitItem = new MenuItem("Quit");	// another menu item
 	scorePanel m_score = new scorePanel();
@@ -135,6 +137,8 @@ class guidoviewerGUI extends JFrame {
     public guidoviewerGUI() {
         //... Add listeners to menu items
         m_openItem.addActionListener(new OpenAction(this));
+        m_midiexportItem.addActionListener(new MidiExportAction(this));
+        m_svgexportItem.addActionListener(new SVGExportAction(this));
         m_printItem.addActionListener(new PrintAction(m_score));
         m_quitItem.addActionListener(new QuitAction());
         
@@ -142,6 +146,8 @@ class guidoviewerGUI extends JFrame {
         MenuBar menubar = new MenuBar();  // declare and create new menu bar
 		menubar.add(m_fileMenu);			// add the menu to the menubar
 		m_fileMenu.add(m_openItem);			// add the menu item to the menu
+		m_fileMenu.add(m_midiexportItem);			// add the menu item to the menu
+		m_fileMenu.add(m_svgexportItem);			// add the menu item to the menu
 		m_fileMenu.add(m_printItem);		// add the menu item to the menu
 		m_fileMenu.addSeparator();			// add separator line to menu
 		m_fileMenu.add(m_quitItem);
@@ -164,6 +170,8 @@ class guidoviewerGUI extends JFrame {
  		m_score.setGMN(file.getPath(), false); 
 	}
 
+	public guidoscore score()				{ return m_score.score(); }
+
 	//// OpenAction
 	class OpenAction implements ActionListener {
 		guidoviewerGUI m_viewer;
@@ -172,6 +180,39 @@ class guidoviewerGUI extends JFrame {
 			JFileChooser chooser = new JFileChooser();
     		if(chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
 				m_viewer.setGMNFile(chooser.getSelectedFile());
+    	}
+    }
+
+	//// MIDI export
+	class MidiExportAction implements ActionListener {
+		guidoviewerGUI m_viewer;
+        public MidiExportAction (guidoviewerGUI viewer)	{ m_viewer = viewer; }
+		public void actionPerformed(ActionEvent e) {
+			JFileChooser chooser = new JFileChooser();
+    		if(m_viewer.m_score.opened() && (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION)) {
+				guido2midiparams p = new guido2midiparams();
+				m_viewer.score().AR2MIDIFile (chooser.getSelectedFile().getPath(), p);
+			}
+    	}
+    }
+
+	//// SVG export
+	class SVGExportAction implements ActionListener  {
+		guidoviewerGUI m_viewer;
+        public SVGExportAction (guidoviewerGUI viewer)	{ m_viewer = viewer; }
+		public void actionPerformed(ActionEvent e) {
+			JFileChooser chooser = new JFileChooser();
+    		if(m_viewer.m_score.opened() && (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION)) {
+				try {
+					FileWriter w = new FileWriter (chooser.getSelectedFile());
+					String svg = m_viewer.score().SVGExport (1);
+					w.write ( svg);
+					w.flush ();
+				}
+				catch (IOException x) {
+					System.err.println("writing to file " + chooser.getSelectedFile().getPath() + " failed");
+				}
+			}
     	}
     }
 
