@@ -239,9 +239,12 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_AR2MIDIFile
 		p.fTenutoFactor		= env->GetFloatField (jparams, gTenutoFactorID);
 		p.fFermataFactor	= env->GetFloatField (jparams, gFermataFactorID);
 		
-//		for (int i=0; i<128; i++) {
-//			p.fVChans = ?;
-//		}
+		jintArray arr = (jintArray)env->GetObjectField(jparams, gVoice2ChanID);
+		for (int i=0; i<128; i++) {
+			jint val;
+			env->GetIntArrayRegion (arr, i, 1, &val);
+			if (val) p.fVChans[i] = val;
+		}
 		const char *str  = env->GetStringUTFChars(file, JNI_FALSE);
 		err = GuidoAR2MIDIFile (ar, str, &p);
 		env->ReleaseStringUTFChars(file, str);
