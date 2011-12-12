@@ -64,7 +64,7 @@ class scorePanel extends Canvas implements Printable {
 
 
 	public void setGMN(String str, boolean gmncode) {
-		m_gmnscore.close();
+		if (opened()) m_gmnscore.close();
 		int err = gmncode ? m_gmnscore.ParseString(str) : m_gmnscore.ParseFile(str);
 		if (err != guido.guidoNoErr) {
 			String msg = gmncode ? 
@@ -79,7 +79,6 @@ class scorePanel extends Canvas implements Printable {
 				msg += " line " + guido.GetParseErrorLine();
 			}
 			JOptionPane.showMessageDialog(this, msg);
-			m_gmnscore = null;
 		}
 		else {
 			err = m_gmnscore.AR2GR();
@@ -191,7 +190,10 @@ class guidoviewerGUI extends JFrame {
 			JFileChooser chooser = new JFileChooser();
     		if(m_viewer.m_score.opened() && (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION)) {
 				guido2midiparams p = new guido2midiparams();
-				m_viewer.score().AR2MIDIFile (chooser.getSelectedFile().getPath(), p);
+				int err = m_viewer.score().AR2MIDIFile (chooser.getSelectedFile().getPath(), p);
+				if (err != 0) {
+					System.err.println("midi export failed: " + guido.GetErrorString(err));
+				}
 			}
     	}
     }
