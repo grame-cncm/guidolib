@@ -18,8 +18,15 @@ if(UNIX)
 endif(UNIX)
 
 if(APPLE)
-	add_definitions(-D_USE_QD_COORDINATES_ -compatibility_version 1.0.0)
+
+ #######################################
+ if (DIST STREQUAL "yes")
+	message (STATUS "All architectures will be compiled - Use -DDIST=no to change.")
 	set (CMAKE_OSX_ARCHITECTURES "x86_64 i386 ppc")
+ else ()
+	message (STATUS "Only the current architecture will be compiled - Use -DDIST=yes to change.")
+ endif ()
+	add_definitions(-D_USE_QD_COORDINATES_ -compatibility_version 1.0.0)
 	set (CMAKE_OSX_SYSROOT /Developer/SDKs/MacOSX10.5.sdk)
 	set (CMAKE_C++_FLAGS -mmacosx-version-min=10.4)
 	set (CMAKE_LDFLAGS -mmacosx-version-min=10.4)
