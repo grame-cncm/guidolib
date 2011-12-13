@@ -1,7 +1,7 @@
 GUIDO Engine - JNI history 
 
 ----------------------------------------------------------------
-version 1.1.0 - 
+version 1.1.0 - Dec. 12 2011
 - update to GUIDO 1.4.6 interface:
   new guidoscore.AR2MIDIFile method
   new guidoscore.SVGExport method  
