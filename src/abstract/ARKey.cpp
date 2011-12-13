@@ -23,11 +23,12 @@
 #include <ctype.h>
 
 #include "ARKey.h"
-// #include "ARFactory.h"
 #include "TagParameterString.h"
 #include "TagParameterInt.h"
 #include "ListOfStrings.h"
 #include "TagParameterList.h"
+
+using namespace std;
 
 int gd_noteName2pc(const char *name);
 
@@ -35,26 +36,24 @@ int gd_noteName2pc(const char *name);
 ListOfTPLs ARKey::ltpls(1);
 
 ARKey::ARKey(const TYPE_TIMEPOSITION & timeposition)
-	: ARMTParameter(timeposition),
-	  mIsFree(false)
-  {
+	: ARMTParameter(timeposition), mIsFree(false)
+{
 	keynumber = 0;
 	memset(octarray,0,NUMNOTES*(sizeof(int))); // octarray auf 0 setzen;
-  }
+}
 
 
-ARKey::ARKey(int p_keynumber)
-: mIsFree(false)
+ARKey::ARKey(int p_keynumber) : mIsFree(false)
 {
 	keynumber = p_keynumber;
 	memset(octarray,0,NUMNOTES*(sizeof(int))); // octarray auf 0 setzen;
 }
-ARKey::ARKey()
-: mIsFree(false)
-  {
+
+ARKey::ARKey() : mIsFree(false)
+{
 	keynumber = 0; // no accidentals
 	memset(octarray,0,NUMNOTES*(sizeof(int))); // octarray auf 0 setzen;
-  }
+}
 
 ARKey::ARKey(const ARKey & key)
 {
@@ -65,27 +64,19 @@ ARKey::ARKey(const ARKey & key)
 	key.getFreeKeyArray((int *) &mkarray);
 
 }
-ARKey::~ARKey() // does nothing
-  {
-  }
 
 bool ARKey::operator ==(const ARKey & k) const
 {
-
-	if (mIsFree != k.mIsFree)
-		return 0;
-	if (keynumber != k.keynumber)
-		return 0;
+	if (mIsFree != k.mIsFree)		return false;
+	if (keynumber != k.keynumber)	return false;
 	for (int i =0;i<NUMNOTES;i++)
 	{
-		if (mkarray[i] != k.mkarray[i])
-			return 0;
-		if (octarray[i] != k.octarray[i])
-			return 0;
+		if (mkarray[i] != k.mkarray[i])			return false;
+		if (octarray[i] != k.octarray[i])		return false;
 	}
 
 	// they are equal!
-	return 1;
+	return true;
 	
 }
 void ARKey::print() const
@@ -106,11 +97,9 @@ void ARKey::setTagParameterList(TagParameterList & tpl)
 	if (ltpls.GetCount() == 0)
 	{
 		// create a list of string ...
-
 		ListOfStrings lstrs; // (1); std::vector test impl
 
-		// either a key-string ("G")
-		// or a key-number key=3
+		// either a key-string ("G") or a key-number key=3
 		lstrs.AddTail(( "S,key,,r"));
 		lstrs.AddTail(( "I,key,,r"));
 		CreateListOfTPLs(ltpls,lstrs);
@@ -124,8 +113,7 @@ void ARKey::setTagParameterList(TagParameterList & tpl)
 		// we found a match!
 		if (ret == 0)
 		{
-			// then, we now the match for
-			// the first ParameterList
+			// then, we now the match for the first ParameterList
 			// w, h, ml, mt, mr, mb
 			GuidoPos pos = rtpl->GetHeadPosition();
 
@@ -135,23 +123,17 @@ void ARKey::setTagParameterList(TagParameterList & tpl)
 			NVstring name = tps->getValue();
 
 			// ist free-Tag gesetzt?
-			if (name.substr(0, 5) == "free=" ) // NVstring("free=")) 
-			{
-				///keynumber=0;
+			if (name.substr(0, 5) == "free=" ) {
 				mIsFree = true;
 				getKeyArray(name.substr(5, name.length()-5));
+				newgetKeyArray (name.substr(5, name.length()-5));
 			}
-			else
-			{
+			else {
 				mIsFree = false;
-				
 				int t = (int)name[0];
-				
-				int major = 0;
-				if (t == toupper(t) ) // uppercase letter
-					major = 1; // major key
-				t = toupper(t);
-				
+				int major = (t == toupper(t));
+
+				t = toupper(t);				
 				switch (t) 
 				{
 					case 'F': 	keynumber = -1;	break;
@@ -165,33 +147,24 @@ void ARKey::setTagParameterList(TagParameterList & tpl)
 					default:	keynumber = 0;
 				}
 				
-				if (!major)
-					keynumber -= 3; // minus 3 accidentals  (A-Major ->  a-minor ...)
-				
+				if (!major)				keynumber -= 3;		// minus 3 accidentals  (A-Major ->  a-minor ...)				
 				if (name.length() > 1)
 				{
 					t = name[1];
-					if (t == '#')
-						keynumber += 7;
-					if (t == '&')
-						keynumber -= 7;
+					if (t == '#')		keynumber += 7;
+					else if (t == '&')	keynumber -= 7;
 				}
 			}
-			
 		}
 		else if (ret == 1)
 		{
-			// then, we now the match for
-			// the first ParameterList
+			// then, we now the match for the first ParameterList
 			// w, h, ml, mt, mr, mb
 			GuidoPos pos = rtpl->GetHeadPosition();
-
 			TagParameterInt * tpi = TagParameterInt::cast(rtpl->GetNext(pos));
 			assert(tpi);
-
 			keynumber = tpi->getValue();
 		}
-
 		delete rtpl;
 	}
 	else
@@ -202,38 +175,70 @@ void ARKey::setTagParameterList(TagParameterList & tpl)
 }
 
 
-void ARKey::getKeyArray(NVstring inString) 
+float ARKey::getAccidental (const char*& ptr)
+{
+	float accidental = 0.f;
+	if (*ptr == '[') {
+cout << "ARKey::getAccidental float" << endl;
+		ptr++;
+		string acc;
+		while (*ptr && (*ptr != ']')) acc += *ptr++;
+		if (*ptr == ']')  accidental = atof (acc.c_str());
+	}
+	else while (*ptr) {
+cout << "ARKey::getAccidental standard" << endl;
+		if (*ptr == '#') accidental += 1.f;
+		else if (*ptr == '&') accidental -= 1.f;
+		else break;
+		ptr++;			
+	}
+	return accidental;
+}
+
+int ARKey::getNote (const char*& ptr)
+{
+	string notename;
+	while (isalpha(*ptr)) notename += *ptr++;
+cout << "ARKey::getNote " << notename << endl;
+	return gd_noteName2pc(notename.c_str());
+}
+
+void ARKey::newgetKeyArray(const std::string& inString)
+{
+cout << "ARKey::newgetKeyArray: " << inString << endl;
+	const char* ptr = inString.c_str();
+	while (*ptr) {
+		int note = getNote (ptr);
+		float accidental = getAccidental(ptr);
+		cout << "note " << note << " acc: " << accidental << endl;
+		if (accidental == 0.f) break;
+	}
+}
+
+void ARKey::getKeyArray(std::string inString) 
 {
 	size_t i,j,index;
 	int acc = 0;	// can be < 0
-	NVstring notename, accidental;
+	string notename, accidental;
 
 	memset(mkarray, 0, NUMNOTES * sizeof(int)); // mkarray auf 0 setzen.
-	///for (i=0;i<7;i++)mkarray[i]=0;
 
-	while( /*( inString.is_null() == false ) && */ (inString.length() > 0)) 
+	while (inString.length()) 
 	{
 		index = 0;
-
 		for (i = 0; i < inString.length() && isalpha(inString[i]); i++) { }
-		
 		notename = inString.substr(0,i);
 
-		for (j=i;j< inString.length() && (inString[j]=='#' || inString[j]=='&');j++) { }
-		
-		// get type of accidental
-		accidental = inString.substr(i,j-i);
-//		if (accidental.is_null() == false) // (JB) is is_null() ok ? should be length() > 0 ?
-//		{
-			acc = (int)accidental.length();
-			if (acc > 2) return; // Error !
-			if (acc == 2 && (accidental[0] != accidental[1]) )
-				return; // accidentals like &# or #& make no sense
-			acc *= ((accidental[0] == '#') ? 1 : -1 );
-//		}
+		for (j=i; j< inString.length() && (inString[j]=='#' || inString[j]=='&'); j++) { }		
+		accidental = inString.substr(i,j-i);		// get type of accidental
 
-		// if correct notename, store accidental 
-		// at correct position in  mkarray
+		acc = (int)accidental.length();
+		if (acc > 2) return; // Error !
+		if (acc == 2 && (accidental[0] != accidental[1]) )
+			return; // accidentals like &# or #& make no sense
+		acc *= ((accidental[0] == '#') ? 1 : -1 );
+
+		// if correct notename, store accidental  at correct position in  mkarray
 		switch(gd_noteName2pc(notename.c_str())) 
 		{
 			case NOTE_C: index=0; mkarray[0]=acc; break;
@@ -292,7 +297,6 @@ void ARKey::getKeyArray(NVstring inString)
 		}
 		inString = inString.substr( j, inString.length()-j);
 	}
-
 }
 
 void ARKey::getFreeKeyArray(int * keyArray) const

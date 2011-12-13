@@ -29,13 +29,18 @@
 */
 class ARKey : public ARMTParameter
 {
+	void	getKeyArray		(std::string inString);
+	void	newgetKeyArray	(const std::string& inString);
+	int		getNote			(const char*& ptr);
+	float	getAccidental	(const char*& ptr);
+
   public:
 						ARKey(const TYPE_TIMEPOSITION & timeposition);
       					ARKey(int p_keynumber);
 						ARKey();
 						ARKey(const ARKey & key);
 
-		virtual 		~ARKey();
+		virtual 		~ARKey() {}
 
 	  	virtual bool operator==(const ARKey & k) const;
 	  	virtual bool IsStateTag() const;
@@ -47,23 +52,22 @@ class ARKey : public ARMTParameter
 		virtual void setTagParameterList(TagParameterList & theTagParameterList);
 
 
-				int getKeyNumber() const { return keynumber; }
-				void setKeyNumber(int newnumber) { keynumber = newnumber; }
+				int getKeyNumber() const			{ return keynumber; }
+				void setKeyNumber(int newnumber)	{ keynumber = newnumber; }
 
 		bool mIsFree; // True if accidental free specified
 
-		virtual void getKeyArray(NVstring inString);
 		virtual void getOctArray(int *) const;
 		virtual void getFreeKeyArray(int *) const;
 
-		int mkarray [NUMNOTES];
-		int octarray [NUMNOTES];
 
   protected:
 	
 	static ListOfTPLs ltpls;
 
 		int keynumber; // >0 = nr of #, < 0 = nr of &
+		int mkarray [NUMNOTES];
+		int octarray [NUMNOTES];
 };
 
 #endif
