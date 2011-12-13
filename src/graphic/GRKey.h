@@ -42,8 +42,8 @@ class GRKey : public GRARCompositeNotationElement, public GRTag
 		virtual 		~GRKey();
 
 	  	virtual void 	setGRStaff(GRStaff * stf);
-				int 	getKeyArray(int * KeyArray);
-		static 	int 	getNonFreeKeyArray(int pnumkeys, int * KeyArray);
+				int 	getKeyArray(float * KeyArray);
+		static 	int 	getNonFreeKeyArray(int pnumkeys, float * KeyArray);
 				void 	getOctArray(int * ctArray);
 
 		virtual void 	updateBoundingBox();
@@ -61,10 +61,10 @@ class GRKey : public GRARCompositeNotationElement, public GRTag
 
   protected:
 
-		int mNatural;
-		int mNumKeys;
-		int mkarray[NUMNOTES];
-		int mOctarray[NUMNOTES]; // octave of accidentlas
+		int		mNatural;
+		int		mNumKeys;
+		float	mkarray[NUMNOTES];
+		int		mOctarray[NUMNOTES]; // octave of accidentlas
 
 		// GRStaff *grstaff;
 

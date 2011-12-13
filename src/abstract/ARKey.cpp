@@ -38,41 +38,41 @@ ListOfTPLs ARKey::ltpls(1);
 ARKey::ARKey(const TYPE_TIMEPOSITION & timeposition)
 	: ARMTParameter(timeposition), mIsFree(false)
 {
-	keynumber = 0;
-	memset(octarray,0,NUMNOTES*(sizeof(int))); // octarray auf 0 setzen;
+	fKeyNumber = 0;
+	memset(fOctarray,0,NUMNOTES*(sizeof(int))); // octarray auf 0 setzen;
 }
 
 
 ARKey::ARKey(int p_keynumber) : mIsFree(false)
 {
-	keynumber = p_keynumber;
-	memset(octarray,0,NUMNOTES*(sizeof(int))); // octarray auf 0 setzen;
+	fKeyNumber = p_keynumber;
+	memset(fOctarray,0,NUMNOTES*(sizeof(int))); // octarray auf 0 setzen;
 }
 
 ARKey::ARKey() : mIsFree(false)
 {
-	keynumber = 0; // no accidentals
-	memset(octarray,0,NUMNOTES*(sizeof(int))); // octarray auf 0 setzen;
+	fKeyNumber = 0; // no accidentals
+	memset(fOctarray,0,NUMNOTES*(sizeof(int))); // octarray auf 0 setzen;
 }
 
 ARKey::ARKey(const ARKey & key)
 {
 	mIsFree = key.mIsFree;
-	keynumber = key.keynumber;
+	fKeyNumber = key.fKeyNumber;
 
-	key.getOctArray((int *) &octarray);
-	key.getFreeKeyArray((int *) &mkarray);
+	key.getOctArray((int *) &fOctarray);
+	key.getFreeKeyArray (fAccarray);
 
 }
 
 bool ARKey::operator ==(const ARKey & k) const
 {
 	if (mIsFree != k.mIsFree)		return false;
-	if (keynumber != k.keynumber)	return false;
+	if (fKeyNumber != k.fKeyNumber)	return false;
 	for (int i =0;i<NUMNOTES;i++)
 	{
-		if (mkarray[i] != k.mkarray[i])			return false;
-		if (octarray[i] != k.octarray[i])		return false;
+		if (fAccarray[i] != k.fAccarray[i])			return false;
+		if (fOctarray[i] != k.fOctarray[i])		return false;
 	}
 
 	// they are equal!
@@ -89,7 +89,7 @@ void ARKey::PrintName(std::ostream & os) const
 }
 void ARKey::PrintParameters(std::ostream & os) const
 {
-	os << "<" << keynumber << "> ";
+	os << "<" << fKeyNumber << "> ";
 }
 
 void ARKey::setTagParameterList(TagParameterList & tpl)
@@ -125,7 +125,7 @@ void ARKey::setTagParameterList(TagParameterList & tpl)
 			// ist free-Tag gesetzt?
 			if (name.substr(0, 5) == "free=" ) {
 				mIsFree = true;
-				getKeyArray(name.substr(5, name.length()-5));
+//				getKeyArray(name.substr(5, name.length()-5));
 				newgetKeyArray (name.substr(5, name.length()-5));
 			}
 			else {
@@ -136,23 +136,23 @@ void ARKey::setTagParameterList(TagParameterList & tpl)
 				t = toupper(t);				
 				switch (t) 
 				{
-					case 'F': 	keynumber = -1;	break;
-					case 'C': 	keynumber = 0;	break;
-					case 'G': 	keynumber = 1;	break;
-					case 'D': 	keynumber = 2;	break;
-					case 'A': 	keynumber = 3;	break;
-					case 'E': 	keynumber = 4;	break;
+					case 'F': 	fKeyNumber = -1;	break;
+					case 'C': 	fKeyNumber = 0;	break;
+					case 'G': 	fKeyNumber = 1;	break;
+					case 'D': 	fKeyNumber = 2;	break;
+					case 'A': 	fKeyNumber = 3;	break;
+					case 'E': 	fKeyNumber = 4;	break;
 					case 'H':
-					case 'B':	keynumber = 5;	break;
-					default:	keynumber = 0;
+					case 'B':	fKeyNumber = 5;	break;
+					default:	fKeyNumber = 0;
 				}
 				
-				if (!major)				keynumber -= 3;		// minus 3 accidentals  (A-Major ->  a-minor ...)				
+				if (!major)				fKeyNumber -= 3;		// minus 3 accidentals  (A-Major ->  a-minor ...)				
 				if (name.length() > 1)
 				{
 					t = name[1];
-					if (t == '#')		keynumber += 7;
-					else if (t == '&')	keynumber -= 7;
+					if (t == '#')		fKeyNumber += 7;
+					else if (t == '&')	fKeyNumber -= 7;
 				}
 			}
 		}
@@ -163,7 +163,7 @@ void ARKey::setTagParameterList(TagParameterList & tpl)
 			GuidoPos pos = rtpl->GetHeadPosition();
 			TagParameterInt * tpi = TagParameterInt::cast(rtpl->GetNext(pos));
 			assert(tpi);
-			keynumber = tpi->getValue();
+			fKeyNumber = tpi->getValue();
 		}
 		delete rtpl;
 	}
@@ -175,18 +175,19 @@ void ARKey::setTagParameterList(TagParameterList & tpl)
 }
 
 
-float ARKey::getAccidental (const char*& ptr)
+float ARKey::getAccidental (const char*& ptr) const
 {
 	float accidental = 0.f;
 	if (*ptr == '[') {
-cout << "ARKey::getAccidental float" << endl;
 		ptr++;
 		string acc;
 		while (*ptr && (*ptr != ']')) acc += *ptr++;
-		if (*ptr == ']')  accidental = atof (acc.c_str());
+		if (*ptr == ']') {
+			accidental = atof (acc.c_str());
+			ptr++;
+		}
 	}
 	else while (*ptr) {
-cout << "ARKey::getAccidental standard" << endl;
 		if (*ptr == '#') accidental += 1.f;
 		else if (*ptr == '&') accidental -= 1.f;
 		else break;
@@ -195,23 +196,65 @@ cout << "ARKey::getAccidental standard" << endl;
 	return accidental;
 }
 
-int ARKey::getNote (const char*& ptr)
+int ARKey::getNote (const char*& ptr) const
 {
 	string notename;
 	while (isalpha(*ptr)) notename += *ptr++;
-cout << "ARKey::getNote " << notename << endl;
 	return gd_noteName2pc(notename.c_str());
+}
+
+bool ARKey::getOctave (const char*& ptr, int& oct) const
+{
+	int sign = 1;
+	if (*ptr == '-') {
+		sign = -1;
+		ptr++;
+	}
+	else if (*ptr == '+')
+		ptr++;
+
+	if (isdigit (*ptr)) {
+		oct = (*ptr++ - '0') * sign;
+		return true;
+	}
+	return false;
 }
 
 void ARKey::newgetKeyArray(const std::string& inString)
 {
-cout << "ARKey::newgetKeyArray: " << inString << endl;
+	int loop=0;
 	const char* ptr = inString.c_str();
-	while (*ptr) {
+	memset(fAccarray, 0, sizeof(fAccarray)); // mkarray auf 0 setzen.
+
+	while (*ptr && (loop < 10)) {
 		int note = getNote (ptr);
-		float accidental = getAccidental(ptr);
-		cout << "note " << note << " acc: " << accidental << endl;
-		if (accidental == 0.f) break;
+		if( note > 1) {
+			float accidental = getAccidental(ptr);
+			int index = 0;
+			switch(note) 
+			{
+				case NOTE_C:	index=0; break;
+				case NOTE_CIS:	break;				// do nothing (yet)
+				case NOTE_D:	index=1; break;
+				case NOTE_DIS:	break;
+				case NOTE_E:	index=2; break;
+				case NOTE_F:	index=3; break;
+				case NOTE_FIS:	break;
+				case NOTE_G:	index=4; break;
+				case NOTE_GIS:	break;
+				case NOTE_A:	index=5; break;
+				case NOTE_AIS:	break;
+				case NOTE_H:	index=6; break;
+				default: return;
+			}
+
+			fAccarray[index] = accidental;
+			int oct;
+			if (getOctave (ptr, oct)) fOctarray[index] = oct;
+
+//			cout << "at index " << index << " acc: " << fAccarray[index] << endl;
+		}
+		else break; // unknown notename
 	}
 }
 
@@ -221,7 +264,7 @@ void ARKey::getKeyArray(std::string inString)
 	int acc = 0;	// can be < 0
 	string notename, accidental;
 
-	memset(mkarray, 0, NUMNOTES * sizeof(int)); // mkarray auf 0 setzen.
+	memset(fAccarray, 0, NUMNOTES * sizeof(int)); // mkarray auf 0 setzen.
 
 	while (inString.length()) 
 	{
@@ -241,18 +284,18 @@ void ARKey::getKeyArray(std::string inString)
 		// if correct notename, store accidental  at correct position in  mkarray
 		switch(gd_noteName2pc(notename.c_str())) 
 		{
-			case NOTE_C: index=0; mkarray[0]=acc; break;
+			case NOTE_C: index=0; fAccarray[0]=acc; break;
 			case NOTE_CIS: break; // do nothing (yet)
-			case NOTE_D: index=1; mkarray[1]=acc; break;
+			case NOTE_D: index=1; fAccarray[1]=acc; break;
 			case NOTE_DIS: break; // do nothing (yet)
-			case NOTE_E: index=2; mkarray[2]=acc; break;
-			case NOTE_F: index=3; mkarray[3]=acc; break;
+			case NOTE_E: index=2; fAccarray[2]=acc; break;
+			case NOTE_F: index=3; fAccarray[3]=acc; break;
 			case NOTE_FIS: break; // do nothing (yet)
-			case NOTE_G: index=4; mkarray[4]=acc; break;
+			case NOTE_G: index=4; fAccarray[4]=acc; break;
 			case NOTE_GIS: break; // do nothing (yet)
-			case NOTE_A: index=5; mkarray[5]=acc; break;
+			case NOTE_A: index=5; fAccarray[5]=acc; break;
 			case NOTE_AIS: break; // do nothing (yet)
-			case NOTE_H: index=6; mkarray[6]=acc; break;
+			case NOTE_H: index=6; fAccarray[6]=acc; break;
 			default: return; // if neede, do error handling here
 		}
 
@@ -266,9 +309,9 @@ void ARKey::getKeyArray(std::string inString)
 				if( j < inString.length())
 				switch (inString[j]) 
 				{
-					case '0': octarray[index]=0; ++j; break;
-					case '1': octarray[index]=1; ++j; break;
-					case '2': octarray[index]=2; ++j; break;
+					case '0': fOctarray[index]=0; ++j; break;
+					case '1': fOctarray[index]=1; ++j; break;
+					case '2': fOctarray[index]=2; ++j; break;
 					default: return; // here additional octaves or errors could be handled
 				}
 			}
@@ -278,9 +321,9 @@ void ARKey::getKeyArray(std::string inString)
 				if( j < inString.length())
 				switch (inString[j]) 
 				{
-					case '0': octarray[index]= 0; ++j; break;
-					case '1': octarray[index]=-1; ++j; break;
-					case '2': octarray[index]=-2; ++j; break;
+					case '0': fOctarray[index]= 0; ++j; break;
+					case '1': fOctarray[index]=-1; ++j; break;
+					case '2': fOctarray[index]=-2; ++j; break;
 					default: return; // here additional octaves or errors could be handled
 				}
 			}
@@ -288,9 +331,9 @@ void ARKey::getKeyArray(std::string inString)
 			{
 				switch (inString[j]) 
 				{
-					case '0': octarray[index]=0; ++j; break;
-					case '1': octarray[index]=1; ++j; break;
-					case '2': octarray[index]=2; ++j; break;
+					case '0': fOctarray[index]=0; ++j; break;
+					case '1': fOctarray[index]=1; ++j; break;
+					case '2': fOctarray[index]=2; ++j; break;
 					default: return; // here additional octaves or errors could be handled
 				}
 			}
@@ -299,14 +342,14 @@ void ARKey::getKeyArray(std::string inString)
 	}
 }
 
-void ARKey::getFreeKeyArray(int * keyArray) const
+void ARKey::getFreeKeyArray(float * keyArray) const
 {
-	for (int i=0;i<NUMNOTES;i++) keyArray[i]=mkarray[i];
+	for (int i=0;i<NUMNOTES;i++) keyArray[i]=fAccarray[i];
 }
 
 void ARKey::getOctArray(int * OctArray) const
 {
-	for (int i=0;i<NUMNOTES;i++) OctArray[i]=octarray[i];
+	for (int i=0;i<NUMNOTES;i++) OctArray[i]=fOctarray[i];
 }
 
 

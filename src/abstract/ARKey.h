@@ -31,8 +31,9 @@ class ARKey : public ARMTParameter
 {
 	void	getKeyArray		(std::string inString);
 	void	newgetKeyArray	(const std::string& inString);
-	int		getNote			(const char*& ptr);
-	float	getAccidental	(const char*& ptr);
+	int		getNote			(const char*& ptr) const;
+	bool	getOctave		(const char*& ptr, int& oct) const;
+	float	getAccidental	(const char*& ptr) const;
 
   public:
 						ARKey(const TYPE_TIMEPOSITION & timeposition);
@@ -45,29 +46,28 @@ class ARKey : public ARMTParameter
 	  	virtual bool operator==(const ARKey & k) const;
 	  	virtual bool IsStateTag() const;
 		virtual void print() const;
-		// virtual ostream & operator<<(ostream &os) const;
 		virtual void PrintName(std::ostream & os) const;
 		virtual void PrintParameters(std::ostream & os) const;
 
 		virtual void setTagParameterList(TagParameterList & theTagParameterList);
 
 
-				int getKeyNumber() const			{ return keynumber; }
-				void setKeyNumber(int newnumber)	{ keynumber = newnumber; }
+				int		getKeyNumber() const			{ return fKeyNumber; }
+				void	setKeyNumber(int newnumber)		{ fKeyNumber = newnumber; }
 
 		bool mIsFree; // True if accidental free specified
 
 		virtual void getOctArray(int *) const;
-		virtual void getFreeKeyArray(int *) const;
+		virtual void getFreeKeyArray(float *) const;
 
 
   protected:
 	
 	static ListOfTPLs ltpls;
 
-		int keynumber; // >0 = nr of #, < 0 = nr of &
-		int mkarray [NUMNOTES];
-		int octarray [NUMNOTES];
+		int		fKeyNumber; // >0 = nr of #, < 0 = nr of &
+		float	fAccarray [NUMNOTES];
+		int		fOctarray [NUMNOTES];
 };
 
 #endif

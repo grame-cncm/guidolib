@@ -66,7 +66,7 @@ GRKey::~GRKey()
 }
 
 // This is a static function ...
-int GRKey::getNonFreeKeyArray(int pnumkeys, int *KeyArray)
+int GRKey::getNonFreeKeyArray(int pnumkeys, float *KeyArray)
 {
 	for (int i=0;i<NUMNOTES;i++)
 		KeyArray[i] = 0;
@@ -86,19 +86,13 @@ int GRKey::getNonFreeKeyArray(int pnumkeys, int *KeyArray)
 
 /** \brief Determines the accidentals ... 
 */
-int GRKey::getKeyArray(int * KeyArray)
+int GRKey::getKeyArray(float * KeyArray)
 {
-	ARKey * mykey = /*dynamic*/static_cast<ARKey *>(getAbstractRepresentation());
+	ARKey * mykey = static_cast<ARKey *>(getAbstractRepresentation());
 	if (mykey->mIsFree)
-	{
 		mykey->getFreeKeyArray(KeyArray);
-		/// octaveArray=mykey->getoctavearray;
-	}
 	else
-	{
 		getNonFreeKeyArray(mNumKeys,KeyArray);
-	}
-
 	return mNumKeys;
 }
 
@@ -154,8 +148,8 @@ void GRKey::createAccidentals()
 		return;
 	
 	int mynumkeys = mNumKeys;
-	int mymkarray [ NUMNOTES ];
-	int * keyarr = mkarray;
+	float mymkarray [ NUMNOTES ];
+	float * keyarr = mkarray;
 	int instrkeynumber = mGrStaff->getStaffState()->getInstrKeyNumber();
 	if (instrkeynumber != 0)
 	{

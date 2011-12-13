@@ -128,7 +128,7 @@ class GRStaffState
 		// Noteparameter
 		bool	keyset;							// flag for if key-sig is given
 		int		numkeys;						// number of accidentals, neede for GRKey.
-		int		KeyArray[NUMNOTES];
+		float	KeyArray[NUMNOTES];
 		MeasureAccidentals	fMeasureAccidentals;
 
 		ARKey * curkey;
@@ -141,7 +141,7 @@ class GRStaffState
 				// basepitoffs: the offset for the given instrument, example: clarinet in A
 				// has an offset of -2, it is two pitchclasses away from c-major
 				// instrnumkeys: the number of keys for the transposed instrument ,,,
-		int instrKeyArray[NUMNOTES];
+		float instrKeyArray[NUMNOTES];
 				// the key-array for the current instrument (if transposed).
 
 		int baseoct;
