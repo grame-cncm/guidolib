@@ -54,7 +54,7 @@ default : svg
 
 help:
 	@echo "Makefile for testing the engine output. Available targets are:"
-	@echo "'pdf' (default): makes pdf files for a set of gmn files"
+	@echo "'svg' (default): makes svg files for a set of gmn files"
 	@echo "                 the output folder name is the current guido engine version number."
 	@echo "'validate VERSION=another_version': compares the current version pdf output with another one"
 	@echo "'checkleaks TOOL=a_tool': check memory leaks on a set of gmn files using various tools"
