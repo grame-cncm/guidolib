@@ -199,6 +199,7 @@ float ARKey::getAccidental (const char*& ptr) const
 int ARKey::getNote (const char*& ptr) const
 {
 	string notename;
+	while ((*ptr==' ') || (*ptr=='	')) ptr++;
 	while (isalpha(*ptr)) notename += *ptr++;
 	return gd_noteName2pc(notename.c_str());
 }
@@ -226,6 +227,7 @@ void ARKey::newgetKeyArray(const std::string& inString)
 	const char* ptr = inString.c_str();
 	memset(fAccarray, 0, sizeof(fAccarray)); // mkarray auf 0 setzen.
 
+	float currentAccidental = 0.f;
 	while (*ptr && (loop < 10)) {
 		int note = getNote (ptr);
 		if( note > 1) {
@@ -247,8 +249,10 @@ void ARKey::newgetKeyArray(const std::string& inString)
 				case NOTE_H:	index=6; break;
 				default: return;
 			}
-
-			fAccarray[index] = accidental;
+			if (accidental)
+				fAccarray[index] = currentAccidental = accidental;
+			else 
+				fAccarray[index] = currentAccidental;
 			int oct;
 			if (getOctave (ptr, oct)) fOctarray[index] = oct;
 
