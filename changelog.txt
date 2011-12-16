@@ -2,6 +2,7 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
 2011-11-25 version 1.4.7
+- new mapping functions providing adjusted mappings for voices, staves and systems
 - micro tonal support in free keys
 - corrects crash bug with dynamic editing (supports incomplete tag params list)
 - corrects incorrect accidentals rendering in multi voice staffs
