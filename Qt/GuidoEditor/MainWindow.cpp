@@ -66,6 +66,7 @@ typedef GuidoErrCode (* GuidoAR2MIDIFilePtr)(const struct NodeAR* ar, const char
 #define BBMAP_SETTING					"BBMap"
 #define SHOW_BOXES_SETTING				"showBoxes"
 #define SHOW_MAPPING_SETTING			"showMapping"
+#define RAW_MAPPING_SETTING				"rawMapping"
 #define VOICE_NUM_SETTING				"voiceNum"
 #define STAFF_NUM_SETTING				"staffNum"
 #define ENGINE_SETTING					"engine"
@@ -267,9 +268,40 @@ void MapGuidoWidget::Graph2TimeMap (const FloatRect& box, const TimeSegment& dat
 	{
 		QPainter paint(this);
 		paint.setBrush( QBrush( QColor( 0 , 0, 255 , 100 ) ) );
-	//if (duration)
 		paint.drawRect( QRectF( box.left , box.top , box.right - box.left , box.bottom - box.top ) );
 	}
+}
+
+//-------------------------------------------------------------------------
+void MapGuidoWidget::paintMap(const Time2GraphicMap& map)
+{
+	QColor cols[2] = { QColor( 0, 0, 200, 100 ), QColor( 200, 0, 0, 100 ) };
+	int colindex = 0;
+	QPainter paint(this);
+	for (Time2GraphicMap::const_iterator i = map.begin(); i != map.end(); i++) {
+		paint.setBrush( QBrush( cols[colindex++ % 2] ) );
+		paint.drawRect( QRectF( i->second.left, i->second.top, i->second.right - i->second.left, i->second.bottom - i->second.top));
+	}
+}
+
+//-------------------------------------------------------------------------
+GuidoErrCode MapGuidoWidget::paintStaff(int page, int num)
+{
+	Time2GraphicMap map;
+	GuidoErrCode err = GuidoGetStaffMap(getGRHandler(), page, width(), height(), num, map);
+	if (map.size()) paintMap (map);
+	else err = guidoErrActionFailed;
+	return err;
+}
+
+//-------------------------------------------------------------------------
+GuidoErrCode MapGuidoWidget::paintVoice(int page, int num)
+{
+	Time2GraphicMap map;
+	GuidoErrCode err = GuidoGetVoiceMap(getGRHandler(), page, width(), height(), num, map);
+	if (map.size()) paintMap (map);
+	else err = guidoErrActionFailed;
+	return err;
 }
 
 //-------------------------------------------------------------------------
@@ -278,30 +310,50 @@ void MapGuidoWidget::paintEvent(QPaintEvent * event)
 	QGuidoWidget::paintEvent (event);
 	int page = firstVisiblePage();
 	if (fMap) {
-		GuidoErrCode err = guidoNoErr;
-		if (fMap & kPageBB) {
-			err = GuidoGetMap(getGRHandler(), page, width(), height(), kGuidoPage, *this);
+		if (fRaw) {
+			GuidoErrCode err = guidoNoErr;
+			if (fMap & kPageBB)
+				err = GuidoGetMap(getGRHandler(), page, width(), height(), kGuidoPage, *this);
+			if (fMap & kSystemsBB)
+				err = GuidoGetMap(getGRHandler(), page, width(), height(), kGuidoSystem, *this);
+			if (fMap & kSystemsSliceBB)
+				err = GuidoGetMap(getGRHandler(), page, width(), height(), kGuidoSystemSlice, *this);
+			if (fMap & kStavesBB)
+				err = GuidoGetMap(getGRHandler(), page, width(), height(), kGuidoStaff, *this);
+			if (fMap & kMeasureBB)
+				err = GuidoGetMap(getGRHandler(), page, width(), height(), kGuidoBar, *this);
+			if (fMap & kEventsBB)
+				err = GuidoGetMap(getGRHandler(), page, width(), height(), kGuidoEvent, *this);
 			if (err != guidoNoErr) cerr << "GuidoGetMap error: " << GuidoGetErrorString(err) << endl;
 		}
-		if (fMap & kSystemsBB) {
-			err = GuidoGetMap(getGRHandler(), page, width(), height(), kGuidoSystem, *this);
-			if (err != guidoNoErr) cerr << "GuidoGetMap error: " << GuidoGetErrorString(err) << endl;
-		}
-		if (fMap & kSystemsSliceBB) {
-			err = GuidoGetMap(getGRHandler(), page, width(), height(), kGuidoSystemSlice, *this);
-			if (err != guidoNoErr) cerr << "GuidoGetMap error: " << GuidoGetErrorString(err) << endl;
-		}
-		if (fMap & kStavesBB) {
-			err = GuidoGetMap(getGRHandler(), page, width(), height(), kGuidoStaff, *this);
-			if (err != guidoNoErr) cerr << "GuidoGetMap error: " << GuidoGetErrorString(err) << endl;
-		} 
-		if (fMap & kMeasureBB) {
-			err = GuidoGetMap(getGRHandler(), page, width(), height(), kGuidoBar, *this);
-			if (err != guidoNoErr) cerr << "GuidoGetMap error: " << GuidoGetErrorString(err) << endl;
-		}
-		if (fMap & kEventsBB) {
-			err = GuidoGetMap(getGRHandler(), page, width(), height(), kGuidoEvent, *this);
-			if (err != guidoNoErr) cerr << "GuidoGetMap error: " << GuidoGetErrorString(err) << endl;
+		else {
+			GuidoErrCode err = guidoNoErr;
+			if (fMap & kPageBB) {
+				Time2GraphicMap map;
+				err = GuidoGetPageMap(getGRHandler(), page, width(), height(), map);
+				if (err == guidoNoErr) paintMap (map);
+			}
+			if (fMap & kSystemsBB) {
+				Time2GraphicMap map;
+				err = GuidoGetSystemMap(getGRHandler(), page, width(), height(), map);
+				if (err == guidoNoErr) paintMap (map);
+			}
+			if (fMap & kStavesBB) {
+				if (fStaffNum > 0)	err = paintStaff(page, fStaffNum);
+				else if (fStaffNum < 0) {
+					for (int staff=1; err == guidoNoErr; staff++)
+						err = paintStaff(page, staff);
+				}
+			}
+			if (fMap & kEventsBB) {
+				if (fVoiceNum > 0)	err = paintVoice(page, fVoiceNum);
+				else if (fVoiceNum < 0) {
+					for (int voice=1; err == guidoNoErr; voice++)
+						err = paintVoice(page, voice);
+				}
+			}
+			if ((err != guidoNoErr) && (err != guidoErrActionFailed)) 
+				cerr << "GuidoGetMap error: " << GuidoGetErrorString(err) << endl;
 		}
 	}
 }
@@ -876,7 +928,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 
 //-------------------------------------------------------------------------
 void MainWindow::setEngineSettings(const GuidoLayoutSettings& gls, 
-					int bbmap , bool showMapping , bool showBoxes,
+					int bbmap , bool showMapping , bool rawMapping , bool showBoxes,
 					int voiceNum, int staffNum)
 {	
 	if ( (gls.systemsDistance != mGuidoEngineParams.systemsDistance)		|
@@ -891,8 +943,7 @@ void MainWindow::setEngineSettings(const GuidoLayoutSettings& gls,
 		mGuidoWidget->setGuidoLayoutSettings( mGuidoEngineParams );
 		updateWidgetSize();
 	}
-	if	  ( (bbmap != mBBMap)
-		||	(showBoxes != mShowBoxes) )
+	if ( (bbmap != mBBMap) || (showBoxes != mShowBoxes) )
 	{
 		mShowBoxes = showBoxes;
 		int bbmap_boxes = mShowBoxes ? bbmap : 0;
@@ -903,15 +954,16 @@ void MainWindow::setEngineSettings(const GuidoLayoutSettings& gls,
 			mGuidoWidget->clearCache();
 		}
 	}
-	if (	(bbmap != mGuidoWidget->fMap)
-		||	(showMapping != mShowMapping) ) 
+	if ( (bbmap != mGuidoWidget->fMap) || (showMapping != mShowMapping) || (rawMapping != mRawMapping) ) 
 	{
 		mShowMapping = showMapping;
+		mRawMapping = rawMapping;
 		int bbmap_mapping = mShowMapping ? bbmap : 0;
-		if (bbmap_mapping != mGuidoWidget->fMap)
+		if ((bbmap_mapping != mGuidoWidget->fMap) || (mRawMapping != mGuidoWidget->fRaw))
 		{
 			mBBMap = bbmap_mapping;
 			mGuidoWidget->fMap = bbmap_mapping;
+			mGuidoWidget->fRaw = mRawMapping;
 			mGuidoWidget->update();
 		}
 	}
@@ -1352,6 +1404,7 @@ void MainWindow::readSettings()
 	int bbmap = settings.value( BBMAP_SETTING , 0 ).toInt();
 	bool showBoxes = settings.value( SHOW_BOXES_SETTING , false ).toBool();
 	bool showMapping = settings.value( SHOW_MAPPING_SETTING , true ).toBool();
+	bool rawMapping = settings.value( RAW_MAPPING_SETTING , true ).toBool();
 	
 	int voiceNum = settings.value( VOICE_NUM_SETTING, -1 ).toInt();
 	int staffNum = settings.value( STAFF_NUM_SETTING, -1 ).toInt();
@@ -1398,8 +1451,8 @@ void MainWindow::readSettings()
 	changeFontSize( fontSize );
 	setScoreColor( scoreColor );
 //	mGuidoEngineParams = guidoLayoutSettings;
-	mBBMap=-1; mShowBoxes=!showBoxes; mShowMapping=!showMapping;mVoiceNum=voiceNum-1;mStaffNum=staffNum-1; //Unset values.
-	setEngineSettings( guidoLayoutSettings , bbmap , showMapping , showBoxes , voiceNum , staffNum );
+	mBBMap=-1; mShowBoxes=!showBoxes; mShowMapping=!showMapping; mVoiceNum=voiceNum-1; mStaffNum=staffNum-1; //Unset values.
+	setEngineSettings( guidoLayoutSettings, bbmap, showMapping, rawMapping, showBoxes, voiceNum, staffNum );
 }
 
 //-------------------------------------------------------------------------
@@ -1424,6 +1477,7 @@ void MainWindow::writeSettings()
 	settings.setValue( BBMAP_SETTING , mBBMap );
 	settings.setValue( SHOW_BOXES_SETTING , mShowBoxes );
 	settings.setValue( SHOW_MAPPING_SETTING , mShowMapping );
+	settings.setValue( RAW_MAPPING_SETTING , mRawMapping );
 	settings.setValue( VOICE_NUM_SETTING, mVoiceNum );
 	settings.setValue( STAFF_NUM_SETTING, mStaffNum );
 	

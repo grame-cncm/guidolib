@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>421</width>
-    <height>667</height>
+    <width>442</width>
+    <height>669</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -334,6 +334,21 @@
               </widget>
              </item>
              <item>
+              <widget class="QCheckBox" name="fRawMapping">
+               <property name="font">
+                <font>
+                 <pointsize>13</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Raw</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
               <widget class="QCheckBox" name="fBoundingBoxes">
                <property name="font">
                 <font>
@@ -373,7 +388,11 @@
                 </widget>
                </item>
                <item>
-                <widget class="QSpinBox" name="fVoiceNumEdit"/>
+                <widget class="QSpinBox" name="fVoiceNumEdit">
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
+                </widget>
                </item>
                <item>
                 <widget class="QCheckBox" name="fShowAllVoicesCheckBox">
@@ -419,7 +438,11 @@
                 </widget>
                </item>
                <item>
-                <widget class="QSpinBox" name="fStaffNumEdit"/>
+                <widget class="QSpinBox" name="fStaffNumEdit">
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
+                </widget>
                </item>
                <item>
                 <widget class="QCheckBox" name="fShowAllStaffsCheckBox">

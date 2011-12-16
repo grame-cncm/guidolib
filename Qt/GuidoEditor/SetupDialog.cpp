@@ -55,21 +55,10 @@ QString weightToString( QFont::Weight w )
 {
 	switch (w)
 	{
-//		case QFont::Light:
-//			return "Light";
-//		break;
 		case QFont::Normal:
 			return "Normal";
-		break;
-//		case QFont::DemiBold:
-//			return "DemiBold";
-//		break;
 		case QFont::Bold:
 			return "Bold";
-		break;
-//		case QFont::Black:
-//			return "Black";
-//		break;
 		default:
 			return "";
 	}
@@ -95,6 +84,7 @@ SetupDialog::SetupDialog(MainWindow *parent)
 	QObject::connect (fColorButton, SIGNAL(clicked()) , this, SLOT(changeColor()));
 	
 	QObject::connect (fMapping, SIGNAL(clicked()), this, SLOT(setup()));
+	QObject::connect (fRawMapping, SIGNAL(clicked()), this, SLOT(setup()));
 	QObject::connect (fBoundingBoxes, SIGNAL(clicked()), this, SLOT(setup()));
 	QObject::connect (fPageBB, SIGNAL(clicked()), this, SLOT(setup()));
 	QObject::connect (fSystemBB, SIGNAL(clicked()), this, SLOT(setup()));
@@ -111,11 +101,12 @@ SetupDialog::SetupDialog(MainWindow *parent)
 	mSavedSettings = mMainWindow->getEngineSettings();
 	mSavedBBMap = mMainWindow->getBBMap();
 	mSavedShowMapping = mMainWindow->getShowMapping();
+	mSavedRawMapping = mMainWindow->getRawMapping();
 	mSavedShowBoxes = mMainWindow->getShowBoxes();
 	mSavedVoiceNum = mMainWindow->getVoiceNum();
 	mSavedStaffNum = mMainWindow->getStaffNum();
 	scoreColorChanged( mMainWindow->getScoreColor() );
-	set (mSavedSettings, mSavedBBMap, mSavedShowMapping , mSavedShowBoxes , mSavedVoiceNum , mSavedStaffNum);
+	set (mSavedSettings, mSavedBBMap, mSavedShowMapping, mSavedRawMapping, mSavedShowBoxes, mSavedVoiceNum, mSavedStaffNum);
 
 	mFontColorMap[ GuidoHighlighter::VOICE_SEPARATOR_ELT ]	= fVoiceSeparatorColorButton;
 	mFontColorMap[ GuidoHighlighter::SCORE_SEPARATOR_ELT ]	= fScoreSeparatorColorButton;
@@ -187,9 +178,9 @@ void SetupDialog::setup()
 {
 	GuidoLayoutSettings gls;
 	int bbmap,voiceNum,staffNum;
-	bool showBoxes, showMapping;
-	get (gls, bbmap , showMapping , showBoxes , voiceNum,staffNum);
-	mMainWindow->setEngineSettings (gls, bbmap , showMapping , showBoxes , voiceNum , staffNum);	
+	bool showBoxes, showMapping, rawMapping;
+	get (gls, bbmap , showMapping , rawMapping, showBoxes , voiceNum,staffNum);
+	mMainWindow->setEngineSettings (gls, bbmap, showMapping, rawMapping, showBoxes, voiceNum, staffNum);	
 }
 
 //-------------------------------------------------------------------------
@@ -220,7 +211,7 @@ void SetupDialog::scoreColorChanged(const QColor& c)
 //-------------------------------------------------------------------------
 void SetupDialog::reject()
 {
-	mMainWindow->setEngineSettings (mSavedSettings, mSavedBBMap, mSavedShowMapping , mSavedShowBoxes , mSavedVoiceNum , mSavedStaffNum);
+	mMainWindow->setEngineSettings (mSavedSettings, mSavedBBMap, mSavedShowMapping, mSavedRawMapping, mSavedShowBoxes, mSavedVoiceNum, mSavedStaffNum);
 	scoreColorChanged(mSavedColor);
 
 	GuidoHighlighter * highlighter = new GuidoHighlighter();
@@ -232,7 +223,7 @@ void SetupDialog::reject()
 }
 	
 //-------------------------------------------------------------------------
-void SetupDialog::get (GuidoLayoutSettings& gls, int& bbmap, bool& showMapping, bool& showBoxes, int&voiceNum, int&staffNum)
+void SetupDialog::get (GuidoLayoutSettings& gls, int& bbmap, bool& showMapping, bool& rawMapping, bool& showBoxes, int&voiceNum, int&staffNum)
 {
 	gls.systemsDistance		= fSysDistBox->value();
 	gls.systemsDistribLimit = float(fMaxDistBox->value()) / 100;
@@ -250,13 +241,14 @@ void SetupDialog::get (GuidoLayoutSettings& gls, int& bbmap, bool& showMapping, 
 	if (fMeasureBB->checkState() == Qt::Checked)		bbmap |= kMeasureBB;
 	if (fEventBB->checkState() == Qt::Checked)			bbmap |= kEventsBB;
 	showMapping = fMapping->checkState();
+	rawMapping = fRawMapping->checkState();
 	showBoxes = fBoundingBoxes->checkState();
 	voiceNum = this->voiceNum();
 	staffNum = this->staffNum();
 }
 	
 //-------------------------------------------------------------------------
-void SetupDialog::set (const GuidoLayoutSettings& gls, int bbmap , bool showMapping, bool showBoxes, int voiceNum, int staffNum)
+void SetupDialog::set (const GuidoLayoutSettings& gls, int bbmap , bool showMapping, bool rawMapping, bool showBoxes, int voiceNum, int staffNum)
 {
 	fSysDistBox->setValue(gls.systemsDistance);
 	fMaxDistBox->setValue(gls.systemsDistribLimit*100);
@@ -267,6 +259,7 @@ void SetupDialog::set (const GuidoLayoutSettings& gls, int bbmap , bool showMapp
 	fNSpacingcheckBox->setCheckState(gls.neighborhoodSpacing ? Qt::Checked : Qt::Unchecked);
 
 	fMapping->setCheckState(showMapping ? Qt::Checked : Qt::Unchecked);
+	fRawMapping->setCheckState(rawMapping ? Qt::Checked : Qt::Unchecked);
 	fBoundingBoxes->setCheckState(showBoxes ? Qt::Checked : Qt::Unchecked);
 
 	fPageBB->setCheckState(bbmap & kPageBB ? Qt::Checked : Qt::Unchecked);
@@ -302,7 +295,7 @@ void SetupDialog::reset()
 {
 	GuidoLayoutSettings gls;
 	GuidoGetDefaultLayoutSettings (&gls);
-	set (gls, kNoBB , false , false , ALL_VOICE , ALL_STAFF );
+	set (gls, kNoBB , false , true, false , ALL_VOICE , ALL_STAFF );
 	setup();
 	scoreColorChanged( Qt::black );
 	

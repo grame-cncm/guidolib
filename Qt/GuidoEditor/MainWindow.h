@@ -51,14 +51,18 @@ class MapGuidoWidget : public QGuidoWidget, public MapCollector
 
 		int fMap;
 		int fVoiceNum, fStaffNum;
+		bool fRaw;
 
-				 MapGuidoWidget() :fMap(kNoBB) {}
+				 MapGuidoWidget() : fMap(kNoBB), fRaw(true) {}
 		virtual ~MapGuidoWidget() {};		
 
 		virtual void Graph2TimeMap( const FloatRect& box, const TimeSegment& dates, const GuidoElementInfos& infos );
 
 	protected:
-		void paintEvent(QPaintEvent * event);
+		void			paintEvent(QPaintEvent * event);
+		void			paintMap(const Time2GraphicMap& map);
+		GuidoErrCode	paintStaff(int page, int num);
+		GuidoErrCode	paintVoice(int page, int num);
 		
 		bool showStaff(int staffNum) const;
 		bool showVoice(int voiceNum) const;
@@ -76,8 +80,9 @@ public:
 	~MainWindow();
 	
 	const GuidoLayoutSettings&	getEngineSettings() const		{ return mGuidoEngineParams; }
-	void				setEngineSettings(const GuidoLayoutSettings& gls, int bbmap , bool showMapping , bool showBoxes, int voiceNum, int staffNum);
+	void				setEngineSettings(const GuidoLayoutSettings& gls, int bbmap, bool showMapping, bool rawMapping, bool showBoxes, int voiceNum, int staffNum);
 	bool				getShowMapping() const { return mShowMapping; }
+	bool				getRawMapping() const { return mRawMapping; }
 	bool				getShowBoxes() const { return mShowBoxes; }
 	int					getBBMap() const { return mBBMap; }
 	int					getVoiceNum() const { return mVoiceNum; }
@@ -190,6 +195,7 @@ private:
 	GuidoLayoutSettings mGuidoEngineParams;
 	bool			mShowBoxes;
 	bool			mShowMapping;
+	bool			mRawMapping;
 	int				mBBMap;
 	int				mVoiceNum, mStaffNum;
 	QColor			mScoreColor;

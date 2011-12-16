@@ -66,8 +66,8 @@ private slots:
 	void voiceStaffSetup(int index);
 
 private:
-	void get (GuidoLayoutSettings& gls, int& bbmap, bool& showMapping, bool& showBoxes, int&voiceNum, int&staffNum);
-	void set(const GuidoLayoutSettings& gls, int bbmap , bool showMapping, bool showBoxes , int voiceNum , int staffNum );
+	void get (GuidoLayoutSettings& gls, int& bbmap, bool& showMapping, bool& rawMapping, bool& showBoxes, int&voiceNum, int&staffNum);
+	void set(const GuidoLayoutSettings& gls, int bbmap , bool showMapping, bool rawMapping, bool showBoxes , int voiceNum , int staffNum );
 	
 	int voiceNum() const;
 	int staffNum() const;
@@ -75,7 +75,7 @@ private:
 	MainWindow *		mMainWindow;
 	GuidoLayoutSettings mSavedSettings;
 	int					mSavedBBMap;
-	bool				mSavedShowMapping, mSavedShowBoxes;
+	bool				mSavedShowMapping, mSavedRawMapping, mSavedShowBoxes;
 	QColor				mSavedColor;
 	int					mSavedVoiceNum, mSavedStaffNum;
 	QMap<int, QPushButton*> mFontColorMap;
