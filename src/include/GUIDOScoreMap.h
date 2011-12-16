@@ -26,6 +26,7 @@
 
 #include <utility>
 #include <vector>
+#include <map>
 
 
 /*!
@@ -45,13 +46,37 @@ typedef enum {
 	kNote = 1, kRest, kEmpty, kBar, kRepeatBegin, kRepeatEnd, kStaff, kSystemSlice, kSystem, kPage
 } GuidoElementType;
 
+// elements infos struct
 typedef struct {
 	GuidoElementType type;		///< the element type
 	int			staffNum;		///< the element staff number or 0 when na
 	int			voiceNum;		///< the element voice number or 0 when na
 } GuidoElementInfos;
 
-typedef std::pair<GuidoDate, GuidoDate>		TimeSegment;
+//typedef std::pair<GuidoDate, GuidoDate>		TimeSegment;
+
+
+//----------------------------------------------------------------------
+/*!
+	\brief a time segment definition and operations
+*/
+class TimeSegment: public std::pair<GuidoDate, GuidoDate>
+{
+	public:
+				 TimeSegment () {}
+				 TimeSegment (const TimeSegment& s) : std::pair<GuidoDate, GuidoDate>(s.first, s.second) {}
+				 TimeSegment (const GuidoDate& a, const GuidoDate& b) : std::pair<GuidoDate, GuidoDate>(a, b) {}
+		virtual ~TimeSegment () {}
+
+		bool empty() const;										///< check for empty segment
+		bool intersect(const TimeSegment& ts) const;			///< check for segments intersection
+		bool include(const TimeSegment& ts) const;				///< check for segment inclusion
+		bool operator < (const TimeSegment& ts) const;			///< order relationship: the smaller is the smaller first date
+		TimeSegment operator & (const TimeSegment& ts) const;	///< intersection operation (may return an arbitrary empty segment)
+};
+
+typedef std::map<TimeSegment, FloatRect>	Time2GraphicMap;
+
 
 //------------------------------------------------------------------------------
 // mapping collector abstract class definition
@@ -106,34 +131,81 @@ extern "C" {
 
 /** \brief Retrieves the graphic to time mapping
 
-	\param inHandleGR a Guido opaque handle to a GR structure.
-	\param inPage a page index, starting from 1.
+	\param gr a Guido opaque handle to a GR structure.
+	\param pagenum a page index, starting from 1.
 	\param width the page width.
 	\param height the page height.
 	\param sel GuidoeElementSelector to filter undesired objects out.
 	\param f a MapCollector object that will be called for each selected element.
 	\return an error code.
 */
-GUIDOAPI(GuidoErrCode)	GuidoGetMap( CGRHandler inHandleGR, int inPage, float width, float height, 
+GUIDOAPI(GuidoErrCode)	GuidoGetMap( CGRHandler gr, int pagenum, float width, float height, 
 									 GuidoeElementSelector sel, MapCollector& f);
+
+
+/** \brief Retrieves a guido page graphic to time mapping. 
+
+	\param gr a Guido opaque handle to a GR structure.
+	\param pagenum a page index, starting from 1.
+	\param w the page width.
+	\param h the page height.
+	\param outmap contains the mapping on output.
+	\return an error code.
+*/
+GUIDOAPI(GuidoErrCode)	GuidoGetPageMap( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap);
+
+/** \brief Retrieves a guido staff graphic to time mapping. 
+
+	\param gr a Guido opaque handle to a GR structure.
+	\param pagenum a page index, starting from 1.
+	\param w the page width.
+	\param h the page height.
+	\param staff the staff index (starting from 1).
+	\param outmap contains the mapping on output.
+	\return an error code.
+*/
+GUIDOAPI(GuidoErrCode)	GuidoGetStaffMap( CGRHandler gr, int pagenum, float w, float h, int staff, Time2GraphicMap& outmap);
+
+/** \brief Retrieves a guido voice graphic to time mapping. 
+
+	\param gr a Guido opaque handle to a GR structure.
+	\param pagenum a page index, starting from 1.
+	\param w the page width.
+	\param h the page height.
+	\param voice the voice index (starting from 1).
+	\param outmap contains the mapping on output.
+	\return an error code.
+*/
+GUIDOAPI(GuidoErrCode)	GuidoGetVoiceMap( CGRHandler gr, int pagenum, float w, float h, int voice, Time2GraphicMap& outmap);
+
+/** \brief Retrieves a guido system graphic to time mapping. 
+
+	\param gr a Guido opaque handle to a GR structure.
+	\param pagenum a page index, starting from 1.
+	\param w the page width.
+	\param h the page height.
+	\param outmap contains the mapping on output.
+	\return an error code.
+*/
+GUIDOAPI(GuidoErrCode)	GuidoGetSystemMap( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap);
 
 /** \brief Retrieves the graphic to time mapping corresponding to the SVG output
 
-	\param inHandleGR a Guido opaque handle to a GR structure.
-	\param inPage a page index, starting from 1.
+	\param gr a Guido opaque handle to a GR structure.
+	\param pagenum a page index, starting from 1.
 	\param sel GuidoeElementSelector to filter undesired objects out.
 	\param outMap on output: a vector containing the map elements
 	\return an error code.
 */
-GUIDOAPI(GuidoErrCode)	GuidoGetSVGMap( GRHandler inHandleGR, int inPage, GuidoeElementSelector sel, std::vector<MapElement>& outMap);
+GUIDOAPI(GuidoErrCode)	GuidoGetSVGMap( GRHandler gr, int pagenum, GuidoeElementSelector sel, std::vector<MapElement>& outMap);
 
 /** \brief Retrieves the rolled to unrolled time mapping
 
-	\param inHandleGR a Guido opaque handle to a GR structure.
+	\param gr a Guido opaque handle to a GR structure.
 	\param f a TimeMapCollector object that will be called for each time segment.
 	\return an error code.
 */
-GUIDOAPI(GuidoErrCode)	GuidoGetTimeMap( CARHandler inHandleGR, TimeMapCollector& f);
+GUIDOAPI(GuidoErrCode)	GuidoGetTimeMap( CARHandler gr, TimeMapCollector& f);
 
 
 /*! @} */

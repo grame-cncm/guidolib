@@ -29,8 +29,10 @@
 #include "ARMusic.h"
 #include "GRMusic.h"
 #include "SVGDevice.h"
+#include "GuidoMapCollector.h"
 
 using namespace std;
+using namespace guido;
 
 class SVGMapCollector : public MapCollector
 {
@@ -46,18 +48,109 @@ class SVGMapCollector : public MapCollector
 		}
 };
 
+inline float fdate (const GuidoDate& d)		{ return d.num / (float)d.denom; }
+//----------------------------------------------------------------------
+bool TimeSegment::empty() const
+{
+	float d1 = fdate(first);
+	float d2 = fdate(second);
+	float interval = (d1 > d2) ? d1 - d2 : d2 - d1;
+	return (interval < 0.0001);
+}
 
+bool TimeSegment::intersect(const TimeSegment& ts) const
+{
+	float s1a = fdate(this->first);
+	float s1b = fdate(this->second);
+	float s2a = fdate(ts.first);
+	float s2b = fdate(ts.second);
+	return ((s1a >= s2a) && (s1a < s2b)) || ((s2a >= s1a) && (s2a < s1b));
+}
 
+bool TimeSegment::include(const TimeSegment& ts) const
+{
+	float s1a = fdate(this->first);
+	float s1b = fdate(this->second);
+	float s2a = fdate(ts.first);
+	float s2b = fdate(ts.second);
+	return (s1a <= s2a) && (s1b >= s2b);
+}
+
+bool TimeSegment::operator < (const TimeSegment& ts) const
+{
+	return fdate(this->first) < fdate(ts.first);
+}
+
+TimeSegment TimeSegment::operator & (const TimeSegment& ts) const
+{
+	const GuidoDate& a = (fdate(first) > fdate(ts.first)) ? first : ts.first;
+	const GuidoDate& b = (fdate(second) < fdate(ts.second)) ? second : ts.second;
+	return TimeSegment (a, (fdate(a) < fdate(b)) ? b : a);
+}
+
+//----------------------------------------------------------------------
+static GuidoErrCode checkParams( CGRHandler handle, int page)
+{
+	if( handle == 0 )			return guidoErrInvalidHandle;
+  	if( handle->grmusic == 0 )	return guidoErrInvalidHandle;
+  	if( page <= 0 )				return guidoErrBadParameter;
+	if (page > GuidoGetPageCount(handle)) return guidoErrBadParameter;
+	return guidoNoErr;
+}
+
+//----------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode)	GuidoGetMap( CGRHandler handle, int page, float w, float h, GuidoeElementSelector sel, MapCollector& f)
 {
-	if( handle == 0 ) 	return guidoErrInvalidHandle;
-  	if( handle->grmusic == 0 ) return guidoErrInvalidHandle;
-  	if( page <= 0 )		return guidoErrBadParameter;
+	GuidoErrCode err = checkParams (handle, page);
+	if (err != guidoNoErr) return err;
 	if ((sel < 0) || (sel >= kGuidoScoreElementEnd)) return guidoErrBadParameter; 
 	handle->grmusic->GetMap( page, w, h, sel, f );
 	return guidoNoErr;
 }
 
+//----------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode)	GuidoGetPageMap( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap)
+{
+	GuidoErrCode err = checkParams (gr, pagenum);
+	if (err != guidoNoErr) return err;
+	GuidoMapCollector getmap (gr, kGuidoPage);
+	getmap.process (pagenum, w, h, &outmap);
+	return guidoNoErr;
+}
+
+//----------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode)	GuidoGetStaffMap( CGRHandler gr, int pagenum, float w, float h, int staff, Time2GraphicMap& outmap)
+{
+	GuidoErrCode err = checkParams (gr, pagenum);
+	if (err != guidoNoErr) return err;
+	if (staff < 1) return guidoErrBadParameter; 
+	GuidoStaffCollector getmap (gr, staff);
+	getmap.process (pagenum, w, h, &outmap);
+	return guidoNoErr;
+}
+
+//----------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode)	GuidoGetVoiceMap( CGRHandler gr, int pagenum, float w, float h, int voice, Time2GraphicMap& outmap)
+{
+	GuidoErrCode err = checkParams (gr, pagenum);
+	if (err != guidoNoErr) return err;
+	if (voice < 1) return guidoErrBadParameter; 
+	GuidoVoiceCollector getmap (gr, voice);
+	getmap.process (pagenum, w, h, &outmap);
+	return guidoNoErr;
+}
+
+//----------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode)	GuidoGetSystemMap( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap)
+{
+	GuidoErrCode err = checkParams (gr, pagenum);
+	if (err != guidoNoErr) return err;
+	GuidoSystemCollector getmap (gr);
+	getmap.process (pagenum, w, h, &outmap);
+	return guidoNoErr;
+}
+
+//----------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode)	GuidoGetSVGMap( GRHandler handle, int page, GuidoeElementSelector sel, vector<MapElement>& outMap)
 {
 	if( handle == 0 ) 	return guidoErrInvalidHandle;
