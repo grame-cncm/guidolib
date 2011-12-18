@@ -3,6 +3,7 @@
 #include <libgen.h>
 #endif
 #include <iostream>
+#include <string>
 #include <stdlib.h>
 
 #include "SVGSystem.h"
@@ -16,10 +17,11 @@ using namespace std;
 static void usage (char* name)
 {
 #ifndef WIN32
-	cerr << "usage: " << basename (name) << " <gmn file> pageNum" << endl;
+	const char* tool = basename (name);
 #else
-	cerr << "usage: " << name << " <gmn file> pageNum" << endl;
+	const char* tool = name;
 #endif
+	cerr << "usage: " << tool << " [-f fontfile] <gmn file> pageNum" << endl;
 	exit(1);
 }
 
@@ -29,12 +31,30 @@ static void error (GuidoErrCode err)
 	exit(1);
 }
 
+static void lopts(int argc, char **argv, int& page, int& file, int& fontfile)
+{
+	if (argc < 3) usage(argv[0]);
+	if (argc == 3) {
+		page = atoi(argv[2]);
+		if (page <= 0) usage(argv[0]);
+		file = 1;
+		fontfile = 0;
+	}
+	else if (argc == 5) {
+		if (strcmp(argv[1], "-f")) usage(argv[0]);
+		page = atoi(argv[4]);
+		if (page <= 0) usage(argv[0]);
+		file = 3;
+		fontfile = 2;	 
+	}
+}
+
 int main(int argc, char **argv)
 {
-	if (argc != 3) usage(argv[0]);
-	const char* filename = argv[1];
-	int page = atoi(argv[2]);
-	if (page <= 0) usage(argv[0]);
+	int page, font, file;
+	lopts (argc, argv, page, file, font);
+	const char* filename = argv[file];
+	const char* fontfile = font ? argv[font] : 0;
 
 	SVGSystem sys;
 	SVGDevice dev (cout, &sys);
@@ -50,7 +70,7 @@ int main(int argc, char **argv)
     err = GuidoAR2GR (arh, 0, &grh);
 	if (err != guidoNoErr) error (err);
 
-	err = GuidoSVGExport( grh, page, cout );
+	err = GuidoSVGExport( grh, page, cout, fontfile);
 	if (err != guidoNoErr) error (err);
 	return 0;
 }
