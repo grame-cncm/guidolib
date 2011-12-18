@@ -43,8 +43,8 @@ void svgendl::print(std::ostream& os) const {
 //______________________________________________________________________________
 // SVGDevice
 //______________________________________________________________________________
-SVGDevice::SVGDevice(std::ostream& outstream, SVGSystem* system) : 
-	fSystem (system),
+SVGDevice::SVGDevice(std::ostream& outstream, SVGSystem* system, const char* guidofontfile) : 
+	fSystem (system), fGuidoFontFile(guidofontfile),
 	fStream(outstream), 
 	fWidth(1000), fHeight(1000),
 	fMusicFont(0), fTextFont(0), fOpMode(kUnknown),
@@ -62,6 +62,62 @@ SVGDevice::~SVGDevice()
 }
 
 //______________________________________________________________________________
+// Guido font output
+//______________________________________________________________________________
+void SVGDevice::getsvgfont (const char* ptr, string& str) const
+{
+	const char* fontstart = "<font";
+	const char* fontend = "</font>";
+	int len = strlen (fontstart);
+	bool infont = false;
+	while (*ptr) {
+		if (!infont) {
+			if (*ptr == '<') {
+				if (strncmp(ptr, fontstart, len) == 0) {
+					while (len-- && *ptr) ptr++;
+					if ((*ptr == ' ') || (*ptr ==  '	')) {
+						infont = true;
+						str += fontstart;
+						str += ' ';
+						len = strlen(fontend);
+					}
+				}
+			}
+			ptr++;
+		}
+		else {
+			if (*ptr == '<') {
+				if (strncmp(ptr, fontend, len) == 0) {
+					str += fontend;
+					break;
+				}
+			}
+			str += *ptr++;
+		}
+	}
+}
+
+void SVGDevice::printFont(std::ostream& out, const char* file) const
+{
+	ifstream is (file);
+	if (is.is_open()) {
+		is.seekg (0, ios::end);
+		int length = is.tellg();
+		is.seekg (0, ios::beg);
+		char * buffer = new char [++length];
+		// read data as a block:
+		is.read (buffer,length);
+		buffer[length-1] = 0;
+		string str;
+		getsvgfont (buffer, str);
+		delete [] buffer;
+		if (str.size())
+			out << "<defs>\n" << str << "\n</defs>" << endl;
+	}
+	else cerr << "SVGDevice: can't open svg guido font " << file << endl;
+}
+
+//______________________________________________________________________________
 // - Drawing services
 //______________________________________________________________________________
 bool SVGDevice::BeginDraw()
@@ -70,6 +126,7 @@ bool SVGDevice::BeginDraw()
 	fStream << "<svg viewBox=\"0 0 " << fWidth << " " << fHeight << "\" xmlns=\"http://www.w3.org/2000/svg\"  version=\"1.1\">";
 	fEndl++;
 	fStream << fEndl << "<desc> SVG file generated using the GuidoEngine version " << GuidoGetVersionStr() << "</desc>";
+	if (fGuidoFontFile) printFont (fStream, fGuidoFontFile);
 	fBeginDone = true;
 	if (fPendingStrokeColor) {
 		SelectPenColor (*fPendingStrokeColor);

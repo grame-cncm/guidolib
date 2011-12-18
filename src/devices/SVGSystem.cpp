@@ -24,27 +24,41 @@
 
 using namespace std;
 //______________________________________________________________________________
-VGDevice* SVGSystem::CreateDisplayDevice(ostream& outstream)
+VGDevice* SVGSystem::CreateDisplayDevice(ostream& outstream, const char* fontfile)
 {
-	return new SVGDevice (outstream, this);
+	return new SVGDevice (outstream, this, fontfile);
 }
 
 //______________________________________________________________________________
 VGDevice* SVGSystem::CreateDisplayDevice()
 {
-	return new SVGDevice (cout, this);
+	return new SVGDevice (cout, this, 0);
 }
 
 //______________________________________________________________________________
-VGDevice* SVGSystem::CreateMemoryDevice( int w, int h )
+VGDevice* SVGSystem::CreateDisplayDevice(const char* fontfile)
 {
-	SVGDevice* device = new SVGDevice (cout, this);
+	return new SVGDevice (cout, this, fontfile);
+}
+
+//______________________________________________________________________________
+VGDevice* SVGSystem::CreateMemoryDevice( int w, int h)
+{
+	SVGDevice* device = new SVGDevice (cout, this, 0);
 	device->NotifySize( w, h );
 	return device;
 }
 
 //______________________________________________________________________________
-VGDevice* SVGSystem::CreateMemoryDevice( const char * inPath )		{ return 0; }
+VGDevice* SVGSystem::CreateMemoryDevice( int w, int h, const char* fontfile )
+{
+	SVGDevice* device = new SVGDevice (cout, this, fontfile);
+	device->NotifySize( w, h );
+	return device;
+}
+
+//______________________________________________________________________________
+VGDevice* SVGSystem::CreateMemoryDevice( const char * inPath)		{ return 0; }
 VGDevice* SVGSystem::CreatePrinterDevice( )							{ return 0; }
 
 //______________________________________________________________________________
