@@ -413,9 +413,10 @@ units.
 
 		\param page the page number.
 		\param out the output stream.
+		\param fontfile path of the guido svg font file.
 		\return a Guido error code
 	*/
-    GUIDOAPI(GuidoErrCode) 	GuidoSVGExport( const GRHandler handle, int page, std::ostream& out );
+    GUIDOAPI(GuidoErrCode) 	GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile );
 
 	/** \brief Control bounding boxes drawing.
 
