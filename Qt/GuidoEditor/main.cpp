@@ -31,29 +31,20 @@
 static QString getGuidoFontPath()
 {
 	CFURLRef appUrlRef = CFBundleCopyBundleURL(CFBundleGetMainBundle());
-	CFStringRef macPath = CFURLCopyFileSystemPath(appUrlRef,
-                                               kCFURLPOSIXPathStyle);
-	const char *bundlePath = CFStringGetCStringPtr(macPath,
-                                               CFStringGetSystemEncoding());
+	CFStringRef macPath = CFURLCopyFileSystemPath(appUrlRef, kCFURLPOSIXPathStyle);
+	const char *bundlePath = CFStringGetCStringPtr(macPath, CFStringGetSystemEncoding());
 	CFRelease(appUrlRef);
 	CFRelease(macPath );
 	
 	QString guidoFontPath = QString(bundlePath) + "/Contents/Resources/" + QString(GUIDO_FONT_FILE);
 	
 	if ( QFile::exists(guidoFontPath) )
-	{
 		return guidoFontPath ;
-	}
 	else
 	{
 		if ( QFile::exists(GUIDO_FONT_FILE) )
-		{
 			return GUIDO_FONT_FILE;
-		}
-		else
-		{
-			return "";
-		}
+		else return "";
 	}
 }
 #else
@@ -75,11 +66,8 @@ int main(int argc, char *argv[])
 	QApplication app(argc, argv);
 
 	installGuidoFont();
-
 	MainWindow mainWin;
-	
 	QApplication::instance()->installEventFilter( &mainWin );
-
 	mainWin.show();
 
 	if ( argc >= 2 )
@@ -88,7 +76,6 @@ int main(int argc, char *argv[])
 		QFileOpenEvent event(fileName);
 		QApplication::sendEvent( &mainWin , &event );
 	}
-
 	return app.exec();
 }
 
