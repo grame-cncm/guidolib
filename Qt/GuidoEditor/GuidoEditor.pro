@@ -24,6 +24,10 @@ macx {
 	RC_FILE+=$$RESOURCES_DIR/English.lproj/InfoPlist.strings 
 	QMAKE_INFO_PLIST = $$RESOURCES_DIR/GuidoEditorInfo.plist
 	ICON =  $$RESOURCES_DIR/guido.icns
+	FONT.files  = ../../src/guido2.svg
+	FONT.files += ../../src/guido2.ttf
+	FONT.path  = Contents/Resources
+	QMAKE_BUNDLE_DATA += FONT
 }
 win32 {
 	RC_FILE = $$RESOURCES_DIR/GuidoEditor.rc
