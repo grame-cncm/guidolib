@@ -612,9 +612,17 @@ void MainWindow::exportToMidi (CARHandler ar, const QString& filename)
 //-------------------------------------------------------------------------
 void MainWindow::exportToSVG(QGuidoPainter * guidoPainter, const QString& filename)
 {
+	QDir dir(QApplication::applicationDirPath());
+#if linux
+#elif !defined(WIN32)
+	dir.cdUp();
+	dir.cd("Resources");
+#endif
+	QString guidofont = dir.absoluteFilePath("guido2.svg");
+
 	fstream out(filename.toStdString().c_str(), fstream::out | fstream::trunc);
-	int page = mGuidoWidget->firstVisiblePage();
-	GuidoErrCode err = GuidoSVGExport (guidoPainter->getGRHandler(), page, out);
+	int page = mGuidoWidget->firstVisiblePage();	
+	GuidoErrCode err = GuidoSVGExport (guidoPainter->getGRHandler(), page, out, guidofont.toStdString().c_str());
 	if (err != guidoNoErr)
 		statusBar()->showMessage("Export failed: "+ QString(GuidoGetErrorString (err)));
 }
