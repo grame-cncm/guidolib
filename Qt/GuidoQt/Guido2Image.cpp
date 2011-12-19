@@ -234,7 +234,7 @@ void Guido2Image::writeImage( QGuidoPainter * guidoPainter, Guido2ImageImageForm
 {
 	if (imageFormat == GUIDO_2_IMAGE_SVG) {
 		std::fstream out(imageFileName, std::fstream::out | std::fstream::trunc);
-		GuidoErrCode err = GuidoSVGExport (guidoPainter->getGRHandler(), pageIndex+1, out);
+		GuidoErrCode err = GuidoSVGExport (guidoPainter->getGRHandler(), pageIndex+1, out, 0);
 		if (err != guidoNoErr)
 			std::cerr << "Error writing SVG file: " << GuidoGetErrorString (err) << std::endl;
 		return;
