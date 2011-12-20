@@ -36,6 +36,7 @@
 #include "GUIDOExport.h"
 
 #include <gdiplus.h>
+#include <string>
 using namespace Gdiplus;
 
 
@@ -59,7 +60,7 @@ class_export GFontWin32GDIPlus : public VGFont
 													const unsigned int * charSet );
 								virtual	~GFontWin32GDIPlus();
 
-		virtual	const char*		GetName() const			{ return mName; }
+		virtual	const char*		GetName() const			{ return mName.c_str(); }
 		virtual	int 			GetSize() const			{ return mSize; }
 		virtual	int				GetProperties() const	{ return mFontProp; }
 
@@ -82,7 +83,7 @@ class_export GFontWin32GDIPlus : public VGFont
 
 	protected:
 				Font*			mNativeFont;
-				const char*		mName;
+				std::string		mName;
 				int				mSize;
 				int				mFontProp;
 

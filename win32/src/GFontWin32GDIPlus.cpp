@@ -30,6 +30,8 @@ GFontWin32GDIPlus::GFontWin32GDIPlus( Font* nativeFont, const char * faceName,
 						: mNativeFont(nativeFont), mName(faceName),
 						  mSize(size), mFontProp(properties), fSymbolTable(charSet)
 {
+	std::cerr << "new GFontWin32GDIPlus::GFontWin32GDIPlus: " << mName << std::endl;
+
 	DWORD count = mbstowcs(NULL, faceName, strlen(faceName));
 	WCHAR * wstr = (WCHAR*) malloc ((count + 1) * sizeof(WCHAR));
 	mbstowcs(wstr, faceName, strlen(faceName));

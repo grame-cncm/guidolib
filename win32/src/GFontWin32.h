@@ -32,6 +32,7 @@
 
 #include "GUIDOExport.h"
 #include "VGFont.h"
+#include <string>
 
 
 // --------------------------------------------------------------
@@ -51,7 +52,7 @@ class_export GFontWin32 : public VGFont
 
 		// - VGFont services -------------------------------------------
 		virtual	const char*		GetName() const
-									{ return mName; }
+									{ return mName.c_str(); }
 		virtual	int 			GetSize() const
 									{ return mSize; }
 		virtual	int				GetProperties() const
@@ -69,7 +70,7 @@ class_export GFontWin32 : public VGFont
 	protected:
 
 				HFONT			mNativeFont;
-				char			mName[1024];
+				std::string		mName;
 				int				mSize;
 				int				mFontProp;
 };

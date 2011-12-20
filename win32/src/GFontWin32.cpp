@@ -23,14 +23,10 @@
 // --------------------------------------------------------------
 GFontWin32::GFontWin32( HFONT nativeFont, const char * faceName, 
 						int size, int properties ) 
-						: mNativeFont(nativeFont),
+						: mNativeFont(nativeFont), mName(faceName),
 						  mSize(size), mFontProp(properties)
 {
-	int i=0;
-	while (*faceName && (i < 1022)) {
-		mName[i++] = *faceName++;
-	}
-	mName[i] = 0;
+	std::cerr << "new GFontWin32::GFontWin32: " << mName << std::endl;
 }
 
 // --------------------------------------------------------------
