@@ -293,8 +293,6 @@ void SVGDevice::SetScale( float x, float y )
 void SVGDevice::SetOrigin( float x, float y )
 { 
 	checkfont();
-
-//cerr << "SetOrigin " << x << " " << y << endl;
 	if (fOffset) closegroup();
 	fStream << fEndl << "<g transform=\"translate(" << x << ", " << y << ")\">";
 	fXOrigin = x; fYOrigin = y;
@@ -303,7 +301,6 @@ void SVGDevice::SetOrigin( float x, float y )
 }
 void SVGDevice::OffsetOrigin( float x, float y )	
 { 
-//cerr << "OffsetOrigin " << x << " " << y << endl;
 	SetOrigin( fXOrigin + x, fYOrigin += y); 
 }
 void SVGDevice::LogicalToDevice( float * x, float * y ) const {}
