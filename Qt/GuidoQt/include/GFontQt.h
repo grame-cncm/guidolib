@@ -25,6 +25,8 @@
 #include <QString>
 #include <QChar>
 
+#include <string>
+
 /**
 *	\brief Qt implementation of the VGFont interface.
 *
@@ -37,7 +39,7 @@ public:
 	virtual ~GFontQt();
   
 	// - VGFont services ---------------------------------------------
-	virtual const char* GetName() const			{ return mName.toStdString().c_str(); }
+	virtual const char* GetName() const			{ return mName.c_str(); }
 	virtual int			GetSize() const			{ return mSize; }
 	virtual int			GetProperties() const	{ return mFontProp; }
 
@@ -53,7 +55,7 @@ public:
 
 protected:
 	QFont * mNativeFont;
-	QString	mName;
+	std::string	mName;
 	int		mSize;
 	int		mFontProp;
 };
