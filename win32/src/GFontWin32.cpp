@@ -26,7 +26,6 @@ GFontWin32::GFontWin32( HFONT nativeFont, const char * faceName,
 						: mNativeFont(nativeFont), mName(faceName),
 						  mSize(size), mFontProp(properties)
 {
-	std::cerr << "new GFontWin32::GFontWin32: " << mName << std::endl;
 }
 
 // --------------------------------------------------------------
