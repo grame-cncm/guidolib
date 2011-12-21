@@ -2,6 +2,7 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.4.7
+- new GuidoCountVoices API
 - support for guido svg font added to SVG device
 - GuidoSVGExport API change to for optional guido svg font support
 - new mapping functions providing adjusted mappings for voices, staves and systems
