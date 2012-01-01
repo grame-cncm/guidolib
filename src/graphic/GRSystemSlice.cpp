@@ -312,10 +312,12 @@ void GRSystemSlice::Finish()
 				first = false;
 			}
 
-//			GCoord min = myrect.bottom < 6*LSPACE ? 6*LSPACE : myrect.bottom + LSPACE;
+#if 1
+			GCoord min = myrect.bottom < 6*LSPACE ? 6*LSPACE : myrect.bottom + LSPACE;
 //			GCoord min = (myrect.bottom + curLSPACE) < 7*curLSPACE ? 7*curLSPACE : myrect.bottom + curLSPACE;
+#else
 			GCoord min = myrect.bottom;
-
+#endif
 			if (theStaff->getStaffState()->distanceset) {
 				min = theStaff->getDredgeSize() + theStaff->getStaffState()->distance;
 			}
