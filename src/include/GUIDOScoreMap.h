@@ -27,6 +27,7 @@
 #include <utility>
 #include <vector>
 #include <map>
+#include <iostream>
 
 
 /*!
@@ -53,8 +54,6 @@ typedef struct {
 	int			voiceNum;		///< the element voice number or 0 when na
 } GuidoElementInfos;
 
-//typedef std::pair<GuidoDate, GuidoDate>		TimeSegment;
-
 
 //----------------------------------------------------------------------
 /*!
@@ -68,6 +67,7 @@ class TimeSegment: public std::pair<GuidoDate, GuidoDate>
 				 TimeSegment (const GuidoDate& a, const GuidoDate& b) : std::pair<GuidoDate, GuidoDate>(a, b) {}
 		virtual ~TimeSegment () {}
 
+		void print(std::ostream& out) const;					///< print the time segment 
 		bool empty() const;										///< check for empty segment
 		bool intersect(const TimeSegment& ts) const;			///< check for segments intersection
 		bool include(const TimeSegment& ts) const;				///< check for segment inclusion
@@ -76,6 +76,16 @@ class TimeSegment: public std::pair<GuidoDate, GuidoDate>
 };
 
 typedef std::map<TimeSegment, FloatRect>	Time2GraphicMap;
+
+inline std::ostream& operator << (std::ostream& out, const GuidoDate& d) {
+	out << d.num << "/" << d.denom;
+	return out;
+}
+
+inline std::ostream& operator << (std::ostream& out, const TimeSegment& s) { 
+	s.print(out); 
+	return out;
+}
 
 
 //------------------------------------------------------------------------------
