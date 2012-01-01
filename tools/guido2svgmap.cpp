@@ -17,8 +17,6 @@
 using namespace std;
 
 
-std::ostream& operator<< (std::ostream& os, const GuidoDate& d) { os << d.num << "/" << d.denom; return os; }
-
 static void usage (char* name)
 {
 #ifndef WIN32
