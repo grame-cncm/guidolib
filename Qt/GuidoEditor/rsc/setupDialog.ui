@@ -322,7 +322,7 @@
               <widget class="QCheckBox" name="fMapping">
                <property name="font">
                 <font>
-                 <pointsize>13</pointsize>
+                 <pointsize>12</pointsize>
                 </font>
                </property>
                <property name="text">
@@ -337,7 +337,7 @@
               <widget class="QCheckBox" name="fRawMapping">
                <property name="font">
                 <font>
-                 <pointsize>13</pointsize>
+                 <pointsize>12</pointsize>
                 </font>
                </property>
                <property name="text">
@@ -352,7 +352,7 @@
               <widget class="QCheckBox" name="fBoundingBoxes">
                <property name="font">
                 <font>
-                 <pointsize>13</pointsize>
+                 <pointsize>12</pointsize>
                 </font>
                </property>
                <property name="text">
@@ -401,7 +401,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>13</pointsize>
+                   <pointsize>12</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -448,7 +448,7 @@
                 <widget class="QCheckBox" name="fShowAllStaffsCheckBox">
                  <property name="font">
                   <font>
-                   <pointsize>13</pointsize>
+                   <pointsize>12</pointsize>
                   </font>
                  </property>
                  <property name="text">
