@@ -232,20 +232,6 @@ class QScoreDockWidget : public QDockWidget
 };
 
 //-------------------------------------------------------------------------
-ostream& operator<< (ostream& os, const GuidoDate& date)
-{
-	os << date.num << "/" << date.denom;
-	return os;
-}
-
-//-------------------------------------------------------------------------
-ostream& operator<< (ostream& os, const TimeSegment& s)
-{
-	os << s.first << " - " << s.second;
-	return os;
-}
-
-//-------------------------------------------------------------------------
 bool MapGuidoWidget::showStaff(int staffNum) const
 {
 	return (staffNum==fStaffNum) || (fStaffNum == ALL_STAFF );
