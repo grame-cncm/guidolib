@@ -72,6 +72,14 @@ bool TimeSegment::intersect(const TimeSegment& ts) const
 	return ((s1a >= s2a) && (s1a < s2b)) || ((s2a >= s1a) && (s2a < s1b));
 }
 
+bool TimeSegment::include(const GuidoDate& date) const
+{
+	float start = fdate(this->first);
+	float end = fdate(this->second);
+	float d = fdate(date);
+	return (d >= start) && (d < end);
+}
+
 bool TimeSegment::include(const TimeSegment& ts) const
 {
 	float s1a = fdate(this->first);
@@ -155,6 +163,32 @@ GUIDOAPI(GuidoErrCode)	GuidoGetSystemMap( CGRHandler gr, int pagenum, float w, f
 	GuidoSystemCollector getmap (gr);
 	getmap.process (pagenum, w, h, &outmap);
 	return guidoNoErr;
+}
+
+//----------------------------------------------------------------------
+GUIDOAPI(bool)	GuidoGetTime( const GuidoDate& date, const Time2GraphicMap map, TimeSegment& t, FloatRect& r)
+{
+	for (Time2GraphicMap::const_iterator i = map.begin(); i != map.end(); i++) {
+		if (i->first.include(date)) {
+			t = i->first;
+			r = i->second;
+			return true;
+		}
+	}
+	return false;
+}
+
+//----------------------------------------------------------------------
+GUIDOAPI(bool)	GuidoGetPoint( float x, float y, const Time2GraphicMap map, TimeSegment& t, FloatRect& r)
+{
+	for (Time2GraphicMap::const_iterator i = map.begin(); i != map.end(); i++) {
+		if (i->second.Contains(x, y)) {
+			t = i->first;
+			r = i->second;
+			return true;
+		}
+	}
+	return false;
 }
 
 //----------------------------------------------------------------------

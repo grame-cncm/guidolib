@@ -70,6 +70,7 @@ class TimeSegment: public std::pair<GuidoDate, GuidoDate>
 		void print(std::ostream& out) const;					///< print the time segment 
 		bool empty() const;										///< check for empty segment
 		bool intersect(const TimeSegment& ts) const;			///< check for segments intersection
+		bool include(const GuidoDate& date) const;				///< check for date inclusion
 		bool include(const TimeSegment& ts) const;				///< check for segment inclusion
 		bool operator < (const TimeSegment& ts) const;			///< order relationship: the smaller is the smaller first date
 		TimeSegment operator & (const TimeSegment& ts) const;	///< intersection operation (may return an arbitrary empty segment)
@@ -198,6 +199,27 @@ GUIDOAPI(GuidoErrCode)	GuidoGetVoiceMap( CGRHandler gr, int pagenum, float w, fl
 	\return an error code.
 */
 GUIDOAPI(GuidoErrCode)	GuidoGetSystemMap( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap);
+
+/** \brief Retrieves a time segment and the associated graphic segment in a mapping.
+
+	\param date a date used to select the container time segment
+	\param map a time to graphic map.
+	\param t on output, the time segment containing the date (note that segments are right opened)
+	\param r on output, the graphic segment associated to the time segment
+	\return false when there is no segment containing the date.
+*/
+GUIDOAPI(bool)	GuidoGetTime( const GuidoDate& date, const Time2GraphicMap map, TimeSegment& t, FloatRect& r);
+
+/** \brief Retrieves a time segment and the associated graphic segment in a mapping.
+
+	\param x a point x coordinate
+	\param y a point y coordinate
+	\param map a time to graphic map.
+	\param r on output, the graphic segment containing the point (note that segments are right and bottom opened)
+	\param t on output, the time segment associated to the graphic segment
+	\return false when there is no segment containing the point.
+*/
+GUIDOAPI(bool)	GuidoGetPoint( float x, float y, const Time2GraphicMap map, TimeSegment& t, FloatRect& r);
 
 /** \brief Retrieves the graphic to time mapping corresponding to the SVG output
 
