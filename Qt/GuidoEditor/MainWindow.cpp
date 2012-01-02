@@ -232,20 +232,6 @@ class QScoreDockWidget : public QDockWidget
 };
 
 //-------------------------------------------------------------------------
-ostream& operator<< (ostream& os, const GuidoDate& date)
-{
-	os << date.num << "/" << date.denom;
-	return os;
-}
-
-//-------------------------------------------------------------------------
-ostream& operator<< (ostream& os, const TimeSegment& s)
-{
-	os << s.first << " - " << s.second;
-	return os;
-}
-
-//-------------------------------------------------------------------------
 bool MapGuidoWidget::showStaff(int staffNum) const
 {
 	return (staffNum==fStaffNum) || (fStaffNum == ALL_STAFF );
@@ -290,7 +276,6 @@ GuidoErrCode MapGuidoWidget::paintStaff(int page, int num)
 	Time2GraphicMap map;
 	GuidoErrCode err = GuidoGetStaffMap(getGRHandler(), page, width(), height(), num, map);
 	if (map.size()) paintMap (map);
-	else err = guidoErrActionFailed;
 	return err;
 }
 
@@ -341,7 +326,7 @@ void MapGuidoWidget::paintEvent(QPaintEvent * event)
 			if (fMap & kStavesBB) {
 				if (fStaffNum > 0)	err = paintStaff(page, fStaffNum);
 				else if (fStaffNum < 0) {
-					for (int staff=1; err == guidoNoErr; staff++)
+					for (int staff=1; staff <= GuidoCountVoices(getARHandler()) ; staff++)
 						err = paintStaff(page, staff);
 				}
 			}

@@ -1,5 +1,0 @@
-gmn
-guido2svgmap
-guido2svg
-guido2midi
-guidogetversion

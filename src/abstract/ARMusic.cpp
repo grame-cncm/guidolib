@@ -72,6 +72,17 @@ void ARMusic::adjustDuration(TYPE_DURATION newDuration)
 	}
 }
 
+int ARMusic::countVoices () const
+{
+	int count = 0;
+	GuidoPos pos = GetHeadPosition();
+	while (pos) {
+		count++;
+		GetNext(pos);
+	}
+	return count;
+}
+
 void ARMusic::getTimeMap (TimeMapCollector& f) const
 {
 //	TYPE_DURATION duration = getDuration();

@@ -35,13 +35,13 @@ class GuidoFeedback;
 
 struct NodeAR
 {
-	int refCount;		// Number of GRMusic using this NodeAR.
+	int refCount;			// Number of GRMusic using this NodeAR.
 	ARMusic * armusic;
 };
 
 struct NodeGR
 {
-	int page;			// page is obsolete. Just here for compatibility.
+	int page;				// page is obsolete. Just here for compatibility.
 	GRMusic * grmusic;
 	NodeAR * arHandle;		// the corresponding AR handle
 };

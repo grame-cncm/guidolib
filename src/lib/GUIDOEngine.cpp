@@ -425,6 +425,15 @@ GuidoGetDefaultLayoutSettings (GuidoLayoutSettings * settings)
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
+GUIDOAPI(int) GuidoCountVoices( CARHandler inHandleAR)
+{
+	if ((!inHandleAR) || ( inHandleAR->armusic == 0 ))
+		return guidoErrInvalidHandle;
+		
+	return inHandleAR->armusic->countVoices();
+}
+
+// --------------------------------------------------------------------------
 GUIDOAPI(int) GuidoGetPageCount( CGRHandler inHandleGR )
 {
 	if ( !inHandleGR )

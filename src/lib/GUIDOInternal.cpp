@@ -37,18 +37,8 @@
 
 using namespace std;
 
-//extern "C" {
-	int gd_parse(const char * filename, int mode);
-//  }
-
 extern bool gInited;			// GuidoInit() Flag
 extern ARPageFormat * gARPageFormat;
-extern NodeGR * gFirstNodeGR;
-extern NodeAR * gFirstNodeAR;
-
-// - Guido Internal globals
-int gIdGeneratorAR = 0;
-int gIdGeneratorGR = 0;
 
 // --------------------------------------------------------------------------
 // Prototypes are in "defines.h"

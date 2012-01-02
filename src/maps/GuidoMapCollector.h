@@ -44,26 +44,10 @@ namespace guido
 /*!
 	\brief a class to collect guido graphic maps
 */
-//class _TimeSegment: public TimeSegment
-//{
-//	public:
-//			_TimeSegment (const TimeSegment& s) : TimeSegment(s) {}
-//		bool empty() const;
-//		bool intersect(const TimeSegment& ts) const;
-//		bool include(const TimeSegment& ts) const;
-//		bool operator < (const TimeSegment& ts) const;
-//};
-
-//----------------------------------------------------------------------
-/*!
-	\brief a class to collect guido graphic maps
-*/
 class GuidoMapCollector: public MapCollector
 {
 	public :
-//		typedef std::map<_TimeSegment, FloatRect> Time2GraphicMap;
 		struct Filter { virtual ~Filter() {} virtual bool operator() (const GuidoElementInfos& infos) const { return true; } } ;
-
 
 				 GuidoMapCollector(CGRHandler gr, GuidoeElementSelector selector, const Filter* filter=0) 
 					: fGRHandler(gr), fSelector(selector), fFilter(filter), fOutMap(0) {}
@@ -94,8 +78,7 @@ class GuidoVoiceCollector: public GuidoMapCollector
 		void	setFilter(int num)			{ fVoiceFilter.fNum = num; fFilter = &fVoiceFilter; }
 
 	public :
-				 GuidoVoiceCollector(CGRHandler gr, int num) 
-					: GuidoMapCollector(gr, kGuidoEvent) { if (num) setFilter(num); }
+				 GuidoVoiceCollector(CGRHandler gr, int num) : GuidoMapCollector(gr, kGuidoEvent) { if (num) setFilter(num); }
 		virtual ~GuidoVoiceCollector() {}
 };
 
@@ -107,17 +90,19 @@ class GuidoVoiceCollector: public GuidoMapCollector
 class GuidoStaffCollector: public GuidoMapCollector
 {
 	private:
-		struct AcceptStaffPredicat : public Filter {
-			int	fNum;
-			virtual bool operator() (const GuidoElementInfos& infos) const { return infos.staffNum == fNum; }
-		} fStaffFilter;
-		void	setFilter(int num)			{ fStaffFilter.fNum = num; fFilter = &fStaffFilter; }
+		typedef std::pair<TimeSegment, FloatRect>	TMapElt;
+		std::vector<TMapElt>	fMap;
+		int		fStaffNum;
+		bool	fNoEmpty;
+
+	void mergelines (const std::vector<TMapElt>& elts, Time2GraphicMap& outmap) const;
 
 	public :
-				 GuidoStaffCollector (CGRHandler gr, int num) 
-					: GuidoMapCollector(gr, kGuidoStaff) { if (num) setFilter(num); }
+				 GuidoStaffCollector (CGRHandler gr, int num) : GuidoMapCollector(gr, kGuidoStaff), fStaffNum(num), fNoEmpty(true) {}
 		virtual ~GuidoStaffCollector()	{}
 
+		///< overrides the method called by guido for each graphic segment
+		virtual void Graph2TimeMap( const FloatRect& box, const TimeSegment& dates,  const GuidoElementInfos& infos );
 		virtual void process (int page, float w, float h, Time2GraphicMap* outmap);
 };
 
@@ -127,13 +112,15 @@ class GuidoStaffCollector: public GuidoMapCollector
 */
 class GuidoSystemCollector: public GuidoMapCollector
 {
-	void merge (const Time2GraphicMap& map1, const Time2GraphicMap& map2, Time2GraphicMap& outmap);
+	typedef std::pair<TimeSegment, FloatRect>	TMapElt;
+	std::vector<TMapElt>	fMap;
 	
 	public :
-				 GuidoSystemCollector(CGRHandler gr) 
-					: GuidoMapCollector(gr, kGuidoSystem) { }
+				 GuidoSystemCollector(CGRHandler gr) : GuidoMapCollector(gr, kGuidoSystem) { }
 		virtual ~GuidoSystemCollector() {}
 
+		///< overrides the method called by guido for each graphic segment
+		virtual void Graph2TimeMap( const FloatRect& box, const TimeSegment& dates,  const GuidoElementInfos& infos );
 		virtual void processNoDiv (int page, float w, float h, Time2GraphicMap* outmap);
 		virtual void process (int page, float w, float h, Time2GraphicMap* outmap);
 };

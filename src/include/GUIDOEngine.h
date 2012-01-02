@@ -340,6 +340,13 @@ as by date. Page numbers start at 1.
 */
 	/** \brief Gives the number of score pages of the graphic representation.
 
+		\param inHandleAR a Guido opaque handle to a AR structure.
+		\return the number of voices or a guido error code.
+	*/
+	GUIDOAPI(int) 	GuidoCountVoices( CARHandler inHandleAR );
+	
+	/** \brief Gives the number of score pages of the graphic representation.
+
 		\param inHandleGR a Guido opaque handle to a GR structure.
 		\return a number of pages or a guido error code.
 	*/

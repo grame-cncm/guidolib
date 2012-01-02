@@ -50,6 +50,11 @@ class SVGMapCollector : public MapCollector
 
 inline float fdate (const GuidoDate& d)		{ return d.num / (float)d.denom; }
 //----------------------------------------------------------------------
+void TimeSegment::print(ostream& out) const
+{
+	out << "[" << this->first << ", " << this->second << "]";
+}
+
 bool TimeSegment::empty() const
 {
 	float d1 = fdate(first);
@@ -78,7 +83,9 @@ bool TimeSegment::include(const TimeSegment& ts) const
 
 bool TimeSegment::operator < (const TimeSegment& ts) const
 {
-	return fdate(this->first) < fdate(ts.first);
+	if (fdate(this->first) < fdate(ts.first)) return true;
+	if (fdate(this->first) > fdate(ts.first)) return false;
+	return ts.include (*this);
 }
 
 TimeSegment TimeSegment::operator & (const TimeSegment& ts) const
