@@ -3,6 +3,9 @@
 #######################################
 project(guidolib)
 cmake_minimum_required(VERSION 2.6)
+if(CMAKE_CONFIGURATION_TYPES)
+	set(CMAKE_CONFIGURATION_TYPES Debug Release)
+endif()
 
 set (target GUIDOEngine)
 set (statictarget SGUIDOEngine)
