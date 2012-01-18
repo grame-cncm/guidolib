@@ -305,6 +305,9 @@
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>
            <widget class="QFrame" name="frame">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
             <property name="frameShape">
              <enum>QFrame::StyledPanel</enum>
             </property>
@@ -322,7 +325,7 @@
               <widget class="QCheckBox" name="fMapping">
                <property name="font">
                 <font>
-                 <pointsize>8</pointsize>
+                 <pointsize>13</pointsize>
                 </font>
                </property>
                <property name="text">
@@ -337,7 +340,7 @@
               <widget class="QCheckBox" name="fRawMapping">
                <property name="font">
                 <font>
-                 <pointsize>8</pointsize>
+                 <pointsize>13</pointsize>
                 </font>
                </property>
                <property name="text">
@@ -352,7 +355,7 @@
               <widget class="QCheckBox" name="fBoundingBoxes">
                <property name="font">
                 <font>
-                 <pointsize>8</pointsize>
+                 <pointsize>13</pointsize>
                 </font>
                </property>
                <property name="text">
@@ -401,7 +404,7 @@
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>8</pointsize>
+                   <pointsize>13</pointsize>
                   </font>
                  </property>
                  <property name="text">
@@ -448,7 +451,7 @@
                 <widget class="QCheckBox" name="fShowAllStaffsCheckBox">
                  <property name="font">
                   <font>
-                   <pointsize>8</pointsize>
+                   <pointsize>13</pointsize>
                   </font>
                  </property>
                  <property name="text">
