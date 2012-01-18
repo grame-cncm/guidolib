@@ -64,10 +64,10 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_AR2MIDIFile
 /*
  * Class:     guidoengine_guidoscore
  * Method:    SVGExport
- * Signature: (I)Ljava/lang/String;
+ * Signature: (ILjava/lang/String;)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL Java_guidoengine_guidoscore_SVGExport
-  (JNIEnv *, jobject, jint);
+  (JNIEnv *, jobject, jint, jstring);
 
 /*
  * Class:     guidoengine_guidoscore
@@ -143,6 +143,14 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetPageCount
 
 /*
  * Class:     guidoengine_guidoscore
+ * Method:    CountVoices
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_CountVoices
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     guidoengine_guidoscore
  * Method:    GetDuration
  * Signature: (Lguidoengine/guidodate;)I
  */
@@ -188,6 +196,38 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetMap
  */
 JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetTimeMap
   (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     guidoengine_guidoscore
+ * Method:    GetPageMap
+ * Signature: (IFFLguidoengine/guidoscoremap;)I
+ */
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetPageMap
+  (JNIEnv *, jobject, jint, jfloat, jfloat, jobject);
+
+/*
+ * Class:     guidoengine_guidoscore
+ * Method:    GetStaffMap
+ * Signature: (IFFILguidoengine/guidoscoremap;)I
+ */
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetStaffMap
+  (JNIEnv *, jobject, jint, jfloat, jfloat, jint, jobject);
+
+/*
+ * Class:     guidoengine_guidoscore
+ * Method:    GetVoiceMap
+ * Signature: (IFFILguidoengine/guidoscoremap;)I
+ */
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetVoiceMap
+  (JNIEnv *, jobject, jint, jfloat, jfloat, jint, jobject);
+
+/*
+ * Class:     guidoengine_guidoscore
+ * Method:    GetSystemMap
+ * Signature: (IFFLguidoengine/guidoscoremap;)I
+ */
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetSystemMap
+  (JNIEnv *, jobject, jint, jfloat, jfloat, jobject);
 
 /*
  * Class:     guidoengine_guidoscore
