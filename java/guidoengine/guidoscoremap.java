@@ -27,12 +27,68 @@
 
 package guidoengine;
 import guidoengine.*;
+import java.awt.Rectangle;
 
+/**
+	A Guido score map.
+	<br>
+	A guido score map describes the relations between the time and graphic space.
+	It is typically used as argument of the guidscore adjusted mappings methods.
+*/
 public final class guidoscoremap {
+	
+	private long fMap;
+
+
 	public static final int kGuidoPage			= 0;
 	public static final int kGuidoSystem		= 1;
 	public static final int kGuidoSystemSlice	= 2;
 	public static final int kGuidoStaff			= 3;
 	public static final int kGuidoBar			= 4;
 	public static final int kGuidoEvent			= 5;
+	
+	public				guidoscoremap()		{ fMap = 0; }
+	protected	void	finalize()			{ dispose(); }
+	public		void	dispose()			{ disposeNative(); }
+
+	private native void disposeNative();
+
+
+	/** Give the map size
+		@return the map size
+	*/
+    public native final synchronized int  size();
+
+	/** Give a relation by index
+
+		@param index the map index
+		@param time on output, contains the corresponding time segment.
+		@param r on output, contains the corresponding graphic rectangle.
+		@return false in case of incorrect index
+	*/
+    public native final synchronized boolean  get(int index, guidosegment time, Rectangle r);
+
+	/** Give a relation by date
+
+		@param date a guido date
+		@param time on output, contains the corresponding time segment.
+		@param r on output, contains the corresponding graphic rectangle.
+		@return true when the date is found in a time segment
+	*/
+    public native final synchronized boolean  getTime(guidodate date, guidosegment time, Rectangle r);
+
+	/** Give a relation by point
+
+		@param x the point x coordinate
+		@param y the point y coordinate
+		@param time on output, contains the corresponding time segment.
+		@param r on output, contains the corresponding graphic rectangle.
+		@return true when the point is found in a graphic segment
+	*/
+    public native final synchronized boolean  getPoint(float x, float y, guidosegment time, Rectangle r);
+	
+	/** Internal jni initialization method.
+		Automatically called at package init.
+	*/
+    protected static native void	Init ();
 }

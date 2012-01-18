@@ -69,6 +69,7 @@ public final class guido {
 			guidosegment.Init ();
 			guidofactory.Init ();
 			guido2midiparams.Init();
+			guidoscoremap.Init();
 			System.out.println("GUIDOEngine version " + GetVersion() + " - JNI interface version " + GetJNIVersion() + " initialized.");
 		} catch (UnsatisfiedLinkError e) {
 			System.err.println("GUIDOEngine native code library initialization failed.\n" + e);
