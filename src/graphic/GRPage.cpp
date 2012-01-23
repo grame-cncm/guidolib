@@ -111,111 +111,43 @@ bool GRPage::addSystem( GRSystem * inSystem, float * ioUsedSystemDistance )
 {
 	assert(inSystem->getGRPage() == this);
 	GRSystem * lastSystem = mSystems.empty() ? 0 : mSystems.back(); // get the current last system
-
 	const NVRect & newSystemBox = inSystem->getBoundingBox();
 	
 	NVPoint newPos;
 	if( lastSystem ) {
-		//// last->updateBoundingBox();
 		if (*ioUsedSystemDistance > 0) {
-			newPos.y = (lastSystem->getPosition().y + *ioUsedSystemDistance);
+			newPos.y = lastSystem->getPosition().y + *ioUsedSystemDistance;
 			*ioUsedSystemDistance = -1;
 		}
 		else {
 			newPos.y = lastSystem->getPosition().y + lastSystem->getBoundingBox().bottom;
-			// this should be handled by "springs" as well .....
-			// and there should be a "minimum" distance ....
+			// this should be handled by "springs" as well... and there should be a "minimum" distance...
 			newPos.y -= newSystemBox.top;
-
 			// the default distance ...
 			// it is later distributed evenly between mSystems ...
 			newPos.y += GRStaffManager::sDefaultSystemDistance;
 		}
-		inSystem->setPosition( newPos );
 		m_totalsystemheight += newSystemBox.Height();
 	}
 	else // So this is the first system of the page
 	{	
-		const bool alignFirstStaffLine = false;
-		if( alignFirstStaffLine == false )
-			newPos.y = - newSystemBox.top;
-		inSystem->setPosition( newPos );
+		newPos.y = - newSystemBox.top;
 		m_totalsystemheight = newSystemBox.Height(); // TODO: bottom - newPos.y;
 	}
+	inSystem->setPosition( newPos );
 
-	if( mSystems.empty())
-		mDebugPageDate = inSystem->mDebugSystemDate;
+	if( mSystems.empty())	mDebugPageDate = inSystem->mDebugSystemDate;
 	mSystems.push_back( inSystem );
 	updateBoundingBox();
 	return true;
 }
 
-// ----------------------------------------------------------------------------
-/** \brief Returns true if the system was added to the page false otherwise.
-
-	Original version:
-bool GRPage::addSystem( GRSystem * inSystem, float * ioUsedSystemDistance )
-{
-	assert(inSystem->getGRPage() == this);
-	GRSystem * last = mSystems.empty() ? 0 : mSystems.back(); // get the current last system
-
-	NVPoint newposition;
-	if (last)
-	{
-		//// last->updateBoundingBox();
-
-		if (*ioUsedSystemDistance > 0)
-		{
-			newposition.y = (last->getPosition().y + *ioUsedSystemDistance);
-			*ioUsedSystemDistance = -1;
-		}
-		else
-		{
-		  newposition.y = last->getPosition().y + last->getBoundingBox().bottom;
-		  // this should be handled by "springs" as well .....
-		  // and there should be a "minimum" distance ....
-		  newposition.y -= inSystem->getBoundingBox().top;
-
-		  // the default distance ...
-		  // it is later distributed evenly between mSystems ...
-		  newposition.y += GRStaffManager::sDefaultSystemDistance;
-		}
-
-		inSystem->setPosition(newposition);
-		
-		m_totalsystemheight += inSystem->getBoundingBox().Height();
-	}
-	else
-	{	
-		m_totalsystemheight += inSystem->getBoundingBox().bottom;
-
-		inSystem->setPosition(NVPoint(0,0));
-	}
-
-	if( mSystems.empty())
-		mDebugPageDate = inSystem->mDebugSystemDate;
-
-	mSystems.push_back( inSystem );
-
-	updateBoundingBox();
-	return true;
-}
-*/
 // ----------------------------------------------------------------------------
 /** \brief Converts a Rectangle from device coordinades to logical (virtual) coordinates.
 */
 bool GRPage::DPtoLPRect( VGDevice & hdc, float left, float top, 
 						float right, float bottom, NVRect * outRect ) const
 {
-/*	if (!hdc.IsValid()) // Required ? 
-	{
-		outRect->left = 0;
-		outRect->top = 0;
-		outRect->right = getSizeX();
-		outRect->bottom = getSizeY();
-		return false;
-	}*/
-
 	hdc.DeviceToLogical( &left, &top );
 	hdc.DeviceToLogical( &right, &bottom );
 
