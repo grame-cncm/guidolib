@@ -24,6 +24,7 @@
 
 #include "secureio.h"
 #include "TagParameterString.h"
+#include "HtmlColors.h"
 
 TagParameterString::TagParameterString(const char * theString)			: fValue(theString)	{}
 TagParameterString::TagParameterString(const std::string& theString)	: fValue(theString) {}
@@ -75,7 +76,7 @@ bool TagParameterString::getRGB( unsigned char colref[4] ) const
 	bool hexformat = value.substr(0,2) == "0x";
 	int size = value.size();
 	// - Check for 0xRRGGBB	
-	if (size == 8 && hexformat)
+	if ((size == 8) && hexformat)
 	{
 		unsigned int r, g, b;
 		sscanf(value.c_str(), "0x%2x%2x%2x", &r, &g, &b);
@@ -84,7 +85,7 @@ bool TagParameterString::getRGB( unsigned char colref[4] ) const
 		colref[2] = (unsigned char)b;
 	}
 	// (JB) Proposal: alpha component for transparency: 0xRRGGBBAA
-	else if(size == 10 && hexformat)
+	else if ((size == 10) && hexformat)
 	{
 		unsigned int r, g, b, a;
 		sscanf(value.c_str(), "0x%2x%2x%2x%2x", &r, &g, &b, &a);
@@ -93,24 +94,26 @@ bool TagParameterString::getRGB( unsigned char colref[4] ) const
 		colref[2] = (unsigned char)b;
 		colref[3] = (unsigned char)a;
 	}
-	else if (value == "red")
-		colref[0] = 200;
+	else return HtmlColor::get (value.c_str(), colref);
 
-	else if (value == "green")
-		colref[1] = 200;
+//	else if (value == "red")
+//		colref[0] = 200;
+//
+//	else if (value == "green")
+//		colref[1] = 200;
+//
+//	else if (value == "blue")
+//		colref[2] = 200;
+//
+//	else if (value == "black")
+//		;
+//
+//	else if (value == "white")
+//		colref[0] = colref[1] = colref[2] = 255;
+//
+//	else if (value == "yellow")
+//		colref[0] = colref[1] = 200;
+//	else return false;
 
-	else if (value == "blue")
-		colref[2] = 200;
-
-	else if (value == "black")
-		;
-
-	else if (value == "white")
-		colref[0] = colref[1] = colref[2] = 255;
-
-	else if (value == "yellow")
-		colref[0] = colref[1] = 200;
-	else return false;
-
-	return true;
+//	return true;
 }
