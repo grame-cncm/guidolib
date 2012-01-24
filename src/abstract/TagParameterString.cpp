@@ -94,7 +94,7 @@ bool TagParameterString::getRGB( unsigned char colref[4] ) const
 		colref[2] = (unsigned char)b;
 		colref[3] = (unsigned char)a;
 	}
-	else return HtmlColor::get (value.c_str(), colref);
+	return HtmlColor::get (value.c_str(), colref);
 
 //	else if (value == "red")
 //		colref[0] = 200;
