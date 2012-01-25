@@ -59,7 +59,7 @@ typedef struct {
 /*!
 	\brief a time segment definition and operations
 */
-class TimeSegment: public std::pair<GuidoDate, GuidoDate>
+class_export TimeSegment: public std::pair<GuidoDate, GuidoDate>
 {
 	public:
 				 TimeSegment () {}
