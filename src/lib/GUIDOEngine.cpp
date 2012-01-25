@@ -132,6 +132,13 @@ GUIDOAPI(GuidoErrCode) GuidoInit( GuidoInitDesc * desc )
 }
 
 // --------------------------------------------------------------------------
+GUIDOAPI(void) GuidoShutdown()
+{
+	FontManager::ReleaseAllFonts();
+	gInited = false;
+}
+
+// --------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoParseFile(const char * filename, ARHandler * ar)
 {
 	if( !filename || !ar )	return guidoErrBadParameter;
