@@ -22,50 +22,34 @@
 */
 
 #include "ARMTParameter.h"
-// #include "ARMusicalObject.h"
 
 class ARMusicalVoiceState;
 
 /** \brief Auto tag
 */
 class ARAuto : public ARMTParameter
-	// ,
-   // public ARMusicalObject
 {
 public:
 	friend class ARMusicalVoiceState;
 
 	enum state { ON,OFF };
-	ARAuto();
+
+			 ARAuto();
 	virtual ~ARAuto();
 
-	state getStretchLastLineState() const
-	{ return stretchLastLineState; }
-	state getStretchFirstLineState() const
-	{ return stretchFirstLineState; }
-	state getClefKeyMeterOrderState() const
-	{ return clefKeyMeterOrderState; }
-	state getEndBarState() const
-	{ return endBarState; }
-	state getSystemBreakState() const
-	{ return systemBreakState; }
-	state getPageBreakState() const
-	{ return pageBreakState; } 
+	state getStretchLastLineState() const		{ return stretchLastLineState; }
+	state getStretchFirstLineState() const		{ return stretchFirstLineState; }
+	state getClefKeyMeterOrderState() const		{ return clefKeyMeterOrderState; }
+	state getEndBarState() const				{ return endBarState; }
+	state getSystemBreakState() const			{ return systemBreakState; }
+	state getPageBreakState() const				{ return pageBreakState; } 
+
 	virtual void setTagParameterList(TagParameterList & tpl);
 	virtual void PrintName(std::ostream & os) const;
 	virtual void PrintParameters(std::ostream & os) const;
-	/* virtual ostream & operator<<(ostream &os) const
-	{
-		os << "\\autoBreak";
-		if (state == ON)
-			os << "<\"on\">";
-		else
-			os << "<\"off\">";
-		return os << " ";
-	} */
 
 	virtual void print() const {}
-	virtual bool IsStateTag() const { return true; }
+	virtual bool IsStateTag() const				{ return true; }
 
 protected:
 	state endBarState;
@@ -76,7 +60,6 @@ protected:
 	state stretchFirstLineState;
 
 	int numparset;
-
 	static ListOfTPLs ltpls;
 };
 

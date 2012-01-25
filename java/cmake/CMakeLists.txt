@@ -7,9 +7,9 @@ cmake_minimum_required(VERSION 2.6)
 set (target jniGUIDOEngine)
 #######################################
 # versions management
-set (VERSION 1.00)
-set (STRVERS "v.1.00")
-set (SSTRVERS "1.00")
+set (VERSION 1.20)
+set (STRVERS "v.1.20")
+set (SSTRVERS "1.20")
 
 FIND_PACKAGE(JNI REQUIRED)
 #FIND_PACKAGE(Java REQUIRED)

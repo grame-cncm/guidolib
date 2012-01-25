@@ -60,14 +60,27 @@ extern jfieldID gIntensityID, gAccentFactorID, gMarcatoFactorID;
 extern jfieldID gDFactorID, gStaccatoFactorID, gSlurFactorID, gTenutoFactorID, gFermataFactorID;
 extern jfieldID gVoice2ChanID;
 
+// --------------------------------------------------------------------------------------------
+// methods imported from guidoengine_guidoscoremap.cpp
+Time2GraphicMap* getMap (JNIEnv * env, jobject obj);
+
 
 // --------------------------------------------------------------------------------------------
 // methods to convert java objects to/from Guido structs
 // --------------------------------------------------------------------------------------------
-static void setDate (JNIEnv * env, jobject jdate, const GuidoDate& date)
+void setDate (JNIEnv * env, jobject jdate, const GuidoDate& date)
 {
 	env->SetIntField (jdate, gDateNumID, date.num);
 	env->SetIntField (jdate, gDateDenumID, date.denom);
+}
+
+// --------------------------------------------------------------------------------------------
+GuidoDate getDate (JNIEnv * env, jobject jdate)
+{
+	GuidoDate date;
+	date.num	= env->GetIntField (jdate, gDateNumID);
+	date.denom	= env->GetIntField (jdate, gDateDenumID);
+	return date;
 }
 
 // --------------------------------------------------------------------------------------------
@@ -79,15 +92,6 @@ static void setPageFormat (JNIEnv * env, jobject jformat, const GuidoPageFormat&
 	env->SetFloatField (jformat, gMRightID, format.marginright);
 	env->SetFloatField (jformat, gMTopID, format.margintop);
 	env->SetFloatField (jformat, gMBottomID, format.marginbottom);
-}
-
-// --------------------------------------------------------------------------------------------
-static GuidoDate getDate (JNIEnv * env, jobject jdate)
-{
-	GuidoDate date;
-	date.num	= env->GetIntField (jdate, gDateNumID);
-	date.denom	= env->GetIntField (jdate, gDateDenumID);
-	return date;
 }
 
 // --------------------------------------------------------------------------------------------
@@ -218,8 +222,7 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_AR2GR__Lguidoengine_guidolayo
  * Method:    AR2MIDIFile
  * Signature: (Ljava/lang/String;Lguidoengine/guido2midiparams;)I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_AR2MIDIFile
-  (JNIEnv * env, jobject obj, jstring file, jobject jparams)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_AR2MIDIFile (JNIEnv * env, jobject obj, jstring file, jobject jparams)
 {
 	ARHandler ar = (ARHandler)env->GetLongField (obj, gARHandlerID);
 	GuidoErrCode err = guidoErrInvalidHandle;
@@ -255,16 +258,17 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_AR2MIDIFile
 /*
  * Class:     guidoengine_guidoscore
  * Method:    SVGExport
- * Signature: (I)Ljava/lang/String;
+ * Signature: (ILjava/lang/String;)Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_guidoengine_guidoscore_SVGExport
-  (JNIEnv * env, jobject obj, jint page)
+JNIEXPORT jstring JNICALL Java_guidoengine_guidoscore_SVGExport (JNIEnv * env, jobject obj, jint page, jstring font)
 {
 	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
 	std::stringstream sstr;
 	GuidoErrCode err = guidoErrInvalidHandle;
 	if (gr) {
-		err = GuidoSVGExport(gr, page, sstr);
+		const char *guidofont  = env->GetStringUTFChars(font, JNI_FALSE);
+		err = GuidoSVGExport(gr, page, sstr, *guidofont ? guidofont : 0);
+		env->ReleaseStringUTFChars(font, guidofont);
 		if (err == guidoNoErr)
 			return env->NewStringUTF(sstr.str().c_str());
 	}
@@ -353,8 +357,7 @@ static VGColor jcolor2VGColor (JNIEnv * env, jobject jcolor)
  * Method:    getBitmap
  * Signature: ([ILguidoengine/guidodrawdesc;Lguidoengine/guidopaint;)I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetBitmap
-  (JNIEnv *env, jobject obj, jintArray bitmapArray, jint w, jint h, jobject jdesc, jobject jpaint, jobject jcolor)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetBitmap (JNIEnv * env, jobject obj, jintArray bitmapArray, jint w, jint h, jobject jdesc, jobject jpaint, jobject jcolor)
 {
 	GuidoOnDrawDesc desc;
 	desc.handle		= (GRHandler)env->GetLongField (obj, gGRHandlerID);
@@ -436,6 +439,17 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetPageCount (JNIEnv * env, j
 
 /*
  * Class:     guidoengine_guidoscore
+ * Method:    CountVoices
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_CountVoices (JNIEnv * env, jobject obj)
+{
+	ARHandler ar = (ARHandler)env->GetLongField (obj, gARHandlerID);
+	return GuidoCountVoices (ar);
+}
+
+/*
+ * Class:     guidoengine_guidoscore
  * Method:    GetDuration
  * Signature: (Lguidoengine/guidodate;)I
  */
@@ -513,4 +527,57 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetTimeMap (JNIEnv * env, job
 	ARHandler ar = (ARHandler)env->GetLongField (obj, gARHandlerID);
 	return GuidoGetTimeMap ( ar, collector);
 }
+
+
+// -------------------------------------------------------------------------
+// adjusted mappings methods - new in guido lib 1.47 and in guido java 1.20
+// -------------------------------------------------------------------------
+/*
+ * Class:     guidoengine_guidoscore
+ * Method:    GetPageMap
+ * Signature: (IFFLguidoengine/guidoscoremap;)I
+ */
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetPageMap (JNIEnv * env, jobject obj, jint page, jfloat w, jfloat h, jobject map)
+{
+	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
+	Time2GraphicMap * mapPtr = getMap(env, map);
+	return mapPtr ? GuidoGetPageMap( gr, page, w, h, *mapPtr) : guidoErrActionFailed;
+}
+
+/*
+ * Class:     guidoengine_guidoscore
+ * Method:    GetStaffMap
+ * Signature: (IFFILguidoengine/guidoscoremap;)I
+ */
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetStaffMap (JNIEnv * env, jobject obj, jint page, jfloat w, jfloat h, jint staff, jobject map)
+{
+	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
+	Time2GraphicMap * mapPtr = getMap(env, map);
+	return mapPtr ? GuidoGetStaffMap( gr, page, w, h, staff, *mapPtr) : guidoErrActionFailed;
+}
+
+/*
+ * Class:     guidoengine_guidoscore
+ * Method:    GetVoiceMap
+ * Signature: (IFFILguidoengine/guidoscoremap;)I
+ */
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetVoiceMap (JNIEnv * env, jobject obj, jint page, jfloat w, jfloat h, jint voice, jobject map)
+{
+	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
+	Time2GraphicMap * mapPtr = getMap(env, map);
+	return mapPtr ? GuidoGetVoiceMap( gr, page, w, h, voice, *mapPtr) : guidoErrActionFailed;
+}
+
+/*
+ * Class:     guidoengine_guidoscore
+ * Method:    GetSystemMap
+ * Signature: (IFFLguidoengine/guidoscoremap;)I
+ */
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetSystemMap (JNIEnv * env, jobject obj, jint page, jfloat w, jfloat h, jobject map)
+{
+	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
+	Time2GraphicMap * mapPtr = getMap(env, map);
+	return mapPtr ? GuidoGetSystemMap( gr, page, w, h, *mapPtr) : guidoErrActionFailed;
+}
+
 

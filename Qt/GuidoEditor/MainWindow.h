@@ -60,6 +60,8 @@ class MapGuidoWidget : public QGuidoWidget, public MapCollector
 
 	protected:
 		void			paintEvent(QPaintEvent * event);
+		void			mousePressEvent ( QMouseEvent* event);
+		
 		void			paintMap(const Time2GraphicMap& map);
 		GuidoErrCode	paintStaff(int page, int num);
 		GuidoErrCode	paintVoice(int page, int num);

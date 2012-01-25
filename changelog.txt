@@ -2,6 +2,9 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.4.7
+- support of html colors by name (extended colors keywords)
+  warning: previous named color (red, green, blue and yellow) values was 200
+           the corresponding html color value is 255
 - new GuidoCountVoices API
 - support for guido svg font added to SVG device
 - GuidoSVGExport API change to for optional guido svg font support

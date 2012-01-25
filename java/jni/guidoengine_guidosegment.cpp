@@ -21,8 +21,23 @@
 
 #include "guidoengine_guidosegment.h"
 #include "javaIDs.h"
+#include "GUIDOEngine.h"
 
 jfieldID gStartID, gEndID;
+
+// imported from guidoengine_guidoscore.cpp
+void setDate (JNIEnv * env, jobject jdate, const GuidoDate& date);
+
+// --------------------------------------------------------------------------------------------
+void setSegment (JNIEnv * env, jobject segm, const GuidoDate& start, const GuidoDate& end)
+{
+	jobject ostart = env->GetObjectField (segm, gStartID);
+	jobject oend   = env->GetObjectField (segm, gEndID);
+	setDate (env, ostart, start);
+	setDate (env, oend, end);
+	env->SetObjectField (segm, gStartID, ostart);
+	env->SetObjectField (segm, gEndID, oend);
+}
 
 /*
  * Class:     guidoengine_guidosegment

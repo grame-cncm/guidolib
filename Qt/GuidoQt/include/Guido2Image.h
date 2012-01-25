@@ -23,8 +23,10 @@
 #include <QRectF>
 #include <QString>
 
+
 class QPaintDevice;
 class QGuidoPainter;
+struct GuidoLayoutSettings;
 
 /** \brief Error codes description (values returned by gmnStringToImage and gmnFileToImage).
 *
@@ -88,6 +90,19 @@ enum Guido2ImageImageFormat
 class Guido2Image
 {
 	public :
+		typedef struct Params {
+			const char *			input;
+			const char *			output;
+			Guido2ImageImageFormat	format;
+			const GuidoLayoutSettings*	layout;
+			int						pageIndex;
+			QSize					sizeConstraints;
+			float					zoom;
+			char *					errorMsgBuffer;
+			int						bufferSize;
+			Params () : input(0), output(0), format(GUIDO_2_IMAGE_PNG), layout(0),
+						pageIndex(1), zoom(1.0), errorMsgBuffer(0), bufferSize(0) {}
+		} Params;
 
 		/*!
 		*	\brief	Build a Guido Score from the specified string, and exports the Guido Score to the specified image.
@@ -113,26 +128,33 @@ class Guido2Image
 		*			\warning	To export GIF images, you need the Qt framework to support this format. (see Qt doc about GIF).
 		*			\warning	To support SVG format, you need to link Guido2Image.cpp against Qt's SVG module (see Qt doc about SVG) ;
 		*						and you must #define GUIDO_2_IMAGE_SVG_SUPPORT when compiling Guido2Image.cpp.
-		*			\warning	In current Qt version (4.4.0), a known bug in the SVG module makes it impossible to export a Guido Score to SVG.
-		*						Check if the bug is still pending at http://trolltech.no/developer/task-tracker/index_html?method=entry&id=133905.
 		*
 		*			\return 0: Success. Else, error (see Guido2ImageErrorCodes above).
 		*/
-		static Guido2ImageErrorCodes gmnStringToImage( const char * gmnString , const char * imageFileName, Guido2ImageImageFormat imageFormat, 
+		__attribute__((__deprecated__)) static Guido2ImageErrorCodes gmnStringToImage( const char * gmnString , const char * imageFileName, Guido2ImageImageFormat imageFormat, 
 										int pageIndex, const QSize& outputSizeConstraint , float zoom , 
 										char * errorMsgBuffer = 0 , int bufferSize = 0);
 
 		/*!
+		*	\brief	Same as gmnStringToImage above, but using a data structure instead.
+		*/
+		static Guido2ImageErrorCodes gmnString2Image( const Params& p);
+
+		/*!
 		*	\brief	Same as gmnStringToImage, except that it uses the gmnFileName GMN file.
 		*/
-		static Guido2ImageErrorCodes gmnFileToImage	( const char * gmnFileName , const char * imageFileName, Guido2ImageImageFormat imageFormat,
+		__attribute__((__deprecated__)) static Guido2ImageErrorCodes gmnFileToImage	( const char * gmnFileName , const char * imageFileName, Guido2ImageImageFormat imageFormat,
 										int pageIndex, const QSize& outputSizeConstraint , float zoom ,  
 										char * errorMsgBuffer = 0, int bufferSize = 0);
+		/*!
+		*	\brief	Same as gmnFileToImage above, but using a data structure instead.
+		*/
+		static Guido2ImageErrorCodes gmnFile2Image	( const Params& p );
 
 	private :
 
-		static QGuidoPainter * buildPainterFromGMNString	( const char * gmnString );
-		static QGuidoPainter * buildPainterFromGMNFile		( const char * gmnFileName );
+		static QGuidoPainter * buildPainterFromGMNString	( const char * gmnString, const GuidoLayoutSettings* layout = 0 );
+		static QGuidoPainter * buildPainterFromGMNFile		( const char * gmnFileName, const GuidoLayoutSettings* layout = 0 );
 
 		static Guido2ImageErrorCodes guidoPainterToImage( QGuidoPainter * guidoPainter , const char * imageFileName , Guido2ImageImageFormat imageFormat, int pageIndex, const QSize& outputSizeConstraint , float zoom , char * errorMsgBuffer , int bufferSize );
 
@@ -144,4 +166,4 @@ class Guido2Image
 		static void				finalizePaintDevice(QPaintDevice * paintDevice  , const QString& imageFileName , Guido2ImageImageFormat imageFormat);
 };
 
-#endif	//GUIDO_2_IMAGE_H
+#endif

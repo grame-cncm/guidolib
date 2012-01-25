@@ -68,21 +68,6 @@ static bool intersect (const FloatRect& r1, const FloatRect& r2)
 }
 
 //----------------------------------------------------------------------
-static _Interval xintersect (const FloatRect& r1, const FloatRect& r2)
-{
-	float a = ( r1.left > r2.left ) ? r1.left : r2.left;
-	float b = ( r1.right < r2.right ) ? r1.right : r2.right;
-	return _Interval(a, (a < b) ? b : a);
-}
-
-//----------------------------------------------------------------------
-static GuidoDate addtomap (const TimeSegment& ts, const _Interval& xi, const _Interval& yi, Time2GraphicMap& outmap)
-{
-	outmap[ts] = FloatRect(xi.first, yi.first, xi.second, yi.second);
-	return ts.second;
-}
-
-//----------------------------------------------------------------------
 void GuidoMapCollector::Graph2TimeMap( const FloatRect& box, const TimeSegment& dates, const GuidoElementInfos& infos )
 {
 	// Guido mapping filtering: the Guido map doesn't fit the Interlude mapping constraints and should be reworked.

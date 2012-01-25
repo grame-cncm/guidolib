@@ -195,7 +195,7 @@ class DragScrollArea : public QScrollArea
 			if ( widget() )
 			{
 				event->accept();
-				widget()->setCursor( QCursor( Qt::OpenHandCursor ) );
+//				widget()->setCursor( QCursor( Qt::OpenHandCursor ) );
 				mPreviousPoint.setX(0);
 				mPreviousPoint.setY(0);
 			}
@@ -206,7 +206,7 @@ class DragScrollArea : public QScrollArea
 			if ( widget() )
 			{
 				event->accept();
-				widget()->setCursor( QCursor( Qt::ClosedHandCursor ) );
+//				widget()->setCursor( QCursor( Qt::ClosedHandCursor ) );
 				mPreviousPoint = event->pos();
 			}
 		}
@@ -241,6 +241,21 @@ bool MapGuidoWidget::showStaff(int staffNum) const
 bool MapGuidoWidget::showVoice(int voiceNum) const
 {
 	return (voiceNum==fVoiceNum) || (fVoiceNum == ALL_VOICE );
+}
+
+//-------------------------------------------------------------------------
+void MapGuidoWidget::mousePressEvent ( QMouseEvent* event)
+{
+	for (int p = firstVisiblePage(); p <= lastVisiblePage(); p++) {
+		Time2GraphicMap	map;
+		GuidoErrCode err = GuidoGetSystemMap( getGRHandler(), p, size().width(), size().height(), map);
+		if (err) break;
+		TimeSegment t; FloatRect r;
+		if (GuidoGetPoint( event->x(), event->y(), map, t, r)) {
+//			cout << "clicked page " << p << " in time segment " << t << endl; 
+			break;
+		}
+	}
 }
 
 //-------------------------------------------------------------------------
@@ -1750,7 +1765,7 @@ void MainWindow::reinitGuidoWidget()
 //			delete mGuidoWidget;
 	if ( !mGuidoWidget )
 		mGuidoWidget = new MapGuidoWidget();
-	mGuidoWidget->setCursor( QCursor( Qt::OpenHandCursor ) );
+//	mGuidoWidget->setCursor( QCursor( Qt::OpenHandCursor ) );
 	mGuidoWidget->setGuidoLayoutSettings(mGuidoEngineParams);
 	mGuidoWidget->fMap = mBBMap;
 	mGuidoWidget->fVoiceNum = mVoiceNum;

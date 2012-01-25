@@ -184,29 +184,26 @@ void QGuidoPainter::setARHandler( ARHandler ar )
 //-------------------------------------------------------------------------
 bool QGuidoPainter::setGMNData( const QString& dataSource , GuidoParseFunction parseFunction )
 {
-//	QTime time;
-//	time.start();
-
 	// Read the gmnCode and build the score's Abstract Representation,
 	// containing all the notes, rests, staffs, lyrics ...
 	ARHandler arh;
+	GRHandler grh;
 	mLastErr = parseFunction( dataSource.toAscii().data(), &arh );		
 	if ( mLastErr != guidoNoErr )
 		return false;
-
-	// If necessary, free the previous score's Graphic Representation
-	GuidoFreeGR( mDesc.handle );
 
 	// Build a new score Graphic Representation according the score's Abstract Representation.
 	GuidoPageFormat currentFormat;
 	GuidoGetDefaultPageFormat ( &currentFormat );
 	GuidoSetDefaultPageFormat( &mPageFormat );
 
-	mLastErr = GuidoAR2GR (arh, &mLayoutSettings , &mDesc.handle);
+	mLastErr = GuidoAR2GR (arh, &mLayoutSettings , &grh);
 
 	GuidoSetDefaultPageFormat( &currentFormat );
 	if (mLastErr == guidoNoErr)
 	{
+		GuidoFreeGR( mDesc.handle );
+		mDesc.handle = grh;
 		GuidoFreeAR( mARHandler );
 		mARHandler = arh;
 		if ( mResizePageToMusic )

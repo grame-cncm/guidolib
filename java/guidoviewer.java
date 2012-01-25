@@ -43,6 +43,7 @@ public class guidoviewer {
 }
    
 class scorePanel extends Canvas implements Printable {
+
  	static {
         try {
 			System.loadLibrary("jniGUIDOEngine");
@@ -55,13 +56,20 @@ class scorePanel extends Canvas implements Printable {
 		}
 	}
 
-	guidoscore m_gmnscore;
+	public static final int kNoMap = 0;
+	public static final int kMapVoice = 1;
+	public static final int kMapStaff = 2;
+	public static final int kMapSys = 3;
+
+	guidoscore	m_gmnscore;
+	int			m_showMap;
 	
-	public scorePanel()						{ m_gmnscore = new guidoscore(); }
+	public scorePanel()						{ m_gmnscore = new guidoscore(); m_showMap = kNoMap; }
 	public guidoscore score()				{ return m_gmnscore; }
 	public boolean opened()					{ return m_gmnscore.fARHandler != 0; }
 	public Dimension getPreferredSize()		{ return new Dimension(500,600); }
 
+	public void showMap (int map)			{ if (m_showMap != map) { m_showMap = map; repaint(); } }
 
 	public void setGMN(String str, boolean gmncode) {
 		if (opened()) m_gmnscore.close();
@@ -93,12 +101,59 @@ class scorePanel extends Canvas implements Printable {
 		}
 	}
 
+	public void drawMap(Graphics g, guidoscoremap map) {
+		int n = map.size();
+		Color a = new Color (0,0,200,100);
+		Color b = new Color (200,0,0,100);
+		guidosegment time = new guidosegment();
+		Rectangle r = new Rectangle();
+		for (int i=0; i < n; i++) {
+			if (map.get(i, time, r)) {
+				g.setColor ( (i%2 == 1) ? b : a);
+				g.fillRect(r.x, r.y, r.width, r.height);
+			}
+			else {
+				System.err.println("unexpected map.get failure");
+				break;
+			}
+		}
+	}
+
+	public void drawMap(Graphics g, int what) {
+		guidoscoremap map = new guidoscoremap();
+		int ret = guido.guidoNoErr;
+		int voices = m_gmnscore.CountVoices();
+		switch (what) {
+			case kMapVoice:
+				for (int i=1; i<=voices; i++) {
+					ret = m_gmnscore.GetVoiceMap (1, getSize().width, getSize().height, i, map);
+					if (ret != guido.guidoNoErr) break;
+					drawMap (g, map);
+				}
+				break;
+			case kMapStaff:
+				for (int i=1; i<=voices; i++) {
+					ret = m_gmnscore.GetStaffMap (1, getSize().width, getSize().height, i, map);
+					if (ret != guido.guidoNoErr) break;
+					drawMap (g, map);
+				}
+				break;
+			case kMapSys:
+				ret = m_gmnscore.GetSystemMap (1, getSize().width, getSize().height, map);
+				if (ret == guido.guidoNoErr) drawMap (g, map);
+				break;
+		}		
+		if (ret != guido.guidoNoErr)
+			System.err.println("error getting score map: " + guido.GetErrorString(ret));
+	}
+
 	public void paint(Graphics g) {
 		if (m_gmnscore.fGRHandler != 0) {
 			guidodrawdesc desc = new guidodrawdesc(getSize().width, getSize().height);		
 			int ret = m_gmnscore.Draw (g, getSize().width, getSize().height, desc, new guidopaint());
 			if (ret != guido.guidoNoErr)
 				System.err.println("error drawing score: " + guido.GetErrorString(ret));
+			else if (m_showMap > 0) drawMap (g, m_showMap);
 		}
 	}
 	
@@ -123,6 +178,7 @@ class scorePanel extends Canvas implements Printable {
 
 ///// guidoviewerGUI
 class guidoviewerGUI extends JFrame {
+
     String	 m_Title = "Guido Viewer Java";
 	Menu     m_fileMenu = new Menu("File");		// declare and create new menu
     MenuItem m_openItem = new MenuItem("Open");	// create new menu item
@@ -130,27 +186,56 @@ class guidoviewerGUI extends JFrame {
     MenuItem m_svgexportItem = new MenuItem("Export to SVG");	// create new menu item
     MenuItem m_printItem = new MenuItem("Print");	// create new menu item
     MenuItem m_quitItem = new MenuItem("Quit");	// another menu item
+
+	Menu     m_mapMenu = new Menu("Map");		// declare and create new menu
+    CheckboxMenuItem m_mapVoiceItem = new CheckboxMenuItem("Voice");	// create new menu item
+    CheckboxMenuItem m_mapStaffItem = new CheckboxMenuItem("Staff");	// create new menu item
+    CheckboxMenuItem m_mapSysItem	= new CheckboxMenuItem("System");	// create new menu item
+
 	scorePanel m_score = new scorePanel();
 
     
     public guidoviewerGUI() {
-        //... Add listeners to menu items
+        //... Add listeners to file menu items
         m_openItem.addActionListener(new OpenAction(this));
+        m_openItem.setShortcut(new MenuShortcut('O'));
         m_midiexportItem.addActionListener(new MidiExportAction(this));
         m_svgexportItem.addActionListener(new SVGExportAction(this));
         m_printItem.addActionListener(new PrintAction(m_score));
         m_quitItem.addActionListener(new QuitAction());
-        
+ 		//... Add listeners to map menu items
+        m_mapVoiceItem.addItemListener(new MapAction(this, scorePanel.kMapVoice));
+        m_mapStaffItem.addItemListener(new MapAction(this, scorePanel.kMapStaff));
+        m_mapSysItem.addItemListener(new MapAction(this, scorePanel.kMapSys));
+
+        //... set shortcuts
+        m_openItem.setShortcut(new MenuShortcut('O'));
+        m_printItem.setShortcut(new MenuShortcut('P'));
+		m_mapVoiceItem.setShortcut(new MenuShortcut('R'));
+        m_mapStaffItem.setShortcut(new MenuShortcut('T'));
+        m_mapSysItem.setShortcut(new MenuShortcut('Y'));
+	  
+        //... disable some items
+		m_midiexportItem.setEnabled (false);
+        m_svgexportItem.setEnabled (false);
+        m_printItem.setEnabled (false);
+        m_mapMenu.setEnabled (false);
+ 
         //... Menubar, menus, menu items.  Use indentation to show structure.
         MenuBar menubar = new MenuBar();  // declare and create new menu bar
 		menubar.add(m_fileMenu);			// add the menu to the menubar
 		m_fileMenu.add(m_openItem);			// add the menu item to the menu
-		m_fileMenu.add(m_midiexportItem);			// add the menu item to the menu
-		m_fileMenu.add(m_svgexportItem);			// add the menu item to the menu
-		m_fileMenu.add(m_printItem);		// add the menu item to the menu
+		m_fileMenu.add(m_midiexportItem);
+		m_fileMenu.add(m_svgexportItem);
+		m_fileMenu.add(m_printItem);
 		m_fileMenu.addSeparator();			// add separator line to menu
 		m_fileMenu.add(m_quitItem);
-        
+
+		menubar.add(m_mapMenu);			// add the menu to the menubar
+  		m_mapMenu.add(m_mapVoiceItem);
+  		m_mapMenu.add(m_mapStaffItem);
+  		m_mapMenu.add(m_mapSysItem);
+    
         //... Content pane: create, layout, add components
         JPanel content = new JPanel();
         content.setBackground(Color.white);
@@ -164,12 +249,59 @@ class guidoviewerGUI extends JFrame {
         this.pack();
     }
     
+    protected void mapChange(int map, int change) {
+		if (change == ItemEvent.DESELECTED) m_score.showMap (scorePanel.kNoMap);
+		else {
+			m_score.showMap (map);
+			switch (map) {
+				case scorePanel.kMapVoice:
+					m_mapStaffItem.setState ( false );
+					m_mapSysItem.setState	( false );
+					break;
+				case scorePanel.kMapStaff:
+					m_mapVoiceItem.setState ( false );
+					m_mapSysItem.setState	( false );
+					break;
+				case scorePanel.kMapSys:
+					m_mapStaffItem.setState ( false );
+					m_mapVoiceItem.setState ( false );
+					break;
+			}
+		}
+	}
+    
+    protected boolean getMapState(int map) {
+		switch (map) {
+			case scorePanel.kMapVoice:
+				return m_mapVoiceItem.getState();
+			case scorePanel.kMapStaff:
+				return m_mapStaffItem.getState();
+			case scorePanel.kMapSys:
+				return m_mapSysItem.getState();
+		}
+		return false;
+	}
+   
     public void setGMNFile(File file) {
         this.setTitle(m_Title + " - " + file.getName());
  		m_score.setGMN(file.getPath(), false); 
+		m_midiexportItem.setEnabled (true);
+        m_svgexportItem.setEnabled (true);
+        m_printItem.setEnabled (true);
+		m_mapMenu.setEnabled (true);
 	}
 
 	public guidoscore score()				{ return m_score.score(); }
+
+	//// MapAction
+	class MapAction implements ItemListener {
+		guidoviewerGUI m_viewer;
+		int m_map; 
+        public MapAction(guidoviewerGUI viewer, int map)	{ m_viewer = viewer; m_map = map; }
+		public void itemStateChanged(ItemEvent e) {
+			m_viewer.mapChange (m_map, e.getStateChange());
+    	}
+    }
 
 	//// OpenAction
 	class OpenAction implements ActionListener {
@@ -207,7 +339,7 @@ class guidoviewerGUI extends JFrame {
     		if(m_viewer.m_score.opened() && (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION)) {
 				try {
 					FileWriter w = new FileWriter (chooser.getSelectedFile());
-					String svg = m_viewer.score().SVGExport (1);
+					String svg = m_viewer.score().SVGExport (1, "");
 					w.write ( svg);
 					w.flush ();
 				}

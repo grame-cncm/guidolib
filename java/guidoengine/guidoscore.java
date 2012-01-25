@@ -99,10 +99,10 @@ public class guidoscore
 	/** Exports a graphic representation to SVG
 	
 		@param pagenum the page to be exported
-		@param params MIDI export settings
+		@param fontFile an optional Guido SVG font file (could be empty when there is no SVG font)
 		@return a string containing th corresponding SVG code.
 	*/
-    public native final synchronized String  SVGExport(int pagenum);
+    public native final synchronized String  SVGExport(int pagenum, String fontFile);
 
 
 	/** Updates a GR representation
@@ -209,6 +209,11 @@ public class guidoscore
 		@return the score pages count or an error code when < 0
 	*/
     public native final synchronized int GetPageCount ();
+
+	/** Give the score count of voices.
+		@return the count of voices an error code when < 0
+	*/
+    public native final synchronized int CountVoices ();
  
 	/** Give the score duration.
 		@param date on output, the score duration.
@@ -253,6 +258,57 @@ public class guidoscore
 		@see timemapcollector
 	*/
 	public native final synchronized int	GetTimeMap( timemapcollector f);
+
+
+	// -------------------------------------------------------------------------
+	// adjusted mappings methods - new in guido lib 1.47 and in guido java 1.20
+	// -------------------------------------------------------------------------
+	/** Gives the adjusted page mapping
+	
+		@param page a page index, starting from 1.
+		@param width an area width (typically the current drawing zone width).
+		@param height an area height (typically the current drawing zone height).
+		@param map on output, contains the page map.
+		@return an error code.
+		@see mapcollector
+	*/
+	public native final synchronized int	GetPageMap (int page, float width, float height, guidoscoremap map);
+
+	/** Gives the adjusted staff mapping
+	
+		@param page a page index, starting from 1.
+		@param width an area width (typically the current drawing zone width).
+		@param height an area height (typically the current drawing zone height).
+		@param staff the staff index (starting from 1).
+		@param map on output, contains the staff map.
+		@return an error code.
+		@see mapcollector
+	*/
+	public native final synchronized int	GetStaffMap (int page, float width, float height, int staff, guidoscoremap map);
+
+	/** Gives the adjusted voice mapping
+	
+		@param page a page index, starting from 1.
+		@param width an area width (typically the current drawing zone width).
+		@param height an area height (typically the current drawing zone height).
+		@param voice the voice index (starting from 1).
+		@param map on output, contains the staff map.
+		@return an error code.
+		@see mapcollector
+	*/
+	public native final synchronized int	GetVoiceMap (int page, float width, float height, int voice, guidoscoremap map);
+
+	/** Gives the adjusted system mapping
+	
+		@param page a page index, starting from 1.
+		@param width an area width (typically the current drawing zone width).
+		@param height an area height (typically the current drawing zone height).
+		@param map on output, contains the staff map.
+		@return an error code.
+		@see mapcollector
+	*/
+	public native final synchronized int	GetSystemMap (int page, float width, float height, guidoscoremap map);
+
 
 
 	/** close a score

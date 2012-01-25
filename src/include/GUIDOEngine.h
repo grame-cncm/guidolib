@@ -166,7 +166,7 @@ enum { kAutoDistrib = 1, kAlwaysDistrib = 2, kNeverDistrib = 3 };
 /**
     Settings for the graphic score layout.
 */
-typedef struct
+typedef struct GuidoLayoutSettings
 {
     /*! Control distance between systems, distance is in internal units
 		(default value: 75)
@@ -204,7 +204,7 @@ typedef struct
 		(default value: 1)
 	*/
 	int optimalPageFill;
-
+	
 } GuidoLayoutSettings;
 
 /**

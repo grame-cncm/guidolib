@@ -3512,21 +3512,7 @@ traceslice(cout << "GRStaffManager::FindOptimumBreaks  =>  get lastslice: " << l
 
 		// we can only add the system on the page, if it would still fit ... 
 		// maybe this will change whem optimum pagebreaks are implemented ?
-		if (!mGrPage->addSystem(mGrSystem, &usedsystemdistance))
-		{
-			// this will no longer be called, addSystem never fail.
-			assert(false);
-
-			// then we have to build a new page and put the system into the new page ....
-			// build a new page and put the system in the new page
-			GRPage * newpage = new GRPage( mGrMusic,this,
-							mGrSystem->getRelativeTimePosition(), mGrPage );
-			mGrPage = newpage;
-			mGrMusic->addPage(mGrPage);
-			mGrSystem->setGRPage(mGrPage);
-			float tmpf = -1;
-			mGrPage->addSystem(mGrSystem, &tmpf);
-		}
+		mGrPage->addSystem(mGrSystem, &usedsystemdistance);
 		retval = mGrSystem->getPosition().y + mGrSystem->getBoundingBox().bottom;
 	}
 traceslice(cout << ">>>> GRStaffManager::FindOptimumBreaks  =>  end pos loop" << endl);
