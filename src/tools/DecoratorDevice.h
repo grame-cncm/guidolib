@@ -27,13 +27,13 @@
 class DecoratorDevice : public VGDevice
 {
 	protected:
-	
+		bool					fDevOwner;
 		VGDevice *				fDevice;
 		virtual void *			GetNativeContext() const;
 
 	public:
-								DecoratorDevice(VGDevice * dev) : VGDevice() { fDevice = dev; }
-		virtual					~DecoratorDevice()	{ delete fDevice; }
+								DecoratorDevice(VGDevice * dev, bool owner=true) : fDevOwner(owner), fDevice(dev)  {}
+		virtual					~DecoratorDevice()	{ if (fDevOwner) delete fDevice; }
 
 		virtual bool			IsValid() const;
 
