@@ -39,7 +39,7 @@ find_library (GUIDOLIB GUIDOEngine PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../../cmake
 
 #######################################
 # tools generation
-set(TOOLS guido2midi guido2svg guido2svgmap guidogetversion guidogetpagemap guidogetstaffmap guidogetsystemmap guidogetvoicemap)
+set(TOOLS guido2midi guido2svg guido2svgmap guidogetversion guidogetpagecount guidogetvoicecount guidogetpagemap guidogetstaffmap guidogetsystemmap guidogetvoicemap)
 foreach(tool ${TOOLS})
 	add_executable( ${tool} ${TOOLS_PATH}/${tool}.cpp )
 	target_link_libraries( ${tool} ${GUIDOLIB})
