@@ -32,9 +32,11 @@ class DebugDevice : public DecoratorDevice
 {
 
 	public:
-							 DebugDevice(VGDevice * dev, const char* outfile=0) : DecoratorDevice(dev), filestream(0) 
+					 DebugDevice(VGDevice& dev, const char* outfile=0) : DecoratorDevice(&dev, false), filestream(0)
 							 { if (outfile) filestream = new ofstream(outfile); }
-		virtual				~DebugDevice() 
+					 DebugDevice(VGDevice * dev, const char* outfile=0) : DecoratorDevice(dev), filestream(0) 
+							 { if (outfile) filestream = new ofstream(outfile); }
+		virtual		~DebugDevice() 
 							 { if (filestream) { filestream->close(); delete filestream; } }
 
 		// Returns the ability of the current VGdevice to be drawn into.	
@@ -182,7 +184,9 @@ inline void DebugDevice::Rectangle( float left, float top, float right, float bo
 
 // --------------------------------------------------------------
 inline void DebugDevice::SetMusicFont(const VGFont * font) {
-	dbgStream << "Device::SetMusicFont " << (void*)font << endl;
+	dbgStream << "Device::SetMusicFont " << (void*)font;
+	if (font) cout << " " << font->GetName() << " " << font->GetSize ();
+	cout << endl;
 	if (fDevice) fDevice->SetMusicFont(font);
 }
 inline const VGFont* DebugDevice::GetMusicFont() const {
@@ -190,7 +194,9 @@ inline const VGFont* DebugDevice::GetMusicFont() const {
 	return (fDevice) ? fDevice->GetMusicFont(): NULL;
 }
 inline void DebugDevice::SetTextFont(const VGFont * font) {
-	dbgStream << "Device::SetTextFont " << (void*)font << endl;
+	dbgStream << "Device::SetTextFont " << (void*)font;
+	if (font) cout << " " << font->GetName() << " " << font->GetSize ();
+	cout << endl;
 	if (fDevice) fDevice->SetTextFont(font);
 }
 inline const VGFont* DebugDevice::GetTextFont() const {
