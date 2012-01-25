@@ -266,66 +266,75 @@ static GuidoLayoutSettings* options2layout (const Guido2ImageOptions& opts)
 //------------------------------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
-	gAppName = basename (argv[0]);
+	gAppName = basename (argv[0]);		// stores the application name for global access
+	QApplication app( argc , argv );	// required by Qt
+	Guido2ImageOptions options;			// the tool options
+	parseOptions( argc, argv, options );// parse the command line (may exit in case of incorrect args)
 
-	QApplication app( argc , argv );
-	Guido2ImageOptions options;
-	parseOptions( argc, argv, options );
-
-	Guido2ImageErrorCodes (*convertFunction)(const Guido2Image::Params &);
-
-	Guido2Image::Params p;
-	string stdinstr;
-	if ( options.inputString ) {
+	Guido2Image::Params p;		// a struct used as arg of the conversion function
+	string stdinstr;			// a string to read the standard input
+	Guido2ImageErrorCodes (*convertFunction)(const Guido2Image::Params &);	// a pointer to the conversion function
+	if ( options.inputString ) {							// string parsing mode
 		convertFunction = &Guido2Image::gmnString2Image;
 		p.input = options.inputString;
 	}
-	else if ( options.inputFile ) {
+	else if ( options.inputFile ) {							// file parsing mode
 		convertFunction = &Guido2Image::gmnFile2Image;
 		p.input = options.inputFile;
 	}
-	else {	// read std in
-		convertFunction = &Guido2Image::gmnString2Image;
+	else {													// std in mode
+		convertFunction = &Guido2Image::gmnString2Image;	// handled like the string parsing mode
 		int c;
 		while (read(0, &c, 1) == 1)
-			stdinstr += char(c);
+			stdinstr += char(c);							// read the standard input into a string
 		p.input = stdinstr.c_str();
 	}
 	
-	char errorMsgBuffer[ ERROR_BUFFER_SIZE ];
-	string output;
-	if (options.outputFile) stripext ( options.outputFile, output);
+	//----------------------------------------------------
+	// the stuff below is for historical reasons and should be avoided
+	char errorMsgBuffer[ ERROR_BUFFER_SIZE ];				// a (ugly) buffer to get error messages
+	string output;											// a string for the ouput file name i.e. without extension
+	// removes the file extension (when there is one)
+	if (options.outputFile) stripext ( options.outputFile, output);	
 	else stripext ( options.inputFile, output);
 	p.output = output.c_str();
-	p.format = strToFormat (options.imageFormat);
-	p.layout = options2layout (options);
-	p.pageIndex = 0;
-	p.sizeConstraints = QSize(options.width , options.height);
-	p.zoom = options.zoom;
-	p.errorMsgBuffer = errorMsgBuffer;
-	p.bufferSize = ERROR_BUFFER_SIZE;
+	//----------------------------------------------------
+	p.format = strToFormat (options.imageFormat);			// the image output format
+	p.layout = options2layout (options);					// the layout options (if any)
+	p.pageIndex = 0;										// page index starts at 0 (I guess it means all pages - to be checked)
+	p.sizeConstraints = QSize(options.width , options.height); // size constraints
+	p.zoom = options.zoom;									// zoom value
+	p.errorMsgBuffer = errorMsgBuffer;						// no comment :-(
+	p.bufferSize = ERROR_BUFFER_SIZE;						// no comment :-(
 
 	int error = 0;
-	QGuidoPainter::startGuidoEngine();
-	if ( options.pageMode && ( p.format != GUIDO_2_IMAGE_PDF ) )
+	QGuidoPainter::startGuidoEngine();						// starts the guido engine
+	// the page mode should be removed in a future version
+	// a simple shell script can do the equivalent without constraint on the naming scheme
+	if (options.pageMode && (p.format != GUIDO_2_IMAGE_PDF))// we're in page mode 
 	{
 		string outputBase (p.output);
 		while ( !error )	// Export the pages until the function fails (at least it will fail returning INVALID_PAGE_INDEX error)
 		{
 			p.pageIndex++;
-			char buff[1024];
+			//----------------------------------------------------
+			// this was originaly made using QStrings + QVariant
+			// another version was using a stringstream
+			// both were producing an unexpected strange behavior (inconsistent output name after calling GuidoAR2GR)
+			char buff[1024]; 
 			sprintf (buff, "%s_%d", outputBase.c_str(), p.pageIndex);
+			//----------------------------------------------------
 			p.output = buff;
-			error = convertFunction( p );
+			error = convertFunction( p );					// convert to an image
 			output.clear();
 		}
 		if ( error == GUIDO_2_IMAGE_INVALID_PAGE_INDEX )
 			error = 0;
 	}
-	else error = convertFunction( p );
+	else error = convertFunction( p );						// convert to an image
+	QGuidoPainter::stopGuidoEngine();						// stop the guido engine
 	
 	if ( error ) cerr << errorMsgBuffer << endl;
-	QGuidoPainter::stopGuidoEngine();
-	return 0;
+	return error;
 }
 
