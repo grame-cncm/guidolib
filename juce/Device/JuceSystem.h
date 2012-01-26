@@ -18,7 +18,8 @@
 
 #include "VGSystem.h"
 
-class juce::Graphics;
+namespace juce { class Graphics; }
+
 // --------------------------------------------------------------
 // 		Juce implementation of the VGSystem class
 // --------------------------------------------------------------

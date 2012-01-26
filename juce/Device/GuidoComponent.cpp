@@ -16,12 +16,10 @@
 #include <iostream>
 #include <string>
 
-#include "GuidoComponent.h"
 #include "JuceSystem.h"
 #include "JuceDevice.h"
 #include "JuceFont.h"
-
-//#include "DebugDevice.h"
+#include "GuidoComponent.h"
 
 using namespace std;
 

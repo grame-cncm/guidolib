@@ -14,8 +14,8 @@
 
 #include <iostream>
 
-#include "JuceHeader.h"
 #include "JuceFont.h"
+#include "JuceHeader.h"
 
 using namespace juce;
 // --------------------------------------------------------------

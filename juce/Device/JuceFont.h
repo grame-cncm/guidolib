@@ -19,7 +19,7 @@
 #include <string>
 #include "VGFont.h"
 
-class juce::Font;
+namespace juce { class Font; }
 // --------------------------------------------------------------
 // 		Juce implementation of the VGFont class
 // --------------------------------------------------------------
@@ -41,7 +41,7 @@ class JuceFont : public VGFont
 		virtual	void			GetExtent( const char * s, int count, float * width, float * height, VGDevice *) const;
 		virtual	void			GetExtent( unsigned char c, float * width, float * height,  VGDevice *) const;
 
-		const Font&	NativeFont() const	{ return *fNativeFont; };
+		const juce::Font&	NativeFont() const	{ return *fNativeFont; };
 
 };
 

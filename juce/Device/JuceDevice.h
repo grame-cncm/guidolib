@@ -21,9 +21,9 @@
 #include "VGDevice.h"
 #include "VGColor.h"
 
-class juce::Graphics;
 class VGFont;
 class VGSystem;
+namespace juce { class Graphics; }
 
 // --------------------------------------------------------------
 // 		Juce implementation of the VGDevice class
@@ -57,8 +57,8 @@ class JuceDevice : public VGDevice
 	void	initialize();
 
 	public:
-					 JuceDevice(Graphics * g, VGSystem* sys=0);
-					 JuceDevice(int height, int height, VGSystem* sys=0);
+		JuceDevice(juce::Graphics * g, VGSystem* sys=0);
+					 JuceDevice(int width, int height, VGSystem* sys=0);
 		virtual		~JuceDevice();
 
 		virtual bool			IsValid() const		{ return fGraphics != 0; }

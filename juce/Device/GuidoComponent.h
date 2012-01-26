@@ -17,9 +17,8 @@
 #ifndef __GuidoComponent__
 #define __GuidoComponent__
 
-#include "JuceHeader.h"
 #include "GUIDOEngine.h"
-
+#include "JuceHeader.h"
 
 //==============================================================================
 /**

@@ -13,9 +13,11 @@
 	Lesser General Public License for more details.
 */
 
-#include "JuceHeader.h"
+
 #include "JuceDevice.h"
 #include "JuceFont.h"
+
+#include "JuceHeader.h"
 
 using namespace juce;
 
@@ -69,7 +71,7 @@ bool JuceDevice::BeginDraw()	{
 	return true;
 }
 void JuceDevice::EndDraw()		{ fGraphics->restoreState(); }
-void JuceDevice::InvalidateRect( float left, float top, float right, float bottom ) {}
+void JuceDevice::InvalidateRect( float /*left*/, float /*top*/, float /*right*/, float /*bottom*/ ) {}
 
 // - Standard graphic primitives -------------------------
 void JuceDevice::MoveTo( float x, float y )			{ fXPos = x; fYPos = y; }
@@ -157,26 +159,26 @@ VGDevice::VRasterOpMode	JuceDevice::GetRasterOpMode() const		{ return fRasterOpM
 
 // - Bitmap services (bit-block copy methods) --------------------------
 //>>>>>>>>>>>>>>>> todo
-bool JuceDevice::CopyPixels( VGDevice* pSrcDC, float alpha)
+bool JuceDevice::CopyPixels( VGDevice* /*pSrcDC*/, float /*alpha*/)
 {
 	return false;
 }
 
-bool JuceDevice::CopyPixels( int xDest, int yDest, VGDevice* pSrcDC, int xSrc, int ySrc,
-							 int srcWidth, int srcHeight, float alpha)
+bool JuceDevice::CopyPixels( int /*xDest*/, int /*yDest*/, VGDevice* /*pSrcDC*/, int /*xSrc*/, int /*ySrc*/,
+							 int /*srcWidth*/, int /*srcHeight*/, float /*alpha*/)
 {
 	return false;
 }
 
-bool JuceDevice::CopyPixels( int xDest, int yDest, int dstWidth, int dstHeight,
-							 VGDevice* pSrcDC, float alpha)
+bool JuceDevice::CopyPixels( int /*xDest*/, int /*yDest*/, int /*dstWidth*/, int /*dstHeight*/,
+							 VGDevice* /*pSrcDC*/, float /*alpha*/)
 {
 	return false;
 }
 
-bool JuceDevice::CopyPixels( int xDest, int yDest, int dstWidth, int dstHeight,
-							 VGDevice* pSrcDC, int xSrc, int ySrc,
-							 int srcWidth, int srcHeight, float alpha)
+bool JuceDevice::CopyPixels( int /*xDest*/, int /*yDest*/, int /*dstWidth*/, int /*dstHeight*/,
+							 VGDevice* /*pSrcDC*/, int /*xSrc*/, int /*ySrc*/,
+							 int /*srcWidth*/, int /*srcHeight*/, float /*alpha*/)
 {
 	return false;
 }

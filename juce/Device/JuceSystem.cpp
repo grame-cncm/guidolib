@@ -14,10 +14,11 @@
 */
 
 
-#include "JuceHeader.h"
 #include "JuceFont.h"
-#include "JuceSystem.h"
 #include "JuceDevice.h"
+#include "JuceSystem.h"
+
+#include "JuceHeader.h"
 
 using namespace juce;
 
@@ -34,7 +35,7 @@ VGDevice* JuceSystem::CreateMemoryDevice( int width, int height )
 	return new JuceDevice (width, height, this);
 }
 
-VGDevice* JuceSystem::CreateMemoryDevice( const char * path )
+VGDevice* JuceSystem::CreateMemoryDevice( const char *  )
 {
 //	FileInputStream file (File (path));
 //	if (file.getStatus().failed()) return 0;
