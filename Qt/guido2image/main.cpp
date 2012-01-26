@@ -50,7 +50,9 @@
 //------------------------------------------------------------------------------------------
 
 #ifdef WIN32
-#define basename (a)	a
+#include <io.h>
+#define basename(a)	a
+#define read	_read
 #else
 #include <libgen.h>
 #endif

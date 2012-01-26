@@ -24,6 +24,8 @@
 */
 
 #include <iostream>
+#include <algorithm>
+
 #include "GuidoMapCollector.h"
 
 using namespace std;

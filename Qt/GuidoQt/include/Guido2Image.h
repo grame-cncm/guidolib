@@ -23,6 +23,12 @@
 #include <QRectF>
 #include <QString>
 
+#ifdef WIN32
+#define warndeprecated __declspec(deprecated("** method is deprecated **"))
+#else
+#define warndeprecated  __attribute__((__deprecated__))
+#endif
+
 
 class QPaintDevice;
 class QGuidoPainter;
@@ -131,7 +137,7 @@ class Guido2Image
 		*
 		*			\return 0: Success. Else, error (see Guido2ImageErrorCodes above).
 		*/
-		__attribute__((__deprecated__)) static Guido2ImageErrorCodes gmnStringToImage( const char * gmnString , const char * imageFileName, Guido2ImageImageFormat imageFormat, 
+		warndeprecated static Guido2ImageErrorCodes gmnStringToImage( const char * gmnString , const char * imageFileName, Guido2ImageImageFormat imageFormat, 
 										int pageIndex, const QSize& outputSizeConstraint , float zoom , 
 										char * errorMsgBuffer = 0 , int bufferSize = 0);
 
@@ -143,7 +149,7 @@ class Guido2Image
 		/*!
 		*	\brief	Same as gmnStringToImage, except that it uses the gmnFileName GMN file.
 		*/
-		__attribute__((__deprecated__)) static Guido2ImageErrorCodes gmnFileToImage	( const char * gmnFileName , const char * imageFileName, Guido2ImageImageFormat imageFormat,
+		warndeprecated static Guido2ImageErrorCodes gmnFileToImage	( const char * gmnFileName , const char * imageFileName, Guido2ImageImageFormat imageFormat,
 										int pageIndex, const QSize& outputSizeConstraint , float zoom ,  
 										char * errorMsgBuffer = 0, int bufferSize = 0);
 		/*!

@@ -7,10 +7,13 @@
 
 #ifdef WIN32
 #include "GSystemWin32.h"
+GSystemWin32 gSys(0,0);
 #elif __APPLE__
 #include "GSystemOSX.h"
+GSystemOSX gSys (0,0);
 #else
 #include "CairoSystem.h"
+CairoSystem gSys(0);
 #endif
 
 #include "GUIDOEngine.h"
@@ -41,8 +44,7 @@ static void draw(GRHandler gr, int page, VGDevice* dev)
 
 int main(int argc, char **argv)
 {
-	GSystemOSX sys (0,0);
-	VGDevice* dev = sys.CreateMemoryDevice(kSize, kSize);
+	VGDevice* dev = gSys.CreateMemoryDevice(kSize, kSize);
     GuidoInitDesc gd = { dev, 0, 0, 0 };
     GuidoInit (&gd);
 
