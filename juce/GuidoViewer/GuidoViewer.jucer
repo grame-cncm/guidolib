@@ -19,7 +19,9 @@
             rtasFolder="c:\SDKs\PT_80_SDK" libraryType="1" juceFolder="f:/src/juce"
             extraCompilerFlags="-I../../JuceLibraryCode -I../../../Device -IF:\src\juce -I../../../../src/include"
             extraLinkerFlags="../../../../cmake/Debug/GUIDOEngine.lib"/>
-    <LINUX_MAKE targetFolder="Builds/Linux" vstFolder="~/SDKs/vstsdk2.4" juceFolder="../../../../../juce"/>
+    <LINUX_MAKE targetFolder="Builds/Linux" vstFolder="~/SDKs/vstsdk2.4" juceFolder="/home/fober/src/juce"
+                extraCompilerFlags="-I../../../../src/include -I../../../Device -I../../JuceLibraryCode"
+                extraLinkerFlags="-lGUIDOEngine"/>
     <ANDROID targetFolder="Builds/Android" androidSDKPath="${user.home}/SDKs/android-sdk-mac_x86"
              androidNDKPath="${user.home}/SDKs/android-ndk-r5" androidInternetNeeded="1"
              juceFolder="../../../../../juce"/>
