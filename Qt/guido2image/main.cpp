@@ -87,7 +87,7 @@ typedef struct Guido2ImageOptions {
 //------------------------------------------------------------------------------------------
 static void usage(const char * name)
 {
-	cerr << name << " version " << kVersion << endl;
+	cerr << name << " version " << kVersion << " using Guido Engine v." << GuidoGetVersionStr() << endl;
 	cerr << "usages: (1) " << name << " [options] -f GMNFile   [-o outfile]"  << endl;
 	cerr << "        (2) " << name << " [options] -s GMNString  -o outfile"  << endl;
 	cerr << "        (3) " << name << " [options] -o outfile"  << endl;
