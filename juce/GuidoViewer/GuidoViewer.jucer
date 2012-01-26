@@ -8,7 +8,7 @@
               pluginSilenceInIsSilenceOut="0" pluginTailLength="0" pluginEditorRequiresKeys="0"
               pluginAUExportPrefix="JuceProjectAU" pluginAUViewClass="JuceProjectAU_V1"
               pluginRTASCategory="" bundleIdentifier="com.grame.GuidoViewer"
-              jucerVersion="3.0.0" bigIcon="IAUjPh">
+              jucerVersion="3.0.0" bigIcon="IAUjPh" defines="JUCE_DONT_DEFINE_MACROS">
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX" vstFolder="~/SDKs/vstsdk2.4" rtasFolder="~/SDKs/PT_80_SDK"
                objCExtraSuffix="WzPHFY" juceFolder="../../../../../juce" extraLinkerFlags="-F../../../../cmake/Debug  -framework GUIDOEngine"
@@ -16,7 +16,9 @@
     <XCODE_IPHONE targetFolder="Builds/iOS" vstFolder="~/SDKs/vstsdk2.4" rtasFolder="~/SDKs/PT_80_SDK"
                   objCExtraSuffix="JcEpwT" juceFolder="../../../../../juce"/>
     <VS2005 targetFolder="Builds/VisualStudio2005" vstFolder="c:\SDKs\vstsdk2.4"
-            rtasFolder="c:\SDKs\PT_80_SDK" libraryType="1" juceFolder="../../../../../juce"/>
+            rtasFolder="c:\SDKs\PT_80_SDK" libraryType="1" juceFolder="f:/src/juce"
+            extraCompilerFlags="-I../../JuceLibraryCode -I../../../Device -IF:\src\juce -I../../../../src/include"
+            extraLinkerFlags="../../../../cmake/Debug/GUIDOEngine.lib"/>
     <LINUX_MAKE targetFolder="Builds/Linux" vstFolder="~/SDKs/vstsdk2.4" juceFolder="../../../../../juce"/>
     <ANDROID targetFolder="Builds/Android" androidSDKPath="${user.home}/SDKs/android-sdk-mac_x86"
              androidNDKPath="${user.home}/SDKs/android-ndk-r5" androidInternetNeeded="1"
@@ -52,7 +54,7 @@
                JUCE_WASAPI="default" JUCE_DIRECTSOUND="default" JUCE_DIRECTSHOW="default"
                JUCE_MEDIAFOUNDATION="default" JUCE_ALSA="default" JUCE_QUICKTIME="default"
                JUCE_OPENGL="default" JUCE_DIRECT2D="default" JUCE_USE_FLAC="default"
-               JUCE_USE_OGGVORBIS="default" JUCE_USE_CDBURNER="default" JUCE_USE_CDREADER="default"
+               JUCE_USE_OGGVORBIS="default" JUCE_USE_CDBURNER="disabled" JUCE_USE_CDREADER="default"
                JUCE_USE_CAMERA="default" JUCE_ENABLE_REPAINT_DEBUGGING="default"
                JUCE_USE_XINERAMA="default" JUCE_USE_XSHM="default" JUCE_USE_XRENDER="default"
                JUCE_USE_XCURSOR="default" JUCE_PLUGINHOST_VST="default" JUCE_PLUGINHOST_AU="default"
