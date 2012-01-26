@@ -22,6 +22,7 @@
 */
 
 #include "DecoratorDevice.h"
+#include "VGFont.h"
 
 #include <iostream>
 #include <fstream>
