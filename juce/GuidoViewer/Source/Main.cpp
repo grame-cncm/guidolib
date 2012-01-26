@@ -8,6 +8,7 @@
   ==============================================================================
 */
 
+
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MainWindow.h"
 
@@ -26,7 +27,7 @@ public:
     }
 
     //==============================================================================
-    void initialise (const String& commandLine)
+    void initialise (const String& )
     {
         // Do your application's initialisation code here..
         mainWindow = new MainAppWindow();
@@ -60,7 +61,7 @@ public:
         return true;
     }
 
-    void anotherInstanceStarted (const String& commandLine)
+    void anotherInstanceStarted (const String& )
     {
         
     }
