@@ -19,6 +19,7 @@
 */
 
 #include <stdio.h>
+#include <string.h>
 
 #include "SVGDevice.h"
 #include "VGFont.h"
