@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="itte03" name="GuidoViewer" projectType="guiapp" version="1.0.0"
+              juceLinkage="amalg_big" buildVST="1" buildRTAS="0" buildAU="1"
+              pluginName="Juce Project" pluginDesc="Juce Project" pluginManufacturer="yourcompany"
+              pluginManufacturerCode="Manu" pluginCode="Plug" pluginChannelConfigs="{1, 1}, {2, 2}"
+              pluginIsSynth="0" pluginWantsMidiIn="0" pluginProducesMidiOut="0"
+              pluginSilenceInIsSilenceOut="0" pluginTailLength="0" pluginEditorRequiresKeys="0"
+              pluginAUExportPrefix="JuceProjectAU" pluginAUViewClass="JuceProjectAU_V1"
+              pluginRTASCategory="" bundleIdentifier="com.grame.GuidoViewer"
+              jucerVersion="3.0.0" bigIcon="IAUjPh">
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX" vstFolder="~/SDKs/vstsdk2.4" rtasFolder="~/SDKs/PT_80_SDK"
+               objCExtraSuffix="WzPHFY" juceFolder="../../../../../juce" extraLinkerFlags="-F../../../../cmake/Debug  -framework GUIDOEngine"
+               extraCompilerFlags="-I../../../../src/include"/>
+    <XCODE_IPHONE targetFolder="Builds/iOS" vstFolder="~/SDKs/vstsdk2.4" rtasFolder="~/SDKs/PT_80_SDK"
+                  objCExtraSuffix="JcEpwT" juceFolder="../../../../../juce"/>
+    <VS2005 targetFolder="Builds/VisualStudio2005" vstFolder="c:\SDKs\vstsdk2.4"
+            rtasFolder="c:\SDKs\PT_80_SDK" libraryType="1" juceFolder="../../../../../juce"/>
+    <LINUX_MAKE targetFolder="Builds/Linux" vstFolder="~/SDKs/vstsdk2.4" juceFolder="../../../../../juce"/>
+    <ANDROID targetFolder="Builds/Android" androidSDKPath="${user.home}/SDKs/android-sdk-mac_x86"
+             androidNDKPath="${user.home}/SDKs/android-ndk-r5" androidInternetNeeded="1"
+             juceFolder="../../../../../juce"/>
+  </EXPORTFORMATS>
+  <CONFIGURATIONS>
+    <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="GuidoViewer"
+                   osxSDK="10.5 SDK" osxCompatibility="10.5 SDK" osxArchitecture="default"/>
+    <CONFIGURATION name="Release" isDebug="0" optimisation="2" targetName="GuidoViewer"
+                   osxSDK="10.5 SDK" osxCompatibility="10.5 SDK" osxArchitecture="64BitUniversal"
+                   binaryPath=""/>
+  </CONFIGURATIONS>
+  <MAINGROUP id="cQ5GjM" name="GuidoViewer">
+    <GROUP id="r7RLot" name="Source">
+      <FILE id="ftyN5Q" name="GuidoViewer.cpp" compile="1" resource="0" file="Source/GuidoViewer.cpp"/>
+      <FILE id="CXBTtP" name="GuidoViewer.h" compile="0" resource="0" file="Source/GuidoViewer.h"/>
+      <FILE id="IAUjPh" name="gmnicon.png" compile="0" resource="1" file="Ressources/gmnicon.png"/>
+      <FILE id="S7SIXI" name="GuidoComponent.cpp" compile="1" resource="0"
+            file="../Device/GuidoComponent.cpp"/>
+      <FILE id="FkCG1" name="GuidoComponent.h" compile="0" resource="0" file="../Device/GuidoComponent.h"/>
+      <FILE id="PnIM2v" name="JuceDevice.cpp" compile="1" resource="0" file="../Device/JuceDevice.cpp"/>
+      <FILE id="oHfkt" name="JuceDevice.h" compile="0" resource="0" file="../Device/JuceDevice.h"/>
+      <FILE id="AZmYRv" name="JuceFont.cpp" compile="1" resource="0" file="../Device/JuceFont.cpp"/>
+      <FILE id="RpAZue" name="JuceFont.h" compile="0" resource="0" file="../Device/JuceFont.h"/>
+      <FILE id="toRqeZ" name="JuceSystem.cpp" compile="1" resource="0" file="../Device/JuceSystem.cpp"/>
+      <FILE id="pcE9VX" name="JuceSystem.h" compile="0" resource="0" file="../Device/JuceSystem.h"/>
+      <FILE id="lQO317" name="MainWindow.cpp" compile="1" resource="0" file="Source/MainWindow.cpp"/>
+      <FILE id="NBTsvN" name="MainWindow.h" compile="0" resource="0" file="Source/MainWindow.h"/>
+      <FILE id="VOAAIl" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+    </GROUP>
+  </MAINGROUP>
+  <JUCEOPTIONS JUCE_FORCE_DEBUG="default" JUCE_LOG_ASSERTIONS="default" JUCE_ASIO="default"
+               JUCE_WASAPI="default" JUCE_DIRECTSOUND="default" JUCE_DIRECTSHOW="default"
+               JUCE_MEDIAFOUNDATION="default" JUCE_ALSA="default" JUCE_QUICKTIME="default"
+               JUCE_OPENGL="default" JUCE_DIRECT2D="default" JUCE_USE_FLAC="default"
+               JUCE_USE_OGGVORBIS="default" JUCE_USE_CDBURNER="default" JUCE_USE_CDREADER="default"
+               JUCE_USE_CAMERA="default" JUCE_ENABLE_REPAINT_DEBUGGING="default"
+               JUCE_USE_XINERAMA="default" JUCE_USE_XSHM="default" JUCE_USE_XRENDER="default"
+               JUCE_USE_XCURSOR="default" JUCE_PLUGINHOST_VST="default" JUCE_PLUGINHOST_AU="default"
+               JUCE_ONLY_BUILD_CORE_LIBRARY="default" JUCE_WEB_BROWSER="default"
+               JUCE_SUPPORT_CARBON="default" JUCE_CHECK_MEMORY_LEAKS="default"
+               JUCE_CATCH_UNHANDLED_EXCEPTIONS="default"/>
+</JUCERPROJECT>

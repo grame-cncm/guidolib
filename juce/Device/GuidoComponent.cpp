@@ -94,6 +94,7 @@ GuidoErrCode GuidoComponent::setARHandler(ARHandler ar)
 		fARHandler = ar;
 		fPage = 1;
 		if (fResizeToMusic) GuidoResizePageToMusic (fGRHandler);
+		repaint();
 	}
 	else GuidoFreeAR (ar);
 	return err;
@@ -150,10 +151,10 @@ void GuidoComponent::paint (Graphics& g)
 //	DebugDevice dev (jdev);
 	dev.NotifySize(getWidth(), getHeight());
 
-	float x = 10.0f;
-	float y = 10.0f;
-	float w = getWidth() - (x*2);
-	float h = getHeight() - (y*2);
+//	float x = 10.0f;
+//	float y = 10.0f;
+//	float w = getWidth() - (x*2);
+//	float h = getHeight() - (y*2);
 
 //	dev.SelectFillColor (VGColor(255,0,0,50));
 //	dev.SetScale (0.5, 0.5);
@@ -163,12 +164,12 @@ void GuidoComponent::paint (Graphics& g)
 
 	g.setColour (fScoreColor);
 
-	dev.SetScale (0.5, 0.5);
-	JuceFont font("Guido2", 200, VGFont::kFontBold);
-	dev.SetTextFont (&font);
-	string msg("Hello world!");
-	dev.DrawString (x*2, 150, msg.c_str(), msg.size());
-	dev.SetScale (1.,1.);
+//	dev.SetScale (0.5, 0.5);
+//	JuceFont font("Guido2", 200, VGFont::kFontBold);
+//	dev.SetTextFont (&font);
+//	string msg("Hello world!");
+//	dev.DrawString (x*2, 150, msg.c_str(), msg.size());
+//	dev.SetScale (1.,1.);
 
 	GuidoOnDrawDesc desc;
 	desc.handle = fGRHandler;
@@ -184,8 +185,4 @@ void GuidoComponent::paint (Graphics& g)
 	if (err != guidoNoErr)
 		cerr << "error while painting: " << GuidoGetErrorString(err) << endl;
 }
-
-//void GuidoComponent::resized()
-//{
-//}
 
