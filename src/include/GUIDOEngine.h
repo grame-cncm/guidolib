@@ -250,6 +250,15 @@ representations.
     GUIDOAPI(GuidoErrCode)	GuidoInit(GuidoInitDesc * desc);
 
 	/*!
+        Guido Engine shutdown
+		
+        Actually release the font allocated by the engine. 
+		Anyway, the fonts are release when the client application exit but
+		the function provides control over the time of the release.
+    */
+    GUIDOAPI(void)	GuidoShutdown();
+
+	/*!
         Parses a Guido Music Notation (.gmn) file and builds the corresponding
         abstract representation.
 		\param filename the file to parse.

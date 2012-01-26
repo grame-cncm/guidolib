@@ -24,6 +24,7 @@
 
 #include <vector>
 #include <string>
+#include "VGSystem.h"
 
 class VGFont;
 /** \brief Description of a font: name, font size and attributes.
@@ -56,8 +57,9 @@ class FontManager
 				 FontManager() {}
 		virtual ~FontManager();
 
+	static const VGFont * FindOrCreateFont(VGSystem* sys, int size, const std::string * iname = 0, const std::string * attributes = 0 );
 	static const VGFont * FindOrCreateFont( int size, const std::string * iname = 0, const std::string * attributes = 0 );
-	static void		ReleaseAllFonts();
+	static void	 ReleaseAllFonts();
 
 	static const VGFont * gFontScriab;
 	static const VGFont * gFontText;

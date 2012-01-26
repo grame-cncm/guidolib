@@ -77,7 +77,7 @@ FontManager::~FontManager()	{ ReleaseAllFonts(); }
 /** \brief Looks for a font in the font list, and returns it. If the font does not exist, it 
 	is created and added to the font list.
 */
-const VGFont* FontManager::FindOrCreateFont( int size, const string * name, const string * attributesStr )
+const VGFont* FontManager::FindOrCreateFont(VGSystem* sys, int size, const string * name, const string * attributesStr )
 {
 	// - First, we look if a similar font is already in our font list.
 	const char * fontNameCStr = name ? name->c_str() : kDefaultMusicFont;
@@ -101,17 +101,64 @@ const VGFont* FontManager::FindOrCreateFont( int size, const string * name, cons
 	}
 	
 	const VGFont* fontRef = 0;
-	if( gGlobalSettings.gDevice ) {
-		VGSystem * sys = gGlobalSettings.gDevice->getVGSystem();
-		if (sys)
-			fontRef = sys->CreateVGFont( fontNameCStr, size, attributes );
-	}
+	if (sys)
+		fontRef = sys->CreateVGFont( fontNameCStr, size, attributes );
 
 	if( fontRef )
 		sFontList.push_back( new FontInfo( fontRef, size, fontNameCStr, attributesStr ? *attributesStr : "" ) );
 	else
 		cerr << "Guido error: \"" <<  fontNameCStr << "\" font creation failed !" << endl;
 	return fontRef;
+}
+// --------------------------------------------------------------------------
+// TODO: currently, only text fonts can have different attributes (bold, underline, italic).
+// Many text and musical fonts with different sizes can exists.
+// In the futur, we could have only one musical font at one size, and scale the context to
+// draw musical symbols at any size.
+
+/** \brief Looks for a font in the font list, and returns it. If the font does not exist, it 
+	is created and added to the font list.
+*/
+const VGFont* FontManager::FindOrCreateFont( int size, const string * name, const string * attributesStr )
+{
+	VGSystem * sys = 0;
+	if( gGlobalSettings.gDevice)
+		sys = gGlobalSettings.gDevice->getVGSystem();
+	return FindOrCreateFont (sys, size, name, attributesStr);
+
+//	// - First, we look if a similar font is already in our font list.
+//	const char * fontNameCStr = name ? name->c_str() : kDefaultMusicFont;
+//	const char * fontAttribCStr = attributesStr ? attributesStr->c_str() : "";
+//	
+//	// - First, we look if a similar font is already in our font list.
+//	FontInfoList::const_iterator ptr;
+//	for( ptr = sFontList.begin(); ptr != sFontList.end(); ++ ptr )
+//	{
+//		const FontInfo * infos = *ptr;
+//		if( infos->Compare( size, fontNameCStr, fontAttribCStr ))
+//			return infos->mFontRef;
+//	}
+//	
+//	// - The font does not exist, we create it.
+//	int attributes = VGFont::kFontNone;
+//	if( attributesStr ) {
+//		if( attributesStr->find("b") != string::npos )	attributes |= VGFont::kFontBold;
+//		if( attributesStr->find("i") != string::npos )	attributes |= VGFont::kFontItalic;
+//		if( attributesStr->find("u") != string::npos )	attributes |= VGFont::kFontUnderline;
+//	}
+//	
+//	const VGFont* fontRef = 0;
+//	if( gGlobalSettings.gDevice ) {
+//		VGSystem * sys = gGlobalSettings.gDevice->getVGSystem();
+//		if (sys)
+//			fontRef = sys->CreateVGFont( fontNameCStr, size, attributes );
+//	}
+//
+//	if( fontRef )
+//		sFontList.push_back( new FontInfo( fontRef, size, fontNameCStr, attributesStr ? *attributesStr : "" ) );
+//	else
+//		cerr << "Guido error: \"" <<  fontNameCStr << "\" font creation failed !" << endl;
+//	return fontRef;
 }
 
 // --------------------------------------------------------------------------
