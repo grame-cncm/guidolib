@@ -21,7 +21,7 @@ MainAppWindow::MainAppWindow()
     setBackgroundColour (Colour(255,255,255));
 	setUsingNativeTitleBar (true);
 	setResizable (true, true);
-	centreWithSize (500, 400);
+	centreWithSize (500, 600);
 
     GuidoViewer* gmnview = new GuidoViewer (this);
 
