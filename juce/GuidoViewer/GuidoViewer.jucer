@@ -22,9 +22,10 @@
     <LINUX_MAKE targetFolder="Builds/Linux" vstFolder="~/SDKs/vstsdk2.4" juceFolder="/home/fober/src/juce"
                 extraCompilerFlags="-I../../../../src/include -I../../../Device -I../../JuceLibraryCode"
                 extraLinkerFlags="-lGUIDOEngine"/>
-    <ANDROID targetFolder="Builds/Android" androidSDKPath="${user.home}/SDKs/android-sdk-mac_x86"
-             androidNDKPath="${user.home}/SDKs/android-ndk-r5" androidInternetNeeded="1"
-             juceFolder="../../../../../juce"/>
+    <ANDROID targetFolder="Builds/Android" androidSDKPath="${user.home}/Desktop/SDKs/android-sdk-mac_x86"
+             androidNDKPath="${user.home}/Desktop/SDKs/android-ndk-r5" androidInternetNeeded="1"
+             juceFolder="../../../../../juce" extraCompilerFlags="-I../../../../src/include -I../../../Device -I../../JuceLibraryCode"
+             extraLinkerFlags="-L../../../../cmake/Release  -lSGUIDOEngine"/>
   </EXPORTFORMATS>
   <CONFIGURATIONS>
     <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="GuidoViewer"
