@@ -40,7 +40,7 @@ class SVGFont : public VGFont
 					 SVGFont(const char * name, int size, int properties=kFontNone);
 		virtual		~SVGFont();
 
-		virtual	const char *	GetName() const			{ std::cerr << "svgfont get name\n"; return fFont->GetName(); }
+		virtual	const char *	GetName() const			{ return fFont->GetName(); }
 		virtual	int 			GetSize() const			{ return fFont->GetSize(); }
 		virtual	int				GetProperties() const	{ return fFont->GetProperties(); }
 
