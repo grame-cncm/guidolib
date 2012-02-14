@@ -194,7 +194,7 @@ extern FILE *guidoin, *guidoout;
      */
     #define  YY_LESS_LINENO(n) \
             do { \
-                int yyl;\
+                yy_size_t yyl;\
                 for ( yyl = n; yyl < guidoleng; ++yyl )\
                     if ( guidotext[yyl] == '\n' )\
                         --guidolineno;\
@@ -877,7 +877,7 @@ yy_find_action:
 
 		if ( yy_act != YY_END_OF_BUFFER && yy_rule_can_match_eol[yy_act] )
 			{
-			int yyl;
+			yy_size_t yyl;
 			for ( yyl = 0; yyl < guidoleng; ++yyl )
 				if ( guidotext[yyl] == '\n' )
 					   
@@ -1125,7 +1125,7 @@ YY_RULE_SETUP
 case 45:
 YY_RULE_SETUP
 #line 106 "guido.l"
-printf("extra text is : %s\n", guidotext); return EXTRA;
+fprintf(stderr, "extra text is : %s\n", guidotext); return EXTRA;
 	YY_BREAK
 case 46:
 YY_RULE_SETUP

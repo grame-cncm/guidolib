@@ -103,5 +103,5 @@ EOL		[\x0a\x0d]
 \"(\\\\|\\.|[^\\\"])*\"   unescape(yytext); unquote(yytext); return STRING;
 
 {SPACE}+			/* eat up space */
-.				printf("extra text is : %s\n", yytext); return EXTRA;
+.				fprintf(stderr, "extra text is : %s\n", yytext); return EXTRA;
 
