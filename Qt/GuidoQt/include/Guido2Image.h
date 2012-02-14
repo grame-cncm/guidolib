@@ -22,6 +22,7 @@
 #include <QSize>
 #include <QRectF>
 #include <QString>
+#include <QIODevice>
 
 #ifdef WIN32
 #define warndeprecated __declspec(deprecated("** method is deprecated **"))
@@ -65,16 +66,16 @@ enum Guido2ImageErrorCodes
 enum Guido2ImageImageFormat
 {
 	GUIDO_2_IMAGE_PDF = 0, 
-	GUIDO_2_IMAGE_BMP , 
-	GUIDO_2_IMAGE_GIF , 
+	GUIDO_2_IMAGE_BMP, 
+	GUIDO_2_IMAGE_GIF, 
 	GUIDO_2_IMAGE_JPEG, 
-	GUIDO_2_IMAGE_PNG , 
-	GUIDO_2_IMAGE_PGM , 
-	GUIDO_2_IMAGE_PPM , 
+	GUIDO_2_IMAGE_PNG, 
+	GUIDO_2_IMAGE_PGM, 
+	GUIDO_2_IMAGE_PPM, 
 	GUIDO_2_IMAGE_TIFF, 
-	GUIDO_2_IMAGE_XBM , 
-	GUIDO_2_IMAGE_XPM ,
-	GUIDO_2_IMAGE_SVG ,
+	GUIDO_2_IMAGE_XBM, 
+	GUIDO_2_IMAGE_XPM,
+	GUIDO_2_IMAGE_SVG,
 	GUIDO_2_IMAGE_NB_OF_FORMAT
 };
 
@@ -99,15 +100,13 @@ class Guido2Image
 		typedef struct Params {
 			const char *			input;
 			const char *			output;
+			QIODevice*				device;
 			Guido2ImageImageFormat	format;
 			const GuidoLayoutSettings*	layout;
 			int						pageIndex;
 			QSize					sizeConstraints;
 			float					zoom;
-			char *					errorMsgBuffer;
-			int						bufferSize;
-			Params () : input(0), output(0), format(GUIDO_2_IMAGE_PNG), layout(0),
-						pageIndex(1), zoom(1.0), errorMsgBuffer(0), bufferSize(0) {}
+			Params () : input(0), output(0), device(0), format(GUIDO_2_IMAGE_PNG), layout(0), pageIndex(1), zoom(1.0) {}
 		} Params;
 
 		/*!
@@ -132,14 +131,17 @@ class Guido2Image
 		*			\note	You must call QGuidoPainter::startGuidoEngine before calling this function, and call QGuidoPainter::stopGuidoEngine
 		*					after (or at least once at the end of your application).
 		*			\warning	To export GIF images, you need the Qt framework to support this format. (see Qt doc about GIF).
-		*			\warning	To support SVG format, you need to link Guido2Image.cpp against Qt's SVG module (see Qt doc about SVG) ;
-		*						and you must #define GUIDO_2_IMAGE_SVG_SUPPORT when compiling Guido2Image.cpp.
 		*
 		*			\return 0: Success. Else, error (see Guido2ImageErrorCodes above).
 		*/
-		warndeprecated static Guido2ImageErrorCodes gmnStringToImage( const char * gmnString , const char * imageFileName, Guido2ImageImageFormat imageFormat, 
-										int pageIndex, const QSize& outputSizeConstraint , float zoom , 
-										char * errorMsgBuffer = 0 , int bufferSize = 0);
+		warndeprecated static Guido2ImageErrorCodes gmnStringToImage( const char * gmnString, const char * imageFileName, Guido2ImageImageFormat imageFormat, 
+										int pageIndex, const QSize& outputSizeConstraint, float zoom, 
+										char * errorMsgBuffer = 0, int bufferSize = 0);
+
+		/*!
+		*	\brief	Same as gmnStringToImage above, but using a data structure instead.
+		*/
+		static const char* getErrorString( Guido2ImageErrorCodes err );
 
 		/*!
 		*	\brief	Same as gmnStringToImage above, but using a data structure instead.
@@ -149,27 +151,32 @@ class Guido2Image
 		/*!
 		*	\brief	Same as gmnStringToImage, except that it uses the gmnFileName GMN file.
 		*/
-		warndeprecated static Guido2ImageErrorCodes gmnFileToImage	( const char * gmnFileName , const char * imageFileName, Guido2ImageImageFormat imageFormat,
-										int pageIndex, const QSize& outputSizeConstraint , float zoom ,  
+		warndeprecated static Guido2ImageErrorCodes gmnFileToImage	( const char * gmnFileName, const char * imageFileName, Guido2ImageImageFormat imageFormat,
+										int pageIndex, const QSize& outputSizeConstraint, float zoom,  
 										char * errorMsgBuffer = 0, int bufferSize = 0);
 		/*!
-		*	\brief	Same as gmnFileToImage above, but using a data structure instead.
+		*	\brief	Same as gmnFileToImage above, but output is send to dev instead a file.
 		*/
-		static Guido2ImageErrorCodes gmnFile2Image	( const Params& p );
+		static Guido2ImageErrorCodes gmnFile2Image	( const Params& p);
 
 	private :
 
+		static Guido2ImageErrorCodes check( const Params& p );
+		
 		static QGuidoPainter * buildPainterFromGMNString	( const char * gmnString, const GuidoLayoutSettings* layout = 0 );
 		static QGuidoPainter * buildPainterFromGMNFile		( const char * gmnFileName, const GuidoLayoutSettings* layout = 0 );
 
-		static Guido2ImageErrorCodes guidoPainterToImage( QGuidoPainter * guidoPainter , const char * imageFileName , Guido2ImageImageFormat imageFormat, int pageIndex, const QSize& outputSizeConstraint , float zoom , char * errorMsgBuffer , int bufferSize );
+		static Guido2ImageErrorCodes guidoPainterToImage( QGuidoPainter * guidoPainter, const char * imageFileName, Guido2ImageImageFormat imageFormat, int pageIndex, const QSize& outputSizeConstraint, float zoom, char * errorMsgBuffer, int bufferSize );
+		static Guido2ImageErrorCodes guidoPainterToImage( QGuidoPainter * guidoPainter, const Params& p );
 
-		static void writeImage( QGuidoPainter * guidoPainter , Guido2ImageImageFormat imageFormat, int pageIndex, const QSize& outputSizeConstraint , float zoom , const char * imageFileName );
-		static void writePDF( QGuidoPainter * guidoPainter , int pageIndex, const char * fileName );
+		static void writeImage( QGuidoPainter * guidoPainter, Guido2ImageImageFormat imageFormat, int pageIndex, const QSize& outputSizeConstraint, float zoom, const char * imageFileName );
+		static void writeImage( QGuidoPainter * guidoPainter, const Params& p);
+		static void writePDF( QGuidoPainter * guidoPainter, int pageIndex, const char * fileName );
 		
-		static QRectF			getPictureRect(QGuidoPainter * guidoPainter , int pageIndex, const QSize& outputSizeConstraint , float zoom );
-		static QPaintDevice *	getPaintDevice( const QRectF& pictureRect , Guido2ImageImageFormat imageFormat , const QString& imageFileName );
-		static void				finalizePaintDevice(QPaintDevice * paintDevice  , const QString& imageFileName , Guido2ImageImageFormat imageFormat);
+		static QRectF			getPictureRect(QGuidoPainter * guidoPainter, int pageIndex, const QSize& outputSizeConstraint, float zoom );
+		static QPaintDevice *	getPaintDevice( const QRectF& pictureRect);
+		static void				finalizePaintDevice(QPaintDevice * paintDevice, const QString& imageFileName, Guido2ImageImageFormat imageFormat);
+		static void				save(QPaintDevice * paintDevice, const Params& p);
 };
 
 #endif

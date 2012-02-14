@@ -35,10 +35,6 @@
 
 #include "GUIDOEngine.h"
 
-#ifdef GUIDO_2_IMAGE_SVG_SUPPORT
-	#include <QSvgGenerator>
-#endif
-
 #include <assert.h>
 
 #define WRITE_ERROR(a,b,c) if ( ( a ) && ( c ) ) strncpy( a , b , c )
@@ -88,6 +84,7 @@ Guido2ImageErrorCodes checkParams( bool isFile , const char * gmnSource , const 
 			WRITE_ERROR(errorMsgBuffer , "gmnString is null" , bufferSize );
 		return GUIDO_2_IMAGE_SOURCE_IS_NULL;
 	}
+	
 	if ( !imageFileName )
 	{
 		WRITE_ERROR(errorMsgBuffer , "imageFileName is null" , bufferSize );
@@ -112,17 +109,52 @@ Guido2ImageErrorCodes checkParams( bool isFile , const char * gmnSource , const 
 	return GUIDO_2_IMAGE_SUCCESS;
 }
 
+
+//----------------------------------------------------------------------------
+const char* Guido2Image::getErrorString( Guido2ImageErrorCodes err )
+{
+	switch (err) {
+		case GUIDO_2_IMAGE_SUCCESS:					return "success";
+		case GUIDO_2_IMAGE_SOURCE_IS_NULL:			return "invalid input";
+		case GUIDO_2_IMAGE_OUTPUT_IS_NULL:			return "invalid output";
+		case GUIDO_2_IMAGE_INPUT_FILE_ERROR:		return "no such input file";
+		case GUIDO_2_IMAGE_INVALID_SIZE_AND_ZOOM:	return "invalid size and zoom";
+		case GUIDO_2_IMAGE_INVALID_PAGE_INDEX:		return "invalid page index";
+		case GUIDO_2_IMAGE_INVALID_GMN_CODE:		return "invalid gmn code";
+		case GUIDO_2_IMAGE_GUIDO_ENGINE_NOT_STARTED: return "Guido Engine not started";
+		case GUIDO_2_IMAGE_INVALID_IMAGE_FORMAT:	return "invalid image format";
+	}
+	return "unknown error";
+}
+
+//----------------------------------------------------------------------------
+Guido2ImageErrorCodes Guido2Image::check( const Params& p )
+{
+	if ( !p.input )
+		return GUIDO_2_IMAGE_SOURCE_IS_NULL;
+	
+	if ( !p.output && !p.device )
+		return GUIDO_2_IMAGE_OUTPUT_IS_NULL;
+
+	if ( ( p.sizeConstraints.isNull() ) && ( !p.zoom ) ) 
+		return GUIDO_2_IMAGE_INVALID_SIZE_AND_ZOOM;
+
+	if ( ( p.format < 0 ) || ( p.format >= GUIDO_2_IMAGE_NB_OF_FORMAT ) )
+		return GUIDO_2_IMAGE_INVALID_IMAGE_FORMAT;
+	return GUIDO_2_IMAGE_SUCCESS;
+}
+
 //----------------------------------------------------------------------------
 Guido2ImageErrorCodes Guido2Image::gmnString2Image( const Params& p )
 {
-	Guido2ImageErrorCodes errorCode = checkParams( false, p.input, p.output, p.format, p.pageIndex, p.sizeConstraints, p.zoom, p.errorMsgBuffer, p.bufferSize );
+	Guido2ImageErrorCodes errorCode = check(p);
 	if ( errorCode != GUIDO_2_IMAGE_SUCCESS )
 		return errorCode;
 		
 	QGuidoPainter * painter = buildPainterFromGMNString (p.input, p.layout);
 	if ( !painter )
 		return GUIDO_2_IMAGE_GUIDO_ENGINE_NOT_STARTED;
-	return guidoPainterToImage(painter, p.output, p.format, p.pageIndex, p.sizeConstraints, p.zoom, p.errorMsgBuffer, p.bufferSize);
+	return guidoPainterToImage(painter, p);
 }
 
 //----------------------------------------------------------------------------
@@ -142,21 +174,23 @@ Guido2ImageErrorCodes Guido2Image::gmnStringToImage( const char * gmnString, con
 //----------------------------------------------------------------------------
 Guido2ImageErrorCodes Guido2Image::gmnFile2Image	( const  Params& p )
 {
-	Guido2ImageErrorCodes errorCode = checkParams( true , p.input , p.output , p.format , p.pageIndex , p.sizeConstraints, p.zoom, p.errorMsgBuffer, p.bufferSize );
+	Guido2ImageErrorCodes errorCode = check( p );
 	if ( errorCode != GUIDO_2_IMAGE_SUCCESS )
 		return errorCode;
-		
+	if (!QFile::exists( p.input))
+		return GUIDO_2_IMAGE_INPUT_FILE_ERROR;
+
 	QGuidoPainter * painter = buildPainterFromGMNFile(p.input, p.layout);
 	if ( !painter )
 		return GUIDO_2_IMAGE_GUIDO_ENGINE_NOT_STARTED;
-	return guidoPainterToImage(painter, p.output , p.format , p.pageIndex , p.sizeConstraints, p.zoom, p.errorMsgBuffer, p.bufferSize);
+	return guidoPainterToImage(painter, p);
 }
 
 //----------------------------------------------------------------------------
-Guido2ImageErrorCodes Guido2Image::gmnFileToImage	( const char * gmnFileName , const char * imageFileName	, Guido2ImageImageFormat imageFormat , 
-	int pageIndex, const QSize& outputSizeConstraint , float zoom , char * errorMsgBuffer , int bufferSize )
+Guido2ImageErrorCodes Guido2Image::gmnFileToImage	( const char * gmnFileName, const char * imageFileName	, Guido2ImageImageFormat imageFormat, 
+	int pageIndex, const QSize& outputSizeConstraint, float zoom, char * errorMsgBuffer, int bufferSize )
 {
-	Guido2ImageErrorCodes errorCode = checkParams( true , gmnFileName , imageFileName , imageFormat , pageIndex , outputSizeConstraint , zoom , errorMsgBuffer , bufferSize );
+	Guido2ImageErrorCodes errorCode = checkParams( true, gmnFileName, imageFileName, imageFormat, pageIndex, outputSizeConstraint, zoom, errorMsgBuffer, bufferSize );
 	if ( errorCode != GUIDO_2_IMAGE_SUCCESS )
 		return errorCode;
 		
@@ -167,28 +201,42 @@ Guido2ImageErrorCodes Guido2Image::gmnFileToImage	( const char * gmnFileName , c
 }
 
 //----------------------------------------------------------------------------
-Guido2ImageErrorCodes Guido2Image::guidoPainterToImage( QGuidoPainter * guidoPainter , const char * imageFileName , Guido2ImageImageFormat imageFormat ,
-	int pageIndex, const QSize& outputSizeConstraint , float zoom , char * errorMsgBuffer , int bufferSize)
+Guido2ImageErrorCodes Guido2Image::guidoPainterToImage( QGuidoPainter * guidoPainter, const Params& p )
 {
 	Guido2ImageErrorCodes result = GUIDO_2_IMAGE_SUCCESS;
 	if ( guidoPainter->isGMNValid() )
 	{
-		if ( ( pageIndex < 0 ) || ( pageIndex > guidoPainter->pageCount() ) )
-		{
-			WRITE_ERROR( errorMsgBuffer , "Invalid page index" , bufferSize );
-			result = GUIDO_2_IMAGE_INVALID_PAGE_INDEX;
-		}
-		else 
-		{
-			if ( imageFormat == GUIDO_2_IMAGE_PDF )
-				writePDF( guidoPainter , pageIndex , imageFileName );
-			else
-				writeImage(guidoPainter,imageFormat,pageIndex , outputSizeConstraint, zoom, imageFileName);
-		}
+		int page = p.pageIndex;
+		if ( page < 0 )  page = 0;
+		else if ( page > guidoPainter->pageCount() ) page = guidoPainter->pageCount();
+		if ( p.format == GUIDO_2_IMAGE_PDF )
+			writePDF( guidoPainter, page, p.output );
+		else
+			writeImage(guidoPainter, p);
+	}
+	else result = GUIDO_2_IMAGE_INVALID_GMN_CODE;
+	QGuidoPainter::destroyGuidoPainter( guidoPainter );
+	return result;
+}
+
+//----------------------------------------------------------------------------
+Guido2ImageErrorCodes Guido2Image::guidoPainterToImage( QGuidoPainter * guidoPainter, const char * imageFileName, Guido2ImageImageFormat imageFormat,
+	int pageIndex, const QSize& outputSizeConstraint, float zoom, char * errorMsgBuffer, int bufferSize)
+{
+	Guido2ImageErrorCodes result = GUIDO_2_IMAGE_SUCCESS;
+	if ( guidoPainter->isGMNValid() )
+	{
+		int page = pageIndex;
+		if ( page < 0 )  page = 0;
+		else if ( page > guidoPainter->pageCount() ) page = guidoPainter->pageCount();
+		if ( imageFormat == GUIDO_2_IMAGE_PDF )
+			writePDF( guidoPainter, page, imageFileName );
+		else
+			writeImage(guidoPainter, imageFormat, page, outputSizeConstraint, zoom, imageFileName);
 	}
 	else
 	{
-		WRITE_ERROR( errorMsgBuffer , guidoPainter->getLastErrorMessage().toAscii().data() , bufferSize );
+		WRITE_ERROR( errorMsgBuffer, guidoPainter->getLastErrorMessage().toAscii().data(), bufferSize );
 		result = GUIDO_2_IMAGE_INVALID_GMN_CODE;
 	}
 	QGuidoPainter::destroyGuidoPainter( guidoPainter );
@@ -219,7 +267,7 @@ QGuidoPainter * Guido2Image::buildPainterFromGMNFile ( const char * gmnFileName,
 
 #define PDF_FORMAT				QString(".pdf")
 //----------------------------------------------------------------------------
-void Guido2Image::writePDF( QGuidoPainter * guidoPainter , int pageIndex, const char * fname )
+void Guido2Image::writePDF( QGuidoPainter * guidoPainter, int pageIndex, const char * fname )
 {
 	QString fileName (fname);
 	if ( !fileName.toUpper().endsWith( PDF_FORMAT.toUpper())) fileName += PDF_FORMAT;
@@ -230,7 +278,7 @@ void Guido2Image::writePDF( QGuidoPainter * guidoPainter , int pageIndex, const 
 	printer.setOutputFormat( QPrinter::PdfFormat );
 
 	QSizeF firstPageSize = guidoPainter->pageSizeMM(1);
-	printer.setPaperSize( firstPageSize , QPrinter::Millimeter );
+	printer.setPaperSize( firstPageSize, QPrinter::Millimeter );
 
 	QPainter painter(&printer);
 	painter.setRenderHint( QPainter::Antialiasing );
@@ -278,7 +326,7 @@ void Guido2Image::writeImage( QGuidoPainter * guidoPainter, Guido2ImageImageForm
 
 	QRectF pictureRect = Guido2Image::getPictureRect( guidoPainter , pageIndex, outputSizeConstraint , zoom );
 	
-	QPaintDevice * paintDevice = Guido2Image::getPaintDevice( pictureRect , imageFormat , imageFileName);
+	QPaintDevice * paintDevice = Guido2Image::getPaintDevice( pictureRect );
 	
 	QPainter painter(paintDevice);
 	painter.setRenderHint( QPainter::Antialiasing );
@@ -324,43 +372,71 @@ void Guido2Image::writeImage( QGuidoPainter * guidoPainter, Guido2ImageImageForm
 }
 
 //----------------------------------------------------------------------------
-#ifdef GUIDO_2_IMAGE_SVG_SUPPORT
-QPaintDevice * Guido2Image::getPaintDevice( const QRectF& pictureRect , Guido2ImageImageFormat imageFormat , const QString& imageFileName )
-#else
-QPaintDevice * Guido2Image::getPaintDevice( const QRectF& pictureRect , Guido2ImageImageFormat imageFormat , const QString& )
-#endif
+void Guido2Image::writeImage( QGuidoPainter * guidoPainter, const Params& p)
 {
-	QPaintDevice * paintDevice = 0;
-	if ( imageFormat != GUIDO_2_IMAGE_SVG )
-	{
-		QImage * pic = new QImage( QSize( pictureRect.width() , pictureRect.height() ) , QImage::Format_ARGB32_Premultiplied );
-		pic->fill( QColor(Qt::white).rgb() );
-		paintDevice = pic; 
-	}
+	int page = p.pageIndex;
+	if (page < 0) page = 0;
+	else if ( page > guidoPainter->pageCount() ) page = guidoPainter->pageCount();
+
+	QRectF pictureRect = Guido2Image::getPictureRect( guidoPainter, page, p.sizeConstraints, p.zoom );
+	QPaintDevice * paintDevice = Guido2Image::getPaintDevice( pictureRect );
+	
+	QPainter painter(paintDevice);
+	painter.setRenderHint( QPainter::Antialiasing );
+	
+	if ( page )
+		guidoPainter->draw(&painter, page, pictureRect.toRect());
 	else
 	{
-#ifdef GUIDO_2_IMAGE_SVG_SUPPORT
-		QSvgGenerator * svgGenerator = new QSvgGenerator();
-		svgGenerator->setFileName( imageFileName + "." + imageFormatToStr(imageFormat) );
-		svgGenerator->setSize( pictureRect.size().toSize() );
-		paintDevice = svgGenerator;
-#else
-		qFatal( "Guido2Image error: To use the SVG format, you must #define GUIDO_2_IMAGE_SVG_SUPPORT when compiling Guido2Image.cpp");
-		assert(0);
-#endif
+		int pageCoordinateIncrement = 0;
+		for (int page = 1 ; page <= guidoPainter->pageCount() ; page++ )
+		{
+			int pageIncrementedDimension;
+			int x, y, width, height;
+			QSizeF pageSize = guidoPainter->pageSizeMM(page) * p.zoom;
+			pageIncrementedDimension = pageSize.width();
+			width = pageIncrementedDimension;
+			height = pictureRect.height();
+			x = pageCoordinateIncrement;
+			y = 0;
+			QRect pageRect( x , y , width , height );
+			guidoPainter->draw( &painter , page , pageRect , QRect() );
+			pageCoordinateIncrement += pageIncrementedDimension;
+		}
 	}
-	return paintDevice;
+	painter.end();
+	Guido2Image::save (paintDevice, p);
+	delete paintDevice;
+}
+
+
+//----------------------------------------------------------------------------
+QPaintDevice * Guido2Image::getPaintDevice( const QRectF& pictureRect )
+{
+	QImage * pic = new QImage( QSize( pictureRect.width() , pictureRect.height() ) , QImage::Format_ARGB32_Premultiplied );
+	pic->fill( QColor(Qt::white).rgb() );
+	return pic;
 }
 
 //----------------------------------------------------------------------------
 void Guido2Image::finalizePaintDevice(QPaintDevice * paintDevice  , const QString& imageFileName , Guido2ImageImageFormat imageFormat)
 {
-	if ( imageFormat != GUIDO_2_IMAGE_SVG )
-	{
-		QImage * pic = dynamic_cast<QImage*>( paintDevice );
-		assert(pic);
-		pic->save( imageFileName + "." + imageFormatToStr(imageFormat) );
+	QImage * pic = dynamic_cast<QImage*>( paintDevice );
+	assert(pic);
+	pic->save( imageFileName + "." + imageFormatToStr(imageFormat) );
+}
+
+//----------------------------------------------------------------------------
+void Guido2Image::save(QPaintDevice * paintDevice, const Params& p)
+{
+	QImage * pic = dynamic_cast<QImage*>( paintDevice );
+	assert(pic);
+	if (p.output) {
+		QString imageFileName (p.output);
+		pic->save( imageFileName + "." + imageFormatToStr(p.format) );
 	}
+	else if (p.device)
+		pic->save( p.device, imageFormatToStr(p.format) );
 }
 	
 //----------------------------------------------------------------------------
