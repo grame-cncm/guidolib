@@ -421,6 +421,22 @@ void GRVoiceManager::BeginManageVoice()
 	// called once. There are NO OPEN TAGS!
 }
 
+
+static void debugstate(const char* context, const TagList* tl)
+{
+	cout << "\ndebugstate :" << context << endl;
+	GuidoPos pos = tl->GetHeadPosition();
+	while (pos) {
+		ARMusicalTag * tag = tl->GetNext (pos);
+		if (tag) {
+			tag->PrintName (cout);
+			tag->PrintParameters (cout);
+			cout << endl;
+		}
+		else cout << "null tag" << endl;
+	}
+}
+
 /** \brief Actually does a newSystem or a newPage-break.
 
 	if the tag at the current position is a 
@@ -445,7 +461,11 @@ int GRVoiceManager::DoBreak(const TYPE_TIMEPOSITION & tp,
 
 
 	if (o && dynamic_cast<ARPossibleBreak *>(o))		arVoice->GetNext(curvst->vpos,*curvst);
-	else if ( o && dynamic_cast<ARNewSystem *>(o))		arVoice->GetNext(curvst->vpos,*curvst);
+	else if ( o && dynamic_cast<ARNewSystem *>(o)) {
+//		debugstate ("before next:", curvst->getCurStateTags());
+		arVoice->GetNext(curvst->vpos,*curvst);
+//		debugstate ("after next:", curvst->getCurStateTags());
+	}
 	else if (o && dynamic_cast<ARNewPage *>(o))			arVoice->GetNext(curvst->vpos,*curvst);
 
 	// newSystem or newPage we need to get a new mCurGrStaff... This automatically adds the startglue 
@@ -897,7 +917,6 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 	// else assert(false); // don't know...
 	
 	// Here the most common tags must be at the top of the if / elseif tests, for better performances.
-	
 	// first, we look whether it is a state tag (that is one like \staff, \stemsUp, \colour... 
 	if (mytag && mytag->IsStateTag() && parseStateTag(mytag))
 	{
@@ -908,7 +927,7 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 		grne = mCurGrStaff->AddClef(static_cast<ARClef *>(arOfCompleteObject));
 		
 		// here the baseline etc. will be changed
-		gCurMusic->addVoiceElement(arVoice,grne);
+		if (grne) gCurMusic->addVoiceElement(arVoice,grne);
 		
 	}
 	else if (tinf == typeid(ARMeter))

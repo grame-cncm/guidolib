@@ -4172,19 +4172,21 @@ ARClef* ARMusicalVoice::newAutoClef(ARClef * oldclef, const TYPE_TIMEPOSITION& t
 	ARClef * clef;
 	if (!oldclef)
 	{
+//cout << "ARMusicalVoice::newAutoClef no old " << sum << " -" << ((float) pitchsum/ sum) << endl;
 		clef = new ARClef();
 		clef->setIsAuto(true);
 		if (sum>0)
 		{
-			if ( (float) pitchsum/ sum >= float(8.0))	clef->setName("treble");
-			else										clef->setName("bass");
+			float meanpitch = (float)pitchsum/ sum;
+			if ( meanpitch >= float(8.0))	clef->setName("treble");
+			else							clef->setName("bass");
 		}
 		else	clef->setName("treble");
 	}
 	else
 	{
 		clef = new ARClef(*oldclef);
-		if (oldclef->getIsAuto())						clef->setIsAuto(true);
+		if (oldclef->getIsAuto())			clef->setIsAuto(true);
 	}
 	clef->setRelativeTimePosition(tp);
 	return clef;
