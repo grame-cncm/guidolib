@@ -83,7 +83,7 @@ pdfclean:
 
 $(version)/%.pdf: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	$(guido2image) $< $@
+	$(guido2image) -f $< -o $@
 
 #########################################################################
 # leaks check tools
@@ -117,7 +117,7 @@ svgclean:
 
 $(version)/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	-$(guido2svg) $< 1 > __tmp.svg  &&  mv __tmp.svg $@
+	-$(guido2svg) $< > __tmp.svg  &&  mv __tmp.svg $@
 
 
 #########################################################################
