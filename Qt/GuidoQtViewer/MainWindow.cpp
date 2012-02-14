@@ -123,19 +123,6 @@ class DragScrollArea : public QScrollArea
 
 
 //-------------------------------------------------------------------------
-std::ostream& operator<< (std::ostream& os, const GuidoDate& date)
-{
-	os << date.num << "/" << date.denom;
-	return os;
-}
-
-std::ostream& operator<< (std::ostream& os, const TimeSegment& s)
-{
-	os << s.first << " - " << s.second;
-	return os;
-}
-
-//-------------------------------------------------------------------------
 void MapGuidoWidget::Graph2TimeMap (const FloatRect& box, const TimeSegment& dates, const GuidoElementInfos& infos)
 {
 	cout << "map collection: " << box << " dates: " << dates << " type: " << infos.type << endl;
