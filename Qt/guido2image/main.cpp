@@ -97,14 +97,14 @@ static void usage(const char * name)
 	cerr << "                  when not specified, the output file name is the input file + the corresponding format extension." << endl;
 	cerr << "              (2) takes a GMN string as argument and an output file name" << endl;
 	cerr << "              (3) reads the standard input" << endl;
-	cerr << "              Supported formats : PDF, BMP, GIF, JPG, JPEG, PNG, PGM, PPM, SVG, TIFF, XBM, XPM" << endl;
 	cerr << endl;
 	cerr << "options:   -h imageHeight (int)   Output image height in pixels" << endl;
 	cerr << "           -w imageWidth  (int)   Output image width in pixels" << endl;
 	cerr << "           -z imageZoom   (float) Output image zoom (bigger/smaller image)" << endl;
 	cerr << "           -p                     Page mode : put each page of the score in a separate image file," << endl;
 	cerr << "                                  suffixed with _i (where i is the page number)" << endl;
-	cerr << "           -t format              Image format (see supported formats below)." << endl; 
+	cerr << "           -t format              Image format" << endl; 
+	cerr << "                                  Supported formats: PDF, BMP, GIF, JPG, JPEG, PNG, PGM, PPM, SVG, TIFF, XBM, XPM" << endl;
 	cerr << "           -?                     print this help message." << endl;
 	cerr << "options controlling the Guido Engine layout settings:" << endl;
 	cerr << "           -d distance (int)      control the systems distance (default value is 75)." << endl;
@@ -294,7 +294,6 @@ int main(int argc, char *argv[])
 	
 	//----------------------------------------------------
 	// the stuff below is for historical reasons and should be avoided
-	char errorMsgBuffer[ ERROR_BUFFER_SIZE ];				// a (ugly) buffer to get error messages
 	string output;											// a string for the ouput file name i.e. without extension
 	// removes the file extension (when there is one)
 	if (options.outputFile) stripext ( options.outputFile, output);	
@@ -306,17 +305,15 @@ int main(int argc, char *argv[])
 	p.pageIndex = 0;										// page index starts at 0 (I guess it means all pages - to be checked)
 	p.sizeConstraints = QSize(options.width , options.height); // size constraints
 	p.zoom = options.zoom;									// zoom value
-	p.errorMsgBuffer = errorMsgBuffer;						// no comment :-(
-	p.bufferSize = ERROR_BUFFER_SIZE;						// no comment :-(
 
-	int error = 0;
+	Guido2ImageErrorCodes error = GUIDO_2_IMAGE_SUCCESS;
 	QGuidoPainter::startGuidoEngine();						// starts the guido engine
 	// the page mode should be removed in a future version
 	// a simple shell script can do the equivalent without constraint on the naming scheme
 	if (options.pageMode && (p.format != GUIDO_2_IMAGE_PDF))// we're in page mode 
 	{
 		string outputBase (p.output);
-		while ( !error )	// Export the pages until the function fails (at least it will fail returning INVALID_PAGE_INDEX error)
+		while ( error == GUIDO_2_IMAGE_SUCCESS )	// Export the pages until the function fails (at least it will fail returning INVALID_PAGE_INDEX error)
 		{
 			p.pageIndex++;
 			//----------------------------------------------------
@@ -331,12 +328,12 @@ int main(int argc, char *argv[])
 			output.clear();
 		}
 		if ( error == GUIDO_2_IMAGE_INVALID_PAGE_INDEX )
-			error = 0;
+			error = GUIDO_2_IMAGE_SUCCESS;
 	}
 	else error = convertFunction( p );						// convert to an image
 	QGuidoPainter::stopGuidoEngine();						// stop the guido engine
 	
-	if ( error ) cerr << errorMsgBuffer << endl;
+	if ( error ) cerr << Guido2Image::getErrorString(error) << endl;
 	return error;
 }
 
