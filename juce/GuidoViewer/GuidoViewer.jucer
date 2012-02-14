@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="itte03" name="GuidoViewer" projectType="guiapp" version="1.0.0"
-              juceLinkage="static" buildVST="1" buildRTAS="0" buildAU="1" pluginName="Juce Project"
-              pluginDesc="Juce Project" pluginManufacturer="yourcompany" pluginManufacturerCode="Manu"
-              pluginCode="Plug" pluginChannelConfigs="{1, 1}, {2, 2}" pluginIsSynth="0"
-              pluginWantsMidiIn="0" pluginProducesMidiOut="0" pluginSilenceInIsSilenceOut="0"
-              pluginTailLength="0" pluginEditorRequiresKeys="0" pluginAUExportPrefix="JuceProjectAU"
-              pluginAUViewClass="JuceProjectAU_V1" pluginRTASCategory="" bundleIdentifier="com.grame.GuidoViewer"
+              juceLinkage="amalg_multi" buildVST="1" buildRTAS="0" buildAU="1"
+              pluginName="Juce Project" pluginDesc="Juce Project" pluginManufacturer="yourcompany"
+              pluginManufacturerCode="Manu" pluginCode="Plug" pluginChannelConfigs="{1, 1}, {2, 2}"
+              pluginIsSynth="0" pluginWantsMidiIn="0" pluginProducesMidiOut="0"
+              pluginSilenceInIsSilenceOut="0" pluginTailLength="0" pluginEditorRequiresKeys="0"
+              pluginAUExportPrefix="JuceProjectAU" pluginAUViewClass="JuceProjectAU_V1"
+              pluginRTASCategory="" bundleIdentifier="com.grame.GuidoViewer"
               jucerVersion="3.0.0" bigIcon="IAUjPh" defines="JUCE_DONT_DEFINE_MACROS">
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX" vstFolder="~/SDKs/vstsdk2.4" rtasFolder="~/SDKs/PT_80_SDK"
                objCExtraSuffix="WzPHFY" juceFolder="../../../../../juce" extraLinkerFlags="-F../../../../cmake/Debug  -framework GUIDOEngine"
                extraCompilerFlags="-I../../../../src/include"/>
     <XCODE_IPHONE targetFolder="Builds/iOS" vstFolder="~/SDKs/vstsdk2.4" rtasFolder="~/SDKs/PT_80_SDK"
-                  objCExtraSuffix="JcEpwT" juceFolder="../../../../../juce" extraLinkerFlags="-F../../../../cmake/Debug  -framework GUIDOEngine"
+                  objCExtraSuffix="JcEpwT" juceFolder="../../../../../juce" extraLinkerFlags="-L/Users/fober/Desktop  -lSGUIDOEngine"
                   extraCompilerFlags="-I../../../../src/include"/>
     <VS2005 targetFolder="Builds/VisualStudio2005" vstFolder="c:\SDKs\vstsdk2.4"
             rtasFolder="c:\SDKs\PT_80_SDK" libraryType="1" juceFolder="f:/src/juce"
