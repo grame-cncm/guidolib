@@ -53,8 +53,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,4,7,1
- PRODUCTVERSION 1,4,7,1
+ FILEVERSION 1,4,8,0
+ PRODUCTVERSION 1,4,8,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -72,13 +72,13 @@ BEGIN
             VALUE "Comments", "Free software, Lesser General Public License (LGPL)"
             VALUE "CompanyName", "Grame"
             VALUE "FileDescription", "GUIDOEngine"
-            VALUE "FileVersion", "1, 4, 7, 1"
+            VALUE "FileVersion", "1, 4, 8, 0"
             VALUE "InternalName", "GUIDOEngine"
-            VALUE "LegalCopyright", "Copyright © 2003, 2011"
+            VALUE "LegalCopyright", "Copyright © 2003, 2012"
             VALUE "LegalTrademarks", "Free software, Lesser General Public License (LGPL)"
             VALUE "OriginalFilename", "GUIDOEngine.dll"
             VALUE "ProductName", "GUIDOEngine"
-            VALUE "ProductVersion", "1, 4, 7, 1"
+            VALUE "ProductVersion", "1, 4, 8, 0"
         END
     END
     BLOCK "VarFileInfo"

@@ -11,9 +11,9 @@ set (target GUIDOEngine)
 set (statictarget SGUIDOEngine)
 #######################################
 # versions management
-set (VERSION 1.4.7.1b)
-set (STRVERS "v.1.4.7.1b")
-set (SSTRVERS "1.4.7.1b")
+set (VERSION 1.4.8)
+set (STRVERS "v.1.4.8")
+set (SSTRVERS "1.4.8")
 set (GUIDOFWKVERS B)
 
 if(UNIX)
@@ -21,6 +21,15 @@ if(UNIX)
 endif(UNIX)
 
 if(APPLE)
+
+#######################################
+# iOS support
+if (IOS STREQUAL "yes")
+	message (STATUS "Generates iOS project - Use -DIOS=no to change.")
+	set (DIST "no")
+else (MIDIEXPORT STREQUAL "yes")
+	message (STATUS "Generates Mac OS project- Use -DIOS=yes to change.")
+endif ()
 
  #######################################
  if (DIST STREQUAL "yes")
