@@ -144,9 +144,12 @@ void GuidoComponent::paint (Graphics& g)
 	if (!fGRHandler) return;
 
 	JuceSystem sys (&g);
+#if 1
 	JuceDevice dev (&g, &sys);
-
-//	DebugDevice dev (jdev);
+#else
+	JuceDevice* jdev = new JuceDevice(&g, &sys);
+	DebugDevice dev (jdev);
+#endif
 	dev.NotifySize(getWidth(), getHeight());
 
 //	float x = 10.0f;
@@ -166,8 +169,9 @@ void GuidoComponent::paint (Graphics& g)
 //	JuceFont font("Guido2", 200, VGFont::kFontBold);
 //	dev.SetTextFont (&font);
 //	string msg("Hello world!");
-//	dev.DrawString (x*2, 150, msg.c_str(), msg.size());
-//	dev.SetScale (1.,1.);
+//	dev.DrawString (20, 50, msg.c_str(), msg.size());
+	dev.SetScale (1.,1.);
+//	dev.DrawString (20, 300, msg.c_str(), msg.size());
 
 	GuidoOnDrawDesc desc;
 	desc.handle = fGRHandler;

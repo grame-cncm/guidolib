@@ -27,7 +27,7 @@ JuceFont::JuceFont(const char * faceName, int size, int properties) : fNativeFon
 	if (properties & kFontBold)			style += Font::bold;
 	if (properties & kFontItalic)		style += Font::italic;
 	if (properties & kFontUnderline)	style += Font::underlined;
-	fNativeFont = new Font(faceName, float(size), style);
+	fNativeFont = new Font(faceName, float(size)/**2.5*/, style);
 	fName = faceName;
 }
 
