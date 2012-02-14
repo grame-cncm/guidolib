@@ -6,7 +6,7 @@ DO_CLEAN= " && $(MAKE) clean"
 XCODE_BUILD= " && xcodebuild"
 MSVC2005_BUILD=" && vcbuild"
 # QPROJECT_CLEAN = " && ( [ -d tmpSrc ] || mkdir tmpSrc ) && rm -f tmpSrc/*.cpp && rm -f tmpSrc/*.h "
-PROJECTS = GraphicsSceneMainWindow GuidoQt GuidoQtFontViewer GuidoEditor GuidoSceneComposer guido2image
+PROJECTS = GraphicsSceneMainWindow GuidoQt GuidoQtFontViewer GuidoEditor GuidoSceneComposer guido2image GuidoServer
 
 nothing:
 	@ echo "Clean build of all the apps."
