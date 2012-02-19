@@ -12,12 +12,13 @@
 	Lesser General Public License for more details.
 */
 
-#include <iostream>
 
 #include "JuceFont.h"
 #include "JuceHeader.h"
 
+#include <string>
 using namespace juce;
+
 // --------------------------------------------------------------
 // 		Juce implementation of the VGFont class
 // --------------------------------------------------------------
@@ -27,7 +28,10 @@ JuceFont::JuceFont(const char * faceName, int size, int properties) : fNativeFon
 	if (properties & kFontBold)			style += Font::bold;
 	if (properties & kFontItalic)		style += Font::italic;
 	if (properties & kFontUnderline)	style += Font::underlined;
-	fNativeFont = new Font(faceName, float(size)/**2.5*/, style);
+	
+	std::string guido("Guido2");
+	float scale = (guido == faceName) ? 2.5 : 1.;
+	fNativeFont = new Font(faceName, float(size * scale), style);
 	fName = faceName;
 }
 
