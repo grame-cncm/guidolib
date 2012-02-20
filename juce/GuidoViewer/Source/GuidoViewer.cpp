@@ -153,7 +153,11 @@ bool GuidoViewer::perform (const InvocationInfo& info)
 		case kExport:
 			break;
 
-		case kReload:
+		case kReload: {
+			const String& file = fWindow->getName();
+			if (file.length())
+				setFile (file);
+			}
 			break;
 
 		default:
