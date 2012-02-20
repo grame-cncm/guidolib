@@ -1,1 +1,1 @@
-[ \staffFormat<size=5pt> \noteFormat<size=1.4, color="Blue"> a ]
+[ \staffFormat<size=5pt> \clef<"g", color="0xff0000"> \noteFormat<size=1.4, color="Blue"> a ]
