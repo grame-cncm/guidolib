@@ -11,7 +11,8 @@ class MainAppWindow;
 class GuidoViewer  : 
 			public GuidoComponent,
 			public MenuBarModel,
-			public ApplicationCommandTarget
+			public ApplicationCommandTarget,
+			public FileDragAndDropTarget
 {
 
 public:
@@ -39,6 +40,14 @@ public:
     // this is the ApplicationCommandTarget method that is used to actually perform one of our commands..
     bool perform (const InvocationInfo& info);
 
+	void paint (Graphics& g);		// paint overrided for drop feedback
+
+    // drop support
+	bool 	isInterestedInFileDrag (const StringArray &files);
+	void 	fileDragEnter (const StringArray &files, int x, int y);
+	void 	fileDragExit (const StringArray &files);
+	void 	filesDropped (const StringArray &files, int x, int y);
+
 private:
     //==============================================================================
     MainAppWindow* fWindow;
@@ -46,7 +55,8 @@ private:
     TooltipWindow tooltipWindow; // to add tooltips to an application, you
                                  // just need to create one of these and leave it
                                  // there to do its work..
-
+	bool fDragEntered;
+	
 	String	ChooseGmnFile() const;
 	void	setFile (String file);
 

@@ -1,12 +1,16 @@
 
+
+#include <iostream>
+
 #include "GuidoViewer.h"
 #include "MainWindow.h"
 
+using namespace std;
 using namespace juce;
 
 //==============================================================================
 GuidoViewer::GuidoViewer (MainAppWindow* w) 
-	: fWindow (w)
+	: fWindow (w), fDragEntered(false)
 {
 	setResizePageToMusic (true);
 }
@@ -157,3 +161,43 @@ bool GuidoViewer::perform (const InvocationInfo& info)
 	};
 	return true;
 }
+
+//-------------------------------------------------------------------------------
+void GuidoViewer::paint (Graphics& g)
+{
+	GuidoComponent::paint(g);
+	if (fDragEntered) {
+		float gray = 0.3;
+		float border = 0.f;
+		float alpha = 0.4f;
+		for (int i=0; i<4; i++, alpha-=0.1f, border+=1.f) {
+			g.setColour( Colour(gray, gray, gray, alpha));
+			g.drawRect (border, border, getWidth()-(border*2), getHeight()-(border*2), 1.0f);
+		}
+	}
+}
+
+//-------------------------------------------------------------------------------
+bool GuidoViewer::isInterestedInFileDrag (const StringArray &files)
+{
+	return true;
+}
+
+void GuidoViewer::fileDragEnter (const StringArray &files, int x, int y)
+{
+	fDragEntered = true;
+	repaint();
+}
+
+void GuidoViewer::fileDragExit (const StringArray &files)
+{
+	fDragEntered = false;
+	repaint();
+}
+
+void GuidoViewer::filesDropped (const StringArray &files, int x, int y)
+{
+	fDragEntered = false;
+	setFile (files[0]);
+}
+
