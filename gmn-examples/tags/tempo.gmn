@@ -1,0 +1,4 @@
+[
+  	\clef<"g"> \tempo<"Allegro [1/8]  = 60","1/4=60",dx=-5, dy=4> \meter<"4/4">
+  	c d e f  
+]  
