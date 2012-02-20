@@ -220,7 +220,7 @@ inline void DebugDevice::SelectPenWidth(float witdh) {
 }
 
 inline void DebugDevice::PushPenColor(const VGColor & inColor) {
-	dbgStream << "Device::PushPenColor" << endl;
+	dbgStream << "Device::PushPenColor " << inColor << endl;
 	if (fDevice) fDevice->PushPenColor(inColor);
 }
 inline void DebugDevice::PushPenWidth(float witdh) {
@@ -237,7 +237,7 @@ inline void DebugDevice::PopPenWidth() {
 }
 
 inline void DebugDevice::SelectFillColor(const VGColor & inColor) {
-	dbgStream << "Device::SelectFillColor" << endl;
+	dbgStream << "Device::SelectFillColor " << inColor << endl;
 	if (fDevice) fDevice->SelectFillColor(inColor);
 }
 inline void DebugDevice::PushPen(const VGColor & inColor, float witdh) {
@@ -249,7 +249,7 @@ inline void DebugDevice::PopPen() {
 	if (fDevice) fDevice->PopPen();
 }
 inline void DebugDevice::PushFillColor(const VGColor & inColor) {
-	dbgStream << "Device::PushFillColor" << endl;
+	dbgStream << "Device::PushFillColor " << inColor << endl;
 	if (fDevice) fDevice->PushFillColor(inColor);
 }
 inline void DebugDevice::PopFillColor() {
@@ -350,7 +350,7 @@ inline void DebugDevice::DrawString(float x, float y, const char * s, int inChar
 	if (fDevice) fDevice->DrawString(x, y, s, inCharCount);
 }
 inline void DebugDevice::SetFontColor(const VGColor & inColor) {
-	dbgStream << "Device::SetFontColor" << endl;
+	dbgStream << "Device::SetFontColor " << inColor << endl;
 	if (fDevice) fDevice->SetFontColor(inColor);
 }
 inline VGColor DebugDevice::GetFontColor() const {
@@ -358,7 +358,7 @@ inline VGColor DebugDevice::GetFontColor() const {
 	return (fDevice) ? fDevice->GetFontColor() : VGColor();
 }
 inline void DebugDevice::SetFontBackgroundColor(const VGColor & inColor) {
-	dbgStream << "Device::SetFontBackgroundColor" << endl;
+	dbgStream << "Device::SetFontBackgroundColor" << inColor << endl;
 	if (fDevice) fDevice->SetFontBackgroundColor(inColor);
 }
 inline VGColor DebugDevice::GetFontBackgroundColor() const {
