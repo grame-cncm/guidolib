@@ -21,6 +21,11 @@
 #include "JuceFont.h"
 #include "GuidoComponent.h"
 
+#define __DebugDevice 0
+#if __DebugDevice
+#include "DebugDevice.h"
+#endif
+
 using namespace std;
 
 static JuceSystem gSystem(0);
@@ -144,35 +149,15 @@ void GuidoComponent::paint (Graphics& g)
 	if (!fGRHandler) return;
 
 	JuceSystem sys (&g);
-#if 1
-	JuceDevice dev (&g, &sys);
-#else
+#if __DebugDevice
 	JuceDevice* jdev = new JuceDevice(&g, &sys);
 	DebugDevice dev (jdev);
+#else
+	JuceDevice dev (&g, &sys);
 #endif
 	dev.NotifySize(getWidth(), getHeight());
 
-//	float x = 10.0f;
-//	float y = 10.0f;
-//	float w = getWidth() - (x*2);
-//	float h = getHeight() - (y*2);
-
-//	dev.SelectFillColor (VGColor(255,0,0,50));
-//	dev.SetScale (0.5, 0.5);
-//	dev.Rectangle (x, y, x + w, y + h);
-//	dev.SetScale (0.8, 0.8);
-//	dev.Rectangle (x, y, x + w, y + h);
-
 	g.setColour (fScoreColor);
-
-//	dev.SetScale (0.5, 0.5);
-//	JuceFont font("Guido2", 200, VGFont::kFontBold);
-//	dev.SetTextFont (&font);
-//	string msg("Hello world!");
-//	dev.DrawString (20, 50, msg.c_str(), msg.size());
-	dev.SetScale (1.,1.);
-//	dev.DrawString (20, 300, msg.c_str(), msg.size());
-
 	GuidoOnDrawDesc desc;
 	desc.handle = fGRHandler;
 	desc.hdc = &dev;
