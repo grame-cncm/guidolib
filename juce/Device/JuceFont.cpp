@@ -30,7 +30,7 @@ JuceFont::JuceFont(const char * faceName, int size, int properties) : fNativeFon
 	if (properties & kFontUnderline)	style += Font::underlined;
 	
 	std::string guido("Guido2");
-	float scale = (guido == faceName) ? 2.5 : 1.;
+	float scale = (guido == faceName) ? 2.49 : 1.;
 	fNativeFont = new Font(faceName, float(size * scale), style);
 	fName = faceName;
 }
