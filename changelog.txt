@@ -2,11 +2,16 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.4.8
-
+- new juce device and viewer
 - tools changes:
   guido2svg options change
   guido2image options change
 
+known issues: 
+- incorrect clef displayed in a very specific case: a multi voice staff with
+  no clef indication, with one voice dispatched to "g" clef and the other dispatched 
+  to "f" clef: the second line may display an incorrect clef when forced with a
+  \newline tag
 
 ----------------------------------------------------------------
   version 1.4.7
