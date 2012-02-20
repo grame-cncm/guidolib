@@ -37,6 +37,8 @@ void JuceDevice::initialize()
 	fCurrentFont = 0;
 	fFontAlign   = 0;
 	fRasterOpMode = kOpCopy;
+	fFillColorStack.push( VGColor(0,0,0) );
+	fPenColorStack.push( VGColor(0,0,0) );
 }
 
 // --------------------------------------------------------------
@@ -149,8 +151,8 @@ void JuceDevice::PushFillColor( const VGColor & color )
 }
 void JuceDevice::PopFillColor()
 {
-	SelectFillColor( fFillColorStack.top() );
 	fFillColorStack.pop();
+	SelectFillColor( fFillColorStack.top() );
 }
 
 
@@ -216,8 +218,9 @@ void JuceDevice::DeviceToLogical( float * x, float * y ) const
 
 void JuceDevice::SetScale( float x, float y )	
 { 
-	AffineTransform transform = AffineTransform::scale (x*1/fXScale, y*1/fYScale);
-	fGraphics->addTransform (transform);
+//	AffineTransform transform = AffineTransform::scale (x*1/fXScale, y*1/fYScale);
+//	fGraphics->addTransform (transform);
+	fGraphics->addTransform (AffineTransform::scale (x, y));
 	fXScale = x;
 	fYScale = y;
 }
@@ -252,13 +255,24 @@ void JuceDevice::DrawMusicSymbol(float x, float y, unsigned int inSymbolID )
 {
 	String text;
 	text += wchar_t(inSymbolID);
+	fGraphics->setColour (Color2JColor(fFontColor));
 	fGraphics->drawSingleLineText (text, int(x), int(y));
+	fGraphics->setColour (Color2JColor(fFillColor));
 }
 
 void JuceDevice::DrawString( float x, float y, const char * s, int inCharCount ) 
 {
+	float w, h; 
+	fTextFont->GetExtent (s, inCharCount, &w, &h, this);
+	if (fFontAlign & kAlignCenter)
+		x -= w/2;
+	else if (fFontAlign & kAlignRight)
+		x -= w;
+
 	String text (s, inCharCount);
+	fGraphics->setColour (Color2JColor(fFontColor));
 	fGraphics->drawSingleLineText (text, int(x), int(y));
+	fGraphics->setColour (Color2JColor(fFillColor));
 }
 
 void JuceDevice::SetFontColor( const VGColor & c )			{ fFontColor = c; }
@@ -275,7 +289,7 @@ float JuceDevice::GetDPITag() const						{ return fDPI; }
 // - VGDevice extension --------------------------------------------
 void JuceDevice::SelectPenColor( const VGColor & color)	{ fPenColor = color; }
 void JuceDevice::PushPenColor( const VGColor & color)	{ fPenColor = color; fPenColorStack.push(color); }
-void JuceDevice::PopPenColor()							{ fPenColor = fPenColorStack.top(); fPenColorStack.pop(); }
+void JuceDevice::PopPenColor()							{ fPenColorStack.pop(); fPenColor = fPenColorStack.top();  }
 
 void JuceDevice::SelectPenWidth( float width)			{ fLineThick = width; }
 void JuceDevice::PushPenWidth( float width)				{ fPenWidthStack.push(width); fLineThick = width; }
