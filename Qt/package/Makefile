@@ -58,7 +58,6 @@ linux:
 
 win32: 
 	@make -s check
-	make common PACKAGE_NAME=$(WIN32_NAME)
 	cp $(WIN32APPS) $(WIN32_NAME)
 	cp $(WIN32TOOLS) $(WIN32_NAME)
 	cp -f ../../cmake/release/GUIDOEngine.dll $(WIN32_NAME)
@@ -67,6 +66,7 @@ win32:
 	cp *80.* $(WIN32_NAME)
 	[ -d $(WIN32_NAME)/imageformats ] || mkdir -p $(WIN32_NAME)/imageformats
 	cp 	$(WIN32QTPLUGS) $(WIN32_NAME)/imageformats
+	make common PACKAGE_NAME=$(WIN32_NAME)
 
 doc:
 
@@ -76,10 +76,13 @@ common:
 	cp "../../doc/GUIDO-Format_de_Notation_Musicale.pdf" $(PACKAGE_NAME)/doc
 	cp "../../doc/GUIDO_Additional_Specifications_1.3.8.pdf" $(PACKAGE_NAME)/doc
 	cp "../../doc/refcard/GMNRefCard.pdf" $(PACKAGE_NAME)/doc
-	cd ../../doc/html && git archive -o __tmp__.tgz --prefix=../../Qt/package/$(PACKAGE_NAME)/doc/html/ HEAD && tar xzfP __tmp__.tgz && rm __tmp__.tgz
-	cd ../../gmn-examples && git archive -o __tmp__.tgz --prefix=../Qt/package/$(PACKAGE_NAME)/gmn-examples/ HEAD && tar xzfP __tmp__.tgz && rm __tmp__.tgz
 	cp ../../changelog.txt $(PACKAGE_NAME)/guido-changelog.txt
 	cp ../GuidoEditor/changelog.txt $(PACKAGE_NAME)/GuidoEditor-changelog.txt
 	cp ../guido2image/changelog.txt $(PACKAGE_NAME)/guido2image-changelog.txt
 	cp ../GuidoSceneComposer/changelog.txt $(PACKAGE_NAME)/GuidoSceneComposer-changelog.txt
 	cp appPack-readme.txt $(PACKAGE_NAME)/readme.txt
+	make commongit
+
+commongit:
+	cd ../../doc/html && git archive -o __tmp__.tgz --prefix=../../Qt/package/$(PACKAGE_NAME)/doc/html/ HEAD && tar xzfP __tmp__.tgz && rm __tmp__.tgz
+	cd ../../gmn-examples && git archive -o __tmp__.tgz --prefix=../Qt/package/$(PACKAGE_NAME)/gmn-examples/ HEAD && tar xzfP __tmp__.tgz && rm __tmp__.tgz
