@@ -1,3 +1,17 @@
+/*
+	GUIDO Library
+	Copyright (C) 2012	Grame
+
+	This library is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License (Version 2), 
+	as published by the Free Software Foundation.
+	A copy of the license can be found online at www.gnu.org/licenses.
+
+	This library is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+	Lesser General Public License for more details.
+*/
 
 #ifndef __GuidoViewer__
 #define __GuidoViewer__
@@ -56,9 +70,13 @@ private:
                                  // just need to create one of these and leave it
                                  // there to do its work..
 	bool fDragEntered;
+	File fFileLocation;
 	
-	String	ChooseGmnFile() const;
-	void	setFile (String file);
+	String				ChooseGmnFile();
+	bool				ChooseExportFile(File& file);
+	ImageFileFormat*	File2ImageFileFormat (const File& file);
+	void				setFile (String file);
+	void				export2Image (const File& file, ImageFileFormat* format);
 
     enum CommandIDs
     {

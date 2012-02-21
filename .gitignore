@@ -8,3 +8,5 @@ Debug
 Release
 tmpSrc
 .DS_Store
+*.o
+*~

@@ -1,4 +1,17 @@
+/*
+	GUIDO Library
+	Copyright (C) 2012	Grame
 
+	This library is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License (Version 2), 
+	as published by the Free Software Foundation.
+	A copy of the license can be found online at www.gnu.org/licenses.
+
+	This library is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+	Lesser General Public License for more details.
+*/
 
 #include <iostream>
 
@@ -13,6 +26,7 @@ GuidoViewer::GuidoViewer (MainAppWindow* w)
 	: fWindow (w), fDragEntered(false)
 {
 	setResizePageToMusic (true);
+	fFileLocation = File::getSpecialLocation(File::userHomeDirectory);
 }
 
 //==============================================================================
@@ -31,7 +45,7 @@ const PopupMenu GuidoViewer::getMenuForIndex (int menuIndex, const String& /*men
 	if (menuIndex == 0)
 	{
 		menu.addCommandItem (commandManager, kOpen);
-		menu.addCommandItem (commandManager, kPrint);
+//		menu.addCommandItem (commandManager, kPrint);
 		menu.addCommandItem (commandManager, kExport);
 		menu.addCommandItem (commandManager, kReload);
 //		menu.addSeparator();
@@ -63,7 +77,7 @@ ApplicationCommandTarget* GuidoViewer::getNextCommandTarget()
 void GuidoViewer::getAllCommands (Array <CommandID>& commands)
 {
 	// this returns the set of all commands that this target can perform..
-	const CommandID ids[] = { kOpen, kPrint, kExport, kReload };
+	const CommandID ids[] = { kOpen, /*kPrint,*/ kExport, kReload };
 	commands.addArray (ids, numElementsInArray (ids));
 }
 
@@ -82,11 +96,11 @@ void GuidoViewer::getCommandInfo (CommandID commandID, ApplicationCommandInfo& r
 			result.addDefaultKeypress ('o', ModifierKeys::commandModifier);
 			break;
 
-		case kPrint:
-			result.setInfo ("Print", "Print the current score", generalCategory, 0);
-			result.setTicked (false);
-			result.addDefaultKeypress ('p', ModifierKeys::commandModifier);
-			break;
+//		case kPrint:
+//			result.setInfo ("Print", "Print the current score", generalCategory, 0);
+//			result.setTicked (false);
+//			result.addDefaultKeypress ('p', ModifierKeys::commandModifier);
+//			break;
 
 		case kExport:
 			result.setInfo ("Export", "Export the current score", generalCategory, 0);
@@ -107,16 +121,63 @@ void GuidoViewer::getCommandInfo (CommandID commandID, ApplicationCommandInfo& r
 
 
 //-------------------------------------------------------------------------------
-String GuidoViewer::ChooseGmnFile() const
+String GuidoViewer::ChooseGmnFile()
 {
-	static File f = File::getSpecialLocation(File::userHomeDirectory);
 	String file;
-	FileChooser chooser("Choose a GMN file", f, "*.gmn");
+	FileChooser chooser("Choose a GMN file", fFileLocation, "*.gmn");
 	if (chooser.browseForFileToOpen()) {
-		f = chooser.getResult();
-		file = f.getFullPathName();
+		fFileLocation = chooser.getResult();
+		file = fFileLocation.getFullPathName();
 	}
 	return file;
+}
+
+//-------------------------------------------------------------------------------
+bool GuidoViewer::ChooseExportFile(File& file)
+{
+	FileChooser chooser("Export to", fFileLocation);
+	if (chooser.browseForFileToSave(true)) {
+		fFileLocation = chooser.getResult();
+		file = fFileLocation;
+		return true;
+	}
+	return false;
+}
+
+//-------------------------------------------------------------------------------
+ImageFileFormat* GuidoViewer::File2ImageFileFormat (const File& file)
+{
+	ImageFileFormat* iff = 0;
+	if (file.hasFileExtension ("png"))
+		iff = new PNGImageFormat();
+	else if (file.hasFileExtension ("jpg;jpeg"))
+		iff = new JPEGImageFormat();
+	else {
+		String msg = "Can't guess a valid file format from " + file.getFileName() + " extension.\n";
+		msg += "Retry using one of .png .jpg .jpeg";
+		AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, "Export error", msg, "OK", this);
+	}
+	return iff;
+}
+
+//-------------------------------------------------------------------------------
+void GuidoViewer::export2Image (const File& file, ImageFileFormat* format)
+{
+	if (!format) return;
+	Image::PixelFormat pf = Image::RGB;
+	if (format->getFormatName() == "PNG")
+		pf = Image::ARGB;
+	
+	Image img (pf, getWidth(), getHeight(), true, Image::SoftwareImage);
+	Graphics g (img);
+	if (pf == Image::RGB) {
+		g.setColour (Colours::white);
+		g.fillRect (0, 0, getWidth(), getHeight());
+	}
+	FileOutputStream outfile (file);
+	GuidoComponent::paint(g);
+	format->writeImageToStream (img, outfile);
+	delete format;
 }
 
 //-------------------------------------------------------------------------------
@@ -147,10 +208,14 @@ bool GuidoViewer::perform (const InvocationInfo& info)
 			setFile( ChooseGmnFile());
 			break;
 
-		case kPrint:
-			break;
+//		case kPrint:
+//			break;
 
-		case kExport:
+		case kExport: {
+				File f;
+				if (ChooseExportFile(f)) 
+					export2Image (f, File2ImageFileFormat (f));
+			}
 			break;
 
 		case kReload: {
@@ -203,5 +268,6 @@ void GuidoViewer::filesDropped (const StringArray &files, int, int )
 {
 	fDragEntered = false;
 	setFile (files[0]);
+	fFileLocation = files[0];
 }
 
