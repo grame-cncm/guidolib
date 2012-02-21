@@ -18,7 +18,7 @@ macosx :
 
 win32 :
 	make common
-	cp ../jniGUIDOEngine.dll $(PACK)
+	cp ../cmake/release/jniGUIDOEngine.dll $(PACK)
 	cp ../../cmake/release/GUIDOEngine.dll $(PACK)
 	cp ../jniGUIDOEngine64.dll $(PACK)
 	cp ../../cmake/release/GUIDOEngine64.dll $(PACK)
