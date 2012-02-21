@@ -1,12 +1,14 @@
 VERSION=2.40
 
 APPLS := GuidoEditor GuidoSceneComposer guido2image
-TOOLS = guido2midi guido2svg guidogetversion
+TOOLS = guido2midi guido2svg guidogetversion guidogetpagecount guidogetvoicecount
 
 MAKEFILES 	= makeBundleGSC makeBundleGQV
 MACOSX_NAME = GuidoQtApplsMacOSX-$(VERSION)
 WIN32_NAME	= GuidoQtApplsWin32-$(VERSION)
 
+
+MACTOOLS  := $(patsubst %, ../../tools/cmake/release/%, $(TOOLS))
 
 WIN32QTPATH := /c/Qt/2010.05/qt
 WIN32QT		:= QtCore4.dll QtGui4.dll QtXml4.dll
