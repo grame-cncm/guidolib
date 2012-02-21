@@ -1,4 +1,17 @@
+/*
+	GUIDO Library
+	Copyright (C) 2012	Grame
 
+	This library is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License (Version 2), 
+	as published by the Free Software Foundation.
+	A copy of the license can be found online at www.gnu.org/licenses.
+
+	This library is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+	Lesser General Public License for more details.
+*/
 
 #include <iostream>
 
@@ -32,7 +45,7 @@ const PopupMenu GuidoViewer::getMenuForIndex (int menuIndex, const String& /*men
 	if (menuIndex == 0)
 	{
 		menu.addCommandItem (commandManager, kOpen);
-		menu.addCommandItem (commandManager, kPrint);
+//		menu.addCommandItem (commandManager, kPrint);
 		menu.addCommandItem (commandManager, kExport);
 		menu.addCommandItem (commandManager, kReload);
 //		menu.addSeparator();
@@ -64,7 +77,7 @@ ApplicationCommandTarget* GuidoViewer::getNextCommandTarget()
 void GuidoViewer::getAllCommands (Array <CommandID>& commands)
 {
 	// this returns the set of all commands that this target can perform..
-	const CommandID ids[] = { kOpen, kPrint, kExport, kReload };
+	const CommandID ids[] = { kOpen, /*kPrint,*/ kExport, kReload };
 	commands.addArray (ids, numElementsInArray (ids));
 }
 
@@ -83,11 +96,11 @@ void GuidoViewer::getCommandInfo (CommandID commandID, ApplicationCommandInfo& r
 			result.addDefaultKeypress ('o', ModifierKeys::commandModifier);
 			break;
 
-		case kPrint:
-			result.setInfo ("Print", "Print the current score", generalCategory, 0);
-			result.setTicked (false);
-			result.addDefaultKeypress ('p', ModifierKeys::commandModifier);
-			break;
+//		case kPrint:
+//			result.setInfo ("Print", "Print the current score", generalCategory, 0);
+//			result.setTicked (false);
+//			result.addDefaultKeypress ('p', ModifierKeys::commandModifier);
+//			break;
 
 		case kExport:
 			result.setInfo ("Export", "Export the current score", generalCategory, 0);
@@ -195,8 +208,8 @@ bool GuidoViewer::perform (const InvocationInfo& info)
 			setFile( ChooseGmnFile());
 			break;
 
-		case kPrint:
-			break;
+//		case kPrint:
+//			break;
 
 		case kExport: {
 				File f;
@@ -255,5 +268,6 @@ void GuidoViewer::filesDropped (const StringArray &files, int x, int y)
 {
 	fDragEntered = false;
 	setFile (files[0]);
+	fFileLocation = files[0];
 }
 
