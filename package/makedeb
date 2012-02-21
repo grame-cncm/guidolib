@@ -16,7 +16,8 @@ SAMPLES := $(wildcard ../samples/*.cpp ../validate/guido*.cpp ../src/tools/Null*
 
 deb:
 	-[ -d debian ] && rm -rf debian
-	svn export debiansvn debian
+	mkdir debian
+	cp -r debiansvn/DEBIAN debian
 	@echo setup include files...
 	@[ -d $(incl) ] || mkdir -p $(incl)	
 	cp ../src/include/*.h ../linux/src/Cairo*.h $(incl)
@@ -30,7 +31,8 @@ deb:
 	@echo setup documentation...
 	@[ -d $(doc)/samples ] || mkdir -p $(doc)/samples
 	cp -r doc $(doc)
-	svn export ../gmn-examples $(doc)/gmn-examples
+	#### Export the sources
+	cd ../gmn-examples && git archive -o __tmp__.tar --prefix=../package/$(doc)/gmn-examples/ HEAD && tar xfP __tmp__.tar && rm __tmp__.tar
 	cp $(SAMPLES) $(doc)/samples
 	make -f makedeb finalize
 

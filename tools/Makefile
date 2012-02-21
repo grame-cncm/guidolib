@@ -10,6 +10,7 @@ ifeq ($(system), MINGW32_NT-6.1)
   lib =  ../cmake/Release/GUIDOEngine.lib
 else
   lib = -lGUIDOEngine
+  INC := $(INC)  -I../linux/src $(shell pkg-config --cflags cairo)
 endif
 endif
 
