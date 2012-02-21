@@ -1,4 +1,4 @@
-VERSION=2.30
+VERSION=2.40
 
 APPLS := GuidoEditor GuidoSceneComposer guido2image
 TOOLS = guido2midi guido2svg guidogetversion
@@ -16,7 +16,6 @@ WIN32TOOLS  := $(patsubst %, ../../tools/cmake/release/%.exe, $(TOOLS))
 WIN32QTPLUGS := qgif4.dll qtiff4.dll qjpeg4.dll
 WIN32QTPLUGS := $(patsubst %, $(WIN32QTPATH)/plugins/imageformats/%, $(WIN32QTPLUGS))
 
-EXPORT  := svn export
 
 nothing:
 	echo $(WIN32QT)
@@ -77,8 +76,10 @@ common:
 	cp "../../doc/GUIDO-Format_de_Notation_Musicale.pdf" $(PACKAGE_NAME)/doc
 	cp "../../doc/GUIDO_Additional_Specifications_1.3.8.pdf" $(PACKAGE_NAME)/doc
 	cp "../../doc/refcard/GMNRefCard.pdf" $(PACKAGE_NAME)/doc
-	$(EXPORT) ../../doc/html $(PACKAGE_NAME)/doc/html || echo " === WARNING ! html doc NOT exported ==="
-	$(EXPORT) ../../gmn-examples $(PACKAGE_NAME)/gmn-examples || echo " === WARNING ! gmn-examples NOT exported ==="
+	cd ../../doc/html && git archive -o __tmp__.tgz --prefix=../../Qt/package/$(PACKAGE_NAME)/doc/html/ HEAD && tar xzfP __tmp__.tgz && rm __tmp__.tgz
+	cd ../../gmn-examples && git archive -o __tmp__.tgz --prefix=../Qt/package/$(PACKAGE_NAME)/gmn-examples/ HEAD && tar xzfP __tmp__.tgz && rm __tmp__.tgz
 	cp ../../changelog.txt $(PACKAGE_NAME)/guido-changelog.txt
-	cp ../GuidoEditor/changelog.txt $(PACKAGE_NAME)/guidoeditor-changelog.txt
+	cp ../GuidoEditor/changelog.txt $(PACKAGE_NAME)/GuidoEditor-changelog.txt
+	cp ../guido2image/changelog.txt $(PACKAGE_NAME)/guido2image-changelog.txt
+	cp ../GuidoSceneComposer/changelog.txt $(PACKAGE_NAME)/GuidoSceneComposer-changelog.txt
 	cp appPack-readme.txt $(PACKAGE_NAME)/readme.txt

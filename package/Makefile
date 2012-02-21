@@ -1,5 +1,5 @@
 VERSION := 1.4.8
-DOCVERS := 1.40
+DOCVERS := 1.43
 DEST    := .
 
 DEVKIT   := guidolib-$(VERSION)-devkit
@@ -9,8 +9,6 @@ LINUXLIB := $(DEVKIT)-linux-x86
 WINLIB   := $(DEVKIT)-win32
 QTLIB    := $(DEVKIT)-Qt
 SRC 	 := guidolib-$(VERSION)-src
-
-EXPORT  := svn export
 
 files   := ../changelog.txt license.txt readme.txt ../src/guido2.ttf
 modules := guidolib
@@ -68,7 +66,7 @@ docpack:
 	tar czf $(DOCPACK).tgz $(DOCPACK)
 	
 srcpack:
-	$(EXPORT) .. $(SRC)
+	cd .. && git archive -o __tmp__.tgz --prefix=package/$(SRC)/ HEAD && tar xzfP __tmp__.tgz && rm __tmp__.tgz
 	cp readme-src_package.txt $(SRC)/readme.txt
 	tar czf $(SRC).tgz $(SRC)
 
@@ -96,8 +94,8 @@ qt:
 	mkdir -p $(QTLIB)/doc/Qt/html 
 	cp -Rf ../Qt/doc/html $(QTLIB)/doc/Qt
 	cp "../Qt/doc/Guido Qt-Binding manual.pdf" $(QTLIB)/doc/Qt/
-	#### SVN-Export the sources
-	$(EXPORT) ../Qt/ $(QTLIB)/src
+	#### Export the sources
+	cd ../Qt && git archive -o __tmp__.tgz --prefix=../package/$(QTLIB)/src/ HEAD && tar xzfP __tmp__.tgz && rm __tmp__.tgz
 	#### Copy GUIDOEngine includes
 	mkdir -p $(QTLIB)/src/include
 	cp $(qtinc) $(QTLIB)/src/include

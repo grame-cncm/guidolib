@@ -7,7 +7,7 @@
 ======================================================================
 	Introduction
 ======================================================================
-GUIDO Music Notation is a textbased, humanreadable format to represent 
+GUIDO Music Notation is a text based, human readable format to represent 
 music. It is intended to describe musical information as well as 
 notational information. In GUIDO, simple music can be described in a 
 simple way, whereas complex music sometimes requires more complex 
@@ -20,8 +20,8 @@ These applications are built on top of the Qt framework.
 ======================================================================
          GuidoEditor
 ======================================================================
-GuidoEditor is a simple application to view, edit and print Guido Music 
-Notation (.gmn) files.
+GuidoEditor is a simple application to view, edit, export and print 
+Guido Music Notation (.gmn) files.
 
 ======================================================================
          GuidoSceneComposer
