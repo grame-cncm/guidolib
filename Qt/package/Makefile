@@ -60,13 +60,13 @@ linux:
 
 win32: 
 	@make -s check
+	[ -d $(WIN32_NAME)/imageformats ] || mkdir -p $(WIN32_NAME)/imageformats
 	cp $(WIN32APPS) $(WIN32_NAME)
 	cp $(WIN32TOOLS) $(WIN32_NAME)
 	cp -f ../../cmake/release/GUIDOEngine.dll $(WIN32_NAME)
 	cp -f ../../src/guido2.ttf $(WIN32_NAME)
 	cp $(WIN32QT) $(WIN32_NAME)
 	cp *80.* $(WIN32_NAME)
-	[ -d $(WIN32_NAME)/imageformats ] || mkdir -p $(WIN32_NAME)/imageformats
 	cp 	$(WIN32QTPLUGS) $(WIN32_NAME)/imageformats
 	make common PACKAGE_NAME=$(WIN32_NAME)
 
