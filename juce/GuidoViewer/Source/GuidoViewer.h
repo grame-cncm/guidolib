@@ -56,9 +56,13 @@ private:
                                  // just need to create one of these and leave it
                                  // there to do its work..
 	bool fDragEntered;
+	File fFileLocation;
 	
-	String	ChooseGmnFile() const;
-	void	setFile (String file);
+	String				ChooseGmnFile();
+	bool				ChooseExportFile(File& file);
+	ImageFileFormat*	File2ImageFileFormat (const File& file);
+	void				setFile (String file);
+	void				export2Image (const File& file, ImageFileFormat* format);
 
     enum CommandIDs
     {

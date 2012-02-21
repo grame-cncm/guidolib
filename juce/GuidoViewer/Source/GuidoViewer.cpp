@@ -13,6 +13,7 @@ GuidoViewer::GuidoViewer (MainAppWindow* w)
 	: fWindow (w), fDragEntered(false)
 {
 	setResizePageToMusic (true);
+	fFileLocation = File::getSpecialLocation(File::userHomeDirectory);
 }
 
 //==============================================================================
@@ -107,16 +108,63 @@ void GuidoViewer::getCommandInfo (CommandID commandID, ApplicationCommandInfo& r
 
 
 //-------------------------------------------------------------------------------
-String GuidoViewer::ChooseGmnFile() const
+String GuidoViewer::ChooseGmnFile()
 {
-	static File f = File::getSpecialLocation(File::userHomeDirectory);
 	String file;
-	FileChooser chooser("Choose a GMN file", f, "*.gmn");
+	FileChooser chooser("Choose a GMN file", fFileLocation, "*.gmn");
 	if (chooser.browseForFileToOpen()) {
-		f = chooser.getResult();
-		file = f.getFullPathName();
+		fFileLocation = chooser.getResult();
+		file = fFileLocation.getFullPathName();
 	}
 	return file;
+}
+
+//-------------------------------------------------------------------------------
+bool GuidoViewer::ChooseExportFile(File& file)
+{
+	FileChooser chooser("Export to", fFileLocation);
+	if (chooser.browseForFileToSave(true)) {
+		fFileLocation = chooser.getResult();
+		file = fFileLocation;
+		return true;
+	}
+	return false;
+}
+
+//-------------------------------------------------------------------------------
+ImageFileFormat* GuidoViewer::File2ImageFileFormat (const File& file)
+{
+	ImageFileFormat* iff = 0;
+	if (file.hasFileExtension ("png"))
+		iff = new PNGImageFormat();
+	else if (file.hasFileExtension ("jpg;jpeg"))
+		iff = new JPEGImageFormat();
+	else {
+		String msg = "Can't guess a valid file format from " + file.getFileName() + " extension.\n";
+		msg += "Retry using one of .png .jpg .jpeg";
+		AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, "Export error", msg, "OK", this);
+	}
+	return iff;
+}
+
+//-------------------------------------------------------------------------------
+void GuidoViewer::export2Image (const File& file, ImageFileFormat* format)
+{
+	if (!format) return;
+	Image::PixelFormat pf = Image::RGB;
+	if (format->getFormatName() == "PNG")
+		pf = Image::ARGB;
+	
+	Image img (pf, getWidth(), getHeight(), true, Image::SoftwareImage);
+	Graphics g (img);
+	if (pf == Image::RGB) {
+		g.setColour (Colours::white);
+		g.fillRect (0, 0, getWidth(), getHeight());
+	}
+	FileOutputStream outfile (file);
+	GuidoComponent::paint(g);
+	format->writeImageToStream (img, outfile);
+	delete format;
 }
 
 //-------------------------------------------------------------------------------
@@ -150,7 +198,11 @@ bool GuidoViewer::perform (const InvocationInfo& info)
 		case kPrint:
 			break;
 
-		case kExport:
+		case kExport: {
+				File f;
+				if (ChooseExportFile(f)) 
+					export2Image (f, File2ImageFileFormat (f));
+			}
 			break;
 
 		case kReload: {
