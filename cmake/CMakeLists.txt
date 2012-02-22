@@ -11,9 +11,9 @@ set (target GUIDOEngine)
 set (statictarget SGUIDOEngine)
 #######################################
 # versions management
-set (VERSION 1.48)
-set (STRVERS "v.1.48")
-set (SSTRVERS "1.48")
+set (VERSION 1.49)
+set (STRVERS "v.1.49")
+set (SSTRVERS "1.49")
 set (GUIDOFWKVERS B)
 
 if(UNIX)
