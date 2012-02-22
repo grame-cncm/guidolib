@@ -3,7 +3,7 @@ Version: 2.4.0
 Section: sound
 Priority: optional
 Architecture: amd64
-Depends: guidoengine-devel (>= 1.4.8), libqtgui4 (>= 4:4.7.0), libqtcore4 (>= 4:4.7.0), libc6 (>= 2.13), libstdc++6 (>= 4.6.1), libc6 (>= 2.13), libgcc1 (>= 1:4.6.1), libc6 (>= 2.13)
+Depends: guidoengine-devel (>= 1.4.8), libqtgui4 (>= 4:4.7.0), libqtcore4 (>= 4:4.7.0), libstdc++6 (>= 4.5.1), libc6 (>= 2.12), libgcc1 (>= 1:4.5.1)
 Installed-Size: 2342
 Maintainer: D. Fober <fober@grame.fr>
 Description: Guido Music Notation applications based on Qt.
