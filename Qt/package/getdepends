@@ -1,0 +1,30 @@
+#!/bin/bash
+#
+
+function get()
+{
+	echo locate $1	
+	locate $1 | sed = | sed 'N;s/\n/ /'
+	echo -n "type number: "
+	read sel
+	locate $1 | head -n $sel | tail -n 1
+}
+
+echo -n > getdepends.out.txt
+FILE=$1
+DEPLIBS=$(objdump -p  $FILE | grep NEEDED | sed -e 's/.*NEEDED//')
+for a in $DEPLIBS
+do
+	echo locate $a	
+	locate $a | sed = | sed 'N;s/\n/ /'
+	echo -n "type number: "
+	read sel
+	b=$(locate $a | head -n $sel | tail -n 1)
+	PKG=$(dpkg -S $b | cut -d: -f1  | sort -u)
+    VERS=$(dpkg -p $PKG | grep ^Version | sed -e 's/Version://')
+	echo "$PKG (>= $VERS)" >> getdepends.out.txt
+	echo "$PKG (>= $VERS)"
+	echo
+done
+exit 0
+
