@@ -1,3 +1,10 @@
 Info.plist
 lib*.a
 bin
+GraphicsSceneMainWindow/Makefile
+GuidoEditor/Makefile
+GuidoQt/Makefile
+GuidoQtFontViewer/Makefile
+GuidoSceneComposer/Makefile
+GuidoServer/guidohttpserver
+guido2image/Makefile
