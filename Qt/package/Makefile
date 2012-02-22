@@ -38,6 +38,7 @@ macos:
 	make common PACKAGE_NAME=$(MACOSX_NAME)
 	make macapp APPL=GuidoEditor
 	make macapp APPL=GuidoSceneComposer
+	cp $(MACTOOLS) $(MACOSX_NAME)
 	cp ../../src/guido2.ttf $(MACOSX_NAME)
 	cp ../bin/guido2image $(MACOSX_NAME)
 	hdiutil create -srcfolder $(MACOSX_NAME) -ov $(MACOSX_NAME).dmg
