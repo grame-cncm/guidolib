@@ -1,6 +1,11 @@
 
 [OK] July 12 2011 - support for microtonal key signature - requested by
+[OK] Feb. 21 2012 - Free keys supporting the alter directly as percentage % e.g. \key<"free=f#[25] c&[-25] a[-75];> - suggested by Sadek
 
 Automatic formatting of tuplets (dy) - requested by Mika (on nov. 2 2011)
 Accidental cancellation after barline - suggested by Michael Kassler
-Free keys supporting the alter directly as percentage % e.g. \key<"free=f#[25] c&[-25] a[-75];> - suggested by Sadek
+
+Trill between any two notes - requested by Richard Hoadley
+Tremolo implementation - requested by Richard Hoadley
+Octava indications could have horizontal lines and extend to two or even three octaves either way  - requested by Richard Hoadley
+
