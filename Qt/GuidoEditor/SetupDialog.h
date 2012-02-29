@@ -37,6 +37,7 @@
 #ifndef __SetupDialog__
 #define __SetupDialog__
 
+#include <QColorDialog>
 #include <QDialog>
 #include <QObject>
 #include "ui_setupDialog.h"
@@ -82,6 +83,7 @@ private:
 	QMap<int, QComboBox*>	mFontWeightMap;
 	QMap<int, QColor>		mSavedColors;
 	QMap<int, int>			mSavedWeights;
+static QColorDialog *		mColorDialog;
 };
 
 #endif
