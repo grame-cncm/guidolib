@@ -23,6 +23,10 @@ library. You must install the GUIDOEngine library and  make sure that all the
 libraries are on the java library path before using the Guido JNI.
 You must  also install the guido2.ttf music font.
 
+Mac OS X: you should copy the the GUIDOEngine.framework into /Library/Frameworks
+		  copy libjniGUIDOEngine.dylib to /usr/local/lib or /usr/lib  
+Windows : the dlls can be put with your java application
+
 This package includes sample java code:
  - guidoviewer.java : a simple viewer application
  - factorysample.java : shows how to use the guido factory API
