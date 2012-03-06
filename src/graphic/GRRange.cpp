@@ -68,7 +68,7 @@ void GRRange::addAssociation(GRNotationElement * el)
 
 void GRRange::removeAssociation(GRNotationElement * el)
 {
-	assert(false);
+	// assert(false);
 	// do nothing, all those notes will be automatically
 	// deleted ...
 }
