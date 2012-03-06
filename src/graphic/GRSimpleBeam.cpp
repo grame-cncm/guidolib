@@ -18,17 +18,19 @@
 
 */
 
+//#include <iostream>
+
 #include "GRSimpleBeam.h"
 #include "GRBeam.h"
 #include "VGDevice.h"
 
 GRSimpleBeam::GRSimpleBeam (GRBeam * p_parent, const NVPoint par[4] )
 {
-	parent = p_parent;
-	p[0] = par[0];
-	p[1] = par[1];
-	p[2] = par[2];
-	p[3] = par[3];
+	fParent = p_parent;
+	fPoints[0] = par[0];
+	fPoints[1] = par[1];
+	fPoints[2] = par[2];
+	fPoints[3] = par[3];
 }
 
 void GRSimpleBeam::GGSOutput() const
@@ -44,8 +46,16 @@ void GRSimpleBeam::OnDraw( VGDevice & hdc ) const
 		hdc.PushFillColor( color );
 		hdc.PushPen( color, 1 );
 	}
-	float ax [4] = { p[0].x, p[1].x, p[3].x, p[2].x };
-	float ay [4] = { p[0].y, p[1].y, p[3].y, p[2].y };
+	float ax [4] = { fPoints[0].x, fPoints[1].x, fPoints[3].x, fPoints[2].x };
+	float ay [4] = { fPoints[0].y, fPoints[1].y, fPoints[3].y, fPoints[2].y };
+
+
+// DF added to check for incorrect coordinates
+// makes sure that the right point is not to the left of the left point :-)
+// actually this should be checked at coordinates computation time
+// todo: check the object that computes the beam coordinates
+	if (ax[0] > ax[2]) { ax[2] = ax[0]; }
+	if (ax[1] > ax[3]) { ax[3] = ax[1]; }
 	
 	// This does the drawing!
 	hdc.Polygon( ax, ay, 4 );
@@ -59,5 +69,5 @@ void GRSimpleBeam::OnDraw( VGDevice & hdc ) const
 
 const unsigned char * GRSimpleBeam::getColRef() const
 {
-	return parent ? parent->getColRef() : 0;
+	return fParent ? fParent->getColRef() : 0;
 }
