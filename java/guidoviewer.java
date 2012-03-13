@@ -69,8 +69,9 @@ class scorePanel extends Canvas implements Printable {
 
 	guidoscore	m_gmnscore;
 	int			m_showMap;
+	boolean		m_resizepage2window;
 	
-	public scorePanel()						{ m_gmnscore = new guidoscore(); m_showMap = kNoMap; }
+	public scorePanel(boolean resizepage)	{ m_gmnscore = new guidoscore(); m_showMap = kNoMap; m_resizepage2window=resizepage;}
 	public guidoscore score()				{ return m_gmnscore; }
 	public boolean opened()					{ return m_gmnscore.fARHandler != 0; }
 	public Dimension getPreferredSize()		{ return new Dimension(500,600); }
@@ -105,7 +106,8 @@ class scorePanel extends Canvas implements Printable {
 				m_gmnscore = null;
 			}
 			else {
-				m_gmnscore.ResizePageToMusic(); // resize the page to the music actual size
+				if (!m_resizepage2window)
+					m_gmnscore.ResizePageToMusic(); // resize the page to the music actual size
 				repaint();						// and trigger the paint function
 			}
 		}
@@ -160,9 +162,27 @@ class scorePanel extends Canvas implements Printable {
 	}
 
 	//--------------------------------------------------------------------
+	// update the score layout
+	public void updategr() {
+		m_gmnscore.UpdateGR();
+		if (!m_resizepage2window)
+			m_gmnscore.ResizePageToMusic(); // resize the page to the music actual size
+		repaint();							// and trigger the paint function
+	}
+
+	//--------------------------------------------------------------------
 	// draw the score
 	public void paint(Graphics g) {
 		if (m_gmnscore.fGRHandler != 0) {			// check if there is  a valid graphic score
+			if (m_resizepage2window) {				// check if page size needs to be adapted
+				int w = getSize().width/72;			// width is now in inches (using a hard coded 72 dpi)
+				int h = getSize().height/72;		// and height too
+				float m = guido.Inches2Unit(0.5f);	// this are the margins: half an inch converted to internal units
+				// next create a new page format - width and height are converted to intrenal units
+				guidopageformat pf = new guidopageformat(guido.Inches2Unit(w), guido.Inches2Unit(h), m,m,m,m);
+				pf.SetDefault();			// set the page format as default
+				m_gmnscore.UpdateGR();		// and recompute the score layout
+			}
 			// creates a new guidodrawdesc using the current canvas width and height
 			guidodrawdesc desc = new guidodrawdesc(getSize().width, getSize().height);		
 			// and call the score draw method
@@ -215,10 +235,17 @@ class guidoviewerGUI extends JFrame {
     CheckboxMenuItem m_mapStaffItem = new CheckboxMenuItem("Staff");	// create new menu item
     CheckboxMenuItem m_mapSysItem	= new CheckboxMenuItem("System");	// create new menu item
 
-	scorePanel m_score = new scorePanel();
+	Menu     m_miscMenu = new Menu("Misc");		// declare and create new menu
+    CheckboxMenuItem m_resizePageItem = new CheckboxMenuItem("Resize page to windows");
+    MenuItem m_resetPageFormatItem = new MenuItem("Reset page format");
+
+	scorePanel m_score = new scorePanel(false);
+	guidopageformat m_defaultPageFormat = new  guidopageformat();
 
     
     public guidoviewerGUI() {
+		m_defaultPageFormat.GetDefault();		// get the guido engine default page format
+
         //... Add listeners to file menu items
         m_openItem.addActionListener(new OpenAction(this));
         m_openItem.setShortcut(new MenuShortcut('O'));
@@ -230,7 +257,9 @@ class guidoviewerGUI extends JFrame {
         m_mapVoiceItem.addItemListener(new MapAction(this, scorePanel.kMapVoice));
         m_mapStaffItem.addItemListener(new MapAction(this, scorePanel.kMapStaff));
         m_mapSysItem.addItemListener(new MapAction(this, scorePanel.kMapSys));
-
+		m_resizePageItem.addItemListener(new ResizePageAction(this));
+		m_resetPageFormatItem.addActionListener(new ResetPageFormatAction(this));
+		
         //... set shortcuts
         m_openItem.setShortcut(new MenuShortcut('O'));
         m_printItem.setShortcut(new MenuShortcut('P'));
@@ -243,6 +272,7 @@ class guidoviewerGUI extends JFrame {
         m_svgexportItem.setEnabled (false);
         m_printItem.setEnabled (false);
         m_mapMenu.setEnabled (false);
+        m_miscMenu.setEnabled (false);
  
         //... Menubar, menus, menu items.  Use indentation to show structure.
         MenuBar menubar = new MenuBar();  // declare and create new menu bar
@@ -258,7 +288,11 @@ class guidoviewerGUI extends JFrame {
   		m_mapMenu.add(m_mapVoiceItem);
   		m_mapMenu.add(m_mapStaffItem);
   		m_mapMenu.add(m_mapSysItem);
-    
+  
+		menubar.add(m_miscMenu);			// add the menu to the menubar
+  		m_miscMenu.add(m_resizePageItem);
+  		m_miscMenu.add(m_resetPageFormatItem);
+		
         //... Content pane: create, layout, add components
         JPanel content = new JPanel();
         content.setBackground(Color.white);
@@ -312,9 +346,33 @@ class guidoviewerGUI extends JFrame {
         m_svgexportItem.setEnabled (true);
         m_printItem.setEnabled (true);
 		m_mapMenu.setEnabled (true);
+        m_miscMenu.setEnabled (true);
 	}
 
 	public guidoscore score()				{ return m_score.score(); }
+
+	//--------------------------------------------------------------------
+	//// reset to default page format
+	class ResetPageFormatAction implements ActionListener {
+		guidoviewerGUI m_viewer;
+        public ResetPageFormatAction (guidoviewerGUI viewer)	{ m_viewer = viewer; }
+		public void actionPerformed(ActionEvent e) {
+			m_defaultPageFormat.SetDefault();
+			m_viewer.m_score.updategr();
+    	}
+    }
+
+	//--------------------------------------------------------------------
+	//// resize page behavior action
+	class ResizePageAction implements ItemListener {
+		guidoviewerGUI m_viewer;
+        public ResizePageAction (guidoviewerGUI viewer)	{ m_viewer = viewer; }
+		public void itemStateChanged(ItemEvent e) {
+			m_viewer.m_score.m_resizepage2window = (e.getStateChange()== ItemEvent.DESELECTED) ? false : true;
+			m_resizePageItem.setState ( m_viewer.m_score.m_resizepage2window );
+			m_viewer.m_score.repaint();
+    	}
+    }
 
 	//--------------------------------------------------------------------
 	//// MapAction
