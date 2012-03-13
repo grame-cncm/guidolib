@@ -33,6 +33,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import guidoengine.*;
 
+//--------------------------------------------------------------------
 public class guidoviewer {  
    
     public static void main(String[] args) {
@@ -42,13 +43,18 @@ public class guidoviewer {
     }
 }
    
+//--------------------------------------------------------------------
+// scorePanel is guido specialized canvas
+// It provides an example of the guido java API use
+// including the extended mapping API
+//--------------------------------------------------------------------
 class scorePanel extends Canvas implements Printable {
 
  	static {
         try {
 			System.loadLibrary("jniGUIDOEngine");
-			guido.Init("Guido2", "Times");
-			if (guido.xml2gmn())
+			guido.Init("Guido2", "Times");				// guido engine initailization is required before calling any guidoscore API
+			if (guido.xml2gmn())						// check if musicxml support is available
 				System.out.println("libMusicXML v." + guido.musicxmlversion() + 
 					" with GMN converter v." + guido.musicxml2guidoversion());
 		} catch (UnsatisfiedLinkError e) {
@@ -71,10 +77,14 @@ class scorePanel extends Canvas implements Printable {
 
 	public void showMap (int map)			{ if (m_showMap != map) { m_showMap = map; repaint(); } }
 
+	//--------------------------------------------------------------------
+	// set the canvas content
+	// depending on the gmncode param the str param is interpredted as litteral gmn code or as a file name
 	public void setGMN(String str, boolean gmncode) {
-		if (opened()) m_gmnscore.close();
+		if (opened()) m_gmnscore.close();		// check the current score status: when opened, close it
+		// next parse the gmn code or a gmn file (depending on the gmncode param)
 		int err = gmncode ? m_gmnscore.ParseString(str) : m_gmnscore.ParseFile(str);
-		if (err != guido.guidoNoErr) {
+		if (err != guido.guidoNoErr) {			//----------------- errors management
 			String msg = gmncode ? 
 				  new String("Error reading string:\n") + guido.GetErrorString (err)
 				: new String("Error opening ") + str + ":\n" + guido.GetErrorString (err);
@@ -88,29 +98,31 @@ class scorePanel extends Canvas implements Printable {
 			}
 			JOptionPane.showMessageDialog(this, msg);
 		}
-		else {
-			err = m_gmnscore.AR2GR();
+		else {									//----------------- no error
+			err = m_gmnscore.AR2GR();			// converts the abstract representation to a graphic representation
 			if (err != guido.guidoNoErr) {
 				JOptionPane.showMessageDialog(this, "Error converting AR to GR " + str + ":\n" + guido.GetErrorString (err));
 				m_gmnscore = null;
 			}
 			else {
-				m_gmnscore.ResizePageToMusic();
-				repaint();
+				m_gmnscore.ResizePageToMusic(); // resize the page to the music actual size
+				repaint();						// and trigger the paint function
 			}
 		}
 	}
 
+	//--------------------------------------------------------------------
+	// draw a guidoscoremap rectangles 
 	public void drawMap(Graphics g, guidoscoremap map) {
-		int n = map.size();
-		Color a = new Color (0,0,200,100);
-		Color b = new Color (200,0,0,100);
-		guidosegment time = new guidosegment();
-		Rectangle r = new Rectangle();
-		for (int i=0; i < n; i++) {
-			if (map.get(i, time, r)) {
-				g.setColor ( (i%2 == 1) ? b : a);
-				g.fillRect(r.x, r.y, r.width, r.height);
+		int n = map.size();						// get the map size
+		Color a = new Color (0,0,200,100);		// makes use of 2 different colors
+		Color b = new Color (200,0,0,100);		// to alternate between adjacent graphic segments
+		guidosegment time = new guidosegment();	// creates a time segment and
+		Rectangle r = new Rectangle();			// a rectangle
+		for (int i=0; i < n; i++) {				// for all the mapp elements
+			if (map.get(i, time, r)) {			// get the time segment ans rectangle by index
+				g.setColor ( (i%2 == 1) ? b : a);			// switch colour
+				g.fillRect(r.x, r.y, r.width, r.height);	// and draw the rectangle
 			}
 			else {
 				System.err.println("unexpected map.get failure");
@@ -119,26 +131,26 @@ class scorePanel extends Canvas implements Printable {
 		}
 	}
 
+	//--------------------------------------------------------------------
+	// ask for the mapping and draw the map rectangles 
 	public void drawMap(Graphics g, int what) {
-		guidoscoremap map = new guidoscoremap();
+		guidoscoremap map = new guidoscoremap();	// creates a guidoscoremap object
 		int ret = guido.guidoNoErr;
-		int voices = m_gmnscore.CountVoices();
-		switch (what) {
+		int voices = m_gmnscore.CountVoices();		// get the count of voices
+		switch (what) {								// check for the requested mapping
 			case kMapVoice:
-				for (int i=1; i<=voices; i++) {
+				for (int i=1; i<=voices; i++) {		// get all voices mapping
 					ret = m_gmnscore.GetVoiceMap (1, getSize().width, getSize().height, i, map);
-					if (ret != guido.guidoNoErr) break;
-					drawMap (g, map);
+					if (ret == guido.guidoNoErr) drawMap (g, map);
 				}
 				break;
 			case kMapStaff:
-				for (int i=1; i<=voices; i++) {
+				for (int i=1; i<=voices; i++) {		// get all staves mapping
 					ret = m_gmnscore.GetStaffMap (1, getSize().width, getSize().height, i, map);
-					if (ret != guido.guidoNoErr) break;
-					drawMap (g, map);
+					if (ret == guido.guidoNoErr) drawMap (g, map);
 				}
 				break;
-			case kMapSys:
+			case kMapSys:							// get the system mapping
 				ret = m_gmnscore.GetSystemMap (1, getSize().width, getSize().height, map);
 				if (ret == guido.guidoNoErr) drawMap (g, map);
 				break;
@@ -147,16 +159,24 @@ class scorePanel extends Canvas implements Printable {
 			System.err.println("error getting score map: " + guido.GetErrorString(ret));
 	}
 
+	//--------------------------------------------------------------------
+	// draw the score
 	public void paint(Graphics g) {
-		if (m_gmnscore.fGRHandler != 0) {
+		if (m_gmnscore.fGRHandler != 0) {			// check if there is  a valid graphic score
+			// creates a new guidodrawdesc using the current canvas width and height
 			guidodrawdesc desc = new guidodrawdesc(getSize().width, getSize().height);		
+			// and call the score draw method
 			int ret = m_gmnscore.Draw (g, getSize().width, getSize().height, desc, new guidopaint());
 			if (ret != guido.guidoNoErr)
 				System.err.println("error drawing score: " + guido.GetErrorString(ret));
+			// check if a map should be diplsayed and draw it
 			else if (m_showMap > 0) drawMap (g, m_showMap);
 		}
 	}
 	
+	//--------------------------------------------------------------------
+	// print the score
+	// quite similar to the paint method apart that all pages are printed
 	public int print(Graphics g, PageFormat pf, int page) throws PrinterException {
 		if (page >= m_gmnscore.GetPageCount())
 			return NO_SUCH_PAGE;
@@ -176,7 +196,10 @@ class scorePanel extends Canvas implements Printable {
 }
 
 
-///// guidoviewerGUI
+//--------------------------------------------------------------------
+// guidoviewerGUI 
+// in charge of the GUI (menu and related actions)
+//--------------------------------------------------------------------
 class guidoviewerGUI extends JFrame {
 
     String	 m_Title = "Guido Viewer Java";
@@ -293,6 +316,7 @@ class guidoviewerGUI extends JFrame {
 
 	public guidoscore score()				{ return m_score.score(); }
 
+	//--------------------------------------------------------------------
 	//// MapAction
 	class MapAction implements ItemListener {
 		guidoviewerGUI m_viewer;
@@ -303,6 +327,7 @@ class guidoviewerGUI extends JFrame {
     	}
     }
 
+	//--------------------------------------------------------------------
 	//// OpenAction
 	class OpenAction implements ActionListener {
 		guidoviewerGUI m_viewer;
@@ -314,6 +339,7 @@ class guidoviewerGUI extends JFrame {
     	}
     }
 
+	//--------------------------------------------------------------------
 	//// MIDI export
 	class MidiExportAction implements ActionListener {
 		guidoviewerGUI m_viewer;
@@ -330,6 +356,7 @@ class guidoviewerGUI extends JFrame {
     	}
     }
 
+	//--------------------------------------------------------------------
 	//// SVG export
 	class SVGExportAction implements ActionListener  {
 		guidoviewerGUI m_viewer;
@@ -350,6 +377,7 @@ class guidoviewerGUI extends JFrame {
     	}
     }
 
+	//--------------------------------------------------------------------
 	//// PrintAction
 	class PrintAction implements ActionListener {
          scorePanel m_score;
@@ -368,6 +396,7 @@ class guidoviewerGUI extends JFrame {
 		}
     }
     
+	//--------------------------------------------------------------------
 	/// QuitAction
     class QuitAction implements ActionListener {
         public void actionPerformed(ActionEvent e) { System.exit(0); }
