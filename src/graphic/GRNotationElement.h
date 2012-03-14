@@ -114,6 +114,7 @@ public:
 	virtual void GGSOutput() const;
 	virtual void GGSOutputAt(unsigned int tmptype, long offsx = 0, long offsy = 0, 
 															float mysize = 0.0f ) const;
+	inline const NEPointerList* associated() const { return mAssociated; }
 
 protected:
 	

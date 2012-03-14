@@ -19,6 +19,7 @@
 
 */
 
+//#include <iostream>
 #include <cstring>
 #include <cassert>
 
@@ -83,9 +84,11 @@ bool TagParameterString::getRGB( unsigned char colref[4] ) const
 		colref[0] = (unsigned char)r;
 		colref[1] = (unsigned char)g;
 		colref[2] = (unsigned char)b;
+		return true;
 	}
+
 	// (JB) Proposal: alpha component for transparency: 0xRRGGBBAA
-	else if ((size == 10) && hexformat)
+	if ((size == 10) && hexformat)
 	{
 		unsigned int r, g, b, a;
 		sscanf(value.c_str(), "0x%2x%2x%2x%2x", &r, &g, &b, &a);
@@ -93,6 +96,7 @@ bool TagParameterString::getRGB( unsigned char colref[4] ) const
 		colref[1] = (unsigned char)g;
 		colref[2] = (unsigned char)b;
 		colref[3] = (unsigned char)a;
+		return true;
 	}
 	return HtmlColor::get (value.c_str(), colref);
 

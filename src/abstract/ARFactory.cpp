@@ -1540,9 +1540,9 @@ void ARFactory::endTag()
 #if ARFTrace
  	cout << "ARFactory::endTag " << endl;
 #endif
-	assert(!mCurrentEvent);
-	assert(mCurrentVoice);
-	assert(!mTags.empty());
+//	assert(!mCurrentEvent);
+//	assert(mCurrentVoice);
+//	assert(!mTags.empty());
 	
 	mCurrentTags--;
 	ARMusicalTag * tag = mTags.RemoveHead(); // pop()

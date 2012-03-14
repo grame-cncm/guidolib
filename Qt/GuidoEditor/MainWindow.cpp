@@ -97,41 +97,42 @@ typedef GuidoErrCode (* GuidoAR2MIDIFilePtr)(const struct NodeAR* ar, const char
 #define DEFAULT_TOOL_BAR_VISIBILITY true
 
 
-#define VIOLET				QColor(72,66,139)
-#define LIGHT_YELLOW		QColor(250,250,210)
-#define LIGHT_GREEN			QColor(240,255,240)
-#define FLORAL_GREEN		QColor(255,250,240)
-#define DARK_OLIVE_GREEN	QColor(85,107,47)
-#define DODGER_BLUE_4		QColor(16,78,139)
-#define INDIAN_RED_1		QColor(255,106,106)
-#define INDIAN_RED_2		QColor(190,84,83)
-#define DARK_SEA_GREEN_1	QColor(193,255,193)
-#define DARK_SEA_BLUE_1		QColor(193,193,255)
-#define LAVENDER_BLUSH		QColor(255,240,245)
+//#define VIOLET				QColor(72,66,139)
+//#define LIGHT_YELLOW		QColor(250,250,210)
+//#define LIGHT_GREEN			QColor(240,255,240)
+//#define FLORAL_GREEN		QColor(255,250,240)
+//#define DARK_OLIVE_GREEN	QColor(85,107,47)
+//#define DODGER_BLUE_4		QColor(16,78,139)
+//#define INDIAN_RED_1		QColor(255,106,106)
+//#define INDIAN_RED_2		QColor(190,84,83)
+//#define DARK_SEA_GREEN_1	QColor(193,255,193)
+//#define DARK_SEA_BLUE_1		QColor(193,193,255)
+//#define LAVENDER_BLUSH		QColor(255,240,245)
 #define GREEN_4				QColor(0,139,0)
-#define ORANGE_1			QColor(240,110,36)
-#define ORANGE_2			QColor(209,110,36)
+//#define ORANGE_1			QColor(240,110,36)
+//#define ORANGE_2			QColor(209,110,36)
 #define DEEP_BLUE			QColor(31,68,110)
-#define DEEP_TURQUOISE		QColor(31,109,110)
-#define DEEP_PURPLE			QColor( 70 , 0 , 83 )
+//#define DEEP_TURQUOISE		QColor(31,109,110)
+//#define DEEP_PURPLE			QColor( 70 , 0 , 83 )
+#define RED					QColor( 128 , 0 , 0 )
 
-#define VOICE_SEPARATOR_FONT	DEEP_PURPLE
+#define VOICE_SEPARATOR_FONT	Qt::black
 #define SQUARE_BRACKETS_WEIGHT	QFont::Bold
 
-#define SCORE_SEPARATOR_FONT		DEEP_PURPLE
+#define SCORE_SEPARATOR_FONT	Qt::black
 #define CURLY_BRACKETS_WEIGHT	QFont::Bold
 
-#define DURATIONS_FONT		INDIAN_RED_2
+#define DURATIONS_FONT		RED
 #define DURATIONS_WEIGHT	QFont::Bold
 
 #define NOTE_FONT			DEEP_BLUE
 #define NOTE_NAMES_WEIGHT	QFont::Bold
 
 #define TAGS_FONT			Qt::black
-#define TAGS_WEIGHT			QFont::Bold
+#define TAGS_WEIGHT			QFont::Normal
 
-#define FULL_TAGS_FONT		ORANGE_2
-#define FULL_TAGS_WEIGHT	QFont::Bold
+#define FULL_TAGS_FONT		Qt::blue
+#define FULL_TAGS_WEIGHT	QFont::Normal
 
 #define COMMENTS_FONT		GREEN_4
 #define COMMENTS_WEIGHT		QFont::Normal
@@ -1744,7 +1745,8 @@ void MainWindow::changeFontSize( float newFontPointSize )
 {
 	bool modified = mTextEdit->document()->isModified();
 
-	QFont newFont = mTextEdit->document()->defaultFont();
+//	QFont newFont = mTextEdit->document()->defaultFont();
+	QFont newFont ( "Courier new", newFontPointSize);
 	newFont.setPointSize( newFontPointSize );
 	mTextEdit->document()->setDefaultFont( newFont  );
 

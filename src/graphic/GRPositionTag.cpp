@@ -18,6 +18,8 @@
 
 */
 
+#include <iostream>
+
 #include "ARPositionTag.h"
 #include "ARMusicalTag.h"
 
@@ -93,7 +95,7 @@ bool GRPositionTag::DeleteStaff(GRStaff * grstaff)
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct(grstaff->getGRSystem());
 	if (!sse)
 	{
-		assert(false);
+//		assert(false);
 		return (mStartEndList.GetCount() == 0);
 	}
 	// also deletes it ...
@@ -102,7 +104,12 @@ bool GRPositionTag::DeleteStaff(GRStaff * grstaff)
 	if (el)
 	{
 		if (sse->startElement)	sse->startElement->removeAssociation(el);
-		if (sse->endElement)	sse->endElement->removeAssociation(el);
+// here we have a real problem: there are some case where the endElement has been freed before this call and of course it crashes :-( 
+// since memory management is quite complex (and a bit messy), the only workaround I've found is to look at the associated fields
+// with the hope that the memory is not reused in between (that's currently the case)
+// a real solution would be to have automatic memory management using smart pointers... 
+// it'll have to be done sooner or later [D.F. 2012 march 6]
+		if (sse->endElement && sse->endElement->associated())	sse->endElement->removeAssociation(el);
 	}
 	// mStartEndList.setOwnership(0);
 	mStartEndList.RemoveElement(sse);

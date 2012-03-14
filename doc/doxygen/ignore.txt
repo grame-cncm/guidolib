@@ -1,4 +1,0 @@
-guidolib-*
-html
-latex
-

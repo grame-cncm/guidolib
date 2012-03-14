@@ -66,7 +66,7 @@ QString weightToString( QFont::Weight w )
 }
 
 QString weightToString(int weight) { return weightToString( QFont::Weight(weight) ); }
-
+QColorDialog* SetupDialog::mColorDialog = 0;
 //-------------------------------------------------------------------------
 SetupDialog::SetupDialog(MainWindow *parent) 
  : QDialog(parent), mMainWindow(parent)
@@ -157,6 +157,12 @@ SetupDialog::SetupDialog(MainWindow *parent)
 		mSavedColors[i] = c;
 		mSavedWeights[i]= int(weight);
 	}
+
+	if (!mColorDialog) {
+		mColorDialog = new QColorDialog( this );
+		mColorDialog->setWindowTitle("Choose score color");
+		mColorDialog->setOption (QColorDialog::NoButtons);
+	}
 	
 	QSettings settings;
     QPoint pos = settings.value(SETUP_DIALOG_POS_SETTING, QPoint(300, 300)).toPoint();
@@ -186,14 +192,10 @@ void SetupDialog::setup()
 //-------------------------------------------------------------------------
 void SetupDialog::changeColor()
 {
-	QColorDialog * colorDialog = new QColorDialog( mSavedColor , this );
-	colorDialog->setWindowTitle("Choose score color");
-	colorDialog->setOptions(QColorDialog::NoButtons);
-	
-	connect( colorDialog , SIGNAL( currentColorChanged(const QColor&)) , this , SLOT( scoreColorChanged(const QColor&) ) );
-		
-	colorDialog->open();
-//	scoreColorChanged( colorDialog->selectedColor() );
+	mColorDialog->disconnect();
+	mColorDialog->setCurrentColor (mSavedColor);
+	connect( mColorDialog , SIGNAL( currentColorChanged(const QColor&)) , this , SLOT( scoreColorChanged(const QColor&) ) );		
+	mColorDialog->open();
 }
 
 //-------------------------------------------------------------------------
@@ -309,14 +311,13 @@ void SetupDialog::reset()
 void SetupDialog::fontColorButtonClicked()
 {
 	QPushButton * button = (QPushButton *)sender();
-
-	QColorDialog * colorDialog = new QColorDialog( button->property( BUTTON_COLOR ).value<QColor>() , this );
-	colorDialog->setWindowTitle("Choose font color");
-	colorDialog->setOptions(QColorDialog::NoButtons);
-	colorDialog->setProperty( DIALOG_ELEMENT_ID , button->property( SYNTAX_ELT_ID ).toInt() );
-	connect( colorDialog , SIGNAL( currentColorChanged(const QColor&)) , this , SLOT( fontColorChanged(const QColor&) ) );
-	
-	colorDialog->open();
+	mColorDialog->disconnect();
+	mColorDialog->setCurrentColor (button->property( BUTTON_COLOR ).value<QColor>());
+	connect( mColorDialog , SIGNAL( currentColorChanged(const QColor&)) , this , SLOT( fontColorChanged(const QColor&) ) );	
+	mColorDialog->setProperty( DIALOG_ELEMENT_ID , button->property( SYNTAX_ELT_ID ).toInt() );
+	mColorDialog->open();
+	if (mColorDialog->result() == QDialog::Rejected) {
+	}
 }
 
 //-------------------------------------------------------------------------

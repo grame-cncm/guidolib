@@ -41,8 +41,8 @@ class GRSimpleBeam : public GRNotationElement
 
 		virtual void OnDraw( VGDevice & hdc ) const;
 
-		NVPoint p[4];
-		GRBeam * parent;
+		NVPoint		fPoints[4];
+		GRBeam *	fParent;
 };
 
 #endif

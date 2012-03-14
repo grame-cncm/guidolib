@@ -33,7 +33,10 @@ import java.awt.Rectangle;
 	A Guido score map.
 	<br>
 	A guido score map describes the relations between the time and graphic space.
-	It is typically used as argument of the guidscore adjusted mappings methods.
+	It is typically used as argument of the guidscore extended mappings methods.
+	@see guidoengine.guidoscore#GetVoiceMap guidoscore.GetVoiceMap
+	@see guidoengine.guidoscore#GetStaffMap guidoscore.GetStaffMap
+	@see guidoengine.guidoscore#GetSystemMap guidoscore.GetSystemMap
 */
 public final class guidoscoremap {
 	

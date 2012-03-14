@@ -13,6 +13,7 @@ usage:
 macosx :
 	make common
 	cp ../libjniGUIDOEngine.dylib $(PACK)
+	cd  $(PACK) && ../localize libjniGUIDOEngine.dylib
 	rm -rf $(PACK)/GUIDOEngine.framework
 	cp -R ../../cmake/Release/GUIDOEngine.framework $(PACK)
 
