@@ -22,12 +22,13 @@ DOC		:= ../doc/GUIDO-Format_de_Notation_Musicale.pdf \
 SAMPLES := $(wildcard ../samples/*.cpp ../validate/guido*.cpp ../src/tools/Null*.h)
 
 ######### common include files 
-cominc  := GUIDOEngine.h GUIDOFactory.h GUIDOExport.h GUIDOScoreMap.h \
-		GuidoFeedback.h VGColor.h  VGFont.h VGSystem.h VGDevice.h VGPen.h 
-cominc  := $(patsubst %, ../src/include/%, $(cominc)) ../src/misc/GUIDOTypes.h  
+#cominc  := GUIDOEngine.h GUIDOFactory.h GUIDOExport.h GUIDOScoreMap.h \
+#		GuidoFeedback.h VGColor.h  VGFont.h VGSystem.h VGDevice.h VGPen.h 
+cominc  :=  $(wildcard ../src/include/GUIDO*.h ../src/include/VG*.h ) ../src/include/TRect.h
+#cominc  := $(patsubst %, ../src/include/%, $(cominc)) ../src/misc/GUIDOTypes.h  
 
 ######### win32 devices include files 
-win32inc := GDeviceWin32.h GSystemWin32.h GFontWin32.h
+win32inc := GDeviceWin32.h GSystemWin32.h GFontWin32.h  GDeviceWin32GDIPlus.h GSystemWin32GDIPlus.h GFontWin32GDIPlus.h
 win32inc := $(patsubst %, ../win32/src/%, $(win32inc))
 
 ######### qt include files 
@@ -45,6 +46,7 @@ QTKIT_EXCLUDED = $(shell find $(QTLIB)/src -name makeBundle \
 
 qtKitExcludedFiles := doc package Makefile GuidoQt.dsw GuidoQt.sln GuidoQtFontViewer
 qtKitExcludedFiles := $(patsubst %, $(QTLIB)/src/%, $(qtKitExcludedFiles))
+
 
 menu:
 	@ echo this is a packaging makefile, available targets are:
