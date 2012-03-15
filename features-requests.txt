@@ -9,3 +9,5 @@ Trill between any two notes - requested by Richard Hoadley
 Tremolo implementation - requested by Richard Hoadley
 Octava indications could have horizontal lines and extend to two or even three octaves either way  - requested by Richard Hoadley
 
+Implement a score visitor suitable to design a player - Sony CSL request
+Provide information about notes, associated to the mapping - Sony CSL request
