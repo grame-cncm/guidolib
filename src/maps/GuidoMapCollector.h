@@ -57,6 +57,8 @@ class GuidoMapCollector: public MapCollector
 		virtual void Graph2TimeMap( const FloatRect& box, const TimeSegment& dates,  const GuidoElementInfos& infos );
 		virtual void process (int page, float w, float h, Time2GraphicMap* outmap);
 		
+		void add (const TimeSegment& ts, const FloatRect& r)	{ fOutMap->push_back(make_pair(ts, r)); }
+
 	protected:
 		CGRHandler				fGRHandler;
 		GuidoeElementSelector	fSelector;
@@ -76,6 +78,7 @@ class GuidoVoiceCollector: public GuidoMapCollector
 			virtual bool operator() (const GuidoElementInfos& infos) const { return (infos.voiceNum == fNum) && (infos.type != kEmpty); }
 		} fVoiceFilter;
 		void	setFilter(int num)			{ fVoiceFilter.fNum = num; fFilter = &fVoiceFilter; }
+		virtual void Graph2TimeMap( const FloatRect& box, const TimeSegment& dates,  const GuidoElementInfos& infos );
 
 	public :
 				 GuidoVoiceCollector(CGRHandler gr, int num) : GuidoMapCollector(gr, kGuidoEvent) { if (num) setFilter(num); }
