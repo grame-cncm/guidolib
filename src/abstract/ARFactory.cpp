@@ -298,8 +298,7 @@ void ARFactory::addVoice()
 // ----------------------------------------------------------------------------
 /** \brief Tells the current voice that you want to begin a new chord.
 
-	When you're finished adding notes to this chord, you must
-	call addChord().
+	When you're finished adding notes to this chord, you must call addChord().
 */
 void ARFactory::createChord()
 {
@@ -308,7 +307,6 @@ void ARFactory::createChord()
 #endif
 	// now, we have to save the position of the voice...
 	assert(mCurrentVoice);
-
 	mCurrentVoice->BeginChord();
 }
 
@@ -326,20 +324,13 @@ void ARFactory::addChord()
 	assert(mCurrentVoice);
 
 	// then we are finished reading the chord.
-
 	// we have to deal with trills somewhere else...
 	
-	// now we have to go through the events within this
-	// chord once more and set the duration of the 
-	// first empty event and reset the timepositions
-	// of the following events (and tags/ptags)
-	// we also have to add the \chord \dispDur and \shareStem
-	// tags...
-	// one thought: these Tags need one additional parameter
-	// (not only auto) but also for saving if the chord
-	// was automatically created or already in the GUIDO
-	// description.
-	
+	// now we have to go through the events within this chord once more and set the duration of the 
+	// first empty event and reset the timepositions of the following events (and tags/ptags)
+	// we also have to add the \chord \dispDur and \shareStem tags...
+	// one thought: these Tags need one additional parameter (not only auto) but also for saving if the chord
+	// was automatically created or already in the GUIDO description.	
 	if (mCurrentTrill)
 	{
 		ARMusicalVoice::CHORD_TYPE chord_type = ARMusicalVoice::UP_SIMPLE;
@@ -353,8 +344,6 @@ void ARFactory::addChord()
 //		delete mCurrentTrill;
 //		mCurrentTrill = 0;
 	}
-		
-		
 	mCurrentVoice->FinishChord();
 }
 
