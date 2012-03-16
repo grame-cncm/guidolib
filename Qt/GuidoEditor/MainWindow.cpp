@@ -342,14 +342,16 @@ void MapGuidoWidget::paintEvent(QPaintEvent * event)
 			if (fMap & kStavesBB) {
 				if (fStaffNum > 0)	err = paintStaff(page, fStaffNum);
 				else if (fStaffNum < 0) {
-					for (int staff=1; staff <= GuidoCountVoices(getARHandler()) ; staff++)
+					int n = GuidoCountVoices (getARHandler());
+					for (int staff=1; staff <= n ; staff++)
 						err = paintStaff(page, staff);
 				}
 			}
 			if (fMap & kEventsBB) {
 				if (fVoiceNum > 0)	err = paintVoice(page, fVoiceNum);
 				else if (fVoiceNum < 0) {
-					for (int voice=1; err == guidoNoErr; voice++)
+					int n = GuidoCountVoices (getARHandler());
+					for (int voice=1; voice <= n; voice++)
 						err = paintVoice(page, voice);
 				}
 			}
