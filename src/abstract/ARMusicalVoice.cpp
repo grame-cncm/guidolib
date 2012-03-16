@@ -4172,7 +4172,6 @@ ARClef* ARMusicalVoice::newAutoClef(ARClef * oldclef, const TYPE_TIMEPOSITION& t
 	ARClef * clef;
 	if (!oldclef)
 	{
-//cout << "ARMusicalVoice::newAutoClef no old " << sum << " -" << ((float) pitchsum/ sum) << endl;
 		clef = new ARClef();
 		clef->setIsAuto(true);
 		if (sum>0)
@@ -5247,15 +5246,9 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE & chord_type, CHORD_ACCIDENTAL
 		key = dynamic_cast<ARKey *>(ObjectList::GetPrev(pos));
 	}
 	if (key)
-	{
 		keyNumber = key->getKeyNumber();
-		//std::cout << "armure : " << keyNumber << '\n';
-	}
 	else
-	{
-		//std::cout << "pas d'armure" << '\n';
 		keyNumber = 0;
-	}
 
 
 	// Determination de l'altÈration sur l'ornementation
@@ -5317,14 +5310,11 @@ void ARMusicalVoice::FinishChord()
 	TYPE_DURATION chorddur;
 
 	ARMusicalVoiceState vst = * chordBeginState;
-
 	mPosTagList->GetNext(vst.ptagpos);
-
 	_readmode oldreadmode = readmode;
 	readmode = EVENTMODE;
 
 	int onlyonegroup = 0;
-
 	// now we have to go through the grouplist...
 	if (chordgrouplist)
 	{
@@ -5341,18 +5331,15 @@ void ARMusicalVoice::FinishChord()
 
 			if (onlyonegroup)
 			{
-				// then we have to delete the one empty-event
-				// that is not needed any longer...
+				// then we have to delete the one empty-event that is not needed any longer...
 				RemoveElementAt(group->startpos);
 				group->startpos = vst.vpos;
 			}
 
-			// now we have to add the sharestem and
-			// dispdur-tags to the group...
+			// now we have to add the sharestem and dispdur-tags to the group...
 
 			// we have to add the dispdur-tag only,
-			// if there is not one already present because
-			// of grace-notes, example :
+			// if there is not one already present because of grace-notes, example :
 			// \grace( { e/8,g } ) c/4
 			// how do we know ?
 			ARDisplayDuration * dispdur = NULL;
@@ -5385,11 +5372,8 @@ void ARMusicalVoice::FinishChord()
 			shrdum->setAssociation(ARMusicalTag::LA);
 			shrstem->setCorrespondence(shrdum);
 
-
 			while (vst.vpos && vst.vpos != group->startpos)
-			{
 				GetNext(vst.vpos,vst);
-			}
 
 			if (vst.ptagpos)
 			{
@@ -5399,10 +5383,8 @@ void ARMusicalVoice::FinishChord()
 				if (!onlyonegroup)
 				{
 					// this adds the tags to the curpositiontags
-					// this is needed, because we traverse
-					// the voice later (GetNext) and then,
-					// these tags must be in the curpositiontag
-					// list, so that the corresponding remove
+					// this is needed, because we traverse the voice later (GetNext) and then,
+					// these tags must be in the curpositiontag list, so that the corresponding remove
 					// tags can be removed correctly.
 					if (dispdur)
 						vst.AddPositionTag(dispdur,0);
@@ -5415,8 +5397,6 @@ void ARMusicalVoice::FinishChord()
 					mPosTagList->AddTail(dispdur);
 				mPosTagList->AddTail(shrstem);
 			}
-
-
 
 			while (vst.vpos && vst.vpos != group->endpos)
 			{
@@ -5437,21 +5417,15 @@ void ARMusicalVoice::FinishChord()
 		}
 	}
 
-	// now we have to traverse the chord to
-	// see that we set the timepositions and also
-	// remember the lastchordpos and ptagpos for
-	// adding the tags that end after the chord...
+	// now we have to traverse the chord to see that we set the timepositions and also
+	// remember the lastchordpos and ptagpos for adding the tags that end after the chord...
 
 	// now I insert one more empty event...
-
 	ARNote * tmpnote = new ARNote("empty",0,1,0,1,80);
 	if (chordgrouplist)
 	{
 		ARChordGroup * tmp = chordgrouplist->GetTail();
-		if (tmp)
-		{
-			tmpnote->setDuration(tmp->dur);
-		}
+		if (tmp) tmpnote->setDuration(tmp->dur);
 	}
 	AddTail(tmpnote);
 
@@ -5473,8 +5447,7 @@ void ARMusicalVoice::FinishChord()
 
 	mPosTagList->AddTail(dummy);
 
-	// now we have to traverse the voice once more to set
-	// the timepositions correctly
+	// now we have to traverse the voice once more to set the timepositions correctly
 	vst = *chordBeginState;
 	TYPE_TIMEPOSITION starttp (vst.curtp);
     TYPE_TIMEPOSITION newtp (starttp + chorddur);
@@ -5484,8 +5457,7 @@ void ARMusicalVoice::FinishChord()
 	if (onlyonegroup)
 	{
 		// we have to move the mPosTagList two more...
-		// what about adding the correponding tags
-		// (at least to the curpositiontags...)?
+		// what about adding the correponding tags (at least to the curpositiontags...)?
 		ARPositionTag *ptag = mPosTagList->GetNext(vst.ptagpos);
 		vst.curpositiontags->AddTail(ptag);
 		ptag = mPosTagList->GetNext(vst.ptagpos);
@@ -5496,6 +5468,7 @@ void ARMusicalVoice::FinishChord()
 	{
 		ARMusicalObject *o = GetNext(vst.vpos,vst);
 		ARMusicalEvent *ev = ARMusicalEvent::cast(o);
+
 		if (vst.addedpositiontags)
 		{
 			TYPE_TIMEPOSITION mytp;
@@ -5574,9 +5547,7 @@ void ARMusicalVoice::FinishChord()
 	chordgrouplist = NULL;
 
 	readmode = oldreadmode;
-
 	posfirstinchord = NULL;
-
 	numchordvoice = -1;
 }
 
@@ -5586,21 +5557,15 @@ void ARMusicalVoice::FinishChord()
 */
 void ARMusicalVoice::initChordNote()
 {
-	// this call can be used to
-
-	// work on the inner chord-data structure...
+	// this call can be used to work on the inner chord-data structure...
 
 	// AddTail is dependant on numchordvoice
-	// (if numchordvoice == 1, then the
-	//  tags are added BEFORE the first empty
-	//  event of the chord.
-	// therefore, I have to temporarilly set
-	// numchordvoice to zero, so that ARChordComma
+	// (if numchordvoice == 1, then the tags are added BEFORE the first empty event of the chord.
+	// therefore, I have to temporarilly set numchordvoice to zero, so that ARChordComma
 	// is added at the correct position.
 	int oldnumchordvoice = numchordvoice;
 
 	numchordvoice = 0;
-
 	ARChordComma * tmp = new ARChordComma();
 	AddTail(tmp);
 	numchordvoice = oldnumchordvoice;
@@ -5611,12 +5576,10 @@ void ARMusicalVoice::MarkVoice(float from, float length)
 	TYPE_TIMEPOSITION tpos(from);
 	TYPE_DURATION duration(length);
 
-	MarkVoice(tpos.getNumerator(),tpos.getDenominator(),
-		duration.getNumerator(),duration.getDenominator());
+	MarkVoice( tpos.getNumerator(), tpos.getDenominator(), duration.getNumerator(), duration.getDenominator());
 }
 
-void ARMusicalVoice::MarkVoice( int fromnum,int fromdenom,
-							int lengthnum,int lengthdenom)
+void ARMusicalVoice::MarkVoice( int fromnum, int fromdenom, int lengthnum, int lengthdenom)
 {
 	TYPE_TIMEPOSITION tpos(fromnum,fromdenom);
 	TYPE_DURATION duration(lengthnum,lengthdenom);
