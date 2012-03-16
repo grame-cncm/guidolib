@@ -30,11 +30,6 @@
 int gd_noteName2pc(const char * name);
 const char * gd_pc2noteName(int fPitch);
 
-ARNote::ARNote(int theNumerator, int theDenominator)
-	:	ARMusicalEvent(theNumerator, theDenominator), fName("noname"), fPitch(UNKNOWN), 
-		fOctave(MIN_REGISTER), fAccidentals(0), fDetune(0), fIntensity(MIN_INTENSITY), fOrnament(NULL)
-{
-}
 
 ARNote::ARNote(const TYPE_DURATION & durationOfNote)
 	:	ARMusicalEvent(durationOfNote), fName("empty"), fPitch(UNKNOWN), fOctave(MIN_REGISTER),

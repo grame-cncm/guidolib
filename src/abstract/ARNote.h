@@ -36,7 +36,6 @@ class ARTrill;
 class ARNote : public ARMusicalEvent
 {
   public:
-      			ARNote( int theNumerator, int theDenominator );
 				ARNote( const TYPE_DURATION & durationOfNote );
 				ARNote( const TYPE_TIMEPOSITION & relativeTimePositionOfNote, const TYPE_DURATION & durationOfNote );
 				ARNote( const std::string& inName, int theAccidentals, int theRegister, int theNumerator, 
