@@ -71,7 +71,7 @@ validate: $(validsvg)
 	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
 	@[ -f  $(tmp) ] || echo $< : new file
 	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
-	@[ -f  $(ignored) ] || (diff $< $(tmp) 2>/dev/null >/dev/null || [ -f  $(tmp) ] && echo "open $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
+	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open -t $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
 
 #########################################################################
 # pdf output generation
@@ -117,7 +117,7 @@ svgclean:
 
 $(version)/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	-$(guido2svg) $< > __tmp.svg  &&  mv __tmp.svg $@
+	-$(guido2svg) $< | grep -v "SVG file generated using" > __tmp.svg  &&  mv __tmp.svg $@
 
 
 #########################################################################
