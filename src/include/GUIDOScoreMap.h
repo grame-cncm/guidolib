@@ -73,10 +73,11 @@ class_export TimeSegment: public std::pair<GuidoDate, GuidoDate>
 		bool include(const GuidoDate& date) const;				///< check for date inclusion
 		bool include(const TimeSegment& ts) const;				///< check for segment inclusion
 		bool operator < (const TimeSegment& ts) const;			///< order relationship: the smaller is the smaller first date
+		bool operator == (const TimeSegment& ts) const;
 		TimeSegment operator & (const TimeSegment& ts) const;	///< intersection operation (may return an arbitrary empty segment)
 };
 
-typedef std::map<TimeSegment, FloatRect>	Time2GraphicMap;
+typedef std::vector<std::pair<TimeSegment, FloatRect> >	Time2GraphicMap;
 
 inline std::ostream& operator << (std::ostream& out, const GuidoDate& d) {
 	out << d.num << "/" << d.denom;

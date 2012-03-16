@@ -24,6 +24,8 @@
 
 */
 
+#include <iostream>
+
 #include "GUIDOScoreMap.h"
 #include "GUIDOInternal.h"
 #include "ARMusic.h"
@@ -94,6 +96,14 @@ bool TimeSegment::operator < (const TimeSegment& ts) const
 	if (fdate(this->first) < fdate(ts.first)) return true;
 	if (fdate(this->first) > fdate(ts.first)) return false;
 	return ts.include (*this);
+}
+
+bool TimeSegment::operator == (const TimeSegment& ts) const
+{
+	return this->first.num == ts.first.num \
+		&& this->first.denom == ts.first.denom \
+		&& this->second.num == ts.second.num \
+		&& this->second.denom == ts.second.denom;
 }
 
 TimeSegment TimeSegment::operator & (const TimeSegment& ts) const
