@@ -957,26 +957,22 @@ int GRStaffManager::AddGRSyncElement (GRNotationElement * grel, GRStaff * grstaf
 	return 0;
 }
 
-/** \brief Called by the VoiceManager to
-    add a SystemTag to the score. 
+/** \brief Called by the VoiceManager to add a SystemTag to the score. 
 
-	A System tag (like e.g. \\tempo) is valid for the whole 
-	system. Each time, a SyncSlice is finished,
+	A System tag (like e.g. \\tempo) is valid for the whole system. Each time, a SyncSlice is finished,
 	the collected systemtags must be checked for contraditing entries.
 	The Systemtags must also be assigned to already present springs.
 */
-int GRStaffManager::AddSystemTag(GRNotationElement * grel,
-								 GRStaff * grstaff, int voiceid)
+int GRStaffManager::AddSystemTag(GRNotationElement * grel, GRStaff * grstaff, int voiceid)
 {
-	// first, we have to look, wether we already have an entry of the
-	// given type at the current time.
+	// first, we have to look, wether we already have an entry of the given type at the current time.
 	// if so, it is ignored (only one System-Tag per SyncSlice).
 	// if not present, we just add it.
 	const type_info & ti = typeid(*grel);
 		
 	// convert it, so it can be looked up in the hash-table
 	NVstring tmp(ti.name());
-	GRNotationElement * mytag;
+	GRNotationElement * mytag=0;
 		
 	GuidoPos systempos = systemHash.Lookup(tmp,mytag);
 		
@@ -984,7 +980,7 @@ int GRStaffManager::AddSystemTag(GRNotationElement * grel,
 	{
 		// there is an entry of this type already
 		GuidoWarn("Another SystemTag of the same type is already used");
-		GuidoTrace("SYSTEM-Tag collision");
+//		GuidoTrace("SYSTEM-Tag collision");
 		delete grel;
 	}
 	else
