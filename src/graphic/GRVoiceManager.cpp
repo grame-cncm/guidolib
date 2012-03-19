@@ -550,19 +550,19 @@ void GRVoiceManager::AddRegularEvent (GREvent * ev)
 	otherwise, other voices could have progressed past the currentTP without handling Tags in a proper way).
 */
 
-int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & tp, int filltagmode)
+int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 {
 	if (curvst->vpos == NULL)		return ENDOFVOICE;
 
-	if (curvst->curtp > tp) {
-		tp = curvst->curtp;
+	if (curvst->curtp > timepos) {
+		timepos = curvst->curtp;
 		ARMusicalObject * o = arVoice->GetAt(curvst->vpos);
 		
 		if (o->getDuration() == DURATION_0 )
 			return CURTPBIGGER_ZEROFOLLOWS;
 		return CURTPBIGGER_EVFOLLOWS;
 	}
-	else if (curvst->curtp < tp) { /* assert(false);*/ }
+	else if (curvst->curtp < timepos) { /* assert(false);*/ }
 
 	if (filltagmode)
 	{
@@ -603,7 +603,7 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & tp, int filltagmode)
 					TYPE_DURATION dur (o->getDuration());
 					if (curvst->curdispdur) dur = curvst->curdispdur->getDisplayDuration();
 
-					ev = CreateGraceNote(tp,o,dur);
+					ev = CreateGraceNote(timepos,o,dur);
 					// this adds the Grace-Note as a regular  event...
 					AddRegularEvent (ev);
 				}
@@ -612,18 +612,18 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & tp, int filltagmode)
 					// careful, what happens to dispDur !!!!
 					if (curvst->curdispdur != NULL && curvst->curdispdur->getDisplayDuration() > DURATION_0)
 					{
-						if (dynamic_cast<ARNote *>(o))			ev = CreateNote(tp,o);
-						else if (dynamic_cast<ARRest *>(o))		ev = CreateRest(tp,o);
+						if (dynamic_cast<ARNote *>(o))			ev = CreateNote(timepos,o);
+						else if (dynamic_cast<ARRest *>(o))		ev = CreateRest(timepos,o);
 						else if (dynamic_cast<ARChord *>(o))
 						{
 							GuidoTrace("ARChord, filltagmode=1");
-							ev = CreateChord(tp,o); // 
+							ev = CreateChord(timepos,o); // 
 						}
 					}
 					// changed on Apr 19 2011 DF
 					// the test has been moved out of CreateEmpty
 					else if (o->getDuration() <= DURATION_0)
-						ev = CreateEmpty (tp, o);
+						ev = CreateEmpty (timepos, o);
 					else ev = 0;
 					if (ev) AddRegularEvent (ev);
 				}
@@ -712,12 +712,12 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & tp, int filltagmode)
 			// This creates the graphical representation for position-tags, that start at the current position...
 			checkStartPTags(curvst->vpos);			
 			GREvent * grev = NULL;
-			if (dynamic_cast<ARNote *>(arev))			grev = CreateNote(tp,arev);
-			else if (dynamic_cast<ARRest *>(arev))		grev = CreateRest(tp,arev);
+			if (dynamic_cast<ARNote *>(arev))			grev = CreateNote(timepos,arev);
+			else if (dynamic_cast<ARRest *>(arev))		grev = CreateRest(timepos,arev);
 			else if (dynamic_cast<ARChord *>(arev))	
 			{
 				GuidoTrace("ARChord, filltagmode=0");
-				grev = CreateChord(tp,arev);// 
+				grev = CreateChord(timepos,arev);// 
 			}
 			
 			assert(grev);
@@ -739,7 +739,7 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & tp, int filltagmode)
 
 			// set the duration/timeposition...!			
 			// important: take the AR-Representation here, as the graphical is dependant on the display-Duration-Setting.
-			tp = arev->getRelativeEndTimePosition();			
+			timepos = arev->getRelativeEndTimePosition();			
 			GuidoPos prevpos = curvst->vpos;
 			// increment the curvoice... increment the position...
 			arVoice->GetNext(curvst->vpos,*curvst);
