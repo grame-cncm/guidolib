@@ -122,6 +122,7 @@ GRStaffManager::GRStaffManager(GRMusic * p_grmusic, ARPageFormat * inPageFormat)
 	  staffBottomVector(0),
 	  lastrod(NULL),
 	  firstrod(NULL),
+	  relativeTimePositionOfGR(0,1),
 	  voiceSpringArr(-1),
 	  evlist(1)					
 {
