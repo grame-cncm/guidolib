@@ -1042,11 +1042,13 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 	else if (tinf == typeid(ARRepeatEnd)) 
     {
 		GRRepeatEnd * rend = mCurGrStaff->AddRepeatEnd(static_cast<ARRepeatEnd *>( arOfCompleteObject));
-        if (checkRepeatBeginNext())
-            rend->setSConst (100.0f);
-        grne = rend;
-		gCurMusic->addVoiceElement(arVoice,	grne);
-		rend->updateBoundingBox();
+		if (rend) {
+			if (checkRepeatBeginNext())
+				rend->setSConst (100.0f);
+			grne = rend;
+			gCurMusic->addVoiceElement(arVoice,	grne);
+			rend->updateBoundingBox();
+		}
 	}
 /* range not any more supported - DF sept 1 2004
 	else if (tinf == typeid(ARRepeatEndRangeEnd))
