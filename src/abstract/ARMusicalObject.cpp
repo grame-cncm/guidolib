@@ -30,20 +30,12 @@
 // Class ARMusicalObject 
 
 ARMusicalObject::ARMusicalObject()
-  : 
-  // export(1),
-    relativeTimePosition(MIN_TIMEPOSITION),
-	fVoiceNum(0),
-	mGrObject(NULL)
+		: relativeTimePosition(MIN_TIMEPOSITION), duration(DURATION_0), fVoiceNum(0), mGrObject(NULL)
 {
 }
 
-ARMusicalObject::ARMusicalObject(const TYPE_TIMEPOSITION & relativeTimepositionOfMusicalObject)
-  : // export(1),
-    relativeTimePosition(relativeTimepositionOfMusicalObject),
-	fVoiceNum(0),
-    mGrObject(NULL)
-
+ARMusicalObject::ARMusicalObject(const TYPE_TIMEPOSITION & relativeTimeposition)
+		: relativeTimePosition(relativeTimeposition), duration(DURATION_0), fVoiceNum(0), mGrObject(NULL)
 {
 	assert(relativeTimePosition >= MIN_TIMEPOSITION);
 }
@@ -99,7 +91,6 @@ std::ostream & ARMusicalObject::operator<< (std::ostream & ostream) const
 	}
 	return ostream;
 }
-
 
 void ARMusicalObject::setRelativeTimePosition(const TYPE_TIMEPOSITION & newRelativeTimePosition)
 {
