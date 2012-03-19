@@ -195,9 +195,11 @@ void GRSingleNote::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos&
 			dur = getDurTemplate();
 		}
 //		const ARNote * ar = getARNote();
-//		std::cout << "mapped duration : " << dur << " pos: " << getRelativeTimePosition() << " ar pos: " << ar->getRelativeTimePosition();
+//		std::cout << "mapped pos: " << ar->getStartTimePosition() << " ar pos: " << ar->getRelativeTimePosition() << " ";
 //		ar->print();
-		SendMap (f, getRelativeTimePosition(), dur, kNote, infos);
+		// ARNote and GRNote don't have the same time position in chords
+		// actually chord notes have a wrong time position, it has been corrected in ARMusicalVoice::FinishChord
+		SendMap (f, getARNote()->getStartTimePosition(), dur, kNote, infos);
 	}
 }
 

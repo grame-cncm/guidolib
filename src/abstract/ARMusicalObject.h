@@ -82,6 +82,10 @@ class ARMusicalObject
 
 		virtual void print() const;
 
+		// introduced to get correct tie pos for notes in chords [DF 2012-03-19]
+		// do nothing at this level
+		virtual void setStartTimePosition(const TYPE_TIMEPOSITION  & pos)	{}
+		
 		virtual void setRelativeTimePosition(const TYPE_TIMEPOSITION  & newRelativeTimePosition);
 		virtual void setRelativeEndTimePosition(const TYPE_TIMEPOSITION & tp)	{ duration = tp - relativeTimePosition; }
 		virtual void setDuration(const TYPE_DURATION & dur)						{ duration = dur; }

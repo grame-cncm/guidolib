@@ -529,7 +529,7 @@ GuidoPos ARMusicalVoice::getPosAtTimePosition(const TYPE_TIMEPOSITION & timeposi
 
 	assert(timeposition>=relativeTimePosition);
 	assert(timeposition<getRelativeEndTimePosition());
-	if(timeposition>=duration)
+	if(timeposition >= duration)
 		return NULL; // timeposition is outside of staff
 	// ...should never happen because of asserts
 	// ... must be checked that GRStaff::createStaffElements works also with "empty" Staffs!
@@ -790,7 +790,7 @@ void ARMusicalVoice::print() const
 	while(pos)
 	{
 		ARMusicalObject * e = ObjectList::GetNext(pos);
-		e->print();
+		cout << e->getRelativeTimePosition() << ": "; e->print();
 	}
 	fprintf(stderr," duration:%.2f",(float) getDuration());
 	fprintf(stderr,"\n");
@@ -5499,6 +5499,7 @@ void ARMusicalVoice::FinishChord()
 		else if (firstevent)
 		{
 			// the first event has happened
+			o->setStartTimePosition(starttp);
 			o->setRelativeTimePosition(newtp);
 		}
 		else
