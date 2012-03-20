@@ -1,0 +1,7 @@
+{ [ \staff<1> \instr<"Flute", dx=-10hs, dy=-5hs> \systemFormat<"", dx=10hs>  \barFormat<style="system">
+   (* meas. 1 *)  \key<0> \meter<"C"> \clef<"g2"> \stemsDown c2 \stemsUp g1 \stemsDown c2 d
+   (* meas. 2 *)  d c e f
+   (* meas. 3 *)  \repeatEnd<1>( e/2 d) 
+   (* meas. 4 *)  \repeatEnd<3>( g _) 
+   (* meas. 5 *)  _/1 \repeatEnd ]
+ }
