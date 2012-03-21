@@ -55,8 +55,6 @@ typedef struct Guido2MidiParams
 
 } Guido2MidiParams;
 
-#ifdef MIDIEXPORT
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -77,6 +75,4 @@ extern "C" {
 
 /*! @} */
 
-
-#endif  // MIDIEXPORT
 #endif

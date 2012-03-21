@@ -18,12 +18,13 @@
 
 */
 
-#ifdef MIDIEXPORT
 
 #include <iostream>
 #include <vector>
 
 #include "GUIDO2Midi.h"
+
+#ifdef MIDIEXPORT
 #include "GUIDOInternal.h"
 
 #include "ARMusicalVoice.h"
@@ -135,6 +136,17 @@ GUIDOAPI(GuidoErrCode) GuidoAR2MIDIFile( const ARHandler ar, const char* filenam
 		file.Close();
 		return guidoNoErr;
 	}
+	return guidoErrActionFailed;
+}
+
+#else
+
+// ==========================================================================
+// - Guido Midi API
+// ==========================================================================
+GUIDOAPI(GuidoErrCode) GuidoAR2MIDIFile( const ARHandler ar, const char* filename, const Guido2MidiParams* params )
+{
+	std::cerr << "The Guido library has been compiled without GuidoAR2MIDIFile support." << std::endl;
 	return guidoErrActionFailed;
 }
 
