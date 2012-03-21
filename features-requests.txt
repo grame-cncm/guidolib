@@ -11,3 +11,5 @@ Octava indications could have horizontal lines and extend to two or even three o
 
 Implement a score visitor suitable to design a player - Sony CSL request
 Provide information about notes, associated to the mapping - Sony CSL request
+
+Better feedback for warning messages and improve warnings management.

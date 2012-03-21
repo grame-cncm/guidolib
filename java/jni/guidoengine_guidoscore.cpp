@@ -20,7 +20,6 @@
 */
 
 #include "guidoengine_guidoscore.h"
-#include "guidoengine_native_paint.h"
 #include "guidoengine_bitmap_paint.h"
 
 #define MIDIEXPORT

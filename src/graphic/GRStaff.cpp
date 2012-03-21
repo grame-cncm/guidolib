@@ -865,7 +865,7 @@ GRRepeatBegin * GRStaff::AddRepeatBegin(ARRepeatBegin * arrb)
 */
 GRRepeatEnd * GRStaff::AddRepeatEnd( ARRepeatEnd * arre )
 {
-	if (arre->getNumRepeat() == 0 || !arre->getRange())
+//	if (arre->getNumRepeat() == 0 || !arre->getRange())
 	{
         assert (arre);
 		GRRepeatEnd * tmp = new GRRepeatEnd(arre, this, arre->getRelativeTimePosition());

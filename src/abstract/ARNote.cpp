@@ -30,21 +30,16 @@
 int gd_noteName2pc(const char * name);
 const char * gd_pc2noteName(int fPitch);
 
-ARNote::ARNote(int theNumerator, int theDenominator)
-	:	ARMusicalEvent(theNumerator, theDenominator), fName("noname"), fPitch(UNKNOWN), 
-		fOctave(MIN_REGISTER), fAccidentals(0), fDetune(0), fIntensity(MIN_INTENSITY), fOrnament(NULL)
-{
-}
 
 ARNote::ARNote(const TYPE_DURATION & durationOfNote)
 	:	ARMusicalEvent(durationOfNote), fName("empty"), fPitch(UNKNOWN), fOctave(MIN_REGISTER),
-		fAccidentals(0), fDetune(0), fIntensity(MIN_INTENSITY), fOrnament(NULL)
+		fAccidentals(0), fDetune(0), fIntensity(MIN_INTENSITY), fOrnament(NULL), fStartPosition(-1,1)
 {
 }
 
 ARNote::ARNote(const TYPE_TIMEPOSITION & relativeTimePositionOfNote, const TYPE_DURATION & durationOfNote)
 	:	ARMusicalEvent( relativeTimePositionOfNote, durationOfNote), fName("noname"), fPitch(UNKNOWN),
-		fOctave(MIN_REGISTER), fAccidentals(0), fDetune(0), fIntensity(MIN_INTENSITY), fOrnament(NULL)
+		fOctave(MIN_REGISTER), fAccidentals(0), fDetune(0), fIntensity(MIN_INTENSITY), fOrnament(NULL), fStartPosition(-1,1)
 {
 }
 
@@ -52,7 +47,7 @@ ARNote::ARNote( const std::string & inName, int theAccidentals, int theRegister,
 				int theDenominator, int theIntensity )
 	:	ARMusicalEvent(theNumerator, theDenominator), fName( inName ), fPitch ( UNKNOWN ),
 		fOctave( theRegister ),	fAccidentals( theAccidentals ), fDetune(0), fIntensity( theIntensity ),
-		fOrnament(NULL)
+		fOrnament(NULL), fStartPosition(-1,1)
 {
 	assert(fAccidentals>=MIN_ACCIDENTALS);
 	assert(fAccidentals<=MAX_ACCIDENTALS);
@@ -62,7 +57,7 @@ ARNote::ARNote( const std::string & inName, int theAccidentals, int theRegister,
 
 ARNote::ARNote(const ARNote & arnote) 
 	:	ARMusicalEvent( (const ARMusicalEvent &) arnote),
-		fName(arnote.fName)
+		fName(arnote.fName), fStartPosition(-1,1)
 {
 	fPitch = arnote.fPitch;
 	fOctave = arnote.fOctave;
@@ -287,6 +282,13 @@ void ARNote::setDuration(const TYPE_DURATION & newdur)
 	if (newdur == DURATION_0)
 		mPoints = 0;
 }
+
+const TYPE_TIMEPOSITION& ARNote::getStartTimePosition() const 
+{
+	return (fStartPosition.getNumerator() >= 0) ? fStartPosition : getRelativeTimePosition();
+}
+
+
 
 // this compares the name, fPitch, fOctave and fAccidentals
 // returns 1 if it matches ...

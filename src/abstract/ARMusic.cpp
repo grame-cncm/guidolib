@@ -372,10 +372,8 @@ void ARMusic::doAutoBreaks()
 
 void ARMusic::doAutoStuff()
 {
-	// this is important so that the voices
-	// now about the maxmium tag-id.
+	// this is important so that the voices now about the maxmium tag-id.
 	gCurArMusic = this;
-
 
 	// First, we adjust all durations ...
 	TYPE_DURATION maxdur = DURATION_0;
@@ -402,21 +400,16 @@ void ARMusic::doAutoStuff()
 
 		if( gGlobalSettings.gFeedback )
 		{
-			gGlobalSettings.gFeedback->UpdateStatusMessage
-				( str_MusicalPreProcessing1, counter, nvoices );
+			gGlobalSettings.gFeedback->UpdateStatusMessage ( str_MusicalPreProcessing1, counter, nvoices );
 			if (gGlobalSettings.gFeedback->ProgDialogAbort())
 				return;
 		}
 		timebench("doAutoStuff1", arvc->doAutoStuff1());
 	}
 
-	// now, we do the stuff that needs to be done
-	// by ALL voices ...
-	// AutoBreaks inserts possible breaks at
-	// the positions, keeping track of explicit
-	// newlines ....
-	// the breaks are put in at bar-lines-positions
-	// or at positions, where all voices end.
+	// now, we do the stuff that needs to be done by ALL voices ...
+	// AutoBreaks inserts possible breaks at the positions, keeping track of explicit newlines ....
+	// the breaks are put in at bar-lines-positions or at positions, where all voices end.
 	timebench("doAutoBreaks", doAutoBreaks());
 
 	counter = 0;
@@ -424,23 +417,15 @@ void ARMusic::doAutoStuff()
 	while (pos)
 	{
 		counter++;
-		// now we can check, wether newSystem and
-		// newPage are followed by correct clef/key
-		// information ...
+		// now we can check, wether newSystem and newPage are followed by correct clef/key information ...
 		// also do AutoDisplayCheck and autoBeaming.
 		ARMusicalVoice * arvc = GetNext(pos);
 
 		if( gGlobalSettings.gFeedback )
 		{
-			//sprintf(statusmsg,"Musical pre-processing II. Voice %d of %d",
-			//											counter, nvoices );
-
-			gGlobalSettings.gFeedback->UpdateStatusMessage
-				( str_MusicalPreProcessing2, counter, nvoices );
+			gGlobalSettings.gFeedback->UpdateStatusMessage ( str_MusicalPreProcessing2, counter, nvoices );
 			if (gGlobalSettings.gFeedback->ProgDialogAbort())
-			{
 				return;
-			}
 		}
 		timebench("doAutoStuff2", arvc->doAutoStuff2());
 	}

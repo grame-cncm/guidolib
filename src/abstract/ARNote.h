@@ -36,7 +36,6 @@ class ARTrill;
 class ARNote : public ARMusicalEvent
 {
   public:
-      			ARNote( int theNumerator, int theDenominator );
 				ARNote( const TYPE_DURATION & durationOfNote );
 				ARNote( const TYPE_TIMEPOSITION & relativeTimePositionOfNote, const TYPE_DURATION & durationOfNote );
 				ARNote( const std::string& inName, int theAccidentals, int theRegister, int theNumerator, 
@@ -54,6 +53,10 @@ class ARNote : public ARMusicalEvent
 		virtual std::ostream & operator<<(std::ostream & os ) const;
 		virtual void	browse(TimeUnwrap& mapper) const;
 
+		// start time position has been introduced to get correct time position for notes in chords [DF 2012-03-19]
+		virtual void						setStartTimePosition(const TYPE_TIMEPOSITION  & pos)	{ fStartPosition = pos; }
+		virtual const TYPE_TIMEPOSITION&	getStartTimePosition() const;
+		
       void		addFlat();
       void		addSharp();
       void		setRegister( int newRegister );
@@ -88,6 +91,8 @@ class ARNote : public ARMusicalEvent
 		float	fDetune;
       	int 	fIntensity;
 		ARTrill * fOrnament;
+
+		TYPE_TIMEPOSITION	fStartPosition;
 };
 
 #endif

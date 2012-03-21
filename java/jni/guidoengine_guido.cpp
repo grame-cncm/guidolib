@@ -219,7 +219,7 @@ JNIEXPORT jstring JNICALL Java_guidoengine_guido_GetVersion (JNIEnv * env, jclas
  */
 JNIEXPORT jstring JNICALL Java_guidoengine_guido_GetJNIVersion (JNIEnv * env, jclass)
 {
-	return env->NewStringUTF("1.2.0");
+	return env->NewStringUTF("1.2.1");
 }
 
 /*

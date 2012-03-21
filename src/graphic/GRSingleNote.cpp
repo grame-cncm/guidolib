@@ -19,6 +19,8 @@
 
 */
 
+#include <iostream>
+
 #include "GUIDOEngine.h"
 #include "GUIDOInternal.h"
 
@@ -188,7 +190,16 @@ void GRSingleNote::GGSOutput() const
 void GRSingleNote::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const
 {
 	if (sel == kGuidoEvent) {
-		SendMap (f, getRelativeTimePosition(), getDuration(), kNote, infos);
+		TYPE_DURATION dur = getDuration();
+		if (dur.getNumerator() == 0) {		// notes in chords have a null duration
+			dur = getDurTemplate();
+		}
+//		const ARNote * ar = getARNote();
+//		std::cout << "mapped pos: " << ar->getStartTimePosition() << " ar pos: " << ar->getRelativeTimePosition() << " ";
+//		ar->print();
+		// ARNote and GRNote don't have the same time position in chords
+		// actually chord notes have a wrong time position, it has been corrected in ARMusicalVoice::FinishChord
+		SendMap (f, getARNote()->getStartTimePosition(), dur, kNote, infos);
 	}
 }
 
