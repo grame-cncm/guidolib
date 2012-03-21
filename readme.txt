@@ -12,8 +12,17 @@ native projects.
 
 To compile:
 	change to cmake directory
-	type:  cmake -G "your target generator"
+	type:  cmake -G "your target generator" OPTIONS
 	run your project/makefile and compile
+
+OPTIONS indocates optional components and is between:
+	-DMIDIEXPORT='yes | no' to support MIDI export
+	
+Note about MIDI export:
+--------------------------
+    MIDI export requires libmidisharelight. For MacOS and Windows, the library is embedded 
+    in binary form in the src/midisharelight folder. Thus there is no additional step.
+    On linux, you must get the library source code, compile and install.
 	
 Note for Linux platforms:
 --------------------------
@@ -23,6 +32,19 @@ Note for Linux platforms:
 	> cmake -G "Unix Makefiles"
 	> make
 	> sudo make install
+
+   Supporting MIDI export on linux:
+   -------------------------------
+   you must get the midishare source code:
+	   git://midishare.git.sourceforge.net/gitroot/midishare/midishare 
+   midisharelight is a recent addition to the project and for the moment, it is only
+   available from the 'dev' branch. It is located at the project root folder.
+   midisharelight is cmake based:
+	> cd midisharelight/cmake
+	> cmake -G "Unix Makefiles"
+	> make
+	> sudo make install
+
 
 Note for Windows platforms:
 --------------------------
