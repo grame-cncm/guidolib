@@ -35,7 +35,24 @@ endif()
 
 include_directories( ${GUIDO}/include ${GUIDO}/devices ${GUIDO}/tools ${DEVICE} )
 
-find_library (GUIDOLIB GUIDOEngine PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/Release NO_DEFAULT_PATH)
+if(APPLE OR WIN32)
+ 	find_library (GUIDOLIB GUIDOEngine PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/Release NO_DEFAULT_PATH)
+else()
+	EXECUTE_PROCESS ( COMMAND "pkg-config"  "--cflags" "cairo"
+                OUTPUT_VARIABLE TMP
+                ERROR_VARIABLE TMP
+        )
+	string (STRIP ${TMP} UINCL)
+	add_definitions(${UINCL})
+	EXECUTE_PROCESS ( COMMAND "pkg-config"  "--libs" "cairo"
+                OUTPUT_VARIABLE TMP
+                ERROR_VARIABLE TMP
+        )
+	string (STRIP ${TMP} CAIRO)
+	set(LINK ${LINK} ${CAIRO})
+
+find_library (GUIDOLIB GUIDOEngine PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../../cmake NO_DEFAULT_PATH)
+endif()
 
 #######################################
 # tools generation

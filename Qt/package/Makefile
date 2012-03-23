@@ -1,4 +1,12 @@
-VERSION=2.40
+VERSION=2.41
+
+system	:= $(shell uname -s)
+ifeq ($(system), Linux)
+APPLS := guidoeditor guidoscenecomposer guido2image
+else
+APPLS := GuidoEditor GuidoSceneComposer guido2image
+endif
+
 
 APPLS := GuidoEditor GuidoSceneComposer guido2image
 TOOLS = guido2midi guido2svg guidogetversion guidogetpagecount guidogetvoicecount

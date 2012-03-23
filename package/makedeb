@@ -9,7 +9,7 @@ tmp		:= __tmp__
 incl	:= debian/usr/local/include/guido
 font	:= debian/usr/share/fonts/truetype/guido
 doc		:= debian/usr/share/guidoengine-devel
-
+sovers  := 1
 files := $(shell cd debian && find usr -type f)
 size  := $(shell du -s debian | sed -e 's/ *debian//')
 SAMPLES := $(wildcard ../samples/*.cpp ../validate/guido*.cpp ../src/tools/Null*.h)
@@ -24,7 +24,8 @@ deb:
 	@echo setup library...
 	@[ -d debian/usr/lib ] || mkdir debian/usr/lib
 	cp ../cmake/$(lib).$(version) debian/usr/lib
-	cd debian/usr/lib && ln -s $(lib).$(version) $(lib)
+	chmod 644 debian/usr/lib/$(lib).$(version)
+	cd debian/usr/lib && ln -s $(lib).$(version) $(lib).$(sovers) && ln -s $(lib).$(sovers) $(lib)
 	@echo setup guido font...
 	@[ -d $(font) ] || mkdir -p $(font)
 	cp ../src/guido2.ttf $(font)

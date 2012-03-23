@@ -15,6 +15,9 @@ else {
 	TARGET = GuidoEditor	 
 }
 
+unix:TARGET = guidoeditor
+
+
 DESTDIR = ../bin
 MOC_DIR = ./tmpSrc
 RCC_DIR = ./tmpSrc

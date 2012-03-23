@@ -15,6 +15,8 @@ win32:DebugBuild {
 else {	 
 	TARGET = GuidoSceneComposer	 
 }
+unix:TARGET = guidoscenecomposer
+
 
 APP_NAME = GuidoSceneComposer
 DEFINES += GUIDO_SCENE_COMPOSER_APP
