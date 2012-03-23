@@ -1,7 +1,10 @@
 
 #ifndef WIN32
 #include <libgen.h>
+#else
+#include <io.h>
 #endif
+
 #include <iostream>
 #include <string>
 #include <stdlib.h>
