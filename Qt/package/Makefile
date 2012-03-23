@@ -47,6 +47,8 @@ macos:
 	make macapp APPL=GuidoEditor
 	make macapp APPL=GuidoSceneComposer
 	cp $(MACTOOLS) $(MACOSX_NAME)
+	cd $(MACOSX_NAME) && ../localise-tool $(TOOLS) guido2image
+	cp -r ../../cmake/Release/GUIDOEngine.framework $(MACOSX_NAME)
 	cp ../../src/guido2.ttf $(MACOSX_NAME)
 	cp ../bin/guido2image $(MACOSX_NAME)
 	hdiutil create -srcfolder $(MACOSX_NAME) -ov $(MACOSX_NAME).dmg

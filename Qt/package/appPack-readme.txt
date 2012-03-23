@@ -34,12 +34,27 @@ and then export it.
 ======================================================================
          guido2image
 ======================================================================
-guido2image is a command-line tool to export GUIDO Music Notation (from
-a file or directly as an argument) to various image formats, including
-PDF and svg.
-On MacOS, you should have the Qt libraries installed to use guido2image.
-Note that the Qt libraries are part of the GuidoEditor and 
-GuidoSceneComposer bundles.
+guido2image 
+	export GUIDO Music Notation to various image formats, including PDF 
+	and svg.
+	On MacOS, you should have the Qt libraries installed to use 
+	guido2image. Note that the Qt libraries are included in the 
+	GuidoEditor and GuidoSceneComposer bundles.
+
+guido2svg
+	export GUIDO Music Notation to svg.
+
+guido2midi
+	converts GUIDO Music Notation to MIDI file.
+
+guidogetpagecount
+	gives the page count of a GUIDO score.
+
+guidogetvoicecount
+	gives the voice count of a GUIDO score.
+
+guidogetversion
+	gives the current GUIDO engine version.
 
 ======================================================================
 	Notes
@@ -53,9 +68,22 @@ The GuidoLib Project is hosted on sourceforge.net project, download page:
 home page:	
 	http://guidolib.sourceforge.net/
 
-If you want to get online music notation, please visit the
-GUIDO NoteServer at
+If you want to get online music notation, visit the GUIDO NoteServer at
 	http://www.noteserver.org
+
+======================================================================
+	Platform notes
+======================================================================
+Mac OS:
+	The applications bundles are standalone: they embed all the required 
+	libraries. The command line tools are expecting to find the 
+	GUIDOEngine.framework in their folder, thus don't move them outside 
+	the folder unless you also move the framework too.
+
+Windows:
+	The Guido Qt folder is self contained : it includes all the libraries
+	required to run the applications. Don't move the applications outside 
+	the folder.
 
 
 ======================================================================
