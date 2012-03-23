@@ -1,7 +1,7 @@
 GUIDO Engine history
 
 ----------------------------------------------------------------
-2012-??-??  version 1.4.9
+2012-03-23  version 1.4.9
 - bug in hex colors setting (could be not taken into account)
 - crash bug catched (due to syntax error in chords duration modification)
 - bug corrected: multiple repeatEnd without repeatBegin
