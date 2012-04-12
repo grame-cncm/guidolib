@@ -11,8 +11,8 @@ win32 {
 }
 
 # Universal binary on MAC
-macx:QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.5.sdk
-macx:CONFIG+=x86 x86_64
+macx:QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.6.sdk
+macx:CONFIG+=x86_64
 
 # Input
 HEADERS += QFontDisplayer.h

@@ -21,8 +21,8 @@ win32 {
 }
 
 # Universal binary on MAC
-macx:QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.5.sdk
-macx:CONFIG+=x86 x86_64 ppc
+macx:QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.6.sdk
+macx:CONFIG+=x86 x86_64
 
 ####### Headers #######
 HEADERS += include/*.h $$SOURCES_DIR/LanguageCommandPalette/*.h
