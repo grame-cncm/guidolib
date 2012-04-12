@@ -21,7 +21,7 @@ CMAKE=$ROOT/cmake/CMakeLists.txt
 echo " updating $CMAKE"
 sed "s/\(set ([A-Z]*VERS[^0-9]*\)[0-9]*\.[0-9]*/\1$VERSION/" $CMAKE > TMP$$
 mv -f TMP$$ $CMAKE
-cmake -G Xcode $ROOT/cmake
+cmake $ROOT/cmake
 
 DOC=$ROOT/doc/doxygen/Makefile
 echo " updating $DOC"
