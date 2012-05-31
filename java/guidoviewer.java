@@ -52,7 +52,11 @@ class scorePanel extends Canvas implements Printable {
 
  	static {
         try {
-			System.loadLibrary("jniGUIDOEngine");
+			String arch = System.getProperty("os.arch");
+			if (arch.equals("x86"))
+				System.loadLibrary("jniGUIDOEngine");
+			else
+				System.loadLibrary("jniGUIDOEngine64");
 			guido.Init("Guido2", "Times");				// guido engine initailization is required before calling any guidoscore API
 			if (guido.xml2gmn())						// check if musicxml support is available
 				System.out.println("libMusicXML v." + guido.musicxmlversion() + 

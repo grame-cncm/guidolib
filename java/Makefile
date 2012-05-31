@@ -61,11 +61,11 @@ GUIDOEngine.dll : ../cmake/release/GUIDOEngine.dll
 jniGUIDOEngine.dll : cmake/release/jniGUIDOEngine.dll
 	cp cmake/release/jniGUIDOEngine.dll .
 
-GUIDOEngine64.dll : ../cmake/release/GUIDOEngine64.dll
-	cp ../cmake/release/GUIDOEngine64.dll .
+GUIDOEngine64.dll : ../win64/release/GUIDOEngine64.dll
+	cp ../win64/release/GUIDOEngine64.dll .
 
-jniGUIDOEngine64.dll : cmake/release/jniGUIDOEngine64.dll
-	cp cmake/release/jniGUIDOEngine64.dll .
+jniGUIDOEngine64.dll : win64/release/jniGUIDOEngine64.dll
+	cp win64/release/jniGUIDOEngine64.dll .
 
 macos: libjniGUIDOEngine.dylib
 
