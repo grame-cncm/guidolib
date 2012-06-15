@@ -168,7 +168,8 @@ void GuidoViewer::export2Image (const File& file, ImageFileFormat* format)
 	if (format->getFormatName() == "PNG")
 		pf = Image::ARGB;
 	
-	Image img (pf, getWidth(), getHeight(), true, Image::SoftwareImage);
+	SoftwareImageType type;
+	Image img (pf, getWidth(), getHeight(), true, type);
 	Graphics g (img);
 	if (pf == Image::RGB) {
 		g.setColour (Colours::white);
