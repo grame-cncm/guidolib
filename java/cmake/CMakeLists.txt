@@ -22,7 +22,7 @@ FIND_PACKAGE(JNI REQUIRED)
 
 
 if(APPLE)
-	set (CMAKE_OSX_ARCHITECTURES "x86_64 i386 ppc")
+	set (CMAKE_OSX_ARCHITECTURES "x86_64 i386")
 	set (CMAKE_OSX_SYSROOT /Developer/SDKs/MacOSX10.5.sdk)
 	set (CMAKE_C++_FLAGS -mmacosx-version-min=10.4)
 endif(APPLE)
