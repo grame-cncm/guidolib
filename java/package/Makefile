@@ -1,4 +1,4 @@
-VERSION := 1.21
+VERSION := 1.22
 PACK := GuidoJava-v.$(VERSION)
 SAMPLES := ../factorysample.java ../guidoviewer.java
 JAR := ../guidoengine.jar
@@ -22,7 +22,7 @@ win32 :
 	cp ../cmake/release/jniGUIDOEngine.dll $(PACK)
 	cp ../../cmake/release/GUIDOEngine.dll $(PACK)
 	cp ../jniGUIDOEngine64.dll $(PACK)
-	cp ../../cmake/release/GUIDOEngine64.dll $(PACK)
+	cp ../../win64/release/GUIDOEngine64.dll $(PACK)
 #	cp msvcr80.dll $(PACK)
 
 common: 

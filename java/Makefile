@@ -1,8 +1,13 @@
 SRC = $(wildcard guidoengine/*.java)
 CLASS = $(patsubst %.java, %.class, $(SRC) )
 JNI   = $(patsubst guidoengine/%.java, jni/guidoengine_%.h, $(SRC) )
-JAVA  = java
-#JAVA  = "C:\Program Files\Java\jdk1.6.0_20\bin\java"
+
+ifeq ($(ARCH), 64)
+	JAVA  = "C:\Program Files\Java\jdk1.6.0_20\bin\java"
+else 
+	JAVA  = java
+endif
+
 
 .PHONY: doc
 
