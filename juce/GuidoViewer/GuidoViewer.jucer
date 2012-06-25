@@ -8,33 +8,67 @@
               pluginSilenceInIsSilenceOut="0" pluginTailLength="0" pluginEditorRequiresKeys="0"
               pluginAUExportPrefix="JuceProjectAU" pluginAUViewClass="JuceProjectAU_V1"
               pluginRTASCategory="" bundleIdentifier="com.grame.GuidoViewer"
-              jucerVersion="3.0.0" bigIcon="IAUjPh" defines="JUCE_DONT_DEFINE_MACROS">
+              jucerVersion="3.0.0" defines="JUCE_DONT_DEFINE_MACROS">
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX" vstFolder="~/SDKs/vstsdk2.4" rtasFolder="~/SDKs/PT_80_SDK"
-               objCExtraSuffix="WzPHFY" juceFolder="../../../../../juce" extraLinkerFlags="-F../../../../cmake/Debug  -framework GUIDOEngine"
-               extraCompilerFlags="-I../../../../src/include"/>
+               objCExtraSuffix="WzPHFY" juceFolder="../../../../../juce2" extraLinkerFlags="-F../../../../cmake/Debug  -framework GUIDOEngine"
+               extraCompilerFlags="-I../../../../src/include" bigIcon="IAUjPh">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="GuidoViewer"
+                       osxSDK="10.6 SDK" osxCompatibility="10.6 SDK" osxArchitecture="Native"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="2" targetName="GuidoViewer"
+                       osxSDK="10.6 SDK" osxCompatibility="10.6 SDK" osxArchitecture="64BitUniversal"
+                       binaryPath=""/>
+      </CONFIGURATIONS>
+    </XCODE_MAC>
     <XCODE_IPHONE targetFolder="Builds/iOS" vstFolder="~/SDKs/vstsdk2.4" rtasFolder="~/SDKs/PT_80_SDK"
-                  objCExtraSuffix="JcEpwT" juceFolder="../../../../../juce" extraLinkerFlags="-L/Users/fober/Desktop  -lSGUIDOEngine"
-                  extraCompilerFlags="-I../../../../src/include"/>
+                  objCExtraSuffix="JcEpwT" juceFolder="../../../../../juce2" extraLinkerFlags="-L/Users/fober/Desktop  -lSGUIDOEngine"
+                  extraCompilerFlags="-I../../../../src/include" bigIcon="IAUjPh">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="GuidoViewer"
+                       osxSDK="10.6 SDK" osxCompatibility="10.6 SDK" osxArchitecture="Native"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="2" targetName="GuidoViewer"
+                       osxSDK="10.6 SDK" osxCompatibility="10.6 SDK" osxArchitecture="64BitUniversal"
+                       binaryPath=""/>
+      </CONFIGURATIONS>
+    </XCODE_IPHONE>
     <VS2005 targetFolder="Builds/VisualStudio2005" vstFolder="c:\SDKs\vstsdk2.4"
             rtasFolder="c:\SDKs\PT_80_SDK" libraryType="1" juceFolder="f:/src/juce"
             extraCompilerFlags="-I../../JuceLibraryCode -I../../../Device -IF:\src\juce -I../../../../src/include"
-            extraLinkerFlags="../../../../cmake/Debug/GUIDOEngine.lib"/>
+            extraLinkerFlags="../../../../cmake/Debug/GUIDOEngine.lib" bigIcon="IAUjPh">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="GuidoViewer"
+                       winWarningLevel="4" generateManifest="1"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="2" targetName="GuidoViewer"
+                       binaryPath="" winWarningLevel="4" generateManifest="1"/>
+      </CONFIGURATIONS>
+    </VS2005>
     <LINUX_MAKE targetFolder="Builds/Linux" vstFolder="~/SDKs/vstsdk2.4" juceFolder="/home/fober/src/juce"
                 extraCompilerFlags="-I../../../../src/include -I../../../Device -I../../JuceLibraryCode"
-                extraLinkerFlags="-lGUIDOEngine"/>
+                extraLinkerFlags="-lGUIDOEngine" bigIcon="IAUjPh">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="GuidoViewer"
+                       libraryPath="/usr/X11R6/lib/"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="2" targetName="GuidoViewer"
+                       binaryPath="" libraryPath="/usr/X11R6/lib/"/>
+      </CONFIGURATIONS>
+    </LINUX_MAKE>
     <ANDROID targetFolder="Builds/Android" androidSDKPath="${user.home}/Desktop/SDKs/android-sdk-mac_x86"
              androidNDKPath="${user.home}/Desktop/SDKs/android-ndk-r5" androidInternetNeeded="1"
              juceFolder="../../../../../juce" extraCompilerFlags="-I../../../../src/include -I../../../Device -I../../JuceLibraryCode"
-             extraLinkerFlags="-L../../../../cmake/Release  -lSGUIDOEngine"/>
+             extraLinkerFlags="-L../../../../cmake/Release  -lSGUIDOEngine"
+             androidActivityClass="com.grame.guidoviewer.GuidoViewer" androidMinimumSDK="8"
+             androidKeyStore="${user.home}/.android/debug.keystore" androidKeyStorePass="android"
+             androidKeyAlias="androiddebugkey" androidKeyAliasPass="android"
+             bigIcon="IAUjPh">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="GuidoViewer"
+                       androidArchitectures="armeabi armeabi-v7a"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="2" targetName="GuidoViewer"
+                       binaryPath="" androidArchitectures="armeabi armeabi-v7a"/>
+      </CONFIGURATIONS>
+    </ANDROID>
   </EXPORTFORMATS>
-  <CONFIGURATIONS>
-    <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="GuidoViewer"
-                   osxSDK="10.6 SDK" osxCompatibility="10.6 SDK" osxArchitecture="Native"/>
-    <CONFIGURATION name="Release" isDebug="0" optimisation="2" targetName="GuidoViewer"
-                   osxSDK="10.6 SDK" osxCompatibility="10.6 SDK" osxArchitecture="64BitUniversal"
-                   binaryPath=""/>
-  </CONFIGURATIONS>
   <MAINGROUP id="cQ5GjM" name="GuidoViewer">
     <GROUP id="r7RLot" name="Source">
       <FILE id="ftyN5Q" name="GuidoViewer.cpp" compile="1" resource="0" file="Source/GuidoViewer.cpp"/>
@@ -54,15 +88,13 @@
       <FILE id="VOAAIl" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
     </GROUP>
   </MAINGROUP>
-  <JUCEOPTIONS JUCE_FORCE_DEBUG="default" JUCE_LOG_ASSERTIONS="default" JUCE_ASIO="default"
-               JUCE_WASAPI="default" JUCE_DIRECTSOUND="default" JUCE_DIRECTSHOW="default"
-               JUCE_MEDIAFOUNDATION="default" JUCE_ALSA="default" JUCE_QUICKTIME="default"
-               JUCE_OPENGL="default" JUCE_DIRECT2D="default" JUCE_USE_FLAC="default"
-               JUCE_USE_OGGVORBIS="default" JUCE_USE_CDBURNER="disabled" JUCE_USE_CDREADER="default"
-               JUCE_USE_CAMERA="default" JUCE_ENABLE_REPAINT_DEBUGGING="default"
-               JUCE_USE_XINERAMA="default" JUCE_USE_XSHM="default" JUCE_USE_XRENDER="default"
-               JUCE_USE_XCURSOR="default" JUCE_PLUGINHOST_VST="default" JUCE_PLUGINHOST_AU="default"
-               JUCE_ONLY_BUILD_CORE_LIBRARY="default" JUCE_WEB_BROWSER="default"
-               JUCE_SUPPORT_CARBON="default" JUCE_CHECK_MEMORY_LEAKS="default"
-               JUCE_CATCH_UNHANDLED_EXCEPTIONS="default"/>
+  <JUCEOPTIONS JUCE_USE_CDBURNER="disabled"/>
+  <MODULES>
+    <MODULE id="juce_core" showAllCode="1"/>
+    <MODULE id="juce_events" showAllCode="1"/>
+    <MODULE id="juce_graphics" showAllCode="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1"/>
+    <MODULE id="juce_gui_audio" showAllCode="1"/>
+  </MODULES>
 </JUCERPROJECT>
