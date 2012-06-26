@@ -8,10 +8,10 @@
               pluginSilenceInIsSilenceOut="0" pluginTailLength="0" pluginEditorRequiresKeys="0"
               pluginAUExportPrefix="JuceProjectAU" pluginAUViewClass="JuceProjectAU_V1"
               pluginRTASCategory="" bundleIdentifier="com.grame.GuidoViewer"
-              jucerVersion="3.0.0" defines="JUCE_DONT_DEFINE_MACROS">
+              jucerVersion="3.0.0" defines="">
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX" vstFolder="~/SDKs/vstsdk2.4" rtasFolder="~/SDKs/PT_80_SDK"
-               objCExtraSuffix="WzPHFY" juceFolder="../../../../../juce2" extraLinkerFlags="-F../../../../cmake/Debug  -framework GUIDOEngine"
+               objCExtraSuffix="WzPHFY" juceFolder="../../../../../juce" extraLinkerFlags="-F../../../../cmake/Debug  -framework GUIDOEngine"
                extraCompilerFlags="-I../../../../src/include" bigIcon="IAUjPh">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="GuidoViewer"
@@ -22,7 +22,7 @@
       </CONFIGURATIONS>
     </XCODE_MAC>
     <XCODE_IPHONE targetFolder="Builds/iOS" vstFolder="~/SDKs/vstsdk2.4" rtasFolder="~/SDKs/PT_80_SDK"
-                  objCExtraSuffix="JcEpwT" juceFolder="../../../../../juce2" extraLinkerFlags="-L/Users/fober/Desktop  -lSGUIDOEngine"
+                  objCExtraSuffix="JcEpwT" juceFolder="../../../../../juce" extraLinkerFlags="-L../../../../cmake/Debug -lSGUIDOEngine"
                   extraCompilerFlags="-I../../../../src/include" bigIcon="IAUjPh">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="GuidoViewer"

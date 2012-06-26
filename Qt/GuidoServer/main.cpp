@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 #include <stdlib.h>
-#include <QApplication>
+#include <QtGui/QApplication>
 
 #include "QGuidoPainter.h"
 #include "guido2img.h"

@@ -25,7 +25,7 @@
 #ifndef __guido2img__
 #define __guido2img__
 
-#include <QBuffer>
+#include <QtCore/QBuffer>
 #include "Guido2Image.h"
 
 namespace guidohttpd

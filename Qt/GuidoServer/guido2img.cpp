@@ -21,7 +21,7 @@
 
 */
 
-#include <QBuffer>
+#include <QtCore/QBuffer>
 
 #include "guido2img.h"
 #include "Guido2Image.h"

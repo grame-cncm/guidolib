@@ -27,7 +27,7 @@
 #define GUIDO_FONT_FILE "guido2.ttf"
 
 #ifdef Q_WS_MAC
-#include "/Developer/Headers/FlatCarbon/CFURL.h"
+#include "/Developer-3.2.5/Headers/FlatCarbon/CFURL.h"
 static QString getGuidoFontPath()
 {
 	CFURLRef appUrlRef = CFBundleCopyBundleURL(CFBundleGetMainBundle());
