@@ -16,7 +16,7 @@ unix:LIBS += -lmicrohttpd
 INCLUDEPATH += ../GuidoQt/include
 
 
-macx:QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.5.sdk
+macx:QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.6.sdk
 macx:CONFIG+=x86_64
 
 # GUIDOEngine library link for each platform
