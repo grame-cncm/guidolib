@@ -25,11 +25,14 @@
 #define __guidosession__
 
 #include <string>
+#include "GUIDOEngine.h"
+#include "GUIDOScoreMap.h"
 
 using namespace std;
 
 namespace guidohttpd
 {
+    enum GuidoSessionMapType {PAGE, STAFF, VOICE, SYSTEM};
     enum GuidoSessionParsingError { GUIDO_SESSION_PARSING_SUCCESS, GUIDO_SESSION_PARSING_FAILURE };
     enum GuidoWebApiFormat { GUIDO_WEB_API_PNG, GUIDO_WEB_API_JPEG, GUIDO_WEB_API_GIF, GUIDO_WEB_API_SVG,
         GUIDO_WEB_API_UNDEFINED };
@@ -38,6 +41,7 @@ namespace guidohttpd
     {
         bool resizeToPage;
         string gmn;
+        string url;
         GuidoWebApiFormat format;
         int page;
         int width;
@@ -56,6 +60,10 @@ namespace guidohttpd
         int optimalPageFill;
         void initialize();
         const char* formatToMIMEType ();
+        const char* formatToLayType ();
+        const char* getStringRepresentationOf (const char*);
+        void fillGuidoPageFormatUsingCurrentSettings(GuidoPageFormat *pf);
+        GuidoErrCode getmap (GuidoSessionMapType map, int aux, Time2GraphicMap& outmap);
     };
     
 } // end namespoace

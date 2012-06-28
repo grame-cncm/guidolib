@@ -30,6 +30,7 @@
 #include <fcntl.h>
 
 #include "HTTPDServer.h"
+#include "json.h"
 #include "guido2img.h"
 #include "guidosession.h"
 
@@ -38,6 +39,12 @@ using namespace std;
 namespace guidohttpd
 {
 
+    static int printchannel(void *userdata, const char *data, uint32_t length)
+    {
+        stringstream *foo = (stringstream *)userdata;
+        *foo << data;
+    }
+    
 //--------------------------------------------------------------------------
 // static functions
 // provided as callbacks to mhttpd
@@ -129,7 +136,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
         {
             namedSessions[url]; // we initialize
             namedSessions[url].initialize();
-            
+            namedSessions[url].url = url;            
         }
         currentSession = &namedSessions[url];
     }
@@ -179,16 +186,15 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
             callback = &HTTPDServer::handleFaultyInput;
         
         parseError = (this->*callback)(currentSession, &size, &data, &format, &errstring, &argumentsToAdvance, args, n);
-        
         if (parseError == GUIDO_SESSION_PARSING_SUCCESS)
         {
             n += argumentsToAdvance;
-            finalMessageToSend = send (connection, data, size, format);            
+            finalMessageToSend = send (connection, data, size, format);
         }
         else
         {
             n += 1;
-            cout << errstring << " " << format;
+            cout << errstring << " " << format << endl;
             finalMessageToSend = send(connection, errstring, format); // show something about the error...
         }
 	}
@@ -216,6 +222,7 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
 		cout << endl;
 	}
     
+    reverse (args.begin(), args.end());
 	return sendGuido (connection, url, args);
 }
 
@@ -223,23 +230,33 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
     
     GuidoSessionParsingError HTTPDServer::handleGet(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n)
     {
-        *data = "All get calls are not yet implemented. Please check back later.";
-        *size = strlen(*data);
-        *format = "text/plain";
-        *errstring = "none";
-        *argumentsToAdvance = 1;
-        return GUIDO_SESSION_PARSING_SUCCESS;
+        const int SIMPLE_SIZE = 9;
+        const char* simple_ids[SIMPLE_SIZE] = {"width", "height", "margintop", "marginbottom", "marginleft", "marginright", "zoom","format","gmn"};
+        for (int i = 0; i < SIMPLE_SIZE; i++)
+            if (strcmp(simple_ids[i], args[n].second.c_str()) == 0)
+                return simpleGet (currentSession, size, data, format, errstring, argumentsToAdvance, simple_ids[i]);
+
+        const int MAP_SIZE = 9;
+        const char* map_ids[MAP_SIZE] = {"pagemap","staffmap","voicemap","systemmap"};
+        for (int i = 0; i < MAP_SIZE; i++)
+            if (strcmp(map_ids[i], args[n].second.c_str()) == 0)
+                return mapGet (currentSession, size, data, format, errstring, argumentsToAdvance, args, n, map_ids[i]);
+
+        return genericFailure(size, data, format, errstring, argumentsToAdvance, "Unidentified get.");
     }
+    
     GuidoSessionParsingError HTTPDServer::handlePage(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n)
     {
         currentSession->page = atof(args[n].second.c_str());
         return genericReturnImage(currentSession, size, data, format, errstring, argumentsToAdvance);
     }
+    
     GuidoSessionParsingError HTTPDServer::handleWidth(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n)
     {
         currentSession->width = atof(args[n].second.c_str());
         return genericReturnImage(currentSession, size, data, format, errstring, argumentsToAdvance);
     }
+    
     GuidoSessionParsingError HTTPDServer::handleHeight(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n)
     {
         currentSession->height = atof(args[n].second.c_str());
@@ -250,21 +267,25 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
         currentSession->marginleft = atof(args[n].second.c_str());
         return genericReturnImage(currentSession, size, data, format, errstring, argumentsToAdvance);
     }
+    
     GuidoSessionParsingError HTTPDServer::handleMarginRight(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n)
     {
         currentSession->marginright = atof(args[n].second.c_str());
         return genericReturnImage(currentSession, size, data, format, errstring, argumentsToAdvance);
     }
+    
     GuidoSessionParsingError HTTPDServer::handleMarginTop(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n)
     {
         currentSession->margintop = atof(args[n].second.c_str());
         return genericReturnImage(currentSession, size, data, format, errstring, argumentsToAdvance);
     }
+    
     GuidoSessionParsingError HTTPDServer::handleMarginBottom(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n)
     {
         currentSession->marginbottom = atof(args[n].second.c_str());
         return genericReturnImage(currentSession, size, data, format, errstring, argumentsToAdvance);
     }
+    
     GuidoSessionParsingError HTTPDServer::handleZoom(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n)
     {
         currentSession->zoom  = atof(args[n].second.c_str());
@@ -302,8 +323,8 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
             currentSession->format = GUIDO_WEB_API_JPEG;
         else if (strcmp("gif", args[n].second.c_str()) == 0)
             currentSession->format = GUIDO_WEB_API_GIF;
-        else if (strcmp("gif", args[n].second.c_str()) == 0)
-            currentSession->format = GUIDO_WEB_API_SVG;
+        else if (strcmp("svg", args[n].second.c_str()) == 0)
+            currentSession->format = GUIDO_WEB_API_PNG;//KLUDGE
         else
             return genericFailure(size, data, format, errstring, argumentsToAdvance, "Not a valid format - please choose from png, jpeg, gif or svg.");
         return genericReturnImage(currentSession, size, data, format, errstring, argumentsToAdvance);
@@ -341,5 +362,112 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
         return GUIDO_SESSION_PARSING_FAILURE;
     }
 
-
+    GuidoSessionParsingError HTTPDServer::simpleGet (guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const char* thingToGet)
+    {
+        const char* internalRep = currentSession->getStringRepresentationOf(thingToGet);
+        json_printer printer;
+        stringstream mystream;
+        json_print_init(&printer, printchannel, &mystream);
+        json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
+        if (currentSession != &anonymousSession)
+        {
+            json_print_pretty(&printer, JSON_KEY, "username", 1);
+            json_print_pretty(&printer, JSON_INT, currentSession->url.c_str(), strlen(currentSession->url.c_str()));
+        }
+        json_print_pretty(&printer, JSON_KEY, thingToGet, 1);
+        json_print_pretty(&printer, JSON_INT, internalRep, strlen(internalRep));
+        json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
+        json_print_free(&printer);
+        *data = mystream.str().c_str();
+        *size = strlen(*data);
+        *format = "application/json";
+        *errstring = "none";
+        *argumentsToAdvance = 1;
+        return GUIDO_SESSION_PARSING_SUCCESS;
+    }
+    
+    GuidoSessionParsingError HTTPDServer::mapGet (guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n, const char* thingToGet)
+    {
+        const char* internalRep = currentSession->getStringRepresentationOf(thingToGet);
+        json_printer printer;
+        stringstream mystream;
+        Time2GraphicMap outmap;
+        GuidoErrCode err;
+        if (strcmp(thingToGet, "pagemap") == 0)
+            err = currentSession->getmap (PAGE, 0, outmap);
+        else if (strcmp(thingToGet, "systemmap") == 0)
+            err = currentSession->getmap (SYSTEM, 0, outmap);
+        else
+        {
+            if (n == args.size ())
+                return genericFailure (size, data, format, errstring, argumentsToAdvance, "You need an extra argument for this map call.");
+            if (strcmp(thingToGet, "systemmap") == 0 && strcmp(args[n + 1].second.c_str(), "voice") != 0)
+                return genericFailure (size, data, format, errstring, argumentsToAdvance, "To get a voicemap, the argument must be followed by a voice argument indicating which voice you want.");
+            if (strcmp(thingToGet, "systemmap") == 0 && strcmp(args[n + 1].second.c_str(), "staff") != 0)
+                return genericFailure (size, data, format, errstring, argumentsToAdvance, "To get a staffmap, the argument must be followed by a staff argument indicating which staff you want.");
+            int aux = atoi(args[n+1].second.c_str());
+            if (strcmp(thingToGet, "staffmap") == 0)
+                err = currentSession->getmap (STAFF, aux, outmap);
+            else if (strcmp(thingToGet, "voicemap") == 0)
+                err = currentSession->getmap (VOICE, aux, outmap);
+        }
+        if (err != guidoNoErr)
+            return genericFailure (size, data, format, errstring, argumentsToAdvance, "Could not generate a map for your request.");
+        json_print_init(&printer, printchannel, &mystream);
+        json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
+        if (currentSession != &anonymousSession)
+        {
+            json_print_pretty(&printer, JSON_KEY, "username", 1);
+            json_print_pretty(&printer, JSON_INT, currentSession->url.c_str(), strlen(currentSession->url.c_str()));
+        }
+        json_print_pretty(&printer, JSON_KEY, thingToGet, 1);
+        json_print_pretty(&printer, JSON_ARRAY_BEGIN, NULL, 0);
+        stringstream buffer;
+        for (int i = 0; i < outmap.size(); i++)
+        {
+            json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
+                json_print_pretty(&printer, JSON_KEY, "begintime", 1);
+                json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
+                    json_print_pretty(&printer, JSON_KEY, "num", 1);
+                        buffer << outmap[i].first.first.num;
+                    json_print_pretty(&printer, JSON_INT, buffer.str().c_str(), strlen(buffer.str().c_str()));
+                    json_print_pretty(&printer, JSON_KEY, "denom", 1);
+                        buffer.flush();
+                        buffer << outmap[i].first.first.denom;
+                    json_print_pretty(&printer, JSON_INT, buffer.str().c_str(), strlen(buffer.str().c_str()));
+                json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
+                json_print_pretty(&printer, JSON_KEY, "endtime", 1);
+                json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
+                    json_print_pretty(&printer, JSON_KEY, "num", 1);
+                        buffer.flush();
+                        buffer << outmap[i].first.second.num;
+                    json_print_pretty(&printer, JSON_INT, buffer.str().c_str(), strlen(buffer.str().c_str()));
+                    json_print_pretty(&printer, JSON_KEY, "denom", 1);
+                        buffer.flush();
+                        buffer << outmap[i].first.second.denom;
+                    json_print_pretty(&printer, JSON_INT, buffer.str().c_str(), strlen(buffer.str().c_str()));
+                json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
+                json_print_pretty(&printer, JSON_KEY, "floatrec", 1);
+                json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
+                    json_print_pretty(&printer, JSON_KEY, "up", 1);
+                    json_print_pretty(&printer, JSON_INT, "1", 1);
+                    json_print_pretty(&printer, JSON_KEY, "left", 1);
+                    json_print_pretty(&printer, JSON_INT, "1", 1);
+                    json_print_pretty(&printer, JSON_KEY, "right", 1);
+                    json_print_pretty(&printer, JSON_INT, "1", 1);
+                    json_print_pretty(&printer, JSON_KEY, "bottom", 1);
+                    json_print_pretty(&printer, JSON_INT, "1", 1);
+                json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
+            json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
+        }
+        json_print_pretty(&printer, JSON_ARRAY_END, NULL, 0);
+        json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
+        json_print_free(&printer);
+        *data = mystream.str().c_str();
+        *size = strlen(*data);
+        *format = "text/plain";
+        *errstring = "none";
+        *argumentsToAdvance = (strcmp(thingToGet, "pagemap") == 0 || strcmp(thingToGet, "systemmap") == 0) ? 1 : 2;
+        return GUIDO_SESSION_PARSING_SUCCESS;
+    }
 } // end namespoace
