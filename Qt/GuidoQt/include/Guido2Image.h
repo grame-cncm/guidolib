@@ -146,7 +146,7 @@ class Guido2Image
 		/*!
 		*	\brief	Same as gmnStringToImage above, but using a data structure instead.
 		*/
-		static Guido2ImageErrorCodes gmnString2Image( const Params& p);
+		static Guido2ImageErrorCodes gmnString2Image( const Params& p, bool resizeMusicToPage = false);
 
 		/*!
 		*	\brief	Same as gmnStringToImage, except that it uses the gmnFileName GMN file.
