@@ -2,10 +2,11 @@
 #ifndef WIN32
 #include <libgen.h>
 #endif
+#include <stdio.h>
 #include <iostream>
 #include <string>
 #include <stdlib.h>
-#include <QApplication>
+#include <QtGui/QApplication>
 
 #include "QGuidoPainter.h"
 #include "guido2img.h"

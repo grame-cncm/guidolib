@@ -1,5 +1,7 @@
-SOURCES += main.cpp HTTPDServer.cpp guido2img.cpp
-HEADERS += HTTPDServer.h guido2img.h
+SOURCES += main.cpp HTTPDServer.cpp guido2img.cpp guidosession.cpp
+HEADERS += HTTPDServer.h guido2img.h guidosession.h
+
+#QMAKE_LFLAGS += -static
 
 TEMPLATE = app
 win32 {

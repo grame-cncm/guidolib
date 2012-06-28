@@ -21,30 +21,39 @@
 
 */
 
-#include <QBuffer>
+#include <QtCore/QBuffer>
 
 #include "guido2img.h"
 #include "Guido2Image.h"
+
+#include <assert.h>
 
 using namespace std;
 namespace guidohttpd
 {
 
 //--------------------------------------------------------------------------
-Guido2ImageErrorCodes guido2img::convert (const char* gmn, int page, int width, int height, float zoom)
+Guido2ImageErrorCodes guido2img::convert (guidosession *currentSession)
 {
 	Guido2Image::Params p;
-	p.input  = gmn;	
+	p.input  = currentSession->gmn.c_str ();	
 	p.output = 0;
-	p.format = GUIDO_2_IMAGE_PNG;
+    switch (currentSession->format)
+    {
+        case GUIDO_WEB_API_PNG : p.format = GUIDO_2_IMAGE_PNG; break;
+        case GUIDO_WEB_API_JPEG : p.format = GUIDO_2_IMAGE_JPEG; break;
+        case GUIDO_WEB_API_GIF : p.format = GUIDO_2_IMAGE_GIF; break;
+        case GUIDO_WEB_API_SVG :  assert (false);
+        default : p.format = GUIDO_2_IMAGE_PNG; break;
+    }
 	p.layout = 0;
-	p.pageIndex = page;
-	p.sizeConstraints = QSize (width, height);
-	p.zoom = zoom;
+	p.pageIndex = currentSession->page;
+	p.sizeConstraints = QSize (currentSession->width, currentSession->height);
+	p.zoom = currentSession->zoom;
 
 	fBuffer.reset();
 	p.device = &fBuffer;
-	return Guido2Image::gmnString2Image (p);
+	return Guido2Image::gmnString2Image (p, currentSession->resizeToPage);
 }
 
 } // end namespoace

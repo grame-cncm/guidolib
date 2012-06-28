@@ -31,6 +31,7 @@
 
 #include "HTTPDServer.h"
 #include "guido2img.h"
+#include "guidosession.h"
 
 using namespace std;
 
@@ -115,73 +116,87 @@ const char* HTTPDServer::getMIMEType (const string& page)
 }
 
 //--------------------------------------------------------------------------
-int HTTPDServer::page (struct MHD_Connection *connection, const char * page)
+int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, const TArgs& args)
 {
-	int ret = 0;
-	char * root =  getenv("FAUSTDocumentRoot");
-	string file = root ? root : ".";
-	file += page;
-	const char* type = getMIMEType (file);
-
-	int fd = open (file.c_str(), O_RDONLY);
-	if (fd != -1) {
-		int length = lseek(fd, 0, SEEK_END);
-		lseek(fd, 0, SEEK_SET);
-		
-		struct MHD_Response *response = MHD_create_response_from_fd (length, fd);
-		if (!response ) {
-			cerr << "MHD_create_response_from_fd error: null response\n";
-			return MHD_NO;
-		}
-		MHD_add_response_header (response, "Content-Type", type ? type : "text/plain");
-		ret = MHD_queue_response (connection, MHD_HTTP_OK, response);
-		MHD_destroy_response (response);
-	}
-	else {
-		ret = send (connection, "", 0, MHD_HTTP_NOT_FOUND);
-	}
-	return ret;
-}
-
-//--------------------------------------------------------------------------
-int HTTPDServer::sendGuido (struct MHD_Connection *connection, const TArgs& args)
-{
-	const char* gmn = 0;
-	int page = 0;			// default page: all pages
-	int width = 0;
-	int height = 0;
-	float zoom = 0;
-	for (unsigned int n = 0; n < args.size(); n++) {
-		if (args[n].first == "gmn")
-			gmn = args[n].second.c_str();
-		if (args[n].first == "page")
-			page = atoi (args[n].second.c_str());
+    guidosession *currentSession;
+    if (!url)
+        currentSession = &anonymousSession;
+    else {
+        // we first check to see if the session exists
+        map<string, guidosession>::iterator it;
+        it = namedSessions.find(url);
+        if (it == namedSessions.end ())
+        {
+            namedSessions[url]; // we initialize
+            namedSessions[url].initialize();
+            
+        }
+        currentSession = &namedSessions[url];
+    }
+    /*
+     const char* gmn = 0;
+     int page = 0;			// default page: all pages
+     int width = 0;
+     int height = 0;
+     float zoom = 0;
+     */
+    GuidoSessionParsingError parseError;
+    unsigned int n = 0;
+    unsigned int argumentsToAdvance;
+    const char* data;
+    int size;
+    const char* format;
+    const char* errstring;
+    int finalMessageToSend = 0;
+    callback_function callback;
+    
+	while (n < args.size()) {
+		if (args[n].first == "get")
+			callback = &HTTPDServer::handleGet;
+		else if (args[n].first == "page")
+			callback = &HTTPDServer::handlePage;
 		else if (args[n].first == "width")
-			width = atoi (args[n].second.c_str());
+			callback = &HTTPDServer::handleWidth;
 		else if (args[n].first == "height")
-			height = atoi (args[n].second.c_str());
+			callback = &HTTPDServer::handleHeight;
+        else if (args[n].first == "marginleft")
+			callback = &HTTPDServer::handleMarginLeft;
+        else if (args[n].first == "marginright")
+			callback = &HTTPDServer::handleMarginRight;
+        else if (args[n].first == "margintop")
+			callback = &HTTPDServer::handleMarginTop;
+        else if (args[n].first == "marginbottom")
+			callback = &HTTPDServer::handleMarginBottom;
 		else if (args[n].first == "zoom")
-			zoom = atof (args[n].second.c_str());
+			callback = &HTTPDServer::handleZoom;
+		else if (args[n].first == "resizepagetomusic")
+			callback = &HTTPDServer::handleResizePageToMusic;
+        else if (args[n].first == "gmn")
+			callback = &HTTPDServer::handleGMN;
+        else if (args[n].first == "format")
+			callback = &HTTPDServer::handleFormat;
+        else
+            callback = &HTTPDServer::handleFaultyInput;
+        
+        parseError = (this->*callback)(currentSession, &size, &data, &format, &errstring, &argumentsToAdvance, args, n);
+        
+        if (parseError == GUIDO_SESSION_PARSING_SUCCESS)
+        {
+            n += argumentsToAdvance;
+            finalMessageToSend = send (connection, data, size, format);            
+        }
+        else
+        {
+            n += 1;
+            cout << errstring << " " << format;
+            finalMessageToSend = send(connection, errstring, format); // show something about the error...
+        }
 	}
-	if (!width) width = 400;
-	if (!height) height = 600;
-	if (!zoom) zoom = 2.0f;
-	
-	if (!gmn)
-		return send (connection, "invalide gmn code", "text/plain");
-		
-	Guido2ImageErrorCodes err = fConverter->convert (gmn, page, width, height, zoom);
-	if (err == GUIDO_2_IMAGE_SUCCESS) {
-		return send (connection, fConverter->data(), fConverter->size(), "image/png");
-	}
-	const char * errstring = Guido2Image::getErrorString (err);
-	return send (connection, errstring, "text/plain");
-}
+    return finalMessageToSend;}
 
 //--------------------------------------------------------------------------
 int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, const char *method, const char *, const char *, size_t *, void **)
 {
-	int ret = 0;
 	MHD_ValueKind t = MHD_GET_ARGUMENT_KIND;
 	if (0 == strcmp (method, "GET"))		t = MHD_GET_ARGUMENT_KIND;
 	else if (0 == strcmp (method, "POST"))	t = MHD_POSTDATA_KIND;
@@ -191,7 +206,7 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
 		msg += " is not supported";
 		return send (connection, msg.c_str(), 0, MHD_HTTP_BAD_REQUEST);
 	}
-
+    
 	TArgs args;
 	MHD_get_connection_values (connection, t, _get_params, &args);
 	if (fDebug) {
@@ -200,17 +215,131 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
 			cout << args[i].first << "=" << args[i].second << " ";
 		cout << endl;
 	}
-
-	if (args.size() >= 1) 
-		return sendGuido (connection, args);
-
-	else if (args.size() == 0) {
-		const char * file = strcmp (url, "/") ? url : "/guido.html";
-		return page (connection, file );
-	}
-	ret = send (connection, "", 0, MHD_HTTP_NOT_FOUND);
-	return ret;
+    
+	return sendGuido (connection, url, args);
 }
+
+    // ------ callbacks --------
+    
+    GuidoSessionParsingError HTTPDServer::handleGet(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n)
+    {
+        *data = "All get calls are not yet implemented. Please check back later.";
+        *size = strlen(*data);
+        *format = "text/plain";
+        *errstring = "none";
+        *argumentsToAdvance = 1;
+        return GUIDO_SESSION_PARSING_SUCCESS;
+    }
+    GuidoSessionParsingError HTTPDServer::handlePage(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n)
+    {
+        currentSession->page = atof(args[n].second.c_str());
+        return genericReturnImage(currentSession, size, data, format, errstring, argumentsToAdvance);
+    }
+    GuidoSessionParsingError HTTPDServer::handleWidth(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n)
+    {
+        currentSession->width = atof(args[n].second.c_str());
+        return genericReturnImage(currentSession, size, data, format, errstring, argumentsToAdvance);
+    }
+    GuidoSessionParsingError HTTPDServer::handleHeight(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n)
+    {
+        currentSession->height = atof(args[n].second.c_str());
+        return genericReturnImage(currentSession, size, data, format, errstring, argumentsToAdvance);
+    }
+    GuidoSessionParsingError HTTPDServer::handleMarginLeft(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n)
+    {
+        currentSession->marginleft = atof(args[n].second.c_str());
+        return genericReturnImage(currentSession, size, data, format, errstring, argumentsToAdvance);
+    }
+    GuidoSessionParsingError HTTPDServer::handleMarginRight(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n)
+    {
+        currentSession->marginright = atof(args[n].second.c_str());
+        return genericReturnImage(currentSession, size, data, format, errstring, argumentsToAdvance);
+    }
+    GuidoSessionParsingError HTTPDServer::handleMarginTop(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n)
+    {
+        currentSession->margintop = atof(args[n].second.c_str());
+        return genericReturnImage(currentSession, size, data, format, errstring, argumentsToAdvance);
+    }
+    GuidoSessionParsingError HTTPDServer::handleMarginBottom(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n)
+    {
+        currentSession->marginbottom = atof(args[n].second.c_str());
+        return genericReturnImage(currentSession, size, data, format, errstring, argumentsToAdvance);
+    }
+    GuidoSessionParsingError HTTPDServer::handleZoom(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n)
+    {
+        currentSession->zoom  = atof(args[n].second.c_str());
+        return genericReturnImage(currentSession, size, data, format, errstring, argumentsToAdvance);
+    }
+    
+    GuidoSessionParsingError HTTPDServer::handleResizePageToMusic(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n)
+    {
+        if (strcmp("true", args[n].second.c_str()) == 0)
+            currentSession->resizeToPage = true;
+        else if (strcmp("True", args[n].second.c_str()) == 0)
+            currentSession->resizeToPage = true;
+        else if (strcmp("false", args[n].second.c_str()) == 0)
+            currentSession->resizeToPage = false;
+        else if (strcmp("False", args[n].second.c_str()) == 0)
+            currentSession->resizeToPage = false;
+        else
+            return genericFailure(size, data, format, errstring, argumentsToAdvance, "Must specify true or false for resizeToPage");
+        return genericReturnImage(currentSession, size, data, format, errstring, argumentsToAdvance);
+    }
+    
+    GuidoSessionParsingError HTTPDServer::handleGMN(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n)
+    {
+        currentSession->gmn  = string(args[n].second);
+        return genericReturnImage(currentSession, size, data, format, errstring, argumentsToAdvance);
+    }
+    
+    GuidoSessionParsingError HTTPDServer::handleFormat(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n)
+    {
+        if (strcmp("png", args[n].second.c_str()) == 0)
+            currentSession->format = GUIDO_WEB_API_PNG;
+        else if (strcmp("jpeg", args[n].second.c_str()) == 0)
+            currentSession->format = GUIDO_WEB_API_JPEG;
+        else if (strcmp("jpg", args[n].second.c_str()) == 0)
+            currentSession->format = GUIDO_WEB_API_JPEG;
+        else if (strcmp("gif", args[n].second.c_str()) == 0)
+            currentSession->format = GUIDO_WEB_API_GIF;
+        else if (strcmp("gif", args[n].second.c_str()) == 0)
+            currentSession->format = GUIDO_WEB_API_SVG;
+        else
+            return genericFailure(size, data, format, errstring, argumentsToAdvance, "Not a valid format - please choose from png, jpeg, gif or svg.");
+        return genericReturnImage(currentSession, size, data, format, errstring, argumentsToAdvance);
+    }
+    
+    GuidoSessionParsingError HTTPDServer::handleFaultyInput(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n)
+    {
+        return genericFailure (size, data, format, errstring, argumentsToAdvance, "You have entered insane input.");
+    }
+    
+    // ---- Abstractions
+    
+    GuidoSessionParsingError HTTPDServer::genericReturnImage(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance)
+    {
+        Guido2ImageErrorCodes err = fConverter->convert(currentSession);
+        if (err == GUIDO_2_IMAGE_SUCCESS)
+        {
+            *data = fConverter->data();
+            *size = fConverter->size();
+            *format = currentSession->formatToMIMEType();
+            *errstring = "";
+            *argumentsToAdvance = 1;
+            return GUIDO_SESSION_PARSING_SUCCESS;
+        }
+        return genericFailure (size, data, format, errstring, argumentsToAdvance, Guido2Image::getErrorString (err));
+    }
+    
+    GuidoSessionParsingError HTTPDServer::genericFailure(int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const char* errorstring)
+    {
+        *data = "";
+        *size = 0;
+        *format = "text/plain";
+        *errstring = errorstring;
+        *argumentsToAdvance = 1;
+        return GUIDO_SESSION_PARSING_FAILURE;
+    }
 
 
 } // end namespoace

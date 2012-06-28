@@ -25,8 +25,9 @@
 #ifndef __guido2img__
 #define __guido2img__
 
-#include <QBuffer>
+#include <QtCore/QBuffer>
 #include "Guido2Image.h"
+#include "guidosession.h"
 
 namespace guidohttpd
 {
@@ -39,7 +40,7 @@ class guido2img
 				 guido2img() {}
 		virtual ~guido2img() {}
 
-		Guido2ImageErrorCodes convert (const char* gmn, int page, int width, int height, float zoom=1.0f);
+    Guido2ImageErrorCodes convert (guidosession *currentSession);
 
 		const char* data()	{ return fBuffer.data().constData(); }
 		int			size()	{ return fBuffer.size(); }
