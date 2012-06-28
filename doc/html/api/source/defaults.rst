@@ -1,6 +1,6 @@
 .. _defaults:
 
-GUIDOEngine Web API Default Settings
+Default Settings
 ===============================================
 
 Below are default settings for a Guido document.
