@@ -12,7 +12,7 @@ To interpret gmn code ``gmn=[a%20b%20c%20d]``, one makes the following call to
 the Guido Web Server:
 
 .. parsed-literal::
-  `http://www.faust.grame.org:8000/?gmn=[a%20b%20c%20d] <http://www.faust.grame.org:8000/?gmn=[a%20b%20c%20d]>`_
+  `http://faust.grame.org:8000/?gmn=[a%20b%20c%20d] <http://faust.grame.org:8000/?gmn=[a%20b%20c%20d]>`_
 
 The output will use GUIDO server default settings for page and formatting
 attributes (discussed in :ref:`defaults`), creating the result:
@@ -26,7 +26,7 @@ attributes (discussed in :ref:`defaults`), creating the result:
    in most modern browsers, you can call:
 
      .. parsed-literal::
-        `http://www.faust.grame.org:8000/?gmn=[a b c d] <http://www.faust.grame.org:8000/?gmn=[a%20b%20c%20d]>`_
+        `http://faust.grame.org:8000/?gmn=[a b c d] <http://faust.grame.org:8000/?gmn=[a%20b%20c%20d]>`_
 
    And it will get you a correct result.
 
@@ -35,7 +35,7 @@ arguments.  For example, to get a page map, the page in question must be
 specified.  This is done by appending those arguments to the URL.
 
 .. parsed-literal::
-  http://www.faust.grame.org:8000/?get=pagemap&page=1
+  http://faust.grame.org:8000/?get=voicemap&voice=1
 
 Resulting in::
 
@@ -46,12 +46,12 @@ order.  For example, the ``get=point`` call requires two arguments, an ``x``
 and ``y`` coordinate for the point.  This can be either:
 
 .. parsed-literal::
-  http://www.faust.grame.org:8000/?get=point&x=10&y=50
+  http://faust.grame.org:8000/?get=point&x=10&y=50
 
 or:
 
 .. parsed-literal::
-  http://www.faust.grame.org:8000/?get=point&y=50&x=10
+  http://faust.grame.org:8000/?get=point&y=50&x=10
 
 Resulting in::
 
@@ -78,7 +78,7 @@ for each call. All extra arguments for a given call to a server must be
 specified immediately after the call.  So:
 
 .. parsed-literal::
-  http://www.faust.grame.org:8000/?gmn=[a%20b]&get=point&x=10&y=50
+  http://faust.grame.org:8000/?gmn=[a%20b]&get=point&x=10&y=50
 
 Will first return::
 
@@ -91,7 +91,7 @@ And then::
 By reversing the calls:
 
 .. parsed-literal::
-  http://www.faust.grame.org:8000/?get=point&x=10&y=50&gmn=[a%20b]
+  http://faust.grame.org:8000/?get=point&x=10&y=50&gmn=[a%20b]
 
 We first receive::
 
