@@ -33,6 +33,7 @@
 
 #include "guidosession.h"
 #include "guido2img.h"
+#include "json.h"
 
 namespace guidohttpd
 {
@@ -92,6 +93,8 @@ namespace guidohttpd
         
 		static int send (struct MHD_Connection *connection, const char *page, int length, const char *type, int status=MHD_HTTP_OK);
 		static int send (struct MHD_Connection *connection, const char *page, const char *type, int status=MHD_HTTP_OK);
+        
+        static json_type swapTypeForName (const char* type);
     };
     
 } // end namespoace

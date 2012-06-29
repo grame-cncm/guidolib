@@ -71,6 +71,7 @@ static int _get_params (void *cls, enum MHD_ValueKind , const char *key, const c
 HTTPDServer::HTTPDServer(int port, guido2img* g2svg)  
 	: fPort(port), fServer(0), fConverter(g2svg), fDebug(true)
 {
+    anonymousSession.initialize();
 }
 
 HTTPDServer::~HTTPDServer() { stop(); }
@@ -125,20 +126,21 @@ const char* HTTPDServer::getMIMEType (const string& page)
 //--------------------------------------------------------------------------
 int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, const TArgs& args)
 {
+    string suburl = string(url).substr(1,string::npos);
     guidosession *currentSession;
-    if (!url)
+    if (suburl.size() == 0)
         currentSession = &anonymousSession;
     else {
         // we first check to see if the session exists
         map<string, guidosession>::iterator it;
-        it = namedSessions.find(url);
+        it = namedSessions.find(suburl);
         if (it == namedSessions.end ())
         {
-            namedSessions[url]; // we initialize
-            namedSessions[url].initialize();
-            namedSessions[url].url = url;            
+            namedSessions[suburl]; // we initialize
+            namedSessions[suburl].initialize();
+            namedSessions[suburl].url = suburl;            
         }
-        currentSession = &namedSessions[url];
+        currentSession = &namedSessions[suburl];
     }
     /*
      const char* gmn = 0;
@@ -157,7 +159,6 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
     callback_function callback;
     
 	while (n < args.size()) {
-
 		if (args[n].first == "get")
 			callback = &HTTPDServer::handleGet;
 		else if (args[n].first == "page")
@@ -198,6 +199,9 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
             size = strlen(data);
         }
 	}
+    if (currentSession == &anonymousSession)
+        anonymousSession.initialize();
+
     // Only the final result gets sent.
     return send (connection, data, size, format);
 }
@@ -360,8 +364,15 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
     {
         *data = "";
         *size = 0;
-        *format = "text/plain";
-        *errstring = errorstring;
+        *format = "application/json";
+        json_printer printer;
+        stringstream mystream;
+        json_print_init(&printer, printchannel, &mystream);
+        json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
+        json_print_pretty(&printer, JSON_KEY, "error", 1);
+        json_print_pretty(&printer, JSON_STRING, errorstring, 1);
+        json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
+        *errstring = mystream.str().c_str();
         *argumentsToAdvance = 1;
         return GUIDO_SESSION_PARSING_FAILURE;
     }
@@ -376,10 +387,13 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
         if (currentSession != &anonymousSession)
         {
             json_print_pretty(&printer, JSON_KEY, "username", 1);
-            json_print_pretty(&printer, JSON_INT, currentSession->url.c_str(), strlen(currentSession->url.c_str()));
+            json_print_pretty(&printer, JSON_STRING, currentSession->url.c_str(), 1);
         }
+        json_type type = swapTypeForName(thingToGet);
+        if (type == JSON_NONE)
+            return genericFailure (size, data, format, errstring, argumentsToAdvance, "Cannot find correct JSON type output.");
         json_print_pretty(&printer, JSON_KEY, thingToGet, 1);
-        json_print_pretty(&printer, JSON_INT, internalRep, strlen(internalRep));
+        json_print_pretty(&printer, type, internalRep, type == JSON_STRING ? 1 : strlen(internalRep));
         json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
         json_print_free(&printer);
         *data = strdup(mystream.str().c_str());
@@ -634,5 +648,28 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
         *errstring = "none";
         *argumentsToAdvance = (type == PAGE || type == SYSTEM) ? 4 : 5;
         return GUIDO_SESSION_PARSING_SUCCESS;
+    }
+    
+    json_type HTTPDServer::swapTypeForName (const char* type)
+    {
+        if (strcmp("width", type) == 0)
+            return JSON_FLOAT;
+        else if (strcmp("height", type) == 0)
+            return JSON_FLOAT;
+        else if (strcmp("margintop", type) == 0)
+            return JSON_FLOAT;
+        else if (strcmp("marginbottom", type) == 0)
+            return JSON_FLOAT;
+        else if (strcmp("marginleft", type) == 0)
+            return JSON_FLOAT;
+        else if (strcmp("marginright", type) == 0)
+            return JSON_FLOAT;
+        else if (strcmp("zoom", type) == 0)
+            return JSON_FLOAT;
+        else if (strcmp("format", type) == 0)
+            return JSON_STRING;
+        else if (strcmp("gmn", type) == 0)
+            return JSON_STRING;
+        return JSON_NONE;
     }
 } // end namespoace

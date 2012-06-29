@@ -3,7 +3,7 @@ Overview
 
 This page provides an overview of certain key concepts in the GUIDOEngine
 Web API.  For all of the examples below, we assume that the base URL
-of the server is ``http://faust.grame.org`` running on port ``8000``.
+of the server is ``http://faust.grame.fr`` running on port ``8000``.
 
 Basic server calls
 ------------------
@@ -12,7 +12,7 @@ To interpret gmn code ``gmn=[a%20b%20c%20d]``, one makes the following call to
 the Guido Web Server:
 
 .. parsed-literal::
-  `http://faust.grame.org:8000/?gmn=[a%20b%20c%20d] <http://faust.grame.org:8000/?gmn=[a%20b%20c%20d]>`_
+  `http://faust.grame.fr:8000/?gmn=[a%20b%20c%20d] <http://faust.grame.fr:8000/?gmn=[a%20b%20c%20d]>`_
 
 The output will use GUIDO server default settings for page and formatting
 attributes (discussed in :ref:`defaults`), creating the result:
@@ -26,7 +26,7 @@ attributes (discussed in :ref:`defaults`), creating the result:
    in most modern browsers, you can call:
 
      .. parsed-literal::
-        `http://faust.grame.org:8000/?gmn=[a b c d] <http://faust.grame.org:8000/?gmn=[a%20b%20c%20d]>`_
+        `http://faust.grame.fr:8000/?gmn=[a b c d] <http://faust.grame.fr:8000/?gmn=[a%20b%20c%20d]>`_
 
    And it will get you a correct result.
 
@@ -35,27 +35,65 @@ arguments.  For example, to get a page map, the page in question must be
 specified.  This is done by appending those arguments to the URL.
 
 .. parsed-literal::
-  http://faust.grame.org:8000/?get=voicemap&voice=1
+  `http://faust.grame.fr:8000/?get=voicemap&voice=1 <http://faust.grame.fr:8000/?get=voicemap&voice=1>`_
 
 Resulting in::
 
-  foo
+  {
+          "voicemap": [
+                  {
+                          "begintime": {
+                                  "num": 0,
+                                  "denom": 1
+                          },
+                          "endtime": {
+                                  "num": 1,
+                                  "denom": 4
+                          },
+                          "floatrec": {
+                                  "left": 211.116,
+                                  "right": 253.269,
+                                  "top": 196.714,
+                                  "bottom": 231.842
+                          }
+                  }
+          ]
+  }
 
 For calls that require multiple arguments, the arguments can appear in any
-order.  For example, the ``get=point`` call requires two arguments, an ``x``
-and ``y`` coordinate for the point.  This can be either:
+order.  For example, the ``get=point`` call requires three arguments, an ``x``
+and ``y`` coordinate for the point as well as a ``map`` argument.
+Depending on the ``map``, a fourth argument may be required as well.
+This can be written either as:
 
 .. parsed-literal::
-  http://faust.grame.org:8000/?get=point&x=10&y=50
+  `http://faust.grame.fr:8000/?get=point&y=200&x=220&map=voice&voice=1 <http://faust.grame.fr:8000/?get=point&y=200&x=220&map=voice&voice=1>`_
 
 or:
 
 .. parsed-literal::
-  http://faust.grame.org:8000/?get=point&y=50&x=10
+  `http://faust.grame.fr:8000/?get=point&x=220&map=voice&voice=1&y=200 <http://faust.grame.fr:8000/?get=point&x=220&map=voice&voice=1&y=200>`_
 
 Resulting in::
 
-  foo
+  {
+          "point": {
+                  "begintime": {
+                          "num": 0,
+                          "denom": 1
+                  },
+                  "endtime": {
+                          "num": 1,
+                          "denom": 4
+                  },
+                  "floatrec": {
+                          "left": 211.116,
+                          "right": 253.269,
+                          "top": 196.714,
+                          "bottom": 231.842
+                  }
+          }
+  }
 
 Server responses
 ----------------
@@ -78,33 +116,100 @@ last valid call. All extra arguments for a given call to a server must be
 specified immediately after the call.  So:
 
 .. parsed-literal::
-  http://faust.grame.org:8000/?gmn=[a%20b]&get=point&x=10&y=50
+  `http://faust.grame.fr:8000/?gmn=[a%20b]&get=voicemap&voice=1 <http://faust.grame.fr:8000/?gmn=[a%20b]&get=voicemap&voice=1>`_
 
 Will return::
+
+  {
+          "voicemap": [
+                  {
+                          "begintime": {
+                                  "num": 0,
+                                  "denom": 1
+                          },
+                          "endtime": {
+                                  "num": 1,
+                                  "denom": 4
+                          },
+                          "floatrec": {
+                                  "left": 148.724,
+                                  "right": 178.419,
+                                  "top": 76.7129,
+                                  "bottom": 101.459
+                          }
+                  },
+                  {
+                          "begintime": {
+                                  "num": 1,
+                                  "denom": 4
+                          },
+                          "endtime": {
+                                  "num": 1,
+                                  "denom": 2
+                          },
+                          "floatrec": {
+                                  "left": 266.938,
+                                  "right": 296.634,
+                                  "top": 64.3399,
+                                  "bottom": 89.086
+                          }
+                  }
+          ]
+  }
 
 By reversing the calls:
 
 .. parsed-literal::
-  http://faust.grame.org:8000/?get=point&x=10&y=50&gmn=[a%20b]
+  `http://faust.grame.fr:8000/?get=voicemap&voice=1&gmn=[a%20b] <http://faust.grame.fr:8000/?get=voicemap&voice=1&gmn=[a%20b]>`_
 
-We receive::
+We receive:
 
-Note that the result is different in the two calls.  In the first, the point
-gotten corresponds to the previously specified gmn code ``gmn=[a%20b]``,
-whereas in the second example the ``get=point`` applies to the default
-``gmn`` (``[a]``), as no ``gmn`` has been specified yet.
+.. image:: ab.png
+
+Note that the number of notes reported to the map is different in the
+two calls. In the first, the map corresponds to the previously specified
+gmn code ``gmn=[a%20b]``, whereas in the second example the
+``get=voicemap`` applies to the default ``gmn`` (``[a]``),
+as no ``gmn`` has been specified yet. However, as this result is not reported
+back (only the image is reported back as it is the last requested
+object), there is no visual confirmation that this is the case.
 
 GET and POST calls to the server
 --------------------------------
+
+The server receives both GET and POST calls.
 
 Corrupt URLs
 ------------
 
 Corrupt URLs for the GUIDOEngine Web Server come in many shapes and sizes.
 
-- a
-- b
-- c 
+- URLs that are malformed and thus unparseable.
+- URLs that specify inexistent arguments.
+- URLs that pass erroneous variables to arguments.
+- URLs that do not pass enough arguments for a given request.
+
+In all of these cases, if the web server encounters an argument that it
+cannot parse in full, it will ignore it and move to the next one. So,
+for example:
+
+.. parsed-literal::
+  `http://faust.grame.fr:8000/?get=point&y=200&x=220&map=voice <http://faust.grame.fr:8000/?get=point&y=200&x=220&map=voice>`_
+
+Will fail because it does not specify a voice and will return::
+
+  {
+          "error": "You have entered insane input."
+  }
+
+On the other hand:
+
+.. parsed-literal::
+  `http://faust.grame.fr:8000/?get=point&y=200&x=220&map=voice&gmn=[c c c] <http://faust.grame.fr:8000/?get=point&y=200&x=220&map=voice&gmn=[c c c]>`_
+
+Will fail for the first call but succeed for the second, returning:
+
+.. image:: ccc.png
 
 .. _anon-named:
 
@@ -116,17 +221,23 @@ numbers in between the base URL of the Guido server and the subsequent
 arguments (if any).  For example, we can instantiate the named session
 for name ``ensemble101`` with ``gmn=[a b c d]`` by calling:
 
-  .. http://faust.grame.org:8000/ensemble101?gmn=[a b c d]
+.. parsed-literal::
+  `http://faust.grame.fr:8000/ensemble101?gmn=[c d e f] <http://faust.grame.fr:8000/ensemble101?gmn=[c d e f]>`_
+
+Returning:
+
+.. image:: cdef.png
 
 When a named session is created, a GRHandler object is created that corresponds
 to the session's name.  This GRHandler retains all information about that
-session.  So, for example, if one calls::
+session.  So, for example, if one calls:
 
-  http://faust.grame.org:8000/ensemble101?get=gmn
+.. parsed-literal::
+  `http://faust.grame.fr:8000/ensemble101?get=gmn <http://faust.grame.fr:8000/ensemble101?get=gmn>`_
 
 The result will be::
 
-  [a b c d]
-
-
-
+  {
+          "username": "ensemble101",
+          "gmn": "[c d e f]"
+  }
