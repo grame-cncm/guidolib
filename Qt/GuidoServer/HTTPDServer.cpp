@@ -86,12 +86,12 @@ bool HTTPDServer::start(int port)
 void HTTPDServer::stop ()
 { 
 	if (fServer) MHD_stop_daemon (fServer); 
-	fServer=0; 
+	fServer=0;
 }
 
 //--------------------------------------------------------------------------
 int HTTPDServer::send (struct MHD_Connection *connection, const char *page, int length, const char* type, int status)
-{
+    {
 	struct MHD_Response *response = MHD_create_response_from_buffer (length, (void *) page, MHD_RESPMEM_MUST_COPY);
 	if (!response) {
 		cerr << "MHD_create_response_from_buffer error: null response\n";
@@ -154,10 +154,10 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
     int size;
     const char* format;
     const char* errstring;
-    int finalMessageToSend = 0;
     callback_function callback;
     
 	while (n < args.size()) {
+
 		if (args[n].first == "get")
 			callback = &HTTPDServer::handleGet;
 		else if (args[n].first == "page")
@@ -184,21 +184,23 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
 			callback = &HTTPDServer::handleFormat;
         else
             callback = &HTTPDServer::handleFaultyInput;
-        
+
         parseError = (this->*callback)(currentSession, &size, &data, &format, &errstring, &argumentsToAdvance, args, n);
+
         if (parseError == GUIDO_SESSION_PARSING_SUCCESS)
         {
             n += argumentsToAdvance;
-            finalMessageToSend = send (connection, data, size, format);
         }
         else
         {
             n += 1;
-            cout << errstring << " " << format << endl;
-            finalMessageToSend = send(connection, errstring, format); // show something about the error...
+            data = strdup(errstring);
+            size = strlen(data);
         }
 	}
-    return finalMessageToSend;}
+    // Only the final result gets sent.
+    return send (connection, data, size, format);
+}
 
 //--------------------------------------------------------------------------
 int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, const char *method, const char *, const char *, size_t *, void **)
@@ -236,12 +238,14 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
             if (strcmp(simple_ids[i], args[n].second.c_str()) == 0)
                 return simpleGet (currentSession, size, data, format, errstring, argumentsToAdvance, simple_ids[i]);
 
-        const int MAP_SIZE = 9;
+        const int MAP_SIZE = 4;
         const char* map_ids[MAP_SIZE] = {"pagemap","staffmap","voicemap","systemmap"};
         for (int i = 0; i < MAP_SIZE; i++)
             if (strcmp(map_ids[i], args[n].second.c_str()) == 0)
                 return mapGet (currentSession, size, data, format, errstring, argumentsToAdvance, args, n, map_ids[i]);
 
+        if (strcmp("point", args[n].second.c_str()) == 0)
+            return pointGet (currentSession, size, data, format, errstring, argumentsToAdvance, args, n);
         return genericFailure(size, data, format, errstring, argumentsToAdvance, "Unidentified get.");
     }
     
@@ -378,7 +382,7 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
         json_print_pretty(&printer, JSON_INT, internalRep, strlen(internalRep));
         json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
         json_print_free(&printer);
-        *data = mystream.str().c_str();
+        *data = strdup(mystream.str().c_str());
         *size = strlen(*data);
         *format = "application/json";
         *errstring = "none";
@@ -388,9 +392,6 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
     
     GuidoSessionParsingError HTTPDServer::mapGet (guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n, const char* thingToGet)
     {
-        const char* internalRep = currentSession->getStringRepresentationOf(thingToGet);
-        json_printer printer;
-        stringstream mystream;
         Time2GraphicMap outmap;
         GuidoErrCode err;
         if (strcmp(thingToGet, "pagemap") == 0)
@@ -399,7 +400,7 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
             err = currentSession->getmap (SYSTEM, 0, outmap);
         else
         {
-            if (n == args.size ())
+            if (n >= args.size () - 1)
                 return genericFailure (size, data, format, errstring, argumentsToAdvance, "You need an extra argument for this map call.");
             if (strcmp(thingToGet, "systemmap") == 0 && strcmp(args[n + 1].second.c_str(), "voice") != 0)
                 return genericFailure (size, data, format, errstring, argumentsToAdvance, "To get a voicemap, the argument must be followed by a voice argument indicating which voice you want.");
@@ -413,6 +414,8 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
         }
         if (err != guidoNoErr)
             return genericFailure (size, data, format, errstring, argumentsToAdvance, "Could not generate a map for your request.");
+        json_printer printer;
+        stringstream mystream;
         json_print_init(&printer, printchannel, &mystream);
         json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
         if (currentSession != &anonymousSession)
@@ -429,6 +432,7 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
                 json_print_pretty(&printer, JSON_KEY, "begintime", 1);
                 json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
                     json_print_pretty(&printer, JSON_KEY, "num", 1);
+                        buffer.str("");
                         buffer << outmap[i].first.first.num;
                     json_print_pretty(&printer, JSON_INT, buffer.str().c_str(), strlen(buffer.str().c_str()));
                     json_print_pretty(&printer, JSON_KEY, "denom", 1);
@@ -471,11 +475,164 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
         json_print_pretty(&printer, JSON_ARRAY_END, NULL, 0);
         json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
         json_print_free(&printer);
-        *data = mystream.str().c_str();
+        *data = strdup(mystream.str().c_str());
         *size = strlen(*data);
-        *format = "text/plain";
+        *format = "application/json";
         *errstring = "none";
         *argumentsToAdvance = (strcmp(thingToGet, "pagemap") == 0 || strcmp(thingToGet, "systemmap") == 0) ? 1 : 2;
+        return GUIDO_SESSION_PARSING_SUCCESS;
+    }
+    GuidoSessionParsingError HTTPDServer::pointGet (guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n)
+    {
+        if (n >= args.size () - 3)
+            return genericFailure (size, data, format, errstring, argumentsToAdvance, "You need both x and y arguments as well as a mapping specification for get=point.");
+        float x;
+        float y;
+        const char* maptype;
+        int aux;
+        GuidoSessionMapType type = NO_TYPE;
+        int i = 1;
+        int movingTarget = 4;
+        while (i < movingTarget) {
+            if (args[n + i].first == "x")
+                x = atof(args[n + i].second.c_str());
+            else if (args[n + i].first == "y")
+                y = atof(args[n + i].second.c_str());
+            else if (args[n + i].first == "map")
+            {
+                maptype = args[n + i].second.c_str();
+                if (strcmp("page", maptype) == 0)
+                {
+                    if (type != NO_TYPE && type != PAGE)
+                        return genericFailure (size, data, format, errstring, argumentsToAdvance, "Cannot specify a page map with a previously specified type."); 
+                    else
+                        type = PAGE;
+                        }
+                else if (strcmp("voice", maptype) == 0)
+                {
+                    if (type != NO_TYPE && type != VOICE)
+                    return genericFailure (size, data, format, errstring, argumentsToAdvance, "Cannot specify a voice map with a previously specified type.");
+                    else
+                        type = VOICE;
+                }
+                else if (strcmp("staff", maptype) == 0)
+                {
+                    if (type != NO_TYPE && type != STAFF)
+                    return genericFailure (size, data, format, errstring, argumentsToAdvance, "Cannot specify a staff map with a previously specified type.");
+                    else
+                        type = STAFF;
+                }
+                else if (strcmp("system", maptype) == 0)
+                {
+                    if (type != NO_TYPE && type != SYSTEM)
+                    return genericFailure (size, data, format, errstring, argumentsToAdvance, "Cannot specify a system map with a previously specified type."); 
+                    else {
+                        type = SYSTEM;
+                    }
+                }
+                
+            }
+            else if (args[n + i].first == "voice")
+            {
+                aux = atoi(args[n + i].second.c_str());
+                if (type != NO_TYPE && type != VOICE)
+                    return genericFailure (size, data, format, errstring, argumentsToAdvance, "Cannot specify voice for this type of map.");
+                type = VOICE;
+            }
+            else if (args[n + i].first == "staff")
+            {
+                aux = atoi(args[n + i].second.c_str());
+                if (type != NO_TYPE && type != STAFF   )
+                    return genericFailure (size, data, format, errstring, argumentsToAdvance, "Cannot specify staff for this type of map.");
+                type = STAFF;
+            }
+            if (type && (type == STAFF || type == VOICE) && n >= args.size () - 4)
+                return genericFailure (size, data, format, errstring, argumentsToAdvance, "You're missing an argument for get=point.");
+            else if (type && (type == STAFF || type == VOICE) && n < args.size () - 4)
+                movingTarget = 5;
+            i++;
+        }
+        if (!x || !y || !maptype)
+            return genericFailure (size, data, format, errstring, argumentsToAdvance, "Necessary argument not specified for getting map type.");
+        if (type != NO_TYPE && (type == STAFF || type == VOICE) && !aux)
+            return genericFailure (size, data, format, errstring, argumentsToAdvance, "Necessary argument not specified for getting map type.");
+        GuidoErrCode err;
+        Time2GraphicMap outmap;
+        switch (type) {
+            case PAGE : err = currentSession->getmap (PAGE, 0, outmap); break;
+            case STAFF : err = currentSession->getmap (STAFF, aux, outmap); break;
+            case SYSTEM : err = currentSession->getmap (SYSTEM, 0, outmap); break;
+            case VOICE : err = currentSession->getmap (VOICE, aux, outmap); break;
+            default : return genericFailure (size, data, format, errstring, argumentsToAdvance, "Exotic programming error.");
+        }
+        
+        if (err != guidoNoErr)
+            return genericFailure (size, data, format, errstring, argumentsToAdvance, "Exotic programming error.");
+
+        TimeSegment t;
+        FloatRect r;
+        GuidoGetPoint(x, y, outmap, t, r);
+        json_printer printer;
+        stringstream mystream;
+        json_print_init(&printer, printchannel, &mystream);
+        json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
+        if (currentSession != &anonymousSession)
+        {
+            json_print_pretty(&printer, JSON_KEY, "username", 1);
+            json_print_pretty(&printer, JSON_INT, currentSession->url.c_str(), strlen(currentSession->url.c_str()));
+        }
+        json_print_pretty(&printer, JSON_KEY, "point", 1);
+        stringstream buffer;
+        json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
+        json_print_pretty(&printer, JSON_KEY, "begintime", 1);
+        json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
+        json_print_pretty(&printer, JSON_KEY, "num", 1);
+        buffer.str("");
+        buffer << t.first.num;
+        json_print_pretty(&printer, JSON_INT, buffer.str().c_str(), strlen(buffer.str().c_str()));
+        json_print_pretty(&printer, JSON_KEY, "denom", 1);
+        buffer.str("");
+        buffer << t.first.denom;
+        json_print_pretty(&printer, JSON_INT, buffer.str().c_str(), strlen(buffer.str().c_str()));
+        json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
+        json_print_pretty(&printer, JSON_KEY, "endtime", 1);
+        json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
+        json_print_pretty(&printer, JSON_KEY, "num", 1);
+        buffer.str("");
+        buffer << t.second.num;
+        json_print_pretty(&printer, JSON_INT, buffer.str().c_str(), strlen(buffer.str().c_str()));
+        json_print_pretty(&printer, JSON_KEY, "denom", 1);
+        buffer.str("");
+        buffer << t.second.denom;
+        json_print_pretty(&printer, JSON_INT, buffer.str().c_str(), strlen(buffer.str().c_str()));
+        json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
+        json_print_pretty(&printer, JSON_KEY, "floatrec", 1);
+        json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
+        json_print_pretty(&printer, JSON_KEY, "left", 1);
+        buffer.str("");
+        buffer << r.left;
+        json_print_pretty(&printer, JSON_FLOAT, buffer.str().c_str(), strlen(buffer.str().c_str()));
+        json_print_pretty(&printer, JSON_KEY, "right", 1);
+        buffer.str("");
+        buffer << r.right;
+        json_print_pretty(&printer, JSON_FLOAT, buffer.str().c_str(), strlen(buffer.str().c_str()));
+        json_print_pretty(&printer, JSON_KEY, "top", 1);
+        buffer.str("");
+        buffer << r.top;
+        json_print_pretty(&printer, JSON_FLOAT, buffer.str().c_str(), strlen(buffer.str().c_str()));
+        json_print_pretty(&printer, JSON_KEY, "bottom", 1);
+        buffer.str("");
+        buffer << r.bottom;
+        json_print_pretty(&printer, JSON_FLOAT, buffer.str().c_str(), strlen(buffer.str().c_str()));
+        json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
+        json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
+        json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
+        json_print_free(&printer);
+        *data = strdup(mystream.str().c_str());
+        *size = strlen(*data);
+        *format = "application/json";
+        *errstring = "none";
+        *argumentsToAdvance = (type == PAGE || type == SYSTEM) ? 4 : 5;
         return GUIDO_SESSION_PARSING_SUCCESS;
     }
 } // end namespoace

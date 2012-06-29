@@ -88,6 +88,7 @@ namespace guidohttpd
         GuidoSessionParsingError genericFailure(int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const char* errorstring);
         GuidoSessionParsingError simpleGet (guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const char* thingToGet);
         GuidoSessionParsingError mapGet (guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n, const char* thingToGet);
+        GuidoSessionParsingError pointGet (guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n);
         
 		static int send (struct MHD_Connection *connection, const char *page, int length, const char *type, int status=MHD_HTTP_OK);
 		static int send (struct MHD_Connection *connection, const char *page, const char *type, int status=MHD_HTTP_OK);

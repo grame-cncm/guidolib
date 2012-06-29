@@ -73,33 +73,21 @@ All server calls in a single URL apply to the same GRHandler. This will
 either be an anonymous handler or a named handler, as discussed in the
 section :ref:`anon-named`.
 
-Multiple calls are interpreted from left to right and send a server response
-for each call. All extra arguments for a given call to a server must be
+Multiple calls are interpreted from left to right. The server responds to the
+last valid call. All extra arguments for a given call to a server must be
 specified immediately after the call.  So:
 
 .. parsed-literal::
   http://faust.grame.org:8000/?gmn=[a%20b]&get=point&x=10&y=50
 
-Will first return::
-
-  foo
-
-And then::
-
-  bar
+Will return::
 
 By reversing the calls:
 
 .. parsed-literal::
   http://faust.grame.org:8000/?get=point&x=10&y=50&gmn=[a%20b]
 
-We first receive::
-
-  foo
-
-And then::
-
-  bar
+We receive::
 
 Note that the result is different in the two calls.  In the first, the point
 gotten corresponds to the previously specified gmn code ``gmn=[a%20b]``,
