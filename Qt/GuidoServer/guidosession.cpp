@@ -72,8 +72,8 @@ namespace guidohttpd
     const char* guidosession::getStringRepresentationOf (const char* toget)
     {
         stringstream out;
-        if (strcmp (toget, "resizetopage") == 0)
-            out << resizeToPage;
+        if (strcmp (toget, "resizepagetomusic") == 0)
+            out << (resizeToPage ? "true" : "false");
         else if (strcmp(toget, "gmn") == 0)
             out << gmn;
         else if (strcmp(toget, "format") == 0)
@@ -94,8 +94,6 @@ namespace guidohttpd
             out << marginright;
         else if (strcmp(toget, "marginbottom") == 0)
             out << marginbottom;
-        else if (strcmp(toget, "systemdistance") == 0)
-            out << systemsDistance;
         else
             out << "";
         return out.str().c_str();

@@ -5,11 +5,28 @@ This page provides an overview of certain key concepts in the GUIDOEngine
 Web API.  For all of the examples below, we assume that the base URL
 of the server is ``http://faust.grame.fr`` running on port ``8000``.
 
+.. index::
+   single: GUIDO Music Notation
+   single: GUIDO Music Engine
+
+GUIDO Music Notation
+--------------------
+
+The GUIDO Music Notation Format is a formal language for score level music representation. It is a plain-text, i.e. readable and platform independent format capable of representing all information contained in conventional musical scores. The basic GUIDO Format is very flexible and can be easily extended and adapted to capture a wide variety of musical features beyond conventional musical notation (CMN). The GUIDO design is strongly influenced by objective oriented programming to facilitate an adequate representation of musical material, from tiny motives up to complex symphonic scores.
+
+GUIDO is a general purpose musical notation format; the intended range of application includes notation software, compositional and analytical systems and tools, performance systems, and large musical databases. It is powerful, flexible, easily portable, and human readable. 
+
+More about the GUIDO Engine Library and the GUDIO Music Notation Format can
+be found on the `GUIDO Sourceforge page <http://guidolib.sourceforge.net/>`_.
+
+.. index::
+   single: Server calls
+
 Basic server calls
 ------------------
 
-To interpret gmn code ``gmn=[a%20b%20c%20d]``, one makes the following call to
-the Guido Web Server:
+To interpret Gudio Music Notation (hereafter refered to as ``gmn``) code ``gmn=[a b c d]``, one makes
+the following call to the Guido Web Server:
 
 .. parsed-literal::
   `http://faust.grame.fr:8000/?gmn=[a%20b%20c%20d] <http://faust.grame.fr:8000/?gmn=[a%20b%20c%20d]>`_
@@ -31,7 +48,7 @@ attributes (discussed in :ref:`defaults`), creating the result:
    And it will get you a correct result.
 
 It is sometimes the case that a call to the Guido Web Server needs additional
-arguments.  For example, to get a page map, the page in question must be
+arguments.  For example, to get a :ref:`page map <page-map>`, the page in question must be
 specified.  This is done by appending those arguments to the URL.
 
 .. parsed-literal::
@@ -60,11 +77,15 @@ Resulting in::
           ]
   }
 
+.. index::
+   single: Multiple arguments
+
 For calls that require multiple arguments, the arguments can appear in any
-order.  For example, the ``get=point`` call requires three arguments, an ``x``
-and ``y`` coordinate for the point as well as a ``map`` argument.
-Depending on the ``map``, a fourth argument may be required as well.
-This can be written either as:
+order.  For example, :ref:`getting a point <get-point>` requires three arguments
+and needs a potential fourth as well depending on the previous three.
+The three necessary arguments ``x`` and ``y`` coordinate for the point as well as a ``map`` argument.
+A fourth argument is required as well if ``map`` is equal to ``voice`` or
+``staff``. This can be written either as:
 
 .. parsed-literal::
   `http://faust.grame.fr:8000/?get=point&y=200&x=220&map=voice&voice=1 <http://faust.grame.fr:8000/?get=point&y=200&x=220&map=voice&voice=1>`_
@@ -95,6 +116,9 @@ Resulting in::
           }
   }
 
+.. index::
+   single: Server responses
+
 Server responses
 ----------------
 
@@ -103,6 +127,9 @@ Graphical data will have a MIME type of ``image/png``, ``image/jpeg``,
 ``image/gif`` or ``image/svg+xml`` depending on the format specified in
 the URL.  Textual data will always be returned in JSON and thus the MIME
 type is ``application/json``.
+
+.. index::
+   single: Multiple server calls
 
 Multiple server calls in a single URL
 -------------------------------------
@@ -113,7 +140,7 @@ section :ref:`anon-named`.
 
 Multiple calls are interpreted from left to right. The server responds to the
 last valid call. All extra arguments for a given call to a server must be
-specified immediately after the call.  So:
+specified immediately after the call.  So :ref:`getting the voice map <voice-map>`:
 
 .. parsed-literal::
   `http://faust.grame.fr:8000/?gmn=[a%20b]&get=voicemap&voice=1 <http://faust.grame.fr:8000/?gmn=[a%20b]&get=voicemap&voice=1>`_
@@ -174,10 +201,17 @@ as no ``gmn`` has been specified yet. However, as this result is not reported
 back (only the image is reported back as it is the last requested
 object), there is no visual confirmation that this is the case.
 
+.. index::
+   single: GET
+   single: POST
+
 GET and POST calls to the server
 --------------------------------
 
 The server receives both GET and POST calls.
+
+.. index::
+   single: Corrupt URLs
 
 Corrupt URLs
 ------------
@@ -210,6 +244,10 @@ On the other hand:
 Will fail for the first call but succeed for the second, returning:
 
 .. image:: ccc.png
+
+.. index::
+   single: Anonymous session
+   single: Named session
 
 .. _anon-named:
 

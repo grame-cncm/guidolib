@@ -5,8 +5,49 @@ This page provides all of the calls avaiable in the GUIDOEngine web
 API.  For all of the examples below, we assume that the base URL
 of the server is ``http://faust.grame.fr`` running on port ``8000``.
 
+Data types
+----------
+
+.. index::
+  single: Date
+
+In addition to standard data types such as integers, floats and strings,
+two data types internal to the GUIDOEngine are represented in JSON.  The
+first, called a ``Date``, is expressed as a rational number with a
+numerator and denominator.  In the example below, ``begintime`` is a ``Date``::
+
+  {
+          "begintime": {
+                  "num": 1,
+                  "denom": 2
+          }
+  }
+
+.. index::
+  single: FloatRec
+
+``FloatRect`` objects are also represented.  A ``FloatRect`` is a rectangle
+defined by its ``top`` and ``bottom`` points on the Y axis and its ``left``
+and ``right`` points on the X axis.  In the example below, ``floatrec``
+is a ``Floatrec``::
+
+  {
+          "floatrec": {
+                  "left": 297.292,
+                  "right": 400,
+                  "top": 0,
+                  "bottom": 129.887
+          }
+  }
+
+.. index::
+  single: Setters
+
 Setter calls
 ------------
+
+.. index::
+  single: Set GMN
 
 GMN
 ^^^
@@ -22,6 +63,9 @@ Resulting in:
 
 Values must be valid GMN.
 
+.. index::
+  single: Set page
+
 Page
 ^^^^
 
@@ -35,6 +79,9 @@ Resulting in:
 .. image:: setPage.png
 
 Values must be integer values greater than 0.
+
+.. index::
+  single: Set width
 
 Width
 ^^^^^
@@ -50,6 +97,9 @@ Resulting in:
 
 Values must be floating point or integer values greater than 0.
 
+.. index::
+  single: Set height
+
 Height
 ^^^^^^
 
@@ -63,6 +113,9 @@ Resulting in:
 .. image:: setHeight.png
 
 Values must be floating point or integer values greater than 0.
+
+.. index::
+  single: Set left margin
 
 Left margin
 ^^^^^^^^^^^
@@ -78,6 +131,9 @@ Resulting in:
 
 Values must be floating point or integer values greater than 0.
 
+.. index::
+  single: Set right margin
+
 Right margin
 ^^^^^^^^^^^^
 
@@ -91,6 +147,9 @@ Resulting in:
 .. image:: setMarginright.png
 
 Values must be floating point or integer values greater than 0.
+
+.. index::
+  single: Set top margin
 
 Top margin
 ^^^^^^^^^^
@@ -106,6 +165,9 @@ Resulting in:
 
 Values must be floating point or integer values greater than 0.
 
+.. index::
+  single: Set bottom margin
+
 Bottom margin
 ^^^^^^^^^^^^^
 
@@ -120,6 +182,9 @@ Resulting in:
 
 Values must be floating point or integer values greater than 0.
 
+.. index::
+  single: Set zoom
+
 Zoom
 ^^^^
 
@@ -133,6 +198,9 @@ Resulting in:
 .. image:: setZoom.png
 
 Values must be floating point or integer values greater than 0.
+
+.. index::
+  single: Set resizepagetomusic
 
 Resize page to music
 ^^^^^^^^^^^^^^^^^^^^
@@ -149,6 +217,9 @@ Resulting in:
 
 Values must be either ``true`` or ``false``.
 
+.. index::
+  single: Set format
+
 Format
 ^^^^^^^^^^^^^^^^^^^^
 
@@ -163,3 +234,345 @@ Resulting in:
 
 Values must be either ``jpg``, ``gif`` or ``png``.
 
+.. index::
+  single: Getters
+
+Getter calls
+------------
+
+Getters for all setters
+^^^^^^^^^^^^^^^^^^^^^^^
+
+All setter calls above have equivalent getter calls in the form ``get=attribute``.
+For example:
+
+.. parsed-literal::
+  `http://faust.grame.fr:8000/?get=gmn <http://faust.grame.fr:8000/?get=gmn>`_
+
+Returns::
+
+  {
+          "gmn": "[c]"
+  }
+
+As a reminder, the available values for ``get`` corresponding to setter methods:
+
+- gmn
+- page
+- width
+- height
+- marginleft
+- marginright
+- margintop
+- marginbottom
+- zoom
+- resizepagetomusic
+- format
+
+Maps may be gotten as well.  A map in guido takes a musical entity (a page,
+staff, voice or system) are returns a map describing the objects in that
+entity.  The map maps beginning and end times (both represented as ``Date``)
+to the graphical bounding box of the object represented by a ``FloatRectangle``.
+
+.. _page-map:
+
+.. index::
+  single: Get page map
+
+Page map
+^^^^^^^^
+
+A page map in Gudio describes the begin and end times of a page as well as
+the bounding box of the entire musical content on the page (meaning one
+bounding box that groups together all musical objects).  The page value as
+well as the GMN are the ones set via previous calls to the server (or
+default values if none were set).
+
+The call:
+
+.. parsed-literal::
+  `http://faust.grame.fr:8000/?gmn=[a b c]&page=1&get=pagemap <http://faust.grame.fr:8000/?gmn=[a%20b%20c]&page=1&get=pagemap>`_
+
+Returns::
+
+  {
+	"pagemap": [
+		{
+			"begintime": {
+				"num": 0,
+				"denom": 1
+			},
+			"endtime": {
+				"num": 3,
+				"denom": 4
+			},
+			"floatrec": {
+				"left": 0,
+				"right": 400,
+				"top": 0,
+				"bottom": 129.887
+			}
+		}
+	]
+  }
+
+.. index::
+  single: Get system map
+
+System map
+^^^^^^^^^^
+
+A system map in Gudio describes the begin and end times of a system as well as
+the bounding box of the events on the system.  The page value as well
+as the GMN are the ones set via previous calls to the server (or default
+values if none were set).
+
+The call:
+
+.. parsed-literal::
+  `http://faust.grame.fr:8000/?gmn=[a b c]&page=1&get=systemmap <http://faust.grame.fr:8000/?gmn=[a%20b%20c]&page=1&get=systemmap>`_
+
+Returns::
+
+  {
+          "staffmap": [
+                  {
+                          "begintime": {
+                                  "num": 0,
+                                  "denom": 1
+                          },
+                          "endtime": {
+                                  "num": 1,
+                                  "denom": 4
+                          },
+                          "floatrec": {
+                                  "left": 114.797,
+                                  "right": 206.045,
+                                  "top": 21.0112,
+                                  "bottom": 97.4154
+                          }
+                  },
+                  {
+                          "begintime": {
+                                  "num": 1,
+                                  "denom": 4
+                          },
+                          "endtime": {
+                                  "num": 1,
+                                  "denom": 2
+                          },
+                          "floatrec": {
+                                  "left": 206.045,
+                                  "right": 297.292,
+                                  "top": 21.0112,
+                                  "bottom": 97.4154
+                          }
+                  },
+                  {
+                          "begintime": {
+                                  "num": 1,
+                                  "denom": 2
+                          },
+                          "endtime": {
+                                  "num": 3,
+                                  "denom": 4
+                          },
+                          "floatrec": {
+                                  "left": 297.292,
+                                  "right": 400,
+                                  "top": 21.0112,
+                                  "bottom": 97.4154
+                          }
+                  }
+          ]
+  }
+
+.. index::
+  single: Get staff map
+
+Staff map
+^^^^^^^^^
+
+A staff map in Gudio describes the begin and end times of a staff
+in a system as well as the bounding box of the events in the staff.
+The page value as well as the GMN are the ones set via previous
+calls to the server (or default values if none were set). The
+desired staff must be explicitly defined via ``staff``. Staves are
+indexed from the top to the bottom of a system. Below, we choose the
+first (and only) staff in the score.
+
+.. parsed-literal::
+  `http://faust.grame.fr:8000/?gmn=[a b c]&page=1&get=staffmap&staff=1 <http://faust.grame.fr:8000/?gmn=[a%20b%20c]&page=1&get=staffmap&staff=1>`_
+
+Returns::
+
+  {
+          "staffmap": [
+                  {
+                          "begintime": {
+                                  "num": 0,
+                                  "denom": 1
+                          },
+                          "endtime": {
+                                  "num": 1,
+                                  "denom": 4
+                          },
+                          "floatrec": {
+                                  "left": 114.797,
+                                  "right": 206.045,
+                                  "top": 21.0112,
+                                  "bottom": 97.4154
+                          }
+                  },
+                  {
+                          "begintime": {
+                                  "num": 1,
+                                  "denom": 4
+                          },
+                          "endtime": {
+                                  "num": 1,
+                                  "denom": 2
+                          },
+                          "floatrec": {
+                                  "left": 206.045,
+                                  "right": 297.292,
+                                  "top": 21.0112,
+                                  "bottom": 97.4154
+                          }
+                  },
+                  {
+                          "begintime": {
+                                  "num": 1,
+                                  "denom": 2
+                          },
+                          "endtime": {
+                                  "num": 3,
+                                  "denom": 4
+                          },
+                          "floatrec": {
+                                  "left": 297.292,
+                                  "right": 400,
+                                  "top": 21.0112,
+                                  "bottom": 97.4154
+                          }
+                  }
+          ]
+  }
+
+.. _voice-map:
+
+.. index::
+  single: Get voice map
+
+Voice map
+^^^^^^^^^
+
+A voice map in Gudio describes the begin and end times of a voice
+in a staff as well as the bounding box of the events in the voice.
+The page value as well as the GMN are the ones set via previous
+calls to the server (or default values if none were set). The
+desired voice must be explicitly defined via ``voice``. Staves are
+indexed from the top to the bottom of a system. Below, we choose the
+first (and only) voice in the score.
+
+.. parsed-literal::
+  `http://faust.grame.fr:8000/?gmn=[a b c]&page=1&get=voicemap&voice=1 <http://faust.grame.fr:8000/?gmn=[a%20b%20c]&page=1&get=voicemap&voice=1>`_
+
+Returns::
+
+  {
+          "voicemap": [
+                  {
+                          "begintime": {
+                                  "num": 0,
+                                  "denom": 1
+                          },
+                          "endtime": {
+                                  "num": 1,
+                                  "denom": 4
+                          },
+                          "floatrec": {
+                                  "left": 114.797,
+                                  "right": 206.045,
+                                  "top": 21.0112,
+                                  "bottom": 97.4154
+                          }
+                  },
+                  {
+                          "begintime": {
+                                  "num": 1,
+                                  "denom": 4
+                          },
+                          "endtime": {
+                                  "num": 1,
+                                  "denom": 2
+                          },
+                          "floatrec": {
+                                  "left": 206.045,
+                                  "right": 297.292,
+                                  "top": 21.0112,
+                                  "bottom": 97.4154
+                          }
+                  },
+                  {
+                          "begintime": {
+                                  "num": 1,
+                                  "denom": 2
+                          },
+                          "endtime": {
+                                  "num": 3,
+                                  "denom": 4
+                          },
+                          "floatrec": {
+                                  "left": 297.292,
+                                  "right": 400,
+                                  "top": 21.0112,
+                                  "bottom": 97.4154
+                          }
+                  }
+          ]
+  }
+
+.. _get-point:
+
+.. index::
+  single: Get point
+
+Point
+^^^^^
+For a given map, one can ask the GUIDOEngine Web Server ''Is there an event
+at a given point with coordinates ``x`` and ``y`` and the events in map ``map``?''
+``x`` and ``y`` are floating-point numbers and ``map`` is one of four maps:
+``page``, ``system``, ``voice`` and ``staff``.  Like the map calls above,
+``voice`` and ``staff`` must be followed by a ``voice`` or ``staff`` argument
+indicating the desired voice or staff. The syntax is:
+
+.. parsed-literal::
+  `http://faust.grame.fr:8000/?gmn=[a b c]&page=1&get=point&x=300&y=80&map=system <http://faust.grame.fr:8000/?gmn=[a%20b%20c]&page=1&get=point&x=300&y=80&map=system>`_
+
+Or, for an equivalent result using the voice map:
+
+.. parsed-literal::
+  `http://faust.grame.fr:8000/?gmn=[a b c]&page=1&get=point&x=300&y=80&map=voice&voice=1 <http://faust.grame.fr:8000/?gmn=[a%20b%20c]&page=1&get=point&x=300&y=80&map=voice&voice=1>`_
+
+
+Resulting in::
+
+  {
+          "point": {
+                  "begintime": {
+                          "num": 1,
+                          "denom": 2
+                  },
+                  "endtime": {
+                          "num": 3,
+                          "denom": 4
+                  },
+                  "floatrec": {
+                          "left": 297.292,
+                          "right": 400,
+                          "top": 0,
+                          "bottom": 129.887
+                  }
+          }
+  }

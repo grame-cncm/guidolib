@@ -236,8 +236,8 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
     
     GuidoSessionParsingError HTTPDServer::handleGet(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n)
     {
-        const int SIMPLE_SIZE = 9;
-        const char* simple_ids[SIMPLE_SIZE] = {"width", "height", "margintop", "marginbottom", "marginleft", "marginright", "zoom","format","gmn"};
+        const int SIMPLE_SIZE = 10;
+        const char* simple_ids[SIMPLE_SIZE] = {"width", "height", "margintop", "marginbottom", "marginleft", "marginright", "zoom","format","gmn", "resizepagetomusic"};
         for (int i = 0; i < SIMPLE_SIZE; i++)
             if (strcmp(simple_ids[i], args[n].second.c_str()) == 0)
                 return simpleGet (currentSession, size, data, format, errstring, argumentsToAdvance, simple_ids[i]);
@@ -669,6 +669,8 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
         else if (strcmp("format", type) == 0)
             return JSON_STRING;
         else if (strcmp("gmn", type) == 0)
+            return JSON_STRING;
+        else if (strcmp("resizepagetomusic", type) == 0)
             return JSON_STRING;
         return JSON_NONE;
     }
