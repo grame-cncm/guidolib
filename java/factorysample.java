@@ -9,11 +9,14 @@ public class factorysample extends Canvas
 {
 	static {
         try {
-			String arch = System.getProperty("os.arch");
-			if (arch.equals("x86"))
-				System.loadLibrary("jniGUIDOEngine");
-			else
-				System.loadLibrary("jniGUIDOEngine64");
+			String jnilib = "jniGUIDOEngine";
+			String os = System.getProperty("os.name").toLowerCase();
+			if (os.indexOf("mac") < 0) {
+				String arch = System.getProperty("os.arch");
+				if (!arch.equals("x86"))
+					jnilib = "jniGUIDOEngine64";
+			}
+			System.loadLibrary(jnilib);
 			guido.Init("Guido2", "Times");
 		} catch (UnsatisfiedLinkError e) {
 			System.err.println("Native code library failed to load.\n" + e);
