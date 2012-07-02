@@ -68,6 +68,18 @@ To compile the GUIDO Qt applications do the following:
   > make projects
 Next you should find Xcode projects into every application folder.
 Just open the projects and compile.
+!!!----------------------------
+ notes for Xcode 4
+!!!----------------------------
+qmake seems to fail generating a valid xcode project.
+I've updated Qt to version 4.8.1 and it solved the problem for me.
+Concerning the GuidoQt static library, all the Qt applications are expecting
+to find libGuidoQt.a at the root of the GuidoQt folder. The DESTDIR qmake variable
+is not taken into account by qmake and thus you have to modify the generated xcode 
+project manually (unfortunately): 
+in 'Build Settings' / 'Build Locations' / 'Per-configuration Build Products Path' 
+change 'Release' to '.'
+!!!----------------------------
 
 >>>>>> Windows
 ----------------------------
