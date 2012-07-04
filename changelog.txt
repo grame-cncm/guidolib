@@ -1,6 +1,11 @@
 GUIDO Engine history
 
 ----------------------------------------------------------------
+2012-04-05  version 1.5.0
+- rendering bug corrected: empty output whith empty \title tag on windows
+
+
+----------------------------------------------------------------
 2012-04-05  version 1.4.9
 - bug in hex colors setting (could be not taken into account)
 - crash bug catched (due to syntax error in chords duration modification)
