@@ -35,31 +35,22 @@ GRPageText::GRPageText ( ARMusicalTag * o, GRPage * p_grpage,
 				 const char* p_txt, const char* p_pageformat,
 				 const char* p_textformat, const char* p_textfont,
 				 int p_textsize, const char* p_textattrib)
-				 
   : GRTagARNotationElement(o, LSPACE)
 {
 	setTagType(GRTag::PAGETAG);
 
-	if (p_grpage) fGRPage = p_grpage;
-	if (p_txt) fPageText = p_txt ;
-	if (p_pageformat)fPageformat = p_pageformat;
-	if (p_textformat) 	
-		fTextformat =  p_textformat;
-	else
-		fTextformat = "lt";
-	
-	if (p_textfont)
-		font = new NVstring(p_textfont);
-
-	if (p_textattrib)
-		fontAttrib = new NVstring(p_textattrib);
-
+	if (p_grpage)		fGRPage = p_grpage;
+	if (p_txt)			fPageText = p_txt ;
+	if (p_pageformat)	fPageformat = p_pageformat;
+	if (p_textformat) 	fTextformat =  p_textformat;
+	else				fTextformat = "lt";
+	if (p_textfont)		font = new NVstring(p_textfont);
+	if (p_textattrib)	fontAttrib = new NVstring(p_textattrib);
 	mFontSize = p_textsize;
 
 	// now, we have to get a font ...
 	// this is plattform-dependant code ...
 	// this was done in special?
-
 	const VGFont* myfont = FontManager::gFontText;
 
 	if (font && font->length() > 0)
@@ -91,7 +82,7 @@ GRPageText::GRPageText ( ARMusicalTag * o, GRPage * p_grpage,
 
 	float width = 0;
 	float height = 0;
-	if( gGlobalSettings.gDevice )	
+	if( gGlobalSettings.gDevice && fPageText.size())	
 		myfont->GetExtent( cp, (int)fPageText.size(), &width, &height, gGlobalSettings.gDevice );
 	
 	// left and right Space is not
@@ -136,7 +127,7 @@ GRPageText::~GRPageText()
 
 void GRPageText::OnDraw(VGDevice & hdc) const
 {
-	GRTagARNotationElement::OnDrawText(hdc, fPageText.c_str(), (int)fPageText.size());
+	if (fPageText.size()) GRTagARNotationElement::OnDrawText(hdc, fPageText.c_str(), (int)fPageText.size());
 }
 
 void GRPageText::print() const
