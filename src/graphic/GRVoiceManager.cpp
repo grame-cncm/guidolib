@@ -506,7 +506,7 @@ int GRVoiceManager::DoBreak(const TYPE_TIMEPOSITION & tp,
 
 void GRVoiceManager::AddRegularEvent (GREvent * ev)
 {
-	if (ev->getNeedsSpring() == -1)
+	if (ev && (ev->getNeedsSpring() == -1))
 	{
 		// then I need the springID of curglobalstem or curgloballocation
 		GRNotationElement *firstEl = NULL;
