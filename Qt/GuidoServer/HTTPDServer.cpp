@@ -69,7 +69,7 @@ static int _get_params (void *cls, enum MHD_ValueKind , const char *key, const c
 // the http server
 //--------------------------------------------------------------------------
 HTTPDServer::HTTPDServer(int port, guido2img* g2svg)  
-	: fPort(port), fServer(0), fConverter(g2svg), fDebug(true)
+	: fPort(port), fServer(0), fConverter(g2svg), fDebug(false)
 {
     anonymousSession.initialize();
 }
