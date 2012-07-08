@@ -23,6 +23,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <cstring>
 
 #include "guidosession.h"
 #include "GUIDOEngine.h"
