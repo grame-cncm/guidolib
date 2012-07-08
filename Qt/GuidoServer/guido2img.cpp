@@ -36,6 +36,11 @@ namespace guidohttpd
 Guido2ImageErrorCodes guido2img::convert (guidosession *currentSession)
 {
 	Guido2Image::Params p;
+
+    GuidoPageFormat pf;
+    currentSession->fillGuidoPageFormatUsingCurrentSettings(&pf);
+    GuidoSetDefaultPageFormat(&pf);
+
 	p.input  = currentSession->gmn.c_str ();	
 	p.output = 0;
     switch (currentSession->format)
