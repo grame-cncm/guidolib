@@ -141,7 +141,7 @@ namespace guidohttpd
             case SYSTEM : err = GuidoGetSystemMap(grh, page, pf.width, pf.height, outmap); break;
             default : err = guidoErrActionFailed;
         }
-        cout << "GMN " << gmn << " SIZE " << outmap.size () << endl;
+        //cout << "GMN " << gmn << " SIZE " << outmap.size () << endl;
         return err;
     }
 } // end namespoace
