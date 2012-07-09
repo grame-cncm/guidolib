@@ -40,10 +40,11 @@ using namespace std;
 namespace guidohttpd
 {
 
-    static int printchannel(void *userdata, const char *data, uint32_t length)
+    static int printchannel(void *userdata, const char *data, uint32_t)
     {
         stringstream *foo = (stringstream *)userdata;
         *foo << data;
+        return 1;
     }
     
 //--------------------------------------------------------------------------
@@ -339,7 +340,7 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
         return genericReturnImage(currentSession, size, data, format, errstring, argumentsToAdvance);
     }
     
-    GuidoSessionParsingError HTTPDServer::handleFaultyInput(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n)
+    GuidoSessionParsingError HTTPDServer::handleFaultyInput(guidosession*, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs&, unsigned int)
     {
         return genericFailure (size, data, format, errstring, argumentsToAdvance, "You have entered insane input.");
     }
@@ -441,7 +442,7 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
         json_print_pretty(&printer, JSON_KEY, thingToGet, 1);
         json_print_pretty(&printer, JSON_ARRAY_BEGIN, NULL, 0);
         stringstream buffer;
-        for (int i = 0; i < outmap.size(); i++)
+        for (int i = 0; i < (int)(outmap.size()); i++)
         {
             json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
                 json_print_pretty(&printer, JSON_KEY, "begintime", 1);

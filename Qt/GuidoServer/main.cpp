@@ -40,9 +40,8 @@ int main(int argc, char **argv)
 {
     QApplication app( argc , argv );	// required by Qt
     // Our process ID and Session ID
-    
-    pid_t pid, sid;
     /*
+    pid_t pid, sid;
     // Fork off the parent process
     pid = fork();
     if (pid < 0) {
