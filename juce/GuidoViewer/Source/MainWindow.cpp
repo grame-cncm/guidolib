@@ -53,7 +53,7 @@ MainAppWindow::MainAppWindow()
     gmnview->setApplicationCommandManagerToWatch (&commandManager);
     setVisible (true);
 
-	//Font::setFallbackFontName (Font::getDefaultSansSerifFontName());
+	Font::setFallbackFontName (Font::getDefaultSansSerifFontName());
 	GuidoComponent::GuidoInit();
 }
 
