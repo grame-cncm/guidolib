@@ -133,7 +133,7 @@ namespace guidohttpd
          It is a temporary solution
          */
         stringstream mystream;
-        err = GuidoSVGExport(grh, page, mystream, "/Users/mikesolomon/Documents/guido/guido2.svg"); 
+        err = GuidoSVGExport(grh, page, mystream, "../../src/guido2.svg"); 
         
         switch(map){
             case PAGE : err = GuidoGetPageMap(grh, page, width, height, outmap); break;
