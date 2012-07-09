@@ -3,7 +3,7 @@ Overview
 
 This page provides an overview of certain key concepts in the GUIDOEngine
 Web API.  For all of the examples below, we assume that the base URL
-of the server is ``http://faust.grame.fr`` running on port ``8000``.
+of the server is ``http://guido.grame.fr`` running on port ``8000``.
 
 .. index::
    single: GUIDO Music Notation
@@ -29,7 +29,7 @@ To interpret Gudio Music Notation (hereafter refered to as ``gmn``) code ``gmn=[
 the following call to the Guido Web Server:
 
 .. parsed-literal::
-  `http://faust.grame.fr:8000/?gmn=[a%20b%20c%20d] <http://faust.grame.fr:8000/?gmn=[a%20b%20c%20d]>`_
+  `http://guido.grame.fr:8000/?gmn=[a%20b%20c%20d] <http://guido.grame.fr:8000/?gmn=[a%20b%20c%20d]>`_
 
 The output will use GUIDO server default settings for page and formatting
 attributes (discussed in :ref:`defaults`), creating the result:
@@ -43,7 +43,7 @@ attributes (discussed in :ref:`defaults`), creating the result:
    in most modern browsers, you can call:
 
      .. parsed-literal::
-        `http://faust.grame.fr:8000/?gmn=[a b c d] <http://faust.grame.fr:8000/?gmn=[a%20b%20c%20d]>`_
+        `http://guido.grame.fr:8000/?gmn=[a b c d] <http://guido.grame.fr:8000/?gmn=[a%20b%20c%20d]>`_
 
    And it will get you a correct result.
 
@@ -52,7 +52,7 @@ arguments.  For example, to get a :ref:`page map <page-map>`, the page in questi
 specified.  This is done by appending those arguments to the URL.
 
 .. parsed-literal::
-  `http://faust.grame.fr:8000/?get=voicemap&voice=1 <http://faust.grame.fr:8000/?get=voicemap&voice=1>`_
+  `http://guido.grame.fr:8000/?get=voicemap&voice=1 <http://guido.grame.fr:8000/?get=voicemap&voice=1>`_
 
 Resulting in::
 
@@ -88,12 +88,12 @@ A fourth argument is required as well if ``map`` is equal to ``voice`` or
 ``staff``. This can be written either as:
 
 .. parsed-literal::
-  `http://faust.grame.fr:8000/?get=point&y=200&x=220&map=voice&voice=1 <http://faust.grame.fr:8000/?get=point&y=200&x=220&map=voice&voice=1>`_
+  `http://guido.grame.fr:8000/?get=point&y=200&x=220&map=voice&voice=1 <http://guido.grame.fr:8000/?get=point&y=200&x=220&map=voice&voice=1>`_
 
 or:
 
 .. parsed-literal::
-  `http://faust.grame.fr:8000/?get=point&x=220&map=voice&voice=1&y=200 <http://faust.grame.fr:8000/?get=point&x=220&map=voice&voice=1&y=200>`_
+  `http://guido.grame.fr:8000/?get=point&x=220&map=voice&voice=1&y=200 <http://guido.grame.fr:8000/?get=point&x=220&map=voice&voice=1&y=200>`_
 
 Resulting in::
 
@@ -143,7 +143,7 @@ last valid call. All extra arguments for a given call to a server must be
 specified immediately after the call.  So :ref:`getting the voice map <voice-map>`:
 
 .. parsed-literal::
-  `http://faust.grame.fr:8000/?gmn=[a%20b]&get=voicemap&voice=1 <http://faust.grame.fr:8000/?gmn=[a%20b]&get=voicemap&voice=1>`_
+  `http://guido.grame.fr:8000/?gmn=[a%20b]&get=voicemap&voice=1 <http://guido.grame.fr:8000/?gmn=[a%20b]&get=voicemap&voice=1>`_
 
 Will return::
 
@@ -187,7 +187,7 @@ Will return::
 By reversing the calls:
 
 .. parsed-literal::
-  `http://faust.grame.fr:8000/?get=voicemap&voice=1&gmn=[a%20b] <http://faust.grame.fr:8000/?get=voicemap&voice=1&gmn=[a%20b]>`_
+  `http://guido.grame.fr:8000/?get=voicemap&voice=1&gmn=[a%20b] <http://guido.grame.fr:8000/?get=voicemap&voice=1&gmn=[a%20b]>`_
 
 We receive:
 
@@ -228,7 +228,7 @@ cannot parse in full, it will ignore it and move to the next one. So,
 for example:
 
 .. parsed-literal::
-  `http://faust.grame.fr:8000/?get=point&y=200&x=220&map=voice <http://faust.grame.fr:8000/?get=point&y=200&x=220&map=voice>`_
+  `http://guido.grame.fr:8000/?get=point&y=200&x=220&map=voice <http://guido.grame.fr:8000/?get=point&y=200&x=220&map=voice>`_
 
 Will fail because it does not specify a voice and will return::
 
@@ -239,7 +239,7 @@ Will fail because it does not specify a voice and will return::
 On the other hand:
 
 .. parsed-literal::
-  `http://faust.grame.fr:8000/?get=point&y=200&x=220&map=voice&gmn=[c c c] <http://faust.grame.fr:8000/?get=point&y=200&x=220&map=voice&gmn=[c c c]>`_
+  `http://guido.grame.fr:8000/?get=point&y=200&x=220&map=voice&gmn=[c c c] <http://guido.grame.fr:8000/?get=point&y=200&x=220&map=voice&gmn=[c c c]>`_
 
 Will fail for the first call but succeed for the second, returning:
 
@@ -260,7 +260,7 @@ arguments (if any).  For example, we can instantiate the named session
 for name ``ensemble101`` with ``gmn=[a b c d]`` by calling:
 
 .. parsed-literal::
-  `http://faust.grame.fr:8000/ensemble101?gmn=[c d e f] <http://faust.grame.fr:8000/ensemble101?gmn=[c d e f]>`_
+  `http://guido.grame.fr:8000/ensemble101?gmn=[c d e f] <http://guido.grame.fr:8000/ensemble101?gmn=[c d e f]>`_
 
 Returning:
 
@@ -271,7 +271,7 @@ to the session's name.  This GRHandler retains all information about that
 session.  So, for example, if one calls:
 
 .. parsed-literal::
-  `http://faust.grame.fr:8000/ensemble101?get=gmn <http://faust.grame.fr:8000/ensemble101?get=gmn>`_
+  `http://guido.grame.fr:8000/ensemble101?get=gmn <http://guido.grame.fr:8000/ensemble101?get=gmn>`_
 
 The result will be::
 
