@@ -204,7 +204,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
         anonymousSession.initialize();
 
     // Only the final result gets sent.
-    return send (connection, data, size, format);
+    return send (connection, strdup (data), size, format);
 }
 
 //--------------------------------------------------------------------------
