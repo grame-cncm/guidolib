@@ -154,7 +154,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
     GuidoSessionParsingError parseError;
     unsigned int n = 0;
     unsigned int argumentsToAdvance;
-    const char* data;
+    const char* data = "";
     int size;
     const char* format;
     const char* errstring;
