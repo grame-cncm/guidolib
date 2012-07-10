@@ -23,6 +23,7 @@
 
 #include "jsonhelper.h"
 #include "json.h"
+#include <string.h>
 #include <sstream>
 
 namespace guidohttpd
