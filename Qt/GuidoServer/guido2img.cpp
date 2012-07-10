@@ -36,6 +36,11 @@ namespace guidohttpd
 Guido2ImageErrorCodes guido2img::convert (guidosession *currentSession)
 {
 	Guido2Image::Params p;
+
+    GuidoPageFormat pf;
+    currentSession->fillGuidoPageFormatUsingCurrentSettings(&pf);
+    GuidoSetDefaultPageFormat(&pf);
+
 	p.input  = currentSession->gmn.c_str ();	
 	p.output = 0;
     switch (currentSession->format)
@@ -46,14 +51,18 @@ Guido2ImageErrorCodes guido2img::convert (guidosession *currentSession)
         case GUIDO_WEB_API_SVG :  assert (false);
         default : p.format = GUIDO_2_IMAGE_PNG; break;
     }
+
 	p.layout = 0;
 	p.pageIndex = currentSession->page;
 	p.sizeConstraints = QSize (currentSession->width, currentSession->height);
 	p.zoom = currentSession->zoom;
 
+    fBuffer.open(QIODevice::ReadWrite);
 	fBuffer.reset();
 	p.device = &fBuffer;
-	return Guido2Image::gmnString2Image (p, currentSession->resizeToPage);
+    Guido2ImageErrorCodes err = Guido2Image::gmnString2Image (p, currentSession->resizeToPage);
+    fBuffer.close();
+	return err;
 }
 
 } // end namespoace
