@@ -34,6 +34,7 @@
 #include "json.h"
 #include "guido2img.h"
 #include "guidosession.h"
+#include "jsonhelper.h"
 
 using namespace std;
 
@@ -437,7 +438,7 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
         if (currentSession != &anonymousSession)
         {
             json_print_pretty(&printer, JSON_KEY, "username", 1);
-            json_print_pretty(&printer, JSON_INT, strdup(currentSession->url.c_str()), strlen(currentSession->url.c_str()));
+            json_print_pretty(&printer, JSON_STRING, strdup(currentSession->url.c_str()), 1);
         }
         json_print_pretty(&printer, JSON_KEY, thingToGet, 1);
         json_print_pretty(&printer, JSON_ARRAY_BEGIN, NULL, 0);
@@ -445,47 +446,9 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
         for (int i = 0; i < (int)(outmap.size()); i++)
         {
             json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
-                json_print_pretty(&printer, JSON_KEY, "begintime", 1);
-                json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
-                    json_print_pretty(&printer, JSON_KEY, "num", 1);
-                        buffer.str("");
-                        buffer << outmap[i].first.first.num;
-                    json_print_pretty(&printer, JSON_INT, strdup(buffer.str().c_str()), strlen(buffer.str().c_str()));
-                    json_print_pretty(&printer, JSON_KEY, "denom", 1);
-                        buffer.str("");
-                        buffer << outmap[i].first.first.denom;
-                    json_print_pretty(&printer, JSON_INT, strdup(buffer.str().c_str()), strlen(buffer.str().c_str()));
-                json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
-                json_print_pretty(&printer, JSON_KEY, "endtime", 1);
-                json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
-                    json_print_pretty(&printer, JSON_KEY, "num", 1);
-                        buffer.str("");
-                        buffer << outmap[i].first.second.num;
-                    json_print_pretty(&printer, JSON_INT, strdup(buffer.str().c_str()), strlen(buffer.str().c_str()));
-                    json_print_pretty(&printer, JSON_KEY, "denom", 1);
-                        buffer.str("");
-                        buffer << outmap[i].first.second.denom;
-                    json_print_pretty(&printer, JSON_INT, strdup(buffer.str().c_str()), strlen(buffer.str().c_str()));
-                json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
-                json_print_pretty(&printer, JSON_KEY, "floatrec", 1);
-                json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
-                    json_print_pretty(&printer, JSON_KEY, "left", 1);
-                        buffer.str("");
-                        buffer << outmap[i].second.left;
-                    json_print_pretty(&printer, JSON_FLOAT, strdup(buffer.str().c_str()), strlen(buffer.str().c_str()));
-                    json_print_pretty(&printer, JSON_KEY, "right", 1);
-                        buffer.str("");
-                        buffer << outmap[i].second.right;
-                    json_print_pretty(&printer, JSON_FLOAT, strdup(buffer.str().c_str()), strlen(buffer.str().c_str()));
-                    json_print_pretty(&printer, JSON_KEY, "top", 1);
-                        buffer.str("");
-                        buffer << outmap[i].second.top;
-                    json_print_pretty(&printer, JSON_FLOAT, strdup(buffer.str().c_str()), strlen(buffer.str().c_str()));
-                    json_print_pretty(&printer, JSON_KEY, "bottom", 1);
-                        buffer.str("");
-                        buffer << outmap[i].second.bottom;
-                    json_print_pretty(&printer, JSON_FLOAT, strdup(buffer.str().c_str()), strlen(buffer.str().c_str()));
-                json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
+            GUIDOjson_print_date (&printer, "begintime", outmap[i].first.first.num, outmap[i].first.first.denom);
+            GUIDOjson_print_date (&printer, "endtime", outmap[i].first.second.num, outmap[i].first.second.denom);
+            GUIDOjson_print_float_rect (&printer , "floatrec", outmap[i].second.left, outmap[i].second.right, outmap[i].second.top, outmap[i].second.bottom);
             json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
         }
         json_print_pretty(&printer, JSON_ARRAY_END, NULL, 0);
@@ -600,47 +563,11 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
         json_print_pretty(&printer, JSON_KEY, "point", 1);
         stringstream buffer;
         json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
-        json_print_pretty(&printer, JSON_KEY, "begintime", 1);
-        json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
-        json_print_pretty(&printer, JSON_KEY, "num", 1);
-        buffer.str("");
-        buffer << t.first.num;
-        json_print_pretty(&printer, JSON_INT, strdup(buffer.str().c_str()), strlen(buffer.str().c_str()));
-        json_print_pretty(&printer, JSON_KEY, "denom", 1);
-        buffer.str("");
-        buffer << t.first.denom;
-        json_print_pretty(&printer, JSON_INT, strdup(buffer.str().c_str()), strlen(buffer.str().c_str()));
-        json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
-        json_print_pretty(&printer, JSON_KEY, "endtime", 1);
-        json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
-        json_print_pretty(&printer, JSON_KEY, "num", 1);
-        buffer.str("");
-        buffer << t.second.num;
-        json_print_pretty(&printer, JSON_INT, strdup(buffer.str().c_str()), strlen(buffer.str().c_str()));
-        json_print_pretty(&printer, JSON_KEY, "denom", 1);
-        buffer.str("");
-        buffer << t.second.denom;
-        json_print_pretty(&printer, JSON_INT, strdup(buffer.str().c_str()), strlen(buffer.str().c_str()));
-        json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
-        json_print_pretty(&printer, JSON_KEY, "floatrec", 1);
-        json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
-        json_print_pretty(&printer, JSON_KEY, "left", 1);
-        buffer.str("");
-        buffer << r.left;
-        json_print_pretty(&printer, JSON_FLOAT, strdup(buffer.str().c_str()), strlen(buffer.str().c_str()));
-        json_print_pretty(&printer, JSON_KEY, "right", 1);
-        buffer.str("");
-        buffer << r.right;
-        json_print_pretty(&printer, JSON_FLOAT, strdup(buffer.str().c_str()), strlen(buffer.str().c_str()));
-        json_print_pretty(&printer, JSON_KEY, "top", 1);
-        buffer.str("");
-        buffer << r.top;
-        json_print_pretty(&printer, JSON_FLOAT, strdup(buffer.str().c_str()), strlen(buffer.str().c_str()));
-        json_print_pretty(&printer, JSON_KEY, "bottom", 1);
-        buffer.str("");
-        buffer << r.bottom;
-        json_print_pretty(&printer, JSON_FLOAT, strdup(buffer.str().c_str()), strlen(buffer.str().c_str()));
-        json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
+        
+        GUIDOjson_print_date (&printer, "begintime", t.first.num, t.first.denom);
+        GUIDOjson_print_date (&printer, "endtime", t.second.num, t.second.denom);
+        GUIDOjson_print_float_rect(&printer, "floatrec", r.left, r.right, r.top, r.bottom);
+        
         json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
         json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
         json_print_free(&printer);
