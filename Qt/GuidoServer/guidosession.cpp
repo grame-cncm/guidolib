@@ -40,7 +40,7 @@ namespace guidohttpd
         format = GUIDO_WEB_API_PNG;
         page = 1;
         width = 400;
-        height = 600;
+        height = 100;
         zoom = 2.0f;
         marginleft = 10.0f;
         margintop = 10.0f;
@@ -133,7 +133,8 @@ namespace guidohttpd
          It is a temporary solution
          */
         stringstream mystream;
-        err = GuidoSVGExport(grh, page, mystream, "../../src/guido2.svg"); 
+        //err = GuidoSVGExport(grh, page, mystream, "../../src/guido2.svg");
+        err = GuidoSVGExport(grh, page, mystream, "/Users/mikesolomon/Documents/guido/guidolib/src/guido2.svg"); 
         
         switch(map){
             case PAGE : err = GuidoGetPageMap(grh, page, width, height, outmap); break;
