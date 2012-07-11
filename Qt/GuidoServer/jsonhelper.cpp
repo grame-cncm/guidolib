@@ -30,41 +30,49 @@ namespace guidohttpd
 {
 void GUIDOjson_print_date (json_printer *printer, const char* key, int num, int denom)
 {
+    const char* curstate;
     stringstream buffer;
     json_print_pretty(printer, JSON_KEY, key, 1);
     json_print_pretty(printer, JSON_OBJECT_BEGIN, NULL, 0);
     json_print_pretty(printer, JSON_KEY, "num", 1);
     buffer.str("");
     buffer << num;
-    json_print_pretty(printer, JSON_INT, strdup(buffer.str().c_str()), strlen(buffer.str().c_str()));
+    curstate = buffer.str().c_str();
+    json_print_pretty(printer, JSON_INT, curstate, strlen(curstate));
     json_print_pretty(printer, JSON_KEY, "denom", 1);
     buffer.str("");
     buffer << denom;
-    json_print_pretty(printer, JSON_INT, strdup(buffer.str().c_str()), strlen(buffer.str().c_str()));
+    curstate = buffer.str().c_str();
+    json_print_pretty(printer, JSON_INT, curstate, strlen(curstate));
     json_print_pretty(printer, JSON_OBJECT_END, NULL, 0);
 }
 
 void GUIDOjson_print_float_rect (json_printer *printer, const char* key, float left, float right, float top, float bottom)
 {
+    const char* curstate;
     stringstream buffer;
     json_print_pretty(printer, JSON_KEY, key, 1);
     json_print_pretty(printer, JSON_OBJECT_BEGIN, NULL, 0);
     json_print_pretty(printer, JSON_KEY, "left", 1);
     buffer.str("");
     buffer << left;
-    json_print_pretty(printer, JSON_FLOAT, strdup(buffer.str().c_str()), strlen(buffer.str().c_str()));
+    curstate = buffer.str().c_str();
+    json_print_pretty(printer, JSON_FLOAT, curstate, strlen(curstate));
     json_print_pretty(printer, JSON_KEY, "right", 1);
     buffer.str("");
     buffer << right;
-    json_print_pretty(printer, JSON_FLOAT, strdup(buffer.str().c_str()), strlen(buffer.str().c_str()));
+    curstate = buffer.str().c_str();
+    json_print_pretty(printer, JSON_FLOAT, curstate, strlen(curstate));
     json_print_pretty(printer, JSON_KEY, "top", 1);
     buffer.str("");
     buffer << top;
-    json_print_pretty(printer, JSON_FLOAT, strdup(buffer.str().c_str()), strlen(buffer.str().c_str()));
+    curstate = buffer.str().c_str();
+    json_print_pretty(printer, JSON_FLOAT, curstate, strlen(curstate));
     json_print_pretty(printer, JSON_KEY, "bottom", 1);
     buffer.str("");
     buffer << bottom;
-    json_print_pretty(printer, JSON_FLOAT, strdup(buffer.str().c_str()), strlen(buffer.str().c_str()));
+    curstate = buffer.str().c_str();
+    json_print_pretty(printer, JSON_FLOAT, curstate, strlen(curstate));
     json_print_pretty(printer, JSON_OBJECT_END, NULL, 0);
 }
 }

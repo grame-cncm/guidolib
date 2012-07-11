@@ -33,7 +33,6 @@
 
 #include "guidosession.h"
 #include "guido2img.h"
-#include "json.h"
 
 namespace guidohttpd
 {
@@ -49,16 +48,12 @@ namespace guidohttpd
         int					fPort;
         struct MHD_Daemon *	fServer;
         guido2img*			fConverter;
-        guidosession        anonymousSession;
-        std::map<std::string, guidosession> namedSessions;
+        std::map<std::string, guidosession *> fSessions;
         bool				fDebug;
         
         const char* getMIMEType (const std::string& page);
         
 	public:
-		typedef std::pair<std::string, std::string>	TArg;
-		typedef std::vector<TArg>					TArgs;
-        typedef GuidoSessionParsingError(HTTPDServer::*callback_function)(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n);
         
         HTTPDServer(int port, guido2img* g2img);
 		virtual ~HTTPDServer();
@@ -70,31 +65,10 @@ namespace guidohttpd
 					const char *upload_data, size_t *upload_data_size, void **con_cls);
 		int sendGuido (struct MHD_Connection *connection, const char* url, const TArgs& args);
         
-        // ------- CALLBACKS -------
-        GuidoSessionParsingError handleGet(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n);
-        GuidoSessionParsingError handlePage(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n);
-        GuidoSessionParsingError handleWidth(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n);
-        GuidoSessionParsingError handleHeight(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n);
-        GuidoSessionParsingError handleMarginLeft(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n);
-        GuidoSessionParsingError handleMarginRight(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n);
-        GuidoSessionParsingError handleMarginTop(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n);
-        GuidoSessionParsingError handleMarginBottom(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n);
-        GuidoSessionParsingError handleResizePageToMusic(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n);
-        GuidoSessionParsingError handleZoom(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n);
-        GuidoSessionParsingError handleGMN(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n);
-        GuidoSessionParsingError handleFormat(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n);
-        GuidoSessionParsingError handleFaultyInput(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n);
-        // -----------------------------
-        GuidoSessionParsingError genericReturnImage(guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance);
-        GuidoSessionParsingError genericFailure(int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const char* errorstring);
-        GuidoSessionParsingError simpleGet (guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const char* thingToGet);
-        GuidoSessionParsingError mapGet (guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n, const char* thingToGet);
-        GuidoSessionParsingError pointGet (guidosession* currentSession, int* size, const char** data, const char** format, const char** errstring, unsigned int* argumentsToAdvance, const HTTPDServer::TArgs& args, unsigned int n);
         
 		static int send (struct MHD_Connection *connection, const char *page, int length, const char *type, int status=MHD_HTTP_OK);
 		static int send (struct MHD_Connection *connection, const char *page, const char *type, int status=MHD_HTTP_OK);
         
-        static json_type swapTypeForName (const char* type);
     };
     
 } // end namespoace
