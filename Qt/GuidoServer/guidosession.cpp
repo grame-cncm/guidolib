@@ -313,7 +313,7 @@ namespace guidohttpd
     
     GuidoSessionParsingError guidosession::simpleGet (int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, string thingToGet)
     {
-        const char* internalRep = getStringRepresentationOf(thingToGet);
+        string internalRep = getStringRepresentationOf(thingToGet);
         json_printer printer;
         stringstream mystream;
         json_print_init(&printer, printchannel, &mystream);
@@ -328,8 +328,9 @@ namespace guidohttpd
         if (type == JSON_NONE)
             return genericFailure (size, data, format, errstring, argumentsToAdvance, "Cannot find correct JSON type output.");
         const char* constCharVersionOfThingToGet = thingToGet.c_str();
+        const char* constCharVersionOfInternalRep = internalRep.c_str();
         json_print_pretty(&printer, JSON_KEY, constCharVersionOfThingToGet, 1);
-        json_print_pretty(&printer, type, internalRep, type == JSON_STRING ? 1 : strlen(internalRep));
+        json_print_pretty(&printer, type, constCharVersionOfInternalRep, type == JSON_STRING ? 1 : strlen(constCharVersionOfInternalRep));
         json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
         json_print_free(&printer);
         *data = strdup(mystream.str().c_str());
