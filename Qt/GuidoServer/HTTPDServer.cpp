@@ -174,6 +174,8 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
 			callback = &guidosession::handleGMN;
         else if (args[n].first == "format")
 			callback = &guidosession::handleFormat;
+        else if (args[n].first == "")
+            callback = &guidosession::handleBlankRequest;
         else
             callback = &guidosession::handleFaultyInput;
 
