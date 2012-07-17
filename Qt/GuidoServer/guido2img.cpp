@@ -33,7 +33,7 @@ namespace guidohttpd
 {
 
 //--------------------------------------------------------------------------
-Guido2ImageErrorCodes guido2img::convert (guidosession *currentSession)
+Guido2ImageErrorCodes guido2img::convert (guidosession* const currentSession)
 {
 	Guido2Image::Params p;
 
@@ -41,9 +41,9 @@ Guido2ImageErrorCodes guido2img::convert (guidosession *currentSession)
     currentSession->fillGuidoPageFormatUsingCurrentSettings(&pf);
     GuidoSetDefaultPageFormat(&pf);
 
-	p.input  = currentSession->gmn.c_str ();	
+	p.input  = currentSession->gmn_.c_str ();	
 	p.output = 0;
-    switch (currentSession->format)
+    switch (currentSession->format_)
     {
         case GUIDO_WEB_API_PNG : p.format = GUIDO_2_IMAGE_PNG; break;
         case GUIDO_WEB_API_JPEG : p.format = GUIDO_2_IMAGE_JPEG; break;
@@ -53,14 +53,14 @@ Guido2ImageErrorCodes guido2img::convert (guidosession *currentSession)
     }
 
 	p.layout = 0;
-	p.pageIndex = currentSession->page;
-	p.sizeConstraints = QSize (currentSession->width, currentSession->height);
-	p.zoom = currentSession->zoom;
+	p.pageIndex = currentSession->page_;
+	p.sizeConstraints = QSize (currentSession->width_, currentSession->height_);
+	p.zoom = currentSession->zoom_;
 
     fBuffer.open(QIODevice::ReadWrite);
 	fBuffer.reset();
 	p.device = &fBuffer;
-    Guido2ImageErrorCodes err = Guido2Image::gmnString2Image (p, currentSession->resizeToPage);
+    Guido2ImageErrorCodes err = Guido2Image::gmnString2Image (p, currentSession->resizeToPage_);
     fBuffer.close();
 	return err;
 }

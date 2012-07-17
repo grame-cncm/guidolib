@@ -31,7 +31,7 @@
 
 namespace guidohttpd
 {
-
+    class guidosession;
 //--------------------------------------------------------------------------
 class guido2img
 {
