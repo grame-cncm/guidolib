@@ -34,6 +34,9 @@
 #include "guidosession.h"
 #include "guido2img.h"
 
+#define POST 1
+#define GET 0
+
 namespace guidohttpd
 {
     
@@ -42,7 +45,13 @@ namespace guidohttpd
     /*!
      \brief a specific thread to listen incoming osc packets
      */
-    
+
+    struct connection_info_struct
+    {
+        int connectiontype;
+        TArgs args;
+        struct MHD_PostProcessor *postprocessor; 
+    };
     class HTTPDServer
     {
         int					fPort;

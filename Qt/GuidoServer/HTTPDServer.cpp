@@ -40,6 +40,8 @@ using namespace std;
 namespace guidohttpd
 {
 
+
+
 //--------------------------------------------------------------------------
 // static functions
 // provided as callbacks to mhttpd
@@ -52,14 +54,45 @@ static int _answer_to_connection (void *cls, struct MHD_Connection *connection, 
 }
 
 //--------------------------------------------------------------------------
-static int _get_params (void *cls, enum MHD_ValueKind , const char *key, const char *value)
+
+void _request_completed (void *cls, struct MHD_Connection *connection, 
+                        void **con_cls,
+                        enum MHD_RequestTerminationCode toe)
+{
+    struct connection_info_struct *con_info = (connection_info_struct *)(*con_cls);
+    
+    if (NULL == con_info) return;
+    if (con_info->connectiontype == 1) //  we make 1 == POST
+    {
+        MHD_destroy_post_processor (con_info->postprocessor);        
+        //if (con_info->answerstring) free (con_info->answerstring);
+    }
+    
+    free (con_info);
+    *con_cls = NULL;   
+}
+    
+static int _get_params (void *cls, enum MHD_ValueKind , const char *key, const char *data)
 {
 	TArgs* args = (TArgs*)cls;
-	TArg arg(key, (value ? value : ""));
+	TArg arg(key, (data ? data : ""));
 	args->push_back (arg);
 	return MHD_YES;
 }
 
+    
+static int 
+_post_params (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
+              const char *filename, const char *content_type,
+              const char *transfer_encoding, const char *data, 
+              uint64_t off, size_t size)
+{
+    struct connection_info_struct *con_info = (connection_info_struct *)coninfo_cls;
+    TArg arg(key, (data ? data : ""));
+    con_info->args.push_back (arg);
+    return MHD_YES;
+}
+    
 //--------------------------------------------------------------------------
 // the http server
 //--------------------------------------------------------------------------
@@ -80,7 +113,7 @@ HTTPDServer::~HTTPDServer() {
 //--------------------------------------------------------------------------
 bool HTTPDServer::start(int port)
 {
-	fServer = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY, port, NULL, NULL, _answer_to_connection, this, MHD_OPTION_END);
+	fServer = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY, port, NULL, NULL, _answer_to_connection, this, MHD_OPTION_NOTIFY_COMPLETED, &_request_completed, NULL, MHD_OPTION_END);
 	return fServer != 0;
 }
 
@@ -198,33 +231,68 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
 
     // Only the final result gets sent.
     const char* formatToSend = format.c_str();
+    cout << data << endl;
     return send (connection, data, size, formatToSend);
 }
 
 //--------------------------------------------------------------------------
-int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, const char *method, const char *, const char *, size_t *, void **)
+int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, const char *method, const char *version, const char *upload_data, size_t *upload_data_size, void **con_cls)
 {
-	MHD_ValueKind t = MHD_GET_ARGUMENT_KIND;
-	if (0 == strcmp (method, "GET"))		t = MHD_GET_ARGUMENT_KIND;
-	else if (0 == strcmp (method, "POST"))	t = MHD_POSTDATA_KIND;
-	else {
-		string msg = "Method ";
-		msg += method;
-		msg += " is not supported";
-		return send (connection, msg.c_str(), 0, MHD_HTTP_BAD_REQUEST);
-	}
+    // <<---- BEGIN POST TESTING
+    if (NULL == *con_cls)
+    {
+        struct connection_info_struct *con_info = new connection_info_struct ();
+        
+        if (0 == strcmp (method, "POST"))
+        {
+            con_info->postprocessor =
+            MHD_create_post_processor (connection, 1024, // arbitrary, recommeneded by libmicrohttpd
+                                       _post_params, (void *) con_info);
+            
+            if (NULL == con_info->postprocessor)
+            {
+                delete con_info;
+                return MHD_NO;
+            }
+            /*
+              The connectiontype field of con_info currently does nothing:
+             it's a placeholder for using POST/GET distinctions as the server
+             becomes more sophisticated.
+             
+             */
+            con_info->connectiontype = POST;
+        }
+        else
+            con_info->connectiontype = GET;
+        
+        *con_cls = (void *) con_info;
+        
+        return MHD_YES;
+    }
     
-	TArgs args;
-	MHD_get_connection_values (connection, t, _get_params, &args);
-	if (fDebug) {
-		cout << method << ": " << url << " - " << args.size() << " ";
-		for (unsigned int i=0; i<args.size(); i++)
-			cout << args[i].first << "=" << args[i].second << " ";
-		cout << endl;
-	}
-    
-    reverse (args.begin(), args.end());
-	return sendGuido (connection, url, args);
+    if (0 == strcmp (method, "POST"))
+    {
+        struct connection_info_struct *con_info = (connection_info_struct *)*con_cls;
+        
+        if (*upload_data_size != 0)
+        {
+            MHD_post_process (con_info->postprocessor, upload_data,
+                              *upload_data_size);
+            *upload_data_size = 0;
+        }
+    }
+    if (0 == strcmp (method, "GET"))
+    {
+     	TArgs args;
+        MHD_get_connection_values (connection, MHD_GET_ARGUMENT_KIND, _get_params, &args);
+        reverse (args.begin(), args.end());
+        return sendGuido (connection, url, args);
+    }
+    else {
+        struct connection_info_struct *con_info = (connection_info_struct *)*con_cls;
+        reverse (con_info->args.begin (), con_info->args.end ());
+        return sendGuido (connection, url, con_info->args);
+    }
 }
 
 } // end namespoace
