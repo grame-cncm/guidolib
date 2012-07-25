@@ -231,7 +231,6 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
 
     // Only the final result gets sent.
     const char* formatToSend = format.c_str();
-    cout << data << endl;
     return send (connection, data, size, formatToSend);
 }
 
@@ -279,6 +278,12 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
             MHD_post_process (con_info->postprocessor, upload_data,
                               *upload_data_size);
             *upload_data_size = 0;
+            return MHD_YES;
+        }
+        else {
+            struct connection_info_struct *con_info = (connection_info_struct *)*con_cls;
+            reverse (con_info->args.begin (), con_info->args.end ());
+            return sendGuido (connection, url, con_info->args);
         }
     }
     if (0 == strcmp (method, "GET"))
@@ -287,11 +292,6 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
         MHD_get_connection_values (connection, MHD_GET_ARGUMENT_KIND, _get_params, &args);
         reverse (args.begin(), args.end());
         return sendGuido (connection, url, args);
-    }
-    else {
-        struct connection_info_struct *con_info = (connection_info_struct *)*con_cls;
-        reverse (con_info->args.begin (), con_info->args.end ());
-        return sendGuido (connection, url, con_info->args);
     }
 }
 
