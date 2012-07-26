@@ -255,6 +255,11 @@ namespace guidohttpd
         return genericReturnImage(size, data, format, errstring, argumentsToAdvance);
     }
     
+    GuidoSessionParsingError guidosession::handleBlankRequest(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n)
+    {
+        return genericReturnImage(size, data, format, errstring, argumentsToAdvance);
+    }
+    
     GuidoSessionParsingError guidosession::handleFormat(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n)
     {
         if (strcmp("png", args[n].second.c_str()) == 0)

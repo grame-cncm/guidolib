@@ -92,6 +92,7 @@ namespace guidohttpd
         GuidoSessionParsingError handleResizePageToMusic(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n);
         GuidoSessionParsingError handleZoom(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n);
         GuidoSessionParsingError handleGMN(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n);
+        GuidoSessionParsingError handleBlankRequest(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n);
         GuidoSessionParsingError handleFormat(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n);
         GuidoSessionParsingError handleFaultyInput(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n);
         // -----------------------------
