@@ -277,7 +277,9 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
         }
         else {
             struct connection_info_struct *con_info = (connection_info_struct *)*con_cls;
+#ifdef __MACH__
             reverse (con_info->args.begin (), con_info->args.end ());
+#endif
             return sendGuido (connection, url, con_info->args);
         }
     }
@@ -285,7 +287,9 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
     {
      	TArgs args;
         MHD_get_connection_values (connection, MHD_GET_ARGUMENT_KIND, _get_params, &args);
+#ifdef __MACH__
         reverse (args.begin(), args.end());
+#endif
         return sendGuido (connection, url, args);
     }
 }
