@@ -173,14 +173,9 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
     }
     currentSession = fSessions[suburl];
 
-    GuidoSessionParsingError parseError;
     unsigned int n = 0;
-    unsigned int argumentsToAdvance;
-    const char* data = "";
-    int size;
-    string format;
-    string errstring;
     guidosession::callback_function callback;
+    guidosessionresponse response;
     
 	while (n < args.size()) {
 		if (args[n].first == "get")
@@ -212,17 +207,17 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
         else
             callback = &guidosession::handleFaultyInput;
 
-        parseError = (currentSession->*callback)(&size, &data, &format, &errstring, &argumentsToAdvance, args, n);
+        response = (currentSession->*callback)(args, n);
 
-        if (parseError == GUIDO_SESSION_PARSING_SUCCESS)
+        if (response.status_ == GUIDO_SESSION_PARSING_SUCCESS)
         {
-            n += argumentsToAdvance;
+            n += response.argumentsToAdvance_;
         }
         else
         {
             n += 1;
-            data = errstring.c_str();
-            size = strlen(data);
+            response.data_ = response.errstring_.c_str();
+            response.size_ = response.errstring_.size();
         }
 	}
     
@@ -230,8 +225,8 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
         currentSession->initialize();
 
     // Only the final result gets sent.
-    const char* formatToSend = format.c_str();
-    return send (connection, data, size, formatToSend);
+    const char* formatToSend = response.format_.c_str();
+    return send (connection, response.data_, response.size_, formatToSend);
 }
 
 //--------------------------------------------------------------------------

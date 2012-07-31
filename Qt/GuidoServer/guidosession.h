@@ -41,6 +41,17 @@ namespace guidohttpd
         GUIDO_WEB_API_UNDEFINED };
     //--------------------------------------------------------------------------
     class guido2img;
+    struct guidosessionresponse
+    {
+        const char* data_;
+        unsigned int size_;
+        string format_;
+        string errstring_;
+        unsigned int argumentsToAdvance_;
+        GuidoSessionParsingError status_;
+        guidosessionresponse ();
+        guidosessionresponse (const char* data, unsigned int size, string format, string errstring, unsigned int argumentsToAdvance, GuidoSessionParsingError status);
+    };
     class guidosession
     {
         friend class guido2img;
@@ -78,29 +89,29 @@ namespace guidohttpd
 		virtual ~guidosession();
         void initialize();
         
-        typedef GuidoSessionParsingError(guidosession::*callback_function)(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n);
+        typedef guidosessionresponse(guidosession::*callback_function)(const TArgs& args, unsigned int n);
         
         // ------- CALLBACKS -------
-        GuidoSessionParsingError handleGet(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n);
-        GuidoSessionParsingError handlePage(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n);
-        GuidoSessionParsingError handleWidth(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n);
-        GuidoSessionParsingError handleHeight(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n);
-        GuidoSessionParsingError handleMarginLeft(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n);
-        GuidoSessionParsingError handleMarginRight(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n);
-        GuidoSessionParsingError handleMarginTop(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n);
-        GuidoSessionParsingError handleMarginBottom(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n);
-        GuidoSessionParsingError handleResizePageToMusic(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n);
-        GuidoSessionParsingError handleZoom(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n);
-        GuidoSessionParsingError handleGMN(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n);
-        GuidoSessionParsingError handleBlankRequest(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n);
-        GuidoSessionParsingError handleFormat(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n);
-        GuidoSessionParsingError handleFaultyInput(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n);
+        guidosessionresponse handleGet(const TArgs& args, unsigned int n);
+        guidosessionresponse handlePage(const TArgs& args, unsigned int n);
+        guidosessionresponse handleWidth(const TArgs& args, unsigned int n);
+        guidosessionresponse handleHeight(const TArgs& args, unsigned int n);
+        guidosessionresponse handleMarginLeft(const TArgs& args, unsigned int n);
+        guidosessionresponse handleMarginRight(const TArgs& args, unsigned int n);
+        guidosessionresponse handleMarginTop(const TArgs& args, unsigned int n);
+        guidosessionresponse handleMarginBottom(const TArgs& args, unsigned int n);
+        guidosessionresponse handleResizePageToMusic(const TArgs& args, unsigned int n);
+        guidosessionresponse handleZoom(const TArgs& args, unsigned int n);
+        guidosessionresponse handleGMN(const TArgs& args, unsigned int n);
+        guidosessionresponse handleBlankRequest(const TArgs& args, unsigned int n);
+        guidosessionresponse handleFormat(const TArgs& args, unsigned int n);
+        guidosessionresponse handleFaultyInput(const TArgs& args, unsigned int n);
         // -----------------------------
-        GuidoSessionParsingError genericReturnImage(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance);
-        GuidoSessionParsingError genericFailure(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const char* errorstring);
-        GuidoSessionParsingError simpleGet (int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, string thingToGet);
-        GuidoSessionParsingError mapGet (int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n, string thingToGet);
-        GuidoSessionParsingError pointGet (int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n);
+        guidosessionresponse genericReturnImage();
+        guidosessionresponse genericFailure(const char* errorstring);
+        guidosessionresponse simpleGet (string thingToGet);
+        guidosessionresponse mapGet (const TArgs& args, unsigned int n, string thingToGet);
+        guidosessionresponse pointGet (const TArgs& args, unsigned int n);
         
         void setUrl(string url);
         static json_type swapTypeForName (string type);
