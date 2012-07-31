@@ -3,7 +3,7 @@ API
 
 This page provides all of the calls avaiable in the GUIDOEngine web
 API.  For all of the examples below, we assume that the base URL
-of the server is ``http://localhost`` running on port ``8000``.
+of the server is ``http://guido.grame.fr`` running on port ``8000``.
 
 Data types
 ----------
@@ -55,7 +55,7 @@ GMN
 The following call passes in Guido Music Notation code to the server
 that will be visualized::
 
-  http://localhost:8000/?gmn=[ _/8 \slur(c1 d e) {fis/2, ais} e/2 ]
+  http://guido.grame.fr:8000/?gmn=[ _/8 \slur(c1 d e) {fis/2, ais} e/2 ]
 
 Resulting in:
 
@@ -72,7 +72,7 @@ Page
 The following call sets the page to be displayed:
 
 .. parsed-literal::
-  `http://localhost:8000/?page=1 <http://localhost:8000/?page=1>`_
+  `http://guido.grame.fr:8000/?page=1 <http://guido.grame.fr:8000/?page=1>`_
 
 Resulting in:
 
@@ -89,7 +89,7 @@ Width
 The following call sets the width of the page:
 
 .. parsed-literal::
-  `http://localhost:8000/?width=800 <http://localhost:8000/?width=800>`_
+  `http://guido.grame.fr:8000/?width=800 <http://guido.grame.fr:8000/?width=800>`_
 
 Resulting in:
 
@@ -106,7 +106,7 @@ Height
 The following call sets the height of the page:
 
 .. parsed-literal::
-  `http://localhost:8000/?height=800 <http://localhost:8000/?height=800>`_
+  `http://guido.grame.fr:8000/?height=800 <http://guido.grame.fr:8000/?height=800>`_
 
 Resulting in:
 
@@ -123,7 +123,7 @@ Left margin
 The following call sets the left margin of the page:
 
 .. parsed-literal::
-  `http://localhost:8000/?marginleft=10 <http://localhost:8000/?marginleft=10>`_
+  `http://guido.grame.fr:8000/?marginleft=10 <http://guido.grame.fr:8000/?marginleft=10>`_
 
 Resulting in:
 
@@ -140,7 +140,7 @@ Right margin
 The following call sets the right margin of the page:
 
 .. parsed-literal::
-  `http://localhost:8000/?marginright=10 <http://localhost:8000/?marginright=10>`_
+  `http://guido.grame.fr:8000/?marginright=10 <http://guido.grame.fr:8000/?marginright=10>`_
 
 Resulting in:
 
@@ -157,7 +157,7 @@ Top margin
 The following call sets the top margin of the page:
 
 .. parsed-literal::
-  `http://localhost:8000/?margintop=10 <http://localhost:8000/?margintop=10>`_
+  `http://guido.grame.fr:8000/?margintop=10 <http://guido.grame.fr:8000/?margintop=10>`_
 
 Resulting in:
 
@@ -174,7 +174,7 @@ Bottom margin
 The following call sets the bottom margin of the page:
 
 .. parsed-literal::
-  `http://localhost:8000/?marginbottom=10 <http://localhost:8000/?marginbottom=10>`_
+  `http://guido.grame.fr:8000/?marginbottom=10 <http://guido.grame.fr:8000/?marginbottom=10>`_
 
 Resulting in:
 
@@ -191,7 +191,7 @@ Zoom
 The following call sets the zoom of the page:
 
 .. parsed-literal::
-  `http://localhost:8000/?zoom=4 <http://localhost:8000/?zoom=4>`_
+  `http://guido.grame.fr:8000/?zoom=4 <http://guido.grame.fr:8000/?zoom=4>`_
 
 Resulting in:
 
@@ -209,7 +209,7 @@ The following call tells the web server to resize the page to the music it
 contains:
 
 .. parsed-literal::
-  `http://localhost:8000/?resizepagetomusic=true <http://localhost:8000/?resizepagetomusic=true>`_
+  `http://guido.grame.fr:8000/?resizepagetomusic=true <http://guido.grame.fr:8000/?resizepagetomusic=true>`_
 
 Resulting in:
 
@@ -226,7 +226,7 @@ Format
 The following call tells the web server change the format of the output
 
 .. parsed-literal::
-  `http://localhost:8000/?format=jpg <http://localhost:8000/?format=jpg>`_
+  `http://guido.grame.fr:8000/?format=jpg <http://guido.grame.fr:8000/?format=jpg>`_
 
 Resulting in:
 
@@ -247,7 +247,7 @@ All setter calls above have equivalent getter calls in the form ``get=attribute`
 For example:
 
 .. parsed-literal::
-  `http://localhost:8000/?get=gmn <http://localhost:8000/?get=gmn>`_
+  `http://guido.grame.fr:8000/?get=gmn <http://guido.grame.fr:8000/?get=gmn>`_
 
 Returns::
 
@@ -291,7 +291,7 @@ default values if none were set).
 The call:
 
 .. parsed-literal::
-  `http://localhost:8000/?gmn=[a b c]&page=1&get=pagemap <http://localhost:8000/?gmn=[a%20b%20c]&page=1&get=pagemap>`_
+  `http://guido.grame.fr:8000/?gmn=[a b c]&page=1&get=pagemap <http://guido.grame.fr:8000/?gmn=[a%20b%20c]&page=1&get=pagemap>`_
 
 Returns::
 
@@ -330,7 +330,7 @@ values if none were set).
 The call:
 
 .. parsed-literal::
-  `http://localhost:8000/?gmn=[a b c]&page=1&get=systemmap <http://localhost:8000/?gmn=[a%20b%20c]&page=1&get=systemmap>`_
+  `http://guido.grame.fr:8000/?gmn=[a b c]&page=1&get=systemmap <http://guido.grame.fr:8000/?gmn=[a%20b%20c]&page=1&get=systemmap>`_
 
 Returns::
 
@@ -402,7 +402,7 @@ indexed from the top to the bottom of a system. Below, we choose the
 first (and only) staff in the score.
 
 .. parsed-literal::
-  `http://localhost:8000/?gmn=[a b c]&page=1&get=staffmap&staff=1 <http://localhost:8000/?gmn=[a%20b%20c]&page=1&get=staffmap&staff=1>`_
+  `http://guido.grame.fr:8000/?gmn=[a b c]&page=1&get=staffmap&staff=1 <http://guido.grame.fr:8000/?gmn=[a%20b%20c]&page=1&get=staffmap&staff=1>`_
 
 Returns::
 
@@ -476,7 +476,7 @@ indexed from the top to the bottom of a system. Below, we choose the
 first (and only) voice in the score.
 
 .. parsed-literal::
-  `http://localhost:8000/?gmn=[a b c]&page=1&get=voicemap&voice=1 <http://localhost:8000/?gmn=[a%20b%20c]&page=1&get=voicemap&voice=1>`_
+  `http://guido.grame.fr:8000/?gmn=[a b c]&page=1&get=voicemap&voice=1 <http://guido.grame.fr:8000/?gmn=[a%20b%20c]&page=1&get=voicemap&voice=1>`_
 
 Returns::
 
@@ -548,12 +548,12 @@ at a given point with coordinates ``x`` and ``y`` and the events in map ``map``?
 indicating the desired voice or staff. The syntax is:
 
 .. parsed-literal::
-  `http://localhost:8000/?gmn=[a b c]&page=1&get=point&x=300&y=80&map=system <http://localhost:8000/?gmn=[a%20b%20c]&page=1&get=point&x=300&y=80&map=system>`_
+  `http://guido.grame.fr:8000/?gmn=[a b c]&page=1&get=point&x=300&y=80&map=system <http://guido.grame.fr:8000/?gmn=[a%20b%20c]&page=1&get=point&x=300&y=80&map=system>`_
 
 Or, for an equivalent result using the voice map:
 
 .. parsed-literal::
-  `http://localhost:8000/?gmn=[a b c]&page=1&get=point&x=300&y=80&map=voice&voice=1 <http://localhost:8000/?gmn=[a%20b%20c]&page=1&get=point&x=300&y=80&map=voice&voice=1>`_
+  `http://guido.grame.fr:8000/?gmn=[a b c]&page=1&get=point&x=300&y=80&map=voice&voice=1 <http://guido.grame.fr:8000/?gmn=[a%20b%20c]&page=1&get=point&x=300&y=80&map=voice&voice=1>`_
 
 
 Resulting in::
