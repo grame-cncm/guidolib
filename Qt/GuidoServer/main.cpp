@@ -40,7 +40,7 @@ int main(int argc, char **argv)
 {
     QApplication app( argc , argv );	// required by Qt
     // Our process ID and Session ID
-    /*
+    
     pid_t pid, sid;
     // Fork off the parent process
     pid = fork();
@@ -73,10 +73,10 @@ int main(int argc, char **argv)
     }
     
     // Close out the standard file descriptors
-    //close(STDIN_FILENO);
-    //close(STDOUT_FILENO);
-    //close(STDERR_FILENO);
-*/
+    close(STDIN_FILENO);
+    close(STDOUT_FILENO);
+    close(STDERR_FILENO);
+
 	int port = getPortOption (argc, argv, kPortOpt, kDefaultPort);
 	guido2img converter;
 
