@@ -105,6 +105,8 @@ namespace guidohttpd
         guidosessionresponse handleGMN(const TArgs& args, unsigned int n);
         guidosessionresponse handleBlankRequest(const TArgs& args, unsigned int n);
         guidosessionresponse handleFormat(const TArgs& args, unsigned int n);
+        guidosessionresponse handleErrantGet(const TArgs& args, unsigned int n);
+        guidosessionresponse handleErrantPost(const TArgs& args, unsigned int n);
         guidosessionresponse handleFaultyInput(const TArgs& args, unsigned int n);
         // -----------------------------
         guidosessionresponse genericReturnImage();

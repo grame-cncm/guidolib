@@ -29,7 +29,6 @@
 #include <string.h>
 #include <fcntl.h>
 #include <algorithm>
-#include <assert.h>
 
 #include "utilities.h"
 #include "HTTPDServer.h"
@@ -59,7 +58,6 @@ static int parsechannel(void *userdata, int type, const char *data, uint32_t len
         case JSON_FLOAT: args->back ().second = data; break;
         case JSON_TRUE: args->back ().second = "true"; break;
         case JSON_FALSE: args->back ().second = "false"; break;
-        default : assert (1 == 0); break;
     }
     return 0;
 }
@@ -113,19 +111,19 @@ _post_params (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
     struct connection_info_struct *con_info = (connection_info_struct *)coninfo_cls;
     json_parser parser;
     int ret = json_parser_init(&parser, NULL, parsechannel, &(con_info->args));
-    assert (ret == 0);
+    if (ret)
+        return MHD_NO;
     if (strcmp (key, "data") == 0)
     {
         for (size_t i = 0; i < strlen(data); i++)
         {
             ret = json_parser_string(&parser, data + i, 1, NULL);
-            assert (ret == 0);
+            if (ret)
+                return MHD_NO;
         }
     }
     json_parser_free(&parser);
-    //TArg arg(key, (data ? data : ""));
-    //con_info->args.push_back (arg);
-     return MHD_YES;
+    return MHD_YES;
 }
     
 //--------------------------------------------------------------------------
@@ -217,7 +215,7 @@ const char* HTTPDServer::getMIMEType (const string& page)
 }
 
 //--------------------------------------------------------------------------
-int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, const TArgs& args)
+int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, const TArgs& args, int type)
  {
 
     const char* fakecookie;
@@ -260,6 +258,46 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
     unsigned int n = 0;
     guidosession::callback_function callback;
     guidosessionresponse response;
+    
+    if (type == GET)
+    {
+        /*
+         * we make sure that this is really a get, meaning we screen POST
+         */
+        for (unsigned int i = 0; i < 11; i++)
+        {
+            string postcommands[11] = {"page", "width", "height", "marginleft","marginright","margintop", "marginbottom", "zoom", "resizepagetomusic", "gmn","format"};
+            for (unsigned int j = 0; j < args.size(); j++)
+                if (args[j].first == postcommands[i])
+                {
+                    cout << "OK" << endl;
+                    n = args.size(); // skip args
+                    callback = &guidosession::handleErrantGet;
+                    response = (currentSession->*callback)(args, n);
+                    response.data_ = response.errstring_.c_str();
+                    response.size_ = response.errstring_.size();
+                    break;
+                }
+            if (callback)
+                break;
+        }
+    }
+    else if (type == POST)
+    {
+        /*
+         * we make sure that this is really a post, meaning we screen GET
+         */
+        for (unsigned int i = 0; i < args.size(); i++)
+            if (args[i].first == "get")
+            {
+                n = args.size(); // skip args
+                callback = &guidosession::handleErrantPost;
+                response = (currentSession->*callback)(args, n);
+                response.data_ = response.errstring_.c_str();
+                response.size_ = response.errstring_.size();
+                break;
+            }
+    }
     
 	while (n < args.size()) {
 		if (args[n].first == "get")
@@ -364,7 +402,7 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
 #ifdef __MACH__
             reverse (con_info->args.begin (), con_info->args.end ());
 #endif
-            return sendGuido (connection, url, con_info->args);
+            return sendGuido (connection, url, con_info->args, POST);
         }
     }
     if (0 == strcmp (method, "GET"))
@@ -374,7 +412,7 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
 #ifdef __MACH__
         reverse (args.begin(), args.end());
 #endif
-        return sendGuido (connection, url, args);
+        return sendGuido (connection, url, args, GET);
     }
     return MHD_YES;
 }

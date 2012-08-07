@@ -73,7 +73,7 @@ namespace guidohttpd
 		void stop ();
 		int answer (struct MHD_Connection *connection, const char *url, const char *method, const char *version, 
 					const char *upload_data, size_t *upload_data_size, void **con_cls);
-		int sendGuido (struct MHD_Connection *connection, const char* url, const TArgs& args);
+		int sendGuido (struct MHD_Connection *connection, const char* url, const TArgs& args, int type);
         
         
 		static int send (struct MHD_Connection *connection, const char *page, int length, const char *type, guidouser *session, int status=MHD_HTTP_OK);

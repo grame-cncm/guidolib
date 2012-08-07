@@ -296,6 +296,17 @@ namespace guidohttpd
             return genericFailure("Not a valid format - please choose from png, jpeg, gif or svg.");
         return genericReturnImage();
     }
+
+    guidosessionresponse guidosession::handleErrantGet(const TArgs&, unsigned int)
+    {
+        return genericFailure("You may not send a POST command through a GET channel.");
+    }
+    
+    guidosessionresponse guidosession::handleErrantPost(const TArgs&, unsigned int)
+    {
+        return genericFailure("You may not send a GET command through a POST channel.");
+    }
+    
     
     guidosessionresponse guidosession::handleFaultyInput(const TArgs&, unsigned int)
     {
