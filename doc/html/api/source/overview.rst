@@ -35,6 +35,14 @@ attributes (discussed in :ref:`defaults`), creating the result:
 
 .. image:: abcd.png
 
+Note that this command (given via curl in the present example) is a POST
+command.  The GUIDO server being a RESTful server, all alterations of the
+server's state must pass through post.  All inquiries into the server's state
+must pass through GET.  In the present GUIDOEngine Web API, all POST calls
+are given as curl commands whereas all GET calls are given as clickable
+hyperlinks.  Users should be able to run them verbatim and get the result
+shown on the website.
+
 It is sometimes the case that a call to the Guido Web Server needs additional
 arguments.  For example, to get a :ref:`page map <page-map>`, the page in question must be
 specified.  This is done by appending those arguments to the URL.
