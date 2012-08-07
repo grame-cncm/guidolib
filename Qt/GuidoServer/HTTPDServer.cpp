@@ -29,6 +29,7 @@
 #include <string.h>
 #include <fcntl.h>
 #include <algorithm>
+#include <assert.h>
 
 #include "utilities.h"
 #include "HTTPDServer.h"
@@ -42,6 +43,26 @@ using namespace std;
 namespace guidohttpd
 {
 
+// for json parser
+static int parsechannel(void *userdata, int type, const char *data, uint32_t length)
+{
+    TArgs* args = (TArgs*)userdata;
+    switch (type) {
+        case JSON_OBJECT_BEGIN: break;
+        case JSON_ARRAY_BEGIN: break;
+        case JSON_OBJECT_END:break;
+        case JSON_ARRAY_END: break;
+        case JSON_NULL: break;
+        case JSON_KEY: args->push_back (TArg (data, "")); break;
+        case JSON_STRING: args->back ().second = data; break;
+        case JSON_INT: args->back ().second = data; break;
+        case JSON_FLOAT: args->back ().second = data; break;
+        case JSON_TRUE: args->back ().second = "true"; break;
+        case JSON_FALSE: args->back ().second = "false"; break;
+        default : assert (1 == 0); break;
+    }
+    return 0;
+}
 
 
 //--------------------------------------------------------------------------
@@ -90,9 +111,21 @@ _post_params (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
               uint64_t off, size_t size)
 {
     struct connection_info_struct *con_info = (connection_info_struct *)coninfo_cls;
-    TArg arg(key, (data ? data : ""));
-    con_info->args.push_back (arg);
-    return MHD_YES;
+    json_parser parser;
+    int ret = json_parser_init(&parser, NULL, parsechannel, &(con_info->args));
+    assert (ret == 0);
+    if (strcmp (key, "data") == 0)
+    {
+        for (size_t i = 0; i < strlen(data); i++)
+        {
+            ret = json_parser_string(&parser, data + i, 1, NULL);
+            assert (ret == 0);
+        }
+    }
+    json_parser_free(&parser);
+    //TArg arg(key, (data ? data : ""));
+    //con_info->args.push_back (arg);
+     return MHD_YES;
 }
     
 //--------------------------------------------------------------------------
@@ -343,6 +376,7 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
 #endif
         return sendGuido (connection, url, args);
     }
+    return MHD_YES;
 }
 
 } // end namespoace

@@ -76,7 +76,7 @@ int main(int argc, char **argv)
     close(STDIN_FILENO);
     close(STDOUT_FILENO);
     close(STDERR_FILENO);
-
+    
 	int port = getPortOption (argc, argv, kPortOpt, kDefaultPort);
 	guido2img converter;
 
