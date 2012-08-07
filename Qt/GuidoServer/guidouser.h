@@ -21,19 +21,26 @@
  
  */
 
+#ifndef __guidouser__
+#define __guidouser__
 
-#ifndef __utilities__
-#define __utilities__
+#include <string>
+#include "guidosession.h"
 
-#include <vector>
-#include <map>
+using namespace std;
 
 namespace guidohttpd
 {
-    typedef std::pair<std::string, std::string>	TArg;
-    typedef std::vector<TArg>					TArgs;
-    
-    std::string rand_alnum_str (std::string::size_type sz);
+
+    struct guidouser
+    {
+        std::map<std::string, guidosession *> fSessions;
+        string cookie_;
+        guidouser() {}
+		virtual ~guidouser() {}
+        void setCookie(string url);
+        string getCookie();
+    };
     
 } // end namespoace
 

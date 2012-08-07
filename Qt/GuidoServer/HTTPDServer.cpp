@@ -37,6 +37,8 @@
 
 using namespace std;
 
+#define COOKIE_NAME "guidoserver"
+
 namespace guidohttpd
 {
 
@@ -102,14 +104,37 @@ HTTPDServer::HTTPDServer(int port, guido2img* g2svg)
 }
 
 HTTPDServer::~HTTPDServer() {
-    for (map<string, guidosession *>::iterator it = fSessions.begin ();
-         it != fSessions.end();
-         it++)
-        delete it->second;
-    
+  for (map<string, guidouser *>::iterator it = fUsers.begin ();
+       it != fUsers.end(); it++)
+  {
+      for (map<string, guidosession *>::iterator itt = it->second->fSessions.begin();
+         itt != it->second->fSessions.end(); itt++)
+          { delete itt->second; }
+          delete it->second;
+  }
+              
     stop();
 }
 
+void
+HTTPDServer::add_session_cookie (guidouser *session, MHD_Response *response)
+{
+    char cstr[256];
+    snprintf (cstr,
+              sizeof (cstr),
+              "%s=%s",
+              COOKIE_NAME,
+              session->getCookie().c_str());
+    if (MHD_NO ==
+        MHD_add_response_header (response,
+                                 MHD_HTTP_HEADER_SET_COOKIE,
+                                 cstr))
+    {
+        fprintf (stderr, 
+                 "Failed to set session cookie header!\n");
+    }
+}
+    
 //--------------------------------------------------------------------------
 bool HTTPDServer::start(int port)
 {
@@ -125,13 +150,14 @@ void HTTPDServer::stop ()
 }
 
 //--------------------------------------------------------------------------
-int HTTPDServer::send (struct MHD_Connection *connection, const char *page, int length, const char* type, int status)
+int HTTPDServer::send (struct MHD_Connection *connection, const char *page, int length, const char* type, guidouser *session, int status)
     {
 	struct MHD_Response *response = MHD_create_response_from_buffer (length, (void *) page, MHD_RESPMEM_MUST_COPY);
 	if (!response) {
 		cerr << "MHD_create_response_from_buffer error: null response\n";
 		return MHD_NO;
 	}
+	add_session_cookie (session, response);
 	MHD_add_response_header (response, "Content-Type", type ? type : "text/plain");
 	int ret = MHD_queue_response (connection, status, response);
 	MHD_destroy_response (response);
@@ -139,9 +165,9 @@ int HTTPDServer::send (struct MHD_Connection *connection, const char *page, int 
 }
 
 //--------------------------------------------------------------------------
-int HTTPDServer::send (struct MHD_Connection *connection, const char *page, const char* type, int status)
+int HTTPDServer::send (struct MHD_Connection *connection, const char *page, const char* type, guidouser *session, int status)
 {
-	return send (connection, page, strlen (page), type, status);
+	return send (connection, page, strlen (page), type, session, status);
 }
 
 //--------------------------------------------------------------------------
@@ -159,19 +185,44 @@ const char* HTTPDServer::getMIMEType (const string& page)
 
 //--------------------------------------------------------------------------
 int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, const TArgs& args)
-{
-    string suburl = string(url).substr(1,string::npos);
-    guidosession *currentSession;
-    // we first check to see if the session exists
-    map<string, guidosession *>::iterator it;
-    it = fSessions.find(suburl);
-    if (it == fSessions.end ())
+ {
+
+    const char* fakecookie;
+    string cookie;
+    fakecookie = MHD_lookup_connection_value (connection,
+                                          MHD_COOKIE_KIND,
+                                          COOKIE_NAME);
+    if (fakecookie == NULL)
     {
-        fSessions[suburl] = new guidosession(fConverter);
-        fSessions[suburl]->initialize();
-        fSessions[suburl]->setUrl(suburl);            
+        stringstream mystream;
+        mystream << random() << random() << random() << random();
+        cookie = mystream.str().c_str();
     }
-    currentSession = fSessions[suburl];
+    else
+    {
+        cookie = fakecookie;
+    }
+
+     string suburl = string(url).substr(1,string::npos);
+     guidosession *currentSession;
+    // we first check to see if the user exists
+    map<string, guidouser *>::iterator it;
+    it = fUsers.find(cookie);
+    if (it == fUsers.end ())
+    {
+        fUsers[cookie] = new guidouser();
+        fUsers[cookie]->setCookie(cookie);
+    }
+    // we then check to see if a given session for the user exists
+    map<string, guidosession *>::iterator itt;
+    itt = fUsers[cookie]->fSessions.find(suburl);
+    if (itt == fUsers[cookie]->fSessions.end ())
+     {
+        fUsers[cookie]->fSessions[suburl] = new guidosession(fConverter);
+        fUsers[cookie]->fSessions[suburl]->initialize();
+        fUsers[cookie]->fSessions[suburl]->setUrl(suburl);
+     }
+    currentSession = fUsers[cookie]->fSessions[suburl];
 
     unsigned int n = 0;
     guidosession::callback_function callback;
@@ -226,7 +277,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
 
     // Only the final result gets sent.
     const char* formatToSend = response.format_.c_str();
-    return send (connection, response.data_, response.size_, formatToSend);
+    return send (connection, response.data_, response.size_, formatToSend, fUsers[cookie]);
 }
 
 //--------------------------------------------------------------------------

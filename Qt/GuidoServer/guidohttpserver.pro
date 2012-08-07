@@ -1,5 +1,5 @@
-SOURCES += main.cpp HTTPDServer.cpp guido2img.cpp guidosession.cpp json.c jsonhelper.cpp
-HEADERS += HTTPDServer.h guido2img.h guidosession.h json.h jsonhelper.h utilities.h
+SOURCES += main.cpp HTTPDServer.cpp guido2img.cpp guidosession.cpp guidouser.cpp json.c jsonhelper.cpp utilities.cpp
+HEADERS += HTTPDServer.h guido2img.h guidosession.h guidouser.h json.h jsonhelper.h utilities.h
 
 TEMPLATE = app
 win32 {
