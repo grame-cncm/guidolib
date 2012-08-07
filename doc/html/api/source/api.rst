@@ -55,7 +55,7 @@ GMN
 The following call passes in Guido Music Notation code to the server
 that will be visualized::
 
-  http://guido.grame.fr:8000/?gmn=[ _/8 \slur(c1 d e) {fis/2, ais} e/2 ]
+  curl -d "data={ \"gmn\" : \"[ _/8 \slur(c1 d e) {fis/2, ais} e/2 ]\" }" http://guido.grame.fr:8000/ > setGmn.png
 
 Resulting in:
 
@@ -69,10 +69,9 @@ Values must be valid GMN.
 Page
 ^^^^
 
-The following call sets the page to be displayed:
+The following call sets the page to be displayed::
 
-.. parsed-literal::
-  `http://guido.grame.fr:8000/?page=1 <http://guido.grame.fr:8000/?page=1>`_
+  curl -d "data={ \"page\" : \"1\" }" http://guido.grame.fr:8000/ > setPage.png
 
 Resulting in:
 
@@ -86,10 +85,9 @@ Values must be integer values greater than 0.
 Width
 ^^^^^
 
-The following call sets the width of the page:
+The following call sets the width of the page:L
 
-.. parsed-literal::
-  `http://guido.grame.fr:8000/?width=800 <http://guido.grame.fr:8000/?width=800>`_
+  curl -d "data={ \"width\" : \"800\" }" http://guido.grame.fr:8000/ > setWidth.png
 
 Resulting in:
 
@@ -103,10 +101,9 @@ Values must be floating point or integer values greater than 0.
 Height
 ^^^^^^
 
-The following call sets the height of the page:
+The following call sets the height of the page::
 
-.. parsed-literal::
-  `http://guido.grame.fr:8000/?height=800 <http://guido.grame.fr:8000/?height=800>`_
+  curl -d "data={ \"height\" : \"800\" }" http://guido.grame.fr:8000/ > setHeight.png
 
 Resulting in:
 
@@ -120,10 +117,9 @@ Values must be floating point or integer values greater than 0.
 Left margin
 ^^^^^^^^^^^
 
-The following call sets the left margin of the page:
+The following call sets the left margin of the page::
 
-.. parsed-literal::
-  `http://guido.grame.fr:8000/?marginleft=10 <http://guido.grame.fr:8000/?marginleft=10>`_
+  curl -d "data={ \"marginleft\" : \"10\" }" http://guido.grame.fr:8000/ > setMarginleft.png
 
 Resulting in:
 
@@ -137,10 +133,9 @@ Values must be floating point or integer values greater than 0.
 Right margin
 ^^^^^^^^^^^^
 
-The following call sets the right margin of the page:
+The following call sets the right margin of the page::
 
-.. parsed-literal::
-  `http://guido.grame.fr:8000/?marginright=10 <http://guido.grame.fr:8000/?marginright=10>`_
+  curl -d "data={ \"marginright\" : \"10\" }" http://guido.grame.fr:8000/ > setMarginright.png
 
 Resulting in:
 
@@ -154,10 +149,9 @@ Values must be floating point or integer values greater than 0.
 Top margin
 ^^^^^^^^^^
 
-The following call sets the top margin of the page:
+The following call sets the top margin of the page::
 
-.. parsed-literal::
-  `http://guido.grame.fr:8000/?margintop=10 <http://guido.grame.fr:8000/?margintop=10>`_
+  curl -d "data={ \"margintop\" : \"10\" }" http://guido.grame.fr:8000/ > setMargintop.png
 
 Resulting in:
 
@@ -171,10 +165,9 @@ Values must be floating point or integer values greater than 0.
 Bottom margin
 ^^^^^^^^^^^^^
 
-The following call sets the bottom margin of the page:
+The following call sets the bottom margin of the page::
 
-.. parsed-literal::
-  `http://guido.grame.fr:8000/?marginbottom=10 <http://guido.grame.fr:8000/?marginbottom=10>`_
+  curl -d "data={ \"marginbottom\" : \"10\" }" http://guido.grame.fr:8000/ > setMarginbottom.png
 
 Resulting in:
 
@@ -188,10 +181,9 @@ Values must be floating point or integer values greater than 0.
 Zoom
 ^^^^
 
-The following call sets the zoom of the page:
+The following call sets the zoom of the page::
 
-.. parsed-literal::
-  `http://guido.grame.fr:8000/?zoom=4 <http://guido.grame.fr:8000/?zoom=4>`_
+  curl -d "data={ \"zoom\" : \"4\" }" http://guido.grame.fr:8000/ > setZoom.png
 
 Resulting in:
 
@@ -206,10 +198,9 @@ Resize page to music
 ^^^^^^^^^^^^^^^^^^^^
 
 The following call tells the web server to resize the page to the music it
-contains:
+contains::
 
-.. parsed-literal::
-  `http://guido.grame.fr:8000/?resizepagetomusic=true <http://guido.grame.fr:8000/?resizepagetomusic=true>`_
+  curl -d "data={ \"resizepagetomusic\" : \"true\" }" http://guido.grame.fr:8000/ > setResizepagetomusic.png
 
 Resulting in:
 
@@ -223,10 +214,9 @@ Values must be either ``true`` or ``false``.
 Format
 ^^^^^^^^^^^^^^^^^^^^
 
-The following call tells the web server change the format of the output
+The following call tells the web server change the format of the output::
 
-.. parsed-literal::
-  `http://guido.grame.fr:8000/?format=jpg <http://guido.grame.fr:8000/?format=jpg>`_
+  curl -d "data={ \"format\" : \"jpg\" }" http://guido.grame.fr:8000/ > setFormat.jpg
 
 Resulting in:
 
@@ -244,7 +234,8 @@ Getters for all setters
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 All setter calls above have equivalent getter calls in the form ``get=attribute``.
-For example:
+The GET calls are written variable for variable in the URL and
+not in JSON.  For example:
 
 .. parsed-literal::
   `http://guido.grame.fr:8000/?get=gmn <http://guido.grame.fr:8000/?get=gmn>`_
@@ -296,24 +287,24 @@ The call:
 Returns::
 
   {
-	"pagemap": [
-		{
-			"begintime": {
-				"num": 0,
-				"denom": 1
-			},
-			"endtime": {
-				"num": 3,
-				"denom": 4
-			},
-			"floatrec": {
-				"left": 0,
-				"right": 400,
-				"top": 0,
-				"bottom": 129.887
-			}
-		}
-	]
+          "pagemap": [
+                  {
+                          "begintime": {
+                                  "num": 0,
+                                  "denom": 1
+                          },
+                          "endtime": {
+                                  "num": 3,
+                                  "denom": 4
+                          },
+                          "floatrec": {
+                                  "left": 0,
+                                  "right": 307.959,
+                                  "top": 0,
+                                  "bottom": 100
+                          }
+                  }
+          ]
   }
 
 .. index::
@@ -335,7 +326,7 @@ The call:
 Returns::
 
   {
-          "staffmap": [
+          "systemmap": [
                   {
                           "begintime": {
                                   "num": 0,
@@ -346,10 +337,10 @@ Returns::
                                   "denom": 4
                           },
                           "floatrec": {
-                                  "left": 114.797,
-                                  "right": 206.045,
-                                  "top": 21.0112,
-                                  "bottom": 97.4154
+                                  "left": 88.3824,
+                                  "right": 158.634,
+                                  "top": 0,
+                                  "bottom": 100
                           }
                   },
                   {
@@ -362,10 +353,10 @@ Returns::
                                   "denom": 2
                           },
                           "floatrec": {
-                                  "left": 206.045,
-                                  "right": 297.292,
-                                  "top": 21.0112,
-                                  "bottom": 97.4154
+                                  "left": 158.634,
+                                  "right": 228.885,
+                                  "top": 0,
+                                  "bottom": 100
                           }
                   },
                   {
@@ -378,10 +369,10 @@ Returns::
                                   "denom": 4
                           },
                           "floatrec": {
-                                  "left": 297.292,
-                                  "right": 400,
-                                  "top": 21.0112,
-                                  "bottom": 97.4154
+                                  "left": 228.885,
+                                  "right": 307.959,
+                                  "top": 0,
+                                  "bottom": 100
                           }
                   }
           ]
@@ -418,10 +409,10 @@ Returns::
                                   "denom": 4
                           },
                           "floatrec": {
-                                  "left": 114.797,
-                                  "right": 206.045,
-                                  "top": 21.0112,
-                                  "bottom": 97.4154
+                                  "left": 88.3824,
+                                  "right": 158.634,
+                                  "top": 16.1765,
+                                  "bottom": 75
                           }
                   },
                   {
@@ -434,10 +425,10 @@ Returns::
                                   "denom": 2
                           },
                           "floatrec": {
-                                  "left": 206.045,
-                                  "right": 297.292,
-                                  "top": 21.0112,
-                                  "bottom": 97.4154
+                                  "left": 158.634,
+                                  "right": 228.885,
+                                  "top": 16.1765,
+                                  "bottom": 75
                           }
                   },
                   {
@@ -450,10 +441,10 @@ Returns::
                                   "denom": 4
                           },
                           "floatrec": {
-                                  "left": 297.292,
-                                  "right": 400,
-                                  "top": 21.0112,
-                                  "bottom": 97.4154
+                                  "left": 228.885,
+                                  "right": 307.959,
+                                  "top": 16.1765,
+                                  "bottom": 75
                           }
                   }
           ]
@@ -492,10 +483,10 @@ Returns::
                                   "denom": 4
                           },
                           "floatrec": {
-                                  "left": 114.797,
-                                  "right": 206.045,
-                                  "top": 21.0112,
-                                  "bottom": 97.4154
+                                  "left": 88.3824,
+                                  "right": 106.029,
+                                  "top": 45.5882,
+                                  "bottom": 60.2941
                           }
                   },
                   {
@@ -508,10 +499,10 @@ Returns::
                                   "denom": 2
                           },
                           "floatrec": {
-                                  "left": 206.045,
-                                  "right": 297.292,
-                                  "top": 21.0112,
-                                  "bottom": 97.4154
+                                  "left": 158.634,
+                                  "right": 176.281,
+                                  "top": 38.2353,
+                                  "bottom": 52.9412
                           }
                   },
                   {
@@ -524,10 +515,10 @@ Returns::
                                   "denom": 4
                           },
                           "floatrec": {
-                                  "left": 297.292,
-                                  "right": 400,
-                                  "top": 21.0112,
-                                  "bottom": 97.4154
+                                  "left": 228.885,
+                                  "right": 246.532,
+                                  "top": 82.3529,
+                                  "bottom": 97.0588
                           }
                   }
           ]
