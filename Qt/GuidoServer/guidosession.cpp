@@ -335,7 +335,7 @@ namespace guidohttpd
         json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
         if (url_.size () != 0)
         {
-            json_print_pretty(&printer, JSON_KEY, "username", 1);
+            json_print_pretty(&printer, JSON_KEY, "score", 1);
             const char* current_url = url_.c_str();
             json_print_pretty(&printer, JSON_STRING, current_url, 1);
         }
@@ -381,7 +381,7 @@ namespace guidohttpd
         json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
         if (url_.size () != 0)
         {
-            json_print_pretty(&printer, JSON_KEY, "username", 1);
+            json_print_pretty(&printer, JSON_KEY, "score", 1);
             const char* current_url = url_.c_str();
             json_print_pretty(&printer, JSON_STRING, current_url, 1);
         }
@@ -499,7 +499,7 @@ namespace guidohttpd
         json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
         if (url_.size () != 0)
         {
-            json_print_pretty(&printer, JSON_KEY, "username", 1);
+            json_print_pretty(&printer, JSON_KEY, "score", 1);
             json_print_pretty(&printer, JSON_INT, url_.c_str(), strlen(url_.c_str()));
         }
         json_print_pretty(&printer, JSON_KEY, "point", 1);
