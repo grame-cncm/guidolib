@@ -22,19 +22,31 @@
  */
 
 
-#ifndef __utilities__
-#define __utilities__
-
-#include <vector>
-#include <map>
+#include <cstdlib>   // for rand()
+#include <cctype>    // for isalnum()
+#include <algorithm> // for back_inserter
+#include <string>
+ 
+#include "utilities.h"
 
 namespace guidohttpd
 {
-    typedef std::pair<std::string, std::string>	TArg;
-    typedef std::vector<TArg>					TArgs;
-    
-    std::string rand_alnum_str (std::string::size_type sz);
-    
-} // end namespoace
 
-#endif
+char
+rand_alnum()
+ {
+     char c;
+     while (!std::isalnum(c = static_cast<char>(std::rand())))
+         ;
+     return c;
+ }
+  
+  std::string
+  rand_alnum_str (std::string::size_type sz)
+  {
+      std::string s;
+      s.reserve  (sz);
+      generate_n (std::back_inserter(s), sz, rand_alnum);
+      return s;
+  }  
+} // end namespoace

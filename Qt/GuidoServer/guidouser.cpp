@@ -1,6 +1,6 @@
 /*
  
- Copyright (C) 2012 Grame
+ Copyright (C) 2011 Grame
  
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -21,20 +21,23 @@
  
  */
 
+#include <iostream>
+#include <sstream>
+#include <cstring>
 
-#ifndef __utilities__
-#define __utilities__
+#include "guidouser.h"
 
-#include <vector>
-#include <map>
+using namespace std;
 
 namespace guidohttpd
 {
-    typedef std::pair<std::string, std::string>	TArg;
-    typedef std::vector<TArg>					TArgs;
+    void guidouser::setCookie(string url)
+    {
+        cookie_ = url;
+    }
     
-    std::string rand_alnum_str (std::string::size_type sz);
-    
+    string guidouser::getCookie()
+    {
+        return cookie_;
+    }
 } // end namespoace
-
-#endif

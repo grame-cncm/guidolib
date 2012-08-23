@@ -3,7 +3,7 @@ Overview
 
 This page provides an overview of certain key concepts in the GUIDOEngine
 Web API.  For all of the examples below, we assume that the base URL
-of the server is ``http://localhost`` running on port ``8000``.
+of the server is ``http://guido.grame.fr`` running on port ``8000``.
 
 .. index::
    single: GUIDO Music Notation
@@ -26,33 +26,29 @@ Basic server calls
 ------------------
 
 To interpret Gudio Music Notation (hereafter refered to as ``gmn``) code ``gmn=[a b c d]``, one makes
-the following call to the Guido Web Server:
+the following call to the Guido Web Server::
 
-.. parsed-literal::
-  `http://localhost:8000/?gmn=[a%20b%20c%20d] <http://localhost:8000/?gmn=[a%20b%20c%20d]>`_
+  curl -d "data={ \"gmn\" : \"[a b c d]\" }" http://guido.grame.fr:8000/ > abcd.png
 
 The output will use GUIDO server default settings for page and formatting
 attributes (discussed in :ref:`defaults`), creating the result:
 
 .. image:: abcd.png
 
-.. note::
-
-   Correct URLs use %20 for whitespace.  However, most modern browsers
-   will still interpret whitespace in a URL with whitespace.  For example,
-   in most modern browsers, you can call:
-
-     .. parsed-literal::
-        `http://localhost:8000/?gmn=[a b c d] <http://localhost:8000/?gmn=[a%20b%20c%20d]>`_
-
-   And it will get you a correct result.
+Note that this command (given via curl in the present example) is a POST
+command.  The GUIDO server being a RESTful server, all alterations of the
+server's state must pass through post.  All inquiries into the server's state
+must pass through GET.  In the present GUIDOEngine Web API, all POST calls
+are given as curl commands whereas all GET calls are given as clickable
+hyperlinks.  Users should be able to run them verbatim and get the result
+shown on the website.
 
 It is sometimes the case that a call to the Guido Web Server needs additional
 arguments.  For example, to get a :ref:`page map <page-map>`, the page in question must be
 specified.  This is done by appending those arguments to the URL.
 
 .. parsed-literal::
-  `http://localhost:8000/?get=voicemap&voice=1 <http://localhost:8000/?get=voicemap&voice=1>`_
+  `http://guido.grame.fr:8000/?get=voicemap&voice=1 <http://guido.grame.fr:8000/?get=voicemap&voice=1>`_
 
 Resulting in::
 
@@ -88,12 +84,12 @@ A fourth argument is required as well if ``map`` is equal to ``voice`` or
 ``staff``. This can be written either as:
 
 .. parsed-literal::
-  `http://localhost:8000/?get=point&y=200&x=220&map=voice&voice=1 <http://localhost:8000/?get=point&y=200&x=220&map=voice&voice=1>`_
+  `http://guido.grame.fr:8000/?get=point&y=200&x=220&map=voice&voice=1 <http://guido.grame.fr:8000/?get=point&y=200&x=220&map=voice&voice=1>`_
 
 or:
 
 .. parsed-literal::
-  `http://localhost:8000/?get=point&x=220&map=voice&voice=1&y=200 <http://localhost:8000/?get=point&x=220&map=voice&voice=1&y=200>`_
+  `http://guido.grame.fr:8000/?get=point&x=220&map=voice&voice=1&y=200 <http://guido.grame.fr:8000/?get=point&x=220&map=voice&voice=1&y=200>`_
 
 Resulting in::
 
@@ -143,7 +139,7 @@ last valid call. All extra arguments for a given call to a server must be
 specified immediately after the call.  So :ref:`getting the voice map <voice-map>`:
 
 .. parsed-literal::
-  `http://localhost:8000/?gmn=[a%20b]&get=voicemap&voice=1 <http://localhost:8000/?gmn=[a%20b]&get=voicemap&voice=1>`_
+  `http://guido.grame.fr:8000/?get=page&get=voicemap&voice=1 <http://guido.grame.fr:8000/?get=page&get=voicemap&voice=1>`_
 
 Will return::
 
@@ -187,11 +183,13 @@ Will return::
 By reversing the calls:
 
 .. parsed-literal::
-  `http://localhost:8000/?get=voicemap&voice=1&gmn=[a%20b] <http://localhost:8000/?get=voicemap&voice=1&gmn=[a%20b]>`_
+  `http://guido.grame.fr:8000/?get=voicemap&voice=1&get=page <http://guido.grame.fr:8000/?get=voicemap&voice=1&get=page>`_
 
-We receive:
+We receive::
 
-.. image:: ab.png
+  {
+          "page": 1
+  }
 
 Note that the number of notes reported to the map is different in the
 two calls. In the first, the map corresponds to the previously specified
@@ -228,7 +226,7 @@ cannot parse in full, it will ignore it and move to the next one. So,
 for example:
 
 .. parsed-literal::
-  `http://localhost:8000/?get=point&y=200&x=220&map=voice <http://localhost:8000/?get=point&y=200&x=220&map=voice>`_
+  `http://guido.grame.fr:8000/?get=point&y=200&x=220&map=voice <http://guido.grame.fr:8000/?get=point&y=200&x=220&map=voice>`_
 
 Will fail because it does not specify a voice and will return::
 
@@ -239,7 +237,7 @@ Will fail because it does not specify a voice and will return::
 On the other hand:
 
 .. parsed-literal::
-  `http://localhost:8000/?get=point&y=200&x=220&map=voice&gmn=[c c c] <http://localhost:8000/?get=point&y=200&x=220&map=voice&gmn=[c c c]>`_
+  `http://guido.grame.fr:8000/?get=point&y=200&x=220&map=voice&gmn=[c c c] <http://guido.grame.fr:8000/?get=point&y=200&x=220&map=voice&gmn=[c c c]>`_
 
 Will fail for the first call but succeed for the second, returning:
 
@@ -251,27 +249,26 @@ Will fail for the first call but succeed for the second, returning:
 
 .. _anon-named:
 
-Anonymous versus named sessions
+Anonymous versus named scores
 -------------------------------
 
-A named session is created by inserting a name composed of only letters and
+A named score is created by inserting a name composed of only letters and
 numbers in between the base URL of the Guido server and the subsequent
-arguments (if any).  For example, we can instantiate the named session
-for name ``ensemble101`` with ``gmn=[a b c d]`` by calling:
+arguments (if any).  For example, we can instantiate the named score
+for name ``ensemble101`` with ``gmn=[a b c d]`` by calling::
 
-.. parsed-literal::
-  `http://localhost:8000/ensemble101?gmn=[c d e f] <http://localhost:8000/ensemble101?gmn=[c d e f]>`_
+  curl -d "data={ \"gmn\" : \"[c d e f]\" }" http://guido.grame.fr:8000/ > cdef.png
 
 Returning:
 
 .. image:: cdef.png
 
-When a named session is created, a GRHandler object is created that corresponds
-to the session's name.  This GRHandler retains all information about that
-session.  So, for example, if one calls:
+When a named score is created, a GRHandler object is created that corresponds
+to the score's name.  This GRHandler retains all information about that
+score.  So, for example, if one calls:
 
 .. parsed-literal::
-  `http://localhost:8000/ensemble101?get=gmn <http://localhost:8000/ensemble101?get=gmn>`_
+  `http://guido.grame.fr:8000/ensemble101?get=gmn <http://guido.grame.fr:8000/ensemble101?get=gmn>`_
 
 The result will be::
 

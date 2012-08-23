@@ -35,11 +35,32 @@ using namespace std;
 
 namespace guidohttpd
 {
+
     static int printchannel(void *userdata, const char *data, uint32_t)
     {
         stringstream *foo = (stringstream *)userdata;
         *foo << data;
         return 1;
+    }
+    
+    guidosessionresponse::guidosessionresponse (const char* data, unsigned int size, string format, string errstring, unsigned int argumentsToAdvance, GuidoSessionParsingError status)
+    {
+        data_ = data;
+        size_ = size;
+        format_ = format;
+        errstring_ = errstring;
+        argumentsToAdvance_ = argumentsToAdvance;
+        status_ = status;
+    }
+
+    guidosessionresponse::guidosessionresponse ()
+    {
+        data_ = "";
+        size_ = 0;
+        format_ = "text/plain";
+        errstring_ = "";
+        argumentsToAdvance_ = 0;
+        status_ = GUIDO_SESSION_PARSING_FAILURE;
     }
     
     guidosession::guidosession(guido2img* g2svg)  
@@ -152,8 +173,7 @@ namespace guidohttpd
          It is a temporary solution
          */
         stringstream mystream;
-        //err = GuidoSVGExport(grh, page, mystream, "../../src/guido2.svg");
-        err = GuidoSVGExport(grh, page_, mystream, "/Users/mikesolomon/Documents/guido/guidolib/src/guido2.svg"); 
+        err = GuidoSVGExport(grh, page_, mystream, ""); 
         
         switch(map){
             case PAGE : err = GuidoGetPageMap(grh, page_, width_, height_, outmap); break;
@@ -167,74 +187,74 @@ namespace guidohttpd
     }
     
     /* callbacks */
-    GuidoSessionParsingError guidosession::handleGet(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n)
+    guidosessionresponse guidosession::handleGet(const TArgs& args, unsigned int n)
     {
         const int SIMPLE_SIZE = 10;
         string simple_ids[SIMPLE_SIZE] = {"width", "height", "margintop", "marginbottom", "marginleft", "marginright", "zoom","format","gmn", "resizepagetomusic"};
         
         for (int i = 0; i < SIMPLE_SIZE; i++)
             if (simple_ids[i].compare(args[n].second) == 0)
-                return simpleGet (size, data, format, errstring, argumentsToAdvance, simple_ids[i]);
+                return simpleGet (simple_ids[i]);
         
         const int MAP_SIZE = 4;
         string map_ids[MAP_SIZE] = {"pagemap","staffmap","voicemap","systemmap"};
         for (int i = 0; i < MAP_SIZE; i++)
             if (map_ids[i].compare(args[n].second) == 0)
-                return mapGet (size, data, format, errstring, argumentsToAdvance, args, n, map_ids[i]);
+                return mapGet (args, n, map_ids[i]);
         
         if (strcmp("point", args[n].second.c_str()) == 0)
-            return pointGet (size, data, format, errstring, argumentsToAdvance, args, n);
-        return genericFailure(size, data, format, errstring, argumentsToAdvance, "Unidentified get.");
+            return pointGet (args, n);
+        return genericFailure("Unidentified get.");
     }
     
-    GuidoSessionParsingError guidosession::handlePage(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n)
+    guidosessionresponse guidosession::handlePage(const TArgs& args, unsigned int n)
     {
         page_ = atof(args[n].second.c_str());
-        return genericReturnImage(size, data, format, errstring, argumentsToAdvance);
+        return genericReturnImage();
     }
     
-    GuidoSessionParsingError guidosession::handleWidth(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n)
+    guidosessionresponse guidosession::handleWidth(const TArgs& args, unsigned int n)
     {
         width_ = atof(args[n].second.c_str());
-        return genericReturnImage(size, data, format, errstring, argumentsToAdvance);
+        return genericReturnImage();
     }
     
-    GuidoSessionParsingError guidosession::handleHeight(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n)
+    guidosessionresponse guidosession::handleHeight(const TArgs& args, unsigned int n)
     {
         height_ = atof(args[n].second.c_str());
-        return genericReturnImage(size, data, format, errstring, argumentsToAdvance);
+        return genericReturnImage();
     }
-    GuidoSessionParsingError guidosession::handleMarginLeft(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n)
+    guidosessionresponse guidosession::handleMarginLeft(const TArgs& args, unsigned int n)
     {
         marginleft_ = atof(args[n].second.c_str());
-        return genericReturnImage(size, data, format, errstring, argumentsToAdvance);
+        return genericReturnImage();
     }
     
-    GuidoSessionParsingError guidosession::handleMarginRight(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n)
+    guidosessionresponse guidosession::handleMarginRight(const TArgs& args, unsigned int n)
     {
         marginright_ = atof(args[n].second.c_str());
-        return genericReturnImage(size, data, format, errstring, argumentsToAdvance);
+        return genericReturnImage();
     }
     
-    GuidoSessionParsingError guidosession::handleMarginTop(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n)
+    guidosessionresponse guidosession::handleMarginTop(const TArgs& args, unsigned int n)
     {
         margintop_ = atof(args[n].second.c_str());
-        return genericReturnImage(size, data, format, errstring, argumentsToAdvance);
+        return genericReturnImage();
     }
     
-    GuidoSessionParsingError guidosession::handleMarginBottom(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n)
+    guidosessionresponse guidosession::handleMarginBottom(const TArgs& args, unsigned int n)
     {
         marginbottom_ = atof(args[n].second.c_str());
-        return genericReturnImage(size, data, format, errstring, argumentsToAdvance);
+        return genericReturnImage();
     }
     
-    GuidoSessionParsingError guidosession::handleZoom(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n)
+    guidosessionresponse guidosession::handleZoom(const TArgs& args, unsigned int n)
     {
         zoom_  = atof(args[n].second.c_str());
-        return genericReturnImage(size, data, format, errstring, argumentsToAdvance);
+        return genericReturnImage();
     }
     
-    GuidoSessionParsingError guidosession::handleResizePageToMusic(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n)
+    guidosessionresponse guidosession::handleResizePageToMusic(const TArgs& args, unsigned int n)
     {
         if (strcmp("true", args[n].second.c_str()) == 0)
             resizeToPage_ = true;
@@ -245,22 +265,22 @@ namespace guidohttpd
         else if (strcmp("False", args[n].second.c_str()) == 0)
             resizeToPage_ = false;
         else
-            return genericFailure(size, data, format, errstring, argumentsToAdvance, "Must specify true or false for resizeToPage");
-        return genericReturnImage(size, data, format, errstring, argumentsToAdvance);
+            return genericFailure("Must specify true or false for resizeToPage");
+        return genericReturnImage();
     }
     
-    GuidoSessionParsingError guidosession::handleGMN(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n)
+    guidosessionresponse guidosession::handleGMN(const TArgs& args, unsigned int n)
     {
         gmn_ = string(args[n].second);
-        return genericReturnImage(size, data, format, errstring, argumentsToAdvance);
+        return genericReturnImage();
     }
     
-    GuidoSessionParsingError guidosession::handleBlankRequest(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n)
+    guidosessionresponse guidosession::handleBlankRequest(const TArgs& args, unsigned int n)
     {
-        return genericReturnImage(size, data, format, errstring, argumentsToAdvance);
+        return genericReturnImage();
     }
     
-    GuidoSessionParsingError guidosession::handleFormat(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n)
+    guidosessionresponse guidosession::handleFormat(const TArgs& args, unsigned int n)
     {
         if (strcmp("png", args[n].second.c_str()) == 0)
             format_ = GUIDO_WEB_API_PNG;
@@ -273,37 +293,40 @@ namespace guidohttpd
         else if (strcmp("svg", args[n].second.c_str()) == 0)
             format_ = GUIDO_WEB_API_PNG;//KLUDGE
         else
-            return genericFailure(size, data, format, errstring, argumentsToAdvance, "Not a valid format - please choose from png, jpeg, gif or svg.");
-        return genericReturnImage(size, data, format, errstring, argumentsToAdvance);
+            return genericFailure("Not a valid format - please choose from png, jpeg, gif or svg.");
+        return genericReturnImage();
+    }
+
+    guidosessionresponse guidosession::handleErrantGet(const TArgs&, unsigned int)
+    {
+        return genericFailure("You may not send a POST command through a GET channel.");
     }
     
-    GuidoSessionParsingError guidosession::handleFaultyInput(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs&, unsigned int)
+    guidosessionresponse guidosession::handleErrantPost(const TArgs&, unsigned int)
     {
-        return genericFailure (size, data, format, errstring, argumentsToAdvance, "You have entered insane input.");
+        return genericFailure("You may not send a GET command through a POST channel.");
+    }
+    
+    
+    guidosessionresponse guidosession::handleFaultyInput(const TArgs&, unsigned int)
+    {
+        return genericFailure ("You have entered insane input.");
     }
     
     // ---- Abstractions
     
-    GuidoSessionParsingError guidosession::genericReturnImage(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance)
+    guidosessionresponse guidosession::genericReturnImage()
     {
         Guido2ImageErrorCodes err = fConverter->convert(this);
         if (err == GUIDO_2_IMAGE_SUCCESS)
         {
-            *data = fConverter->data();
-            *size = fConverter->size();
-            *format = formatToMIMEType();
-            *errstring = "";
-            *argumentsToAdvance = 1;
-            return GUIDO_SESSION_PARSING_SUCCESS;
+            return guidosessionresponse(fConverter->data(), fConverter->size(), formatToMIMEType(), "", 1, GUIDO_SESSION_PARSING_SUCCESS);
         }
-        return genericFailure (size, data, format, errstring, argumentsToAdvance, Guido2Image::getErrorString (err));
+        return genericFailure (Guido2Image::getErrorString (err));
     }
     
-    GuidoSessionParsingError guidosession::genericFailure(int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const char* errorstring)
+    guidosessionresponse guidosession::genericFailure(const char* errorstring)
     {
-        *data = "";
-        *size = 0;
-        *format = "application/json";
         json_printer printer;
         stringstream mystream;
         json_print_init(&printer, printchannel, &mystream);
@@ -311,12 +334,10 @@ namespace guidohttpd
         json_print_pretty(&printer, JSON_KEY, "error", 1);
         json_print_pretty(&printer, JSON_STRING, errorstring, 1);
         json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
-        *errstring = strdup(mystream.str().c_str());
-        *argumentsToAdvance = 1;
-        return GUIDO_SESSION_PARSING_FAILURE;
+        return guidosessionresponse("", 0, "application/json", mystream.str(), 1, GUIDO_SESSION_PARSING_FAILURE);
     }
     
-    GuidoSessionParsingError guidosession::simpleGet (int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, string thingToGet)
+    guidosessionresponse guidosession::simpleGet(string thingToGet)
     {
         string internalRep = getStringRepresentationOf(thingToGet);
         json_printer printer;
@@ -325,28 +346,23 @@ namespace guidohttpd
         json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
         if (url_.size () != 0)
         {
-            json_print_pretty(&printer, JSON_KEY, "username", 1);
+            json_print_pretty(&printer, JSON_KEY, "score", 1);
             const char* current_url = url_.c_str();
             json_print_pretty(&printer, JSON_STRING, current_url, 1);
         }
         json_type type = swapTypeForName(thingToGet);
         if (type == JSON_NONE)
-            return genericFailure (size, data, format, errstring, argumentsToAdvance, "Cannot find correct JSON type output.");
+            return genericFailure ("Cannot find correct JSON type output.");
         const char* constCharVersionOfThingToGet = thingToGet.c_str();
         const char* constCharVersionOfInternalRep = internalRep.c_str();
         json_print_pretty(&printer, JSON_KEY, constCharVersionOfThingToGet, 1);
         json_print_pretty(&printer, type, constCharVersionOfInternalRep, type == JSON_STRING ? 1 : strlen(constCharVersionOfInternalRep));
         json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
         json_print_free(&printer);
-        *data = strdup(mystream.str().c_str());
-        *size = strlen(*data);
-        *format = "application/json";
-        *errstring = "none";
-        *argumentsToAdvance = 1;
-        return GUIDO_SESSION_PARSING_SUCCESS;
+        return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", "", 1, GUIDO_SESSION_PARSING_SUCCESS);
     }
     
-    GuidoSessionParsingError guidosession::mapGet (int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n, string thingToGet)
+    guidosessionresponse guidosession::mapGet (const TArgs& args, unsigned int n, string thingToGet)
     {
         Time2GraphicMap outmap;
         GuidoErrCode err;
@@ -357,11 +373,11 @@ namespace guidohttpd
         else
         {
             if (n >= args.size () - 1)
-                return genericFailure (size, data, format, errstring, argumentsToAdvance, "You need an extra argument for this map call.");
+                return genericFailure ("You need an extra argument for this map call.");
             if (thingToGet.compare("systemmap") == 0 && strcmp(args[n + 1].second.c_str(), "voice") != 0)
-                return genericFailure (size, data, format, errstring, argumentsToAdvance, "To get a voicemap, the argument must be followed by a voice argument indicating which voice you want.");
+                return genericFailure ("To get a voicemap, the argument must be followed by a voice argument indicating which voice you want.");
             if (thingToGet.compare("systemmap") == 0 && strcmp(args[n + 1].second.c_str(), "staff") != 0)
-                return genericFailure (size, data, format, errstring, argumentsToAdvance, "To get a staffmap, the argument must be followed by a staff argument indicating which staff you want.");
+                return genericFailure ("To get a staffmap, the argument must be followed by a staff argument indicating which staff you want.");
             int aux = atoi(args[n+1].second.c_str());
             if (thingToGet.compare("staffmap") == 0)
                 err = getmap (STAFF, aux, outmap);
@@ -369,14 +385,14 @@ namespace guidohttpd
                 err = getmap (VOICE, aux, outmap);
         }
         if (err != guidoNoErr)
-            return genericFailure (size, data, format, errstring, argumentsToAdvance, "Could not generate a map for your request.");
+            return genericFailure ("Could not generate a map for your request.");
         json_printer printer;
         stringstream mystream;
         json_print_init(&printer, printchannel, &mystream);
         json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
         if (url_.size () != 0)
         {
-            json_print_pretty(&printer, JSON_KEY, "username", 1);
+            json_print_pretty(&printer, JSON_KEY, "score", 1);
             const char* current_url = url_.c_str();
             json_print_pretty(&printer, JSON_STRING, current_url, 1);
         }
@@ -395,17 +411,13 @@ namespace guidohttpd
         json_print_pretty(&printer, JSON_ARRAY_END, NULL, 0);
         json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
         json_print_free(&printer);
-        *data = strdup(mystream.str().c_str());
-        *size = strlen(*data);
-        *format = "application/json";
-        *errstring = "none";
-        *argumentsToAdvance = (thingToGet.compare("pagemap") == 0 || thingToGet.compare("systemmap") == 0) ? 1 : 2;
-        return GUIDO_SESSION_PARSING_SUCCESS;
+        int argumentsToAdvance = (thingToGet.compare("pagemap") == 0 || thingToGet.compare("systemmap") == 0) ? 1 : 2;
+        return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", "", argumentsToAdvance, GUIDO_SESSION_PARSING_SUCCESS);
     }
-    GuidoSessionParsingError guidosession::pointGet (int* size, const char** data, string* format, string* errstring, unsigned int* argumentsToAdvance, const TArgs& args, unsigned int n)
+    guidosessionresponse guidosession::pointGet (const TArgs& args, unsigned int n)
     {
         if (n >= args.size () - 3)
-            return genericFailure (size, data, format, errstring, argumentsToAdvance, "You need both x and y arguments as well as a mapping specification for get=point.");
+            return genericFailure ("You need both x and y arguments as well as a mapping specification for get=point.");
         float x;
         float y;
         const char* maptype;
@@ -424,28 +436,28 @@ namespace guidohttpd
                 if (strcmp("page", maptype) == 0)
                 {
                     if (type != NO_TYPE && type != PAGE)
-                        return genericFailure (size, data, format, errstring, argumentsToAdvance, "Cannot specify a page map with a previously specified type."); 
+                        return genericFailure ("Cannot specify a page map with a previously specified type."); 
                     else
                         type = PAGE;
                 }
                 else if (strcmp("voice", maptype) == 0)
                 {
                     if (type != NO_TYPE && type != VOICE)
-                        return genericFailure (size, data, format, errstring, argumentsToAdvance, "Cannot specify a voice map with a previously specified type.");
+                        return genericFailure ("Cannot specify a voice map with a previously specified type.");
                     else
                         type = VOICE;
                 }
                 else if (strcmp("staff", maptype) == 0)
                 {
                     if (type != NO_TYPE && type != STAFF)
-                        return genericFailure (size, data, format, errstring, argumentsToAdvance, "Cannot specify a staff map with a previously specified type.");
+                        return genericFailure ("Cannot specify a staff map with a previously specified type.");
                     else
                         type = STAFF;
                 }
                 else if (strcmp("system", maptype) == 0)
                 {
                     if (type != NO_TYPE && type != SYSTEM)
-                        return genericFailure (size, data, format, errstring, argumentsToAdvance, "Cannot specify a system map with a previously specified type."); 
+                        return genericFailure ("Cannot specify a system map with a previously specified type."); 
                     else {
                         type = SYSTEM;
                     }
@@ -456,26 +468,26 @@ namespace guidohttpd
             {
                 aux = atoi(args[n + i].second.c_str());
                 if (type != NO_TYPE && type != VOICE)
-                    return genericFailure (size, data, format, errstring, argumentsToAdvance, "Cannot specify voice for this type of map.");
+                    return genericFailure ("Cannot specify voice for this type of map.");
                 type = VOICE;
             }
             else if (args[n + i].first == "staff")
             {
                 aux = atoi(args[n + i].second.c_str());
                 if (type != NO_TYPE && type != STAFF   )
-                    return genericFailure (size, data, format, errstring, argumentsToAdvance, "Cannot specify staff for this type of map.");
+                    return genericFailure ("Cannot specify staff for this type of map.");
                 type = STAFF;
             }
             if (type && (type == STAFF || type == VOICE) && n >= args.size () - 4)
-                return genericFailure (size, data, format, errstring, argumentsToAdvance, "You're missing an argument for get=point.");
+                return genericFailure ("You're missing an argument for get=point.");
             else if (type && (type == STAFF || type == VOICE) && n < args.size () - 4)
                 movingTarget = 5;
             i++;
         }
         if (!x || !y || !maptype)
-            return genericFailure (size, data, format, errstring, argumentsToAdvance, "Necessary argument not specified for getting map type.");
+            return genericFailure ("Necessary argument not specified for getting map type.");
         if (type != NO_TYPE && (type == STAFF || type == VOICE) && !aux)
-            return genericFailure (size, data, format, errstring, argumentsToAdvance, "Necessary argument not specified for getting map type.");
+            return genericFailure ("Necessary argument not specified for getting map type.");
         GuidoErrCode err;
         Time2GraphicMap outmap;
         switch (type) {
@@ -483,11 +495,11 @@ namespace guidohttpd
             case STAFF : err = getmap (STAFF, aux, outmap); break;
             case SYSTEM : err = getmap (SYSTEM, 0, outmap); break;
             case VOICE : err = getmap (VOICE, aux, outmap); break;
-            default : return genericFailure (size, data, format, errstring, argumentsToAdvance, "Exotic programming error.");
+            default : return genericFailure ("Exotic programming error.");
         }
         
         if (err != guidoNoErr)
-            return genericFailure (size, data, format, errstring, argumentsToAdvance, "Exotic programming error.");
+            return genericFailure ("Exotic programming error.");
         
         TimeSegment t;
         FloatRect r;
@@ -498,7 +510,7 @@ namespace guidohttpd
         json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
         if (url_.size () != 0)
         {
-            json_print_pretty(&printer, JSON_KEY, "username", 1);
+            json_print_pretty(&printer, JSON_KEY, "score", 1);
             json_print_pretty(&printer, JSON_INT, url_.c_str(), strlen(url_.c_str()));
         }
         json_print_pretty(&printer, JSON_KEY, "point", 1);
@@ -512,12 +524,8 @@ namespace guidohttpd
         json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
         json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
         json_print_free(&printer);
-        *data = strdup(mystream.str().c_str());
-        *size = strlen(*data);
-        *format = "application/json";
-        *errstring = "none";
-        *argumentsToAdvance = (type == PAGE || type == SYSTEM) ? 4 : 5;
-        return GUIDO_SESSION_PARSING_SUCCESS;
+        int argumentsToAdvance = (type == PAGE || type == SYSTEM) ? 4 : 5;
+        return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", "", argumentsToAdvance, GUIDO_SESSION_PARSING_SUCCESS);
     }
     
     void guidosession::setUrl(string url)

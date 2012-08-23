@@ -32,6 +32,7 @@
 #include <microhttpd.h>
 
 #include "guidosession.h"
+#include "guidouser.h"
 #include "guido2img.h"
 
 #define POST 1
@@ -57,7 +58,7 @@ namespace guidohttpd
         int					fPort;
         struct MHD_Daemon *	fServer;
         guido2img*			fConverter;
-        std::map<std::string, guidosession *> fSessions;
+        std::map<std::string, guidouser *> fUsers;
         bool				fDebug;
         
         const char* getMIMEType (const std::string& page);
@@ -72,11 +73,12 @@ namespace guidohttpd
 		void stop ();
 		int answer (struct MHD_Connection *connection, const char *url, const char *method, const char *version, 
 					const char *upload_data, size_t *upload_data_size, void **con_cls);
-		int sendGuido (struct MHD_Connection *connection, const char* url, const TArgs& args);
+		int sendGuido (struct MHD_Connection *connection, const char* url, const TArgs& args, int type);
         
         
-		static int send (struct MHD_Connection *connection, const char *page, int length, const char *type, int status=MHD_HTTP_OK);
-		static int send (struct MHD_Connection *connection, const char *page, const char *type, int status=MHD_HTTP_OK);
+		static int send (struct MHD_Connection *connection, const char *page, int length, const char *type, guidouser *session, int status=MHD_HTTP_OK);
+		static int send (struct MHD_Connection *connection, const char *page, const char *type, guidouser *session, int status=MHD_HTTP_OK);
+        static void add_session_cookie (guidouser *session, MHD_Response *response);
         
     };
     
