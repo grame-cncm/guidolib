@@ -129,8 +129,8 @@ _post_params (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
 //--------------------------------------------------------------------------
 // the http server
 //--------------------------------------------------------------------------
-HTTPDServer::HTTPDServer(int port, guido2img* g2svg)  
-	: fPort(port), fServer(0), fConverter(g2svg), fDebug(false)
+HTTPDServer::HTTPDServer(int port, string logfile, bool daemon, guido2img* g2svg)
+	: fPort(port), fServer(0), fConverter(g2svg), fLogfile(logfile), fDaemon(daemon)
 {
 }
 

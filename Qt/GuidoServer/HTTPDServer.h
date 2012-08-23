@@ -59,13 +59,14 @@ namespace guidohttpd
         struct MHD_Daemon *	fServer;
         guido2img*			fConverter;
         std::map<std::string, guidouser *> fUsers;
-        bool				fDebug;
+        bool                fDaemon;
+        string              fLogfile;
         
         const char* getMIMEType (const std::string& page);
         
 	public:
         
-        HTTPDServer(int port, guido2img* g2img);
+        HTTPDServer(int port, string logfile, bool daemon, guido2img* g2img);
 		virtual ~HTTPDServer();
         
 		/// \brief starts the httpd server

@@ -30,11 +30,16 @@
 
 namespace guidohttpd
 {
+
     typedef std::pair<std::string, std::string>	TArg;
     typedef std::vector<TArg>					TArgs;
-    
+
     std::string rand_alnum_str (std::string::size_type sz);
-    
+    long lopt(char *argv[], const char *name, long def);
+    bool bopt(char *argv[], const char *name);
+    std::string sopt(char *argv[], const char *name, std::string def);
+    void write_to_log(std::string message, std::string logfile, bool daemon);
+
 } // end namespoace
 
 #endif
