@@ -94,7 +94,7 @@ int main(int argc, char **argv)
         return 0;
     }
     else
-      write_to_log ("Can't start Guido httpd server.\n", logfile, daemon);
+      write_to_log ("Can't start Guido httpd server on the specified port. Try a different port.\n", logfile, daemon);
 
     QGuidoPainter::stopGuidoEngine();						// stop the guido engine
     return 1;
