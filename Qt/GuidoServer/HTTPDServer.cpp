@@ -103,7 +103,7 @@ static int _get_params (void *cls, enum MHD_ValueKind , const char *key, const c
 
     
 static int 
-_post_params (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
+_post_params (void *coninfo_cls, enum MHD_ValueKind , const char *key,
               const char *filename, const char *content_type,
               const char *transfer_encoding, const char *data, 
               uint64_t off, size_t size)
@@ -129,8 +129,8 @@ _post_params (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
 //--------------------------------------------------------------------------
 // the http server
 //--------------------------------------------------------------------------
-HTTPDServer::HTTPDServer(int port, string logfile, bool daemon, guido2img* g2svg)
-	: fPort(port), fServer(0), fConverter(g2svg), fLogfile(logfile), fDaemon(daemon)
+HTTPDServer::HTTPDServer(int port, guido2img* g2svg)
+	: fPort(port), fServer(0), fConverter(g2svg)
 {
 }
 
@@ -354,11 +354,12 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
 //--------------------------------------------------------------------------
 int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, const char *method, const char *version, const char *upload_data, size_t *upload_data_size, void **con_cls)
 {
-    // <<---- BEGIN POST TESTING
+	const union MHD_ConnectionInfo * infos = MHD_get_connection_info(connection, MHD_CONNECTION_INFO_CLIENT_ADDRESS);
+	log << infos->client_addr << " - " << method << " - " << url << logend;
+	// <<---- BEGIN POST TESTING
     if (NULL == *con_cls)
     {
         struct connection_info_struct *con_info = new connection_info_struct ();
-        
         if (0 == strcmp (method, "POST"))
         {
             con_info->postprocessor =
