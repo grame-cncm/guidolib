@@ -27,6 +27,10 @@
 
 #include <vector>
 #include <map>
+#include <string>
+#include <fstream>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 namespace guidohttpd
 {
@@ -36,9 +40,66 @@ namespace guidohttpd
 
     std::string rand_alnum_str (std::string::size_type sz);
     long lopt(char *argv[], const char *name, long def);
-    bool bopt(char *argv[], const char *name);
+    bool bopt(char *argv[], const char *name, bool def);
     std::string sopt(char *argv[], const char *name, std::string def);
-    void write_to_log(std::string message, std::string logfile, bool daemon);
+
+	struct _logend {};
+
+	class logstream {
+		bool		fDaemon;
+		bool		fPrintDate;
+		std::fstream fFileStream;
+		
+		inline std::ostream& stream() { return fDaemon ? fFileStream : std::cout; }
+		std::string date();
+		void		printdate(std::ostream& out);
+
+		public: 
+					 logstream () : fDaemon (false), fPrintDate(false) {}
+					 logstream (const char * logfile);
+			virtual ~logstream () { fFileStream.close(); }
+
+
+			template <typename T> 
+			void print (const T& val) {
+				std::ostream& out = this->stream();
+				printdate(out);
+				out << val;
+			}
+
+			void print (struct sockaddr * addr) {
+				std::ostream& out = this->stream();
+				printdate(out);
+				char buff[INET6_ADDRSTRLEN];
+				switch(addr->sa_family) {
+					case AF_INET:
+						stream() << inet_ntop(AF_INET, &(((struct sockaddr_in *)addr)->sin_addr), buff, INET6_ADDRSTRLEN);
+						break;
+					case AF_INET6:
+						out << inet_ntop(AF_INET6, &(((struct sockaddr_in6 *)addr)->sin6_addr), buff, INET6_ADDRSTRLEN);
+						break;
+					default:
+						out << "Unexpectes address family";
+				}
+			}
+
+			void print (_logend) {
+				stream() << std::endl;
+				fPrintDate = fDaemon;
+			}
+
+
+	};
+	extern logstream *	gLog;
+	extern _logend		gLogEndl;
+
+	template <typename T>
+	logstream& operator <<(logstream& out, const T& val)			{ out.print(val); return out; }
+
+	#define log	(*gLog)
+	#define logend	(gLogEndl)
+
+//    void write_to_log(std::string message, std::string logfile, bool daemon);
 
 } // end namespoace
 

@@ -27,11 +27,17 @@
 #include <algorithm> // for back_inserter
 #include <string>
 #include <iostream> 
+#include <time.h>
 
 #include "utilities.h"
 
+using namespace std;
+
 namespace guidohttpd
 {
+
+logstream * gLog;
+_logend		gLogEndl;
 
 char
 rand_alnum()
@@ -58,11 +64,11 @@ long lopt(char *argv[], const char *name, long def)
 	return def;
 }
 
-bool bopt(char *argv[], const char *name)
+bool bopt(char *argv[], const char *name, bool def)
 {
 	int	i;
 	for (i = 0; argv[i]; i++) if (!strcmp(argv[i], name)) return true;
-	return false;
+	return def;
 }
 
 std::string sopt(char *argv[], const char *name, std::string def)
@@ -72,15 +78,26 @@ std::string sopt(char *argv[], const char *name, std::string def)
 	return def;
 }
 
-void write_to_log(std::string message, std::string logfile, bool daemon)
-{
-  if (daemon) {
-    FILE *f = fopen (logfile.c_str(), "ab");
-    fwrite(message.c_str (), message.size (), sizeof (char), f);
-    fclose(f);
-  } else {
-      std::cout << message << std::endl; // precautionary endl
-  }
+//----------------------------------------------------------------------------------------
+logstream::logstream (const char * logfile) : fDaemon (true), fPrintDate(true)
+{ 
+	fFileStream.open(logfile, ios_base::out | ios_base::app);
+	if (!fFileStream.is_open()) cerr << "can't open log file " << logfile << endl;
 }
+
+string logstream::date() {
+	time_t rawtime;
+	time ( &rawtime );
+	string datestr (ctime ( &rawtime ));
+	return datestr.substr(0, datestr.size()-1);
+}
+
+void logstream::printdate(std::ostream& out) {
+	if (fPrintDate) {
+		out << "[" << date() << "] ";
+		fPrintDate = false;
+	}
+}
+
 
 } // end namespoace
