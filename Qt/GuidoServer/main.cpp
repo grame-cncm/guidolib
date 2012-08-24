@@ -19,6 +19,8 @@
 using namespace std;
 using namespace guidohttpd;
 
+extern int errno;
+
 #define kVersion	 0.50f
 #define kVersionStr	"0.50"
 
@@ -29,19 +31,67 @@ static const char* kLogfileOpt	= "-logfile";
 static const string kDefaultLogfile = "guidohttpdserver.log";
 
 static const char* kDaemonOpt	= "-daemon";
+static const char* kHelpOpt		= "-help";
 
+//---------------------------------------------------------------------------------
+static void usage (char* name)
+{
+#ifndef WIN32
+	name = basename (name);
+#endif	
+	const char * tab = "             ";
+	cout << "usage: " << name << " [ options ]" << endl;
+	cout << "where options are in:" << endl;
+	cout << tab << kPortOpt << " portnum : sets the communication port number (defaults to " << kDefaultPort << ")"<< endl;
+	cout << tab << kDaemonOpt  << " : launch the server in daemon mode" << endl;
+	cout << tab << kLogfileOpt << " name : (defaults to " << kDefaultLogfile << "  - ignored when not in daemon mode)" << endl;
+	cout << tab << kHelpOpt << " : print this help message and exit" << endl;
+}
+
+//---------------------------------------------------------------------------------
+static bool launchServer (int port, const char * logfile, bool daemon)
+{
+    bool ret = false;
+	guido2img converter;
+    QGuidoPainter::startGuidoEngine();						// starts the guido engine
+    HTTPDServer server(port, &converter);
+    if (server.start(port)) {
+        log << "Guido server v." << kVersionStr << " is running on port " << port << logend;
+        if (daemon) {
+          while (true) { }
+        }
+        else {
+            cout << "Type 'q' to quit" << endl;
+            do {
+				char c = getchar();
+				if (c == 'q') break;
+            } while (true);
+        }
+        server.stop();
+        ret = true;
+    }
+    else log << "Can't start Guido httpd server on the specified port. Try a different port." << logend;
+    QGuidoPainter::stopGuidoEngine();						// stop the guido engine
+	return ret;
+}
+
+//---------------------------------------------------------------------------------
 int main(int argc, char **argv)
 {
     QApplication app( argc , argv );	// required by Qt
     int port = lopt (argv, kPortOpt, kDefaultPort);
     string logfile = sopt (argv, kLogfileOpt, kDefaultLogfile);
-    bool daemon = bopt (argv, kDaemonOpt);
+    bool daemon = bopt (argv, kDaemonOpt, false);
+    if (bopt (argv, kHelpOpt, false)) {
+		usage (argv[0]);
+		exit (0);
+	}
+	gLog = daemon ? new logstream ( logfile.c_str() ) : new logstream();
 
     if (daemon) {
         // Our process ID and Session ID
-        pid_t pid, sid;
         // Fork off the parent process
-        pid = fork();
+        pid_t pid = fork();
         if (pid < 0) {
             exit(EXIT_FAILURE);
         }
@@ -54,17 +104,16 @@ int main(int argc, char **argv)
         umask(0);
         
         // Open any logs here
-        
         // Create a new SID for the child process
-        sid = setsid();
+        pid_t sid = setsid();
         if (sid < 0) {
-            write_to_log ("SID created for the child process less than 0.\n", logfile, daemon);
+            log << "SID creation failed (errno " << errno << ")" << logend;
             exit(EXIT_FAILURE);
         }
             
         // Change the current working directory
         if ((chdir("/")) < 0) {
-            write_to_log ("Could not change the directory to the root directory.\n", logfile, daemon);
+            log << "Could not change the directory to the root directory." << logend;
             exit(EXIT_FAILURE);
         }
         
@@ -73,30 +122,6 @@ int main(int argc, char **argv)
         close(STDOUT_FILENO);
         close(STDERR_FILENO);
     }
-
-    guido2img converter;
-
-    QGuidoPainter::startGuidoEngine();						// starts the guido engine
-    HTTPDServer server(port, logfile, daemon, &converter);
-    if (server.start(port)) {
-        if (daemon) {
-          while (true) { }
-        }
-        else {
-            cout << "Guido server v." << kVersionStr << " is running on port " << port << endl;
-            cout << "Type 'q' to quit" << endl;
-            do {
-                    char c = getchar();
-                    if (c == 'q') break;
-            } while (true);
-        }
-        server.stop();
-        return 0;
-    }
-    else
-      write_to_log ("Can't start Guido httpd server on the specified port. Try a different port.\n", logfile, daemon);
-
-    QGuidoPainter::stopGuidoEngine();						// stop the guido engine
-    return 1;
+	return launchServer (port, logfile.c_str(), daemon) ? 0 : 1;
 }
 
