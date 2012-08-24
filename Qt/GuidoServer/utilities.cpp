@@ -26,7 +26,8 @@
 #include <cctype>    // for isalnum()
 #include <algorithm> // for back_inserter
 #include <string>
- 
+#include <iostream> 
+
 #include "utilities.h"
 
 namespace guidohttpd
@@ -49,4 +50,37 @@ rand_alnum()
       generate_n (std::back_inserter(s), sz, rand_alnum);
       return s;
   }  
+  
+long lopt(char *argv[], const char *name, long def)
+{
+	int	i;
+	for (i = 0; argv[i]; i++) if (!strcmp(argv[i], name)) return atoi(argv[i+1]);
+	return def;
+}
+
+bool bopt(char *argv[], const char *name)
+{
+	int	i;
+	for (i = 0; argv[i]; i++) if (!strcmp(argv[i], name)) return true;
+	return false;
+}
+
+std::string sopt(char *argv[], const char *name, std::string def)
+{
+	int	i;
+	for (i = 0; argv[i]; i++) if (!strcmp(argv[i], name)) return std::string (argv[i+1]);
+	return def;
+}
+
+void write_to_log(std::string message, std::string logfile, bool daemon)
+{
+  if (daemon) {
+    FILE *f = fopen (logfile.c_str(), "ab");
+    fwrite(message.c_str (), message.size (), sizeof (char), f);
+    fclose(f);
+  } else {
+      std::cout << message << std::endl; // precautionary endl
+  }
+}
+
 } // end namespoace
