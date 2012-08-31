@@ -55,6 +55,17 @@ GMN
 The following call passes in Guido Music Notation code to the server
 that will be visualized::
 
+  <html>
+    <body>
+      <form action="http://guido.grame.fr:8000" method="post">
+        <input type="hidden" name="data" value='{ "gmn" : "[ _/8 \slur(c1 d e) {fis/2, ais} e/2 ]" }' />
+        <input type="submit" value="Submit" />
+      </form>
+    </body>
+  </html>
+
+::
+
   curl -d "data={ \"gmn\" : \"[ _/8 \slur(c1 d e) {fis/2, ais} e/2 ]\" }" http://guido.grame.fr:8000/ > setGmn.png
 
 Resulting in:
@@ -71,6 +82,17 @@ Page
 
 The following call sets the page to be displayed::
 
+  <html>
+    <body>
+      <form action="http://guido.grame.fr:8000" method="post">
+        <input type="hidden" name="data" value='{ "page" : "1" }' />
+        <input type="submit" value="Submit" />
+      </form>
+    </body>
+  </html>
+
+::
+
   curl -d "data={ \"page\" : \"1\" }" http://guido.grame.fr:8000/ > setPage.png
 
 Resulting in:
@@ -85,7 +107,18 @@ Values must be integer values greater than 0.
 Width
 ^^^^^
 
-The following call sets the width of the page:L
+The following call sets the width of the page::
+
+  <html>
+    <body>
+      <form action="http://guido.grame.fr:8000" method="post">
+        <input type="hidden" name="data" value='{ "width" : "800" }' />
+        <input type="submit" value="Submit" />
+      </form>
+    </body>
+  </html>
+
+::
 
   curl -d "data={ \"width\" : \"800\" }" http://guido.grame.fr:8000/ > setWidth.png
 
@@ -103,6 +136,17 @@ Height
 
 The following call sets the height of the page::
 
+  <html>
+    <body>
+      <form action="http://guido.grame.fr:8000" method="post">
+        <input type="hidden" name="data" value='{ "height" : "800" }' />
+        <input type="submit" value="Submit" />
+      </form>
+    </body>
+  </html>
+
+::
+
   curl -d "data={ \"height\" : \"800\" }" http://guido.grame.fr:8000/ > setHeight.png
 
 Resulting in:
@@ -118,6 +162,17 @@ Left margin
 ^^^^^^^^^^^
 
 The following call sets the left margin of the page::
+
+  <html>
+    <body>
+      <form action="http://guido.grame.fr:8000" method="post">
+        <input type="hidden" name="data" value='{ "marginleft" : "10" }' />
+        <input type="submit" value="Submit" />
+      </form>
+    </body>
+  </html>
+
+::
 
   curl -d "data={ \"marginleft\" : \"10\" }" http://guido.grame.fr:8000/ > setMarginleft.png
 
@@ -135,6 +190,17 @@ Right margin
 
 The following call sets the right margin of the page::
 
+  <html>
+    <body>
+      <form action="http://guido.grame.fr:8000" method="post">
+        <input type="hidden" name="data" value='{ "marginright" : "10" }' />
+        <input type="submit" value="Submit" />
+      </form>
+    </body>
+  </html>
+
+::
+
   curl -d "data={ \"marginright\" : \"10\" }" http://guido.grame.fr:8000/ > setMarginright.png
 
 Resulting in:
@@ -150,6 +216,17 @@ Top margin
 ^^^^^^^^^^
 
 The following call sets the top margin of the page::
+
+  <html>
+    <body>
+      <form action="http://guido.grame.fr:8000" method="post">
+        <input type="hidden" name="data" value='{ "margintop" : "10" }' />
+        <input type="submit" value="Submit" />
+      </form>
+    </body>
+  </html>
+
+::
 
   curl -d "data={ \"margintop\" : \"10\" }" http://guido.grame.fr:8000/ > setMargintop.png
 
@@ -167,6 +244,17 @@ Bottom margin
 
 The following call sets the bottom margin of the page::
 
+  <html>
+    <body>
+      <form action="http://guido.grame.fr:8000" method="post">
+        <input type="hidden" name="data" value='{ "marginbottom" : "10" }' />
+        <input type="submit" value="Submit" />
+      </form>
+    </body>
+  </html>
+
+::
+
   curl -d "data={ \"marginbottom\" : \"10\" }" http://guido.grame.fr:8000/ > setMarginbottom.png
 
 Resulting in:
@@ -182,6 +270,17 @@ Zoom
 ^^^^
 
 The following call sets the zoom of the page::
+
+  <html>
+    <body>
+      <form action="http://guido.grame.fr:8000" method="post">
+        <input type="hidden" name="data" value='{ "zoom" : "4" }' />
+        <input type="submit" value="Submit" />
+      </form>
+    </body>
+  </html>
+
+::
 
   curl -d "data={ \"zoom\" : \"4\" }" http://guido.grame.fr:8000/ > setZoom.png
 
@@ -200,6 +299,17 @@ Resize page to music
 The following call tells the web server to resize the page to the music it
 contains::
 
+  <html>
+    <body>
+      <form action="http://guido.grame.fr:8000" method="post">
+        <input type="hidden" name="data" value='{ "resizepagetomusic" : "true" }' />
+        <input type="submit" value="Submit" />
+      </form>
+    </body>
+  </html>
+
+::
+
   curl -d "data={ \"resizepagetomusic\" : \"true\" }" http://guido.grame.fr:8000/ > setResizepagetomusic.png
 
 Resulting in:
@@ -215,6 +325,17 @@ Format
 ^^^^^^^^^^^^^^^^^^^^
 
 The following call tells the web server change the format of the output::
+
+  <html>
+    <body>
+      <form action="http://guido.grame.fr:8000" method="post">
+        <input type="hidden" name="data" value='{ "format" : "jpg" }' />
+        <input type="submit" value="Submit" />
+      </form>
+    </body>
+  </html>
+
+::
 
   curl -d "data={ \"format\" : \"jpg\" }" http://guido.grame.fr:8000/ > setFormat.jpg
 

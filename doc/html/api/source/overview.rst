@@ -9,6 +9,105 @@ of the server is ``http://guido.grame.fr`` running on port ``8000``.
    single: GUIDO Music Notation
    single: GUIDO Music Engine
 
+Documentation conventions
+-------------------------
+
+All POST commands in this document are shown in two ways:
+
+* a bloc showing the html of the link
+* a curl command
+
+All GET calls are given as clickable hyperlinks. All DELETE commands are given as curl
+examples.
+
+Users should be able to run all commands verbatim and get the result shown on the
+website. If any discrepencies occur, please contact
+`mike at mikesolomon dot org <mailto:mike@mikesolomon.org>`_.
+
+GUIDOEngine and REST
+--------------------
+
+The GUIDOEngine implements four of the five methods required for a server to be RESTful.
+
+1. Client–server
+................
+
+The GUIDOEngine server is entirely agnostic of the clients that connect to it - anyone
+can connect to the server via any device that transmits HTTP messages such as a browser
+or curl.
+
+2. Cacheable
+............
+
+The GUIDOEngine server caches all cacheable data such as page sizes, notes in a score
+and output formats.
+
+3. Layered system
+.................
+
+The REST standard dictates that clients should not know whether they are connected
+to an end server or to intermediaries. As there is no notion of intermediary server
+in the GUIDOEngine architecture, this part of the specification does not concern
+the server.
+
+4. Uniform interface
+....................
+
+The principle of uniformity of resources dictates that all resources should be
+identifiable by the messages sent about them and that these messages should be
+able to describe the manipulations that happen on these objects. The system of
+naming in the GUIDO server implements this.
+
+.. index::
+   single: Anonymous session
+   single: Named session
+
+The GUIDOEngine does not implement a **Stateless** server (the 5th requirement for
+a RESTful server) insofar as the server retains information about named scores.
+A named score is created by inserting
+a name composed of only letters and numbers in between the base URL of the
+Guido server and the subsequent arguments (if any).  For example, we can
+instantiate the named score for name ``ensemble101`` with ``gmn=[a b c d]`` like so::
+
+  <html>
+    <body>
+      <form action="http://guido.grame.fr:8000/ensemble101" method="post">
+        <input type="hidden" name="data" value='{ "gmn" : "[c d e f]" }' />
+        <input type="submit" value="Submit" />
+      </form>
+    </body>
+  </html>
+
+::
+
+  curl -d "data={ \"gmn\" : \"[c d e f]\" }" http://guido.grame.fr:8000/ensemble101 > cdef.png
+
+Returning:
+
+.. image:: cdef.png
+
+When a named score is created, an internal object on the server is created that
+corresponds to the score's name.  This object retains all information about that
+score.  So, for example, if one calls:
+
+.. parsed-literal::
+  `http://guido.grame.fr:8000/ensemble101?get=gmn <http://guido.grame.fr:8000/ensemble101?get=gmn>`_
+
+The result will be::
+
+  {
+          "username": "ensemble101",
+          "gmn": "[c d e f]"
+  }
+
+Lastly, GUIDOEngine implements three of the four methods of a RESTful web service - GET,
+POST, and DELETE. GET is used to retrieve data from the server. POST is used to modify the
+contents of the server. DELETE is used to remove a score (or a collection URI in RESTful
+teerms) from the server. The one remaining method of a RESTful web service --- PUT ---
+is never used by the GUIDOEngine web server. PUT replaces the contents of a URL with
+another URL and as users are never directly uploading content to be stored as
+a URI on the server, this command is not necessary.
+
 GUIDO Music Notation
 --------------------
 
@@ -28,20 +127,23 @@ Basic server calls
 To interpret Gudio Music Notation (hereafter refered to as ``gmn``) code ``gmn=[a b c d]``, one makes
 the following call to the Guido Web Server::
 
+  <html>
+    <body>
+      <form action="http://guido.grame.fr:8000" method="post">
+        <input type="hidden" name="data" value='{ "gmn" : "[a b c d]" }' />
+        <input type="submit" value="Submit" />
+      </form>
+    </body>
+  </html>
+
+::
+
   curl -d "data={ \"gmn\" : \"[a b c d]\" }" http://guido.grame.fr:8000/ > abcd.png
 
 The output will use GUIDO server default settings for page and formatting
 attributes (discussed in :ref:`defaults`), creating the result:
 
 .. image:: abcd.png
-
-Note that this command (given via curl in the present example) is a POST
-command.  The GUIDO server being a RESTful server, all alterations of the
-server's state must pass through post.  All inquiries into the server's state
-must pass through GET.  In the present GUIDOEngine Web API, all POST calls
-are given as curl commands whereas all GET calls are given as clickable
-hyperlinks.  Users should be able to run them verbatim and get the result
-shown on the website.
 
 It is sometimes the case that a call to the Guido Web Server needs additional
 arguments.  For example, to get a :ref:`page map <page-map>`, the page in question must be
@@ -130,9 +232,8 @@ type is ``application/json``.
 Multiple server calls in a single URL
 -------------------------------------
 
-All server calls in a single URL apply to the same GRHandler. This will
-either be an anonymous handler or a named handler, as discussed in the
-section :ref:`anon-named`.
+All server calls in a single URL apply to the same score. This will
+either be an anonymous handler or a named score.
 
 Multiple calls are interpreted from left to right. The server responds to the
 last valid call. All extra arguments for a given call to a server must be
@@ -242,37 +343,3 @@ On the other hand:
 Will fail for the first call but succeed for the second, returning:
 
 .. image:: ccc.png
-
-.. index::
-   single: Anonymous session
-   single: Named session
-
-.. _anon-named:
-
-Anonymous versus named scores
--------------------------------
-
-A named score is created by inserting a name composed of only letters and
-numbers in between the base URL of the Guido server and the subsequent
-arguments (if any).  For example, we can instantiate the named score
-for name ``ensemble101`` with ``gmn=[a b c d]`` by calling::
-
-  curl -d "data={ \"gmn\" : \"[c d e f]\" }" http://guido.grame.fr:8000/ > cdef.png
-
-Returning:
-
-.. image:: cdef.png
-
-When a named score is created, a GRHandler object is created that corresponds
-to the score's name.  This GRHandler retains all information about that
-score.  So, for example, if one calls:
-
-.. parsed-literal::
-  `http://guido.grame.fr:8000/ensemble101?get=gmn <http://guido.grame.fr:8000/ensemble101?get=gmn>`_
-
-The result will be::
-
-  {
-          "username": "ensemble101",
-          "gmn": "[c d e f]"
-  }
