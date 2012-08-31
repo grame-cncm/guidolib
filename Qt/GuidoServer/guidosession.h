@@ -49,8 +49,9 @@ namespace guidohttpd
         string errstring_;
         unsigned int argumentsToAdvance_;
         GuidoSessionParsingError status_;
+        int http_status_;
         guidosessionresponse ();
-        guidosessionresponse (const char* data, unsigned int size, string format, string errstring, unsigned int argumentsToAdvance, GuidoSessionParsingError status);
+        guidosessionresponse (const char* data, unsigned int size, string format, string errstring, unsigned int argumentsToAdvance, GuidoSessionParsingError status, int http_status = 200);
     };
     class guidosession
     {
@@ -110,7 +111,7 @@ namespace guidohttpd
         guidosessionresponse handleFaultyInput(const TArgs& args, unsigned int n);
         // -----------------------------
         guidosessionresponse genericReturnImage();
-        guidosessionresponse genericFailure(const char* errorstring);
+        guidosessionresponse genericFailure(const char* errorstring, int http_status = 400);
         guidosessionresponse simpleGet (string thingToGet);
         guidosessionresponse mapGet (const TArgs& args, unsigned int n, string thingToGet);
         guidosessionresponse pointGet (const TArgs& args, unsigned int n);

@@ -348,7 +348,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
 
     // Only the final result gets sent.
     const char* formatToSend = response.format_.c_str();
-    return send (connection, response.data_, response.size_, formatToSend, fUsers[cookie]);
+    return send (connection, response.data_, response.size_, formatToSend, fUsers[cookie], response.http_status_);
 }
 
 //--------------------------------------------------------------------------
