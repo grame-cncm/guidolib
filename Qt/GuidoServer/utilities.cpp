@@ -28,6 +28,7 @@
 #include <string>
 #include <iostream>
 #include <time.h>
+#include <string.h>
 
 #include "utilities.h"
 
