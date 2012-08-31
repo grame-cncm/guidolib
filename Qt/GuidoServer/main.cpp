@@ -37,42 +37,44 @@ static const char* kHelpOpt		= "-help";
 static void usage (char* name)
 {
 #ifndef WIN32
-	name = basename (name);
-#endif	
-	const char * tab = "             ";
-	cout << "usage: " << name << " [ options ]" << endl;
-	cout << "where options are in:" << endl;
-	cout << tab << kPortOpt << " portnum : sets the communication port number (defaults to " << kDefaultPort << ")"<< endl;
-	cout << tab << kDaemonOpt  << " : launch the server in daemon mode" << endl;
-	cout << tab << kLogfileOpt << " name : (defaults to " << kDefaultLogfile << "  - ignored when not in daemon mode)" << endl;
-	cout << tab << kHelpOpt << " : print this help message and exit" << endl;
+    name = basename (name);
+#endif
+    const char * tab = "             ";
+    cout << "usage: " << name << " [ options ]" << endl;
+    cout << "where options are in:" << endl;
+    cout << tab << kPortOpt << " portnum : sets the communication port number (defaults to " << kDefaultPort << ")"<< endl;
+    cout << tab << kDaemonOpt  << " : launch the server in daemon mode" << endl;
+    cout << tab << kLogfileOpt << " name : (defaults to " << kDefaultLogfile << "  - ignored when not in daemon mode)" << endl;
+    cout << tab << kHelpOpt << " : print this help message and exit" << endl;
 }
 
 //---------------------------------------------------------------------------------
 static bool launchServer (int port, const char * logfile, bool daemon)
 {
     bool ret = false;
-	guido2img converter;
+    guido2img converter;
     QGuidoPainter::startGuidoEngine();						// starts the guido engine
     HTTPDServer server(port, &converter);
     if (server.start(port)) {
         log << "Guido server v." << kVersionStr << " is running on port " << port << logend;
         if (daemon) {
-          while (true) { }
-        }
-        else {
+            while (true) { }
+        } else {
             cout << "Type 'q' to quit" << endl;
             do {
-				char c = getchar();
-				if (c == 'q') break;
+                char c = getchar();
+                if (c == 'q') {
+                    break;
+                }
             } while (true);
         }
         server.stop();
         ret = true;
+    } else {
+        log << "Can't start Guido httpd server on the specified port. Try a different port." << logend;
     }
-    else log << "Can't start Guido httpd server on the specified port. Try a different port." << logend;
     QGuidoPainter::stopGuidoEngine();						// stop the guido engine
-	return ret;
+    return ret;
 }
 
 //---------------------------------------------------------------------------------
@@ -83,10 +85,10 @@ int main(int argc, char **argv)
     string logfile = sopt (argv, kLogfileOpt, kDefaultLogfile);
     bool daemon = bopt (argv, kDaemonOpt, false);
     if (bopt (argv, kHelpOpt, false)) {
-		usage (argv[0]);
-		exit (0);
-	}
-	gLog = daemon ? new logstream ( logfile.c_str() ) : new logstream();
+        usage (argv[0]);
+        exit (0);
+    }
+    gLog = daemon ? new logstream ( logfile.c_str() ) : new logstream();
 
     if (daemon) {
         // Our process ID and Session ID
@@ -99,10 +101,10 @@ int main(int argc, char **argv)
         if (pid > 0) {
             exit(EXIT_SUCCESS);
         }
-       
+
         // Change the file mode mask
         umask(0);
-        
+
         // Open any logs here
         // Create a new SID for the child process
         pid_t sid = setsid();
@@ -110,18 +112,18 @@ int main(int argc, char **argv)
             log << "SID creation failed (errno " << errno << ")" << logend;
             exit(EXIT_FAILURE);
         }
-            
+
         // Change the current working directory
         if ((chdir("/")) < 0) {
             log << "Could not change the directory to the root directory." << logend;
             exit(EXIT_FAILURE);
         }
-        
+
         // Close out the standard file descriptors
         close(STDIN_FILENO);
         close(STDOUT_FILENO);
         close(STDERR_FILENO);
     }
-	return launchServer (port, logfile.c_str(), daemon) ? 0 : 1;
+    return launchServer (port, logfile.c_str(), daemon) ? 0 : 1;
 }
 

@@ -35,34 +35,42 @@ namespace guidohttpd
 //--------------------------------------------------------------------------
 Guido2ImageErrorCodes guido2img::convert (guidosession* const currentSession)
 {
-	Guido2Image::Params p;
+    Guido2Image::Params p;
 
     GuidoPageFormat pf;
     currentSession->fillGuidoPageFormatUsingCurrentSettings(&pf);
     GuidoSetDefaultPageFormat(&pf);
 
-	p.input  = currentSession->gmn_.c_str ();	
-	p.output = 0;
-    switch (currentSession->format_)
-    {
-        case GUIDO_WEB_API_PNG : p.format = GUIDO_2_IMAGE_PNG; break;
-        case GUIDO_WEB_API_JPEG : p.format = GUIDO_2_IMAGE_JPEG; break;
-        case GUIDO_WEB_API_GIF : p.format = GUIDO_2_IMAGE_GIF; break;
-        case GUIDO_WEB_API_SVG :  assert (false);
-        default : p.format = GUIDO_2_IMAGE_PNG; break;
+    p.input  = currentSession->gmn_.c_str ();
+    p.output = 0;
+    switch (currentSession->format_) {
+    case GUIDO_WEB_API_PNG :
+        p.format = GUIDO_2_IMAGE_PNG;
+        break;
+    case GUIDO_WEB_API_JPEG :
+        p.format = GUIDO_2_IMAGE_JPEG;
+        break;
+    case GUIDO_WEB_API_GIF :
+        p.format = GUIDO_2_IMAGE_GIF;
+        break;
+    case GUIDO_WEB_API_SVG :
+        assert (false);
+    default :
+        p.format = GUIDO_2_IMAGE_PNG;
+        break;
     }
 
-	p.layout = 0;
-	p.pageIndex = currentSession->page_;
-	p.sizeConstraints = QSize (currentSession->width_, currentSession->height_);
-	p.zoom = currentSession->zoom_;
+    p.layout = 0;
+    p.pageIndex = currentSession->page_;
+    p.sizeConstraints = QSize (currentSession->width_, currentSession->height_);
+    p.zoom = currentSession->zoom_;
 
     fBuffer.open(QIODevice::ReadWrite);
-	fBuffer.reset();
-	p.device = &fBuffer;
+    fBuffer.reset();
+    p.device = &fBuffer;
     Guido2ImageErrorCodes err = Guido2Image::gmnString2Image (p, currentSession->resizeToPage_);
     fBuffer.close();
-	return err;
+    return err;
 }
 
 } // end namespoace

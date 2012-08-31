@@ -31,19 +31,23 @@
 
 namespace guidohttpd
 {
-    class guidosession;
+class guidosession;
 //--------------------------------------------------------------------------
 class guido2img
 {
-	QBuffer		fBuffer;
-	public:
-				 guido2img() {}
-		virtual ~guido2img() {}
+    QBuffer		fBuffer;
+public:
+    guido2img() {}
+    virtual ~guido2img() {}
 
     Guido2ImageErrorCodes convert (guidosession *currentSession);
 
-		const char* data()	{ return fBuffer.data().constData(); }
-		int			size()	{ return fBuffer.size(); }
+    const char* data()	{
+        return fBuffer.data().constData();
+    }
+    int			size()	{
+        return fBuffer.size();
+    }
 };
 
 } // end namespoace
