@@ -10,6 +10,13 @@
 
 #include <sys/stat.h>
 
+/*
+ * For Linux, otherwise:
+ * /usr/bin/ld: errno: TLS definition in /lib/x86_64-linux-gnu/libc.so.6 section .tbss mismatches non-TLS reference in main.o
+ * /lib/x86_64-linux-gnu/libc.so.6: could not read symbols: Bad value
+ */
+#include <errno.h>
+
 #include "QGuidoPainter.h"
 #include "guido2img.h"
 #include "HTTPDServer.h"
