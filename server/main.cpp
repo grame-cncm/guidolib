@@ -6,7 +6,6 @@
 #include <iostream>
 #include <string>
 #include <stdlib.h>
-#include <QtGui/QApplication>
 
 #include <sys/stat.h>
 
@@ -21,12 +20,10 @@
 #include "guido2img.h"
 #include "HTTPDServer.h"
 #include "utilities.h"
-
+#include "engine.h"
 
 using namespace std;
 using namespace guidohttpd;
-
-extern int errno;
 
 #define kVersion	 0.50f
 #define kVersionStr	"0.50"
@@ -60,7 +57,6 @@ static bool launchServer (int port, const char * logfile, bool daemon)
 {
     bool ret = false;
     guido2img converter;
-    QGuidoPainter::startGuidoEngine();						// starts the guido engine
     HTTPDServer server(port, &converter);
     if (server.start(port)) {
         log << "Guido server v." << kVersionStr << " is running on port " << port << logend;
@@ -80,14 +76,14 @@ static bool launchServer (int port, const char * logfile, bool daemon)
     } else {
         log << "Can't start Guido httpd server on the specified port. Try a different port." << logend;
     }
-    QGuidoPainter::stopGuidoEngine();						// stop the guido engine
+    stopEngine();
     return ret;
 }
 
 //---------------------------------------------------------------------------------
 int main(int argc, char **argv)
 {
-    QApplication app( argc , argv );	// required by Qt
+    startEngine(argc, argv);
     int port = lopt (argv, kPortOpt, kDefaultPort);
     string logfile = sopt (argv, kLogfileOpt, kDefaultLogfile);
     bool daemon = bopt (argv, kDaemonOpt, false);
