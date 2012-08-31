@@ -83,7 +83,8 @@ void _request_completed (void *cls, struct MHD_Connection *connection,
     struct connection_info_struct *con_info = (connection_info_struct *)(*con_cls);
     
     if (NULL == con_info) return;
-    if (con_info->connectiontype == 1) //  we make 1 == POST
+
+    if (con_info->connectiontype == POST)
     {
         MHD_destroy_post_processor (con_info->postprocessor);        
         //if (con_info->answerstring) free (con_info->answerstring);
@@ -259,7 +260,37 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
     guidosession::callback_function callback;
     guidosessionresponse response;
     
-    if (type == GET)
+    if (type == DELETE)
+    {
+      /*
+       * One possible response - delete an fSession from a given fUser.
+       */
+      if (!args.size () || args.size () > 1 || args[0].first != "score")
+        {
+          response.errstring_ = "There may be one and only one argument called \"score\" passed to DELETE.";
+          response.data_ = response.errstring_.c_str();
+          response.size_ = response.errstring_.size();
+          response.http_status_ = 405;
+        }
+      else if (fUsers[cookie]->fSessions.find (args[0].second) == fUsers[cookie]->fSessions.end ())
+        {
+          response.errstring_ = "Cannot delete the score "+args[0].second+" because it does not exist.";
+          response.data_ = response.errstring_.c_str();
+          response.size_ = response.errstring_.size();
+          response.http_status_ = 404;
+        }
+      else
+        {
+          fUsers[cookie]->fSessions.erase (args[0].second);
+          delete currentSession;
+          response.errstring_ = "";
+          string success = "Successfully removed the score "+args[0].second+".";
+          response.data_ = success.c_str();
+          response.size_ = success.size();
+          response.http_status_ = 200;
+        }
+    }
+    else if (type == GET)
     {
         /*
          * we make sure that this is really a get, meaning we screen POST
@@ -270,12 +301,12 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
             for (unsigned int j = 0; j < args.size(); j++)
                 if (args[j].first == postcommands[i])
                 {
-                    cout << "OK" << endl;
                     n = args.size(); // skip args
                     callback = &guidosession::handleErrantGet;
                     response = (currentSession->*callback)(args, n);
                     response.data_ = response.errstring_.c_str();
                     response.size_ = response.errstring_.size();
+                    response.http_status_ = 405;
                     break;
                 }
             if (callback)
@@ -295,6 +326,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                 response = (currentSession->*callback)(args, n);
                 response.data_ = response.errstring_.c_str();
                 response.size_ = response.errstring_.size();
+                response.http_status_ = 405;
                 break;
             }
     }
@@ -414,6 +446,16 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
         reverse (args.begin(), args.end());
 #endif
         return sendGuido (connection, url, args, GET);
+    }
+
+    if (0 == strcmp (method, "DELETE"))
+    {
+     	TArgs args;
+        MHD_get_connection_values (connection, MHD_GET_ARGUMENT_KIND, _get_params, &args);
+#ifdef __MACH__
+        reverse (args.begin(), args.end());
+#endif
+        return sendGuido (connection, url, args, DELETE);
     }
     return MHD_YES;
 }

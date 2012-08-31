@@ -35,6 +35,7 @@
 #include "guidouser.h"
 #include "guido2img.h"
 
+#define DELETE 2
 #define POST 1
 #define GET 0
 

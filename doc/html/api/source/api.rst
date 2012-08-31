@@ -688,3 +688,33 @@ Resulting in::
                   }
           }
   }
+
+.. index::
+  single: DELETE
+
+Deleting scores
+---------------
+
+Scores may be deleted by using the DELETE RESTful web method. If one creates
+the score::
+
+  <html>
+    <body>
+      <form action="http://guido.grame.fr:8000/ensemble101" method="post">
+        <input type="hidden" name="data" value='{ "gmn" : "[c d e f]" }' />
+        <input type="submit" value="Submit" />
+      </form>
+    </body>
+  </html>
+
+::
+
+  curl -d "data={ \"gmn\" : \"[c d e f]\" }" http://guido.grame.fr:8000/ensemble101 > cdef.png
+
+Returning:
+
+.. image:: cdef.png
+
+It may be deleted as such::
+
+  curl -X DELETE http://guido.grame.fr:8000/ensemble101
