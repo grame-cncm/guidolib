@@ -1,6 +1,6 @@
 /*
 
-  Copyright (C) 2012 Grame
+  Copyright (C) 2011 Grame
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -21,35 +21,12 @@
 
 */
 
+namespace guidohttpd {
 
-#ifndef __guido2img__
-#define __guido2img__
+void startEngine (int argc, char **argv) {
+}
 
-#include <QtCore/QBuffer>
-#include "Guido2Image.h"
-#include "guidosession.h"
+void stopEngine () {
+}
 
-namespace guidohttpd
-{
-class guidosession;
-//--------------------------------------------------------------------------
-class guido2img
-{
-    QBuffer		fBuffer;
-public:
-    guido2img() {}
-    virtual ~guido2img() {}
-
-    int convert (guidosession *currentSession);
-
-    const char* data()	{
-        return fBuffer.data().constData();
-    }
-    int			size()	{
-        return fBuffer.size();
-    }
-};
-
-} // end namespoace
-
-#endif
+} // end namespace

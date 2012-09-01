@@ -25,17 +25,20 @@
 #ifndef __guido2img__
 #define __guido2img__
 
-#include <QtCore/QBuffer>
-#include "Guido2Image.h"
 #include "guidosession.h"
+
+#include "../JuceLibraryCode/JuceHeader.h"
+#include "../../Device/GuidoComponent.h"
 
 namespace guidohttpd
 {
 class guidosession;
 //--------------------------------------------------------------------------
-class guido2img
+class guido2img : GuidoComponent
 {
-    QBuffer		fBuffer;
+
+  MemoryOutputStream fBuffer;
+
 public:
     guido2img() {}
     virtual ~guido2img() {}
@@ -43,10 +46,10 @@ public:
     int convert (guidosession *currentSession);
 
     const char* data()	{
-        return fBuffer.data().constData();
+        return (const char *)fBuffer.getData();
     }
-    int			size()	{
-        return fBuffer.size();
+    int size()	{
+        return fBuffer.getDataSize();
     }
 };
 

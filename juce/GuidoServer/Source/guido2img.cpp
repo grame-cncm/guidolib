@@ -21,11 +21,10 @@
 
 */
 
-#include <QtCore/QBuffer>
 
 #include "guido2img.h"
-#include "Guido2Image.h"
-
+#include "../JuceLibraryCode/JuceHeader.h"
+#include "../../Device/GuidoComponent.h"
 #include <assert.h>
 
 using namespace std;
@@ -33,7 +32,8 @@ namespace guidohttpd
 {
 
 //--------------------------------------------------------------------------
-int guido2img::convert (guidosession* const currentSession)
+/*
+Guido2ImageErrorCodes guido2img::convert (guidosession* const currentSession)
 {
     Guido2Image::Params p;
 
@@ -70,7 +70,51 @@ int guido2img::convert (guidosession* const currentSession)
     p.device = &fBuffer;
     Guido2ImageErrorCodes err = Guido2Image::gmnString2Image (p, currentSession->resizeToPage_);
     fBuffer.close();
-    return err == GUIDO_2_IMAGE_SUCCESS ? 0 : 1;
+    return err;
 }
+*/
+//void GuidoViewer::export2Image (const File& file, ImageFileFormat* format)
+int guido2img::convert (guidosession* const currentSession)
+{
 
+  ImageFileFormat *format;
+  switch (currentSession->format_) {
+    case GUIDO_WEB_API_PNG :
+        format = new PNGImageFormat ();
+        break;
+    case GUIDO_WEB_API_JPEG :
+        format = new JPEGImageFormat ();
+        break;
+    case GUIDO_WEB_API_GIF :
+        format = new GIFImageFormat ();
+        break;
+    case GUIDO_WEB_API_SVG :
+        assert (false);
+    default :
+        format = new PNGImageFormat ();
+        break;
+  }
+  setGMNCode (currentSession->gmn_.c_str());
+  setPage (currentSession->page_);
+  setResizePageToMusic (currentSession->resizeToPage_);
+  GuidoPageFormat pagef;
+  currentSession->fillGuidoPageFormatUsingCurrentSettings(&pagef);
+  setGuidoPageFormat(pagef);
+
+  Image::PixelFormat pf = Image::RGB;
+  if (currentSession->format_ == GUIDO_WEB_API_PNG)
+    pf = Image::ARGB;	
+
+  SoftwareImageType type;
+  Image img (pf, currentSession->width_, currentSession->height_, true, type);
+  Graphics g (img);
+  if (pf == Image::RGB) {
+    g.setColour (Colours::white);
+    g.fillRect (0, 0, currentSession->width_, currentSession->height_);
+  }
+  GuidoComponent::paint(g);
+  format->writeImageToStream (img, fBuffer);
+  delete format;
+  return 0; // need to fix this...
+}
 } // end namespoace

@@ -342,11 +342,11 @@ guidosessionresponse guidosession::handleFaultyInput(const TArgs&, unsigned int)
 
 guidosessionresponse guidosession::genericReturnImage()
 {
-    Guido2ImageErrorCodes err = fConverter->convert(this);
-    if (err == GUIDO_2_IMAGE_SUCCESS) {
+    int err = fConverter->convert(this);
+    if (err == 0) {
         return guidosessionresponse(fConverter->data(), fConverter->size(), formatToMIMEType(), "", 1, GUIDO_SESSION_PARSING_SUCCESS, 201);
     }
-    return genericFailure (Guido2Image::getErrorString (err), 400);
+    return genericFailure ("Could not convert the image.", 400);
 }
 
 guidosessionresponse guidosession::genericFailure(const char* errorstring, int http_status)
