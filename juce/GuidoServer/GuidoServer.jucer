@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="yKLG22" name="GuidoServer" projectType="consoleapp" version="1.0.0"
+              bundleIdentifier="com.grame.GuidoServer" jucerVersion="3.0.0"
+              defines="">
+  <EXPORTFORMATS/>
+  <MAINGROUP id="gigIFR" name="GuidoServer">
+    <GROUP id="{AED83729-06B5-9655-0381-AD5638653EE3}" name="Source">
+      <FILE id="b9xybz" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+    </GROUP>
+  </MAINGROUP>
+  <MODULES>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="1"/>
+    <MODULE id="juce_gui_audio" showAllCode="1" useLocalCopy="1"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="1"/>
+  </MODULES>
+  <JUCEOPTIONS/>
+</JUCERPROJECT>
