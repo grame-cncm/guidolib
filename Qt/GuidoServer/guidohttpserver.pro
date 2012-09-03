@@ -14,6 +14,7 @@ win32:LIBS += ../GuidoQt/GuidoQt.lib
 unix:LIBS += -L../GuidoQt -lGuidoQt
 unix:LIBS += -lmicrohttpd 
 INCLUDEPATH += ../GuidoQt/include
+INCLUDEPATH += ../../server
 
 
 macx:QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.6.sdk

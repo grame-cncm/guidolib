@@ -4,8 +4,8 @@
               bundleIdentifier="com.grame.GuidoServer" jucerVersion="3.0.0"
               defines="">
   <EXPORTFORMATS>
-    <XCODE_MAC targetFolder="Builds/MacOSX" objCExtraSuffix="QI1Enl" juceFolder="../../../../../juce/modules"
-               extraCompilerFlags="-I../../../../src/include" extraLinkerFlags="-F../../../../cmake/Debug  -framework GUIDOEngine">
+    <XCODE_MAC targetFolder="Builds/MacOSX" objCExtraSuffix="QI1Enl" juceFolder="../../JuceLibraryCode"
+               extraCompilerFlags="-I../../../../src/include" extraLinkerFlags="-F../../../../cmake  -framework GUIDOEngine">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="GuidoServer"
                        osxSDK="default" osxCompatibility="default" osxArchitecture="default"/>
