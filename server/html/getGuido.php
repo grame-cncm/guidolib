@@ -21,7 +21,7 @@
       $contentstr = $contentstr . '&voice=' . $_POST["voice"];
     }    
   }
-  $response = http_get("http://guido.grame.fr:8000/?" . $contentstr);
+  $response = http_get("http://localhost:8000/?" . $contentstr);
   if ($response === false) { 
     throw new Exception("Didn't get a response from the server.");     
   }

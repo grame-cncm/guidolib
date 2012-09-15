@@ -22,7 +22,7 @@
       'content' => $content
   )); 
   $ctx = stream_context_create($params); 
-  $fp = @fopen('http://guido.grame.fr:8000/', 'rb', false, $ctx); 
+  $fp = @fopen('http://localhost:8000/', 'rb', false, $ctx); 
   if (!$fp) { 
     throw new Exception("Couldn't connect to the server."); 
   } 
