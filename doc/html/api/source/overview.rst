@@ -59,8 +59,8 @@ able to describe the manipulations that happen on these objects. The system of
 naming in the GUIDO server implements this.
 
 .. index::
-   single: Anonymous session
-   single: Named session
+   single: Anonymous score
+   single: Named score
 
 The GUIDOEngine does not implement a **Stateless** server (the 5th requirement for
 a RESTful server) insofar as the server retains information about named scores.
@@ -96,7 +96,7 @@ score.  So, for example, if one calls:
 The result will be::
 
   {
-          "username": "ensemble101",
+          "scorename": "ensemble101",
           "gmn": "[c d e f]"
   }
 
