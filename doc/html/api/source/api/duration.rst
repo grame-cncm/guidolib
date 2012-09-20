@@ -5,7 +5,7 @@ Getting a score duration
   single: duration
 
 **Path**
-	ScoreID/``duration``
+	*ScoreID*/``duration``
 
 **Response body**
 	* in case of success: 

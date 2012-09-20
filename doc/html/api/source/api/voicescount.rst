@@ -6,7 +6,7 @@ Getting the voices count
 
 
 **Path**
-	ScoreID/``voicescount``
+	*ScoreID*/``voicescount``
 
 **Response body**
 	* in case of success: 

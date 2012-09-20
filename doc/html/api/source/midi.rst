@@ -12,7 +12,7 @@ MIDI file export is available from the ``midi`` path and may use optional export
    params/midi
 
 **Path**
-	ScoreID/``midi``: an identifier previously retrived using the POST method
+	*ScoreID*/``midi``
 
 **Response body**
 	* in case of success: 

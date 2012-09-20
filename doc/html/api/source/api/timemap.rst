@@ -8,7 +8,7 @@ Gives the mapping between the score and the performance time (i.e. rolled to unr
 
 
 **Path**
-	``timemap``
+	*ScoreID*/``timemap``
 
 **Response body**
 	* in case of success: 

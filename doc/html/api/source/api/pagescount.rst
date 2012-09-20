@@ -5,7 +5,7 @@ Getting the pages count
   single: pagescount
 
 **Path**
-	ScoreID/``pagescount``
+	*ScoreID*/``pagescount``
 
 **Response body**
 	* in case of success: 

@@ -5,7 +5,7 @@ Getting a page at a given date
   single: pageat
 
 **Path**
-	ScoreID/``pageat``
+	*ScoreID*/``pageat``
 
 **Parameters**
 	``date``: a date expressed as a rational value.

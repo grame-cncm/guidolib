@@ -14,10 +14,10 @@ Note that the relations between the graphic and time space depends on :ref:`layo
 
 **Path**
 
-| ``pagemap``	: gives the time to graphic mapping at page level
-| ``staffmap``: gives a staff time to graphic mapping
-| ``voicemap`` : gives a voice time to graphic mapping
-| ``systemmap`` : gives the time to graphic mapping at system level
+	| 	*ScoreID*/``pagemap``	: gives the time to graphic mapping at page level.
+	| 	*ScoreID*/``staffmap``: gives a staff time to graphic mapping. An optionnal ``staff`` parameter may be used to indicate the staff number (default vaue is 1).
+	| 	*ScoreID*/``voicemap`` : gives a voice time to graphic mapping. An optionnal ``voice`` parameter may be used to indicate the voice number (default vaue is 1).
+	| 	*ScoreID*/``systemmap`` : gives the time to graphic mapping at system level.
 
 **Response body**
 	* in case of success: 

@@ -5,7 +5,7 @@ Getting the date of a given page
   single: pagedate
 
 **Path**
-	ScoreID/``pagedate``
+	*ScoreID*/``pagedate``
 
 **Parameters**
 	``page``: a page number (page numbers start at 1)
