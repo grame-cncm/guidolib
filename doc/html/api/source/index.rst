@@ -13,7 +13,6 @@ Contents:
 
    overview
    api
-   defaults
 
 Indices and tables
 ==================
