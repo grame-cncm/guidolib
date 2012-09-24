@@ -57,6 +57,7 @@ static bool launchServer (int port, const char * logfile, bool daemon)
 {
     bool ret = false;
     guido2img converter;
+    startEngine();
     HTTPDServer server(port, &converter);
     if (server.start(port)) {
         log << "Guido server v." << kVersionStr << " is running on port " << port << logend;
@@ -83,7 +84,7 @@ static bool launchServer (int port, const char * logfile, bool daemon)
 //---------------------------------------------------------------------------------
 int main(int argc, char **argv)
 {
-    startEngine(argc, argv);
+    makeApplication(argc, argv);
     int port = lopt (argv, kPortOpt, kDefaultPort);
     string logfile = sopt (argv, kLogfileOpt, kDefaultLogfile);
     bool daemon = bopt (argv, kDaemonOpt, false);
