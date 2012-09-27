@@ -33,6 +33,7 @@
 class_export GMemoryDeviceOSX : public GDeviceOSX
 {
 	public:
+		using GDeviceOSX::GetBitMapPixels;
 								
 								GMemoryDeviceOSX( int inWidth, int inHeight, VGSystem* sys );	
 		virtual					~GMemoryDeviceOSX();
