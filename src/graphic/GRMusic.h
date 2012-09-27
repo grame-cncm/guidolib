@@ -49,6 +49,8 @@ extern long ggsoffsety;
 class GRMusic : public GREvent
 {
 	public:
+		using GObject::GetMap;
+		
 				GRMusic( ARMusic * inARMusic, ARPageFormat * inFormat, bool ownsAR ); 
 		virtual ~GRMusic();
 
