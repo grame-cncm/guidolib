@@ -59,6 +59,7 @@ class GRSystemSlice : public GREvent
 	friend class GRSliceHeight;
 
 public:
+	using GRNotationElement::getStaffNumber;
 
 					GRSystemSlice(GRStaffManager * stmgr, const TYPE_TIMEPOSITION & tp);
 	virtual 		~GRSystemSlice();

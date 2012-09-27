@@ -34,6 +34,8 @@ class VGFont;
 class GRTempo : public GRTagARNotationElement
 {
 	public:
+		using GRNotationElement::getDuration;
+		
 					GRTempo(GRStaff *, ARTempo * );
 		virtual 	~GRTempo();
 		

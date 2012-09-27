@@ -70,6 +70,8 @@ class GRSystem : public GREvent
 	friend class GRStaffManager;
 	
 public:
+	using GRNotationElement::getStaffNumber;
+
 	enum BARTYPE { SYSTEM, ACCOLADE, STAFF, MENSUR };
 
 				GRSystem( 	GRPage * inPage, 
