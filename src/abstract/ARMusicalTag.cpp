@@ -125,7 +125,7 @@ std::ostream & ARMusicalTag::operator <<(std::ostream & os) const
 		cp[count] = 0;
 
 		// now we get rid of the  closing bracket.
-		for( ; cp[count] != '>' && count >= 0; count--) { }
+		for( ; cp[count] != '>' ; count--) { }
 
 		if (count > 0)
 		{
