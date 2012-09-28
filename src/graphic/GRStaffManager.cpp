@@ -1063,7 +1063,6 @@ int GRStaffManager::FinishSyncSlice(const TYPE_TIMEPOSITION & tp)
 					SubHash *sh = tmphash.data->GetNext(tmppos);
 					GRTag * tag = dynamic_cast<GRTag *>(sh->grel);
 
-
 					if (!tag)				continue;
 					if (tag->getError())	continue;
 
@@ -1073,21 +1072,17 @@ int GRStaffManager::FinishSyncSlice(const TYPE_TIMEPOSITION & tp)
 						SubHash * sh2 = tmphash.data->GetNext(tmppos2);
 						if (sh->grstaff == sh2->grstaff)
 						{
-							const GRStaffState &  staffstate = sh->grstaff->getGRStaffState();
+							GRStaffState &  staffstate = sh->grstaff->getGRStaffState();
 							GRTag * tag2 = dynamic_cast<GRTag *>(sh2->grel);
 							if (!tag2)	continue;
 							
 							if (tag->getIsAuto() && !tag2->getIsAuto())
 							{
 								// check consistency between staff and clef baseline
-								GRClef * clef1 = dynamic_cast<GRClef*>(tag);
-								if (clef1) {
-									if (staffstate.baseline == clef1->getBaseLine())
-										tag2->setError(1);
-									else tag->setError(1);
-								}
-								else	// in this case, we disable the first tag (the auto one)
-									tag->setError(1);
+								GRClef * clef = dynamic_cast<GRClef*>(tag2);
+								if (clef &&  (staffstate.baseline != clef->getBaseLine()))
+									sh->grstaff->setClefParameters(clef);
+								tag->setError(1);
 								if ( *tag != *tag2)
 									conflict = 1;
 								break;
@@ -1097,24 +1092,22 @@ int GRStaffManager::FinishSyncSlice(const TYPE_TIMEPOSITION & tp)
 								if (tag2->getIsAuto() && !tag->getIsAuto())
 								{
 									// check consistency between staff and clef baseline
-									GRClef * clef1 = dynamic_cast<GRClef*>(tag);
-									if (clef1) {
-										if (staffstate.baseline == clef1->getBaseLine())
-											tag2->setError(1);
-										else tag->setError(1);
-									}
-									else	// disable the second tag
-										tag2->setError(1);
+									GRClef * clef = dynamic_cast<GRClef*>(tag);
+									if (clef &&  (staffstate.baseline != clef->getBaseLine()))
+										sh->grstaff->setClefParameters(clef);
+									tag2->setError(1);
 									if (*tag != *tag2)
 										conflict = 1;
 									continue;
 								}
 							}
 
-							if (tag->getIsAuto() && tag2->getIsAuto())	// both are auto-tag disable the first tag - corrects incorrect clef bug
-								tag->setError(1);
-							else										// now, none of the two is auto-tag disable the second tag
-								tag2->setError(1);
+							// now, none of the two is auto-tag disable the second tag
+							GRClef * clef = dynamic_cast<GRClef*>(tag);
+							// check consistency between staff and clef baseline
+							if (clef &&  (staffstate.baseline != clef->getBaseLine()))
+								sh->grstaff->setClefParameters(clef);
+							tag2->setError(1);
 							if (*tag != *tag2)
 								conflict = 1;
 						}
