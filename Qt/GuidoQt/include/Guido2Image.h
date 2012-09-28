@@ -157,7 +157,7 @@ class Guido2Image
 		/*!
 		*	\brief	Same as gmnFileToImage above, but output is send to dev instead a file.
 		*/
-		static Guido2ImageErrorCodes gmnFile2Image	( const Params& p);
+		static Guido2ImageErrorCodes gmnFile2Image	( const Params& p, bool resizeMusicToPage = false);
 
 	private :
 

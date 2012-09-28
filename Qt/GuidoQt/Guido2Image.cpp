@@ -173,7 +173,7 @@ Guido2ImageErrorCodes Guido2Image::gmnStringToImage( const char * gmnString, con
 }
 
 //----------------------------------------------------------------------------
-Guido2ImageErrorCodes Guido2Image::gmnFile2Image	( const  Params& p )
+Guido2ImageErrorCodes Guido2Image::gmnFile2Image	( const  Params& p, bool resizeMusicToPage )
 {
 	Guido2ImageErrorCodes errorCode = check( p );
 	if ( errorCode != GUIDO_2_IMAGE_SUCCESS )
@@ -184,6 +184,7 @@ Guido2ImageErrorCodes Guido2Image::gmnFile2Image	( const  Params& p )
 	QGuidoPainter * painter = buildPainterFromGMNFile(p.input, p.layout);
 	if ( !painter )
 		return GUIDO_2_IMAGE_GUIDO_ENGINE_NOT_STARTED;
+	painter->setResizePageToMusic (resizeMusicToPage);
 	return guidoPainterToImage(painter, p);
 }
 

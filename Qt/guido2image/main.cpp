@@ -275,7 +275,7 @@ int main(int argc, char *argv[])
 
 	Guido2Image::Params p;		// a struct used as arg of the conversion function
 	string stdinstr;			// a string to read the standard input
-	Guido2ImageErrorCodes (*convertFunction)(const Guido2Image::Params &);	// a pointer to the conversion function
+	Guido2ImageErrorCodes (*convertFunction)(const Guido2Image::Params &, bool);	// a pointer to the conversion function
 	if ( options.inputString ) {							// string parsing mode
 		convertFunction = &Guido2Image::gmnString2Image;
 		p.input = options.inputString;
@@ -324,13 +324,13 @@ int main(int argc, char *argv[])
 			sprintf (buff, "%s_%d", outputBase.c_str(), p.pageIndex);
 			//----------------------------------------------------
 			p.output = buff;
-			error = convertFunction( p );					// convert to an image
+			error = convertFunction( p, false );					// convert to an image
 			output.clear();
 		}
 		if ( error == GUIDO_2_IMAGE_INVALID_PAGE_INDEX )
 			error = GUIDO_2_IMAGE_SUCCESS;
 	}
-	else error = convertFunction( p );						// convert to an image
+	else error = convertFunction( p, false );						// convert to an image
 	QGuidoPainter::stopGuidoEngine();						// stop the guido engine
 	
 	if ( error ) cerr << Guido2Image::getErrorString(error) << endl;
