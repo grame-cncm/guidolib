@@ -1,0 +1,4 @@
+144c144
+< 	set(LINK ${LINK} "msimg32.lib gdiplus.lib")
+---
+> 	set(LINK ${LINK} "msimg32.lib" "gdiplus.lib")

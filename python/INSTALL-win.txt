@@ -1,0 +1,80 @@
+PyGuido: Installation Notes for Windows
+=======================================
+
+Dependencies
+------------
+
+- Visual Studio 2010
+- Python 2.7, 64-bit (tested with EPD 7.3-2 64-bit)
+- Qt 4.7.4 SDK (you may need to compile this yourself)
+- PySide (you may need to compile this yourself)
+
+Please check PyGuido/CMakeLists.txt - you may need to adjust some paths.
+
+Steps
+-----
+
+1) Setup directories
+extract guidolib-1.49-src.tgz into subdirectory "guidolib-1.49-src"
+
+2) Patch files:
+in  Visual Studio x64 Win64 (2010) Command Prompt:
+##
+patch guidolib-1.49-src\cmake\CMakeLists.txt patches\guidolib-1.49-src\cmake\CMakeLists.txt.patch
+patch guidolib-1.49-src\Qt\GuidoQt\include\Guido2Image.h patches\guidolib-1.49-src\Qt\GuidoQt\include\Guido2Image.h.patch
+patch guidolib-1.49-src\src\include\GUIDO2Midi.h patches\guidolib-1.49-src\src\include\GUIDO2Midi.h.patch
+patch guidolib-1.49-src\src\include\GUIDOEngine.h patches\guidolib-1.49-src\src\include\GUIDOEngine.h.patch
+patch guidolib-1.49-src\src\include\GUIDOScoreMap.h patches\guidolib-1.49-src\src\include\GUIDOScoreMap.h.patch
+patch guidolib-1.49-src\src\include\VGColor.h patches\guidolib-1.49-src\src\include\VGColor.h.patch
+patch guidolib-1.49-src\win32\src\GSystemWin32GDIPlus.cpp patches\guidolib-1.49-src\win32\src\GSystemWin32GDIPlus.cpp.patch
+patch guidolib-1.49-src\win32\src\GSystemWin32GDIPlus.h patches\guidolib-1.49-src\win32\src\GSystemWin32GDIPlus.h.patch
+##
+
+
+3) Build GuidoLib:
+open  Visual Studio x64 Win64 (2010) Command Prompt:
+##
+cd guidolib-1.49-src\cmake
+mkdir build-win
+cd build-win
+cmake -G "Visual Studio 10 Win64" ..
+msbuild guidolib.sln /property:Configuration=Release
+cd ..\..\..
+mkdir lib
+mkdir lib\win
+copy /Y guidolib-1.49-src\cmake\build-win\Release\* lib\win
+##
+
+
+4) Build GuidoQt:
+in Visual Studio x64 Win64 (2010) Command Prompt:
+##
+cd guidolib-1.49-src\Qt
+mkdir build-win
+xcopy /S /E GuidoQt\* build-win
+cd build-win
+qmake -spec win32-msvc2010 GuidoQt.pro
+##
+open guidolib-1.49-src\Qt\build-win\GuidoQt.vcxproj with Visual Studio 2010:
+	- create new configureation target (x64)
+	- save GuidoQt.sln file
+
+continue in Visual Studio x64 Win64 (2010) Command Prompt:
+##
+msbuild GuidoQt.sln /property:Configuration=Release
+cd ..\..\..
+copy /Y guidolib-1.49-src\Qt\build-win\GuidoQt.lib lib\win
+##
+
+
+5) Build PyGuido:
+in Visual Studio x64 Win64 (2010) Command Prompt:
+##
+cd PyGuido
+mkdir build-win
+cd build-win
+cmake -G "Visual Studio 10 Win64" ..
+msbuild PyGuido.sln /property:Configuration=Release
+cd ..\..
+copy /Y PyGuido\build-win\Release\* lib\win
+##

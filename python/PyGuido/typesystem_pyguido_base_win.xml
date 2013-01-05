@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<typesystem package="PyGuido">
+    <load-typesystem name="typesystem_pyguido_base_common.xml" generate="yes" />
+	
+    <!-- GDeviceWin32.h -->
+    <object-type name="GDeviceWin32">
+        <inject-code class="native" position="beginning">
+            <insert-template name="fix-compilation-check"/>
+        </inject-code>
+        
+        <object-type identified-by-value="GState" />
+    </object-type>
+	
+	
+    <!-- GDeviceWin32AntiAliased.h -->
+	<!-- not needed and produces errors -->
+	
+	
+    <!-- GDeviceWin32GDIPlus.h -->
+    <object-type name="GDeviceWin32GDIPlus">
+        <inject-code class="native" position="beginning">
+            <insert-template name="fix-compilation-check"/>
+        </inject-code>
+        
+        <object-type identified-by-value="GState" />
+		
+		<modify-function signature="Time2DrawMusic()">
+			<remove class="all"/>
+		</modify-function>
+    </object-type>
+	
+	
+    <!-- GFontWin32.h -->
+    <object-type name="GFontWin32">
+        <inject-code class="native" position="beginning">
+            <insert-template name="fix-compilation-check"/>
+        </inject-code>
+    </object-type>
+	
+	
+    <!-- GFontWin32GDIPlus.h -->
+    <object-type name="GFontWin32GDIPlus">
+        <inject-code class="native" position="beginning">
+            <insert-template name="fix-compilation-check"/>
+        </inject-code>
+		
+		<modify-field name="fSymbolTable" remove="all" /> <!-- remove field to fix compilation error -->
+    </object-type>
+	
+	
+    <!-- GSystemWin32.h -->
+    <object-type name="GSystemWin32">
+        <inject-code class="native" position="beginning">
+            <insert-template name="fix-compilation-check"/>
+        </inject-code>
+    </object-type>
+	
+	
+    <!-- GSystemWin32GDIPlus.h -->
+    <object-type name="GSystemWin32GDIPlus">
+        <inject-code class="native" position="beginning">
+            <insert-template name="fix-compilation-check"/>
+        </inject-code>
+		
+		<modify-field name="fSymbolTable" remove="all" /> <!-- remove field to fix compilation error -->
+    </object-type>
+	
+	
+</typesystem>
