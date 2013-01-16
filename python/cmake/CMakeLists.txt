@@ -92,8 +92,8 @@ if(CMAKE_HOST_WIN32)
 		${QT_QTGUI_INCLUDE_DIR}
 	)
 	set(EXTRA_LINK_LIBRARIES ${EXTRA_LINK_LIBRARIES}
-		${CMAKE_CURRENT_SOURCE_DIR}/../lib/win/GUIDOEngine64.lib
-		${CMAKE_CURRENT_SOURCE_DIR}/../lib/win/GuidoQt.lib
+		${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/Release/GUIDOEngine64.lib
+		${CMAKE_CURRENT_SOURCE_DIR}/../../Qt/GuidoQt/release/GuidoQt.lib
 		${QT_QTGUI_LIBRARY}
 	)
 	
@@ -264,6 +264,14 @@ add_custom_command(
 
 if(CMAKE_HOST_WIN32)
 	# Windows
+	add_custom_command(
+		TARGET PyGuido
+		POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E make_directory ../lib/win
+		COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/Release/PyGuido.pyd ../lib/win/
+		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+		COMMENT "Copying resulting PyGuido.pyd module to lib/win directory"
+	)
 	
 elseif(CMAKE_HOST_APPLE)
 	# Mac
