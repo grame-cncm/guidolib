@@ -8,16 +8,16 @@ find_package(PythonLibs REQUIRED)
 # copy include header files and patch them
 add_custom_command(
 	OUTPUT NotAFile
-	COMMAND mkdir -p guidolib-src/src/include
-	COMMAND mkdir -p guidolib-src/win32/src
-	COMMAND mkdir -p guidolib-src/macosx/src
-	COMMAND mkdir -p guidolib-src/linux/src
-	COMMAND mkdir -p guidolib-src/Qt/GuidoQt/include
-	COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/../../src/include/*.h guidolib-src/src/include/
-	COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/../../win32/src/*.h guidolib-src/win32/src/
-	COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/../../macosx/src/*.h guidolib-src/macosx/src/
-	COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/../../linux/src/*.h guidolib-src/linux/src/
-	COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/../../Qt/GuidoQt/include/*.h guidolib-src/Qt/GuidoQt/include/
+	COMMAND ${CMAKE_COMMAND} -E make_directory guidolib-src/src/include
+	COMMAND ${CMAKE_COMMAND} -E make_directory guidolib-src/win32/src
+	COMMAND ${CMAKE_COMMAND} -E make_directory guidolib-src/macosx/src
+	COMMAND ${CMAKE_COMMAND} -E make_directory guidolib-src/linux/src
+	COMMAND ${CMAKE_COMMAND} -E make_directory guidolib-src/Qt/GuidoQt/include
+	COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/../../src/include guidolib-src/src/include/
+	COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/../../win32/src guidolib-src/win32/src/
+	COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/../../macosx/src guidolib-src/macosx/src/
+	COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/../../linux/src guidolib-src/linux/src/
+	COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/../../Qt/GuidoQt/include guidolib-src/Qt/GuidoQt/include/
 
 	COMMAND patch guidolib-src/Qt/GuidoQt/include/Guido2Image.h ${CMAKE_CURRENT_SOURCE_DIR}/../patches/guidolib-src/Qt/GuidoQt/include/Guido2Image.h.patch
 	COMMAND patch guidolib-src/src/include/GUIDO2Midi.h ${CMAKE_CURRENT_SOURCE_DIR}/../patches/guidolib-src/src/include/GUIDO2Midi.h.patch
@@ -130,9 +130,18 @@ elseif(CMAKE_HOST_APPLE)
 		${QT_QTGUI_INCLUDE_DIR}
 	)
 	set(EXTRA_LINK_LIBRARIES ${EXTRA_LINK_LIBRARIES}
-		${CMAKE_CURRENT_SOURCE_DIR}/../lib/mac/GUIDOEngine.framework
-		${CMAKE_CURRENT_SOURCE_DIR}/../lib/mac/libGuidoQt.a
+		${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/Release/GUIDOEngine.framework
+		${CMAKE_CURRENT_SOURCE_DIR}/../../Qt/GuidoQt/libGuidoQt.a
 		${QT_QTGUI_LIBRARY}
+	)
+	
+	add_custom_command(
+		TARGET PyGuido
+		POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E make_directory ../lib/mac
+		COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/PyGuido.so ../lib/mac/
+		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+		COMMENT "Copying resulting PyGuido.so module to lib/mac directory"
 	)
 
 elseif(CMAKE_HOST_UNIX)
@@ -260,3 +269,25 @@ add_custom_command(
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 	COMMENT "Running generator..."
 )
+
+
+if(CMAKE_HOST_WIN32)
+	# Windows
+	
+elseif(CMAKE_HOST_APPLE)
+	# Mac
+	add_custom_command(
+		TARGET PyGuido
+		POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E make_directory ../lib/mac
+		COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/PyGuido.so ../lib/mac/
+		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+		COMMENT "Copying resulting PyGuido.so module to lib/mac directory"
+	)
+
+elseif(CMAKE_HOST_UNIX)
+	# assume Linux
+
+else()
+	# unknown host
+endif()
