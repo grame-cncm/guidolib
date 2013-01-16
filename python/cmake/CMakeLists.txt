@@ -134,15 +134,6 @@ elseif(CMAKE_HOST_APPLE)
 		${CMAKE_CURRENT_SOURCE_DIR}/../../Qt/GuidoQt/libGuidoQt.a
 		${QT_QTGUI_LIBRARY}
 	)
-	
-	add_custom_command(
-		TARGET PyGuido
-		POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E make_directory ../lib/mac
-		COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/PyGuido.so ../lib/mac/
-		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-		COMMENT "Copying resulting PyGuido.so module to lib/mac directory"
-	)
 
 elseif(CMAKE_HOST_UNIX)
 	# assume Linux
@@ -253,7 +244,7 @@ add_custom_command(
 	--include-paths=${SHIBOKEN_INCLUDE_PATHS}
 	--no-suppress-warnings
 	--output-directory=${CMAKE_CURRENT_BINARY_DIR}
-	--typesystem-paths="${PYSIDE_TYPESYSTEMS}:${CMAKE_CURRENT_SOURCE_DIR}/../PyGuido"
+	--typesystem-paths="${PYSIDE_TYPESYSTEMS}${SHIBOKEN_INCLUDE_PATH_SEPARATOR}${CMAKE_CURRENT_SOURCE_DIR}/../PyGuido"
 	
 	${SHIBOKEN_GENERATOR_EXTRA_FLAGS}
 
