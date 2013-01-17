@@ -102,9 +102,6 @@ elseif(CMAKE_HOST_APPLE)
 	find_package(Shiboken REQUIRED)
 	find_package(PySide REQUIRED)
 	
-	message(${QT_QTGUI_INCLUDE_DIR})
-	message(${QT_QTCORE_INCLUDE_DIR})
-	
 	set(SHIBOKEN_INCLUDE_PATHS ${SHIBOKEN_INCLUDE_PATHS}
 		${PYSIDE_INCLUDE_DIR}
 		${CMAKE_CURRENT_BINARY_DIR}/guidolib-src/macosx/src
@@ -137,7 +134,39 @@ elseif(CMAKE_HOST_APPLE)
 
 elseif(CMAKE_HOST_UNIX)
 	# assume Linux
+	find_package(Shiboken REQUIRED)
+	find_package(PySide REQUIRED)
+	
+	set(SHIBOKEN_INCLUDE_PATHS ${SHIBOKEN_INCLUDE_PATHS}
+		${PYSIDE_INCLUDE_DIR}
+		${CMAKE_CURRENT_BINARY_DIR}/guidolib-src/linux/src
+	)
+	set(SHIBOKEN_INCLUDE_PATH_SEPARATOR ":")
+	
+	# PyGuido
+	set(PYGUIDO_GLOBAL_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/../PyGuido/global_linux.h")
+	set(PYGUIDO_TYPESYSTEM "${CMAKE_CURRENT_SOURCE_DIR}/../PyGuido/typesystem_pyguido_linux.xml")
+	
+	set(PYGUIDO_BASE_SRC_PLATFORM
+		${CMAKE_CURRENT_BINARY_DIR}/PyGuido/cairodevice_wrapper.cpp
+		${CMAKE_CURRENT_BINARY_DIR}/PyGuido/cairofont_wrapper.cpp
+		${CMAKE_CURRENT_BINARY_DIR}/PyGuido/cairosystem_wrapper.cpp
+		${CMAKE_CURRENT_BINARY_DIR}/PyGuido/gdevicegtk_wrapper.cpp
+		${CMAKE_CURRENT_BINARY_DIR}/PyGuido/gfontgtk_wrapper.cpp
+		${CMAKE_CURRENT_BINARY_DIR}/PyGuido/gsystemgtk_wrapper.cpp
+	)
+	
+    set(EXTRA_INCLUDE_DIRS ${EXTRA_INCLUDE_DIRS}
+		${CMAKE_CURRENT_BINARY_DIR}/guidolib-src/linux/src
+		${QT_QTGUI_INCLUDE_DIR}
+	)
+	set(EXTRA_LINK_LIBRARIES ${EXTRA_LINK_LIBRARIES}
+		${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/libGUIDOEngine.so
+		${CMAKE_CURRENT_SOURCE_DIR}/../../Qt/GuidoQt/libGuidoQt.a
+		${QT_QTGUI_LIBRARY}
+	)
 
+	
 else()
 	# unknown host
 endif()
