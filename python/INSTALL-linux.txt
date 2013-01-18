@@ -6,10 +6,56 @@ unzip
 make
 make install
 
+or:
+sudo apt-get install qt-sdk
+
+
 - install PySide: http://qt-project.org/wiki/Building_PySide_on_Linux
 use build-scripts (e.g. git clone git://github.com/PySide/BuildScripts.git pyside-git)
 follow README file
 
 or:
 sudo apt-get install python-pip shiboken libshiboken-dev
-pip install PySide --install-option="--qmake=/path/to/qmake"
+pip install PySide
+
+(or e.g. pip install PySide --install-option="--qmake=/usr/local/Trolltech/Qt-4.7.4/bin/qmake")
+
+
+
+
+
+PySide_DIR=/home/brupprec/Desktop/guidolib-git/python/cmake/build-pyside/PySide/pyside_install/py2.7-qt4.7.4-64bit-release/lib/cmake/PySide-1.1.2
+export PySide_DIR
+
+
+
+cmake -DCMAKE_MODULE_PATH="paths/to/cmake/files" ..
+
+e.g. cmake -DCMAKE_MODULE_PATH="/home/brupprec/Desktop/guidolib-git/python/cmake/build-pyside/PySide/pyside_install/py2.7-qt4.7.4-64bit-release/lib/cmake/PySide-1.1.2:/home/brupprec/Desktop/guidolib-git/python/cmake/build-pyside/PySide/pyside_install/py2.7-qt4.7.4-64bit-release/lib/cmake/Shiboken-1.1.2" ..
+
+rm -rf * && cmake -DCMAKE_MODULE_PATH="/home/brupprec/Desktop/guidolib-git/python/cmake/build-pyside/PySide/pyside_install/py2.7-qt4.7.4-64bit-release/lib/cmake/PySide-1.1.2:/home/brupprec/Desktop/guidolib-git/python/cmake/build-pyside/PySide/pyside_install/py2.7-qt4.7.4-64bit-release/lib/cmake/Shiboken-1.1.2" .. && make
+
+
+
+PATH=/usr/local/Trolltech/Qt-4.7.4/bin:$PATH
+export PATH
+rm -rf * && cmake -DCMAKE_PREFIX_PATH="/home/brupprec/pkg/pyside-sandbox/lib/cmake" .. && make
+
+/home/brupprec/Desktop/pip-pyside/build/PySide/pyside_install/py2.7-qt4.8.3-64bit-release/bin/shiboken
+
+
+PATH=/usr/local/Trolltech/Qt-4.7.4/bin:$PATH
+export PATH
+rm -rf * && cmake -DCMAKE_PREFIX_PATH="/home/brupprec/Desktop/guidolib-git/python/cmake/build-pyside2/PySide/pyside_install/py2.7-qt4.7.4-64bit-release/lib/cmake/" .. && make
+
+
+
+rm -rf * && cmake -DCMAKE_PREFIX_PATH="/home/brupprec/Desktop/pyside-setup/pyside_install/py2.7-qt4.8.3-64bit-release/lib/cmake" ..
+
+----NEW-----
+
+PATH=/usr/local/Trolltech/Qt-4.7.4/bin:$PATH
+export PATH
+    
+rm -rf * && cmake -DFIX_METAOBJECT_HEADER_ERROR=1 .. && make -j8
+

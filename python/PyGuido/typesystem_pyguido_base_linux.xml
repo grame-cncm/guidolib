@@ -9,6 +9,7 @@
         </inject-code>
     </object-type>
 
+    
     <!-- CairoFont.h -->
     <object-type name="CairoFont">
         <inject-code class="native" position="beginning">
@@ -16,6 +17,7 @@
         </inject-code>
     </object-type>
 	
+    
     <!-- CairoSystem.h -->
     <object-type name="CairoSystem">
         <inject-code class="native" position="beginning">
@@ -23,6 +25,7 @@
         </inject-code>
     </object-type>
 	
+    
     <!-- GDeviceGtk.h -->
     <!--
     <object-type name="GDeviceGtk">
@@ -32,6 +35,7 @@
     </object-type>
     -->
 	
+    
     <!-- GFontGtk.h -->
     <!--
     <object-type name="GFontGtk">
@@ -40,6 +44,7 @@
         </inject-code>
     </object-type>
     -->
+    
     
     <!-- GSystemGtk.h -->
     <!--
