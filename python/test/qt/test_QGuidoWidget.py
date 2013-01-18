@@ -13,7 +13,7 @@ class TestGuidoQtImport(unittest.TestCase):
         qt_app = QtGui.QApplication([])
 
         # initialize GuidoLib
-        guidofont_filename = os.path.join('..', 'lib', 'guido2.ttf')
+        guidofont_filename = os.path.join(os.getcwd(), 'guido2.ttf')
         self.assertEqual(0, QtGui.QFontDatabase.addApplicationFont(guidofont_filename))
         PyGuido.QGuidoPainter.startGuidoEngine()
         

@@ -24,25 +24,29 @@
     </object-type>
 	
     <!-- GDeviceGtk.h -->
+    <!--
     <object-type name="GDeviceGtk">
         <inject-code class="native" position="beginning">
             <insert-template name="fix-compilation-check"/>
         </inject-code>
     </object-type>
+    -->
 	
     <!-- GFontGtk.h -->
+    <!--
     <object-type name="GFontGtk">
         <inject-code class="native" position="beginning">
             <insert-template name="fix-compilation-check"/>
         </inject-code>
     </object-type>
-	
+    -->
+    
     <!-- GSystemGtk.h -->
+    <!--
     <object-type name="GSystemGtk">
         <inject-code class="native" position="beginning">
             <insert-template name="fix-compilation-check"/>
         </inject-code>
     </object-type>
-	
-	
+    -->
 </typesystem>

@@ -64,6 +64,4 @@
 		
 		<modify-field name="fSymbolTable" remove="all" /> <!-- remove field to fix compilation error -->
     </object-type>
-	
-	
 </typesystem>
