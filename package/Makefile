@@ -6,7 +6,7 @@ DEVKIT   := guidolib-$(VERSION)-devkit
 DOCPACK  := guidolib-$(VERSION)-doc
 MACOSLIB := $(DEVKIT)-macosx
 LINUXLIB := $(DEVKIT)-linux-x86
-WINLIB   := $(DEVKIT)-win32
+WINLIB   := $(DEVKIT)-windows
 QTLIB    := $(DEVKIT)-Qt
 SRC 	 := guidolib-$(VERSION)-src
 
@@ -88,6 +88,8 @@ windows:
 	make incl DEST=$(WINLIB) SYSINC="$(win32inc)"
 	cp ../cmake/release/GUIDOEngine.dll $(WINLIB)
 	cp ../cmake/release/GUIDOEngine.lib $(WINLIB)
+	cp ../win64/release/GUIDOEngine64.dll $(WINLIB)
+	cp ../win64/release/GUIDOEngine64.lib $(WINLIB)
 
 qt:
 	rm -Rf $(QTLIB)
