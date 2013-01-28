@@ -6,7 +6,7 @@ DEVKIT   := guidolib-$(VERSION)-devkit
 DOCPACK  := guidolib-$(VERSION)-doc
 MACOSLIB := $(DEVKIT)-macosx
 LINUXLIB := $(DEVKIT)-linux-x86
-WINLIB   := $(DEVKIT)-windows
+WINLIB   := $(DEVKIT)-win32
 QTLIB    := $(DEVKIT)-Qt
 SRC 	 := guidolib-$(VERSION)-src
 
@@ -57,6 +57,7 @@ menu:
 	@ echo "  'qt'     : builds an archive with doc, includes, src, samples"
 	@ echo "  'docpack': builds the documentation package"
 	@ echo "  'doc'    : rebuilds the doxygen documentation"
+	@ echo "  'python' : builds the pyguido package"
 
 doc:
 	make -C ../doc/doxygen
@@ -88,8 +89,9 @@ windows:
 	make incl DEST=$(WINLIB) SYSINC="$(win32inc)"
 	cp ../cmake/release/GUIDOEngine.dll $(WINLIB)
 	cp ../cmake/release/GUIDOEngine.lib $(WINLIB)
-	cp ../win64/release/GUIDOEngine64.dll $(WINLIB)
-	cp ../win64/release/GUIDOEngine64.lib $(WINLIB)
+
+python:
+	tar czf pyGuido.tgz ../python
 
 qt:
 	rm -Rf $(QTLIB)
