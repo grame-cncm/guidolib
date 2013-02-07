@@ -20,7 +20,14 @@ DESTDIR = ../bin
 # QT += svg
 
 # GuidoQt library link for each platform
-win32:LIBS += ../GuidoQt/GuidoQt.lib
+win32 {
+	DebugBuild{
+		LIBS += ../GuidoQt/Debug/GuidoQt.lib
+	}
+	else {
+		LIBS += ../GuidoQt/Release/GuidoQt.lib
+	}
+}
 unix:LIBS += -L../GuidoQt -lGuidoQt
 INCLUDEPATH += ../GuidoQt/include
 
