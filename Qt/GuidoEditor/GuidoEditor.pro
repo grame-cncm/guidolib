@@ -49,6 +49,7 @@ win32 {
 macx:LIBS += -framework CoreFoundation
 unix:LIBS += -L../GuidoQt -lGuidoQt
 INCLUDEPATH += ../GuidoQt/include
+QT += widgets printsupport
 
 include( ../GUIDOEngineLink.pri )
 
