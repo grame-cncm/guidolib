@@ -21,7 +21,7 @@ unix:TARGET = guidoscenecomposer
 APP_NAME = GuidoSceneComposer
 DEFINES += GUIDO_SCENE_COMPOSER_APP
 
-QT += xml
+QT += xml widgets printsupport
 
 DESTDIR = ../bin
 MOC_DIR = ./tmpSrc
@@ -56,7 +56,14 @@ INCLUDEPATH += ../GraphicsSceneMainWindow/include
 macx:ICON =  rsc/guido.icns
 
 # GuidoQt library link for each platform
-win32:LIBS += ../GuidoQt/GuidoQt.lib
+win32 {
+	DebugBuild{
+		LIBS += ../GuidoQt/Debug/GuidoQt.lib
+	}
+	else {
+		LIBS += ../GuidoQt/Release/GuidoQt.lib
+	}
+}
 unix:LIBS += -L../GuidoQt -lGuidoQt
 
 INCLUDEPATH += ../GuidoQt/include
