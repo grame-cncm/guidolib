@@ -201,7 +201,7 @@ bool QGuidoItemContainer::setCode( const QString& code )
 	mGuidoItem->setGMNCode(code); 
 	if (!isValid() && QGuidoImporter::musicxmlSupported()) {	// try to import file as MusicXML file
 		std::stringstream out;
-		if ( QGuidoImporter::musicxmlString2Guido(code.toAscii().constData(), true, out) )
+		if ( QGuidoImporter::musicxmlString2Guido(code.toUtf8().constData(), true, out) )
 		{
 			mGuidoItem->setGMNCode( out.str().c_str() );
 			unlinkFile();
@@ -336,7 +336,9 @@ void QGuidoItemContainer::resized(const QRectF& newRect)
 		
 		moveBy( dx , dy );
 		
-		mGuidoItem->scale( boundedSx , boundedSy );
+		float newscale =  (boundedSx > boundedSy ? boundedSx : boundedSy) * mGuidoItem->scale();
+		mGuidoItem->setScale( newscale );
+//		mGuidoItem->scale( boundedSx , boundedSy );
 		guidoGeometryChanged();
 
 		Q_EMIT scaleChanged( mGuidoItem->transform().m11() );
@@ -522,7 +524,13 @@ void QGuidoItemContainer::loadFromOtherContainer( const QGuidoItemContainer * ot
 	mIsOptimalPageFillOn	= otherContainer->mIsOptimalPageFillOn;
 	mIsProportionalOn		= otherContainer->mIsProportionalOn;
 
-	mGuidoItem->scale( otherContainer->mGuidoItem->transform().m11() , otherContainer->mGuidoItem->transform().m22() );
+	float xs = otherContainer->mGuidoItem->transform().m11();
+	float ys = otherContainer->mGuidoItem->transform().m22();
+	float newscale =  (xs > ys ? xs : ys) * mGuidoItem->scale();
+	mGuidoItem->setScale( newscale );
+//	mGuidoItem->scale( otherContainer->mGuidoItem->transform().m11() , otherContainer->mGuidoItem->transform().m22() );
+//	mGuidoItem->setTransform(QTransform::fromScale(xs, ys), true);
+
 	updateLayoutSettings();
 	mGuidoItem->setGridWidth(otherContainer->mGuidoItem->gridWidth());
 	mGuidoItem->setGridHeight(otherContainer->mGuidoItem->gridHeight());

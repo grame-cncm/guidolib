@@ -37,6 +37,16 @@
 #include <QDomElement>
 #include <QDomText>
 #include <QGraphicsRectItem>
+#include <QFileDialog>
+#include <QScrollBar>
+#include <QStatusBar>
+#include <QApplication>
+#include <QDockWidget>
+#include <QPushButton>
+#include <QAbstractButton>
+#include <QMenuBar>
+#include <QToolBar>
+
 
 #define LANGUAGE_NAME_SHORT		GraphicsSceneMainWindow::applicationSettings().mLanguageNameShort
 #define LANGUAGE_NAME_LONG		GraphicsSceneMainWindow::applicationSettings().mLanguageNameLong
@@ -266,7 +276,7 @@ void GraphicsSceneMainWindow::addItemFromFile()
 	QString fileName = QFileDialog::getOpenFileName(
 		this, QString("Add a ") + LANGUAGE_NAME_LONG + QString(" file"),
         getFileDialogPath(),
-        tr( QString( GMN_FILE_FILTER  + QString("\nAll (*.*)") ).toAscii().data() ));
+        tr( QString( GMN_FILE_FILTER  + QString("\nAll (*.*)") ).toUtf8().data() ));
 
 	// Create the item with the file
 	QLanguageItem* createdItem = 0;
@@ -742,7 +752,7 @@ void GraphicsSceneMainWindow::saveSceneAs()
 	QString selectedFilter("");
 	QString fileName = QFileDialog::getSaveFileName(this, "Save the " + LANGUAGE_NAME_SHORT + " scene",
                             savePath,
-                            tr(filters.toAscii().data()) ,
+                            tr(filters.toUtf8().data()) ,
 							&selectedFilter);
 
 	if ( fileName.isEmpty() )
@@ -782,7 +792,7 @@ void GraphicsSceneMainWindow::loadScene()
 		openPath = QDir::homePath();
 	QString fileName = QFileDialog::getOpenFileName(this, "Open a " + LANGUAGE_NAME_SHORT + " scene",
                                                      openPath,
-                                                     tr( GSC_FILE_FILTER.toAscii().data() ));
+                                                     tr( GSC_FILE_FILTER.toUtf8().data() ));
 	
 	if ( !fileName.isEmpty() )
 	if ( !loadSceneFile(fileName) )
@@ -2138,7 +2148,7 @@ void GraphicsSceneMainWindow::saveItemAs(QLanguageItem * languageItem)
 	QString selectedFilter("");
 	QString fileName = QFileDialog::getSaveFileName(this, "Save the " + LANGUAGE_NAME_SHORT + " item",
                             savePath,
-                            tr(filters.toAscii().data()) ,
+                            tr(filters.toUtf8().data()) ,
 							&selectedFilter);
 
 	if ( fileName.isEmpty() )
