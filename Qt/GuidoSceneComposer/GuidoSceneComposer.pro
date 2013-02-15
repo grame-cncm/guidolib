@@ -50,7 +50,7 @@ RESOURCES += $$RESOURCES_DIR/guido.qrc
 ####### External libraries link #######
 # GraphicsSceneMainWindow link for each platform
 win32:LIBS += ../GraphicsSceneMainWindow/GraphicsSceneMainWindow.lib
-unix:LIBS += -L../GraphicsSceneMainWindow -lGraphicsSceneMainWindow
+unix:LIBS += -L.. -lGraphicsSceneMainWindow
 
 INCLUDEPATH += ../GraphicsSceneMainWindow/include
 macx:ICON =  rsc/guido.icns
@@ -64,8 +64,7 @@ win32 {
 		LIBS += ../GuidoQt/Release/GuidoQt.lib
 	}
 }
-unix:LIBS += -L../GuidoQt -lGuidoQt
-
+unix:LIBS += -L.. -lGuidoQt
 INCLUDEPATH += ../GuidoQt/include
 
 include( ../GUIDOEngineLink.pri )

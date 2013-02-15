@@ -27,7 +27,7 @@ win32 {
 		LIBS += ../GuidoQt/Release/GuidoQt.lib
 	}
 }
-unix:LIBS += -L../GuidoQt -lGuidoQt
+unix:LIBS += -L.. -lGuidoQt
 INCLUDEPATH += ../GuidoQt/include
 
 include( ../GUIDOEngineLink.pri )
