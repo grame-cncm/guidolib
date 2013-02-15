@@ -283,17 +283,17 @@ void QPaletteItem::reorderItems()
 		mInteractions[0].mItem->setPos( center - QPointF(itemBoundingRect.width()/2 , itemBoundingRect.height()/2) );
 		while ( !mInteractions[0].mPath->contains( itemBoundingRect ) )
 		{
-			mInteractions[0].mItem->scale(0.9f , 0.9f);
+			mInteractions[0].mItem->setScale(0.9f);
 			itemBoundingRect = mInteractions[0].mItem->mapToParent( mInteractions[0].mItem->boundingRect() ).boundingRect();
 			mInteractions[0].mItem->setPos( center - QPointF(itemBoundingRect.width()/2 , itemBoundingRect.height()/2) );
 		}
 		while ( mInteractions[0].mPath->contains( itemBoundingRect ) )
 		{
-			mInteractions[0].mItem->scale(1/0.9f , 1/0.9f);
+			mInteractions[0].mItem->setScale(1/0.9f);
 			itemBoundingRect = mInteractions[0].mItem->mapToParent( mInteractions[0].mItem->boundingRect() ).boundingRect();
 			mInteractions[0].mItem->setPos( center - QPointF(itemBoundingRect.width()/2 , itemBoundingRect.height()/2) );
 		}
-		mInteractions[0].mItem->scale(0.9f , 0.9f);
+		mInteractions[0].mItem->setScale(0.9f);
 		return;
 	}
 
@@ -370,7 +370,7 @@ void QPaletteItem::reorderItems()
 		}
 		
 		posRadius = littleRect.width()/2 + (mRadius - littleRect.width()/2) * (radiusFactor-2*RADIUS_FACTOR_INCREMENT);
-		mInteractions[i].mItem->scale( maxScale , maxScale );
+		mInteractions[i].mItem->setScale( maxScale );
 		QRectF itemBoundingRect = mInteractions[i].mItem->mapToParent( mInteractions[i].mItem->boundingRect() ).boundingRect();
 		mInteractions[i].mItem->setPos( center + polarToOrtho( posRadius, currentAngle + itemAngle/2 ) - QPointF(itemBoundingRect.width()/2 , itemBoundingRect.height()/2) );
 		
