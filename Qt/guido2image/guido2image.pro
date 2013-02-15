@@ -16,8 +16,7 @@ CONFIG += console
 macx:CONFIG -= app_bundle
 DESTDIR = ../bin
 
-# SVG support
-# QT += svg
+QT += widgets printsupport
 
 # GuidoQt library link for each platform
 win32 {

@@ -17,3 +17,4 @@ macx:CONFIG+=x86_64
 # Input
 HEADERS += QFontDisplayer.h
 SOURCES += main.cpp QFontDisplayer.cpp
+QT += widgets 

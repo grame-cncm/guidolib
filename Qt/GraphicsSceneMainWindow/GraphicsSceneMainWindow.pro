@@ -9,7 +9,7 @@ FORMS_DIR = forms
 win32:DebugBuild:CONFIG += console
 TEMPLATE = lib
 CONFIG += staticlib
-QT += xml
+QT += xml widgets printsupport
 
 DESTDIR = ./
 MOC_DIR = ./tmpSrc
