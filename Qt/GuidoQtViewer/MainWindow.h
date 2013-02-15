@@ -40,6 +40,7 @@
 #include <QScrollArea>
 #include <QLabel>
 #include <QDialog>
+#include <QMenu>
 
 #include "QGuidoWidget.h"
 #include "GUIDOEngine.h"
