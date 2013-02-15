@@ -11,7 +11,7 @@ TEMPLATE = lib
 CONFIG += staticlib
 QT += xml widgets printsupport
 
-DESTDIR = ./
+DESTDIR = ..
 MOC_DIR = ./tmpSrc
 RCC_DIR = ./tmpSrc
 UI_DIR = ./tmpSrc

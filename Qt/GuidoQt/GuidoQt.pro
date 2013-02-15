@@ -6,7 +6,7 @@ INCLUDEPATH += include
 # Library setting
 TEMPLATE = lib
 CONFIG += staticlib
-DESTDIR = .
+DESTDIR = ..
 MOC_DIR = tmpSrc
 
 win32 {
