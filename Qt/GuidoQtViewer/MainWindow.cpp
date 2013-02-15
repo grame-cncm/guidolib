@@ -51,6 +51,12 @@
 #include <QImage>
 #include <QProgressBar>
 #include <QDir>
+#include <QScrollBar>
+#include <QToolBar>
+#include <QStatusBar>
+#include <QMenuBar>
+#include <QFileDialog>
+#include <QMessageBox>
 
 #include <iostream>
 using namespace std;
@@ -265,10 +271,10 @@ void MainWindow::reload()
 //-------------------------------------------------------------------------
 void MainWindow::about()
 {
-    QMessageBox::about(this, tr(QString("About " + APP_NAME).toAscii().data()),
+    QMessageBox::about(this, tr(QString("About " + APP_NAME).toUtf8().data()),
              tr(QString("<h2>" + APP_NAME + "</h2>" + 
                 "<p>Copyright &copy; 2008 Grame. " 
-                "<p>A GMN files viewer based on Qt. ").toAscii().data()));
+                "<p>A GMN files viewer based on Qt. ").toUtf8().data()));
 }
 
 //-------------------------------------------------------------------------
@@ -785,14 +791,14 @@ void MainWindow::updateWidgetSize()
 //-------------------------------------------------------------------------
 bool MainWindow::loadFile(const QString &fileName)
 {
-	statusBar()->showMessage(tr(QString("Loading " + fileName + "...").toAscii().data()));
+	statusBar()->showMessage(tr(QString("Loading " + fileName + "...").toUtf8().data()));
     QApplication::setOverrideCursor(Qt::WaitCursor);
  	mScaleFactor = 1;
 
 	bool loadOk = mGuidoWidget->setGMNFile( fileName );
 	if (!loadOk && QGuidoImporter::musicxmlSupported()) {	// try to import file as MusicXML file
 		std::stringstream out;
-		if ( QGuidoImporter::musicxmlFile2Guido(fileName.toAscii().constData(), true, out) )
+		if ( QGuidoImporter::musicxmlFile2Guido(fileName.toUtf8().constData(), true, out) )
 			loadOk = mGuidoWidget->setGMNCode( out.str().c_str() );
 	}
 
@@ -835,11 +841,11 @@ bool MainWindow::loadFile(const QString &fileName)
 	{
 		QString errorMessage = "Invalid GMN file : " + mGuidoWidget->getLastErrorMessage();
 		mGuidoWidget->resize( QSize( 0,0 ) );
-		statusBar()->showMessage(tr(errorMessage.toAscii().data()), 2000);
+		statusBar()->showMessage(tr(errorMessage.toUtf8().data()), 2000);
 	}
 
 	QApplication::restoreOverrideCursor();
-	setCurrentFile(fileName.toAscii().data());
+	setCurrentFile(fileName.toUtf8().data());
 
 	return loadOk;
 }
@@ -855,7 +861,7 @@ void MainWindow::setCurrentFile(const QString &fileName)
     QString shownName;
 	shownName = strippedName(mCurFile);
 
-    setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(tr(QString(APP_NAME).toAscii().data())));
+    setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(tr(QString(APP_NAME).toUtf8().data())));
 }
 
 //-------------------------------------------------------------------------
