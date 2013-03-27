@@ -113,7 +113,7 @@ std::ostream & ARMusicalTag::operator <<(std::ostream & os) const
 	if (tmpp)
 	{
 		cp = new char[count+1];
-		strncpy(cp,tmpp,count);
+		if (count) strncpy(cp,tmpp,count);
 		cp[count] = 0;
 	}
 
