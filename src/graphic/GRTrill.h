@@ -38,7 +38,8 @@ class GRTrill : public GRPTagARNotationElement
 					 GRTrill( GRStaff * stf, ARTrill * arTrill );
 		virtual		~GRTrill();
 
-		virtual void OnDraw( VGDevice & hdc ) const;
+		virtual void OnDraw( VGDevice & hdc) const;
+		virtual void OnDraw( VGDevice & hdc, float pos);
 		virtual void print() const {};
 		virtual void tellPosition( GObject * caller, const NVPoint & np );
 
@@ -59,10 +60,14 @@ class GRTrill : public GRPTagARNotationElement
 		void setupPrallPrall();
 		
 		void setTrillSymbol( unsigned int inSymbolID);
-		GDirection chooseDirection (GREvent * inParent ) const;
 
+		
+		GDirection chooseDirection (GREvent * inParent ) const;
+		
 		GRAccidental *	fAccidental;		
 		ARTrill::TYPE	fType;
 		NVPoint			sRefPos;
+
+        
 };
 #endif

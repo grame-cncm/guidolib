@@ -202,9 +202,8 @@ void GRSingleNote::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos&
 		SendMap (f, getARNote()->getStartTimePosition(), dur, kNote, infos);
 	}
 }
-
 //____________________________________________________________________________________
-void GRSingleNote::OnDraw( VGDevice & hdc ) const
+void GRSingleNote::OnDraw( VGDevice & hdc) const
 {
 	float incy = 1;
 	float posy = 0;
@@ -245,12 +244,16 @@ void GRSingleNote::OnDraw( VGDevice & hdc ) const
 		}
 	}
 	if (mOrnament )
-		mOrnament->OnDraw(hdc);
+	{
+		float X = mGrStaff->getXEndPosition(getARNote()->getRelativeTimePosition(), getARNote()->getDuration());
+		mOrnament->OnDraw(hdc,X);
+	}
 
 	// - Restore
 	if (mColRef) hdc.SetFontColor( oldcolor );
 	if (gBoundingBoxesMap & kEventsBB)
 		DrawBoundingBox( hdc, kEventBBColor);
+
 }
 
 //____________________________________________________________________________________
