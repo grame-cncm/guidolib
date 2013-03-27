@@ -11,6 +11,8 @@ DESTDIR = ../bin
 MOC_DIR = ./tmpSrc
 RCC_DIR = ./tmpSrc
 UI_DIR = ./tmpSrc
+QT += widgets printsupport
+
 win32 {
 	TEMPLATE = vcapp
 }
@@ -26,7 +28,7 @@ win32 {
 # GuidoQt library link for each platform
 win32:LIBS += ../GuidoQt/GuidoQt.lib
 macx:LIBS += -framework CoreFoundation
-unix:LIBS += -L../GuidoQt -lGuidoQt
+unix:LIBS += -L.. -lGuidoQt
 INCLUDEPATH += ../GuidoQt/include
 
 include( ../GUIDOEngineLink.pri )
