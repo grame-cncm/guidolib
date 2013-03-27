@@ -33,6 +33,7 @@
 
 // #include "NEPointerList.h"
 #include "VGDevice.h"
+using namespace std;
 
 GRTrill::GRTrill(GRStaff * inStaff, ARTrill * artrem ) : GRPTagARNotationElement(artrem)
 {
@@ -40,7 +41,7 @@ GRTrill::GRTrill(GRStaff * inStaff, ARTrill * artrem ) : GRPTagARNotationElement
 	GRSystemStartEndStruct * sse= new GRSystemStartEndStruct;
 	sse->grsystem = inStaff->getGRSystem(); 
 	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
-
+	
 	sse->p = (void *) getNewGRSaveStruct();
 	mStartEndList.AddTail(sse);
 
@@ -160,12 +161,58 @@ GRTrill::~GRTrill()
 	delete fAccidental;
 }
 
-void GRTrill::OnDraw( VGDevice & hdc ) const
+
+void GRTrill::OnDraw( VGDevice & hdc , float pos)
 {
 //	GRStaff * staff;
-
 //	fType = static_cast<ARTrill *>(mAbstractRepresentation)->getType();
 //	staff = getGRStaff();
+	
+
+	GRNotationElement::OnDraw( hdc );
+	fAccidental->OnDraw(hdc);
+	if(fType==0)//TRILL=0
+	{
+		NVRect r = getBoundingBox();
+		r += getPosition ();
+		float left = r.right;
+		float right = pos;
+
+	//essais de fonctions pour accéder aux éléments
+
+	//GRStaff * elmt = this->getGRStaff();
+	//GRSystemSlice * elmt = this->getGRSystemSlice();
+	//const NEPointerList * elmt = this->associated();
+	//const NEPointerList * elmt = this->getAssociations();
+	//GuidoPos elmt = this->getEndPos();
+	//GRNotationElement * elmt = this->lastendElement;
+	//int elmt = this->getID();		//	fonctionne !
+	//ARMusicalObject * elmt = this->getAbstractRepresentation();		fonctionne
+	//NVPoint el = this->getPosition();		fonctionne
+	//float elmt = el.x;			fonctionne
+	//int elmt = this->getStaffNumber();	// fonctionne
+	//int elmt = this->sInstanceCount;	//	fonctionne
+	
+	/*
+	if(!elmt){
+		right = r.right - (LSPACE*4);
+	}else{right = r.right + (LSPACE*4);}
+	*/
+	
+		hdc.Line (left, r.top, right, r.top);
+		hdc.Line (left, r.bottom, left, r.top);
+		hdc.Line (left, r.bottom, right, r.bottom);
+		hdc.Line (right, r.bottom, right, r.top);
+	}
+}
+
+
+void GRTrill::OnDraw( VGDevice & hdc) const
+{
+//	GRStaff * staff;
+//	fType = static_cast<ARTrill *>(mAbstractRepresentation)->getType();
+//	staff = getGRStaff();
+
 	GRNotationElement::OnDraw( hdc );
 	fAccidental->OnDraw(hdc);
 }
@@ -183,7 +230,7 @@ void GRTrill::setupTrill()
 	fAccidental->addToOffset(offsetAccidental);
 	
 	const float height = LSPACE * 1.17f;
-	sRefPos = NVPoint(-mLeftSpace, 0);
+	sRefPos = NVPoint(-mLeftSpace, 0);	
 	mBoundingBox.Set(-mLeftSpace, -height, mRightSpace + 0.24f * LSPACE, 0);
 }
 
