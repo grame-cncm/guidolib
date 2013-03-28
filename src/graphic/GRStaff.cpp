@@ -2119,7 +2119,6 @@ float	GRStaff::getXEndPosition(TYPE_TIMEPOSITION pos, TYPE_DURATION dur){
 	TYPE_TIMEPOSITION end = pos + dur;
 	NEPointerList * elmts = getElements();
 	if(elmts){
-		GRNotationElement * elmtAtEndPos = elmts->GetTail();
 		NEPointerList * elmtsAtEndOfDuration = elmts->getElementsWithTimePosition(end);
 		if(elmtsAtEndOfDuration){
 			GRNotationElement * elmt = elmtsAtEndOfDuration->GetHead();
@@ -2130,8 +2129,8 @@ float	GRStaff::getXEndPosition(TYPE_TIMEPOSITION pos, TYPE_DURATION dur){
 				if(gevent)
 					X -= LSPACE;
 				return X;
-			}else{return 0;}
-		}else{return 0;}
+			}
+		}
 	}else{return 0;}
 }
 
