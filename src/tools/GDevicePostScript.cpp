@@ -209,7 +209,7 @@ GDevicePostScript::DrawString( float x, float y, const char * s, int inCharCount
 	else					// Draw a string
 	{
  		char * ps_tmp = new char [inCharCount + 1]; // TODO: optimize
- 		strncpy( ps_tmp, s, (size_t)inCharCount ); 
+ 		if (inCharCount) strncpy( ps_tmp, s, (size_t)inCharCount ); 
  		ps_tmp[ inCharCount ] = '\0';
 
 	//	fprintf( GetFile(), "newpath\n" ); // Requiered ?

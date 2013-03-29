@@ -78,7 +78,7 @@ TagParameterList::TagParameterList(const NVstring & str)
 	int len = int(str.length()+1);
 	char * buffer = new char[len];;
 	char * ptr = buffer;
-	strncpy(ptr, str.c_str(), len);
+	if (len) strncpy(ptr, str.c_str(), len);
 	char * oldp;
 	bool done = false;
 	

@@ -32,7 +32,7 @@
 TagParameterFloat::TagParameterFloat(const TagParameterFloat & tpf)
 	: TagParameter(tpf)
 {
-	strncpy (fUnit, tpf.fUnit, kUnitLen);
+	if (kUnitLen) strncpy (fUnit, tpf.fUnit, kUnitLen);
 	fUnittag = tpf.fUnittag;
 	fValue = tpf.fValue;
 }
@@ -47,7 +47,7 @@ TagParameterFloat::TagParameterFloat(float theFloat)
 void  TagParameterFloat::set( const TagParameterFloat & in )
 {
 	TagParameter::set( in );
-	strncpy(fUnit, in.fUnit, kUnitLen);
+	if (kUnitLen) strncpy(fUnit, in.fUnit, kUnitLen);
 	fUnittag = in.fUnittag;
 	fValue = in.fValue;
 }
@@ -60,7 +60,7 @@ TagParameterFloat::reset(float inFloatValue, const char * inUnit)
 	fUnit[0] = '\0'; 
 
 	if(!strncmp(fUnit, inUnit, kUnitLen)) {
-		strncpy(fUnit, inUnit, kUnitLen);
+		if (kUnitLen) strncpy(fUnit, inUnit, kUnitLen);
 		fUnit[2] = 0;
 		fUnittag = true;
 	}
@@ -71,12 +71,12 @@ const TYPE_FLOATPARAMETER  TagParameterFloat::getValue(float curLSPACE) const
 	if (fUnittag)
 	{
 		char tmpunit[kUnitLen];
-		strncpy(tmpunit, fUnit, kUnitLen);
+		if (kUnitLen) strncpy(tmpunit, fUnit, kUnitLen);
 		if (tmpunit[0] == 0)
 		{
 			// no unit is given -> then
 			// we take the unit specified by the units-tag ...
-			strncpy(tmpunit, ARUnits::getUnit().c_str(), kUnitLen);
+			if (kUnitLen) strncpy(tmpunit, ARUnits::getUnit().c_str(), kUnitLen);
 		}
 		if (!strcmp(tmpunit,"hs"))
 			return ((float) (fValue * curLSPACE * 0.5f));
@@ -123,7 +123,7 @@ void TagParameterFloat::setValue(const char * p)
 	// we need to to a conversion of units ...
 	if (i != length - 1)
 	{
-		strncpy(fUnit, &p[i+1], kUnitLen);
+		if (kUnitLen) strncpy(fUnit, &p[i+1], kUnitLen);
 		fUnit[2] = 0;
 		fUnittag = true;
 	}
@@ -134,7 +134,7 @@ void TagParameterFloat::setUnit(const char * un)
 	// one should probable check the unit
 	// here -> if no valid unit is given
 	// use cm/inches or whatever ...
-	strncpy(fUnit,un,kUnitLen);
+	if (kUnitLen) strncpy(fUnit,un,kUnitLen);
 	fUnit[2] = 0;
 	fUnittag = true;
 }
@@ -147,7 +147,7 @@ bool TagParameterFloat::copyValue(const TagParameter * tp)
 		if (!fUnittag && tpf->fUnit[0] != 0)
 			return false;
 	
-		if (fUnittag)
+		if (fUnittag && kUnitLen)
 			strncpy(fUnit, tpf->fUnit,kUnitLen);
 		else
 			fUnit[0] = '\0';

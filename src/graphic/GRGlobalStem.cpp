@@ -48,7 +48,7 @@ GRGlobalStem::GRGlobalStem( GRStaff * inStaff,
 						   ARNoteFormat * curnoteformat ) 
 : GRPTagARNotationElement(pshare),
   mFlagOnOff(true),stemdirset(false),stemlengthset(false),
-  stemdir(dirOFF) // , colref(NULL)
+  stemdir(dirOFF), lowerNote(NULL), higherNote(NULL) // , colref(NULL)
 {
 
 	if (curdispdur && curdispdur->getDisplayDuration() > DURATION_0)
@@ -348,6 +348,9 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 				mHighestY = middle;
 				mLowestY = middle;
 				++ count;
+
+				lowerNote = (GRSingleNote *)el;
+				higherNote = (GRSingleNote *)el;
 			}
 			
 			GuidoPos pos = associated->GetHeadPosition();
@@ -363,9 +366,16 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 					middle += ypos;
 					++count ;
 					
-					if (mLowestY > ypos)	mLowestY = ypos;
-					if (mHighestY < ypos)	mHighestY = ypos;
-					
+					if (mLowestY > ypos)
+					{
+						mLowestY = ypos;
+						lowerNote = (GRSingleNote *)el;
+					}
+					if (mHighestY < ypos)
+					{
+						mHighestY = ypos;
+						higherNote = (GRSingleNote *)el;
+					}
 				}
 			}
 			
@@ -473,7 +483,7 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 
 	delete theFlag;
 
-				 // here we have to add the flags ...
+	// here we have to add the flags ...
 	theFlag = new GRFlag(this, dispdur,stemdir,theStem->getStemLength());
 	if (mColRef)
 		theFlag->setColRef(mColRef);
@@ -492,6 +502,31 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 
 	if (tagtype != GRTag::SYSTEMTAG)
 		updateGlobalStem(inStaff);
+
+	const float curLSPACEtmp = (float)(inStaff->getStaffLSPACE());
+
+	if (stemdir == dirUP)
+	{
+		NVPoint stemendpos (theStem->getPosition());
+		stemendpos.y -= theStem->getStemLength();
+
+		if (stemendpos.y > 2 * curLSPACEtmp)
+		{
+			const float newlength = (theStem->getPosition().y - 2 * curLSPACEtmp);
+			changeStemLength(newlength);
+		}
+	}
+	else if (stemdir == dirDOWN)
+	{
+		NVPoint stemendpos (theStem->getPosition());
+		stemendpos.y += theStem->getStemLength();
+
+		if (stemendpos.y < 2 * curLSPACEtmp)
+		{
+			const float newlength = (2 * curLSPACEtmp - theStem->getPosition().y);
+			changeStemLength(newlength) ;
+		}
+	}
 }
 
 
@@ -555,10 +590,25 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 				prevposy = note->getPosition().y;
 				if (tagtype == GRTag::SYSTEMTAG)
 					prevposy += note->getGRStaff()->getPosition().y;
-				
+
 				note->updateBoundingBox();
+
+				// - Adjust horizontal notehead position, for non-standard noteheads, when notes are close in a chord
+				note->getNoteHead()->adjustPositionForChords(sugHeadState, stemdir);
 			}
 		}
+
+		// - Adjust stem length if it's a cross/triangle notehead
+
+		ConstMusicalSymbolID lowerNoteSymbol = lowerNote->getNoteHead()->getSymbol();
+
+		if (lowerNoteSymbol == kFullXHeadSymbol)
+		{
+			lowerNote->setFirstSegmentDrawingState(false);
+			lowerNote->setStemOffsetStartPosition(-4);
+		}
+		else if (lowerNoteSymbol == kFullTriangleHeadSymbol || lowerNoteSymbol == kHalfTriangleHeadSymbol)
+				lowerNote->setFirstSegmentDrawingState(false);
 	}
 	else if (stemdir == dirUP || stemdir == dirOFF)
 	{
@@ -599,14 +649,29 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 					prevposy += note->getGRStaff()->getPosition().y;
 				
 			 	note->updateBoundingBox();
+
+				// - Adjust horizontal notehead position, for non-standard noteheads, when notes are close in a chord
+				note->getNoteHead()->adjustPositionForChords(sugHeadState, stemdir);
 			}
 		}
+
+
+		// - Adjust stem length if it's a cross/triangle notehead
+
+		ConstMusicalSymbolID higherNoteSymbol = higherNote->getNoteHead()->getSymbol();
+
+		if (higherNoteSymbol == kFullXHeadSymbol)
+		{
+			higherNote->setFirstSegmentDrawingState(false);
+			higherNote->setStemOffsetStartPosition(4);
+		}
+		else if (higherNoteSymbol == kFullTriangleHeadSymbol || higherNoteSymbol == kHalfTriangleHeadSymbol)
+				higherNote->setStemOffsetStartPosition(47);
 	}
 	else 
 	{
 		assert(false);
 	}
-
 }
 
 void GRGlobalStem::setHPosition( float nx )
