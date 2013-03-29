@@ -30,7 +30,7 @@
 
 NVPoint GRStem::sRefpos;
 
-GRStem::GRStem(GRGlobalStem * gstem) : mColRef(NULL)
+GRStem::GRStem(GRGlobalStem * gstem) : mColRef(NULL), offsetStartPosition(0), drawActivated(true)
 {
 	mStemDir = dirOFF;
 	
@@ -48,7 +48,9 @@ GRStem::GRStem( GREvent * sngnot,
 	GDirection dir,
 	float length,
 	float notebreite) :
-	mColRef(NULL)
+	mColRef(NULL),
+	offsetStartPosition(0),
+	drawActivated(true)
 {
 	if (durtempl >= DURATION_1)
 	{
@@ -132,12 +134,14 @@ void GRStem::OnDraw( VGDevice & hdc ) const
 	if (mStemDir == dirUP)
 	{
 		tmpSymbol =  kStemUp1Symbol;
-		GRNotationElement::DrawSymbol( hdc, tmpSymbol );
+
+		if (drawActivated)
+			GRNotationElement::DrawSymbol( hdc, tmpSymbol );
 		
 		tmpSymbol =  kStemUp2Symbol;	// wrong in EPS font..
 		
 		// Draws until the length has been completed ...
-		float offsy = -halfSpaceBySize;
+		float offsy = -halfSpaceBySize + offsetStartPosition;
 
 		while( -offsy < mStemLen ) // * mSize)
 		{
@@ -156,12 +160,14 @@ void GRStem::OnDraw( VGDevice & hdc ) const
 	else if (mStemDir == dirDOWN)
 	{
 		tmpSymbol = kStemDown1Symbol;
-		GRNotationElement::DrawSymbol( hdc, tmpSymbol );
+
+		if (drawActivated)
+			GRNotationElement::DrawSymbol( hdc, tmpSymbol );
 		
 		tmpSymbol = kStemDown2Symbol;
 		
 		// Draws until the length has been completed ...		
-		float offsy = halfSpaceBySize;
+		float offsy = halfSpaceBySize + offsetStartPosition;
 
 		while( offsy < mStemLen ) // * mSize)
 		{
@@ -227,4 +233,14 @@ void GRStem::setColRef( const unsigned char * inColor )
 	mColRef[1] = inColor[1];
 	mColRef[2] = inColor[2];
 	mColRef[3] = inColor[3];
+}
+
+void GRStem::setOffsetStartPosition (float inOffset)
+{
+	offsetStartPosition = inOffset;
+}
+
+void GRStem::setFirstSegmentDrawingState (bool inDrawActivated)
+{
+	drawActivated = inDrawActivated;
 }

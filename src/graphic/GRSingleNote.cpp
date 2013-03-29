@@ -319,10 +319,11 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 	ARNote * arNote = getARNote();
 	const int pitch = arNote->getPitch();
 	const int octave = arNote->getOctave();
+	GDirection tmpdir =  mGrStaff->getDefaultThroatDirection( pitch, octave );
 
 	// the creation of the standard elements ....
 	// creates notehead, depends on length or templateLength
-	mNoteHead =  new GRStdNoteHead( this, mDurTemplate );
+	mNoteHead =  new GRStdNoteHead( this, mDurTemplate, tmpdir );
 	AddTail( mNoteHead );
 
 	// this is dependant on size!
@@ -333,7 +334,6 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 	{
 		if (mStemDir == dirAUTO)
 		{
-			GDirection tmpdir =  mGrStaff->getDefaultThroatDirection( pitch, octave );
 			GRStem * tmp =  new GRStem( this, mDurTemplate, tmpdir, tmplength, mNoteBreite); // was 60?);
 			mStemDir = tmp->mStemDir;
 			mStemLen = tmp->mStemLen;
@@ -353,6 +353,25 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 		{
 		}
 		AddTail(tmpflag);
+	}
+
+	ConstMusicalSymbolID noteHeadSymbolTmp = mNoteHead->getSymbol();
+	// - Adjust stem length if it's a cross notehead
+	if (noteHeadSymbolTmp == kFullXHeadSymbol)
+	{
+		setFirstSegmentDrawingState(false);
+
+		if (tmpdir == dirUP)
+			setStemOffsetStartPosition(4);
+		else if (tmpdir == dirDOWN)
+			setStemOffsetStartPosition(-4);
+	}
+	else if (noteHeadSymbolTmp == kFullTriangleHeadSymbol || noteHeadSymbolTmp == kHalfTriangleHeadSymbol)
+	{
+		if (tmpdir == dirUP)
+		    setStemOffsetStartPosition(47);
+		else if (tmpdir == dirDOWN)
+			setFirstSegmentDrawingState(false);
 	}
 
 	// - dots
@@ -602,6 +621,24 @@ void GRSingleNote::drawStemOnly(int flag)
 	if (hals)
 		hals->drawStemOnly(flag);
 		*/
+}
+
+//____________________________________________________________________________________
+void GRSingleNote::setStemOffsetStartPosition(float inOffset)
+{
+	GRStem *stem = getStem();
+
+	if (stem)
+		stem->setOffsetStartPosition(inOffset);
+}
+
+//____________________________________________________________________________________
+void GRSingleNote::setFirstSegmentDrawingState(bool inDrawingState)
+{
+	GRStem *stem = getStem();
+
+	if (stem)
+		stem->setFirstSegmentDrawingState(inDrawingState);
 }
 
 //____________________________________________________________________________________

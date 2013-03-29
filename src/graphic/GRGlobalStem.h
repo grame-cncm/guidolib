@@ -34,6 +34,7 @@ class GRStaff;
 class GRFlag;
 class GRPositionTag;
 class GREvent;
+class GRSingleNote;
 class GRSystem;
 class GRStdNoteHead;
 class GRStem;
@@ -117,6 +118,10 @@ class GRGlobalStem : // public GRStem,
 		float mHighestY;
 
 //		unsigned char * colref;
+
+		// - Lower note on the staff (to adjust stem length if it's a cross headnote)
+		GRSingleNote *lowerNote;
+		GRSingleNote *higherNote;
 };
 
 #endif
