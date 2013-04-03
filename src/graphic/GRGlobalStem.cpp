@@ -327,6 +327,7 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 				
 			}
 		}
+
 		if ( ( stemstate && stemstate->getStemState() == ARTStem::AUTO  )
 			|| !stemstate)
 		{			
@@ -404,6 +405,50 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 				else if (middle < curLSPACE * 2)
 				{
 					stemdir = dirDOWN;
+				}
+			}
+		}
+		else // - If stem's direction is fixed by the user, we have to determine lower and higher chord note all the same
+		{
+			GCoord middle = 0;
+			int count = 0;
+			el = associated->GetTail();
+
+			if (el)
+			{
+				middle = el->getPosition().y;
+				if (tagtype == GRTag::SYSTEMTAG && el->getGRStaff())
+				{
+					middle += (GCoord)el->getGRStaff()->getPosition().y;
+				}
+				mHighestY = middle;
+				mLowestY = middle;
+				++ count;
+
+				lowerNote = (GRSingleNote *)el;
+				higherNote = (GRSingleNote *)el;
+			}
+
+			GuidoPos pos = associated->GetHeadPosition();
+			while (pos && pos != associated->GetTailPosition())
+			{
+				GRNotationElement * el = associated->GetNext(pos);
+				if (el && !dynamic_cast<GREmpty *>(el))
+				{
+					GCoord ypos = el->getPosition().y;
+					if (el->getGRStaff() && tagtype == GRTag::SYSTEMTAG)
+						ypos += el->getGRStaff()->getPosition().y;
+
+					if (mLowestY > ypos)
+					{
+						mLowestY = ypos;
+						lowerNote = (GRSingleNote *)el;
+					}
+					if (mHighestY < ypos)
+					{
+						mHighestY = ypos;
+						higherNote = (GRSingleNote *)el;
+					}
 				}
 			}
 		}
@@ -600,15 +645,18 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 
 		// - Adjust stem length if it's a cross/triangle notehead
 
-		ConstMusicalSymbolID lowerNoteSymbol = lowerNote->getNoteHead()->getSymbol();
-
-		if (lowerNoteSymbol == kFullXHeadSymbol)
+		if (lowerNote)
 		{
-			lowerNote->setFirstSegmentDrawingState(false);
-			lowerNote->setStemOffsetStartPosition(-4);
-		}
-		else if (lowerNoteSymbol == kFullTriangleHeadSymbol || lowerNoteSymbol == kHalfTriangleHeadSymbol)
+			ConstMusicalSymbolID lowerNoteSymbol = lowerNote->getNoteHead()->getSymbol();
+
+			if (lowerNoteSymbol == kFullXHeadSymbol)
+			{
 				lowerNote->setFirstSegmentDrawingState(false);
+				lowerNote->setStemOffsetStartPosition(-4);
+			}
+			else if (lowerNoteSymbol == kFullTriangleHeadSymbol || lowerNoteSymbol == kHalfTriangleHeadSymbol)
+				lowerNote->setFirstSegmentDrawingState(false);
+		}
 	}
 	else if (stemdir == dirUP || stemdir == dirOFF)
 	{
@@ -658,15 +706,18 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 
 		// - Adjust stem length if it's a cross/triangle notehead
 
-		ConstMusicalSymbolID higherNoteSymbol = higherNote->getNoteHead()->getSymbol();
-
-		if (higherNoteSymbol == kFullXHeadSymbol)
+		if (higherNote)
 		{
-			higherNote->setFirstSegmentDrawingState(false);
-			higherNote->setStemOffsetStartPosition(4);
-		}
-		else if (higherNoteSymbol == kFullTriangleHeadSymbol || higherNoteSymbol == kHalfTriangleHeadSymbol)
+			ConstMusicalSymbolID higherNoteSymbol = higherNote->getNoteHead()->getSymbol();
+
+			if (higherNoteSymbol == kFullXHeadSymbol)
+			{
+				higherNote->setFirstSegmentDrawingState(false);
+				higherNote->setStemOffsetStartPosition(4);
+			}
+			else if (higherNoteSymbol == kFullTriangleHeadSymbol || higherNoteSymbol == kHalfTriangleHeadSymbol)
 				higherNote->setStemOffsetStartPosition(47);
+		}
 	}
 	else 
 	{
