@@ -41,15 +41,13 @@ class GRTrill : public GRPTagARNotationElement
 		virtual		~GRTrill();
 
 		virtual void OnDraw( VGDevice & hdc) const;
-		virtual void OnDraw( VGDevice & hdc, float pos);
+		virtual void OnDraw( VGDevice & hdc, float pos, int numVoice);
 		virtual void print() const {};
 		virtual void tellPosition( GObject * caller, const NVPoint & np );
 
 		virtual unsigned int getTextAlign() const;
 		virtual const NVPoint & getReferencePosition() const;
-	//	void		setLastPosX(float x);
-	//	float	 	getLastPosX();
-		
+
 		
 	protected:
 		void placeMord(GREvent * inParents, NVPoint& newPoint);
@@ -77,9 +75,6 @@ class GRTrill : public GRPTagARNotationElement
 		bool			cont;
 		bool			end;
 
-	//	float		lastPosX;
-		
-		
-		static float &	getLastPosX();
+		static float &	getLastPosX(int i);
 };
 #endif
