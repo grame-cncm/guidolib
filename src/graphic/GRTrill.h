@@ -29,8 +29,10 @@ class GREvent;
 class GRAccidental;
 
 
+
 /** \brief GRTrill tag
 */
+
 
 class GRTrill : public GRPTagARNotationElement
 {
@@ -45,6 +47,9 @@ class GRTrill : public GRPTagARNotationElement
 
 		virtual unsigned int getTextAlign() const;
 		virtual const NVPoint & getReferencePosition() const;
+	//	void		setLastPosX(float x);
+	//	float	 	getLastPosX();
+		
 		
 	protected:
 		void placeMord(GREvent * inParents, NVPoint& newPoint);
@@ -58,6 +63,7 @@ class GRTrill : public GRPTagARNotationElement
 		void setupInvertedMord();
 		void setupPrallMordent();
 		void setupPrallPrall();
+
 		
 		void setTrillSymbol( unsigned int inSymbolID);
 
@@ -67,7 +73,13 @@ class GRTrill : public GRPTagARNotationElement
 		GRAccidental *	fAccidental;		
 		ARTrill::TYPE	fType;
 		NVPoint			sRefPos;
+		bool			begin;
+		bool			cont;
+		bool			end;
 
-        
+	//	float		lastPosX;
+		
+		
+		static float &	getLastPosX();
 };
 #endif
