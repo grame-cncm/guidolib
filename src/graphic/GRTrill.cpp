@@ -165,7 +165,7 @@ GRTrill::~GRTrill()
 }
 
 
-void GRTrill::OnDraw( VGDevice & hdc , float pos)
+void GRTrill::OnDraw( VGDevice & hdc , float pos, int nVoice)
 {
 //	GRStaff * staff;
 //	fType = static_cast<ARTrill *>(mAbstractRepresentation)->getType();
@@ -176,23 +176,25 @@ void GRTrill::OnDraw( VGDevice & hdc , float pos)
 		NVRect r = getBoundingBox();
 		r += getPosition ();
 		float left;
+		float lastPos = GRTrill::getLastPosX(nVoice);
 		if(begin){
 			GRNotationElement::OnDraw( hdc );
-			fAccidental->OnDraw(hdc);
-			left = r.right;
+			if(fAccidental){
+				fAccidental->OnDraw(hdc);
+				NVRect rAcc = fAccidental->getBoundingBox();
+				rAcc += fAccidental->getPosition();
+				left = rAcc.right;
+			}
+			else
+				left = r.right;
 		}
 		if(cont){
-			if(GRTrill::getLastPosX()<pos)
-			//if(lastPosX<pos)
-				//left = lastPosX;
-				left = GRTrill::getLastPosX();
+			if(lastPos<pos)
+				left = lastPos;
 			else
 				left = r.left - LSPACE;
 		}
 		float right = pos;
-		//lastPosX = pos;
-		GRTrill::getLastPosX() = pos;
-
 		
 
 		hdc.Line (left, r.top, right, r.top);
@@ -200,6 +202,8 @@ void GRTrill::OnDraw( VGDevice & hdc , float pos)
 		hdc.Line (left, r.bottom, right, r.bottom);
 		hdc.Line (right, r.bottom, right, r.top);
 
+		
+		GRTrill::getLastPosX(nVoice) = right;
 		
 	}else{	
 		GRNotationElement::OnDraw( hdc );
@@ -420,17 +424,8 @@ unsigned int GRTrill::getTextAlign() const
 	return (VGDevice::kAlignLeft | VGDevice::kAlignBase);
 }
 
-float & GRTrill::getLastPosX(){
-	static float lastPosX;
-	return lastPosX;
+float & GRTrill::getLastPosX(int i){
+	//we'll consider that there won't be more than 10 voices
+	static float lastPosX[10];
+	return lastPosX[i];
 }
-
-/*
-void GRTrill::setLastPosX(float x){
-	lastPosX = x;
-}
-
-float GRTrill::getLastPosX(){
-	return lastPosX;
-}
-*/

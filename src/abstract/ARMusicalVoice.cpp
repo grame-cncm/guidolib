@@ -5675,6 +5675,7 @@ void ARMusicalVoice::doAutoTrill(){
 							}while(posObj && !nextNote);
 							if(nextNote){
 								ARTrill * newTrill = new ARTrill(ARTrill::TRILL);
+								nextNote->setVoiceNum(note->getVoiceNum());
 								nextNote->setOrnament(newTrill);
 								nextNote->getOrnament()->setBegin(false);
 								nextNote->getOrnament()->setContine(true);

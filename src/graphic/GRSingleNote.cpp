@@ -245,8 +245,9 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
 	}
 	if (mOrnament )
 	{
+		int numVoice = this->getAbstractRepresentation()->getVoiceNum();
 		float X = mGrStaff->getXEndPosition(getARNote()->getRelativeTimePosition(), getARNote()->getDuration());
-		mOrnament->OnDraw(hdc,X);
+		mOrnament->OnDraw(hdc,X,numVoice);
 	}
 
 	// - Restore
