@@ -77,6 +77,9 @@ using namespace std;
 #include "ARRest.h"
 #include "ARAlter.h"
 #include "ARSlur.h"
+#include "ARTrill.h"
+#include "GRTrill.h"
+#include "GRSingleNote.h"
 
 #include "ARRepeatBegin.h"
 #include "ARCoda.h"
@@ -1183,7 +1186,16 @@ void ARMusicalVoice::doAutoStuff1()
 	// introduce barlines ...
 	// this breaks notes if needed the new barlines are put right before
 	// newSystem or newPage-Tags (if present) otherwise right before the event.
+	
+	//cout<<"avant autoBarLines"<<endl;
+	//this->operator<< (cout);
+	
+	
 	timebench("doAutoBarlines", doAutoBarlines());
+
+	
+	//cout<<endl<<"après"<<endl;
+	//this->operator<< (cout);
 
 	// this needs to be done just after the global voice-check has been done ...
 	// now we can check, whether newSystem and newPage are followed by correct clef/key
@@ -1204,6 +1216,7 @@ void ARMusicalVoice::doAutoStuff1()
 */
 void ARMusicalVoice::doAutoStuff2()
 {
+	
 	// this needs to be done just after the global voice-check has been done ...
 	// now we can check whether newSystem and newPage are followed by correct clef/key information ...
 	timebench("doAutoCheckStaffStateTags", doAutoCheckStaffStateTags());
@@ -1222,6 +1235,8 @@ void ARMusicalVoice::doAutoStuff2()
 	// (and that as well, if a break is introduced later).
 	timebench("doAutoTies", doAutoTies());
 	timebench("doAutoEndBar", doAutoEndBar());
+	//this->operator<< (cout);
+	//timebench("doAutoTrill", doAutoTrill());
 }
 
 //____________________________________________________________________________________
@@ -5142,6 +5157,7 @@ void ARMusicalVoice::BeginChord()
 */
 ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE & chord_type, CHORD_ACCIDENTAL & chord_accidental)
 {
+	
 	const int nbNotes = 3;
 	int pitches[nbNotes]; // we only need 3 pitches for analysis
 	int firstNoteOctave = 0; //the first note's octave
@@ -5628,6 +5644,59 @@ void ARMusicalVoice::MarkVoice( int fromnum, int fromdenom, int lengthnum, int l
 		ntformat = new ARNoteFormat;
 		ntformat->setRelativeTimePosition(endtpos);
 		AddElementAfter(endpos,ntformat);
+	}
+}
+
+void ARMusicalVoice::doAutoTrill(){
+	//we first look for each note and check if it has a trill
+	ARMusicalVoiceState armvs;
+	GuidoPos posObj = GetHeadPosition(armvs);
+	while(posObj){
+		ARMusicalObject * obj = GetNext(posObj, armvs);
+		ARNote * note = dynamic_cast<ARNote *>(obj);
+		if(note){
+			ARTrill * trill = note->getOrnament();
+			if(trill && trill->getType()==0){
+				//if it has, we can check if the note is tied to another
+				//if not it will be "begin/end" (begin is default)
+				//if it is tied, it will just be "begin" (default)
+					//and we'll affect an ARtrill to the next note, that will be "continue", and not "begin" anymore
+				if(armvs.getCurPositionTags()){
+					GuidoPos pos = armvs.getCurPositionTags()->GetHeadPosition();
+					while(pos){
+						ARPositionTag * arpt = armvs.getCurPositionTags()->GetNext(pos);
+						ARTie * tie = dynamic_cast<ARTie *>(arpt);
+						if(tie){
+							GuidoPos posNote = posObj;
+							ARNote * nextNote;
+							do{
+								ARMusicalObject * nextObject = GetNext(posNote, armvs);
+								nextNote = dynamic_cast<ARNote *>(nextObject);
+							}while(posObj && !nextNote);
+							if(nextNote){
+								ARTrill * newTrill = new ARTrill(ARTrill::TRILL);
+								nextNote->setOrnament(newTrill);
+								nextNote->getOrnament()->setBegin(false);
+								nextNote->getOrnament()->setContine(true);
+								/*
+								GObject * gObj = note->getFirstGRRepresentation();
+								GRTrill * gTrill = dynamic_cast<GRTrill *>(gObj);
+								if(gTrill){
+									float x = gTrill->getLastPosX();
+									GObject * gNextObj = newTrill->getFirstGRRepresentation();
+									GRTrill * gNewTrill = dynamic_cast<GRTrill *>(gNextObj);
+									if(gNewTrill)
+										gNewTrill->setLastPosX(x);
+								}
+								*/
+							}
+						}else{trill->setEnd(true);}
+					}
+				}
+			}
+			
+		}else
+			cout<<endl<<"autre";
 	}
 }
 

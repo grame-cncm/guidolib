@@ -419,6 +419,7 @@ void GRVoiceManager::BeginManageVoice()
 
 	// just ignore this: this procedure is only
 	// called once. There are NO OPEN TAGS!
+	arVoice->doAutoTrill();
 }
 
 
