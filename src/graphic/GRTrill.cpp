@@ -33,6 +33,11 @@
 
 // #include "NEPointerList.h"
 #include "VGDevice.h"
+#include "VGFont.h"
+#include <iostream>
+#include <map>
+
+
 using namespace std;
 
 GRTrill::GRTrill(GRStaff * inStaff, ARTrill * artrem ) : GRPTagARNotationElement(artrem)
@@ -176,11 +181,11 @@ void GRTrill::OnDraw( VGDevice & hdc , float pos, int nVoice)
 		NVRect r = getBoundingBox();
 		r += getPosition ();
 		float left;
+		float right;
 		float lastPos = GRTrill::getLastPosX(nVoice);
 		if(begin){
 			GRNotationElement::OnDraw( hdc );
 			if(fAccidental){
-				fAccidental->OnDraw(hdc);
 				NVRect rAcc = fAccidental->getBoundingBox();
 				rAcc += fAccidental->getPosition();
 				left = rAcc.right;
@@ -194,16 +199,18 @@ void GRTrill::OnDraw( VGDevice & hdc , float pos, int nVoice)
 			else
 				left = r.left - LSPACE;
 		}
-		float right = pos;
-		
+		right = pos;
 
-		hdc.Line (left, r.top, right, r.top);
-		hdc.Line (left, r.bottom, left, r.top);
-		hdc.Line (left, r.bottom, right, r.bottom);
-		hdc.Line (right, r.bottom, right, r.top);
-
+		int w = 1.95*LSPACE;
+		float x = left;
+		while(x + w <=right){
+			//dessine la vague et implémente x de la largeur de la vague
+			hdc.DrawMusicSymbol(x, r.bottom, kMordSymbol);
+			x +=w;
+		}
 		
-		GRTrill::getLastPosX(nVoice) = right;
+		fAccidental->OnDraw(hdc);
+		GRTrill::getLastPosX(nVoice) = x;
 		
 	}else{	
 		GRNotationElement::OnDraw( hdc );
@@ -425,7 +432,6 @@ unsigned int GRTrill::getTextAlign() const
 }
 
 float & GRTrill::getLastPosX(int i){
-	//we'll consider that there won't be more than 10 voices
-	static float lastPosX[10];
+	static std::map<int, float> lastPosX;
 	return lastPosX[i];
 }

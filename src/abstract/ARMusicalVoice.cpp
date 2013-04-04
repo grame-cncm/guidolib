@@ -5679,25 +5679,13 @@ void ARMusicalVoice::doAutoTrill(){
 								nextNote->setOrnament(newTrill);
 								nextNote->getOrnament()->setBegin(false);
 								nextNote->getOrnament()->setContine(true);
-								/*
-								GObject * gObj = note->getFirstGRRepresentation();
-								GRTrill * gTrill = dynamic_cast<GRTrill *>(gObj);
-								if(gTrill){
-									float x = gTrill->getLastPosX();
-									GObject * gNextObj = newTrill->getFirstGRRepresentation();
-									GRTrill * gNewTrill = dynamic_cast<GRTrill *>(gNextObj);
-									if(gNewTrill)
-										gNewTrill->setLastPosX(x);
-								}
-								*/
 							}
 						}else{trill->setEnd(true);}
 					}
 				}
 			}
 			
-		}else
-			cout<<endl<<"autre";
+		}
 	}
 }
 
