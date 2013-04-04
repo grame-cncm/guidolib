@@ -373,6 +373,13 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 		else if (tmpdir == dirDOWN)
 			setFirstSegmentDrawingState(false);
 	}
+	else if (noteHeadSymbolTmp == kFullReversedTriangleHeadSymbol || noteHeadSymbolTmp == kHalfReversedTriangleHeadSymbol)
+	{
+		if (tmpdir == dirUP)
+		    setFirstSegmentDrawingState(false);
+		else if (tmpdir == dirDOWN)
+			setStemOffsetStartPosition(-47);
+	}
 
 	// - dots
 	createDots( mDurTemplate, mNoteBreite, NVPoint( 0, 0 ));
