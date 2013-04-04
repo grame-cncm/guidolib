@@ -1,0 +1,40 @@
+% noteFormat2.gmn
+
+% \noteFormat-tag is useful to change noteheads
+% type.
+
+% Usage : \noteFormat<"[type]">
+% with type = x
+%             diamond
+%             square
+%             round
+%             triangle
+{
+ [ \noteFormat<"">         a
+   \noteFormat<"x">        a
+   \noteFormat<"diamond">  a
+   \noteFormat<"square">   a
+   \noteFormat<"round">    a
+   \noteFormat<"triangle"> a
+ ],
+ [ \noteFormat<"">         a/2
+   \noteFormat<"x">        a
+   \noteFormat<"diamond">  a
+   \noteFormat<"square">   a
+   \noteFormat<"round">    a
+   \noteFormat<"triangle"> a
+ ],
+ [ {\noteFormat<"">        c,
+   \noteFormat<"x">        d,
+   \noteFormat<"diamond">  e,
+   \noteFormat<"square">   f,
+   \noteFormat<"round">    g,
+   \noteFormat<"triangle"> c2}
+   {\noteFormat<"">        c1/2,
+   \noteFormat<"x">        d,
+   \noteFormat<"diamond">  e,
+   \noteFormat<"square">   f,
+   \noteFormat<"round">    g,
+   \noteFormat<"triangle"> c2}
+ ]
+}
