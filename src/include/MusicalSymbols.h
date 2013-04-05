@@ -119,6 +119,7 @@ ConstMusicalSymbolID kStemDown1Symbol		= 104;	// vertical line, junction to the 
 ConstMusicalSymbolID kStemDown2Symbol		= 104;	// vertical line a little longer
 ConstMusicalSymbolID kStemUp1Symbol			= 120;	// vertical line, junction to the head
 ConstMusicalSymbolID kStemUp2Symbol			= 120;	// vertical line a little longer
+ConstMusicalSymbolID kTilde					= 126;	// tilde
 ConstMusicalSymbolID kBembelSymbol			= 164;
 ConstMusicalSymbolID kP4Symbol				= 165;	// Rests
 ConstMusicalSymbolID kShortFermataUpSymbol  = 168;

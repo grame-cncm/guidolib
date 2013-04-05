@@ -48,7 +48,7 @@ bool QLanguageCommandReader::read( QLanguageCommandVisitor * visitor , const QSt
 	if( !file.open( QFile::ReadOnly ) )
 	{
 		//Can't read file
-		qDebug("QLanguageCommandReader::read : Can't read file %s" , fileName.toAscii().data() );
+		qDebug("QLanguageCommandReader::read : Can't read file %s" , fileName.toUtf8().data() );
 		return false;
 	}
 
@@ -101,7 +101,7 @@ void QLanguageCommandReader::readNode( QDomElement * element)
 			}
 			else
 			{
-				qWarning( "QLanguageCommandReader::QLanguageCommandReader : Unknown tag : %s" , e.tagName().toAscii().data() );
+				qWarning( "QLanguageCommandReader::QLanguageCommandReader : Unknown tag : %s" , e.tagName().toUtf8().data() );
 			}
 		}
 		n = n.nextSibling();

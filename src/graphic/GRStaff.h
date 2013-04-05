@@ -185,6 +185,7 @@ class GRStaff : public GRCompositeNotationElement
 		GRSystem *      getGRSystem() const;
 		GRSystemSlice * getGRSystemSlice() const;
 		GRStaff *       getPreviousStaff() const;
+		GRStaff *		getNextStaff() const;
 		int             getStaffNumber() const;
 		GRGlue *        getEndGlue() const;
 		GRGlue *        getStartGlue() const;
@@ -195,6 +196,7 @@ class GRStaff : public GRCompositeNotationElement
 		const GRStaffState *    getStaffState();
 		GRStaffState &          getGRStaffState() { return mStaffState; }
 		const GRStaffState &    getGRStaffState() const { return mStaffState; }
+		float			getXEndPosition(TYPE_TIMEPOSITION pos, TYPE_DURATION dur);
 
 		virtual float       getNotePosition(TYPE_PITCH pit, TYPE_REGISTER oct) const;
 		virtual GDirection  getDefaultThroatDirection(TYPE_PITCH pit, TYPE_REGISTER oct) const;

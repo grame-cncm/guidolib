@@ -33,6 +33,12 @@
 
 // #include "NEPointerList.h"
 #include "VGDevice.h"
+#include "VGFont.h"
+#include <iostream>
+#include <map>
+
+
+using namespace std;
 
 GRTrill::GRTrill(GRStaff * inStaff, ARTrill * artrem ) : GRPTagARNotationElement(artrem)
 {
@@ -40,7 +46,7 @@ GRTrill::GRTrill(GRStaff * inStaff, ARTrill * artrem ) : GRPTagARNotationElement
 	GRSystemStartEndStruct * sse= new GRSystemStartEndStruct;
 	sse->grsystem = inStaff->getGRSystem(); 
 	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
-
+	
 	sse->p = (void *) getNewGRSaveStruct();
 	mStartEndList.AddTail(sse);
 
@@ -48,6 +54,7 @@ GRTrill::GRTrill(GRStaff * inStaff, ARTrill * artrem ) : GRPTagARNotationElement
 	bool ShowCautionaryAccidentals = artrem->getCautionary();
 	ARMusicalVoice::CHORD_TYPE chordType = artrem->getChordType();
 	ARMusicalVoice::CHORD_ACCIDENTAL chordAccidental = artrem->getChordAccidental();
+	begin = artrem->getStatus();
 	
 	// - Creation of the accidental symbol -	
 	switch (chordAccidental)
@@ -160,12 +167,60 @@ GRTrill::~GRTrill()
 	delete fAccidental;
 }
 
-void GRTrill::OnDraw( VGDevice & hdc ) const
+
+void GRTrill::OnDraw( VGDevice & hdc , float pos, int nVoice)
 {
 //	GRStaff * staff;
-
 //	fType = static_cast<ARTrill *>(mAbstractRepresentation)->getType();
 //	staff = getGRStaff();
+	
+	if(fType==0)//TRILL=0
+	{
+		NVRect r = getBoundingBox();
+		r += getPosition ();
+		float left;
+		float right;
+		float lastPos = GRTrill::getLastPosX(nVoice);
+		if(begin){
+			GRNotationElement::OnDraw( hdc );
+			if(fAccidental){
+				NVRect rAcc = fAccidental->getBoundingBox();
+				rAcc += fAccidental->getPosition();
+				left = rAcc.right;
+			}
+			else
+				left = r.right;
+		}
+		else{
+			if(lastPos<pos)
+				left = lastPos;
+			else
+				left = r.left - LSPACE;
+		}
+		right = pos;
+		float x = left;
+		int w = 1.35*LSPACE;
+		while(x + w <=right){
+			hdc.DrawMusicSymbol(x, r.bottom, 126);
+			x +=w;
+		}
+		
+		fAccidental->OnDraw(hdc);
+		GRTrill::getLastPosX(nVoice) = x;
+		
+	}else{	
+		GRNotationElement::OnDraw( hdc );
+		fAccidental->OnDraw(hdc);
+	}
+}
+
+
+void GRTrill::OnDraw( VGDevice & hdc) const
+{
+//	GRStaff * staff;
+//	fType = static_cast<ARTrill *>(mAbstractRepresentation)->getType();
+//	staff = getGRStaff();
+
 	GRNotationElement::OnDraw( hdc );
 	fAccidental->OnDraw(hdc);
 }
@@ -183,7 +238,7 @@ void GRTrill::setupTrill()
 	fAccidental->addToOffset(offsetAccidental);
 	
 	const float height = LSPACE * 1.17f;
-	sRefPos = NVPoint(-mLeftSpace, 0);
+	sRefPos = NVPoint(-mLeftSpace, 0);	
 	mBoundingBox.Set(-mLeftSpace, -height, mRightSpace + 0.24f * LSPACE, 0);
 }
 
@@ -370,4 +425,9 @@ GDirection GRTrill::chooseDirection (GREvent * inParent ) const
 unsigned int GRTrill::getTextAlign() const
 {
 	return (VGDevice::kAlignLeft | VGDevice::kAlignBase);
+}
+
+float & GRTrill::getLastPosX(int i){
+	static std::map<int, float> lastPosX;
+	return lastPosX[i];
 }

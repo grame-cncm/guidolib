@@ -64,7 +64,7 @@ public:
 	setflag endflag;
 
 	// these give the position in the associated lists ...
-	// so that the tag later nows, where it's sub-parts start and end.
+	// so that the tag later knows, where it's sub-parts start and end.
 	GuidoPos startpos;
 	GuidoPos endpos;
 

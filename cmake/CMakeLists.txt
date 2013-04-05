@@ -11,8 +11,8 @@ set (target GUIDOEngine)
 set (statictarget SGUIDOEngine)
 #######################################
 # versions management
-set (VERSION 1.50)
-set (STRVERS "v.1.50")
+set (VERSION 1.51)
+set (STRVERS "v.1.51")
 set (GUIDOFWKVERS C)
 set (SOVERS 1)
 
@@ -72,7 +72,7 @@ if(WIN32)
   set (WIN64 1)
   set (target GUIDOEngine64)
   set (statictarget SGUIDOEngine64)
- endif (${CMAKE_GENERATOR} MATCHES ".*Win64")
+ endif ()
 
 endif(WIN32)
 add_definitions(-DGUIDOExport)
@@ -104,9 +104,9 @@ if (MIDIEXPORT STREQUAL "yes")
 	elseif(UNIX)
 		set(LINK ${LINK} "-L/usr/local/lib -lmidisharelight")
 	endif (WIN32)
-else (MIDIEXPORT STREQUAL "yes")
+else()
 	message (STATUS "MIDI export will not be generated - Use -DMIDIEXPORT=yes to change (requires MidiShareLight).")
-endif (MIDIEXPORT STREQUAL "yes")
+endif()
 
 
 foreach(folder ${SRCFOLDERS})
