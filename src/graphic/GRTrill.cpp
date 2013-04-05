@@ -199,9 +199,9 @@ void GRTrill::OnDraw( VGDevice & hdc , float pos, int nVoice)
 		}
 		right = pos;
 		float x = left;
-		int w = 1.95*LSPACE;
+		int w = 1.35*LSPACE;
 		while(x + w <=right){
-			hdc.DrawMusicSymbol(x, r.bottom, kMordSymbol);
+			hdc.DrawMusicSymbol(x, r.bottom, 126);
 			x +=w;
 		}
 		
