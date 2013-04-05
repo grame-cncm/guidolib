@@ -59,13 +59,8 @@ class ARTrill : public ARMTParameter, public ARPositionTag
 				void	setCautionary(bool showAcc)			{ fShowCautionaryAccidentals = showAcc;}
 				float	getadx() const;
 				float	getady() const;
-				void setStatus(bool b, bool c, bool e);
-				void setBegin(bool b);
-				bool getBegin()		{return begin;}
-				void setContine(bool c);
-				bool getContinue()	{return cont;}
-				void setEnd(bool e);
-				bool getEnd()		{return end;}
+				bool	getStatus();
+				void	setContinue();
 
 	protected:
 
@@ -77,8 +72,6 @@ class ARTrill : public ARMTParameter, public ARPositionTag
 		float adx;
 		float ady;
 		bool			begin;
-		bool			cont;
-		bool			end;
 
 		static ListOfTPLs ltpls;
 };
