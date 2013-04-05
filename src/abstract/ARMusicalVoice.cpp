@@ -5658,29 +5658,29 @@ void ARMusicalVoice::doAutoTrill(){
 			ARTrill * trill = note->getOrnament();
 			if(trill && trill->getType()==0){
 				//if it has, we can check if the note is tied to another
-				//if not it will be "begin/end" (begin is default)
-				//if it is tied, it will just be "begin" (default)
-					//and we'll affect an ARtrill to the next note, that will be "continue", and not "begin" anymore
+				//if it is tied, we will let it as "begin" (default)
+				//and we'll affect an ARtrill to the next note, whose boolean "begin" will be set as false with setContinue()
 				if(armvs.getCurPositionTags()){
 					GuidoPos pos = armvs.getCurPositionTags()->GetHeadPosition();
 					while(pos){
 						ARPositionTag * arpt = armvs.getCurPositionTags()->GetNext(pos);
-						ARTie * tie = dynamic_cast<ARTie *>(arpt);
-						if(tie){
-							GuidoPos posNote = posObj;
-							ARNote * nextNote;
-							do{
-								ARMusicalObject * nextObject = GetNext(posNote, armvs);
-								nextNote = dynamic_cast<ARNote *>(nextObject);
-							}while(posObj && !nextNote);
-							if(nextNote){
-								ARTrill * newTrill = new ARTrill(ARTrill::TRILL);
-								nextNote->setVoiceNum(note->getVoiceNum());
-								nextNote->setOrnament(newTrill);
-								nextNote->getOrnament()->setBegin(false);
-								nextNote->getOrnament()->setContine(true);
+						if(arpt){
+							ARTie * tie = dynamic_cast<ARTie *>(arpt);
+							if(tie){
+								GuidoPos posNote = posObj;
+								ARNote * nextNote;
+								do{
+									ARMusicalObject * nextObject = GetNext(posNote, armvs);
+									nextNote = dynamic_cast<ARNote *>(nextObject);
+								}while(posObj && !nextNote);
+								if(nextNote){
+									ARTrill * newTrill = new ARTrill(ARTrill::TRILL);
+									nextNote->setVoiceNum(note->getVoiceNum());
+									nextNote->setOrnament(newTrill);
+									nextNote->getOrnament()->setContinue();
+								}
 							}
-						}else{trill->setEnd(true);}
+						}	
 					}
 				}
 			}

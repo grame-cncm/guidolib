@@ -2006,59 +2006,6 @@ void GRStaff::DrawNotationElements( VGDevice & hdc ) const
 	while (pos)
 	{
 		GRNotationElement * e = mCompElements.GetNext(pos);
-		//TYPE_TIMEPOSITION endpos = next->getRelativeTimePosition();
-		/*
-		GRSingleNote * n = dynamic_cast<GRSingleNote *>(e);
-		if(n){
-			float coorX=0;
-			GuidoPos posNext = pos;
-			GRNotationElement * nextElement;
-			GRChord * NextChord;
-			GRNote * NextNote;
-			GRRest * NextRest;
-			GRPTagARNotationElement * NextTag;
-			do{
-				nextElement = mCompElements.GetNext(posNext);
-				NextNote = dynamic_cast<GRNote *>(nextElement);
-				NextRest = dynamic_cast<GRRest *>(nextElement);
-				NextTag = dynamic_cast<GRPTagARNotationElement *>(nextElement);
-			}while(!NextNote && !NextRest  && posNext);
-			if(NextTag){
-					GRStaff * nextStaff = this->getNextStaff();
-					if(nextStaff){
-						GuidoPos posNextStaff = nextStaff->getElements()->GetHeadPosition();				
-						do{
-							nextElement = nextStaff->getElements()->GetNext(posNextStaff);
-							NextNote = dynamic_cast<GRNote *>(nextElement);
-						}while(!NextNote && posNextStaff);
-						if(NextNote){
-							do{
-								nextElement = nextStaff->getElements()->GetNext(posNextStaff);
-								NextNote = dynamic_cast<GRNote *>(nextElement);
-								NextRest = dynamic_cast<GRRest *>(nextElement);	
-							}while(!NextChord && !NextNote && !NextRest && posNextStaff);
-							if(posNextStaff){coorX = nextElement->getPosition().x -50;}	
-						}
-					}
-			}
-			if(posNext ){
-				coorX = nextElement->getPosition().x -50;
-			}else{
-				coorX = this->getGRSystemSlice()->getBoundingBox().right;
-				//TROUVER CONDITION POUR CONTINUER LE TRILL (TIED NOTES)
-				//TYPE_DURATION dur = n->getDuration();
-				//const GRNEList * articulations = n->getArticulations();
-				//n->getARNote()->getFirstGRRepresentation() != n->getARNote()->getLastGRRepresentation()
-				//n->getARNote()->getRelativeEndTimePosition() > this->getRelativeEndTimePosition()
-				//n->getTieEnd()
-				//n->getFillsBar()
-				//n->hasArticulation()
-				//n->isSplit()
-				//n->isGREventClass()
-				//n->getARNote()->getPitch()
-			}
-			n->OnDraw(hdc, coorX); 
-		}else{e->OnDraw(hdc);}*/
 		e->OnDraw(hdc);
 		
 #ifdef _DEBUG

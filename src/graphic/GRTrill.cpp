@@ -54,9 +54,7 @@ GRTrill::GRTrill(GRStaff * inStaff, ARTrill * artrem ) : GRPTagARNotationElement
 	bool ShowCautionaryAccidentals = artrem->getCautionary();
 	ARMusicalVoice::CHORD_TYPE chordType = artrem->getChordType();
 	ARMusicalVoice::CHORD_ACCIDENTAL chordAccidental = artrem->getChordAccidental();
-	begin = artrem->getBegin();
-	cont = artrem->getContinue();
-	end = artrem->getEnd();
+	begin = artrem->getStatus();
 	
 	// - Creation of the accidental symbol -	
 	switch (chordAccidental)
@@ -193,18 +191,16 @@ void GRTrill::OnDraw( VGDevice & hdc , float pos, int nVoice)
 			else
 				left = r.right;
 		}
-		if(cont){
+		else{
 			if(lastPos<pos)
 				left = lastPos;
 			else
 				left = r.left - LSPACE;
 		}
 		right = pos;
-
-		int w = 1.95*LSPACE;
 		float x = left;
+		int w = 1.95*LSPACE;
 		while(x + w <=right){
-			//dessine la vague et implémente x de la largeur de la vague
 			hdc.DrawMusicSymbol(x, r.bottom, kMordSymbol);
 			x +=w;
 		}
