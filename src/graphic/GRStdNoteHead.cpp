@@ -62,6 +62,8 @@ singleStemDirection(inStemDirection),
 			mSymbol = full ? kFullRoundHeadSymbol : kHalfRoundHeadSymbol;
 		else if( mStyle == "triangle" )
 			mSymbol = full ? kFullTriangleHeadSymbol : kHalfTriangleHeadSymbol;
+		else if( mStyle == "reversedTriangle" )
+			mSymbol = full ? kFullReversedTriangleHeadSymbol : kHalfReversedTriangleHeadSymbol;
 		else if( mStyle == "noHeads" ) {
 #ifndef WIN32	// transparency not supported on WIN32
 			if (!mColRef) mColRef = new unsigned char[4];
@@ -127,6 +129,8 @@ singleStemDirection(inStemDirection),
 
 	case kFullTriangleHeadSymbol:
 	case kHalfTriangleHeadSymbol:
+	case kFullReversedTriangleHeadSymbol:
+	case kHalfReversedTriangleHeadSymbol:
 		if (singleStemDirection == dirUP)
 			sRefPosNotehead.x = (GCoord)(- halfExtent) + 2;
 		else if (singleStemDirection == dirDOWN)
@@ -246,6 +250,8 @@ void GRStdNoteHead::adjustPositionForChords(ARTHead::HEADSTATE inHeadstate, GDir
 
 			case kFullTriangleHeadSymbol:
 			case kHalfTriangleHeadSymbol:
+			case kFullReversedTriangleHeadSymbol:
+			case kHalfReversedTriangleHeadSymbol:
 				sRefPosNotehead.x = (GCoord)(- halfExtent) + 7;
 				break;
 			}
@@ -265,6 +271,8 @@ void GRStdNoteHead::adjustPositionForChords(ARTHead::HEADSTATE inHeadstate, GDir
 
 			case kFullTriangleHeadSymbol:
 			case kHalfTriangleHeadSymbol:
+			case kFullReversedTriangleHeadSymbol:
+			case kHalfReversedTriangleHeadSymbol:
 				sRefPosNotehead.x = (GCoord)(- halfExtent) - 2;
 				break;
 			}
@@ -296,6 +304,8 @@ void GRStdNoteHead::adjustPositionForChords(ARTHead::HEADSTATE inHeadstate, GDir
 
 			case kFullTriangleHeadSymbol:
 			case kHalfTriangleHeadSymbol:
+			case kFullReversedTriangleHeadSymbol:
+			case kHalfReversedTriangleHeadSymbol:
 				sRefPosNotehead.x = (GCoord)(- halfExtent) - 7;
 				break;
 			}
@@ -315,6 +325,8 @@ void GRStdNoteHead::adjustPositionForChords(ARTHead::HEADSTATE inHeadstate, GDir
 
 			case kFullTriangleHeadSymbol:
 			case kHalfTriangleHeadSymbol:
+			case kFullReversedTriangleHeadSymbol:
+			case kHalfReversedTriangleHeadSymbol:
 				sRefPosNotehead.x = (GCoord)(- halfExtent) + 2;
 				break;
 			}

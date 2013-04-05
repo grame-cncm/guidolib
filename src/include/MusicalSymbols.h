@@ -168,16 +168,18 @@ ConstMusicalSymbolID kCau3QFlatSymbol		 = 212;	// cautionary 3/4 flat
 ConstMusicalSymbolID kCauDSharpSymbol		 = 213;	// cautionary double sharp
 
 // version 1.51
-ConstMusicalSymbolID kFullDiamondHeadSymbol	 = 81;
-ConstMusicalSymbolID kFullXHeadSymbol		 = 191;
-ConstMusicalSymbolID kHalfDiamondHeadSymbol	 = 214;
-ConstMusicalSymbolID kFullSquareHeadSymbol   = 215;
-ConstMusicalSymbolID kHalfSquareHeadSymbol 	 = 217;
-ConstMusicalSymbolID kFullRoundHeadSymbol    = 220;
-ConstMusicalSymbolID kHalfRoundHeadSymbol 	 = 232;
-ConstMusicalSymbolID kHalfXHeadSymbol		 = 233;
-ConstMusicalSymbolID kFullTriangleHeadSymbol = 234;
-ConstMusicalSymbolID kHalfTriangleHeadSymbol = 235;
+ConstMusicalSymbolID kFullDiamondHeadSymbol	         = 81;
+ConstMusicalSymbolID kFullXHeadSymbol				 = 191;
+ConstMusicalSymbolID kHalfDiamondHeadSymbol	         = 214;
+ConstMusicalSymbolID kFullSquareHeadSymbol           = 215;
+ConstMusicalSymbolID kHalfSquareHeadSymbol 	         = 217;
+ConstMusicalSymbolID kFullRoundHeadSymbol            = 220;
+ConstMusicalSymbolID kHalfRoundHeadSymbol 	         = 232;
+ConstMusicalSymbolID kHalfXHeadSymbol		         = 233;
+ConstMusicalSymbolID kFullTriangleHeadSymbol         = 234;
+ConstMusicalSymbolID kHalfTriangleHeadSymbol         = 235;
+ConstMusicalSymbolID kFullReversedTriangleHeadSymbol = 236;
+ConstMusicalSymbolID kHalfReversedTriangleHeadSymbol = 237;
 
 
 #endif
