@@ -656,6 +656,8 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 			}
 			else if (lowerNoteSymbol == kFullTriangleHeadSymbol || lowerNoteSymbol == kHalfTriangleHeadSymbol)
 				lowerNote->setFirstSegmentDrawingState(false);
+			else if (lowerNoteSymbol == kFullReversedTriangleHeadSymbol || lowerNoteSymbol == kHalfReversedTriangleHeadSymbol)
+				higherNote->setStemOffsetStartPosition(-47);
 		}
 	}
 	else if (stemdir == dirUP || stemdir == dirOFF)
@@ -717,6 +719,8 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 			}
 			else if (higherNoteSymbol == kFullTriangleHeadSymbol || higherNoteSymbol == kHalfTriangleHeadSymbol)
 				higherNote->setStemOffsetStartPosition(47);
+			else if (higherNoteSymbol == kFullReversedTriangleHeadSymbol || higherNoteSymbol == kHalfReversedTriangleHeadSymbol)
+				higherNote->setFirstSegmentDrawingState(false);
 		}
 	}
 	else 
