@@ -73,6 +73,9 @@ public:
 
 	virtual void setColRef( const unsigned char * inColor );
 
+	void setOffsetStartPosition (float inOffset);
+	void setFirstSegmentDrawingState (bool inDrawActivated);
+
 protected:
 
 	float 		mStemLen;
@@ -85,6 +88,9 @@ protected:
 	NVPoint 	mOffset;
 
 	static NVPoint sRefpos;
+
+	float offsetStartPosition;
+	bool  drawActivated;
 };
 
 #endif

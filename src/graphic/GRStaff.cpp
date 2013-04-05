@@ -2010,7 +2010,7 @@ void GRStaff::DrawNotationElements( VGDevice & hdc ) const
 		
 #ifdef _DEBUG
 		//draw element's bounding box
-		e->DrawBoundingBox( hdc, VGColor(0,0,200)); // debug
+		//e->DrawBoundingBox( hdc, VGColor(0,0,200)); // debug
 #endif
 	}
 	hdc.OffsetOrigin( -xOffset, -yOffset ); // restore origin
