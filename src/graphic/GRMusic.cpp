@@ -663,7 +663,7 @@ void GRMusic::getGuido() const
 	char * s = new char[ charCount +  2];
 
 	const char * guidoString = os.str().c_str();
-	if( guidoString )
+	if( guidoString && charCount)
 		strncpy( s, guidoString, charCount );
 
 	s[ charCount ] = '\n';
