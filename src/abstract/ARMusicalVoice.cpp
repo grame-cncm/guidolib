@@ -5646,9 +5646,10 @@ void ARMusicalVoice::MarkVoice( int fromnum, int fromdenom, int lengthnum, int l
 		AddElementAfter(endpos,ntformat);
 	}
 }
-
+/** \brief Manage the trills in order to give the information of the trill to tied notes
+*/
 void ARMusicalVoice::doAutoTrill(){
-	//we first look for each note and check if it has a trill
+	// We first look for each note and check if it has a trill
 	ARMusicalVoiceState armvs;
 	GuidoPos posObj = GetHeadPosition(armvs);
 	while(posObj){
@@ -5657,9 +5658,9 @@ void ARMusicalVoice::doAutoTrill(){
 		if(note){
 			ARTrill * trill = note->getOrnament();
 			if(trill && trill->getType()==0){
-				//if it has, we can check if the note is tied to another
-				//if it is tied, we will let it as "begin" (default)
-				//and we'll affect an ARtrill to the next note, whose boolean "begin" will be set as false with setContinue()
+				// if it has, we can check if the note is tied to another
+				// if it is tied, we will let its status as "begin" (default)
+				// and we'll affect an ARtrill to the next note, whose boolean "begin" will be set as false with setContinue()
 				if(armvs.getCurPositionTags()){
 					GuidoPos pos = armvs.getCurPositionTags()->GetHeadPosition();
 					while(pos){
@@ -5674,9 +5675,8 @@ void ARMusicalVoice::doAutoTrill(){
 									nextNote = dynamic_cast<ARNote *>(nextObject);
 								}while(posObj && !nextNote);
 								if(nextNote){
-									ARTrill * newTrill = new ARTrill(ARTrill::TRILL);
 									nextNote->setVoiceNum(note->getVoiceNum());
-									nextNote->setOrnament(newTrill);
+									nextNote->setOrnament(note->getOrnament());
 									nextNote->getOrnament()->setContinue();
 								}
 							}

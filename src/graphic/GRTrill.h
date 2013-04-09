@@ -72,6 +72,7 @@ class GRTrill : public GRPTagARNotationElement
 		ARTrill::TYPE	fType;
 		NVPoint			sRefPos;
 		bool			begin;
+		float			widthOfTilde;
 		
 		static float &	getLastPosX(int i);
 };

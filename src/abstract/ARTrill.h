@@ -59,7 +59,7 @@ class ARTrill : public ARMTParameter, public ARPositionTag
 				void	setCautionary(bool showAcc)			{ fShowCautionaryAccidentals = showAcc;}
 				float	getadx() const;
 				float	getady() const;
-				bool	getStatus();
+				bool	getStatus() const;
 				void	setContinue();
 
 	protected:

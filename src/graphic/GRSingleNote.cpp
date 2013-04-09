@@ -245,6 +245,7 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
 	}
 	if (mOrnament )
 	{
+		// to draw the trill line...
 		int numVoice = this->getAbstractRepresentation()->getVoiceNum();
 		float X = mGrStaff->getXEndPosition(getARNote()->getRelativeTimePosition(), getARNote()->getDuration());
 		mOrnament->OnDraw(hdc,X,numVoice);

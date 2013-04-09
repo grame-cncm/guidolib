@@ -45,7 +45,7 @@ ARTrill::ARTrill(int pid, const ARTrill* copy) : ARMTParameter(pid, copy), mDur(
 	fShowCautionaryAccidentals = copy->getCautionary();
 	adx = copy->getadx();
 	ady = copy->getady();
-	begin = true;
+	begin = copy->getStatus();
 	//TODO : copy TagParameterInt* mDur
 }
 
@@ -125,7 +125,7 @@ void ARTrill::PrintParameters(std::ostream & os) const
 	}*/
 }
 
-bool ARTrill::getStatus(){
+bool ARTrill::getStatus() const{
 	return begin;
 }
 
