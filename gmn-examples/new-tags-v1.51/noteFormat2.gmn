@@ -3,7 +3,7 @@
 % \noteFormat-tag is useful to change noteheads
 % type.
 
-% Usage : \noteFormat<"[type]">
+% Usage : \noteFormat<"type">
 % with type = x
 %             diamond
 %             square
