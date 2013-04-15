@@ -41,6 +41,7 @@
 <p><a href="#1.">1. Ornaments</a>
 <ul>
 <li><a href="#1.1">1.1 Noteheads</a></li>
+<li><a href="#1.2">1.2 Noteheads brackets</a></li>
 </ul>
 
 <hr />
@@ -63,6 +64,24 @@
 [ \noteFormat<"reversedTriangle"> a \noteFormat<"diamond"> c { \noteFormat<"x"> d, \noteFormat<"square"> g } ]
 </pre>
 <center> <IMG SRC="imgs/noteFormat.jpg"> </center>
+
+<a name="1.2"></a><h4>1.2 Noteheads brackets</h4>
+<p class="tag"><span class="tag">\noteFormat</span>&lt;<i>style</i>&gt; allows to display brackets around noteheads, where <i>style</i> can be one of the following:
+<ul>
+<li>"()" (round brackets)</li>
+<li>"[]" (square brackets)</li>
+<li>"&lt;&gt;" (angled brackets)</li>
+<li>"(S)" (with S being a type, as previously seen)</li>
+<li>"[S]"</li>
+<li>"&lt;S&gt;"</li>
+</ul>
+</p>
+
+<p class="notes">Examples:</p>
+<pre>
+[ \noteFormat&lt;"()"&gt; a \noteFormat<"[diamond]"> a \noteFormat<"&lt;x&gt;"> a ]
+</pre>
+<center> <IMG SRC="imgs/noteFormat2.jpg"> </center>
 
 <hr />
 
