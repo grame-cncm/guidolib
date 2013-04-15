@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title>GUIDO Additional Specifications</title>
+  <meta name="Author" content="Samuel Brochot">
+
+  <style type="text/css">
+    BODY { font-family : verdana,Arial,Helvetica; font-size : 10pt; font-weight : normal; color: black; background-color: white; margin: 20px 40px 20px 40px;}
+	h1	 { font-size : 31pt; font-weight : bold; padding: 0; line-height: 1.0; }
+	h2	 { font-size : 18pt; font-weight : bold; letter-spacing: 1pt;}
+	h3	 { font-size : 14pt; font-weight : bold; }
+	h4	 { font-size : 12pt; font-weight : bold; margin-left: 50px}
+
+	pre	 { font-family : Monaco, Courier; font-size : 8pt; margin-left: 50px; background-color: #E0D7CB; line-height: 2.0;}
+
+	A:link    { color:#4561CA; text-decoration: none; }
+	A:visited { color:#4561CA; text-decoration: none; }
+	A:hover   { color:#990000; text-decoration: none; }
+
+    p		 { margin-left: 50px; }
+    p.notes  { font-style: italic; margin-left: 0px; }
+    p.tag    { margin-left: 90px; text-indent: -40px}
+    ul		 { margin-left: 100px; }
+    
+	span.tag { font-weight : bold; }
+  </style>
+</head>
+<body>
+
+<br />
+<br />
+<h1>The GUIDO Music Notation Format</h1>
+<h2>Additionnal and new Specifications<br /></h2>
+<p><span class="tag">Supported by the <a href="http://sourceforge.net/projects/guidolib/">GUIDO Engine</a> version 1.5.1</span><br />
+<a href="http://www.grame.fr/Recherche/">Grame</a> - April 2013</p>
+<br />
+<br />
+<hr />
+<p><a href="#1.">1. Ornaments</a>
+<ul>
+<li><a href="#1.1">1.1 Noteheads</a></li>
+</ul>
+
+<hr />
+<a name="1."></a><h3>1. Ornaments</h3>
+
+<a name="1.1"></a><h4>1.1 Noteheads</h4>
+<p class="tag"><span class="tag">\noteFormat</span>&lt;<i>type</i>&gt; changes notehead graphical display, where <i>type</i> can be one of the following:
+<ul>
+<li>"x" (a cross notehead)</li>
+<li>"diamond" (a diamond notehead)</li>
+<li>"square" (a square notehead)</li>
+<li>"round" (a round notehead)</li>
+<li>"triangle" (a triangle notehead)</li>
+<li>"reversedTriangle" (an upside down triangle notehead)</li>
+</ul>
+</p>
+
+<p class="notes">Examples:</p>
+<pre>
+[ \noteFormat<"reversedTriangle"> a \noteFormat<"diamond"> c { \noteFormat<"x"> d, \noteFormat<"square"> g } ]
+</pre>
+<center> <IMG SRC="imgs/noteFormat.jpg"> </center>
+
+<hr />
+
+<H4>Acknowledgements</H4>
+<p>
+We wish to thank Samuel Brochot for his efficient contribution
+to the development of the GUIDO library release 1.38.
+</p>
+
+</body>
+</html>
