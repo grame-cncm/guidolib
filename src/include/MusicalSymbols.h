@@ -168,6 +168,8 @@ ConstMusicalSymbolID kCau3QFlatSymbol		 = 212;	// cautionary 3/4 flat
 ConstMusicalSymbolID kCauDSharpSymbol		 = 213;	// cautionary double sharp
 
 // version 1.51
+ConstMusicalSymbolID kRoundLeftBracket               = 40;
+ConstMusicalSymbolID kRoundRightBracket              = 41;
 ConstMusicalSymbolID kFullDiamondHeadSymbol	         = 81;
 ConstMusicalSymbolID kFullXHeadSymbol				 = 191;
 ConstMusicalSymbolID kHalfDiamondHeadSymbol	         = 214;
@@ -180,6 +182,10 @@ ConstMusicalSymbolID kFullTriangleHeadSymbol         = 234;
 ConstMusicalSymbolID kHalfTriangleHeadSymbol         = 235;
 ConstMusicalSymbolID kFullReversedTriangleHeadSymbol = 236;
 ConstMusicalSymbolID kHalfReversedTriangleHeadSymbol = 237;
+ConstMusicalSymbolID kSquareLeftBracket              = 238;
+ConstMusicalSymbolID kSquareRightBracket             = 239;
+ConstMusicalSymbolID kAngledLeftBracket              = 240;
+ConstMusicalSymbolID kAngledRightBracket             = 241;
 
 
 #endif

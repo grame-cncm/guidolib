@@ -63,6 +63,13 @@ public:
 
 protected:
 
+	enum BracketsType {
+		None,
+		Round,
+		Square,
+		Angled
+	};
+
 	virtual unsigned int durationToHeadSymbol( const TYPE_DURATION & inDur ) const;
 
 	NVPoint sRefPosNotehead;
@@ -73,6 +80,8 @@ protected:
 	GDirection globalStemDirection;
 
 	float halfExtent;
+
+	BracketsType mBracketsType;
 };
 
 #endif
