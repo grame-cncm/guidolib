@@ -16,12 +16,18 @@ CONFIG += console
 macx:CONFIG -= app_bundle
 DESTDIR = ../bin
 
-# SVG support
-# QT += svg
+QT += widgets printsupport
 
 # GuidoQt library link for each platform
-win32:LIBS += ../GuidoQt/GuidoQt.lib
-unix:LIBS += -L../GuidoQt -lGuidoQt
+win32 {
+	DebugBuild{
+		LIBS += ../GuidoQt/Debug/GuidoQt.lib
+	}
+	else {
+		LIBS += ../GuidoQt/Release/GuidoQt.lib
+	}
+}
+unix:LIBS += -L.. -lGuidoQt
 INCLUDEPATH += ../GuidoQt/include
 
 include( ../GUIDOEngineLink.pri )

@@ -47,7 +47,10 @@ typedef GuidoErrCode (* GuidoAR2MIDIFilePtr)(const struct NodeAR* ar, const char
 #include <QProgressBar>
 #include <QDir>
 #include <QTextDocument>
- 
+#include <QMessageBox>
+#include <QToolBar>
+
+
 #define APP_NAME QString("GuidoEditor")
 #define COMPANY_NAME QString("GRAME")
 
@@ -466,7 +469,7 @@ bool MainWindow::saveAs()
 {
 	QString filters = GMN_FILTER + ";;" + ALL_FILTER;
 	QString savePath = mRecentFiles.size() ? QFileInfo(mRecentFiles.last()).path() : QDir::home().path();
-	QString fileName = QFileDialog::getSaveFileName(this, "Save the Guido Score", savePath, tr(filters.toAscii().data()));
+	QString fileName = QFileDialog::getSaveFileName(this, "Save the Guido Score", savePath, tr(filters.toUtf8().data()));
     if (fileName.isEmpty())
         return false;
 	if (!fileName.toUpper().endsWith("."+QString(GMN_EXTENSION).toUpper()))
@@ -680,11 +683,11 @@ void MainWindow::about()
 	mistr.setNum(minor);
 	substr.setNum(sub);
 	QString version(mastr + '.' + mistr + '.' + substr);
-	QMessageBox::about(this, tr(QString("About " + APP_NAME).toAscii().data()),
+	QMessageBox::about(this, tr(QString("About " + APP_NAME).toUtf8().data()),
              tr(QString("<h2>" + APP_NAME + "</h2>" + 
                 "<p>Copyright &copy; 2008-2011 Grame. " 
                 "<p>A Guido score viewer and GMN editor, using Qt. "
-				"<p>Using the Guido Engine version " + version).toAscii().data()));
+				"<p>Using the Guido Engine version " + version).toUtf8().data()));
 }
 
 
@@ -1451,7 +1454,9 @@ void MainWindow::readSettings()
 
 	mFindWidget->readSettings(settings);
 	
-	QColor scoreColor = settings.value( SCORE_COLOR_SETTING , Qt::black ).value<QColor>();
+	QColor black = Qt::black;
+	QVariant color = black;
+	QColor scoreColor = settings.value( SCORE_COLOR_SETTING, color).value<QColor>();
 	
 	setLineWrap(lineWrapping);
     resize(winSize);
@@ -1568,7 +1573,7 @@ bool MainWindow::loadFile(const QString &fileName)
 		return false;
 	}
 
-	statusBar()->showMessage(tr(QString("Loading " + fileName + "...").toAscii().data()));
+	statusBar()->showMessage(tr(QString("Loading " + fileName + "...").toUtf8().data()));
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
 	reinitGuidoWidget();
@@ -1576,7 +1581,7 @@ bool MainWindow::loadFile(const QString &fileName)
 	bool loadOk = mGuidoWidget->setGMNFile( fileName );
 	if (!loadOk && QGuidoImporter::musicxmlSupported()) {	// try to import file as MusicXML file
 		stringstream out;
-		if ( QGuidoImporter::musicxmlFile2Guido(fileName.toAscii().constData(), true, out) )
+		if ( QGuidoImporter::musicxmlFile2Guido(fileName.toUtf8().constData(), true, out) )
 		{
 			loadOk = mGuidoWidget->setGMNCode( out.str().c_str() );
 		}
@@ -1601,11 +1606,11 @@ bool MainWindow::loadFile(const QString &fileName)
 		QString errorMessage = "Invalid GMN file : " + mGuidoWidget->getLastErrorMessage();
 //		mGuidoWidget->resize( QSize( 0,0 ) );
 		mTextEdit->highlightErrorLine( mGuidoWidget->getLastParseErrorLine() );
-		statusBar()->showMessage(tr(errorMessage.toAscii().data()), 2000);
+		statusBar()->showMessage(tr(errorMessage.toUtf8().data()), 2000);
 	}
 
 	QApplication::restoreOverrideCursor();
-	setCurrentFile(fileName.toAscii().data());
+	setCurrentFile(fileName.toUtf8().data());
 	
 	recentFileListUpdate(fileName);
 	

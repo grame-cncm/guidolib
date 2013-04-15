@@ -236,7 +236,7 @@ Guido2ImageErrorCodes Guido2Image::guidoPainterToImage( QGuidoPainter * guidoPai
 	}
 	else
 	{
-		WRITE_ERROR( errorMsgBuffer, guidoPainter->getLastErrorMessage().toAscii().data(), bufferSize );
+		WRITE_ERROR( errorMsgBuffer, guidoPainter->getLastErrorMessage().toUtf8().data(), bufferSize );
 		result = GUIDO_2_IMAGE_INVALID_GMN_CODE;
 	}
 	QGuidoPainter::destroyGuidoPainter( guidoPainter );

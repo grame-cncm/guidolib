@@ -188,7 +188,7 @@ bool QGuidoPainter::setGMNData( const QString& dataSource , GuidoParseFunction p
 	// containing all the notes, rests, staffs, lyrics ...
 	ARHandler arh;
 	GRHandler grh;
-	mLastErr = parseFunction( dataSource.toAscii().data(), &arh );		
+	mLastErr = parseFunction( dataSource.toUtf8().data(), &arh );		
 	if ( mLastErr != guidoNoErr )
 		return false;
 

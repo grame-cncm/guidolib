@@ -119,6 +119,8 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		virtual void	doAutoStuff1();
 		virtual void	doAutoStuff2();
 		
+		virtual void doAutoTrill();
+
 		// expensive Function!
 		GuidoPos		getPosAtTimePosition( const TYPE_TIMEPOSITION & timeposition);
 		// expensive Function!

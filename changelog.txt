@@ -1,6 +1,13 @@
 GUIDO Engine history
 
 ----------------------------------------------------------------
+2013-04-05  version 1.5.1
+- trill line added :  stops at the next element, can be drawn over several staves, systems and pages (if the notes are tied).
+- new notehead types added
+- bug corrected : stem length of high chords
+
+
+---------------------------------------------------------------
 2012-04-05  version 1.5.0
 - rendering bug corrected: empty output whith empty \title tag on windows
 - bug with incorrect clef displayed in a very specific context (auto clef, 

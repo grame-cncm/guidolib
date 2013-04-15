@@ -29,6 +29,13 @@
 #include <QTimer>
 #include <QDateTime>
 #include <QSet>
+#include <QPrinter>
+#include <QMenu>
+#include <QMenuBar>
+#include <QScrollBar>
+#include <QStatusBar>
+#include <QFileDialog>
+
 
 #include "GuidoHighlighter.h"
 #include "QGuidoWidget.h"

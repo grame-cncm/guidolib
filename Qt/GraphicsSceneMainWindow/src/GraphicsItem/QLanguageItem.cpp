@@ -473,8 +473,8 @@ QMimeData *	QLanguageItem::buildMimeData()
 	data->setData( mMimeId , QByteArray::fromRawData( reinterpret_cast<char*>(this) , 4 ) );
 
 	data->setText( code() );
-	data->setData( MIME_FILE_NAME ,	file().toAscii().data()  );
-	data->setData( MIME_CODE ,		code().toAscii().data() );
+	data->setData( MIME_FILE_NAME ,	file().toUtf8().data()  );
+	data->setData( MIME_CODE ,		code().toUtf8().data() );
 
 	if ( !mIsStorageModeOn )
 	{

@@ -34,6 +34,7 @@ ARTrill::ARTrill(TYPE typ) : ARMTParameter(), mDur(NULL), mTrillType(typ)
 {
 	rangesetting = ONLY;
 	fShowCautionaryAccidentals = false;
+	begin = true;
 }
 
 ARTrill::ARTrill(int pid, const ARTrill* copy) : ARMTParameter(pid, copy), mDur(NULL)
@@ -44,6 +45,7 @@ ARTrill::ARTrill(int pid, const ARTrill* copy) : ARMTParameter(pid, copy), mDur(
 	fShowCautionaryAccidentals = copy->getCautionary();
 	adx = copy->getadx();
 	ady = copy->getady();
+	begin = true;
 	//TODO : copy TagParameterInt* mDur
 }
 
@@ -123,4 +125,10 @@ void ARTrill::PrintParameters(std::ostream & os) const
 	}*/
 }
 
+bool ARTrill::getStatus(){
+	return begin;
+}
 
+void ARTrill::setContinue(){
+	begin = false;
+}
