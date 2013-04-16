@@ -1753,7 +1753,9 @@ void MainWindow::changeFontSize( float newFontPointSize )
 	bool modified = mTextEdit->document()->isModified();
 
 //	QFont newFont = mTextEdit->document()->defaultFont();
-	QFont newFont ( "Courier new", newFontPointSize);
+//	QFont newFont ( "Courier new", newFontPointSize);  // Courier new seems to be buggy - incorrect rendering
+//	QFont newFont ( "Courier", newFontPointSize);
+	QFont newFont ( "Monaco", newFontPointSize);
 	newFont.setPointSize( newFontPointSize );
 	mTextEdit->document()->setDefaultFont( newFont  );
 
