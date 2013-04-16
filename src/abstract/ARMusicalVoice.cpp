@@ -78,6 +78,7 @@ using namespace std;
 #include "ARAlter.h"
 #include "ARSlur.h"
 #include "ARTrill.h"
+#include "ARGlissando.h"
 #include "GRTrill.h"
 #include "GRSingleNote.h"
 
@@ -87,7 +88,7 @@ using namespace std;
 
 #include "benchtools.h"
 
-
+#define GLISSANDOEND "\\glissandoEnd"
 #define TIEEND "\\tieEnd"
 #define DISPDUREND "\\dispDurEnd"
 #define SHARESTEMEND "\\shareStemEnd"
@@ -1234,6 +1235,7 @@ void ARMusicalVoice::doAutoStuff2()
 	// this needs to be done, so that all Ties can be broken after the respective Event
 	// (and that as well, if a break is introduced later).
 	timebench("doAutoTies", doAutoTies());
+	timebench("doAutoGlissando", doAutoGlissando());
 	timebench("doAutoEndBar", doAutoEndBar());
 	//this->operator<< (cout);
 	//timebench("doAutoTrill", doAutoTrill());
@@ -5022,6 +5024,329 @@ void ARMusicalVoice::doAutoTies()
 	delete endState;
 	endState = new ARMusicalVoiceState(vst);
 }
+
+//------------------------------------------------------------------------------------
+//doAutoGlissando...
+
+
+struct ARGlissandoStruct
+{
+// public:
+	ARGlissando * glissando;
+	ARGlissando * originGlissando;
+	ARChordTag * curchordtag;
+	ARNote * startnote;
+	ARGlissandoStruct()
+	{
+		glissando = NULL;
+		curchordtag = NULL;
+		startnote = NULL;
+		originGlissando = NULL;
+	}
+};
+
+
+void ARMusicalVoice::doAutoGlissando()
+{
+	KF_IPointerList<ARGlissandoStruct> glissStructlist(1);
+
+	KF_IPointerList<ARGlissando> deletelist(0);
+
+	KF_IPointerList<ARGlissandoStruct> autoglissStructlist(1);
+
+	_readmode oldreadmode = readmode;
+
+	readmode = EVENTMODE;
+
+	ARMusicalVoiceState vst;
+	GetHeadPosition(vst);
+
+	ARChordTag * curchordtag = vst.curchordtag;
+	ARChordTag * prevchordtag = NULL;
+
+	while (vst.vpos)
+	{
+		ARMusicalObject * o = GetAt(vst.vpos);
+		ARMusicalEvent * ev = ARMusicalEvent::cast(o);
+
+		if (vst.addedpositiontags)
+		{
+			GuidoPos tmppos = vst.addedpositiontags->GetHeadPosition();
+			while (tmppos)
+			{
+				ARGlissando * glissando = dynamic_cast<ARGlissando *>(vst.addedpositiontags->GetNext(tmppos));
+				if (glissando)
+				{
+					ARGlissandoStruct * glissStruct = new ARGlissandoStruct();
+					glissStruct->glissando = glissando;
+					glissStruct->curchordtag = vst.curchordtag;
+					glissStruct->startnote = dynamic_cast<ARNote *>(o);
+					glissStructlist.AddTail(glissStruct);
+				}
+			}
+		}
+
+		if (ev)
+		{
+			GuidoPos posGlissStructlist = glissStructlist.GetHeadPosition();
+			while (posGlissStructlist)
+			{
+				ARGlissandoStruct *glissStruct = glissStructlist.GetNext(posGlissStructlist);
+
+				int ischordgliss = 0;
+				if (glissStruct->curchordtag)
+				{
+					ARNote *nt = glissStruct->startnote;
+					if (nt && nt->getName() == ARNoteName::empty)
+					{
+						ischordgliss = 1;
+					}
+				}
+
+				int mustcreate = 0;
+
+				if (!ischordgliss &&
+					glissStruct->glissando->getPosition() == vst.vpos)
+				{
+						mustcreate = 1;
+				}
+
+				else if (vst.curchordtag)
+				{
+					if (ischordgliss && glissStruct->glissando->getPosition() != vst.vpos)
+					{
+						ARNote * nt = dynamic_cast<ARNote *>(o);
+						if (nt && !(nt->getName() == ARNoteName::empty))
+							mustcreate = 1;
+					}
+					else if (glissStruct->curchordtag != vst.curchordtag)
+					{
+						ARNote * nt = dynamic_cast<ARNote *>(o);
+						if (nt && glissStruct->startnote/* && !nt->CompareNameOctavePitch(*glissStruct->startnote)*/)
+						{
+							mustcreate = 1;
+						}
+					}
+				}
+				else
+				{
+					// we are not in a chord...
+					ARNote * nt = dynamic_cast<ARNote *>(o);
+					if (nt && glissStruct->startnote /*&& !nt->CompareNameOctavePitch(*glissStruct->startnote)*/)
+					{
+						mustcreate = 1;
+					}
+
+				}
+				if (mustcreate)
+				{
+					ARGlissando * myglissando = new ARGlissando();
+					myglissando->setID(gCurArMusic->mMaxTagId++);
+					myglissando->setIsAuto(true);
+					myglissando->setStartPosition(vst.vpos);
+					// now we copy the parameters 
+					TagParameterList * tpl = glissStruct->glissando->getTagParameterList();
+
+					myglissando->setTagParameterList(*tpl);
+					delete tpl;
+					mPosTagList->AddElementAt(vst.ptagpos,myglissando);
+
+					ARGlissandoStruct * agstruct = new ARGlissandoStruct;
+					agstruct->glissando = myglissando;
+					
+					agstruct->originGlissando = glissStruct->glissando;
+					agstruct->curchordtag = vst.curchordtag;
+					agstruct->startnote = dynamic_cast<ARNote *>(o);
+
+					autoglissStructlist.AddTail(agstruct);
+				}
+
+			// check the first element...
+			}
+
+			GuidoPos mypos = autoglissStructlist.GetHeadPosition();
+			while (mypos)
+			{
+				ARGlissandoStruct * glissStruct = autoglissStructlist.GetAt(mypos);
+
+				if (glissStruct->glissando->getPosition() == vst.vpos)
+				{
+					autoglissStructlist.GetNext(mypos);
+					continue;
+				}
+
+				int mustclose = 0;
+				ARNote * nt = dynamic_cast<ARNote *>(o);
+				if (vst.curchordtag)
+				{
+					if (glissStruct->curchordtag != vst.curchordtag)
+					{
+						if (nt && glissStruct->startnote && !nt->CompareNameOctavePitch(*glissStruct->startnote))
+						{
+							mustclose = 1;
+						}
+						else
+						{
+							if (glissStruct->curchordtag != prevchordtag)
+							{
+								mPosTagList->RemoveElement(glissStruct->glissando);
+
+								autoglissStructlist.RemoveElementAt(mypos);
+								mypos = autoglissStructlist.GetHeadPosition();
+							}
+						}
+					}
+				}
+				else
+				{
+					
+					if (nt && glissStruct->startnote && !nt->CompareNameOctavePitch(*glissStruct->startnote))
+					{
+						mustclose = 1;
+					}
+					else
+					{
+						// then, this is considered an error...
+						mPosTagList->RemoveElement(glissStruct->glissando);
+
+						autoglissStructlist.RemoveElementAt(mypos);
+						mypos = autoglissStructlist.GetHeadPosition();
+					}
+				}
+
+				if (mustclose)
+				{
+					ARDummyRangeEnd * arde = new ARDummyRangeEnd(GLISSANDOEND);
+					arde->setID(glissStruct->glissando->getID());
+					arde->setPosition(vst.vpos);
+					glissStruct->glissando->setCorrespondence(arde);
+					arde->setCorrespondence(glissStruct->glissando);
+
+					if (vst.ptagpos)
+						mPosTagList->AddElementAt(vst.ptagpos,arde);
+					else
+						mPosTagList->AddTail(arde);
+
+
+					autoglissStructlist.RemoveElementAt(mypos);
+					mypos = autoglissStructlist.GetHeadPosition();
+				}
+				else
+				{
+					// go to the next event...
+					if (mypos)
+						autoglissStructlist.GetNext(mypos);
+				}
+			}
+		}
+
+		// go to the next event...
+		GetNext(vst.vpos,vst);
+
+		ARMusicalObject * nexto = NULL;
+		ARMusicalEvent * nextev  = NULL;
+
+		if (vst.vpos)
+		{
+			nexto = GetAt(vst.vpos);
+			nextev = ARMusicalEvent::cast(nexto);
+		}
+
+		if (nextev && curchordtag != vst.curchordtag)
+		{
+			prevchordtag = curchordtag;
+			curchordtag = vst.curchordtag;
+
+		}
+		else if (nextev && vst.curchordtag == NULL)
+		{
+			prevchordtag = curchordtag;
+		}
+		
+		if (vst.removedpositiontags)
+		{
+			GuidoPos tmppos = vst.removedpositiontags->GetHeadPosition();
+			while (tmppos)
+			{
+				ARGlissando * glissando = dynamic_cast<ARGlissando *>
+					(vst.removedpositiontags->GetNext(tmppos));
+				if (glissando)
+				{
+					GuidoPos posGlissStructlist = glissStructlist.GetHeadPosition();
+					while (posGlissStructlist)
+					{
+						ARGlissandoStruct *glissStruct = glissStructlist.GetAt(
+							posGlissStructlist);
+						if (glissStruct->glissando == glissando)
+							break;
+						glissStructlist.GetNext(posGlissStructlist);
+					}
+
+					if (posGlissStructlist)
+					{
+						ARGlissandoStruct *agstruct = NULL;
+						do
+						{
+							agstruct = NULL;
+							GuidoPos mypos = autoglissStructlist.GetHeadPosition();
+
+							while (mypos)
+							{
+								agstruct = autoglissStructlist.GetAt(mypos);
+								if (agstruct->originGlissando == glissando)
+								{
+									break;
+								}
+								autoglissStructlist.GetNext(mypos);
+							}
+							if (mypos)
+							{
+								assert(agstruct);
+								mPosTagList->RemoveElement(agstruct->glissando);
+								autoglissStructlist.RemoveElementAt(mypos);
+							}
+							else
+								agstruct = NULL;
+						}
+						while (agstruct);
+
+						glissStructlist.RemoveElementAt(posGlissStructlist);
+					}
+					deletelist.AddTail(glissando);
+
+				}
+			}
+		}
+
+	} // while (vst.vpos) -> the whole voice.
+
+	if (deletelist.GetCount() > 0)
+	{
+		GuidoPos pos = deletelist.GetHeadPosition();
+		while (pos)
+		{
+			ARGlissando * glissando = deletelist.GetNext(pos);
+
+			if (glissando->getCorrespondence())
+			{
+				// the list owns this one...
+				mPosTagList->RemoveElement(glissando->getCorrespondence());
+			}
+
+			// the mPosTagList owns the ties!
+			mPosTagList->RemoveElement(glissando);
+
+		}
+	}
+
+	readmode = oldreadmode;
+
+	// now we have the EndState ...
+	delete endState;
+	endState = new ARMusicalVoiceState(vst);
+}
+
+
 
 //____________________________________________________________________________________
 /** \brief (not implemented) Traverses the voice and breaks Fermata-Tags

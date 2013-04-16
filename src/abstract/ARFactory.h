@@ -49,6 +49,7 @@ class ARCue;
 class ARTrill;
 class ARStaff;
 class ARTHead;
+class ARGlissando;
 
 
 // typedef KF_IPointerList<ARMusicalObject> ARMusicalObjectList;

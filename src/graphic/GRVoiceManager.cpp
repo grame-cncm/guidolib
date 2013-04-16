@@ -110,6 +110,8 @@
 #include "ARFine.h"
 #include "ARSegno.h"
 #include "ARVolta.h"
+#include "ARGlissando.h"
+
 
 #include "GRStaffManager.h"
 // #include "GRNoteFactory.h"
@@ -170,6 +172,7 @@
 #include "GRJump.h"
 #include "GRSegno.h"
 #include "GRVolta.h"
+#include "GRGlissando.h"
 
 // #include "NEPointerList.h"
 
@@ -1744,6 +1747,13 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 		
 		mCurGrStaff->AddTag(tmp);
 		gCurMusic->addVoiceElement(arVoice,tmp);
+	}
+	else if (tinf == typeid(ARGlissando)) 
+	{
+		GRGlissando * grglissando = new GRGlissando(mCurGrStaff, static_cast<ARGlissando *>(apt));
+		addGRTag(grglissando,0);
+		mCurGrStaff->AddTag(grglissando);
+		gCurMusic->addVoiceElement(arVoice,grglissando);
 	}
 	else
 		GuidoTrace("Warning, PositionTag not handled");

@@ -114,6 +114,7 @@
 #include "ARTHead.h"
 #include "ARChordTag.h"
 #include "ARUserChordTag.h"
+#include "ARGlissando.h"
 
 #include "TagParameterString.h"
 #include "TagParameterInt.h"
@@ -923,6 +924,32 @@ void ARFactory::createTag( const char * name, int no )
 					mCurrentGrace = tmp;
 				}
 			}
+			else if (!strcmp(name,"glissando"))
+			{
+				ARGlissando * tmp = new ARGlissando();
+				mTags.AddHead(tmp); // push()
+				mCurrentVoice->AddPositionTag(tmp);
+				
+			}
+			
+			else if (!strcmp(name,"glissandoBegin"))
+			{
+				// this is the id-number!
+				ARGlissando * tmp = new ARGlissando;
+				tmp->setAssociation(ARMusicalTag::ER);
+				tmp->setAllowRange(0);
+				tmp->setID(no);
+				mTags.AddHead(tmp);
+				mCurrentVoice->AddPositionTag(tmp);				
+			}
+			else if (!strcmp(name,"glissandoEnd"))
+			{
+				ARDummyRangeEnd * tmp = new ARDummyRangeEnd("\\glissandoEnd");
+				tmp->setID(no);
+				mCurrentVoice->setPositionTagEndPos(no, tmp);
+				mTags.AddHead(tmp);				
+			} 
+			
 			break;
 
 		case 'h':
