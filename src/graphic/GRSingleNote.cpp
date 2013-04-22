@@ -336,13 +336,12 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 	// the Stem-Straight-Flag is not used everywhere
 
 	GRStem * tmp = NULL;
-	GDirection stemTmpDirection;
+	GDirection stemTmpDirection = tmpdir;
 
 	if (mGlobalStem == 0)
 	{
 		if (mStemDir == dirAUTO)
 		{
-			stemTmpDirection = tmpdir;
 			tmp =  new GRStem( this, mDurTemplate, stemTmpDirection, tmplength, mNoteBreite); // was 60?);
 			mStemDir = tmp->mStemDir;
 		}
