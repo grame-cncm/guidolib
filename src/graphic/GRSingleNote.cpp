@@ -334,23 +334,28 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 	mNoteBreite = ((mNoteHead->getLeftSpace() + mNoteHead->getRightSpace()) / (float) mSize);
 	float tmplength = mStemLen;
 	// the Stem-Straight-Flag is not used everywhere
+
+	GRStem * tmp = NULL;
+	GDirection stemTmpDirection;
+
 	if (mGlobalStem == 0)
 	{
 		if (mStemDir == dirAUTO)
 		{
-			GRStem * tmp =  new GRStem( this, mDurTemplate, tmpdir, tmplength, mNoteBreite); // was 60?);
+			stemTmpDirection = tmpdir;
+			tmp =  new GRStem( this, mDurTemplate, stemTmpDirection, tmplength, mNoteBreite); // was 60?);
 			mStemDir = tmp->mStemDir;
-			mStemLen = tmp->mStemLen;
-			AddTail(tmp);
 		}
 		else
 		{
-			GRStem * tmp = new GRStem( this, mDurTemplate, mStemDir, tmplength, mNoteBreite ) ; // was 60? );
-			mStemLen = tmp->mStemLen;
+			stemTmpDirection = mStemDir;
+			tmp = new GRStem( this, mDurTemplate, stemTmpDirection, tmplength, mNoteBreite ) ; // was 60? );
 			mStemDirSet = true;
-			AddTail(tmp);
-
 		}
+
+		mStemLen = tmp->mStemLen;
+		AddTail(tmp);
+
 		// here we have to add the flags ...
 		GRFlag * tmpflag = new GRFlag( this, mDurTemplate, mStemDir, mStemLen, mNoteBreite ); // was 60?);
 		if (mColRef)
@@ -358,30 +363,30 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 		}
 		AddTail(tmpflag);
 	}
-
+	 
 	ConstMusicalSymbolID noteHeadSymbolTmp = mNoteHead->getSymbol();
 	// - Adjust stem length if it's a cross notehead
 	if (noteHeadSymbolTmp == kFullXHeadSymbol)
 	{
 		setFirstSegmentDrawingState(false);
 
-		if (tmpdir == dirUP)
+		if (stemTmpDirection == dirUP)
 			setStemOffsetStartPosition(4);
-		else if (tmpdir == dirDOWN)
+		else if (stemTmpDirection == dirDOWN)
 			setStemOffsetStartPosition(-4);
 	}
 	else if (noteHeadSymbolTmp == kFullTriangleHeadSymbol || noteHeadSymbolTmp == kHalfTriangleHeadSymbol)
 	{
-		if (tmpdir == dirUP)
+		if (stemTmpDirection == dirUP)
 		    setStemOffsetStartPosition(47);
-		else if (tmpdir == dirDOWN)
+		else if (stemTmpDirection == dirDOWN)
 			setFirstSegmentDrawingState(false);
 	}
 	else if (noteHeadSymbolTmp == kFullReversedTriangleHeadSymbol || noteHeadSymbolTmp == kHalfReversedTriangleHeadSymbol)
 	{
-		if (tmpdir == dirUP)
+		if (stemTmpDirection == dirUP)
 		    setFirstSegmentDrawingState(false);
-		else if (tmpdir == dirDOWN)
+		else if (stemTmpDirection == dirDOWN)
 			setStemOffsetStartPosition(-47);
 	}
 
@@ -662,6 +667,42 @@ void GRSingleNote::setStemDirection(GDirection dir)
 	{
 		stem->setStemDir(mStemDir);
 		updateBoundingBox();
+	}
+
+	GRStdNoteHead *notehead = this->getNoteHead();
+
+	if (notehead)
+	{
+		notehead->setGlobalStemDirection(mStemDir);
+
+		ConstMusicalSymbolID noteHeadSymbolTmp = notehead->getSymbol();
+		// - Adjust stem length if it's a cross notehead
+		if (noteHeadSymbolTmp == kFullXHeadSymbol)
+		{
+			setFirstSegmentDrawingState(false);
+
+			if (mStemDir == dirUP)
+				setStemOffsetStartPosition(4);
+			else if (mStemDir == dirDOWN)
+				setStemOffsetStartPosition(-4);
+		}
+		else if (noteHeadSymbolTmp == kFullTriangleHeadSymbol || noteHeadSymbolTmp == kHalfTriangleHeadSymbol)
+		{
+			if (mStemDir == dirUP)
+				setStemOffsetStartPosition(47);
+			else if (mStemDir == dirDOWN)
+				setFirstSegmentDrawingState(false);
+		}
+		else if (noteHeadSymbolTmp == kFullReversedTriangleHeadSymbol || noteHeadSymbolTmp == kHalfReversedTriangleHeadSymbol)
+		{
+			if (mStemDir == dirUP)
+			{
+				setFirstSegmentDrawingState(false);
+				setStemOffsetStartPosition(0);
+			}
+			else if (mStemDir == dirDOWN)
+				setStemOffsetStartPosition(-47);
+		}
 	}
 }
 

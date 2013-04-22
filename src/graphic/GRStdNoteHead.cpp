@@ -125,7 +125,7 @@ singleStemDirection(inStemDirection),
 			mBracketsType = Round;
 			mSymbol = full ? kFullReversedTriangleHeadSymbol : kHalfReversedTriangleHeadSymbol;
 		}
-		
+
 		// - Square brackets
 		else if( mStyle == "[diamond]" )
 		{
@@ -157,7 +157,7 @@ singleStemDirection(inStemDirection),
 			mBracketsType = Square;
 			mSymbol = full ? kFullReversedTriangleHeadSymbol : kHalfReversedTriangleHeadSymbol;
 		}
-		
+
 		// - Angled brackets
 		else if( mStyle == "<diamond>" )
 		{
@@ -314,6 +314,7 @@ void GRStdNoteHead::OnDraw( VGDevice & hdc ) const
 {
 	// the note head -> the note
 	if (mSymbol == kNoneSymbol) return;
+
 	GRNoteHead::OnDraw(hdc);
 
 	if (mBracketsType == Round)
@@ -462,5 +463,61 @@ void GRStdNoteHead::adjustPositionForChords(ARTHead::HEADSTATE inHeadstate, GDir
 				break;
 			}
 		}
+	}
+}
+
+void GRStdNoteHead::adjustHorizontalPosition()
+{
+	if (globalStemDirection == dirDOWN)
+	{
+		switch (mSymbol)
+		{
+		case kFullXHeadSymbol:
+		case kHalfXHeadSymbol:
+		case kFullSquareHeadSymbol:
+		case kHalfSquareHeadSymbol:
+		case kFullRoundHeadSymbol:
+		case kHalfRoundHeadSymbol:
+			sRefPosNotehead.x = (GCoord)(- halfExtent) - 5;
+			break;
+
+		case kFullTriangleHeadSymbol:
+		case kHalfTriangleHeadSymbol:
+		case kFullReversedTriangleHeadSymbol:
+		case kHalfReversedTriangleHeadSymbol:
+			sRefPosNotehead.x = (GCoord)(- halfExtent) - 2;
+			break;
+		}
+	}
+	else if (globalStemDirection == dirUP)
+	{
+		switch (mSymbol)
+		{
+		case kFullXHeadSymbol:
+		case kHalfXHeadSymbol:
+		case kFullSquareHeadSymbol:
+		case kHalfSquareHeadSymbol:
+		case kFullRoundHeadSymbol:
+		case kHalfRoundHeadSymbol:
+			sRefPosNotehead.x = (GCoord)(- halfExtent) + 5;
+			break;
+
+		case kFullTriangleHeadSymbol:
+		case kHalfTriangleHeadSymbol:
+		case kFullReversedTriangleHeadSymbol:
+		case kHalfReversedTriangleHeadSymbol:
+			sRefPosNotehead.x = (GCoord)(- halfExtent) + 2;
+			break;
+		}
+	}
+}
+
+void GRStdNoteHead::setGlobalStemDirection(GDirection inGlobalStemDirection)
+{
+	if (globalStemDirection != inGlobalStemDirection)
+	{
+		globalStemDirection = inGlobalStemDirection;
+
+		this->adjustHorizontalPosition();
 	}
 }

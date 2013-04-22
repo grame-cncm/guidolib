@@ -25,6 +25,8 @@
 #include "GRMusic.h" 
 #include "VGDevice.h" 
 #include "secureio.h"
+#include "GRSingleNote.h"
+#include "GRStdNoteHead.h"
 
 #include "GUIDOEngine.h"	// for AddGGSOutput
 
@@ -79,6 +81,43 @@ GRStem::GRStem( GREvent * sngnot,
 	else if (dir == dirDOWN)
 		mBoundingBox.bottom = (GCoord)(mStemLen);
 	sRefpos.x = (GCoord)(- notebreite * 0.5f);
+
+	GRSingleNote *singleNote = dynamic_cast<GRSingleNote *>(sngnot);
+	if (singleNote)
+	{
+		GRStdNoteHead *noteHead = singleNote->getNoteHead();
+
+		if (noteHead)
+		{
+			noteHead->setGlobalStemDirection(dir);
+
+			ConstMusicalSymbolID noteHeadSymbolTmp = noteHead->getSymbol();
+			// - Adjust stem length if it's a cross notehead
+			if (noteHeadSymbolTmp == kFullXHeadSymbol)
+			{
+				setFirstSegmentDrawingState(false);
+
+				if (dir == dirUP)
+					setOffsetStartPosition(4);
+				else if (dir == dirDOWN)
+					setOffsetStartPosition(-4);
+			}
+			else if (noteHeadSymbolTmp == kFullTriangleHeadSymbol || noteHeadSymbolTmp == kHalfTriangleHeadSymbol)
+			{
+				if (dir == dirUP)
+					setOffsetStartPosition(47);
+				else if (dir == dirDOWN)
+					setFirstSegmentDrawingState(false);
+			}
+			else if (noteHeadSymbolTmp == kFullReversedTriangleHeadSymbol || noteHeadSymbolTmp == kHalfReversedTriangleHeadSymbol)
+			{
+				if (dir == dirUP)
+					setFirstSegmentDrawingState(false);
+				else if (dir == dirDOWN)
+					setOffsetStartPosition(-47);
+			}
+		}
+	}
 }
 
 GRStem::~GRStem()
