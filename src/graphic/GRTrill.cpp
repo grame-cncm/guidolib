@@ -168,7 +168,7 @@ GRTrill::~GRTrill()
 }
 
 
-void GRTrill::OnDraw( VGDevice & hdc , float pos, int nVoice)
+void GRTrill::OnDraw( VGDevice & hdc , float pos, int nVoice) const
 {
 //	GRStaff * staff;
 //	fType = static_cast<ARTrill *>(mAbstractRepresentation)->getType();

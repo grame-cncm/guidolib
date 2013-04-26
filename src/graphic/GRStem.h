@@ -27,7 +27,6 @@
 
 class GREvent;
 class GRSingleNote;
-class GRChord;
 class GRGlobalStem;
 
 /** \brief Graphical representation of a stem
@@ -36,7 +35,6 @@ class GRStem : public GRNotationElement
 {
 public:
 
-	friend class GRChord;
 	friend class GRSingleNote;
 
 	// the LS-Parameters mean:

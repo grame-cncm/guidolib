@@ -27,7 +27,6 @@
 
 class GREvent;
 class GRSingleNote;
-class GRChord;
 
 
 /** \brief This class provides a note with a stem and a correct flag 
@@ -39,7 +38,6 @@ class GRNoteDot : public GRNotationElement
 
 		friend class GREvent;
 		friend class GRSingleNote;
-		friend class GRChord; 
 	 
 					GRNoteDot( GREvent * inNote, const TYPE_DURATION & duration, 
 																float notebreite );

@@ -52,8 +52,6 @@ using namespace std;
 #include "ARMerge.h"
 #include "ARBase.h"
 #include "ARDisplayDuration.h"
-#include "ARChord.h"
-// ARChord unused ?
 #include "ARTuplet.h"
 #include "ARNewPage.h"
 #include "ARKey.h"
@@ -80,6 +78,7 @@ using namespace std;
 #include "ARTrill.h"
 #include "GRTrill.h"
 #include "GRSingleNote.h"
+#include "ARCluster.h"
 
 #include "ARRepeatBegin.h"
 #include "ARCoda.h"
@@ -5148,16 +5147,15 @@ void ARMusicalVoice::BeginChord()
 	posfirstinchord = AddTail(tmp);
 	numchordvoice = 0;
 
-//	mPosTagList->GetNext(mCurVoiceState->ptagpos);
-	chordBeginState = new ARMusicalVoiceState(*mCurVoiceState);
+    //	mPosTagList->GetNext(mCurVoiceState->ptagpos);
+    chordBeginState = new ARMusicalVoiceState(*mCurVoiceState);
 }
 
 //____________________________________________________________________________________
 /** \brief this method is called when the chord is an ornament parameter (SB)
 */
 ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE & chord_type, CHORD_ACCIDENTAL & chord_accidental)
-{
-	
+{	
 	const int nbNotes = 3;
 	int pitches[nbNotes]; // we only need 3 pitches for analysis
 	int firstNoteOctave = 0; //the first note's octave
@@ -5252,7 +5250,7 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE & chord_type, CHORD_ACCIDENTAL
 		chord_type = ERROR;
 
 
-	// RecupÈration de l'armure...
+	// Recupération de l'armure...
 
 	int keyNumber;
 	GuidoPos pos = vst.vpos;
@@ -5267,8 +5265,8 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE & chord_type, CHORD_ACCIDENTAL
 		keyNumber = 0;
 
 
-	// Determination de l'altÈration sur l'ornementation
-	// s'il y a quelque chose sur la note diffÈrent de l'armure, on l'affiche (diese bemol becarre)
+	// Determination de l'altération sur l'ornementation
+	// s'il y a quelque chose sur la note différent de l'armure, on l'affiche (dièse bémol bécarre)
 
 	//std::cout << "accidentals : " << accidentals << '\n';
 
@@ -5313,9 +5311,64 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE & chord_type, CHORD_ACCIDENTAL
 	}
 
 	return firstNote;
-
 }
 
+//____________________________________________________________________________________
+/** \brief this method is about clusters
+*/
+void ARMusicalVoice::setClusterChord(ARCluster *inCurrentCluster)
+{
+	const int nbNotes = 2;
+
+	ARMusicalVoiceState vst = *chordBeginState;
+	GuidoPos posTmp = vst.vpos;
+
+	for(int i=0 ; i<3 ; i++)
+		ObjectList::GetNext(posTmp); // skip "empty, chordcomma, empty"
+
+	int comptTemp = 0;
+	ARMusicalObject * musicalObject = ObjectList::GetNext(posTmp);
+    ARNote *firstNote = dynamic_cast<ARNote *>(musicalObject);
+
+    firstNote->setCluster(inCurrentCluster);
+
+    comptTemp++; // the first note is conserved
+
+    bool isThereASecondNote = false;
+
+    while (posTmp && comptTemp < nbNotes) // we only need to know the first 2 notes
+    {
+        musicalObject = ObjectList::GetNext(posTmp);
+
+        ARNote * noteTmp = dynamic_cast<ARNote *>(musicalObject);
+        if (noteTmp && noteTmp->getPitch()!=0)
+        {
+            noteTmp->setCluster(inCurrentCluster);
+
+            isThereASecondNote = true;
+
+            comptTemp++;
+        }
+    }
+
+    //Other notes deletion
+    while (posTmp) // we only need to know the first 2 notes
+    {
+        musicalObject = ObjectList::GetNext(posTmp);
+
+        ARNote * noteTmp = dynamic_cast<ARNote *>(musicalObject);
+        if (noteTmp && noteTmp->getPitch()!=0)
+        {
+            noteTmp->setPitch(0);
+        }
+    }
+
+    if (!isThereASecondNote)
+    {
+        firstNote->setCluster(inCurrentCluster);
+        firstNote->setIsLonelyInCluster();
+    }
+}
 
 //____________________________________________________________________________________
 /** \brief this finished a chord after parsing it.

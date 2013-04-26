@@ -27,7 +27,6 @@
 class ARGrace;
 class GRStaff;
 
-
 /** \brief not yet documented
 */
 class GRGrace : public GRARCompositeNotationElement,

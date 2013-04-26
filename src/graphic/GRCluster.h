@@ -21,20 +21,38 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
 
-#include "GRNotationElement.h"
+#include "GRARCompositeNotationElement.h"
+#include "GRPositionTag.h"
+
+class ARCluster;
+class GRStaff;
 
 /** \brief Graphical representation of a cluster.
 */
-class GRCluster : public GRNotationElement
+class GRCluster : public GRARCompositeNotationElement,
+	              public GRPositionTag
 {
 public:
 
-	GRCluster();
+				 GRCluster(GRStaff * stf, ARCluster * arcls);
 	virtual	 	~GRCluster();
 
-	virtual void OnDraw( VGDevice & hdc ) const;
+	virtual void OnDraw(VGDevice &hdc);
+	virtual void tellPosition( GObject * caller, const NVPoint & np );
+
+	virtual void addAssociation( GRNotationElement * p );
+    virtual GuidoPos AddTail( GRNotationElement * el );
+
+    void setSecondNoteYPosition();
 
 protected:
+
+    bool mHaveBeenDrawn;
+
+    float mFirstNoteYPosition;
+    float mSecondNoteYPosition;
+    GRStaff *mStaff;
+    ARCluster *mARCluster;
 };
 
 #endif

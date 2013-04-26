@@ -63,7 +63,6 @@ using namespace std;
 #include "GRBar.h"
 #include "GRBarFormat.h"
 #include "GRClef.h"
-#include "GRChord.h"
 #include "GRCompositeNote.h"
 #include "GRCrescendo.h"
 #include "GRDoubleBar.h"
@@ -2065,19 +2064,24 @@ void GRStaff::GGSOutput() const
 float	GRStaff::getXEndPosition(TYPE_TIMEPOSITION pos, TYPE_DURATION dur){
 	TYPE_TIMEPOSITION end = pos + dur;
 	NEPointerList * elmts = getElements();
-	if(elmts){
+	if (elmts)
+    {
 		NEPointerList * elmtsAtEndOfDuration = elmts->getElementsWithTimePosition(end);
-		if(elmtsAtEndOfDuration){
+		if(elmtsAtEndOfDuration)
+        {
 			GRNotationElement * elmt = elmtsAtEndOfDuration->GetHead();
-			if(elmt){
+			if(elmt)
+            {
 				NVPoint position = elmt->getPosition();
 				float X = position.x;
 				GREvent * gevent = dynamic_cast<GREvent *>(elmt);
-				if(gevent)
+				if (gevent)
 					X -= LSPACE;
 				return X;
 			}
 		}
-	}else{return 0;}
+	}
+
+    return 0;
 }
 

@@ -28,7 +28,6 @@
 class ARBar;
 class ARBarFormat;
 class ARClef;
-class ARChord;
 class ARDoubleBar;
 class ARKey;
 class ARInstrument;

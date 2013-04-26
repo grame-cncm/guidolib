@@ -47,6 +47,7 @@ class ARGrace;
 class ARNote;
 class ARClef;
 class ARKey;
+class ARCluster;
 
 class GRVoiceManager;
 class TimeUnwrap;
@@ -98,7 +99,8 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		virtual void	FinishChord();
 		virtual void	BeginChord();
 
-		ARNote *		setTrillChord(CHORD_TYPE & param_type, CHORD_ACCIDENTAL & param_accidental);
+		ARNote        * setTrillChord(CHORD_TYPE & param_type, CHORD_ACCIDENTAL & param_accidental);
+        void            setClusterChord(ARCluster *inCurrentCluster);
 		
 		int				removeTag(ARMusicalObject * obj);
 		void			SplitEventAtPos(ARMusicalVoiceState & vst, const TYPE_TIMEPOSITION & tp, int tieormerge);

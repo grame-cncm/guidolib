@@ -25,15 +25,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "ARTHead.h"
 
 class GREvent;
-class GRChord;
 
 /** \brief Graphical representation of a note head.
 */
 class GRStdNoteHead : public GRNoteHead 
 {
 public:
-	friend class GRChord;
-
 	GRStdNoteHead(GREvent * sngnote, const TYPE_DURATION & inDur, GDirection inStemDirection = dirAUTO);
 	virtual	 	~GRStdNoteHead();
 

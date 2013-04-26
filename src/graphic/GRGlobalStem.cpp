@@ -48,7 +48,7 @@ GRGlobalStem::GRGlobalStem( GRStaff * inStaff,
 						   ARNoteFormat * curnoteformat ) 
 : GRPTagARNotationElement(pshare),
   mFlagOnOff(true),stemdirset(false),stemlengthset(false),
-  stemdir(dirOFF), lowerNote(NULL), higherNote(NULL) // , colref(NULL)
+  stemdir(dirOFF), lowerNote(NULL), higherNote(NULL), mHaveToBeDrawn(true) // , colref(NULL)
 {
 
 	if (curdispdur && curdispdur->getDisplayDuration() > DURATION_0)
@@ -350,14 +350,13 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 				mLowestY = middle;
 				++ count;
 
-				lowerNote = (GRSingleNote *)el;
-				higherNote = (GRSingleNote *)el;
+                if (dynamic_cast<GRSingleNote *>(el))
+				    higherNote = lowerNote = dynamic_cast<GRSingleNote *>(el);
 			}
 			
 			GuidoPos pos = associated->GetHeadPosition();
 			while (pos && pos != associated->GetTailPosition())
 			{
-				
 				GRNotationElement * el = associated->GetNext(pos);
 				if (el && !dynamic_cast<GREmpty *>(el))
 				{
@@ -747,8 +746,8 @@ void GRGlobalStem::setHPosition( float nx )
 void GRGlobalStem::OnDraw( VGDevice & hdc) const
 {
 	if (error) return;
-	if (theStem)	theStem->OnDraw(hdc);
-	if (theFlag)	theFlag->OnDraw(hdc);
+	if (theStem && mHaveToBeDrawn)	theStem->OnDraw(hdc);
+	if (theFlag)	                theFlag->OnDraw(hdc);
 }
 
 float GRGlobalStem::changeStemLength( float inLen )

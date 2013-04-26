@@ -28,7 +28,6 @@
 
 // - Guido AR
 #include "ARMusicalEvent.h"
-#include "ARChord.h"
 #include "ARRest.h"
 #include "ARNote.h"
 
@@ -37,7 +36,6 @@
 #include "GRSingleNote.h"
 #include "GRSingleRest.h"
 #include "GRStaff.h"
-#include "GRChord.h"
 
 #include "secureio.h"
 
@@ -261,7 +259,6 @@ GREvent * GRTuplet::addEvent(ARMusicalEvent * inArEvent, TYPE_TIMEPOSITION von,
 
 	ARNote * arNote;
 	ARRest * arRest;
-	ARChord * arChord;
 	
 	if(( arNote = dynamic_cast<ARNote *>(inArEvent)) != 0 )
 	{
@@ -271,10 +268,6 @@ GREvent * GRTuplet::addEvent(ARMusicalEvent * inArEvent, TYPE_TIMEPOSITION von,
 	else if(( arRest = dynamic_cast<ARRest *>(inArEvent)) != 0 )
 	{
 		newGREvent = new GRSingleRest( staff, arRest, von, bis, dtempl );
-	}
-	else if ((arChord = dynamic_cast<ARChord *>(inArEvent)) != 0 )
-	{
-		newGREvent = new GRChord( staff, arChord, von, bis, dtempl );
 	}
 
 	newGREvent->addAssociation(this); // the tuplet will be associated with GREvent

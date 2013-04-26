@@ -35,7 +35,6 @@ class ARNote;
 
 class ARMusicalEvent;
 class ARRepeatBegin;
-class ARChord;
 class ARMusicalObject;
 class ARMusicalTag;
 class AROctava;
@@ -49,6 +48,7 @@ class ARCue;
 class ARTrill;
 class ARStaff;
 class ARTHead;
+class ARCluster;
 
 
 // typedef KF_IPointerList<ARMusicalObject> ARMusicalObjectList;
@@ -149,10 +149,12 @@ protected:
 	ARAlter *			mCurrentAlter;
 	ARMusicalVoice *	mSaveCurrentVoice;
 	ARStaff *			mCurrentStaff;
+	ARCluster *         mCurrentCluster;
 	int					mVoiceNum;
 	int					mCurrentTags;
 	bool				mTagRanged;
 	bool				mVoiceAdded;
+    bool                mInClusterTag;
 };
 
 extern ARFactory * gGlobalFactory;

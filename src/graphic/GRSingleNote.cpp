@@ -53,6 +53,7 @@
 #include "GRSpecial.h"
 #include "GRSystem.h"
 #include "GRTrill.h"
+#include "GRCluster.h"
 #include "GRNewTuplet.h" // (JB) was GRTuplet
 #include "GRSpring.h"
 #include "GRPage.h"
@@ -205,56 +206,60 @@ void GRSingleNote::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos&
 //____________________________________________________________________________________
 void GRSingleNote::OnDraw( VGDevice & hdc) const
 {
-	float incy = 1;
-	float posy = 0;
-	int sum = mNumHelpLines;
-	if (mNumHelpLines > 0)
-	{ 	// ledger lines up
-	  	incy = -mCurLSPACE;
-	  	posy = -mCurLSPACE;
-		hdc.SetFontAlign( VGDevice::kAlignLeft | VGDevice::kAlignBase );
-	}
-	else if( mNumHelpLines < 0 )
-	{
-		incy = mCurLSPACE;
-		posy = mGrStaff->getNumlines() * mCurLSPACE;
-		sum = - sum;
-		hdc.SetFontAlign( VGDevice::kAlignLeft | VGDevice::kAlignBase );
-	}
+    int numVoice = this->getAbstractRepresentation()->getVoiceNum();
+    float X = mGrStaff->getXEndPosition(getARNote()->getRelativeTimePosition(), getARNote()->getDuration());
 
-	// draw ledger lines
-	const float ledXPos = -60 * 0.85f * mSize;
-	for (int i = 0; i < sum; ++i, posy += incy)
-		 GRNote::DrawSymbol( hdc, kLedgerLineSymbol, ledXPos, ( posy - mPosition.y ));
+    if (mCluster)
+        mCluster->OnDraw(hdc);
+    else
+    {
+        float incy = 1;
+        float posy = 0;
+        int sum = mNumHelpLines;
+        if (mNumHelpLines > 0)
+        { 	// ledger lines up
+            incy = -mCurLSPACE;
+            posy = -mCurLSPACE;
+            hdc.SetFontAlign( VGDevice::kAlignLeft | VGDevice::kAlignBase );
+        }
+        else if( mNumHelpLines < 0 )
+        {
+            incy = mCurLSPACE;
+            posy = mGrStaff->getNumlines() * mCurLSPACE;
+            sum = - sum;
+            hdc.SetFontAlign( VGDevice::kAlignLeft | VGDevice::kAlignBase );
+        }
 
-	const VGColor oldcolor = hdc.GetFontColor();
-	if (mColRef) hdc.SetFontColor( VGColor( mColRef ));
+        // draw ledger lines
+        const float ledXPos = -60 * 0.85f * mSize;
+        for (int i = 0; i < sum; ++i, posy += incy)
+            GRNote::DrawSymbol( hdc, kLedgerLineSymbol, ledXPos, ( posy - mPosition.y ));
 
-	// - Draw elements (stems, dots...)
-	DrawSubElements( hdc );
+        const VGColor oldcolor = hdc.GetFontColor();
+        if (mColRef) hdc.SetFontColor( VGColor( mColRef ));
 
-	// - draw articulations & ornament
-	const GRNEList * articulations = getArticulations();
-	if( articulations )
-	{
-		for( GRNEList::const_iterator ptr = articulations->begin(); ptr != articulations->end(); ++ptr )
-		{
-			GRNotationElement * el = *ptr;
-			el->OnDraw(hdc);
-		}
-	}
-	if (mOrnament )
-	{
-		int numVoice = this->getAbstractRepresentation()->getVoiceNum();
-		float X = mGrStaff->getXEndPosition(getARNote()->getRelativeTimePosition(), getARNote()->getDuration());
-		mOrnament->OnDraw(hdc,X,numVoice);
-	}
+        // - Draw elements (stems, dots...)
+        DrawSubElements( hdc );
 
-	// - Restore
-	if (mColRef) hdc.SetFontColor( oldcolor );
-	if (gBoundingBoxesMap & kEventsBB)
-		DrawBoundingBox( hdc, kEventBBColor);
+        // - draw articulations & ornament
+        const GRNEList * articulations = getArticulations();
+        if( articulations )
+        {
+            for( GRNEList::const_iterator ptr = articulations->begin(); ptr != articulations->end(); ++ptr )
+            {
+                GRNotationElement * el = *ptr;
+                el->OnDraw(hdc);
+            }
+        }
 
+        if (mOrnament )
+            mOrnament->OnDraw(hdc, X, numVoice);
+
+        // - Restore
+        if (mColRef) hdc.SetFontColor( oldcolor );
+        if (gBoundingBoxesMap & kEventsBB)
+            DrawBoundingBox( hdc, kEventBBColor);
+    }
 }
 
 //____________________________________________________________________________________
@@ -533,7 +538,10 @@ void GRSingleNote::setHPosition( GCoord nx )
 	GRNote::setHPosition(nx);
 	// - Notify ornament
 	if (mOrnament)
-		mOrnament -> tellPosition( this, getPosition() );
+		mOrnament->tellPosition(this, getPosition());
+    // - Notify cluster
+    if (mCluster)
+		mCluster->tellPosition(this, getPosition());
 	updateBoundingBox();
 }
 
@@ -544,10 +552,11 @@ void GRSingleNote::setPosition( const NVPoint & inPos )
 	GRNote::setPosition( inPos );
 
 	// - Notify Ornament
-	if ( mOrnament )
-	{
-		mOrnament -> tellPosition( this, getPosition() );
-	}
+	if (mOrnament)
+		mOrnament->tellPosition(this, getPosition());
+    // - Notify cluster
+    if (mCluster)
+        mCluster->tellPosition(this, getPosition());
 
 	// - Watch for the Accidentals
 	GRAccidentalList accList;
