@@ -74,15 +74,13 @@ void ARGlissando::setTagParameterList(TagParameterList & tpl)
 		
 		lstrs.AddTail( "U,dx1,0,o;U,dy1,0,o;"
 			             "U,dx2,0,o;U,dy2,0,o;"
-			             "U,thickness,0.1,o;S,lineStyle,line,o" );
+			             "U,thickness,0.3,o;S,lineStyle,line,o" );
 		
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
 	TagParameterList * rtpl = 0;
 	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
-	if(color)
-		cout<<"color "<<color->getValue()<<endl;
 	if (ret>=0 && rtpl)
 	{
 		// we found a match!
@@ -93,36 +91,26 @@ void ARGlissando::setTagParameterList(TagParameterList & tpl)
 			if (dx1->TagIsSet())
 				mParSet = true;
 
-			cout<<"dx1 = "<<dx1->getValue()<<endl;
-
 			dy1 = TagParameterFloat::cast(rtpl->RemoveHead());
 			assert(dy1);
 			if (dy1->TagIsSet())
 				mParSet = true;
-	
-			cout<<"dy1 = "<<dy1->getValue()<<endl;
 
 			dx2 = TagParameterFloat::cast(rtpl->RemoveHead());
 			assert(dx2);
 			if (dx2->TagIsSet())
 				mParSet = true;
 
-			cout<<"dx2 = "<<dx2->getValue()<<endl;
-
 			dy2 = TagParameterFloat::cast(rtpl->RemoveHead());
 			assert(dy2);
 			if (dy2->TagIsSet())
 				mParSet = true;
-
-			cout<<"dy2 = "<<dy2->getValue()<<endl;
 
 
 			thickness = TagParameterFloat::cast(rtpl->RemoveHead());
 			assert(thickness);
 			if (thickness->TagIsSet())
 				mParSet = true;
-
-			cout<<"thickness = "<<thickness->getValue()<<endl;
 
 			lineStyle = TagParameterString::cast(rtpl->RemoveHead());
 			assert(lineStyle);
@@ -139,12 +127,8 @@ void ARGlissando::setTagParameterList(TagParameterList & tpl)
 				wavy = false;
 			}
 		}
-			if(color)
-		cout<<"color "<<color->getValue()<<endl;
 
 		delete rtpl;
-			if(color)
-		cout<<"color "<<color->getValue()<<endl;
 	}
 	else
 	{

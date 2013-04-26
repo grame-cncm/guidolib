@@ -1229,10 +1229,10 @@ void ARMusicalVoice::doAutoStuff2()
 	// this needs to be done, so that all Ties can be broken after the respective Event
 	// (and that as well, if a break is introduced later).
 	timebench("doAutoTies", doAutoTies());
-	timebench("doAutoGlissando", doAutoGlissando());
 	timebench("doAutoEndBar", doAutoEndBar());
 	//this->operator<< (cout);
 	//timebench("doAutoTrill", doAutoTrill());
+	timebench("doAutoGlissando", doAutoGlissando());
 }
 
 //____________________________________________________________________________________
@@ -5061,7 +5061,7 @@ void ARMusicalVoice::doAutoGlissando()
 	while (vst.vpos)
 	{
 		ARMusicalObject * o = GetAt(vst.vpos);
-		ARMusicalEvent * ev = ARMusicalEvent::cast(o);
+		ARNote * note = dynamic_cast<ARNote *>(o);
 
 		if (vst.addedpositiontags)
 		{
@@ -5074,65 +5074,33 @@ void ARMusicalVoice::doAutoGlissando()
 					ARGlissandoStruct * glissStruct = new ARGlissandoStruct();
 					glissStruct->glissando = glissando;
 					glissStruct->curchordtag = vst.curchordtag;
-					glissStruct->startnote = dynamic_cast<ARNote *>(o);
+					glissStruct->startnote = note;
 					glissStructlist.AddTail(glissStruct);
 				}
 			}
 		}
 
-		if (ev)
+		if (note)
 		{
 			GuidoPos posGlissStructlist = glissStructlist.GetHeadPosition();
 			while (posGlissStructlist)
 			{
 				ARGlissandoStruct *glissStruct = glissStructlist.GetNext(posGlissStructlist);
-
-				int ischordgliss = 0;
-				if (glissStruct->curchordtag)
+				
+				bool isTied = false;
+				if(vst.curpositiontags)
 				{
-					ARNote *nt = glissStruct->startnote;
-					if (nt && nt->getName() == ARNoteName::empty)
+					GuidoPos tmppos = vst.curpositiontags->GetHeadPosition();
+					while (tmppos)
 					{
-						ischordgliss = 1;
-					}
-				}
-
-				int mustcreate = 0;
-
-				if (!ischordgliss &&
-					glissStruct->glissando->getPosition() == vst.vpos)
-				{
-						mustcreate = 1;
-				}
-
-				else if (vst.curchordtag)
-				{
-					if (ischordgliss && glissStruct->glissando->getPosition() != vst.vpos)
-					{
-						ARNote * nt = dynamic_cast<ARNote *>(o);
-						if (nt && !(nt->getName() == ARNoteName::empty))
-							mustcreate = 1;
-					}
-					else if (glissStruct->curchordtag != vst.curchordtag)
-					{
-						ARNote * nt = dynamic_cast<ARNote *>(o);
-						if (nt && glissStruct->startnote/* && !nt->CompareNameOctavePitch(*glissStruct->startnote)*/)
+						ARTie * tie = dynamic_cast<ARTie *>(vst.curpositiontags->GetNext(tmppos));
+						if (tie && tie->getStartPosition() == vst.vpos)
 						{
-							mustcreate = 1;
+							isTied = true;
 						}
 					}
 				}
-				else
-				{
-					// we are not in a chord...
-					ARNote * nt = dynamic_cast<ARNote *>(o);
-					if (nt && glissStruct->startnote /*&& !nt->CompareNameOctavePitch(*glissStruct->startnote)*/)
-					{
-						mustcreate = 1;
-					}
-
-				}
-				if (mustcreate)
+				if(note->getName() != ARNoteName::empty && !isTied)
 				{
 					ARGlissando * myglissando = new ARGlissando();
 					myglissando->setID(gCurArMusic->mMaxTagId++);
@@ -5150,8 +5118,8 @@ void ARMusicalVoice::doAutoGlissando()
 					
 					agstruct->originGlissando = glissStruct->glissando;
 					agstruct->curchordtag = vst.curchordtag;
-					agstruct->startnote = dynamic_cast<ARNote *>(o);
-
+					agstruct->startnote = note;
+					
 					autoglissStructlist.AddTail(agstruct);
 				}
 
@@ -5168,62 +5136,53 @@ void ARMusicalVoice::doAutoGlissando()
 					autoglissStructlist.GetNext(mypos);
 					continue;
 				}
-
-				int mustclose = 0;
-				ARNote * nt = dynamic_cast<ARNote *>(o);
-				if (vst.curchordtag)
+				
+				bool isTied = false;
+				if(vst.curpositiontags)
 				{
-					if (glissStruct->curchordtag != vst.curchordtag)
+					GuidoPos tmppos = vst.curpositiontags->GetHeadPosition();
+					while (tmppos)
 					{
-						if (nt && glissStruct->startnote && !nt->CompareNameOctavePitch(*glissStruct->startnote))
+						ARTie * tie = dynamic_cast<ARTie *>(vst.curpositiontags->GetNext(tmppos));
+						if (tie && tie->getEndPosition() == vst.vpos)
 						{
-							mustclose = 1;
-						}
-						else
-						{
-							if (glissStruct->curchordtag != prevchordtag)
-							{
-								mPosTagList->RemoveElement(glissStruct->glissando);
-
-								autoglissStructlist.RemoveElementAt(mypos);
-								mypos = autoglissStructlist.GetHeadPosition();
-							}
+							isTied = true;
 						}
 					}
 				}
-				else
+
+				if (glissStruct->curchordtag == prevchordtag && (glissStruct->startnote->getRelativeEndTimePosition() == note->getStartTimePosition()))
 				{
-					
-					if (nt && glissStruct->startnote && !nt->CompareNameOctavePitch(*glissStruct->startnote))
+					if (note->getName() != ARNoteName::empty && !note->CompareNameOctavePitch(*glissStruct->startnote) && !isTied)
 					{
-						mustclose = 1;
-					}
-					else
-					{
-						// then, this is considered an error...
-						mPosTagList->RemoveElement(glissStruct->glissando);
+						ARDummyRangeEnd * arde = new ARDummyRangeEnd(GLISSANDOEND);
+						arde->setID(glissStruct->glissando->getID());
+						arde->setPosition(vst.vpos);
+						glissStruct->glissando->setCorrespondence(arde);
+						arde->setCorrespondence(glissStruct->glissando);
+
+						if (vst.ptagpos)
+							mPosTagList->AddElementAt(vst.ptagpos,arde);
+						else
+							mPosTagList->AddTail(arde);
+
 
 						autoglissStructlist.RemoveElementAt(mypos);
 						mypos = autoglissStructlist.GetHeadPosition();
+						break;
 					}
-				}
-
-				if (mustclose)
-				{
-					ARDummyRangeEnd * arde = new ARDummyRangeEnd(GLISSANDOEND);
-					arde->setID(glissStruct->glissando->getID());
-					arde->setPosition(vst.vpos);
-					glissStruct->glissando->setCorrespondence(arde);
-					arde->setCorrespondence(glissStruct->glissando);
-
-					if (vst.ptagpos)
-						mPosTagList->AddElementAt(vst.ptagpos,arde);
+					else if (glissStruct->curchordtag != prevchordtag || isTied)
+					{
+						mPosTagList->RemoveElement(glissStruct->glissando);
+						autoglissStructlist.RemoveElementAt(mypos);
+						mypos = autoglissStructlist.GetHeadPosition();
+					}
 					else
-						mPosTagList->AddTail(arde);
-
-
-					autoglissStructlist.RemoveElementAt(mypos);
-					mypos = autoglissStructlist.GetHeadPosition();
+					{
+						// go to the next event...
+						if (mypos)
+							autoglissStructlist.GetNext(mypos);
+					}
 				}
 				else
 				{
@@ -5238,21 +5197,21 @@ void ARMusicalVoice::doAutoGlissando()
 		GetNext(vst.vpos,vst);
 
 		ARMusicalObject * nexto = NULL;
-		ARMusicalEvent * nextev  = NULL;
+		ARNote * nextnote  = NULL;
 
 		if (vst.vpos)
 		{
 			nexto = GetAt(vst.vpos);
-			nextev = ARMusicalEvent::cast(nexto);
+			nextnote = dynamic_cast<ARNote *>(nexto);
 		}
 
-		if (nextev && curchordtag != vst.curchordtag)
+		if (nextnote && curchordtag != vst.curchordtag)
 		{
 			prevchordtag = curchordtag;
 			curchordtag = vst.curchordtag;
 
 		}
-		else if (nextev && vst.curchordtag == NULL)
+		else if (nextnote && vst.curchordtag == NULL)
 		{
 			prevchordtag = curchordtag;
 		}
@@ -5339,7 +5298,6 @@ void ARMusicalVoice::doAutoGlissando()
 	delete endState;
 	endState = new ARMusicalVoiceState(vst);
 }
-
 
 
 //____________________________________________________________________________________

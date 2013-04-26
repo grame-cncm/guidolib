@@ -30,7 +30,7 @@ class GRGlissando : public GRPTagARNotationElement
 			NVPoint position;
 	};
 	
-	class GRGlissandoContext	// (JB) new
+	class GRGlissandoContext
 	{
 		public:
 				GRGlissandoContext() : staff(0), openRight(false), openLeft(false),
@@ -47,8 +47,7 @@ class GRGlissando : public GRPTagARNotationElement
 	};
 
 	public:
-					GRGlissando( GRStaff * grstaff, GRNotationElement * startEl, GRNotationElement * endEl = 0);
-					GRGlissando( GRStaff * grstaff = 0); // constructor without REAL abstract Element
+					GRGlissando( GRStaff * grstaff = 0); 
 					GRGlissando( GRStaff * grstaff, ARGlissando * abstractRepresentationOfGlissando );
 
 
@@ -58,13 +57,15 @@ class GRGlissando : public GRPTagARNotationElement
 		virtual void updateBoundingBox();
 										
 		virtual void removeAssociation(GRNotationElement * el );
-		virtual void addAssociation(GRNotationElement * );
+		virtual void addAssociation(GRNotationElement * el);
 
 		virtual void tellPosition(GObject * caller, const NVPoint & newPosition);
 		virtual void print() const;
 		virtual GRNotationElement * getStartElement(GRStaff * grstaff) const;
 		virtual GRNotationElement * getEndElement(GRStaff * grstaff) const;
-		
+		virtual void ResumeTag(GRStaff * grstaff, GuidoPos assocpos);
+		virtual void BreakTag(GRStaff * grstaff, GuidoPos & assocpos);
+	
 		
 	protected:
 		
@@ -72,14 +73,16 @@ class GRGlissando : public GRPTagARNotationElement
 
 		//virtual GRPositionTag::GRSaveStruct * getNewGRSaveStruct();
 
-		virtual GRSystemStartEndStruct * prepareSSEStructForGlissando( const GRStaff * inStaff );
+		//virtual GRSystemStartEndStruct * prepareSSEStructForGlissando( const GRStaff * inStaff );
 
 		virtual	void getGlissandoBeginingContext( GRGlissandoContext * ioContext, GRSystemStartEndStruct * sse );
 		virtual void getGlissandoEndingContext( GRGlissandoContext * ioContext, GRSystemStartEndStruct * sse );
-		virtual	GRGlobalStem * findGlobalStem( GRSystemStartEndStruct * sse, 
-												GRNotationElement * stemOwner );
+		//virtual	GRGlobalStem * findGlobalStem( GRSystemStartEndStruct * sse, GRNotationElement * stemOwner );
 		bool wavy;
-		
+
+		GRNotationElement * laststartElement;
+		GuidoPos laststartpos;
+
 	private:
 		
 			GRSystemStartEndStruct * initGRGlissando( GRStaff * grstaff );
