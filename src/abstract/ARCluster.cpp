@@ -22,6 +22,7 @@
 #include "ARCluster.h"
 #include "TagParameterList.h"
 #include "TagParameterInt.h"
+#include "TagParameterString.h"
 
 using namespace std;
 
@@ -46,8 +47,8 @@ void ARCluster::setTagParameterList(TagParameterList& tpl)
 {
 	if (ltpls.GetCount() == 0)
 	{
-		ListOfStrings lstrs;
-		lstrs.AddTail("U,adx,0hs,o;U,ady,0hs,o"); //REM: ajouter des paramètres ?
+		ListOfStrings lstrs; // (1); std::vector test impl
+		lstrs.AddTail("U,adx,0hs,o;U,ady,0hs,o");
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -58,18 +59,6 @@ void ARCluster::setTagParameterList(TagParameterList& tpl)
 		// we found a match!
 		if (ret == 0)
 		{
-			/*TagParameterString * str = TagParameterString::cast(rtpl->RemoveHead());
-			assert(str);
-			if (str->TagIsSet() && (str->getValue() == std::string("cautionary")))
-				fShowCautionaryAccidentals = true;
-			else 
-				fShowCautionaryAccidentals = false;
-			delete str;
-
-			TagParameterInt * dur = TagParameterInt::cast(rtpl->RemoveHead());
-			// Todo
-			delete dur;
-
 			TagParameterFloat* f = TagParameterFloat::cast(rtpl->RemoveHead());
 			adx = f->getValue();
 			delete f;
@@ -77,11 +66,20 @@ void ARCluster::setTagParameterList(TagParameterList& tpl)
 			f = TagParameterFloat::cast(rtpl->RemoveHead());
 			ady = f->getValue();
 			delete f;
-			*/
 		}
 		delete rtpl;
 	}
 	tpl.RemoveAll();
+}
+
+float ARCluster::getadx() const	
+{
+	return adx;
+}
+
+float ARCluster::getady() const
+{
+	return ady;
 }
 
 void ARCluster::PrintName(std::ostream & os) const

@@ -67,7 +67,7 @@ class GRNote : public GREvent
     void       setGRCluster(GRCluster *inCluster);
     bool       getClusterNoteBoolean() {return mClusterNote;}
 
-    GRCluster *createCluster();
+    GRCluster *createCluster(ARNoteFormat *inCurnoteformat);
 
 	// Tell me: is a note splitted over several systems? 
 	// should only occur for CompositeNotes.

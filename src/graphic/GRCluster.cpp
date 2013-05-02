@@ -24,11 +24,14 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "ARCluster.h"
 
 #include "VGDevice.h"
+#include "GRTagARNotationElement.h"
 #include "GRSingleNote.h"
+#include "ARNoteFormat.h"
+#include "TagParameterString.h"
 
-GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls) :
+GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, TYPE_DURATION inDuration, ARNoteFormat * curnoteformat) :
 						GRARCompositeNotationElement(arcls),
-						GRPositionTag(arcls->getEndPosition(), arcls), mHaveBeenDrawn(false), mStaff(stf), mARCluster(arcls)
+						GRPositionTag(arcls->getEndPosition(), arcls), mHaveBeenDrawn(false), mStaff(stf), mARCluster(arcls), mDuration(inDuration)
 {
 	assert(stf);
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
@@ -39,6 +42,19 @@ GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls) :
 
 	mStartEndList.AddTail(sse);
 
+    if (curnoteformat)
+    {
+        const TagParameterString * tmps = curnoteformat->getColor();
+        if (tmps)
+        {
+            if (!mColRef)
+                mColRef = new unsigned char[4];
+            tmps->getRGB(mColRef);
+        }
+    }
+
+    gdx = arcls->getadx();
+    gdy = arcls->getady();
     
     int *firstNoteParameters = mARCluster->getFirstNoteParameters();
 
@@ -52,21 +68,53 @@ void GRCluster::OnDraw(VGDevice &hdc)
 {
     if (mHaveBeenDrawn == false)
     {
+        const VGColor prevTextColor = hdc.GetFontColor();
+        if (mColRef)
+            hdc.SelectFillColor(VGColor(mColRef));
+
         if (mFirstNoteYPosition != mSecondNoteYPosition)
             mHaveBeenDrawn = true;
 
         NVRect r = getBoundingBox();
         r += getPosition();
 
-        float x = r.right;
+        float x = r.left + gdx;
 
         float curLSpace = mStaff->getStaffLSPACE();
 
-        const float xCoords [] = {x, x + 50, x + 50, x};
-        const float yCoords [] = {mFirstNoteYPosition - curLSpace / 2, mFirstNoteYPosition - curLSpace / 2,
-            mSecondNoteYPosition + curLSpace / 2, mSecondNoteYPosition + curLSpace / 2};
+        // - Quarter notes and less
+        if (mDuration < DURATION_2 )
+        {
+            const float xCoords [] = {x - 31, x + 29, x + 29, x - 31};
+            const float yCoords [] = {mFirstNoteYPosition + gdy - curLSpace / 2, mFirstNoteYPosition + gdy - curLSpace / 2,
+                mSecondNoteYPosition + gdy + curLSpace / 2, mSecondNoteYPosition + gdy + curLSpace / 2};
 
-        hdc.Polygon(xCoords, yCoords, 4);
+            hdc.Polygon(xCoords, yCoords, 4);
+        }
+        else
+        {
+            const float xCoords1 [] = {x - 31, x + 29, x + 29, x - 31};
+            const float yCoords1 [] = {mFirstNoteYPosition + gdy - curLSpace / 2, mFirstNoteYPosition + gdy - curLSpace / 2,
+                mFirstNoteYPosition + gdy - curLSpace / 2 + 6, mFirstNoteYPosition + gdy - curLSpace / 2 + 6};
+            const float xCoords2 [] = {x + 23, x + 29, x + 29, x + 23};
+            const float yCoords2 [] = {mFirstNoteYPosition + gdy - curLSpace / 2, mFirstNoteYPosition + gdy - curLSpace / 2,
+                mSecondNoteYPosition + gdy + curLSpace / 2, mSecondNoteYPosition + gdy + curLSpace / 2};
+            const float xCoords3 [] = {x - 31, x + 29, x + 29, x - 31};
+            const float yCoords3 [] = {mSecondNoteYPosition + gdy + curLSpace / 2 - 6, mSecondNoteYPosition + gdy + curLSpace / 2 - 6,
+                mSecondNoteYPosition + gdy + curLSpace / 2, mSecondNoteYPosition + gdy + curLSpace / 2};
+            const float xCoords4 [] = {x - 31, x -25, x - 25, x - 31};
+            const float yCoords4 [] = {mFirstNoteYPosition + gdy - curLSpace / 2, mFirstNoteYPosition + gdy - curLSpace / 2,
+                mSecondNoteYPosition + gdy + curLSpace / 2, mSecondNoteYPosition + gdy + curLSpace / 2};
+
+            hdc.Polygon(xCoords1, yCoords1, 4);
+            hdc.Polygon(xCoords2, yCoords2, 4);
+            hdc.Polygon(xCoords3, yCoords3, 4);
+            hdc.Polygon(xCoords4, yCoords4, 4);
+        }
+
+        // - Restore context
+        if (mColRef)
+            hdc.SelectFillColor(prevTextColor);  //(TODO: in a parent method)
     }
     else
         mHaveBeenDrawn = false;

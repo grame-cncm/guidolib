@@ -181,9 +181,11 @@ void GRTrill::OnDraw( VGDevice & hdc , float pos, int nVoice) const
 		float left;
 		float right;
 		float lastPos = GRTrill::getLastPosX(nVoice);
-		if(begin){
+		if(begin)
+        {
 			GRNotationElement::OnDraw( hdc );
-			if(fAccidental){
+			if(fAccidental)
+            {
 				NVRect rAcc = fAccidental->getBoundingBox();
 				rAcc += fAccidental->getPosition();
 				left = rAcc.right;
@@ -191,7 +193,8 @@ void GRTrill::OnDraw( VGDevice & hdc , float pos, int nVoice) const
 			else
 				left = r.right;
 		}
-		else{
+		else
+        {
 			if(lastPos<pos)
 				left = lastPos;
 			else
@@ -200,15 +203,18 @@ void GRTrill::OnDraw( VGDevice & hdc , float pos, int nVoice) const
 		right = pos;
 		float x = left;
 		int w = 1.35*LSPACE;
-		while(x + w <=right){
+		while(x + w <=right)
+        {
 			hdc.DrawMusicSymbol(x, r.bottom, 126);
-			x +=w;
+			x += w;
 		}
 		
 		fAccidental->OnDraw(hdc);
 		GRTrill::getLastPosX(nVoice) = x;
 		
-	}else{	
+	}
+    else
+    {	
 		GRNotationElement::OnDraw( hdc );
 		fAccidental->OnDraw(hdc);
 	}

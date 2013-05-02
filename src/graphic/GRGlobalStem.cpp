@@ -48,7 +48,7 @@ GRGlobalStem::GRGlobalStem( GRStaff * inStaff,
 						   ARNoteFormat * curnoteformat ) 
 : GRPTagARNotationElement(pshare),
   mFlagOnOff(true),stemdirset(false),stemlengthset(false),
-  stemdir(dirOFF), lowerNote(NULL), higherNote(NULL), mHaveToBeDrawn(true) // , colref(NULL)
+  stemdir(dirOFF), lowerNote(NULL), higherNote(NULL) // , colref(NULL)
 {
 
 	if (curdispdur && curdispdur->getDisplayDuration() > DURATION_0)
@@ -746,7 +746,7 @@ void GRGlobalStem::setHPosition( float nx )
 void GRGlobalStem::OnDraw( VGDevice & hdc) const
 {
 	if (error) return;
-	if (theStem && mHaveToBeDrawn)	theStem->OnDraw(hdc);
+	if (theStem)	theStem->OnDraw(hdc);
 	if (theFlag)	                theFlag->OnDraw(hdc);
 }
 

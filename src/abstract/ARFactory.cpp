@@ -311,9 +311,6 @@ void ARFactory::createChord()
 	// now, we have to save the position of the voice...
 	assert(mCurrentVoice);
 
-    if (mInClusterTag)
-        mCurrentCluster = new ARCluster();
-
 	mCurrentVoice->BeginChord();
 }
 
@@ -1801,6 +1798,11 @@ void ARFactory::addTag()
 	ARMTParameter * theTag = dynamic_cast<ARMTParameter *>(mTags.GetHead());	
 	if (mCurrentTrill)
 		mCurrentTrill->setTagParameterList(mTagParameterList);
+    else if (mInClusterTag)
+    {
+        mCurrentCluster = new ARCluster();
+        mCurrentCluster->setTagParameterList(mTagParameterList);
+    }
 	else if (theTag != 0)
 		theTag->setTagParameterList( mTagParameterList );
 	// the remaining will just be stored
@@ -1849,7 +1851,7 @@ void ARFactory::addTagParameter(const char * parameter)
 #if ARFTrace
  	 cout << "ARFactory::addTagParameter TYPE_TAGPARAMETER_STRING " << parameter << endl;
 #endif
-	if (dynamic_cast<ARMTParameter*>(mTags.GetHead()) || mCurrentTrill || mCurrentCluster)
+	if (dynamic_cast<ARMTParameter*>(mTags.GetHead()) || mCurrentTrill || mInClusterTag)
 		mTagParameterList.AddTail(new TagParameterString(parameter));
 }
 
@@ -1862,7 +1864,7 @@ void ARFactory::addTagParameter(TYPE_TAGPARAMETER_INT parameter)
 	cout << "ARFactory::addTagParameter TYPE_TAGPARAMETER_INT " << parameter << endl;
 #endif
 	// we have assume the DEFAULT Unit here....
-	if (dynamic_cast<ARMTParameter*>(mTags.GetHead()) || mCurrentTrill || mCurrentCluster)
+	if (dynamic_cast<ARMTParameter*>(mTags.GetHead()) || mCurrentTrill || mInClusterTag)
 	{
 		TagParameterInt * ntpi = new TagParameterInt(parameter);
 		// float npar = (float) (parameter * LSPACE/2);
@@ -1879,7 +1881,7 @@ void ARFactory::addTagParameter(TYPE_TAGPARAMETER_REAL parameter)
 #if ARFTrace
 	cout << "ARFactory::addTagParameter TYPE_TAGPARAMETER_REAL " << parameter << endl;
 #endif
-	if (dynamic_cast<ARMTParameter*>(mTags.GetHead()) || mCurrentTrill || mCurrentCluster)
+	if (dynamic_cast<ARMTParameter*>(mTags.GetHead()) || mCurrentTrill || mInClusterTag)
 	{
 		TagParameterFloat * ntpf = new TagParameterFloat((float) parameter);
 		// float npar = (float) (parameter * LSPACE/2);

@@ -44,13 +44,19 @@ public:
 	virtual void    setTagParameterList(TagParameterList & tpl);
 
     void setNotePitchAndOctave(int inPitch, int inOctave, int inAccidental);
-    
+
     int *getFirstNoteParameters() {return mFirstNote;}
     int *getSecondNoteParameters() {return mSecondNote;}
 
+    float	getadx() const;
+    float	getady() const;
+
 protected:
 
-	static ListOfTPLs ltpls;
+    float adx;
+    float ady;
+
+    static ListOfTPLs ltpls;
 
     int mFirstNote[2];
     int mSecondNote[2];

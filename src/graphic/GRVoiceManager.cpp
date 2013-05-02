@@ -420,6 +420,7 @@ void GRVoiceManager::BeginManageVoice()
 	// just ignore this: this procedure is only
 	// called once. There are NO OPEN TAGS!
 	arVoice->doAutoTrill();
+    arVoice->doAutoCluster();
 }
 
 
@@ -630,7 +631,7 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
                             if (!mCurCluster)
                             {
                                 if (grnote->getClusterNoteBoolean())
-                                    mCurCluster = grnote->createCluster();
+                                    mCurCluster = grnote->createCluster(curnoteformat);
                             }
                             else
                             {
@@ -1759,10 +1760,11 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 	}
 	else if (tinf == typeid(ARCluster))
 	{
-		GRCluster * grcluster = new GRCluster(mCurGrStaff, static_cast<ARCluster *>(apt));
+        //REM: Pas testé !
+		/*GRCluster * grcluster = new GRCluster(mCurGrStaff, static_cast<ARCluster *>(apt));
 		addGRTag(grcluster);
 		mCurGrStaff->AddTag(grcluster);
-		gCurMusic->addVoiceElement(arVoice,grcluster);
+		gCurMusic->addVoiceElement(arVoice,grcluster);*/
 	}
 	else
 		GuidoTrace("Warning, PositionTag not handled");

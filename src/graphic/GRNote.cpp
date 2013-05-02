@@ -20,6 +20,7 @@
 
 #include "ARNote.h"
 #include "GRNote.h"
+#include "GRSingleNote.h"
 #include "GRStaff.h"
 #include "GRTrill.h"
 #include "GRCluster.h"
@@ -157,11 +158,11 @@ inline void GRNote::setDotFormat(const ARDotFormat * frmt)
 }
 */
 
-GRCluster *GRNote::createCluster()
+GRCluster *GRNote::createCluster(ARNoteFormat *inCurnoteformat)
 {
-    mCluster = new GRCluster(mGrStaff, mARNote->getARCluster());
-
-    getGlobalStem()->setHaveToBeDrawnBoolean(false);
+    GRSingleNote *singleNote = dynamic_cast<GRSingleNote *>(this);
+    
+    mCluster = new GRCluster(mGrStaff, mARNote->getARCluster(), singleNote->getDurTemplate(), inCurnoteformat);
 
     return mCluster;
 }
@@ -169,8 +170,6 @@ GRCluster *GRNote::createCluster()
 void GRNote::setGRCluster(GRCluster *inCluster)
 {
     mCluster = inCluster;
-
-    getGlobalStem()->setHaveToBeDrawnBoolean(false);
 
     mCluster->setSecondNoteYPosition();
 }

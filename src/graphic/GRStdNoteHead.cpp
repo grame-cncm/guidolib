@@ -275,9 +275,6 @@ unsigned int GRStdNoteHead::durationToHeadSymbol( const TYPE_DURATION & inDur ) 
 	else
 		outSymbol = kFullHeadSymbol;
 
-	//hdc.DrawMusicSymbol(10, 10, kRoundLeftBracket);
-	//REM: kRoundLeftBracket/kRoundRightBracket
-
 	return outSymbol;
 }
 
