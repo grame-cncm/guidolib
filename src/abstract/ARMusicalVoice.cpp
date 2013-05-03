@@ -6060,6 +6060,8 @@ void ARMusicalVoice::doAutoCluster()
                             {
 								GuidoPos posNote = posObj;
 								ARNote * nextNote;
+                                ARCluster *tmpCluster;
+
 								do
                                 {
 									ARMusicalObject * nextObject = GetNext(posNote, armvs);
@@ -6069,11 +6071,19 @@ void ARMusicalVoice::doAutoCluster()
 
 								if(nextNote)
                                 {
-                                    nextNote = nextNote;
-									/*nextNote->setVoiceNum(note->getVoiceNum());
-									nextNote->setOrnament(note->getOrnament());
-									nextNote->getOrnament()->setContinue();*/
+                                    tmpCluster = new ARCluster();
+                                    nextNote->setCluster(tmpCluster);
 								}
+
+                                do
+                                {
+									ARMusicalObject * nextObject = GetNext(posNote, armvs);
+									nextNote = dynamic_cast<ARNote *>(nextObject);
+								}
+                                while(posObj && !nextNote);
+
+                                if(nextNote)
+                                    nextNote->setCluster(tmpCluster);
 							}
 						}	
 					}
