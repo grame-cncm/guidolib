@@ -2074,6 +2074,7 @@ float	GRStaff::getXEndPosition(TYPE_TIMEPOSITION pos, TYPE_DURATION dur){
 				return X;
 			}
 		}
-	}else{return 0;}
+	}
+	return 0;
 }
 
