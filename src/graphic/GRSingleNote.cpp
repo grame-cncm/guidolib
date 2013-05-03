@@ -247,7 +247,8 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
 
         if (mOrnament )
 		{
-			// to draw the trill line...			mOrnament->OnDraw(hdc,X,numVoice);
+			// to draw the trill line...
+            mOrnament->OnDraw(hdc,X,numVoice);
 		}
 
         // - Restore
