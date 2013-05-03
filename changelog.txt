@@ -5,6 +5,7 @@ GUIDO Engine history
 - trill line added :  stops at the next element, can be drawn over several staves, systems and pages (if the notes are tied).
 - new notehead types added
 - bug corrected : stem length of high chords
+- implementation of glissando
 
 
 ---------------------------------------------------------------
