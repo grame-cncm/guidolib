@@ -714,6 +714,7 @@ GUIDOAPI(GuidoErrCode) GuidoMarkVoice( ARHandler inHandleAR, int voicenum,
 		return guidoErrInvalidHandle;
 
 	inHandleAR->armusic->MarkVoice( voicenum, date.num, date.denom, 
-								duration.num, duration.denom );
+                                    duration.num, duration.denom,
+                                    red, green, blue );
 	return guidoNoErr;
 }

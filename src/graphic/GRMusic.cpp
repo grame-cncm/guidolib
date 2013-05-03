@@ -670,7 +670,7 @@ void GRMusic::getGuido() const
 /** \brief Not yet implemented.
 */
 void GRMusic::MarkVoice(int voicenum, int numfrom, int denomfrom, 
-			int numlength, int denomlength)
+			int numlength, int denomlength,unsigned char red, unsigned char green, unsigned char blue)
 {
 }
 

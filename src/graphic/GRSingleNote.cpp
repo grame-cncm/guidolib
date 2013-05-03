@@ -30,6 +30,7 @@
 #include "ARNote.h"
 #include "TagParameterString.h"
 #include "TagParameterFloat.h"
+#include "TagParameterRGBColor.h"
 
 // - Guido GR
 #include "GRSingleNote.h"
@@ -953,6 +954,17 @@ void GRSingleNote::setNoteFormat(const ARNoteFormat * frmt)
 			mColRef = 0;
 		}
 	}
+    else if (frmt->getRGBColor()) {
+        
+        if (mColRef == 0 )
+			mColRef = new unsigned char [4];
+
+        if (frmt->getRGBColor()->getRGBColor( mColRef ) == false ) {
+			delete [] mColRef;
+			mColRef = 0;
+        }
+    }
+
 
 	// - Get the offsets and size
 	const TagParameterFloat * tpf1 = frmt->getDX();

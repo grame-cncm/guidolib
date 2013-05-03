@@ -5918,15 +5918,15 @@ void ARMusicalVoice::initChordNote()
 	numchordvoice = oldnumchordvoice;
 }
 
-void ARMusicalVoice::MarkVoice(float from, float length)
+void ARMusicalVoice::MarkVoice(float from, float length, unsigned char red, unsigned char green, unsigned char blue)
 {
 	TYPE_TIMEPOSITION tpos(from);
 	TYPE_DURATION duration(length);
 
-	MarkVoice( tpos.getNumerator(), tpos.getDenominator(), duration.getNumerator(), duration.getDenominator());
+	MarkVoice( tpos.getNumerator(), tpos.getDenominator(), duration.getNumerator(), duration.getDenominator(), red, green, blue);
 }
 
-void ARMusicalVoice::MarkVoice( int fromnum, int fromdenom, int lengthnum, int lengthdenom)
+void ARMusicalVoice::MarkVoice( int fromnum, int fromdenom, int lengthnum, int lengthdenom, unsigned char red, unsigned char green, unsigned char blue)
 {
 	TYPE_TIMEPOSITION tpos(fromnum,fromdenom);
 	TYPE_DURATION duration(lengthnum,lengthdenom);
@@ -5968,7 +5968,7 @@ void ARMusicalVoice::MarkVoice( int fromnum, int fromdenom, int lengthnum, int l
 	{
 		ARNoteFormat * ntformat = new ARNoteFormat;
 		ntformat->setRelativeTimePosition(tpos);
-		ntformat->setColor("red");
+		ntformat->setRGBColor(red, green, blue);
 		AddElementAt(startpos,ntformat);
 
 		ntformat = new ARNoteFormat;
