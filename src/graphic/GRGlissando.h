@@ -35,7 +35,9 @@ class GRGlissando : public GRPTagARNotationElement
 		public:
 				GRGlissandoContext() : staff(0), openRight(false), openLeft(false),
 									topLeftHead(0), bottomLeftHead(0),
-									topRightHead(0), bottomRightHead(0)
+									topRightHead(0), bottomRightHead(0), accidentalRight(0),
+									sizeLeft(1), sizeRight(1), leftNoteDX(0), rightNoteDX(0),
+									leftNoteDY(0), rightNoteDY(0)
 									 { }
 			GRStaff * staff;
 			bool openRight;
@@ -44,6 +46,13 @@ class GRGlissando : public GRPTagARNotationElement
 			GRStdNoteHead * bottomLeftHead;
 			GRStdNoteHead * topRightHead;
 			GRStdNoteHead * bottomRightHead;
+			GRAccidental * accidentalRight;
+			float sizeLeft;
+			float sizeRight;
+			float leftNoteDX;
+			float rightNoteDX;
+			float leftNoteDY;
+			float rightNoteDY;
 	};
 
 	public:
@@ -54,7 +63,6 @@ class GRGlissando : public GRPTagARNotationElement
 		virtual 	~GRGlissando();
 
 		virtual void OnDraw( VGDevice & hdc ) const;
-		virtual void updateBoundingBox();
 										
 		virtual void removeAssociation(GRNotationElement * el );
 		virtual void addAssociation(GRNotationElement * el);

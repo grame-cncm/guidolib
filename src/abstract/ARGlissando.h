@@ -26,9 +26,9 @@ public:
 	const TagParameterFloat * getDy1() const	{ return dy1; }
 	const TagParameterFloat * getDx2() const	{ return dx2; }
 	const TagParameterFloat * getDy2() const	{ return dy2; }
-	const TagParameterFloat * getThickness() const	{ return thickness; }
-	const TagParameterString * getLineStyle() const	{ return lineStyle; }
-	bool isWavy() {return wavy;}
+	const TagParameterFloat * getThickness() const	{ return fThickness; }
+	const TagParameterString * getLineStyle() const	{ return fLineStyle; }
+	bool isWavy() {return fWavy;}
 	
 	
 protected:
@@ -36,9 +36,9 @@ protected:
 	const TagParameterFloat * dy1;
 	const TagParameterFloat * dx2;
 	const TagParameterFloat * dy2;
-	const TagParameterFloat * thickness;
-	const TagParameterString * lineStyle;
-	bool	wavy;
+	const TagParameterFloat * fThickness;
+	const TagParameterString * fLineStyle;
+	bool	fWavy;
 
 	bool mParSet;
 

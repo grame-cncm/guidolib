@@ -2,11 +2,13 @@
 #include "VGDevice.h"
 
 #include "ARGlissando.h"
+#include "ARNote.h"
 #include "TagParameterString.h"
 #include "TagParameterFloat.h"
 #include "GRStaff.h"
 #include "GRGlue.h"
 #include "GRSingleNote.h"
+#include "GRAccidental.h"
 #include "GRGlobalStem.h"
 #include "GRRest.h"
 #include "GREmpty.h"
@@ -177,23 +179,6 @@ void GRGlissando::OnDraw( VGDevice & hdc ) const
 	}
 	if (mColRef) hdc.PopFillColor();
 }
-/*
-GRSystemStartEndStruct * GRGlissando::prepareSSEStructForGlissando( const GRStaff * inStaff )
-{
-	GRSystemStartEndStruct * sse = getSystemStartEndStruct( inStaff->getGRSystem());
-	if( sse == 0 ) return 0;
-
-	if (sse->endflag == GRSystemStartEndStruct::NOTKNOWN)
-	{
-		// this is not good ...
-		setError(1);
-		setStartElement(inStaff,NULL);
-		setEndElement(inStaff,NULL);
-		return 0 ;
-	}
-	return sse;
-}
-*/
 
 
 void GRGlissando::tellPosition(GObject * caller, const NVPoint & newPosition)
@@ -247,36 +232,48 @@ void GRGlissando::updateGlissando( GRStaff * inStaff )
 	float XRight = 0;
 	float YRight = 0;
 
+	float dBottomLeftx = 0;
+	float dBottomLefty = 0;
+	float dBottomRightx = 0;
+	float dBottomRighty = 0;
+
+	float acc = 0;
+
 	if(glissContext.bottomLeftHead)
-		{
-			XLeft = glissContext.bottomLeftHead->getPosition().x + glissContext.bottomLeftHead->getBoundingBox().Width() + dx1;
-			YLeft = glissContext.bottomLeftHead->getPosition().y - dy1;
-		}
+	{
+		XLeft = glissContext.bottomLeftHead->getPosition().x + glissContext.leftNoteDX; 
+		dBottomLeftx = glissContext.bottomLeftHead->getBoundingBox().Width()*3/4*glissContext.sizeLeft;
+		YLeft = glissContext.bottomLeftHead->getPosition().y + glissContext.leftNoteDY;
+	}
 	if(glissContext.bottomRightHead)
+	{
+		XRight = glissContext.bottomRightHead->getPosition().x + glissContext.rightNoteDX;
+		dBottomRightx = glissContext.bottomRightHead->getBoundingBox().Width()*3/4*glissContext.sizeRight;
+		YRight = glissContext.bottomRightHead->getPosition().y + glissContext.rightNoteDY;
+		if(glissContext.accidentalRight)
 		{
-			XRight = glissContext.bottomRightHead->getPosition().x - glissContext.bottomRightHead->getBoundingBox().Width() + dx2;
-			YRight = glissContext.bottomRightHead->getPosition().y - dy2;
+			acc = glissContext.accidentalRight->getBoundingBox().Width()*getSize();
 		}
+	}
 	float deltaX = XRight - XLeft;
 	float deltaY = YRight - YLeft;
 
+	dBottomLefty = dBottomLeftx*deltaY/deltaX;
+	dBottomRighty = dBottomRightx*deltaY/deltaX;
+
 	float thickness = arGliss->getThickness()->getValue( staffLSpace )*sqrt(deltaX*deltaX + deltaY*deltaY)/deltaX;
 
-	glissInfos->points[0].y = YLeft + thickness/2;
-	glissInfos->points[1].y = YLeft - thickness/2;
-	glissInfos->points[3].y = YRight + thickness/2;
-	glissInfos->points[2].y = YRight - thickness/2;
-	glissInfos->points[0].x = glissInfos->points[1].x = XLeft;
-	glissInfos->points[3].x = glissInfos->points[2].x = XRight;
+	glissInfos->points[0].y = YLeft - dy1 + dBottomLefty + thickness/2;
+	glissInfos->points[1].y = YLeft - dy1 + dBottomLefty - thickness/2;
+	glissInfos->points[3].y = YRight - dy2 - dBottomRighty + thickness/2;
+	glissInfos->points[2].y = YRight - dy2 - dBottomRighty - thickness/2;
+	glissInfos->points[0].x = glissInfos->points[1].x = XLeft + dx1 + dBottomLeftx;
+	glissInfos->points[3].x = glissInfos->points[2].x = XRight + dx2 - dBottomRightx - acc;
 	glissInfos->position = glissInfos->points[0];
 
 	wavy = arGliss->isWavy();
 }
 
-//à faire
-void GRGlissando::updateBoundingBox()
-{
-}	
 
 void GRGlissando::getGlissandoBeginingContext( GRGlissandoContext * ioContext, GRSystemStartEndStruct * sse )
 {
@@ -287,10 +284,13 @@ void GRGlissando::getGlissandoBeginingContext( GRGlissandoContext * ioContext, G
 		{
 			ioContext->bottomLeftHead = note->getNoteHead();
 			ioContext->topLeftHead = NULL;
+			ioContext->sizeLeft = note->getSize();
+			ioContext->leftNoteDX = note->getOffset().x;
+			ioContext->leftNoteDY = note->getOffset().y;
 		}
 	/*	else
 		{
-			//ici il faudra gérer les clusters. pour l'instant pas utilisé...
+			//here, we should deal with clusters...
 		}
 	*/
 }
@@ -302,12 +302,19 @@ void GRGlissando::getGlissandoEndingContext( GRGlissandoContext * ioContext, GRS
 		GRSingleNote * note = dynamic_cast<GRSingleNote *>(endElement);
 		if( note )
 		{
+			GRAccidentalList noteacclist;
+			note->extractAccidentals( &noteacclist );
+			if(!noteacclist.empty())
+				ioContext->accidentalRight = noteacclist.GetHead();
 			ioContext->bottomRightHead = note->getNoteHead();
 			ioContext->topRightHead = NULL;
+			ioContext->sizeRight = note->getSize();
+			ioContext->rightNoteDX = note->getOffset().x;
+			ioContext->rightNoteDY = note->getOffset().y;
 		}
 	/*	else
 		{
-			//ici il faudra gérer les clusters. pour l'instant pas utilisé...
+			//here, we should deal with clusters...
 		}
 	*/
 	
@@ -370,30 +377,15 @@ GRNotationElement * GRGlissando::getEndElement(GRStaff * grstaff) const
 }
 
 
-/*
-GRGlobalStem * GRGlissando::findGlobalStem( GRSystemStartEndStruct * sse, GRNotationElement * stemOwner )
-{
-	const NEPointerList * ptlist1 = stemOwner->getAssociations();
-	if (ptlist1)
-	{
-		GuidoPos nepos = ptlist1->GetHeadPosition();
-		while (nepos)
-		{
-			GRGlobalStem * stem = dynamic_cast<GRGlobalStem *>(ptlist1->GetNext(nepos));
-			if (stem)
-				return stem;
-		}
-	}
-	return 0;
-}
-*/
 
 void GRGlissando::ResumeTag(GRStaff * grstaff,GuidoPos assocpos)
 {
+	//assert( gCurSystem );
 	if (!grstaff) return;
 
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
 	//sse->grsystem = grstaff->getGRSystem();
+	//sse->grsystem = gCurSystem;
 	sse->startflag = GRSystemStartEndStruct::OPENLEFT;
 	sse->startpos = assocpos;
 	sse->startElement = laststartElement;
