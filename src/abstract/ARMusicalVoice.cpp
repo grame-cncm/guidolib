@@ -1,20 +1,14 @@
 /*
 	GUIDO Library
 	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  Copyright (C) 2002-2013 Grame
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Lesser General Public
-	License as published by the Free Software Foundation; either
-	version 2.1 of the License, or (at your option) any later version.
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-	This library is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Lesser General Public License for more details.
-
-	You should have received a copy of the GNU Lesser General Public
-	License along with this library; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
 
 */
 
@@ -76,6 +70,7 @@ using namespace std;
 #include "ARAlter.h"
 #include "ARSlur.h"
 #include "ARTrill.h"
+#include "ARGlissando.h"
 #include "GRTrill.h"
 #include "GRSingleNote.h"
 #include "ARCluster.h"
@@ -86,7 +81,7 @@ using namespace std;
 
 #include "benchtools.h"
 
-
+#define GLISSANDOEND "\\glissandoEnd"
 #define TIEEND "\\tieEnd"
 #define DISPDUREND "\\dispDurEnd"
 #define SHARESTEMEND "\\shareStemEnd"
@@ -1236,6 +1231,7 @@ void ARMusicalVoice::doAutoStuff2()
 	timebench("doAutoEndBar", doAutoEndBar());
 	//this->operator<< (cout);
 	//timebench("doAutoTrill", doAutoTrill());
+	timebench("doAutoGlissando", doAutoGlissando());
 }
 
 //____________________________________________________________________________________
@@ -5022,6 +5018,287 @@ void ARMusicalVoice::doAutoTies()
 	endState = new ARMusicalVoiceState(vst);
 }
 
+//------------------------------------------------------------------------------------
+//doAutoGlissando...
+
+
+struct ARGlissandoStruct
+{
+// public:
+	ARGlissando * glissando;
+	ARGlissando * originGlissando;
+	ARChordTag * curchordtag;
+	ARNote * startnote;
+	ARGlissandoStruct()
+	{
+		glissando = NULL;
+		curchordtag = NULL;
+		startnote = NULL;
+		originGlissando = NULL;
+	}
+};
+
+
+void ARMusicalVoice::doAutoGlissando()
+{
+	KF_IPointerList<ARGlissandoStruct> glissStructlist(1);
+
+	KF_IPointerList<ARGlissando> deletelist(0);
+
+	KF_IPointerList<ARGlissandoStruct> autoglissStructlist(1);
+
+	_readmode oldreadmode = readmode;
+
+	readmode = EVENTMODE;
+
+	ARMusicalVoiceState vst;
+	GetHeadPosition(vst);
+
+	ARChordTag * curchordtag = vst.curchordtag;
+	ARChordTag * prevchordtag = NULL;
+
+	while (vst.vpos)
+	{
+		ARMusicalObject * o = GetAt(vst.vpos);
+		ARNote * note = dynamic_cast<ARNote *>(o);
+
+		if (vst.addedpositiontags)
+		{
+			GuidoPos tmppos = vst.addedpositiontags->GetHeadPosition();
+			while (tmppos)
+			{
+				ARGlissando * glissando = dynamic_cast<ARGlissando *>(vst.addedpositiontags->GetNext(tmppos));
+				if (glissando)
+				{
+					ARGlissandoStruct * glissStruct = new ARGlissandoStruct();
+					glissStruct->glissando = glissando;
+					glissStruct->curchordtag = vst.curchordtag;
+					glissStruct->startnote = note;
+					glissStructlist.AddTail(glissStruct);
+				}
+			}
+		}
+
+		if (note)
+		{
+			GuidoPos posGlissStructlist = glissStructlist.GetHeadPosition();
+			while (posGlissStructlist)
+			{
+				ARGlissandoStruct *glissStruct = glissStructlist.GetNext(posGlissStructlist);
+				
+				bool isTied = false;
+				if(vst.curpositiontags)
+				{
+					GuidoPos tmppos = vst.curpositiontags->GetHeadPosition();
+					while (tmppos)
+					{
+						ARTie * tie = dynamic_cast<ARTie *>(vst.curpositiontags->GetNext(tmppos));
+						if (tie && tie->getStartPosition() == vst.vpos)
+						{
+							isTied = true;
+						}
+					}
+				}
+				if(note->getName() != ARNoteName::empty && !isTied)
+				{
+					ARGlissando * myglissando = new ARGlissando();
+					myglissando->setID(gCurArMusic->mMaxTagId++);
+					myglissando->setIsAuto(true);
+					myglissando->setStartPosition(vst.vpos);
+					// now we copy the parameters 
+					TagParameterList * tpl = glissStruct->glissando->getTagParameterList();
+
+					myglissando->setTagParameterList(*tpl);
+					delete tpl;
+					mPosTagList->AddElementAt(vst.ptagpos,myglissando);
+
+					ARGlissandoStruct * agstruct = new ARGlissandoStruct;
+					agstruct->glissando = myglissando;
+					
+					agstruct->originGlissando = glissStruct->glissando;
+					agstruct->curchordtag = vst.curchordtag;
+					agstruct->startnote = note;
+					
+					autoglissStructlist.AddTail(agstruct);
+				}
+
+			// check the first element...
+			}
+
+			GuidoPos mypos = autoglissStructlist.GetHeadPosition();
+			while (mypos)
+			{
+				ARGlissandoStruct * glissStruct = autoglissStructlist.GetAt(mypos);
+
+				if (glissStruct->glissando->getPosition() == vst.vpos)
+				{
+					autoglissStructlist.GetNext(mypos);
+					continue;
+				}
+				
+				bool isTied = false;
+				if(vst.curpositiontags)
+				{
+					GuidoPos tmppos = vst.curpositiontags->GetHeadPosition();
+					while (tmppos)
+					{
+						ARTie * tie = dynamic_cast<ARTie *>(vst.curpositiontags->GetNext(tmppos));
+						if (tie && tie->getEndPosition() == vst.vpos)
+						{
+							isTied = true;
+						}
+					}
+				}
+
+				if (glissStruct->curchordtag == prevchordtag && (glissStruct->startnote->getRelativeEndTimePosition() == note->getStartTimePosition()))
+				{
+					if (note->getName() != ARNoteName::empty && !note->CompareNameOctavePitch(*glissStruct->startnote) && !isTied)
+					{
+						ARDummyRangeEnd * arde = new ARDummyRangeEnd(GLISSANDOEND);
+						arde->setID(glissStruct->glissando->getID());
+						arde->setPosition(vst.vpos);
+						glissStruct->glissando->setCorrespondence(arde);
+						arde->setCorrespondence(glissStruct->glissando);
+
+						if (vst.ptagpos)
+							mPosTagList->AddElementAt(vst.ptagpos,arde);
+						else
+							mPosTagList->AddTail(arde);
+
+
+						autoglissStructlist.RemoveElementAt(mypos);
+						mypos = autoglissStructlist.GetHeadPosition();
+						break;
+					}
+					else if (glissStruct->curchordtag != prevchordtag || isTied)
+					{
+						mPosTagList->RemoveElement(glissStruct->glissando);
+						autoglissStructlist.RemoveElementAt(mypos);
+						mypos = autoglissStructlist.GetHeadPosition();
+					}
+					else
+					{
+						// go to the next event...
+						if (mypos)
+							autoglissStructlist.GetNext(mypos);
+					}
+				}
+				else
+				{
+					// go to the next event...
+					if (mypos)
+						autoglissStructlist.GetNext(mypos);
+				}
+			}
+		}
+
+		// go to the next event...
+		GetNext(vst.vpos,vst);
+
+		ARMusicalObject * nexto = NULL;
+		ARNote * nextnote  = NULL;
+
+		if (vst.vpos)
+		{
+			nexto = GetAt(vst.vpos);
+			nextnote = dynamic_cast<ARNote *>(nexto);
+		}
+
+		if (nextnote && curchordtag != vst.curchordtag)
+		{
+			prevchordtag = curchordtag;
+			curchordtag = vst.curchordtag;
+
+		}
+		else if (nextnote && vst.curchordtag == NULL)
+		{
+			prevchordtag = curchordtag;
+		}
+		
+		if (vst.removedpositiontags)
+		{
+			GuidoPos tmppos = vst.removedpositiontags->GetHeadPosition();
+			while (tmppos)
+			{
+				ARGlissando * glissando = dynamic_cast<ARGlissando *>
+					(vst.removedpositiontags->GetNext(tmppos));
+				if (glissando)
+				{
+					GuidoPos posGlissStructlist = glissStructlist.GetHeadPosition();
+					while (posGlissStructlist)
+					{
+						ARGlissandoStruct *glissStruct = glissStructlist.GetAt(
+							posGlissStructlist);
+						if (glissStruct->glissando == glissando)
+							break;
+						glissStructlist.GetNext(posGlissStructlist);
+					}
+
+					if (posGlissStructlist)
+					{
+						ARGlissandoStruct *agstruct = NULL;
+						do
+						{
+							agstruct = NULL;
+							GuidoPos mypos = autoglissStructlist.GetHeadPosition();
+
+							while (mypos)
+							{
+								agstruct = autoglissStructlist.GetAt(mypos);
+								if (agstruct->originGlissando == glissando)
+								{
+									break;
+								}
+								autoglissStructlist.GetNext(mypos);
+							}
+							if (mypos)
+							{
+								assert(agstruct);
+								mPosTagList->RemoveElement(agstruct->glissando);
+								autoglissStructlist.RemoveElementAt(mypos);
+							}
+							else
+								agstruct = NULL;
+						}
+						while (agstruct);
+
+						glissStructlist.RemoveElementAt(posGlissStructlist);
+					}
+					deletelist.AddTail(glissando);
+
+				}
+			}
+		}
+
+	} // while (vst.vpos) -> the whole voice.
+
+	if (deletelist.GetCount() > 0)
+	{
+		GuidoPos pos = deletelist.GetHeadPosition();
+		while (pos)
+		{
+			ARGlissando * glissando = deletelist.GetNext(pos);
+
+			if (glissando->getCorrespondence())
+			{
+				// the list owns this one...
+				mPosTagList->RemoveElement(glissando->getCorrespondence());
+			}
+
+			// the mPosTagList owns the ties!
+			mPosTagList->RemoveElement(glissando);
+
+		}
+	}
+
+	readmode = oldreadmode;
+
+	// now we have the EndState ...
+	delete endState;
+	endState = new ARMusicalVoiceState(vst);
+}
+
+
 //____________________________________________________________________________________
 /** \brief (not implemented) Traverses the voice and breaks Fermata-Tags
 	so that the range just covers a single note.
@@ -5699,10 +5976,11 @@ void ARMusicalVoice::MarkVoice( int fromnum, int fromdenom, int lengthnum, int l
 		AddElementAfter(endpos,ntformat);
 	}
 }
-
+/** \brief Manage the trills in order to give the information of the trill to tied notes
+*/
 void ARMusicalVoice::doAutoTrill()
 {
-	//we first look for each note and check if it has a trill
+	// We first look for each note and check if it has a trill
 	ARMusicalVoiceState armvs;
 	GuidoPos posObj = GetHeadPosition(armvs);
 	while(posObj)
@@ -5714,9 +5992,9 @@ void ARMusicalVoice::doAutoTrill()
 			ARTrill * trill = note->getOrnament();
 			if(trill && trill->getType()==0)
             {
-				//if it has, we can check if the note is tied to another
-				//if it is tied, we will let it as "begin" (default)
-				//and we'll affect an ARtrill to the next note, whose boolean "begin" will be set as false with setContinue()
+				// if it has, we can check if the note is tied to another
+				// if it is tied, we will let its status as "begin" (default)
+				// and we'll affect an ARtrill to the next note, whose boolean "begin" will be set as false with setContinue()
 				if(armvs.getCurPositionTags())
                 {
 					GuidoPos pos = armvs.getCurPositionTags()->GetHeadPosition();
@@ -5739,9 +6017,8 @@ void ARMusicalVoice::doAutoTrill()
 
 								if(nextNote)
                                 {
-									ARTrill * newTrill = new ARTrill(ARTrill::TRILL);
 									nextNote->setVoiceNum(note->getVoiceNum());
-									nextNote->setOrnament(newTrill);
+									nextNote->setOrnament(note->getOrnament());
 									nextNote->getOrnament()->setContinue();
 								}
 							}
@@ -5749,6 +6026,7 @@ void ARMusicalVoice::doAutoTrill()
 					}
 				}
 			}
+
 		}
 	}
 }
