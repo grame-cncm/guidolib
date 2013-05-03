@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include "math.h"
 #include "VGDevice.h"
 
 #include "ARGlissando.h"
@@ -81,7 +82,7 @@ void GRGlissando::OnDraw( VGDevice & hdc ) const
 
 	assert( gCurSystem );
 
-	GRSystem * sys = gCurSystem;
+//	GRSystem * sys = gCurSystem;
 
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );
 	if( sse == 0)
