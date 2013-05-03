@@ -32,11 +32,14 @@ ARCluster::ARCluster() : ARMTParameter()
 {
 	rangesetting = ONLY;
 
-    for(int i = 0; i <= 2; i++)
+    for(int i = 0; i <= 1; i++)
     {
         mFirstNote[i] = 0;
         mSecondNote[i] = 0;
     }
+
+    adx = 0;
+    ady = 0;
 }
 
 ARCluster::~ARCluster() 
@@ -100,12 +103,10 @@ void ARCluster::setNotePitchAndOctave(int inPitch, int inOctave, int inAccidenta
     {
         mFirstNote[0] = inPitch;
         mFirstNote[1] = inOctave;
-        mFirstNote[2] = inAccidental;
     }
     else
     {
         mSecondNote[0] = inPitch;
         mSecondNote[1] = inOctave;
-        mSecondNote[2] = inAccidental;
     }
 }

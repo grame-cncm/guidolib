@@ -6033,23 +6033,20 @@ void ARMusicalVoice::doAutoTrill()
 
 void ARMusicalVoice::doAutoCluster()
 {
-	//we first look for each note and check if it has a cluster
-	/*ARMusicalVoiceState armvs;
+	// We first look for each note and check if it has a cluster
+	ARMusicalVoiceState armvs;
 	GuidoPos posObj = GetHeadPosition(armvs);
 	while(posObj)
     {
 		ARMusicalObject * obj = GetNext(posObj, armvs);
 		ARNote * note = dynamic_cast<ARNote *>(obj);
-
 		if(note)
         {
-            ARCluster *cluster = note->getARCluster();
-
+			ARCluster * cluster = note->getARCluster();
 			if(cluster)
             {
-				//if it has, we can check if the note is tied to another
-				//if it is tied, we will let it as "begin" (default)
-				//and we'll affect an ARtrill to the next note, whose boolean "begin" will be set as false with setContinue()
+				// if it has, we can check if the note is tied to another
+				// if it is tied, we'll affect an ARCluster to the next note
 				if(armvs.getCurPositionTags())
                 {
 					GuidoPos pos = armvs.getCurPositionTags()->GetHeadPosition();
@@ -6072,10 +6069,10 @@ void ARMusicalVoice::doAutoCluster()
 
 								if(nextNote)
                                 {
-									ARTrill * newTrill = new ARTrill(ARTrill::TRILL);
-									nextNote->setVoiceNum(note->getVoiceNum());
-									nextNote->setOrnament(newTrill);
-									nextNote->getOrnament()->setContinue();
+                                    nextNote = nextNote;
+									/*nextNote->setVoiceNum(note->getVoiceNum());
+									nextNote->setOrnament(note->getOrnament());
+									nextNote->getOrnament()->setContinue();*/
 								}
 							}
 						}	
@@ -6083,6 +6080,5 @@ void ARMusicalVoice::doAutoCluster()
 				}
 			}
 		}
-	}*/
+	}
 }
-

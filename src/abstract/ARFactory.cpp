@@ -305,7 +305,12 @@ void ARFactory::createChord()
 	// now, we have to save the position of the voice...
 	assert(mCurrentVoice);
 
-	mCurrentVoice->BeginChord();
+    if (mInClusterTag && !mCurrentCluster)
+    {
+        mCurrentCluster = new ARCluster();
+    }
+
+    mCurrentVoice->BeginChord();
 }
 
 // ----------------------------------------------------------------------------
@@ -346,6 +351,8 @@ void ARFactory::addChord()
         mCurrentVoice->setClusterChord(mCurrentCluster);
 
 	mCurrentVoice->FinishChord();
+
+    mCurrentCluster = NULL;
 }
 
 // ----------------------------------------------------------------------------
