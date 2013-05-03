@@ -28,10 +28,15 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "GRSingleNote.h"
 #include "ARNoteFormat.h"
 #include "TagParameterString.h"
+#include "TagParameterFloat.h"
 
 GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, TYPE_DURATION inDuration, ARNoteFormat * curnoteformat) :
 						GRARCompositeNotationElement(arcls),
-						GRPositionTag(arcls->getEndPosition(), arcls), mHaveBeenDrawn(false), mStaff(stf), mARCluster(arcls), mDuration(inDuration)
+						GRPositionTag(arcls->getEndPosition(), arcls),
+                        mHaveBeenDrawn(false),
+                        mStaff(stf),
+                        mARCluster(arcls),
+                        mDuration(inDuration)
 {
 	assert(stf);
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
@@ -44,6 +49,14 @@ GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, TYPE_DURATION inDuration,
 
     if (curnoteformat)
     {
+        // - Size
+        const TagParameterFloat * tmp = curnoteformat->getSize();
+        if (tmp)
+            mTagSize = tmp->getValue();
+        else
+            mTagSize = stf->getSizeRatio();
+
+        // - Color
         const TagParameterString * tmps = curnoteformat->getColor();
         if (tmps)
         {
@@ -51,7 +64,20 @@ GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, TYPE_DURATION inDuration,
                 mColRef = new unsigned char[4];
             tmps->getRGB(mColRef);
         }
+
+        // - Offset
+		const TagParameterFloat * tmpdx = curnoteformat->getDX();
+		const TagParameterFloat * tmpdy = curnoteformat->getDY();
+
+		if (tmpdx)
+			mTagOffset.x = (GCoord)(tmpdx->getValue(stf->getStaffLSPACE()));
+		if (tmpdy)
+			mTagOffset.y = (GCoord)(tmpdy->getValue(stf->getStaffLSPACE()));
     }
+    else
+	{
+		mTagSize = stf->getSizeRatio();
+	}
 
     gdx = arcls->getadx();
     gdy = arcls->getady();
@@ -78,33 +104,60 @@ void GRCluster::OnDraw(VGDevice &hdc)
         NVRect r = getBoundingBox();
         r += getPosition();
 
-        float x = r.left + gdx;
+        float x = r.left + gdx + mTagOffset.x;
 
         float curLSpace = mStaff->getStaffLSPACE();
+
+        gdy += mTagOffset.y;
 
         // - Quarter notes and less
         if (mDuration < DURATION_2 )
         {
-            const float xCoords [] = {x - 31, x + 29, x + 29, x - 31};
-            const float yCoords [] = {mFirstNoteYPosition + gdy - curLSpace / 2, mFirstNoteYPosition + gdy - curLSpace / 2,
-                mSecondNoteYPosition + gdy + curLSpace / 2, mSecondNoteYPosition + gdy + curLSpace / 2};
+            const float xCoords [] = {x - 31 * mTagSize,
+                                      x + 29 * mTagSize,
+                                      x + 29 * mTagSize,
+                                      x - 31 * mTagSize};
+            const float yCoords [] = {mFirstNoteYPosition + gdy - curLSpace / 2,
+                                      mFirstNoteYPosition + gdy - curLSpace / 2,
+                                      mSecondNoteYPosition + gdy + curLSpace / 2,
+                                      mSecondNoteYPosition + gdy + curLSpace / 2};
 
             hdc.Polygon(xCoords, yCoords, 4);
         }
         else
         {
-            const float xCoords1 [] = {x - 31, x + 29, x + 29, x - 31};
-            const float yCoords1 [] = {mFirstNoteYPosition + gdy - curLSpace / 2, mFirstNoteYPosition + gdy - curLSpace / 2,
-                mFirstNoteYPosition + gdy - curLSpace / 2 + 6, mFirstNoteYPosition + gdy - curLSpace / 2 + 6};
-            const float xCoords2 [] = {x + 23, x + 29, x + 29, x + 23};
-            const float yCoords2 [] = {mFirstNoteYPosition + gdy - curLSpace / 2, mFirstNoteYPosition + gdy - curLSpace / 2,
-                mSecondNoteYPosition + gdy + curLSpace / 2, mSecondNoteYPosition + gdy + curLSpace / 2};
-            const float xCoords3 [] = {x - 31, x + 29, x + 29, x - 31};
-            const float yCoords3 [] = {mSecondNoteYPosition + gdy + curLSpace / 2 - 6, mSecondNoteYPosition + gdy + curLSpace / 2 - 6,
-                mSecondNoteYPosition + gdy + curLSpace / 2, mSecondNoteYPosition + gdy + curLSpace / 2};
-            const float xCoords4 [] = {x - 31, x -25, x - 25, x - 31};
-            const float yCoords4 [] = {mFirstNoteYPosition + gdy - curLSpace / 2, mFirstNoteYPosition + gdy - curLSpace / 2,
-                mSecondNoteYPosition + gdy + curLSpace / 2, mSecondNoteYPosition + gdy + curLSpace / 2};
+            const float xCoords1 [] = {x - 31 * mTagSize,
+                                       x + 29 * mTagSize,
+                                       x + 29 * mTagSize,
+                                       x - 31 * mTagSize};
+            const float yCoords1 [] = {mFirstNoteYPosition + gdy - curLSpace / 2,
+                                       mFirstNoteYPosition + gdy - curLSpace / 2,
+                                       mFirstNoteYPosition + gdy - curLSpace / 2 + 6,
+                                       mFirstNoteYPosition + gdy - curLSpace / 2 + 6};
+            const float xCoords2 [] = {x + 23 * mTagSize,
+                                       x + 29 * mTagSize,
+                                       x + 29 * mTagSize,
+                                       x + 23 * mTagSize};
+            const float yCoords2 [] = {mFirstNoteYPosition + gdy - curLSpace / 2,
+                                       mFirstNoteYPosition + gdy - curLSpace / 2,
+                                       mSecondNoteYPosition + gdy + curLSpace / 2,
+                                       mSecondNoteYPosition + gdy + curLSpace / 2};
+            const float xCoords3 [] = {x - 31 * mTagSize,
+                                       x + 29 * mTagSize,
+                                       x + 29 * mTagSize,
+                                       x - 31 * mTagSize};
+            const float yCoords3 [] = {mSecondNoteYPosition + gdy + curLSpace / 2 - 6,
+                                       mSecondNoteYPosition + gdy + curLSpace / 2 - 6,
+                                       mSecondNoteYPosition + gdy + curLSpace / 2,
+                                       mSecondNoteYPosition + gdy + curLSpace / 2};
+            const float xCoords4 [] = {x - 31 * mTagSize,
+                                       x - 25 * mTagSize,
+                                       x - 25 * mTagSize,
+                                       x - 31 * mTagSize};
+            const float yCoords4 [] = {mFirstNoteYPosition + gdy - curLSpace / 2,
+                                       mFirstNoteYPosition + gdy - curLSpace / 2,
+                                       mSecondNoteYPosition + gdy + curLSpace / 2,
+                                       mSecondNoteYPosition + gdy + curLSpace / 2};
 
             hdc.Polygon(xCoords1, yCoords1, 4);
             hdc.Polygon(xCoords2, yCoords2, 4);

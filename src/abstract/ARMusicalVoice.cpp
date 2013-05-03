@@ -6034,7 +6034,7 @@ void ARMusicalVoice::doAutoTrill()
 void ARMusicalVoice::doAutoCluster()
 {
 	// We first look for each note and check if it has a cluster
-	/*ARMusicalVoiceState armvs;
+	ARMusicalVoiceState armvs;
 	GuidoPos posObj = GetHeadPosition(armvs);
 	while(posObj)
     {
@@ -6084,5 +6084,5 @@ void ARMusicalVoice::doAutoCluster()
 				}
 			}
 		}
-	}*/
+	}
 }
