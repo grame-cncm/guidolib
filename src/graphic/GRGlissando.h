@@ -36,8 +36,8 @@ class GRGlissando : public GRPTagARNotationElement
 				GRGlissandoContext() : staff(0), openRight(false), openLeft(false),
 									topLeftHead(0), bottomLeftHead(0),
 									topRightHead(0), bottomRightHead(0), accidentalRight(0),
-									sizeLeft(1), sizeRight(1), leftNoteDX(0), rightNoteDX(0),
-									leftNoteDY(0), rightNoteDY(0)
+									sizeLeft(1), sizeRight(1), leftNoteDX(0), 
+									rightNoteDX(0), leftNoteDY(0), rightNoteDY(0)
 									 { }
 			GRStaff * staff;
 			bool openRight;
@@ -92,8 +92,8 @@ class GRGlissando : public GRPTagARNotationElement
 		GuidoPos laststartpos;
 
 	private:
-		
-			GRSystemStartEndStruct * initGRGlissando( GRStaff * grstaff );
+		void compareAccidentals(GRSystemStartEndStruct * sse, bool * isUp, bool * isDown);
+		GRSystemStartEndStruct * initGRGlissando( GRStaff * grstaff );
 };
 
 #endif

@@ -78,10 +78,7 @@ void GRGlissando::print() const
 void GRGlissando::OnDraw( VGDevice & hdc ) const
 {
 	if (error) return;
-
 	assert( gCurSystem );
-
-	GRSystem * sys = gCurSystem;
 
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );
 	if( sse == 0)
@@ -90,7 +87,6 @@ void GRGlissando::OnDraw( VGDevice & hdc ) const
 	GRGlissandoSaveStruct * glissInfos = (GRGlissandoSaveStruct *)sse->p;
 	assert(glissInfos);
 
-	
 	if (mColRef) 
 		hdc.PushFillColor( VGColor( mColRef ) );
 	
@@ -98,6 +94,7 @@ void GRGlissando::OnDraw( VGDevice & hdc ) const
 	if(!wavy)
 	{
 		float coorX[4] = {glissInfos->points[0].x, glissInfos->points[1].x, glissInfos->points[2].x, glissInfos->points[3].x};
+		float coorY[4] = {glissInfos->points[0].y, glissInfos->points[1].y, glissInfos->points[2].y, glissInfos->points[3].y};
 		if (sse->endflag == GRSystemStartEndStruct::OPENRIGHT)
 		{
 			NVRect r = this->getGRStaff()->getBoundingBox();
@@ -106,16 +103,16 @@ void GRGlissando::OnDraw( VGDevice & hdc ) const
 		}
 		else if (sse->startflag == GRSystemStartEndStruct::OPENLEFT )
 		{
-			coorX[0] = coorX[1] = glissInfos->points[3].x - LSPACE;
+			coorX[0] = coorX[1] = coorX[3] - LSPACE;
 		}
-			
-		float coorY[4] = {glissInfos->points[0].y, glissInfos->points[1].y, glissInfos->points[2].y, glissInfos->points[3].y};
 		hdc.Polygon(coorX, coorY, 4);
 	}
 	//wavy
 	else
 	{
-		float width = glissInfos->points[3].x - glissInfos->points[0].x;
+		//we have to implement new function of the device, in order to be able to rotate a symbol
+
+		/*float width = glissInfos->points[3].x - glissInfos->points[0].x;
 		float height = glissInfos->points[3].y - glissInfos->points[0].y;
 		float pasX = width/10;
 		float pasY = height/10;
@@ -175,7 +172,7 @@ void GRGlissando::OnDraw( VGDevice & hdc ) const
 
 			hdc.Polygon( xPoints, yPoints, index );
 			
-		}
+		}*/
 	}
 	if (mColRef) hdc.PopFillColor();
 }
@@ -195,8 +192,7 @@ void GRGlissando::tellPosition(GObject * caller, const NVPoint & newPosition)
 	const GRNotationElement * const startElement = sse->startElement;
 	const GRNotationElement * const endElement = sse->endElement;
 
-
-	if( grel == endElement || ( endElement == 0 && grel == startElement))
+	if( grel == endElement || (grel == startElement && sse->endflag == GRSystemStartEndStruct::OPENRIGHT))
 	{
 		updateGlissando( staff );
 	}
@@ -206,7 +202,6 @@ void GRGlissando::tellPosition(GObject * caller, const NVPoint & newPosition)
 void GRGlissando::updateGlissando( GRStaff * inStaff )
 {
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( inStaff->getGRSystem());
-	//GRSystemStartEndStruct * sse = prepareSSEStructForGlissando( inStaff );
 	if ( sse == 0 ) return;
 
 	// --- Collects informations about the context ---
@@ -255,6 +250,25 @@ void GRGlissando::updateGlissando( GRStaff * inStaff )
 			acc = glissContext.accidentalRight->getBoundingBox().Width()*getSize();
 		}
 	}
+
+	//now we manage the case of same Y but different pitches...
+	if(YRight == YLeft)
+	{
+		bool forceUp = false;
+		bool forceDown = false;
+		compareAccidentals( sse, &forceUp, &forceDown);
+		if(forceUp)
+		{
+			YLeft += LSPACE/4;
+			YRight -= LSPACE/4;
+		}
+		else if (forceDown)
+		{
+			YLeft -= LSPACE/4;
+			YRight += LSPACE/4;
+		}
+	}
+
 	float deltaX = XRight - XLeft;
 	float deltaY = YRight - YLeft;
 
@@ -283,7 +297,7 @@ void GRGlissando::getGlissandoBeginingContext( GRGlissandoContext * ioContext, G
 		if( note )
 		{
 			ioContext->bottomLeftHead = note->getNoteHead();
-			ioContext->topLeftHead = NULL;
+			ioContext->topLeftHead = NULL; //only in the case of clusters
 			ioContext->sizeLeft = note->getSize();
 			ioContext->leftNoteDX = note->getOffset().x;
 			ioContext->leftNoteDY = note->getOffset().y;
@@ -307,7 +321,7 @@ void GRGlissando::getGlissandoEndingContext( GRGlissandoContext * ioContext, GRS
 			if(!noteacclist.empty())
 				ioContext->accidentalRight = noteacclist.GetHead();
 			ioContext->bottomRightHead = note->getNoteHead();
-			ioContext->topRightHead = NULL;
+			ioContext->topRightHead = NULL; //only in the case of clusters
 			ioContext->sizeRight = note->getSize();
 			ioContext->rightNoteDX = note->getOffset().x;
 			ioContext->rightNoteDY = note->getOffset().y;
@@ -318,6 +332,29 @@ void GRGlissando::getGlissandoEndingContext( GRGlissandoContext * ioContext, GRS
 		}
 	*/
 	
+}
+
+void GRGlissando::compareAccidentals(GRSystemStartEndStruct * sse, bool * isUp, bool * isDown)
+{
+	GRNotationElement * startElement = sse->startElement;
+	GRSingleNote * startnote = dynamic_cast<GRSingleNote *>(startElement);
+	GRNotationElement * endElement = sse->endElement;
+	GRSingleNote * endnote = dynamic_cast<GRSingleNote *>(endElement);
+
+	if(startnote && endnote )
+	{
+		ARNote * arstartnote = startnote->getARNote();
+		ARNote * arendnote = endnote->getARNote();
+		if(arstartnote && arendnote )
+		{
+			int startnoteAcc = arstartnote->getAccidentals();
+			int endnoteAcc = arendnote->getAccidentals();
+			if(startnoteAcc<endnoteAcc)
+				*isUp = true;
+			else if(endnoteAcc<startnoteAcc)
+				*isDown = true;
+		}
+	}
 }
 
 void GRGlissando::removeAssociation(GRNotationElement * el )
@@ -380,12 +417,9 @@ GRNotationElement * GRGlissando::getEndElement(GRStaff * grstaff) const
 
 void GRGlissando::ResumeTag(GRStaff * grstaff,GuidoPos assocpos)
 {
-	//assert( gCurSystem );
 	if (!grstaff) return;
 
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
-	//sse->grsystem = grstaff->getGRSystem();
-	//sse->grsystem = gCurSystem;
 	sse->startflag = GRSystemStartEndStruct::OPENLEFT;
 	sse->startpos = assocpos;
 	sse->startElement = laststartElement;
@@ -398,13 +432,6 @@ void GRGlissando::ResumeTag(GRStaff * grstaff,GuidoPos assocpos)
 	sse->p = (void *) st;
 
 	mStartEndList.AddTail(sse);
-
-	if (error)
-	{
-		setStartElement(grstaff,NULL);
-		setEndElement(grstaff,NULL);
-		return;
-	}
 
 	setStartElement(grstaff, laststartElement);
 }
