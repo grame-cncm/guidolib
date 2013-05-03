@@ -306,9 +306,7 @@ void ARFactory::createChord()
 	assert(mCurrentVoice);
 
     if (mInClusterTag && !mCurrentCluster)
-    {
         mCurrentCluster = new ARCluster();
-    }
 
     mCurrentVoice->BeginChord();
 }
@@ -1631,7 +1629,7 @@ void ARFactory::endTag()
             delete mCurrentTrill;
             mCurrentTrill = NULL;
         }
-        else if (mCurrentCluster)
+        else if (mInClusterTag)
         {
             mInClusterTag = false;
             mCurrentCluster = NULL;

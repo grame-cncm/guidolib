@@ -6034,7 +6034,7 @@ void ARMusicalVoice::doAutoTrill()
 void ARMusicalVoice::doAutoCluster()
 {
 	// We first look for each note and check if it has a cluster
-	ARMusicalVoiceState armvs;
+	/*ARMusicalVoiceState armvs;
 	GuidoPos posObj = GetHeadPosition(armvs);
 	while(posObj)
     {
@@ -6060,35 +6060,29 @@ void ARMusicalVoice::doAutoCluster()
                             {
 								GuidoPos posNote = posObj;
 								ARNote * nextNote;
-                                ARCluster *tmpCluster;
+                                ARCluster *tmpCluster = NULL;
 
-								do
+                                for (int i = 0; i <= 1; i++)
                                 {
-									ARMusicalObject * nextObject = GetNext(posNote, armvs);
-									nextNote = dynamic_cast<ARNote *>(nextObject);
-								}
-                                while(posObj && !nextNote);
+                                    do
+                                    {
+                                        ARMusicalObject * nextObject = GetNext(posNote, armvs);
+                                        nextNote = dynamic_cast<ARNote *>(nextObject);
+                                    }
+                                    while(posObj && !nextNote);
 
-								if(nextNote)
-                                {
-                                    tmpCluster = new ARCluster();
-                                    nextNote->setCluster(tmpCluster);
-								}
-
-                                do
-                                {
-									ARMusicalObject * nextObject = GetNext(posNote, armvs);
-									nextNote = dynamic_cast<ARNote *>(nextObject);
-								}
-                                while(posObj && !nextNote);
-
-                                if(nextNote)
-                                    nextNote->setCluster(tmpCluster);
-							}
+                                    if(nextNote)
+                                    {
+                                        if (!tmpCluster)
+                                            tmpCluster = new ARCluster();
+                                        nextNote->setCluster(tmpCluster);
+                                    }
+                                }
+                            }
 						}	
 					}
 				}
 			}
 		}
-	}
+	}*/
 }
