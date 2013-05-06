@@ -25,8 +25,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "GRPositionTag.h"
 
 class ARCluster;
-class GRStaff;
 class ARNoteFormat;
+class GRStaff;
+class GRSingleNote;
 
 /** \brief Graphical representation of a cluster.
 */
@@ -35,7 +36,7 @@ class GRCluster : public GRARCompositeNotationElement,
 {
 public:
 
-				 GRCluster(GRStaff * stf, ARCluster * arcls, TYPE_DURATION inDuration, ARNoteFormat * curnoteformat);
+				 GRCluster(GRStaff * stf, ARCluster * arcls, GRSingleNote *sngNote, ARNoteFormat * curnoteformat);
 	virtual	 	~GRCluster();
 
 	virtual void OnDraw(VGDevice &hdc);
@@ -52,6 +53,9 @@ protected:
 
     float gdx;
     float gdy;
+    float ghdx;
+    float ghdy;
+    float gSize;
 
     bool mHaveBeenDrawn;
 
@@ -60,6 +64,8 @@ protected:
     GRStaff *mStaff;
     ARCluster *mARCluster;
     TYPE_DURATION mDuration;
+
+    unsigned char *mClusterColor;
 };
 
 #endif

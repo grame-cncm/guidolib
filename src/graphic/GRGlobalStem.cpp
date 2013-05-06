@@ -44,7 +44,6 @@ GRGlobalStem::GRGlobalStem( GRStaff * inStaff,
   mFlagOnOff(true),stemdirset(false),stemlengthset(false),
   stemdir(dirOFF), lowerNote(NULL), higherNote(NULL) // , colref(NULL)
 {
-
 	if (curdispdur && curdispdur->getDisplayDuration() > DURATION_0)
 	{
 		dispdur = curdispdur->getDisplayDuration();
@@ -94,6 +93,7 @@ GRGlobalStem::GRGlobalStem( GRStaff * inStaff,
 		if (tmpdy)
 		{
 			mTagOffset.y = (GCoord)(tmpdy->getValue(inStaff->getStaffLSPACE()));
+            mTagOffset.y = -mTagOffset.y;
 		}
 	}
 	else
@@ -996,6 +996,17 @@ void GRGlobalStem::setNoteStemLength( GREvent * ev, float inLen )
 void GRGlobalStem::setSize( float newsize )
 {
 	mTagSize = newsize;
+}
+
+void GRGlobalStem::setMultiplicatedSize(float newMultiplicatedSize)
+{
+    mTagSize *= newMultiplicatedSize;
+}
+
+void GRGlobalStem::setOffsetXY(float inOffsetX, float inOffsetY)
+{
+    mTagOffset.x += inOffsetX;
+    mTagOffset.y += inOffsetY;
 }
 
 /** \brief Returns the highest and lowest notehead

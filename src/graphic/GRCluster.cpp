@@ -26,17 +26,19 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "VGDevice.h"
 #include "GRTagARNotationElement.h"
 #include "GRSingleNote.h"
+#include "GRGLobalStem.h"
 #include "ARNoteFormat.h"
 #include "TagParameterString.h"
 #include "TagParameterFloat.h"
 
-GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, TYPE_DURATION inDuration, ARNoteFormat * curnoteformat) :
+GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, GRSingleNote *sngNote, ARNoteFormat * curnoteformat) :
 						GRARCompositeNotationElement(arcls),
 						GRPositionTag(arcls->getEndPosition(), arcls),
                         mHaveBeenDrawn(false),
                         mStaff(stf),
                         mARCluster(arcls),
-                        mDuration(inDuration)
+                        mDuration(NULL),
+                        mClusterColor(NULL)
 {
 	assert(stf);
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
@@ -47,22 +49,26 @@ GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, TYPE_DURATION inDuration,
 
 	mStartEndList.AddTail(sse);
 
+    mDuration = sngNote->getDurTemplate();
+
+    const TagParameterString *tmpColor;
+
+    mTagSize = stf->getSizeRatio();
+
     if (curnoteformat)
     {
         // - Size
         const TagParameterFloat * tmp = curnoteformat->getSize();
         if (tmp)
             mTagSize = tmp->getValue();
-        else
-            mTagSize = stf->getSizeRatio();
 
         // - Color
-        const TagParameterString * tmps = curnoteformat->getColor();
-        if (tmps)
+        tmpColor = curnoteformat->getColor();
+        if (tmpColor)
         {
             if (!mColRef)
                 mColRef = new unsigned char[4];
-            tmps->getRGB(mColRef);
+            tmpColor->getRGB(mColRef);
         }
 
         // - Offset
@@ -74,13 +80,32 @@ GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, TYPE_DURATION inDuration,
 		if (tmpdy)
 			mTagOffset.y = (GCoord)(tmpdy->getValue(stf->getStaffLSPACE()));
     }
-    else
-	{
-		mTagSize = stf->getSizeRatio();
-	}
+
+    const TagParameterString *tmps = arcls->getColor();
+    if (tmps)
+    {
+        mClusterColor = new unsigned char[4];
+        tmps->getRGB(mClusterColor);
+
+        if (strcmp(tmps->getValue(), ""))
+            mColRef = NULL;
+    }
 
     gdx = arcls->getadx();
     gdy = arcls->getady();
+    ghdx = arcls->getahdx();
+    ghdy = arcls->getahdy();
+    gSize = arcls->getSize();
+
+    GREvent *grEvent = dynamic_cast<GREvent *>(sngNote);
+    if (grEvent)
+    {
+        grEvent->getGlobalStem()->setOffsetXY(gdx, -gdy);
+        grEvent->getGlobalStem()->setMultiplicatedSize(gSize);
+    }
+
+    gdy += mTagOffset.y;
+    gdx += mTagOffset.x;
     
     int *firstNoteParameters = mARCluster->getFirstNoteParameters();
 
@@ -95,8 +120,11 @@ void GRCluster::OnDraw(VGDevice &hdc)
     if (mHaveBeenDrawn == false)
     {
         const VGColor prevTextColor = hdc.GetFontColor();
+
         if (mColRef)
             hdc.SelectFillColor(VGColor(mColRef));
+        else if (mClusterColor)
+            hdc.SelectFillColor(VGColor(mClusterColor));
 
         if (mFirstNoteYPosition != mSecondNoteYPosition)
             mHaveBeenDrawn = true;
@@ -104,60 +132,58 @@ void GRCluster::OnDraw(VGDevice &hdc)
         NVRect r = getBoundingBox();
         r += getPosition();
 
-        float x = r.left + gdx + mTagOffset.x;
+        float x = r.left + gdx + ghdx;
 
         float curLSpace = mStaff->getStaffLSPACE();
-
-        gdy += mTagOffset.y;
 
         // - Quarter notes and less
         if (mDuration < DURATION_2 )
         {
-            const float xCoords [] = {x - 31 * mTagSize,
-                                      x + 29 * mTagSize,
-                                      x + 29 * mTagSize,
-                                      x - 31 * mTagSize};
-            const float yCoords [] = {mFirstNoteYPosition + gdy - curLSpace / 2,
-                                      mFirstNoteYPosition + gdy - curLSpace / 2,
-                                      mSecondNoteYPosition + gdy + curLSpace / 2,
-                                      mSecondNoteYPosition + gdy + curLSpace / 2};
+            const float xCoords [] = {x - 31 * mTagSize * gSize,
+                                      x + 29 * mTagSize * gSize,
+                                      x + 29 * mTagSize * gSize,
+                                      x - 31 * mTagSize * gSize};
+            const float yCoords [] = {mFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
+                                      mFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
+                                      mSecondNoteYPosition - gdy - ghdy + curLSpace / 2,
+                                      mSecondNoteYPosition - gdy - ghdy + curLSpace / 2};
 
             hdc.Polygon(xCoords, yCoords, 4);
         }
         else
         {
-            const float xCoords1 [] = {x - 31 * mTagSize,
-                                       x + 29 * mTagSize,
-                                       x + 29 * mTagSize,
-                                       x - 31 * mTagSize};
-            const float yCoords1 [] = {mFirstNoteYPosition + gdy - curLSpace / 2,
-                                       mFirstNoteYPosition + gdy - curLSpace / 2,
-                                       mFirstNoteYPosition + gdy - curLSpace / 2 + 6,
-                                       mFirstNoteYPosition + gdy - curLSpace / 2 + 6};
-            const float xCoords2 [] = {x + 23 * mTagSize,
-                                       x + 29 * mTagSize,
-                                       x + 29 * mTagSize,
-                                       x + 23 * mTagSize};
-            const float yCoords2 [] = {mFirstNoteYPosition + gdy - curLSpace / 2,
-                                       mFirstNoteYPosition + gdy - curLSpace / 2,
-                                       mSecondNoteYPosition + gdy + curLSpace / 2,
-                                       mSecondNoteYPosition + gdy + curLSpace / 2};
-            const float xCoords3 [] = {x - 31 * mTagSize,
-                                       x + 29 * mTagSize,
-                                       x + 29 * mTagSize,
-                                       x - 31 * mTagSize};
-            const float yCoords3 [] = {mSecondNoteYPosition + gdy + curLSpace / 2 - 6,
-                                       mSecondNoteYPosition + gdy + curLSpace / 2 - 6,
-                                       mSecondNoteYPosition + gdy + curLSpace / 2,
-                                       mSecondNoteYPosition + gdy + curLSpace / 2};
-            const float xCoords4 [] = {x - 31 * mTagSize,
-                                       x - 25 * mTagSize,
-                                       x - 25 * mTagSize,
-                                       x - 31 * mTagSize};
-            const float yCoords4 [] = {mFirstNoteYPosition + gdy - curLSpace / 2,
-                                       mFirstNoteYPosition + gdy - curLSpace / 2,
-                                       mSecondNoteYPosition + gdy + curLSpace / 2,
-                                       mSecondNoteYPosition + gdy + curLSpace / 2};
+            const float xCoords1 [] = {x - 31 * mTagSize * gSize,
+                                       x + 29 * mTagSize * gSize,
+                                       x + 29 * mTagSize * gSize,
+                                       x - 31 * mTagSize * gSize};
+            const float yCoords1 [] = {mFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
+                                       mFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
+                                       mFirstNoteYPosition - gdy - ghdy - curLSpace / 2 + 6,
+                                       mFirstNoteYPosition - gdy - ghdy - curLSpace / 2 + 6};
+            const float xCoords2 [] = {x + 23 * mTagSize * gSize,
+                                       x + 29 * mTagSize * gSize,
+                                       x + 29 * mTagSize * gSize,
+                                       x + 23 * mTagSize * gSize};
+            const float yCoords2 [] = {mFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
+                                       mFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
+                                       mSecondNoteYPosition - gdy - ghdy + curLSpace / 2,
+                                       mSecondNoteYPosition - gdy - ghdy + curLSpace / 2};
+            const float xCoords3 [] = {x - 31 * mTagSize * gSize,
+                                       x + 29 * mTagSize * gSize,
+                                       x + 29 * mTagSize * gSize,
+                                       x - 31 * mTagSize * gSize};
+            const float yCoords3 [] = {mSecondNoteYPosition - gdy - ghdy + curLSpace / 2 - 6,
+                                       mSecondNoteYPosition - gdy - ghdy + curLSpace / 2 - 6,
+                                       mSecondNoteYPosition - gdy - ghdy + curLSpace / 2,
+                                       mSecondNoteYPosition - gdy - ghdy + curLSpace / 2};
+            const float xCoords4 [] = {x - 31 * mTagSize * gSize,
+                                       x - 25 * mTagSize * gSize,
+                                       x - 25 * mTagSize * gSize,
+                                       x - 31 * mTagSize * gSize};
+            const float yCoords4 [] = {mFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
+                                       mFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
+                                       mSecondNoteYPosition - gdy - ghdy + curLSpace / 2,
+                                       mSecondNoteYPosition - gdy - ghdy + curLSpace / 2};
 
             hdc.Polygon(xCoords1, yCoords1, 4);
             hdc.Polygon(xCoords2, yCoords2, 4);
@@ -166,7 +192,7 @@ void GRCluster::OnDraw(VGDevice &hdc)
         }
 
         // - Restore context
-        if (mColRef)
+        if (mColRef || mClusterColor)
             hdc.SelectFillColor(prevTextColor);  //(TODO: in a parent method)
     }
     else

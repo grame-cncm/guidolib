@@ -40,6 +40,10 @@ ARCluster::ARCluster() : ARMTParameter()
 
     adx = 0;
     ady = 0;
+    ahdx = 0;
+    ahdy = 0;
+    aSize = 1.0;
+    aColor = NULL;
 }
 
 ARCluster::~ARCluster() 
@@ -51,7 +55,7 @@ void ARCluster::setTagParameterList(TagParameterList& tpl)
 	if (ltpls.GetCount() == 0)
 	{
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail("U,adx,0hs,o;U,ady,0hs,o");
+		lstrs.AddTail("S,color,,o;F,size,1.0,o;U,adx,0hs,o;U,ady,0hs,o;U,dx,0hs,o;U,dy,0hs,o");
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -62,11 +66,27 @@ void ARCluster::setTagParameterList(TagParameterList& tpl)
 		// we found a match!
 		if (ret == 0)
 		{
-			TagParameterFloat* f = TagParameterFloat::cast(rtpl->RemoveHead());
-			adx = f->getValue();
+            aColor = TagParameterString::cast(rtpl->RemoveHead());
+
+            TagParameterFloat *f = TagParameterFloat::cast(rtpl->RemoveHead());
+			aSize = f->getValue();
+			delete f;
+
+            // - dx/dy for cluster head only
+			f = TagParameterFloat::cast(rtpl->RemoveHead());
+			ahdx = f->getValue();
 			delete f;
 
 			f = TagParameterFloat::cast(rtpl->RemoveHead());
+			ahdy = f->getValue();
+			delete f;
+
+            // - dx/dy for entire cluster
+            f = TagParameterFloat::cast(rtpl->RemoveHead());
+			adx = f->getValue();
+			delete f;
+
+            f = TagParameterFloat::cast(rtpl->RemoveHead());
 			ady = f->getValue();
 			delete f;
 		}
@@ -83,6 +103,26 @@ float ARCluster::getadx() const
 float ARCluster::getady() const
 {
 	return ady;
+}
+
+float ARCluster::getahdx() const	
+{
+	return ahdx;
+}
+
+float ARCluster::getahdy() const
+{
+	return ahdy;
+}
+
+float ARCluster::getSize() const
+{
+	return aSize;
+}
+
+TagParameterString *ARCluster::getColor() const
+{
+	return aColor;
 }
 
 void ARCluster::PrintName(std::ostream & os) const
