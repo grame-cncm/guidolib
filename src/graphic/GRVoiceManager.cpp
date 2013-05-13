@@ -1757,11 +1757,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 	}
 	else if (tinf == typeid(ARCluster))
 	{
-        //REM: Pas testé !
-		/*GRCluster * grcluster = new GRCluster(mCurGrStaff, static_cast<ARCluster *>(apt));
-		addGRTag(grcluster);
-		mCurGrStaff->AddTag(grcluster);
-		gCurMusic->addVoiceElement(arVoice,grcluster);*/
+        // Not needed because cluster is like an ornament
 	}
 	else if (tinf == typeid(ARGlissando)) 
 	{

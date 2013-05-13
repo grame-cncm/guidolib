@@ -5607,7 +5607,7 @@ void ARMusicalVoice::setClusterChord(ARCluster *inCurrentCluster)
 	ARMusicalObject * musicalObject = ObjectList::GetNext(posTmp);
     ARNote *firstNote = dynamic_cast<ARNote *>(musicalObject);
 
-    firstNote->setCluster(inCurrentCluster);
+    ARCluster *currentCluster = firstNote->setCluster(inCurrentCluster, true);
 
     comptTemp++; // the first note is conserved
 
@@ -5620,7 +5620,7 @@ void ARMusicalVoice::setClusterChord(ARCluster *inCurrentCluster)
         ARNote * noteTmp = dynamic_cast<ARNote *>(musicalObject);
         if (noteTmp && noteTmp->getPitch()!=0)
         {
-            noteTmp->setCluster(inCurrentCluster);
+            noteTmp->setCluster(currentCluster);
 
             isThereASecondNote = true;
 
@@ -5642,7 +5642,7 @@ void ARMusicalVoice::setClusterChord(ARCluster *inCurrentCluster)
 
     if (!isThereASecondNote)
     {
-        firstNote->setCluster(inCurrentCluster);
+        firstNote->setCluster(currentCluster);
         firstNote->setIsLonelyInCluster();
     }
 }

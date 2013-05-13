@@ -69,7 +69,7 @@ class ARNote : public ARMusicalEvent
     float		 getDetune() const						{ return fDetune; }
     float		 getPitchShift() const					{ return fDetune + fAccidentals; }
     void		 setOrnament(ARTrill *newOrnament);
-    void		 setCluster(ARCluster *inCluster);
+    ARCluster   *setCluster(ARCluster *inCluster, bool inHaveToBeCreated = false);
     ARTrill     *getOrnament()		    				{ return fOrnament;}
     ARCluster   *getARCluster() 						{ return fCluster;}
 

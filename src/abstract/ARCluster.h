@@ -35,7 +35,8 @@ class ARCluster : public ARMTParameter, public ARPositionTag
 {		
 public:
 
-	ARCluster();
+    ARCluster();
+	ARCluster(ARCluster *inCopyCluster);
 
 	virtual		 	~ARCluster();
 
@@ -45,7 +46,7 @@ public:
 
 	virtual void    setTagParameterList(TagParameterList & tpl);
 
-    void setNotePitchAndOctave(int inPitch, int inOctave, int inAccidental);
+    void setNotePitchAndOctave(int inPitch, int inOctave);
 
     int *getFirstNoteParameters() {return mFirstNote;}
     int *getSecondNoteParameters() {return mSecondNote;}

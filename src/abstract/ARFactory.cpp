@@ -151,8 +151,8 @@ ARFactory::ARFactory()
 	mCurrentStaff(NULL),
 	mVoiceNum(1),
 	mCurrentTags(0),
-	mVoiceAdded(false),
-    mInClusterTag(false)
+	mVoiceAdded(false)/*,
+    mInClusterTag(false)*/
 {
 		sMaxTagId = -1;
 }
@@ -305,9 +305,6 @@ void ARFactory::createChord()
 	// now, we have to save the position of the voice...
 	assert(mCurrentVoice);
 
-    if (mInClusterTag && !mCurrentCluster)
-        mCurrentCluster = new ARCluster();
-
     mCurrentVoice->BeginChord();
 }
 
@@ -345,12 +342,11 @@ void ARFactory::addChord()
 //		delete mCurrentTrill;
 //		mCurrentTrill = 0;
 	}
-	else if (mCurrentCluster)
+	
+    if (mCurrentCluster)
         mCurrentVoice->setClusterChord(mCurrentCluster);
 
 	mCurrentVoice->FinishChord();
-
-    mCurrentCluster = NULL;
 }
 
 // ----------------------------------------------------------------------------
@@ -790,7 +786,11 @@ void ARFactory::createTag( const char * name, int no )
 			}
 			else if (!strcmp(name,"cluster"))
 			{
-                mInClusterTag = true;
+                ARCluster *tmp = new ARCluster();
+
+				if (mCurrentCluster == 0)
+					mCurrentCluster = tmp;
+				else delete tmp;
 			}
 			break;
 
@@ -1629,9 +1629,9 @@ void ARFactory::endTag()
             delete mCurrentTrill;
             mCurrentTrill = NULL;
         }
-        else if (mInClusterTag)
+        else if (mCurrentCluster)
         {
-            mInClusterTag = false;
+            delete mCurrentCluster;
             mCurrentCluster = NULL;
         }
 
@@ -1823,11 +1823,8 @@ void ARFactory::addTag()
 	ARMTParameter * theTag = dynamic_cast<ARMTParameter *>(mTags.GetHead());	
 	if (mCurrentTrill)
 		mCurrentTrill->setTagParameterList(mTagParameterList);
-    else if (mInClusterTag)
-    {
-        mCurrentCluster = new ARCluster();
+    else if (mCurrentCluster)
         mCurrentCluster->setTagParameterList(mTagParameterList);
-    }
 	else if (theTag != 0)
 		theTag->setTagParameterList( mTagParameterList );
 	// the remaining will just be stored
@@ -1876,7 +1873,7 @@ void ARFactory::addTagParameter(const char * parameter)
 #if ARFTrace
  	 cout << "ARFactory::addTagParameter TYPE_TAGPARAMETER_STRING " << parameter << endl;
 #endif
-	if (dynamic_cast<ARMTParameter*>(mTags.GetHead()) || mCurrentTrill || mInClusterTag)
+	if (dynamic_cast<ARMTParameter*>(mTags.GetHead()) || mCurrentTrill || mCurrentCluster)
 		mTagParameterList.AddTail(new TagParameterString(parameter));
 }
 
@@ -1889,7 +1886,7 @@ void ARFactory::addTagParameter(TYPE_TAGPARAMETER_INT parameter)
 	cout << "ARFactory::addTagParameter TYPE_TAGPARAMETER_INT " << parameter << endl;
 #endif
 	// we have assume the DEFAULT Unit here....
-	if (dynamic_cast<ARMTParameter*>(mTags.GetHead()) || mCurrentTrill || mInClusterTag)
+	if (dynamic_cast<ARMTParameter*>(mTags.GetHead()) || mCurrentTrill || mCurrentCluster)
 	{
 		TagParameterInt * ntpi = new TagParameterInt(parameter);
 		// float npar = (float) (parameter * LSPACE/2);
@@ -1906,7 +1903,7 @@ void ARFactory::addTagParameter(TYPE_TAGPARAMETER_REAL parameter)
 #if ARFTrace
 	cout << "ARFactory::addTagParameter TYPE_TAGPARAMETER_REAL " << parameter << endl;
 #endif
-	if (dynamic_cast<ARMTParameter*>(mTags.GetHead()) || mCurrentTrill || mInClusterTag)
+	if (dynamic_cast<ARMTParameter*>(mTags.GetHead()) || mCurrentTrill || mCurrentCluster)
 	{
 		TagParameterFloat * ntpf = new TagParameterFloat((float) parameter);
 		// float npar = (float) (parameter * LSPACE/2);
