@@ -35,8 +35,8 @@ class ARMusic : public MusicalVoiceList, public ARMusicalEvent
       					ARMusic();
      virtual 			~ARMusic();
 
-	  		void 	MarkVoice(int voicenum,int fromnum, int fromdenom, int lengthnum, int lengthdenom);
-	 		void 	MarkVoice(int voicenum, float from, float length);
+	  		void 	MarkVoice(int voicenum,int fromnum, int fromdenom, int lengthnum, int lengthdenom, unsigned char red, unsigned char green, unsigned char blue);
+	 		void 	MarkVoice(int voicenum, float from, float length, unsigned char red, unsigned char green, unsigned char blue);
 	 		int 	countVoices() const;
 	  		void 	doAutoStuff();
 

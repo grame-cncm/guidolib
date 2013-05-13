@@ -13,7 +13,7 @@
 #include "GRGlobalStem.h"
 #include "GRRest.h"
 #include "GREmpty.h"
-#include "GRChord.h"
+//#include "GRChord.h"
 #include "GRStdNoteHead.h"
 #include "GraphTools.h"
 
@@ -334,7 +334,7 @@ void GRGlissando::addAssociation(GRNotationElement * grnot)
 		if ( GREvent::cast( grnot )  && 	// stop immediately if it's not an event.
 		(dynamic_cast<GRNote *>(grnot) ||
 		 dynamic_cast<GRRest *>(grnot) ||
-		 dynamic_cast<GRChord *>(grnot) ||
+//		 dynamic_cast<GRChord *>(grnot) ||
 		 dynamic_cast<GREmpty *>(grnot)))
 	{
 	  	GRARNotationElement::addAssociation(grnot);

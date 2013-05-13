@@ -49,6 +49,7 @@ class TagParameter
 		virtual bool isString() const	{ return false; }
 		virtual bool isInt() const		{ return false; }
 		virtual bool isFloat() const	{ return false; }
+        virtual bool isRGBValue() const { return false; }
 	  	
 	  	
 		NVstring name;

@@ -86,8 +86,8 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 						 ARMusicalVoice();
 		virtual			~ARMusicalVoice();
 
-		void			MarkVoice(float from,float length);
-		void			MarkVoice(int fromnum,int fromdenom, int lengthnum, int lengthdenom);
+		void			MarkVoice(float from,float length, unsigned char red, unsigned char green, unsigned char blue);
+		void			MarkVoice(int fromnum,int fromdenom, int lengthnum, int lengthdenom, unsigned char red, unsigned char green, unsigned char blue);
 
 		virtual void	initChordNote();
 		virtual void	FinishChord();

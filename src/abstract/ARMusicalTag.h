@@ -23,6 +23,7 @@
 class TagParameterList;
 class TagParameterString;
 class TagParameterFloat;
+class TagParameterRGBColor;
 
 class ListOfTPLs;
 
@@ -86,8 +87,10 @@ class ARMusicalTag : public ARMusicalObject
 		virtual std::ostream & operator << ( std::ostream & os ) const;
 
 		const TagParameterString * getColor() const				{ return color; }
+        const TagParameterRGBColor * getRGBColor() const        { return rgbColor; }
 
 				void setColor( const char * cp );
+                void setRGBColor (unsigned char red, unsigned char green, unsigned char blue);
 		virtual void setDX( TagParameterFloat * tpf );
 		virtual void setDY( TagParameterFloat * tpf );
 
@@ -116,6 +119,7 @@ class ARMusicalTag : public ARMusicalObject
 
 	  // these are the Tagparameters that can be optionally supplied-
 	  TagParameterString * color;
+      TagParameterRGBColor * rgbColor;
 	  TagParameterFloat * mDx;
 	  TagParameterFloat * mDy;
 	  TagParameterFloat * size;
