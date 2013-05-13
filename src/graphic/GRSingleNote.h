@@ -22,7 +22,6 @@ class GRAccidental;
 template <class T> class KF_IPointerList;
 typedef KF_IPointerList<GRAccidental> GRAccidentalList;
 
-class GRChord;
 class GRStaff;
 class GRStdNoteHead;
 class GRStem;
@@ -39,7 +38,6 @@ class ARAlter;
 */
 class GRSingleNote : public GRNote
 {
- 	  friend class GRChord;
  
  public:
 		GRSingleNote( GRStaff *, ARNote * abstractRepresentationOfNote,

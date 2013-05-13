@@ -1,6 +1,6 @@
 /*
-  GUIDO Library
-  Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+	GUIDO Library
+	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
   Copyright (C) 2002-2013 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
@@ -46,8 +46,6 @@ using namespace std;
 #include "ARMerge.h"
 #include "ARBase.h"
 #include "ARDisplayDuration.h"
-#include "ARChord.h"
-// ARChord unused ?
 #include "ARTuplet.h"
 #include "ARNewPage.h"
 #include "ARKey.h"
@@ -75,6 +73,7 @@ using namespace std;
 #include "ARGlissando.h"
 #include "GRTrill.h"
 #include "GRSingleNote.h"
+#include "ARCluster.h"
 
 #include "ARRepeatBegin.h"
 #include "ARCoda.h"
@@ -5425,16 +5424,15 @@ void ARMusicalVoice::BeginChord()
 	posfirstinchord = AddTail(tmp);
 	numchordvoice = 0;
 
-//	mPosTagList->GetNext(mCurVoiceState->ptagpos);
-	chordBeginState = new ARMusicalVoiceState(*mCurVoiceState);
+    //	mPosTagList->GetNext(mCurVoiceState->ptagpos);
+    chordBeginState = new ARMusicalVoiceState(*mCurVoiceState);
 }
 
 //____________________________________________________________________________________
 /** \brief this method is called when the chord is an ornament parameter (SB)
 */
 ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE & chord_type, CHORD_ACCIDENTAL & chord_accidental)
-{
-	
+{	
 	const int nbNotes = 3;
 	int pitches[nbNotes]; // we only need 3 pitches for analysis
 	int firstNoteOctave = 0; //the first note's octave
@@ -5529,7 +5527,7 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE & chord_type, CHORD_ACCIDENTAL
 		chord_type = ERROR;
 
 
-	// RecupÈration de l'armure...
+	// Recupération de l'armure...
 
 	int keyNumber;
 	GuidoPos pos = vst.vpos;
@@ -5544,8 +5542,8 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE & chord_type, CHORD_ACCIDENTAL
 		keyNumber = 0;
 
 
-	// Determination de l'altÈration sur l'ornementation
-	// s'il y a quelque chose sur la note diffÈrent de l'armure, on l'affiche (diese bemol becarre)
+	// Determination de l'altération sur l'ornementation
+	// s'il y a quelque chose sur la note différent de l'armure, on l'affiche (dièse bémol bécarre)
 
 	//std::cout << "accidentals : " << accidentals << '\n';
 
@@ -5590,9 +5588,64 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE & chord_type, CHORD_ACCIDENTAL
 	}
 
 	return firstNote;
-
 }
 
+//____________________________________________________________________________________
+/** \brief this method is about clusters
+*/
+void ARMusicalVoice::setClusterChord(ARCluster *inCurrentCluster)
+{
+	const int nbNotes = 2;
+
+	ARMusicalVoiceState vst = *chordBeginState;
+	GuidoPos posTmp = vst.vpos;
+
+	for(int i=0 ; i<3 ; i++)
+		ObjectList::GetNext(posTmp); // skip "empty, chordcomma, empty"
+
+	int comptTemp = 0;
+	ARMusicalObject * musicalObject = ObjectList::GetNext(posTmp);
+    ARNote *firstNote = dynamic_cast<ARNote *>(musicalObject);
+
+    firstNote->setCluster(inCurrentCluster);
+
+    comptTemp++; // the first note is conserved
+
+    bool isThereASecondNote = false;
+
+    while (posTmp && comptTemp < nbNotes) // we only need to know the first 2 notes
+    {
+        musicalObject = ObjectList::GetNext(posTmp);
+
+        ARNote * noteTmp = dynamic_cast<ARNote *>(musicalObject);
+        if (noteTmp && noteTmp->getPitch()!=0)
+        {
+            noteTmp->setCluster(inCurrentCluster);
+
+            isThereASecondNote = true;
+
+            comptTemp++;
+        }
+    }
+
+    //Other notes deletion
+    while (posTmp) // we only need to know the first 2 notes
+    {
+        musicalObject = ObjectList::GetNext(posTmp);
+
+        ARNote * noteTmp = dynamic_cast<ARNote *>(musicalObject);
+        if (noteTmp && noteTmp->getPitch()!=0)
+        {
+            noteTmp->setPitch(0);
+        }
+    }
+
+    if (!isThereASecondNote)
+    {
+        firstNote->setCluster(inCurrentCluster);
+        firstNote->setIsLonelyInCluster();
+    }
+}
 
 //____________________________________________________________________________________
 /** \brief this finished a chord after parsing it.
@@ -5865,15 +5918,15 @@ void ARMusicalVoice::initChordNote()
 	numchordvoice = oldnumchordvoice;
 }
 
-void ARMusicalVoice::MarkVoice(float from, float length)
+void ARMusicalVoice::MarkVoice(float from, float length, unsigned char red, unsigned char green, unsigned char blue)
 {
 	TYPE_TIMEPOSITION tpos(from);
 	TYPE_DURATION duration(length);
 
-	MarkVoice( tpos.getNumerator(), tpos.getDenominator(), duration.getNumerator(), duration.getDenominator());
+	MarkVoice( tpos.getNumerator(), tpos.getDenominator(), duration.getNumerator(), duration.getDenominator(), red, green, blue);
 }
 
-void ARMusicalVoice::MarkVoice( int fromnum, int fromdenom, int lengthnum, int lengthdenom)
+void ARMusicalVoice::MarkVoice( int fromnum, int fromdenom, int lengthnum, int lengthdenom, unsigned char red, unsigned char green, unsigned char blue)
 {
 	TYPE_TIMEPOSITION tpos(fromnum,fromdenom);
 	TYPE_DURATION duration(lengthnum,lengthdenom);
@@ -5915,7 +5968,7 @@ void ARMusicalVoice::MarkVoice( int fromnum, int fromdenom, int lengthnum, int l
 	{
 		ARNoteFormat * ntformat = new ARNoteFormat;
 		ntformat->setRelativeTimePosition(tpos);
-		ntformat->setColor("red");
+		ntformat->setRGBColor(red, green, blue);
 		AddElementAt(startpos,ntformat);
 
 		ntformat = new ARNoteFormat;
@@ -5925,33 +5978,45 @@ void ARMusicalVoice::MarkVoice( int fromnum, int fromdenom, int lengthnum, int l
 }
 /** \brief Manage the trills in order to give the information of the trill to tied notes
 */
-void ARMusicalVoice::doAutoTrill(){
+void ARMusicalVoice::doAutoTrill()
+{
 	// We first look for each note and check if it has a trill
 	ARMusicalVoiceState armvs;
 	GuidoPos posObj = GetHeadPosition(armvs);
-	while(posObj){
+	while(posObj)
+    {
 		ARMusicalObject * obj = GetNext(posObj, armvs);
 		ARNote * note = dynamic_cast<ARNote *>(obj);
-		if(note){
+		if(note)
+        {
 			ARTrill * trill = note->getOrnament();
-			if(trill && trill->getType()==0){
+			if(trill && trill->getType()==0)
+            {
 				// if it has, we can check if the note is tied to another
 				// if it is tied, we will let its status as "begin" (default)
 				// and we'll affect an ARtrill to the next note, whose boolean "begin" will be set as false with setContinue()
-				if(armvs.getCurPositionTags()){
+				if(armvs.getCurPositionTags())
+                {
 					GuidoPos pos = armvs.getCurPositionTags()->GetHeadPosition();
-					while(pos){
+					while(pos)
+                    {
 						ARPositionTag * arpt = armvs.getCurPositionTags()->GetNext(pos);
-						if(arpt){
+						if(arpt)
+                        {
 							ARTie * tie = dynamic_cast<ARTie *>(arpt);
-							if(tie){
+							if(tie)
+                            {
 								GuidoPos posNote = posObj;
 								ARNote * nextNote;
-								do{
+								do
+                                {
 									ARMusicalObject * nextObject = GetNext(posNote, armvs);
 									nextNote = dynamic_cast<ARNote *>(nextObject);
-								}while(posObj && !nextNote);
-								if(nextNote){
+								}
+                                while(posObj && !nextNote);
+
+								if(nextNote)
+                                {
 									nextNote->setVoiceNum(note->getVoiceNum());
 									nextNote->setOrnament(note->getOrnament());
 									nextNote->getOrnament()->setContinue();
@@ -5961,8 +6026,63 @@ void ARMusicalVoice::doAutoTrill(){
 					}
 				}
 			}
-			
+
 		}
 	}
+}
+
+void ARMusicalVoice::doAutoCluster()
+{
+	//we first look for each note and check if it has a cluster
+	/*ARMusicalVoiceState armvs;
+	GuidoPos posObj = GetHeadPosition(armvs);
+	while(posObj)
+    {
+		ARMusicalObject * obj = GetNext(posObj, armvs);
+		ARNote * note = dynamic_cast<ARNote *>(obj);
+
+		if(note)
+        {
+            ARCluster *cluster = note->getARCluster();
+
+			if(cluster)
+            {
+				//if it has, we can check if the note is tied to another
+				//if it is tied, we will let it as "begin" (default)
+				//and we'll affect an ARtrill to the next note, whose boolean "begin" will be set as false with setContinue()
+				if(armvs.getCurPositionTags())
+                {
+					GuidoPos pos = armvs.getCurPositionTags()->GetHeadPosition();
+					while(pos)
+                    {
+						ARPositionTag * arpt = armvs.getCurPositionTags()->GetNext(pos);
+						if(arpt)
+                        {
+							ARTie * tie = dynamic_cast<ARTie *>(arpt);
+							if(tie)
+                            {
+								GuidoPos posNote = posObj;
+								ARNote * nextNote;
+								do
+                                {
+									ARMusicalObject * nextObject = GetNext(posNote, armvs);
+									nextNote = dynamic_cast<ARNote *>(nextObject);
+								}
+                                while(posObj && !nextNote);
+
+								if(nextNote)
+                                {
+									ARTrill * newTrill = new ARTrill(ARTrill::TRILL);
+									nextNote->setVoiceNum(note->getVoiceNum());
+									nextNote->setOrnament(newTrill);
+									nextNote->getOrnament()->setContinue();
+								}
+							}
+						}	
+					}
+				}
+			}
+		}
+	}*/
 }
 

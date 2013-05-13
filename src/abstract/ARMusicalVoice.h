@@ -41,6 +41,7 @@ class ARGrace;
 class ARNote;
 class ARClef;
 class ARKey;
+class ARCluster;
 
 class GRVoiceManager;
 class TimeUnwrap;
@@ -85,14 +86,15 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 						 ARMusicalVoice();
 		virtual			~ARMusicalVoice();
 
-		void			MarkVoice(float from,float length);
-		void			MarkVoice(int fromnum,int fromdenom, int lengthnum, int lengthdenom);
+		void			MarkVoice(float from,float length, unsigned char red, unsigned char green, unsigned char blue);
+		void			MarkVoice(int fromnum,int fromdenom, int lengthnum, int lengthdenom, unsigned char red, unsigned char green, unsigned char blue);
 
 		virtual void	initChordNote();
 		virtual void	FinishChord();
 		virtual void	BeginChord();
 
-		ARNote *		setTrillChord(CHORD_TYPE & param_type, CHORD_ACCIDENTAL & param_accidental);
+		ARNote        * setTrillChord(CHORD_TYPE & param_type, CHORD_ACCIDENTAL & param_accidental);
+        void            setClusterChord(ARCluster *inCurrentCluster);
 		
 		int				removeTag(ARMusicalObject * obj);
 		void			SplitEventAtPos(ARMusicalVoiceState & vst, const TYPE_TIMEPOSITION & tp, int tieormerge);
@@ -114,6 +116,7 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		virtual void	doAutoStuff2();
 		
 		virtual void doAutoTrill();
+        virtual void doAutoCluster();
 
 		// expensive Function!
 		GuidoPos		getPosAtTimePosition( const TYPE_TIMEPOSITION & timeposition);

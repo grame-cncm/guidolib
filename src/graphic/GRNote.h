@@ -23,6 +23,7 @@ class ARDotFormat;
 class GRStaff;
 class GRTie;
 class GRTrill;
+class GRCluster;
 
 /** \brief Graphical representation of a note. 
 */
@@ -56,12 +57,24 @@ class GRNote : public GREvent
 	virtual GDirection	getDefaultThroatDirection() const;
 	virtual GDirection	getThroatDirection() const;
 
+    GRCluster *getGRCluster() {return mCluster;}
+    void       setGRCluster(GRCluster *inCluster);
+    bool       getClusterNoteBoolean() {return mClusterNote;}
+
+    GRCluster *createCluster(ARNoteFormat *inCurnoteformat);
+
 	// Tell me: is a note splitted over several systems? 
 	// should only occur for CompositeNotes.
 	virtual bool isSplit(); // const;
+
+    bool isLonelyInCluster() {return mIsLonelyInCluster;}
 	
 protected :
-		GRTrill * mOrnament;
+		GRTrill   *mOrnament;
+        GRCluster *mCluster;
+        bool mClusterNote;
+        ARNote *mARNote;
+        bool mIsLonelyInCluster;
 };
 
 

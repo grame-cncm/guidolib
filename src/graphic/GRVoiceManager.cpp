@@ -28,7 +28,6 @@
 #include "ARMeter.h"
 #include "ARBeam.h"
 #include "ARDoubleBar.h"
-#include "ARChord.h"
 #include "ARFermata.h"
 #include "ARRangeEnd.h"
 #include "ARTie.h"
@@ -95,7 +94,7 @@
 #include "ARChordComma.h"
 #include "ARSpecial.h"
 #include "ARBreathMark.h"
-
+#include "ARCluster.h"
 
 #include "ARCoda.h"
 #include "ARDaCapo.h"
@@ -126,7 +125,6 @@
 #include "GRDrRenz.h"
 #include "GRBembel.h"
 #include "GRRest.h"
-#include "GRChord.h"
 #include "GRTFermata.h"
 #include "GRTempo.h"
 #include "GRSpecial.h"
@@ -146,6 +144,7 @@
 #include "GRRange.h"
 #include "GRArticulation.h"
 #include "GRGrace.h"
+#include "GRCluster.h"
 #include "GRTremolo.h"
 #include "GRTrill.h"
 #include "GRAccelerando.h"
@@ -179,6 +178,7 @@ GRVoiceManager::GRVoiceManager(GRStaffManager * p_staffmgr,
 {
 	toadd = NULL;
 	mCurGrace = NULL;
+    mCurCluster = NULL;
 	curglobalstem = NULL;
 	curchordtag = NULL;
 	curgloballocation  = NULL;
@@ -417,6 +417,7 @@ void GRVoiceManager::BeginManageVoice()
 	// just ignore this: this procedure is only
 	// called once. There are NO OPEN TAGS!
 	arVoice->doAutoTrill();
+    arVoice->doAutoCluster();
 }
 
 
@@ -612,18 +613,35 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 					{
 						if (dynamic_cast<ARNote *>(o))			ev = CreateNote(timepos,o);
 						else if (dynamic_cast<ARRest *>(o))		ev = CreateRest(timepos,o);
-						else if (dynamic_cast<ARChord *>(o))
-						{
-							GuidoTrace("ARChord, filltagmode=1");
-							ev = CreateChord(timepos,o); // 
-						}
 					}
 					// changed on Apr 19 2011 DF
 					// the test has been moved out of CreateEmpty
 					else if (o->getDuration() <= DURATION_0)
 						ev = CreateEmpty (timepos, o);
 					else ev = 0;
-					if (ev) AddRegularEvent (ev);
+                    if (ev)
+                    {
+                        AddRegularEvent (ev);
+
+                        if (GRNote *grnote = dynamic_cast<GRNote *>(ev))
+                        {
+                            if (!mCurCluster)
+                            {
+                                if (grnote->getClusterNoteBoolean())
+                                    mCurCluster = grnote->createCluster(curnoteformat);
+                            }
+                            else
+                            {
+                                if (grnote->getClusterNoteBoolean())
+                                    grnote->setGRCluster(mCurCluster);
+
+                                mCurCluster = NULL;
+                            }
+
+                            if (grnote->isLonelyInCluster())
+                                mCurCluster = NULL;
+                        }
+                    }
 				}
 
 				GuidoPos prevpos = curvst->vpos;
@@ -712,11 +730,6 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 			GREvent * grev = NULL;
 			if (dynamic_cast<ARNote *>(arev))			grev = CreateNote(timepos,arev);
 			else if (dynamic_cast<ARRest *>(arev))		grev = CreateRest(timepos,arev);
-			else if (dynamic_cast<ARChord *>(arev))	
-			{
-				GuidoTrace("ARChord, filltagmode=0");
-				grev = CreateChord(timepos,arev);// 
-			}
 			
 			assert(grev);
 			if (grev->getDuration() > DURATION_0)
@@ -1742,6 +1755,14 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 		mCurGrStaff->AddTag(tmp);
 		gCurMusic->addVoiceElement(arVoice,tmp);
 	}
+	else if (tinf == typeid(ARCluster))
+	{
+        //REM: Pas testé !
+		/*GRCluster * grcluster = new GRCluster(mCurGrStaff, static_cast<ARCluster *>(apt));
+		addGRTag(grcluster);
+		mCurGrStaff->AddTag(grcluster);
+		gCurMusic->addVoiceElement(arVoice,grcluster);*/
+	}
 	else if (tinf == typeid(ARGlissando)) 
 	{
 		GRGlissando * grglissando = new GRGlissando(mCurGrStaff, static_cast<ARGlissando *>(apt));
@@ -2050,65 +2071,6 @@ GREvent * GRVoiceManager::CreateRest( const TYPE_TIMEPOSITION & tp, ARMusicalObj
 		return grrest;
 	}
 	return NULL;
-}
-
-GREvent * GRVoiceManager::CreateChord( const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject) // when is this called ???
-{	
-	GuidoTrace("GRVoiceManager::CreateChord() called");
-	//TYPE_TIMEPOSITION artp = arObject->getRelativeTimePosition();
-	
-	const TYPE_TIMEPOSITION von = tp;
-	const TYPE_DURATION bis (arObject->getDuration());
-	
-	if (bis > DURATION_0)
-	{
-		ARChord * chord = dynamic_cast<ARChord *>(arObject);
-		
-		//GRChord * grprevchord = NULL;
-		// new:
-		TYPE_DURATION dtempl;
-		if (curvst->curdispdur != NULL)
-		{
-			dtempl = curvst->curdispdur->getDisplayDuration();
-			int i = curvst->curdispdur->getDots();
-			TYPE_DURATION tmpdur (dtempl);
-			while (i>0)
-			{
-				// this takes care of dots maybe this should be a parameter for GRSingleNote later...
-				tmpdur = tmpdur * DURATION_2;
-				dtempl = dtempl + tmpdur;
-				--i;
-			}
-		}
-		else
-			dtempl = chord->getDuration();
-		// we need to take care of dots !
-			
-		dtempl.normalize();
-
-		GRChord * grchord = new GRChord(mCurGrStaff, chord, von, bis, dtempl );
-		
-		if (curdotformat)
-			grchord->setDotFormat(curdotformat);
-		else
-			grchord->setDotFormat(&defaultARDotFormat);
-
-		// Associate the rest with the current tags...
-		GuidoPos pos = grtags->GetHeadPosition();
-		while (pos)
-		{
-			GRNotationElement * el = dynamic_cast<GRNotationElement *>(grtags->GetNext(pos));
-			if (el)
-				el->addAssociation(grchord);
-		}
-		
-		mCurGrStaff->addNotationElement(grchord);
-		gCurMusic->addVoiceElement(arVoice,grchord);
-		
-		lastev = grchord;
-		return grchord;
-	}
-	return NULL;	
 }
 
 GREvent * GRVoiceManager::CreateEmpty( const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject)

@@ -17,6 +17,7 @@
 
 #include "ARNote.h"
 #include "ARTrill.h"
+#include "ARCluster.h"
 #include "ARDefine.h"
 #include "TimeUnwrap.h"
 #include "nvstring.h"
@@ -27,13 +28,15 @@ const char * gd_pc2noteName(int fPitch);
 
 ARNote::ARNote(const TYPE_DURATION & durationOfNote)
 	:	ARMusicalEvent(durationOfNote), fName("empty"), fPitch(UNKNOWN), fOctave(MIN_REGISTER),
-		fAccidentals(0), fDetune(0), fIntensity(MIN_INTENSITY), fOrnament(NULL), fStartPosition(-1,1)
+    fAccidentals(0), fDetune(0), fIntensity(MIN_INTENSITY), fOrnament(NULL), fCluster(NULL), fIsLonelyInCluster(false),
+    fStartPosition(-1,1)
 {
 }
 
 ARNote::ARNote(const TYPE_TIMEPOSITION & relativeTimePositionOfNote, const TYPE_DURATION & durationOfNote)
 	:	ARMusicalEvent( relativeTimePositionOfNote, durationOfNote), fName("noname"), fPitch(UNKNOWN),
-		fOctave(MIN_REGISTER), fAccidentals(0), fDetune(0), fIntensity(MIN_INTENSITY), fOrnament(NULL), fStartPosition(-1,1)
+		fOctave(MIN_REGISTER), fAccidentals(0), fDetune(0), fIntensity(MIN_INTENSITY), fOrnament(NULL), fCluster(NULL),
+        fIsLonelyInCluster(false), fStartPosition(-1,1)
 {
 }
 
@@ -41,7 +44,7 @@ ARNote::ARNote( const std::string & inName, int theAccidentals, int theRegister,
 				int theDenominator, int theIntensity )
 	:	ARMusicalEvent(theNumerator, theDenominator), fName( inName ), fPitch ( UNKNOWN ),
 		fOctave( theRegister ),	fAccidentals( theAccidentals ), fDetune(0), fIntensity( theIntensity ),
-		fOrnament(NULL), fStartPosition(-1,1)
+		fOrnament(NULL), fCluster(NULL), fIsLonelyInCluster(false), fStartPosition(-1,1)
 {
 	assert(fAccidentals>=MIN_ACCIDENTALS);
 	assert(fAccidentals<=MAX_ACCIDENTALS);
@@ -51,14 +54,13 @@ ARNote::ARNote( const std::string & inName, int theAccidentals, int theRegister,
 
 ARNote::ARNote(const ARNote & arnote) 
 	:	ARMusicalEvent( (const ARMusicalEvent &) arnote),
-		fName(arnote.fName), fStartPosition(-1,1)
+		fName(arnote.fName), fStartPosition(-1,1), fOrnament(NULL),  fCluster(NULL), fIsLonelyInCluster(false)
 {
 	fPitch = arnote.fPitch;
 	fOctave = arnote.fOctave;
 	fAccidentals = arnote.fAccidentals;
 	fDetune = arnote.fDetune;
 	fIntensity = arnote.fIntensity;
-	fOrnament = NULL;
 }
 
 ARNote::~ARNote()
@@ -253,6 +255,13 @@ void ARNote::setOrnament(ARTrill * newOrnament)
 	delete fOrnament;
 //	if (!fOrnament) 
 	fOrnament = new ARTrill(-1, newOrnament);
+}
+
+void ARNote::setCluster(ARCluster *inCluster)
+{
+    fCluster = inCluster;
+
+    fCluster->setNotePitchAndOctave(fPitch, fOctave, fAccidentals);
 }
 
 bool ARNote::CanBeMerged(const ARMusicalEvent * ev2)

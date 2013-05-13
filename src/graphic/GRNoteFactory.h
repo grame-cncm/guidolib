@@ -27,7 +27,6 @@
 #include "defines.h" 	// for TYPE_DURATION ...
 
 
-class ARChord;
 class ARNote;
 class ARRest;
 
@@ -38,7 +37,6 @@ class GRTupletState;
 class GRBeam;
 class GRBeamState;
 class GRNote;
-class GRChord;
 
 /** \brief Class GRNoteFactory creates GRNote objects. 
 	This can be depending on the length - GRSingleNote or GRCompositeNote objects.
@@ -49,11 +47,7 @@ class GRNoteFactory
 	public:
 		void rememberLastNLinePosition(const TYPE_TIMEPOSITION &tp);
 		void setPossibleNLinePosition(const TYPE_TIMEPOSITION &tp);
-		GRChord * createChord(ARChord *,const TYPE_TIMEPOSITION &von,
-			TYPE_TIMEPOSITION &bis);
 
-		void EndChord(GRChord *grchord);
-		void StartChord(GRChord *grchord);
 		virtual void setStemOnOff(int p);
 		GRNoteFactory(GRStaff *p_grstaff = NULL);
 		virtual ~GRNoteFactory();
@@ -83,7 +77,6 @@ class GRNoteFactory
 
 	protected:
 		GRTupletState * nlineTupletState;
-		GRChord * curchord;
 		int stemOnOff;
 		GRStaff *grstaff;
 		GRTuplet *curtuplet;

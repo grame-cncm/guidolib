@@ -1,7 +1,7 @@
 /*
-  GUIDO Library
-  Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2003-2011 	Grame
+	GUIDO Library
+	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+	Copyright (C) 2003-2011  Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -30,6 +30,7 @@
 #include "ARNote.h"
 #include "TagParameterString.h"
 #include "TagParameterFloat.h"
+#include "TagParameterRGBColor.h"
 
 // - Guido GR
 #include "GRSingleNote.h"
@@ -46,6 +47,7 @@
 #include "GRSpecial.h"
 #include "GRSystem.h"
 #include "GRTrill.h"
+#include "GRCluster.h"
 #include "GRNewTuplet.h" // (JB) was GRTuplet
 #include "GRSpring.h"
 #include "GRPage.h"
@@ -198,57 +200,63 @@ void GRSingleNote::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos&
 //____________________________________________________________________________________
 void GRSingleNote::OnDraw( VGDevice & hdc) const
 {
-	float incy = 1;
-	float posy = 0;
-	int sum = mNumHelpLines;
-	if (mNumHelpLines > 0)
-	{ 	// ledger lines up
-	  	incy = -mCurLSPACE;
-	  	posy = -mCurLSPACE;
-		hdc.SetFontAlign( VGDevice::kAlignLeft | VGDevice::kAlignBase );
-	}
-	else if( mNumHelpLines < 0 )
-	{
-		incy = mCurLSPACE;
-		posy = mGrStaff->getNumlines() * mCurLSPACE;
-		sum = - sum;
-		hdc.SetFontAlign( VGDevice::kAlignLeft | VGDevice::kAlignBase );
-	}
+    int numVoice = this->getAbstractRepresentation()->getVoiceNum();
+    float X = mGrStaff->getXEndPosition(getARNote()->getRelativeTimePosition(), getARNote()->getDuration());
 
-	// draw ledger lines
-	const float ledXPos = -60 * 0.85f * mSize;
-	for (int i = 0; i < sum; ++i, posy += incy)
-		 GRNote::DrawSymbol( hdc, kLedgerLineSymbol, ledXPos, ( posy - mPosition.y ));
+    if (mCluster)
+        mCluster->OnDraw(hdc);
+    else
+    {
+        float incy = 1;
+        float posy = 0;
+        int sum = mNumHelpLines;
+        if (mNumHelpLines > 0)
+        { 	// ledger lines up
+            incy = -mCurLSPACE;
+            posy = -mCurLSPACE;
+            hdc.SetFontAlign( VGDevice::kAlignLeft | VGDevice::kAlignBase );
+        }
+        else if( mNumHelpLines < 0 )
+        {
+            incy = mCurLSPACE;
+            posy = mGrStaff->getNumlines() * mCurLSPACE;
+            sum = - sum;
+            hdc.SetFontAlign( VGDevice::kAlignLeft | VGDevice::kAlignBase );
+        }
 
-	const VGColor oldcolor = hdc.GetFontColor();
-	if (mColRef) hdc.SetFontColor( VGColor( mColRef ));
+        // draw ledger lines
+        const float ledXPos = -60 * 0.85f * mSize;
+        for (int i = 0; i < sum; ++i, posy += incy)
+            GRNote::DrawSymbol( hdc, kLedgerLineSymbol, ledXPos, ( posy - mPosition.y ));
 
-	// - Draw elements (stems, dots...)
-	DrawSubElements( hdc );
+        const VGColor oldcolor = hdc.GetFontColor();
+        if (mColRef) hdc.SetFontColor( VGColor( mColRef ));
 
-	// - draw articulations & ornament
-	const GRNEList * articulations = getArticulations();
-	if( articulations )
-	{
-		for( GRNEList::const_iterator ptr = articulations->begin(); ptr != articulations->end(); ++ptr )
+        // - Draw elements (stems, dots...)
+        DrawSubElements( hdc );
+
+        // - draw articulations & ornament
+        const GRNEList * articulations = getArticulations();
+        if( articulations )
+        {
+            for( GRNEList::const_iterator ptr = articulations->begin(); ptr != articulations->end(); ++ptr )
+            {
+                GRNotationElement * el = *ptr;
+                el->OnDraw(hdc);
+            }
+        }
+
+        if (mOrnament )
 		{
-			GRNotationElement * el = *ptr;
-			el->OnDraw(hdc);
+			// to draw the trill line...
+            mOrnament->OnDraw(hdc,X,numVoice);
 		}
-	}
-	if (mOrnament )
-	{
-		// to draw the trill line...
-		int numVoice = this->getAbstractRepresentation()->getVoiceNum();
-		float X = mGrStaff->getXEndPosition(getARNote()->getRelativeTimePosition(), getARNote()->getDuration());
-		mOrnament->OnDraw(hdc,X,numVoice);
-	}
 
-	// - Restore
-	if (mColRef) hdc.SetFontColor( oldcolor );
-	if (gBoundingBoxesMap & kEventsBB)
-		DrawBoundingBox( hdc, kEventBBColor);
-
+        // - Restore
+        if (mColRef) hdc.SetFontColor( oldcolor );
+        if (gBoundingBoxesMap & kEventsBB)
+            DrawBoundingBox( hdc, kEventBBColor);
+    }
 }
 
 //____________________________________________________________________________________
@@ -328,23 +336,27 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 	mNoteBreite = ((mNoteHead->getLeftSpace() + mNoteHead->getRightSpace()) / (float) mSize);
 	float tmplength = mStemLen;
 	// the Stem-Straight-Flag is not used everywhere
+
+	GRStem * tmp = NULL;
+	GDirection stemTmpDirection = tmpdir;
+
 	if (mGlobalStem == 0)
 	{
 		if (mStemDir == dirAUTO)
 		{
-			GRStem * tmp =  new GRStem( this, mDurTemplate, tmpdir, tmplength, mNoteBreite); // was 60?);
+			tmp =  new GRStem( this, mDurTemplate, stemTmpDirection, tmplength, mNoteBreite); // was 60?);
 			mStemDir = tmp->mStemDir;
-			mStemLen = tmp->mStemLen;
-			AddTail(tmp);
 		}
 		else
 		{
-			GRStem * tmp = new GRStem( this, mDurTemplate, mStemDir, tmplength, mNoteBreite ) ; // was 60? );
-			mStemLen = tmp->mStemLen;
+			stemTmpDirection = mStemDir;
+			tmp = new GRStem( this, mDurTemplate, stemTmpDirection, tmplength, mNoteBreite ) ; // was 60? );
 			mStemDirSet = true;
-			AddTail(tmp);
-
 		}
+
+		mStemLen = tmp->mStemLen;
+		AddTail(tmp);
+
 		// here we have to add the flags ...
 		GRFlag * tmpflag = new GRFlag( this, mDurTemplate, mStemDir, mStemLen, mNoteBreite ); // was 60?);
 		if (mColRef)
@@ -352,30 +364,30 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 		}
 		AddTail(tmpflag);
 	}
-
+	 
 	ConstMusicalSymbolID noteHeadSymbolTmp = mNoteHead->getSymbol();
 	// - Adjust stem length if it's a cross notehead
 	if (noteHeadSymbolTmp == kFullXHeadSymbol)
 	{
 		setFirstSegmentDrawingState(false);
 
-		if (tmpdir == dirUP)
+		if (stemTmpDirection == dirUP)
 			setStemOffsetStartPosition(4);
-		else if (tmpdir == dirDOWN)
+		else if (stemTmpDirection == dirDOWN)
 			setStemOffsetStartPosition(-4);
 	}
 	else if (noteHeadSymbolTmp == kFullTriangleHeadSymbol || noteHeadSymbolTmp == kHalfTriangleHeadSymbol)
 	{
-		if (tmpdir == dirUP)
+		if (stemTmpDirection == dirUP)
 		    setStemOffsetStartPosition(47);
-		else if (tmpdir == dirDOWN)
+		else if (stemTmpDirection == dirDOWN)
 			setFirstSegmentDrawingState(false);
 	}
 	else if (noteHeadSymbolTmp == kFullReversedTriangleHeadSymbol || noteHeadSymbolTmp == kHalfReversedTriangleHeadSymbol)
 	{
-		if (tmpdir == dirUP)
+		if (stemTmpDirection == dirUP)
 		    setFirstSegmentDrawingState(false);
-		else if (tmpdir == dirDOWN)
+		else if (stemTmpDirection == dirDOWN)
 			setStemOffsetStartPosition(-47);
 	}
 
@@ -523,7 +535,10 @@ void GRSingleNote::setHPosition( GCoord nx )
 	GRNote::setHPosition(nx);
 	// - Notify ornament
 	if (mOrnament)
-		mOrnament -> tellPosition( this, getPosition() );
+		mOrnament->tellPosition(this, getPosition());
+    // - Notify cluster
+    if (mCluster)
+		mCluster->tellPosition(this, getPosition());
 	updateBoundingBox();
 }
 
@@ -534,10 +549,11 @@ void GRSingleNote::setPosition( const NVPoint & inPos )
 	GRNote::setPosition( inPos );
 
 	// - Notify Ornament
-	if ( mOrnament )
-	{
-		mOrnament -> tellPosition( this, getPosition() );
-	}
+	if (mOrnament)
+		mOrnament->tellPosition(this, getPosition());
+    // - Notify cluster
+    if (mCluster)
+        mCluster->tellPosition(this, getPosition());
 
 	// - Watch for the Accidentals
 	GRAccidentalList accList;
@@ -656,6 +672,42 @@ void GRSingleNote::setStemDirection(GDirection dir)
 	{
 		stem->setStemDir(mStemDir);
 		updateBoundingBox();
+	}
+
+	GRStdNoteHead *notehead = this->getNoteHead();
+
+	if (notehead)
+	{
+		notehead->setGlobalStemDirection(mStemDir);
+
+		ConstMusicalSymbolID noteHeadSymbolTmp = notehead->getSymbol();
+		// - Adjust stem length if it's a cross notehead
+		if (noteHeadSymbolTmp == kFullXHeadSymbol)
+		{
+			setFirstSegmentDrawingState(false);
+
+			if (mStemDir == dirUP)
+				setStemOffsetStartPosition(4);
+			else if (mStemDir == dirDOWN)
+				setStemOffsetStartPosition(-4);
+		}
+		else if (noteHeadSymbolTmp == kFullTriangleHeadSymbol || noteHeadSymbolTmp == kHalfTriangleHeadSymbol)
+		{
+			if (mStemDir == dirUP)
+				setStemOffsetStartPosition(47);
+			else if (mStemDir == dirDOWN)
+				setFirstSegmentDrawingState(false);
+		}
+		else if (noteHeadSymbolTmp == kFullReversedTriangleHeadSymbol || noteHeadSymbolTmp == kHalfReversedTriangleHeadSymbol)
+		{
+			if (mStemDir == dirUP)
+			{
+				setFirstSegmentDrawingState(false);
+				setStemOffsetStartPosition(0);
+			}
+			else if (mStemDir == dirDOWN)
+				setStemOffsetStartPosition(-47);
+		}
 	}
 }
 
@@ -902,6 +954,17 @@ void GRSingleNote::setNoteFormat(const ARNoteFormat * frmt)
 			mColRef = 0;
 		}
 	}
+    else if (frmt->getRGBColor()) {
+        
+        if (mColRef == 0 )
+			mColRef = new unsigned char [4];
+
+        if (frmt->getRGBColor()->getRGBColor( mColRef ) == false ) {
+			delete [] mColRef;
+			mColRef = 0;
+        }
+    }
+
 
 	// - Get the offsets and size
 	const TagParameterFloat * tpf1 = frmt->getDX();

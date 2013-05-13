@@ -14,22 +14,32 @@
 
 #include "ARNote.h"
 #include "GRNote.h"
+#include "GRSingleNote.h"
 #include "GRStaff.h"
 #include "GRTrill.h"
+#include "GRCluster.h"
+#include "GRGlobalStem.h"
 
 
 GRNote::GRNote( GRStaff * grstaf,
 	ARNote * abstractRepresentationOfNote,
 	const TYPE_TIMEPOSITION & relativeTimePositionOfGRNote,
 	const TYPE_DURATION & durationOfGRNote)
-  : GREvent(grstaf,abstractRepresentationOfNote,relativeTimePositionOfGRNote,durationOfGRNote)
+  : GREvent(grstaf,abstractRepresentationOfNote,relativeTimePositionOfGRNote,durationOfGRNote), mClusterNote(false),
+  mARNote(abstractRepresentationOfNote), mCluster(NULL)
 {
-	// builds a graphical "part" of abstractRepresentation
-	  assert(abstractRepresentationOfNote);
-	  if (abstractRepresentationOfNote->getOrnament())
-		  mOrnament = new GRTrill( mGrStaff, abstractRepresentationOfNote->getOrnament());
-	  else
-		  mOrnament = NULL;
+    // builds a graphical "part" of abstractRepresentation
+    assert(mARNote);
+    if (mARNote->getOrnament())
+        mOrnament = new GRTrill( mGrStaff, mARNote->getOrnament());
+    else
+        mOrnament = NULL;
+
+    if (mARNote->getARCluster())
+    {
+        mClusterNote = true;
+        mIsLonelyInCluster = mARNote->isLonelyInCluster();
+    }
 }
 
 GRNote::GRNote(GRStaff * grstaf, const TYPE_DURATION & inDuration )
@@ -141,3 +151,19 @@ inline void GRNote::setDotFormat(const ARDotFormat * frmt)
 
 }
 */
+
+GRCluster *GRNote::createCluster(ARNoteFormat *inCurnoteformat)
+{
+    GRSingleNote *singleNote = dynamic_cast<GRSingleNote *>(this);
+    
+    mCluster = new GRCluster(mGrStaff, mARNote->getARCluster(), singleNote->getDurTemplate(), inCurnoteformat);
+
+    return mCluster;
+}
+
+void GRNote::setGRCluster(GRCluster *inCluster)
+{
+    mCluster = inCluster;
+
+    mCluster->setSecondNoteYPosition();
+}

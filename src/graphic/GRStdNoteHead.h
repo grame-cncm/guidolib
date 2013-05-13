@@ -19,15 +19,12 @@
 #include "ARTHead.h"
 
 class GREvent;
-class GRChord;
 
 /** \brief Graphical representation of a note head.
 */
 class GRStdNoteHead : public GRNoteHead 
 {
 public:
-	friend class GRChord;
-
 	GRStdNoteHead(GREvent * sngnote, const TYPE_DURATION & inDur, GDirection inStemDirection = dirAUTO);
 	virtual	 	~GRStdNoteHead();
 
@@ -46,6 +43,8 @@ public:
 	virtual unsigned int getSymbol() const;
 
 	virtual void adjustPositionForChords(ARTHead::HEADSTATE inHeadstate, GDirection inGlobalStemDirection);
+	void adjustHorizontalPosition();
+	virtual void setGlobalStemDirection(GDirection inGlobalStemDirection);
 
 	/*	enum HEADTYPES { NOHEAD = kNoneSymbol, 
 	WHOLENOTEHEAD = kWholeNoteHeadSymbol, // SCR_WHOLENOTEHEAD,
@@ -57,6 +56,13 @@ public:
 
 protected:
 
+	enum BracketsType {
+		None,
+		Round,
+		Square,
+		Angled
+	};
+
 	virtual unsigned int durationToHeadSymbol( const TYPE_DURATION & inDur ) const;
 
 	NVPoint sRefPosNotehead;
@@ -67,6 +73,8 @@ protected:
 	GDirection globalStemDirection;
 
 	float halfExtent;
+
+	BracketsType mBracketsType;
 };
 
 #endif

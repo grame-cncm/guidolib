@@ -442,7 +442,7 @@ void ARMusic::removeAutoTags()
 	It finds the voice and introduces a noteFormat-tag at the
 	indicated position.
 */
-void ARMusic::MarkVoice(int voicenum,float from,float length)
+void ARMusic::MarkVoice(int voicenum,float from,float length, unsigned char red, unsigned char green, unsigned char blue)
 {
 	GuidoPos pos = GetHeadPosition();
 	while (pos)
@@ -450,7 +450,7 @@ void ARMusic::MarkVoice(int voicenum,float from,float length)
 		ARMusicalVoice * arvc = GetNext(pos);
 		if (arvc->getVoiceNum() == voicenum)
 		{
-			arvc->MarkVoice(from,length);
+			arvc->MarkVoice(from, length, red, green, blue);
 			break;
 		}
 	}
@@ -458,7 +458,8 @@ void ARMusic::MarkVoice(int voicenum,float from,float length)
 
 void ARMusic::MarkVoice(int voicenum,
 						int fromnum,int fromdenom,
-						int lengthnum,int lengthdenom)
+						int lengthnum,int lengthdenom,
+                        unsigned char red, unsigned char green, unsigned char blue)
 {
 	GuidoPos pos = GetHeadPosition();
 	while (pos)
@@ -467,7 +468,7 @@ void ARMusic::MarkVoice(int voicenum,
 		if (arvc->getVoiceNum() == voicenum)
 		{
 			arvc->MarkVoice(fromnum,fromdenom,
-				lengthnum,lengthdenom);
+				lengthnum,lengthdenom, red, green, blue);
 			break;
 		}
 	}

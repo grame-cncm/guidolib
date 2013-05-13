@@ -89,6 +89,8 @@ class GRGlobalStem : // public GRStem,
 
 	virtual float getStemLength() const;
 
+    void setHaveToBeDrawnBoolean(bool inState) {mHaveToBeDrawn = inState;}
+
 	protected:
 
 		void updateGlobalStem(const GRStaff * inStaff); 
@@ -116,6 +118,8 @@ class GRGlobalStem : // public GRStem,
 		// - Lower note on the staff (to adjust stem length if it's a cross headnote)
 		GRSingleNote *lowerNote;
 		GRSingleNote *higherNote;
+
+        bool mHaveToBeDrawn;
 };
 
 #endif

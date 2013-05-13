@@ -288,7 +288,7 @@ void ARMusicalVoiceState::AddPositionTag(ARPositionTag * ntag, int addtoaddedlis
 			assert(false);
 		}
 		curgracetag = gracetag;
-	}	
+	}
 }
 
 void ARMusicalVoiceState::RemovePositionTag(ARPositionTag * ntag, int addtoremovedlist)

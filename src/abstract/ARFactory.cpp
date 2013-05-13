@@ -1,6 +1,6 @@
 /*
-  GUIDO Library
-  Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+	GUIDO Library
+	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
   Copyright (C) 2002-2013 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
@@ -9,7 +9,6 @@
 
   Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
   research@grame.fr
-
 */
 
 #include <string.h>
@@ -68,7 +67,6 @@
 #include "ARStaffOn.h"
 #include "ARMerge.h"
 #include "ARTuplet.h"
-#include "ARChord.h"
 #include "ARMusicalVoice.h"
 #include "ARMusic.h"
 #include "ARClef.h"
@@ -108,6 +106,7 @@
 #include "ARTHead.h"
 #include "ARChordTag.h"
 #include "ARUserChordTag.h"
+#include "ARCluster.h"
 #include "ARGlissando.h"
 
 #include "TagParameterString.h"
@@ -147,11 +146,13 @@ ARFactory::ARFactory()
 	mCurrentRestFormat(NULL),
 	mCurrentDotFormat(NULL),
 	mCurrentAlter(NULL),
+	mCurrentCluster(NULL),
 	mSaveCurrentVoice(NULL),
 	mCurrentStaff(NULL),
 	mVoiceNum(1),
 	mCurrentTags(0),
-	mVoiceAdded(false)
+	mVoiceAdded(false),
+    mInClusterTag(false)
 {
 		sMaxTagId = -1;
 }
@@ -287,6 +288,7 @@ void ARFactory::addVoice()
 	mCurrentCue = NULL;
 	mCurrentGrace = NULL;
 	mCurrentTrill = NULL;
+	mCurrentCluster = NULL;
 	mVoiceAdded = true;
 }
 
@@ -302,6 +304,7 @@ void ARFactory::createChord()
 #endif
 	// now, we have to save the position of the voice...
 	assert(mCurrentVoice);
+
 	mCurrentVoice->BeginChord();
 }
 
@@ -339,6 +342,9 @@ void ARFactory::addChord()
 //		delete mCurrentTrill;
 //		mCurrentTrill = 0;
 	}
+	else if (mCurrentCluster)
+        mCurrentVoice->setClusterChord(mCurrentCluster);
+
 	mCurrentVoice->FinishChord();
 }
 
@@ -776,13 +782,10 @@ void ARFactory::createTag( const char * name, int no )
 				// no ist die ID
 				mCurrentVoice->setPositionTagEndPos(no, tmp);
 				mTags.AddHead(tmp);
-			} 
-			else if (!strcmp(name,"chord")) // same as "splitChord"
+			}
+			else if (!strcmp(name,"cluster"))
 			{
-//				GuidoTrace("chord-Tag is no longer supported!");
-//				ARUserChordTag * tmp = new ARUserChordTag();
-//				mTags.AddHead(tmp);
-//				mCurrentVoice->AddPositionTag(tmp);
+                mInClusterTag = true;
 			}
 			break;
 
@@ -1607,18 +1610,30 @@ void ARFactory::endTag()
 		tag = NULL;
 		return;
 	}
+	else if (tag == mCurrentCluster)
+	{
+		if (tag->getRange() == false)
+			GuidoTrace("cluster-tag without range ignored!");
+	}
 
 	ARPositionTag * myptag = dynamic_cast<ARPositionTag *>(tag); 
 	if (tag->getRange() && tag->getRangeSetting() == ARMusicalTag::NO)
-	{
-			if (mCurrentTrill) {
-				delete mCurrentTrill;
-				mCurrentTrill = NULL;
-			}
-			GuidoWarn("Tag range ignored (1)");
-			tag->setRange( false );	
-	}
-	
+    {
+        if (mCurrentTrill)
+        {
+            delete mCurrentTrill;
+            mCurrentTrill = NULL;
+        }
+        else if (mCurrentCluster)
+        {
+            mInClusterTag = false;
+            mCurrentCluster = NULL;
+        }
+
+        GuidoWarn("Tag range ignored (1)");
+        tag->setRange( false );	
+    }
+
 	if (!tag->getRange() && tag->getRangeSetting() == ARMusicalTag::ONLY)
 	{
 		GuidoWarn("Tag has no range - ignored");
@@ -1803,6 +1818,11 @@ void ARFactory::addTag()
 	ARMTParameter * theTag = dynamic_cast<ARMTParameter *>(mTags.GetHead());	
 	if (mCurrentTrill)
 		mCurrentTrill->setTagParameterList(mTagParameterList);
+    else if (mInClusterTag)
+    {
+        mCurrentCluster = new ARCluster();
+        mCurrentCluster->setTagParameterList(mTagParameterList);
+    }
 	else if (theTag != 0)
 		theTag->setTagParameterList( mTagParameterList );
 	// the remaining will just be stored
@@ -1851,7 +1871,7 @@ void ARFactory::addTagParameter(const char * parameter)
 #if ARFTrace
  	 cout << "ARFactory::addTagParameter TYPE_TAGPARAMETER_STRING " << parameter << endl;
 #endif
-	if (dynamic_cast<ARMTParameter*>(mTags.GetHead()) || mCurrentTrill)
+	if (dynamic_cast<ARMTParameter*>(mTags.GetHead()) || mCurrentTrill || mInClusterTag)
 		mTagParameterList.AddTail(new TagParameterString(parameter));
 }
 
@@ -1864,7 +1884,7 @@ void ARFactory::addTagParameter(TYPE_TAGPARAMETER_INT parameter)
 	cout << "ARFactory::addTagParameter TYPE_TAGPARAMETER_INT " << parameter << endl;
 #endif
 	// we have assume the DEFAULT Unit here....
-	if (dynamic_cast<ARMTParameter*>(mTags.GetHead()) || mCurrentTrill)
+	if (dynamic_cast<ARMTParameter*>(mTags.GetHead()) || mCurrentTrill || mInClusterTag)
 	{
 		TagParameterInt * ntpi = new TagParameterInt(parameter);
 		// float npar = (float) (parameter * LSPACE/2);
@@ -1881,7 +1901,7 @@ void ARFactory::addTagParameter(TYPE_TAGPARAMETER_REAL parameter)
 #if ARFTrace
 	cout << "ARFactory::addTagParameter TYPE_TAGPARAMETER_REAL " << parameter << endl;
 #endif
-	if (dynamic_cast<ARMTParameter*>(mTags.GetHead()) || mCurrentTrill)
+	if (dynamic_cast<ARMTParameter*>(mTags.GetHead()) || mCurrentTrill || mInClusterTag)
 	{
 		TagParameterFloat * ntpf = new TagParameterFloat((float) parameter);
 		// float npar = (float) (parameter * LSPACE/2);

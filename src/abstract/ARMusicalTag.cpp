@@ -20,6 +20,7 @@
 #include "TagParameterList.h"
 #include "TagParameterString.h"
 #include "TagParameterFloat.h"
+#include "TagParameterRGBColor.h"
 #include "ListOfStrings.h"
 
 #include "ARMusicalTag.h"
@@ -29,11 +30,15 @@ ARMusicalTag::ARMusicalTag(const TYPE_TIMEPOSITION & tp, const ARMusicalTag * co
 {
 	assoc = DC;
 	color = 0;
+    rgbColor = 0;
 	mDx = mDy = size = 0;
 	if (copy)
 	{
 		if (copy->getColor())
 			color = TagParameterString::cast(copy->getColor()->getCopy());
+        
+        if (copy->getRGBColor())
+            rgbColor = TagParameterRGBColor::cast(copy->getRGBColor()->getCopy());
 		
 		if (copy->getDX())
 			mDx = TagParameterFloat::cast(copy->getDX()->getCopy());
@@ -59,12 +64,17 @@ ARMusicalTag::ARMusicalTag(int pid, const ARMusicalTag * copy)
 	assoc = DC; // don't care ...
 	isAuto = 0;
 	color = NULL;
+    rgbColor = NULL;
 	mDx = mDy = size = 0;
 	if (copy)
 	{
 		if (copy->getColor())
 			color = TagParameterString::cast(
 				copy->getColor()->getCopy());
+        
+        if (copy->getRGBColor())
+            rgbColor = TagParameterRGBColor::cast(
+                copy->getRGBColor()->getCopy());
 
 		if (copy->getDX())
 			mDx = TagParameterFloat::cast(
@@ -87,6 +97,7 @@ ARMusicalTag::ARMusicalTag(int pid, const ARMusicalTag * copy)
 ARMusicalTag::~ARMusicalTag()
 {
 	delete color;
+    if (rgbColor) delete rgbColor;
 	delete mDx;
 	delete mDy;
 	delete size;
@@ -203,7 +214,14 @@ void ARMusicalTag::PrintParameters(std::ostream & ) const
 
 }
 
-void ARMusicalTag::setColor(const char * cp) 
+void ARMusicalTag::setRGBColor (unsigned char red, unsigned char green, unsigned char blue)
+{
+    //if (rgbColor) delete rgbColor;
+    rgbColor = new TagParameterRGBColor(red, green, blue);
+}
+
+
+void ARMusicalTag::setColor(const char * cp)
 {
 	delete color;
 	color = new TagParameterString(cp);

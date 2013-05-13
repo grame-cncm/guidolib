@@ -69,7 +69,7 @@ class GRMusic : public GREvent
 
 		// - Voice related
 		void MarkVoice(int voicenum,int numfrom,int denomfrom,
-			int numlength,int denomlength);
+			int numlength,int denomlength, unsigned char red, unsigned char green, unsigned char blue);
 		virtual void rememberVoiceNLinePosition(ARMusicalVoice * arv, const TYPE_TIMEPOSITION & tp);
 		virtual void setPossibleVoiceNLinePosition(ARMusicalVoice * arv, const TYPE_TIMEPOSITION & tp);
 		

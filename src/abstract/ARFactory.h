@@ -2,9 +2,9 @@
 #define ARFactory_H
 
 /*
-  GUIDO Library
-  Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2003  Grame
+	GUIDO Library
+	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+	Copyright (C) 2003  Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -28,7 +28,6 @@ class ARNote;
 
 class ARMusicalEvent;
 class ARRepeatBegin;
-class ARChord;
 class ARMusicalObject;
 class ARMusicalTag;
 class AROctava;
@@ -42,6 +41,7 @@ class ARCue;
 class ARTrill;
 class ARStaff;
 class ARTHead;
+class ARCluster;
 class ARGlissando;
 
 
@@ -143,10 +143,12 @@ protected:
 	ARAlter *			mCurrentAlter;
 	ARMusicalVoice *	mSaveCurrentVoice;
 	ARStaff *			mCurrentStaff;
+	ARCluster *         mCurrentCluster;
 	int					mVoiceNum;
 	int					mCurrentTags;
 	bool				mTagRanged;
 	bool				mVoiceAdded;
+    bool                mInClusterTag;
 };
 
 extern ARFactory * gGlobalFactory;

@@ -38,6 +38,7 @@ class GREvent;
 class GRVoice;
 class GRNotationElement;
 class GRGrace;
+class GRCluster;
 class GRTrill;
 class GRGlobalStem;
 class GRGlobalLocation;
@@ -123,6 +124,7 @@ protected:
 	GRStaffManager* mStaffMgr;
 
 	GRGrace *		mCurGrace;	
+    GRCluster *     mCurCluster;
 	ARNoteFormat *	curnoteformat;
 	ARDotFormat *	curdotformat;
 	ARRestFormat *	currestformat;
@@ -133,7 +135,6 @@ protected:
 	GREvent *CreateNote			(const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject);
 	GREvent *CreateEmpty		(const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject);
 	GREvent *CreateRest			(const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject);
-	GREvent *CreateChord		(const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject);
 	GREvent *CreateGraceNote	(const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject, const TYPE_DURATION & dur);
 
 	virtual void checkStartPTags(GuidoPos tstpos);

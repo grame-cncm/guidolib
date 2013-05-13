@@ -1,7 +1,5 @@
 /*
-  GUIDO Library
-  Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002 Grame
+	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -162,6 +160,7 @@ GRTrill::~GRTrill()
 	delete fAccidental;
 }
 
+
 /** \brief Manage the drawing of trill line
 */
 void GRTrill::OnDraw( VGDevice & hdc , float right, int nVoice)
@@ -214,7 +213,6 @@ void GRTrill::OnDraw( VGDevice & hdc , float right, int nVoice)
 			x += widthOfTilde;
 			left += widthOfTilde;
 		}
-		
 		GRTrill::getLastPosX(nVoice) = left;
 				
 	}else{	
