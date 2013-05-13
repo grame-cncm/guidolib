@@ -71,29 +71,23 @@ class GRGlissando : public GRPTagARNotationElement
 		virtual void print() const;
 		virtual GRNotationElement * getStartElement(GRStaff * grstaff) const;
 		virtual GRNotationElement * getEndElement(GRStaff * grstaff) const;
-		virtual void ResumeTag(GRStaff * grstaff, GuidoPos assocpos);
 		virtual void BreakTag(GRStaff * grstaff, GuidoPos & assocpos);
 	
 		
 	protected:
 		
 		virtual void updateGlissando( GRStaff * grstaff );
-
-		//virtual GRPositionTag::GRSaveStruct * getNewGRSaveStruct();
-
-		//virtual GRSystemStartEndStruct * prepareSSEStructForGlissando( const GRStaff * inStaff );
-
 		virtual	void getGlissandoBeginingContext( GRGlissandoContext * ioContext, GRSystemStartEndStruct * sse );
 		virtual void getGlissandoEndingContext( GRGlissandoContext * ioContext, GRSystemStartEndStruct * sse );
-		//virtual	GRGlobalStem * findGlobalStem( GRSystemStartEndStruct * sse, GRNotationElement * stemOwner );
 		bool wavy;
 
-		GRNotationElement * laststartElement;
-		GuidoPos laststartpos;
+		GRNotationElement * flaststartElement;
 
 	private:
 		void compareAccidentals(GRSystemStartEndStruct * sse, bool * isUp, bool * isDown);
 		GRSystemStartEndStruct * initGRGlissando( GRStaff * grstaff );
+		GRGlissandoContext fglissContext;
+		GRGlissandoSaveStruct * fglissInfos;
 };
 
 #endif
