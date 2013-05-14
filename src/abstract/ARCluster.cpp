@@ -160,14 +160,17 @@ void ARCluster::PrintParameters(std::ostream & os) const
 
 void ARCluster::setNotePitchAndOctave(int inPitch, int inOctave)
 {
-    if (mFirstNote[0] == 0)
+    if (inPitch != 0)
     {
-        mFirstNote[0] = inPitch;
-        mFirstNote[1] = inOctave;
-    }
-    else
-    {
-        mSecondNote[0] = inPitch;
-        mSecondNote[1] = inOctave;
+        if (mFirstNote[0] == 0)
+        {
+            mFirstNote[0] = inPitch;
+            mFirstNote[1] = inOctave;
+        }
+        else
+        {
+            mSecondNote[0] = inPitch;
+            mSecondNote[1] = inOctave;
+        }
     }
 }

@@ -261,7 +261,7 @@ ARCluster *ARNote::setCluster(ARCluster *inCluster, bool inHaveToBeCreated)
 {
     if (inHaveToBeCreated)
     {
-        delete fCluster;
+        //delete fCluster;
     
         fCluster = new ARCluster(inCluster);
     }

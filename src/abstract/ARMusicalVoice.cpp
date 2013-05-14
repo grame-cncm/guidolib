@@ -6036,6 +6036,10 @@ void ARMusicalVoice::doAutoCluster()
 	// We first look for each note and check if it has a cluster
 	ARMusicalVoiceState armvs;
 	GuidoPos posObj = GetHeadPosition(armvs);
+    ARNote * savedNote = NULL;
+    ARNote * savedNextNote = NULL;
+    ARCluster *tmpCluster = NULL;
+
 	while(posObj)
     {
 		ARMusicalObject * obj = GetNext(posObj, armvs);
@@ -6056,28 +6060,39 @@ void ARMusicalVoice::doAutoCluster()
 						if(arpt)
                         {
 							ARTie * tie = dynamic_cast<ARTie *>(arpt);
-							if(tie)
+                            if(tie)
                             {
-								GuidoPos posNote = posObj;
-								ARNote * nextNote;
-                                ARCluster *tmpCluster = NULL;
+                                GuidoPos posNote = posObj;
+                                ARNote * nextNote;
 
-                                for (int i = 0; i <= 1; i++)
+                                do
                                 {
-                                    do
-                                    {
-                                        ARMusicalObject * nextObject = GetNext(posNote, armvs);
-                                        nextNote = dynamic_cast<ARNote *>(nextObject);
-                                    }
-                                    while(posObj && !nextNote);
-
-                                    if(nextNote)
-                                    {
-                                        if (!tmpCluster)
-                                            tmpCluster = new ARCluster();
-                                        nextNote->setCluster(tmpCluster);
-                                    }
+                                    ARMusicalObject * nextObject = GetNext(posNote, armvs);
+                                    nextNote = dynamic_cast<ARNote *>(nextObject);
                                 }
+                                while(!nextNote);
+
+                                tmpCluster = note->setCluster(cluster, true);
+                                nextNote->setCluster(tmpCluster);
+
+                                do
+                                {
+                                    ARMusicalObject * nextObject = GetNext(posNote, armvs);
+                                    note = dynamic_cast<ARNote *>(nextObject);
+                                }
+                                while(!note || note->getPitch() == 0);
+
+                                do
+                                {
+                                    ARMusicalObject * nextObject = GetNext(posNote, armvs);
+                                    nextNote = dynamic_cast<ARNote *>(nextObject);
+                                }
+                                while(!nextNote);
+
+                                tmpCluster = note->setCluster(cluster, true);
+                                nextNote->setCluster(tmpCluster);
+
+                                posObj = posNote;
                             }
 						}	
 					}
