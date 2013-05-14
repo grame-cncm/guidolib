@@ -45,29 +45,20 @@
 			<a href="#1.">1. Ornaments</a>
 			
 			<ul>
-				<li>
-					<a href="#1.1">1.1 Noteheads</a>
-				</li>
-				<li>
-					<a href="#1.2">1.2 Noteheads brackets</a>
-				</li>
-				<li>
-					<a href="#1.3">1.3 Glissandos</a>
-				</li>
+				<li><a href="#1.1">1.1 Noteheads</a></li>
+				<li><a href="#1.2">1.2 Noteheads brackets</a></li>
+				<li><a href="#1.3">1.3 Glissandos</a></li>
+				<li><a href="#1.4">1.4 Clusters</a></li>
 			</ul>
 			
 			
 			<hr>
 			<a name="1."></a>
-			<h3>
-				1. Ornaments
-			</h3>
+			<h3>1. Ornaments</h3>
 			
 			
 			<a name="1.1"></a>
-			<h4>
-				1.1 Noteheads
-			</h4>
+			<h4>1.1 Noteheads</h4>
 			
 			<p class="tag">
 				<span class="tag">\noteFormat</span>&lt;<i>type</i>&gt; changes notehead graphical display, where <i>type</i> can be one of the following:
@@ -83,9 +74,7 @@
 			
 			<p class="notes">
 				Examples:
-				<pre>
-					[ \noteFormat<"reversedTriangle"> a \noteFormat<"diamond"> c { \noteFormat<"x"> d, \noteFormat<"square"> g } ]
-				</pre>
+				<pre>[ \noteFormat&lt;"reversedTriangle"&gt; a \noteFormat&lt;"diamond"&gt; c { \noteFormat&lt;"x"&gt; d, \noteFormat&lt;"square"&gt; g } ]</pre>
 				<center>
 					<IMG SRC="imgs/noteFormat.jpg">
 				</center>
@@ -94,9 +83,7 @@
 			
 			
 			<a name="1.2"></a>
-			<h4>
-				1.2 Noteheads brackets
-			</h4>
+			<h4>1.2 Noteheads brackets</h4>
 			
 			<p class="tag">
 				<span class="tag">\noteFormat</span>&lt;<i>style</i>&gt; allows to display brackets around noteheads, where <i>style</i> can be one of the following:
@@ -112,21 +99,17 @@
 			
 			<p class="notes">
 				Examples:
-				<pre>
-					[ \noteFormat&lt;"()"&gt; a \noteFormat<"[diamond]"> a \noteFormat<"&lt;x&gt;"> a ]
-				</pre>
+				<pre>[ \noteFormat&lt;"()"&gt; a \noteFormat<"[diamond]"> a \noteFormat<"&lt;x&gt;"> a ]</pre>
 				<center> <IMG SRC="imgs/noteFormat2.jpg"> </center>
 			</p>
 			
 			
 			
 			<a name="1.3"></a>
-			<h4>
-				1.3 Glissando
-			</h4>
+			<h4>1.3 Glissandos</h4>
 			
 			<p class="tag">
-				<span class="tag">\glissando</span>&lt;<i>dx1, dy1, dx2, dy2, thickness, lineStyle</i>&gt; (notes);
+				<span class="tag">\glissando</span>&lt;<i>dx1, dy1, dx2, dy2, thickness, lineStyle</i>&gt;(notes)
 				<br>
 				Marks glissandos, affects both playback and graphic appearance.
 				<br><br>
@@ -170,7 +153,7 @@
 						
 										<ul>
 											<li>
-												a unit parameter
+												unit parameter
 											</li>
 										</ul>
 									</li>
@@ -183,7 +166,7 @@
 							</li>
 						
 							<li>
-								<b><i>lineStyle</i></b> - graphic apperance of glissando indication
+								<b><i>lineStyle</i></b> - graphic appearance of glissando indication
 								<br>
 							
 								<ul>
@@ -241,15 +224,120 @@
 			
 			<p class="notes">
 				Examples:
-				<pre>
-					[\noteFormat&lt;size=1.5, dx=2&gt \glissando(e g \noteFormat&lt;dx=4, dy=2&gt f b)]
-				</pre>
-				<pre>
-					[\glissando(e g# d& b& c# b c)]
-				</pre>
-				<pre>
-					[\meter<"2/4"> \glissando<thickness=1, color = "red">({b, g} f/2 {g, c2} {e1, g} {b, f} e2 f1/4 b)]
-				</pre>
+				<pre>[\noteFormat&lt;size=1.5, dx=2&gt \glissando(e g \noteFormat&lt;dx=4, dy=2&gt f b)]</pre>
+				<pre>[\glissando(e g# d& b& c# b c)]</pre>
+				<pre>[\meter<"2/4"> \glissando&lt;thickness=1, color = "red"&gt;({b, g} f/2 {g, c2} {e1, g} {b, f} e2 f1/4 b)]</pre>
+			</p>
+			
+			
+			<a name="1.4"></a>
+			<h4>1.4 Clusters</h4>
+			
+			<p class="tag">
+				<span class="tag">\cluster</span>&lt;<i>dx, dy, adx2, ady2, size, color</i>&gt;(chords)
+				<br>
+				Creates clusters, affects graphic appearance.
+				<br><br>
+				
+				<ul>
+					<li>
+						<i><b>Parameters</b> (in the order of their default positions):</i>
+						
+						<ul>
+							<br>
+							<li>
+								<b><i>dx, dy, adx, ady</i></b> - graphic offsets of the cluster (dx/dy for entire cluster, adx/ady only for cluster's head)
+							
+								<ul>
+									<br>
+									<li>
+										<i>standard values:</i>
+						
+										<ul>
+											<li>
+												unit parameters
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> 0
+									</li>
+									<br>
+								</ul>
+							</li>
+						
+							<li>
+								<b><i>size</i></b> - graphic size of cluster (only affects horizontal size)
+								<br>
+						
+								<ul>
+									<br>
+									<li>
+										<i>standard values:</i>
+						
+										<ul>
+											<li>
+												unit parameter
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> 1
+									</li>
+									<br>
+								</ul>
+							</li>
+						
+							<li>
+								<b><i>color</i></b> - graphic color of cluster (only affects cluster's head, use <span class="tag">\noteFormat</span>-tag to affect all cluster)
+								<br>
+							
+								<ul>
+									<br>
+									<li>
+									<i>standard values:</i>
+							
+										<ul>
+											<li>
+												color strings
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> "black"
+									</li>
+									<br>
+								</ul>
+							</li>
+						</ul>
+									
+						<br>
+					</li>
+									
+					<li>
+						<b><i>Range:</i></b> obligatory
+					</li>
+									
+					<br><br>
+									
+					<li>
+						<b><i>Semantics:</i></b>
+								
+						<ul>
+							<li>
+								Transforms a chord into a cluster. Only the two first notes are taken into account.
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</p>
+			
+			<p class="notes">
+				Examples:
+				<pre>[ \cluster&lt;color="red"&gt;({c,d}{f}{d/2,b}) ]</pre>
 			</p>
 		</p>
 			
