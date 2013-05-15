@@ -1,4 +1,0 @@
-{
-[\meter<"2/4">\glissando(b a) \glissando(e g# d& d d# b c)\glissando<thickness=0.6, color = "red">({b, g} f/2 {g/4, c2} {e1, a} {b, f}) \noteFormat<size=1.5, dx=2> \glissando(e g \noteFormat<dx=4, dy=2> f b \noteFormat e/2 e g g b)],
-[\staff<1> empty \glissando(e a)]
-}
