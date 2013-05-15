@@ -28,6 +28,8 @@ ARTrill::ARTrill(TYPE typ) : ARMTParameter(), mDur(NULL), mTrillType(typ)
 {
 	rangesetting = ONLY;
 	fShowCautionaryAccidentals = false;
+	fShowTR = true;
+	fDrawOnNoteHead = false;
 	begin = true;
 }
 
@@ -37,6 +39,8 @@ ARTrill::ARTrill(int pid, const ARTrill* copy) : ARMTParameter(pid, copy), mDur(
 	chordType = copy->getChordType();
 	chordAccidental = copy->getChordAccidental();
 	fShowCautionaryAccidentals = copy->getCautionary();
+	fShowTR = copy->fShowTR;
+	fDrawOnNoteHead = copy->fDrawOnNoteHead;
 	adx = copy->getadx();
 	ady = copy->getady();
 	begin = copy->getStatus();
@@ -53,7 +57,7 @@ void ARTrill::setTagParameterList(TagParameterList& tpl)
 	if (ltpls.GetCount() == 0)
 	{
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail("S,mode,,o;I,dur,32,o;U,adx,0hs,o;U,ady,0hs,o");
+		lstrs.AddTail("S,mode,,o;I,dur,32,o;U,adx,0hs,o;U,ady,0hs,o;S,tr,true,o;S,anchor,above,o");
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -83,6 +87,21 @@ void ARTrill::setTagParameterList(TagParameterList& tpl)
 			f = TagParameterFloat::cast(rtpl->RemoveHead());
 			ady = f->getValue();
 			delete f;
+
+			TagParameterString * tr = TagParameterString::cast(rtpl->RemoveHead());
+			assert(tr);
+			if (tr->TagIsSet() && (tr->getValue() == std::string("false") || tr->getValue() == std::string("0")))
+				fShowTR = false;
+			delete tr;
+
+			TagParameterString * anchor = TagParameterString::cast(rtpl->RemoveHead());
+			assert(anchor);
+			if (anchor->TagIsSet() && (anchor->getValue() == std::string("note")))
+				fDrawOnNoteHead = true;
+			else 
+				fDrawOnNoteHead = false;
+			delete anchor;
+
 		}
 		delete rtpl;
 	}
@@ -108,8 +127,6 @@ void ARTrill::PrintName(std::ostream & os) const
 	if		(mTrillType == TRILL)	os << "\\trill";
 	else if (mTrillType == TURN)	os << "\\turn";
 	else if (mTrillType == MORD)	os << "\\mord";
-	//if (getRange()) os << "(";
-
 }
 void ARTrill::PrintParameters(std::ostream & os) const
 {

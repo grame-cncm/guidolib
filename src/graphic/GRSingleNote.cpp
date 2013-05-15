@@ -249,7 +249,8 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
         if (mOrnament )
 		{
 			// to draw the trill line...
-            mOrnament->OnDraw(hdc,X,numVoice);
+			float Y = getPosition().y + getBoundingBox().Height()/2;
+			mOrnament->OnDraw(hdc,X,Y, numVoice);
 		}
 
         // - Restore

@@ -108,14 +108,14 @@ void GRGlissando::OnDraw( VGDevice & hdc ) const
 	else
 	{
 		//we have to implement new function of the device, in order to be able to rotate a symbol
-
-		/*float width = glissInfos->points[3].x - glissInfos->points[0].x;
-		float height = glissInfos->points[3].y - glissInfos->points[0].y;
+		/*
+		float width = fglissInfos->points[3].x - fglissInfos->points[0].x;
+		float height = fglissInfos->points[3].y - fglissInfos->points[0].y;
 		float pasX = width/10;
 		float pasY = height/10;
 
-		float X = glissInfos->points[0].x;
-		float Y = glissInfos->points[0].y;
+		float X = fglissInfos->points[0].x;
+		float Y = fglissInfos->points[0].y;
 		const int NSEGS = 25;
 
 		for(int i=0; i<10; i++)
@@ -339,6 +339,7 @@ void GRGlissando::compareAccidentals(GRSystemStartEndStruct * sse, bool * isUp, 
 	if(sse->startflag == GRSystemStartEndStruct::OPENLEFT)
 		startElement = flaststartElement;
 	GRSingleNote * startnote = dynamic_cast<GRSingleNote *>(startElement);
+
 	GRNotationElement * endElement = sse->endElement;
 	if(sse->endflag == GRSystemStartEndStruct::OPENRIGHT)
 		endElement = lastendElement;
@@ -350,8 +351,8 @@ void GRGlissando::compareAccidentals(GRSystemStartEndStruct * sse, bool * isUp, 
 		ARNote * arendnote = endnote->getARNote();
 		if(arstartnote && arendnote )
 		{
-			int startnoteAcc = arstartnote->getAccidentals();
-			int endnoteAcc = arendnote->getAccidentals();
+			int startnoteAcc = arstartnote->getAccidentals() + arstartnote->getDetune();
+			int endnoteAcc = arendnote->getAccidentals() + arendnote->getDetune();
 			if(startnoteAcc<endnoteAcc)
 				*isUp = true;
 			else if(endnoteAcc<startnoteAcc)
@@ -373,7 +374,6 @@ void GRGlissando::addAssociation(GRNotationElement * grnot)
 		if ( GREvent::cast( grnot )  && 	// stop immediately if it's not an event.
 		(dynamic_cast<GRNote *>(grnot) ||
 		 dynamic_cast<GRRest *>(grnot) ||
-//		 dynamic_cast<GRChord *>(grnot) ||
 		 dynamic_cast<GREmpty *>(grnot)))
 	{
 	  	GRARNotationElement::addAssociation(grnot);
@@ -416,6 +416,7 @@ GRNotationElement * GRGlissando::getEndElement(GRStaff * grstaff) const
 	return 0;
 }
 
+//reimplemented to keep the last startelement in memory..
 void GRGlissando::BreakTag(GRStaff * grstaff, GuidoPos & assocpos)
 {
 	if (grstaff == 0) return;

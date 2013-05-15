@@ -5152,7 +5152,10 @@ void ARMusicalVoice::doAutoGlissando()
 
 				if (glissStruct->curchordtag == prevchordtag && (glissStruct->startnote->getRelativeEndTimePosition() == note->getStartTimePosition()))
 				{
-					if (note->getName() != ARNoteName::empty && !note->CompareNameOctavePitch(*glissStruct->startnote) && !isTied)
+					if (note->getName() != ARNoteName::empty && 
+						(!note->CompareNameOctavePitch(*glissStruct->startnote) ||
+						(note->CompareNameOctavePitch(*glissStruct->startnote) && note->getDetune() != glissStruct->startnote->getDetune()))
+						&& !isTied)
 					{
 						ARDummyRangeEnd * arde = new ARDummyRangeEnd(GLISSANDOEND);
 						arde->setID(glissStruct->glissando->getID());

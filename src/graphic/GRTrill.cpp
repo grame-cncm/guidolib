@@ -47,6 +47,8 @@ GRTrill::GRTrill(GRStaff * inStaff, ARTrill * artrem ) : GRPTagARNotationElement
 	ARMusicalVoice::CHORD_TYPE chordType = artrem->getChordType();
 	ARMusicalVoice::CHORD_ACCIDENTAL chordAccidental = artrem->getChordAccidental();
 	begin = artrem->getStatus();
+	fShowTR = artrem->getShowTR();
+	fDrawOnNoteHead = artrem->getAnchor();
 	widthOfTilde = GObject::GetSymbolExtent(kTilde)*mTagSize;
 	
 	// - Creation of the accidental symbol -	
@@ -163,7 +165,7 @@ GRTrill::~GRTrill()
 
 /** \brief Manage the drawing of trill line
 */
-void GRTrill::OnDraw( VGDevice & hdc , float right, int nVoice)
+void GRTrill::OnDraw( VGDevice & hdc , float right, float noteY, int nVoice)
 {
 	VGColor oldColor = hdc.GetFontColor();
 	hdc.SetFontColor(VGColor( mColRef ));
@@ -178,11 +180,14 @@ void GRTrill::OnDraw( VGDevice & hdc , float right, int nVoice)
 		// we check if the trill line is begining or continuing another
 
 		if(begin){
-			// the 'tr' is drawn only at the begining of the trill
-			GRNotationElement::OnDraw( hdc );
+			// the 'tr' is drawn only at the begining of the trill, if the parameter 'tr' isn't set as false
+			if(fShowTR)
+				GRNotationElement::OnDraw( hdc );
 			// in order to adapt the accidental to the size of the trill :
 			fAccidental->setPosition(fAccidental->getPosition() + NVPoint(mBoundingBox.Width()/2*(mTagSize-1), - mBoundingBox.Height()/2*(mTagSize-1)));
 			fAccidental->setSize(mTagSize/2);
+			if(fDrawOnNoteHead)
+				fAccidental->setOffsetY(noteY- getPosition().y);
 			fAccidental->OnDraw(hdc);
 
 			NVRect rAcc = fAccidental->getBoundingBox();
@@ -209,14 +214,18 @@ void GRTrill::OnDraw( VGDevice & hdc , float right, int nVoice)
 		else
 			left += mTagOffset.x;
 		while(left + widthOfTilde <= right){
-			GRNotationElement::OnDrawSymbol(hdc, kTilde, x, 0, mTagSize);
+			if(fDrawOnNoteHead)
+				GRNotationElement::OnDrawSymbol(hdc, kTilde, x, noteY - getPosition().y, mTagSize);
+			else
+				GRNotationElement::OnDrawSymbol(hdc, kTilde, x, 0, mTagSize);
 			x += widthOfTilde;
 			left += widthOfTilde;
 		}
 		GRTrill::getLastPosX(nVoice) = left;
 				
 	}else{	
-		GRNotationElement::OnDraw( hdc );
+		if(fShowTR)
+			GRNotationElement::OnDraw( hdc );
 		fAccidental->OnDraw(hdc);
 	}
 	
