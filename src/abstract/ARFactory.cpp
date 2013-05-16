@@ -108,6 +108,7 @@
 #include "ARUserChordTag.h"
 #include "ARCluster.h"
 #include "ARGlissando.h"
+#include "ARSymbol.h"
 
 #include "TagParameterString.h"
 #include "TagParameterInt.h"
@@ -1344,6 +1345,14 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
+            else if(!strcmp(name,"symbol") || !strcmp(name,"s"))
+			{
+				assert(mCurrentVoice);
+				assert(!mCurrentEvent);
+				ARSymbol * tmp = new ARSymbol;
+				mTags.AddHead(tmp);
+				mCurrentVoice->AddPositionTag(tmp);		
+			}
 			break;
 
 		case 't':	
@@ -1762,6 +1771,7 @@ void ARFactory::endTag()
 
 	ARRepeatEnd  * arre;
 	ARText * atext;
+    ARSymbol * aSymbol;
 	if(( atext = dynamic_cast<ARText *>(tag)) != 0 )
 	{
 		// bereich ueber den der Text laueft ?
@@ -1798,6 +1808,12 @@ void ARFactory::endTag()
 	{
 		// tag is not set to NULL -> it will be deleted
 	}
+    else if ((aSymbol = dynamic_cast<ARSymbol *>(tag)) != 0 )
+	{
+        //REM: to test
+		aSymbol->setRelativeEndTimePosition(mCurrentVoice->getDuration());
+		tag = NULL;
+	}
 	else tag = NULL;
 
 	// now delete tags which are not needed anymore
@@ -1825,7 +1841,7 @@ void ARFactory::addTag()
 		mCurrentTrill->setTagParameterList(mTagParameterList);
     else if (mCurrentCluster)
         mCurrentCluster->setTagParameterList(mTagParameterList);
-	else if (theTag != 0)
+	else if (theTag)
 		theTag->setTagParameterList( mTagParameterList );
 	// the remaining will just be stored
 

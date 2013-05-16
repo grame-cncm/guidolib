@@ -95,6 +95,7 @@
 #include "ARSpecial.h"
 #include "ARBreathMark.h"
 #include "ARCluster.h"
+#include "ARSymbol.h"
 
 #include "ARCoda.h"
 #include "ARDaCapo.h"
@@ -166,6 +167,7 @@
 #include "GRSegno.h"
 #include "GRVolta.h"
 #include "GRGlissando.h"
+#include "GRSymbol.h"
 
 // #include "NEPointerList.h"
 
@@ -1319,6 +1321,17 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 		// We do not have any ARRangeEnds anymore !
  
 		assert(false); 
+	}
+    else if (tinf == typeid(ARSymbol))
+	{
+		// this is a No-Range Symbol-Tag...
+		GRSymbol * grsymb = new GRSymbol(mCurGrStaff, static_cast<ARSymbol *>(arOfCompleteObject));		
+
+		grsymb->setNeedsSpring(1);	// needs a Spring
+		mCurGrStaff->AddTag(grsymb);
+		gCurMusic->addVoiceElement(arVoice,grsymb);
+
+		grne = grsymb;
 	}
 	else
 	{
