@@ -5636,7 +5636,8 @@ void ARMusicalVoice::setClusterChord(ARCluster *inCurrentCluster)
         ARNote * noteTmp = dynamic_cast<ARNote *>(musicalObject);
         if (noteTmp && noteTmp->getPitch()!=0)
         {
-            noteTmp->setPitch(0);
+            noteTmp->setPitch(firstNote->getPitch()); // "hides" this note behind the first one
+            noteTmp->setOctave(firstNote->getOctave());
         }
     }
 

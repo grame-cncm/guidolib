@@ -167,7 +167,7 @@ void ARCluster::setNotePitchAndOctave(int inPitch, int inOctave)
             mFirstNote[0] = inPitch;
             mFirstNote[1] = inOctave;
         }
-        else
+        else if (mSecondNote[0] == 0)
         {
             mSecondNote[0] = inPitch;
             mSecondNote[1] = inOctave;
