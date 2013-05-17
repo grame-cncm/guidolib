@@ -40,7 +40,7 @@ class GRSymbol : public GRPTagARNotationElement
 				
 				NVPoint position;
 				NVRect boundingBox;
-				std::string symbol;
+				std::string filename;
 		};
 
 						GRSymbol( GRStaff *, ARSymbol * abstractRepresentationOfSymbol );

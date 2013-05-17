@@ -1771,7 +1771,6 @@ void ARFactory::endTag()
 
 	ARRepeatEnd  * arre;
 	ARText * atext;
-    ARSymbol * aSymbol;
 	if(( atext = dynamic_cast<ARText *>(tag)) != 0 )
 	{
 		// bereich ueber den der Text laueft ?
@@ -1807,12 +1806,6 @@ void ARFactory::endTag()
 	else if (dynamic_cast<ARTDummy *>(tag))
 	{
 		// tag is not set to NULL -> it will be deleted
-	}
-    else if ((aSymbol = dynamic_cast<ARSymbol *>(tag)) != 0 )
-	{
-        //REM: to test
-		aSymbol->setRelativeEndTimePosition(mCurrentVoice->getDuration());
-		tag = NULL;
 	}
 	else tag = NULL;
 

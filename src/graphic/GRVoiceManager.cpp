@@ -1302,7 +1302,6 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 		gCurMusic->addVoiceElement(arVoice,tmp);
 		grne = tmp;
 	}
-
 	else if (tinf == typeid(ARMusicalTag))
 	{
 		// Here, the not yet implemented tags are saved on the
@@ -1778,6 +1777,17 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 		addGRTag(grglissando,0);
 		mCurGrStaff->AddTag(grglissando);
 		gCurMusic->addVoiceElement(arVoice,grglissando);
+	}
+    else if (tinf == typeid(ARSymbol))
+	{
+		ARSymbol * arSymb = static_cast<ARSymbol *>(apt);
+		GRSymbol * grSymb = new GRSymbol(mCurGrStaff, arSymb);
+		// this is a range-tag... therefore no spring is needed... it is handled
+		// by the event at this timeposition
+		// adds the tag at the end...
+        addGRTag(grSymb,0);
+        mCurGrStaff->AddTag(grSymb);
+        gCurMusic->addVoiceElement(arVoice,grSymb);
 	}
 	else
 		GuidoTrace("Warning, PositionTag not handled");

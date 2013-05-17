@@ -36,7 +36,7 @@ extern GRStaff * gCurStaff;
 GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
   : GRPTagARNotationElement(abstractRepresentationOfSymbol)
 {
-	/*assert(abstractRepresentationOfSymbol);
+	assert(abstractRepresentationOfSymbol);
 
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
 	GRSymbolSaveStruct * st = new GRSymbolSaveStruct;
@@ -97,23 +97,23 @@ GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
 	st->boundingBox.top  = 0;
 
 	if (myar && myar->getSymbol())
-		st->symbol = myar->getSymbol();
+		st->filename = myar->getSymbol();
 	else
-		st->symbol = "";
+		st->filename = "";
 
 //	if (st->text)
 //	{
-		const char * cp = st->text.c_str();
+		const char * cp = st->filename.c_str();
 		float sizex = 0;
 		float sizey = 0;
 		if( gGlobalSettings.gDevice )
-			hmyfont->GetExtent( cp, (int)st->text.size(), &sizex, &sizey, gGlobalSettings.gDevice );
+			hmyfont->GetExtent( cp, (int)st->filename.size(), &sizex, &sizey, gGlobalSettings.gDevice );
 
 		st->boundingBox.right = sizex;
 		st->boundingBox.top = sizey;
 //	}
 
-	st->boundingBox.bottom = 4 * LSPACE;*/
+	st->boundingBox.bottom = 4 * LSPACE;
 }
 
 
@@ -153,7 +153,7 @@ void GRSymbol::OnDraw( VGDevice & hdc ) const
 	NVPoint drawPos (st->position);
 
 	// - Force the position to be relative to the bottom line of the staff
-	/*if( mMustFollowPitch == false )
+	if( mMustFollowPitch == false )
 	{
 		if (gCurStaff) // else ?
 			drawPos.y = gCurStaff->getDredgeSize();
@@ -164,12 +164,12 @@ void GRSymbol::OnDraw( VGDevice & hdc ) const
 	float dx = 0;
 	float dy = 0;
 
-	if( arText->getYPos()) // && arText->getYPos()->TagIsSet())
-		drawPos.y -= (arText->getYPos()->getValue(curLSPACE));
-	if (arText->getDY())
-		dy = -arText->getDY()->getValue( curLSPACE );
-	if (arText->getDX())
-		dx = arText->getDX()->getValue( curLSPACE );
+	if( arSymbol->getYPos()) // && arText->getYPos()->TagIsSet())
+		drawPos.y -= (arSymbol->getYPos()->getValue(curLSPACE));
+	if (arSymbol->getDY())
+		dy = -arSymbol->getDY()->getValue( curLSPACE );
+	if (arSymbol->getDX())
+		dx = arSymbol->getDX()->getValue( curLSPACE );
 
 	// - Setup font ....
 	const VGFont* hmyfont;
@@ -196,8 +196,8 @@ void GRSymbol::OnDraw( VGDevice & hdc ) const
 	hdc.SetFontAlign( mTextAlign );
 
 	// - Print text
-	const char * theText = st->text.c_str();
-	const int charCount = (int)st->text.size();
+	const char * theText = st->filename.c_str();
+	const int charCount = (int)st->filename.size();
 
 	hdc.DrawString( drawPos.x + st->boundingBox.left + dx,
 				 drawPos.y + dy, theText, charCount );
@@ -208,7 +208,7 @@ void GRSymbol::OnDraw( VGDevice & hdc ) const
 	// hdc.SetTextAlign( ta );
 	if( mColRef )
 		hdc.SetFontColor( prevTextColor );
-	// hdc.SetBackgroundMode( nBackmode );*/
+	// hdc.SetBackgroundMode( nBackmode );
 }
 
 void GRSymbol::print() const
@@ -282,7 +282,7 @@ void GRSymbol::tellPosition(GObject * caller, const NVPoint & inPosition)
 			{
 				newPos.x -= LSPACE * 0.5f; // this is actually notebreite!
 				st->position = newPos;
-				st->symbol = "-";
+				st->filename = "-";
 			}
 		}
 	}

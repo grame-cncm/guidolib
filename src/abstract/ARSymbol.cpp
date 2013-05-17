@@ -26,29 +26,29 @@ ListOfTPLs ARSymbol::ltpls(1);
 
 ARSymbol::ARSymbol(const NVstring & p_txt, float /*p_offsety*/ )
 {
-	// ASSERT(FALSE);
-	// dy = new TagParameterFloat(p_offsety);
-	//ypos = NULL;
-	//text = new TagParameterString(p_txt.c_str());
-	//textformat = NULL;
-	//font = NULL;
-	//fsize = NULL;
-	//fattrib = NULL;
-	//rangesetting = RANGEDC;
+	//assert(false);
+	//dy = new TagParameterFloat(p_offsety);
+	ypos = NULL;
+	filename = new TagParameterString(p_txt.c_str());
+	textformat = NULL;
+	font = NULL;
+	fsize = NULL;
+	fattrib = NULL;
+	rangesetting = RANGEDC;
 }
 
 ARSymbol::ARSymbol() : ARMTParameter()	
 {
-	//relativeTimePosition = TYPE_TIMEPOSITION(-1,1);
-	//duration = DURATION_0;
-	// dy = new TagParameterFloat(-6 * LSPACE/2);
-	//ypos = NULL;
+	relativeTimePosition = TYPE_TIMEPOSITION(-1,1);
+	duration = DURATION_0;
+	//dy = new TagParameterFloat(-6 * LSPACE/2);
+	ypos = NULL;
 	filename = NULL;
-	//textformat = NULL;
-	//font = NULL;
-	//fsize = NULL;
-	//fattrib = NULL;
-	//rangesetting = RANGEDC;
+	textformat = NULL;
+	font = NULL;
+	fsize = NULL;
+	fattrib = NULL;
+	rangesetting = RANGEDC;
 }
 
 ARSymbol::~ARSymbol() 
@@ -63,7 +63,7 @@ ARSymbol::~ARSymbol()
 
 const char *ARSymbol::getTagFormat() const
 {
-	const char * const outFormat = "S,filename,,r";
+	const char * const outFormat = "S,filename,,r;U,dy,-1,o";
 	return outFormat;
 }
 
@@ -73,7 +73,8 @@ void ARSymbol::setTagParameterList(TagParameterList & tpl)
 	{
 		// create a list of string ...
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(getTagFormat());
+		lstrs.AddTail( getTagFormat());	
+			//"S,text,,r;U,dy,-1,o")); 	
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -88,11 +89,11 @@ void ARSymbol::setTagParameterList(TagParameterList & tpl)
 			// then, we now the match for the first ParameterList
 			delete filename;
 			filename = TagParameterString::cast(rtpl->RemoveHead());
-            assert(filename);
+			assert(filename);
 
-			/*delete mDy;
+			delete mDy;
 			mDy = TagParameterFloat::cast(rtpl->RemoveHead());
-			assert(mDy);*/
+			assert(mDy);
 		}
 		delete rtpl;
 	}
@@ -109,27 +110,27 @@ void ARSymbol::print() const
 
 void ARSymbol::PrintName(std::ostream &os) const
 {
-	os << "\\text";
+	os << "\\symbol";
 }
 
 void ARSymbol::PrintParameters(std::ostream &os) const
 {
-	/*if (text || mDy)
+	if (filename || mDy)
 	{
-		if (text)
-			os << "<\"" << text->getValue();
-		if (text && mDy) 
+		if (filename)
+			os << "<\"" << filename->getValue();
+		if (filename && mDy) 
 			os << "\",";
 		if (mDy)
 			os << mDy->getUnitValue() << mDy->getUnit();
 		os << ">";
-	}*/
+	}
 }
 
 
-/** \brief Grabs the added Text-Parametersif a match has been found.
+/** \brief Grabs the added Symbol-Parameters if a match has been found.
 */
-/*int ARSymbol::MatchListOfTPLsWithTPL(const ListOfTPLs &ltpls,TagParameterList &tpl,
+int ARSymbol::MatchListOfTPLsWithTPL(const ListOfTPLs &ltpls,TagParameterList &tpl,
 		TagParameterList **rtpl)
 {
 	int ret = ARMusicalTag::MatchListOfTPLsWithTPL(ltpls,tpl,rtpl);
@@ -173,13 +174,13 @@ void ARSymbol::PrintParameters(std::ostream &os) const
 	}
 
 	return ret;
-}*/
+}
 
 /** \brief Creates the ListOfTPLs (tag parameters) if it is not already present.
 
 	It adds the default TEXT-Parameters and then calls the default in ARMusicalTag.
 */
-/*void ARSymbol::CreateListOfTPLs( ListOfTPLs &ltpl,ListOfStrings & lstrs)
+void ARSymbol::CreateListOfTPLs( ListOfTPLs &ltpl,ListOfStrings & lstrs)
 {	
 	ListOfStrings::iterator ptr;
 	for( ptr = lstrs.begin(); ptr != lstrs.end(); ++ ptr )
@@ -190,7 +191,7 @@ void ARSymbol::PrintParameters(std::ostream &os) const
 		"S,fattrib,,o"); // TODO: replace "Times" ?
 	}
 	ARMusicalTag::CreateListOfTPLs(ltpl,lstrs);
-}*/
+}
 
 /*void ARText::copyLyricsParams(const ARLyrics * lyrics)
 {
@@ -241,11 +242,9 @@ void ARText::setFSize(const TagParameterFloat *fs)
 {
 	delete fsize;
 	fsize = TagParameterFloat::cast(fs->getCopy());
-}
+}*/
 
-int ARText::getFSize(float curLSPACE) const
+int ARSymbol::getFSize(float curLSPACE) const
 {
 	return fsize ? (int) fsize->getValue(curLSPACE) : 0;
 }
-
-*/
