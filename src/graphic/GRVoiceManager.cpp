@@ -95,6 +95,7 @@
 #include "ARSpecial.h"
 #include "ARBreathMark.h"
 #include "ARCluster.h"
+#include "ARSymbol.h"
 
 #include "ARCoda.h"
 #include "ARDaCapo.h"
@@ -166,6 +167,7 @@
 #include "GRSegno.h"
 #include "GRVolta.h"
 #include "GRGlissando.h"
+#include "GRSymbol.h"
 
 // #include "NEPointerList.h"
 
@@ -1300,7 +1302,6 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 		gCurMusic->addVoiceElement(arVoice,tmp);
 		grne = tmp;
 	}
-
 	else if (tinf == typeid(ARMusicalTag))
 	{
 		// Here, the not yet implemented tags are saved on the
@@ -1319,6 +1320,17 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 		// We do not have any ARRangeEnds anymore !
  
 		assert(false); 
+	}
+    else if (tinf == typeid(ARSymbol))
+	{
+		// this is a No-Range Symbol-Tag...
+		GRSymbol * grsymb = new GRSymbol(mCurGrStaff, static_cast<ARSymbol *>(arOfCompleteObject));		
+
+		grsymb->setNeedsSpring(1);	// needs a Spring
+		mCurGrStaff->AddTag(grsymb);
+		gCurMusic->addVoiceElement(arVoice,grsymb);
+
+		grne = grsymb;
 	}
 	else
 	{
@@ -1757,11 +1769,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 	}
 	else if (tinf == typeid(ARCluster))
 	{
-        //REM: Pas testé !
-		/*GRCluster * grcluster = new GRCluster(mCurGrStaff, static_cast<ARCluster *>(apt));
-		addGRTag(grcluster);
-		mCurGrStaff->AddTag(grcluster);
-		gCurMusic->addVoiceElement(arVoice,grcluster);*/
+        // Not needed because cluster is like an ornament
 	}
 	else if (tinf == typeid(ARGlissando)) 
 	{
@@ -1769,6 +1777,17 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 		addGRTag(grglissando,0);
 		mCurGrStaff->AddTag(grglissando);
 		gCurMusic->addVoiceElement(arVoice,grglissando);
+	}
+    else if (tinf == typeid(ARSymbol))
+	{
+		ARSymbol * arSymb = static_cast<ARSymbol *>(apt);
+		GRSymbol * grSymb = new GRSymbol(mCurGrStaff, arSymb);
+		// this is a range-tag... therefore no spring is needed... it is handled
+		// by the event at this timeposition
+		// adds the tag at the end...
+        addGRTag(grSymb,0);
+        mCurGrStaff->AddTag(grSymb);
+        gCurMusic->addVoiceElement(arVoice,grSymb);
 	}
 	else
 		GuidoTrace("Warning, PositionTag not handled");

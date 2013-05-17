@@ -257,11 +257,20 @@ void ARNote::setOrnament(ARTrill * newOrnament)
 	fOrnament = new ARTrill(-1, newOrnament);
 }
 
-void ARNote::setCluster(ARCluster *inCluster)
+ARCluster *ARNote::setCluster(ARCluster *inCluster, bool inHaveToBeCreated)
 {
-    fCluster = inCluster;
+    if (inHaveToBeCreated)
+    {
+        //delete fCluster;
+    
+        fCluster = new ARCluster(inCluster);
+    }
+    else
+        fCluster = inCluster;
 
-    fCluster->setNotePitchAndOctave(fPitch, fOctave, fAccidentals);
+    fCluster->setNotePitchAndOctave(fPitch, fOctave);
+
+    return fCluster;
 }
 
 bool ARNote::CanBeMerged(const ARMusicalEvent * ev2)

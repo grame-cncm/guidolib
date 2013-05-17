@@ -1,0 +1,20 @@
+% cluster.gmn
+
+% \cluster-tag is useful to create clusters in score.
+
+% Usage : \cluster({chord}{chord}...)
+%
+% Parameters :
+%       - Color (modify only color of head's cluster
+%                --> use \noteFormat-tag to modify its entire color)
+%       - Size (modify only horizontal size)
+%       - dx/dy (modify position of entire cluster)
+%       - adx/ady (modify only position of head's cluster)
+
+{
+  [
+    \meter<"4/4">
+    \cluster({c,e}{a}{f,c2})
+    \cluster<color="blue">({d1/2, g}{f, g2})
+  ]
+}

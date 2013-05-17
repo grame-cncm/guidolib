@@ -32,10 +32,38 @@ ARCluster::ARCluster() : ARMTParameter()
 {
 	rangesetting = ONLY;
 
-    for(int i = 0; i <= 2; i++)
+    for(int i = 0; i <= 1; i++)
     {
         mFirstNote[i] = 0;
         mSecondNote[i] = 0;
+    }
+
+    adx = 0;
+    ady = 0;
+    ahdx = 0;
+    ahdy = 0;
+    aSize = 1.0;
+    aColor = NULL;
+}
+
+ARCluster::ARCluster(ARCluster *inCopyCluster) : ARMTParameter()
+{
+	rangesetting = ONLY;
+
+    for(int i = 0; i <= 1; i++)
+    {
+        mFirstNote[i] = 0;
+        mSecondNote[i] = 0;
+    }
+
+    if (inCopyCluster)
+    {
+        adx = inCopyCluster->getadx();
+        ady = inCopyCluster->getady();
+        ahdx = inCopyCluster->getahdx();
+        ahdy = inCopyCluster->getahdy();
+        aSize = inCopyCluster->getSize();
+        aColor = inCopyCluster->getColor();
     }
 }
 
@@ -48,7 +76,7 @@ void ARCluster::setTagParameterList(TagParameterList& tpl)
 	if (ltpls.GetCount() == 0)
 	{
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail("U,adx,0hs,o;U,ady,0hs,o");
+		lstrs.AddTail("S,color,,o;F,size,1.0,o;U,adx,0hs,o;U,ady,0hs,o;U,dx,0hs,o;U,dy,0hs,o");
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -59,11 +87,27 @@ void ARCluster::setTagParameterList(TagParameterList& tpl)
 		// we found a match!
 		if (ret == 0)
 		{
-			TagParameterFloat* f = TagParameterFloat::cast(rtpl->RemoveHead());
-			adx = f->getValue();
+            aColor = TagParameterString::cast(rtpl->RemoveHead());
+
+            TagParameterFloat *f = TagParameterFloat::cast(rtpl->RemoveHead());
+			aSize = f->getValue();
+			delete f;
+
+            // - dx/dy for cluster head only
+			f = TagParameterFloat::cast(rtpl->RemoveHead());
+			ahdx = f->getValue();
 			delete f;
 
 			f = TagParameterFloat::cast(rtpl->RemoveHead());
+			ahdy = f->getValue();
+			delete f;
+
+            // - dx/dy for entire cluster
+            f = TagParameterFloat::cast(rtpl->RemoveHead());
+			adx = f->getValue();
+			delete f;
+
+            f = TagParameterFloat::cast(rtpl->RemoveHead());
 			ady = f->getValue();
 			delete f;
 		}
@@ -82,6 +126,26 @@ float ARCluster::getady() const
 	return ady;
 }
 
+float ARCluster::getahdx() const	
+{
+	return ahdx;
+}
+
+float ARCluster::getahdy() const
+{
+	return ahdy;
+}
+
+float ARCluster::getSize() const
+{
+	return aSize;
+}
+
+TagParameterString *ARCluster::getColor() const
+{
+	return aColor;
+}
+
 void ARCluster::PrintName(std::ostream & os) const
 {
 	os << "\\cluster";
@@ -94,18 +158,19 @@ void ARCluster::PrintParameters(std::ostream & os) const
 	os << "<i=\"" << num->getValue() << "\">";*/
 }
 
-void ARCluster::setNotePitchAndOctave(int inPitch, int inOctave, int inAccidental)
+void ARCluster::setNotePitchAndOctave(int inPitch, int inOctave)
 {
-    if (mFirstNote[0] == 0)
+    if (inPitch != 0)
     {
-        mFirstNote[0] = inPitch;
-        mFirstNote[1] = inOctave;
-        mFirstNote[2] = inAccidental;
-    }
-    else
-    {
-        mSecondNote[0] = inPitch;
-        mSecondNote[1] = inOctave;
-        mSecondNote[2] = inAccidental;
+        if (mFirstNote[0] == 0)
+        {
+            mFirstNote[0] = inPitch;
+            mFirstNote[1] = inOctave;
+        }
+        else if (mSecondNote[0] == 0)
+        {
+            mSecondNote[0] = inPitch;
+            mSecondNote[1] = inOctave;
+        }
     }
 }

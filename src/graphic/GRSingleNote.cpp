@@ -203,32 +203,30 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
     int numVoice = this->getAbstractRepresentation()->getVoiceNum();
     float X = mGrStaff->getXEndPosition(getARNote()->getRelativeTimePosition(), getARNote()->getDuration());
 
-    if (mCluster)
-        mCluster->OnDraw(hdc);
-    else
+    float incy = 1;
+    float posy = 0;
+    int sum = mNumHelpLines;
+    if (mNumHelpLines > 0)
+    { 	// ledger lines up
+        incy = -mCurLSPACE;
+        posy = -mCurLSPACE;
+        hdc.SetFontAlign( VGDevice::kAlignLeft | VGDevice::kAlignBase );
+    }
+    else if( mNumHelpLines < 0 )
     {
-        float incy = 1;
-        float posy = 0;
-        int sum = mNumHelpLines;
-        if (mNumHelpLines > 0)
-        { 	// ledger lines up
-            incy = -mCurLSPACE;
-            posy = -mCurLSPACE;
-            hdc.SetFontAlign( VGDevice::kAlignLeft | VGDevice::kAlignBase );
-        }
-        else if( mNumHelpLines < 0 )
-        {
-            incy = mCurLSPACE;
-            posy = mGrStaff->getNumlines() * mCurLSPACE;
-            sum = - sum;
-            hdc.SetFontAlign( VGDevice::kAlignLeft | VGDevice::kAlignBase );
-        }
+        incy = mCurLSPACE;
+        posy = mGrStaff->getNumlines() * mCurLSPACE;
+        sum = - sum;
+        hdc.SetFontAlign( VGDevice::kAlignLeft | VGDevice::kAlignBase );
+    }
 
-        // draw ledger lines
-        const float ledXPos = -60 * 0.85f * mSize;
-        for (int i = 0; i < sum; ++i, posy += incy)
-            GRNote::DrawSymbol( hdc, kLedgerLineSymbol, ledXPos, ( posy - mPosition.y ));
+    // draw ledger lines
+    const float ledXPos = -60 * 0.85f * mSize;
+    for (int i = 0; i < sum; ++i, posy += incy)
+        GRNote::DrawSymbol( hdc, kLedgerLineSymbol, ledXPos, ( posy - mPosition.y ));
 
+    if (!mCluster)
+    {
         const VGColor oldcolor = hdc.GetFontColor();
         if (mColRef) hdc.SetFontColor( VGColor( mColRef ));
 
@@ -257,6 +255,10 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
         if (mColRef) hdc.SetFontColor( oldcolor );
         if (gBoundingBoxesMap & kEventsBB)
             DrawBoundingBox( hdc, kEventBBColor);
+    }
+    else
+    {
+        mCluster->OnDraw(hdc);
     }
 }
 

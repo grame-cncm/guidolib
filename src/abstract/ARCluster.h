@@ -23,8 +23,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
+#include <string>
 
 class TagParameterInt;
+class TagParameterString;
 
 /** \brief not yet documented
 */
@@ -33,7 +35,8 @@ class ARCluster : public ARMTParameter, public ARPositionTag
 {		
 public:
 
-	ARCluster();
+    ARCluster();
+	ARCluster(ARCluster *inCopyCluster);
 
 	virtual		 	~ARCluster();
 
@@ -43,18 +46,26 @@ public:
 
 	virtual void    setTagParameterList(TagParameterList & tpl);
 
-    void setNotePitchAndOctave(int inPitch, int inOctave, int inAccidental);
+    void setNotePitchAndOctave(int inPitch, int inOctave);
 
     int *getFirstNoteParameters() {return mFirstNote;}
     int *getSecondNoteParameters() {return mSecondNote;}
 
-    float	getadx() const;
-    float	getady() const;
+    float        getadx() const;
+    float	     getady() const;
+    float        getahdx() const;
+    float	     getahdy() const;
+    float        getSize() const;
+    TagParameterString *getColor() const;
 
 protected:
 
     float adx;
     float ady;
+    float ahdx;
+    float ahdy;
+    float aSize;
+    TagParameterString *aColor;
 
     static ListOfTPLs ltpls;
 

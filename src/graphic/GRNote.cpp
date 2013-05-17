@@ -156,7 +156,7 @@ GRCluster *GRNote::createCluster(ARNoteFormat *inCurnoteformat)
 {
     GRSingleNote *singleNote = dynamic_cast<GRSingleNote *>(this);
     
-    mCluster = new GRCluster(mGrStaff, mARNote->getARCluster(), singleNote->getDurTemplate(), inCurnoteformat);
+    mCluster = new GRCluster(mGrStaff, mARNote->getARCluster(), singleNote, inCurnoteformat);
 
     return mCluster;
 }
