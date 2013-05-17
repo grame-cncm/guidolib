@@ -34,18 +34,18 @@ class GRGlissando : public GRPTagARNotationElement
 	{
 		public:
 				GRGlissandoContext() : staff(0), openRight(false), openLeft(false),
-									topLeftHead(0), bottomLeftHead(0),
-									topRightHead(0), bottomRightHead(0), accidentalRight(0),
+									secondLeftHead(0), firstLeftHead(0),
+									secondRightHead(0), firstRightHead(0), accidentalRight(0),
 									sizeLeft(1), sizeRight(1), leftNoteDX(0), 
 									rightNoteDX(0), leftNoteDY(0), rightNoteDY(0)
 									 { }
 			GRStaff * staff;
 			bool openRight;
 			bool openLeft;
-			GRStdNoteHead * topLeftHead;
-			GRStdNoteHead * bottomLeftHead;
-			GRStdNoteHead * topRightHead;
-			GRStdNoteHead * bottomRightHead;
+			GRStdNoteHead * secondLeftHead;
+			GRStdNoteHead * firstLeftHead;
+			GRStdNoteHead * secondRightHead;
+			GRStdNoteHead * firstRightHead;
 			GRAccidental * accidentalRight;
 			float sizeLeft;
 			float sizeRight;
@@ -80,7 +80,7 @@ class GRGlissando : public GRPTagARNotationElement
 		virtual	void getGlissandoBeginingContext( GRGlissandoContext * ioContext, GRSystemStartEndStruct * sse );
 		virtual void getGlissandoEndingContext( GRGlissandoContext * ioContext, GRSystemStartEndStruct * sse );
 		bool wavy;
-
+		bool fill;
 		GRNotationElement * flaststartElement;
 
 	private:
@@ -88,6 +88,7 @@ class GRGlissando : public GRPTagARNotationElement
 		GRSystemStartEndStruct * initGRGlissando( GRStaff * grstaff );
 		GRGlissandoContext fglissContext;
 		GRGlissandoSaveStruct * fglissInfos;
+		GRGlissando * nextGRGlissando;
 };
 
 #endif

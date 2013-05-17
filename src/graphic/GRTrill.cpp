@@ -186,8 +186,6 @@ void GRTrill::OnDraw( VGDevice & hdc , float right, float noteY, int nVoice)
 			// in order to adapt the accidental to the size of the trill :
 			fAccidental->setPosition(fAccidental->getPosition() + NVPoint(mBoundingBox.Width()/2*(mTagSize-1), - mBoundingBox.Height()/2*(mTagSize-1)));
 			fAccidental->setSize(mTagSize/2);
-			if(fDrawOnNoteHead)
-				fAccidental->setOffsetY(noteY- getPosition().y);
 			fAccidental->OnDraw(hdc);
 
 			NVRect rAcc = fAccidental->getBoundingBox();

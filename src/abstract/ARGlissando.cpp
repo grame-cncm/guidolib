@@ -18,7 +18,10 @@ ARGlissando::ARGlissando()
 	fLineStyle = NULL;
 
 	mParSet = false;
-	fWavy = false;
+	mWavy = false;
+	mFill = false;
+
+	nextGlissando = NULL;
 }
 
 ARGlissando::ARGlissando(const ARGlissando * glissando)	: ARMTParameter(-1,glissando)
@@ -33,7 +36,10 @@ ARGlissando::ARGlissando(const ARGlissando * glissando)	: ARMTParameter(-1,gliss
 	setAssociation(ARMusicalTag::RA);
 	
 	mParSet = false;
-	fWavy = glissando->fWavy;
+	mWavy = glissando->mWavy;
+	mFill = glissando->mFill;
+
+	nextGlissando = glissando->nextGlissando;
 
 	if(glissando->dx1)
 		TagParameterFloat::cast( glissando->dx1->getCopy());
@@ -73,8 +79,9 @@ void ARGlissando::setTagParameterList(TagParameterList & tpl)
 		ListOfStrings lstrs; // (1); std::vector test impl
 		
 		lstrs.AddTail( "U,dx1,0,o;U,dy1,0,o;"
-			             "U,dx2,0,o;U,dy2,0,o;"
-			             "U,thickness,0.3,o;S,lineStyle,line,o" );
+			"U,dx2,0,o;U,dy2,0,o;"
+			"S,fill,false,o;U,thickness,0.3,o;"
+			"S,lineStyle,line,o");
 		
 		CreateListOfTPLs(ltpls,lstrs);
 	}
@@ -106,12 +113,21 @@ void ARGlissando::setTagParameterList(TagParameterList & tpl)
 			if (dy2->TagIsSet())
 				mParSet = true;
 
+			fFill = TagParameterString::cast(rtpl->RemoveHead());
+			assert(fFill);
+			if (fFill->TagIsSet()) 
+				mParSet = true;
+
+			string isFill ("true");
+			if (isFill == fFill->getValue())
+				mFill = true;
 
 			fThickness = TagParameterFloat::cast(rtpl->RemoveHead());
 			assert(fThickness);
 			if (fThickness->TagIsSet())
 				mParSet = true;
 
+			
 			fLineStyle = TagParameterString::cast(rtpl->RemoveHead());
 			assert(fLineStyle);
 			if (fLineStyle->TagIsSet()) 
@@ -119,13 +135,7 @@ void ARGlissando::setTagParameterList(TagParameterList & tpl)
 
 			string wavyLine ("wavy");
 			if (wavyLine == fLineStyle->getValue())
-			{
-				fWavy = true;	
-			}
-			else
-			{
-				fWavy = false;
-			}
+				mWavy = true;
 		}
 
 		delete rtpl;
@@ -157,6 +167,10 @@ TagParameterList * ARGlissando::getTagParameterList() const
 	if (dy2 && dy2->TagIsSet())
 	{
 		tpl->AddTail(dy2->getCopy());
+	}
+	if (fFill && fFill->TagIsSet())
+	{
+		tpl->AddTail(fFill->getCopy());
 	}
 	if (fThickness && fThickness->TagIsSet())
 	{
@@ -190,3 +204,7 @@ bool ARGlissando::MatchEndTag(const char * s)
 	return 0;
 }
 
+void ARGlissando::setNextGliss(ARGlissando *next)
+{
+	nextGlissando = next;
+}

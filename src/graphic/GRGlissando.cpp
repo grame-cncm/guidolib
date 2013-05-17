@@ -30,16 +30,21 @@ GRGlissando::GRGlissando(GRStaff * grstaff)
 {
 	initGRGlissando( grstaff );
 	flaststartElement = NULL;
+	nextGRGlissando = NULL;
+	wavy = false;
+	fill = false;
 }
 
 // -----------------------------------------------------------------------------
-GRGlissando::GRGlissando(GRStaff * grstaff,
-				   ARGlissando * abstractRepresentationOfGlissando)
+GRGlissando::GRGlissando(GRStaff * grstaff, ARGlissando * abstractRepresentationOfGlissando)
 				   : GRPTagARNotationElement(abstractRepresentationOfGlissando)
 {
 	assert(abstractRepresentationOfGlissando);
 	initGRGlissando( grstaff );
 	flaststartElement = NULL;
+		
+	wavy = abstractRepresentationOfGlissando->isWavy();
+	fill = abstractRepresentationOfGlissando->isFill();
 }
 
 GRGlissando::~GRGlissando()
@@ -107,6 +112,7 @@ void GRGlissando::OnDraw( VGDevice & hdc ) const
 	//wavy
 	else
 	{
+		//not implemented yet
 		//we have to implement new function of the device, in order to be able to rotate a symbol
 		/*
 		float width = fglissInfos->points[3].x - fglissInfos->points[0].x;
@@ -186,7 +192,6 @@ void GRGlissando::tellPosition(GObject * caller, const NVPoint & newPosition)
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( staff->getGRSystem());
 	if (sse == 0)	return;
 
-	const GRNotationElement * const startElement = sse->startElement;
 	const GRNotationElement * const endElement = sse->endElement;
 
 	if( grel == endElement )
@@ -210,6 +215,7 @@ void GRGlissando::updateGlissando( GRStaff * inStaff )
 	ARGlissando * arGliss = static_cast<ARGlissando *>(getAbstractRepresentation());
 	const float staffLSpace = inStaff->getStaffLSPACE();
 	assert(arGliss);
+	
 
 	//we gather the informations of parameters
 	float dx1 = arGliss->getDx1()->getValue( staffLSpace );
@@ -219,69 +225,97 @@ void GRGlissando::updateGlissando( GRStaff * inStaff )
 
 	float XLeft = 0;
 	float YLeft = 0;
+	float YLeft2 = 0;
 	float XRight = 0;
 	float YRight = 0;
+	float YRight2 = 0;
 
-	float dBottomLeftx = 0;
-	float dBottomLefty = 0;
-	float dBottomRightx = 0;
-	float dBottomRighty = 0;
+	float dFirstLeftx = 0;
+	float dFirstLefty = 0;
+	float dFirstRightx = 0;
+	float dFirstRighty = 0;
 
 	float acc = 0;
 	
 	
-	if(fglissContext.bottomRightHead)
+	if(fglissContext.firstRightHead)
 	{
-		XRight = fglissContext.bottomRightHead->getPosition().x + fglissContext.rightNoteDX;
-		dBottomRightx = fglissContext.bottomRightHead->getBoundingBox().Width()*3/4*fglissContext.sizeRight;
-		YRight = fglissContext.bottomRightHead->getPosition().y + fglissContext.rightNoteDY;
+		XRight = fglissContext.firstRightHead->getPosition().x + fglissContext.rightNoteDX;
+		dFirstRightx = fglissContext.firstRightHead->getBoundingBox().Width()*3/4*fglissContext.sizeRight;
+		YRight = fglissContext.firstRightHead->getPosition().y + fglissContext.rightNoteDY;
 		if(fglissContext.accidentalRight)
 		{
 			acc = fglissContext.accidentalRight->getBoundingBox().Width()*getSize();
 		}
 	}
-	if(fglissContext.bottomLeftHead)
+
+
+	if(fglissContext.firstLeftHead)
 	{
-		XLeft = fglissContext.bottomLeftHead->getPosition().x + fglissContext.leftNoteDX; 
-		dBottomLeftx = fglissContext.bottomLeftHead->getBoundingBox().Width()*3/4*fglissContext.sizeLeft;
-		YLeft = fglissContext.bottomLeftHead->getPosition().y + fglissContext.leftNoteDY;
+		XLeft = fglissContext.firstLeftHead->getPosition().x + fglissContext.leftNoteDX; 
+		dFirstLeftx = fglissContext.firstLeftHead->getBoundingBox().Width()*3/4*fglissContext.sizeLeft;
+		YLeft = fglissContext.firstLeftHead->getPosition().y + fglissContext.leftNoteDY;
 	}
 
-	//now we manage the case of same Y but different pitches...
-	if(YRight == YLeft)
+
+	if(fill && (fglissContext.secondLeftHead || fglissContext.secondRightHead))
 	{
-		bool forceUp = false;
-		bool forceDown = false;
-		compareAccidentals( sse, &forceUp, &forceDown);
-		if(forceUp)
+		if(fglissContext.secondLeftHead)
 		{
-			YLeft += LSPACE/4;
-			YRight -= LSPACE/4;
+			YLeft2 = fglissContext.secondLeftHead->getPosition().y + fglissContext.leftNoteDY;
 		}
-		else if (forceDown)
+		else
+			YLeft2 = YLeft;
+		if(fglissContext.secondRightHead)
 		{
-			YLeft -= LSPACE/4;
-			YRight += LSPACE/4;
+			YRight2 = fglissContext.secondRightHead->getPosition().y + fglissContext.rightNoteDY;
 		}
+		else
+			YRight2 = YRight;
+		fglissInfos->points[0].y = YLeft - dy1;
+		fglissInfos->points[1].y = YLeft2 - dy1;
+		fglissInfos->points[3].y = YRight - dy2;
+		fglissInfos->points[2].y = YRight2 - dy2;
+		fglissInfos->points[0].x = fglissInfos->points[1].x = XLeft + dx1;
+		fglissInfos->points[3].x = fglissInfos->points[2].x = XRight + dx2 - acc;
+		fglissInfos->position = fglissInfos->points[0];
 	}
+	else
+		{
+		//now we manage the case of same Y but different pitches...
+		if(YRight == YLeft)
+		{
+			bool forceUp = false;
+			bool forceDown = false;
+			compareAccidentals( sse, &forceUp, &forceDown);
+			if(forceUp)
+			{
+				YLeft += LSPACE/4;
+				YRight -= LSPACE/4;
+			}
+			else if (forceDown)
+			{
+				YLeft -= LSPACE/4;
+				YRight += LSPACE/4;
+			}
+		}
 
-	float deltaX = XRight - XLeft;
-	float deltaY = YRight - YLeft;
+		float deltaX = XRight - XLeft;
+		float deltaY = YRight - YLeft;
 
-	dBottomLefty = dBottomLeftx*deltaY/deltaX;
-	dBottomRighty = dBottomRightx*deltaY/deltaX;
+		dFirstLefty = dFirstLeftx*deltaY/deltaX;
+		dFirstRighty = dFirstRightx*deltaY/deltaX;
 
-	float thickness = arGliss->getThickness()->getValue( staffLSpace )*sqrt(deltaX*deltaX + deltaY*deltaY)/deltaX;
+		float thickness = arGliss->getThickness()->getValue( staffLSpace )*sqrt(deltaX*deltaX + deltaY*deltaY)/deltaX;
 
-	fglissInfos->points[0].y = YLeft - dy1 + dBottomLefty + thickness/2;
-	fglissInfos->points[1].y = YLeft - dy1 + dBottomLefty - thickness/2;
-	fglissInfos->points[3].y = YRight - dy2 - dBottomRighty + thickness/2;
-	fglissInfos->points[2].y = YRight - dy2 - dBottomRighty - thickness/2;
-	fglissInfos->points[0].x = fglissInfos->points[1].x = XLeft + dx1 + dBottomLeftx;
-	fglissInfos->points[3].x = fglissInfos->points[2].x = XRight + dx2 - dBottomRightx - acc;
-	fglissInfos->position = fglissInfos->points[0];
-
-	wavy = arGliss->isWavy();
+		fglissInfos->points[0].y = YLeft - dy1 + dFirstLefty + thickness/2;
+		fglissInfos->points[1].y = YLeft - dy1 + dFirstLefty - thickness/2;
+		fglissInfos->points[3].y = YRight - dy2 - dFirstRighty + thickness/2;
+		fglissInfos->points[2].y = YRight - dy2 - dFirstRighty - thickness/2;
+		fglissInfos->points[0].x = fglissInfos->points[1].x = XLeft + dx1 + dFirstLeftx;
+		fglissInfos->points[3].x = fglissInfos->points[2].x = XRight + dx2 - dFirstRightx - acc;
+		fglissInfos->position = fglissInfos->points[0];
+	}
 }
 
 
@@ -294,17 +328,19 @@ void GRGlissando::getGlissandoBeginingContext( GRGlissandoContext * ioContext, G
 	GRSingleNote * note = dynamic_cast<GRSingleNote *>(startElement);
 	if( note )
 	{
-		ioContext->bottomLeftHead = note->getNoteHead();
-		ioContext->topLeftHead = NULL; //only in the case of clusters
+		ioContext->firstLeftHead = note->getNoteHead();
+		if(nextGRGlissando && fill)
+		{
+			GRSingleNote * nextnote = dynamic_cast<GRSingleNote *>(nextGRGlissando->getStartElement(ioContext->staff));
+			if(nextnote)
+				ioContext->secondLeftHead = nextnote->getNoteHead();
+		}
+		else
+			ioContext->secondLeftHead = NULL;
 		ioContext->sizeLeft = note->getSize();
 		ioContext->leftNoteDX = note->getOffset().x;
 		ioContext->leftNoteDY = note->getOffset().y;
 	}
-/*	else
-	{
-		//here, we should deal with clusters...
-	}
-*/
 }
 
 void GRGlissando::getGlissandoEndingContext( GRGlissandoContext * ioContext, GRSystemStartEndStruct * sse )
@@ -315,22 +351,40 @@ void GRGlissando::getGlissandoEndingContext( GRGlissandoContext * ioContext, GRS
 	GRSingleNote * note = dynamic_cast<GRSingleNote *>(endElement);
 	if( note )
 	{
+		//noteHead
+		ioContext->firstRightHead = note->getNoteHead();
+		//accidental
 		GRAccidentalList noteacclist;
 		note->extractAccidentals( &noteacclist );
 		if(!noteacclist.empty())
 			ioContext->accidentalRight = noteacclist.GetHead();
-		ioContext->bottomRightHead = note->getNoteHead();
-		ioContext->topRightHead = NULL; //only in the case of clusters
+
+		//nextglissando?
+		if(nextGRGlissando && fill)
+		{
+			GRSingleNote * nextnote = dynamic_cast<GRSingleNote *>(nextGRGlissando->getEndElement(ioContext->staff));
+			if(nextnote)
+			{
+				//noteHead
+				ioContext->secondRightHead = nextnote->getNoteHead();
+				//accidental
+				if(!ioContext->accidentalRight)
+				{
+					GRAccidentalList noteacclist2;
+					nextnote->extractAccidentals( &noteacclist2 );
+					if(!noteacclist2.empty())
+						ioContext->accidentalRight = noteacclist2.GetHead();
+				}
+			}
+
+		}
+		else
+			ioContext->secondRightHead = NULL;
+		
 		ioContext->sizeRight = note->getSize();
 		ioContext->rightNoteDX = note->getOffset().x;
 		ioContext->rightNoteDY = note->getOffset().y;
 	}
-/*	else
-	{
-		//here, we should deal with clusters...
-	}
-*/
-	
 }
 
 void GRGlissando::compareAccidentals(GRSystemStartEndStruct * sse, bool * isUp, bool * isDown)

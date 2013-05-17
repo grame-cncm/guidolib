@@ -1,0 +1,5 @@
+{
+[\meter<"2/4">\tieBegin \trill({a} {g} {g}) \tieEnd],
+[\meter<"2/4">\tie( \trill({a} {g} {g}) )],
+[\meter<"2/4">\trill({a}{g/2})]
+}

@@ -28,8 +28,10 @@ public:
 	const TagParameterFloat * getDy2() const	{ return dy2; }
 	const TagParameterFloat * getThickness() const	{ return fThickness; }
 	const TagParameterString * getLineStyle() const	{ return fLineStyle; }
-	bool isWavy() {return fWavy;}
-	
+	bool isWavy() {return mWavy;}
+	bool isFill() {return mFill;}
+	ARGlissando * getNextGliss() {return nextGlissando;}
+	void setNextGliss(ARGlissando *next);
 	
 protected:
 	const TagParameterFloat * dx1;
@@ -38,9 +40,11 @@ protected:
 	const TagParameterFloat * dy2;
 	const TagParameterFloat * fThickness;
 	const TagParameterString * fLineStyle;
-	bool	fWavy;
-
+	const TagParameterString * fFill;
+	bool mWavy;
+	bool mFill;
 	bool mParSet;
+	ARGlissando * nextGlissando;
 
 	static ListOfTPLs ltpls;
 };
