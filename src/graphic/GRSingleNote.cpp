@@ -255,7 +255,7 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
         if (gBoundingBoxesMap & kEventsBB)
             DrawBoundingBox( hdc, kEventBBColor);
     }
-    else
+    else if (mClusterHaveToBeDrawn)
     {
         mCluster->OnDraw(hdc);
     }

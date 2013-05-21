@@ -152,8 +152,7 @@ ARFactory::ARFactory()
 	mCurrentStaff(NULL),
 	mVoiceNum(1),
 	mCurrentTags(0),
-	mVoiceAdded(false)/*,
-    mInClusterTag(false)*/
+	mVoiceAdded(false)
 {
 		sMaxTagId = -1;
 }

@@ -39,7 +39,7 @@ public:
 				 GRCluster(GRStaff * stf, ARCluster * arcls, GRSingleNote *sngNote, ARNoteFormat * curnoteformat);
 	virtual	 	~GRCluster();
 
-	virtual void OnDraw(VGDevice &hdc);
+	virtual void OnDraw(VGDevice &hdc) const;
 	virtual void tellPosition( GObject * caller, const NVPoint & np );
 
 	virtual void addAssociation( GRNotationElement * p );
@@ -56,8 +56,6 @@ protected:
     float ghdx;
     float ghdy;
     float gSize;
-
-    bool mHaveBeenDrawn;
 
     float mFirstNoteYPosition;
     float mSecondNoteYPosition;

@@ -28,33 +28,21 @@ using namespace std;
 
 ListOfTPLs ARCluster::ltpls(1);
 
-ARCluster::ARCluster() : ARMTParameter()
+ARCluster::ARCluster() : ARMTParameter(), adx(0), ady(0), ahdx(0), ahdy(0), aSize(1.0), aColor(NULL), aNoteCount(1),
+    aOnlyOneNoteInCluster(false)
 {
 	rangesetting = ONLY;
 
     for(int i = 0; i <= 1; i++)
     {
-        mFirstNote[i] = 0;
-        mSecondNote[i] = 0;
+        aFirstNote[i] = 0;
+        aSecondNote[i] = 0;
     }
-
-    adx = 0;
-    ady = 0;
-    ahdx = 0;
-    ahdy = 0;
-    aSize = 1.0;
-    aColor = NULL;
 }
 
 ARCluster::ARCluster(ARCluster *inCopyCluster) : ARMTParameter()
 {
 	rangesetting = ONLY;
-
-    for(int i = 0; i <= 1; i++)
-    {
-        mFirstNote[i] = 0;
-        mSecondNote[i] = 0;
-    }
 
     if (inCopyCluster)
     {
@@ -64,6 +52,17 @@ ARCluster::ARCluster(ARCluster *inCopyCluster) : ARMTParameter()
         ahdy = inCopyCluster->getahdy();
         aSize = inCopyCluster->getSize();
         aColor = inCopyCluster->getColor();
+        aNoteCount = inCopyCluster->getNoteCount();
+        aOnlyOneNoteInCluster = inCopyCluster->getIsThereOnlyOneNoteInCluster();
+        for(int i = 0; i <= 1; i++)
+        {
+            aFirstNote[i] = inCopyCluster->aFirstNote[i];
+            aSecondNote[i] = inCopyCluster->aSecondNote[i];
+        }
+    }
+    else
+    {
+        //Failure
     }
 }
 
@@ -116,36 +115,6 @@ void ARCluster::setTagParameterList(TagParameterList& tpl)
 	tpl.RemoveAll();
 }
 
-float ARCluster::getadx() const	
-{
-	return adx;
-}
-
-float ARCluster::getady() const
-{
-	return ady;
-}
-
-float ARCluster::getahdx() const	
-{
-	return ahdx;
-}
-
-float ARCluster::getahdy() const
-{
-	return ahdy;
-}
-
-float ARCluster::getSize() const
-{
-	return aSize;
-}
-
-TagParameterString *ARCluster::getColor() const
-{
-	return aColor;
-}
-
 void ARCluster::PrintName(std::ostream & os) const
 {
 	os << "\\cluster";
@@ -162,15 +131,20 @@ void ARCluster::setNotePitchAndOctave(int inPitch, int inOctave)
 {
     if (inPitch != 0)
     {
-        if (mFirstNote[0] == 0)
+        if (aFirstNote[0] == 0)
         {
-            mFirstNote[0] = inPitch;
-            mFirstNote[1] = inOctave;
+            aFirstNote[0] = inPitch;
+            aFirstNote[1] = inOctave;
         }
-        else if (mSecondNote[0] == 0)
+        else if (aSecondNote[0] == 0)
         {
-            mSecondNote[0] = inPitch;
-            mSecondNote[1] = inOctave;
+            aSecondNote[0] = inPitch;
+            aSecondNote[1] = inOctave;
+
+            if (!aOnlyOneNoteInCluster)
+                aNoteCount++;
         }
+        else
+            aNoteCount++;
     }
 }

@@ -48,15 +48,19 @@ public:
 
     void setNotePitchAndOctave(int inPitch, int inOctave);
 
-    int *getFirstNoteParameters() {return mFirstNote;}
-    int *getSecondNoteParameters() {return mSecondNote;}
+    int *getFirstNoteParameters() {return aFirstNote;}
+    int *getSecondNoteParameters() {return aSecondNote;}
 
-    float        getadx() const;
-    float	     getady() const;
-    float        getahdx() const;
-    float	     getahdy() const;
-    float        getSize() const;
-    TagParameterString *getColor() const;
+    float        getadx() const {return adx;}
+    float	     getady() const {return ady;}
+    float        getahdx() const {return ahdx;}
+    float	     getahdy() const {return ahdy;}
+    float        getSize() const {return aSize;}
+    int          getNoteCount() const {return aNoteCount;}
+    TagParameterString *getColor() const {return aColor;}
+    bool         getIsThereOnlyOneNoteInCluster() const {return aOnlyOneNoteInCluster;}
+
+    void         setOnlyOneNoteInCluster() {aOnlyOneNoteInCluster = true;}
 
 protected:
 
@@ -66,11 +70,13 @@ protected:
     float ahdy;
     float aSize;
     TagParameterString *aColor;
+    int   aNoteCount;
+    bool  aOnlyOneNoteInCluster;
 
     static ListOfTPLs ltpls;
 
-    int mFirstNote[2];
-    int mSecondNote[2];
+    int aFirstNote[2];
+    int aSecondNote[2];
 };
 
 #endif
