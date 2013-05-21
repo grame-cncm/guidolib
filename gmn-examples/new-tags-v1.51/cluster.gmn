@@ -16,5 +16,11 @@
     \meter<"4/4">
     \cluster({c,e}{a}{f,c2})
     \cluster<color="blue">({d1/2, g}{f, g2})
+  ],
+  [
+    \noteFormat<color="red">
+    \cluster<adx=1, ady=3>({f,a})
+    \cluster<color="purple">({d1, g}) a
+    \cluster<dx=-7>({c,a})
   ]
 }
