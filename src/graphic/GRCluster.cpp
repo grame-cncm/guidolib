@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 #include "GRCluster.h"
+
 #include "GRStaff.h"
 
 #include "ARCluster.h"
@@ -34,10 +35,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, GRSingleNote *sngNote, ARNoteFormat * curnoteformat) :
 						GRARCompositeNotationElement(arcls),
 						GRPositionTag(arcls->getEndPosition(), arcls),
-                        mStaff(stf),
-                        mARCluster(arcls),
-                        mDuration(NULL),
-                        mClusterColor(NULL)
+                        gStaff(stf),
+                        gARCluster(arcls),
+                        gDuration(NULL),
+                        gClusterColor(NULL)
 {
 	assert(stf);
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
@@ -48,7 +49,7 @@ GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, GRSingleNote *sngNote, AR
 
 	mStartEndList.AddTail(sse);
 
-    mDuration = sngNote->getDurTemplate();
+    gDuration = sngNote->getDurTemplate();
 
     const TagParameterString *tmpColor;
 
@@ -83,8 +84,8 @@ GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, GRSingleNote *sngNote, AR
     const TagParameterString *tmps = arcls->getColor();
     if (tmps)
     {
-        mClusterColor = new unsigned char[4];
-        tmps->getRGB(mClusterColor);
+        gClusterColor = new unsigned char[4];
+        tmps->getRGB(gClusterColor);
 
         if (strcmp(tmps->getValue(), ""))
             mColRef = NULL;
@@ -106,10 +107,12 @@ GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, GRSingleNote *sngNote, AR
     gdy += mTagOffset.y;
     gdx += mTagOffset.x;
     
-    int *firstNoteParameters = mARCluster->getFirstNoteParameters();
+    int *firstNoteParameters = gARCluster->getFirstNoteParameters();
 
-    mFirstNoteYPosition = stf->getNotePosition(firstNoteParameters[0], firstNoteParameters[1]);
-    mSecondNoteYPosition = mFirstNoteYPosition;
+    gFirstNoteYPosition = stf->getNotePosition(firstNoteParameters[0], firstNoteParameters[1]);
+    gSecondNoteYPosition = gFirstNoteYPosition;
+
+    gNoteCount = gARCluster->getNoteCount();
 }
 
 GRCluster::~GRCluster() {}
@@ -120,27 +123,27 @@ void GRCluster::OnDraw(VGDevice &hdc) const
 
     if (mColRef)
         hdc.SelectFillColor(VGColor(mColRef));
-    else if (mClusterColor)
-        hdc.SelectFillColor(VGColor(mClusterColor));
+    else if (gClusterColor)
+        hdc.SelectFillColor(VGColor(gClusterColor));
 
     NVRect r = getBoundingBox();
     r += getPosition();
 
     float x = r.left + gdx + ghdx;
 
-    float curLSpace = mStaff->getStaffLSPACE();
+    float curLSpace = gStaff->getStaffLSPACE();
 
     // - Quarter notes and less
-    if (mDuration < DURATION_2 )
+    if (gDuration < DURATION_2 )
     {
         const float xCoords [] = {x - 31 * mTagSize * gSize,
             x + 29 * mTagSize * gSize,
             x + 29 * mTagSize * gSize,
             x - 31 * mTagSize * gSize};
-        const float yCoords [] = {mFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
-            mFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
-            mSecondNoteYPosition - gdy - ghdy + curLSpace / 2,
-            mSecondNoteYPosition - gdy - ghdy + curLSpace / 2};
+        const float yCoords [] = {gFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
+            gFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
+            gSecondNoteYPosition - gdy - ghdy + curLSpace / 2,
+            gSecondNoteYPosition - gdy - ghdy + curLSpace / 2};
 
         hdc.Polygon(xCoords, yCoords, 4);
     }
@@ -150,34 +153,34 @@ void GRCluster::OnDraw(VGDevice &hdc) const
             x + 29 * mTagSize * gSize,
             x + 29 * mTagSize * gSize,
             x - 31 * mTagSize * gSize};
-        const float yCoords1 [] = {mFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
-            mFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
-            mFirstNoteYPosition - gdy - ghdy - curLSpace / 2 + 6,
-            mFirstNoteYPosition - gdy - ghdy - curLSpace / 2 + 6};
+        const float yCoords1 [] = {gFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
+            gFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
+            gFirstNoteYPosition - gdy - ghdy - curLSpace / 2 + 6,
+            gFirstNoteYPosition - gdy - ghdy - curLSpace / 2 + 6};
         const float xCoords2 [] = {x + 23 * mTagSize * gSize,
             x + 29 * mTagSize * gSize,
             x + 29 * mTagSize * gSize,
             x + 23 * mTagSize * gSize};
-        const float yCoords2 [] = {mFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
-            mFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
-            mSecondNoteYPosition - gdy - ghdy + curLSpace / 2,
-            mSecondNoteYPosition - gdy - ghdy + curLSpace / 2};
+        const float yCoords2 [] = {gFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
+            gFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
+            gSecondNoteYPosition - gdy - ghdy + curLSpace / 2,
+            gSecondNoteYPosition - gdy - ghdy + curLSpace / 2};
         const float xCoords3 [] = {x - 31 * mTagSize * gSize,
             x + 29 * mTagSize * gSize,
             x + 29 * mTagSize * gSize,
             x - 31 * mTagSize * gSize};
-        const float yCoords3 [] = {mSecondNoteYPosition - gdy - ghdy + curLSpace / 2 - 6,
-            mSecondNoteYPosition - gdy - ghdy + curLSpace / 2 - 6,
-            mSecondNoteYPosition - gdy - ghdy + curLSpace / 2,
-            mSecondNoteYPosition - gdy - ghdy + curLSpace / 2};
+        const float yCoords3 [] = {gSecondNoteYPosition - gdy - ghdy + curLSpace / 2 - 6,
+            gSecondNoteYPosition - gdy - ghdy + curLSpace / 2 - 6,
+            gSecondNoteYPosition - gdy - ghdy + curLSpace / 2,
+            gSecondNoteYPosition - gdy - ghdy + curLSpace / 2};
         const float xCoords4 [] = {x - 31 * mTagSize * gSize,
             x - 25 * mTagSize * gSize,
             x - 25 * mTagSize * gSize,
             x - 31 * mTagSize * gSize};
-        const float yCoords4 [] = {mFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
-            mFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
-            mSecondNoteYPosition - gdy - ghdy + curLSpace / 2,
-            mSecondNoteYPosition - gdy - ghdy + curLSpace / 2};
+        const float yCoords4 [] = {gFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
+            gFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
+            gSecondNoteYPosition - gdy - ghdy + curLSpace / 2,
+            gSecondNoteYPosition - gdy - ghdy + curLSpace / 2};
 
         hdc.Polygon(xCoords1, yCoords1, 4);
         hdc.Polygon(xCoords2, yCoords2, 4);
@@ -186,7 +189,7 @@ void GRCluster::OnDraw(VGDevice &hdc) const
     }
 
     // - Restore context
-    if (mColRef || mClusterColor)
+    if (mColRef || gClusterColor)
         hdc.SelectFillColor(prevTextColor);  //(TODO: in a parent method)
 }
 
@@ -228,14 +231,14 @@ void GRCluster::tellPosition(GObject * caller, const NVPoint & np)
 
 void GRCluster::setSecondNoteYPosition()
 {
-    int *secondNoteParameters = mARCluster->getSecondNoteParameters();
+    int *secondNoteParameters = gARCluster->getSecondNoteParameters();
 
-    mSecondNoteYPosition = mStaff->getNotePosition(secondNoteParameters[0], secondNoteParameters[1]);
+    gSecondNoteYPosition = gStaff->getNotePosition(secondNoteParameters[0], secondNoteParameters[1]);
 
-    if (mFirstNoteYPosition > mSecondNoteYPosition)
+    if (gFirstNoteYPosition > gSecondNoteYPosition)
     {
-        float tmpSwitch = mSecondNoteYPosition;
-        mSecondNoteYPosition = mFirstNoteYPosition;
-        mFirstNoteYPosition = tmpSwitch;
+        float tmpSwitch = gSecondNoteYPosition;
+        gSecondNoteYPosition = gFirstNoteYPosition;
+        gFirstNoteYPosition = tmpSwitch;
     }
 }

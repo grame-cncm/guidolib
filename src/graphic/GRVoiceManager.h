@@ -155,7 +155,9 @@ protected:
 	// this is needed for determining the elements that are centered in a bar like whole-note-rests
 	GREvent * lastnonzeroevent;
 	GRBar * lastbar;
-
+    
+    // - for clusters
+    int mCurrentClusterNoteNumber;
 
 private:
 

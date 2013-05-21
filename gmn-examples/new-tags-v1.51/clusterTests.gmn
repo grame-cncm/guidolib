@@ -1,0 +1,28 @@
+% Example about the use of cluster's parameters :
+% color, size, dx/dy, adx/ady, \noteFormat-tag
+
+{
+  [
+    \meter<"4/4">
+    \cluster({a/2})
+    \cluster({a/2,b2}) c/4 \cluster({d,e})
+    \cluster({c1,d}{e,f})
+    \cluster({c,d}{e}{f,g})
+    \cluster({d/2, b})
+    {d/4, b} \cluster({a,b2}) {a1/8, b}
+    \cluster({d/2, b, a})
+  ],
+  [
+    \meter<"4/4">
+    \cluster<color="blue">({c,g1})
+    \cluster<adx=1>({a,g1})
+    \cluster<ady=-4>({a2,g1})
+    \cluster<size=0.6>({a2,g1})
+    \noteFormat<size=0.3>\cluster({a2,g1}) g
+    \noteFormat<dy=-5, dx=-5, color="red"> \cluster({a2,g1}) a
+    \noteFormat<size=0.3>\cluster<size=5>({a2,g1})
+    \noteFormat<color="blue">\cluster<color="green">({a2,g1}{b}) a
+    \cluster{f,b,c}
+    a b\cluster({d/2})
+  ]
+}

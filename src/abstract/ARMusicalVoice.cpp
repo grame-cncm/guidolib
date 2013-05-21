@@ -6031,7 +6031,6 @@ void ARMusicalVoice::doAutoTrill()
 					}
 				}
 			}
-
 		}
 	}
 }
@@ -6124,7 +6123,7 @@ void ARMusicalVoice::doAutoCluster()
                                             {
                                                 currentNoteNumber++;
 
-                                                if (currentNoteNumber < clusterNoteNumber)
+                                                if (currentNoteNumber <= 2 * clusterNoteNumber)
                                                     note->setCluster(tmpCluster2);
                                             }
                                         }

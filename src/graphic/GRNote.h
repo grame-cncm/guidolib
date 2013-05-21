@@ -58,7 +58,7 @@ class GRNote : public GREvent
 	virtual GDirection	getThroatDirection() const;
 
     GRCluster *getGRCluster() {return mCluster;}
-    void       setGRCluster(GRCluster *inCluster);
+    void       setGRCluster(GRCluster *inCluster, bool inSignificativeNote = true);
     bool       getClusterNoteBoolean() {return mClusterNote;}
 
     GRCluster *createCluster(ARNoteFormat *inCurnoteformat);

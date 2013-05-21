@@ -162,9 +162,10 @@ GRCluster *GRNote::createCluster(ARNoteFormat *inCurnoteformat)
     return mCluster;
 }
 
-void GRNote::setGRCluster(GRCluster *inCluster)
+void GRNote::setGRCluster(GRCluster *inCluster, bool inSignificativeNote)
 {
     mCluster = inCluster;
 
-    mCluster->setSecondNoteYPosition();
+    if (inSignificativeNote)
+        mCluster->setSecondNoteYPosition();
 }

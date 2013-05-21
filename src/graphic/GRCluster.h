@@ -49,6 +49,8 @@ public:
 
     virtual const unsigned char * getColRef() const { return mColRef; }
 
+    int getNoteCount() const { return gNoteCount;}
+
 protected:
 
     float gdx;
@@ -57,13 +59,15 @@ protected:
     float ghdy;
     float gSize;
 
-    float mFirstNoteYPosition;
-    float mSecondNoteYPosition;
-    GRStaff *mStaff;
-    ARCluster *mARCluster;
-    TYPE_DURATION mDuration;
+    float gFirstNoteYPosition;
+    float gSecondNoteYPosition;
+    GRStaff *gStaff;
+    ARCluster *gARCluster;
+    TYPE_DURATION gDuration;
 
-    unsigned char *mClusterColor;
+    unsigned char *gClusterColor;
+
+    int gNoteCount;
 };
 
 #endif

@@ -202,6 +202,8 @@ GRVoiceManager::GRVoiceManager(GRStaffManager * p_staffmgr,
 
 	lastbar = NULL;
 	lastnonzeroevent = NULL;
+
+    mCurrentClusterNoteNumber = 0;
 }
 
 GRVoiceManager::~GRVoiceManager()
@@ -630,18 +632,29 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
                             if (!mCurCluster)
                             {
                                 if (grnote->getClusterNoteBoolean())
+                                {
                                     mCurCluster = grnote->createCluster(curnoteformat);
+                                    mCurrentClusterNoteNumber++;
+                                }
                             }
                             else
                             {
-                                if (grnote->getClusterNoteBoolean())
-                                    grnote->setGRCluster(mCurCluster);
+                                if (grnote->getClusterNoteBoolean() && mCurrentClusterNoteNumber <= mCurCluster->getNoteCount())
+                                {
+                                    if (mCurrentClusterNoteNumber < 2)
+                                        grnote->setGRCluster(mCurCluster);
+                                    else
+                                        grnote->setGRCluster(mCurCluster, false);
 
-                                mCurCluster = NULL;
+                                    mCurrentClusterNoteNumber++;
+                                }
                             }
 
-                            if (grnote->isLonelyInCluster())
-                                mCurCluster = NULL;
+                            if (mCurCluster && mCurrentClusterNoteNumber == mCurCluster->getNoteCount())
+                            {
+                                mCurCluster = NULL; 
+                                mCurrentClusterNoteNumber = 0;
+                            }
                         }
                     }
 				}
