@@ -72,6 +72,11 @@ class GRGlissando : public GRPTagARNotationElement
 		virtual GRNotationElement * getStartElement(GRStaff * grstaff) const;
 		virtual GRNotationElement * getEndElement(GRStaff * grstaff) const;
 		virtual void BreakTag(GRStaff * grstaff, GuidoPos & assocpos);
+		virtual void setPrevGlissando( GRGlissando * prev);
+		virtual GRGlissando * getPrevGlissando(){return prevGRGlissando;}
+		GRGlissandoContext * getContext(){return &fglissContext;}
+		void	setHidden(){hidden = true;}
+		bool	isFilled(){return filled;}
 	
 		
 	protected:
@@ -81,6 +86,8 @@ class GRGlissando : public GRPTagARNotationElement
 		virtual void getGlissandoEndingContext( GRGlissandoContext * ioContext, GRSystemStartEndStruct * sse );
 		bool wavy;
 		bool fill;
+		bool hidden;
+		bool filled;
 		GRNotationElement * flaststartElement;
 
 	private:
@@ -88,7 +95,7 @@ class GRGlissando : public GRPTagARNotationElement
 		GRSystemStartEndStruct * initGRGlissando( GRStaff * grstaff );
 		GRGlissandoContext fglissContext;
 		GRGlissandoSaveStruct * fglissInfos;
-		GRGlissando * nextGRGlissando;
+		GRGlissando * prevGRGlissando;
 };
 
 #endif

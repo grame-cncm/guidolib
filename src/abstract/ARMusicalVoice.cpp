@@ -5082,7 +5082,7 @@ void ARMusicalVoice::doAutoGlissando()
 				}
 			}
 		}
-		//for each position within the voice, we look for a note and check if it is affected by a glissando
+		// for each position within the voice, we look for a note and check if it is affected by a glissando
 		if (note)
 		{
 			GuidoPos posGlissStructlist = glissStructlist.GetHeadPosition();
@@ -5128,7 +5128,7 @@ void ARMusicalVoice::doAutoGlissando()
 				}
 			}
 
-			//we know look at the list of glissando structures that we've created
+			// we know look at the list of glissando structures that we've created
 			GuidoPos mypos = autoglissStructlist.GetHeadPosition();
 			while (mypos)
 			{

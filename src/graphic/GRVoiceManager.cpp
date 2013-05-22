@@ -181,9 +181,10 @@ GRVoiceManager::GRVoiceManager(GRStaffManager * p_staffmgr,
 	toadd = NULL;
 	mCurGrace = NULL;
     mCurCluster = NULL;
+	mCurGlissando = NULL;
 	curglobalstem = NULL;
 	curchordtag = NULL;
-	curgloballocation  = NULL;
+	curgloballocation = NULL;
 	curstemstate = NULL;
 	curheadstate = NULL;
 	mStaffMgr = p_staffmgr;
@@ -420,6 +421,7 @@ void GRVoiceManager::BeginManageVoice()
 	// called once. There are NO OPEN TAGS!
 	arVoice->doAutoTrill();
     arVoice->doAutoCluster();
+	
 }
 
 
@@ -554,7 +556,7 @@ void GRVoiceManager::AddRegularEvent (GREvent * ev)
 int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 {
 	if (curvst->vpos == NULL)		return ENDOFVOICE;
-
+	
 	if (curvst->curtp > timepos) {
 		timepos = curvst->curtp;
 		ARMusicalObject * o = arVoice->GetAt(curvst->vpos);
@@ -568,6 +570,7 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 	if (filltagmode)
 	{
 		ARMusicalObject * o = arVoice->GetAt(curvst->vpos);
+		
 		ARNewSystem * tmp = dynamic_cast<ARNewSystem *>(o);
 		if( tmp )
 		{
@@ -668,6 +671,7 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 			{
 				// tag was handled... here, we distinguish the different graphical TAG-Types
 				GRTag *tag = dynamic_cast<GRTag *>(grne);
+				
 				if(tag && (tag->getTagType() == GRTag::SYSTEMTAG))
 					mStaffMgr->AddSystemTag(grne,mCurGrStaff,voicenum);
 
@@ -717,6 +721,7 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 	else			// filltagmode == 0
 	{
 		ARMusicalObject *o = arVoice->GetAt(curvst->vpos);
+		
 		if (o->getDuration() == DURATION_0)
 		{
 			/* assert(false); */
@@ -749,6 +754,8 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 				toadd->RemoveAll();
 			}
 			AddRegularEvent (grev);
+
+
 
 			// set the duration/timeposition...!			
 			// important: take the AR-Representation here, as the graphical is dependant on the display-Duration-Setting.
@@ -1842,6 +1849,10 @@ void GRVoiceManager::checkEndPTags(GuidoPos tstpos)
 				{
 					curchordtag = NULL;
 				}
+				else if(dynamic_cast<GRGlissando *>(g))
+				{
+					organizeGlissando(g);
+				}
 				g->RangeEnd(mCurGrStaff);
 				grtags->RemoveElementAt(curpos);
 				// now remove the special nlinestuff
@@ -2298,4 +2309,17 @@ void GRVoiceManager::ReadBeginTags(const TYPE_TIMEPOSITION & tp)
 		staffread = true;
 	}	
 	delete mystate;	
+}
+
+void GRVoiceManager::organizeGlissando(GRTag * g)
+{
+	GRGlissando * gliss = dynamic_cast<GRGlissando *>(g);
+	if( gliss )
+	{
+		GRGlissando * prevGliss = mCurGlissando;
+		if(prevGliss != NULL )
+			gliss->setPrevGlissando(prevGliss);
+		mCurGlissando = gliss;
+	}
+	
 }

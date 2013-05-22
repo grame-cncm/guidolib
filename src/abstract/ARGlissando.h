@@ -30,8 +30,6 @@ public:
 	const TagParameterString * getLineStyle() const	{ return fLineStyle; }
 	bool isWavy() {return mWavy;}
 	bool isFill() {return mFill;}
-	ARGlissando * getNextGliss() {return nextGlissando;}
-	void setNextGliss(ARGlissando *next);
 	
 protected:
 	const TagParameterFloat * dx1;
@@ -40,11 +38,10 @@ protected:
 	const TagParameterFloat * dy2;
 	const TagParameterFloat * fThickness;
 	const TagParameterString * fLineStyle;
-	const TagParameterString * fFill;
+	const TagParameterString * fill;
 	bool mWavy;
 	bool mFill;
 	bool mParSet;
-	ARGlissando * nextGlissando;
 
 	static ListOfTPLs ltpls;
 };
