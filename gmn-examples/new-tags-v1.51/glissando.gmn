@@ -1,0 +1,10 @@
+{
+[\meter<"2/4">
+\glissando(b a) 
+\glissando<color="green">(e g# d& d d# b c)
+\glissando<fill="true">({b, e} {a/2, f} {g/4, c2} {e1, b, c} {g, c2, f}) \noteFormat<size=1.5, dx=2> 
+\glissando(e1 g 
+\noteFormat<dy=2> f b 
+\noteFormat e/2)],
+[\staff<1> empty \glissando(e a)]
+}

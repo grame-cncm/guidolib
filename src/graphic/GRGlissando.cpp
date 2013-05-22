@@ -128,6 +128,7 @@ void GRGlissando::OnDraw( VGDevice & hdc ) const
 			coorY[3] += deltaThickness;
 			coorY[2] -= deltaThickness;
 		}
+
 		hdc.Polygon(coorX, coorY, 4);
 	}
 
