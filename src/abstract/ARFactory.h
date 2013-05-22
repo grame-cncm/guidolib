@@ -148,7 +148,6 @@ protected:
 	int					mCurrentTags;
 	bool				mTagRanged;
 	bool				mVoiceAdded;
-    //bool                mInClusterTag;
 };
 
 extern ARFactory * gGlobalFactory;

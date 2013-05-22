@@ -75,6 +75,7 @@ protected :
         bool mClusterNote;
         ARNote *mARNote;
         bool mIsLonelyInCluster;
+        bool mClusterHaveToBeDrawn;
 };
 
 
