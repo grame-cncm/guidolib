@@ -23,8 +23,15 @@
 // --------------------------------------------------------------
 Bitmap::Bitmap( const char * inName )
 {
-	if( gGlobalSettings.gDevice )
-		fDevice = gGlobalSettings.gDevice->getVGSystem()->CreateMemoryDevice (inName);
+    VGDevice *tmpDevice = gGlobalSettings.gDevice;
+
+    if (tmpDevice)
+    {
+        VGSystem *tmpSystem = tmpDevice->getVGSystem();
+
+        if (tmpSystem)
+            fDevice = tmpSystem->CreateMemoryDevice(inName);
+    }
 }
 
 // --------------------------------------------------------------
@@ -66,9 +73,13 @@ void Bitmap::OnDrawH( VGDevice & hdc, const NVPoint &where, float height ) const
 // --------------------------------------------------------------
 void Bitmap::OnDraw( VGDevice & hdc, const NVRect & where ) const
 {
- 	if (!fDevice) return;
-	hdc.SetRasterOpMode( VGDevice::kOpAnd );	
-	const int width = int(where.right - where.left); 
-	const int height = int(where.bottom - where.top);
-	hdc.CopyPixels( int(where.left), int(where.top), width, height, fDevice );	
+    if (fDevice)
+    {
+        hdc.SetRasterOpMode(VGDevice::kOpAnd);
+
+        const int width = int(where.right - where.left); 
+        const int height = int(where.bottom - where.top);
+        
+        hdc.CopyPixels(int(where.left), int(where.top), width, height, fDevice);	
+    }
 }

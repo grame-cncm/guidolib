@@ -30,6 +30,7 @@
 #include "VGFont.h"
 #include "FontManager.h"
 
+#include "Bitmap.h"
 
 extern GRStaff * gCurStaff;
 
@@ -201,6 +202,10 @@ void GRSymbol::OnDraw( VGDevice & hdc ) const
 
 	hdc.DrawString( drawPos.x + st->boundingBox.left + dx,
 				 drawPos.y + dy, theText, charCount );
+
+    Bitmap *test = new Bitmap("C:\\test.bmp");
+    NVRect rectTest = NVRect(0, 0, 50, 50);
+    test->OnDraw(hdc, rectTest);
 
 //hdc.SetTextColor( GColor( 0, 0, 0 ));	// DEBUG
 

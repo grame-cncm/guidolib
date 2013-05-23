@@ -52,10 +52,19 @@ VGDevice*		GSystemQt::CreateMemoryDevice( int, int )
 }
 
 //------------------------------------------------------------------------
-VGDevice*		GSystemQt::CreateMemoryDevice( const char * )
+VGDevice*		GSystemQt::CreateMemoryDevice( const char * inPath)
 {
-	assert(0);	//Not implemented.
-	return 0;
+    QImage qImage(inPath);
+    QPoint qPoint(0, 0);
+
+    QSize qSize(50,50);
+    QPixmap *qPixmap = new QPixmap(qSize);
+    QPainter *mQPainter = new QPainter(qPixmap);
+    mQPainter->drawImage(qPoint, qImage);
+
+    GDeviceQt *memDevice = new GDeviceQt(mQPainter, this);
+
+	return memDevice;
 }
 
 //------------------------------------------------------------------------

@@ -47,8 +47,8 @@ ARSymbol::ARSymbol() : ARMTParameter()
 	textformat = NULL;
 	font = NULL;
 	fsize = NULL;
-	fattrib = NULL;
-	rangesetting = RANGEDC;
+    fattrib = NULL;
+    rangesetting = RANGEDC;
 }
 
 ARSymbol::~ARSymbol() 
