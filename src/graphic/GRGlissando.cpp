@@ -101,7 +101,7 @@ void GRGlissando::OnDraw( VGDevice & hdc ) const
 		float coorX[4] = {fglissInfos->points[0].x, fglissInfos->points[1].x, fglissInfos->points[2].x, fglissInfos->points[3].x};
 		float coorY[4] = {fglissInfos->points[0].y, fglissInfos->points[1].y, fglissInfos->points[2].y, fglissInfos->points[3].y};
 		
-		//if we're right open, the glissando ends with staff
+		// if we're right open, the glissando ends with staff
 		if (sse->endflag == GRSystemStartEndStruct::OPENRIGHT)
 		{
 			NVRect r = getGRStaff()->getBoundingBox();
@@ -109,14 +109,14 @@ void GRGlissando::OnDraw( VGDevice & hdc ) const
 			coorX[2] = coorX[3] = r.right - LSPACE;
 		}
 
-		//if we're left open the glissando begins just before the last note
+		//if we're left open the glissando begins just before the last note 
 		if (sse->startflag == GRSystemStartEndStruct::OPENLEFT )
 		{
 			coorX[0] = coorX[1] = coorX[3] - LSPACE;
 		}
-
-		//in any of those two cases, we have to re-calculate the thickness of our glissando line.
-		//there should be a better way to do it, maybe in updateGlissando and not here..
+		
+		// in any of those two cases, we have to re-calculate the thickness of our glissando line.
+		// there should be a better way to do it, maybe in updateGlissando and not here..
 		if(!fill && (sse->startflag == GRSystemStartEndStruct::OPENLEFT || sse->endflag == GRSystemStartEndStruct::OPENRIGHT))
 		{
 			float deltaX = fglissInfos->points[3].x - fglissInfos->points[0].x;
@@ -303,6 +303,9 @@ void GRGlissando::updateGlissando( GRStaff * inStaff )
 		dFirstLeftx = fglissContext.firstLeftHead->getBoundingBox().Width()*3/4*fglissContext.sizeLeft;
 	}
 
+	// the thickness entered by the user
+	float thicknessWanted = arGliss->getThickness()->getValue( staffLSpace );
+	
 	if(fill && fglissContext.secondLeftHead && fglissContext.secondRightHead)
 	{
 		// now we are in the case of the "fill" option, and we have two glissandi in parallel (chords or clusters)
@@ -311,10 +314,27 @@ void GRGlissando::updateGlissando( GRStaff * inStaff )
 		YRight2 = fglissContext.secondRightHead->getPosition().y + fglissContext.rightNoteDY;
 
 		// we add all the variables
-		fglissInfos->points[0].y = YLeft - dy1;
-		fglissInfos->points[1].y = YLeft2 - dy1;
-		fglissInfos->points[3].y = YRight - dy2;
-		fglissInfos->points[2].y = YRight2 - dy2;
+		if(YLeft>YLeft2)
+		{
+			fglissInfos->points[0].y = YLeft - dy1 + thicknessWanted/2;
+			fglissInfos->points[1].y = YLeft2 - dy1 - thicknessWanted/2;
+		}
+		else
+		{
+			fglissInfos->points[0].y = YLeft - dy1 - thicknessWanted/2;
+			fglissInfos->points[1].y = YLeft2 - dy1 + thicknessWanted/2;	
+		}
+		if(YRight>YRight2)
+		{
+			fglissInfos->points[3].y = YRight - dy2 + thicknessWanted/2;
+			fglissInfos->points[2].y = YRight2 - dy2 - thicknessWanted/2;
+		}
+		else
+		{
+			fglissInfos->points[3].y = YRight - dy2 - thicknessWanted/2;
+			fglissInfos->points[2].y = YRight2 - dy2 + thicknessWanted/2;
+		}
+		
 		fglissInfos->points[0].x = fglissInfos->points[1].x = XLeft + dx1 + dFirstLeftx;
 		fglissInfos->points[3].x = fglissInfos->points[2].x = XRight + dx2 - dFirstRightx - acc;
 		fglissInfos->position = fglissInfos->points[0];
@@ -325,8 +345,6 @@ void GRGlissando::updateGlissando( GRStaff * inStaff )
 	}
 	else
 	{
-		// fill = false, or we are not concerned by the "fill" option
-
 		// now we manage the case of same Y but different pitches...
 		if(YRight == YLeft)
 		{
@@ -353,7 +371,8 @@ void GRGlissando::updateGlissando( GRStaff * inStaff )
 		dFirstLefty = dFirstLeftx*deltaY/deltaX;
 		dFirstRighty = dFirstRightx*deltaY/deltaX;
 
-		float thickness = arGliss->getThickness()->getValue( staffLSpace )*sqrt(deltaX*deltaX + deltaY*deltaY)/deltaX*getSize();
+		// in order to have the same thickness, independently from the orientation of the line
+		float thickness = thicknessWanted*sqrt(deltaX*deltaX + deltaY*deltaY)/deltaX*getSize();
 
 		// we add all the variables
 		fglissInfos->points[0].y = YLeft - dy1 + dFirstLefty + thickness/2;
