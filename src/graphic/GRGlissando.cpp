@@ -303,7 +303,6 @@ void GRGlissando::updateGlissando( GRStaff * inStaff )
 		dFirstLeftx = fglissContext.firstLeftHead->getBoundingBox().Width()*3/4*fglissContext.sizeLeft;
 	}
 
-
 	if(fill && fglissContext.secondLeftHead && fglissContext.secondRightHead)
 	{
 		// now we are in the case of the "fill" option, and we have two glissandi in parallel (chords or clusters)
@@ -312,10 +311,10 @@ void GRGlissando::updateGlissando( GRStaff * inStaff )
 		YRight2 = fglissContext.secondRightHead->getPosition().y + fglissContext.rightNoteDY;
 
 		// we add all the variables
-		fglissInfos->points[0].y = YLeft - dy1 -1;
-		fglissInfos->points[1].y = YLeft2 - dy1 +1;
-		fglissInfos->points[3].y = YRight - dy2 -1;
-		fglissInfos->points[2].y = YRight2 - dy2 +1;
+		fglissInfos->points[0].y = YLeft - dy1;
+		fglissInfos->points[1].y = YLeft2 - dy1;
+		fglissInfos->points[3].y = YRight - dy2;
+		fglissInfos->points[2].y = YRight2 - dy2;
 		fglissInfos->points[0].x = fglissInfos->points[1].x = XLeft + dx1 + dFirstLeftx;
 		fglissInfos->points[3].x = fglissInfos->points[2].x = XRight + dx2 - dFirstRightx - acc;
 		fglissInfos->position = fglissInfos->points[0];
@@ -470,6 +469,7 @@ void GRGlissando::compareAccidentals(GRSystemStartEndStruct * sse, bool * isUp, 
 		}
 	}
 }
+
 
 void GRGlissando::removeAssociation(GRNotationElement * el )
 {

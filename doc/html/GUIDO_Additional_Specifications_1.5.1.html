@@ -143,6 +143,32 @@
 							</li>
 						
 							<li>
+								<b><i>fill</i></b> - possibility of filling the space between glissandi (for chords or clusters)
+								<br>
+						
+								<ul>
+									<br>
+									<li>
+										<i>standard values:</i>
+						
+										<ul>
+											<li>
+												true
+											</li>
+											<li>
+												false
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> false
+									</li>
+									<br>
+								</ul>
+							</li>
+
+							<li>
 								<b><i>thickness</i></b> - graphic thickness of glissando indication
 								<br>
 						
@@ -228,7 +254,7 @@
 				<center> <IMG SRC="imgs/glissandoNoteFormat.jpg"> </center>
 				<pre>[\glissando(e g# d& b& c# b c)]</pre>
 				<center> <IMG SRC="imgs/glissandoAccidentals.jpg"> </center>
-				<pre>[\meter<"2/4"> \glissando&lt;thickness=1, color = "red"&gt;({b, g} f/2 {g, c2} {e1, g} {b, f} e2 f1/4 b)]</pre>
+				<pre>[\meter<"2/4"> \glissando&lt;fill="true"&gt({b, g} f/2 {g, c2} {e1, g} {b, f}) \glissando({c/4, f, b} {f, b, c}) \glissando&lt;thickness=1, color = "red"&gt(e2 f1 b)]</pre>
 				<center> <IMG SRC="imgs/glissandoChords.jpg"> </center>
 			</p>
 			
