@@ -37,7 +37,7 @@ GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, GRSingleNote *sngNote, AR
 						GRPositionTag(arcls->getEndPosition(), arcls),
                         gStaff(stf),
                         gARCluster(arcls),
-                        gDuration(NULL),
+                        gDuration(0),
                         gClusterColor(NULL)
 {
 	assert(stf);
