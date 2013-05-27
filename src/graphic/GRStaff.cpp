@@ -275,6 +275,10 @@ GRStaff::GRStaff( GRSystemSlice * systemslice )
 
 	lastrod = 0;
 	firstrod = 0;
+
+	isOn = true;
+	isNextOn = true;
+	firstOnOffSetting = false;
 }
 
 // ----------------------------------------------------------------------------
@@ -1839,6 +1843,9 @@ void GRStaff::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& info
 void GRStaff::OnDraw( VGDevice & hdc ) const
 {
     traceMethod("OnDraw");
+	
+	if(firstOnOffSetting)
+		getGRSystem()->ShareStaffOnOff(this);
 #if 0
 	// - Change font settings
 	const int fontsize = getFontSize();
@@ -1855,10 +1862,14 @@ void GRStaff::OnDraw( VGDevice & hdc ) const
 	// - Restore font settings
 //	hdc.SetTextAlign( ta );
 // 	hdc.SelectFont( hfontold );// JB test for optimisation: do not restore font context.
-#else
-	DrawStaffUsingLines( hdc );
-#endif
 
+
+#else
+	
+	DrawStaffUsingLines( hdc );
+	
+#endif
+	
 	// - 
 	DrawNotationElements( hdc );
 	if (gBoundingBoxesMap & kStavesBB) {
@@ -1976,12 +1987,37 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 //	hdc.PushPen( VGColor( 0, 0, 0 ), kLineThick );// TODO: use correct color
 	hdc.PushPenWidth( kLineThick );
 
-	for( int i = 0; i < mStaffState.numlines; ++i )
+	if(isOn && isNextOn)
 	{
-		hdc.Line( xStart, yPos, xEnd, yPos );
-		yPos += lspace;
+		for( int i = 0; i < mStaffState.numlines; ++i )
+		{
+			hdc.Line( xStart, yPos, xEnd, yPos );
+			yPos += lspace;
+		}
 	}
-
+	else
+	{
+		NVRect r = getBoundingBox();
+		r += getPosition();
+		float xEnd2 = r.right;
+		if(isNextOn)
+		{
+			for( int i = 0; i < mStaffState.numlines; ++i )
+			{
+				hdc.Line( xEnd2, yPos, xEnd, yPos );
+				yPos += lspace;
+			}
+		}
+		else if(isOn)
+		{
+			for( int i = 0; i < mStaffState.numlines; ++i )
+			{
+				hdc.Line( xStart, yPos, xEnd2, yPos );
+				yPos += lspace;
+			}
+		}
+	}
+	
 	hdc.PopPenWidth();
 //	hdc.PopPen();
 }
@@ -2081,3 +2117,8 @@ float	GRStaff::getXEndPosition(TYPE_TIMEPOSITION pos, TYPE_DURATION dur){
     return 0;
 }
 
+void GRStaff::setOnOff(bool onoff)
+{
+	//if(!firstOnOffSetting)
+		isOn = onoff;
+}

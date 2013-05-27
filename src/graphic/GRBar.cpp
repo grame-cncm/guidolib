@@ -189,7 +189,8 @@ void GRBar::OnDraw(VGDevice & hdc ) const
 {
 	traceMethod("OnDraw");
 #if 1
-	DrawWithLines (hdc);
+	if(mGrStaff->isStaffOn())
+		DrawWithLines (hdc);
 #else
 	DrawWithGlyphs (hdc, map);
 #endif

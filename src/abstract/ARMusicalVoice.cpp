@@ -1230,7 +1230,6 @@ void ARMusicalVoice::doAutoStuff2()
 	timebench("doAutoTies", doAutoTies());
 	timebench("doAutoEndBar", doAutoEndBar());
 	//this->operator<< (cout);
-	//timebench("doAutoTrill", doAutoTrill());
 	timebench("doAutoGlissando", doAutoGlissando());
 }
 
@@ -4262,7 +4261,7 @@ void ARMusicalVoice::doAutoCheckStaffStateTags()
 		ARMeter * meter		= dynamic_cast<ARMeter *>(o);
 		ARNewSystem * sys	= dynamic_cast<ARNewSystem *>(o);
 		ARNewPage * page	= dynamic_cast<ARNewPage *>(o);
-
+		
 		if (!clef && !key && !meter && !sys && !page)
 		{
 			ARMusicalTag *armt = dynamic_cast<ARMusicalTag *>(o);

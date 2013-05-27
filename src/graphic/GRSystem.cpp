@@ -572,6 +572,7 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 	{
 		for( int i = mStaffs->GetMinimum(); i <= mStaffs->GetMaximum(); i++ )
 		{
+			GRStaff * nextStaff = 0;
 			if ((theStaff = mStaffs->Get(i)) == NULL)
 				continue;
 
@@ -580,6 +581,7 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 
 			lastStaffPos = theStaff->getPosition();
 			gCurStaff = theStaff;
+
 			theStaff->OnDraw(hdc);
 			++ staffCount;
 		}
@@ -592,7 +594,7 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 		// then we have to draw the systemslices ....
 		GuidoPos pos = mSystemSlices.GetHeadPosition();
 		bool firstFlag = true;
-
+		
 		while (pos)
 		{
 			GRSystemSlice * slice = mSystemSlices.GetNext(pos);
@@ -609,6 +611,30 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 					staffCount = tmpmaxind;
 				}
 			}
+			
+			std::map<int, bool> StavesOn;
+		
+			if(pos)
+			{
+				GRSystemSlice * nextSlice = mSystemSlices.GetAt(pos);
+				if(nextSlice)
+				{
+					for(int i = nextSlice->mStaffs->GetMinimum(); i <= nextSlice->mStaffs->GetMaximum(); i++)
+					{
+						GRStaff * st = nextSlice->mStaffs->Get(i);
+						if(st->isStaffOn())
+							StavesOn[i]=true;
+						else
+							StavesOn[i]=false;
+					}
+				}
+				for(int i = slice->mStaffs->GetMinimum(); i <= slice->mStaffs->GetMaximum(); i++)
+				{
+					if(StavesOn[i] == false)
+						slice->mStaffs->Get(i)->setNextOnOff(false);
+				}
+			}
+	
 			slice->OnDraw(hdc);
 		}
 
@@ -1045,6 +1071,42 @@ void GRSystem::notifyAccoladeTag( ARAccol * inAccoladeTag )
 	mAccolade->setAccoladeType( accolType );
 	mAccolade->setDx( dx );
 
+}
+
+void GRSystem::ShareStaffOnOff(const GRStaff * OriginStaff)
+{
+	GRSystemSlice * slice = OriginStaff->getGRSystemSlice();
+	GRStaff * staff = 0;
+	int idStaff;
+	bool isOn;
+		
+	if(slice)
+	{
+		GuidoPos idSlice = mSystemSlices.GetElementPos(slice);
+		mSystemSlices.GetNext(idSlice);
+		int i = slice->mStaffs->GetMinimum();
+		while( i <= slice->mStaffs->GetMaximum() && staff != OriginStaff )
+		{
+			staff = slice->mStaffs->Get(i);
+			i++;
+		}
+		if(staff == OriginStaff)
+		{
+			idStaff = i-1;
+			isOn = staff->isStaffOn();
+			while (idSlice)
+			{
+				GRSystemSlice * nextSlice = mSystemSlices.GetNext(idSlice);
+				if(nextSlice)
+				{
+					if(nextSlice->mStaffs->Get(idStaff)->getOnOffFirst())
+						break;
+					nextSlice->mStaffs->Get(idStaff)->setOnOff(isOn);
+					//staff->setNextOnOff(isOn);
+				}
+			}
+		}
+	}
 }
 
 

@@ -49,6 +49,7 @@
 #include "ARRepeatEndRangeEnd.h"
 #include "ARRestFormat.h"
 #include "ARStaffOff.h"
+#include "ARStaffOn.h"
 #include "ARDisplayDuration.h"
 #include "ARPossibleBreak.h"
 #include "ARPageFormat.h"
@@ -1338,6 +1339,16 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 		gCurMusic->addVoiceElement(arVoice,grsymb);
 
 		grne = grsymb;
+	}
+	else if (tinf == typeid(ARStaffOff))
+	{
+		mCurGrStaff->setOnOff(false);
+		mCurGrStaff->setOnOffFirst();
+	}
+	else if (tinf == typeid(ARStaffOn))
+	{
+		mCurGrStaff->setOnOff(true);
+		mCurGrStaff->setOnOffFirst();
 	}
 	else
 	{
