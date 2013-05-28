@@ -1871,7 +1871,8 @@ void GRStaff::OnDraw( VGDevice & hdc ) const
 #endif
 	
 	// - 
-	DrawNotationElements( hdc );
+	if(isOn)
+		DrawNotationElements( hdc );
 	if (gBoundingBoxesMap & kStavesBB) {
 		DrawBoundingBox( hdc, kStaffBBColor);
 	}
