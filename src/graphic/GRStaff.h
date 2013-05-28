@@ -248,12 +248,12 @@ class GRStaff : public GRCompositeNotationElement
 		virtual void OnDraw( VGDevice & hdc ) const;
 		virtual void GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 		virtual void print() const;
-		void		setOnOff(bool onoff);
+		void		setOnOff(bool onoff){isOn = onoff;}
 		bool		isStaffOn(){return isOn;}
 		void		setNextOnOff(bool onoff){isNextOn = onoff;}
+		bool		isNextStaffOn(){return isNextOn;}
 		void		setOnOffFirst(){firstOnOffSetting = true;}
 		bool		getOnOffFirst(){return firstOnOffSetting;}
-		//void		setPositionStop(TYPE_TIMEPOSITION tp){stop = tp;}
 
 		// this function was defined as private previously. Because GRNoteFactory needs to add elements 
 		// to the staff (Tuplets), it must be defined public.
@@ -296,7 +296,6 @@ class GRStaff : public GRCompositeNotationElement
 		bool			isOn;
 		bool			isNextOn;
 		bool			firstOnOffSetting;
-		//TYPE_TIMEPOSITION stop;
 
  	 private:
 		TYPE_TIMEPOSITION	fLastSystemBarChecked;

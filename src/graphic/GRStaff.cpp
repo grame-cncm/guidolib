@@ -1844,8 +1844,11 @@ void GRStaff::OnDraw( VGDevice & hdc ) const
 {
     traceMethod("OnDraw");
 	
+	// We have to pass the on/off information to all the next staves till the next one that has been set "first" 
+	// (by a \staffOff- \staffOn- tag or automatically in the case of a new system)
 	if(firstOnOffSetting)
 		getGRSystem()->ShareStaffOnOff(this);
+
 #if 0
 	// - Change font settings
 	const int fontsize = getFontSize();
@@ -1863,11 +1866,8 @@ void GRStaff::OnDraw( VGDevice & hdc ) const
 //	hdc.SetTextAlign( ta );
 // 	hdc.SelectFont( hfontold );// JB test for optimisation: do not restore font context.
 
-
 #else
-	
-	DrawStaffUsingLines( hdc );
-	
+	DrawStaffUsingLines( hdc );	
 #endif
 	
 	// - 
@@ -1987,6 +1987,8 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 //	hdc.PushPen( VGColor( 0, 0, 0 ), kLineThick );// TODO: use correct color
 	hdc.PushPenWidth( kLineThick );
 
+
+	// if the current staff is on, and the next one too, we draw it as usual
 	if(isOn && isNextOn)
 	{
 		for( int i = 0; i < mStaffState.numlines; ++i )
@@ -2000,6 +2002,8 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 		NVRect r = getBoundingBox();
 		r += getPosition();
 		float xEnd2 = r.right;
+
+		// if the current staff is off and the next one is on, we have to draw the begining of the next one
 		if(isNextOn)
 		{
 			for( int i = 0; i < mStaffState.numlines; ++i )
@@ -2008,7 +2012,14 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 				yPos += lspace;
 			}
 		}
-		else if(isOn)
+
+		// If the current staff is on and the next one isn't, we draw only the current staff, 
+		// without the end which is already behind the next bar
+		
+		// We also check if we are in a staff that begins the system (clef set) :  it is always on, but we 
+		// will draw it only if the next staff is on, or if it is the first of the page (with meters)
+		
+		else if(isOn && (!mStaffState.clefset || mStaffState.meterset))
 		{
 			for( int i = 0; i < mStaffState.numlines; ++i )
 			{
@@ -2016,6 +2027,7 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 				yPos += lspace;
 			}
 		}
+		//in any other case (current AND next staves off, or begining of new system with next staff off) : we don't do anything.
 	}
 	
 	hdc.PopPenWidth();
@@ -2115,10 +2127,4 @@ float	GRStaff::getXEndPosition(TYPE_TIMEPOSITION pos, TYPE_DURATION dur){
 	}
 
     return 0;
-}
-
-void GRStaff::setOnOff(bool onoff)
-{
-	//if(!firstOnOffSetting)
-		isOn = onoff;
 }

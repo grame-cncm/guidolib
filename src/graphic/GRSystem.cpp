@@ -41,6 +41,7 @@
 #include "ARAccol.h"
 #include "TagParameterFloat.h"
 #include "TagParameterString.h"
+#include "ARStaff.h"
 
 // Guido GR
 #include "GRSystem.h"
@@ -1073,8 +1074,12 @@ void GRSystem::notifyAccoladeTag( ARAccol * inAccoladeTag )
 
 }
 
+// This function is called by the staff if it has been set on or off, in order to share the information to all next staves till
+// the next one forced on or off (OnOffFirstSetting)
+
 void GRSystem::ShareStaffOnOff(const GRStaff * OriginStaff)
 {
+	// we find the systemSlice of the staff
 	GRSystemSlice * slice = OriginStaff->getGRSystemSlice();
 	GRStaff * staff = 0;
 	int idStaff;
@@ -1084,6 +1089,7 @@ void GRSystem::ShareStaffOnOff(const GRStaff * OriginStaff)
 	{
 		GuidoPos idSlice = mSystemSlices.GetElementPos(slice);
 		mSystemSlices.GetNext(idSlice);
+		// we look for the index of the staff in the systemSlice
 		int i = slice->mStaffs->GetMinimum();
 		while( i <= slice->mStaffs->GetMaximum() && staff != OriginStaff )
 		{
@@ -1094,15 +1100,16 @@ void GRSystem::ShareStaffOnOff(const GRStaff * OriginStaff)
 		{
 			idStaff = i-1;
 			isOn = staff->isStaffOn();
+			// we pass the information to all next staves with the same index in the next slices
 			while (idSlice)
 			{
 				GRSystemSlice * nextSlice = mSystemSlices.GetNext(idSlice);
 				if(nextSlice)
 				{
+					// if we find a staff that has been forced on/off, we stop.
 					if(nextSlice->mStaffs->Get(idStaff)->getOnOffFirst())
 						break;
 					nextSlice->mStaffs->Get(idStaff)->setOnOff(isOn);
-					//staff->setNextOnOff(isOn);
 				}
 			}
 		}
