@@ -21,8 +21,7 @@ research@grame.fr
 #include "TagParameterString.h"
 
 
-class ARLyrics;
-class TagParameterFloat;
+class TagParameterList;
 
 /** \brief The symbol tag
 */
@@ -30,45 +29,27 @@ class ARSymbol : public ARMTParameter,
     public ARPositionTag
 {
 public:
-    ARSymbol(const NVstring & p_txt, float p_offsety);
+    ARSymbol(const NVstring & p_txt);
     ARSymbol();
     virtual 		~ARSymbol();
 
     virtual void 	setTagParameterList(TagParameterList & theTagParameterList);
 
-    virtual const char* getSymbol() const					{ return filename ? filename->getValue() : 0; }
-    //virtual void		copyLyricsParams(const ARLyrics * lyrics);
+    virtual const char* getSymbol() const					{ return aFilePath ? aFilePath->getValue() : 0; }
 
     virtual void print() const;
-    // virtual ostream & operator<<(ostream &os) const;
     virtual void PrintName(std::ostream & os) const;
     virtual void PrintParameters(std::ostream & os) const;
-
-    virtual int MatchListOfTPLsWithTPL(const ListOfTPLs & ltpls, TagParameterList & tpl, TagParameterList ** rtpl);
-    virtual void  CreateListOfTPLs( ListOfTPLs & ltpl, ListOfStrings & lstrs);
-
-    const char* getTextformat() const					{ return textformat ? textformat->getValue() : 0; } 
-    //void		setTextformat(const TagParameterString * tf);
-    const char* getFont() const							{ return font ? font->getValue() : 0; }
-    //void		setFont(const TagParameterString * ft);
-    const char*	getFAttrib() const						{ return fattrib ? fattrib->getValue() : 0; }
-    //void		setFAttrib(const TagParameterString * fa);
-    int			getFSize(float curLSPACE) const;
-    //void		setFSize(const TagParameterFloat * fs);
-
-    const TagParameterFloat * getYPos() const {	return ypos; }
+    float		 getSize() const {return aSize;}
+    bool         getIsFixedGap() const {return aFixedGap;}
 
 protected:
 
     virtual const char * getTagFormat() const;
 
-	TagParameterString * filename; // der entsprechende Text ...
-	TagParameterString * textformat;
-	TagParameterString * font;
-	TagParameterFloat  * fsize;
-	TagParameterString * fattrib;
-
-	TagParameterFloat * ypos;
+	TagParameterString *aFilePath;
+	float               aSize;
+    bool                aFixedGap;
 
 	static ListOfTPLs ltpls;
 };

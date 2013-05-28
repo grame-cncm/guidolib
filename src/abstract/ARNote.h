@@ -73,7 +73,7 @@ class ARNote : public ARMusicalEvent
                                                   bool inHaveToBeCreated = false);
     void         setClusterPitchAndOctave();
     ARTrill     *getOrnament()		    				{ return fOrnament;}
-    ARCluster   *getARCluster() 						{ return fCluster;}
+    ARCluster *getARCluster() 			            	{ return fCluster;}
 
     void setIsLonelyInCluster()                         { fIsLonelyInCluster = true;}
     bool isLonelyInCluster()                            { return fIsLonelyInCluster;}

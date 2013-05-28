@@ -57,7 +57,7 @@ VGDevice*		GSystemQt::CreateMemoryDevice( const char * inPath)
     QImage qImage(inPath);
     QPoint qPoint(0, 0);
 
-    QSize qSize(50,50);
+    QSize qSize(qImage.width(),qImage.height());
     QPixmap *qPixmap = new QPixmap(qSize);
     QPainter *mQPainter = new QPainter(qPixmap);
     mQPainter->drawImage(qPoint, qImage);

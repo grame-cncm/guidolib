@@ -16,7 +16,6 @@
 
 #include "ARSymbol.h"
 
-//#include "GRDefine.h"
 #include "TagParameterList.h"
 #include "TagParameterFloat.h"
 #include "TagParameterString.h"
@@ -24,46 +23,28 @@
 
 ListOfTPLs ARSymbol::ltpls(1);
 
-ARSymbol::ARSymbol(const NVstring & p_txt, float /*p_offsety*/ )
+ARSymbol::ARSymbol(const NVstring & p_txt) : aSize(1), aFixedGap(false)
 {
-	//assert(false);
-	//dy = new TagParameterFloat(p_offsety);
-	ypos = NULL;
-	filename = new TagParameterString(p_txt.c_str());
-	textformat = NULL;
-	font = NULL;
-	fsize = NULL;
-	fattrib = NULL;
+	aFilePath = new TagParameterString(p_txt.c_str());
 	rangesetting = RANGEDC;
 }
 
-ARSymbol::ARSymbol() : ARMTParameter()	
+ARSymbol::ARSymbol() : ARMTParameter(), aSize(1), aFixedGap(false)
 {
 	relativeTimePosition = TYPE_TIMEPOSITION(-1,1);
 	duration = DURATION_0;
-	//dy = new TagParameterFloat(-6 * LSPACE/2);
-	ypos = NULL;
-	filename = NULL;
-	textformat = NULL;
-	font = NULL;
-	fsize = NULL;
-    fattrib = NULL;
+	aFilePath = NULL;
     rangesetting = RANGEDC;
 }
 
 ARSymbol::~ARSymbol() 
 {
-	//delete text;
-	//delete textformat;
-	//delete font;
-	//delete fsize;
-	//delete fattrib;
-	//delete ypos;
+	delete aFilePath;
 };
 
 const char *ARSymbol::getTagFormat() const
 {
-	const char * const outFormat = "S,filename,,r;U,dy,-1,o";
+	const char * const outFormat = "S,filePath,,r;F,size,1.0,o;S,fixedGap,false,o";
 	return outFormat;
 }
 
@@ -71,29 +52,30 @@ void ARSymbol::setTagParameterList(TagParameterList & tpl)
 {
 	if (ltpls.GetCount() == 0)
 	{
-		// create a list of string ...
-		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail( getTagFormat());	
-			//"S,text,,r;U,dy,-1,o")); 	
-		CreateListOfTPLs(ltpls,lstrs);
+		ListOfStrings lstrs;
+		lstrs.AddTail(getTagFormat());	
+        ARMusicalTag::CreateListOfTPLs(ltpls,lstrs);
 	}
 
 	TagParameterList * rtpl = NULL;
 	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
 
-	if (ret>=0 && rtpl)
+	if (ret >= 0 && rtpl)
 	{
-		// we found a match!
 		if (ret == 0)
 		{
-			// then, we now the match for the first ParameterList
-			delete filename;
-			filename = TagParameterString::cast(rtpl->RemoveHead());
-			assert(filename);
+			delete aFilePath;
+			aFilePath = TagParameterString::cast(rtpl->RemoveHead());
+			assert(aFilePath);
 
-			delete mDy;
-			mDy = TagParameterFloat::cast(rtpl->RemoveHead());
-			assert(mDy);
+            TagParameterFloat *f = TagParameterFloat::cast(rtpl->RemoveHead());
+			aSize = f->getValue();
+            delete f;
+
+            TagParameterString *fixedGap = TagParameterString::cast(rtpl->RemoveHead());
+            assert(fixedGap);
+            if (!strcmp(fixedGap->getValue(), "true"))
+                aFixedGap = true;
 		}
 		delete rtpl;
 	}
@@ -115,136 +97,26 @@ void ARSymbol::PrintName(std::ostream &os) const
 
 void ARSymbol::PrintParameters(std::ostream &os) const
 {
-	if (filename || mDy)
-	{
-		if (filename)
-			os << "<\"" << filename->getValue();
-		if (filename && mDy) 
-			os << "\",";
-		if (mDy)
-			os << mDy->getUnitValue() << mDy->getUnit();
-		os << ">";
-	}
-}
+    if (aFilePath || mDx || mDy)
+    {
+        os << "<\"";
+        if (aFilePath)
+        {
+            os << aFilePath->getValue();
+            if (mDx || mDy)
+                os << "\",";
+        }
 
-
-/** \brief Grabs the added Symbol-Parameters if a match has been found.
-*/
-int ARSymbol::MatchListOfTPLsWithTPL(const ListOfTPLs &ltpls,TagParameterList &tpl,
-		TagParameterList **rtpl)
-{
-	int ret = ARMusicalTag::MatchListOfTPLsWithTPL(ltpls,tpl,rtpl);
-	if (ret >= 0)
-	{
-		TagParameterList * mytpl = *rtpl;
-		// then we have to grab the values at the end ...
-
-		// the last one is fattrib ...
-		fattrib = TagParameterString::cast(mytpl->RemoveTail());
-		assert(fattrib);
-		if (fattrib->TagIsNotSet())
-		{
-			delete fattrib;
-			fattrib = 0;
-		}
-
-		// the size ...
-		fsize = TagParameterFloat::cast(mytpl->RemoveTail());
-		assert(fsize);
-		// the font
-		font = TagParameterString::cast(mytpl->RemoveTail());
-		assert(font);
-
-		// the textformat 
-		textformat = TagParameterString::cast(mytpl->RemoveTail());
-		assert(textformat);
-		if (textformat->TagIsNotSet())
-		{
-			delete textformat;
-			textformat = 0;
-		}
-
-		ypos = TagParameterFloat::cast(mytpl->RemoveTail());
-		assert(ypos);
-		if (ypos->TagIsNotSet())
-		{
-			delete ypos;
-			ypos = 0;
-		}
-	}
-
-	return ret;
-}
-
-/** \brief Creates the ListOfTPLs (tag parameters) if it is not already present.
-
-	It adds the default TEXT-Parameters and then calls the default in ARMusicalTag.
-*/
-void ARSymbol::CreateListOfTPLs( ListOfTPLs &ltpl,ListOfStrings & lstrs)
-{	
-	ListOfStrings::iterator ptr;
-	for( ptr = lstrs.begin(); ptr != lstrs.end(); ++ ptr )
-	{
-		NVstring & mystr = *ptr;
-		mystr.append(";U,ypos,0hs,o;S,textformat,cc,o;"
-		"S,font,Times,o;U,fsize,12pt,o;"
-		"S,fattrib,,o"); // TODO: replace "Times" ?
-	}
-	ARMusicalTag::CreateListOfTPLs(ltpl,lstrs);
-}
-
-/*void ARText::copyLyricsParams(const ARLyrics * lyrics)
-{
-	if (lyrics->mDx)
-	{
-		delete mDx;
-		mDx = TagParameterFloat::cast(lyrics->mDx->getCopy());
-	}
-	if (lyrics->mDy)
-	{
-		delete mDy;
-		mDy = 0;
-		delete ypos;
-		ypos = TagParameterFloat::cast(lyrics->mDy->getCopy());
-
-	}
-	if (lyrics->color)
-	{
-		delete color;
-		color = TagParameterString::cast(lyrics->color->getCopy());
-	}
-
-	if (lyrics->mFAttrib)		setFAttrib(lyrics->mFAttrib);
-	if (lyrics->mFont)			setFont(lyrics->mFont);
-	if (lyrics->mFSize)			setFSize(lyrics->mFSize);
-	if (lyrics->mTextFormat)	setTextformat(lyrics->mTextFormat);
-}
-
-void ARText::setTextformat(const TagParameterString * tf)
-{
-	delete textformat;
-	textformat = TagParameterString::cast(tf->getCopy());
-}
-
-void ARText::setFont(const TagParameterString * ft)
-{
-	delete font;
-	font = TagParameterString::cast(ft->getCopy());
-}
-
-void ARText::setFAttrib(const TagParameterString * fa)
-{
-	delete fattrib;
-	fattrib = TagParameterString::cast(fa->getCopy());
-}
-
-void ARText::setFSize(const TagParameterFloat *fs)
-{
-	delete fsize;
-	fsize = TagParameterFloat::cast(fs->getCopy());
-}*/
-
-int ARSymbol::getFSize(float curLSPACE) const
-{
-	return fsize ? (int) fsize->getValue(curLSPACE) : 0;
+        if (mDx)
+        {
+            os << mDx->getUnitValue() << mDx->getUnit();
+            if (mDy)
+                os << "\",";
+        }
+        if (mDy)
+        {
+            os << mDy->getUnitValue() << mDy->getUnit();
+        }
+        os << ">";
+    }
 }

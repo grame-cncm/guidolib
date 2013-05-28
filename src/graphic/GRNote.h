@@ -73,7 +73,6 @@ protected :
 		GRTrill   *mOrnament;
         GRCluster *mCluster;
         bool mClusterNote;
-        ARNote *mARNote;
         bool mIsLonelyInCluster;
         bool mClusterHaveToBeDrawn;
 };

@@ -22,12 +22,8 @@
 class ARSymbol;
 class GRStaff;
 class GRRod;
+class Bitmap;
 
-/** \brief A text string.
-
-	Can represent standard text, lyrics, fingering, label, cue-text, marks...
-
-*/
 class GRSymbol : public GRPTagARNotationElement
 {	
 	public:
@@ -40,7 +36,8 @@ class GRSymbol : public GRPTagARNotationElement
 				
 				NVPoint position;
 				NVRect boundingBox;
-				std::string filename;
+				std::string filePath;
+                Bitmap *bitmap;
 		};
 
 						GRSymbol( GRStaff *, ARSymbol * abstractRepresentationOfSymbol );
@@ -50,29 +47,22 @@ class GRSymbol : public GRPTagARNotationElement
 		virtual void 	tellPosition( GObject * caller, const NVPoint & inPosition );
 		virtual void 	addAssociation( GRNotationElement * el );
 		
-		
 		virtual void 	OnDraw( VGDevice & hdc ) const;
 		
 		virtual void 	print() const;
 		
-		const ARSymbol * 	getARSymbol() const;
-		
-		virtual unsigned int getTextAlign() const { return mTextAlign; }
+		const ARSymbol *getARSymbol() const;
 
 		virtual float 	getLeftSpace() const;
 		virtual float 	getRightSpace() const;
 
 		virtual void 	setPosition(const NVPoint & inPosition );
 		virtual void 	setHPosition( float nx );
-				void	mustFollowPitch( bool flag ) { mMustFollowPitch = flag; }
 
 	protected:
 
 		virtual GRPositionTag::GRSaveStruct * getNewGRSaveStruct()
-			{ return new GRSymbolSaveStruct; }	
-
-		unsigned int mTextAlign;
-		bool	mMustFollowPitch; // (when the text tag has a range)
+        { return new GRSymbolSaveStruct; }
 };
 
 #endif

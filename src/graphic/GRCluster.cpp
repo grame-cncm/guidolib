@@ -36,7 +36,6 @@ GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, GRSingleNote *sngNote, AR
 						GRARCompositeNotationElement(arcls),
 						GRPositionTag(arcls->getEndPosition(), arcls),
                         gStaff(stf),
-                        gARCluster(arcls),
                         gDuration(0),
                         gClusterColor(NULL)
 {
@@ -106,13 +105,13 @@ GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, GRSingleNote *sngNote, AR
 
     gdy += mTagOffset.y;
     gdx += mTagOffset.x;
-    
-    int *firstNoteParameters = gARCluster->getFirstNoteParameters();
+
+    int *firstNoteParameters = arcls->getFirstNoteParameters();
 
     gFirstNoteYPosition = stf->getNotePosition(firstNoteParameters[0], firstNoteParameters[1]);
     gSecondNoteYPosition = gFirstNoteYPosition;
 
-    gNoteCount = gARCluster->getNoteCount();
+    gNoteCount = arcls->getNoteCount();
 }
 
 GRCluster::~GRCluster() {}
@@ -231,7 +230,9 @@ void GRCluster::tellPosition(GObject * caller, const NVPoint & np)
 
 void GRCluster::setSecondNoteYPosition()
 {
-    int *secondNoteParameters = gARCluster->getSecondNoteParameters();
+    ARCluster *arCluster = getARCluster();
+
+    int *secondNoteParameters = arCluster->getSecondNoteParameters();
 
     gSecondNoteYPosition = gStaff->getNotePosition(secondNoteParameters[0], secondNoteParameters[1]);
 
@@ -241,4 +242,9 @@ void GRCluster::setSecondNoteYPosition()
         gSecondNoteYPosition = gFirstNoteYPosition;
         gFirstNoteYPosition = tmpSwitch;
     }
+}
+
+ARCluster *GRCluster::getARCluster()
+{
+	return /*dynamic*/static_cast<ARCluster*>(getAbstractRepresentation());
 }

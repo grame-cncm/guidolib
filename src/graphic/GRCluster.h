@@ -51,6 +51,8 @@ public:
 
     int getNoteCount() const { return gNoteCount;}
 
+    ARCluster *getARCluster();
+
 protected:
 
     float gdx;
@@ -62,7 +64,6 @@ protected:
     float gFirstNoteYPosition;
     float gSecondNoteYPosition;
     GRStaff *gStaff;
-    ARCluster *gARCluster;
     TYPE_DURATION gDuration;
 
     unsigned char *gClusterColor;
