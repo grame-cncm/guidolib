@@ -147,6 +147,7 @@ GRStem::setStemDir(GDirection dir)
 void GRStem::OnDraw( VGDevice & hdc ) const
 {
 	if (mStemDir == dirOFF) return;
+	if (mSize < kMinNoteSize) return;			// size is too small, don't draw
 
 	// - Setup colors
 	const unsigned char * colref = getColRef();

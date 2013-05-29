@@ -25,8 +25,8 @@ GRNote::GRNote( GRStaff * grstaf,
 	ARNote * abstractRepresentationOfNote,
 	const TYPE_TIMEPOSITION & relativeTimePositionOfGRNote,
 	const TYPE_DURATION & durationOfGRNote)
-  : GREvent(grstaf,abstractRepresentationOfNote,relativeTimePositionOfGRNote,durationOfGRNote), mClusterNote(false),
-  mARNote(abstractRepresentationOfNote), mCluster(NULL)
+  : GREvent(grstaf,abstractRepresentationOfNote,relativeTimePositionOfGRNote,durationOfGRNote), 
+  mCluster(NULL), mClusterNote(false), mARNote(abstractRepresentationOfNote), mIsLonelyInCluster(false)
 {
     // builds a graphical "part" of abstractRepresentation
     assert(mARNote);
@@ -39,6 +39,7 @@ GRNote::GRNote( GRStaff * grstaf,
     {
         mClusterNote = true;
         mIsLonelyInCluster = mARNote->isLonelyInCluster();
+        mClusterHaveToBeDrawn = mARNote->doesClusterHaveToBeDrawn();
     }
 }
 

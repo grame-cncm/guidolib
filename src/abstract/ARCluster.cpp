@@ -1,20 +1,13 @@
 /*
-	GUIDO Library
-	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  GUIDO Library
+  Copyright (C) 2013 Grame
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Lesser General Public
-	License as published by the Free Software Foundation; either
-	version 2.1 of the License, or (at your option) any later version.
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-	This library is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Lesser General Public License for more details.
-
-	You should have received a copy of the GNU Lesser General Public
-	License along with this library; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
 
 */
 
@@ -28,33 +21,21 @@ using namespace std;
 
 ListOfTPLs ARCluster::ltpls(1);
 
-ARCluster::ARCluster() : ARMTParameter()
+ARCluster::ARCluster() : ARMTParameter(), adx(0), ady(0), ahdx(0), ahdy(0), aSize(1.0), aColor(NULL), aNoteCount(1),
+    aOnlyOneNoteInCluster(false)
 {
 	rangesetting = ONLY;
 
     for(int i = 0; i <= 1; i++)
     {
-        mFirstNote[i] = 0;
-        mSecondNote[i] = 0;
+        aFirstNote[i] = 0;
+        aSecondNote[i] = 0;
     }
-
-    adx = 0;
-    ady = 0;
-    ahdx = 0;
-    ahdy = 0;
-    aSize = 1.0;
-    aColor = NULL;
 }
 
 ARCluster::ARCluster(ARCluster *inCopyCluster) : ARMTParameter()
 {
 	rangesetting = ONLY;
-
-    for(int i = 0; i <= 1; i++)
-    {
-        mFirstNote[i] = 0;
-        mSecondNote[i] = 0;
-    }
 
     if (inCopyCluster)
     {
@@ -64,6 +45,17 @@ ARCluster::ARCluster(ARCluster *inCopyCluster) : ARMTParameter()
         ahdy = inCopyCluster->getahdy();
         aSize = inCopyCluster->getSize();
         aColor = inCopyCluster->getColor();
+        aNoteCount = inCopyCluster->getNoteCount();
+        aOnlyOneNoteInCluster = inCopyCluster->getIsThereOnlyOneNoteInCluster();
+        for(int i = 0; i <= 1; i++)
+        {
+            aFirstNote[i] = inCopyCluster->aFirstNote[i];
+            aSecondNote[i] = inCopyCluster->aSecondNote[i];
+        }
+    }
+    else
+    {
+        //Failure
     }
 }
 
@@ -116,36 +108,6 @@ void ARCluster::setTagParameterList(TagParameterList& tpl)
 	tpl.RemoveAll();
 }
 
-float ARCluster::getadx() const	
-{
-	return adx;
-}
-
-float ARCluster::getady() const
-{
-	return ady;
-}
-
-float ARCluster::getahdx() const	
-{
-	return ahdx;
-}
-
-float ARCluster::getahdy() const
-{
-	return ahdy;
-}
-
-float ARCluster::getSize() const
-{
-	return aSize;
-}
-
-TagParameterString *ARCluster::getColor() const
-{
-	return aColor;
-}
-
 void ARCluster::PrintName(std::ostream & os) const
 {
 	os << "\\cluster";
@@ -162,15 +124,20 @@ void ARCluster::setNotePitchAndOctave(int inPitch, int inOctave)
 {
     if (inPitch != 0)
     {
-        if (mFirstNote[0] == 0)
+        if (aFirstNote[0] == 0)
         {
-            mFirstNote[0] = inPitch;
-            mFirstNote[1] = inOctave;
+            aFirstNote[0] = inPitch;
+            aFirstNote[1] = inOctave;
         }
-        else if (mSecondNote[0] == 0)
+        else if (aSecondNote[0] == 0)
         {
-            mSecondNote[0] = inPitch;
-            mSecondNote[1] = inOctave;
+            aSecondNote[0] = inPitch;
+            aSecondNote[1] = inOctave;
+
+            if (!aOnlyOneNoteInCluster)
+                aNoteCount++;
         }
+        else
+            aNoteCount++;
     }
 }

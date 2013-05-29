@@ -147,13 +147,12 @@ ARFactory::ARFactory()
 	mCurrentRestFormat(NULL),
 	mCurrentDotFormat(NULL),
 	mCurrentAlter(NULL),
-	mCurrentCluster(NULL),
 	mSaveCurrentVoice(NULL),
 	mCurrentStaff(NULL),
+	mCurrentCluster(NULL),
 	mVoiceNum(1),
 	mCurrentTags(0),
-	mVoiceAdded(false)/*,
-    mInClusterTag(false)*/
+	mVoiceAdded(false)
 {
 		sMaxTagId = -1;
 }
