@@ -37,7 +37,7 @@ extern GRStaff * gCurStaff;
 GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
   : GRPTagARNotationElement(abstractRepresentationOfSymbol)
 {
-	assert(abstractRepresentationOfSymbol);
+    assert(abstractRepresentationOfSymbol);
 
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
 	GRSymbolSaveStruct * st = new GRSymbolSaveStruct;
@@ -50,31 +50,23 @@ GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
 	if (p_staff)
 		curLSPACE = p_staff->getStaffLSPACE();
 
-	const ARSymbol * arSymbol = getARSymbol();
-
-	if (arSymbol && arSymbol->getSymbol())
-		st->filePath = arSymbol->getSymbol();
+	if (abstractRepresentationOfSymbol && abstractRepresentationOfSymbol->getSymbol())
+		st->filePath = abstractRepresentationOfSymbol->getSymbol();
 	else
 		st->filePath = "";
 
     const char *filePathChar = st->filePath.c_str();
     st->bitmap = new Bitmap(filePathChar);
 
+    st->positionString = abstractRepresentationOfSymbol->getPositionString();
+
     float sizex = (float)st->bitmap->GetWidth();
     float sizey = (float)st->bitmap->GetHeight();
 
-    float symbolSize = arSymbol->getSize();
+    float symbolSize = abstractRepresentationOfSymbol->getSize();
 
-    if(arSymbol->getIsFixedGap())
-    {
-        st->boundingBox.right = sizex;
-        st->boundingBox.top = sizey;
-    }
-    else
-    {
-        st->boundingBox.right = sizex * symbolSize;
-        st->boundingBox.top = sizey * symbolSize;
-    }
+    st->boundingBox.right = sizex * symbolSize;
+    st->boundingBox.top = sizey * symbolSize;
 
     st->boundingBox.left = 0;
     st->boundingBox.bottom = 0;
@@ -116,10 +108,18 @@ void GRSymbol::OnDraw( VGDevice & hdc ) const
 	if (arSymbol->getDX())
 		dx = arSymbol->getDX()->getValue( curLSPACE );
 
-    float finaldx = drawPos.x + st->boundingBox.left + dx;
-    float finaldy = drawPos.y + dy;
-
     float currentSize = arSymbol->getSize();
+    float positionStringDy;
+
+    if (!strcmp(st->positionString, "top"))
+        positionStringDy = - st->bitmap->GetHeight() * currentSize - curLSPACE;
+    else if (!strcmp(st->positionString, "bot"))
+        positionStringDy = 5 * curLSPACE;
+    else //mid
+        positionStringDy = 2 * curLSPACE - (st->bitmap->GetHeight() * currentSize / 2);
+
+    float finaldx = drawPos.x + st->boundingBox.left + dx;
+    float finaldy = dy + positionStringDy;
 
     // - Print image
     NVRect rectDraw = NVRect(finaldx, finaldy, finaldx + (float)st->bitmap->GetWidth() * currentSize, finaldy + (float)st->bitmap->GetHeight() * currentSize);
@@ -175,9 +175,7 @@ void GRSymbol::setHPosition( GCoord nx )
 
 void GRSymbol::tellPosition(GObject * caller, const NVPoint & inPosition)
 {
-	/**** NOT TESTED ****/
-
-	/*GRNotationElement * grel =  dynamic_cast<GRNotationElement *>(caller);
+	GRNotationElement * grel =  dynamic_cast<GRNotationElement *>(caller);
 	if( grel == 0 ) return;
 
 	GRStaff * staff = grel->getGRStaff();
@@ -213,7 +211,7 @@ void GRSymbol::tellPosition(GObject * caller, const NVPoint & inPosition)
 		const ARSymbol * arSymbol = getARSymbol();
 		//const char* text = arSymbol ? arSymbol->getText() : 0;
 		//if (text) st->symbol = text;
-	}*/
+	}
 }
 
 void GRSymbol::removeAssociation(GRNotationElement * el)

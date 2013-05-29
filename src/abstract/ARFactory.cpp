@@ -1348,10 +1348,10 @@ void ARFactory::createTag( const char * name, int no )
 			{
 				assert(mCurrentVoice);
 				assert(!mCurrentEvent);
-				ARSymbol * tmp = new ARSymbol;
+				ARSymbol *tmp = new ARSymbol;
 				mTags.AddHead(tmp);
-				mCurrentVoice->AddPositionTag(tmp);		
-			}
+				mCurrentVoice->AddPositionTag(tmp);
+            }
 			break;
 
 		case 't':	
@@ -1770,11 +1770,17 @@ void ARFactory::endTag()
 
 	ARRepeatEnd  * arre;
 	ARText * atext;
+    ARSymbol *asymbol;
 	if(( atext = dynamic_cast<ARText *>(tag)) != 0 )
 	{
 		// bereich ueber den der Text laueft ?
 		// why is this? -> check it out later!
 		atext->setRelativeEndTimePosition(mCurrentVoice->getDuration());
+		tag = NULL;
+	}
+    else if(( asymbol = dynamic_cast<ARSymbol *>(tag)) != 0 )
+	{
+		asymbol->setRelativeEndTimePosition(mCurrentVoice->getDuration());
 		tag = NULL;
 	}
 	else if (dynamic_cast<ARDynamics *>(tag))

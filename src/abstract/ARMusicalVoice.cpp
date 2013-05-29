@@ -74,6 +74,7 @@ using namespace std;
 #include "GRTrill.h"
 #include "GRSingleNote.h"
 #include "ARCluster.h"
+#include "ARSymbol.h"
 
 #include "ARRepeatBegin.h"
 #include "ARCoda.h"

@@ -244,7 +244,7 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
             }
         }
 
-        if (mOrnament )
+        if (mOrnament)
 		{
 			// to draw the trill line...
             mOrnament->OnDraw(hdc,X,numVoice);
@@ -256,9 +256,7 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
             DrawBoundingBox( hdc, kEventBBColor);
     }
     else if (mClusterHaveToBeDrawn)
-    {
         mCluster->OnDraw(hdc);
-    }
 }
 
 //____________________________________________________________________________________

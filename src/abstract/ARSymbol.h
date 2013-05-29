@@ -40,8 +40,8 @@ public:
     virtual void print() const;
     virtual void PrintName(std::ostream & os) const;
     virtual void PrintParameters(std::ostream & os) const;
-    float		 getSize() const {return aSize;}
-    bool         getIsFixedGap() const {return aFixedGap;}
+    float		 getSize() const                            { return aSize; }
+    const char*  getPositionString() const { return aPosition->getValue(); }
 
 protected:
 
@@ -49,7 +49,7 @@ protected:
 
 	TagParameterString *aFilePath;
 	float               aSize;
-    bool                aFixedGap;
+    TagParameterString *aPosition;
 
 	static ListOfTPLs ltpls;
 };

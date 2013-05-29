@@ -23,16 +23,18 @@
 
 ListOfTPLs ARSymbol::ltpls(1);
 
-ARSymbol::ARSymbol(const NVstring & p_txt) : aSize(1), aFixedGap(false)
+ARSymbol::ARSymbol(const NVstring & p_txt) : aSize(1)
 {
 	aFilePath = new TagParameterString(p_txt.c_str());
+    aPosition = NULL;
 	rangesetting = RANGEDC;
 }
 
-ARSymbol::ARSymbol() : ARMTParameter(), aSize(1), aFixedGap(false)
+ARSymbol::ARSymbol() : ARMTParameter(), aSize(1)
 {
 	relativeTimePosition = TYPE_TIMEPOSITION(-1,1);
 	duration = DURATION_0;
+    aPosition = NULL;
 	aFilePath = NULL;
     rangesetting = RANGEDC;
 }
@@ -44,7 +46,7 @@ ARSymbol::~ARSymbol()
 
 const char *ARSymbol::getTagFormat() const
 {
-	const char * const outFormat = "S,filePath,,r;F,size,1.0,o;S,fixedGap,false,o";
+	const char * const outFormat = "S,filePath,,r;F,size,1.0,o;S,position,mid,o";
 	return outFormat;
 }
 
@@ -72,10 +74,9 @@ void ARSymbol::setTagParameterList(TagParameterList & tpl)
 			aSize = f->getValue();
             delete f;
 
-            TagParameterString *fixedGap = TagParameterString::cast(rtpl->RemoveHead());
-            assert(fixedGap);
-            if (!strcmp(fixedGap->getValue(), "true"))
-                aFixedGap = true;
+            delete aPosition;
+			aPosition = TagParameterString::cast(rtpl->RemoveHead());
+			assert(aPosition);
 		}
 		delete rtpl;
 	}

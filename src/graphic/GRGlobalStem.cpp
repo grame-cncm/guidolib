@@ -137,9 +137,7 @@ void GRGlobalStem::addAssociation(GRNotationElement * grnot)
 		TYPE_DURATION durtempl;
 		GRSingleNote * sngnot = dynamic_cast<GRSingleNote *>(ev);
 		if (sngnot)
-		{
-			durtempl = sngnot->getDurTemplate();
-		}
+			durtempl       = sngnot->getDurTemplate();
 		
 		// this changes the display-duration
 		// (nested display-duration-tags!)

@@ -118,8 +118,8 @@ class GRSingleNote : public GRNote
 
 		virtual void	tellPosition( GObject * caller, const NVPoint & newPosition ); 
 
-	  		GRStdNoteHead *	getNoteHead();
-	  		void			extractAccidentals( GRAccidentalList * outList );
+	  	GRStdNoteHead *	getNoteHead();
+	  	void			extractAccidentals( GRAccidentalList * outList );
 
   protected:
 	  GRStem *			getStem();

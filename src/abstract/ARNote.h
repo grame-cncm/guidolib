@@ -73,17 +73,17 @@ class ARNote : public ARMusicalEvent
                                                   bool inHaveToBeCreated = false);
     void         setClusterPitchAndOctave();
     ARTrill     *getOrnament()		    				{ return fOrnament;}
-    ARCluster *getARCluster() 			            	{ return fCluster;}
+    ARCluster   *getARCluster() 			           	{ return fCluster;}
 
-    void setIsLonelyInCluster()                         { fIsLonelyInCluster = true;}
-    bool isLonelyInCluster()                            { return fIsLonelyInCluster;}
-    bool doesClusterHaveToBeDrawn()                     { return fClusterHaveToBeDrawn;}
+    void setIsLonelyInCluster()                         { fIsLonelyInCluster = true; }
+    bool isLonelyInCluster()                            { return fIsLonelyInCluster; }
+    bool doesClusterHaveToBeDrawn()                     { return fClusterHaveToBeDrawn; }
 
     int		midiPitch() const;
 
     static int	detune2Quarters(float detune);
 
-	private:
+  private:
     ARNoteName fName;
 
     int		   fPitch;
