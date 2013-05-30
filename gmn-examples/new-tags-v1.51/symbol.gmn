@@ -1,0 +1,28 @@
+% symbol.gmn
+
+% \symbol-tag is useful to insert pictures in score, and can change score's layout.
+
+% Usage : \symbol(notes) or \symbol
+%
+% Parameters :
+%     Required :
+%       - filePath (can be from .gmn directory, from home directory or as a hard path)
+%     Optional :
+%       - position : "mid" (default), "top", "bot"
+%       - size
+%       - dx/dy
+
+{
+  [
+    \meter<"4/4">
+    a b
+    \symbol<filePath="test.png", size=0.1, position="top", dx=-4> (empty)
+    c d
+  ],
+  [
+    \meter<"4/4">
+    a b
+    \symbol<filePath="imgTest/Lena.jpg", size=2, dx=-4, dy=-6>
+    c d
+  ]
+}
