@@ -1090,7 +1090,7 @@ void GRSingleNote::handleAccidental (const ARAcc* acc)
 	if (pos == 0)
 	{
 		const int kNaturalAccidental = -10; // see the hard coded values in GRAccidental::accidentalID2symbol
-		GRAccidental * myacc = new GRAccidental( this, mNoteBreite, kNaturalAccidental );
+		GRAccidental * myacc = new GRAccidental( this, mNoteBreite, (float)kNaturalAccidental );
 
 		// no accidentals! we need to force accidentals ...
 		int mynewacc = arnote->getAccidentals() * 2 + ARNote::detune2Quarters(arnote->getDetune());

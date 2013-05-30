@@ -143,7 +143,7 @@ GUIDOAPI(GuidoErrCode) GuidoParseFile(const char * filename, ARHandler * ar)
 	gGlobalFactory = new ARFactory();
 
     // - We have to save the current file path to be able to find symbols
-    strcpy(currentFilePath, filename);
+    strcpy_s(currentFilePath, filename);
 
     gGlobalFactory->setFilePath(filename);
 	if( gGlobalSettings.gFeedback )

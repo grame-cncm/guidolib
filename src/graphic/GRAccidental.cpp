@@ -275,7 +275,7 @@ void GRAccidental::setCautionary(int noteoffset, float notebreite, float curLSPA
 	unsigned int caution = getCautionary (mSymbol);
 	if (caution) {
 		mSymbol = caution;
-		offset.x = noteoffset;
+		offset.x = (float)noteoffset;
 		setAccidentalLayout (notebreite, curLSPACE);
 	}
 }
@@ -284,7 +284,7 @@ void GRAccidental::setCautionary(int noteoffset, float notebreite, float curLSPA
 void GRAccidental::setAccidentalByQuarter(int quarters, int noteoffset, float notebreite, float curLSPACE)
 {
 	mSymbol = quarters2symbol (quarters);
-	offset.x = noteoffset;
+	offset.x = (float)noteoffset;
 	setAccidentalLayout (notebreite, curLSPACE);
 }
 
