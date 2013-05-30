@@ -50,6 +50,10 @@ GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
 	if (p_staff)
 		curLSPACE = p_staff->getStaffLSPACE();
 
+    st->basefilePath = ""; //REM: a corriger
+    st->positionString = "";
+    st->bitmap = NULL;
+
     // - Prepare base file path
     NVstring tmpBaseFilePath = abstractRepresentationOfSymbol->getBaseFilePath();
     size_t lastSlashPosition = tmpBaseFilePath.find_last_of("/");
@@ -68,9 +72,9 @@ GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
         char completePath[200];
 
         // - Check in the current folder
-        strcpy(completePath, baseFilePath);
-        strcat(completePath, "/");
-        strcat(completePath, filePath);
+        strcpy_s(completePath, baseFilePath);
+        strcat_s(completePath, "/");
+        strcat_s(completePath, filePath);
 
         st->bitmap = new Bitmap(completePath);
         // -----------------------------
@@ -80,13 +84,21 @@ GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
             // - Check in home directory
             char completeHomePath[200];
 
+#ifdef WIN32
             // - Windows
-            strcpy(completeHomePath, getenv("HOMEDRIVE"));
-            strcat(completeHomePath, getenv("HOMEPATH"));
-            strcat(completeHomePath, "\\");
+            strcpy_s(completeHomePath, getenv("HOMEDRIVE"));
+            strcat_s(completeHomePath, getenv("HOMEPATH"));
+            strcat_s(completeHomePath, "\\");
             // ---------
 
-            strcat(completeHomePath, filePath);
+#else
+            // - Unix
+            strcpy_s(completeHomePath, getenv("HOME"));
+            strcat_s(completeHomePath, "\\");
+            // ---------
+#endif
+
+            strcat_s(completeHomePath, filePath);
 
             st->bitmap = new Bitmap(completeHomePath);
             // -------------------------
@@ -98,19 +110,19 @@ GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
                 // ---------------------------
             }
         }
+
+        st->positionString = abstractRepresentationOfSymbol->getPositionString();
+
+        float sizex = (float)st->bitmap->GetWidth();
+        float sizey = (float)st->bitmap->GetHeight();
+
+        float symbolSize = abstractRepresentationOfSymbol->getSize();
+
+        st->boundingBox.right = sizex * symbolSize;
+        st->boundingBox.top = sizey * symbolSize;
     }
     else
         st->filePath = "";
-
-    st->positionString = abstractRepresentationOfSymbol->getPositionString();
-
-    float sizex = (float)st->bitmap->GetWidth();
-    float sizey = (float)st->bitmap->GetHeight();
-
-    float symbolSize = abstractRepresentationOfSymbol->getSize();
-
-    st->boundingBox.right = sizex * symbolSize;
-    st->boundingBox.top = sizey * symbolSize;
 
     st->boundingBox.left = 0;
     st->boundingBox.bottom = 0;
@@ -135,39 +147,42 @@ GRSymbol::~GRSymbol()
 
 void GRSymbol::OnDraw( VGDevice & hdc ) const
 {
-	GRSystemStartEndStruct * sse = getSystemStartEndStruct(gCurSystem);
-	assert(sse);
-	GRSymbolSaveStruct * st = (GRSymbolSaveStruct *) sse->p;
+    GRSystemStartEndStruct * sse = getSystemStartEndStruct(gCurSystem);
+    assert(sse);
+    GRSymbolSaveStruct * st = (GRSymbolSaveStruct *) sse->p;
 
-	const ARSymbol *arSymbol = getARSymbol();
-	const float curLSPACE = gCurStaff ? gCurStaff->getStaffLSPACE(): LSPACE;
+    if (st->bitmap)
+    {
+        const ARSymbol *arSymbol = getARSymbol();
+        const float curLSPACE = gCurStaff ? gCurStaff->getStaffLSPACE(): LSPACE;
 
-	NVPoint drawPos (st->position);
+        NVPoint drawPos (st->position);
 
-	float dx = 0;
-	float dy = 0;
+        float dx = 0;
+        float dy = 0;
 
-	if (arSymbol->getDY())
-		dy = -arSymbol->getDY()->getValue( curLSPACE );
-	if (arSymbol->getDX())
-		dx = arSymbol->getDX()->getValue( curLSPACE );
+        if (arSymbol->getDY())
+            dy = -arSymbol->getDY()->getValue( curLSPACE );
+        if (arSymbol->getDX())
+            dx = arSymbol->getDX()->getValue( curLSPACE );
 
-    float currentSize = arSymbol->getSize();
-    float positionStringDy;
+        float currentSize = arSymbol->getSize();
+        float positionStringDy;
 
-    if (!strcmp(st->positionString, "top"))
-        positionStringDy = - st->bitmap->GetHeight() * currentSize - curLSPACE;
-    else if (!strcmp(st->positionString, "bot"))
-        positionStringDy = 5 * curLSPACE;
-    else //mid
-        positionStringDy = 2 * curLSPACE - (st->bitmap->GetHeight() * currentSize / 2);
+        if (!strcmp(st->positionString, "top"))
+            positionStringDy = - st->bitmap->GetHeight() * currentSize - curLSPACE;
+        else if (!strcmp(st->positionString, "bot"))
+            positionStringDy = 5 * curLSPACE;
+        else //mid
+            positionStringDy = 2 * curLSPACE - (st->bitmap->GetHeight() * currentSize / 2);
 
-    float finaldx = drawPos.x + st->boundingBox.left + dx;
-    float finaldy = dy + positionStringDy;
+        float finaldx = drawPos.x + st->boundingBox.left + dx;
+        float finaldy = dy + positionStringDy;
 
-    // - Print image
-    NVRect rectDraw = NVRect(finaldx, finaldy, finaldx + (float)st->bitmap->GetWidth() * currentSize, finaldy + (float)st->bitmap->GetHeight() * currentSize);
-    st->bitmap->OnDraw(hdc, rectDraw);
+        // - Print image
+        NVRect rectDraw = NVRect(finaldx, finaldy, finaldx + (float)st->bitmap->GetWidth() * currentSize, finaldy + (float)st->bitmap->GetHeight() * currentSize);
+        st->bitmap->OnDraw(hdc, rectDraw);
+    }
 }
 
 void GRSymbol::print() const

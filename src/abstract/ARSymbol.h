@@ -39,7 +39,7 @@ public:
     virtual void PrintName(std::ostream & os) const;
     virtual void PrintParameters(std::ostream & os) const;
     float		 getSize() const                            { return aSize; }
-    const char*  getPositionString() const                  { return aPosition->getValue(); }
+    const char*  getPositionString() const                  { return aPosition ? aPosition->getValue() : NULL; }
 
          void    setBaseFilePath(NVstring inBaseFilePath);
        NVstring  getBaseFilePath()   const                  { return aBaseFilePath; }
