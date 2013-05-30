@@ -26,7 +26,7 @@ GRNote::GRNote( GRStaff * grstaf,
 	const TYPE_TIMEPOSITION & relativeTimePositionOfGRNote,
 	const TYPE_DURATION & durationOfGRNote)
   : GREvent(grstaf,abstractRepresentationOfNote,relativeTimePositionOfGRNote,durationOfGRNote), mClusterNote(false),
-  mCluster(NULL)
+  mCluster(NULL), mClusterHaveToBeDrawn(false)
 {
     // builds a graphical "part" of abstractRepresentation
     assert(abstractRepresentationOfNote);

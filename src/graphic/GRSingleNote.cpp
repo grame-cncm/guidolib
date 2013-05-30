@@ -256,7 +256,12 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
             DrawBoundingBox( hdc, kEventBBColor);
     }
     else if (mClusterHaveToBeDrawn)
+    {
+        if (mOrnament)
+            mOrnament->OnDraw(hdc,X,numVoice);
+
         mCluster->OnDraw(hdc);
+    }
 }
 
 //____________________________________________________________________________________
