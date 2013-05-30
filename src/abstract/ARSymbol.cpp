@@ -23,19 +23,13 @@
 
 ListOfTPLs ARSymbol::ltpls(1);
 
-ARSymbol::ARSymbol(const NVstring & p_txt) : aSize(1)
-{
-	aFilePath = new TagParameterString(p_txt.c_str());
-    aPosition = NULL;
-	rangesetting = RANGEDC;
-}
-
 ARSymbol::ARSymbol() : ARMTParameter(), aSize(1)
 {
 	relativeTimePosition = TYPE_TIMEPOSITION(-1,1);
 	duration = DURATION_0;
     aPosition = NULL;
 	aFilePath = NULL;
+    aBaseFilePath = NULL;
     rangesetting = RANGEDC;
 }
 
@@ -120,4 +114,9 @@ void ARSymbol::PrintParameters(std::ostream &os) const
         }
         os << ">";
     }
+}
+
+void ARSymbol::setBaseFilePath(NVstring inBaseFilePath)
+{
+    aBaseFilePath = inBaseFilePath;
 }

@@ -15,7 +15,6 @@ research@grame.fr
 
 */
 
-
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
 #include "TagParameterString.h"
@@ -29,27 +28,31 @@ class ARSymbol : public ARMTParameter,
     public ARPositionTag
 {
 public:
-    ARSymbol(const NVstring & p_txt);
     ARSymbol();
     virtual 		~ARSymbol();
 
     virtual void 	setTagParameterList(TagParameterList & theTagParameterList);
 
-    virtual const char* getSymbol() const					{ return aFilePath ? aFilePath->getValue() : 0; }
+    virtual const char* getSymbolPath() const					{ return aFilePath ? aFilePath->getValue() : 0; }
 
     virtual void print() const;
     virtual void PrintName(std::ostream & os) const;
     virtual void PrintParameters(std::ostream & os) const;
     float		 getSize() const                            { return aSize; }
-    const char*  getPositionString() const { return aPosition->getValue(); }
+    const char*  getPositionString() const                  { return aPosition->getValue(); }
+
+         void    setBaseFilePath(NVstring inBaseFilePath);
+       NVstring  getBaseFilePath()   const                  { return aBaseFilePath; }
 
 protected:
 
     virtual const char * getTagFormat() const;
 
 	TagParameterString *aFilePath;
-	float               aSize;
+	             float  aSize;
     TagParameterString *aPosition;
+
+               NVstring aBaseFilePath; 
 
 	static ListOfTPLs ltpls;
 };

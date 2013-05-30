@@ -109,6 +109,8 @@ class ARFactory
 	  	float 		UndoTransform( const float val );
 	  	void 		setParameterName( const char * name );
 	  	void 		setUnit( const char * s );
+
+        void        setFilePath(const char* inFilePath) { mFilePath = inFilePath; }
 	  	
   private:
 
@@ -148,6 +150,8 @@ protected:
 	int					mCurrentTags;
 	bool				mTagRanged;
 	bool				mVoiceAdded;
+
+    NVstring mFilePath;
 };
 
 extern ARFactory * gGlobalFactory;

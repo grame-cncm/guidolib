@@ -310,24 +310,24 @@ void GRStdNoteHead::OnDraw( VGDevice & hdc ) const
 
 	if (mBracketsType == Round)
 	{
-		int xOffset = -25 * mSize;
-		int yOffset = 55 * mSize;
+		float xOffset = -25 * mSize;
+		float yOffset = 55 * mSize;
 		GRNotationElement::OnDrawSymbol(hdc, kRoundLeftBracket, xOffset, yOffset, 0);
 		xOffset = 50 * mSize;
 		GRNotationElement::OnDrawSymbol(hdc, kRoundRightBracket, xOffset, yOffset, 0);
 	}
 	else if (mBracketsType == Square)
 	{
-		int xOffset = -25 * mSize;
-		int yOffset = 55 * mSize;
+		float xOffset = -25 * mSize;
+		float yOffset = 55 * mSize;
 		GRNotationElement::OnDrawSymbol(hdc, kSquareLeftBracket, xOffset, yOffset, 0);
 		xOffset = 50 * mSize;
 		GRNotationElement::OnDrawSymbol(hdc, kSquareRightBracket, xOffset, yOffset, 0);
 	}
 	else if (mBracketsType == Angled)
 	{
-		int xOffset = -55 * mSize;
-		int yOffset = 55 * mSize;
+		float xOffset = -55 * mSize;
+		float yOffset = 55 * mSize;
 		GRNotationElement::OnDrawSymbol(hdc, kAngledLeftBracket, xOffset, yOffset, 0);
 		xOffset = 70 * mSize;
 		GRNotationElement::OnDrawSymbol(hdc, kAngledRightBracket, xOffset, yOffset, 0);

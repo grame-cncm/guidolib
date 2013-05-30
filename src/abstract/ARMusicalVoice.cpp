@@ -5599,8 +5599,13 @@ void ARMusicalVoice::setClusterChord(ARCluster *inCurrentCluster)
 	ARMusicalVoiceState vst = *chordBeginState;
 	GuidoPos posTmp = vst.vpos;
 
-	for(int i=0 ; i<3 ; i++)
-		ObjectList::GetNext(posTmp); // skip "empty, chordcomma, empty"
+    for(int i=0 ; i<3 ; i++)
+    {
+        ObjectList::GetNext(posTmp); // skip "empty, chordcomma, empty"
+
+        if (!posTmp)
+            return;
+    }
 
 	int comptTemp = 0;
 	ARMusicalObject * musicalObject = ObjectList::GetNext(posTmp);

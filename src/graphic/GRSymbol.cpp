@@ -50,13 +50,57 @@ GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
 	if (p_staff)
 		curLSPACE = p_staff->getStaffLSPACE();
 
-	if (abstractRepresentationOfSymbol && abstractRepresentationOfSymbol->getSymbol())
-		st->filePath = abstractRepresentationOfSymbol->getSymbol();
-	else
-		st->filePath = "";
+    // - Prepare base file path
+    NVstring tmpBaseFilePath = abstractRepresentationOfSymbol->getBaseFilePath();
+    size_t lastSlashPosition = tmpBaseFilePath.find_last_of("/");
+    
+    char baseFilePath[200];
+    tmpBaseFilePath.copy(baseFilePath, lastSlashPosition);
+    baseFilePath[lastSlashPosition] = '\0';
+    // -------------------------
 
-    const char *filePathChar = st->filePath.c_str();
-    st->bitmap = new Bitmap(filePathChar);
+    // - Set up file path
+    if (abstractRepresentationOfSymbol->getSymbolPath())
+    {
+        st->filePath = abstractRepresentationOfSymbol->getSymbolPath();
+
+        const char *filePath = st->filePath.c_str();
+        char completePath[200];
+
+        // - Check in the current folder
+        strcpy(completePath, baseFilePath);
+        strcat(completePath, "/");
+        strcat(completePath, filePath);
+
+        st->bitmap = new Bitmap(completePath);
+        // -----------------------------
+
+        if (!st->bitmap->getDevice())
+        {
+            // - Check in home directory
+            char completeHomePath[200];
+
+            // - Windows
+            strcpy(completeHomePath, getenv("HOMEDRIVE"));
+            strcat(completeHomePath, getenv("HOMEPATH"));
+            strcat(completeHomePath, "\\");
+            // ---------
+
+            strcat(completeHomePath, filePath);
+
+            st->bitmap = new Bitmap(completeHomePath);
+            // -------------------------
+
+            if (!st->bitmap->getDevice())
+            {
+                // - Check if it's a hard path
+                st->bitmap = new Bitmap(filePath);
+                // ---------------------------
+            }
+        }
+    }
+    else
+        st->filePath = "";
 
     st->positionString = abstractRepresentationOfSymbol->getPositionString();
 

@@ -37,8 +37,10 @@ class Bitmap : public Image
 		virtual float	GetProportionalHeight( float width ) const;
 		virtual float	GetProportionalWidth( float height ) const;
 
-		virtual int		GetWidth()  const { return fDevice->GetWidth(); }
-		virtual int		GetHeight() const { return fDevice->GetHeight(); }
+		virtual int		GetWidth()  const { return fDevice ? fDevice->GetWidth() : 0; }
+		virtual int		GetHeight() const { return fDevice ? fDevice->GetHeight() : 0; }
+
+        const VGDevice *getDevice() const { return fDevice; }
 };
 
 #endif

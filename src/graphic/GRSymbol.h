@@ -36,7 +36,8 @@ class GRSymbol : public GRPTagARNotationElement
 				
 				NVPoint position;
 				NVRect boundingBox;
-				std::string filePath;
+				NVstring filePath;
+                const char* basefilePath;
                 Bitmap *bitmap;
                 const char* positionString;
 		};
@@ -57,7 +58,7 @@ class GRSymbol : public GRPTagARNotationElement
 		virtual float 	getLeftSpace() const;
 		virtual float 	getRightSpace() const;
 
-		virtual void 	setPosition(const NVPoint & inPosition );
+        virtual void 	setPosition(const NVPoint & inPosition);
 		virtual void 	setHPosition( float nx );
 
 	protected:

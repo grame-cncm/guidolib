@@ -85,6 +85,8 @@ int gParseErrorCol = -1;
 
 int gBoundingBoxesMap = kNoBB;	// a bits field to control bounding boxes draxing [added on May 11 2009 - DF ]
 
+char currentFilePath[200];
+
 // ==========================================================================
 // - Guido Main API
 // ==========================================================================
@@ -139,6 +141,11 @@ GUIDOAPI(GuidoErrCode) GuidoParseFile(const char * filename, ARHandler * ar)
 	*ar = 0;		
 	// - First, we create the abstract representation factory, for the parser.
 	gGlobalFactory = new ARFactory();
+
+    // - We have to save the current file path to be able to find symbols
+    strcpy(currentFilePath, filename);
+
+    gGlobalFactory->setFilePath(filename);
 	if( gGlobalSettings.gFeedback )
 		gGlobalSettings.gFeedback->Notify( GuidoFeedback::kProcessing );
 
@@ -222,6 +229,7 @@ GUIDOAPI(GuidoErrCode) GuidoParseString (const char * str, ARHandler* ar)
 	*ar = 0;
 	// - First, we create the abstract representation factory, for the parser.
 	gGlobalFactory = new ARFactory();
+    gGlobalFactory->setFilePath(currentFilePath);
 	if( gGlobalSettings.gFeedback )
 		gGlobalSettings.gFeedback->Notify( GuidoFeedback::kProcessing );
 

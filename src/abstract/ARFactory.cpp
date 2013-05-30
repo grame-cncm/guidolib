@@ -152,7 +152,8 @@ ARFactory::ARFactory()
 	mCurrentStaff(NULL),
 	mVoiceNum(1),
 	mCurrentTags(0),
-	mVoiceAdded(false)
+	mVoiceAdded(false),
+    mFilePath()
 {
 		sMaxTagId = -1;
 }
@@ -1351,6 +1352,8 @@ void ARFactory::createTag( const char * name, int no )
 				ARSymbol *tmp = new ARSymbol;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
+
+                tmp->setBaseFilePath(NVstring(mFilePath));
             }
 			break;
 
