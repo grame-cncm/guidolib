@@ -214,7 +214,7 @@ class QGuidoPainter
 		QGuidoPainter();
 		~QGuidoPainter();
 
-		typedef GuidoErrCode (*GuidoParseFunction)( const char * , ARHandler* , ARHandler*);
+		typedef GuidoErrCode (*GuidoParseFunction)( const char * , ARHandler*);
 
 		bool setGMNData( const QString& dataSource , GuidoParseFunction parseFunction );
 		bool hasValidGR() const			{ return mDesc.handle != 0; }

@@ -132,18 +132,13 @@ GUIDOAPI(void) GuidoShutdown()
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoParseFile(const char * filename, ARHandler * ar, ARHandler *exAr)
+GUIDOAPI(GuidoErrCode) GuidoParseFile(const char * filename, ARHandler * ar)
 {
 	if( !filename || !ar )	return guidoErrBadParameter;
 	
 	*ar = 0;		
 	// - First, we create the abstract representation factory, for the parser.
 	gGlobalFactory = new ARFactory();
-
-    // - We have to save the current file path to be able to find symbols
-    //strcpy_s(currentFilePath, filename);
-
-    gGlobalFactory->setFilePath(filename);
 
 	if( gGlobalSettings.gFeedback )
 		gGlobalSettings.gFeedback->Notify( GuidoFeedback::kProcessing );
@@ -216,29 +211,19 @@ GUIDOAPI(GuidoErrCode) GuidoParseFile(const char * filename, ARHandler * ar, ARH
 	if( gGlobalSettings.gFeedback )
 		gGlobalSettings.gFeedback->Notify( GuidoFeedback::kIdle );
 
-    GuidoSetSymbolPath(outHandleAR, filename);
-
 	*ar = outHandleAR;
 
 	return guidoNoErr;
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoParseString (const char * str, ARHandler* ar, ARHandler* exAr)
+GUIDOAPI(GuidoErrCode) GuidoParseString (const char * str, ARHandler* ar)
 {
 	if( !str || !ar )	return guidoErrBadParameter;
 	
 	*ar = 0;
 	// - First, we create the abstract representation factory, for the parser.
 	gGlobalFactory = new ARFactory();
-
-    std::string path;
-
-    if (exAr)
-    {
-        GuidoGetSymbolPath(*exAr, path);
-        gGlobalFactory->setFilePath(path.c_str());
-    }
 
 	if( gGlobalSettings.gFeedback )
 		gGlobalSettings.gFeedback->Notify( GuidoFeedback::kProcessing );
@@ -280,8 +265,6 @@ GUIDOAPI(GuidoErrCode) GuidoParseString (const char * str, ARHandler* ar, ARHand
 	// - Restore feedback state
 	if( gGlobalSettings.gFeedback )
         gGlobalSettings.gFeedback->Notify( GuidoFeedback::kIdle );
-
-    GuidoSetSymbolPath(outHandleAR, path.c_str());
 
 	*ar = outHandleAR;
 	return guidoNoErr;
@@ -739,31 +722,51 @@ GUIDOAPI(GuidoErrCode) GuidoMarkVoice( ARHandler inHandleAR, int voicenum,
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoSetSymbolPath(ARHandler inHandleAR, const char* inPath)
+GUIDOAPI(GuidoErrCode) GuidoSetSymbolPath(ARHandler inNewHandleAR, const char* inPath, ARHandler inExHandleAR)
 {
-    if (!inHandleAR)
+    if (!inNewHandleAR)
         return guidoErrInvalidHandle;
 
-    if (!inHandleAR->armusic)
+    if (!inNewHandleAR->armusic)
         return guidoErrInvalidHandle;
 
     NVstring tmpPath(inPath);
 
-    inHandleAR->armusic->setPath(tmpPath);
+    if (tmpPath.compare(""))
+    {
+        inNewHandleAR->armusic->setPath(tmpPath);
+    }
+    else
+    {
+        inNewHandleAR->armusic->setPath(GuidoGetSymbolPath(inExHandleAR));
+    }
 
     return guidoNoErr;
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoGetSymbolPath(ARHandler inHandleAR, std::string &outPath)
+GUIDOAPI(std::string) GuidoGetSymbolPath(ARHandler inHandleAR)
 {
     if (!inHandleAR)
-        return guidoErrInvalidHandle;
+        return NULL;
 
     if (!inHandleAR->armusic)
-        return guidoErrInvalidHandle;
+        return NULL;
 
-    outPath = inHandleAR->armusic->getPath();
-
-    return guidoNoErr;
+    return inHandleAR->armusic->getPath();
 }
+
+
+/*    std::string path;
+
+    if (exAr)
+    {
+        GuidoGetSymbolPath(*exAr, path);
+        gGlobalFactory->setFilePath(path.c_str());
+    }*/
+
+
+/*File :
+
+    gGlobalFactory->setFilePath(filename);
+    */

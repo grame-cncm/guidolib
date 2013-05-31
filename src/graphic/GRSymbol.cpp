@@ -54,13 +54,7 @@ GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
     st->positionString = NVstring();
     st->bitmap = NULL;
 
-    // - Prepare base file path
-    NVstring tmpBaseFilePath = abstractRepresentationOfSymbol->getBaseFilePath();
-    size_t lastSlashPosition = tmpBaseFilePath.find_last_of("/"); //REM: et "\" ?
-
-    NVstring baseFilePathString("");
-    baseFilePathString.append(tmpBaseFilePath, 0, lastSlashPosition);
-    // -------------------------
+    NVstring baseFilePath = abstractRepresentationOfSymbol->getPath();
 
     // - Set up file path
     if (abstractRepresentationOfSymbol->getSymbolPath())
@@ -70,7 +64,7 @@ GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
         NVstring filePathString = st->filePath;
 
         // - Check in the current folder
-        NVstring completePath(baseFilePathString);
+        NVstring completePath(baseFilePath);
         completePath.append("/");
         completePath.append(filePathString);
 

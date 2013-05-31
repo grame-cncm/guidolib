@@ -260,7 +260,7 @@ representations.
                 It's the caller responsability to free the handle using GuidoFreeAR.
 		\return a Guido error code.
     */
-    GUIDOAPI(GuidoErrCode)	GuidoParseFile(const char * filename, ARHandler* ar, ARHandler* exAr);
+    GUIDOAPI(GuidoErrCode)	GuidoParseFile(const char * filename, ARHandler* ar);
 
 	/*!
         Parses a buffer and builds the corresponding abstract representation.
@@ -270,7 +270,7 @@ representations.
                 It's the caller responsability to free the handle using GuidoFreeAR.
 		\return a Guido error code.
     */
-    GUIDOAPI(GuidoErrCode)	GuidoParseString(const char * str, ARHandler* ar, ARHandler* exAr);
+    GUIDOAPI(GuidoErrCode)	GuidoParseString(const char * str, ARHandler* ar);
 
 	/*!
         Transforms a Guido abstract representation into a Guido graphic representation.
@@ -570,24 +570,24 @@ The number of version functions is due to historical reasons.
 											unsigned char red, unsigned char green, unsigned char blue );
 
 
-    /**	\brief Makes the correspondance between an ARMusic and a path.
+    /**	\brief Makes the correspondance between an ARMusic and a path or another ARMusic.
 
-		\param inHandleAR a Guido opaque handle to an AR structure.
+		\param inNewHandleAR the destination ARHandler.
 		\param inPath the path to associate.
+        \param inExHandleAR  the src ARHandle.
 		\return noErr if the association has been made with success
 		\return otherwise guidoErrActionFailed.
 	*/
-    GUIDOAPI(GuidoErrCode) GuidoSetSymbolPath(ARHandler inHandleAR, const char* inPath);
+    GUIDOAPI(GuidoErrCode) GuidoSetSymbolPath(ARHandler inNewHandleAR, const char* inPath, ARHandler inExHandleAR);
 
 
     /**	\brief Returns the path corresponding to an AR.
 
 		\param inHandleAR a Guido opaque handle to an AR structure.
-		\param outPath the resulting path.
-		\return noErr if the path has been well returned.
-		\return otherwise guidoErrActionFailed.
+		\return the path asked is success
+		\return otherwise NULL
 	*/
-    GUIDOAPI(GuidoErrCode) GuidoGetSymbolPath(ARHandler inHandleAR, std::string &outPath);
+    GUIDOAPI(std::string) GuidoGetSymbolPath(ARHandler inHandleAR);
 
 /*! @} */
 

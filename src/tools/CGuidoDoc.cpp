@@ -62,7 +62,7 @@ CGuidoDoc::ParseFileARGR( const char * inFilePath )
 
 
 
-	GuidoErrCode err = GuidoParseFile( inFilePath, &mAR , NULL);
+	GuidoErrCode err = GuidoParseFile( inFilePath, &mAR );
 
 
 
@@ -100,7 +100,7 @@ CGuidoDoc::ParseStringARGR( const char * str )
 
 	mGR = 0;
 
-	GuidoErrCode err = GuidoParseString( str, &mAR , NULL);
+	GuidoErrCode err = GuidoParseString( str, &mAR );
 
 
 

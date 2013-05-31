@@ -29,7 +29,7 @@ ARSymbol::ARSymbol() : ARMTParameter(), aSize(1)
 	duration = DURATION_0;
     aPosition = NULL;
 	aFilePath = NULL;
-    aBaseFilePath = NULL;
+    aCurrentARMusic = NULL;
     rangesetting = RANGEDC;
 }
 
@@ -116,7 +116,7 @@ void ARSymbol::PrintParameters(std::ostream &os) const
     }
 }
 
-void ARSymbol::setBaseFilePath(NVstring inBaseFilePath)
+void ARSymbol::setCurrentARMusic(ARMusic *inARMusic)
 {
-    aBaseFilePath = inBaseFilePath;
+    aCurrentARMusic = inARMusic;
 }

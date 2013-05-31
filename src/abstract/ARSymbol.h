@@ -18,6 +18,7 @@ research@grame.fr
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
 #include "TagParameterString.h"
+#include "ARMusic.h"
 
 
 class TagParameterList;
@@ -41,8 +42,8 @@ public:
     float		 getSize() const                            { return aSize; }
     const char*  getPositionString() const                  { return aPosition ? aPosition->getValue() : NULL; }
 
-         void    setBaseFilePath(NVstring inBaseFilePath);
-       NVstring  getBaseFilePath()   const                  { return aBaseFilePath; }
+            void setCurrentARMusic(ARMusic *inARMusic);
+        NVstring getPath()                                  { return aCurrentARMusic->getPath(); }
 
 protected:
 
@@ -52,7 +53,7 @@ protected:
 	             float  aSize;
     TagParameterString *aPosition;
 
-               NVstring aBaseFilePath; 
+               ARMusic *aCurrentARMusic;
 
 	static ListOfTPLs ltpls;
 };

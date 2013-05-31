@@ -183,9 +183,26 @@ bool QGuidoPainter::setGMNData( const QString& dataSource , GuidoParseFunction p
 	// containing all the notes, rests, staffs, lyrics ...
 	ARHandler arh;
 	GRHandler grh;
-    mLastErr = parseFunction( dataSource.toUtf8().data(), &arh, &mARHandler );		
+    mLastErr = parseFunction( dataSource.toUtf8().data(), &arh);		
 	if ( mLastErr != guidoNoErr )
 		return false;
+
+    if (parseFunction == GuidoParseFile)
+    {
+        // - If parseFile called
+        std::string tmpBaseFilePath(dataSource.toUtf8().data());
+        size_t lastSlashPosition = tmpBaseFilePath.find_last_of("/"); //REM: et "\" ?
+
+        std::string baseFilePath("");
+        baseFilePath.append(tmpBaseFilePath, 0, lastSlashPosition);
+
+        GuidoSetSymbolPath(arh, baseFilePath.c_str(), NULL);
+        // ---------------------
+    }
+    else
+    {
+        GuidoSetSymbolPath(arh, "", mARHandler);
+    }
 
 	// Build a new score Graphic Representation according the score's Abstract Representation.
 	GuidoPageFormat currentFormat;

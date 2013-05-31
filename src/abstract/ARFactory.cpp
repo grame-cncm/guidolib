@@ -1353,7 +1353,7 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 
-                tmp->setBaseFilePath(NVstring(mFilePath));
+                tmp->setCurrentARMusic(mCurrentMusic);
             }
 			break;
 
