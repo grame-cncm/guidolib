@@ -50,17 +50,16 @@ GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
 	if (p_staff)
 		curLSPACE = p_staff->getStaffLSPACE();
 
-    st->basefilePath = ""; //REM: a corriger
-    st->positionString = "";
+    st->baseFilePath = NVstring(); //REM: a corriger
+    st->positionString = NVstring();
     st->bitmap = NULL;
 
     // - Prepare base file path
     NVstring tmpBaseFilePath = abstractRepresentationOfSymbol->getBaseFilePath();
-    size_t lastSlashPosition = tmpBaseFilePath.find_last_of("/");
-    
-    char baseFilePath[200];
-    tmpBaseFilePath.copy(baseFilePath, lastSlashPosition);
-    baseFilePath[lastSlashPosition] = '\0';
+    size_t lastSlashPosition = tmpBaseFilePath.find_last_of("/"); //REM: et "\" ?
+
+    NVstring baseFilePathString("");
+    baseFilePathString.append(tmpBaseFilePath, 0, lastSlashPosition);
     // -------------------------
 
     // - Set up file path
@@ -68,45 +67,44 @@ GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
     {
         st->filePath = abstractRepresentationOfSymbol->getSymbolPath();
 
-        const char *filePath = st->filePath.c_str();
-        char completePath[200];
+        NVstring filePathString = st->filePath;
 
         // - Check in the current folder
-        strcpy_s(completePath, baseFilePath);
-        strcat_s(completePath, "/");
-        strcat_s(completePath, filePath);
+        NVstring completePath(baseFilePathString);
+        completePath.append("/");
+        completePath.append(filePathString);
 
-        st->bitmap = new Bitmap(completePath);
+        st->bitmap = new Bitmap(completePath.c_str());
         // -----------------------------
 
         if (!st->bitmap->getDevice())
         {
             // - Check in home directory
-            char completeHomePath[200];
+            NVstring completeHomePath("");
 
 #ifdef WIN32
             // - Windows
-            strcpy_s(completeHomePath, getenv("HOMEDRIVE"));
-            strcat_s(completeHomePath, getenv("HOMEPATH"));
-            strcat_s(completeHomePath, "\\");
+            completeHomePath.append(getenv("HOMEDRIVE"));
+            completeHomePath.append(getenv("HOMEPATH"));
             // ---------
 
 #else
             // - Unix
-            strcpy_s(completeHomePath, getenv("HOME"));
-            strcat_s(completeHomePath, "\\");
+            completeHomePath.append(getenv("HOME"));
             // ---------
 #endif
 
-            strcat_s(completeHomePath, filePath);
+            completeHomePath.append("\\");
 
-            st->bitmap = new Bitmap(completeHomePath);
+            completeHomePath.append(filePathString);
+
+            st->bitmap = new Bitmap(completeHomePath.c_str());
             // -------------------------
 
             if (!st->bitmap->getDevice())
             {
                 // - Check if it's a hard path
-                st->bitmap = new Bitmap(filePath);
+                st->bitmap = new Bitmap(filePathString.c_str());
                 // ---------------------------
             }
         }
@@ -169,9 +167,9 @@ void GRSymbol::OnDraw( VGDevice & hdc ) const
         float currentSize = arSymbol->getSize();
         float positionStringDy;
 
-        if (!strcmp(st->positionString, "top"))
+        if (!st->positionString.compare("top"))
             positionStringDy = - st->bitmap->GetHeight() * currentSize - curLSPACE;
-        else if (!strcmp(st->positionString, "bot"))
+        else if (!st->positionString.compare("bot"))
             positionStringDy = 5 * curLSPACE;
         else //mid
             positionStringDy = 2 * curLSPACE - (st->bitmap->GetHeight() * currentSize / 2);

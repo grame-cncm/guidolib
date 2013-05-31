@@ -85,8 +85,6 @@ int gParseErrorCol = -1;
 
 int gBoundingBoxesMap = kNoBB;	// a bits field to control bounding boxes draxing [added on May 11 2009 - DF ]
 
-char currentFilePath[200];
-
 // ==========================================================================
 // - Guido Main API
 // ==========================================================================
@@ -134,7 +132,7 @@ GUIDOAPI(void) GuidoShutdown()
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoParseFile(const char * filename, ARHandler * ar)
+GUIDOAPI(GuidoErrCode) GuidoParseFile(const char * filename, ARHandler * ar, ARHandler *exAr)
 {
 	if( !filename || !ar )	return guidoErrBadParameter;
 	
@@ -143,9 +141,10 @@ GUIDOAPI(GuidoErrCode) GuidoParseFile(const char * filename, ARHandler * ar)
 	gGlobalFactory = new ARFactory();
 
     // - We have to save the current file path to be able to find symbols
-    strcpy_s(currentFilePath, filename);
+    //strcpy_s(currentFilePath, filename);
 
     gGlobalFactory->setFilePath(filename);
+
 	if( gGlobalSettings.gFeedback )
 		gGlobalSettings.gFeedback->Notify( GuidoFeedback::kProcessing );
 
@@ -217,22 +216,32 @@ GUIDOAPI(GuidoErrCode) GuidoParseFile(const char * filename, ARHandler * ar)
 	if( gGlobalSettings.gFeedback )
 		gGlobalSettings.gFeedback->Notify( GuidoFeedback::kIdle );
 
+    GuidoSetSymbolPath(outHandleAR, filename);
+
 	*ar = outHandleAR;
+
 	return guidoNoErr;
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoParseString (const char * str, ARHandler* ar)
+GUIDOAPI(GuidoErrCode) GuidoParseString (const char * str, ARHandler* ar, ARHandler* exAr)
 {
 	if( !str || !ar )	return guidoErrBadParameter;
 	
 	*ar = 0;
 	// - First, we create the abstract representation factory, for the parser.
 	gGlobalFactory = new ARFactory();
-    gGlobalFactory->setFilePath(currentFilePath);
+
+    std::string path;
+
+    if (exAr)
+    {
+        GuidoGetSymbolPath(*exAr, path);
+        gGlobalFactory->setFilePath(path.c_str());
+    }
+
 	if( gGlobalSettings.gFeedback )
 		gGlobalSettings.gFeedback->Notify( GuidoFeedback::kProcessing );
-
 	int ret = gd_parse_buffer(str);					// - Parse the notation file
 	if (ret != 0 || ( gGlobalSettings.gFeedback && gGlobalSettings.gFeedback->ProgDialogAbort())) {
 		// Something failed, do some cleanup
@@ -270,7 +279,9 @@ GUIDOAPI(GuidoErrCode) GuidoParseString (const char * str, ARHandler* ar)
 
 	// - Restore feedback state
 	if( gGlobalSettings.gFeedback )
-		gGlobalSettings.gFeedback->Notify( GuidoFeedback::kIdle );
+        gGlobalSettings.gFeedback->Notify( GuidoFeedback::kIdle );
+
+    GuidoSetSymbolPath(outHandleAR, path.c_str());
 
 	*ar = outHandleAR;
 	return guidoNoErr;
@@ -725,4 +736,34 @@ GUIDOAPI(GuidoErrCode) GuidoMarkVoice( ARHandler inHandleAR, int voicenum,
                                     duration.num, duration.denom,
                                     red, green, blue );
 	return guidoNoErr;
+}
+
+// --------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoSetSymbolPath(ARHandler inHandleAR, const char* inPath)
+{
+    if (!inHandleAR)
+        return guidoErrInvalidHandle;
+
+    if (!inHandleAR->armusic)
+        return guidoErrInvalidHandle;
+
+    NVstring tmpPath(inPath);
+
+    inHandleAR->armusic->setPath(tmpPath);
+
+    return guidoNoErr;
+}
+
+// --------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoGetSymbolPath(ARHandler inHandleAR, std::string &outPath)
+{
+    if (!inHandleAR)
+        return guidoErrInvalidHandle;
+
+    if (!inHandleAR->armusic)
+        return guidoErrInvalidHandle;
+
+    outPath = inHandleAR->armusic->getPath();
+
+    return guidoNoErr;
 }

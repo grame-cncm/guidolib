@@ -54,8 +54,11 @@ class ARMusic : public MusicalVoiceList, public ARMusicalEvent
 
 			void 	removeAutoTags();
 
-			const NVstring & getName() const	{ return mName; }
+   const NVstring & getName() const	{ return mName; }
 	  		void 	setName(const char * in)	{ mName = in; }
+
+            void    setPath(NVstring inPath) { mPath = inPath; }
+           NVstring getPath()                { return mPath; }     
 
 	  long mMaxTagId;
 
@@ -66,6 +69,7 @@ class ARMusic : public MusicalVoiceList, public ARMusicalEvent
   	  void doAutoBreaks();
 
 	  NVstring mName;
+      NVstring mPath;
 };
 
 #endif

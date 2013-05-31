@@ -16,6 +16,7 @@
 */
 
 #include <ostream>
+#include <string>
 #include "GUIDOExport.h"
 
 class GuidoFeedback;
@@ -259,7 +260,7 @@ representations.
                 It's the caller responsability to free the handle using GuidoFreeAR.
 		\return a Guido error code.
     */
-    GUIDOAPI(GuidoErrCode)	GuidoParseFile(const char * filename, ARHandler* ar);
+    GUIDOAPI(GuidoErrCode)	GuidoParseFile(const char * filename, ARHandler* ar, ARHandler* exAr);
 
 	/*!
         Parses a buffer and builds the corresponding abstract representation.
@@ -269,7 +270,7 @@ representations.
                 It's the caller responsability to free the handle using GuidoFreeAR.
 		\return a Guido error code.
     */
-    GUIDOAPI(GuidoErrCode)	GuidoParseString(const char * str, ARHandler* ar);
+    GUIDOAPI(GuidoErrCode)	GuidoParseString(const char * str, ARHandler* ar, ARHandler* exAr);
 
 	/*!
         Transforms a Guido abstract representation into a Guido graphic representation.
@@ -568,6 +569,25 @@ The number of version functions is due to historical reasons.
 											const GuidoDate & date, const GuidoDate & duration,
 											unsigned char red, unsigned char green, unsigned char blue );
 
+
+    /**	\brief Makes the correspondance between an ARMusic and a path.
+
+		\param inHandleAR a Guido opaque handle to an AR structure.
+		\param inPath the path to associate.
+		\return noErr if the association has been made with success
+		\return otherwise guidoErrActionFailed.
+	*/
+    GUIDOAPI(GuidoErrCode) GuidoSetSymbolPath(ARHandler inHandleAR, const char* inPath);
+
+
+    /**	\brief Returns the path corresponding to an AR.
+
+		\param inHandleAR a Guido opaque handle to an AR structure.
+		\param outPath the resulting path.
+		\return noErr if the path has been well returned.
+		\return otherwise guidoErrActionFailed.
+	*/
+    GUIDOAPI(GuidoErrCode) GuidoGetSymbolPath(ARHandler inHandleAR, std::string &outPath);
 
 /*! @} */
 
