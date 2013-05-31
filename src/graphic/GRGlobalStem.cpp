@@ -739,7 +739,10 @@ void GRGlobalStem::setHPosition( float nx )
 
 void GRGlobalStem::OnDraw( VGDevice & hdc) const
 {
+	if(!mDraw)
+		return;
 	if (error) return;
+
 	if (theStem)	theStem->OnDraw(hdc);
 	if (theFlag)	                theFlag->OnDraw(hdc);
 }

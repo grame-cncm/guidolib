@@ -146,6 +146,8 @@ GRStem::setStemDir(GDirection dir)
 // TODO: draw only one scaled symbol
 void GRStem::OnDraw( VGDevice & hdc ) const
 {
+	if(!mDraw)
+		return;
 	if (mStemDir == dirOFF) return;
 
 	// - Setup colors

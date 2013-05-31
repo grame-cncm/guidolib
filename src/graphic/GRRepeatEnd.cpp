@@ -99,6 +99,8 @@ void GRRepeatEnd::updateBoundingBox()
 // --------------------------------------------------------------------------
 void GRRepeatEnd::OnDraw( VGDevice & hdc ) const
 {
+	if(!mDraw)
+		return;
 	DrawWithGlyphs (hdc);
 	if (gBoundingBoxesMap & kMeasureBB)
 		DrawBoundingBox( hdc, kMeasureBBColor);

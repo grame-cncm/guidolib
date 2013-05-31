@@ -97,6 +97,7 @@ public:
 			int		DoBreak		(const TYPE_TIMEPOSITION & tp, int system_or_page);
 			int		getStaffNum () const	{ return staffnum; }
 
+
 protected:
 	void beginOpenTags();
 
@@ -130,6 +131,7 @@ protected:
 	ARNoteFormat *	curnoteformat;
 	ARDotFormat *	curdotformat;
 	ARRestFormat *	currestformat;
+	static bool &	getCurStaffDraw(int index);
 
 	TYPE_TIMEPOSITION curtp;
 	int staffnum;

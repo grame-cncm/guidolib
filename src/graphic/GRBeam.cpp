@@ -87,6 +87,9 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 {
 	if (error) return;
 
+	if(!mDraw)
+		return;
+
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );
 	if (sse == 0) return;
 

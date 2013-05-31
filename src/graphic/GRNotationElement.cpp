@@ -52,6 +52,7 @@ GRNotationElement::GRNotationElement()
 	mLeftSpace = 0;
 	mRightSpace = 0;
 	mSymbol =  kNoneSymbol;
+	mDraw = true;
 }
 
 GRNotationElement::~GRNotationElement()
@@ -184,6 +185,9 @@ void GRNotationElement::GGSOutputAt( unsigned int tmptype,
 void GRNotationElement::OnDrawText( VGDevice & hdc,  const char * cp, int inCharCount ) const
 {
 	// first we have to get a font ....
+	if(!mDraw)
+		return;
+	
 	const VGFont* hmyfont = FontManager::gFontText;
 	
 	const int size = getFontSize();
@@ -237,6 +241,8 @@ GRNotationElement::OnDrawSymbol( VGDevice & hdc, unsigned int inSymbol,
 								   float inFontSize ) const //, float inScaleX ) const
 {
 	// - Setup colors
+	if(!mDraw)
+		return;
 	const unsigned char * colref = getColRef();
 	const VGColor prevFontColor = hdc.GetFontColor();
   	if (colref)
@@ -267,7 +273,10 @@ GRNotationElement::DrawSymbol( VGDevice & hdc, unsigned int inSymbol,
 								   float inOffsetX, float inOffsetY,
 								   float inFontSize ) const
 {
+	if(!mDraw)
+		return;
 	// - Setup font
+
 	const VGFont* myfont = FontManager::gFontScriab;
 	const float theSize = (inFontSize != 0) ? inFontSize : getSize();
 	if (theSize != float(1.0))
@@ -317,6 +326,9 @@ GRNotationElement::DrawSymbol( VGDevice & hdc, unsigned int inSymbol,
 void		
 GRNotationElement::DrawExtents( VGDevice & hdc, const VGColor & inColor ) const
 {
+	if(!mDraw)
+		return;
+	
 #if (0)
 	hdc.PushPen( inColor, LSPACE * 0.15f );
 	const float x1 = mPosition.x - getLeftSpace();
@@ -332,6 +344,9 @@ GRNotationElement::DrawExtents( VGDevice & hdc, const VGColor & inColor ) const
 // -------------------------------------------------------------------------
 void GRNotationElement::OnDraw(VGDevice & hdc) const
 {
+	if(!mDraw)
+		return;
+	
 	if (mSymbol != 0)
 		OnDrawSymbol( hdc, mSymbol );
 }

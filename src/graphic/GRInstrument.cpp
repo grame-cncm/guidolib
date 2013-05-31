@@ -61,7 +61,8 @@ void GRInstrument::OnDraw(VGDevice & hdc) const
 
 	const char* nv = static_cast/*dynamic cast*/<ARInstrument *>(mAbstractRepresentation)->getName();
 	if (nv == 0) return;
-
+	if(!mDraw)
+		return;
 	GRTagARNotationElement::OnDrawText(hdc, nv, strlen(nv));
 }
 

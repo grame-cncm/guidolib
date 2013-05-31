@@ -304,6 +304,8 @@ void GRStdNoteHead::GGSOutput() const
 void GRStdNoteHead::OnDraw( VGDevice & hdc ) const
 {
 	// the note head -> the note
+	if(!mDraw)
+		return;
 	if (mSymbol == kNoneSymbol) return;
 
 	GRNoteHead::OnDraw(hdc);

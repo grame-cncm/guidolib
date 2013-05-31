@@ -65,7 +65,7 @@ void GRDrRenz::print() const
 
 void GRDrRenz::OnDraw( VGDevice & hdc) const
 {
-	if (mFace)
+	if (mFace && mDraw)
 	{
 		ARDrRenz * myar = static_cast<ARDrRenz *>(mAbstractRepresentation);
 

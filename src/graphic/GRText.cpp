@@ -140,6 +140,8 @@ GRText::~GRText()
 */
 void GRText::OnDraw( VGDevice & hdc ) const
 {
+	if(!mDraw)
+		return;
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );
 	assert(sse);
 	GRTextSaveStruct * st = (GRTextSaveStruct *) sse->p;

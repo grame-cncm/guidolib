@@ -200,6 +200,8 @@ void GRSingleNote::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos&
 //____________________________________________________________________________________
 void GRSingleNote::OnDraw( VGDevice & hdc) const
 {
+	if(!mDraw)
+		return;
     int numVoice = this->getAbstractRepresentation()->getVoiceNum();
     float X = mGrStaff->getXEndPosition(getARNote()->getRelativeTimePosition(), getARNote()->getDuration());
 
@@ -260,6 +262,7 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
     {
         mCluster->OnDraw(hdc);
     }
+	
 }
 
 //____________________________________________________________________________________

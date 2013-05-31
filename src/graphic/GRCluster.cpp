@@ -117,7 +117,7 @@ GRCluster::~GRCluster() {}
 
 void GRCluster::OnDraw(VGDevice &hdc)
 {
-    if (mHaveBeenDrawn == false)
+    if (mHaveBeenDrawn == false && mDraw)
     {
         const VGColor prevTextColor = hdc.GetFontColor();
 

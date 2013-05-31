@@ -20,6 +20,7 @@
 
 #include <typeinfo>
 #include <vector>
+#include <map>
 #include <cstdlib>
 #include <iostream> // for debug only
 #include <fstream>// for debug only
@@ -276,7 +277,7 @@ GRStaff::GRStaff( GRSystemSlice * systemslice )
 	lastrod = 0;
 	firstrod = 0;
 
-	isOn = true;
+	setOnOff(true);
 	isNextOn = true;
 	firstOnOffSetting = false;
 }
@@ -1840,7 +1841,7 @@ void GRStaff::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& info
 // ----------------------------------------------------------------------------
 /** \brief Draws the staff lines and notations elements.
 */
-void GRStaff::OnDraw( VGDevice & hdc ) const
+void GRStaff::OnDraw( VGDevice & hdc )
 {
     traceMethod("OnDraw");
 	
@@ -1871,8 +1872,7 @@ void GRStaff::OnDraw( VGDevice & hdc ) const
 #endif
 	
 	// - 
-	if(isOn)
-		DrawNotationElements( hdc );
+	DrawNotationElements( hdc );
 	if (gBoundingBoxesMap & kStavesBB) {
 		DrawBoundingBox( hdc, kStaffBBColor);
 	}
@@ -1969,7 +1969,7 @@ void GRStaff::DrawStaffUsingSymbolRepeat( VGDevice & hdc ) const
 // ----------------------------------------------------------------------------
 /** \brief Draws the staff lines with vector lines.
 */
-void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
+void GRStaff::DrawStaffUsingLines( VGDevice & hdc )
 {
 	const float lspace = getStaffLSPACE(); // Space between two lines
 	const NVPoint & staffPos = getPosition();
@@ -1988,47 +1988,74 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 //	hdc.PushPen( VGColor( 0, 0, 0 ), kLineThick );// TODO: use correct color
 	hdc.PushPenWidth( kLineThick );
 
-
-	// if the current staff is on, and the next one too, we draw it as usual
-	if(isOn && isNextOn)
+	// The staves at the begining of a new a system are somehow specials, we have to tell them explicitely 
+	// not to draw if the next one is invisible.
+	if(mStaffState.clefset && !mStaffState.meterset && !isNextOn)
 	{
-		for( int i = 0; i < mStaffState.numlines; ++i )
+		setOnOff(false);
+		GuidoPos pos = mCompElements.GetHeadPosition();
+		while (pos)
 		{
-			hdc.Line( xStart, yPos, xEnd, yPos );
+			GRNotationElement * e = mCompElements.GetNext(pos);
+			e->setDrawOnOff(false);
+		}
+	
+	}
+
+	// this will be the end of the measure
+	NVRect r = getBoundingBox();
+	r += getPosition();
+	float xEnd2 = r.right;
+	
+	// Now we have to see if there is one or more \staffOff- \staffOn- tag(s)
+	std::map<TYPE_TIMEPOSITION, bool>::const_iterator it = isOn.begin();
+	TYPE_TIMEPOSITION t;
+	TYPE_TIMEPOSITION t2 = it->first;
+	bool draw = it->second;
+	float x;
+	float next = xStart;
+
+	it++;
+	while (it != isOn.end())
+	{
+		t = t2;
+		t2 = it->first;
+		x = next;
+		TYPE_DURATION dur = t2 - t;
+		next = getXEndPosition(t, dur);
+		if(draw)
+		{
+			yPos = staffPos.y;
+			for( int i = 0; i < mStaffState.numlines; i++ )
+			{
+				hdc.Line( x, yPos, next, yPos );
+				yPos += lspace;
+			}
+		}
+		draw = it->second;
+		it++;
+	}
+	// when we arrived to the last element (possibly the same as the first one) we draw
+	// from the last x posititon to the end of the measure
+	if(it == isOn.end() && draw)
+	{
+		yPos = staffPos.y;
+		for( int i = 0; i < mStaffState.numlines; i++ )
+		{
+			hdc.Line( next, yPos, xEnd2, yPos );
 			yPos += lspace;
 		}
 	}
-	else
+		
+	// the begining of the next measure has to be drawn by this staff...
+	if(isNextOn && xEnd != xEnd2)
 	{
-		NVRect r = getBoundingBox();
-		r += getPosition();
-		float xEnd2 = r.right;
-
-		// if the current staff is off and the next one is on, we have to draw the begining of the next one
-		if(isNextOn)
+		yPos = staffPos.y;
+		for( int i = 0; i < mStaffState.numlines; ++i )
 		{
-			for( int i = 0; i < mStaffState.numlines; ++i )
-			{
-				hdc.Line( xEnd2, yPos, xEnd, yPos );
-				yPos += lspace;
-			}
+			hdc.Line( xEnd2, yPos, xEnd, yPos );
+			yPos += lspace;
 		}
-
-		// If the current staff is on and the next one isn't, we draw only the current staff, 
-		// without the end which is already behind the next bar
-		
-		// We also check if we are in a staff that begins the system (clef set) :  it is always on, but we 
-		// will draw it only if the next staff is on, or if it is the first of the page (with meters)
-		
-		else if(isOn && (!mStaffState.clefset || mStaffState.meterset))
-		{
-			for( int i = 0; i < mStaffState.numlines; ++i )
-			{
-				hdc.Line( xStart, yPos, xEnd2, yPos );
-				yPos += lspace;
-			}
-		}
-		//in any other case (current AND next staves off, or begining of new system with next staff off) : we don't do anything.
 	}
 	
 	hdc.PopPenWidth();
@@ -2106,7 +2133,8 @@ void GRStaff::GGSOutput() const
 //-------------------------------------------------
 /** \brief Find the spatial x end position from the time position and the duration
 */
-float	GRStaff::getXEndPosition(TYPE_TIMEPOSITION pos, TYPE_DURATION dur){
+float	GRStaff::getXEndPosition(TYPE_TIMEPOSITION pos, TYPE_DURATION dur)
+{
 	TYPE_TIMEPOSITION end = pos + dur;
 	NEPointerList * elmts = getElements();
 	if (elmts)
@@ -2128,4 +2156,35 @@ float	GRStaff::getXEndPosition(TYPE_TIMEPOSITION pos, TYPE_DURATION dur){
 	}
 
     return 0;
+}
+
+void GRStaff::setOnOff(bool onoff, TYPE_TIMEPOSITION tp)
+{
+	if(isOn.count(tp)>0)
+	{
+		std::map<TYPE_TIMEPOSITION, bool>::iterator it;
+		it = isOn.find(tp);
+		it->second = onoff;
+	}
+	else
+		isOn.insert(std::pair<TYPE_TIMEPOSITION, bool>(tp, onoff));
+}
+
+void GRStaff::setOnOff(bool onoff)
+{
+	setOnOff(onoff, mRelativeTimePositionOfGR);
+}
+
+bool GRStaff::isStaffEndOn()
+{
+  std::map<TYPE_TIMEPOSITION, bool>::reverse_iterator rit;
+  rit = isOn.rbegin();
+  return rit->second;
+}
+
+bool GRStaff::isStaffBeginOn()
+{
+  std::map<TYPE_TIMEPOSITION, bool>::iterator it;
+  it = isOn.begin();
+  return it->second;
 }

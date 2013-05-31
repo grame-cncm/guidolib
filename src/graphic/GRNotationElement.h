@@ -95,6 +95,8 @@ public:
 	virtual void setRelativeEndTimePosition(const TYPE_TIMEPOSITION & tp )		{ mDurationOfGR = tp - mRelativeTimePositionOfGR; }
 	virtual const TYPE_TIMEPOSITION & getRelativeTimePosition() const			{ return mRelativeTimePositionOfGR; }
 	
+	virtual void setDrawOnOff(bool onoff){mDraw = onoff;}
+	virtual bool getDrawOnOff(){return mDraw;}
 	
 	virtual TYPE_TIMEPOSITION  getRelativeEndTimePosition() const;
 	
@@ -119,6 +121,7 @@ protected:
 	int  		mSpringID;
 	float 		mLeftSpace;		// Can't we deal only with bounding boxes ?
 	float 		mRightSpace;
+	bool		mDraw;
 
 	TYPE_DURATION mDurationOfGR;
 	TYPE_TIMEPOSITION mRelativeTimePositionOfGR;

@@ -85,7 +85,9 @@ void GRGlissando::print() const
 
 void GRGlissando::OnDraw( VGDevice & hdc ) const
 {
+	if(!mDraw) return;
 	if (error) return;
+
 	assert( gCurSystem );
 
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );

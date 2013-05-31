@@ -110,6 +110,8 @@ float GRJump::getSymbolSize () const	{ return 1.0f; }
 void GRJump::OnDraw( VGDevice & hdc ) const
 {
 //	DrawBoundingBox (hdc, VGColor(255,0,0));
+	if(!mDraw)
+		return;
 
 	const ARJump * ar = getARJump();
 	if (!ar) return;

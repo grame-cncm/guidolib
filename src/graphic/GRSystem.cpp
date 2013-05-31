@@ -623,7 +623,7 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 					for(int i = nextSlice->mStaffs->GetMinimum(); i <= nextSlice->mStaffs->GetMaximum(); i++)
 					{
 						GRStaff * st = nextSlice->mStaffs->Get(i);
-						if(st->isStaffOn())
+						if(st->isStaffBeginOn())
 							StavesOn[i]=true;
 						else
 							StavesOn[i]=false;
@@ -1099,7 +1099,7 @@ void GRSystem::ShareStaffOnOff(const GRStaff * OriginStaff)
 		if(staff == OriginStaff)
 		{
 			idStaff = i-1;
-			isOn = staff->isStaffOn();
+			isOn = staff->isStaffEndOn();
 			// we pass the information to all next staves with the same index in the next slices
 			while (idSlice)
 			{

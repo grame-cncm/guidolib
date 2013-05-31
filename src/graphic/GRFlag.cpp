@@ -136,6 +136,8 @@ void GRFlag::initialize(const TYPE_DURATION & duration, GDirection stemdir, floa
 
 void GRFlag::OnDraw(VGDevice & hdc) const
 {
+	if(!mDraw)	return;
+
 	if ( mSymbol == NONE ) return;
 
 	if (!mFlagOn) return;

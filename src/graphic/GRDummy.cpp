@@ -40,7 +40,7 @@ void GRDummy::print() const
 
 void GRDummy::OnDraw( VGDevice & hdc) const
 {
-	if (myptag)
+	if (myptag && mDraw)
 	{	
 		GObject * myobj = dynamic_cast<GObject *>(myptag);
 		if (myobj)

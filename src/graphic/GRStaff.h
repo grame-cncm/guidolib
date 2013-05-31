@@ -245,11 +245,13 @@ class GRStaff : public GRCompositeNotationElement
 		void        addElementsToSprings();
 
 		virtual void GGSOutput() const;
-		virtual void OnDraw( VGDevice & hdc ) const;
+		virtual void OnDraw( VGDevice & hdc );
 		virtual void GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 		virtual void print() const;
-		void		setOnOff(bool onoff){isOn = onoff;}
-		bool		isStaffOn(){return isOn;}
+		void		setOnOff(bool onoff, TYPE_TIMEPOSITION tp);
+		void		setOnOff(bool onoff);
+		bool		isStaffBeginOn();
+		bool		isStaffEndOn();
 		void		setNextOnOff(bool onoff){isNextOn = onoff;}
 		bool		isNextStaffOn(){return isNextOn;}
 		void		setOnOffFirst(){firstOnOffSetting = true;}
@@ -271,7 +273,7 @@ class GRStaff : public GRCompositeNotationElement
 
 		void	DrawStaffUsingSymbolScale( VGDevice & hdc ) const;
 		void	DrawStaffUsingSymbolRepeat( VGDevice & hdc ) const;
-		void	DrawStaffUsingLines( VGDevice & hdc ) const;
+		void	DrawStaffUsingLines( VGDevice & hdc );
 		void	DrawNotationElements( VGDevice & hdc ) const;
 
 		void	setClefParameters(	GRClef * grclef, GRStaffState::clefstate cstate = GRStaffState::CLEFAUTO );
@@ -292,8 +294,8 @@ class GRStaff : public GRCompositeNotationElement
 		// for the STEM-Auto calculation
 		float 			avg_position;
 		int 			mNoteCount;
-
-		bool			isOn;
+		
+		std::map<TYPE_TIMEPOSITION, bool> isOn;
 		bool			isNextOn;
 		bool			firstOnOffSetting;
 
