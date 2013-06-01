@@ -17,6 +17,7 @@
 
 #include <ostream>
 #include <string>
+#include <vector>
 #include "GUIDOExport.h"
 
 class GuidoFeedback;
@@ -578,7 +579,7 @@ The number of version functions is due to historical reasons.
 		\return noErr if the association has been made with success
 		\return otherwise guidoErrActionFailed.
 	*/
-    GUIDOAPI(GuidoErrCode) GuidoSetSymbolPath(ARHandler inNewHandleAR, const char* inPath, ARHandler inExHandleAR);
+    GUIDOAPI(GuidoErrCode) GuidoSetSymbolPath(ARHandler inNewHandleAR, std::vector<std::string>, ARHandler inExHandleAR);
 
 
     /**	\brief Returns the path corresponding to an AR.
@@ -587,7 +588,7 @@ The number of version functions is due to historical reasons.
 		\return the path asked is success
 		\return otherwise NULL
 	*/
-    GUIDOAPI(std::string) GuidoGetSymbolPath(ARHandler inHandleAR);
+    GUIDOAPI(GuidoErrCode) GuidoGetSymbolPath(ARHandler inHandleAR, std::vector<std::string> &inPathVector);
 
 /*! @} */
 

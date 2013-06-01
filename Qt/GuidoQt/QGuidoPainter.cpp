@@ -187,22 +187,7 @@ bool QGuidoPainter::setGMNData( const QString& dataSource , GuidoParseFunction p
 	if ( mLastErr != guidoNoErr )
 		return false;
 
-    if (parseFunction == GuidoParseFile)
-    {
-        // - If parseFile called
-        std::string tmpBaseFilePath(dataSource.toUtf8().data());
-        size_t lastSlashPosition = tmpBaseFilePath.find_last_of("/"); //REM: et "\" ?
-
-        std::string baseFilePath("");
-        baseFilePath.append(tmpBaseFilePath, 0, lastSlashPosition);
-
-        GuidoSetSymbolPath(arh, baseFilePath.c_str(), NULL);
-        // ---------------------
-    }
-    else
-    {
-        GuidoSetSymbolPath(arh, "", mARHandler);
-    }
+    setPaths(arh, parseFunction, dataSource.toUtf8().data());
 
 	// Build a new score Graphic Representation according the score's Abstract Representation.
 	GuidoPageFormat currentFormat;
@@ -456,6 +441,66 @@ void QGuidoPainter::setGuidoPageFormat(const GuidoPageFormat& pageFormat)
 GuidoPageFormat QGuidoPainter::guidoPageFormat() const
 {
 	return mPageFormat;
+}
+
+//-------------------------------------------------------------------------
+void QGuidoPainter::setPaths(ARHandler inARHandler, GuidoParseFunction inParseFunction, const char* data)
+{
+    std::vector<std::string> paths;
+
+    if (inParseFunction == GuidoParseFile) //REM: quand on crée un nouveau projet, puis qu'on enregistre, il faut récupérer
+        //le chemin de sauvegarde du fichier
+    {
+        // - Current Directory
+        std::string tmpBaseFilePath(data);
+        size_t lastSlashPosition = tmpBaseFilePath.find_last_of("/");
+
+        std::string baseFilePath("");
+        baseFilePath.append(tmpBaseFilePath, 0, lastSlashPosition);
+
+        // - Home directory
+        std::string homePath("");
+
+#ifdef WIN32
+        // For windows
+        homePath.append(getenv("HOMEDRIVE"));
+        homePath.append(getenv("HOMEPATH"));
+#else
+        // For unix
+        homePath.append(getenv("HOME"));
+#endif
+
+        homePath.append("\\");
+
+        paths.push_back(baseFilePath);
+        paths.push_back(homePath);
+
+        GuidoSetSymbolPath(inARHandler, paths, NULL);
+    }
+    else
+    {
+        GuidoGetSymbolPath(mARHandler, paths);
+
+        if (paths.empty())
+        {
+            std::string homePath("");
+
+#ifdef WIN32
+            // For windows
+            homePath.append(getenv("HOMEDRIVE"));
+            homePath.append(getenv("HOMEPATH"));
+#else
+            // For unix
+            homePath.append(getenv("HOME"));
+#endif
+
+            homePath.append("\\");
+
+            paths.push_back(homePath);
+        }
+
+        GuidoSetSymbolPath(inARHandler, paths, mARHandler);
+    }
 }
 
 //-------------------------------------------------------------------------

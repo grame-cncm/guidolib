@@ -37,7 +37,6 @@ class GRSymbol : public GRPTagARNotationElement
 				NVPoint position;
 				NVRect boundingBox;
 				NVstring filePath;
-                NVstring baseFilePath;
                 NVstring positionString;
                 Bitmap *bitmap;
 		};

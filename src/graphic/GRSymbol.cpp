@@ -50,11 +50,10 @@ GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
 	if (p_staff)
 		curLSPACE = p_staff->getStaffLSPACE();
 
-    st->baseFilePath = NVstring(); //REM: a corriger
     st->positionString = NVstring();
     st->bitmap = NULL;
 
-    NVstring baseFilePath = abstractRepresentationOfSymbol->getPath();
+    std::vector<std::string> paths = abstractRepresentationOfSymbol->getPath();
 
     // - Set up file path
     if (abstractRepresentationOfSymbol->getSymbolPath())
@@ -63,55 +62,50 @@ GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
 
         NVstring filePathString = st->filePath;
 
-        // - Check in the current folder
-        NVstring completePath(baseFilePath);
-        completePath.append("/");
-        completePath.append(filePathString);
+        int vectorSize = paths.size();
 
-        st->bitmap = new Bitmap(completePath.c_str());
-        // -----------------------------
-
-        if (!st->bitmap->getDevice())
+        // - Check in paths vector
+        if (vectorSize)
         {
-            // - Check in home directory
-            NVstring completeHomePath("");
+            NVstring relativeFilePath(paths[0]);
+            relativeFilePath.append("/");
+            relativeFilePath.append(filePathString);
 
-#ifdef WIN32
-            // - Windows
-            completeHomePath.append(getenv("HOMEDRIVE"));
-            completeHomePath.append(getenv("HOMEPATH"));
-            // ---------
+            st->bitmap = new Bitmap(relativeFilePath.c_str());
+            // -----------------------------
 
-#else
-            // - Unix
-            completeHomePath.append(getenv("HOME"));
-            // ---------
-#endif
-
-            completeHomePath.append("\\");
-
-            completeHomePath.append(filePathString);
-
-            st->bitmap = new Bitmap(completeHomePath.c_str());
-            // -------------------------
-
-            if (!st->bitmap->getDevice())
+            if (!st->bitmap->getDevice() && vectorSize > 1)
             {
-                // - Check if it's a hard path
-                st->bitmap = new Bitmap(filePathString.c_str());
-                // ---------------------------
+                // - Check in home directory
+                NVstring relativeFilePathFromHome(paths[1]);
+
+                relativeFilePathFromHome.append("/");
+                relativeFilePathFromHome.append(filePathString);
+
+                st->bitmap = new Bitmap(relativeFilePathFromHome.c_str());
+                // -------------------------
             }
         }
 
-        st->positionString = abstractRepresentationOfSymbol->getPositionString();
+        if (!st->bitmap->getDevice())
+        {
+            // - Check if it's a hard path
+            st->bitmap = new Bitmap(filePathString.c_str());
+            // ---------------------------
+        }
 
-        float sizex = (float)st->bitmap->GetWidth();
-        float sizey = (float)st->bitmap->GetHeight();
+        if (!st->bitmap->getDevice())
+        {
+            st->positionString = abstractRepresentationOfSymbol->getPositionString();
 
-        float symbolSize = abstractRepresentationOfSymbol->getSize();
+            float sizex = (float)st->bitmap->GetWidth();
+            float sizey = (float)st->bitmap->GetHeight();
 
-        st->boundingBox.right = sizex * symbolSize;
-        st->boundingBox.top = sizey * symbolSize;
+            float symbolSize = abstractRepresentationOfSymbol->getSize();
+
+            st->boundingBox.right = sizex * symbolSize;
+            st->boundingBox.top = sizey * symbolSize;
+        }
     }
     else
         st->filePath = "";

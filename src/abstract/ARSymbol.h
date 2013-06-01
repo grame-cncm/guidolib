@@ -43,7 +43,7 @@ public:
     const char*  getPositionString() const                  { return aPosition ? aPosition->getValue() : NULL; }
 
             void setCurrentARMusic(ARMusic *inARMusic);
-        NVstring getPath()                                  { return aCurrentARMusic->getPath(); }
+    std::vector<std::string> getPath()                                  { return aCurrentARMusic->getPath(); }
 
 protected:
 

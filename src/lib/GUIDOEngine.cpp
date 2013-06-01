@@ -722,7 +722,7 @@ GUIDOAPI(GuidoErrCode) GuidoMarkVoice( ARHandler inHandleAR, int voicenum,
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoSetSymbolPath(ARHandler inNewHandleAR, const char* inPath, ARHandler inExHandleAR)
+GUIDOAPI(GuidoErrCode) GuidoSetSymbolPath(ARHandler inNewHandleAR, std::vector<std::string>inPaths, ARHandler inExHandleAR)
 {
     if (!inNewHandleAR)
         return guidoErrInvalidHandle;
@@ -730,30 +730,34 @@ GUIDOAPI(GuidoErrCode) GuidoSetSymbolPath(ARHandler inNewHandleAR, const char* i
     if (!inNewHandleAR->armusic)
         return guidoErrInvalidHandle;
 
-    NVstring tmpPath(inPath);
-
-    if (tmpPath.compare(""))
+    if (!inPaths.empty())
     {
-        inNewHandleAR->armusic->setPath(tmpPath);
+        inNewHandleAR->armusic->setPath(inPaths);
     }
     else
     {
-        inNewHandleAR->armusic->setPath(GuidoGetSymbolPath(inExHandleAR));
+        std::vector<std::string> tmp;
+        GuidoGetSymbolPath(inExHandleAR, tmp);
+        inNewHandleAR->armusic->setPath(tmp);
     }
 
     return guidoNoErr;
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(std::string) GuidoGetSymbolPath(ARHandler inHandleAR)
+GUIDOAPI(GuidoErrCode) GuidoGetSymbolPath(ARHandler inHandleAR, std::vector<std::string> &inPathVector)
 {
+    std::vector<std::string> returnedPath;
+
     if (!inHandleAR)
-        return NULL;
+        return guidoErrInvalidHandle;
 
     if (!inHandleAR->armusic)
-        return NULL;
+        return guidoErrInvalidHandle;
 
-    return inHandleAR->armusic->getPath();
+    inPathVector = inHandleAR->armusic->getPath();
+
+    return guidoNoErr;
 }
 
 

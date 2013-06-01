@@ -218,6 +218,8 @@ class QGuidoPainter
 
 		bool setGMNData( const QString& dataSource , GuidoParseFunction parseFunction );
 		bool hasValidGR() const			{ return mDesc.handle != 0; }
+
+        void setPaths(ARHandler inARHandler, GuidoParseFunction inParseFunction, const char* data);
 		
 		GuidoOnDrawDesc mDesc;
 		ARHandler mARHandler;

@@ -54,22 +54,22 @@ class ARMusic : public MusicalVoiceList, public ARMusicalEvent
 
 			void 	removeAutoTags();
 
-   const NVstring & getName() const	{ return mName; }
-	  		void 	setName(const char * in)	{ mName = in; }
+  const NVstring  & getName() const	                                      { return mName; }
+	  		void 	setName(const char * in)	                          { mName = in; }
 
-            void    setPath(NVstring inPath) { mPath = inPath; }
-           NVstring getPath()                { return mPath; }     
+                     void    setPath( std::vector<std::string> inPaths)   { mPaths = inPaths; }
+ std::vector<std::string>    getPath()                                    { return mPaths; }     
 
-	  long mMaxTagId;
+	        long    mMaxTagId;
 
-	static int mRefCount;
+	  static int    mRefCount;
 
   protected:
 
   	  void doAutoBreaks();
 
 	  NVstring mName;
-      NVstring mPath;
+      std::vector<std::string> mPaths;
 };
 
 #endif
