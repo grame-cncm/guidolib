@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include "GRARCompositeNotationElement.h"
 #include "GRPositionTag.h"
+#include "ARTHead.h"
 
 class ARCluster;
 class ARNoteFormat;
@@ -51,6 +52,8 @@ public:
 
     int getNoteCount() const { return gNoteCount;}
 
+    void setClusterOrientation(GDirection inStemDir, ARTHead::HEADSTATE inHeadStateOrientation);
+
     ARCluster *getARCluster();
 
 protected:
@@ -65,6 +68,9 @@ protected:
     float gSecondNoteYPosition;
     GRStaff *gStaff;
     TYPE_DURATION gDuration;
+
+    ARTHead::HEADSTATE gClusterOrientation;
+    GDirection gStemDir;
 
     unsigned char *gClusterColor;
 

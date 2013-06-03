@@ -37,7 +37,9 @@ GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, GRSingleNote *sngNote, AR
 						GRPositionTag(arcls->getEndPosition(), arcls),
                         gStaff(stf),
                         gDuration(0),
-                        gClusterColor(NULL)
+                        gClusterColor(NULL),
+                        gClusterOrientation(ARTHead::NORMAL),
+                        gStemDir(dirAUTO)
 {
 	assert(stf);
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
@@ -132,13 +134,20 @@ void GRCluster::OnDraw(VGDevice &hdc) const
 
     float curLSpace = gStaff->getStaffLSPACE();
 
+    float xOrientation = 0;
+
+    if (gClusterOrientation == ARTHead::LEFT && gStemDir == dirDOWN)
+        xOrientation = - 55;
+    else if (gClusterOrientation == ARTHead::RIGHT && gStemDir == dirUP)
+        xOrientation = 55;
+
     // - Quarter notes and less
     if (gDuration < DURATION_2 )
     {
-        const float xCoords [] = {x - 31 * mTagSize * gSize,
-            x + 29 * mTagSize * gSize,
-            x + 29 * mTagSize * gSize,
-            x - 31 * mTagSize * gSize};
+        const float xCoords [] = {x + (xOrientation - 31) * mTagSize * gSize,
+            x + (xOrientation + 29) * mTagSize * gSize,
+            x + (xOrientation + 29) * mTagSize * gSize,
+            x + (xOrientation - 31) * mTagSize * gSize};
         const float yCoords [] = {gFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
             gFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
             gSecondNoteYPosition - gdy - ghdy + curLSpace / 2,
@@ -148,34 +157,34 @@ void GRCluster::OnDraw(VGDevice &hdc) const
     }
     else
     {
-        const float xCoords1 [] = {x - 31 * mTagSize * gSize,
-            x + 29 * mTagSize * gSize,
-            x + 29 * mTagSize * gSize,
-            x - 31 * mTagSize * gSize};
+        const float xCoords1 [] = {x + (xOrientation - 31) * mTagSize * gSize,
+            x + (xOrientation + 29) * mTagSize * gSize,
+            x + (xOrientation + 29) * mTagSize * gSize,
+            x + (xOrientation - 31) * mTagSize * gSize};
         const float yCoords1 [] = {gFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
             gFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
             gFirstNoteYPosition - gdy - ghdy - curLSpace / 2 + 6,
             gFirstNoteYPosition - gdy - ghdy - curLSpace / 2 + 6};
-        const float xCoords2 [] = {x + 23 * mTagSize * gSize,
-            x + 29 * mTagSize * gSize,
-            x + 29 * mTagSize * gSize,
-            x + 23 * mTagSize * gSize};
+        const float xCoords2 [] = {x + (xOrientation + 23) * mTagSize * gSize,
+            x + (xOrientation + 29) * mTagSize * gSize,
+            x + (xOrientation + 29) * mTagSize * gSize,
+            x + (xOrientation + 23) * mTagSize * gSize};
         const float yCoords2 [] = {gFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
             gFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
             gSecondNoteYPosition - gdy - ghdy + curLSpace / 2,
             gSecondNoteYPosition - gdy - ghdy + curLSpace / 2};
-        const float xCoords3 [] = {x - 31 * mTagSize * gSize,
-            x + 29 * mTagSize * gSize,
-            x + 29 * mTagSize * gSize,
-            x - 31 * mTagSize * gSize};
+        const float xCoords3 [] = {x + (xOrientation - 31) * mTagSize * gSize,
+            x + (xOrientation + 29) * mTagSize * gSize,
+            x + (xOrientation + 29) * mTagSize * gSize,
+            x + (xOrientation - 31) * mTagSize * gSize};
         const float yCoords3 [] = {gSecondNoteYPosition - gdy - ghdy + curLSpace / 2 - 6,
             gSecondNoteYPosition - gdy - ghdy + curLSpace / 2 - 6,
             gSecondNoteYPosition - gdy - ghdy + curLSpace / 2,
             gSecondNoteYPosition - gdy - ghdy + curLSpace / 2};
-        const float xCoords4 [] = {x - 31 * mTagSize * gSize,
-            x - 25 * mTagSize * gSize,
-            x - 25 * mTagSize * gSize,
-            x - 31 * mTagSize * gSize};
+        const float xCoords4 [] = {x + (xOrientation - 31) * mTagSize * gSize,
+            x + (xOrientation - 25) * mTagSize * gSize,
+            x + (xOrientation - 25) * mTagSize * gSize,
+            x + (xOrientation - 31) * mTagSize * gSize};
         const float yCoords4 [] = {gFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
             gFirstNoteYPosition - gdy - ghdy - curLSpace / 2,
             gSecondNoteYPosition - gdy - ghdy + curLSpace / 2,
@@ -242,6 +251,12 @@ void GRCluster::setSecondNoteYPosition()
         gSecondNoteYPosition = gFirstNoteYPosition;
         gFirstNoteYPosition = tmpSwitch;
     }
+}
+
+void GRCluster::setClusterOrientation(GDirection inStemDir, ARTHead::HEADSTATE inHeadStateOrientation)
+{
+    gClusterOrientation = inHeadStateOrientation;
+    gStemDir            = inStemDir;
 }
 
 ARCluster *GRCluster::getARCluster()

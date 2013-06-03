@@ -605,10 +605,10 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 						cury += (float)note->getGRStaff()->getPosition().y;
 
 					// y-values are ascending.
-					if (cury != prevposy && cury - prevposy < curLSPACE)
+					if (cury != prevposy && cury - prevposy < curLSPACE && !note->getGRCluster())
 					{
 						// then I have to reverse the headsuggestion.
-						if (prevHeadState == ARTHead::RIGHT)
+                        if (prevHeadState == ARTHead::RIGHT)
 							sugHeadState = ARTHead::LEFT;
 						else
 							sugHeadState = ARTHead::RIGHT;
@@ -629,10 +629,10 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 
 				note->updateBoundingBox();
 
-				// - Adjust horizontal notehead position, for non-standard noteheads, when notes are close in a chord
-				note->getNoteHead()->adjustPositionForChords(sugHeadState, stemdir);
-			}
-		}
+                // - Adjust horizontal notehead position, for non-standard noteheads, when notes are close in a chord
+                note->getNoteHead()->adjustPositionForChords(sugHeadState, stemdir);
+            }
+        }
 
 		// - Adjust stem length if it's a cross/triangle notehead
 
@@ -667,7 +667,7 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 						cury += note->getGRStaff()->getPosition().y;
 
 					// y-values are decending.
-					if (cury != prevposy && prevposy - cury < curLSPACE)
+					if (cury != prevposy && prevposy - cury < curLSPACE && !note->getGRCluster())
 					{
 						// then I have to reverse the headsuggestion.
 						if (prevHeadState == ARTHead::RIGHT)
@@ -691,8 +691,9 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 				
 			 	note->updateBoundingBox();
 
-				// - Adjust horizontal notehead position, for non-standard noteheads, when notes are close in a chord
-				note->getNoteHead()->adjustPositionForChords(sugHeadState, stemdir);
+                // - Adjust horizontal notehead position, for non-standard noteheads, when notes are close in a chord
+                note->getNoteHead()->adjustPositionForChords(sugHeadState, stemdir);
+
 			}
 		}
 
