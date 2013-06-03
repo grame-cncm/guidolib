@@ -1,14 +1,19 @@
 % Example about the use of cluster's parameters :
-% color, size, dx/dy, adx/ady, \noteFormat-tag
+% 
+% color, size, dx/dy, adx/ady
+% \noteFormat-tag
+% \headsReverse-tag
+% \headsRight-tag
+% \headsLeft-tag
 
 {
   [
     \meter<"4/4">
     \cluster({a/2})
     \cluster({a/2,b2}) c/4 \cluster({d,e})
-    \cluster({c1,d}{e,f})
-    \cluster({c,d}{e}{f,g})
-    \cluster({d/2, b})
+    \cluster({c1,d}\headsReverse{e,f})
+    \cluster({c2,d}{e}{f,g})
+    \headsNormal\cluster({d1/2, b})
     {d/4, b} \cluster({a,b2}) {a1/8, b}
     \cluster({d/2, b, a})
   ],

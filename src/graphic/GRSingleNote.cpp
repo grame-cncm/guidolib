@@ -514,9 +514,11 @@ ARTHead::HEADSTATE GRSingleNote::adjustHeadPosition(ARTHead::HEADSTATE sugHeadSt
 		}
 		else if (stemdir == dirDOWN)
 			head->addToOffset(NVPoint((GCoord)-offsetx,0));
-		retstate = ARTHead::LEFT;
+        retstate = ARTHead::LEFT;
 
-	}
+        if (GRCluster *grcluster = this->getGRCluster())
+            grcluster->setClusterOrientation(stemdir, retstate);
+    }
 	else if (useheadstate == ARTHead::RIGHT )
 	{
 		if (stemdir == dirUP || stemdir == dirOFF)
@@ -524,7 +526,10 @@ ARTHead::HEADSTATE GRSingleNote::adjustHeadPosition(ARTHead::HEADSTATE sugHeadSt
 		else if (stemdir == dirDOWN)
 		{
 		}
-		retstate = ARTHead::RIGHT;
+        retstate = ARTHead::RIGHT;
+
+        if (GRCluster *grcluster = this->getGRCluster())
+            grcluster->setClusterOrientation(stemdir, retstate);
 	}
 	else if (useheadstate == ARTHead::CENTER)
 	{

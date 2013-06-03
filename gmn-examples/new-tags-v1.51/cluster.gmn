@@ -14,8 +14,8 @@
 {
   [
     \meter<"4/4">
-    \cluster({c,e}{a}{f,c2})
-    \cluster<color="blue">({d1/2, g}{f, g2})
+    \cluster({c,e}{a}\headsReverse{f,c2})
+    \headsNormal\cluster<color="blue">({d1/2, g}{f, g2})
   ],
   [
     \noteFormat<color="red">
