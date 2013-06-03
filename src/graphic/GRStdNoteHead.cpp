@@ -359,7 +359,7 @@ void GRStdNoteHead::adjustPositionForChords(ARTHead::HEADSTATE inHeadstate, GDir
 			case kLongaHeadSymbol:
 			case kFullDiamondHeadSymbol:
 			case kHalfDiamondHeadSymbol:
-				sRefPosNotehead.x = (GCoord)(- halfExtent) + 5;
+				sRefPosNotehead.x = (GCoord)(- halfExtent);
 				break;
 
 			case kFullXHeadSymbol:
@@ -368,14 +368,14 @@ void GRStdNoteHead::adjustPositionForChords(ARTHead::HEADSTATE inHeadstate, GDir
 			case kHalfSquareHeadSymbol:
 			case kFullRoundHeadSymbol:
 			case kHalfRoundHeadSymbol:
-				sRefPosNotehead.x = (GCoord)(- halfExtent) + 10;
+				sRefPosNotehead.x = (GCoord)(- halfExtent) + 5;
 				break;
 
 			case kFullTriangleHeadSymbol:
 			case kHalfTriangleHeadSymbol:
 			case kFullReversedTriangleHeadSymbol:
 			case kHalfReversedTriangleHeadSymbol:
-				sRefPosNotehead.x = (GCoord)(- halfExtent) + 7;
+				sRefPosNotehead.x = (GCoord)(- halfExtent) + 2;
 				break;
 			}
 		}
@@ -413,7 +413,7 @@ void GRStdNoteHead::adjustPositionForChords(ARTHead::HEADSTATE inHeadstate, GDir
 			case kLongaHeadSymbol:
 			case kFullDiamondHeadSymbol:
 			case kHalfDiamondHeadSymbol:
-				sRefPosNotehead.x = (GCoord)(- halfExtent) - 5;
+				sRefPosNotehead.x = (GCoord)(- halfExtent);
 				break;
 
 			case kFullXHeadSymbol:
@@ -422,14 +422,14 @@ void GRStdNoteHead::adjustPositionForChords(ARTHead::HEADSTATE inHeadstate, GDir
 			case kHalfSquareHeadSymbol:
 			case kFullRoundHeadSymbol:
 			case kHalfRoundHeadSymbol:
-				sRefPosNotehead.x = (GCoord)(- halfExtent) - 10;
+				sRefPosNotehead.x = (GCoord)(- halfExtent) - 5;
 				break;
 
 			case kFullTriangleHeadSymbol:
 			case kHalfTriangleHeadSymbol:
 			case kFullReversedTriangleHeadSymbol:
 			case kHalfReversedTriangleHeadSymbol:
-				sRefPosNotehead.x = (GCoord)(- halfExtent) - 7;
+				sRefPosNotehead.x = (GCoord)(- halfExtent) - 2;
 				break;
 			}
 		}

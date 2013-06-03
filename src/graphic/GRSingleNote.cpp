@@ -470,7 +470,7 @@ ARTHead::HEADSTATE GRSingleNote::adjustHeadPosition(ARTHead::HEADSTATE sugHeadSt
 	ARTHead::HEADSTATE retstate = ARTHead::CENTER;
 	ARTHead::HEADSTATE useheadstate;
 
-	float offsetx = 60 * mSize; // hardcoded
+	float offsetx = 55 * mSize; // hardcoded
 	if (mHeadState != ARTHead::NOTSET)
 			useheadstate = mHeadState;
 	else	useheadstate = sugHeadState;
@@ -538,7 +538,11 @@ ARTHead::HEADSTATE GRSingleNote::adjustHeadPosition(ARTHead::HEADSTATE sugHeadSt
 		else if (stemdir == dirDOWN)
 			head->addToOffset(NVPoint((GCoord)(-offsetx * 0.5f) ,0));
 		retstate = ARTHead::CENTER;
-	}
+    }
+
+    // - Adjust horizontal notehead position, particularly for non-standard noteheads
+    this->getNoteHead()->adjustPositionForChords(retstate, stemdir);
+
 	return retstate;
 }
 

@@ -628,9 +628,6 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 					prevposy += note->getGRStaff()->getPosition().y;
 
 				note->updateBoundingBox();
-
-                // - Adjust horizontal notehead position, for non-standard noteheads, when notes are close in a chord
-                note->getNoteHead()->adjustPositionForChords(sugHeadState, stemdir);
             }
         }
 
@@ -690,10 +687,6 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 					prevposy += note->getGRStaff()->getPosition().y;
 				
 			 	note->updateBoundingBox();
-
-                // - Adjust horizontal notehead position, for non-standard noteheads, when notes are close in a chord
-                note->getNoteHead()->adjustPositionForChords(sugHeadState, stemdir);
-
 			}
 		}
 
