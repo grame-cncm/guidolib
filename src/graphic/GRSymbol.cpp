@@ -81,7 +81,7 @@ GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
             // ---------------------------
         }
 
-        if (!st->bitmap->getDevice())
+        if (st->bitmap->getDevice())
         {
             st->positionString = abstractRepresentationOfSymbol->getPositionString();
 

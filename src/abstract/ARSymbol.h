@@ -34,7 +34,7 @@ public:
 
     virtual void 	setTagParameterList(TagParameterList & theTagParameterList);
 
-    virtual const char* getSymbolPath() const					{ return aFilePath ? aFilePath->getValue() : 0; }
+    virtual const char* getSymbolPath() const				{ return aFilePath ? aFilePath->getValue() : 0; }
 
     virtual void print() const;
     virtual void PrintName(std::ostream & os) const;
@@ -43,7 +43,7 @@ public:
     const char*  getPositionString() const                  { return aPosition ? aPosition->getValue() : NULL; }
 
             void setCurrentARMusic(ARMusic *inARMusic);
-    std::vector<std::string> getPath()                                  { return aCurrentARMusic->getPath(); }
+    std::vector<std::string> getPath()                      { return aCurrentARMusic->getPath(); }
 
 protected:
 

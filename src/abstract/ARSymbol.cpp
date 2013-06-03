@@ -36,6 +36,7 @@ ARSymbol::ARSymbol() : ARMTParameter(), aSize(1)
 ARSymbol::~ARSymbol() 
 {
 	delete aFilePath;
+    delete aPosition;
 };
 
 const char *ARSymbol::getTagFormat() const
