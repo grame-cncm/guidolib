@@ -187,6 +187,7 @@ private:
 	void	recentFileListUpdate(const QString& fileName);
 	void	changeFontSize( float newFontPointSize );
 	void	reinitGuidoWidget();
+    void    reinitARHandlerPath();
 	
 	int horizontalBorderMargin();
 	int verticalBorderMargin();

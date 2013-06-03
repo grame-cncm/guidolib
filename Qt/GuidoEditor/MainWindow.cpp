@@ -446,6 +446,8 @@ void MainWindow::newFile()
 		mTextEdit->clear();
 
         setCurrentFile("");
+
+        reinitARHandlerPath();
     }
 }
 
@@ -1852,4 +1854,30 @@ void MainWindow::addFileDirectoryPathToARHandler(const std::string filePath, con
         paths.push_back(baseFilePath);
         GuidoSetSymbolPath((ARHandler)currentARHandler, paths);
     }
+}
+
+//-------------------------------------------------------------------------
+void MainWindow::reinitARHandlerPath()
+{
+    CARHandler currentARHandler = mGuidoWidget->getARHandler();
+
+    std::vector<std::string> pathsVector;
+
+    // - Home directory
+    std::string homePath("");
+
+#ifdef WIN32
+    // For windows
+    homePath.append(getenv("HOMEDRIVE"));
+    homePath.append(getenv("HOMEPATH"));
+#else
+    // For unix
+    homePath.append(getenv("HOME"));
+#endif
+
+    homePath.append("\\");
+
+    pathsVector.push_back(homePath);
+
+    GuidoSetSymbolPath((ARHandler)currentARHandler, pathsVector);
 }
