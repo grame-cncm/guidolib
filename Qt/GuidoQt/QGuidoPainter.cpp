@@ -187,7 +187,7 @@ bool QGuidoPainter::setGMNData( const QString& dataSource , GuidoParseFunction p
 	if ( mLastErr != guidoNoErr )
 		return false;
 
-    setPaths(arh, parseFunction, dataSource.toUtf8().data());
+    setPathsToARHandler(arh, parseFunction, dataSource.toUtf8().data());
 
 	// Build a new score Graphic Representation according the score's Abstract Representation.
 	GuidoPageFormat currentFormat;
@@ -444,12 +444,11 @@ GuidoPageFormat QGuidoPainter::guidoPageFormat() const
 }
 
 //-------------------------------------------------------------------------
-void QGuidoPainter::setPaths(ARHandler inARHandler, GuidoParseFunction inParseFunction, const char* data)
+void QGuidoPainter::setPathsToARHandler(ARHandler inARHandler, const GuidoParseFunction inParseFunction, const char* data)
 {
-    std::vector<std::string> paths;
+    std::vector<std::string> pathsVector;
 
-    if (inParseFunction == GuidoParseFile) //REM: quand on crée un nouveau projet, puis qu'on enregistre, il faut récupérer
-        //le chemin de sauvegarde du fichier
+    if (inParseFunction == GuidoParseFile)
     {
         // - Current Directory
         std::string tmpBaseFilePath(data);
@@ -472,16 +471,16 @@ void QGuidoPainter::setPaths(ARHandler inARHandler, GuidoParseFunction inParseFu
 
         homePath.append("\\");
 
-        paths.push_back(baseFilePath);
-        paths.push_back(homePath);
+        pathsVector.push_back(baseFilePath);
+        pathsVector.push_back(homePath);
 
-        GuidoSetSymbolPath(inARHandler, paths, NULL);
+        GuidoSetSymbolPath(inARHandler, pathsVector, NULL);
     }
     else
     {
-        GuidoGetSymbolPath(mARHandler, paths);
+        GuidoGetSymbolPath(mARHandler, pathsVector);
 
-        if (paths.empty())
+        if (pathsVector.empty())
         {
             std::string homePath("");
 
@@ -496,10 +495,10 @@ void QGuidoPainter::setPaths(ARHandler inARHandler, GuidoParseFunction inParseFu
 
             homePath.append("\\");
 
-            paths.push_back(homePath);
+            pathsVector.push_back(homePath);
         }
 
-        GuidoSetSymbolPath(inARHandler, paths, mARHandler);
+        GuidoSetSymbolPath(inARHandler, pathsVector, mARHandler);
     }
 }
 

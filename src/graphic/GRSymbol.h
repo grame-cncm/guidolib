@@ -34,11 +34,10 @@ class GRSymbol : public GRPTagARNotationElement
 						GRSymbolSaveStruct()  {}
 				virtual ~GRSymbolSaveStruct() {};
 				
-				NVPoint position;
-				NVRect boundingBox;
-				NVstring filePath;
+				NVPoint  position;
+				NVRect   boundingBox;
                 NVstring positionString;
-                Bitmap *bitmap;
+                Bitmap  *bitmap;
 		};
 
 						GRSymbol( GRStaff *, ARSymbol * abstractRepresentationOfSymbol );

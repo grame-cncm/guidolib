@@ -96,6 +96,7 @@ public:
 	GuidoHighlighter*	getHighlighter() { return mGuidoHighlighter; }
 	void				setHighlighter( int syntaxElementId, const QColor& color , int weight );
 	void				setHighlighter( GuidoHighlighter * highlighter );
+    void                addFileDirectoryPathToARHandler(const std::string filePath, const std::string exFilePath);
 
 	static QColor	mDefaultFontColors[ GuidoHighlighter::SIZE ];
 	static int		mDefaultFontWeights[ GuidoHighlighter::SIZE ];

@@ -469,7 +469,20 @@ bool MainWindow::saveAs()
         return false;
 	if (!fileName.toUpper().endsWith("."+QString(GMN_EXTENSION).toUpper()))
 		fileName += "." + GMN_EXTENSION;
-    return saveFile(fileName);
+
+    // - To be able to remove ex filePath from ARHandler path list
+    std::string exFilePath(mCurFile.toUtf8().data());
+
+    bool saveResult = saveFile(fileName);
+
+    // - Add path to the AR
+    if (saveResult)
+    {
+        std::string filePath(fileName.toUtf8().data());
+        addFileDirectoryPathToARHandler(filePath, exFilePath);
+    }
+
+    return saveResult;
 }
  
 //-------------------------------------------------------------------------
@@ -1810,3 +1823,33 @@ void MainWindow::setHighlighter( GuidoHighlighter * highlighter )
 	highlighter->setDocument( mTextEdit->document() );
 }
 
+//-------------------------------------------------------------------------
+void MainWindow::addFileDirectoryPathToARHandler(const std::string filePath, const std::string exFilePath)
+{
+    CARHandler currentARHandler = mGuidoWidget->getARHandler();
+
+    size_t lastSlashPosition = filePath.find_last_of("/");
+
+    std::string baseFilePath("");
+    baseFilePath.append(filePath, 0, lastSlashPosition);
+
+    std::vector<std::string> paths;
+    GuidoGetSymbolPath((const ARHandler)currentARHandler, paths);
+
+    if (std::find(paths.begin(), paths.end(), baseFilePath) == paths.end())
+    {
+        // - Remove ex current directory
+        lastSlashPosition = exFilePath.find_last_of("/");
+
+        std::string baseExFilePath("");
+        baseExFilePath.append(exFilePath, 0, lastSlashPosition);
+
+        std::vector<std::string>::iterator pos = std::find(paths.begin(), paths.end(), baseExFilePath);
+        if (pos != paths.end())
+            paths.erase(pos);
+        // -----------------------------
+
+        paths.push_back(baseFilePath);
+        GuidoSetSymbolPath((ARHandler)currentARHandler, paths, NULL);
+    }
+}

@@ -18,17 +18,12 @@
 #include "ARSymbol.h"
 
 #include "GRDefine.h"
-#include "FontManager.h"
 #include "GRPage.h"
-#include "GRRod.h"
 #include "GRStaff.h"
 #include "GRSymbol.h"
-#include "GUIDOInternal.h"	// for gGlobalSettings.gDevice
 
 #include "TagParameterFloat.h"
 #include "VGDevice.h"
-#include "VGFont.h"
-#include "FontManager.h"
 
 #include "Bitmap.h"
 
@@ -53,38 +48,30 @@ GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
     st->positionString = NVstring();
     st->bitmap = NULL;
 
-    std::vector<std::string> paths = abstractRepresentationOfSymbol->getPath();
+    std::vector<std::string> pathsVector = abstractRepresentationOfSymbol->getPath();
 
     // - Set up file path
     if (abstractRepresentationOfSymbol->getSymbolPath())
     {
-        st->filePath = abstractRepresentationOfSymbol->getSymbolPath();
+        NVstring filePathString = abstractRepresentationOfSymbol->getSymbolPath();
 
-        NVstring filePathString = st->filePath;
-
-        int vectorSize = paths.size();
+        int vectorSize = pathsVector.size();
+        int i = 0;
 
         // - Check in paths vector
         if (vectorSize)
         {
-            NVstring relativeFilePath(paths[0]);
-            relativeFilePath.append("/");
-            relativeFilePath.append(filePathString);
-
-            st->bitmap = new Bitmap(relativeFilePath.c_str());
-            // -----------------------------
-
-            if (!st->bitmap->getDevice() && vectorSize > 1)
+            do
             {
-                // - Check in home directory
-                NVstring relativeFilePathFromHome(paths[1]);
+                NVstring relativeFilePath(pathsVector[i]);
+                relativeFilePath.append("/");
+                relativeFilePath.append(filePathString);
 
-                relativeFilePathFromHome.append("/");
-                relativeFilePathFromHome.append(filePathString);
+                st->bitmap = new Bitmap(relativeFilePath.c_str());
 
-                st->bitmap = new Bitmap(relativeFilePathFromHome.c_str());
-                // -------------------------
+                i++;
             }
+            while (!st->bitmap->getDevice() && i < vectorSize);
         }
 
         if (!st->bitmap->getDevice())
@@ -107,8 +94,6 @@ GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
             st->boundingBox.top = sizey * symbolSize;
         }
     }
-    else
-        st->filePath = "";
 
     st->boundingBox.left = 0;
     st->boundingBox.bottom = 0;
@@ -231,7 +216,7 @@ void GRSymbol::tellPosition(GObject * caller, const NVPoint & inPosition)
 
 	GRSymbolSaveStruct * st = (GRSymbolSaveStruct *)sse->p;
 	GRNotationElement * startElement = sse->startElement;
-	NVPoint newPos( inPosition );
+	NVPoint newPos(inPosition);
 
 	// - Check if we're left-opened
 	if (sse->startflag == GRSystemStartEndStruct::OPENLEFT)
@@ -242,7 +227,6 @@ void GRSymbol::tellPosition(GObject * caller, const NVPoint & inPosition)
 			{
 				newPos.x -= LSPACE * 0.5f; // this is actually notebreite!
 				st->position = newPos;
-				st->filePath = "-";
 			}
 		}
 	}
@@ -254,8 +238,6 @@ void GRSymbol::tellPosition(GObject * caller, const NVPoint & inPosition)
 		st->position = newPos;
 
 		const ARSymbol * arSymbol = getARSymbol();
-		//const char* text = arSymbol ? arSymbol->getText() : 0;
-		//if (text) st->symbol = text;
 	}
 }
 
