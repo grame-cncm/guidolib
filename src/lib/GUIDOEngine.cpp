@@ -722,24 +722,15 @@ GUIDOAPI(GuidoErrCode) GuidoMarkVoice( ARHandler inHandleAR, int voicenum,
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoSetSymbolPath(ARHandler inNewHandleAR, const std::vector<std::string>inPaths, const ARHandler inExHandleAR)
+GUIDOAPI(GuidoErrCode) GuidoSetSymbolPath(ARHandler inHandleAR, const std::vector<std::string> &inPaths)
 {
-    if (!inNewHandleAR)
+    if (!inHandleAR)
         return guidoErrInvalidHandle;
 
-    if (!inNewHandleAR->armusic)
+    if (!inHandleAR->armusic)
         return guidoErrInvalidHandle;
 
-    if (!inPaths.empty())
-    {
-        inNewHandleAR->armusic->setPath(inPaths);
-    }
-    else
-    {
-        std::vector<std::string> tmp;
-        GuidoGetSymbolPath(inExHandleAR, tmp);
-        inNewHandleAR->armusic->setPath(tmp);
-    }
+    inHandleAR->armusic->setPath(inPaths);
 
     return guidoNoErr;
 }

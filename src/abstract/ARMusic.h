@@ -54,11 +54,11 @@ class ARMusic : public MusicalVoiceList, public ARMusicalEvent
 
 			void 	removeAutoTags();
 
-  const NVstring  & getName() const	                                      { return mName; }
-	  		void 	setName(const char * in)	                          { mName = in; }
+  const NVstring  & getName() const	                                        { return mName; }
+	  		void 	setName(const char * in)	                            { mName = in; }
 
-                     void    setPath( std::vector<std::string> inPaths)   { mPaths = inPaths; }
- std::vector<std::string>    getPath()                                    { return mPaths; }     
+                          void setPath( std::vector<std::string> inPaths)   { mPaths = inPaths; }
+const std::vector<std::string> &getPath() const                              { return mPaths; }     
 
 	        long    mMaxTagId;
 

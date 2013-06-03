@@ -1850,6 +1850,6 @@ void MainWindow::addFileDirectoryPathToARHandler(const std::string filePath, con
         // -----------------------------
 
         paths.push_back(baseFilePath);
-        GuidoSetSymbolPath((ARHandler)currentARHandler, paths, NULL);
+        GuidoSetSymbolPath((ARHandler)currentARHandler, paths);
     }
 }

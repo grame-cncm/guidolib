@@ -474,7 +474,7 @@ void QGuidoPainter::setPathsToARHandler(ARHandler inARHandler, const GuidoParseF
         pathsVector.push_back(baseFilePath);
         pathsVector.push_back(homePath);
 
-        GuidoSetSymbolPath(inARHandler, pathsVector, NULL);
+        GuidoSetSymbolPath(inARHandler, pathsVector);
     }
     else
     {
@@ -498,7 +498,7 @@ void QGuidoPainter::setPathsToARHandler(ARHandler inARHandler, const GuidoParseF
             pathsVector.push_back(homePath);
         }
 
-        GuidoSetSymbolPath(inARHandler, pathsVector, mARHandler);
+        GuidoSetSymbolPath(inARHandler, pathsVector);
     }
 }
 

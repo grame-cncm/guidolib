@@ -43,11 +43,11 @@ public:
     const char*  getPositionString() const                  { return aPosition ? aPosition->getValue() : NULL; }
 
             void setCurrentARMusic(ARMusic *inARMusic);
-    std::vector<std::string> getPath()                      { return aCurrentARMusic->getPath(); }
+    const std::vector<std::string> &getPath() const        { return aCurrentARMusic->getPath(); }
 
 protected:
 
-    virtual const char * getTagFormat() const;
+    virtual const char *getTagFormat() const;
 
 	TagParameterString *aFilePath;
 	             float  aSize;

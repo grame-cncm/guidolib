@@ -579,7 +579,7 @@ The number of version functions is due to historical reasons.
 		\return noErr if the association has been made with success
 		\return otherwise guidoErrActionFailed.
 	*/
-    GUIDOAPI(GuidoErrCode) GuidoSetSymbolPath(ARHandler inNewHandleAR, const std::vector<std::string>, const ARHandler inExHandleAR);
+    GUIDOAPI(GuidoErrCode) GuidoSetSymbolPath(ARHandler inHandleAR, const std::vector<std::string> &inPaths);
 
 
     /**	\brief Returns the path corresponding to an AR.
