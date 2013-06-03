@@ -222,8 +222,9 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
 
     // draw ledger lines
     const float ledXPos = -60 * 0.85f * mSize;
+    NVPoint noteheadOffset(getNoteHead()->getOffset());
     for (int i = 0; i < sum; ++i, posy += incy)
-        GRNote::DrawSymbol( hdc, kLedgerLineSymbol, ledXPos, ( posy - mPosition.y ));
+        GRNote::DrawSymbol( hdc, kLedgerLineSymbol, ledXPos + noteheadOffset.x, ( posy - mPosition.y ));
 
     if (!mCluster)
     {
@@ -615,7 +616,7 @@ void GRSingleNote::recalcVerticalPosition()
 }
 
 //____________________________________________________________________________________
-GRStdNoteHead * GRSingleNote::getNoteHead()
+GRStdNoteHead * GRSingleNote::getNoteHead() const
 {
 	return mNoteHead;
 }
