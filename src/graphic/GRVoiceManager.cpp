@@ -491,10 +491,19 @@ int GRVoiceManager::DoBreak(const TYPE_TIMEPOSITION & tp,
 		// Then, the necessary steps can be taken by the StaffManager/VoiceManager etc...
 		ReadBeginTags(curvst->curtp);
 
+		// in order to pass the on/off information of the staff from a system to another...
+		bool isOn;
+		if(mCurGrStaff)
+			isOn = mCurGrStaff->isStaffEndOn();
+		mCurGrStaff->setNextOnOff(isOn);
 
 		mStaffMgr->prepareStaff(staffnum);
 		mCurGrStaff = mStaffMgr->getStaff(staffnum);
-		
+
+		mCurGrStaff->setOnOff(isOn);
+		if(!mCurGrStaff->getOnOffFirst())
+			mCurGrStaff->setOnOffFirst();
+
 		// this adds the two start glues...
 		mCurGrStaff->BeginStaff(mStaffMgr);
 		assert(mCurGrStaff);
