@@ -28,6 +28,9 @@ class ARMusicalObject;
 class GRAccidental;
 
 
+
+const float kMinNoteSize = 0.001;	// minimum size of an element, the element is not drawn when the size is smaller
+
 /** \brief parent class for all notation elements.
 */
 class GRNotationElement : public GObject  
