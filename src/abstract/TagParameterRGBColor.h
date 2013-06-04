@@ -37,6 +37,8 @@
 class TagParameterRGBColor : public TagParameter
 {
 public:
+	using TagParameter::setValue;
+	
     TagParameterRGBColor( const unsigned char red, const unsigned char green, const unsigned char blue, const unsigned char alpha = 255 );
     TagParameterRGBColor( const TagParameterRGBColor & tpRGBColor );
     

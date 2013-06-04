@@ -6041,8 +6041,6 @@ void ARMusicalVoice::doAutoCluster()
 	// We first look for each note and check if it has a cluster
 	ARMusicalVoiceState armvs;
 	GuidoPos posObj = GetHeadPosition(armvs);
-    ARNote * savedNote = NULL;
-    ARNote * savedNextNote = NULL;
     ARCluster *tmpCluster = NULL;
 
 	while(posObj)

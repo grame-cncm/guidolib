@@ -573,7 +573,6 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 	{
 		for( int i = mStaffs->GetMinimum(); i <= mStaffs->GetMaximum(); i++ )
 		{
-			GRStaff * nextStaff = 0;
 			if ((theStaff = mStaffs->Get(i)) == NULL)
 				continue;
 
@@ -1104,12 +1103,15 @@ void GRSystem::ShareStaffOnOff(const GRStaff * OriginStaff)
 			while (idSlice)
 			{
 				GRSystemSlice * nextSlice = mSystemSlices.GetNext(idSlice);
-				if(nextSlice)
+				if(nextSlice && nextSlice->mStaffs)
 				{
 					// if we find a staff that has been forced on/off, we stop.
-					if(nextSlice->mStaffs->Get(idStaff)->getOnOffFirst())
-						break;
-					nextSlice->mStaffs->Get(idStaff)->setOnOff(isOn);
+					GRStaff* staff = nextSlice->mStaffs->Get(idStaff);
+					if(staff) {
+						if (staff->getOnOffFirst())
+							break;
+						staff->setOnOff(isOn);
+					}
 				}
 			}
 		}

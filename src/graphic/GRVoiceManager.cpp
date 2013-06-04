@@ -429,20 +429,20 @@ void GRVoiceManager::BeginManageVoice()
 }
 
 
-static void debugstate(const char* context, const TagList* tl)
-{
-	cout << "\ndebugstate :" << context << endl;
-	GuidoPos pos = tl->GetHeadPosition();
-	while (pos) {
-		ARMusicalTag * tag = tl->GetNext (pos);
-		if (tag) {
-			tag->PrintName (cout);
-			tag->PrintParameters (cout);
-			cout << endl;
-		}
-		else cout << "null tag" << endl;
-	}
-}
+//static void debugstate(const char* context, const TagList* tl)
+//{
+//	cout << "\ndebugstate :" << context << endl;
+//	GuidoPos pos = tl->GetHeadPosition();
+//	while (pos) {
+//		ARMusicalTag * tag = tl->GetNext (pos);
+//		if (tag) {
+//			tag->PrintName (cout);
+//			tag->PrintParameters (cout);
+//			cout << endl;
+//		}
+//		else cout << "null tag" << endl;
+//	}
+//}
 
 /** \brief Actually does a newSystem or a newPage-break.
 
