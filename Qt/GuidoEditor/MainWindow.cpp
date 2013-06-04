@@ -571,9 +571,11 @@ void MainWindow::doexport()
 	QGuidoPainter * guidoPainter = QGuidoPainter::createGuidoPainter();
 	guidoPainter->setGuidoLayoutSettings(mGuidoEngineParams);
 
-    // - Since ARHandler is erased, we have to save current ARHandler's pathsVector before...
+    // - Since QGuidoPainter is created again (then lose its parameters),
+    //   we have to make a backup of current ARHandler's pathsVector before...
     std::vector<std::string> pathsVector;
     GuidoGetSymbolPath((ARHandler)mGuidoWidget->getARHandler(), pathsVector);
+    //...and save it in the new QGuidoPainter
     guidoPainter->setPathsVectorBackupForExport(pathsVector);
 
 	if ( guidoPainter->setGMNCode(mTextEdit->toPlainText()) )
