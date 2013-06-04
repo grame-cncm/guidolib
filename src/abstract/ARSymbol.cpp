@@ -19,6 +19,7 @@
 #include "TagParameterList.h"
 #include "TagParameterFloat.h"
 #include "TagParameterString.h"
+#include "TagParameterInt.h"
 #include "ListOfStrings.h"
 
 ListOfTPLs ARSymbol::ltpls(1);
@@ -28,7 +29,9 @@ ARSymbol::ARSymbol() : ARMTParameter(), aSize(1)
 	relativeTimePosition = TYPE_TIMEPOSITION(-1,1);
 	duration = DURATION_0;
     aPosition = NULL;
-	aFilePath = NULL;
+    aFilePath = NULL;
+    aFixedWidth = NULL;
+    aFixedHeight = NULL;
     aCurrentARMusic = NULL;
     rangesetting = RANGEDC;
 }
@@ -37,11 +40,13 @@ ARSymbol::~ARSymbol()
 {
 	delete aFilePath;
     delete aPosition;
+    delete aFixedWidth;
+    delete aFixedHeight;
 };
 
 const char *ARSymbol::getTagFormat() const
 {
-	const char * const outFormat = "S,filePath,,r;F,size,1.0,o;S,position,mid,o";
+	const char * const outFormat = "S,filePath,,r;F,size,1.0,o;S,position,mid,o;I,w,,o;I,h,,o";
 	return outFormat;
 }
 
@@ -72,6 +77,14 @@ void ARSymbol::setTagParameterList(TagParameterList & tpl)
             delete aPosition;
 			aPosition = TagParameterString::cast(rtpl->RemoveHead());
 			assert(aPosition);
+
+            delete aFixedWidth;
+            aFixedWidth = TagParameterInt::cast(rtpl->RemoveHead());
+            assert(aFixedWidth);
+
+            delete aFixedHeight;
+            aFixedHeight = TagParameterInt::cast(rtpl->RemoveHead());
+            assert(aFixedHeight);
 		}
 		delete rtpl;
 	}

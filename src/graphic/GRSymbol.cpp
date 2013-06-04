@@ -85,8 +85,12 @@ GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
         {
             st->positionString = abstractRepresentationOfSymbol->getPositionString();
 
-            float sizex = (float)st->bitmap->GetWidth();
-            float sizey = (float)st->bitmap->GetHeight();
+            int symbolFixedWidth  = abstractRepresentationOfSymbol->getFixedWidth();
+            int symbolFixedHeight = abstractRepresentationOfSymbol->getFixedHeight();
+
+            float sizex, sizey;
+            symbolFixedWidth  ? sizex = symbolFixedWidth  : sizex = (float)st->bitmap->GetWidth();
+            symbolFixedHeight ? sizey = symbolFixedHeight : sizey = (float)st->bitmap->GetHeight();
 
             float symbolSize = abstractRepresentationOfSymbol->getSize();
 
@@ -122,7 +126,7 @@ void GRSymbol::OnDraw( VGDevice & hdc ) const
     assert(sse);
     GRSymbolSaveStruct * st = (GRSymbolSaveStruct *) sse->p;
 
-    if (st->bitmap)
+    if (st->bitmap->getDevice())
     {
         const ARSymbol *arSymbol = getARSymbol();
         const float curLSPACE = gCurStaff ? gCurStaff->getStaffLSPACE(): LSPACE;
@@ -137,22 +141,31 @@ void GRSymbol::OnDraw( VGDevice & hdc ) const
         if (arSymbol->getDX())
             dx = arSymbol->getDX()->getValue( curLSPACE );
 
+        // - Maybe the user set w/h himself
+        int symbolFixedWidth  = arSymbol->getFixedWidth();
+        int symbolFixedHeight = arSymbol->getFixedHeight();
+
+        float sizex, sizey;
+        symbolFixedWidth  ? sizex = symbolFixedWidth  : sizex = (float)st->bitmap->GetWidth();
+        symbolFixedHeight ? sizey = symbolFixedHeight : sizey = (float)st->bitmap->GetHeight();
+        // --------------------------------
+
         float currentSize = arSymbol->getSize();
         float positionStringDy;
 
         if (!st->positionString.compare("top"))
-            positionStringDy = - st->bitmap->GetHeight() * currentSize * kVirtualToPx - curLSPACE;
+            positionStringDy = - sizey * currentSize * kVirtualToPx - curLSPACE;
         else if (!st->positionString.compare("bot"))
             positionStringDy = 5 * curLSPACE;
         else //mid
-            positionStringDy = 2 * curLSPACE - (st->bitmap->GetHeight() * currentSize * kVirtualToPx / 2);
+            positionStringDy = 2 * curLSPACE - (sizey * currentSize * kVirtualToPx / 2);
 
         float finaldx = drawPos.x + st->boundingBox.left + dx;
         float finaldy = dy + positionStringDy;
 
         // - Print image
-        NVRect rectDraw = NVRect(finaldx, finaldy, finaldx + (float)st->bitmap->GetWidth() * currentSize * kVirtualToPx,
-                                                   finaldy + (float)st->bitmap->GetHeight() * currentSize * kVirtualToPx);
+        NVRect rectDraw = NVRect(finaldx, finaldy, finaldx + sizex * currentSize * kVirtualToPx,
+                                                   finaldy + sizey * currentSize * kVirtualToPx);
         st->bitmap->OnDraw(hdc, rectDraw);
     }
 }

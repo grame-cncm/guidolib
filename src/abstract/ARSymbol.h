@@ -18,6 +18,7 @@ research@grame.fr
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
 #include "TagParameterString.h"
+#include "TagParameterInt.h"
 #include "ARMusic.h"
 
 
@@ -41,6 +42,8 @@ public:
     virtual void PrintParameters(std::ostream & os) const;
     float		 getSize() const                            { return aSize; }
     const char*  getPositionString() const                  { return aPosition ? aPosition->getValue() : NULL; }
+    int          getFixedWidth() const                           { return aFixedWidth ? aFixedWidth->getValue() : 0; }
+    int          getFixedHeight() const                          { return aFixedHeight ? aFixedHeight->getValue() : 0; }
 
             void setCurrentARMusic(ARMusic *inARMusic);
     const std::vector<std::string> &getPath() const        { return aCurrentARMusic->getPath(); }
@@ -52,6 +55,8 @@ protected:
 	TagParameterString *aFilePath;
 	             float  aSize;
     TagParameterString *aPosition;
+    TagParameterInt    *aFixedWidth;
+    TagParameterInt    *aFixedHeight;
 
                ARMusic *aCurrentARMusic;
 
