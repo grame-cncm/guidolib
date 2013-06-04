@@ -39,6 +39,9 @@ const float kCmToVirtual = (float)1.0 / kVirtualToCm;			// Was INVCONST
 const float kVirtualToInch = kVirtualToCm / (float)2.54;
 const float kInchToVirtual = (float)1.0 / kVirtualToInch;
 
+const float kPxToVirtual = (float)72.0 * kVirtualToInch;
+const float kVirtualToPx = (float)1.0 / kPxToVirtual;
+
 //const int MINSPACING = 0; 
 const int NUMNOTES = 12;
 

@@ -90,8 +90,8 @@ GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
 
             float symbolSize = abstractRepresentationOfSymbol->getSize();
 
-            st->boundingBox.right = sizex * symbolSize;
-            st->boundingBox.top = sizey * symbolSize;
+            st->boundingBox.right = sizex * symbolSize * kVirtualToPx;
+            st->boundingBox.top = sizey * symbolSize * kVirtualToPx;
         }
     }
 
@@ -141,17 +141,18 @@ void GRSymbol::OnDraw( VGDevice & hdc ) const
         float positionStringDy;
 
         if (!st->positionString.compare("top"))
-            positionStringDy = - st->bitmap->GetHeight() * currentSize - curLSPACE;
+            positionStringDy = - st->bitmap->GetHeight() * currentSize * kVirtualToPx - curLSPACE;
         else if (!st->positionString.compare("bot"))
             positionStringDy = 5 * curLSPACE;
         else //mid
-            positionStringDy = 2 * curLSPACE - (st->bitmap->GetHeight() * currentSize / 2);
+            positionStringDy = 2 * curLSPACE - (st->bitmap->GetHeight() * currentSize * kVirtualToPx / 2);
 
         float finaldx = drawPos.x + st->boundingBox.left + dx;
         float finaldy = dy + positionStringDy;
 
         // - Print image
-        NVRect rectDraw = NVRect(finaldx, finaldy, finaldx + (float)st->bitmap->GetWidth() * currentSize, finaldy + (float)st->bitmap->GetHeight() * currentSize);
+        NVRect rectDraw = NVRect(finaldx, finaldy, finaldx + (float)st->bitmap->GetWidth() * currentSize * kVirtualToPx,
+                                                   finaldy + (float)st->bitmap->GetHeight() * currentSize * kVirtualToPx);
         st->bitmap->OnDraw(hdc, rectDraw);
     }
 }
