@@ -54,7 +54,7 @@ public:
 
     void setClusterOrientation(GDirection inStemDir, ARTHead::HEADSTATE inHeadStateOrientation);
 
-    ARCluster *getARCluster();
+    ARCluster *getARCluster() const;
 
 protected:
 

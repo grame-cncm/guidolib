@@ -259,7 +259,7 @@ void GRCluster::setClusterOrientation(GDirection inStemDir, ARTHead::HEADSTATE i
     gStemDir            = inStemDir;
 }
 
-ARCluster *GRCluster::getARCluster()
+ARCluster *GRCluster::getARCluster() const
 {
 	return /*dynamic*/static_cast<ARCluster*>(getAbstractRepresentation());
 }

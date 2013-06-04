@@ -57,23 +57,20 @@ class GRNote : public GREvent
 	virtual GDirection	getDefaultThroatDirection() const;
 	virtual GDirection	getThroatDirection() const;
 
-    GRCluster *getGRCluster() {return mCluster;}
+    GRCluster *getGRCluster() const {return mCluster;}
     void       setGRCluster(GRCluster *inCluster, bool inSignificativeNote = true);
-    bool       getClusterNoteBoolean() {return mClusterNote;}
+    bool       getClusterNoteBoolean() const {return mClusterNote;}
 
     GRCluster *createCluster(ARNoteFormat *inCurnoteformat);
 
 	// Tell me: is a note splitted over several systems? 
 	// should only occur for CompositeNotes.
 	virtual bool isSplit(); // const;
-
-    bool isLonelyInCluster() {return mIsLonelyInCluster;}
 	
 protected :
 		GRTrill   *mOrnament;
         GRCluster *mCluster;
         bool mClusterNote;
-        bool mIsLonelyInCluster;
         bool mClusterHaveToBeDrawn;
 };
 

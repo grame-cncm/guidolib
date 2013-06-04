@@ -38,7 +38,6 @@ GRNote::GRNote( GRStaff * grstaf,
     if (abstractRepresentationOfNote->getARCluster())
     {
         mClusterNote = true;
-        mIsLonelyInCluster = abstractRepresentationOfNote->isLonelyInCluster();
         mClusterHaveToBeDrawn = abstractRepresentationOfNote->doesClusterHaveToBeDrawn();
     }
 }
