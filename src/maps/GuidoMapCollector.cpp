@@ -122,7 +122,7 @@ void GuidoStaffCollector::mergelines (const std::vector<TMapElt>& elts, Time2Gra
 		if (linechange) {
 			if (start) start = false;				// first time: nothing to store
 			else outmap.push_back(make_pair(linetime, linerect));	// store the previous line rect
-			linetime.first = t.first;				// and prepare the next line
+			linetime = t;							// and prepare the next line
 			linerect = r;
 		}
 		else {
@@ -237,7 +237,7 @@ void GuidoStaffCollector::process (int page, float w, float h, Time2GraphicMap* 
 	GuidoGetMap( fGRHandler, page, w, h, kGuidoEvent, *this );	// collect the events map
 	sort (fMap.begin(), fMap.end(), mcompare);					// sort first date, smaller duration first
 	reduce (fMap, evmap);										// retains only one segment per starting date
-	staffmerge (map, evmap, *outmap);							// and split the staff lines using the events segments	
+	staffmerge (map, evmap, *outmap);							// and split the staff lines using the events segments
 }
 
 //----------------------------------------------------------------------
