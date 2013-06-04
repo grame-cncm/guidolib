@@ -37,9 +37,9 @@ GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, GRSingleNote *sngNote, AR
 						GRPositionTag(arcls->getEndPosition(), arcls),
                         gStaff(stf),
                         gDuration(0),
-                        gClusterColor(NULL),
                         gClusterOrientation(ARTHead::NORMAL),
-                        gStemDir(dirAUTO)
+                        gStemDir(dirAUTO),
+                        gClusterColor(NULL)
 {
 	assert(stf);
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
