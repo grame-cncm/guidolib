@@ -49,8 +49,14 @@
 				<li><a href="#1.2">1.2 Noteheads brackets</a></li>
 				<li><a href="#1.3">1.3 Glissandos</a></li>
 				<li><a href="#1.4">1.4 Clusters</a></li>
+				<li><a href="#1.5">1.5 Trill</a></li>
 			</ul>
+		<p>
+			<a href="#2.">2. Staff and system layout</a>
 			
+			<ul>
+				<li><a href="#2.1">2.1 \staffOff \staffOn</a></li>
+			</ul>	
 			
 			<hr>
 			<a name="1."></a>
@@ -534,12 +540,60 @@
 			</p>
 			<p class="notes">
 				Examples:
-				<pre>{[\meter<"2/4">\tie( \trill({a} {g} {g}) )],</pre>
-				<pre>[\meter<"2/4">\trill({a}{g/2})]}</pre>
+				<pre>{[\meter<"2/4">\tie( \trill({a} {g} {g}) )], <br> [\meter<"2/4">\trill({a}{g/2})]}</pre>
 				<center> <IMG SRC="imgs/trillAndTies.jpg"> </center>
 				<pre>[\trill&lt;tr="false", anchor="note"&gt;({g}{e/2})]</pre>
 				<center> <IMG SRC="imgs/trillAnchorAndTr.jpg"> </center>
 			</p>
+
+
+			
+			<hr>
+			<a name="2."></a>
+			<h3>2. Staff and system layout</h3>
+			
+
+			<a name="2.1"></a>
+			<h4>2.1 \staffOff, staffOn</h4>
+
+			<p class="tag">
+				<span class="tag">\staffOff \staffOn</span> 
+				<br>
+				The \staffOff tag makes the current staff invisible starting from the position where it occurs until the next \staffOn is encountered. While the staff is invisible, all notational elements fixed to it (notes, rests, dynamic markings, etc.) also become invisible.
+				<br>
+				<ul>
+					<li>
+						<i><b>Parameters:</i></b> none
+					</li>
+									
+					<li>
+						<b><i>Range:</i></b> none
+					</li>
+									
+					<br><br>
+						
+					<li>
+						<b><i>Remarks:</i></b>
+						<ul>
+							<li>
+								Takes in account the changes of staff with \staff&lt;i&gt;
+							</li>
+							<li>
+								If a \staffOn is placed at the end of the line and you don't want the last bar to be drawn, you have to write it explicitely before the \staffOn.
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</p>
+			<p class="notes">
+				Examples:
+				<pre>[ \meter<"4/4"> \staffOff \clef	g d \staffOn c f c d f \staffOff a c b g \staffOn f ]</pre>
+				<center> <IMG SRC="imgs/staffOff.jpg"> </center>
+				<pre>{[ \meter<"4/4"> g d c f c d f a], <br> [ \meter<"4/4"> c d f \staff<1> a g \staffOff c \staff<2> g f ]}</pre>
+				<center> <IMG SRC="imgs/staffOff2.jpg"> </center>
+			</p>
+
+
 
 		</p>			
 	</body>

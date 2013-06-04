@@ -7,8 +7,10 @@
 %
 %
 % Parameters : none
+%
+% the bar line has to be put explicitely before the \staffOn if we don't want it to draw.
     
-{
+
 [
  	\staffOff \meter<"4/4">  empty/2 \staffOn g/4 d 
 	c h f e |
@@ -16,23 +18,8 @@
 	g d c h
 	f e f g 
 	d c \staffOff h  f \staffOn
-	\text<"problème de la clef qui apparait ou disparait", dy=14hs>
 	(e f g d )
 	c h  \staffOff f f
 	c h \staffOn f f
 ]
-(*
-,
-[
-\clef \staffOff \meter<"10/4"> 
-e \staffOn f g d c h f e b g 
-e f g d c h f e f g 
-d c h \staffOn f e f g d c h
-],
-[
-\meter<"10/4"> \staffOff \clef
-f g d c \staffOn h f e \tie(f \staffOff f f) | \staffOn 
-e \staff<2> d  f \staffOff c g \staff<3> a d b f e 
-c h f \staffOff g d c h f e f
-]*)
-}
+

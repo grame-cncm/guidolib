@@ -622,19 +622,21 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 					for(int i = nextSlice->mStaffs->GetMinimum(); i <= nextSlice->mStaffs->GetMaximum(); i++)
 					{
 						GRStaff * st = nextSlice->mStaffs->Get(i);
-						if(st->isStaffBeginOn())
-							StavesOn[i]=true;
-						else
-							StavesOn[i]=false;
+						StavesOn[i]=st->isStaffBeginOn();
 					}
 				}
 				for(int i = slice->mStaffs->GetMinimum(); i <= slice->mStaffs->GetMaximum(); i++)
 				{
-					if(StavesOn[i] == false)
-						slice->mStaffs->Get(i)->setNextOnOff(false);
+					slice->mStaffs->Get(i)->setNextOnOff(StavesOn[i]);
 				}
 			}
-	
+			else
+			{
+				for(int i = slice->mStaffs->GetMinimum(); i <= slice->mStaffs->GetMaximum(); i++)
+				{
+					slice->mStaffs->Get(i)->setNextOnOff(slice->mStaffs->Get(i)->isStaffEndOn());
+				}
+			}
 			slice->OnDraw(hdc);
 		}
 

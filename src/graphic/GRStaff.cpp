@@ -1841,14 +1841,9 @@ void GRStaff::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& info
 // ----------------------------------------------------------------------------
 /** \brief Draws the staff lines and notations elements.
 */
-void GRStaff::OnDraw( VGDevice & hdc )
+void GRStaff::OnDraw( VGDevice & hdc ) const
 {
     traceMethod("OnDraw");
-	
-	// We have to pass the on/off information to all the next staves till the next one that has been set "first" 
-	// (by a \staffOff- \staffOn- tag or automatically in the case of a new system)
-	if(firstOnOffSetting)
-		getGRSystem()->ShareStaffOnOff(this);
 
 #if 0
 	// - Change font settings
@@ -1969,13 +1964,11 @@ void GRStaff::DrawStaffUsingSymbolRepeat( VGDevice & hdc ) const
 // ----------------------------------------------------------------------------
 /** \brief Draws the staff lines with vector lines.
 */
-void GRStaff::DrawStaffUsingLines( VGDevice & hdc )
+void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 {
 	const float lspace = getStaffLSPACE(); // Space between two lines
 	const NVPoint & staffPos = getPosition();
 	
-	const float xStart = staffPos.x;
-	const float xEnd = xStart + mLength; //  cause gaps in stafflines: - (0.5f * kLineThick);
 	float yPos = staffPos.y;
 	
 	/* - Debug ->
@@ -1986,78 +1979,24 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc )
 
 	*/
 //	hdc.PushPen( VGColor( 0, 0, 0 ), kLineThick );// TODO: use correct color
+
 	hdc.PushPenWidth( kLineThick );
 
-	// The staves at the begining of a new a system are somehow specials, we have to tell them explicitely 
-	// not to draw if the next one is invisible.
-	if(mStaffState.clefset && !mStaffState.meterset && !isNextOn)
-	{
-		setOnOff(false);
-		GuidoPos pos = mCompElements.GetHeadPosition();
-		while (pos)
-		{
-			GRNotationElement * e = mCompElements.GetNext(pos);
-			e->setDrawOnOff(false);
-		}
+	std::map<float,float>::const_iterator it = positions.begin();
 	
-	}
-
-	// this will be the end of the measure
-	NVRect r = getBoundingBox();
-	r += getPosition();
-	float xEnd2 = r.right;
-	
-	// Now we have to see if there is one or more \staffOff- \staffOn- tag(s)
-	std::map<TYPE_TIMEPOSITION, bool>::const_iterator it = isOn.begin();
-	TYPE_TIMEPOSITION t;
-	TYPE_TIMEPOSITION t2 = it->first;
-	bool draw = it->second;
-	float x;
-	float next = xStart;
-
-	it++;
-	while (it != isOn.end())
+	while (it != positions.end())
 	{
-		t = t2;
-		t2 = it->first;
-		x = next;
-		TYPE_DURATION dur = t2 - t;
-		next = getXEndPosition(t, dur);
-		if(draw)
-		{
-			yPos = staffPos.y;
-			for( int i = 0; i < mStaffState.numlines; i++ )
-			{
-				hdc.Line( x, yPos, next, yPos );
-				yPos += lspace;
-			}
-		}
-		draw = it->second;
-		it++;
-	}
-	// when we arrived to the last element (possibly the same as the first one) we draw
-	// from the last x posititon to the end of the measure
-	if(it == isOn.end() && draw)
-	{
+		float x1 = it->first;
+		float x2 = it->second;
 		yPos = staffPos.y;
 		for( int i = 0; i < mStaffState.numlines; i++ )
 		{
-			hdc.Line( next, yPos, xEnd2, yPos );
+			hdc.Line( x1, yPos, x2, yPos );
 			yPos += lspace;
 		}
+		it++;
 	}
-		
-	// the begining of the next measure has to be drawn by this staff...
-	if(isNextOn && xEnd != xEnd2)
-	{
-		yPos = staffPos.y;
-		for( int i = 0; i < mStaffState.numlines; ++i )
-		{
-			hdc.Line( xEnd2, yPos, xEnd, yPos );
-			yPos += lspace;
-		}
-	}
-	
+
 	hdc.PopPenWidth();
 //	hdc.PopPen();
 }
@@ -2187,4 +2126,71 @@ bool GRStaff::isStaffBeginOn()
   std::map<TYPE_TIMEPOSITION, bool>::iterator it;
   it = isOn.begin();
   return it->second;
+}
+
+
+void GRStaff::generatePositions()
+{
+	//const float lspace = getStaffLSPACE(); // Space between two lines
+	const NVPoint & staffPos = getPosition();
+	
+	const float xStart = staffPos.x;
+	const float xEnd = xStart + mLength;
+	float yPos = staffPos.y;
+
+	// The staves at the begining of a new a system are somehow specials, we have to tell them explicitely 
+	// not to draw if the next one is invisible.
+	if(mStaffState.clefset && !mStaffState.meterset && !isNextOn)
+	{
+		setOnOff(false);
+		GuidoPos pos = mCompElements.GetHeadPosition();
+		while (pos)
+		{
+			GRNotationElement * e = mCompElements.GetNext(pos);
+			e->setDrawOnOff(false);
+		}
+	
+	}
+
+	// this will be the end of the measure
+	NVRect r = getBoundingBox();
+	r += getPosition();
+	float xEnd2 = r.right;
+
+	// Now we have to see if there is one or more \staffOff- \staffOn- tag(s)
+	std::map<TYPE_TIMEPOSITION, bool>::const_iterator it = isOn.begin();
+	TYPE_TIMEPOSITION t;
+	TYPE_TIMEPOSITION t2 = it->first;
+	bool draw = it->second;
+	float x;
+	float next = xStart;
+
+	it++;
+	while (it != isOn.end())
+	{
+		t = t2;
+		t2 = it->first;
+		x = next;
+		TYPE_DURATION dur = t2 - t;
+		next = getXEndPosition(t, dur);
+		if(draw)
+		{
+			positions.insert(std::pair<float,float>(x, next));
+		}
+		draw = it->second;
+		it++;
+	}
+
+	// when we arrive to the last element (possibly the same as the first one) we draw
+	// from the last x posititon to the end of the measure
+	if(it == isOn.end() && draw)
+	{
+		positions.insert(std::pair<float,float>(next, xEnd2));
+	}
+		
+	// the begining of the next measure has to be drawn by this staff...
+	if(isNextOn && xEnd != xEnd2)
+	{
+		positions.insert(std::pair<float,float>(xEnd2, xEnd));
+	}
 }

@@ -245,7 +245,7 @@ class GRStaff : public GRCompositeNotationElement
 		void        addElementsToSprings();
 
 		virtual void GGSOutput() const;
-		virtual void OnDraw( VGDevice & hdc );
+		virtual void OnDraw( VGDevice & hdc ) const;
 		virtual void GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 		virtual void print() const;
 		void		setOnOff(bool onoff, TYPE_TIMEPOSITION tp);
@@ -267,13 +267,15 @@ class GRStaff : public GRCompositeNotationElement
 
 		void checkSystemBar(const TYPE_TIMEPOSITION & tp);
 
+		void	generatePositions();
+
   protected:
 
 		void	DebugPrintState(const char * info) const;
 
 		void	DrawStaffUsingSymbolScale( VGDevice & hdc ) const;
 		void	DrawStaffUsingSymbolRepeat( VGDevice & hdc ) const;
-		void	DrawStaffUsingLines( VGDevice & hdc );
+		void	DrawStaffUsingLines( VGDevice & hdc ) const;
 		void	DrawNotationElements( VGDevice & hdc ) const;
 
 		void	setClefParameters(	GRClef * grclef, GRStaffState::clefstate cstate = GRStaffState::CLEFAUTO );
@@ -295,13 +297,15 @@ class GRStaff : public GRCompositeNotationElement
 		float 			avg_position;
 		int 			mNoteCount;
 		
-		std::map<TYPE_TIMEPOSITION, bool> isOn;
-		bool			isNextOn;
-		bool			firstOnOffSetting;
-
  	 private:
 		TYPE_TIMEPOSITION	fLastSystemBarChecked;
 		void newMeasure(const TYPE_TIMEPOSITION & tp);
+		
+		std::map<TYPE_TIMEPOSITION, bool> isOn;
+		std::map<float, float> positions;
+		bool			isNextOn;
+		bool			firstOnOffSetting;
+
 };
 
 #endif
