@@ -205,9 +205,14 @@ class QGuidoPainter
 		CARHandler	getARHandler() const { return mARHandler; }
 		
 		/**
-		*	\brief Directly set the AR handler .
+		*	\brief Directly set the AR handler.
 		*/
 		void		setARHandler(ARHandler ar);
+
+        /**
+		*	\brief Makes a backup of a certain pathVector.
+		*/
+        void setPathsVectorBackupForExport (std::vector<std::string> inPathsVector) { mPathsVectorBackupForExport = inPathsVector; }
 
 	protected:
 	
@@ -219,7 +224,7 @@ class QGuidoPainter
 		bool setGMNData( const QString& dataSource , GuidoParseFunction parseFunction );
 		bool hasValidGR() const			{ return mDesc.handle != 0; }
 
-        void setPathsToARHandler(ARHandler inARHandler, const GuidoParseFunction inParseFunction, const char* data);
+        void setPathsToARHandler (ARHandler inARHandler, const GuidoParseFunction inParseFunction, const char* data);
 		
 		GuidoOnDrawDesc mDesc;
 		ARHandler mARHandler;
@@ -232,6 +237,8 @@ class QGuidoPainter
 		GuidoPageFormat mPageFormat;
 
 		QColor fCurrentColor;		// the color for drawing the score
+
+        std::vector<std::string>    mPathsVectorBackupForExport;
 };
 
 #endif

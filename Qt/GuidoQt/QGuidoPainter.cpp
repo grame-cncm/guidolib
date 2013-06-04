@@ -478,27 +478,34 @@ void QGuidoPainter::setPathsToARHandler(ARHandler inARHandler, const GuidoParseF
     }
     else
     {
-        GuidoGetSymbolPath(mARHandler, pathsVector);
-
-        if (pathsVector.empty())
+        if (!mARHandler)
         {
-            std::string homePath("");
+            GuidoSetSymbolPath(inARHandler, mPathsVectorBackupForExport);
+        }
+        else
+        {
+            GuidoGetSymbolPath(mARHandler, pathsVector);
+
+            if (pathsVector.empty())
+            {
+                std::string homePath("");
 
 #ifdef WIN32
-            // For windows
-            homePath.append(getenv("HOMEDRIVE"));
-            homePath.append(getenv("HOMEPATH"));
+                // For windows
+                homePath.append(getenv("HOMEDRIVE"));
+                homePath.append(getenv("HOMEPATH"));
 #else
-            // For unix
-            homePath.append(getenv("HOME"));
+                // For unix
+                homePath.append(getenv("HOME"));
 #endif
 
-            homePath.append("\\");
+                homePath.append("\\");
 
-            pathsVector.push_back(homePath);
+                pathsVector.push_back(homePath);
+            }
+
+            GuidoSetSymbolPath(inARHandler, pathsVector);
         }
-
-        GuidoSetSymbolPath(inARHandler, pathsVector);
     }
 }
 

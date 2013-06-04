@@ -570,8 +570,14 @@ void MainWindow::doexport()
 {
 	QGuidoPainter * guidoPainter = QGuidoPainter::createGuidoPainter();
 	guidoPainter->setGuidoLayoutSettings(mGuidoEngineParams);
-	if ( guidoPainter->setGMNCode(mTextEdit->toPlainText()) ) {
 
+    // - Since ARHandler is erased, we have to save current ARHandler's pathsVector before...
+    std::vector<std::string> pathsVector;
+    GuidoGetSymbolPath((ARHandler)mGuidoWidget->getARHandler(), pathsVector);
+    guidoPainter->setPathsVectorBackupForExport(pathsVector);
+
+	if ( guidoPainter->setGMNCode(mTextEdit->toPlainText()) )
+    {
 		QString savePath = mRecentFiles.size() ? QFileInfo(mRecentFiles.last()).path() : QDir::home().path();
 		QString fileName = QFileDialog::getSaveFileName(this, "Export to:", savePath);
 		if (!fileName.isEmpty()) {
