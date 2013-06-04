@@ -236,8 +236,6 @@ void GRSymbol::tellPosition(GObject * caller, const NVPoint & inPosition)
 	{
 		newPos.y = grel->getPosition().y;
 		st->position = newPos;
-
-		const ARSymbol * arSymbol = getARSymbol();
 	}
 }
 
