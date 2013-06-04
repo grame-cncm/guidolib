@@ -54,8 +54,8 @@ ARNote::ARNote( const std::string & inName, int theAccidentals, int theRegister,
 
 ARNote::ARNote(const ARNote & arnote) 
 	:	ARMusicalEvent( (const ARMusicalEvent &) arnote),
-		fName(arnote.fName), fStartPosition(-1,1), fOrnament(NULL),  fCluster(NULL), fIsLonelyInCluster(false),
-        fClusterHaveToBeDrawn(false)
+		fName(arnote.fName), fOrnament(NULL),  fCluster(NULL), fIsLonelyInCluster(false),
+        fClusterHaveToBeDrawn(false), fStartPosition(-1,1)
 {
 	fPitch = arnote.fPitch;
 	fOctave = arnote.fOctave;
