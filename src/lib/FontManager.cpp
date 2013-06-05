@@ -118,40 +118,6 @@ const VGFont* FontManager::FindOrCreateFont( int size, const string * name, cons
 	if( gGlobalSettings.gDevice)
 		sys = gGlobalSettings.gDevice->getVGSystem();
 	return FindOrCreateFont (sys, size, name, attributesStr);
-
-//	// - First, we look if a similar font is already in our font list.
-//	const char * fontNameCStr = name ? name->c_str() : kDefaultMusicFont;
-//	const char * fontAttribCStr = attributesStr ? attributesStr->c_str() : "";
-//	
-//	// - First, we look if a similar font is already in our font list.
-//	FontInfoList::const_iterator ptr;
-//	for( ptr = sFontList.begin(); ptr != sFontList.end(); ++ ptr )
-//	{
-//		const FontInfo * infos = *ptr;
-//		if( infos->Compare( size, fontNameCStr, fontAttribCStr ))
-//			return infos->mFontRef;
-//	}
-//	
-//	// - The font does not exist, we create it.
-//	int attributes = VGFont::kFontNone;
-//	if( attributesStr ) {
-//		if( attributesStr->find("b") != string::npos )	attributes |= VGFont::kFontBold;
-//		if( attributesStr->find("i") != string::npos )	attributes |= VGFont::kFontItalic;
-//		if( attributesStr->find("u") != string::npos )	attributes |= VGFont::kFontUnderline;
-//	}
-//	
-//	const VGFont* fontRef = 0;
-//	if( gGlobalSettings.gDevice ) {
-//		VGSystem * sys = gGlobalSettings.gDevice->getVGSystem();
-//		if (sys)
-//			fontRef = sys->CreateVGFont( fontNameCStr, size, attributes );
-//	}
-//
-//	if( fontRef )
-//		sFontList.push_back( new FontInfo( fontRef, size, fontNameCStr, attributesStr ? *attributesStr : "" ) );
-//	else
-//		cerr << "Guido error: \"" <<  fontNameCStr << "\" font creation failed !" << endl;
-//	return fontRef;
 }
 
 // --------------------------------------------------------------------------
@@ -166,7 +132,5 @@ void FontManager::ReleaseAllFonts()
 		delete fontInfos;
 	}
 	sFontList.clear();
-//	delete gFontScriab;		// now deleted by FontInfos destructor
-//	delete gFontText;
 	gFontScriab = gFontText = 0;
 }
