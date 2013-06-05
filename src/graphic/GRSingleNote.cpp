@@ -222,10 +222,10 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
 
     // draw ledger lines
     const float ledXPos = -60 * 0.85f * mSize;
-    NVPoint noteheadOffset(getNoteHead()->getOffset()); //REM: fonctionne pour les \headsReverse et [{a2,b}] mais pas si
-                                                        //y a décalage dx : [\noteFormat<dx=-2> c]
+    //NVPoint noteheadOffset(getNoteHead()->getOffset()); //REM: fonctionne pour les \headsReverse et [{a2,b}] mais pas si
+                                                          //il y a décalage \noteFormat<dx=X> : [\noteFormat<dx=-2> c] for example
     for (int i = 0; i < sum; ++i, posy += incy)
-        GRNote::DrawSymbol( hdc, kLedgerLineSymbol, ledXPos + noteheadOffset.x, ( posy - mPosition.y ));
+        GRNote::DrawSymbol( hdc, kLedgerLineSymbol, ledXPos/* + noteheadOffset.x*/, ( posy - mPosition.y ));
 
     if (!mCluster)
     {
