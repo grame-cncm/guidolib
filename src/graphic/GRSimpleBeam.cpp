@@ -33,6 +33,8 @@ void GRSimpleBeam::GGSOutput() const
 
 void GRSimpleBeam::OnDraw( VGDevice & hdc ) const
 {
+	if(!mDraw)
+		return;
 	const unsigned char * colref = getColRef();
 
 	if (colref) {

@@ -1,3 +1,16 @@
+/*
+  GUIDO Library
+  Copyright (C) 2013 Grame
+
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
+
+*/
+
 #include "ARGlissando.h"
 #include "TagParameterList.h"
 #include "TagParameterFloat.h"
@@ -16,9 +29,12 @@ ARGlissando::ARGlissando()
 	
 	dx1 = dy1 = dx2 = dy2 = fThickness = 0;
 	fLineStyle = NULL;
+	fill = NULL;
 
 	mParSet = false;
-	fWavy = false;
+	mWavy = false;
+	mFill = false;
+
 }
 
 ARGlissando::ARGlissando(const ARGlissando * glissando)	: ARMTParameter(-1,glissando)
@@ -33,7 +49,7 @@ ARGlissando::ARGlissando(const ARGlissando * glissando)	: ARMTParameter(-1,gliss
 	setAssociation(ARMusicalTag::RA);
 	
 	mParSet = false;
-	fWavy = glissando->fWavy;
+
 
 	if(glissando->dx1)
 		TagParameterFloat::cast( glissando->dx1->getCopy());
@@ -43,6 +59,8 @@ ARGlissando::ARGlissando(const ARGlissando * glissando)	: ARMTParameter(-1,gliss
 		TagParameterFloat::cast( glissando->dx2->getCopy());
 	if(glissando->dy2)
 		TagParameterFloat::cast( glissando->dy2->getCopy());
+	if(glissando->fill)
+		TagParameterString::cast( glissando->fill->getCopy());
 	if(glissando->fThickness)
 		TagParameterFloat::cast( glissando->fThickness->getCopy());
 	if(glissando->fLineStyle)
@@ -58,6 +76,7 @@ ARGlissando::~ARGlissando(void)
 	delete dx2;
 	delete dy2;
 	delete fThickness;
+	delete fill;
 	delete fLineStyle;
 }
 
@@ -73,8 +92,9 @@ void ARGlissando::setTagParameterList(TagParameterList & tpl)
 		ListOfStrings lstrs; // (1); std::vector test impl
 		
 		lstrs.AddTail( "U,dx1,0,o;U,dy1,0,o;"
-			             "U,dx2,0,o;U,dy2,0,o;"
-			             "U,thickness,0.3,o;S,lineStyle,line,o" );
+			"U,dx2,0,o;U,dy2,0,o;"
+			"S,fill,false,o;U,thickness,0.3,o;"
+			"S,lineStyle,line,o");
 		
 		CreateListOfTPLs(ltpls,lstrs);
 	}
@@ -106,6 +126,13 @@ void ARGlissando::setTagParameterList(TagParameterList & tpl)
 			if (dy2->TagIsSet())
 				mParSet = true;
 
+			fill = TagParameterString::cast(rtpl->RemoveHead());
+			assert(fill);
+			if (fill->TagIsSet()) 
+				mParSet = true;
+			string isFill ("true");
+			if (isFill == fill->getValue())
+				mFill = true;
 
 			fThickness = TagParameterFloat::cast(rtpl->RemoveHead());
 			assert(fThickness);
@@ -116,16 +143,9 @@ void ARGlissando::setTagParameterList(TagParameterList & tpl)
 			assert(fLineStyle);
 			if (fLineStyle->TagIsSet()) 
 				mParSet = true;
-
 			string wavyLine ("wavy");
 			if (wavyLine == fLineStyle->getValue())
-			{
-				fWavy = true;	
-			}
-			else
-			{
-				fWavy = false;
-			}
+				mWavy = true;
 		}
 
 		delete rtpl;
@@ -158,6 +178,10 @@ TagParameterList * ARGlissando::getTagParameterList() const
 	{
 		tpl->AddTail(dy2->getCopy());
 	}
+	if (fill && fill->TagIsSet())
+	{
+		tpl->AddTail(fill->getCopy());
+	}
 	if (fThickness && fThickness->TagIsSet())
 	{
 		tpl->AddTail(fThickness->getCopy());
@@ -189,4 +213,3 @@ bool ARGlissando::MatchEndTag(const char * s)
 		return 1;
 	return 0;
 }
-

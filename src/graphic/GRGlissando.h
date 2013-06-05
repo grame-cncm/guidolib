@@ -1,6 +1,19 @@
 #ifndef GRGlissando_H
 #define GRGlissando_H
 
+/*
+  GUIDO Library
+  Copyright (C) 2013  Grame
+
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
+
+*/
+
 #include "GRPTagARNotationElement.h"
 
 class ARGlissando;
@@ -34,18 +47,18 @@ class GRGlissando : public GRPTagARNotationElement
 	{
 		public:
 				GRGlissandoContext() : staff(0), openRight(false), openLeft(false),
-									topLeftHead(0), bottomLeftHead(0),
-									topRightHead(0), bottomRightHead(0), accidentalRight(0),
-									sizeLeft(1), sizeRight(1), leftNoteDX(0), rightNoteDX(0),
-									leftNoteDY(0), rightNoteDY(0)
+									secondLeftHead(0), firstLeftHead(0),
+									secondRightHead(0), firstRightHead(0), accidentalRight(0),
+									sizeLeft(1), sizeRight(1), leftNoteDX(0), 
+									rightNoteDX(0), leftNoteDY(0), rightNoteDY(0)
 									 { }
 			GRStaff * staff;
 			bool openRight;
 			bool openLeft;
-			GRStdNoteHead * topLeftHead;
-			GRStdNoteHead * bottomLeftHead;
-			GRStdNoteHead * topRightHead;
-			GRStdNoteHead * bottomRightHead;
+			GRStdNoteHead * secondLeftHead;
+			GRStdNoteHead * firstLeftHead;
+			GRStdNoteHead * secondRightHead;
+			GRStdNoteHead * firstRightHead;
 			GRAccidental * accidentalRight;
 			float sizeLeft;
 			float sizeRight;
@@ -71,29 +84,31 @@ class GRGlissando : public GRPTagARNotationElement
 		virtual void print() const;
 		virtual GRNotationElement * getStartElement(GRStaff * grstaff) const;
 		virtual GRNotationElement * getEndElement(GRStaff * grstaff) const;
-		virtual void ResumeTag(GRStaff * grstaff, GuidoPos assocpos);
 		virtual void BreakTag(GRStaff * grstaff, GuidoPos & assocpos);
+		virtual void setPrevGlissando( GRGlissando * prev);
+		virtual GRGlissando * getPrevGlissando(){return prevGRGlissando;}
+		GRGlissandoContext * getContext(){return &fglissContext;}
+		void	setHidden(){hidden = true;}
+		bool	isFilled(){return filled;}
 	
 		
 	protected:
 		
 		virtual void updateGlissando( GRStaff * grstaff );
-
-		//virtual GRPositionTag::GRSaveStruct * getNewGRSaveStruct();
-
-		//virtual GRSystemStartEndStruct * prepareSSEStructForGlissando( const GRStaff * inStaff );
-
 		virtual	void getGlissandoBeginingContext( GRGlissandoContext * ioContext, GRSystemStartEndStruct * sse );
 		virtual void getGlissandoEndingContext( GRGlissandoContext * ioContext, GRSystemStartEndStruct * sse );
-		//virtual	GRGlobalStem * findGlobalStem( GRSystemStartEndStruct * sse, GRNotationElement * stemOwner );
 		bool wavy;
-
-		GRNotationElement * laststartElement;
-		GuidoPos laststartpos;
+		bool fill;
+		bool hidden;
+		bool filled;
+		GRNotationElement * flaststartElement;
 
 	private:
-		
-			GRSystemStartEndStruct * initGRGlissando( GRStaff * grstaff );
+		void compareAccidentals(GRSystemStartEndStruct * sse, bool * isUp, bool * isDown);
+		GRSystemStartEndStruct * initGRGlissando( GRStaff * grstaff );
+		GRGlissandoContext fglissContext;
+		GRGlissandoSaveStruct * fglissInfos;
+		GRGlissando * prevGRGlissando;
 };
 
 #endif

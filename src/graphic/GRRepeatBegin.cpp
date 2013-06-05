@@ -92,6 +92,8 @@ void GRRepeatBegin::tellPosition(GObject * caller, const NVPoint & newPosition)
 // --------------------------------------------------------------------------
 void GRRepeatBegin::OnDraw(VGDevice & hdc ) const
 {
+	if(!mDraw)
+		return;
 	GRTagARNotationElement::OnDraw (hdc);
 	if (gBoundingBoxesMap & kMeasureBB)
 		DrawBoundingBox( hdc, kMeasureBBColor);

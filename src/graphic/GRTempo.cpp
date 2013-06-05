@@ -93,7 +93,8 @@ TYPE_DURATION GRTempo::getDuration (const char * str) const
 void GRTempo::OnDraw( VGDevice & hdc ) const
 {
 //	DrawBoundingBox (hdc, GColor(0,0,255));
-
+	if(!mDraw)
+		return; 
 	ARTempo * ar = static_cast<ARTempo *>(mAbstractRepresentation); // was a dynamic cast
 	if (!ar ) return;
 

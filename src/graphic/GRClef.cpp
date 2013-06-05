@@ -229,6 +229,8 @@ void GRClef::OnDraw(VGDevice & hdc) const
 {
 // DrawBoundingBox( hdc, GColor( 255, 200, 0, 150)); // DEBUG
 	if (error) return;
+	if(!mDraw)
+		return;
 
 	GRTagARNotationElement::OnDraw(hdc);
 	if( mDoubleTreble )

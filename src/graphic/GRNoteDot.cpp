@@ -96,7 +96,8 @@ void GRNoteDot::OnDraw(VGDevice & hdc) const
 {
 	int n = mDots;
 	if (!n ) return;
-
+	if(!mDraw)
+		return;
 	float scale = getSize();
 	float offset = LSPACE * 0.5f * scale;
 	float dy = LSPACE * 0.5f * (scale - 1);

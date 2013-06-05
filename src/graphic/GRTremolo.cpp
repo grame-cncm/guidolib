@@ -39,7 +39,8 @@ GRTremolo::~GRTremolo()
 
 void GRTremolo::OnDraw( VGDevice & hdc ) const
 {
-	
+	if(!mDraw)
+		return;
 	GRPTagARNotationElement::OnDrawText(hdc,"trem.");
 }
 

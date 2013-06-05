@@ -742,9 +742,11 @@ GRNotationElement * GRBowing::getEndElement(GRStaff * grstaff) const
 void GRBowing::OnDraw( VGDevice & hdc) const
 {
 // DrawBoundingBox( hdc, GColor( 255, 120, 150, 120 )); // DEBUG
+	if(!mDraw)
+		return;
 
 	if (error) return;
-
+	
 	assert( gCurSystem );
 
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );

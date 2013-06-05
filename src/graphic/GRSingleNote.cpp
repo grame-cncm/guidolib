@@ -200,6 +200,8 @@ void GRSingleNote::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos&
 //____________________________________________________________________________________
 void GRSingleNote::OnDraw( VGDevice & hdc) const
 {
+	if(!mDraw)
+		return;
     int numVoice = this->getAbstractRepresentation()->getVoiceNum();
     float X = mGrStaff->getXEndPosition(getARNote()->getRelativeTimePosition(), getARNote()->getDuration());
 
@@ -249,7 +251,8 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
         if (mOrnament)
 		{
 			// to draw the trill line...
-            mOrnament->OnDraw(hdc,X,numVoice);
+			float Y = getPosition().y + getBoundingBox().Height()/2;
+			mOrnament->OnDraw(hdc,X,Y, numVoice);
 		}
 
         // - Restore
@@ -260,10 +263,14 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
     else if (mClusterHaveToBeDrawn)
     {
         if (mOrnament)
-            mOrnament->OnDraw(hdc,X,numVoice);
+        {
+            float Y = getPosition().y + getBoundingBox().Height()/2;
+			mOrnament->OnDraw(hdc, X, Y, numVoice);
+        }
 
         mCluster->OnDraw(hdc);
     }
+	
 }
 
 //____________________________________________________________________________________

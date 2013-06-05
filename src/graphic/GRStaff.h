@@ -248,6 +248,14 @@ class GRStaff : public GRCompositeNotationElement
 		virtual void OnDraw( VGDevice & hdc ) const;
 		virtual void GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 		virtual void print() const;
+		void		setOnOff(bool onoff, TYPE_TIMEPOSITION tp);
+		void		setOnOff(bool onoff);
+		bool		isStaffBeginOn();
+		bool		isStaffEndOn();
+		void		setNextOnOff(bool onoff){isNextOn = onoff;}
+		bool		isNextStaffOn(){return isNextOn;}
+		void		setOnOffFirst(){firstOnOffSetting = true;}
+		bool		getOnOffFirst(){return firstOnOffSetting;}
 
 		// this function was defined as private previously. Because GRNoteFactory needs to add elements 
 		// to the staff (Tuplets), it must be defined public.
@@ -258,6 +266,8 @@ class GRStaff : public GRCompositeNotationElement
 		void addNotationElement(GRNotationElement * notationElement);
 
 		void checkSystemBar(const TYPE_TIMEPOSITION & tp);
+
+		void	generatePositions();
 
   protected:
 
@@ -286,10 +296,16 @@ class GRStaff : public GRCompositeNotationElement
 		// for the STEM-Auto calculation
 		float 			avg_position;
 		int 			mNoteCount;
-
+		
  	 private:
 		TYPE_TIMEPOSITION	fLastSystemBarChecked;
 		void newMeasure(const TYPE_TIMEPOSITION & tp);
+		
+		std::map<TYPE_TIMEPOSITION, bool> isOn;
+		std::map<float, float> positions;
+		bool			isNextOn;
+		bool			firstOnOffSetting;
+
 };
 
 #endif

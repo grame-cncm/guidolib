@@ -353,6 +353,8 @@ void GRTuplet::GGSOutput() const
 */
 void GRTuplet::OnDraw( VGDevice & hdc ) const
 { 
+	if(!mDraw)
+		return;
 	char buffer[30];
 
 	if(( mTupletElements == 0 ) || ( mTupletElements->empty())) return;
