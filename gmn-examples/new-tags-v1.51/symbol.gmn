@@ -10,19 +10,20 @@
 %     Optional :
 %       - position : "mid" (default), "top", "bot"
 %       - size
+%       - w/h : manually sets the width/height of a symbol
 %       - dx/dy
 
 {
   [
     \meter<"4/4">
     a b
-    \symbol<filePath="test.png", size=0.1, position="top", dx=-4> (empty)
+    \symbol<filePath="test.png", size=1, position="top", dx=-4, w=40> (empty)
     c d
   ],
   [
     \meter<"4/4">
     a b
-    \symbol<filePath="imgTest/Lena.jpg", size=2, dx=-4, dy=-6>
+    \symbol<filePath="imgTest/Lena.jpg", dx=-4, dy=-6>
     c d
   ]
 }
