@@ -1,6 +1,6 @@
 % Example about the use of cluster's parameters :
 % 
-% color, size, dx/dy, adx/ady
+% color, size, dx/dy, hdx/hdy
 % \noteFormat-tag
 % \headsReverse-tag
 % \headsRight-tag
@@ -20,8 +20,8 @@
   [
     \meter<"4/4">
     \cluster<color="blue">({c,g1})
-    \cluster<adx=1>({a,g1})
-    \cluster<ady=-4>({a2,g1})
+    \cluster<hdx=1>({a,g1})
+    \cluster<hdy=-4>({a2,g1})
     \cluster<size=0.6>({a2,g1})
     \noteFormat<size=0.3>\cluster({a2,g1}) g
     \noteFormat<dy=-5, dx=-5, color="red"> \cluster({a2,g1}) a
