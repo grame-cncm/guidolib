@@ -3,11 +3,14 @@ GUIDO Engine history
 ----------------------------------------------------------------
 2013-04-05  version 1.5.1
 - trill line added :  stops at the next element, can be drawn over several staves, systems and pages (if the notes are tied).
-- new notehead types added
-- bug corrected : stem length of high chords
+- implementation of new notehead types
+- implementation of brackets around noteheads
+- bug correction : stem length of high chords
 - implementation of glissando
+- implementation of cluster
 - bug correction: incorrect staff mapping was generated for staves with a single slice
 - implementation of \staffOff- \staffOn- tags
+- implementation of \symbol-tag
 
 ---------------------------------------------------------------
 2012-04-05  version 1.5.0
