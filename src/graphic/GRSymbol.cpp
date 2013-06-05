@@ -126,7 +126,7 @@ void GRSymbol::OnDraw( VGDevice & hdc ) const
     assert(sse);
     GRSymbolSaveStruct * st = (GRSymbolSaveStruct *) sse->p;
 
-    if (st->bitmap->getDevice())
+    if (st->bitmap && st->bitmap->getDevice())
     {
         const ARSymbol *arSymbol = getARSymbol();
         const float curLSPACE = gCurStaff ? gCurStaff->getStaffLSPACE(): LSPACE;
