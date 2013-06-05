@@ -9,7 +9,7 @@
 %                --> use \noteFormat-tag to modify its entire color)
 %       - Size (modify only horizontal size)
 %       - dx/dy (modify position of entire cluster)
-%       - adx/ady (modify only position of head's cluster)
+%       - hdx/hdy (modify only position of head's cluster)
 
 {
   [
@@ -19,7 +19,7 @@
   ],
   [
     \noteFormat<color="red">
-    \cluster<adx=1, ady=3>({f,a})
+    \cluster<hdx=1, hdy=3>({f,a})
     \cluster<color="purple">({d1, g}) a
     \cluster<dx=-7>({c,a})
   ]

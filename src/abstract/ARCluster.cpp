@@ -77,7 +77,7 @@ void ARCluster::setTagParameterList(TagParameterList& tpl)
 	if (ltpls.GetCount() == 0)
 	{
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail("S,color,,o;F,size,1.0,o;U,adx,0hs,o;U,ady,0hs,o;U,dx,0hs,o;U,dy,0hs,o");
+		lstrs.AddTail("S,color,,o;F,size,1.0,o;U,hdx,0hs,o;U,hdy,0hs,o;U,dx,0hs,o;U,dy,0hs,o");
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
