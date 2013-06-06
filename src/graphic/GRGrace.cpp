@@ -37,6 +37,8 @@ GRGrace::~GRGrace()
 
 void GRGrace::OnDraw( VGDevice & hdc) const
 {
+	if(!mDraw)
+		return;
 	if( mAssociated->size() == 1 ) // why 1 ?
 		DrawSubElements( hdc );
 }

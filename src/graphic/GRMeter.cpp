@@ -182,6 +182,8 @@ void GRMeter::GGSOutput() const
 void GRMeter::OnDraw(VGDevice & hdc) const
 {
 	if (error) return;
+	if(!mDraw)
+		return;
 
 	if (mtype == ARMeter::NUMERIC)
 	{

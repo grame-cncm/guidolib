@@ -41,6 +41,7 @@
 #include "ARAccol.h"
 #include "TagParameterFloat.h"
 #include "TagParameterString.h"
+#include "ARStaff.h"
 
 // Guido GR
 #include "GRSystem.h"
@@ -580,6 +581,7 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 
 			lastStaffPos = theStaff->getPosition();
 			gCurStaff = theStaff;
+
 			theStaff->OnDraw(hdc);
 			++ staffCount;
 		}
@@ -592,7 +594,7 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 		// then we have to draw the systemslices ....
 		GuidoPos pos = mSystemSlices.GetHeadPosition();
 		bool firstFlag = true;
-
+		
 		while (pos)
 		{
 			GRSystemSlice * slice = mSystemSlices.GetNext(pos);
@@ -607,6 +609,32 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 				{
 					lastStaffPos = theStaff->getPosition();
 					staffCount = tmpmaxind;
+				}
+			}
+			
+			std::map<int, bool> StavesOn;
+		
+			if(pos)
+			{
+				GRSystemSlice * nextSlice = mSystemSlices.GetAt(pos);
+				if(nextSlice)
+				{
+					for(int i = nextSlice->mStaffs->GetMinimum(); i <= nextSlice->mStaffs->GetMaximum(); i++)
+					{
+						GRStaff * st = nextSlice->mStaffs->Get(i);
+						StavesOn[i]=st->isStaffBeginOn();
+					}
+				}
+				for(int i = slice->mStaffs->GetMinimum(); i <= slice->mStaffs->GetMaximum(); i++)
+				{
+					slice->mStaffs->Get(i)->setNextOnOff(StavesOn[i]);
+				}
+			}
+			else
+			{
+				for(int i = slice->mStaffs->GetMinimum(); i <= slice->mStaffs->GetMaximum(); i++)
+				{
+					slice->mStaffs->Get(i)->setNextOnOff(slice->mStaffs->Get(i)->isStaffEndOn());
 				}
 			}
 			slice->OnDraw(hdc);
@@ -1045,6 +1073,51 @@ void GRSystem::notifyAccoladeTag( ARAccol * inAccoladeTag )
 	mAccolade->setAccoladeType( accolType );
 	mAccolade->setDx( dx );
 
+}
+
+// This function is called by the staff if it has been set on or off, in order to share the information to all next staves till
+// the next one forced on or off (OnOffFirstSetting)
+
+void GRSystem::ShareStaffOnOff(const GRStaff * OriginStaff)
+{
+	// we find the systemSlice of the staff
+	GRSystemSlice * slice = OriginStaff->getGRSystemSlice();
+	GRStaff * staff = 0;
+	int idStaff;
+	bool isOn;
+		
+	if(slice)
+	{
+		GuidoPos idSlice = mSystemSlices.GetElementPos(slice);
+		mSystemSlices.GetNext(idSlice);
+		// we look for the index of the staff in the systemSlice
+		int i = slice->mStaffs->GetMinimum();
+		while( i <= slice->mStaffs->GetMaximum() && staff != OriginStaff )
+		{
+			staff = slice->mStaffs->Get(i);
+			i++;
+		}
+		if(staff == OriginStaff)
+		{
+			idStaff = i-1;
+			isOn = staff->isStaffEndOn();
+			// we pass the information to all next staves with the same index in the next slices
+			while (idSlice)
+			{
+				GRSystemSlice * nextSlice = mSystemSlices.GetNext(idSlice);
+				if(nextSlice && nextSlice->mStaffs)
+				{
+					// if we find a staff that has been forced on/off, we stop.
+					GRStaff* staff = nextSlice->mStaffs->Get(idStaff);
+					if(staff) {
+						if (staff->getOnOffFirst())
+							break;
+						staff->setOnOff(isOn);
+					}
+				}
+			}
+		}
+	}
 }
 
 

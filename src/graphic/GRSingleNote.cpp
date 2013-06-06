@@ -200,6 +200,8 @@ void GRSingleNote::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos&
 //____________________________________________________________________________________
 void GRSingleNote::OnDraw( VGDevice & hdc) const
 {
+	if(!mDraw)
+		return;
     int numVoice = this->getAbstractRepresentation()->getVoiceNum();
     float X = mGrStaff->getXEndPosition(getARNote()->getRelativeTimePosition(), getARNote()->getDuration());
 
@@ -222,8 +224,8 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
 
     // draw ledger lines
     const float ledXPos = -60 * 0.85f * mSize;
-    //NVPoint noteheadOffset(getNoteHead()->getOffset()); //REM: fonctionne pour les \headsReverse et [{a2,b}] mais pas si
-                                                          //il y a décalage \noteFormat<dx=X> : [\noteFormat<dx=-2> c] for example
+    //NVPoint noteheadOffset(getNoteHead()->getOffset()); //REM: fonctionne pour les \headsReverse et [{a2,b}] mais pas s'il y a
+                                                          //décalage \noteFormat<dx=X> : [\noteFormat<dx=-2> c] for example
     for (int i = 0; i < sum; ++i, posy += incy)
         GRNote::DrawSymbol( hdc, kLedgerLineSymbol, ledXPos/* + noteheadOffset.x*/, ( posy - mPosition.y ));
 
@@ -249,7 +251,8 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
         if (mOrnament)
 		{
 			// to draw the trill line...
-            mOrnament->OnDraw(hdc,X,numVoice);
+			float Y = getPosition().y + getBoundingBox().Height()/2;
+			mOrnament->OnDraw(hdc,X,Y, numVoice);
 		}
 
         // - Restore
@@ -260,10 +263,14 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
     else if (mClusterHaveToBeDrawn)
     {
         if (mOrnament)
-            mOrnament->OnDraw(hdc,X,numVoice);
+        {
+            float Y = getPosition().y + getBoundingBox().Height()/2;
+			mOrnament->OnDraw(hdc, X, Y, numVoice);
+        }
 
         mCluster->OnDraw(hdc);
     }
+	
 }
 
 //____________________________________________________________________________________

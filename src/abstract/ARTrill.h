@@ -55,6 +55,8 @@ class ARTrill : public ARMTParameter, public ARPositionTag
 				float	getady() const;
 				bool	getStatus() const;
 				void	setContinue();
+				bool	getShowTR() {return fShowTR;}
+				bool	getAnchor() {return fDrawOnNoteHead;}
 
 	protected:
 
@@ -62,7 +64,9 @@ class ARTrill : public ARMTParameter, public ARPositionTag
 		TYPE 				mTrillType;
 		ARMusicalVoice::CHORD_TYPE			chordType;
 		ARMusicalVoice::CHORD_ACCIDENTAL	chordAccidental;
-		bool	fShowCautionaryAccidentals;
+		bool fShowCautionaryAccidentals;
+		bool fShowTR;
+		bool fDrawOnNoteHead;
 		float adx;
 		float ady;
 		bool			begin;

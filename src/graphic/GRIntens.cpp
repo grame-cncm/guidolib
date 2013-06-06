@@ -136,7 +136,8 @@ GRIntens::~GRIntens()
 //## Other Operations (implementation)
 void GRIntens::OnDraw(VGDevice & hdc) const
 {
-
+	if(!mDraw)
+		return;
 	GRTagARNotationElement::OnDraw( hdc );
 }
 

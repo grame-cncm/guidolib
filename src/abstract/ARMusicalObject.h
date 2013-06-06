@@ -99,11 +99,16 @@ class ARMusicalObject
 
 	static		bool	IsPowerOfTwoDenom(const TYPE_DURATION & dur);
 
+	virtual void	setDrawGR(bool onoff){drawGR = onoff;}
+	virtual bool	getDrawGR(){return drawGR;}
+
   protected:
 		TYPE_TIMEPOSITION	relativeTimePosition;
 		TYPE_DURATION		duration;
 		int					fVoiceNum;		// voice number added for mapping info [DF - 10-11-09]
 		
+		bool	drawGR;
+
 		void * mGrObject;  	// ptr to belonging graphical object or GRMultipleGRObject
 							// There can be multiple graphical objects linked to a single object
 							// (JB) currently, it's always a GRMultipleGRObject *

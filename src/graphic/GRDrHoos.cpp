@@ -63,7 +63,7 @@ void GRDrHoos::print() const
 void GRDrHoos::OnDraw( VGDevice & hdc) const
 {
 	// Here now will be something painted ...
-	if (face)
+	if (face && mDraw)
 	{
 		ARDrHoos * myar = static_cast<ARDrHoos *>(mAbstractRepresentation);
 

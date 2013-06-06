@@ -117,6 +117,8 @@ public:
 	bool 	IsDistanceSet() const 				{ return mDistanceSet; }
 	void	notifyAccoladeTag( ARAccol * inAccoladeTag );
 
+	void	ShareStaffOnOff(const GRStaff * OriginStaff);
+
 	void 	FinishSystem();
 	void 	FinishSystem( ISpringVector * pvect, IRodList * prods1, IRodList * prods2,
 #ifdef OLDSPFACTIVE
@@ -126,6 +128,7 @@ public:
 
 	TYPE_TIMEPOSITION mDebugSystemDate;
     static int sSystemID;
+
 
 protected:
 
@@ -137,7 +140,6 @@ protected:
 	void		InitForceFunction (GRStaffManager * staffmgr, SSliceList ** psystemslices, int count);
 	void		AdjustForceFunction (GRSliceHeight &sliceheight, int &startspring, int &endspring);
 	GRStaff *	ComputeBoundingBox(GRSliceHeight &sliceheight);
-
 								
 	float 	mSystemforce; 		// The force used to stretch the system
 	float 	mMarginLeft;		 // Margin to the Left (=indent)

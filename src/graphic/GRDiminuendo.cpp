@@ -40,6 +40,9 @@ GRDiminuendo::~GRDiminuendo()
 
 void GRDiminuendo::OnDraw( VGDevice & hdc) const 
 {
+	if(!mDraw)
+		return;
+
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );
 	assert(sse);
 

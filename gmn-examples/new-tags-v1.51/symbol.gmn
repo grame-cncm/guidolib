@@ -10,6 +10,7 @@
 %     Optional :
 %       - position : "mid" (default), "top", "bot"
 %       - size
+%       - w/h : manually sets the width/height of a symbol
 %       - dx/dy
 
 {

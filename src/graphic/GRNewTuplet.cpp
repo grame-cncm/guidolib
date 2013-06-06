@@ -407,6 +407,8 @@ void  GRNewTuplet::automaticPosition(GObject * caller, const NVPoint & inPos )
 // ----------------------------------------------------------------------------
 void GRNewTuplet::OnDraw(VGDevice & hdc) const
 { 
+	if(!mDraw)
+		return;
 	assert(gCurSystem);
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct(gCurSystem);
 	if (sse == 0)

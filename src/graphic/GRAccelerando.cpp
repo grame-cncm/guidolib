@@ -46,7 +46,8 @@ unsigned int GRAccelerando::getTextAlign() const
 
 void GRAccelerando::OnDraw( VGDevice & hdc ) const
 {
-	GRPTagARNotationElement::OnDrawText( hdc, "accel" );
+	if(mDraw)
+		GRPTagARNotationElement::OnDrawText( hdc, "accel" );
 }
 
 void GRAccelerando::tellPosition(GObject * caller, const NVPoint & np)

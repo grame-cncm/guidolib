@@ -310,7 +310,8 @@ GRNotationElement * GRVolta::getEndElt(GRNotationElement *after) {
 void GRVolta::OnDraw( VGDevice & hdc ) const
 {
 //  DrawBoundingBox(hdc, VGColor(0,255,0));
-
+	if(!mDraw)
+		return;
     static bool start=true;
 //    hdc.PushPen( VGColor( 0, 0, 0, ALPHA_OPAQUE ), 4);	//opaque black
     hdc.PushPenWidth(4);

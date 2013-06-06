@@ -33,6 +33,8 @@ GRSpecial::GRSpecial(ARSpecial * arspec, bool p_ownsar)
 
 void GRSpecial::OnDraw(VGDevice & hdc) const
 {
+	if(!mDraw)
+		return;
 	const ARSpecial * ar = static_cast/*dynamic cast*/<ARSpecial *>(mAbstractRepresentation);
 	
 	// try to get the correctly scaled musical font ...
