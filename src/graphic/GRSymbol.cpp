@@ -13,6 +13,7 @@
 */
 
 #include <iostream>
+#include <fstream>
 #include <string.h>
 
 #include "ARSymbol.h"
@@ -27,8 +28,11 @@
 
 #include "Bitmap.h"
 
+using namespace std;
+
 extern GRStaff * gCurStaff;
 
+//_______________________________________________________________________
 GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
   : GRPTagARNotationElement(abstractRepresentationOfSymbol)
 {
@@ -74,7 +78,7 @@ GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
             while (!st->bitmap->getDevice() && i < vectorSize);
         }
 
-        if (!st->bitmap->getDevice())
+        if (!st->bitmap || !st->bitmap->getDevice())
         {
             // - Check if it's a hard path
             st->bitmap = new Bitmap(filePathString.c_str());
@@ -103,7 +107,7 @@ GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
     st->boundingBox.bottom = 0;
 }
 
-
+//_______________________________________________________________________
 GRSymbol::~GRSymbol()
 {
 	assert(mStartEndList.empty());
@@ -120,13 +124,49 @@ GRSymbol::~GRSymbol()
 	mAssociated = 0;
 }
 
+//_______________________________________________________________________
+bool GRSymbol::absolutePath( const char* file ) const
+{
+	if (!file || !*file) return false;
+#ifdef WIN32
+	return ( file[1] == ':') && ( file[2] == '\\');
+#else
+	return ( file[0] == '/' );
+#endif
+}
+
+//_______________________________________________________________________
+// make an absolute path to file using path
+// note file is returned when already an absolute path
+string GRSymbol::makeAbsolutePath( const std::string& path, const char* file ) const
+{
+	if (absolutePath(file)) return file;
+
+	char ending = path[path.length()-1];
+#ifdef WIN32
+	const char* sep = (ending == '/') || (ending == '\\') ? "" : "/";
+#else
+	const char* sep = (ending == '/') ? "" : "/";
+#endif
+	return path + sep + file;
+}
+
+//_______________________________________________________________________
+string	GRSymbol::findFile( const char* file, const std::vector<std::string>& paths ) const
+{
+	return "";
+}
+
+
+//_______________________________________________________________________
 void GRSymbol::OnDraw( VGDevice & hdc ) const
 {
     GRSystemStartEndStruct * sse = getSystemStartEndStruct(gCurSystem);
     assert(sse);
     GRSymbolSaveStruct * st = (GRSymbolSaveStruct *) sse->p;
 
-    if (st->bitmap->getDevice())
+//    if (st->bitmap->getDevice())
+	if (st->bitmap && st->bitmap->getDevice())
     {
         const ARSymbol *arSymbol = getARSymbol();
         const float curLSPACE = gCurStaff ? gCurStaff->getStaffLSPACE(): LSPACE;
