@@ -571,11 +571,10 @@ The number of version functions is due to historical reasons.
 											unsigned char red, unsigned char green, unsigned char blue );
 
 
-    /**	\brief Makes the correspondance between an ARMusic and a path or another ARMusic.
+    /**	\brief Makes the correspondance between an ARMusic and a path.
 
-		\param inNewHandleAR the destination ARHandler.
+		\param inHandleAR the destination ARHandler.
 		\param inPath the path to associate.
-        \param inExHandleAR  the src ARHandle.
 		\return noErr if the association has been made with success
 		\return otherwise guidoErrActionFailed.
 	*/
@@ -584,9 +583,10 @@ The number of version functions is due to historical reasons.
 
     /**	\brief Returns the path corresponding to an AR.
 
-		\param inHandleAR a Guido opaque handle to an AR structure.
-		\return the path asked is success
-		\return otherwise NULL
+		\param inHandleAR the handle given to extract its path.
+		\return the returned path.
+        \return noErr if the association has been made with success
+		\return otherwise guidoErrActionFailed.
 	*/
     GUIDOAPI(GuidoErrCode) GuidoGetSymbolPath(const ARHandler inHandleAR, std::vector<std::string> &inPathVector);
 
