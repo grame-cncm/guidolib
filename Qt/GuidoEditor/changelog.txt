@@ -1,5 +1,8 @@
 GuidoEditor Change Log
 
+version 2.5
+- implentation of GSystemQt::CreateMemoryDevice(const char * inPath)
+
 version 2.4
 - extended mappings support
 
