@@ -20,7 +20,7 @@
 #include "VGDevice.h"
 #include "GRTagARNotationElement.h"
 #include "GRSingleNote.h"
-#include "GRGLobalStem.h"
+#include "GRGlobalStem.h"
 #include "ARNoteFormat.h"
 #include "TagParameterString.h"
 #include "TagParameterFloat.h"
