@@ -73,10 +73,11 @@ Guido2ImageErrorCodes checkParams( bool isFile , const char * gmnSource , const 
 {
 	if ( !gmnSource )
 	{
-		if ( isFile )
+		if ( isFile ) {
 			WRITE_ERROR(errorMsgBuffer , "gmnFileName is null" , bufferSize );
-		else
+		} else {
 			WRITE_ERROR(errorMsgBuffer , "gmnString is null" , bufferSize );
+		}
 		return GUIDO_2_IMAGE_SOURCE_IS_NULL;
 	}
 	
