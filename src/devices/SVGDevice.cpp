@@ -13,10 +13,12 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <iostream>
 
 #include "SVGDevice.h"
 #include "VGFont.h"
 #include "GUIDOEngine.h"
+#include "base64.h"
 
 using namespace std;
 
@@ -117,7 +119,7 @@ void SVGDevice::printFont(std::ostream& out, const char* file) const
 bool SVGDevice::BeginDraw()
 {
 	fStream << "<?xml version=\"1.0\"?>" << fEndl;
-	fStream << "<svg viewBox=\"0 0 " << fWidth << " " << fHeight << "\" xmlns=\"http://www.w3.org/2000/svg\"  version=\"1.1\">";
+	fStream << "<svg viewBox=\"0 0 " << fWidth << " " << fHeight << "\" xmlns=\"http://www.w3.org/2000/svg\"  version=\"1.1\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";
 	fEndl++;
 	fStream << fEndl << "<desc> SVG file generated using the GuidoEngine version " << GuidoGetVersionStr() << "</desc>";
 	if (fGuidoFontFile) printFont (fStream, fGuidoFontFile);
@@ -265,12 +267,79 @@ VGDevice::VRasterOpMode SVGDevice::GetRasterOpMode() const		{ return fOpMode; }
 
 //______________________________________________________________________________
 // - Bitmap services (bit-block copy methods)
-// =======  unsupported =======
 //______________________________________________________________________________
-bool SVGDevice::CopyPixels( VGDevice* pSrcDC, float alpha)		{ return false; } 
-bool SVGDevice::CopyPixels( int xDest, int yDest, VGDevice* pSrcDC, int xSrc, int ySrc, int nSrcWidth, int nSrcHeight, float alpha) { return false; }
-bool SVGDevice::CopyPixels( int xDest, int yDest, int dstWidth, int dstHeight, VGDevice* pSrcDC, float alpha) { return false; }
-bool SVGDevice::CopyPixels( int xDest, int yDest, int dstWidth, int dstHeight, VGDevice* pSrcDC, int xSrc, int ySrc, int nSrcWidth, int nSrcHeight, float alpha) { return false; }
+void SVGDevice::putbase64 (const unsigned char* data, unsigned int size, int w, int h) const
+{
+	if (data && size)
+		fStream << fEndl
+			<< "<image width=\"" << w << "\" height=\"" << h << "\" "
+			<< "xlink:href=\"data:image/png;base64," << base64_encode(data, size) << "\"/>";
+}
+
+unsigned char* SVGDevice::getpart(VGDevice* dev, int x, int y, int w, int h) const
+{
+	const unsigned char* ptr = (const unsigned char*)dev->GetBitMapPixels();
+	if (!ptr) return 0;
+
+	int wdev = dev->GetWidth();
+	ptr += (y * wdev) + x;
+	unsigned char* buff = new unsigned char[w*h];
+	int n=0;
+	for (int j = 0; j < h; j++) {
+		for (int i = 0; i <  w; i++, n++)
+			buff[n] = ptr[i];
+		ptr += wdev;
+	}
+	return buff;
+}
+
+bool SVGDevice::CopyPixels( VGDevice* pSrcDC, float alpha)
+{
+	fStream << fEndl << "<g opacity=\"" << alpha << "\">";
+	fEndl++ ;
+	putbase64( (const unsigned char*)pSrcDC->GetBitMapPixels(), pSrcDC->GetWidth() * pSrcDC->GetHeight(), pSrcDC->GetWidth(), pSrcDC->GetHeight());
+	fEndl--;
+	fStream << fEndl << "</g>";
+	return true;
+}
+
+bool SVGDevice::CopyPixels( int xDest, int yDest, VGDevice* pSrcDC, int xSrc, int ySrc, int nSrcWidth, int nSrcHeight, float alpha)
+{
+	fStream << fEndl << "<g transform=\"translate(" << xDest << ", " << yDest << ")\" opacity=\"" << alpha << "\">";
+	fEndl++ ;
+	unsigned char* data = getpart (pSrcDC, xSrc, ySrc, nSrcWidth, nSrcHeight);
+	if (data) {
+		putbase64( data, nSrcWidth * nSrcHeight, nSrcWidth, nSrcHeight);
+		delete[] data;
+	}
+	fEndl--;
+	fStream << fEndl << "</g>";
+	return true;
+}
+
+bool SVGDevice::CopyPixels( int xDest, int yDest, int dstWidth, int dstHeight, VGDevice* pSrcDC, float alpha)
+{
+	fStream << fEndl << "<g transform=\"translate(" << xDest << ", " << yDest << ")\" opacity=\"" << alpha << "\">";
+	fEndl++ ;
+	putbase64( (const unsigned char*)pSrcDC->GetBitMapPixels(), pSrcDC->GetWidth() * pSrcDC->GetHeight(), dstWidth, dstHeight);
+	fEndl--;
+	fStream << fEndl << "</g>";
+	return true;
+}
+
+bool SVGDevice::CopyPixels( int xDest, int yDest, int dstWidth, int dstHeight, VGDevice* pSrcDC, int xSrc, int ySrc, int nSrcWidth, int nSrcHeight, float alpha)
+{
+	fStream << fEndl << "<g transform=\"translate(" << xDest << ", " << yDest << ")\" opacity=\"" << alpha << "\">";
+	fEndl++ ;
+	unsigned char* data = getpart (pSrcDC, xSrc, ySrc, nSrcWidth, nSrcHeight);
+	if (data) {
+		putbase64( data, nSrcWidth * nSrcHeight, dstWidth, dstHeight);
+		delete[] data;
+	}
+	fEndl--;
+	fStream << fEndl << "</g>";
+	return true;
+}
 
 //______________________________________________________________________________
 // - Coordinate services
