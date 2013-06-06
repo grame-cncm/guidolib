@@ -127,19 +127,7 @@ class GDeviceQt: public VGDevice
 	
 		void * GetNativeContext() const;
 		
-		// device's state
-/*		struct GState 
-		{
-			VGColor			textColor;
-			float			originX;
-			float			originY;
-			unsigned int 	textAlign;
-			const GFontQt *	currTextFont;
-			const GFontQt *	currMusicFont;
-			QPoint			penPos;
-		};
-*/
-		struct PenState 
+		struct PenState
 		{
 			QColor			color;
 			float			width;
@@ -152,7 +140,6 @@ class GDeviceQt: public VGDevice
 		void				SetupCharEncodingTable();
 		float				CoordToDegree( float x, float y );
 
-//		QStack<GState>		mStateStack;
 		QStack<QColor>		mFillColorStack;
 		QStack<PenState>	mPenStack;
 		QStack<QColor>		mPenColorStack;
