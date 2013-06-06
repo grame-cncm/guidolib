@@ -81,7 +81,7 @@ GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, GRSingleNote *sngNote, AR
         gClusterColor = new unsigned char[4];
         tmps->getRGB(gClusterColor);
 
-        if (strcmp(tmps->getValue(), ""))
+        if (*tmps->getValue())
             mColRef = NULL;
     }
 
