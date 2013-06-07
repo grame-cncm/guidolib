@@ -45,7 +45,7 @@
 *	or else you'll have an assertion
 *	failed in the QGuidoGraphicsItem constructor.
 */
-class QGuidoGraphicsItem : public QObject, public QGraphicsItem
+class QGuidoGraphicsItem : public QGraphicsObject
 {
 
 	Q_OBJECT
