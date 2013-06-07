@@ -254,9 +254,7 @@ class GRStaff : public GRCompositeNotationElement
 		bool		isStaffEndOn();
 		void		setNextOnOff(bool onoff){isNextOn = onoff;}
 		bool		isNextStaffOn(){return isNextOn;}
-		void		setOnOffFirst(){firstOnOffSetting = true;}
-		bool		getOnOffFirst(){return firstOnOffSetting;}
-
+		
 		// this function was defined as private previously. Because GRNoteFactory needs to add elements 
 		// to the staff (Tuplets), it must be defined public.
 

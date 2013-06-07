@@ -18,7 +18,7 @@
 	g d c h
 	f e f g 
 	d c \staffOff h  f \staffOn
-	(e f g d )
+	e f g d 
 	c h  \staffOff f f
 	c h \staffOn f f
 ]

@@ -17,7 +17,7 @@
   [
     \meter<"4/4">
     a b
-    \symbol<filePath="test.png", position="top", dx=-4, dy=-12> (empty)
+    \symbol<filePath="test.png", position="top", dy=-12> (empty)
     c d
   ],
   [

@@ -11,6 +11,8 @@
 
 */
 
+#include <string.h>
+
 #include "ARGlissando.h"
 #include "TagParameterList.h"
 #include "TagParameterFloat.h"
