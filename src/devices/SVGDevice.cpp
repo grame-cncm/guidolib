@@ -268,36 +268,26 @@ VGDevice::VRasterOpMode SVGDevice::GetRasterOpMode() const		{ return fOpMode; }
 //______________________________________________________________________________
 // - Bitmap services (bit-block copy methods)
 //______________________________________________________________________________
-void SVGDevice::putbase64 (const unsigned char* data, unsigned int size, int w, int h) const
+void SVGDevice::putbase64 (VGDevice* dev) const
 {
-	if (data && size)
+	int length = 0;
+	const char * data;
+	const char* mimetype = dev->GetImageData (data, length);
+	if (mimetype && length) {
 		fStream << fEndl
-			<< "<image width=\"" << w << "\" height=\"" << h << "\" "
-			<< "xlink:href=\"data:image/png;base64," << base64_encode(data, size) << "\"/>";
-}
-
-unsigned char* SVGDevice::getpart(VGDevice* dev, int x, int y, int w, int h) const
-{
-	const unsigned char* ptr = (const unsigned char*)dev->GetBitMapPixels();
-	if (!ptr) return 0;
-
-	int wdev = dev->GetWidth();
-	ptr += (y * wdev) + x;
-	unsigned char* buff = new unsigned char[w*h];
-	int n=0;
-	for (int j = 0; j < h; j++) {
-		for (int i = 0; i <  w; i++, n++)
-			buff[n] = ptr[i];
-		ptr += wdev;
+			<< "<image width=\"" << dev->GetWidth() << "\" height=\"" << dev->GetHeight() << "\" "
+			<< "xlink:href=\"data:" << mimetype << ";base64," << base64_encode((const unsigned char*)data, length) << "\"/>";
+		ReleaseImageData (mimetype);
 	}
-	return buff;
 }
+
+inline float alpha2svgalpha(float a) { return (a==-1.f) ? 1.f : a; }
 
 bool SVGDevice::CopyPixels( VGDevice* pSrcDC, float alpha)
 {
-	fStream << fEndl << "<g opacity=\"" << alpha << "\">";
+	fStream << fEndl << "<g opacity=\"" << alpha2svgalpha(alpha) << "\">";
 	fEndl++ ;
-	putbase64( (const unsigned char*)pSrcDC->GetBitMapPixels(), pSrcDC->GetWidth() * pSrcDC->GetHeight(), pSrcDC->GetWidth(), pSrcDC->GetHeight());
+	putbase64( pSrcDC);
 	fEndl--;
 	fStream << fEndl << "</g>";
 	return true;
@@ -305,23 +295,20 @@ bool SVGDevice::CopyPixels( VGDevice* pSrcDC, float alpha)
 
 bool SVGDevice::CopyPixels( int xDest, int yDest, VGDevice* pSrcDC, int xSrc, int ySrc, int nSrcWidth, int nSrcHeight, float alpha)
 {
-	fStream << fEndl << "<g transform=\"translate(" << xDest << ", " << yDest << ")\" opacity=\"" << alpha << "\">";
-	fEndl++ ;
-	unsigned char* data = getpart (pSrcDC, xSrc, ySrc, nSrcWidth, nSrcHeight);
-	if (data) {
-		putbase64( data, nSrcWidth * nSrcHeight, nSrcWidth, nSrcHeight);
-		delete[] data;
-	}
-	fEndl--;
-	fStream << fEndl << "</g>";
+	cerr << "SVGDevice::CopyPixels: source subset unsupported" << endl;
 	return true;
 }
 
 bool SVGDevice::CopyPixels( int xDest, int yDest, int dstWidth, int dstHeight, VGDevice* pSrcDC, float alpha)
 {
-	fStream << fEndl << "<g transform=\"translate(" << xDest << ", " << yDest << ")\" opacity=\"" << alpha << "\">";
+	float scalex = float(dstWidth) / pSrcDC->GetWidth();
+	float scaley = float(dstHeight) / pSrcDC->GetHeight();
+	
+	fStream << fEndl << "<g transform=\"translate(" << xDest << ", " << yDest << ")"
+			<< " scale(" << scalex << ", " << scaley
+			<< ")\" opacity=\"" << alpha2svgalpha(alpha) << "\">";
 	fEndl++ ;
-	putbase64( (const unsigned char*)pSrcDC->GetBitMapPixels(), pSrcDC->GetWidth() * pSrcDC->GetHeight(), dstWidth, dstHeight);
+	putbase64( pSrcDC);
 	fEndl--;
 	fStream << fEndl << "</g>";
 	return true;
@@ -329,15 +316,7 @@ bool SVGDevice::CopyPixels( int xDest, int yDest, int dstWidth, int dstHeight, V
 
 bool SVGDevice::CopyPixels( int xDest, int yDest, int dstWidth, int dstHeight, VGDevice* pSrcDC, int xSrc, int ySrc, int nSrcWidth, int nSrcHeight, float alpha)
 {
-	fStream << fEndl << "<g transform=\"translate(" << xDest << ", " << yDest << ")\" opacity=\"" << alpha << "\">";
-	fEndl++ ;
-	unsigned char* data = getpart (pSrcDC, xSrc, ySrc, nSrcWidth, nSrcHeight);
-	if (data) {
-		putbase64( data, nSrcWidth * nSrcHeight, dstWidth, dstHeight);
-		delete[] data;
-	}
-	fEndl--;
-	fStream << fEndl << "</g>";
+	cerr << "SVGDevice::CopyPixels: source subset unsupported" << endl;
 	return true;
 }
 

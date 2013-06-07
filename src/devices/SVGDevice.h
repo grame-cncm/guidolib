@@ -90,8 +90,7 @@ class_export SVGDevice : public VGDevice
 	void		closegroup ();
 	const char* align2str (int align) const;
 	const char* baseline2str (int align) const;
-	void		putbase64 (const unsigned char* data, unsigned int size, int w, int h) const;
-	unsigned char* getpart(VGDevice* dev, int x, int y, int w, int h) const;
+	void		putbase64 (VGDevice* pSrcDC) const;
 	
 	public:
 		enum	{ kSVGSizeDivider = 8 };		// used to compute the svg view size GuidoSVGExport and GuidoGetSVGMap
@@ -183,6 +182,8 @@ class_export SVGDevice : public VGDevice
 
 		virtual void*			GetBitMapPixels()		{ return 0; }
 		virtual void			ReleaseBitMapPixels()	{}
+		virtual const char*		GetImageData(const char* & outDataPtr, int& outLength)	{ return 0; };
+		virtual void			ReleaseImageData(const char *) const					{}
 
 		/// temporary hack - must be removed asap
 		virtual	VGSystem *		getVGSystem() const		{ return (VGSystem *)fSystem; }
