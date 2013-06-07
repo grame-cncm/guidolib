@@ -2166,6 +2166,7 @@ void GRStaff::generatePositions()
 	float next = xStart;
 
 	it++;
+
 	while (it != isOn.end())
 	{
 		t = t2;
@@ -2178,6 +2179,8 @@ void GRStaff::generatePositions()
 			positions.insert(std::pair<float,float>(x, next));
 		}
 		draw = it->second;
+		if(next==0)
+			draw = false;
 		it++;
 	}
 
@@ -2191,6 +2194,8 @@ void GRStaff::generatePositions()
 	// the begining of the next measure has to be drawn by this staff...
 	if(isNextOn && xEnd != xEnd2)
 	{
+		if(positions.count(xEnd2)>0)
+			positions.erase(xEnd2);
 		positions.insert(std::pair<float,float>(xEnd2, xEnd));
 	}
 }

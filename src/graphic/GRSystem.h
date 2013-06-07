@@ -117,8 +117,6 @@ public:
 	bool 	IsDistanceSet() const 				{ return mDistanceSet; }
 	void	notifyAccoladeTag( ARAccol * inAccoladeTag );
 
-	void	ShareStaffOnOff(const GRStaff * OriginStaff);
-
 	void 	FinishSystem();
 	void 	FinishSystem( ISpringVector * pvect, IRodList * prods1, IRodList * prods2,
 #ifdef OLDSPFACTIVE

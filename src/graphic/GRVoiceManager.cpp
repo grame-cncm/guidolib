@@ -503,8 +503,6 @@ int GRVoiceManager::DoBreak(const TYPE_TIMEPOSITION & tp,
 		mCurGrStaff = mStaffMgr->getStaff(staffnum);
 
 		mCurGrStaff->setOnOff(isOn);
-		if(!mCurGrStaff->getOnOffFirst())
-			mCurGrStaff->setOnOffFirst();
 
 		// this adds the two start glues...
 		mCurGrStaff->BeginStaff(mStaffMgr);
@@ -524,9 +522,7 @@ int GRVoiceManager::DoBreak(const TYPE_TIMEPOSITION & tp,
 
 		mCurGrStaff = mStaffMgr->getStaff(staffnum);	// we are now working with slices...
 		
-		mCurGrStaff->setOnOff(isOn);
-		if(!mCurGrStaff->getOnOffFirst())
-			mCurGrStaff->setOnOffFirst();
+ 		mCurGrStaff->setOnOff(isOn);
 	}
 	return 1;
 }
@@ -1401,7 +1397,6 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 	{
 		// we set the current staff as off (first setting means that it should be given to all following staves)
 		mCurGrStaff->setOnOff(false, von);
-		mCurGrStaff->setOnOffFirst();
 		// we remember the current state of the current staff, associated with its staffnum
 		GRVoiceManager::getCurStaffDraw(staffnum) = false;
 	}
@@ -1409,7 +1404,6 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 	{
 		// we set the current staff as on (first setting means that it should be given to all following staves)
 		mCurGrStaff->setOnOff(true, von);
-		mCurGrStaff->setOnOffFirst();
 		// we remember the current state of the current staff, associated with its staffnum
 		GRVoiceManager::getCurStaffDraw(staffnum) = true;
 	}
