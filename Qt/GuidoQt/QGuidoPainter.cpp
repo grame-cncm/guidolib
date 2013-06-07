@@ -20,6 +20,7 @@
 #include "VGColor.h"
 
 #include <QVariant>
+#include <QDir>
 #include <QFile>
 #include <QTime>
 
@@ -143,18 +144,17 @@ QString getFileContent(const QString& fileName)
 //-------------------------------------------------------------------------
 bool QGuidoPainter::setGMNFile(const QString& fileName)
 {
-	bool result = setGMNData( fileName , GuidoParseFile );
 	mFileName = fileName;
-	mGMNCode = getFileContent(fileName);
-	return result;
+	QDir path(fileName);
+	path.cdUp();
+	return setGMNCode (getFileContent(fileName), path.absolutePath().toUtf8().data());
 }
 
 //-------------------------------------------------------------------------
-bool QGuidoPainter::setGMNCode( const QString& gmnCode )
+bool QGuidoPainter::setGMNCode( const QString& gmnCode, const char* datapath )
 {
-	bool result = setGMNData( gmnCode , GuidoParseString );
 	mGMNCode = gmnCode;
-	return result;
+	return setGMNData( gmnCode , datapath );
 }
 
 //-------------------------------------------------------------------------
@@ -177,17 +177,17 @@ void QGuidoPainter::setARHandler( ARHandler ar )
 }
 
 //-------------------------------------------------------------------------
-bool QGuidoPainter::setGMNData( const QString& dataSource , GuidoParseFunction parseFunction )
+bool QGuidoPainter::setGMNData( const QString& gmncode, const char* dataPath)
 {
 	// Read the gmnCode and build the score's Abstract Representation,
 	// containing all the notes, rests, staffs, lyrics ...
 	ARHandler arh;
 	GRHandler grh;
-    mLastErr = parseFunction( dataSource.toUtf8().data(), &arh);		
+    mLastErr = GuidoParseString( gmncode.toUtf8().data(), &arh);		
 	if ( mLastErr != guidoNoErr )
 		return false;
 
-    setPathsToARHandler(arh, parseFunction, dataSource.toUtf8().data());
+	setPathsToARHandler(arh, dataPath);
 
 	// Build a new score Graphic Representation according the score's Abstract Representation.
 	GuidoPageFormat currentFormat;
@@ -223,11 +223,6 @@ int QGuidoPainter::pageCount() const
 	else
 		return 1;
 }
-
-//#include <QPicture>
-//#include <QImage>
-//#include <QPixmap>
-//#include <QWidget>
 
 //-------------------------------------------------------------------------
 void QGuidoPainter::draw( QPainter * painter , int page , const QRect& drawRectangle , const QRect& redrawRectangle)
@@ -444,69 +439,24 @@ GuidoPageFormat QGuidoPainter::guidoPageFormat() const
 }
 
 //-------------------------------------------------------------------------
-void QGuidoPainter::setPathsToARHandler(ARHandler inARHandler, const GuidoParseFunction inParseFunction, const char* data)
+// associates a set of default paths to a handler
+// note that the user home directory is always added as default path
+void QGuidoPainter::setPathsToARHandler(ARHandler inARHandler, const char* path)
 {
     std::vector<std::string> pathsVector;
-
-    if (inParseFunction == GuidoParseFile)
-    {
-        // - Current Directory
-        std::string tmpBaseFilePath(data);
-        size_t lastSlashPosition = tmpBaseFilePath.find_last_of("/");
-
-        std::string baseFilePath("");
-        baseFilePath.append(tmpBaseFilePath, 0, lastSlashPosition);
-
-        // - Home directory
-        std::string homePath("");
-
+	if (path) pathsVector.push_back (path);
+	
+	std::string homePath;
 #ifdef WIN32
-        // For windows
-        homePath.append(getenv("HOMEDRIVE"));
-        homePath.append(getenv("HOMEPATH"));
+	// For windows
+	homePath.append(getenv("HOMEDRIVE"));
+	homePath.append(getenv("HOMEPATH"));
 #else
-        // For unix
-        homePath.append(getenv("HOME"));
+	// For unix
+	homePath.append(getenv("HOME"));
 #endif
-
-        homePath.append("\\");
-
-        pathsVector.push_back(baseFilePath);
-        pathsVector.push_back(homePath);
-
-        GuidoSetSymbolPath(inARHandler, pathsVector);
-    }
-    else
-    {
-        if (!mARHandler)
-        {
-            GuidoSetSymbolPath(inARHandler, mPathsVectorBackupForExport);
-        }
-        else
-        {
-            GuidoGetSymbolPath(mARHandler, pathsVector);
-
-            if (pathsVector.empty())
-            {
-                std::string homePath("");
-
-#ifdef WIN32
-                // For windows
-                homePath.append(getenv("HOMEDRIVE"));
-                homePath.append(getenv("HOMEPATH"));
-#else
-                // For unix
-                homePath.append(getenv("HOME"));
-#endif
-
-                homePath.append("\\");
-
-                pathsVector.push_back(homePath);
-            }
-
-            GuidoSetSymbolPath(inARHandler, pathsVector);
-        }
-    }
+	pathsVector.push_back (homePath);
+	GuidoSetSymbolPath(inARHandler, pathsVector);
 }
 
 //-------------------------------------------------------------------------
