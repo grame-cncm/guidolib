@@ -437,6 +437,17 @@ MainWindow::~MainWindow()
 //-------------------------------------------------------------------------
 
 //-------------------------------------------------------------------------
+const QString MainWindow::filePath() const
+{
+	if (mCurFile.size()) {
+		QDir dir(mCurFile);
+		dir.cdUp();
+		return dir.absolutePath();
+	}
+	return "";
+}
+
+//-------------------------------------------------------------------------
 void MainWindow::newFile()
 {
     if (maybeSave()) {
@@ -541,7 +552,7 @@ void MainWindow::updateCode()
 	if ( newGMNCode == mGuidoWidget->gmnCode() )
 		return;
 
-	if ( mGuidoWidget->setGMNCode( newGMNCode ) )
+	if ( mGuidoWidget->setGMNCode( newGMNCode, filePath() ) )
 	{
 		statusBar()->showMessage( "Code ok" );
 		setCurrentPage( mGuidoWidget->firstVisiblePage() );
@@ -575,10 +586,8 @@ void MainWindow::doexport()
     //   we have to make a backup of current ARHandler's pathsVector before...
     std::vector<std::string> pathsVector;
     GuidoGetSymbolPath((ARHandler)mGuidoWidget->getARHandler(), pathsVector);
-    //...and save it in the new QGuidoPainter
-    guidoPainter->setPathsVectorBackupForExport(pathsVector);
 
-	if ( guidoPainter->setGMNCode(mTextEdit->toPlainText()) )
+	if ( guidoPainter->setGMNCode(mTextEdit->toPlainText(), filePath().toUtf8().data()) )
     {
 		QString savePath = mRecentFiles.size() ? QFileInfo(mRecentFiles.last()).path() : QDir::home().path();
 		QString fileName = QFileDialog::getSaveFileName(this, "Export to:", savePath);
@@ -746,7 +755,7 @@ void MainWindow::print()
 	QPainter painter;
 
 	guidoPainter->setGuidoLayoutSettings(mGuidoEngineParams);
-	if ( guidoPainter->setGMNCode(mTextEdit->toPlainText()) )
+	if ( guidoPainter->setGMNCode(mTextEdit->toPlainText(), filePath().toUtf8().data()) )
 	{
 		printer.setPaperSize( QPrinter::A4 );
 		QPrintDialog * dialog = new QPrintDialog( &printer , this);
@@ -1596,12 +1605,14 @@ bool MainWindow::loadFile(const QString &fileName)
 
 	reinitGuidoWidget();
 
+	setCurrentFile(fileName.toUtf8().data());
+
 	bool loadOk = mGuidoWidget->setGMNFile( fileName );
 	if (!loadOk && QGuidoImporter::musicxmlSupported()) {	// try to import file as MusicXML file
 		stringstream out;
 		if ( QGuidoImporter::musicxmlFile2Guido(fileName.toUtf8().constData(), true, out) )
 		{
-			loadOk = mGuidoWidget->setGMNCode( out.str().c_str() );
+			loadOk = mGuidoWidget->setGMNCode( out.str().c_str(),  filePath());
 		}
 	}
 	mLastModified = QFileInfo(fileName).lastModified();
@@ -1628,7 +1639,8 @@ bool MainWindow::loadFile(const QString &fileName)
 	}
 
 	QApplication::restoreOverrideCursor();
-	setCurrentFile(fileName.toUtf8().data());
+// call moved to the beginning of the function to benefit of the filePath() method
+//	setCurrentFile(fileName.toUtf8().data());
 	
 	recentFileListUpdate(fileName);
 	
