@@ -184,11 +184,6 @@ void GRSystemSlice::OnDraw( VGDevice & hdc ) const
 		if (theStaff)
 		{
 			gCurStaff = theStaff;
-		
-			// We have to pass the on/off information to all the next staves till the next one that has been set "first" 
-			// (by a \staffOff- \staffOn- tag or automatically in the case of a new system)
-			if(theStaff->getOnOffFirst())
-				getGRSystem()->ShareStaffOnOff(theStaff);
 			theStaff->generatePositions();
 			theStaff->OnDraw(hdc);
 		}
