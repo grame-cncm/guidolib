@@ -23,9 +23,8 @@
 #include <QPaintDevice>
 #include <QWidget>
 #include <QPrinter>
-//#include <QPicture>
-//#include <QPixmap>
 #include <QImage>
+#include <QBuffer>
 
 #include <QVariant>
 #include <QtDebug>
@@ -885,6 +884,28 @@ void GDeviceQt::ReleaseBitMapPixels()
 {  
 //	assert(0);//Not implemented.
 //	cerr << "Warning: GDeviceQt::ReleaseBitMapPixels not implemented" << endl;
+}
+
+//--------------------------------------------------------------------
+const char* GDeviceQt::GetImageData(const char* & outDataPtr, int& outLength)
+{
+	QImage * image = dynamic_cast<QImage *>( mQPainter->device() );
+	if ( image ) {
+		QByteArray * ba = new QByteArray;
+		QBuffer buffer(ba);
+        buffer.open(QIODevice::WriteOnly);
+        image->save(&buffer, "PNG"); // writes image into ba in PNG format
+		outDataPtr = ba->data();
+		outLength = ba->size();
+		return "image/png";
+	}
+	return 0;
+}
+
+//--------------------------------------------------------------------
+void GDeviceQt::ReleaseImageData(const char * ptr) const
+{
+	delete ptr;
 }
 
 //--------------------------------------------------------------------

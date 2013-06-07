@@ -116,6 +116,8 @@ class GDeviceQt: public VGDevice
 		
 		void*			GetBitMapPixels();
 		void			ReleaseBitMapPixels();
+		const char*		GetImageData(const char* & outDataPtr, int& outLength);
+		void			ReleaseImageData(const char *) const;
 		
 		VGSystem * getVGSystem() const;
 		
