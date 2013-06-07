@@ -133,6 +133,10 @@ class_export GDeviceOSX : public VGDevice
 									{ return NULL; }
 		virtual void			ReleaseBitMapPixels()  
 									{};
+		virtual const char*		GetImageData(const char* &, int& )
+									{ return NULL; }
+		virtual void			ReleaseImageData(const char *) const
+									{};
 		virtual	VGSystem *		getVGSystem() const 
 									{ return mSys; }
 
