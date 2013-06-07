@@ -2136,7 +2136,6 @@ void GRStaff::generatePositions()
 	
 	const float xStart = staffPos.x;
 	const float xEnd = xStart + mLength;
-	float yPos = staffPos.y;
 
 	// The staves at the begining of a new a system are somehow specials, we have to tell them explicitely 
 	// not to draw if the next one is invisible.
