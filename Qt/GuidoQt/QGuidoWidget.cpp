@@ -156,9 +156,9 @@ bool QGuidoWidget::setGMNFile(const QString& fileName)
 }
 
 //-------------------------------------------------------------------------
-bool QGuidoWidget::setGMNCode(const QString& gmnCode)
+bool QGuidoWidget::setGMNCode(const QString& gmnCode, const QString& path)
 {
-	if ( mGuidoPainter->setGMNCode( gmnCode ) )
+	if ( mGuidoPainter->setGMNCode( gmnCode, path.size() ? path.toUtf8().data() : 0) )
 	{
 		updateGuidoPagesSizes();
 		clearCache();
