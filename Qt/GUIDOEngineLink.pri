@@ -1,5 +1,5 @@
 # Universal binary on MAC
-macx:QMAKE_MAC_SDK=macosx10.7
+#macx:QMAKE_MAC_SDK=macosx10.7
 macx:CONFIG+= x86_64
 
 # GUIDOEngine library link for each platform
