@@ -26,7 +26,7 @@ win32 {
 }
 
 # GuidoQt library link for each platform
-win32:LIBS += ../GuidoQt/GuidoQt.lib
+win32:LIBS += ../GuidoQt.lib
 macx:LIBS += -framework CoreFoundation
 unix:LIBS += -L.. -lGuidoQt
 INCLUDEPATH += ../GuidoQt/include
