@@ -146,6 +146,9 @@ class_export  GDeviceWin32GDIPlus : public VGDevice
 				void			ReleaseBitMapPixels();
 				Bitmap*			GetBitmap()	const;
 
+		virtual const char*		GetImageData(const char* & outDataPtr, int& outLength)	{ return 0; }
+		virtual void			ReleaseImageData(const char *) const					{}
+
 		// - Data export services ----------------------------------------
 /*		virtual	void			ExportToFile( const char * inFilePath ) // to be removed
 									{}
