@@ -299,7 +299,7 @@ void QGuidoPainter::draw( QPainter * painter , int page , const QRect& drawRecta
 #if absoluteTransform1 || absoluteTransform2
 	// DF Apr. 28 2011
 	// rescaling introduced to take account of the QTDevice::SetScale change
- 	// the QTDevice::SetScale change corresponds to the common VGDevice demantic and implementation
+ 	// the QTDevice::SetScale change corresponds to the common VGDevice semantic and implementation
 	// actually commented out due to unresolved problems with rotations
 	qreal xs, ys;
 	QPainter * p = (QPainter*)dev->GetNativeContext();
