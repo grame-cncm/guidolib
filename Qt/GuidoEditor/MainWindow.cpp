@@ -584,8 +584,8 @@ void MainWindow::doexport()
 
     // - Since QGuidoPainter is created again (then lose its parameters),
     //   we have to make a backup of current ARHandler's pathsVector before...
-    std::vector<std::string> pathsVector;
-    GuidoGetSymbolPath((ARHandler)mGuidoWidget->getARHandler(), pathsVector);
+//    std::vector<std::string> pathsVector;
+//    GuidoGetSymbolPath((ARHandler)mGuidoWidget->getARHandler(), pathsVector);
 
 	if ( guidoPainter->setGMNCode(mTextEdit->toPlainText(), filePath().toUtf8().data()) )
     {
@@ -663,11 +663,11 @@ void MainWindow::exportToSVG(QGuidoPainter * guidoPainter, const QString& filena
 //-------------------------------------------------------------------------
 void MainWindow::exportToPdf(QGuidoPainter * guidoPainter, const QString& filename)
 {
-	QPrinter printer;
-	printer.setPaperSize( QPrinter::A4 );
+	QPrinter printer(QPrinter::HighResolution);
 //	printer.setFullPage(true);
-	printer.setOutputFileName( QString(filename) );
 	printer.setOutputFormat( QPrinter::PdfFormat );
+	printer.setOutputFileName( QString(filename) );
+	printer.setPaperSize( QPrinter::A4 );
 	print (guidoPainter, printer);
 }
 
@@ -728,8 +728,7 @@ void MainWindow::preferences()
 //------------------------------------------------------------------------- 
 void MainWindow::print(QGuidoPainter * guidoPainter, QPrinter& printer) 
 {
-	QPainter painter;
-	painter.begin(&printer);
+	QPainter painter (&printer);
 	painter.setRenderHint( QPainter::Antialiasing );
 
 	int firstPage = 1;
@@ -744,7 +743,6 @@ void MainWindow::print(QGuidoPainter * guidoPainter, QPrinter& printer)
 		if (page != lastPage)
 			printer.newPage();
 	}
-	painter.end();
 }
 
 //------------------------------------------------------------------------- 
