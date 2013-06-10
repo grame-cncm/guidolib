@@ -21,7 +21,7 @@
 */
 
 // typedef CList<ARMusicalVoice*,ARMusicalVoice*> MusicalVoiceList;
-class ARMusicalVoice;
+#include "ARMusicalVoice.h"
 template <class T> class KF_IPointerList;
 typedef KF_IPointerList<ARMusicalVoice> MusicalVoiceList;
 

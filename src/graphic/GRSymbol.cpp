@@ -65,8 +65,8 @@ GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
             int symbolFixedHeight = abstractRepresentationOfSymbol->getFixedHeight();
 
             float sizex, sizey;
-            symbolFixedWidth  ? sizex = symbolFixedWidth  : sizex = (float)st->bitmap->GetWidth();
-            symbolFixedHeight ? sizey = symbolFixedHeight : sizey = (float)st->bitmap->GetHeight();
+            symbolFixedWidth  ? sizex = float(symbolFixedWidth)  : sizex = (float)st->bitmap->GetWidth();
+            symbolFixedHeight ? sizey = float(symbolFixedHeight) : sizey = (float)st->bitmap->GetHeight();
 
             float symbolSize = abstractRepresentationOfSymbol->getSize();
 
@@ -163,8 +163,8 @@ void GRSymbol::OnDraw( VGDevice & hdc ) const
         int symbolFixedHeight = arSymbol->getFixedHeight();
 
         float sizex, sizey;
-        symbolFixedWidth  ? sizex = symbolFixedWidth  : sizex = (float)st->bitmap->GetWidth();
-        symbolFixedHeight ? sizey = symbolFixedHeight : sizey = (float)st->bitmap->GetHeight();
+        symbolFixedWidth  ? sizex = float(symbolFixedWidth)  : sizex = (float)st->bitmap->GetWidth();
+        symbolFixedHeight ? sizey = float(symbolFixedHeight) : sizey = (float)st->bitmap->GetHeight();
         // --------------------------------
 
         float currentSize = arSymbol->getSize();

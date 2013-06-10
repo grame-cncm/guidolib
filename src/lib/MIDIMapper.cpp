@@ -132,7 +132,7 @@ void MidiMapper::Event(const ARMusicalObject * ev, EventType type)
 //------------------------------------------------------------------------------
 int MidiMapper::AdjustDuration(int dur, const Guido2MidiParams* p) const
 {
-	if (!fFlags) return dur * p->fDFactor;
+	if (!fFlags)				return int(dur * p->fDFactor);
 
 	if (fFlags & hasStaccato)	dur *= p->fStaccatoFactor;
 	if (fFlags & hasSlur)		dur *= p->fSlurFactor;
