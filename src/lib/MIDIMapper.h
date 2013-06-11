@@ -37,6 +37,7 @@ class MidiMapper : public TimeUnwrap
 		int				fFlags;				// a bit field carrying accents, stacc, tenuto, etc...
 		int				fCurrVelocity;		// the current velocity, updated by \intens tags
 		std::map<char, MidiEvPtr>	fTiedNotes;		// tied notes mapped by Midi pitch
+		TYPE_DURATION	fEmptyDur;			// empty duration storage: used for chords
 		
 		enum { knoflag, hasStaccato=1, hasSlur=hasStaccato*2, hasTenuto=hasSlur*2, hasFermata = hasTenuto*2,
 			hasAccent=hasFermata*2,  hasMarcato=hasAccent*2, hasTie=hasMarcato*2 };
