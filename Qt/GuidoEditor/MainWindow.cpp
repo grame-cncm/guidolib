@@ -688,8 +688,8 @@ void MainWindow::exportToImage(QGuidoPainter * guidoPainter, const QString& file
 	painter.setRenderHints ( QPainter::Antialiasing | QPainter::TextAntialiasing, true);
 
 	//With the QPainter, fill background with white.
-	painter.setBrush(QBrush(QColor(255,255,255)));
-	painter.setPen(QPen(QColor(255,255,255)));
+	painter.setBrush(QBrush(QColor(255,255,255,0)));
+	painter.setPen(QPen(QColor(255,255,255,0)));
 	painter.drawRect(0,0,size.width(), size.height());
 
 	//With the QPainter and the QGuidoPainter, draw the score.
