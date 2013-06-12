@@ -186,7 +186,10 @@ void MidiMapper::Note(const ARMusicalObject * ev)
 			// empty duration is stored for future use
 			fEmptyDur = ev->getDuration();
 			// when null,
-			if (fEmptyDur) return;
+			if (fEmptyDur) {
+				TimeUnwrap::Note(ev);
+				return;
+			}
 		}
 	}
 	if (fFlags & hasFermata) offset *= fParams->fFermataFactor;
