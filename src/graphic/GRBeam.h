@@ -16,6 +16,7 @@
 */
 
 #include "ARBeam.h"
+#include "ARFeatheredBeam.h"
 #include "GRPTagARNotationElement.h"
 #include "GRSystemTagInterface.h"
 
@@ -100,6 +101,9 @@ private:
 	NVPoint initp2 (GRSystemStartEndStruct * sse, const GREvent * endEl, PosInfos& infos);
 	void	initp3 (GRSystemStartEndStruct * sse, PosInfos& infos);
 	void	slopeAdjust (GRSystemStartEndStruct * sse, const GREvent * startEl, const GREvent * endEl,float slope, PosInfos& infos);
+	bool   isFeathered;
+	bool   drawDur;
+	TYPE_DURATION getTotalDuration() const;
 };
 
 #endif

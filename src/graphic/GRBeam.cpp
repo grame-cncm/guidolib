@@ -44,6 +44,14 @@ GRBeamSaveStruct::~GRBeamSaveStruct()
 GRBeam::GRBeam(GRStaff * grstaf,ARBeam * arbeam) : GRPTagARNotationElement(arbeam)
 {
 	mHasRestInMiddle = false;
+	isFeathered = arbeam->isFeatheredBeam();
+	if(isFeathered)
+	{
+		ARFeatheredBeam * ar = dynamic_cast<ARFeatheredBeam *>(arbeam);
+		drawDur = ar->drawDuration();
+	}
+	else
+		drawDur = false;
 
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct();
 	
@@ -116,6 +124,37 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 			GRSimpleBeam * smplbeam = st->simpleBeams->GetNext(smplpos);
 			smplbeam->OnDraw(hdc);
 		}
+	}
+
+	if(drawDur)
+	{
+		TYPE_DURATION dur = getTotalDuration();
+
+		GREvent * ev = dynamic_cast<GREvent *>(mAssociated->GetHead());
+		const NVPoint p1 = ev->getStemEndPos();
+		ev = dynamic_cast<GREvent *>(mAssociated->GetTail());
+		const NVPoint p2 = ev->getStemEndPos();
+		int dir = ev->getStemDirection();
+		float Y1;
+		float Y2;
+		if(dir>0)
+		{
+			Y1 = min(p1.y, p2.y) - LSPACE;
+			Y2 = Y1 - LSPACE/2;
+		}
+		else
+		{
+			Y1 = max(p1.y, p2.y) + LSPACE;
+			Y2 = Y1 + LSPACE/2;
+		}
+		float x = p1.x + (p2.x - p1.x)/2;
+		float X1 = x - LSPACE;
+		float X2 = x + LSPACE;
+		hdc.SelectPenWidth(4);
+		hdc.Line(p1.x, Y2, X1, Y2);
+		hdc.Line(X2, Y2, p2.x, Y2);
+		hdc.Line(p1.x, Y1, p1.x, Y2);
+		hdc.Line(p2.x, Y1, p2.x, Y2);
 	}
 
 	if (mColRef) {
@@ -830,11 +869,79 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	// - These constants defines the space and the thickness of additionnal beams.
 	const float yFact1 = 0.75f * infos.currentLSPACE;	// was 0.7f
 	const float yFact2 = 0.4f * infos.currentLSPACE;
+	
+	if(isFeathered)
+	{
+		ARFeatheredBeam * ar = dynamic_cast<ARFeatheredBeam *>(getARBeam());
+		int begin = 0;
+		int end = 0;
+		GREvent * stemNote = GREvent::cast(mAssociated->GetHead());
+		GDirection localDir = stemNote->getStemDirection();
+		float yLocalFact1 = yFact1 * localDir;
+		float yLocalFact2 = yFact2 * localDir;
+
+		if(ar->isDurationsSet())
+		{
+			end = ar->getLastBeaming();
+			begin = ar->getFirstBeaming();
+		}
+		else
+		{
+			begin = stemNote->getNumFaehnchen();
+			stemNote = GREvent::cast(mAssociated->GetTail());
+			end = stemNote->getNumFaehnchen();
+		}
+		
+		if(begin && end)
+		{
+			for(int i=1;i<=begin; i++)
+			{
+				myp[0] = st->p[0];
+				myp[0].y += (i-1) * yLocalFact1;
+				myp[1].x = myp[0].x;
+				myp[1].y = myp[0].y + yLocalFact2;
+				
+				myp[2] = st->p[2];
+				if(end>=i)
+					myp[2].y += (i-1) * yLocalFact1;
+				else
+					myp[2].y += (end-1) * yLocalFact1;
+				myp[3].x = myp[2].x;
+				myp[3].y = myp[2].y + yLocalFact2;
+
+				GRSimpleBeam * tmpbeam = new GRSimpleBeam(this,myp);
+				if( st->simpleBeams == 0 )
+					st->simpleBeams = new SimpleBeamList(1);
+
+				st->simpleBeams->AddTail(tmpbeam);
+			}
+			for(int i=begin; i<end; i++)
+			{
+				myp[0] = st->p[0];
+				myp[0].y += (begin-1) * yLocalFact1;
+				myp[1].x = myp[0].x;
+				myp[1].y = myp[0].y + yLocalFact2;
+
+				myp[2] = st->p[2];
+				myp[2].y += i * yLocalFact1;
+				myp[3].x = myp[2].x;
+				myp[3].y = myp[2].y + yLocalFact2;
+
+				GRSimpleBeam * tmpbeam = new GRSimpleBeam(this,myp);
+				if( st->simpleBeams == 0 )
+					st->simpleBeams = new SimpleBeamList(1);
+
+				st->simpleBeams->AddTail(tmpbeam);
+			}
+		}
+	}
+
 	// for beam length adjustment - DF sept 15 2009
 	const float xadjust = infos.currentLSPACE/10;
 	GDirection lastLocalDir = dirOFF;
 	int previousBeamsCount = 0;
-	while (pos)
+
+	while (pos && !isFeathered)
 	{
 		GuidoPos oldpos = pos;
 		GREvent * stemNote = GREvent::cast(mAssociated->GetNext(pos));
@@ -869,7 +976,6 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 					myp[1].x = myp[0].x;
 					myp[1].y = myp[0].y + yLocalFact2;
 				}
-
 				// now we look for the endposition
 				GREvent * sn2 = NULL;
 				GuidoPos tmppos = pos;
@@ -968,7 +1074,6 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 						myp[3].x = myp[2].x;
 						myp[3].y = myp[1].y;
 					}
-
 					/* 26/11/03 
 					 Beaming bug: wrong direction for partial beam (beam-bug.gmn)
 					 can be tested but changing this test. 				 
@@ -1065,7 +1170,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 		if (oldpos == sse->endpos)
 			break;
 	}
-	
+
 	// now we have to make sure, that the original positions
 	// for the beam are set for the right staff
 	if (tagtype == SYSTEMTAG)
@@ -1205,4 +1310,16 @@ void GRBeam::checkPosition( const GRSystem * grsys)
 	mIsSystemCall = true;
 	tellPosition( sse->endElement, sse->endElement->getPosition());
 	mIsSystemCall = false;
+}
+
+TYPE_DURATION GRBeam::getTotalDuration() const
+{
+	TYPE_DURATION dur = 0;
+	GuidoPos pos = mAssociated->GetHeadPosition();
+	while(pos)
+	{
+		GREvent * ev = dynamic_cast<GREvent *>(mAssociated->GetNext(pos));
+		dur += ev->getDuration();
+	}
+	return dur;
 }

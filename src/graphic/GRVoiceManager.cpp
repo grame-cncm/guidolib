@@ -97,6 +97,7 @@
 #include "ARBreathMark.h"
 #include "ARCluster.h"
 #include "ARSymbol.h"
+#include "ARFeatheredBeam.h"
 
 #include "ARCoda.h"
 #include "ARDaCapo.h"
@@ -494,7 +495,7 @@ int GRVoiceManager::DoBreak(const TYPE_TIMEPOSITION & tp,
 		ReadBeginTags(curvst->curtp);
 
 		// in order to pass the on/off information of the staff from a system to another...
-		bool isOn;
+		bool isOn = true;
 		if(mCurGrStaff)
 			isOn = mCurGrStaff->isStaffEndOn();
 		mCurGrStaff->setNextOnOff(isOn);
@@ -516,7 +517,7 @@ int GRVoiceManager::DoBreak(const TYPE_TIMEPOSITION & tp,
 	else if (system_or_page == 3)
 	{	
 		// in order to pass the on/off information of the staff from a system to another...
-		bool isOn;
+		bool isOn = true;
 		if(mCurGrStaff)
 			isOn = mCurGrStaff->isStaffEndOn();
 
@@ -1576,6 +1577,13 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 		// Beams that start at the end of the line are parsed for the next line...
 		// if (atEnd) return retval;
 		GRBeam * grbeam = new GRBeam(mCurGrStaff, static_cast<ARBeam *>(apt));
+		addGRTag(grbeam,0);
+		mCurGrStaff->AddTag(grbeam);
+		gCurMusic->addVoiceElement(arVoice,grbeam);
+	}
+	else if (tinf == typeid(ARFeatheredBeam))
+	{
+		GRBeam * grbeam = new GRBeam(mCurGrStaff, static_cast<ARFeatheredBeam *>(apt));
 		addGRTag(grbeam,0);
 		mCurGrStaff->AddTag(grbeam);
 		gCurMusic->addVoiceElement(arVoice,grbeam);

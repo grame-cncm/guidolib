@@ -17,6 +17,7 @@
 
 #include "ARBeam.h"
 #include "TagParameterFloat.h"
+#include "TagParameterString.h"
 #include "TagParameterList.h"
 #include "ListOfStrings.h"
 
@@ -27,6 +28,7 @@ ARBeam::ARBeam()
 	rangesetting = ONLY;
 	dx1 = dx2 = dx3 = dx4 = NULL;
 	dy1 = dy2 = dy3 = dy4 = NULL;
+	feathered = false;
 }
 
 ARBeam::~ARBeam()
@@ -116,7 +118,6 @@ void ARBeam::setTagParameterList(TagParameterList & tpl)
 	
 			dy4 = TagParameterFloat::cast(rtpl->RemoveHead());
 			assert(dy4);
-
 		}
 		delete rtpl;
 	}

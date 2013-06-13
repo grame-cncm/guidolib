@@ -109,6 +109,7 @@
 #include "ARCluster.h"
 #include "ARGlissando.h"
 #include "ARSymbol.h"
+#include "ARFeatheredBeam.h"
 
 #include "TagParameterString.h"
 #include "TagParameterInt.h"
@@ -900,6 +901,27 @@ void ARFactory::createTag( const char * name, int no )
 				ARFermata * tmp = new ARFermata;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
+			}
+			else if(!strcmp(name,"fBeam"))
+			{
+				ARFeatheredBeam * tmp = new ARFeatheredBeam();
+				mTags.AddHead(tmp); // push();
+				mCurrentVoice->AddPositionTag(tmp);
+			}
+			else if(!strcmp(name,"fBeamBegin"))
+			{
+				ARFeatheredBeam * tmp = new ARFeatheredBeam();
+				tmp->setID(no);
+				tmp->setAllowRange(0);
+				mTags.AddHead(tmp);
+				mCurrentVoice->AddPositionTag(tmp);
+			}
+			else if(!strcmp(name,"fBeamEnd"))
+			{
+				ARDummyRangeEnd * tmp = new ARDummyRangeEnd("\\fBeamEnd");
+				tmp->setID(no);
+				mCurrentVoice->setPositionTagEndPos(no, tmp);
+				mTags.AddHead(tmp);
 			}
 			break;
 
