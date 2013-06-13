@@ -30,9 +30,11 @@
 #include "GRSimpleBeam.h"
 #include "VGDevice.h"
 #include "secureio.h"
+#include "FontManager.h"
 
 // #include "NEPointerList.h"	// for template instanciation
 #include <iostream>
+#include <sstream>
 using namespace std;
 
 GRBeamSaveStruct::~GRBeamSaveStruct()
@@ -129,11 +131,23 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 	if(drawDur)
 	{
 		TYPE_DURATION dur = getTotalDuration();
+		int num = dur.getNumerator();
+		int den = dur.getDenominator();
+		stringstream out;
+		out << num << '/' << den;
+		string s;
+		s = out.str();
+		int n = s.length();
+		const char * fraction = s.c_str();
 
 		GREvent * ev = dynamic_cast<GREvent *>(mAssociated->GetHead());
 		const NVPoint p1 = ev->getStemEndPos();
+		float xBegin = ev->getPosition().x - ev->getBoundingBox().Width()/2;
+		
 		ev = dynamic_cast<GREvent *>(mAssociated->GetTail());
 		const NVPoint p2 = ev->getStemEndPos();
+		float xEnd = ev->getPosition().x + ev->getBoundingBox().Width()/2;
+		
 		int dir = ev->getStemDirection();
 		float Y1;
 		float Y2;
@@ -147,14 +161,30 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 			Y1 = max(p1.y, p2.y) + LSPACE;
 			Y2 = Y1 + LSPACE/2;
 		}
-		float x = p1.x + (p2.x - p1.x)/2;
-		float X1 = x - LSPACE;
-		float X2 = x + LSPACE;
+		if(xBegin>xEnd)
+		{
+			if(sse->endflag == GRSystemStartEndStruct::OPENRIGHT)
+				xEnd = sse->endElement->getPosition().x;
+			if(sse->startflag == GRSystemStartEndStruct::OPENLEFT)
+				xBegin = sse->startElement->getPosition().x;
+		}
+		float x = xBegin + (xEnd - xBegin)/2;
+		float X1 = x - (n-1)/2*LSPACE;
+		float X2 = x + (n-1)/2*LSPACE;
 		hdc.SelectPenWidth(4);
-		hdc.Line(p1.x, Y2, X1, Y2);
-		hdc.Line(X2, Y2, p2.x, Y2);
-		hdc.Line(p1.x, Y1, p1.x, Y2);
-		hdc.Line(p2.x, Y1, p2.x, Y2);
+		hdc.Line(xBegin, Y2, X1, Y2);
+		hdc.Line(X2, Y2, xEnd, Y2);
+		if(sse->startflag != GRSystemStartEndStruct::OPENLEFT)
+			hdc.Line(xBegin, Y1, xBegin, Y2);
+		if(sse->endflag != GRSystemStartEndStruct::OPENRIGHT)
+			hdc.Line(xEnd, Y1, xEnd, Y2);
+		
+		
+		const VGFont* hmyfont;
+		hmyfont = FontManager::gFontText;
+		hdc.SetTextFont( hmyfont );
+
+		hdc.DrawString(X1, Y2+LSPACE/2, fraction, n);
 	}
 
 	if (mColRef) {
@@ -1314,12 +1344,8 @@ void GRBeam::checkPosition( const GRSystem * grsys)
 
 TYPE_DURATION GRBeam::getTotalDuration() const
 {
-	TYPE_DURATION dur = 0;
-	GuidoPos pos = mAssociated->GetHeadPosition();
-	while(pos)
-	{
-		GREvent * ev = dynamic_cast<GREvent *>(mAssociated->GetNext(pos));
-		dur += ev->getDuration();
-	}
+	TYPE_TIMEPOSITION begin = mAssociated->GetHead()->getRelativeTimePosition();
+	TYPE_TIMEPOSITION end = mAssociated->GetTail()->getRelativeEndTimePosition();
+	TYPE_DURATION dur = end - begin;
 	return dur;
 }
