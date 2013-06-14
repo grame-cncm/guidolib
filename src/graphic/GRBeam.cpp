@@ -142,7 +142,7 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 
 		GREvent * ev = dynamic_cast<GREvent *>(mAssociated->GetHead());
 		const NVPoint p1 = ev->getStemEndPos();
-		float xBegin = ev->getPosition().x - ev->getBoundingBox().Width()/2;
+		float xBegin = ev->getPosition().x;
 		
 		ev = dynamic_cast<GREvent *>(mAssociated->GetTail());
 		const NVPoint p2 = ev->getStemEndPos();
@@ -909,7 +909,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 		GDirection localDir = stemNote->getStemDirection();
 		float yLocalFact1 = yFact1 * localDir;
 		float yLocalFact2 = yFact2 * localDir;
-
+		
 		if(ar->isDurationsSet())
 		{
 			end = ar->getLastBeaming();
@@ -921,48 +921,44 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 			stemNote = GREvent::cast(mAssociated->GetTail());
 			end = stemNote->getNumFaehnchen();
 		}
-		
-		if(begin && end)
+		for(int i=1;i<=begin; i++)
 		{
-			for(int i=1;i<=begin; i++)
-			{
-				myp[0] = st->p[0];
-				myp[0].y += (i-1) * yLocalFact1;
-				myp[1].x = myp[0].x;
-				myp[1].y = myp[0].y + yLocalFact2;
+			myp[0] = st->p[0];
+			myp[0].y += (i-1) * yLocalFact1;
+			myp[1].x = myp[0].x;
+			myp[1].y = myp[0].y + yLocalFact2;
 				
-				myp[2] = st->p[2];
-				if(end>=i)
-					myp[2].y += (i-1) * yLocalFact1;
-				else
-					myp[2].y += (end-1) * yLocalFact1;
-				myp[3].x = myp[2].x;
-				myp[3].y = myp[2].y + yLocalFact2;
+			myp[2] = st->p[2];
+			if(end>i ||(end==i && i!=1))
+				myp[2].y += (i-1) * yLocalFact1;
+			else
+				myp[2].y += (end-1) * yLocalFact1;
+			myp[3].x = myp[2].x;
+			myp[3].y = myp[2].y + yLocalFact2;
 
-				GRSimpleBeam * tmpbeam = new GRSimpleBeam(this,myp);
-				if( st->simpleBeams == 0 )
-					st->simpleBeams = new SimpleBeamList(1);
+			GRSimpleBeam * tmpbeam = new GRSimpleBeam(this,myp);
+			if( st->simpleBeams == 0 )
+				st->simpleBeams = new SimpleBeamList(1);
 
-				st->simpleBeams->AddTail(tmpbeam);
-			}
-			for(int i=begin; i<end; i++)
-			{
-				myp[0] = st->p[0];
-				myp[0].y += (begin-1) * yLocalFact1;
-				myp[1].x = myp[0].x;
-				myp[1].y = myp[0].y + yLocalFact2;
+			st->simpleBeams->AddTail(tmpbeam);
+		}
+		for(int i=begin; i<end; i++)
+		{
+			myp[0] = st->p[0];
+			myp[0].y += (begin-1) * yLocalFact1;
+			myp[1].x = myp[0].x;
+			myp[1].y = myp[0].y + yLocalFact2;
 
-				myp[2] = st->p[2];
-				myp[2].y += i * yLocalFact1;
-				myp[3].x = myp[2].x;
-				myp[3].y = myp[2].y + yLocalFact2;
+			myp[2] = st->p[2];
+			myp[2].y += i * yLocalFact1;
+			myp[3].x = myp[2].x;
+			myp[3].y = myp[2].y + yLocalFact2;
 
-				GRSimpleBeam * tmpbeam = new GRSimpleBeam(this,myp);
-				if( st->simpleBeams == 0 )
-					st->simpleBeams = new SimpleBeamList(1);
+			GRSimpleBeam * tmpbeam = new GRSimpleBeam(this,myp);
+			if( st->simpleBeams == 0 )
+				st->simpleBeams = new SimpleBeamList(1);
 
-				st->simpleBeams->AddTail(tmpbeam);
-			}
+			st->simpleBeams->AddTail(tmpbeam);
 		}
 	}
 
