@@ -42,6 +42,7 @@ GREvent::GREvent(GRStaff * inStaff,
 	mArticulationFlags = 0;
 	mGrStaff = inStaff;
 	mColRef = 0;
+	stemChanged = false;
 	if (mGrStaff)
 	{
 		mSize = mGrStaff->getSizeRatio();
@@ -70,6 +71,7 @@ GREvent::GREvent( GRStaff * inStaff,
 	mBeamCount = 0;
 	mArticulationFlags = 0;
 	mGrStaff = inStaff;
+	stemChanged = false;
 
 	if (mGrStaff)
 	{

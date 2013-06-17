@@ -126,16 +126,3 @@ void ARFeatheredBeam::findPoints(std::string points)
 		begin = commaPos+1;
 	}
 }
-
-bool ARFeatheredBeam::isDurationsSet()
-{
-	return durationsSet;
-}
-int ARFeatheredBeam::getFirstBeaming()
-{
-	return beams.first;
-}
-int ARFeatheredBeam::getLastBeaming()
-{
-	return beams.second;
-}

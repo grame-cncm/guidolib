@@ -688,10 +688,11 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	}
 	
 	bool needsadjust = true;
-	// we have to adjust the slope ONLY, if the stemlength
+	// we have to adjust the slope ONLY if the stemlength
 	// of the first and last element has not been set automatically!
+	// and if we are note in the case of a chained feather beam
 	if ( (startEl && startEl->getStemLengthSet() && endEl && endEl->getStemLengthSet())
-		|| tagtype == SYSTEMTAG || (arBeam && isSpecBeam))
+		|| tagtype == SYSTEMTAG || (arBeam && isSpecBeam) || (isFeathered && startEl && startEl->stemHasBeenChanged()))
 	{
 		needsadjust = false;
 	}
@@ -838,7 +839,10 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 				}
 //				sn->changeStemLength( ly );
 				// adjusted - DF sept 15 2009
-				sn->changeStemLength( ly - infos.currentLSPACE/20 );				
+				sn->changeStemLength( ly - infos.currentLSPACE/20 );
+				// so that the possible next featherd beam knows that he is chained
+				// (and musn't change its slope)
+				sn->setStemChanged();
 			}
 			if (oldpos == sse->endpos)
 				break;
@@ -864,6 +868,10 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	const float yFact1 = 0.75f * infos.currentLSPACE;	// was 0.7f
 	const float yFact2 = 0.4f * infos.currentLSPACE;
 	
+	// if we have a feathered beam, we just have to draw the main beam (already done) 
+	// and the other simple beams will only depend on the begining and ending 
+	// points, regardless of the durations of the inner notes.
+	
 	if(isFeathered)
 	{
 		ARFeatheredBeam * ar = dynamic_cast<ARFeatheredBeam *>(getARBeam());
@@ -879,6 +887,8 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 			end = ar->getLastBeaming();
 			begin = ar->getFirstBeaming();
 		}
+		// if the user hasn't set the durations as parameters, 
+		// we will take the first and last notes'durations
 		else
 		{
 			begin = stemNote->getNumFaehnchen();
@@ -893,7 +903,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 			myp[1].y = myp[0].y + yLocalFact2;
 				
 			myp[2] = st->p[2];
-			if(end>i ||(end==i && i!=1))
+			if(end>i ||(end==i && i!=1)) // no need to draw the main beam again.
 				myp[2].y += (i-1) * yLocalFact1;
 			else
 				myp[2].y += (end-1) * yLocalFact1;
@@ -906,6 +916,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 
 			st->simpleBeams->AddTail(tmpbeam);
 		}
+		// if end > begin
 		for(int i=begin; i<end; i++)
 		{
 			myp[0] = st->p[0];
@@ -925,6 +936,8 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 			st->simpleBeams->AddTail(tmpbeam);
 		}
 
+
+		// in order to draw the total duration of the beam
 		if(drawDur)
 		{
 			TYPE_DURATION dur = getTotalDuration();

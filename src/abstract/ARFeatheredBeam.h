@@ -38,10 +38,10 @@ class ARFeatheredBeam :  public ARBeam
 	virtual void PrintName(std::ostream & os) const;
 	virtual void setTagParameterList(TagParameterList & tpl);
 
-	bool isDurationsSet();
+	bool isDurationsSet(){return durationsSet;}
 	bool drawDuration(){return drawDur;}
-	int getFirstBeaming();
-	int getLastBeaming();
+	int getFirstBeaming(){return beams.first;}
+	int getLastBeaming(){return beams.second;}
 
 	protected:
 
