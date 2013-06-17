@@ -55,6 +55,9 @@ GRBeam::GRBeam(GRStaff * grstaf,ARBeam * arbeam) : GRPTagARNotationElement(arbea
 	else
 		drawDur = false;
 
+	getLastPositionOfBarDuration().first = 0;
+	getLastPositionOfBarDuration().second = 0;
+
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct();
 	
 	GRBeamSaveStruct * st = new GRBeamSaveStruct();
@@ -130,61 +133,22 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 
 	if(drawDur)
 	{
-		TYPE_DURATION dur = getTotalDuration();
-		int num = dur.getNumerator();
-		int den = dur.getDenominator();
-		stringstream out;
-		out << num << '/' << den;
-		string s;
-		s = out.str();
-		int n = s.length();
-		const char * fraction = s.c_str();
+		const char * fraction = st->duration.c_str();
+		int n = st->duration.length();
 
-		GREvent * ev = dynamic_cast<GREvent *>(mAssociated->GetHead());
-		const NVPoint p1 = ev->getStemEndPos();
-		float xBegin = ev->getPosition().x;
-		
-		ev = dynamic_cast<GREvent *>(mAssociated->GetTail());
-		const NVPoint p2 = ev->getStemEndPos();
-		float xEnd = ev->getPosition().x + ev->getBoundingBox().Width()/2;
-		
-		int dir = ev->getStemDirection();
-		float Y1;
-		float Y2;
-		if(dir>0)
-		{
-			Y1 = min(p1.y, p2.y) - LSPACE;
-			Y2 = Y1 - LSPACE/2;
-		}
-		else
-		{
-			Y1 = max(p1.y, p2.y) + LSPACE;
-			Y2 = Y1 + LSPACE/2;
-		}
-		if(xBegin>xEnd)
-		{
-			if(sse->endflag == GRSystemStartEndStruct::OPENRIGHT)
-				xEnd = sse->endElement->getPosition().x;
-			if(sse->startflag == GRSystemStartEndStruct::OPENLEFT)
-				xBegin = sse->startElement->getPosition().x;
-		}
-		float x = xBegin + (xEnd - xBegin)/2;
-		float X1 = x - (n-1)/2*LSPACE;
-		float X2 = x + (n-1)/2*LSPACE;
 		hdc.SelectPenWidth(4);
-		hdc.Line(xBegin, Y2, X1, Y2);
-		hdc.Line(X2, Y2, xEnd, Y2);
+		hdc.Line(st->DurationLine[1].x, st->DurationLine[1].y, st->DurationLine[2].x, st->DurationLine[2].y);
+		hdc.Line(st->DurationLine[3].x, st->DurationLine[3].y, st->DurationLine[4].x, st->DurationLine[4].y);
 		if(sse->startflag != GRSystemStartEndStruct::OPENLEFT)
-			hdc.Line(xBegin, Y1, xBegin, Y2);
+			hdc.Line(st->DurationLine[0].x, st->DurationLine[0].y, st->DurationLine[1].x, st->DurationLine[1].y);
 		if(sse->endflag != GRSystemStartEndStruct::OPENRIGHT)
-			hdc.Line(xEnd, Y1, xEnd, Y2);
-		
+			hdc.Line(st->DurationLine[4].x, st->DurationLine[4].y, st->DurationLine[5].x, st->DurationLine[5].y);
 		
 		const VGFont* hmyfont;
 		hmyfont = FontManager::gFontText;
 		hdc.SetTextFont( hmyfont );
 
-		hdc.DrawString(X1, Y2+LSPACE/2, fraction, n);
+		hdc.DrawString(st->DurationLine[2].x, st->DurationLine[2].y+LSPACE/2, fraction, n);
 	}
 
 	if (mColRef) {
@@ -896,7 +860,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	bool first = true;
 	pos = sse->startpos;
 
-	// - These constants defines the space and the thickness of additionnal beams.
+	// - These constants define the space and the thickness of additionnal beams.
 	const float yFact1 = 0.75f * infos.currentLSPACE;	// was 0.7f
 	const float yFact2 = 0.4f * infos.currentLSPACE;
 	
@@ -959,6 +923,65 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 				st->simpleBeams = new SimpleBeamList(1);
 
 			st->simpleBeams->AddTail(tmpbeam);
+		}
+
+		if(drawDur)
+		{
+			TYPE_DURATION dur = getTotalDuration();
+			int num = dur.getNumerator();
+			int den = dur.getDenominator();
+			stringstream out;
+			out << num << '/' << den;
+			st->duration = out.str();
+			int n = st->duration.length();
+
+		
+			GREvent * ev = dynamic_cast<GREvent *>(mAssociated->GetHead());
+			const NVPoint p1 = ev->getStemEndPos();
+			float xBegin = ev->getPosition().x;
+		
+			ev = dynamic_cast<GREvent *>(mAssociated->GetTail());
+			const NVPoint p2 = ev->getStemEndPos();
+			float xEnd = ev->getPosition().x + ev->getBoundingBox().Width()/2;
+		
+			int dir = ev->getStemDirection();
+			float Y1;
+			float Y2;
+			if(dir>0)
+			{
+				Y1 = min(p1.y, p2.y) - LSPACE;
+				if(Y1>=getLastPositionOfBarDuration().first && Y1<getLastPositionOfBarDuration().second+LSPACE/2)
+					Y1 -= LSPACE;
+				Y2 = Y1 - LSPACE/2;
+				getLastPositionOfBarDuration().first = Y2;
+				getLastPositionOfBarDuration().second = Y1;
+			}
+			else
+			{
+				Y1 = max(p1.y, p2.y) + LSPACE;
+				if(Y1>=getLastPositionOfBarDuration().first-LSPACE/2 && Y1<getLastPositionOfBarDuration().second)
+					Y1 += LSPACE;
+				Y2 = Y1 + LSPACE/2;
+				getLastPositionOfBarDuration().first = Y1;
+				getLastPositionOfBarDuration().second = Y2;
+			}
+			if(xBegin>xEnd)
+			{
+				if(sse->endflag == GRSystemStartEndStruct::OPENRIGHT)
+					xEnd = sse->endElement->getPosition().x;
+				if(sse->startflag == GRSystemStartEndStruct::OPENLEFT)
+					xBegin = sse->startElement->getPosition().x;
+			}
+			float x = xBegin + (xEnd - xBegin)/2;
+			float X1 = x - (n-1)/2*LSPACE;
+			float X2 = x + (n-1)/2*LSPACE;
+
+			st->DurationLine[0] = NVPoint(xBegin, Y1);
+			st->DurationLine[1] = NVPoint(xBegin, Y2);
+			st->DurationLine[2] = NVPoint(X1, Y2);
+			st->DurationLine[3] = NVPoint(X2, Y2);
+			st->DurationLine[4] = NVPoint(xEnd, Y2);
+			st->DurationLine[5] = NVPoint(xEnd, Y1);
 		}
 	}
 
@@ -1344,4 +1367,10 @@ TYPE_DURATION GRBeam::getTotalDuration() const
 	TYPE_TIMEPOSITION end = mAssociated->GetTail()->getRelativeEndTimePosition();
 	TYPE_DURATION dur = end - begin;
 	return dur;
+}
+
+std::pair<float,float> & GRBeam::getLastPositionOfBarDuration()
+{
+	static std::pair<float, float> lastPositionOfBarDuration;
+	return lastPositionOfBarDuration;
 }

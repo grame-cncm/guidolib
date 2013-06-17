@@ -40,6 +40,8 @@ class GRBeamSaveStruct : public GRPositionTag::GRSaveStruct
 		int dirset;
 		int direction;
 		NVPoint p[4];
+		NVPoint DurationLine[6];
+		std::string duration;
 		SimpleBeamList * simpleBeams;
 };
 
@@ -104,6 +106,8 @@ private:
 	bool   isFeathered;
 	bool   drawDur;
 	TYPE_DURATION getTotalDuration() const;
+
+	static std::pair<float, float> & getLastPositionOfBarDuration();
 };
 
 #endif
