@@ -139,9 +139,9 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 		hdc.SelectPenWidth(4);
 		hdc.Line(st->DurationLine[1].x, st->DurationLine[1].y, st->DurationLine[2].x, st->DurationLine[2].y);
 		hdc.Line(st->DurationLine[3].x, st->DurationLine[3].y, st->DurationLine[4].x, st->DurationLine[4].y);
-		if(sse->startflag != GRSystemStartEndStruct::OPENLEFT)
+		//if(sse->startflag != GRSystemStartEndStruct::OPENLEFT)
 			hdc.Line(st->DurationLine[0].x, st->DurationLine[0].y, st->DurationLine[1].x, st->DurationLine[1].y);
-		if(sse->endflag != GRSystemStartEndStruct::OPENRIGHT)
+		//if(sse->endflag != GRSystemStartEndStruct::OPENRIGHT)
 			hdc.Line(st->DurationLine[4].x, st->DurationLine[4].y, st->DurationLine[5].x, st->DurationLine[5].y);
 		
 		const VGFont* hmyfont;
@@ -840,6 +840,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 //				sn->changeStemLength( ly );
 				// adjusted - DF sept 15 2009
 				sn->changeStemLength( ly - infos.currentLSPACE/20 );
+
 				// so that the possible next featherd beam knows that he is chained
 				// (and musn't change its slope)
 				sn->setStemChanged();
@@ -847,6 +848,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 			if (oldpos == sse->endpos)
 				break;
 		}
+		//endEl->setStemChanged();
 	}	
 	
 	// -- Now we need to add the simplebeams as simplebeamgroups ...
@@ -877,10 +879,13 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 		ARFeatheredBeam * ar = dynamic_cast<ARFeatheredBeam *>(getARBeam());
 		int begin = 0;
 		int end = 0;
-		GREvent * stemNote = GREvent::cast(mAssociated->GetHead());
-		GDirection localDir = stemNote->getStemDirection();
-		float yLocalFact1 = yFact1 * localDir;
-		float yLocalFact2 = yFact2 * localDir;
+		GREvent * stemNoteBegin = GREvent::cast(mAssociated->GetHead());
+		GREvent * stemNoteEnd = GREvent::cast(mAssociated->GetTail());
+
+		GDirection localDir = stemNoteBegin->getStemDirection();
+		float yLocalFact1 = yFact1 * localDir * infos.currentSize;
+		float yLocalFact2 = yFact2 * localDir * infos.currentSize;
+		
 		
 		if(ar->isDurationsSet())
 		{
@@ -891,9 +896,15 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 		// we will take the first and last notes'durations
 		else
 		{
-			begin = stemNote->getNumFaehnchen();
-			stemNote = GREvent::cast(mAssociated->GetTail());
-			end = stemNote->getNumFaehnchen();
+			if(sse->startflag == GRSystemStartEndStruct::OPENLEFT)
+			{
+				GuidoPos start = sse->startpos;
+				do{
+					stemNoteBegin = GREvent::cast(mAssociated->GetNext(start));
+				}while(start && !stemNoteBegin);
+			}
+			begin = stemNoteBegin->getNumFaehnchen();
+			end = stemNoteEnd->getNumFaehnchen();
 		}
 		for(int i=1;i<=begin; i++)
 		{
@@ -915,7 +926,15 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 				st->simpleBeams = new SimpleBeamList(1);
 
 			st->simpleBeams->AddTail(tmpbeam);
-		}
+
+/*			GuidoPos pos = mAssociated->GetHeadPosition();
+			while(pos != sse->endpos)
+			{
+				GREvent * stemNote = dynamic_cast<GREvent *>(mAssociated->GetNext(pos));
+				if (stemNote)
+					stemNote->incBeamCount();
+			}
+*/		}
 		// if end > begin
 		for(int i=begin; i<end; i++)
 		{
@@ -940,15 +959,18 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 		// in order to draw the total duration of the beam
 		if(drawDur)
 		{
-			TYPE_DURATION dur = getTotalDuration();
+			TYPE_TIMEPOSITION begin = mAssociated->GetHead()->getRelativeTimePosition();
+			TYPE_TIMEPOSITION end = mAssociated->GetTail()->getRelativeEndTimePosition();
+			if(sse->startflag == GRSystemStartEndStruct::OPENLEFT)
+				begin = sse->startElement->getRelativeTimePosition();
+			TYPE_DURATION dur = end - begin;
 			int num = dur.getNumerator();
 			int den = dur.getDenominator();
 			stringstream out;
 			out << num << '/' << den;
 			st->duration = out.str();
 			int n = st->duration.length();
-
-		
+					
 			GREvent * ev = dynamic_cast<GREvent *>(mAssociated->GetHead());
 			const NVPoint p1 = ev->getStemEndPos();
 			float xBegin = ev->getPosition().x;
@@ -1372,14 +1394,6 @@ void GRBeam::checkPosition( const GRSystem * grsys)
 	mIsSystemCall = true;
 	tellPosition( sse->endElement, sse->endElement->getPosition());
 	mIsSystemCall = false;
-}
-
-TYPE_DURATION GRBeam::getTotalDuration() const
-{
-	TYPE_TIMEPOSITION begin = mAssociated->GetHead()->getRelativeTimePosition();
-	TYPE_TIMEPOSITION end = mAssociated->GetTail()->getRelativeEndTimePosition();
-	TYPE_DURATION dur = end - begin;
-	return dur;
 }
 
 std::pair<float,float> & GRBeam::getLastPositionOfBarDuration()
