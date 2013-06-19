@@ -17,13 +17,13 @@
   [
     \meter<"4/4">
     a b
-    \symbol<filePath="test.png", position="top", dy=-12> (empty)
+    \symbol<filePath="symbols/silence.png", dx=-4, dy=-10> 
     c d
   ],
   [
     \meter<"4/4">
-    a b
-    \symbol<filePath="imgTest/curve1.png", position="top", dy=-1, h=14, w=58>
+    a b 
+    \symbol<filePath="symbols/curve1.png", position="top", dy=-1, h=13, w=54>
     (c d )
   ]
 }
