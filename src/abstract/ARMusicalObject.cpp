@@ -24,12 +24,12 @@
 // Class ARMusicalObject 
 
 ARMusicalObject::ARMusicalObject()
-		: relativeTimePosition(MIN_TIMEPOSITION), duration(DURATION_0), fVoiceNum(0), mGrObject(NULL), drawGR(true)
+		: relativeTimePosition(MIN_TIMEPOSITION), duration(DURATION_0), fVoiceNum(0), drawGR(true), mGrObject(NULL)
 {
 }
 
 ARMusicalObject::ARMusicalObject(const TYPE_TIMEPOSITION & relativeTimeposition)
-		: relativeTimePosition(relativeTimeposition), duration(DURATION_0), fVoiceNum(0), mGrObject(NULL), drawGR(true)
+		: relativeTimePosition(relativeTimeposition), duration(DURATION_0), fVoiceNum(0), drawGR(true), mGrObject(NULL)
 {
 	assert(relativeTimePosition >= MIN_TIMEPOSITION);
 }
