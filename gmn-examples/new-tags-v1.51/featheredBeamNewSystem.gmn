@@ -3,9 +3,7 @@
 % \fBeam tag is used to create feathered beams that indicate acceleration or deceleration within a group of beamed notes (shorter than a quarter note) 
 % (see featheredBeaming.gmn)
 %
-% When a feathered beam belongs to two different systems, it can either be drawn : 
-% 		- with intermediate values given by the first system's last note and the next system's first note
-%		- or twice the same, if the durations have been set in the parameters
+% When a feathered beam belongs to two different systems, it will be drawn twice the same
 
 [
 	empty*2

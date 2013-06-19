@@ -14,6 +14,7 @@
 
 #include <cstring>
 #include <iostream>
+#include <sstream>
 
 #include "ARFeatheredBeam.h"
 #include "TagParameterInt.h"
@@ -91,38 +92,61 @@ void ARFeatheredBeam::PrintName(std::ostream & os) const
 		os << "Begin";
 }
 
-void ARFeatheredBeam::findPoints(std::string points)
+void ARFeatheredBeam::findPoints(std::string durations)
 {
 	std::size_t begin = 0;
-	for(int i=0; i<2; i++)
+	std::size_t commaPos = durations.find(",", begin);
+	if(commaPos != -1)
 	{
-		std::string point;
-		std::size_t commaPos = points.find(",", begin);
-		if(commaPos != -1)
-		{
 			durationsSet = true;
-			point = points.substr(begin, (commaPos - begin));
-			if(point.find("1/8") != -1) 
+			std::string dur = durations.substr(begin, commaPos);
+			float valor;
+			std::stringstream stream(dur);
+			stream >> valor;
+			std::size_t slashPos = dur.find("/",begin);
+			std::cout<<valor<<std::endl;
+			if(slashPos != -1)
+			{
+				std::string denominator = dur.substr(slashPos+1,(commaPos-slashPos));
+				std::stringstream stream(denominator);
+				float den;
+				stream >> den;
+				std::cout<<den<<std::endl;
+				valor /= den;
+			}
+			std::cout<<valor<<std::endl;
+			if(valor >= 0.09375) 
 				beams.first=1;
-			else if(point.find("1/16") != -1)
+			else if(valor >= 0.046875)
 				beams.first=2;
-			else if(point.find("1/32") != -1)
+			else if(valor >= 0.0234375)
 				beams.first=3;
-			else if(point.find("1/64") != -1)
+			else
 				beams.first=4;
-		}
-		else
-		{
-			point = points.substr(begin);
-			if(point.find("1/8") != -1) 
+			
+			dur = durations.substr(commaPos+1);
+			std::stringstream stream2(dur);
+			float valor2;
+			stream2 >> valor2;
+			slashPos = dur.find("/",begin);
+			std::cout<<valor2<<std::endl;
+			if(slashPos != -1)
+			{
+				std::string denominator = dur.substr(slashPos+1);
+				std::stringstream stream2(denominator);
+				float den;
+				stream2 >> den;
+				std::cout<<den<<std::endl;
+				valor2 /= den;
+			}
+			std::cout<<valor2<<std::endl;
+			if(valor2>=0.09375) 
 				beams.second=1;
-			else if(point.find("1/16") != -1)
+			else if(valor2>=0.046875)
 				beams.second=2;
-			else if(point.find("1/32") != -1)
+			else if(valor2>=0.0234375)
 				beams.second=3;
-			else if(point.find("1/64") != -1)
+			else
 				beams.second=4;
-		}
-		begin = commaPos+1;
 	}
 }

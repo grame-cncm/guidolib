@@ -896,13 +896,6 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 		// we will take the first and last notes'durations
 		else
 		{
-			if(sse->startflag == GRSystemStartEndStruct::OPENLEFT)
-			{
-				GuidoPos start = sse->startpos;
-				do{
-					stemNoteBegin = GREvent::cast(mAssociated->GetNext(start));
-				}while(start && !stemNoteBegin);
-			}
 			begin = stemNoteBegin->getNumFaehnchen();
 			end = stemNoteEnd->getNumFaehnchen();
 		}
@@ -1032,8 +1025,8 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 		if (stemNote)
 		{
 			GDirection localDir = stemNote->getStemDirection();
-			float yLocalFact1 = yFact1 * localDir;
-			float yLocalFact2 = yFact2 * localDir;
+			float yLocalFact1 = yFact1 * localDir * infos.currentSize;
+			float yLocalFact2 = yFact2 * localDir * infos.currentSize;
 
 			// now we check the number of beams ...
 			if (stemNote->getBeamCount() < stemNote->getNumFaehnchen())
@@ -1359,6 +1352,8 @@ void GRBeam::ResumeTag(GRStaff *grstaff,GuidoPos assocpos)
 void GRBeam::BreakTag( GRStaff * grstaff, GuidoPos & assocpos)
 {
 	if (!grstaff) return;
+
+	lastEndEl = dynamic_cast<GREvent *>(mAssociated->GetTail());
 
 	// do the "basic" stuff.
 	GRPositionTag::BreakTag(grstaff,assocpos);
