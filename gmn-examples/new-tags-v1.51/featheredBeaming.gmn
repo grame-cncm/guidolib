@@ -7,7 +7,7 @@
 %
 % Parameters : 
 %       - durations : indicates the begin- and end- durations
-%       - drawDuration : possibility to draw the total duration above or under the beaming (the last note is not taken into account)
+%       - drawDuration : possibility to draw the total duration above or under the beaming (from the beginig of the first note to the end of the last one)
 %
 % 
 
