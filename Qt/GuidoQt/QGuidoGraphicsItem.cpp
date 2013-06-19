@@ -22,7 +22,7 @@
 
 //-------------------------------------------------------------------------
 QGuidoGraphicsItem::QGuidoGraphicsItem(QGraphicsItem * parent)
-	: QGraphicsItem(parent)
+	: QGraphicsObject(parent)
 {
 	mGuidoPainter = QGuidoPainter::createGuidoPainter();
 	

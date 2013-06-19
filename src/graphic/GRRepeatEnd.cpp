@@ -64,7 +64,7 @@ void GRRepeatEnd::InitRepeatEnd()
 
 	mSymbol = kRepeatEndSymbol; 
 	mLeftSpace =  mRightSpace = 0;
-	refpos.Set( -LSPACE * 0.8, 4 * LSPACE );
+	refpos.Set( -LSPACE * 0.8f, 4 * LSPACE );
 }
 
 // --------------------------------------------------------------------------

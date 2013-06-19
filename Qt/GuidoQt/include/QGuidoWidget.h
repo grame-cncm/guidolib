@@ -73,9 +73,10 @@ class QGuidoWidget : public QWidget
 		
 		/**	\brief Sets the current Guido code to draw.
 		*	\param gmnCode The Guido Music Notation code
+		*	\param path The path to external ressources (typically the file path for file based code)
 		*	\return true if the GMN code is valid.
 		*/
-		bool setGMNCode( const QString& gmnCode );
+		bool setGMNCode( const QString& gmnCode, const QString& path );
 		
 		/**	\brief Returns the current Guido code.
 		*

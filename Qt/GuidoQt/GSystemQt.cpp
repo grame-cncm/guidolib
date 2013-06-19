@@ -54,7 +54,20 @@ VGDevice*		GSystemQt::CreateMemoryDevice( int, int )
 //------------------------------------------------------------------------
 VGDevice*		GSystemQt::CreateMemoryDevice( const char * inPath)
 {
-    GDeviceQt *memDevice = NULL;
+    GDeviceQt *memDevice = 0;
+
+#if 1
+	// new implementation, more simple, more direct, only QImage expected
+    QImage qImage(inPath);
+	if (qImage.isNull()) {
+		return 0;
+	}
+
+    QPainter * mQPainter = new QPainter(new QImage (qImage.convertToFormat (QImage::Format_ARGB32)));
+	mQPainter->setRenderHints (QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+	memDevice = new GDeviceQt(mQPainter, this);
+	
+#else
     QImage qImage(inPath);
 
     if (!qImage.isNull())
@@ -68,7 +81,7 @@ VGDevice*		GSystemQt::CreateMemoryDevice( const char * inPath)
 
         memDevice = new GDeviceQt(mQPainter, this);
     }
-
+#endif
 	return memDevice;
 }
 

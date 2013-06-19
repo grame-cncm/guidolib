@@ -23,9 +23,8 @@
 #include <QPaintDevice>
 #include <QWidget>
 #include <QPrinter>
-#include <QPicture>
-#include <QPixmap>
 #include <QImage>
+#include <QBuffer>
 
 #include <QVariant>
 #include <QtDebug>
@@ -563,37 +562,37 @@ bool GDeviceQt::CopyPixels( int xDest, int yDest,
 		mQPainter->drawImage( target , *qImage , source );
 		copyOk = true;
 	}
-	else 
-	{
-		QPicture * qPicture = dynamic_cast<QPicture *>( srcDeviceQt );
-		if ( qPicture )
-		{
-			if (		( xSrc != 0 ) || ( ySrc != 0 )
-					||	( source.width() != target.width() ) || ( source.height() != target.height() )
-				)
-			{
-				//	- The source-point is not specifiable with QPicture
-				//	- Can't stretch from a Rect to another with QPicture
-				qWarning("GDeviceQt::CopyPixels: Can't do stretching on a QPicture : x=%d , y=%d , sW=%d , sH=%d , dW=%d , dH=%d\n" , 
-						xSrc , ySrc , source.width() , source.height() , target.width() , target.height() );
-				copyOk = false;
-			}
-			else
-			{
-				mQPainter->drawPicture( target.topLeft() , *qPicture );
-				copyOk = true;
-			}
-		}
-		else
-		{
-			QPixmap * qPixmap = dynamic_cast<QPixmap *>( srcDeviceQt );
-			if ( qPixmap )
-			{
-				mQPainter->drawPixmap( target , *qPixmap , source );
-				copyOk = true;
-			}
-		}
-	}
+//	else 
+//	{
+//		QPicture * qPicture = dynamic_cast<QPicture *>( srcDeviceQt );
+//		if ( qPicture )
+//		{
+//			if (		( xSrc != 0 ) || ( ySrc != 0 )
+//					||	( source.width() != target.width() ) || ( source.height() != target.height() )
+//				)
+//			{
+//				//	- The source-point is not specifiable with QPicture
+//				//	- Can't stretch from a Rect to another with QPicture
+//				qWarning("GDeviceQt::CopyPixels: Can't do stretching on a QPicture : x=%d , y=%d , sW=%d , sH=%d , dW=%d , dH=%d\n" , 
+//						xSrc , ySrc , source.width() , source.height() , target.width() , target.height() );
+//				copyOk = false;
+//			}
+//			else
+//			{
+//				mQPainter->drawPicture( target.topLeft() , *qPicture );
+//				copyOk = true;
+//			}
+//		}
+//		else
+//		{
+//			QPixmap * qPixmap = dynamic_cast<QPixmap *>( srcDeviceQt );
+//			if ( qPixmap )
+//			{
+//				mQPainter->drawPixmap( target , *qPixmap , source );
+//				copyOk = true;
+//			}
+//		}
+//	}
 	
 	mQPainter->restore();
 	return copyOk;
@@ -872,9 +871,11 @@ float GDeviceQt::GetDPITag()const
 
 //--------------------------------------------------------------------
 void* GDeviceQt::GetBitMapPixels()
-{  
-	// assert(0);//Not implemented.
-	cerr << "Warning: GDeviceQt::GetBitMapPixels not implemented" << endl;
+{
+	QImage * qImage = dynamic_cast<QImage *>( mQPainter->device() );
+	if ( qImage ) return (void*)qImage->bits();
+
+	cerr << "Warning: GDeviceQt::GetBitMapPixels cannot get image data" << endl;
 	return 0;
 }
 
@@ -882,7 +883,29 @@ void* GDeviceQt::GetBitMapPixels()
 void GDeviceQt::ReleaseBitMapPixels()
 {  
 //	assert(0);//Not implemented.
-	cerr << "Warning: GDeviceQt::ReleaseBitMapPixels not implemented" << endl;
+//	cerr << "Warning: GDeviceQt::ReleaseBitMapPixels not implemented" << endl;
+}
+
+//--------------------------------------------------------------------
+const char* GDeviceQt::GetImageData(const char* & outDataPtr, int& outLength)
+{
+	QImage * image = dynamic_cast<QImage *>( mQPainter->device() );
+	if ( image ) {
+		QByteArray * ba = new QByteArray;
+		QBuffer buffer(ba);
+        buffer.open(QIODevice::WriteOnly);
+        image->save(&buffer, "PNG"); // writes image into ba in PNG format
+		outDataPtr = ba->data();
+		outLength = ba->size();
+		return "image/png";
+	}
+	return 0;
+}
+
+//--------------------------------------------------------------------
+void GDeviceQt::ReleaseImageData(const char * ptr) const
+{
+	delete ptr;
 }
 
 //--------------------------------------------------------------------

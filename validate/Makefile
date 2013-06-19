@@ -26,7 +26,8 @@ endif
 endif
 
 guido2image := ../Qt/bin/guido2image
-guido2svg   := guido2svg
+guido2svg   := ../tools/guido2svg
+guido2midi  := ../tools/guido2midi
 
 ifdef TOOL
 	TOOLPATH := $(shell basename $(TOOL))
@@ -40,6 +41,7 @@ gmnfiles     = $(shell find ../gmn-examples -name "*.gmn") $(wildcard ../regress
 pdfout		:= $(patsubst ../%.gmn, $(version)/%.pdf, $(gmnfiles))
 svgout		:= $(patsubst ../%.gmn, $(version)/%.svg, $(gmnfiles))
 leaksout 	:= $(patsubst ../%.gmn, $(version)/$(TOOLPATH)/%.leaks.txt, $(gmnfiles))
+midiout     := $(patsubst ../%.gmn, $(version)/%.mid, $(gmnfiles))
 
 allpdf 		 = $(shell [ -d $(version) ] && find $(version) -name "*.pdf")
 allsvg 		 = $(shell [ -d $(version) ] && find $(version) -name "*.svg")
@@ -57,6 +59,10 @@ pdfbased : pdf
 help:
 	@echo "Makefile for testing the engine output. Available targets are:"
 	@echo "'svg' (default): makes svg files for a set of gmn files"
+	@echo "                 the output folder name is the current guido engine version number."
+	@echo "'pdf'          : makes pdf files for a set of gmn files"
+	@echo "                 the output folder name is the current guido engine version number."
+	@echo "'midi'         : makes MIDI files for a set of gmn files"
 	@echo "                 the output folder name is the current guido engine version number."
 	@echo "'validate VERSION=another_version': compares the current version pdf output with another one"
 	@echo "'checkleaks TOOL=a_tool': check memory leaks on a set of gmn files using various tools"
@@ -96,6 +102,18 @@ pdfclean:
 $(version)/%.pdf: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	$(guido2image) -f $< -o $@
+
+#########################################################################
+# midi output generation
+midi:  $(midiout)
+
+midiclean: 
+	rm -f $(midiout)
+
+$(version)/%.mid: ../%.gmn
+	@[ -d $(@D) ] || mkdir -p $(@D)
+	-$(guido2midi) $< -o $@
+
 
 #########################################################################
 # leaks check tools

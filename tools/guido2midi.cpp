@@ -65,6 +65,10 @@ static void error (GuidoErrCode err)
 	exit(1);
 }
 
+
+#include "SVGSystem.h"
+#include "SVGDevice.h"
+#include "SVGFont.h"
 //______________________________________________________________________________
 int main(int argc, char **argv)
 {
@@ -76,13 +80,34 @@ int main(int argc, char **argv)
 	if (infile.empty()) usage (argv[0]);
 	if (outfile.empty()) outfile = defaultOutName (infile);
 
-	cout << "converting " << infile << " to " << outfile << endl;
 	GuidoErrCode err;
+	SVGSystem sys;
+	SVGDevice dev (cout, &sys);
+	GuidoInitDesc id = { &dev, 0, 0, 0 };
+	err = GuidoInit(&id);
+	if (err != guidoNoErr) error (err);
+	
 	ARHandler arh;
     err = GuidoParseFile (infile.c_str(), &arh);
 	if (err != guidoNoErr) error (err);
 
+/*
+	GuidoAR2MIDIFile operates using an ARHandler
+	However, for an unknown reason, it fails to convert scores with chords when the
+	AR handler has not been converted to GR. This is probably due to the AR to AR 
+	transforms that take place before the AR to GR conversion.
+	This is the reason of the GuidoAR2GR call below.
+	Should be corrected in a future version.
+	D.F. June 12 2013
+*/
+	GRHandler grh;
+	GuidoLayoutSettings settings = {};
+	err = GuidoAR2GR( arh, 0, &grh);
+	if (err != guidoNoErr) error (err);
+
+	cout << "converting " << infile << " to " << outfile << endl;
     err = GuidoAR2MIDIFile (arh, outfile.c_str(), 0);
+	GuidoFreeGR (grh);
 	GuidoFreeAR (arh);
 	if (err != guidoNoErr) error (err);
 

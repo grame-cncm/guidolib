@@ -13,6 +13,7 @@
 */
 
 #include <iostream>
+#include <fstream>
 #include <string.h>
 
 #include "ARSymbol.h"
@@ -27,8 +28,11 @@
 
 #include "Bitmap.h"
 
+using namespace std;
+
 extern GRStaff * gCurStaff;
 
+//_______________________________________________________________________
 GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
   : GRPTagARNotationElement(abstractRepresentationOfSymbol)
 {
@@ -48,39 +52,11 @@ GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
     st->positionString = NVstring();
     st->bitmap = NULL;
 
-    std::vector<std::string> pathsVector = abstractRepresentationOfSymbol->getPath();
-
-    // - Set up file path
-    if (abstractRepresentationOfSymbol->getSymbolPath())
-    {
-        NVstring filePathString = abstractRepresentationOfSymbol->getSymbolPath();
-
-        int vectorSize = pathsVector.size();
-        int i = 0;
-
-        // - Check in paths vector
-        if (vectorSize)
-        {
-            do
-            {
-                NVstring relativeFilePath(pathsVector[i]);
-                relativeFilePath.append("/");
-                relativeFilePath.append(filePathString);
-
-                st->bitmap = new Bitmap(relativeFilePath.c_str());
-
-                i++;
-            }
-            while (!st->bitmap->getDevice() && i < vectorSize);
-        }
-
-        if (!st->bitmap->getDevice())
-        {
-            // - Check if it's a hard path
-            st->bitmap = new Bitmap(filePathString.c_str());
-            // ---------------------------
-        }
-
+	// first, look for an existing file using a list of access paths
+	string filepath = findFile( abstractRepresentationOfSymbol->getSymbolPath(), abstractRepresentationOfSymbol->getPath() );
+	// when file exists
+	if (filepath.size()) {
+		st->bitmap = new Bitmap(filepath.c_str());
         if (st->bitmap->getDevice())
         {
             st->positionString = abstractRepresentationOfSymbol->getPositionString();
@@ -89,37 +65,78 @@ GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
             int symbolFixedHeight = abstractRepresentationOfSymbol->getFixedHeight();
 
             float sizex, sizey;
-            symbolFixedWidth  ? sizex = symbolFixedWidth  : sizex = (float)st->bitmap->GetWidth();
-            symbolFixedHeight ? sizey = symbolFixedHeight : sizey = (float)st->bitmap->GetHeight();
+            symbolFixedWidth  ? sizex = float(symbolFixedWidth)  : sizex = (float)st->bitmap->GetWidth();
+            symbolFixedHeight ? sizey = float(symbolFixedHeight) : sizey = (float)st->bitmap->GetHeight();
 
             float symbolSize = abstractRepresentationOfSymbol->getSize();
 
             st->boundingBox.right = sizex * symbolSize * kVirtualToPx;
             st->boundingBox.top = sizey * symbolSize * kVirtualToPx;
-        }
-    }
-
+        }		
+	}
     st->boundingBox.left = 0;
     st->boundingBox.bottom = 0;
 }
 
-
+//_______________________________________________________________________
 GRSymbol::~GRSymbol()
 {
 	assert(mStartEndList.empty());
 	// this is important ...
-	// All associaions that have been made
-	// are dealt with in GRPositionTag ...
+	// All associaions that have been made are dealt with in GRPositionTag ...
 
-	// this makes sure, that we don't remove
-	// associations, that are no longer there
-	// after the Tag has been delete
-	// (especially, if more than one system
-	//  is handled.)
+	// this makes sure, that we don't remove associations, that are no longer there
+	// after the Tag has been delete (especially, if more than one system is handled.)
 	delete mAssociated;
 	mAssociated = 0;
 }
 
+//_______________________________________________________________________
+bool GRSymbol::absolutePath( const char* file ) const
+{
+	if (!file || !*file) return false;
+#ifdef WIN32
+	return ( file[1] == ':') && ( file[2] == '\\');
+#else
+	return ( file[0] == '/' );
+#endif
+}
+
+//_______________________________________________________________________
+// make an absolute path to file using path
+// note that file is returned unchanged when already an absolute path
+string GRSymbol::makeAbsolutePath( const std::string& path, const char* file ) const
+{
+	if (absolutePath(file)) return file;
+
+	char ending = path[path.length()-1];
+#ifdef WIN32
+	const char* sep = (ending == '/') || (ending == '\\') ? "" : "/";
+#else
+	const char* sep = (ending == '/') ? "" : "/";
+#endif
+	return path + sep + file;
+}
+
+//_______________________________________________________________________
+// look for a file using a list of access paths and returns a full path name
+string	GRSymbol::findFile( const char* file, const std::vector<std::string>& paths ) const
+{
+	if (file) {
+		// go through the list of paths
+		for (unsigned int i = 0; i < paths.size(); i++) {
+			// build an absolute file path
+			string fullpathname = makeAbsolutePath( paths[i], file);
+			ifstream fs (fullpathname.c_str());
+			// check if file exists and when it does, return the full path name
+			if (fs.is_open()) return fullpathname;
+		}
+	}
+	return "";
+}
+
+
+//_______________________________________________________________________
 void GRSymbol::OnDraw( VGDevice & hdc ) const
 {
     GRSystemStartEndStruct * sse = getSystemStartEndStruct(gCurSystem);
@@ -146,8 +163,8 @@ void GRSymbol::OnDraw( VGDevice & hdc ) const
         int symbolFixedHeight = arSymbol->getFixedHeight();
 
         float sizex, sizey;
-        symbolFixedWidth  ? sizex = symbolFixedWidth  : sizex = (float)st->bitmap->GetWidth();
-        symbolFixedHeight ? sizey = symbolFixedHeight : sizey = (float)st->bitmap->GetHeight();
+        symbolFixedWidth  ? sizex = float(symbolFixedWidth)  : sizex = (float)st->bitmap->GetWidth();
+        symbolFixedHeight ? sizey = float(symbolFixedHeight) : sizey = (float)st->bitmap->GetHeight();
         // --------------------------------
 
         float currentSize = arSymbol->getSize();

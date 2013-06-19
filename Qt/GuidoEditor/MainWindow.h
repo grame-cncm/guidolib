@@ -188,6 +188,7 @@ private:
 	void	changeFontSize( float newFontPointSize );
 	void	reinitGuidoWidget();
     void    reinitARHandlerPath();
+    const QString filePath() const;
 	
 	int horizontalBorderMargin();
 	int verticalBorderMargin();
