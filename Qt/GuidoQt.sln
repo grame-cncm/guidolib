@@ -2,11 +2,11 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C++ Express 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GraphicsSceneMainWindow", "GraphicsSceneMainWindow\GraphicsSceneMainWindow.vcxproj", "{A5ED16C3-695F-381B-B7A4-267F2E9DF4C7}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GuidoQt", "GuidoQt\GuidoQt.vcxproj", "{4FC2E3E4-54F5-3AD0-A5E8-C2B285BDC1E3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GuidoQt", "GuidoQt\GuidoQt.vcxproj", "{474E1E63-677A-338E-BCBA-4A9022DDFE72}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GuidoQtFontViewer", "GuidoQtFontViewer\GuidoQtFontViewer.vcxproj", "{EBF10055-8E50-3260-A2C6-8708DD5081FF}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GuidoEditor", "GuidoEditor\GuidoEditor.vcxproj", "{FD359C4F-1C62-3B7D-AF89-71F3B991EBBD}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GuidoEditor", "GuidoEditor\GuidoEditor.vcxproj", "{A3FC8C2C-0039-3F20-8B63-E4CCE698C5F1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GuidoSceneComposer", "GuidoSceneComposer\GuidoSceneComposer.vcxproj", "{61AD4C60-E1AF-3E47-9A66-77EE77BAD9F0}"
 EndProject
@@ -22,18 +22,18 @@ Global
 		{A5ED16C3-695F-381B-B7A4-267F2E9DF4C7}.Debug|Win32.Build.0 = Debug|Win32
 		{A5ED16C3-695F-381B-B7A4-267F2E9DF4C7}.Release|Win32.ActiveCfg = Release|Win32
 		{A5ED16C3-695F-381B-B7A4-267F2E9DF4C7}.Release|Win32.Build.0 = Release|Win32
-		{4FC2E3E4-54F5-3AD0-A5E8-C2B285BDC1E3}.Debug|Win32.ActiveCfg = Debug|Win32
-		{4FC2E3E4-54F5-3AD0-A5E8-C2B285BDC1E3}.Debug|Win32.Build.0 = Debug|Win32
-		{4FC2E3E4-54F5-3AD0-A5E8-C2B285BDC1E3}.Release|Win32.ActiveCfg = Release|Win32
-		{4FC2E3E4-54F5-3AD0-A5E8-C2B285BDC1E3}.Release|Win32.Build.0 = Release|Win32
+		{474E1E63-677A-338E-BCBA-4A9022DDFE72}.Debug|Win32.ActiveCfg = Debug|Win32
+		{474E1E63-677A-338E-BCBA-4A9022DDFE72}.Debug|Win32.Build.0 = Debug|Win32
+		{474E1E63-677A-338E-BCBA-4A9022DDFE72}.Release|Win32.ActiveCfg = Release|Win32
+		{474E1E63-677A-338E-BCBA-4A9022DDFE72}.Release|Win32.Build.0 = Release|Win32
 		{EBF10055-8E50-3260-A2C6-8708DD5081FF}.Debug|Win32.ActiveCfg = Debug|Win32
 		{EBF10055-8E50-3260-A2C6-8708DD5081FF}.Debug|Win32.Build.0 = Debug|Win32
 		{EBF10055-8E50-3260-A2C6-8708DD5081FF}.Release|Win32.ActiveCfg = Release|Win32
 		{EBF10055-8E50-3260-A2C6-8708DD5081FF}.Release|Win32.Build.0 = Release|Win32
-		{FD359C4F-1C62-3B7D-AF89-71F3B991EBBD}.Debug|Win32.ActiveCfg = Debug|Win32
-		{FD359C4F-1C62-3B7D-AF89-71F3B991EBBD}.Debug|Win32.Build.0 = Debug|Win32
-		{FD359C4F-1C62-3B7D-AF89-71F3B991EBBD}.Release|Win32.ActiveCfg = Release|Win32
-		{FD359C4F-1C62-3B7D-AF89-71F3B991EBBD}.Release|Win32.Build.0 = Release|Win32
+		{A3FC8C2C-0039-3F20-8B63-E4CCE698C5F1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A3FC8C2C-0039-3F20-8B63-E4CCE698C5F1}.Debug|Win32.Build.0 = Debug|Win32
+		{A3FC8C2C-0039-3F20-8B63-E4CCE698C5F1}.Release|Win32.ActiveCfg = Release|Win32
+		{A3FC8C2C-0039-3F20-8B63-E4CCE698C5F1}.Release|Win32.Build.0 = Release|Win32
 		{61AD4C60-E1AF-3E47-9A66-77EE77BAD9F0}.Debug|Win32.ActiveCfg = Debug|Win32
 		{61AD4C60-E1AF-3E47-9A66-77EE77BAD9F0}.Debug|Win32.Build.0 = Debug|Win32
 		{61AD4C60-E1AF-3E47-9A66-77EE77BAD9F0}.Release|Win32.ActiveCfg = Release|Win32

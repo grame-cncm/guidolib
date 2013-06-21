@@ -42,6 +42,9 @@ class ARFeatheredBeam :  public ARBeam
 	bool drawDuration(){return drawDur;}
 	int getFirstBeaming(){return beams.first;}
 	int getLastBeaming(){return beams.second;}
+	void setBeginDuration( const TYPE_DURATION b){beginDur = b;}
+	void setEndDuration( const TYPE_DURATION e){endDur = e;}
+	void findDefaultPoints();
 
 	protected:
 
@@ -50,8 +53,11 @@ class ARFeatheredBeam :  public ARBeam
 		bool drawDur;
 		bool durationsSet;
 		std::pair<int,int> beams;
+		TYPE_DURATION beginDur;
+		TYPE_DURATION endDur;
 
 		void findPoints(std::string points); 
+		void convertDurationToBeams(float valor, float valor2);
 };
 
 #endif

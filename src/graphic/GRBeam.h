@@ -105,7 +105,6 @@ private:
 	void	slopeAdjust (GRSystemStartEndStruct * sse, const GREvent * startEl, const GREvent * endEl,float slope, PosInfos& infos);
 	bool   isFeathered;
 	bool   drawDur;
-	GREvent * lastEndEl;
 
 	static std::pair<float, float> & getLastPositionOfBarDuration();
 };

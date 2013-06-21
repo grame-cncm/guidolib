@@ -7,9 +7,9 @@
 
 [
 	empty*2
-	\fBeam<drawDuration="true">(e/32 e f  a e d f/16 
+	\fBeam<drawDuration="true">(e/64 e f  a e d f/32 
 		\newSystem 
-		a/8 g e2/64 )
+		a/16 g e2/8 )
 	empty*2
 	\fBeam<drawDuration="true", durations="1/16,1/64">(g1/8 a d f a f c a 
 		\newSystem 

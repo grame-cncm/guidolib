@@ -75,6 +75,7 @@ using namespace std;
 #include "GRSingleNote.h"
 #include "ARCluster.h"
 #include "ARSymbol.h"
+#include "ARFeatheredBeam.h"
 
 #include "ARRepeatBegin.h"
 #include "ARCoda.h"
@@ -1229,6 +1230,7 @@ void ARMusicalVoice::doAutoStuff2()
 	// this needs to be done, so that all Ties can be broken after the respective Event
 	// (and that as well, if a break is introduced later).
 	timebench("doAutoTies", doAutoTies());
+	timebench("doAutoFeatheredBeam", doAutoFeatheredBeam());
 	timebench("doAutoEndBar", doAutoEndBar());
 	//this->operator<< (cout);
 	timebench("doAutoGlissando", doAutoGlissando());
@@ -6160,6 +6162,38 @@ void ARMusicalVoice::doAutoCluster()
                             }
 						}	
 					}
+				}
+			}
+		}
+	}
+}
+
+void ARMusicalVoice::doAutoFeatheredBeam()
+{
+	ARMusicalVoiceState armvs;
+	GuidoPos pos = GetHeadPosition(armvs);
+	while(pos)
+	{
+		GetNext(pos,armvs);
+		if(armvs.getCurPositionTags())
+		{
+			GuidoPos posTag = armvs.getCurPositionTags()->GetHeadPosition();
+			while(posTag)
+			{
+				ARPositionTag * tag = armvs.getCurPositionTags()->GetNext(posTag);
+				ARFeatheredBeam * curfBeam = dynamic_cast<ARFeatheredBeam *>(tag);
+				if(curfBeam)
+				{
+					GuidoPos posBegin = curfBeam->getPosition();
+					ARMusicalObject * object = GetAt(posBegin);
+					ARNote * note = dynamic_cast<ARNote *>(object);
+					if(note)
+						curfBeam->setBeginDuration(note->getDuration());
+					GuidoPos posEnd = curfBeam->getEndPosition();
+					object = GetAt(posEnd);
+					note = dynamic_cast<ARNote *>(object);
+					if(note)
+						curfBeam->setEndDuration(note->getDuration());
 				}
 			}
 		}

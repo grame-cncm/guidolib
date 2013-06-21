@@ -184,6 +184,7 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		void doAutoEndBar();
 		void doAutoBeaming();
 		void doAutoGlissando();
+		void doAutoFeatheredBeam();
 
 		void doMicroTonal();
 

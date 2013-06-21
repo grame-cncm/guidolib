@@ -880,25 +880,21 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 		int begin = 0;
 		int end = 0;
 		GREvent * stemNoteBegin = GREvent::cast(mAssociated->GetHead());
-		GREvent * stemNoteEnd = GREvent::cast(mAssociated->GetTail());
-
+		
 		GDirection localDir = stemNoteBegin->getStemDirection();
 		float yLocalFact1 = yFact1 * localDir * infos.currentSize;
 		float yLocalFact2 = yFact2 * localDir * infos.currentSize;
 		
 		
-		if(ar->isDurationsSet())
-		{
-			end = ar->getLastBeaming();
-			begin = ar->getFirstBeaming();
-		}
 		// if the user hasn't set the durations as parameters, 
 		// we will take the first and last notes'durations
-		else
+		if(!ar->isDurationsSet())
 		{
-			begin = stemNoteBegin->getNumFaehnchen();
-			end = stemNoteEnd->getNumFaehnchen();
+			ar->findDefaultPoints();
 		}
+		end = ar->getLastBeaming();
+		begin = ar->getFirstBeaming();
+
 		for(int i=1;i<=begin; i++)
 		{
 			myp[0] = st->p[0];
@@ -1352,8 +1348,6 @@ void GRBeam::ResumeTag(GRStaff *grstaff,GuidoPos assocpos)
 void GRBeam::BreakTag( GRStaff * grstaff, GuidoPos & assocpos)
 {
 	if (!grstaff) return;
-
-	lastEndEl = dynamic_cast<GREvent *>(mAssociated->GetTail());
 
 	// do the "basic" stuff.
 	GRPositionTag::BreakTag(grstaff,assocpos);
