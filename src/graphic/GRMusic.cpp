@@ -271,6 +271,18 @@ int GRMusic::getNumPages() const
 	return (int)mPages.size();
 }
 
+// -----------------------------------------------------------------------------
+/** \brief Returns the number of pages of music.
+*/
+int GRMusic::getNumSystems(int pagenum) const
+{
+	if(( pagenum > 0 ) && ( pagenum <= getNumPages())) {
+		GRPage* page = mPages[ (size_t)pagenum - 1 ];
+		return page->getSystems()->size();
+	}
+	return guidoErrBadParameter;
+}
+
 /** \brief Adjusts the pagesizes so that they fit the music on them ...
 	this is done with the bounding_rectangle.
 	

@@ -66,6 +66,7 @@ class GRMusic : public GREvent
 		virtual	int 		getPageNumForTimePos( int num, int denom ) const;
 
 		virtual int 		getNumPages() const;
+		virtual int 		getNumSystems(int page) const;
 
 		// - Voice related
 		void MarkVoice(int voicenum,int numfrom,int denomfrom,

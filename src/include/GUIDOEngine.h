@@ -355,6 +355,14 @@ as by date. Page numbers start at 1.
 		\return a number of pages or a guido error code.
 	*/
 	GUIDOAPI(int) 	GuidoGetPageCount( CGRHandler inHandleGR );
+	
+	/** \brief Gives the number of systems on a given page.
+
+		\param inHandleGR a Guido opaque handle to a GR structure.
+		\param page a page number (starts at 1).
+		\return the systems count on the given page or a guido error code.
+	*/
+	GUIDOAPI(int) 	GuidoGetSystemCount( CGRHandler inHandleGR, int page );
 
 	/** \brief Returns the music duration of a score.
 

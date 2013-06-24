@@ -439,8 +439,16 @@ GUIDOAPI(int) GuidoCountVoices( CARHandler inHandleAR)
 GUIDOAPI(int) GuidoGetPageCount( CGRHandler inHandleGR )
 {
 	if ( !inHandleGR )
-		return 0;
-	return inHandleGR->grmusic ? inHandleGR->grmusic->getNumPages() : 0;
+		return guidoErrInvalidHandle;
+	return inHandleGR->grmusic ? inHandleGR->grmusic->getNumPages() : guidoErrInvalidHandle;
+}
+
+// --------------------------------------------------------------------------
+GUIDOAPI(int) GuidoGetSystemCount( CGRHandler inHandleGR, int page )
+{
+	if ( !inHandleGR )
+		return guidoErrInvalidHandle;
+	return inHandleGR->grmusic ? inHandleGR->grmusic->getNumSystems(page) : guidoErrInvalidHandle;
 }
 
 // --------------------------------------------------------------------------
