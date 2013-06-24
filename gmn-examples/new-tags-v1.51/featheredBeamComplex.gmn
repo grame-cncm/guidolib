@@ -6,7 +6,7 @@
 %
 %
 % Parameters : 
-%       - durations : indicates the begin- and end- durations
+%       - durations="firstDur, lastDur" : indicates the begin- and end- durations
 %       - drawDuration : possibility to draw the total duration above or under the beaming (from the beginig of the first note to the end of the last one)
 %
 % 
@@ -14,7 +14,6 @@
 
 {
 [
-	\meter<"2/4">
 	\fBeamBegin:1<drawDuration="true"> e/32 e g f 
 	\fBeamBegin:2<drawDuration="true"> g/16 \fBeamEnd:1 
 	f e d 
@@ -23,15 +22,13 @@
 	\fBeamEnd:3
 ],
 [
-	\meter<"2/4">
 	\fBeamBegin:1 a/8 e f e/16 d g f/32 
 	\fBeamBegin:2 a/64 \fBeamEnd:1 
 	a f  e f/32 e g a/16 e d/8 
 	\fBeamEnd:2
 ],
 [
-	\meter<"2/4">
-	\fBeam<durations="1/8,1/32">(f/16 e g f c d e a e f )
+	\fBeam<"1/8,1/32">(f/16 e g f c d e a e f )
 	\fBeam<durations="1/32,1/16", drawDuration="true">( b e d a d e)
 ]
 }

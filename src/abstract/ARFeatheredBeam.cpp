@@ -14,6 +14,7 @@
 
 #include <cstring>
 #include <iostream>
+#include <sstream>
 
 #include "ARFeatheredBeam.h"
 #include "TagParameterInt.h"
@@ -29,6 +30,9 @@ ARFeatheredBeam::ARFeatheredBeam()
 	feathered = true;
 	drawDur = false;
 	durationsSet = false;
+	
+	TYPE_DURATION beginDur = 0;
+	TYPE_DURATION endDur = 0;
 }
 
 ARFeatheredBeam::~ARFeatheredBeam()
@@ -91,38 +95,83 @@ void ARFeatheredBeam::PrintName(std::ostream & os) const
 		os << "Begin";
 }
 
-void ARFeatheredBeam::findPoints(std::string points)
+void ARFeatheredBeam::findPoints(std::string durations)
 {
 	std::size_t begin = 0;
-	for(int i=0; i<2; i++)
+	std::size_t commaPos = durations.find(",", begin);
+	
+	if(commaPos != -1)
 	{
-		std::string point;
-		std::size_t commaPos = points.find(",", begin);
-		if(commaPos != -1)
+		float valor = 0;
+		float valor2 = 0;
+
+		durationsSet = true;
+
+		std::string dur = durations.substr(begin, commaPos);
+		std::stringstream stream(dur);
+		stream >> valor;
+		std::size_t slashPos = dur.find("/",begin);
+		if(slashPos != -1)
 		{
-			durationsSet = true;
-			point = points.substr(begin, (commaPos - begin));
-			if(point.find("1/8") != -1) 
-				beams.first=1;
-			else if(point.find("1/16") != -1)
-				beams.first=2;
-			else if(point.find("1/32") != -1)
-				beams.first=3;
-			else if(point.find("1/64") != -1)
-				beams.first=4;
+			std::string denominator = dur.substr(slashPos+1,(commaPos-slashPos));
+			std::stringstream stream(denominator);
+			float den;
+			stream >> den;
+			valor /= den;
 		}
+		if(valor >= 0.09375) 
+			beams.first=1;
+		else if(valor >= 0.046875)
+			beams.first=2;
+		else if(valor >= 0.0234375)
+			beams.first=3;
 		else
+			beams.first=4;
+			
+		dur = durations.substr(commaPos+1);
+		std::stringstream stream2(dur);
+		stream2 >> valor2;
+		slashPos = dur.find("/",begin);
+		if(slashPos != -1)
 		{
-			point = points.substr(begin);
-			if(point.find("1/8") != -1) 
-				beams.second=1;
-			else if(point.find("1/16") != -1)
-				beams.second=2;
-			else if(point.find("1/32") != -1)
-				beams.second=3;
-			else if(point.find("1/64") != -1)
-				beams.second=4;
+			std::string denominator = dur.substr(slashPos+1);
+			std::stringstream stream2(denominator);
+			float den;
+			stream2 >> den;
+			valor2 /= den;
 		}
-		begin = commaPos+1;
+		convertDurationToBeams(valor, valor2);
 	}
+}
+
+void ARFeatheredBeam::findDefaultPoints()
+{
+	//handle the case with no duration parameters
+	float valor = beginDur.getNumerator();
+	valor /= beginDur.getDenominator();
+	float valor2 = endDur.getNumerator();
+	valor2 /= endDur.getDenominator();
+	convertDurationToBeams(valor, valor2);
+}
+
+void ARFeatheredBeam::convertDurationToBeams(float valor, float valor2)
+{
+		
+	if(valor >= 0.09375) 
+		beams.first=1;
+	else if(valor >= 0.046875)
+		beams.first=2;
+	else if(valor >= 0.0234375)
+		beams.first=3;
+	else
+		beams.first=4;
+
+	if(valor2>=0.09375) 
+		beams.second=1;
+	else if(valor2>=0.046875)
+		beams.second=2;
+	else if(valor2>=0.0234375)
+		beams.second=3;
+	else
+		beams.second=4;
 }
