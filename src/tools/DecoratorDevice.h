@@ -124,6 +124,8 @@ class DecoratorDevice : public VGDevice
 
 		virtual void*			GetBitMapPixels();
 		virtual void			ReleaseBitMapPixels();
+		virtual const char*		GetImageData(const char* & outDataPtr, int& outLength);
+		virtual void			ReleaseImageData(const char *) const;
 	
 		virtual	VGSystem *		getVGSystem() const;
 
@@ -333,6 +335,13 @@ inline  void* DecoratorDevice::GetBitMapPixels() {
 inline void DecoratorDevice::ReleaseBitMapPixels() {
 	fDevice->ReleaseBitMapPixels();
 }
+inline const char* DecoratorDevice::GetImageData(const char* & outDataPtr, int& outLength) {
+	return fDevice->GetImageData(outDataPtr, outLength);
+}
+inline void DecoratorDevice::ReleaseImageData(const char * ptr) const {
+	fDevice->ReleaseImageData(ptr);
+}
+
 inline VGSystem * DecoratorDevice::getVGSystem() const {
 	return fDevice->getVGSystem();
 }

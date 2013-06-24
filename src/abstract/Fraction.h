@@ -58,6 +58,7 @@ class Fraction
 
 		operator double() const;
 		operator float() const;
+		inline operator bool() const				{ return numerator != 0; }
 		bool operator >(const Fraction & in) const  { return (dval > in.dval); }
 		bool operator ==(const Fraction & in) const { return (dval == in.dval); }
 		bool operator !=(const Fraction & in) const { return (dval != in.dval); }

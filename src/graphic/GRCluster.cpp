@@ -20,7 +20,7 @@
 #include "VGDevice.h"
 #include "GRTagARNotationElement.h"
 #include "GRSingleNote.h"
-#include "GRGLobalStem.h"
+#include "GRGlobalStem.h"
 #include "ARNoteFormat.h"
 #include "TagParameterString.h"
 #include "TagParameterFloat.h"
@@ -81,7 +81,7 @@ GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, GRSingleNote *sngNote, AR
         gClusterColor = new unsigned char[4];
         tmps->getRGB(gClusterColor);
 
-        if (strcmp(tmps->getValue(), ""))
+        if (*tmps->getValue())
             mColRef = NULL;
     }
 

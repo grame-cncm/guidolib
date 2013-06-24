@@ -21,7 +21,7 @@ win32 {
 }
 
 # Universal binary on MAC
-macx:QMAKE_MAC_SDK=macosx10.7
+#macx:QMAKE_MAC_SDK=macosx10.7
 macx:CONFIG+=x86 x86_64
 
 ####### Headers #######

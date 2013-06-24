@@ -104,6 +104,8 @@ class DebugDevice : public DecoratorDevice
 		virtual	float		GetDPITag() const;
 		virtual void*		GetBitMapPixels();
 		virtual void		ReleaseBitMapPixels();
+		virtual const char*	GetImageData(const char* & outDataPtr, int& outLength);
+		virtual void		ReleaseImageData(const char *) const;
 		virtual	VGSystem *	getVGSystem() const;
 		
 		ofstream * filestream;
@@ -383,6 +385,15 @@ inline  void* DebugDevice::GetBitMapPixels() {
 inline void DebugDevice::ReleaseBitMapPixels() {
 	dbgStream << "Device::ReleaseBitMapPixels" << endl;
 	if (fDevice) fDevice->ReleaseBitMapPixels();
+}
+inline const char*	DebugDevice::GetImageData(const char* & outDataPtr, int& outLength) {
+	dbgStream << "Device::GetImageData" << endl;
+	if (fDevice) return fDevice->GetImageData(outDataPtr, outLength);
+	return 0;
+}
+inline void DebugDevice::ReleaseImageData(const char * ptr) const {
+	dbgStream << "Device::ReleaseImageData" << endl;
+	if (fDevice) fDevice->ReleaseImageData (ptr);
 }
 inline VGSystem * DebugDevice::getVGSystem() const {
 	dbgStream << "Device::getVGSystem" << endl;

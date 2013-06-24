@@ -750,18 +750,3 @@ GUIDOAPI(GuidoErrCode) GuidoGetSymbolPath(const ARHandler inHandleAR, std::vecto
 
     return guidoNoErr;
 }
-
-
-/*    std::string path;
-
-    if (exAr)
-    {
-        GuidoGetSymbolPath(*exAr, path);
-        gGlobalFactory->setFilePath(path.c_str());
-    }*/
-
-
-/*File :
-
-    gGlobalFactory->setFilePath(filename);
-    */

@@ -39,10 +39,10 @@ win32 {
 # GuidoQt library link for each platform
 win32 {
 	DebugBuild{
-		LIBS += ../GuidoQt/Debug/GuidoQt.lib
+		LIBS += ../GuidoQt.lib
 	}
 	else {
-		LIBS += ../GuidoQt/Release/GuidoQt.lib
+		LIBS += ../GuidoQt.lib
 	}
 }
 

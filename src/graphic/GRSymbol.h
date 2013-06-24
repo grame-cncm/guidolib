@@ -26,6 +26,10 @@ class Bitmap;
 
 class GRSymbol : public GRPTagARNotationElement
 {	
+	bool			absolutePath( const char* file ) const;
+	std::string		makeAbsolutePath( const std::string& path, const char* file ) const;
+	std::string		findFile( const char* file, const std::vector<std::string>& paths ) const;
+
 	public:
 		class GRSymbolSaveStruct : public GRPositionTag::GRSaveStruct
 		{

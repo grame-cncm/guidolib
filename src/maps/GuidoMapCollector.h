@@ -100,7 +100,7 @@ class GuidoStaffCollector: public GuidoMapCollector
 		virtual void process (int page, float w, float h, Time2GraphicMap* outmap);
 };
 inline std::ostream& operator<< (std::ostream& os, const std::vector<std::pair<TimeSegment, FloatRect> >& v) {
-	for (int i=0; i<v.size(); i++) os << v[i].first << " -> " << v[i].second << std::endl;
+	for (unsigned int i=0; i<v.size(); i++) os << v[i].first << " -> " << v[i].second << std::endl;
 	return os; }
 
 //----------------------------------------------------------------------

@@ -437,6 +437,17 @@ MainWindow::~MainWindow()
 //-------------------------------------------------------------------------
 
 //-------------------------------------------------------------------------
+const QString MainWindow::filePath() const
+{
+	if (mCurFile.size()) {
+		QDir dir(mCurFile);
+		dir.cdUp();
+		return dir.absolutePath();
+	}
+	return "";
+}
+
+//-------------------------------------------------------------------------
 void MainWindow::newFile()
 {
     if (maybeSave()) {
@@ -541,7 +552,7 @@ void MainWindow::updateCode()
 	if ( newGMNCode == mGuidoWidget->gmnCode() )
 		return;
 
-	if ( mGuidoWidget->setGMNCode( newGMNCode ) )
+	if ( mGuidoWidget->setGMNCode( newGMNCode, filePath() ) )
 	{
 		statusBar()->showMessage( "Code ok" );
 		setCurrentPage( mGuidoWidget->firstVisiblePage() );
@@ -573,12 +584,10 @@ void MainWindow::doexport()
 
     // - Since QGuidoPainter is created again (then lose its parameters),
     //   we have to make a backup of current ARHandler's pathsVector before...
-    std::vector<std::string> pathsVector;
-    GuidoGetSymbolPath((ARHandler)mGuidoWidget->getARHandler(), pathsVector);
-    //...and save it in the new QGuidoPainter
-    guidoPainter->setPathsVectorBackupForExport(pathsVector);
+//    std::vector<std::string> pathsVector;
+//    GuidoGetSymbolPath((ARHandler)mGuidoWidget->getARHandler(), pathsVector);
 
-	if ( guidoPainter->setGMNCode(mTextEdit->toPlainText()) )
+	if ( guidoPainter->setGMNCode(mTextEdit->toPlainText(), filePath().toUtf8().data()) )
     {
 		QString savePath = mRecentFiles.size() ? QFileInfo(mRecentFiles.last()).path() : QDir::home().path();
 		QString fileName = QFileDialog::getSaveFileName(this, "Export to:", savePath);
@@ -654,11 +663,11 @@ void MainWindow::exportToSVG(QGuidoPainter * guidoPainter, const QString& filena
 //-------------------------------------------------------------------------
 void MainWindow::exportToPdf(QGuidoPainter * guidoPainter, const QString& filename)
 {
-	QPrinter printer;
-	printer.setPaperSize( QPrinter::A4 );
+	QPrinter printer(QPrinter::HighResolution);
 //	printer.setFullPage(true);
-	printer.setOutputFileName( QString(filename) );
 	printer.setOutputFormat( QPrinter::PdfFormat );
+	printer.setOutputFileName( QString(filename) );
+	printer.setPaperSize( QPrinter::A4 );
 	print (guidoPainter, printer);
 }
 
@@ -679,8 +688,8 @@ void MainWindow::exportToImage(QGuidoPainter * guidoPainter, const QString& file
 	painter.setRenderHints ( QPainter::Antialiasing | QPainter::TextAntialiasing, true);
 
 	//With the QPainter, fill background with white.
-	painter.setBrush(QBrush(QColor(255,255,255)));
-	painter.setPen(QPen(QColor(255,255,255)));
+	painter.setBrush(QBrush(QColor(255,255,255,0)));
+	painter.setPen(QPen(QColor(255,255,255,0)));
 	painter.drawRect(0,0,size.width(), size.height());
 
 	//With the QPainter and the QGuidoPainter, draw the score.
@@ -719,8 +728,7 @@ void MainWindow::preferences()
 //------------------------------------------------------------------------- 
 void MainWindow::print(QGuidoPainter * guidoPainter, QPrinter& printer) 
 {
-	QPainter painter;
-	painter.begin(&printer);
+	QPainter painter (&printer);
 	painter.setRenderHint( QPainter::Antialiasing );
 
 	int firstPage = 1;
@@ -735,7 +743,6 @@ void MainWindow::print(QGuidoPainter * guidoPainter, QPrinter& printer)
 		if (page != lastPage)
 			printer.newPage();
 	}
-	painter.end();
 }
 
 //------------------------------------------------------------------------- 
@@ -746,7 +753,7 @@ void MainWindow::print()
 	QPainter painter;
 
 	guidoPainter->setGuidoLayoutSettings(mGuidoEngineParams);
-	if ( guidoPainter->setGMNCode(mTextEdit->toPlainText()) )
+	if ( guidoPainter->setGMNCode(mTextEdit->toPlainText(), filePath().toUtf8().data()) )
 	{
 		printer.setPaperSize( QPrinter::A4 );
 		QPrintDialog * dialog = new QPrintDialog( &printer , this);
@@ -1596,12 +1603,14 @@ bool MainWindow::loadFile(const QString &fileName)
 
 	reinitGuidoWidget();
 
+	setCurrentFile(fileName.toUtf8().data());
+
 	bool loadOk = mGuidoWidget->setGMNFile( fileName );
 	if (!loadOk && QGuidoImporter::musicxmlSupported()) {	// try to import file as MusicXML file
 		stringstream out;
 		if ( QGuidoImporter::musicxmlFile2Guido(fileName.toUtf8().constData(), true, out) )
 		{
-			loadOk = mGuidoWidget->setGMNCode( out.str().c_str() );
+			loadOk = mGuidoWidget->setGMNCode( out.str().c_str(),  filePath());
 		}
 	}
 	mLastModified = QFileInfo(fileName).lastModified();
@@ -1628,7 +1637,8 @@ bool MainWindow::loadFile(const QString &fileName)
 	}
 
 	QApplication::restoreOverrideCursor();
-	setCurrentFile(fileName.toUtf8().data());
+// call moved to the beginning of the function to benefit of the filePath() method
+//	setCurrentFile(fileName.toUtf8().data());
 	
 	recentFileListUpdate(fileName);
 	

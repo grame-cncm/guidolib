@@ -494,11 +494,11 @@ void GRGlissando::compareAccidentals(GRSystemStartEndStruct * sse, bool * isUp, 
 		ARNote * arendnote = endnote->getARNote();
 		if(arstartnote && arendnote )
 		{
-			int startnoteAcc = arstartnote->getAccidentals() + arstartnote->getDetune();
-			int endnoteAcc = arendnote->getAccidentals() + arendnote->getDetune();
-			if(startnoteAcc<endnoteAcc)
+			int startnoteAcc = arstartnote->getAccidentals() + int(arstartnote->getDetune());
+			int endnoteAcc = arendnote->getAccidentals() + int(arendnote->getDetune());
+			if(startnoteAcc < endnoteAcc)
 				*isUp = true;
-			else if(endnoteAcc<startnoteAcc)
+			else if(endnoteAcc < startnoteAcc)
 				*isDown = true;
 		}
 	}

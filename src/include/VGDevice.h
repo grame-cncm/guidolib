@@ -363,6 +363,11 @@ class VGDevice
 		/// Update bitmap pixels and ends pixels operations.
 		virtual void			ReleaseBitMapPixels() = 0;
 
+		/// Gives the current device data and returns the data associated mime type.
+		virtual const char*		GetImageData(const char* & outDataPtr, int& outLength) = 0;
+		/// Release the pointer returned by GetImageData
+		virtual void			ReleaseImageData(const char *) const = 0;
+
 		/// temporary hack - must be removed asap
 		virtual	VGSystem *		getVGSystem() const = 0;
 
