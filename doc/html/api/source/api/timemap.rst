@@ -16,21 +16,23 @@ Gives the mapping between the score and the performance time (i.e. rolled to unr
 	  	
 	  	Example::
 
-	  		{ "timemap" : [
-	  				["score": {"start": "0/1", "end": "1/1"}, 
-	  				 "perf":  {"start": "0/1", "end": "1/1"} ],
-	  				["score": {"start": "1/1", "end": "2/1"}, 
-	  				  "perf": {"start": "1/1", "end": "2/1"} ],
-	  				["score": {"start": "2/1", "end": "3/1"}, 
-	  				 "perf":  {"start": "0/1", "end": "1/1"} ],
-	  				["score": {"start": "3/1", "end": "4/1"}, 
-	  				  "perf": {"start": "1/1", "end": "2/1"} ]
-	  			] 
+	  		{ "ScoreID" : { 
+	  			"timemap" : [
+	  					{"score": {"start": "0/1", "end": "1/1"}, 
+	  					 "perf":  {"start": "0/1", "end": "1/1"} },
+	  					{"score": {"start": "1/1", "end": "2/1"}, 
+	  					  "perf": {"start": "1/1", "end": "2/1"} },
+	  					{"score": {"start": "2/1", "end": "3/1"}, 
+	  					 "perf":  {"start": "0/1", "end": "1/1"} },
+	  					{"score": {"start": "3/1", "end": "4/1"}, 
+		  				  "perf": {"start": "1/1", "end": "2/1"} }
+		  			]
+	  			}
 	  		}
 
 	* in case of error:
 		| An error message formatted as JSON with 'Error' as key.
-	  	| Example: ``{ "Error" : "incorrect score ID." }``
+	  	| Example: ``{ "ScoreID" : {"Error" : "incorrect score ID."} }``
 
 **Response code**
 	* 200 ("Success")

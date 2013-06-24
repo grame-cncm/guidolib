@@ -11,10 +11,10 @@ Getting the voices count
 **Response body**
 	* in case of success: 
 		| Gives the voices count of the score identified by ``ScoreID`` formatted as JSON with 'voicescount' as key.
-	  	| Example: ``{ "voicescount" : 4 }``
+	  	| Example: ``{ "ScoreID" : {"voicescount" : 4} }``
 	* in case of error:
 		| An error message formatted as JSON with 'Error' as key.
-	  	| Example: ``{ "Error" : "incorrect score ID." }``
+	  	| Example: ``{ "ScoreID" : {"Error" : "incorrect score ID."} }``
 
 **Response code**
 	* 200 ("Success")

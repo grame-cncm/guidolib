@@ -19,7 +19,7 @@ MIDI file export is available from the ``midi`` path and may use optional export
 		| a MIDI file.
 	* in case of error:
 		| An error message formatted as JSON with 'Error' as key.
-	  	| Example: ``{ "Error" : "incorrect score ID." }``
+	  	| Example: ``{ "ScoreID" : {"Error" : "incorrect score ID."} }``
 
 **Response code**
 	* 200 ("Success")

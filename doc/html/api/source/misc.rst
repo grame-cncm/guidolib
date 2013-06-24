@@ -1,7 +1,7 @@
 Miscellaneous
 =============
 
-| Miscellaneous requests to get information about the GUIDO engine. 
+| Miscellaneous requests to get information about the GUIDO engine or the GUIDO server. 
 | These requests don't require a score ID.
 
 
@@ -9,6 +9,7 @@ Miscellaneous
    :maxdepth: 1
 
    api/version
+   api/server
    api/linespace
 
 

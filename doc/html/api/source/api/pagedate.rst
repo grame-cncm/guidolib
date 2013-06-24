@@ -8,15 +8,23 @@ Getting the date of a given page
 	*ScoreID*/``pagedate``
 
 **Parameters**
-	``page``: a page number (page numbers start at 1)
+	``page``: a page number (page numbers start at 1). Default page is 1.
 
 **Response body**
 	* in case of success: 
-		| Gives the date of a page of the score identified by ``ScoreID`` formatted as JSON with 'date' as key and expressed as a rational value.
-	  	| Example: ``{ "date" : "12/1" }``
+		| Gives the date of a page of the score identified by ``ScoreID`` formatted as JSON with 'page' and 'date' as keys. The date is expressed as a rational value.
+	  	
+	  	Example:: 
+	  	
+	  		{ "ScoreID" : {
+					"page" : 1,
+					"date" : "12/1"
+	  			}
+	  		}
+
 	* in case of error:
 		| An error message formatted as JSON with 'Error' as key.
-	  	| Example: ``{ "Error" : "incorrect score ID." }``
+	  	| Example: ``{ "ScoreID" : {"Error" : "incorrect score ID."} }``
 
 **Response code**
 	* 200 ("Success")

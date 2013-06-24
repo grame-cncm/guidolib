@@ -20,7 +20,7 @@ Score drawing and page formatting
 		| an image of the score which format and mime/type depends on the optional formatting parameters.
 	* in case of error:
 		| An error message formatted as JSON with 'Error' as key.
-	  	| Example: ``{ "Error" : "incorrect score ID." }``
+	  	| Example: ``{ "ScoreID" : {"Error" : "incorrect score ID."} }``
 
 **Response code**
 	* 200 ("Success")

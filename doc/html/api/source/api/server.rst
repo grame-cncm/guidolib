@@ -1,16 +1,16 @@
-Getting GUIDO Engine version
+Getting GUIDO Server information
 ----------------------------
 
 .. index::
-  single: version
+  single: server
 
 **Path**
-	``version``
+	``server``
 
 **Response body**
 	* in case of success: 
-		| a version number, formatted as JSON with 'version' as key.
-	  	| Example: ``{ "version" : "1.5.0" }``
+		| a version number, formatted as JSON with 'server' as key.
+	  	| Example: ``{ "server" : "1.0" }``
 
 **Response code**
 	* 200 ("Success")

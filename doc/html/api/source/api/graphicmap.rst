@@ -25,19 +25,21 @@ Note that the relations between the graphic and time space depends on :ref:`layo
 	  	
 	  	Example::
 
-	  		{ "staffmap" : [
-	  				["graph": {"left": 80, "top": 0, "right": 122, "bottom": 451 }, 
-	  				 "time": { "start": "0/1", "end": "1/1"} ],
-	  				["graph": {"left": 122, "top": 0, "right": 243, "bottom": 451 }, 
-	  				 "time": { "start": "1/1", "end": "2/1"} ],
-	  				["graph": {"left": 243, "top": 0, "right": 312, "bottom": 451 }, 
-	  				 "time": { "start": "2/1", "end": "3/1"} ]
-	  			] 
+	  		{ "ScoreID" : {
+	  			"staffmap" : [
+						{"graph": {"left": 80, "top": 0, "right": 122, "bottom": 451 }, 
+						 "time": { "start": "0/1", "end": "1/1"} },
+						{"graph": {"left": 122, "top": 0, "right": 243, "bottom": 451 }, 
+						 "time": { "start": "1/1", "end": "2/1"} },
+						{"graph": {"left": 243, "top": 0, "right": 312, "bottom": 451 }, 
+						 "time": { "start": "2/1", "end": "3/1"} }
+					] 
+				}
 	  		}
 
 	* in case of error:
 		| An error message formatted as JSON with 'Error' as key.
-	  	| Example: ``{ "Error" : "incorrect score ID." }``
+	  	| Example: ``{ "ScoreID" : {"Error" : "incorrect score ID."} }``
 
 **Response code**
 	* 200 ("Success")

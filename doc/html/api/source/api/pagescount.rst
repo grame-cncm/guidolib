@@ -10,10 +10,10 @@ Getting the pages count
 **Response body**
 	* in case of success: 
 		| Gives the count of pages of the score identified by ``ScoreID`` formatted as JSON with 'pagescount' as key.
-	  	| Example: ``{ "pagescount" : 1 }``
+	  	| Example: ``{ "ScoreID" : {"pagescount" : 1} }``
 	* in case of error:
 		| An error message formatted as JSON with 'Error' as key.
-	  	| Example: ``{ "Error" : "incorrect score ID." }``
+	  	| Example: ``{ "ScoreID" : {"Error" : "incorrect score ID."} }``
 
 **Response code**
 	* 200 ("Success")

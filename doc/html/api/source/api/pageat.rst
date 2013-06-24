@@ -12,11 +12,19 @@ Getting a page at a given date
 
 **Response body**
 	* in case of success: 
-		| Gives the page number of the score identified by ``ScoreID`` that contains the given date, formatted as JSON with 'page' as key.
-	  	| Example: ``{ "page" : 2 }``
+		| Gives the page number of the score identified by ``ScoreID`` that contains the given date, formatted as JSON with 'date' and 'page' as key.
+	  	
+	  	Example::
+	  	
+			{ "ScoreID" : {
+					"date" : "15/2", 
+					"page" : 2 
+				}
+			}
+	  		
 	* in case of error:
 		| An error message formatted as JSON with 'Error' as key.
-	  	| Example: ``{ "Error" : "incorrect score ID." }``
+	  	| Example: ``{ "ScoreID" : {"Error" : "incorrect score ID."} }``
 
 **Response code**
 	* 200 ("Success")
