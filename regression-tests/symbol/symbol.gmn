@@ -1,0 +1,5 @@
+{
+  [\symbol<"test.png", dx=-4> (empty)],
+  [\symbol<"Documents/devGuido/code/regression-tests/test.png", dx=-4> (empty)],
+  [a \symbol<"C:/Users/Colas/Documents/devguido/code/regression-tests/test.png", dx=-4>(empty)]
+}

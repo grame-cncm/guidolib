@@ -1,0 +1,431 @@
+<?xml version="1.0"?>
+<typesystem package="PyGuido">
+    <load-typesystem name="typesystem_core.xml" generate="no" />
+    <load-typesystem name="typesystem_gui.xml" generate="no" />
+    
+    <!-- template that fixes compilation problems under Mac, but shouldn't hurt on other systems -->
+    <template name="fix-compilation-check">
+        // make sure we undefine the check() macros, which otherwise eats up the Shiboken::String::check() function
+        // I think the macro comes from Apple's file AssertMacros.h
+        #undef check
+    </template>
+    <inject-code class="native" position="beginning">
+        <!-- inject code at module level -->
+        <insert-template name="fix-compilation-check"/>
+    </inject-code>
+    <inject-code class="native" position="beginning">
+        static bool checkPyCapsuleOrPyCObject(PyObject* pyObj)
+        {
+            return PyCObject_Check(pyObj);
+        }
+    </inject-code>
+	
+    
+    <!-- GUIDO2Midi.h -->
+    <object-type name="Guido2MidiParams">
+        <inject-code class="native" position="beginning">
+            <insert-template name="fix-compilation-check"/>
+        </inject-code>
+    </object-type>
+    
+    <function signature="GuidoAR2MIDIFile(const ARHandler, const char*, const Guido2MidiParams*)" />
+    
+    
+    <!-- GUIDOEngine.h -->
+    <value-type name="ARHandler" />
+    <value-type name="GRHandler" />
+    <value-type name="CARHandler" />
+    <value-type name="CGRHandler" />
+    
+    <object-type name="GuidoInitDesc">
+        <inject-code class="native" position="beginning">
+            <insert-template name="fix-compilation-check"/>
+        </inject-code>
+        
+        <modify-field name="reserved" remove="all" /> <!-- for now, remove field to fix compilation error -->
+    </object-type>
+    
+    <value-type name="GPaintStruct">
+        <inject-code class="native" position="beginning">
+            <insert-template name="fix-compilation-check"/>
+        </inject-code>
+    </value-type>
+    
+    <value-type name="GuidoOnDrawDesc">
+        <inject-code class="native" position="beginning">
+            <insert-template name="fix-compilation-check"/>
+        </inject-code>
+    </value-type>
+    
+    <enum-type identified-by-value="kNoBB" />
+    <enum-type name="GuidoErrCode" force-integer="yes" />
+    <value-type name="GuidoDate" default-constructor="GuidoDate()" />
+    <enum-type identified-by-value="kAutoDistrib" />
+    <value-type name="GuidoLayoutSettings" />
+    <value-type name="GuidoPageFormat" />
+    
+    <function signature="GuidoInit(GuidoInitDesc*)" />
+    <function signature="GuidoShutdown()" />
+    <function signature="GuidoParseFile(const char*, ARHandler*)" />
+    <function signature="GuidoParseString(const char*, ARHandler*)" />
+    <function signature="GuidoAR2GR(ARHandler, const GuidoLayoutSettings*, GRHandler*)" />
+    <function signature="GuidoUpdateGR(GRHandler, const GuidoLayoutSettings*)" />
+    <function signature="GuidoFreeAR(ARHandler)" />
+    <function signature="GuidoFreeGR(GRHandler)" />
+    <function signature="GuidoGetErrorString(GuidoErrCode)" />
+    <function signature="GuidoGetParseErrorLine()" />
+    <function signature="GuidoGetDefaultLayoutSettings(GuidoLayoutSettings*)" />
+    <function signature="GuidoCountVoices(CARHandler)" />
+    <function signature="GuidoGetPageCount(CGRHandler)" />
+    <function signature="GuidoDuration(CGRHandler, GuidoDate*)" />
+    <function signature="GuidoFindEventPage(CGRHandler, const GuidoDate&amp;)" />
+    <function signature="GuidoFindPageAt(CGRHandler, const GuidoDate&amp;)" />
+    <function signature="GuidoGetPageDate(CGRHandler, int, GuidoDate*)" />
+    <function signature="GuidoOnDraw(GuidoOnDrawDesc*)" />
+    <function signature="GuidoSVGExport(const GRHandler, int, std::ostream&amp;, const char*)" />
+    <function signature="GuidoDrawBoundingBoxes(int)" />
+    <function signature="GuidoGetDrawBoundingBoxes()" />
+    <function signature="GuidoGetPageFormat(CGRHandler, int, GuidoPageFormat*)" />
+    <function signature="GuidoSetDefaultPageFormat(const GuidoPageFormat*)" />
+    <function signature="GuidoGetDefaultPageFormat(GuidoPageFormat*)" />
+    <function signature="GuidoUnit2CM(float)" />
+    <function signature="GuidoCM2Unit(float)" />
+    <function signature="GuidoUnit2Inches(float)" />
+    <function signature="GuidoInches2Unit(float)" />
+    <function signature="GuidoResizePageToMusic(GRHandler)" />
+    <function signature="GuidoGetVersionNums(int*, int*, int*)">
+        <modify-function signature="GuidoGetVersionNums(int*, int*, int*)">
+            <modify-argument index="1">
+                <remove-argument />
+            </modify-argument>
+            <modify-argument index="2">
+                <remove-argument />
+            </modify-argument>
+            <modify-argument index="3">
+                <remove-argument />
+            </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="PyTuple" />
+            </modify-argument>
+            <inject-code class="target" position="beginning">
+                int major, minor, sub;
+                %FUNCTION_NAME(&amp;major, &amp;minor, &amp;sub);
+                
+                %PYARG_0 = PyTuple_New(3);
+                PyTuple_SET_ITEM(%PYARG_0, 0, %CONVERTTOPYTHON[int](major));
+                PyTuple_SET_ITEM(%PYARG_0, 1, %CONVERTTOPYTHON[int](minor));
+                PyTuple_SET_ITEM(%PYARG_0, 2, %CONVERTTOPYTHON[int](sub));
+            </inject-code>
+        </modify-function>
+    </function>
+    <function signature="GuidoGetVersionStr()" />
+    <function signature="GuidoCheckVersionNums(int, int, int)" />
+    <function signature="GuidoGetLineSpace()" />
+    <function signature="GuidoMarkVoice(ARHandler, int, const GuidoDate&amp;, const GuidoDate&amp;, unsigned char, unsigned char, unsigned char)">
+        <modify-function signature="GuidoMarkVoice(ARHandler, int, const GuidoDate&amp;, const GuidoDate&amp;, unsigned char, unsigned char, unsigned char)">
+            <modify-argument index="5">
+                <replace-type modified-type="int" />
+                <conversion-rule class="target" position="beginning">
+                    int %out = %CONVERTTOCPP[int](%PYARG_5);
+                </conversion-rule>
+            </modify-argument>
+        </modify-function>
+    </function>
+    <!--function signature="AddGGSOutput(const char*)" /-->
+    <!--function signature="AddGuidoOutput(const char*)" /-->
+    
+	
+    <!-- GUIDOExport.h -->
+    <!-- nothing revlevant defined here -->
+    
+	
+    <!-- GUIDOFactory.h -->
+    <primitive-type name="ARFactoryHandler" />
+    
+    <function signature="GuidoFactoryOpen(ARFactoryHandler *)" />
+    <function signature="GuidoFactoryClose(ARFactoryHandler)" />
+    <function signature="GuidoFactoryOpenMusic(ARFactoryHandler)" />
+    <function signature="GuidoFactoryCloseMusic(ARFactoryHandler)" />
+    <function signature="GuidoFactoryOpenVoice(ARFactoryHandler)" />
+    <function signature="GuidoFactoryCloseVoice(ARFactoryHandler)" />
+    <function signature="GuidoFactoryOpenChord(ARFactoryHandler)" />
+    <function signature="GuidoFactoryCloseChord(ARFactoryHandler)" />
+    <function signature="GuidoFactoryInsertCommata(ARFactoryHandler)" />
+    <function signature="GuidoFactoryOpenEvent(ARFactoryHandler, const char *)" />
+    <function signature="GuidoFactoryCloseEvent(ARFactoryHandler)" />
+    <function signature="GuidoFactoryAddSharp(ARFactoryHandler)" />
+    <function signature="GuidoFactoryAddFlat(ARFactoryHandler)" />
+    <function signature="GuidoFactorySetEventDots(ARFactoryHandler, int)" />
+    <function signature="GuidoFactorySetEventAccidentals(ARFactoryHandler, int)" />
+    <function signature="GuidoFactorySetOctave(ARFactoryHandler, int)" />
+    <function signature="GuidoFactorySetDuration(ARFactoryHandler, int, int)" />
+    <function signature="GuidoFactoryOpenTag(ARFactoryHandler, const char * , long)" />
+    <function signature="GuidoFactoryOpenRangeTag(ARFactoryHandler, const char *, long)" />
+    <function signature="GuidoFactoryEndTag(ARFactoryHandler)" />
+    <function signature="GuidoFactoryCloseTag(ARFactoryHandler)" />
+    <function signature="GuidoFactoryAddTagParameterString(ARFactoryHandler, const char *)" />
+    <function signature="GuidoFactoryAddTagParameterInt(ARFactoryHandler, int)" />
+    <function signature="GuidoFactoryAddTagParameterFloat(ARFactoryHandler, double)" />
+    <function signature="GuidoFactorySetParameterName(ARFactoryHandler, const char *)" />
+    <function signature="GuidoFactorySetParameterUnit(ARFactoryHandler, const char *)" />
+    <function signature="GuidoFactoryCreateTag(ARFactoryHandler, const char*, long)" />
+    <function signature="GuidoFactoryIsRangeTag(ARFactoryHandler)" />
+    
+    
+    <!-- GuidoFeedback.h -->
+    <enum-type identified-by-value="kLastFeedbackString" />
+    
+    <interface-type name="GuidoFeedback">
+        <enum-type identified-by-value="kProcessing" />
+        <enum-type identified-by-value="kActionCancel" />
+        <modify-function signature="CreateDialogWindow(int, int)">
+            <modify-argument index="1">
+                <replace-default-expression with="1" /> <!-- replace str_Title with it's value -->
+            </modify-argument>
+        </modify-function>
+    </interface-type>
+    
+    
+    <!-- GUIDOScoreMap.h -->
+    <enum-type name="GuidoeElementSelector" />
+    <enum-type name="GuidoElementType" />
+
+    <value-type name="GuidoElementInfos">
+    </value-type>
+
+    <primitive-type name="TimeSegment" target-lang-api-name="PyTuple">
+        <include file-name="Python.h" location="global"/>
+        <conversion-rule>
+            <native-to-target>
+                PyObject* %out = PyTuple_New(2);
+                PyTuple_SET_ITEM(%out, 0, %CONVERTTOPYTHON[GuidoDate](%in.first));
+                PyTuple_SET_ITEM(%out, 1, %CONVERTTOPYTHON[GuidoDate](%in.second));
+                return %out;
+            </native-to-target>
+            <target-to-native>
+                <add-conversion type="PyTuple" check="%CHECKTYPE[TimeSegment](%in)">
+                    GuidoDate first = %CONVERTTOCPP[GuidoDate](PyTuple_GET_ITEM(%in, 0));
+                    GuidoDate second = %CONVERTTOCPP[GuidoDate](PyTuple_GET_ITEM(%in, 1));
+                    %out = %OUTTYPE(first, second);
+                </add-conversion>
+            </target-to-native>
+        </conversion-rule>
+    </primitive-type>
+    
+    <object-type name="Time2GraphicMap">
+        <inject-code class="native" position="beginning">
+            <insert-template name="fix-compilation-check"/>
+        </inject-code>
+    </object-type>
+    
+    <interface-type name="MapCollector">
+        <inject-code class="native" position="beginning">
+            <insert-template name="fix-compilation-check"/>
+        </inject-code>
+    </interface-type>
+    
+    <object-type name="RectInfos">
+        <inject-code class="native" position="beginning">
+            <insert-template name="fix-compilation-check"/>
+        </inject-code>
+    </object-type>
+
+    <object-type name="MapElement">
+        <inject-code class="native" position="beginning">
+            <insert-template name="fix-compilation-check"/>
+        </inject-code>
+    </object-type>
+    
+    <interface-type name="TimeMapCollector">
+        <inject-code class="native" position="beginning">
+            <insert-template name="fix-compilation-check"/>
+        </inject-code>
+    </interface-type>
+    
+    <function signature="GuidoGetMap(CGRHandler, int, float, float, GuidoeElementSelector, MapCollector&amp;)" />
+    <function signature="GuidoGetPageMap(CGRHandler, int, float, float, Time2GraphicMap&amp;)" />
+    <function signature="GuidoGetStaffMap(CGRHandler, int, float, float, int, Time2GraphicMap&amp;)" />
+    <function signature="GuidoGetVoiceMap(CGRHandler, int, float, float, int, Time2GraphicMap&amp;)" />
+    <function signature="GuidoGetSystemMap(CGRHandler, int, float, float, Time2GraphicMap&amp;)" />
+    <function signature="GuidoGetTime(const GuidoDate&amp;, const Time2GraphicMap, TimeSegment&amp;, FloatRect&amp;)" />
+    <function signature="GuidoGetPoint(float, float, const Time2GraphicMap, TimeSegment&amp;, FloatRect&amp;)" />
+    <function signature="GuidoGetSVGMap(GRHandler, int pagenum, GuidoeElementSelector, std::vector&lt;MapElement&gt;&amp;)" />
+    <function signature="GuidoGetTimeMap(CARHandler, TimeMapCollector&amp;)" />
+    
+    
+    <!-- MusicalSymbols.h -->
+    <!-- ??? constants ??? -->
+    
+    
+    <!-- SingletonGSystem.h -->
+    <object-type name="SingletonGSystem">
+        <inject-code class="native" position="beginning">
+            <insert-template name="fix-compilation-check"/>
+        </inject-code>
+		
+		<modify-field name="mInstance" remove="all" /> <!-- remove field to fix a crash when loading PyGuido library on Windows -->
+    </object-type>
+    
+    
+    <!-- TRect.h -->
+    <value-type name="TRect" generate="no"/>
+    
+    <value-type name="FloatRect">
+	    <include file-name="sstream" location="global" />
+	    <add-function signature="__repr__" return-type="PyObject*">
+	        <inject-code class="target" position="beginning">
+	        	std::ostringstream ss;
+	        	ss &lt;&lt; ((PyObject*)%PYSELF)->ob_type->tp_name &lt;&lt; "("
+	        	   &lt;&lt; %CPPSELF.left &lt;&lt; "," &lt;&lt; %CPPSELF.top &lt;&lt; ","
+	        	   &lt;&lt; %CPPSELF.right &lt;&lt; "," &lt;&lt; %CPPSELF.bottom &lt;&lt; ")";
+	        	%PYARG_0 = Shiboken::String::fromCString(ss.str().c_str());
+	        </inject-code>
+	    </add-function>
+	    <add-function signature="left" return-type="PyObject*">
+	        <inject-code class="target" position="beginning">
+	        	float res = %CPPSELF.left;
+	        	%PYARG_0 = %CONVERTTOPYTHON[float](res);
+	        </inject-code>
+	    </add-function>
+	    <add-function signature="top" return-type="PyObject*">
+	        <inject-code class="target" position="beginning">
+	        	float res = %CPPSELF.top;
+	        	%PYARG_0 = %CONVERTTOPYTHON[float](res);
+	        </inject-code>
+	    </add-function>
+	    <add-function signature="right" return-type="PyObject*">
+	        <inject-code class="target" position="beginning">
+	        	float res = %CPPSELF.right;
+	        	%PYARG_0 = %CONVERTTOPYTHON[float](res);
+	        </inject-code>
+	    </add-function>
+	    <add-function signature="bottom" return-type="PyObject*">
+	        <inject-code class="target" position="beginning">
+	        	float res = %CPPSELF.bottom;
+	        	%PYARG_0 = %CONVERTTOPYTHON[float](res);
+	        </inject-code>
+	    </add-function>
+        <modify-function signature="GetPos(float*, float*)">
+        	<rename to="GetXYPos" />
+            <modify-argument index="1">
+                <remove-argument />
+            </modify-argument>
+            <modify-argument index="2">
+                <remove-argument />
+            </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="PyTuple" />
+            </modify-argument>
+            <inject-code class="target" position="beginning">
+                float in_x, in_y;
+                %CPPSELF.%FUNCTION_NAME(&amp;in_x, &amp;in_y);
+                
+                %PYARG_0 = PyTuple_New(2);
+                PyTuple_SET_ITEM(%PYARG_0, 0, %CONVERTTOPYTHON[float](in_x));
+                PyTuple_SET_ITEM(%PYARG_0, 1, %CONVERTTOPYTHON[float](in_y));
+            </inject-code>
+        </modify-function>
+        <modify-function signature="GetXPos(float*)">
+            <modify-argument index="1">
+                <remove-argument />
+            </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="float" />
+            </modify-argument>
+            <inject-code class="target" position="beginning">
+                float inXPos;
+                %CPPSELF.%FUNCTION_NAME(&amp;inXPos);
+                %PYARG_0 = %CONVERTTOPYTHON[float](inXPos);
+            </inject-code>
+        </modify-function>
+        <modify-function signature="GetYPos(float*)">
+            <modify-argument index="1">
+                <remove-argument />
+            </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="float" />
+            </modify-argument>
+            <inject-code class="target" position="beginning">
+                float inYPos;
+                %CPPSELF.%FUNCTION_NAME(&amp;inYPos);
+                %PYARG_0 = %CONVERTTOPYTHON[float](inYPos);
+            </inject-code>
+        </modify-function>
+        <modify-function signature="GetPos(float*, float*, float*, float*)">
+            <modify-argument index="1">
+                <remove-argument />
+            </modify-argument>
+            <modify-argument index="2">
+                <remove-argument />
+            </modify-argument>
+            <modify-argument index="3">
+                <remove-argument />
+            </modify-argument>
+            <modify-argument index="4">
+                <remove-argument />
+            </modify-argument>
+            <modify-argument index="return">
+                <replace-type modified-type="PyTuple" />
+            </modify-argument>
+            <inject-code class="target" position="beginning">
+                float in_x1, in_y1, in_x2, in_y2;
+                %CPPSELF.%FUNCTION_NAME(&amp;in_x1, &amp;in_y1, &amp;in_x2, &amp;in_y2);
+                
+                %PYARG_0 = PyTuple_New(4);
+                PyTuple_SET_ITEM(%PYARG_0, 0, %CONVERTTOPYTHON[float](in_x1));
+                PyTuple_SET_ITEM(%PYARG_0, 1, %CONVERTTOPYTHON[float](in_y1));
+                PyTuple_SET_ITEM(%PYARG_0, 2, %CONVERTTOPYTHON[float](in_x2));
+                PyTuple_SET_ITEM(%PYARG_0, 3, %CONVERTTOPYTHON[float](in_y2));
+            </inject-code>
+        </modify-function>
+    </value-type>
+    
+    <value-type name="IntRect">
+    </value-type>
+    
+	
+    <!-- VGColor.h -->
+    <value-type name="VGColor">
+        <inject-code class="native" position="beginning">
+            <insert-template name="fix-compilation-check"/>
+        </inject-code>
+    </value-type>
+    
+    
+    <!-- VGDevice.h -->
+    <object-type name="VGDevice">
+        <inject-code class="native" position="beginning">
+            <insert-template name="fix-compilation-check"/>
+        </inject-code>
+        <enum-type name="VRasterOpMode" />
+        <enum-type name="VTextAlignMode" />
+    </object-type>
+    
+    
+    <!-- VGFont.h -->
+    <object-type name="VGFont">
+        <inject-code class="native" position="beginning">
+            <insert-template name="fix-compilation-check"/>
+        </inject-code>
+        
+        <enum-type identified-by-value="kFontNone" />
+    </object-type>
+    
+    
+    <!-- VGPen.h -->
+    <object-type name="VGPen">
+        <inject-code class="native" position="beginning">
+            <insert-template name="fix-compilation-check"/>
+        </inject-code>
+    </object-type>
+    
+    
+    <!-- VGSystem.h -->
+    <object-type name="VGSystem">
+        <inject-code class="native" position="beginning">
+            <insert-template name="fix-compilation-check"/>
+        </inject-code>
+    </object-type>
+    
+</typesystem>
+

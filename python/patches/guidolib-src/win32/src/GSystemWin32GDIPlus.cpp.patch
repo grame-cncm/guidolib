@@ -1,0 +1,4 @@
+34a35
+> 	fSymbolTable = new unsigned int[kMaxMusicalSymbolID];
+41a43
+> 	delete[] fSymbolTable;

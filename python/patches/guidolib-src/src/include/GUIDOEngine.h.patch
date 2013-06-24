@@ -1,0 +1,24 @@
+155c155
+< typedef struct
+---
+> struct GuidoDate
+161c161
+< } GuidoDate;
+---
+> };
+169c169
+< typedef struct GuidoLayoutSettings
+---
+> struct GuidoLayoutSettings
+208c208
+< } GuidoLayoutSettings;
+---
+> };
+213c213
+< typedef struct
+---
+> struct GuidoPageFormat
+221c221
+< } GuidoPageFormat;
+---
+> };

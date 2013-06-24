@@ -40,8 +40,12 @@ void
 GFontWin32::GetExtent( const char * s, int inCharCount, float * outWidth, 
 					   float * outHeight, VGDevice * context ) const 
 {
+	if (!inCharCount) {
+		*outWidth = *outHeight = 0;
+		return;
+	}
+	
 	HDC hdc;
-
 	if( !(context && context->IsValid()) )
 		hdc = ::GetDC( (HWND)NULL ); 
 	else 

@@ -1,0 +1,24 @@
+
+			Changes implemented to draw the trill line
+
+
+Method void ARMusicalVoice::doAutoTrill():
+	Called in void GRVoiceManager::BeginManageVoice() 
+	Manages the notes and trills to pass the information of trill to the tied notes 
+	(and make possible the drawing of the trill line over several tied notes and not only the first one)
+
+Method  float	GRStaff::getXEndPosition(TYPE_TIMEPOSITION pos, TYPE_DURATION dur) :
+	Called in void GRSingleNote::OnDraw( VGDevice & hdc) const 
+	Returns the spatial end position (x) corresponding to the end of the caller's time duration.
+	If it is followed by a note or a rest, the position returned will be just before the rest or note.
+	If it is the last note on a staff, the position returned will be exactly on the next bar line.
+	Wheter or not the note is tied doesn't matter : the note to which it is tied will not be taken in 
+	count in the duration.
+
+Method  void GRTrill::OnDraw(VGDevice & hdc, float right, int nVoice) :
+	Called in void GRSingleNote::OnDraw( VGDevice & hdc) const 
+	Draws the trill line depending on the position and the voice number given by GRSingleNote, 
+	and on his status begin (boolean, default = true) set by ARMusicalVoice::doAutoTrill().
+
+Method virtual float & GRTrill::getLastPosX(int i) :
+	Keeps in memory, through a map, the end position of the last trill line drawn for each voice.

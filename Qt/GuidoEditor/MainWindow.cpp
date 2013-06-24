@@ -4,17 +4,12 @@
  * Created by Christophe Daudin on 12/05/09.
  * Copyright 2009 Grame. All rights reserved.
  *
- * GNU Lesser General Public License Usage
- * Alternatively, this file may be used under the terms of the GNU Lesser
- * General Public License version 2.1 as published by the Free Software
- * Foundation and appearing in the file LICENSE.LGPL included in the
- * packaging of this file.  Please review the following information to
- * ensure the GNU Lesser General Public License version 2.1 requirements
- * will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
- *
- *
- * This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- * WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+ * Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+ * research@grame.fr
  */
  
 #include <fstream>
@@ -47,7 +42,10 @@ typedef GuidoErrCode (* GuidoAR2MIDIFilePtr)(const struct NodeAR* ar, const char
 #include <QProgressBar>
 #include <QDir>
 #include <QTextDocument>
- 
+#include <QMessageBox>
+#include <QToolBar>
+
+
 #define APP_NAME QString("GuidoEditor")
 #define COMPANY_NAME QString("GRAME")
 
@@ -439,6 +437,17 @@ MainWindow::~MainWindow()
 //-------------------------------------------------------------------------
 
 //-------------------------------------------------------------------------
+const QString MainWindow::filePath() const
+{
+	if (mCurFile.size()) {
+		QDir dir(mCurFile);
+		dir.cdUp();
+		return dir.absolutePath();
+	}
+	return "";
+}
+
+//-------------------------------------------------------------------------
 void MainWindow::newFile()
 {
     if (maybeSave()) {
@@ -448,6 +457,8 @@ void MainWindow::newFile()
 		mTextEdit->clear();
 
         setCurrentFile("");
+
+        reinitARHandlerPath();
     }
 }
 
@@ -466,12 +477,25 @@ bool MainWindow::saveAs()
 {
 	QString filters = GMN_FILTER + ";;" + ALL_FILTER;
 	QString savePath = mRecentFiles.size() ? QFileInfo(mRecentFiles.last()).path() : QDir::home().path();
-	QString fileName = QFileDialog::getSaveFileName(this, "Save the Guido Score", savePath, tr(filters.toAscii().data()));
+	QString fileName = QFileDialog::getSaveFileName(this, "Save the Guido Score", savePath, tr(filters.toUtf8().data()));
     if (fileName.isEmpty())
         return false;
 	if (!fileName.toUpper().endsWith("."+QString(GMN_EXTENSION).toUpper()))
 		fileName += "." + GMN_EXTENSION;
-    return saveFile(fileName);
+
+    // - To be able to remove ex filePath from ARHandler path list
+    std::string exFilePath(mCurFile.toUtf8().data());
+
+    bool saveResult = saveFile(fileName);
+
+    // - Add path to the AR
+    if (saveResult)
+    {
+        std::string filePath(fileName.toUtf8().data());
+        addFileDirectoryPathToARHandler(filePath, exFilePath);
+    }
+
+    return saveResult;
 }
  
 //-------------------------------------------------------------------------
@@ -528,7 +552,7 @@ void MainWindow::updateCode()
 	if ( newGMNCode == mGuidoWidget->gmnCode() )
 		return;
 
-	if ( mGuidoWidget->setGMNCode( newGMNCode ) )
+	if ( mGuidoWidget->setGMNCode( newGMNCode, filePath() ) )
 	{
 		statusBar()->showMessage( "Code ok" );
 		setCurrentPage( mGuidoWidget->firstVisiblePage() );
@@ -557,8 +581,14 @@ void MainWindow::doexport()
 {
 	QGuidoPainter * guidoPainter = QGuidoPainter::createGuidoPainter();
 	guidoPainter->setGuidoLayoutSettings(mGuidoEngineParams);
-	if ( guidoPainter->setGMNCode(mTextEdit->toPlainText()) ) {
 
+    // - Since QGuidoPainter is created again (then lose its parameters),
+    //   we have to make a backup of current ARHandler's pathsVector before...
+//    std::vector<std::string> pathsVector;
+//    GuidoGetSymbolPath((ARHandler)mGuidoWidget->getARHandler(), pathsVector);
+
+	if ( guidoPainter->setGMNCode(mTextEdit->toPlainText(), filePath().toUtf8().data()) )
+    {
 		QString savePath = mRecentFiles.size() ? QFileInfo(mRecentFiles.last()).path() : QDir::home().path();
 		QString fileName = QFileDialog::getSaveFileName(this, "Export to:", savePath);
 		if (!fileName.isEmpty()) {
@@ -633,11 +663,11 @@ void MainWindow::exportToSVG(QGuidoPainter * guidoPainter, const QString& filena
 //-------------------------------------------------------------------------
 void MainWindow::exportToPdf(QGuidoPainter * guidoPainter, const QString& filename)
 {
-	QPrinter printer;
-	printer.setPaperSize( QPrinter::A4 );
+	QPrinter printer(QPrinter::HighResolution);
 //	printer.setFullPage(true);
-	printer.setOutputFileName( QString(filename) );
 	printer.setOutputFormat( QPrinter::PdfFormat );
+	printer.setOutputFileName( QString(filename) );
+	printer.setPaperSize( QPrinter::A4 );
 	print (guidoPainter, printer);
 }
 
@@ -658,8 +688,8 @@ void MainWindow::exportToImage(QGuidoPainter * guidoPainter, const QString& file
 	painter.setRenderHints ( QPainter::Antialiasing | QPainter::TextAntialiasing, true);
 
 	//With the QPainter, fill background with white.
-	painter.setBrush(QBrush(QColor(255,255,255)));
-	painter.setPen(QPen(QColor(255,255,255)));
+	painter.setBrush(QBrush(QColor(255,255,255,0)));
+	painter.setPen(QPen(QColor(255,255,255,0)));
 	painter.drawRect(0,0,size.width(), size.height());
 
 	//With the QPainter and the QGuidoPainter, draw the score.
@@ -680,11 +710,11 @@ void MainWindow::about()
 	mistr.setNum(minor);
 	substr.setNum(sub);
 	QString version(mastr + '.' + mistr + '.' + substr);
-	QMessageBox::about(this, tr(QString("About " + APP_NAME).toAscii().data()),
+	QMessageBox::about(this, tr(QString("About " + APP_NAME).toUtf8().data()),
              tr(QString("<h2>" + APP_NAME + "</h2>" + 
                 "<p>Copyright &copy; 2008-2011 Grame. " 
                 "<p>A Guido score viewer and GMN editor, using Qt. "
-				"<p>Using the Guido Engine version " + version).toAscii().data()));
+				"<p>Using the Guido Engine version " + version).toUtf8().data()));
 }
 
 
@@ -698,8 +728,7 @@ void MainWindow::preferences()
 //------------------------------------------------------------------------- 
 void MainWindow::print(QGuidoPainter * guidoPainter, QPrinter& printer) 
 {
-	QPainter painter;
-	painter.begin(&printer);
+	QPainter painter (&printer);
 	painter.setRenderHint( QPainter::Antialiasing );
 
 	int firstPage = 1;
@@ -714,7 +743,6 @@ void MainWindow::print(QGuidoPainter * guidoPainter, QPrinter& printer)
 		if (page != lastPage)
 			printer.newPage();
 	}
-	painter.end();
 }
 
 //------------------------------------------------------------------------- 
@@ -725,7 +753,7 @@ void MainWindow::print()
 	QPainter painter;
 
 	guidoPainter->setGuidoLayoutSettings(mGuidoEngineParams);
-	if ( guidoPainter->setGMNCode(mTextEdit->toPlainText()) )
+	if ( guidoPainter->setGMNCode(mTextEdit->toPlainText(), filePath().toUtf8().data()) )
 	{
 		printer.setPaperSize( QPrinter::A4 );
 		QPrintDialog * dialog = new QPrintDialog( &printer , this);
@@ -1451,7 +1479,9 @@ void MainWindow::readSettings()
 
 	mFindWidget->readSettings(settings);
 	
-	QColor scoreColor = settings.value( SCORE_COLOR_SETTING , Qt::black ).value<QColor>();
+	QColor black = Qt::black;
+	QVariant color = black;
+	QColor scoreColor = settings.value( SCORE_COLOR_SETTING, color).value<QColor>();
 	
 	setLineWrap(lineWrapping);
     resize(winSize);
@@ -1568,17 +1598,19 @@ bool MainWindow::loadFile(const QString &fileName)
 		return false;
 	}
 
-	statusBar()->showMessage(tr(QString("Loading " + fileName + "...").toAscii().data()));
+	statusBar()->showMessage(tr(QString("Loading " + fileName + "...").toUtf8().data()));
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
 	reinitGuidoWidget();
 
+	setCurrentFile(fileName.toUtf8().data());
+
 	bool loadOk = mGuidoWidget->setGMNFile( fileName );
 	if (!loadOk && QGuidoImporter::musicxmlSupported()) {	// try to import file as MusicXML file
 		stringstream out;
-		if ( QGuidoImporter::musicxmlFile2Guido(fileName.toAscii().constData(), true, out) )
+		if ( QGuidoImporter::musicxmlFile2Guido(fileName.toUtf8().constData(), true, out) )
 		{
-			loadOk = mGuidoWidget->setGMNCode( out.str().c_str() );
+			loadOk = mGuidoWidget->setGMNCode( out.str().c_str(),  filePath());
 		}
 	}
 	mLastModified = QFileInfo(fileName).lastModified();
@@ -1601,11 +1633,12 @@ bool MainWindow::loadFile(const QString &fileName)
 		QString errorMessage = "Invalid GMN file : " + mGuidoWidget->getLastErrorMessage();
 //		mGuidoWidget->resize( QSize( 0,0 ) );
 		mTextEdit->highlightErrorLine( mGuidoWidget->getLastParseErrorLine() );
-		statusBar()->showMessage(tr(errorMessage.toAscii().data()), 2000);
+		statusBar()->showMessage(tr(errorMessage.toUtf8().data()), 2000);
 	}
 
 	QApplication::restoreOverrideCursor();
-	setCurrentFile(fileName.toAscii().data());
+// call moved to the beginning of the function to benefit of the filePath() method
+//	setCurrentFile(fileName.toUtf8().data());
 	
 	recentFileListUpdate(fileName);
 	
@@ -1748,7 +1781,9 @@ void MainWindow::changeFontSize( float newFontPointSize )
 	bool modified = mTextEdit->document()->isModified();
 
 //	QFont newFont = mTextEdit->document()->defaultFont();
-	QFont newFont ( "Courier new", newFontPointSize);
+//	QFont newFont ( "Courier new", newFontPointSize);  // Courier new seems to be buggy - incorrect rendering
+//	QFont newFont ( "Courier", newFontPointSize);
+	QFont newFont ( "Monaco", newFontPointSize);
 	newFont.setPointSize( newFontPointSize );
 	mTextEdit->document()->setDefaultFont( newFont  );
 
@@ -1808,3 +1843,59 @@ void MainWindow::setHighlighter( GuidoHighlighter * highlighter )
 	highlighter->setDocument( mTextEdit->document() );
 }
 
+//-------------------------------------------------------------------------
+void MainWindow::addFileDirectoryPathToARHandler(const std::string filePath, const std::string exFilePath)
+{
+    CARHandler currentARHandler = mGuidoWidget->getARHandler();
+
+    size_t lastSlashPosition = filePath.find_last_of("/");
+
+    std::string baseFilePath("");
+    baseFilePath.append(filePath, 0, lastSlashPosition);
+
+    std::vector<std::string> paths;
+    GuidoGetSymbolPath((const ARHandler)currentARHandler, paths);
+
+    if (std::find(paths.begin(), paths.end(), baseFilePath) == paths.end())
+    {
+        // - Remove ex current directory
+        lastSlashPosition = exFilePath.find_last_of("/");
+
+        std::string baseExFilePath("");
+        baseExFilePath.append(exFilePath, 0, lastSlashPosition);
+
+        std::vector<std::string>::iterator pos = std::find(paths.begin(), paths.end(), baseExFilePath);
+        if (pos != paths.end())
+            paths.erase(pos);
+        // -----------------------------
+
+        paths.push_back(baseFilePath);
+        GuidoSetSymbolPath((ARHandler)currentARHandler, paths);
+    }
+}
+
+//-------------------------------------------------------------------------
+void MainWindow::reinitARHandlerPath()
+{
+    CARHandler currentARHandler = mGuidoWidget->getARHandler();
+
+    std::vector<std::string> pathsVector;
+
+    // - Home directory
+    std::string homePath("");
+
+#ifdef WIN32
+    // For windows
+    homePath.append(getenv("HOMEDRIVE"));
+    homePath.append(getenv("HOMEPATH"));
+#else
+    // For unix
+    homePath.append(getenv("HOME"));
+#endif
+
+    homePath.append("\\");
+
+    pathsVector.push_back(homePath);
+
+    GuidoSetSymbolPath((ARHandler)currentARHandler, pathsVector);
+}

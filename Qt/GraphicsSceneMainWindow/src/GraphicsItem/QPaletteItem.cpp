@@ -4,17 +4,12 @@
  * Created by Christophe Daudin on 12/05/09.
  * Copyright 2009 Grame. All rights reserved.
  *
- * GNU Lesser General Public License Usage
- * Alternatively, this file may be used under the terms of the GNU Lesser
- * General Public License version 2.1 as published by the Free Software
- * Foundation and appearing in the file LICENSE.LGPL included in the
- * packaging of this file.  Please review the following information to
- * ensure the GNU Lesser General Public License version 2.1 requirements
- * will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
- *
- *
- * This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- * WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+ * Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+ * research@grame.fr
  */
 #include "QPaletteItem.h"
 
@@ -283,17 +278,17 @@ void QPaletteItem::reorderItems()
 		mInteractions[0].mItem->setPos( center - QPointF(itemBoundingRect.width()/2 , itemBoundingRect.height()/2) );
 		while ( !mInteractions[0].mPath->contains( itemBoundingRect ) )
 		{
-			mInteractions[0].mItem->scale(0.9f , 0.9f);
+			mInteractions[0].mItem->setScale(0.9f);
 			itemBoundingRect = mInteractions[0].mItem->mapToParent( mInteractions[0].mItem->boundingRect() ).boundingRect();
 			mInteractions[0].mItem->setPos( center - QPointF(itemBoundingRect.width()/2 , itemBoundingRect.height()/2) );
 		}
 		while ( mInteractions[0].mPath->contains( itemBoundingRect ) )
 		{
-			mInteractions[0].mItem->scale(1/0.9f , 1/0.9f);
+			mInteractions[0].mItem->setScale(1/0.9f);
 			itemBoundingRect = mInteractions[0].mItem->mapToParent( mInteractions[0].mItem->boundingRect() ).boundingRect();
 			mInteractions[0].mItem->setPos( center - QPointF(itemBoundingRect.width()/2 , itemBoundingRect.height()/2) );
 		}
-		mInteractions[0].mItem->scale(0.9f , 0.9f);
+		mInteractions[0].mItem->setScale(0.9f);
 		return;
 	}
 
@@ -370,7 +365,7 @@ void QPaletteItem::reorderItems()
 		}
 		
 		posRadius = littleRect.width()/2 + (mRadius - littleRect.width()/2) * (radiusFactor-2*RADIUS_FACTOR_INCREMENT);
-		mInteractions[i].mItem->scale( maxScale , maxScale );
+		mInteractions[i].mItem->setScale( maxScale );
 		QRectF itemBoundingRect = mInteractions[i].mItem->mapToParent( mInteractions[i].mItem->boundingRect() ).boundingRect();
 		mInteractions[i].mItem->setPos( center + polarToOrtho( posRadius, currentAngle + itemAngle/2 ) - QPointF(itemBoundingRect.width()/2 , itemBoundingRect.height()/2) );
 		

@@ -1,20 +1,14 @@
 /*
-	GUIDO Library
-	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  GUIDO Library
+  Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  Copyright (C) 2002-2013 Grame
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Lesser General Public
-	License as published by the Free Software Foundation; either
-	version 2.1 of the License, or (at your option) any later version.
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-	This library is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Lesser General Public License for more details.
-
-	You should have received a copy of the GNU Lesser General Public
-	License along with this library; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
 
 */
 
@@ -48,9 +42,8 @@ GRGlobalStem::GRGlobalStem( GRStaff * inStaff,
 						   ARNoteFormat * curnoteformat ) 
 : GRPTagARNotationElement(pshare),
   mFlagOnOff(true),stemdirset(false),stemlengthset(false),
-  stemdir(dirOFF) // , colref(NULL)
+  stemdir(dirOFF), lowerNote(NULL), higherNote(NULL) // , colref(NULL)
 {
-
 	if (curdispdur && curdispdur->getDisplayDuration() > DURATION_0)
 	{
 		dispdur = curdispdur->getDisplayDuration();
@@ -100,6 +93,7 @@ GRGlobalStem::GRGlobalStem( GRStaff * inStaff,
 		if (tmpdy)
 		{
 			mTagOffset.y = (GCoord)(tmpdy->getValue(inStaff->getStaffLSPACE()));
+            mTagOffset.y = -mTagOffset.y;
 		}
 	}
 	else
@@ -143,9 +137,7 @@ void GRGlobalStem::addAssociation(GRNotationElement * grnot)
 		TYPE_DURATION durtempl;
 		GRSingleNote * sngnot = dynamic_cast<GRSingleNote *>(ev);
 		if (sngnot)
-		{
-			durtempl = sngnot->getDurTemplate();
-		}
+			durtempl       = sngnot->getDurTemplate();
 		
 		// this changes the display-duration
 		// (nested display-duration-tags!)
@@ -327,6 +319,7 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 				
 			}
 		}
+
 		if ( ( stemstate && stemstate->getStemState() == ARTStem::AUTO  )
 			|| !stemstate)
 		{			
@@ -348,12 +341,14 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 				mHighestY = middle;
 				mLowestY = middle;
 				++ count;
+
+                if (dynamic_cast<GRSingleNote *>(el))
+				    higherNote = lowerNote = dynamic_cast<GRSingleNote *>(el);
 			}
 			
 			GuidoPos pos = associated->GetHeadPosition();
 			while (pos && pos != associated->GetTailPosition())
 			{
-				
 				GRNotationElement * el = associated->GetNext(pos);
 				if (el && !dynamic_cast<GREmpty *>(el))
 				{
@@ -363,9 +358,16 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 					middle += ypos;
 					++count ;
 					
-					if (mLowestY > ypos)	mLowestY = ypos;
-					if (mHighestY < ypos)	mHighestY = ypos;
-					
+					if (mLowestY > ypos)
+					{
+						mLowestY = ypos;
+						lowerNote = (GRSingleNote *)el;
+					}
+					if (mHighestY < ypos)
+					{
+						mHighestY = ypos;
+						higherNote = (GRSingleNote *)el;
+					}
 				}
 			}
 			
@@ -394,6 +396,50 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 				else if (middle < curLSPACE * 2)
 				{
 					stemdir = dirDOWN;
+				}
+			}
+		}
+		else // - If stem's direction is fixed by the user, we have to determine lower and higher chord note all the same
+		{
+			GCoord middle = 0;
+			int count = 0;
+			el = associated->GetTail();
+
+			if (el)
+			{
+				middle = el->getPosition().y;
+				if (tagtype == GRTag::SYSTEMTAG && el->getGRStaff())
+				{
+					middle += (GCoord)el->getGRStaff()->getPosition().y;
+				}
+				mHighestY = middle;
+				mLowestY = middle;
+				++ count;
+
+				lowerNote = (GRSingleNote *)el;
+				higherNote = (GRSingleNote *)el;
+			}
+
+			GuidoPos pos = associated->GetHeadPosition();
+			while (pos && pos != associated->GetTailPosition())
+			{
+				GRNotationElement * el = associated->GetNext(pos);
+				if (el && !dynamic_cast<GREmpty *>(el))
+				{
+					GCoord ypos = el->getPosition().y;
+					if (el->getGRStaff() && tagtype == GRTag::SYSTEMTAG)
+						ypos += el->getGRStaff()->getPosition().y;
+
+					if (mLowestY > ypos)
+					{
+						mLowestY = ypos;
+						lowerNote = (GRSingleNote *)el;
+					}
+					if (mHighestY < ypos)
+					{
+						mHighestY = ypos;
+						higherNote = (GRSingleNote *)el;
+					}
 				}
 			}
 		}
@@ -473,7 +519,7 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 
 	delete theFlag;
 
-				 // here we have to add the flags ...
+	// here we have to add the flags ...
 	theFlag = new GRFlag(this, dispdur,stemdir,theStem->getStemLength());
 	if (mColRef)
 		theFlag->setColRef(mColRef);
@@ -492,6 +538,31 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 
 	if (tagtype != GRTag::SYSTEMTAG)
 		updateGlobalStem(inStaff);
+
+	const float curLSPACEtmp = (float)(inStaff->getStaffLSPACE());
+
+	if (stemdir == dirUP)
+	{
+		NVPoint stemendpos (theStem->getPosition());
+		stemendpos.y -= theStem->getStemLength();
+
+		if (stemendpos.y > 2 * curLSPACEtmp)
+		{
+			const float newlength = (theStem->getPosition().y - 2 * curLSPACEtmp);
+			changeStemLength(newlength);
+		}
+	}
+	else if (stemdir == dirDOWN)
+	{
+		NVPoint stemendpos (theStem->getPosition());
+		stemendpos.y += theStem->getStemLength();
+
+		if (stemendpos.y < 2 * curLSPACEtmp)
+		{
+			const float newlength = (2 * curLSPACEtmp - theStem->getPosition().y);
+			changeStemLength(newlength) ;
+		}
+	}
 }
 
 
@@ -534,10 +605,10 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 						cury += (float)note->getGRStaff()->getPosition().y;
 
 					// y-values are ascending.
-					if (cury != prevposy && cury - prevposy < curLSPACE)
+					if (cury != prevposy && cury - prevposy < curLSPACE && !note->getGRCluster())
 					{
 						// then I have to reverse the headsuggestion.
-						if (prevHeadState == ARTHead::RIGHT)
+                        if (prevHeadState == ARTHead::RIGHT)
 							sugHeadState = ARTHead::LEFT;
 						else
 							sugHeadState = ARTHead::RIGHT;
@@ -555,9 +626,26 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 				prevposy = note->getPosition().y;
 				if (tagtype == GRTag::SYSTEMTAG)
 					prevposy += note->getGRStaff()->getPosition().y;
-				
+
 				note->updateBoundingBox();
+            }
+        }
+
+		// - Adjust stem length if it's a cross/triangle notehead
+
+		if (lowerNote)
+		{
+			ConstMusicalSymbolID lowerNoteSymbol = lowerNote->getNoteHead()->getSymbol();
+
+			if (lowerNoteSymbol == kFullXHeadSymbol)
+			{
+				lowerNote->setFirstSegmentDrawingState(false);
+				lowerNote->setStemOffsetStartPosition(-4);
 			}
+			else if (lowerNoteSymbol == kFullTriangleHeadSymbol || lowerNoteSymbol == kHalfTriangleHeadSymbol)
+				lowerNote->setFirstSegmentDrawingState(false);
+			else if (lowerNoteSymbol == kFullReversedTriangleHeadSymbol || lowerNoteSymbol == kHalfReversedTriangleHeadSymbol)
+				higherNote->setStemOffsetStartPosition(-47);
 		}
 	}
 	else if (stemdir == dirUP || stemdir == dirOFF)
@@ -576,7 +664,7 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 						cury += note->getGRStaff()->getPosition().y;
 
 					// y-values are decending.
-					if (cury != prevposy && prevposy - cury < curLSPACE)
+					if (cury != prevposy && prevposy - cury < curLSPACE && !note->getGRCluster())
 					{
 						// then I have to reverse the headsuggestion.
 						if (prevHeadState == ARTHead::RIGHT)
@@ -601,12 +689,29 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 			 	note->updateBoundingBox();
 			}
 		}
+
+
+		// - Adjust stem length if it's a cross/triangle notehead
+
+		if (higherNote)
+		{
+			ConstMusicalSymbolID higherNoteSymbol = higherNote->getNoteHead()->getSymbol();
+
+			if (higherNoteSymbol == kFullXHeadSymbol)
+			{
+				higherNote->setFirstSegmentDrawingState(false);
+				higherNote->setStemOffsetStartPosition(4);
+			}
+			else if (higherNoteSymbol == kFullTriangleHeadSymbol || higherNoteSymbol == kHalfTriangleHeadSymbol)
+				higherNote->setStemOffsetStartPosition(47);
+			else if (higherNoteSymbol == kFullReversedTriangleHeadSymbol || higherNoteSymbol == kHalfReversedTriangleHeadSymbol)
+				higherNote->setFirstSegmentDrawingState(false);
+		}
 	}
 	else 
 	{
 		assert(false);
 	}
-
 }
 
 void GRGlobalStem::setHPosition( float nx )
@@ -626,9 +731,12 @@ void GRGlobalStem::setHPosition( float nx )
 
 void GRGlobalStem::OnDraw( VGDevice & hdc) const
 {
+	if(!mDraw)
+		return;
 	if (error) return;
+
 	if (theStem)	theStem->OnDraw(hdc);
-	if (theFlag)	theFlag->OnDraw(hdc);
+	if (theFlag)	                theFlag->OnDraw(hdc);
 }
 
 float GRGlobalStem::changeStemLength( float inLen )
@@ -883,6 +991,17 @@ void GRGlobalStem::setNoteStemLength( GREvent * ev, float inLen )
 void GRGlobalStem::setSize( float newsize )
 {
 	mTagSize = newsize;
+}
+
+void GRGlobalStem::setMultiplicatedSize(float newMultiplicatedSize)
+{
+    mTagSize *= newMultiplicatedSize;
+}
+
+void GRGlobalStem::setOffsetXY(float inOffsetX, float inOffsetY)
+{
+    mTagOffset.x += inOffsetX;
+    mTagOffset.y += inOffsetY;
 }
 
 /** \brief Returns the highest and lowest notehead

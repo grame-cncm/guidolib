@@ -4,17 +4,12 @@
  * Created by Christophe Daudin on 12/05/09.
  * Copyright 2009 Grame. All rights reserved.
  *
- * GNU Lesser General Public License Usage
- * Alternatively, this file may be used under the terms of the GNU Lesser
- * General Public License version 2.1 as published by the Free Software
- * Foundation and appearing in the file LICENSE.LGPL included in the
- * packaging of this file.  Please review the following information to
- * ensure the GNU Lesser General Public License version 2.1 requirements
- * will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
- *
- *
- * This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- * WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+ * Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+ * research@grame.fr
  */
 
 #include "GSystemQt.h"
@@ -28,9 +23,8 @@
 #include <QPaintDevice>
 #include <QWidget>
 #include <QPrinter>
-#include <QPicture>
-#include <QPixmap>
 #include <QImage>
+#include <QBuffer>
 
 #include <QVariant>
 #include <QtDebug>
@@ -568,37 +562,37 @@ bool GDeviceQt::CopyPixels( int xDest, int yDest,
 		mQPainter->drawImage( target , *qImage , source );
 		copyOk = true;
 	}
-	else 
-	{
-		QPicture * qPicture = dynamic_cast<QPicture *>( srcDeviceQt );
-		if ( qPicture )
-		{
-			if (		( xSrc != 0 ) || ( ySrc != 0 )
-					||	( source.width() != target.width() ) || ( source.height() != target.height() )
-				)
-			{
-				//	- The source-point is not specifiable with QPicture
-				//	- Can't stretch from a Rect to another with QPicture
-				qWarning("GDeviceQt::CopyPixels: Can't do stretching on a QPicture : x=%d , y=%d , sW=%d , sH=%d , dW=%d , dH=%d\n" , 
-						xSrc , ySrc , source.width() , source.height() , target.width() , target.height() );
-				copyOk = false;
-			}
-			else
-			{
-				mQPainter->drawPicture( target.topLeft() , *qPicture );
-				copyOk = true;
-			}
-		}
-		else
-		{
-			QPixmap * qPixmap = dynamic_cast<QPixmap *>( srcDeviceQt );
-			if ( qPixmap )
-			{
-				mQPainter->drawPixmap( target , *qPixmap , source );
-				copyOk = true;
-			}
-		}
-	}
+//	else 
+//	{
+//		QPicture * qPicture = dynamic_cast<QPicture *>( srcDeviceQt );
+//		if ( qPicture )
+//		{
+//			if (		( xSrc != 0 ) || ( ySrc != 0 )
+//					||	( source.width() != target.width() ) || ( source.height() != target.height() )
+//				)
+//			{
+//				//	- The source-point is not specifiable with QPicture
+//				//	- Can't stretch from a Rect to another with QPicture
+//				qWarning("GDeviceQt::CopyPixels: Can't do stretching on a QPicture : x=%d , y=%d , sW=%d , sH=%d , dW=%d , dH=%d\n" , 
+//						xSrc , ySrc , source.width() , source.height() , target.width() , target.height() );
+//				copyOk = false;
+//			}
+//			else
+//			{
+//				mQPainter->drawPicture( target.topLeft() , *qPicture );
+//				copyOk = true;
+//			}
+//		}
+//		else
+//		{
+//			QPixmap * qPixmap = dynamic_cast<QPixmap *>( srcDeviceQt );
+//			if ( qPixmap )
+//			{
+//				mQPainter->drawPixmap( target , *qPixmap , source );
+//				copyOk = true;
+//			}
+//		}
+//	}
 	
 	mQPainter->restore();
 	return copyOk;
@@ -877,9 +871,11 @@ float GDeviceQt::GetDPITag()const
 
 //--------------------------------------------------------------------
 void* GDeviceQt::GetBitMapPixels()
-{  
-	// assert(0);//Not implemented.
-	cerr << "Warning: GDeviceQt::GetBitMapPixels not implemented" << endl;
+{
+	QImage * qImage = dynamic_cast<QImage *>( mQPainter->device() );
+	if ( qImage ) return (void*)qImage->bits();
+
+	cerr << "Warning: GDeviceQt::GetBitMapPixels cannot get image data" << endl;
 	return 0;
 }
 
@@ -887,7 +883,29 @@ void* GDeviceQt::GetBitMapPixels()
 void GDeviceQt::ReleaseBitMapPixels()
 {  
 //	assert(0);//Not implemented.
-	cerr << "Warning: GDeviceQt::ReleaseBitMapPixels not implemented" << endl;
+//	cerr << "Warning: GDeviceQt::ReleaseBitMapPixels not implemented" << endl;
+}
+
+//--------------------------------------------------------------------
+const char* GDeviceQt::GetImageData(const char* & outDataPtr, int& outLength)
+{
+	QImage * image = dynamic_cast<QImage *>( mQPainter->device() );
+	if ( image ) {
+		QByteArray * ba = new QByteArray;
+		QBuffer buffer(ba);
+        buffer.open(QIODevice::WriteOnly);
+        image->save(&buffer, "PNG"); // writes image into ba in PNG format
+		outDataPtr = ba->data();
+		outLength = ba->size();
+		return "image/png";
+	}
+	return 0;
+}
+
+//--------------------------------------------------------------------
+void GDeviceQt::ReleaseImageData(const char * ptr) const
+{
+	delete ptr;
 }
 
 //--------------------------------------------------------------------

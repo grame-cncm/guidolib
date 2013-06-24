@@ -1,20 +1,14 @@
 /*
-	GUIDO Library
-	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  GUIDO Library
+  Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  Copyright (C) 2002-2013 Grame
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Lesser General Public
-	License as published by the Free Software Foundation; either
-	version 2.1 of the License, or (at your option) any later version.
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-	This library is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Lesser General Public License for more details.
-
-	You should have received a copy of the GNU Lesser General Public
-	License along with this library; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
 
 */
 
@@ -25,12 +19,14 @@
 #include "GRMusic.h" 
 #include "VGDevice.h" 
 #include "secureio.h"
+#include "GRSingleNote.h"
+#include "GRStdNoteHead.h"
 
 #include "GUIDOEngine.h"	// for AddGGSOutput
 
 NVPoint GRStem::sRefpos;
 
-GRStem::GRStem(GRGlobalStem * gstem) : mColRef(NULL)
+GRStem::GRStem(GRGlobalStem * gstem) : mColRef(NULL), offsetStartPosition(0), drawActivated(true)
 {
 	mStemDir = dirOFF;
 	
@@ -48,7 +44,9 @@ GRStem::GRStem( GREvent * sngnot,
 	GDirection dir,
 	float length,
 	float notebreite) :
-	mColRef(NULL)
+	mColRef(NULL),
+	offsetStartPosition(0),
+	drawActivated(true)
 {
 	if (durtempl >= DURATION_1)
 	{
@@ -77,6 +75,43 @@ GRStem::GRStem( GREvent * sngnot,
 	else if (dir == dirDOWN)
 		mBoundingBox.bottom = (GCoord)(mStemLen);
 	sRefpos.x = (GCoord)(- notebreite * 0.5f);
+
+	GRSingleNote *singleNote = dynamic_cast<GRSingleNote *>(sngnot);
+	if (singleNote)
+	{
+		GRStdNoteHead *noteHead = singleNote->getNoteHead();
+
+		if (noteHead)
+		{
+			noteHead->setGlobalStemDirection(dir);
+
+			ConstMusicalSymbolID noteHeadSymbolTmp = noteHead->getSymbol();
+			// - Adjust stem length if it's a cross notehead
+			if (noteHeadSymbolTmp == kFullXHeadSymbol)
+			{
+				setFirstSegmentDrawingState(false);
+
+				if (dir == dirUP)
+					setOffsetStartPosition(4);
+				else if (dir == dirDOWN)
+					setOffsetStartPosition(-4);
+			}
+			else if (noteHeadSymbolTmp == kFullTriangleHeadSymbol || noteHeadSymbolTmp == kHalfTriangleHeadSymbol)
+			{
+				if (dir == dirUP)
+					setOffsetStartPosition(47);
+				else if (dir == dirDOWN)
+					setFirstSegmentDrawingState(false);
+			}
+			else if (noteHeadSymbolTmp == kFullReversedTriangleHeadSymbol || noteHeadSymbolTmp == kHalfReversedTriangleHeadSymbol)
+			{
+				if (dir == dirUP)
+					setFirstSegmentDrawingState(false);
+				else if (dir == dirDOWN)
+					setOffsetStartPosition(-47);
+			}
+		}
+	}
 }
 
 GRStem::~GRStem()
@@ -111,7 +146,10 @@ GRStem::setStemDir(GDirection dir)
 // TODO: draw only one scaled symbol
 void GRStem::OnDraw( VGDevice & hdc ) const
 {
+	if(!mDraw)
+		return;
 	if (mStemDir == dirOFF) return;
+	if (mSize < kMinNoteSize) return;			// size is too small, don't draw
 
 	// - Setup colors
 	const unsigned char * colref = getColRef();
@@ -132,12 +170,14 @@ void GRStem::OnDraw( VGDevice & hdc ) const
 	if (mStemDir == dirUP)
 	{
 		tmpSymbol =  kStemUp1Symbol;
-		GRNotationElement::DrawSymbol( hdc, tmpSymbol );
+
+		if (drawActivated)
+			GRNotationElement::DrawSymbol( hdc, tmpSymbol );
 		
 		tmpSymbol =  kStemUp2Symbol;	// wrong in EPS font..
 		
 		// Draws until the length has been completed ...
-		float offsy = -halfSpaceBySize;
+		float offsy = -halfSpaceBySize + offsetStartPosition;
 
 		while( -offsy < mStemLen ) // * mSize)
 		{
@@ -156,12 +196,14 @@ void GRStem::OnDraw( VGDevice & hdc ) const
 	else if (mStemDir == dirDOWN)
 	{
 		tmpSymbol = kStemDown1Symbol;
-		GRNotationElement::DrawSymbol( hdc, tmpSymbol );
+
+		if (drawActivated)
+			GRNotationElement::DrawSymbol( hdc, tmpSymbol );
 		
 		tmpSymbol = kStemDown2Symbol;
 		
 		// Draws until the length has been completed ...		
-		float offsy = halfSpaceBySize;
+		float offsy = halfSpaceBySize + offsetStartPosition;
 
 		while( offsy < mStemLen ) // * mSize)
 		{
@@ -227,4 +269,14 @@ void GRStem::setColRef( const unsigned char * inColor )
 	mColRef[1] = inColor[1];
 	mColRef[2] = inColor[2];
 	mColRef[3] = inColor[3];
+}
+
+void GRStem::setOffsetStartPosition (float inOffset)
+{
+	offsetStartPosition = inOffset;
+}
+
+void GRStem::setFirstSegmentDrawingState (bool inDrawActivated)
+{
+	drawActivated = inDrawActivated;
 }

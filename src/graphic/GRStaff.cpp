@@ -1,20 +1,14 @@
 /*
-	GUIDO Library
-	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  GUIDO Library
+  Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  Copyright (C) 2002 Grame
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Lesser General Public
-	License as published by the Free Software Foundation; either
-	version 2.1 of the License, or (at your option) any later version.
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-	This library is distributed in the hope that it will be useful, 
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Lesser General Public License for more details.
-
-	You should have received a copy of the GNU Lesser General Public
-	License along with this library; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
 
 */
 
@@ -26,6 +20,7 @@
 
 #include <typeinfo>
 #include <vector>
+#include <map>
 #include <cstdlib>
 #include <iostream> // for debug only
 #include <fstream>// for debug only
@@ -63,7 +58,6 @@ using namespace std;
 #include "GRBar.h"
 #include "GRBarFormat.h"
 #include "GRClef.h"
-#include "GRChord.h"
 #include "GRCompositeNote.h"
 #include "GRCrescendo.h"
 #include "GRDoubleBar.h"
@@ -282,6 +276,10 @@ GRStaff::GRStaff( GRSystemSlice * systemslice )
 
 	lastrod = 0;
 	firstrod = 0;
+
+	setOnOff(true);
+	isNextOn = true;
+	firstOnOffSetting = false;
 }
 
 // ----------------------------------------------------------------------------
@@ -1795,6 +1793,30 @@ GRStaff * GRStaff::getPreviousStaff() const
     return pstaff;
 }
 
+GRStaff * GRStaff::getNextStaff() const
+{
+    GRSystem * system = getGRSystem();
+    GRSystemSlice * curslice = getGRSystemSlice();
+    if (!system || !curslice) return 0;
+
+    SSliceList * sl = system->getSlices();          // get the list of system slices
+    if (!sl) return 0;
+    
+    GuidoPos pos = sl->GetElementPos(curslice);                 // looks for the current slice
+    GRSystemSlice * nextSlice = pos ? sl->GetNext(pos) : 0;  // get the previous twice
+    nextSlice = pos ? sl->GetNext(pos) : 0;                  // this is to skip the current slice
+    if (!nextSlice) return 0;                               // fails to find the previous
+
+	int	num = curslice->getStaffNumber(this);
+
+    StaffVector * sv = nextSlice->getStaves();  // get the staves list
+    if (!sv) return 0;
+
+    GRStaff * pstaff = sv->Get(num);                // get the staff carrying the same number
+    return pstaff;
+}
+
+
 // ----------------------------------------------------------------------------
 /** \brief Retrieves the mapping
 */
@@ -1822,6 +1844,7 @@ void GRStaff::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& info
 void GRStaff::OnDraw( VGDevice & hdc ) const
 {
     traceMethod("OnDraw");
+
 #if 0
 	// - Change font settings
 	const int fontsize = getFontSize();
@@ -1838,10 +1861,11 @@ void GRStaff::OnDraw( VGDevice & hdc ) const
 	// - Restore font settings
 //	hdc.SetTextAlign( ta );
 // 	hdc.SelectFont( hfontold );// JB test for optimisation: do not restore font context.
-#else
-	DrawStaffUsingLines( hdc );
-#endif
 
+#else
+	DrawStaffUsingLines( hdc );	
+#endif
+	
 	// - 
 	DrawNotationElements( hdc );
 	if (gBoundingBoxesMap & kStavesBB) {
@@ -1945,8 +1969,6 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 	const float lspace = getStaffLSPACE(); // Space between two lines
 	const NVPoint & staffPos = getPosition();
 	
-	const float xStart = staffPos.x;
-	const float xEnd = xStart + mLength; //  cause gaps in stafflines: - (0.5f * kLineThick);
 	float yPos = staffPos.y;
 	
 	/* - Debug ->
@@ -1957,12 +1979,22 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 
 	*/
 //	hdc.PushPen( VGColor( 0, 0, 0 ), kLineThick );// TODO: use correct color
+
 	hdc.PushPenWidth( kLineThick );
 
-	for( int i = 0; i < mStaffState.numlines; ++i )
+	std::map<float,float>::const_iterator it = positions.begin();
+	
+	while (it != positions.end())
 	{
-		hdc.Line( xStart, yPos, xEnd, yPos );
-		yPos += lspace;
+		float x1 = it->first;
+		float x2 = it->second;
+		yPos = staffPos.y;
+		for( int i = 0; i < mStaffState.numlines; i++ )
+		{
+			hdc.Line( x1, yPos, x2, yPos );
+			yPos += lspace;
+		}
+		it++;
 	}
 
 	hdc.PopPenWidth();
@@ -1986,7 +2018,7 @@ void GRStaff::DrawNotationElements( VGDevice & hdc ) const
 		
 #ifdef _DEBUG
 		//draw element's bounding box
-		e->DrawBoundingBox( hdc, VGColor(0,0,200)); // debug
+		//e->DrawBoundingBox( hdc, VGColor(0,0,200)); // debug
 #endif
 	}
 	hdc.OffsetOrigin( -xOffset, -yOffset ); // restore origin
@@ -2037,3 +2069,132 @@ void GRStaff::GGSOutput() const
 	ggsoffsety -= (long)mPosition.y;
 }
 
+//-------------------------------------------------
+/** \brief Find the spatial x end position from the time position and the duration
+*/
+float	GRStaff::getXEndPosition(TYPE_TIMEPOSITION pos, TYPE_DURATION dur)
+{
+	TYPE_TIMEPOSITION end = pos + dur;
+	NEPointerList * elmts = getElements();
+	if (elmts)
+    {
+		NEPointerList * elmtsAtEndOfDuration = elmts->getElementsWithTimePosition(end);
+		if(elmtsAtEndOfDuration)
+        {
+			GRNotationElement * elmt = elmtsAtEndOfDuration->GetHead();
+			if(elmt)
+            {
+				NVPoint position = elmt->getPosition();
+				float X = position.x;
+				GREvent * gevent = dynamic_cast<GREvent *>(elmt);
+				if (gevent)
+					X -= LSPACE;
+				return X;
+			}
+		}
+	}
+
+    return 0;
+}
+
+void GRStaff::setOnOff(bool onoff, TYPE_TIMEPOSITION tp)
+{
+	if(isOn.count(tp)>0)
+	{
+		std::map<TYPE_TIMEPOSITION, bool>::iterator it;
+		it = isOn.find(tp);
+		it->second = onoff;
+	}
+	else
+		isOn.insert(std::pair<TYPE_TIMEPOSITION, bool>(tp, onoff));
+}
+
+void GRStaff::setOnOff(bool onoff)
+{
+	setOnOff(onoff, mRelativeTimePositionOfGR);
+}
+
+bool GRStaff::isStaffEndOn()
+{
+  std::map<TYPE_TIMEPOSITION, bool>::reverse_iterator rit;
+  rit = isOn.rbegin();
+  return rit->second;
+}
+
+bool GRStaff::isStaffBeginOn()
+{
+  std::map<TYPE_TIMEPOSITION, bool>::iterator it;
+  it = isOn.begin();
+  return it->second;
+}
+
+
+void GRStaff::generatePositions()
+{
+	//const float lspace = getStaffLSPACE(); // Space between two lines
+	const NVPoint & staffPos = getPosition();
+	
+	const float xStart = staffPos.x;
+	const float xEnd = xStart + mLength;
+
+	// The staves at the begining of a new a system are somehow specials, we have to tell them explicitely 
+	// not to draw if the next one is invisible.
+	if(mStaffState.clefset && !mStaffState.meterset && !isNextOn)
+	{
+		setOnOff(false);
+		GuidoPos pos = mCompElements.GetHeadPosition();
+		while (pos)
+		{
+			GRNotationElement * e = mCompElements.GetNext(pos);
+			e->setDrawOnOff(false);
+		}
+	
+	}
+
+	// this will be the end of the measure
+	NVRect r = getBoundingBox();
+	r += getPosition();
+	float xEnd2 = r.right;
+
+	// Now we have to see if there is one or more \staffOff- \staffOn- tag(s)
+	std::map<TYPE_TIMEPOSITION, bool>::const_iterator it = isOn.begin();
+	TYPE_TIMEPOSITION t;
+	TYPE_TIMEPOSITION t2 = it->first;
+	bool draw = it->second;
+	float x;
+	float next = xStart;
+
+	it++;
+
+	while (it != isOn.end())
+	{
+		t = t2;
+		t2 = it->first;
+		x = next;
+		TYPE_DURATION dur = t2 - t;
+		next = getXEndPosition(t, dur);
+		if(draw)
+		{
+			positions.insert(std::pair<float,float>(x, next));
+		}
+		draw = it->second;
+		if(next==0)
+			draw = false;
+		it++;
+	}
+
+	// when we arrive to the last element (possibly the same as the first one) we draw
+	// from the last x posititon to the end of the measure
+	if(it == isOn.end() && draw)
+	{
+		positions.insert(std::pair<float,float>(next, xEnd2));
+	}
+		
+	// the begining of the next measure has to be drawn by this staff...
+	if(isNextOn && xEnd != xEnd2)
+	{
+		if(positions.count(xEnd2)>0)
+			positions.erase(xEnd2);
+		positions.insert(std::pair<float,float>(xEnd2, xEnd));
+	}
+}

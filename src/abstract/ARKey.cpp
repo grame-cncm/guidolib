@@ -1,20 +1,14 @@
 /*
-	GUIDO Library
-	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  GUIDO Library
+  Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  Copyright (C) 2002-2013 Grame
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Lesser General Public
-	License as published by the Free Software Foundation; either
-	version 2.1 of the License, or (at your option) any later version.
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-	This library is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Lesser General Public License for more details.
-
-	You should have received a copy of the GNU Lesser General Public
-	License along with this library; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
 
 */
 
@@ -288,18 +282,18 @@ void ARKey::getKeyArray(std::string inString)
 		// if correct notename, store accidental  at correct position in  mkarray
 		switch(gd_noteName2pc(notename.c_str())) 
 		{
-			case NOTE_C: index=0; fAccarray[0]=acc; break;
+			case NOTE_C: index=0; fAccarray[0]=(float)acc; break;
 			case NOTE_CIS: break; // do nothing (yet)
-			case NOTE_D: index=1; fAccarray[1]=acc; break;
+			case NOTE_D: index=1; fAccarray[1]=(float)acc; break;
 			case NOTE_DIS: break; // do nothing (yet)
-			case NOTE_E: index=2; fAccarray[2]=acc; break;
-			case NOTE_F: index=3; fAccarray[3]=acc; break;
+			case NOTE_E: index=2; fAccarray[2]=(float)acc; break;
+			case NOTE_F: index=3; fAccarray[3]=(float)acc; break;
 			case NOTE_FIS: break; // do nothing (yet)
-			case NOTE_G: index=4; fAccarray[4]=acc; break;
+			case NOTE_G: index=4; fAccarray[4]=(float)acc; break;
 			case NOTE_GIS: break; // do nothing (yet)
-			case NOTE_A: index=5; fAccarray[5]=acc; break;
+			case NOTE_A: index=5; fAccarray[5]=(float)acc; break;
 			case NOTE_AIS: break; // do nothing (yet)
-			case NOTE_H: index=6; fAccarray[6]=acc; break;
+			case NOTE_H: index=6; fAccarray[6]=(float)acc; break;
 			default: return; // if neede, do error handling here
 		}
 

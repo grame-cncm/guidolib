@@ -59,6 +59,7 @@ static void bimap_copy_gdiplus (VGDevice * dev, jint* dstBitmap, int w, int h)
 	}
 	bitmap->UnlockBits(&bdata);
 }
+
 static void bimap_copy_gdi (VGDevice * dev, jint* dstBitmap, int w, int h)
 {
 	GDeviceWin32* windev = (GDeviceWin32*)dev;
@@ -75,26 +76,8 @@ static void bimap_copy_gdi (VGDevice * dev, jint* dstBitmap, int w, int h)
 	infos.bmiHeader.biClrUsed = 0;
 	infos.bmiHeader.biClrImportant = 0;
 	int n = GetDIBits(windev->getHDC(), windev->getBitmap(), 0, h, dstBitmap, &infos, DIB_RGB_COLORS);
-
-
-//	HBITMAP bitmap = windev->getBitmap();
-//	LONG n = ::GetBitmapBits(bitmap, w*h, dstBitmap);
-//printf ("bimap_copy_gdi %ld bytes\n", n);
-
-//HDC hdc = HDC(dev->GetNativeContext());
-	//for (int y=0; y<h; y++) {
-	//	for (int x=0; x<w; x++) {
-	//		COLORREF c = GetPixel(hdc, x, y);
-	//		if (c) printf ("color %d at %d/%d\n", c, x, y);
-	//		*dstBitmap++ = c;
-	//	}
-	//}
-//	int * data = (int*) dev->GetBitMapPixels();
-//	for (int i=0, n=w*h; i<n; i++) {
-////		*dstBitmap++ = *data++;
-//		*dstBitmap++ = 0xffff0000;
-//	}
 }
+
 static void bimap_copy (VGDevice * dev, jint* dstBitmap, int w, int h)
 {
 	if (gAntiAliasing) bimap_copy_gdiplus (dev, dstBitmap, w, h);

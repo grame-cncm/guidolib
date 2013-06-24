@@ -1,21 +1,14 @@
 /*
-	GUIDO Library
-	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-	Copyright (C) 2003, 2004  Grame
+  GUIDO Library
+  Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  Copyright (C) 2003, 2004  Grame
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Lesser General Public
-	License as published by the Free Software Foundation; either
-	version 2.1 of the License, or (at your option) any later version.
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-	This library is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Lesser General Public License for more details.
-
-	You should have received a copy of the GNU Lesser General Public
-	License along with this library; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
 
 */
 
@@ -74,8 +67,8 @@ using namespace std;
 // ==========================================================================
 const int GUIDOENGINE_MAJOR_VERSION = 1;
 const int GUIDOENGINE_MINOR_VERSION = 5;
-const int GUIDOENGINE_SUB_VERSION =	0;
-const char* GUIDOENGINE_VERSION_STR = "1.5.0";
+const int GUIDOENGINE_SUB_VERSION =	1;
+const char* GUIDOENGINE_VERSION_STR = "1.5.1";
 
 // global factory object, used by the parser and the GuidoFactory API
 ARFactory * gGlobalFactory = 0;
@@ -146,6 +139,7 @@ GUIDOAPI(GuidoErrCode) GuidoParseFile(const char * filename, ARHandler * ar)
 	*ar = 0;		
 	// - First, we create the abstract representation factory, for the parser.
 	gGlobalFactory = new ARFactory();
+
 	if( gGlobalSettings.gFeedback )
 		gGlobalSettings.gFeedback->Notify( GuidoFeedback::kProcessing );
 
@@ -218,6 +212,7 @@ GUIDOAPI(GuidoErrCode) GuidoParseFile(const char * filename, ARHandler * ar)
 		gGlobalSettings.gFeedback->Notify( GuidoFeedback::kIdle );
 
 	*ar = outHandleAR;
+
 	return guidoNoErr;
 }
 
@@ -229,9 +224,9 @@ GUIDOAPI(GuidoErrCode) GuidoParseString (const char * str, ARHandler* ar)
 	*ar = 0;
 	// - First, we create the abstract representation factory, for the parser.
 	gGlobalFactory = new ARFactory();
+
 	if( gGlobalSettings.gFeedback )
 		gGlobalSettings.gFeedback->Notify( GuidoFeedback::kProcessing );
-
 	int ret = gd_parse_buffer(str);					// - Parse the notation file
 	if (ret != 0 || ( gGlobalSettings.gFeedback && gGlobalSettings.gFeedback->ProgDialogAbort())) {
 		// Something failed, do some cleanup
@@ -269,7 +264,7 @@ GUIDOAPI(GuidoErrCode) GuidoParseString (const char * str, ARHandler* ar)
 
 	// - Restore feedback state
 	if( gGlobalSettings.gFeedback )
-		gGlobalSettings.gFeedback->Notify( GuidoFeedback::kIdle );
+        gGlobalSettings.gFeedback->Notify( GuidoFeedback::kIdle );
 
 	*ar = outHandleAR;
 	return guidoNoErr;
@@ -444,8 +439,16 @@ GUIDOAPI(int) GuidoCountVoices( CARHandler inHandleAR)
 GUIDOAPI(int) GuidoGetPageCount( CGRHandler inHandleGR )
 {
 	if ( !inHandleGR )
-		return 0;
-	return inHandleGR->grmusic ? inHandleGR->grmusic->getNumPages() : 0;
+		return guidoErrInvalidHandle;
+	return inHandleGR->grmusic ? inHandleGR->grmusic->getNumPages() : guidoErrInvalidHandle;
+}
+
+// --------------------------------------------------------------------------
+GUIDOAPI(int) GuidoGetSystemCount( CGRHandler inHandleGR, int page )
+{
+	if ( !inHandleGR )
+		return guidoErrInvalidHandle;
+	return inHandleGR->grmusic ? inHandleGR->grmusic->getNumSystems(page) : guidoErrInvalidHandle;
 }
 
 // --------------------------------------------------------------------------
@@ -721,6 +724,37 @@ GUIDOAPI(GuidoErrCode) GuidoMarkVoice( ARHandler inHandleAR, int voicenum,
 		return guidoErrInvalidHandle;
 
 	inHandleAR->armusic->MarkVoice( voicenum, date.num, date.denom, 
-								duration.num, duration.denom );
+                                    duration.num, duration.denom,
+                                    red, green, blue );
 	return guidoNoErr;
+}
+
+// --------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoSetSymbolPath(ARHandler inHandleAR, const std::vector<std::string> &inPaths)
+{
+    if (!inHandleAR)
+        return guidoErrInvalidHandle;
+
+    if (!inHandleAR->armusic)
+        return guidoErrInvalidHandle;
+
+    inHandleAR->armusic->setPath(inPaths);
+
+    return guidoNoErr;
+}
+
+// --------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoGetSymbolPath(const ARHandler inHandleAR, std::vector<std::string> &inPathVector)
+{
+    std::vector<std::string> returnedPath;
+
+    if (!inHandleAR)
+        return guidoErrInvalidHandle;
+
+    if (!inHandleAR->armusic)
+        return guidoErrInvalidHandle;
+
+    inPathVector = inHandleAR->armusic->getPath();
+
+    return guidoNoErr;
 }

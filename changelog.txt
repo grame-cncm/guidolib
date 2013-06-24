@@ -1,6 +1,27 @@
 GUIDO Engine history
 
 ----------------------------------------------------------------
+2013-04-05  version 1.5.1
+- new GuidoGetSystemCount API
+- bug in midi export corrected: chord notes were ignored
+- trill line added :  stops at the next element, can be drawn over several staves, systems and pages (if the notes are tied).
+- implementation of new notehead types
+- implementation of brackets around noteheads
+- bug correction : stem length of high chords
+- implementation of glissando
+- implementation of cluster
+- bug correction: incorrect staff mapping was generated for staves with a single slice
+- implementation of \staffOff- \staffOn- tags
+- implementation of \symbol-tag
+
+---------------------------------------------------------------
+2012-04-05  version 1.5.0
+- rendering bug corrected: empty output whith empty \title tag on windows
+- bug with incorrect clef displayed in a very specific context (auto clef, 
+  multi-voice staff, new line forced)
+
+
+----------------------------------------------------------------
 2012-04-05  version 1.4.9
 - bug in hex colors setting (could be not taken into account)
 - crash bug catched (due to syntax error in chords duration modification)

@@ -2,22 +2,16 @@
 #define GRStaff_H
 
 /*
-	GUIDO Library
-	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  GUIDO Library
+  Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  Copyright (C) 2002-2013 Grame
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Lesser General Public
-	License as published by the Free Software Foundation; either
-	version 2.1 of the License, or (at your option) any later version.
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-	This library is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Lesser General Public License for more details.
-
-	You should have received a copy of the GNU Lesser General Public
-	License along with this library; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
 
 */
 
@@ -28,7 +22,6 @@
 class ARBar;
 class ARBarFormat;
 class ARClef;
-class ARChord;
 class ARDoubleBar;
 class ARKey;
 class ARInstrument;
@@ -185,6 +178,7 @@ class GRStaff : public GRCompositeNotationElement
 		GRSystem *      getGRSystem() const;
 		GRSystemSlice * getGRSystemSlice() const;
 		GRStaff *       getPreviousStaff() const;
+		GRStaff *		getNextStaff() const;
 		int             getStaffNumber() const;
 		GRGlue *        getEndGlue() const;
 		GRGlue *        getStartGlue() const;
@@ -195,6 +189,7 @@ class GRStaff : public GRCompositeNotationElement
 		const GRStaffState *    getStaffState();
 		GRStaffState &          getGRStaffState() { return mStaffState; }
 		const GRStaffState &    getGRStaffState() const { return mStaffState; }
+		float			getXEndPosition(TYPE_TIMEPOSITION pos, TYPE_DURATION dur);
 
 		virtual float       getNotePosition(TYPE_PITCH pit, TYPE_REGISTER oct) const;
 		virtual GDirection  getDefaultThroatDirection(TYPE_PITCH pit, TYPE_REGISTER oct) const;
@@ -253,7 +248,13 @@ class GRStaff : public GRCompositeNotationElement
 		virtual void OnDraw( VGDevice & hdc ) const;
 		virtual void GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 		virtual void print() const;
-
+		void		setOnOff(bool onoff, TYPE_TIMEPOSITION tp);
+		void		setOnOff(bool onoff);
+		bool		isStaffBeginOn();
+		bool		isStaffEndOn();
+		void		setNextOnOff(bool onoff){isNextOn = onoff;}
+		bool		isNextStaffOn(){return isNextOn;}
+		
 		// this function was defined as private previously. Because GRNoteFactory needs to add elements 
 		// to the staff (Tuplets), it must be defined public.
 
@@ -263,6 +264,8 @@ class GRStaff : public GRCompositeNotationElement
 		void addNotationElement(GRNotationElement * notationElement);
 
 		void checkSystemBar(const TYPE_TIMEPOSITION & tp);
+
+		void	generatePositions();
 
   protected:
 
@@ -291,10 +294,16 @@ class GRStaff : public GRCompositeNotationElement
 		// for the STEM-Auto calculation
 		float 			avg_position;
 		int 			mNoteCount;
-
+		
  	 private:
 		TYPE_TIMEPOSITION	fLastSystemBarChecked;
 		void newMeasure(const TYPE_TIMEPOSITION & tp);
+		
+		std::map<TYPE_TIMEPOSITION, bool> isOn;
+		std::map<float, float> positions;
+		bool			isNextOn;
+		bool			firstOnOffSetting;
+
 };
 
 #endif

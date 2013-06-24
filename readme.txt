@@ -26,7 +26,8 @@ Note about MIDI export:
 	
 Note for Linux platforms:
 --------------------------
-	The procedure to compile can be close to the usual 'configure' 'make' 'make install'
+	You need to have libcairo2-dev installed to compile the GUIDOEngine.
+	The procedure to compile is close to the usual 'configure' 'make' 'make install'
 	steps. Actually, you can simply do the following:
 	> cd /your_path_to_the_project/cmake
 	> cmake -G "Unix Makefiles"

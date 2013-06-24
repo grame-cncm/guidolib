@@ -1,21 +1,14 @@
 /*
-	GUIDO Library
-	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-	Copyright (C) 2004	Grame
+  GUIDO Library
+  Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  Copyright (C) 2004 Grame
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Lesser General Public
-	License as published by the Free Software Foundation; either
-	version 2.1 of the License, or (at your option) any later version.
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-	This library is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Lesser General Public License for more details.
-
-	You should have received a copy of the GNU Lesser General Public
-	License along with this library; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
 
 */
 
@@ -28,7 +21,6 @@
 
 // - Guido AR
 #include "ARMusicalEvent.h"
-#include "ARChord.h"
 #include "ARRest.h"
 #include "ARNote.h"
 
@@ -37,7 +29,6 @@
 #include "GRSingleNote.h"
 #include "GRSingleRest.h"
 #include "GRStaff.h"
-#include "GRChord.h"
 
 #include "secureio.h"
 
@@ -261,7 +252,6 @@ GREvent * GRTuplet::addEvent(ARMusicalEvent * inArEvent, TYPE_TIMEPOSITION von,
 
 	ARNote * arNote;
 	ARRest * arRest;
-	ARChord * arChord;
 	
 	if(( arNote = dynamic_cast<ARNote *>(inArEvent)) != 0 )
 	{
@@ -271,10 +261,6 @@ GREvent * GRTuplet::addEvent(ARMusicalEvent * inArEvent, TYPE_TIMEPOSITION von,
 	else if(( arRest = dynamic_cast<ARRest *>(inArEvent)) != 0 )
 	{
 		newGREvent = new GRSingleRest( staff, arRest, von, bis, dtempl );
-	}
-	else if ((arChord = dynamic_cast<ARChord *>(inArEvent)) != 0 )
-	{
-		newGREvent = new GRChord( staff, arChord, von, bis, dtempl );
 	}
 
 	newGREvent->addAssociation(this); // the tuplet will be associated with GREvent
@@ -367,6 +353,8 @@ void GRTuplet::GGSOutput() const
 */
 void GRTuplet::OnDraw( VGDevice & hdc ) const
 { 
+	if(!mDraw)
+		return;
 	char buffer[30];
 
 	if(( mTupletElements == 0 ) || ( mTupletElements->empty())) return;

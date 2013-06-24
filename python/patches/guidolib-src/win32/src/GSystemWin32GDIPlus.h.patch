@@ -1,0 +1,4 @@
+113c113
+< 		unsigned int			fSymbolTable [kMaxMusicalSymbolID];
+---
+> 		unsigned int*			fSymbolTable;

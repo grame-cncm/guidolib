@@ -4,17 +4,12 @@
  * Created by Christophe Daudin on 12/05/09.
  * Copyright 2009 Grame. All rights reserved.
  *
- * GNU Lesser General Public License Usage
- * Alternatively, this file may be used under the terms of the GNU Lesser
- * General Public License version 2.1 as published by the Free Software
- * Foundation and appearing in the file LICENSE.LGPL included in the
- * packaging of this file.  Please review the following information to
- * ensure the GNU Lesser General Public License version 2.1 requirements
- * will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
- *
- *
- * This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- * WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+ * Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+ * research@grame.fr
  */
 
 #include <sstream>
@@ -25,6 +20,7 @@
 #include "VGColor.h"
 
 #include <QVariant>
+#include <QDir>
 #include <QFile>
 #include <QTime>
 
@@ -148,18 +144,17 @@ QString getFileContent(const QString& fileName)
 //-------------------------------------------------------------------------
 bool QGuidoPainter::setGMNFile(const QString& fileName)
 {
-	bool result = setGMNData( fileName , GuidoParseFile );
 	mFileName = fileName;
-	mGMNCode = getFileContent(fileName);
-	return result;
+	QDir path(fileName);
+	path.cdUp();
+	return setGMNCode (getFileContent(fileName), path.absolutePath().toUtf8().data());
 }
 
 //-------------------------------------------------------------------------
-bool QGuidoPainter::setGMNCode( const QString& gmnCode )
+bool QGuidoPainter::setGMNCode( const QString& gmnCode, const char* datapath )
 {
-	bool result = setGMNData( gmnCode , GuidoParseString );
 	mGMNCode = gmnCode;
-	return result;
+	return setGMNData( gmnCode , datapath );
 }
 
 //-------------------------------------------------------------------------
@@ -182,15 +177,17 @@ void QGuidoPainter::setARHandler( ARHandler ar )
 }
 
 //-------------------------------------------------------------------------
-bool QGuidoPainter::setGMNData( const QString& dataSource , GuidoParseFunction parseFunction )
+bool QGuidoPainter::setGMNData( const QString& gmncode, const char* dataPath)
 {
 	// Read the gmnCode and build the score's Abstract Representation,
 	// containing all the notes, rests, staffs, lyrics ...
 	ARHandler arh;
 	GRHandler grh;
-	mLastErr = parseFunction( dataSource.toAscii().data(), &arh );		
+    mLastErr = GuidoParseString( gmncode.toUtf8().data(), &arh);		
 	if ( mLastErr != guidoNoErr )
 		return false;
+
+	setPathsToARHandler(arh, dataPath);
 
 	// Build a new score Graphic Representation according the score's Abstract Representation.
 	GuidoPageFormat currentFormat;
@@ -226,11 +223,6 @@ int QGuidoPainter::pageCount() const
 	else
 		return 1;
 }
-
-//#include <QPicture>
-//#include <QImage>
-//#include <QPixmap>
-//#include <QWidget>
 
 //-------------------------------------------------------------------------
 void QGuidoPainter::draw( QPainter * painter , int page , const QRect& drawRectangle , const QRect& redrawRectangle)
@@ -307,7 +299,7 @@ void QGuidoPainter::draw( QPainter * painter , int page , const QRect& drawRecta
 #if absoluteTransform1 || absoluteTransform2
 	// DF Apr. 28 2011
 	// rescaling introduced to take account of the QTDevice::SetScale change
- 	// the QTDevice::SetScale change corresponds to the common VGDevice demantic and implementation
+ 	// the QTDevice::SetScale change corresponds to the common VGDevice semantic and implementation
 	// actually commented out due to unresolved problems with rotations
 	qreal xs, ys;
 	QPainter * p = (QPainter*)dev->GetNativeContext();
@@ -444,6 +436,27 @@ void QGuidoPainter::setGuidoPageFormat(const GuidoPageFormat& pageFormat)
 GuidoPageFormat QGuidoPainter::guidoPageFormat() const
 {
 	return mPageFormat;
+}
+
+//-------------------------------------------------------------------------
+// associates a set of default paths to a handler
+// note that the user home directory is always added as default path
+void QGuidoPainter::setPathsToARHandler(ARHandler inARHandler, const char* path)
+{
+    std::vector<std::string> pathsVector;
+	if (path) pathsVector.push_back (path);
+	
+	std::string homePath;
+#ifdef WIN32
+	// For windows
+	homePath.append(getenv("HOMEDRIVE"));
+	homePath.append(getenv("HOMEPATH"));
+#else
+	// For unix
+	homePath.append(getenv("HOME"));
+#endif
+	pathsVector.push_back (homePath);
+	GuidoSetSymbolPath(inARHandler, pathsVector);
 }
 
 //-------------------------------------------------------------------------
