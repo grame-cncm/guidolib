@@ -38,7 +38,7 @@ class ARChordComma : // public ARMusicalObject,
 		virtual void PrintParameters(std::ostream & os) const;
 
 		virtual void setTagParameterList(TagParameterList & theTagParameterList);
-
+		virtual void browse(TimeUnwrap& mapper) const;
 
   protected:
 

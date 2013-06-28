@@ -18,6 +18,7 @@
 #include "TagParameterInt.h"
 #include "TagParameterFloat.h"
 #include "TagParameterList.h"
+#include "TimeUnwrap.h"
 #include "ListOfStrings.h"
 
 ListOfTPLs ARChordComma::ltpls(1);
@@ -54,6 +55,13 @@ void ARChordComma::PrintName(std::ostream & os) const
 void ARChordComma::PrintParameters(std::ostream & ) const
 {
 }
+
+
+void ARChordComma::browse(TimeUnwrap& mapper) const
+{
+	mapper.AtPos (this, TimeUnwrap::kChordComma);
+}
+
 
 void ARChordComma::setTagParameterList(TagParameterList & tpl)
 {
