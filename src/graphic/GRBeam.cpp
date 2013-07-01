@@ -667,6 +667,11 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	ARBeam * arBeam = getARBeam();
 	const bool isSpecBeam = arBeam->isGuidoSpecBeam();
 
+	if(startEl)
+		infos.stemdir = startEl->getStemDirection();
+	else if(endEl)
+		infos.stemdir = endEl->getStemDirection();
+
 	if(level != 0)
 		return;
 
@@ -776,7 +781,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 					adjustdir = dirDOWN;
 					diffy -= (float)sn->getStemLength();
 				}
-					
+				
 				ly -= diffy;
 				if (tagtype == SYSTEMTAG)
 					ly -= (float)sn->getGRStaff()->getPosition().y;

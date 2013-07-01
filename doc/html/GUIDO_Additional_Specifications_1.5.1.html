@@ -792,7 +792,7 @@
 			
 			<p class="tag">
 				<p>
-					<span class="tag">\fBeam</span>&lt;<i>durations, drawDuration, color</i>&gt;(notes)
+					<span class="tag">\fBeam</span>&lt;<i>durations, drawDuration, color</i>&gt;(notes shorter than a quarter note)
 				</p>
 				<p>
 					Creates a feathered beam
@@ -865,7 +865,7 @@
 									</li>
 
 									<li>
-										<i>remarks:</i> if the specified durations are not standard, we will take the closest standard duration 
+										<i>remark:</i> if the specified durations are not standard, we will take the closest standard duration 
 									</li>
 									<br>
 								</ul>
@@ -910,7 +910,10 @@
 						<b><i>Remarks:</i></b>
 						<ul>
 							<li>
-								the spacing between notes stays the same as usual : it depends on the inner duration explicitely given by the user (and not the graphic appearance given by the number of beams)
+								The spacing between notes stays the same as usual : it depends on the inner duration explicitely given by the user (and not the graphic appearance given by the number of beams)
+							</li>
+							<li>
+								The beams can be chained (using the \fBeamBegin \fBeamEnd tags), combined, and included in bigger beams.
 							</li>
 						</ul>
 					</li>
@@ -923,6 +926,8 @@
 				<center> <IMG SRC="imgs/fBeam1.jpg"> </center>
 				<pre>[ \fBeamBegin:1&lt;drawDuration = "true"&gt; a/8 e f e/16 d g f/32 \fBeamBegin:2&lt;drawDuration = "true"&gt; a/64 \fBeamEnd:1 a f e f/32 e g a/16 e d/8 \fBeamEnd:2]</pre>
 				<center> <IMG SRC="imgs/fBeam2.jpg"> </center>
+				<pre>[ \beam( \fBeam( a/16 f2 g1 b/32) \fBeam( d/32 c b a g/64) \fBeam( e d c d/8) ) \beam( \beam( a/8 f g/32 b) \beam( d c b a g2/64) \beam( e d c a/32) ) ] </pre>
+				<center> <IMG SRC="imgs/combinedBeams.jpg"> </center>
 			</p>
 		</p>			
 	</body>

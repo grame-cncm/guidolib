@@ -12,6 +12,9 @@ GUIDO Engine history
 - bug correction: incorrect staff mapping was generated for staves with a single slice
 - implementation of \staffOff- \staffOn- tags
 - implementation of \symbol-tag
+- implementation of \fBeam tag (feathered beaming)
+- modifications on the beams : change size with the \noteFormat changes, beams can be included in others, bugs solved...
+
 
 ---------------------------------------------------------------
 2012-04-05  version 1.5.0
