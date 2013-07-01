@@ -119,11 +119,11 @@ void ARFeatheredBeam::findPoints(std::string durations)
 			stream >> den;
 			valor /= den;
 		}
-		if(valor >= 0.09375) 
+		if(valor >= 0.09375)  // = (1/8 + 1/16)/2 = 3/32
 			beams.first=1;
-		else if(valor >= 0.046875)
+		else if(valor >= 0.046875)   // = (1/16 + 1/32)/2 = 3/64
 			beams.first=2;
-		else if(valor >= 0.0234375)
+		else if(valor >= 0.0234375)  // = (1/32 + 1/64)/2 = 3/128
 			beams.first=3;
 		else
 			beams.first=4;

@@ -66,6 +66,8 @@ GRBeam::GRBeam(GRStaff * grstaf,ARBeam * arbeam) : GRPTagARNotationElement(arbea
 	sse->p = (void *) st;
 
 	mStartEndList.AddTail(sse);
+
+	level = 0;
 }
 
 GRBeam::~GRBeam()
@@ -155,6 +157,7 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 		hdc.PopPen();
 		hdc.PopFillColor();
 	}
+
 }
 
 void GRBeam::print() const
@@ -254,7 +257,8 @@ void GRBeam::addAssociation(GRNotationElement * grnot)
 	// and cannot be done that way.
 	// otherwise we do not get the flags on again ...
 	grn->setFlagOnOff(false);
-	grn->incBeamCount();
+	//if we increment the beamCount, we can't allow several beams to be superposed
+//	grn->incBeamCount();
 }
 
 void GRBeam::RangeEnd(GRStaff * grstaff)
@@ -663,6 +667,9 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	ARBeam * arBeam = getARBeam();
 	const bool isSpecBeam = arBeam->isGuidoSpecBeam();
 
+	if(level != 0)
+		return;
+
 	NVPoint offset = initp0 (sse, startEl, infos);
 	initp1 (sse, infos);
 	offset = initp2 (sse, endEl, infos);
@@ -851,6 +858,16 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 		//endEl->setStemChanged();
 	}	
 	
+	if(!smallerBeams.empty())
+	{
+		for(std::vector<GRBeam *>::iterator it = smallerBeams.begin(); it < smallerBeams.end(); it++)
+		{
+			(*it)->decLevel();
+			(*it)->tellPosition((*it)->getEndElement(), (*it)->getEndElement()->getPosition());
+		}
+		return;
+	}
+
 	// -- Now we need to add the simplebeams as simplebeamgroups ...
 	NVPoint myp[4];
 	int dir = st->direction;
@@ -915,15 +932,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 				st->simpleBeams = new SimpleBeamList(1);
 
 			st->simpleBeams->AddTail(tmpbeam);
-
-/*			GuidoPos pos = mAssociated->GetHeadPosition();
-			while(pos != sse->endpos)
-			{
-				GREvent * stemNote = dynamic_cast<GREvent *>(mAssociated->GetNext(pos));
-				if (stemNote)
-					stemNote->incBeamCount();
-			}
-*/		}
+		}
 		// if end > begin
 		for(int i=begin; i<end; i++)
 		{
@@ -943,7 +952,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 
 			st->simpleBeams->AddTail(tmpbeam);
 		}
-
+		
 
 		// in order to draw the total duration of the beam
 		if(drawDur)
@@ -1382,6 +1391,7 @@ void GRBeam::checkPosition( const GRSystem * grsys)
 
 	mIsSystemCall = true;
 	tellPosition( sse->endElement, sse->endElement->getPosition());
+
 	mIsSystemCall = false;
 }
 
@@ -1389,4 +1399,16 @@ std::pair<float,float> & GRBeam::getLastPositionOfBarDuration()
 {
 	static std::pair<float, float> lastPositionOfBarDuration;
 	return lastPositionOfBarDuration;
+}
+
+GRNotationElement * GRBeam::getEndElement()
+{
+	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );
+	return sse->endElement;
+}
+
+void GRBeam::addSmallerBeam(GRBeam * beam)
+{
+	beam->setLevel(level+1);
+	smallerBeams.push_back(beam);
 }

@@ -147,4 +147,3 @@ void ARBeam::PrintName(std::ostream & os) const
 	if (!getRange())
 		os << "Begin";
 }
-

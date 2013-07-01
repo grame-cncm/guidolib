@@ -17,6 +17,7 @@
 
 // #include "ARTStem.h"
 // #include "GRTag.h"
+#include "GRBeam.h"
 #include "GRPossibleBreakState.h"
 
 template <class T> class KF_IPointerList;
@@ -168,6 +169,8 @@ private:
 	GRSingleNote *	CreateSingleNote	(const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject, float size=0);
 	void			AddRegularEvent		(GREvent * ev);
 	void			organizeGlissando(GRTag * g);
+	std::vector<GRBeam *> curbeam;
+	void			organizeBeaming(GRTag * grb);
 
 };
 

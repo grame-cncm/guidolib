@@ -70,6 +70,10 @@ public:
 	virtual void GGSOutput() const;
 	virtual void OnDraw( VGDevice & hdc ) const;
 	virtual bool isAutoBeam() { return false; } // derived by GRAutoBeam
+	virtual GRNotationElement * getEndElement();
+	virtual void addSmallerBeam(GRBeam * beam);
+	virtual void setLevel(int l){level = l;}
+	virtual void decLevel(){level--;}
 
 protected:
 	ARBeam * getARBeam()										{ return static_cast<ARBeam *>(mAbstractRepresentation); }
@@ -105,8 +109,10 @@ private:
 	void	slopeAdjust (GRSystemStartEndStruct * sse, const GREvent * startEl, const GREvent * endEl,float slope, PosInfos& infos);
 	bool   isFeathered;
 	bool   drawDur;
+	int level;
 
 	static std::pair<float, float> & getLastPositionOfBarDuration();
+	std::vector<GRBeam *> smallerBeams;
 };
 
 #endif

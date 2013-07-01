@@ -1,0 +1,12 @@
+[
+	\beam(
+		\fBeam( a/16 f g b2/32)
+		\fBeam( d1/32 c b a g/64)
+		\fBeam( e d c a/8)
+	)
+	\beam(
+		\beam( a/8 f g b/32)
+		\beam( d1/32 c b a g2/64)
+		\beam( e d c a/32)
+	)
+]

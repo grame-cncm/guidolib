@@ -428,7 +428,7 @@ void GRVoiceManager::BeginManageVoice()
 	// called once. There are NO OPEN TAGS!
 	arVoice->doAutoTrill();
     arVoice->doAutoCluster();
-	
+
 }
 
 
@@ -588,7 +588,7 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 		return CURTPBIGGER_EVFOLLOWS;
 	}
 	else if (curvst->curtp < timepos) { /* assert(false);*/ }
-
+	
 	if (filltagmode)
 	{
 		ARMusicalObject * o = arVoice->GetAt(curvst->vpos);
@@ -1935,6 +1935,10 @@ void GRVoiceManager::checkEndPTags(GuidoPos tstpos)
 				{
 					organizeGlissando(g);
 				}
+				else if(dynamic_cast<GRBeam *>(g))
+				{
+					organizeBeaming(g);
+				}
 				g->RangeEnd(mCurGrStaff);
 				grtags->RemoveElementAt(curpos);
 				// now remove the special nlinestuff
@@ -1944,6 +1948,7 @@ void GRVoiceManager::checkEndPTags(GuidoPos tstpos)
 			}
 		}
 	}
+
 }
 
 /** \brief Gets called so that possible NewLine-Positions can be retrieved easily.
@@ -2418,3 +2423,39 @@ bool & GRVoiceManager::getCurStaffDraw(int index)
 	}
 	return mCurStaffDraw[index];
 }	
+
+void GRVoiceManager::organizeBeaming(GRTag * grb)
+{
+	GRBeam * caller = dynamic_cast<GRBeam *>(grb);
+	if(!caller)
+		return;
+	GuidoPos pos = grtags->GetHeadPosition();
+	while(pos)
+	{
+		GRTag * tag = grtags->GetNext(pos);
+		GRBeam * beam = dynamic_cast<GRBeam *>(tag);
+		bool same = false;
+		if(beam)
+		{
+			std::vector<GRBeam *>::iterator it = curbeam.begin();
+			while(it != curbeam.end())
+			{
+				if(*it == beam)
+					same = true;
+				if(same && beam == caller)
+				{
+					curbeam.erase(it);
+					break;
+				}	
+				// to be added as "smaller beam", it has to be on its end position, 
+				// and to have begun after the other(s) current(s) beam(s)
+				if(beam == caller && !same && (*it)->getRelativeTimePosition() <= beam->getRelativeTimePosition())
+					(*it)->addSmallerBeam(beam);
+				it++;
+			}
+			// if the beam is already registered, or if it is the caller (in its end position), there is no need to add it
+			if(!same && beam != caller)
+				curbeam.push_back(beam);
+		}
+	}
+}

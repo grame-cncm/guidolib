@@ -1691,7 +1691,9 @@ void ARMusicalVoice::doAutoBeaming()
 				ARBeam * bm = dynamic_cast<ARBeam *>
 					(vst.addedpositiontags->GetNext(tmppos));
 				if (bm)
+				{
 					++ beamcount;
+				}
 			}
 		}
 
@@ -1702,7 +1704,7 @@ void ARMusicalVoice::doAutoBeaming()
 		ARMusicalObject * o = GetAt(pos);
 		ARMusicalEvent * ev = ARMusicalEvent::cast(o);
 		ARBar * arbar = dynamic_cast<ARBar *>(o);
-
+		
 		// is it an event? and there are NO explicit beams and the beamstate is auto?
 		if (beamcount == 0 && bmauto && ev && !vst.curgracetag)
 		{
@@ -6167,6 +6169,8 @@ void ARMusicalVoice::doAutoCluster()
 		}
 	}
 }
+
+// set the begin- and end- durations for each feathered beam.
 
 void ARMusicalVoice::doAutoFeatheredBeam()
 {
