@@ -6009,6 +6009,7 @@ void ARMusicalVoice::doAutoTrill()
 		if(note)
         {
 			ARTrill * trill = note->getOrnament();
+			//type = 0 -> is a trill (and not a mord or turn)
 			if(trill && trill->getType()==0)
             {
 				// if it has, we can check if the note is tied to another
