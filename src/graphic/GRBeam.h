@@ -16,6 +16,7 @@
 */
 
 #include "ARBeam.h"
+#include "ARFeatheredBeam.h"
 #include "GRPTagARNotationElement.h"
 #include "GRSystemTagInterface.h"
 
@@ -39,6 +40,8 @@ class GRBeamSaveStruct : public GRPositionTag::GRSaveStruct
 		int dirset;
 		int direction;
 		NVPoint p[4];
+		NVPoint DurationLine[6];
+		std::string duration;
 		SimpleBeamList * simpleBeams;
 };
 
@@ -67,6 +70,10 @@ public:
 	virtual void GGSOutput() const;
 	virtual void OnDraw( VGDevice & hdc ) const;
 	virtual bool isAutoBeam() { return false; } // derived by GRAutoBeam
+	virtual GRNotationElement * getEndElement();
+	virtual void addSmallerBeam(GRBeam * beam);
+	virtual void setLevel(int l){level = l;}
+	virtual void decLevel(){level--;}
 
 protected:
 	ARBeam * getARBeam()										{ return static_cast<ARBeam *>(mAbstractRepresentation); }
@@ -100,6 +107,12 @@ private:
 	NVPoint initp2 (GRSystemStartEndStruct * sse, const GREvent * endEl, PosInfos& infos);
 	void	initp3 (GRSystemStartEndStruct * sse, PosInfos& infos);
 	void	slopeAdjust (GRSystemStartEndStruct * sse, const GREvent * startEl, const GREvent * endEl,float slope, PosInfos& infos);
+	bool   isFeathered;
+	bool   drawDur;
+	int level;
+
+	static std::pair<float, float> & getLastPositionOfBarDuration();
+	std::vector<GRBeam *> smallerBeams;
 };
 
 #endif

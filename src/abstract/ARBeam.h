@@ -32,6 +32,7 @@ class ARBeam :  public ARMTParameter, public ARPositionTag
 	virtual 		~ARBeam();
 
 	  bool isGuidoSpecBeam() const;
+	  bool isFeatheredBeam() const {return feathered;}
 
 	virtual bool MatchEndTag(const char * s);
 	virtual void print() const { }
@@ -50,6 +51,8 @@ class ARBeam :  public ARMTParameter, public ARPositionTag
 		TagParameterFloat * dy3;
 		TagParameterFloat * dx4;
 		TagParameterFloat * dy4;
+
+		bool feathered;
 };
 
 #endif
