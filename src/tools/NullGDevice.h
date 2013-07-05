@@ -110,6 +110,11 @@ class NullGDevice : public VGDevice
 		virtual void*			GetBitMapPixels()					{ return 0; }
 		virtual void			ReleaseBitMapPixels()				{}
 
+		/// Gives the current device data and returns the data associated mime type.
+		virtual const char*		GetImageData(const char* & outDataPtr, int& outLength) { outLength=0; return 0;}
+		/// Release the pointer returned by GetImageData
+		virtual void			ReleaseImageData(const char *) const {}
+
 		/// temporary hack - must be removed asap
 		virtual	VGSystem *		getVGSystem() const					{ return mSys; }
 
