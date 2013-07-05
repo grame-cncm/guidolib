@@ -499,7 +499,6 @@ void QLanguageItem::load(const QMimeData * mimeData)
 		
 	setModified( code() != getFileContent( file() ) );
 
-	QRectF r = rect();
 	if ( mimeData->hasFormat( MIME_SCALE ) )
 	{
 		float hotSpotX = mimeData->data( MIME_HOTSPOT_X ).toFloat();
