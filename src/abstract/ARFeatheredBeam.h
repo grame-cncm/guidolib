@@ -44,6 +44,10 @@ class ARFeatheredBeam :  public ARBeam
 	int getLastBeaming(){return beams.second;}
 	void setBeginDuration( const TYPE_DURATION b){beginDur = b;}
 	void setEndDuration( const TYPE_DURATION e){endDur = e;}
+	void setBeginTimePosition( const TYPE_TIMEPOSITION bp){beginTimePos = bp;}
+	void setEndTimePosition( const TYPE_TIMEPOSITION ep){endTimePos = ep;}
+	TYPE_TIMEPOSITION getBeginTimePosition (){return beginTimePos;}
+	TYPE_TIMEPOSITION getEndTimePosition (){return endTimePos;}
 	void findDefaultPoints();
 
 	protected:
@@ -55,6 +59,8 @@ class ARFeatheredBeam :  public ARBeam
 		std::pair<int,int> beams;
 		TYPE_DURATION beginDur;
 		TYPE_DURATION endDur;
+		TYPE_TIMEPOSITION beginTimePos;
+		TYPE_TIMEPOSITION endTimePos;
 
 		void findPoints(std::string points); 
 		void convertDurationToBeams(float valor, float valor2);

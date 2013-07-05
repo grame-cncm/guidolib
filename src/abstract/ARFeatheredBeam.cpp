@@ -31,8 +31,10 @@ ARFeatheredBeam::ARFeatheredBeam()
 	drawDur = false;
 	durationsSet = false;
 	
-	TYPE_DURATION beginDur = 0;
-	TYPE_DURATION endDur = 0;
+	beginDur = 0;
+	endDur = 0;
+	beginTimePos = 0;
+	endTimePos = 0;
 }
 
 ARFeatheredBeam::~ARFeatheredBeam()

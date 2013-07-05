@@ -6193,12 +6193,18 @@ void ARMusicalVoice::doAutoFeatheredBeam()
 					ARMusicalObject * object = GetAt(posBegin);
 					ARNote * note = dynamic_cast<ARNote *>(object);
 					if(note)
+					{
+						curfBeam->setBeginTimePosition(note->getRelativeTimePosition());
 						curfBeam->setBeginDuration(note->getDuration());
+					}
 					GuidoPos posEnd = curfBeam->getEndPosition();
 					object = GetAt(posEnd);
 					note = dynamic_cast<ARNote *>(object);
 					if(note)
+					{
 						curfBeam->setEndDuration(note->getDuration());
+						curfBeam->setEndTimePosition(note->getRelativeEndTimePosition());
+					}
 				}
 			}
 		}

@@ -139,18 +139,23 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 		int n = st->duration.length();
 
 		hdc.SelectPenWidth(4);
-		hdc.Line(st->DurationLine[1].x, st->DurationLine[1].y, st->DurationLine[2].x, st->DurationLine[2].y);
-		hdc.Line(st->DurationLine[3].x, st->DurationLine[3].y, st->DurationLine[4].x, st->DurationLine[4].y);
-		//if(sse->startflag != GRSystemStartEndStruct::OPENLEFT)
+		if(sse->startflag != GRSystemStartEndStruct::OPENLEFT)
+		{	
 			hdc.Line(st->DurationLine[0].x, st->DurationLine[0].y, st->DurationLine[1].x, st->DurationLine[1].y);
-		//if(sse->endflag != GRSystemStartEndStruct::OPENRIGHT)
+			hdc.Line(st->DurationLine[1].x, st->DurationLine[1].y, st->DurationLine[2].x, st->DurationLine[2].y);
+			hdc.Line(st->DurationLine[3].x, st->DurationLine[3].y, st->DurationLine[4].x, st->DurationLine[4].y);
+		}
+		else
+			hdc.Line(st->DurationLine[1].x, st->DurationLine[1].y, st->DurationLine[4].x, st->DurationLine[4].y);
+		if(sse->endflag != GRSystemStartEndStruct::OPENRIGHT)
 			hdc.Line(st->DurationLine[4].x, st->DurationLine[4].y, st->DurationLine[5].x, st->DurationLine[5].y);
 		
 		const VGFont* hmyfont;
 		hmyfont = FontManager::gFontText;
 		hdc.SetTextFont( hmyfont );
 
-		hdc.DrawString(st->DurationLine[2].x, st->DurationLine[2].y+LSPACE/2, fraction, n);
+		if(sse->startflag != GRSystemStartEndStruct::OPENLEFT)
+			hdc.DrawString(st->DurationLine[2].x, st->DurationLine[2].y+LSPACE/2, fraction, n);
 	}
 
 	if (mColRef) {
@@ -962,10 +967,8 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 		// in order to draw the total duration of the beam
 		if(drawDur)
 		{
-			TYPE_TIMEPOSITION begin = mAssociated->GetHead()->getRelativeTimePosition();
-			TYPE_TIMEPOSITION end = mAssociated->GetTail()->getRelativeEndTimePosition();
-			if(sse->startflag == GRSystemStartEndStruct::OPENLEFT)
-				begin = sse->startElement->getRelativeTimePosition();
+			TYPE_TIMEPOSITION begin = ar->getBeginTimePosition();
+			TYPE_TIMEPOSITION end = ar->getEndTimePosition();
 			TYPE_DURATION dur = end - begin;
 			int num = dur.getNumerator();
 			int den = dur.getDenominator();
