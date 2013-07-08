@@ -9,7 +9,7 @@ else
 ifeq ($(system), Linux)
   bin =  ../cmake/Release
 else
-  bin =  build/win*/Release
+  bin =  ../build/win*/Release
 endif
 endif
 
@@ -17,7 +17,7 @@ DEVKIT   := guidolib-$(VERSION)-devkit
 DOCPACK  := guidolib-$(VERSION)-doc
 MACOSLIB := $(DEVKIT)-macosx
 LINUXLIB := $(DEVKIT)-linux-x86
-WINLIB   := $(DEVKIT)-win32
+WINLIB   := $(DEVKIT)-windows
 QTLIB    := $(DEVKIT)-Qt
 SRC 	 := guidolib-$(VERSION)-src
 
