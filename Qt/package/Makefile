@@ -1,4 +1,4 @@
-VERSION=2.42
+VERSION=2.50
 
 system	:= $(shell uname -s)
 ifeq ($(system), Linux)
@@ -18,12 +18,12 @@ WIN32_NAME	= GuidoQtApplsWin32-$(VERSION)
 
 MACTOOLS  := $(patsubst %, ../../tools/cmake/release/%, $(TOOLS))
 
-WIN32QTPATH := /c/Qt/2010.05/qt
-WIN32QT		:= QtCore4.dll QtGui4.dll QtXml4.dll
+WIN32QTPATH := /c/Qt/Qt5.0.1/5.0.1/msvc2010/
+WIN32QT		:= QT5PRINTSUPPORT.DLL QT5WIDGETS.DLL QT5GUI.DLL QT5CORE.DLL
 WIN32QT		:= $(patsubst %, $(WIN32QTPATH)/bin/%, $(WIN32QT))
 WIN32APPS	:= $(patsubst %, ../bin/%.exe, $(APPLS))
-WIN32TOOLS  := $(patsubst %, ../../tools/cmake/release/%.exe, $(TOOLS))
-WIN32QTPLUGS := qgif4.dll qtiff4.dll qjpeg4.dll
+WIN32TOOLS  := $(patsubst %, ../../tools/build/win32/release/%.exe, $(TOOLS))
+WIN32QTPLUGS := qgif.dll qtiff.dll qjpeg.dll
 WIN32QTPLUGS := $(patsubst %, $(WIN32QTPATH)/plugins/imageformats/%, $(WIN32QTPLUGS))
 
 
@@ -48,7 +48,7 @@ macos:
 	make macapp APPL=GuidoSceneComposer
 	cp $(MACTOOLS) $(MACOSX_NAME)
 	cd $(MACOSX_NAME) && ../localise-tool $(TOOLS) guido2image
-	cp -r ../../cmake/Release/GUIDOEngine.framework $(MACOSX_NAME)
+	cp -r ../../build/MacOS/Release/GUIDOEngine.framework $(MACOSX_NAME)
 	cp ../../src/guido2.ttf $(MACOSX_NAME)
 	cp ../bin/guido2image $(MACOSX_NAME)
 	hdiutil create -srcfolder $(MACOSX_NAME) -ov $(MACOSX_NAME).dmg
@@ -74,10 +74,10 @@ win32:
 	[ -d $(WIN32_NAME)/imageformats ] || mkdir -p $(WIN32_NAME)/imageformats
 	cp $(WIN32APPS) $(WIN32_NAME)
 	cp $(WIN32TOOLS) $(WIN32_NAME)
-	cp -f ../../cmake/release/GUIDOEngine.dll $(WIN32_NAME)
+	cp -f ../../build/win32/release/GUIDOEngine.dll $(WIN32_NAME)
 	cp -f ../../src/guido2.ttf $(WIN32_NAME)
 	cp $(WIN32QT) $(WIN32_NAME)
-	cp *80.* $(WIN32_NAME)
+	cp vcredist_x86.exe $(WIN32_NAME)
 	cp 	$(WIN32QTPLUGS) $(WIN32_NAME)/imageformats
 	make common PACKAGE_NAME=$(WIN32_NAME)
 
@@ -97,5 +97,5 @@ common:
 	make commongit
 
 commongit:
-	cd ../../doc/html && git archive -o __tmp__.tgz --prefix=../../Qt/package/$(PACKAGE_NAME)/doc/html/ HEAD && tar xzfP __tmp__.tgz && rm __tmp__.tgz
-	cd ../../gmn-examples && git archive -o __tmp__.tgz --prefix=../Qt/package/$(PACKAGE_NAME)/gmn-examples/ HEAD && tar xzfP __tmp__.tgz && rm __tmp__.tgz
+	cp -R ../../doc/html $(PACKAGE_NAME)/doc/html
+	cp -R ../../gmn-examples $(PACKAGE_NAME)/gmn-examples
