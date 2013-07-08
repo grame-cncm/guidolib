@@ -1,7 +1,7 @@
 GuidoEditor Change Log
 
 version 2.5 - june 2013
-- support of \symbol-tag, above all the image's path research
+- support of \symbol tag: relative path management
 
 version 2.4
 - extended mappings support
