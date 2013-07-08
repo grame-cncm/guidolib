@@ -646,8 +646,8 @@
 			
 			<p class="tag">
 				<p>
-					<span class="tag">\symbol</span>&lt;<i>filePath, position, size, w, h, dx, dy</i>&gt; <br>
-					<span class="tag">\symbol</span>&lt;<i>filePath, position, size, w, h, dx, dy</i>&gt;(notes)
+					<span class="tag">\symbol</span>&lt;<i>file, position, size, w, h, dx, dy</i>&gt; <br>
+					<span class="tag">\symbol</span>&lt;<i>file, position, size, w, h, dx, dy</i>&gt;(notes)
 				</p>
 				<p>
 					Inserts a symbol in the score, which can be a png/jpg/bmp file and which can modify score's layout.
@@ -664,7 +664,7 @@
 						<ul>
 							<br>
 							<li>
-								<b><i>filePath</i> (required)</b> - path to the symbol: can be relative from home directory, from current gmn file directory, or absolute.
+								<b><i>file</i> (required)</b> - path to the symbol: can be relative from home directory, from current gmn file directory, or absolute.
 							
 								<ul>
 									<br>
@@ -779,10 +779,10 @@
 			
 			<p class="notes">
 				Examples:
-				<pre>[ \meter&lt;"4/4"&gt; a b \symbol&lt;filePath="test.png", dx=-3&gt; (empty) c d ]</pre>
+				<pre>[ \meter&lt;"4/4"&gt; a b \symbol&lt;file="test.png", dx=-3&gt; c d ]</pre>
 				<center> <IMG SRC="imgs/symbol1.jpg"> </center>
-				<pre>[ \meter&lt;"4/4"&gt; a b \symbol&lt;filePath="imgTest/Lena.jpg", position="bot", size=0.5, dx=-5&gt; c/2 d ]</pre>
-				<center> <IMG SRC="imgs/symbol2.jpg"> </center>
+				<pre>[ \meter<"4/4"> a b  \symbol&lt;file="symbols/curve1.png", position="top", dy=-1, h=13, w=50&gt; (c d ) ]</pre>
+				<center> <IMG SRC="imgs/symbol2.png"> </center>
 			</p>
 
 			<hr>

@@ -1,5 +1,8 @@
 --------------------------------------------------------------------------
-                             GUIDO Engine Library
+                         GUIDO Engine Library
+                            ==============
+              Grame, Centre National de Creation Musicale
+                          http://www.grame.fr
 --------------------------------------------------------------------------
 
 The GUIDO Engine library provides music score layout to client applications.
