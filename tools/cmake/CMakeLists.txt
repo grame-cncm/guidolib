@@ -44,7 +44,12 @@ endif()
 include_directories( ${GUIDO}/include ${GUIDO}/devices ${GUIDO}/tools ${DEVICE} )
 
 if(APPLE OR WIN32)
- 	find_library (GUIDOLIB GUIDOEngine PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/Release NO_DEFAULT_PATH)
+	if (${CMAKE_CL_64})
+		set(GUIDOEngine GUIDOEngine64)
+	else ()
+		set(GUIDOEngine GUIDOEngine)
+	endif()
+ 	find_library (GUIDOLIB ${GUIDOEngine} PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../../build/*/Release NO_DEFAULT_PATH)
 else()
 	EXECUTE_PROCESS ( COMMAND "pkg-config"  "--cflags" "cairo"
                 OUTPUT_VARIABLE TMP
@@ -59,7 +64,7 @@ else()
 	string (STRIP ${TMP} CAIRO)
 	set(LINK ${LINK} ${CAIRO})
 
-find_library (GUIDOLIB GUIDOEngine PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../../cmake NO_DEFAULT_PATH)
+	find_library (GUIDOLIB GUIDOEngine PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../../cmake NO_DEFAULT_PATH)
 endif()
 
 #######################################
