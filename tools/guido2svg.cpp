@@ -1,6 +1,7 @@
 
 #ifndef WIN32
 #include <libgen.h>
+#include <unistd.h>
 #else
 #include <io.h>
 #endif
