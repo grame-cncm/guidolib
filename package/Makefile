@@ -28,6 +28,7 @@ modules := guidolib
 DOC		:= ../doc/GUIDO-Format_de_Notation_Musicale.pdf \
 			"../doc/GUIDO-Music Notation Format.pdf" \
 			../doc/GUIDO_Additional_Specifications_1.3.8.pdf \
+			../doc/GUIDO_Additional_Specifications_1.5.1.pdf \
 			../doc/refcard/GMNRefCard.pdf
 
 SAMPLES := $(wildcard ../samples/*.cpp ../validate/guido*.cpp ../src/tools/Null*.h)
