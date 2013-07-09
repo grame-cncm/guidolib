@@ -60,7 +60,7 @@ guidogetversion
 	Notes
 ======================================================================
 The Guido Qt applications are part of the GuidoLib project. 
-They demonstrates the use of the Guido Engine Library to render music 
+They demonstrate the use of the Guido Engine Library to render music 
 scores using the Qt framework.
 
 The GuidoLib Project is hosted on sourceforge.net project, download page:

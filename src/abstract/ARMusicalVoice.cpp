@@ -1931,7 +1931,9 @@ public:
 			}
 		}
 		size_t length = (size_t)(end-start);
-		char c = (*text)[end];
+		char c = NULL;
+		if(text->size()>end)
+			c = (*text)[end];
 		if (c == '-' || c == '_')
 		{
 			++ length;
