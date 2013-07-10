@@ -18,8 +18,8 @@ WIN32_NAME	= GuidoQtApplsWin32-$(VERSION)
 
 MACTOOLS  := $(patsubst %, ../../tools/cmake/release/%, $(TOOLS))
 
-WIN32QTPATH := /c/Qt/Qt5.0.1/5.0.1/msvc2010/
-WIN32QT		:= QT5PRINTSUPPORT.DLL QT5WIDGETS.DLL QT5GUI.DLL QT5CORE.DLL QT5XML.DLL LIBGLESV2.DLL D3DCOMPILER_43.DLL ICUIN49.DLL ICUUC49.DLL ICUDT49.DLL
+WIN32QTPATH := /c/Qt/Qt5.1.0/5.1.0/msvc2010/
+WIN32QT		:= QT5PRINTSUPPORT.DLL QT5WIDGETS.DLL QT5GUI.DLL QT5CORE.DLL QT5XML.DLL LIBGLESV2.DLL ICUIN51.DLL ICUUC51.DLL ICUDT51.DLL
 WIN32QT		:= $(patsubst %, $(WIN32QTPATH)/bin/%, $(WIN32QT))
 WIN32APPS	:= $(patsubst %, ../bin/%.exe, $(APPLS))
 WIN32TOOLS  := $(patsubst %, ../../tools/build/win32/release/%.exe, $(TOOLS))
@@ -28,7 +28,6 @@ WIN32QTPLUGS := $(patsubst %, $(WIN32QTPATH)/plugins/imageformats/%, $(WIN32QTPL
 
 
 nothing:
-	echo $(WIN32QT)
 	@ echo " Make guidolib Qt packages:"
 	@ echo " 'macos' :  deployed binaries package for macosx"
 	@ echo " 'win32' :  deployed binaries package for win32. Works with MSys."
@@ -77,7 +76,7 @@ win32:
 	cp -f ../../build/win32/release/GUIDOEngine.dll $(WIN32_NAME)
 	cp -f ../../src/guido2.ttf $(WIN32_NAME)
 	cp $(WIN32QT) $(WIN32_NAME)
-	cp vcredist_x86.exe $(WIN32_NAME)
+	cp vcredist_sp1_x86.exe $(WIN32_NAME)
 	cp 	$(WIN32QTPLUGS) $(WIN32_NAME)/imageformats
 	make common PACKAGE_NAME=$(WIN32_NAME)
 
