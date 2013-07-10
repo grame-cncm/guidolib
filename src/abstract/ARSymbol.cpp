@@ -46,7 +46,7 @@ ARSymbol::~ARSymbol()
 
 const char *ARSymbol::getTagFormat() const
 {
-	const char * const outFormat = "S,filePath,,r;F,size,1.0,o;S,position,mid,o;I,w,,o;I,h,,o";
+	const char * const outFormat = "S,file,,r;F,size,1.0,o;S,position,mid,o;I,w,,o;I,h,,o";
 	return outFormat;
 }
 
