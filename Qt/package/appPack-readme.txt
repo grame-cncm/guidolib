@@ -81,6 +81,8 @@ Mac OS:
 	the folder unless you also move the framework too.
 
 Windows:
+	You need to install Microsoft redistributable dlls using vcredist_sp1_x86.exe.
+	You need to install the guido font : open the guido2.ttf file and click 'install'
 	The Guido Qt folder is self contained : it includes all the libraries
 	required to run the applications. Don't move the applications outside 
 	the folder.
@@ -90,16 +92,24 @@ Windows:
 	Copyright and Disclaimer
 ======================================================================
 This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public License
-as published by the Free Software Foundation; either version 2.1
-of the License, or (at your option) any later version.
+modify it under the terms of the Mozilla Public License.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
-You should have received a copy of the GNU Lesser General 
-Public License along with this program; if not, write to the 
-Free Software Foundation, Inc., 
-59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+======================================================================
+Acknowledgments
+======================================================================
+The Guido project originates from Ph.D.s conducted by Holger Hoos, Kai Renz and 
+Jürgen Kilian at the TU Darmstadt.
+The Guido engine has been designed by Kai Renz. It became an open source library in 
+December 2002 at the initiative of the Grame Computer Music Research Lab. Since then,
+many persons have been contributing to the Guido library project.
+I would like to thank them and especially: 
+J. Scott Amort, Jérôme Berthet, Samuel Brochot, Yannick Chapuis, Christophe Daudin,
+Colas Decron, Torben Hohn, Camille Le Roi, Stéphane Letz, François Levy, 
+Benjamen Ruprechter, Mike Solomon
+
+Dominique Fober

@@ -42,9 +42,23 @@ application against the  corresponding platfrom native Guidolib.
 	this font on your system.
 
 --------------------------------------------------------------------------
---------------------------------------------------------------------------
-
 The source code of the GUIDO Qt binding classes are available from 
-sourceforge under the LGPL2.1 license (see the LICENSE.LGPL-2.1 file).
+sourceforge under the Mozilla Public license.
 
 For more informations : http://sourceforge.net/projects/guidolib
+
+
+--------------------------------------------------------------------------
+Acknowledgments
+--------------------------------------------------------------------------
+The Guido project originates from Ph.D.s conducted by Holger Hoos, Kai Renz and 
+Jürgen Kilian at the TU Darmstadt.
+The Guido engine has been designed by Kai Renz. It became an open source library in 
+December 2002 at the initiative of the Grame Computer Music Research Lab. Since then,
+many persons have been contributing to the Guido library project.
+I would like to thank them and especially: 
+J. Scott Amort, Jérôme Berthet, Samuel Brochot, Yannick Chapuis, Christophe Daudin,
+Colas Decron, Torben Hohn, Camille Le Roi, Stéphane Letz, François Levy, 
+Benjamen Ruprechter, Mike Solomon
+
+Dominique Fober

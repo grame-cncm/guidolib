@@ -18,14 +18,16 @@ WIN32_NAME	= GuidoQtApplsWin32-$(VERSION)
 
 MACTOOLS  := $(patsubst %, ../../tools/cmake/release/%, $(TOOLS))
 
-WIN32QTPATH := /c/Qt/Qt5.1.0/5.1.0/msvc2010/
-WIN32QT		:= QT5PRINTSUPPORT.DLL QT5WIDGETS.DLL QT5GUI.DLL QT5CORE.DLL QT5XML.DLL LIBGLESV2.DLL ICUIN51.DLL ICUUC51.DLL ICUDT51.DLL
+QT5 := /c/Qt/Qt5.1.0
+WIN32QTPATH := $(QT5)/5.1.0/msvc2010/
+WIN32QT		:= QT5PRINTSUPPORT.DLL QT5WIDGETS.DLL QT5GUI.DLL QT5CORE.DLL QT5XML.DLL LIBGLESV2.DLL LIBEGL.DLL ICUIN51.DLL ICUUC51.DLL ICUDT51.DLL
 WIN32QT		:= $(patsubst %, $(WIN32QTPATH)/bin/%, $(WIN32QT))
 WIN32APPS	:= $(patsubst %, ../bin/%.exe, $(APPLS))
 WIN32TOOLS  := $(patsubst %, ../../tools/build/win32/release/%.exe, $(TOOLS))
 WIN32QTPLUGS := qgif.dll qtiff.dll qjpeg.dll
+WIN32QTPLATFORMS := qminimal.dll qoffscreen.dll qwindows.dll
 WIN32QTPLUGS := $(patsubst %, $(WIN32QTPATH)/plugins/imageformats/%, $(WIN32QTPLUGS))
-
+WIN32QTPLATFORMS := $(patsubst %, $(WIN32QTPATH)/plugins/platforms/%, $(WIN32QTPLATFORMS))
 
 nothing:
 	@ echo " Make guidolib Qt packages:"
@@ -70,14 +72,17 @@ linux:
 
 win32: 
 	@make -s check
-	[ -d $(WIN32_NAME)/imageformats ] || mkdir -p $(WIN32_NAME)/imageformats
+	[ -d $(WIN32_NAME)/plugins/imageformats ] || mkdir -p $(WIN32_NAME)/plugins/imageformats
+	[ -d $(WIN32_NAME)/plugins/platforms ] || mkdir -p $(WIN32_NAME)/plugins/platforms
 	cp $(WIN32APPS) $(WIN32_NAME)
 	cp $(WIN32TOOLS) $(WIN32_NAME)
 	cp -f ../../build/win32/release/GUIDOEngine.dll $(WIN32_NAME)
 	cp -f ../../src/guido2.ttf $(WIN32_NAME)
 	cp $(WIN32QT) $(WIN32_NAME)
-	cp vcredist_sp1_x86.exe $(WIN32_NAME)
-	cp 	$(WIN32QTPLUGS) $(WIN32_NAME)/imageformats
+	cp $(QT5)/vcredist/vcredist_sp1_x86.exe $(WIN32_NAME)
+	cp qt.conf $(WIN32_NAME)
+	cp 	$(WIN32QTPLUGS) $(WIN32_NAME)/plugins/imageformats
+	cp 	$(WIN32QTPLATFORMS) $(WIN32_NAME)/plugins/platforms
 	make common PACKAGE_NAME=$(WIN32_NAME)
 
 doc:
