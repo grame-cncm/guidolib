@@ -39,6 +39,8 @@ public:
 	
 	virtual void PrintName(std::ostream & os) const;
 	virtual void PrintParameters(std::ostream & os) const;
+	TagParameterString * getTempo(){return s1;}
+	TagParameterString * getAbsTempo(){return s2;}
 	
 
 protected:

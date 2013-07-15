@@ -37,6 +37,13 @@ class GRAccelerando : public GRPTagARNotationElement
 
 		virtual void	tellPosition( GObject * caller,const NVPoint & np );
 
+	private:
+		bool isTempoAbsSet;
+		bool isTempoSet;
+		NVPoint startPos;
+		NVPoint endPos;
+		std::string tempo1;
+		std::string tempo2;
 };
 
 #endif
