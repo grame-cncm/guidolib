@@ -86,9 +86,16 @@ void GRAccelerando::OnDraw( VGDevice & hdc ) const
 	float xEnd = endPos.x;
 
 	const VGFont* hmyfont = FontManager::gFontText;
+	
+	if (mColRef) {
+		VGColor color ( mColRef ); 	// custom or black
+		hdc.PushFillColor( color );
+		hdc.PushPen( color, 1);
+		hdc.SetFontColor(color);
+	}
 
 	hdc.SetTextFont(hmyfont);
-	
+
 	if(isTempoSet && sse->startflag==GRSystemStartEndStruct::LEFTMOST)
 	{
 		const char * t1 = tempo1.c_str();
@@ -141,6 +148,12 @@ void GRAccelerando::OnDraw( VGDevice & hdc ) const
 		else
 			hdc.Line(xStart, startPos.y, xStart+LSPACE, endPos.y);
 		xStart += 2*LSPACE;
+	}
+	
+	if (mColRef) {
+		hdc.PopPen();
+		hdc.PopFillColor();
+		hdc.SetFontColor(VGColor());//black
 	}
 }
 

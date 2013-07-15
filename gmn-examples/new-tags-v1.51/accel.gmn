@@ -1,0 +1,20 @@
+% accel.gmn
+%
+% Accelerando tag indicates an acceleration
+%
+% Usage : \accel<parameters>( notes )  
+%
+% Parameters : 
+%       - tempo : the tempo at the beginnig
+%       - abstempo : the tempo at the end
+
+{
+[
+	\accel<tempo="60", abstempo="80">
+	(
+		e d e2 
+		\newSystem 
+		b f1 a
+	)
+]
+}

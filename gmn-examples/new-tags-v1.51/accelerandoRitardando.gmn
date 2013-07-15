@@ -1,0 +1,33 @@
+% accelerandoRitardando.gmn
+%
+% Accelerando tag indicates an acceleration
+% Ritardando tag indicates a deceleration
+%
+% Usage : \accel<parameters>( notes )    or    \rit<parameters> ( notes ) 
+%
+% Parameters : 
+%       - tempo : the tempo at the beginnig
+%       - abstempo : the tempo at the end
+
+{
+[
+	\rit
+	(
+		e g b f a
+	) 
+	\accel<tempo="60", color="red", abstempo="80">
+	(
+		e d e2 e3 f1 a
+	)
+],
+[
+	\rit<abstempo="120", tempo="100", color="blue">
+	(
+		e c b2 f1 a
+	) 
+	\accel
+	(
+		e d e c d f
+	)
+]
+}
