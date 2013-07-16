@@ -8,6 +8,8 @@
 % Parameters : 
 %       - tempo : the tempo at the beginnig
 %       - abstempo : the tempo at the end
+%		- color
+%		- dx, dy
 
 {
 [
@@ -15,7 +17,7 @@
 	(
 		e g b f a
 	) 
-	\accel<tempo="60", color="red", abstempo="80">
+	\accel<tempo="60", color="red", abstempo="80", dy=22>
 	(
 		e d e2 e3 f1 a
 	)
@@ -23,7 +25,7 @@
 [
 	\rit<abstempo="120", tempo="100", color="blue">
 	(
-		e c b2 f1 a
+		e c b f a
 	) 
 	\accel
 	(

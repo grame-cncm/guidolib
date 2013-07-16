@@ -44,6 +44,8 @@ class GRRitardando : public GRPTagARNotationElement
 		NVPoint endPos;
 		std::string tempo1;
 		std::string tempo2;
+		float mdx;
+		float mdy;
 };
 
 #endif

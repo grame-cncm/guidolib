@@ -18,6 +18,7 @@
 #include "VGDevice.h"
 #include "GRSingleNote.h"
 #include "TagParameterString.h"
+#include "TagParameterFloat.h"
 #include <algorithm>
 #include "FontManager.h"
 
@@ -58,6 +59,14 @@ GRAccelerando::GRAccelerando( GRStaff * inStaff, ARAccelerando * artrem )
   }
   else
 	  isTempoAbsSet = false;
+
+  if(artrem->getDX())
+	  mdx = artrem->getDX()->getValue();
+  else mdx = 0;
+
+  if(artrem->getDY())
+	  mdy = artrem->getDY()->getValue();
+  else mdy = 0;
 }
 
 GRAccelerando::~GRAccelerando()
@@ -169,7 +178,7 @@ void GRAccelerando::tellPosition(GObject * caller, const NVPoint & np)
 	GRSingleNote * noteEnd = dynamic_cast<GRSingleNote *>(getAssociations()->GetTail());
 	if(noteEnd)
 		endPos = noteEnd->getStemStartPos();
-
+/*
 	float minY = startPos.y;
 	for(int i=1; i<= getAssociations()->GetCount(); i++)
 	{
@@ -181,7 +190,7 @@ void GRAccelerando::tellPosition(GObject * caller, const NVPoint & np)
 	}
 	if(minY > 0)
 		minY = 0;
-/*	
+*/	
 	float maxY = startPos.y;
 	for(int i=1; i<= getAssociations()->GetCount(); i++)
 	{
@@ -189,17 +198,14 @@ void GRAccelerando::tellPosition(GObject * caller, const NVPoint & np)
 		if(n && n->getStemDirection() == -1)
 			maxY = std::max(maxY, n->getStemStartPos().y);
 		else if (n)
-			maxY = std::max(maxY, n->getPosition().y + LSPACE/2);
+			maxY = std::max(maxY, n->getPosition().y + LSPACE);
 	}
 	if(maxY<5*LSPACE)
 		maxY = 5*LSPACE;
 	
-	if(maxY-5*LSPACE < -1*minY)
-		startPos.y = endPos.y = maxY+LSPACE;
-	else
-		startPos.y = endPos.y = minY-LSPACE;
-	*/
-	startPos.y = endPos.y = minY-LSPACE;
+	startPos.y = endPos.y = maxY+LSPACE-mdy;
+	startPos.x += mdx;
+	endPos.x += mdx;
 
 	setPosition(startPos);
 	startPos.x += 4*LSPACE;

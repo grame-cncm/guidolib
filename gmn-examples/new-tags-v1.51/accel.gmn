@@ -7,6 +7,8 @@
 % Parameters : 
 %       - tempo : the tempo at the beginnig
 %       - abstempo : the tempo at the end
+%		- color
+%		- dx, dy
 
 {
 [
