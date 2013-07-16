@@ -42,7 +42,7 @@ void ARRitardando::setTagParameterList(TagParameterList& tpl)
 
 		ListOfStrings lstrs; // (1); std::vector test impl
 		lstrs.AddTail(
-			( "S,tempo,,o;S,abstempo,,o" ));
+			( "S,tempo,,o;S,abstempo,,o;S,font,Times new roman,o;S,fattrib,,o" ));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -58,6 +58,18 @@ void ARRitardando::setTagParameterList(TagParameterList& tpl)
 			s1 = TagParameterString::cast(rtpl->RemoveHead());
 			//assert(text);
 			s2 = TagParameterString::cast(rtpl->RemoveHead());
+			
+			// the font
+			font = TagParameterString::cast(rtpl->RemoveHead());
+			assert(font);
+			// the font attrib ...
+			fattrib = TagParameterString::cast(rtpl->RemoveHead());
+			assert(fattrib);
+			if (fattrib->TagIsNotSet())
+			{
+				delete fattrib;
+				fattrib = 0;
+			}
 		}
 
 		delete rtpl;

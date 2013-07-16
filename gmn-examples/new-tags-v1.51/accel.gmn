@@ -9,6 +9,9 @@
 %       - abstempo : the tempo at the end
 %		- color
 %		- dx, dy
+%		- font
+%		- fattrib : attribute of the font (b for bold, i for italic)
+
 
 {
 [

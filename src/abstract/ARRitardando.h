@@ -17,6 +17,7 @@
 
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
+#include "TagParameterString.h"
 
 class TagParameterString;
 
@@ -41,6 +42,10 @@ public:
 	virtual void PrintParameters(std::ostream & os) const;
 	TagParameterString * getTempo(){return s1;}
 	TagParameterString * getAbsTempo(){return s2;}
+	const char* getFont() const	{ return font ? font->getValue() : 0; }
+	void		setFont(const TagParameterString * ft);
+	const char*	getFAttrib() const { return fattrib ? fattrib->getValue() : 0; }
+	void		setFAttrib(const TagParameterString * fa);
 	
 
 protected:
@@ -48,6 +53,8 @@ protected:
 	// TagParameters ..
 	TagParameterString * s1;
 	TagParameterString * s2;
+	TagParameterString * font;
+	TagParameterString * fattrib;
 
 	// this is important for allowed
 	// TagParameters ....

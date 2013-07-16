@@ -69,6 +69,17 @@ GRRitardando::GRRitardando( GRStaff * stf, ARRitardando * artrem )
   if(artrem->getDY())
 	  mdy = artrem->getDY()->getValue();
   else mdy = 0;
+  
+  font = new NVstring(artrem->getFont());
+  fontAttrib = new NVstring(artrem->getFAttrib());
+
+  const VGFont* hmyfont = FontManager::gFontText;
+
+  if (font && font->length() > 0)
+  {
+	  // handle font-attributes ...
+	  hmyfont = FontManager::FindOrCreateFont( mFontSize, font, fontAttrib );
+  }
 }
 
 GRRitardando::~GRRitardando()
@@ -91,8 +102,14 @@ void GRRitardando::OnDraw(VGDevice & hdc) const
 	float xStart = startPos.x;
 	float xEnd = endPos.x;
 
-	const VGFont* hmyfont = FontManager::gFontText;
+	// - Setup font ....
+	const VGFont* hmyfont;
+	if (font && font->length() > 0)
+		hmyfont = FontManager::FindOrCreateFont( mFontSize, font, fontAttrib );
+	else
+		hmyfont = FontManager::gFontText;
 
+	// set up color
 	if (mColRef) {
 		VGColor color ( mColRef ); 	// custom or black
 		hdc.PushFillColor( color );
@@ -104,8 +121,13 @@ void GRRitardando::OnDraw(VGDevice & hdc) const
 	
 	if(isTempoSet && sse->startflag==GRSystemStartEndStruct::LEFTMOST)
 	{
-		const char * t1 = tempo1.c_str();
-		int n = tempo1.length();
+		std::string toPrint ("= ");
+		toPrint += tempo1;
+		toPrint += " rit.";
+		const char * t1 = toPrint.c_str();
+		int n = toPrint.length();
+		
+		//to draw the little note
 		hdc.SetScale(0.5,0.5);
 		hdc.DrawMusicSymbol(2*getPosition().x, 2*getPosition().y, kFullHeadSymbol);
 		float y = 2*getPosition().y;
@@ -115,30 +137,34 @@ void GRRitardando::OnDraw(VGDevice & hdc) const
 			y -= LSPACE;
 		}
 		hdc.SetScale(2,2);
-		hdc.DrawString(getPosition().x + 1*LSPACE, getPosition().y, "=", 1);
-		hdc.DrawString(getPosition().x + 2*LSPACE, getPosition().y, t1, n);
-		hdc.DrawString(getPosition().x + (n+2)*LSPACE, getPosition().y, "rit.", 4);
-		xStart += (n+2)*LSPACE;
+
+		hdc.DrawString(getPosition().x + LSPACE, getPosition().y, t1, 1);
+		xStart += n*LSPACE/2;
 	}
 	else if (sse->startflag==GRSystemStartEndStruct::LEFTMOST)
 		hdc.DrawString(getPosition().x, getPosition().y, "rit.", 4);
 
 	if(isTempoAbsSet && sse->endflag == GRSystemStartEndStruct::RIGHTMOST)
 	{
-		const char * t2 = tempo2.c_str();
-		int n = tempo2.length();
+		std::string toPrint2 ("= ");
+		toPrint2 += tempo2;
+		const char * t2 = toPrint2.c_str();
+		int n = toPrint2.length();
+		
 		hdc.DrawString(endPos.x - n*LSPACE, endPos.y, t2, n);
-		hdc.DrawString(endPos.x - (n+1)*LSPACE, endPos.y, "=", 1);
+		
+		// to draw the little note
 		hdc.SetScale(0.5,0.5);
-		hdc.DrawMusicSymbol(2*(endPos.x - (n+2)*LSPACE), 2*endPos.y, kFullHeadSymbol);
+		hdc.DrawMusicSymbol(2*(endPos.x - (n+1)*LSPACE), 2*endPos.y, kFullHeadSymbol);
 		float y = 2*endPos.y;
 		for(int i=0; i<3; i++)
 		{
-			hdc.DrawMusicSymbol(2*(endPos.x - (n+2)*LSPACE), y, kStemUp2Symbol);
+			hdc.DrawMusicSymbol(2*(endPos.x - (n+1)*LSPACE), y, kStemUp2Symbol);
 			y -= LSPACE;
 		}
 		hdc.SetScale(2,2);
-		xEnd -= (n+3)*LSPACE;
+
+		xEnd -= (n+2)*LSPACE;
 	}
 
 	if(sse->endflag == GRSystemStartEndStruct::OPENRIGHT)
@@ -146,7 +172,8 @@ void GRRitardando::OnDraw(VGDevice & hdc) const
 	else if(sse->startflag == GRSystemStartEndStruct::OPENLEFT)
 		xStart = sse->startElement->getPosition().x;
 
-	hdc.SelectPenWidth(8);
+	hdc.SelectPenWidth(2);
+
 	while(xStart<xEnd)
 	{
 		if(xStart+LSPACE > xEnd)
@@ -206,7 +233,7 @@ void GRRitardando::tellPosition(GObject * caller, const NVPoint & np)
 	endPos.x += mdx;
 
 	setPosition(startPos);
-	startPos.x += 2*LSPACE;
+	startPos.x += 2.5*LSPACE;
 }
 
 unsigned int GRRitardando::getTextAlign() const

@@ -10,6 +10,8 @@
 %       - abstempo : the tempo at the end
 %		- color
 %		- dx, dy
+%		- font
+%		- fattrib : attribute of the font (b for bold, i for italic)
 
 {
 [
@@ -17,7 +19,7 @@
 	(
 		e g b f a
 	) 
-	\accel<tempo="60", color="red", abstempo="80", dy=22>
+	\accel<tempo="60", color="red", abstempo="80", dy=22, font="Andalus">
 	(
 		e d e2 e3 f1 a
 	)
@@ -27,7 +29,7 @@
 	(
 		e c b f a
 	) 
-	\accel
+	\accel<fattrib="bi">
 	(
 		e d e c d f
 	)
