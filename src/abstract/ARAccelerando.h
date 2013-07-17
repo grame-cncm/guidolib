@@ -19,6 +19,7 @@
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
 #include "TagParameterString.h"
+#include "TagParameterFloat.h"
 
 class TagParameterString;
 
@@ -50,9 +51,8 @@ public:
 	TagParameterString * getTempo(){return s1;}
 	TagParameterString * getAbsTempo(){return s2;}	
 	const char* getFont() const	{ return font ? font->getValue() : 0; }
-	void		setFont(const TagParameterString * ft);
 	const char*	getFAttrib() const { return fattrib ? fattrib->getValue() : 0; }
-	void		setFAttrib(const TagParameterString * fa);
+	int			getFSize(float curLSPACE) const {return fsize ? (int) fsize->getValue(curLSPACE) : 0;}
 
 protected:
 
@@ -61,6 +61,7 @@ protected:
 	TagParameterString * s2;
 	TagParameterString * font;
 	TagParameterString * fattrib;
+	TagParameterFloat  * fsize;
 	// TagParameterFloat  *fsize;
 	// TagParameterInt	  *fnumber;
 

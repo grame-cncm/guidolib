@@ -70,6 +70,17 @@ GRRitardando::GRRitardando( GRStaff * stf, ARRitardando * artrem )
 	  mdy = artrem->getDY()->getValue();
   else mdy = 0;
   
+  
+  float curLSPACE = LSPACE;
+  if (stf)
+  {
+	  curLSPACE = stf->getStaffLSPACE();
+  }
+
+  mFontSize = artrem->getFSize(curLSPACE);
+  if (mFontSize == 0)
+	  mFontSize = (int)(1.5f * LSPACE);
+  
   font = new NVstring(artrem->getFont());
   fontAttrib = new NVstring(artrem->getFAttrib());
 
@@ -139,7 +150,7 @@ void GRRitardando::OnDraw(VGDevice & hdc) const
 		hdc.SetScale(2,2);
 
 		hdc.DrawString(getPosition().x + LSPACE, getPosition().y, t1, 1);
-		xStart += n*LSPACE/2;
+		xStart += n*LSPACE/2*mFontSize;
 	}
 	else if (sse->startflag==GRSystemStartEndStruct::LEFTMOST)
 		hdc.DrawString(getPosition().x, getPosition().y, "rit.", 4);

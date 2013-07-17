@@ -17,6 +17,7 @@
 #include "ARRitardando.h"
 #include "TagParameterList.h"
 #include "TagParameterString.h"
+#include "TagParameterFloat.h"
 #include "ListOfStrings.h"
 
 ListOfTPLs ARRitardando::ltpls(1);
@@ -42,7 +43,7 @@ void ARRitardando::setTagParameterList(TagParameterList& tpl)
 
 		ListOfStrings lstrs; // (1); std::vector test impl
 		lstrs.AddTail(
-			( "S,tempo,,o;S,abstempo,,o;S,font,Times new roman,o;S,fattrib,,o" ));
+			( "S,tempo,,o;S,abstempo,,o;S,font,Times new roman,o;S,fattrib,,o;U,fsize,9pt,o" ));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -70,6 +71,9 @@ void ARRitardando::setTagParameterList(TagParameterList& tpl)
 				delete fattrib;
 				fattrib = 0;
 			}
+			// the size ...
+			fsize = TagParameterFloat::cast(rtpl->RemoveHead());
+			assert(fsize);
 		}
 
 		delete rtpl;
