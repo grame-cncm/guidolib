@@ -1,0 +1,233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<title>GUIDO Additional Specifications 1.5.2</title>
+		<meta name="Author" content="Camille Le Roi">
+
+		<style type="text/css">
+			BODY { font-family : verdana,Arial,Helvetica; font-size : 10pt; font-weight : normal; color: black; background-color: white; margin: 20px 40px 20px 40px;}
+			h1	 { font-size : 31pt; font-weight : bold; padding: 0; line-height: 1.0; }
+			h2	 { font-size : 18pt; font-weight : bold; letter-spacing: 1pt;}
+			h3	 { font-size : 14pt; font-weight : bold; }
+			h4	 { font-size : 12pt; font-weight : bold; margin-left: 50px}
+
+			pre	 { font-family : Monaco, Courier; font-size : 8pt; margin-left: 50px; background-color: #E0D7CB; line-height: 2.0;}
+
+			A:link    { color:#4561CA; text-decoration: none; }
+			A:visited { color:#4561CA; text-decoration: none; }
+			A:hover   { color:#990000; text-decoration: none; }
+
+			p		 { margin-left: 50px; }
+			p.notes  { font-style: italic; margin-left: 0px; }
+			p.tag    { margin-left: 90px; text-indent: -40px}
+			ul		 { margin-left: 100px; }
+    
+			span.tag { font-weight : bold; }
+		</style>
+	</head>
+	
+	<body>
+
+		<h1>The GUIDO Music Notation Format</h1>
+		<h2>Additionnal and new Specifications</h2>
+		<p>
+			<span class="tag">
+				Supported by the <a href="http://sourceforge.net/projects/guidolib/">GUIDO Engine</a> version 1.5.2
+			</span>
+			<br>
+			<a href="http://www.grame.fr/Recherche/">Grame</a> - July 2013
+		</p>
+		
+		
+		<p>
+			<p>
+				<a href="#1.">1. Accelerando / Ritardando</a>
+			</p>
+			
+			<hr>
+			
+			
+			<a name="1."></a>
+			<h4>1. Accelerando / Ritardando</h4>
+
+			<p class="tag">
+				<p>
+					<span class="tag">\accel</span>&lt;<i>dx, dy, color, tempo, abstempo, font, fattrib</i>&gt;(<i>notes</i>) 
+				</p>
+				<p>
+					<span class="tag">\rit</span>&lt;<i>dx, dy, color, tempo, abstempo, font, fattrib</i>&gt;(<i>notes</i>) 
+				</p>
+				<p>
+					Places the text "accel." or "rit." under the staff where it occurs, and draws a dotted line to the end position.
+				</p>
+				
+				<br>
+				
+				<ul>
+					<li>
+						<i><b>Parameters</b> (in the order of their default positions):</i>
+						
+						<ul>
+							<br>
+							<li>
+								<b><i>dx, dy</i></b> - graphic offsets of the accelerando/ritardando
+							
+								<ul>
+									<br>
+									<li>
+										<i>standard values:</i>
+						
+										<ul>
+											<li>
+												unit parameters
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> 0
+									</li>
+									<br>
+								</ul>
+							</li>
+						
+							<li>
+								<b><i>color</i></b> - graphic color of the trill 
+								<br>
+							
+								<ul>
+									<br>
+									<li>
+									<i>standard values:</i>
+							
+										<ul>
+											<li>
+												color strings
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> "black"
+									</li>
+									<br>
+								</ul>
+							</li>
+						
+							<li>
+								<b><i>tempo</i></b> - tempo for the beginning note
+								<ul>
+									<br>
+									<li>
+										<i>standard values:</i>
+						
+										<ul>
+											<li>
+												string (ex : "60", "80")
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> none
+									</li>
+									<br>
+								</ul>
+							</li>
+							<li>
+								<b><i>abstempo</i></b> - tempo for the ending note
+								<ul>
+									<br>
+									<li>
+										<i>standard values:</i>
+						
+										<ul>
+											<li>
+												string (ex : "60", "80")
+											</li>
+
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> none
+									</li>
+									<br>
+								</ul>
+							</li>
+							<li>
+								<b><i>font</i></b> - the font name for the text accel or rit								<ul>
+									<br>
+									<li>
+										<i>standard values:</i>
+						
+										<ul>
+											<li>
+												string (ex : "Arial")
+											</li>
+
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> "Times new Roman"
+									</li>
+									<br>
+								</ul>
+							</li>
+							<li>
+								<b><i>fattrib</i></b> - the font attributes
+								<ul>
+									<br>
+									<li>
+										<i>standard values:</i>
+						
+										<ul>
+											<li>
+												"b" (for bold)
+											</li>
+											<li>
+												"i" (for italic)
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> none
+									</li>
+									<br>
+								</ul>
+							</li>
+						</ul>		
+						<br>
+					</li>
+									
+					<li>
+						<b><i>Range:</i></b> obligatory
+					</li>
+									
+					<br><br>
+									
+					<li>
+						<b><i>Semantics:</i></b>
+								
+						<ul>
+							<li>
+								
+								acceleration or deceleration within a group of notes
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</p>
+			<p class="notes">
+				Examples:
+				<pre>[ \rit&lt;fattrib="b"&gt;(e g b f a) \accel&lt;tempo="60", color="red", abstempo="80", dy=22, font="Andalus"&gt;( e d e2 e3 f1 a)]</pre>
+				<center> <IMG SRC="imgs/accelRit.jpg"> </center>
+			</p>
+			
+		</p>			
+	</body>
+</html>

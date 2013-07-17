@@ -151,20 +151,20 @@ void GRRitardando::OnDraw(VGDevice & hdc) const
 		const char * t2 = toPrint2.c_str();
 		int n = toPrint2.length();
 		
-		hdc.DrawString(endPos.x - n*LSPACE, endPos.y, t2, n);
+		hdc.DrawString(endPos.x - (n-1)*LSPACE, endPos.y, t2, n);
 		
 		// to draw the little note
 		hdc.SetScale(0.5,0.5);
-		hdc.DrawMusicSymbol(2*(endPos.x - (n+1)*LSPACE), 2*endPos.y, kFullHeadSymbol);
+		hdc.DrawMusicSymbol(2*(endPos.x - n*LSPACE), 2*endPos.y, kFullHeadSymbol);
 		float y = 2*endPos.y;
 		for(int i=0; i<3; i++)
 		{
-			hdc.DrawMusicSymbol(2*(endPos.x - (n+1)*LSPACE), y, kStemUp2Symbol);
+			hdc.DrawMusicSymbol(2*(endPos.x - n*LSPACE), y, kStemUp2Symbol);
 			y -= LSPACE;
 		}
 		hdc.SetScale(2,2);
 
-		xEnd -= (n+2)*LSPACE;
+		xEnd -= (n+1)*LSPACE;
 	}
 
 	if(sse->endflag == GRSystemStartEndStruct::OPENRIGHT)
