@@ -12,6 +12,7 @@
 %		- dx, dy
 %		- font
 %		- fattrib : attribute of the font (b for bold, i for italic)
+%		- fsize : size of the font
 
 {
 [

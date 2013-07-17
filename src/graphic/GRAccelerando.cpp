@@ -151,7 +151,7 @@ void GRAccelerando::OnDraw( VGDevice & hdc ) const
 		hdc.SetScale(2,2);
 
 		hdc.DrawString(getPosition().x + LSPACE, getPosition().y, t1, n);
-		xStart += (n-4)*LSPACE/2*mFontSize;
+		xStart += (n-4)*LSPACE/2;
 	}
 	else if (sse->startflag==GRSystemStartEndStruct::LEFTMOST)
 		hdc.DrawString(getPosition().x, getPosition().y, "accel.", 6);
