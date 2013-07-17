@@ -67,8 +67,8 @@ using namespace std;
 // ==========================================================================
 const int GUIDOENGINE_MAJOR_VERSION = 1;
 const int GUIDOENGINE_MINOR_VERSION = 5;
-const int GUIDOENGINE_SUB_VERSION =	1;
-const char* GUIDOENGINE_VERSION_STR = "1.5.1";
+const int GUIDOENGINE_SUB_VERSION =	2;
+const char* GUIDOENGINE_VERSION_STR = "1.5.2";
 
 // global factory object, used by the parser and the GuidoFactory API
 ARFactory * gGlobalFactory = 0;
