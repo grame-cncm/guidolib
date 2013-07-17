@@ -29,6 +29,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "guido2Image", "guido2Image\
 		{4FC2E3E4-54F5-3AD0-A5E8-C2B285BDC1E3} = {4FC2E3E4-54F5-3AD0-A5E8-C2B285BDC1E3}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GuidoQtD", "GuidoQt\GuidoQtD.vcxproj", "{6744F700-A7DF-34F7-93EF-DF58863B9C05}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -59,6 +61,10 @@ Global
 		{F09C85E3-EEBA-3195-9780-4360F71280FB}.Debug|Win32.Build.0 = Debug|Win32
 		{F09C85E3-EEBA-3195-9780-4360F71280FB}.Release|Win32.ActiveCfg = Release|Win32
 		{F09C85E3-EEBA-3195-9780-4360F71280FB}.Release|Win32.Build.0 = Release|Win32
+		{6744F700-A7DF-34F7-93EF-DF58863B9C05}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6744F700-A7DF-34F7-93EF-DF58863B9C05}.Debug|Win32.Build.0 = Debug|Win32
+		{6744F700-A7DF-34F7-93EF-DF58863B9C05}.Release|Win32.ActiveCfg = Release|Win32
+		{6744F700-A7DF-34F7-93EF-DF58863B9C05}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
