@@ -1419,6 +1419,23 @@ void ARFactory::createTag( const char * name, int no )
 					mCurrentTrill = tmp;
 				else delete tmp;
 			}
+			else if (!strcmp(name,"trillBegin"))
+			{
+				ARTrill * tmp = new ARTrill(ARTrill::TRILL);
+				
+				tmp->setID(no);
+				tmp->setAllowRange(0);
+				if (!mCurrentTrill)
+					mCurrentTrill = tmp;
+				else delete tmp;
+			}
+			else if (!strcmp(name,"trillEnd"))
+			{
+				ARDummyRangeEnd * tmp = new ARDummyRangeEnd("\\trillEnd");
+				tmp->setID(no);
+				mCurrentVoice->setPositionTagEndPos(no, tmp);
+				mTags.AddHead(tmp);
+			}
 			else if (!strcmp(name,"turn"))
 			{
 				ARTrill * tmp =new ARTrill(ARTrill::TURN);
