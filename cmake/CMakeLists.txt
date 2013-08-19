@@ -24,11 +24,11 @@ if(APPLE)
 
 #######################################
 # iOS support
-if (IOS STREQUAL "yes")
-	message (STATUS "Generates iOS project - Use -DIOS=no to change.")
+if (IOS)
+	message (STATUS "Generates iOS project")
 	set (DIST "no")
-else (MIDIEXPORT STREQUAL "yes")
-	message (STATUS "Generates Mac OS project- Use -DIOS=yes to change.")
+else ()
+	message (STATUS "Generates Mac OS project- Use iOS.cmake toolchain for iOS.")
 endif ()
 
  #######################################
@@ -39,15 +39,6 @@ endif ()
 	message (STATUS "Only the current architecture will be compiled - Use -DDIST=yes to change.")
  endif ()
 	add_definitions(-D_USE_QD_COORDINATES_ -compatibility_version 1.0.0)
-	if (${CMAKE_SYSTEM_VERSION} VERSION_LESS 9.0.0)
-		set (CMAKE_OSX_SYSROOT /Developer/SDKs/MacOSX10.4u.sdk)
-	elseif (${CMAKE_SYSTEM_VERSION} VERSION_LESS 10.8.0)
-		set (CMAKE_OSX_SYSROOT /Developer/SDKs/MacOSX10.5.sdk)
-	elseif (${XCODE_VERSION} VERSION_LESS 4.0.0)
-		set (CMAKE_OSX_SYSROOT /Developer/SDKs/MacOSX10.6.sdk)
-	else ()
-		set (CMAKE_OSX_SYSROOT "macosx10.7")
-	endif ()
 	set (CMAKE_C++_FLAGS -mmacosx-version-min=10.4)
 	set (CMAKE_LDFLAGS -mmacosx-version-min=10.4)
 endif(APPLE)
@@ -174,6 +165,11 @@ endif(APPLE)
 
 #######################################
 # library generation
+if (IOS)
+	add_library(${target} STATIC ${LIBCONTENT})
+
+else ()
+
 add_library(${target} SHARED ${LIBCONTENT})
 set_target_properties (${target} PROPERTIES
 			FRAMEWORK TRUE
@@ -189,12 +185,14 @@ set_target_properties (${target} PROPERTIES
 if (STATICLIB STREQUAL "yes")
 	message (STATUS "Static Guido lib will be generated - Use -DSTATICLIB=no to change.")
 	add_library(${statictarget} STATIC ${LIBCONTENT})
-else (STATICLIB STREQUAL "yes")
+else ()
 	message (STATUS "Static Guido lib will not be generated - Use -DSTATICLIB=yes to change.")
-endif (STATICLIB STREQUAL "yes")
+endif ()
 
 set (LIBDEST /usr/lib)
 target_link_libraries (${target} ${LINK})
+
+endif()
 
 
 #######################################
@@ -203,7 +201,7 @@ if(APPLE)
 set(FRMWK  FRAMEWORK DESTINATION "/Library/Frameworks" CONFIGURATIONS Release)
 endif(APPLE)
 
-if (NOT WIN32)
+if (NOT WIN32 AND NOT IOS)
  if (DEFINED LIBINSTALL)
 	set(LIBPATH ${LIBINSTALL})
  else (DEFINED LIBINSTALL)
@@ -216,6 +214,6 @@ install ( TARGETS ${target}
     	${FRMWK}
     	PUBLIC_HEADER DESTINATION /usr/include/guido
 )
-endif(NOT WIN32)
+endif()
 
 
