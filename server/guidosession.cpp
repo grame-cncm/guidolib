@@ -28,10 +28,15 @@
 #include "guidosession.h"
 #include "GUIDOEngine.h"
 #include "GUIDOScoreMap.h"
-#include "json.h"
-#include "jsonhelper.h"
+#include "utilities.h"
+
+// json
+#include "json_object.h"
+#include "json_array.h"
+#include "json_stream.h"
 
 using namespace std;
+using namespace json;
 
 namespace guidohttpd
 {
@@ -43,13 +48,12 @@ static int printchannel(void *userdata, const char *data, uint32_t)
     return 1;
 }
 
-guidosessionresponse::guidosessionresponse (const char* data, unsigned int size, string format, string errstring, unsigned int argumentsToAdvance, GuidoSessionParsingError status, int http_status)
+guidosessionresponse::guidosessionresponse (const char* data, unsigned int size, string format, string errstring,GuidoSessionParsingError status, int http_status)
 {
     data_ = data;
     size_ = size;
     format_ = format;
     errstring_ = errstring;
-    argumentsToAdvance_ = argumentsToAdvance;
     status_ = status;
     http_status_ = http_status;
 }
@@ -60,13 +64,12 @@ guidosessionresponse::guidosessionresponse ()
     size_ = 0;
     format_ = "text/plain";
     errstring_ = "";
-    argumentsToAdvance_ = 0;
     status_ = GUIDO_SESSION_PARSING_FAILURE;
     http_status_ = 404;
 }
 
-guidosession::guidosession(guido2img* g2svg)
-    : fConverter(g2svg)
+guidosession::guidosession(guido2img* g2svg, string gmn, string id)
+    : fConverter(g2svg), id_(id), dgmn_(gmn)
 {
     initialize();
 }
@@ -78,30 +81,261 @@ guidosession::~guidosession()
 
 void guidosession::initialize()
 {
-    resizeToPage_ = false;
-    gmn_  = "[c]";
-    url_ = "";
-    format_ = GUIDO_WEB_API_PNG;
-    page_ = 1;
-    width_ = 400;
-    height_ = 100;
-    zoom_ = 2.0f;
-    marginleft_ = 10.0f;
-    margintop_ = 10.0f;
-    marginright_ = 10.0f;
-    marginbottom_ = 10.0f;
-    systemsDistance_ = 75.0f;
-    systemsDistribution_ = kAutoDistrib;
-    systemsDistribLimit_ = 0.25f;
-    force_ = 750.0f;
-    spring_ = 1.1f;
-    neighborhoodSpacing_ = 0;
-    optimalPageFill_ = 1;
+    // note that we do nothing to the GMN when we initalize because
+    // we set it in the constructor
+    dresizeToPage_ = false;
+    dformat_ = GUIDO_WEB_API_PNG;
+    dpage_ = 1;
+    dwidth_ = 400;
+    dheight_ = 100;
+    dzoom_ = 2.0f;
+    dmarginleft_ = 10.0f;
+    dmargintop_ = 10.0f;
+    dmarginright_ = 10.0f;
+    dmarginbottom_ = 10.0f;
+    dsystemsDistance_ = 75.0f;
+    dsystemsDistribution_ = kAutoDistrib;
+    dsystemsDistribLimit_ = 0.25f;
+    dforce_ = 750.0f;
+    dspring_ = 1.1f;
+    dneighborhoodSpacing_ = 0;
+    doptimalPageFill_ = 1;
+    updateValuesFromDefaults();
 }
+
+void guidosession::changeDefaultValues(const TArgs &args)
+{
+    // resize
+    if (args.find("resize") != args.end()) {
+        dresizeToPage_ = atob(args.find("resize")->second);
+    }
+    
+    // gmn
+    if (args.find("gmn") != args.end()) {
+        dgmn_ = args.find("gmn")->second;
+    }
+    
+    // format
+    if (args.find("format") != args.end()) {
+        dformat_ = formatToWebApiFormat(args.find("format")->second);
+    }
+    
+    // page
+    if (args.find("page") != args.end()) {
+        dpage_ = atoi(args.find("page")->second.c_str());
+    }
+    
+    // width
+    if (args.find("width") != args.end()) {
+        dwidth_ = atoi(args.find("width")->second.c_str());
+    }
+    
+    // height
+    if (args.find("height") != args.end()) {
+        dheight_ = atoi(args.find("height")->second.c_str());
+    }
+    
+    // zoom
+    if (args.find("zoom") != args.end()) {
+        dzoom_ = atof(args.find("zoom")->second.c_str());
+    }
+    
+    // marginleft
+    if (args.find("marginleft") != args.end()) {
+       dmarginleft_ = atof(args.find("marginleft")->second.c_str());
+    }
+    
+    // margintop
+    if (args.find("margintop") != args.end()) {
+       dmargintop_ = atof(args.find("margintop")->second.c_str());
+    }
+    
+    // marginright
+    if (args.find("marginright") != args.end()) {
+        dmarginright_ = atof(args.find("marginright")->second.c_str());
+    }
+    
+    // marginbottom
+    if (args.find("marginbottom") != args.end()) {
+        dmarginbottom_ = atof(args.find("marginbottom")->second.c_str());
+    }
+    
+    // systemsDistance
+    if (args.find("systemsDistance") != args.end()) {
+        dsystemsDistance_ = atof(args.find("systemsDistance")->second.c_str());
+    }
+    
+    // systemsDistribution
+    if (args.find("systemsDistribution") != args.end()) {
+        dsystemsDistribution_ = atof(args.find("systemsDistribution")->second.c_str());
+    }
+    
+    // systemsDistribLimit
+    if (args.find("systemsDistribLimit") != args.end()) {
+        dsystemsDistribLimit_ = atof(args.find("systemsDistribLimit")->second.c_str());
+    }
+    
+    // force
+    if (args.find("force") != args.end()) {
+        dforce_ = atof(args.find("force")->second.c_str());
+    }
+    
+    // spring
+    if (args.find("spring") != args.end()) {
+        dspring_ = atof(args.find("spring")->second.c_str());
+    }
+    
+    // neighborhoodSpacing
+    if (args.find("neighborhoodSpacing") != args.end()) {
+        dneighborhoodSpacing_ = atoi(args.find("neighborhoodSpacing")->second.c_str());
+    }
+    
+    // optimalPageFill
+    if (args.find("optimalPageFill") != args.end()) {
+        doptimalPageFill_ = atoi(args.find("optimalPageFill")->second.c_str());
+    }   
+}
+    
+void guidosession::updateValuesFromDefaults()
+{
+    TArgs args;
+    updateValuesFromDefaults(args);
+}
+    
+void guidosession::updateValuesFromDefaults(const TArgs &args)
+{
+    // resize
+    if (args.find("resize") != args.end()) {
+        resizeToPage_ = atob(args.find("resize")->second);
+    } else {
+        resizeToPage_ = dresizeToPage_;
+    }
+    
+    // gmn
+    if (args.find("gmn") != args.end()) {
+        gmn_ = args.find("gmn")->second;
+    } else {
+        gmn_ = dgmn_;
+    }
+
+    // format
+    if (args.find("format") != args.end()) {
+        format_ = formatToWebApiFormat(args.find("format")->second);
+    } else {
+        format_ = dformat_;
+    }
+
+    // page
+    if (args.find("page") != args.end()) {
+        page_ = atoi(args.find("page")->second.c_str());
+    } else {
+        page_ = dpage_;
+    }
+
+    // width
+    if (args.find("width") != args.end()) {
+        width_ = atoi(args.find("width")->second.c_str());
+    } else {
+        width_ = dwidth_;
+    }
+
+    // height
+    if (args.find("height") != args.end()) {
+        height_ = atoi(args.find("height")->second.c_str());
+    } else {
+        height_ = dheight_;
+    }
+
+    // zoom
+    if (args.find("zoom") != args.end()) {
+        zoom_ = atof(args.find("zoom")->second.c_str());
+    } else {
+        zoom_ = dzoom_;
+    }
+
+    // marginleft
+    if (args.find("marginleft") != args.end()) {
+        marginleft_ = atof(args.find("marginleft")->second.c_str());
+    } else {
+        marginleft_ = dmarginleft_;
+    }
+
+    // margintop
+    if (args.find("margintop") != args.end()) {
+        margintop_ = atof(args.find("margintop")->second.c_str());
+    } else {
+        margintop_ = dmargintop_;
+    }
+    
+    // marginright
+    if (args.find("marginright") != args.end()) {
+        marginright_ = atof(args.find("marginright")->second.c_str());
+    } else {
+        marginright_ = dmarginright_;
+    }
+
+    // marginbottom
+    if (args.find("marginbottom") != args.end()) {
+        marginbottom_ = atof(args.find("marginbottom")->second.c_str());
+    } else {
+        marginbottom_ = dmarginbottom_;
+    }
+  
+    // systemsDistance
+    if (args.find("systemsDistance") != args.end()) {
+        systemsDistance_ = atof(args.find("systemsDistance")->second.c_str());
+    } else {
+        systemsDistance_ = dsystemsDistance_;
+    }
+    
+    // systemsDistribution
+    if (args.find("systemsDistribution") != args.end()) {
+        systemsDistribution_ = atof(args.find("systemsDistribution")->second.c_str());
+    } else {
+        systemsDistribution_ = dsystemsDistribution_;
+    }
+    
+    // systemsDistribLimit
+    if (args.find("systemsDistribLimit") != args.end()) {
+        systemsDistribLimit_ = atof(args.find("systemsDistribLimit")->second.c_str());
+    } else {
+        systemsDistribLimit_ = dsystemsDistribLimit_;
+    }
+
+    // force
+    if (args.find("force") != args.end()) {
+        force_ = atof(args.find("force")->second.c_str());
+    } else {
+        force_ = dforce_;
+    }
+    
+    // spring
+    if (args.find("spring") != args.end()) {
+        spring_ = atof(args.find("spring")->second.c_str());
+    } else {
+        spring_ = dspring_;
+    }
+    
+    // neighborhoodSpacing
+    if (args.find("neighborhoodSpacing") != args.end()) {
+        neighborhoodSpacing_ = atoi(args.find("neighborhoodSpacing")->second.c_str());
+    } else {
+        neighborhoodSpacing_ = dneighborhoodSpacing_;
+    }
+    
+    // optimalPageFill
+    if (args.find("optimalPageFill") != args.end()) {
+        optimalPageFill_ = atoi(args.find("optimalPageFill")->second.c_str());
+    } else {
+        optimalPageFill_ = doptimalPageFill_;
+    }    
+}
+    
 const char* guidosession::formatToMIMEType ()
 {
     return ("image/" + string(formatToLayType())).c_str();
 }
+    
 const char* guidosession::formatToLayType ()
 {
     switch(format_) {
@@ -118,35 +352,328 @@ const char* guidosession::formatToLayType ()
     }
     return "png";
 }
-const char* guidosession::getStringRepresentationOf (string toget)
+    
+GuidoWebApiFormat guidosession::formatToWebApiFormat(string format)
 {
-    stringstream out;
-    if (toget.compare("resizepagetomusic") == 0) {
-        out << (resizeToPage_ ? "true" : "false");
-    } else if (toget.compare("gmn") == 0) {
-        out << gmn_;
-    } else if (toget.compare("format") == 0) {
-        out << formatToLayType();
-    } else if (toget.compare("page") == 0) {
-        out << page_;
-    } else if (toget.compare("width") == 0) {
-        out << width_;
-    } else if (toget.compare("height") == 0) {
-        out << height_;
-    } else if (toget.compare("zoom") == 0) {
-        out << zoom_;
-    } else if (toget.compare("marginleft") == 0) {
-        out << marginleft_;
-    } else if (toget.compare("margintop") == 0) {
-        out << margintop_;
-    } else if (toget.compare("marginright") == 0) {
-        out << marginright_;
-    } else if (toget.compare("marginbottom") == 0) {
-        out << marginbottom_;
+    if (strcmp("png", format.c_str()) == 0) {
+        return GUIDO_WEB_API_PNG;
+    } else if (strcmp("jpeg", format.c_str()) == 0) {
+        return GUIDO_WEB_API_JPEG;
+    } else if (strcmp("jpg", format.c_str()) == 0) {
+        return GUIDO_WEB_API_JPEG;
+    } else if (strcmp("gif", format.c_str()) == 0) {
+        return GUIDO_WEB_API_GIF;
     } else {
-        out << "";
+        return GUIDO_WEB_API_PNG;
     }
-    return out.str().c_str();
+    return GUIDO_WEB_API_PNG;
+}
+
+// queries.......................
+
+guidosessionresponse guidosession::wrapObjectInId(json_object *obj)
+{
+    json_object *wrapper = new json_object;
+    wrapper->add(new json_element(id_.c_str(), new json_object_value(obj)));
+    ostringstream mystream;
+    json_stream jstream(mystream);
+    wrapper->print(jstream);
+    // important! as everything is pointers, need to delete here
+    delete wrapper;
+    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", "", GUIDO_SESSION_PARSING_SUCCESS, 200);
+}
+
+guidosessionresponse guidosession::handleSimpleIntQuery(string name, int myint)
+{
+    json_object *obj = new json_object();
+    obj->add (new json_element(name.c_str(), new json_int_value(myint)));
+    ostringstream mystream;
+    json_stream jstream(mystream);
+    obj->print(jstream);
+    // important! as everything is pointers, need to delete here
+    delete obj;
+    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", "", GUIDO_SESSION_PARSING_SUCCESS, 200);
+}
+
+guidosessionresponse guidosession::handleSimpleBoolQuery(string name, bool mybool)
+{
+    json_object *obj = new json_object();
+    if (mybool)
+        obj->add (new json_element(name.c_str(), new json_true_value()));
+    else
+        obj->add (new json_element(name.c_str(), new json_false_value()));
+    ostringstream mystream;
+    json_stream jstream(mystream);
+    obj->print(jstream);
+    // important! as everything is pointers, need to delete here
+    delete obj;
+    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", "", GUIDO_SESSION_PARSING_SUCCESS, 200);
+}
+
+guidosessionresponse guidosession::handleSimpleFloatQuery(string name, float myfloat)
+{
+    json_object *obj = new json_object();
+    obj->add (new json_element(name.c_str(), new json_float_value(myfloat)));
+    ostringstream mystream;
+    json_stream jstream(mystream);
+    obj->print(jstream);
+    // important! as everything is pointers, need to delete here
+    delete obj;
+    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", "", GUIDO_SESSION_PARSING_SUCCESS, 200);
+}
+
+guidosessionresponse guidosession::handleSimpleStringQuery(string name, string mystring)
+{
+    json_object *obj = new json_object();
+    obj->add (new json_element(name.c_str(), new json_string_value(mystring.c_str())));
+    ostringstream mystream;
+    json_stream jstream(mystream);
+    obj->print(jstream);
+    // important! as everything is pointers, need to delete here
+    delete obj;
+    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", "", GUIDO_SESSION_PARSING_SUCCESS, 200);
+}
+
+guidosessionresponse guidosession::handleSimpleIDdIntQuery(string name, int myint)
+{
+    json_object *obj = new json_object();
+    obj->add (new json_element(name.c_str(), new json_int_value(myint)));
+    return wrapObjectInId(obj);
+}
+
+guidosessionresponse guidosession::handleSimpleIDdBoolQuery(string name, bool mybool)
+{
+    json_object *obj = new json_object();
+    if (mybool)
+        obj->add (new json_element(name.c_str(), new json_true_value()));
+    else
+        obj->add (new json_element(name.c_str(), new json_false_value()));
+    return wrapObjectInId(obj);
+}
+
+guidosessionresponse guidosession::handleSimpleIDdFloatQuery(string name, float myfloat)
+{
+    json_object *obj = new json_object();
+    obj->add (new json_element(name.c_str(), new json_float_value(myfloat)));
+    return wrapObjectInId(obj);
+}
+    
+guidosessionresponse guidosession::handleSimpleIDdStringQuery(string name, string mystring)
+{
+    json_object *obj = new json_object();
+    obj->add (new json_element(name.c_str(), new json_string_value(mystring.c_str())));
+    return wrapObjectInId(obj);
+}
+
+guidosessionresponse guidosession::datePageJson(string date, int page)
+{
+    json_object *obj = new json_object();
+    obj->add(new json_element("page", new json_int_value(page)));
+    obj->add(new json_element("date", new json_string_value(date.c_str())));
+    return wrapObjectInId(obj);
+}
+
+guidosessionresponse guidosession::mapJson (string thingToGet, Time2GraphicMap &outmap)
+{
+    json_object *obj = new json_object();
+    json_array *arr = new json_array();
+    // ugh...memory management nightmare...need to fix
+    for (int i = 0; i < (int)(outmap.size()); i++) {
+        json_object*  holder = new json_object();
+        json_object*  graph = new json_object();
+        json_object*  mytime = new json_object();
+        graph->add(new json_element("left", new json_float_value(outmap[i].second.left)));
+        graph->add(new json_element("top", new json_float_value(outmap[i].second.top)));
+        graph->add(new json_element("right", new json_float_value(outmap[i].second.right)));
+        graph->add(new json_element("bottom", new json_float_value(outmap[i].second.bottom)));
+        mytime->add(new json_element("start", new json_string_value(dateToString(outmap[i].first.first).c_str())));
+        mytime->add(new json_element("end", new json_string_value(dateToString(outmap[i].first.second).c_str())));
+        holder->add(new json_element("graph", new json_object_value(graph)));
+        holder->add(new json_element("time", new json_object_value(mytime)));
+        arr->add(new json_object_value(holder));
+    }
+    obj->add(new json_element(thingToGet.c_str(), new json_array_value(arr)));
+    return wrapObjectInId(obj);
+}
+
+// gets.....
+
+string guidosession::getVersion() {
+    return string (GuidoGetVersionStr());
+}
+
+string guidosession::getServerVersion() {
+    return "0.50";
+}
+
+float guidosession::getLineSpace() {
+    return GuidoGetLineSpace();
+}
+
+int guidosession::voicesCount()
+{
+    GuidoErrCode err;
+    ARHandler arh;
+    err = GuidoParseString (gmn_.c_str(), &arh);
+    if (err != guidoNoErr) {
+        return -1;
+    }
+
+    return GuidoCountVoices(arh);
+}
+string guidosession::duration()
+{
+    GuidoErrCode err;
+    ARHandler arh;
+    err = GuidoParseString (gmn_.c_str(), &arh);
+    if (err != guidoNoErr) {
+        return "";
+    }
+    GRHandler grh;
+    
+    GuidoPageFormat pf;
+    fillGuidoPageFormatUsingCurrentSettings(&pf);
+    
+    GuidoSetDefaultPageFormat(&pf);
+    err = GuidoAR2GR (arh, 0, &grh);
+    if (err != guidoNoErr) {
+        return "";
+    }
+    
+    GuidoDate date;
+    err = GuidoDuration(grh, &date);
+    if (err != guidoNoErr) {
+        return "";
+    }
+
+    return dateToString(date);
+}
+    
+int guidosession::pagesCount()
+{
+    GuidoErrCode err;
+    ARHandler arh;
+    err = GuidoParseString (gmn_.c_str(), &arh);
+    if (err != guidoNoErr) {
+        return -1;
+    }
+    GRHandler grh;
+    
+    GuidoPageFormat pf;
+    fillGuidoPageFormatUsingCurrentSettings(&pf);
+    
+    GuidoSetDefaultPageFormat(&pf);
+    err = GuidoAR2GR (arh, 0, &grh);
+    if (err != guidoNoErr) {
+        return -1;
+    }
+
+    return GuidoGetPageCount(grh);
+}
+    
+int guidosession::pageAt(GuidoDate date)
+{
+    GuidoErrCode err;
+    ARHandler arh;
+    err = GuidoParseString (gmn_.c_str(), &arh);
+    if (err != guidoNoErr) {
+        return -1;
+    }
+    GRHandler grh;
+    
+    GuidoPageFormat pf;
+    fillGuidoPageFormatUsingCurrentSettings(&pf);
+    
+    GuidoSetDefaultPageFormat(&pf);
+    err = GuidoAR2GR (arh, 0, &grh);
+    if (err != guidoNoErr) {
+        return -1;
+    }
+    
+    return GuidoFindPageAt(grh, date);
+}
+
+int guidosession::pageDate(int page, GuidoDate *date)
+{
+    GuidoErrCode err;
+    ARHandler arh;
+    err = GuidoParseString (gmn_.c_str(), &arh);
+    if (err != guidoNoErr) {
+        return 1;
+    }
+    GRHandler grh;
+    
+    GuidoPageFormat pf;
+    fillGuidoPageFormatUsingCurrentSettings(&pf);
+    
+    GuidoSetDefaultPageFormat(&pf);
+    err = GuidoAR2GR (arh, 0, &grh);
+    if (err != guidoNoErr) {
+        return 1;
+    }
+    
+    GuidoGetPageDate(grh, page, date);
+    return 0;
+}
+    
+GuidoErrCode guidosession::getTimeMap (TimeMapCollector& outmap)
+{
+    GuidoErrCode err;
+    ARHandler arh;
+    err = GuidoParseString (gmn_.c_str(), &arh);
+    if (err != guidoNoErr) {
+        return err;
+    }
+    
+    err = GuidoGetTimeMap(arh, outmap);
+
+    return err;
+}
+    
+GuidoErrCode guidosession::getMap (GuidoSessionMapType map, int aux, Time2GraphicMap& outmap)
+{
+    GuidoErrCode err;
+    ARHandler arh;
+    err = GuidoParseString (gmn_.c_str(), &arh);
+    if (err != guidoNoErr) {
+        return err;
+    }
+    GRHandler grh;
+    
+    GuidoPageFormat pf;
+    fillGuidoPageFormatUsingCurrentSettings(&pf);
+    
+    GuidoSetDefaultPageFormat(&pf);
+    err = GuidoAR2GR (arh, 0, &grh);
+    if (err != guidoNoErr) {
+        return err;
+    }
+    
+    /*
+     In order to export a map, the score needs to be drawn on something.
+     SVG export is a really quick way to do this drawing.
+     It is a temporary solution
+     */
+    stringstream mystream;
+    err = GuidoSVGExport(grh, page_, mystream, "");
+    
+    switch(map) {
+        case PAGE :
+            err = GuidoGetPageMap(grh, page_, width_, height_, outmap);
+            break;
+        case STAFF :
+            err = GuidoGetStaffMap(grh, page_, width_, height_, aux, outmap);
+            break;
+        case VOICE :
+            err = GuidoGetVoiceMap(grh, page_, width_, height_, aux, outmap);
+            break;
+        case SYSTEM :
+            err = GuidoGetSystemMap(grh, page_, width_, height_, outmap);
+            break;
+        default :
+            err = guidoErrActionFailed;
+    }
+    return err;
 }
 
 void guidosession::fillGuidoPageFormatUsingCurrentSettings(GuidoPageFormat *pf)
@@ -159,435 +686,35 @@ void guidosession::fillGuidoPageFormatUsingCurrentSettings(GuidoPageFormat *pf)
     pf->marginbottom = marginbottom_;
 }
 
-GuidoErrCode guidosession::getmap (GuidoSessionMapType map, int aux, Time2GraphicMap& outmap)
-{
-    GuidoErrCode err;
-    ARHandler arh;
-    err = GuidoParseString (gmn_.c_str(), &arh);
-    if (err != guidoNoErr) {
-        return err;
-    }
-    GRHandler grh;
-
-    GuidoPageFormat pf;
-    fillGuidoPageFormatUsingCurrentSettings(&pf);
-
-    GuidoSetDefaultPageFormat(&pf);
-    err = GuidoAR2GR (arh, 0, &grh);
-    if (err != guidoNoErr) {
-        return err;
-    }
-
-    /*
-     In order to export a map, the score needs to be drawn on something.
-     SVG export is a really quick way to do this drawing.
-     It is a temporary solution
-     */
-    stringstream mystream;
-    err = GuidoSVGExport(grh, page_, mystream, "");
-
-    switch(map) {
-    case PAGE :
-        err = GuidoGetPageMap(grh, page_, width_, height_, outmap);
-        break;
-    case STAFF :
-        err = GuidoGetStaffMap(grh, page_, width_, height_, aux, outmap);
-        break;
-    case VOICE :
-        err = GuidoGetVoiceMap(grh, page_, width_, height_, aux, outmap);
-        break;
-    case SYSTEM :
-        err = GuidoGetSystemMap(grh, page_, width_, height_, outmap);
-        break;
-    default :
-        err = guidoErrActionFailed;
-    }
-    //cout << "GMN " << gmn << " SIZE " << outmap.size () << endl;
-    return err;
-}
-
-/* callbacks */
-guidosessionresponse guidosession::handleGet(const TArgs& args, unsigned int n)
-{
-    const int SIMPLE_SIZE = 10;
-    string simple_ids[SIMPLE_SIZE] = {"width", "height", "margintop", "marginbottom", "marginleft", "marginright", "zoom","format","gmn", "resizepagetomusic"};
-
-    for (int i = 0; i < SIMPLE_SIZE; i++)
-        if (simple_ids[i].compare(args[n].second) == 0) {
-            return simpleGet (simple_ids[i]);
-        }
-
-    const int MAP_SIZE = 4;
-    string map_ids[MAP_SIZE] = {"pagemap","staffmap","voicemap","systemmap"};
-    for (int i = 0; i < MAP_SIZE; i++)
-        if (map_ids[i].compare(args[n].second) == 0) {
-            return mapGet (args, n, map_ids[i]);
-        }
-
-    if (strcmp("point", args[n].second.c_str()) == 0) {
-        return pointGet (args, n);
-    }
-    return genericFailure("Unidentified get.", 403);
-}
-
-guidosessionresponse guidosession::handlePage(const TArgs& args, unsigned int n)
-{
-    page_ = atof(args[n].second.c_str());
-    return genericReturnImage();
-}
-
-guidosessionresponse guidosession::handleWidth(const TArgs& args, unsigned int n)
-{
-    width_ = atof(args[n].second.c_str());
-    return genericReturnImage();
-}
-
-guidosessionresponse guidosession::handleHeight(const TArgs& args, unsigned int n)
-{
-    height_ = atof(args[n].second.c_str());
-    return genericReturnImage();
-}
-guidosessionresponse guidosession::handleMarginLeft(const TArgs& args, unsigned int n)
-{
-    marginleft_ = atof(args[n].second.c_str());
-    return genericReturnImage();
-}
-
-guidosessionresponse guidosession::handleMarginRight(const TArgs& args, unsigned int n)
-{
-    marginright_ = atof(args[n].second.c_str());
-    return genericReturnImage();
-}
-
-guidosessionresponse guidosession::handleMarginTop(const TArgs& args, unsigned int n)
-{
-    margintop_ = atof(args[n].second.c_str());
-    return genericReturnImage();
-}
-
-guidosessionresponse guidosession::handleMarginBottom(const TArgs& args, unsigned int n)
-{
-    marginbottom_ = atof(args[n].second.c_str());
-    return genericReturnImage();
-}
-
-guidosessionresponse guidosession::handleZoom(const TArgs& args, unsigned int n)
-{
-    zoom_  = atof(args[n].second.c_str());
-    return genericReturnImage();
-}
-
-guidosessionresponse guidosession::handleResizePageToMusic(const TArgs& args, unsigned int n)
-{
-    if (strcmp("true", args[n].second.c_str()) == 0) {
-        resizeToPage_ = true;
-    } else if (strcmp("True", args[n].second.c_str()) == 0) {
-        resizeToPage_ = true;
-    } else if (strcmp("false", args[n].second.c_str()) == 0) {
-        resizeToPage_ = false;
-    } else if (strcmp("False", args[n].second.c_str()) == 0) {
-        resizeToPage_ = false;
-    } else {
-        return genericFailure("Must specify true or false for resizeToPage", 403);
-    }
-    return genericReturnImage();
-}
-
-guidosessionresponse guidosession::handleGMN(const TArgs& args, unsigned int n)
-{
-    gmn_ = string(args[n].second);
-    return genericReturnImage();
-}
-
-guidosessionresponse guidosession::handleBlankRequest(const TArgs& args, unsigned int n)
-{
-    return genericReturnImage();
-}
-
-guidosessionresponse guidosession::handleFormat(const TArgs& args, unsigned int n)
-{
-    if (strcmp("png", args[n].second.c_str()) == 0) {
-        format_ = GUIDO_WEB_API_PNG;
-    } else if (strcmp("jpeg", args[n].second.c_str()) == 0) {
-        format_ = GUIDO_WEB_API_JPEG;
-    } else if (strcmp("jpg", args[n].second.c_str()) == 0) {
-        format_ = GUIDO_WEB_API_JPEG;
-    } else if (strcmp("gif", args[n].second.c_str()) == 0) {
-        format_ = GUIDO_WEB_API_GIF;
-    } else if (strcmp("svg", args[n].second.c_str()) == 0) {
-        format_ = GUIDO_WEB_API_PNG;    //KLUDGE
-    } else {
-        return genericFailure("Not a valid format - please choose from png, jpeg, gif or svg.", 403);
-    }
-    return genericReturnImage();
-}
-
-guidosessionresponse guidosession::handleErrantGet(const TArgs&, unsigned int)
-{
-    return genericFailure("You may not send a POST command through a GET channel.", 405);
-}
-
-guidosessionresponse guidosession::handleErrantPost(const TArgs&, unsigned int)
-{
-    return genericFailure("You may not send a GET command through a POST channel.", 405);
-}
-
-
-guidosessionresponse guidosession::handleFaultyInput(const TArgs&, unsigned int)
-{
-    return genericFailure ("You have entered insane input.", 400);
-}
-
 // ---- Abstractions
 
 guidosessionresponse guidosession::genericReturnImage()
 {
     int err = fConverter->convert(this);
     if (err == 0) {
-        return guidosessionresponse(fConverter->data(), fConverter->size(), formatToMIMEType(), "", 1, GUIDO_SESSION_PARSING_SUCCESS, 201);
+        return guidosessionresponse(fConverter->data(), fConverter->size(), formatToMIMEType(), "", GUIDO_SESSION_PARSING_SUCCESS, 201);
     }
     return genericFailure ("Could not convert the image.", 400);
 }
 
 guidosessionresponse guidosession::genericFailure(const char* errorstring, int http_status)
 {
-    json_printer printer;
-    stringstream mystream;
-    json_print_init(&printer, printchannel, &mystream);
-    json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
-    json_print_pretty(&printer, JSON_KEY, "error", 1);
-    json_print_pretty(&printer, JSON_STRING, errorstring, 1);
-    json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
-    return guidosessionresponse("", 0, "application/json", mystream.str(), 1, GUIDO_SESSION_PARSING_FAILURE, http_status);
+    json_object obj;
+    obj.add (new json_element("Error", new json_string_value(errorstring)));
+    ostringstream mystream;
+    json_stream jstream(mystream);
+    obj.print(jstream);
+    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", "", GUIDO_SESSION_PARSING_FAILURE, http_status);
 }
 
-guidosessionresponse guidosession::simpleGet(string thingToGet)
+guidosessionresponse guidosession::genericReturnId()
 {
-    string internalRep = getStringRepresentationOf(thingToGet);
-    json_printer printer;
-    stringstream mystream;
-    json_print_init(&printer, printchannel, &mystream);
-    json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
-    if (url_.size () != 0) {
-        json_print_pretty(&printer, JSON_KEY, "score", 1);
-        const char* current_url = url_.c_str();
-        json_print_pretty(&printer, JSON_STRING, current_url, 1);
-    }
-    json_type type = swapTypeForName(thingToGet);
-    if (type == JSON_NONE) {
-        return genericFailure ("Cannot find correct JSON type output.", 400);
-    }
-    const char* constCharVersionOfThingToGet = thingToGet.c_str();
-    const char* constCharVersionOfInternalRep = internalRep.c_str();
-    json_print_pretty(&printer, JSON_KEY, constCharVersionOfThingToGet, 1);
-    json_print_pretty(&printer, type, constCharVersionOfInternalRep, type == JSON_STRING ? 1 : strlen(constCharVersionOfInternalRep));
-    json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
-    json_print_free(&printer);
-    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", "", 1, GUIDO_SESSION_PARSING_SUCCESS, 200);
+    json_object obj;
+    obj.add (new json_element("ID", new json_string_value(id_.c_str())));
+    ostringstream mystream;
+    json_stream jstream(mystream);
+    obj.print(jstream);
+    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", "", GUIDO_SESSION_PARSING_SUCCESS, 200);
 }
 
-guidosessionresponse guidosession::mapGet (const TArgs& args, unsigned int n, string thingToGet)
-{
-    Time2GraphicMap outmap;
-    GuidoErrCode err;
-    if (thingToGet.compare("pagemap") == 0) {
-        err = getmap (PAGE, 0, outmap);
-    } else if (thingToGet.compare("systemmap") == 0) {
-        err = getmap (SYSTEM, 0, outmap);
-    } else {
-        if (n >= args.size () - 1) {
-            return genericFailure ("You need an extra argument for this map call.", 403);
-        }
-        if (thingToGet.compare("systemmap") == 0 && strcmp(args[n + 1].second.c_str(), "voice") != 0) {
-            return genericFailure ("To get a voicemap, the argument must be followed by a voice argument indicating which voice you want.", 403);
-        }
-        if (thingToGet.compare("systemmap") == 0 && strcmp(args[n + 1].second.c_str(), "staff") != 0) {
-            return genericFailure ("To get a staffmap, the argument must be followed by a staff argument indicating which staff you want.", 403);
-        }
-        int aux = atoi(args[n+1].second.c_str());
-        if (thingToGet.compare("staffmap") == 0) {
-            err = getmap (STAFF, aux, outmap);
-        } else if (thingToGet.compare("voicemap") == 0) {
-            err = getmap (VOICE, aux, outmap);
-        }
-    }
-    if (err != guidoNoErr) {
-        return genericFailure ("Could not generate a map for your request.", 400);
-    }
-    json_printer printer;
-    stringstream mystream;
-    json_print_init(&printer, printchannel, &mystream);
-    json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
-    if (url_.size () != 0) {
-        json_print_pretty(&printer, JSON_KEY, "score", 1);
-        const char* current_url = url_.c_str();
-        json_print_pretty(&printer, JSON_STRING, current_url, 1);
-    }
-    const char* constCharVersionOfThingToGet = thingToGet.c_str();
-    json_print_pretty(&printer, JSON_KEY, constCharVersionOfThingToGet, 1);
-    json_print_pretty(&printer, JSON_ARRAY_BEGIN, NULL, 0);
-    stringstream buffer;
-    for (int i = 0; i < (int)(outmap.size()); i++) {
-        json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
-        GUIDOjson_print_date (&printer, "begintime", outmap[i].first.first.num, outmap[i].first.first.denom);
-        GUIDOjson_print_date (&printer, "endtime", outmap[i].first.second.num, outmap[i].first.second.denom);
-        GUIDOjson_print_float_rect (&printer , "floatrec", outmap[i].second.left, outmap[i].second.right, outmap[i].second.top, outmap[i].second.bottom);
-        json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
-    }
-    json_print_pretty(&printer, JSON_ARRAY_END, NULL, 0);
-    json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
-    json_print_free(&printer);
-    int argumentsToAdvance = (thingToGet.compare("pagemap") == 0 || thingToGet.compare("systemmap") == 0) ? 1 : 2;
-    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", "", argumentsToAdvance, GUIDO_SESSION_PARSING_SUCCESS, 200);
-}
-guidosessionresponse guidosession::pointGet (const TArgs& args, unsigned int n)
-{
-    if (n >= args.size () - 3) {
-        return genericFailure ("You need both x and y arguments as well as a mapping specification for get=point.", 403);
-    }
-    float x;
-    float y;
-    const char* maptype;
-    int aux;
-    GuidoSessionMapType type = NO_TYPE;
-    int i = 1;
-    int movingTarget = 4;
-    while (i < movingTarget) {
-        if (args[n + i].first == "x") {
-            x = atof(args[n + i].second.c_str());
-        } else if (args[n + i].first == "y") {
-            y = atof(args[n + i].second.c_str());
-        } else if (args[n + i].first == "map") {
-            maptype = args[n + i].second.c_str();
-            if (strcmp("page", maptype) == 0) {
-                if (type != NO_TYPE && type != PAGE) {
-                    return genericFailure ("Cannot specify a page map with a previously specified type.", 400);
-                } else {
-                    type = PAGE;
-                }
-            } else if (strcmp("voice", maptype) == 0) {
-                if (type != NO_TYPE && type != VOICE) {
-                    return genericFailure ("Cannot specify a voice map with a previously specified type.", 400);
-                } else {
-                    type = VOICE;
-                }
-            } else if (strcmp("staff", maptype) == 0) {
-                if (type != NO_TYPE && type != STAFF) {
-                    return genericFailure ("Cannot specify a staff map with a previously specified type.", 400);
-                } else {
-                    type = STAFF;
-                }
-            } else if (strcmp("system", maptype) == 0) {
-                if (type != NO_TYPE && type != SYSTEM) {
-                    return genericFailure ("Cannot specify a system map with a previously specified type.", 400);
-                } else {
-                    type = SYSTEM;
-                }
-            }
-
-        } else if (args[n + i].first == "voice") {
-            aux = atoi(args[n + i].second.c_str());
-            if (type != NO_TYPE && type != VOICE) {
-                return genericFailure ("Cannot specify voice for this type of map.", 400);
-            }
-            type = VOICE;
-        } else if (args[n + i].first == "staff") {
-            aux = atoi(args[n + i].second.c_str());
-            if (type != NO_TYPE && type != STAFF   ) {
-                return genericFailure ("Cannot specify staff for this type of map.", 400);
-            }
-            type = STAFF;
-        }
-        if (type && (type == STAFF || type == VOICE) && n >= args.size () - 4) {
-            return genericFailure ("You're missing an argument for get=point.", 400);
-        } else if (type && (type == STAFF || type == VOICE) && n < args.size () - 4) {
-            movingTarget = 5;
-        }
-        i++;
-    }
-    if (!x || !y || !maptype) {
-        return genericFailure ("Necessary argument not specified for getting map type.", 400);
-    }
-    if (type != NO_TYPE && (type == STAFF || type == VOICE) && !aux) {
-        return genericFailure ("Necessary argument not specified for getting map type.", 400);
-    }
-    GuidoErrCode err;
-    Time2GraphicMap outmap;
-    switch (type) {
-    case PAGE :
-        err = getmap (PAGE, 0, outmap);
-        break;
-    case STAFF :
-        err = getmap (STAFF, aux, outmap);
-        break;
-    case SYSTEM :
-        err = getmap (SYSTEM, 0, outmap);
-        break;
-    case VOICE :
-        err = getmap (VOICE, aux, outmap);
-        break;
-    default :
-        return genericFailure ("Exotic programming error.", 400);
-    }
-
-    if (err != guidoNoErr) {
-        return genericFailure ("Exotic programming error.", 400);
-    }
-
-    TimeSegment t;
-    FloatRect r;
-    GuidoGetPoint(x, y, outmap, t, r);
-    json_printer printer;
-    stringstream mystream;
-    json_print_init(&printer, printchannel, &mystream);
-    json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
-    if (url_.size () != 0) {
-        json_print_pretty(&printer, JSON_KEY, "score", 1);
-        json_print_pretty(&printer, JSON_INT, url_.c_str(), strlen(url_.c_str()));
-    }
-    json_print_pretty(&printer, JSON_KEY, "point", 1);
-    stringstream buffer;
-    json_print_pretty(&printer, JSON_OBJECT_BEGIN, NULL, 0);
-
-    GUIDOjson_print_date (&printer, "begintime", t.first.num, t.first.denom);
-    GUIDOjson_print_date (&printer, "endtime", t.second.num, t.second.denom);
-    GUIDOjson_print_float_rect(&printer, "floatrec", r.left, r.right, r.top, r.bottom);
-
-    json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
-    json_print_pretty(&printer, JSON_OBJECT_END, NULL, 0);
-    json_print_free(&printer);
-    int argumentsToAdvance = (type == PAGE || type == SYSTEM) ? 4 : 5;
-    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", "", argumentsToAdvance, GUIDO_SESSION_PARSING_SUCCESS, 200);
-}
-
-void guidosession::setUrl(string url)
-{
-    url_ = url;
-}
-
-json_type guidosession::swapTypeForName (string type)
-{
-    if (type.compare("width") == 0) {
-        return JSON_FLOAT;
-    } else if (type.compare("height") == 0) {
-        return JSON_FLOAT;
-    } else if (type.compare("margintop") == 0) {
-        return JSON_FLOAT;
-    } else if (type.compare("marginbottom") == 0) {
-        return JSON_FLOAT;
-    } else if (type.compare("marginleft") == 0) {
-        return JSON_FLOAT;
-    } else if (type.compare("marginright") == 0) {
-        return JSON_FLOAT;
-    } else if (type.compare("zoom") == 0) {
-        return JSON_FLOAT;
-    } else if (type.compare("format") == 0) {
-        return JSON_STRING;
-    } else if (type.compare("gmn") == 0) {
-        return JSON_STRING;
-    } else if (type.compare("resizepagetomusic") == 0) {
-        return JSON_STRING;
-    }
-    return JSON_NONE;
-}
 } // end namespoace

@@ -58,7 +58,7 @@ int guido2img::convert (guidosession* const currentSession)
     fBuffer.open(QIODevice::ReadWrite);
     fBuffer.reset();
     p.device = &fBuffer;
-    Guido2ImageErrorCodes err = Guido2Image::gmnString2Image (p, currentSession->resizeToPage_);
+    Guido2ImageErrorCodes err = Guido2Image::gmnString2Image (p);
     fBuffer.close();
     return err == GUIDO_2_IMAGE_SUCCESS ? 0 : 1;
 }

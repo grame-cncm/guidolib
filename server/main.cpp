@@ -9,6 +9,8 @@
 
 #include <sys/stat.h>
 
+#include <ctime>
+
 /*
  * For Linux, otherwise:
  * /usr/bin/ld: errno: TLS definition in /lib/x86_64-linux-gnu/libc.so.6 section .tbss mismatches non-TLS reference in main.o
@@ -18,7 +20,7 @@
 
 #include "QGuidoPainter.h"
 #include "guido2img.h"
-#include "HTTPDServer.h"
+#include "server.h"
 #include "utilities.h"
 #include "engine.h"
 
@@ -85,6 +87,7 @@ static bool launchServer (int port, const char * logfile, bool daemon)
 int main(int argc, char **argv)
 {
     makeApplication(argc, argv);
+    srand(time(0));
     int port = lopt (argv, kPortOpt, kDefaultPort);
     string logfile = sopt (argv, kLogfileOpt, kDefaultLogfile);
     bool daemon = bopt (argv, kDaemonOpt, false);

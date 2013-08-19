@@ -29,7 +29,8 @@
 #include "GUIDOScoreMap.h"
 #include "utilities.h"
 #include "guido2img.h"
-#include "json.h"
+
+#include "json_value.h"
 
 using namespace std;
 
@@ -47,11 +48,10 @@ struct guidosessionresponse {
     unsigned int size_;
     string format_;
     string errstring_;
-    unsigned int argumentsToAdvance_;
     GuidoSessionParsingError status_;
     int http_status_;
     guidosessionresponse ();
-    guidosessionresponse (const char* data, unsigned int size, string format, string errstring, unsigned int argumentsToAdvance, GuidoSessionParsingError status, int http_status = 200);
+    guidosessionresponse (const char* data, unsigned int size, string format, string errstring, GuidoSessionParsingError status, int http_status = 200);
 };
 class guidosession
 {
@@ -59,10 +59,11 @@ class guidosession
     guido2img*			fConverter;
 
 private :
+    string id_;
+    // these are the current values
     bool resizeToPage_;
-    string gmn_;
-    string url_;
     GuidoWebApiFormat format_;
+    string gmn_;
     int page_;
     int width_;
     int height_;
@@ -78,46 +79,80 @@ private :
     float spring_;
     int neighborhoodSpacing_;
     int optimalPageFill_;
+    
+    // and these are the default values
+    bool dresizeToPage_;
+    GuidoWebApiFormat dformat_;
+    string dgmn_;
+    int dpage_;
+    int dwidth_;
+    int dheight_;
+    float dzoom_;
+    float dmarginleft_;
+    float dmargintop_;
+    float dmarginbottom_;
+    float dmarginright_;
+    float dsystemsDistance_;
+    int dsystemsDistribution_;
+    float dsystemsDistribLimit_;
+    float dforce_;
+    float dspring_;
+    int dneighborhoodSpacing_;
+    int doptimalPageFill_;
+
     const char* formatToMIMEType ();
     const char* formatToLayType ();
-    const char* getStringRepresentationOf (string toget);
+    static GuidoWebApiFormat formatToWebApiFormat(string format);
+    //const char* getStringRepresentationOf (string toget);
     void fillGuidoPageFormatUsingCurrentSettings(GuidoPageFormat *pf);
-    GuidoErrCode getmap (GuidoSessionMapType map, int aux, Time2GraphicMap& outmap);
 
+    // query handling
+    guidosessionresponse wrapObjectInId(json::json_object *obj);
+    
 public :
 
-    guidosession(guido2img* g2img);
+    guidosession(guido2img* g2img, string gmn, string id);
     virtual ~guidosession();
     void initialize();
+    void updateValuesFromDefaults();
+    void updateValuesFromDefaults(const TArgs& args);
+    void changeDefaultValues(const TArgs &args);
 
-    typedef guidosessionresponse(guidosession::*callback_function)(const TArgs& args, unsigned int n);
+    // query handling
+    static guidosessionresponse handleSimpleIntQuery(string, int);
+    static guidosessionresponse handleSimpleBoolQuery(string, bool);
+    static guidosessionresponse handleSimpleFloatQuery(string, float);
+    static guidosessionresponse handleSimpleStringQuery(string, string);
+    
+    guidosessionresponse handleSimpleIDdIntQuery(string, int);
+    guidosessionresponse handleSimpleIDdBoolQuery(string, bool);
+    guidosessionresponse handleSimpleIDdFloatQuery(string, float);
+    guidosessionresponse handleSimpleIDdStringQuery(string, string);
 
-    // ------- CALLBACKS -------
-    guidosessionresponse handleGet(const TArgs& args, unsigned int n);
-    guidosessionresponse handlePage(const TArgs& args, unsigned int n);
-    guidosessionresponse handleWidth(const TArgs& args, unsigned int n);
-    guidosessionresponse handleHeight(const TArgs& args, unsigned int n);
-    guidosessionresponse handleMarginLeft(const TArgs& args, unsigned int n);
-    guidosessionresponse handleMarginRight(const TArgs& args, unsigned int n);
-    guidosessionresponse handleMarginTop(const TArgs& args, unsigned int n);
-    guidosessionresponse handleMarginBottom(const TArgs& args, unsigned int n);
-    guidosessionresponse handleResizePageToMusic(const TArgs& args, unsigned int n);
-    guidosessionresponse handleZoom(const TArgs& args, unsigned int n);
-    guidosessionresponse handleGMN(const TArgs& args, unsigned int n);
-    guidosessionresponse handleBlankRequest(const TArgs& args, unsigned int n);
-    guidosessionresponse handleFormat(const TArgs& args, unsigned int n);
-    guidosessionresponse handleErrantGet(const TArgs& args, unsigned int n);
-    guidosessionresponse handleErrantPost(const TArgs& args, unsigned int n);
-    guidosessionresponse handleFaultyInput(const TArgs& args, unsigned int n);
+    // more advanced handling
+    guidosessionresponse datePageJson(string, int);
+    guidosessionresponse mapJson (string thingToGet, Time2GraphicMap &outmap);
+
+    // queries
+    int voicesCount();
+    int pagesCount();
+    string duration();
+    int pageAt(GuidoDate date);
+    int pageDate(int page, GuidoDate *date);
+    GuidoErrCode getMap (GuidoSessionMapType map, int aux, Time2GraphicMap& outmap);
+    GuidoErrCode getTimeMap (TimeMapCollector& outmap);
+    static string getVersion();
+    static string getServerVersion();
+    static float getLineSpace();
+
     // -----------------------------
     guidosessionresponse genericReturnImage();
-    guidosessionresponse genericFailure(const char* errorstring, int http_status = 400);
-    guidosessionresponse simpleGet (string thingToGet);
+    guidosessionresponse genericReturnId();
+    static guidosessionresponse genericFailure(const char* errorstring, int http_status = 400);
     guidosessionresponse mapGet (const TArgs& args, unsigned int n, string thingToGet);
     guidosessionresponse pointGet (const TArgs& args, unsigned int n);
 
-    void setUrl(string url);
-    static json_type swapTypeForName (string type);
+    //static json_type swapTypeForName (string type);
 };
 
 } // end namespoace

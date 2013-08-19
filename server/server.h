@@ -32,8 +32,12 @@
 #include <microhttpd.h>
 
 #include "guidosession.h"
-#include "guidouser.h"
 #include "guido2img.h"
+
+// json
+#include "json_object.h"
+#include "json_array.h"
+#include "json_parser.h"
 
 #define DELETE 2
 #define POST 1
@@ -58,7 +62,7 @@ class HTTPDServer
     int					fPort;
     struct MHD_Daemon *	fServer;
     guido2img*			fConverter;
-    std::map<std::string, guidouser *> fUsers;
+    std::map<std::string, guidosession *> fSessions;
 
     const char* getMIMEType (const std::string& page);
 
@@ -73,11 +77,12 @@ public:
     int answer (struct MHD_Connection *connection, const char *url, const char *method, const char *version,
                 const char *upload_data, size_t *upload_data_size, void **con_cls);
     int sendGuido (struct MHD_Connection *connection, const char* url, const TArgs& args, int type);
+    int sendGuidoPostRequest (struct MHD_Connection *connection, const TArgs& args);
+    int sendGuidoDeleteRequest (struct MHD_Connection *connection, const TArgs& args);
 
-
-    static int send (struct MHD_Connection *connection, const char *page, int length, const char *type, guidouser *session, int status=MHD_HTTP_OK);
-    static int send (struct MHD_Connection *connection, const char *page, const char *type, guidouser *session, int status=MHD_HTTP_OK);
-    static void add_session_cookie (guidouser *session, MHD_Response *response);
+    static int send (struct MHD_Connection *connection, guidosessionresponse &response);
+    static int send (struct MHD_Connection *connection, const char *page, int length, const char *type, int status=MHD_HTTP_OK);
+    static int send (struct MHD_Connection *connection, const char *page, const char *type, int status=MHD_HTTP_OK);
 
 };
 
