@@ -144,6 +144,7 @@ public :
     static string getVersion();
     static string getServerVersion();
     static float getLineSpace();
+    static GuidoErrCode verifyGMN(string gmn);
 
     // -----------------------------
     guidosessionresponse genericReturnImage();

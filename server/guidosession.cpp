@@ -369,6 +369,10 @@ GuidoWebApiFormat guidosession::formatToWebApiFormat(string format)
     return GUIDO_WEB_API_PNG;
 }
 
+GuidoErrCode guidosession::verifyGMN(string gmn) {
+    ARHandler arh;
+    return GuidoParseString (gmn.c_str(), &arh);
+}
 // queries.......................
 
 guidosessionresponse guidosession::wrapObjectInId(json_object *obj)

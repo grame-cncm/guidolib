@@ -206,6 +206,12 @@ int HTTPDServer::sendGuidoPostRequest(struct MHD_Connection *connection, const T
         guidosessionresponse response = guidosession::genericFailure("Requests without scores MUST only contain one field called `data'.", 403);
         return send (connection, response);
     }
+    // we verify to see if this is valid guido
+    GuidoErrCode err = guidosession::verifyGMN(args.begin()->second);
+    if (err != guidoNoErr) {
+        guidosessionresponse response = guidosession::genericFailure("You have sent the server invalid GMN.", 403);
+        return send (connection, response);
+    }
     std::string unique_id;
     for(unsigned int i = 0; i < 20; ++i) {
         unique_id += genRandom();
