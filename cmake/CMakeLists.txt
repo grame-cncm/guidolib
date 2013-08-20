@@ -23,24 +23,27 @@ endif(UNIX)
 if(APPLE)
 
 #######################################
-# iOS support
-if (IOS)
-	message (STATUS "Generates iOS project")
-	set (DIST "no")
-else ()
-	message (STATUS "Generates Mac OS project- Use iOS.cmake toolchain for iOS.")
-endif ()
+#   iOS support
+	if ( IOS STREQUAL "yes" )
+		message (STATUS "Generates project for iOS - Use -DIOS=no to change.")
+		set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "iPhoneOS")
+		set (CMAKE_OSX_ARCHITECTURES "armv6 armv7")
+		set (CMAKE_OSX_SYSROOT "iphoneos5.1")
+		set (libtype STATIC)
+	else ()
+		message (STATUS "Generates Mac OS project- Use -DIOS=yes to change.")
 
- #######################################
- if (DIST STREQUAL "yes")
-	message (STATUS "All architectures will be compiled - Use -DDIST=no to change.")
-	set (CMAKE_OSX_ARCHITECTURES "x86_64 i386")
- else ()
-	message (STATUS "Only the current architecture will be compiled - Use -DDIST=yes to change.")
- endif ()
+	 	#######################################
+		if (DIST STREQUAL "yes")
+			message (STATUS "All architectures will be compiled - Use -DDIST=no to change.")
+			set (CMAKE_OSX_ARCHITECTURES "x86_64 i386")
+		else ()
+			message (STATUS "Only the current architecture will be compiled - Use -DDIST=yes to change.")
+		endif ()
 	add_definitions(-D_USE_QD_COORDINATES_ -compatibility_version 1.0.0)
 	set (CMAKE_C++_FLAGS -mmacosx-version-min=10.4)
 	set (CMAKE_LDFLAGS -mmacosx-version-min=10.4)
+	endif ()
 endif(APPLE)
 
 if(WIN32)
@@ -165,32 +168,32 @@ endif(APPLE)
 
 #######################################
 # library generation
-if (IOS)
+if (IOS STREQUAL "yes")
 	add_library(${target} STATIC ${LIBCONTENT})
 
 else ()
 
-add_library(${target} SHARED ${LIBCONTENT})
-set_target_properties (${target} PROPERTIES
-			FRAMEWORK TRUE
-			FRAMEWORK_VERSION ${GUIDOFWKVERS}
-			PUBLIC_HEADER "${PUBLICHEADERS}"
-			DEFINE_SYMBOL LIBMUSICXML_EXPORTS
-			VERSION ${VERSION}
-			SOVERSION ${SOVERS}
-			MACOSX_FRAMEWORK_SHORT_VERSION_STRING ${STRVERS}
-			MACOSX_FRAMEWORK_BUNDLE_VERSION ${VERSION}
-			MACOSX_FRAMEWORK_BUNDLE_VERSION "A")
+	add_library(${target} SHARED ${LIBCONTENT})
+	set_target_properties (${target} PROPERTIES
+				FRAMEWORK TRUE
+				FRAMEWORK_VERSION ${GUIDOFWKVERS}
+				PUBLIC_HEADER "${PUBLICHEADERS}"
+				DEFINE_SYMBOL LIBMUSICXML_EXPORTS
+				VERSION ${VERSION}
+				SOVERSION ${SOVERS}
+				MACOSX_FRAMEWORK_SHORT_VERSION_STRING ${STRVERS}
+				MACOSX_FRAMEWORK_BUNDLE_VERSION ${VERSION}
+				MACOSX_FRAMEWORK_BUNDLE_VERSION "A")
 
-if (STATICLIB STREQUAL "yes")
-	message (STATUS "Static Guido lib will be generated - Use -DSTATICLIB=no to change.")
-	add_library(${statictarget} STATIC ${LIBCONTENT})
-else ()
-	message (STATUS "Static Guido lib will not be generated - Use -DSTATICLIB=yes to change.")
-endif ()
+	if (STATICLIB STREQUAL "yes")
+		message (STATUS "Static Guido lib will be generated - Use -DSTATICLIB=no to change.")
+		add_library(${statictarget} STATIC ${LIBCONTENT})
+	else ()
+		message (STATUS "Static Guido lib will not be generated - Use -DSTATICLIB=yes to change.")
+	endif ()
 
-set (LIBDEST /usr/lib)
-target_link_libraries (${target} ${LINK})
+	set (LIBDEST /usr/lib)
+	target_link_libraries (${target} ${LINK})
 
 endif()
 
