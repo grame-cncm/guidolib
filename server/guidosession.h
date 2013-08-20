@@ -51,7 +51,7 @@ struct guidosessionresponse {
     GuidoSessionParsingError status_;
     int http_status_;
     guidosessionresponse ();
-    guidosessionresponse (const char* data, unsigned int size, string format, string errstring, GuidoSessionParsingError status, int http_status = 200);
+    guidosessionresponse (const char* data, unsigned int size, string format, int http_status = 200);
 };
 class guidosession
 {
@@ -100,17 +100,20 @@ private :
     int dneighborhoodSpacing_;
     int doptimalPageFill_;
 
+    // format conversion
     const char* formatToMIMEType ();
     const char* formatToLayType ();
     static GuidoWebApiFormat formatToWebApiFormat(string format);
-    //const char* getStringRepresentationOf (string toget);
+
+    // used for graphical representation building
     void fillGuidoPageFormatUsingCurrentSettings(GuidoPageFormat *pf);
 
-    // query handling
+    // private function to wrap json in the ID of a current session
     guidosessionresponse wrapObjectInId(json::json_object *obj);
     
 public :
 
+    // constructors, destructor, and initialzer
     guidosession(guido2img* g2img, string gmn, string id);
     virtual ~guidosession();
     void initialize();
@@ -118,7 +121,7 @@ public :
     void updateValuesFromDefaults(const TArgs& args);
     void changeDefaultValues(const TArgs &args);
 
-    // query handling
+    // returns session responses with information for server to send
     static guidosessionresponse handleSimpleIntQuery(string, int);
     static guidosessionresponse handleSimpleBoolQuery(string, bool);
     static guidosessionresponse handleSimpleFloatQuery(string, float);

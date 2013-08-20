@@ -41,20 +41,14 @@ using namespace json;
 namespace guidohttpd
 {
 
-static int printchannel(void *userdata, const char *data, uint32_t)
-{
-    stringstream *foo = (stringstream *)userdata;
-    *foo << data;
-    return 1;
-}
+// CONSTRUCTORS, DESTRUCTORS AND INITIALIZERS
+// ................................................
 
-guidosessionresponse::guidosessionresponse (const char* data, unsigned int size, string format, string errstring,GuidoSessionParsingError status, int http_status)
+guidosessionresponse::guidosessionresponse (const char* data, unsigned int size, string format, int http_status)
 {
     data_ = data;
     size_ = size;
     format_ = format;
-    errstring_ = errstring;
-    status_ = status;
     http_status_ = http_status;
 }
 
@@ -63,8 +57,6 @@ guidosessionresponse::guidosessionresponse ()
     data_ = "";
     size_ = 0;
     format_ = "text/plain";
-    errstring_ = "";
-    status_ = GUIDO_SESSION_PARSING_FAILURE;
     http_status_ = 404;
 }
 
@@ -76,7 +68,6 @@ guidosession::guidosession(guido2img* g2svg, string gmn, string id)
 
 guidosession::~guidosession()
 {
-
 }
 
 void guidosession::initialize()
@@ -330,6 +321,9 @@ void guidosession::updateValuesFromDefaults(const TArgs &args)
         optimalPageFill_ = doptimalPageFill_;
     }    
 }
+
+// FORMATTING
+// ................................................
     
 const char* guidosession::formatToMIMEType ()
 {
@@ -373,7 +367,21 @@ GuidoErrCode guidosession::verifyGMN(string gmn) {
     ARHandler arh;
     return GuidoParseString (gmn.c_str(), &arh);
 }
-// queries.......................
+
+// GUIDO PAGE FORMAT
+// ................................................
+void guidosession::fillGuidoPageFormatUsingCurrentSettings(GuidoPageFormat *pf)
+{
+    pf->height = height_;
+    pf->width = width_;
+    pf->margintop = margintop_;
+    pf->marginleft = marginleft_;
+    pf->marginright = marginright_;
+    pf->marginbottom = marginbottom_;
+}
+    
+// GUIDO SESSION RESPONSE RETURNERS
+// ................................................
 
 guidosessionresponse guidosession::wrapObjectInId(json_object *obj)
 {
@@ -384,7 +392,7 @@ guidosessionresponse guidosession::wrapObjectInId(json_object *obj)
     wrapper->print(jstream);
     // important! as everything is pointers, need to delete here
     delete wrapper;
-    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", "", GUIDO_SESSION_PARSING_SUCCESS, 200);
+    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", 200);
 }
 
 guidosessionresponse guidosession::handleSimpleIntQuery(string name, int myint)
@@ -396,7 +404,7 @@ guidosessionresponse guidosession::handleSimpleIntQuery(string name, int myint)
     obj->print(jstream);
     // important! as everything is pointers, need to delete here
     delete obj;
-    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", "", GUIDO_SESSION_PARSING_SUCCESS, 200);
+    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", 200);
 }
 
 guidosessionresponse guidosession::handleSimpleBoolQuery(string name, bool mybool)
@@ -411,7 +419,7 @@ guidosessionresponse guidosession::handleSimpleBoolQuery(string name, bool myboo
     obj->print(jstream);
     // important! as everything is pointers, need to delete here
     delete obj;
-    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", "", GUIDO_SESSION_PARSING_SUCCESS, 200);
+    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", 200);
 }
 
 guidosessionresponse guidosession::handleSimpleFloatQuery(string name, float myfloat)
@@ -423,7 +431,7 @@ guidosessionresponse guidosession::handleSimpleFloatQuery(string name, float myf
     obj->print(jstream);
     // important! as everything is pointers, need to delete here
     delete obj;
-    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", "", GUIDO_SESSION_PARSING_SUCCESS, 200);
+    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", 200);
 }
 
 guidosessionresponse guidosession::handleSimpleStringQuery(string name, string mystring)
@@ -435,7 +443,7 @@ guidosessionresponse guidosession::handleSimpleStringQuery(string name, string m
     obj->print(jstream);
     // important! as everything is pointers, need to delete here
     delete obj;
-    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", "", GUIDO_SESSION_PARSING_SUCCESS, 200);
+    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", 200);
 }
 
 guidosessionresponse guidosession::handleSimpleIDdIntQuery(string name, int myint)
@@ -500,13 +508,15 @@ guidosessionresponse guidosession::mapJson (string thingToGet, Time2GraphicMap &
     return wrapObjectInId(obj);
 }
 
-// gets.....
+// GETTING GUIDO INFORMATION
+// ................................................
 
 string guidosession::getVersion() {
     return string (GuidoGetVersionStr());
 }
 
 string guidosession::getServerVersion() {
+    // TODO - un-hardcode this
     return "0.50";
 }
 
@@ -525,6 +535,7 @@ int guidosession::voicesCount()
 
     return GuidoCountVoices(arh);
 }
+
 string guidosession::duration()
 {
     GuidoErrCode err;
@@ -680,23 +691,13 @@ GuidoErrCode guidosession::getMap (GuidoSessionMapType map, int aux, Time2Graphi
     return err;
 }
 
-void guidosession::fillGuidoPageFormatUsingCurrentSettings(GuidoPageFormat *pf)
-{
-    pf->height = height_;
-    pf->width = width_;
-    pf->margintop = margintop_;
-    pf->marginleft = marginleft_;
-    pf->marginright = marginright_;
-    pf->marginbottom = marginbottom_;
-}
-
 // ---- Abstractions
 
 guidosessionresponse guidosession::genericReturnImage()
 {
     int err = fConverter->convert(this);
     if (err == 0) {
-        return guidosessionresponse(fConverter->data(), fConverter->size(), formatToMIMEType(), "", GUIDO_SESSION_PARSING_SUCCESS, 201);
+        return guidosessionresponse(fConverter->data(), fConverter->size(), formatToMIMEType(), 201);
     }
     return genericFailure ("Could not convert the image.", 400);
 }
@@ -708,7 +709,7 @@ guidosessionresponse guidosession::genericFailure(const char* errorstring, int h
     ostringstream mystream;
     json_stream jstream(mystream);
     obj.print(jstream);
-    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", "", GUIDO_SESSION_PARSING_FAILURE, http_status);
+    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", http_status);
 }
 
 guidosessionresponse guidosession::genericReturnId()
@@ -718,7 +719,7 @@ guidosessionresponse guidosession::genericReturnId()
     ostringstream mystream;
     json_stream jstream(mystream);
     obj.print(jstream);
-    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", "", GUIDO_SESSION_PARSING_SUCCESS, 200);
+    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", 201);
 }
 
 } // end namespoace

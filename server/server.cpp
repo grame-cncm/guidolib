@@ -209,7 +209,7 @@ int HTTPDServer::sendGuidoPostRequest(struct MHD_Connection *connection, const T
     // we verify to see if this is valid guido
     GuidoErrCode err = guidosession::verifyGMN(args.begin()->second);
     if (err != guidoNoErr) {
-        guidosessionresponse response = guidosession::genericFailure("You have sent the server invalid GMN.", 403);
+        guidosessionresponse response = guidosession::genericFailure("You have sent the server invalid GMN.", 400);
         return send (connection, response);
     }
     std::string unique_id;
@@ -289,7 +289,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
 
     map<string, guidosession *>::iterator it = fSessions.find(elems[0]);
     if (it == fSessions.end ()) {
-        guidosessionresponse response = guidosession::genericFailure("GET requests must pertain to an already-created score", 403);
+        guidosessionresponse response = guidosession::genericFailure("GET requests must pertain to an already-created score", 400);
         return send (connection, response);
     }
     guidosession *currentSession = fSessions[elems[0]];
@@ -313,19 +313,19 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                 int nvoices = currentSession->voicesCount();
                 guidosessionresponse response = nvoices >= 0
                     ? currentSession->handleSimpleIDdIntQuery("voicescount", nvoices)
-                    : guidosession::genericFailure("Could not get the number of voices from this score.", 403);
+                    : guidosession::genericFailure("Could not get the number of voices from this score.", 400);
                 return send(connection, response);
             } else if (elems[1] == "pagescount") {
                 int npages = currentSession->pagesCount();
                 guidosessionresponse response = npages >= 0
                     ? currentSession->handleSimpleIDdIntQuery("pagescount", npages)
-                    : guidosession::genericFailure("Could not get the number of pages from this score.", 403);
+                    : guidosession::genericFailure("Could not get the number of pages from this score.", 400);
                 return send(connection, response);
             } else if (elems[1] == "duration") {
                 string duration = currentSession->duration();
                 guidosessionresponse response = duration != ""
                     ? currentSession->handleSimpleIDdStringQuery("duration", duration)
-                    : guidosession::genericFailure("Could not get the duration of this score.", 403);
+                    : guidosession::genericFailure("Could not get the duration of this score.", 400);
                 return send(connection, response);
             } else if (elems[1] == "pageat") {
                 GuidoDate date;
@@ -337,7 +337,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                 int page = currentSession->pageAt(date);
                 guidosessionresponse response = page >= 0
                     ? currentSession->datePageJson(mydate, page)
-                    : guidosession::genericFailure("Could not get the page for the given date.", 403);
+                    : guidosession::genericFailure("Could not get the page for the given date.", 400);
                 return send(connection, response);
             } else if (elems[1] == "pagedate") {
                 GuidoDate date;
@@ -348,7 +348,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                 int success = currentSession->pageDate(mypage, &date);
                 guidosessionresponse response = success == 0
                     ? currentSession->datePageJson(dateToString(date), mypage)
-                    : guidosession::genericFailure("Could not get the page for the given date.", 403);
+                    : guidosession::genericFailure("Could not get the page for the given date.", 400);
                 return send(connection, response);
             } else if (elems[1] == "pagemap") {
                 Time2GraphicMap outmap;
@@ -356,7 +356,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                 err = currentSession->getMap(PAGE, 0, outmap);
                 guidosessionresponse response = err == guidoNoErr
                     ? currentSession->mapJson("pagemap", outmap)
-                    : guidosession::genericFailure("Could not generate a page map.", 403);
+                    : guidosession::genericFailure("Could not generate a page map.", 400);
                 return send(connection, response);
             } else if (elems[1] == "systemmap") {
                 Time2GraphicMap outmap;
@@ -364,7 +364,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                 err = currentSession->getMap(SYSTEM, 0, outmap);
                 guidosessionresponse response = err == guidoNoErr
                     ? currentSession->mapJson("systemmap", outmap)
-                    : guidosession::genericFailure("Could not generate a system map.", 403);
+                    : guidosession::genericFailure("Could not generate a system map.", 400);
                 return send(connection, response);
             } else if (elems[1] == "staffmap") {
                 Time2GraphicMap outmap;
@@ -376,7 +376,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                 err = currentSession->getMap(STAFF, mystaff, outmap);
                 guidosessionresponse response = err == guidoNoErr
                     ? currentSession->mapJson("staffmap", outmap)
-                    : guidosession::genericFailure("Could not generate a staff map.", 403);
+                    : guidosession::genericFailure("Could not generate a staff map.", 400);
                 return send(connection, response);
             } else if (elems[1] == "voicemap") {
                 Time2GraphicMap outmap;
@@ -388,19 +388,19 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                 err = currentSession->getMap(STAFF, myvoice, outmap);
                 guidosessionresponse response = err == guidoNoErr
                     ? currentSession->mapJson("voicemap", outmap)
-                    : guidosession::genericFailure("Could not generate a voice map.", 403);
+                    : guidosession::genericFailure("Could not generate a voice map.", 400);
                 return send(connection, response);
             } else if (elems[1] == "timemap") {
-                guidosessionresponse response = guidosession::genericFailure("timemap is not implemented yet but will be soon.", 403);
+                guidosessionresponse response = guidosession::genericFailure("timemap is not implemented yet but will be soon.", 501);
                 return send(connection, response);
             } else {
-                guidosessionresponse response = guidosession::genericFailure("Unidentified GET request.", 403);
+                guidosessionresponse response = guidosession::genericFailure("Unidentified GET request.", 400);
                 return send(connection, response);
             }
         }
     }
 
-    guidosessionresponse reallyBadResponse = guidosession::genericFailure("Only GET and DELETE requests may be sent to an already completed score.", 403);
+    guidosessionresponse reallyBadResponse = guidosession::genericFailure("Only GET and DELETE requests may be sent to an already completed score.", 400);
     return send (connection, reallyBadResponse);
 }
 
