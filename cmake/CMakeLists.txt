@@ -186,6 +186,13 @@ set_target_properties (${target} PROPERTIES
 			MACOSX_FRAMEWORK_BUNDLE_VERSION ${VERSION}
 			MACOSX_FRAMEWORK_BUNDLE_VERSION "A")
 
+if(WIN32)
+	set_target_properties (${target} PROPERTIES
+		DEBUG_OUTPUT_NAME ${target}D
+		RELEASE_OUTPUT_NAME ${target})
+endif()
+
+
 if (STATICLIB STREQUAL "yes")
 	message (STATUS "Static Guido lib will be generated - Use -DSTATICLIB=no to change.")
 	add_library(${statictarget} STATIC ${LIBCONTENT})
