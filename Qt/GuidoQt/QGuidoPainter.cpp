@@ -12,6 +12,10 @@
  * research@grame.fr
  */
 
+#ifdef WIN32
+#pragma warning (disable: 4996)
+#endif
+
 #include <sstream>
 #include <iostream>
 

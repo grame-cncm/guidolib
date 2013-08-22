@@ -11,6 +11,11 @@
  * Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
  * research@grame.fr
  */
+
+#ifdef WIN32
+#pragma warning (disable: 4996)
+#endif
+
 #include "Guido2Image.h"
 
 #include <iostream>
