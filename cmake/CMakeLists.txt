@@ -171,19 +171,7 @@ endif(APPLE)
 if (IOS STREQUAL "yes")
 	add_library(${target} STATIC ${LIBCONTENT})
 
-if(WIN32)
-	set_target_properties (${target} PROPERTIES
-		DEBUG_OUTPUT_NAME ${target}D
-		RELEASE_OUTPUT_NAME ${target})
-endif()
-
-
-if (STATICLIB STREQUAL "yes")
-	message (STATUS "Static Guido lib will be generated - Use -DSTATICLIB=no to change.")
-	add_library(${statictarget} STATIC ${LIBCONTENT})
-else (STATICLIB STREQUAL "yes")
-	message (STATUS "Static Guido lib will not be generated - Use -DSTATICLIB=yes to change.")
-endif (STATICLIB STREQUAL "yes")
+else()
 
 	add_library(${target} SHARED ${LIBCONTENT})
 	set_target_properties (${target} PROPERTIES
@@ -206,9 +194,13 @@ endif (STATICLIB STREQUAL "yes")
 
 	set (LIBDEST /usr/lib)
 	target_link_libraries (${target} ${LINK})
-
 endif()
 
+if(WIN32)
+	set_target_properties (${target} PROPERTIES
+		DEBUG_OUTPUT_NAME ${target}D
+		RELEASE_OUTPUT_NAME ${target})
+endif()
 
 #######################################
 # install setup
