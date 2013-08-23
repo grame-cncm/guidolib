@@ -134,6 +134,9 @@ class CairoDevice : public VGDevice
 		virtual	float			GetDPITag() const;
 		virtual void*			GetBitMapPixels();
 		virtual void			ReleaseBitMapPixels();
+		virtual const char*		GetImageData(const char* & outDataPtr, int& outLength) { return 0; }
+		virtual void			ReleaseImageData(const char *) const  {}
+
 
 		/// temporary hack - must be removed asap
 		virtual	VGSystem *		getVGSystem() const				{ return fSystem; }

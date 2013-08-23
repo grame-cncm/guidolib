@@ -75,6 +75,7 @@ using namespace std;
 #include "GRSingleNote.h"
 #include "ARCluster.h"
 #include "ARSymbol.h"
+#include "ARFeatheredBeam.h"
 
 #include "ARRepeatBegin.h"
 #include "ARCoda.h"
@@ -1229,6 +1230,7 @@ void ARMusicalVoice::doAutoStuff2()
 	// this needs to be done, so that all Ties can be broken after the respective Event
 	// (and that as well, if a break is introduced later).
 	timebench("doAutoTies", doAutoTies());
+	timebench("doAutoFeatheredBeam", doAutoFeatheredBeam());
 	timebench("doAutoEndBar", doAutoEndBar());
 	//this->operator<< (cout);
 	timebench("doAutoGlissando", doAutoGlissando());
@@ -1689,7 +1691,9 @@ void ARMusicalVoice::doAutoBeaming()
 				ARBeam * bm = dynamic_cast<ARBeam *>
 					(vst.addedpositiontags->GetNext(tmppos));
 				if (bm)
+				{
 					++ beamcount;
+				}
 			}
 		}
 
@@ -1700,7 +1704,7 @@ void ARMusicalVoice::doAutoBeaming()
 		ARMusicalObject * o = GetAt(pos);
 		ARMusicalEvent * ev = ARMusicalEvent::cast(o);
 		ARBar * arbar = dynamic_cast<ARBar *>(o);
-
+		
 		// is it an event? and there are NO explicit beams and the beamstate is auto?
 		if (beamcount == 0 && bmauto && ev && !vst.curgracetag)
 		{
@@ -1927,7 +1931,9 @@ public:
 			}
 		}
 		size_t length = (size_t)(end-start);
-		char c = (*text)[end];
+		char c = NULL;
+		if(text->size()>end)
+			c = (*text)[end];
 		if (c == '-' || c == '_')
 		{
 			++ length;
@@ -6005,6 +6011,7 @@ void ARMusicalVoice::doAutoTrill()
 		if(note)
         {
 			ARTrill * trill = note->getOrnament();
+			//type = 0 -> is a trill (and not a mord or turn)
 			if(trill && trill->getType()==0)
             {
 				// if it has, we can check if the note is tied to another
@@ -6159,6 +6166,46 @@ void ARMusicalVoice::doAutoCluster()
                                 posObj = posNote;
                             }
 						}	
+					}
+				}
+			}
+		}
+	}
+}
+
+// set the begin- and end- durations for each feathered beam.
+
+void ARMusicalVoice::doAutoFeatheredBeam()
+{
+	ARMusicalVoiceState armvs;
+	GuidoPos pos = GetHeadPosition(armvs);
+	while(pos)
+	{
+		GetNext(pos,armvs);
+		if(armvs.getCurPositionTags())
+		{
+			GuidoPos posTag = armvs.getCurPositionTags()->GetHeadPosition();
+			while(posTag)
+			{
+				ARPositionTag * tag = armvs.getCurPositionTags()->GetNext(posTag);
+				ARFeatheredBeam * curfBeam = dynamic_cast<ARFeatheredBeam *>(tag);
+				if(curfBeam)
+				{
+					GuidoPos posBegin = curfBeam->getPosition();
+					ARMusicalObject * object = GetAt(posBegin);
+					ARNote * note = dynamic_cast<ARNote *>(object);
+					if(note)
+					{
+						curfBeam->setBeginTimePosition(note->getRelativeTimePosition());
+						curfBeam->setBeginDuration(note->getDuration());
+					}
+					GuidoPos posEnd = curfBeam->getEndPosition();
+					object = GetAt(posEnd);
+					note = dynamic_cast<ARNote *>(object);
+					if(note)
+					{
+						curfBeam->setEndDuration(note->getDuration());
+						curfBeam->setEndTimePosition(note->getRelativeEndTimePosition());
 					}
 				}
 			}

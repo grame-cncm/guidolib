@@ -147,6 +147,9 @@ class GREvent : public GRARCompositeNotationElement
 
 		const GRNEList * getArticulations() const { return mArtilist; }
 
+		virtual bool	stemHasBeenChanged(){return stemChanged;}
+		virtual void	setStemChanged(){stemChanged = true;}
+
   protected:
 
 		GRNoteDot *		getDot();
@@ -169,6 +172,7 @@ class GREvent : public GRARCompositeNotationElement
 	  GRGlobalStem * mGlobalStem;
 	  
 	  bool		mFillsBar;
+	  bool		stemChanged;
 
 	private:
 			GRNEList *		mArtilist;	// our list of articulations.

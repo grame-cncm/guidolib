@@ -31,7 +31,7 @@ using namespace std;
 
 //------------------------------------------------------------------------------
 MidiMapper::MidiMapper(ARMusicalVoice* voice, MidiLight* midi, const Guido2MidiParams* p, int chan, MidiSeqPtr seq, MidiSeqPtr tmap)
-	: TimeUnwrap(voice), fParams(p), fMidi(midi), fSeq(seq), fTempoMap(tmap), fChan(chan), fLastTempo(0), fFlags(0)
+	: TimeUnwrap(voice), fParams(p), fMidi(midi), fSeq(seq), fTempoMap(tmap), fChan(chan), fLastTempo(0), fFlags(0), fChord(false)
 {
 	fCurrVelocity = 90;
 }
@@ -156,13 +156,20 @@ int MidiMapper::AdjustVelocity(int vel, const Guido2MidiParams* p) const
 }
 
 //------------------------------------------------------------------------------
+void MidiMapper::AtPos (const ARMusicalObject * ev, EventType type)
+{
+	TimeUnwrap::AtPos (ev, type);
+	if (type == TimeUnwrap::kChordComma)
+		fChord = true;
+}
+
+//------------------------------------------------------------------------------
 void MidiMapper::Note(const ARMusicalObject * ev)
 {
 	if (ev->getDuration().getNumerator() < 0) return;
-	bool emptydur = false;		// a flag to indicate wether last empty duration should be used
-	if (!ev->getDuration()) {
-		if (fEmptyDur) emptydur = true;
-		else return;
+	if (!fChord && fEmptyDur) {		// don't move time for empty notes inside a chord
+		MoveTime (fEmptyDur);
+		fEmptyDur = 0;
 	}
 	TYPE_DURATION offset = ev->getDuration();
 
@@ -172,7 +179,7 @@ void MidiMapper::Note(const ARMusicalObject * ev)
 				
 			MidiEvPtr note = fMidi->NewEv(typeNote);
 			Chan(note)	= fChan;
-			Dur(note)	= AdjustDuration(Ticks (emptydur ? fEmptyDur : ev->getDuration()), fParams);
+			Dur(note)	= AdjustDuration(Ticks (fChord ? fEmptyDur : ev->getDuration()), fParams);
 			Vel(note)	= char(AdjustVelocity (fCurrVelocity, fParams));
 			Pitch(note)	= arn->midiPitch();
 			Date(note)  = Ticks (fUPosition);
@@ -180,12 +187,15 @@ void MidiMapper::Note(const ARMusicalObject * ev)
 			else fMidi->AddSeq (fSeq, note);
 		}
 		else {
-			// chords duration is encoded using "empty" notes
-			// an empty note indicates the end of the chord and then time should be moved ahead
-			if (emptydur) MoveTime (fEmptyDur);
-			// empty duration is stored for future use
-			fEmptyDur = ev->getDuration();
-			// when null,
+			// chords duration is encoded using "empty" notes that carry the chord duration
+			// notes are separated by ARChordComma, denoted by the fChord flag
+			if (fChord) {						// we're inside a chord
+				if (!ev->getDuration()) {		// and a null duration indicates the end of the chord
+					MoveTime (fEmptyDur);		// then, move time using the previously saved duration
+					fChord = false;				// and exit the chord
+				}
+			}
+			fEmptyDur = ev->getDuration();		// empty duration is stored for future use
 			if (fEmptyDur) {
 				TimeUnwrap::Note(ev);
 				return;
@@ -193,8 +203,6 @@ void MidiMapper::Note(const ARMusicalObject * ev)
 		}
 	}
 	if (fFlags & hasFermata) offset *= fParams->fFermataFactor;
-//	if (!StartPos() || (ev->getRelativeTimePosition() != PrevPosition())) MoveTime (offset);
-//	if (ev->getRelativeTimePosition() != PrevPosition()) MoveTime (offset);
 	if (offset) MoveTime (offset);
 	TimeUnwrap::Note(ev);
 	fFlags = knoflag;

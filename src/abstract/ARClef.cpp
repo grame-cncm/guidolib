@@ -154,27 +154,32 @@ void ARClef::setName(const string& theName)
 	 	if ( clef.substr(0,2) == "gg")		// double g-clef
 		{  
 			mClef = DOUBLEG;
-			line = atoi(&clef[2]);
+			if(clef.size()>2)
+				line = atoi(&clef[2]);
 		}
 		else if (clef[0] == 'f')
 		{
 			mClef = BASS;
-			line = atoi(&clef[1]);
+			if(clef.size()>1)
+				line = atoi(&clef[1]);
 		}
 		else if (clef[0] == 'c')
 		{
 			mClef = BRATSCHE;
-			line = atoi(&clef[1]);
+			if(clef.size()>1)
+				line = atoi(&clef[1]);
 		}
 	 	else if ( clef.substr(0,4) == "perc")
 		{
 			mClef = PERC;
-			line = atoi(&clef[4]);
+			if(clef.size()>4)
+				line = atoi(&clef[4]);
 		}
 		else if (clef[0] == 'g')
 		{
 			mClef = VIOLIN;
-			line = atoi(&clef[1]);
+			if(clef.size()>1)
+				line = atoi(&clef[1]);
 		}
 	  	else mClef = VIOLIN;
 

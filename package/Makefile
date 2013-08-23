@@ -1,12 +1,23 @@
-VERSION := 1.51
+VERSION := 1.52
 DOCVERS := 1.43
 DEST    := .
+
+system	:= $(shell uname -s)
+ifeq ($(system), Darwin)
+  bin =  ../build/MacOS/Release
+else
+ifeq ($(system), Linux)
+  bin =  ../cmake/Release
+else
+  bin =  ../build/win*/Release
+endif
+endif
 
 DEVKIT   := guidolib-$(VERSION)-devkit
 DOCPACK  := guidolib-$(VERSION)-doc
 MACOSLIB := $(DEVKIT)-macosx
 LINUXLIB := $(DEVKIT)-linux-x86
-WINLIB   := $(DEVKIT)-win32
+WINLIB   := $(DEVKIT)-windows
 QTLIB    := $(DEVKIT)-Qt
 SRC 	 := guidolib-$(VERSION)-src
 
@@ -17,15 +28,13 @@ modules := guidolib
 DOC		:= ../doc/GUIDO-Format_de_Notation_Musicale.pdf \
 			"../doc/GUIDO-Music Notation Format.pdf" \
 			../doc/GUIDO_Additional_Specifications_1.3.8.pdf \
+			../doc/GUIDO_Additional_Specifications_1.5.1.pdf \
 			../doc/refcard/GMNRefCard.pdf
 
 SAMPLES := $(wildcard ../samples/*.cpp ../validate/guido*.cpp ../src/tools/Null*.h)
 
 ######### common include files 
-#cominc  := GUIDOEngine.h GUIDOFactory.h GUIDOExport.h GUIDOScoreMap.h \
-#		GuidoFeedback.h VGColor.h  VGFont.h VGSystem.h VGDevice.h VGPen.h 
 cominc  :=  $(wildcard ../src/include/GUIDO*.h ../src/include/VG*.h ) ../src/include/TRect.h
-#cominc  := $(patsubst %, ../src/include/%, $(cominc)) ../src/misc/GUIDOTypes.h  
 
 ######### win32 devices include files 
 win32inc := GDeviceWin32.h GSystemWin32.h GFontWin32.h  GDeviceWin32GDIPlus.h GSystemWin32GDIPlus.h GFontWin32GDIPlus.h
@@ -77,7 +86,7 @@ macos:
 	[ -d $(MACOSLIB) ] || mkdir $(MACOSLIB)
 	make common DEST=$(MACOSLIB)
 	rm -rf $(MACOSLIB)/GUIDOEngine.framework
-	cp -R ../cmake/Release/GUIDOEngine.framework $(MACOSLIB)
+	cp -R $(bin)/GUIDOEngine.framework $(MACOSLIB)
 	tar czf $(MACOSLIB).tgz $(MACOSLIB)
 
 linux:
@@ -87,8 +96,8 @@ windows:
 	[ -d $(WINLIB) ] || mkdir $(WINLIB)
 	make common DEST=$(WINLIB)
 	make incl DEST=$(WINLIB) SYSINC="$(win32inc)"
-	cp ../cmake/release/GUIDOEngine.dll $(WINLIB)
-	cp ../cmake/release/GUIDOEngine.lib $(WINLIB)
+	cp $(bin)/GUIDOEngine*.dll $(WINLIB)
+	cp $(bin)/GUIDOEngine*.lib $(WINLIB)
 
 python:
 	tar czf pyGuido.tgz ../python

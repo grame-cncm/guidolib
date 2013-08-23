@@ -38,6 +38,7 @@ class MidiMapper : public TimeUnwrap
 		int				fCurrVelocity;		// the current velocity, updated by \intens tags
 		std::map<char, MidiEvPtr>	fTiedNotes;		// tied notes mapped by Midi pitch
 		TYPE_DURATION	fEmptyDur;			// empty duration storage: used for chords
+		bool			fChord;				// a flag to indicate that we're in a chord
 		
 		enum { knoflag, hasStaccato=1, hasSlur=hasStaccato*2, hasTenuto=hasSlur*2, hasFermata = hasTenuto*2,
 			hasAccent=hasFermata*2,  hasMarcato=hasAccent*2, hasTie=hasMarcato*2 };
@@ -59,6 +60,8 @@ class MidiMapper : public TimeUnwrap
 				 MidiMapper(ARMusicalVoice* voice, MidiLight* midi, const Guido2MidiParams* p, int chan, MidiSeqPtr outseq, MidiSeqPtr tmap);
 		virtual ~MidiMapper();
 		
+		virtual void	AtPos (const ARMusicalObject * ev, EventType type);
+
 		void		End();
 		void		Clear();
 };
