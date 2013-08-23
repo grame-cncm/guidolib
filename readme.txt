@@ -10,8 +10,8 @@ system ( see http://www.cmake.org/).
 The cmake folder contains the project description and is used to generate 
 native projects. 
 	
-Note the project organization:
------------------------------
+Note about the project organization:
+-----------------------------------
 On MacOS and Windows, in order to support different architectures (win32, win64 
 on windows, MacOS, iOS on mac), the library is expected to be compiled in a 'build'
 folder located at the root of the project that should contain 4 sub-folders: 
@@ -22,7 +22,7 @@ To compile for a given platform:
 	type:  cmake ../../cmake -G "your target generator" OPTIONS
 	run your project/makefile and compile
 
-OPTIONS indocates optional components and is between:
+OPTIONS indicates optional components and is between:
 	-DMIDIEXPORT='yes | no' to support MIDI export
 	
 Note about MIDI export:
