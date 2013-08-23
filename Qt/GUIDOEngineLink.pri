@@ -4,11 +4,11 @@ macx:CONFIG+= x86_64
 
 # GUIDOEngine library link for each platform
 !DebugBuild {
-	macx:LIBS += -F../../cmake/Release -framework GUIDOEngine
+	macx:LIBS += -F../../build/MacOS/Release -framework GUIDOEngine
 	win32:LIBS += ../../cmake/release/GUIDOEngine.lib
 	unix:!macx:LIBS += -L../../cmake -lGUIDOEngine
 } else {
-	macx:LIBS += -F../../cmake/Debug -framework GUIDOEngine
+	macx:LIBS += -F../../build/MacOS/Debug -framework GUIDOEngine
 	win32:LIBS += ../../cmake/Debug/GUIDOEngine.lib
 	unix:!macx:LIBS += -L../../cmake -lGUIDOEngine
 }

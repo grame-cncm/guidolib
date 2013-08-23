@@ -22,7 +22,7 @@
 */
 
 #include "QGuidoPainter.h"
-#include <QtGui/QApplication>
+#include <QApplication>
 
 namespace guidohttpd {
 
