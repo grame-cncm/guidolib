@@ -27,6 +27,7 @@
 
 #include "guidosession.h"
 #include "GUIDOEngine.h"
+#include "GUIDO2Midi.h"
 #include "GUIDOScoreMap.h"
 #include "utilities.h"
 
@@ -702,6 +703,37 @@ guidosessionresponse guidosession::genericReturnImage()
     return genericFailure ("Could not convert the image.", 400);
 }
 
+
+guidosessionresponse guidosession::genericReturnMidi()
+{
+    //Guido2MidiParams midiparams;
+    ARHandler arh;
+    GuidoErrCode err = GuidoParseString (gmn_.c_str(), &arh);
+    
+    if (err != guidoNoErr) {
+        return genericFailure ("Could not convert the Midi.", 400);
+    }
+    
+    string filename = rand_alnum_str(20)+".midi";
+    err = GuidoAR2MIDIFile(arh, filename.c_str(), 0);
+    
+    if (err != guidoNoErr) {
+        return genericFailure ("Could not convert the Midi.", 400);
+    }
+    
+    ostringstream sstream;
+    ifstream fs(filename.c_str());
+    sstream << fs.rdbuf();
+    string data = sstream.str();
+    fs.close();
+    //remove(filename.c_str());
+    if (err == 0) {
+        return guidosessionresponse(data.c_str(), data.length(), "audio/midi", 201);
+    }
+
+    return genericFailure ("Could not convert the Midi.", 400);
+}
+    
 guidosessionresponse guidosession::genericFailure(const char* errorstring, int http_status)
 {
     json_object obj;

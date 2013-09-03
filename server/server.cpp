@@ -358,6 +358,9 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                     ? currentSession->mapJson("pagemap", outmap)
                     : guidosession::genericFailure("Could not generate a page map.", 400);
                 return send(connection, response);
+            } else if (elems[1] == "midi") {
+                guidosessionresponse response = currentSession->genericReturnMidi();
+                return send(connection, response);
             } else if (elems[1] == "systemmap") {
                 Time2GraphicMap outmap;
                 GuidoErrCode err;
