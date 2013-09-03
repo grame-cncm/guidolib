@@ -17,6 +17,6 @@ unix:LIBS += -L.. -lGuidoQt -L/usr/local/lib
 unix:LIBS += -lmicrohttpd -ljson
 INCLUDEPATH += ../GuidoQt/include
 INCLUDEPATH += ../../server
-INCLUDEPATH += /usr/local/include/json
+INCLUDEPATH += /usr/local/include
 
 include( ../GUIDOEngineLink.pri )
