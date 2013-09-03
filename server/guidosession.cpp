@@ -31,9 +31,9 @@
 #include "utilities.h"
 
 // json
-#include "json_object.h"
-#include "json_array.h"
-#include "json_stream.h"
+#include "json/json_object.h"
+#include "json/json_array.h"
+#include "json/json_stream.h"
 
 using namespace std;
 using namespace json;
