@@ -1,6 +1,6 @@
 # Universal binary on MAC
 #macx:QMAKE_MAC_SDK=macosx10.7
-macx:CONFIG+= x86_64
+#macx:CONFIG+= x86_64
 
 contains(QMAKE_HOST.arch, x86): {
 QMAKE_LFLAGS *= /MACHINE:X86
