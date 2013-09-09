@@ -99,7 +99,7 @@ void ARMusic::print() const
 
 /** \brief Prints the music into a stream
 */
-std::ostream & ARMusic::operator<<(std::ostream &os) const
+void ARMusic::print(std::ostream &os) const
 {
 	GuidoPos pos=GetHeadPosition();
 	ARMusicalVoice * e;
