@@ -36,10 +36,10 @@
 #include "guidosession.h"
 
 // json
-#include "json_object.h"
-#include "json_array.h"
-#include "json_parser.h"
-#include "json_stream.h"
+#include "json/json_object.h"
+#include "json/json_array.h"
+#include "json/json_parser.h"
+#include "json/json_stream.h"
 
 using namespace json;
 
@@ -357,6 +357,9 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                 guidosessionresponse response = err == guidoNoErr
                     ? currentSession->mapJson("pagemap", outmap)
                     : guidosession::genericFailure("Could not generate a page map.", 400);
+                return send(connection, response);
+            } else if (elems[1] == "midi") {
+                guidosessionresponse response = currentSession->genericReturnMidi();
                 return send(connection, response);
             } else if (elems[1] == "systemmap") {
                 Time2GraphicMap outmap;

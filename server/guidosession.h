@@ -30,7 +30,7 @@
 #include "utilities.h"
 #include "guido2img.h"
 
-#include "json_value.h"
+#include "json/json_value.h"
 
 using namespace std;
 
@@ -151,6 +151,7 @@ public :
 
     // -----------------------------
     guidosessionresponse genericReturnImage();
+    guidosessionresponse genericReturnMidi();
     guidosessionresponse genericReturnId();
     static guidosessionresponse genericFailure(const char* errorstring, int http_status = 400);
     guidosessionresponse mapGet (const TArgs& args, unsigned int n, string thingToGet);
