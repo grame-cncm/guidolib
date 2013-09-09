@@ -20,7 +20,7 @@ guido2svg   := guido2svg
 guido2midi  := guido2midi
 
 ifeq ($(system), Darwin)
-  lib =  -F../cmake/Release/ -framework GUIDOEngine
+  lib =  -F../build/MacOS/Release/ -framework GUIDOEngine
 else
 ifeq ($(system), MINGW32_NT-6.1)
   libbin  := ../build/win32/Release
