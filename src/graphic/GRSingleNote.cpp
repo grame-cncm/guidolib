@@ -232,40 +232,37 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
 	if (mCluster)
 		getNoteHead()->setHaveToBeDrawn(false);
 
-	if (!mCluster || mClusterHaveToBeDrawn)
+	const VGColor oldcolor = hdc.GetFontColor();
+	if (mColRef) hdc.SetFontColor( VGColor( mColRef ));
+
+	// - Draw elements (stems, dots...)
+	DrawSubElements( hdc );
+
+	// - draw articulations & ornament
+	const GRNEList * articulations = getArticulations();
+	if( articulations )
 	{
-		const VGColor oldcolor = hdc.GetFontColor();
-        if (mColRef) hdc.SetFontColor( VGColor( mColRef ));
-
-        // - Draw elements (stems, dots...)
-        DrawSubElements( hdc );
-
-        // - draw articulations & ornament
-        const GRNEList * articulations = getArticulations();
-        if( articulations )
-        {
-            for( GRNEList::const_iterator ptr = articulations->begin(); ptr != articulations->end(); ++ptr )
-            {
-                GRNotationElement * el = *ptr;
-                el->OnDraw(hdc);
-            }
-        }
-
-        if (mOrnament)
+		for( GRNEList::const_iterator ptr = articulations->begin(); ptr != articulations->end(); ++ptr )
 		{
-			// to draw the trill line...
-			float Y = getPosition().y + getBoundingBox().Height()/2;
-			mOrnament->OnDraw(hdc,X,Y, numVoice);
+			GRNotationElement * el = *ptr;
+			el->OnDraw(hdc);
 		}
-
-        // - Restore
-        if (mColRef) hdc.SetFontColor( oldcolor );
-        if (gBoundingBoxesMap & kEventsBB)
-            DrawBoundingBox( hdc, kEventBBColor);
-
-		if (mClusterHaveToBeDrawn)
-			mCluster->OnDraw(hdc);
 	}
+
+	if (mOrnament)
+	{
+		// to draw the trill line...
+		float Y = getPosition().y + getBoundingBox().Height()/2;
+		mOrnament->OnDraw(hdc,X,Y, numVoice);
+	}
+
+	// - Restore
+	if (mColRef) hdc.SetFontColor( oldcolor );
+	if (gBoundingBoxesMap & kEventsBB)
+		DrawBoundingBox( hdc, kEventBBColor);
+
+	if (mClusterHaveToBeDrawn)
+		mCluster->OnDraw(hdc);
 
 	/*
     if (!mCluster) //REM: ce else if est à améliorer structurellement
