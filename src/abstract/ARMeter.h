@@ -68,7 +68,9 @@ class ARMeter : public ARMTParameter
  
   private:
 		std::string mMeterName;
-		int numerator;
+        int numerator;
+		int numerator1;
+        int numerator2;
 		int denominator;
 		metertype mtype;
 		

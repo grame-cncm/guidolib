@@ -102,26 +102,34 @@ void ARMeter::setTagParameterList(TagParameterList& tpl)
 			
 			// now set  enumerator and
 			// denominator 
-			if (sscanf(mMeterName.c_str(),"%d/%d",&numerator,&denominator) != 2)
-			{ // read error
-				if (mMeterName == "C")
-				{
-					mtype = C;
-					numerator = 4;
-					denominator = 4;
-				}
-				else if (mMeterName == "C/")
-				{
-					mtype = C2;
-					numerator = 2;
-					denominator = 2;
-				}
-				else
-				{
-					numerator = 0;
-					denominator = 1;
-					mtype = NONE;
-				}
+            if (sscanf(mMeterName.c_str(),"%d/%d",&numerator,&denominator) != 2)
+            { // read error
+                if (sscanf(mMeterName.c_str(), "%d+%d/%d", &numerator1, &numerator2, &denominator) != 3)
+                { // read error
+                    if (mMeterName == "C")
+                    {
+                        mtype = C;
+                        numerator = 4;
+                        denominator = 4;
+                    }
+                    else if (mMeterName == "C/")
+                    {
+                        mtype = C2;
+                        numerator = 2;
+                        denominator = 2;
+                    }
+                    else
+                    {
+                        numerator = 0;
+                        denominator = 1;
+                        mtype = NONE;
+                    }
+                }
+                else
+                {
+                    numerator = numerator1 + numerator2;
+                    mtype = NUMERIC;
+                }
 			}
 			else
 				mtype = NUMERIC;
