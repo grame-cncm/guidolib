@@ -78,7 +78,7 @@ typedef struct Guido2ImageOptions {
 	const char *	optimalPageFill;
 
 	Guido2ImageOptions () 
-		: stdInMode(false), page(1), hasLayout(false),
+		: stdInMode(false), hasLayout(false), page(1),
 		  inputFile(0), inputString(0), outputFile(0), imageFormat(0),
 		  zoom(-1.f), height(-1), width(-1), 
 		  systemsDistance(-1.f), systemsDistribution(0), optimalPageFill(0)  {}
