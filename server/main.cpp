@@ -18,6 +18,8 @@
  */
 #include <errno.h>
 
+#include <QApplication>
+
 #include "QGuidoPainter.h"
 #include "guido2img.h"
 #include "server.h"
@@ -86,7 +88,8 @@ static bool launchServer (int port, const char * logfile, bool daemon)
 //---------------------------------------------------------------------------------
 int main(int argc, char **argv)
 {
-    makeApplication(argc, argv);
+    QApplication app(argc , argv); // required by Qt
+//    makeApplication(argc, argv);
     srand(time(0));
     int port = lopt (argv, kPortOpt, kDefaultPort);
     string logfile = sopt (argv, kLogfileOpt, kDefaultLogfile);
