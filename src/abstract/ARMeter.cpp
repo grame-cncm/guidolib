@@ -102,9 +102,7 @@ void ARMeter::setTagParameterList(TagParameterList& tpl)
 
 
             //Meter string analysis to set numerator/denominator
-            std::vector<int> numeratorsVector;
-            int numeratorSum = 0;
-
+            numerator = 0;
             std::string meterStr(mMeterName);
             std::string delimiterSlash = "/";
 
@@ -142,11 +140,12 @@ void ARMeter::setTagParameterList(TagParameterList& tpl)
                 {
                     for(int i = 0; i < numeratorsVector.size(); i++)
                     {
-                        numeratorSum += numeratorsVector[i]; //REM: fixer une limite de somme ?
+                        numerator += numeratorsVector[i]; //REM: fixer une limite de somme pour le numérateur ? et pour le dénominateur ?
                     }
+                }
 
-                    numerator = numeratorSum;
-
+                if (!numeratorsVector.empty())
+                {
                     mtype = NUMERIC;
                 }
             }
@@ -155,18 +154,18 @@ void ARMeter::setTagParameterList(TagParameterList& tpl)
                 if (mMeterName == "C")
                 {
                     mtype = C;
-                    numerator = 4;
+                    numeratorsVector.push_back(4);
                     denominator = 4;
                 }
                 else if (mMeterName == "C/")
                 {
                     mtype = C2;
-                    numerator = 2;
+                    numeratorsVector.push_back(2);
                     denominator = 2;
                 }
                 else
                 {
-                    numerator = 0;
+                    numeratorsVector.push_back(0);
                     denominator = 1;
                     mtype = NONE;
                 }
@@ -177,7 +176,7 @@ void ARMeter::setTagParameterList(TagParameterList& tpl)
 	}
 	else
 	{
-		numerator = 0;
+		numeratorsVector.push_back(0);
 		denominator = 1;
 		mtype = NONE;
 	}
