@@ -81,7 +81,7 @@ bool gInited = false;		// GuidoInit() Flag
 int gARHandlerRefCount = 0;
 
 int	gParseErrorLine = -1;
-int gParseErrorCol = -1;
+//int gParseErrorCol = -1;
 
 int gBoundingBoxesMap = kNoBB;	// a bits field to control bounding boxes draxing [added on May 11 2009 - DF ]
 
@@ -122,14 +122,58 @@ GUIDOAPI(GuidoErrCode) GuidoInit( GuidoInitDesc * desc )
 	return guidoNoErr;
 }
 
-// --------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 GUIDOAPI(void) GuidoShutdown()
 {
 	FontManager::ReleaseAllFonts();
 	gInited = false;
 }
 
-// --------------------------------------------------------------------------
+
+static int checkUnicode(FILE *fd)
+{
+	rewind( fd );
+	if ( fd ) {
+		int c = fgetc( fd );
+		if( c == 0xff || c == 0xfe) {
+			c = fgetc( fd );
+			if( c == 0xfe || c == 0xff )
+				return 1;
+		}
+	}
+	return 0;
+}
+
+static void uniconv(const char *filename)
+{
+	FILE * fd = fopen(filename,"rb");	// open file
+	if (!fd) return;
+
+	if (checkUnicode (fd)) {
+		fseek(fd, 0, SEEK_END);
+		long int len = ftell(fd);
+		char * content = new char[len+1];
+		if( content ) {
+			rewind( fd );
+			fread (content, 1, len, fd);
+			fclose(fd);
+
+			fd = fopen(filename,"wt");
+			if (fd) {
+				int i;
+				for( i = 0; i < len; i++ ) {
+					if( content[i] > 0 )
+						fputc(content[i], fd);
+				}
+				fclose( fd );
+			}
+			delete [] content;
+		}
+	}
+	else fclose(fd);
+}
+
+// ------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoParseFile(const char * filename, ARHandler * ar)
 {
 	if( !filename || !ar )	return guidoErrBadParameter;
@@ -138,9 +182,11 @@ GUIDOAPI(GuidoErrCode) GuidoParseFile(const char * filename, ARHandler * ar)
 	if( gGlobalSettings.gFeedback )
 		gGlobalSettings.gFeedback->Notify( GuidoFeedback::kProcessing );
 
-	// Check if file exists.
+ 	// first convert unicode files
+	uniconv(filename);
+ 	// Check if file exists.
     ARHandler music = 0;
-    fstream file (filename, fstream::in);
+   fstream file (filename, fstream::in);
     if (file.is_open()) {
         guido::GuidoParser p (&file);
         music = p.parse();
@@ -346,6 +392,8 @@ GUIDOAPI(const char *) GuidoGetErrorString( GuidoErrCode errCode )
 }
 
 // --------------------------------------------------------------------------
+// this function is obsolete with the new reentrant parser
+// syntax error line and columns should be retrieved from the parser
 GUIDOAPI(int) GuidoGetParseErrorLine()
 {
 	return gParseErrorLine;
