@@ -228,7 +228,7 @@ class_export GDevicePostScript : public VGDevice
 				int				mBeginDrawCount;
 
 				/// temporary hack - must be removed asap
-				VGSystem *		mSys;
+//				VGSystem *		mSys;
 				
 				// - GDevicePostScript specific --------------------
 		
