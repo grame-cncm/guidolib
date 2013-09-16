@@ -1,11 +1,39 @@
+%option reentrant
+%option bison-locations
+%option never-interactive
+%option noyywrap
+%option nounput
+%option yylineno
+%option yymore
+
 %{
 
+#include <iostream>
 #include <stdlib.h>
 
-#define YY_NO_UNISTD_H
-extern YYSTYPE guidolval;
+#include "GuidoParser.h"
+#include "guidoparse.hpp"
+
+using namespace std;
+
+#define YY_EXTRA_TYPE guido::GuidoParser*
+#define YY_USER_ACTION yylloc->last_line = yylineno; yylloc->first_column += strlen(yytext);
+
+#define YY_INPUT(buf,result,max_size)   \
+   {                                       \
+	  char c;                              \
+      yyextra->fStream->get( c );                 \
+	  if (yyextra->fStream->eof())               \
+         result = YY_NULL;                 \
+      else {                               \
+         buf[0] = c;                       \
+         result = 1;                       \
+      }                                    \
+   }
 
 static int nested;
+
+#define YY_NO_UNISTD_H
 
 static  char* unescape (char * str) {
 	int n = strlen(str);
@@ -33,9 +61,6 @@ static  char* unquote (char * str) {
 
 %}
 
-%option yylineno
-%option never-interactive
-
 %x CMNTLN
 %x COMMENT
 %S PARAM
@@ -48,13 +73,13 @@ SPACE	[ \t\x0a\x0d]
 EOL		[\x0a\x0d]
 
 %%
-{DIGIT}+					return NUMBER;
-"+"{DIGIT}+					return PNUMBER;
-"-"{DIGIT}+					return NNUMBER;
+{DIGIT}+					yyextra->fText = yytext; return NUMBER;
+"+"{DIGIT}+					yyextra->fText = yytext; return PNUMBER;
+"-"{DIGIT}+					yyextra->fText = yytext; return NNUMBER;
 
-{DIGIT}*"."{DIGIT}+			return FLOAT;
-"+"{DIGIT}*"."{DIGIT}+		return FLOAT;
-"-"{DIGIT}*"."{DIGIT}+		return FLOAT;
+{DIGIT}*"."{DIGIT}+			yyextra->fText = yytext; return FLOAT;
+"+"{DIGIT}*"."{DIGIT}+		yyextra->fText = yytext; return FLOAT;
+"-"{DIGIT}*"."{DIGIT}+		yyextra->fText = yytext; return FLOAT;
 
 {SPACE}*"%"			BEGIN CMNTLN;
 <CMNTLN>.
@@ -86,22 +111,40 @@ EOL		[\x0a\x0d]
 
 "ms"				return MLS;
 "s"					return SEC;
-"m"|"cm"|"mm"|"in"|"pt"|"pc"|"hs"|"rl"		return UNIT;
+"m"|"cm"|"mm"|"in"|"pt"|"pc"|"hs"|"rl"		yyextra->fText = yytext; return UNIT;
 
 "<"					BEGIN PARAM; return STARTPARAM;
-<PARAM>{ID}			return IDT;
+<PARAM>{ID}			yyextra->fText = yytext; return IDT;
 <PARAM>">"			BEGIN INITIAL; return ENDPARAM;
 
-"\\"{ID}			return TAGNAME;
+"\\"{ID}			yyextra->fText = yytext; return TAGNAME;
 
-"do"|"re"|"mi"|"fa"|"sol"|"la"|"si"|"ti"	return SOLFEGE;
-"cis"|"dis"|"fis"|"gis"|"ais"				return CHROMATIC;
-{NOTE}				return DIATONIC;
-"empty"				return EMPTYT;
+"do"|"re"|"mi"|"fa"|"sol"|"la"|"si"|"ti"	yyextra->fText = yytext; return SOLFEGE;
+"cis"|"dis"|"fis"|"gis"|"ais"				yyextra->fText = yytext; return CHROMATIC;
+{NOTE}				yyextra->fText = yytext; return DIATONIC;
+"empty"				yyextra->fText = yytext; return EMPTYT;
 "_"					return RESTT;
 
-\"(\\\\|\\.|[^\\\"])*\"   unescape(yytext); unquote(yytext); return STRING;
+\"(\\\\|\\.|[^\\\"])*\"   unescape(yytext); unquote(yytext); yyextra->fText = yytext; return STRING;
 
 {SPACE}+			/* eat up space */
 .				fprintf(stderr, "extra text is : %s\n", yytext); return EXTRA;
+
+%%
+
+namespace guido 
+{
+
+void GuidoParser::initScanner()
+{
+	yylex_init(&fScanner);
+	yyset_extra(this, fScanner);
+}
+
+void GuidoParser::destroyScanner()
+{
+	yylex_destroy(fScanner);
+}
+
+} // end namespace
 
