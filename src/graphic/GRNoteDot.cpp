@@ -100,10 +100,10 @@ void GRNoteDot::OnDraw(VGDevice & hdc) const
 		return;
 	float scale = getSize();
 	float offset = LSPACE * 0.5f * scale;
-	float dy = LSPACE * 0.5f * (scale - 1);
+	float dx = LSPACE * 0.5f * (scale - 1);
 	while (n-- > 0) {
-		GRNotationElement::OnDrawSymbol( hdc, mSymbol, dy);
-		dy += offset;
+		GRNotationElement::OnDrawSymbol( hdc, mSymbol, dx);
+		dx += offset;
 	}	
 }
 
@@ -122,4 +122,29 @@ int	GRNoteDot::DurationToDotCount( const TYPE_DURATION & duration )
 		case 13: return 3;
 		default: return 0;
 	}
+}
+
+void  GRNoteDot::adjustHorizontalDotPosition(float inNoteSize, ARTHead::HEADSTATE inHeadState, GDirection inGlobalStemDirection)
+{
+    mOffset.x += 45;
+
+	if (inGlobalStemDirection == dirDOWN)
+	{
+		if (inHeadState == ARTHead::LEFT)
+		{
+			mOffset.x -= inNoteSize * 55; //hardcoded
+		}
+	}
+	else if (inGlobalStemDirection == dirUP)
+	{
+		if (inHeadState == ARTHead::RIGHT)
+		{
+			mOffset.x += inNoteSize * 55; //hardcoded
+		}
+	}
+}
+
+void GRNoteDot::addToOffset(int inOffset)
+{
+    mOffset.x += inOffset;
 }

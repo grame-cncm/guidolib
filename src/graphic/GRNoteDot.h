@@ -17,6 +17,7 @@
 
 
 #include "GRNotationElement.h"
+#include "ARTHead.h"
 
 class GREvent;
 class GRSingleNote;
@@ -53,6 +54,9 @@ class GRNoteDot : public GRNotationElement
 	 virtual float	getSize() const	 						{ return size; }
 
 	  static int	DurationToDotCount( const TYPE_DURATION & duration );
+
+	  virtual void  adjustHorizontalDotPosition(float inNoteSize, ARTHead::HEADSTATE inHeadState, GDirection inGlobalStemDirection);
+      virtual void  addToOffset(int inOffset);
 
   protected:
 
