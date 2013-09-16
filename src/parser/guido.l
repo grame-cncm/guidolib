@@ -69,7 +69,7 @@ DIGIT	[0-9]
 ID		[$a-z_A-Z][a-z_A-Z0-9]*
 LETTER	[a-zA-Z]
 NOTE	[abcdefgh]
-SPACE	[ \t\x0a\x0d]
+SPACE	[ \t]
 EOL		[\x0a\x0d]
 
 %%
@@ -83,7 +83,7 @@ EOL		[\x0a\x0d]
 
 {SPACE}*"%"			BEGIN CMNTLN;
 <CMNTLN>.
-<CMNTLN>{EOL}+		BEGIN INITIAL;
+<CMNTLN>{EOL}+		yylloc->first_column=0; BEGIN INITIAL;
 
 {SPACE}*"(*"		nested=1; BEGIN COMMENT;
 <COMMENT>.|{EOL}*
@@ -128,7 +128,10 @@ EOL		[\x0a\x0d]
 \"(\\\\|\\.|[^\\\"])*\"   unescape(yytext); unquote(yytext); yyextra->fText = yytext; return STRING;
 
 {SPACE}+			/* eat up space */
-.				fprintf(stderr, "extra text is : %s\n", yytext); return EXTRA;
+
+{EOL}				yylloc->first_column=1; /* ignore */
+
+.					fprintf(stderr, "extra text is : %s\n", yytext); return EXTRA;
 
 %%
 
