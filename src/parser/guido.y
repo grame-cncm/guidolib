@@ -9,15 +9,11 @@
 
 #include "guidoparse.hpp"
 
-//int guidoerror(const char*s);
-//int	guidowrap()		{ return(1); }
-
 #define YYERROR_VERBOSE
 int guidoerror (YYLTYPE* locp, guido::GuidoParser* context, const char*s);
 int yylex(YYSTYPE* lvalp, YYLTYPE* llocp, void* scanner);
 
 #define scanner context->fScanner
-#define factory context->fFactory
 
 using namespace std;
 
@@ -100,55 +96,55 @@ using namespace std;
 %%
 
 //_______________________________________________
-score		: STARTCHORD { gd_segmInit (factory); } ENDCHORD			{ gd_segmExit (factory); }
-			| STARTCHORD { gd_segmInit (factory); } voicelist ENDCHORD	{ gd_segmExit (factory); }
-			| { gd_segmInit (factory); } voice							{ gd_segmExit (factory); }
+score		: STARTCHORD { context->segmInit (); } ENDCHORD				{ context->segmExit (); }
+			| STARTCHORD { context->segmInit (); } voicelist ENDCHORD	{ context->segmExit (); }
+			| { context->segmInit (); } voice							{ context->segmExit (); }
 			;
 
-voicelist	: voice											{ gd_segmAppendSeq (factory); }
-			| voicelist SEP voice							{ gd_segmAppendSeq (factory); }
+voicelist	: voice													{ context->segmAppendSeq (); }
+			| voicelist SEP voice									{ context->segmAppendSeq (); }
 			;
 
-voice		: STARTSEQ { gd_seqInit (factory); } symbols ENDSEQ		{ gd_seqExit( factory); }
+voice		: STARTSEQ { context->seqInit (); } symbols ENDSEQ		{ context->seqExit( ); }
 			;
 
 symbols		:
-			| symbols music									{ gd_seqAppendNote (factory); }
+			| symbols music									{ context->appendNote (); }
 			| symbols tag
-			| symbols chord									{ gd_seqAppendChord (factory); }
+			| symbols chord									{ context->seqAppendChord (); }
 			;
 
 //_______________________________________________
 // tags description
-tag			: positiontag									{ gd_tagEnd (factory); }
-			| rangetag										{ gd_tagEnd (factory); }
+tag			: positiontag									{ context->tagEnd (); }
+			| rangetag										{ context->tagEnd (); }
 			;
 
-positiontag	: tagid											{ gd_tagAdd (factory); }
-			| tagid STARTPARAM tagparams ENDPARAM			{ gd_tagAdd (factory); }
+positiontag	: tagid											{ context->tagAdd (); }
+			| tagid STARTPARAM tagparams ENDPARAM			{ context->tagAdd (); }
 			;
 
-rangetag	: positiontag STARTRANGE { gd_tagRange (factory); } symbols ENDRANGE
+rangetag	: positiontag STARTRANGE { context->tagRange (); } symbols ENDRANGE
 			;
 
 tagname		: TAGNAME										{ $$ = new string(context->fText); }
 			;
 
-tagid		: tagname										{ gd_tagStart ( factory, $1->c_str(), 0); delete $1; }
-			| tagname IDSEP number							{ gd_tagStart ( factory, $1->c_str(),$3); delete $1; }
-			| BAR											{ gd_tagStart ( factory, "\\bar", 0); }
+tagid		: tagname										{ context->tagStart ( $1->c_str(), 0); delete $1; }
+			| tagname IDSEP number							{ context->tagStart ( $1->c_str(),$3); delete $1; }
+			| BAR											{ context->tagStart ( "\\bar", 0); }
 			;
 
-tagarg		: signednumber									{ gd_tagIntArg   (factory, $1) }
-			| floatn										{ gd_tagFloatArg (factory, $1) }
-			| signednumber UNIT								{ gd_tagIntArg   (factory, $1); gd_tagArgUnit (factory, context->fText.c_str() ) }
-			| floatn UNIT									{ gd_tagFloatArg (factory,$1);  gd_tagArgUnit (factory, context->fText.c_str() ) }
-			| STRING										{ gd_tagStrArg   (factory, context->fText.c_str() ) }
+tagarg		: signednumber									{ context->tagIntArg   ($1) }
+			| floatn										{ context->tagFloatArg ($1) }
+			| signednumber UNIT								{ context->tagIntArg   ($1); context->tagArgUnit (context->fText.c_str() ) }
+			| floatn UNIT									{ context->tagFloatArg ($1); context->tagArgUnit (context->fText.c_str() ) }
+			| STRING										{ context->tagStrArg   (context->fText.c_str() ) }
 			| id											{ /* unused */ delete $1; }
 			;
 
-tagparam	: tagarg										{ gd_tagAddArg ( factory, ""); }
-			| id EQUAL tagarg								{ gd_tagAddArg ( factory, $1->c_str()); delete $1; }
+tagparam	: tagarg										{ context->tagAddArg ( ""); }
+			| id EQUAL tagarg								{ context->tagAddArg ( $1->c_str()); delete $1; }
 			;
 
 tagparams	: tagparam
@@ -158,11 +154,11 @@ tagparams	: tagparam
 //_______________________________________________
 // chord description
 
-chord		: STARTCHORD { gd_chordInit ( factory ); } chordsymbols ENDCHORD
+chord		: STARTCHORD { context->chordInit (); } chordsymbols ENDCHORD
 			;
 
-chordsymbols: { gd_chordInitNote ( factory ); } tagchordsymbol
-			| chordsymbols SEP { gd_chordInitNote (factory);} tagchordsymbol
+chordsymbols: { context->chordInitNote (); } tagchordsymbol
+			| chordsymbols SEP { context->chordInitNote ();} tagchordsymbol
 			;
 
 tagchordsymbol: chordsymbol
@@ -171,15 +167,15 @@ tagchordsymbol: chordsymbol
 			| taglist chordsymbol taglist
 			;
 
-chordsymbol	: music									{ gd_chordAppendNote (factory);  }
+chordsymbol	: music									{ context->appendNote ();  }
 			| rangechordtag	
 			;
 
-rangechordtag : positiontag  STARTRANGE { gd_tagRange (factory); } tagchordsymbol ENDRANGE { gd_tagEnd (factory); }
+rangechordtag : positiontag  STARTRANGE { context->tagRange (); } tagchordsymbol ENDRANGE { context->tagEnd (); }
 			;
 
-taglist		: positiontag							{ gd_tagEnd (factory); }
-			| taglist positiontag					{ gd_tagEnd (factory); }
+taglist		: positiontag							{ context->tagEnd (); }
+			| taglist positiontag					{ context->tagEnd (); }
 			;
 
 //_______________________________________________
@@ -189,8 +185,8 @@ music		: note
 			| rest
 			;
 
-rest		: RESTT { gd_noteInit ( factory, "_" ); } duration dots
-			| RESTT { gd_noteInit ( factory, "_" ); } STARTPARAM NUMBER ENDPARAM duration dots
+rest		: RESTT { context->noteInit ( "_" ); } duration dots
+			| RESTT { context->noteInit ( "_" ); } STARTPARAM NUMBER ENDPARAM duration dots
 			;
 
 note		: noteid octave duration dots
@@ -201,35 +197,35 @@ noteid		: notename
 			| notename STARTPARAM NUMBER ENDPARAM
 			;
 			
-notename	: DIATONIC								{ gd_noteInit ( factory, context->fText.c_str() ); }
-			| CHROMATIC								{ gd_noteInit ( factory, context->fText.c_str() ); }
-			| SOLFEGE								{ gd_noteInit ( factory, context->fText.c_str() ); }
-			| EMPTYT								{ gd_noteInit ( factory, context->fText.c_str() ); }
+notename	: DIATONIC								{ context->noteInit ( context->fText.c_str() ); }
+			| CHROMATIC								{ context->noteInit ( context->fText.c_str() ); }
+			| SOLFEGE								{ context->noteInit ( context->fText.c_str() ); }
+			| EMPTYT								{ context->noteInit ( context->fText.c_str() ); }
 			;		
 
 accidentals	: accidental
 			| accidentals accidental
 			;
 
-accidental	: SHARPT								{  gd_noteAcc (factory, SHARP); }
-			| FLATT									{  gd_noteAcc (factory, FLAT); }
+accidental	: SHARPT								{  context->noteAcc (SHARP); }
+			| FLATT									{  context->noteAcc (FLAT); }
 			;
 
 octave		:
-			| signednumber							{ gd_noteOct (factory, $1); }
+			| signednumber							{ context->noteOct ($1); }
 			;
 
 duration	:
-			| MULT number DIV number				{  gd_noteEnum (factory, $2); gd_noteDenom (factory, $4); }
-			| MULT number							{  gd_noteEnum (factory, $2);  }
-			| MULT number MLS						{  gd_noteAbsDur(factory, $2);  }
-			| DIV number							{  gd_noteDenom (factory, $2); }
+			| MULT number DIV number				{  context->noteEnum ($2); context->noteDenom ($4); }
+			| MULT number							{  context->noteEnum ($2);  }
+			| MULT number MLS						{  context->noteAbsDur($2);  }
+			| DIV number							{  context->noteDenom ($2); }
 			;
 
 dots		:
-			| DOT									{  gd_noteDot  (factory);  }
-			| DDOT									{  gd_noteDdot (factory); }
-			| TDOT									{  gd_noteTdot (factory); }
+			| DOT									{  context->noteDot  ();  }
+			| DDOT									{  context->noteDdot (); }
+			| TDOT									{  context->noteTdot (); }
 			;
 
 //_______________________________________________
@@ -251,15 +247,11 @@ signednumber: number								{ $$ = $1; }
 			;
 %%
 
-// int guidoerror(const char*s) {
-// 	extern long int lnr;
-// 	YY_FLUSH_BUFFER;
-// 	lnr = guidolineno;
-// 	return ERROR(s);
-// }
-
-int guidoerror(YYLTYPE* loc, guido::GuidoParser* context, const char*s) {
-//	cerr << "error line: " << loc->last_line + context->fLine << " col: " << loc->first_column << ": " << s << endl;
+extern int	gParseErrorLine;
+int guidoerror(YYLTYPE* loc, guido::GuidoParser* p, const char*s) {
+	gParseErrorLine = loc->last_line;		// for backward compatibility only
+	p->setErrorLoc (loc->last_line, loc->first_column);
+	cerr << "error line: " << loc->last_line << " col: " << loc->first_column << ": " << s << endl;
 	return 0;
 }
 
@@ -269,6 +261,12 @@ namespace guido
 
 ARHandler GuidoParser::parse()
 {
+	fzaehlerSet = 0;
+	faccidentals = 0;
+	fndots = 0;
+	fnt_enumSet = false;
+	fnt_enum =0;
+	fnt_denom =1;
 	yyparse (this);
 	return GuidoFactoryCloseMusic (fFactory);
 }
