@@ -164,15 +164,11 @@
 
 #include "guidoparse.hpp"
 
-//int guidoerror(const char*s);
-//int	guidowrap()		{ return(1); }
-
 #define YYERROR_VERBOSE
 int guidoerror (YYLTYPE* locp, guido::GuidoParser* context, const char*s);
 int yylex(YYSTYPE* lvalp, YYLTYPE* llocp, void* scanner);
 
 #define scanner context->fScanner
-#define factory context->fFactory
 
 using namespace std;
 
@@ -198,7 +194,7 @@ using namespace std;
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 35 "guido.y"
+#line 31 "guido.y"
 {         
 	long int		num;
 	float			real;
@@ -207,7 +203,7 @@ typedef union YYSTYPE
 	char			c;
 }
 /* Line 193 of yacc.c.  */
-#line 211 "guidoparse.cpp"
+#line 207 "guidoparse.cpp"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -232,7 +228,7 @@ typedef struct YYLTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 236 "guidoparse.cpp"
+#line 232 "guidoparse.cpp"
 
 #ifdef short
 # undef short
@@ -550,15 +546,15 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,   103,   103,   103,   104,   104,   105,   105,   108,   109,
-     112,   112,   115,   116,   117,   118,   123,   124,   127,   128,
-     131,   131,   134,   137,   138,   139,   142,   143,   144,   145,
-     146,   147,   150,   151,   154,   155,   161,   161,   164,   164,
-     165,   165,   168,   169,   170,   171,   174,   175,   178,   178,
-     181,   182,   188,   189,   192,   192,   193,   193,   196,   197,
-     200,   201,   204,   205,   206,   207,   210,   211,   214,   215,
-     218,   219,   222,   223,   224,   225,   226,   229,   230,   231,
-     232,   237,   239,   241,   243,   245,   248,   249,   250
+       0,    99,    99,    99,   100,   100,   101,   101,   104,   105,
+     108,   108,   111,   112,   113,   114,   119,   120,   123,   124,
+     127,   127,   130,   133,   134,   135,   138,   139,   140,   141,
+     142,   143,   146,   147,   150,   151,   157,   157,   160,   160,
+     161,   161,   164,   165,   166,   167,   170,   171,   174,   174,
+     177,   178,   184,   185,   188,   188,   189,   189,   192,   193,
+     196,   197,   200,   201,   202,   203,   206,   207,   210,   211,
+     214,   215,   218,   219,   220,   221,   222,   225,   226,   227,
+     228,   233,   235,   237,   239,   241,   244,   245,   246
 };
 #endif
 
@@ -1576,313 +1572,313 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 103 "guido.y"
-    { gd_segmInit (factory); ;}
+#line 99 "guido.y"
+    { context->segmInit (); ;}
     break;
 
   case 3:
-#line 103 "guido.y"
-    { gd_segmExit (factory); ;}
+#line 99 "guido.y"
+    { context->segmExit (); ;}
     break;
 
   case 4:
-#line 104 "guido.y"
-    { gd_segmInit (factory); ;}
+#line 100 "guido.y"
+    { context->segmInit (); ;}
     break;
 
   case 5:
-#line 104 "guido.y"
-    { gd_segmExit (factory); ;}
+#line 100 "guido.y"
+    { context->segmExit (); ;}
     break;
 
   case 6:
-#line 105 "guido.y"
-    { gd_segmInit (factory); ;}
+#line 101 "guido.y"
+    { context->segmInit (); ;}
     break;
 
   case 7:
-#line 105 "guido.y"
-    { gd_segmExit (factory); ;}
+#line 101 "guido.y"
+    { context->segmExit (); ;}
     break;
 
   case 8:
-#line 108 "guido.y"
-    { gd_segmAppendSeq (factory); ;}
+#line 104 "guido.y"
+    { context->segmAppendSeq (); ;}
     break;
 
   case 9:
-#line 109 "guido.y"
-    { gd_segmAppendSeq (factory); ;}
+#line 105 "guido.y"
+    { context->segmAppendSeq (); ;}
     break;
 
   case 10:
-#line 112 "guido.y"
-    { gd_seqInit (factory); ;}
+#line 108 "guido.y"
+    { context->seqInit (); ;}
     break;
 
   case 11:
-#line 112 "guido.y"
-    { gd_seqExit( factory); ;}
+#line 108 "guido.y"
+    { context->seqExit( ); ;}
     break;
 
   case 13:
-#line 116 "guido.y"
-    { gd_seqAppendNote (factory); ;}
+#line 112 "guido.y"
+    { context->appendNote (); ;}
     break;
 
   case 15:
-#line 118 "guido.y"
-    { gd_seqAppendChord (factory); ;}
+#line 114 "guido.y"
+    { context->seqAppendChord (); ;}
     break;
 
   case 16:
-#line 123 "guido.y"
-    { gd_tagEnd (factory); ;}
+#line 119 "guido.y"
+    { context->tagEnd (); ;}
     break;
 
   case 17:
-#line 124 "guido.y"
-    { gd_tagEnd (factory); ;}
+#line 120 "guido.y"
+    { context->tagEnd (); ;}
     break;
 
   case 18:
-#line 127 "guido.y"
-    { gd_tagAdd (factory); ;}
+#line 123 "guido.y"
+    { context->tagAdd (); ;}
     break;
 
   case 19:
-#line 128 "guido.y"
-    { gd_tagAdd (factory); ;}
+#line 124 "guido.y"
+    { context->tagAdd (); ;}
     break;
 
   case 20:
-#line 131 "guido.y"
-    { gd_tagRange (factory); ;}
+#line 127 "guido.y"
+    { context->tagRange (); ;}
     break;
 
   case 22:
-#line 134 "guido.y"
+#line 130 "guido.y"
     { (yyval.str) = new string(context->fText); ;}
     break;
 
   case 23:
-#line 137 "guido.y"
-    { gd_tagStart ( factory, (yyvsp[(1) - (1)].str)->c_str(), 0); delete (yyvsp[(1) - (1)].str); ;}
+#line 133 "guido.y"
+    { context->tagStart ( (yyvsp[(1) - (1)].str)->c_str(), 0); delete (yyvsp[(1) - (1)].str); ;}
     break;
 
   case 24:
-#line 138 "guido.y"
-    { gd_tagStart ( factory, (yyvsp[(1) - (3)].str)->c_str(),(yyvsp[(3) - (3)].num)); delete (yyvsp[(1) - (3)].str); ;}
+#line 134 "guido.y"
+    { context->tagStart ( (yyvsp[(1) - (3)].str)->c_str(),(yyvsp[(3) - (3)].num)); delete (yyvsp[(1) - (3)].str); ;}
     break;
 
   case 25:
-#line 139 "guido.y"
-    { gd_tagStart ( factory, "\\bar", 0); ;}
+#line 135 "guido.y"
+    { context->tagStart ( "\\bar", 0); ;}
     break;
 
   case 26:
-#line 142 "guido.y"
-    { gd_tagIntArg   (factory, (yyvsp[(1) - (1)].num)) ;}
+#line 138 "guido.y"
+    { context->tagIntArg   ((yyvsp[(1) - (1)].num)) ;}
     break;
 
   case 27:
-#line 143 "guido.y"
-    { gd_tagFloatArg (factory, (yyvsp[(1) - (1)].real)) ;}
+#line 139 "guido.y"
+    { context->tagFloatArg ((yyvsp[(1) - (1)].real)) ;}
     break;
 
   case 28:
-#line 144 "guido.y"
-    { gd_tagIntArg   (factory, (yyvsp[(1) - (2)].num)); gd_tagArgUnit (factory, context->fText.c_str() ) ;}
+#line 140 "guido.y"
+    { context->tagIntArg   ((yyvsp[(1) - (2)].num)); context->tagArgUnit (context->fText.c_str() ) ;}
     break;
 
   case 29:
-#line 145 "guido.y"
-    { gd_tagFloatArg (factory,(yyvsp[(1) - (2)].real));  gd_tagArgUnit (factory, context->fText.c_str() ) ;}
+#line 141 "guido.y"
+    { context->tagFloatArg ((yyvsp[(1) - (2)].real)); context->tagArgUnit (context->fText.c_str() ) ;}
     break;
 
   case 30:
-#line 146 "guido.y"
-    { gd_tagStrArg   (factory, context->fText.c_str() ) ;}
+#line 142 "guido.y"
+    { context->tagStrArg   (context->fText.c_str() ) ;}
     break;
 
   case 31:
-#line 147 "guido.y"
+#line 143 "guido.y"
     { /* unused */ delete (yyvsp[(1) - (1)].str); ;}
     break;
 
   case 32:
-#line 150 "guido.y"
-    { gd_tagAddArg ( factory, ""); ;}
+#line 146 "guido.y"
+    { context->tagAddArg ( ""); ;}
     break;
 
   case 33:
-#line 151 "guido.y"
-    { gd_tagAddArg ( factory, (yyvsp[(1) - (3)].str)->c_str()); delete (yyvsp[(1) - (3)].str); ;}
+#line 147 "guido.y"
+    { context->tagAddArg ( (yyvsp[(1) - (3)].str)->c_str()); delete (yyvsp[(1) - (3)].str); ;}
     break;
 
   case 36:
-#line 161 "guido.y"
-    { gd_chordInit ( factory ); ;}
+#line 157 "guido.y"
+    { context->chordInit (); ;}
     break;
 
   case 38:
-#line 164 "guido.y"
-    { gd_chordInitNote ( factory ); ;}
+#line 160 "guido.y"
+    { context->chordInitNote (); ;}
     break;
 
   case 40:
-#line 165 "guido.y"
-    { gd_chordInitNote (factory);;}
+#line 161 "guido.y"
+    { context->chordInitNote ();;}
     break;
 
   case 46:
-#line 174 "guido.y"
-    { gd_chordAppendNote (factory);  ;}
+#line 170 "guido.y"
+    { context->appendNote ();  ;}
     break;
 
   case 48:
-#line 178 "guido.y"
-    { gd_tagRange (factory); ;}
+#line 174 "guido.y"
+    { context->tagRange (); ;}
     break;
 
   case 49:
-#line 178 "guido.y"
-    { gd_tagEnd (factory); ;}
+#line 174 "guido.y"
+    { context->tagEnd (); ;}
     break;
 
   case 50:
-#line 181 "guido.y"
-    { gd_tagEnd (factory); ;}
+#line 177 "guido.y"
+    { context->tagEnd (); ;}
     break;
 
   case 51:
-#line 182 "guido.y"
-    { gd_tagEnd (factory); ;}
+#line 178 "guido.y"
+    { context->tagEnd (); ;}
     break;
 
   case 54:
-#line 192 "guido.y"
-    { gd_noteInit ( factory, "_" ); ;}
+#line 188 "guido.y"
+    { context->noteInit ( "_" ); ;}
     break;
 
   case 56:
-#line 193 "guido.y"
-    { gd_noteInit ( factory, "_" ); ;}
+#line 189 "guido.y"
+    { context->noteInit ( "_" ); ;}
     break;
 
   case 62:
-#line 204 "guido.y"
-    { gd_noteInit ( factory, context->fText.c_str() ); ;}
+#line 200 "guido.y"
+    { context->noteInit ( context->fText.c_str() ); ;}
     break;
 
   case 63:
-#line 205 "guido.y"
-    { gd_noteInit ( factory, context->fText.c_str() ); ;}
+#line 201 "guido.y"
+    { context->noteInit ( context->fText.c_str() ); ;}
     break;
 
   case 64:
-#line 206 "guido.y"
-    { gd_noteInit ( factory, context->fText.c_str() ); ;}
+#line 202 "guido.y"
+    { context->noteInit ( context->fText.c_str() ); ;}
     break;
 
   case 65:
-#line 207 "guido.y"
-    { gd_noteInit ( factory, context->fText.c_str() ); ;}
+#line 203 "guido.y"
+    { context->noteInit ( context->fText.c_str() ); ;}
     break;
 
   case 68:
-#line 214 "guido.y"
-    {  gd_noteAcc (factory, SHARP); ;}
+#line 210 "guido.y"
+    {  context->noteAcc (SHARP); ;}
     break;
 
   case 69:
-#line 215 "guido.y"
-    {  gd_noteAcc (factory, FLAT); ;}
+#line 211 "guido.y"
+    {  context->noteAcc (FLAT); ;}
     break;
 
   case 71:
-#line 219 "guido.y"
-    { gd_noteOct (factory, (yyvsp[(1) - (1)].num)); ;}
+#line 215 "guido.y"
+    { context->noteOct ((yyvsp[(1) - (1)].num)); ;}
     break;
 
   case 73:
-#line 223 "guido.y"
-    {  gd_noteEnum (factory, (yyvsp[(2) - (4)].num)); gd_noteDenom (factory, (yyvsp[(4) - (4)].num)); ;}
+#line 219 "guido.y"
+    {  context->noteEnum ((yyvsp[(2) - (4)].num)); context->noteDenom ((yyvsp[(4) - (4)].num)); ;}
     break;
 
   case 74:
-#line 224 "guido.y"
-    {  gd_noteEnum (factory, (yyvsp[(2) - (2)].num));  ;}
+#line 220 "guido.y"
+    {  context->noteEnum ((yyvsp[(2) - (2)].num));  ;}
     break;
 
   case 75:
-#line 225 "guido.y"
-    {  gd_noteAbsDur(factory, (yyvsp[(2) - (3)].num));  ;}
+#line 221 "guido.y"
+    {  context->noteAbsDur((yyvsp[(2) - (3)].num));  ;}
     break;
 
   case 76:
-#line 226 "guido.y"
-    {  gd_noteDenom (factory, (yyvsp[(2) - (2)].num)); ;}
+#line 222 "guido.y"
+    {  context->noteDenom ((yyvsp[(2) - (2)].num)); ;}
     break;
 
   case 78:
-#line 230 "guido.y"
-    {  gd_noteDot  (factory);  ;}
+#line 226 "guido.y"
+    {  context->noteDot  ();  ;}
     break;
 
   case 79:
-#line 231 "guido.y"
-    {  gd_noteDdot (factory); ;}
+#line 227 "guido.y"
+    {  context->noteDdot (); ;}
     break;
 
   case 80:
-#line 232 "guido.y"
-    {  gd_noteTdot (factory); ;}
+#line 228 "guido.y"
+    {  context->noteTdot (); ;}
     break;
 
   case 81:
-#line 237 "guido.y"
+#line 233 "guido.y"
     { (yyval.str) = new string(context->fText); ;}
     break;
 
   case 82:
-#line 239 "guido.y"
+#line 235 "guido.y"
     { (yyval.num) = atol(context->fText.c_str() ); ;}
     break;
 
   case 83:
-#line 241 "guido.y"
+#line 237 "guido.y"
     { (yyval.num) = atol(context->fText.c_str() ); ;}
     break;
 
   case 84:
-#line 243 "guido.y"
+#line 239 "guido.y"
     { (yyval.num) = atol(context->fText.c_str() ); ;}
     break;
 
   case 85:
-#line 245 "guido.y"
+#line 241 "guido.y"
     { (yyval.real) = atof(context->fText.c_str() ); ;}
     break;
 
   case 86:
-#line 248 "guido.y"
+#line 244 "guido.y"
     { (yyval.num) = (yyvsp[(1) - (1)].num); ;}
     break;
 
   case 87:
-#line 249 "guido.y"
+#line 245 "guido.y"
     { (yyval.num) = (yyvsp[(1) - (1)].num); ;}
     break;
 
   case 88:
-#line 250 "guido.y"
+#line 246 "guido.y"
     { (yyval.num) = (yyvsp[(1) - (1)].num); ;}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1886 "guidoparse.cpp"
+#line 1882 "guidoparse.cpp"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2102,18 +2098,14 @@ yyreturn:
 }
 
 
-#line 252 "guido.y"
+#line 248 "guido.y"
 
 
-// int guidoerror(const char*s) {
-// 	extern long int lnr;
-// 	YY_FLUSH_BUFFER;
-// 	lnr = guidolineno;
-// 	return ERROR(s);
-// }
-
-int guidoerror(YYLTYPE* loc, guido::GuidoParser* context, const char*s) {
-//	cerr << "error line: " << loc->last_line + context->fLine << " col: " << loc->first_column << ": " << s << endl;
+extern int	gParseErrorLine;
+int guidoerror(YYLTYPE* loc, guido::GuidoParser* p, const char*s) {
+	gParseErrorLine = loc->last_line;		// for backward compatibility only
+	p->setErrorLoc (loc->last_line, loc->first_column);
+	cerr << "error line: " << loc->last_line << " col: " << loc->first_column << ": " << s << endl;
 	return 0;
 }
 
@@ -2123,6 +2115,12 @@ namespace guido
 
 ARHandler GuidoParser::parse()
 {
+	fzaehlerSet = 0;
+	faccidentals = 0;
+	fndots = 0;
+	fnt_enumSet = false;
+	fnt_enum =0;
+	fnt_denom =1;
 	yyparse (this);
 	return GuidoFactoryCloseMusic (fFactory);
 }
