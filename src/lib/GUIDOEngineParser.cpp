@@ -40,32 +40,10 @@ extern int gParseErrorCol;
 	application which is to use the GUIDO parser module
 	------------------------------------------------- */
 
-
-// The global factory that creates the AR objects structure
-extern ARFactory * gGlobalFactory;
-
 int zaehlerSet;
 int accidentals;
 int ndots;
 
-/* current segment properties: */
-long int sg_num_voices = 0; /* voices counter */
-long int sg_num_notes = 0; /* notes counter */
-long int sg_num_tags = 0; /* tags counter */
-
-/* rel. dur. of current segment: */
-long int sg_enum = 0;
-long int sg_denom = 1;
-
-
-/* current sequence (voice) properties: */
-long int sq_num_notes = 0;  /* note counter */
-long int sq_num_tags = 0;   /* tag counter */
-long int sq_max_voices = 0; /* max chord voices counter */
-
-/* rel. time pos within current voice: */
-long int rtp_enum = 0;
-long int rtp_denom = 1;
 
 /* current note properties: */
 int nt_enumSet=0; /* enum of rel.dur explicitely specified? */
@@ -74,64 +52,44 @@ int nt_enumSet=0; /* enum of rel.dur explicitely specified? */
 long int nt_enum=0;
 long int nt_denom=1;
 
-/* current chord properties: */
-int ch_num_notes=0;	/* number notes in chord */
 
-/* rel. dur. of current chord: */
-long int ch_enum=0;
-long int ch_denom=1;
-
-
-/* --- specific initialization code, to be implemented by applications */
-void gd_imp_init(void) {}
-
-
-/* --- specific cleanup code, to be implemented by applications */
-void gd_imp_exit(void){}
-
-
-void gd_noteInit (const char *id) {
+void gd_noteInit (ARFactory *f, const char *id) {
 vdebug ("gd_noteInit", id);
-
 	accidentals = 0;
-
-   // kf-change!
-   // ndots = 0; // This is important to switch dots off!
-
 	zaehlerSet = 0;
-	gGlobalFactory->createEvent(id);
+	f->createEvent(id);
 }
 
-void gd_noteAcc (int n) {
+void gd_noteAcc (ARFactory *, int n) {
 	accidentals += n;
 }
 
-void gd_noteOct (int n) {
+void gd_noteOct (ARFactory *f, int n) {
 vdebug ("gd_noteOct", n);
-	gGlobalFactory->setRegister(n);
+	f->setRegister(n);
 }
 
-void gd_noteEnum (long int n) {
+void gd_noteEnum (ARFactory *f, long int n) {
 vdebug ("gd_noteEnum", n);
 	 // numerator
 	zaehlerSet = 1;
 	ndots = 0;
-	gGlobalFactory->setNumerator(n);
-	gGlobalFactory->setDenominator(1);
+	f->setNumerator(n);
+	f->setDenominator(1);
 
 	nt_enum=n;
 	nt_denom=1;
 	nt_enumSet=1;
 }
 
-void gd_noteDenom (long int n) {
+void gd_noteDenom (ARFactory *f, long int n) {
 vdebug ("gd_noteDenom", n);
 	if (zaehlerSet == 0)
 	 {
 	 //  reset to standard
-	 gGlobalFactory->setNumerator(1);
+	 f->setNumerator(1);
 	 }
-	gGlobalFactory->setDenominator(n);
+	f->setDenominator(n);
 	ndots = 0; // switch off dots 
 
 	nt_denom=n;
@@ -140,66 +98,59 @@ vdebug ("gd_noteDenom", n);
 	zaehlerSet = 0;
 }
 
-void gd_noteDot(void) {
+void gd_noteDot(ARFactory *) {
 debug ("gd_noteDot");
-	//gGlobalFactory->setPoints(1);
 	ndots = 1;
 }
 
-void gd_noteDdot(void) {
+void gd_noteDdot(ARFactory *) {
 debug ("gd_noteDdot");
 	ndots = 2;
-	//gGlobalFactory->setPoints(2);
+	//f->setPoints(2);
 }
 
-void gd_noteTdot(void) {
+void gd_noteTdot(ARFactory *) {
 debug ("gd_noteDdot");
 	ndots = 3;
-	//gGlobalFactory->setPoints(2);
+	//f->setPoints(2);
 }
 
-void gd_seqAppendNote (void) {
+void gd_seqAppendNote (ARFactory *f) {
 debug ("gd_seqAppendNote");
 	if (accidentals)
-		gGlobalFactory->setAccidentals(accidentals);
+		f->setAccidentals(accidentals);
 	if (ndots)
-		gGlobalFactory->setPoints(ndots);
-	gGlobalFactory->addEvent();
+		f->setPoints(ndots);
+	f->addEvent();
 
 }
 
-void gd_chordInit(void) {
+void gd_chordInit(ARFactory *f) {
 debug ("gd_chordInit");
-
-	// factory does nothing?
-	gGlobalFactory->createChord();
-
-	ch_enum = 0;
-	ch_denom = 1;
-	ch_num_notes = 0;
+	f->createChord();
 }
 
-void gd_chordInitNote(void) {
+void gd_chordInitNote(ARFactory *f) {
 debug ("gd_chordInitNote");
-	gGlobalFactory->initChordNote();
+	f->initChordNote();
 }
 
-void gd_chordAppendNote(void) {
+void gd_chordAppendNote(ARFactory *f) {
 debug ("gd_chordAppendNote");
 
 	// factory does the same thing as with regular Notes.
 	// evtl. can be optimised
 
 	if (accidentals)
-		gGlobalFactory->setAccidentals(accidentals);
+		f->setAccidentals(accidentals);
 	if (ndots)
-		gGlobalFactory->setPoints(ndots);
-	gGlobalFactory->addEvent();
+		f->setPoints(ndots);
+	f->addEvent();
 }
 
-void gd_seqAppendChord(void) {
+void gd_seqAppendChord(ARFactory *f) {
 debug ("gd_seqAppendChord");
-	gGlobalFactory->addChord();
+	f->addChord();
 	// factory does nothing?
 
 }
@@ -220,24 +171,18 @@ static void mls2dur (int n, int& outNum, int& outDenum)
 	outDenum = denum;
 }
 
-void gd_noteAbsDur (long int n) {
+void gd_noteAbsDur (ARFactory *f, long int n) {
 vdebug ("gd_noteAbsDur", n);
 	int num, denum;
 	mls2dur (n, num, denum);
-	gd_noteEnum (num);
-	gd_noteDenom (denum);
+	gd_noteEnum (f, num);
+	gd_noteDenom (f, denum);
 }
 
-void gd_seqInit(void) {
+void gd_seqInit(ARFactory *f) {
 debug ("gd_seqInit");
 
-	gGlobalFactory->createVoice();
-
-	rtp_enum=0;
-	rtp_denom=1;
-
-	sq_max_voices=1;
-	sq_num_tags=0;
+	f->createVoice();
 
 	nt_enum=1;
 	nt_denom=4;
@@ -245,35 +190,27 @@ debug ("gd_seqInit");
 	zaehlerSet = 0;
 }
 
-void gd_seqExit(void) {
+void gd_seqExit(ARFactory *f) {
 debug ("gd_seqExit");
-	gGlobalFactory->addVoice();
+	f->addVoice();
 }
 
-void gd_segmInit(void) {
+void gd_segmInit(ARFactory *f) {
 debug ("gd_segmInit");
 
-	gGlobalFactory->createMusic();
-
-	sg_enum = 0;
-	sg_denom = 1;
-
-	sg_num_voices = 0;
-	sg_num_notes = 0;
-	sg_num_tags = 0;
-
+	f->createMusic();
 	zaehlerSet = 0;
 	ndots = 0;
 }
 
-void gd_segmExit(void) {
+void gd_segmExit(ARFactory *) {
 debug ("gd_segmExit");
 
 	// Nothing happens to gGlobalFactory -> You can now
 	// retrieve the Music by running factory->getMusic();
 }
 
-void gd_segmAppendSeq(void) {
+void gd_segmAppendSeq(ARFactory *) {
 debug ("gd_segmAppendSeq");
   // Nothing happens to gGlobalFactory
 }
@@ -294,31 +231,31 @@ char *tag;
 int argc;
 ARGV *argv;
 
-void gd_tagStart(const char* id,long int no) {
+void gd_tagStart(ARFactory *f, const char* id,long int no) {
 vdebug ("gd_tagStart", id);
 	// skip tag without slash
 	if (no<=0)
 		no = -1;
-	gGlobalFactory->createTag(&(id[1]),no);
+	f->createTag(&(id[1]),no);
 }
 
 // will be called at end of complete tag (closing bracket)
-void gd_tagEnd(void) {
+void gd_tagEnd(ARFactory *f) {
 debug ("gd_tagEnd");
-	gGlobalFactory->endTag();
+	f->endTag();
 }
 
-void gd_tagIntArg(long int n) {
+void gd_tagIntArg(ARFactory *f, long int n) {
 vdebug ("gd_tagIntArg", n);
-	gGlobalFactory->addTagParameter((int) n);
+	f->addTagParameter((int) n);
 }
 
-void gd_tagFloatArg(T_REAL f) {
-vdebug ("gd_tagFloatArg", f);
-	gGlobalFactory->addTagParameter(f);
+void gd_tagFloatArg(ARFactory *f, T_REAL val) {
+vdebug ("gd_tagFloatArg", val);
+	f->addTagParameter(val);
 }
 
-void gd_tagArgUnit(char *unit)
+void gd_tagArgUnit(ARFactory *f, const char *unit)
 {
 vdebug ("gd_tagArgUnit", unit);
 	// this gets the unit for tags...
@@ -328,76 +265,46 @@ vdebug ("gd_tagArgUnit", unit);
 	// (that is after gd_tagIntArg or
 	//  gd_tagFloatArg)
 
-	gGlobalFactory->setUnit(unit);
+	f->setUnit(unit);
 
 	// Parameter needs not to be freed!
 }
 
-void gd_tagStrArg(char *s) {
+void gd_tagStrArg(ARFactory *f, const char *s) {
 vdebug ("gd_tagStrArg", s);
-	gGlobalFactory->addTagParameter(s);
+	f->addTagParameter(s);
 }
 
-void gd_tagAddArg(const char *s) 
+void gd_tagAddArg(ARFactory *f, const char *s)
 {
 vdebug ("gd_tagAddArg", s);
 	// is called when a tagargument is complete
 
 	// s is the name (if the parameter had a name)
-	gGlobalFactory->setParameterName(s);
+	f->setParameterName(s);
 	
 }
 
-void gd_tagAdd(void) {
-	gGlobalFactory->addTag();
-	++ sq_num_tags;
+void gd_tagAdd(ARFactory *f) {
+	f->addTag();
+//	++ sq_num_tags;
 }
 
 // will be called after arguments have been passed
 // and before range starts. Can be used for checking
 // if current tag can have a range or not
-void gd_tagRange(void) {
+void gd_tagRange(ARFactory *f) {
 debug ("gd_tagRange");
-	gGlobalFactory->tagRange();
+	f->tagRange();
 }
 
 /** \brief Called after a parse error
 */
-int gd_error(const char *msg) 
-{
-	gParseErrorLine = lnr;
-	gParseErrorCol = cnr;
-	
-	std::cerr << "Guido error: " << msg << " (line " << lnr << ", char " <<  cnr << ")" << std::endl;
-	return 0;
-}
-
-/* Was: TODO: replace using the guido Feedback class
-int gd_error(const char *msg) 
-{
-#ifndef GMN2GIF
-//  printf("\nERROR: %s (line %li, char %li)\n", msg, lnr,cnr);
-	char str[250];
-	sprintf(str,"Error: %s (line %li, char %li)",
-			msg, lnr,cnr);
-// ATTENTION: windows specific
-#ifdef _WINDOWS
-
-	errmsg = str;
-
-	HMODULE hmod = ::LoadLibrary("nview32.dll");
-	if (DialogBox(hmod,MAKEINTRESOURCE(130),NULL,(DLGPROC) MyDlgProc) == 0)
-	{
-		// abort ... what do we do now?
-
-		::FreeLibrary(hmod);
-		return 1;
-	}
-	::FreeLibrary(hmod);
-	return 0; 
-
-#endif
-#endif
-	return 0;
-}
-*/
+//int gd_error(const char *msg) 
+//{
+//	gParseErrorLine = lnr;
+//	gParseErrorCol = cnr;
+//	
+//	std::cerr << "Guido error: " << msg << " (line " << lnr << ", char " <<  cnr << ")" << std::endl;
+//	return 0;
+//}

@@ -77,7 +77,6 @@ void guido_applySettings( const GuidoLayoutSettings * settings )
 // --------------------------------------------------------------------------
 void guido_deinit()
 {
-	gd_exit();	// for the GUIDO-Parser
 	FontManager::ReleaseAllFonts();
 	gInited = false;
 }
