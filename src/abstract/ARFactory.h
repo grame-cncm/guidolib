@@ -154,8 +154,6 @@ protected:
     NVstring mFilePath;
 };
 
-extern ARFactory * gGlobalFactory;
-
 #endif
 
 
