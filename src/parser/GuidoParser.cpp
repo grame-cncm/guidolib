@@ -163,5 +163,20 @@ void GuidoParser::tagAddArg	(const char *s)		{ fFactory->setParameterName(s); }
 void GuidoParser::tagEnd ()						{ fFactory->endTag(); }
 void GuidoParser::tagRange ()					{ fFactory->tagRange(); }
 
+//--------------------------------------------------------------------------
+ARHandler GuidoParser::parse()
+{
+	fzaehlerSet = 0;
+	faccidentals = 0;
+	fndots = 0;
+	fnt_enumSet = false;
+	fnt_enum =0;
+	fnt_denom =1;
+	fErrorLine = fErrorColumn = 0;
+	_yyparse ();
+	return (fErrorLine == 0) ? GuidoFactoryCloseMusic (fFactory) : 0;
+}
+
+
 } // end namespace
 

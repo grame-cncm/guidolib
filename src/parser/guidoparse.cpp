@@ -2112,19 +2112,7 @@ int guidoerror(YYLTYPE* loc, guido::GuidoParser* p, const char*s) {
 
 namespace guido 
 {
-
-ARHandler GuidoParser::parse()
-{
-	fzaehlerSet = 0;
-	faccidentals = 0;
-	fndots = 0;
-	fnt_enumSet = false;
-	fnt_enum =0;
-	fnt_denom =1;
-	fErrorLine = fErrorColumn = 0;
-	yyparse (this);
-	return (fErrorLine == 0) ? GuidoFactoryCloseMusic (fFactory) : 0;
-}
+			int GuidoParser::_yyparse()		{ return yyparse (this); }
 }
 
 

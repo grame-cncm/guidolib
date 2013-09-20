@@ -43,6 +43,8 @@ class GuidoParser {
 	int fErrorLine;
 	int fErrorColumn;
 	
+	int	_yyparse();
+	
 	public:
 		void*			fScanner;	// the flex scanner
 		std::istream*	fStream;    // input stream
