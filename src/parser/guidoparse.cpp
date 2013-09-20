@@ -2121,8 +2121,9 @@ ARHandler GuidoParser::parse()
 	fnt_enumSet = false;
 	fnt_enum =0;
 	fnt_denom =1;
+	fErrorLine = fErrorColumn = 0;
 	yyparse (this);
-	return GuidoFactoryCloseMusic (fFactory);
+	return (fErrorLine == 0) ? GuidoFactoryCloseMusic (fFactory) : 0;
 }
 }
 

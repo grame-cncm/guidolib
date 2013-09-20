@@ -25,6 +25,7 @@ GuidoParser::GuidoParser(std::istream* stream) : fStream(stream)
 	setlocale(LC_NUMERIC, "C");
 	fFactory = new ARFactory();
     initScanner();
+	fErrorLine = fErrorColumn = 0;
 }
 
 //--------------------------------------------------------------------------
