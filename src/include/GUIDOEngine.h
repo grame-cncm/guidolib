@@ -321,7 +321,8 @@ representations.
         Gives the line of a Guido script where the last parse error has occured.
 		\return a line number.
 	*/
-	GUIDOAPI(int)   GuidoGetParseErrorLine();
+	__declspec(deprecated("Deprecated function (will be erased soon) : use GUIDOAPI(GuidoErrCode) GuidoParserGetErrorCode (GuidoParser* p, int& line, int& col) instead."))
+    GUIDOAPI(int)   GuidoGetParseErrorLine(); //REM: completer warning
 
 	/*!
         Gives the default values of the layout settings.
