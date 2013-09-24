@@ -82,7 +82,7 @@ GRMeter::GRMeter( ARMeter * abstractRepresentationOfMeter, GRStaff * curstaff, b
 
 		if( gGlobalSettings.gDevice )
         {
-            for(int i = 0; i < numeratorsVector.size(); i++)
+            for(size_t i = 0; i < numeratorsVector.size(); i++)
             {
                 if (i)
                     extentsNumeratorsVector.push_back(extentPlus);
@@ -98,7 +98,7 @@ GRMeter::GRMeter( ARMeter * abstractRepresentationOfMeter, GRStaff * curstaff, b
 
         totalNumeratorExtent = 0;
 
-        for(int i = 0; i < extentsNumeratorsVector.size(); i++)
+        for(size_t i = 0; i < extentsNumeratorsVector.size(); i++)
                 totalNumeratorExtent += extentsNumeratorsVector[i];
 
 		extent = totalNumeratorExtent > extentDenominator ? totalNumeratorExtent : extentDenominator;
@@ -224,7 +224,7 @@ void GRMeter::OnDraw(VGDevice & hdc) const
 
         float dx2 = 0;
 
-        for (int i = 0; i < numeratorsVector.size(); i++)
+        for (size_t i = 0; i < numeratorsVector.size(); i++)
         {
             if (i == 0)
             {

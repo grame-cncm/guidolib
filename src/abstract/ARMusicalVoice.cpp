@@ -1919,10 +1919,10 @@ public:
 		if (start >= (int)text->length())
 			return "";
 
-		int end = position;
+		size_t end = position;
 		if (end >= 0)
 		{
-			while (end <= (int)text->length()-1 )
+			while (end <= (size_t)text->length()-1 )
 			{
 				char c = (*text)[end];
 				if (c == ' ' || c == '-' || c == '_')

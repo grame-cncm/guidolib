@@ -445,7 +445,7 @@ GRSystem::GRSystem(	GRStaffManager * staffmgr, GRPage * inPage,
 		GRSystemTag * systag;
 		if (bar)
 		{
-			int linesOffset = 0;
+			float linesOffset = 0;
 			bar->setPosFrom(0);
 			if (lastStaff) {
 				linesOffset += LSPACE / 2 * (lastStaff->getNumlines() - 5);

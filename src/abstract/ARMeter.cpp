@@ -138,7 +138,7 @@ void ARMeter::setTagParameterList(TagParameterList& tpl)
 
                 if (!numeratorsVector.empty())
                 {
-                    for(int i = 0; i < numeratorsVector.size(); i++)
+                    for(size_t i = 0; i < numeratorsVector.size(); i++)
                     {
                         numerator += numeratorsVector[i]; //REM: fixer une limite de somme pour le numérateur ? et pour le dénominateur ?
                     }
