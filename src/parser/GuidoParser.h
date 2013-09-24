@@ -56,7 +56,8 @@ class GuidoParser {
 		virtual ~GuidoParser();
 		
 		ARHandler           parse();
-        const ARFactory *   getFactory() const  { return fFactory; }
+        const ARFactory    *getFactory() const  { return fFactory; }
+        ARFactory          *getFactory()        { return fFactory; }
 
 		void noteInit		(const char *id);
 		void noteAcc		(int n);
