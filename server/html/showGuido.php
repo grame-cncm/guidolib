@@ -4,17 +4,7 @@
   {
     $resizepagetomusic = 'false';
   }
-  $content = 'data={ ' 
-. '"gmn" : "' . $_POST["gmn"] . '", '
-. '"width" : "' . $_POST["width"] . '", '
-. '"height" : "' . $_POST["height"] . '", '
-. '"page" : "' . $_POST["page"] . '", '
-. '"leftmargin" : "' . $_POST["marginleft"] . '", '
-. '"rightmargin" : "' . $_POST["marginright"] . '", '
-. '"topmargin" : "' . $_POST["margintop"] . '", '
-. '"bottommargin" : "' . $_POST["marginbottom"] . '", '
-. '"resizepagetomusic" : "' . $resizepagetomusic . '", '
-. '"format" : "' . $_POST["format"] . '" }';
+  $content = 'data="' . $_POST["gmn"] . '"';
 
   $params = array(
     'http' => array( 
@@ -22,7 +12,7 @@
       'content' => $content
   )); 
   $ctx = stream_context_create($params); 
-  $fp = @fopen('http://localhost:8000/', 'rb', false, $ctx); 
+  $fp = @fopen('http://guido.grame.fr:8000/', 'rb', false, $ctx); 
   if (!$fp) { 
     throw new Exception("Couldn't connect to the server."); 
   } 
