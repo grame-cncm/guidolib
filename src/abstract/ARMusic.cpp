@@ -120,7 +120,6 @@ void ARMusic::print(std::ostream &os) const
 
 	}
 	os << " } ";
-	return os;
 }
 
 std::ostream & ARMusic::output(std::ostream & os, bool isauto) const
