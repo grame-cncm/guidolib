@@ -163,6 +163,8 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		void			setReadMode(_readmode newreadmode)	{ readmode = newreadmode; }
 		_readmode getReadMode() const						{ return readmode; }
 
+        ARChordTag          *getCurrentChord()              { return currentChord; }
+
 	protected:
 		ARChordTag *		currentChord;
 		ARShareLocation *	currentShareLocation;

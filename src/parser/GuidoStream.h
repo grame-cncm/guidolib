@@ -14,33 +14,33 @@
  
  */
 
-#include <iostream>
-//#include <string>
-#include <locale.h>
+#include <istream>
 
-/*#include "GuidoFactory.h"
+#include "GuidoStreamBuf.h"
 
- class ARFactory;*/
+using namespace std;
 
-namespace guido
+
+class GuidoStream : public istream
 {
+public:
+             GuidoStream(GuidoStreamBuf *inStreamBuf);
+    virtual ~GuidoStream();
 
-    class GuidoStream {
+    void WriteToStream(const char* str);
 
-        public:
+    bool IsParserJobFinished()  { return fParserJobFinished; }
+    void CloseStream()          { fGuidoStreamBuffer->SetHaveToCloseStream(); }
 
-                     GuidoStream();
-            virtual ~GuidoStream();
-    
-            std::istream* getStream() {return fStream;}
+    void SetParserJobFinished() { fParserJobFinished = true; }
 
-            void WriteStream(const char* str);
+    bool GetAreAllDataRead()    { return fGuidoStreamBuffer->GetAreAllDataRead(); }
 
-        protected:
+protected:
+    GuidoStreamBuf *fGuidoStreamBuffer;
 
-            std::istream* fStream;
-    };
-    
-} // end namespace
+    bool fParserJobFinished;
+};
+
 
 #endif

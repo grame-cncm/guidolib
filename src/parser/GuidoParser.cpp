@@ -12,20 +12,21 @@
  */
 
 #include <locale.h>
+#include <istream>
+
+#include "GuidoStream.h"
 
 #include "GuidoParser.h"
 #include "ARFactory.h"
 
-namespace guido
-{
-
 //--------------------------------------------------------------------------
-GuidoParser::GuidoParser(std::istream* stream) : fStream(stream)
+GuidoParser::GuidoParser()
 {
 	setlocale(LC_NUMERIC, "C");
 	fFactory = new ARFactory();
     initScanner();
 	fErrorLine = fErrorColumn = 0;
+    fStream = NULL;
 }
 
 //--------------------------------------------------------------------------
@@ -34,6 +35,15 @@ GuidoParser::~GuidoParser()
 	setlocale(LC_NUMERIC, 0);
 	destroyScanner();
 	delete fFactory;
+}
+
+//--------------------------------------------------------------------------
+void GuidoParser::setStream(std::istream *stream)
+{
+    if (stream)
+    {
+        fStream = stream;
+    }
 }
 
 //--------------------------------------------------------------------------
@@ -174,9 +184,6 @@ ARHandler GuidoParser::parse()
 	fnt_denom =1;
 	fErrorLine = fErrorColumn = 0;
 	_yyparse ();
+    getGuidoStream()->SetParserJobFinished();
 	return (fErrorLine == 0) ? GuidoFactoryCloseMusic (fFactory) : 0;
 }
-
-
-} // end namespace
-

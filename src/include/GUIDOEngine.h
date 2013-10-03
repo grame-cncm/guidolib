@@ -322,7 +322,7 @@ representations.
 		\return a line number.
 	*/
 	__declspec(deprecated("Deprecated function (will be erased soon) : use GUIDOAPI(GuidoErrCode) GuidoParserGetErrorCode (GuidoParser* p, int& line, int& col) instead."))
-    GUIDOAPI(int)   GuidoGetParseErrorLine(); //REM: completer warning
+    GUIDOAPI(int)   GuidoGetParseErrorLine();
 
 	/*!
         Gives the default values of the layout settings.

@@ -12,27 +12,26 @@
  */
 
 #include <locale.h>
+#include <istream>
+
+#include "GuidoStreamBuf.h"
 
 #include "GuidoStream.h"
-//#include "ARFactory.h"
 
-namespace guido
+
+//--------------------------------------------------------------------------
+GuidoStream::GuidoStream(GuidoStreamBuf *inStreamBuf) : fGuidoStreamBuffer(inStreamBuf), istream(inStreamBuf), fParserJobFinished(false)
 {
+}
 
-    //--------------------------------------------------------------------------
-    GuidoStream::GuidoStream()
-    {
-    }
+//--------------------------------------------------------------------------
+GuidoStream::~GuidoStream() 
+{
+    delete fGuidoStreamBuffer;
+}
 
-    //--------------------------------------------------------------------------
-    GuidoStream::~GuidoStream() 
-    {
-    }
-
-    void GuidoStream::WriteStream(const char* str)
-    {
-        //écrire str dans fStream
-    }
-
-} // end namespace
-
+//--------------------------------------------------------------------------
+void GuidoStream::WriteToStream(const char* str) 
+{
+    fGuidoStreamBuffer->WriteToBuffer(str);
+}

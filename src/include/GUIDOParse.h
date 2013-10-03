@@ -17,20 +17,18 @@
 
 #include <istream>
 #include "GUIDOExport.h"
-#include "GuidoParser.h"
-#include "GuidoStream.h"
 
 struct NodeAR;
 struct NodeGR;
-typedef struct NodeAR *  ARHandler;
-typedef struct NodeGR *  GRHandler;
+typedef struct NodeAR *ARHandler;
+typedef struct NodeGR *GRHandler;
 typedef const struct NodeAR *  CARHandler;
 typedef const struct NodeGR *  CGRHandler;
 
-using namespace guido;
+class GuidoParser;
+class GuidoStream;
 
 enum GuidoErrCode;
-
 
 #ifdef __cplusplus
 extern "C" {
@@ -48,7 +46,7 @@ extern "C" {
 		\brief Creates a new parser
 		\return a guido parser.
 	*/
-	GUIDOAPI(guido::GuidoParser *)		GuidoOpenParser (GuidoStream *s);
+	GUIDOAPI(GuidoParser *)		GuidoOpenParser ();
 
 	/*!
 		\brief Close a guido parser and releases all the associated ressources
@@ -79,7 +77,7 @@ extern "C" {
 		\param stream the GuidoStream to parse.
 		\return a ARHandler or 0 in case of error.
 	*/
-	GUIDOAPI(ARHandler)			GuidoStream2AR (GuidoParser *p, const GuidoStream* stream);
+	GUIDOAPI(ARHandler)			GuidoStream2AR (GuidoParser *p, GuidoStream* stream);
 
 	/*!
 		\brief Try to convert the current parser state to AR
@@ -105,7 +103,7 @@ extern "C" {
 		In particular, streams allow to retrieve an AR in while the stream is still opened.
 		\return a guido stream.
 	*/
-	GUIDOAPI(GuidoStream*)		GuidoOpenStream ();
+	GUIDOAPI(GuidoStream *)		GuidoOpenStream ();
 
 	/*!
 		\brief Close a guido stream
@@ -127,10 +125,10 @@ extern "C" {
 		\param str a string containing a portion of gmn code
 		\return a Guido error code.
 	*/
-	GUIDOAPI(GuidoErrCode)		GuidoWriteStream (GuidoStream *stream, const char* str);
+	GUIDOAPI(GuidoErrCode)		GuidoWriteStream (GuidoStream *s, const char* str);
 
 
-//inline GuidoStream* operator <<(GuidoStream* stream, const char* str)	{ GuidoWriteStream(stream, str)); return stream; } //REM: décommenter
+//inline GuidoStream &operator <<(GuidoStream &stream, const char *str)	{ GuidoWriteStream(&stream, str); return stream; }
 
 /*! @} */
 
@@ -139,4 +137,4 @@ extern "C" {
 }
 #endif
 
-#endif
+#endif	/* GUIDOParse_H */

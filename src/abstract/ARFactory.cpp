@@ -199,32 +199,39 @@ ARMusic * ARFactory::getMusic()
 {
 	assert(!mCurrentEvent);
 	assert(!mCurrentVoice);
-	assert(mCurrentMusic);
-	ARMusic * music = mCurrentMusic;
 
-	// this sets the maxtagid in the ARMusic.
-	// this can be used by all auto-routines...
-	music->mMaxTagId = ARFactory::sMaxTagId + 1;
+    if (mCurrentMusic) //REM: keep modified ?
+    {
+        ARMusic * music = mCurrentMusic;
 
-#if ARTRACE
-	cout << "ARFactory::getMusic before auto stuff: " << endl;
-	music->output(cout, true);
-#endif
-
-	// this call inserts potential Breaks in
-	// the first voice of the piece.
-	timebench("ARMusic::doAutoStuff", music->doAutoStuff());
+        // this sets the maxtagid in the ARMusic.
+        // this can be used by all auto-routines...
+        music->mMaxTagId = ARFactory::sMaxTagId + 1;
 
 #if ARTRACE
-	cout << "\nARFactory::getMusic after auto stuff: " << endl;
-	music->output(cout, true);
-	cout << "\nARFactory::getMusic - end ----------- " << endl;
+        cout << "ARFactory::getMusic before auto stuff: " << endl;
+        music->output(cout, true);
+#endif
+
+        // this call inserts potential Breaks in
+        // the first voice of the piece.
+        timebench("ARMusic::doAutoStuff", music->doAutoStuff());
+
+#if ARTRACE
+        cout << "\nARFactory::getMusic after auto stuff: " << endl;
+        music->output(cout, true);
+        cout << "\nARFactory::getMusic - end ----------- " << endl;
 #endif
 
 
-	mCurrentMusic = 0;
-	ARFactory::sMaxTagId = -1;
-	return music;
+        mCurrentMusic = 0;
+        ARFactory::sMaxTagId = -1;
+        return music;
+    }
+    else
+    {
+        return NULL;
+    }
 }
 
 
@@ -261,37 +268,38 @@ void ARFactory::addVoice()
  	cout << "ARFactory::addVoice " << endl;
 #endif
 	assert(!mCurrentEvent);
-	assert(mCurrentMusic);
-	assert(mCurrentVoice);
 
-	mCurrentVoice->ConvertToNormalForm();
+    if (mCurrentVoice && mCurrentMusic) //REM: keep modified ?
+    {
+        mCurrentVoice->ConvertToNormalForm();
 
-	// old: this is now done
-	// when returning the complete voice ...
+        // old: this is now done
+        // when returning the complete voice ...
 
-	// this does automatic conversion,
-	// for example autobeaming ...
-	// mCurrentVoice->doAutoStuff();
+        // this does automatic conversion,
+        // for example autobeaming ...
+        // mCurrentVoice->doAutoStuff();
 
-	mCurrentMusic->AddTail(mCurrentVoice);
-	mCurrentVoice=NULL;
-	mCurrentDenominator = DEFAULT_DENOMINATOR;
-	mCurrentIntensity = DEFAULT_INTENSITY;
-	mCurrentNumerator = DEFAULT_NUMERATOR;
-	mCurrentRegister = DEFAULT_REGISTER;
-	mCurrentStaff = NULL;
-	mCurrentOctava = NULL;
-	mCurrentStem = NULL;
-	mCurrentHead = NULL;
-	mCurrentNoteFormat = NULL;
-	mCurrentAlter = NULL;
-	mCurrentRestFormat = NULL;
-	mCurrentDotFormat = NULL;
-	mCurrentCue = NULL;
-	mCurrentGrace = NULL;
-	mCurrentTrill = NULL;
-	mCurrentCluster = NULL;
-	mVoiceAdded = true;
+        mCurrentMusic->AddTail(mCurrentVoice);
+        mCurrentVoice=NULL;
+        mCurrentDenominator = DEFAULT_DENOMINATOR;
+        mCurrentIntensity = DEFAULT_INTENSITY;
+        mCurrentNumerator = DEFAULT_NUMERATOR;
+        mCurrentRegister = DEFAULT_REGISTER;
+        mCurrentStaff = NULL;
+        mCurrentOctava = NULL;
+        mCurrentStem = NULL;
+        mCurrentHead = NULL;
+        mCurrentNoteFormat = NULL;
+        mCurrentAlter = NULL;
+        mCurrentRestFormat = NULL;
+        mCurrentDotFormat = NULL;
+        mCurrentCue = NULL;
+        mCurrentGrace = NULL;
+        mCurrentTrill = NULL;
+        mCurrentCluster = NULL;
+        mVoiceAdded = true;
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -321,34 +329,36 @@ void ARFactory::addChord()
 #if ARFTrace
  	cout << "ARFactory::addChord " << endl;
 #endif
-	assert(mCurrentVoice);
+    if (mCurrentVoice) //REM: keep modified ?
+    {
+        // then we are finished reading the chord.
+        // we have to deal with trills somewhere else...
 
-	// then we are finished reading the chord.
-	// we have to deal with trills somewhere else...
-	
-	// now we have to go through the events within this chord once more and set the duration of the 
-	// first empty event and reset the timepositions of the following events (and tags/ptags)
-	// we also have to add the \chord \dispDur and \shareStem tags...
-	// one thought: these Tags need one additional parameter (not only auto) but also for saving if the chord
-	// was automatically created or already in the GUIDO description.	
-	if (mCurrentTrill)
-	{
-		ARMusicalVoice::CHORD_TYPE chord_type = ARMusicalVoice::UP_SIMPLE;
-		ARMusicalVoice::CHORD_ACCIDENTAL chord_accidental = ARMusicalVoice::NATURAL;
-		ARNote * FirstNote = mCurrentVoice->setTrillChord(chord_type, chord_accidental);
+        // now we have to go through the events within this chord once more and set the duration of the 
+        // first empty event and reset the timepositions of the following events (and tags/ptags)
+        // we also have to add the \chord \dispDur and \shareStem tags...
+        // one thought: these Tags need one additional parameter (not only auto) but also for saving if the chord
+        // was automatically created or already in the GUIDO description.	
+        if (mCurrentTrill)
+        {
+            ARMusicalVoice::CHORD_TYPE chord_type = ARMusicalVoice::UP_SIMPLE;
+            ARMusicalVoice::CHORD_ACCIDENTAL chord_accidental = ARMusicalVoice::NATURAL;
+            ARNote * FirstNote = mCurrentVoice->setTrillChord(chord_type, chord_accidental);
 
-		mCurrentTrill->setChordType(chord_type);
-		mCurrentTrill->setChordAccidental(chord_accidental);
+            mCurrentTrill->setChordType(chord_type);
+            mCurrentTrill->setChordAccidental(chord_accidental);
 
-		FirstNote->setOrnament(mCurrentTrill);
-//		delete mCurrentTrill;
-//		mCurrentTrill = 0;
-	}
-	
-    if (mCurrentCluster)
-        mCurrentVoice->setClusterChord(mCurrentCluster);
+            FirstNote->setOrnament(mCurrentTrill);
+            //		delete mCurrentTrill;
+            //		mCurrentTrill = 0;
+        }
 
-	mCurrentVoice->FinishChord();
+        if (mCurrentCluster)
+            mCurrentVoice->setClusterChord(mCurrentCluster);
+
+        if (mCurrentVoice->getCurrentChord())
+            mCurrentVoice->FinishChord();
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -400,59 +410,59 @@ void ARFactory::addEvent()
 #if ARFTrace
  	cout << "ARFactory::addEvent " << endl;
 #endif
-	assert(mCurrentVoice);
-	assert(mCurrentEvent);
-	
-	ARDisplayDuration * tmpdspdur = 0;
-	if (mCurrentGrace)
-	{
-		assert(mCurrentGrace->getRange());
+    if (mCurrentVoice && mCurrentEvent) //REM: keep modified ?
+    {
+        ARDisplayDuration * tmpdspdur = 0;
+        if (mCurrentGrace)
+        {
+            assert(mCurrentGrace->getRange());
 
-		// maybe introduce a display-duration?
-		// we have to introduce a display duration for sure ....
-		// only set the display-duration if the event
-		// within the grace-note has a duration greater then zero 
+            // maybe introduce a display-duration?
+            // we have to introduce a display duration for sure ....
+            // only set the display-duration if the event
+            // within the grace-note has a duration greater then zero 
 
-		if (mCurrentEvent->getDuration() > DURATION_0)
-		{
-			tmpdspdur = new ARDisplayDuration;
-			tmpdspdur->setDisplayDuration( mCurrentEvent->getDuration());
+            if (mCurrentEvent->getDuration() > DURATION_0)
+            {
+                tmpdspdur = new ARDisplayDuration;
+                tmpdspdur->setDisplayDuration( mCurrentEvent->getDuration());
 
-			mCurrentVoice->AddPositionTag(tmpdspdur);
-			
-			// the display duration tag will get its position 
-			// through the voice::AddTail operation.
-			// now we need an end ...
-			mCurrentEvent->setDuration(DURATION_0);
-		}
-	}
-	
-	mCurrentVoice->AddTail( mCurrentEvent );
+                mCurrentVoice->AddPositionTag(tmpdspdur);
 
-	// In the "toadd" list are all musical objects (Ties, Fermatas, ...) stored which
-	// must be definitly stored AFTER the event.
-	// otherwise an update of the graphical position is very hard todo
-	// The position of the last note is needed before 
-	// the calculation of the  position can be done
-	// ATTENTION: This  is not true anymore! Ties and slurs are now
-	// handled totally differently. Only for fermatas this solution
-	// maybe needed now (I believe).
-	 
-/*	while (!mToAddList.empty())
-	{
-		// old
-		// mCurrentVoice->AddTailNoDuration(mToAddList.RemoveHead());
-		mCurrentVoice->AddTail(mToAddList.RemoveHead());
-	}*/
+                // the display duration tag will get its position 
+                // through the voice::AddTail operation.
+                // now we need an end ...
+                mCurrentEvent->setDuration(DURATION_0);
+            }
+        }
 
-	mLastEvent = mCurrentEvent;
-	mCurrentEvent = 0;
+        mCurrentVoice->AddTail( mCurrentEvent );
 
-	if (tmpdspdur)
-	{
-		ARDummyRangeEnd * dummy = new ARDummyRangeEnd("\\dispDurEnd");
-		mCurrentVoice->setPositionTagEndPos(-1,dummy,tmpdspdur);
-	}
+        // In the "toadd" list are all musical objects (Ties, Fermatas, ...) stored which
+        // must be definitly stored AFTER the event.
+        // otherwise an update of the graphical position is very hard todo
+        // The position of the last note is needed before 
+        // the calculation of the  position can be done
+        // ATTENTION: This  is not true anymore! Ties and slurs are now
+        // handled totally differently. Only for fermatas this solution
+        // maybe needed now (I believe).
+
+        /*	while (!mToAddList.empty())
+        {
+        // old
+        // mCurrentVoice->AddTailNoDuration(mToAddList.RemoveHead());
+        mCurrentVoice->AddTail(mToAddList.RemoveHead());
+        }*/
+
+        mLastEvent = mCurrentEvent;
+        mCurrentEvent = 0;
+
+        if (tmpdspdur)
+        {
+            ARDummyRangeEnd * dummy = new ARDummyRangeEnd("\\dispDurEnd");
+            mCurrentVoice->setPositionTagEndPos(-1,dummy,tmpdspdur);
+        }
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -1980,7 +1990,7 @@ void ARFactory::setUnit( const char * s )
 }
 
 // ----------------------------------------------------------------------------
-/** \brief Defines the name (when applicable) of the last added tag-paramater
+/** \brief Defines the name (when applicable) of the last added tag-parameter
 */
 void ARFactory::setParameterName( const char * name)
 {
@@ -1995,4 +2005,38 @@ float ARFactory::UndoTransform(const float val)
 	// this must be refined, if 
 	// the default unit changes!
 	return (float) (val * 2.0f / (float)LSPACE);
+}
+
+// ----------------------------------------------------------------------------
+void ARFactory::makePartialBackup()
+{
+    //ARDisplayDuration * tmpdspdur = 0;
+    //if (mCurrentGrace)
+    //{
+    //    /**** REM: ça on verra ****/
+    //    assert(mCurrentGrace->getRange());
+
+    //    if (mCurrentEvent->getDuration() > DURATION_0)
+    //    {
+    //        tmpdspdur = new ARDisplayDuration;
+    //        tmpdspdur->setDisplayDuration( mCurrentEvent->getDuration());
+
+    //        mCurrentVoice->AddPositionTag(tmpdspdur);
+
+    //        mCurrentEvent->setDuration(DURATION_0);
+    //    }
+    //    /******************************/
+    //}
+
+    ///* REM: faire l'inverse */
+    //mCurrentVoice->AddTail( mCurrentEvent );
+
+    //mLastEvent = mCurrentEvent;
+    //mCurrentEvent = 0;
+
+    //if (tmpdspdur)
+    //{
+    //    ARDummyRangeEnd * dummy = new ARDummyRangeEnd("\\dispDurEnd");
+    //    mCurrentVoice->setPositionTagEndPos(-1,dummy,tmpdspdur);
+    //}
 }

@@ -17,14 +17,22 @@
 	The Guido parser API
  */
 
-#include "GUIDOParse.h"
-#include "ARFactory.h"
-#include "GUIDOInternal.h"
-/*#include <iostream>
-#include <fstream>
-#include <sstream>*/
-
 using namespace std;
+
+// - Guido AR
+#include "ARFactory.h"
+
+// - Guido Misc
+#include "GUIDOInternal.h"
+#include "GuidoParser.h"
+#include "GuidoStream.h"
+#include "GUIDOEngine.h"
+
+#include "GUIDOParse.h"
+
+/* REM: tmp */
+#include <windows.h>
+/************/
 
 
 // ==========================================================================
@@ -32,75 +40,122 @@ using namespace std;
 // ==========================================================================
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoParser*) GuidoOpenParser (GuidoStream *s)
+GUIDOAPI(GuidoParser *) GuidoOpenParser ()
 {
+    GuidoParser *newParser = new GuidoParser();
 
-    GuidoParser *newParser = new GuidoParser(s->getStream());
-
-    return newParser;
+	return newParser;
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoCloseParser (GuidoParser* p)
+GUIDOAPI(GuidoErrCode) GuidoCloseParser (GuidoParser *p)
 {
+    if (!p)
+        return guidoErrBadParameter;
+
     delete p;
 
 	return guidoNoErr;
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(ARHandler) GuidoFile2AR (GuidoParser* p, const char* file)
+GUIDOAPI(ARHandler) GuidoFile2AR (GuidoParser *p, const char *file)
 {
-    //écrire le contenu du fichier dans le stream du parser
-    
+    /*if (!file || !p)
+        return NULL;
+
+    std::ifstream fileStream(file);
+ 
+    if (!fileStream)
+        return NULL;
+
+    GuidoStream *parserStream = p->getGuidoStream();
+
+    *parserStream << fileStream.rdbuf();
+
+    fileStream.close();
+
+    std::cout <<  parserStream->str();*/
+
     ARHandler ar = GuidoParser2AR(p);
 
 	return ar;
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(ARHandler)	GuidoString2AR (GuidoParser* p, const char* str)
+GUIDOAPI(ARHandler)	GuidoString2AR (GuidoParser *p, const char *str)
 {
-    //écrire la string dans le stream du parser
-    
+    /*if( !str || !p )
+        return NULL;
+
+    std::istringstream iss(str);
+
+    GuidoStream *parserStream = (GuidoStream *)p->getStream();
+
+    //while (iss)
+      //  *parserStream << iss.get();*/
+
     ARHandler ar = GuidoParser2AR(p);
 
 	return ar;
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(ARHandler)	GuidoStream2AR (GuidoParser* p, const GuidoStream* stream) //REM: méthode bloquante qui va tourner dans un thread ?
+GUIDOAPI(ARHandler)	GuidoStream2AR (GuidoParser *p, GuidoStream* s)
 {
-    //écrire le contenu du stream dans le stream du parser
-    
-    ARHandler ar = GuidoParser2AR(p);
+    if (!p || !s)
+        return NULL;
+
+    ARHandler ar = 0;
+
+    p->setStream(s);
+
+    ar = p->parse();
 
 	return ar;
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(ARHandler)	GuidoParser2AR (GuidoParser* p)
+GUIDOAPI(ARHandler)	GuidoParser2AR (GuidoParser *p)
 {
+    if (!p)
+        return NULL;
+
+    /* Wait for the parser to be initialized */
+    while (!p->getGuidoStream())
+    {
+        Sleep(10);
+    }
+
+    /* Wait for the stream to have consumed all data written at this moment */
+    while (!p->getGuidoStream()->GetAreAllDataRead())
+    {
+        Sleep(10);
+    }
+    
     ARFactory *factory = p->getFactory();
-    
-    //backup de la factory
+
+    //REM: make factory backup
+
     GuidoFactoryCloseEvent(factory);
+    GuidoFactoryCloseChord(factory);
     GuidoFactoryCloseVoice(factory);
-    GuidoFactoryCloseMusic(factory);
-    GuidoFactoryClose(factory);
 
     ARHandler ar = guido_RegisterARMusic(factory->getMusic());
 
     //REM: il faut remettre la factory dans l'état précédent à un certain moment !
     //Juste avant de faire un WriteStream ?
-    //Pas ici en tout cas, puisque sinon les close auront servi à rien.
+    //Pas ici en tout cas, puisque sinon les "close" auront servi à rien.
 
 	return ar;
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoParserGetErrorCode (GuidoParser* p, int& line, int& col)
+GUIDOAPI(GuidoErrCode) GuidoParserGetErrorCode (GuidoParser *p, int &line, int &col)
 {
+    if (!p)
+        return guidoErrBadParameter;
+
     line = p->getErrorColumn();
     col  = p->getErrorLine();
 
@@ -108,26 +163,43 @@ GUIDOAPI(GuidoErrCode) GuidoParserGetErrorCode (GuidoParser* p, int& line, int& 
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoStream*) GuidoOpenStream ()
+GUIDOAPI(GuidoStream *) GuidoOpenStream ()
 {
-    GuidoStream *stream = new GuidoStream();
+    GuidoStreamBuf *guidoStreamBuffer = new GuidoStreamBuf();
 
-    return stream;
+    GuidoStream *newStream = new GuidoStream(guidoStreamBuffer);
 
+    return newStream;
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoCloseStream (GuidoStream* s)
+GUIDOAPI(GuidoErrCode) GuidoCloseStream (GuidoStream *s)
 {
+    if (!s)
+        return guidoErrBadParameter;
+
+    s->CloseStream();
+
+    /* Wait for the parser to end his job */
+    while (!s->IsParserJobFinished())
+    {
+        Sleep(10);
+    }
+
     delete s;
 
     return guidoNoErr;
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoWriteStream (GuidoStream* stream, const char* str)
+GUIDOAPI(GuidoErrCode) GuidoWriteStream (GuidoStream *s, const char *str)
 {
-    stream->WriteStream(str); //Ecrire str dans le stream
+    if( !s || !str )
+        return guidoErrBadParameter;
+
+    s->WriteToStream(str);
+    s->WriteToStream(" "); //bad, but without this the last character of str isn't taken in account
+
 
 	return guidoNoErr;
 }

@@ -41,7 +41,6 @@ using namespace std;
 #include "TagParameterFloat.h"
 
 // - Guido GR
-
 #include "GRMusic.h"
 #include "GRSpringForceIndex.h"
 #include "GRStaffManager.h"
@@ -188,8 +187,8 @@ GUIDOAPI(GuidoErrCode) GuidoParseFile(const char * filename, ARHandler * ar)
     ARHandler music = 0;
    fstream file (filename, fstream::in);
     if (file.is_open()) {
-        guido::GuidoParser p (&file);
-        music = p.parse();
+        /*GuidoParser p (&file); //REM: A CHANGER
+        music = p.parse();*/
     }
 	else {
 		return guidoErrFileAccess;
@@ -239,9 +238,11 @@ GUIDOAPI(GuidoErrCode) GuidoParseString (const char * str, ARHandler* ar)
 	if( gGlobalSettings.gFeedback )
 		gGlobalSettings.gFeedback->Notify( GuidoFeedback::kProcessing );
 
-	stringstream sstr (str);
-    guido::GuidoParser p(&sstr);
-    ARHandler music = p.parse();
+    ARHandler music = 0;
+
+	/*stringstream sstr (str); //REM: A CHANGER
+    GuidoParser p(&sstr);
+    ARHandler music = p.parse();*/
 	if (!music || ( gGlobalSettings.gFeedback && gGlobalSettings.gFeedback->ProgDialogAbort())) {
 		// Something failed, do some cleanup
 		return music ? guidoErrUserCancel : guidoErrParse;

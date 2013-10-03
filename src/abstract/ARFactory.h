@@ -111,6 +111,8 @@ class ARFactory
 	  	void 		setUnit( const char * s );
 
         void        setFilePath(const char* inFilePath) { mFilePath = inFilePath; }
+
+        void        makePartialBackup();
 	  	
   private:
 
