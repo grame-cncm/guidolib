@@ -16,7 +16,7 @@
 
 using namespace std;
 
-#define YY_EXTRA_TYPE guido::GuidoParser*
+#define YY_EXTRA_TYPE GuidoParser*
 #define YY_USER_ACTION yylloc->last_line = yylineno; yylloc->first_column += strlen(yytext);
 
 #define YY_INPUT(buf,result,max_size)   \
@@ -135,9 +135,6 @@ EOL		[\x0a\x0d]
 
 %%
 
-namespace guido 
-{
-
 void GuidoParser::initScanner()
 {
 	yylex_init(&fScanner);
@@ -148,6 +145,3 @@ void GuidoParser::destroyScanner()
 {
 	yylex_destroy(fScanner);
 }
-
-} // end namespace
-
