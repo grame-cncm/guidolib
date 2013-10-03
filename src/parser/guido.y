@@ -10,7 +10,7 @@
 #include "guidoparse.hpp"
 
 #define YYERROR_VERBOSE
-int guidoerror (YYLTYPE* locp, guido::GuidoParser* context, const char*s);
+int guidoerror (YYLTYPE* locp, GuidoParser* context, const char*s);
 int yylex(YYSTYPE* lvalp, YYLTYPE* llocp, void* scanner);
 
 #define scanner context->fScanner
@@ -23,7 +23,7 @@ using namespace std;
 %locations
 %defines
 %error-verbose
-%parse-param { guido::GuidoParser* context }
+%parse-param { GuidoParser* context }
 %lex-param { void* scanner  }
 
 %start score
@@ -248,16 +248,11 @@ signednumber: number								{ $$ = $1; }
 %%
 
 extern int	gParseErrorLine;
-int guidoerror(YYLTYPE* loc, guido::GuidoParser* p, const char*s) {
+int guidoerror(YYLTYPE* loc, GuidoParser* p, const char*s) {
 	gParseErrorLine = loc->last_line;		// for backward compatibility only
 	p->setErrorLoc (loc->last_line, loc->first_column);
 	cerr << "error line: " << loc->last_line << " col: " << loc->first_column << ": " << s << endl;
 	return 0;
 }
 
-
-namespace guido 
-{
-			int GuidoParser::_yyparse()		{ return yyparse (this); }
-}
-
+int GuidoParser::_yyparse()		{ return yyparse (this); }
