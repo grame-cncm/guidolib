@@ -542,15 +542,15 @@ void MainWindow::documentWasModified()
 
 //-------------------------------------------------------------------------
 void MainWindow::updateCode()
-{	
+{
 	mTextEditTimer->stop();
 
 	QString newGMNCode = mTextEdit->toPlainText();
-	if ( !newGMNCode.length() )
-		return;
+	//if ( !newGMNCode.length() )
+	//	return;
 
-	if ( newGMNCode == mGuidoWidget->gmnCode() )
-		return;
+	//if ( newGMNCode == mGuidoWidget->gmnCode() )
+	//	return;
 
 	if ( mGuidoWidget->setGMNCode( newGMNCode, filePath() ) )
 	{
