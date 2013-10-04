@@ -380,6 +380,16 @@ void guidosession::fillGuidoPageFormatUsingCurrentSettings(GuidoPageFormat *pf)
     pf->marginright = marginright_;
     pf->marginbottom = marginbottom_;
 }
+
+void guidosession::fillGuidoLayoutSettingsUsingCurrentSettings(GuidoLayoutSettings *ls)
+{
+    ls->systemsDistance = systemsDistance_;
+    ls->systemsDistribution = systemsDistribution_;
+    ls->systemsDistribLimit = systemsDistribLimit_;
+    ls->spring = spring_;
+    ls->neighborhoodSpacing = neighborhoodSpacing_;
+    ls->optimalPageFill = optimalPageFill_;
+}
     
 // GUIDO SESSION RESPONSE RETURNERS
 // ................................................

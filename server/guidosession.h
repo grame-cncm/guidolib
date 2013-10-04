@@ -107,7 +107,7 @@ private :
 
     // used for graphical representation building
     void fillGuidoPageFormatUsingCurrentSettings(GuidoPageFormat *pf);
-
+    void fillGuidoLayoutSettingsUsingCurrentSettings(GuidoLayoutSettings *ls);
     // private function to wrap json in the ID of a current session
     guidosessionresponse wrapObjectInId(json::json_object *obj);
     
