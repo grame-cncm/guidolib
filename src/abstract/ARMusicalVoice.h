@@ -105,6 +105,7 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		void			ConvertToNormalForm();
 
 		virtual GuidoPos getLastEventPosition();
+        virtual void    setLastEventPosition(GuidoPos inPos);
 //		virtual void	FreezeState(ARMusicalVoiceState * in);
 		virtual void	setPositionTagEndPos(int id, ARMusicalTag * tag, ARMusicalTag * start = NULL);
 		virtual void	RemovePositionTag( ARPositionTag * ptag);
@@ -148,6 +149,7 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		virtual void	GetPrevEvent(GuidoPos & pos, ARMusicalVoiceState & vst) const;
 		virtual			ARMusicalObject * GetNext(GuidoPos & pos, ARMusicalVoiceState & vst) const;
 		virtual const	ARMusicalVoiceState * getVoiceState() const		{ return mCurVoiceState; }
+        virtual         ARMusicalVoiceState * getVoiceState()           { return mCurVoiceState; }
 
 		// for automatic-beaming ...
 		enum bmstate { BEAMSAUTO, BEAMSOFF, BEAMSEXPLICIT };
@@ -163,19 +165,26 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		void			setReadMode(_readmode newreadmode)	{ readmode = newreadmode; }
 		_readmode getReadMode() const						{ return readmode; }
 
-        ARChordTag          *getCurrentChord()              { return currentChord; }
+        ARChordTag     *getCurrentChord()                   { return currentChord; }
+
+        int             getPitchsum()                       { return pitchsum; }
+        void            setPitchsum(int inPitchsum)         { pitchsum = inPitchsum; }
+        
+        int             getSum()                            { return sum; }
+        void            setSum(int inSum)                   { sum = inSum; }
+
 
 	protected:
-		ARChordTag *		currentChord;
-		ARShareLocation *	currentShareLocation;
-		ChordGroupList *	chordgrouplist;
-		GuidoPos			posfirstinchord;
-		int					numchordvoice;
-		ARMusicalVoiceState * chordBeginState;
-		void				doAutoKeys();
-		int					sum;
-		int					pitchsum;
-		int					voicenum;
+		ARChordTag          *currentChord;
+		ARShareLocation     *currentShareLocation;
+		ChordGroupList      *chordgrouplist;
+		GuidoPos             posfirstinchord;
+		int                  numchordvoice;
+		ARMusicalVoiceState *chordBeginState;
+		void                 doAutoKeys();
+		int	                 sum;
+		int                  pitchsum;
+		int                  voicenum;
 
 		void doAutoDispatchLyrics();
 		void doAutoFermatas();

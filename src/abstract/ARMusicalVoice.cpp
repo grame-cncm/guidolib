@@ -1395,9 +1395,13 @@ void ARMusicalVoice::FreezeState(ARMusicalVoiceState * in)
 //____________________________________________________________________________________
 GuidoPos ARMusicalVoice::getLastEventPosition()
 {
-	assert(false);
-	// not needed ...
 	return lastevposition;
+}
+
+//____________________________________________________________________________________
+void ARMusicalVoice::setLastEventPosition(GuidoPos inPos)
+{
+    lastevposition = inPos;
 }
 
 //____________________________________________________________________________________
@@ -1405,23 +1409,22 @@ GuidoPos ARMusicalVoice::getLastEventPosition()
 
 OK: Attention: What about Tags within Chords (I have not thought about this yet)
 OK: Tags in chords are handled as in the regular case .... the chord is splitted
-into "chordless" GUIDO and all GNF transformation
-work seamless on the result.
+into "chordless" GUIDO and all GNF transformation work seamless on the result.
 
-A Voice is in Normal-Form, iff for every segment between events the following order is maintained:
+A Voice is in Normal-Form, if for every segment between events the following order is maintained:
 ev_1 tg_1 tg_2 tg_3 ... tg_n ev_2
 and forall 1 <= i <= j <= n and 1 <= k <= n:
     (1 <= k <= i) tg_k is LeftAssociated AND
     (i <= k <= j) tg_k is Not Associated AND
     (j <= k <= n) tg_k is Right Associated.
-naturally speaking this means that all left associated tags can be moved as close as possible
+Naturally speaking this means that all left associated tags can be moved as close as possible
 towards the left event; right associated tags  can be moved as close as possible towards the
 right event; all other tags remain in the middle
 (it is, of course, important, that their previous order is maintained).
 
-the routine works as follows:
+The routine works as follows:
 
-the following describes an algorithm that would we valid, if all Tags are maintained within
+The following describes an algorithm that would be valid, if all Tags are maintained within
 one list. However, right now, a positiontaglist is maintained, so this list needs to be manipulated now as well.
 
 events are found. Two positions are maintained:

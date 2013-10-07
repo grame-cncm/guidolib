@@ -41,9 +41,7 @@ GuidoParser::~GuidoParser()
 void GuidoParser::setStream(std::istream *stream)
 {
     if (stream)
-    {
         fStream = stream;
-    }
 }
 
 //--------------------------------------------------------------------------
@@ -184,6 +182,10 @@ ARHandler GuidoParser::parse()
 	fnt_denom =1;
 	fErrorLine = fErrorColumn = 0;
 	_yyparse ();
-    getGuidoStream()->SetParserJobFinished();
-	return (fErrorLine == 0) ? GuidoFactoryCloseMusic (fFactory) : 0;
+    
+    GuidoStream *guidoStream = dynamic_cast<GuidoStream *>(getStream());
+    if (guidoStream)
+        getGuidoStream()->SetParserJobFinished();
+	
+    return (fErrorLine == 0) ? GuidoFactoryCloseMusic (fFactory) : 0;
 }

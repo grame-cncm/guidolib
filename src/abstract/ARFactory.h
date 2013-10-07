@@ -21,6 +21,7 @@
 #include "ARDefine.h"
 // #include "GRDefine.h"
 #include "TagParameterList.h"
+#include "ARMusicalTag.h"
 
 class ARMusic;
 class ARMusicalVoice;
@@ -29,7 +30,6 @@ class ARNote;
 class ARMusicalEvent;
 class ARRepeatBegin;
 class ARMusicalObject;
-class ARMusicalTag;
 class AROctava;
 class ARTStem;
 class ARNoteFormat;
@@ -61,7 +61,7 @@ class ARFactory
 		enum		bmstate { BEAMSAUTO, BEAMSOFF, BEAMSEXPLICIT };
 		
 					ARFactory();
-	virtual 		~ARFactory();
+     virtual 		~ARFactory();
 
 		void 		createMusic();
 		ARMusic * 	getMusic();
@@ -112,8 +112,11 @@ class ARFactory
 
         void        setFilePath(const char* inFilePath) { mFilePath = inFilePath; }
 
-        void        makePartialBackup();
-	  	
+        /**** For factory backup ****/
+        bool        GetIsBackupExisting() { return mExistingBackup; }
+        void        MakePartialBackup();
+        void        ReloadOldFactory();
+        /****************************/	  	
   private:
 
 		ARMusicalVoice * 	mCurrentVoice;
@@ -154,6 +157,46 @@ protected:
 	bool				mVoiceAdded;
 
     NVstring mFilePath;
+
+
+    /**** For factory backup ****/
+
+    bool              mExistingBackup;
+
+    TYPE_TIMEPOSITION mBackupCurtp;
+    GuidoPos          mBackupVPos;
+    int               mBackupSum;
+    int               mBackupPitchsum;
+    GuidoPos          mBackupLastEventPosition;
+    TYPE_DURATION     mCurrentBackupDuration;
+    TYPE_TIMEPOSITION mBackupRelativeTimePosition;
+    int               mBackupCurrentVoiceNum;
+
+    ARMusic          *mBackupCurrentMusic;
+    ARMusicalEvent   *mBackupCurrentEvent;
+    int               mBackupCurrentDenominator;
+    int               mBackupCurrentIntensity;
+    int               mBackupCurrentNumerator;
+    int               mBackupCurrentRegister;
+    ARStaff          *mBackupCurrentStaff;
+    AROctava         *mBackupCurrentOctava;
+    ARTStem          *mBackupCurrentStem;
+    ARTHead          *mBackupCurrentHead;
+    ARNoteFormat     *mBackupCurrentNoteFormat;
+    ARAlter          *mBackupCurrentAlter;
+    ARRestFormat     *mBackupCurrentRestFormat;
+    ARDotFormat      *mBackupCurrentDotFormat;
+    ARCue            *mBackupCurrentCue;
+    ARGrace          *mBackupCurrentGrace;
+    ARTrill          *mBackupCurrentTrill;
+    ARCluster        *mBackupCurrentCluster;
+    bool              mBackupVoiceAdded;
+
+    std::vector<GuidoPos> mBackupPosVector;
+
+    ARMusicalEvent   *mBackupLastEvent;
+
+    /****************************/
 };
 
 #endif

@@ -15,7 +15,7 @@
  */
 
 #include <istream>
-
+#include "ARFactory.h"
 #include "GuidoStreamBuf.h"
 
 using namespace std;
@@ -36,10 +36,15 @@ public:
 
     bool GetAreAllDataRead()    { return fGuidoStreamBuffer->GetAreAllDataRead(); }
 
+    void       SetFactory(ARFactory *inFactory) { fFactory = inFactory; }
+    ARFactory *GetFactory()                     { return fFactory; }
+
 protected:
     GuidoStreamBuf *fGuidoStreamBuffer;
 
     bool fParserJobFinished;
+
+    ARFactory *fFactory;
 };
 
 

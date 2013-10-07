@@ -20,7 +20,11 @@
 
 
 //--------------------------------------------------------------------------
-GuidoStream::GuidoStream(GuidoStreamBuf *inStreamBuf) : fGuidoStreamBuffer(inStreamBuf), istream(inStreamBuf), fParserJobFinished(false)
+GuidoStream::GuidoStream(GuidoStreamBuf *inStreamBuf) :
+             fGuidoStreamBuffer(inStreamBuf),
+             istream(inStreamBuf),
+             fParserJobFinished(false),
+             fFactory(NULL)
 {
 }
 

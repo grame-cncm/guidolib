@@ -45,10 +45,10 @@ class GuidoParser {
 	int	_yyparse();
 	
 	public:
-		void*			fScanner;	// the flex scanner
-		std::istream*	fStream;    // input stream
-		ARFactory *		fFactory;
-		std::string		fText;		// the current text
+		void           *fScanner;   // the flex scanner
+		std::istream   *fStream;    // input stream
+		ARFactory      *fFactory;
+		std::string	    fText;      // the current text
 
 				 GuidoParser();
 		virtual ~GuidoParser();
@@ -60,6 +60,7 @@ class GuidoParser {
         void                setStream(std::istream *stream);
 
         GuidoStream        *getGuidoStream()    { return (GuidoStream *)fStream; }
+        std::istream       *getStream()         { return fStream; }
 
 		void noteInit		(const char *id);
 		void noteAcc		(int n);

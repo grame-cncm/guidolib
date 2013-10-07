@@ -13,6 +13,7 @@
 
 #include <string.h>
 #include <iostream>
+#include <algorithm>
 
 #include "defines.h" 
 #include "ARFactory.h"
@@ -154,7 +155,36 @@ ARFactory::ARFactory()
 	mVoiceNum(1),
 	mCurrentTags(0),
 	mVoiceAdded(false),
-    mFilePath()
+    mFilePath(),
+    mExistingBackup(false),
+    mBackupCurrentMusic(NULL),
+    mBackupCurrentEvent(NULL),
+    mBackupCurrentDenominator(0),
+    mBackupCurrentIntensity(0),
+    mBackupCurrentNumerator(0),
+    mBackupCurrentRegister(0),
+    mBackupCurrentStaff(NULL),
+    mBackupCurrentOctava(NULL),
+    mBackupCurrentStem(NULL),
+    mBackupCurrentHead(NULL),
+    mBackupCurrentNoteFormat(NULL),
+    mBackupCurrentAlter(NULL),
+    mBackupCurrentRestFormat(NULL),
+    mBackupCurrentDotFormat(NULL),
+    mBackupCurrentCue(NULL),
+    mBackupCurrentGrace(NULL),
+    mBackupCurrentTrill(NULL),
+    mBackupCurrentCluster(NULL),
+    mBackupVoiceAdded(false),
+    mBackupLastEvent(NULL),
+    mBackupCurtp(NULL),
+    mBackupVPos(NULL),
+    mBackupSum(0),
+    mBackupPitchsum(0),
+    mBackupLastEventPosition(NULL),
+    mCurrentBackupDuration(NULL),
+    mBackupRelativeTimePosition(NULL),
+    mBackupCurrentVoiceNum(0)
 {
 		sMaxTagId = -1;
 }
@@ -2008,35 +2038,215 @@ float ARFactory::UndoTransform(const float val)
 }
 
 // ----------------------------------------------------------------------------
-void ARFactory::makePartialBackup()
+void ARFactory::MakePartialBackup()
 {
-    //ARDisplayDuration * tmpdspdur = 0;
-    //if (mCurrentGrace)
-    //{
-    //    /**** REM: ça on verra ****/
-    //    assert(mCurrentGrace->getRange());
+    mBackupPosVector.clear();
 
-    //    if (mCurrentEvent->getDuration() > DURATION_0)
-    //    {
-    //        tmpdspdur = new ARDisplayDuration;
-    //        tmpdspdur->setDisplayDuration( mCurrentEvent->getDuration());
+    if (mCurrentVoice)
+    {
+        ARMusicalVoiceState vst;
+        GuidoPos pos = mCurrentVoice->GetHeadPosition(vst);
+        while (pos)
+        {
+            mBackupPosVector.push_back(pos);
+            mCurrentVoice->GetNext(pos, vst);
+        }
 
-    //        mCurrentVoice->AddPositionTag(tmpdspdur);
+        if (mCurrentEvent)
+        {
+            mBackupCurrentEvent         = mCurrentEvent;
 
-    //        mCurrentEvent->setDuration(DURATION_0);
-    //    }
-    //    /******************************/
-    //}
+            mBackupCurrentVoiceNum      = mCurrentEvent->getVoiceNum();
+            mBackupRelativeTimePosition = mCurrentEvent->getRelativeTimePosition();
+            mCurrentBackupDuration      = mCurrentVoice->getDuration();
 
-    ///* REM: faire l'inverse */
-    //mCurrentVoice->AddTail( mCurrentEvent );
+            mBackupLastEventPosition    = mCurrentVoice->getLastEventPosition();
+            mBackupPitchsum             = mCurrentVoice->getPitchsum();
+            mBackupSum                  = mCurrentVoice->getSum();
 
-    //mLastEvent = mCurrentEvent;
-    //mCurrentEvent = 0;
+            mBackupVPos                 = mCurrentVoice->getVoiceState()->getVPos();
+            mBackupCurtp                = mCurrentVoice->getVoiceState()->getCurtp();
 
-    //if (tmpdspdur)
-    //{
-    //    ARDummyRangeEnd * dummy = new ARDummyRangeEnd("\\dispDurEnd");
-    //    mCurrentVoice->setPositionTagEndPos(-1,dummy,tmpdspdur);
-    //}
+            mBackupLastEvent = mLastEvent;
+
+            ARDisplayDuration * tmpdspdur = 0;
+            if (mCurrentGrace)
+            {
+                //assert(mCurrentGrace->getRange());
+
+                //// maybe introduce a display-duration?
+                //// we have to introduce a display duration for sure ....
+                //// only set the display-duration if the event
+                //// within the grace-note has a duration greater then zero 
+
+                //if (mCurrentEvent->getDuration() > DURATION_0)
+                //{
+                //    tmpdspdur = new ARDisplayDuration;
+                //    tmpdspdur->setDisplayDuration( mCurrentEvent->getDuration());
+
+                //    mCurrentVoice->AddPositionTag(tmpdspdur);
+
+                //    // the display duration tag will get its position 
+                //    // through the voice::AddTail operation.
+                //    // now we need an end ...
+                //    mCurrentEvent->setDuration(DURATION_0);
+
+                //    if (tmpdspdur)
+                //    {
+                //        ARDummyRangeEnd * dummy = new ARDummyRangeEnd("\\dispDurEnd");
+                //        mCurrentVoice->setPositionTagEndPos(-1,dummy,tmpdspdur);
+                //    }
+                //}
+            }
+        }
+
+        /**********************/
+
+        /**** VOICE BACKUP ****/
+
+        if (mCurrentMusic)
+        {
+            mBackupCurrentMusic       = mCurrentMusic;
+            mBackupCurrentDenominator = mCurrentDenominator;
+            mBackupCurrentIntensity   = mCurrentIntensity;
+            mBackupCurrentNumerator   = mCurrentNumerator;
+            mBackupCurrentRegister    = mCurrentRegister;
+            mBackupCurrentStaff       = mCurrentStaff;
+            mBackupCurrentOctava      = mCurrentOctava;
+            mBackupCurrentStem        = mCurrentStem;
+            mBackupCurrentHead        = mCurrentHead;
+            mBackupCurrentNoteFormat  = mCurrentNoteFormat;
+            mBackupCurrentAlter       = mCurrentAlter;
+            mBackupCurrentRestFormat  = mCurrentRestFormat;
+            mBackupCurrentDotFormat   = mCurrentDotFormat;
+            mBackupCurrentCue         = mCurrentCue;
+            mBackupCurrentGrace       = mCurrentGrace;
+            mBackupCurrentTrill       = mCurrentTrill;
+            mBackupCurrentCluster     = mCurrentCluster;
+            mBackupVoiceAdded         = mVoiceAdded;
+        }
+    }
+
+    /**********************/
+
+    mExistingBackup = true;
+}
+
+// ----------------------------------------------------------------------------
+void ARFactory::ReloadOldFactory()
+{
+    mCurrentMusic       = mBackupCurrentMusic;
+
+    if (!mCurrentMusic)
+        return;
+
+    mCurrentVoice       = mCurrentMusic->RemoveTail();
+    mCurrentEvent       = mBackupCurrentEvent;
+
+
+    bool mCurrentEventFound = false;
+    
+    /* Deletion of stuff added to mCurrentVoice by music closure */
+    ARMusicalVoiceState vst;
+    GuidoPos pos = mCurrentVoice->GetHeadPosition(vst);
+	while (pos)
+	{
+        /* If ARMusicalEvent not found at pos (in vector),
+           delete it from mCurrent Voice */
+        if (mBackupPosVector.end() == find(mBackupPosVector.begin(), mBackupPosVector.end(), pos))
+        {
+            if (mCurrentVoice->GetAt(pos) != mCurrentEvent)
+            {
+                mCurrentVoice->RemoveElementAt(pos);
+                pos = mCurrentVoice->GetHeadPosition(vst);
+            }
+            else
+            {
+                mCurrentEventFound = true;
+                mCurrentVoice->GetNext(pos, vst);
+            }
+        }
+        else
+            mCurrentVoice->GetNext(pos, vst);
+	}
+
+    if (mCurrentEventFound)
+        mCurrentVoice->RemoveTail(); // In order to keep mCurrentEvent data
+                                     // (if we do a RemoveElementAt(), data is deleted)
+
+
+    /**** VOICE RELOAD ****/
+
+    mCurrentDenominator = mBackupCurrentDenominator;
+    mCurrentIntensity   = mBackupCurrentIntensity;
+    mCurrentNumerator   = mBackupCurrentNumerator;
+    mCurrentRegister    = mBackupCurrentRegister;
+    mCurrentStaff       = mBackupCurrentStaff;
+    mCurrentOctava      = mBackupCurrentOctava;
+    mCurrentStem        = mBackupCurrentStem;
+    mCurrentHead        = mBackupCurrentHead;
+    mCurrentNoteFormat  = mBackupCurrentNoteFormat;
+    mCurrentAlter       = mBackupCurrentAlter;
+    mCurrentRestFormat  = mBackupCurrentRestFormat;
+    mCurrentDotFormat   = mBackupCurrentDotFormat;
+    mCurrentCue         = mBackupCurrentCue;
+    mCurrentGrace       = mBackupCurrentGrace;
+    mCurrentTrill       = mBackupCurrentTrill;
+    mCurrentCluster     = mBackupCurrentCluster;
+    mVoiceAdded         = mBackupVoiceAdded;
+
+    /**********************/
+
+
+    /**** EVENT RELOAD ****/
+    mCurrentVoice->getVoiceState()->setCurtp(mBackupCurtp);
+    mCurrentVoice->getVoiceState()->setVPos(mBackupVPos);
+    mCurrentVoice->setSum(mBackupSum);
+    mCurrentVoice->setPitchsum(mBackupPitchsum);
+    mCurrentVoice->setLastEventPosition(mBackupLastEventPosition);
+
+    mLastEvent    = mBackupLastEvent;
+
+    mCurrentVoice->setDuration(mCurrentBackupDuration);
+    mCurrentEvent->setRelativeTimePosition(mBackupRelativeTimePosition);
+    mCurrentEvent->setVoiceNum(mBackupCurrentVoiceNum);
+
+    /**********************/
+
+
+    /**** RESET ****/
+
+    mBackupCurrentMusic         = NULL;
+    mBackupCurrentDenominator   = 0;
+    mBackupCurrentIntensity     = 0;
+    mBackupCurrentNumerator     = 0;
+    mBackupCurrentRegister      = 0;
+    mBackupCurrentStaff         = NULL;
+    mBackupCurrentOctava        = NULL;
+    mBackupCurrentStem          = NULL;
+    mBackupCurrentHead          = NULL;
+    mBackupCurrentNoteFormat    = NULL;
+    mBackupCurrentAlter         = NULL;
+    mBackupCurrentRestFormat    = NULL;
+    mBackupCurrentDotFormat     = NULL;
+    mBackupCurrentCue           = NULL;
+    mBackupCurrentGrace         = NULL;
+    mBackupCurrentTrill         = NULL;
+    mBackupCurrentCluster       = NULL;
+    mBackupVoiceAdded           = false;
+    mBackupCurtp                = NULL;
+    mBackupVPos                 = NULL;
+    mBackupSum                  = 0;
+    mBackupPitchsum             = 0;
+    mBackupLastEventPosition    = NULL;
+    mCurrentBackupDuration      = NULL;
+    mBackupRelativeTimePosition = NULL;
+    mBackupCurrentVoiceNum      = 0;
+    mBackupLastEvent            = NULL;
+    mBackupCurrentEvent         = NULL;
+
+    /***************/
+
+
+    mExistingBackup = false;
 }
