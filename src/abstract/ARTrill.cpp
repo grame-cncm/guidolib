@@ -1,20 +1,14 @@
 /*
-	GUIDO Library
-	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  GUIDO Library
+  Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  Copyright (C) 2002-2013 Grame
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Lesser General Public
-	License as published by the Free Software Foundation; either
-	version 2.1 of the License, or (at your option) any later version.
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-	This library is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Lesser General Public License for more details.
-
-	You should have received a copy of the GNU Lesser General Public
-	License along with this library; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
 
 */
 
@@ -34,6 +28,9 @@ ARTrill::ARTrill(TYPE typ) : ARMTParameter(), mDur(NULL), mTrillType(typ)
 {
 	rangesetting = ONLY;
 	fShowCautionaryAccidentals = false;
+	fShowTR = true;
+	fDrawOnNoteHead = false;
+	begin = true;
 }
 
 ARTrill::ARTrill(int pid, const ARTrill* copy) : ARMTParameter(pid, copy), mDur(NULL)
@@ -42,8 +39,11 @@ ARTrill::ARTrill(int pid, const ARTrill* copy) : ARMTParameter(pid, copy), mDur(
 	chordType = copy->getChordType();
 	chordAccidental = copy->getChordAccidental();
 	fShowCautionaryAccidentals = copy->getCautionary();
+	fShowTR = copy->fShowTR;
+	fDrawOnNoteHead = copy->fDrawOnNoteHead;
 	adx = copy->getadx();
 	ady = copy->getady();
+	begin = copy->getStatus();
 	//TODO : copy TagParameterInt* mDur
 }
 
@@ -57,7 +57,7 @@ void ARTrill::setTagParameterList(TagParameterList& tpl)
 	if (ltpls.GetCount() == 0)
 	{
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail("S,mode,,o;I,dur,32,o;U,adx,0hs,o;U,ady,0hs,o");
+		lstrs.AddTail("S,mode,,o;I,dur,32,o;U,adx,0hs,o;U,ady,0hs,o;S,tr,true,o;S,anchor,above,o");
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -87,6 +87,21 @@ void ARTrill::setTagParameterList(TagParameterList& tpl)
 			f = TagParameterFloat::cast(rtpl->RemoveHead());
 			ady = f->getValue();
 			delete f;
+
+			TagParameterString * tr = TagParameterString::cast(rtpl->RemoveHead());
+			assert(tr);
+			if (tr->TagIsSet() && (tr->getValue() == std::string("false") || tr->getValue() == std::string("0")))
+				fShowTR = false;
+			delete tr;
+
+			TagParameterString * anchor = TagParameterString::cast(rtpl->RemoveHead());
+			assert(anchor);
+			if (anchor->TagIsSet() && (anchor->getValue() == std::string("note")))
+				fDrawOnNoteHead = true;
+			else 
+				fDrawOnNoteHead = false;
+			delete anchor;
+
 		}
 		delete rtpl;
 	}
@@ -112,8 +127,6 @@ void ARTrill::PrintName(std::ostream & os) const
 	if		(mTrillType == TRILL)	os << "\\trill";
 	else if (mTrillType == TURN)	os << "\\turn";
 	else if (mTrillType == MORD)	os << "\\mord";
-	//if (getRange()) os << "(";
-
 }
 void ARTrill::PrintParameters(std::ostream & os) const
 {
@@ -123,4 +136,10 @@ void ARTrill::PrintParameters(std::ostream & os) const
 	}*/
 }
 
+bool ARTrill::getStatus() const{
+	return begin;
+}
 
+void ARTrill::setContinue(){
+	begin = false;
+}

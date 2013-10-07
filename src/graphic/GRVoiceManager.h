@@ -2,27 +2,22 @@
 #define GRVoiceManager_H
 
 /*
-	GUIDO Library
-	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  GUIDO Library
+  Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  Copyright (C) 2002-2013 Grame
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Lesser General Public
-	License as published by the Free Software Foundation; either
-	version 2.1 of the License, or (at your option) any later version.
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-	This library is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Lesser General Public License for more details.
-
-	You should have received a copy of the GNU Lesser General Public
-	License along with this library; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
 
 */
 
 // #include "ARTStem.h"
 // #include "GRTag.h"
+#include "GRBeam.h"
 #include "GRPossibleBreakState.h"
 
 template <class T> class KF_IPointerList;
@@ -44,6 +39,7 @@ class GREvent;
 class GRVoice;
 class GRNotationElement;
 class GRGrace;
+class GRCluster;
 class GRTrill;
 class GRGlobalStem;
 class GRGlobalLocation;
@@ -51,6 +47,7 @@ class GRChordTag;
 class GRStaffManager;
 class GRTag;
 class GRSingleNote;
+class GRGlissando;
 
 typedef KF_IPointerList<GRTag> GRTagPointerList;
 
@@ -101,6 +98,7 @@ public:
 			int		DoBreak		(const TYPE_TIMEPOSITION & tp, int system_or_page);
 			int		getStaffNum () const	{ return staffnum; }
 
+
 protected:
 	void beginOpenTags();
 
@@ -129,9 +127,12 @@ protected:
 	GRStaffManager* mStaffMgr;
 
 	GRGrace *		mCurGrace;	
+    GRCluster *     mCurCluster;
+	GRGlissando *	mCurGlissando;
 	ARNoteFormat *	curnoteformat;
 	ARDotFormat *	curdotformat;
 	ARRestFormat *	currestformat;
+	static bool &	getCurStaffDraw(int index);
 
 	TYPE_TIMEPOSITION curtp;
 	int staffnum;
@@ -139,7 +140,6 @@ protected:
 	GREvent *CreateNote			(const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject);
 	GREvent *CreateEmpty		(const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject);
 	GREvent *CreateRest			(const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject);
-	GREvent *CreateChord		(const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject);
 	GREvent *CreateGraceNote	(const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject, const TYPE_DURATION & dur);
 
 	virtual void checkStartPTags(GuidoPos tstpos);
@@ -160,12 +160,17 @@ protected:
 	// this is needed for determining the elements that are centered in a bar like whole-note-rests
 	GREvent * lastnonzeroevent;
 	GRBar * lastbar;
-
+    
+    // - for clusters
+    int mCurrentClusterNoteNumber;
 
 private:
 
 	GRSingleNote *	CreateSingleNote	(const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject, float size=0);
 	void			AddRegularEvent		(GREvent * ev);
+	void			organizeGlissando(GRTag * g);
+	std::vector<GRBeam *> curbeam;
+	void			organizeBeaming(GRTag * grb);
 
 };
 

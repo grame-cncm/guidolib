@@ -1,20 +1,14 @@
 /*
-	GUIDO Library
-	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  GUIDO Library
+  Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  Copyright (C) 2002-2013 Grame
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Lesser General Public
-	License as published by the Free Software Foundation; either
-	version 2.1 of the License, or (at your option) any later version.
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-	This library is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Lesser General Public License for more details.
-
-	You should have received a copy of the GNU Lesser General Public
-	License along with this library; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
 
 */
 
@@ -58,6 +52,7 @@ GRNotationElement::GRNotationElement()
 	mLeftSpace = 0;
 	mRightSpace = 0;
 	mSymbol =  kNoneSymbol;
+	mDraw = true;
 }
 
 GRNotationElement::~GRNotationElement()
@@ -190,6 +185,9 @@ void GRNotationElement::GGSOutputAt( unsigned int tmptype,
 void GRNotationElement::OnDrawText( VGDevice & hdc,  const char * cp, int inCharCount ) const
 {
 	// first we have to get a font ....
+	if(!mDraw)
+		return;
+	
 	const VGFont* hmyfont = FontManager::gFontText;
 	
 	const int size = getFontSize();
@@ -243,6 +241,8 @@ GRNotationElement::OnDrawSymbol( VGDevice & hdc, unsigned int inSymbol,
 								   float inFontSize ) const //, float inScaleX ) const
 {
 	// - Setup colors
+	if(!mDraw)
+		return;
 	const unsigned char * colref = getColRef();
 	const VGColor prevFontColor = hdc.GetFontColor();
   	if (colref)
@@ -273,9 +273,14 @@ GRNotationElement::DrawSymbol( VGDevice & hdc, unsigned int inSymbol,
 								   float inOffsetX, float inOffsetY,
 								   float inFontSize ) const
 {
+	if(!mDraw)
+		return;
 	// - Setup font
+
 	const VGFont* myfont = FontManager::gFontScriab;
 	const float theSize = (inFontSize != 0) ? inFontSize : getSize();
+	if (theSize < kMinNoteSize) return;		// element is too small, don't draw it
+
 	if (theSize != float(1.0))
 	{
 		const int newFontSize = (int)(theSize * 4 * LSPACE + 0.5f ); // +0.5 to round from float to int.
@@ -323,6 +328,9 @@ GRNotationElement::DrawSymbol( VGDevice & hdc, unsigned int inSymbol,
 void		
 GRNotationElement::DrawExtents( VGDevice & hdc, const VGColor & inColor ) const
 {
+	if(!mDraw)
+		return;
+	
 #if (0)
 	hdc.PushPen( inColor, LSPACE * 0.15f );
 	const float x1 = mPosition.x - getLeftSpace();
@@ -338,6 +346,9 @@ GRNotationElement::DrawExtents( VGDevice & hdc, const VGColor & inColor ) const
 // -------------------------------------------------------------------------
 void GRNotationElement::OnDraw(VGDevice & hdc) const
 {
+	if(!mDraw)
+		return;
+	
 	if (mSymbol != 0)
 		OnDrawSymbol( hdc, mSymbol );
 }

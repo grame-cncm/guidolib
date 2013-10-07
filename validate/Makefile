@@ -14,19 +14,23 @@ version	:= $(shell guidogetversion | cut -d' ' -f 3)
 system	:= $(shell uname -s)
 LEAKTOOLS = guidoparse guidoar2gr guidodraw
 
+
+guido2image := guido2image
+guido2svg   := guido2svg
+guido2midi  := guido2midi
+
 ifeq ($(system), Darwin)
-  lib =  -F../cmake/Release/ -framework GUIDOEngine
+  lib =  -F../build/MacOS/Release/ -framework GUIDOEngine
 else
 ifeq ($(system), MINGW32_NT-6.1)
-  lib =  ../cmake/Release/GUIDOEngine.lib
-  LEAKTOOLS = GUIDOEngine.dll guidogetversion.exe guido2svg.exe guidoparse.exe guidoar2gr.exe guidodraw.exe guido2image.exe
+  libbin  := ../build/win32/Release
+  toolbin := ../tools/build/win32/Release
+  lib       = $(libbin)/GUIDOEngine.lib
+  LEAKTOOLS = GUIDOEngine.dll guidogetversion.exe guido2svg.exe guidoparse.exe guidoar2gr.exe guidodraw.exe guido2image.exe guido2midi.exe
 else
   lib = -lGUIDOEngine
 endif
 endif
-
-guido2image := ../Qt/bin/guido2image
-guido2svg   := guido2svg
 
 ifdef TOOL
 	TOOLPATH := $(shell basename $(TOOL))
@@ -36,10 +40,11 @@ nodlost	= "definitely lost: 0"
 noilost	= "indirectly lost: 0"
 noplost	= "possibly lost: 0"
 
-gmnfiles     = $(shell find ../gmn-examples -name "*.gmn") $(wildcard ../regression-tests/*.gmn)
+gmnfiles     = $(shell find ../gmn-examples -name "*.gmn") $(shell find ../regression-tests -name "*.gmn")
 pdfout		:= $(patsubst ../%.gmn, $(version)/%.pdf, $(gmnfiles))
 svgout		:= $(patsubst ../%.gmn, $(version)/%.svg, $(gmnfiles))
 leaksout 	:= $(patsubst ../%.gmn, $(version)/$(TOOLPATH)/%.leaks.txt, $(gmnfiles))
+midiout     := $(patsubst ../%.gmn, $(version)/%.mid, $(gmnfiles))
 
 allpdf 		 = $(shell [ -d $(version) ] && find $(version) -name "*.pdf")
 allsvg 		 = $(shell [ -d $(version) ] && find $(version) -name "*.svg")
@@ -56,14 +61,30 @@ help:
 	@echo "Makefile for testing the engine output. Available targets are:"
 	@echo "'svg' (default): makes svg files for a set of gmn files"
 	@echo "                 the output folder name is the current guido engine version number."
-	@echo "'validate VERSION=another_version': compares the current version pdf output with another one"
+	@echo "'pdf'          : makes pdf files for a set of gmn files"
+	@echo "                 the output folder name is the current guido engine version number."
+	@echo "'midi'         : makes MIDI files for a set of gmn files"
+	@echo "                 the output folder name is the current guido engine version number."
+	@echo "'validate    VERSION=another_version': compares the current version svg output with another one"
+	@echo "'pdfvalidate VERSION=another_version': compares the current version pdf output with another one"
 	@echo "'checkleaks TOOL=a_tool': check memory leaks on a set of gmn files using various tools"
 	@echo "                 the basic tool set is included in this folder but any tool arbitrary tool could be used as well"
 	@echo "'checkcrash TOOL=a_tool': run a tool with all the gmn files as arguments"
+	@echo "--------------------------------"
+	@echo "'svgclean'  : removes svg output"
+	@echo "'pdfclean'  : removes pdf output"
+	@echo "'midiclean' : removes midi files output"
+	@echo "--------------------------------"
+	@echo "'tools'     : build the tools"
+	@echo "'win32'     : copy the tools and dll to the validate folder"
 
 #########################################################################
 # tools to validate the graphic output, based on pdf conversion
 validate: $(validsvg)
+	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
+	@echo Validating version $(version) with $(VERSION) $(tmp)
+
+pdfvalidate: $(validpdf)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
 	@echo Validating version $(version) with $(VERSION) $(tmp)
 	
@@ -72,6 +93,12 @@ validate: $(validsvg)
 	@[ -f  $(tmp) ] || echo $< : new file
 	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
 	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open -t $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
+	
+%.outpdf: %.pdf
+	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
+	@[ -f  $(tmp) ] || echo $< : new file
+	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
+	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
 
 #########################################################################
 # pdf output generation
@@ -84,6 +111,18 @@ pdfclean:
 $(version)/%.pdf: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	$(guido2image) -f $< -o $@
+
+#########################################################################
+# midi output generation
+midi:  $(midiout)
+
+midiclean: 
+	rm -f $(midiout)
+
+$(version)/%.mid: ../%.gmn
+	@[ -d $(@D) ] || mkdir -p $(@D)
+	-$(guido2midi) $< -o $@
+
 
 #########################################################################
 # leaks check tools
@@ -125,22 +164,25 @@ $(version)/%.svg: ../%.gmn
 win32 : $(LEAKTOOLS)
 
 GUIDOEngine.dll:
-	cp ../cmake/release/GUIDOEngine.dll .
+	cp $(libbin)/GUIDOEngine.dll .
 
 guidogetversion.exe:
-	cp ../tools/cmake/release/guidogetversion.exe .
+	cp $(toolbin)/guidogetversion.exe .
 
 guido2svg.exe:
-	cp ../tools/cmake/release/guido2svg.exe .
+	cp $(toolbin)/guido2svg.exe .
+
+guido2midi.exe:
+	cp $(toolbin)/guido2midi.exe .
 
 guidoparse.exe:
-	cp ../tools/cmake/release/guidoparse.exe .
+	cp $(toolbin)/guidoparse.exe .
 
 guidoar2gr.exe:
-	cp ../tools/cmake/release/guidoar2gr.exe .
+	cp $(toolbin)/guidoar2gr.exe .
 
 guidodraw.exe:
-	cp ../tools/cmake/release/guidodraw.exe .
+	cp $(toolbin)/guidodraw.exe .
 
 guido2image.exe:
 	cp ../Qt/bin/guido2image.exe .

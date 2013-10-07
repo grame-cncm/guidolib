@@ -11,8 +11,8 @@ set (target GUIDOEngine)
 set (statictarget SGUIDOEngine)
 #######################################
 # versions management
-set (VERSION 1.50)
-set (STRVERS "v.1.50")
+set (VERSION 1.52)
+set (STRVERS "v.1.52")
 set (GUIDOFWKVERS C)
 set (SOVERS 1)
 
@@ -23,25 +23,25 @@ endif(UNIX)
 if(APPLE)
 
 #######################################
-# iOS support
-if (IOS STREQUAL "yes")
-	message (STATUS "Generates iOS project - Use -DIOS=no to change.")
-	set (DIST "no")
-else (MIDIEXPORT STREQUAL "yes")
-	message (STATUS "Generates Mac OS project- Use -DIOS=yes to change.")
-endif ()
+#   iOS support
+	if ( IOS STREQUAL "yes" )
+		message (STATUS "Generates project for iOS - Use -DIOS=no to change.")
+		set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "iPhoneOS")
+		set (CMAKE_OSX_ARCHITECTURES "armv6 armv7")
+		set (CMAKE_OSX_SYSROOT "iphoneos")
+		set (libtype STATIC)
+	else ()
+		message (STATUS "Generates Mac OS project- Use -DIOS=yes to change.")
 
- #######################################
- if (DIST STREQUAL "yes")
-	message (STATUS "All architectures will be compiled - Use -DDIST=no to change.")
-	set (CMAKE_OSX_ARCHITECTURES "x86_64 i386")
- else ()
-	message (STATUS "Only the current architecture will be compiled - Use -DDIST=yes to change.")
- endif ()
+	 	#######################################
+		if (DIST STREQUAL "yes")
+			message (STATUS "All architectures will be compiled - Use -DDIST=no to change.")
+			set (CMAKE_OSX_ARCHITECTURES "x86_64 i386")
+		else ()
+			message (STATUS "Only the current architecture will be compiled - Use -DDIST=yes to change.")
+		endif ()
 	add_definitions(-D_USE_QD_COORDINATES_ -compatibility_version 1.0.0)
-	set (CMAKE_OSX_SYSROOT /Developer/SDKs/MacOSX10.6.sdk)
-	set (CMAKE_C++_FLAGS -mmacosx-version-min=10.4)
-	set (CMAKE_LDFLAGS -mmacosx-version-min=10.4)
+	endif ()
 endif(APPLE)
 
 if(WIN32)
@@ -52,16 +52,19 @@ if(WIN32)
   add_definitions(-DVC2005)
  elseif(${CMAKE_GENERATOR} STREQUAL "Visual Studio 9 2008")
   add_definitions(-DVC2005)
+ elseif(${CMAKE_GENERATOR} STREQUAL "Visual Studio 10")
+  add_definitions(-DVC2005)
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
  elseif(${CMAKE_GENERATOR} STREQUAL "MSYS Makefiles")
   add_definitions(-DGCC)
- endif(${CMAKE_GENERATOR} STREQUAL "Visual Studio 6")
+ endif()
 
  if (${CMAKE_GENERATOR} MATCHES ".*Win64")
   add_definitions(-DVC2005)
   set (WIN64 1)
   set (target GUIDOEngine64)
   set (statictarget SGUIDOEngine64)
- endif (${CMAKE_GENERATOR} MATCHES ".*Win64")
+ endif ()
 
 endif(WIN32)
 add_definitions(-DGUIDOExport)
@@ -87,15 +90,19 @@ if (MIDIEXPORT STREQUAL "yes")
 	set (SRCFOLDERS  ${SRCFOLDERS} midisharelight)
 	add_definitions(-DMIDIEXPORT)
 	if (WIN32)
-		set(LINK ${LINK} "${SRC_PATH}/midisharelight/win32/midisharelight.lib")
+		if (${CMAKE_CL_64})
+			set(LINK ${LINK} "${SRC_PATH}/midisharelight/win64/midisharelight64.lib")
+		else()
+			set(LINK ${LINK} "${SRC_PATH}/midisharelight/win32/midisharelight.lib")
+		endif()
 	elseif(APPLE)
 		set(LINK ${LINK} "-L${SRC_PATH}/midisharelight/macos -lmidisharelight")
 	elseif(UNIX)
 		set(LINK ${LINK} "-L/usr/local/lib -lmidisharelight")
 	endif (WIN32)
-else (MIDIEXPORT STREQUAL "yes")
+else()
 	message (STATUS "MIDI export will not be generated - Use -DMIDIEXPORT=yes to change (requires MidiShareLight).")
-endif (MIDIEXPORT STREQUAL "yes")
+endif()
 
 
 foreach(folder ${SRCFOLDERS})
@@ -141,7 +148,7 @@ set_source_files_properties (${INCL} PROPERTIES HEADER_FILE_ONLY TRUE)
 if(WIN32)
 	enable_language(RC)
 	set(LIBCONTENT ${LIBSRC} ${LIBH} ${GUIDO_PATH}/win32/GUIDOEngine.rc)
-	set(LINK ${LINK} "msimg32.lib gdiplus.lib")
+	set(LINK ${LINK} "msimg32.lib" "gdiplus.lib")
 else(WIN32)
 	set(LIBCONTENT ${LIBSRC} ${LIBH})
 endif(WIN32)
@@ -159,27 +166,34 @@ endif(APPLE)
 
 #######################################
 # library generation
-add_library(${target} SHARED ${LIBCONTENT})
-set_target_properties (${target} PROPERTIES
-			FRAMEWORK TRUE
-			FRAMEWORK_VERSION ${GUIDOFWKVERS}
-			PUBLIC_HEADER "${PUBLICHEADERS}"
-			DEFINE_SYMBOL LIBMUSICXML_EXPORTS
-			VERSION ${VERSION}
-			SOVERSION ${SOVERS}
-			MACOSX_FRAMEWORK_SHORT_VERSION_STRING ${STRVERS}
-			MACOSX_FRAMEWORK_BUNDLE_VERSION ${VERSION}
-			MACOSX_FRAMEWORK_BUNDLE_VERSION "A")
+if (IOS STREQUAL "yes")
+	add_library(${target} STATIC ${LIBCONTENT})
 
-if (STATICLIB STREQUAL "yes")
-	message (STATUS "Static Guido lib will be generated - Use -DSTATICLIB=no to change.")
-	add_library(${statictarget} STATIC ${LIBCONTENT})
-else (STATICLIB STREQUAL "yes")
-	message (STATUS "Static Guido lib will not be generated - Use -DSTATICLIB=yes to change.")
-endif (STATICLIB STREQUAL "yes")
+else ()
 
-set (LIBDEST /usr/lib)
-target_link_libraries (${target} ${LINK})
+	add_library(${target} SHARED ${LIBCONTENT})
+	set_target_properties (${target} PROPERTIES
+				FRAMEWORK TRUE
+				FRAMEWORK_VERSION ${GUIDOFWKVERS}
+				PUBLIC_HEADER "${PUBLICHEADERS}"
+				DEFINE_SYMBOL LIBMUSICXML_EXPORTS
+				VERSION ${VERSION}
+				SOVERSION ${SOVERS}
+				MACOSX_FRAMEWORK_SHORT_VERSION_STRING ${STRVERS}
+				MACOSX_FRAMEWORK_BUNDLE_VERSION ${VERSION}
+				MACOSX_FRAMEWORK_BUNDLE_VERSION "A")
+
+	if (STATICLIB STREQUAL "yes")
+		message (STATUS "Static Guido lib will be generated - Use -DSTATICLIB=no to change.")
+		add_library(${statictarget} STATIC ${LIBCONTENT})
+	else ()
+		message (STATUS "Static Guido lib will not be generated - Use -DSTATICLIB=yes to change.")
+	endif ()
+
+	set (LIBDEST /usr/lib)
+	target_link_libraries (${target} ${LINK})
+
+endif()
 
 
 #######################################
@@ -188,7 +202,7 @@ if(APPLE)
 set(FRMWK  FRAMEWORK DESTINATION "/Library/Frameworks" CONFIGURATIONS Release)
 endif(APPLE)
 
-if (NOT WIN32)
+if (NOT WIN32 AND NOT IOS)
  if (DEFINED LIBINSTALL)
 	set(LIBPATH ${LIBINSTALL})
  else (DEFINED LIBINSTALL)
@@ -201,6 +215,6 @@ install ( TARGETS ${target}
     	${FRMWK}
     	PUBLIC_HEADER DESTINATION /usr/include/guido
 )
-endif(NOT WIN32)
+endif()
 
 

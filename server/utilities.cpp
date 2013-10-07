@@ -29,6 +29,7 @@
 #include <iostream>
 #include <time.h>
 #include <string.h>
+#include <sstream>
 
 #include "utilities.h"
 
@@ -49,6 +50,49 @@ rand_alnum()
     return c;
 }
 
+bool atob(string name)
+{
+    if (name == "true")
+        return true;
+    if (name == "True")
+        return true;
+    if (name == "yes")
+        return true;
+    
+    return false;
+}
+
+void stringToDate(std::string str, GuidoDate &date)
+{
+    // first, parse the fraction
+    std::stringstream ss(str);
+    std::string item;
+    vector<string> elems;
+    while (getline(ss, item, '/')) {
+        if (item != "") {
+            elems.push_back(item);
+        }
+    }
+    if (!(elems.size() == 2)) {
+        date.num = 0;
+        date.denom = 1;
+    } else {
+        date.num = atoi(elems[0].c_str());
+        date.denom = atoi(elems[1].c_str());
+        if (!date.denom)
+            date.denom = 1;
+    }
+}
+string dateToString(GuidoDate &date)
+{
+    // first, parse the fraction
+    std::stringstream ss;
+    ss << date.num;
+    ss << "/";
+    ss << date.denom;
+    return ss.str();
+}
+    
 std::string
 rand_alnum_str (std::string::size_type sz)
 {

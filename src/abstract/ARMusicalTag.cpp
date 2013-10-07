@@ -1,20 +1,14 @@
 /*
-	GUIDO Library
-	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  GUIDO Library
+  Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  Copyright (C) 2002-2013 Grame
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Lesser General Public
-	License as published by the Free Software Foundation; either
-	version 2.1 of the License, or (at your option) any later version.
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-	This library is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Lesser General Public License for more details.
-
-	You should have received a copy of the GNU Lesser General Public
-	License along with this library; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
 
 */
 
@@ -26,6 +20,7 @@
 #include "TagParameterList.h"
 #include "TagParameterString.h"
 #include "TagParameterFloat.h"
+#include "TagParameterRGBColor.h"
 #include "ListOfStrings.h"
 
 #include "ARMusicalTag.h"
@@ -35,11 +30,15 @@ ARMusicalTag::ARMusicalTag(const TYPE_TIMEPOSITION & tp, const ARMusicalTag * co
 {
 	assoc = DC;
 	color = 0;
+    rgbColor = 0;
 	mDx = mDy = size = 0;
 	if (copy)
 	{
 		if (copy->getColor())
 			color = TagParameterString::cast(copy->getColor()->getCopy());
+        
+        if (copy->getRGBColor())
+            rgbColor = TagParameterRGBColor::cast(copy->getRGBColor()->getCopy());
 		
 		if (copy->getDX())
 			mDx = TagParameterFloat::cast(copy->getDX()->getCopy());
@@ -65,12 +64,17 @@ ARMusicalTag::ARMusicalTag(int pid, const ARMusicalTag * copy)
 	assoc = DC; // don't care ...
 	isAuto = 0;
 	color = NULL;
+    rgbColor = NULL;
 	mDx = mDy = size = 0;
 	if (copy)
 	{
 		if (copy->getColor())
 			color = TagParameterString::cast(
 				copy->getColor()->getCopy());
+        
+        if (copy->getRGBColor())
+            rgbColor = TagParameterRGBColor::cast(
+                copy->getRGBColor()->getCopy());
 
 		if (copy->getDX())
 			mDx = TagParameterFloat::cast(
@@ -93,6 +97,7 @@ ARMusicalTag::ARMusicalTag(int pid, const ARMusicalTag * copy)
 ARMusicalTag::~ARMusicalTag()
 {
 	delete color;
+    if (rgbColor) delete rgbColor;
 	delete mDx;
 	delete mDy;
 	delete size;
@@ -113,7 +118,7 @@ std::ostream & ARMusicalTag::operator <<(std::ostream & os) const
 	if (tmpp)
 	{
 		cp = new char[count+1];
-		strncpy(cp,tmpp,count);
+		if (count) strncpy(cp,tmpp,count);
 		cp[count] = 0;
 	}
 
@@ -125,7 +130,7 @@ std::ostream & ARMusicalTag::operator <<(std::ostream & os) const
 		cp[count] = 0;
 
 		// now we get rid of the  closing bracket.
-		for( ; cp[count] != '>' && count >= 0; count--) { }
+		for( ; cp[count] != '>' ; count--) { }
 
 		if (count > 0)
 		{
@@ -209,7 +214,14 @@ void ARMusicalTag::PrintParameters(std::ostream & ) const
 
 }
 
-void ARMusicalTag::setColor(const char * cp) 
+void ARMusicalTag::setRGBColor (unsigned char red, unsigned char green, unsigned char blue)
+{
+    //if (rgbColor) delete rgbColor;
+    rgbColor = new TagParameterRGBColor(red, green, blue);
+}
+
+
+void ARMusicalTag::setColor(const char * cp)
 {
 	delete color;
 	color = new TagParameterString(cp);

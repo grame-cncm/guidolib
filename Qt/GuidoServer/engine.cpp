@@ -22,14 +22,17 @@
 */
 
 #include "QGuidoPainter.h"
-#include <QtGui/QApplication>
+#include <QApplication>
 
 namespace guidohttpd {
 
-void startEngine (int argc, char **argv) {
-    QApplication app(argc , argv); // required by Qt
+void startEngine () {
     QGuidoPainter::startGuidoEngine(); // starts the guido engine
 }
+
+//void makeApplication (int argc, char **argv) {
+//    QApplication app(argc , argv); // required by Qt
+//}
 
 void stopEngine () {
     QGuidoPainter::stopGuidoEngine(); // stop the guido engine

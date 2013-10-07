@@ -1,20 +1,14 @@
 /*
-	GUIDO Library
-	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  GUIDO Library
+  Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  Copyright (C) 2002-2013 Grame
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Lesser General Public
-	License as published by the Free Software Foundation; either
-	version 2.1 of the License, or (at your option) any later version.
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-	This library is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Lesser General Public License for more details.
-
-	You should have received a copy of the GNU Lesser General Public
-	License along with this library; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
 
 */
 
@@ -1058,9 +1052,11 @@ int GRStaffManager::FinishSyncSlice(const TYPE_TIMEPOSITION & tp)
 				GuidoPos tmppos = tmphash.data->GetHeadPosition();
 				while (tmppos)
 				{
+
 					// we need to compare each of the entries to each other.
 					SubHash *sh = tmphash.data->GetNext(tmppos);
 					GRTag * tag = dynamic_cast<GRTag *>(sh->grel);
+
 					if (!tag)				continue;
 					if (tag->getError())	continue;
 
@@ -1070,13 +1066,17 @@ int GRStaffManager::FinishSyncSlice(const TYPE_TIMEPOSITION & tp)
 						SubHash * sh2 = tmphash.data->GetNext(tmppos2);
 						if (sh->grstaff == sh2->grstaff)
 						{
+							GRStaffState &  staffstate = sh->grstaff->getGRStaffState();
 							GRTag * tag2 = dynamic_cast<GRTag *>(sh2->grel);
 							if (!tag2)	continue;
 							
 							if (tag->getIsAuto() && !tag2->getIsAuto())
 							{
-								// in this case, we disable the first tag (the auto one)
-								tag->setError(1); 
+								// check consistency between staff and clef baseline
+								GRClef * clef = dynamic_cast<GRClef*>(tag2);
+								if (clef &&  (staffstate.baseline != clef->getBaseLine()))
+									sh->grstaff->setClefParameters(clef);
+								tag->setError(1);
 								if ( *tag != *tag2)
 									conflict = 1;
 								break;
@@ -1085,7 +1085,10 @@ int GRStaffManager::FinishSyncSlice(const TYPE_TIMEPOSITION & tp)
 							{
 								if (tag2->getIsAuto() && !tag->getIsAuto())
 								{
-									// disable the second tag
+									// check consistency between staff and clef baseline
+									GRClef * clef = dynamic_cast<GRClef*>(tag);
+									if (clef &&  (staffstate.baseline != clef->getBaseLine()))
+										sh->grstaff->setClefParameters(clef);
 									tag2->setError(1);
 									if (*tag != *tag2)
 										conflict = 1;
@@ -1094,6 +1097,10 @@ int GRStaffManager::FinishSyncSlice(const TYPE_TIMEPOSITION & tp)
 							}
 
 							// now, none of the two is auto-tag disable the second tag
+							GRClef * clef = dynamic_cast<GRClef*>(tag);
+							// check consistency between staff and clef baseline
+							if (clef &&  (staffstate.baseline != clef->getBaseLine()))
+								sh->grstaff->setClefParameters(clef);
 							tag2->setError(1);
 							if (*tag != *tag2)
 								conflict = 1;

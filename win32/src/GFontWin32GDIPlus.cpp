@@ -71,6 +71,10 @@ void
 GFontWin32GDIPlus::GetExtent( const char * str, int inCharCount, float * outWidth, 
 					   float * outHeight, VGDevice * context ) const 
 {
+	if (!inCharCount) {
+		*outWidth = *outHeight = 0;
+		return;
+	}
 	// convert input string
 	DWORD count = mbstowcs(NULL, str, inCharCount);
 	WCHAR * wstr = (WCHAR*) malloc ((count + 1) * sizeof(WCHAR));

@@ -1,20 +1,12 @@
 /*
-	GUIDO Library
 	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Lesser General Public
-	License as published by the Free Software Foundation; either
-	version 2.1 of the License, or (at your option) any later version.
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-	This library is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Lesser General Public License for more details.
-
-	You should have received a copy of the GNU Lesser General Public
-	License along with this library; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
 
 
 	-- Rules of ornaments --
@@ -33,6 +25,12 @@
 
 // #include "NEPointerList.h"
 #include "VGDevice.h"
+#include "VGFont.h"
+#include <iostream>
+#include <map>
+
+
+using namespace std;
 
 GRTrill::GRTrill(GRStaff * inStaff, ARTrill * artrem ) : GRPTagARNotationElement(artrem)
 {
@@ -40,7 +38,7 @@ GRTrill::GRTrill(GRStaff * inStaff, ARTrill * artrem ) : GRPTagARNotationElement
 	GRSystemStartEndStruct * sse= new GRSystemStartEndStruct;
 	sse->grsystem = inStaff->getGRSystem(); 
 	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
-
+	
 	sse->p = (void *) getNewGRSaveStruct();
 	mStartEndList.AddTail(sse);
 
@@ -48,6 +46,10 @@ GRTrill::GRTrill(GRStaff * inStaff, ARTrill * artrem ) : GRPTagARNotationElement
 	bool ShowCautionaryAccidentals = artrem->getCautionary();
 	ARMusicalVoice::CHORD_TYPE chordType = artrem->getChordType();
 	ARMusicalVoice::CHORD_ACCIDENTAL chordAccidental = artrem->getChordAccidental();
+	begin = artrem->getStatus();
+	fShowTR = artrem->getShowTR();
+	fDrawOnNoteHead = artrem->getAnchor();
+	widthOfTilde = GObject::GetSymbolExtent(kTilde)*mTagSize;
 	
 	// - Creation of the accidental symbol -	
 	switch (chordAccidental)
@@ -160,12 +162,77 @@ GRTrill::~GRTrill()
 	delete fAccidental;
 }
 
-void GRTrill::OnDraw( VGDevice & hdc ) const
-{
-//	GRStaff * staff;
 
-//	fType = static_cast<ARTrill *>(mAbstractRepresentation)->getType();
-//	staff = getGRStaff();
+/** \brief Manage the drawing of trill line
+*/
+void GRTrill::OnDraw( VGDevice & hdc , float right, float noteY, int nVoice)
+{
+	VGColor oldColor = hdc.GetFontColor();
+	hdc.SetFontColor(VGColor( mColRef ));
+	
+	if(fType==0)//TRILL=0
+	{
+		NVRect r = mBoundingBox;
+		r += getPosition();
+		float left;
+		float lastPos = GRTrill::getLastPosX(nVoice);
+
+		// we check if the trill line is begining or continuing another
+
+		if(begin){
+			// the 'tr' is drawn only at the begining of the trill, if the parameter 'tr' isn't set as false
+			if(fShowTR)
+				GRNotationElement::OnDraw( hdc );
+			// in order to adapt the accidental to the size of the trill :
+			fAccidental->setPosition(fAccidental->getPosition() + NVPoint(mBoundingBox.Width()/2*(mTagSize-1), - mBoundingBox.Height()/2*(mTagSize-1)));
+			fAccidental->setSize(mTagSize/2);
+			fAccidental->OnDraw(hdc);
+
+			NVRect rAcc = fAccidental->getBoundingBox();
+			rAcc += fAccidental->getPosition();
+			float leftR = r.left + r.Width()*mTagSize;
+			float leftA = rAcc.left + rAcc.Width()*mTagSize + fAccidental->getOffset().x - mTagOffset.x;
+			// check the position of the accidental to know where to begin the trill line
+			if(leftA > leftR && (fAccidental->getOffset().y - mTagOffset.y)>0 && (fAccidental->getOffset().y-mTagOffset.y)<r.Height()+rAcc.Height())
+				left = leftA;
+			else
+				left = leftR;
+		}
+		else{	// continue the line from the last position (or at the begining of a new system)
+			if(lastPos<right)
+				left = lastPos;
+			else
+				left = r.left - LSPACE;
+		}
+
+		// now we iterates the symbol kTilde as many times as posible from "left" to "right"
+		float x = (left - r.left);
+		if(!begin)
+			x-=mTagOffset.x;
+		else
+			left += mTagOffset.x;
+		while(left + widthOfTilde <= right){
+			if(fDrawOnNoteHead)
+				GRNotationElement::OnDrawSymbol(hdc, kTilde, x, noteY - getPosition().y, mTagSize);
+			else
+				GRNotationElement::OnDrawSymbol(hdc, kTilde, x, 0, mTagSize);
+			x += widthOfTilde;
+			left += widthOfTilde;
+		}
+		GRTrill::getLastPosX(nVoice) = left;
+				
+	}else{	
+		if(fShowTR)
+			GRNotationElement::OnDraw( hdc );
+		fAccidental->OnDraw(hdc);
+	}
+	
+	hdc.SetFontColor(oldColor);
+}
+
+
+void GRTrill::OnDraw( VGDevice & hdc) const
+{
 	GRNotationElement::OnDraw( hdc );
 	fAccidental->OnDraw(hdc);
 }
@@ -183,7 +250,7 @@ void GRTrill::setupTrill()
 	fAccidental->addToOffset(offsetAccidental);
 	
 	const float height = LSPACE * 1.17f;
-	sRefPos = NVPoint(-mLeftSpace, 0);
+	sRefPos = NVPoint(-mLeftSpace, 0);	
 	mBoundingBox.Set(-mLeftSpace, -height, mRightSpace + 0.24f * LSPACE, 0);
 }
 
@@ -370,4 +437,12 @@ GDirection GRTrill::chooseDirection (GREvent * inParent ) const
 unsigned int GRTrill::getTextAlign() const
 {
 	return (VGDevice::kAlignLeft | VGDevice::kAlignBase);
+}
+
+//-------------------------------------------------------------------
+/** \brief Memorize the last position of trill line for each voice
+*/
+float & GRTrill::getLastPosX(int i){
+	static std::map<int, float> lastPosX;
+	return lastPosX[i];
 }

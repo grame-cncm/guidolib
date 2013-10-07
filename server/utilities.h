@@ -31,12 +31,26 @@
 #include <fstream>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <string>
+
+#include "GUIDOEngine.h"
+
+#define POSTBUFFERSIZE 512
+
+#define GET 0
+#define POST 1
 
 namespace guidohttpd
 {
 
-typedef std::pair<std::string, std::string>	TArg;
-typedef std::vector<TArg>					TArgs;
+typedef std::pair<std::string, std::string> TArg;
+typedef std::map<std::string, std::string> TArgs;
+    //typedef std::vector<TArg> TArgs;
+    
+bool atob(std::string name);
+void stringToDate(std::string, GuidoDate &date);
+std::string dateToString(GuidoDate &date);
+
 
 std::string rand_alnum_str (std::string::size_type sz);
 long lopt(char *argv[], const char *name, long def);

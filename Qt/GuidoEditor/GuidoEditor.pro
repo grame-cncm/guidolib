@@ -15,8 +15,11 @@ else {
 	TARGET = GuidoEditor	 
 }
 
-unix:TARGET = guidoeditor
-
+unix:DebugBuild {
+	TARGET = guidoeditord
+} else {
+	TARGET = guidoeditor
+}
 
 DESTDIR = ../bin
 MOC_DIR = ./tmpSrc
@@ -37,10 +40,19 @@ win32 {
 }
 
 # GuidoQt library link for each platform
-win32:LIBS += ../GuidoQt/GuidoQt.lib
+win32 {
+	DebugBuild{
+		LIBS += ../GuidoQt.lib
+	}
+	else {
+		LIBS += ../GuidoQt.lib
+	}
+}
+
 macx:LIBS += -framework CoreFoundation
-unix:LIBS += -L../GuidoQt -lGuidoQt
+unix:LIBS += -L.. -lGuidoQt
 INCLUDEPATH += ../GuidoQt/include
+QT += widgets printsupport
 
 include( ../GUIDOEngineLink.pri )
 

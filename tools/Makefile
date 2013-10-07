@@ -3,11 +3,11 @@ INC = -I../src/include -I../src/devices
 
 system	:= $(shell uname -s)
 ifeq ($(system), Darwin)
-  lib =  -F../cmake/Release/ -framework GUIDOEngine
+  lib =  -F../build/MacOS/Release/ -framework GUIDOEngine
   INC := $(INC)  -I../macosx/src
 else
 ifeq ($(system), MINGW32_NT-6.1)
-  lib =  ../cmake/Release/GUIDOEngine.lib
+  lib =  ../build/win32/Release/GUIDOEngine.lib
 else
   lib = -lGUIDOEngine
   INC := $(INC)  -I../linux/src $(shell pkg-config --cflags cairo)

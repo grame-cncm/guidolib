@@ -46,7 +46,7 @@
 
 #define ERROR_BUFFER_SIZE 500
 //------------------------------------------------------------------------------------------
-#define kVersion	"1.10"
+#define kVersion	"1.20"
 //------------------------------------------------------------------------------------------
 
 #ifdef WIN32
@@ -63,8 +63,8 @@ static const char * gAppName;
 //------------------------------------------------------------------------------------------
 typedef struct Guido2ImageOptions {
 	bool stdInMode;
-	bool pageMode;
 	bool hasLayout;
+	int	 page;
 	const char * inputFile;
 	const char * inputString;
 	const char * outputFile; 
@@ -78,7 +78,7 @@ typedef struct Guido2ImageOptions {
 	const char *	optimalPageFill;
 
 	Guido2ImageOptions () 
-		: stdInMode(false), pageMode(false), hasLayout(false),
+		: stdInMode(false), page(1), hasLayout(false),
 		  inputFile(0), inputString(0), outputFile(0), imageFormat(0),
 		  zoom(-1.f), height(-1), width(-1), 
 		  systemsDistance(-1.f), systemsDistribution(0), optimalPageFill(0)  {}
@@ -101,10 +101,10 @@ static void usage(const char * name)
 	cerr << "options:   -h imageHeight (int)   Output image height in pixels" << endl;
 	cerr << "           -w imageWidth  (int)   Output image width in pixels" << endl;
 	cerr << "           -z imageZoom   (float) Output image zoom (bigger/smaller image)" << endl;
-	cerr << "           -p                     Page mode : put each page of the score in a separate image file," << endl;
-	cerr << "                                  suffixed with _i (where i is the page number)" << endl;
+	cerr << "           -p num (int)           print page number 'num' (default is 1)" << endl;
 	cerr << "           -t format              Image format" << endl; 
 	cerr << "                                  Supported formats: PDF, BMP, GIF, JPG, JPEG, PNG, PGM, PPM, SVG, TIFF, XBM, XPM" << endl;
+	cerr << "           -v                     print the version number and exit." << endl;
 	cerr << "           -?                     print this help message." << endl;
 	cerr << "options controlling the Guido Engine layout settings:" << endl;
 	cerr << "           -d distance (int)      control the systems distance (default value is 75)." << endl;
@@ -144,14 +144,14 @@ static void parseOptions(int argc, char *argv[] , Guido2ImageOptions& opts )
 {
 	int c;
 	opterr = 0;
-	while ((c = getopt (argc, argv, "f:s:o:pw:h:z:t:d:a:b:?")) != -1)
+	while ((c = getopt (argc, argv, "f:s:o:pw:h:z:t:d:a:b:?:v")) != -1)
 		switch (c)
 		{
 			case 'f':	opts.inputFile = optarg;		break;
 			case 's':	opts.inputString = optarg;		break;
 			case 'o':	opts.outputFile = optarg;		break;
 
-			case 'p':	opts.pageMode = true;			break;
+			case 'p':	opts.page = (int)strtol(optarg, 0, 10);		break;
 			case 'w':	opts.width = (int)strtol(optarg, 0, 10);	break;
 			case 'h':	opts.height = (int)strtol(optarg, 0, 10);	break;
 			case 'z':	opts.zoom = strtod(optarg, 0);				break;
@@ -166,6 +166,8 @@ static void parseOptions(int argc, char *argv[] , Guido2ImageOptions& opts )
 			case 'b':	opts.optimalPageFill = optarg;
 						opts.hasLayout = true;
 						break;
+			case 'v':	cout << basename(argv[0]) << " version " << kVersion << " using Guido Engine v." << GuidoGetVersionStr() << endl;
+						exit(0);
 
 			default:
 				usage( basename(argv[0]) );
@@ -275,7 +277,7 @@ int main(int argc, char *argv[])
 
 	Guido2Image::Params p;		// a struct used as arg of the conversion function
 	string stdinstr;			// a string to read the standard input
-	Guido2ImageErrorCodes (*convertFunction)(const Guido2Image::Params &, bool);	// a pointer to the conversion function
+	Guido2ImageErrorCodes (*convertFunction)(const Guido2Image::Params &);	// a pointer to the conversion function
 	if ( options.inputString ) {							// string parsing mode
 		convertFunction = &Guido2Image::gmnString2Image;
 		p.input = options.inputString;
@@ -310,27 +312,27 @@ int main(int argc, char *argv[])
 	QGuidoPainter::startGuidoEngine();						// starts the guido engine
 	// the page mode should be removed in a future version
 	// a simple shell script can do the equivalent without constraint on the naming scheme
-	if (options.pageMode && (p.format != GUIDO_2_IMAGE_PDF))// we're in page mode 
-	{
-		string outputBase (p.output);
-		while ( error == GUIDO_2_IMAGE_SUCCESS )	// Export the pages until the function fails (at least it will fail returning INVALID_PAGE_INDEX error)
-		{
-			p.pageIndex++;
-			//----------------------------------------------------
-			// this was originaly made using QStrings + QVariant
-			// another version was using a stringstream
-			// both were producing an unexpected strange behavior (inconsistent output name after calling GuidoAR2GR)
-			char buff[1024]; 
-			sprintf (buff, "%s_%d", outputBase.c_str(), p.pageIndex);
-			//----------------------------------------------------
-			p.output = buff;
-			error = convertFunction( p, false );					// convert to an image
-			output.clear();
-		}
-		if ( error == GUIDO_2_IMAGE_INVALID_PAGE_INDEX )
-			error = GUIDO_2_IMAGE_SUCCESS;
-	}
-	else error = convertFunction( p, false );						// convert to an image
+//	if (options.pageMode && (p.format != GUIDO_2_IMAGE_PDF))// we're in page mode 
+//	{
+//		string outputBase (p.output);
+//		while ( error == GUIDO_2_IMAGE_SUCCESS )	// Export the pages until the function fails (at least it will fail returning INVALID_PAGE_INDEX error)
+//		{
+//			p.pageIndex++;
+//			//----------------------------------------------------
+//			// this was originaly made using QStrings + QVariant
+//			// another version was using a stringstream
+//			// both were producing an unexpected strange behavior (inconsistent output name after calling GuidoAR2GR)
+//			char buff[1024]; 
+//			sprintf (buff, "%s_%d", outputBase.c_str(), p.pageIndex);
+//			//----------------------------------------------------
+//			p.output = buff;
+//			error = convertFunction( p );					// convert to an image
+//			output.clear();
+//		}
+//		if ( error == GUIDO_2_IMAGE_INVALID_PAGE_INDEX )
+//			error = GUIDO_2_IMAGE_SUCCESS;
+//	}
+	error = convertFunction( p );							// convert to an image
 	QGuidoPainter::stopGuidoEngine();						// stop the guido engine
 	
 	if ( error ) cerr << Guido2Image::getErrorString(error) << endl;

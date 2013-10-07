@@ -2,27 +2,22 @@
 #define GUIDOEngine_H
 
 /*
-	GUIDO Library
-	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-	Copyright (C) 2003, 2004  Grame
+  GUIDO Library
+  Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  Copyright (C) 2003, 2004  Grame
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Lesser General Public
-	License as published by the Free Software Foundation; either
-	version 2.1 of the License, or (at your option) any later version.
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-	This library is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Lesser General Public License for more details.
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
 
-	You should have received a copy of the GNU Lesser General Public
-	License along with this library; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
- */
+*/
 
 #include <ostream>
+#include <string>
+#include <vector>
 #include "GUIDOExport.h"
 
 class GuidoFeedback;
@@ -360,6 +355,14 @@ as by date. Page numbers start at 1.
 		\return a number of pages or a guido error code.
 	*/
 	GUIDOAPI(int) 	GuidoGetPageCount( CGRHandler inHandleGR );
+	
+	/** \brief Gives the number of systems on a given page.
+
+		\param inHandleGR a Guido opaque handle to a GR structure.
+		\param page a page number (starts at 1).
+		\return the systems count on the given page or a guido error code.
+	*/
+	GUIDOAPI(int) 	GuidoGetSystemCount( CGRHandler inHandleGR, int page );
 
 	/** \brief Returns the music duration of a score.
 
@@ -575,6 +578,25 @@ The number of version functions is due to historical reasons.
 											const GuidoDate & date, const GuidoDate & duration,
 											unsigned char red, unsigned char green, unsigned char blue );
 
+
+    /**	\brief Makes the correspondance between an ARMusic and a path.
+
+		\param inHandleAR the destination ARHandler.
+		\param inPath the path to associate.
+		\return noErr if the association has been made with success
+		\return otherwise guidoErrActionFailed.
+	*/
+    GUIDOAPI(GuidoErrCode) GuidoSetSymbolPath(ARHandler inHandleAR, const std::vector<std::string> &inPaths);
+
+
+    /**	\brief Returns the path corresponding to an AR.
+
+		\param inHandleAR the handle given to extract its path.
+		\return the returned path.
+        \return noErr if the association has been made with success
+		\return otherwise guidoErrActionFailed.
+	*/
+    GUIDOAPI(GuidoErrCode) GuidoGetSymbolPath(const ARHandler inHandleAR, std::vector<std::string> &inPathVector);
 
 /*! @} */
 

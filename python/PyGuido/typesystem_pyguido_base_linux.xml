@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<typesystem package="PyGuido">
+    <load-typesystem name="typesystem_pyguido_base_common.xml" generate="yes" />
+	
+    <!-- CairoDevice.h -->
+    <object-type name="CairoDevice">
+        <inject-code class="native" position="beginning">
+            <insert-template name="fix-compilation-check"/>
+        </inject-code>
+    </object-type>
+
+    
+    <!-- CairoFont.h -->
+    <object-type name="CairoFont">
+        <inject-code class="native" position="beginning">
+            <insert-template name="fix-compilation-check"/>
+        </inject-code>
+    </object-type>
+	
+    
+    <!-- CairoSystem.h -->
+    <object-type name="CairoSystem">
+        <inject-code class="native" position="beginning">
+            <insert-template name="fix-compilation-check"/>
+        </inject-code>
+    </object-type>
+	
+    
+    <!-- GDeviceGtk.h -->
+    <!--
+    <object-type name="GDeviceGtk">
+        <inject-code class="native" position="beginning">
+            <insert-template name="fix-compilation-check"/>
+        </inject-code>
+    </object-type>
+    -->
+	
+    
+    <!-- GFontGtk.h -->
+    <!--
+    <object-type name="GFontGtk">
+        <inject-code class="native" position="beginning">
+            <insert-template name="fix-compilation-check"/>
+        </inject-code>
+    </object-type>
+    -->
+    
+    
+    <!-- GSystemGtk.h -->
+    <!--
+    <object-type name="GSystemGtk">
+        <inject-code class="native" position="beginning">
+            <insert-template name="fix-compilation-check"/>
+        </inject-code>
+    </object-type>
+    -->
+</typesystem>

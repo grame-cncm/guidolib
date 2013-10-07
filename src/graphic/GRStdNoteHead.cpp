@@ -1,20 +1,14 @@
 /*
-	GUIDO Library
-	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  GUIDO Library
+  Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  Copyright (C) 2003 Grame
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Lesser General Public
-	License as published by the Free Software Foundation; either
-	version 2.1 of the License, or (at your option) any later version.
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-	This library is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Lesser General Public License for more details.
-
-	You should have received a copy of the GNU Lesser General Public
-	License along with this library; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
 
 */
 
@@ -27,15 +21,11 @@ using namespace std;
 
 #include "GRDefine.h"
 
-NVPoint GRStdNoteHead::sRefposFull;
-NVPoint GRStdNoteHead::sRefposHalf;
-NVPoint GRStdNoteHead::sRefposWhole;
-NVPoint GRStdNoteHead::sRefposLonga;
-NVPoint GRStdNoteHead::sRefposDiamond;
-NVPoint GRStdNoteHead::sRefposCrossHead;
-
-
-GRStdNoteHead::GRStdNoteHead( GREvent * sngnot, const TYPE_DURATION & inDur )
+GRStdNoteHead::GRStdNoteHead( GREvent * sngnot, const TYPE_DURATION & inDur, GDirection inStemDirection ) :
+singleStemDirection(inStemDirection),
+	globalStemDirection(dirAUTO),
+	halfExtent(0),
+	mBracketsType(None)
 {
 	mSize = sngnot->getSize();
 	const unsigned char * tmpcolref = sngnot->getColRef();
@@ -60,10 +50,15 @@ GRStdNoteHead::GRStdNoteHead( GREvent * sngnot, const TYPE_DURATION & inDur )
 		if( mStyle == "diamond" )
 			mSymbol = full ? kFullDiamondHeadSymbol : kHalfDiamondHeadSymbol;
 		else if( mStyle == "x" )
-			mSymbol = kXHeadSymbol;
-		else if( mStyle == "square" ) // TODO: look if the "square" symbol exists.
-			mSymbol = full ? kFullHeadSymbol : kHalfNoteHeadSymbol;	
-
+			mSymbol = full ? kFullXHeadSymbol : kHalfXHeadSymbol;
+		else if( mStyle == "square" )
+			mSymbol = full ? kFullSquareHeadSymbol : kHalfSquareHeadSymbol;
+		else if( mStyle == "round" )
+			mSymbol = full ? kFullRoundHeadSymbol : kHalfRoundHeadSymbol;
+		else if( mStyle == "triangle" )
+			mSymbol = full ? kFullTriangleHeadSymbol : kHalfTriangleHeadSymbol;
+		else if( mStyle == "reversedTriangle" )
+			mSymbol = full ? kFullReversedTriangleHeadSymbol : kHalfReversedTriangleHeadSymbol;
 		else if( mStyle == "noHeads" ) {
 #ifndef WIN32	// transparency not supported on WIN32
 			if (!mColRef) mColRef = new unsigned char[4];
@@ -73,22 +68,122 @@ GRStdNoteHead::GRStdNoteHead( GREvent * sngnot, const TYPE_DURATION & inDur )
 			mSymbol = kNoneSymbol;
 #endif
 		}
-		else if( mStyle == "()" )
-			mSymbol = durationToHeadSymbol( inDur );
-		else if( mStyle == "[]" )
-			mSymbol = durationToHeadSymbol( inDur );
-		else if( mStyle == "<>" )
-			mSymbol = durationToHeadSymbol( inDur );
-		// to be implemented: S represents one of the above styles
-		else if( mStyle == "(S)" )
-			mSymbol = durationToHeadSymbol( inDur );
-		else if( mStyle == "[S]" )
-			mSymbol = durationToHeadSymbol( inDur );
-		else if( mStyle == "<S>" )
-			mSymbol = durationToHeadSymbol( inDur );
-	}
 
-	float halfExtent = 0;
+		// - Noteheads ornaments
+
+		else if( mStyle == "()" )
+		{
+			mBracketsType = Round; // - Round brackets
+			mSymbol = durationToHeadSymbol( inDur );
+		}
+		else if( mStyle == "[]" )
+		{
+			mBracketsType = Square; // - Square brackets
+			mSymbol = durationToHeadSymbol( inDur );
+		}
+		else if( mStyle == "<>" )
+		{
+			mBracketsType = Angled; // - Angled brackets
+			mSymbol = durationToHeadSymbol( inDur );
+		}
+
+		// - Ornament for non-standard notehead types
+		// - Round brackets
+		else if( mStyle == "(diamond)" )
+		{
+			mBracketsType = Round;
+			mSymbol = full ? kFullDiamondHeadSymbol : kHalfDiamondHeadSymbol;
+		}
+		else if( mStyle == "(x)" )
+		{
+			mBracketsType = Round;
+			mSymbol = full ? kFullXHeadSymbol : kHalfXHeadSymbol;
+		}
+		else if( mStyle == "(square)" )
+		{
+			mBracketsType = Round;
+			mSymbol = full ? kFullSquareHeadSymbol : kHalfSquareHeadSymbol;
+		}
+		else if( mStyle == "(round)" )
+		{
+			mBracketsType = Round;
+			mSymbol = full ? kFullRoundHeadSymbol : kHalfRoundHeadSymbol;
+		}
+		else if( mStyle == "(triangle)" )
+		{
+			mBracketsType = Round;
+			mSymbol = full ? kFullTriangleHeadSymbol : kHalfTriangleHeadSymbol;
+		}
+		else if( mStyle == "(reversedTriangle)" )
+		{
+			mBracketsType = Round;
+			mSymbol = full ? kFullReversedTriangleHeadSymbol : kHalfReversedTriangleHeadSymbol;
+		}
+
+		// - Square brackets
+		else if( mStyle == "[diamond]" )
+		{
+			mBracketsType = Square;
+			mSymbol = full ? kFullDiamondHeadSymbol : kHalfDiamondHeadSymbol;
+		}
+		else if( mStyle == "[x]" )
+		{
+			mBracketsType = Square;
+			mSymbol = full ? kFullXHeadSymbol : kHalfXHeadSymbol;
+		}
+		else if( mStyle == "[square]" )
+		{
+			mBracketsType = Square;
+			mSymbol = full ? kFullSquareHeadSymbol : kHalfSquareHeadSymbol;
+		}
+		else if( mStyle == "[round]" )
+		{
+			mBracketsType = Square;
+			mSymbol = full ? kFullRoundHeadSymbol : kHalfRoundHeadSymbol;
+		}
+		else if( mStyle == "[triangle]" )
+		{
+			mBracketsType = Square;
+			mSymbol = full ? kFullTriangleHeadSymbol : kHalfTriangleHeadSymbol;
+		}
+		else if( mStyle == "[reversedTriangle]" )
+		{
+			mBracketsType = Square;
+			mSymbol = full ? kFullReversedTriangleHeadSymbol : kHalfReversedTriangleHeadSymbol;
+		}
+
+		// - Angled brackets
+		else if( mStyle == "<diamond>" )
+		{
+			mBracketsType = Angled;
+			mSymbol = full ? kFullDiamondHeadSymbol : kHalfDiamondHeadSymbol;
+		}
+		else if( mStyle == "<x>" )
+		{
+			mBracketsType = Angled;
+			mSymbol = full ? kFullXHeadSymbol : kHalfXHeadSymbol;
+		}
+		else if( mStyle == "<square>" )
+		{
+			mBracketsType = Angled;
+			mSymbol = full ? kFullSquareHeadSymbol : kHalfSquareHeadSymbol;
+		}
+		else if( mStyle == "<round>" )
+		{
+			mBracketsType = Angled;
+			mSymbol = full ? kFullRoundHeadSymbol : kHalfRoundHeadSymbol;
+		}
+		else if( mStyle == "<triangle>" )
+		{
+			mBracketsType = Angled;
+			mSymbol = full ? kFullTriangleHeadSymbol : kHalfTriangleHeadSymbol;
+		}
+		else if( mStyle == "<reversedTriangle>" )
+		{
+			mBracketsType = Angled;
+			mSymbol = full ? kFullReversedTriangleHeadSymbol : kHalfReversedTriangleHeadSymbol;
+		}
+	}
 
 	// - Calculate the bounding box
 	if (mSymbol != kNoneSymbol) {
@@ -104,38 +199,45 @@ GRStdNoteHead::GRStdNoteHead( GREvent * sngnot, const TYPE_DURATION & inDur )
 	mLeftSpace = (GCoord) (halfExtent * getSize());
 	mRightSpace = (GCoord) (halfExtent * getSize());
 
-	switch (mSymbol) {
-		case kFullHeadSymbol:
-			sRefposFull.x = (GCoord)(- halfExtent);
-			sRefposFull.y = 0;
-			break;
+	switch (mSymbol)
+	{
+	case kFullHeadSymbol:
+	case kHalfNoteHeadSymbol:
+	case kWholeNoteHeadSymbol:
+	case kLongaHeadSymbol:
+	case kFullDiamondHeadSymbol:
+	case kHalfDiamondHeadSymbol:
+		sRefPosNotehead.x = (GCoord)(- halfExtent);
+		break;
 
-		case kHalfNoteHeadSymbol:
-			sRefposHalf.x = (GCoord)(- halfExtent);
-			sRefposHalf.y = 0;
-			break;
-					
-		case kWholeNoteHeadSymbol:
-			sRefposWhole.x = (GCoord)(- halfExtent);
-			sRefposWhole.y = 0;
-			break;
-		
-		case kLongaHeadSymbol:
-			sRefposLonga.x = (GCoord)(- halfExtent);
-			sRefposLonga.y = 0;
-			break;
-		
-		case kFullDiamondHeadSymbol:
-		case kHalfDiamondHeadSymbol:
-			sRefposDiamond.x = (GCoord)(- halfExtent) + 2;
-			sRefposDiamond.y = 0;
-			break;
+	case kFullXHeadSymbol:
+	case kHalfXHeadSymbol:
+	case kFullSquareHeadSymbol:
+	case kHalfSquareHeadSymbol:
+	case kFullRoundHeadSymbol:
+	case kHalfRoundHeadSymbol:
+		if (singleStemDirection == dirUP)
+			sRefPosNotehead.x = (GCoord)(- halfExtent) + 5;
+		else if (singleStemDirection == dirDOWN)
+			sRefPosNotehead.x = (GCoord)(- halfExtent) - 5;
+		else
+			sRefPosNotehead.x = (GCoord)(- halfExtent);
+		break;
 
-		case kXHeadSymbol:
-			sRefposCrossHead.x = (GCoord)(- halfExtent);
-			sRefposCrossHead.y = 0;
-			break;
+	case kFullTriangleHeadSymbol:
+	case kHalfTriangleHeadSymbol:
+	case kFullReversedTriangleHeadSymbol:
+	case kHalfReversedTriangleHeadSymbol:
+		if (singleStemDirection == dirUP)
+			sRefPosNotehead.x = (GCoord)(- halfExtent) + 2;
+		else if (singleStemDirection == dirDOWN)
+			sRefPosNotehead.x = (GCoord)(- halfExtent) - 2;
+		else
+			sRefPosNotehead.x = (GCoord)(- halfExtent);
+		break;
 	}
+
+	sRefPosNotehead.y = 0;
 }
 
 GRStdNoteHead::~GRStdNoteHead() {}
@@ -150,18 +252,18 @@ unsigned int GRStdNoteHead::durationToHeadSymbol( const TYPE_DURATION & inDur ) 
 
 	// - Half notes
 	else if( inDur < DURATION_1 )
-			/* was: if( duration == DURATION_2 
-			|| duration == DURATION_3_4 
-			|| duration == DURATION_7_8) */
-   		outSymbol = kHalfNoteHeadSymbol;
+		/* was: if( duration == DURATION_2 
+		|| duration == DURATION_3_4 
+		|| duration == DURATION_7_8) */
+		outSymbol = kHalfNoteHeadSymbol;
 
 	// - Whole notes (semi-breves)	
 	else if( inDur < Fraction( 2, 1 ))
 		outSymbol = kWholeNoteHeadSymbol;
-	
+
 	// - Longa notes (breves)
 	else if( inDur == Fraction( 2, 1 ))
-   		outSymbol = kLongaHeadSymbol;
+		outSymbol = kLongaHeadSymbol;
 
 	// - Unknown, use a full head
 	else
@@ -185,36 +287,230 @@ const NVPoint & GRStdNoteHead::getPosition() const
 
 const NVPoint & GRStdNoteHead::getReferencePosition() const
 {
-	switch (mSymbol)
-	{
-		case kFullHeadSymbol:		return sRefposFull;		break;
-		case kHalfNoteHeadSymbol:	return sRefposHalf;		break;
-		case kWholeNoteHeadSymbol:	return sRefposWhole;	break;
-		case kLongaHeadSymbol:		return sRefposLonga;	break;
-		case kFullDiamondHeadSymbol:
-		case kHalfDiamondHeadSymbol:return sRefposDiamond;	break;
-		case kXHeadSymbol:			return sRefposCrossHead; break;
-		default: 					return sRefposNone;		break;
-	}
+	if (mSymbol != kNoneSymbol)
+		return sRefPosNotehead;
+	else
+		return sRefposNone;
 }
 
 void GRStdNoteHead::GGSOutput() const
 {
-  // so that the notehead is put at the correct position
-  // this is a workaround ....
-  // tell Christian.
-  GRNoteHead::GGSOutput();
+	// so that the notehead is put at the correct position
+	// this is a workaround ....
+	// tell Christian.
+	GRNoteHead::GGSOutput();
 }
 
 void GRStdNoteHead::OnDraw( VGDevice & hdc ) const
 {
-  // the note head -> the note
-  if (mSymbol == kNoneSymbol) return;
-  GRNoteHead::OnDraw(hdc);
+	// the note head -> the note
+	if(!mDraw)
+		return;
+	if (mSymbol == kNoneSymbol) return;
+
+	GRNoteHead::OnDraw(hdc);
+
+	if (mBracketsType == Round)
+	{
+		float xOffset = -25 * mSize;
+		float yOffset = 55 * mSize;
+		GRNotationElement::OnDrawSymbol(hdc, kRoundLeftBracket, xOffset, yOffset, 0);
+		xOffset = 50 * mSize;
+		GRNotationElement::OnDrawSymbol(hdc, kRoundRightBracket, xOffset, yOffset, 0);
+	}
+	else if (mBracketsType == Square)
+	{
+		float xOffset = -25 * mSize;
+		float yOffset = 55 * mSize;
+		GRNotationElement::OnDrawSymbol(hdc, kSquareLeftBracket, xOffset, yOffset, 0);
+		xOffset = 50 * mSize;
+		GRNotationElement::OnDrawSymbol(hdc, kSquareRightBracket, xOffset, yOffset, 0);
+	}
+	else if (mBracketsType == Angled)
+	{
+		float xOffset = -55 * mSize;
+		float yOffset = 55 * mSize;
+		GRNotationElement::OnDrawSymbol(hdc, kAngledLeftBracket, xOffset, yOffset, 0);
+		xOffset = 70 * mSize;
+		GRNotationElement::OnDrawSymbol(hdc, kAngledRightBracket, xOffset, yOffset, 0);
+	}
 }
 
 void GRStdNoteHead::print() const
 {
 }
 
+unsigned int GRStdNoteHead::getSymbol() const
+{
+	return mSymbol;
+}
 
+void GRStdNoteHead::adjustPositionForChords(ARTHead::HEADSTATE inHeadstate, GDirection inGlobalStemDirection)
+{
+	globalStemDirection = inGlobalStemDirection;
+
+	if (globalStemDirection == dirDOWN)
+	{
+		if (inHeadstate == ARTHead::LEFT)
+		{
+			switch (mSymbol)
+			{
+			case kFullHeadSymbol:
+			case kHalfNoteHeadSymbol:
+			case kWholeNoteHeadSymbol:
+			case kLongaHeadSymbol:
+			case kFullDiamondHeadSymbol:
+			case kHalfDiamondHeadSymbol:
+				sRefPosNotehead.x = (GCoord)(- halfExtent);
+				break;
+
+			case kFullXHeadSymbol:
+			case kHalfXHeadSymbol:
+			case kFullSquareHeadSymbol:
+			case kHalfSquareHeadSymbol:
+			case kFullRoundHeadSymbol:
+			case kHalfRoundHeadSymbol:
+				sRefPosNotehead.x = (GCoord)(- halfExtent) + 5;
+				break;
+
+			case kFullTriangleHeadSymbol:
+			case kHalfTriangleHeadSymbol:
+			case kFullReversedTriangleHeadSymbol:
+			case kHalfReversedTriangleHeadSymbol:
+				sRefPosNotehead.x = (GCoord)(- halfExtent) + 2;
+				break;
+			}
+		}
+		else if (inHeadstate == ARTHead::RIGHT)
+		{
+			switch (mSymbol)
+			{
+			case kFullXHeadSymbol:
+			case kHalfXHeadSymbol:
+			case kFullSquareHeadSymbol:
+			case kHalfSquareHeadSymbol:
+			case kFullRoundHeadSymbol:
+			case kHalfRoundHeadSymbol:
+				sRefPosNotehead.x = (GCoord)(- halfExtent) - 5;
+				break;
+
+			case kFullTriangleHeadSymbol:
+			case kHalfTriangleHeadSymbol:
+			case kFullReversedTriangleHeadSymbol:
+			case kHalfReversedTriangleHeadSymbol:
+				sRefPosNotehead.x = (GCoord)(- halfExtent) - 2;
+				break;
+			}
+		}
+	}
+	else if (globalStemDirection == dirUP)
+	{
+		if (inHeadstate == ARTHead::RIGHT)
+		{
+			switch (mSymbol)
+			{
+			case kFullHeadSymbol:
+			case kHalfNoteHeadSymbol:
+			case kWholeNoteHeadSymbol:
+			case kLongaHeadSymbol:
+			case kFullDiamondHeadSymbol:
+			case kHalfDiamondHeadSymbol:
+				sRefPosNotehead.x = (GCoord)(- halfExtent);
+				break;
+
+			case kFullXHeadSymbol:
+			case kHalfXHeadSymbol:
+			case kFullSquareHeadSymbol:
+			case kHalfSquareHeadSymbol:
+			case kFullRoundHeadSymbol:
+			case kHalfRoundHeadSymbol:
+				sRefPosNotehead.x = (GCoord)(- halfExtent) - 5;
+				break;
+
+			case kFullTriangleHeadSymbol:
+			case kHalfTriangleHeadSymbol:
+			case kFullReversedTriangleHeadSymbol:
+			case kHalfReversedTriangleHeadSymbol:
+				sRefPosNotehead.x = (GCoord)(- halfExtent) - 2;
+				break;
+			}
+		}
+		else if (inHeadstate == ARTHead::LEFT)
+		{
+			switch (mSymbol)
+			{
+			case kFullXHeadSymbol:
+			case kHalfXHeadSymbol:
+			case kFullSquareHeadSymbol:
+			case kHalfSquareHeadSymbol:
+			case kFullRoundHeadSymbol:
+			case kHalfRoundHeadSymbol:
+				sRefPosNotehead.x = (GCoord)(- halfExtent) + 5;
+				break;
+
+			case kFullTriangleHeadSymbol:
+			case kHalfTriangleHeadSymbol:
+			case kFullReversedTriangleHeadSymbol:
+			case kHalfReversedTriangleHeadSymbol:
+				sRefPosNotehead.x = (GCoord)(- halfExtent) + 2;
+				break;
+			}
+		}
+	}
+}
+
+void GRStdNoteHead::adjustHorizontalPosition()
+{
+	if (globalStemDirection == dirDOWN)
+	{
+		switch (mSymbol)
+		{
+		case kFullXHeadSymbol:
+		case kHalfXHeadSymbol:
+		case kFullSquareHeadSymbol:
+		case kHalfSquareHeadSymbol:
+		case kFullRoundHeadSymbol:
+		case kHalfRoundHeadSymbol:
+			sRefPosNotehead.x = (GCoord)(- halfExtent) - 5;
+			break;
+
+		case kFullTriangleHeadSymbol:
+		case kHalfTriangleHeadSymbol:
+		case kFullReversedTriangleHeadSymbol:
+		case kHalfReversedTriangleHeadSymbol:
+			sRefPosNotehead.x = (GCoord)(- halfExtent) - 2;
+			break;
+		}
+	}
+	else if (globalStemDirection == dirUP)
+	{
+		switch (mSymbol)
+		{
+		case kFullXHeadSymbol:
+		case kHalfXHeadSymbol:
+		case kFullSquareHeadSymbol:
+		case kHalfSquareHeadSymbol:
+		case kFullRoundHeadSymbol:
+		case kHalfRoundHeadSymbol:
+			sRefPosNotehead.x = (GCoord)(- halfExtent) + 5;
+			break;
+
+		case kFullTriangleHeadSymbol:
+		case kHalfTriangleHeadSymbol:
+		case kFullReversedTriangleHeadSymbol:
+		case kHalfReversedTriangleHeadSymbol:
+			sRefPosNotehead.x = (GCoord)(- halfExtent) + 2;
+			break;
+		}
+	}
+}
+
+void GRStdNoteHead::setGlobalStemDirection(GDirection inGlobalStemDirection)
+{
+	if (globalStemDirection != inGlobalStemDirection)
+	{
+		globalStemDirection = inGlobalStemDirection;
+
+		this->adjustHorizontalPosition();
+	}
+}

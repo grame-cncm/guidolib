@@ -4,17 +4,12 @@
  * Created by Christophe Daudin on 12/05/09.
  * Copyright 2009 Grame. All rights reserved.
  *
- * GNU Lesser General Public License Usage
- * Alternatively, this file may be used under the terms of the GNU Lesser
- * General Public License version 2.1 as published by the Free Software
- * Foundation and appearing in the file LICENSE.LGPL included in the
- * packaging of this file.  Please review the following information to
- * ensure the GNU Lesser General Public License version 2.1 requirements
- * will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
- *
- *
- * This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- * WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+ * Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+ * research@grame.fr
  */
 #ifndef GUIDO_PAINTER_H
 #define GUIDO_PAINTER_H
@@ -114,7 +109,7 @@ class QGuidoPainter
 		*	\param gmnCode The Guido Music Notation code
 		*	\return true if the GMN code is valid.
 		*/
-		bool setGMNCode( const QString& gmnCode );
+		bool setGMNCode( const QString& gmnCode, const char* datapath=0 );
 		
 		/**	\brief Returns the current Guido code.
 		*/
@@ -210,7 +205,7 @@ class QGuidoPainter
 		CARHandler	getARHandler() const { return mARHandler; }
 		
 		/**
-		*	\brief Directly set the AR handler .
+		*	\brief Directly set the AR handler.
 		*/
 		void		setARHandler(ARHandler ar);
 
@@ -219,10 +214,12 @@ class QGuidoPainter
 		QGuidoPainter();
 		~QGuidoPainter();
 
-		typedef GuidoErrCode (*GuidoParseFunction)( const char * , ARHandler* );
+		typedef GuidoErrCode (*GuidoParseFunction)( const char * , ARHandler*);
 
-		bool setGMNData( const QString& dataSource , GuidoParseFunction parseFunction );
+		bool setGMNData( const QString& data, const char* dataPath=0 );
 		bool hasValidGR() const			{ return mDesc.handle != 0; }
+
+        void setPathsToARHandler (ARHandler inARHandler, const char* data);
 		
 		GuidoOnDrawDesc mDesc;
 		ARHandler mARHandler;

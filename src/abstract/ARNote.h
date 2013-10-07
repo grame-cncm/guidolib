@@ -2,24 +2,16 @@
 #define ARNote_H
 
 /*
-	GUIDO Library
-	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+GUIDO Library
+Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  Copyright (C) 2002-2013 Grame
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Lesser General Public
-	License as published by the Free Software Foundation; either
-	version 2.1 of the License, or (at your option) any later version.
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-	This library is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Lesser General Public License for more details.
-
-	You should have received a copy of the GNU Lesser General Public
-	License along with this library; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-*/
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr*/
 
 #include <string>
 
@@ -30,71 +22,81 @@
 
 
 class ARTrill;
+class ARCluster;
 
 /** \brief Representation of a GUIDO note.
 */
 class ARNote : public ARMusicalEvent
 {
   public:
-				ARNote( const TYPE_DURATION & durationOfNote );
-				ARNote( const TYPE_TIMEPOSITION & relativeTimePositionOfNote, const TYPE_DURATION & durationOfNote );
-				ARNote( const std::string& inName, int theAccidentals, int theRegister, int theNumerator, 
-						int theDenominator, int theIntensity );
-				ARNote( const ARNote & arnote );
-		virtual ~ARNote();
+    ARNote( const TYPE_DURATION & durationOfNote );
+    ARNote( const TYPE_TIMEPOSITION & relativeTimePositionOfNote, const TYPE_DURATION & durationOfNote );
+    ARNote( const std::string& inName, int theAccidentals, int theRegister, int theNumerator, 
+        int theDenominator, int theIntensity );
+    ARNote( const ARNote & arnote );
+    virtual ~ARNote();
 
-		virtual int		CompareNameOctavePitch( const ARNote & nt );
-		virtual void	setDuration( const TYPE_DURATION & newdur );
-		virtual bool	CanBeMerged( const ARMusicalEvent * ev2 );
+    virtual int		CompareNameOctavePitch( const ARNote & nt );
+    virtual void	setDuration( const TYPE_DURATION & newdur );
+    virtual bool	CanBeMerged( const ARMusicalEvent * ev2 );
 
-		virtual ARMusicalObject * Copy() const;
+    virtual ARMusicalObject * Copy() const;
 
-		virtual void print() const;
-		virtual std::ostream & operator<<(std::ostream & os ) const;
-		virtual void	browse(TimeUnwrap& mapper) const;
+    virtual void print() const;
+    virtual std::ostream & operator<<(std::ostream & os ) const;
+    virtual void	browse(TimeUnwrap& mapper) const;
 
-		// start time position has been introduced to get correct time position for notes in chords [DF 2012-03-19]
-		virtual void						setStartTimePosition(const TYPE_TIMEPOSITION  & pos)	{ fStartPosition = pos; }
-		virtual const TYPE_TIMEPOSITION&	getStartTimePosition() const;
-		
-      void		addFlat();
-      void		addSharp();
-      void		setRegister( int newRegister );
+    // start time position has been introduced to get correct time position for notes in chords [DF 2012-03-19]
+    virtual void						setStartTimePosition(const TYPE_TIMEPOSITION  & pos)	{ fStartPosition = pos; }
+    virtual const TYPE_TIMEPOSITION&	getStartTimePosition() const;
 
-      const ARNoteName & getName() const;
+    void		 addFlat();
+    void	 	 addSharp();
+    void	 	 setRegister( int newRegister );
 
-	  int		getOctave() const;
-      int		getPitch() const;
+    const ARNoteName & getName() const;
 
-	  void		setPitch( int newpitch );
-	  void		setOctave( int newOctave )					{fOctave = newOctave;}
-      void		offsetpitch( int steps );
+    int		     getOctave() const;
+    int	    	 getPitch() const;
 
-      void		setAccidentals( int theAccidentals );
-	  int		getAccidentals() const						{ return fAccidentals; }
-      void		setDetune( float detune )					{ fDetune = detune; }
-	  float		getDetune() const							{ return fDetune; }
-	  float		getPitchShift() const						{ return fDetune + fAccidentals; }
-	  void		setOrnament( ARTrill * newOrnament );
-	  ARTrill *	getOrnament( )								{ return fOrnament;}
-	  
-	  int		midiPitch() const;
+    void		 setPitch( int newpitch );
+    void		 setOctave( int newOctave )				{fOctave = newOctave;}
+    void		 offsetpitch( int steps );
 
-	static int	detune2Quarters(float detune);
+    void		 setAccidentals( int theAccidentals );
+    int		     getAccidentals() const					{ return fAccidentals; }
+    void		 setDetune( float detune )				{ fDetune = detune; }
+    float		 getDetune() const						{ return fDetune; }
+    float		 getPitchShift() const					{ return fDetune + fAccidentals; }
+    void		 setOrnament(ARTrill *newOrnament);
+    ARCluster   *setCluster(ARCluster *inCluster, bool inClusterHaveToBeDrawn = false,
+                                                  bool inHaveToBeCreated = false);
+    void         setClusterPitchAndOctave();
+    ARTrill     *getOrnament()		    				{ return fOrnament;}
+    ARCluster   *getARCluster() 			           	{ return fCluster;}
 
-	private:
-		ARNoteName fName;
+    void setIsLonelyInCluster()                         { fIsLonelyInCluster = true; }
+    bool isLonelyInCluster()                            { return fIsLonelyInCluster; }
+    bool doesClusterHaveToBeDrawn()                     { return fClusterHaveToBeDrawn; }
 
-		int		fPitch;
-		int		fOctave;
-		int		fAccidentals;
-		float	fDetune;
-      	int 	fIntensity;
-		ARTrill * fOrnament;
+    int		midiPitch() const;
 
-		TYPE_TIMEPOSITION	fStartPosition;
+    static int	detune2Quarters(float detune);
+
+  private:
+    ARNoteName fName;
+
+    int		   fPitch;
+    int		   fOctave;
+    int		   fAccidentals;
+    float	   fDetune;
+    int 	   fIntensity;
+    ARTrill   *fOrnament;
+    ARCluster *fCluster;
+    bool       fIsLonelyInCluster;
+    bool       fClusterHaveToBeDrawn;
+
+    TYPE_TIMEPOSITION	fStartPosition;
 };
 
 #endif
-
-

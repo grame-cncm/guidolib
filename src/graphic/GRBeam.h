@@ -2,26 +2,21 @@
 #define GRBeam_H
 
 /*
-	GUIDO Library
-	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  GUIDO Library
+  Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  Copyright (C) 2002-2013 Grame
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Lesser General Public
-	License as published by the Free Software Foundation; either
-	version 2.1 of the License, or (at your option) any later version.
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-	This library is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Lesser General Public License for more details.
-
-	You should have received a copy of the GNU Lesser General Public
-	License along with this library; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
 
 */
 
 #include "ARBeam.h"
+#include "ARFeatheredBeam.h"
 #include "GRPTagARNotationElement.h"
 #include "GRSystemTagInterface.h"
 
@@ -45,6 +40,8 @@ class GRBeamSaveStruct : public GRPositionTag::GRSaveStruct
 		int dirset;
 		int direction;
 		NVPoint p[4];
+		NVPoint DurationLine[6];
+		std::string duration;
 		SimpleBeamList * simpleBeams;
 };
 
@@ -73,6 +70,10 @@ public:
 	virtual void GGSOutput() const;
 	virtual void OnDraw( VGDevice & hdc ) const;
 	virtual bool isAutoBeam() { return false; } // derived by GRAutoBeam
+	virtual GRNotationElement * getEndElement();
+	virtual void addSmallerBeam(GRBeam * beam);
+	virtual void setLevel(int l){level = l;}
+	virtual void decLevel(){level--;}
 
 protected:
 	ARBeam * getARBeam()										{ return static_cast<ARBeam *>(mAbstractRepresentation); }
@@ -106,6 +107,12 @@ private:
 	NVPoint initp2 (GRSystemStartEndStruct * sse, const GREvent * endEl, PosInfos& infos);
 	void	initp3 (GRSystemStartEndStruct * sse, PosInfos& infos);
 	void	slopeAdjust (GRSystemStartEndStruct * sse, const GREvent * startEl, const GREvent * endEl,float slope, PosInfos& infos);
+	bool   isFeathered;
+	bool   drawDur;
+	int level;
+
+	static std::pair<float, float> & getLastPositionOfBarDuration();
+	std::vector<GRBeam *> smallerBeams;
 };
 
 #endif

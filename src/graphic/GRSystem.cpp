@@ -1,21 +1,14 @@
 /*
-	GUIDO Library
-	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-	Copyright (C) 2003, 2004	Grame
+  GUIDO Library
+  Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  Copyright (C) 2003, 2004 Grame
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Lesser General Public
-	License as published by the Free Software Foundation; either
-	version 2.1 of the License, or (at your option) any later version.
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-	This library is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Lesser General Public License for more details.
-
-	You should have received a copy of the GNU Lesser General Public
-	License along with this library; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
 
 */
 
@@ -48,6 +41,7 @@
 #include "ARAccol.h"
 #include "TagParameterFloat.h"
 #include "TagParameterString.h"
+#include "ARStaff.h"
 
 // Guido GR
 #include "GRSystem.h"
@@ -587,6 +581,7 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 
 			lastStaffPos = theStaff->getPosition();
 			gCurStaff = theStaff;
+
 			theStaff->OnDraw(hdc);
 			++ staffCount;
 		}
@@ -599,7 +594,7 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 		// then we have to draw the systemslices ....
 		GuidoPos pos = mSystemSlices.GetHeadPosition();
 		bool firstFlag = true;
-
+		
 		while (pos)
 		{
 			GRSystemSlice * slice = mSystemSlices.GetNext(pos);
@@ -614,6 +609,37 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 				{
 					lastStaffPos = theStaff->getPosition();
 					staffCount = tmpmaxind;
+				}
+			}
+			
+			std::map<int, bool> StavesOn;
+		
+			if(pos)
+			{
+				GRSystemSlice * nextSlice = mSystemSlices.GetAt(pos);
+				if(nextSlice)
+				{
+					for(int i = nextSlice->mStaffs->GetMinimum(); i <= nextSlice->mStaffs->GetMaximum(); i++)
+					{
+						GRStaff * st = nextSlice->mStaffs->Get(i);
+						StavesOn[i]=st->isStaffBeginOn();
+					}
+				}
+				for(int i = slice->mStaffs->GetMinimum(); i <= slice->mStaffs->GetMaximum(); i++)
+				{
+					if(nextSlice->mStaffs->Get(i))
+						slice->mStaffs->Get(i)->setNextOnOff(StavesOn[i]);
+					else
+					{
+						slice->mStaffs->Get(i)->setNextOnOff(true);
+					}
+				}
+			}
+			else
+			{
+				for(int i = slice->mStaffs->GetMinimum(); i <= slice->mStaffs->GetMaximum(); i++)
+				{
+					slice->mStaffs->Get(i)->setNextOnOff(slice->mStaffs->Get(i)->isStaffEndOn());
 				}
 			}
 			slice->OnDraw(hdc);

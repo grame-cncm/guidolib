@@ -2,22 +2,15 @@
 #define __SVGDevice__
 
 /*
-	GUIDO Library
-	Copyright (C) 2011	Grame
+  GUIDO Library
+  Copyright (C) 2011 Grame
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Lesser General Public
-	License as published by the Free Software Foundation; either
-	version 2.1 of the License, or (at your option) any later version.
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-	This library is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Lesser General Public License for more details.
-
-	You should have received a copy of the GNU Lesser General Public
-	License along with this library; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
 
 */
 
@@ -97,6 +90,7 @@ class_export SVGDevice : public VGDevice
 	void		closegroup ();
 	const char* align2str (int align) const;
 	const char* baseline2str (int align) const;
+	void		putbase64 (VGDevice* pSrcDC) const;
 	
 	public:
 		enum	{ kSVGSizeDivider = 8 };		// used to compute the svg view size GuidoSVGExport and GuidoGetSVGMap
@@ -188,6 +182,8 @@ class_export SVGDevice : public VGDevice
 
 		virtual void*			GetBitMapPixels()		{ return 0; }
 		virtual void			ReleaseBitMapPixels()	{}
+		virtual const char*		GetImageData(const char* & outDataPtr, int& outLength)	{ return 0; };
+		virtual void			ReleaseImageData(const char *) const					{}
 
 		/// temporary hack - must be removed asap
 		virtual	VGSystem *		getVGSystem() const		{ return (VGSystem *)fSystem; }

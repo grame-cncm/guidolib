@@ -1,22 +1,16 @@
 /*
-	GUIDO Library
-	Copyright (C) 2011  Grame
+  GUIDO Library
+  Copyright (C) 2011  Grame
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Lesser General Public
-	License as published by the Free Software Foundation; either
-	version 2.1 of the License, or (at your option) any later version.
 
-	This library is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Lesser General Public License for more details.
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-	You should have received a copy of the GNU Lesser General Public
-	License along with this library; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
 
- */
+*/
 
 #ifdef MIDIEXPORT
 
@@ -37,7 +31,7 @@ using namespace std;
 
 //------------------------------------------------------------------------------
 MidiMapper::MidiMapper(ARMusicalVoice* voice, MidiLight* midi, const Guido2MidiParams* p, int chan, MidiSeqPtr seq, MidiSeqPtr tmap)
-	: TimeUnwrap(voice), fParams(p), fMidi(midi), fSeq(seq), fTempoMap(tmap), fChan(chan), fLastTempo(0), fFlags(0)
+	: TimeUnwrap(voice), fParams(p), fMidi(midi), fSeq(seq), fTempoMap(tmap), fChan(chan), fLastTempo(0), fFlags(0), fChord(false)
 {
 	fCurrVelocity = 90;
 }
@@ -64,7 +58,11 @@ void MidiMapper::TiedNote (MidiEvPtr note)
 	}
 }
 
-void MidiMapper::MoveTime (TYPE_DURATION dur)	{ fUPosition += dur; }
+void MidiMapper::MoveTime (TYPE_DURATION dur)	{
+//cout << "MidiMapper::MoveTime from " << fUPosition;
+	fUPosition += dur;
+//cout << " to " << fUPosition << endl;
+}
 
 
 //------------------------------------------------------------------------------
@@ -138,7 +136,7 @@ void MidiMapper::Event(const ARMusicalObject * ev, EventType type)
 //------------------------------------------------------------------------------
 int MidiMapper::AdjustDuration(int dur, const Guido2MidiParams* p) const
 {
-	if (!fFlags) return dur * p->fDFactor;
+	if (!fFlags)				return int(dur * p->fDFactor);
 
 	if (fFlags & hasStaccato)	dur *= p->fStaccatoFactor;
 	if (fFlags & hasSlur)		dur *= p->fSlurFactor;
@@ -158,24 +156,54 @@ int MidiMapper::AdjustVelocity(int vel, const Guido2MidiParams* p) const
 }
 
 //------------------------------------------------------------------------------
+void MidiMapper::AtPos (const ARMusicalObject * ev, EventType type)
+{
+	TimeUnwrap::AtPos (ev, type);
+	if (type == TimeUnwrap::kChordComma)
+		fChord = true;
+}
+
+//------------------------------------------------------------------------------
 void MidiMapper::Note(const ARMusicalObject * ev)
 {
-	if (ev->getDuration().getNumerator() <= 0) return;
-
-	const ARNote* arn = dynamic_cast<const ARNote*>(ev);
-	if (arn && (arn->getName() != ARNoteName::empty)) {
-		MidiEvPtr note = fMidi->NewEv(typeNote);
-		Chan(note)	= fChan;
-		Dur(note)	= AdjustDuration(Ticks (ev->getDuration()), fParams);
-		Vel(note)	= char(AdjustVelocity (fCurrVelocity, fParams));
-		Pitch(note)	= arn->midiPitch();
-		Date(note)  = Ticks (fUPosition);
-		if (fFlags & hasTie) TiedNote (note);
-		else fMidi->AddSeq (fSeq, note);
+	if (ev->getDuration().getNumerator() < 0) return;
+	if (!fChord && fEmptyDur) {		// don't move time for empty notes inside a chord
+		MoveTime (fEmptyDur);
+		fEmptyDur = 0;
 	}
 	TYPE_DURATION offset = ev->getDuration();
+
+	const ARNote* arn = dynamic_cast<const ARNote*>(ev);
+	if (arn ) {
+		if (arn->getName() != ARNoteName::empty) {
+				
+			MidiEvPtr note = fMidi->NewEv(typeNote);
+			Chan(note)	= fChan;
+			Dur(note)	= AdjustDuration(Ticks (fChord ? fEmptyDur : ev->getDuration()), fParams);
+			Vel(note)	= char(AdjustVelocity (fCurrVelocity, fParams));
+			Pitch(note)	= arn->midiPitch();
+			Date(note)  = Ticks (fUPosition);
+			if (fFlags & hasTie) TiedNote (note);
+			else fMidi->AddSeq (fSeq, note);
+		}
+		else {
+			// chords duration is encoded using "empty" notes that carry the chord duration
+			// notes are separated by ARChordComma, denoted by the fChord flag
+			if (fChord) {						// we're inside a chord
+				if (!ev->getDuration()) {		// and a null duration indicates the end of the chord
+					MoveTime (fEmptyDur);		// then, move time using the previously saved duration
+					fChord = false;				// and exit the chord
+				}
+			}
+			fEmptyDur = ev->getDuration();		// empty duration is stored for future use
+			if (fEmptyDur) {
+				TimeUnwrap::Note(ev);
+				return;
+			}
+		}
+	}
 	if (fFlags & hasFermata) offset *= fParams->fFermataFactor;
-	if (!StartPos() || (ev->getRelativeTimePosition() != PrevPosition())) MoveTime (offset);
+	if (offset) MoveTime (offset);
 	TimeUnwrap::Note(ev);
 	fFlags = knoflag;
 }

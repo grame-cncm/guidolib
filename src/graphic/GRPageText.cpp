@@ -1,20 +1,14 @@
 /*
-	GUIDO Library
-	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  GUIDO Library
+  Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  Copyright (C) 2002-2013 Grame
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Lesser General Public
-	License as published by the Free Software Foundation; either
-	version 2.1 of the License, or (at your option) any later version.
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-	This library is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Lesser General Public License for more details.
-
-	You should have received a copy of the GNU Lesser General Public
-	License along with this library; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
 
 */
 
@@ -35,31 +29,22 @@ GRPageText::GRPageText ( ARMusicalTag * o, GRPage * p_grpage,
 				 const char* p_txt, const char* p_pageformat,
 				 const char* p_textformat, const char* p_textfont,
 				 int p_textsize, const char* p_textattrib)
-				 
   : GRTagARNotationElement(o, LSPACE)
 {
 	setTagType(GRTag::PAGETAG);
 
-	if (p_grpage) fGRPage = p_grpage;
-	if (p_txt) fPageText = p_txt ;
-	if (p_pageformat)fPageformat = p_pageformat;
-	if (p_textformat) 	
-		fTextformat =  p_textformat;
-	else
-		fTextformat = "lt";
-	
-	if (p_textfont)
-		font = new NVstring(p_textfont);
-
-	if (p_textattrib)
-		fontAttrib = new NVstring(p_textattrib);
-
+	if (p_grpage)		fGRPage = p_grpage;
+	if (p_txt)			fPageText = p_txt ;
+	if (p_pageformat)	fPageformat = p_pageformat;
+	if (p_textformat) 	fTextformat =  p_textformat;
+	else				fTextformat = "lt";
+	if (p_textfont)		font = new NVstring(p_textfont);
+	if (p_textattrib)	fontAttrib = new NVstring(p_textattrib);
 	mFontSize = p_textsize;
 
 	// now, we have to get a font ...
 	// this is plattform-dependant code ...
 	// this was done in special?
-
 	const VGFont* myfont = FontManager::gFontText;
 
 	if (font && font->length() > 0)
@@ -91,7 +76,7 @@ GRPageText::GRPageText ( ARMusicalTag * o, GRPage * p_grpage,
 
 	float width = 0;
 	float height = 0;
-	if( gGlobalSettings.gDevice )	
+	if( gGlobalSettings.gDevice && fPageText.size())	
 		myfont->GetExtent( cp, (int)fPageText.size(), &width, &height, gGlobalSettings.gDevice );
 	
 	// left and right Space is not
@@ -136,7 +121,7 @@ GRPageText::~GRPageText()
 
 void GRPageText::OnDraw(VGDevice & hdc) const
 {
-	GRTagARNotationElement::OnDrawText(hdc, fPageText.c_str(), (int)fPageText.size());
+	if (fPageText.size()) GRTagARNotationElement::OnDrawText(hdc, fPageText.c_str(), (int)fPageText.size());
 }
 
 void GRPageText::print() const

@@ -4,17 +4,12 @@
  * Created by Christophe Daudin on 12/05/09.
  * Copyright 2009 Grame. All rights reserved.
  *
- * GNU Lesser General Public License Usage
- * Alternatively, this file may be used under the terms of the GNU Lesser
- * General Public License version 2.1 as published by the Free Software
- * Foundation and appearing in the file LICENSE.LGPL included in the
- * packaging of this file.  Please review the following information to
- * ensure the GNU Lesser General Public License version 2.1 requirements
- * will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
- *
- *
- * This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- * WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+ * Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+ * research@grame.fr
  */
 #include "GraphicsSceneMainWindow.h"
 
@@ -37,6 +32,16 @@
 #include <QDomElement>
 #include <QDomText>
 #include <QGraphicsRectItem>
+#include <QFileDialog>
+#include <QScrollBar>
+#include <QStatusBar>
+#include <QApplication>
+#include <QDockWidget>
+#include <QPushButton>
+#include <QAbstractButton>
+#include <QMenuBar>
+#include <QToolBar>
+
 
 #define LANGUAGE_NAME_SHORT		GraphicsSceneMainWindow::applicationSettings().mLanguageNameShort
 #define LANGUAGE_NAME_LONG		GraphicsSceneMainWindow::applicationSettings().mLanguageNameLong
@@ -266,7 +271,7 @@ void GraphicsSceneMainWindow::addItemFromFile()
 	QString fileName = QFileDialog::getOpenFileName(
 		this, QString("Add a ") + LANGUAGE_NAME_LONG + QString(" file"),
         getFileDialogPath(),
-        tr( QString( GMN_FILE_FILTER  + QString("\nAll (*.*)") ).toAscii().data() ));
+        tr( QString( GMN_FILE_FILTER  + QString("\nAll (*.*)") ).toUtf8().data() ));
 
 	// Create the item with the file
 	QLanguageItem* createdItem = 0;
@@ -742,7 +747,7 @@ void GraphicsSceneMainWindow::saveSceneAs()
 	QString selectedFilter("");
 	QString fileName = QFileDialog::getSaveFileName(this, "Save the " + LANGUAGE_NAME_SHORT + " scene",
                             savePath,
-                            tr(filters.toAscii().data()) ,
+                            tr(filters.toUtf8().data()) ,
 							&selectedFilter);
 
 	if ( fileName.isEmpty() )
@@ -782,7 +787,7 @@ void GraphicsSceneMainWindow::loadScene()
 		openPath = QDir::homePath();
 	QString fileName = QFileDialog::getOpenFileName(this, "Open a " + LANGUAGE_NAME_SHORT + " scene",
                                                      openPath,
-                                                     tr( GSC_FILE_FILTER.toAscii().data() ));
+                                                     tr( GSC_FILE_FILTER.toUtf8().data() ));
 	
 	if ( !fileName.isEmpty() )
 	if ( !loadSceneFile(fileName) )
@@ -2138,7 +2143,7 @@ void GraphicsSceneMainWindow::saveItemAs(QLanguageItem * languageItem)
 	QString selectedFilter("");
 	QString fileName = QFileDialog::getSaveFileName(this, "Save the " + LANGUAGE_NAME_SHORT + " item",
                             savePath,
-                            tr(filters.toAscii().data()) ,
+                            tr(filters.toUtf8().data()) ,
 							&selectedFilter);
 
 	if ( fileName.isEmpty() )

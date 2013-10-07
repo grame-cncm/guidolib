@@ -1,4 +1,4 @@
-VERSION=2.41
+VERSION=2.50
 
 system	:= $(shell uname -s)
 ifeq ($(system), Linux)
@@ -18,17 +18,18 @@ WIN32_NAME	= GuidoQtApplsWin32-$(VERSION)
 
 MACTOOLS  := $(patsubst %, ../../tools/cmake/release/%, $(TOOLS))
 
-WIN32QTPATH := /c/Qt/2010.05/qt
-WIN32QT		:= QtCore4.dll QtGui4.dll QtXml4.dll
+QT5 := /c/Qt/Qt5.1.0
+WIN32QTPATH := $(QT5)/5.1.0/msvc2010/
+WIN32QT		:= QT5PRINTSUPPORT.DLL QT5WIDGETS.DLL QT5GUI.DLL QT5CORE.DLL QT5XML.DLL LIBGLESV2.DLL LIBEGL.DLL ICUIN51.DLL ICUUC51.DLL ICUDT51.DLL
 WIN32QT		:= $(patsubst %, $(WIN32QTPATH)/bin/%, $(WIN32QT))
 WIN32APPS	:= $(patsubst %, ../bin/%.exe, $(APPLS))
-WIN32TOOLS  := $(patsubst %, ../../tools/cmake/release/%.exe, $(TOOLS))
-WIN32QTPLUGS := qgif4.dll qtiff4.dll qjpeg4.dll
+WIN32TOOLS  := $(patsubst %, ../../tools/build/win32/release/%.exe, $(TOOLS))
+WIN32QTPLUGS := qgif.dll qtiff.dll qjpeg.dll
+WIN32QTPLATFORMS := qminimal.dll qoffscreen.dll qwindows.dll
 WIN32QTPLUGS := $(patsubst %, $(WIN32QTPATH)/plugins/imageformats/%, $(WIN32QTPLUGS))
-
+WIN32QTPLATFORMS := $(patsubst %, $(WIN32QTPATH)/plugins/platforms/%, $(WIN32QTPLATFORMS))
 
 nothing:
-	echo $(WIN32QT)
 	@ echo " Make guidolib Qt packages:"
 	@ echo " 'macos' :  deployed binaries package for macosx"
 	@ echo " 'win32' :  deployed binaries package for win32. Works with MSys."
@@ -47,10 +48,10 @@ macos:
 	make macapp APPL=GuidoEditor
 	make macapp APPL=GuidoSceneComposer
 	cp $(MACTOOLS) $(MACOSX_NAME)
-	cd $(MACOSX_NAME) && ../localise-tool $(TOOLS) guido2image
-	cp -r ../../cmake/Release/GUIDOEngine.framework $(MACOSX_NAME)
+	cp -r ../../build/MacOS/Release/GUIDOEngine.framework $(MACOSX_NAME)
 	cp ../../src/guido2.ttf $(MACOSX_NAME)
 	cp ../bin/guido2image $(MACOSX_NAME)
+	cd $(MACOSX_NAME) && ../localise-tool $(TOOLS) guido2image
 	hdiutil create -srcfolder $(MACOSX_NAME) -ov $(MACOSX_NAME).dmg
 
 check:
@@ -71,14 +72,17 @@ linux:
 
 win32: 
 	@make -s check
-	[ -d $(WIN32_NAME)/imageformats ] || mkdir -p $(WIN32_NAME)/imageformats
+	[ -d $(WIN32_NAME)/plugins/imageformats ] || mkdir -p $(WIN32_NAME)/plugins/imageformats
+	[ -d $(WIN32_NAME)/plugins/platforms ] || mkdir -p $(WIN32_NAME)/plugins/platforms
 	cp $(WIN32APPS) $(WIN32_NAME)
 	cp $(WIN32TOOLS) $(WIN32_NAME)
-	cp -f ../../cmake/release/GUIDOEngine.dll $(WIN32_NAME)
+	cp -f ../../build/win32/release/GUIDOEngine.dll $(WIN32_NAME)
 	cp -f ../../src/guido2.ttf $(WIN32_NAME)
 	cp $(WIN32QT) $(WIN32_NAME)
-	cp *80.* $(WIN32_NAME)
-	cp 	$(WIN32QTPLUGS) $(WIN32_NAME)/imageformats
+	cp $(QT5)/vcredist/vcredist_sp1_x86.exe $(WIN32_NAME)
+	cp qt.conf $(WIN32_NAME)
+	cp 	$(WIN32QTPLUGS) $(WIN32_NAME)/plugins/imageformats
+	cp 	$(WIN32QTPLATFORMS) $(WIN32_NAME)/plugins/platforms
 	make common PACKAGE_NAME=$(WIN32_NAME)
 
 doc:
@@ -97,5 +101,5 @@ common:
 	make commongit
 
 commongit:
-	cd ../../doc/html && git archive -o __tmp__.tgz --prefix=../../Qt/package/$(PACKAGE_NAME)/doc/html/ HEAD && tar xzfP __tmp__.tgz && rm __tmp__.tgz
-	cd ../../gmn-examples && git archive -o __tmp__.tgz --prefix=../Qt/package/$(PACKAGE_NAME)/gmn-examples/ HEAD && tar xzfP __tmp__.tgz && rm __tmp__.tgz
+	cp -R ../../doc/html $(PACKAGE_NAME)/doc/html
+	cp -R ../../gmn-examples $(PACKAGE_NAME)/gmn-examples

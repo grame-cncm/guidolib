@@ -2,23 +2,16 @@
 #define GRNotationElement_H
 
 /*
-	GUIDO Library
-	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-	Copyright (C) 2003	Grame
+  GUIDO Library
+  Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  Copyright (C) 2003, 2004 	Grame
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Lesser General Public
-	License as published by the Free Software Foundation; either
-	version 2.1 of the License, or (at your option) any later version.
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-	This library is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Lesser General Public License for more details.
-
-	You should have received a copy of the GNU Lesser General Public
-	License along with this library; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
 
 */
 
@@ -34,6 +27,9 @@ class GRSystemSlice;
 class ARMusicalObject;
 class GRAccidental;
 
+
+
+const float kMinNoteSize = 0.001f;	// minimum size of an element, the element is not drawn when the size is smaller
 
 /** \brief parent class for all notation elements.
 */
@@ -102,6 +98,8 @@ public:
 	virtual void setRelativeEndTimePosition(const TYPE_TIMEPOSITION & tp )		{ mDurationOfGR = tp - mRelativeTimePositionOfGR; }
 	virtual const TYPE_TIMEPOSITION & getRelativeTimePosition() const			{ return mRelativeTimePositionOfGR; }
 	
+	virtual void setDrawOnOff(bool onoff){mDraw = onoff;}
+	virtual bool getDrawOnOff(){return mDraw;}
 	
 	virtual TYPE_TIMEPOSITION  getRelativeEndTimePosition() const;
 	
@@ -126,6 +124,7 @@ protected:
 	int  		mSpringID;
 	float 		mLeftSpace;		// Can't we deal only with bounding boxes ?
 	float 		mRightSpace;
+	bool		mDraw;
 
 	TYPE_DURATION mDurationOfGR;
 	TYPE_TIMEPOSITION mRelativeTimePositionOfGR;

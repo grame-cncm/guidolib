@@ -1,20 +1,14 @@
 /*
-	GUIDO Library
-	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  GUIDO Library
+  Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+  Copyright (C) 2002-2013 Grame
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Lesser General Public
-	License as published by the Free Software Foundation; either
-	version 2.1 of the License, or (at your option) any later version.
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-	This library is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Lesser General Public License for more details.
-
-	You should have received a copy of the GNU Lesser General Public
-	License along with this library; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
 
 */
 
@@ -23,6 +17,7 @@
 
 #include "ARNote.h"
 #include "ARTrill.h"
+#include "ARCluster.h"
 #include "ARDefine.h"
 #include "TimeUnwrap.h"
 #include "nvstring.h"
@@ -33,13 +28,15 @@ const char * gd_pc2noteName(int fPitch);
 
 ARNote::ARNote(const TYPE_DURATION & durationOfNote)
 	:	ARMusicalEvent(durationOfNote), fName("empty"), fPitch(UNKNOWN), fOctave(MIN_REGISTER),
-		fAccidentals(0), fDetune(0), fIntensity(MIN_INTENSITY), fOrnament(NULL), fStartPosition(-1,1)
+    fAccidentals(0), fDetune(0), fIntensity(MIN_INTENSITY), fOrnament(NULL), fCluster(NULL), fIsLonelyInCluster(false),
+    fClusterHaveToBeDrawn(false), fStartPosition(-1,1)
 {
 }
 
 ARNote::ARNote(const TYPE_TIMEPOSITION & relativeTimePositionOfNote, const TYPE_DURATION & durationOfNote)
 	:	ARMusicalEvent( relativeTimePositionOfNote, durationOfNote), fName("noname"), fPitch(UNKNOWN),
-		fOctave(MIN_REGISTER), fAccidentals(0), fDetune(0), fIntensity(MIN_INTENSITY), fOrnament(NULL), fStartPosition(-1,1)
+		fOctave(MIN_REGISTER), fAccidentals(0), fDetune(0), fIntensity(MIN_INTENSITY), fOrnament(NULL), fCluster(NULL),
+        fIsLonelyInCluster(false), fClusterHaveToBeDrawn(false), fStartPosition(-1,1)
 {
 }
 
@@ -47,7 +44,7 @@ ARNote::ARNote( const std::string & inName, int theAccidentals, int theRegister,
 				int theDenominator, int theIntensity )
 	:	ARMusicalEvent(theNumerator, theDenominator), fName( inName ), fPitch ( UNKNOWN ),
 		fOctave( theRegister ),	fAccidentals( theAccidentals ), fDetune(0), fIntensity( theIntensity ),
-		fOrnament(NULL), fStartPosition(-1,1)
+		fOrnament(NULL), fCluster(NULL), fIsLonelyInCluster(false), fClusterHaveToBeDrawn(false), fStartPosition(-1,1)
 {
 	assert(fAccidentals>=MIN_ACCIDENTALS);
 	assert(fAccidentals<=MAX_ACCIDENTALS);
@@ -57,14 +54,14 @@ ARNote::ARNote( const std::string & inName, int theAccidentals, int theRegister,
 
 ARNote::ARNote(const ARNote & arnote) 
 	:	ARMusicalEvent( (const ARMusicalEvent &) arnote),
-		fName(arnote.fName), fStartPosition(-1,1)
+		fName(arnote.fName), fOrnament(NULL),  fCluster(NULL), fIsLonelyInCluster(false),
+        fClusterHaveToBeDrawn(false), fStartPosition(-1,1)
 {
 	fPitch = arnote.fPitch;
 	fOctave = arnote.fOctave;
 	fAccidentals = arnote.fAccidentals;
 	fDetune = arnote.fDetune;
 	fIntensity = arnote.fIntensity;
-	fOrnament = NULL;
 }
 
 ARNote::~ARNote()
@@ -261,6 +258,26 @@ void ARNote::setOrnament(ARTrill * newOrnament)
 	fOrnament = new ARTrill(-1, newOrnament);
 }
 
+ARCluster *ARNote::setCluster(ARCluster *inCluster,
+                              bool inClusterHaveToBeDrawn,
+                              bool inHaveToBeCreated)
+{
+    if (!fClusterHaveToBeDrawn && inClusterHaveToBeDrawn)
+        fClusterHaveToBeDrawn = true;
+
+    if (inHaveToBeCreated)
+        fCluster = new ARCluster(inCluster);
+    else
+        fCluster = inCluster;
+
+    return fCluster;
+}
+
+void ARNote::setClusterPitchAndOctave()
+{
+    fCluster->setNotePitchAndOctave(fPitch, fOctave);
+}
+
 bool ARNote::CanBeMerged(const ARMusicalEvent * ev2)
 {
 	if (ARMusicalEvent::CanBeMerged(ev2))
@@ -288,8 +305,6 @@ const TYPE_TIMEPOSITION& ARNote::getStartTimePosition() const
 	return (fStartPosition.getNumerator() >= 0) ? fStartPosition : getRelativeTimePosition();
 }
 
-
-
 // this compares the name, fPitch, fOctave and fAccidentals
 // returns 1 if it matches ...
 int ARNote::CompareNameOctavePitch(const ARNote & nt)
@@ -299,6 +314,6 @@ int ARNote::CompareNameOctavePitch(const ARNote & nt)
 		&& fOctave == nt.fOctave 
 		&& fAccidentals == nt.fAccidentals)
 		return 1;
-	return 0;
 
+	return 0;
 }

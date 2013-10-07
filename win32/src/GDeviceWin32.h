@@ -129,6 +129,9 @@ class_export GDeviceWin32 : public VGDevice
 		virtual void			ReleaseBitMapPixels();
 		virtual	VGSystem *		getVGSystem() const;
 
+		virtual const char*		GetImageData(const char* & outDataPtr, int& outLength)	{ return 0; }
+		virtual void			ReleaseImageData(const char *) const 					{}
+
 		// - Data export services -------------------------------------------------
 //		virtual	void			ExportToFile( const char * inFilePath );
 

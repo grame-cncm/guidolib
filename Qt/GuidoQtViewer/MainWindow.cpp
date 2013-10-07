@@ -4,34 +4,12 @@
  * Created by Christophe Daudin on 17/04/08.
  * Copyright 2008 Grame. All rights reserved.
  *
- * This file may be used under the terms of the GNU General Public
- * License version 2.0 as published by the Free Software Foundation
- * and appearing in the file LICENSE.GPL included in the packaging of
- * this file.  Please review the following information to ensure GNU
- * General Public Licensing requirements will be met:
- * http://trolltech.com/products/qt/licenses/licensing/opensource/
- *
- * If you are unsure which license is appropriate for your use, please
- * review the following information:
- * http://trolltech.com/products/qt/licenses/licensing/licensingoverview
- * or contact the sales department at sales@trolltech.com.
- *
- * In addition, as a special exception, Trolltech gives you certain
- * additional rights. These rights are described in the Trolltech GPL
- * Exception version 1.0, which can be found at
- * http://www.trolltech.com/products/qt/gplexception/ and in the file
- * GPL_EXCEPTION.txt in this package.
- *
- * In addition, as a special exception, Trolltech, as the sole copyright
- * holder for Qt Designer, grants users of the Qt/Eclipse Integration
- * plug-in the right for the Qt/Eclipse Integration to link to
- * functionality provided by Qt Designer and its related libraries.
- *
- * Trolltech reserves all rights not expressly granted herein.
- *
- * This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- * WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
- *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+ * Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+ * research@grame.fr
  */
  
 #include <sstream>
@@ -51,6 +29,12 @@
 #include <QImage>
 #include <QProgressBar>
 #include <QDir>
+#include <QScrollBar>
+#include <QToolBar>
+#include <QStatusBar>
+#include <QMenuBar>
+#include <QFileDialog>
+#include <QMessageBox>
 
 #include <iostream>
 using namespace std;
@@ -265,10 +249,10 @@ void MainWindow::reload()
 //-------------------------------------------------------------------------
 void MainWindow::about()
 {
-    QMessageBox::about(this, tr(QString("About " + APP_NAME).toAscii().data()),
+    QMessageBox::about(this, tr(QString("About " + APP_NAME).toUtf8().data()),
              tr(QString("<h2>" + APP_NAME + "</h2>" + 
                 "<p>Copyright &copy; 2008 Grame. " 
-                "<p>A GMN files viewer based on Qt. ").toAscii().data()));
+                "<p>A GMN files viewer based on Qt. ").toUtf8().data()));
 }
 
 //-------------------------------------------------------------------------
@@ -785,14 +769,14 @@ void MainWindow::updateWidgetSize()
 //-------------------------------------------------------------------------
 bool MainWindow::loadFile(const QString &fileName)
 {
-	statusBar()->showMessage(tr(QString("Loading " + fileName + "...").toAscii().data()));
+	statusBar()->showMessage(tr(QString("Loading " + fileName + "...").toUtf8().data()));
     QApplication::setOverrideCursor(Qt::WaitCursor);
  	mScaleFactor = 1;
 
 	bool loadOk = mGuidoWidget->setGMNFile( fileName );
 	if (!loadOk && QGuidoImporter::musicxmlSupported()) {	// try to import file as MusicXML file
 		std::stringstream out;
-		if ( QGuidoImporter::musicxmlFile2Guido(fileName.toAscii().constData(), true, out) )
+		if ( QGuidoImporter::musicxmlFile2Guido(fileName.toUtf8().constData(), true, out) )
 			loadOk = mGuidoWidget->setGMNCode( out.str().c_str() );
 	}
 
@@ -835,11 +819,11 @@ bool MainWindow::loadFile(const QString &fileName)
 	{
 		QString errorMessage = "Invalid GMN file : " + mGuidoWidget->getLastErrorMessage();
 		mGuidoWidget->resize( QSize( 0,0 ) );
-		statusBar()->showMessage(tr(errorMessage.toAscii().data()), 2000);
+		statusBar()->showMessage(tr(errorMessage.toUtf8().data()), 2000);
 	}
 
 	QApplication::restoreOverrideCursor();
-	setCurrentFile(fileName.toAscii().data());
+	setCurrentFile(fileName.toUtf8().data());
 
 	return loadOk;
 }
@@ -855,7 +839,7 @@ void MainWindow::setCurrentFile(const QString &fileName)
     QString shownName;
 	shownName = strippedName(mCurFile);
 
-    setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(tr(QString(APP_NAME).toAscii().data())));
+    setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(tr(QString(APP_NAME).toUtf8().data())));
 }
 
 //-------------------------------------------------------------------------

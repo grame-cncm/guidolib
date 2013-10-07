@@ -1,0 +1,4 @@
+52c52
+< 		explicit	VGColor( const unsigned char col [4] ) 
+---
+> 		explicit	VGColor( const unsigned char* col ) 

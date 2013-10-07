@@ -1,0 +1,29 @@
+% featheredBeam.gmn
+%
+% \fBeam tag is used to create feathered beams that indicate acceleration or deceleration within a group of beamed notes (shorter than a quarter note) 
+%
+% Usage : \fBeam<parameters>( notes )    or    \fBeamBegin<parameters> ... notes ... \fBeamEnd
+%
+%
+% Parameters : 
+%       - durations="firstDur, lastDur" : indicates the begin- and end- durations
+%       - drawDuration : possibility to draw the total duration above or under the beaming (from the beginig of the first note to the end of the last one)
+%
+
+
+
+{
+[
+	\meter<"2/4">
+	\fBeam<drawDuration = "true">(
+		a/64 g f d e/32 e g f g/16 f d e/8 d e
+	)
+	\fBeam<durations =  "1/8,1/32">(
+		e/16 d a g/32 f
+	)
+],
+[
+	\meter<"2/4">
+	a/8 a a a a a a a
+]
+}

@@ -9,9 +9,9 @@ FORMS_DIR = forms
 win32:DebugBuild:CONFIG += console
 TEMPLATE = lib
 CONFIG += staticlib
-QT += xml
+QT += xml widgets printsupport
 
-DESTDIR = ./
+DESTDIR = ..
 MOC_DIR = ./tmpSrc
 RCC_DIR = ./tmpSrc
 UI_DIR = ./tmpSrc
@@ -21,7 +21,7 @@ win32 {
 }
 
 # Universal binary on MAC
-macx:QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.6.sdk
+#macx:QMAKE_MAC_SDK=macosx10.7
 macx:CONFIG+=x86 x86_64
 
 ####### Headers #######
