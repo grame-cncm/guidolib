@@ -116,7 +116,7 @@ class Guido2Image
 		/*!
 		*	\brief	converts a gmn file to an image
 		*/
-		static Guido2ImageErrorCodes gmnFile2Image	( const Params& p, bool resizeMusicToPage = false);
+		static Guido2ImageErrorCodes gmnFile2Image	( const Params& p);
 
 	private :
 
