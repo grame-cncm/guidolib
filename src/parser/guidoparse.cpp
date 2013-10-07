@@ -165,7 +165,7 @@
 #include "guidoparse.hpp"
 
 #define YYERROR_VERBOSE
-int guidoerror (YYLTYPE* locp, guido::GuidoParser* context, const char*s);
+int guidoerror (YYLTYPE* locp, GuidoParser* context, const char*s);
 int yylex(YYSTYPE* lvalp, YYLTYPE* llocp, void* scanner);
 
 #define scanner context->fScanner
@@ -856,7 +856,7 @@ do {									  \
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, guido::GuidoParser* context)
+yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, GuidoParser* context)
 #else
 static void
 yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, context)
@@ -864,7 +864,7 @@ yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, context)
     int yytype;
     YYSTYPE const * const yyvaluep;
     YYLTYPE const * const yylocationp;
-    guido::GuidoParser* context;
+    GuidoParser* context;
 #endif
 {
   if (!yyvaluep)
@@ -892,7 +892,7 @@ yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, context)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, guido::GuidoParser* context)
+yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, GuidoParser* context)
 #else
 static void
 yy_symbol_print (yyoutput, yytype, yyvaluep, yylocationp, context)
@@ -900,7 +900,7 @@ yy_symbol_print (yyoutput, yytype, yyvaluep, yylocationp, context)
     int yytype;
     YYSTYPE const * const yyvaluep;
     YYLTYPE const * const yylocationp;
-    guido::GuidoParser* context;
+    GuidoParser* context;
 #endif
 {
   if (yytype < YYNTOKENS)
@@ -950,14 +950,14 @@ do {								\
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_reduce_print (YYSTYPE *yyvsp, YYLTYPE *yylsp, int yyrule, guido::GuidoParser* context)
+yy_reduce_print (YYSTYPE *yyvsp, YYLTYPE *yylsp, int yyrule, GuidoParser* context)
 #else
 static void
 yy_reduce_print (yyvsp, yylsp, yyrule, context)
     YYSTYPE *yyvsp;
     YYLTYPE *yylsp;
     int yyrule;
-    guido::GuidoParser* context;
+    GuidoParser* context;
 #endif
 {
   int yynrhs = yyr2[yyrule];
@@ -1230,7 +1230,7 @@ yysyntax_error (char *yyresult, int yystate, int yychar)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, YYLTYPE *yylocationp, guido::GuidoParser* context)
+yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, YYLTYPE *yylocationp, GuidoParser* context)
 #else
 static void
 yydestruct (yymsg, yytype, yyvaluep, yylocationp, context)
@@ -1238,7 +1238,7 @@ yydestruct (yymsg, yytype, yyvaluep, yylocationp, context)
     int yytype;
     YYSTYPE *yyvaluep;
     YYLTYPE *yylocationp;
-    guido::GuidoParser* context;
+    GuidoParser* context;
 #endif
 {
   YYUSE (yyvaluep);
@@ -1268,7 +1268,7 @@ int yyparse ();
 #endif
 #else /* ! YYPARSE_PARAM */
 #if defined __STDC__ || defined __cplusplus
-int yyparse (guido::GuidoParser* context);
+int yyparse (GuidoParser* context);
 #else
 int yyparse ();
 #endif
@@ -1297,11 +1297,11 @@ yyparse (YYPARSE_PARAM)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 int
-yyparse (guido::GuidoParser* context)
+yyparse (GuidoParser* context)
 #else
 int
 yyparse (context)
-    guido::GuidoParser* context;
+    GuidoParser* context;
 #endif
 #endif
 {
@@ -2102,17 +2102,12 @@ yyreturn:
 
 
 extern int	gParseErrorLine;
-int guidoerror(YYLTYPE* loc, guido::GuidoParser* p, const char*s) {
+int guidoerror(YYLTYPE* loc, GuidoParser* p, const char*s) {
 	gParseErrorLine = loc->last_line;		// for backward compatibility only
 	p->setErrorLoc (loc->last_line, loc->first_column);
 	cerr << "error line: " << loc->last_line << " col: " << loc->first_column << ": " << s << endl;
 	return 0;
 }
 
-
-namespace guido 
-{
-			int GuidoParser::_yyparse()		{ return yyparse (this); }
-}
-
+int GuidoParser::_yyparse()		{ return yyparse (this); }
 

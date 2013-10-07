@@ -188,7 +188,7 @@ GUIDOAPI(GuidoErrCode) GuidoParseFile(const char * filename, ARHandler * ar)
     ARHandler music = 0;
    fstream file (filename, fstream::in);
     if (file.is_open()) {
-        guido::GuidoParser p (&file);
+        GuidoParser p (&file);
         music = p.parse();
     }
 	else {
@@ -240,7 +240,7 @@ GUIDOAPI(GuidoErrCode) GuidoParseString (const char * str, ARHandler* ar)
 		gGlobalSettings.gFeedback->Notify( GuidoFeedback::kProcessing );
 
 	stringstream sstr (str);
-    guido::GuidoParser p(&sstr);
+    GuidoParser p(&sstr);
     ARHandler music = p.parse();
 	if (!music || ( gGlobalSettings.gFeedback && gGlobalSettings.gFeedback->ProgDialogAbort())) {
 		// Something failed, do some cleanup

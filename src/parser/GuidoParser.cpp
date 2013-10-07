@@ -16,8 +16,6 @@
 #include "GuidoParser.h"
 #include "ARFactory.h"
 
-namespace guido
-{
 
 //--------------------------------------------------------------------------
 GuidoParser::GuidoParser(std::istream* stream) : fStream(stream)
@@ -176,7 +174,4 @@ ARHandler GuidoParser::parse()
 	_yyparse ();
 	return (fErrorLine == 0) ? GuidoFactoryCloseMusic (fFactory) : 0;
 }
-
-
-} // end namespace
 

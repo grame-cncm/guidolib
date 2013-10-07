@@ -22,8 +22,6 @@
 
 class ARFactory;
 
-namespace guido
-{
 
 /* \brief a class for reading gmn streams
 */
@@ -95,7 +93,5 @@ class GuidoParser {
 		int getErrorLine() const				{ return fErrorLine; }
 		int getErrorColumn() const				{ return fErrorColumn; }
 };
-
-} // end namespace
 
 #endif

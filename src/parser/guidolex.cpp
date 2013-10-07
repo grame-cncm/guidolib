@@ -561,7 +561,7 @@ static yyconst flex_int32_t yy_rule_can_match_eol[48] =
 
 using namespace std;
 
-#define YY_EXTRA_TYPE guido::GuidoParser*
+#define YY_EXTRA_TYPE GuidoParser*
 #define YY_USER_ACTION yylloc->last_line = yylineno; yylloc->first_column += strlen(yytext);
 
 #define YY_INPUT(buf,result,max_size)   \
@@ -2342,9 +2342,6 @@ void guidofree (void * ptr , yyscan_t yyscanner)
 
 
 
-namespace guido 
-{
-
 void GuidoParser::initScanner()
 {
 	guidolex_init(&fScanner);
@@ -2355,7 +2352,4 @@ void GuidoParser::destroyScanner()
 {
 	guidolex_destroy(fScanner);
 }
-
-} // end namespace
-
 
