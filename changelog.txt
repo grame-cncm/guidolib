@@ -1,6 +1,12 @@
 GUIDO Engine history
 
 ----------------------------------------------------------------
+2013-09-13  version 1.5.2
+- improvement of \meter-tag (now sums in numerator are allowed)
+- new reentrant parser (transparent for users, not for developers)
+
+
+----------------------------------------------------------------
 2013-04-05  version 1.5.1
 - new GuidoGetSystemCount API
 - bug in midi export corrected: chord notes were ignored

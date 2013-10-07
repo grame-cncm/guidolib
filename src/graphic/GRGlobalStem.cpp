@@ -33,6 +33,7 @@
 #include "GRStdNoteHead.h"
 #include "GRVoice.h"
 #include "GRSystemSlice.h"
+#include "GRNoteDot.h"
 
 
 GRGlobalStem::GRGlobalStem( GRStaff * inStaff,
@@ -589,6 +590,13 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 		note->updateBoundingBox();
 	}
 
+    // Variables for dot's horizontal offset
+    int offsetMax = 0;
+    NVPoint currentNoteHeadOffset = NVPoint(0, 0);
+    bool differentOffsets = false;
+    bool prevOffsetExisting = false;
+    int prevOffset = 0;
+
 	if (stemdir == dirDOWN)
 	{
 		sugHeadState = ARTHead::RIGHT;
@@ -621,6 +629,26 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 				}
 				ARTHead::HEADSTATE retHeadState = note->adjustHeadPosition(sugHeadState);
 				// now we have a current headstate ....
+
+                /* To adjust the horizontal dot's offset */
+                if (note->getNoteHead())
+                {
+                    currentNoteHeadOffset = note->getNoteHead()->getOffset();
+
+                    if (offsetMax < currentNoteHeadOffset.x)
+                        offsetMax = currentNoteHeadOffset.x;
+
+                    if (prevOffsetExisting)
+                    {
+                        if (prevOffset != currentNoteHeadOffset.x)
+                            differentOffsets = true;
+                    }
+                    else
+                    {
+                        prevOffset = currentNoteHeadOffset.x;
+                        prevOffsetExisting = true;
+                    }
+                }
 
 				prevHeadState = retHeadState;
 				prevposy = note->getPosition().y;
@@ -680,6 +708,27 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 
 				}
 				ARTHead::HEADSTATE retHeadState = note->adjustHeadPosition(sugHeadState);
+                // now we have a current headstate ....
+
+                /* To adjust the horizontal dot's offset */
+                if (note->getNoteHead())
+                {
+                    currentNoteHeadOffset = note->getNoteHead()->getOffset();
+
+                    if (offsetMax < currentNoteHeadOffset.x)
+                        offsetMax = currentNoteHeadOffset.x;
+
+                    if (prevOffsetExisting)
+                    {
+                        if (prevOffset != currentNoteHeadOffset.x)
+                            differentOffsets = true;
+                    }
+                    else
+                    {
+                        prevOffset = currentNoteHeadOffset.x;
+                        prevOffsetExisting = true;
+                    }
+                }
 
 				prevHeadState = retHeadState;
 				prevposy = note->getPosition().y;
@@ -712,6 +761,26 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 	{
 		assert(false);
 	}
+
+    /* To horizontally adjust every dot */
+    if (differentOffsets)
+    {
+        GuidoPos pos = mAssociated->GetHeadPosition();
+        while (pos)
+        {
+            note = dynamic_cast<GRSingleNote *>(mAssociated->GetNext(pos));
+            if (note)
+            {
+                GRNoteDot *currentDot = dynamic_cast<GRNoteDot *>(note->getDot());
+
+                if (currentDot && note->getNoteHead())
+                {
+                    if (note->getNoteHead()->getOffset().x != offsetMax)
+                        currentDot->addToOffset(55); //hardcoded
+                }
+            }
+        }
+    }
 }
 
 void GRGlobalStem::setHPosition( float nx )

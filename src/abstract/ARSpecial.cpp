@@ -16,7 +16,6 @@
 #include <iostream>
 #include "secureio.h"
 
-// #include "TagParameterInt.h"
 #include "TagParameterString.h"
 #include "TagParameterFloat.h"
 #include "TagParameterList.h"
@@ -24,7 +23,6 @@
 #include "GuidoDefs.h"
 
 #include "ARSpecial.h"
-// #include "ARFactory.h"	// for gGlobalFactory
 
 
 ListOfTPLs ARSpecial::ltpls(1);

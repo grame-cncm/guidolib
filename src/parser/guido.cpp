@@ -30,142 +30,12 @@ extern int yydebug;
 static void yyunput(int, char*) __attribute__((unused));
 #endif
 
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "guido.h"
-#include "guidoparse.cxx"
-
-/*
-extern "C" {
-YY_BUFFER_STATE guido_scan_string YY_PROTO(( const char *yy_str ));
-}
-*/
-
-int gd_error(const char *msg);
-
-
-/* --- initialisation, has to be called before  any other gd_*  function is called --- */
-
-void gd_init(void) {
-	gd_imp_init();
-	setlocale(LC_NUMERIC, "C");
-}
-
-void gd_exit(void)
-{
-	setlocale(LC_NUMERIC, 0);
-	gd_imp_exit();
-}
-
-
-/* --- parser interface: --- */
-int parse_mode;
-
-long int lnr = 1;
-long int cnr = 0;
-long int cmnt_level;
-
-static int checkUnicode(FILE *fd)
-{
-	rewind( fd );
-	if ( fd ) {
-		int c = fgetc( fd );
-		if( c == 0xff || c == 0xfe) {
-			c = fgetc( fd );
-			if( c == 0xfe || c == 0xff )
-				return 1;
-		}
-	}
-	return 0;
-}
-
-static void uniconv(const char *filename)
-{
-	FILE * fd = fopen(filename,"rb");	// open file
-	if (!fd) return;
-
-	if (checkUnicode (fd)) {
-		fseek(fd, 0, SEEK_END);
-		long int len = ftell(fd);
-		char * content = new char[len+1];
-		if( content ) {
-			rewind( fd );
-			fread (content, 1, len, fd);
-			fclose(fd);
-
-			fd = fopen(filename,"wt");
-			if (fd) {
-				int i;
-				for( i = 0; i < len; i++ ) {
-					if( content[i] > 0 )
-						fputc(content[i], fd);
-				}
-				fclose( fd );
-			}
-			delete [] content;
-		}
-	}
-	else fclose(fd);
-}
-
-int gd_parse_buffer(const char *buffer)
-{
-	lnr = 1;
-	cnr = 0;
-
-	int res;
-	if (!*buffer) return -1;		// error for empty buffers
-
-	gd_init();
-	YY_BUFFER_STATE b;
-    /*Copy string into new buffer and Switch buffers*/
-    b = guido_scan_string (buffer);
-
-    /*Parse the string*/
-	guidolineno = 1;
-    res = guidoparse();
-
-    /*Delete the new buffer*/
-    guido_delete_buffer(b);
-
-	BEGIN(INITIAL);
-
-	guidorestart(guidoin);
-#if !defined(linux) && !defined(WIN32)
-	guidolex_destroy();
-#endif
-//	fclose(guidoin);
-	gd_exit();
-
-	return res;
-}
-
-int gd_parse(const char *filename, int mode)
-{
-	lnr = 1;
-	cnr = 0;
-
-	int res;
-#ifdef yyDebug
-	yydebug = 1;
-#endif
-
-	gd_init();
-	uniconv(filename);
-	if((guidoin= fopen(filename,"r")) == NULL){
-		gd_error("Could not open file");
-		return -1;
-	}
-
-	guidolineno = 1;
-	res = guidoparse();
-	guidorestart(guidoin);
-#if !defined(linux) && !defined(WIN32)
-	guidolex_destroy();
-#endif
-	fclose(guidoin);
-	gd_exit();
-	return res;
-}
-
 
 /* --- utility functions: --- */
 
@@ -176,13 +46,6 @@ void gd_fracNorm(long int *a, long int *b) {
   if (*b==0)
 	 return;
 
-  /// multiplication can cause range overflow errors!
-  /*
-  if ((*a) * (*b) < 0)
-	 sgn = -1;
-  else
-	 sgn = +1;
-   */
   if( ((*a) > 0 && (*b) > 0) ||
       ((*a) < 0 && (*b) < 0) )
       sgn = 1;
@@ -283,7 +146,7 @@ int gd_noteName2pc (const char *name) {
   }
   else {
 	 res =  REST;
-	 gd_error ("Unknown notename, replaced by rest.");
+	  std::cerr << "Unknown notename, replaced by rest." << std::endl;
 	 }
   return(res);
 }

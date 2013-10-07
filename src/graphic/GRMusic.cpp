@@ -278,7 +278,7 @@ int GRMusic::getNumSystems(int pagenum) const
 {
 	if(( pagenum > 0 ) && ( pagenum <= getNumPages())) {
 		GRPage* page = mPages[ (size_t)pagenum - 1 ];
-		return page->getSystems()->size();
+		return int(page->getSystems()->size());
 	}
 	return guidoErrBadParameter;
 }

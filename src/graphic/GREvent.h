@@ -150,9 +150,9 @@ class GREvent : public GRARCompositeNotationElement
 		virtual bool	stemHasBeenChanged(){return stemChanged;}
 		virtual void	setStemChanged(){stemChanged = true;}
 
-  protected:
-
 		GRNoteDot *		getDot();
+
+  protected:
 
 		int				mArticulationFlags;	
 

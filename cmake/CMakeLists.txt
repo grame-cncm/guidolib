@@ -169,7 +169,7 @@ endif(APPLE)
 if (IOS STREQUAL "yes")
 	add_library(${target} STATIC ${LIBCONTENT})
 
-else ()
+else()
 
 	add_library(${target} SHARED ${LIBCONTENT})
 	set_target_properties (${target} PROPERTIES
@@ -192,9 +192,13 @@ else ()
 
 	set (LIBDEST /usr/lib)
 	target_link_libraries (${target} ${LINK})
-
 endif()
 
+if(WIN32)
+	set_target_properties (${target} PROPERTIES
+		DEBUG_OUTPUT_NAME ${target}D
+		RELEASE_OUTPUT_NAME ${target})
+endif()
 
 #######################################
 # install setup

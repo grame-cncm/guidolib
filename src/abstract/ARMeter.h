@@ -41,15 +41,16 @@ class ARMeter : public ARMTParameter
 
 		TYPE_TIMEPOSITION getMeterTime() const;
 
-		int getAutoBarlines() const			{ return autoBarlines; }
-		int getNumerator() const			{ return numerator; }
-		int getDenominator() const			{ return denominator; }
+		int getAutoBarlines()                  const { return autoBarlines; }
+		std::vector<int> getNumeratorsVector() const { return numeratorsVector; }
+        int getNumerator()                     const { return numerator; }
+		int getDenominator()                   const { return denominator; }
 
-		metertype	getMeterType() const	{ return mtype; }
-		const char* getName() const			{ return mMeterName.c_str(); } 
+		metertype	getMeterType() const	         { return mtype; }
+		const char* getName() const			         { return mMeterName.c_str(); } 
 
-		int		getMeasureNum() const			{ return mnum; }
-		void	setMeasureNum(int p_num)		{ mnum = p_num; }
+		int		getMeasureNum() const                { return mnum; }
+		void	setMeasureNum(int p_num)             { mnum = p_num; }
 
 		const TYPE_TIMEPOSITION & getTimeOffset() const	{ return timeoffset; }
 		void setTimeOffset(const TYPE_TIMEPOSITION &tp) { timeoffset = tp; }
@@ -68,7 +69,8 @@ class ARMeter : public ARMTParameter
  
   private:
 		std::string mMeterName;
-		int numerator;
+        std::vector<int> numeratorsVector;
+        int numerator;
 		int denominator;
 		metertype mtype;
 		

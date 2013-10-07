@@ -66,7 +66,7 @@ void GRSText::OnDraw( VGDevice & hdc) const
 {
 	const char * cp = txt->c_str();
 #if 1
-	OnDrawText(hdc,  cp, txt->length() );
+	OnDrawText(hdc,  cp, int(txt->length()) );
 #else
 	const VGFont* hmyfont = FontManager::gFontText;
 	

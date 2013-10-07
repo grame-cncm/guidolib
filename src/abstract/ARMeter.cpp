@@ -99,40 +99,84 @@ void ARMeter::setTagParameterList(TagParameterList& tpl)
 				autoBarlines = 0;
 			else
 				autoBarlines = 1;
-			
-			// now set  enumerator and
-			// denominator 
-			if (sscanf(mMeterName.c_str(),"%d/%d",&numerator,&denominator) != 2)
-			{ // read error
-				if (mMeterName == "C")
-				{
-					mtype = C;
-					numerator = 4;
-					denominator = 4;
-				}
-				else if (mMeterName == "C/")
-				{
-					mtype = C2;
-					numerator = 2;
-					denominator = 2;
-				}
-				else
-				{
-					numerator = 0;
-					denominator = 1;
-					mtype = NONE;
-				}
-			}
-			else
-				mtype = NUMERIC;
-			
+
+
+            //Meter string analysis to set numerator/denominator
+            numerator = 0;
+            std::string meterStr(mMeterName);
+            std::string delimiterSlash = "/";
+
+            size_t posSlash = 0;
+            std::string completeNumeratorStr;
+            std::string denominatorStr;
+
+            posSlash = meterStr.find(delimiterSlash);
+            completeNumeratorStr = meterStr.substr(0, posSlash);
+            denominatorStr = meterStr;
+            denominatorStr.erase(0, posSlash + 1);
+
+            if (sscanf(denominatorStr.c_str(), "%d", &denominator) == 1)
+            { //numerator check
+                int tmpNumeratorX = 0;
+                std::string delimiterPlus = "+";
+                size_t posPlus = 0;
+                std::string tpmNumeratorXStr;
+                while ((posPlus = completeNumeratorStr.find(delimiterPlus)) != std::string::npos)
+                {
+                    tpmNumeratorXStr = completeNumeratorStr.substr(0, posPlus);
+                    if (sscanf(tpmNumeratorXStr.c_str(), "%d", &tmpNumeratorX) == 1)
+                    {
+                        numeratorsVector.push_back(tmpNumeratorX);
+                    }
+                    completeNumeratorStr.erase(0, posPlus + delimiterPlus.length());
+                }
+
+                if (sscanf(completeNumeratorStr.c_str(), "%d", &tmpNumeratorX) == 1)
+                { // last sum member
+                    numeratorsVector.push_back(tmpNumeratorX);
+                }
+
+                if (!numeratorsVector.empty())
+                {
+                    for(int i = 0; i < numeratorsVector.size(); i++)
+                    {
+                        numerator += numeratorsVector[i]; //REM: fixer une limite de somme pour le numérateur ? et pour le dénominateur ?
+                    }
+                }
+
+                if (!numeratorsVector.empty())
+                {
+                    mtype = NUMERIC;
+                }
+            }
+            else
+            { // read error
+                if (mMeterName == "C")
+                {
+                    mtype = C;
+                    numeratorsVector.push_back(4);
+                    denominator = 4;
+                }
+                else if (mMeterName == "C/")
+                {
+                    mtype = C2;
+                    numeratorsVector.push_back(2);
+                    denominator = 2;
+                }
+                else
+                {
+                    numeratorsVector.push_back(0);
+                    denominator = 1;
+                    mtype = NONE;
+                }
+            }
 		}
 
 		delete rtpl;
 	}
 	else
 	{
-		numerator = 0;
+		numeratorsVector.push_back(0);
 		denominator = 1;
 		mtype = NONE;
 	}

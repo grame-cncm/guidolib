@@ -136,7 +136,7 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 	if(drawDur)
 	{
 		const char * fraction = st->duration.c_str();
-		int n = st->duration.length();
+		size_t n = st->duration.length();
 
 		hdc.SelectPenWidth(4);
 		if(sse->startflag != GRSystemStartEndStruct::OPENLEFT)
@@ -975,7 +975,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 			stringstream out;
 			out << num << '/' << den;
 			st->duration = out.str();
-			int n = st->duration.length();
+			size_t n = st->duration.length();
 					
 			GREvent * ev = dynamic_cast<GREvent *>(mAssociated->GetHead());
 			const NVPoint p1 = ev->getStemEndPos();
