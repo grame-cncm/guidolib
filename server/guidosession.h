@@ -153,7 +153,7 @@ public :
     guidosessionresponse genericReturnImage();
     guidosessionresponse genericReturnMidi();
     guidosessionresponse genericReturnId();
-    static guidosessionresponse genericFailure(const char* errorstring, int http_status = 400);
+    static guidosessionresponse genericFailure(const char* errorstring, int http_status = 400, string id = "");
     guidosessionresponse mapGet (const TArgs& args, unsigned int n, string thingToGet);
     guidosessionresponse pointGet (const TArgs& args, unsigned int n);
 

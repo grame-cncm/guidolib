@@ -46,7 +46,6 @@
 using namespace json;
 
 using namespace std;
-
 #define COOKIE_NAME "guidoserver"
 
 namespace guidohttpd
@@ -313,7 +312,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
 
     map<string, guidosession *>::iterator it = fSessions.find(elems[0]);
     if (it == fSessions.end ()) {
-        guidosessionresponse response = guidosession::genericFailure("GET requests must pertain to an already-created score", 400);
+        guidosessionresponse response = guidosession::genericFailure("incorrect score ID.", 404, elems[0]);
         return send (connection, response);
     }
     guidosession *currentSession = fSessions[elems[0]];

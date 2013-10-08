@@ -713,7 +713,7 @@ guidosessionresponse guidosession::genericReturnImage()
         ARHandler arh;
         err = GuidoParseString (gmn_.c_str(), &arh);
         if (err != guidoNoErr) {
-          return genericFailure ("Could not convert the image.", 400);
+          return genericFailure ("Could not convert the image.", 400, id_);
         }
         GRHandler grh;
         
@@ -723,13 +723,13 @@ guidosessionresponse guidosession::genericReturnImage()
         GuidoSetDefaultPageFormat(&pf);
         err = GuidoAR2GR (arh, 0, &grh);
         if (err != guidoNoErr) {
-          return genericFailure ("Could not convert the image.", 400);
+          return genericFailure ("Could not convert the image.", 400, id_);
         }
         
         stringstream mystream;
         err = GuidoSVGExport(grh, page_, mystream, "");
         if (err != guidoNoErr) {
-          return genericFailure ("Could not convert the image.", 400);
+          return genericFailure ("Could not convert the image.", 400, id_);
         }
         string svg = mystream.str();
         return guidosessionresponse(svg.c_str(), svg.size(), formatToMIMEType(), 201);
@@ -738,7 +738,7 @@ guidosessionresponse guidosession::genericReturnImage()
     if (err == 0) {
         return guidosessionresponse(fConverter->data(), fConverter->size(), formatToMIMEType(), 201);
     }
-    return genericFailure ("Could not convert the image.", 400);
+    return genericFailure ("Could not convert the image.", 400, id_);
 }
 
 
@@ -749,14 +749,14 @@ guidosessionresponse guidosession::genericReturnMidi()
     GuidoErrCode err = GuidoParseString (gmn_.c_str(), &arh);
     
     if (err != guidoNoErr) {
-        return genericFailure ("Could not convert the Midi.", 400);
+        return genericFailure ("Could not convert the Midi.", 400, id_);
     }
     
     string filename = rand_alnum_str(20)+".midi";
     err = GuidoAR2MIDIFile(arh, filename.c_str(), 0);
     
     if (err != guidoNoErr) {
-        return genericFailure ("Could not convert the Midi.", 400);
+        return genericFailure ("Could not convert the Midi.", 400, id_);
     }
     
     ostringstream sstream;
@@ -769,16 +769,19 @@ guidosessionresponse guidosession::genericReturnMidi()
         return guidosessionresponse(data.c_str(), data.length(), "audio/midi", 201);
     }
 
-    return genericFailure ("Could not convert the Midi.", 400);
+    return genericFailure ("Could not convert the Midi.", 400, id_);
 }
     
-guidosessionresponse guidosession::genericFailure(const char* errorstring, int http_status)
+guidosessionresponse guidosession::genericFailure(const char* errorstring, int http_status, string id)
 {
-    json_object obj;
-    obj.add (new json_element("Error", new json_string_value(errorstring)));
+    json_object *obj = new json_object;
+    obj->add (new json_element("Error", new json_string_value(errorstring)));
+    json_object *wrapper = new json_object;
+    wrapper->add(new json_element(id.c_str(), new json_object_value(obj)));
     ostringstream mystream;
     json_stream jstream(mystream);
-    obj.print(jstream);
+    wrapper->print(jstream);
+    delete wrapper;
     return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", http_status);
 }
 
