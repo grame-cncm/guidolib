@@ -4,10 +4,11 @@ Overview
 The HTTP GUIDO Engine is a web server that provides music score layout services, based on the
 the `GUIDO Engine library <http://guidolib.sourceforge.net/>`_ and on the :ref:`gmn` format. These services are availble using HTTP requests. The corresponding API is inspired by a RESTful design and is close to the `C/C++ API <http://guidolib.sourceforge.net/doc/guidolib/>`_.
 
-The semantic of the operations is carried by the HTTP method (POST, GET) and their scope is indicated by the URI:
+The semantic of the operations is carried by the HTTP method (POST, GET, HEAD) and their scope is indicated by the URI:
 
 • POST is used to create a new score, 
 • GET is used to get a score or score attributes
+• HEAD is used to read the header of a server response
 
 Typical examples of transactions with the server could be as follows:
 
