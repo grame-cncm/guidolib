@@ -14,7 +14,7 @@ macx:CONFIG -= app_bundle
 # GuidoQt library link for each platform
 win32:LIBS += ../GuidoQt.lib
 unix:LIBS += -L.. -lGuidoQt -L/usr/local/lib
-unix:LIBS += -lmicrohttpd -ljson
+unix:LIBS += -lmicrohttpd -ljson -lcrypto
 INCLUDEPATH += ../GuidoQt/include
 INCLUDEPATH += ../../server
 INCLUDEPATH += /usr/local/include

@@ -41,6 +41,8 @@
 #include "json/json_parser.h"
 #include "json/json_stream.h"
 
+#include "openssl/sha.h"
+
 using namespace json;
 
 using namespace std;
@@ -196,6 +198,21 @@ char genRandom()
     return alphanum[rand() % stringLength];
 }
 
+std::string generate_sha1(std::string setter)
+{
+  unsigned char obuf[20];
+  SHA1((const unsigned char *)(setter.c_str()), setter.length(), obuf);
+  char buffer[20];
+  std::stringstream ss;
+
+  for (int i=0; i < 20; i++) {
+     sprintf(buffer, "%02x", obuf[i]);
+     ss << buffer;
+  }
+
+  return ss.str();
+}
+
 int HTTPDServer::sendGuidoPostRequest(struct MHD_Connection *connection, const TArgs& args)
 {
     if (args.size() != 1) {
@@ -213,11 +230,18 @@ int HTTPDServer::sendGuidoPostRequest(struct MHD_Connection *connection, const T
         return send (connection, response);
     }
     std::string unique_id;
+    /*
+    // old method of making a random hash
     for(unsigned int i = 0; i < 20; ++i) {
         unique_id += genRandom();
     }
-    fSessions[unique_id] = new guidosession(fConverter, args.begin()->second, unique_id);
-    fSessions[unique_id]->initialize();
+    */
+    unique_id = generate_sha1(args.begin()->second);
+    // if the score does not exist already, we put it there
+    if (fSessions.find (unique_id) == fSessions.end ()) {
+      fSessions[unique_id] = new guidosession(fConverter, args.begin()->second, unique_id);
+      fSessions[unique_id]->initialize();
+    }
     guidosessionresponse response = fSessions[unique_id]->genericReturnId();
     return send (connection, response);
 }
