@@ -358,6 +358,8 @@ GuidoWebApiFormat guidosession::formatToWebApiFormat(string format)
         return GUIDO_WEB_API_JPEG;
     } else if (strcmp("gif", format.c_str()) == 0) {
         return GUIDO_WEB_API_GIF;
+    } else if (strcmp("svg", format.c_str()) == 0) {
+        return GUIDO_WEB_API_SVG;
     } else {
         return GUIDO_WEB_API_PNG;
     }
@@ -706,6 +708,37 @@ GuidoErrCode guidosession::getMap (GuidoSessionMapType map, int aux, Time2Graphi
 
 guidosessionresponse guidosession::genericReturnImage()
 {
+    if (format_ == GUIDO_WEB_API_SVG) {
+        GuidoErrCode err;
+        ARHandler arh;
+        err = GuidoParseString (gmn_.c_str(), &arh);
+        if (err != guidoNoErr) {
+          return genericFailure ("Could not convert the image.", 400);
+        }
+        GRHandler grh;
+        
+        GuidoPageFormat pf;
+        fillGuidoPageFormatUsingCurrentSettings(&pf);
+        
+        GuidoSetDefaultPageFormat(&pf);
+        err = GuidoAR2GR (arh, 0, &grh);
+        if (err != guidoNoErr) {
+          return genericFailure ("Could not convert the image.", 400);
+        }
+        
+        /*
+         In order to export a map, the score needs to be drawn on something.
+         SVG export is a really quick way to do this drawing.
+         It is a temporary solution
+         */
+        stringstream mystream;
+        err = GuidoSVGExport(grh, page_, mystream, "");
+        if (err != guidoNoErr) {
+          return genericFailure ("Could not convert the image.", 400);
+        }
+        string svg = mystream.str();
+        return guidosessionresponse(svg.c_str(), svg.size(), formatToMIMEType(), 201);
+    }
     int err = fConverter->convert(this);
     if (err == 0) {
         return guidosessionresponse(fConverter->data(), fConverter->size(), formatToMIMEType(), 201);
