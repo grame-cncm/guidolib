@@ -39,6 +39,7 @@
 #include "json/json_array.h"
 #include "json/json_parser.h"
 
+#define HEAD 3
 #define DELETE 2
 #define POST 1
 #define GET 0

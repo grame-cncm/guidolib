@@ -152,7 +152,7 @@ int HTTPDServer::send (struct MHD_Connection *connection, const char *page, int 
         cerr << "MHD_create_response_from_buffer error: null response\n";
         return MHD_NO;
     }
-    MHD_add_response_header (response, "Content-Type", type ? type : "text/plain");
+    MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE, type ? type : "text/plain");
     int ret = MHD_queue_response (connection, status, response);
     MHD_destroy_response (response);
     return ret;
@@ -297,7 +297,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
     if (type == DELETE) {
         // delete an fSession.
         sendGuidoDeleteRequest(connection, args);
-    } else if (type == GET) {
+    } else if ((type == GET) || (type == HEAD)) {
         currentSession->updateValuesFromDefaults(args);
         if (elems.size() == 1) {
             // must be getting the score
@@ -453,18 +453,31 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
             return sendGuido (connection, url, con_info->args, POST);
         }
     }
-    if (0 == strcmp (method, "GET")) {
+    else if (0 == strcmp (method, "GET")) {
         TArgs args;
         MHD_get_connection_values (connection, MHD_GET_ARGUMENT_KIND, _get_params, &args);
         return sendGuido (connection, url, args, GET);
     }
-
-    if (0 == strcmp (method, "DELETE")) {
+    else if (0 == strcmp (method, "HEAD")) {
+        TArgs args;
+        MHD_get_connection_values (connection, MHD_GET_ARGUMENT_KIND, _get_params, &args);
+        return sendGuido (connection, url, args, HEAD);
+    }
+    else if (0 == strcmp (method, "DELETE")) {
         TArgs args;
         MHD_get_connection_values (connection, MHD_GET_ARGUMENT_KIND, _get_params, &args);
         return sendGuido (connection, url, args, DELETE);
     }
-    return MHD_YES;
+    else {
+      stringstream ss;
+      ss << "The GUIDO server does not support the ";
+      ss << method;
+      ss << " command";
+      guidosessionresponse reallyBadResponse = guidosession::genericFailure(ss.str ().c_str (), 400);
+      return send (connection, reallyBadResponse);
+    }
+    // should never get here
+    return MHD_NO;
 }
 
 } // end namespoace
