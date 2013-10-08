@@ -27,14 +27,6 @@ int guido2img::convert (guidosession* const currentSession)
 {
     Guido2Image::Params p;
 
-    GuidoPageFormat pf;
-    currentSession->fillGuidoPageFormatUsingCurrentSettings(&pf);
-    GuidoSetDefaultPageFormat(&pf);
-
-    GuidoLayoutSettings ls;
-    currentSession->fillGuidoLayoutSettingsUsingCurrentSettings(&ls);
-    p.layout = &ls;
-
     p.input  = currentSession->gmn_.c_str ();
     p.output = 0;
     switch (currentSession->format_) {
