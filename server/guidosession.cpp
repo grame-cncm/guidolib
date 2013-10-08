@@ -726,11 +726,6 @@ guidosessionresponse guidosession::genericReturnImage()
           return genericFailure ("Could not convert the image.", 400);
         }
         
-        /*
-         In order to export a map, the score needs to be drawn on something.
-         SVG export is a really quick way to do this drawing.
-         It is a temporary solution
-         */
         stringstream mystream;
         err = GuidoSVGExport(grh, page_, mystream, "");
         if (err != guidoNoErr) {
