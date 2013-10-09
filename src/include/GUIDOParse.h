@@ -88,7 +88,7 @@ extern "C" {
 
 
 	/*!
-		\brief Try to convert the current parser state to AR
+		\brief Get the error syntax line/column
 		\param p a parser previously opened with GuidoOpenParser
 		\param line a reference that will contains a line number in case of syntax error
 		\param col a reference that will contains a column number in case of syntax error
@@ -117,10 +117,14 @@ extern "C" {
 		
 		Writing data to a stream may be viewed as writing gmn code by portion. 
 		The sequence of all the data written to the stream should always be valid gmn code, 
-		provided that a valid gmn sequence may be writtent to properly close the stream.
+		provided that a valid gmn sequence may be written to properly close the stream.
 		When a syntax error occurs when writting data to the stream, the stream becomes invalid
 		and should be closed. Further attempts to write data will always result in a syntax error.
-		
+		On the other hand, you have to be careful about special char (for example, write "\\tie(a a)"
+        in stream, not "\tie(a a)".
+        Finally, gmn key-words have to be written in one shot (for exemple, don't write "\\clu" and
+        then "ster({a, c})", it won't work.
+
 		\param s a GuidoStream previoulsy opened with GuidoOpenStream
 		\param str a string containing a portion of gmn code
 		\return a Guido error code.

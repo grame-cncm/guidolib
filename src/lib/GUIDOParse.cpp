@@ -22,10 +22,6 @@
 
 using namespace std;
 
-// - Guido AR
-#include "ARFactory.h"
-#include "ARBackupFactory.h"
-
 // - Guido Misc
 #include "GUIDOInternal.h"
 #include "GuidoParser.h"
@@ -70,7 +66,7 @@ GUIDOAPI(GuidoErrCode) GuidoCloseParser (GuidoParser *p)
     if (!p)
         return guidoErrBadParameter;
 
-    delete p;
+    delete p; //REM: bug des fois ?
 
 	return guidoNoErr;
 }
@@ -120,11 +116,13 @@ GUIDOAPI(ARHandler)	GuidoStream2AR (GuidoParser *p, GuidoStream* s)
 
     /* Set the GuidoStream into the GuidoParser */
     p->setStream(s);
-    s->SetFactory(p->getFactory()); // In order that GuidoWriteStream can reload 
-                                    // backuped factory juste before writing
 
-    /* Parse ! (blocking method while stream isn't closed) */
+    /* Parse ! (blocking method while stream isn't closed AND no syntax errors) */
     ar = p->parse();
+
+    if (!ar)
+        s->SetParserJobFinished(); /* There are syntax errors, we have to unblock GuidoParser2AR which
+                                      may be waiting for stream to say that all data are consumed */
 
 	return ar;
 }
@@ -135,29 +133,34 @@ GUIDOAPI(ARHandler)	GuidoParser2AR (GuidoParser *p)
     if (!p)
         return NULL;
 
+    GuidoStream *s = NULL;
+
     /* Wait for the stream to be set in parser */
-    while (!p->getGuidoStream())
+    while ((s = p->getGuidoStream()) == NULL)
         sleep(10);
 
-    /* Wait for the stream to have consumed all data written for now */
-    while (!p->getGuidoStream()->GetAreAllDataRead())
+    while (!s->GetAreAllDataRead() && !s->GetParserJobFinished())
         sleep(10);
+    /****************************/
     
     ARHandler ar = 0;
+    int line;
+    int col;
+    
+    GuidoParserGetErrorCode(p, line, col);
 
-    ARFactory *factory = p->getFactory();
-
-    if (factory)
+    if (line == 0) // No syntax error, then we can do synchronous parsing
     {
-        /* Factory backup */
-        factory->MakePartialBackup();
+        GuidoParser *synchronousParser = new GuidoParser(true);
+        stringstream *stringStreamToParse = new stringstream();
+        string stringToCopy = p->getGuidoStream()->getSynchronousString();
 
-        /* Factory closes */
-        GuidoFactoryCloseEvent(factory);
-        GuidoFactoryCloseChord(factory);
-        GuidoFactoryCloseVoice(factory);
+        stringStreamToParse->str(stringToCopy);
+        synchronousParser->setStream(stringStreamToParse);
 
-        ar = guido_RegisterARMusic(factory->getMusic());
+        ar = synchronousParser->parse();
+
+        GuidoCloseParser(synchronousParser);
     }
 
 	return ar;
@@ -209,14 +212,6 @@ GUIDOAPI(GuidoErrCode) GuidoWriteStream (GuidoStream *s, const char *str)
 {
     if( !s || !str )
         return guidoErrBadParameter;
-
-    /* Wait for factory to be set in GuidoStream (by GuidoStream2AR) */
-    while (!s->GetFactory())
-        sleep(10);
-
-    /* Factory reloading */
-    if (s->GetFactory()->GetIsBackupExisting())
-        s->GetFactory()->ReloadOldFactory();
 
     s->WriteToStream(str);
     s->WriteToStream(" "); // Ugly and "dangerous", but without this the last

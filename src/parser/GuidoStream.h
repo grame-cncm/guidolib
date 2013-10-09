@@ -33,11 +33,11 @@ public:
     void CloseStream()          { fGuidoStreamBuffer->SetHaveToCloseStream(); }
 
     void SetParserJobFinished() { fParserJobFinished = true; }
+    bool GetParserJobFinished() { return fParserJobFinished; }
 
     bool GetAreAllDataRead()    { return fGuidoStreamBuffer->GetAreAllDataRead(); }
 
-    void       SetFactory(ARFactory *inFactory) { fFactory = inFactory; }
-    ARFactory *GetFactory()                     { return fFactory; }
+    string     getSynchronousString() { return fSynchronousString; }
 
 protected:
     GuidoStreamBuf *fGuidoStreamBuffer;
@@ -45,6 +45,8 @@ protected:
     bool fParserJobFinished;
 
     ARFactory *fFactory;
+
+    string fSynchronousString;
 };
 
 

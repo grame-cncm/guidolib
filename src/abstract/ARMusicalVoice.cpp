@@ -1399,12 +1399,6 @@ GuidoPos ARMusicalVoice::getLastEventPosition()
 }
 
 //____________________________________________________________________________________
-void ARMusicalVoice::setLastEventPosition(GuidoPos inPos)
-{
-    lastevposition = inPos;
-}
-
-//____________________________________________________________________________________
 /** \brief Converts the voice into Normal-Form
 
 OK: Attention: What about Tags within Chords (I have not thought about this yet)
@@ -5677,6 +5671,9 @@ void ARMusicalVoice::setClusterChord(ARCluster *inCurrentCluster)
 */
 void ARMusicalVoice::FinishChord()
 {
+    if (!currentChord)
+        return;
+
 	TYPE_DURATION chorddur;
 
 	ARMusicalVoiceState vst = * chordBeginState;

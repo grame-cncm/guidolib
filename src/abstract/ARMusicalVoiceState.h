@@ -73,12 +73,6 @@ class ARMusicalVoiceState
 
 		void DeleteAll();
 
-        GuidoPos getVPos()                { return vpos; }
-        void     setVPos(GuidoPos inVPos) { vpos = inVPos; }
-
-        TYPE_TIMEPOSITION getCurtp()                          { return curtp; }
-        void              setCurtp(TYPE_TIMEPOSITION inCurtp) { curtp = inCurtp; }
-
 	protected:
 
 		// The timeposition of the last barline.

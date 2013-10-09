@@ -20,7 +20,7 @@
 #include "ARFactory.h"
 
 //--------------------------------------------------------------------------
-GuidoParser::GuidoParser()
+GuidoParser::GuidoParser(bool inIsSecondParser) : fIsSecondParser(inIsSecondParser)
 {
 	setlocale(LC_NUMERIC, "C");
 	fFactory = new ARFactory();
@@ -178,8 +178,8 @@ ARHandler GuidoParser::parse()
 	faccidentals = 0;
 	fndots = 0;
 	fnt_enumSet = false;
-	fnt_enum =0;
-	fnt_denom =1;
+	fnt_enum = 0;
+	fnt_denom = 1;
 	fErrorLine = fErrorColumn = 0;
 	_yyparse ();
     
@@ -187,5 +187,18 @@ ARHandler GuidoParser::parse()
     if (guidoStream)
         getGuidoStream()->SetParserJobFinished();
 	
+    if (fIsSecondParser)
+    {
+        // There are certainly errors, but we're sure it's because of
+        // non-closure events/chords/tags/voice/music
+
+        fFactory->addEvent();
+        fFactory->addChord();
+        fFactory->endTag();
+        fFactory->addVoice();
+
+        return GuidoFactoryCloseMusic (fFactory);
+    }
+
     return (fErrorLine == 0) ? GuidoFactoryCloseMusic (fFactory) : 0;
 }

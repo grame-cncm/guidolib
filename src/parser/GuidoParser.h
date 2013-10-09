@@ -45,12 +45,12 @@ class GuidoParser {
 	int	_yyparse();
 	
 	public:
-		void           *fScanner;   // the flex scanner
-		std::istream   *fStream;    // input stream
-		ARFactory      *fFactory;
-		std::string	    fText;      // the current text
+		void              *fScanner;   // the flex scanner
+		std::istream      *fStream;    // input stream
+		ARFactory         *fFactory;
+		std::string	       fText;      // the current text
 
-				 GuidoParser();
+				 GuidoParser(bool inIsSecondParser = false);
 		virtual ~GuidoParser();
 		
 		ARHandler           parse();
@@ -98,6 +98,9 @@ class GuidoParser {
 
 		int getErrorLine() const				{ return fErrorLine; }
 		int getErrorColumn() const				{ return fErrorColumn; }
+
+    protected:
+        bool fIsSecondParser;
 };
 
 #endif

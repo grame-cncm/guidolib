@@ -13,6 +13,9 @@
 
 #include <locale.h>
 #include <istream>
+#include <sstream>
+
+using namespace std;
 
 #include "GuidoStreamBuf.h"
 
@@ -24,7 +27,8 @@ GuidoStream::GuidoStream(GuidoStreamBuf *inStreamBuf) :
              fGuidoStreamBuffer(inStreamBuf),
              istream(inStreamBuf),
              fParserJobFinished(false),
-             fFactory(NULL)
+             fFactory(NULL),
+             fSynchronousString()
 {
 }
 
@@ -37,5 +41,6 @@ GuidoStream::~GuidoStream()
 //--------------------------------------------------------------------------
 void GuidoStream::WriteToStream(const char* str) 
 {
+    fSynchronousString += str;
     fGuidoStreamBuffer->WriteToBuffer(str);
 }

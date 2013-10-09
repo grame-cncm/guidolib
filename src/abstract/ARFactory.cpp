@@ -155,36 +155,7 @@ ARFactory::ARFactory()
 	mVoiceNum(1),
 	mCurrentTags(0),
 	mVoiceAdded(false),
-    mFilePath(),
-    mExistingBackup(false),
-    mBackupCurrentMusic(NULL),
-    mBackupCurrentEvent(NULL),
-    mBackupCurrentDenominator(0),
-    mBackupCurrentIntensity(0),
-    mBackupCurrentNumerator(0),
-    mBackupCurrentRegister(0),
-    mBackupCurrentStaff(NULL),
-    mBackupCurrentOctava(NULL),
-    mBackupCurrentStem(NULL),
-    mBackupCurrentHead(NULL),
-    mBackupCurrentNoteFormat(NULL),
-    mBackupCurrentAlter(NULL),
-    mBackupCurrentRestFormat(NULL),
-    mBackupCurrentDotFormat(NULL),
-    mBackupCurrentCue(NULL),
-    mBackupCurrentGrace(NULL),
-    mBackupCurrentTrill(NULL),
-    mBackupCurrentCluster(NULL),
-    mBackupVoiceAdded(false),
-    mBackupLastEvent(NULL),
-    mBackupCurtp(NULL),
-    mBackupVPos(NULL),
-    mBackupSum(0),
-    mBackupPitchsum(0),
-    mBackupLastEventPosition(NULL),
-    mCurrentBackupDuration(NULL),
-    mBackupRelativeTimePosition(NULL),
-    mBackupCurrentVoiceNum(0)
+    mFilePath()
 {
 		sMaxTagId = -1;
 }
@@ -230,38 +201,34 @@ ARMusic * ARFactory::getMusic()
 	assert(!mCurrentEvent);
 	assert(!mCurrentVoice);
 
-    if (mCurrentMusic) //REM: keep modified ?
-    {
-        ARMusic * music = mCurrentMusic;
-
-        // this sets the maxtagid in the ARMusic.
-        // this can be used by all auto-routines...
-        music->mMaxTagId = ARFactory::sMaxTagId + 1;
-
-#if ARTRACE
-        cout << "ARFactory::getMusic before auto stuff: " << endl;
-        music->output(cout, true);
-#endif
-
-        // this call inserts potential Breaks in
-        // the first voice of the piece.
-        timebench("ARMusic::doAutoStuff", music->doAutoStuff());
-
-#if ARTRACE
-        cout << "\nARFactory::getMusic after auto stuff: " << endl;
-        music->output(cout, true);
-        cout << "\nARFactory::getMusic - end ----------- " << endl;
-#endif
-
-
-        mCurrentMusic = 0;
-        ARFactory::sMaxTagId = -1;
-        return music;
-    }
-    else
-    {
+    if (!mCurrentMusic)
         return NULL;
-    }
+
+    ARMusic * music = mCurrentMusic;
+
+    // this sets the maxtagid in the ARMusic.
+    // this can be used by all auto-routines...
+    music->mMaxTagId = ARFactory::sMaxTagId + 1;
+
+#if ARTRACE
+    cout << "ARFactory::getMusic before auto stuff: " << endl;
+    music->output(cout, true);
+#endif
+
+    // this call inserts potential Breaks in
+    // the first voice of the piece.
+    timebench("ARMusic::doAutoStuff", music->doAutoStuff());
+
+#if ARTRACE
+    cout << "\nARFactory::getMusic after auto stuff: " << endl;
+    music->output(cout, true);
+    cout << "\nARFactory::getMusic - end ----------- " << endl;
+#endif
+
+
+    mCurrentMusic = 0;
+    ARFactory::sMaxTagId = -1;
+    return music;
 }
 
 
@@ -299,37 +266,37 @@ void ARFactory::addVoice()
 #endif
 	assert(!mCurrentEvent);
 
-    if (mCurrentVoice && mCurrentMusic) //REM: keep modified ?
-    {
-        mCurrentVoice->ConvertToNormalForm();
+    if (!mCurrentVoice || !mCurrentMusic)
+        return;
 
-        // old: this is now done
-        // when returning the complete voice ...
+    mCurrentVoice->ConvertToNormalForm();
 
-        // this does automatic conversion,
-        // for example autobeaming ...
-        // mCurrentVoice->doAutoStuff();
+    // old: this is now done
+    // when returning the complete voice ...
 
-        mCurrentMusic->AddTail(mCurrentVoice);
-        mCurrentVoice=NULL;
-        mCurrentDenominator = DEFAULT_DENOMINATOR;
-        mCurrentIntensity = DEFAULT_INTENSITY;
-        mCurrentNumerator = DEFAULT_NUMERATOR;
-        mCurrentRegister = DEFAULT_REGISTER;
-        mCurrentStaff = NULL;
-        mCurrentOctava = NULL;
-        mCurrentStem = NULL;
-        mCurrentHead = NULL;
-        mCurrentNoteFormat = NULL;
-        mCurrentAlter = NULL;
-        mCurrentRestFormat = NULL;
-        mCurrentDotFormat = NULL;
-        mCurrentCue = NULL;
-        mCurrentGrace = NULL;
-        mCurrentTrill = NULL;
-        mCurrentCluster = NULL;
-        mVoiceAdded = true;
-    }
+    // this does automatic conversion,
+    // for example autobeaming ...
+    // mCurrentVoice->doAutoStuff();
+
+    mCurrentMusic->AddTail(mCurrentVoice);
+    mCurrentVoice=NULL;
+    mCurrentDenominator = DEFAULT_DENOMINATOR;
+    mCurrentIntensity = DEFAULT_INTENSITY;
+    mCurrentNumerator = DEFAULT_NUMERATOR;
+    mCurrentRegister = DEFAULT_REGISTER;
+    mCurrentStaff = NULL;
+    mCurrentOctava = NULL;
+    mCurrentStem = NULL;
+    mCurrentHead = NULL;
+    mCurrentNoteFormat = NULL;
+    mCurrentAlter = NULL;
+    mCurrentRestFormat = NULL;
+    mCurrentDotFormat = NULL;
+    mCurrentCue = NULL;
+    mCurrentGrace = NULL;
+    mCurrentTrill = NULL;
+    mCurrentCluster = NULL;
+    mVoiceAdded = true;
 }
 
 // ----------------------------------------------------------------------------
@@ -359,36 +326,35 @@ void ARFactory::addChord()
 #if ARFTrace
  	cout << "ARFactory::addChord " << endl;
 #endif
-    if (mCurrentVoice) //REM: keep modified ?
+    if (!mCurrentVoice)
+        return;
+
+    // then we are finished reading the chord.
+    // we have to deal with trills somewhere else...
+
+    // now we have to go through the events within this chord once more and set the duration of the 
+    // first empty event and reset the timepositions of the following events (and tags/ptags)
+    // we also have to add the \chord \dispDur and \shareStem tags...
+    // one thought: these Tags need one additional parameter (not only auto) but also for saving if the chord
+    // was automatically created or already in the GUIDO description.	
+    if (mCurrentTrill)
     {
-        // then we are finished reading the chord.
-        // we have to deal with trills somewhere else...
+        ARMusicalVoice::CHORD_TYPE chord_type = ARMusicalVoice::UP_SIMPLE;
+        ARMusicalVoice::CHORD_ACCIDENTAL chord_accidental = ARMusicalVoice::NATURAL;
+        ARNote * FirstNote = mCurrentVoice->setTrillChord(chord_type, chord_accidental);
 
-        // now we have to go through the events within this chord once more and set the duration of the 
-        // first empty event and reset the timepositions of the following events (and tags/ptags)
-        // we also have to add the \chord \dispDur and \shareStem tags...
-        // one thought: these Tags need one additional parameter (not only auto) but also for saving if the chord
-        // was automatically created or already in the GUIDO description.	
-        if (mCurrentTrill)
-        {
-            ARMusicalVoice::CHORD_TYPE chord_type = ARMusicalVoice::UP_SIMPLE;
-            ARMusicalVoice::CHORD_ACCIDENTAL chord_accidental = ARMusicalVoice::NATURAL;
-            ARNote * FirstNote = mCurrentVoice->setTrillChord(chord_type, chord_accidental);
+        mCurrentTrill->setChordType(chord_type);
+        mCurrentTrill->setChordAccidental(chord_accidental);
 
-            mCurrentTrill->setChordType(chord_type);
-            mCurrentTrill->setChordAccidental(chord_accidental);
-
-            FirstNote->setOrnament(mCurrentTrill);
-            //		delete mCurrentTrill;
-            //		mCurrentTrill = 0;
-        }
-
-        if (mCurrentCluster)
-            mCurrentVoice->setClusterChord(mCurrentCluster);
-
-        if (mCurrentVoice->getCurrentChord())
-            mCurrentVoice->FinishChord();
+        FirstNote->setOrnament(mCurrentTrill);
+        //		delete mCurrentTrill;
+        //		mCurrentTrill = 0;
     }
+
+    if (mCurrentCluster)
+        mCurrentVoice->setClusterChord(mCurrentCluster);
+
+    mCurrentVoice->FinishChord();
 }
 
 // ----------------------------------------------------------------------------
@@ -440,58 +406,58 @@ void ARFactory::addEvent()
 #if ARFTrace
  	cout << "ARFactory::addEvent " << endl;
 #endif
-    if (mCurrentVoice && mCurrentEvent) //REM: keep modified ?
+    if (!mCurrentVoice || !mCurrentEvent)
+        return;
+
+    ARDisplayDuration * tmpdspdur = 0;
+    if (mCurrentGrace)
     {
-        ARDisplayDuration * tmpdspdur = 0;
-        if (mCurrentGrace)
+        assert(mCurrentGrace->getRange());
+
+        // maybe introduce a display-duration?
+        // we have to introduce a display duration for sure ....
+        // only set the display-duration if the event
+        // within the grace-note has a duration greater then zero 
+
+        if (mCurrentEvent->getDuration() > DURATION_0)
         {
-            assert(mCurrentGrace->getRange());
+            tmpdspdur = new ARDisplayDuration;
+            tmpdspdur->setDisplayDuration( mCurrentEvent->getDuration());
 
-            // maybe introduce a display-duration?
-            // we have to introduce a display duration for sure ....
-            // only set the display-duration if the event
-            // within the grace-note has a duration greater then zero 
+            mCurrentVoice->AddPositionTag(tmpdspdur);
 
-            if (mCurrentEvent->getDuration() > DURATION_0)
-            {
-                tmpdspdur = new ARDisplayDuration;
-                tmpdspdur->setDisplayDuration( mCurrentEvent->getDuration());
-
-                mCurrentVoice->AddPositionTag(tmpdspdur);
-
-                // the display duration tag will get its position 
-                // through the voice::AddTail operation.
-                // now we need an end ...
-                mCurrentEvent->setDuration(DURATION_0);
-            }
+            // the display duration tag will get its position 
+            // through the voice::AddTail operation.
+            // now we need an end ...
+            mCurrentEvent->setDuration(DURATION_0);
         }
+    }
 
-        mCurrentVoice->AddTail( mCurrentEvent );
+    mCurrentVoice->AddTail( mCurrentEvent );
 
-        // In the "toadd" list are all musical objects (Ties, Fermatas, ...) stored which
-        // must be definitly stored AFTER the event.
-        // otherwise an update of the graphical position is very hard todo
-        // The position of the last note is needed before 
-        // the calculation of the  position can be done
-        // ATTENTION: This  is not true anymore! Ties and slurs are now
-        // handled totally differently. Only for fermatas this solution
-        // maybe needed now (I believe).
+    // In the "toadd" list are all musical objects (Ties, Fermatas, ...) stored which
+    // must be definitly stored AFTER the event.
+    // otherwise an update of the graphical position is very hard todo
+    // The position of the last note is needed before 
+    // the calculation of the  position can be done
+    // ATTENTION: This  is not true anymore! Ties and slurs are now
+    // handled totally differently. Only for fermatas this solution
+    // maybe needed now (I believe).
 
-        /*	while (!mToAddList.empty())
-        {
-        // old
-        // mCurrentVoice->AddTailNoDuration(mToAddList.RemoveHead());
-        mCurrentVoice->AddTail(mToAddList.RemoveHead());
-        }*/
+    /*	while (!mToAddList.empty())
+    {
+    // old
+    // mCurrentVoice->AddTailNoDuration(mToAddList.RemoveHead());
+    mCurrentVoice->AddTail(mToAddList.RemoveHead());
+    }*/
 
-        mLastEvent = mCurrentEvent;
-        mCurrentEvent = 0;
+    mLastEvent = mCurrentEvent;
+    mCurrentEvent = 0;
 
-        if (tmpdspdur)
-        {
-            ARDummyRangeEnd * dummy = new ARDummyRangeEnd("\\dispDurEnd");
-            mCurrentVoice->setPositionTagEndPos(-1,dummy,tmpdspdur);
-        }
+    if (tmpdspdur)
+    {
+        ARDummyRangeEnd * dummy = new ARDummyRangeEnd("\\dispDurEnd");
+        mCurrentVoice->setPositionTagEndPos(-1,dummy,tmpdspdur);
     }
 }
 
@@ -1635,253 +1601,257 @@ void ARFactory::endTag()
 //	assert(mCurrentVoice);
 //	assert(!mTags.empty());
 	
-	mCurrentTags--;
-	ARMusicalTag * tag = mTags.RemoveHead(); // pop()
-
-	// some of the tags need to be checked. As they end here, the behaviour of ARFactory needs to be "reset"
-	// check for range ...
-	if (tag == mCurrentGrace)
-	{
-		if (tag->getRange() == false)
-		{
-			// then we have to delete the grace (it will be ignored completely)
-			GuidoTrace("Grace-tag without range ignored!");
-		}
-		// then we also delete the dispdur-tag ....
-		mCurrentGrace = NULL;
-	}
-	else if (tag == mCurrentTrill)
-	{
-		if (tag->getRange() == false)
-			GuidoTrace("trill-tag without range ignored!");
-	}
-	else if (tag == mCurrentCue)
-	{
-		mCurrentVoice->ConvertToNormalForm();
-		mCurrentMusic->AddTail(mCurrentVoice);
-		mCurrentVoice = mSaveCurrentVoice;
-		mSaveCurrentVoice = NULL;
-		mCurrentCue = NULL;
-
-		ARCue * cue = dynamic_cast<ARCue *>(tag);
-		const TagParameterString * tps = cue->getName();
-		if (tps)
-		{
-			// then we have to add the name ....
-			ARText * txt = new ARText(tps->getValue(),0);
-			if (cue->getDY())
-			{
-				TagParameterFloat * tpf = TagParameterFloat::cast(cue->getDY()->getCopy());
-				txt->setDY(tpf);
-			}
-			if (cue->getDX())
-			{
-				TagParameterFloat * tpf = TagParameterFloat::cast(cue->getDX()->getCopy());
-				txt->setDX(tpf);
-			}
-			if (cue->getColor())		txt->setColor(cue->getColor()->getValue());				
-			if (cue->getSize())			txt->setSize(cue->getSize()->getValue());
-			mCurrentVoice->AddTail(txt);
-			// we need to be able to specify the offset!
-		}
-		delete tag;
-		tag = NULL;
-		return;
-	}
-	else if (tag == mCurrentCluster)
-	{
-		if (tag->getRange() == false)
-			GuidoTrace("cluster-tag without range ignored!");
-	}
-
-	ARPositionTag * myptag = dynamic_cast<ARPositionTag *>(tag); 
-	if (tag->getRange() && tag->getRangeSetting() == ARMusicalTag::NO)
+    if (mCurrentTags)
     {
-        if (mCurrentTrill)
+        mCurrentTags--;
+        ARMusicalTag * tag = mTags.RemoveHead(); // pop()
+
+        // some of the tags need to be checked. As they end here, the behaviour of ARFactory needs to be "reset"
+        // check for range ...
+        if (tag == mCurrentGrace)
         {
-            delete mCurrentTrill;
-            mCurrentTrill = NULL;
+            if (tag->getRange() == false)
+            {
+                // then we have to delete the grace (it will be ignored completely)
+                GuidoTrace("Grace-tag without range ignored!");
+            }
+            // then we also delete the dispdur-tag ....
+            mCurrentGrace = NULL;
         }
-        else if (mCurrentCluster)
+        else if (tag == mCurrentTrill)
         {
-            delete mCurrentCluster;
-            mCurrentCluster = NULL;
+            if (tag->getRange() == false)
+                GuidoTrace("trill-tag without range ignored!");
+        }
+        else if (tag == mCurrentCue)
+        {
+            mCurrentVoice->ConvertToNormalForm();
+            mCurrentMusic->AddTail(mCurrentVoice);
+            mCurrentVoice = mSaveCurrentVoice;
+            mSaveCurrentVoice = NULL;
+            mCurrentCue = NULL;
+
+            ARCue * cue = dynamic_cast<ARCue *>(tag);
+            const TagParameterString * tps = cue->getName();
+            if (tps)
+            {
+                // then we have to add the name ....
+                ARText * txt = new ARText(tps->getValue(),0);
+                if (cue->getDY())
+                {
+                    TagParameterFloat * tpf = TagParameterFloat::cast(cue->getDY()->getCopy());
+                    txt->setDY(tpf);
+                }
+                if (cue->getDX())
+                {
+                    TagParameterFloat * tpf = TagParameterFloat::cast(cue->getDX()->getCopy());
+                    txt->setDX(tpf);
+                }
+                if (cue->getColor())		txt->setColor(cue->getColor()->getValue());				
+                if (cue->getSize())			txt->setSize(cue->getSize()->getValue());
+                mCurrentVoice->AddTail(txt);
+                // we need to be able to specify the offset!
+            }
+            delete tag;
+            tag = NULL;
+            return;
+        }
+        else if (tag == mCurrentCluster)
+        {
+            if (tag->getRange() == false)
+                GuidoTrace("cluster-tag without range ignored!");
         }
 
-        GuidoWarn("Tag range ignored (1)");
-        tag->setRange( false );	
+        ARPositionTag * myptag = dynamic_cast<ARPositionTag *>(tag); 
+        if (tag->getRange() && tag->getRangeSetting() == ARMusicalTag::NO)
+        {
+            if (mCurrentTrill)
+            {
+                delete mCurrentTrill;
+                mCurrentTrill = NULL;
+            }
+            else if (mCurrentCluster)
+            {
+                delete mCurrentCluster;
+                mCurrentCluster = NULL;
+            }
+
+            GuidoWarn("Tag range ignored (1)");
+            tag->setRange( false );	
+        }
+
+        if (!tag->getRange() && tag->getRangeSetting() == ARMusicalTag::ONLY)
+        {
+            GuidoWarn("Tag has no range - ignored");
+            if (myptag) mCurrentVoice->RemovePositionTag(myptag);
+            delete tag;
+            return;
+        }
+
+        // now we need to set the correct end-positions for range tags ...
+        if (myptag)
+        {
+            //		ARAlter * alter = dynamic_cast<ARAlter *>(tag); 
+            if (/*!alter &&*/ ((tag->getRange() && myptag->getStartPosition() == NULL)
+                || (!tag->getRange() && tag->getRangeSetting() == ARMusicalTag::RANGEDC)))
+            {
+                // we do not have a start-position yet ...
+                // then the range is empty ! 
+                if (tag->getRangeSetting() == ARMusicalTag::ONLY)
+                {
+                    // then the Tag must be completly discarded ....
+                    mCurrentVoice->RemovePositionTag(myptag);
+                    delete tag;
+                    return;
+                }
+
+                // otherwise we replace the tag as a regular tag ... no positiontag any longer ...
+                assert(tag->getRangeSetting() == ARMusicalTag::RANGEDC);
+
+                // otherwise we have to remove the position tag ....
+                // we need this (if range was empty ..)
+                tag->setRange(0);
+                mCurrentVoice->RemovePositionTag(myptag);
+                // sets the Don't Care association 
+                tag->setAssociation(ARMusicalTag::DC);			
+                // redo this so that \text<"bla">(  /i<"p"> ) works in the correct order!
+                if(!mTagParameterList.IsEmpty()) {		// here was an assert
+                    // removed to allow dynamic editing
+                    mTagParameterList.RemoveAll();
+                }
+                return;
+            }
+
+            if (/*alter ||*/ (tag->getRange() && (dynamic_cast<ARTagEnd *>(tag) == 0)))
+            {
+                if (tag->IsStateTag())
+                {
+                    // then we have to split
+                    // the tag in two ordinary tags...
+                    tag->setRange(0);
+                    mCurrentVoice->RemovePositionTag(myptag);
+
+                    AROctava * myoct;
+                    ARTStem * mystem;
+                    ARTHead * myhead;
+                    ARNoteFormat * mynf;
+                    ARDotFormat * mydf;
+                    ARRestFormat * myrf;
+                    ARAlter * myal;
+
+                    if ((myoct = dynamic_cast<AROctava *>(tag)) != 0 )
+                    {
+                        AROctava * noct = dynamic_cast<AROctava *>( myoct->getEndTag());
+                        mCurrentOctava = noct;
+                        mCurrentVoice->AddTail(noct);
+                    }
+                    else if ((mystem = dynamic_cast<ARTStem *>(tag)) != 0 )
+                    {
+                        ARTStem * nstem = dynamic_cast<ARTStem *>(mystem->getEndTag());
+                        mCurrentStem = nstem;
+                        mCurrentVoice->AddTail(nstem);
+                    }
+                    else if ((myhead = dynamic_cast<ARTHead *>(tag)) != 0 )
+                    {
+                        ARTHead * nhead = dynamic_cast<ARTHead *>(myhead->getEndTag());
+                        mCurrentHead = nhead;
+                        mCurrentVoice->AddTail(nhead);
+
+                    }
+                    else if ((mynf = dynamic_cast<ARNoteFormat *>(tag)) != 0 )
+                    {
+                        ARNoteFormat * nnf = dynamic_cast<ARNoteFormat *>(mynf->getEndTag());
+                        mCurrentNoteFormat = nnf;
+                        mCurrentVoice->AddTail(nnf);
+                    }
+                    else if ((mydf = dynamic_cast<ARDotFormat *>(tag)) != 0 )
+                    {
+                        ARDotFormat * ndf = dynamic_cast<ARDotFormat *>(mydf->getEndTag());
+                        mCurrentDotFormat = ndf;
+                        mCurrentVoice->AddTail(ndf);
+                    }
+                    else if ((myrf = dynamic_cast<ARRestFormat *>(tag)) != 0 )
+                    {
+                        ARRestFormat * nrf = dynamic_cast<ARRestFormat *>(myrf->getEndTag());
+                        mCurrentRestFormat = nrf;
+                        mCurrentVoice->AddTail(nrf);
+                    }
+                    else if ((myal = dynamic_cast<ARAlter *>(tag)) != 0 )
+                    {
+                        ARAlter * nal = dynamic_cast<ARAlter *>(myal->getEndTag());
+                        mCurrentAlter = nal;
+                        mCurrentVoice->AddTail(nal);
+                    }
+                    else
+                    {
+                        assert(false);
+                    }
+                }
+                else
+                {
+                    // in this case we can just close the range .. the position is set ...
+                    // Introduce a dummy RangeEnd ..
+                    // That is a ")" ...
+                    ARDummyRangeEnd * ard = new ARDummyRangeEnd();
+                    // is the dummy range end added to the voice?
+                    mCurrentVoice->setPositionTagEndPos( tag->getID(), ard, tag );
+                    // then we have to delete the tag in the voice ...
+                    mCurrentVoice->removeTag(tag);
+                }
+            }				
+        }
+
+        ARRepeatEnd  * arre;
+        ARText * atext;
+        ARSymbol *asymbol;
+        if(( atext = dynamic_cast<ARText *>(tag)) != 0 )
+        {
+            // bereich ueber den der Text laueft ?
+            // why is this? -> check it out later!
+            atext->setRelativeEndTimePosition(mCurrentVoice->getDuration());
+            tag = NULL;
+        }
+        else if(( asymbol = dynamic_cast<ARSymbol *>(tag)) != 0 )
+        {
+            asymbol->setRelativeEndTimePosition(mCurrentVoice->getDuration());
+            tag = NULL;
+        }
+        else if (dynamic_cast<ARDynamics *>(tag))
+        {
+            // check if there is a first parameter?
+            tag = NULL;
+        }
+        else if ((arre = dynamic_cast<ARRepeatEnd *>(tag)) != 0 )
+        {
+            if (arre->repbeg) // a repeat-end
+            {
+                TYPE_DURATION dur (arre->repbeg->dur);
+                int numrepeat = arre->numrepeat;
+                if (numrepeat == 0) numrepeat = 1;
+
+                ++numrepeat;
+                dur.setNumerator(dur.getNumerator() * numrepeat);
+                dur.normalize();
+                //mCurrentVoice->setDuration(arre->repbeg->getRelativeTimePosition() + dur);
+            }
+            if (arre->getRange()) // the tag has a range ...
+            {
+                ARRepeatEndRangeEnd * tmp = new ARRepeatEndRangeEnd(arre); // !
+                mCurrentVoice->AddTail(tmp);
+            }
+            tag = NULL;
+        }
+        else if (dynamic_cast<ARTDummy *>(tag))
+        {
+            // tag is not set to NULL -> it will be deleted
+        }
+        else tag = NULL;
+
+	    // now delete tags which are not needed anymore
+        //	assert(mTagParameterList.empty());
+	
+        if (tag != NULL)  delete tag;
     }
-
-	if (!tag->getRange() && tag->getRangeSetting() == ARMusicalTag::ONLY)
-	{
-		GuidoWarn("Tag has no range - ignored");
-		if (myptag) mCurrentVoice->RemovePositionTag(myptag);
-		delete tag;
-		return;
-	}
-
-	// now we need to set the correct end-positions for range tags ...
-	if (myptag)
-	{
-//		ARAlter * alter = dynamic_cast<ARAlter *>(tag); 
-		if (/*!alter &&*/ ((tag->getRange() && myptag->getStartPosition() == NULL)
-			|| (!tag->getRange() && tag->getRangeSetting() == ARMusicalTag::RANGEDC)))
-		{
-			// we do not have a start-position yet ...
-			// then the range is empty ! 
-			if (tag->getRangeSetting() == ARMusicalTag::ONLY)
-			{
-				// then the Tag must be completly discarded ....
-				mCurrentVoice->RemovePositionTag(myptag);
-				delete tag;
-				return;
-			}
-
-			// otherwise we replace the tag as a regular tag ... no positiontag any longer ...
-			assert(tag->getRangeSetting() == ARMusicalTag::RANGEDC);
-
-			// otherwise we have to remove the position tag ....
-			// we need this (if range was empty ..)
-			tag->setRange(0);
-			mCurrentVoice->RemovePositionTag(myptag);
-			// sets the Don't Care association 
-			tag->setAssociation(ARMusicalTag::DC);			
-			// redo this so that \text<"bla">(  /i<"p"> ) works in the correct order!
-			if(!mTagParameterList.IsEmpty()) {		// here was an assert
-				// removed to allow dynamic editing
-				mTagParameterList.RemoveAll();
-			}
-			return;
-		}
-
-		if (/*alter ||*/ (tag->getRange() && (dynamic_cast<ARTagEnd *>(tag) == 0)))
-		{
-			if (tag->IsStateTag())
-			{
-				// then we have to split
-				// the tag in two ordinary tags...
-				tag->setRange(0);
-				mCurrentVoice->RemovePositionTag(myptag);
-				
-				AROctava * myoct;
-				ARTStem * mystem;
-				ARTHead * myhead;
-				ARNoteFormat * mynf;
-				ARDotFormat * mydf;
-				ARRestFormat * myrf;
-				ARAlter * myal;
-				
-				if ((myoct = dynamic_cast<AROctava *>(tag)) != 0 )
-				{
-					AROctava * noct = dynamic_cast<AROctava *>( myoct->getEndTag());
-					mCurrentOctava = noct;
-					mCurrentVoice->AddTail(noct);
-				}
-				else if ((mystem = dynamic_cast<ARTStem *>(tag)) != 0 )
-				{
-					ARTStem * nstem = dynamic_cast<ARTStem *>(mystem->getEndTag());
-					mCurrentStem = nstem;
-					mCurrentVoice->AddTail(nstem);
-				}
-				else if ((myhead = dynamic_cast<ARTHead *>(tag)) != 0 )
-				{
-					ARTHead * nhead = dynamic_cast<ARTHead *>(myhead->getEndTag());
-					mCurrentHead = nhead;
-					mCurrentVoice->AddTail(nhead);
-					
-				}
-				else if ((mynf = dynamic_cast<ARNoteFormat *>(tag)) != 0 )
-				{
-					ARNoteFormat * nnf = dynamic_cast<ARNoteFormat *>(mynf->getEndTag());
-					mCurrentNoteFormat = nnf;
-					mCurrentVoice->AddTail(nnf);
-				}
-				else if ((mydf = dynamic_cast<ARDotFormat *>(tag)) != 0 )
-				{
-					ARDotFormat * ndf = dynamic_cast<ARDotFormat *>(mydf->getEndTag());
-					mCurrentDotFormat = ndf;
-					mCurrentVoice->AddTail(ndf);
-				}
-				else if ((myrf = dynamic_cast<ARRestFormat *>(tag)) != 0 )
-				{
-					ARRestFormat * nrf = dynamic_cast<ARRestFormat *>(myrf->getEndTag());
-					mCurrentRestFormat = nrf;
-					mCurrentVoice->AddTail(nrf);
-				}
-				else if ((myal = dynamic_cast<ARAlter *>(tag)) != 0 )
-				{
-					ARAlter * nal = dynamic_cast<ARAlter *>(myal->getEndTag());
-					mCurrentAlter = nal;
-					mCurrentVoice->AddTail(nal);
-				}
-				else
-				{
-					assert(false);
-				}
-			}
-			else
-			{
-				// in this case we can just close the range .. the position is set ...
-				// Introduce a dummy RangeEnd ..
-				// That is a ")" ...
-				ARDummyRangeEnd * ard = new ARDummyRangeEnd();
-				// is the dummy range end added to the voice?
-				mCurrentVoice->setPositionTagEndPos( tag->getID(), ard, tag );
-				// then we have to delete the tag in the voice ...
-				mCurrentVoice->removeTag(tag);
-			}
-		}				
-	}
-
-	ARRepeatEnd  * arre;
-	ARText * atext;
-    ARSymbol *asymbol;
-	if(( atext = dynamic_cast<ARText *>(tag)) != 0 )
-	{
-		// bereich ueber den der Text laueft ?
-		// why is this? -> check it out later!
-		atext->setRelativeEndTimePosition(mCurrentVoice->getDuration());
-		tag = NULL;
-	}
-    else if(( asymbol = dynamic_cast<ARSymbol *>(tag)) != 0 )
-	{
-		asymbol->setRelativeEndTimePosition(mCurrentVoice->getDuration());
-		tag = NULL;
-	}
-	else if (dynamic_cast<ARDynamics *>(tag))
-	{
-		// check if there is a first parameter?
-		tag = NULL;
-	}
-	else if ((arre = dynamic_cast<ARRepeatEnd *>(tag)) != 0 )
-	{
-		if (arre->repbeg) // a repeat-end
-		{
-			TYPE_DURATION dur (arre->repbeg->dur);
-			int numrepeat = arre->numrepeat;
-			if (numrepeat == 0) numrepeat = 1;
-			
-			++numrepeat;
-			dur.setNumerator(dur.getNumerator() * numrepeat);
-			dur.normalize();
-			//mCurrentVoice->setDuration(arre->repbeg->getRelativeTimePosition() + dur);
-		}
-		if (arre->getRange()) // the tag has a range ...
-		{
-			ARRepeatEndRangeEnd * tmp = new ARRepeatEndRangeEnd(arre); // !
-			mCurrentVoice->AddTail(tmp);
-		}
-		tag = NULL;
-	}
-	else if (dynamic_cast<ARTDummy *>(tag))
-	{
-		// tag is not set to NULL -> it will be deleted
-	}
-	else tag = NULL;
-
-	// now delete tags which are not needed anymore
-//	assert(mTagParameterList.empty());
-	if (tag != NULL)  delete tag;
 }
 
 // ----------------------------------------------------------------------------
@@ -2035,218 +2005,4 @@ float ARFactory::UndoTransform(const float val)
 	// this must be refined, if 
 	// the default unit changes!
 	return (float) (val * 2.0f / (float)LSPACE);
-}
-
-// ----------------------------------------------------------------------------
-void ARFactory::MakePartialBackup()
-{
-    mBackupPosVector.clear();
-
-    if (mCurrentVoice)
-    {
-        ARMusicalVoiceState vst;
-        GuidoPos pos = mCurrentVoice->GetHeadPosition(vst);
-        while (pos)
-        {
-            mBackupPosVector.push_back(pos);
-            mCurrentVoice->GetNext(pos, vst);
-        }
-
-        if (mCurrentEvent)
-        {
-            mBackupCurrentEvent         = mCurrentEvent;
-
-            mBackupCurrentVoiceNum      = mCurrentEvent->getVoiceNum();
-            mBackupRelativeTimePosition = mCurrentEvent->getRelativeTimePosition();
-            mCurrentBackupDuration      = mCurrentVoice->getDuration();
-
-            mBackupLastEventPosition    = mCurrentVoice->getLastEventPosition();
-            mBackupPitchsum             = mCurrentVoice->getPitchsum();
-            mBackupSum                  = mCurrentVoice->getSum();
-
-            mBackupVPos                 = mCurrentVoice->getVoiceState()->getVPos();
-            mBackupCurtp                = mCurrentVoice->getVoiceState()->getCurtp();
-
-            mBackupLastEvent = mLastEvent;
-
-            ARDisplayDuration * tmpdspdur = 0;
-            if (mCurrentGrace)
-            {
-                //assert(mCurrentGrace->getRange());
-
-                //// maybe introduce a display-duration?
-                //// we have to introduce a display duration for sure ....
-                //// only set the display-duration if the event
-                //// within the grace-note has a duration greater then zero 
-
-                //if (mCurrentEvent->getDuration() > DURATION_0)
-                //{
-                //    tmpdspdur = new ARDisplayDuration;
-                //    tmpdspdur->setDisplayDuration( mCurrentEvent->getDuration());
-
-                //    mCurrentVoice->AddPositionTag(tmpdspdur);
-
-                //    // the display duration tag will get its position 
-                //    // through the voice::AddTail operation.
-                //    // now we need an end ...
-                //    mCurrentEvent->setDuration(DURATION_0);
-
-                //    if (tmpdspdur)
-                //    {
-                //        ARDummyRangeEnd * dummy = new ARDummyRangeEnd("\\dispDurEnd");
-                //        mCurrentVoice->setPositionTagEndPos(-1,dummy,tmpdspdur);
-                //    }
-                //}
-            }
-        }
-
-        /**********************/
-
-        /**** VOICE BACKUP ****/
-
-        if (mCurrentMusic)
-        {
-            mBackupCurrentMusic       = mCurrentMusic;
-            mBackupCurrentDenominator = mCurrentDenominator;
-            mBackupCurrentIntensity   = mCurrentIntensity;
-            mBackupCurrentNumerator   = mCurrentNumerator;
-            mBackupCurrentRegister    = mCurrentRegister;
-            mBackupCurrentStaff       = mCurrentStaff;
-            mBackupCurrentOctava      = mCurrentOctava;
-            mBackupCurrentStem        = mCurrentStem;
-            mBackupCurrentHead        = mCurrentHead;
-            mBackupCurrentNoteFormat  = mCurrentNoteFormat;
-            mBackupCurrentAlter       = mCurrentAlter;
-            mBackupCurrentRestFormat  = mCurrentRestFormat;
-            mBackupCurrentDotFormat   = mCurrentDotFormat;
-            mBackupCurrentCue         = mCurrentCue;
-            mBackupCurrentGrace       = mCurrentGrace;
-            mBackupCurrentTrill       = mCurrentTrill;
-            mBackupCurrentCluster     = mCurrentCluster;
-            mBackupVoiceAdded         = mVoiceAdded;
-        }
-    }
-
-    /**********************/
-
-    mExistingBackup = true;
-}
-
-// ----------------------------------------------------------------------------
-void ARFactory::ReloadOldFactory()
-{
-    mCurrentMusic       = mBackupCurrentMusic;
-
-    if (!mCurrentMusic)
-        return;
-
-    mCurrentVoice       = mCurrentMusic->RemoveTail();
-    mCurrentEvent       = mBackupCurrentEvent;
-
-
-    bool mCurrentEventFound = false;
-    
-    /* Deletion of stuff added to mCurrentVoice by music closure */
-    ARMusicalVoiceState vst;
-    GuidoPos pos = mCurrentVoice->GetHeadPosition(vst);
-	while (pos)
-	{
-        /* If ARMusicalEvent not found at pos (in vector),
-           delete it from mCurrent Voice */
-        if (mBackupPosVector.end() == find(mBackupPosVector.begin(), mBackupPosVector.end(), pos))
-        {
-            if (mCurrentVoice->GetAt(pos) != mCurrentEvent)
-            {
-                mCurrentVoice->RemoveElementAt(pos);
-                pos = mCurrentVoice->GetHeadPosition(vst);
-            }
-            else
-            {
-                mCurrentEventFound = true;
-                mCurrentVoice->GetNext(pos, vst);
-            }
-        }
-        else
-            mCurrentVoice->GetNext(pos, vst);
-	}
-
-    if (mCurrentEventFound)
-        mCurrentVoice->RemoveTail(); // In order to keep mCurrentEvent data
-                                     // (if we do a RemoveElementAt(), data is deleted)
-
-
-    /**** VOICE RELOAD ****/
-
-    mCurrentDenominator = mBackupCurrentDenominator;
-    mCurrentIntensity   = mBackupCurrentIntensity;
-    mCurrentNumerator   = mBackupCurrentNumerator;
-    mCurrentRegister    = mBackupCurrentRegister;
-    mCurrentStaff       = mBackupCurrentStaff;
-    mCurrentOctava      = mBackupCurrentOctava;
-    mCurrentStem        = mBackupCurrentStem;
-    mCurrentHead        = mBackupCurrentHead;
-    mCurrentNoteFormat  = mBackupCurrentNoteFormat;
-    mCurrentAlter       = mBackupCurrentAlter;
-    mCurrentRestFormat  = mBackupCurrentRestFormat;
-    mCurrentDotFormat   = mBackupCurrentDotFormat;
-    mCurrentCue         = mBackupCurrentCue;
-    mCurrentGrace       = mBackupCurrentGrace;
-    mCurrentTrill       = mBackupCurrentTrill;
-    mCurrentCluster     = mBackupCurrentCluster;
-    mVoiceAdded         = mBackupVoiceAdded;
-
-    /**********************/
-
-
-    /**** EVENT RELOAD ****/
-    mCurrentVoice->getVoiceState()->setCurtp(mBackupCurtp);
-    mCurrentVoice->getVoiceState()->setVPos(mBackupVPos);
-    mCurrentVoice->setSum(mBackupSum);
-    mCurrentVoice->setPitchsum(mBackupPitchsum);
-    mCurrentVoice->setLastEventPosition(mBackupLastEventPosition);
-
-    mLastEvent    = mBackupLastEvent;
-
-    mCurrentVoice->setDuration(mCurrentBackupDuration);
-    mCurrentEvent->setRelativeTimePosition(mBackupRelativeTimePosition);
-    mCurrentEvent->setVoiceNum(mBackupCurrentVoiceNum);
-
-    /**********************/
-
-
-    /**** RESET ****/
-
-    mBackupCurrentMusic         = NULL;
-    mBackupCurrentDenominator   = 0;
-    mBackupCurrentIntensity     = 0;
-    mBackupCurrentNumerator     = 0;
-    mBackupCurrentRegister      = 0;
-    mBackupCurrentStaff         = NULL;
-    mBackupCurrentOctava        = NULL;
-    mBackupCurrentStem          = NULL;
-    mBackupCurrentHead          = NULL;
-    mBackupCurrentNoteFormat    = NULL;
-    mBackupCurrentAlter         = NULL;
-    mBackupCurrentRestFormat    = NULL;
-    mBackupCurrentDotFormat     = NULL;
-    mBackupCurrentCue           = NULL;
-    mBackupCurrentGrace         = NULL;
-    mBackupCurrentTrill         = NULL;
-    mBackupCurrentCluster       = NULL;
-    mBackupVoiceAdded           = false;
-    mBackupCurtp                = NULL;
-    mBackupVPos                 = NULL;
-    mBackupSum                  = 0;
-    mBackupPitchsum             = 0;
-    mBackupLastEventPosition    = NULL;
-    mCurrentBackupDuration      = NULL;
-    mBackupRelativeTimePosition = NULL;
-    mBackupCurrentVoiceNum      = 0;
-    mBackupLastEvent            = NULL;
-    mBackupCurrentEvent         = NULL;
-
-    /***************/
-
-
-    mExistingBackup = false;
 }
