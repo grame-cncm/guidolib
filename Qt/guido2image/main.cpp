@@ -302,6 +302,7 @@ int main(int argc, char *argv[])
 	else stripext ( options.inputFile, output);
 	p.output = output.c_str();
 	//----------------------------------------------------
+	p.pageFormat = 0;
 	p.format = strToFormat (options.imageFormat);			// the image output format
 	p.layout = options2layout (options);					// the layout options (if any)
 	p.pageIndex = 0;										// page index starts at 0 (I guess it means all pages - to be checked)
