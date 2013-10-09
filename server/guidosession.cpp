@@ -85,13 +85,18 @@ void guidosession::initialize()
     dmargintop_ = 2.0f;
     dmarginright_ = 2.0f;
     dmarginbottom_ = 2.0f;
-    dsystemsDistance_ = 75.0f;
-    dsystemsDistribution_ = kAutoDistrib;
-    dsystemsDistribLimit_ = 0.25f;
-    dforce_ = 750.0f;
-    dspring_ = 1.1f;
-    dneighborhoodSpacing_ = 0;
-    doptimalPageFill_ = 1;
+    // we always want our settings to
+    // be the default as guido evolves, so
+    // we don't hardcode them here
+    GuidoLayoutSettings gls;
+    GuidoGetDefaultLayoutSettings (&gls);
+    dsystemsDistance_ = gls.systemsDistance;
+    dsystemsDistribution_ = gls.systemsDistribution;
+    dsystemsDistribLimit_ = gls.systemsDistribLimit;
+    dforce_ = gls.force;
+    dspring_ = gls.spring;
+    dneighborhoodSpacing_ = gls.neighborhoodSpacing;
+    doptimalPageFill_ = gls.optimalPageFill;
     updateValuesFromDefaults();
 }
 
@@ -388,6 +393,7 @@ void guidosession::fillGuidoLayoutSettingsUsingCurrentSettings(GuidoLayoutSettin
     ls->systemsDistance = systemsDistance_;
     ls->systemsDistribution = systemsDistribution_;
     ls->systemsDistribLimit = systemsDistribLimit_;
+    ls->force = force_;
     ls->spring = spring_;
     ls->neighborhoodSpacing = neighborhoodSpacing_;
     ls->optimalPageFill = optimalPageFill_;
