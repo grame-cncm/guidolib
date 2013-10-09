@@ -19,6 +19,8 @@
 #include <QString>
 #include <QIODevice>
 
+#include "GUIDOEngine.h"
+
 #ifdef WIN32
 #define warndeprecated __declspec(deprecated("** method is deprecated **"))
 #else
@@ -98,6 +100,7 @@ class Guido2Image
 			QIODevice*				device;				///< or the output device
 			Guido2ImageImageFormat	format;				///< the output format
 			const GuidoLayoutSettings*	layout;			///< layout setting (see guido doc)
+			const GuidoPageFormat*	pageFormat;			///< layout setting (see guido doc)
 			int						pageIndex;
 			QSize					sizeConstraints;
 			float					zoom;

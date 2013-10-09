@@ -155,6 +155,7 @@ Guido2ImageErrorCodes Guido2Image::gmnString2Image( const Params& p )
 		
 	QGuidoPainter * painter = QGuidoPainter::createGuidoPainter();
 	if (painter) {
+		if (p.pageFormat) painter->setGuidoPageFormat (*p.pageFormat);
 		if (p.layout) painter->setGuidoLayoutSettings (*p.layout);
 		painter->setGMNCode(p.input);
 	}
