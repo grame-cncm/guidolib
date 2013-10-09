@@ -48,16 +48,16 @@ int guido2img::convert (guidosession* const currentSession)
 
     p.layout = 0;
     p.pageFormat = 0;
+    GuidoPageFormat pf;
+    currentSession->fillGuidoPageFormatUsingCurrentSettings(&pf);
+    p.pageFormat = &pf;
     /*
-      GuidoPageFormat pf;
-      currentSession->fillGuidoPageFormatUsingCurrentSettings(&pf);
-      p.pageFormat = &pf;
       GuidoLayoutSettings ls;
       currentSession->fillGuidoLayoutSettingsUsingCurrentSettings(&ls);
       p.layout = &ls;
     */
     p.pageIndex = currentSession->page_;
-    p.sizeConstraints = QSize (currentSession->width_, currentSession->height_);
+    p.sizeConstraints = QSize (GuidoCM2Unit(currentSession->width_), GuidoCM2Unit(currentSession->height_));
     p.zoom = currentSession->zoom_;
 
     fBuffer.open(QIODevice::ReadWrite);

@@ -78,13 +78,13 @@ void guidosession::initialize()
     dresizeToPage_ = false;
     dformat_ = GUIDO_WEB_API_PNG;
     dpage_ = 1;
-    dwidth_ = 400;
-    dheight_ = 100;
+    dwidth_ = 30.0f;
+    dheight_ = 10.0f;
     dzoom_ = 2.0f;
-    dmarginleft_ = 10.0f;
-    dmargintop_ = 10.0f;
-    dmarginright_ = 10.0f;
-    dmarginbottom_ = 10.0f;
+    dmarginleft_ = 2.0f;
+    dmargintop_ = 2.0f;
+    dmarginright_ = 2.0f;
+    dmarginbottom_ = 2.0f;
     dsystemsDistance_ = 75.0f;
     dsystemsDistribution_ = kAutoDistrib;
     dsystemsDistribLimit_ = 0.25f;
@@ -375,12 +375,12 @@ GuidoErrCode guidosession::verifyGMN(string gmn) {
 // ................................................
 void guidosession::fillGuidoPageFormatUsingCurrentSettings(GuidoPageFormat *pf)
 {
-    pf->height = height_;
-    pf->width = width_;
-    pf->margintop = margintop_;
-    pf->marginleft = marginleft_;
-    pf->marginright = marginright_;
-    pf->marginbottom = marginbottom_;
+    pf->height = GuidoCM2Unit(height_);
+    pf->width = GuidoCM2Unit(width_);
+    pf->margintop = GuidoCM2Unit(margintop_);
+    pf->marginleft = GuidoCM2Unit(marginleft_);
+    pf->marginright = GuidoCM2Unit(marginright_);
+    pf->marginbottom = GuidoCM2Unit(marginbottom_);
 }
 
 void guidosession::fillGuidoLayoutSettingsUsingCurrentSettings(GuidoLayoutSettings *ls)
@@ -687,16 +687,16 @@ GuidoErrCode guidosession::getMap (GuidoSessionMapType map, int aux, Time2Graphi
     
     switch(map) {
         case PAGE :
-            err = GuidoGetPageMap(grh, page_, width_, height_, outmap);
+            err = GuidoGetPageMap(grh, page_, GuidoCM2Unit(width_), GuidoCM2Unit(height_), outmap);
             break;
         case STAFF :
-            err = GuidoGetStaffMap(grh, page_, width_, height_, aux, outmap);
+            err = GuidoGetStaffMap(grh, page_, GuidoCM2Unit(width_), GuidoCM2Unit(height_), aux, outmap);
             break;
         case VOICE :
-            err = GuidoGetVoiceMap(grh, page_, width_, height_, aux, outmap);
+            err = GuidoGetVoiceMap(grh, page_, GuidoCM2Unit(width_), GuidoCM2Unit(height_), aux, outmap);
             break;
         case SYSTEM :
-            err = GuidoGetSystemMap(grh, page_, width_, height_, outmap);
+            err = GuidoGetSystemMap(grh, page_, GuidoCM2Unit(width_), GuidoCM2Unit(height_), outmap);
             break;
         default :
             err = guidoErrActionFailed;

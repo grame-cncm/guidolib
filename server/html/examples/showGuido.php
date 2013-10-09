@@ -5,6 +5,7 @@
     $resizepagetomusic = 'false';
   }
   $gmn = $_POST["gmn"];
+  $gmn = urlencode($gmn);
   //$gmn = preg_replace('/\%.*/', "", $gmn); // percentage sign
   //$gmn = preg_replace('(/\(\*..*\*\)/', "", $gmn); // something I don't understand
   //$gmn = preg_replace('/\n/', "   ", $gmn); // newline

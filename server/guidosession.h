@@ -65,8 +65,8 @@ private :
     GuidoWebApiFormat format_;
     string gmn_;
     int page_;
-    int width_;
-    int height_;
+    float width_;
+    float height_;
     float zoom_;
     float marginleft_;
     float margintop_;
@@ -84,8 +84,8 @@ private :
     bool dresizeToPage_;
     GuidoWebApiFormat dformat_;
     string dgmn_;
-    int dpage_;
-    int dwidth_;
+    float dpage_;
+    float dwidth_;
     int dheight_;
     float dzoom_;
     float dmarginleft_;
