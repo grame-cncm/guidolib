@@ -18,7 +18,7 @@
 #include <string>
 #include <locale.h>
 
-#include "GuidoFactory.h"
+#include "GUIDOFactory.h"
 
 class ARFactory;
 
