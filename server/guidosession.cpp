@@ -78,8 +78,8 @@ void guidosession::initialize()
     dresizeToPage_ = false;
     dformat_ = GUIDO_WEB_API_PNG;
     dpage_ = 1;
-    dwidth_ = 30.0f;
-    dheight_ = 10.0f;
+    dwidth_ = 15.0f;
+    dheight_ = 5.0f;
     dzoom_ = 2.0f;
     dmarginleft_ = 2.0f;
     dmargintop_ = 2.0f;
