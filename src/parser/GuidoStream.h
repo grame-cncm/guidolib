@@ -29,23 +29,23 @@ public:
 
     void WriteToStream(const char* str);
 
-    bool IsParserJobFinished()  { return fParserJobFinished; }
-    void CloseStream()          { fGuidoStreamBuffer->SetHaveToCloseStream(); }
+    bool IsParserJobFinished()    { return fParserJobFinished; }
+    
+    void CloseStream()            { fGuidoStreamBuffer->SetHaveToCloseStream(); }
 
-    void SetParserJobFinished() { fParserJobFinished = true; }
-    bool GetParserJobFinished() { return fParserJobFinished; }
+    void SetParserJobFinished()   { fParserJobFinished = true; }
+    bool GetParserJobFinished()   { return fParserJobFinished; }
 
-    bool GetAreAllDataRead()    { return fGuidoStreamBuffer->GetAreAllDataRead(); }
+    bool GetAreAllDataRead()      { return fGuidoStreamBuffer->GetAreAllDataRead(); }
 
-    string     getSynchronousString() { return fSynchronousString; }
+    string getSynchronousString() { return fSynchronousString; }
 
 protected:
     GuidoStreamBuf *fGuidoStreamBuffer;
 
     bool fParserJobFinished;
 
-    ARFactory *fFactory;
-
+    /* To feed synchronous parser */
     string fSynchronousString;
 };
 

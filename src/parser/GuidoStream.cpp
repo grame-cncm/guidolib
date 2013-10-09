@@ -23,11 +23,9 @@ using namespace std;
 
 
 //--------------------------------------------------------------------------
-GuidoStream::GuidoStream(GuidoStreamBuf *inStreamBuf) :
+GuidoStream::GuidoStream(GuidoStreamBuf *inStreamBuf) : istream(inStreamBuf),
              fGuidoStreamBuffer(inStreamBuf),
-             istream(inStreamBuf),
              fParserJobFinished(false),
-             fFactory(NULL),
              fSynchronousString()
 {
 }

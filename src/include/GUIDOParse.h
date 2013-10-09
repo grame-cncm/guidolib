@@ -73,6 +73,10 @@ extern "C" {
 
 	/*!
 		\brief Parse a GuidoStream and create the corresponding AR
+
+        Any syntax error will be declared as such (included not
+        ended voice, tag, etc.).
+
 		\param p a parser previously opened with GuidoOpenParser
 		\param stream the GuidoStream to parse.
 		\return a ARHandler or 0 in case of error.
@@ -81,6 +85,11 @@ extern "C" {
 
 	/*!
 		\brief Try to convert the current parser state to AR
+
+        Voice/chord/tags/events will automatically be closed :
+        if they're not closed in gmn, it won't be declared as
+        syntax error.
+
 		\param p a parser previously opened with GuidoOpenParser
 		\return a ARHandler or 0 in case of error.
 	*/

@@ -5603,6 +5603,9 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE & chord_type, CHORD_ACCIDENTAL
 */
 void ARMusicalVoice::setClusterChord(ARCluster *inCurrentCluster)
 {
+    if (!chordBeginState)
+        return;
+
 	ARMusicalVoiceState vst = *chordBeginState;
 	GuidoPos posTmp = vst.vpos;
 
