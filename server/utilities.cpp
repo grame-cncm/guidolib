@@ -62,6 +62,29 @@ bool atob(string name)
     return false;
 }
 
+int atoib(string name)
+{
+    if (name == "true")
+        return 1;
+    if (name == "True")
+        return 1;
+    if (name == "yes")
+        return 1;
+    
+    return 0;
+}
+
+int systemsDistributionToFloat(std::string sd)
+{
+  if (sd == "auto")
+    return kAutoDistrib;
+  if (sd == "always")
+    return kAlwaysDistrib;
+  if (sd == "never")
+    return kNeverDistrib;
+  return kAutoDistrib;
+}
+
 void stringToDate(std::string raw, GuidoDate &date)
 {
     // get rid of the encapsulating quotation marks

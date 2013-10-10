@@ -164,7 +164,7 @@ void guidosession::changeDefaultValues(const TArgs &args)
     
     // systemsDistribution
     if (args.find("systemsDistribution") != args.end()) {
-        dsystemsDistribution_ = atof(args.find("systemsDistribution")->second.c_str());
+        dsystemsDistribution_ = systemsDistributionToFloat(args.find("systemsDistribution")->second);
     }
     
     // systemsDistribLimit
@@ -184,12 +184,12 @@ void guidosession::changeDefaultValues(const TArgs &args)
     
     // neighborhoodSpacing
     if (args.find("neighborhoodSpacing") != args.end()) {
-        dneighborhoodSpacing_ = atoi(args.find("neighborhoodSpacing")->second.c_str());
+        dneighborhoodSpacing_ = atoib(args.find("neighborhoodSpacing")->second.c_str());
     }
     
     // optimalPageFill
     if (args.find("optimalPageFill") != args.end()) {
-        doptimalPageFill_ = atoi(args.find("optimalPageFill")->second.c_str());
+        doptimalPageFill_ = atoib(args.find("optimalPageFill")->second.c_str());
     }   
 }
     
@@ -287,7 +287,7 @@ void guidosession::updateValuesFromDefaults(const TArgs &args)
     
     // systemsDistribution
     if (args.find("systemsDistribution") != args.end()) {
-        systemsDistribution_ = atof(args.find("systemsDistribution")->second.c_str());
+        systemsDistribution_ = systemsDistributionToFloat(args.find("systemsDistribution")->second);
     } else {
         systemsDistribution_ = dsystemsDistribution_;
     }
@@ -315,14 +315,14 @@ void guidosession::updateValuesFromDefaults(const TArgs &args)
     
     // neighborhoodSpacing
     if (args.find("neighborhoodSpacing") != args.end()) {
-        neighborhoodSpacing_ = atoi(args.find("neighborhoodSpacing")->second.c_str());
+        neighborhoodSpacing_ = atoib(args.find("neighborhoodSpacing")->second.c_str());
     } else {
         neighborhoodSpacing_ = dneighborhoodSpacing_;
     }
     
     // optimalPageFill
     if (args.find("optimalPageFill") != args.end()) {
-        optimalPageFill_ = atoi(args.find("optimalPageFill")->second.c_str());
+        optimalPageFill_ = atoib(args.find("optimalPageFill")->second.c_str());
     } else {
         optimalPageFill_ = doptimalPageFill_;
     }    

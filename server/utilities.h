@@ -48,10 +48,12 @@ typedef std::map<std::string, std::string> TArgs;
     //typedef std::vector<TArg> TArgs;
     
 bool atob(std::string name);
+int atoib(std::string name);
 void stringToDate(std::string, GuidoDate &date);
 std::string dateToString(GuidoDate &date);
 float dateToFloat(const GuidoDate &date);
 
+int systemsDistributionToFloat(std::string sd);
 
 std::string rand_alnum_str (std::string::size_type sz);
 long lopt(char *argv[], const char *name, long def);
