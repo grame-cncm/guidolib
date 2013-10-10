@@ -53,6 +53,18 @@ struct guidosessionresponse {
     guidosessionresponse ();
     guidosessionresponse (const char* data, unsigned int size, string format, int http_status = 200);
 };
+
+
+class GuidoServerTimeMap : public TimeMapCollector
+{
+  public:
+    vector<pair<TimeSegment, TimeSegment> > segments_;
+    virtual ~GuidoServerTimeMap() {}
+    virtual void Time2TimeMap( const TimeSegment& from, const TimeSegment& to ) {
+      segments_.push_back (pair<TimeSegment, TimeSegment> (from, to));
+    }
+};
+
 class guidosession
 {
     friend class guido2img;
@@ -135,6 +147,7 @@ public :
     // more advanced handling
     guidosessionresponse datePageJson(string, int);
     guidosessionresponse mapJson (string thingToGet, Time2GraphicMap &outmap);
+    guidosessionresponse timeMapJson (GuidoServerTimeMap &outmap);
 
     // queries
     int voicesCount();
@@ -143,7 +156,7 @@ public :
     int pageAt(GuidoDate date);
     int pageDate(int page, GuidoDate *date);
     GuidoErrCode getMap (GuidoSessionMapType map, int aux, Time2GraphicMap& outmap);
-    GuidoErrCode getTimeMap (TimeMapCollector& outmap);
+    GuidoErrCode getTimeMap (GuidoServerTimeMap& outmap);
     static string getVersion();
     static string getServerVersion();
     static float getLineSpace();

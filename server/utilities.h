@@ -50,6 +50,7 @@ typedef std::map<std::string, std::string> TArgs;
 bool atob(std::string name);
 void stringToDate(std::string, GuidoDate &date);
 std::string dateToString(GuidoDate &date);
+float dateToFloat(const GuidoDate &date);
 
 
 std::string rand_alnum_str (std::string::size_type sz);

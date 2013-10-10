@@ -21,9 +21,14 @@ MIDI file export is available from the ``midi`` path and may use optional export
 		| An error message formatted as JSON with 'Error' as key.
 	  	| Example: ``{ "ScoreID" : {"Error" : "incorrect score ID."} }``
 
+..
+  **Response code**
+          * 200 ("Success")	
+          * 400 ("Bad Request") in case of incorrect parameter.
+          * 404 ("Not Found") in case of incorrect score ID.
+
 **Response code**
-	* 200 ("Success")
-	* 400 ("Bad Request") in case of incorrect parameter.
+	* 200 ("Success")	
 	* 404 ("Not Found") in case of incorrect score ID.
 
 Example

@@ -23,14 +23,34 @@ Score drawing options may be used when a graphic instance of the score is requir
 		*default value*: 1
 
 	- ``width``: 
-		the drawing area width in pixels. 
+		the drawing area width in centimeters. 
 		
-		*default value*: 400
+		*default value*: 15
 
 	- ``height``: 
-		the drawing area height in pixels. 
+		the drawing area height in centimeters.
 		
-		*default value*: 600
+		*default value*: 5
+
+	- ``marginleft``: 
+		the left margin in centimeters. 
+		
+		*default value*: 1
+
+	- ``marginright``: 
+		the right margin in centimeters. 
+		
+		*default value*: 1
+
+	- ``margintop``: 
+		the top margin in centimeters. 
+		
+		*default value*: 0.5
+
+	- ``marginbottom``: 
+		the bottom margin in centimeters. 
+		
+		*default value*: 0.5
 
 	- ``format``: 
 		a string to request a specific image format. Accepted values are:
@@ -46,14 +66,9 @@ Score drawing options may be used when a graphic instance of the score is requir
 		
 		*default value*: "yes"
 
-	- ``margins``:  
-		a comma separated list of 4 values separated by space, indicating the left, top, right and bottom margins size. Values are in pixels. Note that page formatting is ignored when the GMN code already contains a \pageFormat tag.
-		
-		*default value*: "10,10,10,10"
-
 Example
 ^^^^^^^^^^^
 
 Using jQuery::
 
-	$.get('http://guido.server.org/XXX?width=220&height=100&format=svg');
+	$.get('http://guido.server.org/XXX?width=20&height=10&format=svg');

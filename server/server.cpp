@@ -360,7 +360,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                 int page = currentSession->pageAt(date);
                 guidosessionresponse response = page >= 0
                     ? currentSession->datePageJson(mydate, page)
-                    : guidosession::genericFailure("Could not get the page for the given date.", 400);
+                    : guidosession::genericFailure("The score does not contain this date.", 400);
                 return send(connection, response);
             } else if (elems[1] == "pagedate") {
                 GuidoDate date;
@@ -371,7 +371,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                 int success = currentSession->pageDate(mypage, &date);
                 guidosessionresponse response = success == 0
                     ? currentSession->datePageJson(dateToString(date), mypage)
-                    : guidosession::genericFailure("Could not get the page for the given date.", 400);
+                    : guidosession::genericFailure("This page does not exist in the score.", 400);
                 return send(connection, response);
             } else if (elems[1] == "pagemap") {
                 Time2GraphicMap outmap;
@@ -417,10 +417,17 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                     : guidosession::genericFailure("Could not generate a voice map.", 400);
                 return send(connection, response);
             } else if (elems[1] == "timemap") {
-                guidosessionresponse response = guidosession::genericFailure("timemap is not implemented yet but will be soon.", 501);
+                GuidoServerTimeMap outmap;
+                GuidoErrCode err;
+                err = currentSession->getTimeMap(outmap);
+                guidosessionresponse response = err == guidoNoErr
+                    ? currentSession->timeMapJson(outmap)
+                    : guidosession::genericFailure("Could not generate a time map.", 400);
                 return send(connection, response);
+                //guidosessionresponse response = guidosession::genericFailure("timemap is not implemented yet but will be soon.", 501);
+                //return send(connection, response);
             } else {
-                guidosessionresponse response = guidosession::genericFailure("Unidentified GET request.", 400);
+                guidosessionresponse response = guidosession::genericFailure("Unidentified GET request (page doesn't exist).", 404);
                 return send(connection, response);
             }
         }

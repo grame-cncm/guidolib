@@ -81,10 +81,10 @@ void guidosession::initialize()
     dwidth_ = 15.0f;
     dheight_ = 5.0f;
     dzoom_ = 2.0f;
-    dmarginleft_ = 2.0f;
-    dmargintop_ = 2.0f;
-    dmarginright_ = 2.0f;
-    dmarginbottom_ = 2.0f;
+    dmarginleft_ = 1.0f;
+    dmargintop_ = 1.0f;
+    dmarginright_ = 0.5f;
+    dmarginbottom_ = 0.5f;
     // we always want our settings to
     // be the default as guido evolves, so
     // we don't hardcode them here
@@ -508,7 +508,6 @@ guidosessionresponse guidosession::mapJson (string thingToGet, Time2GraphicMap &
 {
     json_object *obj = new json_object();
     json_array *arr = new json_array();
-    // ugh...memory management nightmare...need to fix
     for (int i = 0; i < (int)(outmap.size()); i++) {
         json_object*  holder = new json_object();
         json_object*  graph = new json_object();
@@ -524,6 +523,26 @@ guidosessionresponse guidosession::mapJson (string thingToGet, Time2GraphicMap &
         arr->add(new json_object_value(holder));
     }
     obj->add(new json_element(thingToGet.c_str(), new json_array_value(arr)));
+    return wrapObjectInId(obj);
+}
+
+guidosessionresponse guidosession::timeMapJson (GuidoServerTimeMap &outmap)
+{
+    json_object *obj = new json_object();
+    json_array *arr = new json_array();
+    for (int i = 0; i < (int)(outmap.segments_.size()); i++) {
+        json_object*  holder = new json_object();
+        json_object*  score = new json_object();
+        json_object*  perf = new json_object();
+        score->add(new json_element("start", new json_string_value(dateToString(outmap.segments_[i].first.first).c_str())));
+        score->add(new json_element("end", new json_string_value(dateToString(outmap.segments_[i].first.second).c_str())));
+        perf->add(new json_element("start", new json_string_value(dateToString(outmap.segments_[i].second.first).c_str())));
+        perf->add(new json_element("end", new json_string_value(dateToString(outmap.segments_[i].second.second).c_str())));
+        holder->add(new json_element("score", new json_object_value(score)));
+        holder->add(new json_element("perf", new json_object_value(perf)));
+        arr->add(new json_object_value(holder));
+    }
+    obj->add(new json_element("timemap", new json_array_value(arr)));
     return wrapObjectInId(obj);
 }
 
@@ -604,7 +623,7 @@ int guidosession::pagesCount()
 
     return GuidoGetPageCount(grh);
 }
-    
+
 int guidosession::pageAt(GuidoDate date)
 {
     GuidoErrCode err;
@@ -623,7 +642,14 @@ int guidosession::pageAt(GuidoDate date)
     if (err != guidoNoErr) {
         return -1;
     }
-    
+
+    GuidoDate dur;
+    GuidoDuration(grh, &dur);
+    if ((dateToFloat(dur) < dateToFloat(date))
+        || (0 > dateToFloat(date))) {
+        return -1;
+    }
+        
     return GuidoFindPageAt(grh, date);
 }
 
@@ -645,12 +671,17 @@ int guidosession::pageDate(int page, GuidoDate *date)
     if (err != guidoNoErr) {
         return 1;
     }
-    
+
+    if ((page > GuidoGetPageCount(grh))
+        || (page <= 0)) {
+      return 1;
+    }
+
     GuidoGetPageDate(grh, page, date);
     return 0;
 }
     
-GuidoErrCode guidosession::getTimeMap (TimeMapCollector& outmap)
+GuidoErrCode guidosession::getTimeMap (GuidoServerTimeMap& outmap)
 {
     GuidoErrCode err;
     ARHandler arh;

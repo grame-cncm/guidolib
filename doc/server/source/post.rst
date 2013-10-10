@@ -27,7 +27,7 @@ The following HTML script passes in Guido Music Notation code to a server::
   <html>
     <body>
       <form action="http://guido.server.org" method="post">
-        <input type="hidden" name="data" value="[ g e c ]" }' />
+        <input type="hidden" name="data" value="[ g e c ]" />
         <input type="submit" value="Submit" />
       </form>
     </body>
@@ -48,7 +48,7 @@ or using jQuery::
 
 or using curl::
 
-  curl -d "data={ \"[ g e c ]\" }" http://guido.server.org
+  curl -d "data=[ g e c ]" http://guido.server.org
 
 
 

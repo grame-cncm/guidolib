@@ -62,8 +62,13 @@ bool atob(string name)
     return false;
 }
 
-void stringToDate(std::string str, GuidoDate &date)
+void stringToDate(std::string raw, GuidoDate &date)
 {
+    // get rid of the encapsulating quotation marks
+    std::string str = raw;
+    str.erase(str.end() - 1, str.end());
+    str.erase(str.begin(), str.begin()+1);
+
     // first, parse the fraction
     std::stringstream ss(str);
     std::string item;
@@ -87,12 +92,22 @@ string dateToString(GuidoDate &date)
 {
     // first, parse the fraction
     std::stringstream ss;
+    ss << "\"";
     ss << date.num;
     ss << "/";
     ss << date.denom;
+    ss << "\"";
     return ss.str();
 }
     
+float dateToFloat(const GuidoDate &date) {
+  if ((date.num == 0) && (date.denom == 0))
+    return 0.f;
+  if (date.denom == 0)
+    return 1000000.f;
+  return (date.num * 1.f) / (date.denom * 1.f);
+}
+
 std::string
 rand_alnum_str (std::string::size_type sz)
 {

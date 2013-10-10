@@ -9,7 +9,7 @@ Getting GUIDO Server information
 
 **Response body**
 	* in case of success: 
-		| a version number, formatted as JSON with 'server' as key.
+		| a version number of the server, formatted as JSON with 'server' as key.
 	  	| Example: ``{ "server" : "1.0" }``
 
 **Response code**
@@ -20,10 +20,5 @@ Example
 
 Using jQuery::
 
-	$.get('http://guido.server.org/version');
+	$.get('http://guido.server.org/server');
 
-
-Internals
-^^^^^^^^^^^
-
-The ``version`` request correspond to the ``GuidoGetVersionStr`` C/C++ API.
