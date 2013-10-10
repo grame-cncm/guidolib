@@ -4,36 +4,44 @@ import json
 import xml.etree.ElementTree as ET
 import cPickle
 import sys
+import urlparse
+from optparse import OptionParser
 
-URL = 'http://guido.grame.fr:8000/'
-#URL = 'http://localhost:8000/'
+parser = OptionParser(usage = "Runs regtests on the guido server")
+parser.add_option("-u", "--url", dest="url", help="url of the server", default = "http://localhost:8000")
+parser.add_option("-m", "--mode", dest="mode", help="mode of the test: either baseline or check", default = "check", choices=["baseline", "check"])
+(OPTIONS, ARGS) = parser.parse_args()
+
+URL = OPTIONS.url
+BASELINE = True
+if OPTIONS.mode == 'check' :
+  BASELINE = False
+
+print "Welcome to the GUIDO server regtests. Run this script with -h for help."
+print "Running regtest in {0} mode.".format("baseline" if BASELINE else "check")
+
+try :
+  urllib2.urlopen(URL, 'data={0}'.format(urllib.quote_plus('[e f g a]')))
+except urllib2.URLError :
+  print "Could not compile a simple test on the server with url {0}. Run this script with the -h flag to see how to specify a URL of the server.".format(URL)
+  sys.exit(1)
+
+RESULTS = {}
 
 RES = 0
 CODE = 1
 
-INSTR = "Regtest script must be called with an argument of either \"baseline\" or \"check\""
-
-if len(sys.argv) != 2 :
-  print INSTR
-  sys.exit(1)
-
-BASELINE = True
-RESULTS = {}
-if sys.argv[1] == 'baseline' :
-  pass
-elif sys.argv[1] == 'check' :
-  BASELINE = False
-else :
-  print INSTR
-  sys.exit(1)
-
 if not BASELINE :
-  output = open('test.pkl','rb')
-  RESULTS = cPickle.load(output)
-  output.close()
+  try :
+    output = open('test.pkl','rb')
+    RESULTS = cPickle.load(output)
+    output.close()
+  except :
+    print "Looks like you need to run a baseline first.  Use -m baseline (see the help for more details)."
+    sys.exit(1)
     
 def guidourl(end='', url=URL) :
-  return url+end
+  return urlparse.urljoin(url,end)
 
 def gulp(fn) :
   infile = file(fn, 'r')
@@ -107,7 +115,7 @@ RESULTS["postfile"] = json_test(guidourl(), "postfile", 'data={0}'.format(urllib
 Test: referencing inexistant score
 """
 
-test_400(guidourl('enemble101'), 404)
+test_400(guidourl('ensemble101'), 404)
 
 """
 Test: SvG
