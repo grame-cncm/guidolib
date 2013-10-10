@@ -546,11 +546,13 @@ void MainWindow::updateCode()
 	mTextEditTimer->stop();
 
 	QString newGMNCode = mTextEdit->toPlainText();
-	//if ( !newGMNCode.length() )
-	//	return;
+	if ( !newGMNCode.length() )
+		return;
 
-	//if ( newGMNCode == mGuidoWidget->gmnCode() )
-	//	return;
+    mGuidoWidget->CreateParser();
+
+	if ( newGMNCode == mGuidoWidget->gmnCode() )
+		return;
 
 	if ( mGuidoWidget->setGMNCode( newGMNCode, filePath() ) )
 	{
@@ -561,9 +563,14 @@ void MainWindow::updateCode()
 	}
 	else
 	{
-		mTextEdit->highlightErrorLine( mGuidoWidget->getLastParseErrorLine() );
-		statusBar()->showMessage( mGuidoWidget->getLastErrorMessage() );
+        int line;
+        int col;
+        mGuidoWidget->getLastParseErrorLine(line, col);
+		mTextEdit->highlightErrorLine(line);
+		statusBar()->showMessage( mGuidoWidget->getLastErrorMessage() ); //REM: changer ça
 	}
+
+    mGuidoWidget->CloseParser();
 }
 
 //-------------------------------------------------------------------------
@@ -1605,6 +1612,8 @@ bool MainWindow::loadFile(const QString &fileName)
 
 	setCurrentFile(fileName.toUtf8().data());
 
+    mGuidoWidget->CreateParser();
+
 	bool loadOk = mGuidoWidget->setGMNFile( fileName );
 	if (!loadOk && QGuidoImporter::musicxmlSupported()) {	// try to import file as MusicXML file
 		stringstream out;
@@ -1632,7 +1641,10 @@ bool MainWindow::loadFile(const QString &fileName)
 	{
 		QString errorMessage = "Invalid GMN file : " + mGuidoWidget->getLastErrorMessage();
 //		mGuidoWidget->resize( QSize( 0,0 ) );
-		mTextEdit->highlightErrorLine( mGuidoWidget->getLastParseErrorLine() );
+        int line;
+        int col;
+        mGuidoWidget->getLastParseErrorLine(line, col);
+		mTextEdit->highlightErrorLine(line);
 		statusBar()->showMessage(tr(errorMessage.toUtf8().data()), 2000);
 	}
 
@@ -1641,6 +1653,8 @@ bool MainWindow::loadFile(const QString &fileName)
 //	setCurrentFile(fileName.toUtf8().data());
 	
 	recentFileListUpdate(fileName);
+
+    mGuidoWidget->CloseParser();
 	
 	return loadOk;
 }

@@ -91,9 +91,9 @@ QString QGuidoGraphicsItem::getLastErrorMessage() const
 }
 
 //-------------------------------------------------------------------------
-int	QGuidoGraphicsItem::getLastParseErrorLine() const
+void QGuidoGraphicsItem::getLastParseErrorLine(int &line, int &col) const
 {
-	return mGuidoPainter->getLastParseErrorLine();
+	mGuidoPainter->getLastParseErrorLine(line, col);
 }
 
 //-------------------------------------------------------------------------

@@ -19,6 +19,7 @@
 #include <string>
 #include <vector>
 #include "GUIDOExport.h"
+#include "GUIDOParse.h"
 
 class GuidoFeedback;
 class VGDevice;
@@ -261,6 +262,7 @@ representations.
                 It's the caller responsability to free the handle using GuidoFreeAR.
 		\return a Guido error code.
     */
+    __declspec(deprecated("Deprecated function (will be erased soon) : use GUIDOAPI(GuidoErrCode) GuidoNewParseString (GuidoParser *parser, const char * str, ARHandler* ar) instead."))
     GUIDOAPI(GuidoErrCode)	GuidoParseFile(const char * filename, ARHandler* ar);
 
 	/*!
@@ -271,7 +273,19 @@ representations.
                 It's the caller responsability to free the handle using GuidoFreeAR.
 		\return a Guido error code.
     */
+    __declspec(deprecated("Deprecated function (will be erased soon) : use GUIDOAPI(GuidoErrCode) GuidoNewParseString (GuidoParser *parser, const char * str, ARHandler* ar) instead."))
     GUIDOAPI(GuidoErrCode)	GuidoParseString(const char * str, ARHandler* ar);
+
+	/*!
+        Parses a buffer and builds the corresponding abstract representation.
+		The buffer if expected to contain gmn code.
+        \param parser the parse which will parse the buffer str
+		\param str the null terminated buffer to parse.
+		\param ar on output: a Guido opaque handle to an abstract music representation.
+                It's the caller responsability to free the handle using GuidoFreeAR.
+		\return a Guido error code.
+    */
+    GUIDOAPI(GuidoErrCode) GuidoNewParseString (GuidoParser *parser, const char * str, ARHandler* ar);
 
 	/*!
         Transforms a Guido abstract representation into a Guido graphic representation.

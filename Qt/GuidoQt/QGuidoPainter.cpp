@@ -21,6 +21,7 @@
 
 #include "QGuidoPainter.h"
 #include "GUIDOEngine.h"
+#include "GUIDOParse.h"
 #include "VGColor.h"
 
 #include <QVariant>
@@ -33,10 +34,6 @@
 #include "GSystemQt.h"
 #include "GDeviceQt.h"
 
-/**** REM: TEST DU NOUVEAU PARSING ****/
-#include "GUIDOParse.h"
-#include <windows.h>
-/**************************************/
 
 #define DEFAULT_DRAW_SIZE 100
 #define MAX(a,b) ( a > b ) ? a : b
@@ -185,23 +182,18 @@ void QGuidoPainter::setARHandler( ARHandler ar )
 		mLastErr = GuidoResizePageToMusic( mDesc.handle );
 }
 
-/**** TEST DE LA NOUVELLE METHODE DE PARSING ****/
-typedef struct MyData {
-    GuidoStream *s;
-    GuidoParser *p;
-    ARHandler arh;
-} MYDATA, *PMYDATA;
-
-DWORD WINAPI threadParser(LPVOID lpParam)
+//-------------------------------------------------------------------------
+void QGuidoPainter::CreateParser()
 {
-    PMYDATA pDataArray;
-    pDataArray = (PMYDATA)lpParam;
-
-    pDataArray->arh = GuidoStream2AR(pDataArray->p, pDataArray->s);
-
-    ExitThread(0);
+    fParser = GuidoOpenParser();
 }
-/************************************************/
+
+//-------------------------------------------------------------------------
+void QGuidoPainter::CloseParser()
+{
+    if (fParser)
+        GuidoCloseParser(fParser);
+}
 
 //-------------------------------------------------------------------------
 bool QGuidoPainter::setGMNData( const QString& gmncode, const char* dataPath)
@@ -210,66 +202,11 @@ bool QGuidoPainter::setGMNData( const QString& gmncode, const char* dataPath)
 	// containing all the notes, rests, staffs, lyrics ...
 	ARHandler arh;
 	GRHandler grh;
-    /*mLastErr = GuidoParseString( gmncode.toUtf8().data(), &arh);		
-	if ( mLastErr != guidoNoErr )
-		return false;*/
 
+    mLastErr = GuidoNewParseString(fParser, gmncode.toUtf8().data(), &arh);
 
-
-    /**** TEST DE LA NOUVELLE METHODE DE PARSING ****/
-
-    GuidoStream *newStream = GuidoOpenStream();
-    GuidoParser *newParser = GuidoOpenParser();
-
-    /* thread server creation */
-    PMYDATA pDataArray[1];
-    HANDLE  hThreadArray[1];
-    DWORD   dwThreadIdArray[1];
-
-    pDataArray[0] = (PMYDATA) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY,
-                sizeof(MYDATA));
-
-    pDataArray[0]->s = newStream;
-    pDataArray[0]->p = newParser;
-
-    hThreadArray[0] = CreateThread( 
-            NULL,                   // default security attributes
-            0,                      // use default stack size
-            threadParser,           // thread function name
-            pDataArray[0],          // argument to thread function
-            0,                      // use default creation flags
-            &dwThreadIdArray[0]);   // returns the thread identifier
-
-
-
-    /* Écriture dans le stream */
-    GuidoWriteStream(newStream, "[ab");
-    //Sleep(3000);
-    GuidoWriteStream(newStream, "cdf");
-    //Sleep(1000);
-    //GuidoWriteStream(newStream, "{a,b}]");
-
-    /* Récupération de l'état courant du parser */
-    arh = GuidoParser2AR(newParser); //REM: pas encore de backup de factory
-
-    GuidoCloseStream(newStream);
-
-    /* Wait for server thread to end */
-    WaitForSingleObject(hThreadArray[0], INFINITE);
-
-    /* Récupération finale de la factory */
-    //arh = pDataArray[0]->arh;
-
-    int errorLine, errorRow;
-    GuidoParserGetErrorCode(newParser, errorLine, errorRow);
-    if (errorLine != 0)
-        std::cout << "Error at line" << errorLine << ", row " << errorRow << "." << std::endl;
-
-    GuidoCloseParser(newParser);
-
-    /*********************************************/
-
-
+    if (!arh)
+        return false;
 
 	setPathsToARHandler(arh, dataPath);
 
@@ -438,24 +375,21 @@ QString QGuidoPainter::gmnCode() const
 //-------------------------------------------------------------------------
 QString QGuidoPainter::getLastErrorMessage() const
 {
-	QString result = QString( GuidoGetErrorString(mLastErr) );
-	if ( mLastErr == guidoErrParse )
+	QString result = QString( GuidoGetErrorString(mLastErr) ); // REM: Qu'est-ce qu'on fait de ça ?
+	if ( mLastErr == guidoErrParse )                           // et ça ?
 	{
-		int line = GuidoGetParseErrorLine();
-		result += " (line " + QVariant(line).toString() + ")";
+		int line;
+        int col;
+        GuidoParserGetErrorCode(fParser, line, col);
+		result += " (line " + QVariant(line).toString() + ", col " + QVariant(col).toString() + ")";
 	}
 	return result;
-
 }
 
 //-------------------------------------------------------------------------
-int QGuidoPainter::getLastParseErrorLine() const
+void QGuidoPainter::getLastParseErrorLine(int &line, int &col) const
 {
-	if ( !isGMNValid() )
-		if ( mLastErr == guidoErrParse )
-			return GuidoGetParseErrorLine();
-
-	return 0;
+    GuidoParserGetErrorCode(fParser, line, col);
 }
 		
 //-------------------------------------------------------------------------

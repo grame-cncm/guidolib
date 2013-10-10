@@ -247,9 +247,9 @@ QString QGuidoWidget::getLastErrorMessage() const
 }
 
 //-------------------------------------------------------------------------
-int	QGuidoWidget::getLastParseErrorLine() const
+void QGuidoWidget::getLastParseErrorLine(int &line, int &col) const
 {
-	return mGuidoPainter->getLastParseErrorLine();
+    mGuidoPainter->getLastParseErrorLine(line, col);
 }
 
 //-------------------------------------------------------------------------
@@ -341,4 +341,16 @@ float QGuidoWidget::getSystemsDistance() const
 QSize QGuidoWidget::sizeHint() const
 {
 	return mPageManager->totalSize().toSize();
+}
+
+//-------------------------------------------------------------------------
+void QGuidoWidget::CreateParser()
+{
+    mGuidoPainter->CreateParser();
+}
+
+//-------------------------------------------------------------------------
+void QGuidoWidget::CloseParser()
+{
+    mGuidoPainter->CloseParser();
 }

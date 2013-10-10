@@ -172,8 +172,8 @@ GUIDOAPI(GuidoErrCode) GuidoParserGetErrorCode (GuidoParser *p, int &line, int &
     if (!p)
         return guidoErrBadParameter;
 
-    line = p->getErrorColumn();
-    col  = p->getErrorLine();
+    line = p->getErrorLine();
+    col  = p->getErrorColumn();
 
     return guidoNoErr;
 }
