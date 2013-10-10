@@ -5,10 +5,12 @@ import xml.etree.ElementTree as ET
 import cPickle
 import sys
 import urlparse
+import os
 from optparse import OptionParser
 
 parser = OptionParser(usage = "Runs regtests on the guido server")
 parser.add_option("-u", "--url", dest="url", help="url of the server", default = "http://localhost:8000")
+parser.add_option("-f", "--filename", dest="filename", help="filename to read/write test information from/to.  Note that the regtests will never overwrite a file, so make sure to stash a similarly named file elsewhere.", default = "test.pkl")
 parser.add_option("-m", "--mode", dest="mode", help="mode of the test: either baseline or check", default = "check", choices=["baseline", "check"])
 (OPTIONS, ARGS) = parser.parse_args()
 
@@ -26,6 +28,11 @@ except urllib2.URLError :
   print "Could not compile a simple test on the server with url {0}. Run this script with the -h flag to see how to specify a URL of the server.".format(URL)
   sys.exit(1)
 
+if BASELINE :
+  if os.path.exists(OPTIONS.filename) :
+    print "Not overwriting {0}. Stash it and run the script again.".format(OPTIONS.filename)
+    sys.exit(1)
+
 RESULTS = {}
 
 RES = 0
@@ -33,7 +40,7 @@ CODE = 1
 
 if not BASELINE :
   try :
-    output = open('test.pkl','rb')
+    output = open(OPTIONS.filename,'rb')
     RESULTS = cPickle.load(output)
     output.close()
   except :
@@ -201,7 +208,7 @@ Test: linespace
 RESULTS["linespace"] = json_test(guidourl('linespace'), "linespace")
 
 if BASELINE :
-  output = open('test.pkl','wb')
+  output = open(OPTIONS.filename,'wb')
   cPickle.dump(RESULTS, output)
   output.close()
   print "REGTEST BASELINE COMPLETED"
