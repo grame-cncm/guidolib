@@ -12,6 +12,8 @@ parser = OptionParser(usage = "Runs regtests on the guido server")
 parser.add_option("-u", "--url", dest="url", help="url of the server", default = "http://localhost:8000")
 parser.add_option("-f", "--filename", dest="filename", help="filename to read/write test information from/to.  Note that the regtests will never overwrite a file, so make sure to stash a similarly named file elsewhere.", default = "test.pkl")
 parser.add_option("-m", "--mode", dest="mode", help="mode of the test: either baseline or check", default = "check", choices=["baseline", "check"])
+parser.add_option("-s", "--spew", dest="spew", help="show all regtest results at the end", default = "no", choices=["no", "yes"])
+
 (OPTIONS, ARGS) = parser.parse_args()
 
 URL = OPTIONS.url
@@ -214,3 +216,10 @@ if BASELINE :
   print "REGTEST BASELINE COMPLETED"
 else :
   print "REGTEST CHECK COMPLETED"
+
+if OPTIONS.spew == "yes" :
+  print "Results of the regtest."
+  for key in RESULTS.keys() :
+    print key
+    print "code returned: {0}".format(RESULTS[key][CODE])
+    print "{0}".format(RESULTS[key][RES])
