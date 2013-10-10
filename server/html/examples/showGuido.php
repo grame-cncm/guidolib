@@ -6,12 +6,6 @@
   }
   $gmn = $_POST["gmn"];
   $gmn = urlencode($gmn);
-  //$gmn = preg_replace('/\%.*/', "", $gmn); // percentage sign
-  //$gmn = preg_replace('(/\(\*..*\*\)/', "", $gmn); // something I don't understand
-  //$gmn = preg_replace('/\n/', "   ", $gmn); // newline
-  //$gmn = preg_replace('/#/', "%23", $gmn); // hash
-  //$gmn = preg_replace('/ +/', " ", $gmn); // something I don't understand
-  //$gmn = preg_replace('/&/',"%26", $gmn); // ampersand
   $content = 'data=' . $gmn . '';
 
   $params = array(
