@@ -2,7 +2,7 @@ The POST method
 ===============
 
 | The POST method is used to create a new score. 
-| The HTTP request entity-body is expected to contain **valid GMN code**.
+| The HTTP request entity-body is expected to contain **valid GMN code** that is **URL encoded**. Many URL transfer tools do this URL encoding automatically for certain POST methods.  When in doubt, use a URL encoding method like, for example, the function ``urlencode`` in PHP.
 
 **Response body**
 	* in case of success: 
@@ -51,6 +51,12 @@ or using curl::
   curl -d "data=[ g e c ]" http://guido.server.org
 
 
+POSTing files
+^^^^^^^^^^^^^
+
+Files can be sent to the server via POST.  For example, you can upload the file ``foo.gmn`` with::
+
+  curl --data-urlencode "data@foo.gmn" http://guido.grame.fr:8000
 
 Internals
 ^^^^^^^^^^^
