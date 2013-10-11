@@ -375,8 +375,8 @@ QString QGuidoPainter::gmnCode() const
 //-------------------------------------------------------------------------
 QString QGuidoPainter::getLastErrorMessage() const
 {
-	QString result = QString( GuidoGetErrorString(mLastErr) ); // REM: Qu'est-ce qu'on fait de ça ?
-	if ( mLastErr == guidoErrParse )                           // et ça ?
+	QString result = QString( GuidoGetErrorString(mLastErr) );
+	if ( mLastErr == guidoErrParse )
 	{
 		int line;
         int col;
