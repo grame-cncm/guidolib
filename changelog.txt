@@ -4,6 +4,8 @@ GUIDO Engine history
 2013-09-13  version 1.5.2
 - improvement of \meter-tag (now sums in numerator are allowed)
 - new reentrant parser (transparent for users, not for developers)
+- new stream parsing mechanism : from now, it's possible to parse a stream as it goes
+  along, and to get intermediate ar's state
 
 
 ----------------------------------------------------------------

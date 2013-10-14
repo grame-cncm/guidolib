@@ -21,6 +21,7 @@
 #include "ARDefine.h"
 // #include "GRDefine.h"
 #include "TagParameterList.h"
+#include "ARMusicalTag.h"
 
 class ARMusic;
 class ARMusicalVoice;
@@ -29,7 +30,6 @@ class ARNote;
 class ARMusicalEvent;
 class ARRepeatBegin;
 class ARMusicalObject;
-class ARMusicalTag;
 class AROctava;
 class ARTStem;
 class ARNoteFormat;
@@ -61,7 +61,7 @@ class ARFactory
 		enum		bmstate { BEAMSAUTO, BEAMSOFF, BEAMSEXPLICIT };
 		
 					ARFactory();
-	virtual 		~ARFactory();
+     virtual 		~ARFactory();
 
 		void 		createMusic();
 		ARMusic * 	getMusic();
@@ -111,7 +111,7 @@ class ARFactory
 	  	void 		setUnit( const char * s );
 
         void        setFilePath(const char* inFilePath) { mFilePath = inFilePath; }
-	  	
+  	
   private:
 
 		ARMusicalVoice * 	mCurrentVoice;

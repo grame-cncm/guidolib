@@ -591,11 +591,11 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 	}
 
     // Variables for dot's horizontal offset
-    int offsetMax = 0;
+    float offsetMax = 0;
     NVPoint currentNoteHeadOffset = NVPoint(0, 0);
     bool differentOffsets = false;
     bool prevOffsetExisting = false;
-    int prevOffset = 0;
+    float prevOffset = 0;
 
 	if (stemdir == dirDOWN)
 	{

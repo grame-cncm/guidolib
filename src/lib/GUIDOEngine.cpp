@@ -41,7 +41,6 @@ using namespace std;
 #include "TagParameterFloat.h"
 
 // - Guido GR
-
 #include "GRMusic.h"
 #include "GRSpringForceIndex.h"
 #include "GRStaffManager.h"
@@ -50,6 +49,7 @@ using namespace std;
 
 // - Guido Misc
 #include "GUIDOInternal.h"
+#include "GUIDOParse.h"
 #include "guido.h"
 #include "VGDevice.h"
 #include "GuidoFeedback.h"
@@ -186,14 +186,10 @@ GUIDOAPI(GuidoErrCode) GuidoParseFile(const char * filename, ARHandler * ar)
 	uniconv(filename);
  	// Check if file exists.
     ARHandler music = 0;
-   fstream file (filename, fstream::in);
-    if (file.is_open()) {
-        GuidoParser p (&file);
-        music = p.parse();
-    }
-	else {
-		return guidoErrFileAccess;
-	}
+    
+    GuidoParser *parser = GuidoOpenParser();
+    music = GuidoFile2AR(parser, filename);
+    GuidoCloseParser(parser);
 
 	// - Update the feedback status text ....
 	if( gGlobalSettings.gFeedback )
@@ -239,9 +235,52 @@ GUIDOAPI(GuidoErrCode) GuidoParseString (const char * str, ARHandler* ar)
 	if( gGlobalSettings.gFeedback )
 		gGlobalSettings.gFeedback->Notify( GuidoFeedback::kProcessing );
 
-	stringstream sstr (str);
-    GuidoParser p(&sstr);
-    ARHandler music = p.parse();
+    ARHandler music = 0;
+
+    GuidoParser *parser = GuidoOpenParser();
+    music = GuidoString2AR(parser, str);
+    GuidoCloseParser(parser);
+
+	if (!music || ( gGlobalSettings.gFeedback && gGlobalSettings.gFeedback->ProgDialogAbort())) {
+		// Something failed, do some cleanup
+		return music ? guidoErrUserCancel : guidoErrParse;
+	}
+
+	// - Update the feedback status text ....
+	if( gGlobalSettings.gFeedback )
+		gGlobalSettings.gFeedback->UpdateStatusMessage( str_ARMusicCreated );
+
+	if( gGlobalSettings.gFeedback ) {
+		gGlobalSettings.gFeedback->UpdateStatusMessage( 0 );
+		if( gGlobalSettings.gFeedback->ProgDialogAbort()) {
+			delete music;
+			gGlobalSettings.gFeedback->Notify( GuidoFeedback::kIdle );
+			return guidoErrUserCancel;
+		}
+	}
+	music->armusic->setName( "" );						// - Use the filename as the new music name
+
+	// - Restore feedback state
+	if( gGlobalSettings.gFeedback )
+        gGlobalSettings.gFeedback->Notify( GuidoFeedback::kIdle );
+
+	*ar = music;
+	return guidoNoErr;
+}
+
+// --------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoNewParseString (GuidoParser *parser, const char * str, ARHandler* ar)
+{
+	if( !str || !ar )	return guidoErrBadParameter;
+	
+	*ar = 0;
+	if( gGlobalSettings.gFeedback )
+		gGlobalSettings.gFeedback->Notify( GuidoFeedback::kProcessing );
+
+    ARHandler music = 0;
+
+    music = GuidoString2AR(parser, str);
+
 	if (!music || ( gGlobalSettings.gFeedback && gGlobalSettings.gFeedback->ProgDialogAbort())) {
 		// Something failed, do some cleanup
 		return music ? guidoErrUserCancel : guidoErrParse;

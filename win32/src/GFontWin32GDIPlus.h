@@ -79,7 +79,7 @@ class_export GFontWin32GDIPlus : public VGFont
 										   VGDevice * context = 0) const;
 				float		mAscent;
 				float		mEmHeight;
-				int		mDescent;
+				float		mDescent;
 
 	protected:
 				Font*			mNativeFont;

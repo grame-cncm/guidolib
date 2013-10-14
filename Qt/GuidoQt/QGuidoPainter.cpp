@@ -21,6 +21,7 @@
 
 #include "QGuidoPainter.h"
 #include "GUIDOEngine.h"
+#include "GUIDOParse.h"
 #include "VGColor.h"
 
 #include <QVariant>
@@ -32,6 +33,7 @@
 
 #include "GSystemQt.h"
 #include "GDeviceQt.h"
+
 
 #define DEFAULT_DRAW_SIZE 100
 #define MAX(a,b) ( a > b ) ? a : b
@@ -181,15 +183,30 @@ void QGuidoPainter::setARHandler( ARHandler ar )
 }
 
 //-------------------------------------------------------------------------
+void QGuidoPainter::CreateParser()
+{
+    fParser = GuidoOpenParser();
+}
+
+//-------------------------------------------------------------------------
+void QGuidoPainter::CloseParser()
+{
+    if (fParser)
+        GuidoCloseParser(fParser);
+}
+
+//-------------------------------------------------------------------------
 bool QGuidoPainter::setGMNData( const QString& gmncode, const char* dataPath)
 {
 	// Read the gmnCode and build the score's Abstract Representation,
 	// containing all the notes, rests, staffs, lyrics ...
 	ARHandler arh;
 	GRHandler grh;
-    mLastErr = GuidoParseString( gmncode.toUtf8().data(), &arh);		
-	if ( mLastErr != guidoNoErr )
-		return false;
+
+    mLastErr = GuidoNewParseString(fParser, gmncode.toUtf8().data(), &arh);
+
+    if (!arh)
+        return false;
 
 	setPathsToARHandler(arh, dataPath);
 
@@ -361,21 +378,18 @@ QString QGuidoPainter::getLastErrorMessage() const
 	QString result = QString( GuidoGetErrorString(mLastErr) );
 	if ( mLastErr == guidoErrParse )
 	{
-		int line = GuidoGetParseErrorLine();
-		result += " (line " + QVariant(line).toString() + ")";
+		int line;
+        int col;
+        GuidoParserGetErrorCode(fParser, line, col);
+		result += " (line " + QVariant(line).toString() + ", col " + QVariant(col).toString() + ")";
 	}
 	return result;
-
 }
 
 //-------------------------------------------------------------------------
-int QGuidoPainter::getLastParseErrorLine() const
+void QGuidoPainter::getLastParseErrorLine(int &line, int &col) const
 {
-	if ( !isGMNValid() )
-		if ( mLastErr == guidoErrParse )
-			return GuidoGetParseErrorLine();
-
-	return 0;
+    GuidoParserGetErrorCode(fParser, line, col);
 }
 		
 //-------------------------------------------------------------------------
