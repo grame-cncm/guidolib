@@ -594,6 +594,8 @@ void MainWindow::doexport()
 //    std::vector<std::string> pathsVector;
 //    GuidoGetSymbolPath((ARHandler)mGuidoWidget->getARHandler(), pathsVector);
 
+    guidoPainter->CreateParser();
+
 	if ( guidoPainter->setGMNCode(mTextEdit->toPlainText(), filePath().toUtf8().data()) )
     {
 		QString savePath = mRecentFiles.size() ? QFileInfo(mRecentFiles.last()).path() : QDir::home().path();
@@ -613,6 +615,9 @@ void MainWindow::doexport()
 				exportToImage( guidoPainter, fileName );
 		}
 	}
+
+    guidoPainter->CloseParser();
+
 	QGuidoPainter::destroyGuidoPainter( guidoPainter );
 }
 
@@ -759,6 +764,8 @@ void MainWindow::print()
 	QPrinter printer;
 	QPainter painter;
 
+    guidoPainter->CreateParser();
+
 	guidoPainter->setGuidoLayoutSettings(mGuidoEngineParams);
 	if ( guidoPainter->setGMNCode(mTextEdit->toPlainText(), filePath().toUtf8().data()) )
 	{
@@ -769,6 +776,9 @@ void MainWindow::print()
 		if (dialog->exec() == QDialog::Accepted)
 			print (guidoPainter, printer);
 	}
+
+    guidoPainter->CloseParser();
+
 //	else statusBar()->showMessage(tr("Error reading file."));
 	QGuidoPainter::destroyGuidoPainter( guidoPainter );
 }
