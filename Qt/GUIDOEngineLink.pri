@@ -2,15 +2,17 @@
 #macx:QMAKE_MAC_SDK=macosx10.7
 #macx:CONFIG+= x86_64
 
-contains(QMAKE_HOST.arch, x86): {
-QMAKE_LFLAGS *= /MACHINE:X86
-!DebugBuild { GUIDO = ../../build/win32/release/GUIDOEngine.lib }
-else		{ GUIDO = ../../build/win32/debug/GUIDOEngineD.lib } 
-}
-contains(QMAKE_HOST.arch, x86_64): {
-QMAKE_LFLAGS *= /MACHINE:X64
-!DebugBuild { GUIDO = ../../build/win64/release/GUIDOEngine64.lib }
-else		{ GUIDO = ../../build/win64/debug/GUIDOEngine64D.lib }
+win32: {
+	contains(QMAKE_HOST.arch, x86): {
+	QMAKE_LFLAGS *= /MACHINE:X86
+	!DebugBuild { GUIDO = ../../build/win32/release/GUIDOEngine.lib }
+	else		{ GUIDO = ../../build/win32/debug/GUIDOEngineD.lib } 
+	}
+	contains(QMAKE_HOST.arch, x86_64): {
+	QMAKE_LFLAGS *= /MACHINE:X64
+	!DebugBuild { GUIDO = ../../build/win64/release/GUIDOEngine64.lib }
+	else		{ GUIDO = ../../build/win64/debug/GUIDOEngine64D.lib }
+	}
 }
 
 # GUIDOEngine library link for each platform

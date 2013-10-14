@@ -205,7 +205,10 @@ typedef struct GuidoLayoutSettings
 
 /**
     The page format parameters
-*/
+
+	Page format should be given in internal units. To convert from cm or inches
+	you should use \c GuidoCM2Unit or \c GuidoInches2Unit
+ */
 typedef struct
 {
     float width;
