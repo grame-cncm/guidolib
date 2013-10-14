@@ -567,7 +567,7 @@ void MainWindow::updateCode()
         int col;
         mGuidoWidget->getLastParseErrorLine(line, col);
 		mTextEdit->highlightErrorLine(line);
-		statusBar()->showMessage( mGuidoWidget->getLastErrorMessage() ); //REM: changer ça
+		statusBar()->showMessage( mGuidoWidget->getLastErrorMessage() );
 	}
 
     mGuidoWidget->CloseParser();

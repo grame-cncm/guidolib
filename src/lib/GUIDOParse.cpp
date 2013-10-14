@@ -66,7 +66,7 @@ GUIDOAPI(GuidoErrCode) GuidoCloseParser (GuidoParser *p)
     if (!p)
         return guidoErrBadParameter;
 
-    delete p; //REM: bug des fois ?
+    delete p;
 
 	return guidoNoErr;
 }
