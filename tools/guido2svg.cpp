@@ -7,6 +7,8 @@
 #endif
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <string>
 #include <stdlib.h>
 
@@ -121,10 +123,23 @@ int main(int argc, char **argv)
 
 	GuidoErrCode err;
 	ARHandler arh;
+
+    GuidoParser *parser = GuidoOpenParser();
+
 	if (gmn.size())
-		err = GuidoParseString (gmn.c_str(), &arh);
+		err = GuidoNewParseString (parser, gmn.c_str(), &arh);
 	else
-		err = GuidoParseFile (filename, &arh);
+    {
+        std::ifstream ifs(filename, ios::in);
+        if (!ifs)
+            return 0;
+
+        std::stringstream streamBuffer;
+        streamBuffer << ifs.rdbuf();
+        ifs.close();
+
+		err = GuidoNewParseString (parser, streamBuffer.str().c_str(), &arh);
+    }
 	if (err != guidoNoErr) error (err);
 
 	GRHandler grh;
@@ -133,6 +148,9 @@ int main(int argc, char **argv)
 
 	err = GuidoSVGExport( grh, page, cout, fontfile);
 	if (err != guidoNoErr) error (err);
+
+    GuidoCloseParser(parser);
+
 	return 0;
 }
 
