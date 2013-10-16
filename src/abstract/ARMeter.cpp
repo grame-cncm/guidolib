@@ -29,6 +29,9 @@ ARMeter::ARMeter()
 {
 	mtype = NONE;
 	autoBarlines = 1;
+
+    numerator = 0;
+    denominator = 0;
 }
 
 ARMeter::ARMeter(int p_numerator, int p_denominator)
@@ -105,7 +108,6 @@ void ARMeter::setTagParameterList(TagParameterList& tpl)
 
 
             //Meter string analysis to set numerator/denominator
-            numerator = 0;
             std::string meterStr(mMeterName);
             std::string delimiterSlash = "/";
 
@@ -154,12 +156,6 @@ void ARMeter::setTagParameterList(TagParameterList& tpl)
                 }
 
                 if (!numeratorsVector.empty())
-                {
-                    for(size_t i = 0; i < numeratorsVector.size(); i++)
-                        numerator += numeratorsVector[i];
-                }
-
-                if (!numeratorsVector.empty())
                     mtype = NUMERIC;
             }
             else
@@ -194,7 +190,13 @@ void ARMeter::setTagParameterList(TagParameterList& tpl)
 		mtype = NONE;
 	}
 
-	tpl.RemoveAll();
+    if (!numeratorsVector.empty())
+    {
+        for(size_t i = 0; i < numeratorsVector.size(); i++)
+            numerator += numeratorsVector[i];
+    }
+
+    tpl.RemoveAll();
 }
 
 bool ARMeter::IsStateTag() const
