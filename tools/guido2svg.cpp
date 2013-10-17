@@ -99,40 +99,60 @@ static const char* getFile (int argc, char *argv[])
 vector<string> fillPathsVector (char *argv[])
 {
     vector<string> pathsVector;
-    
+
     string fileDirectoryStr(argv[0]);
     string fileNameStr(argv[1]);
 
-    for (size_t i = 0; i < 2; i++)
+    if (fileNameStr[0] == '.' && fileNameStr[1] == '.')
+    {
+        for (size_t i = 0; i < 2; i++)
+        {
+            size_t posSlash = 0;
+
+            for (size_t j = 0; j < fileDirectoryStr.size(); j++)
+            {
+                if (fileDirectoryStr[j] == '/' || fileDirectoryStr[j] == '\\')
+                    posSlash = j;
+            }
+
+            fileDirectoryStr.erase(posSlash, fileDirectoryStr.size());
+        }
+
+        size_t posSlash = 0;
+
+        for (size_t i = 0; i < fileNameStr.size(); i++)
+        {
+            if (fileNameStr[i] == '/' || fileNameStr[i] == '\\')
+            {
+                fileNameStr[i] = '\\';
+                posSlash = i;
+            }
+        }
+
+        fileNameStr.erase(posSlash + 1, fileNameStr.size());
+
+        fileNameStr.erase(0, 2);
+        fileDirectoryStr.append(fileNameStr);
+
+        pathsVector.push_back(fileDirectoryStr);
+    }
+    else
     {
         size_t posSlash = 0;
 
-        for (size_t j = 0; j < fileDirectoryStr.size(); j++)
+        for (size_t i = 0; i < fileNameStr.size(); i++)
         {
-            if (fileDirectoryStr[j] == '/' || fileDirectoryStr[j] == '\\')
-                posSlash = j;
+            if (fileNameStr[i] == '/' || fileNameStr[i] == '\\')
+            {
+                fileNameStr[i] = '\\';
+                posSlash = i;
+            }
         }
 
-        fileDirectoryStr.erase(posSlash, fileDirectoryStr.size());
+        fileNameStr.erase(posSlash + 1, fileNameStr.size());
+
+        pathsVector.push_back(fileNameStr);
     }
-
-    size_t posSlash = 0;
-
-    for (size_t i = 0; i < fileNameStr.size(); i++)
-    {
-        if (fileNameStr[i] == '/' || fileNameStr[i] == '\\')
-        {
-            fileNameStr[i] = '\\';
-            posSlash = i;
-        }
-    }
-
-    fileNameStr.erase(posSlash + 1, fileNameStr.size());
-
-    fileNameStr.erase(0, 2);
-    fileDirectoryStr.append(fileNameStr);
-
-    pathsVector.push_back(fileDirectoryStr);
 
 #ifdef WIN32
     // For windows

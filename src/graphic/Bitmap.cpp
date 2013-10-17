@@ -17,6 +17,8 @@
 #include "NVRect.h"
 
 #include "VGDevice.h"
+#include "SVGDevice.h"
+
 #include "GUIDOInternal.h"		// for gGlobalSettings.gFeedback
 
 
@@ -31,6 +33,15 @@ Bitmap::Bitmap( const char * inName )
 
         if (tmpSystem)
             fDevice = tmpSystem->CreateMemoryDevice(inName);
+    }
+
+    isSVGDevice = false;
+
+    if (fDevice)
+    {
+        SVGDevice *device = dynamic_cast<SVGDevice *>(fDevice);
+        if (device)
+            isSVGDevice = true;    
     }
 }
 
