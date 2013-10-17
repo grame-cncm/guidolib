@@ -306,11 +306,19 @@ void GRMeter::OnDraw(VGDevice & hdc) const
 	}
 	else if (mtype == ARMeter::C)
 	{
-		OnDrawSymbol( hdc, kCSymbol, 0, 0, mTagSize );
+        float extentBufferx;
+        float extentBuffery;
+        FontManager::gFontScriab->GetExtent(kCSymbol, &extentBufferx, &extentBuffery, gGlobalSettings.gDevice );
+
+		OnDrawSymbol( hdc, kCSymbol, 0, - 200 * (mTagSize - 1) / 2, mTagSize );
 	}
 	else if (mtype == ARMeter::C2)
 	{
-		OnDrawSymbol( hdc, kC2Symbol, 0, 0, mTagSize );
+        float extentBufferx;
+        float extentBuffery;
+        FontManager::gFontScriab->GetExtent(kC2Symbol, &extentBufferx, &extentBuffery, gGlobalSettings.gDevice );
+
+		OnDrawSymbol( hdc, kC2Symbol, 0, - 200 * (mTagSize - 1) / 2, mTagSize );
 	}
 }
 
