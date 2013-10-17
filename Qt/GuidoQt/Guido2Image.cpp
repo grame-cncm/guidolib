@@ -156,7 +156,9 @@ Guido2ImageErrorCodes Guido2Image::gmnString2Image( const Params& p )
 	QGuidoPainter * painter = QGuidoPainter::createGuidoPainter();
 	if (painter) {
 		if (p.layout) painter->setGuidoLayoutSettings (*p.layout);
+        painter->CreateParser();
 		painter->setGMNCode(p.input);
+        painter->CloseParser();
 	}
 	else return GUIDO_2_IMAGE_GUIDO_ENGINE_NOT_STARTED;			// likely
 	return guidoPainterToImage(painter, p);
@@ -174,7 +176,9 @@ Guido2ImageErrorCodes Guido2Image::gmnFile2Image	( const  Params& p )
 	QGuidoPainter * painter = QGuidoPainter::createGuidoPainter();
 	if (painter) {
 		if (p.layout) painter->setGuidoLayoutSettings (*p.layout);
+        painter->CreateParser();
 		painter->setGMNFile(p.input);
+        painter->CloseParser();
 	}
 	else
 		return GUIDO_2_IMAGE_GUIDO_ENGINE_NOT_STARTED;			// likely
