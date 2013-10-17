@@ -138,7 +138,8 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 		const char * fraction = st->duration.c_str();
 		size_t n = st->duration.length();
 
-		hdc.SelectPenWidth(4);
+        hdc.PushPenWidth(4);
+
 		if(sse->startflag != GRSystemStartEndStruct::OPENLEFT)
 		{	
 			hdc.Line(st->DurationLine[0].x, st->DurationLine[0].y, st->DurationLine[1].x, st->DurationLine[1].y);
@@ -156,6 +157,8 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 
 		if(sse->startflag != GRSystemStartEndStruct::OPENLEFT)
 			hdc.DrawString(st->DurationLine[2].x, st->DurationLine[2].y+LSPACE/2, fraction, n);
+
+        hdc.PopPenWidth();
 	}
 
 	if (mColRef) {
