@@ -119,7 +119,7 @@ GRMeter::GRMeter( ARMeter * abstractRepresentationOfMeter, GRStaff * curstaff, b
 		mBoundingBox.right = (GCoord)(extent * 0.5f + LSPACE);
 	}
 
-	mTagSize *= curstaff->getSizeRatio();
+    mTagSize *= curstaff->getSizeRatio() * abstractRepresentationOfMeter->getSize();
 	mBoundingBox.bottom = (GCoord)(5*curLSPACE);
 
 	// set leftSpace, rightSpace 
