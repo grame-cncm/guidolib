@@ -118,7 +118,7 @@ RESULTS["poststr"] = json_test(guidourl(), "poststr", 'data={0}'.format(urllib.q
 Test: post from a file
 """
 
-RESULTS["postfile"] = json_test(guidourl(), "postfile", 'data={0}'.format(urllib.quote_plus(gulp('test.gmn'))))
+RESULTS["postfile"] = json_test(guidourl(), "postfile", 'data={0}'.format(urllib.quote_plus(gulp('moz581.gmn'))))
 
 """
 Test: referencing inexistant score
@@ -135,64 +135,64 @@ due to sorting of pointers
 """
 Test: voicescount
 """
-RESULTS["voicescount"] = json_test(guidourl('29ba36a3f7d3cf1ca008948d4707d9a8470b335c/voicescount'), "voicescount")
+RESULTS["voicescount"] = json_test(guidourl('2b9133d84f09e4ac1e4e3762a8640bf4fbc726ab/voicescount'), "voicescount")
 
 """
 Test: pagescount
 """
-RESULTS["pagescount"] = json_test(guidourl('29ba36a3f7d3cf1ca008948d4707d9a8470b335c/pagescount'), "pagescount")
+RESULTS["pagescount"] = json_test(guidourl('2b9133d84f09e4ac1e4e3762a8640bf4fbc726ab/pagescount'), "pagescount")
 
 """
 Test: duration
 """
-RESULTS["duration"] = json_test(guidourl('29ba36a3f7d3cf1ca008948d4707d9a8470b335c/duration'), "duration")
+RESULTS["duration"] = json_test(guidourl('2b9133d84f09e4ac1e4e3762a8640bf4fbc726ab/duration'), "duration")
 
 """
 Test: pageat
 """
-RESULTS["pageat"] = json_test(guidourl('29ba36a3f7d3cf1ca008948d4707d9a8470b335c/pageat?date="3/4"'), "pageat")
+RESULTS["pageat"] = json_test(guidourl('2b9133d84f09e4ac1e4e3762a8640bf4fbc726ab/pageat?date="3/4"'), "pageat")
 
 """
 Test: date out of bounds
 """
 
-test_400(guidourl('29ba36a3f7d3cf1ca008948d4707d9a8470b335c/pageat?date="42/4"'), 400)
+test_400(guidourl('2b9133d84f09e4ac1e4e3762a8640bf4fbc726ab/pageat?date="42/4"'), 400)
 
 """
 Test: pagedate
 """
-RESULTS["pagedate"] = json_test(guidourl('29ba36a3f7d3cf1ca008948d4707d9a8470b335c/pagedate?page=1'), "pagedate")
+RESULTS["pagedate"] = json_test(guidourl('2b9133d84f09e4ac1e4e3762a8640bf4fbc726ab/pagedate?page=1'), "pagedate")
 
 """
 Test: page out of bounds
 """
 
-test_400(guidourl('29ba36a3f7d3cf1ca008948d4707d9a8470b335c/pagedate?page=42'), 400)
+test_400(guidourl('2b9133d84f09e4ac1e4e3762a8640bf4fbc726ab/pagedate?page=42'), 400)
 
 """
 Test: staffmap
 """
-RESULTS["staffmap"] = json_test(guidourl('29ba36a3f7d3cf1ca008948d4707d9a8470b335c/staffmap?staff=1'), "staffmap")
+RESULTS["staffmap"] = json_test(guidourl('2b9133d84f09e4ac1e4e3762a8640bf4fbc726ab/staffmap?staff=1'), "staffmap")
 
 """
 Test: pagemap
 """
-RESULTS["pagemap"] = json_test(guidourl('29ba36a3f7d3cf1ca008948d4707d9a8470b335c/pagemap'), "pagemap")
+RESULTS["pagemap"] = json_test(guidourl('2b9133d84f09e4ac1e4e3762a8640bf4fbc726ab/pagemap'), "pagemap")
 
 """
 Test: systemmap
 """
-RESULTS["systemmap"] = json_test(guidourl('29ba36a3f7d3cf1ca008948d4707d9a8470b335c/systemmap'), "systemmap")
+RESULTS["systemmap"] = json_test(guidourl('2b9133d84f09e4ac1e4e3762a8640bf4fbc726ab/systemmap'), "systemmap")
 
 """
 Test: voicemap
 """
-RESULTS["voicemap"] = json_test(guidourl('29ba36a3f7d3cf1ca008948d4707d9a8470b335c/voicemap'), "voicemap")
+RESULTS["voicemap"] = json_test(guidourl('2b9133d84f09e4ac1e4e3762a8640bf4fbc726ab/voicemap'), "voicemap")
 
 """
 Test: timemap
 """
-RESULTS["timemap"] = json_test(guidourl('29ba36a3f7d3cf1ca008948d4707d9a8470b335c/timemap'), "timemap")
+RESULTS["timemap"] = json_test(guidourl('2b9133d84f09e4ac1e4e3762a8640bf4fbc726ab/timemap'), "timemap")
 
 """
 Test: version
