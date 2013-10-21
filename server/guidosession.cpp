@@ -592,13 +592,20 @@ string guidosession::duration()
     if (err != guidoNoErr) {
         return "";
     }
+
+    if (resizeToPage_) {
+      err = GuidoResizePageToMusic (grh);
+      if (err != guidoNoErr) {
+          return "";
+      }
+    }
     
     GuidoDate date;
     err = GuidoDuration(grh, &date);
     if (err != guidoNoErr) {
         return "";
     }
-
+    
     return dateToString(date);
 }
     
@@ -621,6 +628,13 @@ int guidosession::pagesCount()
         return -1;
     }
 
+    if (resizeToPage_) {
+      err = GuidoResizePageToMusic (grh);
+      if (err != guidoNoErr) {
+          return -1;
+      }
+    }
+    
     return GuidoGetPageCount(grh);
 }
 
@@ -643,6 +657,13 @@ int guidosession::pageAt(GuidoDate date)
         return -1;
     }
 
+    if (resizeToPage_) {
+      err = GuidoResizePageToMusic (grh);
+      if (err != guidoNoErr) {
+          return -1;
+      }
+    }
+    
     GuidoDate dur;
     GuidoDuration(grh, &dur);
     if ((dateToFloat(dur) < dateToFloat(date))
@@ -672,6 +693,13 @@ int guidosession::pageDate(int page, GuidoDate *date)
         return 1;
     }
 
+    if (resizeToPage_) {
+      err = GuidoResizePageToMusic (grh);
+      if (err != guidoNoErr) {
+          return 1;
+      }
+    }
+    
     if ((page > GuidoGetPageCount(grh))
         || (page <= 0)) {
       return 1;
@@ -712,6 +740,13 @@ GuidoErrCode guidosession::getMap (GuidoSessionMapType map, int aux, Time2Graphi
     err = GuidoAR2GR (arh, 0, &grh);
     if (err != guidoNoErr) {
         return err;
+    }
+
+    if (resizeToPage_) {
+      err = GuidoResizePageToMusic (grh);
+      if (err != guidoNoErr) {
+          return err;
+      }
     }
     
     /*
@@ -763,6 +798,13 @@ guidosessionresponse guidosession::genericReturnImage()
           return genericFailure ("Could not convert the image.", 400, id_);
         }
         
+        if (resizeToPage_) {
+          err = GuidoResizePageToMusic (grh);
+          if (err != guidoNoErr) {
+              return genericFailure ("Could not convert the image.", 400, id_);;
+          }
+        }
+
         stringstream mystream;
         err = GuidoSVGExport(grh, page_, mystream, "");
         if (err != guidoNoErr) {
