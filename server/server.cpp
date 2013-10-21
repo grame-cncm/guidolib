@@ -286,6 +286,25 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
        in the case of 2, we are referencing an existing score with a precise operation and the request must be GET
     */
     
+    // LOGFILE.
+    if (type == DELETE) {
+      log << "DELETE" << logend;
+    }
+    else if (type == GET) {
+      log << "GET" << logend;
+    }
+    else if (type == POST) {
+      log << "POST" << logend;
+    }
+    else if (type == HEAD) {
+      log << "HEAD" << logend;
+    }
+    log << url << logend;
+    for(TArgs::const_iterator it = args.begin(); it != args.end(); it++) {
+      log << it->first << logend;
+      log << it->second << logend;
+    }
+
     // first, parse the URL
     std::stringstream ss(url);
     std::string item;
