@@ -100,7 +100,12 @@ _post_params (void *coninfo_cls, enum MHD_ValueKind , const char *key,
 {
     struct connection_info_struct *con_info = (connection_info_struct *)coninfo_cls;
     if (strcmp (key, "data") == 0) {
-        con_info->args.insert(TArg("data", string(data)));
+        if (con_info->args.find("data") != con_info->args.end()) {
+          con_info->args["data"] += string(data);
+        }
+        else {
+          con_info->args.insert(TArg("data", string(data)));
+        }
     }
     return MHD_YES;
 }
