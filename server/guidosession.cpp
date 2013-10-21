@@ -75,7 +75,7 @@ void guidosession::initialize()
 {
     // note that we do nothing to the GMN when we initalize because
     // we set it in the constructor
-    dresizeToPage_ = false;
+    dresizeToPage_ = true;
     dformat_ = GUIDO_WEB_API_PNG;
     dpage_ = 1;
     dwidth_ = 15.0f;

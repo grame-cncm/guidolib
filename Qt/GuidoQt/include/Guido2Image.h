@@ -104,7 +104,8 @@ class Guido2Image
 			int						pageIndex;
 			QSize					sizeConstraints;
 			float					zoom;
-			Params () : input(0), output(0), device(0), format(GUIDO_2_IMAGE_PNG), layout(0), pageIndex(1), zoom(1.0) {}
+			bool resizePageToMusic; // do we resize the page to the music?
+			Params () : input(0), output(0), device(0), format(GUIDO_2_IMAGE_PNG), layout(0), pageIndex(1), zoom(1.0), resizePageToMusic(false) {}
 		} Params;
 
 		/*!
