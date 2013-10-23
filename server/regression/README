@@ -1,0 +1,44 @@
+GUIDO server regtest.
+
+To run the regtests for the first time, type:
+
+python test.py baseline
+
+and
+
+python test.py check
+
+In theory, nothing should differ.
+
+For subsequent runs, make sure to stash the old folder before you create a
+new one.  i.e.:
+
+rm -rf check/
+python test.py check
+
+Otherwise, the script will complain.
+
+If there is a difference betwen the baseline and check, the script will show
+the URL as well as change in the result.  For example:
+
+<snip>
+URL sent to the server:
+32cd115bcaff3272c4ab8c28d5698b8ace5012c5/staffmap?staff=1
+--- baseline/gmn-examples/note/headsReverse/07f3d96f1f7043e3119ce29982325c267ba87961/headsReverse_07f3d96f1f7043e3119ce29982325c267ba87961.code
+
++++
+check/gmn-examples/note/headsReverse/07f3d96f1f7043e3119ce29982325c267ba87961/headsReverse_07f3d96f1f7043e3119ce29982325c267ba87961.code
+
+@@ -1 +1 @@
+
+-500
++200
+</snip>
+
+This means that the URL sent to the server was
+32cd115bcaff3272c4ab8c28d5698b8ace5012c5/staffmap?staff=1.  In the old
+version, the return code was 500, but in the new one, the return code was
+200.
+
+This info can be written to a logfile (run the script with -h for more
+info).
