@@ -136,6 +136,8 @@ def get_extension(tp) :
     return 'svg'
   if tp == 'image/png' :
     return 'png'
+  if tp == 'image/gif' :
+    return 'gif'
   if tp == 'image/jpeg' :
     return 'jpg'
   if tp == 'application/json' :

@@ -42,3 +42,13 @@ version, the return code was 500, but in the new one, the return code was
 
 This info can be written to a logfile (run the script with -h for more
 info).
+
+Internally, the regtest directories are structured as a heirarchy similar
+to that of the gmn examples. In terminal directories, there are four files:
+
+*.code = the status code
+*.url = the url
+*.X = the resulting file, where X is either json, svg, png, gif or jpg
+*.type = the MIME type
+
+Questions? mike at mikesolomon dot org
