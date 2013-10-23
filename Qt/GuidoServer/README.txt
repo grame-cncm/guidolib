@@ -1,3 +1,5 @@
-If on Mac OS X, do:
+To compile, just qmake and then make.
 
-qmake -spec macx-xcode
+To run the server as a daemon, do:
+
+nohup ./guidohttpserver -daemon &

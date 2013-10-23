@@ -29,17 +29,18 @@
 using namespace std;
 using namespace guidohttpd;
 
-#define kVersion	 0.50f
-#define kVersionStr	"0.50"
+#define kVersion 0.50f
+#define kVersionStr "0.50"
 
-static const char* kPortOpt	= "-port";
+static const char* kPortOpt = "--port";
 static const int kDefaultPort = 8000;
 
-static const char* kLogfileOpt	= "-logfile";
+static const char* kLogfileOpt = "--logfile";
 static const string kDefaultLogfile = "guidohttpdserver.log";
 
-static const char* kDaemonOpt	= "-daemon";
-static const char* kHelpOpt		= "-help";
+static const char* kSafeOpt = "--safe";
+static const char* kHelpOpt = "--help";
+static const char* kShortHelpOpt = "-h";
 
 //---------------------------------------------------------------------------------
 static void usage (char* name)
@@ -51,13 +52,13 @@ static void usage (char* name)
     cout << "usage: " << name << " [ options ]" << endl;
     cout << "where options are in:" << endl;
     cout << tab << kPortOpt << " portnum : sets the communication port number (defaults to " << kDefaultPort << ")"<< endl;
-    cout << tab << kDaemonOpt  << " : launch the server in daemon mode" << endl;
-    cout << tab << kLogfileOpt << " name : (defaults to " << kDefaultLogfile << "  - ignored when not in daemon mode)" << endl;
+    cout << tab << kSafeOpt  << " : closes all file descriptors and moves the program to a safe place " << endl;
+    cout << tab << kLogfileOpt << " name : (defaults to " << kDefaultLogfile << "  - ignored when not in safe mode)" << endl;
     cout << tab << kHelpOpt << " : print this help message and exit" << endl;
 }
 
 //---------------------------------------------------------------------------------
-static bool launchServer (int port, const char * logfile, bool daemon)
+static bool launchServer (int port, const char * logfile, bool safe)
 {
     bool ret = false;
     guido2img converter;
@@ -65,7 +66,7 @@ static bool launchServer (int port, const char * logfile, bool daemon)
     HTTPDServer server(port, &converter);
     if (server.start(port)) {
         log << "Guido server v." << kVersionStr << " is running on port " << port << logend;
-        if (daemon) {
+        if (safe) {
             while (true) { }
         } else {
             cout << "Type 'q' to quit" << endl;
@@ -88,19 +89,20 @@ static bool launchServer (int port, const char * logfile, bool daemon)
 //---------------------------------------------------------------------------------
 int main(int argc, char **argv)
 {
-    QApplication app(argc , argv); // required by Qt
-//    makeApplication(argc, argv);
+    QCoreApplication app(argc , argv); // required by Qt
     srand(time(0));
     int port = lopt (argv, kPortOpt, kDefaultPort);
     string logfile = sopt (argv, kLogfileOpt, kDefaultLogfile);
-    bool daemon = bopt (argv, kDaemonOpt, false);
-    if (bopt (argv, kHelpOpt, false)) {
+    bool safe = bopt (argv, kSafeOpt, false);
+    if (bopt (argv, kHelpOpt, false) || bopt (argv, kShortHelpOpt, false)) {
         usage (argv[0]);
         exit (0);
     }
-    gLog = daemon ? new logstream ( logfile.c_str() ) : new logstream();
+    gLog = safe ? new logstream ( logfile.c_str() ) : new logstream();
 
-    if (daemon) {
+    if (safe) {
+        // below is commented out because of Mac OS X problems with daemons
+        /*
         // Our process ID and Session ID
         // Fork off the parent process
         pid_t pid = fork();
@@ -122,7 +124,7 @@ int main(int argc, char **argv)
             log << "SID creation failed (errno " << errno << ")" << logend;
             exit(EXIT_FAILURE);
         }
-
+        */
         // Change the current working directory
         if ((chdir("/")) < 0) {
             log << "Could not change the directory to the root directory." << logend;
@@ -134,6 +136,6 @@ int main(int argc, char **argv)
         close(STDOUT_FILENO);
         close(STDERR_FILENO);
     }
-    return launchServer (port, logfile.c_str(), daemon) ? 0 : 1;
+    return launchServer (port, logfile.c_str(), safe) ? 0 : 1;
 }
 
