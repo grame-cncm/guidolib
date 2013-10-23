@@ -61,6 +61,8 @@ struct connection_info_struct {
 class HTTPDServer
 {
     int					fPort;
+    int					fVerbose;
+    string fCachedir;
     struct MHD_Daemon *	fServer;
     guido2img*			fConverter;
     std::map<std::string, guidosession *> fSessions;
@@ -69,7 +71,7 @@ class HTTPDServer
 
 public:
 
-    HTTPDServer(int port, guido2img* g2img);
+    HTTPDServer(int port, int verbose, string cachedir, guido2img* g2img);
     virtual ~HTTPDServer();
 
     /// \brief starts the httpd server
@@ -80,6 +82,9 @@ public:
     int sendGuido (struct MHD_Connection *connection, const char* url, const TArgs& args, int type);
     int sendGuidoPostRequest (struct MHD_Connection *connection, const TArgs& args);
     int sendGuidoDeleteRequest (struct MHD_Connection *connection, const TArgs& args);
+
+    void registerGMN(string unique_id, string gmn);
+    void readFromCache();
 
     static int send (struct MHD_Connection *connection, guidosessionresponse &response);
     static int send (struct MHD_Connection *connection, const char *page, int length, const char *type, int status=MHD_HTTP_OK);

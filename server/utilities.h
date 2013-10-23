@@ -37,11 +37,10 @@
 
 #define POSTBUFFERSIZE 512
 
-#define GET 0
-#define POST 1
-
 namespace guidohttpd
 {
+
+extern int kVerbose;
 
 typedef std::pair<std::string, std::string> TArg;
 typedef std::map<std::string, std::string> TArgs;

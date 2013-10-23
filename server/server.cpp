@@ -21,6 +21,9 @@
 
 */
 
+#include <QDir>
+#include <QTextStream>
+
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -113,8 +116,8 @@ _post_params (void *coninfo_cls, enum MHD_ValueKind , const char *key,
 //--------------------------------------------------------------------------
 // the http server
 //--------------------------------------------------------------------------
-HTTPDServer::HTTPDServer(int port, guido2img* g2svg)
-    : fPort(port), fServer(0), fConverter(g2svg)
+HTTPDServer::HTTPDServer(int port, int verbose, string cachedir, guido2img* g2svg)
+    : fPort(port), fVerbose(verbose), fCachedir(cachedir), fServer(0), fConverter(g2svg)
 {
 }
 
@@ -217,6 +220,43 @@ std::string generate_sha1(std::string setter)
   return ss.str();
 }
 
+void HTTPDServer::readFromCache()
+{
+  QDir myDir(fCachedir.c_str());
+  QStringList filesList = myDir.entryList();
+
+  for (int i = 0; i < filesList.size(); i++) {
+    string unique_id = filesList[i].toStdString();
+    QFile file((fCachedir+"/"+unique_id+"/"+unique_id+".gmn").c_str());
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+      continue;
+                
+    QTextStream in(&file);
+    string all = in.readAll().toStdString();
+    file.close();
+
+    registerGMN(unique_id, all);
+  }
+}
+
+void HTTPDServer::registerGMN(string unique_id, string gmn)
+{
+    if (fSessions.find (unique_id) == fSessions.end ()) {
+      fSessions[unique_id] = new guidosession(fConverter, gmn, unique_id);
+      fSessions[unique_id]->initialize();
+    }
+    QDir dir((fCachedir+'/'+unique_id).c_str());
+    if (!dir.exists()) {
+      dir.mkpath(".");
+      QFile file(dir.absoluteFilePath((unique_id+".gmn").c_str()));
+      if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream out(&file);
+        out << gmn.c_str();
+        file.close();
+      }
+    }
+}
+
 int HTTPDServer::sendGuidoPostRequest(struct MHD_Connection *connection, const TArgs& args)
 {
     if (args.size() != 1) {
@@ -242,10 +282,7 @@ int HTTPDServer::sendGuidoPostRequest(struct MHD_Connection *connection, const T
     */
     unique_id = generate_sha1(args.begin()->second);
     // if the score does not exist already, we put it there
-    if (fSessions.find (unique_id) == fSessions.end ()) {
-      fSessions[unique_id] = new guidosession(fConverter, args.begin()->second, unique_id);
-      fSessions[unique_id]->initialize();
-    }
+    registerGMN(unique_id, args.begin()->second);
     guidosessionresponse response = fSessions[unique_id]->genericReturnId();
     return send (connection, response);
 }
@@ -287,22 +324,15 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
     */
     
     // LOGFILE.
-    if (type == DELETE) {
-      log << "DELETE" << logend;
-    }
-    else if (type == GET) {
-      log << "GET" << logend;
-    }
-    else if (type == POST) {
-      log << "POST" << logend;
-    }
-    else if (type == HEAD) {
-      log << "HEAD" << logend;
-    }
-    log << url << logend;
-    for(TArgs::const_iterator it = args.begin(); it != args.end(); it++) {
-      log << it->first << logend;
-      log << it->second << logend;
+    const string stypes[4] = {"GET", "POST", "DELETE", "HEAD"};
+    string stype = stypes[type];
+    if (((type == GET) && (fVerbose == 1)) || (fVerbose == 2)) {
+      log << stype << logend;
+      log << url << logend;
+      for(TArgs::const_iterator it = args.begin(); it != args.end(); it++) {
+        log << it->first << logend;
+        log << it->second << logend;
+      }
     }
 
     // first, parse the URL
@@ -464,9 +494,6 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
 //--------------------------------------------------------------------------
 int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, const char *method, const char *version, const char *upload_data, size_t *upload_data_size, void **con_cls)
 {
-    //const union MHD_ConnectionInfo * infos = MHD_get_connection_info(connection, MHD_CONNECTION_INFO_CLIENT_ADDRESS);
-    //log << infos->client_addr << " - " << method << " - " << url << logend;
-    // <<---- BEGIN POST TESTING
     if (NULL == *con_cls) {
         struct connection_info_struct *con_info = new connection_info_struct ();
         if (0 == strcmp (method, "POST")) {

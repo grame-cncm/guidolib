@@ -19,6 +19,7 @@
 #include <errno.h>
 
 #include <QApplication>
+#include <QDir>
 
 #include "QGuidoPainter.h"
 #include "guido2img.h"
@@ -35,12 +36,21 @@ using namespace guidohttpd;
 static const char* kPortOpt = "--port";
 static const int kDefaultPort = 8000;
 
+static const int kDefaultVerbose = 0;
+
 static const char* kLogfileOpt = "--logfile";
 static const string kDefaultLogfile = "guidohttpdserver.log";
 
+static const char* kCachedirOpt = "--cachedir";
+static const string kDefaultCachedir = "cache";
+
 static const char* kSafeOpt = "--safe";
+
 static const char* kHelpOpt = "--help";
 static const char* kShortHelpOpt = "-h";
+
+static const char* kVerboseOpt = "--verbose";
+static const char* kShortVerboseOpt = "-v";
 
 //---------------------------------------------------------------------------------
 static void usage (char* name)
@@ -54,16 +64,19 @@ static void usage (char* name)
     cout << tab << kPortOpt << " portnum : sets the communication port number (defaults to " << kDefaultPort << ")"<< endl;
     cout << tab << kSafeOpt  << " : closes all file descriptors and moves the program to a safe place " << endl;
     cout << tab << kLogfileOpt << " name : (defaults to " << kDefaultLogfile << "  - ignored when not in safe mode)" << endl;
+    cout << tab << kCachedirOpt << " name : (defaults to " << kDefaultCachedir << "  - ignored when not in safe mode)" << endl;
+    cout << tab << kVerboseOpt << " : the level of verbosity (0 is the bare minimum, 1 is the GET requests the server is getting, 2 is all the requests the server is getting)" << endl;
     cout << tab << kHelpOpt << " : print this help message and exit" << endl;
 }
 
 //---------------------------------------------------------------------------------
-static bool launchServer (int port, const char * logfile, bool safe)
+static bool launchServer (int port, int verbose, string cachedir, bool safe)
 {
     bool ret = false;
     guido2img converter;
     startEngine();
-    HTTPDServer server(port, &converter);
+    HTTPDServer server(port, verbose, cachedir, &converter);
+    server.readFromCache();
     if (server.start(port)) {
         log << "Guido server v." << kVersionStr << " is running on port " << port << logend;
         if (safe) {
@@ -92,6 +105,8 @@ int main(int argc, char **argv)
     QCoreApplication app(argc , argv); // required by Qt
     srand(time(0));
     int port = lopt (argv, kPortOpt, kDefaultPort);
+    int verbose = lopt (argv, kVerboseOpt, kDefaultVerbose);
+
     string logfile = sopt (argv, kLogfileOpt, kDefaultLogfile);
     bool safe = bopt (argv, kSafeOpt, false);
     if (bopt (argv, kHelpOpt, false) || bopt (argv, kShortHelpOpt, false)) {
@@ -99,7 +114,8 @@ int main(int argc, char **argv)
         exit (0);
     }
     gLog = safe ? new logstream ( logfile.c_str() ) : new logstream();
-
+    string cachedir = sopt (argv, kCachedirOpt, kDefaultCachedir);
+    cachedir = QDir(cachedir.c_str()).absolutePath().toStdString();
     if (safe) {
         // below is commented out because of Mac OS X problems with daemons
         /*
@@ -136,6 +152,5 @@ int main(int argc, char **argv)
         close(STDOUT_FILENO);
         close(STDERR_FILENO);
     }
-    return launchServer (port, logfile.c_str(), safe) ? 0 : 1;
+    return launchServer (port, verbose, cachedir, safe) ? 0 : 1;
 }
-
