@@ -226,16 +226,28 @@ void HTTPDServer::readFromCache()
   QStringList filesList = myDir.entryList();
 
   for (int i = 0; i < filesList.size(); i++) {
-    string unique_id = filesList[i].toStdString();
-    QFile file((fCachedir+"/"+unique_id.substr(0,2)+"/"+unique_id+".gmn").c_str());
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-      continue;
-                
-    QTextStream in(&file);
-    string all = in.readAll().toStdString();
-    file.close();
+    QDir subDir(myDir.absoluteFilePath(filesList[i]));
+    QStringList subFilesList = subDir.entryList();
+    string folder = filesList[i].toStdString();
+    for (int j = 0; j < subFilesList.size(); j++) {
+      string fn = subFilesList[j].toStdString();
+      if (fn.length() != 44)
+        continue;
 
-    registerGMN(unique_id, all);
+      if (fn.substr(41,3) != "gmn")
+        continue;
+
+      string unique_id = fn.substr(0,40);
+      QFile file((fCachedir+"/"+unique_id.substr(0,2)+"/"+unique_id+".gmn").c_str());
+      if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        continue;
+                  
+      QTextStream in(&file);
+      string all = in.readAll().toStdString();
+      file.close();
+
+      registerGMN(unique_id, all);
+    }
   }
 }
 
