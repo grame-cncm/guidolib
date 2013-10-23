@@ -227,7 +227,7 @@ void HTTPDServer::readFromCache()
 
   for (int i = 0; i < filesList.size(); i++) {
     string unique_id = filesList[i].toStdString();
-    QFile file((fCachedir+"/"+unique_id+"/"+unique_id+".gmn").c_str());
+    QFile file((fCachedir+"/"+unique_id.substr(0,2)+"/"+unique_id+".gmn").c_str());
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
       continue;
                 
@@ -245,7 +245,7 @@ void HTTPDServer::registerGMN(string unique_id, string gmn)
       fSessions[unique_id] = new guidosession(fConverter, gmn, unique_id);
       fSessions[unique_id]->initialize();
     }
-    QDir dir((fCachedir+'/'+unique_id).c_str());
+    QDir dir((fCachedir+'/'+unique_id.substr(0,2)).c_str());
     if (!dir.exists()) {
       dir.mkpath(".");
       QFile file(dir.absoluteFilePath((unique_id+".gmn").c_str()));
