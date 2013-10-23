@@ -102,7 +102,7 @@ static bool launchServer (int port, int verbose, string cachedir, bool safe)
 //---------------------------------------------------------------------------------
 int main(int argc, char **argv)
 {
-    QCoreApplication app(argc , argv); // required by Qt
+    QApplication app(argc , argv); // required by Qt
     srand(time(0));
     int port = lopt (argv, kPortOpt, kDefaultPort);
     int verbose = lopt (argv, kVerboseOpt, kDefaultVerbose);
