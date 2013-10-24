@@ -44,6 +44,9 @@
 #define REQUEST_VERBOSE 4
 #define URL_VERBOSE 8
 #define QUERY_VERBOSE 16
+#define CODE_VERBOSE 32
+#define MIME_VERBOSE 64
+#define LENGTH_VERBOSE 128
 
 #define HEAD 3
 #define DELETE 2
@@ -92,9 +95,9 @@ public:
     void registerGMN(string unique_id, string gmn);
     void readFromCache();
 
-    static int send (struct MHD_Connection *connection, guidosessionresponse &response);
-    static int send (struct MHD_Connection *connection, const char *page, int length, const char *type, int status=MHD_HTTP_OK);
-    static int send (struct MHD_Connection *connection, const char *page, const char *type, int status=MHD_HTTP_OK);
+    static int send (struct MHD_Connection *connection, guidosessionresponse &response, int verbose);
+    static int send (struct MHD_Connection *connection, const char *page, int length, const char *type, int verbose, int status=MHD_HTTP_OK);
+    static int send (struct MHD_Connection *connection, const char *page, const char *type, int verbose, int status=MHD_HTTP_OK);
 
 };
 

@@ -44,6 +44,9 @@
 #include "json/json_parser.h"
 #include "json/json_stream.h"
 
+// curl
+#include <curl/curl.h>
+
 #include "openssl/sha.h"
 
 using namespace json;
@@ -162,14 +165,33 @@ void HTTPDServer::stop ()
 }
 
 //--------------------------------------------------------------------------
-int HTTPDServer::send (struct MHD_Connection *connection, guidosessionresponse &response)
+int HTTPDServer::send (struct MHD_Connection *connection, guidosessionresponse &response, int verbose)
 {
-    return send (connection, response.data_, response.size_, response.format_.c_str(), response.http_status_);
+    return send (connection, response.data_, response.size_, response.format_.c_str(), verbose, response.http_status_);
 }
 
 //--------------------------------------------------------------------------
-int HTTPDServer::send (struct MHD_Connection *connection, const char *page, int length, const char* type, int status)
+int HTTPDServer::send (struct MHD_Connection *connection, const char *page, int length, const char* type, int verbose, int status)
 {
+    if (verbose > 0) {
+      const char *tab = "  ";
+      if (verbose & CODE_VERBOSE) {
+        log << tab << "<code>" << logend;
+        log << tab << tab << status << logend;
+        log << tab << "</code>" << logend;
+      }
+      if (verbose & MIME_VERBOSE) {
+        log << tab << "<mime>" << logend;
+        log << tab << tab << type << logend;
+        log << tab << "</mime>" << logend;
+      }
+      if (verbose & LENGTH_VERBOSE) {
+        log << tab << "<length>" << logend;
+        log << tab << tab << length << logend;
+        log << tab << "</length>" << logend;
+      }
+      log << "</entry>" << logend;
+    }
     struct MHD_Response *response = MHD_create_response_from_buffer (length, (void *) page, MHD_RESPMEM_MUST_COPY);
     if (!response) {
         cerr << "MHD_create_response_from_buffer error: null response\n";
@@ -182,9 +204,9 @@ int HTTPDServer::send (struct MHD_Connection *connection, const char *page, int 
 }
 
 //--------------------------------------------------------------------------
-int HTTPDServer::send (struct MHD_Connection *connection, const char *page, const char* type, int status)
+int HTTPDServer::send (struct MHD_Connection *connection, const char *page, const char* type, int verbose, int status)
 {
-    return send (connection, page, strlen (page), type, status);
+    return send (connection, page, strlen (page), type, verbose, status);
 }
 
 //--------------------------------------------------------------------------
@@ -287,17 +309,17 @@ int HTTPDServer::sendGuidoPostRequest(struct MHD_Connection *connection, const T
 {
     if (args.size() != 1) {
         guidosessionresponse response = guidosession::genericFailure("Requests without scores MUST only contain one field called `data'.", 403);
-        return send (connection, response);
+        return send (connection, response, fVerbose);
     }
     if (args.begin()->first != "data") {
         guidosessionresponse response = guidosession::genericFailure("Requests without scores MUST only contain one field called `data'.", 403);
-        return send (connection, response);
+        return send (connection, response, fVerbose);
     }
     // we verify to see if this is valid guido
     GuidoErrCode err = guidosession::verifyGMN(args.begin()->second);
     if (err != guidoNoErr) {
         guidosessionresponse response = guidosession::genericFailure("You have sent the server invalid GMN.", 400);
-        return send (connection, response);
+        return send (connection, response, fVerbose);
     }
     std::string unique_id;
     /*
@@ -310,7 +332,7 @@ int HTTPDServer::sendGuidoPostRequest(struct MHD_Connection *connection, const T
     // if the score does not exist already, we put it there
     registerGMN(unique_id, args.begin()->second);
     guidosessionresponse response = fSessions[unique_id]->genericReturnId();
-    return send (connection, response);
+    return send (connection, response, fVerbose);
 }
 
 int HTTPDServer::sendGuidoDeleteRequest(struct MHD_Connection *connection, const TArgs& args)
@@ -336,7 +358,7 @@ int HTTPDServer::sendGuidoDeleteRequest(struct MHD_Connection *connection, const
         response.size_ = success.size();
         response.http_status_ = 200;
     }
-    return send (connection, response);
+    return send (connection, response, fVerbose);
 }
     
 //--------------------------------------------------------------------------
@@ -350,8 +372,6 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
     */
 
     // LOGFILE.
-    const string stypes[4] = {"GET", "POST", "DELETE", "HEAD"};
-    string stype = stypes[type];
     if (fVerbose > 0) {
       const char *tab = "  ";
       log << "<entry>" << logend;
@@ -388,9 +408,11 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
         }
       }
       if (fVerbose & REQUEST_VERBOSE) {
-        log << tab << "<type>" << logend;
-        log << tab << tab << stype << logend;
-        log << tab << "</type>" << logend;
+        const string smethods[4] = {"GET", "POST", "DELETE", "HEAD"};
+        string smethod = smethods[type];
+        log << tab << "<method>" << logend;
+        log << tab << tab << smethod << logend;
+        log << tab << "</method>" << logend;
       }
       if (fVerbose & URL_VERBOSE) {
         log << tab << "<url>" << logend;
@@ -406,14 +428,15 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
             log << tab << tab << tab << tab << it->first << logend;
             log << tab << tab << tab << "</name>" << logend;
             log << tab << tab << tab << "<value>" << logend;
-            log << tab << tab << tab << tab << it->second << logend;
+            log << tab << tab << tab << tab << curl_escape(it->second.c_str (), 0) << logend;
             log << tab << tab << tab << "</value>" << logend;
             log << tab << tab << "</pair>" << logend;
           }
           log << tab << "</query>" << logend;
         }
       }
-      log << "</entry>" << logend;
+      // we close the entry when we send
+      //log << "</entry>" << logend;
     }
 
     // first, parse the URL
@@ -429,26 +452,26 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
     if (!elems.size()) {
         if (type != POST) {
             guidosessionresponse response = guidosession::genericFailure("Requests without scores MUST be POST.", 403);
-            return send (connection, response);
+            return send (connection, response, fVerbose);
         }
         return sendGuidoPostRequest(connection, args);
     }
 
     if (elems[0] == "version") {
         guidosessionresponse response = guidosession::handleSimpleStringQuery("version", guidosession::getVersion());
-        return send(connection, response);
+        return send(connection, response, fVerbose);
     } else if (elems[0] == "server") {
         guidosessionresponse response = guidosession::handleSimpleStringQuery("server", guidosession::getServerVersion());
-        return send(connection, response);
+        return send(connection, response, fVerbose);
     } else if (elems[0] == "linespace") {
         guidosessionresponse response = guidosession::handleSimpleFloatQuery("linespace", guidosession::getLineSpace());
-        return send(connection, response);
+        return send(connection, response, fVerbose);
     }
 
     map<string, guidosession *>::iterator it = fSessions.find(elems[0]);
     if (it == fSessions.end ()) {
         guidosessionresponse response = guidosession::genericFailure("incorrect score ID.", 404, elems[0]);
-        return send (connection, response);
+        return send (connection, response, fVerbose);
     }
     guidosession *currentSession = fSessions[elems[0]];
 
@@ -460,7 +483,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
         if (elems.size() == 1) {
             // must be getting the score
             guidosessionresponse response = currentSession->genericReturnImage();
-            return send (connection, response);
+            return send (connection, response, fVerbose);
         }
         if (elems.size() == 2) {
             // the second element will always specify something we need in JSON
@@ -472,19 +495,19 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                 guidosessionresponse response = nvoices >= 0
                     ? currentSession->handleSimpleIDdIntQuery("voicescount", nvoices)
                     : guidosession::genericFailure("Could not get the number of voices from this score.", 400, elems[0]);
-                return send(connection, response);
+                return send(connection, response, fVerbose);
             } else if (elems[1] == "pagescount") {
                 int npages = currentSession->pagesCount();
                 guidosessionresponse response = npages >= 0
                     ? currentSession->handleSimpleIDdIntQuery("pagescount", npages)
                     : guidosession::genericFailure("Could not get the number of pages from this score.", 400, elems[0]);
-                return send(connection, response);
+                return send(connection, response, fVerbose);
             } else if (elems[1] == "duration") {
                 string duration = currentSession->duration();
                 guidosessionresponse response = duration != ""
                     ? currentSession->handleSimpleIDdStringQuery("duration", duration)
                     : guidosession::genericFailure("Could not get the duration of this score.", 400, elems[0]);
-                return send(connection, response);
+                return send(connection, response, fVerbose);
             } else if (elems[1] == "pageat") {
                 GuidoDate date;
                 string mydate = "";
@@ -496,7 +519,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                 guidosessionresponse response = page >= 0
                     ? currentSession->datePageJson(mydate, page)
                     : guidosession::genericFailure("The score does not contain this date.", 400, elems[0]);
-                return send(connection, response);
+                return send(connection, response, fVerbose);
             } else if (elems[1] == "pagedate") {
                 GuidoDate date;
                 int mypage = 1;
@@ -507,7 +530,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                 guidosessionresponse response = success == 0
                     ? currentSession->datePageJson(dateToString(date), mypage)
                     : guidosession::genericFailure("This page does not exist in the score.", 400, elems[0]);
-                return send(connection, response);
+                return send(connection, response, fVerbose);
             } else if (elems[1] == "pagemap") {
                 Time2GraphicMap outmap;
                 GuidoErrCode err;
@@ -515,10 +538,10 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                 guidosessionresponse response = err == guidoNoErr
                     ? currentSession->mapJson("pagemap", outmap)
                     : guidosession::genericFailure("Could not generate a page map.", 400, elems[0]);
-                return send(connection, response);
+                return send(connection, response, fVerbose);
             } else if (elems[1] == "midi") {
                 guidosessionresponse response = currentSession->genericReturnMidi();
-                return send(connection, response);
+                return send(connection, response, fVerbose);
             } else if (elems[1] == "systemmap") {
                 Time2GraphicMap outmap;
                 GuidoErrCode err;
@@ -526,7 +549,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                 guidosessionresponse response = err == guidoNoErr
                     ? currentSession->mapJson("systemmap", outmap)
                     : guidosession::genericFailure("Could not generate a system map.", 400, elems[0]);
-                return send(connection, response);
+                return send(connection, response, fVerbose);
             } else if (elems[1] == "staffmap") {
                 Time2GraphicMap outmap;
                 GuidoErrCode err;
@@ -538,7 +561,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                 guidosessionresponse response = err == guidoNoErr
                     ? currentSession->mapJson("staffmap", outmap)
                     : guidosession::genericFailure("Could not generate a staff map.", 400, elems[0]);
-                return send(connection, response);
+                return send(connection, response, fVerbose);
             } else if (elems[1] == "voicemap") {
                 Time2GraphicMap outmap;
                 GuidoErrCode err;
@@ -550,7 +573,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                 guidosessionresponse response = err == guidoNoErr
                     ? currentSession->mapJson("voicemap", outmap)
                     : guidosession::genericFailure("Could not generate a voice map.", 400, elems[0]);
-                return send(connection, response);
+                return send(connection, response, fVerbose);
             } else if (elems[1] == "timemap") {
                 GuidoServerTimeMap outmap;
                 GuidoErrCode err;
@@ -558,18 +581,18 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                 guidosessionresponse response = err == guidoNoErr
                     ? currentSession->timeMapJson(outmap)
                     : guidosession::genericFailure("Could not generate a time map.", 400, elems[0]);
-                return send(connection, response);
+                return send(connection, response, fVerbose);
                 //guidosessionresponse response = guidosession::genericFailure("timemap is not implemented yet but will be soon.", 501);
-                //return send(connection, response);
+                //return send(connection, response, fVerbose);
             } else {
                 guidosessionresponse response = guidosession::genericFailure("Unidentified GET request.", 404, elems[0]);
-                return send(connection, response);
+                return send(connection, response, fVerbose);
             }
         }
     }
 
     guidosessionresponse reallyBadResponse = guidosession::genericFailure("Only GET and DELETE requests may be sent to an already completed score.", 400);
-    return send (connection, reallyBadResponse);
+    return send (connection, reallyBadResponse, fVerbose);
 }
 
 //--------------------------------------------------------------------------
@@ -640,7 +663,7 @@ for (TArgs::const_iterator it = myArgs.begin(); it != myArgs.end(); it++)
       ss << method;
       ss << " command";
       guidosessionresponse reallyBadResponse = guidosession::genericFailure(ss.str ().c_str (), 400);
-      return send (connection, reallyBadResponse);
+      return send (connection, reallyBadResponse, fVerbose);
     }
     // should never get here
     return MHD_NO;

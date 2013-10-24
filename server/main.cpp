@@ -37,7 +37,9 @@ static const char* kPortOpt = "--port";
 static const int kDefaultPort = 8000;
 
 static const char* kVerboseOpt = "--verbose";
-static const int kDefaultVerbose = IP_VERBOSE | HEADER_VERBOSE | REQUEST_VERBOSE | URL_VERBOSE | QUERY_VERBOSE;
+static const int kDefaultVerbose = IP_VERBOSE | HEADER_VERBOSE
+  | REQUEST_VERBOSE | URL_VERBOSE | QUERY_VERBOSE
+  | CODE_VERBOSE | MIME_VERBOSE | LENGTH_VERBOSE;
 
 static const char* kLogfileOpt = "--logfile";
 static const string kDefaultLogfile = "guidohttpdserver.log";
@@ -64,13 +66,16 @@ static void usage (char* name)
     cout << tab << kLogfileOpt << " name : (defaults to " << kDefaultLogfile << " - use an empty string to write to STDOUT)" << endl;
     cout << tab << kCachedirOpt << " name : (defaults to " << kDefaultCachedir << ")" << endl;
     cout << tab << kVerboseOpt << " verbosity. an integer bitmap that can combine:" << endl;
-    cout << tab << tab << "1 (print ip to log)" << endl;
-    cout << tab << tab << "2 (print header info to log)" << endl;
-    cout << tab << tab << "4 (print request type to log)" << endl;
-    cout << tab << tab << "8 (print url to log)" << endl;
-    cout << tab << tab << "16 (print query string to log)" << endl;
-    cout << tab << tab << "example: --verbose 25 will print ip, url and query string" << endl;
-    cout << tab << tab << "default is 31, or everything" << endl;
+    cout << tab << tab << "1 (print ip to log as <ip></ip>)" << endl;
+    cout << tab << tab << "2 (print header info pairs to log as <header></header>)" << endl;
+    cout << tab << tab << "4 (print method type to log as <method></method>)" << endl;
+    cout << tab << tab << "8 (print url to log as <url></url>)" << endl;
+    cout << tab << tab << "16 (print url-encoded query pairs to log as <query></query>)" << endl;
+    cout << tab << tab << "32 (print return code string to log as <code></code>)" << endl;
+    cout << tab << tab << "64 (print mime type string to log as <mime></mime>)" << endl;
+    cout << tab << tab << "128 (print length of return type to log as <length></length>)" << endl;
+    cout << tab << tab << "example: --verbose 25 will print ip, url and query pairs" << endl;
+    cout << tab << tab << "default is 255, or everything" << endl;
     cout << tab << kHelpOpt << " : print this help message and exit" << endl;
 }
 
