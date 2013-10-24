@@ -353,50 +353,67 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
     const string stypes[4] = {"GET", "POST", "DELETE", "HEAD"};
     string stype = stypes[type];
     if (fVerbose > 0) {
-      const char *tab = "     ";
-      log << "*****************************************************" << logend;
+      const char *tab = "  ";
+      log << "<entry>" << logend;
+      log << tab << "<date>" << logend;
+      log << tab << tab << log.date() << logend;
+      log << tab << "</date>" << logend;
       if (fVerbose & IP_VERBOSE) {
         struct sockaddr *so;
         char buf[INET6_ADDRSTRLEN];
         so = MHD_get_connection_info (connection,
                                       MHD_CONNECTION_INFO_CLIENT_ADDRESS)->client_addr;
-        log << "INCOMING IP:" << logend;
-        log << tab << inet_ntop(so->sa_family,
+        log << tab << "<ip>" << logend;
+        log << tab << tab << inet_ntop(so->sa_family,
                          so->sa_data + 2, buf, INET6_ADDRSTRLEN)
             << logend;
+        log << tab << "</ip>" << logend;
       }
       if (fVerbose & HEADER_VERBOSE) {
         TArgs headerArgs;
         MHD_get_connection_values (connection, MHD_HEADER_KIND, _get_params, &headerArgs);
         if (headerArgs.size()) {
-          log << "HEADER VALUES:" << logend;
+          log << tab << "<header>" << logend;
           for(TArgs::const_iterator it = headerArgs.begin(); it != headerArgs.end(); it++) {
-            log << tab << "NAME:" << logend;
-            log << tab << tab << it->first << logend;
-            log << tab << "VALUE:" << logend;
-            log << tab << tab << it->second << logend;
+            log << tab << tab << "<pair>" << logend;
+            log << tab << tab << tab << "<name>" << logend;
+            log << tab << tab << tab << tab << it->first << logend;
+            log << tab << tab << tab << "</name>" << logend;
+            log << tab << tab << tab << "<value>" << logend;
+            log << tab << tab << tab << tab << it->second << logend;
+            log << tab << tab << tab << "</value>" << logend;
+            log << tab << tab << "</pair>" << logend;
           }
+          log << tab << "</header>" << logend;
         }
       }
       if (fVerbose & REQUEST_VERBOSE) {
-        log << "REQUEST TYPE:" << logend;
-        log << tab << stype << logend;
+        log << tab << "<type>" << logend;
+        log << tab << tab << stype << logend;
+        log << tab << "</type>" << logend;
       }
       if (fVerbose & URL_VERBOSE) {
-        log << "URL:" << logend;
-        log << tab << url << logend;
+        log << tab << "<url>" << logend;
+        log << tab << tab << url << logend;
+        log << tab << "</url>" << logend;
       }
       if (fVerbose & QUERY_VERBOSE) {
         if (args.size()) {
-          log << "QUERY STRING:" << logend;
+          log << tab << "<query>" << logend;
           for(TArgs::const_iterator it = args.begin(); it != args.end(); it++) {
-            log << tab << "NAME:" << logend;
-            log << tab << tab << it->first << logend;
-            log << tab << "VALUE:" << logend;
-            log << tab << tab << it->second << logend;
+            log << tab << tab << "<pair>" << logend;
+            log << tab << tab << tab << "<name>" << logend;
+            log << tab << tab << tab << tab << it->first << logend;
+            log << tab << tab << tab << "</name>" << logend;
+            log << tab << tab << tab << "<value>" << logend;
+            log << tab << tab << tab << tab << it->second << logend;
+            log << tab << tab << tab << "</value>" << logend;
+            log << tab << tab << "</pair>" << logend;
           }
+          log << tab << "</query>" << logend;
         }
       }
+      log << "</entry>" << logend;
     }
 
     // first, parse the URL

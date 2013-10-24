@@ -66,14 +66,13 @@ class logstream
     bool		fDaemon;
     bool		fPrintDate;
     std::fstream fFileStream;
-
+    void		printdate(std::ostream& out);
     inline std::ostream& stream() {
         return fDaemon ? fFileStream : std::cout;
     }
-    std::string date();
-    void		printdate(std::ostream& out);
 
 public:
+    std::string date();
     logstream () : fDaemon (false), fPrintDate(false) {}
     logstream (const char * logfile);
     virtual ~logstream () {
@@ -84,13 +83,13 @@ public:
     template <typename T>
     void print (const T& val) {
         std::ostream& out = this->stream();
-        printdate(out);
+        //printdate(out);
         out << val;
     }
 
     void print (struct sockaddr * addr) {
         std::ostream& out = this->stream();
-        printdate(out);
+        //printdate(out);
         char buff[INET6_ADDRSTRLEN];
         switch(addr->sa_family) {
         case AF_INET:
