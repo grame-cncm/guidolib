@@ -36,7 +36,8 @@ using namespace guidohttpd;
 static const char* kPortOpt = "--port";
 static const int kDefaultPort = 8000;
 
-static const int kDefaultVerbose = 0;
+static const char* kVerboseOpt = "--verbose";
+static const int kDefaultVerbose = IP_VERBOSE | HEADER_VERBOSE | REQUEST_VERBOSE | URL_VERBOSE | QUERY_VERBOSE;
 
 static const char* kLogfileOpt = "--logfile";
 static const string kDefaultLogfile = "guidohttpdserver.log";
@@ -49,23 +50,27 @@ static const char* kSafeOpt = "--safe";
 static const char* kHelpOpt = "--help";
 static const char* kShortHelpOpt = "-h";
 
-static const char* kVerboseOpt = "--verbose";
-static const char* kShortVerboseOpt = "-v";
-
 //---------------------------------------------------------------------------------
 static void usage (char* name)
 {
 #ifndef WIN32
     name = basename (name);
 #endif
-    const char * tab = "             ";
+    const char *tab = "      ";
     cout << "usage: " << name << " [ options ]" << endl;
     cout << "where options are in:" << endl;
     cout << tab << kPortOpt << " portnum : sets the communication port number (defaults to " << kDefaultPort << ")"<< endl;
     cout << tab << kSafeOpt  << " : closes all file descriptors and moves the program to a safe place " << endl;
-    cout << tab << kLogfileOpt << " name : (defaults to " << kDefaultLogfile << "  - ignored when not in safe mode)" << endl;
-    cout << tab << kCachedirOpt << " name : (defaults to " << kDefaultCachedir << "  - ignored when not in safe mode)" << endl;
-    cout << tab << kVerboseOpt << " : the level of verbosity (0 is the bare minimum, 1 is the GET requests the server is getting, 2 is all the requests the server is getting)" << endl;
+    cout << tab << kLogfileOpt << " name : (defaults to " << kDefaultLogfile << " - use an empty string to write to STDOUT)" << endl;
+    cout << tab << kCachedirOpt << " name : (defaults to " << kDefaultCachedir << ")" << endl;
+    cout << tab << kVerboseOpt << " verbosity. an integer bitmap that can combine:" << endl;
+    cout << tab << tab << "1 (print ip to log)" << endl;
+    cout << tab << tab << "2 (print header info to log)" << endl;
+    cout << tab << tab << "4 (print request type to log)" << endl;
+    cout << tab << tab << "8 (print url to log)" << endl;
+    cout << tab << tab << "16 (print query string to log)" << endl;
+    cout << tab << tab << "example: --verbose 25 will print ip, url and query string" << endl;
+    cout << tab << tab << "default is 31, or everything" << endl;
     cout << tab << kHelpOpt << " : print this help message and exit" << endl;
 }
 
@@ -78,10 +83,11 @@ static bool launchServer (int port, int verbose, string cachedir, bool safe)
     HTTPDServer server(port, verbose, cachedir, &converter);
     server.readFromCache();
     if (server.start(port)) {
-        log << "Guido server v." << kVersionStr << " is running on port " << port << logend;
         if (safe) {
+            log << "Guido server v." << kVersionStr << " is running on port " << port << logend;
             while (true) { }
         } else {
+            cout << "Guido server v." << kVersionStr << " is running on port " << port << endl;
             cout << "Type 'q' to quit" << endl;
             do {
                 char c = getchar();
@@ -113,7 +119,9 @@ int main(int argc, char **argv)
         usage (argv[0]);
         exit (0);
     }
-    gLog = safe ? new logstream ( logfile.c_str() ) : new logstream();
+    gLog = logfile != ""
+           ? new logstream (logfile.c_str())
+           : new logstream();
     string cachedir = sopt (argv, kCachedirOpt, kDefaultCachedir);
     cachedir = QDir(cachedir.c_str()).absolutePath().toStdString();
     if (safe) {

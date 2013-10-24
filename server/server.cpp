@@ -58,6 +58,15 @@ namespace guidohttpd
 // static functions
 // provided as callbacks to mhttpd
 //--------------------------------------------------------------------------
+
+static int _on_client_connect(void* cls, const sockaddr* addr, socklen_t addrlen)
+{
+   // do nothing.
+   // one day, if we want to limit nefarious connections,
+   // this is the place
+   return MHD_YES;
+}
+
 static int _answer_to_connection (void *cls, struct MHD_Connection *connection, const char *url, const char *method, const char *version,
                                   const char *upload_data, size_t *upload_data_size, void **con_cls)
 {
@@ -134,7 +143,12 @@ HTTPDServer::~HTTPDServer()
 //--------------------------------------------------------------------------
 bool HTTPDServer::start(int port)
 {
-    fServer = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY, port, NULL, NULL, _answer_to_connection, this, MHD_OPTION_NOTIFY_COMPLETED, &_request_completed, NULL, MHD_OPTION_END);
+    fServer = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY, port,
+                                _on_client_connect,
+                                NULL, _answer_to_connection, this,
+                                MHD_OPTION_NOTIFY_COMPLETED,
+                                _request_completed,
+                                NULL, MHD_OPTION_END);
     return fServer != 0;
 }
 
@@ -334,16 +348,54 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
        in the case of 1, we are referencing an existing score and the request must be either GET or DELETE
        in the case of 2, we are referencing an existing score with a precise operation and the request must be GET
     */
-    
+
     // LOGFILE.
     const string stypes[4] = {"GET", "POST", "DELETE", "HEAD"};
     string stype = stypes[type];
-    if (((type == GET) && (fVerbose == 1)) || (fVerbose == 2)) {
-      log << stype << logend;
-      log << url << logend;
-      for(TArgs::const_iterator it = args.begin(); it != args.end(); it++) {
-        log << it->first << logend;
-        log << it->second << logend;
+    if (fVerbose > 0) {
+      const char *tab = "     ";
+      log << "*****************************************************" << logend;
+      if (fVerbose & IP_VERBOSE) {
+        struct sockaddr *so;
+        char buf[INET6_ADDRSTRLEN];
+        so = MHD_get_connection_info (connection,
+                                      MHD_CONNECTION_INFO_CLIENT_ADDRESS)->client_addr;
+        log << "INCOMING IP:" << logend;
+        log << tab << inet_ntop(so->sa_family,
+                         so->sa_data + 2, buf, INET6_ADDRSTRLEN)
+            << logend;
+      }
+      if (fVerbose & HEADER_VERBOSE) {
+        TArgs headerArgs;
+        MHD_get_connection_values (connection, MHD_HEADER_KIND, _get_params, &headerArgs);
+        if (headerArgs.size()) {
+          log << "HEADER VALUES:" << logend;
+          for(TArgs::const_iterator it = headerArgs.begin(); it != headerArgs.end(); it++) {
+            log << tab << "NAME:" << logend;
+            log << tab << tab << it->first << logend;
+            log << tab << "VALUE:" << logend;
+            log << tab << tab << it->second << logend;
+          }
+        }
+      }
+      if (fVerbose & REQUEST_VERBOSE) {
+        log << "REQUEST TYPE:" << logend;
+        log << tab << stype << logend;
+      }
+      if (fVerbose & URL_VERBOSE) {
+        log << "URL:" << logend;
+        log << tab << url << logend;
+      }
+      if (fVerbose & QUERY_VERBOSE) {
+        if (args.size()) {
+          log << "QUERY STRING:" << logend;
+          for(TArgs::const_iterator it = args.begin(); it != args.end(); it++) {
+            log << tab << "NAME:" << logend;
+            log << tab << tab << it->first << logend;
+            log << tab << "VALUE:" << logend;
+            log << tab << tab << it->second << logend;
+          }
+        }
       }
     }
 
@@ -533,6 +585,10 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
         return MHD_YES;
     }
 
+    TArgs myArgs;
+    MHD_get_connection_values (connection, MHD_COOKIE_KIND, _get_params, &myArgs);
+for (TArgs::const_iterator it = myArgs.begin(); it != myArgs.end(); it++)
+  printf ("%s %s\n", it->first.c_str(), it->second.c_str());
     if (0 == strcmp (method, "POST")) {
         struct connection_info_struct *con_info = (connection_info_struct *)*con_cls;
 

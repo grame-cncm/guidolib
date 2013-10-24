@@ -39,6 +39,12 @@
 #include "json/json_array.h"
 #include "json/json_parser.h"
 
+#define IP_VERBOSE 1
+#define HEADER_VERBOSE 2
+#define REQUEST_VERBOSE 4
+#define URL_VERBOSE 8
+#define QUERY_VERBOSE 16
+
 #define HEAD 3
 #define DELETE 2
 #define POST 1
