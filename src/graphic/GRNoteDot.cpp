@@ -143,8 +143,3 @@ void  GRNoteDot::adjustHorizontalDotPosition(float inNoteSize, ARTHead::HEADSTAT
 		}
 	}
 }
-
-void GRNoteDot::addToOffset(int inOffset)
-{
-    mOffset.x += inOffset;
-}
