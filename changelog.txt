@@ -5,7 +5,11 @@ GUIDO Engine history
 - improvement of \meter-tag (now sums in numerator are allowed)
 - new reentrant parser (transparent for users, not for developers)
 - new stream parsing mechanism : from now, it's possible to parse a stream as it goes
-  along, and to get intermediate ar's state
+  along, and to get intermediate AR's state
+- bug correction : dotted clusters
+- bug correction : dotted chords (vertical dot alignment and collision avoidance)
+- bug correction : dotted rests
+- bug correction : meter size set by user
 
 
 ----------------------------------------------------------------
