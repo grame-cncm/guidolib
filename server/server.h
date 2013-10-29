@@ -69,8 +69,8 @@ struct connection_info_struct {
 };
 class HTTPDServer
 {
-    int					fPort;
-    int					fVerbose;
+    int fVerbose;
+    int fLogmode;
     string fCachedir;
     struct MHD_Daemon *	fServer;
     guido2img*			fConverter;
@@ -80,7 +80,7 @@ class HTTPDServer
 
 public:
 
-    HTTPDServer(int port, int verbose, string cachedir, guido2img* g2img);
+    HTTPDServer(int verbose, int logmode, string cachedir, guido2img* g2img);
     virtual ~HTTPDServer();
 
     /// \brief starts the httpd server
@@ -95,9 +95,9 @@ public:
     void registerGMN(string unique_id, string gmn);
     void readFromCache();
 
-    static int send (struct MHD_Connection *connection, guidosessionresponse &response, int verbose);
-    static int send (struct MHD_Connection *connection, const char *page, int length, const char *type, int verbose, int status=MHD_HTTP_OK);
-    static int send (struct MHD_Connection *connection, const char *page, const char *type, int verbose, int status=MHD_HTTP_OK);
+    int send (struct MHD_Connection *connection, guidosessionresponse &response);
+    int send (struct MHD_Connection *connection, const char *page, int length, const char *type, int status=MHD_HTTP_OK);
+    int send (struct MHD_Connection *connection, const char *page, const char *type, int status=MHD_HTTP_OK);
 
 };
 

@@ -44,6 +44,9 @@ static const int kDefaultVerbose = IP_VERBOSE | HEADER_VERBOSE
 static const char* kLogfileOpt = "--logfile";
 static const string kDefaultLogfile = "guidohttpdserver.log";
 
+static const char* kLogmodeOpt = "--logmode";
+static const int kDefaultLogmode = 0;
+
 static const char* kCachedirOpt = "--cachedir";
 static const string kDefaultCachedir = "cache";
 
@@ -63,8 +66,11 @@ static void usage (char* name)
     cout << "where options are in:" << endl;
     cout << tab << kPortOpt << " portnum : sets the communication port number (defaults to " << kDefaultPort << ")"<< endl;
     cout << tab << kSafeOpt  << " : closes all file descriptors and moves the program to a safe place " << endl;
-    cout << tab << kLogfileOpt << " name : (defaults to " << kDefaultLogfile << " - use an empty string to write to STDOUT)" << endl;
-    cout << tab << kCachedirOpt << " name : (defaults to " << kDefaultCachedir << ")" << endl;
+    cout << tab << kLogfileOpt << " log file name : (defaults to " << kDefaultLogfile << " - use an empty string to write to STDOUT)" << endl;
+    cout << tab << kLogmodeOpt << " log file mode : (defaults to " << kDefaultLogmode << ")" << endl;
+    cout << tab << tab << "0 = Apache-like log" << endl;
+    cout << tab << tab << "1 = XML logfile" << endl;
+    cout << tab << kCachedirOpt << " cache dir name : (defaults to " << kDefaultCachedir << ")" << endl;
     cout << tab << kVerboseOpt << " verbosity. an integer bitmap that can combine:" << endl;
     cout << tab << tab << "1 (print ip to log as <ip></ip>)" << endl;
     cout << tab << tab << "2 (print header info pairs to log as <header></header>)" << endl;
@@ -80,12 +86,12 @@ static void usage (char* name)
 }
 
 //---------------------------------------------------------------------------------
-static bool launchServer (int port, int verbose, string cachedir, bool safe)
+static bool launchServer (int port, int verbose, int logmode, string cachedir, bool safe)
 {
     bool ret = false;
     guido2img converter;
     startEngine();
-    HTTPDServer server(port, verbose, cachedir, &converter);
+    HTTPDServer server(verbose, logmode, cachedir, &converter);
     server.readFromCache();
     if (server.start(port)) {
         if (safe) {
@@ -117,6 +123,11 @@ int main(int argc, char **argv)
     srand(time(0));
     int port = lopt (argv, kPortOpt, kDefaultPort);
     int verbose = lopt (argv, kVerboseOpt, kDefaultVerbose);
+    int logmode = lopt (argv, kLogmodeOpt, kDefaultLogmode);
+    if (logmode > 1)
+      logmode = 1;
+    if (logmode < 0)
+      logmode = 0;
 
     string logfile = sopt (argv, kLogfileOpt, kDefaultLogfile);
     bool safe = bopt (argv, kSafeOpt, false);
@@ -165,5 +176,5 @@ int main(int argc, char **argv)
         close(STDOUT_FILENO);
         close(STDERR_FILENO);
     }
-    return launchServer (port, verbose, cachedir, safe) ? 0 : 1;
+    return launchServer (port, verbose, logmode, cachedir, safe) ? 0 : 1;
 }
