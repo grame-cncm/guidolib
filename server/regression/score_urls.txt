@@ -1,6 +1,6 @@
 # To leave a comment in this file, start the line with a hash
 
-# The default output : should be a png
+# SVG output
 /?format=svg
 
 # The number of voices in the score
