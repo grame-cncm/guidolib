@@ -63,7 +63,6 @@ static void usage (char* name)
 #endif
     const char *tab = "      ";
     cout << "usage: " << name << " [ options ]" << endl;
-    cout << "to run as a daemon, do: " << endl;
     cout << "where options are in:" << endl;
     cout << tab << kPortOpt << " portnum : sets the communication port number (defaults to " << kDefaultPort << ")"<< endl;
     cout << tab << kSafeOpt  << " : used with nohup to make this run as a daemon" << endl;
@@ -72,6 +71,7 @@ static void usage (char* name)
     cout << tab << tab << "0 = Apache-like log" << endl;
     cout << tab << tab << "1 = XML logfile" << endl;
     cout << tab << kCachedirOpt << " cache dir name : (defaults to a directory cache in the directory of the current executable)" << endl;
+/*
     cout << tab << kVerboseOpt << " verbosity. an integer bitmap that can combine:" << endl;
     cout << tab << tab << "1 (print ip to log)" << endl;
     cout << tab << tab << "2 (print header info pairs to log)" << endl;
@@ -83,9 +83,10 @@ static void usage (char* name)
     cout << tab << tab << "128 (print length of return object)" << endl;
     cout << tab << tab << "example: --verbose 25 will print ip, url and query pairs" << endl;
     cout << tab << tab << "default is 255, or everything" << endl;
+*/
     cout << tab << kHelpOpt << " : print this help message and exit" << endl;
     cout << "to run as a daemon, do: " << endl;
-    cout << tab << "nohup /path/to/guidohttpserver/executable --daemon" << endl;
+    cout << tab << "nohup /path/to/guidohttpserver/executable --daemon &" << endl;
 }
 
 //---------------------------------------------------------------------------------
@@ -126,7 +127,8 @@ int main(int argc, char **argv)
     string applicationPath = QDir(QDir(QApplication::applicationFilePath()).absoluteFilePath("../")).canonicalPath().toStdString();
     srand(time(0));
     int port = lopt (argv, kPortOpt, kDefaultPort);
-    int verbose = lopt (argv, kVerboseOpt, kDefaultVerbose);
+    (void) kVerboseOpt;
+    int verbose = kDefaultVerbose;//lopt (argv, kVerboseOpt, kDefaultVerbose);
     int logmode = lopt (argv, kLogmodeOpt, kDefaultLogmode);
     if (logmode > 1)
       logmode = 1;
