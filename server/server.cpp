@@ -186,7 +186,7 @@ int HTTPDServer::send (struct MHD_Connection *connection, const char *page, int 
 {
     if (fVerbose > 0) {
       if (fLogmode == 0) {
-        const char *sep = ";";
+        const char *sep = " ; ";
         if (fVerbose & CODE_VERBOSE) {
           log << status << sep;
         }
@@ -400,7 +400,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
     // LOGFILE.
     if (fVerbose > 0) {
       if (fLogmode == 0) {
-        const char *sep = ";";
+        const char *sep = " ; ";
         log << log.date() << sep;
         if (fVerbose & IP_VERBOSE) {
           struct sockaddr *so;

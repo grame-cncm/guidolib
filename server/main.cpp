@@ -143,7 +143,6 @@ int main(int argc, char **argv)
            ? new logstream (logfile.c_str())
            : new logstream();
     string cachedir = sopt (argv, kCachedirOpt, QDir(applicationPath.c_str()).absoluteFilePath(kDefaultCachedir.c_str()).toStdString());
-    //canonicalPath().toStdString());
     if (daemon) {
         // below is commented out because of Mac OS X problems with daemons
         /*
