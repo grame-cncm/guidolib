@@ -52,6 +52,7 @@ struct guidosessionresponse {
     int http_status_;
     guidosessionresponse ();
     guidosessionresponse (const char* data, unsigned int size, string format, int http_status = 200);
+    guidosessionresponse (string, string format, int http_status = 200);
     ~guidosessionresponse ();
 };
 

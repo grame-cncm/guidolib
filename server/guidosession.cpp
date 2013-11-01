@@ -47,8 +47,19 @@ namespace guidohttpd
 
 guidosessionresponse::guidosessionresponse (const char* data, unsigned int size, string format, int http_status)
 {
-    data_ = new char[strlen(data) + 1];
-    strcpy(data_, data);
+    data_ = new char[size + 1];
+    memcpy (data_, data, size);
+    size_ = size;
+    format_ = format;
+    http_status_ = http_status;
+}
+
+guidosessionresponse::guidosessionresponse (string data, string format, int http_status)
+{
+    int size = data.size();
+    const char *cc = data.c_str();
+    data_ = new char[size + 1];
+    memcpy (data_, cc, size + 1);
     size_ = size;
     format_ = format;
     http_status_ = http_status;
@@ -418,7 +429,7 @@ guidosessionresponse guidosession::wrapObjectInId(json_object *obj)
     wrapper->print(jstream);
     // important! as everything is pointers, need to delete here
     delete wrapper;
-    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", 200);
+    return guidosessionresponse(mystream.str(), "application/json", 200);
 }
 
 guidosessionresponse guidosession::handleSimpleIntQuery(string name, int myint)
@@ -430,7 +441,7 @@ guidosessionresponse guidosession::handleSimpleIntQuery(string name, int myint)
     obj->print(jstream);
     // important! as everything is pointers, need to delete here
     delete obj;
-    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", 200);
+    return guidosessionresponse(mystream.str(), "application/json", 200);
 }
 
 guidosessionresponse guidosession::handleSimpleBoolQuery(string name, bool mybool)
@@ -445,7 +456,7 @@ guidosessionresponse guidosession::handleSimpleBoolQuery(string name, bool myboo
     obj->print(jstream);
     // important! as everything is pointers, need to delete here
     delete obj;
-    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", 200);
+    return guidosessionresponse(mystream.str(), "application/json", 200);
 }
 
 guidosessionresponse guidosession::handleSimpleFloatQuery(string name, float myfloat)
@@ -457,7 +468,7 @@ guidosessionresponse guidosession::handleSimpleFloatQuery(string name, float myf
     obj->print(jstream);
     // important! as everything is pointers, need to delete here
     delete obj;
-    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", 200);
+    return guidosessionresponse(mystream.str(), "application/json", 200);
 }
 
 guidosessionresponse guidosession::handleSimpleStringQuery(string name, string mystring)
@@ -469,7 +480,7 @@ guidosessionresponse guidosession::handleSimpleStringQuery(string name, string m
     obj->print(jstream);
     // important! as everything is pointers, need to delete here
     delete obj;
-    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", 200);
+    return guidosessionresponse(mystream.str(), "application/json", 200);
 }
 
 guidosessionresponse guidosession::handleSimpleIDdIntQuery(string name, int myint)
@@ -818,11 +829,12 @@ guidosessionresponse guidosession::genericReturnImage()
           return genericFailure ("Could not convert the image.", 400, id_);
         }
         string svg = mystream.str();
-        return guidosessionresponse(svg.c_str(), svg.size(), formatToMIMEType(), 201);
+        return guidosessionresponse(svg, formatToMIMEType(), 201);
     }
     int err = fConverter->convert(this);
     if (err == 0) {
-        return guidosessionresponse(fConverter->data(), fConverter->size(), formatToMIMEType(), 201);
+        const char *fcd = fConverter->data();
+        return guidosessionresponse(fcd, fConverter->size(), formatToMIMEType(), 201);
     }
     return genericFailure ("Could not convert the image.", 400, id_);
 }
@@ -852,7 +864,7 @@ guidosessionresponse guidosession::genericReturnMidi()
     fs.close();
     //remove(filename.c_str());
     if (err == 0) {
-        return guidosessionresponse(data.c_str(), data.length(), "audio/midi", 201);
+        return guidosessionresponse(data, "audio/midi", 201);
     }
 
     return genericFailure ("Could not convert the Midi.", 400, id_);
@@ -875,7 +887,7 @@ guidosessionresponse guidosession::genericFailure(const char* errorstring, int h
       obj->print(jstream);
       delete obj;
     }
-    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", http_status);
+    return guidosessionresponse(mystream.str(), "application/json", http_status);
 }
 
 guidosessionresponse guidosession::genericReturnId()
@@ -885,7 +897,7 @@ guidosessionresponse guidosession::genericReturnId()
     ostringstream mystream;
     json_stream jstream(mystream);
     obj.print(jstream);
-    return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", 201);
+    return guidosessionresponse(mystream.str(), "application/json", 201);
 }
 
 } // end namespoace
