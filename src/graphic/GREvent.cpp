@@ -215,7 +215,6 @@ void GREvent::createDots( const TYPE_DURATION & inDuration, float inNoteBreite,
 		GRNoteDot * noteDot = new GRNoteDot ( this, inNoteBreite, dotCount );
         noteDot->setPosition(inPos);
 
-        float offsetX = 0;
         GRSingleRest *rest = dynamic_cast<GRSingleRest *>(this);
         if (rest)
             noteDot->addOffsetX(45);        
