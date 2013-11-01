@@ -424,8 +424,8 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
               log << "=";
               log << it->second;
             }
-            log << sep;
           }
+          log << sep;
         }
         if (fVerbose & REQUEST_VERBOSE) {
           const string smethods[4] = {"GET", "POST", "DELETE", "HEAD"};
@@ -443,11 +443,12 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                 ampersand = true;
               else
                 log << "&";
-              log << it->first << sep;
+              log << it->first;
               log << "=";
               log << curl_escape(it->second.c_str (), 0);
             }
           }
+          log << sep;
         }
         // we close the entry when we send
       }
