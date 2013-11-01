@@ -853,14 +853,21 @@ guidosessionresponse guidosession::genericReturnMidi()
     
 guidosessionresponse guidosession::genericFailure(const char* errorstring, int http_status, string id)
 {
+    ostringstream mystream;
     json_object *obj = new json_object;
     obj->add (new json_element("Error", new json_string_value(errorstring)));
-    json_object *wrapper = new json_object;
-    wrapper->add(new json_element(id.c_str(), new json_object_value(obj)));
-    ostringstream mystream;
-    json_stream jstream(mystream);
-    wrapper->print(jstream);
-    delete wrapper;
+    if (id != "") {
+      json_object *wrapper = new json_object;
+      wrapper->add(new json_element(id.c_str(), new json_object_value(obj)));
+      json_stream jstream(mystream);
+      wrapper->print(jstream);
+      delete wrapper;
+    }
+    else {
+      json_stream jstream(mystream);
+      obj->print(jstream);
+      delete obj;
+    }
     return guidosessionresponse(strdup(mystream.str().c_str()), mystream.str().size(), "application/json", http_status);
 }
 
