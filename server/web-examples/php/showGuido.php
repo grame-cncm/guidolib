@@ -1,4 +1,5 @@
 <?php
+
   $resizepagetomusc = $_POST["resizepagetomusic"];
   if ($resizepagetomusic == '')
   {
@@ -42,7 +43,7 @@
     $response = @stream_get_contents($fp);
     $im = imagecreatefromstring($response);
     if ($im !== false) {
-      header('Content-Type: image/' . $_POST["format"]);
+      header('Content-Type: image/png');
       imagepng($im);
       imagedestroy($im);
     }

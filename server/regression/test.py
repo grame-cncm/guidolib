@@ -20,7 +20,8 @@ EVER NEED TO CHANGE TO MAKE THIS WORK.
 '''
 
 # The directory holding the GUIDO examples
-EXAMPLE_DIR = '../../gmn-examples'
+#EXAMPLE_DIRS = ['../../gmn-examples','../../regression-tests']
+EXAMPLE_DIRS = ['../../gmn-examples']
 
 # THE EXTENSION OF A GMN FILE FOUND IN THIS DIRECTORY
 # OR ITS SUB-DIRECTORIES
@@ -150,17 +151,29 @@ def get_extension(tp) :
     return 'json'
   raise ValueError('Server is not supposed to return {0}.  This is bad.'.format(tp))
 
-SCORE_URLS = gulp(SCORE_URLS_PATH).split('\n')
-SERVER_URLS = gulp(SERVER_URLS_PATH).split('\n')
+def startscomment(x) :
+  x = x.replace(' ','')
+  x = x.replace('\t','')
+  if x == '' : return True
+  return x[0] == '#'
+
+def remove_extraneous(l) :
+  return filter(lambda x : (x != '') & (not startscomment(x)), l)
+  
+
+SCORE_URLS = remove_extraneous(gulp(SCORE_URLS_PATH).split('\n'))
+SERVER_URLS = remove_extraneous(gulp(SERVER_URLS_PATH).split('\n'))
 SCORE_URLHEXS = [URL_TRANSLATION_FUNCTION(URL) for URL in SCORE_URLS]
 SERVER_URLHEXS = [URL_TRANSLATION_FUNCTION(URL) for URL in SERVER_URLS]
 
-TESTTREE = os.walk(EXAMPLE_DIR)
 TESTFILES = []
-for entry in TESTTREE :
-  for filename in entry[2] :
-    if filename.split('.')[-1] == GMN_FILE_EXTENSION :
-      TESTFILES.append(os.path.join(entry[0], filename))
+
+for DIR in EXAMPLE_DIRS :
+  TESTTREE = os.walk(DIR)
+  for entry in TESTTREE :
+    for filename in entry[2] :
+      if filename.split('.')[-1] == GMN_FILE_EXTENSION :
+        TESTFILES.append(os.path.join(entry[0], filename))
 
 class Result(object) :
   def __init__(self, url, tp, code, data) :
@@ -188,8 +201,11 @@ for i in range(len(SERVER_URLS)) :
   # write the info to files in the file tree
   for key in kres.__dict__.keys() :
     F = file(os.path.join(localpath, HEX+'.'+key), 'w')
+    '''
+    # too much...
     if OPTIONS.verbose :
       print key, str(getattr(kres, key))
+    '''
     F.write(str(getattr(kres, key)))
     F.close()
 
@@ -229,8 +245,11 @@ for FILE in TESTFILES :
     # write the info to files in the file tree
     for key in kres.__dict__.keys() :
       F = file(os.path.join(localpath, BASE+'_'+HEX+'.'+key), 'w')
+      '''
+      # too much
       if OPTIONS.verbose :
         print key, str(getattr(kres, key))
+      '''
       F.write(str(getattr(kres, key)))
       F.close()
 
