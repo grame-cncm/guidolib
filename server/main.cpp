@@ -36,6 +36,8 @@ using namespace guidohttpd;
 static const char* kPortOpt = "--port";
 static const int kDefaultPort = 8000;
 
+static const char* kVersionOpt = "--version";
+
 static const char* kVerboseOpt = "--verbose";
 static const int kDefaultVerbose = IP_VERBOSE | HEADER_VERBOSE
   | REQUEST_VERBOSE | URL_VERBOSE | QUERY_VERBOSE
@@ -123,6 +125,14 @@ static bool launchServer (int port, int verbose, int logmode, string cachedir, b
 //---------------------------------------------------------------------------------
 int main(int argc, char **argv)
 {
+    if (bopt (argv, kHelpOpt, false) || bopt (argv, kShortHelpOpt, false)) {
+        usage (argv[0]);
+        exit (0);
+    }
+    if (bopt (argv, kVersionOpt, false)) {
+        cout << "Guido server v." << kVersionStr << " with Guido v." << GuidoGetVersionStr() << "." << endl;
+        exit (0);
+    }
     QApplication app(argc , argv); // required by Qt
     string applicationPath = QDir(QDir(QApplication::applicationFilePath()).absoluteFilePath("../")).canonicalPath().toStdString();
     srand(time(0));
@@ -137,10 +147,6 @@ int main(int argc, char **argv)
 
     string logfile = sopt (argv, kLogfileOpt, QDir(applicationPath.c_str()).absoluteFilePath(kDefaultLogfile.c_str()).toStdString());
     bool daemon = bopt (argv, kSafeOpt, false);
-    if (bopt (argv, kHelpOpt, false) || bopt (argv, kShortHelpOpt, false)) {
-        usage (argv[0]);
-        exit (0);
-    }
     gLog = logfile != ""
            ? new logstream (logfile.c_str())
            : new logstream();
