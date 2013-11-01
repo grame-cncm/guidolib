@@ -40,10 +40,15 @@
       throw new Exception("Couldn't connect to the server."); 
     } 
     $response = @stream_get_contents($fp);
-    //$im = imagecreatefromstring($response);
-    $im64 = base64_encode($response);
-    //imagedestroy($im);
-    if (true /*$im !== false*/) {
+    $im = imagecreatefromstring($response);
+    if ($im !== false) {
+      header('Content-Type: image/' . $_POST["format"]);
+      imagepng($im);
+      imagedestroy($im);
+    }
+    else {
+      // last ditch effort
+      $im64 = base64_encode($response);
       header('Content-Type: text/html');
       echo "<html>";
       echo "<body>";
@@ -52,8 +57,10 @@
       echo "</body>";
       echo "</html>";
     }
+    /*
     else {
       throw new Exception("Didn't get an image from the server.");
     }
+    */
   }
 ?>

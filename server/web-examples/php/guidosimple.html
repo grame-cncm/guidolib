@@ -2,6 +2,17 @@
 <html>
   <head>
     <title>Guido Engine</title>
+    <script type="text/javascript" src="jquery-1.10.2.min.js"></script>
+    <script>
+      $(function() {
+        $("#guidoform").submit();
+        $('#gmn').keypress(function() {
+          setTimeout(function () {
+            $("#guidoform").submit();
+          }, 500);
+        })
+      });
+    </script>
   </head>
   <body>
     <h1>Guido Engine Online</h1>
@@ -9,12 +20,12 @@
       Type your GUIDO code below.
     </p>
     <div>
-      <form action="showGuido.php" target="score" method="post">
+      <form id="guidoform" action="showGuido.php" target="score" method="post">
         <div>
           <textarea style="width:100%" type="text" name="gmn" id="gmn">[a b c]</textarea>
         </div>
         <div>
-        <input type="submit" value="visualize score">
+        <!--<input type="submit" value="visualize score">-->
         </div>
       </form>
     </div>

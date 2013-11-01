@@ -48,7 +48,7 @@ parser = OptionParser(usage = "Runs regtests on the guido server.\n"
 parser.add_option("-u", "--url", dest="url", help="url of the server [default: %default]", default = "http://localhost:8000")
 parser.add_option("-b", "--baselinedir", dest="baselinedir", help="directory to stash the baseline results in [default: %default]", default = "baseline")
 parser.add_option("-c", "--checkdir", dest="checkdir", help="directory to stash the check results in [default: %default]", default = "check")
-parser.add_option("-v", "--verbose", dest="verbose", help="show all regtest results at the end", action = "store_true", default = False)
+parser.add_option("-v", "--verbose", dest="verbose", help="show URLs being checked", action = "store_true", default = False)
 parser.add_option("-l", "--log", dest="log", help="Filename to write log to. If not specified, log will be printed to STDOUT.", default = None)
 
 (OPTIONS, ARGS) = parser.parse_args()
