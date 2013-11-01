@@ -3,10 +3,34 @@
   <head>
     <title>Guido Engine</title>
     <script type="text/javascript" src="jquery-1.10.2.min.js"></script>
-    <script>
+    <script type="text/javascript" src="jquery.autosize.min.js"></script>
+    <script type="text/javascript">
+      function cancel(event) {
+              event.preventDefault();
+              return false;
+      }
+
+      function dropfile(file) {
+          var r = new FileReader();
+          r.onload = function(e) {
+             $("#gmn").val(e.target.result).trigger('autosize.resize');;
+             $("#guidoform").submit();
+             $("#processing").text("Processing...")             
+          }
+          r.onerror = function(e) { console.log("error: ", e); }
+          r.readAsText(file);
+      }
+
+      function drop(event) {
+          event.preventDefault();
+          var file = event.dataTransfer.files.item(0);
+          if (file) {
+              dropfile (file);
+          }
+      }
       $(function() {
         $("#guidoform").submit();
-        $('#gmn').keypress(function() {
+        $('#gmn').keyup(function() {
           setTimeout(function () {
             $("#guidoform").submit();
             $("#processing").text("Processing...")
@@ -15,6 +39,7 @@
         $('#score').load(function(){
             $("#processing").text("")
         });
+        $('#gmn').autosize();
       });
     </script>
   </head>
@@ -26,7 +51,10 @@
     <div>
       <form id="guidoform" action="showGuido.php" target="score" method="post">
         <div>
-          <textarea style="width:100%" type="text" name="gmn" id="gmn">[a b c]</textarea>
+          <textarea ondragenter="cancel(event)"
+             ondragover="cancel(event)"
+             ondrop="drop(event)"style="width:100%"
+             class="expand" type="text" name="gmn" id="gmn">[a b c]</textarea>
         </div>
         <div>
         <!--<input type="submit" value="visualize score">-->
