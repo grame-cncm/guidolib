@@ -1,3 +1,16 @@
+import urllib
+import urllib2
+import json
+import sys
+import urlparse
+import os
+import difflib
+import shutil
+import hashlib
+import guido_utilities
+from optparse import OptionParser
+from filecmp import dircmp
+
 '''
 BELOW YOU CAN SET CERTAIN SCRIPT VARIABLES
 THAT CANNOT BE SET FROM THE COMMAND LINE.
@@ -19,19 +32,12 @@ SCORE_URLS_PATH = 'score_urls.txt'
 # PATH TO A LIST OF URLS THAT ARE TESTED FOR THE SERVER
 SERVER_URLS_PATH = 'server_urls.txt'
 
+# FUNCTION FOR CREATING FILE-SYSTEM FRIENDLY URLS
+#URL_TRANLSATION_FUNCTION = hashlib.sha1
+URL_TRANSLATION_FUNCTION = guido_utilities.my_url_translation_function
+
 ####################################################
 
-import urllib
-import urllib2
-import json
-import sys
-import urlparse
-import os
-import difflib
-import shutil
-import hashlib
-from optparse import OptionParser
-from filecmp import dircmp
 
 parser = OptionParser(usage = "Runs regtests on the guido server.\n"
 "Must be invoked with either the command `baseline' or `check'. Meaning...\n"
@@ -146,8 +152,8 @@ def get_extension(tp) :
 
 SCORE_URLS = gulp(SCORE_URLS_PATH).split('\n')
 SERVER_URLS = gulp(SERVER_URLS_PATH).split('\n')
-SCORE_URLHEXS = [hashlib.sha1(URL).hexdigest() for URL in SCORE_URLS]
-SERVER_URLHEXS = [hashlib.sha1(URL).hexdigest() for URL in SERVER_URLS]
+SCORE_URLHEXS = [URL_TRANSLATION_FUNCTION(URL) for URL in SCORE_URLS]
+SERVER_URLHEXS = [URL_TRANSLATION_FUNCTION(URL) for URL in SERVER_URLS]
 
 TESTTREE = os.walk(EXAMPLE_DIR)
 TESTFILES = []
