@@ -47,7 +47,8 @@ namespace guidohttpd
 
 guidosessionresponse::guidosessionresponse (const char* data, unsigned int size, string format, int http_status)
 {
-    data_ = data;
+    data_ = new char[strlen(data) + 1];
+    strcpy(data_, data);
     size_ = size;
     format_ = format;
     http_status_ = http_status;
@@ -55,10 +56,16 @@ guidosessionresponse::guidosessionresponse (const char* data, unsigned int size,
 
 guidosessionresponse::guidosessionresponse ()
 {
-    data_ = "";
+    data_ = new char[1];
+    strcpy(data_, "");
     size_ = 0;
     format_ = "text/plain";
     http_status_ = 404;
+}
+
+guidosessionresponse::~guidosessionresponse ()
+{
+  delete data_; 
 }
 
 guidosession::guidosession(guido2img* g2svg, string gmn, string id)

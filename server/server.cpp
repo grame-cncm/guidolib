@@ -178,7 +178,8 @@ void HTTPDServer::stop ()
 //--------------------------------------------------------------------------
 int HTTPDServer::send (struct MHD_Connection *connection, guidosessionresponse &response)
 {
-    return send (connection, response.data_, response.size_, response.format_.c_str(), response.http_status_);
+    const char *format =  response.format_.c_str();
+    return send (connection, response.data_, response.size_, format, response.http_status_);
 }
 
 //--------------------------------------------------------------------------
@@ -365,24 +366,16 @@ int HTTPDServer::sendGuidoDeleteRequest(struct MHD_Connection *connection, const
 {
     guidosessionresponse response;
     if (!args.size () || args.size () > 1 || args.begin()->first != "ID") {
-        response.errstring_ = "There may be one and only one argument called \"ID\" passed to DELETE.";
-        response.data_ = response.errstring_.c_str();
-        response.size_ = response.errstring_.size();
-        response.http_status_ = 405;
+        response = guidosession::genericFailure("There may be one and only one argument called \"ID\" passed to DELETE.", 405);
+        return send(connection, response);
     } else if (fSessions.find (args.begin()->second) == fSessions.end ()) {
-        response.errstring_ = "Cannot delete the score with ID "+(args.begin()->second)+" because it does not exist.";
-        response.data_ = response.errstring_.c_str();
-        response.size_ = response.errstring_.size();
-        response.http_status_ = 404;
+        response = guidosession::genericFailure(("Cannot delete the score with ID "+(args.begin()->second)+" because it does not exist.").c_str(), 404);
+        return send(connection, response);
     } else {
         guidosession *toErase = fSessions[args.begin()->second];
         fSessions.erase (args.begin()->second);
         delete toErase;
-        response.errstring_ = "";
-        string success = "Successfully removed the score with ID "+(args.begin()->second)+".";
-        response.data_ = success.c_str();
-        response.size_ = success.size();
-        response.http_status_ = 200;
+        response = guidosession::genericFailure(("Successfully removed the score with ID "+(args.begin()->second)+".").c_str(), 200);
     }
     return send (connection, response);
 }

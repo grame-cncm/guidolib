@@ -44,7 +44,7 @@ enum GuidoWebApiFormat { GUIDO_WEB_API_PNG, GUIDO_WEB_API_JPEG, GUIDO_WEB_API_GI
 //--------------------------------------------------------------------------
 class guido2img;
 struct guidosessionresponse {
-    const char* data_;
+    char* data_;
     unsigned int size_;
     string format_;
     string errstring_;
@@ -52,6 +52,7 @@ struct guidosessionresponse {
     int http_status_;
     guidosessionresponse ();
     guidosessionresponse (const char* data, unsigned int size, string format, int http_status = 200);
+    ~guidosessionresponse ();
 };
 
 
