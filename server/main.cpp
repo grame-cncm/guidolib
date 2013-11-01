@@ -133,7 +133,7 @@ int main(int argc, char **argv)
     if (logmode < 0)
       logmode = 0;
 
-    string logfile = sopt (argv, kLogfileOpt, QDir(QDir(applicationPath.c_str()).absoluteFilePath(kDefaultLogfile.c_str())).canonicalPath().toStdString());
+    string logfile = sopt (argv, kLogfileOpt, QDir(applicationPath.c_str()).absoluteFilePath(kDefaultLogfile.c_str()).toStdString());
     bool daemon = bopt (argv, kSafeOpt, false);
     if (bopt (argv, kHelpOpt, false) || bopt (argv, kShortHelpOpt, false)) {
         usage (argv[0]);
@@ -142,7 +142,10 @@ int main(int argc, char **argv)
     gLog = logfile != ""
            ? new logstream (logfile.c_str())
            : new logstream();
-    string cachedir = sopt (argv, kCachedirOpt, QDir(QDir(applicationPath.c_str()).absoluteFilePath(kDefaultCachedir.c_str())).canonicalPath().toStdString());
+    string cachedir = sopt (argv, kCachedirOpt, QDir(applicationPath.c_str()).absoluteFilePath(kDefaultCachedir.c_str()).toStdString());
+    //canonicalPath().toStdString());
+    printf ("CD %s\n", cachedir.c_str());
+    printf ("CD %s\n", logfile.c_str());
     if (daemon) {
         // below is commented out because of Mac OS X problems with daemons
         /*
