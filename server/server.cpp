@@ -323,12 +323,12 @@ void HTTPDServer::registerGMN(string unique_id, string gmn)
     QDir dir((fCachedir+'/'+unique_id.substr(0,2)).c_str());
     if (!dir.exists()) {
       dir.mkpath(".");
-      QFile file(dir.absoluteFilePath((unique_id+".gmn").c_str()));
-      if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        QTextStream out(&file);
-        out << gmn.c_str();
-        file.close();
-      }
+    }
+    QFile file(dir.absoluteFilePath((unique_id+".gmn").c_str()));
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+      QTextStream out(&file);
+      out << gmn.c_str();
+      file.close();
     }
 }
 
