@@ -1978,12 +1978,8 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 	hdc.PopPen();
 
 	*/
-//	hdc.PushPen( VGColor( 0, 0, 0 ), kLineThick );// TODO: use correct color
-
 	hdc.PushPenWidth( kLineThick );
-
-	std::map<float,float>::const_iterator it = positions.begin();
-	
+	std::map<float,float>::const_iterator it = positions.begin();	
 	while (it != positions.end())
 	{
 		float x1 = it->first;
@@ -1998,7 +1994,6 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 	}
 
 	hdc.PopPenWidth();
-//	hdc.PopPen();
 }
 
 // ----------------------------------------------------------------------------
@@ -2118,14 +2113,14 @@ bool GRStaff::isStaffEndOn()
 {
   std::map<TYPE_TIMEPOSITION, bool>::reverse_iterator rit;
   rit = isOn.rbegin();
-  return rit->second;
+  return (rit == isOn.rend() ? false : rit->second);
 }
 
 bool GRStaff::isStaffBeginOn()
 {
   std::map<TYPE_TIMEPOSITION, bool>::iterator it;
   it = isOn.begin();
-  return it->second;
+  return (it == isOn.end() ? false : it->second);
 }
 
 
