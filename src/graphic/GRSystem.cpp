@@ -639,7 +639,8 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 			{
 				for(int i = slice->mStaffs->GetMinimum(); i <= slice->mStaffs->GetMaximum(); i++)
 				{
-					slice->mStaffs->Get(i)->setNextOnOff(slice->mStaffs->Get(i)->isStaffEndOn());
+					GRStaff* staff = slice->mStaffs->Get(i);
+					if (staff) staff->setNextOnOff(staff->isStaffEndOn());
 				}
 			}
 			slice->OnDraw(hdc);
