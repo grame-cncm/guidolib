@@ -14,7 +14,15 @@
 #include "GuidoStreamBuf.h"
 
 #include <sstream>
+
+#ifdef WIN32
 #include <Windows.h>
+#define sleep(n)	Sleep(n);
+#else
+#include <unistd.h>
+#define sleep(n)	usleep(n*1000);
+#endif
+static const int kSleepTime = 10;		// sleep time in milliseconds
 
 using namespace std;
 
@@ -44,7 +52,7 @@ GuidoStreamBuf::int_type GuidoStreamBuf::underflow()
 
         while (streamIteratorCurrent == streamIteratorEnd && !fHaveToCloseStream)
         {
-            Sleep(10);
+            sleep(kSleepTime);
         }
 
         if (fHaveToCloseStream && streamIteratorCurrent == streamIteratorEnd)
