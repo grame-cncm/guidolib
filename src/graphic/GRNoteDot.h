@@ -52,6 +52,7 @@ class GRNoteDot : public GRNotationElement
 	 
      virtual const	NVPoint & getOffset() const				{ return mOffset; }
      virtual void   addOffsetX(float inX)                   { mOffset.x += inX; }
+     virtual void   addOffsetY(float inY)                   { mOffset.y += inY; }
 	 
      virtual const	unsigned char * getColRef() const		{ return mColRef; }
 	 virtual float	getSize() const	 						{ return size; }
@@ -59,7 +60,6 @@ class GRNoteDot : public GRNotationElement
 	  static int	DurationToDotCount( const TYPE_DURATION & duration );
 
 	  virtual void  adjustHorizontalDotPosition(float inNoteSize, ARTHead::HEADSTATE inHeadState, GDirection inGlobalStemDirection);
-      virtual void  addToOffset(int inOffset);
 
   protected:
 

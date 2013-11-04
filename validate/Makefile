@@ -52,6 +52,7 @@ leaksfiles  := $(patsubst ../%.gmn, $(version)/$(TOOLPATH)/%.leaks.out, $(gmnfil
 
 validpdf 	= $(patsubst %.pdf, %.outpdf, $(allpdf))
 validsvg 	= $(patsubst %.svg, %.outsvg, $(allsvg))
+validsvgwin 	= $(patsubst %.svg, %.outsvgwin, $(allsvg))
 
 .PHONY: pdf svg
 
@@ -83,16 +84,26 @@ help:
 validate: $(validsvg)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
 	@echo Validating version $(version) with $(VERSION) $(tmp)
+	
+validateWin: $(validsvgwin)
+	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
+	@echo Validating version $(version) with $(VERSION) $(tmp)
 
 pdfvalidate: $(validpdf)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
 	@echo Validating version $(version) with $(VERSION) $(tmp)
 	
 %.outsvg: %.svg
+		$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
+		@[ -f  $(tmp) ] || echo $< : new file
+		$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
+		@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open -t $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
+	
+%.outsvgwin: %.svg
 	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
 	@[ -f  $(tmp) ] || echo $< : new file
 	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
-	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open -t $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
+	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && C:/Program\ Files\ \(x86\)/Mozilla\ Firefox/firefox -new-tab $(patsubst $(version)/%, $(VERSION)/%, $<) -new-tab $<; true)
 	
 %.outpdf: %.pdf
 	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	

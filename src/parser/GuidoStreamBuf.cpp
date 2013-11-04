@@ -30,17 +30,14 @@ using namespace std;
 GuidoStreamBuf::GuidoStreamBuf() :
     fHaveToCloseStream(false),
     fAllDataRead(false),
-    fSomeDataHaveBeenWritten(false)
+    fSomeDataHaveBeenWritten(false),
+    fTheStringStream()
 {
-    fTheStringStream = new stringstream();
-    
-    streamIteratorCurrent = fTheStringStream->rdbuf();
-    streamIteratorEnd = streamIteratorEnd;
+    streamIteratorCurrent = fTheStringStream.rdbuf();
 }
 
 GuidoStreamBuf::~GuidoStreamBuf()
 {
-    delete fTheStringStream;
 }
 
 GuidoStreamBuf::int_type GuidoStreamBuf::underflow()
@@ -69,11 +66,11 @@ GuidoStreamBuf::int_type GuidoStreamBuf::uflow()
 
 void GuidoStreamBuf::WriteToBuffer(const char *str)
 {
-    *fTheStringStream << str;
+    fTheStringStream << str;
 
     fAllDataRead = false;
     fSomeDataHaveBeenWritten = true;
 
     if (streamIteratorCurrent == streamIteratorEnd)
-        streamIteratorCurrent = fTheStringStream->rdbuf();
+        streamIteratorCurrent = fTheStringStream.rdbuf();
 }

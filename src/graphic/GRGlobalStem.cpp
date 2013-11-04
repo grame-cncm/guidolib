@@ -590,12 +590,15 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 		note->updateBoundingBox();
 	}
 
-    // Variables for dot's horizontal offset
+    // Variables for dot's offset...
+    // ...horizontally
     float offsetMax = 0;
     NVPoint currentNoteHeadOffset = NVPoint(0, 0);
     bool differentOffsets = false;
     bool prevOffsetExisting = false;
     float prevOffset = 0;
+    // ...vertically
+    std::vector<float> yOffsetVector;
 
 	if (stemdir == dirDOWN)
 	{
@@ -630,9 +633,10 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 				ARTHead::HEADSTATE retHeadState = note->adjustHeadPosition(sugHeadState);
 				// now we have a current headstate ....
 
-                /* To adjust the horizontal dot's offset */
+                /* To adjust the dot's offset... */
                 if (note->getNoteHead())
                 {
+                    /* ...horizontally */
                     currentNoteHeadOffset = note->getNoteHead()->getOffset();
 
                     if (offsetMax < currentNoteHeadOffset.x)
@@ -647,6 +651,66 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
                     {
                         prevOffset = currentNoteHeadOffset.x;
                         prevOffsetExisting = true;
+                    }
+
+
+                    /* ...vertically */
+                    if (note->getDot())
+                    {
+                        float dotPosition = note->getDot()->getPosition().y + note->getDot()->getOffset().y;
+
+                        if (!yOffsetVector.size())
+                            yOffsetVector.push_back(dotPosition);
+                        else
+                        {
+                            bool found = false;
+
+                            size_t vectorSize = yOffsetVector.size();
+                            for (size_t i = 0; i < vectorSize; i++)
+                            {
+                                if (yOffsetVector[i] - 10 < dotPosition && yOffsetVector[i] + 10 > dotPosition)
+                                {
+                                    bool withOffsetFound = false;
+
+                                    for (size_t j = 0; j < vectorSize; j++)
+                                    {
+                                        if (dotPosition + LSPACE - 10 < yOffsetVector[j] && dotPosition + LSPACE + 10 > yOffsetVector[j])
+                                            withOffsetFound = true;
+                                    }
+
+                                    if (!withOffsetFound)
+                                    {
+                                        note->getDot()->addOffsetY(LSPACE);
+                                        yOffsetVector.push_back(dotPosition + LSPACE);
+                                        found = true;
+
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        withOffsetFound = false;
+
+                                        for (size_t j = 0; j < vectorSize; j++)
+                                        {
+                                            if (dotPosition - LSPACE - 10 < yOffsetVector[j] && dotPosition - LSPACE + 10 > yOffsetVector[j])
+                                                withOffsetFound = true;
+                                        }
+
+                                        if (!withOffsetFound)
+                                        {
+                                            note->getDot()->addOffsetY(-LSPACE);
+                                            yOffsetVector.push_back(dotPosition - LSPACE);
+                                            found = true;
+
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (!found)
+                                yOffsetVector.push_back(dotPosition);
+                        }
                     }
                 }
 
@@ -728,6 +792,66 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
                         prevOffset = currentNoteHeadOffset.x;
                         prevOffsetExisting = true;
                     }
+
+
+                    /* ...vertically */
+                    if (note->getDot())
+                    {
+                        float dotPosition = note->getDot()->getPosition().y + note->getDot()->getOffset().y;
+
+                        if (!yOffsetVector.size())
+                            yOffsetVector.push_back(dotPosition);
+                        else
+                        {
+                            bool found = false;
+
+                            size_t vectorSize = yOffsetVector.size();
+                            for (size_t i = 0; i < vectorSize; i++)
+                            {
+                                if (yOffsetVector[i] - 10 < dotPosition && yOffsetVector[i] + 10 > dotPosition)
+                                {
+                                    bool withOffsetFound = false;
+
+                                    for (size_t j = 0; j < vectorSize; j++)
+                                    {
+                                        if (dotPosition + LSPACE - 10 < yOffsetVector[j] && dotPosition + LSPACE + 10 > yOffsetVector[j])
+                                            withOffsetFound = true;
+                                    }
+
+                                    if (!withOffsetFound)
+                                    {
+                                        note->getDot()->addOffsetY(LSPACE);
+                                        yOffsetVector.push_back(dotPosition + LSPACE);
+                                        found = true;
+
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        withOffsetFound = false;
+
+                                        for (size_t j = 0; j < vectorSize; j++)
+                                        {
+                                            if (dotPosition - LSPACE - 10 < yOffsetVector[j] && dotPosition - LSPACE + 10 > yOffsetVector[j])
+                                                withOffsetFound = true;
+                                        }
+
+                                        if (!withOffsetFound)
+                                        {
+                                            note->getDot()->addOffsetY(-LSPACE);
+                                            yOffsetVector.push_back(dotPosition - LSPACE);
+                                            found = true;
+
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (!found)
+                                yOffsetVector.push_back(dotPosition);
+                        }
+                    }
                 }
 
 				prevHeadState = retHeadState;
@@ -776,7 +900,7 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
                 if (currentDot && note->getNoteHead())
                 {
                     if (note->getNoteHead()->getOffset().x != offsetMax)
-                        currentDot->addToOffset(55); //hardcoded
+                        currentDot->addOffsetX(55); //hardcoded
                 }
             }
         }

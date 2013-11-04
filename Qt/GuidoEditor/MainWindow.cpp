@@ -506,8 +506,12 @@ void MainWindow::open()
 		const char *str = QGuidoImporter::musicxmlSupported() ? "Guido Music Notation or MusicXML (*.gmn *.xml)" : "Guido Music Notation (*.gmn)";
 		QString openPath = mRecentFiles.size() ? mRecentFiles.last() : QDir::home().path();
 		QString fileName = QFileDialog::getOpenFileName(this , tr("Open file") , openPath , tr(str) );
-		if (!fileName.isEmpty())  
+		if (!fileName.isEmpty())
+        {
 			loadFile(fileName);
+            mTextEdit->document()->setModified(false);
+            setWindowModified(false);
+        }
 	}
 }
 
