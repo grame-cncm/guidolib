@@ -47,6 +47,7 @@ typedef int16_t flex_int16_t;
 typedef uint16_t flex_uint16_t;
 typedef int32_t flex_int32_t;
 typedef uint32_t flex_uint32_t;
+typedef uint64_t flex_uint64_t;
 #else
 typedef signed char flex_int8_t;
 typedef short int flex_int16_t;
@@ -358,7 +359,7 @@ static void yy_fatal_error (yyconst char msg[] ,yyscan_t yyscanner );
 #define YY_DO_BEFORE_ACTION \
 	yyg->yytext_ptr = yy_bp; \
 	yyg->yytext_ptr -= yyg->yy_more_len; \
-	yyleng = (size_t) (yy_cp - yyg->yytext_ptr); \
+	yyleng = (yy_size_t) (yy_cp - yyg->yytext_ptr); \
 	yyg->yy_hold_char = *yy_cp; \
 	*yy_cp = '\0'; \
 	yyg->yy_c_buf_p = yy_cp;
@@ -607,7 +608,7 @@ static  char* unquote (char * str) {
 
 
 
-#line 611 "guidolex.cpp"
+#line 612 "guidolex.cpp"
 
 #define INITIAL 0
 #define CMNTLN 1
@@ -851,7 +852,7 @@ YY_DECL
 
 #line 75 "guido.l"
 
-#line 855 "guidolex.cpp"
+#line 856 "guidolex.cpp"
 
     yylval = yylval_param;
 
@@ -1191,7 +1192,7 @@ YY_RULE_SETUP
 #line 136 "guido.l"
 ECHO;
 	YY_BREAK
-#line 1195 "guidolex.cpp"
+#line 1196 "guidolex.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(CMNTLN):
 case YY_STATE_EOF(COMMENT):

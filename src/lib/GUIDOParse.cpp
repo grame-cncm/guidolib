@@ -41,7 +41,7 @@ static void _winSleep(unsigned milliseconds)
 #else
     #include <unistd.h>
 
-static void _sleep(unsigned milliseconds)
+static void _winSleep(unsigned milliseconds)
     {
         usleep(milliseconds * 1000); // takes microseconds
     }
@@ -150,9 +150,9 @@ GUIDOAPI(ARHandler)	GuidoParser2AR (GuidoParser *p)
     int line;
     int col;
     
-    GuidoParserGetErrorCode(p, line, col);
+    GuidoErrCode err = GuidoParserGetErrorCode(p, line, col, 0);
 
-    if (line == 0) // No syntax error, then we can do synchronous parsing
+    if (err == guidoNoErr) // No syntax error, then we can do synchronous parsing
     {
         GuidoParser *synchronousParser = new GuidoParser();
         stringstream *stringStreamToParse = new stringstream();
@@ -170,15 +170,15 @@ GUIDOAPI(ARHandler)	GuidoParser2AR (GuidoParser *p)
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoParserGetErrorCode (GuidoParser *p, int &line, int &col)
+GUIDOAPI(GuidoErrCode) GuidoParserGetErrorCode (GuidoParser *p, int &line, int &col, const char** msg)
 {
-    if (!p)
-        return guidoErrBadParameter;
+    if (!p) return guidoErrBadParameter;
 
     line = p->getErrorLine();
     col  = p->getErrorColumn();
-
-    return guidoNoErr;
+    if (msg) *msg = p->getErrorMsg();
+	
+	return (line) ? guidoErrParse : guidoNoErr;
 }
 
 // --------------------------------------------------------------------------
