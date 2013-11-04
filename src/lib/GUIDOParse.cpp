@@ -34,7 +34,7 @@ using namespace std;
 #ifdef WIN32
     #include <windows.h>
 
-static void _sleep(unsigned milliseconds)
+static void _winSleep(unsigned milliseconds)
     {
         Sleep(milliseconds);
     }
@@ -130,13 +130,20 @@ GUIDOAPI(ARHandler)	GuidoStream2AR (GuidoParser *p, GuidoStream* s)
 // --------------------------------------------------------------------------
 GUIDOAPI(ARHandler)	GuidoParser2AR (GuidoParser *p)
 {
-    if (!p || !p->getStream())
+    if (!p)
         return NULL;
 
-    GuidoStream *s = p->getGuidoStream();
+    GuidoStream *s = NULL;
+
 	// todo : avoiding synchronisation using sleep
+	// But for now, user has no way to know when stream has been set in parser
+
+    /* Wait for the stream to be set in parser */
+    while ((s = p->getGuidoStream()) == NULL)
+        _winSleep(10);
+
     while (!s->GetAreAllDataRead() && !s->GetParserJobFinished())
-        _sleep(10);
+        _winSleep(10);
 
     /****************************/
     ARHandler ar = 0;
@@ -196,7 +203,7 @@ GUIDOAPI(GuidoErrCode) GuidoCloseStream (GuidoStream *s)
 
     /* Wait for the parser to end his job */
     while (!s->IsParserJobFinished())
-        sleep(10);
+        _winSleep(10);
 
     delete s;
 

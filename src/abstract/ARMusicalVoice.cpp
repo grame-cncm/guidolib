@@ -1916,7 +1916,7 @@ public:
 		if (start >= (int)text->length())
 			return "";
 
-		int end = position;
+		size_t end = position;
 		if (end >= 0)
 		{
 			while (end <= text->length()-1 )
