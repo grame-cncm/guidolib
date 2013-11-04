@@ -32,6 +32,7 @@ class GRNoteDot : public GRNotationElement
 
 		friend class GREvent;
 		friend class GRSingleNote;
+		using GObject::addToOffset;
 	 
 					GRNoteDot( GREvent * inNote, const TYPE_DURATION & duration, 
 																float notebreite );
