@@ -78,7 +78,6 @@ using namespace std;
 #include "GRSpace.h"
 #include "GRSpecial.h"
 
-#include "GRStaffFormat.h"
 #include "GRGlobalStem.h"
 #include "GRStem.h"
 #include "GRSText.h"
@@ -1962,6 +1961,10 @@ void GRStaff::DrawStaffUsingSymbolRepeat( VGDevice & hdc ) const
 }
 
 // ----------------------------------------------------------------------------
+float GRStaff::currentLineThikness() const
+{ return mStaffState.curstaffrmt ? mStaffState.curstaffrmt->getLineThickness() : kLineThick; }
+
+// ----------------------------------------------------------------------------
 /** \brief Draws the staff lines with vector lines.
 */
 void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
@@ -1978,8 +1981,8 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 	hdc.PopPen();
 
 	*/
-	hdc.PushPenWidth( kLineThick );
-	std::map<float,float>::const_iterator it = positions.begin();	
+	hdc.PushPenWidth( currentLineThikness() );
+	std::map<float,float>::const_iterator it = positions.begin();
 	while (it != positions.end())
 	{
 		float x1 = it->first;
