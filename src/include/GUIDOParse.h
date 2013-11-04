@@ -16,19 +16,12 @@
 */
 
 #include <istream>
-#include "GUIDOExport.h"
 
-struct NodeAR;
-struct NodeGR;
-typedef struct NodeAR *ARHandler;
-typedef struct NodeGR *GRHandler;
-typedef const struct NodeAR *  CARHandler;
-typedef const struct NodeGR *  CGRHandler;
+#include "GUIDOEngine.h"
+#include "GUIDOExport.h"
 
 class GuidoParser;
 class GuidoStream;
-
-enum GuidoErrCode;
 
 #ifdef __cplusplus
 extern "C" {
@@ -42,6 +35,7 @@ extern "C" {
 	//---------------------------------------------------------------------------
 	// the new API
 	//---------------------------------------------------------------------------
+
 	/*!
 		\brief Creates a new parser
 		\return a guido parser.
