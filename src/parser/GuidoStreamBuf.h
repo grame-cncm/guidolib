@@ -15,6 +15,7 @@
  */
 
 #include <iostream>
+#include <sstream>
 #include <iterator>
 
 using namespace std;
@@ -34,7 +35,11 @@ class GuidoStreamBuf : public std::streambuf
         bool GetAreAllDataRead() { return fAllDataRead; }
 
     protected:
-        stringstream *fTheStringStream;
+        stringstream fTheStringStream;
+
+    private:
+        int_type underflow();
+        int_type uflow();
 
         istreambuf_iterator<char> streamIteratorCurrent;
         istreambuf_iterator<char> streamIteratorEnd;
@@ -42,10 +47,6 @@ class GuidoStreamBuf : public std::streambuf
         bool fHaveToCloseStream;
         bool fAllDataRead;
         bool fSomeDataHaveBeenWritten;
-
-    private:
-        int_type underflow();
-        int_type uflow();
 };
 
 

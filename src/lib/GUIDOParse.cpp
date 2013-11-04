@@ -151,14 +151,14 @@ GUIDOAPI(ARHandler)	GuidoParser2AR (GuidoParser *p)
 
     if (line == 0) // No syntax error, then we can do synchronous parsing
     {
-        GuidoParser *synchronousParser = new GuidoParser(true);
+        GuidoParser *synchronousParser = new GuidoParser();
         stringstream *stringStreamToParse = new stringstream();
         string stringToCopy = p->getGuidoStream()->getSynchronousString();
 
         stringStreamToParse->str(stringToCopy);
         synchronousParser->setStream(stringStreamToParse);
 
-        ar = synchronousParser->parse();
+        ar = synchronousParser->parseSynchronousParser();
 
         GuidoCloseParser(synchronousParser);
     }

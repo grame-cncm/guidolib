@@ -50,10 +50,11 @@ class GuidoParser {
 		ARFactory         *fFactory;
 		std::string	       fText;      // the current text
 
-				 GuidoParser(bool inIsSecondParser = false);
+				 GuidoParser();
 		virtual ~GuidoParser();
 		
 		ARHandler           parse();
+        ARHandler           parseSynchronousParser();
         const ARFactory    *getFactory() const  { return fFactory; }
         ARFactory          *getFactory()        { return fFactory; }
 
@@ -98,9 +99,6 @@ class GuidoParser {
 
 		int getErrorLine() const				{ return fErrorLine; }
 		int getErrorColumn() const				{ return fErrorColumn; }
-
-    protected:
-        bool fIsSecondParser;
 };
 
 #endif
