@@ -31,17 +31,17 @@ using namespace std;
 #include "GUIDOParse.h"
 
 
-#ifdef _WIN32
+#ifdef WIN32
     #include <windows.h>
 
-    void sleep(unsigned milliseconds)
+static void _sleep(unsigned milliseconds)
     {
         Sleep(milliseconds);
     }
 #else
     #include <unistd.h>
 
-    void sleep(unsigned milliseconds)
+static void _sleep(unsigned milliseconds)
     {
         usleep(milliseconds * 1000); // takes microseconds
     }
@@ -135,14 +135,11 @@ GUIDOAPI(ARHandler)	GuidoParser2AR (GuidoParser *p)
 
     GuidoStream *s = NULL;
 
-    /* Wait for the stream to be set in parser */
-    while ((s = p->getGuidoStream()) == NULL)
-        sleep(10);
-
+	// todo : avoiding synchronisation using sleep
     while (!s->GetAreAllDataRead() && !s->GetParserJobFinished())
-        sleep(10);
+        _sleep(10);
+
     /****************************/
-    
     ARHandler ar = 0;
     int line;
     int col;
