@@ -2104,7 +2104,7 @@ yyreturn:
 extern int	gParseErrorLine;
 int guidoerror(YYLTYPE* loc, GuidoParser* p, const char*s) {
 	gParseErrorLine = loc->last_line;		// for backward compatibility only
-	p->setErrorLoc (loc->last_line, loc->first_column);
+	p->setError (loc->last_line, loc->first_column, s);
 	cerr << "error line: " << loc->last_line << " col: " << loc->first_column << ": " << s << endl;
 	return 0;
 }
