@@ -78,7 +78,6 @@ using namespace std;
 #include "GRSpace.h"
 #include "GRSpecial.h"
 
-#include "GRStaffFormat.h"
 #include "GRGlobalStem.h"
 #include "GRStem.h"
 #include "GRSText.h"
@@ -1962,6 +1961,10 @@ void GRStaff::DrawStaffUsingSymbolRepeat( VGDevice & hdc ) const
 }
 
 // ----------------------------------------------------------------------------
+float GRStaff::currentLineThikness() const
+{ return mStaffState.curstaffrmt ? mStaffState.curstaffrmt->getLineThickness() : kLineThick; }
+
+// ----------------------------------------------------------------------------
 /** \brief Draws the staff lines with vector lines.
 */
 void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
@@ -1978,12 +1981,8 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 	hdc.PopPen();
 
 	*/
-//	hdc.PushPen( VGColor( 0, 0, 0 ), kLineThick );// TODO: use correct color
-
-	hdc.PushPenWidth( kLineThick );
-
+	hdc.PushPenWidth( currentLineThikness() );
 	std::map<float,float>::const_iterator it = positions.begin();
-	
 	while (it != positions.end())
 	{
 		float x1 = it->first;
@@ -1998,7 +1997,6 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 	}
 
 	hdc.PopPenWidth();
-//	hdc.PopPen();
 }
 
 // ----------------------------------------------------------------------------
@@ -2118,14 +2116,14 @@ bool GRStaff::isStaffEndOn()
 {
   std::map<TYPE_TIMEPOSITION, bool>::reverse_iterator rit;
   rit = isOn.rbegin();
-  return rit->second;
+  return (rit == isOn.rend() ? false : rit->second);
 }
 
 bool GRStaff::isStaffBeginOn()
 {
   std::map<TYPE_TIMEPOSITION, bool>::iterator it;
   it = isOn.begin();
-  return it->second;
+  return (it == isOn.end() ? false : it->second);
 }
 
 
