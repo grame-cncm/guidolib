@@ -130,11 +130,10 @@ GUIDOAPI(ARHandler)	GuidoStream2AR (GuidoParser *p, GuidoStream* s)
 // --------------------------------------------------------------------------
 GUIDOAPI(ARHandler)	GuidoParser2AR (GuidoParser *p)
 {
-    if (!p)
+    if (!p || !p->getStream())
         return NULL;
 
-    GuidoStream *s = NULL;
-
+    GuidoStream *s = p->getGuidoStream();
 	// todo : avoiding synchronisation using sleep
     while (!s->GetAreAllDataRead() && !s->GetParserJobFinished())
         _sleep(10);
