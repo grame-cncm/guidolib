@@ -203,7 +203,7 @@ bool QGuidoPainter::setGMNData( const QString& gmncode, const char* dataPath)
 	ARHandler arh;
 	GRHandler grh;
 
-    mLastErr = GuidoNewParseString(fParser, gmncode.toUtf8().data(), &arh);
+    arh = GuidoString2AR(fParser, gmncode.toUtf8().data());
 
     if (!arh)
         return false;
