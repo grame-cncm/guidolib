@@ -97,7 +97,7 @@ extern "C" {
 		\param col a reference that will contains a column number in case of syntax error
 		\return a Guido error code.
 	*/
-	GUIDOAPI(GuidoErrCode)		GuidoParserGetErrorCode (GuidoParser *p, int& line, int& col);
+	GUIDOAPI(GuidoErrCode)		GuidoParserGetErrorCode (GuidoParser *p, int& line, int& col, const char ** msg );
 
 	/*!
 		\brief Open a guido stream

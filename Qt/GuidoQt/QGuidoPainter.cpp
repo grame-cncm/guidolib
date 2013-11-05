@@ -203,7 +203,8 @@ bool QGuidoPainter::setGMNData( const QString& gmncode, const char* dataPath)
 	ARHandler arh;
 	GRHandler grh;
 
-    mLastErr = GuidoNewParseString(fParser, gmncode.toUtf8().data(), &arh);
+//    mLastErr = GuidoNewParseString(fParser, gmncode.toUtf8().data(), &arh);
+    arh = GuidoString2AR(fParser, gmncode.toUtf8().data());
 
     if (!arh)
         return false;
@@ -380,7 +381,7 @@ QString QGuidoPainter::getLastErrorMessage() const
 	{
 		int line;
         int col;
-        GuidoParserGetErrorCode(fParser, line, col);
+        GuidoParserGetErrorCode(fParser, line, col, 0);
 		result += " (line " + QVariant(line).toString() + ", col " + QVariant(col).toString() + ")";
 	}
 	return result;
@@ -389,7 +390,7 @@ QString QGuidoPainter::getLastErrorMessage() const
 //-------------------------------------------------------------------------
 void QGuidoPainter::getLastParseErrorLine(int &line, int &col) const
 {
-    GuidoParserGetErrorCode(fParser, line, col);
+    GuidoParserGetErrorCode(fParser, line, col, 0);
 }
 		
 //-------------------------------------------------------------------------

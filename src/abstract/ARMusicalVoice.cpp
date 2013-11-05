@@ -1919,7 +1919,7 @@ public:
 		int end = position;
 		if (end >= 0)
 		{
-			while (end <= text->length()-1 )
+			while (end <= int(text->length()-1) )
 			{
 				char c = (*text)[end];
 				if (c == ' ' || c == '-' || c == '_')

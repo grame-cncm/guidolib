@@ -193,7 +193,7 @@ void GREvent::setDotFormat( GRNoteDot * inDot, const ARDotFormat * inFormat )
 	else if (inFormat->getDY())
 	{
 		if( positionIsOnStaffLine( mPosition.y, mCurLSPACE ))
-			inDot->mOffset.y -= (GCoord)TagParameterFloat::convertValue(0.8f,"hs",mCurLSPACE);
+			inDot->mOffset.y -= (GCoord)TagParameterFloat::convertValue(1.0f,"hs",mCurLSPACE);
 	}
 
 	if (inFormat->getSize())

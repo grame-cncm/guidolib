@@ -34,14 +34,14 @@ using namespace std;
 #ifdef WIN32
     #include <windows.h>
 
-static void _sleep(unsigned milliseconds)
+static void _winSleep(unsigned milliseconds)
     {
         Sleep(milliseconds);
     }
 #else
     #include <unistd.h>
 
-static void _sleep(unsigned milliseconds)
+static void _winSleep(unsigned milliseconds)
     {
         usleep(milliseconds * 1000); // takes microseconds
     }
@@ -130,31 +130,38 @@ GUIDOAPI(ARHandler)	GuidoStream2AR (GuidoParser *p, GuidoStream* s)
 // --------------------------------------------------------------------------
 GUIDOAPI(ARHandler)	GuidoParser2AR (GuidoParser *p)
 {
-    if (!p || !p->getStream())
+    if (!p)
         return NULL;
 
-    GuidoStream *s = p->getGuidoStream();
+    GuidoStream *s = NULL;
+
 	// todo : avoiding synchronisation using sleep
+	// But for now, user has no way to know when stream has been set in parser
+
+    /* Wait for the stream to be set in parser */
+    while ((s = p->getGuidoStream()) == NULL)
+        _winSleep(10);
+
     while (!s->GetAreAllDataRead() && !s->GetParserJobFinished())
-        _sleep(10);
+        _winSleep(10);
 
     /****************************/
     ARHandler ar = 0;
     int line;
     int col;
     
-    GuidoParserGetErrorCode(p, line, col);
+    GuidoErrCode err = GuidoParserGetErrorCode(p, line, col, 0);
 
-    if (line == 0) // No syntax error, then we can do synchronous parsing
+    if (err == guidoNoErr) // No syntax error, then we can do synchronous parsing
     {
-        GuidoParser *synchronousParser = new GuidoParser(true);
+        GuidoParser *synchronousParser = new GuidoParser();
         stringstream *stringStreamToParse = new stringstream();
         string stringToCopy = p->getGuidoStream()->getSynchronousString();
 
         stringStreamToParse->str(stringToCopy);
         synchronousParser->setStream(stringStreamToParse);
 
-        ar = synchronousParser->parse();
+        ar = synchronousParser->parseSynchronousParser();
 
         GuidoCloseParser(synchronousParser);
     }
@@ -163,15 +170,15 @@ GUIDOAPI(ARHandler)	GuidoParser2AR (GuidoParser *p)
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoParserGetErrorCode (GuidoParser *p, int &line, int &col)
+GUIDOAPI(GuidoErrCode) GuidoParserGetErrorCode (GuidoParser *p, int &line, int &col, const char** msg)
 {
-    if (!p)
-        return guidoErrBadParameter;
+    if (!p) return guidoErrBadParameter;
 
     line = p->getErrorLine();
     col  = p->getErrorColumn();
-
-    return guidoNoErr;
+    if (msg) *msg = p->getErrorMsg();
+	
+	return (line) ? guidoErrParse : guidoNoErr;
 }
 
 // --------------------------------------------------------------------------
@@ -196,7 +203,7 @@ GUIDOAPI(GuidoErrCode) GuidoCloseStream (GuidoStream *s)
 
     /* Wait for the parser to end his job */
     while (!s->IsParserJobFinished())
-        sleep(10);
+        _winSleep(10);
 
     delete s;
 

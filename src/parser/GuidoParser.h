@@ -39,8 +39,9 @@ class GuidoParser {
 	long int fnt_enum;		/* rel. dur. of current / last note: */
 	long int fnt_denom;
 
-	int fErrorLine;
-	int fErrorColumn;
+	int fErrorLine;			//< filled in case of syntax error
+	int fErrorColumn;		//< filled in case of syntax error
+	std::string fErrorMsg;	//< filled in case of syntax error
 	
 	int	_yyparse();
 	
@@ -50,10 +51,11 @@ class GuidoParser {
 		ARFactory         *fFactory;
 		std::string	       fText;      // the current text
 
-				 GuidoParser(bool inIsSecondParser = false);
+				 GuidoParser();
 		virtual ~GuidoParser();
 		
 		ARHandler           parse();
+        ARHandler           parseSynchronousParser();
         const ARFactory    *getFactory() const  { return fFactory; }
         ARFactory          *getFactory()        { return fFactory; }
 
@@ -94,13 +96,12 @@ class GuidoParser {
 		void tagEnd			();
 		void tagRange		();
 
-		void setErrorLoc(int line, int column)	{ fErrorLine = line; fErrorColumn = column; }
+		void setError(int line, int column, const char *msg)
+					{ fErrorLine = line; fErrorColumn = column; fErrorMsg = msg; }
 
 		int getErrorLine() const				{ return fErrorLine; }
 		int getErrorColumn() const				{ return fErrorColumn; }
-
-    protected:
-        bool fIsSecondParser;
+		const char* getErrorMsg() const			{ return fErrorMsg.c_str(); }
 };
 
 #endif
