@@ -380,7 +380,7 @@ QString QGuidoPainter::getLastErrorMessage() const
 	{
 		int line;
         int col;
-        GuidoParserGetErrorCode(fParser, line, col, NULL); // REM: NULL à modifier
+        GuidoParserGetErrorCode(fParser, line, col, 0);
 		result += " (line " + QVariant(line).toString() + ", col " + QVariant(col).toString() + ")";
 	}
 	return result;
@@ -389,7 +389,7 @@ QString QGuidoPainter::getLastErrorMessage() const
 //-------------------------------------------------------------------------
 void QGuidoPainter::getLastParseErrorLine(int &line, int &col) const
 {
-    GuidoParserGetErrorCode(fParser, line, col, NULL); // REM: NULL à modifier
+    GuidoParserGetErrorCode(fParser, line, col, 0);
 }
 		
 //-------------------------------------------------------------------------
