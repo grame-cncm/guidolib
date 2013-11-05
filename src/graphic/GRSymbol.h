@@ -67,6 +67,8 @@ class GRSymbol : public GRPTagARNotationElement
 
 		virtual GRPositionTag::GRSaveStruct * getNewGRSaveStruct()
         { return new GRSymbolSaveStruct; }
+
+        bool haveToDisplayWarningMsg;
 };
 
 #endif

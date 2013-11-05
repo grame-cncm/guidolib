@@ -3,6 +3,8 @@
 #include <libgen.h>
 #endif
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <stdlib.h>
 
 #include "GUIDOEngine.h"
@@ -16,10 +18,23 @@ int main(int argc, char **argv)
 		cout << "======== parsing " << argv[i] << endl;
 		GuidoErrCode err;
 		ARHandler arh;
-		err = GuidoParseFile (argv[i], &arh);
+
+        GuidoParser *parser = GuidoOpenParser();
+
+        std::ifstream ifs(argv[i], ios::in);
+        if (!ifs)
+            return 0;
+
+        std::stringstream streamBuffer;
+        streamBuffer << ifs.rdbuf();
+        ifs.close();
+
+        err = GuidoNewParseString(parser, streamBuffer.str().c_str(), &arh);
 		if (err != guidoNoErr) 
 			cerr << "error #" << err << ": " << GuidoGetErrorString (err) << endl;
 		GuidoFreeAR (arh);
+
+        GuidoCloseParser(parser);
 	}
 	return 0;
 }

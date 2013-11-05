@@ -51,7 +51,13 @@ VGDevice* SVGSystem::CreateMemoryDevice( int w, int h, const char* fontfile )
 }
 
 //______________________________________________________________________________
-VGDevice* SVGSystem::CreateMemoryDevice( const char * inPath)		{ return 0; }
+VGDevice* SVGSystem::CreateMemoryDevice(const char * inPath)
+{
+    SVGDevice* device = new SVGDevice (cout, this, 0);
+	return device;
+}
+
+//______________________________________________________________________________
 VGDevice* SVGSystem::CreatePrinterDevice( )							{ return 0; }
 
 //______________________________________________________________________________

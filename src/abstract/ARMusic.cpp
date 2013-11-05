@@ -365,7 +365,7 @@ void ARMusic::doAutoBreaks()
 
 void ARMusic::doAutoStuff()
 {
-	// this is important so that the voices now about the maxmium tag-id.
+	// this is important so that the voices now about the maximum tag-id.
 	gCurArMusic = this;
 
 	// First, we adjust all durations ...

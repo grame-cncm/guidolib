@@ -32,6 +32,7 @@ ARStaffFormat::ARStaffFormat(const ARStaffFormat &stffrmt)
 		style = TagParameterString::cast(stffrmt.style->getCopy());
 	if (stffrmt.size != NULL)
 		size = TagParameterFloat::cast(stffrmt.size->getCopy());
+	fLineThickness = stffrmt.getLineThickness();
 }
 
 ARStaffFormat::~ARStaffFormat()
@@ -39,7 +40,7 @@ ARStaffFormat::~ARStaffFormat()
 	delete style;
 }
 
-ARStaffFormat::ARStaffFormat()
+ARStaffFormat::ARStaffFormat() : fLineThickness(kLineThick)
 {
 	style = NULL;
 }
@@ -49,7 +50,7 @@ void ARStaffFormat::setTagParameterList(TagParameterList & tpl)
 	if (ltpls.GetCount() == 0) {
 		// create a list of string ...
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail( ( "S,style,standard,o;U,size,3pt,o"));
+		lstrs.AddTail( ( "S,style,standard,o;U,size,3pt,o;F,lineThickness,0.08,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -85,6 +86,12 @@ void ARStaffFormat::setTagParameterList(TagParameterList & tpl)
 				intunits = (float)gd_convertUnits(cmunits,"cm",unit);
 				size->setValue( intunits );
 			}
+
+			TagParameterFloat* fval =  TagParameterFloat::cast(rtpl->RemoveHead());
+			assert(fval);
+			if (fval->TagIsSet())
+				fLineThickness = LSPACE * fval->getValue();
+			delete fval;
 		}
 		delete rtpl;
 	}

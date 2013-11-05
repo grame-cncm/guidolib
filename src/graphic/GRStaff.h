@@ -263,9 +263,11 @@ class GRStaff : public GRCompositeNotationElement
 		// the old functionality will be lost
 		void addNotationElement(GRNotationElement * notationElement);
 
-		void checkSystemBar(const TYPE_TIMEPOSITION & tp);
+		void	checkSystemBar(const TYPE_TIMEPOSITION & tp);
 
 		void	generatePositions();
+		float	currentLineThikness() const;
+
 
   protected:
 

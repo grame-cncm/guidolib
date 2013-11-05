@@ -15,6 +15,7 @@
 #define GUIDO_PAINTER_H
 
 #include "GUIDOEngine.h"
+#include "GUIDOParse.h"
 
 #include <QString>
 #include <QPainter>
@@ -162,9 +163,9 @@ class QGuidoPainter
 		QString getLastErrorMessage() const;
 		
 		/**
-		*	\brief Returns the parse error line, or 0 if there is no parse error with the current GMN code.
+		*	\brief Gets the parse error line/col.
 		*/
-		int		getLastParseErrorLine() const;
+		void getLastParseErrorLine(int &line, int &col) const;
 		
 		/// \brief sets the guido layout settings \see GUIDOEngine interface
 		void setGuidoLayoutSettings(const GuidoLayoutSettings& layoutSettings);
@@ -209,6 +210,9 @@ class QGuidoPainter
 		*/
 		void		setARHandler(ARHandler ar);
 
+        void        CreateParser();
+        void        CloseParser();
+
 	protected:
 	
 		QGuidoPainter();
@@ -232,6 +236,8 @@ class QGuidoPainter
 		GuidoPageFormat mPageFormat;
 
 		QColor fCurrentColor;		// the color for drawing the score
+        
+        GuidoParser *fParser;
 };
 
 #endif

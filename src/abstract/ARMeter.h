@@ -55,6 +55,8 @@ class ARMeter : public ARMTParameter
 		const TYPE_TIMEPOSITION & getTimeOffset() const	{ return timeoffset; }
 		void setTimeOffset(const TYPE_TIMEPOSITION &tp) { timeoffset = tp; }
 
+        float        getSize() const {return size;}
+
   protected:
 	  // timeoffset describes the offset from the current meter-position within a staff. 
 	  // This is set and read by GRStaff

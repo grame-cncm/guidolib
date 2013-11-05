@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<title>GUIDO Additional Specifications 1.5.2</title>
+		<meta name="Author" content="Colas Decron">
+
+		<style type="text/css">
+			BODY { font-family : verdana,Arial,Helvetica; font-size : 10pt; font-weight : normal; color: black; background-color: white; margin: 20px 40px 20px 40px;}
+			h1	 { font-size : 31pt; font-weight : bold; padding: 0; line-height: 1.0; }
+			h2	 { font-size : 18pt; font-weight : bold; letter-spacing: 1pt;}
+			h3	 { font-size : 14pt; font-weight : bold; }
+			h4	 { font-size : 12pt; font-weight : bold; margin-left: 50px}
+
+			pre	 { font-family : Monaco, Courier; font-size : 8pt; margin-left: 50px; background-color: #E0D7CB; line-height: 2.0;}
+
+			A:link    { color:#4561CA; text-decoration: none; }
+			A:visited { color:#4561CA; text-decoration: none; }
+			A:hover   { color:#990000; text-decoration: none; }
+
+			p		 { margin-left: 50px; }
+			p.notes  { font-style: italic; margin-left: 0px; }
+			p.tag    { margin-left: 90px; text-indent: -40px}
+			ul		 { margin-left: 100px; }
+    
+			span.tag { font-weight : bold; }
+		</style>
+	</head>
+	
+	<body>
+
+		<h1>The GUIDO Music Notation Format</h1>
+		<h2>Additionnal and new specifications</h2>
+		<p>
+			<span class="tag">
+				Supported by the <a href="http://sourceforge.net/projects/guidolib/">GUIDO Engine</a> version 1.5.2
+			</span>
+			<br>
+			<a href="http://www.grame.fr/Recherche/">Grame</a> - October 2013
+		</p>
+		
+		
+		<p>
+			<p>
+				<a href="#1.">1. Meter</a>
+			</p>
+			
+			
+			<hr>
+			
+			
+			<a name="1."></a>
+			<h4>1. Meter</h4>
+
+			<p class="tag">
+				<p>
+					<span class="tag">\meter</span>&lt;<i>type, size, autoBarlines</i>&gt;
+				</p>
+				<p>
+					Set the meter of the voice. Meter can be complex : numerator can be a sum. See examples.
+				</p>
+				
+				<br>
+				
+				<ul>
+					<li>
+						<i><b>Parameters</b> (in the order of their default positions):</i>
+						
+						<ul>
+							<br>
+							<li>
+								<b><i>type</i></b> - meter type
+							
+								<ul>
+									<br>
+									<li>
+										<i>standard values:</i>
+						
+										<ul>
+											<li>
+												string
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> "4/4"
+									</li>
+									<br>
+								</ul>
+							</li>
+						
+							<li>
+								<b><i>size</i></b> - graphic size of meter 
+								<br>
+						
+								<ul>
+									<br>
+									<li>
+										<i>standard values:</i>
+						
+										<ul>
+											<li>
+												unit parameter
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> 1
+									</li>
+									<br>
+								</ul>
+							</li>
+						
+							<li>
+								<b><i>autoBarlines</i></b> - Sets auto barlines on or off
+								<br>
+							
+								<ul>
+									<br>
+									<li>
+									<i>standard values:</i>
+							
+										<ul>
+											<li>
+												strings ("on" / "off")
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> "on"
+									</li>
+									<br>
+								</ul>
+							</li>
+						</ul>		
+						<br>
+					</li>
+									
+					<li>
+						<b><i>Semantics:</i></b>
+								
+						<ul>
+							<li>
+								segmentation of music part's duration
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</p>
+			<p class="notes">
+				Examples:
+				<pre>[ \meter&lt;"2+2+3/4"&gt; a a c2 a1 e2 e d c ]</pre>
+				<center> <IMG SRC="imgs/meter1.png"> </center>
+				<pre>[ \meter&lt;"C"&gt; a b c d e ]</pre>
+				<center> <IMG SRC="imgs/meter2.png"> </center>
+			</p>
+			
+			
+			<hr>		
+	</body>
+</html>

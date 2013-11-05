@@ -28,6 +28,7 @@ using namespace std;
 #include "GRGlobalStem.h"
 #include "GRGlobalLocation.h"
 #include "GRNoteDot.h"
+#include "GRSingleRest.h"
 
 #include "GuidoDefs.h" // for LSPACE
 
@@ -212,7 +213,12 @@ void GREvent::createDots( const TYPE_DURATION & inDuration, float inNoteBreite,
 	if( dotCount > 0 )
 	{
 		GRNoteDot * noteDot = new GRNoteDot ( this, inNoteBreite, dotCount );
-		noteDot->setPosition( inPos );
+        noteDot->setPosition(inPos);
+
+        GRSingleRest *rest = dynamic_cast<GRSingleRest *>(this);
+        if (rest)
+            noteDot->addOffsetX(45);        
+
 		AddTail( noteDot );
 		updateBoundingBox();
 	}

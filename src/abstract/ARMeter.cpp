@@ -13,6 +13,7 @@
 */
 
 #include <iostream>
+#include <sstream>
 #include "secureio.h"
 
 #include "ARMeter.h"
@@ -28,15 +29,20 @@ ARMeter::ARMeter()
 {
 	mtype = NONE;
 	autoBarlines = 1;
+
+    numerator = 0;
+    denominator = 0;
 }
 
 ARMeter::ARMeter(int p_numerator, int p_denominator)
 {
 	numerator = p_numerator;
 	denominator = p_denominator;
-	char buffer[20];
-	snprintf(buffer, 20, "%d/%d",numerator,denominator);
-	mMeterName = buffer;
+
+    std::stringstream bufferSStream;
+    bufferSStream << numerator << "/" << denominator;
+
+	mMeterName = bufferSStream.str().c_str();
 	mtype = NUMERIC;
 	autoBarlines = 1;
 }
@@ -102,7 +108,6 @@ void ARMeter::setTagParameterList(TagParameterList& tpl)
 
 
             //Meter string analysis to set numerator/denominator
-            numerator = 0;
             std::string meterStr(mMeterName);
             std::string delimiterSlash = "/";
 
@@ -116,7 +121,13 @@ void ARMeter::setTagParameterList(TagParameterList& tpl)
             denominatorStr.erase(0, posSlash + 1);
 
             if (sscanf(denominatorStr.c_str(), "%d", &denominator) == 1)
-            { //numerator check
+            {
+                while(denominator > 99)
+                    denominator = (int)(denominator / 10);
+
+
+                /* Numerator check */
+
                 int tmpNumeratorX = 0;
                 std::string delimiterPlus = "+";
                 size_t posPlus = 0;
@@ -126,6 +137,10 @@ void ARMeter::setTagParameterList(TagParameterList& tpl)
                     tpmNumeratorXStr = completeNumeratorStr.substr(0, posPlus);
                     if (sscanf(tpmNumeratorXStr.c_str(), "%d", &tmpNumeratorX) == 1)
                     {
+                        /* We keep only the first 2 figures */
+                        while(tmpNumeratorX > 99)
+                            tmpNumeratorX = (int)(tmpNumeratorX / 10);
+
                         numeratorsVector.push_back(tmpNumeratorX);
                     }
                     completeNumeratorStr.erase(0, posPlus + delimiterPlus.length());
@@ -133,21 +148,15 @@ void ARMeter::setTagParameterList(TagParameterList& tpl)
 
                 if (sscanf(completeNumeratorStr.c_str(), "%d", &tmpNumeratorX) == 1)
                 { // last sum member
+                    /* We keep only the first 2 figures */
+                    while(tmpNumeratorX > 99)
+                        tmpNumeratorX = (int)(tmpNumeratorX / 10);
+
                     numeratorsVector.push_back(tmpNumeratorX);
                 }
 
                 if (!numeratorsVector.empty())
-                {
-                    for(int i = 0; i < numeratorsVector.size(); i++)
-                    {
-                        numerator += numeratorsVector[i]; //REM: fixer une limite de somme pour le numérateur ? et pour le dénominateur ?
-                    }
-                }
-
-                if (!numeratorsVector.empty())
-                {
                     mtype = NUMERIC;
-                }
             }
             else
             { // read error
@@ -181,7 +190,13 @@ void ARMeter::setTagParameterList(TagParameterList& tpl)
 		mtype = NONE;
 	}
 
-	tpl.RemoveAll();
+    if (!numeratorsVector.empty())
+    {
+        for(size_t i = 0; i < numeratorsVector.size(); i++)
+            numerator += numeratorsVector[i];
+    }
+
+    tpl.RemoveAll();
 }
 
 bool ARMeter::IsStateTag() const

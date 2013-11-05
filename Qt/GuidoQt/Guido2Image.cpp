@@ -155,7 +155,9 @@ Guido2ImageErrorCodes Guido2Image::gmnString2Image( const Params& p )
 		
 	QGuidoPainter * painter = QGuidoPainter::createGuidoPainter();
 	if (painter) {
+                painter->CreateParser();
 		painter->setGMNCode(p.input);
+                painter->CloseParser();
 		if (p.pageFormat) painter->setGuidoPageFormat (*p.pageFormat);
 		if (p.layout) painter->setGuidoLayoutSettings (*p.layout);
 		painter->setResizePageToMusic(p.resizePageToMusic);
@@ -175,7 +177,9 @@ Guido2ImageErrorCodes Guido2Image::gmnFile2Image	( const  Params& p )
 
 	QGuidoPainter * painter = QGuidoPainter::createGuidoPainter();
 	if (painter) {
+                painter->CreateParser();
 		painter->setGMNFile(p.input);
+                painter->CloseParser();
 		if (p.layout) painter->setGuidoLayoutSettings (*p.layout);
 		if (p.pageFormat) painter->setGuidoPageFormat (*p.pageFormat);
 		painter->setResizePageToMusic(p.resizePageToMusic);

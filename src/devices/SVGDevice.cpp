@@ -52,6 +52,7 @@ SVGDevice::SVGDevice(std::ostream& outstream, SVGSystem* system, const char* gui
 	fBeginDone(false)
 {
 }
+
 SVGDevice::~SVGDevice() 
 {
 	delete fPendingStrokeColor;

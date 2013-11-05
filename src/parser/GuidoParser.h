@@ -14,14 +14,15 @@
 #ifndef __GuidoParser__
 #define __GuidoParser__
 
-#include <iostream>
+#include <istream>
 #include <string>
+#include <sstream>
 #include <locale.h>
 
-#include "GUIDOFactory.h"
+#include "GuidoStream.h"
+#include "GuidoFactory.h"
 
 class ARFactory;
-
 
 /* \brief a class for reading gmn streams
 */
@@ -44,17 +45,22 @@ class GuidoParser {
 	int	_yyparse();
 	
 	public:
-		void*			fScanner;	// the flex scanner
-		std::istream*	fStream;    // input stream
-		ARFactory *		fFactory;
-		std::string		fText;		// the current text
-		
+		void              *fScanner;   // the flex scanner
+		std::istream      *fStream;    // input stream
+		ARFactory         *fFactory;
+		std::string	       fText;      // the current text
 
-				 GuidoParser(std::istream* stream);
+				 GuidoParser(bool inIsSecondParser = false);
 		virtual ~GuidoParser();
 		
 		ARHandler           parse();
-        const ARFactory *   getFactory() const  { return fFactory; }
+        const ARFactory    *getFactory() const  { return fFactory; }
+        ARFactory          *getFactory()        { return fFactory; }
+
+        void                setStream(std::istream *stream);
+
+        GuidoStream        *getGuidoStream()    { return (GuidoStream *)fStream; }
+        std::istream       *getStream()         { return fStream; }
 
 		void noteInit		(const char *id);
 		void noteAcc		(int n);
@@ -92,6 +98,9 @@ class GuidoParser {
 
 		int getErrorLine() const				{ return fErrorLine; }
 		int getErrorColumn() const				{ return fErrorColumn; }
+
+    protected:
+        bool fIsSecondParser;
 };
 
 #endif
