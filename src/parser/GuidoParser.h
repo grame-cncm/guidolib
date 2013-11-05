@@ -53,16 +53,13 @@ class GuidoParser {
 
 				 GuidoParser();
 		virtual ~GuidoParser();
+
+        void                Reinit();
 		
 		ARHandler           parse();
-        ARHandler           parseSynchronousParser();
         const ARFactory    *getFactory() const  { return fFactory; }
-        ARFactory          *getFactory()        { return fFactory; }
 
         void                setStream(std::istream *stream);
-
-        GuidoStream        *getGuidoStream()    { return (GuidoStream *)fStream; }
-        std::istream       *getStream()         { return fStream; }
 
 		void noteInit		(const char *id);
 		void noteAcc		(int n);

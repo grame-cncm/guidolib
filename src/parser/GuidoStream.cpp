@@ -14,31 +14,136 @@
 #include <locale.h>
 #include <istream>
 #include <sstream>
+#include <stack>
 
 using namespace std;
-
-#include "GuidoStreamBuf.h"
 
 #include "GuidoStream.h"
 
 
 //--------------------------------------------------------------------------
-GuidoStream::GuidoStream(GuidoStreamBuf *inStreamBuf) : istream(inStreamBuf),
-             fGuidoStreamBuffer(inStreamBuf),
-             fParserJobFinished(false),
-             fSynchronousString()
+GuidoStream::GuidoStream() : stringstream()
 {
+    fTheGlobalStringStream = new stringstream();
 }
 
 //--------------------------------------------------------------------------
 GuidoStream::~GuidoStream() 
 {
-    delete fGuidoStreamBuffer;
+    delete fTheGlobalStringStream;
 }
 
 //--------------------------------------------------------------------------
-void GuidoStream::WriteToStream(const char* str) 
+void GuidoStream::WriteToStream(const char* inStr) 
 {
-    fSynchronousString += str;
-    fGuidoStreamBuffer->WriteToBuffer(str);
+    /* Append inStr (written by user) to global string */
+    *fTheGlobalStringStream << inStr;
+
+    /* Create a temporary string from the global string */
+    string *tmpString = new string(fTheGlobalStringStream->str());
+
+    /* Build tags stack from the global string */
+    stack<char> *charStack = AnalyzeString(fTheGlobalStringStream);
+    
+    /* Complete temporary string with appropriate tags from tags stack */
+    WriteNewString(charStack, tmpString);
+
+    /* Set the final stringstream (this) from the temporary string */
+    this->str(*tmpString);
+
+    delete tmpString;
+}
+
+//--------------------------------------------------------------------------
+stack<char> *GuidoStream::AnalyzeString(stringstream *inStr)
+{
+    stack<char> *charStack = new stack<char>();
+
+    string stringToAnalyze(inStr->str());
+
+    bool errorFound = false;
+
+    /* Get current char, and push its opposite in the stack if it's a tag ("{," "[," "(," "<") */
+    for (size_t i = 0; i < stringToAnalyze.size() && errorFound == false; i++)
+    {
+        switch (stringToAnalyze[i])
+        {
+        case '{':
+            charStack->push('}');
+            break;
+        case '[':
+            charStack->push(']');
+            break;
+        case '(':
+            charStack->push(')');
+            break;
+        case '<':
+            charStack->push('>');
+            break;
+        /* If current char is a closing tag and corresponds to the top of the stack, stack's first element is popped.
+           Else, there is a syntax error and we leave. */
+        case '}':
+            if (charStack->top() == '}')
+                charStack->pop();
+            else
+            {
+                /* Syntax error */
+                cout << "Unexpected " << charStack->top() << ", expecting }" << endl; // REM: à laisser ?
+                errorFound = true;
+            }
+            break;
+        case ']':
+            if (charStack->top() == ']')
+                charStack->pop();
+            else
+            {
+                /* Syntax error */
+                cout << "Unexpected " << charStack->top() << ", expecting ]" << endl;
+                errorFound = true;
+            }
+            break;
+        case ')':
+            if (charStack->top() == ')')
+                charStack->pop();
+            else
+            {
+                /* Syntax error */
+                cout << "Unexpected " << charStack->top() << ", expecting )" << endl;
+                errorFound = true;
+            }
+            break;
+        case '>':
+            if (charStack->top() == '>')
+                charStack->pop();
+            else
+            {
+                /* Syntax error */
+                cout << "Unexpected " << charStack->top() << ", expecting >" << endl;
+                errorFound = true;
+            }
+            break;
+        default:
+            break;
+        }
+    }
+
+    return charStack;
+}
+
+//--------------------------------------------------------------------------
+void GuidoStream::WriteNewString(stack<char> *inStack, string *stringToComplete)
+{
+    /* Append all stack's tags to the stringToComplete */
+    while (inStack->size())
+    {
+        stringToComplete->push_back(inStack->top());
+        inStack->pop();
+    }
+}
+
+//--------------------------------------------------------------------------
+void GuidoStream::Prepare()
+{
+    this->clear();
+    this->str(this->str()); // Needed !
 }
