@@ -153,7 +153,7 @@ GUIDOAPI(GuidoErrCode) GuidoWriteStream (GuidoStream *s, const char *str)
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoFlushStream (GuidoStream *s)
+GUIDOAPI(GuidoErrCode) GuidoResetStream (GuidoStream *s)
 {
     if (!s)
         return guidoErrBadParameter;

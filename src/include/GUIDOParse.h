@@ -125,7 +125,7 @@ extern "C" {
 		\param s a GuidoStream previoulsy opened with GuidoOpenStream
 		\return a Guido error code.
 	*/
-	GUIDOAPI(GuidoErrCode)		GuidoFlushStream (GuidoStream *s);
+	GUIDOAPI(GuidoErrCode)		GuidoResetStream (GuidoStream *s);
 
 /*! @} */
 
