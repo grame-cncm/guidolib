@@ -997,7 +997,8 @@ void MainWindow::setEngineSettings(const GuidoLayoutSettings& gls,
 		(gls.force != mGuidoEngineParams.force)								|
 		(gls.spring != mGuidoEngineParams.spring)							|
 		(gls.neighborhoodSpacing != mGuidoEngineParams.neighborhoodSpacing)	|
-		(gls.optimalPageFill != mGuidoEngineParams.optimalPageFill)	)
+		(gls.optimalPageFill != mGuidoEngineParams.optimalPageFill)	        |
+        (gls.resizePage2Music != mGuidoEngineParams.resizePage2Music) )
 	{
 		mGuidoEngineParams = gls;
 		mGuidoWidget->setGuidoLayoutSettings( mGuidoEngineParams );
