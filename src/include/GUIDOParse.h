@@ -119,6 +119,14 @@ extern "C" {
 	*/
 	GUIDOAPI(GuidoErrCode)		GuidoWriteStream (GuidoStream *s, const char* str);
 
+    /*!
+		\brief Erase all stream content in order to reuse it
+
+		\param s a GuidoStream previoulsy opened with GuidoOpenStream
+		\return a Guido error code.
+	*/
+	GUIDOAPI(GuidoErrCode)		GuidoFlushStream (GuidoStream *s);
+
 /*! @} */
 
 

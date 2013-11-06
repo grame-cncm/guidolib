@@ -32,6 +32,7 @@ public:
 
     /* Clears this' state flags */
     void     Prepare();
+    void     ReinitStream();
 
 protected:
     stringstream *fTheGlobalStringStream; // The stringstream which contains the real string

@@ -147,3 +147,13 @@ void GuidoStream::Prepare()
     this->clear();
     this->str(this->str()); // Needed !
 }
+
+//--------------------------------------------------------------------------
+void GuidoStream::ReinitStream()
+{
+    this->clear();
+    this->str("");
+
+    fTheGlobalStringStream->clear();
+    fTheGlobalStringStream->str("");
+}
