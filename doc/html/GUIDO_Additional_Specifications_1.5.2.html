@@ -44,6 +44,7 @@
 		<p>
 			<p>
 				<a href="#1.">1. Meter</a>
+				<a href="#2.">2. Tuplet</a>
 			</p>
 			
 			
@@ -161,5 +162,168 @@
 			
 			
 			<hr>		
+			
+			
+			<a name="2."></a>
+			<h4>2. Tuplet</h4>
+
+			<p class="tag">
+				<p>
+					<span class="tag">\tuplet</span>&lt;<i>format, dy1, dy2, lineThickness, bold, textSize</i>&gt;(<i>notes</i>) 
+				</p>
+				<p>
+					Set a tuplet.
+				</p>
+				
+				<br>
+				
+				<ul>
+					<li>
+						<i><b>Parameters</b> (in the order of their default positions):</i>
+						
+						<ul>
+							<br>
+							<li>
+								<b><i>format</i></b> - meter format
+							
+								<ul>
+									<br>
+									<li>
+										<i>standard values</i> ([leftBrace][numerator]:[denominator][rightBrace]) :
+						
+										<ul>
+											<li>
+												"-3-"
+											</li>
+											<li>
+												"-3:5-"
+											</li>
+											<li>
+												"-2:5"
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> ""
+									</li>
+									<br>
+								</ul>
+							</li>
+						
+							<li>
+								<b><i>dy1, dy2</i></b> - graphic vertical offsets of the two ends of the tuplet's line (defines tuplet's line slope)
+							
+								<ul>
+									<br>
+									<li>
+										<i>standard values:</i>
+						
+										<ul>
+											<li>
+												unit parameters
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> 0
+									</li>
+									<br>
+								</ul>
+							</li>
+						
+							<li>
+								<b><i>lineThickness</i></b> - graphic thickness of tuplet's line
+								<br>
+						
+								<ul>
+									<br>
+									<li>
+										<i>standard values:</i>
+						
+										<ul>
+											<li>
+												unit parameter
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> 1
+									</li>
+									<br>
+								</ul>
+							</li>
+							
+							<li>
+								<b><i>bold</i></b> - defines if the text is bold or not
+							
+								<ul>
+									<br>
+									<li>
+										<i>standard values:</i>
+						
+										<ul>
+											<li>
+												"true"
+											</li>
+											<li>
+												"false"
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> "false"
+									</li>
+									<br>
+								</ul>
+							</li>
+							
+							<li>
+								<b><i>textSize</i></b> - graphic size of the text
+								<br>
+						
+								<ul>
+									<br>
+									<li>
+										<i>standard values:</i>
+						
+										<ul>
+											<li>
+												unit parameter
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> 1
+									</li>
+									<br>
+								</ul>
+							</li>
+						</ul>		
+						<br>
+					</li>
+									
+					<li>
+						<b><i>Semantics:</i></b>
+								
+						<ul>
+							<li>
+								A tuplet corresponds to any rhythm that involves dividing the beat into a different number of equal subdivisions from that usually permitted by the time-signature.
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</p>
+			<p class="notes">
+				Examples:
+				<pre>[ \tuplet&lt;"-3-", textSize=1.5, bold="true", lineThickness=0.2, dy1=10&gt; (a a a) ]</pre>
+				<center> <IMG SRC="imgs/tuplet1.png"> </center>
+				<pre>[ \tuplet&lt;"2:5-", dy1=7, dy2=9&gt; (g b b) ]</pre>
+				<center> <IMG SRC="imgs/tuplet2.png"> </center>
+			</p>
 	</body>
 </html>
