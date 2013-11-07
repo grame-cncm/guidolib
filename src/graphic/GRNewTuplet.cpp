@@ -1,4 +1,4 @@
-/*
+﻿/*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
   Copyright (C) 2003, 2004 	Grame
@@ -25,6 +25,7 @@
 
 #include <iostream>
 #include <string.h>
+#include <sstream>
 
 #include "ARTuplet.h"
 
@@ -33,6 +34,7 @@
 #include "GRPage.h"
 #include "GRVoice.h"
 #include "VGDevice.h"
+#include "VGFont.h"
 #include "FontManager.h"
 #include "secureio.h"
 
@@ -116,8 +118,8 @@ GRNewTuplet::manualPosition(GObject * caller, const NVPoint & inPos )
 
 	const ARTuplet * arTuplet = getARTuplet();
 
-	float dy1 = arTuplet->isDySet() ? arTuplet->getDy1() : float(1.25) * LSPACE;
-	float dy2 = arTuplet->isDySet() ? arTuplet->getDy2() : float(1.25) * LSPACE;
+	float dy1 = arTuplet->isDySet() ? arTuplet->getDy1() : 0;
+	float dy2 = arTuplet->isDySet() ? arTuplet->getDy2() : 0;
 
 	if(( dy1 > 0 ) || ( dy2 > 0 ))
 		mDirection = dirUP;
@@ -141,12 +143,10 @@ GRNewTuplet::manualPosition(GObject * caller, const NVPoint & inPos )
 		if (startElement && endElement)
 		{
 			const float posx = (st->p2.x - st->p1.x) * 0.5f + st->p1.x;
-			const float posy = st->p2.y > st->p1.y ? (st->p2.y) : (st->p1.y);
-
-			// posy += 2*LSPACE;
+            const float posy = st->p2.y > st->p1.y ? (st->p2.y - st->p1.y) * 0.5f + st->p1.y + 40 : (st->p1.y - st->p2.y) * 0.5f + st->p2.y + 40;
 		
 			st->textpos.x = posx;
-			st->textpos.y = posy;
+            st->textpos.y = posy;
 		}
 		else
 			st->textpos = inPos;
@@ -400,7 +400,7 @@ void  GRNewTuplet::automaticPosition(GObject * caller, const NVPoint & inPos )
 	st->p2.y = endY;
 
 	st->textpos.x = (startX + endX) * float(0.5);
-	st->textpos.y = (startY + endY) * float(0.5) + textOffsetY;
+	st->textpos.y = (startY + endY) * float(0.5) + textOffsetY - 9;
 }
 
 
@@ -409,8 +409,10 @@ void GRNewTuplet::OnDraw(VGDevice & hdc) const
 { 
 	if(!mDraw)
 		return;
+
 	assert(gCurSystem);
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct(gCurSystem);
+
 	if (sse == 0)
 		return;
 
@@ -420,34 +422,55 @@ void GRNewTuplet::OnDraw(VGDevice & hdc) const
 
 	int charCount = 0;
 
+    float const thickness = arTuplet->getThickness();
+
 	// - Draws the number
 	const int numerator = arTuplet->getNumerator();
-	if( numerator > 0 )
-	{
-		char buffer[8];
-		const int denominator = arTuplet->getDenominator(); 
-		if( denominator > 0 )
-			snprintf( buffer, 8, "%d:%d", numerator, denominator ); // should be cached somewhere
-		else
-			snprintf( buffer, 8, "%d", numerator );
-	
-		charCount = (int)strlen( buffer );
 
-		hdc.SetTextFont( FontManager::gFontText );
-		hdc.SetFontAlign( VGDevice::kAlignCenter | VGDevice::kAlignBottom );
-		hdc.DrawString( st->textpos.x, st->textpos.y, buffer, charCount );
+	if (numerator > 0)
+	{
+		std::stringstream bufferNumeratorDenominatorStream;
+        
+		const int denominator = arTuplet->getDenominator(); 
+		if (denominator > 0)
+			bufferNumeratorDenominatorStream << numerator << ":" << denominator;
+		else
+			bufferNumeratorDenominatorStream << numerator;
+	
+        std::string bufferNumeratorDenominator = bufferNumeratorDenominatorStream.str();
+        charCount = bufferNumeratorDenominator.size();
+
+        const VGFont *font = 0;
+        const NVstring fontName("Times New Roman");
+        NVstring attrs;
+
+        if (arTuplet->getIsBold())
+            attrs = "b";
+
+        font = FontManager::FindOrCreateFont(int(80 * arTuplet->getTextSize()), &fontName, &attrs);
+        hdc.SetTextFont(font);
+
+        /* In order that numerator/denominator stays at the same vertical position even if size is changed */
+        float extentCharNumeratorDenominatorx;
+        float extentCharNumeratorDenominatory;
+        FontManager::gFontScriab->GetExtent(bufferNumeratorDenominator.c_str(), bufferNumeratorDenominator.size(), &extentCharNumeratorDenominatorx, &extentCharNumeratorDenominatory, &hdc);
+
+        int offset = int(extentCharNumeratorDenominatory / 11.2 * arTuplet->getTextSize() - 40);
+        /***************************************************************************************************/
+
+		hdc.SetFontAlign(VGDevice::kAlignCenter | VGDevice::kAlignBottom);
+        hdc.DrawString(st->textpos.x, st->textpos.y + offset, bufferNumeratorDenominator.c_str(), charCount);
 	}
 
 	// - Draws the braces
 	const float middleX = (st->p1.x + st->p2.x) * 0.5f;
 	const float middleY = (st->p1.y + st->p2.y) * 0.5f;
 	const float slope = (st->p2.y - st->p1.y) / (st->p2.x - st->p1.x); //<- could be stored
-	const float textSpace = ((float)charCount + float(0.5)) * LSPACE * float(0.5);
+    const float textSpace = ((float)charCount + float(0.5)) * LSPACE * float(0.5) * arTuplet->getTextSize();
 
 	if( mShowLeftBrace | mShowRightBrace )
 	{
-		const float bracketThick = LSPACE * float(0.08);
-		hdc.PushPenWidth( bracketThick );
+		hdc.PushPenWidth(thickness);
 		
 		if( mShowLeftBrace ) //arTuplet->getLeftBrace()) // (mBraceState & BRACELEFT)
 		{

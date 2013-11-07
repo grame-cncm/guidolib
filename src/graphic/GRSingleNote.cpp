@@ -935,7 +935,7 @@ int GRSingleNote::adjustLength( const TYPE_DURATION & ndur )
 		while (pos)
 		{
 			el = mAssociated->GetNext(pos);
-			mytuplet = dynamic_cast<GRNewTuplet *>(el); // war GRTuplet
+			mytuplet = dynamic_cast<GRNewTuplet *>(el); // was GRTuplet
 			if (mytuplet)
 				break;
 		}

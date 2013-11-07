@@ -1962,7 +1962,9 @@ void GRStaff::DrawStaffUsingSymbolRepeat( VGDevice & hdc ) const
 
 // ----------------------------------------------------------------------------
 float GRStaff::currentLineThikness() const
-{ return mStaffState.curstaffrmt ? mStaffState.curstaffrmt->getLineThickness() : kLineThick; }
+{
+    return mStaffState.curstaffrmt ? mStaffState.curstaffrmt->getLineThickness() : kLineThick;
+}
 
 // ----------------------------------------------------------------------------
 /** \brief Draws the staff lines with vector lines.
