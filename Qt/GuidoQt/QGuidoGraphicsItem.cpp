@@ -47,7 +47,7 @@ void QGuidoGraphicsItem::paint( QPainter * painter, const QStyleOptionGraphicsIt
 {	
 	for ( int i = mPageManager->firstVisiblePage() ; i <= mPageManager->lastVisiblePage() ; i++ )
 	{
-		QRectF pageRect;
+        QRectF pageRect;
 		pageRect.moveTo( mPageManager->pagePos(i) );
 		pageRect.setSize( mPageManager->pageSize(i) );
 		mGuidoPainter->draw( painter , i , pageRect.toRect() , option->exposedRect.toRect() );
@@ -64,12 +64,15 @@ bool QGuidoGraphicsItem::setGMNFile(const QString& fileName)
 }
 	
 //-------------------------------------------------------------------------
-bool QGuidoGraphicsItem::setGMNCode(const QString& gmnCode)
+bool QGuidoGraphicsItem::setGMNCode(const QString& gmnCode, const QString& path)
 {
-	bool loadOk = mGuidoPainter->setGMNCode( gmnCode );
-	updateGuidoPagesSizes();
-	guidoItemUpdate();
-	return loadOk;
+    if ( mGuidoPainter->setGMNCode( gmnCode, path.size() ? path.toUtf8().data() : 0) )
+	{
+		updateGuidoPagesSizes();
+        guidoItemUpdate();
+		return true;
+	}
+	return false;
 }
 
 //-------------------------------------------------------------------------

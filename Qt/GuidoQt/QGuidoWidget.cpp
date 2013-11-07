@@ -342,15 +342,3 @@ QSize QGuidoWidget::sizeHint() const
 {
 	return mPageManager->totalSize().toSize();
 }
-
-//-------------------------------------------------------------------------
-void QGuidoWidget::CreateParser()
-{
-    mGuidoPainter->CreateParser();
-}
-
-//-------------------------------------------------------------------------
-void QGuidoWidget::CloseParser()
-{
-    mGuidoPainter->CloseParser();
-}

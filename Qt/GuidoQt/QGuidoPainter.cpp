@@ -111,6 +111,7 @@ QGuidoPainter::QGuidoPainter()
 	mLastErr = guidoNoErr;
 	mGMNCode = "";
 	mFileName = "";
+    fParser = GuidoOpenParser();
 
 	mResizePageToMusic = true;
 
@@ -125,6 +126,8 @@ QGuidoPainter::~QGuidoPainter()
 {
 	GuidoFreeGR( mDesc.handle );
 	GuidoFreeAR( mARHandler );
+    if (fParser)
+        GuidoCloseParser(fParser);
 }
 
 //-------------------------------------------------------------------------
@@ -180,19 +183,6 @@ void QGuidoPainter::setARHandler( ARHandler ar )
 	GuidoSetDefaultPageFormat( &currentFormat );
 	if ( mResizePageToMusic )
 		mLastErr = GuidoResizePageToMusic( mDesc.handle );
-}
-
-//-------------------------------------------------------------------------
-void QGuidoPainter::CreateParser()
-{
-    fParser = GuidoOpenParser();
-}
-
-//-------------------------------------------------------------------------
-void QGuidoPainter::CloseParser()
-{
-    if (fParser)
-        GuidoCloseParser(fParser);
 }
 
 //-------------------------------------------------------------------------
