@@ -396,6 +396,7 @@ void QGuidoPainter::setGuidoLayoutSettings(const GuidoLayoutSettings& layoutSett
 	if ( hasValidGR() )
 	{
 		GuidoUpdateGR( mDesc.handle , &mLayoutSettings );
+		mResizePageToMusic = layoutSettings.resizePage2Music;
 		if ( mResizePageToMusic )
 			GuidoResizePageToMusic( mDesc.handle );
 	}

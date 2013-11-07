@@ -39,6 +39,17 @@ int main()
 
     ar = GuidoStream2AR(newParser, newStream);
 
+    /* Stream flushing */
+    GuidoFlushStream(newStream);
+
+    GuidoWriteStream(newStream, "[ a");
+
+    ar = GuidoStream2AR(newParser, newStream);
+
+    GuidoWriteStream(newStream, "b ]");
+
+    ar = GuidoStream2AR(newParser, newStream);
+
 	/* Stream and parser closure */
     GuidoCloseStream(newStream);
 	GuidoCloseParser(newParser);
