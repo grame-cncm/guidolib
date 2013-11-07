@@ -5,8 +5,7 @@ GUIDO Engine history
 - new 'lineThickness' attribute for the \staffFormat tag
 - improvement of \meter-tag (now sums in numerator are allowed)
 - new reentrant parser (transparent for users, not for developers)
-- new stream parsing mechanism : from now, it's possible to parse a stream as it goes
-  along, and to get intermediate AR's state
+- new stream parsing mechanism : from now, it's possible to parse a stream as it goes along, and to get intermediate AR's state
 - bugs correction : dotted events (clusters, chords (vertical dot alignment and collision avoidance) and rests)
 - bug correction : meter size set by user
 - Option "Resize page to music" added in GuidoEditor settings and in Guido2Image
