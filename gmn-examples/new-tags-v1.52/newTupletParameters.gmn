@@ -1,8 +1,0 @@
-{
-  [
-    \tuplet<"-3-", textSize=1.5, bold="true", lineThickness=0.2, dy1=10, dy2=10> (a a a)
-  ],
-  [
-    a/6 a a
-  ]
-}
