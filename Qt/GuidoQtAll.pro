@@ -5,6 +5,5 @@ SUBDIRS       = \
                 GraphicsSceneMainWindow \
                 guido2image \
                 GuidoEditor \
-                GuidoQtFontViewer \
-                GuidoQtViewer \
-                GuidoSceneComposer
+                GuidoSceneComposer \
+                GuidoQtFontViewer 

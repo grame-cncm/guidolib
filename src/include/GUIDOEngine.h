@@ -194,17 +194,24 @@ typedef struct GuidoLayoutSettings
 	*/
 	 int neighborhoodSpacing;
 
-
 	/** boolean value to tell the engine to use the optimal page fill algorithm or not
 		(default value: 1)
 	*/
 	int optimalPageFill;
+
+    /** boolean value to tell the engine to resize page to music
+		(default value: 1)
+	*/
+	int resizePage2Music;
 	
 } GuidoLayoutSettings;
 
 /**
     The page format parameters
-*/
+
+	Page format should be given in internal units. To convert from cm or inches
+	you should use \c GuidoCM2Unit or \c GuidoInches2Unit
+ */
 typedef struct
 {
     float width;
@@ -261,6 +268,7 @@ representations.
                 It's the caller responsability to free the handle using GuidoFreeAR.
 		\return a Guido error code.
     */
+    __declspec(deprecated("Deprecated function (will be erased soon) : use GUIDOAPI(ARHandler) GuidoFile2AR (GuidoParser *parser, const char * file) instead."))
     GUIDOAPI(GuidoErrCode)	GuidoParseFile(const char * filename, ARHandler* ar);
 
 	/*!
@@ -271,6 +279,7 @@ representations.
                 It's the caller responsability to free the handle using GuidoFreeAR.
 		\return a Guido error code.
     */
+    __declspec(deprecated("Deprecated function (will be erased soon) : use GUIDOAPI(ARHandler) GuidoString2AR (GuidoParser *parser, const char * str) instead."))
     GUIDOAPI(GuidoErrCode)	GuidoParseString(const char * str, ARHandler* ar);
 
 	/*!
@@ -321,7 +330,8 @@ representations.
         Gives the line of a Guido script where the last parse error has occured.
 		\return a line number.
 	*/
-	GUIDOAPI(int)   GuidoGetParseErrorLine();
+	__declspec(deprecated("Deprecated function (will be erased soon) : use GUIDOAPI(GuidoErrCode) GuidoParserGetErrorCode (GuidoParser* p, int& line, int& col) instead."))
+    GUIDOAPI(int)   GuidoGetParseErrorLine();
 
 	/*!
         Gives the default values of the layout settings.

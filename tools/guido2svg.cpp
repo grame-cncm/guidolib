@@ -7,6 +7,8 @@
 #endif
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <string>
 #include <stdlib.h>
 
@@ -91,6 +93,80 @@ static const char* getFile (int argc, char *argv[])
 //	}
 //}
 
+//--------------------------------------------------------------------------
+// utility for making correspondance between ar and directory path
+//--------------------------------------------------------------------------
+vector<string> fillPathsVector (char *argv[])
+{
+    vector<string> pathsVector;
+
+    string fileDirectoryStr(argv[0]);
+    string fileNameStr(argv[1]);
+
+    if (fileNameStr[0] == '.' && fileNameStr[1] == '.')
+    {
+        for (size_t i = 0; i < 2; i++)
+        {
+            size_t posSlash = 0;
+
+            for (size_t j = 0; j < fileDirectoryStr.size(); j++)
+            {
+                if (fileDirectoryStr[j] == '/' || fileDirectoryStr[j] == '\\')
+                    posSlash = j;
+            }
+
+            fileDirectoryStr.erase(posSlash, fileDirectoryStr.size());
+        }
+
+        size_t posSlash = 0;
+
+        for (size_t i = 0; i < fileNameStr.size(); i++)
+        {
+            if (fileNameStr[i] == '/' || fileNameStr[i] == '\\')
+            {
+                fileNameStr[i] = '\\';
+                posSlash = i;
+            }
+        }
+
+        fileNameStr.erase(posSlash + 1, fileNameStr.size());
+
+        fileNameStr.erase(0, 2);
+        fileDirectoryStr.append(fileNameStr);
+
+        pathsVector.push_back(fileDirectoryStr);
+    }
+    else
+    {
+        size_t posSlash = 0;
+
+        for (size_t i = 0; i < fileNameStr.size(); i++)
+        {
+            if (fileNameStr[i] == '/' || fileNameStr[i] == '\\')
+            {
+                fileNameStr[i] = '\\';
+                posSlash = i;
+            }
+        }
+
+        fileNameStr.erase(posSlash + 1, fileNameStr.size());
+
+        pathsVector.push_back(fileNameStr);
+    }
+
+#ifdef WIN32
+    // For windows
+    string homePath(getenv("HOMEDRIVE"));
+    homePath.append(getenv("HOMEPATH"));
+#else
+    // For unix
+    string homePath(getenv("HOME"));
+#endif
+    pathsVector.push_back(homePath);
+
+    return pathsVector;
+}
+
 int main(int argc, char **argv)
 {
 	int page = getIntOption (argc, argv, "-p", 1);
@@ -113,19 +189,38 @@ int main(int argc, char **argv)
 			gmn += char(c);				// read the standard input into a string
 	}
 
-
 	SVGSystem sys;
 	SVGDevice dev (cout, &sys);
     GuidoInitDesc gd = { &dev, 0, 0, 0 };
     GuidoInit (&gd);                   // Initialise the Guido Engine first
 
 	GuidoErrCode err;
-	ARHandler arh;
+    ARHandler arh;
+
+    /* For symbol-tag */
+    vector<string> pathsVector = fillPathsVector(argv);
+
+    GuidoParser *parser = GuidoOpenParser();
+
 	if (gmn.size())
-		err = GuidoParseString (gmn.c_str(), &arh);
+		err = GuidoNewParseString (parser, gmn.c_str(), &arh);
 	else
-		err = GuidoParseFile (filename, &arh);
+    {
+        std::ifstream ifs(filename, ios::in);
+        if (!ifs)
+            return 0;
+
+        std::stringstream streamBuffer;
+        streamBuffer << ifs.rdbuf();
+        ifs.close();
+
+		err = GuidoNewParseString (parser, streamBuffer.str().c_str(), &arh);
+    }
 	if (err != guidoNoErr) error (err);
+
+    /* For symbol-tag */
+    GuidoSetSymbolPath(arh, pathsVector);
+    /******************/
 
 	GRHandler grh;
     err = GuidoAR2GR (arh, 0, &grh);
@@ -133,6 +228,9 @@ int main(int argc, char **argv)
 
 	err = GuidoSVGExport( grh, page, cout, fontfile);
 	if (err != guidoNoErr) error (err);
+
+    GuidoCloseParser(parser);
+
 	return 0;
 }
 

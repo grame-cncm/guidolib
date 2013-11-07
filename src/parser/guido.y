@@ -1,36 +1,30 @@
 %{
 
-#include <string>
 #include <iostream>
+#include <sstream>
+#include <string>
 
+#include "GuidoParser.h"
 #include "guido.h"
 
-#include "guidoparse.hxx"
-#include "guidolex.cxx"
-
-int guidoerror(const char*s);
-int	guidowrap()		{ return(1); }
-
-
-//#define parseDebug
-
-#ifdef parseDebug
-#define debug(msg)		cout << msg << endl;
-#define vdebug(msg,v)	cout << msg << " " << v << endl;
-#else
-#define debug(msg)
-#define vdebug(msg, v)
-#endif
+#include "guidoparse.hpp"
 
 #define YYERROR_VERBOSE
+int guidoerror (YYLTYPE* locp, GuidoParser* context, const char*s);
+int yylex(YYSTYPE* lvalp, YYLTYPE* llocp, void* scanner);
 
+#define scanner context->fScanner
 
 using namespace std;
 
 %}
 
-
-//%pure_parser
+%pure-parser
+%locations
+%defines
+%error-verbose
+%parse-param { GuidoParser* context }
+%lex-param { void* scanner  }
 
 %start score
 
@@ -102,55 +96,55 @@ using namespace std;
 %%
 
 //_______________________________________________
-score		: STARTCHORD { GD_INIT_SEGM } ENDCHORD				{ GD_EXIT_SEGM }
-			| STARTCHORD { GD_INIT_SEGM } voicelist ENDCHORD	{ GD_EXIT_SEGM }
-			| { GD_INIT_SEGM } voice							{ GD_EXIT_SEGM }
+score		: STARTCHORD { context->segmInit (); } ENDCHORD				{ context->segmExit (); }
+			| STARTCHORD { context->segmInit (); } voicelist ENDCHORD	{ context->segmExit (); }
+			| { context->segmInit (); } voice							{ context->segmExit (); }
 			;
 
-voicelist	: voice											{ GD_APP_SEQ }
-			| voicelist SEP voice							{ GD_APP_SEQ }
+voicelist	: voice													{ context->segmAppendSeq (); }
+			| voicelist SEP voice									{ context->segmAppendSeq (); }
 			;
 
-voice		: STARTSEQ { GD_INIT_SEQ } symbols ENDSEQ		{ GD_EXIT_SEQ }
+voice		: STARTSEQ { context->seqInit (); } symbols ENDSEQ		{ context->seqExit( ); }
 			;
 
 symbols		:
-			| symbols music									{  GD_APP_NT  }
+			| symbols music									{ context->appendNote (); }
 			| symbols tag
-			| symbols chord									{  GD_APP_CH  }
+			| symbols chord									{ context->seqAppendChord (); }
 			;
 
 //_______________________________________________
 // tags description
-tag			: positiontag									{ GD_TAG_END }
-			| rangetag										{ GD_TAG_END }
+tag			: positiontag									{ context->tagEnd (); }
+			| rangetag										{ context->tagEnd (); }
 			;
 
-positiontag	: tagid											{ GD_TAG_ADD }
-			| tagid STARTPARAM tagparams ENDPARAM			{ GD_TAG_ADD }
+positiontag	: tagid											{ context->tagAdd (); }
+			| tagid STARTPARAM tagparams ENDPARAM			{ context->tagAdd (); }
 			;
 
-rangetag	: positiontag STARTRANGE { GD_TAG_RANGE } symbols ENDRANGE
+rangetag	: positiontag STARTRANGE { context->tagRange (); } symbols ENDRANGE
 			;
 
-tagname		: TAGNAME										{ $$ = new string(guidotext); }
+tagname		: TAGNAME										{ $$ = new string(context->fText); }
 			;
 
-tagid		: tagname										{ GD_TAG_START($1->c_str(), 0); delete $1; }
-			| tagname IDSEP number							{ GD_TAG_START($1->c_str(),$3); delete $1; }
-			| BAR											{ GD_TAG_START("\\bar", 0); }
+tagid		: tagname										{ context->tagStart ( $1->c_str(), 0); delete $1; }
+			| tagname IDSEP number							{ context->tagStart ( $1->c_str(),$3); delete $1; }
+			| BAR											{ context->tagStart ( "\\bar", 0); }
 			;
 
-tagarg		: signednumber									{ GD_TAG_NARG($1) }
-			| floatn										{ GD_TAG_RARG($1) }
-			| signednumber UNIT								{ GD_TAG_NARG($1); GD_TAG_ARG_UNIT(guidotext) }
-			| floatn UNIT									{ GD_TAG_RARG($1); GD_TAG_ARG_UNIT(guidotext) }
-			| STRING										{ GD_TAG_SARG(guidotext) }
-			| id											{ GD_TAG_TARG($1->c_str()); delete $1; }
+tagarg		: signednumber									{ context->tagIntArg   ($1) }
+			| floatn										{ context->tagFloatArg ($1) }
+			| signednumber UNIT								{ context->tagIntArg   ($1); context->tagArgUnit (context->fText.c_str() ) }
+			| floatn UNIT									{ context->tagFloatArg ($1); context->tagArgUnit (context->fText.c_str() ) }
+			| STRING										{ context->tagStrArg   (context->fText.c_str() ) }
+			| id											{ /* unused */ delete $1; }
 			;
 
-tagparam	: tagarg										{ GD_TAG_ADD_ARG(""); }
-			| id EQUAL tagarg								{ GD_TAG_ADD_ARG($1->c_str()); delete $1; }
+tagparam	: tagarg										{ context->tagAddArg ( ""); }
+			| id EQUAL tagarg								{ context->tagAddArg ( $1->c_str()); delete $1; }
 			;
 
 tagparams	: tagparam
@@ -160,11 +154,11 @@ tagparams	: tagparam
 //_______________________________________________
 // chord description
 
-chord		: STARTCHORD { GD_INIT_CH } chordsymbols ENDCHORD
+chord		: STARTCHORD { context->chordInit (); } chordsymbols ENDCHORD
 			;
 
-chordsymbols: { GD_CH_INIT_NT } tagchordsymbol
-			| chordsymbols SEP { GD_CH_INIT_NT } tagchordsymbol
+chordsymbols: { context->chordInitNote (); } tagchordsymbol
+			| chordsymbols SEP { context->chordInitNote ();} tagchordsymbol
 			;
 
 tagchordsymbol: chordsymbol
@@ -173,15 +167,15 @@ tagchordsymbol: chordsymbol
 			| taglist chordsymbol taglist
 			;
 
-chordsymbol	: music											{ GD_CH_APP_NT }
+chordsymbol	: music									{ context->appendNote ();  }
 			| rangechordtag	
 			;
 
-rangechordtag : positiontag  STARTRANGE { GD_TAG_RANGE } tagchordsymbol ENDRANGE { GD_TAG_END }
+rangechordtag : positiontag  STARTRANGE { context->tagRange (); } tagchordsymbol ENDRANGE { context->tagEnd (); }
 			;
 
-taglist		: positiontag							{ GD_TAG_END }
-			| taglist positiontag					{ GD_TAG_END }
+taglist		: positiontag							{ context->tagEnd (); }
+			| taglist positiontag					{ context->tagEnd (); }
 			;
 
 //_______________________________________________
@@ -191,8 +185,8 @@ music		: note
 			| rest
 			;
 
-rest		: RESTT { GD_NT("_") } duration dots
-			| RESTT { GD_NT("_") } STARTPARAM NUMBER ENDPARAM duration dots
+rest		: RESTT { context->noteInit ( "_" ); } duration dots
+			| RESTT { context->noteInit ( "_" ); } STARTPARAM NUMBER ENDPARAM duration dots
 			;
 
 note		: noteid octave duration dots
@@ -203,48 +197,48 @@ noteid		: notename
 			| notename STARTPARAM NUMBER ENDPARAM
 			;
 			
-notename	: DIATONIC								{ GD_NT(guidotext) }
-			| CHROMATIC								{ GD_NT(guidotext) }
-			| SOLFEGE								{ GD_NT(guidotext) }
-			| EMPTYT								{ GD_NT(guidotext) }
+notename	: DIATONIC								{ context->noteInit ( context->fText.c_str() ); }
+			| CHROMATIC								{ context->noteInit ( context->fText.c_str() ); }
+			| SOLFEGE								{ context->noteInit ( context->fText.c_str() ); }
+			| EMPTYT								{ context->noteInit ( context->fText.c_str() ); }
 			;		
 
 accidentals	: accidental
 			| accidentals accidental
 			;
 
-accidental	: SHARPT								{  GD_SH_NT  }
-			| FLATT									{  GD_FL_NT  }
+accidental	: SHARPT								{  context->noteAcc (SHARP); }
+			| FLATT									{  context->noteAcc (FLAT); }
 			;
 
 octave		:
-			| signednumber							{ GD_OCT_NT($1) }
+			| signednumber							{ context->noteOct ($1); }
 			;
 
 duration	:
-			| MULT number DIV number				{  GD_ENUM_NT($2); GD_DENOM_NT($4) }
-			| MULT number							{  GD_ENUM_NT($2)  }
-			| MULT number MLS						{  GD_ABSDUR_NT($2)  }
-			| DIV number							{  GD_DENOM_NT($2) }
+			| MULT number DIV number				{  context->noteEnum ($2); context->noteDenom ($4); }
+			| MULT number							{  context->noteEnum ($2);  }
+			| MULT number MLS						{  context->noteAbsDur($2);  }
+			| DIV number							{  context->noteDenom ($2); }
 			;
 
 dots		:
-			| DOT									{  GD_DOT_NT  }
-			| DDOT									{  GD_DDOT_NT }
-			| TDOT									{  GD_TDOT_NT }
+			| DOT									{  context->noteDot  ();  }
+			| DDOT									{  context->noteDdot (); }
+			| TDOT									{  context->noteTdot (); }
 			;
 
 //_______________________________________________
 // misc
-id			: IDT									{ $$ = new string(guidotext); }
+id			: IDT									{ $$ = new string(context->fText); }
 			;
-number		: NUMBER								{ $$ = atol(guidotext); }
+number		: NUMBER								{ $$ = atol(context->fText.c_str() ); }
 			;
-pnumber		: PNUMBER								{ $$ = atol(guidotext); }
+pnumber		: PNUMBER								{ $$ = atol(context->fText.c_str() ); }
 			;
-nnumber		: NNUMBER								{ $$ = atol(guidotext); }
+nnumber		: NNUMBER								{ $$ = atol(context->fText.c_str() ); }
 			;
-floatn		: FLOAT									{ $$ = atof(guidotext); }
+floatn		: FLOAT									{ $$ = atof(context->fText.c_str() ); }
 
 			;
 signednumber: number								{ $$ = $1; }
@@ -253,9 +247,12 @@ signednumber: number								{ $$ = $1; }
 			;
 %%
 
-int guidoerror(const char*s) {
-	extern long int lnr;
-	YY_FLUSH_BUFFER;
-	lnr = guidolineno;
-	return ERROR(s);
+extern int	gParseErrorLine;
+int guidoerror(YYLTYPE* loc, GuidoParser* p, const char*s) {
+	gParseErrorLine = loc->last_line;		// for backward compatibility only
+	p->setError (loc->last_line, loc->first_column, s);
+	cerr << "error line: " << loc->last_line << " col: " << loc->first_column << ": " << s << endl;
+	return 0;
 }
+
+int GuidoParser::_yyparse()		{ return yyparse (this); }

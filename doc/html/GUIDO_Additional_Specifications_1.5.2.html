@@ -4,7 +4,11 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta http-equiv="Content-Style-Type" content="text/css">
 		<title>GUIDO Additional Specifications 1.5.2</title>
+<<<<<<< HEAD
 		<meta name="Author" content="Camille Le Roi">
+=======
+		<meta name="Author" content="Colas Decron">
+>>>>>>> refs/remotes/origin/dev
 
 		<style type="text/css">
 			BODY { font-family : verdana,Arial,Helvetica; font-size : 10pt; font-weight : normal; color: black; background-color: white; margin: 20px 40px 20px 40px;}
@@ -31,25 +35,41 @@
 	<body>
 
 		<h1>The GUIDO Music Notation Format</h1>
+<<<<<<< HEAD
 		<h2>Additionnal and new Specifications</h2>
+=======
+		<h2>Additionnal and new specifications</h2>
+>>>>>>> refs/remotes/origin/dev
 		<p>
 			<span class="tag">
 				Supported by the <a href="http://sourceforge.net/projects/guidolib/">GUIDO Engine</a> version 1.5.2
 			</span>
 			<br>
+<<<<<<< HEAD
 			<a href="http://www.grame.fr/Recherche/">Grame</a> - July 2013
+=======
+			<a href="http://www.grame.fr/Recherche/">Grame</a> - October 2013
+>>>>>>> refs/remotes/origin/dev
 		</p>
 		
 		
 		<p>
 			<p>
+<<<<<<< HEAD
 				<a href="#1.">1. Accelerando / Ritardando</a>
 			</p>
 			
+=======
+				<a href="#1.">1. Meter</a>
+			</p>
+			
+			
+>>>>>>> refs/remotes/origin/dev
 			<hr>
 			
 			
 			<a name="1."></a>
+<<<<<<< HEAD
 			<h4>1. Accelerando / Ritardando</h4>
 
 			<p class="tag">
@@ -61,6 +81,16 @@
 				</p>
 				<p>
 					Places the text "accel." or "rit." under the staff where it occurs, and draws a dotted line to the end position.
+=======
+			<h4>1. Meter</h4>
+
+			<p class="tag">
+				<p>
+					<span class="tag">\meter</span>&lt;<i>type, size, autoBarlines</i>&gt;
+				</p>
+				<p>
+					Set the meter of the voice. Meter can be complex : numerator can be a sum. See examples.
+>>>>>>> refs/remotes/origin/dev
 				</p>
 				
 				<br>
@@ -72,7 +102,11 @@
 						<ul>
 							<br>
 							<li>
+<<<<<<< HEAD
 								<b><i>dx, dy</i></b> - graphic offsets of the accelerando/ritardando
+=======
+								<b><i>type</i></b> - meter type
+>>>>>>> refs/remotes/origin/dev
 							
 								<ul>
 									<br>
@@ -81,19 +115,28 @@
 						
 										<ul>
 											<li>
+<<<<<<< HEAD
 												unit parameters
+=======
+												string
+>>>>>>> refs/remotes/origin/dev
 											</li>
 										</ul>
 									</li>
 							
 									<li>
+<<<<<<< HEAD
 										<i>default value:</i> 0
+=======
+										<i>default value:</i> "4/4"
+>>>>>>> refs/remotes/origin/dev
 									</li>
 									<br>
 								</ul>
 							</li>
 						
 							<li>
+<<<<<<< HEAD
 								<b><i>color</i></b> - graphic color of the trill 
 								<br>
 							
@@ -118,6 +161,11 @@
 						
 							<li>
 								<b><i>tempo</i></b> - tempo for the beginning note
+=======
+								<b><i>size</i></b> - graphic size of meter 
+								<br>
+						
+>>>>>>> refs/remotes/origin/dev
 								<ul>
 									<br>
 									<li>
@@ -125,17 +173,26 @@
 						
 										<ul>
 											<li>
+<<<<<<< HEAD
 												string (ex : "60", "80")
+=======
+												unit parameter
+>>>>>>> refs/remotes/origin/dev
 											</li>
 										</ul>
 									</li>
 							
 									<li>
+<<<<<<< HEAD
 										<i>default value:</i> none
+=======
+										<i>default value:</i> 1
+>>>>>>> refs/remotes/origin/dev
 									</li>
 									<br>
 								</ul>
 							</li>
+<<<<<<< HEAD
 							<li>
 								<b><i>abstempo</i></b> - tempo for the ending note
 								<ul>
@@ -210,12 +267,31 @@
 										<ul>
 											<li>
 												unit parameter
+=======
+						
+							<li>
+								<b><i>autoBarlines</i></b> - Sets auto barlines on or off
+								<br>
+							
+								<ul>
+									<br>
+									<li>
+									<i>standard values:</i>
+							
+										<ul>
+											<li>
+												strings ("on" / "off")
+>>>>>>> refs/remotes/origin/dev
 											</li>
 										</ul>
 									</li>
 							
 									<li>
+<<<<<<< HEAD
 										<i>default value:</i> 9pt
+=======
+										<i>default value:</i> "on"
+>>>>>>> refs/remotes/origin/dev
 									</li>
 									<br>
 								</ul>
@@ -225,18 +301,25 @@
 					</li>
 									
 					<li>
+<<<<<<< HEAD
 						<b><i>Range:</i></b> obligatory
 					</li>
 									
 					<br><br>
 									
 					<li>
+=======
+>>>>>>> refs/remotes/origin/dev
 						<b><i>Semantics:</i></b>
 								
 						<ul>
 							<li>
+<<<<<<< HEAD
 								
 								acceleration or deceleration within a group of notes
+=======
+								segmentation of music part's duration
+>>>>>>> refs/remotes/origin/dev
 							</li>
 						</ul>
 					</li>
@@ -244,10 +327,21 @@
 			</p>
 			<p class="notes">
 				Examples:
+<<<<<<< HEAD
 				<pre>[ \rit&lt;fattrib="b"&gt;(e g b f a) \accel&lt;tempo="60", color="red", abstempo="80", dy=22, font="Andalus"&gt;( e d e2 e3 f1 a)]</pre>
 				<center> <IMG SRC="imgs/accelRit.jpg"> </center>
 			</p>
 			
 		</p>			
+=======
+				<pre>[ \meter&lt;"2+2+3/4"&gt; a a c2 a1 e2 e d c ]</pre>
+				<center> <IMG SRC="imgs/meter1.png"> </center>
+				<pre>[ \meter&lt;"C"&gt; a b c d e ]</pre>
+				<center> <IMG SRC="imgs/meter2.png"> </center>
+			</p>
+			
+			
+			<hr>		
+>>>>>>> refs/remotes/origin/dev
 	</body>
 </html>

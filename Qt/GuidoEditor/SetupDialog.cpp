@@ -59,6 +59,7 @@ SetupDialog::SetupDialog(MainWindow *parent)
 	QObject::connect (fSysDistrMenu, SIGNAL(currentIndexChanged(int)), this, SLOT(setup()));
 	QObject::connect (fOPFcheckBox, SIGNAL(clicked()), this, SLOT(setup()));
 	QObject::connect (fNSpacingcheckBox, SIGNAL(clicked()), this, SLOT(setup()));
+    QObject::connect (fResizePage2Music, SIGNAL(clicked()), this, SLOT(setup()));
 	QObject::connect (fColorButton, SIGNAL(clicked()) , this, SLOT(changeColor()));
 	
 	QObject::connect (fMapping, SIGNAL(clicked()), this, SLOT(setup()));
@@ -212,6 +213,7 @@ void SetupDialog::get (GuidoLayoutSettings& gls, int& bbmap, bool& showMapping, 
 	gls.systemsDistribution	= fSysDistrMenu->currentIndex() + 1 ;
 	gls.optimalPageFill		= fOPFcheckBox->checkState() == Qt::Checked ? 1 : 0;
 	gls.neighborhoodSpacing	= fNSpacingcheckBox->checkState() == Qt::Checked ? 1 : 0;
+    gls.resizePage2Music	= fResizePage2Music->checkState() == Qt::Checked ? 1 : 0;
 	
 	bbmap = kNoBB;
 	if (fPageBB->checkState() == Qt::Checked)			bbmap |= kPageBB;
@@ -237,6 +239,7 @@ void SetupDialog::set (const GuidoLayoutSettings& gls, int bbmap , bool showMapp
 	fSysDistrMenu->setCurrentIndex(gls.systemsDistribution - 1);
 	fOPFcheckBox->setCheckState(gls.optimalPageFill ? Qt::Checked : Qt::Unchecked);
 	fNSpacingcheckBox->setCheckState(gls.neighborhoodSpacing ? Qt::Checked : Qt::Unchecked);
+    fResizePage2Music->setCheckState(gls.resizePage2Music ? Qt::Checked : Qt::Unchecked);
 
 	fMapping->setCheckState(showMapping ? Qt::Checked : Qt::Unchecked);
 	fRawMapping->setCheckState(rawMapping ? Qt::Checked : Qt::Unchecked);

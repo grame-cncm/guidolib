@@ -445,7 +445,7 @@ GRSystem::GRSystem(	GRStaffManager * staffmgr, GRPage * inPage,
 		GRSystemTag * systag;
 		if (bar)
 		{
-			int linesOffset = 0;
+			float linesOffset = 0;
 			bar->setPosFrom(0);
 			if (lastStaff) {
 				linesOffset += LSPACE / 2 * (lastStaff->getNumlines() - 5);
@@ -639,7 +639,8 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 			{
 				for(int i = slice->mStaffs->GetMinimum(); i <= slice->mStaffs->GetMaximum(); i++)
 				{
-					slice->mStaffs->Get(i)->setNextOnOff(slice->mStaffs->Get(i)->isStaffEndOn());
+					GRStaff* staff = slice->mStaffs->Get(i);
+					if (staff) staff->setNextOnOff(staff->isStaffEndOn());
 				}
 			}
 			slice->OnDraw(hdc);

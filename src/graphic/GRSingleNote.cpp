@@ -225,52 +225,44 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
     // draw ledger lines
     const float ledXPos = -60 * 0.85f * mSize;
     //NVPoint noteheadOffset(getNoteHead()->getOffset()); //REM: fonctionne pour les \headsReverse et [{a2,b}] mais pas s'il y a
-                                                          //décalage \noteFormat<dx=X> : [\noteFormat<dx=-2> c] for example
+                                                          //décalage \noteFormat<dx=X> : [\noteFormat<dx=-2> c] par exemple
     for (int i = 0; i < sum; ++i, posy += incy)
         GRNote::DrawSymbol( hdc, kLedgerLineSymbol, ledXPos/* + noteheadOffset.x*/, ( posy - mPosition.y ));
 
-    if (!mCluster)
-    {
-        const VGColor oldcolor = hdc.GetFontColor();
-        if (mColRef) hdc.SetFontColor( VGColor( mColRef ));
+	if (mCluster)
+		getNoteHead()->setHaveToBeDrawn(false);
 
-        // - Draw elements (stems, dots...)
-        DrawSubElements( hdc );
+	const VGColor oldcolor = hdc.GetFontColor();
+	if (mColRef) hdc.SetFontColor( VGColor( mColRef ));
 
-        // - draw articulations & ornament
-        const GRNEList * articulations = getArticulations();
-        if( articulations )
-        {
-            for( GRNEList::const_iterator ptr = articulations->begin(); ptr != articulations->end(); ++ptr )
-            {
-                GRNotationElement * el = *ptr;
-                el->OnDraw(hdc);
-            }
-        }
+	// - Draw elements (stems, dots...)
+	DrawSubElements( hdc );
 
-        if (mOrnament)
+	// - draw articulations & ornament
+	const GRNEList * articulations = getArticulations();
+	if( articulations )
+	{
+		for( GRNEList::const_iterator ptr = articulations->begin(); ptr != articulations->end(); ++ptr )
 		{
-			// to draw the trill line...
-			float Y = getPosition().y + getBoundingBox().Height()/2;
-			mOrnament->OnDraw(hdc,X,Y, numVoice);
+			GRNotationElement * el = *ptr;
+			el->OnDraw(hdc);
 		}
+	}
 
-        // - Restore
-        if (mColRef) hdc.SetFontColor( oldcolor );
-        if (gBoundingBoxesMap & kEventsBB)
-            DrawBoundingBox( hdc, kEventBBColor);
-    }
-    else if (mClusterHaveToBeDrawn)
-    {
-        if (mOrnament)
-        {
-            float Y = getPosition().y + getBoundingBox().Height()/2;
-			mOrnament->OnDraw(hdc, X, Y, numVoice);
-        }
+	if (mOrnament)
+	{
+		// to draw the trill line...
+		float Y = getPosition().y + getBoundingBox().Height()/2;
+		mOrnament->OnDraw(hdc,X,Y, numVoice);
+	}
 
-        mCluster->OnDraw(hdc);
-    }
-	
+	// - Restore
+	if (mColRef) hdc.SetFontColor( oldcolor );
+	if (gBoundingBoxesMap & kEventsBB)
+		DrawBoundingBox( hdc, kEventBBColor);
+
+	if (mClusterHaveToBeDrawn)
+		mCluster->OnDraw(hdc);
 }
 
 //____________________________________________________________________________________
@@ -548,6 +540,9 @@ ARTHead::HEADSTATE GRSingleNote::adjustHeadPosition(ARTHead::HEADSTATE sugHeadSt
 			head->addToOffset(NVPoint((GCoord)(-offsetx * 0.5f) ,0));
 		retstate = ARTHead::CENTER;
     }
+
+	if (this->getDot())
+		this->getDot()->adjustHorizontalDotPosition(mSize, retstate, stemdir);
 
     // - Adjust horizontal notehead position, particularly for non-standard noteheads
     this->getNoteHead()->adjustPositionForChords(retstate, stemdir);

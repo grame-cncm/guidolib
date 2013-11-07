@@ -1,6 +1,8 @@
 
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <string>
 #ifndef WIN32
 #include <libgen.h>
@@ -62,8 +64,19 @@ int main(int argc, char **argv)
 
 	GuidoErrCode err;
 	ARHandler arh;
-    err = GuidoParseFile (filename, &arh);
-	if (err != guidoNoErr) error (err);
+
+    GuidoParser *parser = GuidoOpenParser();
+
+    std::ifstream ifs(filename, ios::in);
+    if (!ifs)
+        return 0;
+
+    std::stringstream streamBuffer;
+    streamBuffer << ifs.rdbuf();
+    ifs.close();
+
+    err = GuidoNewParseString(parser, streamBuffer.str().c_str(), &arh);
+    if (err != guidoNoErr) error (err);
 
 	GRHandler grh;
     err = GuidoAR2GR (arh, 0, &grh);
@@ -73,12 +86,15 @@ int main(int argc, char **argv)
 	err = GuidoGetSVGMap( grh, page, sel, map);
 	if (err != guidoNoErr) error (err);
 	
-	for (int i = 0; i < map.size(); i++) {
+	for (size_t i = 0; i < map.size(); i++) {
 		FloatRect r = map[i].first;
 		TimeSegment time = map[i].second.time();
 		cout << "( [" << int(r.left) << "," << int(r.right) << "[ [" << int(r.top) << "," << int(r.bottom) << "[ ) "
 		<< " ( [" << time.first << ", " << time.second << "[ )" << endl;
 	}
+
+    GuidoCloseParser(parser);
+
 	return 0;
 }
 

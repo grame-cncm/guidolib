@@ -3,6 +3,8 @@
 #include <libgen.h>
 #endif
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <stdlib.h>
 
 #ifdef WIN32
@@ -52,7 +54,18 @@ int main(int argc, char **argv)
 		cerr << "# get page mapping for " << argv[i] << endl;
 		GuidoErrCode err;
 		ARHandler arh;
-		err = GuidoParseFile (argv[i], &arh);
+        
+        GuidoParser *parser = GuidoOpenParser();
+
+        std::ifstream ifs(argv[i], ios::in);
+        if (!ifs)
+            return 0;
+
+        std::stringstream streamBuffer;
+        streamBuffer << ifs.rdbuf();
+        ifs.close();
+
+        err = GuidoNewParseString(parser, streamBuffer.str().c_str(), &arh);
 		if (err == guidoNoErr) {
 			GRHandler grh;
 			err = GuidoAR2GR (arh, 0, &grh);
@@ -77,6 +90,8 @@ int main(int argc, char **argv)
 			GuidoFreeAR (arh);
 		}
 		else error (err);
+
+        GuidoCloseParser(parser);
 	}
 	delete dev;
 	return 0;

@@ -1,7 +1,7 @@
 
 arch	:= $(shell arch)
 debarch := $(shell dpkg --print-architecture)
-dist	:= ubuntu-11.10
+dist	:= ubuntu-13.04
 package := GUIDOEngine-devel-$(version)-$(dist)-$(arch).deb
 lib		:= libGUIDOEngine.so
 control := debian/DEBIAN/control

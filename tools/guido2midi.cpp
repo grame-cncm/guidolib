@@ -3,6 +3,8 @@
 #include <libgen.h>
 #endif
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <string>
 #include <stdlib.h>
 
@@ -88,7 +90,18 @@ int main(int argc, char **argv)
 	if (err != guidoNoErr) error (err);
 	
 	ARHandler arh;
-    err = GuidoParseFile (infile.c_str(), &arh);
+
+    GuidoParser *parser = GuidoOpenParser();
+
+    std::ifstream ifs(infile, ios::in);
+    if (!ifs)
+        return 0;
+
+    std::stringstream streamBuffer;
+    streamBuffer << ifs.rdbuf();
+    ifs.close();
+
+    err = GuidoNewParseString(parser, streamBuffer.str().c_str(), &arh);
 	if (err != guidoNoErr) error (err);
 
 /*
@@ -110,6 +123,8 @@ int main(int argc, char **argv)
 	GuidoFreeGR (grh);
 	GuidoFreeAR (arh);
 	if (err != guidoNoErr) error (err);
+
+    GuidoCloseParser(parser);
 
 	return 0;
 }

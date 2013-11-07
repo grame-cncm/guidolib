@@ -53,10 +53,10 @@
 #define YYSKELETON_NAME "yacc.c"
 
 /* Pure parsers.  */
-#define YYPURE 0
+#define YYPURE 1
 
 /* Using locations.  */
-#define YYLSP_NEEDED 0
+#define YYLSP_NEEDED 1
 
 /* Substitute the variable and function names.  */
 #define yyparse guidoparse
@@ -66,7 +66,7 @@
 #define yychar  guidochar
 #define yydebug guidodebug
 #define yynerrs guidonerrs
-
+#define yylloc guidolloc
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
@@ -155,30 +155,20 @@
 #line 1 "guido.y"
 
 
-#include <string>
 #include <iostream>
+#include <sstream>
+#include <string>
 
+#include "GuidoParser.h"
 #include "guido.h"
 
-#include "guidoparse.hxx"
-#include "guidolex.cxx"
-
-int guidoerror(const char*s);
-int	guidowrap()		{ return(1); }
-
-
-//#define parseDebug
-
-#ifdef parseDebug
-#define debug(msg)		cout << msg << endl;
-#define vdebug(msg,v)	cout << msg << " " << v << endl;
-#else
-#define debug(msg)
-#define vdebug(msg, v)
-#endif
+#include "guidoparse.hpp"
 
 #define YYERROR_VERBOSE
+int guidoerror (YYLTYPE* locp, GuidoParser* context, const char*s);
+int yylex(YYSTYPE* lvalp, YYLTYPE* llocp, void* scanner);
 
+#define scanner context->fScanner
 
 using namespace std;
 
@@ -194,7 +184,7 @@ using namespace std;
 # undef YYERROR_VERBOSE
 # define YYERROR_VERBOSE 1
 #else
-# define YYERROR_VERBOSE 0
+# define YYERROR_VERBOSE 1
 #endif
 
 /* Enabling the token table.  */
@@ -204,7 +194,7 @@ using namespace std;
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 37 "guido.y"
+#line 31 "guido.y"
 {         
 	long int		num;
 	float			real;
@@ -213,20 +203,32 @@ typedef union YYSTYPE
 	char			c;
 }
 /* Line 193 of yacc.c.  */
-#line 217 "guidoparse.cxx"
+#line 207 "guidoparse.cpp"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1
 #endif
 
+#if ! defined YYLTYPE && ! defined YYLTYPE_IS_DECLARED
+typedef struct YYLTYPE
+{
+  int first_line;
+  int first_column;
+  int last_line;
+  int last_column;
+} YYLTYPE;
+# define yyltype YYLTYPE /* obsolescent; will be withdrawn */
+# define YYLTYPE_IS_DECLARED 1
+# define YYLTYPE_IS_TRIVIAL 1
+#endif
 
 
 /* Copy the second part of user declarations.  */
 
 
 /* Line 216 of yacc.c.  */
-#line 230 "guidoparse.cxx"
+#line 232 "guidoparse.cpp"
 
 #ifdef short
 # undef short
@@ -384,14 +386,16 @@ void free (void *); /* INFRINGES ON USER NAME SPACE */
 
 #if (! defined yyoverflow \
      && (! defined __cplusplus \
-	 || (defined YYSTYPE_IS_TRIVIAL && YYSTYPE_IS_TRIVIAL)))
+	 || (defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL \
+	     && defined YYSTYPE_IS_TRIVIAL && YYSTYPE_IS_TRIVIAL)))
 
 /* A type that is properly aligned for any stack member.  */
 union yyalloc
 {
   yytype_int16 yyss;
   YYSTYPE yyvs;
-  };
+    YYLTYPE yyls;
+};
 
 /* The size of the maximum gap between one aligned stack and the next.  */
 # define YYSTACK_GAP_MAXIMUM (sizeof (union yyalloc) - 1)
@@ -399,8 +403,8 @@ union yyalloc
 /* The size of an array large to enough to hold all stacks, each with
    N elements.  */
 # define YYSTACK_BYTES(N) \
-     ((N) * (sizeof (yytype_int16) + sizeof (YYSTYPE)) \
-      + YYSTACK_GAP_MAXIMUM)
+     ((N) * (sizeof (yytype_int16) + sizeof (YYSTYPE) + sizeof (YYLTYPE)) \
+      + 2 * YYSTACK_GAP_MAXIMUM)
 
 /* Copy COUNT objects from FROM to TO.  The source and destination do
    not overlap.  */
@@ -542,15 +546,15 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,   105,   105,   105,   106,   106,   107,   107,   110,   111,
-     114,   114,   117,   118,   119,   120,   125,   126,   129,   130,
-     133,   133,   136,   139,   140,   141,   144,   145,   146,   147,
-     148,   149,   152,   153,   156,   157,   163,   163,   166,   166,
-     167,   167,   170,   171,   172,   173,   176,   177,   180,   180,
-     183,   184,   190,   191,   194,   194,   195,   195,   198,   199,
-     202,   203,   206,   207,   208,   209,   212,   213,   216,   217,
-     220,   221,   224,   225,   226,   227,   228,   231,   232,   233,
-     234,   239,   241,   243,   245,   247,   250,   251,   252
+       0,    99,    99,    99,   100,   100,   101,   101,   104,   105,
+     108,   108,   111,   112,   113,   114,   119,   120,   123,   124,
+     127,   127,   130,   133,   134,   135,   138,   139,   140,   141,
+     142,   143,   146,   147,   150,   151,   157,   157,   160,   160,
+     161,   161,   164,   165,   166,   167,   170,   171,   174,   174,
+     177,   178,   184,   185,   188,   188,   189,   189,   192,   193,
+     196,   197,   200,   201,   202,   203,   206,   207,   210,   211,
+     214,   215,   218,   219,   220,   221,   222,   225,   226,   227,
+     228,   233,   235,   237,   239,   241,   244,   245,   246
 };
 #endif
 
@@ -758,7 +762,7 @@ do								\
     }								\
   else								\
     {								\
-      yyerror (YY_("syntax error: cannot back up")); \
+      yyerror (&yylloc, context, YY_("syntax error: cannot back up")); \
       YYERROR;							\
     }								\
 while (YYID (0))
@@ -813,9 +817,9 @@ while (YYID (0))
 /* YYLEX -- calling `yylex' with the right arguments.  */
 
 #ifdef YYLEX_PARAM
-# define YYLEX yylex (YYLEX_PARAM)
+# define YYLEX yylex (&yylval, &yylloc, YYLEX_PARAM)
 #else
-# define YYLEX yylex ()
+# define YYLEX yylex (&yylval, &yylloc, scanner)
 #endif
 
 /* Enable debugging if requested.  */
@@ -838,7 +842,7 @@ do {									  \
     {									  \
       YYFPRINTF (stderr, "%s ", Title);					  \
       yy_symbol_print (stderr,						  \
-		  Type, Value); \
+		  Type, Value, Location, context); \
       YYFPRINTF (stderr, "\n");						  \
     }									  \
 } while (YYID (0))
@@ -852,17 +856,21 @@ do {									  \
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep)
+yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, GuidoParser* context)
 #else
 static void
-yy_symbol_value_print (yyoutput, yytype, yyvaluep)
+yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, context)
     FILE *yyoutput;
     int yytype;
     YYSTYPE const * const yyvaluep;
+    YYLTYPE const * const yylocationp;
+    GuidoParser* context;
 #endif
 {
   if (!yyvaluep)
     return;
+  YYUSE (yylocationp);
+  YYUSE (context);
 # ifdef YYPRINT
   if (yytype < YYNTOKENS)
     YYPRINT (yyoutput, yytoknum[yytype], *yyvaluep);
@@ -884,13 +892,15 @@ yy_symbol_value_print (yyoutput, yytype, yyvaluep)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep)
+yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, GuidoParser* context)
 #else
 static void
-yy_symbol_print (yyoutput, yytype, yyvaluep)
+yy_symbol_print (yyoutput, yytype, yyvaluep, yylocationp, context)
     FILE *yyoutput;
     int yytype;
     YYSTYPE const * const yyvaluep;
+    YYLTYPE const * const yylocationp;
+    GuidoParser* context;
 #endif
 {
   if (yytype < YYNTOKENS)
@@ -898,7 +908,9 @@ yy_symbol_print (yyoutput, yytype, yyvaluep)
   else
     YYFPRINTF (yyoutput, "nterm %s (", yytname[yytype]);
 
-  yy_symbol_value_print (yyoutput, yytype, yyvaluep);
+  YY_LOCATION_PRINT (yyoutput, *yylocationp);
+  YYFPRINTF (yyoutput, ": ");
+  yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, context);
   YYFPRINTF (yyoutput, ")");
 }
 
@@ -938,12 +950,14 @@ do {								\
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_reduce_print (YYSTYPE *yyvsp, int yyrule)
+yy_reduce_print (YYSTYPE *yyvsp, YYLTYPE *yylsp, int yyrule, GuidoParser* context)
 #else
 static void
-yy_reduce_print (yyvsp, yyrule)
+yy_reduce_print (yyvsp, yylsp, yyrule, context)
     YYSTYPE *yyvsp;
+    YYLTYPE *yylsp;
     int yyrule;
+    GuidoParser* context;
 #endif
 {
   int yynrhs = yyr2[yyrule];
@@ -957,7 +971,7 @@ yy_reduce_print (yyvsp, yyrule)
       fprintf (stderr, "   $%d = ", yyi + 1);
       yy_symbol_print (stderr, yyrhs[yyprhs[yyrule] + yyi],
 		       &(yyvsp[(yyi + 1) - (yynrhs)])
-		       		       );
+		       , &(yylsp[(yyi + 1) - (yynrhs)])		       , context);
       fprintf (stderr, "\n");
     }
 }
@@ -965,7 +979,7 @@ yy_reduce_print (yyvsp, yyrule)
 # define YY_REDUCE_PRINT(Rule)		\
 do {					\
   if (yydebug)				\
-    yy_reduce_print (yyvsp, Rule); \
+    yy_reduce_print (yyvsp, yylsp, Rule, context); \
 } while (YYID (0))
 
 /* Nonzero means print parse trace.  It is left uninitialized so that
@@ -1216,16 +1230,20 @@ yysyntax_error (char *yyresult, int yystate, int yychar)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep)
+yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, YYLTYPE *yylocationp, GuidoParser* context)
 #else
 static void
-yydestruct (yymsg, yytype, yyvaluep)
+yydestruct (yymsg, yytype, yyvaluep, yylocationp, context)
     const char *yymsg;
     int yytype;
     YYSTYPE *yyvaluep;
+    YYLTYPE *yylocationp;
+    GuidoParser* context;
 #endif
 {
   YYUSE (yyvaluep);
+  YYUSE (yylocationp);
+  YYUSE (context);
 
   if (!yymsg)
     yymsg = "Deleting";
@@ -1250,7 +1268,7 @@ int yyparse ();
 #endif
 #else /* ! YYPARSE_PARAM */
 #if defined __STDC__ || defined __cplusplus
-int yyparse (void);
+int yyparse (GuidoParser* context);
 #else
 int yyparse ();
 #endif
@@ -1258,14 +1276,6 @@ int yyparse ();
 
 
 
-/* The look-ahead symbol.  */
-int yychar;
-
-/* The semantic value of the look-ahead symbol.  */
-YYSTYPE yylval;
-
-/* Number of syntax errors so far.  */
-int yynerrs;
 
 
 
@@ -1287,15 +1297,25 @@ yyparse (YYPARSE_PARAM)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 int
-yyparse (void)
+yyparse (GuidoParser* context)
 #else
 int
-yyparse ()
-
+yyparse (context)
+    GuidoParser* context;
 #endif
 #endif
 {
-  
+  /* The look-ahead symbol.  */
+int yychar;
+
+/* The semantic value of the look-ahead symbol.  */
+YYSTYPE yylval;
+
+/* Number of syntax errors so far.  */
+int yynerrs;
+/* Location data for the look-ahead symbol.  */
+YYLTYPE yylloc;
+
   int yystate;
   int yyn;
   int yyresult;
@@ -1328,16 +1348,21 @@ yyparse ()
   YYSTYPE *yyvs = yyvsa;
   YYSTYPE *yyvsp;
 
+  /* The location stack.  */
+  YYLTYPE yylsa[YYINITDEPTH];
+  YYLTYPE *yyls = yylsa;
+  YYLTYPE *yylsp;
+  /* The locations where the error started and ended.  */
+  YYLTYPE yyerror_range[2];
 
-
-#define YYPOPSTACK(N)   (yyvsp -= (N), yyssp -= (N))
+#define YYPOPSTACK(N)   (yyvsp -= (N), yyssp -= (N), yylsp -= (N))
 
   YYSIZE_T yystacksize = YYINITDEPTH;
 
   /* The variables used to return semantic value and location from the
      action routines.  */
   YYSTYPE yyval;
-
+  YYLTYPE yyloc;
 
   /* The number of symbols on the RHS of the reduced rule.
      Keep to zero when no symbol should be popped.  */
@@ -1357,6 +1382,12 @@ yyparse ()
 
   yyssp = yyss;
   yyvsp = yyvs;
+  yylsp = yyls;
+#if defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL
+  /* Initialize the default location before parsing starts.  */
+  yylloc.first_line   = yylloc.last_line   = 1;
+  yylloc.first_column = yylloc.last_column = 0;
+#endif
 
   goto yysetstate;
 
@@ -1383,7 +1414,7 @@ yyparse ()
 	   memory.  */
 	YYSTYPE *yyvs1 = yyvs;
 	yytype_int16 *yyss1 = yyss;
-
+	YYLTYPE *yyls1 = yyls;
 
 	/* Each stack pointer address is followed by the size of the
 	   data in use in that stack, in bytes.  This used to be a
@@ -1392,9 +1423,9 @@ yyparse ()
 	yyoverflow (YY_("memory exhausted"),
 		    &yyss1, yysize * sizeof (*yyssp),
 		    &yyvs1, yysize * sizeof (*yyvsp),
-
+		    &yyls1, yysize * sizeof (*yylsp),
 		    &yystacksize);
-
+	yyls = yyls1;
 	yyss = yyss1;
 	yyvs = yyvs1;
       }
@@ -1417,7 +1448,7 @@ yyparse ()
 	  goto yyexhaustedlab;
 	YYSTACK_RELOCATE (yyss);
 	YYSTACK_RELOCATE (yyvs);
-
+	YYSTACK_RELOCATE (yyls);
 #  undef YYSTACK_RELOCATE
 	if (yyss1 != yyssa)
 	  YYSTACK_FREE (yyss1);
@@ -1427,7 +1458,7 @@ yyparse ()
 
       yyssp = yyss + yysize - 1;
       yyvsp = yyvs + yysize - 1;
-
+      yylsp = yyls + yysize - 1;
 
       YYDPRINTF ((stderr, "Stack size increased to %lu\n",
 		  (unsigned long int) yystacksize));
@@ -1504,7 +1535,7 @@ yybackup:
 
   yystate = yyn;
   *++yyvsp = yylval;
-
+  *++yylsp = yylloc;
   goto yynewstate;
 
 
@@ -1535,318 +1566,319 @@ yyreduce:
      GCC warning that YYVAL may be used uninitialized.  */
   yyval = yyvsp[1-yylen];
 
-
+  /* Default location.  */
+  YYLLOC_DEFAULT (yyloc, (yylsp - yylen), yylen);
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
         case 2:
-#line 105 "guido.y"
-    { GD_INIT_SEGM ;}
+#line 99 "guido.y"
+    { context->segmInit (); ;}
     break;
 
   case 3:
-#line 105 "guido.y"
-    { GD_EXIT_SEGM ;}
+#line 99 "guido.y"
+    { context->segmExit (); ;}
     break;
 
   case 4:
-#line 106 "guido.y"
-    { GD_INIT_SEGM ;}
+#line 100 "guido.y"
+    { context->segmInit (); ;}
     break;
 
   case 5:
-#line 106 "guido.y"
-    { GD_EXIT_SEGM ;}
+#line 100 "guido.y"
+    { context->segmExit (); ;}
     break;
 
   case 6:
-#line 107 "guido.y"
-    { GD_INIT_SEGM ;}
+#line 101 "guido.y"
+    { context->segmInit (); ;}
     break;
 
   case 7:
-#line 107 "guido.y"
-    { GD_EXIT_SEGM ;}
+#line 101 "guido.y"
+    { context->segmExit (); ;}
     break;
 
   case 8:
-#line 110 "guido.y"
-    { GD_APP_SEQ ;}
+#line 104 "guido.y"
+    { context->segmAppendSeq (); ;}
     break;
 
   case 9:
-#line 111 "guido.y"
-    { GD_APP_SEQ ;}
+#line 105 "guido.y"
+    { context->segmAppendSeq (); ;}
     break;
 
   case 10:
-#line 114 "guido.y"
-    { GD_INIT_SEQ ;}
+#line 108 "guido.y"
+    { context->seqInit (); ;}
     break;
 
   case 11:
-#line 114 "guido.y"
-    { GD_EXIT_SEQ ;}
+#line 108 "guido.y"
+    { context->seqExit( ); ;}
     break;
 
   case 13:
-#line 118 "guido.y"
-    {  GD_APP_NT  ;}
+#line 112 "guido.y"
+    { context->appendNote (); ;}
     break;
 
   case 15:
-#line 120 "guido.y"
-    {  GD_APP_CH  ;}
+#line 114 "guido.y"
+    { context->seqAppendChord (); ;}
     break;
 
   case 16:
-#line 125 "guido.y"
-    { GD_TAG_END ;}
+#line 119 "guido.y"
+    { context->tagEnd (); ;}
     break;
 
   case 17:
-#line 126 "guido.y"
-    { GD_TAG_END ;}
+#line 120 "guido.y"
+    { context->tagEnd (); ;}
     break;
 
   case 18:
-#line 129 "guido.y"
-    { GD_TAG_ADD ;}
+#line 123 "guido.y"
+    { context->tagAdd (); ;}
     break;
 
   case 19:
-#line 130 "guido.y"
-    { GD_TAG_ADD ;}
+#line 124 "guido.y"
+    { context->tagAdd (); ;}
     break;
 
   case 20:
-#line 133 "guido.y"
-    { GD_TAG_RANGE ;}
+#line 127 "guido.y"
+    { context->tagRange (); ;}
     break;
 
   case 22:
-#line 136 "guido.y"
-    { (yyval.str) = new string(guidotext); ;}
+#line 130 "guido.y"
+    { (yyval.str) = new string(context->fText); ;}
     break;
 
   case 23:
-#line 139 "guido.y"
-    { GD_TAG_START((yyvsp[(1) - (1)].str)->c_str(), 0); delete (yyvsp[(1) - (1)].str); ;}
+#line 133 "guido.y"
+    { context->tagStart ( (yyvsp[(1) - (1)].str)->c_str(), 0); delete (yyvsp[(1) - (1)].str); ;}
     break;
 
   case 24:
-#line 140 "guido.y"
-    { GD_TAG_START((yyvsp[(1) - (3)].str)->c_str(),(yyvsp[(3) - (3)].num)); delete (yyvsp[(1) - (3)].str); ;}
+#line 134 "guido.y"
+    { context->tagStart ( (yyvsp[(1) - (3)].str)->c_str(),(yyvsp[(3) - (3)].num)); delete (yyvsp[(1) - (3)].str); ;}
     break;
 
   case 25:
-#line 141 "guido.y"
-    { GD_TAG_START("\\bar", 0); ;}
+#line 135 "guido.y"
+    { context->tagStart ( "\\bar", 0); ;}
     break;
 
   case 26:
-#line 144 "guido.y"
-    { GD_TAG_NARG((yyvsp[(1) - (1)].num)) ;}
+#line 138 "guido.y"
+    { context->tagIntArg   ((yyvsp[(1) - (1)].num)) ;}
     break;
 
   case 27:
-#line 145 "guido.y"
-    { GD_TAG_RARG((yyvsp[(1) - (1)].real)) ;}
+#line 139 "guido.y"
+    { context->tagFloatArg ((yyvsp[(1) - (1)].real)) ;}
     break;
 
   case 28:
-#line 146 "guido.y"
-    { GD_TAG_NARG((yyvsp[(1) - (2)].num)); GD_TAG_ARG_UNIT(guidotext) ;}
+#line 140 "guido.y"
+    { context->tagIntArg   ((yyvsp[(1) - (2)].num)); context->tagArgUnit (context->fText.c_str() ) ;}
     break;
 
   case 29:
-#line 147 "guido.y"
-    { GD_TAG_RARG((yyvsp[(1) - (2)].real)); GD_TAG_ARG_UNIT(guidotext) ;}
+#line 141 "guido.y"
+    { context->tagFloatArg ((yyvsp[(1) - (2)].real)); context->tagArgUnit (context->fText.c_str() ) ;}
     break;
 
   case 30:
-#line 148 "guido.y"
-    { GD_TAG_SARG(guidotext) ;}
+#line 142 "guido.y"
+    { context->tagStrArg   (context->fText.c_str() ) ;}
     break;
 
   case 31:
-#line 149 "guido.y"
-    { GD_TAG_TARG((yyvsp[(1) - (1)].str)->c_str()); delete (yyvsp[(1) - (1)].str); ;}
+#line 143 "guido.y"
+    { /* unused */ delete (yyvsp[(1) - (1)].str); ;}
     break;
 
   case 32:
-#line 152 "guido.y"
-    { GD_TAG_ADD_ARG(""); ;}
+#line 146 "guido.y"
+    { context->tagAddArg ( ""); ;}
     break;
 
   case 33:
-#line 153 "guido.y"
-    { GD_TAG_ADD_ARG((yyvsp[(1) - (3)].str)->c_str()); delete (yyvsp[(1) - (3)].str); ;}
+#line 147 "guido.y"
+    { context->tagAddArg ( (yyvsp[(1) - (3)].str)->c_str()); delete (yyvsp[(1) - (3)].str); ;}
     break;
 
   case 36:
-#line 163 "guido.y"
-    { GD_INIT_CH ;}
+#line 157 "guido.y"
+    { context->chordInit (); ;}
     break;
 
   case 38:
-#line 166 "guido.y"
-    { GD_CH_INIT_NT ;}
+#line 160 "guido.y"
+    { context->chordInitNote (); ;}
     break;
 
   case 40:
-#line 167 "guido.y"
-    { GD_CH_INIT_NT ;}
+#line 161 "guido.y"
+    { context->chordInitNote ();;}
     break;
 
   case 46:
-#line 176 "guido.y"
-    { GD_CH_APP_NT ;}
+#line 170 "guido.y"
+    { context->appendNote ();  ;}
     break;
 
   case 48:
-#line 180 "guido.y"
-    { GD_TAG_RANGE ;}
+#line 174 "guido.y"
+    { context->tagRange (); ;}
     break;
 
   case 49:
-#line 180 "guido.y"
-    { GD_TAG_END ;}
+#line 174 "guido.y"
+    { context->tagEnd (); ;}
     break;
 
   case 50:
-#line 183 "guido.y"
-    { GD_TAG_END ;}
+#line 177 "guido.y"
+    { context->tagEnd (); ;}
     break;
 
   case 51:
-#line 184 "guido.y"
-    { GD_TAG_END ;}
+#line 178 "guido.y"
+    { context->tagEnd (); ;}
     break;
 
   case 54:
-#line 194 "guido.y"
-    { GD_NT("_") ;}
+#line 188 "guido.y"
+    { context->noteInit ( "_" ); ;}
     break;
 
   case 56:
-#line 195 "guido.y"
-    { GD_NT("_") ;}
+#line 189 "guido.y"
+    { context->noteInit ( "_" ); ;}
     break;
 
   case 62:
-#line 206 "guido.y"
-    { GD_NT(guidotext) ;}
+#line 200 "guido.y"
+    { context->noteInit ( context->fText.c_str() ); ;}
     break;
 
   case 63:
-#line 207 "guido.y"
-    { GD_NT(guidotext) ;}
+#line 201 "guido.y"
+    { context->noteInit ( context->fText.c_str() ); ;}
     break;
 
   case 64:
-#line 208 "guido.y"
-    { GD_NT(guidotext) ;}
+#line 202 "guido.y"
+    { context->noteInit ( context->fText.c_str() ); ;}
     break;
 
   case 65:
-#line 209 "guido.y"
-    { GD_NT(guidotext) ;}
+#line 203 "guido.y"
+    { context->noteInit ( context->fText.c_str() ); ;}
     break;
 
   case 68:
-#line 216 "guido.y"
-    {  GD_SH_NT  ;}
+#line 210 "guido.y"
+    {  context->noteAcc (SHARP); ;}
     break;
 
   case 69:
-#line 217 "guido.y"
-    {  GD_FL_NT  ;}
+#line 211 "guido.y"
+    {  context->noteAcc (FLAT); ;}
     break;
 
   case 71:
-#line 221 "guido.y"
-    { GD_OCT_NT((yyvsp[(1) - (1)].num)) ;}
+#line 215 "guido.y"
+    { context->noteOct ((yyvsp[(1) - (1)].num)); ;}
     break;
 
   case 73:
-#line 225 "guido.y"
-    {  GD_ENUM_NT((yyvsp[(2) - (4)].num)); GD_DENOM_NT((yyvsp[(4) - (4)].num)) ;}
+#line 219 "guido.y"
+    {  context->noteEnum ((yyvsp[(2) - (4)].num)); context->noteDenom ((yyvsp[(4) - (4)].num)); ;}
     break;
 
   case 74:
-#line 226 "guido.y"
-    {  GD_ENUM_NT((yyvsp[(2) - (2)].num))  ;}
+#line 220 "guido.y"
+    {  context->noteEnum ((yyvsp[(2) - (2)].num));  ;}
     break;
 
   case 75:
-#line 227 "guido.y"
-    {  GD_ABSDUR_NT((yyvsp[(2) - (3)].num))  ;}
+#line 221 "guido.y"
+    {  context->noteAbsDur((yyvsp[(2) - (3)].num));  ;}
     break;
 
   case 76:
-#line 228 "guido.y"
-    {  GD_DENOM_NT((yyvsp[(2) - (2)].num)) ;}
+#line 222 "guido.y"
+    {  context->noteDenom ((yyvsp[(2) - (2)].num)); ;}
     break;
 
   case 78:
-#line 232 "guido.y"
-    {  GD_DOT_NT  ;}
+#line 226 "guido.y"
+    {  context->noteDot  ();  ;}
     break;
 
   case 79:
-#line 233 "guido.y"
-    {  GD_DDOT_NT ;}
+#line 227 "guido.y"
+    {  context->noteDdot (); ;}
     break;
 
   case 80:
-#line 234 "guido.y"
-    {  GD_TDOT_NT ;}
+#line 228 "guido.y"
+    {  context->noteTdot (); ;}
     break;
 
   case 81:
-#line 239 "guido.y"
-    { (yyval.str) = new string(guidotext); ;}
+#line 233 "guido.y"
+    { (yyval.str) = new string(context->fText); ;}
     break;
 
   case 82:
-#line 241 "guido.y"
-    { (yyval.num) = atol(guidotext); ;}
+#line 235 "guido.y"
+    { (yyval.num) = atol(context->fText.c_str() ); ;}
     break;
 
   case 83:
-#line 243 "guido.y"
-    { (yyval.num) = atol(guidotext); ;}
+#line 237 "guido.y"
+    { (yyval.num) = atol(context->fText.c_str() ); ;}
     break;
 
   case 84:
-#line 245 "guido.y"
-    { (yyval.num) = atol(guidotext); ;}
+#line 239 "guido.y"
+    { (yyval.num) = atol(context->fText.c_str() ); ;}
     break;
 
   case 85:
-#line 247 "guido.y"
-    { (yyval.real) = atof(guidotext); ;}
+#line 241 "guido.y"
+    { (yyval.real) = atof(context->fText.c_str() ); ;}
     break;
 
   case 86:
-#line 250 "guido.y"
+#line 244 "guido.y"
     { (yyval.num) = (yyvsp[(1) - (1)].num); ;}
     break;
 
   case 87:
-#line 251 "guido.y"
+#line 245 "guido.y"
     { (yyval.num) = (yyvsp[(1) - (1)].num); ;}
     break;
 
   case 88:
-#line 252 "guido.y"
+#line 246 "guido.y"
     { (yyval.num) = (yyvsp[(1) - (1)].num); ;}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1850 "guidoparse.cxx"
+#line 1882 "guidoparse.cpp"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1856,7 +1888,7 @@ yyreduce:
   YY_STACK_PRINT (yyss, yyssp);
 
   *++yyvsp = yyval;
-
+  *++yylsp = yyloc;
 
   /* Now `shift' the result of the reduction.  Determine what state
      that goes to, based on the state we popped back to and the rule
@@ -1882,7 +1914,7 @@ yyerrlab:
     {
       ++yynerrs;
 #if ! YYERROR_VERBOSE
-      yyerror (YY_("syntax error"));
+      yyerror (&yylloc, context, YY_("syntax error"));
 #else
       {
 	YYSIZE_T yysize = yysyntax_error (0, yystate, yychar);
@@ -1906,11 +1938,11 @@ yyerrlab:
 	if (0 < yysize && yysize <= yymsg_alloc)
 	  {
 	    (void) yysyntax_error (yymsg, yystate, yychar);
-	    yyerror (yymsg);
+	    yyerror (&yylloc, context, yymsg);
 	  }
 	else
 	  {
-	    yyerror (YY_("syntax error"));
+	    yyerror (&yylloc, context, YY_("syntax error"));
 	    if (yysize != 0)
 	      goto yyexhaustedlab;
 	  }
@@ -1918,7 +1950,7 @@ yyerrlab:
 #endif
     }
 
-
+  yyerror_range[0] = yylloc;
 
   if (yyerrstatus == 3)
     {
@@ -1934,7 +1966,7 @@ yyerrlab:
       else
 	{
 	  yydestruct ("Error: discarding",
-		      yytoken, &yylval);
+		      yytoken, &yylval, &yylloc, context);
 	  yychar = YYEMPTY;
 	}
     }
@@ -1955,6 +1987,7 @@ yyerrorlab:
   if (/*CONSTCOND*/ 0)
      goto yyerrorlab;
 
+  yyerror_range[0] = yylsp[1-yylen];
   /* Do not reclaim the symbols of the rule which action triggered
      this YYERROR.  */
   YYPOPSTACK (yylen);
@@ -1988,9 +2021,9 @@ yyerrlab1:
       if (yyssp == yyss)
 	YYABORT;
 
-
+      yyerror_range[0] = *yylsp;
       yydestruct ("Error: popping",
-		  yystos[yystate], yyvsp);
+		  yystos[yystate], yyvsp, yylsp, context);
       YYPOPSTACK (1);
       yystate = *yyssp;
       YY_STACK_PRINT (yyss, yyssp);
@@ -2001,6 +2034,11 @@ yyerrlab1:
 
   *++yyvsp = yylval;
 
+  yyerror_range[1] = yylloc;
+  /* Using YYLLOC is tempting, but would change the location of
+     the look-ahead.  YYLOC is available though.  */
+  YYLLOC_DEFAULT (yyloc, (yyerror_range - 1), 2);
+  *++yylsp = yyloc;
 
   /* Shift the error token.  */
   YY_SYMBOL_PRINT ("Shifting", yystos[yyn], yyvsp, yylsp);
@@ -2028,7 +2066,7 @@ yyabortlab:
 | yyexhaustedlab -- memory exhaustion comes here.  |
 `-------------------------------------------------*/
 yyexhaustedlab:
-  yyerror (YY_("memory exhausted"));
+  yyerror (&yylloc, context, YY_("memory exhausted"));
   yyresult = 2;
   /* Fall through.  */
 #endif
@@ -2036,7 +2074,7 @@ yyexhaustedlab:
 yyreturn:
   if (yychar != YYEOF && yychar != YYEMPTY)
      yydestruct ("Cleanup: discarding lookahead",
-		 yytoken, &yylval);
+		 yytoken, &yylval, &yylloc, context);
   /* Do not reclaim the symbols of the rule which action triggered
      this YYABORT or YYACCEPT.  */
   YYPOPSTACK (yylen);
@@ -2044,7 +2082,7 @@ yyreturn:
   while (yyssp != yyss)
     {
       yydestruct ("Cleanup: popping",
-		  yystos[*yyssp], yyvsp);
+		  yystos[*yyssp], yyvsp, yylsp, context);
       YYPOPSTACK (1);
     }
 #ifndef yyoverflow
@@ -2060,13 +2098,16 @@ yyreturn:
 }
 
 
-#line 254 "guido.y"
+#line 248 "guido.y"
 
 
-int guidoerror(const char*s) {
-	extern long int lnr;
-	YY_FLUSH_BUFFER;
-	lnr = guidolineno;
-	return ERROR(s);
+extern int	gParseErrorLine;
+int guidoerror(YYLTYPE* loc, GuidoParser* p, const char*s) {
+	gParseErrorLine = loc->last_line;		// for backward compatibility only
+	p->setError (loc->last_line, loc->first_column, s);
+	cerr << "error line: " << loc->last_line << " col: " << loc->first_column << ": " << s << endl;
+	return 0;
 }
+
+int GuidoParser::_yyparse()		{ return yyparse (this); }
 

@@ -30,7 +30,7 @@ GFontWin32GDIPlus::GFontWin32GDIPlus( Font* nativeFont, const char * faceName,
 						: mNativeFont(nativeFont), mName(faceName),
 						  mSize(size), mFontProp(properties), fSymbolTable(charSet)
 {
-	DWORD count = mbstowcs(NULL, faceName, strlen(faceName));
+	DWORD count = (DWORD)mbstowcs(NULL, faceName, strlen(faceName));
 	WCHAR * wstr = (WCHAR*) malloc ((count + 1) * sizeof(WCHAR));
 	mbstowcs(wstr, faceName, strlen(faceName));
 	FontCollection fc;
@@ -76,7 +76,7 @@ GFontWin32GDIPlus::GetExtent( const char * str, int inCharCount, float * outWidt
 		return;
 	}
 	// convert input string
-	DWORD count = mbstowcs(NULL, str, inCharCount);
+	DWORD count = (DWORD)mbstowcs(NULL, str, inCharCount);
 	WCHAR * wstr = (WCHAR*) malloc ((count + 1) * sizeof(WCHAR));
 	mbstowcs(wstr, str, inCharCount);
 

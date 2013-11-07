@@ -12,11 +12,16 @@
  * research@grame.fr
  */
 
+#ifdef WIN32
+#pragma warning (disable: 4996)
+#endif
+
 #include <sstream>
 #include <iostream>
 
 #include "QGuidoPainter.h"
 #include "GUIDOEngine.h"
+#include "GUIDOParse.h"
 #include "VGColor.h"
 
 #include <QVariant>
@@ -28,6 +33,7 @@
 
 #include "GSystemQt.h"
 #include "GDeviceQt.h"
+
 
 #define DEFAULT_DRAW_SIZE 100
 #define MAX(a,b) ( a > b ) ? a : b
@@ -105,6 +111,7 @@ QGuidoPainter::QGuidoPainter()
 	mLastErr = guidoNoErr;
 	mGMNCode = "";
 	mFileName = "";
+    fParser = GuidoOpenParser();
 
 	mResizePageToMusic = true;
 
@@ -119,6 +126,8 @@ QGuidoPainter::~QGuidoPainter()
 {
 	GuidoFreeGR( mDesc.handle );
 	GuidoFreeAR( mARHandler );
+    if (fParser)
+        GuidoCloseParser(fParser);
 }
 
 //-------------------------------------------------------------------------
@@ -183,9 +192,11 @@ bool QGuidoPainter::setGMNData( const QString& gmncode, const char* dataPath)
 	// containing all the notes, rests, staffs, lyrics ...
 	ARHandler arh;
 	GRHandler grh;
-    mLastErr = GuidoParseString( gmncode.toUtf8().data(), &arh);		
-	if ( mLastErr != guidoNoErr )
-		return false;
+
+    arh = GuidoString2AR(fParser, gmncode.toUtf8().data());
+
+    if (!arh)
+        return false;
 
 	setPathsToARHandler(arh, dataPath);
 
@@ -357,21 +368,18 @@ QString QGuidoPainter::getLastErrorMessage() const
 	QString result = QString( GuidoGetErrorString(mLastErr) );
 	if ( mLastErr == guidoErrParse )
 	{
-		int line = GuidoGetParseErrorLine();
-		result += " (line " + QVariant(line).toString() + ")";
+		int line;
+        int col;
+        GuidoParserGetErrorCode(fParser, line, col, 0);
+		result += " (line " + QVariant(line).toString() + ", col " + QVariant(col).toString() + ")";
 	}
 	return result;
-
 }
 
 //-------------------------------------------------------------------------
-int QGuidoPainter::getLastParseErrorLine() const
+void QGuidoPainter::getLastParseErrorLine(int &line, int &col) const
 {
-	if ( !isGMNValid() )
-		if ( mLastErr == guidoErrParse )
-			return GuidoGetParseErrorLine();
-
-	return 0;
+    GuidoParserGetErrorCode(fParser, line, col, 0);
 }
 		
 //-------------------------------------------------------------------------
@@ -388,6 +396,7 @@ void QGuidoPainter::setGuidoLayoutSettings(const GuidoLayoutSettings& layoutSett
 	if ( hasValidGR() )
 	{
 		GuidoUpdateGR( mDesc.handle , &mLayoutSettings );
+		mResizePageToMusic = layoutSettings.resizePage2Music;
 		if ( mResizePageToMusic )
 			GuidoResizePageToMusic( mDesc.handle );
 	}

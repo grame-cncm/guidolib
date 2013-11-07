@@ -136,9 +136,10 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 	if(drawDur)
 	{
 		const char * fraction = st->duration.c_str();
-		int n = st->duration.length();
+		size_t n = st->duration.length();
 
-		hdc.SelectPenWidth(4);
+        hdc.PushPenWidth(4);
+
 		if(sse->startflag != GRSystemStartEndStruct::OPENLEFT)
 		{	
 			hdc.Line(st->DurationLine[0].x, st->DurationLine[0].y, st->DurationLine[1].x, st->DurationLine[1].y);
@@ -155,7 +156,13 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 		hdc.SetTextFont( hmyfont );
 
 		if(sse->startflag != GRSystemStartEndStruct::OPENLEFT)
+<<<<<<< HEAD
 			hdc.DrawString(st->DurationLine[2].x+LSPACE/4, st->DurationLine[2].y+LSPACE/2, fraction, n);
+=======
+			hdc.DrawString(st->DurationLine[2].x, st->DurationLine[2].y+LSPACE/2, fraction, n);
+
+        hdc.PopPenWidth();
+>>>>>>> refs/remotes/origin/dev
 	}
 
 	if (mColRef) {
@@ -975,7 +982,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 			stringstream out;
 			out << num << '/' << den;
 			st->duration = out.str();
-			int n = st->duration.length();
+			size_t n = st->duration.length();
 					
 			GREvent * ev = dynamic_cast<GREvent *>(mAssociated->GetHead());
 			const NVPoint p1 = ev->getStemEndPos();

@@ -150,9 +150,9 @@ class QGuidoWidget : public QWidget
 		QString getLastErrorMessage() const;
 		
 		/**
-		*	\brief Returns the parse error line, or 0 if there is no parse error with the current GMN code.
+		*	\brief Gets the parse error line/col.
 		*/
-		int		getLastParseErrorLine() const;
+		void getLastParseErrorLine(int &line, int &col) const;
 
 		/**
 		*	\brief Sets the Guido layout settings used to draw with this QGuidoPainter
@@ -211,6 +211,7 @@ class QGuidoWidget : public QWidget
 
 		///	\brief Clears the widget's draw-cache, forcing it to redraw.
 		void clearCache();
+
 
 	protected:
 
