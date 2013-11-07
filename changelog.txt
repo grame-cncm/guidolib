@@ -7,10 +7,10 @@ GUIDO Engine history
 - new reentrant parser (transparent for users, not for developers)
 - new stream parsing mechanism : from now, it's possible to parse a stream as it goes
   along, and to get intermediate AR's state
-- bug correction : dotted clusters
-- bug correction : dotted chords (vertical dot alignment and collision avoidance)
-- bug correction : dotted rests
+- bugs correction : dotted events (clusters, chords (vertical dot alignment and collision avoidance) and rests)
 - bug correction : meter size set by user
+- Option "Resize page to music" added in GuidoEditor settings and in Guido2Image
+- ARPageFormat modified : from now, when margins sum are superior than width / height, they are set to 0
 
 
 ----------------------------------------------------------------
