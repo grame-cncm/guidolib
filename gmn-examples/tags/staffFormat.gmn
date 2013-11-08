@@ -4,16 +4,14 @@
 %
 % The \staffFormat-Tag can be used to change the appearance
 % of a staff. Parameters:
-% style  			 "n-line" where n is the number of lines 
-% size   			 defining the size of 1 halfspace (standard 3pt)
-%        			 (halfspace is the half the distance between two lines of the staff)
-% lineThickness defines the staff lines thickness. Unit is the half space.
-%					 default value is 0.08
+% - style  			       "n-line" where n is the number of lines 
+% - size   			       defining the size of 1 halfspace (standard 3pt)
+%        			            (halfspace is the half the distance between two lines of the staff)
+% - lineThickness       defines the staff lines thickness. Unit is the half space.
+%				                 default value is 0.08
 %
 % still to do:
-% 
-% some elements do not react to size-parameter
-% end-bar looks funny on staves with n-lines (for n != 5)
+% - some elements do not react to size-parameter
 %
 { 
   [ \staffFormat<size=3pt> 
