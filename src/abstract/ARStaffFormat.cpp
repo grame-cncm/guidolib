@@ -50,7 +50,7 @@ void ARStaffFormat::setTagParameterList(TagParameterList & tpl)
 	if (ltpls.GetCount() == 0) {
 		// create a list of string ...
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail( ( "S,style,standard,o;U,size,3pt,o;F,lineThickness,0.08,o"));
+		lstrs.AddTail(("S,style,standard,o;U,size,3pt,o;F,lineThickness,0.08,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
