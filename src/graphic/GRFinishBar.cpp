@@ -23,6 +23,7 @@
 #include "GuidoDefs.h"
 #include "GRStaff.h"
 #include "VGDevice.h"
+#include "ARStaffFormat.h"
 
 #include <iostream>
 using namespace std;
@@ -94,4 +95,26 @@ void GRFinishBar::DrawWithLines( VGDevice & hdc ) const
 ARFinishBar * GRFinishBar::getARFinishBar()
 {
 	return static_cast/*dynamic cast*/<ARFinishBar *>(mAbstractRepresentation);
+}
+
+// --------------------------------------------------------------------------
+void GRFinishBar::SetStaffFormat(const ARStaffFormat * staffFormat)
+{
+	if (staffFormat == 0)
+        return;
+
+    // - Get the staff style
+    const TagParameterString *paramStyle = staffFormat->getStyle();
+    if (paramStyle)
+    {
+        std::string style = paramStyle->getValue();
+
+        if (style.size())
+        {
+            // get first char
+            //fLineNumber = atoi(...)
+        }
+    }
+
+    // REM: get the size ?
 }

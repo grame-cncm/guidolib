@@ -34,12 +34,14 @@ class GRFinishBar: public GRBar
 		ARFinishBar * getARFinishBar();
 
 		virtual const NVPoint & getReferencePosition() const	{ return refpos; }
-		virtual void DrawWithLines( VGDevice & hdc ) const;
-		virtual void updateBoundingBox();
+		virtual void  DrawWithLines( VGDevice & hdc ) const;
+		virtual void  updateBoundingBox();
+        void          SetStaffFormat(const ARStaffFormat * staffFormat);
 
 	protected:
-				float	mThickness;
+		float	mThickness;
 		static	NVPoint refpos;
+        int     fLineNumber;
 };
 
 #endif 
