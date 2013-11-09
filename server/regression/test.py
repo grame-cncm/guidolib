@@ -20,8 +20,7 @@ EVER NEED TO CHANGE TO MAKE THIS WORK.
 '''
 
 # The directory holding the GUIDO examples
-#EXAMPLE_DIRS = ['../../gmn-examples','../../regression-tests']
-EXAMPLE_DIRS = ['../../gmn-examples']
+EXAMPLE_DIRS = ['../../gmn-examples','../../regression-tests']
 
 # THE EXTENSION OF A GMN FILE FOUND IN THIS DIRECTORY
 # OR ITS SUB-DIRECTORIES

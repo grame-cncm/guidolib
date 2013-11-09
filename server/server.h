@@ -73,7 +73,7 @@ class HTTPDServer
     int fLogmode;
     string fCachedir;
     struct MHD_Daemon *	fServer;
-    guido2img*			fConverter;
+    guido2img* fConverter;
     std::map<std::string, guidosession *> fSessions;
 
     const char* getMIMEType (const std::string& page);
@@ -92,7 +92,7 @@ public:
     int sendGuidoPostRequest (struct MHD_Connection *connection, const TArgs& args);
     int sendGuidoDeleteRequest (struct MHD_Connection *connection, const TArgs& args);
 
-    void registerGMN(string unique_id, string gmn);
+    guidosessionresponse registerGMN(string unique_id, string gmn);
     void readFromCache();
 
     int send (struct MHD_Connection *connection, guidosessionresponse &response);

@@ -308,17 +308,21 @@ void HTTPDServer::readFromCache()
       QTextStream in(&file);
       string all = in.readAll().toStdString();
       file.close();
-
-      registerGMN(unique_id, all);
+      (void) registerGMN(unique_id, all);
     }
   }
 }
 
-void HTTPDServer::registerGMN(string unique_id, string gmn)
+guidosessionresponse HTTPDServer::registerGMN(string unique_id, string gmn)
 {
     if (fSessions.find (unique_id) == fSessions.end ()) {
-      fSessions[unique_id] = new guidosession(fConverter, gmn, unique_id);
-      fSessions[unique_id]->initialize();
+      guidosession *maybe = new guidosession(fConverter, gmn, unique_id);
+      if (!maybe->success()) {
+        string error = maybe->errorMsg();
+        delete maybe;
+        return guidosession::genericFailure(error, 400);
+      }
+      fSessions[unique_id] = maybe;
     }
     QDir dir((fCachedir+'/'+unique_id.substr(0,2)).c_str());
     if (!dir.exists()) {
@@ -330,6 +334,7 @@ void HTTPDServer::registerGMN(string unique_id, string gmn)
       out << gmn.c_str();
       file.close();
     }
+    return fSessions[unique_id]->genericReturnId();
 }
 
 int HTTPDServer::sendGuidoPostRequest(struct MHD_Connection *connection, const TArgs& args)
@@ -342,23 +347,10 @@ int HTTPDServer::sendGuidoPostRequest(struct MHD_Connection *connection, const T
         guidosessionresponse response = guidosession::genericFailure("Requests without scores MUST only contain one field called `data'.", 403);
         return send (connection, response);
     }
-    // we verify to see if this is valid guido
-    GuidoErrCode err = guidosession::verifyGMN(args.begin()->second);
-    if (err != guidoNoErr) {
-        guidosessionresponse response = guidosession::genericFailure("You have sent the server invalid GMN.", 400);
-        return send (connection, response);
-    }
     std::string unique_id;
-    /*
-    // old method of making a random hash
-    for(unsigned int i = 0; i < 20; ++i) {
-        unique_id += genRandom();
-    }
-    */
     unique_id = generate_sha1(args.begin()->second);
     // if the score does not exist already, we put it there
-    registerGMN(unique_id, args.begin()->second);
-    guidosessionresponse response = fSessions[unique_id]->genericReturnId();
+    guidosessionresponse response = registerGMN(unique_id, args.begin()->second);
     return send (connection, response);
 }
 
@@ -565,22 +557,25 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
             // maybe templates...but it is sufficiently different to perhaps warrant writing
             // all this stuff out
             if (elems[1] == "voicescount") {
-                int nvoices = currentSession->voicesCount();
-                guidosessionresponse response = nvoices >= 0
+                int nvoices;
+                guidoAPIresponse gar = currentSession->voicesCount(nvoices);
+                guidosessionresponse response = gar.is_happy()
                     ? currentSession->handleSimpleIDdIntQuery("voicescount", nvoices)
-                    : guidosession::genericFailure("Could not get the number of voices from this score.", 400, elems[0]);
+                    : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
             } else if (elems[1] == "pagescount") {
-                int npages = currentSession->pagesCount();
-                guidosessionresponse response = npages >= 0
+                int npages;
+                guidoAPIresponse gar = currentSession->voicesCount(npages);
+                guidosessionresponse response = gar.is_happy()
                     ? currentSession->handleSimpleIDdIntQuery("pagescount", npages)
-                    : guidosession::genericFailure("Could not get the number of pages from this score.", 400, elems[0]);
+                    : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
             } else if (elems[1] == "duration") {
-                string duration = currentSession->duration();
-                guidosessionresponse response = duration != ""
+                string duration;
+                guidoAPIresponse gar = currentSession->duration(duration);
+                guidosessionresponse response = gar.is_happy()
                     ? currentSession->handleSimpleIDdStringQuery("duration", duration)
-                    : guidosession::genericFailure("Could not get the duration of this score.", 400, elems[0]);
+                    : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
             } else if (elems[1] == "pageat") {
                 GuidoDate date;
@@ -589,10 +584,11 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                     mydate = args.find("date")->second;
                 }
                 stringToDate(mydate, date);
-                int page = currentSession->pageAt(date);
-                guidosessionresponse response = page >= 0
+                int page;
+                guidoAPIresponse gar = currentSession->pageAt(date, page);
+                guidosessionresponse response = gar.is_happy()
                     ? currentSession->datePageJson(mydate, page)
-                    : guidosession::genericFailure("The score does not contain this date.", 400, elems[0]);
+                    : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
             } else if (elems[1] == "pagedate") {
                 GuidoDate date;
@@ -600,64 +596,57 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                 if (args.find("page") != args.end()) {
                     mypage = atoi(args.find("page")->second.c_str());
                 }
-                int success = currentSession->pageDate(mypage, &date);
-                guidosessionresponse response = success == 0
+                guidoAPIresponse gar = currentSession->pageDate(mypage, date);
+                guidosessionresponse response = gar.is_happy()
                     ? currentSession->datePageJson(dateToString(date), mypage)
-                    : guidosession::genericFailure("This page does not exist in the score.", 400, elems[0]);
+                    : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
             } else if (elems[1] == "pagemap") {
                 Time2GraphicMap outmap;
-                GuidoErrCode err;
-                err = currentSession->getMap(PAGE, 0, outmap);
-                guidosessionresponse response = err == guidoNoErr
+                guidoAPIresponse gar = currentSession->getMap(PAGE, 0, outmap);
+                guidosessionresponse response = gar.is_happy()
                     ? currentSession->mapJson("pagemap", outmap)
-                    : guidosession::genericFailure("Could not generate a page map.", 400, elems[0]);
+                    : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
             } else if (elems[1] == "midi") {
                 guidosessionresponse response = currentSession->genericReturnMidi();
                 return send(connection, response);
             } else if (elems[1] == "systemmap") {
                 Time2GraphicMap outmap;
-                GuidoErrCode err;
-                err = currentSession->getMap(SYSTEM, 0, outmap);
-                guidosessionresponse response = err == guidoNoErr
+                guidoAPIresponse gar = currentSession->getMap(SYSTEM, 0, outmap);
+                guidosessionresponse response = gar.is_happy()
                     ? currentSession->mapJson("systemmap", outmap)
-                    : guidosession::genericFailure("Could not generate a system map.", 400, elems[0]);
+                    : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
             } else if (elems[1] == "staffmap") {
                 Time2GraphicMap outmap;
-                GuidoErrCode err;
                 int mystaff = 1;
                 if (args.find("staff") != args.end()) {
                     mystaff = atoi(args.find("staff")->second.c_str());
                 }
-                err = currentSession->getMap(STAFF, mystaff, outmap);
-                guidosessionresponse response = err == guidoNoErr
+                guidoAPIresponse gar = currentSession->getMap(STAFF, mystaff, outmap);
+                guidosessionresponse response = gar.is_happy()
                     ? currentSession->mapJson("staffmap", outmap)
-                    : guidosession::genericFailure("Could not generate a staff map.", 400, elems[0]);
+                    : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
             } else if (elems[1] == "voicemap") {
                 Time2GraphicMap outmap;
-                GuidoErrCode err;
                 int myvoice = 1;
                 if (args.find("voice") != args.end()) {
                     myvoice = atoi(args.find("voice")->second.c_str());
                 }
-                err = currentSession->getMap(STAFF, myvoice, outmap);
-                guidosessionresponse response = err == guidoNoErr
+                guidoAPIresponse gar = currentSession->getMap(STAFF, myvoice, outmap);
+                guidosessionresponse response = gar.is_happy()
                     ? currentSession->mapJson("voicemap", outmap)
-                    : guidosession::genericFailure("Could not generate a voice map.", 400, elems[0]);
+                    : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
             } else if (elems[1] == "timemap") {
                 GuidoServerTimeMap outmap;
-                GuidoErrCode err;
-                err = currentSession->getTimeMap(outmap);
-                guidosessionresponse response = err == guidoNoErr
+                guidoAPIresponse gar = currentSession->getTimeMap(outmap);
+                guidosessionresponse response = gar.is_happy()
                     ? currentSession->timeMapJson(outmap)
-                    : guidosession::genericFailure("Could not generate a time map.", 400, elems[0]);
+                    : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
-                //guidosessionresponse response = guidosession::genericFailure("timemap is not implemented yet but will be soon.", 501);
-                //return send(connection, response);
             } else {
                 guidosessionresponse response = guidosession::genericFailure("Unidentified GET request.", 404, elems[0]);
                 return send(connection, response);

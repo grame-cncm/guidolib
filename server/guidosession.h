@@ -43,6 +43,22 @@ enum GuidoWebApiFormat { GUIDO_WEB_API_PNG, GUIDO_WEB_API_JPEG, GUIDO_WEB_API_GI
                        };
 //--------------------------------------------------------------------------
 class guido2img;
+
+class guidoAPIresponse {
+  private :
+    GuidoErrCode error_;
+    int line_;
+    int column_;
+    string msg_;
+  public :
+    guidoAPIresponse (GuidoErrCode error, int line, int column, string msg);
+    guidoAPIresponse (GuidoErrCode error);
+    guidoAPIresponse ();
+    bool is_happy();
+    string errorMsg();
+    static guidoAPIresponse make_happy_response();
+};
+
 struct guidosessionresponse {
     char* data_;
     unsigned int size_;
@@ -70,10 +86,13 @@ class GuidoServerTimeMap : public TimeMapCollector
 class guidosession
 {
     friend class guido2img;
-    guido2img*			fConverter;
+    guido2img* fConverter;
 
 private :
     string id_;
+    ARHandler arh_;
+    GRHandler grh_;
+    guidoAPIresponse *whyIFailed_; // only for very problematic code
     // these are the current values
     bool resizeToPage_;
     GuidoWebApiFormat format_;
@@ -115,8 +134,8 @@ private :
     int doptimalPageFill_;
 
     // format conversion
-    const char* formatToMIMEType ();
-    const char* formatToLayType ();
+    string formatToMIMEType ();
+    string formatToLayType ();
     static GuidoWebApiFormat formatToWebApiFormat(string format);
 
     // used for graphical representation building
@@ -130,10 +149,13 @@ public :
     // constructors, destructor, and initialzer
     guidosession(guido2img* g2img, string gmn, string id);
     virtual ~guidosession();
-    void initialize();
+    void initializeUserSettableParameters();
+    void initializeARHandGRH();
     void updateValuesFromDefaults();
     void updateValuesFromDefaults(const TArgs& args);
     void changeDefaultValues(const TArgs &args);
+    bool success();
+    string errorMsg();
 
     // returns session responses with information for server to send
     static guidosessionresponse handleSimpleIntQuery(string, int);
@@ -152,23 +174,23 @@ public :
     guidosessionresponse timeMapJson (GuidoServerTimeMap &outmap);
 
     // queries
-    int voicesCount();
-    int pagesCount();
-    string duration();
-    int pageAt(GuidoDate date);
-    int pageDate(int page, GuidoDate *date);
-    GuidoErrCode getMap (GuidoSessionMapType map, int aux, Time2GraphicMap& outmap);
-    GuidoErrCode getTimeMap (GuidoServerTimeMap& outmap);
+    guidoAPIresponse voicesCount(int &n);
+    guidoAPIresponse pagesCount(int &p);
+    guidoAPIresponse duration(string &d);
+    guidoAPIresponse pageAt(GuidoDate date, int &p);
+    guidoAPIresponse pageDate(int page, GuidoDate &date);
+    guidoAPIresponse getMap (GuidoSessionMapType map, int aux, Time2GraphicMap& outmap);
+    guidoAPIresponse getTimeMap (GuidoServerTimeMap& outmap);
     static string getVersion();
     static string getServerVersion();
     static float getLineSpace();
-    static GuidoErrCode verifyGMN(string gmn);
+    static guidoAPIresponse verifyGMN(string gmn);
 
     // -----------------------------
     guidosessionresponse genericReturnImage();
     guidosessionresponse genericReturnMidi();
     guidosessionresponse genericReturnId();
-    static guidosessionresponse genericFailure(const char* errorstring, int http_status = 400, string id = "");
+    static guidosessionresponse genericFailure(string errorstring, int http_status = 400, string id = "");
     guidosessionresponse mapGet (const TArgs& args, unsigned int n, string thingToGet);
     guidosessionresponse pointGet (const TArgs& args, unsigned int n);
 

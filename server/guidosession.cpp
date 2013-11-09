@@ -29,6 +29,7 @@
 #include "GUIDOEngine.h"
 #include "GUIDO2Midi.h"
 #include "GUIDOScoreMap.h"
+#include "GUIDOParse.h"
 #include "utilities.h"
 
 // json
@@ -44,6 +45,38 @@ namespace guidohttpd
 
 // CONSTRUCTORS, DESTRUCTORS AND INITIALIZERS
 // ................................................
+
+guidoAPIresponse::guidoAPIresponse()
+  : error_(guidoNoErr), line_(-1), column_(-1), msg_("")
+{
+}
+
+guidoAPIresponse::guidoAPIresponse(GuidoErrCode error)
+  : error_(error), line_(-1), column_(-1), msg_("")
+{
+}
+
+guidoAPIresponse::guidoAPIresponse (GuidoErrCode error, int line, int column, string msg)
+  : error_(error), line_(line), column_(column), msg_(msg)
+{
+}
+
+guidoAPIresponse guidoAPIresponse::make_happy_response() {
+  return guidoAPIresponse(guidoNoErr);
+}
+
+bool guidoAPIresponse::is_happy() {
+  return error_ == guidoNoErr;
+}
+
+string guidoAPIresponse::errorMsg() {
+  stringstream out;
+  out << GuidoGetErrorString(error_) << ".";
+  if (line_ > 0) {
+    out << " At line " << line_ << ", column " << column_ << ": " << msg_ << ".";
+  }
+  return out.str();
+}
 
 guidosessionresponse::guidosessionresponse (const char* data, unsigned int size, string format, int http_status)
 {
@@ -76,20 +109,32 @@ guidosessionresponse::guidosessionresponse ()
 
 guidosessionresponse::~guidosessionresponse ()
 {
-  delete data_; 
+  delete data_;
 }
 
 guidosession::guidosession(guido2img* g2svg, string gmn, string id)
     : fConverter(g2svg), id_(id), dgmn_(gmn)
 {
-    initialize();
+    arh_ = 0;
+    grh_ = 0;
+    whyIFailed_ = 0;
+    initializeUserSettableParameters();
+    initializeARHandGRH();
 }
 
 guidosession::~guidosession()
 {
+  // must be done in this order
+  // grh_ depends on arh_
+  if (grh_)
+    GuidoFreeGR(grh_);
+  if (arh_)
+    GuidoFreeAR(arh_);
+  if (whyIFailed_)
+    delete whyIFailed_;
 }
 
-void guidosession::initialize()
+void guidosession::initializeUserSettableParameters()
 {
     // note that we do nothing to the GMN when we initalize because
     // we set it in the constructor
@@ -116,6 +161,49 @@ void guidosession::initialize()
     dneighborhoodSpacing_ = gls.neighborhoodSpacing;
     doptimalPageFill_ = gls.optimalPageFill;
     updateValuesFromDefaults();
+}
+
+void guidosession::initializeARHandGRH() {
+    GuidoParser *parser = GuidoOpenParser();
+    arh_ = GuidoString2AR (parser, gmn_.c_str());
+    if (!arh_) {
+      int line;
+      int col;
+      const char *msg;
+      GuidoParserGetErrorCode (parser, line, col, &msg);
+      GuidoCloseParser(parser);
+      whyIFailed_ = new guidoAPIresponse(guidoErrParse, line, col, string(msg));
+      return;
+    }
+
+    GuidoCloseParser(parser);
+    GuidoErrCode err;
+    
+    GuidoPageFormat pf;
+    fillGuidoPageFormatUsingCurrentSettings(&pf);
+    
+    GuidoSetDefaultPageFormat(&pf);
+    err = GuidoAR2GR (arh_, 0, &grh_);
+    if (err != guidoNoErr) {
+        whyIFailed_ = new guidoAPIresponse(err);
+        return;
+    }
+
+    if (resizeToPage_) {
+      err = GuidoResizePageToMusic (grh_);
+      if (err != guidoNoErr) {
+        whyIFailed_ = new guidoAPIresponse(err);
+        return;
+      }
+    }
+}
+
+bool guidosession::success() {
+  return whyIFailed_ ? false : true;
+}
+
+string guidosession::errorMsg() {
+  return whyIFailed_ ? whyIFailed_->errorMsg() : "";
 }
 
 void guidosession::changeDefaultValues(const TArgs &args)
@@ -349,12 +437,12 @@ void guidosession::updateValuesFromDefaults(const TArgs &args)
 // FORMATTING
 // ................................................
     
-const char* guidosession::formatToMIMEType ()
+string guidosession::formatToMIMEType ()
 {
     return ("image/" + string(formatToLayType())).c_str();
 }
-    
-const char* guidosession::formatToLayType ()
+
+string guidosession::formatToLayType ()
 {
     switch(format_) {
     case GUIDO_WEB_API_PNG :
@@ -387,11 +475,6 @@ GuidoWebApiFormat guidosession::formatToWebApiFormat(string format)
         return GUIDO_WEB_API_PNG;
     }
     return GUIDO_WEB_API_PNG;
-}
-
-GuidoErrCode guidosession::verifyGMN(string gmn) {
-    ARHandler arh;
-    return GuidoParseString (gmn.c_str(), &arh);
 }
 
 // GUIDO PAGE FORMAT
@@ -580,218 +663,100 @@ float guidosession::getLineSpace() {
     return GuidoGetLineSpace();
 }
 
-int guidosession::voicesCount()
+guidoAPIresponse guidosession::voicesCount(int &vc)
 {
-    GuidoErrCode err;
-    ARHandler arh;
-    err = GuidoParseString (gmn_.c_str(), &arh);
-    if (err != guidoNoErr) {
-        return -1;
+    if (whyIFailed_)
+      return *whyIFailed_;
+
+    vc = GuidoCountVoices(arh_);
+    if (vc < 0) {
+      return guidoAPIresponse((GuidoErrCode) vc);
     }
 
-    return GuidoCountVoices(arh);
+    return guidoAPIresponse::make_happy_response();
 }
 
-string guidosession::duration()
+guidoAPIresponse guidosession::duration(string &dur)
 {
-    GuidoErrCode err;
-    ARHandler arh;
-    err = GuidoParseString (gmn_.c_str(), &arh);
-    if (err != guidoNoErr) {
-        return "";
-    }
-    GRHandler grh;
-    
-    GuidoPageFormat pf;
-    fillGuidoPageFormatUsingCurrentSettings(&pf);
-    
-    GuidoSetDefaultPageFormat(&pf);
-    err = GuidoAR2GR (arh, 0, &grh);
-    if (err != guidoNoErr) {
-        return "";
-    }
+    if (whyIFailed_)
+      return *whyIFailed_;
 
-    if (resizeToPage_) {
-      err = GuidoResizePageToMusic (grh);
-      if (err != guidoNoErr) {
-          return "";
-      }
-    }
-    
+    GuidoErrCode err;
     GuidoDate date;
-    err = GuidoDuration(grh, &date);
+
+    err = GuidoDuration(grh_, &date);
     if (err != guidoNoErr) {
-        return "";
+        return guidoAPIresponse(err);
     }
     
-    return dateToString(date);
+    dur = dateToString(date);
+    return guidoAPIresponse::make_happy_response();
 }
     
-int guidosession::pagesCount()
+guidoAPIresponse guidosession::pagesCount(int &pc)
 {
-    GuidoErrCode err;
-    ARHandler arh;
-    err = GuidoParseString (gmn_.c_str(), &arh);
-    if (err != guidoNoErr) {
-        return -1;
-    }
-    GRHandler grh;
-    
-    GuidoPageFormat pf;
-    fillGuidoPageFormatUsingCurrentSettings(&pf);
-    
-    GuidoSetDefaultPageFormat(&pf);
-    err = GuidoAR2GR (arh, 0, &grh);
-    if (err != guidoNoErr) {
-        return -1;
-    }
+    if (whyIFailed_)
+      return *whyIFailed_;
 
-    if (resizeToPage_) {
-      err = GuidoResizePageToMusic (grh);
-      if (err != guidoNoErr) {
-          return -1;
-      }
+    pc = GuidoGetPageCount(grh_);
+    if (pc < 0) {
+      return guidoAPIresponse((GuidoErrCode) pc);
     }
-    
-    return GuidoGetPageCount(grh);
+    return guidoAPIresponse::make_happy_response();
 }
 
-int guidosession::pageAt(GuidoDate date)
+guidoAPIresponse guidosession::pageAt(GuidoDate date, int &pageat)
 {
-    GuidoErrCode err;
-    ARHandler arh;
-    err = GuidoParseString (gmn_.c_str(), &arh);
-    if (err != guidoNoErr) {
-        return -1;
-    }
-    GRHandler grh;
-    
-    GuidoPageFormat pf;
-    fillGuidoPageFormatUsingCurrentSettings(&pf);
-    
-    GuidoSetDefaultPageFormat(&pf);
-    err = GuidoAR2GR (arh, 0, &grh);
-    if (err != guidoNoErr) {
-        return -1;
-    }
+    if (whyIFailed_)
+      return *whyIFailed_;
 
-    if (resizeToPage_) {
-      err = GuidoResizePageToMusic (grh);
-      if (err != guidoNoErr) {
-          return -1;
-      }
+    pageat = GuidoFindPageAt(grh_, date);
+    if (pageat < 0) {
+      return guidoAPIresponse((GuidoErrCode) pageat);
     }
-    
-    GuidoDate dur;
-    GuidoDuration(grh, &dur);
-    if ((dateToFloat(dur) < dateToFloat(date))
-        || (0 > dateToFloat(date))) {
-        return -1;
-    }
-        
-    return GuidoFindPageAt(grh, date);
+    return guidoAPIresponse::make_happy_response();
 }
 
-int guidosession::pageDate(int page, GuidoDate *date)
+guidoAPIresponse guidosession::pageDate(int page, GuidoDate &date)
 {
-    GuidoErrCode err;
-    ARHandler arh;
-    err = GuidoParseString (gmn_.c_str(), &arh);
-    if (err != guidoNoErr) {
-        return 1;
-    }
-    GRHandler grh;
-    
-    GuidoPageFormat pf;
-    fillGuidoPageFormatUsingCurrentSettings(&pf);
-    
-    GuidoSetDefaultPageFormat(&pf);
-    err = GuidoAR2GR (arh, 0, &grh);
-    if (err != guidoNoErr) {
-        return 1;
-    }
+    if (whyIFailed_)
+      return *whyIFailed_;
 
-    if (resizeToPage_) {
-      err = GuidoResizePageToMusic (grh);
-      if (err != guidoNoErr) {
-          return 1;
-      }
-    }
-    
-    if ((page > GuidoGetPageCount(grh))
-        || (page <= 0)) {
-      return 1;
-    }
+    return guidoAPIresponse(GuidoGetPageDate(grh_, page, &date));
+}
 
-    GuidoGetPageDate(grh, page, date);
-    return 0;
+guidoAPIresponse guidosession::getTimeMap (GuidoServerTimeMap& outmap)
+{
+    if (whyIFailed_)
+      return *whyIFailed_;
+
+    return guidoAPIresponse(GuidoGetTimeMap(arh_, outmap));
 }
     
-GuidoErrCode guidosession::getTimeMap (GuidoServerTimeMap& outmap)
+guidoAPIresponse guidosession::getMap (GuidoSessionMapType map, int aux, Time2GraphicMap& outmap)
 {
-    GuidoErrCode err;
-    ARHandler arh;
-    err = GuidoParseString (gmn_.c_str(), &arh);
-    if (err != guidoNoErr) {
-        return err;
-    }
-    
-    err = GuidoGetTimeMap(arh, outmap);
+    if (whyIFailed_)
+      return *whyIFailed_;
 
-    return err;
-}
-    
-GuidoErrCode guidosession::getMap (GuidoSessionMapType map, int aux, Time2GraphicMap& outmap)
-{
     GuidoErrCode err;
-    ARHandler arh;
-    err = GuidoParseString (gmn_.c_str(), &arh);
-    if (err != guidoNoErr) {
-        return err;
-    }
-    GRHandler grh;
-    
-    GuidoPageFormat pf;
-    fillGuidoPageFormatUsingCurrentSettings(&pf);
-    
-    GuidoSetDefaultPageFormat(&pf);
-    err = GuidoAR2GR (arh, 0, &grh);
-    if (err != guidoNoErr) {
-        return err;
-    }
 
-    if (resizeToPage_) {
-      err = GuidoResizePageToMusic (grh);
-      if (err != guidoNoErr) {
-          return err;
-      }
-    }
-    
-    /*
-     In order to export a map, the score needs to be drawn on something.
-     SVG export is a really quick way to do this drawing.
-     It is a temporary solution
-     */
-    stringstream mystream;
-    err = GuidoSVGExport(grh, page_, mystream, "");
-    
     switch(map) {
         case PAGE :
-            err = GuidoGetPageMap(grh, page_, GuidoCM2Unit(width_), GuidoCM2Unit(height_), outmap);
+            err = GuidoGetPageMap(grh_, page_, GuidoCM2Unit(width_), GuidoCM2Unit(height_), outmap);
             break;
         case STAFF :
-            err = GuidoGetStaffMap(grh, page_, GuidoCM2Unit(width_), GuidoCM2Unit(height_), aux, outmap);
+            err = GuidoGetStaffMap(grh_, page_, GuidoCM2Unit(width_), GuidoCM2Unit(height_), aux, outmap);
             break;
         case VOICE :
-            err = GuidoGetVoiceMap(grh, page_, GuidoCM2Unit(width_), GuidoCM2Unit(height_), aux, outmap);
+            err = GuidoGetVoiceMap(grh_, page_, GuidoCM2Unit(width_), GuidoCM2Unit(height_), aux, outmap);
             break;
         case SYSTEM :
-            err = GuidoGetSystemMap(grh, page_, GuidoCM2Unit(width_), GuidoCM2Unit(height_), outmap);
+            err = GuidoGetSystemMap(grh_, page_, GuidoCM2Unit(width_), GuidoCM2Unit(height_), outmap);
             break;
         default :
             err = guidoErrActionFailed;
     }
-    return err;
+    return guidoAPIresponse(err);
 }
 
 // ---- Abstractions
@@ -799,37 +764,17 @@ GuidoErrCode guidosession::getMap (GuidoSessionMapType map, int aux, Time2Graphi
 guidosessionresponse guidosession::genericReturnImage()
 {
     if (format_ == GUIDO_WEB_API_SVG) {
-        GuidoErrCode err;
-        ARHandler arh;
-        err = GuidoParseString (gmn_.c_str(), &arh);
-        if (err != guidoNoErr) {
-          return genericFailure ("Could not convert the image.", 400, id_);
-        }
-        GRHandler grh;
-        
-        GuidoPageFormat pf;
-        fillGuidoPageFormatUsingCurrentSettings(&pf);
-        
-        GuidoSetDefaultPageFormat(&pf);
-        err = GuidoAR2GR (arh, 0, &grh);
-        if (err != guidoNoErr) {
-          return genericFailure ("Could not convert the image.", 400, id_);
-        }
-        
-        if (resizeToPage_) {
-          err = GuidoResizePageToMusic (grh);
-          if (err != guidoNoErr) {
-              return genericFailure ("Could not convert the image.", 400, id_);;
-          }
-        }
-
-        stringstream mystream;
-        err = GuidoSVGExport(grh, page_, mystream, "");
-        if (err != guidoNoErr) {
-          return genericFailure ("Could not convert the image.", 400, id_);
-        }
-        string svg = mystream.str();
-        return guidosessionresponse(svg, formatToMIMEType(), 201);
+      if (whyIFailed_) {
+        return genericFailure(whyIFailed_->errorMsg(), 400, id_);
+      }
+      GuidoErrCode err;
+      stringstream mystream;
+      err = GuidoSVGExport(grh_, page_, mystream, "");
+      if (err != guidoNoErr) {
+        return genericFailure ("Could not convert the image.", 400, id_);
+      }
+      string svg = mystream.str();
+      return guidosessionresponse(svg, formatToMIMEType(), 201);
     }
     int err = fConverter->convert(this);
     if (err == 0) {
@@ -843,15 +788,14 @@ guidosessionresponse guidosession::genericReturnImage()
 guidosessionresponse guidosession::genericReturnMidi()
 {
     //Guido2MidiParams midiparams;
-    ARHandler arh;
-    GuidoErrCode err = GuidoParseString (gmn_.c_str(), &arh);
     
-    if (err != guidoNoErr) {
-        return genericFailure ("Could not convert the Midi.", 400, id_);
+    if (whyIFailed_) {
+      return genericFailure(whyIFailed_->errorMsg(), 400, id_);
     }
-    
+
     string filename = rand_alnum_str(20)+".midi";
-    err = GuidoAR2MIDIFile(arh, filename.c_str(), 0);
+    GuidoErrCode err;
+    err = GuidoAR2MIDIFile(arh_, filename.c_str(), 0);
     
     if (err != guidoNoErr) {
         return genericFailure ("Could not convert the Midi.", 400, id_);
@@ -863,18 +807,18 @@ guidosessionresponse guidosession::genericReturnMidi()
     string data = sstream.str();
     fs.close();
     //remove(filename.c_str());
-    if (err == 0) {
+    if (err == guidoNoErr) {
         return guidosessionresponse(data, "audio/midi", 201);
     }
 
     return genericFailure ("Could not convert the Midi.", 400, id_);
 }
     
-guidosessionresponse guidosession::genericFailure(const char* errorstring, int http_status, string id)
+guidosessionresponse guidosession::genericFailure(string errorstring, int http_status, string id)
 {
     ostringstream mystream;
     json_object *obj = new json_object;
-    obj->add (new json_element("Error", new json_string_value(errorstring)));
+    obj->add (new json_element("Error", new json_string_value(errorstring.c_str ())));
     if (id != "") {
       json_object *wrapper = new json_object;
       wrapper->add(new json_element(id.c_str(), new json_object_value(obj)));

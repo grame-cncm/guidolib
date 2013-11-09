@@ -157,10 +157,10 @@ Guido2ImageErrorCodes Guido2Image::gmnString2Image( const Params& p )
 	if (painter) {
                 painter->CreateParser();
 		painter->setGMNCode(p.input);
-                painter->CloseParser();
 		if (p.pageFormat) painter->setGuidoPageFormat (*p.pageFormat);
 		if (p.layout) painter->setGuidoLayoutSettings (*p.layout);
 		painter->setResizePageToMusic(p.resizePageToMusic);
+                painter->CloseParser(); // NEEDS TO BE AFTER all the page resizing stuff
 	}
 	else return GUIDO_2_IMAGE_GUIDO_ENGINE_NOT_STARTED;			// likely
 	return guidoPainterToImage(painter, p);
@@ -179,10 +179,10 @@ Guido2ImageErrorCodes Guido2Image::gmnFile2Image	( const  Params& p )
 	if (painter) {
                 painter->CreateParser();
 		painter->setGMNFile(p.input);
-                painter->CloseParser();
 		if (p.layout) painter->setGuidoLayoutSettings (*p.layout);
 		if (p.pageFormat) painter->setGuidoPageFormat (*p.pageFormat);
 		painter->setResizePageToMusic(p.resizePageToMusic);
+                painter->CloseParser(); // NEEDS TO BE AFTER all the page resizing stuff
 	}
 	else
 		return GUIDO_2_IMAGE_GUIDO_ENGINE_NOT_STARTED;			// likely
