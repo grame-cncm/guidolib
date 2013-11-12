@@ -49,6 +49,7 @@ int guido2img::convert (guidosession* const currentSession)
     GuidoPageFormat pf;
     currentSession->fillGuidoPageFormatUsingCurrentSettings(&pf);
     p.pageFormat = &pf;
+
     p.resizePageToMusic = currentSession->resizeToPage_;
 
     GuidoLayoutSettings ls;
