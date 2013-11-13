@@ -65,7 +65,7 @@ win32 {
 	}
 }
 unix:DebugBuild { LIBS += -L../GuidoQt/Debug -lGuidoQt }
-else  { LIBS += -L.. -lGuidoQt }
+else { LIBS += -L.. -lGuidoQt }
 INCLUDEPATH += ../GuidoQt/include
 
 include( ../GUIDOEngineLink.pri )

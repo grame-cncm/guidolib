@@ -209,9 +209,7 @@ class QGuidoPainter
 		*	\brief Directly set the AR handler.
 		*/
 		void		setARHandler(ARHandler ar);
-
-        void        CreateParser();
-        void        CloseParser();
+        GuidoParser* getParser() {return fParser;}
 
 	protected:
 	

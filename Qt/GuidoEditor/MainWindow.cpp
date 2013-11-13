@@ -553,7 +553,6 @@ void MainWindow::updateCode()
 	if ( !newGMNCode.length() )
 		return;
 
-    mGuidoWidget->CreateParser();
 
 	if ( newGMNCode == mGuidoWidget->gmnCode() )
 		return;
@@ -574,7 +573,6 @@ void MainWindow::updateCode()
 		statusBar()->showMessage( mGuidoWidget->getLastErrorMessage() );
 	}
 
-    mGuidoWidget->CloseParser();
 }
 
 //-------------------------------------------------------------------------
@@ -598,8 +596,6 @@ void MainWindow::doexport()
 //    std::vector<std::string> pathsVector;
 //    GuidoGetSymbolPath((ARHandler)mGuidoWidget->getARHandler(), pathsVector);
 
-    guidoPainter->CreateParser();
-
 	if ( guidoPainter->setGMNCode(mTextEdit->toPlainText(), filePath().toUtf8().data()) )
     {
 		QString savePath = mRecentFiles.size() ? QFileInfo(mRecentFiles.last()).path() : QDir::home().path();
@@ -619,8 +615,6 @@ void MainWindow::doexport()
 				exportToImage( guidoPainter, fileName );
 		}
 	}
-
-    guidoPainter->CloseParser();
 
 	QGuidoPainter::destroyGuidoPainter( guidoPainter );
 }
@@ -768,8 +762,6 @@ void MainWindow::print()
 	QPrinter printer;
 	QPainter painter;
 
-    guidoPainter->CreateParser();
-
 	guidoPainter->setGuidoLayoutSettings(mGuidoEngineParams);
 	if ( guidoPainter->setGMNCode(mTextEdit->toPlainText(), filePath().toUtf8().data()) )
 	{
@@ -781,7 +773,6 @@ void MainWindow::print()
 			print (guidoPainter, printer);
 	}
 
-    guidoPainter->CloseParser();
 
 //	else statusBar()->showMessage(tr("Error reading file."));
 	QGuidoPainter::destroyGuidoPainter( guidoPainter );
@@ -997,7 +988,8 @@ void MainWindow::setEngineSettings(const GuidoLayoutSettings& gls,
 		(gls.force != mGuidoEngineParams.force)								|
 		(gls.spring != mGuidoEngineParams.spring)							|
 		(gls.neighborhoodSpacing != mGuidoEngineParams.neighborhoodSpacing)	|
-		(gls.optimalPageFill != mGuidoEngineParams.optimalPageFill)	)
+		(gls.optimalPageFill != mGuidoEngineParams.optimalPageFill)	        |
+        (gls.resizePage2Music != mGuidoEngineParams.resizePage2Music) )
 	{
 		mGuidoEngineParams = gls;
 		mGuidoWidget->setGuidoLayoutSettings( mGuidoEngineParams );
@@ -1626,8 +1618,6 @@ bool MainWindow::loadFile(const QString &fileName)
 
 	setCurrentFile(fileName.toUtf8().data());
 
-    mGuidoWidget->CreateParser();
-
 	bool loadOk = mGuidoWidget->setGMNFile( fileName );
 	if (!loadOk && QGuidoImporter::musicxmlSupported()) {	// try to import file as MusicXML file
 		stringstream out;
@@ -1668,8 +1658,6 @@ bool MainWindow::loadFile(const QString &fileName)
 	
 	recentFileListUpdate(fileName);
 
-    mGuidoWidget->CloseParser();
-	
 	return loadOk;
 }
 

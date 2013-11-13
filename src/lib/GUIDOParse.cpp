@@ -144,10 +144,21 @@ GUIDOAPI(GuidoErrCode) GuidoCloseStream (GuidoStream *s)
 // --------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoWriteStream (GuidoStream *s, const char *str)
 {
-    if( !s || !str )
+    if (!s || !str)
         return guidoErrBadParameter;
 
     s->WriteToStream(str);
+
+	return guidoNoErr;
+}
+
+// --------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoResetStream (GuidoStream *s)
+{
+    if (!s)
+        return guidoErrBadParameter;
+
+    s->ReinitStream();
 
 	return guidoNoErr;
 }
