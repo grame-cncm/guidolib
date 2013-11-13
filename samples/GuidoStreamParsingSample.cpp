@@ -40,7 +40,7 @@ int main()
     ar = GuidoStream2AR(newParser, newStream);
 
     /* Stream flushing */
-    GuidoFlushStream(newStream);
+    GuidoResetStream(newStream);
 
     GuidoWriteStream(newStream, "[ a");
 
