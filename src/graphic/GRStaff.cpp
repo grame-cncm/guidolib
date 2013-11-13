@@ -1525,7 +1525,10 @@ void GRStaff::setStaffFormat(ARStaffFormat * staffrmt)
 		{
 			// other than standard? -> rather n-line ....?
 			const NVstring & mystr = mStaffState.curstaffrmt->getStyle()->getValue();
-			if (mystr.size() && isdigit(mystr[0]) && mystr.substr(1, 5) == "-line")
+			if   (isdigit(mystr[0])
+              && (mystr.size() == 6 || mystr.size() == 7)
+              &&   mystr.substr(1, 5) == "-line"
+              && (!mystr[6] || mystr[6] == 's'))
 			{
 				const int tmp = atoi(mystr.substr(0, 1).c_str());
 				if (tmp >= 0 && tmp <= 7)
