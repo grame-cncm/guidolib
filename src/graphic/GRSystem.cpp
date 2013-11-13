@@ -660,9 +660,12 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 	}
 
 	// - Draws the vertical left border line.
-	hdc.PushPenWidth( kLineThick );
-	hdc.Line( firstStaffPos.x, firstStaffPos.y, lastStaffPos.x, lastStaffPos.y );
-	hdc.PopPenWidth();
+    if (firstStaffPos.x != firstStaffPos.y)
+    {
+        hdc.PushPenWidth( kLineThick );
+        hdc.Line( firstStaffPos.x, firstStaffPos.y, lastStaffPos.x, lastStaffPos.y );
+        hdc.PopPenWidth();
+    }
 
 	// - Now draws the (System)-elements
     DrawSubElements( hdc );
