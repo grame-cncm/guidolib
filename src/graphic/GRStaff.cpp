@@ -172,6 +172,7 @@ GRStaffState::GRStaffState()
 	curstaffrmt = NULL;
 	staffLSPACE = LSPACE;
 	numlines = 5;				// Standard
+    lineThickness = (float)0.08;
 
 	curkey = NULL;
 
@@ -246,6 +247,7 @@ GRStaffState & GRStaffState::operator=(const GRStaffState & tmp)
 		staffLSPACE = curstaffrmt->getSize()->getValue() * 2;
 	}
 	numlines = tmp.numlines; // Standard ...
+    lineThickness = tmp.lineThickness;
 
 	distanceset = tmp.distanceset;
 	distance = tmp.distance;
@@ -1510,24 +1512,28 @@ staff_debug("AddSecondGlue");
 void GRStaff::setStaffFormat(ARStaffFormat * staffrmt)
 {
 	mStaffState.curstaffrmt = staffrmt;
+
 	if (mStaffState.curstaffrmt)
 	{
 		if (mStaffState.curstaffrmt->getSize() && mStaffState.curstaffrmt->getSize()->TagIsSet())
 		{
 			mStaffState.staffLSPACE = mStaffState.curstaffrmt->getSize()->getValue() * 2;
 		}
-		if (mStaffState.curstaffrmt->getStyle() &&
+		
+        if (mStaffState.curstaffrmt->getStyle() &&
 			mStaffState.curstaffrmt->getStyle()->TagIsSet())
 		{
-			// other then standard? -> rather n-line ....?
+			// other than standard? -> rather n-line ....?
 			const NVstring & mystr = mStaffState.curstaffrmt->getStyle()->getValue();
-			if (mystr.size() && mystr.substr(1, 5) == "-line")
+			if (mystr.size() && isdigit(mystr[0]) && mystr.substr(1, 5) == "-line")
 			{
 				const int tmp = atoi(mystr.substr(0, 1).c_str());
 				if (tmp >= 0 && tmp <= 7)
 					mStaffState.numlines = tmp;
 			}
 		}
+        
+        mStaffState.lineThickness = mStaffState.curstaffrmt->getLineThickness();
 	}
 
 	// I have to deal with Size - parameter!
@@ -2044,9 +2050,10 @@ void GRStaff::GGSOutput() const
 {
 	char buffer[200];
 	assert(endglue);
-	snprintf(buffer, 200, "\\draw_staff<%ld,%d,%d,%d,%d>\n", 
+	snprintf(buffer, 200, "\\draw_staff<%ld,%d,%d,%d,%d,%d>\n", 
 		getID(), 
-		mStaffState.numlines, 
+		mStaffState.numlines,
+        mStaffState.lineThickness,
 		(int)(mPosition.x + ggsoffsetx), 
 		(int)(mPosition.y + 4 * LSPACE + ggsoffsety),  
 		(int)(endglue->getPosition().x ));
