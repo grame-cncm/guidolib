@@ -4,7 +4,7 @@
 %
 % The \staffFormat-Tag can be used to change the appearance
 % of a staff. Parameters:
-% - style  			       "n-line" where n is the number of lines 
+% - style  			       "n-line" or "n-lines" where n is the number of lines 
 % - size   			       defining the size of 1 halfspace (standard 3pt)
 %        			            (halfspace is the half the distance between two lines of the staff)
 % - lineThickness       defines the staff lines thickness. Unit is the half space.
@@ -19,7 +19,7 @@
    ( c d e f g a h c2 ) ],
   [ \staffFormat<size=5pt, lineThickness=0.2>  c d e f g a h c2 ],
   [ \staffFormat<style="1-line"> \clef<"none"> g g g g g e h ],
-  [ \staffFormat<style="7-line",size=2pt> c d e f g a h c2 ] }
+  [ \staffFormat<style="7-lines",size=2pt> c d e f g a h c2 ] }
 
 
 
