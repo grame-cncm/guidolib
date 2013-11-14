@@ -34,7 +34,8 @@ public:
     virtual void DrawWithLines( VGDevice & hdc ) const;
 
 protected:
-    int fLineNumber;
+    int   fLineNumber;
+    float fSize;
 };
 
 #endif

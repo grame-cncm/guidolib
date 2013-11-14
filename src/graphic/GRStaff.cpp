@@ -505,7 +505,7 @@ void GRStaff::setNoteParameters(GRNote * inNote)
 	// Reset of accidentals
 	ARNote * arnote = inNote->getARNote();
 	const int tmppitch = arnote->getPitch() - NOTE_C;
-	const int acc = arnote->getAccidentals() - mStaffState.instrKeyArray[tmppitch];
+	const int acc = arnote->getAccidentals() - (int)mStaffState.instrKeyArray[tmppitch];
 //	mStaffState.MeasureAccidentals[tmppitch] = acc + arnote->getDetune();
 	mStaffState.fMeasureAccidentals.setAccidental(tmppitch, arnote->getOctave(), acc + arnote->getDetune());
 }
@@ -712,7 +712,7 @@ AccList * GRStaff::askAccidentals( int p_pit, int p_oct, int p_acc, float detune
 	int pitchclass = p_pit - NOTE_C;
 	const float classAccidental = mStaffState.fMeasureAccidentals.accidental(pitchclass);
 	const float noteAccidental = mStaffState.fMeasureAccidentals.accidental(pitchclass, p_oct);
-	const int shiftparm = mStaffState.instrKeyArray[pitchclass];
+	const int shiftparm = (int)mStaffState.instrKeyArray[pitchclass];
 	const float sounds = shiftparm + noteAccidental;
 	if ((sounds == p_acc + detune)	&& (noteAccidental == classAccidental))
 		return mylist;
@@ -867,7 +867,7 @@ GRRepeatEnd * GRStaff::AddRepeatEnd( ARRepeatEnd * arre )
 //	if (arre->getNumRepeat() == 0 || !arre->getRange())
 	{
         assert (arre);
-		GRRepeatEnd * tmp = new GRRepeatEnd(arre, this, arre->getRelativeTimePosition());
+		GRRepeatEnd * tmp = new GRRepeatEnd(arre);
 		addNotationElement(tmp);
 		return tmp;
 	}
@@ -1992,7 +1992,7 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 	hdc.PopPen();
 
 	*/
-	hdc.PushPenWidth( currentLineThikness() );
+    hdc.PushPenWidth( currentLineThikness() * getSizeRatio());
 	std::map<float,float>::const_iterator it = positions.begin();
 	while (it != positions.end())
 	{
@@ -2001,7 +2001,7 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 		yPos = staffPos.y;
 		for( int i = 0; i < mStaffState.numlines; i++ )
 		{
-			hdc.Line( x1, yPos, x2, yPos );
+			hdc.Line(x1, yPos, x2 - currentLineThikness() * getSizeRatio() / 2, yPos);
 			yPos += lspace;
 		}
 		it++;

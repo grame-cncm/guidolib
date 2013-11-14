@@ -38,10 +38,11 @@ public:
     virtual void  updateBoundingBox();
 
 protected:
-    float	mThickness;
+    float	fBaseThickness;
     static	NVPoint refpos;
     int     fLineNumber;
     float   fStaffThickness;
+    float   fSize;
 };
 
 #endif 

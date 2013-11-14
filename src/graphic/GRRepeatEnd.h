@@ -17,9 +17,8 @@
 
 #include "GRBar.h"
 #include "GRDefine.h"
-#include "GUIDOScoreMap.h"
 
-class ARRepeatEndRangeEnd;
+//class ARRepeatEndRangeEnd; REM: virer ?
 class ARRepeatEnd;
 
 
@@ -28,27 +27,29 @@ class ARRepeatEnd;
 // (JB) It's actually a range tag, so it must derive from Position Tag.
 //class GRRepeatEnd : public GRPTagARNotationElement // was GRTagARNotationElement
 //class GRRepeatEnd : public GRTagARNotationElement
-class GRRepeatEnd : public GRBar
+class GRRepeatEnd : public GRTagARNotationElement
 {
 	public:
 
-				 GRRepeatEnd( ARRepeatEnd * ar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos );
+				 GRRepeatEnd(ARRepeatEnd *arre, bool p_ownsar = false);
 		virtual	~GRRepeatEnd();
 	
 		virtual void	print() const { }
 		virtual unsigned int getTextAlign() const;
 		virtual void	updateBoundingBox();
 		virtual void	setHPosition( float nx);
-		virtual void	GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
+		virtual void	GetMap(GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 		virtual void	OnDraw( VGDevice & hdc ) const;
+        virtual void    tellPosition(GObject * caller, const NVPoint & newPosition);
 
 		virtual const NVPoint & getReferencePosition() const { return refpos; }
 
 	protected:
 		static NVPoint refpos;
-
-	private:
-				void	InitRepeatEnd();
+               float   fBaseThickness;
+               int     fLineNumber;
+               float   fStaffThickness;
+               float   fSize;
 };
 
 #endif
