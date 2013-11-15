@@ -848,9 +848,9 @@ void GRStaff::AddTag(GRNotationElement * grtag)
 // ----------------------------------------------------------------------------
 /** \brief This creates a repeatBegin.
 */
-GRRepeatBegin * GRStaff::AddRepeatBegin(ARRepeatBegin * arrb)
+GRRepeatBegin * GRStaff::AddRepeatBegin(ARRepeatBegin *arrb)
 {
-    assert (arrb);
+    assert(arrb);
 //	GRRepeatBegin * tmp = new GRRepeatBegin(arrb, this, arrb->getRelativeTimePosition());
 	GRRepeatBegin * tmp = new GRRepeatBegin(arrb);
 	addNotationElement(tmp);
@@ -862,16 +862,14 @@ GRRepeatBegin * GRStaff::AddRepeatBegin(ARRepeatBegin * arrb)
 // ----------------------------------------------------------------------------
 /** \brief This creates a repeatEnd 
 */
-GRRepeatEnd * GRStaff::AddRepeatEnd( ARRepeatEnd * arre )
+GRRepeatEnd * GRStaff::AddRepeatEnd(ARRepeatEnd *arre)
 {
-//	if (arre->getNumRepeat() == 0 || !arre->getRange())
-	{
-        assert (arre);
-		GRRepeatEnd * tmp = new GRRepeatEnd(arre);
-		addNotationElement(tmp);
-		return tmp;
-	}
-	return NULL;
+    assert(arre);
+	GRRepeatEnd *tmp = new GRRepeatEnd(arre);
+	addNotationElement(tmp);
+	tmp->setGRStaff(this);
+	tmp->updateBoundingBox();
+	return tmp;
 }
 
 // ----------------------------------------------------------------------------

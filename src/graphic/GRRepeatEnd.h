@@ -18,16 +18,13 @@
 #include "GRBar.h"
 #include "GRDefine.h"
 
-//class ARRepeatEndRangeEnd; REM: virer ?
 class ARRepeatEnd;
 
 
 /** \brief The left facing repeat bar sign.
 */
-// (JB) It's actually a range tag, so it must derive from Position Tag.
-//class GRRepeatEnd : public GRPTagARNotationElement // was GRTagARNotationElement
-//class GRRepeatEnd : public GRTagARNotationElement
 class GRRepeatEnd : public GRTagARNotationElement
+    //class GRRepeatEnd : public GRBar
 {
 	public:
 

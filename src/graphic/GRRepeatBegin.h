@@ -21,7 +21,7 @@
 class ARRepeatBegin;
 
 
-/** \brief not yet documented
+/** \brief The right facing repeat bar sign.
 */
 class GRRepeatBegin : public GRTagARNotationElement
     //class GRRepeatBegin : public GRBar

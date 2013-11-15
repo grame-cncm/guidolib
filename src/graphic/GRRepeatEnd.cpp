@@ -18,8 +18,6 @@
 
 #include "GRRepeatEnd.h"
 #include "GRStaff.h"
-//#include "ARRepeatEndRangeEnd.h" // REM: utile ?
-#include "GUIDOInternal.h"
 #include "VGDevice.h"
 
 using namespace std;
@@ -34,12 +32,9 @@ GRRepeatEnd::GRRepeatEnd(ARRepeatEnd *arre, bool p_ownsar)
 {
 	mNeedsSpring = 1;
 	sconst = SCONST_BAR - 2;
-//	sconst = 5; //SCONST_BAR;
-
 	mSymbol = kRepeatEndSymbol; 
 	mLeftSpace =  mRightSpace = 0;
     refpos = NVPoint (0, 4 * LSPACE);
-	//refpos.Set(-LSPACE * 0.8f, 4 * LSPACE); // REM: lequel est le bon ?
 
     fLineNumber = 5;
     fStaffThickness = 0.08f;
@@ -57,21 +52,22 @@ void GRRepeatEnd::updateBoundingBox()
 {
 	const float halfExtent = GetSymbolExtent(mSymbol) * 0.5f;
 
-	mBoundingBox.top = 0;
-	mBoundingBox.left = - halfExtent/* + refpos.x*/; // REM: laisser commenté ?
-	mBoundingBox.right = halfExtent/* + refpos.x*/;  // REM: laisser commenté ?
+	mBoundingBox.top    = 0;
+	mBoundingBox.left   = - halfExtent;
+	mBoundingBox.right  = halfExtent;
 	mBoundingBox.bottom = 4 * LSPACE;
 
     GRStaff *staff = getGRStaff();
 
     if (staff)
     {
+        fLineNumber = staff->getNumlines();
+
         int linesOffset = fLineNumber - 5;
 
         if (linesOffset)
             mPosition.y += staff->getStaffLSPACE() * linesOffset / 2;
 
-        fLineNumber = staff->getNumlines();
         fStaffThickness = staff->getLineThickness();
         fSize = staff->getSizeRatio();
         fBaseThickness = LSPACE * 0.6f * fSize;
@@ -122,7 +118,7 @@ void GRRepeatEnd::OnDraw( VGDevice & hdc ) const
 	const float x1 = mPosition.x - mBoundingBox.Width() + 2;
 	const float x2 = x1 + spacing;
     const float y1 = mPosition.y + offsety1 * fSize;
-	const float y2 = y1 + mBoundingBox.bottom + offsety2 * fSize;
+	const float y2 = y1 + (mBoundingBox.bottom + offsety2) * fSize;
 
     float leftLineThickness = 1.8f * kLineThick * fSize;
 
@@ -146,7 +142,7 @@ void GRRepeatEnd::OnDraw( VGDevice & hdc ) const
     int   pointSymbol = 220;
     float pointOffsety1 = - 5 * fSize + offsety1AccordingToLineNumber;
     float pointOffsety2 = pointOffsety1 + LSPACE * fSize + offsety2AccordingToLineNumber;
-    float pointOffsetx = 55 * fSize - 85;
+    float pointOffsetx = -30 * fSize - 90;
     float pointSize = 0.4f * fSize;
 
     DrawSymbol(hdc, pointSymbol, pointOffsetx, pointOffsety1, pointSize);

@@ -19,7 +19,6 @@
 #include "GRRepeatBegin.h"
 #include "GRStaff.h"
 #include "VGDevice.h"
-#include "GUIDOInternal.h"
 
 using namespace std;
 
@@ -53,21 +52,22 @@ void GRRepeatBegin::updateBoundingBox()
 {
 	const float halfExtent = GetSymbolExtent(mSymbol) * 0.5f;
 
-	mBoundingBox.top = 0;
-	mBoundingBox.left = -halfExtent;
-	mBoundingBox.right = halfExtent;
+	mBoundingBox.top    = 0;
+	mBoundingBox.left   = -halfExtent;
+	mBoundingBox.right  = halfExtent;
 	mBoundingBox.bottom = 4 * LSPACE;
 
     GRStaff *staff = getGRStaff();
 
     if (staff)
     {
+        fLineNumber = staff->getNumlines();
+
         int linesOffset = fLineNumber - 5;
 
         if (linesOffset)
             mPosition.y += staff->getStaffLSPACE() * linesOffset / 2;
 
-        fLineNumber = staff->getNumlines();
         fStaffThickness = staff->getLineThickness();
         fSize = staff->getSizeRatio();
         fBaseThickness = LSPACE * 0.6f * fSize;
