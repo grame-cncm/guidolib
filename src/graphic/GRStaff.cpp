@@ -1990,22 +1990,28 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 	hdc.PopPen();
 
 	*/
-    hdc.PushPenWidth( currentLineThikness() * getSizeRatio());
-	std::map<float,float>::const_iterator it = positions.begin();
-	while (it != positions.end())
-	{
-		float x1 = it->first;
-		float x2 = it->second;
-		yPos = staffPos.y;
-		for( int i = 0; i < mStaffState.numlines; i++ )
-		{
-			hdc.Line(x1, yPos, x2 - currentLineThikness() * getSizeRatio() / 2, yPos);
-			yPos += lspace;
-		}
-		it++;
-	}
+    float sizeRatio = getSizeRatio();
 
-	hdc.PopPenWidth();
+    if (sizeRatio > 0.05)
+    {
+        hdc.PushPenWidth(currentLineThikness() * getSizeRatio());
+        std::map<float,float>::const_iterator it = positions.begin();
+        
+        while (it != positions.end())
+        {
+            float x1 = it->first;
+            float x2 = it->second;
+            yPos = staffPos.y;
+            for( int i = 0; i < mStaffState.numlines; i++ )
+            {
+                hdc.Line(x1, yPos, x2 - currentLineThikness() * getSizeRatio() / 2, yPos);
+                yPos += lspace;
+            }
+            it++;
+        }
+
+        hdc.PopPenWidth();
+    }
 }
 
 // ----------------------------------------------------------------------------
