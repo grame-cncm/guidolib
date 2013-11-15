@@ -476,8 +476,13 @@ NVPoint GRBeam::initp0 (GRSystemStartEndStruct * sse, const GREvent * startEl, P
 	else
 	{
 		// This depends on the direction, we do not know this yet (do we?)
-		if (infos.oneNote) {
-			st->p[0].x -= TagParameterFloat::convertValue((float)2.0,"hs", infos.currentLSPACE) * infos.currentSize;
+		if (infos.oneNote)
+        {
+            double result;
+            bool conversionOk = TagParameterFloat::convertValue(2.0f, result, "hs", infos.currentLSPACE);
+
+            if (conversionOk)
+                st->p[0].x -= (float)result * infos.currentSize;
 		}
 	}
 
@@ -497,15 +502,33 @@ void GRBeam::initp1 (GRSystemStartEndStruct * sse, PosInfos& infos)
 	else
 	{
 		if (infos.oneNote)
-			st->p[1].x -= TagParameterFloat::convertValue(2.0f,"hs", infos.currentLSPACE) * infos.currentSize;
+        {
+            double result;
+            bool conversionOk = TagParameterFloat::convertValue(2.0f, result, "hs", infos.currentLSPACE);
+			
+            if (conversionOk)
+                st->p[1].x -= (float)result * infos.currentSize;
+        }
 	}
 	if (arBeam->dy2 && arBeam->dy2->TagIsSet())
 		st->p[1].y -= (GCoord)(arBeam->dy2->getValue(infos.currentLSPACE));
 	else {
 		if (infos.stemdir == dirUP)
-			st->p[1].y = st->p[0].y + TagParameterFloat::convertValue(0.9f,"hs", infos.currentLSPACE) * infos.currentSize;
+        {
+            double result;
+            bool conversionOk = TagParameterFloat::convertValue(0.9f, result, "hs", infos.currentLSPACE);
+			
+            if (conversionOk)
+                st->p[1].y = st->p[0].y + (float)result * infos.currentSize;
+        }
 		else if (infos.stemdir == dirDOWN)
-			st->p[1].y = st->p[0].y - TagParameterFloat::convertValue(0.9f,"hs", infos.currentLSPACE) * infos.currentSize;
+        {
+            double result;
+            bool conversionOk = TagParameterFloat::convertValue(0.9f, result, "hs", infos.currentLSPACE);
+			
+            if (conversionOk)
+                st->p[1].y = st->p[0].y - (float)result * infos.currentSize;
+        }
 	}
 }
 
@@ -564,9 +587,21 @@ void GRBeam::initp3 (GRSystemStartEndStruct * sse, PosInfos& infos)
 		st->p[3].y -= (arBeam->dy4->getValue(infos.currentLSPACE));
 	else {
 		if (infos.stemdir == dirUP)
-			st->p[3].y =  st->p[2].y + (GCoord) (infos.currentSize * TagParameterFloat::convertValue( 0.9f,"hs", infos.currentLSPACE));
+        {
+            double result;
+            bool conversionOk = TagParameterFloat::convertValue(0.9f, result, "hs", infos.currentLSPACE);
+			
+            if (conversionOk)
+                st->p[3].y = st->p[2].y + (GCoord)((float)result * infos.currentSize);
+        }
 		else if (infos.stemdir == dirDOWN)
-			st->p[3].y = st->p[2].y - (GCoord) (infos.currentSize * TagParameterFloat::convertValue( 0.9f,"hs", infos.currentLSPACE));
+        {
+            double result;
+            bool conversionOk = TagParameterFloat::convertValue(0.9f, result, "hs", infos.currentLSPACE);
+			
+            if (conversionOk)
+                st->p[3].y = st->p[2].y - (GCoord)((float)result * infos.currentSize);
+        }
 	}
 }
 

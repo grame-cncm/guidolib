@@ -20,7 +20,6 @@
 #include "ListOfStrings.h"
 
 #include "GRDefine.h"
-//#include "../parser/gmntools.h" // for gd_convertUnits
 #include "gmntools.h" // for gd_convertUnits
 
 ListOfTPLs ARStaffFormat::ltpls(1);
@@ -80,11 +79,20 @@ void ARStaffFormat::setTagParameterList(TagParameterList & tpl)
 				// one idea is to adjust the size, so that it matches an integer (internally)
 				float intunits = size->getValue();		// per halfspace ...
 				// Integer internal units 
-				const int Iintunits = (int) (intunits + 0.5);
+				const int Iintunits  = (int)(intunits + 0.5);
 				const double cmunits = Iintunits * kVirtualToCm;
-				const char * unit = size->getUnit();
-				intunits = (float)gd_convertUnits(cmunits,"cm",unit);
-				size->setValue( intunits );
+				const char *unit     = size->getUnit();
+
+                double result;
+				bool conversionOk    = gd_convertUnits(cmunits, "cm", unit, result);
+
+                if (conversionOk)
+				    size->setValue(result);
+                else
+                {
+                    delete size;
+                    size = NULL;
+                }
 			}
 
 			TagParameterFloat* fval =  TagParameterFloat::cast(rtpl->RemoveHead());
