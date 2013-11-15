@@ -1111,7 +1111,7 @@ void GRSingleNote::handleAccidental (const ARAcc* acc)
 		// no accidentals! we need to force accidentals ...
 		int mynewacc = arnote->getAccidentals() * 2 + ARNote::detune2Quarters(arnote->getDetune());
 		if (mynewacc != 0) 
-			myacc->setAccidentalByQuarter(mynewacc, getOffset().x, mNoteBreite);
+			myacc->setAccidentalByQuarter(mynewacc, (int)getOffset().x, mNoteBreite);
 
 		myacc->setPosition( getPosition());
 		AddTail(myacc);
@@ -1135,7 +1135,7 @@ void GRSingleNote::handleAccidental (const ARAcc* acc)
 			el->setSize(acc->getSize()->getValue());
 
 		if (acc->getStyle() == ARAcc::kCautionary) {
-			if (el) el->setCautionary (getOffset().x, mNoteBreite);			
+			if (el) el->setCautionary ((int)getOffset().x, mNoteBreite);			
 		}
 		// color...
 	}
