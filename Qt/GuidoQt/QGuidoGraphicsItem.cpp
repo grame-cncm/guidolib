@@ -75,6 +75,19 @@ bool QGuidoGraphicsItem::setGMNCode(const QString& gmnCode, const QString& path)
 	return false;
 }
 
+	
+//-------------------------------------------------------------------------
+bool QGuidoGraphicsItem::setGMNStream(GuidoStream * gmnStream)
+{
+    if ( mGuidoPainter->setGMNStream( gmnStream ))
+	{
+		updateGuidoPagesSizes();
+        guidoItemUpdate();
+		return true;
+	}
+	return false;
+}
+
 //-------------------------------------------------------------------------
 QString QGuidoGraphicsItem::gmnCode() const
 {

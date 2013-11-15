@@ -167,6 +167,13 @@ bool QGuidoPainter::setGMNCode( const QString& gmnCode, const char* datapath )
 }
 
 //-------------------------------------------------------------------------
+bool QGuidoPainter::setGMNStream(GuidoStream * gmnStream)
+{
+    mGMNStream = gmnStream;
+    return setGMNDataStream(gmnStream);
+}
+
+//-------------------------------------------------------------------------
 void QGuidoPainter::setARHandler( ARHandler ar )
 {
 	if (!ar) return;
@@ -183,6 +190,40 @@ void QGuidoPainter::setARHandler( ARHandler ar )
 	GuidoSetDefaultPageFormat( &currentFormat );
 	if ( mResizePageToMusic )
 		mLastErr = GuidoResizePageToMusic( mDesc.handle );
+}
+
+//-------------------------------------------------------------------------
+bool QGuidoPainter::setGMNDataStream (GuidoStream * guidoStream)
+{
+    // Read the gmnStream and build the score's Abstract Representation,
+	// containing all the notes, rests, staffs, lyrics ...
+	ARHandler arh;
+	GRHandler grh;
+
+    arh = GuidoStream2AR(fParser, guidoStream);
+
+    if (!arh)
+        return false;
+    
+	// Build a new score Graphic Representation according the score's Abstract Representation.
+	GuidoPageFormat currentFormat;
+	GuidoGetDefaultPageFormat ( &currentFormat );
+	GuidoSetDefaultPageFormat( &mPageFormat );
+
+	mLastErr = GuidoAR2GR (arh, &mLayoutSettings , &grh);
+
+	GuidoSetDefaultPageFormat( &currentFormat );
+	if (mLastErr == guidoNoErr)
+	{
+		GuidoFreeGR( mDesc.handle );
+		mDesc.handle = grh;
+		GuidoFreeAR( mARHandler );
+		mARHandler = arh;
+		if ( mResizePageToMusic )
+			mLastErr = GuidoResizePageToMusic( mDesc.handle );
+	}
+	return (mLastErr == guidoNoErr);
+
 }
 
 //-------------------------------------------------------------------------

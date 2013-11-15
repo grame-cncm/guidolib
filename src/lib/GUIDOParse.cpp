@@ -131,6 +131,12 @@ GUIDOAPI(GuidoStream *) GuidoOpenStream ()
 }
 
 // --------------------------------------------------------------------------
+GUIDOAPI(std::string) GuidoGetGlobalStream (GuidoStream * gStream)
+{
+    return gStream->str();
+}
+
+// --------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoCloseStream (GuidoStream *s)
 {
     if (!s)

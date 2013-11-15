@@ -156,13 +156,13 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 		hdc.SetTextFont( hmyfont );
 
 		if(sse->startflag != GRSystemStartEndStruct::OPENLEFT)
-<<<<<<< HEAD
+//<<<<<<< HEAD
 			hdc.DrawString(st->DurationLine[2].x+LSPACE/4, st->DurationLine[2].y+LSPACE/2, fraction, n);
-=======
+//=======
 			hdc.DrawString(st->DurationLine[2].x, st->DurationLine[2].y+LSPACE/2, fraction, n);
 
         hdc.PopPenWidth();
->>>>>>> refs/remotes/origin/dev
+//>>>>>>> refs/remotes/origin/dev
 	}
 
 	if (mColRef) {

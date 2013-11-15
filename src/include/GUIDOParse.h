@@ -50,6 +50,13 @@ extern "C" {
 	GUIDOAPI(GuidoErrCode)		GuidoCloseParser (GuidoParser *p);
 
 	/*!
+		\brief returns the parameter fTheGlobalStringStream of the GuidoStream
+		\param gStream a GuidoStream
+        \return a std::stringstream.
+	*/
+    GUIDOAPI(std::string) GuidoGetGlobalStream (GuidoStream * gStream);
+
+	/*!
 		\brief Parse a file and create the corresponding AR
 		\param p a parser previously opened with GuidoOpenParser
 		\param file the file to parse.

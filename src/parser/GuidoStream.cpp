@@ -38,19 +38,14 @@ void GuidoStream::WriteToStream(const char* inStr)
 {
     /* Append inStr (written by user) to global string */
     *fTheGlobalStringStream << inStr;
-
     /* Create a temporary string from the global string */
     string *tmpString = new string(fTheGlobalStringStream->str());
-
     /* Build tags stack from the global string */
     stack<char> *charStack = AnalyzeString(fTheGlobalStringStream);
-    
     /* Complete temporary string with appropriate tags from tags stack */
     WriteNewString(charStack, tmpString);
-
     /* Set the final stringstream (this) from the temporary string */
     this->str(*tmpString);
-
     delete tmpString;
 }
 
@@ -60,7 +55,6 @@ stack<char> *GuidoStream::AnalyzeString(stringstream *inStr)
     stack<char> *charStack = new stack<char>();
 
     string stringToAnalyze(inStr->str());
-
     bool errorFound = false;
 
     /* Get current char, and push its opposite in the stack if it's a tag ("{," "[," "(," "<") */
@@ -83,42 +77,38 @@ stack<char> *GuidoStream::AnalyzeString(stringstream *inStr)
         /* If current char is a closing tag and corresponds to the top of the stack, stack's first element is popped.
            Else, there is a syntax error and we leave. */
         case '}':
-            if (charStack->top() == '}')
+            if (charStack->size() && charStack->top() == '}')
                 charStack->pop();
             else
             {
                 /* Syntax error */
-                cout << "Unexpected " << charStack->top() << ", expecting }" << endl; // REM: à laisser ?
                 errorFound = true;
             }
             break;
         case ']':
-            if (charStack->top() == ']')
+            if (charStack->size() && charStack->top() == ']')
                 charStack->pop();
             else
             {
                 /* Syntax error */
-                cout << "Unexpected " << charStack->top() << ", expecting ]" << endl;
                 errorFound = true;
             }
             break;
         case ')':
-            if (charStack->top() == ')')
+            if (charStack->size() && charStack->top() == ')')
                 charStack->pop();
             else
             {
                 /* Syntax error */
-                cout << "Unexpected " << charStack->top() << ", expecting )" << endl;
                 errorFound = true;
             }
             break;
         case '>':
-            if (charStack->top() == '>')
+            if (charStack->size() && charStack->top() == '>')
                 charStack->pop();
             else
             {
                 /* Syntax error */
-                cout << "Unexpected " << charStack->top() << ", expecting >" << endl;
                 errorFound = true;
             }
             break;
@@ -126,7 +116,8 @@ stack<char> *GuidoStream::AnalyzeString(stringstream *inStr)
             break;
         }
     }
-
+    
+    
     return charStack;
 }
 
