@@ -24,6 +24,44 @@ Note about MIDI export:
     in binary form in the src/midisharelight folder. Thus there is no additional step.
     On linux, you must get the library source code, compile and install.
 	
+Note for Android:
+-------------------------
+    Download the Android SDK and NDK.
+
+    From the build/tools directory of the NDK, invoke make-standalone-toolchain.sh
+    to make a standalone toolchain in the directory of your choice (see NDK)
+    documentation for how.  I will call the path to your standalone toolchain
+    $PATH_TO_STANDALONE_TOOLCHAIN, the path to the SDK $PATH_TO_SDK and the
+    path to android cmake $PATH_TO_ANDROID_CMAKE.
+
+    Get android-cmake: https://github.com/taka-no-me/android-cmake.
+    This is the best version for now - get the least buggy one...
+
+    Modify your path to contain the following.  Otherwise, the compiler
+    won't find things like the standard library.
+
+    export PATH=$PATH:$PATH_TO_SDK/tools
+    export PATH=$PATH:$PATH_TO_SDK/platform-tools
+    export PATH=$PATH:$PATH_TO_STANDALONE_TOOLCHAIN/bin
+
+    export ANDROID_NDK_TOOLCHAIN_ROOT=$PATH_TO_STANDALONE_TOOLCHAIN
+    export ANDTOOLCHAIN=$PATH_TO_ANDROID_CMAKE/android.toolchain.cmake
+    you may have to do instead...
+    export ANDTOOLCHAIN=$PATH_TO_ANDROID_CMAKE/toolchain/android.toolchain.cmake
+
+    depending on where you get android.toolchain.cmake from.
+
+    Then, in your build directory, make an android folder.  From this folder, call:
+    cmake -DCMAKE_TOOLCHAIN_FILE=$ANDTOOLCHAIN -DANDROID=1 -DSTATICLIB=yes ../../cmake
+    make
+
+    It should result in something like:
+    Linking CXX shared library /Users/mikesolomon/devel/guidolib-code/cmake/libs/armeabi-v7a/libGUIDOEngine.so
+    obviously with your path...
+
+    After this, make sure that all libraries are linked against this.
+    For example, for anything Qt related, use this library in the .pro file.
+
 Note for Linux platforms:
 --------------------------
 	You need to have libcairo2-dev installed to compile the GUIDOEngine.
