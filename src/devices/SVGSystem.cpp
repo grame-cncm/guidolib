@@ -19,25 +19,25 @@ using namespace std;
 //______________________________________________________________________________
 VGDevice* SVGSystem::CreateDisplayDevice(ostream& outstream, const char* fontfile)
 {
-	return new SVGDevice (outstream, this, fontfile);
+	return new SVGDevice (outstream, this, fontfile, 0);
 }
 
 //______________________________________________________________________________
 VGDevice* SVGSystem::CreateDisplayDevice()
 {
-	return new SVGDevice (cout, this, 0);
+	return new SVGDevice (cout, this, 0, 0);
 }
 
 //______________________________________________________________________________
 VGDevice* SVGSystem::CreateDisplayDevice(const char* fontfile)
 {
-	return new SVGDevice (cout, this, fontfile);
+	return new SVGDevice (cout, this, fontfile, 0);
 }
 
 //______________________________________________________________________________
 VGDevice* SVGSystem::CreateMemoryDevice( int w, int h)
 {
-	SVGDevice* device = new SVGDevice (cout, this, 0);
+	SVGDevice* device = new SVGDevice (cout, this, 0, 0);
 	device->NotifySize( w, h );
 	return device;
 }
@@ -45,7 +45,7 @@ VGDevice* SVGSystem::CreateMemoryDevice( int w, int h)
 //______________________________________________________________________________
 VGDevice* SVGSystem::CreateMemoryDevice( int w, int h, const char* fontfile )
 {
-	SVGDevice* device = new SVGDevice (cout, this, fontfile);
+	SVGDevice* device = new SVGDevice (cout, this, fontfile, 0);
 	device->NotifySize( w, h );
 	return device;
 }
@@ -53,7 +53,7 @@ VGDevice* SVGSystem::CreateMemoryDevice( int w, int h, const char* fontfile )
 //______________________________________________________________________________
 VGDevice* SVGSystem::CreateMemoryDevice(const char * inPath)
 {
-    SVGDevice* device = new SVGDevice (cout, this, 0);
+    SVGDevice* device = new SVGDevice (cout, this, 0, 0);
 	return device;
 }
 
@@ -63,7 +63,7 @@ VGDevice* SVGSystem::CreatePrinterDevice( )							{ return 0; }
 //______________________________________________________________________________
 VGDevice* SVGSystem::CreateAntiAliasedMemoryDevice( int w, int h )
 {
-	SVGDevice* device = new SVGDevice (cout, this);
+	SVGDevice* device = new SVGDevice (cout, this, 0, 0);
 	device->NotifySize( w, h );
 	return device;
 }

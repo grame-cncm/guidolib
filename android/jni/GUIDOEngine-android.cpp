@@ -2,6 +2,8 @@
 #include "GUIDOParse.h"
 #include "CairoSystem.h"
 
+#include "guido2.h"
+
 #include <string>
 #include <sstream>
 
@@ -73,7 +75,7 @@ Java_com_grame_guidoandroid_GuidoAndroid_gmntosvg(JNIEnv *env, jobject thisObj, 
 
     std::stringstream out;
 
-    err = GuidoSVGExport (grh, 1, out, 0);
+    err = GuidoSVGExport (grh, 1, out, 0, guido2);
     if (err != guidoNoErr) {
       env->ReleaseStringUTFChars(java_gmn, gmn);  // release resources
       return NULL;
