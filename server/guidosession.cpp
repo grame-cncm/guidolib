@@ -769,7 +769,7 @@ guidosessionresponse guidosession::genericReturnImage()
       }
       GuidoErrCode err;
       stringstream mystream;
-      err = GuidoSVGExport(grh_, page_, mystream, "");
+      err = GuidoSVGExport(grh_, page_, mystream, 0);
       if (err != guidoNoErr) {
         return genericFailure ("Could not convert the image.", 400, id_);
       }

@@ -16,13 +16,14 @@ win32: {
 }
 
 # GUIDOEngine library link for each platform
-!DebugBuild {
-	macx:LIBS += -F../../build/MacOS/Release -framework GUIDOEngine
-	unix:!macx:LIBS += -L../../cmake -lGUIDOEngine
-} else {
-	macx:LIBS += -F../../build/MacOS/Debug -framework GUIDOEngine
-	unix:!macx:LIBS += -L../../cmake -lGUIDOEngine
-}
+#!DebugBuild {
+#	macx:LIBS += -F../../build/MacOS/Release -framework GUIDOEngine
+#	unix:!macx:LIBS += -L../../cmake -lGUIDOEngine
+#} else {
+#	macx:LIBS += -F../../build/MacOS/Debug -framework GUIDOEngine
+#	unix:!macx:LIBS += -L../../cmake -lGUIDOEngine
+#}
+!win32:LIBS += -L../../build/unix -lSGUIDOEngine
 win32:LIBS += $$GUIDO
 
 INCLUDEPATH += ../../src/include
