@@ -233,19 +233,7 @@ void ARPageFormat::setTagParameterList(	TagParameterList & tpl )
 
 	ClipSize();
 
-	// - (JB) Should be replaced by AdjustMargins() ? -> 
-	if ( mSizeX - mLeft - mRight < MINSIZEX )
-	{
-		mLeft = 0;
-		mRight = 0;
-	}
-
-	if (mSizeY - mTop - mBottom < MINSIZEY )
-	{
-		mTop = 0;
-		mBottom = 0;
-	}
-	// <-
+    AdjustMargins();
 
 	tpl.RemoveAll();
 
@@ -283,16 +271,9 @@ ARPageFormat::ClipSize()
 void	
 ARPageFormat::AdjustMargins()
 {
-	if ( mSizeX - mLeft - mRight < MINSIZEX )
-	{
-		// changed by jk
-		// mLeft = mRight = 0;
-		mLeft = mRight = (mSizeX - MINSIZEX) * 0.5f;
-	}
-	if (mSizeY - mTop - mBottom < MINSIZEY )
-	{
-		// changed by jk
-		// mTop = mBottom = 0;
-		mTop = mBottom = (mSizeY - MINSIZEY) * 0.5f;
-	}
+	if ( mSizeX - mLeft - mRight <= 0.1 ) // If horizontal margins sum if higher or equal than width,
+		mLeft = mRight = 0;             // we set both left and right margin to 0.
+
+	if (mSizeY - mTop - mBottom <= 0.1 )  // Idem for vertical margins.
+		mTop = mBottom = 0;
 }

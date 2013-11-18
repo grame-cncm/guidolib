@@ -172,6 +172,7 @@ GRStaffState::GRStaffState()
 	curstaffrmt = NULL;
 	staffLSPACE = LSPACE;
 	numlines = 5;				// Standard
+    lineThickness = (float)0.08;
 
 	curkey = NULL;
 
@@ -246,6 +247,7 @@ GRStaffState & GRStaffState::operator=(const GRStaffState & tmp)
 		staffLSPACE = curstaffrmt->getSize()->getValue() * 2;
 	}
 	numlines = tmp.numlines; // Standard ...
+    lineThickness = tmp.lineThickness;
 
 	distanceset = tmp.distanceset;
 	distance = tmp.distance;
@@ -503,7 +505,7 @@ void GRStaff::setNoteParameters(GRNote * inNote)
 	// Reset of accidentals
 	ARNote * arnote = inNote->getARNote();
 	const int tmppitch = arnote->getPitch() - NOTE_C;
-	const int acc = arnote->getAccidentals() - mStaffState.instrKeyArray[tmppitch];
+	const int acc = arnote->getAccidentals() - (int)mStaffState.instrKeyArray[tmppitch];
 //	mStaffState.MeasureAccidentals[tmppitch] = acc + arnote->getDetune();
 	mStaffState.fMeasureAccidentals.setAccidental(tmppitch, arnote->getOctave(), acc + arnote->getDetune());
 }
@@ -661,9 +663,10 @@ int GRStaff::getNumHelplines(TYPE_PITCH pit, TYPE_REGISTER oct) const
 	// we get a "rounding-problem" for non-standard sizes ...
 	// therfore we do it differently ...
 
-	// we calculate the difference 
+	// we calculate the difference
+	if (getStaffLSPACE() < kMinNoteSize) return 0;
+
 	float calc = getNotePosition(pit, oct) / getStaffLSPACE();
-	
 	if (calc<0)		calc -= 0.25f;
 	else			calc += 0.25f;
 
@@ -710,7 +713,7 @@ AccList * GRStaff::askAccidentals( int p_pit, int p_oct, int p_acc, float detune
 	int pitchclass = p_pit - NOTE_C;
 	const float classAccidental = mStaffState.fMeasureAccidentals.accidental(pitchclass);
 	const float noteAccidental = mStaffState.fMeasureAccidentals.accidental(pitchclass, p_oct);
-	const int shiftparm = mStaffState.instrKeyArray[pitchclass];
+	const int shiftparm = (int)mStaffState.instrKeyArray[pitchclass];
 	const float sounds = shiftparm + noteAccidental;
 	if ((sounds == p_acc + detune)	&& (noteAccidental == classAccidental))
 		return mylist;
@@ -846,9 +849,9 @@ void GRStaff::AddTag(GRNotationElement * grtag)
 // ----------------------------------------------------------------------------
 /** \brief This creates a repeatBegin.
 */
-GRRepeatBegin * GRStaff::AddRepeatBegin(ARRepeatBegin * arrb)
+GRRepeatBegin * GRStaff::AddRepeatBegin(ARRepeatBegin *arrb)
 {
-    assert (arrb);
+    assert(arrb);
 //	GRRepeatBegin * tmp = new GRRepeatBegin(arrb, this, arrb->getRelativeTimePosition());
 	GRRepeatBegin * tmp = new GRRepeatBegin(arrb);
 	addNotationElement(tmp);
@@ -860,16 +863,14 @@ GRRepeatBegin * GRStaff::AddRepeatBegin(ARRepeatBegin * arrb)
 // ----------------------------------------------------------------------------
 /** \brief This creates a repeatEnd 
 */
-GRRepeatEnd * GRStaff::AddRepeatEnd( ARRepeatEnd * arre )
+GRRepeatEnd * GRStaff::AddRepeatEnd(ARRepeatEnd *arre)
 {
-//	if (arre->getNumRepeat() == 0 || !arre->getRange())
-	{
-        assert (arre);
-		GRRepeatEnd * tmp = new GRRepeatEnd(arre, this, arre->getRelativeTimePosition());
-		addNotationElement(tmp);
-		return tmp;
-	}
-	return NULL;
+    assert(arre);
+	GRRepeatEnd *tmp = new GRRepeatEnd(arre);
+	addNotationElement(tmp);
+	tmp->setGRStaff(this);
+	tmp->updateBoundingBox();
+	return tmp;
 }
 
 // ----------------------------------------------------------------------------
@@ -1510,24 +1511,31 @@ staff_debug("AddSecondGlue");
 void GRStaff::setStaffFormat(ARStaffFormat * staffrmt)
 {
 	mStaffState.curstaffrmt = staffrmt;
+
 	if (mStaffState.curstaffrmt)
 	{
 		if (mStaffState.curstaffrmt->getSize() && mStaffState.curstaffrmt->getSize()->TagIsSet())
 		{
 			mStaffState.staffLSPACE = mStaffState.curstaffrmt->getSize()->getValue() * 2;
 		}
-		if (mStaffState.curstaffrmt->getStyle() &&
+		
+        if (mStaffState.curstaffrmt->getStyle() &&
 			mStaffState.curstaffrmt->getStyle()->TagIsSet())
 		{
-			// other then standard? -> rather n-line ....?
+			// other than standard? -> rather n-line ....?
 			const NVstring & mystr = mStaffState.curstaffrmt->getStyle()->getValue();
-			if (mystr.substr(1, 5) == "-line")
+			if   (isdigit(mystr[0])
+              && (mystr.size() == 6 || mystr.size() == 7)
+              &&   mystr.substr(1, 5) == "-line"
+              && (!mystr[6] || mystr[6] == 's'))
 			{
 				const int tmp = atoi(mystr.substr(0, 1).c_str());
 				if (tmp >= 0 && tmp <= 7)
 					mStaffState.numlines = tmp;
 			}
 		}
+        
+        mStaffState.lineThickness = mStaffState.curstaffrmt->getLineThickness();
 	}
 
 	// I have to deal with Size - parameter!
@@ -1962,7 +1970,9 @@ void GRStaff::DrawStaffUsingSymbolRepeat( VGDevice & hdc ) const
 
 // ----------------------------------------------------------------------------
 float GRStaff::currentLineThikness() const
-{ return mStaffState.curstaffrmt ? mStaffState.curstaffrmt->getLineThickness() : kLineThick; }
+{
+    return mStaffState.curstaffrmt ? mStaffState.curstaffrmt->getLineThickness() : kLineThick;
+}
 
 // ----------------------------------------------------------------------------
 /** \brief Draws the staff lines with vector lines.
@@ -1981,22 +1991,27 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 	hdc.PopPen();
 
 	*/
-	hdc.PushPenWidth( currentLineThikness() );
-	std::map<float,float>::const_iterator it = positions.begin();
-	while (it != positions.end())
-	{
-		float x1 = it->first;
-		float x2 = it->second;
-		yPos = staffPos.y;
-		for( int i = 0; i < mStaffState.numlines; i++ )
-		{
-			hdc.Line( x1, yPos, x2, yPos );
-			yPos += lspace;
-		}
-		it++;
-	}
+    float sizeRatio = getSizeRatio();
+    if (sizeRatio > 0.05)
+    {
+        hdc.PushPenWidth(currentLineThikness() * getSizeRatio());
+        std::map<float,float>::const_iterator it = positions.begin();
+        
+        while (it != positions.end())
+        {
+            float x1 = it->first;
+            float x2 = it->second;
+            yPos = staffPos.y;
+            for( int i = 0; i < mStaffState.numlines; i++ )
+            {
+                hdc.Line(x1, yPos, x2 - currentLineThikness() * getSizeRatio() / 2, yPos);
+                yPos += lspace;
+            }
+            it++;
+        }
 
-	hdc.PopPenWidth();
+        hdc.PopPenWidth();
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -2042,9 +2057,10 @@ void GRStaff::GGSOutput() const
 {
 	char buffer[200];
 	assert(endglue);
-	snprintf(buffer, 200, "\\draw_staff<%ld,%d,%d,%d,%d>\n", 
+	snprintf(buffer, 200, "\\draw_staff<%ld,%d,%d,%d,%d,%d>\n", 
 		getID(), 
-		mStaffState.numlines, 
+		mStaffState.numlines,
+        mStaffState.lineThickness,
 		(int)(mPosition.x + ggsoffsetx), 
 		(int)(mPosition.y + 4 * LSPACE + ggsoffsety),  
 		(int)(endglue->getPosition().x ));

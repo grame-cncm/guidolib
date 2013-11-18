@@ -55,13 +55,23 @@ Bitmap::~Bitmap()
 // --------------------------------------------------------------
 float Bitmap::GetProportionalHeight (float width) const
 {
-	return width * fDevice->GetHeight() / fDevice->GetWidth();
+    float propHeight = 0;
+
+    if (fDevice)
+	    propHeight = width * fDevice->GetHeight() / fDevice->GetWidth();
+
+    return propHeight;
 }
 
 // --------------------------------------------------------------
 float Bitmap::GetProportionalWidth (float height) const
 {
-	return height * fDevice->GetWidth() / fDevice->GetHeight();
+    float propWidth = 0;
+
+    if (fDevice)
+	    propWidth = height * fDevice->GetWidth() / fDevice->GetHeight();
+
+    return propWidth;
 }
 
 // --------------------------------------------------------------
