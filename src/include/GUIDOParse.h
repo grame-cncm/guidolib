@@ -50,11 +50,11 @@ extern "C" {
 	GUIDOAPI(GuidoErrCode)		GuidoCloseParser (GuidoParser *p);
 
 	/*!
-		\brief returns the parameter fTheGlobalStringStream of the GuidoStream
+		\brief returns the string of the GuidoStream
 		\param gStream a GuidoStream
-        \return a std::stringstream.
+        \return a std::string.
 	*/
-    GUIDOAPI(std::string) GuidoGetGlobalStream (GuidoStream * gStream);
+    GUIDOAPI(std::string) GuidoGetGlobalString (GuidoStream * gStream);
 
 	/*!
 		\brief Parse a file and create the corresponding AR

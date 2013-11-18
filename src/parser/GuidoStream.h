@@ -30,7 +30,6 @@ public:
 
     void     WriteToStream(const char* str);
     
-    stringstream * getGlobalStringStream() { return fTheGlobalStringStream;}
 
     /* Clears this' state flags */
     void     Prepare();
