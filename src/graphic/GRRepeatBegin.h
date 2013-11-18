@@ -21,29 +21,32 @@
 class ARRepeatBegin;
 
 
-/** \brief not yet documented
+/** \brief The right facing repeat bar sign.
 */
 class GRRepeatBegin : public GRTagARNotationElement
-//class GRRepeatBegin : public GRBar
+    //class GRRepeatBegin : public GRBar
 {
-	public:
-//		GRRepeatBegin( ARRepeatBegin * ar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos );
-					GRRepeatBegin(ARRepeatBegin * arrb, bool p_ownsar = false);
-		virtual 	~GRRepeatBegin();
+public:
+              // GRRepeatBegin( ARRepeatBegin * ar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos );
+                 GRRepeatBegin(ARRepeatBegin * arrb, bool p_ownsar = false);
+    virtual 	~GRRepeatBegin();
 
-	
-		virtual void	print() const {}
-		virtual unsigned int getTextAlign() const;
-		virtual const NVPoint & getReferencePosition() const { return refpos; }
-		virtual void	OnDraw(VGDevice & hdc ) const;
-		virtual void	GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
-		virtual void	updateBoundingBox();
-		virtual void	tellPosition(GObject * caller, const NVPoint & newPosition);
-		virtual void	setHPosition( float nx);
 
-	protected:
-		static NVPoint refpos;
+    virtual void            print() const {}
+    virtual unsigned int    getTextAlign() const;
+    virtual const NVPoint & getReferencePosition() const { return refpos; }
+    virtual void            OnDraw(VGDevice & hdc ) const;
+    virtual void            GetMap(GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
+    virtual void            updateBoundingBox();
+    virtual void            tellPosition(GObject * caller, const NVPoint & newPosition);
+    virtual void            setHPosition( float nx);
 
+protected:
+    static NVPoint refpos;
+           float   fBaseThickness;
+           int     fLineNumber;
+           float   fStaffThickness;
+           float   fSize;
 };
 
 #endif

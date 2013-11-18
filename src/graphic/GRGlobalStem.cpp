@@ -546,23 +546,43 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 	{
 		NVPoint stemendpos (theStem->getPosition());
 		stemendpos.y -= theStem->getStemLength();
+        float coef = 0;
+        int numberLines = inStaff->getNumlines();
 
-		if (stemendpos.y > 2 * curLSPACEtmp)
-		{
-			const float newlength = (theStem->getPosition().y - 2 * curLSPACEtmp);
-			changeStemLength(newlength);
-		}
+        // Stem length adaptation according to staff lines number
+        if (numberLines != 0)
+        {
+            // Stem length is set everytime as far as the middle of the staff.
+            // Can be changed easily if it's not the good behaviour to adopt.
+            coef = 0.5f * numberLines - 0.5f;
+        }
+
+        if (stemendpos.y > coef * curLSPACEtmp)
+        {
+            const float newlength = (theStem->getPosition().y - coef * curLSPACEtmp);
+            changeStemLength(newlength);
+        }
 	}
 	else if (stemdir == dirDOWN)
 	{
 		NVPoint stemendpos (theStem->getPosition());
 		stemendpos.y += theStem->getStemLength();
+        float coef = 0;
+        int numberLines = inStaff->getNumlines();
 
-		if (stemendpos.y < 2 * curLSPACEtmp)
-		{
-			const float newlength = (2 * curLSPACEtmp - theStem->getPosition().y);
-			changeStemLength(newlength) ;
-		}
+        // Stem length adaptation according to staff lines number
+        if (numberLines != 0)
+        {
+            // Stem length is set everytime as far as the middle of the staff.
+            // Can be changed easily if it's not the good behaviour to adopt.
+            coef = 0.5f * numberLines - 0.5f;
+        }
+
+        if (stemendpos.y < coef * curLSPACEtmp)
+        {
+            const float newlength = (coef * curLSPACEtmp - theStem->getPosition().y);
+            changeStemLength(newlength);
+        }
 	}
 }
 

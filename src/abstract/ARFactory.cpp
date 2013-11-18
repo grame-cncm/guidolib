@@ -595,7 +595,7 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}	
-			else if (!strcmp(name,"auto"))	// same as "set"
+			else if (!strcmp(name,"auto") || !strcmp(name,"set"))
 			{
 				ARAuto * tmp = new ARAuto();
 				mTags.AddHead(tmp);
@@ -1346,12 +1346,6 @@ void ARFactory::createTag( const char * name, int no )
 				ARStaffFormat * tmp = new ARStaffFormat;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);				
-			}
-			else if (!strcmp(name,"set"))	// "same as auto"		
-			{
-				ARAuto * tmp = new ARAuto;
-				mTags.AddHead(tmp);
-				mCurrentVoice->AddTail(tmp);
 			}
 			else if (!strcmp(name,"shareLocation"))
 			{

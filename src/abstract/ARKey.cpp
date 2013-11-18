@@ -177,7 +177,7 @@ float ARKey::getAccidental (const char*& ptr) const
 		string acc;
 		while (*ptr && (*ptr != ']')) acc += *ptr++;
 		if (*ptr == ']') {
-			accidental = atof (acc.c_str());
+			accidental = (float)atof(acc.c_str());
 			ptr++;
 		}
 	}

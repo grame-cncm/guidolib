@@ -392,11 +392,12 @@ const QString& QGuidoPainter::fileName() const
 void QGuidoPainter::setGuidoLayoutSettings(const GuidoLayoutSettings& layoutSettings)
 {
 	mLayoutSettings = layoutSettings;
+    mResizePageToMusic = layoutSettings.resizePage2Music;
 
 	if ( hasValidGR() )
 	{
 		GuidoUpdateGR( mDesc.handle , &mLayoutSettings );
-		mResizePageToMusic = layoutSettings.resizePage2Music;
+
 		if ( mResizePageToMusic )
 			GuidoResizePageToMusic( mDesc.handle );
 	}
