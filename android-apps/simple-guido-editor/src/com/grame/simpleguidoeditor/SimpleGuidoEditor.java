@@ -25,10 +25,10 @@ public class SimpleGuidoEditor extends TabActivity {
         LayoutInflater.from(this).inflate(R.layout.main, tabHost.getTabContentView(), true);
 
         tabHost.addTab(tabHost.newTabSpec("tab1")
-                .setIndicator("tab1")
+                .setIndicator("GMN")
                 .setContent(R.id.view1));
         tabHost.addTab(tabHost.newTabSpec("tab2")
-                .setIndicator("tab2")
+                .setIndicator("SCORE")
                 .setContent(R.id.view2));
 
         EditText et = (EditText) findViewById(R.id.view1);
@@ -43,7 +43,15 @@ public class SimpleGuidoEditor extends TabActivity {
         }
         et.addTextChangedListener(new TextWatcher() {
                     @Override
-                    public void afterTextChanged(Editable s) {
+                    public void afterTextChanged(Editable s) {}
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count,
+							int after) {}
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before,
+							int count) {
                       EditText et = (EditText) findViewById(R.id.view1);
 	              WebView wv = (WebView) findViewById(R.id.view2);
 	              String svg = SimpleGuidoEditor.gmntosvg(et.getText().toString());
@@ -54,14 +62,6 @@ public class SimpleGuidoEditor extends TabActivity {
 	                wv.loadData(svg, "image/svg+xml", null);
                       }
 		    }
-
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count,
-							int after) {}
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before,
-							int count) {}
 
         });
         tabHost.setOnTabChangedListener(new OnTabChangeListener() {
