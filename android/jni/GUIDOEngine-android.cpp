@@ -75,7 +75,7 @@ Java_com_grame_guidoandroid_GuidoAndroid_gmntosvg(JNIEnv *env, jobject thisObj, 
 
     std::stringstream out;
 
-    err = GuidoSVGExport (grh, 1, out, 0, guido2);
+    err = GuidoSVGExport (grh, 1, out, 0, reinterpret_cast<char *>(___src_guido2_svg));
     if (err != guidoNoErr) {
       env->ReleaseStringUTFChars(java_gmn, gmn);  // release resources
       return NULL;
