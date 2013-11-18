@@ -12,6 +12,8 @@
 
 */
 
+#include <math.h>
+
 #include "ARFinishBar.h"
 #include "GRFinishBar.h"
 #include "GuidoDefs.h"

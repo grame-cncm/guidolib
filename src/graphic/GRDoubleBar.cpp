@@ -12,6 +12,8 @@
 
 */
 
+#include <math.h>
+
 #include "GRDoubleBar.h"
 #include "ARDoubleBar.h"
 #include "GRStaff.h"
