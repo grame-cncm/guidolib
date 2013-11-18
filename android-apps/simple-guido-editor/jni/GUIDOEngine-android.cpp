@@ -10,14 +10,14 @@
 #include <jni.h>
 
 extern "C" {
-  JNIEXPORT jint JNICALL Java_com_grame_guidoandroid_GuidoAndroid_init(JNIEnv *env, jobject thisObj);
-  JNIEXPORT jint JNICALL Java_com_grame_guidoandroid_GuidoAndroid_shutdown(JNIEnv *env, jobject thisObj);
-  JNIEXPORT jstring JNICALL Java_com_grame_guidoandroid_GuidoAndroid_gmntosvg(JNIEnv *env, jobject thisObj, jstring java_gmn);
+  JNIEXPORT jint JNICALL Java_com_grame_simpleguidoeditor_SimpleGuidoEditor_init(JNIEnv *env, jclass kls);
+  JNIEXPORT jint JNICALL Java_com_grame_simpleguidoeditor_SimpleGuidoEditor_shutdown(JNIEnv *env, jclass kls);
+  JNIEXPORT jstring JNICALL Java_com_grame_simpleguidoeditor_SimpleGuidoEditor_gmntosvg(JNIEnv *env, jclass kls, jstring java_gmn);
 };
 
 JNIEXPORT
 jint JNICALL
-Java_com_grame_guidoandroid_GuidoAndroid_init(JNIEnv *env, jobject thisObj)
+Java_com_grame_simpleguidoeditor_SimpleGuidoEditor_init(JNIEnv *env, jclass kls)
 {
    CairoSystem *sys = new CairoSystem(0);
    VGDevice * dev = sys->CreateMemoryDevice(10,10);
@@ -32,7 +32,7 @@ Java_com_grame_guidoandroid_GuidoAndroid_init(JNIEnv *env, jobject thisObj)
 
 JNIEXPORT
 jint JNICALL
-Java_com_grame_guidoandroid_GuidoAndroid_shutdown(JNIEnv *env, jobject thisObj)
+Java_com_grame_simpleguidoeditor_SimpleGuidoEditor_shutdown(JNIEnv *env, jclass kls)
 {
    //GuidoShutdown();
    return 0;
@@ -40,7 +40,7 @@ Java_com_grame_guidoandroid_GuidoAndroid_shutdown(JNIEnv *env, jobject thisObj)
 
 JNIEXPORT
 jstring JNICALL
-Java_com_grame_guidoandroid_GuidoAndroid_gmntosvg(JNIEnv *env, jobject thisObj, jstring java_gmn)
+Java_com_grame_simpleguidoeditor_SimpleGuidoEditor_gmntosvg(JNIEnv *env, jclass kls, jstring java_gmn)
 {
    const char *gmn = env->GetStringUTFChars(java_gmn, NULL);
    if (NULL == gmn) {
@@ -55,6 +55,8 @@ Java_com_grame_guidoandroid_GuidoAndroid_gmntosvg(JNIEnv *env, jobject thisObj, 
     if (!arh) {
       GuidoCloseParser(parser);
       env->ReleaseStringUTFChars(java_gmn, gmn);  // release resources
+      if (grh) GuidoFreeGR(grh);
+      if (arh) GuidoFreeAR(arh);
       return NULL;
     }
 
@@ -63,24 +65,31 @@ Java_com_grame_guidoandroid_GuidoAndroid_gmntosvg(JNIEnv *env, jobject thisObj, 
 
     err = GuidoAR2GR (arh, 0, &grh);
     if (err != guidoNoErr) {
-        env->ReleaseStringUTFChars(java_gmn, gmn);  // release resources
-        return NULL;
+      env->ReleaseStringUTFChars(java_gmn, gmn);  // release resources
+      if (grh) GuidoFreeGR(grh);
+      if (arh) GuidoFreeAR(arh);
+      return NULL;
     }
 
     err = GuidoResizePageToMusic (grh);
     if (err != guidoNoErr) {
       env->ReleaseStringUTFChars(java_gmn, gmn);  // release resources
+      if (grh) GuidoFreeGR(grh);
+      if (arh) GuidoFreeAR(arh);
       return NULL;
     }
 
     std::stringstream out;
 
-    err = GuidoSVGExport (grh, 1, out, 0, reinterpret_cast<char *>(___src_guido2_svg));
+    err = GuidoSVGExport (grh, 1, out, 0, reinterpret_cast<char *>(______src_guido2_svg));
     if (err != guidoNoErr) {
       env->ReleaseStringUTFChars(java_gmn, gmn);  // release resources
+      if (grh) GuidoFreeGR(grh);
+      if (arh) GuidoFreeAR(arh);
       return NULL;
     }
 
+    if (grh) GuidoFreeGR(grh);
+    if (arh) GuidoFreeAR(arh);
     return env->NewStringUTF(out.str().c_str());
-    return NULL;
 }
