@@ -663,9 +663,10 @@ int GRStaff::getNumHelplines(TYPE_PITCH pit, TYPE_REGISTER oct) const
 	// we get a "rounding-problem" for non-standard sizes ...
 	// therfore we do it differently ...
 
-	// we calculate the difference 
+	// we calculate the difference
+	if (getStaffLSPACE() < kMinNoteSize) return 0;
+
 	float calc = getNotePosition(pit, oct) / getStaffLSPACE();
-	
 	if (calc<0)		calc -= 0.25f;
 	else			calc += 0.25f;
 
@@ -1991,7 +1992,6 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 
 	*/
     float sizeRatio = getSizeRatio();
-
     if (sizeRatio > 0.05)
     {
         hdc.PushPenWidth(currentLineThikness() * getSizeRatio());
