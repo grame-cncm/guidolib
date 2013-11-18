@@ -87,7 +87,7 @@ void ARStaffFormat::setTagParameterList(TagParameterList & tpl)
 				bool conversionOk    = gd_convertUnits(cmunits, "cm", unit, result);
 
                 if (conversionOk)
-				    size->setValue(result);
+				    size->setValue((float)result);
                 else
                 {
                     delete size;

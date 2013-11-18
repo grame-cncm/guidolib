@@ -433,22 +433,43 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 			{
 				NVPoint stemendpos (stem->getPosition());
 				stemendpos.y -= stem->mStemLen;
+                float coef = 0;
+                int numberLines = mGrStaff->getNumlines();
 
-				if (stemendpos.y > 2 * mCurLSPACE)
-				{
-					const float newlength = (stem->getPosition().y - 2 * mCurLSPACE );
-					changeStemLength(newlength);
-					mStemLen = stem->mStemLen;
-				}
+                // Stem length adaptation according to staff lines number
+                if (numberLines != 0)
+                {
+                    // Stem length is set everytime as far as the middle of the staff.
+                    // Can be changed easily if it's not the good behaviour to adopt.
+                    coef = 0.5f * numberLines - 0.5f;
+                }
+
+                if (stemendpos.y > coef * mCurLSPACE)
+                {
+                    const float newlength = (stem->getPosition().y - coef * mCurLSPACE);
+                    changeStemLength(newlength);
+                    mStemLen = stem->mStemLen;
+                }
 			}
 			else if (stem->mStemDir == dirDOWN)
 			{
 				NVPoint stemendpos (stem->getPosition());
 				stemendpos.y += stem->mStemLen;
-				if (stemendpos.y < 2 * mCurLSPACE)
+                float coef = 0;
+                int numberLines = mGrStaff->getNumlines();
+
+                // Stem length adaptation according to staff lines number
+                if (numberLines != 0)
+                {
+                    // Stem length is set everytime as far as the middle of the staff.
+                    // Can be changed easily if it's not the good behaviour to adopt.
+                    coef = 0.5f * numberLines - 0.5f;
+                }
+
+				if (stemendpos.y < coef * mCurLSPACE)
 				{
-					const float newlength = (2 * mCurLSPACE - stem->getPosition().y);
-					changeStemLength( newlength ) ;
+					const float newlength = (coef * mCurLSPACE - stem->getPosition().y);
+					changeStemLength(newlength) ;
 					mStemLen = stem->mStemLen;
 				}
 			}
