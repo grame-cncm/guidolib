@@ -11,6 +11,9 @@ GUIDO Engine history
 - ARPageFormat modified : from now, when margins sum are superior than width / height, they are set to 0
 - new 'lineThickness' attribute for the \staffFormat tag
 - new attributes for the \tuplet tag : 'lineThickness', 'textSize', 'bold'
+- bug correction : on windows, sometimes Guido crashed when user lest-clicked on the score
+- now, bars (repeatBegin, repeatEnd, double bar, finish bar) adapts their size to staff lines number and to staff size
+- various bugs fixed and crashes avoided
 
 
 ----------------------------------------------------------------
