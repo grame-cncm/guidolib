@@ -72,20 +72,20 @@ public:
 	// at the GRSpringCollider of nextspring.
 	// It finds matching poslists and
 	// returns the maximum needed distance ...
-	float GetMaxDistance( GRSpring * nextspring );
-	float stretchWithForce( float newforce );
-	bool hasStaffAndType( const GRStaff * grstaff, const std::type_info & ti );
+	float GetMaxDistance(GRSpring * nextspring);
+	float stretchWithForce(float newforce);
+	bool hasStaffAndType(const GRStaff * grstaff, const std::type_info & ti);
 
-	float set_const( float dc );
+	float set_const(float dc);
 	static float funcpar;
 	static float getFunctionParameter();
 	float recalcConstant();
-	static void setFunctionParameter( float npar );
-	void addElement( GRNotationElement * el,GRVoice * vce );
-	bool hasType( const std::type_info & ti );
+	static void setFunctionParameter(float npar);
+	void addElement(GRNotationElement * el,GRVoice * vce);
+	bool hasType(const std::type_info & ti);
 	void setNoExtent();
-	int removeElement( GRNotationElement * el );
-	int setGRPositionX( float p_posx );
+	int removeElement(GRNotationElement * el);
+	int setGRPositionX(float p_posx);
 	void setGRSpringID();
 
 

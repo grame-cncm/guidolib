@@ -426,12 +426,13 @@ GRSystem::GRSystem(	GRStaffManager * staffmgr, GRPage * inPage,
 			GRSpring * spr = mSpringVector->Get(i);
 			if (spr)
 			{
-				spr->stretchWithForce (mSystemforce);
-				spr->setGRPositionX (curx);
+				spr->stretchWithForce(mSystemforce);
+                spr->setGRPositionX(curx);
 				curx += spr->x;
 			}
 		}
 	}
+
 	mBoundingBox.right = curx;				// this is the amount we have to go to the right ....
 
 	// now I cut the spring-vector and give back the stuff that I do not longer need ....

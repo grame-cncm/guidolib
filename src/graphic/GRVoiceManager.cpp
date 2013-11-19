@@ -428,7 +428,6 @@ void GRVoiceManager::BeginManageVoice()
 	// called once. There are NO OPEN TAGS!
 	arVoice->doAutoTrill();
     arVoice->doAutoCluster();
-
 }
 
 
@@ -768,9 +767,8 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 	{
 		ARMusicalObject *o = arVoice->GetAt(curvst->vpos);
 		
-		//we give to the object the information about the state on-off of the staff
+		// We give to the object the information about the state on-off of the staff
 		o->setDrawGR(GRVoiceManager::getCurStaffDraw(staffnum));
-				
 
 		if (o->getDuration() == DURATION_0)
 		{

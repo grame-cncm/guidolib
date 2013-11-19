@@ -240,7 +240,7 @@ void GRSymbol::setPosition(const NVPoint & inPosition)
 	st->position = inPosition;
 }
 
-void GRSymbol::setHPosition( GCoord nx )
+void GRSymbol::setHPosition(GCoord nx)
 {
 	GRPTagARNotationElement::setHPosition(nx);
 	// there can be only one sse! -> no overlap

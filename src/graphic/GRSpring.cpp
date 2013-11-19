@@ -31,6 +31,12 @@
 #include "GRVoice.h"
 #include "GRRepeatEnd.h"
 
+/* For proportionnal rendering */
+#include "GRClef.h"
+#include "GRFinishBar.h"
+#include "GRRepeatBegin.h"
+#include "GRRepeatEnd.h"
+
 // - Guido misc
 #include "GuidoDefs.h"		 // For kLayoutSettingDefaultSpring
 #include "kf_vect.h"
@@ -324,15 +330,53 @@ int sprpcomp(const GRSpring *gr1,const GRSpring *gr2)
 	return *gr1 < *gr2;
 }
 
-int GRSpring::setGRPositionX( GCoord p_posx )
+int GRSpring::setGRPositionX(GCoord p_posx)
 {
 	posx = p_posx;
 	GuidoPos pos = grolst.GetHeadPosition();
+
 	while (pos)
 	{
 		GRNotationElement * el = grolst.GetNext(pos);
+
+        if (1 == 1) // REM: rendu proportionnel
+        {
+            TYPE_DURATION durTmp = el->getDuration();
+            float tmp = durTmp.getNumerator() * (float)1000 / durTmp.getDenominator();
+
+            GREvent       *eventTmp       = dynamic_cast<GREvent *>      (el);
+            GRBar         *barTmp         = dynamic_cast<GRBar *>        (el);
+            GRFinishBar   *finishBarTmp   = dynamic_cast<GRFinishBar *>  (el);
+            GRRepeatBegin *repeatBeginTmp = dynamic_cast<GRRepeatBegin *>(el);
+            GRRepeatEnd   *repeatEndTmp   = dynamic_cast<GRRepeatEnd *>  (el);
+
+            if (eventTmp)
+                change_x(tmp);
+            else if (finishBarTmp)
+            {
+                posx -= 20;
+                change_x(0);
+            }
+            else if (repeatBeginTmp)
+            {
+                posx -= 20;
+                change_x(0);
+            }
+            else if (repeatEndTmp)
+            {
+                posx -= 20;
+                change_x(0);
+            }
+            else if (barTmp)
+            {
+                posx -= 20;
+                change_x(0);
+            }
+        }
+
 		el->setHPosition(posx);
 	}
+
 	return 0;
 }
 
