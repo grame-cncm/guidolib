@@ -38,12 +38,16 @@ void GuidoStream::WriteToStream(const char* inStr)
 {
     /* Append inStr (written by user) to global string */
     *fTheGlobalStringStream << inStr;
+
     /* Create a temporary string from the global string */
     string *tmpString = new string(fTheGlobalStringStream->str());
+
     /* Build tags stack from the global string */
     stack<char> *charStack = AnalyzeString(fTheGlobalStringStream);
+
     /* Complete temporary string with appropriate tags from tags stack */
     WriteNewString(charStack, tmpString);
+
     /* Set the final stringstream (this) from the temporary string */
     this->str(*tmpString);
     delete tmpString;
