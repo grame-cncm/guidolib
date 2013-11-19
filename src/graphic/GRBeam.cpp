@@ -156,9 +156,13 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 		hdc.SetTextFont( hmyfont );
 
 		if(sse->startflag != GRSystemStartEndStruct::OPENLEFT)
-			hdc.DrawString(st->DurationLine[2].x, st->DurationLine[2].y+LSPACE/2, fraction, n);
+//<<<<<<< HEAD
+			hdc.DrawString(st->DurationLine[2].x+LSPACE/4, st->DurationLine[2].y+LSPACE/2, fraction, n);
+//=======
+//			hdc.DrawString(st->DurationLine[2].x, st->DurationLine[2].y+LSPACE/2, fraction, n);
 
         hdc.PopPenWidth();
+//>>>>>>> refs/remotes/origin/dev
 	}
 
 	if (mColRef) {
@@ -1052,8 +1056,8 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 					xBegin = sse->startElement->getPosition().x;
 			}
 			float x = xBegin + (xEnd - xBegin)/2;
-			float X1 = x - (n-1)/2*LSPACE;
-			float X2 = x + (n-1)/2*LSPACE;
+			float X1 = x - (n-0.5)/2*LSPACE;
+			float X2 = x + (n-0.5)/2*LSPACE;
 
 			st->DurationLine[0] = NVPoint(xBegin, Y1);
 			st->DurationLine[1] = NVPoint(xBegin, Y2);

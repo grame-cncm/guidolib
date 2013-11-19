@@ -29,6 +29,7 @@ public:
     virtual ~GuidoStream();
 
     void     WriteToStream(const char* str);
+    
 
     /* Clears this' state flags */
     void     Prepare();

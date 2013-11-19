@@ -211,7 +211,7 @@ bool ARGlissando::MatchEndTag(const char * s)
 {
 	if (ARMusicalTag::MatchEndTag(s))
 		return 1;
-	if (!getRange() && !strcmp("\\GlissandoEnd",s))
+	if (!getRange() && !strcmp("\\glissandoEnd",s))
 		return 1;
 	return 0;
 }

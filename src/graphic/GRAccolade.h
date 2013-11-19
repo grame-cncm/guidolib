@@ -47,7 +47,7 @@ class GRAccolade : public GObject // GRTagARNotationElement ?
 
 
 		void		DrawEmulatedAccolade( VGDevice & hdc, float x, 
-											float yTop, float yBottom ) const;
+											float yTop, float yBottom, float thickness ) const;
 	
 		void		DrawStraightAccolade( VGDevice & hdc, float x, float yTop, 
 									float yBottom, bool drawEndCurves = true ) const;

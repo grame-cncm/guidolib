@@ -81,6 +81,8 @@ class QGuidoGraphicsItem : public QGraphicsObject
 		*/
 		virtual bool setGMNCode(const QString& gmnCode, const QString& path=0);
 		
+        bool setGMNStream(GuidoStream * gmnStream);
+    
 		/**	\brief Returns the current Guido code.
 		*
 		*	\note This will work only if the code has been

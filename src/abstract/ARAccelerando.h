@@ -18,6 +18,8 @@
 
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
+#include "TagParameterString.h"
+#include "TagParameterFloat.h"
 
 class TagParameterString;
 
@@ -46,13 +48,20 @@ public:
 	
 	virtual void PrintName(std::ostream & os) const;
 	virtual void PrintParameters(std::ostream & os) const;
-	
+	TagParameterString * getTempo(){return s1;}
+	TagParameterString * getAbsTempo(){return s2;}	
+	const char* getFont() const	{ return font ? font->getValue() : 0; }
+	const char*	getFAttrib() const { return fattrib ? fattrib->getValue() : 0; }
+	int			getFSize(float curLSPACE) const {return fsize ? (int) fsize->getValue(curLSPACE) : 0;}
 
 protected:
 
 	// TagParameters ..
 	TagParameterString * s1;
 	TagParameterString * s2;
+	TagParameterString * font;
+	TagParameterString * fattrib;
+	TagParameterFloat  * fsize;
 	// TagParameterFloat  *fsize;
 	// TagParameterInt	  *fnumber;
 
