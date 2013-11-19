@@ -27,6 +27,8 @@ QGuidoGraphicsItem::QGuidoGraphicsItem(QGraphicsItem * parent)
 	mGuidoPainter = QGuidoPainter::createGuidoPainter();
 	
 	mPageManager = new QPageManager();
+    
+    setResizePageToMusic(true);
 	
 	assert(mGuidoPainter);
 	// QGuidoPainter::createGuidoPainter() returned NULL. 

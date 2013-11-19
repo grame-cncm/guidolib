@@ -404,7 +404,6 @@ GUIDOAPI(void)
 GuidoGetDefaultLayoutSettings (GuidoLayoutSettings * settings)
 {
 	if( settings == 0 ) return;
-	
 	settings->systemsDistance = kSettingDefaultSystemDistance;
  	settings->systemsDistribution = kSettingDefaultSystemDistrib;
  	settings->systemsDistribLimit = kSettingDefaultDistribLimit;
@@ -412,6 +411,7 @@ GuidoGetDefaultLayoutSettings (GuidoLayoutSettings * settings)
     settings->spring = kSettingDefaultSpring;
 	settings->neighborhoodSpacing = kSettingDefaultNeighborhood;
 	settings->optimalPageFill = kSettingDefaultOptimalPageFill;
+    settings->resizePage2Music = kSettingDefaultResizePage;
 }
 
 
