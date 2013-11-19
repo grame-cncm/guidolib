@@ -1,4 +1,4 @@
-VERSION := 1.52
+VERSION := 1.53
 DOCVERS := 1.43
 DEST    := .
 
