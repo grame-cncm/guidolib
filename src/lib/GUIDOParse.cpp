@@ -95,9 +95,6 @@ GUIDOAPI(ARHandler)	GuidoStream2AR (GuidoParser *p, GuidoStream* s)
     if (!p || !s)
         return NULL;
 
-    /* Reset parser before parsing */
-    p->Reinit();
-
     /* Prepare stream (principally, clear eof flag) */
     s->Prepare();
 
