@@ -23,7 +23,7 @@
 GuidoParser::GuidoParser()
 {
 	setlocale(LC_NUMERIC, "C");
-	fFactory = new ARFactory();
+	fFactory = 0;
     initScanner();
 	fErrorLine = fErrorColumn = 0;
     fStream = NULL;
@@ -35,20 +35,6 @@ GuidoParser::~GuidoParser()
 	setlocale(LC_NUMERIC, 0);
 	destroyScanner();
 	delete fFactory;
-}
-
-//--------------------------------------------------------------------------
-void GuidoParser::Reinit()
-{
-    delete fFactory;
-    destroyScanner();
-
-    setlocale(LC_NUMERIC, "C");
-	fFactory = new ARFactory();
-    initScanner();
-	fErrorLine = fErrorColumn = 0;
-    fStream = NULL;
-    fText = "";
 }
 
 //--------------------------------------------------------------------------
@@ -188,6 +174,7 @@ void GuidoParser::tagRange ()					{ fFactory->tagRange(); }
 //--------------------------------------------------------------------------
 ARHandler GuidoParser::parse()
 {
+    /* Parser reinitialization */
 	fzaehlerSet = 0;
 	faccidentals = 0;
 	fndots = 0;
@@ -195,6 +182,16 @@ ARHandler GuidoParser::parse()
 	fnt_enum = 0;
 	fnt_denom = 1;
 	fErrorLine = fErrorColumn = 0;
+    setlocale(LC_NUMERIC, "C");
+    fText = "";
+
+    destroyScanner();
+    initScanner();
+
+    delete fFactory;
+    fFactory = new ARFactory();
+    /***************************/
+
 	_yyparse ();
 
     return (fErrorLine == 0) ? GuidoFactoryCloseMusic (fFactory) : 0;
