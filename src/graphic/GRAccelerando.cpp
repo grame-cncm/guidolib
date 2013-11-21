@@ -244,5 +244,5 @@ void GRAccelerando::tellPosition(GObject * caller, const NVPoint & np)
 	endPos.x += mdx;
 
 	setPosition(startPos);
-	startPos.x += 4.5*LSPACE;
+	startPos.x += 4.5f * LSPACE;
 }

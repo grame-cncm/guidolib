@@ -228,7 +228,7 @@ void GRRitardando::tellPosition(GObject * caller, const NVPoint & np)
 */	
 
 	float maxY = startPos.y;
-	for(int i=1; i<= getAssociations()->GetCount(); i++)
+	for(int i = 1; i <= getAssociations()->GetCount(); i++)
 	{
 		GRSingleNote * n = dynamic_cast<GRSingleNote *>(getAssociations()->Get(i));
 		if(n && n->getStemDirection() == -1)
@@ -236,15 +236,15 @@ void GRRitardando::tellPosition(GObject * caller, const NVPoint & np)
 		else if (n)
 			maxY = std::max(maxY, n->getPosition().y + LSPACE);
 	}
-	if(maxY<5*LSPACE)
-		maxY = 5*LSPACE;
+	if(maxY < 5 * LSPACE)
+		maxY = 5 * LSPACE;
 
-	startPos.y = endPos.y = maxY+LSPACE-mdy;
+	startPos.y = endPos.y = maxY + LSPACE-mdy;
 	startPos.x += mdx;
 	endPos.x += mdx;
 
 	setPosition(startPos);
-	startPos.x += 2.5*LSPACE;
+	startPos.x += 2.5f * LSPACE;
 }
 
 unsigned int GRRitardando::getTextAlign() const

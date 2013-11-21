@@ -466,10 +466,10 @@ int GRVoiceManager::DoBreak(const TYPE_TIMEPOSITION & tp,
 	}
 
 	ARMusicalObject *o = NULL;
-	if (curvst->vpos)		o = arVoice->GetAt(curvst->vpos);
+	if (curvst->vpos)
+        o = arVoice->GetAt(curvst->vpos);
 
-
-	if (o && dynamic_cast<ARPossibleBreak *>(o))		arVoice->GetNext(curvst->vpos,*curvst);
+	if (o && dynamic_cast<ARPossibleBreak *>(o))		arVoice->GetNext(curvst->vpos, *curvst);
 	else if ( o && dynamic_cast<ARNewSystem *>(o)) {
 //		debugstate ("before next:", curvst->getCurStateTags());
 		arVoice->GetNext(curvst->vpos,*curvst);
@@ -524,6 +524,7 @@ int GRVoiceManager::DoBreak(const TYPE_TIMEPOSITION & tp,
 		
  		mCurGrStaff->setOnOff(isOn);
 	}
+
 	return 1;
 }
 
@@ -611,12 +612,11 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 
 		if (o->getDuration() == DURATION_0)
 		{
-			// now we have a tag ( no position tag!) or an event with duration 0 handle it...
+			// now we have a tag (no position tag!) or an event with duration 0, handle it...
 			GRNotationElement * grne = NULL;
 
 			if (ARMusicalEvent::cast(o))
 			{
-				
 				// Then we create an EMPTY-Event handling all the startPTags and endPTags...
 				checkStartPTags(curvst->vpos);				
 				GREvent * ev = NULL;
@@ -648,6 +648,7 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 					else if (o->getDuration() <= DURATION_0)
 						ev = CreateEmpty (timepos, o);
 					else ev = 0;
+
                     if (ev)
                     {
                         AddRegularEvent (ev);
@@ -737,13 +738,14 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 			else
 			{
 				// not handled !?
-				ARMusicalTag * armt = dynamic_cast<ARMusicalTag *>(o);
+				ARMusicalTag *armt = dynamic_cast<ARMusicalTag *>(o);
 				if (!armt || !armt->IsStateTag())
 					GuidoTrace("Warning, Tag not handled");
 			}
 
 			// increment the position...
-			arVoice->GetNext(curvst->vpos,*curvst);
+			arVoice->GetNext(curvst->vpos, *curvst);
+
 			if (curvst->vpos)
 			{
 				// check, what the next element in the voice is (tag, zero-event or event)
@@ -751,7 +753,6 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 				
 				//we give to the object the information about the state on-off of the staff
 				o->setDrawGR(GRVoiceManager::getCurStaffDraw(staffnum));
-				
 
 				if ( o->getDuration() == DURATION_0)
 					return DONE_ZEROFOLLOWS;
@@ -801,8 +802,7 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 				}
 				toadd->RemoveAll();
 			}
-			AddRegularEvent (grev);
-
+			AddRegularEvent(grev);
 
 
 			// set the duration/timeposition...!			
@@ -810,18 +810,18 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 			timepos = arev->getRelativeEndTimePosition();			
 			GuidoPos prevpos = curvst->vpos;
 			// increment the curvoice... increment the position...
-			arVoice->GetNext(curvst->vpos,*curvst);
+			arVoice->GetNext(curvst->vpos, *curvst);
 			
 			// Check Ending Tags...
-			if (curvst->removedpositiontags)		checkEndPTags(prevpos);			
+			if (curvst->removedpositiontags)
+                checkEndPTags(prevpos);			
 			if (curvst->vpos)
 			{
 				// check what the next element in the voice is (tag, zero-event or event)
-				ARMusicalObject * o = arVoice->GetAt(curvst->vpos);
+				ARMusicalObject *o = arVoice->GetAt(curvst->vpos);
 				
 				//we give to the object the information about the state on-off of the staff
 				o->setDrawGR(GRVoiceManager::getCurStaffDraw(staffnum));
-				
 
 				if (o->getDuration() == DURATION_0)
 					return DONE_ZEROFOLLOWS;
@@ -1112,10 +1112,16 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 		grne = mCurGrStaff->AddRepeatBegin (static_cast<ARRepeatBegin *>(arOfCompleteObject));
 		gCurMusic->addVoiceElement(arVoice,	grne);
 	}
-	else if (tinf == typeid(ARRepeatEnd)) 
+    else if (tinf == typeid(ARRepeatEnd)) 
     {
-        grne = mCurGrStaff->AddRepeatEnd(static_cast<ARRepeatEnd *>(arOfCompleteObject));
-		gCurMusic->addVoiceElement(arVoice,	grne);
+		GRRepeatEnd * rend = mCurGrStaff->AddRepeatEnd(static_cast<ARRepeatEnd *>( arOfCompleteObject));
+		if (rend) {
+			if (checkRepeatBeginNext())
+				rend->setSConst (100.0f);
+			grne = rend;
+			gCurMusic->addVoiceElement(arVoice,	grne);
+			rend->updateBoundingBox();
+		}
 	}
 /* range not any more supported - DF sept 1 2004
 	else if (tinf == typeid(ARRepeatEndRangeEnd))

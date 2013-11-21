@@ -172,7 +172,7 @@ GRStaffState::GRStaffState()
 	curstaffrmt = NULL;
 	staffLSPACE = LSPACE;
 	numlines = 5;				// Standard
-    lineThickness = (float)0.08;
+    lineThickness = LSPACE * 0.08f;
 
 	curkey = NULL;
 
@@ -863,14 +863,16 @@ GRRepeatBegin * GRStaff::AddRepeatBegin(ARRepeatBegin *arrb)
 // ----------------------------------------------------------------------------
 /** \brief This creates a repeatEnd 
 */
-GRRepeatEnd * GRStaff::AddRepeatEnd(ARRepeatEnd *arre)
+GRRepeatEnd * GRStaff::AddRepeatEnd( ARRepeatEnd * arre )
 {
-    assert(arre);
-	GRRepeatEnd *tmp = new GRRepeatEnd(arre);
-	addNotationElement(tmp);
-	tmp->setGRStaff(this);
-	tmp->updateBoundingBox();
-	return tmp;
+//	if (arre->getNumRepeat() == 0 || !arre->getRange())
+	{
+        assert (arre);
+		GRRepeatEnd * tmp = new GRRepeatEnd(arre, this, arre->getRelativeTimePosition());
+		addNotationElement(tmp);
+		return tmp;
+	}
+	return NULL;
 }
 
 // ----------------------------------------------------------------------------
@@ -1870,13 +1872,14 @@ void GRStaff::OnDraw( VGDevice & hdc ) const
 // 	hdc.SelectFont( hfontold );// JB test for optimisation: do not restore font context.
 
 #else
-	DrawStaffUsingLines( hdc );	
+	DrawStaffUsingLines(hdc);	
 #endif
 	
 	// - 
-	DrawNotationElements( hdc );
-	if (gBoundingBoxesMap & kStavesBB) {
-		DrawBoundingBox( hdc, kStaffBBColor);
+	DrawNotationElements(hdc);
+	if (gBoundingBoxesMap & kStavesBB)
+    {
+		DrawBoundingBox(hdc, kStaffBBColor);
 	}
 }
 
@@ -1910,12 +1913,12 @@ void GRStaff::DrawStaffUsingSymbolScale( VGDevice & hdc ) const
 	}
 	else
 	{
-		for( int i = 0; i < mStaffState.numlines; ++i )
+		for (int i = 0; i < mStaffState.numlines; ++i)
 		{
 			yOffset = staffPos.y + i * kStaffLSPace;
-			hdc.OffsetOrigin( 0, yOffset );
-			hdc.DrawMusicSymbol( 0, 0, kStaffLineSymbol );
-			hdc.OffsetOrigin( 0, -yOffset );
+			hdc.OffsetOrigin(0, yOffset);
+			hdc.DrawMusicSymbol( 0, 0, kStaffLineSymbol);
+			hdc.OffsetOrigin(0, - yOffset);
 		}
 	}
 	
@@ -2004,7 +2007,8 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
             yPos = staffPos.y;
             for( int i = 0; i < mStaffState.numlines; i++ )
             {
-                hdc.Line(x1, yPos, x2 - currentLineThikness() * getSizeRatio() / 2, yPos);
+                // Fat formula to adjust ending lines position according to sizeRatio and lineThickness
+                hdc.Line(x1, yPos, x2 - (currentLineThikness() - 4) * (sizeRatio - 1) * 0.5f - currentLineThikness() / 2 + 2, yPos);
                 yPos += lspace;
             }
             it++;

@@ -1,1 +1,17 @@
-[ \staffFormat<"1-lines"> e \repeatBegin a \doubleBar  g \repeatEnd f]
+[
+    \staffFormat<"0-lines", size=1pt> e \repeatBegin a \doubleBar  g \repeatEnd f
+    \newSystem
+    \staffFormat<"1-lines", size=1pt> e \repeatBegin a \doubleBar  g \repeatEnd f
+    \newSystem
+    \staffFormat<"2-lines", size=1pt> e \repeatBegin a \doubleBar  g \repeatEnd f
+    \newSystem
+    \staffFormat<"3-lines", size=1pt> e \repeatBegin a \doubleBar  g \repeatEnd f
+    \newSystem
+    \staffFormat<"4-lines", size=1pt> e \repeatBegin a \doubleBar  g \repeatEnd f
+    \newSystem
+    \staffFormat<"5-lines", size=1pt> e \repeatBegin a \doubleBar  g \repeatEnd f
+    \newSystem
+    \staffFormat<"6-lines", size=1pt> e \repeatBegin a \doubleBar  g \repeatEnd f
+    \newSystem
+    \staffFormat<"7-lines", size=1pt> e \repeatBegin a \doubleBar  g \repeatEnd f
+]

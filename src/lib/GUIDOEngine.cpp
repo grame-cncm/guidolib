@@ -69,8 +69,8 @@ using namespace std;
 // ==========================================================================
 const int GUIDOENGINE_MAJOR_VERSION = 1;
 const int GUIDOENGINE_MINOR_VERSION = 5;
-const int GUIDOENGINE_SUB_VERSION   = 3;
-const char* GUIDOENGINE_VERSION_STR = "1.5.3";
+const int GUIDOENGINE_SUB_VERSION   = 2;
+const char* GUIDOENGINE_VERSION_STR = "1.5.2";
 
 ARPageFormat * gARPageFormat = 0;
 
@@ -323,7 +323,7 @@ GUIDOAPI(GuidoErrCode) GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * set
 	ar->refCount++;
 
 	// - Propagate the music name
-	grMusic->setName( arMusic->getName().c_str());
+	grMusic->setName(arMusic->getName().c_str());
 
 	//  - Add the GRMusic object to the global list
 	GRHandler outHandleGR = guido_RegisterGRMusic( grMusic, ar );

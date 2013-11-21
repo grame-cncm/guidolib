@@ -338,42 +338,6 @@ int GRSpring::setGRPositionX(GCoord p_posx)
 	while (pos)
 	{
 		GRNotationElement * el = grolst.GetNext(pos);
-
-        if (1 == 1) // REM: rendu proportionnel
-        {
-            TYPE_DURATION durTmp = el->getDuration();
-            float tmp = durTmp.getNumerator() * (float)1000 / durTmp.getDenominator();
-
-            GREvent       *eventTmp       = dynamic_cast<GREvent *>      (el);
-            GRBar         *barTmp         = dynamic_cast<GRBar *>        (el);
-            GRFinishBar   *finishBarTmp   = dynamic_cast<GRFinishBar *>  (el);
-            GRRepeatBegin *repeatBeginTmp = dynamic_cast<GRRepeatBegin *>(el);
-            GRRepeatEnd   *repeatEndTmp   = dynamic_cast<GRRepeatEnd *>  (el);
-
-            if (eventTmp)
-                change_x(tmp);
-            else if (finishBarTmp)
-            {
-                posx -= 20;
-                change_x(0);
-            }
-            else if (repeatBeginTmp)
-            {
-                posx -= 20;
-                change_x(0);
-            }
-            else if (repeatEndTmp)
-            {
-                posx -= 20;
-                change_x(0);
-            }
-            else if (barTmp)
-            {
-                posx -= 20;
-                change_x(0);
-            }
-        }
-
 		el->setHPosition(posx);
 	}
 

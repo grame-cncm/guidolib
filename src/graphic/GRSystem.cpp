@@ -567,12 +567,13 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 	// - Find the positions of top and bottom systems.
 	// Todo: the complete list of positions, to allow many accolades.
 	GRStaff * theStaff = 0;
-	NVPoint firstStaffPos ( -1, 0 );
+	NVPoint firstStaffPos(-1, 0);
 	NVPoint lastStaffPos;
 	int staffCount = 0;
+
 	if (mStaffs)
 	{
-		for( int i = mStaffs->GetMinimum(); i <= mStaffs->GetMaximum(); i++ )
+		for (int i = mStaffs->GetMinimum(); i <= mStaffs->GetMaximum(); i++)
 		{
 			if ((theStaff = mStaffs->Get(i)) == NULL)
 				continue;
@@ -590,7 +591,7 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 		// if (theStaff && ( numstaffs > 1 ))
 		//	DrawAccoladeAndBorder( hdc, theStaff, firstStaffPos, lastStaffPos );
 	}
-	else if (mSystemSlices.size() > 0 )
+	else if (mSystemSlices.size() > 0)
 	{
 		// then we have to draw the systemslices ....
 		GuidoPos pos = mSystemSlices.GetHeadPosition();
@@ -652,32 +653,34 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 	}
 
 	// - Draws the accolades (TODO: multiple accolades support)
-	if( theStaff && ( staffCount > 1 ))
+	if (theStaff && (staffCount > 1))
 	{
 		const float staffHeight = (theStaff->getNumlines() - 1) * theStaff->getStaffLSPACE();
 		lastStaffPos.y += staffHeight; // Set to the bottom of last staff
 
-		DrawAccolade( hdc, firstStaffPos, lastStaffPos );
+		DrawAccolade(hdc, firstStaffPos, lastStaffPos);
 	}
 
 	// - Draws the vertical left border line.
-    if (firstStaffPos.x != firstStaffPos.y)
+    if (firstStaffPos.x != lastStaffPos.x || firstStaffPos.y != lastStaffPos.y)
     {
-        hdc.PushPenWidth( kLineThick );
-        hdc.Line( firstStaffPos.x, firstStaffPos.y, lastStaffPos.x, lastStaffPos.y );
+        hdc.PushPenWidth(kLineThick);
+        hdc.Line(firstStaffPos.x, firstStaffPos.y, lastStaffPos.x, lastStaffPos.y);
         hdc.PopPenWidth();
     }
 
 	// - Now draws the (System)-elements
-    DrawSubElements( hdc );
+    DrawSubElements(hdc);
 
-	if( gGlobalSettings.gDisplaySprings == 1 )	DrawSystemSprings( hdc );
-	if( gGlobalSettings.gDisplayForce == 1 )	DrawSystemForce( hdc );
+	if (gGlobalSettings.gDisplaySprings == 1)
+        DrawSystemSprings(hdc);
+	if (gGlobalSettings.gDisplayForce == 1)
+        DrawSystemForce(hdc);
 
-	hdc.OffsetOrigin( -mPosition.x, -mPosition.y ); // Restore previous origin. (JB) sign change
+	hdc.OffsetOrigin(- mPosition.x, - mPosition.y); // Restore previous origin. (JB) sign change
 
 	if (gBoundingBoxesMap & kSystemsBB)
-		DrawBoundingBox( hdc, kSystemBBColor);
+		DrawBoundingBox(hdc, kSystemBBColor);
 }
 
 // --------------------------------------------------------------------------

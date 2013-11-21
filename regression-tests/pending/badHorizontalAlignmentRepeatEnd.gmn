@@ -1,0 +1,6 @@
+% Les points de la barre de répétition ne sont pas alignés horizontalement !
+[
+    _/4 \repeatEnd
+    \newSystem
+    a \repeatEnd
+]

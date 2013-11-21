@@ -38,7 +38,7 @@ GRRepeatBegin::GRRepeatBegin(ARRepeatBegin *arrb, bool p_ownsar)
 	refpos = NVPoint (0, 4 * LSPACE);
 
     fLineNumber = 5;
-    fStaffThickness = 0.08f;
+    fStaffThickness = 4;
     fSize = 1;
     fBaseThickness = LSPACE * 0.6f;
 }
@@ -117,8 +117,11 @@ void GRRepeatBegin::OnDraw(VGDevice & hdc ) const
 
     float rightLineThickness = 1.8f * kLineThick * fSize;
 
+    // - Horizontal adjustement according to staff's lines size and staff's size
+    const float offsetX = 40 - 25.0f * (fSize - 1) + 0.45f * (fStaffThickness - 4) + (fSize - 1) * (fStaffThickness - 4) * 0.5f;
+
     const float spacing = fBaseThickness + LSPACE * 0.4f * fSize - rightLineThickness;
-	const float x1 = mPosition.x - mBoundingBox.Width() + 1 + fStaffThickness / 2;
+	const float x1 = mPosition.x - mBoundingBox.Width() + offsetX;
 	const float x2 = x1 + spacing;
     const float y1 = mPosition.y + offsety1 * fSize;
 	const float y2 = y1 + (mBoundingBox.bottom + offsety2) * fSize;
@@ -143,14 +146,13 @@ void GRRepeatBegin::OnDraw(VGDevice & hdc ) const
     int   pointSymbol = 220;
     float pointOffsety1 = - 5 * fSize + offsety1AccordingToLineNumber;
     float pointOffsety2 = pointOffsety1 + LSPACE * fSize + offsety2AccordingToLineNumber;
-    float pointOffsetx = 55 * fSize - 85;
+    float pointOffsetx = 32.5f * (fSize - 1) + 10 + 0.45f * (fStaffThickness - 4) + (fSize - 1) * (fStaffThickness - 4) * 0.5f;
     float pointSize = 0.4f * fSize;
 
     DrawSymbol(hdc, pointSymbol, pointOffsetx, pointOffsety1, pointSize);
     DrawSymbol(hdc, pointSymbol, pointOffsetx, pointOffsety2, pointSize);
     /**********************/
 }
-
 
 // --------------------------------------------------------------------------
 unsigned int GRRepeatBegin::getTextAlign() const

@@ -298,10 +298,10 @@ void GRStaffManager::createStaves()
 
 	// this remembers the current mSystemSize (very crude indeed!)
 	mSystemSize = 0;
+
 	do 
 	{ 
-		// this determines whether the filltagmode should be maintained, so that all tags can be read in ...
-		conttagmode = 0;
+		conttagmode = 0;    // this determines whether the filltagmode should be maintained, so that all tags can be read in ...
 		ender = true;		// this is set to one and unset, if there is at least one voice still active
 		newline = 0;		// newline is reset.
 
@@ -311,9 +311,9 @@ void GRStaffManager::createStaves()
 
 		pbreakval = 0;		// the pbreakval ...
 
-		if( gGlobalSettings.gFeedback )
+		if (gGlobalSettings.gFeedback)
 		{
-			float progress = 0;
+			float progress = 1;
 			if ((float) ardur > 0)
 				progress = (float) timePos / (float) ardur;
 			gGlobalSettings.gFeedback->UpdateStatusMessage ( str_CreatingGraphSymbols, (int)(progress * 100.0));
@@ -322,18 +322,18 @@ void GRStaffManager::createStaves()
 		}
 
 		// now, we go through all the voices sequentially
-		for (int i=0; i<cnt; i++)
+		for (int i = 0; i < cnt; i++)
 		{
-			GRVoiceManager * voiceManager = mVoiceMgrList->Get(i);
+			GRVoiceManager *voiceManager = mVoiceMgrList->Get(i);
 			tmptp = timePos;
 
 			// this does the next timeposition ... 
 			// behavior:
 			// 1. independant of filltagmode:
-			//	  if curtp > tmptp than tmptp is set to curtp and -1 is returned.
+			//	  if curtp > tmptp then tmptp is set to curtp and -1 is returned.
 			//    if we are at the very end of a voice -5 is returned.
 			// 2. dependant on the filltagmode
-			//    different behaviour oocurs:
+			//    different behaviour occurs:
 			// filltagmode = 1:
 			//    if there are tags or events with dur==0 at the current VoicePosition, then the
 			//    respective NotationElements are created (tags that do not have a graphical representation 
@@ -342,13 +342,13 @@ void GRStaffManager::createStaves()
 			//    if the tag is newSystem or newPage -3 and -4 are returned respectivly.
 			//    if there is an event with dur>0 than -2 is returned.
 			// filltagmode = 0:
-			//    if there is an event at tmptp than the GRNotationElement is created,the curtp is incremented; 
+			//    if there is an event at tmptp then the GRNotationElement is created, the curtp is incremented; 
 			//    0 is returned.
 			//    if there is no event here, than -2 is returned -> switch to filltagmode!
-			//    ret = tmp->Next(tmptp,filltagmode);
+			//    ret = tmp->Next(tmptp, filltagmode);
 			
 			// see Iterate-description for documentation
-			int ret = voiceManager->Iterate(tmptp,filltagmode);
+			int ret = voiceManager->Iterate(tmptp, filltagmode);
 
 			// there is still a voice active ...
 			if (ret != GRVoiceManager::ENDOFVOICE)
@@ -371,13 +371,13 @@ void GRStaffManager::createStaves()
 			}
 			else if (filltagmode)
 			{
-				if (!conttagmode && ret==GRVoiceManager::DONE_ZEROFOLLOWS)
+				if (!conttagmode && ret == GRVoiceManager::DONE_ZEROFOLLOWS)
 				{
 					// there has been at last one tag -> continue with filltagmode
 					conttagmode = 1;
 				}
 				
-				if (ret==GRVoiceManager::NEWSYSTEM)
+				if (ret == GRVoiceManager::NEWSYSTEM)
 				{
 					// newSystem.
 					if (newline == 0 || newline == 3)
@@ -493,6 +493,7 @@ void GRStaffManager::createStaves()
 					// (when breaks inbetween pbreaks  will become possible) ...
 					// pblist->RemoveAll();
 				}
+
 				if (newline == 2)
 				{
 					// a newpage
@@ -533,7 +534,7 @@ void GRStaffManager::createStaves()
 					delete mMyStaffs;
 					mMyStaffs = new VStaff(0); // the Staves are no longer valid and need to be created a new ...
 
-					for (int i=0;i<cnt;i++)
+					for (int i = 0; i < cnt; i++)
 					{
 						GRVoiceManager * voiceManager = mVoiceMgrList->Get(i);
 						voiceManager->DoBreak( timePos,newline);
@@ -544,7 +545,8 @@ void GRStaffManager::createStaves()
 				}
 			}
 		}
-		else { // no filltagmode ...
+		else // no filltagmode...
+        {
 			if (mintp != MAX_DURATION)
 				timePos = mintp;		// we increment the timeposition ...
 			else if (!ender)
@@ -740,24 +742,24 @@ bool GRStaffManager::setStaffStateTag( ARMusicalTag * tag, int staffnum )
 /** \brief  AddGRSyncElement is called by the GRVoiceManager-class to add those elements, that 
 	need horizontal synchronization.
 
-	It uses a temporary spring-id and a data-structure, to keep track of equivalent tags.
+	    It uses a temporary spring-id and a data-structure, to keep track of equivalent tags.
 	When a slice is finished, FinishSyncSlice is called, which handles spring-ID-distribution and
 	spring-stretching.
 	The routine works as follows:
 	If the notationelement is a tag or an event with duration 0, than the type is looked up in a hash-table. 
 	The hash-table has entries of the following type: (type,(grnotationelement,staff,voiceID),mSpringID):
 
-	 If there is no element of this type, the temporary springid is incremented, and the type (and
+	    If there is no element of this type, the temporary springid is incremented, and the type (and
 	element) is added to the hash-table. The entry voice-id of the voice-array is set to the new springid.
 
-	 If there is an element of this type, it is checked, whether voice-array[voiceID] is
+	    If there is an element of this type, it is checked, whether voice-array[voiceID] is
 	greater than the mSpringID of the entry of the hash-table. In this case, the mSpringID is 
 	incremented and the hashtable-entry is replaced by a new entry. voice-array[voice-id] is set to the
 	new spring-id. 
 	(There is a special case here: if the current springIDs of ALL voices in the old hash-table-entry are 
 	smaller or equal to the mSpringID of the old hash-table-entry, than the old mSpringID
-	is REMOVED, that is, all the notationelements are  moved to the new hash-table-entry. Each respective 
-	voice-arr[voice-id] entry is set to the new mSpringID)
+	is REMOVED, that is, all the notationelements are moved to the new hash-table-entry. Each respective 
+	voice-arr[voice-id] entry is set to the new mSpringID).
 	If the voice-array[voice-id] is smaller than the temporary mSpringID, the notation-element is added to the
 	same hash-table-entry. The mSpringID of voice-array[voice-id] is set to the value in the hash-table-entry.
 */
@@ -1014,7 +1016,7 @@ int GRStaffManager::AddPageTag(GRNotationElement * grel, GRStaff * grstaff,int v
 	The routine works as follows:
 	Iterate through the hash-table (ordered by mSpringID). 
 	For each entry, set the mSpringID and add the element to the staff. (This might
-	cause WARNIGNS to be issued by the staff, as there might be two or more elements added with the
+	cause WARNINGS to be issued by the staff, as there might be two or more elements added with the
 	samed Spring-ID but conflicting meanings (as in clefs or keys)
 */
 int GRStaffManager::FinishSyncSlice(const TYPE_TIMEPOSITION & tp)
@@ -1197,7 +1199,7 @@ int GRStaffManager::FinishSyncSlice(const TYPE_TIMEPOSITION & tp)
 	}
 
 	// now, we introduce the System- and Pagetags.
-	if (systemHash.GetCount()>0)
+	if (systemHash.GetCount() > 0)
 	{
 		// depending on the type, we need to associate with different springs.
 		// right now, we only have the tempo-tag that needs to be put, where the meter
@@ -1258,7 +1260,7 @@ int GRStaffManager::FinishSyncSlice(const TYPE_TIMEPOSITION & tp)
 		systemHash.DeleteAll();
 	}
 
-	if (pageHash.GetCount()>0)
+	if (pageHash.GetCount() > 0)
 	{
 	}
 
@@ -1274,7 +1276,9 @@ int GRStaffManager::FinishSyncSlice(const TYPE_TIMEPOSITION & tp)
 	for (int i = theMin; i <= theMax; ++i )
 	{
 		GRStaff * staff = mMyStaffs->Get(i);
-		if (staff) staffposvect.Set( i, staff->mCompElements.GetTailPosition());
+		
+        if (staff)
+            staffposvect.Set(i, staff->mCompElements.GetTailPosition());
 	}
 
 #ifdef SPRINGLOG
@@ -2949,7 +2953,7 @@ typedef KF_IPointerList<edge> edgelist;
 	\return the height of the entries on the last page
 	 this is used for repeated calls to FindOptimumBreaks, if explicit newsystemcalls are encountered ....
 */
-float GRStaffManager::FindOptimumBreaks( int inPageOrSystemBreak, float inBeginHeight )
+float GRStaffManager::FindOptimumBreaks(int inPageOrSystemBreak, float inBeginHeight)
 {
 	int numpageareas = 12;
 	if( inPageOrSystemBreak == 1 )	numpageareas = 1;

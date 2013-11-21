@@ -16,6 +16,7 @@
 #include "SVGDevice.h"
 #include "SVGFont.h"
 
+#include "GUIDOParse.h"
 #include "GUIDOEngine.h"
 
 using namespace std;
@@ -170,10 +171,13 @@ vector<string> fillPathsVector (char *argv[])
 int main(int argc, char **argv)
 {
 	int page = getIntOption (argc, argv, "-p", 1);
-	if (page < 0) {
+
+	if (page < 0)
+    {
 		cerr << "page number should be positive" << endl;
 		usage(argv[0]);
 	}
+
 	const char* fontfile = getOption (argc, argv, "-f", 0);
 	const char* filename = getFile (argc, argv);
 
@@ -183,16 +187,17 @@ int main(int argc, char **argv)
 //	const char* fontfile = font ? argv[font] : 0;
 
 	string gmn;							// a string to read the standard input
-	if (!filename) {					// std in mode
+	if (!filename)						// std in mode
+    {
 		int c;
 		while (read(0, &c, 1) == 1)
 			gmn += char(c);				// read the standard input into a string
 	}
 
 	SVGSystem sys;
-	SVGDevice dev (cout, &sys);
+	SVGDevice dev(cout, &sys);
     GuidoInitDesc gd = { &dev, 0, 0, 0 };
-    GuidoInit (&gd);                   // Initialise the Guido Engine first
+    GuidoInit(&gd);                    // Initialise the Guido Engine first
 
 	GuidoErrCode err;
     ARHandler arh;
@@ -203,7 +208,7 @@ int main(int argc, char **argv)
     GuidoParser *parser = GuidoOpenParser();
 
 	if (gmn.size())
-		err = GuidoNewParseString (parser, gmn.c_str(), &arh);
+		arh = GuidoString2AR(parser, gmn.c_str());
 	else
     {
         std::ifstream ifs(filename, ios::in);
@@ -214,9 +219,11 @@ int main(int argc, char **argv)
         streamBuffer << ifs.rdbuf();
         ifs.close();
 
-		err = GuidoNewParseString (parser, streamBuffer.str().c_str(), &arh);
+		arh = GuidoString2AR(parser, streamBuffer.str().c_str());
     }
-	if (err != guidoNoErr) error (err);
+
+	if (!arh)
+        error(err);
 
     /* For symbol-tag */
     GuidoSetSymbolPath(arh, pathsVector);
@@ -224,10 +231,14 @@ int main(int argc, char **argv)
 
 	GRHandler grh;
     err = GuidoAR2GR (arh, 0, &grh);
-	if (err != guidoNoErr) error (err);
+
+	if (err != guidoNoErr)
+        error(err);
 
 	err = GuidoSVGExport( grh, page, cout, fontfile);
-	if (err != guidoNoErr) error (err);
+
+	if (err != guidoNoErr)
+        error(err);
 
     GuidoCloseParser(parser);
 

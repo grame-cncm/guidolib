@@ -33,6 +33,7 @@ GRDoubleBar::GRDoubleBar( ARDoubleBar * ardbar, GRStaff * inStaff, const TYPE_TI
 	mRightSpace = mBoundingBox.right * mTagSize;
 
     fLineNumber = inStaff->getNumlines();
+    fStaffThickness = inStaff->getLineThickness();
     fSize = inStaff->getSizeRatio();
 }
 
@@ -47,6 +48,7 @@ GRDoubleBar::GRDoubleBar(ARDoubleBar * ardbar, GRSystem * p_grsystem, GRStaff * 
 	mRightSpace = mBoundingBox.right * mTagSize;
 
     fLineNumber = inStaff->getNumlines();
+    fStaffThickness = inStaff->getLineThickness();
     fSize = inStaff->getSizeRatio();
 }
 
@@ -65,14 +67,18 @@ void GRDoubleBar::DrawWithLines( VGDevice & hdc ) const
     float offsety2 = 0;
 
     if (fLineNumber != 0 && fLineNumber != 1)
-    offsety2 = ((fLineNumber - 5) % 6) * LSPACE;
+        offsety2 = ((fLineNumber - 5) % 6) * LSPACE;
 
-	const float x1 = mPosition.x + mBoundingBox.left;
-	const float x2 = mPosition.x + mBoundingBox.right;
+    // - Horizontal adjustement according to staff's lines size and staff's size
+    const float offsetX = - 15 + 17 * (fSize - 1);
+
+    const float spacing = LSPACE * 0.7f * fSize;
+	const float x1 = mPosition.x + mBoundingBox.left + offsetX;
+	const float x2 = x1 + spacing;
 	const float y1 = mPosition.y + offsety1 * fSize;
 	const float y2 = y1 + mBoundingBox.bottom + offsety2 * fSize;
 
-    float lineThickness = kLineThick * 1.2f * fSize;
+    float lineThickness = kLineThick * 1.5f * fSize;
 
 	hdc.Rectangle(x1, y1, x1 + lineThickness, y2);
 	hdc.Rectangle(x2, y1, x2 + lineThickness, y2);
