@@ -1,0 +1,5 @@
+{
+[\noteFormat<"none"> \stemsOff \glissando<fill="true">({a,a}{e,b}{g, e2}{d1, g2}{g,d1})],
+[\glissando(a \staff<3> b) \glissando(c f)],
+[empty*3/4 \glissando(a/4 g)]
+}
