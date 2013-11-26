@@ -46,6 +46,8 @@ GRBar::GRBar(ARBar * p_arbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTim
 	setTagType(GRTag::STAFFTAG);
 	sconst = SCONST_BAR;
 	InitGRBar( inTimePos, inStaff );
+
+    fLineNumber = inStaff->getNumlines();
 }
 
 // --------------------------------------------------------------------------
@@ -74,6 +76,8 @@ GRBar::GRBar(ARBar * p_arbar, GRSystem * , GRStaff * inStaff, const TYPE_TIMEPOS
 //			}
 //		}
 //	}
+
+    fLineNumber = inStaff->getNumlines();
 }
 
 // --------------------------------------------------------------------------
@@ -175,12 +179,27 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
 	if ((getTagType() != GRTag::SYSTEMTAG) && isSystemSlice())
 		return;			// don't draw staff bars on system slices
 
-	const float x = mPosition.x;
-	const float y1 = mPosition.y + mBoundingBox.top;
-	const float y2 = y1 + mBoundingBox.bottom;
-	hdc.PushPenWidth( mGrStaff ? mGrStaff->currentLineThikness() : kLineThick );
-	hdc.Line( x, y1, x, y2 );
-	hdc.PopPenWidth();
+    const float staffSize = mGrStaff->getSizeRatio();
+
+    if (staffSize < kMinNoteSize) // Too small, don't draw
+        return;
+
+    // - Vertical adjustement according to staff's line number
+    float offsety1 = (fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;
+    float offsety2 = 0;
+
+    if (fLineNumber != 0 && fLineNumber != 1)
+        offsety2 = ((fLineNumber - 5) % 6) * LSPACE;
+
+    const float offsetX = 3 + (staffSize - 1) * 2;
+
+    const float x = mPosition.x + offsetX;
+	const float y1 = mPosition.y + mBoundingBox.top + offsety1 * staffSize;
+	const float y2 = y1 + mBoundingBox.bottom + offsety2 * staffSize;
+
+    hdc.PushPenWidth( mGrStaff ? mGrStaff->currentLineThikness() * staffSize : kLineThick * staffSize );
+    hdc.Line(x, y1, x, y2);
+    hdc.PopPenWidth();
 }
 
 // --------------------------------------------------------------------------

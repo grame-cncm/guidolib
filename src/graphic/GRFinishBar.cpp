@@ -88,6 +88,9 @@ void GRFinishBar::DrawWithLines( VGDevice & hdc ) const
 	if ((getTagType() != GRTag::SYSTEMTAG) && isSystemSlice())
 		return;			// don't draw staff bars on system slices
 
+    if (fSize < kMinNoteSize) // Too small, don't draw
+        return;
+
     // - Vertical adjustement according to staff's line number
     float offsety1 = (fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;
     float offsety2 = 0;
@@ -95,8 +98,10 @@ void GRFinishBar::DrawWithLines( VGDevice & hdc ) const
     if (fLineNumber != 0 && fLineNumber != 1)
         offsety2 = ((fLineNumber - 5) % 6) * LSPACE;
 
+    const float offsetX = (fSize - 1) * 1.8f + (fStaffThickness - 4) * 0.5f + 2.8f + (fSize - 1) * (fStaffThickness - 4) * 0.5f;
+
     const float spacing = LSPACE * 0.4f * fSize;
-	const float x1 = mPosition.x - mBoundingBox.Width() + fSize * 1.8f + 1;
+    const float x1 = mPosition.x - mBoundingBox.Width() + offsetX;
 	const float x2 = x1 + spacing;
     const float y1 = mPosition.y + (offsety1 - 2) * fSize;
 	const float y2 = y1 + mBoundingBox.bottom + (offsety2 + 4) * fSize;

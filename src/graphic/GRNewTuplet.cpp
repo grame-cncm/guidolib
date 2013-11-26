@@ -138,7 +138,7 @@ GRNewTuplet::manualPosition(GObject * caller, const NVPoint & inPos )
 		st->p2.y -= dy2;
 	}
 	
-	if( event == endElement || ( endElement == 0 && event == startElement) )
+	if(event == endElement || (endElement == 0 && event == startElement))
 	{
 		if (startElement && endElement)
 		{
@@ -478,17 +478,20 @@ void GRNewTuplet::OnDraw(VGDevice & hdc) const
 			{
 				hdc.Line(st->p1.x, st->p1.y + 0.5f * LSPACE * mDirection, st->p1.x, st->p1.y);
 			}
+
 			hdc.Line( st->p1.x, st->p1.y, middleX - textSpace, middleY - slope * textSpace );
 		}
 
 		if( mShowRightBrace ) //arTuplet->getRightBrace()) // (mBraceState & BRACERIGHT)
 		{
 			hdc.Line( middleX + textSpace, middleY + slope * textSpace, st->p2.x, st->p2.y );
+
 			if( sse->endflag == GRSystemStartEndStruct::RIGHTMOST)
 			{
 				hdc.Line( st->p2.x, st->p2.y, st->p2.x, st->p2.y + 0.5f * LSPACE * (float)mDirection);
 			}
 		}
+
 		hdc.PopPenWidth();
 	}
 }

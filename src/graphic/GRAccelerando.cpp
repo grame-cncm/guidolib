@@ -103,35 +103,35 @@ unsigned int GRAccelerando::getTextAlign() const
 
 void GRAccelerando::OnDraw( VGDevice & hdc ) const
 {
-	if(!mDraw) return;
+	if(!mDraw)
+        return;
 	
-	assert( gCurSystem );
+	assert(gCurSystem);
 
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );
-	if( sse == 0)
+	if (sse == 0)
 		return; // don't draw
 
 	float xStart = startPos.x;
 	float xEnd = endPos.x;
 
 	// - Setup font ....
-	const VGFont* hmyfont;
+	const VGFont *hTextFont;
 	if (font && font->length() > 0)
-		hmyfont = FontManager::FindOrCreateFont( mFontSize, font, fontAttrib );
+		hTextFont = FontManager::FindOrCreateFont(mFontSize, font, fontAttrib);
 	else
-		hmyfont = FontManager::gFontText;
+		hTextFont = FontManager::gFontText;
 
 	// set up color
-	if (mColRef) {
-		VGColor color ( mColRef ); 	// custom or black
-		hdc.PushFillColor( color );
-		hdc.PushPen( color, 1);
+	if (mColRef)
+    {
+		VGColor color (mColRef); 	// custom or black
+		hdc.PushFillColor(color);
+		hdc.PushPen(color, 1);
 		hdc.SetFontColor(color);
 	}
 
-	hdc.SetTextFont(hmyfont);
-
-	if(isTempoSet && sse->startflag==GRSystemStartEndStruct::LEFTMOST)
+	if (isTempoSet && sse->startflag == GRSystemStartEndStruct::LEFTMOST)
 	{
 		std::string toPrint ("= ");
 		toPrint += tempo1;
@@ -140,66 +140,84 @@ void GRAccelerando::OnDraw( VGDevice & hdc ) const
 		int n = toPrint.length();
 		
 		//to draw the little note
-		hdc.SetScale(0.5,0.5);
-		hdc.DrawMusicSymbol(2*getPosition().x, 2*getPosition().y, kFullHeadSymbol);
-		float y = 2*getPosition().y;
-		for(int i=0; i<3; i++)
+        hdc.selectfont(1); // Not very beautiful but avoid a bug during SVG export
+		hdc.SetScale(0.5, 0.5);
+		hdc.DrawMusicSymbol(2 * getPosition().x, 2 * getPosition().y, kFullHeadSymbol);
+
+		float y = 2 * getPosition().y;
+
+		for (int i = 0; i < 3; i++)
 		{
-			hdc.DrawMusicSymbol(2*getPosition().x, y, kStemUp2Symbol);
+			hdc.DrawMusicSymbol(2 * getPosition().x, y, kStemUp2Symbol);
 			y -= LSPACE;
 		}
-		hdc.SetScale(2,2);
 
+        hdc.UnsetScale();
+
+        hdc.SetTextFont(hTextFont);
 		hdc.DrawString(getPosition().x + LSPACE, getPosition().y, t1, n);
-		xStart += (n-4)*LSPACE/2;
+		
+        xStart += (n - 4) * LSPACE / 2;
 	}
-	else if (sse->startflag==GRSystemStartEndStruct::LEFTMOST)
+	else if (sse->startflag == GRSystemStartEndStruct::LEFTMOST)
+    {
+        hdc.SetTextFont(hTextFont);
 		hdc.DrawString(getPosition().x, getPosition().y, "accel.", 6);
+    }
 
-	if(isTempoAbsSet && sse->endflag == GRSystemStartEndStruct::RIGHTMOST)
+	if (isTempoAbsSet && sse->endflag == GRSystemStartEndStruct::RIGHTMOST)
 	{
 		std::string toPrint2 ("= ");
 		toPrint2 += tempo2;
 		const char * t2 = toPrint2.c_str();
 		int n = toPrint2.length();
 
-		hdc.DrawString(endPos.x - (n-1)*LSPACE, endPos.y, t2, n);
+        //to draw the little note
+        hdc.selectfont(1); // Not very beautiful but avoid a bug during SVG export
+		hdc.SetScale(0.5, 0.5);
+		hdc.DrawMusicSymbol(2 * (endPos.x - n * LSPACE), 2 * endPos.y, kFullHeadSymbol);
 		
-		// to draw the little note
-		hdc.SetScale(0.5,0.5);
-		hdc.DrawMusicSymbol(2*(endPos.x - n*LSPACE), 2*endPos.y, kFullHeadSymbol);
-		float y = 2*endPos.y;
-		for(int i=0; i<3; i++)
+        float y = 2 * endPos.y;
+
+		for (int i = 0; i < 3; i++)
 		{
-			hdc.DrawMusicSymbol(2*(endPos.x - n*LSPACE), y, kStemUp2Symbol);
+			hdc.DrawMusicSymbol(2 * (endPos.x - n * LSPACE), y, kStemUp2Symbol);
 			y -= LSPACE;
 		}
-		hdc.SetScale(2,2);
 
-		xEnd -= (n+1)*LSPACE;
+        hdc.UnsetScale();
+
+        hdc.SetTextFont(hTextFont);
+		hdc.DrawString(endPos.x - (n - 1) * LSPACE, endPos.y, t2, n);
+
+		xEnd -= (n + 1) * LSPACE;
 	}
 
-	if(sse->endflag == GRSystemStartEndStruct::OPENRIGHT)
+	if (sse->endflag == GRSystemStartEndStruct::OPENRIGHT)
 		xEnd = sse->endElement->getPosition().x;
-	else if(sse->startflag == GRSystemStartEndStruct::OPENLEFT)
+	else if (sse->startflag == GRSystemStartEndStruct::OPENLEFT)
 		xStart = sse->startElement->getPosition().x;
 
-	hdc.SelectPenWidth(2);
+    hdc.PushPenWidth(2);
 
-	while(xStart<xEnd)
+	while (xStart < xEnd)
 	{
-		if(xStart+LSPACE > xEnd)
+		if( xStart + LSPACE > xEnd)
 			hdc.Line(xStart, startPos.y, xEnd, endPos.y);
 		else
-			hdc.Line(xStart, startPos.y, xStart+LSPACE, endPos.y);
-		xStart += 2*LSPACE;
+			hdc.Line(xStart, startPos.y, xStart + LSPACE, endPos.y);
+
+		xStart += 2 * LSPACE;
 	}
 	
-	if (mColRef) {
+	if (mColRef)
+    {
 		hdc.PopPen();
 		hdc.PopFillColor();
 		hdc.SetFontColor(VGColor());//black
 	}
+
+    hdc.PopPenWidth();
 }
 
 void GRAccelerando::tellPosition(GObject * caller, const NVPoint & np)

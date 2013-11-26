@@ -47,7 +47,7 @@ SVGDevice::SVGDevice(std::ostream& outstream, SVGSystem* system, const char* gui
 	fXScale(1), fYScale(1), fXOrigin(0), fYOrigin(0), fXPos(0), fYPos(0),
 	fFontAlign(kAlignBase), fDPI(0),
 	fPushedPen(false), fPushedPenColor(false), fPushedPenWidth(false), fPushedFill(false), fScaled(false), fOffset(false),
-	fCurrFont (kNoFont),
+    fCurrFont (kNoFont), fScaledCount(0),
 	fPendingStrokeColor(0),
 	fBeginDone(false)
 {
@@ -139,7 +139,9 @@ void SVGDevice::EndDraw()
 	if (fPushedPenColor) closegroup();
 	if (fPushedPenWidth) closegroup();
 	if (fPushedFill) closegroup();
-	if (fScaled) closegroup();
+	//if (fScaled) closegroup();
+    for (int i = 0; i < fScaledCount; i++)
+        closegroup();
 	if (fOffset) closegroup();
 	if (fCurrFont) closegroup();
 	fPushedPen = false;
@@ -326,11 +328,26 @@ bool SVGDevice::CopyPixels( int xDest, int yDest, int dstWidth, int dstHeight, V
 //______________________________________________________________________________
 void SVGDevice::SetScale( float x, float y )
 { 
-	fXScale = x; fYScale = y; 
-	if (fScaled) closegroup();
+	fXScale = x; fYScale = y;
+
+	// if (fScaled) closegroup();
+    fScaledCount++;
+
 	fStream << fEndl << "<g transform=\"scale(" << x << ", " << y << ")\">";
 	fEndl++ ;
 	fScaled = true;
+}
+
+void SVGDevice::UnsetScale()
+{
+	if (fScaledCount)
+        fScaledCount--;
+
+    closegroup();
+
+	// if (fScaled) closegroup();
+    //fScaledCount++;
+	//fScaled = true;
 }
 
 void SVGDevice::SetOrigin( float x, float y )
@@ -342,10 +359,12 @@ void SVGDevice::SetOrigin( float x, float y )
 	fEndl++ ;
 	fOffset = true;
 }
+
 void SVGDevice::OffsetOrigin( float x, float y )	
 { 
 	SetOrigin( fXOrigin + x, fYOrigin += y); 
 }
+
 void SVGDevice::LogicalToDevice( float * x, float * y ) const {}
 void SVGDevice::DeviceToLogical( float * x, float * y ) const {}
 

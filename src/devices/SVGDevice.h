@@ -75,7 +75,7 @@ class_export SVGDevice : public VGDevice
 	float			fDPI;
 	
 	bool		fPushedPen, fPushedPenColor, fPushedPenWidth, fPushedFill, fScaled, fOffset;
-	int			fCurrFont;
+	int			fCurrFont, fScaledCount;
 	VGColor	*	fPendingStrokeColor;
 	bool		fBeginDone;
 	
@@ -150,6 +150,7 @@ class_export SVGDevice : public VGDevice
 
 		// - Coordinate services ------------------------------------------------
 		virtual	void			SetScale( float x, float y );
+        virtual void            UnsetScale();
 		virtual	void			SetOrigin( float x, float y );
 		virtual	void			OffsetOrigin( float x, float y );
 		virtual	void			LogicalToDevice( float * x, float * y ) const;

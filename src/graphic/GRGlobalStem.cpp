@@ -65,13 +65,13 @@ GRGlobalStem::GRGlobalStem( GRStaff * inStaff,
 	theFlag = NULL;
 	stemlengthset = false;
 
+    fStaffSize = mTagSize = inStaff->getSizeRatio();
+
 	if (curnoteformat)
 	{
 		const TagParameterFloat * tmp = curnoteformat->getSize();
 		if (tmp)
 			mTagSize = tmp->getValue();
-		else
-			mTagSize = inStaff->getSizeRatio();
 
 		// color ...
 
@@ -96,10 +96,6 @@ GRGlobalStem::GRGlobalStem( GRStaff * inStaff,
 			mTagOffset.y = (GCoord)(tmpdy->getValue(inStaff->getStaffLSPACE()));
             mTagOffset.y = -mTagOffset.y;
 		}
-	}
-	else
-	{
-		mTagSize = inStaff->getSizeRatio();
 	}
 
 	mFirstEl = NULL;
@@ -514,7 +510,7 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 	else
 	{
 		// length was not set ....
-		float length = (float)(mHighestY - mLowestY + inStaff->getStaffLSPACE() * 3.5f * mTagSize);
+        float length = (float)(mHighestY - mLowestY + inStaff->getStaffLSPACE() * 3.5f * mTagSize / fStaffSize);
 		theStem->setStemLength( length );
 	}
 
@@ -759,6 +755,9 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 			else if (lowerNoteSymbol == kFullReversedTriangleHeadSymbol || lowerNoteSymbol == kHalfReversedTriangleHeadSymbol)
 				higherNote->setStemOffsetStartPosition(-47);
 		}
+
+        // - Set notehead orientation for extreme chord note
+        theStem->setLastHeadOrientation(lowerNote->getHeadState());
 	}
 	else if (stemdir == dirUP || stemdir == dirOFF)
 	{
@@ -900,6 +899,9 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 			else if (higherNoteSymbol == kFullReversedTriangleHeadSymbol || higherNoteSymbol == kHalfReversedTriangleHeadSymbol)
 				higherNote->setFirstSegmentDrawingState(false);
 		}
+
+        // - Set notehead orientation for extreme chord note
+        theStem->setLastHeadOrientation(higherNote->getHeadState());
 	}
 	else 
 	{
@@ -946,10 +948,13 @@ void GRGlobalStem::OnDraw( VGDevice & hdc) const
 {
 	if(!mDraw)
 		return;
-	if (error) return;
+	if (error)
+        return;
 
-	if (theStem)	theStem->OnDraw(hdc);
-	if (theFlag)	                theFlag->OnDraw(hdc);
+	if (theStem)
+        theStem->OnDraw(hdc);
+	if (theFlag)
+        theFlag->OnDraw(hdc);
 }
 
 float GRGlobalStem::changeStemLength( float inLen )

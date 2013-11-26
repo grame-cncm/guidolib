@@ -2004,11 +2004,12 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
         {
             float x1 = it->first;
             float x2 = it->second;
+
             yPos = staffPos.y;
+            
             for( int i = 0; i < mStaffState.numlines; i++ )
             {
-                // Fat formula to adjust ending lines position according to sizeRatio and lineThickness
-                hdc.Line(x1, yPos, x2 - (currentLineThikness() - 4) * (sizeRatio - 1) * 0.5f - currentLineThikness() / 2 + 2, yPos);
+                hdc.Line(x1, yPos, x2, yPos);
                 yPos += lspace;
             }
             it++;

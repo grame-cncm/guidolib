@@ -1,9 +1,0 @@
-[
-    \staffFormat<style="1-lines", size=3> e \doubleBar f \repeatBegin a b
-    \newSystem
-    \staffFormat<style="7-lines", lineThickness=0.3, size>  c d e f
-]
-
-
-
-

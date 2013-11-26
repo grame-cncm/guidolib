@@ -17,6 +17,7 @@
 
 #include "NVPoint.h"
 #include "GRNotationElement.h"
+#include "ARTHead.h"
 
 class GREvent;
 class GRSingleNote;
@@ -64,8 +65,16 @@ public:
 
 	virtual void setColRef( const unsigned char * inColor );
 
-	void setOffsetStartPosition (float inOffset);
-	void setFirstSegmentDrawingState (bool inDrawActivated);
+	void setOffsetStartPosition(float inOffset) { fOffsetStartPosition = inOffset; }
+    void setFirstSegmentDrawingState(bool inDrawActivated) { fDrawActivated = inDrawActivated; }
+    bool getFirstSegmentDrawingState() { return fDrawActivated; }
+
+    ARTHead::HEADSTATE getHeadOrientation() { return fHeadOrientation; }
+    
+    /* Only for GlobalStem */
+    void setLastHeadOrientation(ARTHead::HEADSTATE inLastHeadOrientation) { fLastHeadOrientation = inLastHeadOrientation; }
+
+    float getOffsetStartPosition() { return fOffsetStartPosition; }
 
 protected:
 
@@ -80,8 +89,13 @@ protected:
 
 	static NVPoint sRefpos;
 
-	float offsetStartPosition;
-	bool  drawActivated;
+	float  fOffsetStartPosition;
+	bool   fDrawActivated;
+
+    int fNoteHeadType;
+
+    ARTHead::HEADSTATE fHeadOrientation;
+    ARTHead::HEADSTATE fLastHeadOrientation;
 };
 
 #endif
