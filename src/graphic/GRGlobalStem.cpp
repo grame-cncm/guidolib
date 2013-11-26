@@ -631,8 +631,9 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 					if (tagtype == GRTag::SYSTEMTAG)
 						cury += (float)note->getGRStaff()->getPosition().y;
 
+                    const float tmpCurLSPACE = (curLSPACE - curLSPACE / 50); // To avoid precision problems
 					// y-values are ascending.
-					if (cury != prevposy && cury - prevposy < curLSPACE && !note->getGRCluster())
+					if (cury != prevposy && cury - prevposy < tmpCurLSPACE && !note->getGRCluster())
 					{
 						// then I have to reverse the headsuggestion.
                         if (prevHeadState == ARTHead::RIGHT)
@@ -774,8 +775,9 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 					if (tagtype == GRTag::SYSTEMTAG)
 						cury += note->getGRStaff()->getPosition().y;
 
+                    const float tmpCurLSPACE = (curLSPACE - curLSPACE / 50); // To avoid precision problems
 					// y-values are decending.
-					if (cury != prevposy && prevposy - cury < curLSPACE && !note->getGRCluster())
+					if (cury != prevposy && prevposy - cury < tmpCurLSPACE && !note->getGRCluster())
 					{
 						// then I have to reverse the headsuggestion.
 						if (prevHeadState == ARTHead::RIGHT)

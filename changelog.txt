@@ -16,7 +16,8 @@ GUIDO Engine history
 - new 'lineThickness' attribute for the \staffFormat tag
 - new attributes for the \tuplet tag : 'lineThickness', 'textSize', 'bold'
 - bug correction : on windows, sometimes Guido crashed when user lest-clicked on the score
-- now, bars (repeatBegin, repeatEnd, double bar, finish bar) adapts their size to staff lines number and to staff size
+- now, bars (simple bar, repeatBegin, repeatEnd, double bar, finish bar) adapts their size to staff lines number and to staff size
+- some bugs fixed about SVG export
 - various bugs fixed and crashes avoided
 
 

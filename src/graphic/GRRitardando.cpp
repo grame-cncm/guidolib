@@ -153,7 +153,7 @@ void GRRitardando::OnDraw(VGDevice & hdc) const
 		hdc.UnsetScale();
 
         hdc.SetTextFont(hTextFont);
-		hdc.DrawString(getPosition().x + LSPACE, getPosition().y, t1, 1);
+		hdc.DrawString(getPosition().x + LSPACE, getPosition().y, t1, n);
 
 		xStart += n * LSPACE / 2;
 	}
@@ -205,7 +205,7 @@ void GRRitardando::OnDraw(VGDevice & hdc) const
 		else
 			hdc.Line(xStart, startPos.y, xStart + LSPACE, endPos.y);
 
-		xStart += 2*LSPACE;
+		xStart += 2 * LSPACE;
 	}
 	
 	if (mColRef)
