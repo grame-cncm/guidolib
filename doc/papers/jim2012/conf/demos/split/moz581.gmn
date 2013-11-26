@@ -1,0 +1,122 @@
+% Mozart Clarient Quintet, K. 581 
+% do we want a graphical or a musical representation?
+% first we do a graphical representation -> playback needs
+% additional information .....
+% We definitly need a musical interpretation aswell : what would
+% happen, if we decide to exchange the clarinet with a flute?
+{
+
+(* 
+ [   % First voice, clarinet in A, graphical representation ....
+\instr<"clarinet in A"> \clef<"g"> \key<0> \meter<"3/4">
+\i<"p"> \sl( c2/8 e | 
+% measure 1, voice 1 
+g e c3/4 ) \sl( g2/8 e | 
+% measure 2, voice 1
+d f a/4)   \sl( f/8 d |
+% measure 3, voice 1
+\bm( c h1 e2 d g f )  ) |
+% measure 4, voice 1
+\sl( d#/4 e )  \sl( c/8 e | 
+% measure 5, voice 1
+g e c3/4 ) \sl( g2/8 e |
+% measure 6, voice 1
+\acc( d ) f a/4 ) _ |
+% measure 7, voice 1
+_*3/4
+% measure 8, voice 1
+_/4 _/4  \slurBegin d1/12 a0 f | 
+% measure 9, voice 1
+\bm( a0/8 \slurEnd \stacc( d1 f a d2 f ) ) | 
+% measure 10, voice 1
+\sl( \bm( a2/8 g f e f d ) )  |
+% measure 11, voice 1
+\sl( c2/2 e/8 d ) 
+% measure 12, voice 1
+c/4 _
+],  *)
+
+[ % first voice, clarient in A, musical representation ....
+\pageFormat<w=25cm,h=38cm,tm=4cm,lm=2cm,bm=2cm,rm=2cm>
+\title<"Clarinet Quintet"> \composer<"Mozart, K. 581",dy=1cm> 
+\systemFormat<dx=2cm>
+
+ \instr<"clarinet in A",transp="A",dx=-2cm,dy=-0.6cm> 
+\clef<"g">   \key<"A"> % you do not need specify the key, but you can; 
+ \meter<"3/4">
+\i<"p"> \sl( a1/8 c#2 | 
+% measure 1, voice 1 
+e c# a/4 ) \sl( e/8 c# | 
+% measure 2, voice 1
+h1 d2 f#/4)   \sl( d/8 h1 |
+% measure 3, voice 1
+\bm( a g# c#2 h1 e2 d )  ) | \newSystem
+% measure 4, voice 1
+\staff<1,dy=1.3cm> \sl( h#1/4 c#2 )  \sl( a1/8 c#2 | 
+% measure 5, voice 1
+e c# a/4 ) \sl( e/8 c# |
+% measure 6, voice 1
+\acc( h1 ) d2 f#/4 ) _ |
+% measure 7, voice 1
+_*3/4
+% measure 8, voice 1
+_/4 _/4  \slurBegin<dx1=-1hs,dy1=-2hs,dy2=-2hs,h=-5hs> \tuplet( h0/12 f# d )  | 
+% measure 9, voice 1
+\bm( f#0/8 \slurEnd \stacc( h d1 f# h d2 ) ) | 
+% measure 10, voice 1
+\sl<h=3hs,dx2=1hs,dy2=2hs>( \bm( f#2/8 e d c# d h1 ) )  |
+% measure 11, voice 1
+\sl( a/2 c#2/8 h1 ) 
+% measure 12, voice 1
+a/4 _
+], 
+
+[ %second voice, violino I
+\instr<"violino I",dx=-2cm,dy=-0.6cm> \clef<"g"> \key<"A"> \meter<"3/4"> 
+_/4 | 
+% measures 1 to 5, voice 2
+_ \i<"p"> a a _ a a _ g# g# _ a a _ a a 
+% measure 6, voice 2
+f# _ \sl( c#2/8 a#1| 
+% measure 7, voice 2
+ h d2 f#/4 ) \sl( c#/8 a#1 |  \newSystem
+% measure 8, voice 2
+\staff<id=2,dy=1.3cm> h d2 f#/4 ) _  |
+% measures 9 to 10, voice 2
+\restFormat<dx=15hs>(\dispDur<1,1,0>(_*2/4)) empty*1/4 | 
+\restFormat<dx=15hs>(\dispDur<1,1,0>(_*2/4)) empty*1/4
+% measure 11, voice 2
+\bm( c#1/8 e c# e d e )
+% measure 12, voice 2
+c#/4 _
+],
+[ % third voice, violino II
+\instr<"violino II",dx=-2cm,dy=-0.6cm> \clef<"g"> \key<"A"> \meter<"3/4">
+_/4 |
+% measures 1 to 5, voice 3
+_ \i<"p"> e e _ f# f# _ d d _ c# c# _ e e |
+% measures 6 to 12, voice 3
+d _ \sl( g f#/2 g/4 f#/2) _/4 
+\restFormat<dx=15hs>(\dispDur<1,1,0>(_*2/4)) empty*1/4
+\restFormat<dx=15hs>(\dispDur<1,1,0>(_*2/4)) empty*1/4
+% _*6/4 
+| \sl( a0/2 g#/4 ) a/4 _ ],
+[ % fourth voice, viola
+\instr<"viola",dx=-2cm,dy=-0.75cm> \clef<"c"> \key<"A"> \meter<"3/4">
+_/4 | 
+_ \i<"p"> c#1/4 c# _ b0 b _ b b _ a a _ c#1 c# |
+h0 _ \sl( e1 d/2 e/4 d/2 ) _/4 
+\restFormat<dx=15hs>(\dispDur<1,1,0>(_*2/4)) empty*1/4
+\restFormat<dx=15hs>(\dispDur<1,1,0>(_*2/4)) empty*1/4
+% _*6/4 
+e0*4/4 _/4 ],
+[ % fifth voice, violoncello
+\instr<"violoncello",dx=-2cm,dy=-0.6cm> \clef<"f"> \key<"A"> \meter<"3/4"> _/4 |
+\i<"p"> a0/4 _ _ | d _ _ e _ _ f# _ _ c# _ _ d _ _ 
+\restFormat<dx=15hs>(\dispDur<1,1,0>(_*2/4)) empty*1/4
+\restFormat<dx=15hs>(\dispDur<1,1,0>(_*2/4)) empty*1/4
+\restFormat<dx=15hs>(\dispDur<1,1,0>(_*2/4)) empty*1/4
+\restFormat<dx=15hs>(\dispDur<1,1,0>(_*2/4)) empty*1/4
+% _*12/4 
+\sl( \stacc( e-1/4 e e ) ) a _ ]
+}

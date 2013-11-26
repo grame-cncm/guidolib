@@ -1,0 +1,68 @@
+{
+    [
+        \title<"Blue Rondo A La Turk"> \meter<"9/8"> \tempo<"Lively [3/8] = 126","3/8=126">
+         \barFormat<style="system"> \sl( \beam( \accent( a1*1/8 ) \stacc( f ) ) ) \sl
+        ( \beam( \accent( a1*1/8 ) \stacc( f ) ) ) \sl( \beam( \accent( a1*1/8 ) \stacc( f 
+        ) ) ) \slur( \b( \accent( e1*1/8 ) f \stacc( g ) ) ) \sl( \beam( \accent( a1*1/8 
+        ) \stacc( f ) ) ) \sl( \beam( \accent( a1*1/8 ) \stacc( f ) ) ) \sl( \beam( \accent
+        ( a1*1/8 ) \stacc( f ) ) ) \slur( \b( \accent( b&1*1/8 ) a \stacc( g ) ) ) \sl( \beam
+        ( \accent( a1*1/8 ) \stacc( f ) ) ) \sl( \beam( \accent( a1*1/8 ) \stacc( f ) ) ) 
+        \sl( \beam( \accent( a1*1/8 ) \stacc( f ) ) ) \slur( \b( \accent( e1*1/8 ) f \stacc
+        ( g ) ) ) \slur( \b( \accent( f1*1/8 ) g \stacc( a ) ) ) \slur( \b( \accent( g/8 ) a 
+        \stacc( b& ) ) ) \slur( \b( \accent( a/8 ) b& \stacc( c2 ) ) ) \sl( \beam( \accent
+        ( a1*1/8 ) \stacc( f ) ) ) \sl( \beam( \accent( a1*1/8 ) \stacc( f ) ) ) \sl( \beam
+        ( \accent( a1*1/8 ) \stacc( f ) ) ) \slur( \b( \accent( e1*1/8 ) f \stacc( g ) ) ) 
+        \sl( \beam( \accent( a1*1/8 ) \stacc( f ) ) ) \sl( \beam( \accent( a1*1/8 ) \stacc
+        ( f ) ) ) \sl( \beam( \accent( a1*1/8 ) \stacc( f ) ) ) \slur( \b( \accent( b&1*1/8 
+        ) a \stacc( g ) ) ) \sl( \beam( \accent( a1*1/8 ) \stacc( f ) ) ) \sl( \beam( \accent
+        ( a1*1/8 ) \stacc( f ) ) ) \sl( \beam( \accent( a1*1/8 ) \stacc( f ) ) ) \slur( \b
+        ( \accent( e1*1/8 ) f \stacc( g ) ) ) \slur( \b( \accent( f1*1/8 ) g \stacc( a ) ) 
+        ) \slur( \b( \accent( g/8 ) a \stacc( b& ) ) ) \slur( \b( \accent( a/8 ) b& \stacc
+        ( c2 ) ) ) \sl( \beam( \accent( c2*1/8 ) \stacc( a&1 ) ) ) \sl( \beam( \accent( c2*1/8 
+        ) \stacc( a&1 ) ) ) \sl( \beam( \accent( c2*1/8 ) \stacc( a&1 ) ) ) \slur( \b( \accent
+        ( g1*1/8 ) a& \stacc( b& ) ) ) \sl( \beam( \accent( c2*1/8 ) \stacc( a&1 ) ) ) \sl
+        ( \beam( \accent( c2*1/8 ) \stacc( a&1 ) ) ) \sl( \beam( \accent( c2*1/8 ) \stacc
+        ( a&1 ) ) ) \slur( \b( \accent( d&2*1/8 ) c \stacc( b&1 ) ) ) \sl( \beam( \accent
+        ( c2*1/8 ) \stacc( a&1 ) ) ) \sl( \beam( \accent( c2*1/8 ) \stacc( a&1 ) ) ) \sl
+        ( \beam( \accent( c2*1/8 ) \stacc( a&1 ) ) ) \slur( \b( \accent( g1*1/8 ) a& \stacc
+        ( b& ) ) ) \slur( \b( \accent( a&1*1/8 ) b& \stacc( c2 ) ) ) \slur( \b( \accent( b&1*1/8 
+        ) c2 \stacc( d& ) ) ) \slur( \b( \accent( c/8 ) d& \stacc( e&2 ) ) ) \sl( \beam( \accent
+        ( a1*1/8 ) \stacc( f ) ) ) \sl( \beam( \accent( a1*1/8 ) \stacc( f ) ) ) \sl( \beam
+        ( \accent( a1*1/8 ) \stacc( f ) ) ) \slur( \b( \accent( e1*1/8 ) f \stacc( g ) ) ) 
+        \sl( \beam( \accent( a1*1/8 ) \stacc( f ) ) ) \sl( \beam( \accent( a1*1/8 ) \stacc
+        ( f ) ) ) \sl( \beam( \accent( a1*1/8 ) \stacc( f ) ) ) \slur( \b( \accent( b&1*1/8 
+        ) a \stacc( g ) ) ) \sl( \beam( \accent( a1*1/8 ) \stacc( f ) ) ) \sl( \beam( \accent
+        ( a1*1/8 ) \stacc( f ) ) ) \sl( \beam( \accent( a1*1/8 ) \stacc( f ) ) ) \slur( \b
+        ( \accent( e1*1/8 ) f \stacc( g ) ) ) \slur( \b( \accent( f1*1/8 ) g \stacc( a ) ) 
+        ) \slur( \b( \accent( g/8 ) a \stacc( b& ) ) ) \slur( \b( \accent( a/8 ) b& \stacc
+        ( c2 ) ) ) 
+    ],
+    
+    [
+        \clef<"f"> \meter<"9/8"> { \accent( \stacc( e ) ) , f0 } { \accent( \stacc
+        ( e&1 ) ) , f0 } { \accent( \stacc( d1 ) ) , f0 } { \ten( c#1 ) , f0 } _/8 { \accent
+        ( \stacc( c1*1/4 ) ) , f0 } { \accent( \stacc( c#1 ) ) , f0 } { \accent( \stacc
+        ( d1 ) ) , f0 } { \ten( e&1 ) , f0 } _/8 { \accent( \stacc( e1*1/4 ) ) , f0 } 
+        { \accent( \stacc( e&1 ) ) , f0 } { \accent( \stacc( d1 ) ) , f0 } { \ten( c#1 
+        ) , f0 } _/8 { \accent( c1*1/4 ) , f0 } _/8 { \accent( c#1*1/4 ) , f0 } _/8 
+        { \accent( d1*1/4 ) , f0 } _/8 { \accent( \stacc( e1*1/4 ) ) , f0 } { \accent
+        ( \stacc( e&1 ) ) , f0 } { \accent( \stacc( d1 ) ) , f0 } { \ten( c#1 ) , f0 } 
+        _/8 { \accent( \stacc( c1*1/4 ) ) , f0 } { \accent( \stacc( c#1 ) ) , f0 } { \accent
+        ( \stacc( d1 ) ) , f0 } { \ten( e&1 ) , f0 } _/8 { \accent( \stacc( e1*1/4 ) ) 
+        , f0 } { \accent( \stacc( e&1 ) ) , f0 } { \accent( \stacc( d1 ) ) , f0 } { \ten
+        ( c#1 ) , f0 } _/8 { \accent( c1*1/4 ) , f0 } _/8 { \accent( c#1*1/4 ) , f0 } 
+        _/8 { \accent( d1*1/4 ) , f0 } _/8 { \accent( \stacc( g1*1/4 ) ) , a&0 } { \accent
+        ( \stacc( g&1 ) ) , a&0 } { \accent( \stacc( f1 ) ) , a&0 } { \ten( e1 ) , a&0 
+        } _/8 { \accent( \stacc( e&1*1/4 ) ) , a&0 } { \accent( \stacc( e1 ) ) , a&0 
+        } { \accent( \stacc( f1 ) ) , a&0 } { \ten( g&1 ) , a&0 } _/8 { \accent( \stacc
+        ( g1*1/4 ) ) , a&0 } { \accent( \stacc( g&1 ) ) , a&0 } { \accent( \stacc( f1 
+        ) ) , a&0 } { \ten( e1 ) , a&0 } _/8 { \accent( e&1*1/4 ) , a&0 } _/8 { \accent
+        ( e1*1/4 ) , a&0 } _/8 { \accent( f1*1/4 ) , a&0 } _/8 { \accent( \stacc( e1*1/4 
+        ) ) , f0 } { \accent( \stacc( e&1 ) ) , f0 } { \accent( \stacc( d1 ) ) , f0 
+        } { \ten( c#1 ) , f0 } _/8 { \accent( \stacc( c1*1/4 ) ) , f0 } { \accent( \stacc
+        ( c#1 ) ) , f0 } { \accent( \stacc( d1 ) ) , f0 } { \ten( e&1 ) , f0 } _/8 { \accent
+        ( \stacc( e1*1/4 ) ) , f0 } { \accent( \stacc( e&1 ) ) , f0 } { \accent( \stacc
+        ( d1 ) ) , f0 } { \ten( c#1 ) , f0 } _/8 { \accent( c1*1/4 ) , f0 } _/8 { \accent
+        ( c#1*1/4 ) , f0 } _/8 { \accent( d1*1/4 ) , f0 } _/8 
+    ]
+}

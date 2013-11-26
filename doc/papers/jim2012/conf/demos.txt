@@ -1,0 +1,22 @@
+
+
+1) seq
+illustre la règle 4) redondance
+
+2) slurs
+illustre les règles 
+ 1) fermeture des tags ouverts à la fin
+ 3) fermeture des tags ouverts au début
+ 2) rappel des tags courants
+ 5) fusion et réversibilité
+
+3) ties
+illustre la réversibilité sur les notes coupées 
+
+4) repeats
+illustre les règles sur la structure + réversibilité
+
+usages:
+5) split : extraction de parties instrumentales
+6) layout 
+7) bluerond : command line

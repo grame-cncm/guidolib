@@ -1,0 +1,20 @@
+{
+ [
+  \pageFormat<w=21.5cm,h=15cm,tm=2mm,bm=2,lm=4,rm=2>
+%  \tempo<"1/8=60">
+  \barFormat<"system">
+  \staff<1> \stemsUp \meter<"2/4"> 
+  \intens<"p", dx=1hs,dy=-7hs>
+  \beam(g2/32 e/16 c*3/32) c/8 
+  \beam(\noteFormat<dx=-0.9hs>(a1/16) c2 f) 
+  \beam(g/32 d/16 h1*3/32) d2/8 
+  \beam(h1/16 d2 g)],
+
+ [\staff<1>\stemsDown g1/8 e
+  \beam(f/16 \noteFormat<dx=0.8hs>(g) f a) a/8 e 
+  \beam(f/16 g f e)],
+
+ [\staff<2> \meter<"2/4"> 
+  \stemsUp a0 f h c1],
+ [\staff<2> \stemsDown c0 d g {d, a}]
+}
