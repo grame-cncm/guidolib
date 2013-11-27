@@ -6,8 +6,8 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
 2013-09-13  version 1.5.2
-- improvement of ritardando/accelerando tags : now a dotted line is drawn and it is possible to indicate the tempo of begining and end
-(also possible to change the text style and color)
+- improvement of \ritardando-tag and \accelerando-tag: now a dotted line is drawn and it is possible to indicate the tempo of beginning
+and end (also possible to change the text style and color)
 - improvement of accol tag : the accolade can change style and have a range : they can now envelop the entire system or a part of it
 - improvement of \meter-tag (now sums in numerator are allowed)
 - new reentrant parser (transparent for users, not for developers)
@@ -15,9 +15,9 @@ GUIDO Engine history
 - bugs correction : dotted events (clusters, chords (vertical dot alignment and collision avoidance) and rests)
 - bug correction : meter size set by user
 - option "Resize page to music" added in GuidoEditor settings and in Guido2Image
-- ARPageFormat modified : from now, when margins sum are superior than width / height, they are set to 0
+- ARPageFormat modified : from now, when horizontal / vertical margins sum is superior than width / height, they are set to 0
 - new 'lineThickness' attribute for the \staffFormat tag
-- new attributes for the \tuplet tag : 'lineThickness', 'textSize', 'bold'
+- new attributes for the \tuplet tag: 'lineThickness', 'textSize', 'bold'
 - bug correction : on windows, sometimes Guido crashed when user lest-clicked on the score
 - now, bars (simple bar, repeatBegin, repeatEnd, double bar, finish bar) adapts their size to staff lines number and to staff size
 - some bugs fixed about SVG export

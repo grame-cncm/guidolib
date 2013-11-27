@@ -19,7 +19,6 @@
 #include "GuidoDefs.h"
 #include "GRStaff.h"
 #include "VGDevice.h"
-#include "ARStaffFormat.h"
 
 #include <iostream>
 using namespace std;

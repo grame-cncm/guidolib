@@ -543,7 +543,7 @@ float GRStaff::getKeyPosition(TYPE_PITCH pit, int numkeys) const
 				bottombound = getNotePosition( NOTE_F, baseoct );
 				++ baseoct;
 			}
-			while (bottombound > (mStaffState.numlines)*getStaffLSPACE() );
+			while (bottombound > (mStaffState.numlines) * getStaffLSPACE() );
 			// Watch it here: the f-flat can be just outside (below lowest line)
 		}
 		else		// sharps
@@ -1982,6 +1982,11 @@ float GRStaff::currentLineThikness() const
 */
 void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 {
+    float sizeRatio = getSizeRatio();
+
+    if (sizeRatio < kMinNoteSize) // Too small, don't draw
+        return;
+
 	const float lspace = getStaffLSPACE(); // Space between two lines
 	const NVPoint & staffPos = getPosition();
 	
@@ -1992,31 +1997,27 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 	hdc.Line( xStart - 100, yPos, xStart + 100, yPos );
 	hdc.Line( xStart, yPos - 100, xStart, yPos + 100 );
 	hdc.PopPen();
-
 	*/
-    float sizeRatio = getSizeRatio();
-    if (sizeRatio > 0.05)
+
+    hdc.PushPenWidth(currentLineThikness() * getSizeRatio());
+    std::map<float,float>::const_iterator it = positions.begin();
+
+    while (it != positions.end())
     {
-        hdc.PushPenWidth(currentLineThikness() * getSizeRatio());
-        std::map<float,float>::const_iterator it = positions.begin();
-        
-        while (it != positions.end())
+        float x1 = it->first;
+        float x2 = it->second;
+
+        yPos = staffPos.y;
+
+        for (int i = 0; i < mStaffState.numlines; i++)
         {
-            float x1 = it->first;
-            float x2 = it->second;
-
-            yPos = staffPos.y;
-            
-            for( int i = 0; i < mStaffState.numlines; i++ )
-            {
-                hdc.Line(x1, yPos, x2, yPos);
-                yPos += lspace;
-            }
-            it++;
+            hdc.Line(x1, yPos, x2, yPos);
+            yPos += lspace;
         }
-
-        hdc.PopPenWidth();
+        it++;
     }
+
+    hdc.PopPenWidth();
 }
 
 // ----------------------------------------------------------------------------
