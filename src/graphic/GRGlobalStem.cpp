@@ -758,7 +758,8 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 		}
 
         // - Set notehead orientation for extreme chord note
-        theStem->setLastHeadOrientation(lowerNote->getHeadState());
+        if (lowerNote)
+            theStem->setLastHeadOrientation(lowerNote->getHeadState());
 	}
 	else if (stemdir == dirUP || stemdir == dirOFF)
 	{
@@ -903,7 +904,8 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 		}
 
         // - Set notehead orientation for extreme chord note
-        theStem->setLastHeadOrientation(higherNote->getHeadState());
+        if (higherNote)
+            theStem->setLastHeadOrientation(higherNote->getHeadState());
 	}
 	else 
 	{
