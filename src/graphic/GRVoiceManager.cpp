@@ -141,7 +141,7 @@
 #include "GRIntens.h"
 #include "GRSingleNote.h"
 #include "GRSingleRest.h"
-#include "GRNewTuplet.h"
+#include "GRTuplet.h"
 #include "GRGlue.h"
 #include "GRPageText.h"
 #include "GRRange.h"
@@ -1761,7 +1761,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 	}
 	else if (tinf == typeid(ARTuplet))
 	{
-		GRNewTuplet * grtupl = new GRNewTuplet(mCurGrStaff, static_cast<ARTuplet *>(apt));
+		GRTuplet * grtupl = new GRTuplet(mCurGrStaff, static_cast<ARTuplet *>(apt));
 
 		addGRTag(grtupl, 0);
 		mCurGrStaff->AddTag(grtupl);

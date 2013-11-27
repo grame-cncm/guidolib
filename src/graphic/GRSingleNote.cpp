@@ -48,7 +48,7 @@
 #include "GRSystem.h"
 #include "GRTrill.h"
 #include "GRCluster.h"
-#include "GRNewTuplet.h" // (JB) was GRTuplet
+#include "GRTuplet.h"
 #include "GRSpring.h"
 #include "GRPage.h"
 #include "secureio.h"
@@ -950,7 +950,7 @@ int GRSingleNote::adjustLength( const TYPE_DURATION & ndur )
 
 	// ATTENTION,  what happens when the note was within a tuplet!!!!
 	// tuplet is not handled yet ....
-	GRNewTuplet * mytuplet = 0; // was GRTuplet
+	GRTuplet * mytuplet = 0;
 	if (mAssociated)
 	{
 		GuidoPos pos = mAssociated->GetHeadPosition();
@@ -958,7 +958,7 @@ int GRSingleNote::adjustLength( const TYPE_DURATION & ndur )
 		while (pos)
 		{
 			el = mAssociated->GetNext(pos);
-			mytuplet = dynamic_cast<GRNewTuplet *>(el); // was GRTuplet
+			mytuplet = dynamic_cast<GRTuplet *>(el);
 			if (mytuplet)
 				break;
 		}
@@ -966,7 +966,7 @@ int GRSingleNote::adjustLength( const TYPE_DURATION & ndur )
 
 	if (mytuplet)
 	{
-//		mytuplet->removeEvent(this); // now GRNewTuplet... use removeAssociation ?
+//		mytuplet->removeEvent(this); // use removeAssociation ?
 	}
 
 	mDurationOfGR = ndur;

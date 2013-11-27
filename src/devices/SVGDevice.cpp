@@ -47,7 +47,7 @@ SVGDevice::SVGDevice(std::ostream& outstream, SVGSystem* system, const char* gui
 	fXScale(1), fYScale(1), fXOrigin(0), fYOrigin(0), fXPos(0), fYPos(0),
 	fFontAlign(kAlignBase), fDPI(0),
 	fPushedPen(false), fPushedPenColor(false), fPushedPenWidth(false), fPushedFill(false), fOffset(false),
-    fCurrFont (kNoFont), fScaledCount(0),
+    fCurrFont (kNoFont), fCurrFontProperties (VGFont::kFontNone), fScaledCount(0),
 	fPendingStrokeColor(0),
 	fBeginDone(false)
 {
@@ -390,8 +390,11 @@ const char* SVGDevice::baseline2str (int align) const
 //______________________________________________________________________________
 void SVGDevice::selectfont (int fonttype)
 {
-	if (fCurrFont == fonttype) return;		// nothing to do
-	if (fCurrFont) closegroup();
+    if (fCurrFont == fonttype && fonttype == 1) // (fonttype == 1) condition added
+        return;                                 // to avoid risk of writing several
+                                                // texts in the same text font
+	
+    if (fCurrFont) closegroup();
 
 	const VGFont * font = 0;
 	switch (fonttype) {
