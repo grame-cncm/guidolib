@@ -356,7 +356,7 @@ void GDeviceQt::SelectFillColor( const VGColor & c )
 void GDeviceQt::PushPen( const VGColor & inColor, float inWidth )
 {
 	QPen qPen = mQPainter->pen();
-	PenState state = {qPen.color(), qPen.widthF()};
+	PenState state = {qPen.color(), static_cast<float>(qPen.widthF())};
 	mPenStack.push( state );
 	SelectPen( inColor, inWidth );
 }
