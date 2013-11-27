@@ -58,8 +58,10 @@ Note for Android:
     and cairo for android.  This probably require having a different set of
     include and lib flags than normal system ones. These need to be defined
     manually (see below).
-    For example, you could define CAIRO_INCLUDE_FLAGS as :
-    export CAIRO_INCLUDE_FLAGS="-I/usr/local/android-libs/cairo/cairo/include -I/usr/local/android-libs/cairo-extra/include"
+    For example, you could define CAIRO_ANDROID_INCLUDE_FLAGS as :
+    export CAIRO_ANDROID_INCLUDE_FLAGS="-I/usr/local/android-libs/cairo/cairo/include -I/usr/local/android-libs/cairo-extra/include"
+    For example, you could define PIXMAN_ANDROID_INCLUDE_FLAGS as :
+    export PIXMAN_ANDROID_INCLUDE_FLAGS="-I/usr/local/android-libs/pixman/pixman/include -I/usr/local/android-libs/pixman-extra/include"
 
     A project that makes cairo for android can be found at:
       https://github.com/anoek/android-cairo
@@ -68,8 +70,8 @@ Note for Android:
     cmake -DCMAKE_TOOLCHAIN_FILE=$ANDTOOLCHAIN \
     -DANDROID=1 \
     -DLIBRARY_OUTPUT_PATH_ROOT=../../android/jni/
-    -DANDROID_CAIRO_CPP_FLAGS=$CAIRO_INCLUDE_FLAGS \
-    -DANDROID_PIXMAN_CPP_FLAGS=$PIXMAN_INCLUDE_FLAGS \
+    -DANDROID_CAIRO_CPP_FLAGS=$CAIRO_ANDROID_INCLUDE_FLAGS \
+    -DANDROID_PIXMAN_CPP_FLAGS=$PIXMAN_ANDROID_INCLUDE_FLAGS \
     -DANDROID_CAIRO_LIBS=$CAIRO_LIB_FLAGS \
     -DANDROID_PIXMAN_LIBS=$PIXMAN_LIB_FLAGS \
     -DSTATICLIB=yes ../../cmake
