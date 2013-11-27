@@ -8,7 +8,7 @@ GUIDO Engine history
 2013-09-13  version 1.5.2
 - improvement of \ritardando-tag and \accelerando-tag: now a dotted line is drawn and it is possible to indicate the tempo of beginning
 and end (also possible to change the text style and color)
-- improvement of \accol tag : the accolade can change style and have a range : they can now envelop the entire system or a part of it
+- improvement of \accol tag : the accolade can change its style and have a range: now it can envelop the entire system or a part of it
 - improvement of \meter-tag (now sums in numerator are allowed)
 - new reentrant parser (transparent for users, not for developers)
 - new stream parsing mechanism : from now, it's possible to parse a stream as it goes along, and to get intermediate AR's state
