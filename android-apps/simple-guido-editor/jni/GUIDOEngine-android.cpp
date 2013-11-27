@@ -81,7 +81,7 @@ Java_com_grame_simpleguidoeditor_SimpleGuidoEditor_gmntosvg(JNIEnv *env, jclass 
 
     std::stringstream out;
 
-    err = GuidoSVGExport (grh, 1, out, 0, reinterpret_cast<char *>(______src_guido2_svg));
+    err = GuidoSVGExportWithFontSpec (grh, 1, out, 0, reinterpret_cast<char *>(______src_guido2_svg));
     if (err != guidoNoErr) {
       env->ReleaseStringUTFChars(java_gmn, gmn);  // release resources
       if (grh) GuidoFreeGR(grh);
