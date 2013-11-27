@@ -555,7 +555,7 @@ GUIDOAPI(GuidoErrCode) GuidoSVGExport( const GRHandler handle, int page, std::os
   return GuidoSVGExportWithFontSpec( handle, page, out, fontfile, 0);
 }
 
-GUIDOAPI(GuidoErrCode) GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec)
+GUIDOAPI(GuidoErrCode) GuidoSVGExportWithFontSpec( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec)
 {
  	SVGSystem sys;
 	SVGDevice dev (out, &sys, fontfile, fontspec);
