@@ -42,6 +42,7 @@ Note for Android:
     Modify your path to contain the following.  Otherwise, the compiler
     won't find things like the standard library.
 
+    export PATH=$PATH:$PATH_TO_NDK
     export PATH=$PATH:$PATH_TO_SDK/tools
     export PATH=$PATH:$PATH_TO_SDK/platform-tools
     export PATH=$PATH:$PATH_TO_STANDALONE_TOOLCHAIN/bin
