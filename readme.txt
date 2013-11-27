@@ -30,7 +30,9 @@ Note for Android:
 
     From the build/tools directory of the NDK, invoke make-standalone-toolchain.sh
     to make a standalone toolchain in the directory of your choice (see NDK)
-    documentation for how.  I will call the path to your standalone toolchain
+    documentation for how.  More precisely, read section 4 in the document
+    STANDALONE-TOOLCHAIN.html that ships with the NDK. Make sure to use a recent
+    platform (at least android-18). I will call the path to your standalone toolchain
     $PATH_TO_STANDALONE_TOOLCHAIN, the path to the SDK $PATH_TO_SDK and the
     path to android cmake $PATH_TO_ANDROID_CMAKE.
 
