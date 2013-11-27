@@ -73,6 +73,7 @@ static void usage (char* name)
     cout << tab << tab << "0 = Apache-like log" << endl;
     cout << tab << tab << "1 = XML logfile" << endl;
     cout << tab << kCachedirOpt << " cache dir name : (defaults to a directory cache in the directory of the current executable)" << endl;
+    cout << tab << kVersionOpt << " version of the server and GUIDO" << endl;
 /*
     cout << tab << kVerboseOpt << " verbosity. an integer bitmap that can combine:" << endl;
     cout << tab << tab << "1 (print ip to log)" << endl;
