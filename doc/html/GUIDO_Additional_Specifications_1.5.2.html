@@ -20,9 +20,13 @@
 			A:hover   { color:#990000; text-decoration: none; }
 
 			p		 { margin-left: 50px; }
-			p.notes  { font-style: italic; margin-left: 0px; }
+			p.notes  { font-style: italic; margin-left: 50px; }
 			p.tag    { margin-left: 90px; text-indent: -40px}
-			ul		 { margin-left: 100px; }
+			ul li  	 { margin-left: 50px; }
+			ul li ul { margin-left: -20px; }
+			ul li ul li ul li ul li { margin-left: 10px; }
+			pre      { margin-left: 0px; }
+			
     
 			span.tag { font-weight : bold; }
 		</style>
@@ -51,6 +55,9 @@
 			<p>
 				<a href="#3.">3. Staff format</a>
 			</p>
+			<p>
+				<a href="#4.">4. Accelerando / Ritardando</a>
+			</p>
 			
 			
 			<hr>
@@ -67,102 +74,103 @@
 					Set the meter of the voice. Meter can be complex : numerator can be a sum. See examples.
 				</p>
 				
-				<br>
-				
 				<ul>
 					<li>
 						<i><b>Parameters</b> (in the order of their default positions):</i>
 						
 						<ul>
 							<br>
+							
 							<li>
 								<b><i>type</i></b> - meter type
 							
 								<ul>
-									<br>
 									<li>
-										<i>standard values:</i>
-						
-										<ul>
-											<li>
-												string
-											</li>
-										</ul>
+										<i>value type:</i> <b>string</b>
 									</li>
 							
 									<li>
-										<i>default value:</i> "4/4"
+										<i>default value:</i> <b>"4/4"</b>
 									</li>
-									<br>
 								</ul>
 							</li>
+						
+							<br>
 						
 							<li>
-								<b><i>size</i></b> - graphic size of the meter 
-								<br>
+								<b><i>size</i></b> - graphic size of the meter
 						
 								<ul>
-									<br>
 									<li>
-										<i>standard values:</i>
-						
-										<ul>
-											<li>
-												unit parameter
-											</li>
-										</ul>
+										<i>value type:</i> <b>unit</b>
 									</li>
 							
 									<li>
-										<i>default value:</i> 1
+										<i>default value:</i> <b>1</b>
 									</li>
-									<br>
 								</ul>
 							</li>
 						
+							<br>
+							
 							<li>
 								<b><i>autoBarlines</i></b> - sets auto barlines on or off
-								<br>
 							
 								<ul>
-									<br>
 									<li>
-									<i>standard values:</i>
-							
+										<i>value type:</i> <b>string</b>
+									</li>
+									
+									<li>
+										<i>standard values:</i>
 										<ul>
 											<li>
-												strings ("on" / "off")
+												<b>"on"</b>
+											</li>
+											<li>
+												<b>"off"</b>
 											</li>
 										</ul>
 									</li>
-							
+									
 									<li>
-										<i>default value:</i> "on"
+										<i>default value:</i> <b>"on"</b>
 									</li>
-									<br>
 								</ul>
 							</li>
-						</ul>		
-						<br>
+						</ul>
 					</li>
-									
+					
+					<br>
+					
 					<li>
 						<b><i>Semantics:</i></b>
 								
 						<ul>
 							<li>
-								segmentation of music part's duration
+								Meter corresponds to the segmentation of music part's duration
+							</li>
+						</ul>
+					</li>
+					
+					<br>
+					
+					<li>
+						<b><i>Examples:</i></b>
+						
+						<ul>
+							<li>
+								<pre>[ \meter&lt;"2+2+3/4"&gt; a a c2 a1 e2 e d c ]</pre>
+								<center> <IMG SRC="imgs/meter1.png"> </center>
+							</li>
+							
+							<li>
+								<pre>[ \meter&lt;"C"&gt; a b c d e ]</pre>
+								<center> <IMG SRC="imgs/meter2.png"> </center>
 							</li>
 						</ul>
 					</li>
 				</ul>
-			</p>
-			<p class="notes">
-				Examples:
-				<pre>[ \meter&lt;"2+2+3/4"&gt; a a c2 a1 e2 e d c ]</pre>
-				<center> <IMG SRC="imgs/meter1.png"> </center>
-				<pre>[ \meter&lt;"C"&gt; a b c d e ]</pre>
-				<center> <IMG SRC="imgs/meter2.png"> </center>
 			</p>
 			
 			
@@ -180,137 +188,127 @@
 					Set a tuplet.
 				</p>
 				
-				<br>
-				
 				<ul>
 					<li>
 						<i><b>Parameters</b> (in the order of their default positions):</i>
 						
 						<ul>
 							<br>
+							
 							<li>
 								<b><i>format</i></b> - meter format
 							
 								<ul>
-									<br>
 									<li>
-										<i>standard values</i> ("[leftBrace][numerator]:[denominator][rightBrace]") :
-						
+										<i>value type:</i> <b>string</b>
+									</li>
+									
+									<li>
+										<i>syntax:</i> <b>"[leftBrace][numerator]:[denominator][rightBrace]"</b>
+									</li>
+										
+									<li>
+										<i>examples:</i>
+
 										<ul>
 											<li>
-												"-3-"
+												<b>"-3-"</b>
 											</li>
 											<li>
-												"-3:5-"
+												<b>"3:5-"</b>
 											</li>
 											<li>
-												"-2:5"
+												<b>"2:7"</b>
 											</li>
 										</ul>
 									</li>
 							
 									<li>
-										<i>default value:</i> ""
+										<i>default value:</i> <b>"--"</b>
 									</li>
-									<br>
 								</ul>
 							</li>
 						
+							<br>
+							
 							<li>
 								<b><i>dy1, dy2</i></b> - graphic vertical offsets of the two ends of the tuplet's line (defines tuplet's line slope)
 							
 								<ul>
-									<br>
 									<li>
-										<i>standard values:</i>
-						
-										<ul>
-											<li>
-												unit parameters
-											</li>
-										</ul>
+										<i>value type:</i> <b>unit</b>
 									</li>
 							
 									<li>
-										<i>default value:</i> 0
+										<i>default value:</i> <b>0</b>
 									</li>
-									<br>
 								</ul>
 							</li>
 						
+							<br>
+							
 							<li>
 								<b><i>lineThickness</i></b> - graphic thickness of tuplet's line
-								<br>
 						
 								<ul>
-									<br>
 									<li>
-										<i>standard values:</i>
-						
-										<ul>
-											<li>
-												unit parameter
-											</li>
-										</ul>
+										<i>value type:</i> <b>unit</b>
 									</li>
 							
 									<li>
-										<i>default value:</i> 0.08
-									<br>
+										<i>default value:</i> <b>0.08</b>
+									</li>
 								</ul>
 							</li>
+							
+							<br>
 							
 							<li>
 								<b><i>bold</i></b> - defines if the text is bold or not
 							
 								<ul>
-									<br>
+									<li>
+										<i>value type:</i> <b>string</b>
+									</li>
+									
 									<li>
 										<i>standard values:</i>
-						
 										<ul>
 											<li>
-												"true"
+												<b>"true"</b>
 											</li>
 											<li>
-												"false"
+												<b>"false"</b>
 											</li>
 										</ul>
 									</li>
 							
 									<li>
-										<i>default value:</i> "false"
+										<i>default value:</i> <b>"false"</b>
 									</li>
-									<br>
 								</ul>
 							</li>
+							
+							<br>
 							
 							<li>
 								<b><i>textSize</i></b> - graphic size of the text
-								<br>
 						
 								<ul>
-									<br>
 									<li>
-										<i>standard values:</i>
-						
-										<ul>
-											<li>
-												unit parameter
-											</li>
-										</ul>
+										<i>value type:</i> <b>unit</b>
 									</li>
 							
 									<li>
-										<i>default value:</i> 1
+										<i>default value:</i> <b>1</b>
 									</li>
-									<br>
 								</ul>
 							</li>
-						</ul>		
-						<br>
+						</ul>
 					</li>
-									
+					
+					<br>
+					
 					<li>
 						<b><i>Semantics:</i></b>
 								
@@ -320,14 +318,25 @@
 							</li>
 						</ul>
 					</li>
+					
+					<br>
+					
+					<li>
+						<b><i>Examples:</i></b>
+								
+						<ul>
+							<li>
+								<pre>[ \tuplet&lt;"-3-", textSize=1.5, bold="true", lineThickness=0.2, dy1=10&gt; (a/3 a a) ]</pre>
+								<center> <IMG SRC="imgs/tuplet1.png"> </center>
+							</li>
+							
+							<li>
+								<pre>[ \tuplet&lt;"2:5-", dy1=7, dy2=9&gt; (g b b) ]</pre>
+								<center> <IMG SRC="imgs/tuplet2.png"> </center>
+							</li>
+						</ul>
+					</li>
 				</ul>
-			</p>
-			<p class="notes">
-				Examples:
-				<pre>[ \tuplet&lt;"-3-", textSize=1.5, bold="true", lineThickness=0.2, dy1=10&gt; (a/3 a a) ]</pre>
-				<center> <IMG SRC="imgs/tuplet1.png"> </center>
-				<pre>[ \tuplet&lt;"2:5-", dy1=7, dy2=9&gt; (g b b) ]</pre>
-				<center> <IMG SRC="imgs/tuplet2.png"> </center>
 			</p>
 			
 			
@@ -345,8 +354,6 @@
 					Change the appearance of a staff.
 				</p>
 				
-				<br>
-				
 				<ul>
 					<li>
 						<i><b>Parameters</b> (in the order of their default positions):</i>
@@ -357,30 +364,26 @@
 								<b><i>style</i></b> - staff style
 							    
 								<ul>
-									<br>
 									<li>
-										<i>standard values</i> ("[n]-lines", where <i>n</i> is the number of lines to display) :
-						
-										<ul>
-											<li>
-												string
-											</li>
-										</ul>
+										<i>value type:</i> <b>string</b>
 									</li>
-							
+									
 									<li>
-										<i>default value:</i> "5-lines"
+										<i>syntax:</i> <b>"[n]-lines"</b>, where <i>n</i> is the number of lines to display
 									</li>
-									<br>
+									
+									<li>
+										<i>default value:</i> <b>"5-lines"</b>
+									</li>
 								</ul>
 							</li>
 						
+							<br>
+							
 							<li>
 								<b><i>size</i></b> - graphic size of the staff
-								<br>
 						
 								<ul>
-									<br>
 									<li>
 										<i>standard values:</i>
 						
@@ -394,43 +397,49 @@
 									<li>
 										<i>default value:</i> 1
 									</li>
-									<br>
 								</ul>
 							</li>
+							
+							<br>
 						
 							<li>
 								<b><i>lineThickness</i></b> - defines the staff lines thickness
-								<br>
 						
 								<ul>
-									<br>
 									<li>
-										<i>standard values:</i>
-						
-										<ul>
-											<li>
-												unit parameter
-											</li>
-										</ul>
+										<i>value type</i> <b>unit</b>
 									</li>
 							
 									<li>
-										<i>default value:</i> 0.08
+										<i>default value:</i> <b>0.08</b>
 									</li>
-									<br>
 								</ul>
 							</li>
-						</ul>		
-						<br>
+						</ul>
+					</li>
+					
+					<br>
+					
+					<li>
+						<b><i>Examples:</i></b>
+								
+						<ul>
+							<li>
+								<pre>[ \staffFormat&lt;size=5pt, lineThickness=0.3&gt; c d e f g a h c2 ]</pre>
+								<center> <IMG SRC="imgs/staffFormat1.png"> </center>
+							</li>
+							
+							<li>
+								<pre>[ \staffFormat&lt;style="1-line"> \clef<"none"&gt; g g g g g e h ]</pre>
+								<center> <IMG SRC="imgs/staffFormat2.png"> </center>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</p>
-			<p class="notes">
-				Examples:
-				<pre>[ \staffFormat&lt;size=5pt, lineThickness=0.3&gt; c d e f g a h c2 ]</pre>
-				<center> <IMG SRC="imgs/staffFormat1.png"> </center>
-				<pre>[ \staffFormat&lt;style="1-line"> \clef<"none"&gt; g g g g g e h ]</pre>
-				<center> <IMG SRC="imgs/staffFormat2.png"> </center>
-			</p>
+			
+			<a name="4."></a>
+			<h4>4. Accelerando - Ritardando</h4>
+		</p>
 	</body>
 </html>
