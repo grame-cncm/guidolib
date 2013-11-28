@@ -20,7 +20,7 @@
 #include <locale.h>
 
 #include "GuidoStream.h"
-#include "GuidoFactory.h"
+#include "GUIDOFactory.h"
 
 class ARFactory;
 
