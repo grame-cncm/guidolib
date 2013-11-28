@@ -142,6 +142,12 @@
 					</li>
 					
 					<br>
+									
+					<li>
+						<i><b>Range:</b> none</i>
+					</li>
+					
+					<br>
 					
 					<li>
 						<b><i>Semantics:</i></b>
@@ -308,6 +314,12 @@
 					</li>
 					
 					<br>
+									
+					<li>
+						<i><b>Range:</b> obligatory</i>
+					</li>
+					
+					<br>
 					
 					<li>
 						<b><i>Semantics:</i></b>
@@ -385,17 +397,11 @@
 						
 								<ul>
 									<li>
-										<i>standard values:</i>
-						
-										<ul>
-											<li>
-												unit parameter
-											</li>
-										</ul>
+										<i>value type!</i> <b>unit</b>
 									</li>
 							
 									<li>
-										<i>default value:</i> 1
+										<i>default value:</i> <b>1</b>
 									</li>
 								</ul>
 							</li>
@@ -416,6 +422,12 @@
 								</ul>
 							</li>
 						</ul>
+					</li>
+					
+					<br>
+									
+					<li>
+						<i><b>Range:</b> none</i>
 					</li>
 					
 					<br>
@@ -440,6 +452,221 @@
 			
 			<a name="4."></a>
 			<h4>4. Accelerando - Ritardando</h4>
+			
+			<p class="tag">
+				<p>
+					<span class="tag">\accel</span>&lt;<i>dx, dy, color, tempo, abstempo, font, fattrib, fsize</i>&gt;(<i>notes</i>) 
+				</p>
+				<p>
+					<span class="tag">\rit</span>&lt;<i>dx, dy, color, tempo, abstempo, font, fattrib, fsize</i>&gt;(<i>notes</i>) 
+				</p>
+				<p>
+					Places the text "accel." or "rit." under the staff where it occurs, and draws a dotted line to the end position.
+				</p>
+				
+				<ul>
+					<li>
+						<i><b>Parameters</b> (in the order of their default positions):</i>
+						
+						<ul>
+							<br>
+							<li>
+								<b><i>dx, dy</i></b> - graphic offsets of the accelerando/ritardando
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>unit</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>0</b>
+									</li>
+								</ul>
+							</li>
+							
+							<br>
+						
+							<li>
+								<b><i>color</i></b> - graphic color of the trill 
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>color string</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>"black"</b>
+									</li>
+								</ul>
+							</li>
+							
+							<br>
+						
+							<li>
+								<b><i>tempo</i></b> - tempo for the beginning note
+								
+								<ul>
+									<li>
+										<i>value type:</i> <b>tempo string</b>
+									</li>
+						
+									<li>
+										<i>examples:</i>
+
+										<ul>
+											<li>
+												<b>"60"</b>
+											</li>
+											<li>
+												<b>"80"</b>
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>none</b>
+									</li>
+								</ul>
+							</li>
+							
+							<br>
+							
+							<li>
+								<b><i>abstempo</i></b> - tempo for the ending note
+								<ul>
+									<li>
+										<i>value type:</i> <b>tempo string</b>
+									</li>
+									
+									<li>
+										<i>examples:</i>
+
+										<ul>
+											<li>
+												<b>"60"</b>
+											</li>
+											<li>
+												<b>"80"</b>
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>none</b>
+									</li>
+								</ul>
+							</li>
+							
+							<br>
+							
+							<li>
+								<b><i>font</i></b> - the font name for the text accel or rit
+								
+								<ul>
+									<li>
+										<i>type value:</i> <b>font string</b>
+						
+									</li>
+									
+									<li>
+										<i>examples:</i>
+
+										<ul>
+											<li>
+												<b>"Arial"</b>
+											</li>
+											<li>
+												<b>"Andalus"</b>
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> "Times new Roman"
+									</li>
+								</ul>
+							</li>
+							
+							<br>
+							
+							<li>
+								<b><i>fattrib</i></b> - the font attributes
+								
+								<ul>
+									<li>
+										<i>value type:</i> <b>attributes string</b>
+									</li>
+									
+									<li>
+										<i>standard values:</i>
+										
+										<ul>
+											<li>
+												<b>"b"</b> (for bold)
+											</li>
+											
+											<li>
+												<b>"i"</b> (for italic)
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>none</b>
+									</li>
+								</ul>
+							</li>
+							
+							<br>
+							
+							<li>
+								<b><i>fsize</i></b> - the font size
+								
+								<ul>
+									<li>
+										<i>value type:</i> unit
+									</li>
+									
+									<li>
+										<i>default value:</i> <b>9pt</b>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					
+					<br>
+									
+					<li>
+						<i><b>Range:</b> obligatory</i>
+					</li>
+					
+					<br>
+					
+					<li>
+						<b><i>Semantics:</i></b>
+								
+						<ul>
+							<li>
+								Acceleration or deceleration within a group of notes
+							</li>
+						</ul>
+					</li>
+					
+					<br>
+					
+					<li>
+						<b><i>Examples:</i></b>
+								
+						<ul>
+							<li>
+								<pre>[ \rit&lt;fattrib="b"&gt;(e g b f a) \accel&lt;tempo="60", color="red", abstempo="80", dy=22, font="Andalus"&gt;(e d e2 e3 f1 a)]</pre>
+								<center> <IMG SRC="imgs/accelRit.png"> </center>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</p>
 		</p>
 	</body>
 </html>
