@@ -34,6 +34,7 @@ public:
     /* Clears this' state flags */
     void     Prepare();
     void     ReinitStream();
+    stringstream * getGlobalStringStream() {return fTheGlobalStringStream;}
 
 protected:
     stringstream *fTheGlobalStringStream; // The stringstream which contains the real string
