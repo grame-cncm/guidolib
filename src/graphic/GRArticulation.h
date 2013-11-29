@@ -43,9 +43,9 @@ class GRArticulation : public GRTagARNotationElement
 	//  enum { STACCATO, ACCENT, MARCATO, TENUTO, FERMATA, BREATHMARK };
 	
 		enum {  kFlagStaccato = 1, kFlagStaccmo = 2, kFlagTenuto = 4,
-				kFlagAccent = 8, kFlagMarcato = 16, 
-				kFlagFermataUp = 32, kFlagFermataDown = 64, kFlagBreathMark = 128, 
-				kFlagPizz = 256, kFlagHarmonic = 512 };
+				kFlagAccent = 8, kFlagMarcato = 16, kFlagMarcatoUp = 32,
+                kFlagMarcatoDown = 64, kFlagFermataUp = 128, kFlagFermataDown = 256,
+                kFlagBreathMark = 512, kFlagPizz = 1024, kFlagHarmonic = 2048 };
 
 
 				GRArticulation( ARMusicalTag * inTag,
@@ -80,6 +80,8 @@ class GRArticulation : public GRTagARNotationElement
 		void	setupFingernailPizz();
 		void	setupAccent();
 		void	setupMarcato();
+        void	setupMarcatoDown();
+        void	setupMarcatoUp();
 		void	setupTenuto();
 		void	setupFermataUp();
 		void	setupFermataDown();
@@ -96,6 +98,8 @@ class GRArticulation : public GRTagARNotationElement
 		void	placePizz(GREvent * inParent, NVPoint & ioPos);
 		void	placeAccent( GREvent * inParent, NVPoint & ioPos );
 		void	placeMarcato( GREvent * inParent, NVPoint & ioPos );
+        void	placeMarcatoUp( GREvent * inParent, NVPoint & ioPos );
+        void	placeMarcatoDown( GREvent * inParent, NVPoint & ioPos );
 		void	placeTenuto( GREvent * inParent, NVPoint & ioPos );
 		void	placeFermataUp( GREvent * inParent, NVPoint & ioPos );
 		void	placeFermataDown( GREvent * inParent, NVPoint & ioPos );

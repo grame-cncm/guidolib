@@ -58,6 +58,9 @@
 			<p>
 				<a href="#4.">4. Accelerando / Ritardando</a>
 			</p>
+			<p>
+				<a href="#5.">5. Marcato</a>
+			</p>
 			
 			
 			<hr>
@@ -154,7 +157,7 @@
 								
 						<ul>
 							<li>
-								Meter corresponds to the segmentation of music part's duration
+								Meter corresponds to the segmentation of music part's duration.
 							</li>
 						</ul>
 					</li>
@@ -191,7 +194,7 @@
 					<span class="tag">\tuplet</span>&lt;<i>format, dy1, dy2, lineThickness, bold, textSize</i>&gt;(<i>notes</i>) 
 				</p>
 				<p>
-					Set a tuplet.
+					Set a <i>tuplet</i>.
 				</p>
 				
 				<ul>
@@ -238,7 +241,7 @@
 							<br>
 							
 							<li>
-								<b><i>dy1, dy2</i></b> - graphic vertical offsets of the two ends of the tuplet's line (defines tuplet's line slope)
+								<b><i>dy1, dy2</i></b> - graphic vertical offsets of the two ends of the <i>tuplet</i>'s line (defines <i>tuplet</i>'s line slope)
 							
 								<ul>
 									<li>
@@ -254,7 +257,7 @@
 							<br>
 							
 							<li>
-								<b><i>lineThickness</i></b> - graphic thickness of tuplet's line
+								<b><i>lineThickness</i></b> - graphic thickness of <i>tuplet</i>'s line
 						
 								<ul>
 									<li>
@@ -326,7 +329,7 @@
 								
 						<ul>
 							<li>
-								A tuplet corresponds to any rhythm that involves dividing the beat into a different number of equal subdivisions from that usually permitted by the time-signature.
+								A <i>tuplet</i> corresponds to any rhythm that involves dividing the beat into a different number of equal subdivisions from that usually permitted by the time-signature.
 							</li>
 						</ul>
 					</li>
@@ -471,7 +474,7 @@
 						<ul>
 							<br>
 							<li>
-								<b><i>dx, dy</i></b> - graphic offsets of the accelerando/ritardando
+								<b><i>dx, dy</i></b> - graphic offsets of the <i>accelerando</i> / <i>ritardando</i>
 							
 								<ul>
 									<li>
@@ -648,7 +651,7 @@
 								
 						<ul>
 							<li>
-								Acceleration or deceleration within a group of notes
+								Acceleration or deceleration within a group of notes.
 							</li>
 						</ul>
 					</li>
@@ -662,6 +665,107 @@
 							<li>
 								<pre>[ \rit&lt;fattrib="b"&gt;(e g b f a) \accel&lt;tempo="60", color="red", abstempo="80", dy=22, font="Andalus"&gt;(e d e2 e3 f1 a)]</pre>
 								<center> <IMG SRC="imgs/accelRit.png"> </center>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</p>
+			
+			
+			<hr>
+			
+			
+			<a name="5."></a>
+			<h4>5. Marcato</h4>
+
+			<p class="tag">
+				<p>
+					<span class="tag">\marcato</span>&lt;<i>position, dx, dy</i>&gt;(<i>notes</i>) 
+				</p>
+				<p>
+					Places a <i>marcato</i> on a note.
+				</p>
+				
+				<ul>
+					<li>
+						<i><b>Parameters</b> (in the order of their default positions):</i>
+						
+						<ul>
+							<br>
+							
+							<li>
+								<b><i>position</i></b> - <i>marcato</i> position
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>string</b>
+									</li>
+									
+									<li>
+										<i>standard values:</i>
+										
+										<ul>
+											<li>
+												<b>"above"</b>
+											</li>
+											
+											<li>
+												<b>"below"</b>
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>""</b>, let the <i>marcato</i> places itself automatically
+									</li>
+								</ul>
+							</li>
+						
+							<br>
+						
+							<li>
+								<b><i>dx, dy</i></b> - graphic offsets of the <i>marcato</i>
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>unit</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>0</b>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					
+					<br>
+									
+					<li>
+						<i><b>Range:</b> obligatory</i>
+					</li>
+					
+					<br>
+					
+					<li>
+						<b><i>Semantics:</i></b>
+								
+						<ul>
+							<li>
+								The <i>marcato</i> is a musical instruction indicating a note, chord, or passage which has to be played louder or more forcefully than surrounding music.
+							</li>
+						</ul>
+					</li>
+					
+					<br>
+					
+					<li>
+						<b><i>Examples:</i></b>
+						
+						<ul>
+							<li>
+								<pre>[ \marcato(b) \marcato(a) \marcato&lt;position="above", dy=4&gt;(a) \marcato&lt;"below", dx=3, dy=-4&gt;(b) ]</pre>
+								<center> <IMG SRC="imgs/marcato.png"> </center>
 							</li>
 						</ul>
 					</li>

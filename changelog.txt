@@ -10,6 +10,7 @@ GUIDO Engine history
 and end (also possible to change the text style and color)
 - improvement of \accol tag : the accolade can change its style and have a range: now it can envelop the entire system or a part of it
 - improvement of \meter-tag (now sums in numerator are allowed)
+- new 'position' attribute for the \marcato tag
 - new reentrant parser (transparent for users, not for developers)
 - new stream parsing mechanism : from now, it's possible to parse a stream as it goes along, and to get intermediate AR's state
 - bugs correction : dotted events (clusters, chords (vertical dot alignment and collision avoidance) and rests)
