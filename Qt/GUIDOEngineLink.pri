@@ -1,7 +1,7 @@
 # Universal binary on MAC
 #macx:QMAKE_MAC_SDK=macosx10.7
 #macx:CONFIG+= x86_64
-
+CONFIG += c++11
 win32: {
 	contains(QMAKE_HOST.arch, x86): {
 	QMAKE_LFLAGS *= /MACHINE:X86
@@ -23,7 +23,7 @@ win32: {
 	macx:LIBS += -F../../build/MacOS/Debug -framework GUIDOEngine
 	unix:!macx:LIBS += -L../../cmake -lGUIDOEngine
 }
-#!win32:LIBS += -L../../build/unix -lSGUIDOEngine
+
 win32:LIBS += $$GUIDO
 
 INCLUDEPATH += ../../src/include

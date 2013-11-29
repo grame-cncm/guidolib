@@ -8,7 +8,6 @@ win32 {
 }
 QT += widgets printsupport
 CONFIG += console
-CONFIG += c++11
 macx:CONFIG -= app_bundle
 #DESTDIR = ../bin
 
