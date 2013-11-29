@@ -1,9 +1,6 @@
-Edit jni/Android.mk to point to your cairo and pixman locations. Make sure
-cairo and pixman are compiled for android. Also make sure to build
-GUIDOEngine for android (see ../readme.txt) and to install this
-to the jni directory of this project.
+First, read the README in the directory above this one if you haven't yet.
 
-Then, from the android directory
+Then, from this directory:
 
 ndk-build
 ant debug

@@ -36,55 +36,21 @@ Note for Android:
     $PATH_TO_STANDALONE_TOOLCHAIN, the path to the SDK $PATH_TO_SDK and the
     path to android cmake $PATH_TO_ANDROID_CMAKE.
 
-    Get android-cmake: https://github.com/taka-no-me/android-cmake.
-    This is the best version for now - get the least buggy one...
-
     Modify your path to contain the following.  Otherwise, the compiler
     won't find things like the standard library.
 
-    export PATH=$PATH:$PATH_TO_NDK
-    export PATH=$PATH:$PATH_TO_SDK/tools
-    export PATH=$PATH:$PATH_TO_SDK/platform-tools
-    export PATH=$PATH:$PATH_TO_STANDALONE_TOOLCHAIN/bin
+      export PATH=$PATH:$PATH_TO_NDK
+      export PATH=$PATH:$PATH_TO_SDK/tools
+      export PATH=$PATH:$PATH_TO_SDK/platform-tools
+      export PATH=$PATH:$PATH_TO_STANDALONE_TOOLCHAIN/bin
 
-    export ANDROID_NDK_TOOLCHAIN_ROOT=$PATH_TO_STANDALONE_TOOLCHAIN
-    export ANDTOOLCHAIN=$PATH_TO_ANDROID_CMAKE/android.toolchain.cmake
-    you may have to do instead...
-    export ANDTOOLCHAIN=$PATH_TO_ANDROID_CMAKE/toolchain/android.toolchain.cmake
+    Read the short README in the android-apps folder for instructions on
+    how to compile android-cairo.
 
-    depending on where you get android.toolchain.cmake from.
-
-    There are also several variables you'll need to define in the scheme
-    below so that cmake finds everything.  You'll need to compile pixman
-    and cairo for android.  This probably require having a different set of
-    include and lib flags than normal system ones. These need to be defined
-    manually (see below).
-    For example, you could define CAIRO_ANDROID_INCLUDE_FLAGS as :
-    export CAIRO_ANDROID_INCLUDE_FLAGS="-I/usr/local/android-libs/cairo/cairo/include -I/usr/local/android-libs/cairo-extra/include"
-    ...you could define PIXMAN_ANDROID_INCLUDE_FLAGS as :
-    export PIXMAN_ANDROID_INCLUDE_FLAGS="-I/usr/local/android-libs/pixman/pixman/include -I/usr/local/android-libs/pixman-extra/include"
-    ...and use a similar convention for CAIRO_ANDROID_LIB_FLAGS and PIXMAN_ANDROID_LIB_FLAGS.
-
-    A project that makes cairo for android can be found at:
-      https://github.com/anoek/android-cairo
-
-    Then, in your build directory, make an android folder.  From this folder, call:
-    cmake -DCMAKE_TOOLCHAIN_FILE=$ANDTOOLCHAIN \
-    -DANDROID=1 \
-    -DLIBRARY_OUTPUT_PATH_ROOT=../../android/jni/ \
-    -DANDROID_CAIRO_CPP_FLAGS="$CAIRO_ANDROID_INCLUDE_FLAGS" \
-    -DANDROID_PIXMAN_CPP_FLAGS="$PIXMAN_ANDROID_INCLUDE_FLAGS" \
-    -DANDROID_CAIRO_LIBS="$CAIRO_ANDROID_LIB_FLAGS" \
-    -DANDROID_PIXMAN_LIBS="$PIXMAN_ANDROID_LIB_FLAGS" \
-    -DSTATICLIB=yes ../../cmake
-    make
-
-    It should result in something like:
-    Linking CXX shared library /Users/mikesolomon/devel/guidolib-code/cmake/libs/armeabi-v7a/libGUIDOEngine.so
-    obviously with your path...
-
-    After this, make sure that all libraries are linked against this.
-    For example, for anything Qt related, use this library in the .pro file.
+    Then, in your build directory, make an android folder.
+    From this folder, call:
+      cmake -DANDROID=1../../cmake
+      make
 
 Note for Linux platforms:
 --------------------------
