@@ -595,7 +595,7 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}	
-			else if (!strcmp(name,"auto"))	// same as "set"
+			else if (!strcmp(name,"auto") || !strcmp(name,"set"))
 			{
 				ARAuto * tmp = new ARAuto();
 				mTags.AddHead(tmp);
@@ -1347,12 +1347,6 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);				
 			}
-			else if (!strcmp(name,"set"))	// "same as auto"		
-			{
-				ARAuto * tmp = new ARAuto;
-				mTags.AddHead(tmp);
-				mCurrentVoice->AddTail(tmp);
-			}
 			else if (!strcmp(name,"shareLocation"))
 			{
 				ARShareLocation * tmp = new ARShareLocation;
@@ -1424,6 +1418,23 @@ void ARFactory::createTag( const char * name, int no )
 				if (!mCurrentTrill)
 					mCurrentTrill = tmp;
 				else delete tmp;
+			}
+			else if (!strcmp(name,"trillBegin"))
+			{
+				ARTrill * tmp = new ARTrill(ARTrill::TRILL);
+				
+				tmp->setID(no);
+				tmp->setAllowRange(0);
+				if (!mCurrentTrill)
+					mCurrentTrill = tmp;
+				else delete tmp;
+			}
+			else if (!strcmp(name,"trillEnd"))
+			{
+				ARDummyRangeEnd * tmp = new ARDummyRangeEnd("\\trillEnd");
+				tmp->setID(no);
+				mCurrentVoice->setPositionTagEndPos(no, tmp);
+				mTags.AddHead(tmp);
 			}
 			else if (!strcmp(name,"turn"))
 			{

@@ -76,6 +76,7 @@ typedef struct Guido2ImageOptions {
 	float			systemsDistance;
 	const char *	systemsDistribution; 
 	const char *	optimalPageFill;
+    const char *    resize2Page;
 
 	Guido2ImageOptions () 
 		: stdInMode(false), hasLayout(false), page(1),
@@ -244,9 +245,9 @@ static string toLower (const char* str)
 }
 
 //------------------------------------------------------------------------------------------
-static GuidoLayoutSettings options2layout (const Guido2ImageOptions& opts)
+static GuidoLayoutSettings* options2layout (const Guido2ImageOptions& opts)
 {
-	static GuidoLayoutSettings layout = { 75.f, kAutoDistrib, 0.25f, 750, 1.1f, 0, 1 };
+	static GuidoLayoutSettings layout = { 75.f, kAutoDistrib, 0.25f, 750, 1.1f, 0, 1, 1 };
 	if (opts.hasLayout) {
 		if (opts.systemsDistance > 0) layout.systemsDistance = opts.systemsDistance;
 		if (opts.systemsDistribution) {
@@ -262,9 +263,15 @@ static GuidoLayoutSettings options2layout (const Guido2ImageOptions& opts)
 			else if (str == "off")	layout.optimalPageFill = 0;
 			else error ("invalid optimal page fill mode");
 		}
-		return layout;
+        if (opts.resize2Page) {
+			string str (toLower (opts.resize2Page));
+			if (str == "on")		layout.resizePage2Music = 1;
+			else if (str == "off")	layout.resizePage2Music = 0;
+			else error ("invalid resize page to music mode");
+		}
+		return &layout;
 	}
-	return layout;
+	return 0;
 }
 
 //------------------------------------------------------------------------------------------
@@ -305,7 +312,7 @@ int main(int argc, char *argv[])
 	p.pageFormat = 0;
 	p.format = strToFormat (options.imageFormat);			// the image output format
 	GuidoLayoutSettings ls = options2layout (options);
-	p.layout = &ls;					// the layout options (if any)
+	p.layout = options2layout (options);					// the layout options (if any)
 	p.pageIndex = 0;										// page index starts at 0 (I guess it means all pages - to be checked)
 	p.sizeConstraints = QSize(options.width , options.height); // size constraints
 	p.zoom = options.zoom;									// zoom value

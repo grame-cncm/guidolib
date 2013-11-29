@@ -23,7 +23,7 @@
 GuidoParser::GuidoParser()
 {
 	setlocale(LC_NUMERIC, "C");
-	fFactory = new ARFactory();
+	fFactory = 0;
     initScanner();
 	fErrorLine = fErrorColumn = 0;
     fStream = NULL;
@@ -174,6 +174,7 @@ void GuidoParser::tagRange ()					{ fFactory->tagRange(); }
 //--------------------------------------------------------------------------
 ARHandler GuidoParser::parse()
 {
+    /* Parser reinitialization */
 	fzaehlerSet = 0;
 	faccidentals = 0;
 	fndots = 0;
@@ -181,34 +182,17 @@ ARHandler GuidoParser::parse()
 	fnt_enum = 0;
 	fnt_denom = 1;
 	fErrorLine = fErrorColumn = 0;
+    setlocale(LC_NUMERIC, "C");
+    fText = "";
+
+    destroyScanner();
+    initScanner();
+
+    delete fFactory;
+    fFactory = new ARFactory();
+    /***************************/
+
 	_yyparse ();
-    
-    GuidoStream *guidoStream = dynamic_cast<GuidoStream *>(getStream());
-    if (guidoStream)
-        getGuidoStream()->SetParserJobFinished();
 
     return (fErrorLine == 0) ? GuidoFactoryCloseMusic (fFactory) : 0;
-}
-
-//--------------------------------------------------------------------------
-ARHandler GuidoParser::parseSynchronousParser()
-{
-	fzaehlerSet = 0;
-	faccidentals = 0;
-	fndots = 0;
-	fnt_enumSet = false;
-	fnt_enum = 0;
-	fnt_denom = 1;
-	fErrorLine = fErrorColumn = 0;
-	_yyparse ();
-	
-    // There are certainly errors, but we're sure it's because of
-    // non-closure events/chords/tags/voice/music
-
-    fFactory->addEvent();
-    fFactory->addChord();
-    fFactory->endTag();
-    fFactory->addVoice();
-
-    return GuidoFactoryCloseMusic (fFactory);
 }

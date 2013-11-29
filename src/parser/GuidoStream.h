@@ -15,38 +15,36 @@
  */
 
 #include <istream>
+#include <sstream>
+#include <stack>
 #include "ARFactory.h"
-#include "GuidoStreamBuf.h"
 
 using namespace std;
 
 
-class GuidoStream : public istream
+class GuidoStream : public stringstream
 {
 public:
-             GuidoStream(GuidoStreamBuf *inStreamBuf);
+             GuidoStream();
     virtual ~GuidoStream();
 
-    void WriteToStream(const char* str);
-
-    bool IsParserJobFinished()    { return fParserJobFinished; }
+    void     WriteToStream(const char* str);
     
-    void CloseStream()            { fGuidoStreamBuffer->SetHaveToCloseStream(); }
 
-    void SetParserJobFinished()   { fParserJobFinished = true; }
-    bool GetParserJobFinished()   { return fParserJobFinished; }
-
-    bool GetAreAllDataRead()      { return fGuidoStreamBuffer->GetAreAllDataRead(); }
-
-    string getSynchronousString() { return fSynchronousString; }
+    /* Clears this' state flags */
+    void     Prepare();
+    void     ReinitStream();
+    stringstream * getGlobalStringStream() {return fTheGlobalStringStream;}
 
 protected:
-    GuidoStreamBuf *fGuidoStreamBuffer;
+    stringstream *fTheGlobalStringStream; // The stringstream which contains the real string
+                                          // written by the user since the beginning
 
-    bool fParserJobFinished;
+    /* Builds the tags ( "{", "[", "(", "<" ) stack from inStr */
+    stack<char> *AnalyzeString(stringstream *inStr);
 
-    /* To feed synchronous parser */
-    string fSynchronousString;
+    /* Complete stringToComplete with appropriate tags contained in inStack */
+    void         WriteNewString(stack<char> *inStack, string *stringToComplete);
 };
 
 

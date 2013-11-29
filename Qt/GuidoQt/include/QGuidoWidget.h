@@ -212,8 +212,6 @@ class QGuidoWidget : public QWidget
 		///	\brief Clears the widget's draw-cache, forcing it to redraw.
 		void clearCache();
 
-        void CreateParser();
-        void CloseParser();
 
 	protected:
 

@@ -69,8 +69,8 @@ using namespace std;
 // ==========================================================================
 const int GUIDOENGINE_MAJOR_VERSION = 1;
 const int GUIDOENGINE_MINOR_VERSION = 5;
-const int GUIDOENGINE_SUB_VERSION =	2;
-const char* GUIDOENGINE_VERSION_STR = "1.5.2";
+const int GUIDOENGINE_SUB_VERSION =	3;
+const char* GUIDOENGINE_VERSION_STR = "1.5.3";
 
 ARPageFormat * gARPageFormat = 0;
 
@@ -404,7 +404,6 @@ GUIDOAPI(void)
 GuidoGetDefaultLayoutSettings (GuidoLayoutSettings * settings)
 {
 	if( settings == 0 ) return;
-	
 	settings->systemsDistance = kSettingDefaultSystemDistance;
  	settings->systemsDistribution = kSettingDefaultSystemDistrib;
  	settings->systemsDistribLimit = kSettingDefaultDistribLimit;
@@ -412,6 +411,7 @@ GuidoGetDefaultLayoutSettings (GuidoLayoutSettings * settings)
     settings->spring = kSettingDefaultSpring;
 	settings->neighborhoodSpacing = kSettingDefaultNeighborhood;
 	settings->optimalPageFill = kSettingDefaultOptimalPageFill;
+    settings->resizePage2Music = kSettingDefaultResizePage;
 }
 
 

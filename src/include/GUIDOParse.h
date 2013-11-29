@@ -50,6 +50,13 @@ extern "C" {
 	GUIDOAPI(GuidoErrCode)		GuidoCloseParser (GuidoParser *p);
 
 	/*!
+		\brief returns the string of the GuidoStream
+		\param gStream a GuidoStream
+        \return a std::string.
+	*/
+    GUIDOAPI(const char *) GuidoGetStream (GuidoStream * gStream);
+
+	/*!
 		\brief Parse a file and create the corresponding AR
 		\param p a parser previously opened with GuidoOpenParser
 		\param file the file to parse.
@@ -68,9 +75,6 @@ extern "C" {
 	/*!
 		\brief Parse a GuidoStream and create the corresponding AR
 
-        Any syntax error will be declared as such (included not
-        ended voice, tag, etc.).
-
 		\param p a parser previously opened with GuidoOpenParser
 		\param stream the GuidoStream to parse.
 		\return a ARHandler or 0 in case of error.
@@ -78,23 +82,11 @@ extern "C" {
 	GUIDOAPI(ARHandler)			GuidoStream2AR (GuidoParser *p, GuidoStream* stream);
 
 	/*!
-		\brief Try to convert the current parser state to AR
-
-        Voice/chord/tags/events will automatically be closed :
-        if they're not closed in gmn, it won't be declared as
-        syntax error.
-
-		\param p a parser previously opened with GuidoOpenParser
-		\return a ARHandler or 0 in case of error.
-	*/
-	GUIDOAPI(ARHandler)			GuidoParser2AR (GuidoParser *p);
-
-
-	/*!
 		\brief Get the error syntax line/column
 		\param p a parser previously opened with GuidoOpenParser
-		\param line a reference that will contains a line number in case of syntax error
-		\param col a reference that will contains a column number in case of syntax error
+		\param line a reference that will contain a line number in case of syntax error
+		\param col a reference that will contain a column number in case of syntax error
+        \param msg a string that will contain the error message
 		\return a Guido error code.
 	*/
 	GUIDOAPI(GuidoErrCode)		GuidoParserGetErrorCode (GuidoParser *p, int& line, int& col, const char ** msg );
@@ -118,15 +110,20 @@ extern "C" {
 	/*!
 		\brief Write data to the stream
 		
-		Writing data to a stream may be viewed as writing gmn code by portion. 
-		The sequence of all the data written to the stream should always be valid gmn code, 
-		provided that a valid gmn sequence may be written to properly close the stream.
-		When a syntax error occurs when writting data to the stream, the stream becomes invalid
+		Writing data to a stream may be viewed as writing gmn code by portion.
+        Syntax errors concerning music/voice/tag/event/parameter non-closure won't be declared
+        as such (GuidoWriteStream uses an automatic-closure mechanism).
+		When a syntax error (other than a non-closure) occurs when writting data to the stream, the stream becomes invalid
 		and should be closed. Further attempts to write data will always result in a syntax error.
-		On the other hand, you have to be careful about special char (for example, write "\\tie(a a)"
-        in stream, not "\tie(a a)".
-        Finally, gmn key-words have to be written in one shot (for exemple, don't write "\\clu" and
-        then "ster({a, c})", it won't work.
+
+        Regarding syntax errors, allowed incomplete constructs are :
+			- opened music i.e. { without closing }
+			- opened voice i.e. [ without closing ]
+			- opened range tag i.e. ( without closing )
+			- opened range parameter i.e. < without closing > but with at least one parameter
+			- opened chord i.e. ( without closing ) but with at least one note
+		\note for incomplete chords and range parameters, the ',' separator must always be followed by a note or a parameter.
+		For example, don't write "{a," and then "b}" but "{a" and then ",b}".
 
 		\param s a GuidoStream previoulsy opened with GuidoOpenStream
 		\param str a string containing a portion of gmn code
@@ -134,8 +131,13 @@ extern "C" {
 	*/
 	GUIDOAPI(GuidoErrCode)		GuidoWriteStream (GuidoStream *s, const char* str);
 
+    /*!
+		\brief Erase all stream content in order to reuse it
 
-//inline GuidoStream &operator <<(GuidoStream &stream, const char *str)	{ GuidoWriteStream(&stream, str); return stream; }
+		\param s a GuidoStream previoulsy opened with GuidoOpenStream
+		\return a Guido error code.
+	*/
+	GUIDOAPI(GuidoErrCode)		GuidoResetStream (GuidoStream *s);
 
 /*! @} */
 

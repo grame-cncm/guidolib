@@ -43,7 +43,7 @@ class TagParameterFloat : public TagParameter
 
 		const TYPE_FLOATPARAMETER getValue( float curLSPACE = 50.0f ) const;
 
-		static TYPE_FLOATPARAMETER convertValue(float value, const char * unit, float curLSPACE = 50.0f);
+		static bool     convertValue(float value, double &toValue, const char * unit, float curLSPACE = 50.0f);
 
 		bool			TagIsUnitTag() const 		{ return fUnittag; }
 		const char *	getUnit() const				{ return fUnit; }

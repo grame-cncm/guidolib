@@ -259,7 +259,14 @@
             <string>Page layout</string>
            </property>
            <layout class="QGridLayout" name="gridLayout_3">
-            <item row="0" column="0">
+            <item row="2" column="0">
+             <widget class="QCheckBox" name="fNSpacingcheckBox">
+              <property name="text">
+               <string>Neighborhood spacing</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
              <widget class="QCheckBox" name="fOPFcheckBox">
               <property name="text">
                <string>Optimum page fill</string>
@@ -269,10 +276,13 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="0">
-             <widget class="QCheckBox" name="fNSpacingcheckBox">
+            <item row="3" column="0">
+             <widget class="QCheckBox" name="fResizePage2Music">
               <property name="text">
-               <string>Neighborhood spacing</string>
+               <string>Resize page to music</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -318,7 +328,16 @@
              <property name="spacing">
               <number>0</number>
              </property>
-             <property name="margin">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
               <number>0</number>
              </property>
              <item>
@@ -380,7 +399,16 @@
                <property name="spacing">
                 <number>0</number>
                </property>
-               <property name="margin">
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
                 <number>0</number>
                </property>
                <item>
@@ -430,7 +458,16 @@
                <property name="spacing">
                 <number>0</number>
                </property>
-               <property name="margin">
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
                 <number>0</number>
                </property>
                <item>

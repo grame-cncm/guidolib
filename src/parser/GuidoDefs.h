@@ -80,6 +80,7 @@ const float kSettingDefaultForce = float(750.0);
 const float kSettingDefaultSpring = float(1.1);
 const bool	kSettingDefaultNeighborhood = 0;
 const bool	kSettingDefaultOptimalPageFill = 1;
+const bool  kSettingDefaultResizePage = 1;
 
 // - Notes *must* stay in this order. Several algorithms rely on it
 enum

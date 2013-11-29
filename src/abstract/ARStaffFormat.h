@@ -33,7 +33,7 @@ public:
 	virtual void PrintParameters(std::ostream & os) const;
 
 	const TagParameterString * getStyle() const		{ return style; }
-	float getLineThickness () const					{ return fLineThickness; }
+	float getLineThickness() const					{ return fLineThickness; }
 
 protected:
 	TagParameterString * style;

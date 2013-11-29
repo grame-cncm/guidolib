@@ -19,7 +19,6 @@
 #include "GRDefine.h"
 #include "TagParameterList.h"
 #include "ListOfStrings.h"
-//#include "../parser/gmntools.h" // for gd_convertUnits
 
 ListOfTPLs ARBarFormat::ltpls(1);
 

@@ -134,13 +134,13 @@ void ARPageFormat::setTagParameterList(	TagParameterList & tpl )
 		// create a list of string ...
 
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail( ("U,w,,r;U,h,,r;U,lm,2cm,o;"
-			"U,tm,5cm,o;U,rm,2cm,o;U,bm,3cm,o"));
+		lstrs.AddTail("U,w,,r;U,h,,r;U,lm,2cm,o;"
+			"U,tm,5cm,o;U,rm,2cm,o;U,bm,3cm,o");
 		
-		lstrs.AddTail( ("S,type,,r;U,lm,2cm,o;"
-			"U,tm,5cm,o;U,rm,2cm,o;U,bm,3cm,o"));
+		lstrs.AddTail("S,type,,r;U,lm,2cm,o;"
+			"U,tm,5cm,o;U,rm,2cm,o;U,bm,3cm,o");
 	
-		CreateListOfTPLs(ltpls,lstrs);
+		CreateListOfTPLs(ltpls, lstrs);
 	}
 
 	TagParameterList * rtpl = 0;
@@ -153,28 +153,28 @@ void ARPageFormat::setTagParameterList(	TagParameterList & tpl )
 		{
 			// Then, we now the match for the first ParameterList
 			// w, h, ml, mt, mr, mb
-			GuidoPos pos = rtpl->GetHeadPosition();
-			TagParameterFloat * tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
+
+			TagParameterFloat * tpf = TagParameterFloat::cast(rtpl->RemoveHead());
 			assert(tpf);			
 			mSizeX = tpf->getValue();
 
-			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
+			tpf = TagParameterFloat::cast(rtpl->RemoveHead());
 			assert(tpf);
 			mSizeY = tpf->getValue();
 
-			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
+			tpf = TagParameterFloat::cast(rtpl->RemoveHead());
 			assert(tpf);			
 			mLeft = tpf->getValue();
 
-			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
+			tpf = TagParameterFloat::cast(rtpl->RemoveHead());
 			assert(tpf);			
 			mTop = tpf->getValue();
 
-			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
+			tpf = TagParameterFloat::cast(rtpl->RemoveHead());
 			assert(tpf);			
 			mRight = tpf->getValue();
 
-			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
+			tpf = TagParameterFloat::cast(rtpl->RemoveHead());
 			assert(tpf);			
 			mBottom = tpf->getValue();
 
@@ -183,10 +183,9 @@ void ARPageFormat::setTagParameterList(	TagParameterList & tpl )
 		else if (ret==1)
 		{
 			// it matches the second parameter list
-			// pagesize,ml,mt,mr,mb
+			// pagesize, ml, mt, mr, mb
 
-			GuidoPos pos = rtpl->GetHeadPosition();
-			TagParameterString * tps = TagParameterString::cast(rtpl->GetNext(pos));
+			TagParameterString * tps = TagParameterString::cast(rtpl->RemoveHead());
 			assert(tps);
 			mFormat = tps->getValue();
 
@@ -207,19 +206,19 @@ void ARPageFormat::setTagParameterList(	TagParameterList & tpl )
 				mSizeY = (float) ( 31 * kCmToVirtual ) ;
 			}
 
-			TagParameterFloat * tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
+			TagParameterFloat * tpf = TagParameterFloat::cast(rtpl->RemoveHead());
 			assert(tpf);
 			mLeft = tpf->getValue();
 
-			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
+			tpf = TagParameterFloat::cast(rtpl->RemoveHead());
 			assert(tpf);
 			mTop = tpf->getValue();
 
-			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
+			tpf = TagParameterFloat::cast(rtpl->RemoveHead());
 			assert(tpf);
 			mRight = tpf->getValue();
 
-			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
+			tpf = TagParameterFloat::cast(rtpl->RemoveHead());
 			assert(tpf);
 			mBottom = tpf->getValue();
 		}
@@ -234,19 +233,7 @@ void ARPageFormat::setTagParameterList(	TagParameterList & tpl )
 
 	ClipSize();
 
-	// - (JB) Should be replaced by AdjustMargins() ? -> 
-	if ( mSizeX - mLeft - mRight < MINSIZEX )
-	{
-		mLeft = 0;
-		mRight = 0;
-	}
-
-	if (mSizeY - mTop - mBottom < MINSIZEY )
-	{
-		mTop = 0;
-		mBottom = 0;
-	}
-	// <-
+    AdjustMargins();
 
 	tpl.RemoveAll();
 
@@ -284,16 +271,9 @@ ARPageFormat::ClipSize()
 void	
 ARPageFormat::AdjustMargins()
 {
-	if ( mSizeX - mLeft - mRight < MINSIZEX )
-	{
-		// changed by jk
-		// mLeft = mRight = 0;
-		mLeft = mRight = (mSizeX - MINSIZEX) * 0.5f;
-	}
-	if (mSizeY - mTop - mBottom < MINSIZEY )
-	{
-		// changed by jk
-		// mTop = mBottom = 0;
-		mTop = mBottom = (mSizeY - MINSIZEY) * 0.5f;
-	}
+	if ( mSizeX - mLeft - mRight <= 0.1 ) // If horizontal margins sum if higher or equal than width,
+		mLeft = mRight = 0;             // we set both left and right margin to 0.
+
+	if (mSizeY - mTop - mBottom <= 0.1 )  // Idem for vertical margins.
+		mTop = mBottom = 0;
 }

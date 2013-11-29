@@ -25,13 +25,17 @@ class ARDoubleBar;
 */
 class GRDoubleBar : public GRBar  
 {
-	public:
-					GRDoubleBar(ARDoubleBar * ardbar, GRStaff * p_grstaff, const TYPE_TIMEPOSITION & p_timeposition);
-					GRDoubleBar(ARDoubleBar * ardbar, GRSystem * p_grsystem, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos );
-	virtual			~GRDoubleBar();
+public:
+    GRDoubleBar(ARDoubleBar * ardbar, GRStaff * p_grstaff, const TYPE_TIMEPOSITION & p_timeposition);
+    GRDoubleBar(ARDoubleBar * ardbar, GRSystem * p_grsystem, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos );
+    virtual			~GRDoubleBar();
 
-			ARDoubleBar * getARDoubleBar();
-			virtual void DrawWithLines( VGDevice & hdc ) const;
+    ARDoubleBar * getARDoubleBar();
+    virtual void DrawWithLines( VGDevice & hdc ) const;
+
+protected:
+    int   fLineNumber;
+    float fSize;
 };
 
 #endif

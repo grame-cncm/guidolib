@@ -194,11 +194,15 @@ typedef struct GuidoLayoutSettings
 	*/
 	 int neighborhoodSpacing;
 
-
 	/** boolean value to tell the engine to use the optimal page fill algorithm or not
 		(default value: 1)
 	*/
 	int optimalPageFill;
+
+    /** boolean value to tell the engine to resize page to music
+		(default value: 1)
+	*/
+	int resizePage2Music;
 	
 } GuidoLayoutSettings;
 

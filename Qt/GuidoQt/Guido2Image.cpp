@@ -155,26 +155,11 @@ Guido2ImageErrorCodes Guido2Image::gmnString2Image( const Params& p )
 		
 	QGuidoPainter * painter = QGuidoPainter::createGuidoPainter();
 	if (painter) {
-                painter->CreateParser();
-		painter->setGMNCode(p.input);
-                painter->CloseParser();
-		if (p.pageFormat) {
-                  painter->CreateParser();
-		  painter->setGuidoPageFormat (*p.pageFormat);
-                  painter->CloseParser();
-                }
-		if (p.layout) {
-                  painter->CreateParser();
-		  painter->setGuidoLayoutSettings (*p.layout);
-                  painter->CloseParser();
-                }
-                painter->CreateParser();
-		painter->setResizePageToMusic(p.resizePageToMusic);
-                painter->CloseParser();
+		if (p.layout) painter->setGuidoLayoutSettings (*p.layout);
+        painter->setGMNCode(p.input);
 	}
 	else return GUIDO_2_IMAGE_GUIDO_ENGINE_NOT_STARTED;			// likely
-	Guido2ImageErrorCodes err = guidoPainterToImage(painter, p);
-	return err;
+	return guidoPainterToImage(painter, p);
 }
 
 //----------------------------------------------------------------------------
@@ -188,26 +173,11 @@ Guido2ImageErrorCodes Guido2Image::gmnFile2Image	( const  Params& p )
 
 	QGuidoPainter * painter = QGuidoPainter::createGuidoPainter();
 	if (painter) {
-                painter->CreateParser();
+		if (p.layout) painter->setGuidoLayoutSettings (*p.layout);
 		painter->setGMNFile(p.input);
-                painter->CloseParser();
-		if (p.pageFormat) {
-                  painter->CreateParser();
-		  painter->setGuidoPageFormat (*p.pageFormat);
-                  painter->CloseParser();
-                }
-		if (p.layout) {
-                  painter->CreateParser();
-		  painter->setGuidoLayoutSettings (*p.layout);
-                  painter->CloseParser();
-                }
-                painter->CreateParser();
-		painter->setResizePageToMusic(p.resizePageToMusic);
-                painter->CloseParser();
 	}
-	else return GUIDO_2_IMAGE_GUIDO_ENGINE_NOT_STARTED;			// likely
-	Guido2ImageErrorCodes err = guidoPainterToImage(painter, p);
-	return err;
+		return GUIDO_2_IMAGE_GUIDO_ENGINE_NOT_STARTED;			// likely
+	return guidoPainterToImage(painter, p);
 }
 
 //----------------------------------------------------------------------------
@@ -279,9 +249,7 @@ void Guido2Image::writeImage( QGuidoPainter * guidoPainter, const Params& p)
 	QSizeF size = guidoPainter->pageSizeMM( page );
 	size.setWidth( 5 * size.width() );
 	size.setHeight( 5 * size.height() );
-	if (!guidoPainter->isResizePageToMusic()) {
-	  size = size2constrainedsize (size, p.sizeConstraints);
-        }
+	size = size2constrainedsize (size, p.sizeConstraints);
 //qDebug() << "Guido2Image::writeImage size:" << size;
 
 	QImage image( size.width() , size.height() , QImage::Format_ARGB32);
