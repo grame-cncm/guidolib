@@ -1,0 +1,3 @@
+Make sure to check out all git submodules from the top of the
+build tree using:
+git submodule update --init --recursive

@@ -1,6 +1,20 @@
 #######################################
 # CMAKE guidolib
 #######################################
+if(ANDROID)
+#######################################
+#  Android support
+	message (STATUS "Setting android-based variables")
+	set (CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/../android-apps/android-cmake/android.toolchain.cmake)
+	set (CPUFEATURES_CPP_FLAGS "-I${CMAKE_CURRENT_SOURCE_DIR}/../android-apps/android-cairo/jni/cpufeatures")
+	set (ANDROID_CAIRO_CPP_FLAGS "-I${CMAKE_CURRENT_SOURCE_DIR}/../android-apps/android-cairo/jni/cairo-extra -I${CMAKE_CURRENT_SOURCE_DIR}/../android-apps/android-cairo/jni/cairo/src")
+	set (ANDROID_PIXMAN_CPP_FLAGS "-I${CMAKE_CURRENT_SOURCE_DIR}/../android-apps/android-cairo/jni/pixman-extra -I${CMAKE_CURRENT_SOURCE_DIR}/../android-apps/android-cairo/jni/pixman/pixman")
+	set (CPUFEATURES_LIBS "-L${CMAKE_CURRENT_SOURCE_DIR}/../android-apps/android-cairo/obj/local/armeabi-v7a -lcpufeatures")
+	set (ANDROID_CAIRO_LIBS "-L${CMAKE_CURRENT_SOURCE_DIR}/../android-apps/android-cairo/obj/local/armeabi-v7a -lcairo")
+	set (ANDROID_PIXMAN_LIBS "-L${CMAKE_CURRENT_SOURCE_DIR}/../android-apps/android-cairo/obj/local/armeabi-v7a -lpixman")
+	set (STATICLIB "yes")
+endif(ANDROID)
+
 project(guidolib)
 cmake_minimum_required(VERSION 2.6)
 if(CMAKE_CONFIGURATION_TYPES)
@@ -122,6 +136,7 @@ elseif(ANDROID)
 	string (REPLACE .cpp .h VGDEV_H ${VGDEV_SRC})
 	add_definitions(${ANDROID_CAIRO_CPP_FLAGS})
 	add_definitions(${ANDROID_PIXMAN_CPP_FLAGS})
+	add_definitions(${CPUFEATURES_CPP_FLAGS})
 elseif(UNIX)
 	set (VGDEV_SRC "${VGDEV_PATH}/*Cairo*.cpp")
 	string (REPLACE .cpp .h VGDEV_H ${VGDEV_SRC})
@@ -165,6 +180,7 @@ if(APPLE)
 elseif(ANDROID)
 	set(LINK ${LINK} ${ANDROID_CAIRO_LIBS})
 	set(LINK ${LINK} ${ANDROID_PIXMAN_LIBS})
+	set(LINK ${LINK} ${CPUFEATURES_LIBS})
 elseif (UNIX)
       EXECUTE_PROCESS ( COMMAND "pkg-config"  "--libs" "cairo"
                 OUTPUT_VARIABLE TMP
