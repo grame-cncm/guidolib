@@ -74,6 +74,7 @@ class HTTPDServer
     string fCachedir;
     struct MHD_Daemon *	fServer;
     guido2img* fConverter;
+    int fMaxSessions;
     std::map<std::string, guidosession *> fSessions;
 
     const char* getMIMEType (const std::string& page);
@@ -93,7 +94,7 @@ public:
     int sendGuidoDeleteRequest (struct MHD_Connection *connection, const TArgs& args);
 
     guidosessionresponse registerGMN(string unique_id, string gmn);
-    void readFromCache();
+    void readFromCache(string target = "");
 
     int send (struct MHD_Connection *connection, guidosessionresponse &response);
     int send (struct MHD_Connection *connection, const char *page, int length, const char *type, int status=MHD_HTTP_OK);

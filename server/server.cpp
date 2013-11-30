@@ -140,7 +140,7 @@ _post_params (void *coninfo_cls, enum MHD_ValueKind , const char *key,
 // the http server
 //--------------------------------------------------------------------------
 HTTPDServer::HTTPDServer(int verbose, int logmode, string cachedir, guido2img* g2svg)
-    : fVerbose(verbose), fLogmode(logmode), fCachedir(cachedir), fServer(0), fConverter(g2svg)
+    : fVerbose(verbose), fLogmode(logmode), fCachedir(cachedir), fServer(0), fConverter(g2svg), fMaxSessions(1000)
 {
 }
 
@@ -157,6 +157,9 @@ HTTPDServer::~HTTPDServer()
 //--------------------------------------------------------------------------
 bool HTTPDServer::start(int port)
 {
+    // USE_SELECT_INTERALLY makes the server single threaded
+    // this guarantees that operations will be queued, which prevents
+    // issues involving the use of shared resources
     fServer = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY, port,
                                 _on_client_connect,
                                 NULL, _answer_to_connection, this,
@@ -283,17 +286,27 @@ std::string generate_sha1(std::string setter)
   return ss.str();
 }
 
-void HTTPDServer::readFromCache()
+void HTTPDServer::readFromCache(string target)
 {
   QDir myDir(fCachedir.c_str());
   QStringList filesList = myDir.entryList();
 
   for (int i = 0; i < filesList.size(); i++) {
+    if (i >= fMaxSessions) {
+      return;
+    }
     QDir subDir(myDir.absoluteFilePath(filesList[i]));
     QStringList subFilesList = subDir.entryList();
     string folder = filesList[i].toStdString();
+    if ((target != "") && (folder.substr(0,2) != target.substr(0,2))) {
+      continue;
+    }
     for (int j = 0; j < subFilesList.size(); j++) {
       string fn = subFilesList[j].toStdString();
+      if ((target != "") && (fn.substr(0,40) != target)) {
+        continue;
+      }
+
       if (fn.length() != 44)
         continue;
 
@@ -309,6 +322,9 @@ void HTTPDServer::readFromCache()
       string all = in.readAll().toStdString();
       file.close();
       (void) registerGMN(unique_id, all);
+      if (target != "") {
+        return;
+      }
     }
   }
 }
@@ -321,6 +337,11 @@ guidosessionresponse HTTPDServer::registerGMN(string unique_id, string gmn)
         string error = maybe->errorMsg();
         delete maybe;
         return guidosession::genericFailure(error, 400);
+      }
+      if (fSessions.size() >= fMaxSessions) {
+        guidosession *toDelete = fSessions.begin()->second;
+        fSessions.erase(fSessions.begin());
+        delete toDelete;
       }
       fSessions[unique_id] = maybe;
     }
@@ -536,8 +557,14 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
 
     map<string, guidosession *>::iterator it = fSessions.find(elems[0]);
     if (it == fSessions.end ()) {
-        guidosessionresponse response = guidosession::genericFailure("incorrect score ID.", 404, elems[0]);
-        return send (connection, response);
+        // first try to read from cache...
+        readFromCache(elems[0]);
+        // redo
+        it = fSessions.find(elems[0]);
+        if (it == fSessions.end ()) {
+          guidosessionresponse response = guidosession::genericFailure("incorrect score ID.", 404, elems[0]);
+          return send (connection, response);
+        }
     }
     guidosession *currentSession = fSessions[elems[0]];
 
