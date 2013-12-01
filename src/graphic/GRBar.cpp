@@ -178,7 +178,7 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
 	const float x = mPosition.x;
 	const float y1 = mPosition.y + mBoundingBox.top;
 	const float y2 = y1 + mBoundingBox.bottom;
-	hdc.PushPenWidth( kLineThick );
+	hdc.PushPenWidth( mGrStaff ? mGrStaff->currentLineThikness() : kLineThick );
 	hdc.Line( x, y1, x, y2 );
 	hdc.PopPenWidth();
 }

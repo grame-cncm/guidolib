@@ -52,6 +52,7 @@ SVGDevice::SVGDevice(std::ostream& outstream, SVGSystem* system, const char* gui
 	fBeginDone(false)
 {
 }
+
 SVGDevice::~SVGDevice() 
 {
 	delete fPendingStrokeColor;
@@ -64,7 +65,7 @@ void SVGDevice::getsvgfont (const char* ptr, string& str) const
 {
 	const char* fontstart = "<font";
 	const char* fontend = "</font>";
-	int len = strlen (fontstart);
+	size_t len = strlen (fontstart);
 	bool infont = false;
 	while (*ptr) {
 		if (!infont) {
@@ -98,7 +99,7 @@ void SVGDevice::printFont(std::ostream& out, const char* file) const
 	ifstream is (file);
 	if (is.is_open()) {
 		is.seekg (0, ios::end);
-		int length = is.tellg();
+		int length = int(is.tellg());
 		is.seekg (0, ios::beg);
 		char * buffer = new char [++length];
 		// read data as a block:

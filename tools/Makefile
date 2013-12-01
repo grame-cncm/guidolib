@@ -3,7 +3,7 @@ INC = -I../src/include -I../src/devices
 
 system	:= $(shell uname -s)
 ifeq ($(system), Darwin)
-  lib =  -F../cmake/Release/ -framework GUIDOEngine
+  lib =  -F../build/MacOS/Release/ -framework GUIDOEngine
   INC := $(INC)  -I../macosx/src
 else
 ifeq ($(system), MINGW32_NT-6.1)

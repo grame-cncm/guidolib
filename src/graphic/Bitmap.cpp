@@ -17,6 +17,8 @@
 #include "NVRect.h"
 
 #include "VGDevice.h"
+#include "SVGDevice.h"
+
 #include "GUIDOInternal.h"		// for gGlobalSettings.gFeedback
 
 
@@ -32,6 +34,15 @@ Bitmap::Bitmap( const char * inName )
         if (tmpSystem)
             fDevice = tmpSystem->CreateMemoryDevice(inName);
     }
+
+    isSVGDevice = false;
+
+    if (fDevice)
+    {
+        SVGDevice *device = dynamic_cast<SVGDevice *>(fDevice);
+        if (device)
+            isSVGDevice = true;    
+    }
 }
 
 // --------------------------------------------------------------
@@ -44,13 +55,23 @@ Bitmap::~Bitmap()
 // --------------------------------------------------------------
 float Bitmap::GetProportionalHeight (float width) const
 {
-	return width * fDevice->GetHeight() / fDevice->GetWidth();
+    float propHeight = 0;
+
+    if (fDevice)
+	    propHeight = width * fDevice->GetHeight() / fDevice->GetWidth();
+
+    return propHeight;
 }
 
 // --------------------------------------------------------------
 float Bitmap::GetProportionalWidth (float height) const
 {
-	return height * fDevice->GetWidth() / fDevice->GetHeight();
+    float propWidth = 0;
+
+    if (fDevice)
+	    propWidth = height * fDevice->GetWidth() / fDevice->GetHeight();
+
+    return propWidth;
 }
 
 // --------------------------------------------------------------

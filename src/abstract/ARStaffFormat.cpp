@@ -20,7 +20,6 @@
 #include "ListOfStrings.h"
 
 #include "GRDefine.h"
-//#include "../parser/gmntools.h" // for gd_convertUnits
 #include "gmntools.h" // for gd_convertUnits
 
 ListOfTPLs ARStaffFormat::ltpls(1);
@@ -32,6 +31,7 @@ ARStaffFormat::ARStaffFormat(const ARStaffFormat &stffrmt)
 		style = TagParameterString::cast(stffrmt.style->getCopy());
 	if (stffrmt.size != NULL)
 		size = TagParameterFloat::cast(stffrmt.size->getCopy());
+	fLineThickness = stffrmt.getLineThickness();
 }
 
 ARStaffFormat::~ARStaffFormat()
@@ -39,7 +39,7 @@ ARStaffFormat::~ARStaffFormat()
 	delete style;
 }
 
-ARStaffFormat::ARStaffFormat()
+ARStaffFormat::ARStaffFormat() : fLineThickness(kLineThick)
 {
 	style = NULL;
 }
@@ -49,7 +49,7 @@ void ARStaffFormat::setTagParameterList(TagParameterList & tpl)
 	if (ltpls.GetCount() == 0) {
 		// create a list of string ...
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail( ( "S,style,standard,o;U,size,3pt,o"));
+		lstrs.AddTail(("S,style,standard,o;U,size,3pt,o;F,lineThickness,0.08,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -79,12 +79,27 @@ void ARStaffFormat::setTagParameterList(TagParameterList & tpl)
 				// one idea is to adjust the size, so that it matches an integer (internally)
 				float intunits = size->getValue();		// per halfspace ...
 				// Integer internal units 
-				const int Iintunits = (int) (intunits + 0.5);
+				const int Iintunits  = (int)(intunits + 0.5);
 				const double cmunits = Iintunits * kVirtualToCm;
-				const char * unit = size->getUnit();
-				intunits = (float)gd_convertUnits(cmunits,"cm",unit);
-				size->setValue( intunits );
+				const char *unit     = size->getUnit();
+
+                double result;
+				bool conversionOk    = gd_convertUnits(cmunits, "cm", unit, result);
+
+                if (conversionOk)
+				    size->setValue((float)result);
+                else
+                {
+                    delete size;
+                    size = NULL;
+                }
 			}
+
+			TagParameterFloat* fval =  TagParameterFloat::cast(rtpl->RemoveHead());
+			assert(fval);
+			if (fval->TagIsSet())
+				fLineThickness = LSPACE * fval->getValue();
+			delete fval;
 		}
 		delete rtpl;
 	}

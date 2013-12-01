@@ -20,6 +20,8 @@
 // Last released version: 1.2.2, current version: 1.3.1 (see GuidoInternal.h)
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
 using namespace std;
 
 //#define TIMING
@@ -39,7 +41,6 @@ using namespace std;
 #include "TagParameterFloat.h"
 
 // - Guido GR
-
 #include "GRMusic.h"
 #include "GRSpringForceIndex.h"
 #include "GRStaffManager.h"
@@ -48,10 +49,11 @@ using namespace std;
 
 // - Guido Misc
 #include "GUIDOInternal.h"
+#include "GUIDOParse.h"
 #include "guido.h"
-//#include "GDeviceDefs.h"	// for kDefaultMusicFont, kDefaultTextFont
 #include "VGDevice.h"
 #include "GuidoFeedback.h"
+#include "GuidoParser.h"
 
 #include "GUIDOEngine.h"
 #include "secureio.h"
@@ -67,11 +69,9 @@ using namespace std;
 // ==========================================================================
 const int GUIDOENGINE_MAJOR_VERSION = 1;
 const int GUIDOENGINE_MINOR_VERSION = 5;
-const int GUIDOENGINE_SUB_VERSION =	1;
-const char* GUIDOENGINE_VERSION_STR = "1.5.1";
+const int GUIDOENGINE_SUB_VERSION =	3;
+const char* GUIDOENGINE_VERSION_STR = "1.5.3";
 
-// global factory object, used by the parser and the GuidoFactory API
-ARFactory * gGlobalFactory = 0;
 ARPageFormat * gARPageFormat = 0;
 
 // - Misc globals
@@ -81,7 +81,7 @@ bool gInited = false;		// GuidoInit() Flag
 int gARHandlerRefCount = 0;
 
 int	gParseErrorLine = -1;
-int gParseErrorCol = -1;
+//int gParseErrorCol = -1;
 
 int gBoundingBoxesMap = kNoBB;	// a bits field to control bounding boxes draxing [added on May 11 2009 - DF ]
 
@@ -117,71 +117,85 @@ GUIDOAPI(GuidoErrCode) GuidoInit( GuidoInitDesc * desc )
 		NVstring textFontStr ( textFont );
 		FontManager::gFontText = FontManager::FindOrCreateFont((int)(1.5f * LSPACE), &textFontStr );
 
-		// for the GUIDO-Parser
-		gd_init();
 		gInited = true;
 	}
 	return guidoNoErr;
 }
 
-// --------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 GUIDOAPI(void) GuidoShutdown()
 {
 	FontManager::ReleaseAllFonts();
 	gInited = false;
 }
 
-// --------------------------------------------------------------------------
+
+static int checkUnicode(FILE *fd)
+{
+	rewind( fd );
+	if ( fd ) {
+		int c = fgetc( fd );
+		if( c == 0xff || c == 0xfe) {
+			c = fgetc( fd );
+			if( c == 0xfe || c == 0xff )
+				return 1;
+		}
+	}
+	return 0;
+}
+
+static void uniconv(const char *filename)
+{
+	FILE * fd = fopen(filename,"rb");	// open file
+	if (!fd) return;
+
+	if (checkUnicode (fd)) {
+		fseek(fd, 0, SEEK_END);
+		long int len = ftell(fd);
+		char * content = new char[len+1];
+		if( content ) {
+			rewind( fd );
+			fread (content, 1, len, fd);
+			fclose(fd);
+
+			fd = fopen(filename,"wt");
+			if (fd) {
+				int i;
+				for( i = 0; i < len; i++ ) {
+					if( content[i] > 0 )
+						fputc(content[i], fd);
+				}
+				fclose( fd );
+			}
+			delete [] content;
+		}
+	}
+	else fclose(fd);
+}
+
+// ------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoParseFile(const char * filename, ARHandler * ar)
 {
 	if( !filename || !ar )	return guidoErrBadParameter;
 	
 	*ar = 0;		
-	// - First, we create the abstract representation factory, for the parser.
-	gGlobalFactory = new ARFactory();
-
 	if( gGlobalSettings.gFeedback )
 		gGlobalSettings.gFeedback->Notify( GuidoFeedback::kProcessing );
 
-	// Check if file exists.
-	FILE * tmp = fopen(filename,"r");
-	if (tmp)
-	{
-		fclose(tmp);
-		
-		// - Parse the notation file
-		int ret = gd_parse(filename, PARSE_MODE_ALL);		
-		if (ret != 0 || ( gGlobalSettings.gFeedback && gGlobalSettings.gFeedback->ProgDialogAbort()))
-		{
-			// Something failed, do some cleanup
-			delete gGlobalFactory;
-			gGlobalFactory = 0;
-			return ( ret != 0 ) ? guidoErrParse : guidoErrUserCancel;
-		}
-	}
-	else
-	{
-		// could not open the file, cleanup things
-		delete gGlobalFactory;
-		gGlobalFactory = 0;
-
-//		guido_deinit();
-		
-		return guidoErrFileAccess; 
-	}
+ 	// first convert unicode files
+	uniconv(filename);
+ 	// Check if file exists.
+    ARHandler music = 0;
+    
+    GuidoParser *parser = GuidoOpenParser();
+    music = GuidoFile2AR(parser, filename);
+    GuidoCloseParser(parser);
 
 	// - Update the feedback status text ....
 	if( gGlobalSettings.gFeedback )
 		gGlobalSettings.gFeedback->UpdateStatusMessage( str_ARMusicCreated );
 
-	// - The big one: we extract the abstract representation.
-	ARMusic * music = gGlobalFactory->getMusic();
-
-	// - The factory is now useless
-	delete gGlobalFactory;
-	gGlobalFactory = 0;
-
-	if (music == 0)	
+	if (music == 0)
 	{
 		// - The factory failed to create our music.
 		if( gGlobalSettings.gFeedback )
@@ -195,24 +209,20 @@ GUIDOAPI(GuidoErrCode) GuidoParseFile(const char * filename, ARHandler * ar)
 		gGlobalSettings.gFeedback->UpdateStatusMessage( 0 );
 		if( gGlobalSettings.gFeedback->ProgDialogAbort())
 		{
-			delete music;
+			GuidoFreeAR (music);
 			gGlobalSettings.gFeedback->Notify( GuidoFeedback::kIdle );
 			return guidoErrUserCancel;
 		}
 	}
 
 	// - Use the filename as the new music name
-	music->setName( filename );
-
-	// - Now we can save the ARMusic
-	const ARHandler outHandleAR = guido_RegisterARMusic( music );
+	music->armusic->setName( filename );
 
 	// - Restore feedback state
 	if( gGlobalSettings.gFeedback )
 		gGlobalSettings.gFeedback->Notify( GuidoFeedback::kIdle );
 
-	*ar = outHandleAR;
-
+	*ar = music;
 	return guidoNoErr;
 }
 
@@ -222,32 +232,23 @@ GUIDOAPI(GuidoErrCode) GuidoParseString (const char * str, ARHandler* ar)
 	if( !str || !ar )	return guidoErrBadParameter;
 	
 	*ar = 0;
-	// - First, we create the abstract representation factory, for the parser.
-	gGlobalFactory = new ARFactory();
-
 	if( gGlobalSettings.gFeedback )
 		gGlobalSettings.gFeedback->Notify( GuidoFeedback::kProcessing );
-	int ret = gd_parse_buffer(str);					// - Parse the notation file
-	if (ret != 0 || ( gGlobalSettings.gFeedback && gGlobalSettings.gFeedback->ProgDialogAbort())) {
+
+    ARHandler music = 0;
+
+    GuidoParser *parser = GuidoOpenParser();
+    music = GuidoString2AR(parser, str);
+    GuidoCloseParser(parser);
+
+	if (!music || ( gGlobalSettings.gFeedback && gGlobalSettings.gFeedback->ProgDialogAbort())) {
 		// Something failed, do some cleanup
-		delete gGlobalFactory;
-		gGlobalFactory = 0;
-		return ( ret != 0 ) ? guidoErrParse : guidoErrUserCancel;
+		return music ? guidoErrUserCancel : guidoErrParse;
 	}
 
 	// - Update the feedback status text ....
 	if( gGlobalSettings.gFeedback )
 		gGlobalSettings.gFeedback->UpdateStatusMessage( str_ARMusicCreated );
-
-	ARMusic * music = gGlobalFactory->getMusic();	// we extract the abstract representation.
-	delete gGlobalFactory;							// - The factory is now useless
-	gGlobalFactory = 0;
-
-	if (music == 0)	{								// - The factory failed to create our music.
-		if( gGlobalSettings.gFeedback )
-			gGlobalSettings.gFeedback->Notify( GuidoFeedback::kIdle );
-		return guidoErrMemory;
-	}
 
 	if( gGlobalSettings.gFeedback ) {
 		gGlobalSettings.gFeedback->UpdateStatusMessage( 0 );
@@ -257,16 +258,13 @@ GUIDOAPI(GuidoErrCode) GuidoParseString (const char * str, ARHandler* ar)
 			return guidoErrUserCancel;
 		}
 	}
-	music->setName( "" );						// - Use the filename as the new music name
-
-	// - Now we can save the ARMusic
-	const ARHandler outHandleAR = guido_RegisterARMusic( music );
+	music->armusic->setName( "" );						// - Use the filename as the new music name
 
 	// - Restore feedback state
 	if( gGlobalSettings.gFeedback )
         gGlobalSettings.gFeedback->Notify( GuidoFeedback::kIdle );
 
-	*ar = outHandleAR;
+	*ar = music;
 	return guidoNoErr;
 }
 
@@ -348,19 +346,14 @@ GUIDOAPI(GuidoErrCode) GuidoUpdateGR( GRHandler gr, const GuidoLayoutSettings * 
 // --------------------------------------------------------------------------
 GUIDOAPI(void)	GuidoFreeAR( ARHandler ar )
 {
-	if ( !ar )
-		return;
+	if ( !ar ) return;
 
 	ar->refCount -= 1;
 	if( !ar->refCount )	// No more GR using this AR
 	{
 		delete ar->armusic;
 		delete ar;
-		// If it as the last ARMusic instance.
-//		if ( !ARMusic::mRefCount )
-//			guido_deinit();			// no de-init.
 	}
-
 }
 
 // --------------------------------------------------------------------------
@@ -398,11 +391,11 @@ GUIDOAPI(const char *) GuidoGetErrorString( GuidoErrCode errCode )
 }
 
 // --------------------------------------------------------------------------
+// this function is obsolete with the new reentrant parser
+// syntax error line and columns should be retrieved from the parser
 GUIDOAPI(int) GuidoGetParseErrorLine()
 {
 	return gParseErrorLine;
-	
-	// note: gParseErrorCol is the column where the parse error occured.
 }
 
 
@@ -411,7 +404,6 @@ GUIDOAPI(void)
 GuidoGetDefaultLayoutSettings (GuidoLayoutSettings * settings)
 {
 	if( settings == 0 ) return;
-	
 	settings->systemsDistance = kSettingDefaultSystemDistance;
  	settings->systemsDistribution = kSettingDefaultSystemDistrib;
  	settings->systemsDistribLimit = kSettingDefaultDistribLimit;
@@ -419,6 +411,7 @@ GuidoGetDefaultLayoutSettings (GuidoLayoutSettings * settings)
     settings->spring = kSettingDefaultSpring;
 	settings->neighborhoodSpacing = kSettingDefaultNeighborhood;
 	settings->optimalPageFill = kSettingDefaultOptimalPageFill;
+    settings->resizePage2Music = kSettingDefaultResizePage;
 }
 
 
@@ -551,7 +544,6 @@ GUIDOAPI(GuidoErrCode) GuidoOnDraw( GuidoOnDrawDesc * desc )
 	}
 		
 	desc->hdc->EndDraw(); // must be called even if BeginDraw has failed.
-
 	return result;
 }
 

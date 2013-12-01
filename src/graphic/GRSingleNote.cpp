@@ -225,52 +225,44 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
     // draw ledger lines
     const float ledXPos = -60 * 0.85f * mSize;
     //NVPoint noteheadOffset(getNoteHead()->getOffset()); //REM: fonctionne pour les \headsReverse et [{a2,b}] mais pas s'il y a
-                                                          //décalage \noteFormat<dx=X> : [\noteFormat<dx=-2> c] for example
+                                                          //décalage \noteFormat<dx=X> : [\noteFormat<dx=-2> c] par exemple
     for (int i = 0; i < sum; ++i, posy += incy)
         GRNote::DrawSymbol( hdc, kLedgerLineSymbol, ledXPos/* + noteheadOffset.x*/, ( posy - mPosition.y ));
 
-    if (!mCluster)
-    {
-        const VGColor oldcolor = hdc.GetFontColor();
-        if (mColRef) hdc.SetFontColor( VGColor( mColRef ));
+	if (mCluster)
+		getNoteHead()->setHaveToBeDrawn(false);
 
-        // - Draw elements (stems, dots...)
-        DrawSubElements( hdc );
+	const VGColor oldcolor = hdc.GetFontColor();
+	if (mColRef) hdc.SetFontColor( VGColor( mColRef ));
 
-        // - draw articulations & ornament
-        const GRNEList * articulations = getArticulations();
-        if( articulations )
-        {
-            for( GRNEList::const_iterator ptr = articulations->begin(); ptr != articulations->end(); ++ptr )
-            {
-                GRNotationElement * el = *ptr;
-                el->OnDraw(hdc);
-            }
-        }
+	// - Draw elements (stems, dots...)
+	DrawSubElements( hdc );
 
-        if (mOrnament)
+	// - draw articulations & ornament
+	const GRNEList * articulations = getArticulations();
+	if( articulations )
+	{
+		for( GRNEList::const_iterator ptr = articulations->begin(); ptr != articulations->end(); ++ptr )
 		{
-			// to draw the trill line...
-			float Y = getPosition().y + getBoundingBox().Height()/2;
-			mOrnament->OnDraw(hdc,X,Y, numVoice);
+			GRNotationElement * el = *ptr;
+			el->OnDraw(hdc);
 		}
+	}
 
-        // - Restore
-        if (mColRef) hdc.SetFontColor( oldcolor );
-        if (gBoundingBoxesMap & kEventsBB)
-            DrawBoundingBox( hdc, kEventBBColor);
-    }
-    else if (mClusterHaveToBeDrawn)
-    {
-        if (mOrnament)
-        {
-            float Y = getPosition().y + getBoundingBox().Height()/2;
-			mOrnament->OnDraw(hdc, X, Y, numVoice);
-        }
+	if (mOrnament)
+	{
+		// to draw the trill line...
+		float Y = getPosition().y + getBoundingBox().Height()/2;
+		mOrnament->OnDraw(hdc,X,Y, numVoice);
+	}
 
-        mCluster->OnDraw(hdc);
-    }
-	
+	// - Restore
+	if (mColRef) hdc.SetFontColor( oldcolor );
+	if (gBoundingBoxesMap & kEventsBB)
+		DrawBoundingBox( hdc, kEventBBColor);
+
+	if (mClusterHaveToBeDrawn)
+		mCluster->OnDraw(hdc);
 }
 
 //____________________________________________________________________________________
@@ -441,22 +433,43 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 			{
 				NVPoint stemendpos (stem->getPosition());
 				stemendpos.y -= stem->mStemLen;
+                float coef = 0;
+                int numberLines = mGrStaff->getNumlines();
 
-				if (stemendpos.y > 2 * mCurLSPACE)
-				{
-					const float newlength = (stem->getPosition().y - 2 * mCurLSPACE );
-					changeStemLength(newlength);
-					mStemLen = stem->mStemLen;
-				}
+                // Stem length adaptation according to staff lines number
+                if (numberLines != 0)
+                {
+                    // Stem length is set everytime as far as the middle of the staff.
+                    // Can be changed easily if it's not the good behaviour to adopt.
+                    coef = 0.5f * numberLines - 0.5f;
+                }
+
+                if (stemendpos.y > coef * mCurLSPACE)
+                {
+                    const float newlength = (stem->getPosition().y - coef * mCurLSPACE);
+                    changeStemLength(newlength);
+                    mStemLen = stem->mStemLen;
+                }
 			}
 			else if (stem->mStemDir == dirDOWN)
 			{
 				NVPoint stemendpos (stem->getPosition());
 				stemendpos.y += stem->mStemLen;
-				if (stemendpos.y < 2 * mCurLSPACE)
+                float coef = 0;
+                int numberLines = mGrStaff->getNumlines();
+
+                // Stem length adaptation according to staff lines number
+                if (numberLines != 0)
+                {
+                    // Stem length is set everytime as far as the middle of the staff.
+                    // Can be changed easily if it's not the good behaviour to adopt.
+                    coef = 0.5f * numberLines - 0.5f;
+                }
+
+				if (stemendpos.y < coef * mCurLSPACE)
 				{
-					const float newlength = (2 * mCurLSPACE - stem->getPosition().y);
-					changeStemLength( newlength ) ;
+					const float newlength = (coef * mCurLSPACE - stem->getPosition().y);
+					changeStemLength(newlength) ;
 					mStemLen = stem->mStemLen;
 				}
 			}
@@ -548,6 +561,9 @@ ARTHead::HEADSTATE GRSingleNote::adjustHeadPosition(ARTHead::HEADSTATE sugHeadSt
 			head->addToOffset(NVPoint((GCoord)(-offsetx * 0.5f) ,0));
 		retstate = ARTHead::CENTER;
     }
+
+	if (this->getDot())
+		this->getDot()->adjustHorizontalDotPosition(mSize, retstate, stemdir);
 
     // - Adjust horizontal notehead position, particularly for non-standard noteheads
     this->getNoteHead()->adjustPositionForChords(retstate, stemdir);
@@ -940,7 +956,7 @@ int GRSingleNote::adjustLength( const TYPE_DURATION & ndur )
 		while (pos)
 		{
 			el = mAssociated->GetNext(pos);
-			mytuplet = dynamic_cast<GRNewTuplet *>(el); // war GRTuplet
+			mytuplet = dynamic_cast<GRNewTuplet *>(el); // was GRTuplet
 			if (mytuplet)
 				break;
 		}
@@ -1116,7 +1132,7 @@ void GRSingleNote::handleAccidental (const ARAcc* acc)
 		// no accidentals! we need to force accidentals ...
 		int mynewacc = arnote->getAccidentals() * 2 + ARNote::detune2Quarters(arnote->getDetune());
 		if (mynewacc != 0) 
-			myacc->setAccidentalByQuarter(mynewacc, getOffset().x, mNoteBreite);
+			myacc->setAccidentalByQuarter(mynewacc, (int)getOffset().x, mNoteBreite);
 
 		myacc->setPosition( getPosition());
 		AddTail(myacc);
@@ -1140,7 +1156,7 @@ void GRSingleNote::handleAccidental (const ARAcc* acc)
 			el->setSize(acc->getSize()->getValue());
 
 		if (acc->getStyle() == ARAcc::kCautionary) {
-			if (el) el->setCautionary (getOffset().x, mNoteBreite);			
+			if (el) el->setCautionary ((int)getOffset().x, mNoteBreite);			
 		}
 		// color...
 	}

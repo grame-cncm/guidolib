@@ -104,7 +104,7 @@ GDeviceWin32GDIPlus::GDeviceWin32GDIPlus( const char * inPath, VGSystem* sys )
 	//std::copy(s.begin(), s.end(), wPath.begin());
 
 	int charCount = (int)strlen( inPath );
-	DWORD count = mbstowcs(NULL, inPath, charCount);
+	DWORD count = (DWORD)mbstowcs(NULL, inPath, charCount);
 	WCHAR * wPath = (WCHAR*) malloc ((count + 1) * sizeof(WCHAR));
 	mbstowcs(wPath, inPath, charCount+1);
 

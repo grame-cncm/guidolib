@@ -14,6 +14,10 @@
 
 */
 
+#ifdef WIN32
+# pragma warning (disable : 4661)		// don't know how to solve it
+#endif
+
 #include "GUIDOExport.h"
 #include "GUIDOEngine.h"
 #include "TRect.h"

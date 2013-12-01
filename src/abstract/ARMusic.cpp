@@ -81,10 +81,13 @@ void ARMusic::getTimeMap (TimeMapCollector& f) const
 {
 //	TYPE_DURATION duration = getDuration();
 	GuidoPos pos = GetHeadPosition();
-	ARMusicalVoice * voice = GetNext(pos);
-	if (voice) {
-		TimeMapper mapper (f, voice);
-		voice->browse(mapper);	// actually browse the first voice only
+    if(pos)
+    {
+        ARMusicalVoice * voice = GetNext(pos);
+        if (voice) {
+            TimeMapper mapper (f, voice);
+            voice->browse(mapper);	// actually browse the first voice only
+        }
 	}
 }
 
@@ -366,7 +369,7 @@ void ARMusic::doAutoBreaks()
 
 void ARMusic::doAutoStuff()
 {
-	// this is important so that the voices now about the maxmium tag-id.
+	// this is important so that the voices now about the maximum tag-id.
 	gCurArMusic = this;
 
 	// First, we adjust all durations ...

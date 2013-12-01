@@ -115,12 +115,18 @@ void GRCluster::OnDraw(VGDevice &hdc) const
 {
     if (mDraw)
 	{
-    	const VGColor prevTextColor = hdc.GetFontColor();
-
     	if (mColRef)
-    	    hdc.SelectFillColor(VGColor(mColRef));
+        {
+            VGColor color(mColRef);
+            hdc.PushFillColor(color);
+            hdc.PushPen(color, 1);
+        }
    		else if (gClusterColor)
-   	    	hdc.SelectFillColor(VGColor(gClusterColor));
+        {
+            VGColor color(gClusterColor);
+            hdc.PushFillColor(color);
+            hdc.PushPen(color, 1);
+        }
 
     	NVRect r = getBoundingBox();
     	r += getPosition();
@@ -193,7 +199,10 @@ void GRCluster::OnDraw(VGDevice &hdc) const
 
 	    // - Restore context
 	    if (mColRef || gClusterColor)
-	        hdc.SelectFillColor(prevTextColor);  //(TODO: in a parent method)
+	    {
+		    hdc.PopPen();
+		    hdc.PopFillColor();
+	    }
 	}
 }
 

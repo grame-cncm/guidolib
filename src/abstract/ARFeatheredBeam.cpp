@@ -141,9 +141,9 @@ void ARFeatheredBeam::findPoints(std::string durations)
 void ARFeatheredBeam::findDefaultPoints()
 {
 	//handle the case with no duration parameters
-	float valor = beginDur.getNumerator();
+	float valor = float(beginDur.getNumerator());
 	valor /= beginDur.getDenominator();
-	float valor2 = endDur.getNumerator();
+	float valor2 = float(endDur.getNumerator());
 	valor2 /= endDur.getDenominator();
 	convertDurationToBeams(valor, valor2);
 }

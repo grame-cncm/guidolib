@@ -68,7 +68,7 @@ bool TagParameterString::getRGB( unsigned char colref[4] ) const
 	colref[3] = 255;	//YC corrected here
 
 	bool hexformat = value.substr(0,2) == "0x";
-	int size = value.size();
+	size_t size = value.size();
 	// - Check for 0xRRGGBB	
 	if ((size == 8) && hexformat)
 	{

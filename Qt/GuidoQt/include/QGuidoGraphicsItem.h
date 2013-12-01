@@ -79,8 +79,10 @@ class QGuidoGraphicsItem : public QGraphicsObject
 		*	\param gmnCode The Guido Music Notation code
 		*	\return true if the GMN code is valid.
 		*/
-		virtual bool setGMNCode(const QString& gmnCode);
+		virtual bool setGMNCode(const QString& gmnCode, const QString& path=0);
 		
+        bool setGMNStream(GuidoStream * gmnStream);
+    
 		/**	\brief Returns the current Guido code.
 		*
 		*	\note This will work only if the code has been
@@ -99,9 +101,9 @@ class QGuidoGraphicsItem : public QGraphicsObject
 		QString getLastErrorMessage() const;
 
 		/**
-		*	\brief Returns the parse error line, or 0 if there is no parse error with the current GMN code.
+		*	\brief Gets the parse error line/col.
 		*/
-		int		getLastParseErrorLine() const;
+		void getLastParseErrorLine(int &line, int &col) const;
 
 		/**
 		*	\brief Sets the Guido layout settings used to draw with this QGuidoPainter
@@ -193,7 +195,8 @@ class QGuidoGraphicsItem : public QGraphicsObject
 		*	\brief Gives access to the ARHandler (abstract representation) of the Score in read-only.
 		*/		
 		CARHandler   getARHandler() const { return mGuidoPainter->getARHandler(); }
-		
+    
+
 		/// \brief sets the color used to draw the score
 		void setScoreColor(const QColor& color)	{ mGuidoPainter->setScoreColor(color); }
 		/// \brief returns the color used to draw the score
