@@ -131,7 +131,7 @@ public:
 protected:
 
 	void 		dospacing();
-	void		DrawAccolade(  VGDevice & hdc, const NVPoint & leftTop, const NVPoint & leftBottom ) const;
+//	void		DrawAccolade(  VGDevice & hdc, const NVPoint & leftTop, const NVPoint & leftBottom, int id ) const;
 	void 		DrawSystemSprings( VGDevice & hdc ) const;
 	void 		DrawSystemForce( VGDevice & hdc ) const;	
 	void		AddSystemSlice( GRSystemSlice * inSlice );
@@ -175,7 +175,7 @@ protected:
 	NEPointerList 	mSpaceList;
 
 	// GRAccoladeList	mAccolades; // TODO
-	GRAccolade *	mAccolade;		// TEMP
+	std::vector<GRAccolade *>	mAccolade;		// TEMP
 
 private:  
 
