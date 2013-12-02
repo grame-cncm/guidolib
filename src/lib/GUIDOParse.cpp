@@ -128,9 +128,9 @@ GUIDOAPI(GuidoStream *) GuidoOpenStream ()
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(const char *) GuidoGetStream (GuidoStream * gStream)
+GUIDOAPI(const char *) GuidoGetStream (GuidoStream * guidoStream)
 {
-    return gStream->str().c_str();
+    return guidoStream->getGlobalStringStream()->str().c_str();
 }
 
 // --------------------------------------------------------------------------

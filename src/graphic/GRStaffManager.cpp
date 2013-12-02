@@ -37,6 +37,7 @@
 #include "ARABreak.h"
 #include "ARAuto.h"
 #include "ARDisplayDuration.h"
+#include "ARAccol.h"
 
 // - Guido GR
 #include "GRSystem.h"
@@ -135,8 +136,7 @@ GRStaffManager::GRStaffManager(GRMusic * p_grmusic, ARPageFormat * inPageFormat)
 	mLastSpringID = 0;
 
 	mNewLinePage = 0;
-	mCurAccoladeTag = 0;
-
+	
 	// These are pointers to the maximum width clef and the maximum width key. These are saved so that
 	// the beginning sff can be updated easily .....
 	mMaxClef = NULL;
@@ -3503,10 +3503,12 @@ traceslice(cout << "GRStaffManager::FindOptimumBreaks  =>  CreateBeginSlice" << 
 		mGrSystem = new GRSystem(this, mGrPage, tp, &mSystemSlices, breakent->numslices, beginslice, &mSpringVector, mCurSysFormat,
 				pos == NULL && inPageOrSystemBreak == 0);
 		
-		if( mCurAccoladeTag )	// should be a list of accolades
+		if( ! mCurAccoladeTag.empty() )	
 		{
-			mGrSystem->notifyAccoladeTag( mCurAccoladeTag );	
-			// mCurAccoladeTag = 0;
+			for(std::vector<ARAccol *>::const_iterator it = mCurAccoladeTag.begin(); it < mCurAccoladeTag.end(); it++)
+			{
+				mGrSystem->notifyAccoladeTag( *it );	
+			}
 		}
 
 		mCurSysFormat = 0;
@@ -3534,14 +3536,14 @@ traceslice(cout << ">>>> GRStaffManager::FindOptimumBreaks  =>  end pos loop" <<
 					NULL, &mSpringVector, mCurSysFormat,
 					// is last system
 					inPageOrSystemBreak == 0);
-
-
-		if( mCurAccoladeTag )	// should be a list of accolades
+		
+		if( ! mCurAccoladeTag.empty() )	
 		{
-			mGrSystem->notifyAccoladeTag( mCurAccoladeTag );	
-			// mCurAccoladeTag = 0;
+			for(std::vector<ARAccol *>::const_iterator it = mCurAccoladeTag.begin(); it < mCurAccoladeTag.end(); it++)
+			{
+				mGrSystem->notifyAccoladeTag( *it );	
+			}
 		}
-
 		mCurSysFormat = 0;
 			
 		if (!mGrPage->addSystem(mGrSystem, &usedsystemdistance))
@@ -3912,5 +3914,5 @@ GRStaffManager::notifyAccoladeTag( ARAccol * inAccoladeTag )
 	// at this point, mGrSystem == 0, so we need to store input tag
 	// for futur use.
 
-	mCurAccoladeTag = inAccoladeTag;
+	mCurAccoladeTag.push_back(inAccoladeTag);
 }

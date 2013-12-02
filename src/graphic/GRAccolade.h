@@ -36,6 +36,13 @@ class GRAccolade : public GObject // GRTagARNotationElement ?
 
 		virtual void	setAccoladeType( int in ) { mAccoladeType = in; }
 		virtual void	setDx( float in ) { mDx = in; }
+		virtual void	setAccoladeID( int i) {id = i;}
+		virtual int 	getAccoladeID() {return id;}
+		virtual void	setBeginRange(int begin){rangeBegin = begin;}
+		virtual int		getBeginRange(){return rangeBegin;}
+		virtual void	setEndRange(int end){rangeEnd = end;}
+		virtual int 	getEndRange(){return rangeEnd;}
+
 
 		virtual void	draw( VGDevice & hdc, const NVPoint & leftTop, 
 								const NVPoint & leftBottom ) const;
@@ -56,7 +63,9 @@ class GRAccolade : public GObject // GRTagARNotationElement ?
 		
 		int			mAccoladeType;
 		float		mDx;
-		
+		int			id;
+		int			rangeBegin;
+		int			rangeEnd;
 };
 
 #endif
