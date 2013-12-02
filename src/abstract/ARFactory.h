@@ -43,6 +43,7 @@ class ARStaff;
 class ARTHead;
 class ARCluster;
 class ARGlissando;
+class ARCrescendo;
 
 
 // typedef KF_IPointerList<ARMusicalObject> ARMusicalObjectList;

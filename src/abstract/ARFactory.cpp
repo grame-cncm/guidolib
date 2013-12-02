@@ -764,22 +764,19 @@ void ARFactory::createTag( const char * name, int no )
 				mCurrentVoice->AddTail(tmp);
 				
 			}
-			else if(!strcmp(name,"cresc") )
+            else if (!strcmp(name,"cresc"))
 			{
 				ARCrescendo * tmp = new ARCrescendo();
-				mTags.AddHead(tmp); // push();
-				// just testing ...
-				
+				mTags.AddHead(tmp); // push()
 				mCurrentVoice->AddPositionTag(tmp);
-				// mCurrentVoice->AddTail(tmp);				
-			}
+            }
 			else if (!strcmp(name,"crescBegin"))
 			{
 				ARCrescendo * tmp = new ARCrescendo();
+                tmp->setAssociation(ARMusicalTag::ER);
+                tmp->setAllowRange(0);
 				tmp->setID(no);
-				tmp->setAllowRange(0);
-
-				mTags.AddHead(tmp);
+                mTags.AddHead(tmp);
 
 				mCurrentVoice->AddPositionTag(tmp);		
 			}
@@ -787,9 +784,7 @@ void ARFactory::createTag( const char * name, int no )
 			{
 				ARDummyRangeEnd * tmp = new ARDummyRangeEnd("\\crescEnd");
 				tmp->setID(no);
-
-				// no ist die ID
-				mCurrentVoice->setPositionTagEndPos(no, tmp);
+                mCurrentVoice->setPositionTagEndPos(no, tmp);
 				mTags.AddHead(tmp);
 			}
 			else if (!strcmp(name,"cluster"))
@@ -844,36 +839,31 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);				
 			}
-			else if(!strcmp(name,"doubleBar")) {
+			else if (!strcmp(name,"doubleBar")) {
 				assert(!mCurrentEvent);
 				assert(mCurrentVoice);
 				ARDoubleBar * tmp = new ARDoubleBar;
 				mTags.AddHead(tmp); // push()
 				mCurrentVoice->AddTail(tmp);				
 			}
-			else if(!strcmp(name,"decresc") || !strcmp(name,"dim") || !strcmp(name,"diminuendo")) {
+			else if (!strcmp(name,"decresc") || !strcmp(name,"dim") || !strcmp(name,"diminuendo")) {
 				ARDiminuendo * tmp = new ARDiminuendo;
 				mTags.AddHead(tmp); // push();
-
 				mCurrentVoice->AddPositionTag(tmp);			
 			}
-			else if (!strcmp(name,"dimBegin")) {
+			else if (!strcmp(name,"decrescBegin") || !strcmp(name,"dimBegin") || !strcmp(name,"diminuendoBegin")) {
 				ARDiminuendo * tmp = new ARDiminuendo;
+                tmp->setAssociation(ARMusicalTag::ER);
 				tmp->setAllowRange(0);
 				tmp->setID(no);
-
-				// brauch ich das?
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"dimEnd")) {
+			else if (!strcmp(name,"decrescEnd") || !strcmp(name,"dimEnd") || !strcmp(name,"diminuendoBegin")) {
 				ARDummyRangeEnd * tmp = new ARDummyRangeEnd("\\dimEnd");			
 				tmp->setID(no);
 				mCurrentVoice->setPositionTagEndPos( no, tmp );
 				mTags.AddHead(tmp);
-
-				// this is done in setPositionTagEndPos ...
-				// mCurrentVoice->AddTail(tmp);
 			}
 			break;
 
@@ -962,7 +952,6 @@ void ARFactory::createTag( const char * name, int no )
 				mCurrentVoice->AddPositionTag(tmp);
 				
 			}
-			
 			else if (!strcmp(name,"glissandoBegin"))
 			{
 				// this is the id-number!

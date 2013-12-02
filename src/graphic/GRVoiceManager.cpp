@@ -1531,12 +1531,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 	}
 	else if (tinf == typeid(ARCrescendo))
 	{
-		// No crescendo starts at the end... if (atEnd) return retval;
-		// the graphical crescendo...
 		GRCrescendo * grcresc = new GRCrescendo(mCurGrStaff, static_cast<ARCrescendo *>(apt));
-	
-		// the cresc. is added to the Tag-Stack...
-		// ATTENTION... AddTail !!!
 		addGRTag(grcresc,0);
 		mCurGrStaff->AddTag(grcresc);
 		gCurMusic->addVoiceElement(arVoice,grcresc);
@@ -1544,8 +1539,6 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 	else if (tinf == typeid(ARDiminuendo))
 	{
 		GRDiminuendo * grdim = new GRDiminuendo(mCurGrStaff, static_cast<ARDiminuendo *>(apt));
-		// the cresc. is added to the Tag-Stack...
-		// ATTENTION... AddTail !!!
 		addGRTag(grdim,0);
 		mCurGrStaff->AddTag(grdim);
 		gCurMusic->addVoiceElement(arVoice,grdim);
