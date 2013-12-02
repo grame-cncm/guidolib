@@ -689,21 +689,18 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 	}
 
 	// - Draws the vertical left border line.
-<<<<<<< HEAD
 
 	const float staffHeight = (theStaff->getNumlines() - 1) * theStaff->getStaffLSPACE();
 	lastStaffPos.y += staffHeight; // Set to the bottom of last staff
 	hdc.PushPenWidth( kLineThick );
 	hdc.Line( firstStaffPos.x, firstStaffPos.y, lastStaffPos.x, lastStaffPos.y );
 	hdc.PopPenWidth();
-=======
     if (firstStaffPos.x != firstStaffPos.y)
     {
         hdc.PushPenWidth( kLineThick );
         hdc.Line( firstStaffPos.x, firstStaffPos.y, lastStaffPos.x, lastStaffPos.y );
         hdc.PopPenWidth();
     }
->>>>>>> 76e712208757fd6865b2f338566f5514c31f9bdb
 
 	// - Now draws the (System)-elements
     DrawSubElements( hdc );
