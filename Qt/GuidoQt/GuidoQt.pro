@@ -6,7 +6,7 @@ INCLUDEPATH += include
 # Library setting
 TEMPLATE = lib
 CONFIG += staticlib
-CONFIG += c++11
+#CONFIG += c++11
 DESTDIR = ..
 MOC_DIR = tmpSrc
 
