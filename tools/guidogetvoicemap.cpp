@@ -18,6 +18,7 @@ GSystemOSX gSys (0,0);
 CairoSystem gSys(0);
 #endif
 
+#include "GUIDOParse.h"
 #include "GUIDOEngine.h"
 #include "GUIDOScoreMap.h"
 #include "VGDevice.h"
@@ -64,25 +65,38 @@ int main(int argc, char **argv)
         streamBuffer << ifs.rdbuf();
         ifs.close();
 
-		err = GuidoNewParseString(parser, streamBuffer.str().c_str(), &arh);
-		if (err == guidoNoErr) {
+        arh = GuidoString2AR(parser, streamBuffer.str().c_str());
+
+		if (arh)
+        {
 			GRHandler grh;
 			err = GuidoAR2GR (arh, 0, &grh);
-			if (err != guidoNoErr) error (err);
-			else {
+
+			if (err != guidoNoErr)
+                error (err);
+			else
+            {
 				int n = GuidoGetPageCount (grh);
 				int voices = GuidoCountVoices (arh);
-				for (int page =1; page <= n; page++) {
+
+				for (int page =1; page <= n; page++)
+                {
 					draw (grh, page, dev);
 					cout << "# page " << page << "/" << n << endl;
 					cout << "######################### " << endl;
-					for (int v =1; v <= voices; v++) {
+
+					for (int v =1; v <= voices; v++)
+                    {
 						Time2GraphicMap map;
 						err = GuidoGetVoiceMap( grh, page, kSize, kSize, v, map);
-						if (err != guidoNoErr) error (err);
-						else if (map.size()) {
+
+						if (err != guidoNoErr)
+                            error (err);
+						else if (map.size())
+                        {
 							cout << "# voice " << v << "/" << voices << endl;
 							cout << "######################### " << endl;
+
 							for (Time2GraphicMap::const_iterator m = map.begin(); m != map.end(); m++)
 								cout << m->first << " " << m->second << endl;
 						}

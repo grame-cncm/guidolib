@@ -13,6 +13,7 @@
 #include "SVGDevice.h"
 #include "SVGFont.h"
 
+#include "GUIDOParse.h"
 #include "GUIDOEngine.h"
 #include "GUIDOScoreMap.h"
 
@@ -58,9 +59,9 @@ int main(int argc, char **argv)
 
 
 	SVGSystem sys;
-	SVGDevice dev (cout, &sys);
+	SVGDevice dev(cout, &sys);
     GuidoInitDesc gd = { &dev, 0, 0, 0 };
-    GuidoInit (&gd);                   // Initialise the Guido Engine first
+    GuidoInit(&gd);                   // Initialise the Guido Engine first
 
 	GuidoErrCode err;
 	ARHandler arh;
@@ -75,18 +76,22 @@ int main(int argc, char **argv)
     streamBuffer << ifs.rdbuf();
     ifs.close();
 
-    err = GuidoNewParseString(parser, streamBuffer.str().c_str(), &arh);
-    if (err != guidoNoErr) error (err);
+    arh = GuidoString2AR(parser, streamBuffer.str().c_str());
+    if (arh)
+        error(err);
 
 	GRHandler grh;
     err = GuidoAR2GR (arh, 0, &grh);
-	if (err != guidoNoErr) error (err);
+
+	if (err != guidoNoErr)
+        error(err);
 
 	vector<MapElement> map;
 	err = GuidoGetSVGMap( grh, page, sel, map);
 	if (err != guidoNoErr) error (err);
 	
-	for (size_t i = 0; i < map.size(); i++) {
+	for (size_t i = 0; i < map.size(); i++)
+    {
 		FloatRect r = map[i].first;
 		TimeSegment time = map[i].second.time();
 		cout << "( [" << int(r.left) << "," << int(r.right) << "[ [" << int(r.top) << "," << int(r.bottom) << "[ ) "

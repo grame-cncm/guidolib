@@ -71,6 +71,7 @@ using namespace std;
 #include "ARSlur.h"
 #include "ARTrill.h"
 #include "ARGlissando.h"
+#include "ARCrescendo.h"
 #include "GRTrill.h"
 #include "GRSingleNote.h"
 #include "ARCluster.h"
@@ -5295,7 +5296,6 @@ void ARMusicalVoice::doAutoGlissando()
 
 			// the mPosTagList owns the ties!
 			mPosTagList->RemoveElement(glissando);
-
 		}
 	}
 

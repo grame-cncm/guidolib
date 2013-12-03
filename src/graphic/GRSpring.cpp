@@ -31,6 +31,12 @@
 #include "GRVoice.h"
 #include "GRRepeatEnd.h"
 
+/* For proportionnal rendering */
+#include "GRClef.h"
+#include "GRFinishBar.h"
+#include "GRRepeatBegin.h"
+#include "GRRepeatEnd.h"
+
 // - Guido misc
 #include "GuidoDefs.h"		 // For kLayoutSettingDefaultSpring
 #include "kf_vect.h"
@@ -324,15 +330,17 @@ int sprpcomp(const GRSpring *gr1,const GRSpring *gr2)
 	return *gr1 < *gr2;
 }
 
-int GRSpring::setGRPositionX( GCoord p_posx )
+int GRSpring::setGRPositionX(GCoord p_posx)
 {
 	posx = p_posx;
 	GuidoPos pos = grolst.GetHeadPosition();
+
 	while (pos)
 	{
 		GRNotationElement * el = grolst.GetNext(pos);
 		el->setHPosition(posx);
 	}
+
 	return 0;
 }
 

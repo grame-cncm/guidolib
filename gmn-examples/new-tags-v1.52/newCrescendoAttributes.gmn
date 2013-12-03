@@ -1,0 +1,17 @@
+% New \crescendo-Tag attributes :
+%
+% - dx1            defines the horizontal offset of the crescendo's left
+%					default value is 0
+% - dx2            defines the horizontal offset of the crescendo's right
+%					default value is 0
+% - dy              defines the vertical offset of the crescendo
+%					default value is 0
+% - deltaY       defines the vertical spacing (between the end of the two lines) of the crescendo's right
+%					default value is 3
+% - color          defines the crescendo's color.
+%                      value type : string
+%                      default value is "black"
+%
+[
+     \cresc<dx1=2, dx2=-4, dy=1.5, deltaY=3, color="red"> (a b c)
+]

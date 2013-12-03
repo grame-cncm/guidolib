@@ -172,7 +172,7 @@ GRStaffState::GRStaffState()
 	curstaffrmt = NULL;
 	staffLSPACE = LSPACE;
 	numlines = 5;				// Standard
-    lineThickness = (float)0.08;
+    lineThickness = LSPACE * 0.08f;
 
 	curkey = NULL;
 
@@ -543,7 +543,7 @@ float GRStaff::getKeyPosition(TYPE_PITCH pit, int numkeys) const
 				bottombound = getNotePosition( NOTE_F, baseoct );
 				++ baseoct;
 			}
-			while (bottombound > (mStaffState.numlines)*getStaffLSPACE() );
+			while (bottombound > (mStaffState.numlines) * getStaffLSPACE() );
 			// Watch it here: the f-flat can be just outside (below lowest line)
 		}
 		else		// sharps
@@ -863,14 +863,16 @@ GRRepeatBegin * GRStaff::AddRepeatBegin(ARRepeatBegin *arrb)
 // ----------------------------------------------------------------------------
 /** \brief This creates a repeatEnd 
 */
-GRRepeatEnd * GRStaff::AddRepeatEnd(ARRepeatEnd *arre)
+GRRepeatEnd * GRStaff::AddRepeatEnd( ARRepeatEnd * arre )
 {
-    assert(arre);
-	GRRepeatEnd *tmp = new GRRepeatEnd(arre);
-	addNotationElement(tmp);
-	tmp->setGRStaff(this);
-	tmp->updateBoundingBox();
-	return tmp;
+//	if (arre->getNumRepeat() == 0 || !arre->getRange())
+	{
+        assert (arre);
+		GRRepeatEnd * tmp = new GRRepeatEnd(arre, this, arre->getRelativeTimePosition());
+		addNotationElement(tmp);
+		return tmp;
+	}
+	return NULL;
 }
 
 // ----------------------------------------------------------------------------
@@ -1870,13 +1872,14 @@ void GRStaff::OnDraw( VGDevice & hdc ) const
 // 	hdc.SelectFont( hfontold );// JB test for optimisation: do not restore font context.
 
 #else
-	DrawStaffUsingLines( hdc );	
+	DrawStaffUsingLines(hdc);	
 #endif
 	
 	// - 
-	DrawNotationElements( hdc );
-	if (gBoundingBoxesMap & kStavesBB) {
-		DrawBoundingBox( hdc, kStaffBBColor);
+	DrawNotationElements(hdc);
+	if (gBoundingBoxesMap & kStavesBB)
+    {
+		DrawBoundingBox(hdc, kStaffBBColor);
 	}
 }
 
@@ -1910,17 +1913,17 @@ void GRStaff::DrawStaffUsingSymbolScale( VGDevice & hdc ) const
 	}
 	else
 	{
-		for( int i = 0; i < mStaffState.numlines; ++i )
+		for (int i = 0; i < mStaffState.numlines; ++i)
 		{
 			yOffset = staffPos.y + i * kStaffLSPace;
-			hdc.OffsetOrigin( 0, yOffset );
-			hdc.DrawMusicSymbol( 0, 0, kStaffLineSymbol );
-			hdc.OffsetOrigin( 0, -yOffset );
+			hdc.OffsetOrigin(0, yOffset);
+			hdc.DrawMusicSymbol( 0, 0, kStaffLineSymbol);
+			hdc.OffsetOrigin(0, - yOffset);
 		}
 	}
 	
 	// - Restore the orginal state of the matrix
-	hdc.SetScale( prevXScale, prevYScale );
+	hdc.UnsetScale();
 	hdc.OffsetOrigin( - staffPos.x, 0 );
 }
 
@@ -1979,6 +1982,11 @@ float GRStaff::currentLineThikness() const
 */
 void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 {
+    float sizeRatio = getSizeRatio();
+
+    if (sizeRatio < kMinNoteSize) // Too small, don't draw
+        return;
+
 	const float lspace = getStaffLSPACE(); // Space between two lines
 	const NVPoint & staffPos = getPosition();
 	
@@ -1989,29 +1997,27 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 	hdc.Line( xStart - 100, yPos, xStart + 100, yPos );
 	hdc.Line( xStart, yPos - 100, xStart, yPos + 100 );
 	hdc.PopPen();
-
 	*/
-    float sizeRatio = getSizeRatio();
-    if (sizeRatio > 0.05)
-    {
-        hdc.PushPenWidth(currentLineThikness() * getSizeRatio());
-        std::map<float,float>::const_iterator it = positions.begin();
-        
-        while (it != positions.end())
-        {
-            float x1 = it->first;
-            float x2 = it->second;
-            yPos = staffPos.y;
-            for( int i = 0; i < mStaffState.numlines; i++ )
-            {
-                hdc.Line(x1, yPos, x2 - currentLineThikness() * getSizeRatio() / 2, yPos);
-                yPos += lspace;
-            }
-            it++;
-        }
 
-        hdc.PopPenWidth();
+    hdc.PushPenWidth(currentLineThikness() * getSizeRatio());
+    std::map<float,float>::const_iterator it = positions.begin();
+
+    while (it != positions.end())
+    {
+        float x1 = it->first;
+        float x2 = it->second;
+
+        yPos = staffPos.y;
+
+        for (int i = 0; i < mStaffState.numlines; i++)
+        {
+            hdc.Line(x1, yPos, x2, yPos);
+            yPos += lspace;
+        }
+        it++;
     }
+
+    hdc.PopPenWidth();
 }
 
 // ----------------------------------------------------------------------------

@@ -533,11 +533,17 @@ GDeviceWin32GDIPlus::CopyPixels( int xDest, int yDest,
 // values, so they cannot exceed 32767.
 void GDeviceWin32GDIPlus::SetScale( float x, float y )
 {
-	const float prevX	= mScaleX;
-	const float prevY	= mScaleY;
-	mScaleX				= x;
-	mScaleY				= y;	
+	mScaleX	= x;
+	mScaleY	= y;	
 	mGraphics->ScaleTransform( x, y );  
+}
+
+// --------------------------------------------------------------
+void GDeviceWin32GDIPlus::UnsetScale()
+{
+	mScaleX = 1 / mScaleX;
+	mScaleY	= 1 / mScaleY;
+	mGraphics->ScaleTransform( mScaleX, mScaleY );  
 }
 
 // --------------------------------------------------------------

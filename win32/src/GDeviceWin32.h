@@ -77,7 +77,7 @@ class_export GDeviceWin32 : public VGDevice
 		virtual	void			SetMusicFont( const VGFont * font );				
 		virtual	const VGFont *	GetMusicFont() const;		
 		virtual	void			SetTextFont( const VGFont * font );				
-		virtual	const VGFont *	GetTextFont() const	;
+		virtual	const VGFont *	GetTextFont() const;
 
 		// - Pen & brush services --------------------------------------------
 		/// Implements the generic VGDevice behaviour + a Win32 trick: input width of -1 or -2 sets pen to dashed/dotted style.
@@ -100,6 +100,7 @@ class_export GDeviceWin32 : public VGDevice
 
 		// - Coordinate services ------------------------------------------------
 		virtual	void			SetScale( float x, float y );
+        virtual	void			UnsetScale();
 		virtual	void			SetOrigin( float x, float y );
 		virtual	void			OffsetOrigin( float x, float y );
 		virtual	void			LogicalToDevice( float * x, float * y ) const;
