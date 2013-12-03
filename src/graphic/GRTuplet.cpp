@@ -29,7 +29,7 @@
 
 #include "ARTuplet.h"
 
-#include "GRNewTuplet.h"
+#include "GRTuplet.h"
 #include "GRStaff.h"
 #include "GRPage.h"
 #include "GRVoice.h"
@@ -42,7 +42,7 @@ using namespace std;
 
 // #include "NEPointerList.h"
 // ----------------------------------------------------------------------------
-GRNewTuplet::GRNewTuplet ( GRStaff * inStaff, ARTuplet * artuplet )
+GRTuplet::GRTuplet ( GRStaff * inStaff, ARTuplet * artuplet )
 				   : GRPTagARNotationElement(artuplet)
 {
 	// (JB) require mGrStaff = inStaff ?
@@ -55,7 +55,7 @@ GRNewTuplet::GRNewTuplet ( GRStaff * inStaff, ARTuplet * artuplet )
 	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
 	
 	
-	GRNewTupletSaveStruct * st = new GRNewTupletSaveStruct;
+	GRTupletSaveStruct * st = new GRTupletSaveStruct;
 
 	sse->p = (void *) st;
 
@@ -67,21 +67,21 @@ GRNewTuplet::GRNewTuplet ( GRStaff * inStaff, ARTuplet * artuplet )
 }
 
 // ----------------------------------------------------------------------------
-GRNewTuplet::~GRNewTuplet()
+GRTuplet::~GRTuplet()
 {
 	delete mAssociated;	// base destructor does a more complex job, should be removed ? 
 	mAssociated = 0;
 }
 
 // ----------------------------------------------------------------------------
-const ARTuplet * GRNewTuplet::getARTuplet() const
+const ARTuplet * GRTuplet::getARTuplet() const
 {
 	return static_cast/*dynamic cast*/<ARTuplet *>(mAbstractRepresentation);
 }
 
 // ----------------------------------------------------------------------------
 void 
-GRNewTuplet::tellPosition(GObject * caller, const NVPoint & inPos )
+GRTuplet::tellPosition(GObject * caller, const NVPoint & inPos )
 {
 	const ARTuplet * arTuplet = getARTuplet();
 
@@ -98,7 +98,7 @@ GRNewTuplet::tellPosition(GObject * caller, const NVPoint & inPos )
 
 // ----------------------------------------------------------------------------
 void 
-GRNewTuplet::manualPosition(GObject * caller, const NVPoint & inPos )
+GRTuplet::manualPosition(GObject * caller, const NVPoint & inPos )
 {
 	GREvent * event = GREvent::cast( caller );
 	if( event == 0 ) return;
@@ -114,7 +114,7 @@ GRNewTuplet::manualPosition(GObject * caller, const NVPoint & inPos )
 
 	// if ( openLeftRange && openRightRange ) return;
 
-	GRNewTupletSaveStruct * st = (GRNewTupletSaveStruct *)sse->p;
+	GRTupletSaveStruct * st = (GRTupletSaveStruct *)sse->p;
 
 	const ARTuplet * arTuplet = getARTuplet();
 
@@ -138,7 +138,7 @@ GRNewTuplet::manualPosition(GObject * caller, const NVPoint & inPos )
 		st->p2.y -= dy2;
 	}
 	
-	if( event == endElement || ( endElement == 0 && event == startElement) )
+	if(event == endElement || (endElement == 0 && event == startElement))
 	{
 		if (startElement && endElement)
 		{
@@ -163,7 +163,7 @@ GRNewTuplet::manualPosition(GObject * caller, const NVPoint & inPos )
 /*
 // ----------------------------------------------------------------------------
 void 
-GRNewTuplet::automaticDirection()
+GRTuplet::automaticDirection()
 {
 	GuidoPos pos = mAssociated->GetHeadPosition();
 	while( pos )
@@ -186,7 +186,7 @@ GRNewTuplet::automaticDirection()
 	 and below) then choose the best one.
 
 */
-void  GRNewTuplet::automaticPosition(GObject * caller, const NVPoint & inPos )
+void  GRTuplet::automaticPosition(GObject * caller, const NVPoint & inPos )
 {
 	GREvent * callerEv = GREvent::cast( caller );
 	if( callerEv == 0 ) return;
@@ -197,7 +197,7 @@ void  GRNewTuplet::automaticPosition(GObject * caller, const NVPoint & inPos )
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct(staff->getGRSystem());
 	if( sse == 0 ) return;
 
-	GRNewTupletSaveStruct * st = (GRNewTupletSaveStruct *)sse->p;
+	GRTupletSaveStruct * st = (GRTupletSaveStruct *)sse->p;
 	if( st == 0 ) return;
 
 	GREvent * startElement = GREvent::cast( sse->startElement );
@@ -405,7 +405,7 @@ void  GRNewTuplet::automaticPosition(GObject * caller, const NVPoint & inPos )
 
 
 // ----------------------------------------------------------------------------
-void GRNewTuplet::OnDraw(VGDevice & hdc) const
+void GRTuplet::OnDraw(VGDevice & hdc) const
 { 
 	if(!mDraw)
 		return;
@@ -416,7 +416,7 @@ void GRNewTuplet::OnDraw(VGDevice & hdc) const
 	if (sse == 0)
 		return;
 
-	GRNewTupletSaveStruct * st = (GRNewTupletSaveStruct *)sse->p;	
+	GRTupletSaveStruct * st = (GRTupletSaveStruct *)sse->p;	
 
 	const ARTuplet * arTuplet = getARTuplet();
 
@@ -478,30 +478,33 @@ void GRNewTuplet::OnDraw(VGDevice & hdc) const
 			{
 				hdc.Line(st->p1.x, st->p1.y + 0.5f * LSPACE * mDirection, st->p1.x, st->p1.y);
 			}
+
 			hdc.Line( st->p1.x, st->p1.y, middleX - textSpace, middleY - slope * textSpace );
 		}
 
 		if( mShowRightBrace ) //arTuplet->getRightBrace()) // (mBraceState & BRACERIGHT)
 		{
 			hdc.Line( middleX + textSpace, middleY + slope * textSpace, st->p2.x, st->p2.y );
+
 			if( sse->endflag == GRSystemStartEndStruct::RIGHTMOST)
 			{
 				hdc.Line( st->p2.x, st->p2.y, st->p2.x, st->p2.y + 0.5f * LSPACE * (float)mDirection);
 			}
 		}
+
 		hdc.PopPenWidth();
 	}
 }
 
 // ----------------------------------------------------------------------------
-void GRNewTuplet::print() const
+void GRTuplet::print() const
 {
 }
 
 /* First new version
 // ----------------------------------------------------------------------------
 void 
-GRNewTuplet::automaticPosition(GObject * caller, const NVPoint & inPos )
+GRTuplet::automaticPosition(GObject * caller, const NVPoint & inPos )
 {
 	GREvent * event = GREvent::cast( caller );
 	if( event == 0 ) return;
@@ -512,7 +515,7 @@ GRNewTuplet::automaticPosition(GObject * caller, const NVPoint & inPos )
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct(staff->getGRSystem());
 	if( sse == 0 ) return;
 
-	GRNewTupletSaveStruct * st = (GRNewTupletSaveStruct *)sse->p;
+	GRTupletSaveStruct * st = (GRTupletSaveStruct *)sse->p;
 	if( st == 0 ) return;
 
 	GRNotationElement * startElement = sse->startElement;
@@ -630,7 +633,7 @@ GRNewTuplet::automaticPosition(GObject * caller, const NVPoint & inPos )
 }*/
 
 /* Original version:
-void GRNewTuplet::tellPosition(GObject * caller, const NVPoint & newPosition)
+void GRTuplet::tellPosition(GObject * caller, const NVPoint & newPosition)
 {
 	GRNotationElement * grel = dynamic_cast<GRNotationElement *>(caller);
 	if((grel == 0) || (grel->getGRStaff() == 0))
@@ -649,7 +652,7 @@ void GRNewTuplet::tellPosition(GObject * caller, const NVPoint & newPosition)
 
 	// if ( openLeftRange && openRightRange ) return;
 
-	GRNewTupletSaveStruct * st = (GRNewTupletSaveStruct *)sse->p;
+	GRTupletSaveStruct * st = (GRTupletSaveStruct *)sse->p;
 
 	const ARTuplet * arTuplet = getARTuplet();
 
@@ -686,7 +689,7 @@ void GRNewTuplet::tellPosition(GObject * caller, const NVPoint & newPosition)
 */
 
 /* Original version:
-void GRNewTuplet::OnDraw(VGDevice & hdc) const
+void GRTuplet::OnDraw(VGDevice & hdc) const
 { 
 
 	assert(gCurSystem);
@@ -694,7 +697,7 @@ void GRNewTuplet::OnDraw(VGDevice & hdc) const
 	if (!sse)
 		return;
 
-	GRNewTupletSaveStruct * st = (GRNewTupletSaveStruct *) sse->p;	
+	GRTupletSaveStruct * st = (GRTupletSaveStruct *) sse->p;	
 
 	// The first implementation justs draws the string ...
 	char buffer[30];

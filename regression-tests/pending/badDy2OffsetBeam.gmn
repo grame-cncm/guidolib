@@ -1,0 +1,14 @@
+{
+    [
+        \systemFormat<staves="1-4", dx=0>
+        \accol<id=0, range="1-2", type="straightBrace">
+        \staff<id=1, dy=2.5cm>
+        \barFormat<style="staff">
+        \staffFormat<style="3-line", size=0.875mm>
+        \clef<"perc">
+        \meter<"3+2/8"> _ _/8 \stemsUp \beam<dy1=10>(g/20 e g b g/40 e)
+    ],
+    [
+a*4/3
+    ]
+}

@@ -23,18 +23,10 @@
 class ARMarcato : public ARMTParameter, public ARPositionTag
 {		
 public:			
+    enum     tPositionMarcato { ABOVE, BELOW, NOTSET };
 
-
-	ARMarcato() : ARMTParameter()
-	{
-		rangesetting = ONLY;
-	}
-	virtual ~ARMarcato() 
-	{
-
-		// delete TagParameterPointer ...
-
-	};
+             ARMarcato();
+	virtual ~ARMarcato();
 
 	virtual void setTagParameterList(TagParameterList & tpl);
 
@@ -44,8 +36,9 @@ public:
 	virtual void PrintName(std::ostream & os) const;
 	virtual void PrintParameters(std::ostream & os) const;
 
-	virtual void	browse(TimeUnwrap& mapper) const;
+	virtual void browse(TimeUnwrap& mapper) const;
 	
+    tPositionMarcato getPositionMarcato() const {return position;};
 
 protected:
 
@@ -59,6 +52,7 @@ protected:
 	// TagParameters ....
 	static ListOfTPLs ltpls;
 
+    tPositionMarcato position;
 };
 
 #endif

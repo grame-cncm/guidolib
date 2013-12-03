@@ -7,6 +7,7 @@
 #include <sstream>
 #include <stdlib.h>
 
+#include "GUIDOParse.h"
 #include "GUIDOEngine.h"
 #include "NullGSystem.h"
 
@@ -40,19 +41,28 @@ int main(int argc, char **argv)
         streamBuffer << ifs.rdbuf();
         ifs.close();
 
-        err = GuidoNewParseString(parser, streamBuffer.str().c_str(), &arh);
-		if (err == guidoNoErr) {
+        arh = GuidoString2AR(parser, streamBuffer.str().c_str());
+		
+        if (arh)
+        {
 			GRHandler grh;
-			err = GuidoAR2GR (arh, 0, &grh);
-			if (err != guidoNoErr) error (err);
-			else GuidoFreeGR (grh);
-			GuidoFreeAR (arh);
+			err = GuidoAR2GR(arh, 0, &grh);
+
+			if (err != guidoNoErr)
+                error(err);
+			else
+                GuidoFreeGR(grh);
+
+			GuidoFreeAR(arh);
 		}
-		else error (err);
+		else
+            error(err);
 
         GuidoCloseParser(parser);
 	}
+
 	delete dev;
+
 	return 0;
 }
 

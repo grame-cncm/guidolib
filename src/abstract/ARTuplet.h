@@ -18,7 +18,6 @@
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
 
-// class GRNewTuplet;
 class ARBase;
 
 /** \brief Abstract representation of a tuplet.
@@ -28,8 +27,6 @@ class ARTuplet :
 	public ARMTParameter,
 	public ARPositionTag
 {
-		// friend class GRNewTuplet;
-
 	public:
 
 							ARTuplet(); 

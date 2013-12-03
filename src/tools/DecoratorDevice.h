@@ -58,10 +58,11 @@ class DecoratorDevice : public VGDevice
 										   float right, float bottom );
 
 		// - Font services ---------------------------------------------------
-		virtual	void			SetMusicFont( const VGFont * font );				
-		virtual	const VGFont *	GetMusicFont() const;				  
-		virtual	void			SetTextFont( const VGFont * font );				
-		virtual	const VGFont *	GetTextFont() const;				  
+		virtual	void			SetMusicFont( const VGFont * font );
+		virtual	const VGFont *	GetMusicFont() const;
+		virtual	void			SetTextFont( const VGFont * font );
+		virtual	const VGFont *	GetTextFont() const;
+	  
 
 
 		// - Pen & brush services --------------------------------------------
@@ -92,6 +93,7 @@ class DecoratorDevice : public VGDevice
 
 		// - Coordinate services ------------------------------------------------
 		virtual	void			SetScale( float x, float y );
+        virtual	void			UnsetScale();
 		virtual	void			SetOrigin( float x, float y );
 		virtual	void			OffsetOrigin( float x, float y );
 		virtual	void			LogicalToDevice( float * x, float * y ) const;
@@ -261,6 +263,9 @@ inline bool DecoratorDevice::CopyPixels( int xDest, int yDest, int dstWidth, int
 // --------------------------------------------------------------
 inline void DecoratorDevice::SetScale(float x, float y) {
 	fDevice->SetScale(x, y);
+}
+inline void DecoratorDevice::UnsetScale() {
+	fDevice->UnsetScale();
 }
 inline void DecoratorDevice::SetOrigin(float x, float y) {
 	fDevice->SetOrigin(x, y);

@@ -36,9 +36,9 @@ public:
 	float getLineThickness() const					{ return fLineThickness; }
 
 protected:
-	TagParameterString * style;
+	TagParameterString *style;
 	float				fLineThickness;
-	static ListOfTPLs ltpls;
+	static ListOfTPLs   ltpls;
 
 };
 

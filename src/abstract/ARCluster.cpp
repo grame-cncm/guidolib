@@ -74,9 +74,9 @@ void ARCluster::setTagParameterList(TagParameterList& tpl)
 		CreateListOfTPLs(ltpls, lstrs);
 	}
 
-	TagParameterList * rtpl = NULL;
+	TagParameterList *rtpl = NULL;
 	int ret = MatchListOfTPLsWithTPL(ltpls, tpl, &rtpl);
-	if (ret>=0 && rtpl)
+	if (ret >= 0 && rtpl)
 	{
 		// we found a match!
 		if (ret == 0)
@@ -105,8 +105,14 @@ void ARCluster::setTagParameterList(TagParameterList& tpl)
 			ady = f->getValue();
 			delete f;
 		}
+
 		delete rtpl;
 	}
+	else
+	{
+		// failure
+	}
+
 	tpl.RemoveAll();
 }
 

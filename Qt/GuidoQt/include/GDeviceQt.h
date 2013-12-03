@@ -64,6 +64,7 @@ class GDeviceQt: public VGDevice
 		const VGFont *	GetMusicFont() const;
 		void			SetTextFont( const VGFont * font );
 		const VGFont *	GetTextFont() const;
+        void			UnsetTextFont();
 		
 		void SelectPen( const VGColor & inColor, float width );
 		void SelectFillColor( const VGColor & c );
@@ -88,6 +89,7 @@ class GDeviceQt: public VGDevice
 				int nSrcWidth, int nSrcHeight, float alpha = -1.0);
 		
 		void  SetScale		 ( float x, float y );
+        void  UnsetScale     ();
 		void  SetOrigin		 ( float x, float y );
 		void  OffsetOrigin	 ( float x, float y );
 		void  LogicalToDevice( float * x, float * y ) const;
@@ -147,12 +149,16 @@ class GDeviceQt: public VGDevice
 		QStack<QColor>		mPenColorStack;
 		QStack<float>		mPenWidthStack;
 
-		const GFontQt *		mCurrTextFont; 
-		const GFontQt *		mCurrMusicFont; 
+		const GFontQt *		mCurrTextFont;
+		const GFontQt *		mCurrMusicFont;
 
 		// text and symbol 
 		VGColor				mTextColor; 
 		unsigned int 		mTextAlign;
+
+        // scaling
+        float mScaleX;
+        float mScaleY;
 		
 		/// temporary hack - must be removed asap
 		GSystemQt *			mSys;		

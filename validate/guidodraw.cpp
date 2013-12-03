@@ -7,6 +7,7 @@
 #include <sstream>
 #include <stdlib.h>
 
+#include "GUIDOParse.h"
 #include "GUIDOEngine.h"
 #include "NullGSystem.h"
 
@@ -25,7 +26,8 @@ int main(int argc, char **argv)
     GuidoInitDesc gd = { dev, 0, 0, 0 };
     GuidoInit (&gd);
 
-	for (int i=1; i < argc; i++) {
+	for (int i = 1; i < argc; i++)
+    {
 		cout << "======== guidodraw " << argv[i] << endl;
 		GuidoErrCode err;
 		ARHandler arh;
@@ -40,12 +42,17 @@ int main(int argc, char **argv)
         streamBuffer << ifs.rdbuf();
         ifs.close();
 
-        err = GuidoNewParseString(parser, streamBuffer.str().c_str(), &arh);
-		if (err == guidoNoErr) {
+        arh = GuidoString2AR(parser, streamBuffer.str().c_str());
+
+		if (arh)
+        {
 			GRHandler grh;
 			err = GuidoAR2GR (arh, 0, &grh);
-			if (err != guidoNoErr) error (err);
-			else {
+
+			if (err != guidoNoErr)
+                error(err);
+			else
+            {
 				GuidoOnDrawDesc desc;
 				desc.handle = grh;
 				desc.hdc = dev;
@@ -64,7 +71,9 @@ int main(int argc, char **argv)
 
         GuidoCloseParser(parser);
 	}
+
 	delete dev;
+
 	return 0;
 }
 

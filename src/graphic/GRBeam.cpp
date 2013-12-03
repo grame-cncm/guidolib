@@ -121,7 +121,7 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 	float ay [4] = { st->p[0].y, st->p[1].y, st->p[3].y, st->p[2].y };
 	
 	// This does the drawing!
-	hdc.Polygon( ax, ay, 4 );
+	hdc.Polygon(ax, ay, 4);
 	
 	if (st->simpleBeams)
 	{
@@ -155,17 +155,14 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 		hmyfont = FontManager::gFontText;
 		hdc.SetTextFont( hmyfont );
 
-		if(sse->startflag != GRSystemStartEndStruct::OPENLEFT)
-//<<<<<<< HEAD
-			hdc.DrawString(st->DurationLine[2].x+LSPACE/4, st->DurationLine[2].y+LSPACE/2, fraction, n);
-//=======
-//			hdc.DrawString(st->DurationLine[2].x, st->DurationLine[2].y+LSPACE/2, fraction, n);
+		if (sse->startflag != GRSystemStartEndStruct::OPENLEFT)
+			hdc.DrawString(st->DurationLine[2].x + LSPACE/4, st->DurationLine[2].y + LSPACE / 2, fraction, n);
 
         hdc.PopPenWidth();
-//>>>>>>> refs/remotes/origin/dev
 	}
 
-	if (mColRef) {
+	if (mColRef)
+    {
 		hdc.PopPen();
 		hdc.PopFillColor();
 	}
@@ -1048,16 +1045,16 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 				getLastPositionOfBarDuration().first = Y1;
 				getLastPositionOfBarDuration().second = Y2;
 			}
-			if(xBegin>xEnd)
+			if (xBegin > xEnd)
 			{
-				if(sse->endflag == GRSystemStartEndStruct::OPENRIGHT)
+				if (sse->endflag == GRSystemStartEndStruct::OPENRIGHT)
 					xEnd = sse->endElement->getPosition().x;
-				if(sse->startflag == GRSystemStartEndStruct::OPENLEFT)
+				if (sse->startflag == GRSystemStartEndStruct::OPENLEFT)
 					xBegin = sse->startElement->getPosition().x;
 			}
-			float x = xBegin + (xEnd - xBegin)/2;
-			float X1 = x - (n-0.5)/2*LSPACE;
-			float X2 = x + (n-0.5)/2*LSPACE;
+			float x = xBegin + (xEnd - xBegin) / 2;
+			float X1 = x - (n - 0.5f) / 2 * LSPACE;
+			float X2 = x + (n - 0.5f) / 2 * LSPACE;
 
 			st->DurationLine[0] = NVPoint(xBegin, Y1);
 			st->DurationLine[1] = NVPoint(xBegin, Y2);

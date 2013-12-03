@@ -84,8 +84,8 @@ class_export  GDeviceWin32GDIPlus : public VGDevice
 		// - Font services ---------------------------------------------------
 		virtual	void			SetMusicFont( const VGFont * font );				
 		virtual	const VGFont *	GetMusicFont() const;		
-		virtual	void			SetTextFont( const VGFont * font );				
-		virtual	const VGFont *	GetTextFont() const	;
+		virtual	void			SetTextFont( const VGFont * font );		
+		virtual	const VGFont *	GetTextFont() const;
 
 		// - Pen & brush services --------------------------------------------
 		virtual	void			SelectPen( const VGColor & inColor, float witdh = 1 ); 
@@ -115,6 +115,7 @@ class_export  GDeviceWin32GDIPlus : public VGDevice
 
 		// - Coordinate services ------------------------------------------------
 		virtual	void			SetScale( float x, float y );
+        virtual	void			UnsetScale();
 		virtual	void			SetOrigin( float x, float y );
 		virtual	void			OffsetOrigin( float x, float y );
 		virtual	void			LogicalToDevice( float * x, float * y ) const;

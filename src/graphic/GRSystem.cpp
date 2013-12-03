@@ -425,12 +425,13 @@ GRSystem::GRSystem(	GRStaffManager * staffmgr, GRPage * inPage,
 			GRSpring * spr = mSpringVector->Get(i);
 			if (spr)
 			{
-				spr->stretchWithForce (mSystemforce);
-				spr->setGRPositionX (curx);
+				spr->stretchWithForce(mSystemforce);
+                spr->setGRPositionX(curx);
 				curx += spr->x;
 			}
 		}
 	}
+
 	mBoundingBox.right = curx;				// this is the amount we have to go to the right ....
 
 	// now I cut the spring-vector and give back the stuff that I do not longer need ....
@@ -569,12 +570,13 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 	// - Find the positions of top and bottom systems.
 	// Todo: the complete list of positions, to allow many accolades.
 	GRStaff * theStaff = 0;
-	NVPoint firstStaffPos ( -1, 0 );
+	NVPoint firstStaffPos(-1, 0);
 	NVPoint lastStaffPos;
 	int staffCount = 0;
+
 	if (mStaffs)
 	{
-		for( int i = mStaffs->GetMinimum(); i <= mStaffs->GetMaximum(); i++ )
+		for (int i = mStaffs->GetMinimum(); i <= mStaffs->GetMaximum(); i++)
 		{
 			if ((theStaff = mStaffs->Get(i)) == NULL)
 				continue;
@@ -591,7 +593,7 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 
 	}		
 
-	else if (mSystemSlices.size() > 0 )
+	else if (mSystemSlices.size() > 0)
 	{
 		// then we have to draw the systemslices ....
 		GuidoPos pos = mSystemSlices.GetHeadPosition();
@@ -661,16 +663,26 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 					for(int i = nextSlice->mStaffs->GetMinimum(); i <= nextSlice->mStaffs->GetMaximum(); i++)
 					{
 						GRStaff * st = nextSlice->mStaffs->Get(i);
-						StavesOn[i]=st->isStaffBeginOn();
+
+                        if (st)
+						    StavesOn[i] = st->isStaffBeginOn();
 					}
 				}
 				for(int i = slice->mStaffs->GetMinimum(); i <= slice->mStaffs->GetMaximum(); i++)
 				{
 					if(nextSlice->mStaffs->Get(i))
-						slice->mStaffs->Get(i)->setNextOnOff(StavesOn[i]);
+                    {
+						GRStaff * st = slice->mStaffs->Get(i);
+                        
+                        if (st)
+                            st->setNextOnOff(StavesOn[i]);
+                    }
 					else
 					{
-						slice->mStaffs->Get(i)->setNextOnOff(true);
+						GRStaff * st = slice->mStaffs->Get(i);
+                        
+                        if (st)
+                            st->setNextOnOff(true);
 					}
 				}
 			}
@@ -685,16 +697,15 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 
 			slice->OnDraw(hdc);
 		}
-
 	}
 
-	// - Draws the vertical left border line.
+    // - Draws the vertical left border line.
 
-	const float staffHeight = (theStaff->getNumlines() - 1) * theStaff->getStaffLSPACE();
-	lastStaffPos.y += staffHeight; // Set to the bottom of last staff
-	hdc.PushPenWidth( kLineThick );
-	hdc.Line( firstStaffPos.x, firstStaffPos.y, lastStaffPos.x, lastStaffPos.y );
-	hdc.PopPenWidth();
+    const float staffHeight = (theStaff->getNumlines() - 1) * theStaff->getStaffLSPACE();
+    lastStaffPos.y += staffHeight; // Set to the bottom of last staff
+    hdc.PushPenWidth( kLineThick );
+    hdc.Line( firstStaffPos.x, firstStaffPos.y, lastStaffPos.x, lastStaffPos.y );
+    hdc.PopPenWidth();
     if (firstStaffPos.x != firstStaffPos.y)
     {
         hdc.PushPenWidth( kLineThick );
@@ -702,16 +713,16 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
         hdc.PopPenWidth();
     }
 
-	// - Now draws the (System)-elements
+    // - Now draws the (System)-elements
     DrawSubElements( hdc );
 
-	if( gGlobalSettings.gDisplaySprings == 1 )	DrawSystemSprings( hdc );
-	if( gGlobalSettings.gDisplayForce == 1 )	DrawSystemForce( hdc );
+    if( gGlobalSettings.gDisplaySprings == 1 )	DrawSystemSprings( hdc );
+    if( gGlobalSettings.gDisplayForce == 1 )	DrawSystemForce( hdc );
 
-	hdc.OffsetOrigin( -mPosition.x, -mPosition.y ); // Restore previous origin. (JB) sign change
+    hdc.OffsetOrigin( -mPosition.x, -mPosition.y ); // Restore previous origin. (JB) sign change
 
-	if (gBoundingBoxesMap & kSystemsBB)
-		DrawBoundingBox( hdc, kSystemBBColor);
+    if (gBoundingBoxesMap & kSystemsBB)
+        DrawBoundingBox( hdc, kSystemBBColor);
 }
 
 // --------------------------------------------------------------------------

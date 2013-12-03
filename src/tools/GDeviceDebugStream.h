@@ -153,6 +153,9 @@ class GDeviceDebugStream : public VGDevice
 		virtual void			DoSetScale( float prevX, float prevY, float newX, float newY )
 												{ std::cout << "DoSetScale " << newX << ", " << newY << std::endl; }
 
+        virtual void			DoUnsetScale()
+												{ std::cout << "DoUnsetScale" << std::endl; }
+
 		virtual	void			DoSaveDC()		{ std::cout << "DoSaveDC" << std::endl; }
 		virtual void			DoRestoreDC()	{ std::cout << "DoRestoreDC" << std::endl; }
 
