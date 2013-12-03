@@ -1923,7 +1923,7 @@ void GRStaff::DrawStaffUsingSymbolScale( VGDevice & hdc ) const
 	}
 	
 	// - Restore the orginal state of the matrix
-	hdc.UnsetScale();
+	hdc.SetScale(1 / (prevXScale * mLength / staffCharWidth), 1 / prevYScale);
 	hdc.OffsetOrigin( - staffPos.x, 0 );
 }
 

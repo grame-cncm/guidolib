@@ -286,9 +286,6 @@ class VGDevice
 		/// Sets the scale factors of the current VGDevice to the input values.
 		virtual	void			SetScale( float x, float y ) = 0;
 
-        /// Unsets the scale factors of the current VGDevice.
-		virtual	void			UnsetScale() = 0;
-
 		/// Specifies which VGDevice point (x,y) maps to the window origin (0,0).
 		virtual	void			SetOrigin( float x, float y ) = 0;
 

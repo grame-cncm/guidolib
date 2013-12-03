@@ -100,7 +100,6 @@ class_export GDeviceWin32 : public VGDevice
 
 		// - Coordinate services ------------------------------------------------
 		virtual	void			SetScale( float x, float y );
-        virtual	void			UnsetScale();
 		virtual	void			SetOrigin( float x, float y );
 		virtual	void			OffsetOrigin( float x, float y );
 		virtual	void			LogicalToDevice( float * x, float * y ) const;

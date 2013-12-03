@@ -678,15 +678,6 @@ GDeviceWin32::SetScale( float x, float y )
 
 // --------------------------------------------------------------
 void
-GDeviceWin32::UnsetScale()
-{
-	mScaleX	= 1 / mScaleX;
-	mScaleY	= 1 / mScaleY;
-	Win32ApplyTransform();
-}
-
-// --------------------------------------------------------------
-void
 GDeviceWin32::SetOrigin( float x, float y )
 {
 	const float prevX	= mOriginX;
