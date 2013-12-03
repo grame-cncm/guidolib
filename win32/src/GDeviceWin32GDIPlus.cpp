@@ -539,14 +539,6 @@ void GDeviceWin32GDIPlus::SetScale( float x, float y )
 }
 
 // --------------------------------------------------------------
-void GDeviceWin32GDIPlus::UnsetScale()
-{
-	mScaleX = 1 / mScaleX;
-	mScaleY	= 1 / mScaleY;
-	mGraphics->ScaleTransform( mScaleX, mScaleY );  
-}
-
-// --------------------------------------------------------------
 void GDeviceWin32GDIPlus::SetOrigin( float x, float y )
 {	
 	const float prevX	= mOriginX;

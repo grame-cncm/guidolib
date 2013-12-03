@@ -334,14 +334,6 @@ void SVGDevice::SetScale( float x, float y )
 	fEndl++ ;
 }
 
-void SVGDevice::UnsetScale()
-{
-	if (fScaledCount)
-        fScaledCount--;
-
-    closegroup();
-}
-
 void SVGDevice::SetOrigin( float x, float y )
 { 
 	checkfont();

@@ -545,17 +545,6 @@ GDevicePostScript::SetScale( float x, float y )
 }
 
 // --------------------------------------------------------------
-void			
-GDevicePostScript::UnsetScale()
-{
- 		fprintf( GetFile(), "%f %f scale\n", (1 / mScaleX), (1 / mScaleY));
-
-		// - We must update the current position after each coordinate 
-		// transformation
-		PSMoveTo( mCurrPenPos.x, mCurrPenPos.y );
-}
-
-// --------------------------------------------------------------
 void				
 GDevicePostScript::SetOrigin( float x, float y )
 {

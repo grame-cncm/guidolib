@@ -140,8 +140,9 @@ void GRAccelerando::OnDraw( VGDevice & hdc ) const
 		int n = toPrint.length();
 		
 		//to draw the little note
+        float scaleFactor = 0.5f;
         hdc.selectfont(1); // Not very beautiful but avoid a bug during SVG export
-		hdc.SetScale(0.5, 0.5);
+		hdc.SetScale(scaleFactor, scaleFactor);
 		hdc.DrawMusicSymbol(2 * getPosition().x, 2 * getPosition().y, kFullHeadSymbol);
 
 		float y = 2 * getPosition().y;
@@ -152,7 +153,7 @@ void GRAccelerando::OnDraw( VGDevice & hdc ) const
 			y -= LSPACE;
 		}
 
-        hdc.UnsetScale();
+        hdc.SetScale(1 / scaleFactor, 1 / scaleFactor);
 
         hdc.SetTextFont(hTextFont);
 		hdc.DrawString(getPosition().x + LSPACE, getPosition().y, t1, n);
@@ -173,8 +174,9 @@ void GRAccelerando::OnDraw( VGDevice & hdc ) const
 		int n = toPrint2.length();
 
         //to draw the little note
+        float scaleFactor = 0.5f;
         hdc.selectfont(1); // Not very beautiful but avoid a bug during SVG export
-		hdc.SetScale(0.5, 0.5);
+		hdc.SetScale(scaleFactor, scaleFactor);
 		hdc.DrawMusicSymbol(2 * (endPos.x - n * LSPACE), 2 * endPos.y, kFullHeadSymbol);
 		
         float y = 2 * endPos.y;
@@ -185,7 +187,7 @@ void GRAccelerando::OnDraw( VGDevice & hdc ) const
 			y -= LSPACE;
 		}
 
-        hdc.UnsetScale();
+        hdc.SetScale(1 / scaleFactor, 1 / scaleFactor);
 
         hdc.SetTextFont(hTextFont);
 		hdc.DrawString(endPos.x - (n - 1) * LSPACE, endPos.y, t2, n);

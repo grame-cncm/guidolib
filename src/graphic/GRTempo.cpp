@@ -216,7 +216,7 @@ float GRTempo::DrawNote( VGDevice & hdc, const TYPE_DURATION & noteDur, float xO
 	}
 
 	// - Cleanup
-	hdc.UnsetScale();
+	hdc.SetScale(1 / cueScale, 1 / cueScale);
 	return offsetX;
 }
 

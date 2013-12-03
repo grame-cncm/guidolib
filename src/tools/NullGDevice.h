@@ -80,8 +80,7 @@ class NullGDevice : public VGDevice
 		virtual bool			CopyPixels( int xDest, int yDest, int dstWidth, int dstHeight, VGDevice* pSrcDC, int xSrc, int ySrc, int nSrcWidth, int nSrcHeight, float alpha = -1.0)		{ return true; }
 
 		// - Coordinate services ------------------------------------------------
-		virtual	void			SetScale( float x, float y )					{}
-        virtual	void			UnsetScale()	                				{}
+		virtual	void			SetScale( float x, float y )					{}                				{}
 		virtual	void			SetOrigin( float x, float y )					{}
 		virtual	void			OffsetOrigin( float x, float y )				{}
 		virtual	void			LogicalToDevice( float * x, float * y ) const	{}
