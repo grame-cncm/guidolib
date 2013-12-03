@@ -61,6 +61,9 @@
 			<p>
 				<a href="#5.">5. Marcato</a>
 			</p>
+			<p>
+				<a href="#6.">6. Crescendo</a>
+			</p>
 			
 			
 			<hr>
@@ -490,7 +493,7 @@
 							<br>
 						
 							<li>
-								<b><i>color</i></b> - graphic color of the trill 
+								<b><i>color</i></b> - graphic color of the <i>accelerando</i> / <i>ritardando</i>
 							
 								<ul>
 									<li>
@@ -766,6 +769,141 @@
 							<li>
 								<pre>[ \marcato(b) \marcato(a) \marcato&lt;position="above", dy=4&gt;(a) \marcato&lt;"below", dx=3, dy=-4&gt;(b) ]</pre>
 								<center> <IMG SRC="imgs/marcato.png"> </center>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</p>
+			
+			
+			<hr>
+			
+			
+			<a name="6."></a>
+			<h4>6. Crescendo</h4>
+
+			<p class="tag">
+				<p>
+					<span class="tag">\crescendo</span>&lt;<i>dx1, dx2, dy, deltaY, color</i>&gt;(<i>notes</i>) 
+				</p>
+				<p>
+					Places a <i>crescendo</i> under some notes.
+				</p>
+				
+				<ul>
+					<li>
+						<i><b>Parameters</b> (in the order of their default positions):</i>
+						
+						<ul>
+							<br>
+							
+							<li>
+								<b><i>dx1</i></b> - graphic horizontal offset of the <i>crescendo</i>'s left
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>unit</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>0</b>
+									</li>
+								</ul>
+							</li>
+						
+							<br>
+						
+							<li>
+								<b><i>dx2</i></b> - graphic horizontal offset of the <i>crescendo</i>'s right
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>unit</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>0</b>
+									</li>
+								</ul>
+							</li>
+							
+							<br>
+						
+							<li>
+								<b><i>dy</i></b> - graphic vertical offset of the <i>crescendo</i>
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>unit</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>0</b>
+									</li>
+								</ul>
+							</li>
+							
+							<br>
+						
+							<li>
+								<b><i>deltaY</i></b> - graphic vertical spacing between the two <i>crescendo</i>'s lines
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>unit</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>3</b>
+									</li>
+								</ul>
+							</li>
+							
+							<br>
+						
+							<li>
+								<b><i>color</i></b> - graphic color of the <i>crescendo</i>
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>color string</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>"black"</b>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					
+					<br>
+									
+					<li>
+						<i><b>Range:</b> obligatory</i>
+					</li>
+					
+					<br>
+					
+					<li>
+						<b><i>Semantics:</i></b>
+								
+						<ul>
+							<li>
+								The <i>crescendo</i> marks a passage of a music during which the volume gradually increases.
+							</li>
+						</ul>
+					</li>
+					
+					<br>
+					
+					<li>
+						<b><i>Examples:</i></b>
+						
+						<ul>
+							<li>
+								<pre>[ \cresc&lt;dx1=2, dx2=-4, dy=1.5, deltaY=3, color="red"&gt;(a b c) ]</pre>
+								<center> <IMG SRC="imgs/crescendo.png"> </center>
 							</li>
 						</ul>
 					</li>

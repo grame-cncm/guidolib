@@ -196,8 +196,8 @@ void GRCrescendo::OnDraw( VGDevice & hdc) const
 	if (sse == 0)
 		return;
 
-    if (mColRef) 
-		hdc.PushFillColor(VGColor(mColRef));
+    if (mColRef)
+        hdc.PushPenColor(VGColor(mColRef));
 
     hdc.PushPenWidth(fCrescInfos->thickness);
 
@@ -207,7 +207,7 @@ void GRCrescendo::OnDraw( VGDevice & hdc) const
     hdc.PopPenWidth();
 
     if (mColRef)
-        hdc.PopFillColor();
+        hdc.PopPenColor();
 }
 
 
