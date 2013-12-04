@@ -22,6 +22,7 @@
 #include "GRDoubleBar.h"
 #include "GRSystemSlice.h"
 #include "VGDevice.h"
+#include "math.h"
 
 #include <iostream>
 using namespace std;
