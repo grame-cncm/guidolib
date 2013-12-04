@@ -701,28 +701,32 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 
     // - Draws the vertical left border line.
 
-    const float staffHeight = (theStaff->getNumlines() - 1) * theStaff->getStaffLSPACE();
-    lastStaffPos.y += staffHeight; // Set to the bottom of last staff
-    hdc.PushPenWidth( kLineThick );
-    hdc.Line( firstStaffPos.x, firstStaffPos.y, lastStaffPos.x, lastStaffPos.y );
-    hdc.PopPenWidth();
-    if (firstStaffPos.x != firstStaffPos.y)
+    if (theStaff)
     {
+        const float staffHeight = (theStaff->getNumlines() - 1) * theStaff->getStaffLSPACE();
+        lastStaffPos.y += staffHeight; // Set to the bottom of last staff
         hdc.PushPenWidth( kLineThick );
         hdc.Line( firstStaffPos.x, firstStaffPos.y, lastStaffPos.x, lastStaffPos.y );
         hdc.PopPenWidth();
+
+        if (firstStaffPos.x != firstStaffPos.y)
+        {
+            hdc.PushPenWidth( kLineThick );
+            hdc.Line( firstStaffPos.x, firstStaffPos.y, lastStaffPos.x, lastStaffPos.y );
+            hdc.PopPenWidth();
+        }
+
+        // - Now draws the (System)-elements
+        DrawSubElements( hdc );
+
+        if( gGlobalSettings.gDisplaySprings == 1 )	DrawSystemSprings( hdc );
+        if( gGlobalSettings.gDisplayForce == 1 )	DrawSystemForce( hdc );
+
+        hdc.OffsetOrigin( -mPosition.x, -mPosition.y ); // Restore previous origin. (JB) sign change
+
+        if (gBoundingBoxesMap & kSystemsBB)
+            DrawBoundingBox( hdc, kSystemBBColor);
     }
-
-    // - Now draws the (System)-elements
-    DrawSubElements( hdc );
-
-    if( gGlobalSettings.gDisplaySprings == 1 )	DrawSystemSprings( hdc );
-    if( gGlobalSettings.gDisplayForce == 1 )	DrawSystemForce( hdc );
-
-    hdc.OffsetOrigin( -mPosition.x, -mPosition.y ); // Restore previous origin. (JB) sign change
-
-    if (gBoundingBoxesMap & kSystemsBB)
-        DrawBoundingBox( hdc, kSystemBBColor);
 }
 
 // --------------------------------------------------------------------------
