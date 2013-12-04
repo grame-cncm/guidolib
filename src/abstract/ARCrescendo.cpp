@@ -47,7 +47,7 @@ ARCrescendo::ARCrescendo(const ARCrescendo * crescendo)	: ARMTParameter(-1, cres
     }
 }
 
-ARCrescendo::~ARCrescendo(void)
+ARCrescendo::~ARCrescendo()
 {
 }
 
