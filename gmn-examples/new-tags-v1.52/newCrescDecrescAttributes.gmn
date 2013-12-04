@@ -1,0 +1,22 @@
+% New \cresc / \decresc-Tag attributes :
+%
+% - dx1            defines the horizontal offset of the symbol's left
+%					default value is 0
+% - dx2            defines the horizontal offset of the symbol's right
+%					default value is 0
+% - dy              defines the vertical offset of the symbol
+%					default value is 0
+% - deltaY       defines the vertical spacing (between the end of the two lines) of the symbol's right
+%					default value is 3
+% - color          defines the symbol's color.
+%                      value type : string
+%                      default value is "black"
+%
+{
+    [
+        \cresc<dx1=2, dx2=-4, dy=1.5, deltaY=5, color="red"> (a b c)
+    ],
+    [
+        \decresc<dy=0> (a f/2 f/4 empty)
+    ]
+}

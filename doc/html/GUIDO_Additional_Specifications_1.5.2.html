@@ -783,14 +783,17 @@
 			
 			
 			<a name="6."></a>
-			<h4>6. Crescendo</h4>
+			<h4>6. Crescendo - Decrescendo</h4>
 
 			<p class="tag">
 				<p>
-					<span class="tag">\crescendo</span>&lt;<i>dx1, dx2, dy, deltaY, color</i>&gt;(<i>notes</i>) 
+					<span class="tag">\cresc</span>&lt;<i>dx1, dx2, dy, deltaY, color</i>&gt;(<i>notes</i>) 
 				</p>
 				<p>
-					Places a <i>crescendo</i> under some notes.
+					<span class="tag">\decresc</span>&lt;<i>dx1, dx2, dy, deltaY, color</i>&gt;(<i>notes</i>) 
+				</p>
+				<p>
+					Places a <i>crescendo</i> / <i>decrescendo</i> under selected notes.
 				</p>
 				
 				<ul>
@@ -801,7 +804,7 @@
 							<br>
 							
 							<li>
-								<b><i>dx1</i></b> (<i>optional</i>) - graphic horizontal offset of the <i>crescendo</i>'s left
+								<b><i>dx1</i></b> (<i>optional</i>) - graphic horizontal offset of the symbol's left
 							
 								<ul>
 									<li>
@@ -817,7 +820,7 @@
 							<br>
 						
 							<li>
-								<b><i>dx2</i></b> (<i>optional</i>) - graphic horizontal offset of the <i>crescendo</i>'s right
+								<b><i>dx2</i></b> (<i>optional</i>) - graphic horizontal offset of the symbol's right
 							
 								<ul>
 									<li>
@@ -833,7 +836,7 @@
 							<br>
 						
 							<li>
-								<b><i>dy</i></b> (<i>optional</i>) - graphic vertical offset of the <i>crescendo</i>
+								<b><i>dy</i></b> (<i>optional</i>) - graphic vertical offset of the symbol
 							
 								<ul>
 									<li>
@@ -849,7 +852,7 @@
 							<br>
 						
 							<li>
-								<b><i>deltaY</i></b> (<i>optional</i>) - graphic vertical spacing between the two <i>crescendo</i>'s lines
+								<b><i>deltaY</i></b> (<i>optional</i>) - graphic vertical spacing between the two symbol's lines
 							
 								<ul>
 									<li>
@@ -865,7 +868,7 @@
 							<br>
 						
 							<li>
-								<b><i>color</i></b> (<i>optional</i>) - graphic color of the <i>crescendo</i>
+								<b><i>color</i></b> (<i>optional</i>) - graphic color of the symbol
 							
 								<ul>
 									<li>
@@ -893,7 +896,7 @@
 								
 						<ul>
 							<li>
-								The <i>crescendo</i> marks a passage of a music during which the volume gradually increases.
+								The <i>crescendo</i> (<i>decrescendo</i>) marks a passage of a music during which the volume gradually increases (decreases).
 							</li>
 						</ul>
 					</li>
@@ -907,6 +910,8 @@
 							<li>
 								<pre>[ \cresc&lt;dx1=2, dx2=-4, dy=1.5, deltaY=3, color="red"&gt;(a b c) ]</pre>
 								<center> <IMG SRC="imgs/crescendo.png"> </center>
+								<pre>[ \decresc(a f/2 f/4 empty) ]</pre>
+								<center> <IMG SRC="imgs/decrescendo.png"> </center>
 							</li>
 						</ul>
 					</li>

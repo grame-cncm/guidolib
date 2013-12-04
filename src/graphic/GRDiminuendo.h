@@ -15,27 +15,70 @@
 
 */
 
+#include "GRPTagARNotationElement.h"
+
 class ARDiminuendo;
-#include "GRDynamics.h"
-
 class GRStaff;
+class GRStdNoteHead;
 
 
-/** \brief The Diminuendo dynamics. Draws a decrescendo arrow.
-*/
-class GRDiminuendo : public GRDynamics
+class GRDiminuendo : public GRPTagARNotationElement
 {
-  public:
-	 
-	  // constructor without REAL abstract element
-	 GRDiminuendo(GRStaff *); 
-	 
-	 GRDiminuendo(GRStaff *,ARDiminuendo * abstractRepresentationOfDecresc);
-	 // GRDiminuendo(GRStaff *,ARDimBegin *arb);
-	 virtual ~GRDiminuendo();
+public:
 
-	 virtual void OnDraw( VGDevice & hdc ) const;
-	 virtual void print() const;
-  };
+    class GRDiminuendoSaveStruct : public GRPositionTag::GRSaveStruct
+    {
+    public:
+        GRDiminuendoSaveStruct() : numPoints(3), thickness(4) { }
+
+        virtual ~GRDiminuendoSaveStruct() { }
+        int numPoints;
+
+        /* Params here */
+        NVPoint points[3];
+        NVPoint position;
+        float thickness;
+    };
+
+    class GRDiminuendoContext
+	{
+		public:
+				GRDiminuendoContext() : staff(0), leftHead(0), rightHead(0), leftNoteDX(0), 
+									rightNoteDX(0) { }
+
+			GRStaff * staff;
+			bool openRight;
+			bool openLeft;
+			GRStdNoteHead *leftHead;
+			GRStdNoteHead *rightHead;
+			float leftNoteDX;
+			float rightNoteDX;
+	};
+
+    GRDiminuendo(GRStaff * grstaff = 0);
+    GRDiminuendo(GRStaff * grstaff, ARDiminuendo * abstractRepresentationOfDiminuendo);
+    virtual			~GRDiminuendo();
+
+    virtual void	OnDraw(VGDevice & hdc) const;
+
+	virtual void    addAssociation(GRNotationElement * el);
+
+    virtual void    tellPosition(GObject * caller, const NVPoint & newPosition);
+
+    virtual void	print() const;
+
+protected:
+    virtual void updateDiminuendo(GRStaff *grstaff);
+    virtual	void getDiminuendoBeginingContext(GRDiminuendoContext *ioContext, GRSystemStartEndStruct * sse);
+	virtual void getDiminuendoEndingContext(GRDiminuendoContext *ioContext, GRSystemStartEndStruct * sse);
+
+    GRNotationElement * flaststartElement;
+
+private:
+    GRSystemStartEndStruct *initGRDiminuendo(GRStaff *grstaff);
+
+    GRDiminuendoSaveStruct * fDimInfos;
+    GRDiminuendoContext fDimContext;
+};
 
 #endif

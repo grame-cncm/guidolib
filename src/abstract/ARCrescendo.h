@@ -14,7 +14,10 @@
   research@grame.fr
 
 */
-#include "ARDynamics.h"
+
+#include "ARMTParameter.h"
+#include "ARPositionTag.h"
+
 
 /** \brief not yet documented
 */

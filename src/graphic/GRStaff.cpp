@@ -59,7 +59,6 @@ using namespace std;
 #include "GRBarFormat.h"
 #include "GRClef.h"
 #include "GRCompositeNote.h"
-#include "GRCrescendo.h"
 #include "GRDoubleBar.h"
 #include "GRDummy.h"
 #include "GRFermata.h"

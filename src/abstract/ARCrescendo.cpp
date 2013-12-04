@@ -28,7 +28,7 @@ ARCrescendo::ARCrescendo() : dx1(0), dx2(0), dy(0), deltaY(75), thickness(4)
 	setAssociation(ARMusicalTag::RA);
 }
 
-ARCrescendo::ARCrescendo(const ARCrescendo * crescendo)	: ARMTParameter(-1, crescendo)
+ARCrescendo::ARCrescendo(const ARCrescendo * crescendo) : ARMTParameter(-1, crescendo)
 {
 	rangesetting = ONLY;
 	setAssociation(ARMusicalTag::RA);

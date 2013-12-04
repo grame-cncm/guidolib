@@ -15,20 +15,40 @@
 
 */
 
-#include "ARDynamics.h"
+#include "ARMTParameter.h"
+#include "ARPositionTag.h"
+
 
 /** \brief not yet documented
 */
-class ARDiminuendo: public ARDynamics
+class ARDiminuendo : public ARMTParameter, public ARPositionTag
 {
-	public:
-		virtual bool MatchEndTag(const char * s);
-		//ARDecrescendo();
-		//virtual ~ARDecrescendo();
+public:
 
-		virtual void print() const;
+    ARDiminuendo();
+    ARDiminuendo(const ARDiminuendo* crescendo);
+    virtual		~ARDiminuendo();
 
-		virtual void PrintName(std::ostream & os) const;
+    virtual void setTagParameterList(TagParameterList & tlist);
+    virtual bool MatchEndTag(const char * s);
+
+    virtual void print() const;
+    virtual void PrintName(std::ostream & os) const;
+
+    const float getDx1()       const { return dx1; }
+	const float getDx2()       const { return dx2; }
+    const float getDy()        const { return dy; }
+	const float getDeltaY()    const { return deltaY; }
+    const float getThickness() const { return thickness; }
+
+protected:
+    float dx1;
+	float dx2;
+    float dy;
+	float deltaY;
+    float thickness;
+
+    static ListOfTPLs ltpls;
 };
 
 #endif
