@@ -19,7 +19,7 @@
 \author{Colas Decron, Camille Le Roi}
 \title{\centering Extension de Guido à la notation musicale contemporaine}
 
-\date{ Février-Aout 2013}
+\date{ Février - décembre 2013}
 
 \begin{document}
 
@@ -78,7 +78,7 @@ où param-list est une liste de paramètres (chaînes de caractères ou nombres)
 \subsection{Trilles}
 
 \begin{code}
-\textbackslash{}trill\textless{}options\textgreater{}( accords )
+\textbackslash{}trill\textless{}param-list\textgreater{}(chord-series)
 \end{code}
 \\
 
@@ -86,7 +86,10 @@ où param-list est une liste de paramètres (chaînes de caractères ou nombres)
 % lilypond : e\trill f\trill ... sans vaguelette sinon \startTrillSpan ... \stopTrillSpan
 %\gardner Read
 
-Dans la version précédente, le trille à proprement parler n'était indiqué que par le symbole \textit{\textbf{tr}} placé au dessus de la note. Il paraissait pourtant important que la notation comprenne également la ligne ondulée du trille qui suit celui-ci et en indique la durée.
+Un trille est \og{}un ornement musical qui consiste à alterner très rapidement la note de base (la note principale), sur laquelle est noté le trille, et la note située juste au-dessus\fg{}.
+% Citation wiki
+
+Dans la version précédente de Guido, le trille à proprement parler n'était indiqué que par le symbole \textit{\textbf{tr}} placé au dessus de la note. Il paraissait pourtant important que la notation comprenne également la ligne ondulée du trille qui suit celui-ci et en indique la durée.
 
 La question était alors de savoir jusqu'à quelle position devait se dessiner cette ligne, ainsi que les éventuelles variantes ou libertés données à l'utilisateur, et leur signification. En effet, comme ce symbole était déjà en partie implémenté, il fallait pouvoir lui offrir plus de souplesse sans pour autant en complexifier la notation.
 
@@ -121,12 +124,25 @@ De plus, nous avons voulu donner la possibilité de choisir de dessiner ou non l
 \label{fig:trillanchor}
 \end{figure}
 
-\newpage
-
 %**************TETES DE NOTES*********************
 \subsection{Têtes de notes}
 
-% colas //////////////////
+Le Grame est en liaison avec un compositeur, Jean-Baptiste Barrière, qui avait besoin, pour une certaine œuvre qu'il était en train de composer, de nouveaux types de têtes de notes (ou \emph{noteheads}).
+Nous avons donc choisi de rajouter à la librairie Guido 6 nouveaux symboles (cf. figure \ref{fig:noteheads}) :
+%
+\begin{itemize}
+    \item \emph{x} (une croix)
+    \item \emph{diamond} (un diamant)
+    \item \emph{square} (un carré)
+    \item \emph{round} (un rond)
+    \item \emph{triangle} (un triangle, pointe en haut)
+    \item \emph{reversedTriangle} (un triangle, pointe en bas)
+\end{itemize} 
+%
+Le tag \begin{code}noteFormat\end{code} permet de modifier l'apparence des notes lui étant postérieures.
+\begin{code}
+\textbackslash{}noteFormat\textless{}style="type"\textgreater{}(chord-series)
+\end{code}
 
 \newpage
 
