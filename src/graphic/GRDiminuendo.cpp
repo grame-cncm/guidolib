@@ -20,6 +20,7 @@
 #include "GRSingleNote.h"
 #include "GRRest.h"
 #include "GREmpty.h"
+#include "MusicalSymbols.h"
 
 #include "GRDiminuendo.h"
 
@@ -102,7 +103,34 @@ void GRDiminuendo::updateDiminuendo(GRStaff * inStaff)
 	const float staffLSpace = inStaff->getStaffLSPACE();
 	assert(arDim);
 	
-	// we gather the informations of parameters from the AR
+	/**** information gathering of parameters from the AR ****/
+
+    const char* dynamicMarking = arDim->getDynamicMarking().c_str();
+    if (!strcmp(dynamicMarking,"p"))
+		fDimInfos->fMarkingSymbol = kIntensPSymbol;
+	else if (!strcmp(dynamicMarking,"f"))
+		fDimInfos->fMarkingSymbol = kIntensFSymbol;
+	else if (!strcmp(dynamicMarking,"ff"))
+		fDimInfos->fMarkingSymbol = kIntensFFSymbol;
+	else if (!strcmp(dynamicMarking,"fff"))
+		fDimInfos->fMarkingSymbol = kIntensFFFSymbol;
+	else if (!strcmp(dynamicMarking,"ffff"))
+		fDimInfos->fMarkingSymbol = kIntensFFFFSymbol;
+	else if (!strcmp(dynamicMarking,"mf"))
+		fDimInfos->fMarkingSymbol = kIntensMFSymbol;
+	else if (!strcmp(dynamicMarking,"mp"))
+		fDimInfos->fMarkingSymbol = kIntensMPSymbol;
+	else if (!strcmp(dynamicMarking,"sf"))
+		fDimInfos->fMarkingSymbol = kIntensSFSymbol;
+	else if (!strcmp(dynamicMarking,"pp"))
+		fDimInfos->fMarkingSymbol = kIntensPPSymbol;
+	else if (!strcmp(dynamicMarking,"ppp"))
+		fDimInfos->fMarkingSymbol = kIntensPPPSymbol;
+	else if (!strcmp(dynamicMarking,"pppp"))
+		fDimInfos->fMarkingSymbol = kIntensPPPPSymbol;
+    else
+        fDimInfos->fMarkingSymbol = 0;
+
     float dx1     = arDim->getDx1();
 	float dx2     = arDim->getDx2();
     float dy      = arDim->getDy();
@@ -122,6 +150,12 @@ void GRDiminuendo::updateDiminuendo(GRStaff * inStaff)
 
     fDimInfos->points[0].x = fDimInfos->points[2].x = XLeft + dx1;
     fDimInfos->points[1].x = XRight + dx2;
+
+    if (fDimInfos->points[0].x > fDimInfos->points[1].x)
+    {
+        fDimInfos->points[0].x = fDimInfos->points[2].x = XLeft;
+        fDimInfos->points[1].x = XRight;
+    }
 
     mPosition.y = (GCoord)(6 * staffLSpace);
 
@@ -197,19 +231,31 @@ void GRDiminuendo::OnDraw( VGDevice & hdc) const
 		return;
 
     if (mColRef)
+    {
         hdc.PushPenColor(VGColor(mColRef));
+        hdc.PushFillColor(VGColor(mColRef));
+        hdc.SetFontColor(VGColor(mColRef));
+    }
 
     hdc.PushPenWidth(fDimInfos->thickness);
 
     hdc.Line(fDimInfos->points[0].x , fDimInfos->points[0].y, fDimInfos->points[1].x , fDimInfos->points[1].y);
 	hdc.Line(fDimInfos->points[2].x , fDimInfos->points[2].y, fDimInfos->points[1].x , fDimInfos->points[1].y);
 
+    const float xMarkingOffset = fDimInfos->points[1].x + 30;
+    const float yMarkingOffset = fDimInfos->points[1].y - 277 + (mTagSize - 1) * 25;
+
+    OnDrawSymbol(hdc, fDimInfos->fMarkingSymbol, xMarkingOffset, yMarkingOffset, mTagSize);
+    
     hdc.PopPenWidth();
 
     if (mColRef)
+    {
         hdc.PopPenColor();
+        hdc.PopFillColor();
+        hdc.SetFontColor(VGColor());
+    }
 }
-
 
 void GRDiminuendo::print() const
 {

@@ -804,6 +804,38 @@
 							<br>
 							
 							<li>
+								<b><i>dm</i></b> (<i>optional</i>) - <i>dynamic marking</i>, displays intensity at the symbol's right
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>intensity string</b>
+									</li>
+							
+									<li>
+										<i>examples:</i>
+										
+										<ul>
+											<li>
+												<b>"ppp"</b>
+											</li>
+											<li>
+												<b>"f"</b>
+											</li>
+											<li>
+												<b>"mf"</b>
+											</li>
+										</ul>
+									</li>
+									
+									<li>
+										<i>default value:</i> <b>""</b>
+									</li>
+								</ul>
+							</li>
+							
+							<br>
+							
+							<li>
 								<b><i>dx1</i></b> (<i>optional</i>) - graphic horizontal offset of the symbol's left
 							
 								<ul>
@@ -880,6 +912,22 @@
 									</li>
 								</ul>
 							</li>
+							
+							<br>
+							
+							<li>
+								<b><i>size</i></b> (<i>optional</i>) - graphic size of the <i>marking</i>
+						
+								<ul>
+									<li>
+										<i>value type:</i> <b>unit</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>1</b>
+									</li>
+								</ul>
+							</li>
 						</ul>
 					</li>
 					
@@ -908,9 +956,9 @@
 						
 						<ul>
 							<li>
-								<pre>[ \cresc&lt;dx1=2, dx2=-4, dy=1.5, deltaY=3, color="red"&gt;(a b c) ]</pre>
+								<pre>[ \cresc&lt;dm="ff", dx1=2, dx2=-4, dy=1.5, deltaY=5, color="red", size=1.5&gt;(a b c) ]</pre>
 								<center> <IMG SRC="imgs/crescendo.png"> </center>
-								<pre>[ \decresc(a f/2 f/4 empty) ]</pre>
+								<pre>[ \decresc&lt;thickness=0.5&gt;(a f/2 f/4 empty) ]</pre>
 								<center> <IMG SRC="imgs/decrescendo.png"> </center>
 							</li>
 						</ul>

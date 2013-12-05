@@ -17,10 +17,9 @@
         \clef<"perc"> % => problem 1
         \meter<"3+2/8"> _ _/8
         \intens<"p", dx=-1>
-        \stemsUp \cresc<dx1=3, dx2=-5, dy=-1, deltaY=4> (
+        \stemsUp \cresc<dm="ff", dx1=3, dx2=-5, dy=-1, deltaY=4> (
             \beam<dy2=0.6> (
                 g/20 e g b
-                \intens<"ff", dx=2>
                 g/40 e
             )
         )
@@ -46,10 +45,9 @@
         \accol<id=2, range="3-4">
         \staff<id=3, dy=1.4cm>
         \text<"gliss.", font="Times New Roman", dx=35, dy=1>
-        \cresc<dx1=2, dx2=-5, dy=3, deltaY=4>(
+        \cresc<dm="fff", dx1=2, dx2=-5, dy=3, deltaY=4>(
                 \meter<"3+2/8"> \intens<"p", dy=-4> empty/2 \glissando(\noteFormat<dx=-28.5> (c/8) {\marcato<dy=3>(d#3), e, f#, g}) % => problem 5
         )
-        \intens<"fff", dx=-23, dy=-4>
         \staffOff
     ],
     [
