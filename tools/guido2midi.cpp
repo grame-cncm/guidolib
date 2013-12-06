@@ -117,7 +117,6 @@ int main(int argc, char **argv)
 	D.F. June 12 2013
 */
 	GRHandler grh;
-	GuidoLayoutSettings settings = {};
 	err = GuidoAR2GR( arh, 0, &grh);
 	if (err != guidoNoErr) error (err);
 
