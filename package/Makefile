@@ -1,5 +1,5 @@
 VERSION := 1.52
-DOCVERS := 1.43
+DOCVERS := 1.52
 DEST    := .
 
 system	:= $(shell uname -s)
