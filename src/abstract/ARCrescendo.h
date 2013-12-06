@@ -14,7 +14,10 @@
   research@grame.fr
 
 */
-#include "ARDynamics.h"
+
+#include "ARMTParameter.h"
+#include "ARPositionTag.h"
+
 
 /** \brief not yet documented
 */
@@ -32,18 +35,21 @@ public:
     virtual void print() const;
     virtual void PrintName(std::ostream & os) const;
 
-    const float getDx1()       const { return dx1; }
-	const float getDx2()       const { return dx2; }
-    const float getDy()        const { return dy; }
-	const float getDeltaY()    const { return deltaY; }
-    const float getThickness() const { return thickness; }
+    const NVstring &getDynamicMarking() const { return dynamicMarking; }
+    const float     getDx1()            const { return dx1; }
+	const float     getDx2()            const { return dx2; }
+    const float     getDy()             const { return dy; }
+	const float     getDeltaY()         const { return deltaY; }
+    const float     getThickness()      const { return thickness; }
 
 protected:
-    float dx1;
-	float dx2;
-    float dy;
-	float deltaY;
-    float thickness;
+
+    NVstring dynamicMarking;
+    float    dx1;
+	float    dx2;
+    float    dy;
+	float    deltaY;
+    float    thickness;
 
     static ListOfTPLs ltpls;
 };

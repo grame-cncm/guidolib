@@ -47,7 +47,7 @@ SVGDevice::SVGDevice(std::ostream& outstream, SVGSystem* system, const char* gui
 	fXScale(1), fYScale(1), fXOrigin(0), fYOrigin(0), fXPos(0), fYPos(0),
 	fFontAlign(kAlignBase), fDPI(0),
 	fPushedPen(false), fPushedPenColor(false), fPushedPenWidth(false), fPushedFill(false), fOffset(false),
-    fCurrFont (kNoFont), fCurrFontProperties (VGFont::kFontNone), fScaledCount(0),
+    fCurrFont (kNoFont), fCurrFontProperties (VGFont::kFontNone),
 	fPendingStrokeColor(0),
 	fBeginDone(false)
 {
@@ -139,12 +139,12 @@ void SVGDevice::EndDraw()
 	if (fPushedPenColor) closegroup();
 	if (fPushedPenWidth) closegroup();
 	if (fPushedFill) closegroup();
-    for (int i = 0; i < fScaledCount; i++)
-        closegroup();
+    if (fScaled) closegroup();
 	if (fOffset) closegroup();
 	if (fCurrFont) closegroup();
 	fPushedPen = false;
 	fPushedFill = false;
+    fScaled = false;
 	fOffset = false;
 	fEndl--; fStream << fEndl << "</svg>" << fEndl;
 }
@@ -326,12 +326,21 @@ bool SVGDevice::CopyPixels( int xDest, int yDest, int dstWidth, int dstHeight, V
 //______________________________________________________________________________
 void SVGDevice::SetScale( float x, float y )
 { 
-	fXScale = x; fYScale = y;
+    if ((x > (1 / fXScale) - 0.01) && (x < (1 / fXScale) + 0.01)       // Ugly but necessary to avoid floating approximations
+        && (y > (1 / fYScale) - 0.01) && (y < (1 / fYScale) + 0.01))
+    {
+        fXScale = 1;
+        fYScale = 1;
 
-    fScaledCount++;
-
-	fStream << fEndl << "<g transform=\"scale(" << x << ", " << y << ")\">";
-	fEndl++ ;
+        closegroup();
+    }
+    else
+    {
+        fScaled = true;
+        fXScale = x; fYScale = y;
+        fStream << fEndl << "<g transform=\"scale(" << x << ", " << y << ")\">";
+        fEndl++;
+    }
 }
 
 void SVGDevice::SetOrigin( float x, float y )

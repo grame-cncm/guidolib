@@ -36,8 +36,8 @@ public:
 
         /* Params here */
         NVPoint points[3];
-        NVPoint position;
         float thickness;
+        unsigned int fMarkingSymbol;
     };
 
     class GRCrescendoContext

@@ -1822,11 +1822,6 @@ void ARFactory::endTag()
             asymbol->setRelativeEndTimePosition(mCurrentVoice->getDuration());
             tag = NULL;
         }
-        else if (dynamic_cast<ARDynamics *>(tag))
-        {
-            // check if there is a first parameter?
-            tag = NULL;
-        }
         else if ((arre = dynamic_cast<ARRepeatEnd *>(tag)) != 0 )
         {
             if (arre->repbeg) // a repeat-end

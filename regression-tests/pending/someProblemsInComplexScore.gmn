@@ -4,24 +4,22 @@
 %     2. Too much space before the meter, in the four staves
 %     3. Beaming doesn't work for grace notes
 %     4. Staff 2, notes shoulg be "g" but are on the "e" line
-%     5. Accolade appears at each staff beginning
-%     6. Staff 3, sharps are hidden by some chord notes
+%     5. Staff 3, sharps are hidden by some chord notes
 %
 %
 {
     [
         \staffFormat<style="3-line">
-        \accol<id=1, range="1-2", type="straightBrace"> % => problem 5
+        \accol<id=1, range="1-2", type="straightBrace">
         \staff<id=1, dy=2.5cm>
         % \staff<dy=2.5cm>        
         \barFormat<style="staff">
         \clef<"perc"> % => problem 1
         \meter<"3+2/8"> _ _/8
-        \intens<"p", dx=0>
-        \stemsUp \cresc<dx1=3, dx2=-4, dy=-1, deltaY=4> (
+        \intens<"p", dx=-1>
+        \stemsUp \cresc<dm="ff", dx1=3, dx2=-5, dy=-1, deltaY=4> (
             \beam<dy2=0.6> (
                 g/20 e g b
-                \intens<"ff", dx=2>
                 g/40 e
             )
         )
@@ -44,13 +42,12 @@
         \beam(g/20  \intens<"fff", dx=-3, dy=2> \noteFormat<"x">(\accent(g)) g g \noteFormat<"x">(\accent(g))) % => problem 4
     ],
     [
-        \accol<id=2, range="3-4"> % => problem 5
+        \accol<id=2, range="3-4">
         \staff<id=3, dy=1.4cm>
         \text<"gliss.", font="Times New Roman", dx=35, dy=1>
-        \cresc<dx1=2, dx2=-5, dy=3, deltaY=4>(
-                \meter<"3+2/8"> \intens<"p", dy=-4> empty/2 \glissando(\noteFormat<dx=-28.5> (c/8) {\marcato<dy=3>(d#3), e, f#, g}) % => problem 6
+        \cresc<dm="fff", dx1=2, dx2=-5, dy=3, deltaY=4>(
+                \meter<"3+2/8"> \intens<"p", dy=-4> empty/2 \glissando(\noteFormat<dx=-28.5> (c/8) {\marcato<dy=3>(d#3), e, f#, g}) % => problem 5
         )
-        \intens<"fff", dx=-23, dy=-4>
         \staffOff
     ],
     [

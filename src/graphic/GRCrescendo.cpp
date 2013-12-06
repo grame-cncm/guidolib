@@ -20,6 +20,7 @@
 #include "GRSingleNote.h"
 #include "GRRest.h"
 #include "GREmpty.h"
+#include "MusicalSymbols.h"
 
 #include "GRCrescendo.h"
 
@@ -102,11 +103,38 @@ void GRCrescendo::updateCrescendo(GRStaff * inStaff)
 	const float staffLSpace = inStaff->getStaffLSPACE();
 	assert(arCresc);
 	
-	// we gather the informations of parameters from the AR
-	float dx1     = arCresc->getDx1();
-	float dx2     = arCresc->getDx2();
-    float dy      = arCresc->getDy();
-	float deltaY  = arCresc->getDeltaY();
+	/**** information gathering of parameters from the AR ****/
+
+    const char* dynamicMarking = arCresc->getDynamicMarking().c_str();
+    if (!strcmp(dynamicMarking,"p"))
+		fCrescInfos->fMarkingSymbol = kIntensPSymbol;
+	else if (!strcmp(dynamicMarking,"f"))
+		fCrescInfos->fMarkingSymbol = kIntensFSymbol;
+	else if (!strcmp(dynamicMarking,"ff"))
+		fCrescInfos->fMarkingSymbol = kIntensFFSymbol;
+	else if (!strcmp(dynamicMarking,"fff"))
+		fCrescInfos->fMarkingSymbol = kIntensFFFSymbol;
+	else if (!strcmp(dynamicMarking,"ffff"))
+		fCrescInfos->fMarkingSymbol = kIntensFFFFSymbol;
+	else if (!strcmp(dynamicMarking,"mf"))
+		fCrescInfos->fMarkingSymbol = kIntensMFSymbol;
+	else if (!strcmp(dynamicMarking,"mp"))
+		fCrescInfos->fMarkingSymbol = kIntensMPSymbol;
+	else if (!strcmp(dynamicMarking,"sf"))
+		fCrescInfos->fMarkingSymbol = kIntensSFSymbol;
+	else if (!strcmp(dynamicMarking,"pp"))
+		fCrescInfos->fMarkingSymbol = kIntensPPSymbol;
+	else if (!strcmp(dynamicMarking,"ppp"))
+		fCrescInfos->fMarkingSymbol = kIntensPPPSymbol;
+	else if (!strcmp(dynamicMarking,"pppp"))
+		fCrescInfos->fMarkingSymbol = kIntensPPPPSymbol;
+    else
+        fCrescInfos->fMarkingSymbol = 0;
+
+	float dx1      = arCresc->getDx1();
+	float dx2      = arCresc->getDx2();
+    float dy       = arCresc->getDy();
+	float deltaY   = arCresc->getDeltaY();
 
     float XLeft  = 0;
     float XRight = 0;
@@ -122,6 +150,12 @@ void GRCrescendo::updateCrescendo(GRStaff * inStaff)
 
     fCrescInfos->points[0].x = XLeft + dx1;
 	fCrescInfos->points[2].x = fCrescInfos->points[1].x = XRight + dx2;
+
+    if (fCrescInfos->points[0].x > fCrescInfos->points[2].x)
+    {
+        fCrescInfos->points[0].x = XLeft;
+        fCrescInfos->points[2].x = fCrescInfos->points[1].x = XRight;
+    }
 
     mPosition.y = (GCoord)(6 * staffLSpace);
 
@@ -197,19 +231,31 @@ void GRCrescendo::OnDraw( VGDevice & hdc) const
 		return;
 
     if (mColRef)
+    {
         hdc.PushPenColor(VGColor(mColRef));
+        hdc.PushFillColor(VGColor(mColRef));
+        hdc.SetFontColor(VGColor(mColRef));
+    }
 
     hdc.PushPenWidth(fCrescInfos->thickness);
 
     hdc.Line(fCrescInfos->points[0].x , fCrescInfos->points[0].y, fCrescInfos->points[1].x , fCrescInfos->points[1].y);
 	hdc.Line(fCrescInfos->points[0].x , fCrescInfos->points[0].y, fCrescInfos->points[2].x , fCrescInfos->points[2].y);
 
+    const float xMarkingOffset = fCrescInfos->points[1].x + 30;
+    const float yMarkingOffset = fCrescInfos->points[0].y - 277 + (mTagSize - 1) * 25;
+
+    OnDrawSymbol(hdc, fCrescInfos->fMarkingSymbol, xMarkingOffset, yMarkingOffset, mTagSize);
+    
     hdc.PopPenWidth();
 
     if (mColRef)
+    {
         hdc.PopPenColor();
+        hdc.PopFillColor();
+        hdc.SetFontColor(VGColor());
+    }
 }
-
 
 void GRCrescendo::print() const
 {

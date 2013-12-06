@@ -43,6 +43,8 @@ class GRAccolade : public GObject // GRTagARNotationElement ?
 		virtual void	setEndRange(int end){rangeEnd = end;}
 		virtual int 	getEndRange(){return rangeEnd;}
 
+        virtual void    HasBeenDrawn(bool inHasBeenDrawn) { fHasBeenDrawn = inHasBeenDrawn; }
+        virtual bool    getHasBeenDrawn() { return fHasBeenDrawn; } 
 
 		virtual void	draw( VGDevice & hdc, const NVPoint & leftTop, 
 								const NVPoint & leftBottom ) const;
@@ -66,6 +68,7 @@ class GRAccolade : public GObject // GRTagARNotationElement ?
 		int			id;
 		int			rangeBegin;
 		int			rangeEnd;
+        bool        fHasBeenDrawn;
 };
 
 #endif

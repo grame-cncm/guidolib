@@ -599,6 +599,9 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 		GuidoPos pos = mSystemSlices.GetHeadPosition();
 		bool firstFlag = true;
 		
+        for(std::vector<GRAccolade *>::const_iterator it = mAccolade.begin(); it < mAccolade.end(); it++)
+            (*it)->HasBeenDrawn(false);
+
 		while (pos)
 		{
 			GRSystemSlice * slice = mSystemSlices.GetNext(pos);
@@ -616,32 +619,36 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 				}
 			}
 			
-			
-			if( ! mAccolade.empty() )
+			if (!mAccolade.empty())
 			{
 				for(std::vector<GRAccolade *>::const_iterator it = mAccolade.begin(); it < mAccolade.end(); it++)
-				{
-					int begin = (*it)->getBeginRange();
-					int end = (*it)->getEndRange();
-					if(begin == 0 || end < begin)
-					{
-						NVPoint top = slice->mStaffs->Get(slice->mStaffs->GetMinimum())->getPosition();
-						NVPoint bottom = slice->mStaffs->Get(slice->mStaffs->GetMaximum())->getPosition();
-						float staffHeight = (theStaff->getNumlines() - 1) * theStaff->getStaffLSPACE();
-						bottom.y += staffHeight;
-						(*it)->draw(hdc, top, bottom);
-					}
-					for(int i = slice->mStaffs->GetMinimum(); i <= slice->mStaffs->GetMaximum(); i++)
-					{
-						if (i == begin && slice->mStaffs->Get(end))
-						{
-							NVPoint endpos = NVPoint(slice->mStaffs->Get(end)->getPosition().x, slice->mStaffs->Get(end)->getPosition().y);
-							float staffHeight = (theStaff->getNumlines() - 1) * theStaff->getStaffLSPACE();
-							endpos.y += staffHeight;
-							//no use of DrawAccolade anymore ?
-							(*it)->draw(hdc, slice->mStaffs->Get(begin)->getPosition(), endpos);
-						}
-					}
+                {
+                    if (!(*it)->getHasBeenDrawn())
+                    {
+                        int begin = (*it)->getBeginRange();
+                        int end = (*it)->getEndRange();
+                        if(begin == 0 || end < begin)
+                        {
+                            NVPoint top = slice->mStaffs->Get(slice->mStaffs->GetMinimum())->getPosition();
+                            NVPoint bottom = slice->mStaffs->Get(slice->mStaffs->GetMaximum())->getPosition();
+                            float staffHeight = (theStaff->getNumlines() - 1) * theStaff->getStaffLSPACE();
+                            bottom.y += staffHeight;
+                            (*it)->draw(hdc, top, bottom);
+                        }
+                        for(int i = slice->mStaffs->GetMinimum(); i <= slice->mStaffs->GetMaximum(); i++)
+                        {
+                            if (i == begin && slice->mStaffs->Get(end))
+                            {
+                                NVPoint endpos = NVPoint(slice->mStaffs->Get(end)->getPosition().x, slice->mStaffs->Get(end)->getPosition().y);
+                                float staffHeight = (theStaff->getNumlines() - 1) * theStaff->getStaffLSPACE();
+                                endpos.y += staffHeight;
+
+                                (*it)->draw(hdc, slice->mStaffs->Get(begin)->getPosition(), endpos);
+                            }
+                        }
+
+                        (*it)->HasBeenDrawn(true);
+                    }
 				}
 			}
 			else if (staffCount > 1)
@@ -701,32 +708,29 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 
     // - Draws the vertical left border line.
 
-    if (theStaff)
+    if (theStaff && (staffCount > 1 ))
     {
         const float staffHeight = (theStaff->getNumlines() - 1) * theStaff->getStaffLSPACE();
         lastStaffPos.y += staffHeight; // Set to the bottom of last staff
-        hdc.PushPenWidth( kLineThick );
-        hdc.Line( firstStaffPos.x, firstStaffPos.y, lastStaffPos.x, lastStaffPos.y );
-        hdc.PopPenWidth();
 
-        if (firstStaffPos.x != firstStaffPos.y)
+        if (firstStaffPos.x != lastStaffPos.x || firstStaffPos.y != lastStaffPos.y)
         {
-            hdc.PushPenWidth( kLineThick );
-            hdc.Line( firstStaffPos.x, firstStaffPos.y, lastStaffPos.x, lastStaffPos.y );
+            hdc.PushPenWidth(kLineThick);
+            hdc.Line(firstStaffPos.x, firstStaffPos.y, lastStaffPos.x, lastStaffPos.y);
             hdc.PopPenWidth();
         }
-
-        // - Now draws the (System)-elements
-        DrawSubElements( hdc );
-
-        if( gGlobalSettings.gDisplaySprings == 1 )	DrawSystemSprings( hdc );
-        if( gGlobalSettings.gDisplayForce == 1 )	DrawSystemForce( hdc );
-
-        hdc.OffsetOrigin( -mPosition.x, -mPosition.y ); // Restore previous origin. (JB) sign change
-
-        if (gBoundingBoxesMap & kSystemsBB)
-            DrawBoundingBox( hdc, kSystemBBColor);
     }
+
+    // - Now draws the (System)-elements
+    DrawSubElements( hdc );
+
+    if( gGlobalSettings.gDisplaySprings == 1 )	DrawSystemSprings( hdc );
+    if( gGlobalSettings.gDisplayForce == 1 )	DrawSystemForce( hdc );
+
+    hdc.OffsetOrigin( -mPosition.x, -mPosition.y ); // Restore previous origin. (JB) sign change
+
+    if (gBoundingBoxesMap & kSystemsBB)
+        DrawBoundingBox( hdc, kSystemBBColor);
 }
 
 // --------------------------------------------------------------------------

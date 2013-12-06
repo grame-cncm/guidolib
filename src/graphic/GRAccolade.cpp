@@ -17,10 +17,11 @@
 #include "GraphTools.h"
 
 // --------------------------------------------------------------------------
-GRAccolade::GRAccolade( int inAccoladeType, float inDx )
+GRAccolade::GRAccolade(int inAccoladeType, float inDx)
 {
 	mAccoladeType = inAccoladeType;
 	mDx = inDx;
+    fHasBeenDrawn = false;
 }
 
 // --------------------------------------------------------------------------
