@@ -65,7 +65,7 @@ Les notes sont représentées par leur nom, une altération optionnelle, un num�
 %\subsection{Tags GUIDO}
 
 \paragraph{}
-Les tags sont utilisés pour donner des informations musicales supplémentaires, comme les liaisons, clés, armures, etc. Un tag a une des formes suivantes : 
+Les \emph{tags} sont utilisés pour donner des informations musicales supplémentaires, comme les liaisons, clés, armures, etc. Un \emph{tag} a une des formes suivantes : 
 
 \begin{code}
 \textbackslash{}tagname\textless{}param-list\textgreater{}
@@ -73,17 +73,12 @@ Les tags sont utilisés pour donner des informations musicales supplémentaires,
 \textbackslash{}tagname\textless{}param-list\textgreater{}(note-series)
 \end{code}
 
-où param-list est une liste de paramètres (chaînes de caractères ou nombres), et où note-series est l'ensemble des notes ou accords concernés par le tag, dans le cas d'un range tag (tag possédant une durée).
+où param-list est une liste de paramètres (chaînes de caractères ou nombres), et où note-series est l'ensemble des notes ou accords concernés par le \emph{tag}, dans le cas d'un \emph{range-tag} (\emph{tag} possédant une durée).
 
 \section{Implémentation de nouvelles notations}
 
 %*****************TRILLES********************
 \subsection{Trilles}
-
-\begin{code}
-\textbackslash{}trill\textless{}param-list\textgreater{}(chord-series)
-\end{code}
-\\
 
 % littérature
 % lilypond : e\trill f\trill ... sans vaguelette sinon \startTrillSpan ... \stopTrillSpan
@@ -92,6 +87,10 @@ où param-list est une liste de paramètres (chaînes de caractères ou nombres)
 \paragraph{}
 Un trille est \og{}un ornement musical qui consiste à alterner très rapidement la note de base (la note principale), sur laquelle est noté le trille, et la note située juste au-dessus\fg{}.
 % Citation wiki
+
+\begin{code}
+\textbackslash{}trill\textless{}param-list\textgreater{}(chord-series)
+\end{code}
 
 \paragraph{}
 Dans la version précédente de \textsc{Guido}, le trille à proprement parler n'était indiqué que par le symbole \textit{\textbf{tr}} placé au dessus de la note. Il paraissait pourtant important que la notation comprenne également la ligne ondulée du trille qui suit celui-ci et en indique la durée.
@@ -159,7 +158,7 @@ Nous avons donc choisi de rajouter à la librairie \textsc{Guido} 6 nouveaux sym
 \label{fig:noteheads}
 \end{figure}
 %
-Nous avons implémenté ces nouveaux éléments graphiques à l'aide du tag \begin{code}noteFormat\end{code}, déjà existant. Celui-ci permet de modifier l'apparence des notes lui étant postérieures (couleur, taille, \emph{offset}, etc.). Nous avons donc rajouté un attribut, \emph{style}, permettant à l'utilisateur de choisir l'apparence du \emph{notehead} des notes postérieures :
+Nous avons implémenté ces nouveaux éléments graphiques à l'aide du \emph{tag} \begin{code}noteFormat\end{code}, déjà existant. Celui-ci permet de modifier l'apparence des notes lui étant postérieures (couleur, taille, \emph{offset}, etc.). Nous avons donc rajouté un attribut, \emph{style}, permettant à l'utilisateur de choisir l'apparence du \emph{notehead} des notes postérieures :
 %
 \paragraph{}
 \begin{code}
@@ -172,7 +171,7 @@ Nous avons implémenté ces nouveaux éléments graphiques à l'aide du tag \beg
 Ce travail a été décomposé en plusieurs étapes:
 \begin{itemize}
     \item dessin vectoriel des nouveaux \emph{noteheads} (selon les ouvrages référents en matière de notation contemporaine);
-    \item implémentation du nouvel attribut du tag \begin{code}noteFormat\end{code};
+    \item implémentation du nouvel attribut du \emph{tag} \begin{code}noteFormat\end{code};
     \item derniers ajustements nécessaires pour un bon rendu visuel.
 \end{itemize}
 
@@ -188,9 +187,66 @@ Un des objectifs de \textsc{Guido} étant de laisser le plus de liberté possibl
 %*****************CLUSTERS*************************
 \subsection{Clusters}
 
-% colas /////////////////
+\paragraph{}
+Un \emph{cluster} est un accord musical contenant plusieurs notes consécutives. Il peut par exemple être effectué sur un piano, où il se joue en déclenchant des touches contiguës (en utilisant son avant-bras, par exemple).
+%
+\paragraph{}
+Dans la version précédente de \textsc{Guido}, le \emph{cluster} n'était pas implémenté, il a donc entièrement fallu réfléchir à la manière de le dessiner, de le rajouter à la librairie pour qu'il soit utilisable simplement tout en restant personnalisable, ainsi que de le faire interagir avec d'autres éléments.
+%
+\paragraph{}
+Côté utilisateur, nous avons choisi de l'invoquer de la manière suivante:
+\\
+%
+\begin{code}
+\textbackslash{}cluster\textless{}param-list\textgreater{}(chord-series)
+\end{code}
+\\
+%
+les accords n'étant composés que de deux notes: les notes extrêmes du \emph{cluster}.
+\\
+%
+\begin{figure}[h]
+\centering
+\begin{code}
+[
+\textbackslash{}cluster(\{a, d\} \{c/8, f\}) \{a/2, d2\} \{f/1, c1\})
+]
+\end{code}
+\includegraphics[width=7cm]{img/partitions/cluster.png}
+\caption{Le \emph{cluster}: nouvel élément de notation}
+\label{fig:cluster}
+\end{figure}
+%
+\paragraph{}
+Comme l'indique en partie la figure \ref{fig:cluster}, les choix, faits à partir d'ouvrages référents, ont été les suivants:
+\begin{itemize}
+	\item le \emph{cluster} est représenté par un rectangle;
+	\item ce rectangle est plein ou vide, selon la durée du \emph{cluster};
+	\item la hampe est conservée pour garder l'indication de la durée;
+\end{itemize}
+%
+\paragraph{}
+Nous avons également fait en sorte que l'utilisateur puisse personnaliser au maximum le nouvel élément de la librairie \textsc{Guido}. En plus des habituels \begin{code}size\end{code}, \begin{code}dx\end{code}/\begin{code}dy\end{code} et \begin{code}color\end{code}, les attributs \begin{code}hdx\end{code} et \begin{code}hdy\end{code} ont été implémentés afin de pouvoir introduire un décalage s'appliquant au \emph{notehead} seulement. Au niveau de l'interaction avec d'autres éléments et \emph{tags}, nous avons fait en sorte que \begin{code}noteFormat\end{code} agisse également sur le \emph{cluster}. D'autre part, la gestion du forçage de l'orientation des \emph{noteheads} a également été prise en compte (\emph{tags} \begin{code}headsReverse\end{code}, \begin{code}headsLeft\end{code} et \begin{code}headsRight\end{code}) (cf. figure \ref{fig:clusterInteractions}).
+\\
+%
+\begin{figure}[h]
+\centering
+\begin{code}
+[
+\textbackslash{}cluster\textless{}color="red", hdx=1, hdy=3\textgreater{}({a})
+\textbackslash{}cluster\textless{}size=0.5\textgreater{}({f,c2})
+\textbackslash{}noteFormat\textless{}color="purple"\textgreater{}
+\textbackslash{}headsReverse
+\textbackslash{}cluster\textless{}color="green", size=2\textgreater{}({f, g2})
+\textbackslash{}cluster\textless{}"blue"\textgreater{}({d1/2, g})
+]
+\end{code}
+\includegraphics[width=7cm]{img/partitions/clusterInteractions.png}
+\caption{Les interactions avec d'autres \emph{tags}}
+\label{fig:clusterInteractions}
+\end{figure}
+%
 
-\newpage
 
 %***************GLISSANDO************************
 \subsection{Glissandi}
@@ -204,7 +260,7 @@ Un des objectifs de \textsc{Guido} étant de laisser le plus de liberté possibl
 Dans un souci d'efficacité, il fallait pouvoir décrire un glissando seul ou plusieurs glissandi à la suite de la manière la plus simple et intuitive possible. 
 
 \paragraph{}
-Il paraissait important de donner la possibilité à l'utilisateur de n'écrire qu'une seule fois le tag pour décrire plusieurs glissandi consécutifs, contrairement à la description de lilypond où le tag doit être répété entre chaque note. Ainsi le range tag (tag possédant une durée) apparaissait comme la meilleure solution pour décrire un ou plusieurs glissandi : toutes les notes comprises dans les parenthèses seraient prises en compte et liées les unes aux autres par des glissandi. L'algorithme de démultiplication d'un même tag et de répartition de celui-ci est fortement inspiré de celui du tie, ou liaison de prolongation, qui doit également créer une liaison entre chacune des notes affectées.
+Il paraissait important de donner la possibilité à l'utilisateur de n'écrire qu'une seule fois le \emph{tag} pour décrire plusieurs glissandi consécutifs, contrairement à la description de lilypond où le \emph{tag} doit être répété entre chaque note. Ainsi le \emph{range-tag} (\emph{tag} possédant une durée) apparaissait comme la meilleure solution pour décrire un ou plusieurs glissandi : toutes les notes comprises dans les parenthèses seraient prises en compte et liées les unes aux autres par des glissandi. L'algorithme de démultiplication d'un même \emph{tag} et de répartition de celui-ci est fortement inspiré de celui du tie, ou liaison de prolongation, qui doit également créer une liaison entre chacune des notes affectées.
 
 \paragraph{}
 Un choix devait également être fait quant à la répartition d'un glissando entre les différentes notes de deux accords, ne possédant eux-mêmes pas forcément le même nombre de notes. La solution proposée est celle qui nous a paru la plus intuitive : l'utilisateur choisit quelle note du premier accord sera liée avec quelle note du second. Pour ce faire, il lui suffit de les écrire dans l'ordre, c'est à dire : la première note de l'accord A sera liée à la première note de l'accord B, la seconde de A à la seconde de B\dots (Figure \ref{fig:glissandosimple})
@@ -222,7 +278,7 @@ Un choix devait également être fait quant à la répartition d'un glissando en
 \end{figure}
 
 \paragraph{}
-L'unique problème avec ce choix peut se poser lors d'un conflit dans l'ordre imposé par le glissando précèdent et par le suivant, comme dans l'exemple Figure \ref{fig:glissando} . Il est alors possible de faire appel à une seconde voix, et au tag \textbackslash{}staff \textless{}\textit{numero de portée}\textgreater{} qui pourra créer sur une même portée d'autres glissandi en parallèle et indépendants des premiers.
+L'unique problème avec ce choix peut se poser lors d'un conflit dans l'ordre imposé par le glissando précèdent et par le suivant, comme dans l'exemple Figure \ref{fig:glissando} . Il est alors possible de faire appel à une seconde voix, et au \emph{tag} \textbackslash{}staff \textless{}\textit{numero de portée}\textgreater{} qui pourra créer sur une même portée d'autres glissandi en parallèle et indépendants des premiers.
 
 
 \begin{figure}[h]
@@ -278,7 +334,7 @@ Enfin, dans le cas d'accords ou de clusters, et donc de plusieurs glissandi simu
 % permet aussi de passer d'un style de portée à un autre (override staff) ex : 2 lignes...
 
 \paragraph{}
-L'implémentation de ce tag vient du besoin de pouvoir faire disparaître et apparaître la partition, en particulier pour cacher une voix muette pendant un certain temps, et donc inutilement dessinée. (Figure \ref{fig:staffoffsimple}) 
+L'implémentation de ce \emph{tag} vient du besoin de pouvoir faire disparaître et apparaître la partition, en particulier pour cacher une voix muette pendant un certain temps, et donc inutilement dessinée. (Figure \ref{fig:staffoffsimple}) 
 
 \paragraph{}
 Il est cependant généralisé à tous les éléments et toutes les voix de la partition et peut donc être utilisé à la guise et selon les fantaisies de l'utilisateur. (Figure \ref{fig:staffoffexotique})
@@ -300,7 +356,7 @@ Il est cependant généralisé à tous les éléments et toutes les voix de la p
 \end{figure}
 
 \paragraph{}
-Il fut important de définir les positions temporelles et graphiques correspondant aux positions dans la description textuelle, en particulier pour les éléments sans durée, dont la position était la même que le tag. La solution implémentée consiste à faire disparaître tous les éléments inscrits après le tag \textbackslash{}staffOff dans la description textuelle, et à préserver ceux décrits avant, même dans le cas d'éléments de durée nulle qui donc pourraient être considérés simultanés à l'arrivée du tag. Pour plusieurs éléments simultanés, c'est donc bien l'ordre dans la description textuelle qui indiquera le comportement à adopter. Ainsi, écrire % exemple utile ? pertinent sans image ?
+Il fut important de définir les positions temporelles et graphiques correspondant aux positions dans la description textuelle, en particulier pour les éléments sans durée, dont la position était la même que le \emph{tag}. La solution implémentée consiste à faire disparaître tous les éléments inscrits après le \emph{tag} \textbackslash{}staffOff dans la description textuelle, et à préserver ceux décrits avant, même dans le cas d'éléments de durée nulle qui donc pourraient être considérés simultanés à l'arrivée du \emph{tag}. Pour plusieurs éléments simultanés, c'est donc bien l'ordre dans la description textuelle qui indiquera le comportement à adopter. Ainsi, écrire % exemple utile ? pertinent sans image ?
 
 \begin{center}
 \begin{code}
@@ -316,7 +372,7 @@ n'est pas équivalent à écrire
 \end{center}
 
 \paragraph{}
-Quant à la portée, elle commence, ou s'arrête, aux positions correspondant au début des éléments suivant le tag.
+Quant à la portée, elle commence, ou s'arrête, aux positions correspondant au début des éléments suivant le \emph{tag}.
 
 \newpage
 
@@ -428,7 +484,7 @@ Ainsi, les deux descriptions suivantes sont valides, mais pas équivalentes :
 \end{figure}
 
 \paragraph{}
-Dans un désir de simplicité, il a été décidé de décrire par un seul tag un seul groupe de notes liées, correspondant à un point de départ et un point d'arrivée uniques. Il est cependant possible de chaîner plusieurs feathered beams grâce à la faculté du tag à se séparer en \textbackslash{}fBeamBegin et \textbackslash{}fBeamEnd, permettant alors, non seulement de chaîner deux beams par une note (Figure \ref{fig:fbeamchain}), mais de les faire se chevaucher sur plusieurs notes.
+Dans un désir de simplicité, il a été décidé de décrire par un seul \emph{tag} un seul groupe de notes liées, correspondant à un point de départ et un point d'arrivée uniques. Il est cependant possible de chaîner plusieurs feathered beams grâce à la faculté du \emph{tag} à se séparer en \textbackslash{}fBeamBegin et \textbackslash{}fBeamEnd, permettant alors, non seulement de chaîner deux beams par une note (Figure \ref{fig:fbeamchain}), mais de les faire se chevaucher sur plusieurs notes.
 
 \begin{figure}[h]
 \centering

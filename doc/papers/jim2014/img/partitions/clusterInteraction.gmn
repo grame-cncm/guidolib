@@ -1,0 +1,7 @@
+[
+    \cluster<color="red", hdx=1, hdy=3>({a})
+    \cluster<size=0.5>({f,c2})
+    \noteFormat<color="purple">
+    \headsReverse \cluster<color="green", size=2>({f, g2})	
+    \cluster<"blue">({d1/2, g})
+]
