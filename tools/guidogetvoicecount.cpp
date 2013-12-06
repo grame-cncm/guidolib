@@ -62,8 +62,11 @@ int main(int argc, char **argv)
 			cout << argv[i] << " : " << n << endl;
 			GuidoFreeAR (arh);
 		}
-		else
-            error(err);
+		else {
+			int line, col;
+			err = GuidoParserGetErrorCode (parser, line, col, 0);
+			error (err);
+		}
 
         GuidoCloseParser(parser);
 	}

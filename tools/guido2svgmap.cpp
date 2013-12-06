@@ -77,8 +77,12 @@ int main(int argc, char **argv)
     ifs.close();
 
     arh = GuidoString2AR(parser, streamBuffer.str().c_str());
-    if (arh)
-        error(err);
+    if (!arh) {
+		int line, col;
+		err = GuidoParserGetErrorCode (parser, line, col, 0);
+		error (err);
+		return 1;
+	}
 
 	GRHandler grh;
     err = GuidoAR2GR (arh, 0, &grh);
