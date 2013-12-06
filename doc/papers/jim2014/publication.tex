@@ -87,6 +87,7 @@ où param-list est une liste de paramètres (chaînes de caractères ou nombres)
 \paragraph{}
 Un trille est \og{}un ornement musical qui consiste à alterner très rapidement la note de base (la note principale), sur laquelle est noté le trille, et la note située juste au-dessus\fg{}.
 % Citation wiki
+\\
 
 \begin{code}
 \textbackslash{}trill\textless{}param-list\textgreater{}(chord-series)
@@ -209,7 +210,7 @@ les accords n'étant composés que de deux notes: les notes extrêmes du \emph{c
 \centering
 \begin{code}
 [
-\textbackslash{}cluster(\{a, d\} \{c/8, f\}) \{a/2, d2\} \{f/1, c1\})
+\textbackslash{}cluster(\{a, d\} \{c/8, f\} \{a/2, d2\} \{f/1, c1\})
 ]
 \end{code}
 \includegraphics[width=7cm]{img/partitions/cluster.png}
@@ -222,11 +223,11 @@ Comme l'indique en partie la figure \ref{fig:cluster}, les choix, faits à parti
 \begin{itemize}
 	\item le \emph{cluster} est représenté par un rectangle;
 	\item ce rectangle est plein ou vide, selon la durée du \emph{cluster};
-	\item la hampe est conservée pour garder l'indication de la durée;
+	\item la hampe est conservée pour garder l'indication de la durée.
 \end{itemize}
 %
 \paragraph{}
-Nous avons également fait en sorte que l'utilisateur puisse personnaliser au maximum le nouvel élément de la librairie \textsc{Guido}. En plus des habituels \begin{code}size\end{code}, \begin{code}dx\end{code}/\begin{code}dy\end{code} et \begin{code}color\end{code}, les attributs \begin{code}hdx\end{code} et \begin{code}hdy\end{code} ont été implémentés afin de pouvoir introduire un décalage s'appliquant au \emph{notehead} seulement. Au niveau de l'interaction avec d'autres éléments et \emph{tags}, nous avons fait en sorte que \begin{code}noteFormat\end{code} agisse également sur le \emph{cluster}. D'autre part, la gestion du forçage de l'orientation des \emph{noteheads} a également été prise en compte (\emph{tags} \begin{code}headsReverse\end{code}, \begin{code}headsLeft\end{code} et \begin{code}headsRight\end{code}) (cf. figure \ref{fig:clusterInteractions}).
+Nous avons également fait en sorte que l'utilisateur puisse personnaliser au maximum le nouvel élément de la librairie \textsc{Guido}. En plus des habituels \begin{code}size\end{code}, \begin{code}dx\end{code}/\begin{code}dy\end{code} et \begin{code}color\end{code}, les attributs \begin{code}hdx\end{code} et \begin{code}hdy\end{code} ont été implémentés afin de pouvoir introduire un décalage s'appliquant au \emph{notehead} seulement. Au niveau de l'interaction avec d'autres éléments et \emph{tags}, nous avons fait en sorte que \begin{code}noteFormat\end{code} agisse également sur le \emph{cluster}. D'autre part, la gestion du forçage de l'orientation des \emph{noteheads} a de même été prise en compte (\emph{tags} \begin{code}headsReverse\end{code}, \begin{code}headsLeft\end{code} et \begin{code}headsRight\end{code}) (cf. figure \ref{fig:clusterInteractions}).
 \\
 %
 \begin{figure}[h]
