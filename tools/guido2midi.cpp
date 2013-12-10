@@ -95,7 +95,7 @@ int main(int argc, char **argv)
 
     GuidoParser *parser = GuidoOpenParser();
 
-    std::ifstream ifs(infile, ios::in);
+    std::ifstream ifs(infile.c_str(), ios::in);
     if (!ifs)
         return 0;
 

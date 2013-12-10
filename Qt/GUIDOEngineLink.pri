@@ -3,7 +3,7 @@
 macx:CONFIG+= i386 x86_64
 
 QMAKE_CXXFLAGS += -mmacosx-version-min=10.7
-CONFIG += c++11
+#CONFIG += c++11
 
 win32: {
 	contains(QMAKE_HOST.arch, x86): {
