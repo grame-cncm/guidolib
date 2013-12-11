@@ -6,7 +6,7 @@ macx {
 	QMAKE_CXXFLAGS += -mmacosx-version-min=10.7
 	system( [ $(uname -r | cut -d. -f1) -gt 12 ] ):CONFIG+=CPP11
 	CPP11 {
-		warning ("using C++11")
+		message ("using C++11")
 		CONFIG += c++11
 	} 
 }
