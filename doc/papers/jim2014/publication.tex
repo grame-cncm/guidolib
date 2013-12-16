@@ -154,7 +154,7 @@ Nous avons donc choisi de rajouter à la librairie \textsc{Guido} 6 nouveaux sym
 %\begin{code}
 %[ \textbackslash{}trill\textless{}tr="false", anchor="note"\textgreater{}( \{g\} \{a/2\} ) ]
 %\end{code}
-\includegraphics[width=7cm]{img/partitions/noteheads.png}
+\includegraphics[width=7cm]{img/partitions/noteheads.pdf}
 \caption{Les 6 nouveaux \emph{noteheads} ajoutés}
 \label{fig:noteheads}
 \end{figure}
@@ -213,7 +213,7 @@ les accords n'étant composés que de deux notes: les notes extrêmes du \emph{c
 \textbackslash{}cluster(\{a, d\} \{c/8, f\} \{a/2, d2\} \{f/1, c1\})
 ]
 \end{code}
-\includegraphics[width=7cm]{img/partitions/cluster.png}
+\includegraphics[width=7cm]{img/partitions/cluster.pdf}
 \caption{Le \emph{cluster}: nouvel élément de notation}
 \label{fig:cluster}
 \end{figure}
@@ -234,15 +234,15 @@ Nous avons également fait en sorte que l'utilisateur puisse personnaliser au ma
 \centering
 \begin{code}
 [
-\textbackslash{}cluster\textless{}color="red", hdx=1, hdy=3\textgreater{}({a})
-\textbackslash{}cluster\textless{}size=0.5\textgreater{}({f,c2})
+\textbackslash{}cluster\textless{}color="red", hdx=1, hdy=3\textgreater{}(\{a\})
+\textbackslash{}cluster\textless{}size=0.5\textgreater{}(\{f,c2\})
 \textbackslash{}noteFormat\textless{}color="purple"\textgreater{}
 \textbackslash{}headsReverse
-\textbackslash{}cluster\textless{}color="green", size=2\textgreater{}({f, g2})
-\textbackslash{}cluster\textless{}"blue"\textgreater{}({d1/2, g})
+\textbackslash{}cluster\textless{}color="green", size=2\textgreater{}(\{f, g2\})
+\textbackslash{}cluster\textless{}"blue"\textgreater{}(\{d1/2, g\})
 ]
 \end{code}
-\includegraphics[width=7cm]{img/partitions/clusterInteractions.png}
+\includegraphics[width=7cm]{img/partitions/clusterInteractions.pdf}
 \caption{Les interactions avec d'autres \emph{tags}}
 \label{fig:clusterInteractions}
 \end{figure}
