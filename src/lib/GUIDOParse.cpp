@@ -95,9 +95,6 @@ GUIDOAPI(ARHandler)	GuidoStream2AR (GuidoParser *p, GuidoStream* s)
     if (!p || !s)
         return NULL;
 
-    /* Reset parser before parsing */
-    p->Reinit();
-
     /* Prepare stream (principally, clear eof flag) */
     s->Prepare();
 
@@ -128,6 +125,12 @@ GUIDOAPI(GuidoStream *) GuidoOpenStream ()
     GuidoStream *newStream = new GuidoStream();
 
     return newStream;
+}
+
+// --------------------------------------------------------------------------
+GUIDOAPI(const char *) GuidoGetStream (GuidoStream * guidoStream)
+{
+    return guidoStream->getGlobalStringStream()->str().c_str();
 }
 
 // --------------------------------------------------------------------------

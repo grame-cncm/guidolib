@@ -27,6 +27,8 @@ QGuidoGraphicsItem::QGuidoGraphicsItem(QGraphicsItem * parent)
 	mGuidoPainter = QGuidoPainter::createGuidoPainter();
 	
 	mPageManager = new QPageManager();
+    
+    setResizePageToMusic(true);
 	
 	assert(mGuidoPainter);
 	// QGuidoPainter::createGuidoPainter() returned NULL. 
@@ -67,6 +69,19 @@ bool QGuidoGraphicsItem::setGMNFile(const QString& fileName)
 bool QGuidoGraphicsItem::setGMNCode(const QString& gmnCode, const QString& path)
 {
     if ( mGuidoPainter->setGMNCode( gmnCode, path.size() ? path.toUtf8().data() : 0) )
+	{
+		updateGuidoPagesSizes();
+        guidoItemUpdate();
+		return true;
+	}
+	return false;
+}
+
+	
+//-------------------------------------------------------------------------
+bool QGuidoGraphicsItem::setGMNStream(GuidoStream * gmnStream)
+{
+    if ( mGuidoPainter->setGMNStream( gmnStream ))
 	{
 		updateGuidoPagesSizes();
         guidoItemUpdate();

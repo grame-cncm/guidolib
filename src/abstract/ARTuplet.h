@@ -18,7 +18,6 @@
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
 
-// class GRNewTuplet;
 class ARBase;
 
 /** \brief Abstract representation of a tuplet.
@@ -28,15 +27,13 @@ class ARTuplet :
 	public ARMTParameter,
 	public ARPositionTag
 {
-		// friend class GRNewTuplet;
-
 	public:
 
 							ARTuplet(); 
 		virtual 			~ARTuplet()		{ }
 
 				void 		setName(const char * inName);
-		const NVstring & 	getName() const 	{ return mTupletFormat; }
+		const NVstring & 	getName() const 	{ return fTupletFormat; }
 
 		virtual void 		setTagParameterList(TagParameterList & tl);
 		virtual void 		print() const	{ }
@@ -45,30 +42,38 @@ class ARTuplet :
 				void		setupTuplet( ARBase * inBase );
 				void		parseTupletFormatString();
 
-				int			getNumerator() const { return mBaseNumerator; }
-				int			getDenominator() const { return mBaseDenominator; }
-				float		getDy1() const { return mDy1; }
-				float		getDy2() const { return mDy2; }		
-				bool		getLeftBrace() const { return mLeftBrace; }
-				bool		getRightBrace() const { return mRightBrace; }
+				int			getNumerator() const { return fBaseNumerator; }
+				int			getDenominator() const { return fBaseDenominator; }
+				float		getDy1() const { return fDy1; }
+				float		getDy2() const { return fDy2; }		
+                float		getThickness() const { return fLineThickness; }
+                bool		getIsBold() const { return fTextBold; }
+                float		getTextSize() const { return fTextSize; }
+				bool		getLeftBrace() const { return fLeftBrace; }
+				bool		getRightBrace() const { return fRightBrace; }
 
-				bool		isDySet() const { return (mDy1Set || mDy2Set); }
-				bool		isFormatSet() const { return mFormatSet; } 
+				bool		isDySet() const { return (fDy1Set || fDy2Set); }
+				bool		isFormatSet() const { return fFormatSet; } 
 	protected:
 
-		NVstring mTupletFormat;	// format string <"-x:y-">
+		NVstring fTupletFormat;	// format string <"-x:y-">
 
-		float	mDy1;
-		float	mDy2;
-		int		mBaseNumerator;
-		int		mBaseDenominator;
-		bool	mLeftBrace;
-		bool	mRightBrace;
+		float	fDy1;
+		float	fDy2;
+        float   fLineThickness;
+        bool    fTextBold;
+        float   fTextSize;
+		int		fBaseNumerator;
+		int		fBaseDenominator;
+		bool	fLeftBrace;
+		bool	fRightBrace;
 	
-		bool	mDy1Set;
-		bool	mDy2Set;
-		bool	mFormatSet;
-
+		bool	fDy1Set;
+		bool	fDy2Set;
+		bool	fFormatSet;
+        bool	fLineThicknessSet;
+        bool	fTextBoldSet;
+        bool    fTextSizeSet;
 
 		static ListOfTPLs ltpls;
 		// a string ...

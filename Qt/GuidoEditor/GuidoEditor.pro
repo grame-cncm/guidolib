@@ -18,6 +18,7 @@ else {
 unix:TARGET = guidoeditor
 
 
+#CONFIG += c++11
 DESTDIR = ../bin
 MOC_DIR = ./tmpSrc
 RCC_DIR = ./tmpSrc

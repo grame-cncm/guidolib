@@ -41,6 +41,7 @@
 #include "ARAccol.h"
 #include "TagParameterFloat.h"
 #include "TagParameterString.h"
+#include "TagParameterInt.h"
 #include "ARStaff.h"
 
 // Guido GR
@@ -89,7 +90,6 @@ GRSystem::GRSystem( GRPage * inPage, const TYPE_TIMEPOSITION & relativeTimePosit
 	mDistanceSet = false;
 	mDistance = 0;
 	mNewLinePage = 0;
-	mAccolade = new GRAccolade;
 	mPage = inPage;
 	mNextStaffPosition.x = 0; // 5*LSPACE;
 	mNextStaffPosition.y = 0; // 5*LSPACE;
@@ -298,7 +298,6 @@ GRSystem::GRSystem(	GRStaffManager * staffmgr, GRPage * inPage,
 	mDistanceSet = 0;
 	mDistance = 0;
 	mNewLinePage = 0;
-	mAccolade = new GRAccolade;
 	mPage = inPage;
 	mNextStaffPosition.x = mNextStaffPosition.y = 0;
 
@@ -426,12 +425,13 @@ GRSystem::GRSystem(	GRStaffManager * staffmgr, GRPage * inPage,
 			GRSpring * spr = mSpringVector->Get(i);
 			if (spr)
 			{
-				spr->stretchWithForce (mSystemforce);
-				spr->setGRPositionX (curx);
+				spr->stretchWithForce(mSystemforce);
+                spr->setGRPositionX(curx);
 				curx += spr->x;
 			}
 		}
 	}
+
 	mBoundingBox.right = curx;				// this is the amount we have to go to the right ....
 
 	// now I cut the spring-vector and give back the stuff that I do not longer need ....
@@ -464,7 +464,6 @@ GRSystem::~GRSystem()
 	delete mSpringVector;	mSpringVector = 0;
 	delete simplerods;
 	delete complexrods;
-	delete mAccolade;
 
 #ifdef OLDSPFACTIVE
 	delete spf;
@@ -546,8 +545,13 @@ void GRSystem::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& inf
 			slice->GetMap (sel, f, infos);
 		}
 	}
-	if (( staffCount > 1 ) && mAccolade)
-		mAccolade->GetMap (sel, f, infos);
+	if (( staffCount > 1 ) && ! mAccolade.empty())
+	{
+		for(std::vector<GRAccolade *>::const_iterator it = mAccolade.begin(); it < mAccolade.end(); it++)
+		{
+			(*it)->GetMap (sel, f, infos);
+		}
+	}
 
     GetSubElementsMap( sel, f, infos );
 	infos.fPos.x -= mPosition.x;
@@ -566,12 +570,13 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 	// - Find the positions of top and bottom systems.
 	// Todo: the complete list of positions, to allow many accolades.
 	GRStaff * theStaff = 0;
-	NVPoint firstStaffPos ( -1, 0 );
+	NVPoint firstStaffPos(-1, 0);
 	NVPoint lastStaffPos;
 	int staffCount = 0;
+
 	if (mStaffs)
 	{
-		for( int i = mStaffs->GetMinimum(); i <= mStaffs->GetMaximum(); i++ )
+		for (int i = mStaffs->GetMinimum(); i <= mStaffs->GetMaximum(); i++)
 		{
 			if ((theStaff = mStaffs->Get(i)) == NULL)
 				continue;
@@ -586,15 +591,17 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 			++ staffCount;
 		}
 
-		// if (theStaff && ( numstaffs > 1 ))
-		//	DrawAccoladeAndBorder( hdc, theStaff, firstStaffPos, lastStaffPos );
-	}
-	else if (mSystemSlices.size() > 0 )
+	}		
+
+	else if (mSystemSlices.size() > 0)
 	{
 		// then we have to draw the systemslices ....
 		GuidoPos pos = mSystemSlices.GetHeadPosition();
 		bool firstFlag = true;
 		
+        for(std::vector<GRAccolade *>::const_iterator it = mAccolade.begin(); it < mAccolade.end(); it++)
+            (*it)->HasBeenDrawn(false);
+
 		while (pos)
 		{
 			GRSystemSlice * slice = mSystemSlices.GetNext(pos);
@@ -612,8 +619,49 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 				}
 			}
 			
+			if (!mAccolade.empty())
+			{
+				for(std::vector<GRAccolade *>::const_iterator it = mAccolade.begin(); it < mAccolade.end(); it++)
+                {
+                    if (!(*it)->getHasBeenDrawn())
+                    {
+                        int begin = (*it)->getBeginRange();
+                        int end = (*it)->getEndRange();
+                        if(begin == 0 || end < begin)
+                        {
+                            NVPoint top = slice->mStaffs->Get(slice->mStaffs->GetMinimum())->getPosition();
+                            NVPoint bottom = slice->mStaffs->Get(slice->mStaffs->GetMaximum())->getPosition();
+                            float staffHeight = (theStaff->getNumlines() - 1) * theStaff->getStaffLSPACE();
+                            bottom.y += staffHeight;
+                            (*it)->draw(hdc, top, bottom);
+                        }
+                        for(int i = slice->mStaffs->GetMinimum(); i <= slice->mStaffs->GetMaximum(); i++)
+                        {
+                            if (i == begin && slice->mStaffs->Get(end))
+                            {
+                                NVPoint endpos = NVPoint(slice->mStaffs->Get(end)->getPosition().x, slice->mStaffs->Get(end)->getPosition().y);
+                                float staffHeight = (theStaff->getNumlines() - 1) * theStaff->getStaffLSPACE();
+                                endpos.y += staffHeight;
+
+                                (*it)->draw(hdc, slice->mStaffs->Get(begin)->getPosition(), endpos);
+                            }
+                        }
+
+                        (*it)->HasBeenDrawn(true);
+                    }
+				}
+			}
+			else if (staffCount > 1)
+			{
+				const float staffHeight = (theStaff->getNumlines() - 1) * theStaff->getStaffLSPACE();
+				NVPoint endstaffPos = lastStaffPos;
+				endstaffPos.y += staffHeight; // Set to the bottom of last staff
+				GRAccolade * onlyAccol = new GRAccolade();
+				onlyAccol->draw(hdc, firstStaffPos, endstaffPos);
+			}
+			
 			std::map<int, bool> StavesOn;
-		
+
 			if(pos)
 			{
 				GRSystemSlice * nextSlice = mSystemSlices.GetAt(pos);
@@ -622,16 +670,26 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 					for(int i = nextSlice->mStaffs->GetMinimum(); i <= nextSlice->mStaffs->GetMaximum(); i++)
 					{
 						GRStaff * st = nextSlice->mStaffs->Get(i);
-						StavesOn[i]=st->isStaffBeginOn();
+
+                        if (st)
+						    StavesOn[i] = st->isStaffBeginOn();
 					}
 				}
 				for(int i = slice->mStaffs->GetMinimum(); i <= slice->mStaffs->GetMaximum(); i++)
 				{
 					if(nextSlice->mStaffs->Get(i))
-						slice->mStaffs->Get(i)->setNextOnOff(StavesOn[i]);
+                    {
+						GRStaff * st = slice->mStaffs->Get(i);
+                        
+                        if (st)
+                            st->setNextOnOff(StavesOn[i]);
+                    }
 					else
 					{
-						slice->mStaffs->Get(i)->setNextOnOff(true);
+						GRStaff * st = slice->mStaffs->Get(i);
+                        
+                        if (st)
+                            st->setNextOnOff(true);
 					}
 				}
 			}
@@ -643,50 +701,60 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 					if (staff) staff->setNextOnOff(staff->isStaffEndOn());
 				}
 			}
+
 			slice->OnDraw(hdc);
 		}
-
-	//	if (numstaffs > 1)
-	//		DrawAccoladeAndBorder( hdc, theStaff, firstStaffPos, lastStaffPos );
 	}
 
-	// - Draws the accolades (TODO: multiple accolades support)
-	if( theStaff && ( staffCount > 1 ))
-	{
-		const float staffHeight = (theStaff->getNumlines() - 1) * theStaff->getStaffLSPACE();
-		lastStaffPos.y += staffHeight; // Set to the bottom of last staff
+    // - Draws the vertical left border line.
 
-		DrawAccolade( hdc, firstStaffPos, lastStaffPos );
-	}
+    if (theStaff && (staffCount > 1 ))
+    {
+        const float staffHeight = (theStaff->getNumlines() - 1) * theStaff->getStaffLSPACE();
+        lastStaffPos.y += staffHeight; // Set to the bottom of last staff
 
-	// - Draws the vertical left border line.
-	hdc.PushPenWidth( kLineThick );
-	hdc.Line( firstStaffPos.x, firstStaffPos.y, lastStaffPos.x, lastStaffPos.y );
-	hdc.PopPenWidth();
+        if (firstStaffPos.x != lastStaffPos.x || firstStaffPos.y != lastStaffPos.y)
+        {
+            hdc.PushPenWidth(kLineThick);
+            hdc.Line(firstStaffPos.x, firstStaffPos.y, lastStaffPos.x, lastStaffPos.y);
+            hdc.PopPenWidth();
+        }
+    }
 
-	// - Now draws the (System)-elements
+    // - Now draws the (System)-elements
     DrawSubElements( hdc );
 
-	if( gGlobalSettings.gDisplaySprings == 1 )	DrawSystemSprings( hdc );
-	if( gGlobalSettings.gDisplayForce == 1 )	DrawSystemForce( hdc );
+    if( gGlobalSettings.gDisplaySprings == 1 )	DrawSystemSprings( hdc );
+    if( gGlobalSettings.gDisplayForce == 1 )	DrawSystemForce( hdc );
 
-	hdc.OffsetOrigin( -mPosition.x, -mPosition.y ); // Restore previous origin. (JB) sign change
+    hdc.OffsetOrigin( -mPosition.x, -mPosition.y ); // Restore previous origin. (JB) sign change
 
-	if (gBoundingBoxesMap & kSystemsBB)
-		DrawBoundingBox( hdc, kSystemBBColor);
+    if (gBoundingBoxesMap & kSystemsBB)
+        DrawBoundingBox( hdc, kSystemBBColor);
 }
 
 // --------------------------------------------------------------------------
 /** \brief Scales and draws the accolade. Also draws the left staff borderline
 */
-void GRSystem::DrawAccolade( VGDevice & hdc, const NVPoint & leftTop, const NVPoint & leftBottom ) const
+/*
+
+// (CL) -> useless if everything is done in OnDraw ?
+
+void GRSystem::DrawAccolade( VGDevice & hdc, const NVPoint & leftTop, const NVPoint & leftBottom, int id ) const
 {
 	// TODO: draw accolades
 	// GRAccoladeList::const_iterator ptr;
 	// for( ptr = mAccolades.begin(); ptr != mAccolades.end(); ++ptr )
-	if( mAccolade )
-		mAccolade->draw( hdc, leftTop, leftBottom );
+	if( ! mAccolade.empty() )
+	{
+		for(std::vector<GRAccolade *>::const_iterator it = mAccolade.begin(); it < mAccolade.end(); it++)
+		{
+			if((*it)->getAccoladeID() == id)
+				(*it)->draw(hdc, leftTop, leftBottom);
+		}
+	}
 }
+*/
 
 // --------------------------------------------------------------------------
 /** \brief Draws the springs used for the spacing.
@@ -1040,6 +1108,11 @@ GRSystemSlice * GRSystem::getFirstGRSystemSlice()
 //
 // In the future, several accolades will be displayed, taking account of
 // their respective types and ranges.
+//
+// -> (CL) done in 2013 :  several accolades can be displayed, 
+// GRAccolade mAccolade is now replaced by a std::vector<GRAccolade *>, 
+// as well as mCurAccolade Tag in GRStaffManager (std::vector<ARAccol *>)
+
 void GRSystem::notifyAccoladeTag( ARAccol * inAccoladeTag )
 {
 	traceMethod("notifyAccoladeTag");
@@ -1073,11 +1146,53 @@ void GRSystem::notifyAccoladeTag( ARAccol * inAccoladeTag )
 	if( paramDx && paramDx->TagIsSet())
 		dx = paramDx->getValue();
 
-	if( mAccolade == 0 )
-		mAccolade = new GRAccolade;
+	int beginRange = 0;
+	int endRange = 0;
 
-	mAccolade->setAccoladeType( accolType );
-	mAccolade->setDx( dx );
+	const TagParameterString * range = inAccoladeTag->getAccolRange();
+	std::string stringRange;
+	if( range && range->TagIsSet())
+	{
+		stringRange = range->getValue();
+	
+
+		std::size_t begin = 0;
+		std::size_t dashPos = stringRange.find("-", begin);
+	
+		if(dashPos != -1)
+		{
+			std::string beginString = stringRange.substr(begin, dashPos);
+			std::stringstream stream(beginString);
+			stream >> beginRange;
+
+			std::string endString = stringRange.substr(dashPos+1);
+			std::stringstream stream2(endString);
+			stream2 >> endRange;
+		}
+		else
+		{
+			std::string beginString = stringRange.substr(begin);
+			std::stringstream stream(beginString);
+			stream >> beginRange;
+
+			endRange = beginRange;
+		}
+	}
+	
+	int accolID = 0;
+	const TagParameterInt * IDint = inAccoladeTag->getIDInt();
+	if( IDint && IDint->TagIsSet())
+		accolID = IDint->getValue();
+
+	GRAccolade * accolade = new GRAccolade;
+
+	accolade->setAccoladeType( accolType );
+	accolade->setDx( dx );
+	accolade->setAccoladeID(accolID);
+	accolade->setBeginRange(beginRange);
+	accolade->setEndRange(endRange);
+
+	mAccolade.push_back(accolade);
 
 }
 

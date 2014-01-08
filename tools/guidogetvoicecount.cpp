@@ -18,6 +18,7 @@ GSystemOSX gSys (0,0);
 CairoSystem gSys(0);
 #endif
 
+#include "GUIDOParse.h"
 #include "GUIDOEngine.h"
 #include "VGDevice.h"
 
@@ -38,7 +39,8 @@ int main(int argc, char **argv)
     GuidoInitDesc gd = { dev, 0, 0, 0 };
     GuidoInit (&gd);
 
-	for (int i=1; i < argc; i++) {
+	for (int i = 1; i < argc; i++)
+    {
 		GuidoErrCode err;
 		ARHandler arh;
 
@@ -52,17 +54,25 @@ int main(int argc, char **argv)
         streamBuffer << ifs.rdbuf();
         ifs.close();
 
-        err = GuidoNewParseString(parser, streamBuffer.str().c_str(), &arh);
-		if (err == guidoNoErr) {
-			int n = GuidoCountVoices (arh);
+        arh = GuidoString2AR(parser, streamBuffer.str().c_str());
+		
+        if (arh)
+        {
+			int n = GuidoCountVoices(arh);
 			cout << argv[i] << " : " << n << endl;
 			GuidoFreeAR (arh);
 		}
-		else error (err);
+		else {
+			int line, col;
+			err = GuidoParserGetErrorCode (parser, line, col, 0);
+			error (err);
+		}
 
         GuidoCloseParser(parser);
 	}
+
 	delete dev;
+
 	return 0;
 }
 

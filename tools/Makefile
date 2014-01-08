@@ -14,11 +14,13 @@ else
 endif
 endif
 
-TOOLS = guidogetversion guido2midi guido2svg guidogetpagecount guidogetvoicecount guido2svgmap guidogetpagemap guidogetsystemmap guidogetstaffmap guidogetvoicemap
+TOOLS = guidogetversion guidogetpagecount guidogetvoicecount guidogetpagemap guidogetsystemmap guidogetstaffmap guidogetvoicemap guido2svg guido2svgmap
 
 .PHONY: checkall
 
-all: $(TOOLS)
+all: $(TOOLS) guido2midi
+
+tools: $(TOOLS)
 
 guidogetversion : guidogetversion.cpp
 	g++ guidogetversion.cpp -I../src/include $(lib) -o guidogetversion

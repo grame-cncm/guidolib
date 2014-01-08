@@ -26,7 +26,6 @@
 #include "GRGlobalStem.h"
 #include "GRRest.h"
 #include "GREmpty.h"
-//#include "GRChord.h"
 #include "GRStdNoteHead.h"
 #include "GraphTools.h"
 
@@ -217,34 +216,37 @@ void GRGlissando::OnDraw( VGDevice & hdc ) const
 		}
 		*/
 	}
-	if (mColRef) hdc.PopFillColor();
+	if (mColRef)
+        hdc.PopFillColor();
 }
 
 
 void GRGlissando::tellPosition(GObject * caller, const NVPoint & newPosition)
 {
 	GRNotationElement * grel = dynamic_cast<GRNotationElement *>(caller);
-	if (grel == 0 ) return;
+	if (grel == 0)
+        return;
 
 	GRStaff * staff = grel->getGRStaff();
-	if (staff == 0 ) return;
+	if (staff == 0)
+        return;
 
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( staff->getGRSystem());
-	if (sse == 0)	return;
+	if (sse == 0)
+        return;
 
 	const GRNotationElement * const endElement = sse->endElement;
 
-	if( grel == endElement )
-	{
-		updateGlissando( staff );
-	}
+	if (grel == endElement)
+		updateGlissando(staff);
 }
 
 
 void GRGlissando::updateGlissando( GRStaff * inStaff )
 {
-	GRSystemStartEndStruct * sse = getSystemStartEndStruct( inStaff->getGRSystem());
-	if ( sse == 0 ) return;
+	GRSystemStartEndStruct * sse = getSystemStartEndStruct(inStaff->getGRSystem());
+	if (sse == 0)
+        return;
 
 	// Collects informations about the context
 
@@ -400,7 +402,6 @@ void GRGlissando::updateGlissando( GRStaff * inStaff )
 	}
 }
 
-
 void GRGlissando::getGlissandoBeginingContext( GRGlissandoContext * ioContext, GRSystemStartEndStruct * sse )
 {
 	GRNotationElement * startElement = sse->startElement;
@@ -512,7 +513,6 @@ void GRGlissando::removeAssociation(GRNotationElement * el )
 }
 void GRGlissando::addAssociation(GRNotationElement * grnot)
 {
-
 	if (error) return;
 
 		if ( GREvent::cast( grnot )  && 	// stop immediately if it's not an event.

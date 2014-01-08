@@ -115,7 +115,6 @@ GuidoPos
 GRARCompositeNotationElement::First() const
 {
 	return mCompositeElements.GetHeadPosition();
-
 }
 
 // ----------------------------------------------------------------------------

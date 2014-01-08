@@ -45,7 +45,11 @@ class GRRepeatEnd : public GRBar
 		virtual const NVPoint & getReferencePosition() const { return refpos; }
 
 	protected:
-		static NVPoint refpos;
+        static NVPoint refpos;
+        float  fBaseThickness;
+        int    fLineNumber;
+        float  fSize;
+        float  fStaffThickness;
 
 	private:
 				void	InitRepeatEnd();

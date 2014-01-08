@@ -65,13 +65,13 @@ GRGlobalStem::GRGlobalStem( GRStaff * inStaff,
 	theFlag = NULL;
 	stemlengthset = false;
 
+    fStaffSize = mTagSize = inStaff->getSizeRatio();
+
 	if (curnoteformat)
 	{
 		const TagParameterFloat * tmp = curnoteformat->getSize();
 		if (tmp)
 			mTagSize = tmp->getValue();
-		else
-			mTagSize = inStaff->getSizeRatio();
 
 		// color ...
 
@@ -96,10 +96,6 @@ GRGlobalStem::GRGlobalStem( GRStaff * inStaff,
 			mTagOffset.y = (GCoord)(tmpdy->getValue(inStaff->getStaffLSPACE()));
             mTagOffset.y = -mTagOffset.y;
 		}
-	}
-	else
-	{
-		mTagSize = inStaff->getSizeRatio();
 	}
 
 	mFirstEl = NULL;
@@ -514,7 +510,7 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 	else
 	{
 		// length was not set ....
-		float length = (float)(mHighestY - mLowestY + inStaff->getStaffLSPACE() * 3.5f * mTagSize);
+        float length = (float)(mHighestY - mLowestY + inStaff->getStaffLSPACE() * 3.5f * mTagSize / fStaffSize);
 		theStem->setStemLength( length );
 	}
 
@@ -546,23 +542,43 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 	{
 		NVPoint stemendpos (theStem->getPosition());
 		stemendpos.y -= theStem->getStemLength();
+        float coef = 0;
+        int numberLines = inStaff->getNumlines();
 
-		if (stemendpos.y > 2 * curLSPACEtmp)
-		{
-			const float newlength = (theStem->getPosition().y - 2 * curLSPACEtmp);
-			changeStemLength(newlength);
-		}
+        // Stem length adaptation according to staff lines number
+        if (numberLines != 0)
+        {
+            // Stem length is set everytime as far as the middle of the staff.
+            // Can be changed easily if it's not the good behaviour to adopt.
+            coef = 0.5f * numberLines - 0.5f;
+        }
+
+        if (stemendpos.y > coef * curLSPACEtmp)
+        {
+            const float newlength = (theStem->getPosition().y - coef * curLSPACEtmp);
+            changeStemLength(newlength);
+        }
 	}
 	else if (stemdir == dirDOWN)
 	{
 		NVPoint stemendpos (theStem->getPosition());
 		stemendpos.y += theStem->getStemLength();
+        float coef = 0;
+        int numberLines = inStaff->getNumlines();
 
-		if (stemendpos.y < 2 * curLSPACEtmp)
-		{
-			const float newlength = (2 * curLSPACEtmp - theStem->getPosition().y);
-			changeStemLength(newlength) ;
-		}
+        // Stem length adaptation according to staff lines number
+        if (numberLines != 0)
+        {
+            // Stem length is set everytime as far as the middle of the staff.
+            // Can be changed easily if it's not the good behaviour to adopt.
+            coef = 0.5f * numberLines - 0.5f;
+        }
+
+        if (stemendpos.y < coef * curLSPACEtmp)
+        {
+            const float newlength = (coef * curLSPACEtmp - theStem->getPosition().y);
+            changeStemLength(newlength);
+        }
 	}
 }
 
@@ -615,8 +631,9 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 					if (tagtype == GRTag::SYSTEMTAG)
 						cury += (float)note->getGRStaff()->getPosition().y;
 
+                    const float tmpCurLSPACE = (curLSPACE - curLSPACE / 50); // To avoid precision problems
 					// y-values are ascending.
-					if (cury != prevposy && cury - prevposy < curLSPACE && !note->getGRCluster())
+					if (cury != prevposy && cury - prevposy < tmpCurLSPACE && !note->getGRCluster())
 					{
 						// then I have to reverse the headsuggestion.
                         if (prevHeadState == ARTHead::RIGHT)
@@ -739,6 +756,10 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 			else if (lowerNoteSymbol == kFullReversedTriangleHeadSymbol || lowerNoteSymbol == kHalfReversedTriangleHeadSymbol)
 				higherNote->setStemOffsetStartPosition(-47);
 		}
+
+        // - Set notehead orientation for extreme chord note
+        if (lowerNote)
+            theStem->setLastHeadOrientation(lowerNote->getHeadState());
 	}
 	else if (stemdir == dirUP || stemdir == dirOFF)
 	{
@@ -755,8 +776,9 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 					if (tagtype == GRTag::SYSTEMTAG)
 						cury += note->getGRStaff()->getPosition().y;
 
+                    const float tmpCurLSPACE = (curLSPACE - curLSPACE / 50); // To avoid precision problems
 					// y-values are decending.
-					if (cury != prevposy && prevposy - cury < curLSPACE && !note->getGRCluster())
+					if (cury != prevposy && prevposy - cury < tmpCurLSPACE && !note->getGRCluster())
 					{
 						// then I have to reverse the headsuggestion.
 						if (prevHeadState == ARTHead::RIGHT)
@@ -880,6 +902,10 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 			else if (higherNoteSymbol == kFullReversedTriangleHeadSymbol || higherNoteSymbol == kHalfReversedTriangleHeadSymbol)
 				higherNote->setFirstSegmentDrawingState(false);
 		}
+
+        // - Set notehead orientation for extreme chord note
+        if (higherNote)
+            theStem->setLastHeadOrientation(higherNote->getHeadState());
 	}
 	else 
 	{
@@ -926,10 +952,13 @@ void GRGlobalStem::OnDraw( VGDevice & hdc) const
 {
 	if(!mDraw)
 		return;
-	if (error) return;
+	if (error)
+        return;
 
-	if (theStem)	theStem->OnDraw(hdc);
-	if (theFlag)	                theFlag->OnDraw(hdc);
+	if (theStem)
+        theStem->OnDraw(hdc);
+	if (theFlag)
+        theFlag->OnDraw(hdc);
 }
 
 float GRGlobalStem::changeStemLength( float inLen )

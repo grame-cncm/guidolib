@@ -1615,8 +1615,8 @@ bool MainWindow::loadFile(const QString &fileName)
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
 	reinitGuidoWidget();
-
-	setCurrentFile(fileName.toUtf8().data());
+    
+    setCurrentFile(fileName.toUtf8().data());
 
 	bool loadOk = mGuidoWidget->setGMNFile( fileName );
 	if (!loadOk && QGuidoImporter::musicxmlSupported()) {	// try to import file as MusicXML file
@@ -1655,6 +1655,10 @@ bool MainWindow::loadFile(const QString &fileName)
 	QApplication::restoreOverrideCursor();
 // call moved to the beginning of the function to benefit of the filePath() method
 //	setCurrentFile(fileName.toUtf8().data());
+
+    // In order not to make appear the little star next to filename (at the top of the window)
+    mTextEdit->document()->setModified( false );
+    setWindowModified(false);
 	
 	recentFileListUpdate(fileName);
 

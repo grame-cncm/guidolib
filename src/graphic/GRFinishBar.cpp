@@ -12,11 +12,7 @@
 
 */
 
-
-/** \bug The end bar height is wrong when the staff has more or less than 5 lines.
-
-	 // TODO: handle staff line count != 5
-*/
+#include <math.h>
 
 #include "ARFinishBar.h"
 #include "GRFinishBar.h"
@@ -41,6 +37,12 @@ GRFinishBar::GRFinishBar( ARFinishBar * p_ardbar, GRStaff * inStaff, const TYPE_
 	refpos.x = -40;		// hardcoded
 //	refpos.y = inStaff ? inStaff->getDredgeSize() : (4 * LSPACE);
 	refpos.y = 4 * LSPACE;
+
+    fBaseThickness = LSPACE * 0.5f;
+    fLineNumber = inStaff->getNumlines();
+    fStaffThickness = inStaff->getLineThickness();
+    fSize = inStaff->getSizeRatio();
+
 	updateBoundingBox();
 }
 
@@ -56,6 +58,12 @@ GRFinishBar::GRFinishBar(ARFinishBar * p_arbar, GRSystem * p_grsystem, GRStaff *
 	refpos.x = -40;		// hardcoded
 //	refpos.y = inStaff ? inStaff->getDredgeSize() : (4 * LSPACE);
 	refpos.y = 4 * LSPACE;
+
+    fBaseThickness = LSPACE * 0.5f;
+    fLineNumber = inStaff->getNumlines();
+    fStaffThickness = inStaff->getLineThickness();
+    fSize = inStaff->getSizeRatio();
+
 	updateBoundingBox();
 }
 
@@ -66,10 +74,10 @@ GRFinishBar::~GRFinishBar()
 // --------------------------------------------------------------------------
 void GRFinishBar::updateBoundingBox()
 {
-	mThickness = LSPACE * 0.6f;
-	const float spacing = LSPACE * 0.4f;
-	const float extend = (spacing + mThickness);
-	mBoundingBox.left  = -extend;
+    fBaseThickness = LSPACE * 0.5f * fSize;
+	const float spacing = LSPACE * 0.4f * fSize;
+	const float extend = spacing + fBaseThickness;
+	mBoundingBox.left  = - extend;
 	mBoundingBox.right = 0;
 }
 
@@ -79,16 +87,28 @@ void GRFinishBar::DrawWithLines( VGDevice & hdc ) const
 	if ((getTagType() != GRTag::SYSTEMTAG) && isSystemSlice())
 		return;			// don't draw staff bars on system slices
 
-	const float spacing = LSPACE * 0.4f;
-	const float x1 = mPosition.x - mBoundingBox.Width() + 5;
-	const float x2 = x1 + spacing;
-	const float y1 = mPosition.y;
-	const float y2 = y1 + mBoundingBox.bottom;
+    if (fSize < kMinNoteSize) // Too small, don't draw
+        return;
 
-	hdc.PushPenWidth( kLineThick * 1.8f );
-	hdc.Line( x1, y1, x1, y2 );
-	hdc.Rectangle( x2, y1, x2+mThickness, y2 );
-	hdc.PopPenWidth();
+    // - Vertical adjustement according to staff's line number
+    float offsety1 = (fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;
+    float offsety2 = 0;
+
+    if (fLineNumber != 0 && fLineNumber != 1)
+        offsety2 = ((fLineNumber - 5) % 6) * LSPACE;
+
+    const float offsetX = (fSize - 1) * 1.8f + (fStaffThickness - 4) * 0.5f + 2.8f + (fSize - 1) * (fStaffThickness - 4) * 0.5f;
+
+    const float spacing = LSPACE * 0.4f * fSize;
+    const float x1 = mPosition.x - mBoundingBox.Width() + offsetX;
+	const float x2 = x1 + spacing;
+    const float y1 = mPosition.y + (offsety1 - 2) * fSize;
+	const float y2 = y1 + mBoundingBox.bottom + (offsety2 + 4) * fSize;
+
+    float leftLineThickness = 1.8f * kLineThick * fSize;
+
+	hdc.Rectangle(x1, y1, x1 + leftLineThickness, y2);
+	hdc.Rectangle(x2, y1, x2 + fBaseThickness, y2);
 }
 
 ARFinishBar * GRFinishBar::getARFinishBar()

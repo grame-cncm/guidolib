@@ -14,6 +14,7 @@
 #include <string.h>
 
 #include "ARGlissando.h"
+
 #include "TagParameterList.h"
 #include "TagParameterFloat.h"
 #include "TagParameterString.h"
@@ -36,19 +37,15 @@ ARGlissando::ARGlissando()
 	mParSet = false;
 	mWavy = false;
 	mFill = false;
-
 }
 
-ARGlissando::ARGlissando(const ARGlissando * glissando)	: ARMTParameter(-1,glissando)
+ARGlissando::ARGlissando(const ARGlissando * glissando)	: ARMTParameter(-1, glissando)
 {
 	rangesetting = ONLY;
 	setAssociation(ARMusicalTag::RA);
 
 	dx1 = dy1 = dx2 = dy2 = fThickness = 0;
 	fLineStyle = NULL;
-
-	rangesetting = ONLY;
-	setAssociation(ARMusicalTag::RA);
 	
 	mParSet = false;
 
@@ -158,6 +155,7 @@ void ARGlissando::setTagParameterList(TagParameterList & tpl)
 	}
 
 	tpl.RemoveAll();
+
 	return;
 }
 
@@ -211,7 +209,7 @@ bool ARGlissando::MatchEndTag(const char * s)
 {
 	if (ARMusicalTag::MatchEndTag(s))
 		return 1;
-	if (!getRange() && !strcmp("\\GlissandoEnd",s))
+	if (!getRange() && !strcmp("\\glissandoEnd",s))
 		return 1;
 	return 0;
 }

@@ -12,6 +12,8 @@
 
 */
 
+#include <math.h>
+
 #include "GRDoubleBar.h"
 #include "ARDoubleBar.h"
 #include "GRStaff.h"
@@ -29,6 +31,10 @@ GRDoubleBar::GRDoubleBar( ARDoubleBar * ardbar, GRStaff * inStaff, const TYPE_TI
 	mBoundingBox.left  -= spacing;
 	mBoundingBox.right += spacing;
 	mRightSpace = mBoundingBox.right * mTagSize;
+
+    fLineNumber = inStaff->getNumlines();
+    fStaffThickness = inStaff->getLineThickness();
+    fSize = inStaff->getSizeRatio();
 }
 
 GRDoubleBar::GRDoubleBar(ARDoubleBar * ardbar, GRSystem * p_grsystem, GRStaff * inStaff,
@@ -40,6 +46,10 @@ GRDoubleBar::GRDoubleBar(ARDoubleBar * ardbar, GRSystem * p_grsystem, GRStaff * 
 	mBoundingBox.left  -= spacing;
 	mBoundingBox.right += spacing;
 	mRightSpace = mBoundingBox.right * mTagSize;
+
+    fLineNumber = inStaff->getNumlines();
+    fStaffThickness = inStaff->getLineThickness();
+    fSize = inStaff->getSizeRatio();
 }
 
 GRDoubleBar::~GRDoubleBar()
@@ -51,15 +61,32 @@ void GRDoubleBar::DrawWithLines( VGDevice & hdc ) const
 {
 	if ((getTagType() != GRTag::SYSTEMTAG) && isSystemSlice())
 		return;			// don't draw staff bars on system slices
+    
+    if (fSize < kMinNoteSize) // Too small, don't draw
+        return;
 
-	const float x1 = mPosition.x + mBoundingBox.left;
-	const float x2 = mPosition.x + mBoundingBox.right;
-	const float y1 = mPosition.y;
-	const float y2 = y1 + mBoundingBox.bottom;
-	hdc.PushPenWidth( kLineThick * 1.2f);
-	hdc.Line( x1, y1, x1, y2 );
-	hdc.Line( x2, y1, x2, y2 );
-	hdc.PopPenWidth();
+    // - Vertical adjustement according to staff's line number
+    float offsety1 = (fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;
+    float offsety2 = 0;
+
+    if (fLineNumber != 0 && fLineNumber != 1)
+        offsety2 = ((fLineNumber - 5) % 6) * LSPACE;
+
+    // - Horizontal adjustement according to staff's lines size and staff's size
+    const float offsetX = (fStaffThickness - 4) * 0.5f - 24;
+
+    const float spacing = LSPACE * 0.7f * fSize;
+	const float x1 = mPosition.x + offsetX;
+	const float x2 = x1 + spacing;
+	const float y1 = mPosition.y + mBoundingBox.top + offsety1 * fSize;
+	const float y2 = y1 + mBoundingBox.bottom + offsety2 * fSize;
+
+    float lineThickness = kLineThick * 1.5f * fSize;
+
+    hdc.PushPenWidth(lineThickness);
+    hdc.Line(x1, y1 + lineThickness / 2, x1, y2 - lineThickness / 2);
+    hdc.Line(x2, y1 + lineThickness / 2, x2, y2 - lineThickness / 2);
+    hdc.PopPenWidth();
 }
 
 ARDoubleBar * GRDoubleBar::getARDoubleBar()	{ return static_cast<ARDoubleBar *>(mAbstractRepresentation); }

@@ -121,7 +121,7 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 	float ay [4] = { st->p[0].y, st->p[1].y, st->p[3].y, st->p[2].y };
 	
 	// This does the drawing!
-	hdc.Polygon( ax, ay, 4 );
+	hdc.Polygon(ax, ay, 4);
 	
 	if (st->simpleBeams)
 	{
@@ -155,13 +155,14 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 		hmyfont = FontManager::gFontText;
 		hdc.SetTextFont( hmyfont );
 
-		if(sse->startflag != GRSystemStartEndStruct::OPENLEFT)
-			hdc.DrawString(st->DurationLine[2].x, st->DurationLine[2].y+LSPACE/2, fraction, n);
+		if (sse->startflag != GRSystemStartEndStruct::OPENLEFT)
+			hdc.DrawString(st->DurationLine[2].x + LSPACE/4, st->DurationLine[2].y + LSPACE / 2, fraction, n);
 
         hdc.PopPenWidth();
 	}
 
-	if (mColRef) {
+	if (mColRef)
+    {
 		hdc.PopPen();
 		hdc.PopFillColor();
 	}
@@ -476,8 +477,13 @@ NVPoint GRBeam::initp0 (GRSystemStartEndStruct * sse, const GREvent * startEl, P
 	else
 	{
 		// This depends on the direction, we do not know this yet (do we?)
-		if (infos.oneNote) {
-			st->p[0].x -= TagParameterFloat::convertValue((float)2.0,"hs", infos.currentLSPACE) * infos.currentSize;
+		if (infos.oneNote)
+        {
+            double result;
+            bool conversionOk = TagParameterFloat::convertValue(2.0f, result, "hs", infos.currentLSPACE);
+
+            if (conversionOk)
+                st->p[0].x -= (float)result * infos.currentSize;
 		}
 	}
 
@@ -497,15 +503,33 @@ void GRBeam::initp1 (GRSystemStartEndStruct * sse, PosInfos& infos)
 	else
 	{
 		if (infos.oneNote)
-			st->p[1].x -= TagParameterFloat::convertValue(2.0f,"hs", infos.currentLSPACE) * infos.currentSize;
+        {
+            double result;
+            bool conversionOk = TagParameterFloat::convertValue(2.0f, result, "hs", infos.currentLSPACE);
+			
+            if (conversionOk)
+                st->p[1].x -= (float)result * infos.currentSize;
+        }
 	}
 	if (arBeam->dy2 && arBeam->dy2->TagIsSet())
 		st->p[1].y -= (GCoord)(arBeam->dy2->getValue(infos.currentLSPACE));
 	else {
 		if (infos.stemdir == dirUP)
-			st->p[1].y = st->p[0].y + TagParameterFloat::convertValue(0.9f,"hs", infos.currentLSPACE) * infos.currentSize;
+        {
+            double result;
+            bool conversionOk = TagParameterFloat::convertValue(0.9f, result, "hs", infos.currentLSPACE);
+			
+            if (conversionOk)
+                st->p[1].y = st->p[0].y + (float)result * infos.currentSize;
+        }
 		else if (infos.stemdir == dirDOWN)
-			st->p[1].y = st->p[0].y - TagParameterFloat::convertValue(0.9f,"hs", infos.currentLSPACE) * infos.currentSize;
+        {
+            double result;
+            bool conversionOk = TagParameterFloat::convertValue(0.9f, result, "hs", infos.currentLSPACE);
+			
+            if (conversionOk)
+                st->p[1].y = st->p[0].y - (float)result * infos.currentSize;
+        }
 	}
 }
 
@@ -564,9 +588,21 @@ void GRBeam::initp3 (GRSystemStartEndStruct * sse, PosInfos& infos)
 		st->p[3].y -= (arBeam->dy4->getValue(infos.currentLSPACE));
 	else {
 		if (infos.stemdir == dirUP)
-			st->p[3].y =  st->p[2].y + (GCoord) (infos.currentSize * TagParameterFloat::convertValue( 0.9f,"hs", infos.currentLSPACE));
+        {
+            double result;
+            bool conversionOk = TagParameterFloat::convertValue(0.9f, result, "hs", infos.currentLSPACE);
+			
+            if (conversionOk)
+                st->p[3].y = st->p[2].y + (GCoord)((float)result * infos.currentSize);
+        }
 		else if (infos.stemdir == dirDOWN)
-			st->p[3].y = st->p[2].y - (GCoord) (infos.currentSize * TagParameterFloat::convertValue( 0.9f,"hs", infos.currentLSPACE));
+        {
+            double result;
+            bool conversionOk = TagParameterFloat::convertValue(0.9f, result, "hs", infos.currentLSPACE);
+			
+            if (conversionOk)
+                st->p[3].y = st->p[2].y - (GCoord)((float)result * infos.currentSize);
+        }
 	}
 }
 
@@ -1009,16 +1045,16 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 				getLastPositionOfBarDuration().first = Y1;
 				getLastPositionOfBarDuration().second = Y2;
 			}
-			if(xBegin>xEnd)
+			if (xBegin > xEnd)
 			{
-				if(sse->endflag == GRSystemStartEndStruct::OPENRIGHT)
+				if (sse->endflag == GRSystemStartEndStruct::OPENRIGHT)
 					xEnd = sse->endElement->getPosition().x;
-				if(sse->startflag == GRSystemStartEndStruct::OPENLEFT)
+				if (sse->startflag == GRSystemStartEndStruct::OPENLEFT)
 					xBegin = sse->startElement->getPosition().x;
 			}
-			float x = xBegin + (xEnd - xBegin)/2;
-			float X1 = x - (n-1)/2*LSPACE;
-			float X2 = x + (n-1)/2*LSPACE;
+			float x = xBegin + (xEnd - xBegin) / 2;
+			float X1 = x - (n - 0.5f) / 2 * LSPACE;
+			float X2 = x + (n - 0.5f) / 2 * LSPACE;
 
 			st->DurationLine[0] = NVPoint(xBegin, Y1);
 			st->DurationLine[1] = NVPoint(xBegin, Y2);

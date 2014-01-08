@@ -53,8 +53,6 @@ class GuidoParser {
 
 				 GuidoParser();
 		virtual ~GuidoParser();
-
-        void                Reinit();
 		
 		ARHandler           parse();
         const ARFactory    *getFactory() const  { return fFactory; }

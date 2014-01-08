@@ -16,13 +16,11 @@
 /* for use in guido music notation import / export */
 
 typedef double T_REAL; 		/* per default, use double precision */
-typedef char * T_STRING;
-typedef const char * CONST_T_STRING;
+typedef char *T_STRING;
+typedef const char *CONST_T_STRING;
 
-#define REAL_INVALID -9.99999e99 /* used for indicating invalid real numbers */
-
-/* conversion between units (advanced guido) */
-T_REAL gd_convertUnits(T_REAL fromValue,
-                       CONST_T_STRING fromUnit, CONST_T_STRING toUnit);
-
-
+/* Conversion between units (advanced guido)
+ * Returns 1 is conversion is ok, 0 if not
+ * Result is in finalValue */
+bool gd_convertUnits(T_REAL fromValue, CONST_T_STRING fromUnit,
+                     CONST_T_STRING toUnit, double &toValue);

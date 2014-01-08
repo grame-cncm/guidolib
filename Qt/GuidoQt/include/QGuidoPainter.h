@@ -111,7 +111,9 @@ class QGuidoPainter
 		*	\return true if the GMN code is valid.
 		*/
 		bool setGMNCode( const QString& gmnCode, const char* datapath=0 );
-		
+    
+        bool setGMNStream( GuidoStream * gmnStream);
+    
 		/**	\brief Returns the current Guido code.
 		*/
 		QString gmnCode() const;
@@ -219,6 +221,7 @@ class QGuidoPainter
 		typedef GuidoErrCode (*GuidoParseFunction)( const char * , ARHandler*);
 
 		bool setGMNData( const QString& data, const char* dataPath=0 );
+        bool setGMNDataStream (GuidoStream * guidoStream);
 		bool hasValidGR() const			{ return mDesc.handle != 0; }
 
         void setPathsToARHandler (ARHandler inARHandler, const char* data);
@@ -227,6 +230,7 @@ class QGuidoPainter
 		ARHandler mARHandler;
 		QString mFileName;
 		QString mGMNCode;
+        GuidoStream * mGMNStream;
 		GuidoErrCode mLastErr;
 
 		bool mResizePageToMusic;

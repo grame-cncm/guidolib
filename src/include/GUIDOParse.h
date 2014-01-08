@@ -50,6 +50,13 @@ extern "C" {
 	GUIDOAPI(GuidoErrCode)		GuidoCloseParser (GuidoParser *p);
 
 	/*!
+		\brief returns the string of the GuidoStream
+		\param gStream a GuidoStream
+        \return a std::string.
+	*/
+    GUIDOAPI(const char *) GuidoGetStream (GuidoStream * gStream);
+
+	/*!
 		\brief Parse a file and create the corresponding AR
 		\param p a parser previously opened with GuidoOpenParser
 		\param file the file to parse.
@@ -108,10 +115,15 @@ extern "C" {
         as such (GuidoWriteStream uses an automatic-closure mechanism).
 		When a syntax error (other than a non-closure) occurs when writting data to the stream, the stream becomes invalid
 		and should be closed. Further attempts to write data will always result in a syntax error.
-		You have to be careful about special char (for example, write "\\tie(a a)" in stream, not "\tie(a a)".
-        GMN key-words have to be written in one shot (for exemple, don't write "\\clu" and
-        then "ster({a, c})", it won't work.
-        In the same way, don't write "{a," and then "b}" but "{a" and then ",b}".
+
+        Regarding syntax errors, allowed incomplete constructs are :
+			- opened music i.e. { without closing }
+			- opened voice i.e. [ without closing ]
+			- opened range tag i.e. ( without closing )
+			- opened range parameter i.e. < without closing > but with at least one parameter
+			- opened chord i.e. ( without closing ) but with at least one note
+		\note for incomplete chords and range parameters, the ',' separator must always be followed by a note or a parameter.
+		For example, don't write "{a," and then "b}" but "{a" and then ",b}".
 
 		\param s a GuidoStream previoulsy opened with GuidoOpenStream
 		\param str a string containing a portion of gmn code

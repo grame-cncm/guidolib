@@ -58,7 +58,8 @@ QMap< QString , QMap< unsigned int, QPainterPath > > * GDeviceQt::mCachedMusicFo
 //
 GDeviceQt::GDeviceQt(QPainter * qPainter , GSystemQt * sys)
 		: 
-		mCurrTextFont(NULL), mCurrMusicFont(NULL), mCurrPenPos(0,0)
+		mCurrTextFont(NULL), mCurrMusicFont(NULL), mCurrPenPos(0,0),
+        mScaleX(1), mScaleY(1)
 {
 #ifdef USE_CACHED_MUSIC_FONT
 	// Static member initialization
@@ -321,7 +322,7 @@ void GDeviceQt::SetTextFont( const VGFont * font )
 const VGFont *	GDeviceQt::GetTextFont()const
 {
 	return mCurrTextFont;
-};
+}
 
 //------------------------------------------- DRAWING FUNCTIONS -------------------------------------------------------//
 void GDeviceQt::SelectPen( const VGColor & inColor, float width )
@@ -356,7 +357,7 @@ void GDeviceQt::SelectFillColor( const VGColor & c )
 void GDeviceQt::PushPen( const VGColor & inColor, float inWidth )
 {
 	QPen qPen = mQPainter->pen();
-	PenState state = {qPen.color(), qPen.widthF()};
+	PenState state = {qPen.color(), static_cast<float>(qPen.widthF())};
 	mPenStack.push( state );
 	SelectPen( inColor, inWidth );
 }
@@ -602,6 +603,9 @@ bool GDeviceQt::CopyPixels( int xDest, int yDest,
 //-------------------------------------------------------------
 void GDeviceQt::SetScale( float x, float y )
 {
+    mScaleX = x;
+    mScaleY = y;
+
 #if absoluteTransform1
 	QTransform m = mQPainter->worldTransform();
 	m.setMatrix (x, m.m12(), m.m13(), m.m21(), y, m.m23(), m.m31(), m.m32(), m.m33()),
@@ -611,7 +615,23 @@ void GDeviceQt::SetScale( float x, float y )
 	float curys = GetYScale();
 	mQPainter->scale( x/curxs, y/curys);
 #else
-	mQPainter->scale( x, y);
+	mQPainter->scale(x, y);
+#endif
+}
+
+//-------------------------------------------------------------
+void GDeviceQt::UnsetScale()
+{
+#if absoluteTransform1
+	QTransform m = mQPainter->worldTransform();
+	m.setMatrix (1 / mScaleX, m.m12(), m.m13(), m.m21(), 1 / mScaleY, m.m23(), m.m31(), m.m32(), m.m33()),
+	mQPainter->setWorldTransform (m);
+#elif absoluteTransform2
+	float curxs = GetXScale();
+	float curys = GetYScale();
+	mQPainter->scale( mPrevScaleX / curxs, mPrevScaleY / curys);
+#else
+	mQPainter->scale(1 / mScaleX, 1 / mScaleY);
 #endif
 }
 

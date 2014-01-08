@@ -1,0 +1,21 @@
+% \tuplet-Tag attributes :
+%
+% - format defines the format of the tuplet :
+%                     Syntax : "[leftBrace][numerator]:[denominator][rightBrace]"
+%                     Examples : "-3:5-", "-3"
+%                     default value : "--"
+% - dy1 / dy2 sets the vertical offset of each tuplet's side
+%                     default unit : hs
+% - lineThickness defines the tuplet lines thickness. Unit is the half space.
+%                     default value : 0.08
+% - bold defines is the text is bold or not. Values : "true" or "false".
+%                     default value : "false"
+% - textSize defines the size of the text.
+%                     default value : 1.
+%
+{
+    [
+        \tuplet<"-3-", lineThickness=0.2, bold="true", textSize=1.5, dy1=10, dy2=10> (a a a)
+        \tuplet<"-3:5-", dy1=8, dy2=20> (a b c)
+    ]
+}

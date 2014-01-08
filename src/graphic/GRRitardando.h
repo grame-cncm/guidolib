@@ -35,6 +35,17 @@ class GRRitardando : public GRPTagARNotationElement
 		virtual void tellPosition(GObject *caller,const NVPoint &np);
 
 		virtual unsigned int getTextAlign() const;
+
+		
+	private:
+		bool isTempoAbsSet;
+		bool isTempoSet;
+		NVPoint startPos;
+		NVPoint endPos;
+		std::string tempo1;
+		std::string tempo2;
+		float mdx;
+		float mdy;
 };
 
 #endif

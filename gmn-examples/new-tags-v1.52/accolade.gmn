@@ -1,0 +1,39 @@
+% accol.gmn
+%
+% \accol tag is used to change the style and position of accolade(s) that join the staves at their begining
+%
+% Usage : (at the beginning of a voice only, with the \clef and \meter tags)
+% \accol<id, range, type, dx>
+%
+% Parameters : 
+%		- id (int) : identification number of the accolade
+%		- range (string) : begining and ending staves concerned by the accolade
+%				"m-n" : the accolade goes from staff m to staff n
+%				"m" = "m-m"
+%		- type (string) : the accolade's graphical style
+%		- dx : change in horizontal position
+%
+% There can be several accolades on a same staff.
+%
+{
+    [
+        \accol<id=1, range="1-7", dx=-4, type="straightBrace"> a b c
+    ],
+    [
+        \accol<id=2, range="1-2", type="none">  \clef<"f">
+    ],
+    [
+        \accol<id=2, range="3-4", type="thinBrace">
+    ],
+    [
+        \clef<"f">
+    ],
+    [
+    ],
+    [
+        \clef<"f"> \accol<id=3, range="5-7">
+    ],
+    [
+        \clef<"c">
+    ]
+}

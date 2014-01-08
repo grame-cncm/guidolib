@@ -1,14 +1,14 @@
 /*
-	GUIDO Library
-	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+    GUIDO Library
+    Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
+    Copyright (C) 2002-2013 Grame
 
-  This Source Code Form is subject to the terms of the Mozilla Public
-  License, v. 2.0. If a copy of the MPL was not distributed with this
-  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+    This Source Code Form is subject to the terms of the Mozilla Public
+    License, v. 2.0. If a copy of the MPL was not distributed with this
+    file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
-  research@grame.fr
+    Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+    research@grame.fr
 */
 
 #include <string.h>
@@ -595,7 +595,7 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}	
-			else if (!strcmp(name,"auto"))	// same as "set"
+			else if (!strcmp(name,"auto"))
 			{
 				ARAuto * tmp = new ARAuto();
 				mTags.AddHead(tmp);
@@ -764,22 +764,19 @@ void ARFactory::createTag( const char * name, int no )
 				mCurrentVoice->AddTail(tmp);
 				
 			}
-			else if(!strcmp(name,"cresc") )
+            else if (!strcmp(name,"cresc"))
 			{
 				ARCrescendo * tmp = new ARCrescendo();
-				mTags.AddHead(tmp); // push();
-				// just testing ...
-				
+				mTags.AddHead(tmp); // push()
 				mCurrentVoice->AddPositionTag(tmp);
-				// mCurrentVoice->AddTail(tmp);				
-			}
+            }
 			else if (!strcmp(name,"crescBegin"))
 			{
 				ARCrescendo * tmp = new ARCrescendo();
+                tmp->setAssociation(ARMusicalTag::ER);
+                tmp->setAllowRange(0);
 				tmp->setID(no);
-				tmp->setAllowRange(0);
-
-				mTags.AddHead(tmp);
+                mTags.AddHead(tmp);
 
 				mCurrentVoice->AddPositionTag(tmp);		
 			}
@@ -787,9 +784,7 @@ void ARFactory::createTag( const char * name, int no )
 			{
 				ARDummyRangeEnd * tmp = new ARDummyRangeEnd("\\crescEnd");
 				tmp->setID(no);
-
-				// no ist die ID
-				mCurrentVoice->setPositionTagEndPos(no, tmp);
+                mCurrentVoice->setPositionTagEndPos(no, tmp);
 				mTags.AddHead(tmp);
 			}
 			else if (!strcmp(name,"cluster"))
@@ -844,36 +839,31 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);				
 			}
-			else if(!strcmp(name,"doubleBar")) {
+			else if (!strcmp(name,"doubleBar")) {
 				assert(!mCurrentEvent);
 				assert(mCurrentVoice);
 				ARDoubleBar * tmp = new ARDoubleBar;
 				mTags.AddHead(tmp); // push()
 				mCurrentVoice->AddTail(tmp);				
 			}
-			else if(!strcmp(name,"decresc") || !strcmp(name,"dim") || !strcmp(name,"diminuendo")) {
+			else if (!strcmp(name,"decresc") || !strcmp(name,"dim") || !strcmp(name,"diminuendo")) {
 				ARDiminuendo * tmp = new ARDiminuendo;
 				mTags.AddHead(tmp); // push();
-
 				mCurrentVoice->AddPositionTag(tmp);			
 			}
-			else if (!strcmp(name,"dimBegin")) {
+			else if (!strcmp(name,"decrescBegin") || !strcmp(name,"dimBegin") || !strcmp(name,"diminuendoBegin")) {
 				ARDiminuendo * tmp = new ARDiminuendo;
+                tmp->setAssociation(ARMusicalTag::ER);
 				tmp->setAllowRange(0);
 				tmp->setID(no);
-
-				// brauch ich das?
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"dimEnd")) {
+			else if (!strcmp(name,"decrescEnd") || !strcmp(name,"dimEnd") || !strcmp(name,"diminuendoBegin")) {
 				ARDummyRangeEnd * tmp = new ARDummyRangeEnd("\\dimEnd");			
 				tmp->setID(no);
 				mCurrentVoice->setPositionTagEndPos( no, tmp );
 				mTags.AddHead(tmp);
-
-				// this is done in setPositionTagEndPos ...
-				// mCurrentVoice->AddTail(tmp);
 			}
 			break;
 
@@ -962,7 +952,6 @@ void ARFactory::createTag( const char * name, int no )
 				mCurrentVoice->AddPositionTag(tmp);
 				
 			}
-			
 			else if (!strcmp(name,"glissandoBegin"))
 			{
 				// this is the id-number!
@@ -1250,6 +1239,12 @@ void ARFactory::createTag( const char * name, int no )
 				mCurrentVoice->setPositionTagEndPos( no, slend );
 				mTags.AddHead(slend);
 			}
+            else if(!strcmp(name,"set"))
+            {
+				ARAuto * tmp = new ARAuto();
+				mTags.AddHead(tmp);
+				mCurrentVoice->AddTail(tmp);
+			}
 			else if(!strcmp(name,"stacc"))
 			{
 				ARStaccato * tmp = new ARStaccato;
@@ -1347,12 +1342,6 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);				
 			}
-			else if (!strcmp(name,"set"))	// "same as auto"		
-			{
-				ARAuto * tmp = new ARAuto;
-				mTags.AddHead(tmp);
-				mCurrentVoice->AddTail(tmp);
-			}
 			else if (!strcmp(name,"shareLocation"))
 			{
 				ARShareLocation * tmp = new ARShareLocation;
@@ -1424,6 +1413,23 @@ void ARFactory::createTag( const char * name, int no )
 				if (!mCurrentTrill)
 					mCurrentTrill = tmp;
 				else delete tmp;
+			}
+			else if (!strcmp(name,"trillBegin"))
+			{
+				ARTrill * tmp = new ARTrill(ARTrill::TRILL);
+				
+				tmp->setID(no);
+				tmp->setAllowRange(0);
+				if (!mCurrentTrill)
+					mCurrentTrill = tmp;
+				else delete tmp;
+			}
+			else if (!strcmp(name,"trillEnd"))
+			{
+				ARDummyRangeEnd * tmp = new ARDummyRangeEnd("\\trillEnd");
+				tmp->setID(no);
+				mCurrentVoice->setPositionTagEndPos(no, tmp);
+				mTags.AddHead(tmp);
 			}
 			else if (!strcmp(name,"turn"))
 			{
@@ -1814,11 +1820,6 @@ void ARFactory::endTag()
         else if(( asymbol = dynamic_cast<ARSymbol *>(tag)) != 0 )
         {
             asymbol->setRelativeEndTimePosition(mCurrentVoice->getDuration());
-            tag = NULL;
-        }
-        else if (dynamic_cast<ARDynamics *>(tag))
-        {
-            // check if there is a first parameter?
             tag = NULL;
         }
         else if ((arre = dynamic_cast<ARRepeatEnd *>(tag)) != 0 )

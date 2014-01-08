@@ -52,8 +52,8 @@ class DebugDevice : public DecoratorDevice
  		// - Musical symbol services
 		virtual	void		SetMusicFont(const VGFont* font);
 		virtual	const VGFont*	GetMusicFont() const;	
-		virtual	void		SetTextFont(const VGFont* font);		
-		virtual	const VGFont*	GetTextFont() const;	
+		virtual	void		SetTextFont(const VGFont* font);	
+		virtual	const VGFont*	GetTextFont() const;
 		
 		// - Pen & brush services 
 		virtual	void		SelectPen(const VGColor & inColor,  float witdh); 

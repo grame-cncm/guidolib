@@ -29,10 +29,12 @@ public:
     virtual ~GuidoStream();
 
     void     WriteToStream(const char* str);
+    
 
     /* Clears this' state flags */
     void     Prepare();
     void     ReinitStream();
+    stringstream * getGlobalStringStream() {return fTheGlobalStringStream;}
 
 protected:
     stringstream *fTheGlobalStringStream; // The stringstream which contains the real string
