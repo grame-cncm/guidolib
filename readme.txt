@@ -49,7 +49,7 @@ Note for Android:
 
     Then, in your build directory, make an android folder.
     From this folder, call:
-      cmake -DANDROID=1../../cmake
+      cmake -DANDROID=1 ../../cmake
       make
 
 Note for Linux platforms:
