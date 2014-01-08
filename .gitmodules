@@ -1,3 +1,6 @@
 [submodule "android-apps/android-cmake"]
 	path = android-apps/android-cmake
 	url = https://github.com/taka-no-me/android-cmake
+[submodule "android-apps/android-cairo"]
+	path = android-apps/android-cairo
+	url = https://github.com/mikesol/android-cairo.git
