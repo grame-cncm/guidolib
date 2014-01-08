@@ -15,11 +15,22 @@
 #include <iostream>
 #include "ARMarcato.h"
 #include "TagParameterList.h"
+#include "TagParameterString.h"
 #include "ListOfStrings.h"
 
 #include "TimeUnwrap.h"
 
 ListOfTPLs ARMarcato::ltpls(1);
+
+ARMarcato::ARMarcato()
+{
+	rangesetting = RANGEDC;
+    position = NOTSET;
+}
+
+ARMarcato::~ARMarcato()
+{
+}
 
 void ARMarcato::setTagParameterList(TagParameterList& tpl)
 {
@@ -28,10 +39,8 @@ void ARMarcato::setTagParameterList(TagParameterList& tpl)
 		// create a list of string ...
 
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail((""
-			// "S,text,,r;U,dy,-1,o"
-			));
-		CreateListOfTPLs(ltpls,lstrs);
+		lstrs.AddTail("S,position,,o");
+        CreateListOfTPLs(ltpls,lstrs);
 	}
 
 	TagParameterList * rtpl = NULL;
@@ -42,6 +51,23 @@ void ARMarcato::setTagParameterList(TagParameterList& tpl)
 		// we found a match!
 		if (ret == 0)
 		{
+            TagParameterString * str = TagParameterString::cast(rtpl->RemoveHead());
+            assert(str);
+
+            std::string below ("below");
+            std::string above ("above");
+
+            if (str->TagIsSet() && (below == str->getValue()))
+			{
+				position = BELOW;
+			}
+			else if (str->TagIsSet() && (above == str->getValue()))
+            {
+                position = ABOVE;
+            }
+
+            delete str;
+
 			// Get The TagParameters ...
 			// text = 
 			//	TagParameterString::cast(rtpl->RemoveHead());

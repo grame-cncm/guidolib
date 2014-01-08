@@ -25,6 +25,17 @@ using namespace std;
 
 ListOfTPLs ARAccelerando::ltpls(1);
 
+ARAccelerando::ARAccelerando()
+{
+    rangesetting = ONLY;
+    
+    s1 = 0;
+    s2 = 0;
+	font = 0;
+	fattrib = 0;
+	fsize = 0;
+}
+
 ARAccelerando::~ARAccelerando()
 {
 	delete s1;

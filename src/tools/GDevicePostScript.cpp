@@ -526,15 +526,10 @@ GDevicePostScript::SetFontColor( const VGColor & inColor )
 // --------------------------------------------------------------
 void			
 GDevicePostScript::SetScale( float x, float y )
-{
-	const float prevX = mScaleX;
-	const float prevY = mScaleY;
-	mScaleX = x;
-	mScaleY = y;	
-	
-	if(( x != prevX ) || (y != prevY))
-	{ 	
- 		fprintf( GetFile(), "%f %f scale\n", (x / prevX), (y /prevY));
+{	
+	if(( x != mScaleX ) || (y != mScaleY))
+    {
+ 		fprintf( GetFile(), "%f %f scale\n", (x / mScaleX), (y /mScaleY));
 		
 		// - TODO: Udpate origin?
 
@@ -543,6 +538,9 @@ GDevicePostScript::SetScale( float x, float y )
 		// - We must update the current position after each coordinate 
 		// transformation
 		PSMoveTo( mCurrPenPos.x, mCurrPenPos.y );
+
+        mScaleX = x;
+        mScaleY = y;
 	}
 }
 

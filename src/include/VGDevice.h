@@ -186,6 +186,9 @@ class VGDevice
 		/// Returns the currently selected text VGFont.
 		virtual	const VGFont *	GetTextFont() const = 0;
 
+        /// Selects a font (only for SVG device).
+        virtual	void        	selectfont(int font) {};
+
 
 		// - Pen & brush services --------------------------------------------
 
@@ -281,7 +284,7 @@ class VGDevice
 		// - Coordinate services ------------------------------------------------
 
 		/// Sets the scale factors of the current VGDevice to the input values.
-		virtual	void			SetScale( float x, float y )= 0;
+		virtual	void			SetScale( float x, float y ) = 0;
 
 		/// Specifies which VGDevice point (x,y) maps to the window origin (0,0).
 		virtual	void			SetOrigin( float x, float y ) = 0;

@@ -4,5 +4,7 @@
 %					 default value is 0.08
 %
 {
-  [ \staffFormat<lineThickness=0.3>  c d e f ]
+    [
+        \staffFormat<lineThickness=0.3>  c d e f 
+    ]
 }

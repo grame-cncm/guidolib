@@ -332,5 +332,4 @@ void NEPointerList::setHPosition( float nx )
 {
 	GuidoPos pos = GetHeadPosition();
 	while(pos) GetNext(pos)->setHPosition(nx);
-
 }

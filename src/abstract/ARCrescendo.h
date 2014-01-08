@@ -14,20 +14,44 @@
   research@grame.fr
 
 */
-#include "ARDynamics.h"
+
+#include "ARMTParameter.h"
+#include "ARPositionTag.h"
+
 
 /** \brief not yet documented
 */
-class ARCrescendo : public ARDynamics
+class ARCrescendo : public ARMTParameter, public ARPositionTag
 {
-	public:
-		virtual bool MatchEndTag(const char * s);
-		//ARCrescendo();
-		//virtual ~ARCrescendo();
+public:
 
-		virtual void print() const;
+    ARCrescendo();
+    ARCrescendo(const ARCrescendo* crescendo);
+    virtual		~ARCrescendo();
 
-		virtual void PrintName(std::ostream & os) const;
+    virtual void setTagParameterList(TagParameterList & tlist);
+    virtual bool MatchEndTag(const char * s);
+
+    virtual void print() const;
+    virtual void PrintName(std::ostream & os) const;
+
+    const NVstring &getDynamicMarking() const { return dynamicMarking; }
+    const float     getDx1()            const { return dx1; }
+	const float     getDx2()            const { return dx2; }
+    const float     getDy()             const { return dy; }
+	const float     getDeltaY()         const { return deltaY; }
+    const float     getThickness()      const { return thickness; }
+
+protected:
+
+    NVstring dynamicMarking;
+    float    dx1;
+	float    dx2;
+    float    dy;
+	float    deltaY;
+    float    thickness;
+
+    static ListOfTPLs ltpls;
 };
 
 #endif

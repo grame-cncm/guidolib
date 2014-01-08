@@ -8,6 +8,7 @@
 #include <string>
 #include <stdlib.h>
 
+#include "GUIDOParse.h"
 #include "GUIDOEngine.h"
 #define MIDIEXPORT
 #include "GUIDO2Midi.h"
@@ -84,16 +85,17 @@ int main(int argc, char **argv)
 
 	GuidoErrCode err;
 	SVGSystem sys;
-	SVGDevice dev (cout, &sys);
+	SVGDevice dev(cout, &sys);
 	GuidoInitDesc id = { &dev, 0, 0, 0 };
 	err = GuidoInit(&id);
-	if (err != guidoNoErr) error (err);
+	if (err != guidoNoErr)
+        error(err);
 	
 	ARHandler arh;
 
     GuidoParser *parser = GuidoOpenParser();
 
-    std::ifstream ifs(infile, ios::in);
+    std::ifstream ifs(infile.c_str(), ios::in);
     if (!ifs)
         return 0;
 
@@ -101,8 +103,9 @@ int main(int argc, char **argv)
     streamBuffer << ifs.rdbuf();
     ifs.close();
 
-    err = GuidoNewParseString(parser, streamBuffer.str().c_str(), &arh);
-	if (err != guidoNoErr) error (err);
+    arh = GuidoString2AR(parser, streamBuffer.str().c_str());
+	if (arh)
+        error(err);
 
 /*
 	GuidoAR2MIDIFile operates using an ARHandler
@@ -114,15 +117,16 @@ int main(int argc, char **argv)
 	D.F. June 12 2013
 */
 	GRHandler grh;
-	GuidoLayoutSettings settings = {};
 	err = GuidoAR2GR( arh, 0, &grh);
 	if (err != guidoNoErr) error (err);
 
 	cout << "converting " << infile << " to " << outfile << endl;
-    err = GuidoAR2MIDIFile (arh, outfile.c_str(), 0);
+    err = GuidoAR2MIDIFile(arh, outfile.c_str(), 0);
 	GuidoFreeGR (grh);
 	GuidoFreeAR (arh);
-	if (err != guidoNoErr) error (err);
+
+	if (err != guidoNoErr)
+        error(err);
 
     GuidoCloseParser(parser);
 

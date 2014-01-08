@@ -1,5 +1,5 @@
-#ifndef GRNewTuplet_H
-#define GRNewTuplet_H
+#ifndef GRTuplet_H
+#define GRTuplet_H
 
 /*
   GUIDO Library
@@ -27,25 +27,25 @@ class GRSystem;
 /** \brief Graphical representation of a tuplet.
 */
 
-class GRNewTuplet : public GRPTagARNotationElement
+class GRTuplet : public GRPTagARNotationElement
 {
 
 	public:
 		// enum bracestate { BRACENONE = 0, BRACELEFT = 1, BRACERIGHT = 2 };
 
-		class GRNewTupletSaveStruct : public GRPositionTag::GRSaveStruct
+		class GRTupletSaveStruct : public GRPositionTag::GRSaveStruct
 		{
 			public:
-						GRNewTupletSaveStruct()  {}
-				virtual ~GRNewTupletSaveStruct() {}
+						GRTupletSaveStruct()  {}
+				virtual ~GRTupletSaveStruct() {}
 				
 				NVPoint p1;
 				NVPoint p2;
 				NVPoint textpos;
 		};
 
-						GRNewTuplet( GRStaff * inStaff, ARTuplet * artuplet );
-		virtual 		~GRNewTuplet();
+						GRTuplet( GRStaff * inStaff, ARTuplet * artuplet );
+		virtual 		~GRTuplet();
 
 		virtual void 	OnDraw( VGDevice & hdc ) const;
 		virtual void 	print() const;
@@ -56,7 +56,7 @@ class GRNewTuplet : public GRPTagARNotationElement
 		const ARTuplet * getARTuplet() const;
 		virtual GRPositionTag::GRSaveStruct * getNewGRSaveStruct() 
 			{
-				return new GRNewTupletSaveStruct; 
+				return new GRTupletSaveStruct; 
 			}
 
 			GDirection		mDirection;

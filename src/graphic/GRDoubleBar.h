@@ -35,6 +35,7 @@ public:
 
 protected:
     int   fLineNumber;
+    float fStaffThickness;
     float fSize;
 };
 

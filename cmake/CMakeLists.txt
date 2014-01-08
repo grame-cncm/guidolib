@@ -3,16 +3,14 @@
 #######################################
 project(guidolib)
 cmake_minimum_required(VERSION 2.6)
-if(CMAKE_CONFIGURATION_TYPES)
-	set(CMAKE_CONFIGURATION_TYPES Debug Release)
-endif()
 
+set (CMAKE_CONFIGURATION_TYPES Debug Release)
 set (target GUIDOEngine)
 set (statictarget SGUIDOEngine)
 #######################################
 # versions management
-set (VERSION 1.53)
-set (STRVERS "v.1.53")
+set (VERSION 1.52)
+set (STRVERS "v.1.52")
 set (GUIDOFWKVERS C)
 set (SOVERS 1)
 
@@ -20,11 +18,19 @@ if(UNIX)
 	add_definitions(-Wall -DGCC)
 endif(UNIX)
 
+
+#######################################
+# Options disabled by default
+option ( IOS 	"Generates project for iOS" off )
+option ( DIST 	"Compiles universal binaries (x86_64 i386) on MacOSX" off )
+option ( MIDIEXPORT "MIDI export support (requires MidiShareLight)" off)
+option ( STATICLIB  "Generates a static library (default for iOS)" off)
+
 if(APPLE)
 
 #######################################
 #   iOS support
-	if ( IOS STREQUAL "yes" )
+	if ( IOS )
 		message (STATUS "Generates project for iOS - Use -DIOS=no to change.")
 		set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "iPhoneOS")
 		set (CMAKE_OSX_ARCHITECTURES "armv6 armv7")
@@ -32,15 +38,16 @@ if(APPLE)
 		set (libtype STATIC)
 	else ()
 		message (STATUS "Generates Mac OS project- Use -DIOS=yes to change.")
-
 	 	#######################################
-		if (DIST STREQUAL "yes")
+		if (DIST)
 			message (STATUS "All architectures will be compiled - Use -DDIST=no to change.")
 			set (CMAKE_OSX_ARCHITECTURES "x86_64 i386")
 		else ()
 			message (STATUS "Only the current architecture will be compiled - Use -DDIST=yes to change.")
 		endif ()
 	add_definitions(-D_USE_QD_COORDINATES_ -compatibility_version 1.0.0)
+	set (CMAKE_C++_FLAGS -mmacosx-version-min=10.5)
+	set (CMAKE_LDFLAGS -mmacosx-version-min=10.5)
 	endif ()
 endif(APPLE)
 
@@ -183,7 +190,7 @@ else()
 				MACOSX_FRAMEWORK_BUNDLE_VERSION ${VERSION}
 				MACOSX_FRAMEWORK_BUNDLE_VERSION "A")
 
-	if (STATICLIB STREQUAL "yes")
+	if (STATICLIB)
 		message (STATUS "Static Guido lib will be generated - Use -DSTATICLIB=no to change.")
 		add_library(${statictarget} STATIC ${LIBCONTENT})
 	else ()

@@ -1,7 +1,17 @@
 # Universal binary on MAC
 #macx:QMAKE_MAC_SDK=macosx10.7
-#macx:CONFIG+= x86_64
-CONFIG += c++11
+
+macx:CONFIG+= i386 x86_64
+
+macx {
+	QMAKE_CXXFLAGS += -mmacosx-version-min=10.7
+	system( [ $(uname -r | cut -d. -f1) -gt 12 ] ):CONFIG+=CPP11
+	CPP11 {
+		message ("using C++11")
+		CONFIG += c++11
+	} 
+}
+
 win32: {
 	contains(QMAKE_HOST.arch, x86): {
 	QMAKE_LFLAGS *= /MACHINE:X86

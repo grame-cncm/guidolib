@@ -34,7 +34,6 @@ using namespace std;
 #include "ARColor.h"
 #include "ARAutoBeam.h"
 #include "ARBeamState.h"
-#include "ARDynamics.h"
 #include "ARNewSystem.h"
 #include "ARNote.h"
 #include "ARMeter.h"
@@ -5295,7 +5294,6 @@ void ARMusicalVoice::doAutoGlissando()
 
 			// the mPosTagList owns the ties!
 			mPosTagList->RemoveElement(glissando);
-
 		}
 	}
 

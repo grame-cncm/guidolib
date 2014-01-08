@@ -25,7 +25,7 @@ public:
 
 				ARGlissando();
 				ARGlissando(const ARGlissando * glissando);
-	virtual		~ARGlissando(void);
+	virtual		~ARGlissando();
 
 	
 	virtual void setTagParameterList(TagParameterList & tlist);
@@ -45,13 +45,13 @@ public:
 	bool isFill() {return mFill;}
 	
 protected:
-	const TagParameterFloat * dx1;
-	const TagParameterFloat * dy1;
-	const TagParameterFloat * dx2;
-	const TagParameterFloat * dy2;
-	const TagParameterFloat * fThickness;
-	const TagParameterString * fLineStyle;
-	const TagParameterString * fill;
+	const TagParameterFloat *dx1;
+	const TagParameterFloat *dy1;
+	const TagParameterFloat *dx2;
+	const TagParameterFloat *dy2;
+	const TagParameterFloat *fThickness;
+	const TagParameterString *fLineStyle;
+	const TagParameterString *fill;
 	bool mWavy;
 	bool mFill;
 	bool mParSet;

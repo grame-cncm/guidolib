@@ -374,6 +374,7 @@ GDeviceWin32::SetTextFont( const VGFont * inObj )
 	}
 }
 
+
 // --------------------------------------------------------------
 const VGFont *
 GDeviceWin32::GetTextFont() const
@@ -670,10 +671,8 @@ GDeviceWin32::CopyPixels( int xDest, int yDest, int dstWidth, int dstHeight,
 void
 GDeviceWin32::SetScale( float x, float y )
 {
-//	const float prevX	= mScaleX;
-//	const float prevY	= mScaleY;
-	mScaleX				= x;
-	mScaleY				= y;
+	mScaleX	= x;
+	mScaleY	= y;
 	Win32ApplyTransform();
 }
 

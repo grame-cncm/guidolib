@@ -32,12 +32,7 @@ public:
 	virtual bool MatchEndTag(const char * s);
 
 
-	ARAccelerando() : ARMTParameter()
-	{
-		rangesetting = ONLY;
-		s1 = 0;
-		s2 = 0;
-	}
+	ARAccelerando();
 
 	virtual ~ARAccelerando();
 
@@ -62,8 +57,6 @@ protected:
 	TagParameterString * font;
 	TagParameterString * fattrib;
 	TagParameterFloat  * fsize;
-	// TagParameterFloat  *fsize;
-	// TagParameterInt	  *fnumber;
 
 
 	// this is important for allowed
