@@ -311,7 +311,6 @@ int main(int argc, char *argv[])
 	//----------------------------------------------------
 	p.pageFormat = 0;
 	p.format = strToFormat (options.imageFormat);			// the image output format
-	GuidoLayoutSettings ls = options2layout (options);
 	p.layout = options2layout (options);					// the layout options (if any)
 	p.pageIndex = 0;										// page index starts at 0 (I guess it means all pages - to be checked)
 	p.sizeConstraints = QSize(options.width , options.height); // size constraints
