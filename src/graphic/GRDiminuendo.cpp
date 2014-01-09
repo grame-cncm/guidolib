@@ -12,6 +12,8 @@
 
 */
 
+#include <string.h>
+
 #include "ARDiminuendo.h"
 #include "VGDevice.h"
 #include "GRStaff.h"

@@ -12,6 +12,8 @@
 
 */
 
+#include <string.h>
+
 #include "TagParameterList.h"
 #include "TagParameterFloat.h"
 #include "TagParameterString.h"
