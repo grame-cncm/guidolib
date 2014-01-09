@@ -1,0 +1,527 @@
+\documentclass[a4paper]{article}
+\usepackage{titling}
+\usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage{cprotect}
+\usepackage{longtable}
+
+
+\title{The Guido HTTPD Server}
+\author{M Solomon, D Fober}
+\date{}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The Guido HTTPD Server is a RESTful server that exposes many elements of the public GUIDO Engine API to clients.  This article resumes the core tenants of the REST architecture and goes on to explain the functioning of the GUIDO server with numerous examples, concluding with potential applications of the server.
+\end{abstract}
+
+As client-server models for data processing, visualizing and analyzing become more widespread in mobile computing (YouTube, Instagram, SoundCloud), the music engraving community has yet to implement a client-server model that rapidly executes the compilation and information retrieval of musical scores.  The only existing tools (LilyBin, WebLily) are opaque and limited in the use of separate server-side executables to process user information.  To remedy this, a RESTful server has been implemented that stores GUIDO Music Notation Format and responds to queries about this notation.  By accessing the GUIDO Engine API directly, it is able to be rapid and informative without retaining information about the client's state.  After describing the core tenants of the RESTful architecture upon which the GUIDO HTTPD server is modeled, this article presents a detailed overview of the server, concluding with several application possibilities.
+
+%---------------------------------------
+\section{Representational state transfer}
+The Representational state transfer (REST) standard is a server architecture style first elaborated in 2000 \cite{Fielding00}.  The REST architecture is elaborated as a response to existing hypermedia systems and is intended as a set of constraints to facilitate exchange in these systems.  The standard is based on a traditional client-server model with the design trade-off that the server is \emph{stateless}, meaning that all of the information required to process a request is contained in the request itself and the server does not need to store intermediary states.  In order to speed up interaction with the server, the REST architecture calls for client-side caching of data, which can potentially eliminate certain redundant server requests.  It also calls for a uniform interface, harmonizing all applications' interactions with the server at the expense of application-specific interaction models that could speed up exchanges.  Layering is possible in this model, with intermediary servers translating various forms of shorthand into standard server commands.  With this layering comes the constraint that exchanging agents cannot ``see'' beyond the layer with which they are communicating.  Like other aspects of REST, this is intended to encapsulate all information in a single request made to a single agent.  As the burden on the client to be server-compliant is high in REST, the standard provides an optional constraint of code-on-demand to be downloaded from the server (scripts, applets, etc.) to ease client-side software development.\par
+Certain specific architectural elements are put into place in order to facilitate the above-described architecture  In addition to the transferring of data, REST calls for the transferring of meta-data about a server response.  This allows for the client side to have information about how to de-encode the response without needing to send specific de-encoding instructions.  REST encourages resource requests that favor the retrieval of conceptually relevant entities rather than specific entities at a point in time.  For example, a request to the server for ``best movies of 1964'' or ``weather in Lyon'' should change with time rather than pointing to an arbitrary entity responding to this request at a given time.  Requests to the server should also specify the nature of the representation of these responses.\par
+A server compliant with the REST architecture is said to be a RESTful server.
+
+%---------------------------------------
+\section{The GUIDO HTTPD server}
+The GUIDO Hypertext Transfer Protocol Daemon (HTTPD) server is an austerely RESTful server that compiles strings written in the GUIDO Music Notation (GMN) Format and reports to the client several representations of this data.  It accepts user requests via two main methods of the HTTP protocol: GET, used to retrieve information about elements on the server, and POST, used to place elements on the server.
+\subsection{The POST method}
+POST, as implemented by the GUIDO server, is RESTful insofar as it does not save any information about the user state and only saves information sent by the user.\par
+Assuming that a GUIDO HTTPD server is running on the subdomain \break \verb=http://guido.grame.fr= on port \verb=8000=, a POST request containing GMN code \verb=[a b c d]= is sent via \verb=curl= as follows:
+\begin{quote}
+\begin{verbatim}
+curl -d"data=[a b c d]" http://guido.grame.fr:8000
+\end{verbatim}
+\end{quote}
+Assuming that the GMN code is valid, response, in JSON, gives the user a unique identifier generated using SHA-1:
+\begin{quote}
+\begin{verbatim}
+{
+  "ID": "07a21ccbfe7fe453462fee9a86bc806c8950423f"
+}
+\end{verbatim}
+\end{quote}
+This is the server's internal representation of the GMN code and used for all subsequent requests to the server.  To access it, it is appended onto the URI.  The following is a simple request using the SHA-1 tag:
+\begin{quote}
+\begingroup
+\fontsize{7.5pt}{12pt}\selectfont
+\begin{verbatim}
+curl http://guido.grame.fr:8000/07a21ccbfe7fe453462fee9a86bc806c8950423f
+\end{verbatim}
+\endgroup
+\end{quote}
+It results in the image seen in Figure~\ref{fig:figure1}.
+\begin{figure}[h]
+  \centering
+    \includegraphics[width=0.5\textwidth]{figure1}
+  \cprotect\caption{\label{fig:figure1}Score with SHA-1 tag \verb=07a21ccbfe7fe453462fee9a86bc806c8950423f=.}
+\end{figure}
+
+
+\subsection{The GET method}
+True to RESTful form, the server does not store internally any information about user-requests sent via the GET method save an optional Apache-style log file with various levels of detail possible.  The main return type is JSON for all queries related to information about a score, MIDI for midi realizations of the score, and PNG for all queries asking for visual representations of the score itself.  The latter is also possible in JPEG and SVG.\par
+The GUIDO HTTPD server attempts to expose as much of the public API of the GUIDO Engine as possible, focussing on one-to-one equivalencies with its functions when possible.  Arguments are passed to these functions via optional key-value pairs in the URI.  Defaults are provided for all key-value pairs in case of omission.  All commands are appended to a unique SHA-1 identifier for uploaded GMN code.
+\subsubsection{pagescount}
+The command pagescount returns the number of pages in a score.  It exposes the GUIDO Engine API method \verb=GuidoGetPageCount=.  For example, the request:
+\begin{quote}
+\begingroup
+\fontsize{7.5pt}{12pt}\selectfont
+\begin{verbatim}
+curl http://guido.grame.fr:8000/07a21ccbfe7fe453462fee9a86bc806c8950423f/pagecount
+\end{verbatim}
+\endgroup
+\end{quote}
+yields the following result:
+\begin{quote}
+\begin{verbatim}
+{
+  "07a21ccbfe7fe453462fee9a86bc806c8950423f": {
+    "pagescount": 1
+  }
+}
+\end{verbatim}
+\end{quote}
+
+\subsubsection{voicescount}
+The command voicescount returns the number of voices in a score.  It exposes the GUIDO Engine API method \verb=GuidoCountVoices=.  For example, the request:
+\begin{quote}
+\begingroup
+\fontsize{7.5pt}{12pt}\selectfont
+\begin{verbatim}
+curl http://guido.grame.fr:8000/07a21ccbfe7fe453462fee9a86bc806c8950423f/voicescount
+\end{verbatim}
+\endgroup
+\end{quote}
+yields the following result:
+\begin{quote}
+\begin{verbatim}
+{
+  "07a21ccbfe7fe453462fee9a86bc806c8950423f": {
+    "voicescount": 1
+  }
+}
+\end{verbatim}
+\end{quote}
+
+\subsubsection{duration}
+The command duration returns the duration of a score expressed as a rational number.  It exposes the GUIDO Engine API method \verb=GuidoDuration=.  For example, the request:
+\begin{quote}
+\begingroup
+\fontsize{7.5pt}{12pt}\selectfont
+\begin{verbatim}
+curl http://guido.grame.fr:8000/07a21ccbfe7fe453462fee9a86bc806c8950423f/duration
+\end{verbatim}
+\endgroup
+\end{quote}
+yields the following result:
+\begin{quote}
+\begin{verbatim}
+{
+  "07a21ccbfe7fe453462fee9a86bc806c8950423f": {
+    "duration": "\"1/1\""
+  }
+}
+\end{verbatim}
+\end{quote}
+
+\subsubsection{pageat}
+The command pageat returns the page given a specific date, expressed as a rational number.  It exposes the GUIDO Engine API method \verb=GuidoFindPageAt=.  For example, the request:
+\begin{quote}
+\begingroup
+\fontsize{7.5pt}{12pt}\selectfont
+\begin{verbatim}
+curl http://guido.grame.fr:8000/07a21ccbfe7fe453462fee9a86bc806c8950423f/pageat?date=1/4
+\end{verbatim}
+\endgroup
+\end{quote}
+yields the following result:
+\begin{quote}
+\begin{verbatim}
+{
+  "07a21ccbfe7fe453462fee9a86bc806c8950423f": {
+    "page": 1,
+    "date": "1/4"
+  }
+}
+\end{verbatim}
+\end{quote}
+
+\subsubsection{pagedate}
+The command pagedate returns the date of a specific page's start point.  It exposes the GUIDO Engine API method \verb=GuidoGetPageDate=.  For example, the request:
+\begin{quote}
+\begingroup
+\fontsize{7.5pt}{12pt}\selectfont
+\begin{verbatim}
+curl http://guido.grame.fr:8000/07a21ccbfe7fe453462fee9a86bc806c8950423f/pagedate?page=1
+\end{verbatim}
+\endgroup
+\end{quote}
+yields the following result:
+\begin{quote}
+\begin{verbatim}
+{
+  "07a21ccbfe7fe453462fee9a86bc806c8950423f": {
+    "page": 1,
+    "date": "\"0/1\""
+  }
+}
+\end{verbatim}
+\end{quote}
+
+\subsubsection{pagemap}
+The command pagemap returns a map of the space each page takes up in 2D space (represented by a box) and time space (represented as an interval of rational numbers).  It exposes the GUIDO Engine API method \verb=GuidoGetPageMap=.  For example, the request:
+\begin{quote}
+\begingroup
+\fontsize{7.5pt}{12pt}\selectfont
+\begin{verbatim}
+curl http://guido.grame.fr:8000/07a21ccbfe7fe453462fee9a86bc806c8950423f/pagemap
+\end{verbatim}
+\endgroup
+\end{quote}
+yields the following result:
+\begin{quote}
+\begin{verbatim}
+{
+  "07a21ccbfe7fe453462fee9a86bc806c8950423f": {
+    "pagemap": [
+      {
+        "graph": {
+          "left": 404.073,
+          "top": 404.073,
+          "right": 2595.51,
+          "bottom": 983.495
+        },
+        "time": {
+          "start": "\"0/1\"",
+          "end": "\"1/1\""
+        }
+      }
+    ]
+  }
+}
+\end{verbatim}
+\end{quote}
+
+\subsubsection{systemmap}
+The command systemmap returns a map of the space each element of a system takes up in 2D space (represented by a box) and time space (represented as an interval of rational numbers).  It exposes the GUIDO Engine API method \verb=GuidoGetSystemMap=.  For example, the request:
+\begin{quote}
+\begingroup
+\fontsize{7.5pt}{12pt}\selectfont
+\begin{verbatim}
+curl http://guido.grame.fr:8000/07a21ccbfe7fe453462fee9a86bc806c8950423f/systemmap
+\end{verbatim}
+\endgroup
+\end{quote}
+yields the following result:
+\begin{quote}
+\begin{verbatim}
+{
+  "07a21ccbfe7fe453462fee9a86bc806c8950423f": {
+    "systemmap": [
+      {
+        "graph": {
+          "left": 916.18,
+          "top": 404.073,
+          "right": 1323.23,
+          "bottom": 983.495
+        },
+        "time": {
+          "start": "\"0/1\"",
+          "end": "\"1/4\""
+        }
+      },
+      {
+        "graph": {
+          "left": 1323.23,
+          "top": 404.073,
+          "right": 1730.28,
+          "bottom": 983.495
+        },
+        "time": {
+          "start": "\"1/4\"",
+          "end": "\"1/2\""
+        }
+      },
+      {
+        "graph": {
+          "left": 1730.28,
+          "top": 404.073,
+          "right": 2137.33,
+          "bottom": 983.495
+        },
+        "time": {
+          "start": "\"1/2\"",
+          "end": "\"3/4\""
+        }
+      },
+      {
+        "graph": {
+          "left": 2137.33,
+          "top": 404.073,
+          "right": 2595.51,
+          "bottom": 983.495
+        },
+        "time": {
+          "start": "\"3/4\"",
+          "end": "\"1/1\""
+        }
+      }
+    ]
+  }
+}
+\end{verbatim}
+\end{quote}
+
+\subsubsection{staffmap}
+The command staffmap returns a map of the space each element of a given staff takes up in 2D space (represented by a box) and time space (represented as an interval of rational numbers).  It exposes the GUIDO Engine API method \verb=GuidoGetStaffMap=.  For example, the request:
+\begin{quote}
+\begingroup
+\fontsize{7.5pt}{12pt}\selectfont
+\begin{verbatim}
+curl http://guido.grame.fr:8000/07a21ccbfe7fe453462fee9a86bc806c8950423f/staffmap?staff=1
+\end{verbatim}
+\endgroup
+\end{quote}
+yields the following result:
+\begin{quote}
+\begin{verbatim}
+{
+  "07a21ccbfe7fe453462fee9a86bc806c8950423f": {
+    "staffmap": [
+      {
+        "graph": {
+          "left": 916.18,
+          "top": 497.803,
+          "right": 1323.23,
+          "bottom": 838.64
+        },
+        "time": {
+          "start": "\"0/1\"",
+          "end": "\"1/4\""
+        }
+      },
+      {
+        "graph": {
+          "left": 1323.23,
+          "top": 497.803,
+          "right": 1730.28,
+          "bottom": 838.64
+        },
+        "time": {
+          "start": "\"1/4\"",
+          "end": "\"1/2\""
+        }
+      },
+      {
+        "graph": {
+          "left": 1730.28,
+          "top": 497.803,
+          "right": 2137.33,
+          "bottom": 838.64
+        },
+        "time": {
+          "start": "\"1/2\"",
+          "end": "\"3/4\""
+        }
+      },
+      {
+        "graph": {
+          "left": 2137.33,
+          "top": 497.803,
+          "right": 2595.51,
+          "bottom": 838.64
+        },
+        "time": {
+          "start": "\"3/4\"",
+          "end": "\"1/1\""
+        }
+      }
+    ]
+  }
+}
+\end{verbatim}
+\end{quote}
+
+\subsubsection{voicemap}
+The command voicemap returns a map of the space each element of a given voice takes up in 2D space (represented by a box) and time space (represented as an interval of rational numbers).  It exposes the GUIDO Engine API method \verb=GuidoGetVoiceMap=.  For example, the request:
+\begin{quote}
+\begingroup
+\fontsize{7.5pt}{12pt}\selectfont
+\begin{verbatim}
+curl http://guido.grame.fr:8000/07a21ccbfe7fe453462fee9a86bc806c8950423f/voicemap?voice=1
+\end{verbatim}
+\endgroup
+\end{quote}
+yields the following result:
+\begin{quote}
+\begin{verbatim}
+{
+  "07a21ccbfe7fe453462fee9a86bc806c8950423f": {
+    "voicemap": [
+      {
+        "graph": {
+          "left": 916.18,
+          "top": 497.803,
+          "right": 1323.23,
+          "bottom": 838.64
+        },
+        "time": {
+          "start": "\"0/1\"",
+          "end": "\"1/4\""
+        }
+      },
+      {
+        "graph": {
+          "left": 1323.23,
+          "top": 497.803,
+          "right": 1730.28,
+          "bottom": 838.64
+        },
+        "time": {
+          "start": "\"1/4\"",
+          "end": "\"1/2\""
+        }
+      },
+      {
+        "graph": {
+          "left": 1730.28,
+          "top": 497.803,
+          "right": 2137.33,
+          "bottom": 838.64
+        },
+        "time": {
+          "start": "\"1/2\"",
+          "end": "\"3/4\""
+        }
+      },
+      {
+        "graph": {
+          "left": 2137.33,
+          "top": 497.803,
+          "right": 2595.51,
+          "bottom": 838.64
+        },
+        "time": {
+          "start": "\"3/4\"",
+          "end": "\"1/1\""
+        }
+      }
+    ]
+  }
+}
+\end{verbatim}
+\end{quote}
+
+\subsubsection{timemap}
+The command timemap returns a map of the written time of objects in the score to their performance time, expanding out repeats, taking \emph{Da Cappos} and accounting for various inflections in tempo.  It exposes the GUIDO Engine API method \verb=GuidoGetTimeMap=.  For example, the request:
+\begin{quote}
+\begingroup
+\fontsize{7.5pt}{12pt}\selectfont
+\begin{verbatim}
+curl http://guido.grame.fr:8000/07a21ccbfe7fe453462fee9a86bc806c8950423f/timemap
+\end{verbatim}
+\endgroup
+\end{quote}
+yields the following result:
+\begin{quote}
+\begin{verbatim}
+{
+  "07a21ccbfe7fe453462fee9a86bc806c8950423f": {
+    "timemap": [
+      {
+        "score": {
+          "start": "\"0/1\"",
+          "end": "\"1/4\""
+        },
+        "perf": {
+          "start": "\"0/1\"",
+          "end": "\"1/4\""
+        }
+      },
+      {
+        "score": {
+          "start": "\"1/4\"",
+          "end": "\"1/2\""
+        },
+        "perf": {
+          "start": "\"1/4\"",
+          "end": "\"1/2\""
+        }
+      },
+      {
+        "score": {
+          "start": "\"1/2\"",
+          "end": "\"3/4\""
+        },
+        "perf": {
+          "start": "\"1/2\"",
+          "end": "\"3/4\""
+        }
+      },
+      {
+        "score": {
+          "start": "\"3/4\"",
+          "end": "\"1/1\""
+        },
+        "perf": {
+          "start": "\"3/4\"",
+          "end": "\"1/1\""
+        }
+      }
+    ]
+  }
+}
+\end{verbatim}
+\end{quote}
+
+\subsubsection{midi}
+The command midi returns a MIDI of a GUIDO score.  It exposes the GUIDO Engine API method \verb=GuidoAR2MIDIFile=.  For example, the request:
+\begin{quote}
+\begingroup
+\fontsize{7.5pt}{12pt}\selectfont
+\begin{verbatim}
+curl http://guido.grame.fr:8000/07a21ccbfe7fe453462fee9a86bc806c8950423f/midi
+\end{verbatim}
+\endgroup
+\end{quote}
+returns a MIDI recording of the score.
+
+\subsection{Page Formatting}
+Visual representations of a GUIDO score requested via GET can be altered via a number of optional parameters.  For example:
+\begin{quote}
+\begingroup
+\fontsize{7.5pt}{12pt}\selectfont
+\begin{verbatim}
+curl http://guido.grame.fr:8000/07a21ccbfe7fe453462fee9a86bc806c8950423f/?topmargin=0.0
+\end{verbatim}
+\endgroup
+\end{quote}
+will set the top margin of the resulting PNG to 0.  The following table summarizes the various formatting and layout options one can provide to the server along with the current defaults and their units.  Note that the GUIDO unit represents an arbitrary internal unit that must be experimented with to fine tune.\par
+\begin{longtable}{|l|p{4cm}|l|l|}\hline
+Value & Role & Default & Unit \\\hline
+\verb=page= & a page number & 1 & page \\\hline
+\verb=width= & the drawing area width & 15 & cm \\\hline
+\verb=height= & the drawing area height & 5 & cm \\\hline
+\verb=marginleft= & the left margin & 1 & cm \\\hline
+\verb=marginright= & the right margin & 1 & cm \\\hline
+\verb=margintop= & the top margin & 0.5 & cm \\\hline
+\verb=marginbottom= & the bottom margin & 0.5 & cm \\\hline
+\verb=format= & image format & png & png/jpg/svg \\\hline
+\verb=resize= & resize the page to the image & yes & yes/no \\\hline
+\verb=sysDistance= & distance between systems & 75 & GUIDO \\\hline
+\verb=sysDistribution= & controls systems distribution & auto & auto/always/never\\\hline
+\verb=sysDistribLimit= & maximum distance allowed between two systems for automatic distribution mode & 0.25 & fraction of page \\\hline
+\verb=force= & force in the Space-Force function & 750.0 & GUIDO \\\hline
+\verb=spring= & spring stiffness & 1.1 & GUIDO \\\hline
+\verb=neighborhoodSpacing= & should we use the neighborhood spacing algorithm? & no & yes/no \\\hline
+\verb=optimalPageFill= & should we use the optimal page fill algorithm & yes & yes/no\\\hline
+\end{longtable}
+\section{Applications}
+In keeping with the REST architecture, the GUIDO server is application agnostic, favoring generality over specificity.  As a result, it is likely ill-suited for direct end-user queries and can instead be buffered by intermediary layers used to interact with users.  As mobile music making becomes increasingly common, the server is intended as an alternative to embarking libGUIDOEngine with mobile applications.  In addition to shielding developers and client-side users from build problems with mobile platform updates, outsourcing to a server allows multiple projects to mutualize a rendering engine and share information about usage.\par
+The process of elaborating the GUIDO server as a RESTful server is also a first step towards a more robust project to implement a wiki-like crowd music engraving platform that uses at its core a restful server storing data in various domain-specific languages.
+
+\bibliographystyle{plain}
+\bibliography{refs}
+\end{document}
