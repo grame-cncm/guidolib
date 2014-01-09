@@ -16,6 +16,9 @@
 The Guido HTTPD Server is a RESTful server that exposes many elements of the public GUIDO Engine API to clients.  This article resumes the core tenants of the REST architecture and goes on to explain the functioning of the GUIDO server with numerous examples, concluding with potential applications of the server.
 \end{abstract}
 
+
+%---------------------------------------
+\section{Introduction}
 As client-server models for data processing, visualizing and analyzing become more widespread in mobile computing (YouTube, Instagram, SoundCloud), the music engraving community has yet to implement a client-server model that rapidly executes the compilation and information retrieval of musical scores.  The only existing tools (LilyBin, WebLily) are opaque and limited in the use of separate server-side executables to process user information.  To remedy this, a RESTful server has been implemented that stores GUIDO Music Notation Format and responds to queries about this notation.  By accessing the GUIDO Engine API directly, it is able to be rapid and informative without retaining information about the client's state.  After describing the core tenants of the RESTful architecture upon which the GUIDO HTTPD server is modeled, this article presents a detailed overview of the server, concluding with several application possibilities.
 
 %---------------------------------------
