@@ -44,8 +44,9 @@ Note for Android:
       export PATH=$PATH:$PATH_TO_SDK/platform-tools
       export PATH=$PATH:$PATH_TO_STANDALONE_TOOLCHAIN/bin
 
-    Read the short README in the android-apps folder for instructions on
-    how to compile android-cairo.
+    Read the first part README.md in the android-apps/android-cairo folder
+    for instructions on how to compile android-cairo. This must be done
+    ***BEFORE*** any of the cmake stuff below.
 
     Then, in your build directory, make an android folder.
     From this folder, call:
