@@ -46,10 +46,6 @@ GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
 	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
 	mStartEndList.AddTail(sse);
 
-	float curLSPACE = LSPACE;
-	if (p_staff)
-		curLSPACE = p_staff->getStaffLSPACE();
-
     st->positionString = NVstring();
     st->bitmap = NULL;
 
