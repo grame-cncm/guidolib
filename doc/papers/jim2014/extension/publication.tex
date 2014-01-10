@@ -1,13 +1,17 @@
-\documentclass[a4paper,10pt,twocolumn]{article}
 
+\documentclass{article}
+\usepackage{jim,amsmath}
 \usepackage[utf8]{inputenc}
+\usepackage[francais]{babel}
 \usepackage[T1]{fontenc}
-\usepackage{verbatim} 
-\usepackage{fullpage}
+%\usepackage{pxfonts}
+%\usepackage{graphicx}
+
+%\usepackage{verbatim} 
+%\usepackage{fullpage}
 \usepackage{xcolor,graphicx}
-\usepackage[french, english]{babel}
-\usepackage{indentfirst}
-\usepackage{fancyvrb}
+%\usepackage{indentfirst}
+%\usepackage{fancyvrb}
 \usepackage{comment}
 
 
@@ -16,10 +20,14 @@
 %pbk
 %phv
 
-\author{Colas Decron, Camille Le Roi}
 \title{\centering Extension de \textsc{Guido} à la notation musicale contemporaine}
 
-\date{ Février - décembre 2013}
+%\date{ Février - décembre 2013}
+
+\threeauthors
+  {Dominique Fober} {Grame \\ fober@grame.fr}
+  {Colas Decron} {Grame \\ cdecron@grame.fr}
+  {Camille Le Roi} {Grame \\ cleroi@grame.fr}
 
 \begin{document}
 
@@ -29,12 +37,11 @@
 
 \begin{abstract}
 
-\paragraph{}
 La librairie \textsc{Guido} offre un grand nombre de symboles musicaux correspondant aux plus larges besoins de l'écriture musicale. Elle fournit un moteur de rendu de partitions embarquable dans d'autres applications. Dans une volonté d'étendre cette librairie à la musique contemporaine, nous avons implémenté un ensemble de nouvelles notations jusqu'à présent pas, ou très sommairement, implémentées. L'objectif était de répondre aux demandes des compositeurs en ajoutant certaines notations de la manière la plus adaptée à l'écriture musicale, tout en laissant une large liberté à l'utilisateur.
 
 \end{abstract}
 
-\section{Introduction}
+\section{Introduction}\label{sec:introduction}
 
 % format
 % librairie
@@ -48,23 +55,20 @@ La librairie \textsc{Guido} offre un grand nombre de symboles musicaux correspon
 % Les logiciels d'aide à la composition musicale
 
 
-\paragraph{}
 Le format de notation musicale \textsc{Guido} (GMN) \cite{ref6} \cite{ref5} a été défini par H. Hoos et K. Hamel il y a plus de 10 ans. Il est très proche du format adopté par Lilypond \cite{ref7} mais il est apparu antérieurement. Le format GMN est un langage textuel de représentation de partitions musicales %. Il est basé sur un formalisme simple mais puissant, se concentrant sur les grands concepts musicaux (en opposition aux caractéristiques graphiques). L'approche développée par \textsc{Guido} repose sur l'idée d'adéquation, qui invite à noter simplement les concepts musicaux simples, et à ne recourir à des notations complexes que pour les notions musicales complexes.
 sur lequel est basée %sur le format GMN, 
 la librairie \textsc{Guido} \cite{ref5}. Cette dernière %fournit un puissant moteur de mise en page de partitions, qui 
 se différencie notamment des approches de type compilateur par sa capacité à être embarquée dans une application indépendante, et par la rapidité et l'efficacité du moteur de rendu, qui le rendent utilisable dans un contexte temps réel pour des partitions simples.
 
-\section{Format de Notation Guido}
+\section{Format de Notation Guido}\label{sec:format_notation}
 
 %\subsection{Concepts de base}
 
-\paragraph{}
 Le format de base de \textsc{Guido} recouvre les notes, silences, altérations, voix indépendantes, et les concepts les plus courants de la notation musicale comme les clefs, métriques, armures, articulations, liaisons, etc.
 Les notes sont représentées par leur nom, une altération optionnelle, un numéro d’octave optionnel et une durée optionnelle. Les accords sont décrits par des notes entre accolades séparées par des virgules. Un système (d'une ou plusieurs portées) est décrit par deux accolades, et une portée par deux crochets.
 
 %\subsection{Tags GUIDO}
 
-\paragraph{}
 Les \emph{tags} sont utilisés pour donner des informations musicales supplémentaires, comme les liaisons, clés, armures, etc. Un \emph{tag} a une des formes suivantes : 
 
 \begin{code}
@@ -75,16 +79,15 @@ Les \emph{tags} sont utilisés pour donner des informations musicales supplémen
 
 où param-list est une liste de paramètres (chaînes de caractères ou nombres), et où note-series est l'ensemble des notes ou accords concernés par le \emph{tag}, dans le cas d'un \emph{range-tag} (\emph{tag} possédant une durée).
 
-\section{Implémentation de nouvelles notations}
+\section{Implémentation de nouvelles notations}\label{sec:nouvelles_notations}
 
 %*****************TRILLES********************
-\subsection{Trilles}
+\subsection{Trilles}\label{subsec:trilles}
 
 % littérature
 % lilypond : e\trill f\trill ... sans vaguelette sinon \startTrillSpan ... \stopTrillSpan
 %\gardner Read
 
-\paragraph{}
 Un trille est \og{}un ornement musical qui consiste à alterner très rapidement la note de base (la note principale), sur laquelle est noté le trille, et la note située juste au-dessus\fg{}.
 % Citation wiki
 \\
@@ -93,13 +96,10 @@ Un trille est \og{}un ornement musical qui consiste à alterner très rapidement
 \textbackslash{}trill\textless{}param-list\textgreater{}(chord-series)
 \end{code}
 
-\paragraph{}
 Dans la version précédente de \textsc{Guido}, le trille à proprement parler n'était indiqué que par le symbole \textit{\textbf{tr}} placé au dessus de la note. Il paraissait pourtant important que la notation comprenne également la ligne ondulée du trille qui suit celui-ci et en indique la durée.
 
-\paragraph{}
 La question était alors de savoir jusqu'à quelle position devait se dessiner cette ligne, ainsi que les éventuelles variantes ou libertés données à l'utilisateur, et leur signification. En effet, comme ce symbole était déjà en partie implémenté, il fallait pouvoir lui offrir plus de souplesse sans pour autant en complexifier la notation.
 
-\paragraph{}
 D'après le livre "Behind Bars" d'Elaine Gould \cite{ref2}, la ligne du trille doit être dessinée depuis le signe \textit{\textbf{tr}} jusqu'au début du prochain évènement (la prochaine note ou le prochain soupir), sauf si celui-ci se situe directement après la prochaine barre de mesure, la ligne s'arrêtant dans ce cas à la barre elle-même. 
 
 \begin{figure}[h]
@@ -116,10 +116,8 @@ D'après le livre "Behind Bars" d'Elaine Gould \cite{ref2}, la ligne du trille d
 \label{fig:trill}
 \end{figure}
 
-\paragraph{}
 Il fallut également définir le comportement quant aux notes liées, soit de manière automatique de par la présence d'une barre de mesure, soit de manière explicitement décrite par l'utilisateur. La solution adoptée est de dessiner la ligne de trille jusqu'à la fin de la dernière note liée si celle-ci provient d'une note plus longue découpée automatiquement, mais de s'arrêter normalement à la prochaine note si la liaison a été explicitée par l'utilisateur, qui pourra alors décider de répéter le trille sur cette autre note, ou non. (Figure \ref{fig:trill})
 
-\paragraph{}
 % justifier l'intérêt de tr et anchor ?
 De plus, nous avons voulu donner la possibilité de choisir de dessiner ou non le signe \textit{\textbf{tr}}, ainsi que de pouvoir changer l'ancrage de la ligne pour le déplacer sur la tête de la note. Cela fut implémenté grâce aux options \textit{anchor} qui accepte comme valeurs "note" ou "tr" et \textit{tr} qui accepte comme valeurs "true" ou "false" (Figure \ref{fig:trillanchor}). Le reste des modifications graphiques pouvant être effectuées manuellement par l'utilisateur à travers les paramètres classiques de déplacement (\textit{dx}, \textit{dy}), de couleur (\textit{color}), et de taille (\textit{size}).
 
@@ -134,9 +132,8 @@ De plus, nous avons voulu donner la possibilité de choisir de dessiner ou non l
 \end{figure}
 
 %**************TETES DE NOTES*********************
-\subsection{Têtes de notes}
+\subsection{Têtes de notes}\label{subsec:tetes_notes}
 
-\paragraph{}
 Le \textsc{Grame} est en liaison avec un compositeur, Jean-Baptiste Barrière, qui avait besoin, pour une certaine œuvre qu'il était en train de composer, de nouveaux types de têtes de notes (ou \emph{noteheads}).
 Nous avons donc choisi de rajouter à la librairie \textsc{Guido} 6 nouveaux symboles (cf. figure \ref{fig:noteheads}) :
 %
@@ -154,21 +151,19 @@ Nous avons donc choisi de rajouter à la librairie \textsc{Guido} 6 nouveaux sym
 %\begin{code}
 %[ \textbackslash{}trill\textless{}tr="false", anchor="note"\textgreater{}( \{g\} \{a/2\} ) ]
 %\end{code}
-\includegraphics[width=7cm]{img/partitions/noteheads.pdf}
+\includegraphics[width=7cm]{img/noteheads.pdf}
 \caption{Les 6 nouveaux \emph{noteheads} ajoutés}
 \label{fig:noteheads}
 \end{figure}
 %
 Nous avons implémenté ces nouveaux éléments graphiques à l'aide du \emph{tag} \begin{code}noteFormat\end{code}, déjà existant. Celui-ci permet de modifier l'apparence des notes lui étant postérieures (couleur, taille, \emph{offset}, etc.). Nous avons donc rajouté un attribut, \emph{style}, permettant à l'utilisateur de choisir l'apparence du \emph{notehead} des notes postérieures :
 %
-\paragraph{}
 \begin{code}
 \textbackslash{}noteFormat\textless{}style="diamond"\textgreater{} a b
 
 \textbackslash{}noteFormat\textless{}style="round"\textgreater{} d/2 a g2
 \end{code}
 
-\paragraph{}
 Ce travail a été décomposé en plusieurs étapes:
 \begin{itemize}
     \item dessin vectoriel des nouveaux \emph{noteheads} (selon les ouvrages référents en matière de notation contemporaine);
@@ -176,25 +171,19 @@ Ce travail a été décomposé en plusieurs étapes:
     \item derniers ajustements nécessaires pour un bon rendu visuel.
 \end{itemize}
 
-\paragraph{}
 Quelques ajustements graphiques assez précis ont dû être réalisés selon chaque type de \emph{notehead} utilisé. Tout d'abord, les symboles n'ayant pas tous la même largeur, il a fallu insérer un offset horizontal, prenant notamment en compte l'orientation de la hampe et le type de tête de note. Plus compliqué, il a également fallu gérer cet offset pour les accords, ceux-ci pouvant posséder des \emph{noteheads} différents pour chacune de leurs notes.
 
-\paragraph{}
 Dans un second temps, nous avons dû adapter la longueur de la stem, celle-ci étant par exemple plus longue pour le type \emph{triangle} que pour le type \emph{reverseTriangle} (lorsque la hampe de la note est dirigée vers le haut).
 
-\paragraph{}
 Un des objectifs de \textsc{Guido} étant de laisser le plus de liberté possible au compositeur, il apparaît qu'un grand nombre de cas particuliers doit être géré par le développeur, ce qui a fait la difficulté de cette implémentation.
 
 %*****************CLUSTERS*************************
-\subsection{Clusters}
+\subsection{Clusters}\label{subsec:clusters}
 
-\paragraph{}
 Un \emph{cluster} est un accord musical contenant plusieurs notes consécutives. Il peut par exemple être effectué sur un piano, où il se joue en déclenchant des touches contiguës (en utilisant son avant-bras, par exemple).
 %
-\paragraph{}
 Dans la version précédente de \textsc{Guido}, le \emph{cluster} n'était pas implémenté, il a donc entièrement fallu réfléchir à la manière de le dessiner, de le rajouter à la librairie pour qu'il soit utilisable simplement tout en restant personnalisable, ainsi que de le faire interagir avec d'autres éléments.
 %
-\paragraph{}
 Côté utilisateur, nous avons choisi de l'invoquer de la manière suivante:
 \\
 %
@@ -213,12 +202,11 @@ les accords n'étant composés que de deux notes: les notes extrêmes du \emph{c
 \textbackslash{}cluster(\{a, d\} \{c/8, f\} \{a/2, d2\} \{f/1, c1\})
 ]
 \end{code}
-\includegraphics[width=7cm]{img/partitions/cluster.pdf}
+\includegraphics[width=7cm]{img/cluster.pdf}
 \caption{Le \emph{cluster}: nouvel élément de notation}
 \label{fig:cluster}
 \end{figure}
 %
-\paragraph{}
 Comme l'indique en partie la figure \ref{fig:cluster}, les choix, faits à partir d'ouvrages référents, ont été les suivants:
 \begin{itemize}
 	\item le \emph{cluster} est représenté par un rectangle;
@@ -226,7 +214,6 @@ Comme l'indique en partie la figure \ref{fig:cluster}, les choix, faits à parti
 	\item la hampe est conservée pour garder l'indication de la durée.
 \end{itemize}
 %
-\paragraph{}
 Nous avons également fait en sorte que l'utilisateur puisse personnaliser au maximum le nouvel élément de la librairie \textsc{Guido}. En plus des habituels \begin{code}size\end{code}, \begin{code}dx\end{code}/\begin{code}dy\end{code} et \begin{code}color\end{code}, les attributs \begin{code}hdx\end{code} et \begin{code}hdy\end{code} ont été implémentés afin de pouvoir introduire un décalage s'appliquant au \emph{notehead} seulement. Au niveau de l'interaction avec d'autres éléments et \emph{tags}, nous avons fait en sorte que \begin{code}noteFormat\end{code} agisse également sur le \emph{cluster}. D'autre part, la gestion du forçage de l'orientation des \emph{noteheads} a de même été prise en compte (\emph{tags} \begin{code}headsReverse\end{code}, \begin{code}headsLeft\end{code} et \begin{code}headsRight\end{code}) (cf. figure \ref{fig:clusterInteractions}).
 \\
 %
@@ -242,7 +229,7 @@ Nous avons également fait en sorte que l'utilisateur puisse personnaliser au ma
 \textbackslash{}cluster\textless{}"blue"\textgreater{}(\{d1/2, g\})
 ]
 \end{code}
-\includegraphics[width=7cm]{img/partitions/clusterInteractions.pdf}
+\includegraphics[width=7cm]{img/clusterInteractions.pdf}
 \caption{Les interactions avec d'autres \emph{tags}}
 \label{fig:clusterInteractions}
 \end{figure}
@@ -250,20 +237,17 @@ Nous avons également fait en sorte que l'utilisateur puisse personnaliser au ma
 
 
 %***************GLISSANDO************************
-\subsection{Glissandi}
+\subsection{Glissandi}\label{subsec:glissando}
 
 \begin{code}
 \textbackslash{}glissando\textless{}options\textgreater{}( notes )
 \end{code}
 \\
 
-\paragraph{}
 Dans un souci d'efficacité, il fallait pouvoir décrire un glissando seul ou plusieurs glissandi à la suite de la manière la plus simple et intuitive possible. 
 
-\paragraph{}
 Il paraissait important de donner la possibilité à l'utilisateur de n'écrire qu'une seule fois le \emph{tag} pour décrire plusieurs glissandi consécutifs, contrairement à la description de lilypond où le \emph{tag} doit être répété entre chaque note. Ainsi le \emph{range-tag} (\emph{tag} possédant une durée) apparaissait comme la meilleure solution pour décrire un ou plusieurs glissandi : toutes les notes comprises dans les parenthèses seraient prises en compte et liées les unes aux autres par des glissandi. L'algorithme de démultiplication d'un même \emph{tag} et de répartition de celui-ci est fortement inspiré de celui du tie, ou liaison de prolongation, qui doit également créer une liaison entre chacune des notes affectées.
 
-\paragraph{}
 Un choix devait également être fait quant à la répartition d'un glissando entre les différentes notes de deux accords, ne possédant eux-mêmes pas forcément le même nombre de notes. La solution proposée est celle qui nous a paru la plus intuitive : l'utilisateur choisit quelle note du premier accord sera liée avec quelle note du second. Pour ce faire, il lui suffit de les écrire dans l'ordre, c'est à dire : la première note de l'accord A sera liée à la première note de l'accord B, la seconde de A à la seconde de B\dots (Figure \ref{fig:glissandosimple})
 
 \begin{figure}[h]
@@ -278,7 +262,6 @@ Un choix devait également être fait quant à la répartition d'un glissando en
 \end{center}
 \end{figure}
 
-\paragraph{}
 L'unique problème avec ce choix peut se poser lors d'un conflit dans l'ordre imposé par le glissando précèdent et par le suivant, comme dans l'exemple Figure \ref{fig:glissando} . Il est alors possible de faire appel à une seconde voix, et au \emph{tag} \textbackslash{}staff \textless{}\textit{numero de portée}\textgreater{} qui pourra créer sur une même portée d'autres glissandi en parallèle et indépendants des premiers.
 
 
@@ -304,7 +287,6 @@ alors que l'on souhaite :
 \label{fig:glissando}
 \end{figure}
 
-\paragraph{}
 Enfin, dans le cas d'accords ou de clusters, et donc de plusieurs glissandi simultanés, il nous a paru intéressant, comme on peut le voir dans "Behind Bars" p.143 \cite{ref3} ou dans "Music Notation in the Twentieth Century" p.61 \cite{ref2}, de donner la possibilité de remplir l'espace entre ces glissandi grâce à une option "fill". Une certaine flexibilité peut être trouvée dans le dessin grâce aux options graphiques dx1, dx2, dy1, dy2, ainsi que thickness qui permettent de modifier l'aspect du glissando. (Figure \ref{fig:glissandofill})
 
 \begin{figure}[h]
@@ -320,10 +302,9 @@ Enfin, dans le cas d'accords ou de clusters, et donc de plusieurs glissandi simu
 \end{center}
 \end{figure}
 
-\newpage
 
 % *****************STAFFOFF/ON**********************
-\subsection{Tags staffOff / staffOn}
+\subsection{Tags staffOff / staffOn}\label{subsec:staffoff}
 
 \begin{code}
 [ ... \textbackslash{}staffOff ... \textbackslash{}staffOn ... ]
@@ -334,10 +315,8 @@ Enfin, dans le cas d'accords ou de clusters, et donc de plusieurs glissandi simu
 % lilypond : même principe, mais les notes et autres éléments se dessinent dans le vide
 % permet aussi de passer d'un style de portée à un autre (override staff) ex : 2 lignes...
 
-\paragraph{}
 L'implémentation de ce \emph{tag} vient du besoin de pouvoir faire disparaître et apparaître la partition, en particulier pour cacher une voix muette pendant un certain temps, et donc inutilement dessinée. (Figure \ref{fig:staffoffsimple}) 
 
-\paragraph{}
 Il est cependant généralisé à tous les éléments et toutes les voix de la partition et peut donc être utilisé à la guise et selon les fantaisies de l'utilisateur. (Figure \ref{fig:staffoffexotique})
 
 \begin{figure}[h]
@@ -356,7 +335,6 @@ Il est cependant généralisé à tous les éléments et toutes les voix de la p
 \label{fig:staffoffexotique}
 \end{figure}
 
-\paragraph{}
 Il fut important de définir les positions temporelles et graphiques correspondant aux positions dans la description textuelle, en particulier pour les éléments sans durée, dont la position était la même que le \emph{tag}. La solution implémentée consiste à faire disparaître tous les éléments inscrits après le \emph{tag} \textbackslash{}staffOff dans la description textuelle, et à préserver ceux décrits avant, même dans le cas d'éléments de durée nulle qui donc pourraient être considérés simultanés à l'arrivée du \emph{tag}. Pour plusieurs éléments simultanés, c'est donc bien l'ordre dans la description textuelle qui indiquera le comportement à adopter. Ainsi, écrire % exemple utile ? pertinent sans image ?
 
 \begin{center}
@@ -372,17 +350,14 @@ n'est pas équivalent à écrire
 \end{code} 
 \end{center}
 
-\paragraph{}
 Quant à la portée, elle commence, ou s'arrête, aux positions correspondant au début des éléments suivant le \emph{tag}.
 
-\newpage
 
 %*****************SYMBOLES*****************************
-\subsection{Symboles}
+\subsection{Symboles}\label{subsec:symboles}
 
 % colas /////////////
 
-\newpage
 
 % ***************** FEATHERED BEAM **********************
 \subsection{Liens de croches en soufflet (feathered beaming)}
@@ -392,7 +367,6 @@ Quant à la portée, elle commence, ou s'arrête, aux positions correspondant au
 \end{code}
 \\
 
-\paragraph{}
 Décrite par Gardner Read dans son ouvrage "Music Notation. A Manual of Modern Practice" \cite{ref8} comme "a highly graphic representation of rythmic flexibility"(p.94), cette notation contemporaine d'un accelerando ou ritardando à travers les liens de croches est, de manière générale, encore peu répandue dans les ouvrages de théorie, et se résume souvent à des cas simples, partant ou arrivant à la simple croche, c'est à dire partant ou arrivant vers un unique point. Pourtant il paraît intéressant de pouvoir offrir la possiblité aux compositeurs de décrire le passage entre n'importe quelles valeurs : d'une double-croche à une triple-croche, ou d'une quadruple-croche à une double-croche... (Figure \ref{fig:fbeamcomplex})
 
 \begin{figure}[h]
@@ -408,7 +382,7 @@ Décrite par Gardner Read dans son ouvrage "Music Notation. A Manual of Modern P
 % \featherDurations #(ly:make-moment 2 1)
 % { c16[ c c c c c c c] }
 
-\paragraph{}
+%\paragraph{}
 On remarque que, même dans un ouvrage tel que celui d'Elaine Gould \cite{ref2}, peu de détails sont donnés sur cette notation, et on se heurte rapidement à des incohérences telles que celle de la figure \ref{fig:incoherence} tirée de "Behind Bars" : on veut faire tenir en un temps une croche et quatre notes de durées inférieures à la croche mais supérieures à la triple-croche. 
 
 \begin{figure}[h]
@@ -418,14 +392,11 @@ On remarque que, même dans un ouvrage tel que celui d'Elaine Gould \cite{ref2},
 \label{fig:incoherence}
 \end{figure}
 
-\paragraph{}
 Ce manque d'une exacte cohérence entre tempo et aspect graphique est également souligné dans "Music Notation in the Twentieth Century" de Kurt Stone \cite{ref3} : "Besides, the gradual increase or decrease in the number of beams makes exact indications of beat-units impossible" (p.124).
 
-\paragraph{}
 Ainsi on voit l'importance des choix de design de ce symbole, sur la manière de le décrire textuellement, de le dessiner en particulier dans le cas de plusieurs voix simultanés, et de manière générale sur la liberté laissée à l'utilisateur.
 \\
 
-\paragraph{}
 Concernant les possibilités de description données à l'utilisateur. Nous avons vu que plusieurs critères pouvaient intervenir dans la description, et devaient pouvoir être imposés par l'utilisateur. Des paramètres qui peuvent être incohérents entre eux :
 \begin{itemize}
 \item le nombre de notes dans le groupe,
@@ -434,7 +405,6 @@ Concernant les possibilités de description données à l'utilisateur. Nous avon
 \item les durées de départ et d'arrivée qui définissent l'aspect graphique du feathered beam.
 \end{itemize}
 
-\paragraph{}
 Ces différents niveaux de description nous poussent à faire une claire distinction entre l'aspect temporel et l'aspect graphique de notre groupe de notes.  Il a été décidé de laisser au compositeur la liberté de donner à son feathered beam l'aspect graphique qu'il désire, indépendamment des durées internes de ses notes. Il pourra ainsi jouer sur les espacements entre notes, sur le nombre de notes, et sur la durée totale de manière "classique" en imposant à chaque note une durée, et en veillant à ce que la somme de toutes les notes corresponde à la durée totale souhaitée. Cette durée totale peut être indiquée sur la partition grâce au paramètre \textit{drawDuration} (Figure \ref{fig:fbeamduree}).
 
 \begin{figure}[h]
@@ -449,10 +419,8 @@ Ces différents niveaux de description nous poussent à faire une claire distinc
 \label{fig:fbeamduree}
 \end{figure}
 
-\paragraph{}
 Sans plus d'indication de sa part, l'aspect graphique suivra les durées réelles des notes et prendra comme points de départ et d'arrivée les durées des première et dernière notes.  C'est le cas de la Figure \ref{fig:fbeamduree}.
 
-\paragraph{}
 En revanche, le paramètre \textit{durations} pourra lui permettre d'imposer un aspect graphique tout autre, lui donnant ainsi la possibilité d'indiquer à l'interprète un changement de tempo plus ou moins important, pas forcément cohérent avec les durées intrinsèques des notes, mais ayant du sens dans l'interprétation (Cf Figure \ref{fig:utilisateur}).
 
 \begin{comment}
@@ -484,7 +452,6 @@ Ainsi, les deux descriptions suivantes sont valides, mais pas équivalentes :
 \label{fig:utilisateur}
 \end{figure}
 
-\paragraph{}
 Dans un désir de simplicité, il a été décidé de décrire par un seul \emph{tag} un seul groupe de notes liées, correspondant à un point de départ et un point d'arrivée uniques. Il est cependant possible de chaîner plusieurs feathered beams grâce à la faculté du \emph{tag} à se séparer en \textbackslash{}fBeamBegin et \textbackslash{}fBeamEnd, permettant alors, non seulement de chaîner deux beams par une note (Figure \ref{fig:fbeamchain}), mais de les faire se chevaucher sur plusieurs notes.
 
 \begin{figure}[h]
@@ -498,7 +465,6 @@ Dans un désir de simplicité, il a été décidé de décrire par un seul \emph
 \label{fig:fbeamchain}
 \end{figure}
 
-\paragraph{}
 % justification des hierarchies de beams ?
 Enfin, concernant le feathered beam comme le beam classique, il est maintenant possible de créer des hierarchies de beams : c'est à dire d'englober plusieurs beams dans un plus grand, afin de les joindre par une barre principale commune (Figure \ref{fig:fbeamhierarchie}).
 
@@ -516,11 +482,11 @@ Enfin, concernant le feathered beam comme le beam classique, il est maintenant p
 \end{figure}
 
 %*********************COMBINAISONS********************
-\section{Combinaisons}
+\section{Combinaisons}\label{sec:combinaisons}
 % exemples de "vraies" oeuvres de compositeurs ?
 
 %*********************CONCLUSION**********************
-\section{Conclusion}
+\section{Conclusion}\label{sec:conclusion}
 
 % a faire /////////////////////////////////////////////////////
 
