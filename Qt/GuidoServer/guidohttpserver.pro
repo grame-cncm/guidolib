@@ -1,26 +1,22 @@
-SOURCES += main.cpp HTTPDServer.cpp guido2img.cpp
-HEADERS += HTTPDServer.h guido2img.h
+SOURCES += ../../server/main.cpp ../../server/server.cpp guido2img.cpp ../../server/guidosession.cpp ../../server/utilities.cpp engine.cpp
+HEADERS += ../../server/server.h guido2img.h ../../server/guidosession.h ../../server/utilities.h engine.h
+DEFINES += "JSON_ONLY"
 
 TEMPLATE = app
 win32 {
 	TEMPLATE = vcapp
 }
+QT += widgets printsupport
 CONFIG += console
 macx:CONFIG -= app_bundle
-DESTDIR = .
+#DESTDIR = ../bin
 
 # GuidoQt library link for each platform
-win32:LIBS += ../GuidoQt/GuidoQt.lib
-unix:LIBS += -L../GuidoQt -lGuidoQt
-unix:LIBS += -lmicrohttpd 
+win32:LIBS += ../GuidoQt.lib
+unix:LIBS += -L.. -lGuidoQt -L/usr/local/lib
+unix:LIBS += -lmicrohttpd -ljson -lcrypto -lcurl
 INCLUDEPATH += ../GuidoQt/include
+INCLUDEPATH += ../../server
+INCLUDEPATH += /usr/local/include
 
-
-macx:QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.6.sdk
-macx:CONFIG+=x86_64
-
-# GUIDOEngine library link for each platform
-macx:LIBS += -F../../cmake/Release -framework GUIDOEngine
-win32:LIBS += ../../cmake/release/GUIDOEngine.lib
-unix:!macx:LIBS += -L../../cmake -lGUIDOEngine
-INCLUDEPATH += ../../src/include
+include( ../GUIDOEngineLink.pri )

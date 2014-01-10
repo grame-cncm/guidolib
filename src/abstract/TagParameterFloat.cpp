@@ -177,14 +177,16 @@ bool TagParameterFloat::convertValue(float fromValue, double &toValue, const cha
         returnValue = true;
         toValue = fromValue * curLSPACE * 0.5f;
     }
-
-    double result;
-    bool conversionOk = gd_convertUnits(fromValue, tmp, "cm", result);
-	
-    if (conversionOk)
+    else
     {
-        toValue = result * kCmToVirtual;
-        returnValue = true;
+        double result;
+        bool conversionOk = gd_convertUnits(fromValue, tmp, "cm", result);
+
+        if (conversionOk)
+        {
+            toValue = result * kCmToVirtual;
+            returnValue = true;
+        }
     }
 
     return returnValue;

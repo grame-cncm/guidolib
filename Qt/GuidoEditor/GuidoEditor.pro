@@ -15,8 +15,11 @@ else {
 	TARGET = GuidoEditor	 
 }
 
-unix:TARGET = guidoeditor
-
+unix:DebugBuild {
+	TARGET = guidoeditord
+} else {
+	TARGET = guidoeditor
+}
 
 DESTDIR = ../bin
 MOC_DIR = ./tmpSrc

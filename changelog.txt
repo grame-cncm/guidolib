@@ -1,23 +1,27 @@
 GUIDO Engine history
 
-----------------------------------------------------------------
-2013-11-19  version 1.5.3
-
 
 ----------------------------------------------------------------
 2013-09-13  version 1.5.2
+- improvement of \ritardando-tag and \accelerando-tag: now a dotted line is drawn and it is possible to indicate the tempo of beginning
+and end (also possible to change the text style and color)
+- improvement of \accol-tag : the accolade can change its style and have a range: now it can envelop the entire system or a part of it
 - improvement of \meter-tag (now sums in numerator are allowed)
+- new 'position' attribute for the \marcato tag
 - new reentrant parser (transparent for users, not for developers)
-- new stream parsing mechanism : from now, it's possible to parse a stream as it goes along, and to get intermediate AR's state
-- bugs correction : dotted events (clusters, chords (vertical dot alignment and collision avoidance) and rests)
-- bug correction : meter size set by user
+- new stream parsing mechanism : from now, it's possible to parse a stream as it goes along, and to get intermediate AR's states
 - option "Resize page to music" added in GuidoEditor settings and in Guido2Image
-- ARPageFormat modified : from now, when margins sum are superior than width / height, they are set to 0
-- new 'lineThickness' attribute for the \staffFormat tag
-- new attributes for the \tuplet tag : 'lineThickness', 'textSize', 'bold'
-- bug correction : on windows, sometimes Guido crashed when user lest-clicked on the score
-- now, bars (repeatBegin, repeatEnd, double bar, finish bar) adapts their size to staff lines number and to staff size
-- various bugs fixed and crashes avoided
+- \pageFormat-tag modified : from now, when horizontal / vertical margins sum is superior than width / height, they are set to 0
+- new 'lineThickness' attribute for the \staffFormat-tag
+- new attributes for the \tuplet-tag: 'lineThickness', 'textSize', 'bold'
+- new attributes for the \cres-tag and \decresc-tag: now it's fully customizable
+- bugs correction
+    - on windows, sometimes Guido crashed when user left-clicked on the score
+    - dotted events (clusters, chords (vertical dot alignment and collision avoidance) and rests)
+	- meter size set by user
+    - now, bars (simple bar, repeatBegin, repeatEnd, double bar, finish bar) adapt their size to staff lines number and to staff size
+    - some bugs fixed about SVG export
+    - various bugs fixed and crashes avoided
 
 
 ----------------------------------------------------------------

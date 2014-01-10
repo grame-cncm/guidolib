@@ -6,6 +6,7 @@ INCLUDEPATH += include
 # Library setting
 TEMPLATE = lib
 CONFIG += staticlib
+
 DESTDIR = ..
 MOC_DIR = tmpSrc
 

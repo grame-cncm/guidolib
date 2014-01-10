@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The POST method &mdash; GUIDO Engine Web API 1.0a documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0a',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="GUIDO Engine Web API 1.0a documentation" href="index.html" />
+    <link rel="up" title="API" href="api.html" />
+    <link rel="next" title="The GET method" href="get.html" />
+    <link rel="prev" title="API" href="api.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="get.html" title="The GET method"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="api.html" title="API"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">GUIDO Engine Web API 1.0a documentation</a> &raquo;</li>
+          <li><a href="api.html" accesskey="U">API</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">The POST method</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#posting-files">POSTing files</a></li>
+<li><a class="reference internal" href="#internals">Internals</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="api.html"
+                        title="previous chapter">API</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="get.html"
+                        title="next chapter">The GET method</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/post.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="the-post-method">
+<h1>The POST method<a class="headerlink" href="#the-post-method" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line">The POST method is used to create a new score.</div>
+<div class="line">The HTTP request entity-body is expected to contain <strong>valid GMN code</strong> that is <strong>URL encoded</strong>. Many URL transfer tools do this URL encoding automatically for certain POST methods.  When in doubt, use a URL encoding method like, for example, the function <tt class="docutils literal"><span class="pre">urlencode</span></tt> in PHP.</div>
+</div>
+<dl class="docutils">
+<dt><strong>Response body</strong></dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>in case of success:</dt>
+<dd><div class="first last line-block">
+<div class="line">a unique identifier, formatted as JSON with &#8216;ID&#8217; as key.</div>
+<div class="line">Example: <tt class="docutils literal"><span class="pre">{</span> <span class="pre">&quot;ID&quot;</span> <span class="pre">:</span> <span class="pre">&quot;a_unique_score_id&quot;</span> <span class="pre">}</span></tt></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>in case of error:</dt>
+<dd><div class="first last line-block">
+<div class="line">An error message formatted as JSON with &#8216;Error&#8217; as key.</div>
+<div class="line">Example: <tt class="docutils literal"><span class="pre">{</span> <span class="pre">&quot;Error&quot;</span> <span class="pre">:</span> <span class="pre">&quot;Parse</span> <span class="pre">error</span> <span class="pre">line</span> <span class="pre">9.&quot;</span> <span class="pre">}</span></tt></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt><strong>Response code</strong></dt>
+<dd><ul class="first last simple">
+<li>201 (&#8220;Created&#8221;) in case of success.</li>
+<li>400 (&#8220;Bad request&#8221;) in case of non valid GMN code.</li>
+</ul>
+</dd>
+<dt><strong>Valid GMN code</strong></dt>
+<dd>is GUIDO Music Notation code that is successfully parsed.</dd>
+</dl>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>The following HTML script passes in Guido Music Notation code to a server:</p>
+<div class="highlight-python"><pre>&lt;html&gt;
+  &lt;body&gt;
+    &lt;form action="http://guido.server.org" method="post"&gt;
+      &lt;input type="hidden" name="data" value="[ g e c ]" /&gt;
+      &lt;input type="submit" value="Submit" /&gt;
+    &lt;/form&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+</div>
+<p>Here is an equivalent call using ajax:</p>
+<div class="highlight-python"><pre>$.ajax({
+     url: 'http://guido.server.org',
+     type: 'POST',
+     data: "[ g e c ]",
+ });</pre>
+</div>
+<p>or using jQuery:</p>
+<div class="highlight-python"><pre>$.post('http://guido.server.org', "[ g e c ]");</pre>
+</div>
+<p>or using curl:</p>
+<div class="highlight-python"><pre>curl -d "data=[ g e c ]" http://guido.server.org</pre>
+</div>
+</div>
+<div class="section" id="posting-files">
+<h2>POSTing files<a class="headerlink" href="#posting-files" title="Permalink to this headline">¶</a></h2>
+<p>Files can be sent to the server via POST.  For example, you can upload the file <tt class="docutils literal"><span class="pre">foo.gmn</span></tt> with:</p>
+<div class="highlight-python"><pre>curl --data-urlencode "data@foo.gmn" http://guido.grame.fr:8000</pre>
+</div>
+</div>
+<div class="section" id="internals">
+<h2>Internals<a class="headerlink" href="#internals" title="Permalink to this headline">¶</a></h2>
+<p>You may think of the returned ID as a reference to a <a class="reference external" href="http://guidolib.sourceforge.net/doc/guidolib/group__Engine.html">GUIDO abstract representation</a> [GAR], that is build using <tt class="docutils literal"><span class="pre">GuidoParseFile</span></tt> C/C++ API. Further reference to this ID may be viewed as a reference to this GAR.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="get.html" title="The GET method"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="api.html" title="API"
+             >previous</a> |</li>
+        <li><a href="index.html">GUIDO Engine Web API 1.0a documentation</a> &raquo;</li>
+          <li><a href="api.html" >API</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Grame.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
+    </div>
+  </body>
+</html>

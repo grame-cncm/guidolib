@@ -37,7 +37,6 @@ ARAuto::~ARAuto()
 	
 void ARAuto::setTagParameterList(TagParameterList& tpl)
 {
-
 	if (ltpls.GetCount() == 0)
 	{
 		ListOfStrings lstrs; // (1); std::vector test impl
@@ -55,7 +54,6 @@ void ARAuto::setTagParameterList(TagParameterList& tpl)
 			"S,autoStretchFirstLine,off,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
-
 
 	TagParameterList * rtpl = NULL;
 	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);

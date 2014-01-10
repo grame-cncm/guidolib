@@ -121,6 +121,8 @@ class GRSingleNote : public GRNote
 	  	GRStdNoteHead *	getNoteHead() const;
 	  	void			extractAccidentals( GRAccidentalList * outList );
 
+        ARTHead::HEADSTATE getHeadState() { return mHeadState; }
+
   protected:
 	  GRStem *			getStem();
 	  const GRStem * 	getStem() const;

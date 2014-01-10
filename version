@@ -33,5 +33,5 @@ echo " updating $PKG"
 sed "s/\(VERSION := \)[0-9]*\.[0-9]*/\1$VERSION/" $PKG > TMP$$
 mv -f TMP$$ $PKG
 
-echo "==> change manually GUIDOEngine.cpp, inf.plist and rc files in win32 folder"
+echo "==> change manually GUIDOEngine.cpp and rc files in win32 folder"
 open -t win32/GUIDOEngine.rc src/lib/GUIDOEngine.cpp

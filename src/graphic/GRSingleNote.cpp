@@ -48,7 +48,7 @@
 #include "GRSystem.h"
 #include "GRTrill.h"
 #include "GRCluster.h"
-#include "GRNewTuplet.h" // (JB) was GRTuplet
+#include "GRTuplet.h"
 #include "GRSpring.h"
 #include "GRPage.h"
 #include "secureio.h"
@@ -440,7 +440,6 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
                 if (numberLines != 0)
                 {
                     // Stem length is set everytime as far as the middle of the staff.
-                    // Can be changed easily if it's not the good behaviour to adopt.
                     coef = 0.5f * numberLines - 0.5f;
                 }
 
@@ -512,7 +511,6 @@ ARTHead::HEADSTATE GRSingleNote::adjustHeadPosition(ARTHead::HEADSTATE sugHeadSt
 		if (stemdir == dirUP || stemdir == dirOFF)	retstate = ARTHead::LEFT;
 		else if (stemdir == dirDOWN)				retstate = ARTHead::RIGHT;
 	}
-
 	else if (useheadstate == ARTHead::REVERSE)
 	{
 		if (stemdir == dirUP || stemdir == dirOFF)
@@ -568,7 +566,9 @@ ARTHead::HEADSTATE GRSingleNote::adjustHeadPosition(ARTHead::HEADSTATE sugHeadSt
     // - Adjust horizontal notehead position, particularly for non-standard noteheads
     this->getNoteHead()->adjustPositionForChords(retstate, stemdir);
 
-	return retstate;
+    mHeadState = retstate;
+
+	return mHeadState;
 }
 
 //____________________________________________________________________________________
@@ -827,7 +827,9 @@ float GRSingleNote::setStemLength( float inLen )
 //____________________________________________________________________________________
 float GRSingleNote::changeStemLength( float inLen )
 {
-	if (mStemLengthSet) return mStemLen;
+	if (mStemLengthSet)
+        return mStemLen;
+
 	setStemLength(inLen);
 	// this makes sure, that we don't think that
 	// the stemlength was changed with a parameter.
@@ -948,7 +950,7 @@ int GRSingleNote::adjustLength( const TYPE_DURATION & ndur )
 
 	// ATTENTION,  what happens when the note was within a tuplet!!!!
 	// tuplet is not handled yet ....
-	GRNewTuplet * mytuplet = 0; // was GRTuplet
+	GRTuplet * mytuplet = 0;
 	if (mAssociated)
 	{
 		GuidoPos pos = mAssociated->GetHeadPosition();
@@ -956,7 +958,7 @@ int GRSingleNote::adjustLength( const TYPE_DURATION & ndur )
 		while (pos)
 		{
 			el = mAssociated->GetNext(pos);
-			mytuplet = dynamic_cast<GRNewTuplet *>(el); // was GRTuplet
+			mytuplet = dynamic_cast<GRTuplet *>(el);
 			if (mytuplet)
 				break;
 		}
@@ -964,7 +966,7 @@ int GRSingleNote::adjustLength( const TYPE_DURATION & ndur )
 
 	if (mytuplet)
 	{
-//		mytuplet->removeEvent(this); // now GRNewTuplet... use removeAssociation ?
+//		mytuplet->removeEvent(this); // use removeAssociation ?
 	}
 
 	mDurationOfGR = ndur;

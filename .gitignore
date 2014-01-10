@@ -10,3 +10,4 @@ tmpSrc
 .DS_Store
 *.o
 *~
+DerivedData

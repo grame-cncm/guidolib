@@ -407,7 +407,7 @@ class GRStaffManager
 		ARABreak * mArABreak;
 		ARAuto * mArAuto;
 		GuidoFeedback * mFeedback;
-		ARAccol	* mCurAccoladeTag;
+		std::vector<ARAccol	*> mCurAccoladeTag;
 };
 
 #endif

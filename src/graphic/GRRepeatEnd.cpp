@@ -15,10 +15,14 @@
 #include <iostream>
 #include <math.h>
 
-#include "ARRepeatEnd.h"
+#include "NEPointerList.h"	// TEMP
 
 #include "GRRepeatEnd.h"
+
 #include "GRStaff.h"
+#include "ARRepeatEnd.h"
+#include "ARRepeatEndRangeEnd.h"
+#include "GUIDOInternal.h"
 #include "VGDevice.h"
 
 using namespace std;
@@ -26,22 +30,26 @@ using namespace std;
 NVPoint GRRepeatEnd::refpos;
 
 // --------------------------------------------------------------------------
-GRRepeatEnd::GRRepeatEnd(ARRepeatEnd *arre, bool p_ownsar)
-				: GRTagARNotationElement(arre, LSPACE, p_ownsar)
-//GRRepeatEnd::GRRepeatEnd( ARRepeatEnd * arre, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos )
-//					: GRBar(arre, inStaff, inTimePos) 
+/*
+GRRepeatEnd::GRRepeatEnd( ARRepeatEnd * ar, bool ownsar )
+				: GRTagARNotationElement( ar, LSPACE, ownsar )
+//				: GRPTagARNotationElement( ar, ownsar )
+*/
+GRRepeatEnd::GRRepeatEnd( ARRepeatEnd * arre, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos )
+					: GRBar(arre, inStaff, inTimePos) 
 {
-	mNeedsSpring = 1;
-	sconst = SCONST_BAR - 2;
-	mSymbol = kRepeatEndSymbol; 
-	mLeftSpace =  mRightSpace = 0;
-    refpos = NVPoint (0, 4 * LSPACE);
-
-    fLineNumber = 5;
-    fStaffThickness = 0.08f;
-    fSize = 1;
-    fBaseThickness = LSPACE * 0.6f;
+	InitRepeatEnd();
 }
+
+// --------------------------------------------------------------------------
+/*
+GRRepeatEnd::GRRepeatEnd( ARRepeatEndRangeEnd * ar, bool ownsar )
+						: GRTagARNotationElement( ar, LSPACE, ownsar )
+//				: GRPTagARNotationElement( ar, ownsar )
+{
+	InitRepeatEnd();
+} 
+*/
 
 // --------------------------------------------------------------------------
 GRRepeatEnd::~GRRepeatEnd()
@@ -49,14 +57,15 @@ GRRepeatEnd::~GRRepeatEnd()
 }
 
 // --------------------------------------------------------------------------
-void GRRepeatEnd::updateBoundingBox()
+void GRRepeatEnd::InitRepeatEnd()
 {
-	const float halfExtent = GetSymbolExtent(mSymbol) * 0.5f;
+	mNeedsSpring = 1;
+	sconst = SCONST_BAR - 2;
+//	sconst = 5; //SCONST_BAR;
 
-	mBoundingBox.top    = 0;
-	mBoundingBox.left   = - halfExtent;
-	mBoundingBox.right  = halfExtent;
-	mBoundingBox.bottom = 4 * LSPACE;
+	mSymbol = kRepeatEndSymbol; 
+	mLeftSpace =  mRightSpace = 0;
+	refpos.Set( -LSPACE * 0.8f, 4 * LSPACE );
 
     GRStaff *staff = getGRStaff();
 
@@ -64,49 +73,48 @@ void GRRepeatEnd::updateBoundingBox()
     {
         fLineNumber = staff->getNumlines();
 
-        int linesOffset = fLineNumber - 5;
-
-        if (linesOffset)
-            mPosition.y += staff->getStaffLSPACE() * linesOffset / 2;
-
         fStaffThickness = staff->getLineThickness();
         fSize = staff->getSizeRatio();
         fBaseThickness = LSPACE * 0.6f * fSize;
-
-        mTagSize *= fSize;
     }
+
+    mBoundingBox.bottom = 4 * LSPACE;
+}
+
+// --------------------------------------------------------------------------
+void GRRepeatEnd::setHPosition(float nx)
+{
+	GRBar::setHPosition(nx);
+	mMapping = mBoundingBox;
+	mMapping += mPosition + getOffset() - NVPoint(15,0);
 }
 
 // ----------------------------------------------------------------------------
 /** \brief Retrieves the mapping
 */
-void GRRepeatEnd::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const
+void GRRepeatEnd::GetMap(GuidoeElementSelector sel, MapCollector& f, MapInfos& infos) const
 {
 	if (sel == kGuidoBar)
 		SendMap (f, getRelativeTimePosition(), getDuration(), kRepeatEnd, infos);
 }
 
 // --------------------------------------------------------------------------
-void GRRepeatEnd::setHPosition( float nx )
+void GRRepeatEnd::updateBoundingBox()
 {
-	GRTagARNotationElement::setHPosition(nx);
-	mMapping = mBoundingBox;
-	mMapping += mPosition + getOffset();
-}
+	const float extent = GetSymbolExtent( mSymbol );
+	const float halfExtent = extent * 0.5f;
 
-// --------------------------------------------------------------------------
-void GRRepeatEnd::tellPosition(GObject * caller, const NVPoint & newPosition)
-{
-	GRTagARNotationElement::tellPosition(caller, newPosition);
-	mMapping = mBoundingBox;
-	mMapping += mPosition + getOffset();
+	mBoundingBox.top = 0;
+	mBoundingBox.left = -halfExtent + refpos.x;
+	mBoundingBox.right = halfExtent + refpos.x;
+	mBoundingBox.bottom = 4 * LSPACE;
 }
 
 // --------------------------------------------------------------------------
 void GRRepeatEnd::OnDraw( VGDevice & hdc ) const
 {
-	if(!mDraw)
-		return;
+    if (!mDraw || fSize < kMinNoteSize)
+        return;
 
     // - Vertical adjustement according to staff's line number
     float offsety1 = (fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;
@@ -115,8 +123,11 @@ void GRRepeatEnd::OnDraw( VGDevice & hdc ) const
     if (fLineNumber != 0 && fLineNumber != 1)
         offsety2 = ((fLineNumber - 5) % 6) * LSPACE;
 
+    // - Horizontal adjustement according to staff's lines size and staff's size
+    const float offsetX = (fStaffThickness - 4) * 0.5f - 48 * (fSize - 1) + (fStaffThickness - 4) * (fSize - 1) * 0.5f + 49;
+
     const float spacing = LSPACE * 0.4f * fSize;
-	const float x1 = mPosition.x - mBoundingBox.Width() + 2;
+	const float x1 = mPosition.x - mBoundingBox.Width() + offsetX;
 	const float x2 = x1 + spacing;
     const float y1 = mPosition.y + offsety1 * fSize;
 	const float y2 = y1 + (mBoundingBox.bottom + offsety2) * fSize;
@@ -143,7 +154,7 @@ void GRRepeatEnd::OnDraw( VGDevice & hdc ) const
     int   pointSymbol = 220;
     float pointOffsety1 = - 5 * fSize + offsety1AccordingToLineNumber;
     float pointOffsety2 = pointOffsety1 + LSPACE * fSize + offsety2AccordingToLineNumber;
-    float pointOffsetx = -30 * fSize - 90;
+    float pointOffsetx  = (fStaffThickness - 4) * 0.5f - 62 * (fSize - 1) + (fStaffThickness - 4) * (fSize - 1) * 0.5f - 57;
     float pointSize = 0.4f * fSize;
 
     DrawSymbol(hdc, pointSymbol, pointOffsetx, pointOffsety1, pointSize);

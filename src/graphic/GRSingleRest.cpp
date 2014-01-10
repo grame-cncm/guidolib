@@ -244,7 +244,7 @@ int GRSingleRest::adjustLength( const TYPE_DURATION & ndur )
 	// the note was within a tuplet!!!!
 	// tuplet is not handled yet ....
 	
-//	GRNewTuplet * mytuplet = 0; // was GRTuplet
+//	GRTuplet * mytuplet = 0;
 //	if (mAssociated)
 //	{
 	//	GuidoPos pos = mAssociated->GetHeadPosition();
@@ -252,10 +252,10 @@ int GRSingleRest::adjustLength( const TYPE_DURATION & ndur )
 	//	while (pos)
 	//	{
 	//		el = mAssociated->GetNext(pos);
-	//		mytuplet = dynamic_cast<GRNewTuplet *>(el); // was GRTuplet
+	//		mytuplet = dynamic_cast<GRTuplet *>(el);
 	//		if (mytuplet)
 	//		{
-	//			mytuplet->removeEvent(this); // (JB) now GRNewTuplet... use removeAssociation ?
+	//			mytuplet->removeEvent(this); // use removeAssociation ?
 	//			break;
 	//		}		
 	//	}

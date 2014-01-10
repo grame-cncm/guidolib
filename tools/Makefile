@@ -7,18 +7,20 @@ ifeq ($(system), Darwin)
   INC := $(INC)  -I../macosx/src
 else
 ifeq ($(system), MINGW32_NT-6.1)
-  lib =  ../cmake/Release/GUIDOEngine.lib
+  lib =  ../build/win32/Release/GUIDOEngine.lib
 else
   lib = -lGUIDOEngine
   INC := $(INC)  -I../linux/src $(shell pkg-config --cflags cairo)
 endif
 endif
 
-TOOLS = guidogetversion guido2midi guido2svg guidogetpagecount guidogetvoicecount guido2svgmap guidogetpagemap guidogetsystemmap guidogetstaffmap guidogetvoicemap
+TOOLS = guidogetversion guidogetpagecount guidogetvoicecount guidogetpagemap guidogetsystemmap guidogetstaffmap guidogetvoicemap guido2svg guido2svgmap
 
 .PHONY: checkall
 
-all: $(TOOLS)
+all: $(TOOLS) guido2midi
+
+tools: $(TOOLS)
 
 guidogetversion : guidogetversion.cpp
 	g++ guidogetversion.cpp -I../src/include $(lib) -o guidogetversion

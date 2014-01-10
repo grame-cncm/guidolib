@@ -58,10 +58,11 @@ class DecoratorDevice : public VGDevice
 										   float right, float bottom );
 
 		// - Font services ---------------------------------------------------
-		virtual	void			SetMusicFont( const VGFont * font );				
-		virtual	const VGFont *	GetMusicFont() const;				  
-		virtual	void			SetTextFont( const VGFont * font );				
-		virtual	const VGFont *	GetTextFont() const;				  
+		virtual	void			SetMusicFont( const VGFont * font );
+		virtual	const VGFont *	GetMusicFont() const;
+		virtual	void			SetTextFont( const VGFont * font );
+		virtual	const VGFont *	GetTextFont() const;
+	  
 
 
 		// - Pen & brush services --------------------------------------------

@@ -62,8 +62,8 @@ public:
 	virtual int                     getFontSize() const     { return mFontSize; }
 	virtual const unsigned char *   getColRef() const       { return mColRef; }
 
-	virtual void        setSConst(float val)    { sconst = val; }
-            void		setTagType(TAGTYPE ntyp) {  tagtype = ntyp; }
+	virtual void        setSConst(float val)                { sconst = val; }
+            void		setTagType(TAGTYPE ntyp)            { tagtype = ntyp; }
             void		setError(int p_error);
 
 	virtual void StaffFinished(GRStaff * grstaff = 0);

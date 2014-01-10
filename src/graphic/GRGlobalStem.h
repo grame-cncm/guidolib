@@ -118,6 +118,8 @@ class GRGlobalStem : // public GRStem,
 		// - Lower note on the staff (to adjust stem length if it's a cross headnote)
 		GRSingleNote *lowerNote;
 		GRSingleNote *higherNote;
+
+        float fStaffSize;
 };
 
 #endif

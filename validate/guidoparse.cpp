@@ -7,6 +7,7 @@
 #include <sstream>
 #include <stdlib.h>
 
+#include "GUIDOParse.h"
 #include "GUIDOEngine.h"
 
 using namespace std;
@@ -14,7 +15,7 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-	for (int i=1; i < argc; i++) {
+	for (int i = 1; i < argc; i++) {
 		cout << "======== parsing " << argv[i] << endl;
 		GuidoErrCode err;
 		ARHandler arh;
@@ -29,13 +30,15 @@ int main(int argc, char **argv)
         streamBuffer << ifs.rdbuf();
         ifs.close();
 
-        err = GuidoNewParseString(parser, streamBuffer.str().c_str(), &arh);
-		if (err != guidoNoErr) 
+        arh = GuidoString2AR(parser, streamBuffer.str().c_str());
+		if (arh) 
 			cerr << "error #" << err << ": " << GuidoGetErrorString (err) << endl;
+
 		GuidoFreeAR (arh);
 
         GuidoCloseParser(parser);
 	}
+
 	return 0;
 }
 

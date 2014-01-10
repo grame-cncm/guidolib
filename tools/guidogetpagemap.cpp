@@ -18,6 +18,7 @@ GSystemOSX gSys (0,0);
 CairoSystem gSys(0);
 #endif
 
+#include "GUIDOParse.h"
 #include "GUIDOEngine.h"
 #include "GUIDOScoreMap.h"
 #include "VGDevice.h"
@@ -50,7 +51,8 @@ int main(int argc, char **argv)
     GuidoInitDesc gd = { dev, 0, 0, 0 };
     GuidoInit (&gd);
 
-	for (int i=1; i < argc; i++) {
+	for (int i = 1; i < argc; i++)
+    {
 		cerr << "# get page mapping for " << argv[i] << endl;
 		GuidoErrCode err;
 		ARHandler arh;
@@ -65,21 +67,31 @@ int main(int argc, char **argv)
         streamBuffer << ifs.rdbuf();
         ifs.close();
 
-        err = GuidoNewParseString(parser, streamBuffer.str().c_str(), &arh);
-		if (err == guidoNoErr) {
+        arh = GuidoString2AR(parser, streamBuffer.str().c_str());
+
+		if (arh)
+        {
 			GRHandler grh;
 			err = GuidoAR2GR (arh, 0, &grh);
-			if (err != guidoNoErr) error (err);
-			else {
+
+			if (err != guidoNoErr)
+                error(err);
+			else
+            {
 				int n = GuidoGetPageCount (grh);
-				for (int page =1; page <= n; page++) {
+
+				for (int page = 1; page <= n; page++)
+                {
 					draw (grh, page, dev);
 					Time2GraphicMap map;
 					cout << "# page " << page << "/" << n << endl;
 					cout << "######################### " << endl;
-					err = GuidoGetPageMap( grh, page, kSize, kSize, map);
-					if (err == guidoNoErr) {
-						for (Time2GraphicMap::const_iterator m = map.begin(); m != map.end(); m++) {
+					err = GuidoGetPageMap(grh, page, kSize, kSize, map);
+
+					if (err == guidoNoErr)
+                    {
+						for (Time2GraphicMap::const_iterator m = map.begin(); m != map.end(); m++)
+                        {
 							cout << m->first << " " << m->second << endl;
 						}
 					}
@@ -89,11 +101,17 @@ int main(int argc, char **argv)
 			}
 			GuidoFreeAR (arh);
 		}
-		else error (err);
+		else {
+			int line, col;
+			err = GuidoParserGetErrorCode (parser, line, col, 0);
+			error (err);
+		}
 
         GuidoCloseParser(parser);
 	}
+
 	delete dev;
+
 	return 0;
 }
 

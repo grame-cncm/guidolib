@@ -19,6 +19,8 @@
 #include <QString>
 #include <QIODevice>
 
+#include "GUIDOEngine.h"
+
 #ifdef WIN32
 #define warndeprecated __declspec(deprecated("** method is deprecated **"))
 #else
@@ -98,10 +100,12 @@ class Guido2Image
 			QIODevice*				device;				///< or the output device
 			Guido2ImageImageFormat	format;				///< the output format
 			const GuidoLayoutSettings*	layout;			///< layout setting (see guido doc)
+			const GuidoPageFormat*	pageFormat;			///< layout setting (see guido doc)
 			int						pageIndex;
 			QSize					sizeConstraints;
 			float					zoom;
-			Params () : input(0), output(0), device(0), format(GUIDO_2_IMAGE_PNG), layout(0), pageIndex(1), zoom(1.0) {}
+			bool resizePageToMusic; // do we resize the page to the music?
+			Params () : input(0), output(0), device(0), format(GUIDO_2_IMAGE_PNG), layout(0), pageIndex(1), zoom(1.0), resizePageToMusic(false) {}
 		} Params;
 
 		/*!
