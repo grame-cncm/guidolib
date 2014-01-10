@@ -17,6 +17,7 @@
 
 
 #include "GRNotationElement.h"
+#include "ARTHead.h"
 
 class GREvent;
 class GRSingleNote;
@@ -31,6 +32,7 @@ class GRNoteDot : public GRNotationElement
 
 		friend class GREvent;
 		friend class GRSingleNote;
+		using GObject::addToOffset;
 	 
 					GRNoteDot( GREvent * inNote, const TYPE_DURATION & duration, 
 																float notebreite );
@@ -47,12 +49,17 @@ class GRNoteDot : public GRNotationElement
 	 virtual int	getNumDots() const						{ return mDots; }
 
 	 virtual const	NVPoint & getReferencePosition() const	{ return refpos; }
-	 virtual const	NVPoint & getOffset() const				{ return mOffset; }
-	 virtual const	unsigned char * getColRef() const		{ return mColRef; }
-
+	 
+     virtual const	NVPoint & getOffset() const				{ return mOffset; }
+     virtual void   addOffsetX(float inX)                   { mOffset.x += inX; }
+     virtual void   addOffsetY(float inY)                   { mOffset.y += inY; }
+	 
+     virtual const	unsigned char * getColRef() const		{ return mColRef; }
 	 virtual float	getSize() const	 						{ return size; }
 
 	  static int	DurationToDotCount( const TYPE_DURATION & duration );
+
+	  virtual void  adjustHorizontalDotPosition(float inNoteSize, ARTHead::HEADSTATE inHeadState, GDirection inGlobalStemDirection);
 
   protected:
 

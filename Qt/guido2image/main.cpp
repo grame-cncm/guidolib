@@ -76,9 +76,10 @@ typedef struct Guido2ImageOptions {
 	float			systemsDistance;
 	const char *	systemsDistribution; 
 	const char *	optimalPageFill;
+    const char *    resize2Page;
 
 	Guido2ImageOptions () 
-		: stdInMode(false), page(1), hasLayout(false),
+		: stdInMode(false), hasLayout(false), page(1),
 		  inputFile(0), inputString(0), outputFile(0), imageFormat(0),
 		  zoom(-1.f), height(-1), width(-1), 
 		  systemsDistance(-1.f), systemsDistribution(0), optimalPageFill(0)  {}
@@ -246,7 +247,7 @@ static string toLower (const char* str)
 //------------------------------------------------------------------------------------------
 static GuidoLayoutSettings* options2layout (const Guido2ImageOptions& opts)
 {
-	static GuidoLayoutSettings layout = { 75.f, kAutoDistrib, 0.25f, 750, 1.1f, 0, 1 };
+	static GuidoLayoutSettings layout = { 75.f, kAutoDistrib, 0.25f, 750, 1.1f, 0, 1, 1 };
 	if (opts.hasLayout) {
 		if (opts.systemsDistance > 0) layout.systemsDistance = opts.systemsDistance;
 		if (opts.systemsDistribution) {
@@ -261,6 +262,12 @@ static GuidoLayoutSettings* options2layout (const Guido2ImageOptions& opts)
 			if (str == "on")		layout.optimalPageFill = 1;
 			else if (str == "off")	layout.optimalPageFill = 0;
 			else error ("invalid optimal page fill mode");
+		}
+        if (opts.resize2Page) {
+			string str (toLower (opts.resize2Page));
+			if (str == "on")		layout.resizePage2Music = 1;
+			else if (str == "off")	layout.resizePage2Music = 0;
+			else error ("invalid resize page to music mode");
 		}
 		return &layout;
 	}
@@ -302,6 +309,7 @@ int main(int argc, char *argv[])
 	else stripext ( options.inputFile, output);
 	p.output = output.c_str();
 	//----------------------------------------------------
+	p.pageFormat = 0;
 	p.format = strToFormat (options.imageFormat);			// the image output format
 	p.layout = options2layout (options);					// the layout options (if any)
 	p.pageIndex = 0;										// page index starts at 0 (I guess it means all pages - to be checked)

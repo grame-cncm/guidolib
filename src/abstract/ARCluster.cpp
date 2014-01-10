@@ -71,12 +71,12 @@ void ARCluster::setTagParameterList(TagParameterList& tpl)
 	{
 		ListOfStrings lstrs; // (1); std::vector test impl
 		lstrs.AddTail("S,color,,o;F,size,1.0,o;U,hdx,0hs,o;U,hdy,0hs,o;U,dx,0hs,o;U,dy,0hs,o");
-		CreateListOfTPLs(ltpls,lstrs);
+		CreateListOfTPLs(ltpls, lstrs);
 	}
 
-	TagParameterList * rtpl = NULL;
-	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
-	if (ret>=0 && rtpl)
+	TagParameterList *rtpl = NULL;
+	int ret = MatchListOfTPLsWithTPL(ltpls, tpl, &rtpl);
+	if (ret >= 0 && rtpl)
 	{
 		// we found a match!
 		if (ret == 0)
@@ -105,8 +105,14 @@ void ARCluster::setTagParameterList(TagParameterList& tpl)
 			ady = f->getValue();
 			delete f;
 		}
+
 		delete rtpl;
 	}
+	else
+	{
+		// failure
+	}
+
 	tpl.RemoveAll();
 }
 

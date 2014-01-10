@@ -161,24 +161,24 @@ float GRTempo::DrawNote( VGDevice & hdc, const TYPE_DURATION & noteDur, float xO
 	}
 
 	// - Setup zoom
+    hdc.selectfont(1); // Not very beautiful but avoid a bug during SVG export
 	const float cueScale = 0.70f;
-	hdc.SetScale( cueScale, cueScale );
-
+	hdc.SetScale(cueScale, cueScale);
 
 	// - Calculate the position of the head
 	float w, h;
-	hdc.SetMusicFont( FontManager::gFontScriab );
+
 	hdc.GetMusicFont()->GetExtent(theSymbol, &w, &h, &hdc);
 	float xPos = (xOffset + mPosition.x) / cueScale;
-	float yPos = (yOffset + mPosition.y - w/2.5f) / cueScale;
+	float yPos = (yOffset + mPosition.y - w / 2.5f) / cueScale;
 
 	// - Draw Head
-//	hdc.SelectFont( FontManager::gFontScriab );
-	hdc.DrawMusicSymbol( xPos, yPos, theSymbol );
+	hdc.DrawMusicSymbol(xPos, yPos, theSymbol);
 	offsetX = w * cueScale;
 
 	// - Draw Stem
-	if (theSymbol != kWholeNoteHeadSymbol) {
+	if (theSymbol != kWholeNoteHeadSymbol)
+    {
 		float		stemLen = 3 * LSPACE;
 		float		stemTagSize = 1;
 
@@ -208,14 +208,15 @@ float GRTempo::DrawNote( VGDevice & hdc, const TYPE_DURATION & noteDur, float xO
 	if (theFlagSymbol != kNoneSymbol) hdc.DrawMusicSymbol( xPos, yPos - 4 * LSPACE, theFlagSymbol );
 
 	// - Draw Dot
-	if (theDotSymbol != kNoneSymbol)  {
+	if (theDotSymbol != kNoneSymbol)
+    {
 		hdc.GetMusicFont()->GetExtent(theDotSymbol, &w, &h, &hdc);
 		hdc.DrawMusicSymbol( xPos + 2 * LSPACE, yPos, theDotSymbol);
 		offsetX += LSPACE;
 	}
 
 	// - Cleanup
-	hdc.SetScale( 1.0f/cueScale, 1.0f/cueScale );
+	hdc.SetScale(1 / cueScale, 1 / cueScale);
 	return offsetX;
 }
 

@@ -13,7 +13,13 @@
 
 */
 
+#ifdef WIN32
+# pragma warning (disable : 4661)		// don't know how to solve it
+#endif
+
+
 #include <iostream>
+#include <utility>
 #include <algorithm>
 
 #include "GuidoMapCollector.h"

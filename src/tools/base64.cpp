@@ -25,6 +25,10 @@
 
 */
 
+#ifdef WIN32
+# pragma warning (disable : 4267)
+#endif
+
 #include "base64.h"
 #include <iostream>
 

@@ -24,22 +24,25 @@ class ARFinishBar;
 */
 class GRFinishBar: public GRBar
 {
-	public:
+public:
 
-		GRFinishBar(ARFinishBar *p_arbar,GRStaff * inStaff, const TYPE_TIMEPOSITION & p_timeposition);
-		GRFinishBar(ARFinishBar *p_arbar,GRSystem *p_grsystem,GRStaff * inStaff, const TYPE_TIMEPOSITION &p_timeposition);
+    GRFinishBar(ARFinishBar *p_arbar,GRStaff * inStaff, const TYPE_TIMEPOSITION & p_timeposition);
+    GRFinishBar(ARFinishBar *p_arbar,GRSystem *p_grsystem,GRStaff * inStaff, const TYPE_TIMEPOSITION &p_timeposition);
 
-		virtual ~GRFinishBar();
+    virtual ~GRFinishBar();
 
-		ARFinishBar * getARFinishBar();
+    ARFinishBar * getARFinishBar();
 
-		virtual const NVPoint & getReferencePosition() const	{ return refpos; }
-		virtual void DrawWithLines( VGDevice & hdc ) const;
-		virtual void updateBoundingBox();
+    virtual const NVPoint & getReferencePosition() const	{ return refpos; }
+    virtual void  DrawWithLines( VGDevice & hdc ) const;
+    virtual void  updateBoundingBox();
 
-	protected:
-				float	mThickness;
-		static	NVPoint refpos;
+protected:
+    float	fBaseThickness;
+    static	NVPoint refpos;
+    int     fLineNumber;
+    float   fStaffThickness;
+    float   fSize;
 };
 
 #endif 

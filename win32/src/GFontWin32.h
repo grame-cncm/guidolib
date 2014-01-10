@@ -27,7 +27,7 @@
 # else	
 #  include <windows.h>// without mfc
 # endif
-# pragma warning (disable : 4275) 
+# pragma warning (disable : 4275 4251) 
 #endif
 
 #include "GUIDOExport.h"

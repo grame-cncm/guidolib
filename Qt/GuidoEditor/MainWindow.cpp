@@ -506,8 +506,12 @@ void MainWindow::open()
 		const char *str = QGuidoImporter::musicxmlSupported() ? "Guido Music Notation or MusicXML (*.gmn *.xml)" : "Guido Music Notation (*.gmn)";
 		QString openPath = mRecentFiles.size() ? mRecentFiles.last() : QDir::home().path();
 		QString fileName = QFileDialog::getOpenFileName(this , tr("Open file") , openPath , tr(str) );
-		if (!fileName.isEmpty())  
+		if (!fileName.isEmpty())
+        {
 			loadFile(fileName);
+            mTextEdit->document()->setModified(false);
+            setWindowModified(false);
+        }
 	}
 }
 
@@ -542,12 +546,13 @@ void MainWindow::documentWasModified()
 
 //-------------------------------------------------------------------------
 void MainWindow::updateCode()
-{	
+{
 	mTextEditTimer->stop();
 
 	QString newGMNCode = mTextEdit->toPlainText();
 	if ( !newGMNCode.length() )
 		return;
+
 
 	if ( newGMNCode == mGuidoWidget->gmnCode() )
 		return;
@@ -561,9 +566,13 @@ void MainWindow::updateCode()
 	}
 	else
 	{
-		mTextEdit->highlightErrorLine( mGuidoWidget->getLastParseErrorLine() );
+        int line;
+        int col;
+        mGuidoWidget->getLastParseErrorLine(line, col);
+		mTextEdit->highlightErrorLine(line);
 		statusBar()->showMessage( mGuidoWidget->getLastErrorMessage() );
 	}
+
 }
 
 //-------------------------------------------------------------------------
@@ -606,6 +615,7 @@ void MainWindow::doexport()
 				exportToImage( guidoPainter, fileName );
 		}
 	}
+
 	QGuidoPainter::destroyGuidoPainter( guidoPainter );
 }
 
@@ -762,6 +772,8 @@ void MainWindow::print()
 		if (dialog->exec() == QDialog::Accepted)
 			print (guidoPainter, printer);
 	}
+
+
 //	else statusBar()->showMessage(tr("Error reading file."));
 	QGuidoPainter::destroyGuidoPainter( guidoPainter );
 }
@@ -976,7 +988,8 @@ void MainWindow::setEngineSettings(const GuidoLayoutSettings& gls,
 		(gls.force != mGuidoEngineParams.force)								|
 		(gls.spring != mGuidoEngineParams.spring)							|
 		(gls.neighborhoodSpacing != mGuidoEngineParams.neighborhoodSpacing)	|
-		(gls.optimalPageFill != mGuidoEngineParams.optimalPageFill)	)
+		(gls.optimalPageFill != mGuidoEngineParams.optimalPageFill)	        |
+        (gls.resizePage2Music != mGuidoEngineParams.resizePage2Music) )
 	{
 		mGuidoEngineParams = gls;
 		mGuidoWidget->setGuidoLayoutSettings( mGuidoEngineParams );
@@ -1602,8 +1615,8 @@ bool MainWindow::loadFile(const QString &fileName)
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
 	reinitGuidoWidget();
-
-	setCurrentFile(fileName.toUtf8().data());
+    
+    setCurrentFile(fileName.toUtf8().data());
 
 	bool loadOk = mGuidoWidget->setGMNFile( fileName );
 	if (!loadOk && QGuidoImporter::musicxmlSupported()) {	// try to import file as MusicXML file
@@ -1632,16 +1645,23 @@ bool MainWindow::loadFile(const QString &fileName)
 	{
 		QString errorMessage = "Invalid GMN file : " + mGuidoWidget->getLastErrorMessage();
 //		mGuidoWidget->resize( QSize( 0,0 ) );
-		mTextEdit->highlightErrorLine( mGuidoWidget->getLastParseErrorLine() );
+        int line;
+        int col;
+        mGuidoWidget->getLastParseErrorLine(line, col);
+		mTextEdit->highlightErrorLine(line);
 		statusBar()->showMessage(tr(errorMessage.toUtf8().data()), 2000);
 	}
 
 	QApplication::restoreOverrideCursor();
 // call moved to the beginning of the function to benefit of the filePath() method
 //	setCurrentFile(fileName.toUtf8().data());
+
+    // In order not to make appear the little star next to filename (at the top of the window)
+    mTextEdit->document()->setModified( false );
+    setWindowModified(false);
 	
 	recentFileListUpdate(fileName);
-	
+
 	return loadOk;
 }
 

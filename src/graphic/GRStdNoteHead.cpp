@@ -21,11 +21,12 @@ using namespace std;
 
 #include "GRDefine.h"
 
-GRStdNoteHead::GRStdNoteHead( GREvent * sngnot, const TYPE_DURATION & inDur, GDirection inStemDirection ) :
+GRStdNoteHead::GRStdNoteHead(GREvent * sngnot, const TYPE_DURATION & inDur, GDirection inStemDirection) :
 singleStemDirection(inStemDirection),
 	globalStemDirection(dirAUTO),
 	halfExtent(0),
-	mBracketsType(None)
+	mBracketsType(None),
+	mNoteHeadHaveToBeDrawn(true)
 {
 	mSize = sngnot->getSize();
 	const unsigned char * tmpcolref = sngnot->getColRef();
@@ -304,35 +305,34 @@ void GRStdNoteHead::GGSOutput() const
 void GRStdNoteHead::OnDraw( VGDevice & hdc ) const
 {
 	// the note head -> the note
-	if(!mDraw)
-		return;
-	if (mSymbol == kNoneSymbol) return;
+	if(mDraw && mNoteHeadHaveToBeDrawn && mSymbol != kNoneSymbol)
+	{
+		GRNoteHead::OnDraw(hdc);
 
-	GRNoteHead::OnDraw(hdc);
-
-	if (mBracketsType == Round)
-	{
-		float xOffset = -25 * mSize;
-		float yOffset = 55 * mSize;
-		GRNotationElement::OnDrawSymbol(hdc, kRoundLeftBracket, xOffset, yOffset, 0);
-		xOffset = 50 * mSize;
-		GRNotationElement::OnDrawSymbol(hdc, kRoundRightBracket, xOffset, yOffset, 0);
-	}
-	else if (mBracketsType == Square)
-	{
-		float xOffset = -25 * mSize;
-		float yOffset = 55 * mSize;
-		GRNotationElement::OnDrawSymbol(hdc, kSquareLeftBracket, xOffset, yOffset, 0);
-		xOffset = 50 * mSize;
-		GRNotationElement::OnDrawSymbol(hdc, kSquareRightBracket, xOffset, yOffset, 0);
-	}
-	else if (mBracketsType == Angled)
-	{
-		float xOffset = -55 * mSize;
-		float yOffset = 55 * mSize;
-		GRNotationElement::OnDrawSymbol(hdc, kAngledLeftBracket, xOffset, yOffset, 0);
-		xOffset = 70 * mSize;
-		GRNotationElement::OnDrawSymbol(hdc, kAngledRightBracket, xOffset, yOffset, 0);
+		if (mBracketsType == Round)
+		{
+			float xOffset = -25 * mSize;
+			float yOffset = 55 * mSize;
+			GRNotationElement::OnDrawSymbol(hdc, kRoundLeftBracket, xOffset, yOffset, 0);
+			xOffset = 50 * mSize;
+			GRNotationElement::OnDrawSymbol(hdc, kRoundRightBracket, xOffset, yOffset, 0);
+		}
+		else if (mBracketsType == Square)
+		{
+			float xOffset = -25 * mSize;
+			float yOffset = 55 * mSize;
+			GRNotationElement::OnDrawSymbol(hdc, kSquareLeftBracket, xOffset, yOffset, 0);
+			xOffset = 50 * mSize;
+			GRNotationElement::OnDrawSymbol(hdc, kSquareRightBracket, xOffset, yOffset, 0);
+		}
+		else if (mBracketsType == Angled)
+		{
+			float xOffset = -55 * mSize;
+			float yOffset = 55 * mSize;
+			GRNotationElement::OnDrawSymbol(hdc, kAngledLeftBracket, xOffset, yOffset, 0);
+			xOffset = 70 * mSize;
+			GRNotationElement::OnDrawSymbol(hdc, kAngledRightBracket, xOffset, yOffset, 0);
+		}
 	}
 }
 
@@ -513,4 +513,9 @@ void GRStdNoteHead::setGlobalStemDirection(GDirection inGlobalStemDirection)
 
 		this->adjustHorizontalPosition();
 	}
+}
+
+void GRStdNoteHead::setHaveToBeDrawn(bool inHaveToBeDrawn)
+{
+	mNoteHeadHaveToBeDrawn = inHaveToBeDrawn;
 }

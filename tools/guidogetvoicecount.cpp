@@ -3,6 +3,8 @@
 #include <libgen.h>
 #endif
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <stdlib.h>
 
 #ifdef WIN32
@@ -16,6 +18,7 @@ GSystemOSX gSys (0,0);
 CairoSystem gSys(0);
 #endif
 
+#include "GUIDOParse.h"
 #include "GUIDOEngine.h"
 #include "VGDevice.h"
 
@@ -36,18 +39,40 @@ int main(int argc, char **argv)
     GuidoInitDesc gd = { dev, 0, 0, 0 };
     GuidoInit (&gd);
 
-	for (int i=1; i < argc; i++) {
+	for (int i = 1; i < argc; i++)
+    {
 		GuidoErrCode err;
 		ARHandler arh;
-		err = GuidoParseFile (argv[i], &arh);
-		if (err == guidoNoErr) {
-			int n = GuidoCountVoices (arh);
+
+        GuidoParser *parser = GuidoOpenParser();
+
+        std::ifstream ifs(argv[i], ios::in);
+        if (!ifs)
+            return 0;
+
+        std::stringstream streamBuffer;
+        streamBuffer << ifs.rdbuf();
+        ifs.close();
+
+        arh = GuidoString2AR(parser, streamBuffer.str().c_str());
+		
+        if (arh)
+        {
+			int n = GuidoCountVoices(arh);
 			cout << argv[i] << " : " << n << endl;
 			GuidoFreeAR (arh);
 		}
-		else error (err);
+		else {
+			int line, col;
+			err = GuidoParserGetErrorCode (parser, line, col, 0);
+			error (err);
+		}
+
+        GuidoCloseParser(parser);
 	}
+
 	delete dev;
+
 	return 0;
 }
 

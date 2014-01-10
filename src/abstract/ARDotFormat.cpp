@@ -56,7 +56,7 @@ void ARDotFormat::setTagParameterList(TagParameterList &tpl)
 	{
 		// create a list of string ...
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(("U,dx,1.8hs,o;U,dy,,o;F,size,1.0,o;U,dd,1hs,o"));
+		lstrs.AddTail(("U,dx,0hs,o;U,dy,,o;F,size,1.0,o;U,dd,1hs,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 

@@ -39,8 +39,8 @@ NVPoint GRClef::refposBass;
 NVPoint GRClef::refposAlto;
 unsigned int GRClef::sClefTextAlign;
 
-GRClef::GRClef( ARClef * arClef, GRStaff * curstaff, bool ownsAR )
- 				 : GRTagARNotationElement( arClef, curstaff->getStaffLSPACE(), ownsAR ),
+GRClef::GRClef(ARClef * arClef, GRStaff *curstaff, bool ownsAR)
+ 				 : GRTagARNotationElement(arClef, curstaff->getStaffLSPACE(), ownsAR),
     				mOctaveStr(0)
 {
 	assert(arClef);
@@ -228,17 +228,18 @@ GRClef::~GRClef()
 void GRClef::OnDraw(VGDevice & hdc) const
 {
 // DrawBoundingBox( hdc, GColor( 255, 200, 0, 150)); // DEBUG
-	if (error) return;
-	if(!mDraw)
+	if (error)
+        return;
+	if (!mDraw)
 		return;
 
 	GRTagARNotationElement::OnDraw(hdc);
-	if( mDoubleTreble )
+	if (mDoubleTreble)
 	{
 		const float xOffset = ((mRightSpace + mLeftSpace) * float(0.5)) - LSPACE * float(0.2);
 		OnDrawSymbol( hdc, mSymbol, xOffset, 0 );
 	}
-	else if( mOctaveStr ) // Draws the octava
+	else if (mOctaveStr) // Draws the octava
 	{
 		const int fontSize = (int)(float(1.5) * LSPACE);
 		NVstring textFont ( FontManager::kDefaultTextFont );

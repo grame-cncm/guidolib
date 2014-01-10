@@ -88,7 +88,8 @@ bool TimeSegment::include(const TimeSegment& ts) const
 bool TimeSegment::operator < (const TimeSegment& ts) const
 {
 	if (fdate(this->first) < fdate(ts.first)) return true;
-	if (fdate(this->first) > fdate(ts.first)) return false;
+	if (fdate(this->first) >= fdate(ts.first)) return false; // Before, it was simply ">" and not ">=",
+                                                             // but putting ">=" solved a bug on Windows
 	return ts.include (*this);
 }
 

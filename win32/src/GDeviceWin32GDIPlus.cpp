@@ -104,7 +104,7 @@ GDeviceWin32GDIPlus::GDeviceWin32GDIPlus( const char * inPath, VGSystem* sys )
 	//std::copy(s.begin(), s.end(), wPath.begin());
 
 	int charCount = (int)strlen( inPath );
-	DWORD count = mbstowcs(NULL, inPath, charCount);
+	DWORD count = (DWORD)mbstowcs(NULL, inPath, charCount);
 	WCHAR * wPath = (WCHAR*) malloc ((count + 1) * sizeof(WCHAR));
 	mbstowcs(wPath, inPath, charCount+1);
 
@@ -533,10 +533,8 @@ GDeviceWin32GDIPlus::CopyPixels( int xDest, int yDest,
 // values, so they cannot exceed 32767.
 void GDeviceWin32GDIPlus::SetScale( float x, float y )
 {
-	const float prevX	= mScaleX;
-	const float prevY	= mScaleY;
-	mScaleX				= x;
-	mScaleY				= y;	
+	mScaleX	= x;
+	mScaleY	= y;	
 	mGraphics->ScaleTransform( x, y );  
 }
 

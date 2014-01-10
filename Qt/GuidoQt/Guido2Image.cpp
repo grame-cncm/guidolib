@@ -11,6 +11,11 @@
  * Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
  * research@grame.fr
  */
+
+#ifdef WIN32
+#pragma warning (disable: 4996)
+#endif
+
 #include "Guido2Image.h"
 
 #include <iostream>
@@ -151,7 +156,7 @@ Guido2ImageErrorCodes Guido2Image::gmnString2Image( const Params& p )
 	QGuidoPainter * painter = QGuidoPainter::createGuidoPainter();
 	if (painter) {
 		if (p.layout) painter->setGuidoLayoutSettings (*p.layout);
-		painter->setGMNCode(p.input);
+        painter->setGMNCode(p.input);
 	}
 	else return GUIDO_2_IMAGE_GUIDO_ENGINE_NOT_STARTED;			// likely
 	return guidoPainterToImage(painter, p);
@@ -171,7 +176,6 @@ Guido2ImageErrorCodes Guido2Image::gmnFile2Image	( const  Params& p )
 		if (p.layout) painter->setGuidoLayoutSettings (*p.layout);
 		painter->setGMNFile(p.input);
 	}
-	else
 		return GUIDO_2_IMAGE_GUIDO_ENGINE_NOT_STARTED;			// likely
 	return guidoPainterToImage(painter, p);
 }

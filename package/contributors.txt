@@ -1,0 +1,16 @@
+GuidoLib contributors
+in alphabetical order:
+----------------------
+J. Scott	Amort
+Jérôme		Berthet
+Samuel		Brochot
+Yannick		Chapuis
+Christophe	Daudin
+Colas		Decron
+Torben		Hohn
+Camille		Leroy
+Stéphane	Letz
+François	Levy
+Yann		Orlarey
+Benjamen	Ruprechter
+Mike		Solomon

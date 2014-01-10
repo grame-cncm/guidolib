@@ -43,8 +43,9 @@ public:
 	virtual unsigned int getSymbol() const;
 
 	virtual void adjustPositionForChords(ARTHead::HEADSTATE inHeadstate, GDirection inGlobalStemDirection);
-	void adjustHorizontalPosition();
+	void         adjustHorizontalPosition();
 	virtual void setGlobalStemDirection(GDirection inGlobalStemDirection);
+	void         setHaveToBeDrawn(bool inHaveToBeDrawn);
 
 	/*	enum HEADTYPES { NOHEAD = kNoneSymbol, 
 	WHOLENOTEHEAD = kWholeNoteHeadSymbol, // SCR_WHOLENOTEHEAD,
@@ -75,6 +76,8 @@ protected:
 	float halfExtent;
 
 	BracketsType mBracketsType;
+
+	bool mNoteHeadHaveToBeDrawn;
 };
 
 #endif

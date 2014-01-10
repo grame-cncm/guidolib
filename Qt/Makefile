@@ -1,13 +1,21 @@
+
+system := $(shell uname -s)
 MAKE = make
 BUILD =
-SPEC =
+
+ifeq ($(system), MINGW32_NT-6.1) 
+	SPEC = -spec win32-msvc2010
+else
+	SPEC = 
+endif
+
 DO_BUILD = " && $(MAKE)"
 DO_CLEAN= " && $(MAKE) clean"
 XCODE_BUILD= " && xcodebuild"
 MSVC2005_BUILD=" && vcbuild"
 # QPROJECT_CLEAN = " && ( [ -d tmpSrc ] || mkdir tmpSrc ) && rm -f tmpSrc/*.cpp && rm -f tmpSrc/*.h "
 PROJECTS = GraphicsSceneMainWindow GuidoQt GuidoQtFontViewer GuidoEditor GuidoSceneComposer guido2image GuidoServer
-
+	
 nothing:
 	@ echo "Clean build of all the apps."
 	@ echo " 'unix' :     for unix/gcc "
@@ -21,7 +29,7 @@ projects:
 	$(foreach qt, $(PROJECTS), make qmake PROJECT=$(qt);)
 
 qmake:
-	cd $(PROJECT) && qmake
+	cd $(PROJECT) && qmake $(SPEC)
 
 unix:
 	make common BUILD=$(DO_BUILD)

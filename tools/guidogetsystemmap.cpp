@@ -3,6 +3,8 @@
 #include <libgen.h>
 #endif
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <stdlib.h>
 
 #ifdef WIN32
@@ -16,6 +18,7 @@ GSystemOSX gSys (0,0);
 CairoSystem gSys(0);
 #endif
 
+#include "GUIDOParse.h"
 #include "GUIDOEngine.h"
 #include "GUIDOScoreMap.h"
 #include "VGDevice.h"
@@ -48,25 +51,47 @@ int main(int argc, char **argv)
     GuidoInitDesc gd = { dev, 0, 0, 0 };
     GuidoInit (&gd);
 
-	for (int i=1; i < argc; i++) {
+	for (int i = 1; i < argc; i++)
+    {
 		cerr << "# get system mapping for " << argv[i] << endl;
 		GuidoErrCode err;
 		ARHandler arh;
-		err = GuidoParseFile (argv[i], &arh);
-		if (err == guidoNoErr) {
+
+        GuidoParser *parser = GuidoOpenParser();
+
+        std::ifstream ifs(argv[i], ios::in);
+        if (!ifs)
+            return 0;
+
+        std::stringstream streamBuffer;
+        streamBuffer << ifs.rdbuf();
+        ifs.close();
+
+        arh = GuidoString2AR(parser, streamBuffer.str().c_str());
+		
+        if (arh)
+        {
 			GRHandler grh;
 			err = GuidoAR2GR (arh, 0, &grh);
-			if (err != guidoNoErr) error (err);
-			else {
-				int n = GuidoGetPageCount (grh);
-				for (int page =1; page <= n; page++) {
+			
+            if (err != guidoNoErr)
+                error(err);
+			else
+            {
+				int n = GuidoGetPageCount(grh);
+
+				for (int page = 1; page <= n; page++)
+                {
 					draw (grh, page, dev);
 					Time2GraphicMap map;
 					cout << "# page " << page << "/" << n << endl;
 					cout << "######################### " << endl;
 					err = GuidoGetSystemMap( grh, page, kSize, kSize, map);
-					if (err == guidoNoErr) {
-						for (Time2GraphicMap::const_iterator m = map.begin(); m != map.end(); m++) {
+
+					if (err == guidoNoErr)
+                    {
+						for (Time2GraphicMap::const_iterator m = map.begin(); m != map.end(); m++)
+                        {
 							cout << m->first << " " << m->second << endl;
 						}
 					}
@@ -76,9 +101,17 @@ int main(int argc, char **argv)
 			}
 			GuidoFreeAR (arh);
 		}
-		else error (err);
+		else {
+			int line, col;
+			err = GuidoParserGetErrorCode (parser, line, col, 0);
+			error (err);
+		}
+
+        GuidoCloseParser(parser);
 	}
+
 	delete dev;
+
 	return 0;
 }
 

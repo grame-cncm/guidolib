@@ -60,7 +60,7 @@ TagParameterFloat::reset(float inFloatValue, const char * inUnit)
 	}
 }
 
-const TYPE_FLOATPARAMETER  TagParameterFloat::getValue(float curLSPACE) const
+const TYPE_FLOATPARAMETER TagParameterFloat::getValue(float curLSPACE) const
 {
 	if (fUnittag)
 	{
@@ -75,9 +75,18 @@ const TYPE_FLOATPARAMETER  TagParameterFloat::getValue(float curLSPACE) const
 		if (!strcmp(tmpunit,"hs"))
 			return ((float) (fValue * curLSPACE * 0.5f));
 		
-		const float tmpval = (float)gd_convertUnits((double) fValue, tmpunit, "cm" );
-		return (tmpval * kCmToVirtual);
+        double result;
+		bool conversionOk = gd_convertUnits((double) fValue, tmpunit, "cm", result);
+		
+        if (conversionOk)
+            return ((float)result * kCmToVirtual);
+        else
+        {
+            // Failure. Thing is that getValue should returns an errorCode, 
+            // and not directly the value (like convertValue).
+        }
 	}
+
 	return fValue;
 }
 
@@ -151,16 +160,34 @@ bool TagParameterFloat::copyValue(const TagParameter * tp)
 	return true;
 }
 
-TYPE_FLOATPARAMETER TagParameterFloat::convertValue (float value, const char * unit, float curLSPACE)
+bool TagParameterFloat::convertValue(float fromValue, double &toValue, const char * unit, float curLSPACE)
 {
-	const char * tmp = unit;
-	if (!tmp[0]) {
+    bool returnValue = false;
+
+	const char *tmp = unit;
+
+	if (!tmp[0])
+    {
 		// no unit is given -> then we take the unit specified by the units-tag ...
 		tmp = ARUnits::getUnit().c_str();
 	}
-	if (!strcmp(tmp, "hs"))
-		return value * curLSPACE * 0.5f;
 
-	const float tmpval = (float)gd_convertUnits (value, tmp, "cm" );
-	return tmpval * kCmToVirtual;
+	if (!strcmp(tmp, "hs"))
+    {
+        returnValue = true;
+        toValue = fromValue * curLSPACE * 0.5f;
+    }
+    else
+    {
+        double result;
+        bool conversionOk = gd_convertUnits(fromValue, tmp, "cm", result);
+
+        if (conversionOk)
+        {
+            toValue = result * kCmToVirtual;
+            returnValue = true;
+        }
+    }
+
+    return returnValue;
 }

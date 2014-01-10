@@ -28,6 +28,7 @@ using namespace std;
 #include "GRGlobalStem.h"
 #include "GRGlobalLocation.h"
 #include "GRNoteDot.h"
+#include "GRSingleRest.h"
 
 #include "GuidoDefs.h" // for LSPACE
 
@@ -191,8 +192,14 @@ void GREvent::setDotFormat( GRNoteDot * inDot, const ARDotFormat * inFormat )
 	}
 	else if (inFormat->getDY())
 	{
-		if( positionIsOnStaffLine( mPosition.y, mCurLSPACE ))
-			inDot->mOffset.y -= (GCoord)TagParameterFloat::convertValue(0.8f,"hs",mCurLSPACE);
+		if(positionIsOnStaffLine( mPosition.y, mCurLSPACE ))
+        {
+            double result;
+            bool conversionOk = TagParameterFloat::convertValue(1.0f, result, "hs", mCurLSPACE);
+			
+            if (conversionOk)
+                inDot->mOffset.y -= (GCoord)((float)result);
+        }
 	}
 
 	if (inFormat->getSize())
@@ -212,7 +219,12 @@ void GREvent::createDots( const TYPE_DURATION & inDuration, float inNoteBreite,
 	if( dotCount > 0 )
 	{
 		GRNoteDot * noteDot = new GRNoteDot ( this, inNoteBreite, dotCount );
-		noteDot->setPosition( inPos );
+        noteDot->setPosition(inPos);
+
+        GRSingleRest *rest = dynamic_cast<GRSingleRest *>(this);
+        if (rest)
+            noteDot->addOffsetX(45);        
+
 		AddTail( noteDot );
 		updateBoundingBox();
 	}

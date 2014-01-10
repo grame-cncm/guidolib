@@ -75,7 +75,7 @@ class_export SVGDevice : public VGDevice
 	float			fDPI;
 	
 	bool		fPushedPen, fPushedPenColor, fPushedPenWidth, fPushedFill, fScaled, fOffset;
-	int			fCurrFont;
+	int			fCurrFont, fCurrFontProperties;
 	VGColor	*	fPendingStrokeColor;
 	bool		fBeginDone;
 	

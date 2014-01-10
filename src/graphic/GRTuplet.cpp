@@ -1,7 +1,7 @@
-/*
+﻿/*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2004 Grame
+  Copyright (C) 2003, 2004 	Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -12,444 +12,745 @@
 
 */
 
-#include <cmath>
+/*
+	Tuplet positionning:
+		
+		Manual: a least one parameter was specified in a \tuplet tag. Keeps
+				compatibility with older versions of the library. 
+
+		Automatic: decides if tuplet braces are required or not, decides
+				the "direction" of the tuplet marks (above or below the note group),
+				minimize collisions.
+*/
+
+#include <iostream>
 #include <string.h>
+#include <sstream>
 
-#include "VGDevice.h"
-#include "GRDefine.h"
-#include "FontManager.h"
+#include "ARTuplet.h"
 
-// - Guido AR
-#include "ARMusicalEvent.h"
-#include "ARRest.h"
-#include "ARNote.h"
-
-// - Guido GR
 #include "GRTuplet.h"
-#include "GRSingleNote.h"
-#include "GRSingleRest.h"
 #include "GRStaff.h"
-
+#include "GRPage.h"
+#include "GRVoice.h"
+#include "VGDevice.h"
+#include "VGFont.h"
+#include "FontManager.h"
 #include "secureio.h"
 
-// ===========================================================================
-// 		GRTupletState
-// ===========================================================================
-GRTupletState::GRTupletState(const GRTuplet & inTuplet )
+using namespace std;
+
+// #include "NEPointerList.h"
+// ----------------------------------------------------------------------------
+GRTuplet::GRTuplet ( GRStaff * inStaff, ARTuplet * artuplet )
+				   : GRPTagARNotationElement(artuplet)
 {
-	*this = inTuplet.mTupletState;
-	if (inTuplet.mTupletElements)
-		elements = new NEPointerList(*inTuplet.mTupletElements);
-	else
-		elements = 0;
-}
+	// (JB) require mGrStaff = inStaff ?
 
-GRTupletState::~GRTupletState()
-{
-	delete elements;
-}
+	assert(artuplet);
+	assert(inStaff);
 
-// ===========================================================================
-// 		GRTuplet
-// ===========================================================================
-GRTuplet::GRTuplet(GRStaff * inStaff, const TYPE_DURATION & p_basenote, Fraction p_relation)
-	: mTupletElements(NULL)
-{
-	staff = inStaff;
-
-	// here the base-notes are "cleaned" (normalised) 
-	// .> only exponents of 2 for the numerator
-
-	// This is done away with. We allow arbitrary stuff.
-	// Whatever this implies (i don't know)
-	// long i = floor ( log(p_basenote.getNumerator()) /log(2) );
-	// i = pow(2,i);
-	// mTupletState.base = TYPE_DURATION( i, p_basenote.getDenominator() );
-
-	mTupletState.base = p_basenote;
-	mTupletState.base.normalize();
-
-	mTupletState.relation = p_relation;
-
-	TYPE_DURATION tmp (mTupletState.base * mTupletState.relation);
-	const int expstd = tmp.isMultiple(2); // standarddarstellbar ...
-	if (expstd == -1)
-	{
-		mTupletState.relation = calcRelation();
-	}
-
-	// how do I react to overflow ... ?
-	mTupletState.duration = mTupletState.base * mTupletState.relation.getNumerator();
-
-	mTupletState.starttimepos = DURATION_0;
-	mTupletState.endtimepos = DURATION_0;
-}
-
-GRTuplet::GRTuplet(GRStaff * inStaff, const GRTupletState & tpls)
-	: mTupletElements(NULL)
-{
-	staff = inStaff;
-	mTupletState = tpls;
-	mTupletState.starttimepos = tpls.endtimepos;
-	mTupletState.endtimepos = mTupletState.starttimepos;
+	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
+	sse->grsystem = inStaff->getGRSystem();
+	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
 	
-	if (mTupletState.elements)
-	{
-	  	mTupletElements = new NEPointerList(*mTupletState.elements);
-	}
+	
+	GRTupletSaveStruct * st = new GRTupletSaveStruct;
+
+	sse->p = (void *) st;
+
+	mStartEndList.AddTail(sse);
+	mDirection = dirUP;
+
+	mShowLeftBrace = false;
+	mShowRightBrace = false;
 }
 
+// ----------------------------------------------------------------------------
 GRTuplet::~GRTuplet()
 {
-	if (mTupletElements)
-	{
-		// delete the associations
-		GuidoPos pos = mTupletElements->GetHeadPosition();
-		while (pos)
-		{
-			GRNotationElement * el = mTupletElements->GetNext(pos);
-			if( el ) el->removeAssociation(this);
-		}
-		delete mTupletElements;
-		mTupletElements = 0;
-	}
+	delete mAssociated;	// base destructor does a more complex job, should be removed ? 
+	mAssociated = 0;
 }
 
-TYPE_DURATION GRTuplet::calcRelation()
+// ----------------------------------------------------------------------------
+const ARTuplet * GRTuplet::getARTuplet() const
 {
-	// calculates/derives from base a relation so that
-	// durtempl can be displayed with standard notes (if they fit to base)
-
-	// idea: starting with base it will be searched 
-	// for the next bigger standardnote (base=2) then 
-	// do a multiplication with the inversion of the base note
-
-	const int tmpl = mTupletState.base.getDenominator();
-	if (tmpl >= 129)
-		return TYPE_DURATION(1,1);
-
-	const int k = (int) floor( -log( (double) mTupletState.base) / log(2.0) );
-
-	int power;
-	if (k<0)
-		power = 1;
-	else
-		power = (int) pow(2.0, k);
-
-	const TYPE_DURATION res ( TYPE_DURATION(mTupletState.base.getDenominator(),
-										mTupletState.base.getNumerator()) *
-										TYPE_DURATION(1,power));
-	return res;
-
+	return static_cast/*dynamic cast*/<ARTuplet *>(mAbstractRepresentation);
 }
 
-/** returns NULL if the event does not fit in the currenct tuplet-base.
-*/
-GREvent * GRTuplet::addEvent(ARMusicalEvent * inArEvent, TYPE_TIMEPOSITION von,
-				TYPE_DURATION & bis)
-  {
-	// much logic in!
+// ----------------------------------------------------------------------------
+void 
+GRTuplet::tellPosition(GObject * caller, const NVPoint & inPos )
+{
+	const ARTuplet * arTuplet = getARTuplet();
 
-	// there exist three cases
-	// 1. mTupletState.endtimepos + bis == duration
-	// 	ready
-	// 2. mTupletState.endtimepos + bis > duration
-	// cut from "von" to "bis", until duration reached: ready
-	// 3. mTupletState.endtimepos + bis < duration
-	// try to get the complete group (complete smallest)
-	// 	(e.g. relation.getDenominator()* standardnote (d.h. basis 2))
-	//    is equal to n*1/2^k
-	//	    if yes, change duration and base
-	//		if not, just add, not ready
-	//    Do "just add" so that
-	//     smallest possible unit will be added
-
-
-	// check first if denominator of new note fits to tuplet
-
-	TYPE_DURATION tmpd1 (1, 1);
-
-	if (bis != mTupletState.base)
+	if( arTuplet->isFormatSet() || arTuplet->isDySet())
 	{
-		tmpd1 = TYPE_DURATION(
-			bis.getNumerator() * mTupletState.base.getDenominator(),
-			bis.getDenominator() * mTupletState.base.getNumerator());
-
-		tmpd1.normalize();
-	}
-	if (tmpd1.getDenominator()!=1 && tmpd1.getNumerator()!=1)
-	{
-		// ATTENTION we are not in the correct base any longer!
-		return NULL;
-
-	}
-
-	// test if the duration of "bis" is smaller than 
-	// the previous base; if yes a new base will be selected which
-	// changes the tuplet length
-	if (bis < mTupletState.base)
-	{
-		TYPE_DURATION tmpd = mTupletState.base, tmpd2 = mTupletState.duration;
-		while ( tmpd2 > mTupletState.endtimepos)
-		{
-		  // tmpd is the new base
-			tmpd = mTupletState.base.getBiggestFullNote( mTupletState.base.getDenominator() );
-			if (tmpd == mTupletState.base)
-			{
-				break;
-			}
-			tmpd2 = tmpd * mTupletState.relation.getNumerator();
-			if (tmpd2 > mTupletState.endtimepos)
-			{
-				mTupletState.base = tmpd;
-				mTupletState.duration = tmpd2;
-			}
-		}
-	}
-
-	TYPE_TIMEPOSITION tpos ( mTupletState.endtimepos + bis);
-	if (tpos >= mTupletState.duration)
-	{
-		bis = mTupletState.duration - mTupletState.endtimepos; // schneide wenn noetig etwas ab ...
+		manualPosition( caller, inPos );
 	}
 	else
-	{   // check if it could be a smaller group
-		int expstd = tpos.isMultiple(2); // standard representation
-		if (expstd>=0)
-		{ // smaller grouping possible
-			mTupletState.duration = tpos;
-			mTupletState.base = mTupletState.duration * TYPE_DURATION(1,
-								mTupletState.relation.getNumerator());
-		}
-	}
-
-
-	// dtempl is the duration template for the representation
-	// because tuplets can be represented/displayed only with 
-	// even valued notes (no dots) automatically
-	// getBiggestFullNote will e called.
-	// the duration of "bis" will be changed accordingly
-	GREvent * newGREvent = 0;
-
-	TYPE_DURATION dtempl = bis * mTupletState.relation;
-
-	if (dtempl.getDenominator() < 100 )
 	{
-		dtempl = dtempl.getBiggestFullNote(2);
+		// automaticDirection();
+		automaticPosition( caller, inPos );
+	}
+}
 
-		if (dtempl.getDenominator() > 32 ) // ATTENTION: don't use hardcoded number
-												// or get from .h file
+// ----------------------------------------------------------------------------
+void 
+GRTuplet::manualPosition(GObject * caller, const NVPoint & inPos )
+{
+	GREvent * event = GREvent::cast( caller );
+	if( event == 0 ) return;
+
+	GRStaff * staff = event->getGRStaff();
+	if( staff == 0 ) return;
+
+	GRSystemStartEndStruct * sse = getSystemStartEndStruct(staff->getGRSystem());
+	if( sse == 0 ) return;
+
+	GRNotationElement * startElement = sse->startElement;
+	GRNotationElement * endElement = sse->endElement;
+
+	// if ( openLeftRange && openRightRange ) return;
+
+	GRTupletSaveStruct * st = (GRTupletSaveStruct *)sse->p;
+
+	const ARTuplet * arTuplet = getARTuplet();
+
+	float dy1 = arTuplet->isDySet() ? arTuplet->getDy1() : 0;
+	float dy2 = arTuplet->isDySet() ? arTuplet->getDy2() : 0;
+
+	if(( dy1 > 0 ) || ( dy2 > 0 ))
+		mDirection = dirUP;
+
+	const float halfNoteWidth = LSPACE * float(0.65); // harcoded
+	if (event == startElement)
+	{
+		st->p1 = startElement->getPosition();		
+		st->p1.x -= halfNoteWidth; // to enclose all the element width
+		st->p1.y -= dy1;
+	}
+	else if (event == endElement)
+	{
+		st->p2 = endElement->getPosition();
+		st->p2.x += halfNoteWidth; // to enclose all the element width
+		st->p2.y -= dy2;
+	}
+	
+	if(event == endElement || (endElement == 0 && event == startElement))
+	{
+		if (startElement && endElement)
 		{
-		  	dtempl = bis * mTupletState.relation; // I create a non displayable note
-							// bis will not be changed
+			const float posx = (st->p2.x - st->p1.x) * 0.5f + st->p1.x;
+            const float posy = st->p2.y > st->p1.y ? (st->p2.y - st->p1.y) * 0.5f + st->p1.y + 40 : (st->p1.y - st->p2.y) * 0.5f + st->p2.y + 40;
+		
+			st->textpos.x = posx;
+            st->textpos.y = posy;
 		}
 		else
-			bis = dtempl * TYPE_DURATION(mTupletState.relation.getDenominator(),
-													mTupletState.relation.getNumerator());
+			st->textpos = inPos;
 	}
 
-	// Attention,  what happens if the duration does not fit right?!?
+//	if( arTuplet->isFormatSet())
+//	{
+		mShowLeftBrace = arTuplet->getLeftBrace();
+		mShowRightBrace = arTuplet->getRightBrace();
+//	}
 
-	ARNote * arNote;
-	ARRest * arRest;
-	
-	if(( arNote = dynamic_cast<ARNote *>(inArEvent)) != 0 )
+}
+
+/*
+// ----------------------------------------------------------------------------
+void 
+GRTuplet::automaticDirection()
+{
+	GuidoPos pos = mAssociated->GetHeadPosition();
+	while( pos )
 	{
-		newGREvent =  new GRSingleNote( staff, arNote, von, bis );
-		static_cast <GRSingleNote *>(newGREvent)->doCreateNote( dtempl );
-	}
-	else if(( arRest = dynamic_cast<ARRest *>(inArEvent)) != 0 )
-	{
-		newGREvent = new GRSingleRest( staff, arRest, von, bis, dtempl );
+		GRNotationElement * el = mAssociated->GetNext(pos);
+		if( el && ( el != startElement ) && ( el != endElement ))
+		{
+		}
 	}
 
-	newGREvent->addAssociation(this); // the tuplet will be associated with GREvent
-	if (mTupletElements == 0)
-		mTupletElements = new NEPointerList();
-
-	mTupletElements->AddTail(newGREvent);
-
-	inArEvent->addGRRepresentation(newGREvent);
-
-	mTupletState.endtimepos += bis;
-
-	return newGREvent;
-}
-
-bool GRTuplet::isFull() const
-{
-	if (mTupletState.endtimepos == mTupletState.duration)
-		return true;
-  
- 	return false;
-}
-
-void GRTuplet::setPosition(const NVPoint & )
-{
-}
-
-void GRTuplet::tellPosition(GObject * caller, const NVPoint &)
-{
-	// here the positions of the single tuplet elements can be retrieved
-
-	// the alg- must prevent that the calculated line does not 
-	// go through notes
-
-	// 1. version: line with acceleration 0 below the note heads
-	
-	const NVRect & callerBox = caller->getBoundingBox();
-	const NVPoint & pos = caller->getPosition();
-
-	if ( caller == ((GObject*) mTupletElements->GetHead()))
-	{
-			// this is the first call
-			mPosition.x = pos.x;
-			mPosition.y = pos.y + callerBox.bottom;
-
-			mTupletOffsets[0].x = 0;
-			mTupletOffsets[0].y = (float(0.75) * LSPACE);
-	}
-	else	// another Element
-	{ 
-		if (pos.y + callerBox.bottom > mPosition.y)
-				mPosition.y = pos.y + callerBox.bottom;
-	}
-
-	if( caller == ((GObject*)mTupletElements->GetTail()))	// last Element ...
-	{ 
-		mTupletOffsets[1].x = pos.x - mPosition.x + callerBox.right;
-		mTupletOffsets[1].y = mTupletOffsets[0].y;
-		mTupletOffsets[2].x = mTupletOffsets[1].x;
-
-		if (isFull())
-			mTupletOffsets[2].y = 0;
-		else
-			mTupletOffsets[2].y = mTupletOffsets[0].y; // realisation of the open tiplet 
-
-		// now the text part
-		mTupletOffsets[3].x = (mTupletOffsets[2].x - mTupletOffsets[0].x) / 2 - LSPACE;
-		mTupletOffsets[3].y = 0;
-		mTupletOffsets[4].x = mTupletOffsets[3].x + 2*LSPACE ; // actual textwidth
-		mTupletOffsets[4].y = 2*LSPACE;
-	}
+//	mDirection = event->getStemDirection();
 
 }
-
-TYPE_DURATION GRTuplet::getDurTemplate(TYPE_DURATION d) const
-{
-	return d;
-}
-
-void GRTuplet::print() const
-{
-	fprintf(stderr,"GRTuplet\n");
-}
-
-void GRTuplet::GGSOutput() const
-{
-}
-
-/** \brief Draws the n-tuplet bow (or not).
 */
-void GRTuplet::OnDraw( VGDevice & hdc ) const
+
+// ----------------------------------------------------------------------------
+/** Places the tuplet bracket and/or numeral, close to its group of notes.
+
+	Calculates the positions of the two possible tuplet bracket (above 
+	 and below) then choose the best one.
+
+*/
+void  GRTuplet::automaticPosition(GObject * caller, const NVPoint & inPos )
+{
+	GREvent * callerEv = GREvent::cast( caller );
+	if( callerEv == 0 ) return;
+
+	GRStaff * staff = callerEv->getGRStaff();
+	if( staff == 0 ) return;
+
+	GRSystemStartEndStruct * sse = getSystemStartEndStruct(staff->getGRSystem());
+	if( sse == 0 ) return;
+
+	GRTupletSaveStruct * st = (GRTupletSaveStruct *)sse->p;
+	if( st == 0 ) return;
+
+	GREvent * startElement = GREvent::cast( sse->startElement );
+	if( startElement == 0 ) return;
+
+	GREvent * endElement = GREvent::cast( sse->endElement );
+	if( endElement == 0 ) return;
+
+	// - Accept being positioned only once, if possible by the last tuplet element.
+	//if(( callerEv != endElement ) && ((callerEv != startElement) || (endElement != 0)))
+	if( callerEv != endElement )
+		return;
+	
+	// - Check for beams
+	const bool firstBeamed = (startElement->getBeamCount() > 0);
+	const bool lastBeamed = (endElement->getBeamCount() > 0);
+
+	mShowLeftBrace = !(firstBeamed && lastBeamed );
+	mShowRightBrace = mShowLeftBrace;
+
+	// - Get first and last element positions to work with
+	float startX, endX;
+	startX = endX = 0;
+	float startUpY, startDownY, endUpY, endDownY;
+
+		// x positions
+	const float halfNoteWidth = LSPACE * float(0.65); // harcoded
+	startX = startElement->getPosition().x;
+	endX = endElement->getPosition().x;
+
+//	if( endX == startX ) return;		// DF commented: results in strange vertical bars
+
+	startX -= halfNoteWidth;
+	endX += halfNoteWidth;
+		
+		// y positions
+	const NVRect & leftBox = startElement->getBoundingBox();
+	const NVRect & rightBox = endElement->getBoundingBox();
+	const float elPos1y = startElement->getPosition().y;
+	const float elPos2y = endElement->getPosition().y;
+
+	startUpY = leftBox.top + elPos1y;
+	endUpY = rightBox.top + elPos2y;
+
+	startDownY = leftBox.bottom + elPos1y;
+	endDownY = rightBox.bottom + elPos2y;
+
+	// - Calculate a virtual line from the first to the last element,
+	
+	int stemStats = 0;
+	const float deltaX = (endX - startX);
+
+	float slopeUp = (endUpY - startUpY) / deltaX; // slope of the virtal line above
+	float slopeDown = (endDownY - startDownY) / deltaX; // slope of the virtal line below
+
+	float x, yUp, yDown, distUp, distDown;
+	float mxUp = 0, myUp = 0, mxDown = 0, myDown = 0;	// 'extreme' middle point
+	bool collideUp = false;
+	bool collideDown = false;
+
+	GuidoPos pos = mAssociated->GetHeadPosition();
+	while( pos )
+	{
+		GREvent * el = GREvent::cast( mAssociated->GetNext(pos));
+		if( el == 0 ) continue;
+
+		// - Generate stats about stem directions
+		GDirection stemDir = el->getStemDirection();
+		if( stemDir == dirUP ) ++ stemStats;
+		else if( stemDir == dirDOWN ) -- stemStats; 
+		
+		if(( el != startElement ) && ( el != endElement ))
+		{
+			// - Get the element box
+			const NVRect & elBox = el->getBoundingBox();
+			const NVPoint & elPos = el->getPosition();
+			
+			x = elPos.x;
+			yUp = elBox.top + elPos.y;
+			yDown = elBox.bottom + elPos.y;
+			
+			// - Calculate the y-distance between the element and the virtual line.
+			// distY = startY - (y - slope * (x - startX)); 
+
+			distUp = (startUpY - yUp) + (x - startX) * slopeUp;
+			distDown = (startDownY - yDown) + (x - startX) * slopeDown;
+
+			if( distUp > 0 )	// then the point is above the virtual line
+			{
+				mxUp = x;
+				myUp = yUp; 
+				collideUp = true;
+				//startUpY -= distUp;	// TODO: better handling of this collision
+				//endUpY -= distUp;
+			}
+		
+			if( distDown < 0 )	// then the point is below the virtual line
+			{
+				mxDown = x;
+				myDown = yDown; 
+				collideDown = true;
+				//startDownY -= distDown;
+				//endDownY -= distDown;
+			}
+		}
+	}
+
+	// - Adjust the brace to avoid collisions. It must be above (or below) all elements, 
+	// while remaining close to those elements, and avoid being in the staff.
+	// brace 1 (upward)
+	if( collideUp )
+	{
+		if(( myUp <= startUpY ) && ( myUp <= endUpY ))	// middle point above start and end points
+		{
+			// slopeUp = 0; // horizontal
+			startUpY = myUp;
+			endUpY = myUp;
+		}
+		else	
+		{
+			if( myUp <= endUpY ) // middle point above end point only: shift the end point up
+			{
+				slopeUp = (myUp - startUpY) / (mxUp - startX);
+				endUpY = startUpY + (deltaX * slopeUp);
+			}
+			else // middle point above start point only: shift the start point up
+			{
+				slopeUp = (endUpY - myUp) / (endX - mxUp);
+				startUpY = endUpY - (deltaX * slopeUp);
+			}
+		}
+	}
+
+	// brace 2 (downward)
+	if( collideDown )
+	{
+		if(( myDown >= startDownY ) && ( myDown >= endDownY )) // middle point below start and end points
+		{
+			// slopeDown = 0; // horizontal
+			startDownY = myDown;
+			endDownY = myDown;
+		}
+		else
+		{
+			if( myDown >= endDownY ) // middle point below end point only: shift the end point down
+			{
+				slopeDown = (myDown - startDownY) / (mxDown - startX);
+				endDownY = startDownY + (deltaX * slopeDown);
+			}
+			else // middle point below start point only: shift the start point down
+			{
+				slopeDown = (endDownY - myDown) / (endX - mxDown);
+				startDownY = endDownY - (deltaX * slopeDown);
+			}
+		}
+	}
+
+	// - Avoid being inside staff
+	if( startUpY > 0 )	startUpY = 0;	
+	if( endUpY > 0 )	endUpY = 0;	
+
+	const float staffHeight = staff->getDredgeSize();
+	if( startDownY < staffHeight )	startDownY = staffHeight;	
+	if( endDownY < staffHeight )	endDownY = staffHeight;	
+
+	// - Tune
+	float marginY = LSPACE * float(1.25);
+
+	startUpY -= marginY;
+	endUpY -= marginY;
+	
+	startDownY += marginY;
+	endDownY += marginY;
+
+	// - Choose the best solution (above or below)
+	// We put the brace and the tuplet numeral on the stem side.
+
+	float startY;
+	float endY;
+	
+	if( stemStats >= 0 ) // stems tend to be up.
+	{
+		mDirection = dirUP;
+		startY = startUpY;
+		endY = endUpY;
+	}
+	else
+	{
+		mDirection = dirDOWN;
+		startY = startDownY;
+		endY = endDownY;
+	}
+
+	// - Store results
+	const float textOffsetY = LSPACE;
+
+	st->p1.x = startX;
+	st->p1.y = startY;
+	st->p2.x = endX;
+	st->p2.y = endY;
+
+	st->textpos.x = (startX + endX) * float(0.5);
+	st->textpos.y = (startY + endY) * float(0.5) + textOffsetY - 9;
+}
+
+
+// ----------------------------------------------------------------------------
+void GRTuplet::OnDraw(VGDevice & hdc) const
 { 
 	if(!mDraw)
 		return;
-	char buffer[30];
 
-	if(( mTupletElements == 0 ) || ( mTupletElements->empty())) return;
+	assert(gCurSystem);
+	GRSystemStartEndStruct * sse = getSystemStartEndStruct(gCurSystem);
 
-	const Fraction & relation = mTupletState.relation;
-	const int num = relation.getNumerator();
+	if (sse == 0)
+		return;
 
-	if (num != 3 && num != 5 && num != 7)
-		snprintf( buffer,30,"%d:%d", relation.getNumerator(), relation.getDenominator());
-	else
-		snprintf(buffer,30,"%d", relation.getNumerator());
+	GRTupletSaveStruct * st = (GRTupletSaveStruct *)sse->p;	
 
-	// draw an open bracket if tuplet is not complete
-	int starter = 0;
-	float x, y;
-	if (mTupletState.starttimepos != DURATION_0)
+	const ARTuplet * arTuplet = getARTuplet();
+
+	int charCount = 0;
+
+    float const thickness = arTuplet->getThickness();
+
+	// - Draws the number
+	const int numerator = arTuplet->getNumerator();
+
+	if (numerator > 0)
 	{
-		x = mPosition.x + mTupletOffsets[0].x;
-		y = mPosition.y + mTupletOffsets[0].y;
-		starter = 1;
+		std::stringstream bufferNumeratorDenominatorStream;
+        
+		const int denominator = arTuplet->getDenominator(); 
+		if (denominator > 0)
+			bufferNumeratorDenominatorStream << numerator << ":" << denominator;
+		else
+			bufferNumeratorDenominatorStream << numerator;
+	
+        std::string bufferNumeratorDenominator = bufferNumeratorDenominatorStream.str();
+        charCount = bufferNumeratorDenominator.size();
+
+        const VGFont *font = 0;
+        const NVstring fontName("Times New Roman");
+        NVstring attrs;
+
+        if (arTuplet->getIsBold())
+            attrs = "b";
+
+        font = FontManager::FindOrCreateFont(int(80 * arTuplet->getTextSize()), &fontName, &attrs);
+        hdc.SetTextFont(font);
+
+        /* In order that numerator/denominator stays at the same vertical position even if size is changed */
+        float extentCharNumeratorDenominatorx;
+        float extentCharNumeratorDenominatory;
+        FontManager::gFontScriab->GetExtent(bufferNumeratorDenominator.c_str(), bufferNumeratorDenominator.size(), &extentCharNumeratorDenominatorx, &extentCharNumeratorDenominatory, &hdc);
+
+        int offset = int(extentCharNumeratorDenominatory / 11.2 * arTuplet->getTextSize() - 40);
+        /***************************************************************************************************/
+
+		hdc.SetFontAlign(VGDevice::kAlignCenter | VGDevice::kAlignBottom);
+        hdc.DrawString(st->textpos.x, st->textpos.y + offset, bufferNumeratorDenominator.c_str(), charCount);
 	}
-	else {
-		x = mPosition.x;
-		y = mPosition.y;
-	}
 
-	// - Todo: SelectPen
-	for (int i=starter; i < 3; i++) {
-		hdc.Line( x, y, mPosition.x + mTupletOffsets[i].x , mPosition.y + mTupletOffsets[i].y );
-		x = mPosition.x + mTupletOffsets[i].x;
-		y = mPosition.y + mTupletOffsets[i].y;
-	}
+	// - Draws the braces
+	const float middleX = (st->p1.x + st->p2.x) * 0.5f;
+	const float middleY = (st->p1.y + st->p2.y) * 0.5f;
+	const float slope = (st->p2.y - st->p1.y) / (st->p2.x - st->p1.x); //<- could be stored
+    const float textSpace = ((float)charCount + float(0.5)) * LSPACE * float(0.5) * arTuplet->getTextSize();
 
-	// now the "n" at the bow
-	hdc.SetTextFont( FontManager::gFontText );	// will be automatic soon
-
-	float tmpx = 0;
-	if (mTupletOffsets[3].x <= 0)
-		tmpx = LSPACE - mTupletOffsets[3].x;
-
-	hdc.SetFontAlign( VGDevice::kAlignLeft | VGDevice::kAlignBase );
-	hdc.DrawString( mPosition.x + mTupletOffsets[3].x + tmpx,
-					mPosition.y + mTupletOffsets[3].y + (2.5f * LSPACE), buffer, (int)strlen(buffer) );
-}
-
-void GRTuplet::setHorizontalSpacing()
-{
-}
-
-const TYPE_DURATION & GRTuplet::getDuration() const
-{
-	return mTupletState.duration;
-}
-
-const TYPE_TIMEPOSITION & GRTuplet::getRelativeTimePosition() const
-{
-	return (TYPE_TIMEPOSITION &) DURATION_0;
-}
-
-TYPE_TIMEPOSITION GRTuplet::getRelativeEndTimePosition() const
-{
-	return (TYPE_TIMEPOSITION) DURATION_0;
-}
-
-void GRTuplet::finish()
-{
-	// now set the positions ...
-	if (mTupletElements && !mTupletElements->empty())
+	if( mShowLeftBrace | mShowRightBrace )
 	{
-		GRNotationElement * el = mTupletElements->GetTail();
-		tellPosition( el, el->getPosition());
-	}
-}
-
-void GRTuplet::setTupletState(const GRTupletState & tpl)
-{
-
-	mTupletState = tpl;
-}
-
-void GRTuplet::removeEvent(GREvent * ev)
-{
-	if( ev )
-	{
-		ev->removeAssociation(this);
-		if( mTupletElements )
-			mTupletElements->RemoveElement(ev);
+		hdc.PushPenWidth(thickness);
 		
-		mTupletState.duration -= ev->getDuration();
-	}	
-	finish();
+		if( mShowLeftBrace ) //arTuplet->getLeftBrace()) // (mBraceState & BRACELEFT)
+		{
+			if( sse->startflag == GRSystemStartEndStruct::LEFTMOST)
+			{
+				hdc.Line(st->p1.x, st->p1.y + 0.5f * LSPACE * mDirection, st->p1.x, st->p1.y);
+			}
+
+			hdc.Line( st->p1.x, st->p1.y, middleX - textSpace, middleY - slope * textSpace );
+		}
+
+		if( mShowRightBrace ) //arTuplet->getRightBrace()) // (mBraceState & BRACERIGHT)
+		{
+			hdc.Line( middleX + textSpace, middleY + slope * textSpace, st->p2.x, st->p2.y );
+
+			if( sse->endflag == GRSystemStartEndStruct::RIGHTMOST)
+			{
+				hdc.Line( st->p2.x, st->p2.y, st->p2.x, st->p2.y + 0.5f * LSPACE * (float)mDirection);
+			}
+		}
+
+		hdc.PopPenWidth();
+	}
 }
 
-void GRTuplet::removeAssociation(GRNotationElement * el)
+// ----------------------------------------------------------------------------
+void GRTuplet::print() const
 {
-	if (el && mTupletElements && mTupletElements->RemoveElement(el))
-		mTupletState.duration -= el->getDuration();
 }
+
+/* First new version
+// ----------------------------------------------------------------------------
+void 
+GRTuplet::automaticPosition(GObject * caller, const NVPoint & inPos )
+{
+	GREvent * event = GREvent::cast( caller );
+	if( event == 0 ) return;
+
+	GRStaff * staff = event->getGRStaff();
+	if( staff == 0 ) return;
+
+	GRSystemStartEndStruct * sse = getSystemStartEndStruct(staff->getGRSystem());
+	if( sse == 0 ) return;
+
+	GRTupletSaveStruct * st = (GRTupletSaveStruct *)sse->p;
+	if( st == 0 ) return;
+
+	GRNotationElement * startElement = sse->startElement;
+	GRNotationElement * endElement = sse->endElement;
+
+	// - Accept being positioned only once, end-element prefered, if possible.
+	if(( caller != endElement ) && ((caller != startElement) || (endElement != 0)))
+		return;
+	
+	// - Choose the direction: up (above) or down (below)
+
+	mDirection = event->getStemDirection();
+	const bool upward = (mDirection != dirDOWN);
+
+	// - Get first and last element positions to work with
+	float startX, startY, endX, endY;
+	const float halfNoteWidth = LSPACE * float(0.65); // harcoded
+
+	const NVRect & leftBox = startElement->getBoundingBox();
+	const NVRect & rightBox = endElement->getBoundingBox();
+
+	startX = startElement->getPosition().x - halfNoteWidth;
+	endX = endElement->getPosition().x + halfNoteWidth;
+
+	if( upward )
+	{
+		startY = leftBox.top;
+		endY = rightBox.top;
+	}
+	else
+	{
+		startY = leftBox.bottom;
+		endY = rightBox.bottom;
+	}
+
+	startY += startElement->getPosition().y;
+	endY += endElement->getPosition().y;
+
+	// - Calculates the position of the tuplet bracket.
+	// - The idea is to calculate a virtual line from the first to the last element,
+	// and to shift this line up (or down) to avoid intersections with other elements.
+	if( endX == startX ) return;
+
+	float slope = (endY - startY) / (endX - startX); // slope of the virtal line.
+
+	float x, y, distY;
+
+	GuidoPos pos = mAssociated->GetHeadPosition();
+	while( pos )
+	{
+		GRNotationElement * el = mAssociated->GetNext(pos);
+		if( el && ( el != startElement ) && ( el != endElement ))
+		{
+			// - Get the element box
+			const NVRect & elBox = el->getBoundingBox();
+			const NVPoint & elPos = el->getPosition();
+			
+			x = elPos.x;
+			y = upward ?  elBox.top : elBox.bottom;
+			y += elPos.y;
+
+			// - Calculate the y-distance between the element and the virtual line.
+			// distY = startY - (y - slope * (x - startX)); 
+
+			distY = (startY - y) + (x - startX) * slope;
+
+			if(( upward && (distY > 0)) || ( !upward && (distY < 0)))
+			{
+				startY -= distY;
+				endY -= distY;
+			}
+		}
+	}
+
+	// - Avoid being inside staff
+	if( upward )
+	{
+		if( startY > 0 )	startY = 0;	
+		if( endY > 0 )		endY = 0;	
+	}
+	else
+	{
+		const float staffHeight = staff->getDredgeSize();
+		if( startY < staffHeight )	startY = staffHeight;	
+		if( endY < staffHeight )	endY = staffHeight;	
+	}
+
+	// - Tune
+	float textOffsetY;
+	float marginY;
+
+	if( upward )
+	{
+		marginY = - LSPACE * float(1.25);
+		textOffsetY = LSPACE;
+	}
+	else
+	{
+		marginY = LSPACE * float(1.25);
+		textOffsetY = LSPACE;
+	}
+
+	startY += marginY;
+	endY += marginY;
+	
+	// - Store results
+
+	st->p1.x = startX;
+	st->p1.y = startY;
+	st->p2.x = endX;
+	st->p2.y = endY;
+
+	st->textpos.x = (startX + endX) * float(0.5);
+	st->textpos.y = (startY + endY) * float(0.5) + textOffsetY;
+}*/
+
+/* Original version:
+void GRTuplet::tellPosition(GObject * caller, const NVPoint & newPosition)
+{
+	GRNotationElement * grel = dynamic_cast<GRNotationElement *>(caller);
+	if((grel == 0) || (grel->getGRStaff() == 0))
+	{
+		assert(false);
+		return;
+	}
+
+	GRSystemStartEndStruct * sse = getSystemStartEndStruct(grel->getGRStaff()->getGRSystem());
+	assert(sse);
+	if (!sse)
+		return;
+
+	GRNotationElement * startElement = sse->startElement;
+	GRNotationElement * endElement = sse->endElement;
+
+	// if ( openLeftRange && openRightRange ) return;
+
+	GRTupletSaveStruct * st = (GRTupletSaveStruct *)sse->p;
+
+	const ARTuplet * arTuplet = getARTuplet();
+
+	float dy1 = arTuplet->isDySet() ? -arTuplet->getDy1() : float(1.25) * LSPACE;
+	float dy2 = arTuplet->isDySet() ? -arTuplet->getDy2() : float(1.25) * LSPACE;
+
+	if (grel == startElement)
+	{
+		st->p1 = startElement->getPosition();		
+		st->p1.y += (GCoord)(dy1);
+	}
+	if (grel == endElement)
+	{
+		st->p2 = endElement->getPosition();
+		st->p2.y += (GCoord)(dy2);
+	}
+	if ( grel == endElement || ( endElement == 0 && grel == startElement) )
+	{
+
+		if (startElement && endElement)
+		{
+			const float posx = (st->p2.x - st->p1.x) * 0.5f + st->p1.x;
+			const float posy = st->p2.y > st->p1.y ? (st->p2.y) : (st->p1.y);
+
+			// posy += 2*LSPACE;
+		
+			st->textpos.x = (GCoord)posx;
+			st->textpos.y = (GCoord)posy;
+		}
+		else
+			st->textpos = newPosition;
+	}
+}
+*/
+
+/* Original version:
+void GRTuplet::OnDraw(VGDevice & hdc) const
+{ 
+
+	assert(gCurSystem);
+	GRSystemStartEndStruct * sse = getSystemStartEndStruct(gCurSystem);
+	if (!sse)
+		return;
+
+	GRTupletSaveStruct * st = (GRTupletSaveStruct *) sse->p;	
+
+	// The first implementation justs draws the string ...
+	char buffer[30];
+	char * mybuf = &buffer[0];
+	strncpy(buffer,getARTuplet()->getName(),30);
+	if (buffer[0] == '-')
+		mybuf = &buffer[1];
+	int length = (int)strlen(mybuf);
+	if (mybuf[ length - 1 ] == '-')
+	{
+		mybuf[ length - 1 ] = 0;
+		-- length;
+	}
+
+	// TODO: SelectPen !
+	
+	if (mBraceState & BRACELEFT 
+		&& sse->startflag == GRSystemStartEndStruct::LEFTMOST)
+	{
+	  hdc.MoveTo(st->p1.x, st->p1.y - 0.5f * LSPACE);
+	  hdc.LineTo(st->p1.x, st->p1.y);
+	}
+
+	// now draw the lines ...
+	hdc.MoveTo(st->p1.x,st->p1.y);
+
+	const float middleX = (st->p1.x + st->p2.x) * 0.5f;
+	const float middleY = (st->p1.y + st->p2.y) * 0.5f;
+
+	if (mBraceState & BRACELEFT)
+		hdc.LineTo( middleX, middleY );
+
+	hdc.MoveTo( middleX, middleY );
+
+	if (mBraceState & BRACERIGHT)
+		hdc.LineTo( st->p2.x, st->p2.y );
+
+	if (mBraceState & BRACERIGHT && 
+		sse->endflag == GRSystemStartEndStruct::RIGHTMOST)
+	{
+		hdc.LineTo( st->p2.x, st->p2.y - 0.5f * LSPACE);
+	}
+
+	GFontRef hfontold = hdc.SelectFont( gFontDefs.gFontText );
+	GColor backColor = hdc.GetTextBackgroundColor();
+	hdc.SetTextBackgroundColor( 255, 255, 255, 255 );
+
+	const unsigned int ta = hdc.GetTextAlign();
+	hdc.SetTextAlign( VGDevice::kAlignLeft | VGDevice::kAlignBase );
+	hdc.PrintAt( st->textpos.x, st->textpos.y, mybuf, length );
+	hdc.SetTextAlign(ta);
+
+	hdc.SetTextBackgroundColor( backColor );
+//	hdc.SelectFont( hfontold );			// JB test for optimisation: do not restore font context.
+}
+*/

@@ -146,7 +146,19 @@ GRArticulation::GRArticulation(ARMusicalTag * inTag, float curLSPACE, bool ownsa
 		else setupStaccato();
 	}
 	else if (tinfo == typeid(ARAccent))			setupAccent();
-	else if (tinfo == typeid(ARMarcato))		setupMarcato();
+	else if (tinfo == typeid(ARMarcato))
+    {
+        if ( ((ARMarcato *) inTag)->getPositionMarcato() == ARMarcato::BELOW )
+		{
+			setupMarcatoDown();
+		}
+		else if ( ((ARMarcato *) inTag)->getPositionMarcato() == ARMarcato::ABOVE )
+		{
+			setupMarcatoUp();
+		}
+        else
+            setupMarcato();
+    }
 	else if (tinfo == typeid(ARTenuto))			setupTenuto();
 	else if (tinfo == typeid(ARFermata))		
 	{
@@ -258,6 +270,22 @@ void GRArticulation::setupMarcato()
 	setArticulationSymbol( kMarcatoUpSymbol );
 
 	setMarcatoDirection( true );
+}
+
+void GRArticulation::setupMarcatoUp()
+{
+    mArticulationFlag = kFlagMarcatoUp;
+	setArticulationSymbol( kMarcatoUpSymbol );
+
+	setMarcatoDirection( true );
+}
+
+void GRArticulation::setupMarcatoDown()
+{
+	mArticulationFlag = kFlagMarcatoDown;
+	setArticulationSymbol( kMarcatoDownSymbol );
+
+	setMarcatoDirection( false );
 }
 
 void GRArticulation::setupTenuto()
@@ -408,6 +436,8 @@ void GRArticulation::tellPosition(GObject * caller, const NVPoint & inPos)	// Ca
 		case kFlagStaccmo:		placeStaccmo( ev, newPoint);		break;
 		case kFlagAccent:		placeAccent( ev, newPoint );		break;
 		case kFlagMarcato:		placeMarcato( ev, newPoint );		break;
+        case kFlagMarcatoUp:	placeMarcatoUp( ev, newPoint );		break;
+        case kFlagMarcatoDown:	placeMarcatoDown( ev, newPoint );	break;
 		case kFlagTenuto:		placeTenuto( ev, newPoint );		break;
 		case kFlagFermataUp:	placeFermataUp( ev, newPoint );		break;
 		case kFlagFermataDown:	placeFermataDown(ev, newPoint );	break;
@@ -484,6 +514,26 @@ void GRArticulation::placeMarcato( GREvent * inParent, NVPoint & ioPos )
 //	placeOutsideStaff( inParent, ioPos );
 	const int dir = chooseDirection( inParent );
 	const bool upward = (dir == dirUP);
+
+	setMarcatoDirection( upward );
+	placeAfterNote( inParent, ioPos, upward );
+}
+
+// ----------------------------------------------------------------------------
+// outside the staff prefered
+void GRArticulation::placeMarcatoUp( GREvent * inParent, NVPoint & ioPos )
+{
+	const bool upward = true;
+
+	setMarcatoDirection( upward );
+	placeAfterNote( inParent, ioPos, upward );
+}
+
+// ----------------------------------------------------------------------------
+// outside the staff prefered
+void GRArticulation::placeMarcatoDown( GREvent * inParent, NVPoint & ioPos )
+{
+	const bool upward = false;
 
 	setMarcatoDirection( upward );
 	placeAfterNote( inParent, ioPos, upward );

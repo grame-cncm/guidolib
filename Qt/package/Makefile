@@ -1,4 +1,4 @@
-VERSION=2.50
+VERSION=2.51
 
 system	:= $(shell uname -s)
 ifeq ($(system), Linux)
@@ -48,10 +48,10 @@ macos:
 	make macapp APPL=GuidoEditor
 	make macapp APPL=GuidoSceneComposer
 	cp $(MACTOOLS) $(MACOSX_NAME)
-	cd $(MACOSX_NAME) && ../localise-tool $(TOOLS) guido2image
 	cp -r ../../build/MacOS/Release/GUIDOEngine.framework $(MACOSX_NAME)
 	cp ../../src/guido2.ttf $(MACOSX_NAME)
 	cp ../bin/guido2image $(MACOSX_NAME)
+	cd $(MACOSX_NAME) && ../localise-tool $(TOOLS) guido2image
 	hdiutil create -srcfolder $(MACOSX_NAME) -ov $(MACOSX_NAME).dmg
 
 check:

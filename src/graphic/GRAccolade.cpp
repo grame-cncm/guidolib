@@ -17,10 +17,11 @@
 #include "GraphTools.h"
 
 // --------------------------------------------------------------------------
-GRAccolade::GRAccolade( int inAccoladeType, float inDx )
+GRAccolade::GRAccolade(int inAccoladeType, float inDx)
 {
 	mAccoladeType = inAccoladeType;
 	mDx = inDx;
+    fHasBeenDrawn = false;
 }
 
 // --------------------------------------------------------------------------
@@ -37,6 +38,12 @@ GRAccolade::draw( VGDevice & hdc, const NVPoint & leftTop,
 	switch( mAccoladeType )
 	{
 		case kAccoladeThin: // mywidth *= float(0.67); // (JB) don't know if it's what we want.
+		{
+			const float thickness = float(0.45) * LSPACE/2;
+			DrawEmulatedAccolade( hdc, leftTop.x + mDx, leftTop.y, leftBottom.y, thickness );
+		
+			break;
+		}
 		case kAccoladeCurly:
 		{
 			/*	
@@ -55,7 +62,9 @@ GRAccolade::draw( VGDevice & hdc, const NVPoint & leftTop,
 											(last.y - mPosition.y + staffHeight), totalHeight, mywidth );
 			}
 			else*/
-				DrawEmulatedAccolade( hdc, leftTop.x + mDx, leftTop.y, leftBottom.y );
+			
+				const float thickness = float(0.45) * LSPACE;
+				DrawEmulatedAccolade( hdc, leftTop.x + mDx, leftTop.y, leftBottom.y, thickness );
 		
 			break;
 		}
@@ -164,7 +173,7 @@ GRAccolade::DrawStraightAccolade( VGDevice & hdc, float x, float yTop,
 	version 2
 */
 void 
-GRAccolade::DrawEmulatedAccolade( VGDevice & hdc, float x, float yTop, float yBottom ) const
+GRAccolade::DrawEmulatedAccolade( VGDevice & hdc, float x, float yTop, float yBottom, float thickness ) const
 {
 	const float xOffset = LSPACE * 0.33f;			// offset between brace and system
 	const float yMid = (yTop + yBottom) * 0.5f;		// middle of the system
@@ -186,7 +195,6 @@ GRAccolade::DrawEmulatedAccolade( VGDevice & hdc, float x, float yTop, float yBo
 	x4 = x - float(1) * LSPACE;		// the end anchor point
 	y4 = yMid;
 
-	const float thickness = float(0.45) * LSPACE;
 	float x2b = x2 - thickness;
 	float x3b = x3 - thickness; // we could also modify y's
 

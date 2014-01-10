@@ -164,16 +164,16 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		_readmode getReadMode() const						{ return readmode; }
 
 	protected:
-		ARChordTag *		currentChord;
-		ARShareLocation *	currentShareLocation;
-		ChordGroupList *	chordgrouplist;
-		GuidoPos			posfirstinchord;
-		int					numchordvoice;
-		ARMusicalVoiceState * chordBeginState;
-		void				doAutoKeys();
-		int					sum;
-		int					pitchsum;
-		int					voicenum;
+		ARChordTag          *currentChord;
+		ARShareLocation     *currentShareLocation;
+		ChordGroupList      *chordgrouplist;
+		GuidoPos             posfirstinchord;
+		int                  numchordvoice;
+		ARMusicalVoiceState *chordBeginState;
+		void                 doAutoKeys();
+		int	                 sum;
+		int                  pitchsum;
+		int                  voicenum;
 
 		void doAutoDispatchLyrics();
 		void doAutoFermatas();

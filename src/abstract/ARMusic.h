@@ -46,7 +46,7 @@ class ARMusic : public MusicalVoiceList, public ARMusicalEvent
       		void 	adjustDuration(TYPE_DURATION newDuration);
 
 	virtual void 	print() const;
-	virtual std::ostream & operator<<(std::ostream & os) const;
+	virtual void	print (std::ostream & os) const;
 	virtual std::ostream & output(std::ostream & os, bool isauto = true) const;
 
 	virtual void 	resetGRRepresentation();
@@ -71,6 +71,9 @@ const std::vector<std::string> &getPath() const                              { r
 	  NVstring mName;
       std::vector<std::string> mPaths;
 };
+
+inline std::ostream & operator<<(std::ostream & os, const ARMusic* m)	{ m->print(os); return os; }
+
 
 #endif
 

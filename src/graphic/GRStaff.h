@@ -147,6 +147,7 @@ class GRStaffState
 
 		float	staffLSPACE;	// distance between two lines
 		int		numlines;		// Zahl der Notenlinien.
+        float   lineThickness;
 		float	distance;
 		bool	distanceset;
 		// this is VOICE-Stuff!
@@ -196,6 +197,7 @@ class GRStaff : public GRCompositeNotationElement
 		virtual int         getNumHelplines(TYPE_PITCH pit, TYPE_REGISTER oct) const;
 		virtual VGColor     getNoteColor(TYPE_PITCH pit) const;
 		virtual int         getNumlines() const { return mStaffState.numlines; }
+        virtual float       getLineThickness() const { return mStaffState.lineThickness; }
 		virtual	float       getDredgeSize() const;
 		virtual float       getKeyPosition(TYPE_PITCH pitch, int numkeys = 1) const;
 		virtual GRNote *    getLastNote() const;
@@ -263,9 +265,11 @@ class GRStaff : public GRCompositeNotationElement
 		// the old functionality will be lost
 		void addNotationElement(GRNotationElement * notationElement);
 
-		void checkSystemBar(const TYPE_TIMEPOSITION & tp);
+		void	checkSystemBar(const TYPE_TIMEPOSITION & tp);
 
 		void	generatePositions();
+		float	currentLineThikness() const;
+
 
   protected:
 

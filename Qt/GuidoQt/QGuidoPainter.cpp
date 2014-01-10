@@ -12,11 +12,16 @@
  * research@grame.fr
  */
 
+#ifdef WIN32
+#pragma warning (disable: 4996)
+#endif
+
 #include <sstream>
 #include <iostream>
 
 #include "QGuidoPainter.h"
 #include "GUIDOEngine.h"
+#include "GUIDOParse.h"
 #include "VGColor.h"
 
 #include <QVariant>
@@ -28,6 +33,7 @@
 
 #include "GSystemQt.h"
 #include "GDeviceQt.h"
+
 
 #define DEFAULT_DRAW_SIZE 100
 #define MAX(a,b) ( a > b ) ? a : b
@@ -105,6 +111,7 @@ QGuidoPainter::QGuidoPainter()
 	mLastErr = guidoNoErr;
 	mGMNCode = "";
 	mFileName = "";
+    fParser = GuidoOpenParser();
 
 	mResizePageToMusic = true;
 
@@ -119,6 +126,8 @@ QGuidoPainter::~QGuidoPainter()
 {
 	GuidoFreeGR( mDesc.handle );
 	GuidoFreeAR( mARHandler );
+    if (fParser)
+        GuidoCloseParser(fParser);
 }
 
 //-------------------------------------------------------------------------
@@ -158,6 +167,13 @@ bool QGuidoPainter::setGMNCode( const QString& gmnCode, const char* datapath )
 }
 
 //-------------------------------------------------------------------------
+bool QGuidoPainter::setGMNStream(GuidoStream * gmnStream)
+{
+    mGMNStream = gmnStream;
+    return setGMNDataStream(gmnStream);
+}
+
+//-------------------------------------------------------------------------
 void QGuidoPainter::setARHandler( ARHandler ar )
 {
 	if (!ar) return;
@@ -177,15 +193,51 @@ void QGuidoPainter::setARHandler( ARHandler ar )
 }
 
 //-------------------------------------------------------------------------
+bool QGuidoPainter::setGMNDataStream (GuidoStream * guidoStream)
+{
+    // Read the gmnStream and build the score's Abstract Representation,
+	// containing all the notes, rests, staffs, lyrics ...
+	ARHandler arh;
+	GRHandler grh;
+
+    arh = GuidoStream2AR(fParser, guidoStream);
+
+    if (!arh)
+        return false;
+    
+	// Build a new score Graphic Representation according the score's Abstract Representation.
+	GuidoPageFormat currentFormat;
+	GuidoGetDefaultPageFormat ( &currentFormat );
+	GuidoSetDefaultPageFormat( &mPageFormat );
+
+	mLastErr = GuidoAR2GR (arh, &mLayoutSettings , &grh);
+
+	GuidoSetDefaultPageFormat( &currentFormat );
+	if (mLastErr == guidoNoErr)
+	{
+		GuidoFreeGR( mDesc.handle );
+		mDesc.handle = grh;
+		GuidoFreeAR( mARHandler );
+		mARHandler = arh;
+		if ( mResizePageToMusic )
+			mLastErr = GuidoResizePageToMusic( mDesc.handle );
+	}
+	return (mLastErr == guidoNoErr);
+
+}
+
+//-------------------------------------------------------------------------
 bool QGuidoPainter::setGMNData( const QString& gmncode, const char* dataPath)
 {
 	// Read the gmnCode and build the score's Abstract Representation,
 	// containing all the notes, rests, staffs, lyrics ...
 	ARHandler arh;
 	GRHandler grh;
-    mLastErr = GuidoParseString( gmncode.toUtf8().data(), &arh);		
-	if ( mLastErr != guidoNoErr )
-		return false;
+
+    arh = GuidoString2AR(fParser, gmncode.toUtf8().data());
+
+    if (!arh)
+        return false;
 
 	setPathsToARHandler(arh, dataPath);
 
@@ -357,21 +409,18 @@ QString QGuidoPainter::getLastErrorMessage() const
 	QString result = QString( GuidoGetErrorString(mLastErr) );
 	if ( mLastErr == guidoErrParse )
 	{
-		int line = GuidoGetParseErrorLine();
-		result += " (line " + QVariant(line).toString() + ")";
+		int line;
+        int col;
+        GuidoParserGetErrorCode(fParser, line, col, 0);
+		result += " (line " + QVariant(line).toString() + ", col " + QVariant(col).toString() + ")";
 	}
 	return result;
-
 }
 
 //-------------------------------------------------------------------------
-int QGuidoPainter::getLastParseErrorLine() const
+void QGuidoPainter::getLastParseErrorLine(int &line, int &col) const
 {
-	if ( !isGMNValid() )
-		if ( mLastErr == guidoErrParse )
-			return GuidoGetParseErrorLine();
-
-	return 0;
+    GuidoParserGetErrorCode(fParser, line, col, 0);
 }
 		
 //-------------------------------------------------------------------------
@@ -384,10 +433,12 @@ const QString& QGuidoPainter::fileName() const
 void QGuidoPainter::setGuidoLayoutSettings(const GuidoLayoutSettings& layoutSettings)
 {
 	mLayoutSettings = layoutSettings;
+    mResizePageToMusic = layoutSettings.resizePage2Music;
 
 	if ( hasValidGR() )
 	{
 		GuidoUpdateGR( mDesc.handle , &mLayoutSettings );
+
 		if ( mResizePageToMusic )
 			GuidoResizePageToMusic( mDesc.handle );
 	}

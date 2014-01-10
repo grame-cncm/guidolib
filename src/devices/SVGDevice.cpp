@@ -46,12 +46,13 @@ SVGDevice::SVGDevice(std::ostream& outstream, SVGSystem* system, const char* gui
 	fMusicFont(0), fTextFont(0), fOpMode(kUnknown),
 	fXScale(1), fYScale(1), fXOrigin(0), fYOrigin(0), fXPos(0), fYPos(0),
 	fFontAlign(kAlignBase), fDPI(0),
-	fPushedPen(false), fPushedPenColor(false), fPushedPenWidth(false), fPushedFill(false), fScaled(false), fOffset(false),
-	fCurrFont (kNoFont),
+	fPushedPen(false), fPushedPenColor(false), fPushedPenWidth(false), fPushedFill(false), fOffset(false),
+    fCurrFont (kNoFont), fCurrFontProperties (VGFont::kFontNone),
 	fPendingStrokeColor(0),
 	fBeginDone(false)
 {
 }
+
 SVGDevice::~SVGDevice() 
 {
 	delete fPendingStrokeColor;
@@ -64,7 +65,7 @@ void SVGDevice::getsvgfont (const char* ptr, string& str) const
 {
 	const char* fontstart = "<font";
 	const char* fontend = "</font>";
-	int len = strlen (fontstart);
+	size_t len = strlen (fontstart);
 	bool infont = false;
 	while (*ptr) {
 		if (!infont) {
@@ -98,7 +99,7 @@ void SVGDevice::printFont(std::ostream& out, const char* file) const
 	ifstream is (file);
 	if (is.is_open()) {
 		is.seekg (0, ios::end);
-		int length = is.tellg();
+		int length = int(is.tellg());
 		is.seekg (0, ios::beg);
 		char * buffer = new char [++length];
 		// read data as a block:
@@ -138,12 +139,12 @@ void SVGDevice::EndDraw()
 	if (fPushedPenColor) closegroup();
 	if (fPushedPenWidth) closegroup();
 	if (fPushedFill) closegroup();
-	if (fScaled) closegroup();
+    if (fScaled) closegroup();
 	if (fOffset) closegroup();
 	if (fCurrFont) closegroup();
 	fPushedPen = false;
 	fPushedFill = false;
-	fScaled = false;
+    fScaled = false;
 	fOffset = false;
 	fEndl--; fStream << fEndl << "</svg>" << fEndl;
 }
@@ -325,11 +326,21 @@ bool SVGDevice::CopyPixels( int xDest, int yDest, int dstWidth, int dstHeight, V
 //______________________________________________________________________________
 void SVGDevice::SetScale( float x, float y )
 { 
-	fXScale = x; fYScale = y; 
-	if (fScaled) closegroup();
-	fStream << fEndl << "<g transform=\"scale(" << x << ", " << y << ")\">";
-	fEndl++ ;
-	fScaled = true;
+    if ((x > (1 / fXScale) - 0.01) && (x < (1 / fXScale) + 0.01)       // Ugly but necessary to avoid floating approximations
+        && (y > (1 / fYScale) - 0.01) && (y < (1 / fYScale) + 0.01))
+    {
+        fXScale = 1;
+        fYScale = 1;
+
+        closegroup();
+    }
+    else
+    {
+        fScaled = true;
+        fXScale = x; fYScale = y;
+        fStream << fEndl << "<g transform=\"scale(" << x << ", " << y << ")\">";
+        fEndl++;
+    }
 }
 
 void SVGDevice::SetOrigin( float x, float y )
@@ -341,10 +352,12 @@ void SVGDevice::SetOrigin( float x, float y )
 	fEndl++ ;
 	fOffset = true;
 }
+
 void SVGDevice::OffsetOrigin( float x, float y )	
 { 
 	SetOrigin( fXOrigin + x, fYOrigin += y); 
 }
+
 void SVGDevice::LogicalToDevice( float * x, float * y ) const {}
 void SVGDevice::DeviceToLogical( float * x, float * y ) const {}
 
@@ -378,8 +391,11 @@ const char* SVGDevice::baseline2str (int align) const
 //______________________________________________________________________________
 void SVGDevice::selectfont (int fonttype)
 {
-	if (fCurrFont == fonttype) return;		// nothing to do
-	if (fCurrFont) closegroup();
+    if (fCurrFont == fonttype && fonttype == 1) // (fonttype == 1) condition added
+        return;                                 // to avoid risk of writing several
+                                                // texts in the same text font
+	
+    if (fCurrFont) closegroup();
 
 	const VGFont * font = 0;
 	switch (fonttype) {
@@ -387,8 +403,31 @@ void SVGDevice::selectfont (int fonttype)
 		case kTextFont:		font = fTextFont; break;
 	}
 	if (font) {
-		fStream << fEndl << "<g font-family=\"" << font->GetName()  << "\">";  // << "\" font-size=\"" << font->GetSize() << "\">"; 
-		fEndl++ ;
+		fStream << fEndl << "<g font-family=\"" << font->GetName()  << "\"";  // << "\" font-size=\"" << font->GetSize() << "\">"; 
+        
+        int fontProperties = font->GetProperties();
+
+        switch(fontProperties)
+        {
+        case VGFont::kFontBold:
+            fStream << " font-weight=\"bold\"";
+            break;
+        case VGFont::kFontItalic:
+            fStream << " font-style=\"italic\"";
+            break;
+        case VGFont::kFontBold + VGFont::kFontItalic:
+            fStream << " font-weight=\"bold\" font-style=\"italic\"";
+            break;
+        case VGFont::kFontUnderline:
+            fStream << " text-decoration=\"underline\"";
+            break;
+        default:
+            break;
+        }
+
+        fStream << ">";
+
+        fEndl++ ;
 		fCurrFont = fonttype;
 	}
 }
