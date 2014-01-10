@@ -55,9 +55,9 @@ La librairie \textsc{Guido} offre un grand nombre de symboles musicaux correspon
 % Les logiciels d'aide à la composition musicale
 
 
-Le format de notation musicale \textsc{Guido} (GMN) \cite{ref6} \cite{ref5} a été défini par H. Hoos et K. Hamel il y a plus de 10 ans. Il est très proche du format adopté par Lilypond \cite{ref7} mais il est apparu antérieurement. Le format GMN est un langage textuel de représentation de partitions musicales %. Il est basé sur un formalisme simple mais puissant, se concentrant sur les grands concepts musicaux (en opposition aux caractéristiques graphiques). L'approche développée par \textsc{Guido} repose sur l'idée d'adéquation, qui invite à noter simplement les concepts musicaux simples, et à ne recourir à des notations complexes que pour les notions musicales complexes.
+Le format de notation musicale \textsc{Guido} (GMN) \cite{hoos98} \cite{Dau:09a} a été défini par H. Hoos et K. Hamel il y a plus de 10 ans. Il est très proche du format adopté par Lilypond \cite{lilypond03,lilypond06} mais il est apparu antérieurement. Le format GMN est un langage textuel de représentation de partitions musicales %. Il est basé sur un formalisme simple mais puissant, se concentrant sur les grands concepts musicaux (en opposition aux caractéristiques graphiques). L'approche développée par \textsc{Guido} repose sur l'idée d'adéquation, qui invite à noter simplement les concepts musicaux simples, et à ne recourir à des notations complexes que pour les notions musicales complexes.
 sur lequel est basée %sur le format GMN, 
-la librairie \textsc{Guido} \cite{ref5}. Cette dernière %fournit un puissant moteur de mise en page de partitions, qui 
+la librairie \textsc{Guido} \cite{Dau:09a}. Cette dernière %fournit un puissant moteur de mise en page de partitions, qui 
 se différencie notamment des approches de type compilateur par sa capacité à être embarquée dans une application indépendante, et par la rapidité et l'efficacité du moteur de rendu, qui le rendent utilisable dans un contexte temps réel pour des partitions simples.
 
 \section{Format de Notation Guido}\label{sec:format_notation}
@@ -100,7 +100,7 @@ Dans la version précédente de \textsc{Guido}, le trille à proprement parler n
 
 La question était alors de savoir jusqu'à quelle position devait se dessiner cette ligne, ainsi que les éventuelles variantes ou libertés données à l'utilisateur, et leur signification. En effet, comme ce symbole était déjà en partie implémenté, il fallait pouvoir lui offrir plus de souplesse sans pour autant en complexifier la notation.
 
-D'après le livre "Behind Bars" d'Elaine Gould \cite{ref2}, la ligne du trille doit être dessinée depuis le signe \textit{\textbf{tr}} jusqu'au début du prochain évènement (la prochaine note ou le prochain soupir), sauf si celui-ci se situe directement après la prochaine barre de mesure, la ligne s'arrêtant dans ce cas à la barre elle-même. 
+D'après le livre "Behind Bars" d'Elaine Gould \cite{gould2011behind}, la ligne du trille doit être dessinée depuis le signe \textit{\textbf{tr}} jusqu'au début du prochain évènement (la prochaine note ou le prochain soupir), sauf si celui-ci se situe directement après la prochaine barre de mesure, la ligne s'arrêtant dans ce cas à la barre elle-même. 
 
 \begin{figure}[h]
 \centering
@@ -287,7 +287,7 @@ alors que l'on souhaite :
 \label{fig:glissando}
 \end{figure}
 
-Enfin, dans le cas d'accords ou de clusters, et donc de plusieurs glissandi simultanés, il nous a paru intéressant, comme on peut le voir dans "Behind Bars" p.143 \cite{ref3} ou dans "Music Notation in the Twentieth Century" p.61 \cite{ref2}, de donner la possibilité de remplir l'espace entre ces glissandi grâce à une option "fill". Une certaine flexibilité peut être trouvée dans le dessin grâce aux options graphiques dx1, dx2, dy1, dy2, ainsi que thickness qui permettent de modifier l'aspect du glissando. (Figure \ref{fig:glissandofill})
+Enfin, dans le cas d'accords ou de clusters, et donc de plusieurs glissandi simultanés, il nous a paru intéressant, comme on peut le voir dans "Behind Bars" p.143 \cite{gould2011behind}  ou dans "Music Notation in the Twentieth Century" p.61 \cite{stone1980music}, de donner la possibilité de remplir l'espace entre ces glissandi grâce à une option "fill". Une certaine flexibilité peut être trouvée dans le dessin grâce aux options graphiques dx1, dx2, dy1, dy2, ainsi que thickness qui permettent de modifier l'aspect du glissando. (Figure \ref{fig:glissandofill})
 
 \begin{figure}[h]
 \begin{center}
@@ -367,7 +367,7 @@ Quant à la portée, elle commence, ou s'arrête, aux positions correspondant au
 \end{code}
 \\
 
-Décrite par Gardner Read dans son ouvrage "Music Notation. A Manual of Modern Practice" \cite{ref8} comme "a highly graphic representation of rythmic flexibility"(p.94), cette notation contemporaine d'un accelerando ou ritardando à travers les liens de croches est, de manière générale, encore peu répandue dans les ouvrages de théorie, et se résume souvent à des cas simples, partant ou arrivant à la simple croche, c'est à dire partant ou arrivant vers un unique point. Pourtant il paraît intéressant de pouvoir offrir la possiblité aux compositeurs de décrire le passage entre n'importe quelles valeurs : d'une double-croche à une triple-croche, ou d'une quadruple-croche à une double-croche... (Figure \ref{fig:fbeamcomplex})
+Décrite par Gardner Read dans son ouvrage "Music Notation. A Manual of Modern Practice" \cite{read1969music} comme "a highly graphic representation of rythmic flexibility"(p.94), cette notation contemporaine d'un accelerando ou ritardando à travers les liens de croches est, de manière générale, encore peu répandue dans les ouvrages de théorie, et se résume souvent à des cas simples, partant ou arrivant à la simple croche, c'est à dire partant ou arrivant vers un unique point. Pourtant il paraît intéressant de pouvoir offrir la possiblité aux compositeurs de décrire le passage entre n'importe quelles valeurs : d'une double-croche à une triple-croche, ou d'une quadruple-croche à une double-croche... (Figure \ref{fig:fbeamcomplex})
 
 \begin{figure}[h]
 \centering
@@ -383,7 +383,7 @@ Décrite par Gardner Read dans son ouvrage "Music Notation. A Manual of Modern P
 % { c16[ c c c c c c c] }
 
 %\paragraph{}
-On remarque que, même dans un ouvrage tel que celui d'Elaine Gould \cite{ref2}, peu de détails sont donnés sur cette notation, et on se heurte rapidement à des incohérences telles que celle de la figure \ref{fig:incoherence} tirée de "Behind Bars" : on veut faire tenir en un temps une croche et quatre notes de durées inférieures à la croche mais supérieures à la triple-croche. 
+On remarque que, même dans un ouvrage tel que celui d'Elaine Gould \cite{gould2011behind}, peu de détails sont donnés sur cette notation, et on se heurte rapidement à des incohérences telles que celle de la figure \ref{fig:incoherence} tirée de "Behind Bars" : on veut faire tenir en un temps une croche et quatre notes de durées inférieures à la croche mais supérieures à la triple-croche. 
 
 \begin{figure}[h]
 \centering
@@ -392,7 +392,7 @@ On remarque que, même dans un ouvrage tel que celui d'Elaine Gould \cite{ref2},
 \label{fig:incoherence}
 \end{figure}
 
-Ce manque d'une exacte cohérence entre tempo et aspect graphique est également souligné dans "Music Notation in the Twentieth Century" de Kurt Stone \cite{ref3} : "Besides, the gradual increase or decrease in the number of beams makes exact indications of beat-units impossible" (p.124).
+Ce manque d'une exacte cohérence entre tempo et aspect graphique est également souligné dans "Music Notation in the Twentieth Century" de Kurt Stone \cite{stone1980music} : "Besides, the gradual increase or decrease in the number of beams makes exact indications of beat-units impossible" (p.124).
 
 Ainsi on voit l'importance des choix de design de ce symbole, sur la manière de le décrire textuellement, de le dessiner en particulier dans le cas de plusieurs voix simultanés, et de manière générale sur la liberté laissée à l'utilisateur.
 \\
@@ -491,7 +491,7 @@ Enfin, concernant le feathered beam comme le beam classique, il est maintenant p
 % a faire /////////////////////////////////////////////////////
 
 \bibliographystyle{plain}
-\bibliography{publication}
+\bibliography{../../guido}
 
 
 \end{document}
