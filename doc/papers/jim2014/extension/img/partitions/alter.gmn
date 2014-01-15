@@ -1,0 +1,5 @@
+[
+  a&& \alter<-1.5> (a)  a&  \alter<-0.5> (a)  
+  a \alter<0.5> (a) a# \alter<1.5> (a) 
+  \alter<1.8> (a)
+]
