@@ -13,21 +13,31 @@
 %\usepackage{indentfirst}
 %\usepackage{fancyvrb}
 \usepackage{comment}
+\usepackage{verbatim}
 
 
-\newenvironment{code}
-  {\fontfamily{pnc}\selectfont}{}
 %pbk
 %phv
 
-\title{\centering Extension de \textsc{Guido} à la notation musicale contemporaine}
+\newenvironment{gmncode}	{\vspace{-2mm}\small\verbatim}{\endverbatim\vspace{-2mm}}
+\newenvironment{code}  		{\fontfamily{pnc}\selectfont}{}
+
+\newcommand{\guido}			{\textsc{Guido}}
+
+\title{\centering Extensions de Guido à la notation musicale contemporaine}
 
 %\date{ Février - décembre 2013}
 
-\threeauthors
-  {Dominique Fober} {Grame \\ fober@grame.fr}
-  {Colas Decron} {Grame \\ cdecron@grame.fr}
-  {Camille Le Roi} {Grame \\ cleroi@grame.fr}
+\oneauthor
+ {Camille Le Roi, Colas Decron, Dominique Fober} {
+ Grame - Centre national de création musicale \\ 
+\{cleroi, decron, fober\}@grame.fr
+ }
+
+%\threeauthors
+%  {Camille Le Roi} {Grame \\ cleroi@grame.fr}
+%  {Colas Decron} 	{Grame \\ cdecron@grame.fr}
+%  {Dominique Fober} {Grame \\ fober@grame.fr}
 
 \begin{document}
 
@@ -37,7 +47,10 @@
 
 \begin{abstract}
 
-La librairie \textsc{Guido} offre un grand nombre de symboles musicaux correspondant aux plus larges besoins de l'écriture musicale. Elle fournit un moteur de rendu de partitions embarquable dans d'autres applications. Dans une volonté d'étendre cette librairie à la musique contemporaine, nous avons implémenté un ensemble de nouvelles notations jusqu'à présent pas, ou très sommairement, implémentées. L'objectif était de répondre aux demandes des compositeurs en ajoutant certaines notations de la manière la plus adaptée à l'écriture musicale, tout en laissant une large liberté à l'utilisateur.
+Le projet \guido\ regroupe à la fois un format textuel de description de partitions musicales, un moteur de rendu basé sur ce format, et une librairie qui fournit aux développeurs d'applications, un support de haut niveau pour l'ensemble des services liés au format \guido\ et à son rendu sous forme graphique. 
+De base, le projet \guido\ traite de la notation traditionnelle de la musique occidentale. Le projet a été récement étendu, tant du point de vue format que du point de vue rendu, pour adresser également les besoins les plus courants de la musique contemporaine. Cet article présente ces extensions et montre comment les choix de design fournissent à l'utilisateur, une large palette de solutions pour la notation de la musique. 
+
+%La librairie \guido\ offre un grand nombre de symboles musicaux correspondant aux plus larges besoins de l'écriture musicale. Elle fournit un moteur de rendu de partitions embarquable dans d'autres applications. Dans une volonté d'étendre cette librairie à la musique contemporaine, nous avons implémenté un ensemble de nouvelles notations jusqu'à présent pas, ou très sommairement, implémentées. L'objectif était de répondre aux demandes des compositeurs en ajoutant certaines notations de la manière la plus adaptée à l'écriture musicale, tout en laissant une large liberté à l'utilisateur.
 
 \end{abstract}
 
@@ -55,31 +68,47 @@ La librairie \textsc{Guido} offre un grand nombre de symboles musicaux correspon
 % Les logiciels d'aide à la composition musicale
 
 
-Le format de notation musicale \textsc{Guido} (GMN) \cite{hoos98} \cite{Dau:09a} a été défini par H. Hoos et K. Hamel il y a plus de 10 ans. Il est très proche du format adopté par Lilypond \cite{lilypond03,lilypond06} mais il est apparu antérieurement. Le format GMN est un langage textuel de représentation de partitions musicales %. Il est basé sur un formalisme simple mais puissant, se concentrant sur les grands concepts musicaux (en opposition aux caractéristiques graphiques). L'approche développée par \textsc{Guido} repose sur l'idée d'adéquation, qui invite à noter simplement les concepts musicaux simples, et à ne recourir à des notations complexes que pour les notions musicales complexes.
-sur lequel est basée %sur le format GMN, 
-la librairie \textsc{Guido} \cite{Dau:09a}. Cette dernière %fournit un puissant moteur de mise en page de partitions, qui 
-se différencie notamment des approches de type compilateur par sa capacité à être embarquée dans une application indépendante, et par la rapidité et l'efficacité du moteur de rendu, qui le rendent utilisable dans un contexte temps réel pour des partitions simples.
+Le projet \guido\ est né il y a presque 20 ans, tout d'abord comme format textuel de représentation de la musique \cite{hoos98,guido}, puis comme moteur de rendu graphique de partitions musicales \cite{RENZ02}. 
+Lors de sa conception, le format \guido\ se différencie des approches proposées par SCORE \cite{SCORE}, MuseData \cite{Hewlett97}, DARMS \cite{darms} ou encore Humdrum \cite{Huron97} notamment parce qu'il est pleinement lisible par l'utilisateur. Basée sur un formalisme qui aborde la description de la musique à partir des concepts musicaux, l'approche développée par \guido\ repose sur l'idée d'adéquation, qui invite à noter simplement les concepts musicaux simples, et à ne recourir à des notations complexes que pour les notions musicales complexes.
 
-\section{Format de Notation Guido}\label{sec:format_notation}
+Postérieurement au format \guido, d'autres représentations textuelles de la notation de la musique ont vu le jour, telles Lilypond \cite{lilypond03,lilypond06} qui est assez similaire dans son format, ou MusicXML \cite{good01}, orienté vers l'échange de partitions. Toutefois, le projet \guido\ reste unique parce qu'il est le seul qui propose à la fois un format de notation, une moteur de rendu et une librairie C/C++ permettant d'embarquer des capacités de rendu de partitions dans des applications indépendantes.
+Par ailleurs, la rapidité et l'efficacité du moteur de rendu le rendent utilisable dans un contexte \textit{temps réel} (pour des niveaux de complexité pas trop élevés), ouvrant la voix à des formes d'interactivité inédites \cite{Hoadley12,Fober:12a}.
+
+Pour adresser les besoins les plus courants de la musique contemporaine, le format \guido\ ainsi que le moteur de rendu ont étés étendus. Après un bref rappel sur le format \guido, cet article décrit ces extensions en  situant les choix qui ont été faits en terme de rendu graphique, dans les pratiques identifiées dans la littérature contemporaine. Nous montrerons également comment une forme de \emph{description générique} permet de combiner ces représentations et fournit à l'utilisateur, un large éventail de solutions pour la représentation de la musique.
+
+
+%Le format de notation musicale \guido\ (GMN) \cite{hoos98} \cite{Dau:09a} a été défini par H. Hoos et K. Hamel il y a plus de 10 ans. Il est très proche du format adopté par Lilypond \cite{lilypond03,lilypond06} mais il est apparu antérieurement. Le format GMN est un langage textuel de représentation de partitions musicales 
+%. Il est basé sur un formalisme simple mais puissant, se concentrant sur les grands concepts musicaux (en opposition aux caractéristiques graphiques). L'approche développée par \guido\ repose sur l'idée d'adéquation, qui invite à noter simplement les concepts musicaux simples, et à ne recourir à des notations complexes que pour les notions musicales complexes.
+%sur lequel est basée %sur le format GMN, 
+%la librairie \guido\ \cite{Dau:09a}. Cette dernière %fournit un puissant moteur de mise en page de partitions, qui 
+%se différencie notamment des approches de type compilateur par sa capacité à être embarquée dans une application indépendante, et par la rapidité et l'efficacité du moteur de rendu, qui le rendent utilisable dans un contexte temps réel pour des partitions simples.
+
+\section{Le format de Notation Guido}\label{sec:format_notation}
 
 %\subsection{Concepts de base}
 
-Le format de base de \textsc{Guido} recouvre les notes, silences, altérations, voix indépendantes, et les concepts les plus courants de la notation musicale comme les clefs, métriques, armures, articulations, liaisons, etc.
-Les notes sont représentées par leur nom, une altération optionnelle, un numéro d’octave optionnel et une durée optionnelle. Les accords sont décrits par des notes entre accolades séparées par des virgules. Un système (d'une ou plusieurs portées) est décrit par deux accolades, et une portée par deux crochets.
+Ci-dessous figurent les principes de généraux du format de notation \guido . Ils sont fournits pour permette la compréhension de ce qui suit dans les sections suivantes. Pour plus de détails on peut se reporter à \cite{Dau:09a} ou \cite{guido}.
+
+Le format de base de \guido\ recouvre les notes, silences, altérations, voix indépendantes, et les concepts les plus courants de la notation musicale comme les clefs, métriques, armures, articulations, liaisons, etc.
+Les notes sont représentées par leur nom \texttt{(a b c d e f g h)}, une altération optionnelle ('\#' et '\&' pour dièse et bémol), un numéro d'octave optionnel et une durée optionnelle exprimée sous forme de fraction.
+
+%Le format de base de \guido\ recouvre les notes, silences, altérations, voix indépendantes, et les concepts les plus courants de la notation musicale comme les clefs, métriques, armures, articulations, liaisons, etc.
+%Les notes sont représentées par leur nom, une altération optionnelle, un numéro d’octave optionnel et une durée optionnelle. Les accords sont décrits par des notes entre accolades séparées par des virgules. Un système (d'une ou plusieurs portées) est décrit par deux accolades, et une portée par deux crochets.
 
 %\subsection{Tags GUIDO}
 
 Les \emph{tags} sont utilisés pour donner des informations musicales supplémentaires, comme les liaisons, clés, armures, etc. Un \emph{tag} a une des formes suivantes : 
+\begin{gmncode}
+    \tagname<param-list>
+    \tagname<param-list>(note-series)
+\end{gmncode}
+%\begin{code}
+%\textbackslash{}tagname<param-list>
+%\textbackslash{}tagname\textless{}param-list\textgreater{}(note-series)
+%\end{code}
+où param-list est une liste optionnelle de paramètres (chaînes de caractères ou nombres), et où note-series est l'ensemble des notes ou accords concernés par le \emph{tag}. Dans ce cas nous parlerons de \emph{range-tag} (\emph{tag} possédant une durée explicite).
 
-\begin{code}
-\textbackslash{}tagname\textless{}param-list\textgreater{}
-
-\textbackslash{}tagname\textless{}param-list\textgreater{}(note-series)
-\end{code}
-
-où param-list est une liste de paramètres (chaînes de caractères ou nombres), et où note-series est l'ensemble des notes ou accords concernés par le \emph{tag}, dans le cas d'un \emph{range-tag} (\emph{tag} possédant une durée).
-
-\section{Implémentation de nouvelles notations}\label{sec:nouvelles_notations}
+\section{Extensions de la notation}\label{sec:extension}
 
 %*****************TRILLES********************
 \subsection{Trilles}\label{subsec:trilles}
@@ -96,7 +125,7 @@ Un trille est \og{}un ornement musical qui consiste à alterner très rapidement
 \textbackslash{}trill\textless{}param-list\textgreater{}(chord-series)
 \end{code}
 
-Dans la version précédente de \textsc{Guido}, le trille à proprement parler n'était indiqué que par le symbole \textit{\textbf{tr}} placé au dessus de la note. Il paraissait pourtant important que la notation comprenne également la ligne ondulée du trille qui suit celui-ci et en indique la durée.
+Dans la version précédente de \guido\, le trille à proprement parler n'était indiqué que par le symbole \textit{\textbf{tr}} placé au dessus de la note. Il paraissait pourtant important que la notation comprenne également la ligne ondulée du trille qui suit celui-ci et en indique la durée.
 
 La question était alors de savoir jusqu'à quelle position devait se dessiner cette ligne, ainsi que les éventuelles variantes ou libertés données à l'utilisateur, et leur signification. En effet, comme ce symbole était déjà en partie implémenté, il fallait pouvoir lui offrir plus de souplesse sans pour autant en complexifier la notation.
 
@@ -135,7 +164,7 @@ De plus, nous avons voulu donner la possibilité de choisir de dessiner ou non l
 \subsection{Têtes de notes}\label{subsec:tetes_notes}
 
 Le \textsc{Grame} est en liaison avec un compositeur, Jean-Baptiste Barrière, qui avait besoin, pour une certaine œuvre qu'il était en train de composer, de nouveaux types de têtes de notes (ou \emph{noteheads}).
-Nous avons donc choisi de rajouter à la librairie \textsc{Guido} 6 nouveaux symboles (cf. figure \ref{fig:noteheads}) :
+Nous avons donc choisi de rajouter à la librairie \guido\ 6 nouveaux symboles (cf. figure \ref{fig:noteheads}) :
 %
 \begin{itemize}
     \item \emph{x} (une croix)
@@ -151,7 +180,7 @@ Nous avons donc choisi de rajouter à la librairie \textsc{Guido} 6 nouveaux sym
 %\begin{code}
 %[ \textbackslash{}trill\textless{}tr="false", anchor="note"\textgreater{}( \{g\} \{a/2\} ) ]
 %\end{code}
-\includegraphics[width=7cm]{img/noteheads.pdf}
+\includegraphics[width=7cm]{img/partitions/noteheads.pdf}
 \caption{Les 6 nouveaux \emph{noteheads} ajoutés}
 \label{fig:noteheads}
 \end{figure}
@@ -175,14 +204,14 @@ Quelques ajustements graphiques assez précis ont dû être réalisés selon cha
 
 Dans un second temps, nous avons dû adapter la longueur de la stem, celle-ci étant par exemple plus longue pour le type \emph{triangle} que pour le type \emph{reverseTriangle} (lorsque la hampe de la note est dirigée vers le haut).
 
-Un des objectifs de \textsc{Guido} étant de laisser le plus de liberté possible au compositeur, il apparaît qu'un grand nombre de cas particuliers doit être géré par le développeur, ce qui a fait la difficulté de cette implémentation.
+Un des objectifs de \guido\ étant de laisser le plus de liberté possible au compositeur, il apparaît qu'un grand nombre de cas particuliers doit être géré par le développeur, ce qui a fait la difficulté de cette implémentation.
 
 %*****************CLUSTERS*************************
 \subsection{Clusters}\label{subsec:clusters}
 
 Un \emph{cluster} est un accord musical contenant plusieurs notes consécutives. Il peut par exemple être effectué sur un piano, où il se joue en déclenchant des touches contiguës (en utilisant son avant-bras, par exemple).
 %
-Dans la version précédente de \textsc{Guido}, le \emph{cluster} n'était pas implémenté, il a donc entièrement fallu réfléchir à la manière de le dessiner, de le rajouter à la librairie pour qu'il soit utilisable simplement tout en restant personnalisable, ainsi que de le faire interagir avec d'autres éléments.
+Dans la version précédente de \guido\, le \emph{cluster} n'était pas implémenté, il a donc entièrement fallu réfléchir à la manière de le dessiner, de le rajouter à la librairie pour qu'il soit utilisable simplement tout en restant personnalisable, ainsi que de le faire interagir avec d'autres éléments.
 %
 Côté utilisateur, nous avons choisi de l'invoquer de la manière suivante:
 \\
@@ -202,7 +231,7 @@ les accords n'étant composés que de deux notes: les notes extrêmes du \emph{c
 \textbackslash{}cluster(\{a, d\} \{c/8, f\} \{a/2, d2\} \{f/1, c1\})
 ]
 \end{code}
-\includegraphics[width=7cm]{img/cluster.pdf}
+\includegraphics[width=7cm]{img/partitions/cluster.pdf}
 \caption{Le \emph{cluster}: nouvel élément de notation}
 \label{fig:cluster}
 \end{figure}
@@ -214,7 +243,7 @@ Comme l'indique en partie la figure \ref{fig:cluster}, les choix, faits à parti
 	\item la hampe est conservée pour garder l'indication de la durée.
 \end{itemize}
 %
-Nous avons également fait en sorte que l'utilisateur puisse personnaliser au maximum le nouvel élément de la librairie \textsc{Guido}. En plus des habituels \begin{code}size\end{code}, \begin{code}dx\end{code}/\begin{code}dy\end{code} et \begin{code}color\end{code}, les attributs \begin{code}hdx\end{code} et \begin{code}hdy\end{code} ont été implémentés afin de pouvoir introduire un décalage s'appliquant au \emph{notehead} seulement. Au niveau de l'interaction avec d'autres éléments et \emph{tags}, nous avons fait en sorte que \begin{code}noteFormat\end{code} agisse également sur le \emph{cluster}. D'autre part, la gestion du forçage de l'orientation des \emph{noteheads} a de même été prise en compte (\emph{tags} \begin{code}headsReverse\end{code}, \begin{code}headsLeft\end{code} et \begin{code}headsRight\end{code}) (cf. figure \ref{fig:clusterInteractions}).
+Nous avons également fait en sorte que l'utilisateur puisse personnaliser au maximum le nouvel élément de la librairie \guido\. En plus des habituels \begin{code}size\end{code}, \begin{code}dx\end{code}/\begin{code}dy\end{code} et \begin{code}color\end{code}, les attributs \begin{code}hdx\end{code} et \begin{code}hdy\end{code} ont été implémentés afin de pouvoir introduire un décalage s'appliquant au \emph{notehead} seulement. Au niveau de l'interaction avec d'autres éléments et \emph{tags}, nous avons fait en sorte que \begin{code}noteFormat\end{code} agisse également sur le \emph{cluster}. D'autre part, la gestion du forçage de l'orientation des \emph{noteheads} a de même été prise en compte (\emph{tags} \begin{code}headsReverse\end{code}, \begin{code}headsLeft\end{code} et \begin{code}headsRight\end{code}) (cf. figure \ref{fig:clusterInteractions}).
 \\
 %
 \begin{figure}[h]
@@ -229,7 +258,7 @@ Nous avons également fait en sorte que l'utilisateur puisse personnaliser au ma
 \textbackslash{}cluster\textless{}"blue"\textgreater{}(\{d1/2, g\})
 ]
 \end{code}
-\includegraphics[width=7cm]{img/clusterInteractions.pdf}
+\includegraphics[width=7cm]{img/partitions/clusterInteractions.pdf}
 \caption{Les interactions avec d'autres \emph{tags}}
 \label{fig:clusterInteractions}
 \end{figure}
