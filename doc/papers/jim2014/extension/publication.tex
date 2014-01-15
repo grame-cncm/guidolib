@@ -7,7 +7,6 @@
 %\usepackage{pxfonts}
 %\usepackage{graphicx}
 
-%\usepackage{verbatim} 
 %\usepackage{fullpage}
 \usepackage{xcolor,graphicx}
 %\usepackage{indentfirst}
@@ -23,6 +22,7 @@
 \newenvironment{code}  		{\fontfamily{pnc}\selectfont}{}
 
 \newcommand{\guido}			{\textsc{Guido}}
+\newcommand{\exemple}		{\vspace{2mm}\hspace*{-6mm}\textsc{Exemple}}
 
 \title{\centering Extensions de Guido à la notation musicale contemporaine}
 
@@ -74,7 +74,7 @@ Lors de sa conception, le format \guido\ se différencie des approches proposée
 Postérieurement au format \guido, d'autres représentations textuelles de la notation de la musique ont vu le jour, telles Lilypond \cite{lilypond03,lilypond06} qui est assez similaire dans son format, ou MusicXML \cite{good01}, orienté vers l'échange de partitions. Toutefois, le projet \guido\ reste unique parce qu'il est le seul qui propose à la fois un format de notation, une moteur de rendu et une librairie C/C++ permettant d'embarquer des capacités de rendu de partitions dans des applications indépendantes.
 Par ailleurs, la rapidité et l'efficacité du moteur de rendu le rendent utilisable dans un contexte \textit{temps réel} (pour des niveaux de complexité pas trop élevés), ouvrant la voix à des formes d'interactivité inédites \cite{Hoadley12,Fober:12a}.
 
-Pour adresser les besoins les plus courants de la musique contemporaine, le format \guido\ ainsi que le moteur de rendu ont étés étendus. Après un bref rappel sur le format \guido, cet article décrit ces extensions en  situant les choix qui ont été faits en terme de rendu graphique, dans les pratiques identifiées dans la littérature contemporaine. Nous montrerons également comment une forme de \emph{description générique} permet de combiner ces représentations et fournit à l'utilisateur, un large éventail de solutions pour la représentation de la musique.
+Pour adresser les besoins les plus courants de la musique contemporaine, le format \guido\ ainsi que le moteur de rendu ont étés étendus. Après un bref rappel sur le format \guido, cet article décrit ces extensions en  situant les choix qui ont été faits en terme de rendu graphique, dans les pratiques identifiées dans la littérature contemporaine. Nous montrerons également comment une forme de \emph{langage générique} permet de combiner ces représentations et fournit à l'utilisateur, un large éventail de solutions pour la représentation de la musique.
 
 
 %Le format de notation musicale \guido\ (GMN) \cite{hoos98} \cite{Dau:09a} a été défini par H. Hoos et K. Hamel il y a plus de 10 ans. Il est très proche du format adopté par Lilypond \cite{lilypond03,lilypond06} mais il est apparu antérieurement. Le format GMN est un langage textuel de représentation de partitions musicales 
@@ -109,6 +109,52 @@ Les \emph{tags} sont utilisés pour donner des informations musicales supplémen
 où param-list est une liste optionnelle de paramètres (chaînes de caractères ou nombres), et où note-series est l'ensemble des notes ou accords concernés par le \emph{tag}. Dans ce cas nous parlerons de \emph{range-tag} (\emph{tag} possédant une durée explicite).
 
 \section{Extensions de la notation}\label{sec:extension}
+
+%*****************TRILLES********************
+\subsection{Micro-tonalité}\label{subsec:micro}
+
+La microtonalité a été introduite avec la version 1.43 de la librairie \guido. Graphiquement, elle est limitée à la représentation du quart de ton alors que d'un point de vue langage, elle s'exprime comme un nombre flottant de demis tons, qui sont arrondis au quart de ton le plus proche pour le rendu graphique: 
+\begin{gmncode}
+    1)  \alter<detune>
+    2)  \alter<detune>(note-series)
+\end{gmncode}
+
+La première forme (1) introduit la notion d'\emph{altération courante} : l'atération reste valide jusqu'à une indication contraire. Dans la deuxième forme (2), l'atération ne s'applique qu'aux notes indiquées.
+
+\exemple\\
+Le code suivant produit le résultat présenté en figure \ref{fig:alter}.
+\begin{gmncode}
+[
+  a&& \alter<-1.5>(a) a& \alter<-0.5>(a)  
+  a \alter<0.5>(a) a# \alter<1.5>(a) 
+  \alter<1.8>(a)
+]
+\end{gmncode}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\columnwidth]{img/partitions/alter.pdf}
+\caption{Microtonalité}
+\label{fig:alter}
+\end{figure}
+
+La microtonalité est également introduite dans les armures de clef libres. Elle s'exprime également sous forme de nombre flottant indiqués entre crochets.
+
+\exemple
+\begin{gmncode}
+[
+  \key<"free=c[1.5]g#b&a[-1.5]"> a g# 
+  \alter<0.5> g  a \alter<1.5> g 
+]
+\end{gmncode}
+Le résultat est présenté en figure \ref{fig:freekey}.
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.75\columnwidth]{img/partitions/freekey.pdf}
+\caption{Armure de clef libre avec microtonalité}
+\label{fig:freekey}
+\end{figure}
+
 
 %*****************TRILLES********************
 \subsection{Trilles}\label{subsec:trilles}
