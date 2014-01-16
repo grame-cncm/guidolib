@@ -21,6 +21,8 @@
 
 */
 
+#include <arpa/inet.h>
+
 #include <QDir>
 #include <QTextStream>
 
@@ -50,9 +52,10 @@
 #include "openssl/sha.h"
 
 using namespace json;
-
 using namespace std;
+
 #define COOKIE_NAME "guidoserver"
+#define kInetAddrLen	128
 
 namespace guidohttpd
 {
@@ -410,11 +413,11 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
         log << log.date() << sep;
         if (fVerbose & IP_VERBOSE) {
           struct sockaddr *so;
-          char buf[INET6_ADDRSTRLEN];
+          char buf[kInetAddrLen];
           so = MHD_get_connection_info (connection,
                                         MHD_CONNECTION_INFO_CLIENT_ADDRESS)->client_addr;
           log << inet_ntop(so->sa_family,
-                           so->sa_data + 2, buf, INET6_ADDRSTRLEN) << sep;
+                           so->sa_data + 2, buf, kInetAddrLen) << sep;
         }
         if (fVerbose & HEADER_VERBOSE) {
           TArgs headerArgs;
@@ -466,12 +469,12 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
         log << tab << "</date>" << logend;
         if (fVerbose & IP_VERBOSE) {
           struct sockaddr *so;
-          char buf[INET6_ADDRSTRLEN];
+          char buf[kInetAddrLen];
           so = MHD_get_connection_info (connection,
                                         MHD_CONNECTION_INFO_CLIENT_ADDRESS)->client_addr;
           log << tab << "<ip>" << logend;
           log << tab << tab << inet_ntop(so->sa_family,
-                           so->sa_data + 2, buf, INET6_ADDRSTRLEN)
+                           so->sa_data + 2, buf, kInetAddrLen)
               << logend;
           log << tab << "</ip>" << logend;
         }
