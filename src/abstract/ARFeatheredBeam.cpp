@@ -102,7 +102,7 @@ void ARFeatheredBeam::findPoints(std::string durations)
 	std::size_t begin = 0;
 	std::size_t commaPos = durations.find(",", begin);
 	
-	if(commaPos != -1)
+	if(commaPos != std::string::npos)
 	{
 		float valor = 0;
 		float valor2 = 0;
@@ -113,7 +113,7 @@ void ARFeatheredBeam::findPoints(std::string durations)
 		std::stringstream stream(dur);
 		stream >> valor;
 		std::size_t slashPos = dur.find("/",begin);
-		if(slashPos != -1)
+		if(slashPos != std::string::npos)
 		{
 			std::string denominator = dur.substr(slashPos+1,(commaPos-slashPos));
 			std::stringstream stream(denominator);
@@ -126,7 +126,7 @@ void ARFeatheredBeam::findPoints(std::string durations)
 		std::stringstream stream2(dur);
 		stream2 >> valor2;
 		slashPos = dur.find("/",begin);
-		if(slashPos != -1)
+		if(slashPos != std::string::npos)
 		{
 			std::string denominator = dur.substr(slashPos+1);
 			std::stringstream stream2(denominator);

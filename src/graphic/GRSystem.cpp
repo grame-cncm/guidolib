@@ -1159,7 +1159,7 @@ void GRSystem::notifyAccoladeTag( ARAccol * inAccoladeTag )
 		std::size_t begin = 0;
 		std::size_t dashPos = stringRange.find("-", begin);
 	
-		if(dashPos != -1)
+		if(dashPos != std::string::npos)
 		{
 			std::string beginString = stringRange.substr(begin, dashPos);
 			std::stringstream stream(beginString);
