@@ -187,6 +187,7 @@ public :
     static guidoAPIresponse verifyGMN(string gmn);
 
     // -----------------------------
+    guidosessionresponse genericReturnImage(string svgfontfile);
     guidosessionresponse genericReturnImage();
     guidosessionresponse genericReturnMidi();
     guidosessionresponse genericReturnId();

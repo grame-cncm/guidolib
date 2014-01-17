@@ -763,13 +763,24 @@ guidoAPIresponse guidosession::getMap (GuidoSessionMapType map, int aux, Time2Gr
 
 guidosessionresponse guidosession::genericReturnImage()
 {
+  return genericReturnImage("");
+}
+
+guidosessionresponse guidosession::genericReturnImage(string svgfontfile)
+{
     if (format_ == GUIDO_WEB_API_SVG) {
       if (whyIFailed_) {
         return genericFailure(whyIFailed_->errorMsg(), 400, id_);
       }
       GuidoErrCode err;
       stringstream mystream;
-      err = GuidoSVGExport(grh_, page_, mystream, 0);
+      const char *fontfile = svgfontfile != ""
+                             ? svgfontfile.c_str ()
+                             : 0;
+      if (!fontfile) {
+        cerr << "No svg font file found." << endl;
+      }
+      err = GuidoSVGExport(grh_, page_, mystream, fontfile);
       if (err != guidoNoErr) {
         return genericFailure ("Could not convert the image.", 400, id_);
       }
