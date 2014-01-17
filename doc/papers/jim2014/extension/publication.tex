@@ -133,7 +133,7 @@ Le code suivant produit le résultat présenté en figure \ref{fig:alter}.
 \label{fig:alter}
 \end{figure}
 
-La microtonalité est également introduite dans les armures de clef libres. Elle s'exprime également sous forme de nombre flottant indiqués entre crochets.
+La microtonalité est également introduite dans les armures de clef libres. Elle s'exprime également sous forme de nombres flottants indiqués entre crochets.
 
 \exemple
 \begin{gmncode}
@@ -174,7 +174,7 @@ Nous avons donc choisi de rajouter à la librairie \guido\ 6 nouveaux symboles (
 \label{fig:noteheads}
 \end{figure}
 %
-Nous avons implémenté ces nouveaux éléments graphiques à l'aide du \emph{tag} "noteFormat", déjà existant. Celui-ci permet de modifier l'apparence des notes lui étant postérieures (couleur, taille, offset, etc.). Nous avons donc rajouté un attribut, "style", permettant à l'utilisateur de choisir l'apparence du \emph{notehead} des notes postérieures :
+Nous avons implémenté ces nouveaux éléments graphiques à l'aide du \emph{tag} \emph{noteFormat}, déjà existant. Celui-ci permet de modifier l'apparence des notes lui étant postérieures (couleur, taille, offset, etc.). Nous avons donc rajouté un attribut, \emph{style}, permettant à l'utilisateur de choisir l'apparence du \emph{notehead} des notes postérieures :
 
 \begin{gmncode}
 \noteFormat< style=noteHeadStyle > notes
@@ -189,7 +189,7 @@ Nous avons implémenté ces nouveaux éléments graphiques à l'aide du \emph{ta
 Ce travail a été décomposé en plusieurs étapes:
 \begin{itemize}
     \item dessin vectoriel des nouveaux \emph{noteheads} (selon les ouvrages référents en matière de notation contemporaine);
-    \item implémentation du nouvel attribut du \emph{tag} noteFormat;
+    \item implémentation du nouvel attribut du \emph{tag} \emph{noteFormat};
     \item derniers ajustements nécessaires pour un bon rendu visuel.
 \end{itemize}
 
@@ -217,7 +217,7 @@ Dans la version précédente de \guido\, le \emph{cluster} n'était pas impléme
 %
 %
 
-Il a été décidé de spécifier les \emph{clusters} par un \emph{range tag} (\emph{tag} intervenant sur une durée) s'appliquant à des accords de deux notes: les notes extrêmes du \emph{cluster} (les autres notes éventuelles seront ignorées) :
+Il a été décidé de spécifier les \emph{clusters} par un \emph{range-tag} (\emph{tag} intervenant sur une durée) s'appliquant à des accords de deux notes: les notes extrêmes du \emph{cluster} (les autres notes éventuelles seront ignorées) :
 
 \begin{gmncode}
 \cluster<param-list>(chord-series)
@@ -246,7 +246,7 @@ Comme l'indique en partie la figure \ref{fig:cluster}, les choix, faits à parti
 	\item la hampe est conservée pour garder l'indication de la durée.
 \end{itemize}
 
-Nous avons également fait en sorte que l'utilisateur puisse personnaliser au maximum le nouvel élément de la librairie \guido. En plus des habituels "size", "dx", "dy" et "color", les attributs "hdx" et "hdy" ont été implémentés afin de pouvoir introduire un décalage s'appliquant au \emph{notehead} seulement. Au niveau de l'interaction avec d'autres éléments et \emph{tags}, nous avons fait en sorte que noteFormat agisse également sur le \emph{cluster}. D'autre part, la gestion du forçage de l'orientation des \emph{noteheads} a de même été prise en compte (\emph{tags} headsReverse, headsLeft et headsRight) (cf. figure \ref{fig:clusterInteractions}).
+Nous avons également fait en sorte que l'utilisateur puisse personnaliser au maximum le nouvel élément de la librairie \guido. En plus des habituels \emph{size}, \emph{dx}, \emph{dy} et \emph{color}, les attributs \emph{hdx} et \emph{hdy} ont été implémentés afin de pouvoir introduire un décalage s'appliquant au \emph{notehead} seulement. Au niveau de l'interaction avec d'autres éléments et \emph{tags}, nous avons fait en sorte que noteFormat agisse également sur le \emph{cluster}. D'autre part, la gestion du forçage de l'orientation des \emph{noteheads} a de même été prise en compte (\emph{tags} \emph{headsReverse}, \emph{headsLeft} et \emph{headsRight}) (cf. figure \ref{fig:clusterInteractions}).
 
 %
 \begin{figure}[h]
@@ -320,7 +320,7 @@ Décrite par Gardner Read \cite{read1969music} comme "a highly graphic represent
 \label{fig:fbeamcomplex}
 \end{figure}
 
-Dans un désir de simplicité, il a été décidé de décrire par un seul \emph{range tag} un seul groupe de notes liées, correspondant à un point de départ et un point d'arrivée uniques.
+Dans un désir de simplicité, il a été décidé de décrire par un seul \emph{range-tag} un seul groupe de notes liées, correspondant à un point de départ et un point d'arrivée uniques.
 
 \begin{figure}[h]
 \centering
@@ -338,7 +338,7 @@ Dans un désir de simplicité, il a été décidé de décrire par un seul \emph
 \label{fig:fbeamchain}
 \end{figure}
 
-Il est cependant possible de chaîner plusieurs \emph{feathered beams} grâce à la faculté du \emph{tag} à se séparer en \textbackslash{}fBeamBegin et \textbackslash{}fBeamEnd, permettant alors, non seulement de chaîner deux \emph{beams} par une note (Figure \ref{fig:fbeamchain}), mais aussi de les faire se chevaucher sur plusieurs notes.
+Il est cependant possible de chaîner plusieurs \emph{feathered beams} grâce à la faculté du \emph{tag} à se séparer en \emph{\textbackslash{}fBeamBegin} et \emph{\textbackslash{}fBeamEnd}, permettant alors, non seulement de chaîner deux \emph{beams} par une note (Figure \ref{fig:fbeamchain}), mais aussi de les faire se chevaucher sur plusieurs notes.
 \bigskip
 
 % question de voix simultanées
@@ -371,7 +371,7 @@ Concernant les possibilités de description données à l'utilisateur. Nous avon
 \end{itemize}
 \bigskip
 
-Ces différents niveaux de description nous poussent à faire une claire distinction entre l'aspect temporel et l'aspect graphique de notre groupe de notes.  Il a été décidé de laisser au compositeur la liberté de donner à son \emph{feathered beam} l'aspect graphique qu'il désire, indépendamment des durées internes de ses notes. Il pourra ainsi jouer sur les espacements entre notes, sur le nombre de notes, et sur la durée totale de manière "classique" en imposant à chaque note une durée, et en veillant à ce que la somme de toutes les notes corresponde à la durée totale souhaitée. Cette durée totale peut être indiquée sur la partition grâce au paramètre "drawDuration" (Figure \ref{fig:fbeamduree}).
+Ces différents niveaux de description nous poussent à faire une claire distinction entre l'aspect temporel et l'aspect graphique de notre groupe de notes.  Il a été décidé de laisser au compositeur la liberté de donner à son \emph{feathered beam} l'aspect graphique qu'il désire, indépendamment des durées internes de ses notes. Il pourra ainsi jouer sur les espacements entre notes, sur le nombre de notes, et sur la durée totale de manière "classique" en imposant à chaque note une durée, et en veillant à ce que la somme de toutes les notes corresponde à la durée totale souhaitée. Cette durée totale peut être indiquée sur la partition grâce au paramètre \emph{drawDuration} (Figure \ref{fig:fbeamduree}).
 
 \begin{figure}[h]
 \centering
@@ -388,7 +388,7 @@ Ces différents niveaux de description nous poussent à faire une claire distinc
 
 Sans plus d'indication de sa part, l'aspect graphique suivra les durées réelles des notes et prendra comme points de départ et d'arrivée les durées des première et dernière notes.  C'est le cas de la Figure \ref{fig:fbeamduree}.
 
-En revanche, le paramètre "durations" pourra lui permettre d'imposer un aspect graphique tout autre, lui donnant ainsi la possibilité d'indiquer à l'interprète un changement de tempo plus ou moins important, et pas nécessairement cohérent avec les durées intrinsèques des notes, mais ayant du sens dans l'interprétation (Cf Figure \ref{fig:utilisateur}).
+En revanche, le paramètre \emph{durations} pourra lui permettre d'imposer un aspect graphique tout autre, lui donnant ainsi la possibilité d'indiquer à l'interprète un changement de tempo plus ou moins important, et pas nécessairement cohérent avec les durées intrinsèques des notes, mais ayant du sens dans l'interprétation (Cf Figure \ref{fig:utilisateur}).
 
 %%
 \begin{comment}
@@ -460,7 +460,7 @@ Il est cependant généralisé à tous les éléments et toutes les voix de la p
 \label{fig:staffoffexotique}
 \end{figure}
 
-Il fut important de définir les positions temporelles et graphiques correspondant aux positions dans la description textuelle, en particulier pour les éléments sans durée, dont la position était la même que le \emph{tag}. La solution implémentée consiste à faire disparaître tous les éléments inscrits après le \emph{tag} \textbackslash{}staffOff dans la description textuelle, et à préserver ceux décrits avant, même dans le cas d'éléments de durée nulle qui donc pourraient être considérés simultanés à l'arrivée du \emph{tag}. Pour plusieurs éléments simultanés, c'est donc bien l'ordre dans la description textuelle qui indiquera le comportement à adopter. Ainsi, écrire 
+Il fut important de définir les positions temporelles et graphiques correspondant aux positions dans la description textuelle, en particulier pour les éléments sans durée, dont la position était la même que le \emph{tag}. La solution implémentée consiste à faire disparaître tous les éléments inscrits après le \emph{tag} \emph{\textbackslash{}staffOff} dans la description textuelle, et à préserver ceux décrits avant, même dans le cas d'éléments de durée nulle qui donc pourraient être considérés simultanés à l'arrivée du \emph{tag}. Pour plusieurs éléments simultanés, c'est donc bien l'ordre dans la description textuelle qui indiquera le comportement à adopter. Ainsi, écrire 
 % exemple utile ? pertinent sans image ?
 
 \begin{center}
@@ -500,19 +500,19 @@ Quant à la portée, elle commence, ou s'arrête, aux positions correspondant au
 % lilypond : e\trill f\trill ... sans vaguelette sinon \startTrillSpan ... \stopTrillSpan
 %\gardner Read
 
-% Citation wiki
-Un \emph{trille} est \og{}un ornement musical qui consiste à alterner très rapidement la note de base (la note principale), sur laquelle est noté le \emph{trille}, et la note située juste au-dessus\fg{}.
-
 \begin{gmncode}
 \trill<param-list>(chord-series)
 \end{gmncode}
+
+% Citation wiki
+Un \emph{trille} est \og{}un ornement musical qui consiste à alterner très rapidement la note de base (la note principale), sur laquelle est noté le \emph{trille}, et la note située juste au-dessus\fg{}.
 
 Dans la version précédente de \guido, le \emph{trille} à proprement parler n'était indiqué que par le symbole \textit{\textbf{tr}} placé au dessus de la note. Il paraissait pourtant important que la notation comprenne également la ligne ondulée du \emph{trille} qui suit celui-ci et en indique la durée. Comme ce symbole était déjà en partie implémenté, il fallait pouvoir lui offrir plus de souplesse sans pour autant en complexifier la notation.
 
 %D'après Elaine Gould \cite{gould2011behind}, la ligne du \emph{trille} doit être dessinée depuis le signe \textit{\textbf{tr}} jusqu'au début du prochain évènement (la prochaine note ou le prochain soupir), sauf si celui-ci se situe directement après la prochaine barre de mesure, la ligne s'arrêtant dans ce cas à la barre elle-même. 
 
 % justifier l'intérêt de tr et anchor ?
-De plus, nous avons voulu donner la possibilité de choisir de dessiner ou non le signe \textit{\textbf{tr}}, ainsi que de pouvoir changer l'ancrage de la ligne pour le déplacer sur la tête de la note. Cela fut implémenté grâce aux options \emph{anchor} qui accepte comme valeurs "note" ou "tr" et \emph{tr} qui accepte comme valeurs "true" ou "false" (Figure \ref{fig:trillanchor}). Le reste des modifications graphiques pouvant être effectuées manuellement par l'utilisateur à travers les paramètres classiques de déplacement (\textit{dx}, \textit{dy}), de couleur (\textit{color}), et de taille (\textit{size}).
+De plus, nous avons voulu donner la possibilité de choisir de dessiner ou non le signe \textit{\textbf{tr}}, ainsi que de pouvoir changer l'ancrage de la ligne pour le déplacer sur la tête de la note. Cela fut implémenté grâce aux options \emph{tr} qui accepte comme valeurs "true" ou "false" et \emph{anchor} qui accepte comme valeurs "note" ou "tr" (Figure \ref{fig:trillanchor}). Le reste des modifications graphiques pouvant être effectuées manuellement par l'utilisateur à travers les paramètres classiques de déplacement (\textit{dx}, \textit{dy}), de couleur (\textit{color}), et de taille (\textit{size}).
 
 \begin{figure}[h]
 \centering
@@ -533,6 +533,7 @@ De plus, nous avons voulu donner la possibilité de choisir de dessiner ou non l
 %%%%%%%%%%%%%%%%%%%% CONTROLE DE RENDU %%%%%%%%%%%%%%%%%
 \section{Contr\^ole de rendu}\label{sec:controleRendu}
 
+%*************************GLISSANDI ET ACCORDS*******************************
 \subsection{Glissandi et accords}\label{subsec:glissandiAccords}
 
 Concernant le \emph{glissando}, une certaine flexibilité devait être trouvée quant au rendu graphique d'un \emph{glissando} entre les différentes notes de deux accords, ne possédant eux-mêmes pas forcément le même nombre de notes. La solution proposée est celle qui nous a paru la plus intuitive : l'utilisateur choisit quelle note du premier accord sera liée avec quelle note du second. Pour ce faire, il lui suffit de les écrire dans l'ordre, c'est à dire : la première note de l'accord A sera liée à la première note de l'accord B, la seconde de A à la seconde de B\dots{}(Figure \ref{fig:glissandosimple})
@@ -550,7 +551,7 @@ Concernant le \emph{glissando}, une certaine flexibilité devait être trouvée 
 \end{center}
 \end{figure}
 
-L'unique problème avec ce choix peut se poser lors d'un conflit dans l'ordre imposé par le glissando précèdent et par le suivant, comme dans l'exemple Figure \ref{fig:glissandopb} . Il est alors possible de faire appel à une seconde voix, et au \emph{tag} \textbackslash{}staff \textless{}\textit{numero de portée}\textgreater{} qui pourra créer sur une même portée d'autres glissandi en parallèle et indépendants des premiers (Figure \ref{fig:glissandosspb}).
+L'unique problème avec ce choix peut se poser lors d'un conflit dans l'ordre imposé par le glissando précèdent et par le suivant, comme dans l'exemple Figure \ref{fig:glissandopb} . Il est alors possible de faire appel à une seconde voix, et au \emph{tag \textbackslash{}staff \textless{}numero de portée\textgreater{}} qui pourra créer sur une même portée d'autres glissandi en parallèle et indépendants des premiers (Figure \ref{fig:glissandosspb}).
 
 
 \begin{figure}[h]
@@ -578,6 +579,7 @@ L'unique problème avec ce choix peut se poser lors d'un conflit dans l'ordre im
 \end{figure}
 
 
+%*****************************TRILLES ET TIES****************************************
 \subsection{Trilles et liaisons}\label{subsec:trillesLiaison}
 
 % camille //////////
@@ -600,9 +602,10 @@ Au niveau du trille, une subtilité au niveau du contr\^ole du rendu a égalemen
 %%%%%%%%%%%%%%%%%%%% COMBINAISONS %%%%%%%%%%%%%%%%%
 \section{Combinaisons}\label{sec:combinaisons}
 
+%*****************************GLISSANDI ET CLUSTERS****************************************
 \subsection{Glissandi et clusters}\label{subsec:glissandiCluster}
 
-Lors de combinaisons de \emph{glissandi}  avec des accords ou des \emph{clusters}, il nous a paru intéressant, comme on peut le voir dans \cite{gould2011behind} (p.143) ou dans \cite{stone1980music} (p.61), de donner la possibilité de remplir l'espace entre ces \emph{glissandi} grâce à une option "fill". Une certaine flexibilité peut être trouvée dans le dessin grâce aux options graphiques dx1, dx2, dy1, dy2, ainsi que thickness qui permettent de modifier l'aspect du \emph{glissando}. (Figure \ref{fig:glissandofill})
+Lors de combinaisons de \emph{glissandi}  avec des accords ou des \emph{clusters}, il nous a paru intéressant, comme on peut le voir dans \cite{gould2011behind} (p.143) ou dans \cite{stone1980music} (p.61), de donner la possibilité de remplir l'espace entre ces \emph{glissandi} grâce à une option \emph{fill}. Une certaine flexibilité peut être trouvée dans le dessin grâce aux options graphiques \emph{dx1}, \emph{dx2}, \emph{dy1}, \emph{dy2}, ainsi que \emph{thickness} qui permettent de modifier l'aspect du \emph{glissando}. (Figure \ref{fig:glissandofill})
 
 \begin{figure}[h]
 \begin{center}
@@ -620,6 +623,7 @@ Lors de combinaisons de \emph{glissandi}  avec des accords ou des \emph{clusters
 \end{center}
 \end{figure}
 
+%*****************************HIERARCHIE BEAMS****************************************
 \subsection{Combinaisons de beams}\label{subsec:combinaisonBeams}
 
 % camille //////////
@@ -644,7 +648,7 @@ Enfin, concernant le \emph{feathered beam} comme le \emph{beam} classique, il es
 \end{figure}
 
 
-
+%*****************************EXEMPLES COMPLEXES****************************************
 \subsection{Exemple de partition complexe}\label{subsec:partitionComplexe}
 
 % colas /////////////
