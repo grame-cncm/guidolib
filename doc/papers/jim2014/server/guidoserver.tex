@@ -7,12 +7,22 @@
 \usepackage{graphicx}
 \usepackage{verbatim}
 \usepackage{cprotect}
-\usepackage{longtable}
 \usepackage{hyperref}
 
+\usepackage{natbib}
+
+\newcommand{\verburl}[1]{
+\begin{quote}
+\begingroup
+\fontsize{7.5pt}{12pt}\selectfont
+#1
+\endgroup
+\end{quote}
+}
+\newcommand{\guidosize}{6pt}
 
 \title{The Guido HTTPD Server}
-\threeauthors
+\twoauthors
   {Mike SOLOMON} {Grame \\ mike@mikesolomon.org}
   {Dominique FOBER} {Grame \\ fober@grame.fr}
 
@@ -42,24 +52,32 @@ The GUIDO Hypertext Transfer Protocol Daemon (HTTPD) server is an austerely REST
 POST, as implemented by the GUIDO server, is RESTful insofar as it does not save any information about the user state and only saves information sent by the user.\par
 Assuming that a GUIDO HTTPD server is running on the subdomain \break \verb=http://guido.grame.fr= on port \verb=8000=, a POST request containing GMN code \verb=[a b c d]= is sent via \verb=curl= as follows:
 \begin{quote}
+\begingroup
+\fontsize{\guidosize}{12pt}\selectfont
 \begin{verbatim}
 curl -d"data=[a b c d]" http://guido.grame.fr:8000
 \end{verbatim}
+\endgroup
 \end{quote}
+%\verburl{curl -d"data=[a b c d]" http://guido.grame.fr:8000}
 Assuming that the GMN code is valid, response, in JSON, gives the user a unique identifier generated using an SHA-1 tag corresponding to the input file.  This ensures that the server will not compile and store the same information multiple times:
 \begin{quote}
+\begingroup
+\fontsize{\guidosize}{12pt}\selectfont
 \begin{verbatim}
 {
   "ID": "07a21ccbfe7fe453462fee9a86bc806c8950423f"
 }
 \end{verbatim}
+\endgroup
 \end{quote}
 This is the server's internal representation of the GMN code and used for all subsequent requests to the server.  To access it, it is appended onto the URI.  The following is a simple request using the SHA-1 tag:
 \begin{quote}
 \begingroup
-\fontsize{7.5pt}{12pt}\selectfont
+\fontsize{\guidosize}{12pt}\selectfont
 \begin{verbatim}
-curl http://guido.grame.fr:8000/07a21ccbfe7fe453462fee9a86bc806c8950423f
+curl http://guido.grame.fr:8000/
+07a21ccbfe7fe453462fee9a86bc806c8950423f
 \end{verbatim}
 \endgroup
 \end{quote}
@@ -86,7 +104,7 @@ The GUIDO public API provides two generic categories of functions:
 To represent this distinction via that GUIDO server, the function is elaborated as a URI element either after the server's URI (for information about GUIDO) or after the SHA-1 tag of a score (for information about a specific score processed by GUIDO).  For example,
 \begin{quote}
 \begingroup
-\fontsize{7.5pt}{12pt}\selectfont
+\fontsize{\guidosize}{12pt}\selectfont
 \begin{verbatim}
 curl http://guido.grame.fr:8000/version
 \end{verbatim}
@@ -95,15 +113,17 @@ curl http://guido.grame.fr:8000/version
 reports the version of both GUIDO and the GUIDO server and thus does not need a SHA-1 tag.  The URI
 \begin{quote}
 \begingroup
-\fontsize{7.5pt}{12pt}\selectfont
+\fontsize{\guidosize}{12pt}\selectfont
 \begin{verbatim}
-curl http://guido.grame.fr:8000/07a21ccbfe7fe453462fee9a86bc806c8950423f/voicescount
+curl http://guido.grame.fr:8000/
+07a21ccbfe7fe453462fee9a86bc806c8950423f/voicescount
 \end{verbatim}
 \endgroup
 \end{quote}
 exposes the API function \verb=GuidoCountVoices= via the URI element \verb=voicescount=, giving the voice count of specific score.  Below is a succinct list of the servers' naming conventions showing the name of a function in the GUIDO public API, its representation as a server URI element, and if it is score-specific or generic to all of GUIDO.
-\begin{longtable}{|l|l|l|}\hline
-API Function & URI Element & GUIDO-specific? \\\hline
+\begin{table}
+\begin{tabular}{|l|l|l|}\hline
+API Function & URI Element & score? \\\hline
 \verb=GuidoGetPageCount= & \verb=pagescount= & Yes \\\hline
 \verb=GuidoGetVoiceCount= & \verb=voicescount= & Yes \\\hline
 \verb=GuidoDuration= & \verb=duration= & Yes \\\hline
@@ -117,15 +137,17 @@ API Function & URI Element & GUIDO-specific? \\\hline
 \verb=GuidoAR2MIDIFile= & \verb=midi= & Yes \\\hline
 \verb=GuidoGetVersionStr= & \verb=version= & No \\\hline
 \verb=GuidoGetLineSpace= & \verb=linespace= & No \\\hline
-\end{longtable}
+\end{tabular}
+\end{table}
 Note that the only generic URI element that does not correspond to a GUIDO public API function is ``server``, which gives the version number of the server and thus is not related to the GUIDO API proper.
 \subsubsection{Arguments as key-value pairs}
 Several of the API functions provided above require arguments in order to provide results.  For example, the function \verb=GuidoGetStaffMap= requires an argument \verb=staff= specifying the staff for which the map should be generated.  These arguments are specified in key-value pairs in the URI.
 \begin{quote}
 \begingroup
-\fontsize{7.5pt}{12pt}\selectfont
+\fontsize{\guidosize}{12pt}\selectfont
 \begin{verbatim}
-curl http://guido.grame.fr:8000/07a21ccbfe7fe453462fee9a86bc806c8950423f/staffmap?staff=1
+curl http://guido.grame.fr:8000/
+07a21ccbfe7fe453462fee9a86bc806c8950423f/staffmap?staff=1
 \end{verbatim}
 \endgroup
 \end{quote}
@@ -134,16 +156,19 @@ With respect to the images being generated from the server, the GUDIO server all
 In order to deal with malformed URIs, the GUIDO server provides defaults for out-of-range or nonsensical values and ignores nonsensical keys.
 \begin{quote}
 \begingroup
-\fontsize{7.5pt}{12pt}\selectfont
+\fontsize{\guidosize}{12pt}\selectfont
 \begin{verbatim}
-curl http://guido.grame.fr:8000/07a21ccbfe7fe453462fee9a86bc806c8950423f/?topmargin=0.0
-&format=jpg&resize=useless&foo=bar
+curl http://guido.grame.fr:8000/
+07a21ccbfe7fe453462fee9a86bc806c8950423f/?
+topmargin=0.0&format=jpg&resize=useless&foo=bar
 \end{verbatim}
 \endgroup
 \end{quote}
-In the above example, the \verb=topmargin= and \verb=format= values are not used whereas \verb=resize= is given its default value because \verb=useless= is  useless and \verb=foo= is ignored because it is not a valid key. \par
+In the above example, the \verb=topmargin= and \verb=format= values are not used whereas \verb=resize= is given its default value because \verb=useless= is  useless and \verb=foo= is ignored because it is not a valid key.%\par
+\begin{comment}
 The following table summarizes the various formatting and layout options one can provide to the server along with the current defaults and their units.  Note that the GUIDO unit represents an arbitrary internal unit that must be experimented with to fine tune.\par
-\begin{longtable}{|l|p{4cm}|l|l|}\hline
+\begin{table}
+\begin{tabular}{|l|p{4cm}|l|l|}\hline
 Value & Role & Default & Unit \\\hline
 \verb=page= & a page number & 1 & page \\\hline
 \verb=width= & the drawing area width & 15 & cm \\\hline
@@ -161,20 +186,24 @@ Value & Role & Default & Unit \\\hline
 \verb=spring= & spring stiffness & 1.1 & GUIDO \\\hline
 \verb=neighborhoodSpacing= & should we use the neighborhood spacing algorithm? & no & yes/no \\\hline
 \verb=optimalPageFill= & should we use the optimal page fill algorithm & yes & yes/no\\\hline
-\end{longtable}
-
+\end{tabular}
+\end{table}
+\end{comment}
 \subsubsection{Example: voicescount}
 The command voicescount returns the number of voices in a score.  It exposes the GUIDO Engine API method \verb=GuidoCountVoices=.  For example, the request:
 \begin{quote}
 \begingroup
-\fontsize{7.5pt}{12pt}\selectfont
+\fontsize{\guidosize}{12pt}\selectfont
 \begin{verbatim}
-curl http://guido.grame.fr:8000/07a21ccbfe7fe453462fee9a86bc806c8950423f/voicescount
+curl http://guido.grame.fr:8000/
+07a21ccbfe7fe453462fee9a86bc806c8950423f/voicescount
 \end{verbatim}
 \endgroup
 \end{quote}
 yields the following result:
 \begin{quote}
+\begingroup
+\fontsize{\guidosize}{12pt}\selectfont
 \begin{verbatim}
 {
   "07a21ccbfe7fe453462fee9a86bc806c8950423f": {
@@ -182,6 +211,7 @@ yields the following result:
   }
 }
 \end{verbatim}
+\endgroup
 \end{quote}
 
 
@@ -189,14 +219,17 @@ yields the following result:
 The command pageat returns the page given a specific date, expressed as a rational number.  It exposes the GUIDO Engine API method \verb=GuidoFindPageAt=.  For example, the request:
 \begin{quote}
 \begingroup
-\fontsize{7.5pt}{12pt}\selectfont
+\fontsize{\guidosize}{12pt}\selectfont
 \begin{verbatim}
-curl http://guido.grame.fr:8000/07a21ccbfe7fe453462fee9a86bc806c8950423f/pageat?date=1/4
+curl http://guido.grame.fr:8000/
+07a21ccbfe7fe453462fee9a86bc806c8950423f/pageat?date=1/4
 \end{verbatim}
 \endgroup
 \end{quote}
 yields the following result:
 \begin{quote}
+\begingroup
+\fontsize{\guidosize}{12pt}\selectfont
 \begin{verbatim}
 {
   "07a21ccbfe7fe453462fee9a86bc806c8950423f": {
@@ -205,20 +238,24 @@ yields the following result:
   }
 }
 \end{verbatim}
+\endgroup
 \end{quote}
 
 \subsubsection{Example: staffmap}
 The command staffmap returns a map of the space each element of a given staff takes up in 2D space (represented by a box) and time space (represented as an interval of rational numbers).  It exposes the GUIDO Engine API method \verb=GuidoGetStaffMap=.  For example, the request:
 \begin{quote}
 \begingroup
-\fontsize{7.5pt}{12pt}\selectfont
+\fontsize{\guidosize}{12pt}\selectfont
 \begin{verbatim}
-curl http://guido.grame.fr:8000/07a21ccbfe7fe453462fee9a86bc806c8950423f/staffmap?staff=1
+curl http://guido.grame.fr:8000/
+07a21ccbfe7fe453462fee9a86bc806c8950423f/staffmap?staff=1
 \end{verbatim}
 \endgroup
 \end{quote}
 yields the following result:
 \begin{quote}
+\begingroup
+\fontsize{\guidosize}{12pt}\selectfont
 \begin{verbatim}
 {
   "07a21ccbfe7fe453462fee9a86bc806c8950423f": {
@@ -275,12 +312,14 @@ yields the following result:
   }
 }
 \end{verbatim}
+\endgroup
 \end{quote}
 
 \section{Applications}
 In keeping with the REST architecture, the GUIDO server is application agnostic, favoring generality over specificity.  As a result, it is likely ill-suited for direct end-user queries and can instead be buffered by intermediary layers used to interact with users.  As mobile music making becomes increasingly common, the server is intended as an alternative to embarking libGUIDOEngine with mobile applications.  In addition to shielding developers and client-side users from build problems with mobile platform updates, outsourcing to a server allows multiple projects to mutualize a rendering engine and share information about usage.\par
 The process of elaborating the GUIDO server as a RESTful server is also a first step towards a more robust project to implement a wiki-like crowd music engraving platform that uses at its core a restful server storing data in various domain-specific languages.
 
+\nocite{*}
 \bibliographystyle{plain}
 \bibliography{../../guido}
 \end{document}
