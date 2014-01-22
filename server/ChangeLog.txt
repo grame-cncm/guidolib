@@ -1,0 +1,5 @@
+Welcome to the Guido Server ChangeLog!
+
+This ChangeLog documents major changes in the server that
+should be signaled above and beyond git log, git show or
+git blame.
