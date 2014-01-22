@@ -142,7 +142,7 @@ samples:
 	cp $(SAMPLES) $(DEST)/samples
 	cp readme-samples.txt $(DEST)/samples/readme.txt
 	-[ -d $(DEST)/gmn-examples ] && rm -rf $(DEST)/gmn-examples
-	$(EXPORT) ../gmn-examples $(DEST)/gmn-examples || echo " === WARNING ! gmn-examples NOT exported ==="
+	cp -R ../gmn-examples $(DEST)/gmn-examples || echo " === WARNING ! gmn-examples NOT exported ==="
 
 incl:
 	[ -d $(DEST)/include ] || mkdir $(DEST)/include
