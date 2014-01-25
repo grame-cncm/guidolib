@@ -8,6 +8,7 @@
 \usepackage{verbatim}
 \usepackage{cprotect}
 \usepackage{hyperref}
+%\usepackage{url}
 
 \usepackage{natbib}
 
@@ -21,7 +22,7 @@
 }
 \newcommand{\guidosize}{6pt}
 
-\title{Providing Music Notation Services over Internet}
+\title{Providing Internet Music Notation Services}
 \oneauthor
   {M. Solomon, D. Fober, Y. Orlarey, S. Letz} {Grame\\ Centre national de création musicale \\
   {\small \texttt{mike@mikesolomon.org - \{fober, orlarey, letz\}@grame.fr}}}
@@ -40,19 +41,25 @@ The Guido HTTPD Server is a RESTful server that exposes many elements of the pub
 
 
 %---------------------------------------
-\section{Introduction}
-As client-server models for data processing, visualizing and analyzing become more widespread in mobile computing (YouTube, Instagram, SoundCloud), the music engraving community has yet to implement a client-server model that rapidly executes the compilation of musical scores and exposes an API allowing one to process and retrieve information about these scores.  Several existing tools (LilyBin, WebLily) are limited in the use of separate server-side executables to process user information.  The GUIDO note server (\url{http://www.noteserver.org/noteserver.html}) compiles GUIDO scores into images but does not aim to expose GUIDO's API to users.  To remedy this, a RESTful server has been implemented that stores GUIDO Music Notation Format and responds to queries about this notation.  By accessing the GUIDO Engine API directly, it is able to be rapid and informative without retaining information about the client's state.  After describing the core tenants of the RESTful architecture upon which the GUIDO HTTPD server is modeled, this article presents a detailed overview of the server, concluding with several application possibilities.
+\section{Online musical editing}\label{section:online-musical-editing}
+As client-server models for data processing, visualizing and analyzing become more widespread in mobile computing (WordPress, YouTube, Instagram, SoundCloud), music engraving has entered the fray with various web-based score editing services.  This section explores several categories of online musical editing services, concluding with a discussion of general trends in current technologies and the main problems that the tool outlined in this paper -- the GUIDO HTTPD server -- seeks to address.
+\subsection{Online music notation editors}\label{subsection:editor}
+Currently, there are two main online musical score editors -- Noteflight, Melodus and Scorio.  Noteflight and Melodus seek to provide a full-featured music editing platform online, similar to Google Documents' role in the world of office suites.  Scorio is a hybrid tool that mixes rudimentary layout via a mobile editing platform with publishing-quality layout via JIT compilation through LilyPond when possible.
+\subsection{Online score sharing software}\label{subsection:sharing}
+Several music tools, such as Sibelius, MuseScore \cite{musescore}, Maestro, and Capriccio, offer online services where scores composed using this software can be uploaded, browsed, and downloaded online.  Capriccio, can be run online in limited form as a Java applet.  MuseScore, Sibelius, and Maestro allow for automatic score/MIDI synchronisation of embedded files.
+\subsection{Online music JIT compilation services}\label{subsection:jit}
+WebLily, LilyBin, and OMET are all JIT compilation services that run the LilyPond executable to compile uploaded code and return embedded SVG, canvas or PDF visualizations depending on the tool.  The GUIDO note server \cite{renz98} uses libGUIDOEngine to compile Guido Music Notation Format \cite{hoos98} strings into images.
+\subsection{A RESTful alternative}\label{subsection:restful}
+All of the tools describe above facilitate the creation or visualization of scores via a variety of input methods (WYSIWYG, text, MusicXML etc.) but are not designed to facilitate low-latency server-client exchanges where information about scores can be retrieved.  This is in part due to the design of the majority of automated music engraver programs that do not offer public APIs and are not designed to provide end-user information other than visual representations of scores.  The GUIDO Engine API \cite{Dau:09a} seeks to remedy this issue by offering a public API that reports information about scores such as the number of pages, duration, and the placement of musical events both in time and on the page.  The representational state transfer \cite{Fielding00}, or REST architectural style, is well suited for exposing this public API via the web because of several features such as its use of both data and metadata so that data can be decoded by clients, its insistence on a uniform interface, and its stateless functioning.  This is further discussed in sections ~\ref{section:guido-restful} and ~\ref{section:guido-api}.  The GUIDO HTTPD server thus fills a gap in online score editing technology similar to the gap that Atom web feeds fill in news services.
 
 %---------------------------------------
-\section{Representational state transfer}
-The Representational state transfer (REST) standard is a server architecture style first elaborated in 2000 \cite{Fielding00}.  The REST architecture is elaborated as a response to existing hypermedia systems and is intended as a set of constraints to facilitate exchange in these systems.  The standard is based on a traditional client-server model with the design trade-off that the server is \emph{stateless}, meaning that all of the information required to process a request is contained in the request itself and the server does not need to store intermediary states.  In order to speed up interaction with the server, the REST architecture calls for client-side caching of data, which can potentially eliminate certain redundant server requests.  It also calls for a uniform interface, harmonizing all applications' interactions with the server at the expense of application-specific interaction models that could speed up exchanges.  Layering is possible in this model, with intermediary servers translating various forms of shorthand into standard server commands.  With this layering comes the constraint that exchanging agents cannot ``see'' beyond the layer with which they are communicating.  Like other aspects of REST, this is intended to encapsulate all information in a single request made to a single agent.  As the burden on the client to be server-compliant is high in REST, the standard provides an optional constraint of code-on-demand to be downloaded from the server (scripts, applets, etc.) to ease client-side software development.\par
-Certain specific architectural elements are put into place in order to facilitate the above-described architecture  In addition to the transferring of data, REST calls for the transferring of meta-data about a server response.  This allows for the client side to have information about how to de-encode the response without needing to send specific de-encoding instructions.  REST encourages resource requests that favor the retrieval of conceptually relevant entities rather than specific entities at a point in time.  For example, a request to the server for ``best movies of 1964'' or ``weather in Lyon'' should change with time rather than pointing to an arbitrary entity responding to this request at a given time.  Requests to the server should also specify the nature of the representation of these responses.\par
+\section{Representational state transfer}\label{section:rest}
+Representational state transfer \cite{Fielding00} is an ubiquitous contemporary server architecture style \cite{richardson2008restful}. The REST architecture is elaborated as a response to existing hypermedia systems and is intended as a set of constraints to facilitate exchange in these systems.  The architectural style is based on a traditional \emph{client-server} model with the design trade-off that the server is \emph{stateless}, meaning that all of the information required to process a request is contained in the request itself and the server does not need to store intermediary states.  In order to speed up interaction with the server, the REST architecture calls for \emph{client-side caching} of data, which can potentially eliminate certain redundant server requests.  It also calls for a \emph{uniform interface}, harmonizing all applications' interactions with the server at the expense of application-specific interaction models that could speed up exchanges.  \emph{Layering} is possible in this model, with intermediary servers translating various forms of shorthand into standard server commands.  With this layering comes the constraint that exchanging agents cannot ``see'' beyond the layer with which they are communicating.  Like other aspects of REST, this is intended to encapsulate all information in a single request made to a single agent.  As the burden on the client to be server-compliant is high in REST, the architectural style provides an optional constraint of \emph{code-on-demand} to be downloaded from the server (scripts, applets, etc.) to ease client-side software development.\par
+Certain specific architectural elements are put into place in order to facilitate the above-described architecture  In addition to the transferring of \emph{data}, REST calls for the transferring of \emph{meta-data} about a server response.  This allows for the client side to have information about how to de-encode the response without needing to send specific de-encoding instructions.  REST encourages resource requests that favor the retrieval of conceptually relevant entities rather than specific entities at a point in time.  For example, a request to the server for ``best movies of 1964'' or ``weather in Lyon'' should change with time rather than pointing to an arbitrary entity responding to this request at a given time.  Requests to the server should also specify the nature of the representation of these responses.\par
 A server compliant with the REST architecture is said to be a RESTful server.
-
-%---------------------------------------
-\section{The GUIDO HTTPD server}
+\section{The GUIDO HTTPD server : an overview}\label{section:overview}
 The GUIDO Hypertext Transfer Protocol Daemon (HTTPD) server is an austerely RESTful server that compiles strings written in the GUIDO Music Notation (GMN) Format and reports to the client several representations of this data.  It accepts user requests via two main methods of the HTTP protocol: GET, used to retrieve information about elements on the server, and POST, used to place elements on the server.
-\subsection{The POST method}
+\subsection{The POST method}\label{subsection:post}
 POST, as implemented by the GUIDO server, is RESTful insofar as it does not save any information about the user state and only saves information sent by the user.\par
 Assuming that a GUIDO HTTPD server is running on the subdomain \break \verb=http://guido.grame.fr= on port \verb=8000=, a POST request containing GMN code \verb=[a b c d]= is sent via \verb=curl= as follows:
 \begin{quote}
@@ -93,9 +100,35 @@ It results in the image seen in Figure~\ref{fig:figure1}.
 \end{figure}
 
 
-\subsection{The GET method}
+\subsection{The GET method}\label{subsection:get}
 True to RESTful form, the server does not store internally any information about user-requests sent via the GET method save an optional Apache-style log file with various levels of detail possible.  The main return type is JSON for all queries related to information about a score, MIDI for midi realizations of the score, and PNG for all queries asking for visual representations of the score itself.  The latter is also possible in JPEG and SVG.\par
 The GUIDO HTTPD server attempts to expose as much of the public API of the GUIDO Engine as possible, focussing on one-to-one equivalencies with its functions when possible.  Arguments are passed to these functions via optional key-value pairs in the URI.  Defaults are provided for all key-value pairs in case of omission.  All commands are appended to a unique SHA-1 identifier for uploaded GMN code. An exhaustive overview of the API can be found in the GUIDO HTTPD server's documentation\cite{guidoserverdoc}.\par
+%---------------------------------------
+\section{The GUIDO HTTPD server as a RESTful server}\label{section:guido-restful}
+To summarize the main tenants of a restful posited by Fielding \cite{Fielding00}, a restful architecture implements the following design features :
+\begin{enumerate}
+\item Client-Server Interaction
+\item Stateless
+\item Client-Cache
+\item Uniform Interface
+\item Layered System
+\item Code-on-Demand (optional)
+\end{enumerate}
+The GUIDO server implements all architectural elements of a RESTful server and is designed in a way to favor the creation of client-side RESTful entities.  The following subsections treat each criteria above individually, concluding with a  discussion about specific RESTful architectural elements in the GUIDO server as well as a comparison to previously discussed services.
+\subsection{Client-Server}
+The GUIDO server performs only server-related tasks insofar as it processes incoming requests and sends responses.  It performs no client-side tasks.  The server itself is not needed to input the requests or receive/decode the responses - these are done via what Fielding\cite{Fielding00} calls connectors, such as libcurl or a web-browser.
+\subsection{Stateless}
+The GUIDO server retains no information about users' queries related to scores, nor does it rely on previous states in order to generate its current state.  It clearly separates the posting of scores via the POST method (see section ~\ref{subsection:post}) versus the retrieval of data about those scores via the GET method (see section ~\ref{subsection:get}).
+\subsection{Client-Cache}
+The main RESTful recommendation calls for the ability of clients to cache common requests, which is beyond the purview of the GUIDO server.  However, Fielding \cite{Fielding00} also describes the possibility of a server cache in order to speed up server interaction.  However, the GUIDO server does not have a cache for GET requests save an Apache-like log file.  This is because the look-up time of GET requests is negligibly slower than lookup in a small cache, and is faster than a large cache.  As the GUIDO server is designed to score thousands of scores, it uses the fast GUIDOEngine library in order to maintain a cache-less state while having reasonable delivery time.
+\subsection{Uniform Interface}
+This is, according to Fielding \cite{Fielding00}, the most important aspect of RESTful architecture.  The principle is also at the core of the GUIDO server.  Rather than providing several ways of doing the same thing, the GUIDO server only ever provides one way of retrieving information.  Furthermore, the way data is retrieved is uniform for similar requests and derives from the mapping of URI elements to API functions (see section ~\ref{section:guido-api}).  The inconvenience of this is that URIs sent to the GUIDO server are long and only partially readable (the SHA-1 tag generated after POST requests is not - see section ~\ref{subsection:post}).  However, this allows for the easy construction of intermediary services that provide shortcuts for different categories of users.
+\subsection{Layered System}
+For all but the most technologically savvy of users, a layered system is required to use the GUIDO server.  For example, users wishing to map a GUIDO-generated PNG to an HTML canvas would need a library that translates GUIDO dates and boxes into programmatic JavaScript.  This is because the server is a lightweight wrapper around the GUIDO public API, which is itself created to provide  generic structures that allow for the easy manipulation of musical information.
+\subsection{Code-on-Demand}
+The GUIDO server does not currently provide Code-on-Demand as its functionalities are intended to have almost one-to-one correspondence with the GUIDO public API.  As a future project, a group of best-practice calls to the server in JavaScript, curl, and wget can be elaborated as well as language-specific response parsers.  The decision to send all GET information via JSON (save graphical representations of scores) facilitates parsing that, to an extent, eases the need to provide code to developers and can be seen as an architectural decision in the spirit of code-on-demand.
+%---------------------------------------
+\section{The GUIDO HTTPD server as an API}\label{section:guido-api}
 This section aims to discuss some of the broad decisions made in exposing a C API via a web interface, giving three exhaustive examples at the end showing how the API is exposed.
 
 \subsubsection{Function as URI element}
