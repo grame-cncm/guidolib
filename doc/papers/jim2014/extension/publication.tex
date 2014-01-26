@@ -153,15 +153,14 @@ Le résultat est présenté en figure \ref{fig:freekey}.
 
 %**********************TETES DE NOTES *****************************
 \subsection{Têtes de notes}\label{subsec:tetes_notes}
-
-Le \textsc{Grame} est en liaison avec un compositeur, Jean-Baptiste Barrière, qui avait besoin, pour une certaine œuvre qu'il était en train de composer, de nouveaux types de têtes de notes (ou \emph{noteheads}).
-Nous avons donc choisi de rajouter à la librairie \guido\ 6 nouveaux symboles (cf. figure \ref{fig:noteheads}) :
+%
+Nous avons choisi de rajouter à la librairie \guido\ 6 nouveaux symboles de têtes de note, afin de proposer un choix plus vaste à l'utilisateur. Dans l'ordre de la première portée de la figure \ref{fig:noteheads}, nous avons les nouveaux éléments suivants :
 %
 \begin{itemize}
     \item \emph{x} (une croix)
     \item \emph{diamond} (un diamant)
-    \item \emph{square} (un carré)
     \item \emph{round} (un rond)
+    \item \emph{square} (un carré)
     \item \emph{triangle} (un triangle, pointe en haut)
     \item \emph{reversedTriangle} (un triangle, pointe en bas)
 \end{itemize} 
@@ -174,50 +173,69 @@ Nous avons donc choisi de rajouter à la librairie \guido\ 6 nouveaux symboles (
 \label{fig:noteheads}
 \end{figure}
 %
+Pour l'apparence graphique de ces éléments, nous nous sommes principalement inspirés de deux ouvrages, \emph{Behind Bars : The Definitive Guide to Music Notation} [4] et \emph{Music Notation in the Twentieth Century : A Practical Guidobook} [16].
+%
 Nous avons implémenté ces nouveaux éléments graphiques à l'aide du \emph{tag} \emph{noteFormat}, déjà existant. Celui-ci permet de modifier l'apparence des notes lui étant postérieures (couleur, taille, offset, etc.). Nous avons donc rajouté un attribut, \emph{style}, permettant à l'utilisateur de choisir l'apparence du \emph{notehead} des notes postérieures :
 
 \begin{gmncode}
-\noteFormat< style=noteHeadStyle > notes
+\noteFormat<style=noteHeadStyle> notes
 \end{gmncode}
 
-%
-%\begin{gmncode}
-%\noteFormat<style="diamond"> a b
-%\noteFormat<style="round"> d/2 a g2
-%\end{gmncode}
+La première portée de l'exemple de la figure \ref{fig:noteheads} peut donc être générée avec le code \textsc{Guido} suivant:
 
-Ce travail a été décomposé en plusieurs étapes:
+\begin{gmncode}
+[
+  \noteFormat<style="x"> a
+  \noteFormat<style="diamond"> a
+  \noteFormat<style="round"> a
+  \noteFormat<style="square"> a
+  \noteFormat<style="triangle"> a
+  \noteFormat<style="reversedTriangle"> a
+]
+\end{gmncode}
+\bigskip
+
+Ce travail d'implémentation a été décomposé en plusieurs étapes:
 \begin{itemize}
-    \item dessin vectoriel des nouveaux \emph{noteheads} (selon les ouvrages référents en matière de notation contemporaine);
+    \item dessin vectoriel des nouveaux \emph{noteheads} (selon les ouvrages référents);
     \item implémentation du nouvel attribut du \emph{tag} \emph{noteFormat};
     \item derniers ajustements nécessaires pour un bon rendu visuel.
 \end{itemize}
 
-Quelques ajustements graphiques assez précis ont dû être réalisés selon chaque type de \emph{notehead} utilisé. Tout d'abord, les symboles n'ayant pas tous la même largeur, il a fallu insérer un offset horizontal, prenant notamment en compte l'orientation de la hampe et le type de tête de note. Il a également fallu gérer cet offset pour les accords, ceux-ci pouvant posséder des \emph{noteheads} différents pour chacune de leurs notes.
-
-Dans un second temps, nous avons dû adapter la longueur de la hampe, celle-ci étant par exemple plus longue pour le type "triangle" que pour le type "reverseTriangle" (lorsque la hampe de la note est dirigée vers le haut).
-
-Un des objectifs de \guido\ étant de laisser le plus de liberté possible au compositeur, il apparaît qu'un grand nombre de cas particuliers doit être géré par le développeur, ce qui a fait la difficulté de cette implémentation.
+Quelques ajustements graphiques assez précis ont dû être réalisés pour parfaire le travail:
+\begin{itemize}
+    \item insertion d'un offset horizontal variable selon le symbole choisi, l'orientation de la hampe, l'utilisation en accord ou non (les accords pouvant posséder des \emph{noteheads} différents pour chacune de leurs notes);
+    \item adaptation de la longueur de la hampe selon le type symbole utilisé (par exemple, différence de longueur entre le \emph{triangle} et le \emph{reversedTriangle}).
+\end{itemize}.
 
 
 %**************************** COMPLEX METER ********************************
 \subsection{Métriques complexes}\label{subsec:metriques}
 
-% colas /////////////
+% Pourquoi le texte n'est pas justifié ?
+La possibilité d'insérer une métrique complexe a été introduite avec la version 1.52 de la librairie \guido. Elle offre à l'utilisateur la possibilité d'utiliser, graphiquement, une somme en place et lieu de la métrique habituelle, composée d'un seul nombre. Sa syntaxe est exactement la même que pour une métrique normale, il suffit de remplacer le numérateur par une somme, comme le montre l'exemple ci-dessous.
 
+\exemple\\
+Le code suivant produit le résultat présenté en figure \ref{fig:complexMeter}.
+\begin{gmncode}
+[
+  \meter<"3+3+2/4"> a b g
+]
+\end{gmncode}
+%µ Pdf pas encore adapté
+% \begin{figure}[h]
+% \centering
+% \includegraphics[width=\columnwidth]{img/partitions/complexMeter.pdf}
+% \caption{Métrique complexe}
+% \label{fig:complexMeter}
+% \end{figure}
 
 %**************************** CLUSTERS ********************************
 \subsection{Clusters}\label{subsec:clusters}
 
 Un \emph{cluster} est un accord musical contenant plusieurs notes consécutives. Il peut par exemple être effectué sur un piano, où il se joue en déclenchant des touches contiguës (en utilisant son avant-bras, par exemple).
-%
-Dans la version précédente de \guido\, le \emph{cluster} n'était pas implémenté, il a donc entièrement fallu réfléchir à la manière de le dessiner, de le rajouter à la librairie pour qu'il soit utilisable simplement tout en restant personnalisable, ainsi que de le faire interagir avec d'autres éléments.
-%
-\\
-%
-%
 
-Il a été décidé de spécifier les \emph{clusters} par un \emph{range-tag} (\emph{tag} intervenant sur une durée) s'appliquant à des accords de deux notes: les notes extrêmes du \emph{cluster} (les autres notes éventuelles seront ignorées) :
+Il a été décidé de spécifier les \emph{clusters} par un \emph{range-tag} s'appliquant à des accords de deux notes: les notes extrêmes du \emph{cluster} (les autres notes éventuelles seront ignorées) :
 
 \begin{gmncode}
 \cluster<param-list>(chord-series)
@@ -234,7 +252,7 @@ Il a été décidé de spécifier les \emph{clusters} par un \emph{range-tag} (\
 ]
 \end{gmncode}
 \includegraphics[width=55mm]{img/partitions/cluster.pdf}
-\caption{Le \emph{cluster}: nouvel élément de notation}
+\caption{\emph{Cluster}}
 \label{fig:cluster}
 \end{figure}
 %
