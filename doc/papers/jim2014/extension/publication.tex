@@ -222,13 +222,13 @@ Le code suivant produit le résultat présenté en figure \ref{fig:complexMeter}
   \meter<"3+3+2/4"> a b g
 ]
 \end{gmncode}
-%µ Pdf pas encore adapté
-% \begin{figure}[h]
-% \centering
-% \includegraphics[width=\columnwidth]{img/partitions/complexMeter.pdf}
-% \caption{Métrique complexe}
-% \label{fig:complexMeter}
-% \end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=55mm]{img/partitions/complexMeter.pdf}
+\caption{Métrique complexe}
+\label{fig:complexMeter}
+\end{figure}
 
 %**************************** CLUSTERS ********************************
 \subsection{Clusters}\label{subsec:clusters}
@@ -504,8 +504,61 @@ Quant à la portée, elle commence, ou s'arrête, aux positions correspondant au
 %*****************SYMBOLES*****************************
 \subsubsection{Symboles}\label{subsubsec:symboles}
 
-% colas /////////////
+Une fonctionnalité intéressante manquait dans \guido, la possibilité d'insérer un fichier graphique externe à l'application. Nous avons donc implémenté la possibilité d'appeler dynamiquement une image de type \emph{png}, \emph{jpg} ou \emph{bmp}, à l'aide du \emph{tag} \textsc{symbol}, et d'ajuster sa taille et sa position dans la partition, afin d'offrir de nouvelles possibilités graphiques à l'utilisateur.
 
+Nous avons séparé en deux les types de symboles:
+\begin{itemize}
+	\item symbole ne possédant pas de durée mais prenant une certaine place sur la portée, selon sa taille (cf. exemple 1);
+	\item symbole possédant une durée, et étant alors considéré comme un événement à part entière (cf. exemple 2).
+\end{itemize}
+
+Pour les deux exemples suivants, les fichiers images sont appelés par un chemin relatif et se situent dans le dossier \textsc{symbols} étant dans le même répertoire que le fichier \textsc{.gmn} (contenant le code de l'exemple) ouvert.
+
+\exemple~1\\
+Le code suivant produit le résultat présenté en figure \ref{fig:symbol1}. Le symbole ne possède pas de durée.
+\begin{gmncode}
+[
+  \meter<"4/4">
+  a b
+  \symbol<file="symbols/silence.png"> 
+  c d
+]
+\end{gmncode}
+
+\exemple~2\\
+Le code suivant produit le résultat présenté en figure \ref{fig:symbol2}. Le symbole possède une durée (égale à une blanche). Le mot-clé \textsc{empty} permet d'insérer un événement invisible.
+\begin{gmncode}
+[
+  \meter<"4/4">
+  a
+  \symbol<file="symbols/ronds.png", dx=-5> (empty/2)
+  g/4 f
+]
+\end{gmncode}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=65mm]{img/partitions/symbol1.pdf}
+\caption{Symbole sans durée intrinsèque}
+\label{fig:symbol1}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=65mm]{img/partitions/symbol2.pdf}
+\caption{Symbole avec durée intrinsèque}
+\label{fig:symbol2}
+\end{figure}
+
+Le chemin du fichier peut être absolu ou bien relatif par rapport au dossier \textsc{home} de l'utilisateur ou par rapport au répertoire contenant le fichier \textsc{gmn} ouvert.
+
+Divers paramètres sont proposés à l'utilisateur pour gérer l'affichage de son symbole:
+\begin{itemize}
+	\item \textsc{position} (\emph{top}, \emph{mid} ou \emph{bot}), positionnant l'image par rapport à la portée;
+	\item \textsc{size}, correspondant à sa taille;
+	\item \textsc{w/h}, permettant de régler la largeur et la hauteur de l'image;
+	\item \textsc{dx/dy}, insérant un offset horizontal ou vertical.
+\end{itemize}
 
 %************************ AMELIORATIONS DIVERSES ******************
 \subsection{Améliorations diverses}\label{subsec:amelioraions}

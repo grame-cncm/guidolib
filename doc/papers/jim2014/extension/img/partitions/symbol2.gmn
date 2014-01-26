@@ -1,0 +1,6 @@
+[
+    \meter<"4/4">
+    a
+    \symbol<file="symbols/ronds.png", dx=-5> (empty/2)
+    g/4 f
+]
