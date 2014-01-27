@@ -1,0 +1,6 @@
+[
+    \meter<"4/4">
+    a b
+    \symbol<file="symbols/silence.png"> 
+    c d
+]
