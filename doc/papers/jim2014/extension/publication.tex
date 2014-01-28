@@ -719,86 +719,90 @@ Enfin, concernant le \emph{feathered beam} comme le \emph{beam} classique, il es
 Le code suivant génère la partition présentée en figure \ref{fig:complexExemple}.
 \begin{gmncode}
 {
-    [
-        \staffFormat<style="3-line">
-        \accol<id=1, range="1-2", type="straightBrace">
-        \staff<id=1, dy=2.5cm>
-        \barFormat<style="staff">
-        \clef<"perc">
-        \meter<"3+2/8"> _ _/8
-        \intens<"p", dx=-1>
-        \stemsUp
-        \cresc<dm="ff", dx1=3, dx2=-5, dy=-1, deltaY=4> (
-            \beam<dy2=0.6> (
-                g/20 e g b
-                g/40 e
-            )
-        )
+  [
+    \staffFormat<style="3-line">
+    \accol<id=1,range="1-2",type="straightBrace">
+    \staff<id=1, dy=2.5cm>
+    \barFormat<style="staff">
+    \clef<"perc">
+    \meter<"3+2/8"> _ _/8
+    \intens<"p", dx=-1>
+    \stemsUp
+    \cresc<dm="ff",dx1=3,dx2=-5,dy=-1,deltaY=4>(
+      \beam<dy2=0.6> (
+        g/20 e g b
+        g/40 e
+      )
+    )
 
-        \stemsDown
-        \tuplet<"-6:5-", dy1=6,dy2=10>(
-            \beam<dy2=4>(
-                b*5/40
-                \grace(
-                    \stemsUp(g*5/80 b)
-                )
-                \accent<dy=-3>(e*5/40) _
-                \tuplet<"-3-", dy1=3, dy2=5>(b*5/240 e g) \accent(b*5/40)
-                \grace(
-                    \stemsUp(g*5/80 g)
-                )
-                \accent<dy=-3>(e*5/80)
-            )
+    \stemsDown
+    \tuplet<"-6:5-", dy1=6,dy2=10>(
+      \beam<dy2=4>(
+        b*5/40
+        \grace(
+          \stemsUp(g*5/80 b)
         )
-    ],
-    [
-        \staff<id=2>
-        \staffFormat<"1-line">
-        \staffOff
-        \clef
-        \meter<"2+3/8"> empty*5/8
-        \staffOn
-        \clef<"perc">
-        \intens<"ff", dy=2, dx=2>
-        \beam<dy2=1.5>(
-            g/28
-            \noteFormat<"x">(\accent(g)) g
-            \noteFormat<"x">(\accent(g)) g g g
-            \noteFormat<"x">(\accent(g/8))
+        \accent<dy=-3>(e*5/40) _
+        \tuplet<"-3-", dy1=3, dy2=5>(b*5/240 e g) 
+        \accent(b*5/40)
+        \grace(
+          \stemsUp(g*5/80 g)
         )
-        \beam(
-            g/20
-            \intens<"fff", dx=-3, dy=2>
-            \noteFormat<"x">(\accent(g)) g g
-            \noteFormat<"x">(\accent(g))
-        )
-    ],
-    [
-        \accol<id=2, range="3-4">
-        \staff<id=3, dy=1.4cm>
-        \text<"gliss.", font="Times New Roman", dx=35, dy=1>
-        \cresc<dm="fff", dx1=2, dx2=-5, dy=3, deltaY=4>(
-                \meter<"3+2/8">
-                \intens<"p", dy=-4> empty/2
-                \glissando(
-                    \noteFormat<dx=-28.5> (c/8) {
-                        \marcato<dy=3>(d#3), e, f#, g
-                    }
-                )
-        )
-        \staffOff
-    ],
-    [
-        \staff<id=4>
-        \text<"gliss.", font="Times New Roman", dx=35, dy=12>
-        \meter<"3+2/8"> empty/2
-        \glissando(
-            \noteFormat<dx=-28.5> (b0/8) {
-                \marcato<"below", dy=-5, dx=1>(a#-2), g, f#, e, d
-            }
-        )
-        \staffOff
-    ]
+        \accent<dy=-3>(e*5/80)
+      )
+    )
+  ],
+  [
+    \staff<id=2>
+    \staffFormat<"1-line">
+    \staffOff
+    \clef
+    \meter<"2+3/8"> empty*5/8
+    \staffOn
+    \clef<"perc">
+    \intens<"ff", dy=2, dx=2>
+    \beam<dy2=1.5>(
+      g/28
+      \noteFormat<"x">(\accent(g)) g
+      \noteFormat<"x">(\accent(g)) g g g
+      \noteFormat<"x">(\accent(g/8))
+    )
+    \beam(
+      g/20
+      \intens<"fff", dx=-3, dy=2>
+      \noteFormat<"x">(\accent(g)) g g
+      \noteFormat<"x">(\accent(g))
+    )
+  ],
+  [
+    \accol<id=2, range="3-4">
+    \staff<id=3, dy=1.4cm>
+    \text<"gliss.", font="Times New Roman", 
+      dx=35, dy=1>
+    \cresc<dm="fff", dx1=2, dx2=-5, dy=3, deltaY=4>(
+       \meter<"3+2/8">
+       \intens<"p", dy=-4> empty/2
+       \glissando(
+         \noteFormat<dx=-28.5> (c/8) {
+           \marcato<dy=3>(d#3), e, f#, g
+         }
+       )
+    )
+    \staffOff
+  ],
+  [
+    \staff<id=4>
+    \text<"gliss.", font="Times New Roman", 
+      dx=35, dy=12>
+    \meter<"3+2/8"> empty/2
+    \glissando(
+      \noteFormat<dx=-28.5> (b0/8) {
+        \marcato<"below", dy=-5, dx=1>(a#-2), 
+        g, f#, e, d
+      }
+    )
+    \staffOff
+  ]
 }
 \end{gmncode}
 
