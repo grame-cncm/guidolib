@@ -68,7 +68,7 @@ Lors de sa conception, le format \guido\ se différencie des approches proposée
 Postérieurement au format \guido, d'autres représentations textuelles de la notation de la musique ont vu le jour, telles Lilypond \cite{lilypond03,lilypond06} qui est assez similaire dans son format, ou MusicXML \cite{good01}, orienté vers l'échange de partitions. Toutefois, le projet \guido\ reste unique parce qu'il est le seul qui propose à la fois un format de notation, une moteur de rendu et une librairie C/C++ permettant d'embarquer des capacités de rendu de partitions dans des applications indépendantes.
 Par ailleurs, la rapidité et l'efficacité du moteur de rendu le rendent utilisable dans un contexte \textit{temps réel} (pour des niveaux de complexité pas trop élevés), ouvrant la voix à des formes d'interactivité inédites \cite{Hoadley12,Fober:12a}.
 
-Pour adresser les besoins les plus courants de la musique contemporaine, le format \guido\ ainsi que le moteur de rendu ont étés étendus. Après un bref rappel sur le format \guido, cet article décrit ces extensions en  situant les choix qui ont été faits en terme de rendu graphique, dans les pratiques identifiées dans la littérature contemporaine. Nous montrerons également comment une forme de \emph{langage générique} permet de combiner ces représentations et fournit à l'utilisateur, un large éventail de solutions pour la représentation de la musique.
+Pour adresser les besoins les plus courants de la musique contemporaine, le format \guido\ ainsi que le moteur de rendu ont étés étendus. Après un bref rappel sur le format \guido, cet article décrit ces extensions en  situant les choix qui ont été faits en terme de rendu graphique, dans les pratiques identifiées dans la littérature contemporaine. Nous montrerons également comment une forme de \emph{langage générique} permet de combiner ces représentations et fournit à l'utilisateur un large éventail de solutions pour la représentation de la musique.
 
 
 %Le format de notation musicale \guido\ (GMN) \cite{hoos98} \cite{Dau:09a} a été défini par H. Hoos et K. Hamel il y a plus de 10 ans. Il est très proche du format adopté par Lilypond \cite{lilypond03,lilypond06} mais il est apparu antérieurement. Le format GMN est un langage textuel de représentation de partitions musicales 
@@ -206,7 +206,7 @@ Quelques ajustements graphiques assez précis ont dû être réalisés pour parf
 \begin{itemize}
     \item insertion d'un offset horizontal variable selon le symbole choisi, l'orientation de la hampe, l'utilisation en accord ou non (les accords pouvant posséder des \emph{noteheads} différents pour chacune de leurs notes);
     \item adaptation de la longueur de la hampe selon le type symbole utilisé (par exemple, différence de longueur entre le \emph{triangle} et le \emph{reversedTriangle}).
-\end{itemize}.
+\end{itemize}
 
 
 %**************************** COMPLEX METER ********************************
@@ -365,7 +365,6 @@ Il est cependant possible de chaîner plusieurs \emph{feathered beams} grâce à
 % \featherDurations #(ly:make-moment 2 1)
 % { c16[ c c c c c c c] }
 
-%\paragraph{}
 On remarque que, même dans un ouvrage tel que celui d'Elaine Gould \cite{gould2011behind}, peu de détails sont donnés sur cette notation, et on se heurte rapidement à des incohérences telles que celle de la figure \ref{fig:incoherence} tirée de "Behind Bars" : on veut faire tenir en un temps une croche et quatre notes de durées inférieures à la croche mais supérieures à la triple-croche. 
 
 \begin{figure}[h]
@@ -586,7 +585,8 @@ De plus, nous avons voulu donner la possibilité de choisir de dessiner ou non l
 \begin{figure}[h]
 \centering
 \begin{gmncode}
-[ \trill<tr="false", anchor="note">( {g} {a/2} ) ]
+[ \trill<tr="false", anchor="note">
+( {g} {a/2} ) ]
 \end{gmncode}
 \includegraphics[width=30mm]{img/trillanchor.pdf}
 \caption{Cas du \emph{trille} ancré à la tête de note, et \textit{\textbf{tr}} optionnel}
@@ -620,7 +620,7 @@ Concernant le \emph{glissando}, une certaine flexibilité devait être trouvée 
 \end{center}
 \end{figure}
 
-L'unique problème avec ce choix peut se poser lors d'un conflit dans l'ordre imposé par le glissando précèdent et par le suivant, comme dans l'exemple Figure \ref{fig:glissandopb} . Il est alors possible de faire appel à une seconde voix, et au \emph{tag \textbackslash{}staff \textless{}numero de portée\textgreater{}} qui pourra créer sur une même portée d'autres glissandi en parallèle et indépendants des premiers (Figure \ref{fig:glissandosspb}).
+L'unique problème avec ce choix peut se poser lors d'un conflit dans l'ordre imposé par le glissando précédent et par le suivant, comme dans le premier cas de l'exemple Figure \ref{fig:glissandopb}. Il est alors possible de faire appel à une seconde voix, et au \emph{tag \textbackslash{}staff \textless{}numero de portée\textgreater{}} qui pourra créer sur une même portée d'autres glissandi en parallèle et indépendants des premiers (Figure \ref{fig:glissandopb}).
 
 
 \begin{figure}[h]
@@ -629,12 +629,7 @@ L'unique problème avec ce choix peut se poser lors d'un conflit dans l'ordre im
 [ \glissando(e {d,f,a} g) b ]
 \end{gmncode}
 \includegraphics[width=4cm]{img/glissandopb.pdf}
-\caption{Cas d'un \emph{glissando} imposé par l'ordre des notes.}
-\label{fig:glissandopb}
-\end{figure}
 
-\begin{figure}[h]
-\centering
 \begin{gmncode}
 { 
   [ \glissando( e {d,f}) empty b ],
@@ -644,14 +639,12 @@ L'unique problème avec ce choix peut se poser lors d'un conflit dans l'ordre im
 \includegraphics[width=4cm]{img/glissandosanspb.pdf}
 \caption{Cas de recours à une seconde voix pour le \emph{glissando} -
 'empty' représente une note vide.}
-\label{fig:glissandosspb}
+\label{fig:glissandopb}
 \end{figure}
 
 
 %*****************************TRILLES ET TIES****************************************
 \subsection{Trilles et liaisons}\label{subsec:trillesLiaison}
-
-% camille //////////
 
 Au niveau du trille, une subtilité au niveau du contr\^ole du rendu a également été ajoutée. Il fallait définir le comportement quant aux notes liées, soit de manière automatique de par la présence d'une barre de mesure, soit de manière explicitement décrite par l'utilisateur. La solution adoptée est de dessiner la ligne de \emph{trille} jusqu'à la fin de la dernière note liée si celle-ci provient d'une note plus longue découpée automatiquement, mais de s'arrêter normalement à la prochaine note si la liaison a été explicitée par l'utilisateur, qui pourra alors décider de répéter le \emph{trille} sur cette autre note, ou non. (Figure \ref{fig:trill})
 
@@ -695,8 +688,6 @@ Lors de combinaisons de \emph{glissandi}  avec des accords ou des \emph{clusters
 %*****************************HIERARCHIE BEAMS****************************************
 \subsection{Combinaisons de beams}\label{subsec:combinaisonBeams}
 
-% camille //////////
-
 % justification des hierarchies de beams ?
 Enfin, concernant le \emph{feathered beam} comme le \emph{beam} classique, il est maintenant possible de créer des hierarchies de \emph{beams} : c'est à dire d'englober plusieurs \emph{beams} dans un plus grand, afin de les joindre par une barre principale commune (Figure \ref{fig:fbeamhierarchie}).
 
@@ -726,86 +717,90 @@ Enfin, concernant le \emph{feathered beam} comme le \emph{beam} classique, il es
 Le code suivant génère la partition présentée en figure \ref{fig:complexExemple}.
 \begin{gmncode}
 {
-    [
-        \staffFormat<style="3-line">
-        \accol<id=1, range="1-2", type="straightBrace">
-        \staff<id=1, dy=2.5cm>
-        \barFormat<style="staff">
-        \clef<"perc">
-        \meter<"3+2/8"> _ _/8
-        \intens<"p", dx=-1>
-        \stemsUp
-        \cresc<dm="ff", dx1=3, dx2=-5, dy=-1, deltaY=4> (
-            \beam<dy2=0.6> (
-                g/20 e g b
-                g/40 e
-            )
-        )
+  [
+    \staffFormat<style="3-line">
+    \accol<id=1,range="1-2",type="straightBrace">
+    \staff<id=1, dy=2.5cm>
+    \barFormat<style="staff">
+    \clef<"perc">
+    \meter<"3+2/8"> _ _/8
+    \intens<"p", dx=-1>
+    \stemsUp
+    \cresc<dm="ff",dx1=3,dx2=-5,dy=-1,deltaY=4>(
+      \beam<dy2=0.6> (
+        g/20 e g b
+        g/40 e
+      )
+    )
 
-        \stemsDown
-        \tuplet<"-6:5-", dy1=6,dy2=10>(
-            \beam<dy2=4>(
-                b*5/40
-                \grace(
-                    \stemsUp(g*5/80 b)
-                )
-                \accent<dy=-3>(e*5/40) _
-                \tuplet<"-3-", dy1=3, dy2=5>(b*5/240 e g) \accent(b*5/40)
-                \grace(
-                    \stemsUp(g*5/80 g)
-                )
-                \accent<dy=-3>(e*5/80)
-            )
+    \stemsDown
+    \tuplet<"-6:5-", dy1=6,dy2=10>(
+      \beam<dy2=4>(
+        b*5/40
+        \grace(
+          \stemsUp(g*5/80 b)
         )
-    ],
-    [
-        \staff<id=2>
-        \staffFormat<"1-line">
-        \staffOff
-        \clef
-        \meter<"2+3/8"> empty*5/8
-        \staffOn
-        \clef<"perc">
-        \intens<"ff", dy=2, dx=2>
-        \beam<dy2=1.5>(
-            g/28
-            \noteFormat<"x">(\accent(g)) g
-            \noteFormat<"x">(\accent(g)) g g g
-            \noteFormat<"x">(\accent(g/8))
+        \accent<dy=-3>(e*5/40) _
+        \tuplet<"-3-", dy1=3, dy2=5>(b*5/240 e g) 
+        \accent(b*5/40)
+        \grace(
+          \stemsUp(g*5/80 g)
         )
-        \beam(
-            g/20
-            \intens<"fff", dx=-3, dy=2>
-            \noteFormat<"x">(\accent(g)) g g
-            \noteFormat<"x">(\accent(g))
-        )
-    ],
-    [
-        \accol<id=2, range="3-4">
-        \staff<id=3, dy=1.4cm>
-        \text<"gliss.", font="Times New Roman", dx=35, dy=1>
-        \cresc<dm="fff", dx1=2, dx2=-5, dy=3, deltaY=4>(
-                \meter<"3+2/8">
-                \intens<"p", dy=-4> empty/2
-                \glissando(
-                    \noteFormat<dx=-28.5> (c/8) {
-                        \marcato<dy=3>(d#3), e, f#, g
-                    }
-                )
-        )
-        \staffOff
-    ],
-    [
-        \staff<id=4>
-        \text<"gliss.", font="Times New Roman", dx=35, dy=12>
-        \meter<"3+2/8"> empty/2
-        \glissando(
-            \noteFormat<dx=-28.5> (b0/8) {
-                \marcato<"below", dy=-5, dx=1>(a#-2), g, f#, e, d
-            }
-        )
-        \staffOff
-    ]
+        \accent<dy=-3>(e*5/80)
+      )
+    )
+  ],
+  [
+    \staff<id=2>
+    \staffFormat<"1-line">
+    \staffOff
+    \clef
+    \meter<"2+3/8"> empty*5/8
+    \staffOn
+    \clef<"perc">
+    \intens<"ff", dy=2, dx=2>
+    \beam<dy2=1.5>(
+      g/28
+      \noteFormat<"x">(\accent(g)) g
+      \noteFormat<"x">(\accent(g)) g g g
+      \noteFormat<"x">(\accent(g/8))
+    )
+    \beam(
+      g/20
+      \intens<"fff", dx=-3, dy=2>
+      \noteFormat<"x">(\accent(g)) g g
+      \noteFormat<"x">(\accent(g))
+    )
+  ],
+  [
+    \accol<id=2, range="3-4">
+    \staff<id=3, dy=1.4cm>
+    \text<"gliss.", font="Times New Roman", 
+      dx=35, dy=1>
+    \cresc<dm="fff",dx1=2,dx2=-5,dy=3,deltaY=4>(
+       \meter<"3+2/8">
+       \intens<"p", dy=-4> empty/2
+       \glissando(
+         \noteFormat<dx=-28.5> (c/8) {
+           \marcato<dy=3>(d#3), e, f#, g
+         }
+       )
+    )
+    \staffOff
+  ],
+  [
+    \staff<id=4>
+    \text<"gliss.", font="Times New Roman", 
+      dx=35, dy=12>
+    \meter<"3+2/8"> empty/2
+    \glissando(
+      \noteFormat<dx=-28.5> (b0/8) {
+        \marcato<"below", dy=-5, dx=1>(a#-2), 
+        g, f#, e, d
+      }
+    )
+    \staffOff
+  ]
 }
 \end{gmncode}
 
