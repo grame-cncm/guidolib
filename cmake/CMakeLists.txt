@@ -93,8 +93,8 @@ add_definitions(-DGUIDOExport)
 #######################################
 # set directories, src and headers.
 set (GUIDO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/..)
-set (SRC_PATH	${GUIDO_PATH}/src)
-set (SRCFOLDERS  lib graphic abstract parser tools misc include devices maps)
+set (SRC_PATH	${GUIDO_PATH}/src/engine)
+#set (SRCFOLDERS  lib graphic abstract parser tools misc include devices maps)
 set (HEADERS_PATH ${SRC_PATH}/include)
 if(WIN32)
 	set(VGDEV_PATH ${GUIDO_PATH}/win32/src)
@@ -108,16 +108,18 @@ endif(WIN32)
 # midi export support
 if (MIDIEXPORT STREQUAL "yes")
 	message (STATUS "MIDI export will be generated (requires MidiShareLight) - Use -DMIDIEXPORT=no to change.")
-	set (SRCFOLDERS  ${SRCFOLDERS} midisharelight)
+	set (MSLIGHT_PATH	${GUIDO_PATH}/src/midisharelight)
 	add_definitions(-DMIDIEXPORT)
+	
+	set(INCL ${INCL} "${MSLIGHT_PATH}")			# add include folders
 	if (WIN32)
 		if (${CMAKE_CL_64})
-			set(LINK ${LINK} "${SRC_PATH}/midisharelight/win64/midisharelight64.lib")
+			set(LINK ${LINK} "${MSLIGHT_PATH}/win64/midisharelight64.lib")
 		else()
-			set(LINK ${LINK} "${SRC_PATH}/midisharelight/win32/midisharelight.lib")
+			set(LINK ${LINK} "${MSLIGHT_PATH}/win32/midisharelight.lib")
 		endif()
 	elseif(APPLE)
-		set(LINK ${LINK} "-L${SRC_PATH}/midisharelight/macos -lmidisharelight")
+		set(LINK ${LINK} "-L${MSLIGHT_PATH}/macos -lmidisharelight")
 	elseif(UNIX)
 		set(LINK ${LINK} "-L/usr/local/lib -lmidisharelight")
 	endif (WIN32)
@@ -125,10 +127,8 @@ else()
 	message (STATUS "MIDI export will not be generated - Use -DMIDIEXPORT=yes to change (requires MidiShareLight).")
 endif()
 
+set (SRC ${SRC} "${SRC_PATH}/*/*.cpp")					# add source files
 
-foreach(folder ${SRCFOLDERS})
-	set (SRC ${SRC} "${SRC_PATH}/${folder}/*.cpp")					# add source files
-endforeach(folder)
 if(WIN32)
 	set (VGDEV_SRC "${VGDEV_PATH}/GDeviceWin32.cpp" "${VGDEV_PATH}/GFontWin32.cpp" "${VGDEV_PATH}/GSystemWin32.cpp"
 		"${VGDEV_PATH}/GDeviceWin32GDIPlus.cpp" "${VGDEV_PATH}/GFontWin32GDIPlus.cpp" "${VGDEV_PATH}/GSystemWin32GDIPlus.cpp")
@@ -154,20 +154,17 @@ elseif(UNIX)
 endif(WIN32)
 file (GLOB LIBSRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${SRC} ${VGDEV_SRC})
 
-foreach(folder ${SRCFOLDERS})
-	set(HEADERS ${HEADERS} "${SRC_PATH}/${folder}/*.h")		# add header files
-endforeach(folder)
+set(HEADERS ${HEADERS} "${SRC_PATH}/*/*.h")		# add header files
 file (GLOB LIBH RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${HEADERS} ${VGDEV_H})
 file (GLOB PUBLICHEADERS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${HEADERS_PATH}/*.h" "${VGDEV_H}" "${SRC_PATH}/devices/*H")
 
-foreach(folder ${SRCFOLDERS})
-	set(INCL ${INCL} "${SRC_PATH}/${folder}")			# add include folders
-endforeach(folder)
-set(INCL ${INCL} "${VGDEV_PATH}")						# add include folders
+set(INCL ${INCL} "${SRC_PATH}/*")			# add include folders
+set(INCL ${INCL} "${VGDEV_PATH}")			# add include folders
+file (GLOB INCDIRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${INCL})
 
 #######################################
 # set includes
-include_directories( ${INCL})
+include_directories( ${INCDIRS})
 set_source_files_properties (${INCL} PROPERTIES HEADER_FILE_ONLY TRUE)
 
 #######################################
