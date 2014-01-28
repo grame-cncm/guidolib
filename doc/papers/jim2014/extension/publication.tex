@@ -294,7 +294,7 @@ Le \emph{glissando} se présente classiquement comme une ligne joignant deux not
 Dans un souci d'efficacité, il fallait pouvoir décrire un \emph{glissando} seul ou plusieurs \emph{glissandi} à la suite de la manière la plus simple et intuitive possible. 
 
 \begin{gmncode}
-\glissando<options>( notes )
+\glissando<params>( notes )
 \end{gmncode}
 
 Il paraissait important de donner la possibilité à l'utilisateur de n'écrire qu'une seule fois le \emph{tag} pour décrire plusieurs \emph{glissandi} consécutifs, contrairement à la description de lilypond où le \emph{tag} doit être répété entre chaque note. Ainsi le \emph{range-tag} (\emph{tag} possédant une durée) apparaissait comme la meilleure solution pour décrire un ou plusieurs \emph{glissandi} : toutes les notes comprises dans les parenthèses seraient prises en compte et liées les unes aux autres par des \emph{glissandi}. L'algorithme de démultiplication d'un même \emph{tag} et de répartition de celui-ci est fortement inspiré de celui du \emph{tie}, ou liaison de prolongation, qui doit également créer une liaison entre chacune des notes affectées.
@@ -316,12 +316,12 @@ Il paraissait important de donner la possibilité à l'utilisateur de n'écrire 
 
 
 % *********************** FEATHERED BEAM ****************************
-\subsection{Liens de croches en soufflet (feathered beaming)}
+\subsection{Liens de croches en soufflet (feathered beaming)}\label{subsec:featheredBeaming}
 \bigskip
 
 \begin{gmncode}
-\fBeam<options>( notes )
-  options : 
+\fBeam<params>( notes )
+  params : 
     - durations="firstDur, lastDur" : 
       durée des première et dernière notes
     - drawDuration : 
@@ -498,56 +498,54 @@ Quant à la portée, elle commence, ou s'arrête, aux positions correspondant au
 
 
 %************************ GRAPHIQUES ABSTRAITES ******************
-\subsection{Graphiques abstraites}\label{subsec:graphiquesAbstraites}
+\subsection{Graphiques arbitraires}\label{subsec:graphiquesAbstraites}
+\bigskip
 
+\begin{gmncode}
+1) \symbol<params>
+2) \symbol<params>( notes )
+  params : 
+    - filePath :
+      chemin du fichier
+    - position = "top, mid, bot" :
+      position de l'image
+    - w/h :
+      largeur/hauteur de l'image
+\end{gmncode}
 
-%*****************SYMBOLES*****************************
-\subsubsection{Symboles}\label{subsubsec:symboles}
-
-Une fonctionnalité intéressante manquait dans \guido, la possibilité d'insérer un fichier graphique externe à l'application. Nous avons donc implémenté la possibilité d'appeler dynamiquement une image de type \emph{png}, \emph{jpg} ou \emph{bmp}, à l'aide du \emph{tag} \textsc{symbol}, et d'ajuster sa taille et sa position dans la partition, afin d'offrir de nouvelles possibilités graphiques à l'utilisateur.
+Une fonctionnalité intéressante manquait dans \guido, la possibilité d'insérer un fichier graphique externe à l'application. Nous avons donc implémenté la possibilité d'appeler dynamiquement une image de type \emph{png}, \emph{jpg} ou \emph{bmp}, à l'aide du \emph{tag} \textbackslash{}\emph{symbol}, et d'ajuster sa taille et sa position dans la partition, afin d'offrir de nouvelles possibilités graphiques à l'utilisateur.
 
 Nous avons séparé en deux les types de symboles:
 \begin{itemize}
-	\item symbole ne possédant pas de durée mais prenant une certaine place sur la portée, selon sa taille (cf. exemple 1);
-	\item symbole possédant une durée, et étant alors considéré comme un événement à part entière (cf. exemple 2).
+	\item symbole ne possédant pas de durée mais prenant une certaine place sur la portée, selon sa taille (syntaxe 1);
+	\item symbole possédant une durée, et étant alors considéré comme un événement à part entière (syntaxe 2).
 \end{itemize}
 
-Pour les deux exemples suivants, les fichiers images sont appelés par un chemin relatif et se situent dans le dossier \textsc{symbols} étant dans le même répertoire que le fichier \textsc{.gmn} (contenant le code de l'exemple) ouvert.
+Pour les deux exemples suivants, les fichiers images sont appelés par un chemin relatif et se situent dans le même répertoire que le fichier \textsc{.gmn} (contenant le code de l'exemple) ouvert.
 
-\exemple~1\\
-Le code suivant produit le résultat présenté en figure \ref{fig:symbol1}. Le symbole ne possède pas de durée.
-\begin{gmncode}
-[
-  \meter<"4/4">
-  a b
-  \symbol<file="symbols/silence.png"> 
-  c d
-]
-\end{gmncode}
+\exemple\\
+Le code suivant produit le résultat présenté en figure \ref{fig:symbol}. Sur la première portée, le symbole ne possède pas de durée, contrairement à la deuxième portée.
 
-\exemple~2\\
-Le code suivant produit le résultat présenté en figure \ref{fig:symbol2}. Le symbole possède une durée (égale à une blanche). Le mot-clé \textsc{empty} permet d'insérer un événement invisible.
 \begin{gmncode}
-[
-  \meter<"4/4">
-  a
-  \symbol<file="symbols/ronds.png", dx=-5> (empty/2)
-  g/4 f
-]
+{
+  [
+    \meter<"4/4"> c f
+    \symbol<file="silence.png", dx=-5> 
+    c d f
+  ],
+  [
+    \meter<"4/4"> a d
+    \symbol<file="ronds.png",
+      position="bot"> (f g) g
+  ]
+}
 \end{gmncode}
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=60mm]{img/partitions/symbol1.pdf}
-\caption{Symbole sans durée intrinsèque}
-\label{fig:symbol1}
-\end{figure}
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=55mm]{img/partitions/symbol2.pdf}
-\caption{Symbole avec durée intrinsèque}
-\label{fig:symbol2}
+\includegraphics[width=65mm]{img/partitions/symbol.pdf}
+\caption{Symboles}
+\label{fig:symbol}
 \end{figure}
 
 Le chemin du fichier peut être absolu ou bien relatif par rapport au dossier \textsc{home} de l'utilisateur ou par rapport au répertoire contenant le fichier \textsc{gmn} ouvert.
@@ -583,7 +581,7 @@ Dans la version précédente de \guido, le \emph{trille} à proprement parler n'
 %D'après Elaine Gould \cite{gould2011behind}, la ligne du \emph{trille} doit être dessinée depuis le signe \textit{\textbf{tr}} jusqu'au début du prochain évènement (la prochaine note ou le prochain soupir), sauf si celui-ci se situe directement après la prochaine barre de mesure, la ligne s'arrêtant dans ce cas à la barre elle-même. 
 
 % justifier l'intérêt de tr et anchor ?
-De plus, nous avons voulu donner la possibilité de choisir de dessiner ou non le signe \textit{\textbf{tr}}, ainsi que de pouvoir changer l'ancrage de la ligne pour le déplacer sur la tête de la note. Cela fut implémenté grâce aux options \emph{tr} qui accepte comme valeurs "true" ou "false" et \emph{anchor} qui accepte comme valeurs "note" ou "tr" (Figure \ref{fig:trillanchor}). Le reste des modifications graphiques pouvant être effectuées manuellement par l'utilisateur à travers les paramètres classiques de déplacement (\textit{dx}, \textit{dy}), de couleur (\textit{color}), et de taille (\textit{size}).
+De plus, nous avons voulu donner la possibilité de choisir de dessiner ou non le signe \textit{\textbf{tr}}, ainsi que de pouvoir changer l'ancrage de la ligne pour le déplacer sur la tête de la note. Cela fut implémenté grâce au \emph{param} \emph{tr} qui accepte comme valeurs "true" ou "false" et \emph{anchor} qui accepte comme valeurs "note" ou "tr" (Figure \ref{fig:trillanchor}). Le reste des modifications graphiques pouvant être effectuées manuellement par l'utilisateur à travers les paramètres classiques de déplacement (\textit{dx}, \textit{dy}), de couleur (\textit{color}), et de taille (\textit{size}).
 
 \begin{figure}[h]
 \centering
@@ -676,7 +674,7 @@ Au niveau du trille, une subtilité au niveau du contr\^ole du rendu a égalemen
 %*****************************GLISSANDI ET CLUSTERS****************************************
 \subsection{Glissandi et clusters}\label{subsec:glissandiCluster}
 
-Lors de combinaisons de \emph{glissandi}  avec des accords ou des \emph{clusters}, il nous a paru intéressant, comme on peut le voir dans \cite{gould2011behind} (p.143) ou dans \cite{stone1980music} (p.61), de donner la possibilité de remplir l'espace entre ces \emph{glissandi} grâce à une option \emph{fill}. Une certaine flexibilité peut être trouvée dans le dessin grâce aux options graphiques \emph{dx1}, \emph{dx2}, \emph{dy1}, \emph{dy2}, ainsi que \emph{thickness} qui permettent de modifier l'aspect du \emph{glissando}. (Figure \ref{fig:glissandofill})
+Lors de combinaisons de \emph{glissandi}  avec des accords ou des \emph{clusters}, il nous a paru intéressant, comme on peut le voir dans \cite{gould2011behind} (p.143) ou dans \cite{stone1980music} (p.61), de donner la possibilité de remplir l'espace entre ces \emph{glissandi} grâce à un \emph{param} \emph{fill}. Une certaine flexibilité peut être trouvée dans le dessin grâce aux \emph{params} graphiques \emph{dx1}, \emph{dx2}, \emph{dy1}, \emph{dy2}, ainsi que \emph{thickness} qui permettent de modifier l'aspect du \emph{glissando}. (Figure \ref{fig:glissandofill})
 
 \begin{figure}[h]
 \begin{center}
@@ -689,7 +687,7 @@ Lors de combinaisons de \emph{glissandi}  avec des accords ou des \emph{clusters
 \end{gmncode}
 
 \includegraphics[width=4cm]{img/glissandofill.pdf}
-\caption{\emph{glisandi} entre accords et clusters avec option de remplissage}
+\caption{\emph{glissandi} entre accords et clusters avec \emph{param} de remplissage}
 \label{fig:glissandofill}
 \end{center}
 \end{figure}
