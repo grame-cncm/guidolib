@@ -68,7 +68,7 @@ Lors de sa conception, le format \guido\ se différencie des approches proposée
 Postérieurement au format \guido, d'autres représentations textuelles de la notation de la musique ont vu le jour, telles Lilypond \cite{lilypond03,lilypond06} qui est assez similaire dans son format, ou MusicXML \cite{good01}, orienté vers l'échange de partitions. Toutefois, le projet \guido\ reste unique parce qu'il est le seul qui propose à la fois un format de notation, une moteur de rendu et une librairie C/C++ permettant d'embarquer des capacités de rendu de partitions dans des applications indépendantes.
 Par ailleurs, la rapidité et l'efficacité du moteur de rendu le rendent utilisable dans un contexte \textit{temps réel} (pour des niveaux de complexité pas trop élevés), ouvrant la voix à des formes d'interactivité inédites \cite{Hoadley12,Fober:12a}.
 
-Pour adresser les besoins les plus courants de la musique contemporaine, le format \guido\ ainsi que le moteur de rendu ont étés étendus. Après un bref rappel sur le format \guido, cet article décrit ces extensions en  situant les choix qui ont été faits en terme de rendu graphique, dans les pratiques identifiées dans la littérature contemporaine. Nous montrerons également comment une forme de \emph{langage générique} permet de combiner ces représentations et fournit à l'utilisateur, un large éventail de solutions pour la représentation de la musique.
+Pour adresser les besoins les plus courants de la musique contemporaine, le format \guido\ ainsi que le moteur de rendu ont étés étendus. Après un bref rappel sur le format \guido, cet article décrit ces extensions en  situant les choix qui ont été faits en terme de rendu graphique, dans les pratiques identifiées dans la littérature contemporaine. Nous montrerons également comment une forme de \emph{langage générique} permet de combiner ces représentations et fournit à l'utilisateur un large éventail de solutions pour la représentation de la musique.
 
 
 %Le format de notation musicale \guido\ (GMN) \cite{hoos98} \cite{Dau:09a} a été défini par H. Hoos et K. Hamel il y a plus de 10 ans. Il est très proche du format adopté par Lilypond \cite{lilypond03,lilypond06} mais il est apparu antérieurement. Le format GMN est un langage textuel de représentation de partitions musicales 
@@ -206,7 +206,7 @@ Quelques ajustements graphiques assez précis ont dû être réalisés pour parf
 \begin{itemize}
     \item insertion d'un offset horizontal variable selon le symbole choisi, l'orientation de la hampe, l'utilisation en accord ou non (les accords pouvant posséder des \emph{noteheads} différents pour chacune de leurs notes);
     \item adaptation de la longueur de la hampe selon le type symbole utilisé (par exemple, différence de longueur entre le \emph{triangle} et le \emph{reversedTriangle}).
-\end{itemize}.
+\end{itemize}
 
 
 %**************************** COMPLEX METER ********************************
@@ -365,7 +365,6 @@ Il est cependant possible de chaîner plusieurs \emph{feathered beams} grâce à
 % \featherDurations #(ly:make-moment 2 1)
 % { c16[ c c c c c c c] }
 
-%\paragraph{}
 On remarque que, même dans un ouvrage tel que celui d'Elaine Gould \cite{gould2011behind}, peu de détails sont donnés sur cette notation, et on se heurte rapidement à des incohérences telles que celle de la figure \ref{fig:incoherence} tirée de "Behind Bars" : on veut faire tenir en un temps une croche et quatre notes de durées inférieures à la croche mais supérieures à la triple-croche. 
 
 \begin{figure}[h]
@@ -588,7 +587,8 @@ De plus, nous avons voulu donner la possibilité de choisir de dessiner ou non l
 \begin{figure}[h]
 \centering
 \begin{gmncode}
-[ \trill<tr="false", anchor="note">( {g} {a/2} ) ]
+[ \trill<tr="false", anchor="note">
+( {g} {a/2} ) ]
 \end{gmncode}
 \includegraphics[width=30mm]{img/trillanchor.pdf}
 \caption{Cas du \emph{trille} ancré à la tête de note, et \textit{\textbf{tr}} optionnel}
@@ -622,7 +622,7 @@ Concernant le \emph{glissando}, une certaine flexibilité devait être trouvée 
 \end{center}
 \end{figure}
 
-L'unique problème avec ce choix peut se poser lors d'un conflit dans l'ordre imposé par le glissando précèdent et par le suivant, comme dans l'exemple Figure \ref{fig:glissandopb} . Il est alors possible de faire appel à une seconde voix, et au \emph{tag \textbackslash{}staff \textless{}numero de portée\textgreater{}} qui pourra créer sur une même portée d'autres glissandi en parallèle et indépendants des premiers (Figure \ref{fig:glissandosspb}).
+L'unique problème avec ce choix peut se poser lors d'un conflit dans l'ordre imposé par le glissando précédent et par le suivant, comme dans l'exemple Figure \ref{fig:glissandopb}. Il est alors possible de faire appel à une seconde voix, et au \emph{tag \textbackslash{}staff \textless{}numero de portée\textgreater{}} qui pourra créer sur une même portée d'autres glissandi en parallèle et indépendants des premiers (Figure \ref{fig:glissandosspb}).
 
 
 \begin{figure}[h]
@@ -631,12 +631,7 @@ L'unique problème avec ce choix peut se poser lors d'un conflit dans l'ordre im
 [ \glissando(e {d,f,a} g) b ]
 \end{gmncode}
 \includegraphics[width=4cm]{img/glissandopb.pdf}
-\caption{Cas d'un \emph{glissando} imposé par l'ordre des notes.}
-\label{fig:glissandopb}
-\end{figure}
 
-\begin{figure}[h]
-\centering
 \begin{gmncode}
 { 
   [ \glissando( e {d,f}) empty b ],
@@ -652,8 +647,6 @@ L'unique problème avec ce choix peut se poser lors d'un conflit dans l'ordre im
 
 %*****************************TRILLES ET TIES****************************************
 \subsection{Trilles et liaisons}\label{subsec:trillesLiaison}
-
-% camille //////////
 
 Au niveau du trille, une subtilité au niveau du contr\^ole du rendu a également été ajoutée. Il fallait définir le comportement quant aux notes liées, soit de manière automatique de par la présence d'une barre de mesure, soit de manière explicitement décrite par l'utilisateur. La solution adoptée est de dessiner la ligne de \emph{trille} jusqu'à la fin de la dernière note liée si celle-ci provient d'une note plus longue découpée automatiquement, mais de s'arrêter normalement à la prochaine note si la liaison a été explicitée par l'utilisateur, qui pourra alors décider de répéter le \emph{trille} sur cette autre note, ou non. (Figure \ref{fig:trill})
 
@@ -696,8 +689,6 @@ Lors de combinaisons de \emph{glissandi}  avec des accords ou des \emph{clusters
 
 %*****************************HIERARCHIE BEAMS****************************************
 \subsection{Combinaisons de beams}\label{subsec:combinaisonBeams}
-
-% camille //////////
 
 % justification des hierarchies de beams ?
 Enfin, concernant le \emph{feathered beam} comme le \emph{beam} classique, il est maintenant possible de créer des hierarchies de \emph{beams} : c'est à dire d'englober plusieurs \emph{beams} dans un plus grand, afin de les joindre par une barre principale commune (Figure \ref{fig:fbeamhierarchie}).
