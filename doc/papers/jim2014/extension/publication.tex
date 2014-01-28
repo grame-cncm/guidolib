@@ -622,7 +622,7 @@ Concernant le \emph{glissando}, une certaine flexibilité devait être trouvée 
 \end{center}
 \end{figure}
 
-L'unique problème avec ce choix peut se poser lors d'un conflit dans l'ordre imposé par le glissando précédent et par le suivant, comme dans l'exemple Figure \ref{fig:glissandopb}. Il est alors possible de faire appel à une seconde voix, et au \emph{tag \textbackslash{}staff \textless{}numero de portée\textgreater{}} qui pourra créer sur une même portée d'autres glissandi en parallèle et indépendants des premiers (Figure \ref{fig:glissandosspb}).
+L'unique problème avec ce choix peut se poser lors d'un conflit dans l'ordre imposé par le glissando précédent et par le suivant, comme dans le premier cas de l'exemple Figure \ref{fig:glissandopb}. Il est alors possible de faire appel à une seconde voix, et au \emph{tag \textbackslash{}staff \textless{}numero de portée\textgreater{}} qui pourra créer sur une même portée d'autres glissandi en parallèle et indépendants des premiers (Figure \ref{fig:glissandopb}).
 
 
 \begin{figure}[h]
@@ -641,7 +641,7 @@ L'unique problème avec ce choix peut se poser lors d'un conflit dans l'ordre im
 \includegraphics[width=4cm]{img/glissandosanspb.pdf}
 \caption{Cas de recours à une seconde voix pour le \emph{glissando} -
 'empty' représente une note vide.}
-\label{fig:glissandosspb}
+\label{fig:glissandopb}
 \end{figure}
 
 
@@ -779,7 +779,7 @@ Le code suivant génère la partition présentée en figure \ref{fig:complexExem
     \staff<id=3, dy=1.4cm>
     \text<"gliss.", font="Times New Roman", 
       dx=35, dy=1>
-    \cresc<dm="fff", dx1=2, dx2=-5, dy=3, deltaY=4>(
+    \cresc<dm="fff",dx1=2,dx2=-5,dy=3,deltaY=4>(
        \meter<"3+2/8">
        \intens<"p", dy=-4> empty/2
        \glissando(
