@@ -14,6 +14,8 @@
 %\newenvironment{code}  		{\fontfamily{pnc}\selectfont}{}
 
 \newcommand{\guido}			{\textsc{Guido}}
+\newcommand{\code}[1]		{\texttt{#1}}
+\newcommand{\guidotag}[1]	{\textbackslash\code{#1}}
 \newcommand{\exemple}		{\vspace{2mm}\hspace*{-6mm}\textsc{Exemple}}
 
 \title{\centering Extension de Guido aux notations contemporaines}
@@ -503,16 +505,15 @@ Quant à la portée, elle commence, ou s'arrête, aux positions correspondant au
 \begin{gmncode}
 1) \symbol<params>
 2) \symbol<params>( notes )
-  params : 
-    - filePath :
-      chemin du fichier
-    - position = "top, mid, bot" :
+    params : 
+    - filePath : chemin du fichier
+    - position = [top | mid | bot] :
       position de l'image
-    - w/h :
-      largeur/hauteur de l'image
+    - size : taille de l'image
+    - w/h : largeur/hauteur de l'image
 \end{gmncode}
 
-Une fonctionnalité intéressante manquait dans \guido, la possibilité d'insérer un fichier graphique externe à l'application. Nous avons donc implémenté la possibilité d'appeler dynamiquement une image de type \emph{png}, \emph{jpg} ou \emph{bmp}, à l'aide du \emph{tag} \textbackslash{}\emph{symbol}, et d'ajuster sa taille et sa position dans la partition, afin d'offrir de nouvelles possibilités graphiques à l'utilisateur.
+Une fonctionnalité intéressante manquait dans \guido, la possibilité d'insérer un fichier graphique externe à l'application. Nous avons donc implémenté la possibilité d'appeler dynamiquement une image de type \emph{png}, \emph{jpg} ou \emph{bmp}, à l'aide du \emph{tag} \guidotag{symbol}, et d'ajuster sa taille et sa position dans la partition, afin d'offrir de nouvelles possibilités graphiques à l'utilisateur.
 
 Nous avons séparé en deux les types de symboles:
 \begin{itemize}
@@ -527,23 +528,23 @@ Le code suivant produit le résultat présenté en figure \ref{fig:symbol}. Sur 
 
 \begin{gmncode}
 {
-  [
-    \meter<"4/4"> c f
-    \symbol<file="silence.png", dx=-5> 
-    c d f
-  ],
-  [
-    \meter<"4/4"> a d
-    \symbol<file="ronds.png",
-      position="bot"> (f g) g
-  ]
+ [
+  \meter<"4/4"> c f
+  \symbol<file="silence.png",dx=-5,dy=-10> 
+   c d f
+ ],
+ [
+  \meter<"4/4"> a d
+  \symbol<file="ronds.png",position="bot"> 
+  (f g) g
+ ]
 }
 \end{gmncode}
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=65mm]{img/partitions/symbol.pdf}
-\caption{Symboles}
+\caption{Graphiques arbitraires}
 \label{fig:symbol}
 \end{figure}
 
@@ -551,10 +552,10 @@ Le chemin du fichier peut être absolu ou bien relatif par rapport au dossier \t
 
 Divers paramètres sont proposés à l'utilisateur pour gérer l'affichage de son symbole:
 \begin{itemize}
-	\item \textsc{position} (\emph{top}, \emph{mid} ou \emph{bot}), positionnant l'image par rapport à la portée;
-	\item \textsc{size}, correspondant à sa taille;
-	\item \textsc{w/h}, permettant de régler la largeur et la hauteur de l'image;
-	\item \textsc{dx/dy}, insérant un offset horizontal ou vertical.
+	\item \code{position} (\emph{top}, \emph{mid} ou \emph{bot}), positionnant l'image par rapport à la portée;
+	\item \code{size}, correspondant à sa taille;
+	\item \code{w/h}, permettant de régler la largeur et la hauteur de l'image;
+	\item \code{dx/dy}, insérant un offset horizontal ou vertical.
 \end{itemize}
 
 %************************ AMELIORATIONS DIVERSES ******************
@@ -815,8 +816,8 @@ Enfin, concernant le \emph{feathered beam} comme le \emph{beam} classique, il es
 %*********************CONCLUSION**********************
 \section{Conclusion}\label{sec:conclusion}
 
-% a faire /////////////////////////////////////////////////////
 
+% a faire /////////////////////////////////////////////////////
 \bibliographystyle{plain}
 \bibliography{../../guido}
 
