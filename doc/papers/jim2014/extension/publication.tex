@@ -83,7 +83,7 @@ Pour adresser les besoins les plus courants de la musique contemporaine, le form
 %%%%%%%%%%%%%%%%%%%%% FORMAT GMN %%%%%%%%%%%%%%%%%%
 \section{Le format de Notation Guido}\label{sec:format_notation}
 
-Ci-dessous figurent les principes généraux du format de notation \guido . Ils sont fournis pour permette la compréhension du contenu des sections suivantes. Pour plus de détails on peut se reporter à \cite{Dau:09a} ou \cite{guido}.
+Ci-dessous figurent les principes généraux du format de notation \guido . Ils sont fournis pour permettre la compréhension du contenu des sections suivantes. Pour plus de détails on peut se reporter à \cite{Dau:09a} ou \cite{guido}.
 
 Le format de base de \guido\ recouvre les notes, silences, altérations, voix indépendantes, et les concepts les plus courants de la notation musicale comme les clefs, métriques, armures, articulations, liaisons, etc.
 Les notes sont représentées par leur nom \code{(a b c d e f g h)}, une altération optionnelle (\code{\#} et \code{\&} pour dièse et bémol), un numéro d'octave optionnel et une durée optionnelle exprimée sous forme de fraction.
@@ -116,7 +116,7 @@ La microtonalité a été introduite avec la version 1.43 de la librairie \guido
     2)  \alter<detune>(note-series)
 \end{gmncode}
 
-La première forme (1) introduit la notion d'\emph{altération courante} : l'atération reste valide jusqu'à une indication contraire. Dans la deuxième forme (2), l'atération ne s'applique qu'aux notes indiquées.
+La première forme (1) introduit la notion d'\emph{altération courante} : l'altération reste valide jusqu'à une indication contraire. Dans la deuxième forme (2), l'altération ne s'applique qu'aux notes indiquées.
 
 \exemple\\
 Le code suivant produit le résultat présenté en figure \ref{fig:alter}.
@@ -156,7 +156,7 @@ Le résultat est présenté en figure \ref{fig:freekey}.
 %**********************TETES DE NOTES *****************************
 \subsection{Têtes de notes}\label{subsec:tetes_notes}
 %
-Nous avons choisi de rajouter à la librairie \guido\ 6 nouveaux symboles de têtes de note, afin de proposer un choix plus vaste à l'utilisateur. Dans l'ordre de la première portée de la figure \ref{fig:noteheads}, nous avons les nouveaux éléments suivants :
+Nous avons choisi de rajouter à la librairie \guido\ six nouveaux symboles de têtes de note, afin de proposer un choix plus vaste à l'utilisateur. Dans l'ordre de la première portée de la figure \ref{fig:noteheads}, nous avons les nouveaux éléments suivants :
 %
 \begin{itemize}
     \item \code{x} (une croix)
@@ -177,7 +177,7 @@ Nous avons choisi de rajouter à la librairie \guido\ 6 nouveaux symboles de tê
 %
 Pour l'apparence graphique de ces éléments, nous nous sommes principalement inspirés de deux ouvrages, \emph{Behind Bars : The Definitive Guide to Music Notation} [4] et \emph{Music Notation in the Twentieth Century : A Practical Guidobook} [16].
 %
-Nous avons implémenté ces nouveaux éléments graphiques à l'aide du \emph{tag} \guidotag{noteFormat}, déjà existant. Celui-ci permet de modifier l'apparence des notes lui étant postérieures (couleur, taille, offset, etc.). Nous avons donc rajouté un attribut, \code{style}, permettant à l'utilisateur de choisir l'apparence du \emph{notehead} des notes postérieures :
+Nous avons implémenté ces nouveaux éléments graphiques à l'aide du \emph{tag} \guidotag{noteFormat}, déjà existant, qui permet de modifier l'apparence des notes lui étant postérieures (couleur, taille, offset, etc.). Nous avons donc rajouté un attribut, \code{style}, permettant à l'utilisateur de choisir l'apparence du \emph{notehead} des notes postérieures :
 
 \begin{gmncode}
 \noteFormat<style=noteHeadStyle> notes
@@ -207,7 +207,7 @@ Ce travail d'implémentation a été décomposé en plusieurs étapes:
 Quelques ajustements graphiques assez précis ont dû être réalisés pour parfaire le travail:
 \begin{itemize}
     \item insertion d'un offset horizontal variable selon le symbole choisi, l'orientation de la hampe, l'utilisation en accord ou non (les accords pouvant posséder des \emph{noteheads} différents pour chacune de leurs notes);
-    \item adaptation de la longueur de la hampe selon le type symbole utilisé (par exemple, différence de longueur entre le \code{triangle} et le \code{reversedTriangle}).
+    \item adaptation de la longueur de la hampe selon le type de symbole utilisé (par exemple, différence de longueur entre le \code{triangle} et le \code{reversedTriangle}).
 \end{itemize}
 
 
@@ -299,7 +299,7 @@ Dans un souci d'efficacité, il fallait pouvoir décrire un \emph{glissando} seu
 \glissando<params>( notes )
 \end{gmncode}
 
-Il paraissait important de donner la possibilité à l'utilisateur de n'écrire qu'une seule fois le \emph{tag} pour décrire plusieurs \emph{glissandi} consécutifs, contrairement à la description de lilypond où le \emph{tag} doit être répété entre chaque note. Ainsi le \emph{range-tag} (\emph{tag} possédant une durée) apparaissait comme la meilleure solution pour décrire un ou plusieurs \emph{glissandi} : toutes les notes comprises dans les parenthèses seraient prises en compte et liées les unes aux autres par des \emph{glissandi}. L'algorithme de démultiplication d'un même \emph{tag} et de répartition de celui-ci est fortement inspiré de celui du \guidotag{tie}, ou liaison de prolongation, qui doit également créer une liaison entre chacune des notes affectées.
+Il paraissait important de donner la possibilité à l'utilisateur de n'écrire qu'une seule fois le \emph{tag} pour décrire plusieurs \emph{glissandi} consécutifs, contrairement à la description de lilypond où le \emph{tag} doit être répété entre chaque note. Ainsi le \emph{range-tag} apparaissait comme la meilleure solution pour décrire un ou plusieurs \emph{glissandi} : toutes les notes comprises dans les parenthèses seraient prises en compte et liées les unes aux autres par des \emph{glissandi}. L'algorithme de démultiplication d'un même \emph{tag} et de répartition de celui-ci est fortement inspiré de celui du \guidotag{tie}, ou liaison de prolongation, qui doit également créer une liaison entre chacune des notes affectées.
 \\
 
 \begin{figure}[h]
@@ -358,7 +358,7 @@ Dans un désir de simplicité, il a été décidé de décrire par un seul \emph
 \label{fig:fbeamchain}
 \end{figure}
 
-Il est cependant possible de chaîner plusieurs \emph{feathered beams} grâce à la faculté du \emph{tag} à se séparer en\\ \guidotag{fBeamBegin} et \guidotag{fBeamEnd}, permettant alors, non seulement de chaîner deux \emph{beams} par une note (Figure \ref{fig:fbeamchain}), mais aussi de les faire se chevaucher sur plusieurs notes.
+Il est cependant possible de chaîner plusieurs \emph{feathered beams} grâce à la faculté du \emph{tag} à se séparer en \guidotag{fBeam- Begin} et \guidotag{fBeamEnd}, permettant alors, non seulement de chaîner deux \emph{beams} par une note (Figure \ref{fig:fbeamchain}), mais aussi de les faire se chevaucher sur plusieurs notes.
 \bigskip
 
 % question de voix simultanées
@@ -378,7 +378,7 @@ On remarque que, même dans un ouvrage tel que celui d'Elaine Gould \cite{gould2
 
 Ce manque d'une exacte cohérence entre tempo et aspect graphique est également souligné par Kurt Stone \cite{stone1980music} : "Besides, the gradual increase or decrease in the number of beams makes exact indications of beat-units impossible" (p.124).
 
-Ainsi on voit l'importance des choix de design de ce symbole, sur la manière de le décrire textuellement, de le dessiner en particulier dans le cas de plusieurs voix simultanés, et de manière générale sur la liberté laissée à l'utilisateur.
+Ainsi on voit l'importance des choix de design de ce symbole, sur la manière de le décrire textuellement, de le dessiner en particulier dans le cas de plusieurs voix simultanées, et de manière générale sur la liberté laissée à l'utilisateur.
 \\
 
 Concernant les possibilités de description données à l'utilisateur. Nous avons vu que plusieurs critères pouvaient intervenir dans la description, et devaient pouvoir être imposés par l'utilisateur. Des paramètres qui peuvent être incohérents entre eux :
@@ -405,9 +405,9 @@ Ces différents niveaux de description nous poussent à faire une claire distinc
 \label{fig:fbeamduree}
 \end{figure}
 
-Sans plus d'indication de sa part, l'aspect graphique suivra les durées réelles des notes et prendra comme points de départ et d'arrivée les durées des première et dernière notes.  C'est le cas de la Figure \ref{fig:fbeamduree}.
+Sans plus d'indication de sa part, l'aspect graphique suivra les durées réelles des notes et prendra comme points de départ et d'arrivée les durées des première et dernière notes.  C'est le cas de la figure \ref{fig:fbeamduree}.
 
-En revanche, le paramètre \code{durations} pourra lui permettre d'imposer un aspect graphique tout autre, lui donnant ainsi la possibilité d'indiquer à l'interprète un changement de tempo plus ou moins important, et pas nécessairement cohérent avec les durées intrinsèques des notes, mais ayant du sens dans l'interprétation (Cf Figure \ref{fig:utilisateur}).
+En revanche, le paramètre \code{durations} pourra lui permettre d'imposer un aspect graphique tout autre, lui donnant ainsi la possibilité d'indiquer à l'interprète un changement de tempo plus ou moins important, et pas nécessairement cohérent avec les durées intrinsèques des notes, mais ayant du sens dans l'interprétation (cf. figure \ref{fig:utilisateur}).
 
 %%
 \begin{comment}
@@ -513,7 +513,7 @@ Quant à la portée, elle commence, ou s'arrête, aux positions correspondant au
     - w/h : largeur/hauteur de l'image
 \end{gmncode}
 
-Une fonctionnalité intéressante manquait dans \guido, la possibilité d'insérer un fichier graphique externe à l'application. Nous avons donc implémenté la possibilité d'appeler dynamiquement une image de type \emph{png}, \emph{jpg} ou \emph{bmp}, à l'aide du \emph{tag} \guidotag{symbol}, et d'ajuster sa taille et sa position dans la partition, afin d'offrir de nouvelles possibilités graphiques à l'utilisateur.
+Une fonctionnalité intéressante manquait dans \guido : la possibilité d'insérer un fichier graphique externe à l'application. Nous avons donc implémenté la possibilité d'appeler dynamiquement une image de type \emph{png}, \emph{jpg} ou \emph{bmp}, à l'aide du \emph{tag} \guidotag{symbol}, et d'ajuster sa taille et sa position dans la partition, afin d'offrir de nouvelles possibilités graphiques à l'utilisateur.
 
 Nous avons séparé en deux les types de symboles:
 \begin{itemize}
