@@ -581,8 +581,127 @@ De plus, nous avons voulu donner la possibilité de choisir de dessiner ou non l
 %************************* NOUVEAUX ATTRIBUTS **************************
 \subsubsection{Nouveaux attributs}\label{subsubsec:attributs}
 
-% colas /////////////
+Le tag \guidotag{accol} permet de paramétrer l'accolade liant les portées d'une partition. Depuis la version 1.52, celle-ci peut changer de style et posséder un \emph{range}, c'est-à-dire qu'elle n'est plus obligée d'englober toute la partie musicale. De plus, plusieurs accolades peuvent être affichées en même temps. L'exemple de la figure \ref{fig:accol} illustre ceci.
 
+\begin{figure}[h]
+\centering
+\begin{gmncode}
+{
+  [
+    \accol<id=1, range="1-3",
+      dx=-4, type="straightBrace"> a b c
+  ],
+  [
+    \accol<id=2, range="1-2">
+    \clef<"f"> c0/2
+  ],
+  [
+    c d e
+  ]
+}
+\end{gmncode}
+\includegraphics[width=40mm]{img/partitions/accol.pdf}
+\caption{Nouveaux paramétrages de l'accolade}
+\label{fig:accol}
+\end{figure}
+
+\bigskip
+
+Dans \guido{}, la direction du \emph{marcato} ne pouvait auparavant pas être choisie par l'utilisateur, ceci a été modifié (cf. figure \ref{fig:marcato}).
+
+\begin{figure}[h]
+\centering
+\begin{gmncode}
+[
+  \marcato(a)
+  \marcato<"above", dy=4> (a)
+]
+\end{gmncode}
+\includegraphics[width=30mm]{img/partitions/marcato.pdf}
+\caption{Orientation forcée du \emph{marcato}}
+\label{fig:marcato}
+\end{figure}
+
+\bigskip
+
+Le tag \guidotag{staffFormat} s'est également vu doter d'un nouveau paramètre, \code{lineThickness}, permettant de gérer l'épaisseur des lignes de la portée (cf. \ref{fig:lineThickness}).
+
+\begin{figure}[h]
+\centering
+\begin{gmncode}
+[
+  \staffFormat<lineThickness=0.5>  c d e f 
+]
+\end{gmncode}
+\includegraphics[width=40mm]{img/partitions/staffFormat.pdf}
+\caption{Tag \guidotag{staffFormat} : nouveau \emph{param}}
+\label{fig:lineThickness}
+\end{figure}
+
+\bigskip
+
+Nous avons rajouté trois nouveaux \emph{params} au tag\\ \guidotag{tuplet} (cf. figure \ref{fig:tuplet}) :
+\begin{gmncode}
+1) lineThickness :
+   épaisseur des lignes latérales
+2) bold = [true | false] :
+   style typographique de la valeur du tuplet
+3) textSize : 
+   taille de la valeur du tuplet
+\end{gmncode}
+
+\begin{figure}[h]
+\centering
+\begin{gmncode}
+[
+  \tuplet<"-3-", lineThickness=0.4,
+    bold="true", textSize=2, dy1=10>
+  (a a a)
+]
+\end{gmncode}
+\includegraphics[width=35mm]{img/partitions/tuplet.pdf}
+\caption{Tag \guidotag{tuplet} : nouveaux \emph{params}}
+\label{fig:tuplet}
+\end{figure}
+
+\bigskip
+
+Dans les versions précédentes de \guido{}, le crescendo/decrescendo n'était pas personnalisable, ceci a été amélioré dans la version 1.52 (cf. figure \ref{fig:crescDecresc}). Sept nouveaux \emph{params} ont vu le jour :
+\begin{gmncode}
+1) dm = [pp | p | f | ff ...] :
+intensité du crescendo/decrescendo
+2) dx1 :
+offset horizontal de la gauche du symbole
+3) dx2 :
+offset horizontal de la droite du symbole
+4) dy :
+offset vertical du symbole
+5) deltaY :
+écartement des deux droites du symbole
+6) color :
+couleur du symbole
+7) size :
+taille du marqueur d'intensité
+\end{gmncode}
+
+\begin{figure}[h]
+\centering
+\begin{gmncode}
+{
+  [
+    \cresc<dm="ff", dx1=2, dx2=-4, dy=1,
+      deltaY=5, color="red", size=2>
+    (a b e)
+  ],
+  [
+    \decresc<thickness=0.5> (a f/2 f/4)
+  ]
+}
+\end{gmncode}
+\includegraphics[width=40mm]{img/partitions/crescDecresc.pdf}
+\caption{Tag \guidotag{cresc} et \guidotag{decresc} : nouveaux \emph{params}}
+\label{fig:crescDecresc}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%% CONTROLE DE RENDU %%%%%%%%%%%%%%%%%
 \section{Contr\^ole de rendu}\label{sec:controleRendu}
@@ -600,7 +719,7 @@ Un \emph{glissando} entre deux accords soulève la question la répartition des 
 \bigskip
 
 \includegraphics[width=35mm]{img/glissandosimple.pdf}
-\caption{\emph{glisandi} entre accords}
+\caption{\emph{glissandi} entre accords}
 \label{fig:glissandosimple}
 \end{center}
 \end{figure}
@@ -691,123 +810,6 @@ Enfin, concernant le \emph{feathered beam} comme le \emph{beam} classique, il es
 \caption{\emph{Feathered beams} englobés dans un plus grand}
 \label{fig:fbeamhierarchie}
 \end{figure}
-
-
-%%%%%%%%%%%%%%%%%%%% STREAM %%%%%%%%%%%%%%%%%
-\section{\emph{Stream}}\label{sec:stream}
-
-Dans les versions précédentes de la librairie \guido{}, il était uniquement possible de convertir une chaîne de langage \gmn{} d'un seul coup, sans pouvoir obtenir d'état intermédiaire. Une \emph{string} était passée au \emph{parser}, qui renvoyait, après l'avoir analysé en entier (ou jusqu'à la première erreur de syntaxe) la \emph{factory} \guido{} contenant tous les éléments abstraits (\emph{abstract representation}) de la partition musicale. Dans la version 1.52, nous avons décidé de rendre possible le \emph{parsing} de \emph{streams}, afin de pouvoir récupérer la \emph{factory} dans des états intermédiaires, et de pouvoir fournir un flux possiblement infini de code \gmn{} au parser, et non plus des \emph{string} finies.
-
-\subsection{\emph{Parser} réentrant}\label{subsec:parserReentrant}
-
-% Dom ////////////////////////
-
-\subsection{\emph{Stream parsing}}\label{subsec:streamParsing}
-
-
-
-%*****************************EXEMPLES COMPLEXES****************************************
-%\subsection{Exemple de partition complexe}\label{subsec:partitionComplexe}
-%
-%À l'aide des nouveaux éléments, \emph{tag} et autres implémentations effectuées dans les dernières versions, nous avons essayé de mettre en place un exemple complexe afin d'illustrer quelques nouvelles possibilités offertes par \guido{}.
-%
-%\exemple\\
-%Le code suivant génère la partition présentée en figure \ref{fig:complexExemple}.
-%\begin{gmncode}
-%{
-%  [
-%    \staffFormat<style="3-line">
-%    \accol<id=1,range="1-2",type="straightBrace">
-%    \staff<id=1, dy=2.5cm>
-%    \barFormat<style="staff">
-%    \clef<"perc">
-%    \meter<"3+2/8"> _ _/8
-%    \intens<"p", dx=-1>
-%    \stemsUp
-%    \cresc<dm="ff",dx1=3,dx2=-5,dy=-1,deltaY=4>(
-%      \beam<dy2=0.6> (
-%        g/20 e g b
-%        g/40 e
-%      )
-%    )
-%
-%    \stemsDown
-%    \tuplet<"-6:5-", dy1=6,dy2=10>(
-%      \beam<dy2=4>(
-%        b*5/40
-%        \grace(
-%          \stemsUp(g*5/80 b)
-%        )
-%        \accent<dy=-3>(e*5/40) _
-%        \tuplet<"-3-", dy1=3, dy2=5>(b*5/240 e g) 
-%        \accent(b*5/40)
-%        \grace(
-%          \stemsUp(g*5/80 g)
-%        )
-%        \accent<dy=-3>(e*5/80)
-%      )
-%    )
-%  ],
-%  [
-%    \staff<id=2>
-%    \staffFormat<"1-line">
-%    \staffOff
-%    \clef
-%    \meter<"2+3/8"> empty*5/8
-%    \staffOn
-%    \clef<"perc">
-%    \intens<"ff", dy=2, dx=2>
-%    \beam<dy2=1.5>(
-%      g/28
-%      \noteFormat<"x">(\accent(g)) g
-%      \noteFormat<"x">(\accent(g)) g g g
-%      \noteFormat<"x">(\accent(g/8))
-%    )
-%    \beam(
-%      g/20
-%      \intens<"fff", dx=-3, dy=2>
-%      \noteFormat<"x">(\accent(g)) g g
-%      \noteFormat<"x">(\accent(g))
-%    )
-%  ],
-%  [
-%    \accol<id=2, range="3-4">
-%    \staff<id=3, dy=1.4cm>
-%    \text<"gliss.", font="Times New Roman", 
-%      dx=35, dy=1>
-%    \cresc<dm="fff",dx1=2,dx2=-5,dy=3,deltaY=4>(
-%       \meter<"3+2/8">
-%       \intens<"p", dy=-4> empty/2
-%       \glissando(
-%         \noteFormat<dx=-28.5> (c/8) {
-%           \marcato<dy=3>(d#3), e, f#, g
-%         }
-%       )
-%    )
-%    \staffOff
-%  ],
-%  [
-%    \staff<id=4>
-%    \text<"gliss.", font="Times New Roman", 
-%      dx=35, dy=12>
-%    \meter<"3+2/8"> empty/2
-%    \glissando(
-%      \noteFormat<dx=-28.5> (b0/8) {
-%        \marcato<"below", dy=-5, dx=1>(a#-2), 
-%        g, f#, e, d
-%      }
-%    )
-%    \staffOff
-%  ]
-%}
-%\end{gmncode}
-%
-%\begin{figure}[h]
-%\centering
-%\includegraphics[width=80mm]{img/partitions/complexExemple.pdf}
-%\caption{Exemple de partition complexe générée avec \guido{}}
-%\label{fig:complexExemple}
-%\end{figure}
 
 
 %*********************CONCLUSION**********************
