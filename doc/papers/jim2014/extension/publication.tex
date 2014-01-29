@@ -43,7 +43,7 @@
 \begin{abstract}
 
 Le projet \guido\ regroupe à la fois un format textuel de description de partitions musicales, un moteur de rendu basé sur ce format, et une librairie qui fournit aux développeurs d'applications, un support de haut niveau pour l'ensemble des services liés au format \guido\ et à son rendu sous forme graphique. 
-De base, le projet \guido\ traite de la notation traditionnelle de la musique occidentale. Le projet a été récement étendu, tant du point de vue format que du point de vue rendu, pour adresser également les besoins les plus courants de la musique contemporaine. Cet article présente ces extensions et montre comment les choix de design fournissent à l'utilisateur, une large palette de solutions pour la notation de la musique. 
+De base, le projet \guido\ traite de la notation traditionnelle de la musique occidentale. Le projet a été récement étendu, tant du point de vue format que du point de vue rendu, pour adresser également les besoins les plus courants de la musique contemporaine. Cet article présente ces extensions et montre comment les choix de design fournissent à l'utilisateur une large palette de solutions pour la notation de la musique. 
 
 %La librairie \guido\ offre un grand nombre de symboles musicaux correspondant aux plus larges besoins de l'écriture musicale. Elle fournit un moteur de rendu de partitions embarquable dans d'autres applications. Dans une volonté d'étendre cette librairie à la musique contemporaine, nous avons implémenté un ensemble de nouvelles notations jusqu'à présent pas, ou très sommairement, implémentées. L'objectif était de répondre aux demandes des compositeurs en ajoutant certaines notations de la manière la plus adaptée à l'écriture musicale, tout en laissant une large liberté à l'utilisateur.
 
@@ -68,10 +68,10 @@ De base, le projet \guido\ traite de la notation traditionnelle de la musique oc
 Le projet \guido\ est né il y a presque 20 ans, tout d'abord comme format textuel de représentation de la musique \cite{hoos98,guido}, puis comme moteur de rendu graphique de partitions musicales \cite{RENZ02}. 
 Lors de sa conception, le format \guido\ se différencie des approches proposées par SCORE \cite{SCORE}, MuseData \cite{Hewlett97}, DARMS \cite{darms} ou encore Humdrum \cite{Huron97} notamment parce qu'il est pleinement lisible par l'utilisateur. Basée sur un formalisme qui aborde la description de la musique à partir des concepts musicaux, l'approche développée par \guido\ repose sur l'idée d'adéquation, qui invite à noter simplement les concepts musicaux simples, et à ne recourir à des notations complexes que pour les notions musicales complexes.
 
-Postérieurement au format \guido, d'autres représentations textuelles de la notation de la musique ont vu le jour, telles Lilypond \cite{lilypond03,lilypond06} qui est assez similaire dans son format, ou MusicXML \cite{good01}, orienté vers l'échange de partitions. Toutefois, le projet \guido\ reste unique parce qu'il est le seul qui propose à la fois un format de notation, une moteur de rendu et une librairie C/C++ permettant d'embarquer des capacités de rendu de partitions dans des applications indépendantes.
-Par ailleurs, la rapidité et l'efficacité du moteur de rendu le rendent utilisable dans un contexte \textit{temps réel} (pour des niveaux de complexité pas trop élevés), ouvrant la voix à des formes d'interactivité inédites \cite{Hoadley12,Fober:12a}.
+Postérieurement au format \guido, d'autres représentations textuelles de la notation de la musique ont vu le jour, telles que Lilypond \cite{lilypond03,lilypond06} qui est assez similaire dans son format, ou MusicXML \cite{good01}, orienté vers l'échange de partitions. Toutefois, le projet \guido\ reste unique parce qu'il est le seul qui propose à la fois un format de notation, une moteur de rendu et une librairie C/C++ permettant d'embarquer des capacités de rendu de partitions dans des applications indépendantes.
+Par ailleurs, la rapidité et l'efficacité du moteur de rendu le rendent utilisable dans un contexte \textit{temps réel} (pour des partitions dont le niveau de complexité n'est pas trop élevé), ouvrant la voie à des formes d'interactivité inédites \cite{Hoadley12,Fober:12a}.
 
-Pour adresser les besoins les plus courants de la musique contemporaine, le format \guido\ ainsi que le moteur de rendu ont étés étendus. Après un bref rappel sur le format \guido, cet article décrit ces extensions en  situant les choix qui ont été faits en terme de rendu graphique, dans les pratiques identifiées dans la littérature contemporaine. Nous montrerons également comment une forme de \emph{langage générique} permet de combiner ces représentations et fournit à l'utilisateur un large éventail de solutions pour la représentation de la musique.
+Pour répondre aux besoins les plus courants de la musique contemporaine, le format \guido\ ainsi que le moteur de rendu ont étés étendus. Après un bref rappel sur le format \guido, cet article décrit ces extensions en  situant les choix qui ont été faits en terme de rendu graphique, dans les pratiques identifiées dans la littérature contemporaine. Nous montrerons également comment une forme de \emph{langage générique} permet de combiner ces représentations et offre à l'utilisateur un large éventail de solutions pour la représentation de la musique.
 
 
 %Le format de notation musicale \guido\ (GMN) \cite{hoos98} \cite{Dau:09a} a été défini par H. Hoos et K. Hamel il y a plus de 10 ans. Il est très proche du format adopté par Lilypond \cite{lilypond03,lilypond06} mais il est apparu antérieurement. Le format GMN est un langage textuel de représentation de partitions musicales 
@@ -84,7 +84,7 @@ Pour adresser les besoins les plus courants de la musique contemporaine, le form
 %%%%%%%%%%%%%%%%%%%%% FORMAT GMN %%%%%%%%%%%%%%%%%%
 \section{Le format de Notation Guido}\label{sec:format_notation}
 
-Ci-dessous figurent les principes généraux du format de notation \guido . Ils sont fournis pour permette la compréhension du contenu des sections suivantes. Pour plus de détails on peut se reporter à \cite{Dau:09a} ou \cite{guido}.
+Ci-dessous figurent les principes généraux du format de notation \guido . Ils sont fournis pour permettre la compréhension du contenu des sections suivantes. Pour plus de détails on peut se reporter à \cite{Dau:09a} ou \cite{guido}.
 
 Le format de base de \guido\ recouvre les notes, silences, altérations, voix indépendantes, et les concepts les plus courants de la notation musicale comme les clefs, métriques, armures, articulations, liaisons, etc.
 Les notes sont représentées par leur nom \code{(a b c d e f g h)}, une altération optionnelle (\code{\#} et \code{\&} pour dièse et bémol), un numéro d'octave optionnel et une durée optionnelle exprimée sous forme de fraction.
@@ -102,7 +102,7 @@ Les \emph{tags} sont utilisés pour donner des informations musicales supplémen
 %\textbackslash{}tagname<param-list>
 %\textbackslash{}tagname\textless{}param-list\textgreater{}(note-series)
 %\end{code}
-où param-list est une liste optionnelle de paramètres (chaînes de caractères ou nombres), et où note-series est l'ensemble des notes ou accords concernés par le \emph{tag}. Dans ce cas nous parlerons de \emph{range-tag} (\emph{tag} possédant une durée explicite).
+où \emph{param-list} est une liste optionnelle de paramètres (chaînes de caractères ou nombres), et où \emph{note-series} est l'ensemble des notes ou accords concernés par le \emph{tag}. Dans ce cas nous parlerons de \emph{range-tag} (\emph{tag} possédant une durée explicite).
 
 
 %%%%%%%%%%%%%%%%%%%%%%% NOUVEAUTES %%%%%%%%%%%%%%%%%%%
@@ -117,7 +117,7 @@ La microtonalité a été introduite avec la version 1.43 de la librairie \guido
     2)  \alter<detune>(note-series)
 \end{gmncode}
 
-La première forme (1) introduit la notion d'\emph{altération courante} : l'atération reste valide jusqu'à une indication contraire. Dans la deuxième forme (2), l'atération ne s'applique qu'aux notes indiquées.
+La première forme (1) introduit la notion d'\emph{altération courante} : l'altération reste valide jusqu'à une indication contraire. Dans la deuxième forme (2), l'altération ne s'applique qu'aux notes indiquées.
 
 \exemple\\
 Le code suivant produit le résultat présenté en figure \ref{fig:alter}.
@@ -345,7 +345,6 @@ Dans un désir de simplicité, il a été décidé de décrire par un seul \emph
 \end{figure}
 
 Il est cependant possible de chaîner plusieurs \emph{feathered beams} en utilisant la forme \code{Begin / End} des \emph{range-tag} (i.e \guidotag{fBeamBegin} et \guidotag{fBeamEnd}), permettant alors, non seulement de chaîner deux \emph{beams} par une note (Figure \ref{fig:fbeamchain}), mais aussi de les faire se chevaucher sur plusieurs notes.
-\bigskip
 
 % question de voix simultanées
 % lilypond : 
@@ -364,7 +363,7 @@ On remarque que, même dans un ouvrage tel que celui d'Elaine Gould \cite{gould2
 
 Ce manque d'une exacte cohérence entre tempo et aspect graphique est également souligné par Kurt Stone \cite{stone1980music} : "Besides, the gradual increase or decrease in the number of beams makes exact indications of beat-units impossible" (p.124).
 
-Ainsi on voit l'importance des choix de design de ce symbole, sur la manière de le décrire textuellement, de le dessiner en particulier dans le cas de plusieurs voix simultanés, et de manière générale sur la liberté laissée à l'utilisateur.
+Ainsi on voit l'importance des choix de design de ce symbole, sur la manière de le décrire textuellement, de le dessiner en particulier dans le cas de plusieurs voix simultanées, et de manière générale sur la liberté laissée à l'utilisateur.
 \\
 
 Concernant les possibilités de description données à l'utilisateur. Nous avons vu que plusieurs critères pouvaient intervenir dans la description, et devaient pouvoir être imposés par l'utilisateur. Des paramètres qui peuvent être incohérents entre eux :
