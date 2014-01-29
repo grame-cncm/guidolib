@@ -42,7 +42,7 @@
 \begin{abstract}
 
 Le projet \guido\ regroupe à la fois un format textuel de description de partitions musicales, un moteur de rendu basé sur ce format, et une librairie qui fournit aux développeurs d'applications, un support de haut niveau pour l'ensemble des services liés au format \guido\ et à son rendu sous forme graphique. 
-De base, le projet \guido\ traite de la notation traditionnelle de la musique occidentale. Le projet a été récement étendu, tant du point de vue format que du point de vue rendu, pour adresser également les besoins les plus courants de la musique contemporaine. Cet article présente ces extensions et montre comment les choix de design fournissent à l'utilisateur, une large palette de solutions pour la notation de la musique. 
+De base, le projet \guido\ traite de la notation traditionnelle de la musique occidentale. Le projet a été récement étendu, tant du point de vue format que du point de vue rendu, pour adresser également les besoins les plus courants de la musique contemporaine. Cet article présente ces extensions et montre comment les choix de design fournissent à l'utilisateur une large palette de solutions pour la notation de la musique. 
 
 %La librairie \guido\ offre un grand nombre de symboles musicaux correspondant aux plus larges besoins de l'écriture musicale. Elle fournit un moteur de rendu de partitions embarquable dans d'autres applications. Dans une volonté d'étendre cette librairie à la musique contemporaine, nous avons implémenté un ensemble de nouvelles notations jusqu'à présent pas, ou très sommairement, implémentées. L'objectif était de répondre aux demandes des compositeurs en ajoutant certaines notations de la manière la plus adaptée à l'écriture musicale, tout en laissant une large liberté à l'utilisateur.
 
@@ -67,10 +67,10 @@ De base, le projet \guido\ traite de la notation traditionnelle de la musique oc
 Le projet \guido\ est né il y a presque 20 ans, tout d'abord comme format textuel de représentation de la musique \cite{hoos98,guido}, puis comme moteur de rendu graphique de partitions musicales \cite{RENZ02}. 
 Lors de sa conception, le format \guido\ se différencie des approches proposées par SCORE \cite{SCORE}, MuseData \cite{Hewlett97}, DARMS \cite{darms} ou encore Humdrum \cite{Huron97} notamment parce qu'il est pleinement lisible par l'utilisateur. Basée sur un formalisme qui aborde la description de la musique à partir des concepts musicaux, l'approche développée par \guido\ repose sur l'idée d'adéquation, qui invite à noter simplement les concepts musicaux simples, et à ne recourir à des notations complexes que pour les notions musicales complexes.
 
-Postérieurement au format \guido, d'autres représentations textuelles de la notation de la musique ont vu le jour, telles Lilypond \cite{lilypond03,lilypond06} qui est assez similaire dans son format, ou MusicXML \cite{good01}, orienté vers l'échange de partitions. Toutefois, le projet \guido\ reste unique parce qu'il est le seul qui propose à la fois un format de notation, une moteur de rendu et une librairie C/C++ permettant d'embarquer des capacités de rendu de partitions dans des applications indépendantes.
-Par ailleurs, la rapidité et l'efficacité du moteur de rendu le rendent utilisable dans un contexte \textit{temps réel} (pour des niveaux de complexité pas trop élevés), ouvrant la voix à des formes d'interactivité inédites \cite{Hoadley12,Fober:12a}.
+Postérieurement au format \guido, d'autres représentations textuelles de la notation de la musique ont vu le jour, telles que Lilypond \cite{lilypond03,lilypond06} qui est assez similaire dans son format, ou MusicXML \cite{good01}, orienté vers l'échange de partitions. Toutefois, le projet \guido\ reste unique parce qu'il est le seul qui propose à la fois un format de notation, une moteur de rendu et une librairie C/C++ permettant d'embarquer des capacités de rendu de partitions dans des applications indépendantes.
+Par ailleurs, la rapidité et l'efficacité du moteur de rendu le rendent utilisable dans un contexte \textit{temps réel} (pour des partitions dont le niveau de complexité n'est pas trop élevé), ouvrant la voie à des formes d'interactivité inédites \cite{Hoadley12,Fober:12a}.
 
-Pour adresser les besoins les plus courants de la musique contemporaine, le format \guido\ ainsi que le moteur de rendu ont étés étendus. Après un bref rappel sur le format \guido, cet article décrit ces extensions en  situant les choix qui ont été faits en terme de rendu graphique, dans les pratiques identifiées dans la littérature contemporaine. Nous montrerons également comment une forme de \emph{langage générique} permet de combiner ces représentations et fournit à l'utilisateur un large éventail de solutions pour la représentation de la musique.
+Pour répondre aux besoins les plus courants de la musique contemporaine, le format \guido\ ainsi que le moteur de rendu ont étés étendus. Après un bref rappel sur le format \guido, cet article décrit ces extensions en  situant les choix qui ont été faits en terme de rendu graphique, dans les pratiques identifiées dans la littérature contemporaine. Nous montrerons également comment une forme de \emph{langage générique} permet de combiner ces représentations et offre à l'utilisateur un large éventail de solutions pour la représentation de la musique.
 
 
 %Le format de notation musicale \guido\ (GMN) \cite{hoos98} \cite{Dau:09a} a été défini par H. Hoos et K. Hamel il y a plus de 10 ans. Il est très proche du format adopté par Lilypond \cite{lilypond03,lilypond06} mais il est apparu antérieurement. Le format GMN est un langage textuel de représentation de partitions musicales 
@@ -101,7 +101,7 @@ Les \emph{tags} sont utilisés pour donner des informations musicales supplémen
 %\textbackslash{}tagname<param-list>
 %\textbackslash{}tagname\textless{}param-list\textgreater{}(note-series)
 %\end{code}
-où param-list est une liste optionnelle de paramètres (chaînes de caractères ou nombres), et où note-series est l'ensemble des notes ou accords concernés par le \emph{tag}. Dans ce cas nous parlerons de \emph{range-tag} (\emph{tag} possédant une durée explicite).
+où \emph{param-list} est une liste optionnelle de paramètres (chaînes de caractères ou nombres), et où \emph{note-series} est l'ensemble des notes ou accords concernés par le \emph{tag}. Dans ce cas nous parlerons de \emph{range-tag} (\emph{tag} possédant une durée explicite).
 
 
 %%%%%%%%%%%%%%%%%%%%%%% NOUVEAUTES %%%%%%%%%%%%%%%%%%%
@@ -266,7 +266,7 @@ Comme l'indique en partie la figure \ref{fig:cluster}, les choix, faits à parti
 	\item la hampe est conservée pour garder l'indication de la durée.
 \end{itemize}
 
-Nous avons également fait en sorte que l'utilisateur puisse personnaliser au maximum le nouvel élément de la librairie \guido. En plus des habituels \code{size}, \code{dx}, \code{dy} et \code{color}, les attributs \code{hdx} et \code{hdy} ont été implémentés afin de pouvoir introduire un décalage s'appliquant au \emph{notehead} seulement. Au niveau de l'interaction avec d'autres éléments et \emph{tags}, nous avons fait en sorte que noteFormat agisse également sur le \emph{cluster}. D'autre part, la gestion du forçage de l'orientation des \emph{noteheads} a de même été prise en compte (\emph{tags} \guidotag{headsReverse}, \guidotag{headsLeft} et \guidotag{headsRight}) (cf. figure \ref{fig:clusterInteractions}).
+Nous avons également fait en sorte que l'utilisateur puisse personnaliser au maximum le nouvel élément de la librairie \guido. En plus des habituels \code{size}, \code{dx}, \code{dy} et \code{color}, les attributs \code{hdx} et \code{hdy} ont été implémentés afin de pouvoir introduire un décalage s'appliquant au \emph{notehead} seulement. Au niveau de l'interaction avec d'autres éléments et \emph{tags}, nous avons fait en sorte que \guidotag{noteFormat} agisse également sur le \emph{cluster}. D'autre part, la gestion du forçage de l'orientation des \emph{noteheads} a de même été prise en compte (\emph{tags} \guidotag{headsReverse}, \guidotag{headsLeft} et \guidotag{headsRight}) (cf. figure \ref{fig:clusterInteractions}).
 
 %
 \begin{figure}[h]
@@ -517,8 +517,8 @@ Une fonctionnalité intéressante manquait dans \guido : la possibilité d'insé
 
 Nous avons séparé en deux les types de symboles:
 \begin{itemize}
-	\item symbole ne possédant pas de durée mais prenant une certaine place sur la portée, selon sa taille (syntaxe 1);
-	\item symbole possédant une durée, et étant alors considéré comme un événement à part entière (syntaxe 2).
+	\item symbole ne possédant pas de durée mais prenant une certaine place sur la portée, selon sa taille (1);
+	\item symbole possédant une durée, et étant alors considéré comme un événement à part entière (2).
 \end{itemize}
 
 Pour les deux exemples suivants, les fichiers images sont appelés par un chemin relatif et se situent dans le même répertoire que le fichier \emph{.gmn} (contenant le code de l'exemple) ouvert.
@@ -606,7 +606,7 @@ De plus, nous avons voulu donner la possibilité de choisir de dessiner ou non l
 %*************************GLISSANDI ET ACCORDS*******************************
 \subsection{Glissandi et accords}\label{subsec:glissandiAccords}
 
-Concernant le \emph{glissando}, une certaine flexibilité devait être trouvée quant au rendu graphique d'un \emph{glissando} entre les différentes notes de deux accords, ne possédant eux-mêmes pas forcément le même nombre de notes. La solution proposée est celle qui nous a paru la plus intuitive : l'utilisateur choisit quelle note du premier accord sera liée avec quelle note du second. Pour ce faire, il lui suffit de les écrire dans l'ordre, c'est à dire : la première note de l'accord A sera liée à la première note de l'accord B, la seconde de A à la seconde de B\dots{}(Figure \ref{fig:glissandosimple})
+Concernant le \emph{glissando}, une certaine flexibilité devait être trouvée quant au rendu graphique d'un \emph{glissando} entre les différentes notes de deux accords, ne possédant eux-mêmes pas forcément le même nombre de notes. La solution proposée est celle qui nous a paru la plus intuitive : l'utilisateur choisit quelle note du premier accord sera liée avec quelle note du second. Pour ce faire, il lui suffit de les écrire dans l'ordre, c'est à dire : la première note de l'accord A sera liée à la première note de l'accord B, la seconde de A à la seconde de B, etc\dots{}(Figure \ref{fig:glissandosimple})
 
 \begin{figure}[h]
 \begin{center}
