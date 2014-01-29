@@ -2,7 +2,7 @@
     [
         \meter<"4/4">
         c f
-        \symbol<file="silence.png", dx=-5> 
+        \symbol<file="silence.png", dx=-5, dy=-10> 
         c d f
     ],
     [
