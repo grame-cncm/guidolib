@@ -225,14 +225,12 @@ La possibilité d'insérer une métrique complexe a été introduite avec la ver
 
 Un \emph{cluster} est un accord musical contenant plusieurs notes consécutives. Il peut par exemple être effectué sur un piano, où il se joue en déclenchant des touches contiguës (en utilisant son avant-bras, par exemple).
 
-Un \emph{cluster} est indiqué par un \emph{range-tag} s'appliquant à des accords de deux notes: les notes extrêmes du \emph{cluster} (les autres notes éventuelles seront ignorées) :
+Un \emph{cluster} est indiqué par un range-tag s'appliquant à des accords de deux notes: les notes extrêmes du \emph{cluster} (les autres notes éventuelles seront ignorées) :
 
 \begin{gmncode}
 \cluster<param-list>(chord-series)
 \end{gmncode}
 
-
-%
 \begin{figure}[h]
 \centering
 \begin{gmncode}
@@ -258,7 +256,7 @@ Le tag \guidotag{cluster} supporte les paramètres de contrôle standard (\code{
 
 Un cluster est vu comme une note et supporte donc le tag \guidotag{noteFormat} ainsi que le contrôle de l'orientation des têtes de notes (\guidotag{headsReverse}, \guidotag{headsLeft} et \guidotag{headsRight}) ainsi qu'illustré en figure \ref{fig:clusterInteractions}).
 
-%
+\exemple
 \begin{figure}[h]
 \centering
 \begin{gmncode}
@@ -272,7 +270,7 @@ Un cluster est vu comme une note et supporte donc le tag \guidotag{noteFormat} a
 ]
 \end{gmncode}
 \includegraphics[width=45mm]{img/partitions/clusterInteractions.pdf}
-\caption{Les interactions avec d'autres \emph{tags}}
+\caption{Les interactions avec d'autres tags}
 \label{fig:clusterInteractions}
 \end{figure}
 %
@@ -287,10 +285,17 @@ Dans un souci d'efficacité, il fallait pouvoir décrire un \emph{glissando} seu
 
 \begin{gmncode}
   \glissando<params>( notes )
+  params : 
+    - fill = "true" ou "false": 
+      option de remplissage
+    - thickness = float : 
+      épaisseur de la ligne
 \end{gmncode}
 
-Il paraissait important de donner la possibilité à l'utilisateur de n'écrire qu'une seule fois le \emph{tag} pour décrire plusieurs \emph{glissandi} consécutifs, contrairement à la description de lilypond où le \emph{tag} doit être répété entre chaque note. Ainsi le \emph{range-tag} (\emph{tag} possédant une durée) apparaissait comme la meilleure solution pour décrire un ou plusieurs \emph{glissandi} : toutes les notes comprises dans les parenthèses seraient prises en compte et liées les unes aux autres par des \emph{glissandi}. L'algorithme de démultiplication d'un même \emph{tag} et de répartition de celui-ci est fortement inspiré de celui du \guidotag{tie}, ou liaison de prolongation, qui doit également créer une liaison entre chacune des notes affectées.
+Il paraissait important de donner la possibilité à l'utilisateur de n'écrire qu'une seule fois le tag pour décrire plusieurs \emph{glissandi} consécutifs, contrairement à la description de lilypond où le tag doit être répété entre chaque note. Ainsi le range-tag apparaissait comme la meilleure solution pour décrire un ou plusieurs \emph{glissandi} : toutes les notes comprises dans les parenthèses seraient prises en compte et liées les unes aux autres par des \emph{glissandi}. L'algorithme de démultiplication d'un même tag et de répartition de celui-ci est fortement inspiré de celui du \guidotag{tie}, ou liaison de prolongation, qui doit également créer une liaison entre chacune des notes affectées.
 
+
+\exemple
 \begin{figure}[h]
 \centering
 
@@ -317,22 +322,24 @@ Il paraissait important de donner la possibilité à l'utilisateur de n'écrire 
       durée des première et dernière notes
     - drawDuration : 
       indication de la durée totale
-
 \end{gmncode}
 
-Décrite par Gardner Read comme "a highly graphic representation of rythmic flexibility"  \cite{read1969music} (p.94), cette notation contemporaine d'un accelerando ou ritardando à travers les liens de croches est, de manière générale, encore peu répandue dans les ouvrages de théorie, et se résume souvent à des cas simples, partant ou arrivant à la simple croche, c'est à dire partant ou arrivant vers un unique point. Pourtant il paraît intéressant de pouvoir offrir la possiblité aux compositeurs de décrire le passage entre n'importe quelles valeurs : par exemple d'une double-croche à une triple-croche, ou d'une quadruple-croche à une double-croche... (Figure \ref{fig:fbeamcomplex})
+Décrite par Gardner Read comme "a highly graphic representation of rythmic flexibility"  \cite{read1969music} (p.94), cette notation contemporaine d'un accelerando ou ritardando à travers les liens de croches est, de manière générale, encore peu répandue dans les ouvrages de théorie, et se résume souvent à des cas simples, partant ou arrivant à la simple croche, c'est à dire partant de, ou arrivant vers, un unique point. Pourtant il paraît intéressant de pouvoir offrir la possiblité aux compositeurs de décrire le passage entre n'importe quelles valeurs : par exemple d'une double-croche à une triple-croche, ou d'une quadruple-croche à une double-croche... (Figure \ref{fig:fbeamcomplex})
 
+\exemple
 \begin{figure}[h]
 \centering
 \includegraphics[width=40mm]{img/fbeamcomplex.pdf}
-\caption{Exemple de \emph{feathered beams} plus complexes}
+\caption{\emph{feathered beams} plus complexes}
 \label{fig:fbeamcomplex}
 \end{figure}
 
-Dans un désir de simplicité, il a été décidé de décrire par un seul \emph{range-tag} un seul groupe de notes liées, correspondant à un point de départ et un point d'arrivée uniques.
+Dans un désir de simplicité, il a été décidé de décrire par un seul range-tag un seul groupe de notes liées, correspondant à un point de départ et un point d'arrivée uniques.
+
+Il est cependant possible de chaîner plusieurs \emph{feathered beams} en utilisant la forme \code{Begin / End} des range-tag (i.e \guidotag{fBeamBegin} et \guidotag{fBeamEnd}), permettant alors, non seulement de chaîner deux \emph{beams} par une note (Figure \ref{fig:fbeamchain}), mais aussi de les faire se chevaucher sur plusieurs notes.
 
 \begin{figure}[h]
-\centering
+\exemple
 \begin{gmncode}
 [ 
   \fBeamBegin:1 c/8 d e/16 
@@ -340,19 +347,20 @@ Dans un désir de simplicité, il a été décidé de décrire par un seul \emph
   e/16 d/8 c \fBeamEnd:2 
 ]
 \end{gmncode}
+
+\begin{center}
 \includegraphics[width=45mm]{img/fBeamChaine.pdf}
+\end{center}
 \caption{\emph{Feathered beams} chaînés}
 \label{fig:fbeamchain}
 \end{figure}
-
-Il est cependant possible de chaîner plusieurs \emph{feathered beams} en utilisant la forme \code{Begin / End} des \emph{range-tag} (i.e \guidotag{fBeamBegin} et \guidotag{fBeamEnd}), permettant alors, non seulement de chaîner deux \emph{beams} par une note (Figure \ref{fig:fbeamchain}), mais aussi de les faire se chevaucher sur plusieurs notes.
 
 % question de voix simultanées
 % lilypond : 
 % \override Beam #'grow-direction = #LEFT
 % \featherDurations #(ly:make-moment 2 1)
 % { c16[ c c c c c c c] }
-
+\bigskip
 On remarque que, même dans un ouvrage tel que celui d'Elaine Gould \cite{gould2011behind}, peu de détails sont donnés sur cette notation, et on se heurte rapidement à des incohérences telles que celle de la figure \ref{fig:incoherence} tirée de "Behind Bars" : on veut faire tenir en un temps une croche et quatre notes de durées inférieures à la croche mais supérieures à la triple-croche. 
 
 \begin{figure}[h]
@@ -378,6 +386,7 @@ Concernant les possibilités de description données à l'utilisateur. Nous avon
 
 Ces différents niveaux de description nous poussent à faire une claire distinction entre l'aspect temporel et l'aspect graphique de notre groupe de notes.  Il a été décidé de laisser au compositeur la liberté de donner à son \emph{feathered beam} l'aspect graphique qu'il désire, indépendamment des durées internes de ses notes. Il pourra ainsi jouer sur les espacements entre notes, sur le nombre de notes, et sur la durée totale de manière "classique" en imposant à chaque note une durée, et en veillant à ce que la somme de toutes les notes corresponde à la durée totale souhaitée. Cette durée totale peut être indiquée sur la partition grâce au paramètre \code{drawDuration} (Figure \ref{fig:fbeamduree}).
 
+\exemple
 \begin{figure}[h]
 \centering
 \begin{gmncode}
@@ -416,7 +425,7 @@ Ainsi, les deux descriptions suivantes sont valides, mais pas équivalentes :
 \end{comment}
 %%
 
-
+\exemple
 \begin{figure}[h]
 \centering
 \begin{gmncode}
@@ -448,12 +457,16 @@ Ainsi, les deux descriptions suivantes sont valides, mais pas équivalentes :
 
 Les tags \guidotag{staffOff} et \guidotag{staffOn} permettent de faire disparaître et apparaître la partition, en particulier pour cacher une voix muette pendant un certain temps (Figure \ref{fig:staffoffsimple}).
 
-Son uage est généralisé à tous les éléments et toutes les voix de la partition et permet des \emph{montages} plus complexes. (Figure \ref{fig:staffoffexotique})
+Son usage est généralisé à tous les éléments et toutes les voix de la partition et permet des \emph{montages} plus complexes. (Figure \ref{fig:staffoffexotique})
+
+
 
 \begin{figure}[h]
-\centering
+\exemple
+\begin{center}
 \includegraphics[width=\columnwidth]{img/staffoff.pdf}
-\caption{ Exemple \guidotag{staffOff} classique}
+\end{center}
+\caption{ \guidotag{staffOff} classique}
 \label{fig:staffoffsimple}
 \end{figure}
 
@@ -462,7 +475,7 @@ Son uage est généralisé à tous les éléments et toutes les voix de la parti
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.8\columnwidth]{img/staffoffexotique.pdf}
-\caption{ Exemple \guidotag{staffOff} plus complexe}
+\caption{ \guidotag{staffOff} plus complexe}
 \label{fig:staffoffexotique}
 \end{figure}
 
@@ -477,7 +490,7 @@ n'est pas équivalent à :
 [\staffOff\meter<"4/4">\clef a b\staffOn c]
 \end{gmncode} 
 
-Quant à la portée, elle commence, ou s'arrête, aux positions correspondant au début des éléments suivant le \emph{tag}.
+Quant à la portée, elle commence, ou s'arrête, aux positions correspondant au début des éléments suivant le tag.
 
 
 %************************ GRAPHIQUES ABSTRAITES ******************
@@ -551,7 +564,7 @@ Divers paramètres spécifiques permettent de contrôler le rendu graphique :
 %\gardner Read
 
 \begin{gmncode}
-  \trill<param-list>(chord-series)
+  \trill<params>(chord-series)
    params:
     - tr = [true | false]
     - anchor = [note | tr]
@@ -567,6 +580,7 @@ Dans la version précédente de \guido{}, le \emph{trille} à proprement parler 
 % justifier l'intérêt de tr et anchor ?
 De plus, nous avons voulu donner la possibilité de choisir de dessiner ou non le signe \textit{\textbf{tr}}, ainsi que de pouvoir changer l'ancrage de la ligne pour le déplacer sur la tête de la note. Cela fut implémenté grâce au \emph{param} \code{tr} qui accepte comme valeurs \code{true} ou \code{false} et \code{anchor} qui accepte comme valeurs \code{note} ou \code{tr} (Figure \ref{fig:trillanchor}). Le reste des modifications graphiques pouvant être effectuées manuellement par l'utilisateur à travers les paramètres classiques de déplacement (\code{dx}, \code{dy}), de couleur (\code{color}), et de taille (\code{size}).
 
+\exemple
 \begin{figure}[h]
 \centering
 \begin{gmncode}
@@ -666,7 +680,7 @@ Nous avons rajouté trois nouveaux \emph{params} au tag\\ \guidotag{tuplet} (cf.
 
 \bigskip
 
-Dans les versions précédentes de \guido{}, le crescendo/decrescendo n'était pas personnalisable, ceci a été amélioré dans la version 1.52 (cf. figure \ref{fig:crescDecresc}). Sept nouveaux \emph{params} ont vu le jour :
+Dans les versions précédentes de \guido{}, le crescendo/ decrescendo n'était pas personnalisable, ceci a été amélioré dans la version 1.52 (cf. figure \ref{fig:crescDecresc}). Sept nouveaux \emph{params} ont vu le jour :
 \begin{gmncode}
 1) dm = [pp | p | f | ff ...] :
 intensité du crescendo/decrescendo
@@ -711,7 +725,9 @@ taille du marqueur d'intensité
 
 Un \emph{glissando} entre deux accords soulève la question la répartition des \emph{glissandi} entre les notes des accords. La solution proposée est celle qui nous a paru la plus intuitive : c'est l'ordre des notes dans la description textuelle de l'accord qui détermine les relations entre les notes, c'est à dire : pour 2 accords A t B, la première note de l'accord A sera liée à la première note de l'accord B, la seconde de A à la seconde de B, etc.(Figure \ref{fig:glissandosimple})
 
+
 \begin{figure}[h]
+\exemple
 \begin{center}
 \begin{gmncode}
 [\glissando({e,a} {f,b} {a,d})]
@@ -724,9 +740,9 @@ Un \emph{glissando} entre deux accords soulève la question la répartition des 
 \end{center}
 \end{figure}
 
-L'unique problème avec ce choix peut se poser lors d'un conflit dans l'ordre imposé par le glissando précédent et par le suivant, comme dans le premier cas de l'exemple Figure \ref{fig:glissandopb}. Il est alors possible de faire appel à une seconde voix, et au \emph{tag} \guidotag{staff\textless{}numero de portée\textgreater{}} qui pourra créer sur une même portée d'autres glissandi en parallèle et indépendants des premiers (Figure \ref{fig:glissandopb}).
+L'unique problème avec ce choix peut se poser lors d'un conflit dans l'ordre imposé par le glissando précédent et par le suivant, comme dans le premier cas de l'exemple Figure \ref{fig:glissandopb}. Il est alors possible de faire appel à une seconde voix, et au tag \guidotag{staff\textless{}numero de portée\textgreater{}} qui pourra créer sur une même portée d'autres glissandi en parallèle et indépendants des premiers (Figure \ref{fig:glissandopb}).
 
-
+\exemple
 \begin{figure}[h]
 \centering
 \begin{gmncode}
@@ -752,6 +768,7 @@ L'unique problème avec ce choix peut se poser lors d'un conflit dans l'ordre im
 
 Au niveau du trille, une subtilité au niveau du contr\^ole du rendu a également été ajoutée. Il fallait définir le comportement quant aux notes liées, soit de manière automatique de par la présence d'une barre de mesure, soit de manière explicitement décrite par l'utilisateur. La solution adoptée est de dessiner la ligne de \emph{trille} jusqu'à la fin de la dernière note liée si celle-ci provient d'une note plus longue découpée automatiquement, mais de s'arrêter normalement à la prochaine note si la liaison a été explicitée par l'utilisateur, qui pourra alors décider de répéter le \emph{trille} sur cette autre note, ou non. (Figure \ref{fig:trill})
 
+\exemple
 \begin{figure}[h]
 \centering
 \begin{gmncode}
@@ -773,6 +790,7 @@ Au niveau du trille, une subtilité au niveau du contr\^ole du rendu a égalemen
 
 Lors de combinaisons de \emph{glissandi}  avec des accords ou des \emph{clusters}, il nous a paru intéressant, comme on peut le voir dans \cite{gould2011behind} (p.143) ou dans \cite{stone1980music} (p.61), de donner la possibilité de remplir l'espace entre ces \emph{glissandi} grâce à un \emph{param} \code{fill}. Une certaine flexibilité peut être trouvée dans le dessin grâce aux \emph{params} graphiques \code{dx1}, \code{dx2}, \code{dy1}, \code{dy2}, ainsi que \code{thickness} qui permettent de modifier l'aspect du \emph{glissando}. (Figure \ref{fig:glissandofill})
 
+\exemple
 \begin{figure}[h]
 \begin{center}
 \begin{gmncode}
@@ -795,6 +813,7 @@ Lors de combinaisons de \emph{glissandi}  avec des accords ou des \emph{clusters
 % justification des hierarchies de beams ?
 Enfin, concernant le \emph{feathered beam} comme le \emph{beam} classique, il est maintenant possible de créer des hierarchies de \emph{beams} : c'est à dire d'englober plusieurs \emph{beams} dans un plus grand, afin de les joindre par une barre principale commune (Figure \ref{fig:fbeamhierarchie}).
 
+\exemple
 \begin{figure}[h]
 \centering
 \begin{gmncode}
