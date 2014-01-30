@@ -1,4 +1,0 @@
-[
-  \marcato(a)
-  \marcato<"above", dy=4> (a)
-]

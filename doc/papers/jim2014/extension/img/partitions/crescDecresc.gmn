@@ -1,8 +1,0 @@
-{
-    [
-        \cresc<dm="ff", dx1=2, dx2=-4, dy=1, deltaY=5, color="red", size=2> (a b e)
-    ],
-    [
-        \decresc<thickness=0.5> (a f/2 f/4)
-    ]
-}
