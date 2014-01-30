@@ -1,4 +1,4 @@
-% New \tuplet-Tag attributes :
+% New \tuplet-tag attributes :
 %
 % - lineThickness defines the tuplet lines thickness. Unit is the half space.
 %					default value is 0.08
