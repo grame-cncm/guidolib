@@ -71,17 +71,17 @@ Par ailleurs, la rapidité et l'efficacité du moteur de rendu le rendent utilis
 Pour adresser les besoins les plus courants de la musique contemporaine, le format \guido\ ainsi que le moteur de rendu ont étés étendus. Après un bref rappel sur le format \guido, cet article décrit ces extensions en  situant les choix qui ont été faits en terme de rendu graphique, dans les pratiques identifiées dans la littérature contemporaine. Nous montrerons également comment une forme de \emph{langage générique} permet de combiner ces représentations et fournit à l'utilisateur, un large éventail de solutions pour la représentation de la musique.
 
 
-%Le format de notation musicale \guido\ (GMN) \cite{hoos98} \cite{Dau:09a} a été défini par H. Hoos et K. Hamel il y a plus de 10 ans. Il est très proche du format adopté par Lilypond \cite{lilypond03,lilypond06} mais il est apparu antérieurement. Le format GMN est un langage textuel de représentation de partitions musicales 
+%Le format de notation musicale \guido\ (GMN) \cite{hoos98} \cite{Dau09a} a été défini par H. Hoos et K. Hamel il y a plus de 10 ans. Il est très proche du format adopté par Lilypond \cite{lilypond03,lilypond06} mais il est apparu antérieurement. Le format GMN est un langage textuel de représentation de partitions musicales 
 %. Il est basé sur un formalisme simple mais puissant, se concentrant sur les grands concepts musicaux (en opposition aux caractéristiques graphiques). L'approche développée par \guido\ repose sur l'idée d'adéquation, qui invite à noter simplement les concepts musicaux simples, et à ne recourir à des notations complexes que pour les notions musicales complexes.
 %sur lequel est basée %sur le format GMN, 
-%la librairie \guido\ \cite{Dau:09a}. Cette dernière %fournit un puissant moteur de mise en page de partitions, qui 
+%la librairie \guido\ \cite{Dau09a}. Cette dernière %fournit un puissant moteur de mise en page de partitions, qui 
 %se différencie notamment des approches de type compilateur par sa capacité à être embarquée dans une application indépendante, et par la rapidité et l'efficacité du moteur de rendu, qui le rendent utilisable dans un contexte temps réel pour des partitions simples.
 
 
 %%%%%%%%%%%%%%%%%%%%% FORMAT GMN %%%%%%%%%%%%%%%%%%
 \section{Le format de Notation Guido}\label{sec:format_notation}
 
-Ci-dessous figurent les principes généraux du format de notation \guido . Ils sont fournis pour permette la compréhension du contenu des sections suivantes. Pour plus de détails on peut se reporter à \cite{Dau:09a} ou \cite{guido}.
+Ci-dessous figurent les principes généraux du format de notation \guido . Ils sont fournis pour permette la compréhension du contenu des sections suivantes. Pour plus de détails on peut se reporter à \cite{Dau09a} ou \cite{guido}.
 
 Le format de base de \guido\ recouvre les notes, silences, altérations, voix indépendantes, et les concepts les plus courants de la notation musicale comme les clefs, métriques, armures, articulations, liaisons, etc.
 Les notes sont représentées par leur nom \texttt{(a b c d e f g h)}, une altération optionnelle ('\#' et '\&' pour dièse et bémol), un numéro d'octave optionnel et une durée optionnelle exprimée sous forme de fraction.
