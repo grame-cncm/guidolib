@@ -1,17 +1,17 @@
-\documentclass{article}
+%\documentclass{article}
+\documentclass[11pt,a4paper]{article}
 \usepackage{lac2014}
 \usepackage[utf8]{inputenc}
-%\usepackage[francais]{babel}
 \usepackage[T1]{fontenc}
-%\usepackage{pxfonts}
+\usepackage{pxfonts}
 \usepackage{graphicx}
 \usepackage{verbatim}
 \usepackage{cprotect}
 \usepackage{enumitem}
 \usepackage{hyperref}
-%\usepackage{url}
+\usepackage{url}
+\usepackage{balance}
 
-\usepackage{natbib}
 
 \newcommand{\verburl}[1]{
 \begin{quote}
@@ -25,11 +25,10 @@
 
 \title{Providing a RESTful Music Notation Web API}
 \author
-{Mike SOLOMON, Dominique FOBER, Yann ORLAREY \and St\'ephan LETZ
+{Mike SOLOMON, Dominique FOBER, Yann ORLAREY \and Stéphane LETZ
 \\ Grame
-\\ 11 Cours de Verdun Gensoul
-\\ 69002 Lyon
-\\ France 
+\\ Centre national de création musicale
+\\ Lyon - France 
 \\ mike@mikesolomon.org, \{fober, orlarey, letz\}@grame.fr 
 }
 
@@ -39,7 +38,7 @@
 
 \begin{abstract}
 
-The GUIDO HTTPD Server is a web server that allows users to access the musical-score-related functions in the API of libGUIDOEngine via uniform resource identifiers (URIs).  This article resumes the core tenants of the REST architecture on which the GUIOD server is based, going on to explain how the server ports a C++ API to the web.  It concludes with several examples as well as a discussion of how the REST architecture is well suited to a web-API that serves as a wrapper for another API.
+The GUIDO HTTPD Server is a web server that allows users to access the musical-score-related functions in the API of libGUIDOEngine via uniform resource identifiers (URIs).  This article resumes the core tenants of the REST architecture on which the GUIDO server is based, going on to explain how the server ports a C++ API to the web.  It concludes with several examples as well as a discussion of how the REST architecture is well suited to a web-API that serves as a wrapper for another API.
 \end{abstract}
 
 
@@ -47,7 +46,7 @@ The GUIDO HTTPD Server is a web server that allows users to access the musical-s
 \section{Online musical editing}\label{section:online-musical-editing}
 As client-server models for the processing, visualizing and analysis of data become more widespread in mobile computing (WordPress, YouTube, Instagram, SoundCloud), music engraving has entered the fray with various web-based score editing services.  The GUIDO HTTP server merges the idea of a web-based music editor with a RESTful web service in order to expose the public API of libGUIDOEngine \cite{guido}. This section explores several categories of online musical editing services, concluding with a discussion of general trends in current technologies and the main problems that the tool outlined in this paper -- the GUIDO HTTPD server -- seeks to address.
 \subsection{Online music notation editors}\label{subsection:editor}
-As of the writing of this paper (2014), there are three main online musical score editors -- Noteflight\footnote{http://www.noteflight.com}, Melodus\footnote{ttp://www.melod.us} and Scorio\footnote{https://scorio.com}.  Noteflight and Melodus seek to provide a full-featured music editing platform online, similar to Google Documents' role in the world of office suites.  Scorio is a hybrid tool that mixes rudimentary layout via a mobile editing platform with publishing-quality layout via JIT compilation through LilyPond when possible.
+As of the writing of this paper (2014), there are three main online musical score editors -- Noteflight\footnote{\url{http://www.noteflight.com}}, Melodus\footnote{\url{http://www.melod.us}} and Scorio\footnote{\url{https://scorio.com}}.  Noteflight and Melodus seek to provide a full-featured music editing platform online, similar to Google Documents' role in the world of office suites.  Scorio is a hybrid tool that mixes rudimentary layout via a mobile editing platform with publishing-quality layout via JIT compilation through LilyPond when possible.
 \subsection{Online score sharing software}\label{subsection:sharing}
 Several music tools, such as Sibelius\footnote{http://www.sibelius.com}, MuseScore \cite{musescore}, Maestro\footnote{http://www.musicaleditor.com}, and Capriccio\footnote{http://cdefgabc.com}, offer online services where scores composed using this software can be uploaded, browsed, and downloaded online.  Capriccio, can be run online in limited form as a Java applet.  MuseScore, Sibelius, and Maestro allow for automatic score/MIDI synchronisation of embedded files.
 \subsection{Online music JIT compilation services}\label{subsection:jit}
@@ -358,6 +357,9 @@ The GUIDO HTTPD server uses RESTful architectural principles such as statelessne
 The process of elaborating the GUIDO server as a RESTful server is also a first step towards a more robust project to implement a wiki-like crowd music engraving platform that uses at its core a restful server storing data in various domain-specific languages.
 \end{comment}
 %\nocite{*}
+
+\balance
 \bibliographystyle{acl}
+%\bibliographystyle{plain}
 \bibliography{../../guido}
 \end{document}
