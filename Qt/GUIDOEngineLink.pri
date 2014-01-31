@@ -1,15 +1,15 @@
 # Universal binary on MAC
-#macx:QMAKE_MAC_SDK=macosx10.7
 
+#macx:QMAKE_MAC_SDK=macosx10.8
 macx:CONFIG+= i386 x86_64
 
 macx {
-	QMAKE_CXXFLAGS += -mmacosx-version-min=10.7
-	system( [ $(uname -r | cut -d. -f1) -gt 12 ] ):CONFIG+=CPP11
-	CPP11 {
-		message ("using C++11")
-		CONFIG += c++11
-	} 
+	QMAKE_CXXFLAGS += -mmacosx-version-min=10.6
+#	system( [ $(uname -r | cut -d. -f1) -gt 12 ] ):CONFIG+=CPP11
+#	CPP11 {
+#		message ("using C++11")
+#		CONFIG += c++11
+#	} 
 }
 
 win32: {
