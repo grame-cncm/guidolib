@@ -588,28 +588,23 @@ De plus, nous avons voulu donner la possibilité de choisir de dessiner ou non l
 \label{fig:trillanchor}
 \end{figure}
 
+
+%%%%%%%%%%%%%%%%%%%% CONTRÔLE DE RENDU %%%%%%%%%%%%%%%%%
+\section{Contr\^ole de rendu}\label{sec:controleRendu}
+
 %************************* NOUVEAUX ATTRIBUTS **************************
-\subsubsection{Nouveaux attributs}\label{subsubsec:attributs}
+\subsection{Nouveaux paramètres}\label{subsubsec:attributs}
 
-Plusieurs tags ont été améliorés, ils se sont vus doter de nouveau \emph{params} qu'on ne listera pas ici mais qui sont décrits avec précision dans la documentation.
+De nouveaux paramètres ont été introduits pour plusieurs tags, permettant un contrôle étendu du rendu graphique :
+\begin{itemize}
+\item \guidotag{staffFormat} : contrôle de l'épaisseur des lignes de la portée
+\item \guidotag{tuplet} : contrôle de l'épaisseur des lignes, de la taille du texte, etc.
+\item \guidotag{cresc}/\guidotag{decresc} : paramétrable en position, épaisseur, couleur.
+\end{itemize}
+On se reportera à la documentation utilisateur pour le détail de ces paramètres.
 
-\begin{gmncode}
-  \staffFormat<params>
-    L'épaisseur des lignes des portées est
-    dorénavant modifiable.
-  
-  \tuplet<params>(notes)
-    Désormais, le tuplet est davantage
-    modifiable graphiquement.
-      
-  \cresc<params>(notes)
-  \decresc<params>(notes)
-    Ces deux symboles ont été rendus
-    entièrement paramétrables.
-\end{gmncode}
-
-L'exemple suivant, illustrant les améliorations précédentes, génère la partition de la figure \ref{fig:nouveauxParams}.
-
+\exemple\\
+L'exemple suivant, illustre ces améliorations et génère la partition de la figure \ref{fig:nouveauxParams}.
 \begin{gmncode}
 {
   [
@@ -626,34 +621,26 @@ L'exemple suivant, illustrant les améliorations précédentes, génère la part
   ]
 }
 \end{gmncode}
-
 \begin{figure}[h]
 \centering
 \includegraphics[width=40mm]{img/partitions/nouveauxParams.pdf}
-\caption{Nouveaux \emph{params}}
+\caption{Contrôle de rendu étendu}
 \label{fig:nouveauxParams}
 \end{figure}
-
-% % % % % % % % % % % Renvoyer vers la doc
-
-
-%%%%%%%%%%%%%%%%%%%% CONTRÔLE DE RENDU %%%%%%%%%%%%%%%%%
-\section{Contr\^ole de rendu}\label{sec:controleRendu}
 
 %************************* GLISSANDI ET ACCORDS *******************************
 \subsection{Glissandi et accords}\label{subsec:glissandiAccords}
 
 Un \emph{glissando} entre deux accords soulève la question la répartition des \emph{glissandi} entre les notes des accords. La solution proposée est celle qui nous a paru la plus intuitive : c'est l'ordre des notes dans la description textuelle de l'accord qui détermine les relations entre les notes, c'est à dire : pour 2 accords A t B, la première note de l'accord A sera liée à la première note de l'accord B, la seconde de A à la seconde de B, etc.(Figure \ref{fig:glissandosimple})
 
-
-\begin{figure}[h]
 \exemple
-\begin{center}
 \begin{gmncode}
 [ \glissando({e,a} {f,b} {a,d}) ]
 \end{gmncode}
-\bigskip
+%\bigskip
 
+\begin{figure}[h]
+\begin{center}
 \includegraphics[width=35mm]{img/glissandosimple.pdf}
 \caption{\emph{glissandi} entre accords}
 \label{fig:glissandosimple}
@@ -761,7 +748,8 @@ Enfin, concernant le \emph{feathered beam} comme le \emph{beam} classique, il es
 
 %********************* CONCLUSION **********************
 \section{Conclusion}\label{sec:conclusion}
-Les extensions présentées dans cet article ont été réalisées principalement à la demande de compositeurs et au service de créations en cours. Elles s'intègrent dans le moteur existant dans le respect des différentes combinaisons du langage. Leur implémentation a soulevé des problèmes de design qui ont été résolus en laissant à l'utilisateur le choix entre les différentes possibilités. Elles sont disponibles avec la version 1.52 de la librairie \guido{}.
+Le projet \guido\ se différencie des approches de type gravure musicale telles que Lilypond ou MuseScore (pour ne citer que les outils \emph{libres}) en ce sens qu'il privilégie un rendu efficace et qu'il met en oeuvre un grand nombre d'automatismes pour le calcul de la partition. Il est cependant plus limité en termes de complexité et de notations supportées. Les extensions qui ont été présentées comblent pour partie le fossé entre le moteur \guido\ et les approches citées précédement. Elles ont été réalisées principalement à la demande de compositeurs et au service de créations en cours. Elles s'intègrent dans le moteur existant dans le respect des différentes combinaisons du langage. Leur implémentation a soulevé des problèmes de design qui ont été résolus en laissant à l'utilisateur le choix entre les différentes possibilités. Elles sont disponibles avec la version 1.52 de la librairie \guido{}. 
+
 
 
 \balance
