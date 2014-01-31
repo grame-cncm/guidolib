@@ -569,7 +569,7 @@ void ARFactory::createTag( const char * name, int no )
 	switch( c )
 	{
 		case 'a':
-			if (!strcmp(name,"accel"))
+			if (!strcmp(name,"accelerando") || !strcmp(name,"accel"))
 			{
 				ARAccelerando * tmp = new ARAccelerando();
 				mTags.AddHead(tmp);
@@ -601,14 +601,14 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
-			else if (!strcmp(name,"accol"))
+			else if (!strcmp(name,"accolade") || !strcmp(name,"accol"))
 			{
 				ARAccol * tmp = new ARAccol;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 				
 			}
-			else if (!strcmp(name,"acc"))
+			else if (!strcmp(name,"acc") || !strcmp(name,"accidental"))
 			{
 				ARAcc * tmp = new ARAcc();
 				mTags.AddHead(tmp);
@@ -764,7 +764,7 @@ void ARFactory::createTag( const char * name, int no )
 				mCurrentVoice->AddTail(tmp);
 				
 			}
-            else if (!strcmp(name,"cresc"))
+            else if (!strcmp(name,"cresc") || !strcmp(name,"crescendo"))
 			{
 				ARCrescendo * tmp = new ARCrescendo();
 				mTags.AddHead(tmp); // push()
@@ -846,7 +846,7 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp); // push()
 				mCurrentVoice->AddTail(tmp);				
 			}
-			else if (!strcmp(name,"decresc") || !strcmp(name,"dim") || !strcmp(name,"diminuendo")) {
+			else if (!strcmp(name,"decresc") || !strcmp(name,"decrescendo") || !strcmp(name,"dim") || !strcmp(name,"diminuendo")) {
 				ARDiminuendo * tmp = new ARDiminuendo;
 				mTags.AddHead(tmp); // push();
 				mCurrentVoice->AddPositionTag(tmp);			
@@ -1159,7 +1159,7 @@ void ARFactory::createTag( const char * name, int no )
 				mCurrentVoice->AddPositionTag(tmp);
 				
 			}
-			else if (!strcmp(name,"rit"))
+			else if (!strcmp(name,"ritardando") || !strcmp(name,"rit"))
 			{
 				ARRitardando * tmp = new ARRitardando;
 				mTags.AddHead(tmp);
