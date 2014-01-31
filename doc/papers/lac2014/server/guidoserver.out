@@ -1,0 +1,21 @@
+\BOOKMARK [1][-]{section.1}{Online musical editing}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Online music notation editors}{section.1}% 2
+\BOOKMARK [2][-]{subsection.1.2}{Online score sharing software}{section.1}% 3
+\BOOKMARK [2][-]{subsection.1.3}{Online music JIT compilation services}{section.1}% 4
+\BOOKMARK [2][-]{subsection.1.4}{A RESTful alternative}{section.1}% 5
+\BOOKMARK [1][-]{section.2}{Representational state transfer}{}% 6
+\BOOKMARK [1][-]{section.3}{The GUIDO HTTPD server : an overview}{}% 7
+\BOOKMARK [2][-]{subsection.3.1}{The POST method}{section.3}% 8
+\BOOKMARK [2][-]{subsection.3.2}{The GET method}{section.3}% 9
+\BOOKMARK [2][-]{subsection.3.3}{Uniform interface}{section.3}% 10
+\BOOKMARK [1][-]{section.4}{The GUIDO HTTPD server as an API}{}% 11
+\BOOKMARK [2][-]{subsection.4.1}{SHA-1 key as musical score}{section.4}% 12
+\BOOKMARK [2][-]{subsection.4.2}{Function as URI segment}{section.4}% 13
+\BOOKMARK [2][-]{subsection.4.3}{Arguments as key-value pairs}{section.4}% 14
+\BOOKMARK [2][-]{subsection.4.4}{Layout and formatting options as key-value pairs}{section.4}% 15
+\BOOKMARK [2][-]{subsection.4.5}{Return values}{section.4}% 16
+\BOOKMARK [2][-]{subsection.4.6}{Examples}{section.4}% 17
+\BOOKMARK [3][-]{subsubsection.4.6.1}{voicescount}{subsection.4.6}% 18
+\BOOKMARK [3][-]{subsubsection.4.6.2}{pageat}{subsection.4.6}% 19
+\BOOKMARK [3][-]{subsubsection.4.6.3}{staffmap}{subsection.4.6}% 20
+\BOOKMARK [1][-]{section.5}{Conclusion}{}% 21
