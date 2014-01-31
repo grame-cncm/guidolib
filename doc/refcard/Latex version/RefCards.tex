@@ -1,16 +1,30 @@
-\documentclass[11pt]{article}
+\documentclass[a4paper, landscape, 11pt]{article}
+
+\usepackage{tabularx}
+\usepackage{lipsum}
+\usepackage{geometry}
+
+\geometry{hmargin=1.5cm,vmargin=1.5cm}
+
 \begin{document}
 
+% Disable indentation
+\setlength{\parindent}{0pt}
+
+% To vertically center text inside cells
+\renewcommand{\tabularxcolumn}[1]{m{#1}}
 % Mettre la feuille en paysage
-\begin{tabular}{lllll}
+\begin{tabularx}{\linewidth}{lllll}
     \hline
     \textbf{Tag}&\textbf{Shortcut}&\textbf{Form support}&\textbf{Notation element}&\textbf{Parameters}\\
     \hline
-    \textbackslash{}acc&&\textbf{RT}&accidental&\\
+    \textbackslash{}accidental&\textbackslash{}acc&\textbf{RT}&accidental&\\
     \hline
-    \textbackslash{}accel&&\textbf{RT} - \textbf{BE}&accelerando&\\
+    \textbackslash{}accelerando&\textbackslash{}accel&\textbf{RT} - \textbf{BE}&accelerando&\\
     \hline
     \textbackslash{}accent&&\textbf{RT}&accent mark&\\
+    \hline
+    \textbackslash{}accolade&\textbackslash{}accol&&accolade&\\
     \hline
     \textbackslash{}alter&&\textbf{ORT}&microtonal accidentals&\\
     \hline
@@ -18,29 +32,29 @@
     \hline
     \textbackslash{}bar&\textbar&&measure bar&\\
     \hline
-    \textbackslash{}barFormat&&&bar formatting&\\
-    \hline
+    %\textbackslash{}barFormat&&&bar formatting&\\ % Useless tag for now ?
+    %\hline
     \textbackslash{}beam&\textbackslash{}bm&\textbf{RT} - \textbf{BE}&notes beaming&\\
     \hline
     \textbackslash{}beamsAuto&&&auto-beaming (default)&\\
     \hline
     \textbackslash{}beamsOff&&&no auto beaming&\\
     \hline
-    \textbackslash{}bembel&A COMPLETER&&&\\
-    \hline
+    %\textbackslash{}bembel&A COMPLETER&&&\\ % Useless tag for now ?
+    %\hline
     \textbackslash{}breathMark&&&breath mark sign&\\
     \hline
     \textbackslash{}clef&&&clef indication&\\
     \hline
-    \textbackslash{}cluster&A COMPLETER&&&\\
+    \textbackslash{}cluster&&\textbf{RT}&cluster&\\
     \hline
     \textbackslash{}coda&&&coda sign&\\
     \hline
-    \textbackslash{}color&A COMPLETER&&&\\
-    \hline
+    %\textbackslash{}color&A COMPLETER&&&\\ % Useless tag for now ?
+    %\hline
     \textbackslash{}composer&&&composer indication&\\
     \hline
-    \textbackslash{}cresc&&\textbf{RT} - \textbf{BE}&crescendo&\\
+    \textbackslash{}crescendo&\textbackslash{}cresc&\textbf{RT} - \textbf{BE}&crescendo&\\
     \hline
     \textbackslash{}cue&&\textbf{RT}&cue notes&\\
     \hline
@@ -54,13 +68,13 @@
     \hline
     \textbackslash{}dalSegnoAlFine&&&dal segno al fine sign&\\
     \hline
-    \textbackslash{}decresc&\textbackslash{}dim \textbackslash{}diminuendo&\textbf{RT}&decrescendo&\\
+    \textbackslash{}decrescendo&\textbackslash{}decresc \textbackslash{}dim \textbackslash{}diminuendo&\textbf{RT}&decrescendo&\\
     \hline
-    \textbackslash{}defineTag&A COMPLETER&&&\\
+    %\textbackslash{}defineTag&&&&\\ % Useless tag for now ?
+    %\hline
+    \textbackslash{}dispDur&A COMPLETER&&&\\ % Je ne comprends pas ce qu'il fait !
     \hline
-    \textbackslash{}dispDur&&&&\\
-    \hline
-    \textbackslash{}dotFormat&&&dot formatting&\\
+    \textbackslash{}dotFormat&&\textbf{ORT}&dot formatting&\\
     \hline
     \textbackslash{}doubleBar&&&double measure bar&\\
     \hline
@@ -70,9 +84,9 @@
     \hline
     \textbackslash{}fine&&&fine sign&\\
     \hline
-    \textbackslash{}fingering&&&fingering&\\
+    \textbackslash{}fingering&&\textbf{RT}&fingering&\\
     \hline
-    \textbackslash{}glissando&A COMPLETER&&&\\
+    \textbackslash{}glissando&&\textbf{RT}&glissando&\\
     \hline
     \textbackslash{}grace&&\textbf{RT}&grace notes&\\
     \hline
@@ -82,11 +96,11 @@
     \hline
     \textbackslash{}headsLeft&&\textbf{ORT}&noteheads at the left of the stem&\\
     \hline
-\end{tabular}
+\end{tabularx}
 %
 % Because the table can't divide itself...
 %
-\begin{tabular}{lllll}
+\begin{tabularx}{\linewidth}{lllll}
     \hline
     \textbackslash{}headsNormal&&\textbf{ORT}&normal placement of noteheads&\\
     \hline
@@ -138,7 +152,7 @@
     \hline
     \textbackslash{}restFormat&&&rests formatting&\\
     \hline
-    \textbackslash{}rit&&\textbf{RT} - \textbf{BE}&ritardando&\\
+    \textbackslash{}ritardando&\textbackslash{}rit&\textbf{RT} - \textbf{BE}&ritardando&\\
     \hline
     \textbackslash{}segno&&&segno sign&\\
     \hline
@@ -194,6 +208,6 @@
     \hline
     \textbackslash{}volta&&\textbf{RT} - \textbf{BE}&volta mark&\\
     \hline
-\end{tabular}
- 
+\end{tabularx}
+
 \end{document}
