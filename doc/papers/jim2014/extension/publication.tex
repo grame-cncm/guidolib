@@ -71,7 +71,7 @@ Lors de sa conception, le format \guido{} se différencie des approches proposé
 Postérieurement au format \guido{}, d'autres représentations textuelles de la notation de la musique ont vu le jour, telles que Lilypond \cite{lilypond03,lilypond06} qui est assez similaire dans son format, ou MusicXML \cite{good01}, orienté vers l'échange de partitions. Toutefois, le projet \guido{} reste unique parce qu'il est le seul qui propose à la fois un format de notation, une moteur de rendu et une librairie C/C++ permettant d'embarquer des capacités de rendu de partitions dans des applications indépendantes.
 Par ailleurs, la rapidité et l'efficacité du moteur de rendu le rendent utilisable dans un contexte \textit{temps réel} (pour des partitions dont le niveau de complexité n'est pas trop élevé), ouvrant la voie à des formes d'interactivité inédites \cite{Hoadley12,Fober:12a}.
 
-Pour répondre aux besoins les plus courants de la musique contemporaine, le format \guido{} ainsi que le moteur de rendu ont étés étendus. Après un bref rappel sur le format \guido{}, cet article décrit ces extensions en  situant les choix qui ont été faits en terme de rendu graphique, dans les pratiques identifiées dans la littérature contemporaine. Nous montrerons également comment une forme de \emph{langage générique} permet de combiner ces représentations et offre à l'utilisateur un large éventail de solutions pour la représentation de la musique.
+Pour répondre aux besoins les plus courants de la musique contemporaine, le format \guido{} ainsi que le moteur de rendu ont été étendus. Après un bref rappel sur le format \guido{}, cet article décrit ces extensions en  situant les choix qui ont été faits en terme de rendu graphique, dans les pratiques identifiées dans la littérature contemporaine. Nous montrerons également comment une forme de \emph{langage générique} permet de combiner ces représentations et offre à l'utilisateur un large éventail de solutions pour la représentation de la musique.
 
 
 %Le format de notation musicale \guido{} (GMN) \cite{hoos98} \cite{Dau09a} a été défini par H. Hoos et K. Hamel il y a plus de 10 ans. Il est très proche du format adopté par Lilypond \cite{lilypond03,lilypond06} mais il est apparu antérieurement. Le format GMN est un langage textuel de représentation de partitions musicales 
@@ -111,7 +111,7 @@ où \emph{param-list} est une liste optionnelle de paramètres (chaînes de cara
 %**************************** MICRO-TONALITÉS *****************************
 \subsection{Micro-tonalité}\label{subsec:micro}
 
-La micro-tonalité a été introduite avec la version 1.43 de la librairie \guido{}. Graphiquement, elle est limitée à la représentation du quart de ton alors que d'un point de vue langage, elle s'exprime comme un nombre flottant de demis tons, qui sont arrondis au quart de ton le plus proche pour le rendu graphique: 
+La micro-tonalité a été introduite avec la version 1.43 de la librairie \guido{}. Graphiquement, elle est limitée à la représentation du quart de ton, alors que, d'un point de vue langage, elle s'exprime comme un nombre flottant de demi-tons qui sont arrondis au quart de ton le plus proche pour le rendu graphique: 
 \begin{gmncode}
     1)  \alter<detune>
     2)  \alter<detune>(note-series)
@@ -194,12 +194,12 @@ La première portée de l'exemple de la figure \ref{fig:noteheads} est généré
 \bigskip
 
 Pour l'apparence graphique de ces éléments, nous nous sommes principalement inspirés des ouvrages de E. Gould \cite{gould2011behind} et de K. Stone \cite{stone1980music}.
-L'implémentation repose sur le tag \guidotag{noteFormat} déjà existant, qui modifie l'apparence des notes qui le suivent (couleur, taille, offset, etc.). Nous avons rajouté un attribut de \code{style}, permettant à l'utilisateur de choisir l'apparence des têtes de notes.
+L'implémentation repose sur le tag \guidotag{noteFormat}, déjà existant, qui modifie l'apparence des notes qui le suivent (couleur, taille, offset, etc.), et auquel nous avons ajouté un attribut de style, permettant à l'utilisateur de choisir l'apparence des têtes de notes.
 
 Des ajustements graphiques particuliers ont été nécessaires pour tenir compte des différences graphiques entre les têtes de notes :
 \begin{itemize}
     \item insertion d'un offset horizontal variable selon le symbole choisi, l'orientation de la hampe, l'utilisation en accord ou non (les accords pouvant posséder des têtes de notes différentes pour chacune de leurs notes);
-    \item adaptation de la longueur de la hampe selon le type symbole utilisé (par exemple, différence de longueur entre le \code{triangle} et le \code{reversedTriangle}).
+    \item adaptation de la longueur de la hampe selon le type de symbole utilisé (par exemple, différence de longueur entre le \code{triangle} et le \code{reversedTriangle}).
 \end{itemize}
 
 
@@ -223,9 +223,9 @@ La possibilité d'insérer une métrique complexe a été introduite avec la ver
 %**************************** CLUSTERS ********************************
 \subsection{\emph{Clusters}}\label{subsec:clusters}
 
-Un \emph{cluster} est un accord musical contenant plusieurs notes consécutives. Il peut par exemple être effectué sur un piano, où il se joue en déclenchant des touches contiguës (en utilisant son avant-bras, par exemple).
+Un \emph{cluster} est un accord musical contenant plusieurs notes consécutives. Il peut par exemple être effectué sur un piano où il se joue en déclenchant des touches contiguës (en utilisant son avant-bras, par exemple).
 
-Un \emph{cluster} est indiqué par un range-tag s'appliquant à des accords de deux notes: les notes extrêmes du \emph{cluster} (les autres notes éventuelles seront ignorées) :
+Un \emph{cluster} est indiqué par un range-tag s'appliquant à des accords de deux notes: les notes extrêmes du \emph{cluster} (les autres notes éventuelles seront ignorées).
 
 \begin{gmncode}
 \cluster<param-list>(chord-series)
@@ -245,16 +245,16 @@ Un \emph{cluster} est indiqué par un range-tag s'appliquant à des accords de d
 \end{figure}
 %
 
-Comme l'indique en partie la figure \ref{fig:cluster}, les choix, faits à partir d'ouvrages référents \cite{gould2011behind,stone1980music} ont été les suivants:
+Comme l'indique en partie la figure \ref{fig:cluster}, les choix, faits à partir d'ouvrages référents \cite{gould2011behind,stone1980music}, ont été les suivants:
 \begin{itemize}
 	\item le \emph{cluster} est représenté par un rectangle;
 	\item ce rectangle est plein ou vide, selon la durée du \emph{cluster};
 	\item la hampe est conservée pour garder l'indication de la durée.
 \end{itemize}
 
-Le tag \guidotag{cluster} supporte les paramètres de contrôle standard (\code{size}, \code{dx}, \code{dy}, \code{color}) auxquels ont été ajoutés des paramètres \code{hdx} et \code{hdy} permettant d'introduire un décalage s'appliquant à la tête de note. 
+Le tag \guidotag{cluster} supporte les paramètres de contrôle standards (\code{size}, \code{dx}, \code{dy}, \code{color}) auxquels ont été ajoutés des paramètres \code{hdx} et \code{hdy} permettant d'introduire un décalage s'appliquant à la tête de note. 
 
-Un \emph{cluster} est vu comme une note et supporte donc le tag \guidotag{noteFormat} ainsi que le contrôle de l'orientation des têtes de notes (\guidotag{headsReverse}, \guidotag{headsLeft} et \guidotag{headsRight}) ainsi qu'illustré en figure \ref{fig:clusterInteractions}).
+Un \emph{cluster} est vu comme une note et supporte donc le tag \guidotag{noteFormat} ainsi que le contrôle de l'orientation des têtes de notes (\guidotag{headsReverse}, \guidotag{headsLeft} et \guidotag{headsRight}) ainsi qu'illustré en figure \ref{fig:clusterInteractions}.
 
 \exemple
 \begin{figure}[h]
@@ -279,7 +279,7 @@ Un \emph{cluster} est vu comme une note et supporte donc le tag \guidotag{noteFo
 %*************** GLISSANDO ************************
 \subsection{Glissando}\label{subsec:glissando}
 
-Le \emph{glissando} se présente classiquement comme une ligne joignant deux notes décalées dans le temps ( Figure \ref{fig:glissandoSimple} ), indiquant ainsi un glissement, continu ou non suivant le type d'instrument, d'une hauteur à l'autre.
+Le \emph{glissando} se présente classiquement comme une ligne joignant deux notes décalées dans le temps ( Figure \ref{fig:glissandoSimple} ), indiquant ainsi un glissement, continu ou non suivant le type d'instrument, d'une hauteur à une autre.
 
 Dans un souci d'efficacité, il fallait pouvoir décrire un \emph{glissando} seul ou plusieurs \emph{glissandi} à la suite de la manière la plus simple et intuitive possible. 
 
@@ -335,7 +335,7 @@ Décrite par Gardner Read comme "a highly graphic representation of rythmic flex
 
 Dans un désir de simplicité, il a été décidé de décrire par un seul range-tag un seul groupe de notes liées, correspondant à un point de départ et un point d'arrivée uniques.
 
-Il est cependant possible de chaîner plusieurs \emph{feathered beams} en utilisant la forme \code{Begin / End} des range-tag (i.e \guidotag{fBeamBegin} et \guidotag{fBeamEnd}), permettant alors, non seulement de chaîner deux \emph{beams} par une note (figure \ref{fig:fbeamchain}), mais aussi de les faire se chevaucher sur plusieurs notes.
+Il est cependant possible de chaîner plusieurs \emph{feathered beams} en utilisant la forme \code{Begin / End} des range-tags (i.e \guidotag{fBeamBegin} et \guidotag{fBeamEnd}), permettant alors, non seulement de chaîner deux \emph{beams} par une note (figure \ref{fig:fbeamchain}), mais aussi de les faire se chevaucher sur plusieurs notes.
 
 \begin{figure}[h]
 \exemple
@@ -374,7 +374,7 @@ Ce manque d'une exacte cohérence entre tempo et aspect graphique est également
 Ainsi on voit l'importance des choix de design de ce symbole, sur la manière de le décrire textuellement, de le dessiner en particulier dans le cas de plusieurs voix simultanées, et de manière générale sur la liberté laissée à l'utilisateur.
 \\
 
-Concernant les possibilités de description données à l'utilisateur. Nous avons vu que plusieurs critères pouvaient intervenir dans la description, et devaient pouvoir être imposés par l'utilisateur. Des paramètres qui peuvent être incohérents entre eux :
+Concernant les possibilités de description données à l'utilisateur, nous avons vu que plusieurs critères pouvaient intervenir dans la description et devaient pouvoir être imposés par l'utilisateur. Des paramètres qui peuvent être incohérents entre eux :
 \begin{itemize}
 \item le nombre de notes dans le groupe;
 \item leurs durées individuelles et intrinsèques qui définissent également leur espacement;
@@ -400,7 +400,7 @@ Ces différents niveaux de description nous poussent à faire une claire distinc
 \label{fig:fbeamduree}
 \end{figure}
 
-Sans plus d'indication de sa part, l'aspect graphique suivra les durées réelles des notes et prendra comme points de départ et d'arrivée les durées de la première et dernière notes.  C'est le cas de la Figure \ref{fig:fbeamduree}.
+Sans plus d'indication de sa part, l'aspect graphique suivra les durées réelles des notes et prendra comme points de départ et d'arrivée les durées des première et dernière notes.  C'est le cas de la Figure \ref{fig:fbeamduree}.
 
 En revanche, le \emph{param} \code{durations} pourra lui permettre d'imposer un aspect graphique tout autre, lui donnant ainsi la possibilité d'indiquer à l'interprète un changement de tempo plus ou moins important, et pas nécessairement cohérent avec les durées intrinsèques des notes, mais ayant du sens dans l'interprétation (Figure \ref{fig:utilisateur}).
 
@@ -443,7 +443,7 @@ Ainsi, les deux descriptions suivantes sont valides, mais pas équivalentes :
 
 
 % ***************** STAFFOFF/ON **********************
-\subsection{Tags \textbackslash{}\emph{staffOff} / \textbackslash{}\emph{staffOn}}\label{subsec:staffoff}
+\subsection{Tags \textbackslash{}\emph{staffOff} et \textbackslash{}\emph{staffOn}}\label{subsec:staffoff}
 
 \vspace{2mm}
 \begin{gmncode}
@@ -479,7 +479,7 @@ Son usage est généralisé à tous les éléments et toutes les voix de la part
 \label{fig:staffoffexotique}
 \end{figure}
 
-L'implémentation graphique est le pendant de la description textuelle : tous les éléments inscrits après un tag \guidotag{staffOff} dans la description textuelle ne sont pas dessinés jusqu'au prochain \guidotag{staffOn} dans la séquence courante. Pour plusieurs éléments simultanés, c'est donc bien l'ordre dans la description textuelle qui indiquera le comportement à adopter. Ainsi, écrire :
+L'implémentation graphique est le pendant de la description textuelle : tous les éléments inscrits après un tag \guidotag{staffOff} dans la description textuelle ne sont pas dessinés jusqu'au prochain \guidotag{staffOn} dans la séquence courante. Pour plusieurs éléments simultanés, c'est donc bien l'ordre dans la description textuelle qui indiquera le comportement à adopter. Ainsi :
 \begin{gmncode}
 [\meter<"4/4">\clef\staffOff a b\staffOn c]
 \end{gmncode}
@@ -512,7 +512,7 @@ Le tag \guidotag{symbol} permet d'insérer des graphiques arbitraires dans la pa
 
 Le tag \guidotag{symbol} peut être utilisé comme un tag simple ou comme un range-tag :
 \begin{itemize}
-	\item 1) le symbole ne possède pas de durée mais prend de place sur la portée, selon sa taille;
+	\item 1) le symbole ne possède pas de durée mais prend de la place sur la portée, selon sa taille;
 	\item 2) le symbole s'applique aux notes indiquées (sans étirement).
 \end{itemize}
 
@@ -567,14 +567,14 @@ Le fichier est indiqué par un chemin absolu ou relatif. Dans le second cas, le 
 \end{gmncode}
 
 % Citation wiki
-Un \emph{trille} est \og{}un ornement musical qui consiste à alterner très rapidement la note de base (la note principale), sur laquelle est noté le \emph{trille}, et la note située juste au-dessus\fg{}.
+Un \emph{trille} est un ornement musical qui consiste à alterner rapidement la note de base, sur laquelle est noté le \emph{trille}, et la note située juste au-dessus.
 
-Dans la version précédente de \guido{}, le \emph{trille} à proprement parler n'était indiqué que par le symbole \textit{\textbf{tr}} placé au dessus de la note. Il paraissait pourtant important que la notation comprenne également la ligne ondulée du \emph{trille} qui suit celui-ci et en indique la durée. Comme ce symbole était déjà en partie implémenté, il fallait pouvoir lui offrir plus de souplesse sans pour autant en complexifier la notation.
+Dans la version précédente de \guido{}, le \emph{trille} à proprement parler n'était indiqué que par le symbole \textit{\textbf{tr}} placé au-dessus de la note. Il paraissait pourtant important que la notation comprenne également la ligne ondulée du \emph{trille} qui suit celui-ci et en indique la durée. Comme ce symbole était déjà en partie implémenté, il fallait pouvoir lui offrir plus de souplesse sans pour autant en complexifier la notation.
 
 %D'après Elaine Gould \cite{gould2011behind}, la ligne du \emph{trille} doit être dessinée depuis le signe \textit{\textbf{tr}} jusqu'au début du prochain évènement (la prochaine note ou le prochain soupir), sauf si celui-ci se situe directement après la prochaine barre de mesure, la ligne s'arrêtant dans ce cas à la barre elle-même. 
 
 % justifier l'intérêt de tr et anchor ?
-De plus, nous avons voulu donner la possibilité de choisir de dessiner ou non le signe \textit{\textbf{tr}}, ainsi que de pouvoir changer l'ancrage de la ligne pour le déplacer sur la tête de la note. Cela fut implémenté grâce au \emph{param} \code{tr} qui accepte comme valeurs \code{true} ou \code{false} et \code{anchor} qui accepte comme valeurs \code{note} ou \code{tr} (Figure \ref{fig:trillanchor}). Le reste des modifications graphiques pouvant être effectuées manuellement par l'utilisateur à travers les paramètres classiques de déplacement (\code{dx}, \code{dy}), de couleur (\code{color}), et de taille (\code{size}).
+De plus, nous avons voulu donner la possibilité de choisir de dessiner ou non le signe \textit{\textbf{tr}}, ainsi que de pouvoir changer l'ancrage de la ligne pour le déplacer sur la tête de la note. Cela fut implémenté grâce au \emph{param} \code{tr} qui accepte comme valeurs \code{true} ou \code{false} et à \code{anchor} qui accepte comme valeurs \code{note} ou \code{tr} (Figure \ref{fig:trillanchor}). Le reste des modifications graphiques pouvant être effectuées manuellement par l'utilisateur à travers les paramètres classiques de déplacement (\code{dx}, \code{dy}), de couleur (\code{color}), et de taille (\code{size}).
 
 \exemple
 \begin{figure}[h]
@@ -599,12 +599,12 @@ De nouveaux paramètres ont été introduits pour plusieurs tags, permettant un 
 \begin{itemize}
 \item \guidotag{staffFormat} : contrôle de l'épaisseur des lignes de la portée
 \item \guidotag{tuplet} : contrôle de l'épaisseur des lignes, de la taille du texte, etc.
-\item \guidotag{cresc}/\guidotag{decresc} : paramétrable en position, épaisseur, couleur.
+\item \guidotag{cresc} et \guidotag{decresc} : paramétrable en position, épaisseur, couleur.
 \end{itemize}
 On se reportera à la documentation utilisateur pour le détail de ces paramètres.
 
 \exemple\\
-L'exemple suivant, illustre ces améliorations et génère la partition de la figure \ref{fig:nouveauxParams}.
+L'exemple suivant illustre ces améliorations et génère la partition de la figure \ref{fig:nouveauxParams}.
 \begin{gmncode}
 {
   [
@@ -631,7 +631,7 @@ L'exemple suivant, illustre ces améliorations et génère la partition de la fi
 %************************* GLISSANDI ET ACCORDS *******************************
 \subsection{Glissandi et accords}\label{subsec:glissandiAccords}
 
-Un \emph{glissando} entre deux accords soulève la question la répartition des \emph{glissandi} entre les notes des accords. La solution proposée est celle qui nous a paru la plus intuitive : c'est l'ordre des notes dans la description textuelle de l'accord qui détermine les relations entre les notes, c'est à dire : pour 2 accords A t B, la première note de l'accord A sera liée à la première note de l'accord B, la seconde de A à la seconde de B, etc.(Figure \ref{fig:glissandosimple})
+Un \emph{glissando} entre deux accords soulève la question de la répartition des \emph{glissandi} entre les notes des accords. La solution proposée est celle qui nous a paru la plus intuitive : c'est l'ordre des notes dans la description textuelle de l'accord qui détermine les relations entre les notes. C'est à dire : pour 2 accords A et B, la première note de l'accord A sera liée à la première note de l'accord B, la seconde de A à la seconde de B, etc.(Figure \ref{fig:glissandosimple})
 
 \exemple
 \begin{gmncode}
@@ -673,7 +673,7 @@ L'unique problème avec ce choix peut se poser lors d'un conflit dans l'ordre im
 %***************************** TRILLES ET TIES ****************************************
 \subsection{Trilles et liaisons}\label{subsec:trillesLiaison}
 
-Au niveau du trille, une subtilité au niveau du contr\^ole du rendu a également été ajoutée. Il fallait définir le comportement quant aux notes liées, soit de manière automatique de par la présence d'une barre de mesure, soit de manière explicitement décrite par l'utilisateur. La solution adoptée est de dessiner la ligne de \emph{trille} jusqu'à la fin de la dernière note liée si celle-ci provient d'une note plus longue découpée automatiquement, mais de s'arrêter normalement à la prochaine note si la liaison a été explicitée par l'utilisateur, qui pourra alors décider de répéter le \emph{trille} sur cette autre note, ou non. (Figure \ref{fig:trill})
+Concernant le trille, une subtilité au niveau du contr\^ole du rendu a également été ajoutée. Il fallait définir le comportement quant aux notes liées, soit de manière automatique de par la présence d'une barre de mesure, soit de manière explicitement décrite par l'utilisateur. La solution adoptée est de dessiner la ligne de \emph{trille} jusqu'à la fin de la dernière note liée si celle-ci provient d'une note plus longue découpée automatiquement, mais de s'arrêter normalement à la prochaine note si la liaison a été explicitée par l'utilisateur, qui pourra alors décider de répéter le \emph{trille} sur cette autre note, ou non. (Figure \ref{fig:trill})
 
 \exemple
 \begin{figure}[h]
@@ -748,7 +748,7 @@ Enfin, concernant le \emph{feathered beam} comme le \emph{beam} classique, il es
 
 %********************* CONCLUSION **********************
 \section{Conclusion}\label{sec:conclusion}
-Le projet \guido\ se différencie des approches de type gravure musicale telles que Lilypond ou MuseScore (pour ne citer que les outils \emph{libres}) en ce sens qu'il privilégie un rendu efficace et qu'il met en oeuvre un grand nombre d'automatismes pour le calcul de la partition. Il est cependant plus limité en termes de complexité et de notations supportées. Les extensions qui ont été présentées comblent pour partie le fossé entre le moteur \guido\ et les approches citées précédement. Elles ont été réalisées principalement à la demande de compositeurs et au service de créations en cours. Elles s'intègrent dans le moteur existant dans le respect des différentes combinaisons du langage. Leur implémentation a soulevé des problèmes de design qui ont été résolus en laissant à l'utilisateur le choix entre les différentes possibilités. Elles sont disponibles avec la version 1.52 de la librairie \guido{}. 
+Le projet \guido\ se différencie des approches de type gravure musicale telles que Lilypond ou MuseScore (pour ne citer que les outils \emph{libres}) en ce sens qu'il privilégie un rendu efficace et qu'il met en \oe{}uvre un grand nombre d'automatismes pour le calcul de la partition. Il est cependant plus limité en matière de complexité et de notations supportées. Les extensions qui ont été présentées comblent pour partie le fossé entre le moteur \guido\ et les approches citées précédement. Elles ont été réalisées principalement à la demande de compositeurs et au service de créations en cours. Elles s'intègrent dans le moteur existant dans le respect des différentes combinaisons du langage. Leur implémentation a soulevé des problèmes de design qui ont été résolus en laissant à l'utilisateur le choix entre les différentes possibilités. Elles sont disponibles avec la version 1.52 de la librairie \guido{}. 
 
 
 
