@@ -72,17 +72,17 @@ singleStemDirection(inStemDirection),
 
 		// - Noteheads ornaments
 
-		else if( mStyle == "()" )
+		else if (mStyle == "()" || mStyle == "(standard)")
 		{
 			mBracketsType = Round; // - Round brackets
 			mSymbol = durationToHeadSymbol( inDur );
 		}
-		else if( mStyle == "[]" )
+		else if (mStyle == "[]" || mStyle == "[standard]")
 		{
 			mBracketsType = Square; // - Square brackets
 			mSymbol = durationToHeadSymbol( inDur );
 		}
-		else if( mStyle == "<>" )
+		else if (mStyle == "<>" || mStyle == "<standard>")
 		{
 			mBracketsType = Angled; // - Angled brackets
 			mSymbol = durationToHeadSymbol( inDur );
@@ -90,96 +90,96 @@ singleStemDirection(inStemDirection),
 
 		// - Ornament for non-standard notehead types
 		// - Round brackets
-		else if( mStyle == "(diamond)" )
+		else if (mStyle == "(diamond)")
 		{
 			mBracketsType = Round;
 			mSymbol = full ? kFullDiamondHeadSymbol : kHalfDiamondHeadSymbol;
 		}
-		else if( mStyle == "(x)" )
+		else if (mStyle == "(x)")
 		{
 			mBracketsType = Round;
 			mSymbol = full ? kFullXHeadSymbol : kHalfXHeadSymbol;
 		}
-		else if( mStyle == "(square)" )
+		else if (mStyle == "(square)")
 		{
 			mBracketsType = Round;
 			mSymbol = full ? kFullSquareHeadSymbol : kHalfSquareHeadSymbol;
 		}
-		else if( mStyle == "(round)" )
+		else if (mStyle == "(round)")
 		{
 			mBracketsType = Round;
 			mSymbol = full ? kFullRoundHeadSymbol : kHalfRoundHeadSymbol;
 		}
-		else if( mStyle == "(triangle)" )
+		else if (mStyle == "(triangle)")
 		{
 			mBracketsType = Round;
 			mSymbol = full ? kFullTriangleHeadSymbol : kHalfTriangleHeadSymbol;
 		}
-		else if( mStyle == "(reversedTriangle)" )
+		else if (mStyle == "(reversedTriangle)")
 		{
 			mBracketsType = Round;
 			mSymbol = full ? kFullReversedTriangleHeadSymbol : kHalfReversedTriangleHeadSymbol;
 		}
 
 		// - Square brackets
-		else if( mStyle == "[diamond]" )
+		else if (mStyle == "[diamond]")
 		{
 			mBracketsType = Square;
 			mSymbol = full ? kFullDiamondHeadSymbol : kHalfDiamondHeadSymbol;
 		}
-		else if( mStyle == "[x]" )
+		else if (mStyle == "[x]")
 		{
 			mBracketsType = Square;
 			mSymbol = full ? kFullXHeadSymbol : kHalfXHeadSymbol;
 		}
-		else if( mStyle == "[square]" )
+		else if (mStyle == "[square]")
 		{
 			mBracketsType = Square;
 			mSymbol = full ? kFullSquareHeadSymbol : kHalfSquareHeadSymbol;
 		}
-		else if( mStyle == "[round]" )
+		else if (mStyle == "[round]")
 		{
 			mBracketsType = Square;
 			mSymbol = full ? kFullRoundHeadSymbol : kHalfRoundHeadSymbol;
 		}
-		else if( mStyle == "[triangle]" )
+		else if (mStyle == "[triangle]")
 		{
 			mBracketsType = Square;
 			mSymbol = full ? kFullTriangleHeadSymbol : kHalfTriangleHeadSymbol;
 		}
-		else if( mStyle == "[reversedTriangle]" )
+		else if (mStyle == "[reversedTriangle]")
 		{
 			mBracketsType = Square;
 			mSymbol = full ? kFullReversedTriangleHeadSymbol : kHalfReversedTriangleHeadSymbol;
 		}
 
 		// - Angled brackets
-		else if( mStyle == "<diamond>" )
+		else if (mStyle == "<diamond>")
 		{
 			mBracketsType = Angled;
 			mSymbol = full ? kFullDiamondHeadSymbol : kHalfDiamondHeadSymbol;
 		}
-		else if( mStyle == "<x>" )
+		else if (mStyle == "<x>")
 		{
 			mBracketsType = Angled;
 			mSymbol = full ? kFullXHeadSymbol : kHalfXHeadSymbol;
 		}
-		else if( mStyle == "<square>" )
+		else if (mStyle == "<square>")
 		{
 			mBracketsType = Angled;
 			mSymbol = full ? kFullSquareHeadSymbol : kHalfSquareHeadSymbol;
 		}
-		else if( mStyle == "<round>" )
+		else if (mStyle == "<round>")
 		{
 			mBracketsType = Angled;
 			mSymbol = full ? kFullRoundHeadSymbol : kHalfRoundHeadSymbol;
 		}
-		else if( mStyle == "<triangle>" )
+		else if (mStyle == "<triangle>")
 		{
 			mBracketsType = Angled;
 			mSymbol = full ? kFullTriangleHeadSymbol : kHalfTriangleHeadSymbol;
 		}
-		else if( mStyle == "<reversedTriangle>" )
+		else if (mStyle == "<reversedTriangle>")
 		{
 			mBracketsType = Angled;
 			mSymbol = full ? kFullReversedTriangleHeadSymbol : kHalfReversedTriangleHeadSymbol;
