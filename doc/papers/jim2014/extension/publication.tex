@@ -8,6 +8,8 @@
 \usepackage{comment}
 \usepackage{verbatim}
 \usepackage{balance}
+\usepackage{hyperref}
+\usepackage{url}
 
 
 \newenvironment{gmncode}	{\vspace{-2mm}\small\verbatim}{\endverbatim\vspace{-2mm}}
@@ -549,11 +551,7 @@ Le fichier est indiqué par un chemin absolu ou relatif. Dans le second cas, le 
 
 
 %************************ AMÉLIORATIONS DIVERSES ******************
-\subsection{Améliorations diverses}\label{subsec:amelioraions}
-
-
-%*****************TRILLES********************
-\subsubsection{Trilles}\label{subsubsec:trilles}
+\subsection{Améliorations diverses : trilles}\label{subsec:amelioraions}
 
 % littérature
 % lilypond : e\trill f\trill ... sans vaguelette sinon \startTrillSpan ... \stopTrillSpan
@@ -748,7 +746,9 @@ Enfin, concernant le \emph{feathered beam} comme le \emph{beam} classique, il es
 
 %********************* CONCLUSION **********************
 \section{Conclusion}\label{sec:conclusion}
-Le projet \guido\ se différencie des approches de type gravure musicale telles que Lilypond ou MuseScore (pour ne citer que les outils \emph{libres}) en ce sens qu'il privilégie un rendu efficace et qu'il met en \oe{}uvre un grand nombre d'automatismes pour le calcul de la partition. Il est cependant plus limité en matière de complexité et de notations supportées. Les extensions qui ont été présentées comblent pour partie le fossé entre le moteur \guido\ et les approches citées précédement. Elles ont été réalisées principalement à la demande de compositeurs et au service de créations en cours. Elles s'intègrent dans le moteur existant dans le respect des différentes combinaisons du langage. Leur implémentation a soulevé des problèmes de design qui ont été résolus en laissant à l'utilisateur le choix entre les différentes possibilités. Elles sont disponibles avec la version 1.52 de la librairie \guido{}. 
+Le projet \guido\ se différencie des approches de type gravure musicale telles que Lilypond ou MuseScore (pour ne citer que les outils \emph{libres}) en ce sens qu'il privilégie un rendu efficace et qu'il met en \oe{}uvre un grand nombre d'automatismes pour le calcul de la partition. Il est cependant plus limité en matière de complexité et de notations supportées. 
+
+Les extensions qui ont été présentées comblent pour partie le fossé entre le moteur \guido\ et les approches citées précédement. Elles ont été réalisées principalement à la demande de compositeurs et au service de créations en cours. Elles s'intègrent dans le moteur existant dans le respect des différentes combinaisons du langage. Leur implémentation a soulevé des problèmes de design qui ont été résolus en laissant à l'utilisateur le choix entre les différentes possibilités. Elles sont disponibles avec la version 1.52 de la librairie \guido{}. Le projet \guido est un projet \emph{open source} hébergé sur Sourceforge\footnote{\url{http://guidolib.sf.net}}.
 
 
 
