@@ -8,15 +8,18 @@
 
 \begin{document}
 
+% Mettre titre + date
+
 % Disable indentation
 \setlength{\parindent}{0pt}
 
 % To vertically center text inside cells
 \renewcommand{\tabularxcolumn}[1]{m{#1}}
 % Mettre la feuille en paysage
-\begin{tabularx}{\linewidth}{lllll}
+\begin{tabularx}{\linewidth}{p{3cm}p{5cm}lll}
     \hline
-    \textbf{Tag}&\textbf{Shortcut}&\textbf{Form support}&\textbf{Notation element}&\textbf{Parameters}\\
+    \textbf{Tag}&\textbf{Shortcut}&\textbf{Form support}&\textbf{Notation element}&\textbf{ %Parameters
+    }\\
     \hline
     \textbackslash{}accidental&\textbackslash{}acc&\textbf{RT}&accidental&\\
     \hline
@@ -28,8 +31,8 @@
     \hline
     \textbackslash{}alter&&\textbf{ORT}&microtonal accidentals&\\
     \hline
-    \textbackslash{}auto&&A COMPLETER&&\\
-    \hline
+    %\textbackslash{}auto&&&&\\ % A COMPLETER
+    %\hline
     \textbackslash{}bar&\textbar&&measure bar&\\
     \hline
     %\textbackslash{}barFormat&&&bar formatting&\\ % Useless tag for now ?
@@ -72,8 +75,8 @@
     \hline
     %\textbackslash{}defineTag&&&&\\ % Useless tag for now ?
     %\hline
-    \textbackslash{}dispDur&A COMPLETER&&&\\ % Je ne comprends pas ce qu'il fait !
-    \hline
+    %\textbackslash{}dispDur&&&&\\ % Je ne comprends pas ce qu'il fait ! % A COMPLETER
+    %\hline
     \textbackslash{}dotFormat&&\textbf{ORT}&dot formatting&\\
     \hline
     \textbackslash{}doubleBar&&&double measure bar&\\
@@ -96,39 +99,40 @@
     \hline
     \textbackslash{}headsLeft&&\textbf{ORT}&noteheads at the left of the stem&\\
     \hline
-\end{tabularx}
-%
-% Because the table can't divide itself...
-%
-\begin{tabularx}{\linewidth}{lllll}
-    \hline
     \textbackslash{}headsNormal&&\textbf{ORT}&normal placement of noteheads&\\
     \hline
     \textbackslash{}headsReverse&&\textbf{ORT}&reverted placement of noteheads&\\
     \hline
+\end{tabularx}
+%
+% Because the table can't divide itself...
+%
+\begin{tabularx}{\linewidth}{p{3cm}p{5cm}lll}
+    \hline
+    \textbf{Tag}&\textbf{Shortcut}&\textbf{Form support}&\textbf{Notation element}&\textbf{ %Parameters
+    }\\
+    \hline
     \textbackslash{}headsRight&&\textbf{ORT}&noteheads at the right of the stem&\\
     \hline
-    \textbackslash{}instr&&&instrument specification&\\
+    \textbackslash{}instrument&\textbackslash{}instr&&instrument specification&\\
     \hline
     \textbackslash{}intens&\textbackslash{}i&&nuance marking&\\
     \hline
-    \textbf{Tag}&\textbf{Shortcut}&\textbf{Form support}&\textbf{Notation element}&\textbf{Parameters}\\
-    \hline
     \textbackslash{}key&&&key signature&\\
     \hline
-    \textbackslash{}label&&&textual label&\\
+    \textbackslash{}label&&\textbf{ORT}&textual label&\\
     \hline
-    \textbackslash{}lyrics&&&lyrics&\\
+    \textbackslash{}lyrics&&\textbf{RT}&lyrics&\\
     \hline
     \textbackslash{}marcato&&\textbf{RT}&marcato mark&\\
     \hline
     \textbackslash{}mark&&&textual mark&\\
     \hline
-    \textbackslash{}merge&A COMPLETER&&&\\
-    \hline
+    %\textbackslash{}merge&&&&\\ % Useless tag for now ?
+    %\hline
     \textbackslash{}meter&&&meter indication&\\
     \hline
-    \textbackslash{}mord&&\textbf{RT}&mordent&\\
+    \textbackslash{}mordent&\textbackslash{}mord&\textbf{RT}&mordent&\\
     \hline
     \textbackslash{}newLine&&&force a new line&\\
     \hline
@@ -138,65 +142,72 @@
     \hline
     \textbackslash{}noteFormat&&\textbf{ORT}&notes formatting&\\
     \hline
-    \textbackslash{}oct&&\textbf{ORT}&octava sign&\\
+    \textbackslash{}octava&\textbackslash{}oct&\textbf{ORT}&octava sign&\\ % Does it work ?
     \hline
     \textbackslash{}pageFormat&&&page format indication&\\
     \hline
     \textbackslash{}pizz&&\textbf{RT}&pizzicato&\\
     \hline
-    \textbackslash{}port&A COMPLETER&&&\\
-    \hline
     \textbackslash{}repeatBegin&&&repeat begin bar&\\
     \hline
     \textbackslash{}repeatEnd&&&repeat end bar&\\
     \hline
-    \textbackslash{}restFormat&&&rests formatting&\\
+    \textbackslash{}restFormat&&\textbf{ORT}&rests formatting&\\
     \hline
     \textbackslash{}ritardando&\textbackslash{}rit&\textbf{RT} - \textbf{BE}&ritardando&\\
     \hline
     \textbackslash{}segno&&&segno sign&\\
     \hline
-    \textbackslash{}shareLocation&A COMPLETER&&&\\
+    \textbackslash{}shareLocation&&\textbf{RT}&put several events in same position&\\
     \hline
     \textbackslash{}slur&\textbackslash{}sl&\textbf{RT} - \textbf{BE}&slur&\\
     \hline
     \textbackslash{}space&&&space&\\
     \hline
-    \textbackslash{}special&A COMPLETER&&&\\
-    \hline
+    %\textbackslash{}special&&&&\\ % What does it do ? % A COMPLETER
+    %\hline
     \textbackslash{}stacc&&\textbf{RT} - \textbf{BE}&staccato&\\
     \hline
     \textbackslash{}staff&&&staff assignation&\\
     \hline
     \textbackslash{}staffFormat&&&staff formatting&\\
     \hline
-    \textbackslash{}staffOff&A COMPLETER&&&\\
+    \textbackslash{}staffOff&&&disable staff display&\\
     \hline
-    \textbackslash{}staffOn&A COMPLETER&&&\\
+    \textbackslash{}staffOn&&&enable staff display&\\
     \hline
-    \textbackslash{}stemsAuto&&&auto stem direction (default)&\\
+    \textbackslash{}stemsAuto&&\textbf{ORT}&auto stem direction (default)&\\
     \hline
-    \textbackslash{}stemsDown&&&force stems down&\\
+    \textbackslash{}stemsDown&&\textbf{ORT}&force stems down&\\
+	\hline
+    \textbackslash{}stemsOff&&\textbf{ORT}&no stems&\\
     \hline
-    \textbackslash{}stemsOff&&&no stems&\\
+    \textbackslash{}stemsUp&&\textbf{ORT}&force stems up&\\
     \hline
-    \textbackslash{}stemsUp&&&force stems up&\\
+    \textbackslash{}symbol&\textbackslash{}s&\textbf{ORT}&insert an image&\\
     \hline
-    \textbackslash{}symbol&s&A COMPLETER&&\\
+\end{tabularx}
+%
+% Because the table can't divide itself...
+%
+\begin{tabularx}{\linewidth}{p{3cm}p{5cm}lll}
     \hline
-    \textbackslash{}systemFormat&&&system formatting&\\
+    \textbf{Tag}&\textbf{Shortcut}&\textbf{Form support}&\textbf{Notation element}&\textbf{ %Parameters
+    }\\
+    \hline
+    \textbackslash{}systemFormat&&&system formatting&\\ % Does it work ?
     \hline
     \textbackslash{}tempo&&&tempo mark&\\
     \hline
-    \textbackslash{}ten&&\textbf{RT}&tenuto mark&\\
+    \textbackslash{}tenuto&\textbackslash{}ten&\textbf{RT}&tenuto mark&\\ % Does it work ?
     \hline
-    \textbackslash{}text&t&\textbf{ORT}&text annotation&\\
+    \textbackslash{}text&\textbackslash{}t&\textbf{ORT}&text annotation&\\
     \hline
     \textbackslash{}tie&&\textbf{RT} - \textbf{BE}&tie notes&\\
     \hline
     \textbackslash{}title&&&score title&\\
     \hline
-    \textbackslash{}trem&&\textbf{RT}&tremolo sign&\\
+    \textbackslash{}tremolo&\textbackslash{}trem&\textbf{RT}&tremolo sign&\\
     \hline
     \textbackslash{}trill&&\textbf{RT}&trill sign&\\
     \hline
@@ -209,5 +220,11 @@
     \textbackslash{}volta&&\textbf{RT} - \textbf{BE}&volta mark&\\
     \hline
 \end{tabularx}
+
+\bigskip
+
+\textbf{RT} - range-tag \\
+\textbf{ORT} - optional range-tag \\
+\textbf{BE} - can be under [\textbackslash{}\emph{tagname}Begin ... \textbackslash{}\emph{tagname}End] form instead of [\textbackslash{}\emph{tagname}(...)] form
 
 \end{document}
