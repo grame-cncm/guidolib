@@ -1012,7 +1012,7 @@ void ARFactory::createTag( const char * name, int no )
 			break;
 
 		case 'i':
-			if (!strcmp(name,"instr"))
+			if (!strcmp(name,"instrument") || !strcmp(name,"instr"))
 			{
 				ARInstrument * tmp = new ARInstrument;
 				mTags.AddHead(tmp);
@@ -1064,7 +1064,7 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"mord"))
+			else if (!strcmp(name,"mordent") || !strcmp(name,"mord"))
 			{
 				ARTrill * tmp =new ARTrill(ARTrill::MORD);
 				//mTags.AddHead(tmp);
@@ -1121,7 +1121,7 @@ void ARFactory::createTag( const char * name, int no )
 			break;
 
 		case 'o':	
-			if (!strcmp(name,"oct"))
+			if (!strcmp(name,"oct") || !strcmp(name,"octava"))
 			{
 				AROctava * tmp = new AROctava(mCurrentOctava);
 				mTags.AddHead(tmp);
@@ -1398,7 +1398,7 @@ void ARFactory::createTag( const char * name, int no )
 				mCurrentVoice->setPositionTagEndPos(no, tmp);
 				mTags.AddHead(tmp);				
 			} 
-			else if(!strcmp(name,"ten"))
+			else if(!strcmp(name,"tenuto") || !strcmp(name,"ten"))
 			{
 				ARTenuto * tmp = new ARTenuto;
 				mTags.AddHead(tmp);
@@ -1441,7 +1441,7 @@ void ARFactory::createTag( const char * name, int no )
 					mCurrentTrill = tmp;
 				else delete tmp;
 			}
-			else if(!strcmp(name,"trem"))
+			else if(!strcmp(name,"tremolo") || !strcmp(name,"trem"))
 			{
 				ARTremolo * tmp = new ARTremolo;
 				mTags.AddHead(tmp);
