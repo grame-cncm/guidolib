@@ -1,4 +1,4 @@
-\documentclass[a4paper, landscape, 11pt]{article}
+\documentclass[a4paper, landscape, 10pt]{article}
 
 \usepackage{tabularx}
 \usepackage{lipsum}
@@ -16,50 +16,52 @@
 % To vertically center text inside cells
 \renewcommand{\tabularxcolumn}[1]{m{#1}}
 % Mettre la feuille en paysage
-\begin{tabularx}{\linewidth}{p{3cm}p{5cm}lll}
+\begin{tabularx}{\linewidth}{p{3cm}p{4.5cm}p{3cm}p{5.5cm}l}
     \hline
-    \textbf{Tag}&\textbf{Shortcut}&\textbf{Form support}&\textbf{Notation element}&\textbf{ %Parameters
-    }\\
+    \textbf{Tag}&\textbf{Shortcut}&\textbf{Form support}&\textbf{Notation element}&\textbf{Parameters}\\
     \hline
-    \textbackslash{}accidental&\textbackslash{}acc&\textbf{RT}&accidental&\\
+    \textbackslash{}accidental&\textbackslash{}acc&\textbf{RT}&accidental&style\\
     \hline
-    \textbackslash{}accelerando&\textbackslash{}accel&\textbf{RT} - \textbf{BE}&accelerando&\\
+    \textbackslash{}accelerando&\textbackslash{}accel&\textbf{RT} - \textbf{BE}&accelerando&tempo - abstempo - font - fattrib - fsize\\
     \hline
     \textbackslash{}accent&&\textbf{RT}&accent mark&\\
     \hline
-    \textbackslash{}accolade&\textbackslash{}accol&&accolade&\\
+    \textbackslash{}accolade&\textbackslash{}accol&&accolade configuration&\textbf{id} - \textbf{range} - type\\
     \hline
-    \textbackslash{}alter&&\textbf{ORT}&microtonal accidentals&\\
+    \textbackslash{}alter&&\textbf{ORT}&microtonal accidentals&\textbf{detune} - text\\
     \hline
     %\textbackslash{}auto&&&&\\ % A COMPLETER
     %\hline
-    \textbackslash{}bar&\textbar&&measure bar&\\
+    \textbackslash{}bar&\textbar&&measure bar&number\\
     \hline
     %\textbackslash{}barFormat&&&bar formatting&\\ % Useless tag for now ?
     %\hline
-    \textbackslash{}beam&\textbackslash{}bm&\textbf{RT} - \textbf{BE}&notes beaming&\\
+    \textbackslash{}beam&\textbackslash{}bm&\textbf{RT} - \textbf{BE}&notes beaming&dy\\
+    &&&&dy1 - dy2\\
+    &&&&dx1 - dy1 - dx2 - dy2\\
+    &&&&dx3 - dy3 - dx4 - dy4\\
     \hline
-    \textbackslash{}beamsAuto&&&auto-beaming (default)&\\
+    \textbackslash{}beamsAuto&&&auto beaming (default)&\\
     \hline
     \textbackslash{}beamsOff&&&no auto beaming&\\
     \hline
     %\textbackslash{}bembel&A COMPLETER&&&\\ % Useless tag for now ?
     %\hline
-    \textbackslash{}breathMark&&&breath mark sign&\\
+    \textbackslash{}breathMark&&&breath mark&\\
     \hline
-    \textbackslash{}clef&&&clef indication&\\
+    \textbackslash{}clef&&&clef indication&\textbf{type}\\
     \hline
-    \textbackslash{}cluster&&\textbf{RT}&cluster&\\
+    \textbackslash{}cluster&&\textbf{RT}&cluster&color - size - hdx - hdy - dx - dy\\
     \hline
     \textbackslash{}coda&&&coda sign&\\
     \hline
     %\textbackslash{}color&A COMPLETER&&&\\ % Useless tag for now ?
     %\hline
-    \textbackslash{}composer&&&composer indication&\\
+    \textbackslash{}composer&&&composer indication&\textbf{name} - pageformat\\
     \hline
-    \textbackslash{}crescendo&\textbackslash{}cresc&\textbf{RT} - \textbf{BE}&crescendo&\\
+    \textbackslash{}crescendo&\textbackslash{}cresc&\textbf{RT} - \textbf{BE}&crescendo&dm - dx1 - dx2 - dy - deltaY - thickness\\
     \hline
-    \textbackslash{}cue&&\textbf{RT}&cue notes&\\
+    \textbackslash{}cue&&\textbf{RT}&cue notes&name\\
     \hline
     \textbackslash{}daCapo&&&da capo sign&\\
     \hline
@@ -71,27 +73,27 @@
     \hline
     \textbackslash{}dalSegnoAlFine&&&dal segno al fine sign&\\
     \hline
-    \textbackslash{}decrescendo&\textbackslash{}decresc \textbackslash{}dim \textbackslash{}diminuendo&\textbf{RT}&decrescendo&\\
+    \textbackslash{}decrescendo&\textbackslash{}decresc \textbackslash{}dim \textbackslash{}diminuendo&\textbf{RT}&decrescendo&dm - dx1 - dx2 - dy - deltaY - thickness\\
     \hline
     %\textbackslash{}defineTag&&&&\\ % Useless tag for now ?
     %\hline
     %\textbackslash{}dispDur&&&&\\ % Je ne comprends pas ce qu'il fait ! % A COMPLETER
     %\hline
-    \textbackslash{}dotFormat&&\textbf{ORT}&dot formatting&\\
+    \textbackslash{}dotFormat&&\textbf{ORT}&dot formatting&dx - dy - size - dd\\
     \hline
     \textbackslash{}doubleBar&&&double measure bar&\\
     \hline
     \textbackslash{}endBar&&&end bar&\\
     \hline
-    \textbackslash{}fermata&&&fermata sign&\\
+    \textbackslash{}fermata&&\textbf{ORT}&fermata sign&type - position\\
     \hline
     \textbackslash{}fine&&&fine sign&\\
     \hline
-    \textbackslash{}fingering&&\textbf{RT}&fingering&\\
+    \textbackslash{}fingering&&\textbf{RT}&fingering&\textbf{text} - dy\\
     \hline
-    \textbackslash{}glissando&&\textbf{RT}&glissando&\\
+    \textbackslash{}glissando&&\textbf{RT}&glissando&dx1 - dy1 - dx2 - dy2 - fill - thickness - lineStyle\\
     \hline
-    \textbackslash{}grace&&\textbf{RT}&grace notes&\\
+    \textbackslash{}grace&&\textbf{RT}&grace notes&i\\
     \hline
     \textbackslash{}harmonic&&\textbf{RT}&harmonic mark&\\
     \hline
@@ -99,7 +101,7 @@
     \hline
     \textbackslash{}headsLeft&&\textbf{ORT}&noteheads at the left of the stem&\\
     \hline
-    \textbackslash{}headsNormal&&\textbf{ORT}&normal placement of noteheads&\\
+    \textbackslash{}headsNormal&&\textbf{ORT}&auto noteheads placement (default)&\\
     \hline
     \textbackslash{}headsReverse&&\textbf{ORT}&reverted placement of noteheads&\\
     \hline
@@ -107,54 +109,54 @@
 %
 % Because the table can't divide itself...
 %
-\begin{tabularx}{\linewidth}{p{3cm}p{5cm}lll}
+\begin{tabularx}{\linewidth}{p{3cm}p{4.5cm}p{3cm}p{5.5cm}l}
     \hline
-    \textbf{Tag}&\textbf{Shortcut}&\textbf{Form support}&\textbf{Notation element}&\textbf{ %Parameters
-    }\\
+    \textbf{Tag}&\textbf{Shortcut}&\textbf{Form support}&\textbf{Notation element}&\textbf{Parameters}\\
     \hline
     \textbackslash{}headsRight&&\textbf{ORT}&noteheads at the right of the stem&\\
     \hline
-    \textbackslash{}instrument&\textbackslash{}instr&&instrument specification&\\
+    \textbackslash{}instrument&\textbackslash{}instr&&instrument specification&\textbf{name} - midiname - transp\\
     \hline
-    \textbackslash{}intens&\textbackslash{}i&&nuance marking&\\
+    \textbackslash{}intensity&\textbackslash{}i \textbackslash{}intens&&nuance marking&\textbf{type} - value\\
     \hline
-    \textbackslash{}key&&&key signature&\\
+    \textbackslash{}key&&&key signature&\textbf{key}\\
     \hline
-    \textbackslash{}label&&\textbf{ORT}&textual label&\\
+    \textbackslash{}label&&\textbf{ORT}&textual label&\textbf{text}\\
     \hline
-    \textbackslash{}lyrics&&\textbf{RT}&lyrics&\\
+    \textbackslash{}lyrics&&\textbf{RT}&lyrics&\textbf{text} - dy\\
     \hline
-    \textbackslash{}marcato&&\textbf{RT}&marcato mark&\\
+    \textbackslash{}marcato&&\textbf{RT}&marcato mark&position\\
     \hline
-    \textbackslash{}mark&&&textual mark&\\
+    \textbackslash{}mark&&&textual mark&\textbf{text}\\
     \hline
     %\textbackslash{}merge&&&&\\ % Useless tag for now ?
     %\hline
-    \textbackslash{}meter&&&meter indication&\\
+    \textbackslash{}meter&&&meter indication&\textbf{type} - size - autoBarLines\\
     \hline
-    \textbackslash{}mordent&\textbackslash{}mord&\textbf{RT}&mordent&\\
+    \textbackslash{}mordent&\textbackslash{}mord&\textbf{RT}&mordent sign&mode - adx - ady\\
     \hline
-    \textbackslash{}newLine&&&force a new line&\\
+    \textbackslash{}newLine&&&force a new line&dy\\ % Does param dy work ?
     \hline
     \textbackslash{}newPage&&&force a new page&\\
     \hline
-    \textbackslash{}newSystem&&&force a new system&\\
+    \textbackslash{}newSystem&&&force a new system&dy\\ % Does param dy work ?
     \hline
-    \textbackslash{}noteFormat&&\textbf{ORT}&notes formatting&\\
+    \textbackslash{}noteFormat&&\textbf{ORT}&notes formatting&style\\
     \hline
-    \textbackslash{}octava&\textbackslash{}oct&\textbf{ORT}&octava sign&\\ % Does it work ?
+    \textbackslash{}octava&\textbackslash{}oct&\textbf{ORT}&octava sign&\textbf{i}\\ % Does it work ?
     \hline
-    \textbackslash{}pageFormat&&&page format indication&\\
+    \textbackslash{}pageFormat&&&page format indication&\textbf{w} - \textbf{h} - lm - tm - rm - bm\\
+    &&&&\textbf{type} - lm - tm - rm - bm\\
     \hline
-    \textbackslash{}pizz&&\textbf{RT}&pizzicato&\\
+    \textbackslash{}pizzicato&\textbackslash{}pizz&\textbf{RT}&pizzicato sign&type\\
     \hline
-    \textbackslash{}repeatBegin&&&repeat begin bar&\\
+    \textbackslash{}repeatBegin&&&repeat begin bar&num\\
     \hline
-    \textbackslash{}repeatEnd&&&repeat end bar&\\
+    \textbackslash{}repeatEnd&&&repeat end bar&num\\
     \hline
-    \textbackslash{}restFormat&&\textbf{ORT}&rests formatting&\\
+    \textbackslash{}restFormat&&\textbf{ORT}&rests formatting&posy\\
     \hline
-    \textbackslash{}ritardando&\textbackslash{}rit&\textbf{RT} - \textbf{BE}&ritardando&\\
+    \textbackslash{}ritardando&\textbackslash{}rit&\textbf{RT} - \textbf{BE}&ritardando&tempo - abstempo - font - fattrib - fsize\\
     \hline
     \textbackslash{}segno&&&segno sign&\\
     \hline
@@ -162,62 +164,61 @@
     \hline
     \textbackslash{}slur&\textbackslash{}sl&\textbf{RT} - \textbf{BE}&slur&\\
     \hline
-    \textbackslash{}space&&&space&\\
+    \textbackslash{}space&&&space insertion&\textbf{dd}\\
     \hline
     %\textbackslash{}special&&&&\\ % What does it do ? % A COMPLETER
     %\hline
-    \textbackslash{}stacc&&\textbf{RT} - \textbf{BE}&staccato&\\
+    \textbackslash{}staccato&\textbackslash{}stacc&\textbf{RT} - \textbf{BE}&staccato sign&type\\
     \hline
-    \textbackslash{}staff&&&staff assignation&\\
+    \textbackslash{}staff&&&staff assignation&\textbf{id} - dy\\
     \hline
-    \textbackslash{}staffFormat&&&staff formatting&\\
+    \textbackslash{}staffFormat&&&staff formatting&style - size - lineThickness\\
     \hline
     \textbackslash{}staffOff&&&disable staff display&\\
     \hline
     \textbackslash{}staffOn&&&enable staff display&\\
     \hline
-    \textbackslash{}stemsAuto&&\textbf{ORT}&auto stem direction (default)&\\
+    \textbackslash{}stemsAuto&&\textbf{ORT}&auto stem direction (default)&length\\
     \hline
-    \textbackslash{}stemsDown&&\textbf{ORT}&force stems down&\\
+    \textbackslash{}stemsDown&&\textbf{ORT}&force stems down&length\\
 	\hline
     \textbackslash{}stemsOff&&\textbf{ORT}&no stems&\\
     \hline
-    \textbackslash{}stemsUp&&\textbf{ORT}&force stems up&\\
+    \textbackslash{}stemsUp&&\textbf{ORT}&force stems up&length\\
     \hline
-    \textbackslash{}symbol&\textbackslash{}s&\textbf{ORT}&insert an image&\\
+    \textbackslash{}symbol&\textbackslash{}s&\textbf{ORT}&insert an image&\textbf{file} - size - position - w - h\\
     \hline
 \end{tabularx}
 %
 % Because the table can't divide itself...
 %
-\begin{tabularx}{\linewidth}{p{3cm}p{5cm}lll}
+\begin{tabularx}{\linewidth}{p{3cm}p{4.5cm}p{3cm}p{5.5cm}l}
     \hline
-    \textbf{Tag}&\textbf{Shortcut}&\textbf{Form support}&\textbf{Notation element}&\textbf{ %Parameters
-    }\\
+    \textbf{Tag}&\textbf{Shortcut}&\textbf{Form support}&\textbf{Notation element}&\textbf{Parameters}\\
     \hline
-    \textbackslash{}systemFormat&&&system formatting&\\ % Does it work ?
+    \textbackslash{}systemFormat&&&system formatting&staves - dx\\ % Does it work ?
     \hline
-    \textbackslash{}tempo&&&tempo mark&\\
+    \textbackslash{}tempo&&&tempo mark&\textbf{tempo} - bpm - dy\\
     \hline
     \textbackslash{}tenuto&\textbackslash{}ten&\textbf{RT}&tenuto mark&\\ % Does it work ?
     \hline
-    \textbackslash{}text&\textbackslash{}t&\textbf{ORT}&text annotation&\\
+    \textbackslash{}text&\textbackslash{}t&\textbf{ORT}&text annotation&\textbf{text} - dy\\
     \hline
     \textbackslash{}tie&&\textbf{RT} - \textbf{BE}&tie notes&\\
     \hline
-    \textbackslash{}title&&&score title&\\
+    \textbackslash{}title&&&score title&\textbf{name} - pageformat - textformat\\
     \hline
-    \textbackslash{}tremolo&\textbackslash{}trem&\textbf{RT}&tremolo sign&\\
+    \textbackslash{}tremolo&\textbackslash{}trem&\textbf{RT}&tremolo sign&dur\\
     \hline
-    \textbackslash{}trill&&\textbf{RT}&trill sign&\\
+    \textbackslash{}trill&&\textbf{RT}&trill sign&mode - adx - ady - tr - anchor\\
     \hline
-    \textbackslash{}tuplet&&\textbf{RT}&tuplet mark&\\
+    \textbackslash{}tuplet&&\textbf{RT}&tuplet mark&\textbf{format} - dy1 - dy2 - lineThickness - bold - textSize\\
     \hline
-    \textbackslash{}turn&&\textbf{RT}&turn&\\
+    \textbackslash{}turn&&\textbf{RT}&turn sign&mode - adx - ady\\
     \hline
-    \textbackslash{}units&&&unit spec&\\
+    \textbackslash{}units&&&unit specification&\textbf{type}\\
     \hline
-    \textbackslash{}volta&&\textbf{RT} - \textbf{BE}&volta mark&\\
+    \textbackslash{}volta&&\textbf{RT} - \textbf{BE}&volta mark&\textbf{pass} - \textbf{m} - format\\
     \hline
 \end{tabularx}
 
@@ -225,6 +226,7 @@
 
 \textbf{RT} - range-tag \\
 \textbf{ORT} - optional range-tag \\
-\textbf{BE} - can be under [\textbackslash{}\emph{tagname}Begin ... \textbackslash{}\emph{tagname}End] form instead of [\textbackslash{}\emph{tagname}(...)] form
+\textbf{BE} - can be under [\textbackslash{}\emph{tagname}Begin ... \textbackslash{}\emph{tagname}End] form instead of [\textbackslash{}\emph{tagname}(...)] form\\
+Required params are in \textbf{bold}
 
 \end{document}
