@@ -1018,7 +1018,7 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
-			else if (!strcmp(name,"intens") || !strcmp(name,"i"))
+			else if (!strcmp(name,"intensity") || !strcmp(name,"intens") || !strcmp(name,"i"))
 			{
 				ARIntens * tmp = new ARIntens;
 				mTags.AddHead(tmp);
@@ -1136,7 +1136,7 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
-			else if (!strcmp(name, "pizz"))
+			else if (!strcmp(name, "pizzicato") || !strcmp(name, "pizz"))
 			{
 				ARPizz * tmp = new ARPizz;
 				mTags.AddHead(tmp);
@@ -1245,7 +1245,7 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
-			else if(!strcmp(name,"stacc"))
+			else if(!strcmp(name,"staccato") || !strcmp(name,"stacc"))
 			{
 				ARStaccato * tmp = new ARStaccato;
 				mTags.AddHead(tmp);
