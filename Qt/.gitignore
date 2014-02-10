@@ -8,3 +8,4 @@ GuidoQtFontViewer/Makefile
 GuidoSceneComposer/Makefile
 GuidoServer/guidohttpserver
 guido2image/Makefile
+package/GuidoQtApplsMacOSX*
