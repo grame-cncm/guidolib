@@ -10,10 +10,14 @@
 \usepackage{enumitem}
 \usepackage{hyperref}
 \usepackage{balance}
-%\usepackage{url}
+\usepackage{natbib}
+
+
+\newenvironment{code}		{\vspace{-2mm} \fontsize{8.5pt}{12pt}\selectfont \verbatim}{\endverbatim\vspace{-2mm}}
+
+\newenvironment{mcode}		{\vspace{-2mm} \fontsize{10pt}{12pt}\selectfont \verbatim}{\endverbatim\vspace{-2mm}}
 
 \newcommand{\footurl}[1]	{\footnote{\url{#1}}}
-\usepackage{natbib}
 \newcommand{\icode}[1]		{{\small \texttt{#1}}}
 \newcommand{\verburl}[1]{
 \begin{quote}
@@ -23,7 +27,9 @@
 \endgroup
 \end{quote}
 }
-\newcommand{\guidosize}{7pt}
+
+\newcommand{\guido}		{\textsc{Guido}}
+\newcommand{\guidosize}	{8pt}
 
 %\title{Providing A RESTful Music Notation Web API}
 \title{Déploiement des services du moteur de rendu de partitions GUIDO sur Internet}
@@ -40,392 +46,251 @@
 
 \begin{abstract}
 
-%The Guido HTTP Server is a RESTful server that exposes many elements of the public GUIDO Engine API to clients.  This article resumes the core tenants of the REST architecture and goes on to explain the functioning of the GUIDO server with several examples, concluding with potential applications of the server.
-Le projet GUIDO regroupe plusieurs éléments relevant de la gravure musicale dont un langage textuel pour représenter la musique, un engin qui traduit ce langage en partition musicale et un ensemble d'outils permettant de travailler avec le langage GUIDO et les résultats de sa compilation. Cet article a pour but d'exposer un nouveau serveur HTTP désormais distribué avec le projet qui permet d'accéder à l'API de la librairie GUIDOEngine par le biais d'identifiants uniformes de ressource (URI). Après avoir expliqué le style d'architecture \emph{representational state transfer} (REST) sur lequel se repose le serveur, l'article montre la manière dont le serveur traduit l'API C++ de GUIDO en API web. L'article se résume avec une discussion sur la cohérence de l'architecture REST par rapport à l'élaboration d'une interface de programmation (API) web.
+La librairie \guido\ embarque un moteur de rendu de partitions musicales et fournit une API de haut niveau pour un ensemble de services liés au rendu de partition. Cette librairie est désormais embarquée dans un serveur HTTP qui permet d'accéder à son interface par le biais d'identifiants de ressource uniformes (URI). Après avoir décrit le style d'architecture \emph{representational state transfer} (REST) sur lequel repose le serveur, l'article montre comment l'API C/C++ de la librairie est rendue accessible sous forme de requêtes HTTP.
+
+%Le projet GUIDO regroupe plusieurs éléments relevant de la gravure musicale dont un langage textuel pour représenter la musique, un engin qui traduit ce langage en partition musicale et un ensemble d'outils permettant de travailler avec le langage GUIDO et les résultats de sa compilation. Cet article a pour but d'exposer un nouveau serveur HTTP désormais distribué avec le projet qui permet d'accéder à l'API de la librairie GUIDOEngine par le biais d'identifiants uniformes de ressource (URI). Après avoir expliqué le style d'architecture \emph{representational state transfer} (REST) sur lequel se repose le serveur, l'article montre la manière dont le serveur traduit l'API C++ de GUIDO en API web. L'article se résume avec une discussion sur la cohérence de l'architecture REST par rapport à l'élaboration d'une interface de programmation (API) web.
 \end{abstract}
 
 
 %---------------------------------------
 \section{L'édition musicale sur Internet}\label{section:online-musical-editing}
-%\section{Online musical editing}\label{section:online-musical-editing}
-Pendant les dix dernières années, plusieurs outils de gravure musicale ont été développés selon un modèle client-serveur à destination d'internautes et d'usagers de \emph{cloud computing}. Le serveur GUIDO allie la gravure musicale sur Internet aux principes de l'architecture REST (élaborés dans la section~\ref{section:rest}) afin d'exposer l'API du GUIDOEngine \cite{guido} par le biais d'URIs. Cette section a pour but de survoler plusieurs catégories d'outils d'édition musicale qui existent sur la toile. Elle dégage quelques thématiques sur lesquelles se basent les services actuellement disponibles et montre comment le serveur GUIDO se situe dans le paysage de la gravure musicale sur Internet.
-%As client-server models for the processing, visualizing and analysis of data become more widespread in mobile computing (WordPress, YouTube, Instagram, SoundCloud), music engraving has entered the fray with various web-based score editing services.  This section explores several categories of online musical editing services, concluding with a discussion of general trends in current technologies and the main problems that the tool outlined in this paper -- the GUIDO HTTP server -- seeks to address.
-%\subsection{Online music notation editors}\label{subsection:editor}
-\subsection{Editeurs de musique sur Internet}\label{subsection:editor}
-%As of the writing of this paper (2014), there are three main online musical score editors -- Noteflight, Melodus and Scorio.  Noteflight and Melodus seek to provide a full-featured music editing platform online, similar to Google Documents' role in the world of office suites.  Scorio is a hybrid tool that mixes rudimentary layout via a mobile editing platform with publishing-quality layout via JIT compilation through LilyPond when possible.
-Au moment de la parution de cet article, il y a trois outils majeurs d'édition musicale web -- Noteflight\footnote{\url{http://www.noteflight.com}}, Melodus\footnote{\url{http://www.melod.us}} et Score\footnote{\url{https://scorio.com}}. Noteflight et Melodus fournissent un environment immersif d'édition musicale sur Internet comparable à Finale ou Sibelius. Scorio est un outil hybride qui utilise des algorithmes de mise en page élémentaires pour sa plate-forme mobile et propose le téléchargement des documents de haute qualité compilés avec GNU LilyPond.
-%\subsection{Online score sharing software}\label{subsection:sharing}
-\subsection{Outils de partage de partitions sur Internet}\label{subsection:sharing}
-Plusieurs outils musicaux dont Sibelius\footnote{\url{http://www.sibelius.com}}, Muse\-Score \cite{musescore}, Maestro\footnote{\url{http://www.musicaleditor.com}} et Capriccio\footnote{\url{http://cdefgabc.com}}, proposent des services où l'on peut partager sur Internet des partitions créées à partir de ces logiciels. Les services permettent le téléchargement, la lecture et parfois la sonorisation de ces partition. Capriccio propose une application web écrite en Java qui reproduit les aspects essentiels de son éditeur principal alors que MuseScore, Sibelius et Maestro permettent la synchronisation automatique des partitions avec leurs représentations MIDI.
-%Several music tools, such as Sibelius, MuseScore \cite{musescore}, Maestro, and Capriccio, offer online services where scores composed using this software can be uploaded, browsed, and downloaded online.  Capriccio, can be run online in limited form as a Java applet.  MuseScore, Sibelius, and Maestro allow for automatic score/MIDI synchronisation of embedded files.
-%\subsection{Online music JIT compilation services}\label{subsection:jit}
-\subsection{Services de compilation JIT sur Internet}\label{subsection:jit}
-%WebLily, LilyBin, and OMET are all JIT compilation services that run the LilyPond executable to compile uploaded code and return embedded SVG, canvas or PDF visualizations depending on the tool.  The GUIDO note server \cite{renz98} uses libGUIDOEngine to compile Guido Music Notation Format \cite{hoos98} strings into images.
-WebLily\footnote{\url{http://weblily.net}}, LilyBin\footnote{\url{http://www.lilybin.com}} et OMET\footnote{\url{http://www.omet.ca}} proposent tous la compilation JIT de partitions LilyPond qui sont visualisées en SVG, PDF et/ou HTML 5 canvas selon l'outil. Le \emph{GUIDO note server} \cite{renz98} utilise le GUIDOEngine pour compiler des document de Guido Music Notation Format \cite{hoos98} et sortir des représentations en format PNG.
-%\subsection{A RESTful alternative}\label{subsection:restful}
-\subsection{Une alternative RESTful}\label{subsection:restful}
-Tous les outils exposés ci-dessous permettent la création et la visualisation des partitions par le biais de plusieurs méthodes dont WYSIWYG, texte, MusicXML etc.. En revanche, ils ne sont pas bien adaptés à des exchanges d'information rapides entre un serveur et un client. D'une part, ceci provient du fait que la plupart de logiciels de gravure musicale ne proposent pas d'API publique et ne fournissent pas d'information au-delà d'une représentation visuelle de la partition. Le serveur GUIDO résout ce problème en proposant une API web qui n'est qu'une passerelle entre l'API GUIDO  \cite{daudin09a} et le client, eliminant ainsi les effets de bord associés aux applications avec de multiples composants qui interagissent. Le serveur ne fournit que les valeurs retournées de l'API GUIDO, c'est-à-dire des visualisations des partitions ainsi que des informations sur le nombre pages dans une partition, sa durée et la répartition de ses éléments musicaux sur la page et dans le temps. Le serveur GUIDO comble donc une lacune dans le paysage d'outils de gravure musicale sur Internet en permettant de rapides interactions client-serveur sans effet de bord.
+Pendant les dix dernières années, plusieurs outils de gravure musicale ont été développés selon un modèle client-serveur, à destination d'utilisateurs finaux et d'usagers du \emph{cloud computing}. Le serveur GUIDO allie la gravure musicale sur Internet aux principes de l'architecture REST (élaborés dans la section~\ref{section:rest}) afin d'exposer l'API de la librairie \guido\ \cite{guido} \cite{daudin09a} par le biais d'URIs. Après un survol des outils d'édition musicale en ligne, nous dégagerons les thématiques sur lesquelles se basent les services actuellement disponibles et nous situerons le serveur \guido\ dans le paysage de la gravure musicale sur Internet.
 
-%All of the tools describe above facilitate the creation or visualization of scores via a variety of input methods (WYSIWYG, text, MusicXML etc.) but are not designed to facilitate low-latency server-client exchanges of score-related information.  This is, in part, due to the fact that the majority of automated music engraving programs do not offer public APIs and are not designed to provide end-user information other than visual representations of scores and various non-human-readable file formats.  The GUIDO Engine API \cite{daudin09a} seeks to remedy this issue by offering a public API that reports information about scores such as the number of pages, duration, and the placement of musical events both in time and on the page.  The representational state transfer \cite{Fielding00}, or REST architectural style, is well suited for exposing this public API via the web because of several features such as its use of both data and metadata so that data can be decoded by clients, its insistence on a uniform interface, and its stateless functioning.  This is further discussed in Section ~\ref{section:guido-restful} and Section ~\ref{section:guido-api}.  The GUIDO HTTPD server thus fills a gap in online score editing technology similar to the gap filled by Atom web feeds in news services.
+\subsection{Editeurs de musique sur Internet}\label{subsection:editor}
+Il y a actuellement trois outils majeurs d'édition musicale sur le web -- Noteflight\footnote{\url{http://www.noteflight.com}}, Melodus\footnote{\url{http://www.melod.us}} et Score\footnote{\url{https://scorio.com}}. Noteflight et Melodus fournissent un environment immersif d'édition musicale sur Internet comparable à Finale ou Sibelius. Scorio est un outil hybride qui utilise des algorithmes de mise en page élémentaires pour sa plate-forme mobile et propose le téléchargement des documents de haute qualité compilés avec GNU LilyPond.
+
+\subsection{Outils de partage de partitions sur Internet}\label{subsection:sharing}
+Plusieurs outils musicaux dont Sibelius\footnote{\url{http://www.sibelius.com}}, Muse\-Score \cite{musescore}, Maestro\footnote{\url{http://www.musicaleditor.com}} et Capriccio\footnote{\url{http://cdefgabc.com}}, proposent des services de partage sur Internet des partitions créées à partir de ces logiciels. Ces services permettent le téléchargement, la lecture et parfois le rendu sonore de ces partitions. Capriccio propose une application web écrite en Java qui reproduit les aspects essentiels de son éditeur principal alors que MuseScore, Sibelius et Maestro permettent la synchronisation automatique des partitions avec leurs représentations MIDI.
+
+\subsection{Services de compilation JIT sur Internet}\label{subsection:jit}
+WebLily\footnote{\url{http://weblily.net}}, LilyBin\footnote{\url{http://www.lilybin.com}} et OMET\footnote{\url{http://www.omet.ca}} proposent tous la compilation JIT de partitions LilyPond qui sont visualisées en SVG, PDF et/ou canvas HTML 5, selon l'outil. Le \emph{\guido\ Note Server} \cite{renz98} utilise le moteur \guido\ pour compiler des documents au format GMN (Guido Music Notation Format) \cite{hoos98} et calcule des images PNG.
+
+\subsection{Une alternative RESTful}\label{subsection:restful}
+Tous les outils exposés ci-dessous permettent la création et la visualisation de partitions par le biais de différentes méthodes d'entrée (texte, MusicXML, etc.). En revanche, ils ne sont pas adaptés à des exchanges d'information dynamiques entre un serveur et un client, du fait qu'ils ne proposent pas d'API publique et ne fournissent pas d'information au-delà d'une représentation graphique de la partition. Le serveur \guido\ résout ce problème en fournissant une API HTTP, qui agit comme une passerelle entre le client HTTP et l'API C/C++ de la librairie. Le serveur fournit donc aussi bien des représentations graphiques de la partition qu'un ensemble d'information liées à la partition : nombre pages, durée, répartition des éléments musicaux sur la page et dans le temps, représentation MIDI...
+Le serveur \guido\ comble donc une lacune dans le paysage des outils de gravure musicale sur Internet en fournissnt à la fois des services de rendu de partition et en permettant le déploiement d'applications basées sur ces services.
 
 %---------------------------------------
 \section{Representational state transfer}\label{section:rest}
-%Representational state transfer \cite{Fielding00} is an ubiquitous contemporary server architecture style \cite{richardson2008restful}. The REST architecture is elaborated as a response to existing hypermedia systems and is intended as a set of constraints to facilitate exchange in these systems.  The architectural style is based on a traditional \emph{client-server} model with the design trade-off that the server is \emph{stateless}, meaning that all of the information required to process a request is contained in the request itself and the server does not need to store intermediary states.  In order to speed up interaction with the server, the REST architecture calls for \emph{client-side caching} of data, which can potentially eliminate certain redundant server requests.  It also calls for a \emph{uniform interface}, harmonizing all applications' interactions with the server at the expense of application-specific interaction models that could speed up exchanges.  \emph{Layering} is possible in this model, with intermediary servers translating various forms of shorthand into longer or less human-readable server commands.  With this layering comes the constraint that exchanging agents cannot ``see'' beyond the layer with which they are communicating.  Like other aspects of REST, this is intended to encapsulate all information in a single request made to a single agent.  As the burden on the client to be server-compliant is high in REST, the architectural style provides an optional constraint of servers' offering downloadable \emph{code-on-demand} (scripts, applets, etc.) to ease client-side software development.\par
-Le serveur GUIDO se base sur une architecture de \emph{representational state transfer} \cite{Fielding00}, ou REST. REST est un style d'architecture de serveur largement utilisé pour la construction de serveurs web. L'architecture REST se repose sur le modèle client-serveur classic, rajoutant plusieurs contraintes pour que ça devienne \og{}orientée resource\fg{}, c'est-à-dire que le fonctionnement du serveur est optimisé pour transmettre des informations sur un ensemble d'éléments \cite{richardson2008restful}. Un aspect essentiel d'un serveur REST est son opération \emph{sans état}, c'est-à-dire que toutes les informations requises pour traiter une requête se trouvent dans la requête elle même. Autrement dit, le serveur ne garde pas d'informations par rapport à ses états précédents. Ça veut dire, par exemple, qu'une ressource sur le serveur ne peut jamais être modifiée par le client -- une modification équivaut au remplacement d'une ressource avec une autre \cite{richardson2008restful}. Plusieurs conventions \cite{richardson2008restful} sont proposés pour structurer les requêtes en forme d'URI afin qu'elles soient faciles à construire et décoder. Pour accélérer des interactions entre le serveur et le client, l'architecture REST permet la mise en cache de certains elements du côté du client et du serveur. Le serveur doit proposer une interface uniforme en harmonisant sa syntaxe d'accès et en proposant les mêmes services à tous les clients qui s'en servent.\par
-%Certain specific architectural elements are put into place in order to facilitate the above-described architecture.  In addition to the transferring of \emph{data}, REST calls for the transferring of \emph{meta-data} about a server response.  This allows for the client side to have information about how to de-encode the response without needing to send specific de-encoding instructions.  REST encourages resource requests that favor the retrieval of conceptually relevant entities rather than specific entities at a point in time.  For example, a request to the server for ``best movies of 1964'' or ``weather in Lyon'' should change with time rather than pointing to an arbitrary entity responding to this request at a given time.\par
-Quelques contraintes structurelles sont élaborées afin de pouvoir facilement construire des serveurs selon cette architecture. La contrainte la plus importante est la séparation de données et de méta-données. Cela permet aux clients de savoir l'encodage d'une réponse quelconque et donc de la décoder.\par
-%A server compliant with the REST architecture is said to be a RESTful server.
-Un serveur qui met en \oe{}uvre les recommandations REST s'appèle un serveur RESTful.
-%\section{The GUIDO HTTP server : an overview}\label{section:overview}
-\section{Présentation du serveur GUIDO HTTP}\label{section:overview}
-%The GUIDO Hypertext Transfer Protocol Daemon (HTTP) server is an austerely RESTful server that compiles strings written in the GUIDO Music Notation (GMN) Format and reports to the client several representations of this data.  It accepts user requests via two main methods of the HTTP protocol: POST, used to place elements on the server, and GET, used to retrieve information about elements on the server.
-Le serveur GUIDO est un serveur RESTful qui compile des documents écrits en format GUIDO Music Notation (GMN) et renvoie au client plusieurs représentations de la partition compilées à partir du GMN. Il accepte des requêtes d'utilisateur par le biais de deux méthodes du protocole HTTP : POST pour mettre des éléments sur le serveur et GET pour récupérer des informations sur les partitions dans le cache du serveur.
-%\subsection{The POST method}\label{subsection:post}
+
+Le serveur \guido\ est basé sur une architecture de type REST (\emph{REpresentational State Transfer}) \cite{Fielding00}. Ce type d'architecture est largement utilisé pour l'élaboration de services Internet et repose sur un modèle client-serveur classique, \og{}orientée resource\fg{}, c'est-à-dire que le fonctionnement du serveur est optimisé pour la transmission d'informations relatives à des \emph{ressources} \cite{richardson2008restful}. Une des caractéristiques essentielles d'un serveur REST repose sur un fonctionnement \emph{sans état} : toutes les informations requises pour traiter une requête se trouvent dans la requête elle même. Cela signifie, par exemple, qu'une ressource sur le serveur ne peut jamais être modifiée par un client -- une modification équivaut au remplacement d'une ressource par une autre. 
+
+Plusieurs conventions sont proposés pour structurer les requêtes en forme d'URI afin qu'elles soient plus faciles à construire et décoder. Pour accélérer les interactions entre le serveur et le client, l'architecture REST permet la mise en cache de certains éléments, tant du côté du client que serveur. Le serveur doit proposer une interface uniforme en harmonisant sa syntaxe d'accès et en proposant les mêmes services à tous les clients qui l'utilisent.
+
+Un serveur qui met en \oe{}uvre les recommandations REST s'appelle un serveur RESTful.
+
+\section{Le serveur Guido HTTP}\label{section:overview}
+
+Le serveur \guido\ est un serveur RESTful qui compile des documents au format GMN (Guido Music Notation) et renvoie différentes représentations de la partition calculée à partir du code GMN. Il accepte des requêtes par le biais de deux méthodes du protocole HTTP : POST pour envoyer des partitions au format GMN au serveur, et GET pour interroger ces partitions ou pour en demander différentes représentations.
+
 \subsection{La méthode POST}\label{subsection:post}
-%POST, as implemented by the GUIDO server, is RESTful insofar as it does not save any information about the user state and only saves information sent by the user.\par
-L'implémentation de POST dans le serveur GUIDO est RESTful dans la mesure où il ne garde pas d'information par rapport aux clients et ne stocke que les documents GMN qu'on lui envoie.
-%Assuming that a GUIDO HTTP server is running on the subdomain \url{http://guido.grame.fr} on port \break 8000, a POST request containing GMN code \verb=[a b c d]= is sent via \verb=curl= as follows:
-Admettons qu'un serveur GUIDO HTTP tourne sur le site \url{http://guido.grame.fr} au port 8000, une requête poste avec le code GMN \verb=[a b c d]= y serait envoyé de la manière suivante :
-\begin{quote}
-\begingroup
-\fontsize{\guidosize}{12pt}\selectfont
-\begin{verbatim}
+L'implémentation de POST dans le serveur \guido\ est RESTful dans la mesure où il ne garde pas d'information par rapport aux clients et ne stocke que les documents GMN qu'on lui envoie.
+Supposons qu'un serveur \guido\ HTTP fonctionne sur le site \url{http://guido.grame.fr} sur le port 8000, une requête POST avec le code GMN \verb=[a b c d]= pourrait être envoyée de la manière suivante :
+\begin{code}
 curl -d"data=[a b c d]" http://guido.grame.fr:8000
-\end{verbatim}
-\endgroup
-\end{quote}
-%\verburl{curl -d"data=[a b c d]" http://guido.grame.fr:8000}
-%Assuming that the GMN code is valid, response, in JSON, gives the user a unique identifier generated using an SHA-1 tag corresponding to the input file.  This ensures that the server will not store the same information multiple times:
-Si le code GMN est valide, une réponse en JSON est envoyé à l'utilisateur avec un identifiant unique qui correspond au GMN.
-\begin{quote}
-\begingroup
-\fontsize{\guidosize}{12pt}\selectfont
-\begin{verbatim}
+\end{code}
+
+Pour un code GMN valide, une réponse est renvoyée au format JSON \cite{json}, avec un identifiant unique qui correspond au code GMN.
+\begin{code}
 {
   "ID": "07a21ccbfe7fe453462fee9a86bc806c8950423f"
 }
-\end{verbatim}
-\endgroup
-\end{quote}
-Cet identifiant est généré via l'algorithme de hachage cryptographique SHA-1 \cite{sha1} qui transforme des documents numérisés en clé de 160 bits. L'algorithme comporte une très faible chance ($\frac{1}{2^{63}}$) de \og{}collision\fg{}, ce qui veut dire que c'est presque impossible que deux documents aboutissent à la même clé SHA-1. 
+\end{code}
+Cet identifiant est généré via l'algorithme de hachage cryptographique SHA-1 \cite{sha1} qui transforme des documents numérisés en clé de 160 bits. La probabilité de collision de deux clés est très faible ($\frac{1}{2^{63}}$), et l'on peut donc considérer que cette clé constitue un identificateur unique. Ce type d'identification est, par exemple, utilisé par Git \cite{scott2009pro}, le système de gestion de versions distribué.
 
-%This is the server's internal representation of the GMN code and used for all subsequent requests to the server.  To access it, it is appended onto the URI.  The following is a simple request using the SHA-1 tag:
-La clé SHA-1 est la représentation interne du GMN qui est utilisée pour toutes les requêtes subséquentes au serveur sur une partition. Dans l'exemple suivant, on accède à une partition en faisant référence à sa clé SHA-1. La clé est désormais abrégée <key> pour faciliter la lecture.
-\begin{quote}
-\begingroup
-\fontsize{\guidosize}{12pt}\selectfont
-\begin{verbatim}
-curl http://guido.grame.fr:8000/<key>
-\end{verbatim}
-\endgroup
-\end{quote}
-%It results in the image seen in Figure~\ref{fig:figure1}.
-Sans d'autres informations dans l'URL, l'objet de retour par défaut se trouve dans la Figure~\ref{fig:figure1}.
+La clé SHA-1 est la représentation interne du code GMN qui est utilisée pour toutes les requêtes ultérieure. Dans l'exemple suivant, on accède à une partition en faisant référence à sa clé SHA-1. Cette clé sera désormais abrégée en \icode{<key>} pour faciliter la lecture.
+\begin{mcode}
+  http://guido.grame.fr:8000/<key>
+\end{mcode}
+
+Sans autre information dans l'URL, l'objet de retour par défaut est illustré par la Figure~\ref{fig:figure1}.
 \begin{figure}[h]
   \centering
-    \includegraphics[width=0.5\textwidth]{figure1}
+    \includegraphics[width=0.65\columnwidth]{figure1}
   \cprotect\caption{\label{fig:figure1}Score with SHA-1 tag \verb=<key>=.}
 \end{figure}
 
-Or, l'obligation de passer par une clé SHA-1 afin d'accéder aux informations sur une partition n'est pas strictement RESTful dans la mesure où l'on ne peut pas à la fois envoyer une partition au serveur et récupérer des informations sur la partition. Cette décision vient d'un souci dans des serveurs RESTful de séparer les fonctionnements POST et GET \cite{richardson2008restful}. La clé SHA-1 minimise la déviation du style RESTful tout en proposant un point d'accès unique à la partition escomptée, comme si on y mettait le GMN de la partition. %Cette convention d'utiliser des caches afin d'éviter de multiples téléchargements est considérée RESTful pourvu que l'information n'est pas changée une fois téléchargée au serveur.
+Pour un fonctionnement totalement RESTful, le code GMN devrait être fournit avec toute requête le concernant. Dans la pratique, on peut considérer que la clé SHA-1 remplace ce code sans effet de bord. Son utilisation minimise la déviation du style RESTful tout en proposant un point d'accès unique à la partition. 
 
-%\subsection{The GET method}\label{subsection:get}
 \subsection{La méthode GET}\label{subsection:get}
-Une requête GET récupère des informations sur une partition stockée sur le serveur. Le type de retour principal est JSON pour la transmission des informations sur une partition. Le format MIDI est utilisé pour une représentation audio de la partition et PNG, JPEG et SVG sont utilisés pour une representation visuelle. L'utilisation du HTTP, qui permet d'envoyer des méta-données, est conforme à la recommendation RESTful d'envoyer dans une réponse le contenu et des indices pour décoder le contenu \cite{richardson2008restful}.
-\subsection{Interface uniforme}
-Le style RESTful précise que l'interface du serveur doit être uniforme, c'est-à-dire que les opérations qu'il execute doit être pareilles pour chaque resource sur le serveur et que ces opérations sont communément connues et comprises. L'interface HTTP fournit plusieurs méthodes qui permettent de construire une interface uniforme, mais GET et POST sont répandues et existent dans la quasi-intégralité d'applications client. D'autres opérations plus exotiques, comme PUT ou DELETE, ne sont pas actualisées dans le serveur pour que le fonctionnement complet soit accessible au plus grand nombre d'applications client.
-%GET requests query the server for information about scores. The main return type is JSON for all queries related to information about a score, MIDI for midi realizations of the score, and PNG for all queries asking for visual representations of the score itself.  The latter is also possible in JPEG and SVG.  All return types are specified in meta-data as per REST guidelines (see Section~\ref{section:rest}).\par
-%---------------------------------------
-\begin{comment}
-\section{The GUIDO HTTP server as a RESTful server}\label{section:guido-restful}
-To summarize the main tenants of a restful posited by Fielding \cite{Fielding00}, a restful architecture implements the following design features :
-\begin{enumerate}[noitemsep]
-\item Client-Server Interaction
-\item Stateless
-\item Client-Cache
-\item Uniform Interface
-\item Layered System
-\item Code-on-Demand (optional)
-\end{enumerate}
-The GUIDO server implements all architectural elements of a RESTful server.  Its design also encourages client-side RESTful practices.  The following subsections treat each criteria above individually, concluding with a  discussion how the GUIDO server uses HTTP as well as a comparison to previously-discussed web-based musical engraving services.
-\subsection{Client-Server}
-The GUIDO server performs only server-related tasks insofar as it processes incoming requests and sends responses.  It performs no client-side tasks.  The server does not needed provide clients with tools for inputting requests or decoding responses.  This is because the server is a HTTP server, meaning that client-side HTTP connectors \cite{Fielding00}, such as libcurl or a web-browser, can send and retrieve data.
-\subsection{Stateless}
-The GUIDO server retains no information about users' queries related to scores, nor does it rely on previous states in order to generate its current state.  It clearly separates the posting of scores via the POST method (see Section~\ref{subsection:post}) versus the retrieval of data about those scores via the GET method (see Section~\ref{subsection:get}).
-\subsection{Client-Cache}
-The RESTful recommendation calls for the ability of clients to cache common requests, which is beyond the purview of the GUIDO server.  However, Fielding \cite{Fielding00} also describes the possibility of a server cache in order to speed up server interaction.  However, the GUIDO server does not have a cache for GET requests save an Apache-like log file.  This is because the processing time of GET requests is not necessarily slower than reading from a cache.  The GUIDO server does, however, maintain a small internal cache of recently consulted abstract and graphical representations of \cite{daudin09a} scores in order to avoid persistent GMN complication.
-\subsection{Uniform Interface}
-This is, according to Fielding \cite{Fielding00}, the most important aspect of RESTful architecture.  The principle is also at the core of the GUIDO server.  Rather than providing several ways of doing the same thing, the GUIDO server only ever provides one way of interpreting requests and representing information.  Furthermore, the way data is retrieved is uniform for similar requests and derives from the mapping of URI segments to API functions (see Section~\ref{section:guido-api}).  The inconvenience of this is that URIs sent to the GUIDO server are long and only partially readable (the SHA-1 tag generated after POST requests is not - see Section~\ref{subsection:post}).  This difficulty can be mitigated by layered systems that provide score-access shortcuts.
-\subsection{Layered System}
-For all but the most technologically savvy of users, a layered system is required to use the GUIDO server.  For example, users wishing to map a GUIDO-generated PNG to an HTML canvas would need a library that translates GUIDO dates and boxes into programmatic JavaScript.  This is because the server is a lightweight wrapper around the GUIDO public API, which is itself created to provide  generic structures that allow for the easy manipulation of musical information.
-\subsection{Code-on-Demand}
-The GUIDO server does not currently provide Code-on-Demand as its functionalities are intended to have almost one-to-one correspondence with the GUIDO public API.  As a future project, a group of best-practice calls to the server in JavaScript, curl, and wget can be elaborated as well as language-specific response parsers.  The decision to send all GET information via JSON (save graphical representations of scores) facilitates parsing that, to an extent, eases the need to provide code to developers and can be seen as an architectural decision in the spirit of code-on-demand.
-\subsection{HTTP}
-According to Fielding \cite{Fielding00}, a RESTful server must be able to send both data and meta-data in responses.  The GUIDO server uses HTTP in order to do this via libmicrohttpd\cite{libmicrohttpd}, sending both a MIME type and data in its responses.
-\subsection{REST and online music engraving}
-As stated in Section~\ref{subsection:restful}, the GUIDO HTTP server seeks to provide a full implementation of the RESTful architecture recommendations for server constructions in order to facilitate the transfer of visual score representations and score-related data.  It offers stateless, server-only functionality via a uniform interface.  While this is done at the expense of application-specific shortcuts and human-interpretability, it favors parsing by intermediary tools and a robust palate of extractable data.  In this way, it is ideal for web-based and mobile applications that wish to outsource score-data calculation to a server instead of linking to a library or running an executable.  The next section describes how this data is extracted via the exposure of GUIDO Engine's public API via a standardized URI-construction system.
-%---------------------------------------
-\end{comment}
-\section{Le Serveur GUIDO HTTP comme API}\label{section:guido-api}
-%The GUIDO HTTP server attempts to expose as much of the public API of the GUIDO Engine as possible, implementing one-to-one equivalencies with its functions when possible.  Arguments are passed to these functions via optional key-value pairs in the URI's query part.  Defaults are provided for all key-value pairs in case of omission.  An exhaustive overview of the API can be found in the GUIDO HTTP server's documentation\cite{guidoserverdoc}.\par
-Le serveur GUIDO HTTP expose l'API publique de l'engin GUIDO, s'efforçant de créer des correspondences étroites entre l'API web et son homologue C++. Les arguments aux fonctions y sont passés par le biais de paires clé-valuer dans la partie \emph{query} de l'URI transmis au serveur. Une présentation complète de l'API se trouve dans la documentation du serveur GUIDO\cite{guidoserverdoc}.\par
-%This section aims to discuss some of the broad decisions made in exposing a C API via a web interface, giving three exhaustive examples at the end showing how the API is exposed.
-Cette section a pour objectif de classifier les conventions majeures dans le processus de conversion d'API. C'est fait dans l'optique de fournir un modèle qui peut être utilisé de manière générique pour transformer une API en API web. A la fin, on traite trois exemples précis d'interactions avec le serveur. 
+Une requête GET permet d'obtenir des informations sur une partition identifiée sur le serveur par une clé SHA-1 ou différentes représentations de cette partition. 
+Selon la requête, les données renvoyées par le serveur sont de type :
+\begin{itemize}
+\item image (jpeg, png ou svg) pour une représentation graphique de la partition,
+\item MIDI pour une représentation MIDI de la partition, 
+\item JSON pour toute autre demande d'information.
+\end{itemize}
+
+%\subsection{Interface uniforme}
+%Le style RESTful précise que l'interface du serveur doit être uniforme, c'est-à-dire que les opérations qu'il execute doit être pareilles pour chaque resource sur le serveur et que ces opérations sont communément connues et comprises. L'interface HTTP fournit plusieurs méthodes qui permettent de construire une interface uniforme, mais GET et POST sont répandues et existent dans la quasi-intégralité d'applications client. D'autres opérations plus exotiques, comme PUT ou DELETE, ne sont pas actualisées dans le serveur pour que le fonctionnement complet soit accessible au plus grand nombre d'applications client.
+
+\section{L'API HTTP de la librairie Guido}\label{section:guido-api}
+Le serveur \guido\ expose l'API de la librairie \guido\ en créer des équivalences une à une entre l'API HTTP et les fonctions C/C++ correspondantes. Les arguments des fonctions sont passés par le biais de paires \emph{clé-valeur} dans la partie \emph{query} de l'URI transmise au serveur. Une présentation complète de l'API se trouve dans la documentation du serveur \cite{guidoserverdoc}.\par
+
+Cette section décrit les conventions utilisées pour passer de l'API C/C++ à l'API HTTP. Elle est suivie de trois exemples concrets d'interactions avec le serveur. 
+
 %\subsubsection{Function as URI segment}
 \subsection{Clé SHA-1 comme représentation de partition}
-La section~\ref{subsection:post} sur la méthode POST explique comment la clé SHA-1 remplace du code GMN dans les URIs envoyés au serveur pour séparer des fonctionnements GET et POST et pour faciliter la composition des URIs. A l'intérieur de l'API GUIDO, cette clé correspond à la fois à l'\emph{Abstract Representation} et la \emph{Graphic Representation} d'une partition. Ces deux structures sont utilisées pour des informations sur le contenu musical d'une partition (\emph{Abstract Representation}) ainsi que sa mise en page (\emph{Graphic Representation}). Cette représentation des deux structures avec une seule clé SHA-1 cache le fonctionnement interne de l'API et permettant au client de n'avoir qu'un seul point d'entrée pour chaque partition GMN.
+La section~\ref{subsection:post} explique comment la clé SHA-1 remplace du code GMN dans les URIs envoyés au serveur. Cette clé peut-être vue comme l'équivalent d'un pointeur sur une partition, en l'occurrence un \emph{handler} sur une représentation abstraite (GAR) de la partition pour la librairie \guido .
+
+% A l'intérieur de l'API \guido\, cette clé correspond à la fois à l'\emph{Abstract Representation} et la \emph{Graphic Representation} d'une partition. Ces deux structures sont utilisées pour des informations sur le contenu musical d'une partition (\emph{Abstract Representation}) ainsi que sa mise en page (\emph{Graphic Representation}). Cette représentation des deux structures avec une seule clé SHA-1 cache le fonctionnement interne de l'API et permettant au client de n'avoir qu'un seul point d'entrée pour chaque partition GMN.
+
 \subsection{Fonction comme segment d'URI}
-%A function in the GUIDO public API is represented as an segment of the URI sent to the server.  For example, the function \verb=GuidoGetPageCount= in the GUIDO public API is represented as the URI segment \verb=pagescount=.\par
-Une fonction dans l'API publique GUIDO se transforme en segment d'URI dans l'API web. Par exemple, la fonction \verb=GuidoGetPageCount= dans l'API publique correspond au segment \verb=pagescount= dans un URI.
-%The GUIDO public API provides two generic categories of functions:
-Cette convention se repose sur un système d'URI descriptifs \cite{richardson2008restful}, une recommandation de l'architecture RESTful afin de rendre les URI lisibles et de representer une hiérarchie dans les informations transmises au serveur. Cette notion d'envergure (\emph{scope}) peut-être exploitée pour récréer des hiérarchies de classe, de namespace ou de variables globales à l'intérieure d'une API.\par
-Toutes les partitions téléchargées au serveur peuvent être interrogées avec les mêmes fonctions, ce qui rend le serveur \og{}adressible\fg{} -- une recommandation RESTful qui précise qu'un utilisateur doit pouvoir récupérer autant d'informations que possible pour chaque resource pour qu'il puisse être autonome dans la construction d'URIs \cite{richardson2008restful}.\par
-Les fonctions dans l'API GUIDO peuvent être classées en deux catégories d'envergure :
+Un segment d'URI dans l'API HTTP correspond à une fonction dans l'API C/C++. Par exemple, la fonction \verb=GuidoGetPageCount= dans l'API C/C++ correspond au segment \verb=pagescount= dans une URI.
+
+Les fonctions de l'API \guido\ peuvent être classées en deux catégories :
 \begin{itemize}[noitemsep]
-%\item Functions reporting information about GUIDO.
-\item Des fonctions qui retournent de l'information sur la librairie.
-%\item Functions reporting information about a specific score processed by GUIDO.
-\item Des fonctions qui retournent de l'information sur une entrée GMN.
+\item fonctions qui fournissent de l'information sur la librairie.
+\item fonctions qui fournissent de l'information sur une partition.
 \end{itemize}
-%To represent this distinction via that GUIDO server, the function is elaborated as a URI segment in the path part of the URI either after the server's URI (for information about GUIDO) or after the SHA-1 tag of a score (for information about a specific score processed by GUIDO).  For example,
-Afin de représenter cette distinction dans le serveur GUIDO, les fonctions qui fournissent de l'information sur la librairie sont des segments d'URI qui s'enchaînent avec l'URI de base du serveur. Par exemple,
-\begin{quote}
-\begingroup
-\fontsize{\guidosize}{12pt}\selectfont
-\begin{verbatim}
-curl http://guido.grame.fr:8000/version
-\end{verbatim}
-\endgroup
-\end{quote}
-%reports the version of both GUIDO and the GUIDO server and thus does not need a SHA-1 tag.  On the other hand, the URI
-retourne la version de la librairie.\par
-Pour toute requête portant sur une partition GMN, la fonction suit la clé SHA-1 générée pour représenter cette partition. Par exemple,
-\begin{quote}
-\begingroup
-\fontsize{\guidosize}{12pt}\selectfont
-\begin{verbatim}
-curl http://guido.grame.fr:8000/<key>/voicescount
-\end{verbatim}
-\endgroup
-\end{quote}
-%exposes the API function \verb=GuidoCountVoices= via the URI segment \verb=voicescount=, giving the voice count of specific score.\par
-correspond à la fonction \verb=GuidoCountVoices= dans l'API. Le segment d'URI suit la clé SHA-1 parce que la fonction interroge sur une partition précise.
-%Table~\ref{table:table1} contains a succinct list of the servers' naming conventions showing the name of a function in the GUIDO public API, its representation as a server URI segment, and if it is score-specific or generic to all of GUIDO.
-La table~\ref{table:table1} présente une liste succincte de fonctions dans l'API GUIDO et les segments d'URI par lesquels ils sont représentés dans les requêtes au serveur.
+
+Pour l'API C/C++ de la librairie, les fonctions qui s'adressent à une partition prennent comme argument une \emph{handler} sur la partition, qui peut être vu comme un pointeur sur la représentation interne de la partition. Avec l'API HTTP, la clé SHA-1 remplace ce \emph{handler} dans l'URI et permet de définir la partition cible de la requête :
+\begin{itemize}[noitemsep]
+\item les requêtes adressées à une partition sont préfixées par la clé SHA-1,
+\item les requêtes adressées au moteur de rendu ne sont pas préfixées.
+\end{itemize}
+Par exemple,
+\begin{code}
+  http://guido.grame.fr:8000/version
+\end{code}
+renvoie la version de la librairie. Par ailleurs, l'URI:
+\begin{code}
+  http://guido.grame.fr:8000/<key>/voicescount
+         ou <key> est la clé SHA-1
+\end{code}
+expose la fonction \verb=GuidoCountVoices= par le biais du segment \verb=voicescount=, adressé à la partition identifiée par \verb=<key>=, et renvoie le nombre de voix de la partition.
+
+La table~\ref{table:table1} présente une liste de fonctions de l'API \guido\ et les segments d'URI correspondants dans les requêtes au serveur.
 \begin{table}
-\begin{tabular}{|l|l|}\hline
-Fonction d'API & Segment d'URI \\\hline\hline
-\verb=GuidoGetPageCount= & \verb=pagescount= \\\hline
-\verb=GuidoGetVoiceCount= & \verb=voicescount= \\\hline
-\verb=GuidoDuration= & \verb=duration= \\\hline
-\verb=GuidoFindPageAt= & \verb=pageat= \\\hline
-\verb=GuidoGetPageDate= & \verb=pagedate= \\\hline
-\verb=GuidoGetPageMap= & \verb=pagemap= \\\hline
-\verb=GuidoGetSystemMap= & \verb=systemmap= \\\hline
-\verb=GuidoGetStaffMap= & \verb=staffmap= \\\hline
-\verb=GuidoGetVoiceMap= & \verb=voicemap= \\\hline
-\verb=GuidoGetTimeMap= & \verb=timemap= \\\hline
-\verb=GuidoAR2MIDIFile= & \verb=midi= \\\hline
-\verb=GuidoGetVersionStr= & \verb=version= \\\hline
-\verb=GuidoGetLineSpace= & \verb=linespace= \\\hline
+\centering
+{\small \begin{tabular}{|l|l|l|}\hline
+C/C++ API & URI segment & cible \\\hline
+\verb=GuidoGetPageCount= & \verb=pagescount= & \verb=partition= \\\hline
+\verb=GuidoGetVoiceCount= & \verb=voicescount= & \verb=partition= \\\hline
+\verb=GuidoDuration= & \verb=duration= & \verb=partition= \\\hline
+\verb=GuidoFindPageAt= & \verb=pageat= & \verb=partition= \\\hline
+\verb=GuidoGetPageDate= & \verb=pagedate= & \verb=partition= \\\hline
+\verb=GuidoGetPageMap= & \verb=pagemap= & \verb=partition= \\\hline
+\verb=GuidoGetSystemMap= & \verb=systemmap= & \verb=partition= \\\hline
+\verb=GuidoGetStaffMap= & \verb=staffmap= & \verb=partition= \\\hline
+\verb=GuidoGetVoiceMap= & \verb=voicemap= & \verb=partition= \\\hline
+\verb=GuidoGetTimeMap= & \verb=timemap= & \verb=partition= \\\hline
+\verb=GuidoAR2MIDIFile= & \verb=midi= & \verb=partition= \\\hline
+\verb=GuidoGetVersionStr= & \verb=version= & \verb=moteur= \\\hline
+\verb=GuidoGetLineSpace= & \verb=linespace= & \verb=moteur= \\\hline
 \end{tabular}
-%\cprotect\caption{\label{table:table1} GUIDO API public functions and their representations as URI segments.}
-\cprotect\caption{\label{table:table1} Représentation des fonctions de l'API GUIDO comme segments d'URI.}
+}
+\cprotect\caption{\label{table:table1} Représentation des fonctions de l'API \guido\ comme segments d'URI.}
 \end{table}
-Certaines fonctions propres au serveur peuvent exister pour fournir des informations sur le serveur. Au lieu de créer un niveau d'envergure séparé pour ces fonctions, elles existent au même niveau que les fonctions globales à l'API. Par exemple, 
-\begin{quote}
-\begingroup
-\fontsize{\guidosize}{12pt}\selectfont
-\begin{verbatim}
-curl http://guido.grame.fr:8000/version
-\end{verbatim}
-\endgroup
-\end{quote}
-retourne la version du serveur.
-%Note that the only generic URI segment that does not correspond to a GUIDO public API function is \verb=server=, which gives the version number of the server and thus is not related to the GUIDO API proper.
-%\subsubsection{Arguments as key-value pairs}
+
+
 \subsection{Arguments comme paires clé-valeur}
-%Several of the API functions listed in Table~\ref{table:table1} require arguments in order to generate results.  For example, the function \verb=GuidoGetStaffMap= requires an argument \verb=staff= specifying the staff for which the map should be generated.  These arguments are specified in key-value pairs in the URI.
-Plusieurs fonctions référencées dans la Table~\ref{table:table1} nécessite des arguments pour générer des résultats. Par exemple, la fonction \verb=GuidoGetStaffMap= prend un argument \verb=staff= qui permet de préciser la portée que la \emph{map}, une structure abordée dans la section~\ref{subsection:returnvalues}. Dans l'URI envoyé au serveur GUIDO, ces arguments se déclinent en paires clé-valeur.
-\begin{quote}
-\begingroup
-\fontsize{\guidosize}{12pt}\selectfont
-\begin{verbatim}
-curl http://guido.grame.fr:8000/<key>/
-staffmap?staff=1
-\end{verbatim}
-\endgroup
-\end{quote}
+Pour les fonctions qui prennent des arguments, ceux-ci sont déclinés en paires clé-valeur dans l'URI. Par exemple, la fonction \verb=GuidoGetStaffMap= prend un argument \verb=staff= qui permet de préciser la \emph{staff} (portée) cible de la requête.
+\begin{code}
+ http://guido.grame.fr:8000/<key>/staffmap?staff=1
+\end{code}
+
 Pour permettre aux URIs incomplets ou mal-formés de parvenir au serveur, tous les arguments passés aux fonctions ont des valeurs par défaut dans le serveur. Ces valeurs sont parfois indiquées dans l'API et sinon correspondent à des valeurs qui auraient du sens pour la plupart de partitions.
-%Default arguments are provided for all argument-taking functions in case the user fails to specify an argument.
-%\subsubsection{Layout and formatting options as key-value pairs}
-\subsection{Options de mise en page et de formatage comme paires clé-valeur}
+
+\subsection{Options de mise en page et formatage}
 %The GUDIO server allows for the specification of several parameters relating to the layout and formatting of scores as key-value pairs.  These parameters are used in several different ways in the GUIDO public API.  Some, such as \verb=topmargin=, are become values of structures such as \verb=GuidoPageFormat=.  Others, such as \verb=resize=, represent calls to functions that effect layout (in this case \break \verb=GuidoResizePageToMusic=).  Yet others, such as \break \verb=width=, are used at several points in the layout process depending on the chosen backend.  Rather than devising separate URI construction conventions to represent different layout and formatting information in GUIDO, all layout and formatting options are implemented as key-value pairs to make interacting with the server uniform in keeping with RESTful style.\par
-Le serveur GUIDO permet la spécification de plusieurs paramètres relevant de la mise en page et le formatage d'une partition. Cette précision s'effectue à travers des paires clé-valeur dans la même manière que les arguments aux fonctions abordés ci-dessus.\par
-Les paramètres de mise en page et de formatage sont utilisés de manière différente selon sa fonction dans l'API GUIDO. Certains paramètres, comme \break \verb=topmargin=, font partie d'une structure \break \verb=GuidoPageFormat= qui est utilisée pour contrôler la taille globale d'une page. D'autres, comme \verb=resize=, déclenchent un appel à une fonction. Le paramètre \verb=width= est utilisé plusieurs fois dans le processus de compilation selon le format de sortie choisi. Au lieu de créer de différents façons de representer ces options dans une URI, toutes les options de mise en page et de formatage sont élaborées comme des paires clé-valeur afin de faciliter la composition d'URIs et donc de les rendre plus RESTful. 
-%In order to deal with malformed URIs, the GUIDO server provides defaults for out-of-range or nonsensical values and ignores nonsensical keys.
-\begin{comment}
-\begin{quote}
-\begingroup
-\fontsize{\guidosize}{12pt}\selectfont
-\begin{verbatim}
-curl http://guido.grame.fr:8000/
-<key>/?
-topmargin=0.0&format=jpg&resize=useless&foo=bar
-\end{verbatim}
-\endgroup
-\end{quote}
-\end{comment}
-%In the above example, the \verb=topmargin= and \verb=format= values in the query part of the URI are used by the server whereas \verb=resize= is given its default value because \break \verb=useless= is  useless and \verb=foo= is ignored because it is not a valid key.%\par
-\begin{comment}
-The following table summarizes the various formatting and layout options one can provide to the server along with the current defaults and their units.  Note that the GUIDO unit represents an arbitrary internal unit that must be experimented with to fine tune.\par
-\begin{table}
-\begin{tabular}{|l|p{4cm}|l|l|}\hline
-Value & Role & Default & Unit \\\hline
-\verb=page= & a page number & 1 & page \\\hline
-\verb=width= & the drawing area width & 15 & cm \\\hline
-\verb=height= & the drawing area height & 5 & cm \\\hline
-\verb=marginleft= & the left margin & 1 & cm \\\hline
-\verb=marginright= & the right margin & 1 & cm \\\hline
-\verb=margintop= & the top margin & 0.5 & cm \\\hline
-\verb=marginbottom= & the bottom margin & 0.5 & cm \\\hline
-\verb=format= & image format & png & png/jpg/svg \\\hline
-\verb=resize= & resize the page to the image & yes & yes/no \\\hline
-\verb=sysDistance= & distance between systems & 75 & GUIDO \\\hline
-\verb=sysDistribution= & controls systems distribution & auto & auto/always/never\\\hline
-\verb=sysDistribLimit= & maximum distance allowed between two systems for automatic distribution mode & 0.25 & fraction of page \\\hline
-\verb=force= & force in the Space-Force function & 750.0 & GUIDO \\\hline
-\verb=spring= & spring stiffness & 1.1 & GUIDO \\\hline
-\verb=neighborhoodSpacing= & should we use the neighborhood spacing algorithm? & no & yes/no \\\hline
-\verb=optimalPageFill= & should we use the optimal page fill algorithm & yes & yes/no\\\hline
-\end{tabular}
-\end{table}
-\end{comment}
-%\subsubsection{JSON as structs}\label{subsection:values} 
+
+Le serveur \guido\ permet le contrôle de la mise en page et le formattage de la partition grâce à des paires clé-valeur indiqués de manière similaire aux arguments des fonctions décris ci-dessus.
+%Le serveur \guido\ permet la spécification de plusieurs paramètres relevant de la mise en page et le formatage d'une partition. Cette précision s'effectue à travers des paires clé-valeur dans la même manière que les arguments aux fonctions abordés ci-dessus.\par
+Ces paramètres sont utilisés de différentes manières selon leur fonction dans l'API C/C++ \guido\ . Certains paramètres, comme  \verb=topmargin=, font partie d'une structure \verb=GuidoPageFormat= qui est utilisée pour contrôler la taille globale d'une page. D'autres, comme \verb=resize=, déclenchent un appel à une fonction. Le paramètre \verb=width= est utilisé plusieurs fois dans le processus de compilation selon le format de sortie choisi. 
+
+Toutes les options de mise en page et de formatage sont spécifiées dans l'URI, afin de fournir toutes les informations nécessaires au rendu de la partition sans gérer d'états et de satisfaire ainsi aux recommendations RESTful.
+
 \subsection{Valeurs de retour}\label{subsection:values}
-Pour faire face aux diverses catégories de valeur de retour incluses dans l'API GUIDO, le serveur GUIDO s'efforce de trouver un type MIME qui correspond à la valeur de retour dans l'API C++. Cette idée d'un serveur qui fournit à la fois l'information et l'enveloppe qui la contient est au c\oe{}ur du style RESTful \cite{richardson2008restful}. Par exemple, pour la sortie visuelle du serveur, le serveur fournit les types MIME de JPEG, SVG et PNG.\par
-Parfois, l'API GUIDO fournit une fonction dont la sortie est une structure complexe qui n'a pas d'équivalent logique en type MIME. Le serveur GUIDO traite ces cas en passant par JSON \cite{json}, un format web qui permet de transmettre plusieurs types de valeurs (int, float, string, array, dict) dans une seule structure.\par
-Par exemple, la structure \verb=Time2GraphicMap= fournit une liste paires ou chaque paire contient la durée d'un événement (\verb=TimeSegment=) et les coordonnées d'une case autour de l'événement sur la page (\verb=FloatRect=). \verb=TimeSegment= et \verb=FloatRect= sont elles mêmes des structures qui contiennent d'autres données. Ces structures peuvent être articulées comme une hiérarchie de dictionnaires JSON, comme dans l'exemple fourni dans la section~\ref{subsection:staffmap} où \verb=time= correspond à un \verb=TimeSegment= et \verb=graph= correspond à un \verb=FloatRect=.
-%GUIDO provides several structures in its public API for the transmission of information that falls outside standard C types.  For example, the \verb=Date= struct is a numerator-denominator pair used to specify a point in time in a score.  The \verb=Time2GraphicMap= struct is a composite structure consisting of pairs of \verb=TimeSegment= and \verb=FloatRect= structures.  \verb=TimeSegment= corresponds to beginning and end \verb=Date= instances whereas \verb=FloatRect= shows four \break points in graphical space.\par
-%To represent these structures in server responses, the GUIDO server uses JSON where key-value pairs correspond to a structure's element's name and its value.  For example, in the JSON returned in Section~\ref{subsection:staffmap}, \verb=time= corresponds to a \verb=TimeSegment= and \verb=graph= corresponds to a \verb=FloatRect=.
+Les paquets renvoyés par le serveur sont constitués d'une enveloppe et d'un contenu. L'enveloppe indique un code de retour et un type MIME pour le contenu associé. Les types renvoyés sont parmi :
+\begin{itemize}
+\item \icode{image/[jpeg | png | svg+xml]} pour une représentation graphique de la partition au format jpeg, png ou svg,
+\item \icode{audio/midi} pour une représentation MIDI de la partition, 
+\item \icode{application/json} pour des informations structurées sur la partition.
+\end{itemize}
+JSON est utilisé de manière consistante pour toutes les demandes informations. Pour les fonctions qui renvoient des structures de données, les données renvoyées par le serveur sont typées et structurées de manière équivalente en JSON.
+Par exemple, la structure \verb=Time2GraphicMap= contient une liste de paires où chaque paire contient la durée d'un événement (\verb=TimeSegment=) et les coordonnées du rectangle englobant l'événement dans la la page (\verb=FloatRect=). \verb=TimeSegment= et \verb=FloatRect= sont elles mêmes des structures qui contiennent d'autres données. Ces structures peuvent être articulées comme une hiérarchie de dictionnaires JSON, comme dans l'exemple fourni dans la section~\ref{subsection:staffmap} où \verb=time= correspond à un \break \verb=TimeSegment= et \verb=graph= correspond à un \verb=FloatRect=.
+
 \subsection{Exemples}
 \subsubsection{voicescount}
-%The command voicescount returns the number of voices in a score.  It exposes the GUIDO Engine API method \verb=GuidoCountVoices=.  For example, the request:
-La commande \verb=voicescount= retourne le nombre de voix dans une partition. Elle correspond à la fonction \verb=GuidoCountVoices= dans l'API GUIDO. La requête :
-\begin{quote}
-\begingroup
-\fontsize{\guidosize}{12pt}\selectfont
-\begin{verbatim}
-curl http://guido.grame.fr:8000/
-<key>/voicescount
-\end{verbatim}
-\endgroup
-\end{quote}
+La requête \verb=voicescount= retourne le nombre de voix dans une partition. Elle correspond à la fonction \verb=GuidoCountVoices= de l'API \guido\ . L'URI :
+\begin{code}
+  http://guido.grame.fr:8000/<key>/voicescount
+\end{code}
 %yields the following result:
-occasionne la réponse suivante du serveur :
-\begin{quote}
-\begingroup
-\fontsize{\guidosize}{12pt}\selectfont
-\begin{verbatim}
-{
-  "<key>": {
-    "voicescount": 1
+produit la réponse suivante du serveur :
+\begin{mcode}
+  {
+    "<key>": {
+      "voicescount": 1
+    }
   }
-}
-\end{verbatim}
-\endgroup
-\end{quote}
+\end{mcode}
+
 \subsubsection{pageat}
-%The command pageat returns the page given a specific date, expressed as a rational number.  It exposes the GUIDO Engine API method \verb=GuidoFindPageAt=.  For example, the request:
-La commande \verb=pageat= retourne la page pour une date précise, où \og{}date\fg{} correspond à un moment dans une partition. Elle correspond à la fonction \verb=GuidoFindPageAt= dans l'API GUIDO. La requête :
-\begin{quote}
-\begingroup
-\fontsize{\guidosize}{12pt}\selectfont
-\begin{verbatim}
-curl http://guido.grame.fr:8000/
-<key>/pageat?date=1/4
-\end{verbatim}
-\endgroup
-\end{quote}
-%yields the following result:
-occasionne la réponse suivante du serveur :
-\begin{quote}
-\begingroup
-\fontsize{\guidosize}{12pt}\selectfont
-\begin{verbatim}
-{
-  "<key>": {
-    "page": 1,
-    "date": "1/4"
+La requête \verb=pageat= demande la page contenant la date passée en argument, où \og{}date\fg{} correspond à une date de la partition. Elle correspond à la fonction \break \verb=GuidoFindPageAt= de l'API \guido\ . L'URI :
+\begin{code}
+ http://guido.grame.fr:8000/<key>/pageat?date=1/4
+\end{code}
+produit la réponse suivante du serveur :
+\begin{mcode}
+  {
+    "<key>": {
+      "page": 1,
+      "date": "1/4"
+    }
   }
-}
-\end{verbatim}
-\endgroup
-\end{quote}
+\end{mcode}
 
 \subsubsection{staffmap}\label{subsection:staffmap}
-%The command staffmap returns a map of the space each element of a given staff takes up in 2D space (represented by a box) and time space (represented as an interval of rational numbers).  It exposes the GUIDO Engine API method \verb=GuidoGetStaffMap=.  For example, the request:
-La commande \verb=staffmap= retourne une série de paires pour chaque événement dans une portée donnée. La paire contient des informations temporelles de durée et des informations graphiques de mise en page. Elle correspond à la fonction \verb=GuidoGetStaffMap= dans l'API GUIDO. La requête :
-\begin{quote}
-\begingroup
-\fontsize{\guidosize}{12pt}\selectfont
-\begin{verbatim}
-curl http://guido.grame.fr:8000/
-<key>/staffmap?staff=1
-\end{verbatim}
-\endgroup
-\end{quote}
-%yields the following result:
-occasionne la réponse suivante du serveur, abrégée pour lisibilité :
-\begin{quote}
-\begingroup
-\fontsize{\guidosize}{12pt}\selectfont
-\begin{verbatim}
-{
-  "<key>": {
-    "staffmap": [
-      {
-        "graph": {
-          "left": 916.18,
-          "top": 497.803,
-          "right": 1323.23,
-          "bottom": 838.64
+La requête \verb=staffmap= demande la description des relations entre espace graphique et temporel de la partition. Elle renvoie une série de paires associant un espace graphique décrit comme un rectangle et un espace temporel décrit comme un intervalle borné par 2 dates. Les dates sont exprimées par des rationels en temps musical (i.e. relatif à un tempo) où 1 représente la ronde. Elle correspond à la fonction \verb=GuidoGetStaffMap= de l'API \guido\. L'URI :
+\begin{code}
+  http://guido.grame.fr:8000/<key>/staffmap?staff=1
+\end{code}
+produit la réponse suivante du serveur (abrégée pour des raison de commodité) :
+\begin{mcode}
+  {
+    "<key>": {
+      "staffmap": [
+        {
+          "graph": {
+            "left": 916.18,
+            "top": 497.803,
+            "right": 1323.23,
+            "bottom": 838.64
+          },
+          "time": {
+            "start": "0/1",
+            "end": "1/4"
+          }
         },
-        "time": {
-          "start": "0/1",
-          "end": "1/4"
+        .
+        .
+        .
+        {
+          "graph": {
+            "left": 2137.33,
+            "top": 497.803,
+            "right": 2595.51,
+            "bottom": 838.64
+          },
+          "time": {
+            "start": "3/4",
+            "end": "1/1"
+          }
         }
-      },
-      .
-      .
-      .
-      {
-        "graph": {
-          "left": 2137.33,
-          "top": 497.803,
-          "right": 2595.51,
-          "bottom": 838.64
-        },
-        "time": {
-          "start": "3/4",
-          "end": "1/1"
-        }
-      }
-    ]
+      ]
+    }
   }
-}
-\end{verbatim}
-\endgroup
-\end{quote}
+\end{mcode}
 
 \section{Conclusion}
-%The GUIDO HTTP server uses RESTful architectural principles such as statelessness, a uniform interface and a separation of client-server functionality in order to provide low-latency information retrieval.  Information corresponds to uploaded GMN scores, encoded as various MIME types and transmitted via the HTTP protocol.  The server exposes the robust GUIDO Engine public API via an interface based on standardized URI construction.  It is intended for use by various applications needing to visualize musical scores and process score-related data.  It is especially well-suited as an alternative to embarking libraries or external applications in score processing software.  As cloud computing and mobile human-computer interaction becomes more common, this form of data transmission and processing is increasingly necessary.  The GUIDO HTTP server intends to fill this by following RESTful architectural recommendations that have proven successful in other server-based services.\par
-Le serveur GUIDO se sert du style d'architecture RESTful afin d'exposer l'API de GUIDO. En utilisant un format qui ne nécessite pas la sauvegarde d'états successifs, toutes les informations nécessaires pour comprendre et executer une requête peuvent être mises dans un seul URI.  Ceci est possible grâce au protocole HTTP, l'API GUIDO rapide et la librairie microhttpd qui permet un certain nombre d'automatismes dans la transmission et la réception de données et de méta-données. Il peut servir dans de multiples contextes, comme par exemple des applications web qui souhaitent proposer des services de visualisation de partitions et qui souhaite exploiter des données sur ces partitions. Il permet aux développeurs de ne pas embarquer des librairies externes dans des applications. En montrant comment l'API GUIDO se traduit en API web, on espère fournir un modèle pour ceux qui souhaite adapter les formats web courants aux architectures informatiques classiques qui se repose sur l'execution des fonctions qui génèrent des réponses ainsi que la représentation d'information par le biais de structures et de classes. La technologie s'inscrit dans un mouvement vers le \emph{cloud computing} où le traitement des informations à distance est de plus en plus nécessaire. La source de son efficacité et de sa rapidité se trouve dans son architecture RESTful, une architecture qui s'est avérée utile pour de nombreux serveurs.\par
-Le projet GUIDO est un projet à source ouvert hébergé sur sourceforge\footurl{http://guidolib.sf.net}. Le serveur tourne actuellement à l'URL \icode{\url{http://guidoservice.grame.fr/}}.
-\begin{comment}
-The process of elaborating the GUIDO server as a RESTful server is also a first step towards a more robust project to implement a wiki-like crowd music engraving platform that uses at its core a restful server storing data in various domain-specific languages.
-\end{comment}
-%\nocite{*}
+
+Le serveur \guido\ repose sur une architecture architecture RESTful afin d'exposer l'API C/C++ de la librairie \guido\ à travers une  API HTTP. La spécification cette API permet de traiter les requêtes sans gérer d'états successifs, dans la mesure où toutes les informations nécessaires à une requête sont contenues dans son URI. 
+La disponibilité de ce service sur Internet ouvre de nouvelles perspectives dans le développement d'applications Web qui souhaitent incorporer la notation musicale symbolique, que ce soit pour visualiser des partitions ou encore pour exploiter des données sur ces partitions. 
+
+Le projet \guido\ est un projet \emph{open source} hébergé sur sourceforge\footurl{http://guidolib.sf.net}. Le serveur est actuellement accessible à l'adresse \icode{\url{http://guidoservice.grame.fr/}}.
+
+\balance
 \bibliographystyle{plain}
 \bibliography{../../guido}
 \end{document}
