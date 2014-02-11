@@ -1927,7 +1927,7 @@ public:
 			}
 		}
 		size_t length = (size_t)(end-start);
-		char c = NULL;
+		char c = '\0';
 		if(text->size()>end)
 			c = (*text)[end];
 		if (c == '-' || c == '_')

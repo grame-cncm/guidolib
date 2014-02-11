@@ -57,6 +57,9 @@ static const char* kSafeOpt = "--daemon";
 static const char* kHelpOpt = "--help";
 static const char* kShortHelpOpt = "-h";
 
+static const char* kSvgFontFileOpt = "--svgfontfile";
+static const string kDefaultSvgFontFile = "guido2.svg";
+
 //---------------------------------------------------------------------------------
 static void usage (char* name)
 {
@@ -73,6 +76,7 @@ static void usage (char* name)
     cout << tab << tab << "0 = Apache-like log" << endl;
     cout << tab << tab << "1 = XML logfile" << endl;
     cout << tab << kCachedirOpt << " cache dir name : (defaults to a directory cache in the directory of the current executable)" << endl;
+    cout << tab << kSvgFontFileOpt << " name of the svg font file - defaults to a file called " << kDefaultSvgFontFile << " in the executable's directory" << endl;
     cout << tab << kVersionOpt << " version of the server and GUIDO" << endl;
 /*
     cout << tab << kVerboseOpt << " verbosity. an integer bitmap that can combine:" << endl;
@@ -93,12 +97,12 @@ static void usage (char* name)
 }
 
 //---------------------------------------------------------------------------------
-static bool launchServer (int port, int verbose, int logmode, string cachedir, bool daemon)
+static bool launchServer (int port, int verbose, int logmode, string cachedir, string svgfontfile, bool daemon)
 {
     bool ret = false;
     guido2img converter;
     startEngine();
-    HTTPDServer server(verbose, logmode, cachedir, &converter);
+    HTTPDServer server(verbose, logmode, cachedir, svgfontfile, &converter);
     server.readFromCache();
     if (server.start(port)) {
         if (daemon) {
@@ -152,6 +156,12 @@ int main(int argc, char **argv)
            ? new logstream (logfile.c_str())
            : new logstream();
     string cachedir = sopt (argv, kCachedirOpt, QDir(applicationPath.c_str()).absoluteFilePath(kDefaultCachedir.c_str()).toStdString());
+    string svgfontfile = sopt (argv, kSvgFontFileOpt, QDir(applicationPath.c_str()).absoluteFilePath(kDefaultSvgFontFile.c_str()).toStdString());
+    // check to see if svgfontfile exists
+    QFile qSvgfontfile(svgfontfile.c_str());
+    if(!qSvgfontfile.exists()) {
+      svgfontfile = "";
+    }
     if (daemon) {
         // below is commented out because of Mac OS X problems with daemons
         /*
@@ -188,5 +198,5 @@ int main(int argc, char **argv)
         close(STDOUT_FILENO);
         close(STDERR_FILENO);
     }
-    return launchServer (port, verbose, logmode, cachedir, daemon) ? 0 : 1;
+    return launchServer (port, verbose, logmode, cachedir, svgfontfile, daemon) ? 0 : 1;
 }

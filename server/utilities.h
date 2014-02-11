@@ -29,8 +29,8 @@
 #include <map>
 #include <string>
 #include <fstream>
-#include <netinet/in.h>
-#include <arpa/inet.h>
+//#include <netinet/in.h>
+//#include <arpa/inet.h>
 #include <string>
 
 #include "GUIDOEngine.h"
@@ -87,21 +87,21 @@ public:
         out << val;
     }
 
-    void print (struct sockaddr * addr) {
-        std::ostream& out = this->stream();
-        //printdate(out);
-        char buff[INET6_ADDRSTRLEN];
-        switch(addr->sa_family) {
-        case AF_INET:
-            stream() << inet_ntop(AF_INET, &(((struct sockaddr_in *)addr)->sin_addr), buff, INET6_ADDRSTRLEN);
-            break;
-        case AF_INET6:
-            out << inet_ntop(AF_INET6, &(((struct sockaddr_in6 *)addr)->sin6_addr), buff, INET6_ADDRSTRLEN);
-            break;
-        default:
-            out << "Unexpectes address family";
-        }
-    }
+//    void print (struct sockaddr * addr) {
+//        std::ostream& out = this->stream();
+//        //printdate(out);
+//        char buff[INET6_ADDRSTRLEN];
+//        switch(addr->sa_family) {
+//        case AF_INET:
+//            stream() << inet_ntop(AF_INET, &(((struct sockaddr_in *)addr)->sin_addr), buff, INET6_ADDRSTRLEN);
+//            break;
+//        case AF_INET6:
+//            out << inet_ntop(AF_INET6, &(((struct sockaddr_in6 *)addr)->sin6_addr), buff, INET6_ADDRSTRLEN);
+//            break;
+//        default:
+//            out << "Unexpectes address family";
+//        }
+//    }
 
     void print (_logend) {
         stream() << std::endl;

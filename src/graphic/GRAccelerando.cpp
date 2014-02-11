@@ -79,14 +79,6 @@ GRAccelerando::GRAccelerando( GRStaff * inStaff, ARAccelerando * artrem )
 	  mFontSize = (int)(1.5f * LSPACE);
   font = new NVstring(artrem->getFont());
   fontAttrib = new NVstring(artrem->getFAttrib());
-
-  const VGFont* hmyfont = FontManager::gFontText;
-
-  if (font && font->length() > 0)
-  {
-	  // handle font-attributes ...
-	  hmyfont = FontManager::FindOrCreateFont( mFontSize, font, fontAttrib );
-  }
 }
 
 GRAccelerando::~GRAccelerando()

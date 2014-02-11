@@ -161,9 +161,9 @@ typedef void * ARFactoryHandler;
 	 is beginning. This is important for the ranges that need to
 	  be added (dispdur and shareStem)
 
-\todo check semantic and rename
     \return an error code
 */
+//  todo check semantic and rename
 	GUIDOAPI(GuidoErrCode)	GuidoFactoryInsertCommata( ARFactoryHandler inFactory ); // is it a correct name ?
 
 // ----------------------------------------------------------------------------
