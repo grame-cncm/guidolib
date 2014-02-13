@@ -16,6 +16,7 @@
 #include <sstream>
 #include <string.h>
 
+#include "ARMeter.h"
 #include "GRMeter.h"
 #include "GRDefine.h"
 #include "GRMusic.h"

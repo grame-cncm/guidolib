@@ -27,19 +27,21 @@ ListOfTPLs ARBar::ltpls(1);
 
 ARBar::ARBar(const TYPE_TIMEPOSITION &timeposition)
 	: ARMTParameter(timeposition)
-  {
-  barnumber = -1; // not specified
-  }
+{
+	barnumber = -1; // not specified
+	measureNumber = 0;
+}
 
 
 ARBar::ARBar() : ARMTParameter()
-  {
-  barnumber = -1; // not specified
-  }   
+{
+	barnumber = -1; // not specified
+	measureNumber = 0;
+}   
 
 ARBar::~ARBar() // does nothing
-  {
-  }
+{
+}
 
 void ARBar::print() const
 {
@@ -56,7 +58,6 @@ void ARBar::PrintParameters(std::ostream &os) const
 	{
 		os << "<" << barnumber << ">";
 	}
-
 }
 
 void ARBar::setTagParameterList(TagParameterList& tpl)

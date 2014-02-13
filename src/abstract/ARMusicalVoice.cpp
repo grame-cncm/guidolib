@@ -2107,6 +2107,8 @@ void ARMusicalVoice::doAutoBarlines()
 	bool lookahead = false;
 	bool foundbarline = false;
 
+	int measureNumber = 1;
+
 	// this is the position of a newSystem or newPage-Tag that was encountered while looking ahead.
 	GuidoPos newSystemOrPagepos = NULL;
 
@@ -2151,7 +2153,7 @@ void ARMusicalVoice::doAutoBarlines()
 		ARCoda * coda = dynamic_cast<ARCoda *>(o);
 		ARSegno * segno = dynamic_cast<ARSegno *>(o);
 
-		// (DF) tests to inhibit auto barlines when a repat bar is present
+		// (DF) tests to inhibit auto barlines when a repeat bar is present
 		bool isRepeatBar = false;
         TYPE_TIMEPOSITION posdate;
         if (o) {
@@ -2202,6 +2204,12 @@ obsolete: an end repeatbar is now ARBar
 						lastbartp = o->getRelativeTimePosition();
 						ARBar * arbar = new ARBar( lastbartp );
 						arbar->setIsAuto( true );
+						
+						if (curmeter->getAutoMeasuresNum())
+						{
+							arbar->setMeasureNumber(measureNumber);
+							measureNumber++;
+						}
 
 						if (newSystemOrPagepos == NULL) {
 							newSystemOrPagepos = pos;

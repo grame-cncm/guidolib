@@ -12,6 +12,9 @@
 
 */
 
+#include <iostream>
+#include <sstream>
+
 #include "GUIDOEngine.h"
 #include "GUIDOInternal.h"
 
@@ -24,7 +27,8 @@
 #include "VGDevice.h"
 #include "math.h"
 
-#include <iostream>
+#include "FontManager.h"
+
 using namespace std;
 
 //#define TRACE
@@ -49,6 +53,8 @@ GRBar::GRBar(ARBar * p_arbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTim
 	InitGRBar( inTimePos, inStaff );
 
     fLineNumber = inStaff->getNumlines();
+
+	fBarNumber = p_arbar->getMeasureNumber();
 }
 
 // --------------------------------------------------------------------------
@@ -79,6 +85,8 @@ GRBar::GRBar(ARBar * p_arbar, GRSystem * , GRStaff * inStaff, const TYPE_TIMEPOS
 //	}
 
     fLineNumber = inStaff->getNumlines();
+
+	fBarNumber = p_arbar->getMeasureNumber();
 }
 
 // --------------------------------------------------------------------------
@@ -184,6 +192,19 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
 
     if (staffSize < kMinNoteSize) // Too small, don't draw
         return;
+
+	if (fBarNumber != 0)
+	{
+		const VGFont* hmyfont = FontManager::gFontText;
+		hdc.SetTextFont( hmyfont );
+
+		string barNumberString;
+		ostringstream barNumberStream;
+		barNumberStream << fBarNumber;
+		barNumberString = barNumberStream.str();
+		// Prendre en compte la staffSize ?
+		hdc.DrawString(mPosition.x - 15, mPosition.y - 20, barNumberString.c_str(), barNumberString.size());
+	}
 
     // - Vertical adjustement according to staff's line number
     float offsety1 = (fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;

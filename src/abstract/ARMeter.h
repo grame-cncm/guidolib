@@ -42,6 +42,7 @@ class ARMeter : public ARMTParameter
 		TYPE_TIMEPOSITION getMeterTime() const;
 
 		int getAutoBarlines()                  const { return autoBarlines; }
+		int getAutoMeasuresNum()               const { return autoMeasuresNum; }
 		std::vector<int> getNumeratorsVector() const { return numeratorsVector; }
         int getNumerator()                     const { return numerator; }
 		int getDenominator()                   const { return denominator; }
@@ -67,6 +68,7 @@ class ARMeter : public ARMTParameter
   protected:
 	  float size;
 	  int autoBarlines;
+	  int autoMeasuresNum;
 	  static ListOfTPLs ltpls;
  
   private:
@@ -75,8 +77,6 @@ class ARMeter : public ARMTParameter
         int numerator;
 		int denominator;
 		metertype mtype;
-		
-
 };
 
 #endif

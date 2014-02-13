@@ -59,6 +59,7 @@ class GRBar : public GRTagARNotationElement
 
 		static NVPoint sRefPos;
         int    fLineNumber;
+		int    fBarNumber;
 
 	private:
 		void InitGRBar( const TYPE_TIMEPOSITION & inTimePos, const GRStaff * inStaff );		

@@ -29,6 +29,7 @@ ARMeter::ARMeter()
 {
 	mtype = NONE;
 	autoBarlines = 1;
+	autoMeasuresNum = 0;
 
     numerator = 0;
     denominator = 0;
@@ -45,6 +46,7 @@ ARMeter::ARMeter(int p_numerator, int p_denominator)
 	mMeterName = bufferSStream.str().c_str();
 	mtype = NUMERIC;
 	autoBarlines = 1;
+	autoMeasuresNum = 0;
 }
 
 
@@ -70,7 +72,7 @@ void ARMeter::setTagParameterList(TagParameterList& tpl)
 	{
 		// create a list of string ...
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail("S,type,4/4,r;F,size,1.0,o;S,autoBarlines,on,o");
+		lstrs.AddTail("S,type,4/4,r;F,size,1.0,o;S,autoBarlines,on,o;S,autoMeasuresNum,off,o");
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -100,11 +102,20 @@ void ARMeter::setTagParameterList(TagParameterList& tpl)
 			tps = TagParameterString::cast(rtpl->GetNext(pos));
 			assert(tps);
 
-			std::string off ("off");
+			std::string off("off");
 			if (off == tps->getValue())
 				autoBarlines = 0;
 			else
 				autoBarlines = 1;
+
+			tps = TagParameterString::cast(rtpl->GetNext(pos));
+			assert(tps);
+
+			std::string on("on");
+			if (on == tps->getValue())
+				autoMeasuresNum = 1;
+			else
+				autoMeasuresNum = 0;
 
 
             //Meter string analysis to set numerator/denominator
