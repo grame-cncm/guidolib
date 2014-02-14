@@ -280,7 +280,7 @@ Un \emph{cluster} est vu comme une note et supporte donc le tag \guidotag{noteFo
 %*************** GLISSANDO ************************
 \subsection{\emph{Glissando}}\label{subsec:glissando}
 
-Le \emph{glissando} se présente classiquement comme une li-gne joignant deux notes décalées dans le temps (figure \ref{fig:glissandoSimple} ), indiquant ainsi un glissement, continu ou non suivant le type d'instrument, d'une hauteur à une autre.
+Le \emph{glissando} se présente classiquement comme une li-gne joignant deux notes décalées dans le temps (figure \ref{fig:glissandoSimple}), indiquant ainsi un glissement, continu ou non suivant le type d'instrument, d'une hauteur à une autre.
 
 Dans un souci d'efficacité, il fallait pouvoir décrire un \emph{glissando} seul ou plusieurs \emph{glissandi} à la suite de la manière la plus simple et intuitive possible. 
 
@@ -574,14 +574,15 @@ Dans la version précédente de \guido{}, le \emph{trille} à proprement parler 
 % justifier l'intérêt de tr et anchor ?
 De plus, nous avons voulu donner la possibilité de choisir de dessiner ou non le signe \textit{\textbf{tr}}, ainsi que de pouvoir changer l'ancrage de la ligne pour le déplacer sur la tête de la note. Cela fut implémenté grâce au \emph{param} \code{tr} qui accepte comme valeurs \code{true} ou \code{false} et à \code{anchor} qui accepte comme valeurs \code{note} ou \code{tr} (figure \ref{fig:trillanchor}). Le reste des modifications graphiques pouvant être effectuées manuellement par l'utilisateur à travers les paramètres classiques de déplacement (\code{dx}, \code{dy}), de couleur (\code{color}), et de taille (\code{size}).
 
-\exemple
 \begin{figure}[h]
-\centering
+\exemple
+\begin{center}
 \begin{gmncode}
 [ \trill<tr="false", anchor="note">
   ( {g} {a/2} ) ]
 \end{gmncode}
 \includegraphics[width=30mm]{img/trillanchor.pdf}
+\end{center}
 \caption{Cas du \emph{trille} ancré à la tête de note, et \textit{\textbf{tr}} optionnel}
 \label{fig:trillanchor}
 \end{figure}
@@ -672,9 +673,9 @@ L'unique problème avec ce choix peut se poser lors d'un conflit dans l'ordre im
 
 Concernant le \emph{trille}, une subtilité au niveau du contr\^ole du rendu a également été ajoutée. Il fallait définir le comportement quant aux notes liées, soit de manière automatique de par la présence d'une barre de mesure, soit de manière explicitement décrite par l'utilisateur. La solution adoptée est de dessiner la ligne du \emph{trille} jusqu'à la fin de la dernière note liée si celle-ci provient d'une note plus longue découpée automatiquement, mais de s'arrêter normalement à la prochaine note si la liaison a été explicitée par l'utilisateur, qui pourra alors décider de répéter le \emph{trille} sur cette autre note, ou non. (figure \ref{fig:trill})
 
-\exemple
 \begin{figure}[h]
-\centering
+\exemple
+\begin{center}
 \begin{gmncode}
 {
   [
@@ -688,6 +689,7 @@ Concernant le \emph{trille}, une subtilité au niveau du contr\^ole du rendu a �
 }
 \end{gmncode}
 \includegraphics[width=45mm]{img/trill.pdf}
+\end{center}
 \caption{Cas du \emph{trille} appliqué à des notes liées}
 \label{fig:trill}
 \end{figure}
