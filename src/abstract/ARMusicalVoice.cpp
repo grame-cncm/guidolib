@@ -1178,6 +1178,7 @@ void ARMusicalVoice::doAutoStuff1()
 	// introduce naturalkeys ...
 	timebench("doAutoKeys", doAutoKeys());
 
+
 	// introduce barlines ...
 	// this breaks notes if needed the new barlines are put right before
 	// newSystem or newPage-Tags (if present) otherwise right before the event.
@@ -1185,8 +1186,11 @@ void ARMusicalVoice::doAutoStuff1()
 	//cout<<"avant autoBarLines"<<endl;
 	//this->operator<< (cout);
 	
-	
 	timebench("doAutoBarlines", doAutoBarlines());
+
+
+	// introduce mesures numbering	
+	timebench("doAutoMeasuresNumbering", doAutoMeasuresNumbering());
 
 	
 	//cout<<endl<<"après"<<endl;
@@ -2107,8 +2111,6 @@ void ARMusicalVoice::doAutoBarlines()
 	bool lookahead = false;
 	bool foundbarline = false;
 
-	int measureNumber = 1;
-
 	// this is the position of a newSystem or newPage-Tag that was encountered while looking ahead.
 	GuidoPos newSystemOrPagepos = NULL;
 
@@ -2204,12 +2206,6 @@ obsolete: an end repeatbar is now ARBar
 						lastbartp = o->getRelativeTimePosition();
 						ARBar * arbar = new ARBar( lastbartp );
 						arbar->setIsAuto( true );
-						
-						if (curmeter->getAutoMeasuresNum())
-						{
-							arbar->setMeasureNumber(measureNumber);
-							measureNumber++;
-						}
 
 						if (newSystemOrPagepos == NULL) {
 							newSystemOrPagepos = pos;
@@ -2448,13 +2444,61 @@ obsolete: an end repeatbar is now ARBar
 	}
 }
 
-	class PointerClass
+//____________________________________________________________________________________
+/** \brief Does a GNF transformation
+
+(from GNF to GNF) introducing measures numbering dependant on the Meter-Information (if present)
+*/
+void ARMusicalVoice::doAutoMeasuresNumbering()
+{
+	ARMeter * curmeter = NULL;
+	TYPE_DURATION curmetertime;
+
+	int measureNumber = 1;
+
+	bool displayMeasureNumber = true;
+
+	ARMusicalVoiceState vst;
+
+	GuidoPos pos = GetHeadPosition(vst);
+
+	while (pos)
 	{
-	public:
-		ARMusicalObject * pobj;
-		GuidoPos		 pos1;
-		GuidoPos		 pos2;
-	};
+		if (curmeter != vst.curmeter)
+		{
+			curmeter = vst.curmeter;
+
+			curmetertime.setNumerator(curmeter->getNumerator());
+			curmetertime.setDenominator(curmeter->getDenominator());
+			curmetertime.normalize();
+
+			if (curmetertime.getNumerator() == 0 || curmeter->getAutoBarlines() == 0 || curmeter->getAutoMeasuresNum() == 0)
+				displayMeasureNumber = false;
+		}
+
+		ARMusicalObject * o = GetAt(pos);
+		ARBar * bar = dynamic_cast<ARBar *>(o);
+
+		ARNewPage * page = dynamic_cast<ARNewPage *>(o);
+		ARNewSystem * sys = dynamic_cast<ARNewSystem *>(o);
+
+		if (bar && displayMeasureNumber)
+		{
+			bar->setMeasureNumber(measureNumber);
+			measureNumber++;
+		}
+		
+		GetNext(pos,vst);
+	}
+}
+
+class PointerClass
+{
+public:
+	ARMusicalObject * pobj;
+	GuidoPos		 pos1;
+	GuidoPos		 pos2;
+};
 
 
 //____________________________________________________________________________________
