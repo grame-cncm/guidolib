@@ -30,6 +30,9 @@ ARBar::ARBar(const TYPE_TIMEPOSITION &timeposition)
 {
 	barnumber = -1; // not specified
 	measureNumber = 0;
+
+	numDx = 0;
+	numDy = 0;
 }
 
 
@@ -37,6 +40,9 @@ ARBar::ARBar() : ARMTParameter()
 {
 	barnumber = -1; // not specified
 	measureNumber = 0;
+
+	numDx = 0;
+	numDy = 0;
 }   
 
 ARBar::~ARBar() // does nothing
@@ -68,8 +74,7 @@ void ARBar::setTagParameterList(TagParameterList& tpl)
 
 		ListOfStrings lstrs; // (1); std::vector test impl
 		lstrs.AddTail(
-			(
-			"I,number,-1,o"));
+			("I,number,-1,o;U,numDx,0,o;U,numDy,0,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -90,9 +95,14 @@ void ARBar::setTagParameterList(TagParameterList& tpl)
 			assert(tpi);
 
 			if (tpi->pflag != TagParameter::NOTSET)
-			{
 				barnumber = tpi->getValue();
-			}
+
+			// - dx/dy for measure number
+			TagParameterFloat *f = TagParameterFloat::cast(rtpl->GetNext(pos));
+			numDx = f->getValue();
+
+			f = TagParameterFloat::cast(rtpl->GetNext(pos));
+			numDy = f->getValue();
 		}
 
 		delete rtpl;
@@ -103,7 +113,4 @@ void ARBar::setTagParameterList(TagParameterList& tpl)
 	}
 
 	tpl.RemoveAll();
-
-  }
-
-
+}

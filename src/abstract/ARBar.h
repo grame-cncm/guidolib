@@ -41,12 +41,18 @@ class ARBar : // public ARMusicalObject,
 		void setMeasureNumber(int inMeasureNumber) { measureNumber = inMeasureNumber; }
 		int  getMeasureNumber()                    { return measureNumber; }
 
+		float  getMeasureNumberDxOffset()            { return numDx; }
+		float  getMeasureNumberDyOffset()            { return numDy; }
+
 		virtual bool operator==(const ARBar & bar)
 			{ return (barnumber == bar.barnumber); }
 
   protected:
 		int barnumber; // number of bar where barline starts
 		int measureNumber;
+
+		float numDx;
+		float numDy;
 
 		static ListOfTPLs ltpls;
   };
