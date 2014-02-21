@@ -30,14 +30,14 @@ GuidoViewer::GuidoViewer (MainAppWindow* w)
 }
 
 //==============================================================================
-const StringArray GuidoViewer::getMenuBarNames()
+StringArray GuidoViewer::getMenuBarNames()
 {
 	const char* const names[] = { "File", 0 };
 	return StringArray (names);
 }
 
 //-------------------------------------------------------------------------------
-const PopupMenu GuidoViewer::getMenuForIndex (int menuIndex, const String& /*menuName*/)
+PopupMenu GuidoViewer::getMenuForIndex (int menuIndex, const String& /*menuName*/)
 {
 	ApplicationCommandManager* commandManager = &(fWindow->commandManager);
 
