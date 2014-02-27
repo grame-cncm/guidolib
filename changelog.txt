@@ -2,6 +2,11 @@ GUIDO Engine history
 
 
 ----------------------------------------------------------------
+2013-09-13  version 1.5.3
+- bug corrected with the mappings (was introduced with comparison operator on time segments)
+ 
+
+----------------------------------------------------------------
 2013-09-13  version 1.5.2
 - improvement of \ritardando-tag and \accelerando-tag: now a dotted line is drawn and it is possible to indicate the tempo of beginning
 and end (also possible to change the text style and color)
