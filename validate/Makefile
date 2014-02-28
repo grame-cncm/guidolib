@@ -43,15 +43,25 @@ noplost	= "possibly lost: 0"
 gmnfiles     = $(shell find ../gmn-examples -name "*.gmn") $(shell find ../regression-tests -name "*.gmn")
 pdfout		:= $(patsubst ../%.gmn, $(version)/%.pdf, $(gmnfiles))
 svgout		:= $(patsubst ../%.gmn, $(version)/%.svg, $(gmnfiles))
+
+sysmapout		:= $(patsubst ../%.gmn, $(version)/maps/system/%.map, $(gmnfiles))
+staffmapout		:= $(patsubst ../%.gmn, $(version)/maps/staff/%.map, $(gmnfiles))
+voicemapout		:= $(patsubst ../%.gmn, $(version)/maps/voice/%.map, $(gmnfiles))
+timemapout		:= $(patsubst ../%.gmn, $(version)/maps/time/%.map, $(gmnfiles))
+mapsout		:= $(sysmapout) $(staffmapout) $(voicemapout) $(timemapout)
+
 leaksout 	:= $(patsubst ../%.gmn, $(version)/$(TOOLPATH)/%.leaks.txt, $(gmnfiles))
 midiout     := $(patsubst ../%.gmn, $(version)/%.mid, $(gmnfiles))
 
+
 allpdf 		 = $(shell [ -d $(version) ] && find $(version) -name "*.pdf")
 allsvg 		 = $(shell [ -d $(version) ] && find $(version) -name "*.svg")
+allmap 		 = $(shell [ -d $(version) ] && find $(version)/maps -name "*.map")
 leaksfiles  := $(patsubst ../%.gmn, $(version)/$(TOOLPATH)/%.leaks.out, $(gmnfiles))
 
 validpdf 	= $(patsubst %.pdf, %.outpdf, $(allpdf))
 validsvg 	= $(patsubst %.svg, %.outsvg, $(allsvg))
+validmap 	= $(patsubst %.map, %.outmap, $(allmap))
 validsvgwin 	= $(patsubst %.svg, %.outsvgwin, $(allsvg))
 
 .PHONY: pdf svg
@@ -84,16 +94,31 @@ help:
 validate: $(validsvg)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
 	@echo Validating version $(version) with $(VERSION) $(tmp)
+	make validmap
+
+validmap: $(validmap)
+	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
+	@echo Validating version maps $(version) with $(VERSION) $(tmp)
 	
 validateWin: $(validsvgwin)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
 	@echo Validating version $(version) with $(VERSION) $(tmp)
+	make validmap
 
 pdfvalidate: $(validpdf)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
 	@echo Validating version $(version) with $(VERSION) $(tmp)
+	make validmap
 	
+#########################################################################
+# rules
 %.outsvg: %.svg
+		$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
+		@[ -f  $(tmp) ] || echo $< : new file
+		$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
+		@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open -t $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
+	
+%.outmap: %.map
 		$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
 		@[ -f  $(tmp) ] || echo $< : new file
 		$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
@@ -168,6 +193,27 @@ svgclean:
 $(version)/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	-$(guido2svg) $< | grep -v "SVG file generated using" > __tmp.svg  &&  mv __tmp.svg $@
+
+
+#########################################################################
+# tools to generate map files
+map: $(mapsout)
+
+$(version)/maps/system/%.map: ../%.gmn
+	@[ -d $(@D) ] || mkdir -p $(@D)
+	-guidogetsystemmap $<  > $@
+
+$(version)/maps/staff/%.map: ../%.gmn
+	@[ -d $(@D) ] || mkdir -p $(@D)
+	-guidogetstaffmap $<  > $@
+
+$(version)/maps/voice/%.map: ../%.gmn
+	@[ -d $(@D) ] || mkdir -p $(@D)
+	-guidogetvoicemap $<  > $@
+
+$(version)/maps/time/%.map: ../%.gmn
+	@[ -d $(@D) ] || mkdir -p $(@D)
+	-guidogettimemap $<  > $@
 
 
 #########################################################################
