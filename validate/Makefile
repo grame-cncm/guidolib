@@ -138,7 +138,7 @@ pdfvalidate: $(validpdf)
 
 #########################################################################
 # pdf output generation
-pdf: forcepdfdate $(pdfout)
+pdf: forcepdfdate $(pdfout) $(mapsout)
 	@./forcepdfdate 20100101120000 $(pdfout)
 
 pdfclean: 
@@ -185,7 +185,7 @@ checkcrash: $(LEAKTOOLS)
 
 #########################################################################
 # tools to generate svg files
-svg: $(svgout)
+svg: $(svgout) $(mapsout)
 
 svgclean: 
 	rm -f $(svgout)
