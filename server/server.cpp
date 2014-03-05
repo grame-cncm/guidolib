@@ -143,7 +143,7 @@ _post_params (void *coninfo_cls, enum MHD_ValueKind , const char *key,
 // the http server
 //--------------------------------------------------------------------------
 HTTPDServer::HTTPDServer(int verbose, int logmode, string cachedir, string svgfontfile, guido2img* g2svg)
-    : fVerbose(verbose), fLogmode(logmode), fCachedir(cachedir), fSvgFontFile(svgfontfile), fServer(0), fConverter(g2svg), fMaxSessions(1000)
+    : fVerbose(verbose), fLogmode(logmode), fCachedir(cachedir), fSvgFontFile(svgfontfile), fServer(0), fConverter(g2svg), fMaxSessions(100)
 {
 }
 
@@ -541,17 +541,20 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
 
     if (!elems.size()) {
         if (type != POST) {
-            guidosessionresponse response = guidosession::genericFailure("Requests without scores MUST be POST.", 403);
+            guidosessionresponse response = guidosession::welcomeMessage();
             return send (connection, response);
         }
         return sendGuidoPostRequest(connection, args);
     }
 
     if (elems[0] == "version") {
-        guidosessionresponse response = guidosession::handleSimpleStringQuery("version", guidosession::getVersion());
+        guidosessionresponse response = guidosession::handleSimpleStringQuery("guidolib", guidosession::getVersion());
         return send(connection, response);
     } else if (elems[0] == "server") {
-        guidosessionresponse response = guidosession::handleSimpleStringQuery("server", guidosession::getServerVersion());
+        guidosessionresponse response = guidosession::handleSimpleStringQuery("guidoserver", guidosession::getServerVersion());
+        return send(connection, response);
+    } else if (elems[0] == "versions") {
+        guidosessionresponse response = guidosession::getGuidoAndServerVersions();
         return send(connection, response);
     } else if (elems[0] == "linespace") {
         guidosessionresponse response = guidosession::handleSimpleFloatQuery("linespace", guidosession::getLineSpace());
