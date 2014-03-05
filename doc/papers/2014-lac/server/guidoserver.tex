@@ -326,7 +326,11 @@ yields the following result, abbreviated below to minimize its space on the page
 The GUIDO HTTP server uses RESTful architectural principles such as statelessness, a uniform interface and a separation of client-server functionality in order to provide low-latency information retrieval.  Information corresponds to uploaded GMN scores, encoded as various MIME types and transmitted via the HTTP protocol.  The server exposes the robust GUIDO Engine public API via an interface based on standardized URI construction.  It is intended for use by various applications needing to visualize musical scores and process score-related data.  It is especially well-suited as an alternative to embarking libraries or external applications in score processing software.  As cloud computing and mobile human-computer interaction becomes more common, this form of data transmission and processing is increasingly necessary.  The GUIDO HTTP server intends to fill this by following RESTful architectural recommendations that have proven successful in other server-based services.
 
 The GUIDO project is an open source project hosted by sourceforge\footurl{http://guidolib.sf.net}.
-The GUIDO HTTP server is running at \icode{\url{http://guidoservice.grame.fr/}}.
+The GUIDO HTTP server is running at \\
+\hspace*{7mm}\icode{\url{http://guidoservice.grame.fr/}}.
+
+\section{Acknowledgements}
+This work has been realized in the framework of the INEDIT project that is supported by the French National Research Agency [ANR-12-CORD-0009].
 
 
 \begin{comment}
@@ -335,6 +339,5 @@ The process of elaborating the GUIDO server as a RESTful server is also a first 
 
 %\balance
 \bibliographystyle{acl}
-%\bibliographystyle{plain}
 \bibliography{../../guido}
 \end{document}
