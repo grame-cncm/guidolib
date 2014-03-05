@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="GUIDO Engine Web API 0.50 documentation" href="index.html" />
-    <link rel="next" title="API" href="api.html" />
+    <link rel="next" title="Server Options" href="options.html" />
     <link rel="prev" title="GUIDOEngine Web API" href="index.html" /> 
   </head>
   <body>
@@ -35,7 +35,7 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="api.html" title="API"
+          <a href="options.html" title="Server Options"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="GUIDOEngine Web API"
@@ -49,7 +49,6 @@
   <ul>
 <li><a class="reference internal" href="#">Overview</a><ul>
 <li><a class="reference internal" href="#guido-music-notation">GUIDO Music Notation</a></li>
-<li><a class="reference internal" href="#server-options">Server options</a></li>
 </ul>
 </li>
 </ul>
@@ -58,8 +57,8 @@
   <p class="topless"><a href="index.html"
                         title="previous chapter">GUIDOEngine Web API</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="api.html"
-                        title="next chapter">API</a></p>
+  <p class="topless"><a href="options.html"
+                        title="next chapter">Server Options</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/overview.txt"
@@ -124,72 +123,6 @@ the <a class="reference external" href="http://guidolib.sourceforge.net/">GUIDO 
 <span id="gmn"></span><h2>GUIDO Music Notation<a class="headerlink" href="#guido-music-notation" title="Permalink to this headline">¶</a></h2>
 <p>The <a class="reference external" href="http://guidolib.sourceforge.net/doc/GUIDO-Music%20Notation%20Format.html">GUIDO Music Notation format</a> is a formal language for score level music representation. It is a plain-text, i.e. readable and platform independent format capable of representing all information contained in conventional musical scores. The basic GUIDO Format is very flexible and can be easily extended and adapted to capture a wide variety of musical features beyond conventional musical notation (CMN). The GUIDO design is strongly influenced by objective oriented programming to facilitate an adequate representation of musical material, from tiny motives up to complex symphonic scores.</p>
 </div>
-<div class="section" id="server-options">
-<h2>Server options<a class="headerlink" href="#server-options" title="Permalink to this headline">¶</a></h2>
-<p>The following options can be passed to the server on startup:</p>
-<blockquote>
-<div><ul>
-<li><dl class="first docutils">
-<dt><tt class="docutils literal"><span class="pre">--port</span></tt></dt>
-<dd><p class="first">portnum : sets the communication port number</p>
-<p class="last"><em>default value</em>: 8000</p>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><tt class="docutils literal"><span class="pre">--daemon</span></tt></dt>
-<dd><p class="first">used with nohup to make this run as a daemon. Daemon-like behavior can be achieved with the options below:</p>
-<ul class="last simple">
-<li><tt class="docutils literal"><span class="pre">--root</span></tt>: run the server in the root directory</li>
-<li><tt class="docutils literal"><span class="pre">--closestdin</span></tt>: close standard in</li>
-<li><tt class="docutils literal"><span class="pre">--closestdout</span></tt>: close standard out</li>
-<li><tt class="docutils literal"><span class="pre">--closestderr</span></tt>: close standard error</li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><tt class="docutils literal"><span class="pre">--logfile</span></tt></dt>
-<dd><p class="first">logfile mode. Use 0 for Apache-like or 1 for XML.</p>
-<p class="last"><em>default value</em>: 0 (Apache-like)</p>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><tt class="docutils literal"><span class="pre">--cachedir</span></tt></dt>
-<dd><p class="first">name of the cache directory</p>
-<p class="last"><em>default value</em>: A directory named <tt class="docutils literal"><span class="pre">cache</span></tt> in the directory of the current executable</p>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><tt class="docutils literal"><span class="pre">--svgfontfile</span></tt></dt>
-<dd><p class="first">name of the svg font file.</p>
-<p class="last"><em>default value</em>: A file called guido2.svg in the directory of the current executable</p>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><tt class="docutils literal"><span class="pre">--version</span></tt></dt>
-<dd><p class="first last">version of the server and of guido</p>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><tt class="docutils literal"><span class="pre">--help</span></tt></dt>
-<dd><p class="first last">display all of these options in a help message</p>
-</dd>
-</dl>
-</li>
-</ul>
-</div></blockquote>
-<p>Here&#8217;s an example of how to make the cachedir in the file <tt class="docutils literal"><span class="pre">/home/guidofriend/mychachedir</span></tt></p>
-<blockquote>
-<div>./guidohttpserver &#8211;cachedir /home/guidofriend/mycachedir</div></blockquote>
-<p>Here&#8217;s an example of how to run the server in daemon mode</p>
-<blockquote>
-<div>sudo nohup ./guidohttpserver &#8211;daemon &amp;</div></blockquote>
-</div>
 </div>
 
 
@@ -205,7 +138,7 @@ the <a class="reference external" href="http://guidolib.sourceforge.net/">GUIDO 
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="api.html" title="API"
+          <a href="options.html" title="Server Options"
              >next</a> |</li>
         <li class="right" >
           <a href="index.html" title="GUIDOEngine Web API"
@@ -215,7 +148,7 @@ the <a class="reference external" href="http://guidolib.sourceforge.net/">GUIDO 
     </div>
     <div class="footer">
         &copy; Copyright 2012, Grame.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b3.
     </div>
   </body>
 </html>

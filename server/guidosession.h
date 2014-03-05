@@ -162,6 +162,10 @@ public :
     static guidosessionresponse handleSimpleBoolQuery(string, bool);
     static guidosessionresponse handleSimpleFloatQuery(string, float);
     static guidosessionresponse handleSimpleStringQuery(string, string);
+
+    // a bit of a kludge for special cases...
+    static guidosessionresponse welcomeMessage();
+    static guidosessionresponse getGuidoAndServerVersions();
     
     guidosessionresponse handleSimpleIDdIntQuery(string, int);
     guidosessionresponse handleSimpleIDdBoolQuery(string, bool);

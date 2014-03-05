@@ -12,6 +12,7 @@ Contents:
    :maxdepth: 2
 
    overview
+   options
    api
 
 Indices and tables

@@ -566,6 +566,39 @@ guidosessionresponse guidosession::handleSimpleStringQuery(string name, string m
     return guidosessionresponse(mystream.str(), "application/json", 200);
 }
 
+guidosessionresponse guidosession::getGuidoAndServerVersions()
+{
+    json_object *obj = new json_object();
+    obj->add (new json_element("guidolib", new json_string_value(getVersion().c_str())));
+    obj->add (new json_element("guidoserver", new json_string_value(getServerVersion().c_str())));
+    ostringstream mystream;
+    json_stream jstream(mystream);
+    obj->print(jstream);
+    // important! as everything is pointers, need to delete here
+    delete obj;
+    return guidosessionresponse(mystream.str(), "application/json", 200);
+}
+
+guidosessionresponse guidosession::welcomeMessage()
+{
+    json_object *obj = new json_object();
+    obj->add (new json_element("description", new json_string_value(
+    "The HTTP GUIDO Engine is a web server that provides music score layout\n"
+    "services, based on the the GUIDO Engine library and on the GUIDO Music\n"
+    "Notation format. These services are availble using HTTP requests. The\n"
+    "corresponding API is inspired by a RESTful design and is close to the\n"
+    "C/C++ API.")));
+    obj->add (new json_element("doc", new json_string_value("http://guido.grame.fr")));
+    obj->add (new json_element("guidolib", new json_string_value(getVersion().c_str())));
+    obj->add (new json_element("guidoserver", new json_string_value(getServerVersion().c_str())));
+    ostringstream mystream;
+    json_stream jstream(mystream);
+    obj->print(jstream);
+    // important! as everything is pointers, need to delete here
+    delete obj;
+    return guidosessionresponse(mystream.str(), "application/json", 200);
+}
+
 guidosessionresponse guidosession::handleSimpleIDdIntQuery(string name, int myint)
 {
     json_object *obj = new json_object();
