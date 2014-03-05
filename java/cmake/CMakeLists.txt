@@ -22,9 +22,8 @@ FIND_PACKAGE(JNI REQUIRED)
 
 
 if(APPLE)
-	set (CMAKE_OSX_ARCHITECTURES "x86_64 i386")
-	set (CMAKE_OSX_SYSROOT /Developer/SDKs/MacOSX10.6.sdk)
-	set (CMAKE_C++_FLAGS -mmacosx-version-min=10.4)
+	set (CMAKE_OSX_ARCHITECTURES "x86_64")
+	set (CMAKE_C++_FLAGS -mmacosx-version-min=10.6)
 endif(APPLE)
 
 if(WIN32)
@@ -85,11 +84,11 @@ include_directories( ${INCL})
 file (GLOB JAVA RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${JAVA_PATH}/*.java")
 file (GLOB LIBSRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${SRC})
 file (GLOB LIBH RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${HEADERS})
-set (GUIDO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../cmake)
+set (GUIDO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../build)
 if (WIN64)
- find_library (GUIDO GUIDOEngine64 PATHS ${GUIDO_PATH}/Release NO_DEFAULT_PATH)
+ find_library (GUIDO GUIDOEngine64 PATHS ${GUIDO_PATH}/win64/Release NO_DEFAULT_PATH)
 else(WIN64)
- find_library (GUIDO GUIDOEngine PATHS ${GUIDO_PATH}/Release NO_DEFAULT_PATH)
+ find_library (GUIDO GUIDOEngine PATHS ${GUIDO_PATH}/MacOS/Release NO_DEFAULT_PATH)
 endif(WIN64)
 
 set (LIBCONTENT ${LIBSRC} ${LIBH})
@@ -107,6 +106,7 @@ endif(WIN32)
 add_library(${target} SHARED ${LIBCONTENT})
 set_target_properties (${target} PROPERTIES VERSION ${VERSION})
 target_link_libraries (${target} ${LINK})
+message ("target_link_libraries (${target} ${LINK})")
 
 #######################################
 # install settings
