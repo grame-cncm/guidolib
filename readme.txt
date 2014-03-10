@@ -44,7 +44,16 @@ Note for Android:
       export PATH=$PATH:$PATH_TO_SDK/platform-tools
       export PATH=$PATH:$PATH_TO_STANDALONE_TOOLCHAIN/bin
 
-    To start off, make sure you are connected to the internet and run:
+    After doing this, the most simple way to get up and running is to
+    run:
+
+      python lazy-android-setup.py
+
+    Then, compile the application android-apps/simple-guido-editor
+    by following the instructions in the readme of that directory.
+
+    If you don't want to run the lazy installer script, To start off,
+    make sure you are connected to the internet and run:
 
       git submodule init
       git submodule update
