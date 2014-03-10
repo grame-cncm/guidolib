@@ -18,33 +18,61 @@ if RI != 'y' :
 
 # init all submodules and checkout master branch
 
-subprocess.call('git submodule init', shell=True, cwd=".")
-subprocess.call('git submodule update', shell=True, cwd=".")
-subprocess.call('git checkout master', shell=True, cwd='android-apps/android-cmake')
-subprocess.call('git submodule init', shell=True, cwd='android-apps/android-cairo')
-subprocess.call('git submodule update', shell=True, cwd='android-apps/android-cairo')
-subprocess.call('git checkout master', shell=True, cwd='android-apps/android-cairo')
+def subprocess_shortcut(command, cwd = ".", rc = 0, msg = "") :
+  print "Step:", msg
+  p = subprocess.Popen(command, shell=True, cwd=cwd, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+  p.wait()
+  if p.returncode == rc :
+    print "  success with exit code", p.returncode
+  else :
+    print "  failed with exit code", p.returncode
+    if p.stderr != '' :
+      print "  and the following message was printed to stderr:"
+      print p.stderr
+      print ""
+      sys.exit(1)
+
+subprocess_shortcut('git submodule init', ".", 0, "Initializing git submodules.")
+
+subprocess_shortcut('git submodule update', ".", 0, "Updating submodules")
+
+subprocess_shortcut('git checkout master', 'android-apps/android-cmake', 0, "Checking out the master branch of android-cmake")
+
+subprocess_shortcut('git checkout master', 'android-apps/android-cmake', 0, "Checking out the master branch of android-cmake")
+
+subprocess_shortcut('git submodule init', 'android-apps/android-cairo', 0, "Initializing submodules of android-cairo")
+
+subprocess_shortcut('git submodule update', 'android-apps/android-cairo', 0, "Updating submodules of android-cairo")
+
+subprocess_shortcut('git checkout master', 'android-apps/android-cairo', 0, "Checking out the master branch of android-cairo")
 
 try :
   os.makedirs('build/android')
-  print "successfully created build/android"
+  print "Successfully created build/android"
 except OSError :
-  print "build/android already exists"
+  print "build/android already exists, not remaking"
 
-subprocess.call('./autogen.sh', shell=True, cwd='android-apps/android-cairo')
+subprocess_shortcut('cp jni/pixman.mk jni/Android.mk', 'android-apps/android-cairo', 0, 'Creating pixman Android makefile')
 
-print "pixman and cairo for android built"
+subprocess_shortcut('ndk-build', 'android-apps/android-cairo', 0, 'Building pixman for android')
 
-subprocess.call('cmake -DANDROID=1 ../../cmake', shell=True, cwd='build/android')
-subprocess.call('make', shell=True, cwd='build/android')
+subprocess_shortcut('cp jni/cairo.mk jni/Android.mk', 'android-apps/android-cairo', 0, 'Creating cairo Android makefile')
 
-print '''If this succeeded, to compile a test android project, go to :
+subprocess_shortcut('ndk-build', 'android-apps/android-cairo', 0, 'Building cairo for android')
+
+subprocess_shortcut('cmake -DANDROID=1 ../../cmake', 'build/android', 0, "Running cmake for android.")
+
+subprocess_shortcut('make', 'build/android', 0, "Making C++ library compiled with android compiler.")
+
+print '''
+Congrats, you made it!
+To compile a test android project, go to :
 
   android-apps/simple-guido-editor
 
 and follow the instructions in the readme.
 
-If this didn't succeed, e-mail mike@mikesolomon.org.
+If this doesn't succeed, e-mail mike@mikesolomon.org.
 
 Happy hacking!
 '''
