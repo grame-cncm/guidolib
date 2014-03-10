@@ -1,10 +1,8 @@
-First, read the README in the directory above this one if you haven't yet.
+From this directory, run:
 
-Then, from this directory:
-
-ndk-build
-ant debug
-adb install -r bin/HelloWorldGuido-debug.apk
+  ndk-build
+  ant debug
+  adb install -r bin/HelloWorldGuido-debug.apk
 
 Make sure that ndk-build (ships with the NDK, should be in the bin/
 directory), ant (Apache ant, http://ant.apache.org/) and adb
