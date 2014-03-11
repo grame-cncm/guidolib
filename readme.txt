@@ -33,8 +33,8 @@ Note for Android:
     documentation for how.  More precisely, read section 4 in the document
     STANDALONE-TOOLCHAIN.html that ships with the NDK. Make sure to use a recent
     platform (at least android-18). I will call the path to your standalone toolchain
-    $PATH_TO_STANDALONE_TOOLCHAIN, the path to the SDK $PATH_TO_SDK and the
-    path to android cmake $PATH_TO_ANDROID_CMAKE.
+    $PATH_TO_STANDALONE_TOOLCHAIN, the path to the NDK $PATH_TO_NDK and the path to
+    the SDK $PATH_TO_SDK.
 
     Modify your path to contain the following.  Otherwise, the compiler
     won't find things like the standard library.
@@ -44,11 +44,40 @@ Note for Android:
       export PATH=$PATH:$PATH_TO_SDK/platform-tools
       export PATH=$PATH:$PATH_TO_STANDALONE_TOOLCHAIN/bin
 
-    Read the short README in the android-apps folder for instructions on
-    how to compile android-cairo.
+    After doing this, the most simple way to get up and running is to
+    run:
+
+      python lazy-android-setup.py
+
+    Then, compile the application android-apps/simple-guido-editor
+    by following the instructions in the readme of that directory.
+
+    If you don't want to run the lazy installer script, To start off,
+    make sure you are connected to the internet and run:
+
+      git submodule init
+      git submodule update
+
+    From the toplevel folder (the folder that this readme is in).
+    This will initialize the repositories of two major dependencies.
+    When in doubt, call these two commands to make sure that you
+    have everything in order, as a simple git pull will not update
+    submodules.
+
+    In the directories android-apps/android-cmake and
+    android-apps/android-cairo, make sure to do:
+
+      git checkout master to
+
+    to be on the master branch.
+
+    Read the first part of README.md in the android-apps/android-cairo
+    folder for instructions on how to compile android-cairo. This must
+    be done ***BEFORE*** any of the cmake stuff below.
 
     Then, in your build directory, make an android folder.
     From this folder, call:
+
       cmake -DANDROID=1 ../../cmake
       make
 
