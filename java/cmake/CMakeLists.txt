@@ -116,11 +116,6 @@ target_link_libraries (${target} ${LINK})
 # install settings
 if (NOT WIN32 AND NOT IOS)
 set (LIBDEST /usr/lib)
-if(${CMAKE_SYSTEM_PROCESSOR} STREQUAL "x86_64")
-  set (LIBDEST /usr/lib64)
-  message (STATUS "64 bits system detected : setting install dir to ${LIBDEST}")
-endif(${CMAKE_SYSTEM_PROCESSOR} STREQUAL "x86_64")
-
 install ( TARGETS ${target}	LIBRARY DESTINATION ${LIBDEST})
 endif()
 
