@@ -19,7 +19,7 @@ and end (also possible to change the text style and color)
 - \pageFormat-tag modified : from now, when horizontal / vertical margins sum is superior than width / height, they are set to 0
 - new 'lineThickness' attribute for the \staffFormat-tag
 - new attributes for the \tuplet-tag: 'lineThickness', 'textSize', 'bold'
-- new attributes for the \cres-tag and \decresc-tag: now it's fully customizable
+- new attributes for the \cresc-tag and \decresc-tag: now it's fully customizable
 - bugs correction
     - on windows, sometimes Guido crashed when user left-clicked on the score
     - dotted events (clusters, chords (vertical dot alignment and collision avoidance) and rests)
