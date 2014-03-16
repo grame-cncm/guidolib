@@ -19,6 +19,8 @@
 #include "GUIDOParse.h"
 #include "GUIDOEngine.h"
 
+#define NANOSVG_IMPLEMENTATION
+
 using namespace std;
 
 static void usage (char* name)
@@ -194,8 +196,8 @@ int main(int argc, char **argv)
 			gmn += char(c);				// read the standard input into a string
 	}
 
-	SVGSystem sys;
-	SVGDevice dev(cout, &sys);
+	SVGSystem sys(fontfile);
+	SVGDevice dev(cout, &sys, fontfile);
     GuidoInitDesc gd = { &dev, 0, 0, 0 };
     GuidoInit(&gd);                    // Initialise the Guido Engine first
 

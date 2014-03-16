@@ -24,6 +24,7 @@ endif(UNIX)
 option ( IOS 	"Generates project for iOS" off )
 option ( DIST 	"Compiles universal binaries (x86_64 i386) on MacOSX" off )
 option ( MIDIEXPORT "MIDI export support (requires MidiShareLight)" off)
+option ( INDEPENDENTSVG "Independent SVG support (gets all font information from provided SVG files)" off)
 option ( STATICLIB  "Generates a static library (default for iOS)" off)
 
 if(APPLE)
@@ -82,7 +83,7 @@ add_definitions(-DGUIDOExport)
 # set directories, src and headers.
 set (GUIDO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/..)
 set (SRC_PATH	${GUIDO_PATH}/src)
-set (SRCFOLDERS  lib graphic abstract parser tools misc include devices maps)
+set (SRCFOLDERS  lib graphic abstract parser tools misc include devices maps nanosvg/src)
 set (HEADERS_PATH ${SRC_PATH}/include)
 if(WIN32)
 	set(VGDEV_PATH ${GUIDO_PATH}/win32/src)
@@ -113,6 +114,13 @@ else()
 	message (STATUS "MIDI export will not be generated - Use -DMIDIEXPORT=yes to change (requires MidiShareLight).")
 endif()
 
+# independent svg support
+if (INDEPENDENTSVG STREQUAL "yes")
+	message (STATUS "Independent SVG will be enforced and all SVG fonts must be elaborated in SVG files - Use -DINDEPENDENTSVG=no to change.")
+	add_definitions(-DINDEPENDENTSVG)
+else()
+	message (STATUS "Independent SVG will not be enforced and SVG fonts will be approximated using system fonts - Use -DINDEPENDENTSVG=yes to change.")
+endif()
 
 foreach(folder ${SRCFOLDERS})
 	set (SRC ${SRC} "${SRC_PATH}/${folder}/*.cpp")					# add source files

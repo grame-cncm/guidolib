@@ -19,6 +19,7 @@
 
 // Last released version: 1.2.2, current version: 1.3.1 (see GuidoInternal.h)
 
+#define NANOSVG_IMPLEMENTATION
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -552,7 +553,7 @@ GUIDOAPI(GuidoErrCode) GuidoOnDraw( GuidoOnDrawDesc * desc )
 // --------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile)
 {
- 	SVGSystem sys;
+ 	SVGSystem sys(fontfile);
 	SVGDevice dev (out, &sys, fontfile);
     
     GuidoOnDrawDesc desc;              // declare a data structure for drawing

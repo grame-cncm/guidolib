@@ -31,8 +31,9 @@
 // --------------------------------------------------------------
 class_export SVGSystem : public VGSystem
 {
+	const char*		fGuidoFontFile;
 	public:
-					 SVGSystem() {}
+                                SVGSystem(const char* guidofontfile=0);
 		virtual		~SVGSystem() {}
 
 		virtual VGDevice*		CreateDisplayDevice( std::ostream& outstream, const char* fontfile=0 );

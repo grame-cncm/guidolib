@@ -17,6 +17,12 @@
 
 using namespace std;
 //______________________________________________________________________________
+SVGSystem::SVGSystem(const char* guidofontfile) : 
+	fGuidoFontFile(guidofontfile)
+{
+}
+
+//______________________________________________________________________________
 VGDevice* SVGSystem::CreateDisplayDevice(ostream& outstream, const char* fontfile)
 {
 	return new SVGDevice (outstream, this, fontfile);
@@ -71,6 +77,6 @@ VGDevice* SVGSystem::CreateAntiAliasedMemoryDevice( int w, int h )
 //______________________________________________________________________________
 const VGFont* SVGSystem::CreateVGFont( const char * faceName, int size, int properties ) const
 {
-	return new SVGFont (faceName, size, properties);
+	return new SVGFont (faceName, size, properties, fGuidoFontFile);
 }
 
