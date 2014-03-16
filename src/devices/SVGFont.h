@@ -16,6 +16,9 @@
 
 #include "VGFont.h"
 #include "nanosvg.h"
+#ifdef INDEPENDENTSVG
+#include <map>
+#endif
 
 /*!
 \addtogroup VGSys Virtual Graphic System
@@ -34,7 +37,8 @@ class SVGFont : public VGFont
 
 #ifdef INDEPENDENTSVG
 	struct NSVGimage *	fNSVGimage;
-        static std::string maybeHexToChar(const char* tryMe);
+        static std::map<std::string, std::string> makeHexToCharMap();
+        static const std::map<std::string, std::string> hexToCharMap;
 #else
 	const VGFont *	fFont;
 	VGDevice *	fDevice;
