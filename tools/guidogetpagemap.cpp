@@ -60,15 +60,13 @@ int main(int argc, char **argv)
         GuidoParser *parser = GuidoOpenParser();
 
         std::ifstream ifs(argv[i], ios::in);
-        if (!ifs)
-            return 0;
+        if (!ifs) return 0;
 
         std::stringstream streamBuffer;
         streamBuffer << ifs.rdbuf();
         ifs.close();
 
         arh = GuidoString2AR(parser, streamBuffer.str().c_str());
-
 		if (arh)
         {
 			GRHandler grh;
@@ -76,8 +74,7 @@ int main(int argc, char **argv)
 
 			if (err != guidoNoErr)
                 error(err);
-			else
-            {
+			else {
 				int n = GuidoGetPageCount (grh);
 
 				for (int page = 1; page <= n; page++)
@@ -87,11 +84,8 @@ int main(int argc, char **argv)
 					cout << "# page " << page << "/" << n << endl;
 					cout << "######################### " << endl;
 					err = GuidoGetPageMap(grh, page, kSize, kSize, map);
-
-					if (err == guidoNoErr)
-                    {
-						for (Time2GraphicMap::const_iterator m = map.begin(); m != map.end(); m++)
-                        {
+					if (err == guidoNoErr) {
+						for (Time2GraphicMap::const_iterator m = map.begin(); m != map.end(); m++) {
 							cout << m->first << " " << m->second << endl;
 						}
 					}
@@ -106,12 +100,9 @@ int main(int argc, char **argv)
 			err = GuidoParserGetErrorCode (parser, line, col, 0);
 			error (err);
 		}
-
         GuidoCloseParser(parser);
 	}
-
 	delete dev;
-
 	return 0;
 }
 

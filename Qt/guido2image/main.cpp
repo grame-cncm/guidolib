@@ -82,7 +82,7 @@ typedef struct Guido2ImageOptions {
 		: stdInMode(false), hasLayout(false), page(1),
 		  inputFile(0), inputString(0), outputFile(0), imageFormat(0),
 		  zoom(-1.f), height(-1), width(-1), 
-          systemsDistance(-1.f), systemsDistribution(0), optimalPageFill(0), resize2Page(0)  {}
+		  systemsDistance(-1.f), systemsDistribution(0), optimalPageFill(0)  {}
 } Guido2ImageOptions;
 
 //------------------------------------------------------------------------------------------
@@ -111,7 +111,6 @@ static void usage(const char * name)
 	cerr << "           -d distance (int)      control the systems distance (default value is 75)." << endl;
 	cerr << "           -a [auto|always|never] control systems distribution (default value is 'auto')." << endl;
 	cerr << "           -b [on|off]			   control the optimal page fill (default value is 'on')." << endl;
-    cerr << "           -r [on|off]			   control the automatic page resizing to music (default value is 'on')." << endl;
 	cerr << endl;
 	cerr << "notes:        * If you use both -h and -w options, the score will be reduced/enlarged to fit" << endl;
 	cerr << "                inside the height*width rect ; the score's aspect ratio will be preserved." << endl;
@@ -146,7 +145,7 @@ static void parseOptions(int argc, char *argv[] , Guido2ImageOptions& opts )
 {
 	int c;
 	opterr = 0;
-	while ((c = getopt (argc, argv, "f:s:o:pw:h:z:t:d:a:b:r:?:v")) != -1)
+	while ((c = getopt (argc, argv, "f:s:o:pw:h:z:t:d:a:b:?:v")) != -1)
 		switch (c)
 		{
 			case 'f':	opts.inputFile = optarg;		break;
@@ -166,9 +165,6 @@ static void parseOptions(int argc, char *argv[] , Guido2ImageOptions& opts )
 						opts.hasLayout = true;
 						break;
 			case 'b':	opts.optimalPageFill = optarg;
-						opts.hasLayout = true;
-						break;
-            case 'r':	opts.resize2Page = optarg;
 						opts.hasLayout = true;
 						break;
 			case 'v':	cout << basename(argv[0]) << " version " << kVersion << " using Guido Engine v." << GuidoGetVersionStr() << endl;
@@ -313,6 +309,7 @@ int main(int argc, char *argv[])
 	else stripext ( options.inputFile, output);
 	p.output = output.c_str();
 	//----------------------------------------------------
+	p.pageFormat = 0;
 	p.format = strToFormat (options.imageFormat);			// the image output format
 	p.layout = options2layout (options);					// the layout options (if any)
 	p.pageIndex = 0;										// page index starts at 0 (I guess it means all pages - to be checked)

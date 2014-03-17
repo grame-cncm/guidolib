@@ -15,10 +15,12 @@ else {
 	TARGET = GuidoEditor	 
 }
 
-unix:TARGET = guidoeditor
+unix:DebugBuild {
+	TARGET = guidoeditord
+} else {
+	TARGET = guidoeditor
+}
 
-
-#CONFIG += c++11
 DESTDIR = ../bin
 MOC_DIR = ./tmpSrc
 RCC_DIR = ./tmpSrc

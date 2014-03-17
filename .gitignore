@@ -10,3 +10,5 @@ tmpSrc
 .DS_Store
 *.o
 *~
+DerivedData
+doc/server/build/*

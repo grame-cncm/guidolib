@@ -11,30 +11,61 @@
 
 */
 
-#include <QBuffer>
+#include <QtCore/QBuffer>
 
 #include "guido2img.h"
 #include "Guido2Image.h"
+
+#include <assert.h>
 
 using namespace std;
 namespace guidohttpd
 {
 
 //--------------------------------------------------------------------------
-Guido2ImageErrorCodes guido2img::convert (const char* gmn, int page, int width, int height, float zoom)
+int guido2img::convert (guidosession* const currentSession)
 {
-	Guido2Image::Params p;
-	p.input  = gmn;	
-	p.output = 0;
-	p.format = GUIDO_2_IMAGE_PNG;
-	p.layout = 0;
-	p.pageIndex = page;
-	p.sizeConstraints = QSize (width, height);
-	p.zoom = zoom;
+    Guido2Image::Params p;
 
-	fBuffer.reset();
-	p.device = &fBuffer;
-	return Guido2Image::gmnString2Image (p);
+    p.input  = currentSession->gmn_.c_str ();
+    p.output = 0;
+    switch (currentSession->format_) {
+    case GUIDO_WEB_API_PNG :
+        p.format = GUIDO_2_IMAGE_PNG;
+        break;
+    case GUIDO_WEB_API_JPEG :
+        p.format = GUIDO_2_IMAGE_JPEG;
+        break;
+    case GUIDO_WEB_API_GIF :
+        p.format = GUIDO_2_IMAGE_GIF;
+        break;
+    case GUIDO_WEB_API_SVG :
+        assert (false);
+    default :
+        p.format = GUIDO_2_IMAGE_PNG;
+        break;
+    }
+
+    GuidoPageFormat pf;
+    currentSession->fillGuidoPageFormatUsingCurrentSettings(&pf);
+    p.pageFormat = &pf;
+
+    p.resizePageToMusic = currentSession->resizeToPage_;
+
+    GuidoLayoutSettings ls;
+    currentSession->fillGuidoLayoutSettingsUsingCurrentSettings(&ls);
+    p.layout = &ls;
+
+    p.pageIndex = currentSession->page_;
+    p.sizeConstraints = QSize (GuidoCM2Unit(currentSession->width_), GuidoCM2Unit(currentSession->height_));
+    p.zoom = currentSession->zoom_;
+
+    fBuffer.open(QIODevice::ReadWrite);
+    fBuffer.reset();
+    p.device = &fBuffer;
+    Guido2ImageErrorCodes err = Guido2Image::gmnString2Image (p);
+    fBuffer.close();
+    return err == GUIDO_2_IMAGE_SUCCESS ? 0 : 1;
 }
 
 } // end namespoace

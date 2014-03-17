@@ -23,8 +23,8 @@ set (target GUIDOEngine)
 set (statictarget SGUIDOEngine)
 #######################################
 # versions management
-set (VERSION 1.52)
-set (STRVERS "v.1.52")
+set (VERSION 1.53)
+set (STRVERS "v.1.53")
 set (GUIDOFWKVERS C)
 set (SOVERS 1)
 
@@ -60,8 +60,10 @@ if(APPLE)
 			message (STATUS "Only the current architecture will be compiled - Use -DDIST=yes to change.")
 		endif ()
 	add_definitions(-D_USE_QD_COORDINATES_ -compatibility_version 1.0.0)
-	set (CMAKE_C++_FLAGS -mmacosx-version-min=10.5)
-	set (CMAKE_LDFLAGS -mmacosx-version-min=10.5)
+	set (CMAKE_C++_FLAGS -mmacosx-version-min=10.6)
+	set (CMAKE_LDFLAGS -mmacosx-version-min=10.6)
+	set (CMAKE_OSX_DEPLOYMENT_TARGET 10.6)
+	set (MACOSX_DEPLOYMENT_TARGET 10.6)
 	endif ()
 endif(APPLE)
 

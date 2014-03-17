@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Getting GUIDO Server information &mdash; GUIDO Engine Web API 0.50 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.50',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="GUIDO Engine Web API 0.50 documentation" href="../index.html" />
+    <link rel="up" title="Miscellaneous" href="../misc.html" />
+    <link rel="next" title="Getting lines spacing" href="linespace.html" />
+    <link rel="prev" title="Getting GUIDO Engine version" href="version.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="linespace.html" title="Getting lines spacing"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="version.html" title="Getting GUIDO Engine version"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">GUIDO Engine Web API 0.50 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >API</a> &raquo;</li>
+          <li><a href="../get.html" >The GET method</a> &raquo;</li>
+          <li><a href="../misc.html" accesskey="U">Miscellaneous</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Getting GUIDO Server information</a><ul>
+<li><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="version.html"
+                        title="previous chapter">Getting GUIDO Engine version</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="linespace.html"
+                        title="next chapter">Getting lines spacing</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/api/server.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="getting-guido-server-information">
+<h1>Getting GUIDO Server information<a class="headerlink" href="#getting-guido-server-information" title="Permalink to this headline">¶</a></h1>
+<dl class="docutils" id="index-0">
+<dt><strong>Path</strong></dt>
+<dd><tt class="docutils literal"><span class="pre">server</span></tt></dd>
+<dt><strong>Response body</strong></dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>in case of success:</dt>
+<dd><div class="first last line-block">
+<div class="line">a version number of the server, formatted as JSON with &#8216;server&#8217; as key.</div>
+<div class="line">Example: <tt class="docutils literal"><span class="pre">{</span> <span class="pre">&quot;server&quot;</span> <span class="pre">:</span> <span class="pre">&quot;1.0&quot;</span> <span class="pre">}</span></tt></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt><strong>Response code</strong></dt>
+<dd><ul class="first last simple">
+<li>200 (&#8220;Success&#8221;)</li>
+</ul>
+</dd>
+</dl>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>Using jQuery:</p>
+<div class="highlight-python"><pre>$.get('http://guido.server.org/server');</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="linespace.html" title="Getting lines spacing"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="version.html" title="Getting GUIDO Engine version"
+             >previous</a> |</li>
+        <li><a href="../index.html">GUIDO Engine Web API 0.50 documentation</a> &raquo;</li>
+          <li><a href="../api.html" >API</a> &raquo;</li>
+          <li><a href="../get.html" >The GET method</a> &raquo;</li>
+          <li><a href="../misc.html" >Miscellaneous</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Grame.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
+    </div>
+  </body>
+</html>

@@ -12,6 +12,8 @@
 
 */
 
+#include <string.h>
+
 #include "ARCrescendo.h"
 #include "VGDevice.h"
 #include "GRStaff.h"

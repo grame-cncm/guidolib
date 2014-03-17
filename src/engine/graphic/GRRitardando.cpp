@@ -84,13 +84,6 @@ GRRitardando::GRRitardando( GRStaff * stf, ARRitardando * artrem )
   font = new NVstring(artrem->getFont());
   fontAttrib = new NVstring(artrem->getFAttrib());
 
-  const VGFont* hmyfont = FontManager::gFontText;
-
-  if (font && font->length() > 0)
-  {
-	  // handle font-attributes ...
-	  hmyfont = FontManager::FindOrCreateFont( mFontSize, font, fontAttrib );
-  }
 }
 
 GRRitardando::~GRRitardando()

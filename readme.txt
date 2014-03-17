@@ -9,13 +9,20 @@ The GUIDOEngine relies on CMake, a cross-platform, open-source build
 system ( see http://www.cmake.org/).
 The cmake folder contains the project description and is used to generate 
 native projects. 
+	
+Note about the project organization:
+-----------------------------------
+On MacOS and Windows, in order to support different architectures (win32, win64 
+on windows, MacOS, iOS on mac), the library is expected to be compiled in a 'build'
+folder located at the root of the project that should contain 4 sub-folders: 
+MacOS, iOS, win32 and win64.
 
-To compile:
-	change to cmake directory
-	type:  cmake -G "your target generator" OPTIONS
+To compile for a given platform:
+	change to build/your_target_arch directory
+	type:  cmake ../../cmake -G "your target generator" OPTIONS
 	run your project/makefile and compile
 
-OPTIONS indocates optional components and is between:
+OPTIONS indicates optional components and is between:
 	-DMIDIEXPORT='yes | no' to support MIDI export
 	
 Note about MIDI export:
@@ -93,8 +100,9 @@ Note for Linux platforms:
 
    Supporting MIDI export on linux:
    -------------------------------
-   you must get the midishare source code:
+   you must get the midishare source code that includes the midisharelight library:
 	   git://midishare.git.sourceforge.net/gitroot/midishare/midishare 
+   You don't need to compile midishare but only the midisharelight library.
    midisharelight is a recent addition to the project and for the moment, it is only
    available from the 'dev' branch. It is located at the project root folder.
    midisharelight is cmake based:
@@ -113,9 +121,9 @@ Note for Windows platforms:
 ======================================================================
 2) Compiling the GUIDO Qt applications
 ----------------------------------------------------------------------
-You need to have Qt SDK version 4.6 or later installed to compile the 
+You need to have Qt SDK version 5.0 or later installed to compile the 
 GUIDO Qt applications.
-(see at http://qt.nokia.com/)
+(see at http://qt-project.org//)
 You can use QTCreator on all platforms to compile the applications.
 See below if you want to use another development environment.
 
@@ -131,10 +139,10 @@ Just open the projects and compile.
 ----------------------------
 To compile the GUIDO Qt applications, the easiest way is probably to use QTCreator.
 However, if you want to use Visual Studio you should:
-- set the QMAKESPEC variable to the corresponding output specification
-  (see Qt documentation)
+- set the QMAKESPEC variable to the corresponding output specification or use
+  the -spec option with qmake (see Qt documentation)
 - generate each project in each application folder using 'qmake'
-Note that a solution for Visual Studio 2005 is provided at the root of the Qt folder.
+Note that a solution for Visual Studio 2010 is provided at the root of the Qt folder.
 Warning, the solution works only after the individual projects have been generated.
 
 >>>>>> Linux
