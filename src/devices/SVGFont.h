@@ -15,8 +15,8 @@
 */
 
 #include "VGFont.h"
-#include "nanosvg.h"
 #ifdef INDEPENDENTSVG
+#include "nanosvg.h"
 #include <map>
 #endif
 

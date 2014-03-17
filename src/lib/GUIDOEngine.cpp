@@ -19,7 +19,10 @@
 
 // Last released version: 1.2.2, current version: 1.3.1 (see GuidoInternal.h)
 
+#ifdef INDEPENDENTSVG
 #define NANOSVG_IMPLEMENTATION
+#endif
+
 #include <iostream>
 #include <fstream>
 #include <sstream>

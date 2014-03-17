@@ -11,10 +11,10 @@
 
 */
 
-#include "nanosvg.h"
 #include "SVGFont.h"
 
 #ifdef INDEPENDENTSVG
+#include "nanosvg.h"
 #include <map>
 #elif __APPLE__
 #include "GFontOSX.h"
