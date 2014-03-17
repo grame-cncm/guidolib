@@ -554,10 +554,10 @@ GUIDOAPI(GuidoErrCode) GuidoOnDraw( GuidoOnDrawDesc * desc )
 // --------------------------------------------------------------------------
 //		- Score export to svg -
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile)
+GUIDOAPI(GuidoErrCode) GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec)
 {
  	SVGSystem sys(fontfile);
-	SVGDevice dev (out, &sys, fontfile);
+ 	SVGDevice dev (out, &sys, fontfile, fontspec);
     
     GuidoOnDrawDesc desc;              // declare a data structure for drawing
 	desc.handle = handle;

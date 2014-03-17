@@ -31,6 +31,7 @@ class VGDevice;
 class SVGFont : public VGFont
 {
 	std::string	fGuidoFontFile;
+	std::string	fGuidoFontSpec;
 	std::string	fName;
 	int fSize;
 	int fProperties;
@@ -45,7 +46,7 @@ class SVGFont : public VGFont
 #endif
 
 	public:
-					 SVGFont(const char * name, int size, int properties, const char * guidofontfile);
+					 SVGFont(const char * name, int size, int properties, const char * guidofontfile, const char * guidofontspec);
 		virtual		~SVGFont();
 
 		virtual	const char *	GetName() const			{

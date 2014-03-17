@@ -196,8 +196,8 @@ int main(int argc, char **argv)
 			gmn += char(c);				// read the standard input into a string
 	}
 
-	SVGSystem sys(fontfile);
-	SVGDevice dev(cout, &sys, fontfile);
+	SVGSystem sys(fontfile, 0);
+	SVGDevice dev(cout, &sys, fontfile, 0);
     GuidoInitDesc gd = { &dev, 0, 0, 0 };
     GuidoInit(&gd);                    // Initialise the Guido Engine first
 
@@ -237,7 +237,7 @@ int main(int argc, char **argv)
 	if (err != guidoNoErr)
         error(err);
 
-	err = GuidoSVGExport( grh, page, cout, fontfile);
+	err = GuidoSVGExport( grh, page, cout, fontfile, 0);
 
 	if (err != guidoNoErr)
         error(err);

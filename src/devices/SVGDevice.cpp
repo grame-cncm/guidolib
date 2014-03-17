@@ -39,8 +39,8 @@ void svgendl::print(std::ostream& os) const {
 //______________________________________________________________________________
 // SVGDevice
 //______________________________________________________________________________
-SVGDevice::SVGDevice(std::ostream& outstream, SVGSystem* system, const char* guidofontfile) : 
-	fSystem (system), fGuidoFontFile(guidofontfile),
+SVGDevice::SVGDevice(std::ostream& outstream, SVGSystem* system, const char* guidofontfile, const char* guidofontspec) : 
+	fSystem (system), fGuidoFontFile(guidofontfile), fGuidoFontSpec(guidofontspec),
 	fStream(outstream), 
 	fWidth(1000), fHeight(1000),
 	fMusicFont(0), fTextFont(0), fOpMode(kUnknown),
@@ -94,7 +94,7 @@ void SVGDevice::getsvgfont (const char* ptr, string& str) const
 	}
 }
 
-void SVGDevice::printFont(std::ostream& out, const char* file) const
+void SVGDevice::printFont(std::ostream& out, const char* file, const char* spec) const
 {
 	ifstream is (file);
 	if (is.is_open()) {
@@ -110,6 +110,11 @@ void SVGDevice::printFont(std::ostream& out, const char* file) const
 		delete [] buffer;
 		if (str.size())
 			out << "<defs>\n" << str << "\n</defs>" << endl;
+       } else if (spec) {
+               string str;
+               getsvgfont (spec, str);
+               if (str.size())
+                       out << "<defs>\n" << str << "\n</defs>" << endl;
 	}
 	else cerr << "SVGDevice: can't open svg guido font " << file << endl;
 }
@@ -123,7 +128,8 @@ bool SVGDevice::BeginDraw()
 	fStream << "<svg viewBox=\"0 0 " << fWidth << " " << fHeight << "\" xmlns=\"http://www.w3.org/2000/svg\"  version=\"1.1\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";
 	fEndl++;
 	fStream << fEndl << "<desc> SVG file generated using the GuidoEngine version " << GuidoGetVersionStr() << "</desc>";
-	if (fGuidoFontFile) printFont (fStream, fGuidoFontFile);
+        if (fGuidoFontFile) printFont (fStream, fGuidoFontFile, 0);
+        else if (fGuidoFontSpec) printFont (fStream, 0, fGuidoFontSpec);
 	fBeginDone = true;
 	if (fPendingStrokeColor) {
 		SelectPenColor (*fPendingStrokeColor);

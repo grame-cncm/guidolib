@@ -38,11 +38,17 @@ CairoSystem gSystem (0);
 
 
 //______________________________________________________________________________
-SVGFont::SVGFont(const char * name, int size, int properties, const char * guidofontfile) :
-	fGuidoFontFile(guidofontfile), fSize(size), fName(name), fProperties(properties)
+SVGFont::SVGFont(const char * name, int size, int properties, const char * guidofontfile, const char * guidofontspec) :
+	fGuidoFontFile(guidofontfile), fGuidoFontSpec(guidofontspec), fSize(size), fName(name), fProperties(properties)
 {
 #ifdef INDEPENDENTSVG
-	fNSVGimage = !fGuidoFontFile.empty() ? nsvgParseFromFile(fGuidoFontFile.c_str(), "px", size) : NULL;
+	fNSVGimage = 0;
+	if (!fGuidoFontFile.empty())
+	  fNSVGimage = nsvgParseFromFile(fGuidoFontFile.c_str(), "px", size);
+	else if (!fGuidoFontSpec.empty())
+	  fNSVGimage = nsvgParse(const_cast<char *>(fGuidoFontSpec.c_str()), "px", size);
+	else
+	  fNSVGimage = NULL;
 #else
 	fDevice = gSystem.CreateMemoryDevice (10,10);
 	fFont = gSystem.CreateVGFont (name, size, properties);

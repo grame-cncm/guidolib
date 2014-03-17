@@ -63,6 +63,7 @@ class_export SVGDevice : public VGDevice
 {
 	SVGSystem*		fSystem;
 	const char*		fGuidoFontFile;
+        const char*             fGuidoFontSpec;
 	std::ostream&	fStream;
 	svgendl			fEndl;
 	int				fWidth, fHeight;
@@ -82,7 +83,7 @@ class_export SVGDevice : public VGDevice
 	enum		{ kNoFont, kMusicFont, kTextFont };
 
 	void		print (std::ostream& out, const VGColor& color) const;
-	void		printFont (std::ostream& out, const char* file) const;
+	void            printFont (std::ostream& out, const char* file, const char* spec) const;
 	void		getsvgfont (const char* ptr, std::string& str) const;
 	float		alpha2float (const VGColor& color) const;
 	void		selectfont (int font);
@@ -94,7 +95,7 @@ class_export SVGDevice : public VGDevice
 	
 	public:
 		enum	{ kSVGSizeDivider = 8 };		// used to compute the svg view size GuidoSVGExport and GuidoGetSVGMap
-				 SVGDevice(std::ostream& outstream, SVGSystem* system, const char* guidofontfile=0);
+				 SVGDevice(std::ostream& outstream, SVGSystem* system, const char* guidofontfile, const char* guidofontspec);
 		virtual	~SVGDevice();
 
 		/// Returns the ability of the current VGdevice to be drawn into.

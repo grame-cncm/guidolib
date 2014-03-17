@@ -92,7 +92,7 @@ const VGFont* FontManager::FindOrCreateFont(VGSystem* sys, int size, const strin
 		if( attributesStr->find("i") != string::npos )	attributes |= VGFont::kFontItalic;
 		if( attributesStr->find("u") != string::npos )	attributes |= VGFont::kFontUnderline;
 	}
-	
+
 	const VGFont* fontRef = 0;
 	if (sys)
 		fontRef = sys->CreateVGFont( fontNameCStr, size, attributes );
