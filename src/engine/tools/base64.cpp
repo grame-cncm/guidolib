@@ -31,6 +31,9 @@
 
 #include "base64.h"
 #include <iostream>
+#ifdef android
+#include <ctype.h>
+#endif
 
 static const std::string base64_chars = 
              "ABCDEFGHIJKLMNOPQRSTUVWXYZ"

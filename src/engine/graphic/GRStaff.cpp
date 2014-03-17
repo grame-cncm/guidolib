@@ -24,6 +24,10 @@
 #include <cstdlib>
 #include <iostream> // for debug only
 #include <fstream>// for debug only
+#ifdef android
+#include <ctype.h>
+#endif
+
 using namespace std;
 
 // - Guido Misc
