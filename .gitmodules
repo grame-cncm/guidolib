@@ -1,6 +1,0 @@
-[submodule "svgdevice/nanosvg"]
-	path = svgdevice/nanosvg
-	url = git://github.com/mikesol/nanosvg.git
-[submodule "src/nanosvg"]
-	path = src/nanosvg
-	url = git://github.com/mikesol/nanosvg.git
