@@ -83,7 +83,7 @@ add_definitions(-DGUIDOExport)
 # set directories, src and headers.
 set (GUIDO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/..)
 set (SRC_PATH	${GUIDO_PATH}/src)
-set (SRCFOLDERS  lib graphic abstract parser tools misc include devices maps nanosvg)
+set (SRCFOLDERS  lib graphic abstract parser tools misc include devices maps)
 set (HEADERS_PATH ${SRC_PATH}/include)
 if(WIN32)
 	set(VGDEV_PATH ${GUIDO_PATH}/win32/src)
