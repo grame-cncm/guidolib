@@ -8,6 +8,11 @@ The following options can be passed to the server on startup:
 		
 		*default value*: 8000
 
+	- ``--initfile``
+		the location of the (optional) server initiation file. See the sample init file guidohttpdserver.ini in the GUIDO source for inspiration.
+		
+		*default value*: A file called guidohttpdserver.ini in the directory of the executable.
+
 	- ``--daemon``
 		used with nohup to make this run as a daemon. Daemon-like behavior can be achieved with the options below:
 
