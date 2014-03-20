@@ -113,7 +113,7 @@ class ARMusicalVoiceState
 		ARMeter * curmeter;
 
 		// the current displayduration (if set) ...
-		ARDisplayDuration * curdispdur;
+		ARDisplayDuration * fCurdispdur;
 
 		// we also save the beamstate ... makes it more elegant for autobeaming ...
 		ARBeamState * curbeamstate;
