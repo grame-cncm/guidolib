@@ -31,4 +31,4 @@ Using jQuery::
 Internals
 ^^^^^^^^^^^
 
-The ``duration`` request correspond to the ``GuidoDuration`` C/C++ API.
+The ``duration`` request corresponds to the ``GuidoDuration`` C/C++ API.

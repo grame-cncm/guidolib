@@ -178,11 +178,11 @@ public :
     guidosessionresponse timeMapJson (GuidoServerTimeMap &outmap);
 
     // queries
-    guidoAPIresponse voicesCount(int &n);
-    guidoAPIresponse pagesCount(int &p);
+    guidoAPIresponse countVoices(int &n);
+    guidoAPIresponse getPageCount(int &p);
     guidoAPIresponse duration(string &d);
-    guidoAPIresponse pageAt(GuidoDate date, int &p);
-    guidoAPIresponse pageDate(int page, GuidoDate &date);
+    guidoAPIresponse findPageAt(GuidoDate date, int &p);
+    guidoAPIresponse getPageDate(int page, GuidoDate &date);
     guidoAPIresponse getMap (GuidoSessionMapType map, int aux, Time2GraphicMap& outmap);
     guidoAPIresponse getTimeMap (GuidoServerTimeMap& outmap);
     static string getVersion();

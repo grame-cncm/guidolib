@@ -2,15 +2,15 @@ Getting the pages count
 -----------------------
 
 .. index::
-  single: pagescount
+  single: getpagecount
 
 **Path**
-	*ScoreID*/``pagescount``
+	*ScoreID*/``getpagecount``
 
 **Response body**
 	* in case of success: 
-		| Gives the count of pages of the score identified by ``ScoreID`` formatted as JSON with 'pagescount' as key.
-	  	| Example: ``{ "ScoreID" : {"pagescount" : 1} }``
+		| Gives the count of pages of the score identified by ``ScoreID`` formatted as JSON with 'pagecount' as key.
+	  	| Example: ``{ "ScoreID" : {"pagecount" : 1} }``
 	* in case of error:
 		| An error message formatted as JSON with 'Error' as key.
 	  	| Example: ``{ "ScoreID" : {"Error" : "incorrect score ID."} }``
@@ -30,4 +30,4 @@ Using jQuery::
 Internals
 ^^^^^^^^^^^
 
-The ``pagescount`` request correspond to the ``GuidoGetPageCount`` C/C++ API.
+The ``getpagecount`` request corresponds to the ``GuidoGetPageCount`` C/C++ API.

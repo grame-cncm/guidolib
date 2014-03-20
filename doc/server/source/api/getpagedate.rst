@@ -2,10 +2,10 @@ Getting the date of a given page
 --------------------------------
 
 .. index::
-  single: pagedate
+  single: getpagedate
 
 **Path**
-	*ScoreID*/``pagedate``
+	*ScoreID*/``getpagedate``
 
 **Parameters**
 	``page``: a page number (page numbers start at 1). Default page is 1.
@@ -36,10 +36,10 @@ Example
 
 Using jQuery::
 
-	$.get('http://guido.server.org/XXX/pagedate?page=2');
+	$.get('http://guido.server.org/XXX/getpagedate?page=2');
 
 
 Internals
 ^^^^^^^^^^^
 
-The ``pagedate`` request correspond to the ``GuidoGetPageDate`` C/C++ API.
+The ``getpagedate`` request corresponds to the ``GuidoGetPageDate`` C/C++ API.

@@ -2,16 +2,16 @@ Getting the voices count
 --------------------------
 
 .. index::
-  single: voicescount
+  single: countvoices
 
 
 **Path**
-	*ScoreID*/``voicescount``
+	*ScoreID*/``countvoices``
 
 **Response body**
 	* in case of success: 
-		| Gives the voices count of the score identified by ``ScoreID`` formatted as JSON with 'voicescount' as key.
-	  	| Example: ``{ "ScoreID" : {"voicescount" : 4} }``
+		| Gives the voices count of the score identified by ``ScoreID`` formatted as JSON with 'voicecount' as key.
+	  	| Example: ``{ "ScoreID" : {"voicecount" : 4} }``
 	* in case of error:
 		| An error message formatted as JSON with 'Error' as key.
 	  	| Example: ``{ "ScoreID" : {"Error" : "incorrect score ID."} }``
@@ -25,10 +25,10 @@ Example
 
 Using jQuery::
 
-	$.get('http://guido.server.org/XXX/voicescount');
+	$.get('http://guido.server.org/XXX/countvoices');
 
 
 Internals
 ^^^^^^^^^^^
 
-The ``voicescount`` request correspond to the ``GuidoCountVoices`` C/C++ API.
+The ``countvoices`` request corresponds to the ``GuidoCountVoices`` C/C++ API.

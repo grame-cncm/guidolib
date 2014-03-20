@@ -696,7 +696,7 @@ float guidosession::getLineSpace() {
     return GuidoGetLineSpace();
 }
 
-guidoAPIresponse guidosession::voicesCount(int &vc)
+guidoAPIresponse guidosession::countVoices(int &vc)
 {
     if (whyIFailed_)
       return *whyIFailed_;
@@ -726,7 +726,7 @@ guidoAPIresponse guidosession::duration(string &dur)
     return guidoAPIresponse::make_happy_response();
 }
     
-guidoAPIresponse guidosession::pagesCount(int &pc)
+guidoAPIresponse guidosession::getPageCount(int &pc)
 {
     if (whyIFailed_)
       return *whyIFailed_;
@@ -738,19 +738,19 @@ guidoAPIresponse guidosession::pagesCount(int &pc)
     return guidoAPIresponse::make_happy_response();
 }
 
-guidoAPIresponse guidosession::pageAt(GuidoDate date, int &pageat)
+guidoAPIresponse guidosession::findPageAt(GuidoDate date, int &findpageat)
 {
     if (whyIFailed_)
       return *whyIFailed_;
 
-    pageat = GuidoFindPageAt(grh_, date);
-    if (pageat < 0) {
-      return guidoAPIresponse((GuidoErrCode) pageat);
+    findpageat = GuidoFindPageAt(grh_, date);
+    if (findpageat < 0) {
+      return guidoAPIresponse((GuidoErrCode) findpageat);
     }
     return guidoAPIresponse::make_happy_response();
 }
 
-guidoAPIresponse guidosession::pageDate(int page, GuidoDate &date)
+guidoAPIresponse guidosession::getPageDate(int page, GuidoDate &date)
 {
     if (whyIFailed_)
       return *whyIFailed_;

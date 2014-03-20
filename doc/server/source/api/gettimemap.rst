@@ -2,13 +2,13 @@ Time to time mapping
 ----------------------------
 
 .. index::
-  single: timemap
+  single: gettimemap
 
 Gives the mapping between the score and the performance time (i.e. rolled to unrolled time) according to repeat bars and jumps (to coda, da capo, etc.).
 
 
 **Path**
-	*ScoreID*/``timemap``
+	*ScoreID*/``gettimemap``
 
 **Response body**
 	* in case of success: 
@@ -43,5 +43,9 @@ Example
 
 Using jQuery::
 
-	$.get('http://guido.server.org/XXX/timemap');
+	$.get('http://guido.server.org/XXX/gettimemap');
 
+Internals
+^^^^^^^^^^^
+
+The ``gettimemap`` request corresponds to the ``GuidoGetTimeMap`` C/C++ API.

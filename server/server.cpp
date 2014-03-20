@@ -589,18 +589,18 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
             // is there a way to streamline this...a lot of logic dup but not much code dup...
             // maybe templates...but it is sufficiently different to perhaps warrant writing
             // all this stuff out
-            if (elems[1] == "voicescount") {
+            if (elems[1] == "countvoices") {
                 int nvoices;
-                guidoAPIresponse gar = currentSession->voicesCount(nvoices);
+                guidoAPIresponse gar = currentSession->countVoices(nvoices);
                 guidosessionresponse response = gar.is_happy()
-                    ? currentSession->handleSimpleIDdIntQuery("voicescount", nvoices)
+                    ? currentSession->handleSimpleIDdIntQuery("voicecount", nvoices)
                     : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
-            } else if (elems[1] == "pagescount") {
+            } else if (elems[1] == "getpagecount") {
                 int npages;
-                guidoAPIresponse gar = currentSession->voicesCount(npages);
+                guidoAPIresponse gar = currentSession->getPageCount(npages);
                 guidosessionresponse response = gar.is_happy()
-                    ? currentSession->handleSimpleIDdIntQuery("pagescount", npages)
+                    ? currentSession->handleSimpleIDdIntQuery("pagecount", npages)
                     : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
             } else if (elems[1] == "duration") {
@@ -610,7 +610,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                     ? currentSession->handleSimpleIDdStringQuery("duration", duration)
                     : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
-            } else if (elems[1] == "pageat") {
+            } else if (elems[1] == "findpageat") {
                 GuidoDate date;
                 string mydate = "";
                 if (args.find("date") != args.end()) {
@@ -618,40 +618,40 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                 }
                 stringToDate(mydate, date);
                 int page;
-                guidoAPIresponse gar = currentSession->pageAt(date, page);
+                guidoAPIresponse gar = currentSession->findPageAt(date, page);
                 guidosessionresponse response = gar.is_happy()
                     ? currentSession->datePageJson(mydate, page)
                     : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
-            } else if (elems[1] == "pagedate") {
+            } else if (elems[1] == "getpagedate") {
                 GuidoDate date;
                 int mypage = 1;
                 if (args.find("page") != args.end()) {
                     mypage = atoi(args.find("page")->second.c_str());
                 }
-                guidoAPIresponse gar = currentSession->pageDate(mypage, date);
+                guidoAPIresponse gar = currentSession->getPageDate(mypage, date);
                 guidosessionresponse response = gar.is_happy()
                     ? currentSession->datePageJson(dateToString(date), mypage)
                     : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
-            } else if (elems[1] == "pagemap") {
+            } else if (elems[1] == "getpagemap") {
                 Time2GraphicMap outmap;
                 guidoAPIresponse gar = currentSession->getMap(PAGE, 0, outmap);
                 guidosessionresponse response = gar.is_happy()
                     ? currentSession->mapJson("pagemap", outmap)
                     : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
-            } else if (elems[1] == "midi") {
+            } else if (elems[1] == "ar2midifile") {
                 guidosessionresponse response = currentSession->genericReturnMidi();
                 return send(connection, response);
-            } else if (elems[1] == "systemmap") {
+            } else if (elems[1] == "getsystemmap") {
                 Time2GraphicMap outmap;
                 guidoAPIresponse gar = currentSession->getMap(SYSTEM, 0, outmap);
                 guidosessionresponse response = gar.is_happy()
                     ? currentSession->mapJson("systemmap", outmap)
                     : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
-            } else if (elems[1] == "staffmap") {
+            } else if (elems[1] == "getstaffmap") {
                 Time2GraphicMap outmap;
                 int mystaff = 1;
                 if (args.find("staff") != args.end()) {
@@ -662,7 +662,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                     ? currentSession->mapJson("staffmap", outmap)
                     : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
-            } else if (elems[1] == "voicemap") {
+            } else if (elems[1] == "getvoicemap") {
                 Time2GraphicMap outmap;
                 int myvoice = 1;
                 if (args.find("voice") != args.end()) {
@@ -673,7 +673,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                     ? currentSession->mapJson("voicemap", outmap)
                     : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
-            } else if (elems[1] == "timemap") {
+            } else if (elems[1] == "gettimemap") {
                 GuidoServerTimeMap outmap;
                 guidoAPIresponse gar = currentSession->getTimeMap(outmap);
                 guidosessionresponse response = gar.is_happy()

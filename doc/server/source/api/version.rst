@@ -26,4 +26,4 @@ Using jQuery::
 Internals
 ^^^^^^^^^^^
 
-The ``version`` request correspond to the ``GuidoGetVersionStr`` C/C++ API.
+The ``version`` request corresponds to the ``GuidoGetVersionStr`` C/C++ API.

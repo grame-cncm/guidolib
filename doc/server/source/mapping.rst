@@ -7,8 +7,8 @@ GUIDO mappings
 .. toctree::
    :maxdepth: 1
 
-   api/graphicmap
-   api/timemap
+   api/getgraphicmap
+   api/gettimemap
 
 Internals
 ---------

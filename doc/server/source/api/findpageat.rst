@@ -2,10 +2,10 @@ Getting a page at a given date
 ------------------------------
 
 .. index::
-  single: pageat
+  single: findpageat
 
 **Path**
-	*ScoreID*/``pageat``
+	*ScoreID*/``findpageat``
 
 **Parameters**
 	``date``: a date expressed as a rational value.
@@ -36,10 +36,10 @@ Example
 
 Using jQuery::
 
-	$.get('http://guido.server.org/XXX/pageat?date="22/8"');
+	$.get('http://guido.server.org/XXX/findpageat?date="22/8"');
 
 
 Internals
 ^^^^^^^^^^^
 
-The ``pageat`` request correspond to the ``GuidoFindPageAt`` C/C++ API.
+The ``findpageat`` request corresponds to the ``GuidoFindPageAt`` C/C++ API.
