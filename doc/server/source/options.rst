@@ -14,12 +14,7 @@ The following options can be passed to the server on startup:
 		*default value*: A file called guidohttpdserver.ini in the directory of the executable.
 
 	- ``--daemon``
-		used with nohup to make this run as a daemon. Daemon-like behavior can be achieved with the options below:
-
-		- ``--root``: run the server in the root directory
-		- ``--closestdin``: close standard in
-		- ``--closestdout``: close standard out
-		- ``--closestderr``: close standard error
+		used with upstart to make this run as a daemon.
 
 	- ``--logfile``
 		logfile mode. Use 0 for Apache-like or 1 for XML.
