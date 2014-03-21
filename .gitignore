@@ -11,4 +11,5 @@ tmpSrc
 *.o
 *~
 DerivedData
+doc/server/build
 doc/server/build/html/*.html
