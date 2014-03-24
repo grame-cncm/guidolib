@@ -110,23 +110,23 @@ GRMeter::GRMeter( ARMeter * abstractRepresentationOfMeter, GRStaff * curstaff, b
 
 		extent = totalNumeratorExtent > extentDenominator ? totalNumeratorExtent : extentDenominator;
 		
-		mBoundingBox.left  = (GCoord)(-extent * 0.5f - LSPACE / 5);
-		mBoundingBox.right = (GCoord)(extent * 0.5f + LSPACE);
+		mBoundingBox.left  = (GCoord)(- extent * 0.5f);
+		mBoundingBox.right = (GCoord)(extent * 0.5f);
 	}
 	else if (mtype == ARMeter::C || mtype == ARMeter::C2)
 	{
 		extent = GetSymbolExtent( kCSymbol);
-		mBoundingBox.left  = (GCoord)(-extent * 0.5f - LSPACE / 5);
-		mBoundingBox.right = (GCoord)(extent * 0.5f + LSPACE);
+		mBoundingBox.left  = (GCoord)(-extent * 0.5f);
+		mBoundingBox.right = (GCoord)(extent * 0.5f);
 	}
 
     mTagSize *= curstaff->getSizeRatio() * abstractRepresentationOfMeter->getSize();
-	mBoundingBox.bottom = (GCoord)(5*curLSPACE);
+	mBoundingBox.bottom = (GCoord)(5 * curLSPACE);
 
 	// set leftSpace, rightSpace 
 
 	mLeftSpace = (GCoord)(- mBoundingBox.left * 2 * mTagSize);
-	mRightSpace = 100; //hardcoded -> initially was (GCoord)(mBoundingBox.right * mTagSize)
+	mRightSpace = 50;
 
 	switch (mtype)
 	{
@@ -210,7 +210,8 @@ void GRMeter::GGSOutput() const
 
 void GRMeter::OnDraw(VGDevice & hdc) const
 {
-	if (error) return;
+	if (error)
+		return;
 	if(!mDraw)
 		return;
 
