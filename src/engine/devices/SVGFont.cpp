@@ -42,7 +42,7 @@ SVGFont::SVGFont(const char * name, int size, int properties, const char * guido
     fGuidoFontFile(guidofontfile), fGuidoFontSpec(guidofontspec), fSize(size), fName(name), fProperties(properties)
 {
 #ifdef INDEPENDENTSVG
-    fNSVGimage = 0;
+    struct NSVGimage *fNSVGimage = 0;
     if (!fGuidoFontFile.empty())
         fNSVGimage = nsvgParseFromFile(fGuidoFontFile.c_str(), "px", size);
     else if (!fGuidoFontSpec.empty()) {        
@@ -50,6 +50,17 @@ SVGFont::SVGFont(const char * name, int size, int properties, const char * guido
         fNSVGimage = nsvgParse(fontspec, "px", size);
     } else
         fNSVGimage = NULL;
+
+    if (fNSVGimage) {
+      fNSVGfont = 0;
+      struct NSVGfont* font;
+      for (font = fNSVGimage->fonts; font != NULL; font = font->next) {
+        if (strcmp(fName.c_str(), font->fontFamily) == 0) {
+          fNSVGfont = font;
+          break;
+        }
+      }
+    }
 #else
     fDevice = gSystem.CreateMemoryDevice (10,10);
     fFont = gSystem.CreateVGFont (name, size, properties);
@@ -70,26 +81,21 @@ void SVGFont::GetExtent( const char * s, int inCharCount, float * outWidth, floa
 #ifdef INDEPENDENTSVG
     *outWidth = 0;
     *outHeight = 0;
-    if (fNSVGimage) {
-        struct NSVGfont* font;
+    if (fNSVGfont) {
         struct NSVGshape* shape;
-        for (font = fNSVGimage->fonts; font != NULL; font = font->next) {
-            if (strcmp(fName.c_str(), font->fontFamily) == 0) {
-                for (int i = 0; i < inCharCount; i++) {
-                    for (shape = font->shapes; shape != NULL; shape = shape->next) {
-                        std::map<std::string, std::string>::const_iterator it;
-                        it = hexToCharMap.find(std::string(shape->unicode));
-                        std::string ucodeTransform = it == hexToCharMap.end() ? shape->unicode : it->second;
-                        if ((std::string(1, s[i]) == std::string(shape->unicode)) || ucodeTransform == std::string(1, s[i])) {
-                            // use horizontal space unless it is the last character
-                            float x_len = i == inCharCount - 1 ? shape->bounds[2] - shape->bounds[0] : shape->horizAdvX;
-                            float x = x_len * fSize / font->unitsPerEm;
-                            float y = (shape->bounds[3] - shape->bounds[1]) * fSize / font->unitsPerEm;;
-                            *outWidth += x;
-                            if (y > *outHeight)
-                                *outHeight = y;
-                        }
-                    }
+        for (int i = 0; i < inCharCount; i++) {
+            for (shape = fNSVGfont->shapes; shape != NULL; shape = shape->next) {
+                std::map<std::string, std::string>::const_iterator it;
+                it = hexToCharMap.find(std::string(shape->unicode));
+                std::string ucodeTransform = it == hexToCharMap.end() ? shape->unicode : it->second;
+                if ((std::string(1, s[i]) == std::string(shape->unicode)) || ucodeTransform == std::string(1, s[i])) {
+                    // use horizontal space unless it is the last character
+                    float x_len = i == inCharCount - 1 ? shape->bounds[2] - shape->bounds[0] : shape->horizAdvX;
+                    float x = x_len * fSize / fNSVGfont->unitsPerEm;
+                    float y = (shape->bounds[3] - shape->bounds[1]) * fSize / fNSVGfont->unitsPerEm;;
+                    *outWidth += x;
+                    if (y > *outHeight)
+                        *outHeight = y;
                 }
             }
         }
@@ -108,20 +114,15 @@ void SVGFont::GetExtent( unsigned char c, float * outWidth, float * outHeight, V
     char cs[2] = {0};
     cs[0] = c;
     cs[1] = '\0';
-    if (fNSVGimage) {
-        struct NSVGfont* font;
+    if (fNSVGfont) {
         struct NSVGshape* shape;
-        for (font = fNSVGimage->fonts; font != NULL; font = font->next) {
-            if (strcmp(fName.c_str(), font->fontFamily) == 0) {
-                for (shape = font->shapes; shape != NULL; shape = shape->next) {
-                    std::map<std::string, std::string>::const_iterator it;
-                    it = hexToCharMap.find(std::string(shape->unicode));
-                    std::string ucodeTransform = (it == hexToCharMap.end()) ? shape->unicode : it->second;
-                    if ((strcmp(cs, shape->unicode) == 0) || ucodeTransform == std::string(cs)) {
-                        *outWidth = (shape->bounds[2] - shape->bounds[0]) * fSize / font->unitsPerEm;
-                        *outHeight = (shape->bounds[3] - shape->bounds[1]) * fSize / font->unitsPerEm;
-                    }
-                }
+        for (shape = fNSVGfont->shapes; shape != NULL; shape = shape->next) {
+            std::map<std::string, std::string>::const_iterator it;
+            it = hexToCharMap.find(std::string(shape->unicode));
+            std::string ucodeTransform = (it == hexToCharMap.end()) ? shape->unicode : it->second;
+            if ((strcmp(cs, shape->unicode) == 0) || ucodeTransform == std::string(cs)) {
+                *outWidth = (shape->bounds[2] - shape->bounds[0]) * fSize / fNSVGfont->unitsPerEm;
+                *outHeight = (shape->bounds[3] - shape->bounds[1]) * fSize / fNSVGfont->unitsPerEm;
             }
         }
     }

@@ -51,42 +51,20 @@ Note for Android:
       export PATH=$PATH:$PATH_TO_SDK/platform-tools
       export PATH=$PATH:$PATH_TO_STANDALONE_TOOLCHAIN/bin
 
-    After doing this, the most simple way to get up and running is to
-    run:
+    From the directory android-apps/guido-engine-android, run
 
-      python lazy-android-setup.py
+      ndk-build
 
-    Then, compile the application android-apps/simple-guido-editor
-    by following the instructions in the readme of that directory.
+    And this will build the library for android.
+    To test with a sample project, from the directory
+    android-apps/simple-guido-editor, run:
 
-    If you don't want to run the lazy installer script, To start off,
-    make sure you are connected to the internet and run:
+      ndk-build
+      ant debug
 
-      git submodule init
-      git submodule update
+    And then install the application on your device.
 
-    From the toplevel folder (the folder that this readme is in).
-    This will initialize the repositories of two major dependencies.
-    When in doubt, call these two commands to make sure that you
-    have everything in order, as a simple git pull will not update
-    submodules.
-
-    In the directories android-apps/android-cmake and
-    android-apps/android-cairo, make sure to do:
-
-      git checkout master to
-
-    to be on the master branch.
-
-    Read the first part of README.md in the android-apps/android-cairo
-    folder for instructions on how to compile android-cairo. This must
-    be done ***BEFORE*** any of the cmake stuff below.
-
-    Then, in your build directory, make an android folder.
-    From this folder, call:
-
-      cmake -DANDROID=1 ../../cmake
-      make
+      
 
 Note for Linux platforms:
 --------------------------

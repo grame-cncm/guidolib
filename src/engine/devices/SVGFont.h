@@ -37,7 +37,7 @@ class SVGFont : public VGFont
 	int fProperties;
 
 #ifdef INDEPENDENTSVG
-	struct NSVGimage *	fNSVGimage;
+	struct NSVGfont *	fNSVGfont;
         static std::map<std::string, std::string> makeHexToCharMap();
         static const std::map<std::string, std::string> hexToCharMap;
 #else
