@@ -24,11 +24,10 @@ Java_com_grame_simpleguidoeditor_SimpleGuidoEditor_init(JNIEnv *env, jclass kls)
 
    GuidoInitDesc desc;
    desc.graphicDevice = dev;
-   desc.musicFont = "guido2";
+   desc.musicFont = "Guido2";
    desc.textFont  = "Times";
    GuidoErrCode err = GuidoInit (&desc);
-   if (err != guidoNoErr) {std::cerr << "INIT ERR" << std::endl;}
-   std::cerr << "SUCCESS GUIDO INIT" << std::endl;
+
    return err;
 }
 
@@ -45,7 +44,7 @@ jstring JNICALL
 Java_com_grame_simpleguidoeditor_SimpleGuidoEditor_gmntosvg(JNIEnv *env, jclass kls, jstring java_gmn)
 {
    const char *gmn = env->GetStringUTFChars(java_gmn, NULL);
-   if (NULL == gmn) {std::cerr << "CONVERSION_ERROR at GETTING GMN" << std::endl;
+   if (NULL == gmn) {
      return NULL;
    }
    
@@ -54,7 +53,7 @@ Java_com_grame_simpleguidoeditor_SimpleGuidoEditor_gmntosvg(JNIEnv *env, jclass 
     GRHandler grh = 0;
 
     arh = GuidoString2AR (parser, gmn);
-    if (!arh) {std::cerr << "CONVERSION_ERROR at AR" << std::endl;
+    if (!arh) {
       GuidoCloseParser(parser);
       env->ReleaseStringUTFChars(java_gmn, gmn);  // release resources
       if (grh) GuidoFreeGR(grh);
@@ -66,7 +65,7 @@ Java_com_grame_simpleguidoeditor_SimpleGuidoEditor_gmntosvg(JNIEnv *env, jclass 
     GuidoErrCode err;
 
     err = GuidoAR2GR (arh, 0, &grh);
-    if (err != guidoNoErr) {std::cerr << "CONVERSION_ERROR at AR2GH" << std::endl;
+    if (err != guidoNoErr) {
       env->ReleaseStringUTFChars(java_gmn, gmn);  // release resources
       if (grh) GuidoFreeGR(grh);
       if (arh) GuidoFreeAR(arh);
@@ -74,7 +73,7 @@ Java_com_grame_simpleguidoeditor_SimpleGuidoEditor_gmntosvg(JNIEnv *env, jclass 
     }
 
     err = GuidoResizePageToMusic (grh);
-    if (err != guidoNoErr) {std::cerr << "CONVERSION_ERROR at RESIZE" << std::endl;
+    if (err != guidoNoErr) {
       env->ReleaseStringUTFChars(java_gmn, gmn);  // release resources
       if (grh) GuidoFreeGR(grh);
       if (arh) GuidoFreeAR(arh);
@@ -84,14 +83,14 @@ Java_com_grame_simpleguidoeditor_SimpleGuidoEditor_gmntosvg(JNIEnv *env, jclass 
     std::stringstream out;
 
     err = GuidoSVGExportWithFontSpec (grh, 1, out, 0, reinterpret_cast<char *>(______src_guido2_svg));
+    
     if (err != guidoNoErr) {
-std::cerr << "CONVERSION_ERROR at SVG EXPORT" << std::endl;
       env->ReleaseStringUTFChars(java_gmn, gmn);  // release resources
       if (grh) GuidoFreeGR(grh);
       if (arh) GuidoFreeAR(arh);
       return NULL;
     }
-std::cerr << "SUCCESS_GUIDO SVG" << std::endl <<  out.str() << std::endl;
+
     if (grh) GuidoFreeGR(grh);
     if (arh) GuidoFreeAR(arh);
     return env->NewStringUTF(out.str().c_str());

@@ -45,9 +45,9 @@ SVGFont::SVGFont(const char * name, int size, int properties, const char * guido
     fNSVGimage = 0;
     if (!fGuidoFontFile.empty())
         fNSVGimage = nsvgParseFromFile(fGuidoFontFile.c_str(), "px", size);
-    else if (!fGuidoFontSpec.empty()) {
-        printf ("FOUND FONTSPEC, PARSING\n");
-        fNSVGimage = nsvgParse(const_cast<char *>(fGuidoFontSpec.c_str()), "px", size);
+    else if (!fGuidoFontSpec.empty()) {        
+        char* fontspec = const_cast<char *>(fGuidoFontSpec.c_str());
+        fNSVGimage = nsvgParse(fontspec, "px", size);
     } else
         fNSVGimage = NULL;
 #else

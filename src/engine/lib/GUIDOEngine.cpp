@@ -562,7 +562,7 @@ GUIDOAPI(GuidoErrCode) GuidoSVGExport( const GRHandler handle, int page, std::os
 
 GUIDOAPI(GuidoErrCode) GuidoSVGExportWithFontSpec( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec)
 {
- 	SVGSystem sys(fontfile);
+ 	SVGSystem sys(fontfile, fontspec);
 	SVGDevice dev (out, &sys, fontfile, fontspec);
     
     GuidoOnDrawDesc desc;              // declare a data structure for drawing

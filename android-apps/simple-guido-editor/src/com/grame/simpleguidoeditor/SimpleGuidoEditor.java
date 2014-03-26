@@ -1,6 +1,6 @@
 package com.grame.simpleguidoeditor;
 
-import android.util.Log;
+//import android.util.Log;
 
 import android.app.TabActivity;
 import android.os.Bundle;
@@ -34,9 +34,9 @@ public class SimpleGuidoEditor extends TabActivity {
                 .setContent(R.id.view2));
 
         EditText et = (EditText) findViewById(R.id.view1);
-        et.setText("[a g b a]");Log.d("SimpleGuidoEditor", "hello");
+        et.setText("[a g b a]");
         WebView wv = (WebView) findViewById(R.id.view2);
-        String svg = gmntosvg("[a g b a]");Log.d("SimpleGuidoEditor", svg);
+        String svg = gmntosvg("[a g b a]");
         if (svg == null) {
           String html = "<html><body>You have entered invalid GMN code. Please retype.</body></html>";
           wv.loadData(html, "text/html", null);
@@ -55,8 +55,8 @@ public class SimpleGuidoEditor extends TabActivity {
                     public void onTextChanged(CharSequence s, int start, int before,
 							int count) {
                       EditText et = (EditText) findViewById(R.id.view1);
-	              WebView wv = (WebView) findViewById(R.id.view2);Log.d("SimpleGuidoEditor", "modified");
-	              String svg = SimpleGuidoEditor.gmntosvg(et.getText().toString());Log.d("SimpleGuidoEditor", svg);
+	              WebView wv = (WebView) findViewById(R.id.view2);
+	              String svg = SimpleGuidoEditor.gmntosvg(et.getText().toString());
 	              if (svg == null) {
                         String html = "<html><body>You have entered invalid GMN code. Please retype.</body></html>";
                         wv.loadData(html, "text/html", null);
