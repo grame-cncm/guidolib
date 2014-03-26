@@ -237,7 +237,7 @@ int main(int argc, char **argv)
 	if (err != guidoNoErr)
         error(err);
 
-	err = GuidoSVGExport( grh, page, cout, fontfile, 0);
+	err = GuidoSVGExport( grh, page, cout, fontfile);
 
 	if (err != guidoNoErr)
         error(err);

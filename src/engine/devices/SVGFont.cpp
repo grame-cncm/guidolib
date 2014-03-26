@@ -79,6 +79,9 @@ SVGFont::~SVGFont()
 #ifdef INDEPENDENTSVG
 std::string mapHexToChar(std::string hex)
 {
+   if (hex.size() != 6)
+     return hex;
+
    std::string substr = hex.substr(3,2);
    unsigned int x;
    std::stringstream ss;

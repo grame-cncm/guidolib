@@ -84,8 +84,8 @@ int main(int argc, char **argv)
 	if (outfile.empty()) outfile = defaultOutName (infile);
 
 	GuidoErrCode err;
-	SVGSystem sys;
-	SVGDevice dev(cout, &sys);
+	SVGSystem sys(0, 0);
+	SVGDevice dev(cout, &sys, 0, 0);
 	GuidoInitDesc id = { &dev, 0, 0, 0 };
 	err = GuidoInit(&id);
 	if (err != guidoNoErr)

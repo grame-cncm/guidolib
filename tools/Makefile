@@ -1,5 +1,5 @@
 
-INC = -I../src/include -I../src/devices -I../src/nanosvg/src
+INC = -I../src/engine/include -I../src/engine/devices
 
 system	:= $(shell uname -s)
 ifeq ($(system), Darwin)
@@ -23,7 +23,7 @@ all: $(TOOLS) guido2midi
 tools: $(TOOLS)
 
 guidogetversion : guidogetversion.cpp
-	g++ guidogetversion.cpp -I../src/include $(lib) -o guidogetversion
+	g++ guidogetversion.cpp -I../src/engine/include $(lib) -o guidogetversion
 
 guido2midi : guido2midi.cpp
 	g++ guido2midi.cpp $(INC) $(lib) -o guido2midi
