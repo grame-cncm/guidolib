@@ -3,6 +3,7 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
 2013-09-13  version 1.5.3
+- incorrect coloring of trills (forced to black even when no color specified)
 - bug corrected with the mappings (was introduced with comparison operator on time segments)
 - improves graphic rendering of 'exotic' durations (e.g. 1/21)
 
