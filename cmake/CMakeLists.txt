@@ -38,6 +38,7 @@ endif(UNIX)
 option ( IOS 	"Generates project for iOS" off )
 option ( DIST 	"Compiles universal binaries (x86_64 i386) on MacOSX" off )
 option ( MIDIEXPORT "MIDI export support (requires MidiShareLight)" off)
+option ( INDEPENDENTSVG "Independent SVG support (gets all font information from provided SVG files)" off)
 option ( STATICLIB  "Generates a static library (default for iOS)" off)
 
 if(APPLE)
@@ -130,6 +131,13 @@ else()
 endif()
 
 set (SRC ${SRC} "${SRC_PATH}/*/*.cpp")					# add source files
+# independent svg support
+if (INDEPENDENTSVG STREQUAL "yes")
+	message (STATUS "Independent SVG will be enforced and all SVG fonts must be elaborated in SVG files - Use -DINDEPENDENTSVG=no to change.")
+	add_definitions(-DINDEPENDENTSVG)
+else()
+	message (STATUS "Independent SVG will not be enforced and SVG fonts will be approximated using system fonts - Use -DINDEPENDENTSVG=yes to change.")
+endif()
 
 if(WIN32)
 	set (VGDEV_SRC "${VGDEV_PATH}/GDeviceWin32.cpp" "${VGDEV_PATH}/GFontWin32.cpp" "${VGDEV_PATH}/GSystemWin32.cpp"

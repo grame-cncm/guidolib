@@ -1,5 +1,5 @@
 
-INC = -I../src/include -I../src/devices
+INC = -I../src/include -I../src/devices -I../src/nanosvg/src
 
 system	:= $(shell uname -s)
 ifeq ($(system), Darwin)

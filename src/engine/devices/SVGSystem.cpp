@@ -17,35 +17,27 @@
 
 using namespace std;
 //______________________________________________________________________________
-VGDevice* SVGSystem::CreateDisplayDevice(ostream& outstream, const char* fontfile)
+SVGSystem::SVGSystem(const char* guidofontfile, const char* guidofontspec) : 
+	fGuidoFontFile(guidofontfile), fGuidoFontSpec(guidofontspec)
 {
-	return new SVGDevice (outstream, this, fontfile, 0);
+}
+
+//______________________________________________________________________________
+VGDevice* SVGSystem::CreateDisplayDevice(ostream& outstream)
+{
+	return new SVGDevice (outstream, this, fGuidoFontFile, fGuidoFontSpec);
 }
 
 //______________________________________________________________________________
 VGDevice* SVGSystem::CreateDisplayDevice()
 {
-	return new SVGDevice (cout, this, 0, 0);
-}
-
-//______________________________________________________________________________
-VGDevice* SVGSystem::CreateDisplayDevice(const char* fontfile)
-{
-	return new SVGDevice (cout, this, fontfile, 0);
+	return new SVGDevice (cout, this, fGuidoFontFile, fGuidoFontSpec);
 }
 
 //______________________________________________________________________________
 VGDevice* SVGSystem::CreateMemoryDevice( int w, int h)
 {
-	SVGDevice* device = new SVGDevice (cout, this, 0, 0);
-	device->NotifySize( w, h );
-	return device;
-}
-
-//______________________________________________________________________________
-VGDevice* SVGSystem::CreateMemoryDevice( int w, int h, const char* fontfile )
-{
-	SVGDevice* device = new SVGDevice (cout, this, fontfile, 0);
+	SVGDevice* device = new SVGDevice (cout, this, fGuidoFontFile, fGuidoFontSpec);
 	device->NotifySize( w, h );
 	return device;
 }
@@ -53,7 +45,7 @@ VGDevice* SVGSystem::CreateMemoryDevice( int w, int h, const char* fontfile )
 //______________________________________________________________________________
 VGDevice* SVGSystem::CreateMemoryDevice(const char * inPath)
 {
-    SVGDevice* device = new SVGDevice (cout, this, 0, 0);
+    SVGDevice* device = new SVGDevice (cout, this, fGuidoFontFile, fGuidoFontSpec);
 	return device;
 }
 
@@ -71,6 +63,6 @@ VGDevice* SVGSystem::CreateAntiAliasedMemoryDevice( int w, int h )
 //______________________________________________________________________________
 const VGFont* SVGSystem::CreateVGFont( const char * faceName, int size, int properties ) const
 {
-	return new SVGFont (faceName, size, properties);
+	return new SVGFont (faceName, size, properties, fGuidoFontFile ? fGuidoFontFile : "", fGuidoFontSpec ? fGuidoFontSpec : "");
 }
 

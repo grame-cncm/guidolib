@@ -31,16 +31,16 @@
 // --------------------------------------------------------------
 class_export SVGSystem : public VGSystem
 {
+	const char*		fGuidoFontFile;
+	const char*		fGuidoFontSpec;
 	public:
-					 SVGSystem() {}
+                                SVGSystem(const char* guidofontfile=0, const char* guidofontspec=0);
 		virtual		~SVGSystem() {}
 
-		virtual VGDevice*		CreateDisplayDevice( std::ostream& outstream, const char* fontfile=0 );
+		virtual VGDevice*		CreateDisplayDevice( std::ostream& outstream);
 		virtual VGDevice*		CreateDisplayDevice();
-		virtual VGDevice*		CreateDisplayDevice(const char* fontfile=0);
 		virtual VGDevice*		CreateMemoryDevice( int inWidth, int inHeight);
-		virtual VGDevice*		CreateMemoryDevice( int inWidth, int inHeight, const char* fontfile=0 );
-		virtual	VGDevice*		CreateMemoryDevice( const char * inPath );
+		virtual	VGDevice*		CreateMemoryDevice( const char * inPath);
 		virtual VGDevice*		CreatePrinterDevice( );
 		virtual VGDevice*		CreateAntiAliasedMemoryDevice( int inWidth, int inHeight );
 		virtual const VGFont*	CreateVGFont( const char * faceName, int size, int properties ) const;

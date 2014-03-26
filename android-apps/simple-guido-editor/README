@@ -2,7 +2,7 @@ From this directory, run:
 
   ndk-build
   ant debug
-  adb install -r bin/HelloWorldGuido-debug.apk
+  adb install -r bin/SimpleGuidoEditor-debug.apk
 
 Make sure that ndk-build (ships with the NDK, should be in the bin/
 directory), ant (Apache ant, http://ant.apache.org/) and adb

@@ -19,6 +19,10 @@
 
 // Last released version: 1.2.2, current version: 1.3.1 (see GuidoInternal.h)
 
+#ifdef INDEPENDENTSVG
+#define NANOSVG_IMPLEMENTATION
+#endif
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -550,6 +554,7 @@ GUIDOAPI(GuidoErrCode) GuidoOnDraw( GuidoOnDrawDesc * desc )
 // --------------------------------------------------------------------------
 //		- Score export to svg -
 // --------------------------------------------------------------------------
+
 GUIDOAPI(GuidoErrCode) GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile )
 {
   return GuidoSVGExportWithFontSpec( handle, page, out, fontfile, 0);
@@ -557,7 +562,7 @@ GUIDOAPI(GuidoErrCode) GuidoSVGExport( const GRHandler handle, int page, std::os
 
 GUIDOAPI(GuidoErrCode) GuidoSVGExportWithFontSpec( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec)
 {
- 	SVGSystem sys;
+ 	SVGSystem sys(fontfile);
 	SVGDevice dev (out, &sys, fontfile, fontspec);
     
     GuidoOnDrawDesc desc;              // declare a data structure for drawing
