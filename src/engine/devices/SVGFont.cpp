@@ -16,6 +16,7 @@
 #ifdef INDEPENDENTSVG
 #include "nanosvg.h"
 #include <map>
+#include <sstream>
 #elif __APPLE__
 #include "GFontOSX.h"
 #include "GSystemOSX.h"
@@ -75,6 +76,22 @@ SVGFont::~SVGFont()
 #endif
 }
 
+#ifdef INDEPENDENTSVG
+std::string mapHexToChar(std::string hex)
+{
+   std::string substr = hex.substr(3,2);
+   unsigned int x;
+   std::stringstream ss;
+   ss << std::hex << substr;
+   ss >> x;
+   char ch = (char) x;
+   std::stringstream out;
+   out << ch;
+   return out.str();
+}
+#endif
+
+
 //______________________________________________________________________________
 void SVGFont::GetExtent( const char * s, int inCharCount, float * outWidth, float * outHeight, VGDevice * context ) const
 {
@@ -88,6 +105,7 @@ void SVGFont::GetExtent( const char * s, int inCharCount, float * outWidth, floa
                 std::map<std::string, std::string>::const_iterator it;
                 it = hexToCharMap.find(std::string(shape->unicode));
                 std::string ucodeTransform = it == hexToCharMap.end() ? shape->unicode : it->second;
+                //std::string ucodeTransform = mapHexToChar(std::string(shape->unicode));
                 if ((std::string(1, s[i]) == std::string(shape->unicode)) || ucodeTransform == std::string(1, s[i])) {
                     // use horizontal space unless it is the last character
                     float x_len = i == inCharCount - 1 ? shape->bounds[2] - shape->bounds[0] : shape->horizAdvX;
@@ -120,6 +138,7 @@ void SVGFont::GetExtent( unsigned char c, float * outWidth, float * outHeight, V
             std::map<std::string, std::string>::const_iterator it;
             it = hexToCharMap.find(std::string(shape->unicode));
             std::string ucodeTransform = (it == hexToCharMap.end()) ? shape->unicode : it->second;
+            //std::string ucodeTransform = mapHexToChar(std::string(shape->unicode));
             if ((strcmp(cs, shape->unicode) == 0) || ucodeTransform == std::string(cs)) {
                 *outWidth = (shape->bounds[2] - shape->bounds[0]) * fSize / fNSVGfont->unitsPerEm;
                 *outHeight = (shape->bounds[3] - shape->bounds[1]) * fSize / fNSVGfont->unitsPerEm;

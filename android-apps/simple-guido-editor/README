@@ -1,5 +1,6 @@
 From this directory, run:
 
+  android update project -p
   ndk-build
   ant debug
   adb install -r bin/SimpleGuidoEditor-debug.apk
