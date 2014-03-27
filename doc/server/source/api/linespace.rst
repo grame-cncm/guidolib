@@ -27,4 +27,4 @@ Using jQuery::
 Internals
 ^^^^^^^^^^^
 
-The ``linespace`` request correspond to the ``GuidoGetLineSpace`` C/C++ API.
+The ``linespace`` request corresponds to the ``GuidoGetLineSpace`` C/C++ API.

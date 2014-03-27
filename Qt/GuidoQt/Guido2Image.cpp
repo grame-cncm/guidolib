@@ -176,7 +176,7 @@ Guido2ImageErrorCodes Guido2Image::gmnFile2Image	( const  Params& p )
 		if (p.layout) painter->setGuidoLayoutSettings (*p.layout);
 		painter->setGMNFile(p.input);
 	}
-		return GUIDO_2_IMAGE_GUIDO_ENGINE_NOT_STARTED;			// likely
+	else return GUIDO_2_IMAGE_GUIDO_ENGINE_NOT_STARTED;			// likely
 	return guidoPainterToImage(painter, p);
 }
 

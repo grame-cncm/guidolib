@@ -3,8 +3,12 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
 2013-09-13  version 1.5.3
+- accidental spacing changed : a bit more space is inserted between the accidental and the note head
+  to conform more to engraving practices
+- incorrect coloring of trills (forced to black even when no color specified)
 - bug corrected with the mappings (was introduced with comparison operator on time segments)
- 
+- improves graphic rendering of 'exotic' durations (e.g. 1/21)
+
 
 ----------------------------------------------------------------
 2013-09-13  version 1.5.2
