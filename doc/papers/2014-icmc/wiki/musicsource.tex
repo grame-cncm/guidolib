@@ -5,6 +5,7 @@
 
 \documentclass{article}
 \usepackage{icmcsmc2014}
+\usepackage{xcolor}
 \usepackage{times}
 \usepackage{ifpdf}
 \usepackage[english]{babel}
@@ -122,8 +123,17 @@
      {\tt \href{mailto:fober@grame.fr}{fober@grame.fr}}}
 %   {\fourthauthor} {Sibelius Academy \\ %
 %     {\tt \href{mailto:vnorilo@gmail.com}{vnorilo@gmail.com}}}
+\usepackage{mdframed}
+\mdfdefinestyle{objectivestyle}{% 
+linecolor=black,linewidth=1pt,% 
+frametitlerule=true,% 
+frametitlebackgroundcolor=gray!20,
+innertopmargin=\topskip,
+skipabove=5pt,
+skipbelow=5pt
+}
 
-
+\mdtheorem[style=objectivestyle]{objective}{Objective}
 % ***************************************** the document starts here ***************
 \begin{document}
 %
@@ -166,7 +176,9 @@ transmitted to powerful servers over the web, users can work with rich
 representations of music in real\-time.
 
 This paper offers a practical roadmap
-of the MSW project. After surveying the
+of the MSW project. The project seeks to provide an online music-source
+wiki-inspired platform that lets multiple users edit and visualize
+musical documents in realtime. After surveying the
 state-of-the-art and describing the objectives of the project,
 it discusses the three major phases of research necessary
 for the implementation of a music-source wiki: (1) the creation of a robust
@@ -230,6 +242,77 @@ always achieve aesthetically satisfactory results.
 
 
 \section{Objectives}\label{sec:objectives}
+The objectives of the MSW project look to solve several of the problems
+discussed in the introduction and that remain unsolved in the
+state-of-the-art. While its final form will be a wiki-like platform enabling
+remote collaboration on musical documents, the various steps building up to
+this platform will result in numerous theoretical and technological advances
+in music representation and music's transmission over the web.
+
+The fundamental theoretical impediment that has hindered the development of
+such a platform is the lack of a robust music representation language.
+Encapsulating practices in diverse fields such as music education, music
+information retrieval, music composition, computational musicology,
+acoustics, digital signal processing, and performance requires versatile representations, flexible
+visualizations, interactivity, accessibility of data, and musical knowledge
+encoded into the system. Currently, there is no general purpose piece of
+software that works equally well for all the aforementioned fields in
+addition to being a high-quality typesetting tool. This is not for lack of
+sufficient technological know-how, but rather a more fundamental problem of
+a lack of a music representation language that can unite multiple musical
+domains. These observations lead to the first objective of the MSW project.
+\begin{objective}
+Develop a music representation language that allows for the articulation of multiple
+existent conventions in musical notation and sound, the invention of new
+conventions, and the realization of these conventions in realtime and
+non-realtime environments at various levels of refinement, including
+publication-quality scores and concert-quality sound.
+\end{objective}
+
+Taking the need for robust computer-based music representations as a
+starting point, this project looks to consider that need in light of
+state-of-the-art trends in computing. It is undeniable that the majority of
+software development is going into the cloud and that music technology is
+becoming more democratized, with music’s creation and performance happening
+increasingly by means of laptops and tablets. We believe, then, that a
+state-of-the-art sound and music computing environment based on rich music
+representation must allow for cloud computing. It should allow users to
+create and communicate using open web protocols and standards and platform-independent
+technologies. Decisions about what processes and data can be offloaded to a
+central server, how data can be compressed, how users can collaborate on a
+common project, and how the sharing and forking of musical projects takes
+place should be encoded in the music representation language itself and
+transmittable via web protocols. This leads to the second objective of the
+project.
+\begin{objective}
+Create open web standards for the communication of musical
+information between clients and a server, allowing for the distributed
+processing and storage of musical data.
+\end{objective}
+Once a robust music representation is in place that can be communicated via
+open web standards, several forms of music collaboration will be easier to
+undertake. While there are many domains in which this could be relevant
+(computer-assisted composition, live digital signal processing), the goal of
+this project is to build a wiki-like music-source platform upon
+these technologies.  
+\begin{objective}
+Construct a music-source wiki that allows musical scores, sound, and
+processes to be collaboratively articulated and maintained.
+\end{objective}
+The objective of this platform is to fill a gap in
+current on-line music sharing services. While there are several services
+that allow for the sharing of finalzied music scores and recordings (SoundCloud,
+IMSLP), there are no current platforms dedicated to collaborating on
+the sources of musical scores, audio, performances and analyses in real time.
+Furthermore,
+no projects allow for the forking of musical data \emph{\`a la} github, nor
+do any projects allow for complete outputs in multiple formats as Faust does
+for digital signal processing.  Once this platform exists, a wealth of
+collaborative projects will be possible such as crowdsourced critical
+editions, real analysis involving several remote collaborators, etc.. By
+relying on the computation power of a central server, it will allow for
+realtime collaboration that benefits from the precision achieved in
+non-realtime environments.
 \section{Music representation}\label{sec:music-representation}
 The project will start with a theoretical inquiry into the representation of
 music, using multiple existing representational languages as starting points
@@ -314,7 +397,9 @@ open standard formats.
 \section{Conclusion}\label{sec:conclusion}
 \begin{acknowledgments}
 The authors would like to thank the Grame and the Sibelius Academy for
-support in writing this paper.
+support in writing this paper. They would especially like to thank Vesa
+Norilo for his help in formalizing musical representation issues in
+digital signal processing.
 \end{acknowledgments} 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
