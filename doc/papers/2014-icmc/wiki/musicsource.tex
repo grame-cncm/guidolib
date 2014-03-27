@@ -214,7 +214,7 @@ of music, translating a user’s point-and-clicks into internal objects that
 represent musical symbols.
 
 At present, there are a large number of score editors for desktop computers.
-The two de facto industry standard notation programs are Finale and
+The two \emph{de facto} industry standard notation programs are Finale and
 Sibelius. The most notable free software projects are LilyPond and
 Guido. Both of these programs compile documents written in LATEX like
 markup languages that are used to describe the contents of a musical score
@@ -249,7 +249,7 @@ follow one of two organizational principles:
 \item Audio is linked to staves that are visualized in a score editor
 (Finale).
 \end{enumerate}
-The former solution does not provide publicaiton-quality typesetting,
+The former solution does not provide publication-quality typesetting,
 whereas the latter has a limited number of DSP options and little
 integration with the notation engine.
 
@@ -322,14 +322,14 @@ processes to be collaboratively articulated and maintained.
 \end{objective}
 The objective of this platform is to fill a gap in
 current on-line music sharing services. While there are several services
-that allow for the sharing of finalzied music scores and recordings (SoundCloud,
+that allow for the sharing of finalized music scores and recordings (SoundCloud,
 IMSLP), there are no current platforms dedicated to collaborating on
 the sources of musical scores, audio, performances and analyses in real time.
 Furthermore,
 no projects allow for the forking of musical data \emph{\`a la} github, nor
 do any projects allow for complete outputs in multiple formats as Faust does
 for digital signal processing.  Once this platform exists, a wealth of
-collaborative projects will be possible such as crowdsourced critical
+collaborative projects will be possible such as crowd-sourced critical
 editions, real analysis involving several remote collaborators, etc.. By
 relying on the computation power of a central server, it will allow for
 realtime collaboration that benefits from the precision achieved in
@@ -363,7 +363,7 @@ like Schenker’s reductive analysis methods~\cite{schenker:1935}.
 
 During this phase, special attention will be given to the transversality of
 our music representation language.  Various phenomena, such as notation,
-performance practice, musical algorithsm and processes, sound synthesis and
+performance practice, musical algorithms and processes, sound synthesis and
 signal processing will all have to be articulated via a combination of
 atomic elements in this music representation.  Furthermore, we will need to
 elaborate structures that allow for the linking of these elements.
@@ -417,8 +417,8 @@ open standard formats.
 \section{Collaborative music editing platform}\label{sec:collaborative-music-editing-platform}
 The Music Source Wiki (MSW) will be a nexus where
 musicians can work collaboratively on musical projects. It consists in three
-subparts -- a central server for data storage and processing, an online
-music source editor, and an online music source visualiser.
+sub-parts -- a central server for data storage and processing, an online
+music source editor, and an online music source visualizer.
 \subsection{Server}
 The MSW server will store all musical data in the music representation format
 discussed in Section \ref{sec:music-representation}, receiving and sending
@@ -428,22 +428,22 @@ output as many common music exchange formats as possible, both proprietary and
 non-proprietary, so that users can always work in formats with which they are
 comfortable.  This means that multiple conversion scripts will need to be
 implemented to translate formats into and out of our music representation
-language.  Regtests will verify lossless translation in several
+language.  Regression tests will verify lossless translation in several
 formats.
 \subsection{Source editor}
 The MSW score editor will be an on-line web editor offering both a
 markup-language format like LilyPond and a WYSIWYG format like MuseScore.
 It will allow for the specification of musical information as well as the
-use of global style sheets for the formatting of that informatin.  Depending
+use of global style sheets for the formatting of that information.  Depending
 on the scope of the source and the modifications being made to it, the
 server will make reactive decisions about when to update compilation, how
 much to compile and the level of approximations that documents should have,
 caching fully-compiled versions frequently.
-\subsection{Source visualiser}
+\subsection{Source visualizer}
 The ambition of the MSW project is to have a visualizer showing the results
-of the source that synchronises as fast as possible with the source editor.
+of the source that synchronizes as fast as possible with the source editor.
 This can be seen independently of the editor or concurrently with it. The
-source visulaiser will have filters that allow users to only access
+source visualizer will have filters that allow users to only access
 data (notation, sound, metadata, comments, etc.). Like most WikiMedia sites,
 discussion and log pages will accompany every project.
 \section{Conclusion}\label{sec:conclusion}
@@ -465,7 +465,7 @@ and Sibelius Academy.  Its provisional timetable is elaborated in Table
 language. \\\hline
 2017 & Publication of an open web specification for the transmission of this
 language. \\\hline
-2019 & Lauch of the MSW website. \\\hline
+2019 & Launch of the MSW website. \\\hline
 \end{tabular}
 \end{center}
  \caption{A provisional timeline for the MSW project.}
