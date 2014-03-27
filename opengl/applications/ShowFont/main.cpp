@@ -15,7 +15,7 @@ using namespace std;
 # include <GL/glut.h>
 #endif
 
-#include "FTGLPixmapFont.h"
+#include "FTGL/ftgl.h"
 
 FTFont * infoFont, * guidoFont;
 enum { kBaseW=840, kBaseH=600 };
@@ -42,7 +42,7 @@ void display(void)
 		infoFont->BBox( buff, x1, y1, z1, x2, y2, z2);
 
 		glRasterPos2i(x+(int)(x2-x1)+10,y);
-		guidoFont->Render(i); 
+		guidoFont->Render(buff); 
 		if (++line > kLines) {
 			x += colW; y = top; line=1;
 		}
@@ -68,11 +68,11 @@ static void myinit()
 {
 	glClearColor( 1.0, 1.0, 1.0, 1.0);
     glShadeModel(GL_SMOOTH);
-#ifdef WIN32
+//#ifdef WIN32
 	infoFont = new FTGLPixmapFont("times.ttf");
-#else
-	infoFont = new FTGLPixmapFont("Times");
-#endif
+//#else
+//	infoFont = new FTGLPixmapFont("Times");
+//#endif
 	if (!infoFont || infoFont->Error()) {
 		cout << "erreur : infoFont creation failed!" << endl;
 		delete infoFont;
@@ -82,11 +82,11 @@ static void myinit()
 		infoFont->FaceSize(12);
 		infoFont->CharMap(ft_encoding_unicode);
 	}
-#ifdef WIN32
-	guidoFont = new FTGLPixmapFont("guido2.ttf");
-#else
-	guidoFont = new FTGLPixmapFont("../Resources/guido2.ttf");
-#endif
+//#ifdef WIN32
+	guidoFont = new FTGLPixmapFont("../../../src/guido2.ttf");
+//#else
+//	guidoFont = new FTGLPixmapFont("../Resources/guido2.ttf");
+//#endif
 	if (!guidoFont || guidoFont->Error()) {
 		cout << "erreur : guidoFont creation failed!" << endl;
 		exit(1);
