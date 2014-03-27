@@ -26,7 +26,7 @@
 
 
 %user defined variables
-\def\papertitle{Towards a Music-Source Wiki}
+\def\papertitle{Towards a Music Source Wiki}
 \def\firstauthor{Mike Solomon}
 \def\secondauthor{Mika Kuuskankare}
 \def\thirdauthor{Dominique Fober}
@@ -142,12 +142,22 @@ skipbelow=5pt
 \capstarttrue
 %
 \begin{abstract}
-The abstract should be placed at the top left column and should contain about 150–-200 words.
+The Music Source Wiki project aims to create a wiki for the collective
+editing, visualization and auralization of musical-source documents on
+the web. It will do so by developing a robust music representation language
+that describes several music phenomena (notation, audio, processes) through
+a small axiomatic language. A web API will be created to transmit this
+language between terminals, and a wiki-like website will allow for the
+realtime editing and just-in-time compilation of musical source documents.
+The present paper presents the basic objectives of the project as well as
+three major phases into which the research and development will be divided.
+The project is a joint endeavor between researchers
+affiliated with the Grame (Lyon) and the Sibelius Academy (Finland).
 \end{abstract}
 %
 
 \section{Introduction}\label{sec:introduction}
-The Music-Source Wiki (MSW) project unites the fields of computer science, software
+The Music Source Wiki (MSW) project unites the fields of computer science, software
 engineering and music in order to solve longstanding problems about music’s
 representation on a computer as well as its ability to be distributed across
 multiple computers. To frame the problem, we consider the representation of
@@ -231,6 +241,18 @@ visualizations depending on the tool. Lastly, scoreSVG is another
 alternative based on the Scalable Vector Graphics, a language for describing
 two-\-di\-men\-sion\-al vector graphics in XML.
 
+Incorporating recording, synthesis and digital signal processing is a recent
+phenomena in the pantheon of notation software.  The majority of approaches
+follow one of two organizational principles:
+\begin{enumerate}
+\item A notation plugin is used to send control data to DSP objects (Max/MSP.
+\item Audio is linked to staves that are visualized in a score editor
+(Finale).
+\end{enumerate}
+The former solution does not provide publicaiton-quality typesetting,
+whereas the latter has a limited number of DSP options and little
+integration with the notation engine.
+
 The disparity between realtime and non-realtime performance is perhaps most
 noticeable in music notation programs. Because line-breaking algorithms for
 musical scores are $O(2^n)$ hard without using any predictive heuristics, the
@@ -268,7 +290,6 @@ conventions, and the realization of these conventions in realtime and
 non-realtime environments at various levels of refinement, including
 publication-quality scores and concert-quality sound.
 \end{objective}
-
 Taking the need for robust computer-based music representations as a
 starting point, this project looks to consider that need in light of
 state-of-the-art trends in computing. It is undeniable that the majority of
@@ -394,7 +415,64 @@ open standard formats.
 
 
 \section{Collaborative music editing platform}\label{sec:collaborative-music-editing-platform}
+The Music Source Wiki (MSW) will be a nexus where
+musicians can work collaboratively on musical projects. It consists in three
+subparts -- a central server for data storage and processing, an online
+music source editor, and an online music source visualiser.
+\subsection{Server}
+The MSW server will store all musical data in the music representation format
+discussed in Section \ref{sec:music-representation}, receiving and sending
+information using the web standards discussed in Section
+\ref{sec:web-music-specification}.  Its ambition is to be able to input and
+output as many common music exchange formats as possible, both proprietary and
+non-proprietary, so that users can always work in formats with which they are
+comfortable.  This means that multiple conversion scripts will need to be
+implemented to translate formats into and out of our music representation
+language.  Regtests will verify lossless translation in several
+formats.
+\subsection{Source editor}
+The MSW score editor will be an on-line web editor offering both a
+markup-language format like LilyPond and a WYSIWYG format like MuseScore.
+It will allow for the specification of musical information as well as the
+use of global style sheets for the formatting of that informatin.  Depending
+on the scope of the source and the modifications being made to it, the
+server will make reactive decisions about when to update compilation, how
+much to compile and the level of approximations that documents should have,
+caching fully-compiled versions frequently.
+\subsection{Source visualiser}
+The ambition of the MSW project is to have a visualizer showing the results
+of the source that synchronises as fast as possible with the source editor.
+This can be seen independently of the editor or concurrently with it. The
+source visulaiser will have filters that allow users to only access
+data (notation, sound, metadata, comments, etc.). Like most WikiMedia sites,
+discussion and log pages will accompany every project.
 \section{Conclusion}\label{sec:conclusion}
+The MSW initiative reunites three research axes into one project:
+\begin{itemize}
+\item The elaboration of a robust musical representation language.
+\item The creation of open web standards for the transmission of this
+language.
+\item The construction of a music source wiki based on this representation
+language that is transmitted via the open protocols.
+\end{itemize}
+The project brings together several researchers affiliated with the Grame
+and Sibelius Academy.  Its provisional timetable is elaborated in Table
+\ref{tab:timeline}.
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{|l|p{6cm}|}\hline
+2016 & Publication of a technical report with the music representation
+language. \\\hline
+2017 & Publication of an open web specification for the transmission of this
+language. \\\hline
+2019 & Lauch of the MSW website. \\\hline
+\end{tabular}
+\end{center}
+ \caption{A provisional timeline for the MSW project.}
+ \label{tab:timeline}
+\end{table}
+This paper surveys the major themes united in this project in hopes of
+widening the community of researchers participating in its development.
 \begin{acknowledgments}
 The authors would like to thank the Grame and the Sibelius Academy for
 support in writing this paper. They would especially like to thank Vesa
