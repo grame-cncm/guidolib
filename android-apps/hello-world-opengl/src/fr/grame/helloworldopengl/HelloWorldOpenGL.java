@@ -41,13 +41,6 @@ public class HelloWorldOpenGL extends Activity implements SurfaceHolder.Callback
         setContentView(R.layout.main);
         SurfaceView surfaceView = (SurfaceView)findViewById(R.id.surfaceview);
         surfaceView.getHolder().addCallback(this);
-        surfaceView.setOnClickListener(new OnClickListener() {
-                public void onClick(View view) {
-                    Toast toast = Toast.makeText(HelloWorldOpenGL.this,
-                                                 "This demo combines Java UI and native EGL + OpenGL renderer",
-                                                 Toast.LENGTH_LONG);
-                    toast.show();
-                }});
     }
 
     @Override
