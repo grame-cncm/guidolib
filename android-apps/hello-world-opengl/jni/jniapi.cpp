@@ -29,28 +29,28 @@
 static ANativeWindow *window = 0;
 static Renderer *renderer = 0;
 
-JNIEXPORT void JNICALL Java_tsaarni_nativeeglexample_NativeEglExample_nativeOnStart(JNIEnv* jenv, jobject obj)
+JNIEXPORT void JNICALL Java_fr_grame_helloworldopengl_HelloWorldOpenGL_nativeOnStart(JNIEnv* jenv, jobject obj)
 {
     LOG_INFO("nativeOnStart");
     renderer = new Renderer();
     return;
 }
 
-JNIEXPORT void JNICALL Java_tsaarni_nativeeglexample_NativeEglExample_nativeOnResume(JNIEnv* jenv, jobject obj)
+JNIEXPORT void JNICALL Java_fr_grame_helloworldopengl_HelloWorldOpenGL_nativeOnResume(JNIEnv* jenv, jobject obj)
 {
     LOG_INFO("nativeOnResume");
     renderer->start();
     return;
 }
 
-JNIEXPORT void JNICALL Java_tsaarni_nativeeglexample_NativeEglExample_nativeOnPause(JNIEnv* jenv, jobject obj)
+JNIEXPORT void JNICALL Java_fr_grame_helloworldopengl_HelloWorldOpenGL_nativeOnPause(JNIEnv* jenv, jobject obj)
 {
     LOG_INFO("nativeOnPause");
     renderer->stop();
     return;
 }
 
-JNIEXPORT void JNICALL Java_tsaarni_nativeeglexample_NativeEglExample_nativeOnStop(JNIEnv* jenv, jobject obj)
+JNIEXPORT void JNICALL Java_fr_grame_helloworldopengl_HelloWorldOpenGL_nativeOnStop(JNIEnv* jenv, jobject obj)
 {
     LOG_INFO("nativeOnStop");
     delete renderer;
@@ -58,7 +58,7 @@ JNIEXPORT void JNICALL Java_tsaarni_nativeeglexample_NativeEglExample_nativeOnSt
     return;
 }
 
-JNIEXPORT void JNICALL Java_tsaarni_nativeeglexample_NativeEglExample_nativeSetSurface(JNIEnv* jenv, jobject obj, jobject surface)
+JNIEXPORT void JNICALL Java_fr_grame_helloworldopengl_HelloWorldOpenGL_nativeSetSurface(JNIEnv* jenv, jobject obj, jobject surface)
 {
     if (surface != 0) {
         window = ANativeWindow_fromSurface(jenv, surface);
