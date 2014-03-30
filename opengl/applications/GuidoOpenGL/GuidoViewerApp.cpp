@@ -91,14 +91,16 @@ bool GuidoViewerApp::Initialize()
 
 
 	desc.graphicDevice = fDevice;
-	desc.textFont = "Times";
-#if defined(WIN32) || defined(linux)
-	desc.musicFont = "guido2.ttf";
+	//desc.textFont = "Times";
+//#if defined(WIN32) || defined(linux)
+//	desc.musicFont = "guido2.ttf";
 //	desc.textFont = "times.ttf";
-#else
-	desc.musicFont = "../Resources/guido2.ttf";
+//#else
+	//desc.musicFont = "../Resources/guido2.ttf";
 //	desc.textFont = "Times";
-#endif
+//#endif
+desc.musicFont = "../../../src/guido2.ttf";
+desc.textFont = "../times.ttf";
 	GuidoErrCode result = GuidoInit( &desc );
 	if( result != guidoNoErr ) {
 		ReportGuidoError( result );

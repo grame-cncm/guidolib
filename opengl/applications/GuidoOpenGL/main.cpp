@@ -18,7 +18,7 @@ using namespace std;
 #endif
 
 #include "GuidoViewerApp.h"
-#include "FTGLPixmapFont.h"
+#include "FTGL/ftgl.h"
 
 FTFont * infoFont;
 GLint w_win = 525, h_win = 700;
@@ -146,11 +146,11 @@ static void myinit()
 
 
 	create_menus();
-#ifdef WIN32
-	infoFont = new FTGLPixmapFont("times.ttf");
-#else
-	infoFont = new FTGLPixmapFont("Times");
-#endif
+//#ifdef WIN32
+	infoFont = new FTGLPixmapFont("../times.ttf");
+//#else
+//	infoFont = new FTGLPixmapFont("Times");
+//#endif
 	if (!infoFont || infoFont->Error()) {
 		cout << "erreur : infoFont creation failed!" << endl;
 		delete infoFont;
@@ -188,10 +188,10 @@ int main(int argc, char** argv)
 	glutSpecialFunc(specialkey);
 //	glutKeyboardFunc(parsekey);
 	myinit();
-#ifdef linux
+//#ifdef linux
 	if (argc > 1)
 		gAppl.OpenFile (argv[1]);
-#endif	
+//#endif	
 	glutMainLoop();
 	return 0;
 }
