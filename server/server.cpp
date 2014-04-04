@@ -632,6 +632,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
         sendGuidoDeleteRequest(connection, args);
     } else if ((type == GET) || (type == HEAD)) {
         currentSession->updateValuesFromDefaults(args);
+        currentSession->maybeResize();
         if (elems.size() == 1) {
             // must be getting the score
             guidosessionresponse response = currentSession->genericReturnImage(fSvgFontFile);

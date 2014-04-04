@@ -18,7 +18,6 @@
  */
 #include <errno.h>
 
-#include "QGuidoPainter.h"
 #include "guido2img.h"
 #include "server.h"
 #include "utilities.h"

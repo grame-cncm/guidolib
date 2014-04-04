@@ -21,22 +21,29 @@
 
 */
 
-#include "QGuidoPainter.h"
-#include <QApplication>
+#include "GUIDOEngine.h"
+#include "CairoSystem.h"
 
 namespace guidohttpd {
 
 GuidoErrCode startEngine () {
-    QGuidoPainter::startGuidoEngine(); // starts the guido engine
-    return guidoNoErr;
+	CairoSystem * sys = new CairoSystem(0);
+	VGDevice * dev = sys->CreateMemoryDevice(10,10);
+
+	GuidoInitDesc desc;
+	desc.graphicDevice = dev;
+	desc.musicFont = "guido2";
+	desc.textFont  = "Times";
+	GuidoErrCode err = GuidoInit (&desc);
+	return err;
 }
 
 void makeApplication (int argc, char **argv) {
-    QApplication *app = new QApplication(argc , argv); // required by Qt
+  // do nothing
 }
 
 void stopEngine () {
-    QGuidoPainter::stopGuidoEngine(); // stop the guido engine
+  GuidoShutdown();
 }
 
 } // end namespace

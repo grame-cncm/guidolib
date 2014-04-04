@@ -120,6 +120,7 @@ guidosession::guidosession(guido2img* g2svg, string gmn, string id)
     whyIFailed_ = 0;
     initializeUserSettableParameters();
     initializeARHandGRH();
+    maybeResize();
 }
 
 guidosession::~guidosession()
@@ -181,21 +182,31 @@ void guidosession::initializeARHandGRH() {
     
     GuidoPageFormat pf;
     fillGuidoPageFormatUsingCurrentSettings(&pf);
-    
+
     GuidoSetDefaultPageFormat(&pf);
     err = GuidoAR2GR (arh_, 0, &grh_);
     if (err != guidoNoErr) {
         whyIFailed_ = new guidoAPIresponse(err);
         return;
     }
+}
 
+void guidosession::maybeResize() {
+    GuidoErrCode err;
     if (resizeToPage_) {
       err = GuidoResizePageToMusic (grh_);
       if (err != guidoNoErr) {
         whyIFailed_ = new guidoAPIresponse(err);
         return;
       }
+      GuidoPageFormat npf;
+      GuidoGetPageFormat(grh_, 1, &npf);
+      fillCurrentSettingsUsingGuidoPageFormat(&npf);
     }
+}
+
+const GRHandler guidosession::getGRHandler() const {
+  return grh_;
 }
 
 bool guidosession::success() {
@@ -487,6 +498,16 @@ void guidosession::fillGuidoPageFormatUsingCurrentSettings(GuidoPageFormat *pf)
     pf->marginleft = GuidoCM2Unit(marginleft_);
     pf->marginright = GuidoCM2Unit(marginright_);
     pf->marginbottom = GuidoCM2Unit(marginbottom_);
+}
+
+void guidosession::fillCurrentSettingsUsingGuidoPageFormat(GuidoPageFormat *pf)
+{
+    height_ = GuidoUnit2CM(pf->height);
+    width_ = GuidoUnit2CM(pf->width);
+    margintop_ = GuidoUnit2CM(pf->margintop);
+    marginleft_ = GuidoUnit2CM(pf->marginleft);
+    marginbottom_ = GuidoUnit2CM(pf->marginbottom);
+    marginright_ = GuidoUnit2CM(pf->marginright);
 }
 
 void guidosession::fillGuidoLayoutSettingsUsingCurrentSettings(GuidoLayoutSettings *ls)

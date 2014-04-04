@@ -140,6 +140,7 @@ private :
 
     // used for graphical representation building
     void fillGuidoPageFormatUsingCurrentSettings(GuidoPageFormat *pf);
+    void fillCurrentSettingsUsingGuidoPageFormat(GuidoPageFormat *pf);
     void fillGuidoLayoutSettingsUsingCurrentSettings(GuidoLayoutSettings *ls);
     // private function to wrap json in the ID of a current session
     guidosessionresponse wrapObjectInId(json::json_object *obj);
@@ -151,11 +152,15 @@ public :
     virtual ~guidosession();
     void initializeUserSettableParameters();
     void initializeARHandGRH();
+    void maybeResize();
     void updateValuesFromDefaults();
     void updateValuesFromDefaults(const TArgs& args);
     void changeDefaultValues(const TArgs &args);
     bool success();
     string errorMsg();
+
+    // gets GR Handler
+    const GRHandler getGRHandler() const;
 
     // returns session responses with information for server to send
     static guidosessionresponse handleSimpleIntQuery(string, int);
