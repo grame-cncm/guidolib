@@ -11,6 +11,7 @@
 
 */
 
+#include "string.h"
 #include "guido2img.h"
 #include "CairoSystem.h"
 #include "CairoDevice.h"
