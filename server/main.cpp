@@ -1,4 +1,4 @@
-
+i
 #ifndef WIN32
 #include <libgen.h>
 #endif
@@ -30,8 +30,8 @@
 using namespace std;
 using namespace guidohttpd;
 
-#define kVersion 0.60f
-#define kVersionStr "0.60"
+#define kVersion 0.61f
+#define kVersionStr "0.61"
 
 static const char* kPortOpt = "--port";
 static const int kDefaultPort = 8000;
