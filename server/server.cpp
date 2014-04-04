@@ -23,8 +23,14 @@
 
 #include <arpa/inet.h>
 
-#include <QDir>
-#include <QTextStream>
+#include "tinydir.h"
+
+#ifdef WIN32
+  #include <libgen.h>
+#else
+  #include <sys/stat.h>
+#endif
+
 
 #include <iostream>
 #include <sstream>
@@ -59,6 +65,15 @@ using namespace std;
 
 namespace guidohttpd
 {
+
+// mymkdir is system dependent
+int mymkdir(string name) {
+  #ifdef WIN32
+    return _mkdir(name.c_str());
+  #else
+    return mkdir(name.c_str(), 0777);
+  #endif
+}
 
 //--------------------------------------------------------------------------
 // static functions
@@ -291,21 +306,41 @@ std::string generate_sha1(std::string setter)
 
 void HTTPDServer::readFromCache(string target)
 {
-  QDir myDir(fCachedir.c_str());
-  QStringList filesList = myDir.entryList();
+  tinydir_dir myDir;
+  tinydir_open_sorted(&myDir, fCachedir.c_str());
 
-  for (int i = 0; i < filesList.size(); i++) {
+  for (int i = 0; i < myDir.n_files; i++) {
     if (i >= fMaxSessions) {
+      tinydir_close(&myDir);
       return;
     }
-    QDir subDir(myDir.absoluteFilePath(filesList[i]));
-    QStringList subFilesList = subDir.entryList();
-    string folder = filesList[i].toStdString();
+
+    tinydir_file maybeSubDir;
+    tinydir_readfile_n(&myDir, &maybeSubDir, i);
+    if (!maybeSubDir.is_dir) {
+      continue;
+    }
+    
+    string folder(maybeSubDir.name);
+    if ((folder == ".") || (folder == "..")) {
+      continue;
+    }
+
     if ((target != "") && (folder.substr(0,2) != target.substr(0,2))) {
       continue;
     }
-    for (int j = 0; j < subFilesList.size(); j++) {
-      string fn = subFilesList[j].toStdString();
+
+    tinydir_dir subDir;
+    tinydir_open_sorted(&subDir, (fCachedir + "/" +string(maybeSubDir.name)).c_str());
+    for (int j = 0; j < subDir.n_files; j++) {
+      tinydir_file file;
+      tinydir_readfile_n(&subDir, &file, j);
+
+      string fn(file.name);
+      if ((fn == ".") || (fn == "..")) {
+        continue;
+      }
+
       if ((target != "") && (fn.substr(0,40) != target)) {
         continue;
       }
@@ -317,19 +352,30 @@ void HTTPDServer::readFromCache(string target)
         continue;
 
       string unique_id = fn.substr(0,40);
-      QFile file((fCachedir+"/"+unique_id.substr(0,2)+"/"+unique_id+".gmn").c_str());
-      if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+      ifstream myfile ((fCachedir+"/"+unique_id.substr(0,2)+"/"+unique_id+".gmn").c_str());
+      if (!myfile.is_open())
         continue;
-                  
-      QTextStream in(&file);
-      string all = in.readAll().toStdString();
-      file.close();
+
+      stringstream ss;
+      string line;
+      while (getline(myfile, line))
+      {
+        ss << line << '\n';
+      }
+      myfile.close();
+      
+      string all = ss.str();
+
       (void) registerGMN(unique_id, all);
       if (target != "") {
+        tinydir_close(&myDir);
+        tinydir_close(&subDir);
         return;
       }
     }
+    tinydir_close(&subDir);
   }
+  tinydir_close(&myDir);
 }
 
 guidosessionresponse HTTPDServer::registerGMN(string unique_id, string gmn)
@@ -348,16 +394,23 @@ guidosessionresponse HTTPDServer::registerGMN(string unique_id, string gmn)
       }
       fSessions[unique_id] = maybe;
     }
-    QDir dir((fCachedir+'/'+unique_id.substr(0,2)).c_str());
-    if (!dir.exists()) {
-      dir.mkpath(".");
+    tinydir_dir myDir;
+    int success = tinydir_open_sorted(&myDir, (fCachedir+'/'+unique_id.substr(0,2)).c_str());
+    if (success != 0) {
+      success = mymkdir(fCachedir+'/'+unique_id.substr(0,2));
+      if (success != 0) {
+        // can't do io
+        return fSessions[unique_id]->genericReturnId();
+      }
     }
-    QFile file(dir.absoluteFilePath((unique_id+".gmn").c_str()));
-    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-      QTextStream out(&file);
-      out << gmn.c_str();
-      file.close();
+
+    tinydir_close(&myDir);
+    ofstream myfile((fCachedir+'/'+unique_id.substr(0,2)+'/'+unique_id+".gmn").c_str());
+    if (myfile.is_open()) {
+      myfile << gmn;
+      myfile.close();
     }
+
     return fSessions[unique_id]->genericReturnId();
 }
 
