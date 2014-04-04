@@ -24,6 +24,7 @@
 #include <iostream>
 #include <sstream>
 #include <cstring>
+#include <stdlib.h> 
 
 #include "guidosession.h"
 #include "GUIDOEngine.h"
