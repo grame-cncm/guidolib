@@ -9,6 +9,7 @@
 \usepackage{times}
 \usepackage{ifpdf}
 \usepackage[english]{babel}
+\usepackage{paralist}
 %\usepackage{cite}
 
 %%%%%%%%%%%%%%%%%%%%%%%% Some useful packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -160,22 +161,27 @@ affiliated with the Grame (Lyon) and the Sibelius Academy (Finland).
 The Music Source Wiki (MSW) project unites the fields of computer science, software
 engineering and music in order to solve longstanding problems about music’s
 representation on a computer as well as its ability to be distributed across
-multiple computers. To frame the problem, we consider the representation of
+multiple terminals. To frame the problem, we consider the representation of
 music in state-of-the-art real\-time and non-real\-time music notation
-environments.
+environments.\footnote{The terms ``real\-time'' and ``non-real\-time'' are heavily
+connotated in computer music as having to do with digital signal processing.
+Here, the paradigm is extended to music notation software. Realtime
+describes tools where the result of an action is
+represented just after the action, whereas in a non-realtime paradigm, the
+rendering of actions comes after their entry}
 
 Realtime environments, such as MuseScore~\cite{musescore}, concentrate on
-the direct manipulation of graphical objects such as sound, waveforms,
-graphics and video, often using approximations of complex structures in
+the direct manipulation of graphical objects, often using approximations of complex structures in
 order to facilitate quick rendering. Non-real\-time score editors, such as
-Lilypond~\cite{lilypond06}, allow for robust musical representations at the expense of
+LilyPond~\cite{lilypond06}, allow for robust musical representations at the expense of
 interactivity. We see this disparity of music representation in real\-time and
-non-real\-time environments as a fundamental problem in the field. Rich music
-representation and real\-time interactivity should not be a trade-off –
+non-real\-time notation environments as a fundamental problem in the field. Rich music
+representation and real\-time interactivity should not be a trade-off --
 instead, the two should complement each other.
 
-The hampering effects of this issue are easily seen when one looks at how
-other fields have solved the real\-time/non-real\-time problem. Online text
+The hampering effects of this issue are most visible in the online domain,
+where music notation has lagged behind other fields that have made headway
+into the realtime/non-realtime problem. Online text
 editors, for example, allow people to develop documents in real\-time while
 retaining a rich view of these documents. The same is true of photo editing
 on mobile devices, where users can apply filters to their photos almost
@@ -183,7 +189,8 @@ instantly thanks to automatic uploads and downloads to and from central
 servers. We imagine a world where the same is possible in music – where,
 thanks to a robust theoretical framework for the representation of music
 transmitted to powerful servers over the web, users can work with rich
-representations of music in real\-time.
+representations of music in real\-time spanning several areas of musical
+production such as notation, synthesis, signal processing and analysis.
 
 This paper offers a practical roadmap
 of the MSW project. The project seeks to provide an online music-source
@@ -194,7 +201,7 @@ it discusses the three major phases of research necessary
 for the implementation of a music-source wiki: (1) the creation of a robust
 music representation language; (2) the elaboration of open web
 specifications for the transmission of this language; and (3) the
-construction of a collaborative on-line music editing platform.
+construction of a collaborative on-line musical-source editing platform.
 \section{State-of-the-art}\label{sec:state-of-the-art}
 
 All computer-assisted music notation programs are based on languages for the
@@ -202,9 +209,9 @@ representation of music that are more or less exposed to users. While it is
 difficult to know the nature of the representation in closed-source
 paradigms, open-source editors use music representation languages based on a
 wide range of assumptions about how notated music should be encoded. Certain
-formats, such as MusicXML~\cite{good2001musicxml}, use the instrument as the fundamental unit,
-ascribing events to instruments and qualities to events in a hierarchical
-manner. The language of the SCORE program focuses more on the physical
+formats, such as MusicXML~\cite{good2001musicxml} and
+MEI~\cite{roland2002music}, represent music in a nested manner,
+ascribing events to instruments or voices and qualities to events. The language of the SCORE program focuses more on the physical
 placement of musical glyphs. Yet others, like the LilyPond~\cite{lilypond06} and
 Guido~\cite{hoos98}
 languages, provide human-readable formats where notes, articulations,
@@ -237,30 +244,20 @@ Maestro, and Capriccio, offer online services where scores composed using
 this software can be uploaded, browsed, and downloaded online. WebLily,
 LilyBin, and OMET are all JIT compilation services that run the LilyPond
 executable to compile uploaded code and return embedded SVG, canvas or PDF
-visualizations depending on the tool. Lastly, scoreSVG is another
-alternative based on the Scalable Vector Graphics, a language for describing
-two-\-di\-men\-sion\-al vector graphics in XML.
+visualizations depending on the tool. The Guido HTTP server is the only RESTful
+web music notation service, allowing the extraction of musical data via a
+and the rapid compilation of musical scores~\cite{solomon:2014}.
 
 Incorporating recording, synthesis and digital signal processing is a recent
-phenomena in the pantheon of notation software.  The majority of approaches
+phenomena.  The majority of approaches
 follow one of two organizational principles:
-\begin{enumerate}
-\item A notation plugin is used to send control data to DSP objects.
-\item Audio is linked to staves that are visualized in a score editor.
-\end{enumerate}
+\begin{inparaenum}[(1)]
+\item a notation plugin is used to send control data to DSP objects; or
+\item audio is linked to staves that are visualized in a score editor.
+\end{inparaenum}
 The former solution does not provide publication-quality typesetting,
 whereas the latter has a limited number of DSP options and little
 integration with the notation engine.
-
-The disparity between realtime and non-realtime performance is perhaps most
-noticeable in music notation programs. Because line-breaking algorithms for
-musical scores are $O(2^n)$ hard without using any predictive heuristics, the
-addition of new measures and new instruments in realtime can quickly lead to
-less graceful and/or more sluggish line breaking choices. Non-realtime
-editors require a much longer compilation time for line breaks but almost
-always achieve aesthetically satisfactory results.
-
-
 
 \section{Objectives}\label{sec:objectives}
 The objectives of the MSW project look to solve several of the problems
@@ -271,8 +268,9 @@ this platform will result in numerous theoretical and technological advances
 in music representation and music's transmission over the web.
 
 The fundamental theoretical impediment that has hindered the development of
-such a platform is the lack of a robust music representation language.
-Encapsulating practices in diverse fields such as music education, music
+such a platform is the lack of a robust music representation language that
+can describe multiple musical phenomena.
+Representing musical practices in diverse fields such as music education, music
 information retrieval, music composition, computational musicology,
 acoustics, digital signal processing, and performance requires versatile representations, flexible
 visualizations, interactivity, accessibility of data, and musical knowledge
@@ -326,7 +324,8 @@ IMSLP), there are no current platforms dedicated to collaborating on
 the sources of musical scores, audio, performances and analyses in real time.
 Furthermore,
 no projects allow for the forking of musical data \emph{\`a la} github, nor
-do any projects allow for complete outputs in multiple formats as Faust does
+do any projects allow for complete outputs in multiple formats as
+Faust~\cite{orlarey2009faust} does
 for digital signal processing.  Once this platform exists, a wealth of
 collaborative projects will be possible such as crowd-sourced critical
 editions, real analysis involving several remote collaborators, etc.. By
@@ -427,26 +426,38 @@ output as many common music exchange formats as possible, both proprietary and
 non-proprietary, so that users can always work in formats with which they are
 comfortable.  This means that multiple conversion scripts will need to be
 implemented to translate formats into and out of our music representation
-language.  Regression tests will verify lossless translation in several
-formats.
+language.  Regression tests will verify:
+\begin{itemize}
+\item Lossless translation into and out of the internal music representation
+language. For example, a MusicXML file translated into and out of the
+internal language should have the same content as the original version.
+\item Zero-artifact translation between different languages. For example,
+translating a MusicXML to MEI document by means of our internal
+representation should remove elements of MusicXML that are not encodable in MEI
+without adding unwanted artifacts.
+\end{itemize}
 \subsection{Source editor}
 The MSW score editor will be an on-line web editor offering both a
 markup-language format like LilyPond and a WYSIWYG format like MuseScore.
 It will allow for the specification of musical information as well as the
-use of global style sheets for the formatting of that information.  Depending
-on the scope of the source and the modifications being made to it, the
+use of global style sheets for the formatting of that information.
+Basic sound synthesis and DSP commands will be built into the source editor
+so that users can mix elements of music notation and electronic music in the same
+documenet. Depending
+on the scope of the source and the modifications being made to a given
+document, the
 server will make reactive decisions about when to update compilation, how
 much to compile and the level of approximations that documents should have,
-caching fully-compiled versions frequently.
+caching fully-compiled versions frequently.\par
+
 \subsection{Source visualizer}
-The ambition of the MSW project is to have a visualizer showing the results
-of the source that synchronizes as fast as possible with the source editor.
-This can be seen independently of the editor or concurrently with it. The
-source visualizer will have filters that allow users to only access
-data (notation, sound, metadata, comments, etc.). Like most WikiMedia sites,
+The ultimate goal of the MSW project is to offer a source visualizer that
+renders the content of the source editor so that users notice almost no
+delay. The visualizer will propose various filters (only certain pages of a
+score, certain parts, etc.). Like most WikiMedia sites,
 discussion and log pages will accompany every project.
 \section{Conclusion}\label{sec:conclusion}
-The MSW initiative reunites three research axes into one project:
+The MSW initiative unites three research axes into one project:
 \begin{itemize}
 \item The elaboration of a robust musical representation language.
 \item The creation of open web standards for the transmission of this
