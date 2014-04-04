@@ -30,9 +30,9 @@ void startEngine () {
     QGuidoPainter::startGuidoEngine(); // starts the guido engine
 }
 
-//void makeApplication (int argc, char **argv) {
-//    QApplication app(argc , argv); // required by Qt
-//}
+void makeApplication (int argc, char **argv) {
+    QApplication *app = new QApplication(argc , argv); // required by Qt
+}
 
 void stopEngine () {
     QGuidoPainter::stopGuidoEngine(); // stop the guido engine

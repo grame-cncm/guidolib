@@ -1,4 +1,4 @@
-i
+
 #ifndef WIN32
 #include <libgen.h>
 #endif
@@ -17,8 +17,6 @@ i
  * /lib/x86_64-linux-gnu/libc.so.6: could not read symbols: Bad value
  */
 #include <errno.h>
-
-#include <QApplication>
 
 #include "QGuidoPainter.h"
 #include "guido2img.h"
@@ -160,7 +158,7 @@ int main(int argc, char **argv)
         cout << "Guido server v." << kVersionStr << " with Guido v." << GuidoGetVersionStr() << "." << endl;
         exit (0);
     }
-    QApplication app(argc , argv); // required by Qt
+    makeApplication(argc, argv);
     char resolved_path[256];
     #ifdef WIN32
       _fullpath(resolved_path, ".");

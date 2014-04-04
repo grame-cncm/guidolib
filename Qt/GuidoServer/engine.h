@@ -30,7 +30,7 @@
 namespace guidohttpd
 {
 
-//void makeApplication (int argc, char **argv);
+void makeApplication (int argc, char **argv);
 void startEngine ();
 void stopEngine ();
 
