@@ -26,10 +26,12 @@
 #define __engine__
 
 #include "GUIDOEngine.h"
+#include "guido2img.h"
 
 namespace guidohttpd
 {
 
+guido2img* makeConverter(std::string svgfontfile);
 void makeApplication (int argc, char **argv);
 GuidoErrCode startEngine ();
 void stopEngine ();

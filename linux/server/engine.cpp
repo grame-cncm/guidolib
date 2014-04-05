@@ -23,8 +23,14 @@
 
 #include "GUIDOEngine.h"
 #include "CairoSystem.h"
+#include "cairo_guido2img.h"
 
 namespace guidohttpd {
+
+guido2img* makeConverter(std::string svgfontfile) {
+  cairo_guido2img *converter = new cairo_guido2img(svgfontfile);
+  return converter;
+}
 
 GuidoErrCode startEngine () {
 	CairoSystem * sys = new CairoSystem(0);

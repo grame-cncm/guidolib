@@ -15,29 +15,24 @@
 #ifndef __guido2img__
 #define __guido2img__
 
-#include <QtCore/QBuffer>
-#include "Guido2Image.h"
 #include "guidosession.h"
 
 namespace guidohttpd
 {
 class guidosession;
 //--------------------------------------------------------------------------
+
 class guido2img
 {
-    QBuffer		fBuffer;
+protected:
+    std::string fSvgFontFile;
 public:
-    guido2img() {}
+    guido2img(std::string svgfontfile) : fSvgFontFile(svgfontfile) {}
     virtual ~guido2img() {}
 
-    int convert (guidosession *currentSession);
-
-    const char* data()	{
-        return fBuffer.data().constData();
-    }
-    int			size()	{
-        return fBuffer.size();
-    }
+    virtual int convert (guidosession *currentSession) = 0;
+    virtual const char* data() = 0;
+    virtual int	size() = 0;
 };
 
 } // end namespoace

@@ -13,7 +13,7 @@
 
 #include <QtCore/QBuffer>
 
-#include "guido2img.h"
+#include "qt_guido2img.h"
 #include "Guido2Image.h"
 
 #include <assert.h>
@@ -23,42 +23,46 @@ namespace guidohttpd
 {
 
 //--------------------------------------------------------------------------
-int guido2img::convert (guidosession* const currentSession)
+int qt_guido2img::convert (guidosession* const currentSession)
 {
     Guido2Image::Params p;
 
-    p.input  = currentSession->gmn_.c_str ();
+    p.input  = currentSession->getGMN().c_str ();
     p.output = 0;
-    switch (currentSession->format_) {
-    case GUIDO_WEB_API_PNG :
+    switch (currentSession->getFormat()) {
+    case GUIDO_WEB_API_SVG : {
+        string svg;
+        int err = currentSession->simpleSVGHelper(fSvgFontFile, &svg);
+        const char* cc_svg = svg.c_str();
+        fBuffer.setData(cc_svg, svg.size());
+        return err;
+    }
+    case GUIDO_WEB_API_PNG : {
         p.format = GUIDO_2_IMAGE_PNG;
-        break;
-    case GUIDO_WEB_API_JPEG :
+        } break;
+    case GUIDO_WEB_API_JPEG : {
         p.format = GUIDO_2_IMAGE_JPEG;
-        break;
-    case GUIDO_WEB_API_GIF :
+        } break;
+    case GUIDO_WEB_API_GIF : {
         p.format = GUIDO_2_IMAGE_GIF;
-        break;
-    case GUIDO_WEB_API_SVG :
-        assert (false);
+        } break;
     default :
-        p.format = GUIDO_2_IMAGE_PNG;
-        break;
+        return guidoErrActionFailed;
     }
 
     GuidoPageFormat pf;
     currentSession->fillGuidoPageFormatUsingCurrentSettings(&pf);
     p.pageFormat = &pf;
 
-    p.resizePageToMusic = currentSession->resizeToPage_;
+    p.resizePageToMusic = currentSession->getResizeToPage();
 
     GuidoLayoutSettings ls;
     currentSession->fillGuidoLayoutSettingsUsingCurrentSettings(&ls);
     p.layout = &ls;
 
-    p.pageIndex = currentSession->page_;
-    p.sizeConstraints = QSize (GuidoCM2Unit(currentSession->width_), GuidoCM2Unit(currentSession->height_));
-    p.zoom = currentSession->zoom_;
+    p.pageIndex = currentSession->getPage();
+    p.sizeConstraints = QSize (GuidoCM2Unit(currentSession->getWidth()), GuidoCM2Unit(currentSession->getHeight()));
+    p.zoom = currentSession->getZoom();
 
     fBuffer.open(QIODevice::ReadWrite);
     fBuffer.reset();

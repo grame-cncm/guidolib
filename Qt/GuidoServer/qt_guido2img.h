@@ -12,39 +12,32 @@
 */
 
 
-#ifndef __guido2img__
-#define __guido2img__
+#ifndef __qt_guido2img__
+#define __qt_guido2img__
 
-#include <cairo.h>
+#include <QtCore/QBuffer>
+#include "Guido2Image.h"
 #include "guidosession.h"
+#include "guido2img.h"
 
 namespace guidohttpd
 {
 class guidosession;
 //--------------------------------------------------------------------------
-
-typedef struct
+class qt_guido2img : public guido2img
 {
-    char *data;
-    char *current;
-    char *start;
-    int size;
-} png_stream_to_byte_array_closure_t;
-
-class guido2img
-{
-  png_stream_to_byte_array_closure_t  fBuffer;
+    QBuffer		fBuffer;
 public:
-    guido2img();
-    virtual ~guido2img();
+    qt_guido2img(string svgfontfile) : guido2img(svgfontfile) {}
+    virtual ~qt_guido2img() {}
 
     int convert (guidosession *currentSession);
 
     const char* data()	{
-        return fBuffer.start;
+        return fBuffer.data().constData();
     }
     int			size()	{
-        return fBuffer.size;
+        return fBuffer.size();
     }
 };
 

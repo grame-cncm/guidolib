@@ -119,9 +119,9 @@ static void usage (char* name)
 static bool launchServer (int port, int verbose, int logmode, string cachedir, string svgfontfile, bool daemon)
 {
     bool ret = false;
-    guido2img converter;
+    guido2img *converter = makeConverter(svgfontfile);
     startEngine();
-    HTTPDServer server(verbose, logmode, cachedir, svgfontfile, &converter);
+    HTTPDServer server(verbose, logmode, cachedir, converter);
     server.readFromCache();
     if (server.start(port)) {
         if (daemon) {
@@ -200,9 +200,9 @@ int main(int argc, char **argv)
     // check to see if svgfontfile exists
 
     ifstream myfile(svgfontfile.c_str());
-    if (!myfile.is_open())
+    if (!myfile.is_open()) {
       svgfontfile = "";
-
+    }
     if (daemon) {
         // below is commented out because of Mac OS X problems with daemons
         /*

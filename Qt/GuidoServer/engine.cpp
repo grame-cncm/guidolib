@@ -23,8 +23,14 @@
 
 #include "QGuidoPainter.h"
 #include <QApplication>
+#include "qt_guido2img.h"
 
 namespace guidohttpd {
+
+guido2img* makeConverter(std::string svgfontfile) {
+  qt_guido2img *converter = new qt_guido2img(svgfontfile);
+  return converter;
+}
 
 GuidoErrCode startEngine () {
     QGuidoPainter::startGuidoEngine(); // starts the guido engine

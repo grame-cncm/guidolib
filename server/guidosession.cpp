@@ -816,38 +816,35 @@ guidoAPIresponse guidosession::getMap (GuidoSessionMapType map, int aux, Time2Gr
 
 // ---- Abstractions
 
-guidosessionresponse guidosession::genericReturnImage()
+int guidosession::simpleSVGHelper (string svgfontfile, string *output)
 {
-  return genericReturnImage("");
+    GuidoErrCode err;
+    stringstream mystream;
+    const char *fontfile = svgfontfile != ""
+                           ? svgfontfile.c_str ()
+                           : 0;
+
+    if (!fontfile) {
+      cerr << "No svg font file found." << endl;
+    }
+
+    err = GuidoSVGExport(grh_, page_, mystream, fontfile);
+    *output = mystream.str();
+    return err;
 }
 
-guidosessionresponse guidosession::genericReturnImage(string svgfontfile)
+guidosessionresponse guidosession::genericReturnImage()
 {
-    if (format_ == GUIDO_WEB_API_SVG) {
-      if (whyIFailed_) {
-        return genericFailure(whyIFailed_->errorMsg(), 400, id_);
-      }
-      GuidoErrCode err;
-      stringstream mystream;
-      const char *fontfile = svgfontfile != ""
-                             ? svgfontfile.c_str ()
-                             : 0;
-      if (!fontfile) {
-        cerr << "No svg font file found." << endl;
-      }
-      err = GuidoSVGExport(grh_, page_, mystream, fontfile);
-      if (err != guidoNoErr) {
-        return genericFailure ("Could not convert the image.", 400, id_);
-      }
-      string svg = mystream.str();
-      return guidosessionresponse(svg, formatToMIMEType(), 201);
+    if (whyIFailed_) {
+      return genericFailure(whyIFailed_->errorMsg(), 400, id_);
     }
+
     int err = fConverter->convert(this);
-    if (err == 0) {
+    if (err == guidoNoErr) {
         const char *fcd = fConverter->data();
         return guidosessionresponse(fcd, fConverter->size(), formatToMIMEType(), 201);
     }
-    return genericFailure ("Could not convert the image.", 400, id_);
+    return genericFailure ("Server could not generate an image of type "+formatToLayType()+".", 400, id_);
 }
 
 

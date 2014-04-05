@@ -85,7 +85,6 @@ class GuidoServerTimeMap : public TimeMapCollector
 
 class guidosession
 {
-    friend class guido2img;
     guido2img* fConverter;
 
 private :
@@ -139,9 +138,8 @@ private :
     static GuidoWebApiFormat formatToWebApiFormat(string format);
 
     // used for graphical representation building
-    void fillGuidoPageFormatUsingCurrentSettings(GuidoPageFormat *pf);
     void fillCurrentSettingsUsingGuidoPageFormat(GuidoPageFormat *pf);
-    void fillGuidoLayoutSettingsUsingCurrentSettings(GuidoLayoutSettings *ls);
+
     // private function to wrap json in the ID of a current session
     guidosessionresponse wrapObjectInId(json::json_object *obj);
     
@@ -161,6 +159,10 @@ public :
 
     // gets GR Handler
     const GRHandler getGRHandler() const;
+
+    // used for graphical representation building
+    void fillGuidoPageFormatUsingCurrentSettings(GuidoPageFormat *pf);
+    void fillGuidoLayoutSettingsUsingCurrentSettings(GuidoLayoutSettings *ls);
 
     // returns session responses with information for server to send
     static guidosessionresponse handleSimpleIntQuery(string, int);
@@ -196,7 +198,7 @@ public :
     static guidoAPIresponse verifyGMN(string gmn);
 
     // -----------------------------
-    guidosessionresponse genericReturnImage(string svgfontfile);
+    int simpleSVGHelper(string svgfontfile, string *output);
     guidosessionresponse genericReturnImage();
     guidosessionresponse genericReturnMidi();
     guidosessionresponse genericReturnId();
@@ -204,7 +206,15 @@ public :
     guidosessionresponse mapGet (const TArgs& args, unsigned int n, string thingToGet);
     guidosessionresponse pointGet (const TArgs& args, unsigned int n);
 
-    //static json_type swapTypeForName (string type);
+    // getters ---------------------
+    float getWidth() { return width_; }
+    float getHeight() { return height_; }
+    int getPage() { return page_; }
+    float getZoom() { return zoom_; }
+    string getGMN() { return gmn_; }
+    bool getResizeToPage() { return resizeToPage_; }
+    GuidoWebApiFormat getFormat() { return format_; }
+
 };
 
 } // end namespoace

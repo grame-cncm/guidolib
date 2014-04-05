@@ -157,8 +157,8 @@ _post_params (void *coninfo_cls, enum MHD_ValueKind , const char *key,
 //--------------------------------------------------------------------------
 // the http server
 //--------------------------------------------------------------------------
-HTTPDServer::HTTPDServer(int verbose, int logmode, string cachedir, string svgfontfile, guido2img* g2svg)
-    : fVerbose(verbose), fLogmode(logmode), fCachedir(cachedir), fSvgFontFile(svgfontfile), fServer(0), fConverter(g2svg), fMaxSessions(100)
+HTTPDServer::HTTPDServer(int verbose, int logmode, string cachedir, guido2img* g2svg)
+    : fVerbose(verbose), fLogmode(logmode), fCachedir(cachedir), fServer(0), fConverter(g2svg), fMaxSessions(100)
 {
 }
 
@@ -635,7 +635,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
         currentSession->maybeResize();
         if (elems.size() == 1) {
             // must be getting the score
-            guidosessionresponse response = currentSession->genericReturnImage(fSvgFontFile);
+            guidosessionresponse response = currentSession->genericReturnImage();
             return send (connection, response);
         }
         if (elems.size() == 2) {

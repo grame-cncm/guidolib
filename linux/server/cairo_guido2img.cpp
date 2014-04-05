@@ -12,7 +12,7 @@
 */
 
 #include "string.h"
-#include "guido2img.h"
+#include "cairo_guido2img.h"
 #include "CairoSystem.h"
 #include "CairoDevice.h"
 #include <cairo.h>
@@ -37,18 +37,30 @@ write_png_stream_to_byte_array (void *in_closure, const unsigned char *data,
 }
 
 //--------------------------------------------------------------------------
-guido2img::guido2img () {
+cairo_guido2img::cairo_guido2img (string svgfontfile) : guido2img(svgfontfile) {
   fBuffer.data = new char[1048576];
   fBuffer.start = fBuffer.data;
   fBuffer.size = 0;
 }
 
-guido2img::~guido2img () {
+cairo_guido2img::~cairo_guido2img () {
   delete[] fBuffer.start;
 }
 
-int guido2img::convert (guidosession* const currentSession)
+int cairo_guido2img::convert (guidosession* const currentSession)
 {
+    if (currentSession->getFormat() == GUIDO_WEB_API_SVG) {
+      string svg;
+      int err = currentSession->simpleSVGHelper(fSvgFontFile, &svg);
+      const char* cc_svg = svg.c_str();
+      fBuffer.size = svg.size();
+      strcpy(fBuffer.data, cc_svg);
+      return err;
+    }
+    if (currentSession->getFormat() != GUIDO_WEB_API_PNG) {
+      return guidoErrActionFailed;
+    }
+
     GuidoPageFormat pf;
     currentSession->fillGuidoPageFormatUsingCurrentSettings(&pf);
 

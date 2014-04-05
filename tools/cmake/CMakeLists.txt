@@ -18,7 +18,7 @@ endif(UNIX)
 
 if(APPLE)
 	add_definitions(-D_USE_QD_COORDINATES_)
-	set (CMAKE_OSX_ARCHITECTURES "x86_64 i386")
+	set (CMAKE_OSX_ARCHITECTURES "x86_64")
 	set (CMAKE_C++_FLAGS -mmacosx-version-min=10.6)
 	set (CMAKE_LDFLAGS -mmacosx-version-min=10.6)
 	set (DEVICE ${GUIDO}/../macosx/src)
