@@ -78,7 +78,7 @@ set(LINK ${LINK} ${CURL_LIB})
 if(APPLE)
   set(LINK ${LINK}  "-framework GUIDOEngine  -F../../build/MacOS/Release")
 else()
-  set(LINK ${LINK}  "-l SGUIDOEngine  -L../../build/unix/")
+  set(LINK ${LINK}  "-l GUIDOEngine  -L../../build/unix/")
 endif(APPLE)
 
 add_executable(${target} ${LOCAL_CPP_SOURCES} ${SERVER_CPP_SOURCES} ${SERVER_C_SOURCES} ${CAIRO_CPP_SOURCES} ${JSON_CPP_SOURCES})
