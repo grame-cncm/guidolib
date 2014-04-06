@@ -465,6 +465,8 @@ string guidosession::formatToLayType ()
         return "gif";
     case GUIDO_WEB_API_SVG :
         return "xml+svg";
+    case GUIDO_WEB_API_UNDEFINED :
+        return "undefined";
     default :
         return "png";
     }
@@ -844,7 +846,10 @@ guidosessionresponse guidosession::genericReturnImage()
         const char *fcd = fConverter->data();
         return guidosessionresponse(fcd, fConverter->size(), formatToMIMEType(), 201);
     }
-    return genericFailure ("Server could not generate an image of type "+formatToLayType()+".", 400, id_);
+    
+    return genericFailure (format_ == GUIDO_WEB_API_UNDEFINED
+                           ? "Return file format is undefined."
+                           : "Server could not generate an image of type "+formatToLayType()+".", 400, id_);
 }
 
 
