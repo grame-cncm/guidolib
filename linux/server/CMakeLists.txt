@@ -86,20 +86,9 @@ set(LINK ${LINK} ${curl_LIBRARIES})
 
 # Magick++
 libfind_pkg_check_modules(Magick++_PKGCONF ImageMagick++)
-find_path(Magick++_INCLUDE_DIR
-  NAMES Magick++.h
-  PATHS ${Magick++_PKGCONF_INCLUDE_DIRS}
-)
-find_library(Magick++_LIBRARY
-  NAMES Magick++-6.Q16
-  PATHS ${Magick++_PKGCONF_LIBRARY_DIRS}
-)
-set(Magick++_PROCESS_INCLUDES Magick++_INCLUDE_DIR)
-set(Magick++_PROCESS_LIBS Magick++_LIBRARY)
-libfind_process(Magick++)
-
-add_definitions("-I" ${Magick++_INCLUDE_DIRS})
-set(LINK ${LINK} ${Magick++_LIBRARIES})
+add_definitions(${Magick++_PKGCONF_CFLAGS})
+set(LINK ${LINK} ${Magick++_PKGCONF_LDFLAGS})
+message(STATUS "Magick++ link flags: " ${Magick++_PKGCONF_LDFLAGS})
 
 if(APPLE)
   set(LINK ${LINK}  "-framework GUIDOEngine  -F../../build/MacOS/Release")
