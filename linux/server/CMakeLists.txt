@@ -1,6 +1,8 @@
 cmake_minimum_required (VERSION 2.6)
 project (guidohttpserver)
 set (target guidohttpserver)
+# LibFindMacros
+include(LibFindMacros.cmake)
 
 set (GUIDO  ${CMAKE_CURRENT_SOURCE_DIR}/../../src)
 
@@ -19,61 +21,72 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../server/json)
 add_definitions(-DJSON_ONLY)
 
 # cairo
-EXECUTE_PROCESS ( COMMAND "pkg-config"  "--cflags" "cairo"
-        OUTPUT_VARIABLE TMP
-        ERROR_VARIABLE TMP
+libfind_package(guidohttpserver cairo)
+libfind_pkg_check_modules(cairo_PKGCONF cairo)
+find_path(cairo_INCLUDE_DIR
+  NAMES cairo.h
+  PATHS ${cairo_PKGCONF_INCLUDE_DIRS}
 )
-
-string (STRIP ${TMP} CAIRO_INCL)
-add_definitions(${CAIRO_INCL})
-EXECUTE_PROCESS ( COMMAND "pkg-config"  "--libs" "cairo"
-        OUTPUT_VARIABLE TMP
-        ERROR_VARIABLE TMP
+find_library(cairo_LIBRARY
+  NAMES cairo
+  PATHS ${cairo_PKGCONF_LIBRARY_DIRS}
 )
-string (STRIP ${TMP} CAIRO_LIB)
-set(LINK ${LINK} ${CAIRO_LIB})
+set(cairo_PROCESS_INCLUDES cairo_INCLUDE_DIR)
+set(cairo_PROCESS_LIBS cairo_LIBRARY)
+libfind_process(cairo)
+add_definitions("-I" ${cairo_INCLUDE_DIRS})
+set(LINK ${LINK} ${cairo_LIBRARIES})
 
 # microhttpd
-EXECUTE_PROCESS ( COMMAND "pkg-config"  "--cflags" "libmicrohttpd"
-        OUTPUT_VARIABLE TMP
-        ERROR_VARIABLE TMP
+libfind_package(guidohttpserver microhttpd)
+libfind_pkg_check_modules(microhttpd_PKGCONF microhttpd)
+find_path(microhttpd_INCLUDE_DIR
+  NAMES microhttpd.h
+  PATHS ${microhttpd_PKGCONF_INCLUDE_DIRS}
 )
-string (STRIP ${TMP} MICROHTTPD_INCL)
-add_definitions(${MICROHTTPD_INCL})
-EXECUTE_PROCESS ( COMMAND "pkg-config"  "--libs" "libmicrohttpd"
-        OUTPUT_VARIABLE TMP
-        ERROR_VARIABLE TMP
+find_library(microhttpd_LIBRARY
+  NAMES microhttpd
+  PATHS ${microhttpd_PKGCONF_LIBRARY_DIRS}
 )
-string (STRIP ${TMP} MICROHTTPD_LIB)
-set(LINK ${LINK} ${MICROHTTPD_LIB})
+set(microhttpd_PROCESS_INCLUDES microhttpd_INCLUDE_DIR)
+set(microhttpd_PROCESS_LIBS microhttpd_LIBRARY)
+libfind_process(microhttpd)
+add_definitions("-I" ${microhttpd_INCLUDE_DIRS})
+set(LINK ${LINK} ${microhttpd_LIBRARIES})
 
-# openssl
-EXECUTE_PROCESS ( COMMAND "pkg-config"  "--cflags" "libcrypto"
-        OUTPUT_VARIABLE TMP
-        ERROR_VARIABLE TMP
+# crypto
+libfind_package(guidohttpserver crypto)
+libfind_pkg_check_modules(crypto_PKGCONF libcrypto)
+find_path(crypto_INCLUDE_DIR
+  NAMES openssl/sha.h
+  PATHS ${crypto_PKGCONF_INCLUDE_DIRS}
 )
-string (STRIP ${TMP} CRYPTO_INCL)
-add_definitions(${CRYPTO_INCL})
-EXECUTE_PROCESS ( COMMAND "pkg-config"  "--libs" "libcrypto"
-        OUTPUT_VARIABLE TMP
-        ERROR_VARIABLE TMP
+find_library(crypto_LIBRARY
+  NAMES crypto
+  PATHS ${crypto_PKGCONF_LIBRARY_DIRS}
 )
-string (STRIP ${TMP} CRYPTO_LIB)
-set(LINK ${LINK} ${CRYPTO_LIB})
+set(crypto_PROCESS_INCLUDES crypto_INCLUDE_DIR)
+set(crypto_PROCESS_LIBS crypto_LIBRARY)
+libfind_process(crypto)
+add_definitions("-I" ${crypto_INCLUDE_DIRS})
+set(LINK ${LINK} ${crypto_LIBRARIES})
 
 # curl
-EXECUTE_PROCESS ( COMMAND "pkg-config"  "--cflags" "libcurl"
-        OUTPUT_VARIABLE TMP
-        ERROR_VARIABLE TMP
+libfind_package(guidohttpserver curl)
+libfind_pkg_check_modules(curl_PKGCONF libcurl)
+find_path(curl_INCLUDE_DIR
+  NAMES curl/curl.h
+  PATHS ${curl_PKGCONF_INCLUDE_DIRS}
 )
-string (STRIP ${TMP} CURL_INCL)
-add_definitions(${CURL_INCL})
-EXECUTE_PROCESS ( COMMAND "pkg-config"  "--libs" "libcurl"
-        OUTPUT_VARIABLE TMP
-        ERROR_VARIABLE TMP
+find_library(curl_LIBRARY
+  NAMES curl
+  PATHS ${curl_PKGCONF_LIBRARY_DIRS}
 )
-string (STRIP ${TMP} CURL_LIB)
-set(LINK ${LINK} ${CURL_LIB})
+set(curl_PROCESS_INCLUDES curl_INCLUDE_DIR)
+set(curl_PROCESS_LIBS curl_LIBRARY)
+libfind_process(curl)
+add_definitions("-I" ${curl_INCLUDE_DIRS})
+set(LINK ${LINK} ${curl_LIBRARIES})
 
 if(APPLE)
   set(LINK ${LINK}  "-framework GUIDOEngine  -F../../build/MacOS/Release")
