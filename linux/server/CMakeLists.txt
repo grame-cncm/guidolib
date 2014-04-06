@@ -21,7 +21,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../server/json)
 add_definitions(-DJSON_ONLY)
 
 # cairo
-libfind_package(guidohttpserver cairo)
 libfind_pkg_check_modules(cairo_PKGCONF cairo)
 find_path(cairo_INCLUDE_DIR
   NAMES cairo.h
@@ -38,8 +37,7 @@ add_definitions("-I" ${cairo_INCLUDE_DIRS})
 set(LINK ${LINK} ${cairo_LIBRARIES})
 
 # microhttpd
-libfind_package(guidohttpserver microhttpd)
-libfind_pkg_check_modules(microhttpd_PKGCONF microhttpd)
+libfind_pkg_check_modules(microhttpd_PKGCONF libmicrohttpd)
 find_path(microhttpd_INCLUDE_DIR
   NAMES microhttpd.h
   PATHS ${microhttpd_PKGCONF_INCLUDE_DIRS}
@@ -55,7 +53,6 @@ add_definitions("-I" ${microhttpd_INCLUDE_DIRS})
 set(LINK ${LINK} ${microhttpd_LIBRARIES})
 
 # crypto
-libfind_package(guidohttpserver crypto)
 libfind_pkg_check_modules(crypto_PKGCONF libcrypto)
 find_path(crypto_INCLUDE_DIR
   NAMES openssl/sha.h
@@ -72,7 +69,6 @@ add_definitions("-I" ${crypto_INCLUDE_DIRS})
 set(LINK ${LINK} ${crypto_LIBRARIES})
 
 # curl
-libfind_package(guidohttpserver curl)
 libfind_pkg_check_modules(curl_PKGCONF libcurl)
 find_path(curl_INCLUDE_DIR
   NAMES curl/curl.h
