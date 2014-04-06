@@ -88,6 +88,21 @@ libfind_process(curl)
 add_definitions("-I" ${curl_INCLUDE_DIRS})
 set(LINK ${LINK} ${curl_LIBRARIES})
 
+# freeimage
+find_path(freeimage_INCLUDE_DIR
+  NAMES FreeImage.h
+  PATHS ${freeimage_PKGCONF_INCLUDE_DIRS}
+)
+find_library(freeimage_LIBRARY
+  NAMES freeimage
+  PATHS ${freeimage_PKGCONF_LIBRARY_DIRS}
+)
+set(freeimage_PROCESS_INCLUDES freeimage_INCLUDE_DIR)
+set(freeimage_PROCESS_LIBS freeimage_LIBRARY)
+libfind_process(freeimage)
+add_definitions("-I" ${freeimage_INCLUDE_DIRS})
+set(LINK ${LINK} ${freeimage_LIBRARIES})
+
 if(APPLE)
   set(LINK ${LINK}  "-framework GUIDOEngine  -F../../build/MacOS/Release")
 else()
