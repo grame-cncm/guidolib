@@ -713,7 +713,7 @@ string guidosession::getVersion() {
 
 string guidosession::getServerVersion() {
     // TODO - un-hardcode this
-    return "0.50";
+    return "0.61";
 }
 
 float guidosession::getLineSpace() {
