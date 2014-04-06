@@ -30,8 +30,10 @@ typedef struct
     char *current_;
     char *start_;
     int size_;
+    int pos_;
     void reset() {
       size_ = 0;
+      pos_ = 0;
       data_ = start_;
     }
 } png_stream_to_byte_array_closure_t;
