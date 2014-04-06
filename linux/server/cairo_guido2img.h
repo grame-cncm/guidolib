@@ -26,10 +26,14 @@ namespace guidohttpd
 
 typedef struct
 {
-    char *data;
-    char *current;
-    char *start;
-    int size;
+    char *data_;
+    char *current_;
+    char *start_;
+    int size_;
+    void reset() {
+      size_ = 0;
+      data_ = start_;
+    }
 } png_stream_to_byte_array_closure_t;
 
 class cairo_guido2img : public guido2img
@@ -42,10 +46,10 @@ public:
     int convert (guidosession *currentSession);
 
     const char* data()	{
-        return fBuffer.start;
+        return fBuffer.start_;
     }
     int			size()	{
-        return fBuffer.size;
+        return fBuffer.size_;
     }
 };
 

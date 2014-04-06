@@ -30,31 +30,32 @@ write_png_stream_to_byte_array (void *in_closure, const unsigned char *data,
     png_stream_to_byte_array_closure_t *closure =
         (png_stream_to_byte_array_closure_t *) in_closure;
 
-    memcpy (closure->data, data, length);
-    closure->data += length;
-    closure->size += length;
+    memcpy (closure->data_, data, length);
+    closure->data_ += length;
+    closure->size_ += length;
     return CAIRO_STATUS_SUCCESS;
 }
 
 //--------------------------------------------------------------------------
 cairo_guido2img::cairo_guido2img (string svgfontfile) : guido2img(svgfontfile) {
-  fBuffer.data = new char[1048576];
-  fBuffer.start = fBuffer.data;
-  fBuffer.size = 0;
+  fBuffer.data_ = new char[1048576];
+  fBuffer.start_ = fBuffer.data_;
+  fBuffer.size_ = 0;
 }
 
 cairo_guido2img::~cairo_guido2img () {
-  delete[] fBuffer.start;
+  delete[] fBuffer.start_;
 }
 
 int cairo_guido2img::convert (guidosession* const currentSession)
 {
+    fBuffer.reset();
     if (currentSession->getFormat() == GUIDO_WEB_API_SVG) {
       string svg;
       int err = currentSession->simpleSVGHelper(fSvgFontFile, &svg);
       const char* cc_svg = svg.c_str();
-      fBuffer.size = svg.size();
-      strcpy(fBuffer.data, cc_svg);
+      fBuffer.size_ = svg.size();
+      strcpy(fBuffer.data_, cc_svg);
       return err;
     }
     if (currentSession->getFormat() != GUIDO_WEB_API_PNG) {
@@ -90,8 +91,6 @@ int cairo_guido2img::convert (guidosession* const currentSession)
     desc.isprint = false;
     GuidoErrCode err = GuidoOnDraw (&desc);
 
-    fBuffer.size = 0;
-    fBuffer.data = fBuffer.start;
     cairo_surface_write_to_png_stream (surface, write_png_stream_to_byte_array, &fBuffer);
     return err;
 }
