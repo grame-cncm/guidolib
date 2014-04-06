@@ -84,20 +84,22 @@ libfind_process(curl)
 add_definitions("-I" ${curl_INCLUDE_DIRS})
 set(LINK ${LINK} ${curl_LIBRARIES})
 
-# freeimage
-find_path(freeimage_INCLUDE_DIR
-  NAMES FreeImage.h
-  PATHS ${freeimage_PKGCONF_INCLUDE_DIRS}
+# Magick++
+libfind_pkg_check_modules(Magick++_PKGCONF ImageMagick++)
+find_path(Magick++_INCLUDE_DIR
+  NAMES Magick++.h
+  PATHS ${Magick++_PKGCONF_INCLUDE_DIRS}
 )
-find_library(freeimage_LIBRARY
-  NAMES freeimage
-  PATHS ${freeimage_PKGCONF_LIBRARY_DIRS}
+find_library(Magick++_LIBRARY
+  NAMES Magick++-6.Q16
+  PATHS ${Magick++_PKGCONF_LIBRARY_DIRS}
 )
-set(freeimage_PROCESS_INCLUDES freeimage_INCLUDE_DIR)
-set(freeimage_PROCESS_LIBS freeimage_LIBRARY)
-libfind_process(freeimage)
-add_definitions("-I" ${freeimage_INCLUDE_DIRS})
-set(LINK ${LINK} ${freeimage_LIBRARIES})
+set(Magick++_PROCESS_INCLUDES Magick++_INCLUDE_DIR)
+set(Magick++_PROCESS_LIBS Magick++_LIBRARY)
+libfind_process(Magick++)
+
+add_definitions("-I" ${Magick++_INCLUDE_DIRS})
+set(LINK ${LINK} ${Magick++_LIBRARIES})
 
 if(APPLE)
   set(LINK ${LINK}  "-framework GUIDOEngine  -F../../build/MacOS/Release")

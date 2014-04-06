@@ -16,7 +16,7 @@
 #include "CairoSystem.h"
 #include "CairoDevice.h"
 #include <cairo.h>
-#include "FreeImage.h"
+#include <Magick++.h>
 
 #include <assert.h>
 
@@ -25,55 +25,7 @@ namespace guidohttpd
 {
 
 // ------------------
-// freeimage
-
-// as size of character is 1, we don't ever need to multiply position by size in the buffer
-unsigned DLL_CALLCONV myReadProc(void *buffer, unsigned size, unsigned count, fi_handle handle) {
-  png_stream_to_byte_array_closure_t *closure =
-          (png_stream_to_byte_array_closure_t *) handle;
-
-  int to_read = size * count;
-  int room = closure->size_ - closure->pos_;
-  if (to_read > room) {
-    to_read = room;
-  }
-  memcpy(buffer, closure->start_ + closure->pos_, to_read);
-  closure->pos_ += to_read;
-  return to_read;
-}
-  
-unsigned DLL_CALLCONV myWriteProc(void *buffer, unsigned size, unsigned count, fi_handle handle) {
-  png_stream_to_byte_array_closure_t *closure =
-          (png_stream_to_byte_array_closure_t *) handle;
-
-  int to_write = size * count;
-  closure->size_ += to_write;
-  memcpy(closure->start_ + closure->pos_, buffer, to_write);
-  closure->pos_ += to_write;
-  return to_write;
-}
-    
-int DLL_CALLCONV mySeekProc(fi_handle handle, long offset, int origin) {
-  png_stream_to_byte_array_closure_t *closure =
-          (png_stream_to_byte_array_closure_t *) handle;
-
-  int place = 0;
-  if (origin == SEEK_CUR)
-    place = closure->pos_;
-  else if (origin == SEEK_END)
-    place = closure->size_;
-
-  closure->pos_ = place + offset;
-
-  return 0;
-}
-      
-long DLL_CALLCONV myTellProc(fi_handle handle) {
-  png_stream_to_byte_array_closure_t *closure =
-          (png_stream_to_byte_array_closure_t *) handle;
-
-  return closure->pos_;
-}
+// magic++
 
 
 // ------------------
@@ -148,22 +100,15 @@ int cairo_guido2img::convert (guidosession* const currentSession)
 
     if ((format == GUIDO_WEB_API_JPEG)
         || (format == GUIDO_WEB_API_GIF)) {
-      // freeimage
-      FreeImageIO io;
-      io.read_proc  = myReadProc;
-      io.write_proc = myWriteProc;
-      io.seek_proc  = mySeekProc;
-      io.tell_proc  = myTellProc;
-      FREE_IMAGE_FORMAT fif = FreeImage_GetFileTypeFromHandle(&io, (fi_handle)&fBuffer, 0);
-      if(fif != FIF_UNKNOWN) {
-        FIBITMAP *dib = FreeImage_LoadFromHandle(fif, &io, (fi_handle) &fBuffer, 0);
-        fBuffer.reset(); // need to reset for writing
-        FREE_IMAGE_FORMAT fmt = format == GUIDO_WEB_API_JPEG ? FIF_JPEG : FIF_GIF;
-        FreeImage_SaveToHandle(fmt, dib, &io, (fi_handle) &fBuffer, 0);
-        FreeImage_Unload(dib);
-      }
-      else
-        err = guidoErrActionFailed;
+      // magick++
+      Magick::Blob in_blob(fBuffer.start_, fBuffer.size_);
+      Magick::Image image(in_blob);
+      Magick::Blob out_blob;
+      string new_format = ((format == GUIDO_WEB_API_JPEG) ? "JPEG" : "GIF");
+      image.magick(new_format);
+      image.write(&out_blob);
+      memcpy(fBuffer.start_, out_blob.data(), out_blob.length());
+      fBuffer.size_ = out_blob.length();
     }
 
     return err;

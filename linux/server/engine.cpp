@@ -24,7 +24,7 @@
 #include "GUIDOEngine.h"
 #include "CairoSystem.h"
 #include "cairo_guido2img.h"
-#include "FreeImage.h"
+#include <Magick++.h>
 
 namespace guidohttpd {
 
@@ -34,7 +34,6 @@ guido2img* makeConverter(std::string svgfontfile) {
 }
 
 GuidoErrCode startEngine () {
-        FreeImage_Initialise();
 	CairoSystem * sys = new CairoSystem(0);
 	VGDevice * dev = sys->CreateMemoryDevice(10,10);
 
@@ -47,12 +46,11 @@ GuidoErrCode startEngine () {
 }
 
 void makeApplication (int argc, char **argv) {
-  // do nothing
+  Magick::InitializeMagick(*argv);
 }
 
 void stopEngine () {
   GuidoShutdown();
-  FreeImage_DeInitialise();
 }
 
 } // end namespace
