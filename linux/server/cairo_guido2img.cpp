@@ -38,6 +38,7 @@ unsigned DLL_CALLCONV myReadProc(void *buffer, unsigned size, unsigned count, fi
     to_read = room;
   }
   memcpy(buffer, closure->start_ + closure->pos_, to_read);
+  closure->pos_ += to_read;
   return to_read;
 }
   
@@ -45,18 +46,17 @@ unsigned DLL_CALLCONV myWriteProc(void *buffer, unsigned size, unsigned count, f
   png_stream_to_byte_array_closure_t *closure =
           (png_stream_to_byte_array_closure_t *) handle;
 
-  int to_read = size * count;
-  int room = closure->size_ - closure->pos_;
-  if (to_read > room) {
-    to_read = room;
-  }
-  memcpy(closure->start_ + closure->pos_, buffer, to_read);
-  return to_read;
+  int to_write = size * count;
+  closure->size_ += to_write;
+  memcpy(closure->start_ + closure->pos_, buffer, to_write);
+  closure->pos_ += to_write;
+  return to_write;
 }
     
 int DLL_CALLCONV mySeekProc(fi_handle handle, long offset, int origin) {
   png_stream_to_byte_array_closure_t *closure =
           (png_stream_to_byte_array_closure_t *) handle;
+
   int place = 0;
   if (origin == SEEK_CUR)
     place = closure->pos_;
@@ -157,7 +157,10 @@ int cairo_guido2img::convert (guidosession* const currentSession)
       FREE_IMAGE_FORMAT fif = FreeImage_GetFileTypeFromHandle(&io, (fi_handle)&fBuffer, 0);
       if(fif != FIF_UNKNOWN) {
         FIBITMAP *dib = FreeImage_LoadFromHandle(fif, &io, (fi_handle) &fBuffer, 0);
-        FreeImage_SaveToHandle(format == GUIDO_WEB_API_JPEG ? FIF_JPEG : FIF_GIF, dib, &io, (fi_handle) &fBuffer, 0);
+        fBuffer.reset(); // need to reset for writing
+        FREE_IMAGE_FORMAT fmt = format == GUIDO_WEB_API_JPEG ? FIF_JPEG : FIF_GIF;
+        FreeImage_SaveToHandle(fmt, dib, &io, (fi_handle) &fBuffer, 0);
+        FreeImage_Unload(dib);
       }
       else
         err = guidoErrActionFailed;
