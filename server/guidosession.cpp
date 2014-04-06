@@ -484,7 +484,7 @@ GuidoWebApiFormat guidosession::formatToWebApiFormat(string format)
     } else if (strcmp("svg", format.c_str()) == 0) {
         return GUIDO_WEB_API_SVG;
     } else {
-        return GUIDO_WEB_API_PNG;
+        return GUIDO_WEB_API_UNDEFINED;
     }
     return GUIDO_WEB_API_PNG;
 }

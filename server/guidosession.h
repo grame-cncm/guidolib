@@ -38,7 +38,10 @@ namespace guidohttpd
 {
 enum GuidoSessionMapType {PAGE, STAFF, VOICE, SYSTEM, NO_TYPE};
 enum GuidoSessionParsingError { GUIDO_SESSION_PARSING_SUCCESS, GUIDO_SESSION_PARSING_FAILURE };
-enum GuidoWebApiFormat { GUIDO_WEB_API_PNG, GUIDO_WEB_API_JPEG, GUIDO_WEB_API_GIF, GUIDO_WEB_API_SVG,
+enum GuidoWebApiFormat { GUIDO_WEB_API_PNG,
+                         GUIDO_WEB_API_JPEG,
+                         GUIDO_WEB_API_GIF,
+                         GUIDO_WEB_API_SVG,
                          GUIDO_WEB_API_UNDEFINED
                        };
 //--------------------------------------------------------------------------
