@@ -1,5 +1,0 @@
-[
-	\slur( \b(\accent(f/8) g \stacc(a)))
-	\slur( \b(\accent(g/8) a \stacc(b&)))
-	\slur( \b(\accent(a/8) b& \stacc(c2)))
-]

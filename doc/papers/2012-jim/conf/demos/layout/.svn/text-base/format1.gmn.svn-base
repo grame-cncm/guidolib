@@ -1,7 +1,0 @@
-{ 
-  [ \staffFormat<size=3pt> ],
-  [ \staffFormat<size=5pt> ],
-  [ \staffFormat<style="1-line"> \clef<"none"> ],
-  [ \staffFormat<style="7-line",size=2pt> ] 
-}
-
