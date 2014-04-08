@@ -1,0 +1,8 @@
+This is the core code for the server. Different implementations must
+implement a derived class of guido2img (see guido2img.h) as well as the
+functions in engine.h. Examples are currently in the Qt and linux
+directories.
+
+Make sure to always use the most recent libmicrohttpd at:
+
+svn checkout https://gnunet.org/svn/libmicrohttpd

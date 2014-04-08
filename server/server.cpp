@@ -246,6 +246,7 @@ int HTTPDServer::send (struct MHD_Connection *connection, const char *page, int 
         return MHD_NO;
     }
     MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE, type ? type : "text/plain");
+    MHD_add_response_header (response, MHD_HTTP_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, "*");
     int ret = MHD_queue_response (connection, status, response);
     MHD_destroy_response (response);
     return ret;
