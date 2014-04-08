@@ -5,13 +5,7 @@
 
 using namespace std;
 
-#ifdef __APPLE_CC__
-	#include <GLUT/glut.h>
-	#include <Carbon/Carbon.h>
-#else
-//	#include <glut.h>		//use this include for VC++7
 	#include <GL/glut.h>	//use this include for VC++6
-#endif
 
 
 // - App
@@ -93,13 +87,7 @@ bool GuidoViewerApp::Initialize()
 
 	desc.graphicDevice = fDevice;
 	desc.textFont = "Times";
-#if defined(WIN32) || defined(linux)
-	desc.musicFont = "guido2.ttf";
-//	desc.textFont = "times.ttf";
-#else
-	desc.musicFont = "../Resources/guido2.ttf";
-//	desc.textFont = "Times";
-#endif
+	desc.musicFont = "../../../src/guido2.ttf";
 	GuidoErrCode result = GuidoInit( &desc );
 	if( result != guidoNoErr ) {
 		ReportGuidoError( result );
@@ -208,98 +196,7 @@ void GuidoViewerApp::DrawScore()
 	GuidoErrCode err = GuidoOnDraw(&desc);
 }
 
-// ---------------------------------------------------------------------------
-string GuidoViewerApp::SelectOneFile()
-{
-	string file;
-#ifdef __APPLE__
-	NavDialogCreationOptions 	options={0};
-    NavDialogRef 	dlog;
-	NavUserAction	userAction;
-	NavReplyRecord	replyRec;
-	
-	::NavGetDefaultDialogCreationOptions (&options);
-	::NavCreateChooseFileDialog( &options, nil, 0, 0, 0, 0, &dlog );
-	if ( ::NavDialogRun( dlog ) != noErr) goto end;
 
-	userAction = ::NavDialogGetUserAction( dlog );
-	switch( userAction )
-	{
-		case kNavUserActionChoose:
-		case kNavUserActionOpen:
-			if (::NavDialogGetReply( dlog, &replyRec ) != noErr) goto end;
-			if( replyRec.validRecord ) {
-				// Extraction de n "AEDesc" a partir d'une structure "AEDescList"
-				SInt32 itemCount = 0;
-				OSErr err = ::AECountItems( &replyRec.selection, &itemCount );
-				if( err == noErr ) {
-					AEKeyword keyWord;
-					AEDesc resultDesc;
-					err = ::AEGetNthDesc( &replyRec.selection, 1,typeFSRef, &keyWord, &resultDesc );
-					if( err == noErr ) {
-						FSRef fref;
-						err = AEGetDescData (&resultDesc, &fref, sizeof(fref));
-						if (err == noErr) {
-							const int pathSize = 1024;
-							char buff[pathSize];
-							buff[ 0 ] = 0;
-							::FSRefMakePath( &fref, (unsigned char *)buff, pathSize );
-							file = buff;
-						}
-						::AEDisposeDesc( &resultDesc );
-					}
-				}
-			}
-			::NavDisposeReply( &replyRec );
-			break;
-
-		default:
-			break;
-	}
-end:
-	::NavDialogDispose( dlog );
-#elif defined(WIN32)
-	OPENFILENAME ofn;
-	char buff[512]={0};
-	char *flt = "gmn files\0*.gmn\0";
-
-	ofn.lStructSize = sizeof(ofn); 
-	ofn.hwndOwner = NULL; 
-	ofn.hInstance = NULL; 
-	ofn.lpstrFilter = flt; 
-	ofn.lpstrCustomFilter = NULL; 
-	ofn.nMaxCustFilter = 0; 
-	ofn.nFilterIndex = 1;
-	ofn.lpstrFile = buff;
-	ofn.nMaxFile = 512; 
-	ofn.lpstrFileTitle = NULL; 
-	ofn.nMaxFileTitle = 0; 
-	ofn.lpstrInitialDir = ""; 
-	ofn.lpstrTitle = "Select a Guido file:"; 
-	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST; // OFN_EXPLORER; 
-	ofn.nFileOffset = 0; 
-	ofn.nFileExtension = 0; 
-	ofn.lpstrDefExt = NULL; 
-	ofn.lCustData = NULL; 
-	ofn.lpfnHook = NULL; 
-	ofn.lpTemplateName = ""; 
-	
-	if (GetOpenFileName(&ofn)) {
-		file = ofn.lpstrFile;
-	}
-#endif
-	return file;
-}
-
-// ---------------------------------------------------------------------------
-void GuidoViewerApp::OpenFile()
-{
-	string file = SelectOneFile();
-	if( file.length() > 0) {
-		cout << "opening file " << file << endl;
-		OpenFile(file.c_str());
-	} 
-}
 // ------------------------------ ---------------------------------------------
 void GuidoViewerApp::Reload()
 {

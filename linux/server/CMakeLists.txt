@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 2.6)
 project (guidohttpserver)
 set (target guidohttpserver)
 # LibFindMacros
-include(LibFindMacros.cmake)
+include(../../cmake/LibFindMacros.cmake)
 
 set (GUIDO  ${CMAKE_CURRENT_SOURCE_DIR}/../../src)
 
