@@ -2,7 +2,10 @@
   <head>
     <script type="text/javascript" src="jquery-1.10.2.min.js"></script>
     <script>
+      var current = 0;
       function processGMN() {
+        var internalCurrent = current;
+        current = current + 1;
         $.post("http://guidoservice.grame.fr",
         "data="+encodeURIComponent($("#gmnSandbox").val()), function(data) {
           var xhr = new XMLHttpRequest();
@@ -12,14 +15,17 @@
             console.log(this.status);
             if (this.status == 201) {
               success = true;
-              $("#warning").text("")
-              console.log("rendering");
               var blob = new Blob([this.response], {type:"image/png"});
-              URL.revokeObjectURL(document.getElementById("guidoResult").src);
-              document.getElementById("guidoResult").src = window.URL.createObjectURL(blob);
+              if (current - 1 == internalCurrent) {
+                $("#warning").text("")
+                URL.revokeObjectURL(document.getElementById("guidoResult").src);
+                document.getElementById("guidoResult").src = window.URL.createObjectURL(blob);
+              }
             }
           };
-          xhr.send();
+          if (current - 1 == internalCurrent) {
+            xhr.send();
+          }
         }).fail(function() {
           $("#warning").text("The GMN code above contains a syntax error.");
         });
