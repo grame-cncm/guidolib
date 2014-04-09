@@ -19,7 +19,7 @@
 \newcommand{\gmn}			{\textsc{gmn}}
 \newcommand{\code}[1]		{{\small \texttt{#1}}}
 \newcommand{\guidotag}[1]	{\textbackslash\code{#1}}
-\newcommand{\exemple}		{\vspace{2mm}\hspace*{-6mm}\textsc{Exemple}}
+\newcommand{\exemple}		{\vspace{2mm}\hspace*{-3mm}\textsc{Exemple}}
 
 \title{\centering Extension de Guido aux notations contemporaines}
 
@@ -45,7 +45,7 @@
 \begin{abstract}
 
 Le projet \guido{} regroupe à la fois un format textuel de description de partitions musicales, un moteur de rendu basé sur ce format, et une librairie qui fournit aux développeurs d'applications, un support de haut niveau pour l'ensemble des services liés au format \guido{} et à son rendu sous forme graphique. 
-De base, le projet \guido{} traite de la notation traditionnelle de la musique occidentale. Le projet a été récemment étendu, tant du point de vue format que du point de vue rendu, pour adresser également les besoins les plus courants de la musique contemporaine. Cet article présente ces extensions et montre comment les choix de design fournissent à l'utilisateur une large palette de solutions pour la notation de la musique. 
+A l'origine, le projet \guido{} traite de la notation traditionnelle de la musique occidentale. Le projet a été récemment étendu, tant du point de vue du format que du point de vue du rendu, pour adresser également les besoins les plus courants de la musique contemporaine. Cet article présente ces extensions et montre comment les choix de design fournissent à l'utilisateur une large palette de solutions pour la notation de la musique. 
 
 %La librairie \guido{} offre un grand nombre de symboles musicaux correspondant aux plus larges besoins de l'écriture musicale. Elle fournit un moteur de rendu de partitions embarquable dans d'autres applications. Dans une volonté d'étendre cette librairie à la musique contemporaine, nous avons implémenté un ensemble de nouvelles notations jusqu'à présent pas, ou très sommairement, implémentées. L'objectif était de répondre aux demandes des compositeurs en ajoutant certaines notations de la manière la plus adaptée à l'écriture musicale, tout en laissant une large liberté à l'utilisateur.
 
@@ -68,12 +68,12 @@ De base, le projet \guido{} traite de la notation traditionnelle de la musique o
 
 
 Le projet \guido{} est né il y a presque 20 ans, tout d'abord comme format textuel de représentation de la musique \cite{hoos98,guido}, puis comme moteur de rendu graphique de partitions musicales \cite{RENZ02}. 
-Lors de sa conception, le format \guido{} se différencie des approches proposées par SCORE \cite{SCORE}, MuseData \cite{Hewlett97}, DARMS \cite{darms} ou encore Humdrum \cite{Huron97} notamment parce qu'il est pleinement lisible par l'utilisateur. Basée sur un formalisme qui aborde la description de la musique à partir des concepts musicaux, l'approche développée par \guido{} repose sur l'idée d'adéquation, qui invite à noter simplement les concepts musicaux simples, et à ne recourir à des notations complexes que pour les notions musicales complexes.
+Lors de sa conception, le format \guido{} se différencie des approches proposées par SCORE \cite{SCORE}, MuseData \cite{Hewlett97}, DARMS \cite{darms} ou encore Humdrum \cite{Huron97} notamment parce qu'il est pleinement lisible par l'utilisateur. L'approche développée par \guido{} repose sur l'idée d'adéquation, qui invite à noter simplement les con-cepts musicaux simples, et à ne recourir à une syntaxe complexe que pour les notions musicales complexes.
 
-Postérieurement au format \guido{}, d'autres représentations textuelles de la notation de la musique ont vu le jour, telles que Lilypond \cite{lilypond03,lilypond06} qui est assez similaire dans son format, ou MusicXML \cite{good01}, orientée vers l'échan-ge de partitions. Toutefois, le projet \guido{} reste unique parce qu'il est le seul qui propose à la fois un format de notation, un moteur de rendu et une librairie C/C++ permettant d'embarquer des capacités de rendu de partitions dans des applications indépendantes.
+Postérieurement au format \guido{}, d'autres représentations textuelles de la musique ont vu le jour, telles que Lilypond \cite{lilypond03,lilypond06} qui est assez similaire dans son format, ou MusicXML \cite{good01}, orientée vers l'échange de partitions. Toutefois, le projet \guido{} reste unique car il est le seul qui propose à la fois une syntaxe, un moteur de rendu et une librairie C/C++ permettant d'embarquer des capacités de rendu de partitions dans des applications indépendantes.
 Par ailleurs, la rapidité et l'efficacité du moteur de rendu le rendent utilisable dans un contexte \textit{temps réel} (pour des partitions dont le niveau de complexité n'est pas trop élevé), ouvrant la voie à des formes d'interactivité inédites \cite{Hoadley12,Fober:12a}.
 
-Pour répondre aux besoins les plus courants de la musique contemporaine, le format \guido{} ainsi que le moteur de rendu ont été étendus. Après un bref rappel sur le format \guido{}, cet article décrit ces extensions, et situe les choix faits en matière de rendu graphique dans les pratiques identifiées dans la littérature contemporaine. Nous montrerons également comment une forme de \emph{langage générique} permet de combiner ces représentations et offre à l'utilisateur un large éventail de solutions pour la représentation de la musique.
+Pour répondre aux besoins les plus courants de la musique contemporaine, le format \guido{} ainsi que le moteur de rendu ont été étendus. Après un bref rappel sur le format \guido{}, cet article décrit ces extensions (nouveaux symboles puis améliorations des symboles existants), et situe les choix faits en matière de rendu graphique dans les pratiques identifiées dans la littérature contemporaine. Nous montrerons également comment une forme de \emph{langage générique} permet de combiner ces représentations et offre à l'utilisateur un large éventail de solutions pour la représentation de la musique.
 
 
 %Le format de notation musicale \guido{} (GMN) \cite{hoos98} \cite{Dau09a} a été défini par H. Hoos et K. Hamel il y a plus de 10 ans. Il est très proche du format adopté par Lilypond \cite{lilypond03,lilypond06} mais il est apparu antérieurement. Le format GMN est un langage textuel de représentation de partitions musicales 
@@ -89,17 +89,19 @@ Pour répondre aux besoins les plus courants de la musique contemporaine, le for
 Ci-dessous figurent les principes généraux du format de notation \guido{}. Ils sont fournis pour permettre la compréhension du contenu des sections suivantes. Pour plus de détails on peut se reporter à \cite{Dau09a} ou \cite{guido}.
 
 Le format de base de \guido{} recouvre les notes, silences, altérations, voix indépendantes, et les concepts les plus courants de la notation musicale comme les clefs, métriques, armures, articulations, liaisons, etc.
-Les notes sont représentées par leur nom \code{(a b c d e f g h)}, une altération optionnelle (\code{\#} et \code{\&} pour dièse et bémol), un numéro d'octave optionnel et une durée optionnelle exprimée sous forme de fraction.
+Les notes sont représentées par leur nom \code{(a b c d e f g h)}, une altération optionnelle (\code{\#} et \code{\&} pour dièse et bémol), un numéro d'octave optionnel (\code{1} par défaut) et une durée optionnelle exprimée sous forme de fraction (\code{1/4} pour la noire, \code{1/8} pour la croche, \code{1/2} pour la ronde, etc. ).
 
 %Le format de base de \guido{} recouvre les notes, silences, altérations, voix indépendantes, et les concepts les plus courants de la notation musicale comme les clefs, métriques, armures, articulations, liaisons, etc.
 %Les notes sont représentées par leur nom, une altération optionnelle, un numéro d'octave optionnel et une durée optionnelle. Les accords sont décrits par des notes entre accolades séparées par des virgules. Un système (d'une ou plusieurs portées) est décrit par deux accolades, et une portée par deux crochets.
 
 
-Les \emph{tags} sont utilisés pour donner des informations musicales supplémentaires, comme les liaisons, clés, armures, etc. Un \emph{tag} a une des formes suivantes : 
+Les \emph{tags} sont utilisés pour donner des informations musicales supplémentaires, comme les liaisons, clefs, armures, etc. Un \emph{tag} a une des formes suivantes : 
+\vspace{1mm}
 \begin{gmncode}
     \tagname<param-list>
     \tagname<param-list>(note-series)
 \end{gmncode}
+\vspace{1mm}
 %\begin{code}
 %\textbackslash{}tagname<param-list>
 %\textbackslash{}tagname\textless{}param-list\textgreater{}(note-series)
@@ -113,7 +115,7 @@ où \emph{param-list} est une liste optionnelle de paramètres (chaî-nes de car
 %**************************** MICRO-TONALITÉS *****************************
 \subsection{Micro-tonalité}\label{subsec:micro}
 
-La micro-tonalité a été introduite avec la version 1.43 de la librairie \guido{}. Graphiquement, elle est limitée à la représentation du quart de ton, alors que, d'un point de vue langage, elle s'exprime comme un nombre flottant de demi-tons qui sont arrondis au quart de ton le plus proche pour le rendu graphique: 
+La micro-tonalité est limitée graphiquement à la représentation du quart de ton, alors que, du point de vue du langage, elle s'exprime comme un nombre flottant de demi-tons qui sont arrondis au quart de ton le plus proche pour le rendu graphique: 
 \begin{gmncode}
     1)  \alter<detune>
     2)  \alter<detune>(note-series)
@@ -122,6 +124,7 @@ La micro-tonalité a été introduite avec la version 1.43 de la librairie \guid
 La première forme (1) introduit la notion d'\emph{altération courante} : l'altération reste valide jusqu'à une indication contraire. Dans la deuxième forme (2), l'altération ne s'applique qu'aux notes indiquées.
 \newpage
 
+\begin{figure}[h]
 \exemple
 \begin{gmncode}
 [
@@ -130,16 +133,17 @@ La première forme (1) introduit la notion d'\emph{altération courante} : l'alt
   \alter<1.8>(a)
 ]
 \end{gmncode}
-
-\begin{figure}[h]
-\centering
+\begin{center}
 \includegraphics[width=\columnwidth]{img/partitions/alter.pdf}
-\caption{Micro-tonalité}
+\end{center}
+\caption{Micro-tonalité arrondie au quart de ton}
 \label{fig:alter}
 \end{figure}
 
 La micro-tonalité est également introduite dans les armures de clef libres. De manière similaire, elle s'exprime sous forme de nombres flottants indiqués entre crochets.
 
+
+\begin{figure}[h]
 \exemple
 \begin{gmncode}
 [
@@ -147,9 +151,9 @@ La micro-tonalité est également introduite dans les armures de clef libres. De
   \alter<0.5> g  a \alter<1.5> g 
 ]
 \end{gmncode}
-\begin{figure}[h]
-\centering
+\begin{center}
 \includegraphics[width=0.75\columnwidth]{img/partitions/freekey.pdf}
+\end{center}
 \caption{Armure de clef libre avec micro-tonalité}
 \label{fig:freekey}
 \end{figure}
@@ -158,14 +162,15 @@ La micro-tonalité est également introduite dans les armures de clef libres. De
 %********************** TÊTES DE NOTES *****************************
 \subsection{Têtes de notes}\label{subsec:tetes_notes}
 
-La librairie \guido{} a été étendue avec 6 nouveaux symboles de têtes de note qui sont spécifiés par le paramètre \code{style} du tag \guidotag{noteFormat}:
+La librairie \guido{} a été étendue avec 6 nouveaux symboles de têtes de note. Son implémentation repose sur le tag \guidotag{noteFormat}, déjà existant, qui modifie l'apparence des notes qui le suivent (couleur, taille, offset, etc.), et auquel nous avons ajouté un attribut de style, permettant à l'utilisateur de choisir l'apparence des têtes de notes.
+
 \begin{gmncode}
   \noteFormat<style=noteHeadStyle>
 \end{gmncode}
 où \code{noteHeadStyle} est parmi :
 \begin{itemize}
     \item \code{x} : une croix
-    \item \code{diamond} : un diamant
+    \item \code{diamond} : un losange
     \item \code{round} : un rond
     \item \code{square} : un carré
     \item \code{triangle} : un triangle, pointe en haut
@@ -192,31 +197,29 @@ La première portée de l'exemple de la figure \ref{fig:noteheads} est généré
 \label{fig:noteheads}
 \end{figure}
 %
-\bigskip
 
 Pour l'apparence graphique de ces éléments, nous nous sommes principalement inspirés des ouvrages de E. Gould \cite{gould2011behind} et de K. Stone \cite{stone1980music}.
-L'implémentation repose sur le tag \guidotag{noteFormat}, déjà existant, qui modifie l'apparence des notes qui le suivent (couleur, taille, offset, etc.), et auquel nous avons ajouté un attribut de style, permettant à l'utilisateur de choisir l'apparence des têtes de notes.
 
 Des ajustements particuliers ont été nécessaires pour tenir compte des différences graphiques entre les têtes de notes :
 \begin{itemize}
     \item insertion d'un offset horizontal variable selon le symbole choisi, l'orientation de la hampe, l'utilisation en accord ou non (les accords pouvant posséder des \emph{noteheads} différents pour chacune de leurs notes);
-    \item adaptation de la longueur de la hampe selon le type de symbole utilisé (par exemple, différence de longueur entre la croix et le diamant.
+    \item adaptation de la longueur de la hampe selon le type de symbole utilisé (par exemple, différence de longueur entre la croix et le losange).
 \end{itemize}
 
 
 %**************************** COMPLEX METER ********************************
 \subsection{Métriques complexes}\label{subsec:metriques}
 
-La possibilité d'insérer une métrique complexe a été introduite avec la version 1.52 de la librairie \guido{}. Elle permet d'indiquer une subdivision de la métrique par une somme en place et lieu de la métrique habituelle. La syntaxe est la même que pour une métrique normale, elle fait usage du tag \guidotag{meter} et il suffit de remplacer le numérateur par une somme, comme le montre l'exemple ci-dessous, illustré en figure \ref{fig:complexMeter}.
+La métrique complexe permet d'indiquer une subdivision de la métrique par une somme en place et lieu de la métrique habituelle. La syntaxe est la même que pour une métrique normale, elle fait usage du tag \guidotag{meter} et il suffit de remplacer le numérateur par une somme, comme le montre l'exemple ci-dessous, illustré en figure \ref{fig:complexMeter}.
 
+\begin{figure}[h]
 \exemple
 \begin{gmncode}
   [ \meter<"3+3+2/4"> a b g ]
 \end{gmncode}
-
-\begin{figure}[h]
-\centering
+\begin{center}
 \includegraphics[width=50mm]{img/partitions/complexMeter.pdf}
+\end{center}
 \caption{Métrique complexe}
 \label{fig:complexMeter}
 \end{figure}
@@ -233,14 +236,16 @@ Un \emph{cluster} est indiqué par un range-tag s'appliquant à des accords de d
 \end{gmncode}
 
 \begin{figure}[h]
-\centering
+\exemple
 \begin{gmncode}
 [
   \cluster({a, d} {c/8, f}
-      {a/2, d2} {f/1, c1})
+      {a/2, d2} {c1/1, f2})
 ]
 \end{gmncode}
+\begin{center}
 \includegraphics[width=50mm]{img/partitions/cluster.pdf}
+\end{center}
 \caption{\emph{Cluster}}
 \label{fig:cluster}
 \end{figure}
@@ -253,13 +258,12 @@ Comme l'indique en partie la figure \ref{fig:cluster}, les choix, faits à parti
 	\item la hampe est conservée pour garder l'indication de la durée.
 \end{itemize}
 
-Le tag \guidotag{cluster} supporte les paramètres de contrôle standards (\code{size}, \code{dx}, \code{dy}, \code{color}) auxquels ont été ajoutés des paramètres \code{hdx} et \code{hdy} permettant d'introduire un décalage s'appliquant à la tête de \emph{cluster}. 
+Le tag \guidotag{cluster} supporte également les paramètres de contrôle standards (\code{size}, \code{dx}, \code{dy}, \code{color}) auxquels ont été ajoutés des paramètres \code{hdx} et \code{hdy} permettant d'introduire un décalage s'appliquant à la tête de \emph{cluster}. 
 
 Un \emph{cluster} est vu comme une note et supporte donc le tag \guidotag{noteFormat} ainsi que le contrôle de l'orientation des têtes de notes (\guidotag{headsReverse}, \guidotag{headsLeft} et \guidotag{headsRight}) ainsi qu'illustré en figure \ref{fig:clusterInteractions}.
 
-\exemple
 \begin{figure}[h]
-\centering
+\exemple
 \begin{gmncode}
 [
   \cluster<color="red", hdx=1, hdy=3>({a})
@@ -270,7 +274,9 @@ Un \emph{cluster} est vu comme une note et supporte donc le tag \guidotag{noteFo
   \cluster<"blue">({d1/2, g})
 ]
 \end{gmncode}
+\begin{center}
 \includegraphics[width=45mm]{img/partitions/clusterInteractions.pdf}
+\end{center}
 \caption{\emph{Clusters} : interactions avec d'autres tags}
 \label{fig:clusterInteractions}
 \end{figure}
@@ -282,7 +288,7 @@ Un \emph{cluster} est vu comme une note et supporte donc le tag \guidotag{noteFo
 
 Le \emph{glissando} se présente classiquement comme une li-gne joignant deux notes décalées dans le temps (figure \ref{fig:glissandoSimple}), indiquant ainsi un glissement, continu ou non suivant le type d'instrument, d'une hauteur à une autre.
 
-Dans un souci d'efficacité, il fallait pouvoir décrire un \emph{glissando} seul ou plusieurs \emph{glissandi} à la suite de la manière la plus simple et intuitive possible. 
+La syntaxe choisie a été la suivante :
 
 \begin{gmncode}
   \glissando<params>(notes)
@@ -292,44 +298,40 @@ Dans un souci d'efficacité, il fallait pouvoir décrire un \emph{glissando} seu
     - thickness : épaisseur de la ligne
 \end{gmncode}
 
-Il paraissait important de donner la possibilité à l'utilisateur de n'écrire qu'une seule fois le tag pour décrire plusieurs \emph{glissandi} consécutifs, contrairement à la description de lilypond où le tag doit être répété entre chaque note. Ainsi le range-tag apparaissait comme la meilleure solution pour décrire un ou plusieurs \emph{glissandi} : toutes les notes comprises dans les parenthèses seraient prises en compte et liées les unes aux autres par des \emph{glissandi}. L'algorithme de démultiplication d'un même tag et de répartition de celui-ci est fortement inspiré de celui du \guidotag{tie}, ou liaison de prolongation, qui doit également créer une liaison entre chacune des notes affectées.
+Il paraissait important de donner la possibilité à l'utilisateur de n'écrire qu'une seule fois le tag pour décrire plusieurs \emph{glissandi} consécutifs, contrairement à la description de lilypond où le tag doit être répété entre chaque note. Ainsi le range-tag apparaissait comme la meilleure solution pour décrire un ou plusieurs \emph{glissandi} : toutes les notes comprises dans les parenthèses seraient prises en compte et liées les unes aux autres par des \emph{glissandi}. 
+
+Concernant le moteur de rendu, l'algorithme de démultiplication d'un même tag et de répartition de celui-ci est fortement inspiré de celui du \guidotag{tie}, ou liaison de prolongation, qui doit également créer une liaison entre chacune des notes affectées.
 
 
-\exemple
 \begin{figure}[h]
-\centering
-
+\exemple
 \begin{gmncode}
   [ \glissando(g b d) ]
 \end{gmncode}
 
+\begin{center}
 \includegraphics[width=35mm]{img/glissando1.pdf}
+\end{center}
 \caption{\emph{Glissando}}
 \label{fig:glissandoSimple}
 \end{figure}
 
 
-
-
 % *********************** FEATHERED BEAM ****************************
 \subsection{Liens de croches en soufflet (\emph{feathered beaming})}\label{subsec:featheredBeaming}
-\bigskip
-
-\begin{gmncode}
-  \fBeam<params>(notes)
-  params : 
-    - durations = "firstDur", "lastDur" : 
-      durée des première et dernière notes
-    - drawDuration : 
-      indication de la durée totale
-\end{gmncode}
 
 Décrite par Gardner Read comme "a highly graphic representation of rythmic flexibility"  \cite{read1969music} (p. 94), cette notation contemporaine d'un \emph{accelerando} ou \emph{ritardando} à travers les liens de croches est, de manière générale, encore peu répandue dans les ouvrages de théorie, et se résume souvent à des cas simples, partant ou arrivant à la simple croche, c'est à dire partant de, ou arrivant vers, un unique point. Pourtant il paraît intéressant de pouvoir offrir la possibilité aux compositeurs de décrire le passage entre n'importe quelles valeurs : par exemple d'une double-croche à une triple-croche, ou d'une quadruple-croche à une double-croche, etc. (figure \ref{fig:fbeamcomplex}).
 
-\exemple
 \begin{figure}[h]
-\centering
+\exemple
+\begin{gmncode}
+[
+ \fBeam(a/16 a a a/32) \fBeam(a/64 a a a a/16)
+]
+\end{gmncode}
+\begin{center}
 \includegraphics[width=40mm]{img/fbeamcomplex.pdf}
+\end{center}
 \caption{\emph{Feathered beams} plus complexes}
 \label{fig:fbeamcomplex}
 \end{figure}
@@ -355,13 +357,7 @@ Il est cependant possible de chaîner plusieurs \emph{feathered beams} en utilis
 \label{fig:fbeamchain}
 \end{figure}
 
-% question de voix simultanées
-% lilypond : 
-% \override Beam #'grow-direction = #LEFT
-% \featherDurations #(ly:make-moment 2 1)
-% { c16[ c c c c c c c] }
-\bigskip
-On remarque que, même dans un ouvrage tel que celui d'E. Gould \cite{gould2011behind}, peu de détails sont donnés sur cette notation, et on se heurte rapidement à des incohérences telles que celle de la figure \ref{fig:incoherence} tirée de E. Gould \cite{gould2011behind} : on veut faire tenir en un temps une croche et quatre notes de durées inférieures à la croche mais supérieures à la triple-croche. 
+On remarque que, même dans un ouvrage tel que celui d'E. Gould \cite{gould2011behind}, peu de détails sont donnés sur cette notation, et on se heurte rapidement à des incohérences telles que celle de la figure \ref{fig:incoherence} tirée de ce même ouvrage : on veut faire tenir en un temps une croche et quatre notes de durées inférieures à la croche mais supérieures à la triple-croche. 
 
 \begin{figure}[h]
 \centering
@@ -375,7 +371,7 @@ Ce manque d'une exacte cohérence entre tempo et aspect graphique est également
 Ainsi on voit l'importance des choix de design de ce symbole, sur la manière de le décrire textuellement, de le dessiner en particulier dans le cas de plusieurs voix simultanées, et de manière générale sur la liberté laissée à l'utilisateur.
 \\
 
-Concernant les possibilités de description données à l'utilisateur, nous avons pu voir que plusieurs critères pouvaient intervenir dans la description et devaient pouvoir être imposés par l'utilisateur. Des paramètres qui peuvent être incohérents entre eux :
+Concernant les possibilités de description données à l'utilisateur, nous avons pu voir que plusieurs critères, parfois incohérents entre eux, pouvaient intervenir dans la description et devaient pouvoir être imposés par l'utilisateur :
 \begin{itemize}
 \item le nombre de notes dans le groupe;
 \item leurs durées individuelles et intrinsèques qui définissent également leur espacement;
@@ -386,17 +382,15 @@ Concernant les possibilités de description données à l'utilisateur, nous avon
 
 Ces différents niveaux de description nous poussent à faire une claire distinction entre l'aspect temporel et l'aspect graphique de notre groupe de notes.  Il a été décidé de laisser au compositeur la liberté de donner à son \emph{feathered beam} l'aspect graphique qu'il désire, indépendamment des durées internes de ses notes. Il pourra ainsi jouer sur les espacements entre notes, sur le nombre de notes, et sur la durée totale de manière "classique" en imposant à chaque note une durée, et en veillant à ce que la somme de toutes les notes corresponde à la durée totale souhaitée. Cette durée totale peut être indiquée sur la partition grâce au paramètre \code{drawDuration} (figure \ref{fig:fbeamduree}).
 
-\exemple
 \begin{figure}[h]
-\centering
+\exemple
 \begin{gmncode}
-[ 
-  \fBeam<drawDuration="true"> (
-    a/8 a a/16 a a a/32 a
-  )
-]
+[ \fBeam<drawDuration="true"> (
+    a/8 a a/16 a a a/32 a )]
 \end{gmncode}
+\begin{center}
 \includegraphics[width=40mm]{img/fbeamduree.pdf}
+\end{center}
 \caption{Représentation de la durée}
 \label{fig:fbeamduree}
 \end{figure}
@@ -405,63 +399,58 @@ Sans plus d'indication de sa part, l'aspect graphique suivra les durées réelle
 
 En revanche, le \emph{param} \code{durations} pourra lui permettre d'imposer un aspect graphique tout autre, lui donnant ainsi la possibilité d'indiquer à l'interprète un changement de tempo plus ou moins important, et pas nécessairement cohérent avec les durées intrinsèques des notes, mais ayant du sens dans l'interprétation (figure \ref{fig:utilisateur}).
 
-%%
-\begin{comment}
-Ainsi, les deux descriptions suivantes sont valides, mais pas équivalentes :
-\\
-
 \begin{figure}[h]
-\centering
-\begin{gmncode}
-[ 
-  \fBeam<drawDuration="true">
-  (a/16 a a a/32 a/64 a) 
-]
-\end{gmncode}
-
-\includegraphics[width=5cm]{img/durationsinternes.pdf}
-\caption{Aspect graphique imposé par les durées internes}
-\label{fig:interne}
-\end{figure}
-\end{comment}
-%%
-
 \exemple
-\begin{figure}[h]
-\centering
 \begin{gmncode}
-[ 
-  \fBeam<durations="1/16, 1/64", 
-      drawDuration="true"> (
-    a/8 a/16 a a a/32 a
-  )
-]
+[ \fBeam<durations="1/16, 1/64", 
+      drawDuration="true">(
+    a/8 a/16 a a a/32 a )]
 \end{gmncode}
-
+\begin{center}
 \includegraphics[width=35mm]{img/durations.pdf}
+\end{center}
 \caption{Aspect graphique imposé par l'utilisateur}
 \label{fig:utilisateur}
 \end{figure}
 
+En résumé, la syntaxe générique est la suivante :
+\vspace{1mm}
+
+\begin{gmncode}
+  \fBeam<params>(notes)
+  params : 
+    - durations = "firstDur", "lastDur" : 
+      durée des première et dernière notes
+    - drawDuration : 
+      indication de la durée totale
+\end{gmncode}
+
+
 
 % ***************** STAFFOFF/ON **********************
 \subsection{Tags \textbackslash{}\emph{staffOff} et \textbackslash{}\emph{staffOn}}\label{subsec:staffoff}
-\bigskip
-
-\begin{gmncode}
-[ ... \staffOff ... \staffOn ... ]
-\end{gmncode}
-
 
 % littérature ?????????????
 % lilypond : même principe, mais les notes et autres éléments se dessinent dans le vide
 % permet aussi de passer d'un style de portée à un autre (override staff) ex : 2 lignes...
 
-Les tags \guidotag{staffOff} et \guidotag{staffOn} permettent de faire disparaître et apparaître la partition, en particulier pour cacher une voix muette pendant un certain temps (figure \ref{fig:staffoffsimple}).
+Les tags \guidotag{staffOff} et \guidotag{staffOn} permettent de faire disparaître et apparaître des parties de la partition, en particulier pour cacher une voix muette pendant un certain temps (figure \ref{fig:staffoffsimple}).
 
 Son usage est généralisé à tous les éléments et toutes les voix de la partition et permet des \emph{montages} plus complexes (figure \ref{fig:staffoffexotique}).
 
 \begin{figure}[h]
+
+%\begin{gmncode}
+%{
+% [ 
+%  \staffOff \clef _/1 \staffOn | \clef<"g"> 
+%  \meter<"4/4"> f/4 g a b
+% ],
+% [
+%  \clef<"f"> \meter<"4/4"> c0 d e f g b g a
+% ]
+%}
+%\end{gmncode}
 \begin{center}
 \includegraphics[width=\columnwidth]{img/staffoff.pdf}
 \end{center}
@@ -472,6 +461,19 @@ Son usage est généralisé à tous les éléments et toutes les voix de la part
 %{[\meter<"3/4"> a b/2 c \staffOff g/4 e _\staffOn e a/2 \staffOff \slur(e g) \staffOn a b/4 ], [\meter<"3/4"> \staffOff \clef e \staffOn d g \staffOff _/2 g e g \staffOn a b g d/4]}
 
 \begin{figure}[h]
+
+\begin{gmncode}
+{
+ [ 
+  \clef \meter<"3/4"> a b/2 e/4 
+  \staffOff f g
+ ],
+ [
+  \meter<"3/4"> \staffOff \clef c 
+  \staffOn d g | \staffOff f g \staffOn b
+ ]
+}
+\end{gmncode}
 \centering
 \includegraphics[width=0.8\columnwidth]{img/staffoffexotique.pdf}
 \caption{ \guidotag{staffOff} plus complexe}
@@ -479,6 +481,7 @@ Son usage est généralisé à tous les éléments et toutes les voix de la part
 \end{figure}
 
 L'implémentation graphique est le pendant de la description textuelle : tous les éléments inscrits après un tag \guidotag{staffOff} dans la description textuelle ne sont pas dessinés jusqu'au prochain \guidotag{staffOn} dans la séquence courante. Pour plusieurs éléments simultanés, c'est donc bien l'ordre dans la description textuelle qui indiquera le comportement à adopter. Ainsi :
+\vspace{1mm}
 \begin{gmncode}
 [ \meter<"4/4"> \clef \staffOff
   a b \staffOn c ]
@@ -489,14 +492,20 @@ n'est pas équivalent à :
 \begin{gmncode}
 [ \staffOff \meter<"4/4">
   \clef a b \staffOn c ]
-\end{gmncode} 
+\end{gmncode}
+\vspace{2mm}
 
 Quant à la portée, elle commence, ou s'arrête, aux positions correspondant au début des éléments suivant le tag.
 
 
 %************************ GRAPHIQUES ABSTRAITES ******************
 \subsection{Graphiques arbitraires}\label{subsec:graphiquesAbstraites}
-\bigskip
+
+Le tag \guidotag{symbol} permet d'insérer des graphiques arbitraires dans la partition, sous forme de fichier image externe. Les formats graphiques supportés sont de type \emph{png}, \emph{jpg} ou \emph{bmp}. Les paramètres de contrôle permettent d'ajuster la taille et la position de l'image dans la partition.
+
+Sa syntaxe est la suivante :
+
+\vspace{1mm}
 
 \begin{gmncode}
 1) \symbol<params>
@@ -509,7 +518,7 @@ Quant à la portée, elle commence, ou s'arrête, aux positions correspondant au
     - w/h : largeur/hauteur de l'image
 \end{gmncode}
 
-Le tag \guidotag{symbol} permet d'insérer des graphiques arbitraires dans la partition, sous forme de fichier image externe. Les formats graphiques supportés sont de type \emph{png}, \emph{jpg} ou \emph{bmp}. Les paramètres de contrôle permettent d'ajuster la taille et la position de l'image dans la partition.
+\vspace{1mm}
 
 Le tag \guidotag{symbol} peut être utilisé comme un tag simple ou comme un range-tag :
 \begin{enumerate}
@@ -517,8 +526,10 @@ Le tag \guidotag{symbol} peut être utilisé comme un tag simple ou comme un ran
 	\item le symbole s'applique aux notes indiquées (sans étirement).
 \end{enumerate}
 
-Pour l'exemple suivant, les fichiers images sont appelés par un chemin relatif et se situent dans le même répertoire que le fichier \gmn{} (contenant le code de l'exemple) ouvert.
+Le fichier est indiqué par un chemin absolu ou relatif. Dans le second cas, le chemin est relatif au répertoire contenant le fichier source ou au répertoire \emph{home} de l'utilisateur.
 
+
+\begin{figure}[h]
 \exemple\\
 Sur la première portée, le symbole ne possède pas de durée, contrairement à la deuxième portée.
 
@@ -537,25 +548,58 @@ Sur la première portée, le symbole ne possède pas de durée, contrairement à
   ]
 }
 \end{gmncode}
-
-\begin{figure}[h]
-\centering
+\begin{center}
 \includegraphics[width=65mm]{img/partitions/symbol.pdf}
+\end{center}
 \caption{Graphiques arbitraires}
 \label{fig:symbol}
 \end{figure}
 
-Le fichier est indiqué par un chemin absolu ou relatif. Dans le second cas, le chemin est relatif au répertoire contenant le fichier source ou au répertoire \emph{home} de l'utilisateur.
+\newpage
+
+%%%%%%%%%%%%%%%%%%%% CONTRÔLE DE RENDU %%%%%%%%%%%%%%%%%
+\section{Contr\^ole de rendu}\label{sec:controleRendu}
+
+Après avoir exposé les nouvelles notations implémentées dans \guido{}, nous allons à présent nous intéresser aux améliorations et subtilités rajoutées aux notations existantes.
+
+%************************* NOUVEAUX ATTRIBUTS **************************
+\subsection{Nouveaux paramètres}\label{subsubsec:attributs}
+
+De nouveaux paramètres ont été introduits pour plusieurs tags déjà existants, permettant un contrôle étendu du rendu graphique :
+\begin{itemize}
+\item \guidotag{staffFormat} : nouvelle possibilité de contrôle de l'épaisseur des lignes de la portée
+\item \guidotag{tuplet} : nouvelle possibilité de contrôle de l'épaisseur des lignes, de la taille du texte, etc.
+\item \guidotag{cresc} et \guidotag{decresc} : maintenant paramétrable en position, épaisseur, couleur.
+\end{itemize}
+On se reportera à la documentation utilisateur pour le détail de ces paramètres.
+
+\begin{figure}[h]
+\exemple\\
+L'exemple suivant illustre ces améliorations et génère la partition de la figure \ref{fig:nouveauxParams}.
+\begin{gmncode}
+{
+  [ \tuplet<"-3-", lineThickness=0.4,
+        bold="true", textSize=2, dy1=10> (
+      \cresc<dm="fff", dx1=-5, dx2=5,
+          dy=1, deltaY=5, color="red",
+          size=1.7> (a a a) )
+  ],
+  [ \staffFormat<lineThickness=0.5>
+    \decresc<thickness=0.8> (g d e f)
+  ]
+}
+\end{gmncode}
+\begin{center}
+\includegraphics[width=40mm]{img/partitions/nouveauxParams.pdf}
+\end{center}
+\caption{Contrôle de rendu étendu}
+\label{fig:nouveauxParams}
+\end{figure}
 
 
-
-%************************ AMÉLIORATIONS DIVERSES ******************
-\subsection{Améliorations diverses : \emph{trilles}}\label{subsec:amelioraions}
-\bigskip
-
-% littérature
-% lilypond : e\trill f\trill ... sans vaguelette sinon \startTrillSpan ... \stopTrillSpan
-%\gardner Read
+%*************************** TRILLES **************************************
+\subsection{Améliorations des \emph{trilles}}\label{subsec:trilles}
+\vspace{1mm}
 
 \begin{gmncode}
   \trill<params>(chord-series)
@@ -567,12 +611,15 @@ Le fichier est indiqué par un chemin absolu ou relatif. Dans le second cas, le 
 % Citation wiki
 Un \emph{trille} est un ornement musical qui consiste à alterner rapidement la note de base, sur laquelle est noté le \emph{trille}, et la note située juste au-dessus.
 
-Dans la version précédente de \guido{}, le \emph{trille} à proprement parler n'était indiqué que par le symbole \textit{\textbf{tr}} placé au-dessus de la note. Il paraissait pourtant important que la notation comprenne également la ligne ondulée du \emph{trille} qui suit celui-ci et en indique la durée. Comme ce symbole était déjà en partie implémenté, il fallait pouvoir lui offrir plus de souplesse sans pour autant en complexifier la notation.
+Dans la version précédente de \guido{}, le \emph{trille} à proprement parler n'était indiqué que par le symbole \textit{\textbf{tr}} placé au-dessus de la note. Il paraissait pourtant important que la notation comprenne également la ligne ondulée du \emph{trille} qui suit celui-ci et en indique la durée. Comme ce symbole était déjà en partie implémenté, il fallait pouvoir lui offrir plus de souplesse sans pour autant en complexifier la syntaxe.
 
 %D'après Elaine Gould \cite{gould2011behind}, la ligne du \emph{trille} doit être dessinée depuis le signe \textit{\textbf{tr}} jusqu'au début du prochain évènement (la prochaine note ou le prochain soupir), sauf si celui-ci se situe directement après la prochaine barre de mesure, la ligne s'arrêtant dans ce cas à la barre elle-même. 
 
 % justifier l'intérêt de tr et anchor ?
-De plus, nous avons voulu donner la possibilité de choisir de dessiner ou non le signe \textit{\textbf{tr}}, ainsi que de pouvoir changer l'ancrage de la ligne pour le déplacer sur la tête de la note. Cela fut implémenté grâce au \emph{param} \code{tr} qui accepte comme valeurs \code{true} ou \code{false} et à \code{anchor} qui accepte comme valeurs \code{note} ou \code{tr} (figure \ref{fig:trillanchor}). Le reste des modifications graphiques pouvant être effectuées manuellement par l'utilisateur à travers les paramètres classiques de déplacement (\code{dx}, \code{dy}), de couleur (\code{color}), et de taille (\code{size}).
+De plus, nous avons voulu donner la possibilité de choisir de dessiner ou non le signe \textit{\textbf{tr}}, ainsi que de pouvoir changer l'ancrage de la ligne pour le déplacer sur la tête de la note. Cela fut implémenté grâce au \emph{param} \code{tr} qui accepte comme valeurs \code{true} ou \code{false} et à \code{anchor} qui accepte comme valeurs \code{note} ou \code{tr} (figure \ref{fig:trillanchor}). 
+
+Le reste des modifications graphiques pouvant être effectuées manuellement par l'utilisateur à travers les paramètres classiques de déplacement (\code{dx}, \code{dy}), de couleur (\code{color}), et de taille (\code{size}).
+
 
 \begin{figure}[h]
 \exemple
@@ -587,91 +634,10 @@ De plus, nous avons voulu donner la possibilité de choisir de dessiner ou non l
 \label{fig:trillanchor}
 \end{figure}
 
-
-%%%%%%%%%%%%%%%%%%%% CONTRÔLE DE RENDU %%%%%%%%%%%%%%%%%
-\section{Contr\^ole de rendu}\label{sec:controleRendu}
-
-%************************* NOUVEAUX ATTRIBUTS **************************
-\subsection{Nouveaux paramètres}\label{subsubsec:attributs}
-
-De nouveaux paramètres ont été introduits pour plusieurs tags, permettant un contrôle étendu du rendu graphique :
-\begin{itemize}
-\item \guidotag{staffFormat} : contrôle de l'épaisseur des lignes de la portée
-\item \guidotag{tuplet} : contrôle de l'épaisseur des lignes, de la taille du texte, etc.
-\item \guidotag{cresc} et \guidotag{decresc} : paramétrable en position, \\épaisseur, couleur.
-\end{itemize}
-On se reportera à la documentation utilisateur pour le détail de ces paramètres.
-
-\exemple\\
-L'exemple suivant illustre ces améliorations et génère la partition de la figure \ref{fig:nouveauxParams}.
-\begin{gmncode}
-{
-  [
-    \tuplet<"-3-", lineThickness=0.4,
-        bold="true", textSize=2, dy1=10> (
-      \cresc<dm="fff", dx1=-5, dx2=5,
-          dy=1, deltaY=5, color="red",
-          size=1.7> (a a a)
-    )
-  ],
-  [
-    \staffFormat<lineThickness=0.5>
-    \decresc<thickness=0.8> (g d e f)
-  ]
-}
-\end{gmncode}
-\begin{figure}[h]
-\centering
-\includegraphics[width=40mm]{img/partitions/nouveauxParams.pdf}
-\caption{Contrôle de rendu étendu}
-\label{fig:nouveauxParams}
-\end{figure}
-
-%************************* GLISSANDI ET ACCORDS *******************************
-\subsection{\emph{Glissandi} et accords}\label{subsec:glissandiAccords}
-
-Un \emph{glissando} entre deux accords soulève la question de la répartition des \emph{glissandi} entre les notes des accords. La solution proposée est celle qui nous a paru la plus intuitive : c'est l'ordre des notes dans la description textuelle de l'accord qui détermine les relations entre les notes. Par exemple, pour 2 accords A et B, la première note de l'accord A sera liée à la première note de l'accord B, la seconde de A à la seconde de B, etc. (figure \ref{fig:glissandosimple}).
-
-\exemple
-\begin{gmncode}
-[ \glissando({e,a} {f,b} {a,d}) ]
-\end{gmncode}
-%\bigskip
-
-\begin{figure}[h]
-\begin{center}
-\includegraphics[width=35mm]{img/glissandosimple.pdf}
-\caption{\emph{glissandi} entre accords}
-\label{fig:glissandosimple}
-\end{center}
-\end{figure}
-
-L'unique problème avec ce choix peut se poser lors d'un conflit dans l'ordre imposé par le glissando précédent et par le suivant, comme dans le premier cas de l'exemple de la figure \ref{fig:glissandopb}. Il est alors possible de faire appel à une seconde voix, et au tag \guidotag{staff\textless{}numéro de portée\textgreater{}} qui pourra créer sur une même portée d'autres \emph{glissandi} en parallèle et indépendants des premiers (figure \ref{fig:glissandopb}).
-
-\exemple
-\begin{figure}[h]
-\centering
-\begin{gmncode}
-[ \glissando(e {d,f,a} g) b ]
-\end{gmncode}
-\includegraphics[width=4cm]{img/glissandopb.pdf}
-
-\begin{gmncode}
-{ 
-  [ \glissando(e {d,f}) empty b ],
-  [ \staff<1> empty \glissando(a g) empty ] 
-}
-\end{gmncode}
-\includegraphics[width=4cm]{img/glissandosanspb.pdf}
-\caption{Cas de recours à une seconde voix pour le \emph{glissando} (\code{empty} représente une note invisible.)}
-\label{fig:glissandopb}
-\end{figure}
-
-
 %***************************** TRILLES ET TIES ****************************************
-\subsection{\emph{Trilles} et liaisons}\label{subsec:trillesLiaison}
+%\subsection{\emph{Trilles} et liaisons}\label{subsec:trillesLiaison}
 
-Concernant le \emph{trille}, une subtilité au niveau du contr\^ole du rendu a également été ajoutée. Il fallait définir le comportement quant aux notes liées, soit de manière automatique de par la présence d'une barre de mesure, soit de manière explicitement décrite par l'utilisateur. La solution adoptée est de dessiner la ligne du \emph{trille} jusqu'à la fin de la dernière note liée si celle-ci provient d'une note plus longue découpée automatiquement, mais de s'arrêter normalement à la prochaine note si la liaison a été explicitée par l'utilisateur, qui pourra alors décider de répéter le \emph{trille} sur cette autre note, ou non. (figure \ref{fig:trill})
+Enfin, une subtilité au niveau du contr\^ole du rendu a également été ajoutée. Il fallait définir le comportement quant aux notes liées. La solution adoptée est de dessiner la ligne du \emph{trille} jusqu'à la fin de la dernière note liée si celle-ci provient d'une note plus longue découpée automatiquement, mais de s'arrêter normalement à la prochaine note si la liaison a été explicitée par l'utilisateur, qui pourra alors décider de répéter le \emph{trille} sur cette autre note, ou non. (figure \ref{fig:trill})
 
 \begin{figure}[h]
 \exemple
@@ -694,16 +660,64 @@ Concernant le \emph{trille}, une subtilité au niveau du contr\^ole du rendu a �
 \label{fig:trill}
 \end{figure}
 
+
+%************************* GLISSANDI ET ACCORDS *******************************
+\subsection{\emph{Glissandi} et accords}\label{subsec:glissandiAccords}
+
+
+Un \emph{glissando} entre deux accords soulève la question de la répartition des \emph{glissandi} entre les notes des accords. La solution proposée est celle qui nous a paru la plus intuitive : c'est l'ordre des notes dans la description textuelle de l'accord qui détermine les relations entre les notes. Par exemple, pour 2 accords A et B, la première note de l'accord A sera liée à la première note de l'accord B, la seconde de A à la seconde de B, etc. (figure \ref{fig:glissandosimple}).
+
+%\bigskip
+
+\begin{figure}[h]
+\exemple
+\begin{gmncode}
+[ \glissando({e,a} {f,b} {a,d}) ]
+\end{gmncode}
+\begin{center}
+\includegraphics[width=35mm]{img/glissandosimple.pdf}
+\caption{\emph{glissandi} entre accords}
+\label{fig:glissandosimple}
+\end{center}
+\end{figure}
+
+L'unique problème avec ce choix peut se poser lors d'un conflit dans l'ordre imposé par le glissando précédent et par le suivant, comme dans le premier cas de l'exemple de la figure \ref{fig:glissandopb}. Il est alors possible de faire appel à une seconde voix, et au tag \guidotag{staff\textless{}numéro de portée\textgreater{}} qui pourra créer sur une même portée d'autres \emph{glissandi} en parallèle et indépendants des premiers (figure \ref{fig:glissandopb}).
+\\
+
+\begin{figure}[h]
+\exemple
+\begin{gmncode}
+[ \glissando(e {d,f,a} g) b ]
+\end{gmncode}
+\begin{center}
+\includegraphics[width=4cm]{img/glissandopb.pdf}
+\end{center}
+\begin{gmncode}
+{ 
+  [ \glissando(e {d,f}) empty b ],
+  [ \staff<1> empty \glissando(a g) empty ] 
+}
+\end{gmncode}
+\begin{center}
+\includegraphics[width=4cm]{img/glissandosanspb.pdf}
+\end{center}
+\caption{Cas de recours à une seconde voix pour le \emph{glissando} (\code{empty} représente une note invisible.)}
+\label{fig:glissandopb}
+\end{figure}
+
+
 %%%%%%%%%%%%%%%%%%%% COMBINAISONS %%%%%%%%%%%%%%%%%
-\section{Combinaisons}\label{sec:combinaisons}
+%\section{Combinaisons}\label{sec:combinaisons}
 
 %*****************************GLISSANDI ET CLUSTERS****************************************
-\subsection{\emph{Glissandi} et \emph{clusters}}\label{subsec:glissandiCluster}
+%\subsection{\emph{Glissandi} et \emph{clusters}}\label{subsec:glissandiCluster}
 
-Lors de combinaisons de \emph{glissandi}  avec des accords ou des \emph{clusters}, il nous a paru intéressant, comme on peut le voir dans \cite{gould2011behind} (p. 143) ou dans \cite{stone1980music} (p. 61), de donner la possibilité de remplir l'espace entre ces \emph{glissandi} grâce à un \emph{param} \code{fill}. Une certaine flexibilité peut être trouvée dans le dessin grâce aux \emph{params} graphiques \code{dx1}, \code{dx2}, \code{dy1}, \code{dy2}, ainsi que \code{thickness} qui permettent de modifier l'aspect du \emph{glissando} (figure \ref{fig:glissandofill}).
+
+Enfin, lors de combinaisons de \emph{glissandi}  avec des accords ou des \emph{clusters}, il nous a paru intéressant, comme on peut le voir dans \cite{gould2011behind} (p. 143) ou dans \cite{stone1980music} (p. 61), de donner la possibilité de remplir l'espace entre ces \emph{glissandi} grâce à un \emph{param} \code{fill}. Une certaine flexibilité peut être trouvée dans le dessin grâce aux \emph{params} graphiques \code{dx1}, \code{dx2}, \code{dy1}, \code{dy2}, ainsi que \code{thickness} qui permettent de modifier l'aspect du \emph{glissando} (figure \ref{fig:glissandofill}).
+
+\begin{figure}[h]
 
 \exemple
-\begin{figure}[h]
 \begin{center}
 \begin{gmncode}
 [ 
@@ -723,15 +737,15 @@ Lors de combinaisons de \emph{glissandi}  avec des accords ou des \emph{clusters
 \end{center}
 \end{figure}
 
+
 %***************************** HIÉRARCHIE BEAMS ****************************************
 \subsection{Combinaisons de \emph{beams}}\label{subsec:combinaisonBeams}
 
 % justification des hiérarchies de beams ?
-Enfin, concernant le \emph{feathered beaming} comme le \emph{beaming} classique, il est maintenant possible de créer des hiérarchies de \emph{beams} : c'est à dire d'englober plusieurs \emph{beams} dans un plus grand, afin de les joindre par une barre principale commune (figure \ref{fig:fbeamhierarchie}).
+Pour finir, concernant le \emph{feathered beaming} comme le \emph{beaming} classique, il est maintenant possible de créer des hiérarchies de \emph{beams} : c'est à dire d'englober plusieurs \emph{beams} dans un plus grand, afin de les joindre par une barre principale commune (figure \ref{fig:fbeamhierarchie}).
 
-\exemple
 \begin{figure}[h]
-\centering
+\exemple
 \begin{gmncode}
 [ 
   \beam( 
@@ -741,10 +755,13 @@ Enfin, concernant le \emph{feathered beaming} comme le \emph{beaming} classique,
 ]
 \end{gmncode}
 
+\begin{center}
 \includegraphics[width=55mm]{img/fBeamHierarchie.pdf}
+\end{center}
 \caption{\emph{Feathered beams} englobés dans un plus grand}
 \label{fig:fbeamhierarchie}
 \end{figure}
+
 
 
 %********************* CONCLUSION **********************
