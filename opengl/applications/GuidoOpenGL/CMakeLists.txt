@@ -13,21 +13,24 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../device/)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../src/include/)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/)
 
-# gl
-libfind_pkg_check_modules(gl_PKGCONF gl)
-add_definitions(${gl_PKGCONF_CFLAGS})
-set(LINK ${LINK} ${gl_PKGCONF_LDFLAGS})
-message(STATUS "gl link flags: " ${gl_PKGCONF_LDFLAGS})
-
-# glu
-libfind_pkg_check_modules(glu_PKGCONF glu)
-add_definitions(${glu_PKGCONF_CFLAGS})
-set(LINK ${LINK} ${glu_PKGCONF_LDFLAGS})
-message(STATUS "glu link flags: " ${glu_PKGCONF_LDFLAGS})
-
-# glut doesn't have a pkg-config, so we cross our fingers that
-# the directories with the opengl stuff have everything we need
-set(LINK ${LINK} "-l glut")
+find_package(OpenGL REQUIRED)
+if (OPENGL_FOUND)
+  message(STATUS "opengl found")
+  include_directories(${OPENGL_INCLUDE_DIR})
+  set(LINK ${LINK} ${OPENGL_LIBRARY})
+endif (OPENGL_FOUND)
+find_package(GLU REQUIRED)
+if (GLU_FOUND)
+  message(STATUS "glu found")
+  include_directories(${GLU_INCLUDE_DIR})
+  set(LINK ${LINK} ${GLU_LIBRARY})
+endif (GLU_FOUND)
+find_package(GLUT REQUIRED)
+if (GLUT_FOUND)
+  message(STATUS "glu found")
+  include_directories(${GLUT_INCLUDE_DIR})
+  set(LINK ${LINK} ${GLUT_LIBRARY})
+endif (GLUT_FOUND)
 
 # freetype
 libfind_pkg_check_modules(freetype2_PKGCONF freetype2)
