@@ -58,24 +58,24 @@ void AbstractDevice::InvalidateRect( float left, float top, float right, float b
 // - Standard graphic primitives
 //______________________________________________________________________________
 void AbstractDevice::MoveTo( float x, float y )  {
-  fStream << "MoveTo" << x << fSpace << y << endl;
+  fStream << "MoveTo" << fSpace << x << fSpace << y << endl;
 }
 void AbstractDevice::LineTo( float x, float y ) {
-  fStream << "LineTo" << x << fSpace << y << endl;
+  fStream << "LineTo" << fSpace << x << fSpace << y << endl;
 }
 void AbstractDevice::Line( float x1, float y1, float x2, float y2 )
 {
-  fStream << "Line" << x1 << fSpace << y1 << fSpace << x2 << fSpace << y2 << endl;
+  fStream << "Line" << fSpace << x1 << fSpace << y1 << fSpace << x2 << fSpace << y2 << endl;
 }
 
 void AbstractDevice::Frame( float left, float top, float right, float bottom )
 {
-	fStream << "Frame" << left << fSpace << top << fSpace << right << fSpace << bottom << endl;
+	fStream << "Frame" << fSpace << left << fSpace << top << fSpace << right << fSpace << bottom << endl;
 }
 
 void AbstractDevice::Arc( float left, float top, float right, float bottom, float startX, float startY, float endX, float endY )
 {
-	fStream << "Arc" << left << fSpace << top << fSpace << right << fSpace << bottom << fSpace << startX << fSpace << startY << fSpace << endX << fSpace << endY << endl;
+	fStream << "Arc" << fSpace << left << fSpace << top << fSpace << right << fSpace << bottom << fSpace << startX << fSpace << startY << fSpace << endX << fSpace << endY << endl;
 }
 
 //______________________________________________________________________________
@@ -83,7 +83,7 @@ void AbstractDevice::Arc( float left, float top, float right, float bottom, floa
 //______________________________________________________________________________
 void AbstractDevice::Triangle( float x1, float y1, float x2, float y2, float x3, float y3 )
 {
-	fStream << "Triangle" << x1 << y1 << x2 << y2 << x3 << y3 << endl;
+	fStream << "Triangle" << fSpace << x1 << y1 << x2 << y2 << x3 << y3 << endl;
 }
 
 void AbstractDevice::Polygon( const float * xCoords, const float * yCoords, int count )
@@ -100,7 +100,7 @@ void AbstractDevice::Polygon( const float * xCoords, const float * yCoords, int 
 
 void AbstractDevice::Rectangle( float left,  float top, float right, float bottom )
 {
-	fStream << "Rectangle" << left << fSpace << top << fSpace << right << fSpace << bottom << endl;
+	fStream << "Rectangle" << fSpace << left << fSpace << top << fSpace << right << fSpace << bottom << endl;
 }
 
 //______________________________________________________________________________
@@ -116,7 +116,7 @@ void AbstractDevice::writeColor (const VGColor& color) const
 //______________________________________________________________________________
 
 void AbstractDevice::writeFont(const VGFont *font) const {
-    fStream << font->GetName() << fSpace << font->GetSize() << fSpace << font->GetProperties() << endl;
+    fStream << font->GetName() << fSpace << font->GetSize() << fSpace << font->GetProperties();
 }
 
 void	AbstractDevice::SetMusicFont( const VGFont * font )	{
@@ -256,15 +256,15 @@ void AbstractDevice::SetOrigin( float x, float y )
 
 void AbstractDevice::OffsetOrigin( float x, float y )	
 { 
-  fStream << "OffsetOrigin" << x << fSpace << y << endl;
+  fStream << "OffsetOrigin" << fSpace << x << fSpace << y << endl;
 }
 
 void AbstractDevice::LogicalToDevice( float * x, float * y ) const {
-  fStream << "LogicalToDevice" << x << fSpace << y << endl;
+  fStream << "LogicalToDevice" << fSpace << x << fSpace << y << endl;
 }
 
 void AbstractDevice::DeviceToLogical( float * x, float * y ) const {
-  fStream << "DeviceToLogical" << x << fSpace << y << endl;
+  fStream << "DeviceToLogical" << fSpace << x << fSpace << y << endl;
 }
 
 float AbstractDevice::GetXScale() const {
@@ -285,7 +285,7 @@ float AbstractDevice::GetYOrigin() const {
 }
 
 void AbstractDevice::NotifySize( int w, int h ) {
-  fStream << "NotifySize" << w << fSpace << h << endl;
+  fStream << "NotifySize" << fSpace << w << fSpace << h << endl;
 }
 
 int AbstractDevice::GetWidth() const {
@@ -304,12 +304,12 @@ int AbstractDevice::GetHeight() const {
 //______________________________________________________________________________
 void AbstractDevice::DrawMusicSymbol(float x, float y, unsigned int inSymbolID )
 {
-	fStream << "DrawMusicSymbol" << x << fSpace << y << fSpace << inSymbolID << endl;
+	fStream << "DrawMusicSymbol" << fSpace << x << fSpace << y << fSpace << inSymbolID << endl;
 }
 
 void AbstractDevice::DrawString( float x, float y, const char * s, int inCharCount )
 {
-	fStream << "DrawString" << x << fSpace << y << fSpace << s << fSpace << inCharCount << endl;
+	fStream << "DrawString" << fSpace << x << fSpace << y << fSpace << s << fSpace << inCharCount << endl;
 }
 
 void	AbstractDevice::SetFontColor( const VGColor & color ) {
