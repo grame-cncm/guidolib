@@ -55,7 +55,7 @@ else()
 	string (STRIP ${TMP} CAIRO)
 	set(LINK ${LINK} ${CAIRO})
 
-	find_library (GUIDOLIB GUIDOEngine PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../../cmake NO_DEFAULT_PATH)
+	find_library (GUIDOLIB GUIDOEngine PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../../build/unix NO_DEFAULT_PATH)
 endif()
 
 #######################################
