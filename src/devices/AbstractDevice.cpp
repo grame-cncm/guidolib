@@ -43,11 +43,13 @@ AbstractDevice::~AbstractDevice()
 //______________________________________________________________________________
 bool AbstractDevice::BeginDraw()
 {
-	return true;
+  fStream << "BeginDraw" << endl;
+  return true;
 }
 
 void AbstractDevice::EndDraw()
 {
+  fStream << "EndDraw" << endl;
 }
 
 void AbstractDevice::InvalidateRect( float left, float top, float right, float bottom ) {
