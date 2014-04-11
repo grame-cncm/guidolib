@@ -447,6 +447,13 @@ units.
 	*/
     GUIDOAPI(GuidoErrCode) 	GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile );
 
+	/** \brief Exports an abstract representation of GUIDO draw commands.
+
+		\param out the output stream.
+		\return a Guido error code
+	*/
+    GUIDOAPI(GuidoErrCode) 	GuidoAbstractExport( const GRHandler handle, int page, std::ostream& out);
+
 	/** \brief Control bounding boxes drawing.
 
 		\param bbMap a bits field indicating the set of bounding boxes to draw (default to none).
