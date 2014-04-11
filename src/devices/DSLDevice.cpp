@@ -52,20 +52,20 @@ DSLDevice::~DSLDevice()
 //______________________________________________________________________________
 bool DSLDevice::BeginDraw()
 {
-  char id = 0;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 0;
+  fStream.write((char *)&id, sizeof(unsigned char));
   return true;
 }
 
 void DSLDevice::EndDraw()
 {
-  char id = 1;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 1;
+  fStream.write((char *)&id, sizeof(unsigned char));
 }
 
 void DSLDevice::InvalidateRect( float left, float top, float right, float bottom ) {
-  char id = 2;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 2;
+  fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&left, sizeof(float));
   fStream.write((char *)&top, sizeof(float));
   fStream.write((char *)&right, sizeof(float));
@@ -76,21 +76,21 @@ void DSLDevice::InvalidateRect( float left, float top, float right, float bottom
 // - Standard graphic primitives
 //______________________________________________________________________________
 void DSLDevice::MoveTo( float x, float y )  {
-  char id = 3;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 3;
+  fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&x, sizeof(float));
   fStream.write((char *)&y, sizeof(float));
 }
 void DSLDevice::LineTo( float x, float y ) {
-  char id = 4;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 4;
+  fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&x, sizeof(float));
   fStream.write((char *)&y, sizeof(float));
 }
 void DSLDevice::Line( float x1, float y1, float x2, float y2 )
 {
-  char id = 5;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 5;
+  fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&x1, sizeof(float));
   fStream.write((char *)&y1, sizeof(float));
   fStream.write((char *)&x2, sizeof(float));
@@ -99,8 +99,8 @@ void DSLDevice::Line( float x1, float y1, float x2, float y2 )
 
 void DSLDevice::Frame( float left, float top, float right, float bottom )
 {
-  char id = 6;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 6;
+  fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&left, sizeof(float));
   fStream.write((char *)&top, sizeof(float));
   fStream.write((char *)&right, sizeof(float));
@@ -109,8 +109,8 @@ void DSLDevice::Frame( float left, float top, float right, float bottom )
 
 void DSLDevice::Arc( float left, float top, float right, float bottom, float startX, float startY, float endX, float endY )
 {
-  char id = 7;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 7;
+  fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&left, sizeof(float));
   fStream.write((char *)&top, sizeof(float));
   fStream.write((char *)&right, sizeof(float));
@@ -126,8 +126,8 @@ void DSLDevice::Arc( float left, float top, float right, float bottom, float sta
 //______________________________________________________________________________
 void DSLDevice::Triangle( float x1, float y1, float x2, float y2, float x3, float y3 )
 {
-  char id = 8;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 8;
+  fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&x1, sizeof(float));
   fStream.write((char *)&y1, sizeof(float));
   fStream.write((char *)&x2, sizeof(float));
@@ -138,8 +138,8 @@ void DSLDevice::Triangle( float x1, float y1, float x2, float y2, float x3, floa
 
 void DSLDevice::Polygon( const float * xCoords, const float * yCoords, int count )
 {
-  char id = 9;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 9;
+  fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&count, sizeof(int));
   for (int i = 0; i < count; i++) {
     fStream.write((char *)(xCoords + i), sizeof(float));
@@ -151,8 +151,8 @@ void DSLDevice::Polygon( const float * xCoords, const float * yCoords, int count
 
 void DSLDevice::Rectangle( float left,  float top, float right, float bottom )
 {
-  char id = 10;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 10;
+  fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&left, sizeof(float));
   fStream.write((char *)&top, sizeof(float));
   fStream.write((char *)&right, sizeof(float));
@@ -190,23 +190,23 @@ void DSLDevice::writeFont(const VGFont *font) const {
 }
 
 void	DSLDevice::SetMusicFont( const VGFont * font )	{
-  char id = 11;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 11;
+  fStream.write((char *)&id, sizeof(unsigned char));
   writeFont(font);
 }
 const VGFont *	DSLDevice::GetMusicFont() const {
-  char id = 12;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 12;
+  fStream.write((char *)&id, sizeof(unsigned char));
   return 0;
 }
 void			DSLDevice::SetTextFont( const VGFont * font )	{
-  char id = 13;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 13;
+  fStream.write((char *)&id, sizeof(unsigned char));
   writeFont(font);
 }
 const VGFont *	DSLDevice::GetTextFont() const	{
-  char id = 14;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 14;
+  fStream.write((char *)&id, sizeof(unsigned char));
   return 0;
 }
 
@@ -215,42 +215,42 @@ const VGFont *	DSLDevice::GetTextFont() const	{
 //______________________________________________________________________________
 void DSLDevice::SelectPen( const VGColor & c, float w )
 {
-  char id = 15;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 15;
+  fStream.write((char *)&id, sizeof(unsigned char));
   writeColor(c);
   fStream.write((char *)&w, sizeof(float));
 }
 
 void DSLDevice::SelectFillColor( const VGColor & c )
 {
-  char id = 16;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 16;
+  fStream.write((char *)&id, sizeof(unsigned char));
   writeColor(c);
 }
 
 void DSLDevice::PushPen( const VGColor & color, float width )
 {
-  char id = 17;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 17;
+  fStream.write((char *)&id, sizeof(unsigned char));
   writeColor(color);
   fStream.write((char *)&width, sizeof(float));
 }
 
 void DSLDevice::PopPen() {
-  char id = 18;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 18;
+  fStream.write((char *)&id, sizeof(unsigned char));
 }
 
 void DSLDevice::PushFillColor( const VGColor & color )
 {
-  char id = 19;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 19;
+  fStream.write((char *)&id, sizeof(unsigned char));
   writeColor(color);
 }
 
 void DSLDevice::PopFillColor() {
-  char id = 20;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 20;
+  fStream.write((char *)&id, sizeof(unsigned char));
 }
 
 void DSLDevice::writeRasterOpModeToString(VRasterOpMode mode) const {
@@ -267,13 +267,13 @@ void DSLDevice::writeRasterOpModeToString(VRasterOpMode mode) const {
 }
 
 void DSLDevice::SetRasterOpMode( VRasterOpMode mode) {
-  char id = 21;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 21;
+  fStream.write((char *)&id, sizeof(unsigned char));
   writeRasterOpModeToString(mode);
 }
 VGDevice::VRasterOpMode DSLDevice::GetRasterOpMode() const {
-  char id = 22;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 22;
+  fStream.write((char *)&id, sizeof(unsigned char));
   return kUnknown;
 }
 
@@ -309,8 +309,8 @@ void DSLDevice::writeFormattedImage (VGDevice* dev) const
 
 bool DSLDevice::CopyPixels( VGDevice* pSrcDC, float alpha)
 {
-  char id = 23;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 23;
+  fStream.write((char *)&id, sizeof(unsigned char));
   writeFormattedImage(pSrcDC);
   fStream.write((char *)&alpha, sizeof(float));
   return true;
@@ -318,8 +318,8 @@ bool DSLDevice::CopyPixels( VGDevice* pSrcDC, float alpha)
 
 bool DSLDevice::CopyPixels( int xDest, int yDest, VGDevice* pSrcDC, int xSrc, int ySrc, int nSrcWidth, int nSrcHeight, float alpha)
 {
-  char id = 24;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 24;
+  fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&xDest, sizeof(int));
   fStream.write((char *)&yDest, sizeof(int));
   writeFormattedImage(pSrcDC);
@@ -333,8 +333,8 @@ bool DSLDevice::CopyPixels( int xDest, int yDest, VGDevice* pSrcDC, int xSrc, in
 
 bool DSLDevice::CopyPixels( int xDest, int yDest, int dstWidth, int dstHeight, VGDevice* pSrcDC, float alpha)
 {
-  char id = 25;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 25;
+  fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&xDest, sizeof(int));
   fStream.write((char *)&yDest, sizeof(int));
   fStream.write((char *)&dstWidth, sizeof(int));
@@ -346,8 +346,8 @@ bool DSLDevice::CopyPixels( int xDest, int yDest, int dstWidth, int dstHeight, V
 
 bool DSLDevice::CopyPixels( int xDest, int yDest, int dstWidth, int dstHeight, VGDevice* pSrcDC, int xSrc, int ySrc, int nSrcWidth, int nSrcHeight, float alpha)
 {
-  char id = 26;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 26;
+  fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&xDest, sizeof(int));
   fStream.write((char *)&yDest, sizeof(int));
   fStream.write((char *)&dstWidth, sizeof(int));
@@ -366,79 +366,79 @@ bool DSLDevice::CopyPixels( int xDest, int yDest, int dstWidth, int dstHeight, V
 //______________________________________________________________________________
 void DSLDevice::SetScale( float x, float y )
 {
-  char id = 27;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 27;
+  fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&x, sizeof(float));
   fStream.write((char *)&y, sizeof(float));
 }
 
 void DSLDevice::SetOrigin( float x, float y )
 { 
-  char id = 28;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 28;
+  fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&x, sizeof(float));
   fStream.write((char *)&y, sizeof(float));
 }
 
 void DSLDevice::OffsetOrigin( float x, float y )	
 { 
-  char id = 29;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 29;
+  fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&x, sizeof(float));
   fStream.write((char *)&y, sizeof(float));
 }
 
 void DSLDevice::LogicalToDevice( float * x, float * y ) const {
-  char id = 30;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 30;
+  fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)x, sizeof(float));
   fStream.write((char *)y, sizeof(float));
 }
 
 void DSLDevice::DeviceToLogical( float * x, float * y ) const {
-  char id = 31;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 31;
+  fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)x, sizeof(float));
   fStream.write((char *)y, sizeof(float));
 }
 
 float DSLDevice::GetXScale() const {
-  char id = 32;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 32;
+  fStream.write((char *)&id, sizeof(unsigned char));
     return 0.0;
 }
 float DSLDevice::GetYScale() const {
-  char id = 33;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 33;
+  fStream.write((char *)&id, sizeof(unsigned char));
     return 0.0;
 }
 float DSLDevice::GetXOrigin() const {
-  char id = 34;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 34;
+  fStream.write((char *)&id, sizeof(unsigned char));
     return 0.0;
 }
 float DSLDevice::GetYOrigin() const {
-  char id = 35;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 35;
+  fStream.write((char *)&id, sizeof(unsigned char));
     return 0.0;
 }
 
 void DSLDevice::NotifySize( int w, int h ) {
-  char id = 36;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 36;
+  fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&w, sizeof(int));
   fStream.write((char *)&h, sizeof(int));
 }
 
 int DSLDevice::GetWidth() const {
-  char id = 37;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 37;
+  fStream.write((char *)&id, sizeof(unsigned char));
   return 0;
 }
 
 int DSLDevice::GetHeight() const {
-  char id = 38;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 38;
+  fStream.write((char *)&id, sizeof(unsigned char));
   return 0;
 }
 
@@ -448,8 +448,8 @@ int DSLDevice::GetHeight() const {
 //______________________________________________________________________________
 void DSLDevice::DrawMusicSymbol(float x, float y, unsigned int inSymbolID )
 {
-  char id = 39;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 39;
+  fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&x, sizeof(float));
   fStream.write((char *)&y, sizeof(float));
   fStream.write((char *)&inSymbolID, sizeof(unsigned int));
@@ -457,8 +457,8 @@ void DSLDevice::DrawMusicSymbol(float x, float y, unsigned int inSymbolID )
 
 void DSLDevice::DrawString( float x, float y, const char * s, int inCharCount )
 {
-  char id = 40;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 40;
+  fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&x, sizeof(float));
   fStream.write((char *)&y, sizeof(float));
   fStream.write((char *)&inCharCount, sizeof(int));
@@ -466,38 +466,38 @@ void DSLDevice::DrawString( float x, float y, const char * s, int inCharCount )
 }
 
 void	DSLDevice::SetFontColor( const VGColor & color ) {
-  char id = 41;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 41;
+  fStream.write((char *)&id, sizeof(unsigned char));
   writeColor(color);
 }
 
 VGColor DSLDevice::GetFontColor() const	{
-  char id = 42;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 42;
+  fStream.write((char *)&id, sizeof(unsigned char));
   return VGColor();
 }
 
 void	DSLDevice::SetFontBackgroundColor( const VGColor & color ) {
-  char id = 43;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 43;
+  fStream.write((char *)&id, sizeof(unsigned char));
   writeColor(color);
 }
 
 VGColor DSLDevice::GetFontBackgroundColor() const	{
-  char id = 44;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 44;
+  fStream.write((char *)&id, sizeof(unsigned char));
   return VGColor();
 }
 
 void	DSLDevice::SetFontAlign( unsigned int inAlign ) {
-  char id = 45;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 45;
+  fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&inAlign, sizeof(unsigned int));
 }
 
 unsigned int DSLDevice::GetFontAlign() const	{
-  char id = 46;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 46;
+  fStream.write((char *)&id, sizeof(unsigned char));
   return 0;
 }
 
@@ -505,14 +505,14 @@ unsigned int DSLDevice::GetFontAlign() const	{
 // - Printer informations services - useless in svg context
 //______________________________________________________________________________
 void	DSLDevice::SetDPITag( float inDPI ) {
-  char id = 47;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 47;
+  fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&inDPI, sizeof(float));
 }
 
 float DSLDevice::GetDPITag() const	{
-  char id = 48;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 48;
+  fStream.write((char *)&id, sizeof(unsigned char));
   return 0.0;
 }
 
@@ -521,36 +521,36 @@ float DSLDevice::GetDPITag() const	{
 //______________________________________________________________________________
 void DSLDevice::SelectPenColor( const VGColor & color)
 {
-  char id = 49;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 49;
+  fStream.write((char *)&id, sizeof(unsigned char));
   writeColor(color);
 }
 
 void DSLDevice::SelectPenWidth( float width)
 {
-  char id = 50;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 50;
+  fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&width, sizeof(float));
 }
 
 void DSLDevice::PushPenColor( const VGColor & color)
 {
-  char id = 51;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 51;
+  fStream.write((char *)&id, sizeof(unsigned char));
   writeColor(color);
 }
 
 void DSLDevice::PushPenWidth( float width)
 {
-  char id = 52;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 52;
+  fStream.write((char *)&id, sizeof(unsigned char));
 }
 void DSLDevice::PopPenColor() {
-  char id = 53;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 53;
+  fStream.write((char *)&id, sizeof(unsigned char));
 }
 
 void DSLDevice::PopPenWidth() {
-  char id = 54;
-  fStream.write(&id, sizeof(char));
+  unsigned char id = 54;
+  fStream.write((char *)&id, sizeof(unsigned char));
 }
