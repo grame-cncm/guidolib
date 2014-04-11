@@ -262,11 +262,11 @@ void AbstractDevice::OffsetOrigin( float x, float y )
 }
 
 void AbstractDevice::LogicalToDevice( float * x, float * y ) const {
-  fStream << "LogicalToDevice" << fSpace << x << fSpace << y << endl;
+  fStream << "LogicalToDevice" << fSpace << *x << fSpace << *y << endl;
 }
 
 void AbstractDevice::DeviceToLogical( float * x, float * y ) const {
-  fStream << "DeviceToLogical" << fSpace << x << fSpace << y << endl;
+  fStream << "DeviceToLogical" << fSpace << *x << fSpace << *y << endl;
 }
 
 float AbstractDevice::GetXScale() const {
