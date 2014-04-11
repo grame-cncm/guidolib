@@ -29,7 +29,9 @@
 #include "DSLDevice.h"
 #include "VGFont.h"
 #include "GUIDOEngine.h"
-#include "base64.h"
+
+// we want to make sure all ints are 32 bit
+#include <stdint.h>
 
 using namespace std;
 
@@ -139,8 +141,9 @@ void DSLDevice::Triangle( float x1, float y1, float x2, float y2, float x3, floa
 void DSLDevice::Polygon( const float * xCoords, const float * yCoords, int count )
 {
   unsigned char id = 9;
+  int32_t count32 = (int32_t)count;
   fStream.write((char *)&id, sizeof(unsigned char));
-  fStream.write((char *)&count, sizeof(int));
+  fStream.write((char *)&count32, sizeof(int32_t));
   for (int i = 0; i < count; i++) {
     fStream.write((char *)(xCoords + i), sizeof(float));
   }
@@ -181,12 +184,12 @@ void DSLDevice::writeString(const char *str) const {
 
 void DSLDevice::writeFont(const VGFont *font) const {
   const char *name = font->GetName();
-  int size = font->GetSize();
-  int prop = font->GetProperties();
+  int32_t size = font->GetSize();
+  int32_t prop = font->GetProperties();
   
   writeString(name);
-  fStream.write((char *)&size, sizeof(int));
-  fStream.write((char *)&prop, sizeof(int));
+  fStream.write((char *)&size, sizeof(int32_t));
+  fStream.write((char *)&prop, sizeof(int32_t));
 }
 
 void	DSLDevice::SetMusicFont( const VGFont * font )	{
@@ -286,23 +289,24 @@ void DSLDevice::writeFormattedImage (VGDevice* dev) const
   int length = 0;
   const char * data;
   const char* mimetype = dev->GetImageData (data, length);
+  int32_t length32 = (int32_t)length;
   if (mimetype && length) {
-    int width = dev->GetWidth();
-    int height = dev->GetHeight();
-    fStream.write((char *)&width, sizeof(int));
-    fStream.write((char *)&height, sizeof(int));
+    int32_t width = dev->GetWidth();
+    int32_t height = dev->GetHeight();
+    fStream.write((char *)&width, sizeof(int32_t));
+    fStream.write((char *)&height, sizeof(int32_t));
     writeString(mimetype);
-    fStream.write((char *)&length, sizeof(int));
+    fStream.write((char *)&length32, sizeof(int32_t));
     fStream.write((char *)&data, sizeof(char) * length);
     ReleaseImageData (mimetype);
   } else {
     int width = 0;
     int height = 0;
     char null = '\0';
-    fStream.write((char *)&width, sizeof(int));
-    fStream.write((char *)&height, sizeof(int));
+    fStream.write((char *)&width, sizeof(int32_t));
+    fStream.write((char *)&height, sizeof(int32_t));
     fStream.write(&null, sizeof(char));
-    fStream.write((char *)&length, sizeof(int));
+    fStream.write((char *)&length32, sizeof(int32_t));
     fStream.write((char *)&data, sizeof(char) * length);    
   }
 }
@@ -319,14 +323,20 @@ bool DSLDevice::CopyPixels( VGDevice* pSrcDC, float alpha)
 bool DSLDevice::CopyPixels( int xDest, int yDest, VGDevice* pSrcDC, int xSrc, int ySrc, int nSrcWidth, int nSrcHeight, float alpha)
 {
   unsigned char id = 24;
+  int32_t xDest32 = (int32_t)xDest;
+  int32_t yDest32 = (int32_t)yDest;
+  int32_t xSrc32 = (int32_t)xSrc;
+  int32_t ySrc32 = (int32_t)ySrc;
+  int32_t nSrcWidth32 = (int32_t)nSrcWidth;
+  int32_t nSrcHeight32 = (int32_t)nSrcHeight;
   fStream.write((char *)&id, sizeof(unsigned char));
-  fStream.write((char *)&xDest, sizeof(int));
-  fStream.write((char *)&yDest, sizeof(int));
+  fStream.write((char *)&xDest32, sizeof(int32_t));
+  fStream.write((char *)&yDest32, sizeof(int32_t));
   writeFormattedImage(pSrcDC);
-  fStream.write((char *)&xSrc, sizeof(int));
-  fStream.write((char *)&ySrc, sizeof(int));
-  fStream.write((char *)&nSrcWidth, sizeof(int));
-  fStream.write((char *)&nSrcHeight, sizeof(int));
+  fStream.write((char *)&xSrc32, sizeof(int32_t));
+  fStream.write((char *)&ySrc32, sizeof(int32_t));
+  fStream.write((char *)&nSrcWidth32, sizeof(int32_t));
+  fStream.write((char *)&nSrcHeight32, sizeof(int32_t));
   fStream.write((char *)&alpha, sizeof(float));
   return true;
 }
@@ -334,11 +344,15 @@ bool DSLDevice::CopyPixels( int xDest, int yDest, VGDevice* pSrcDC, int xSrc, in
 bool DSLDevice::CopyPixels( int xDest, int yDest, int dstWidth, int dstHeight, VGDevice* pSrcDC, float alpha)
 {
   unsigned char id = 25;
+  int32_t xDest32 = (int32_t)xDest;
+  int32_t yDest32 = (int32_t)yDest;
+  int32_t dstWidth32 = (int32_t)dstWidth;
+  int32_t dstHeight32 = (int32_t)dstHeight;
   fStream.write((char *)&id, sizeof(unsigned char));
-  fStream.write((char *)&xDest, sizeof(int));
-  fStream.write((char *)&yDest, sizeof(int));
-  fStream.write((char *)&dstWidth, sizeof(int));
-  fStream.write((char *)&dstHeight, sizeof(int));
+  fStream.write((char *)&xDest32, sizeof(int32_t));
+  fStream.write((char *)&yDest32, sizeof(int32_t));
+  fStream.write((char *)&dstWidth32, sizeof(int32_t));
+  fStream.write((char *)&dstHeight32, sizeof(int32_t));
   writeFormattedImage(pSrcDC);
   fStream.write((char *)&alpha, sizeof(float));
   return true;
@@ -347,16 +361,24 @@ bool DSLDevice::CopyPixels( int xDest, int yDest, int dstWidth, int dstHeight, V
 bool DSLDevice::CopyPixels( int xDest, int yDest, int dstWidth, int dstHeight, VGDevice* pSrcDC, int xSrc, int ySrc, int nSrcWidth, int nSrcHeight, float alpha)
 {
   unsigned char id = 26;
+  int32_t xDest32 = (int32_t)xDest;
+  int32_t yDest32 = (int32_t)yDest;
+  int32_t xSrc32 = (int32_t)xSrc;
+  int32_t ySrc32 = (int32_t)ySrc;
+  int32_t nSrcWidth32 = (int32_t)nSrcWidth;
+  int32_t nSrcHeight32 = (int32_t)nSrcHeight;
+  int32_t dstWidth32 = (int32_t)dstWidth;
+  int32_t dstHeight32 = (int32_t)dstHeight;
   fStream.write((char *)&id, sizeof(unsigned char));
-  fStream.write((char *)&xDest, sizeof(int));
-  fStream.write((char *)&yDest, sizeof(int));
-  fStream.write((char *)&dstWidth, sizeof(int));
-  fStream.write((char *)&dstHeight, sizeof(int));
+  fStream.write((char *)&xDest32, sizeof(int32_t));
+  fStream.write((char *)&yDest32, sizeof(int32_t));
+  fStream.write((char *)&dstWidth32, sizeof(int32_t));
+  fStream.write((char *)&dstHeight32, sizeof(int32_t));
   writeFormattedImage(pSrcDC);
-  fStream.write((char *)&xSrc, sizeof(int));
-  fStream.write((char *)&ySrc, sizeof(int));
-  fStream.write((char *)&nSrcWidth, sizeof(int));
-  fStream.write((char *)&nSrcHeight, sizeof(int));
+  fStream.write((char *)&xSrc32, sizeof(int32_t));
+  fStream.write((char *)&ySrc32, sizeof(int32_t));
+  fStream.write((char *)&nSrcWidth32, sizeof(int32_t));
+  fStream.write((char *)&nSrcHeight32, sizeof(int32_t));
   fStream.write((char *)&alpha, sizeof(float));
   return true;
 }
@@ -425,9 +447,11 @@ float DSLDevice::GetYOrigin() const {
 
 void DSLDevice::NotifySize( int w, int h ) {
   unsigned char id = 36;
+  int32_t w32 = (int32_t)w;
+  int32_t h32 = (int32_t)h;
   fStream.write((char *)&id, sizeof(unsigned char));
-  fStream.write((char *)&w, sizeof(int));
-  fStream.write((char *)&h, sizeof(int));
+  fStream.write((char *)&w32, sizeof(int32_t));
+  fStream.write((char *)&h32, sizeof(int32_t));
 }
 
 int DSLDevice::GetWidth() const {
@@ -458,10 +482,11 @@ void DSLDevice::DrawMusicSymbol(float x, float y, unsigned int inSymbolID )
 void DSLDevice::DrawString( float x, float y, const char * s, int inCharCount )
 {
   unsigned char id = 40;
+  int32_t inCharCount32 = (int32_t)inCharCount;
   fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&x, sizeof(float));
   fStream.write((char *)&y, sizeof(float));
-  fStream.write((char *)&inCharCount, sizeof(int));
+  fStream.write((char *)&inCharCount32, sizeof(int32_t));
   fStream.write(s, sizeof(char) * inCharCount);
 }
 
