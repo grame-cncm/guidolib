@@ -454,6 +454,13 @@ units.
 	*/
     GUIDOAPI(GuidoErrCode) 	GuidoAbstractExport( const GRHandler handle, int page, std::ostream& out);
 
+	/** \brief Exports an representation of GUIDO draw commands in a data-reduced dsl
+
+		\param out the output stream.
+		\return a Guido error code
+	*/
+    GUIDOAPI(GuidoErrCode) 	GuidoDSLExport( const GRHandler handle, int page, std::ostream& out);
+
 	/** \brief Control bounding boxes drawing.
 
 		\param bbMap a bits field indicating the set of bounding boxes to draw (default to none).

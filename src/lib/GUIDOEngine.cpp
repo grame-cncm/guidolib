@@ -67,6 +67,10 @@ using namespace std;
 #include "AbstractDevice.h"
 #include "AbstractFont.h"
 
+#include "DSLSystem.h"
+#include "DSLDevice.h"
+#include "DSLFont.h"
+
 
 // ==========================================================================
 // - Guido Global variables
@@ -558,6 +562,32 @@ GUIDOAPI(GuidoErrCode) 	GuidoAbstractExport( const GRHandler handle, int page, s
 {
  	AbstractSystem sys;
 	AbstractDevice dev (out, &sys);
+    
+        GuidoOnDrawDesc desc;              // declare a data structure for drawing
+	desc.handle = handle;
+
+	GuidoPageFormat	pf;
+	GuidoResizePageToMusic (handle);
+	GuidoGetPageFormat (handle, page, &pf);
+ 
+	desc.hdc = &dev;                    // we'll draw on the svg device
+        desc.page = page;
+        desc.updateRegion.erase = true;     // and draw everything
+	desc.scrollx = desc.scrolly = 0;    // from the upper left page corner
+        desc.sizex = pf.width;
+	desc.sizey = pf.height;
+        dev.NotifySize(desc.sizex, desc.sizey);
+        dev.SelectPenColor(VGColor(0,0,0));
+        return GuidoOnDraw (&desc);
+}
+
+// --------------------------------------------------------------------------
+//		- Score export to a DSL representation -
+// --------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) 	GuidoDSLExport( const GRHandler handle, int page, std::ostream& out)
+{
+ 	DSLSystem sys;
+	DSLDevice dev (out, &sys);
     
         GuidoOnDrawDesc desc;              // declare a data structure for drawing
 	desc.handle = handle;
