@@ -14,7 +14,7 @@ else
 endif
 endif
 
-TOOLS = guidogetversion guidogetpagecount guidogetvoicecount guidogettimemap guidogetpagemap guidogetsystemmap guidogetstaffmap guidogetvoicemap guido2svg guido2svgmap
+TOOLS = guidogetversion guidogetpagecount guidogetvoicecount guidogettimemap guidogetpagemap guidogetsystemmap guidogetstaffmap guidogetvoicemap guido2svg guido2svgmap guido2abstract guido2dsl
 
 .PHONY: checkall
 
@@ -30,6 +30,12 @@ guido2midi : guido2midi.cpp
 
 guido2svg : guido2svg.cpp
 	g++ guido2svg.cpp $(INC) $(lib) -o guido2svg
+
+guido2abstract : guido2abstract.cpp
+	g++ guido2abstract.cpp $(INC) $(lib) -o guido2abstract
+
+guido2dsl : guido2dsl.cpp
+	g++ guido2dsl.cpp $(INC) $(lib) -o guido2dsl
 
 guido2svgmap : guido2svgmap.cpp
 	g++ guido2svgmap.cpp $(INC) $(lib) -o guido2svgmap
