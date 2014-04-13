@@ -66,6 +66,15 @@ int cairo_guido2img::convert (guidosession* const currentSession)
       strcpy(fBuffer.data_, cc_svg);
       return err;
     }
+    else if (format == GUIDO_WEB_API_DSL) {
+      stringstream stream;
+      int err = currentSession->simpleDSLHelper(&stream);
+      string ss_str = stream.str();
+      const char *ss_cstr = ss_str.c_str();
+      fBuffer.size_ = ss_str.size();
+      memcpy(fBuffer.data_, ss_cstr, ss_str.size());
+      return err;
+    }
 
     GuidoPageFormat pf;
     currentSession->fillGuidoPageFormatUsingCurrentSettings(&pf);
