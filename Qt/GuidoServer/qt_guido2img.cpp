@@ -37,6 +37,14 @@ int qt_guido2img::convert (guidosession* const currentSession)
         fBuffer.setData(cc_svg, svg.size());
         return err;
     }
+    case GUIDO_WEB_API_DSL : {
+        stringstream stream;
+        int err = currentSession->simpleDSLHelper(&stream);
+        string ss_str = stream.str();
+        const char *ss_cstr = ss_str.c_str();
+        fBuffer.setData(ss_cstr, ss_str.size());
+        return err;
+    }
     case GUIDO_WEB_API_PNG : {
         p.format = GUIDO_2_IMAGE_PNG;
         } break;

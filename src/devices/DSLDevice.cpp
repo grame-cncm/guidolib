@@ -392,6 +392,7 @@ void DSLDevice::SetScale( float x, float y )
   fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&x, sizeof(float));
   fStream.write((char *)&y, sizeof(float));
+  cout << "setSCALE " << x << " " << y << endl;
 }
 
 void DSLDevice::SetOrigin( float x, float y )
@@ -400,6 +401,7 @@ void DSLDevice::SetOrigin( float x, float y )
   fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&x, sizeof(float));
   fStream.write((char *)&y, sizeof(float));
+  cout << "setORIGIN " << x << " " << y << endl;
 }
 
 void DSLDevice::OffsetOrigin( float x, float y )	
@@ -408,6 +410,7 @@ void DSLDevice::OffsetOrigin( float x, float y )
   fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&x, sizeof(float));
   fStream.write((char *)&y, sizeof(float));
+  cout << "offsetORIGIN " << x << " " << y << endl;
 }
 
 void DSLDevice::LogicalToDevice( float * x, float * y ) const {
@@ -473,10 +476,11 @@ int DSLDevice::GetHeight() const {
 void DSLDevice::DrawMusicSymbol(float x, float y, unsigned int inSymbolID )
 {
   unsigned char id = 39;
+  uint32_t inSymbolID32 = (uint32_t)inSymbolID;
   fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&x, sizeof(float));
   fStream.write((char *)&y, sizeof(float));
-  fStream.write((char *)&inSymbolID, sizeof(unsigned int));
+  fStream.write((char *)&inSymbolID32, sizeof(uint32_t));
 }
 
 void DSLDevice::DrawString( float x, float y, const char * s, int inCharCount )
@@ -516,8 +520,9 @@ VGColor DSLDevice::GetFontBackgroundColor() const	{
 
 void	DSLDevice::SetFontAlign( unsigned int inAlign ) {
   unsigned char id = 45;
+  uint32_t inAlign32 = (uint32_t)inAlign;
   fStream.write((char *)&id, sizeof(unsigned char));
-  fStream.write((char *)&inAlign, sizeof(unsigned int));
+  fStream.write((char *)&inAlign32, sizeof(uint32_t));
 }
 
 unsigned int DSLDevice::GetFontAlign() const	{
@@ -565,14 +570,17 @@ void DSLDevice::PushPenColor( const VGColor & color)
   writeColor(color);
 }
 
-void DSLDevice::PushPenWidth( float width)
-{
+void DSLDevice::PopPenColor() {
   unsigned char id = 52;
   fStream.write((char *)&id, sizeof(unsigned char));
 }
-void DSLDevice::PopPenColor() {
+
+void DSLDevice::PushPenWidth( float width)
+{
   unsigned char id = 53;
   fStream.write((char *)&id, sizeof(unsigned char));
+  fStream.write((char *)&width, sizeof(float));
+  cout << "WIDTH " << width << endl;
 }
 
 void DSLDevice::PopPenWidth() {
