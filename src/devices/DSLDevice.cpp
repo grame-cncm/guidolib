@@ -392,7 +392,6 @@ void DSLDevice::SetScale( float x, float y )
   fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&x, sizeof(float));
   fStream.write((char *)&y, sizeof(float));
-  cout << "setSCALE " << x << " " << y << endl;
 }
 
 void DSLDevice::SetOrigin( float x, float y )
@@ -401,7 +400,6 @@ void DSLDevice::SetOrigin( float x, float y )
   fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&x, sizeof(float));
   fStream.write((char *)&y, sizeof(float));
-  cout << "setORIGIN " << x << " " << y << endl;
 }
 
 void DSLDevice::OffsetOrigin( float x, float y )	
@@ -410,7 +408,6 @@ void DSLDevice::OffsetOrigin( float x, float y )
   fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&x, sizeof(float));
   fStream.write((char *)&y, sizeof(float));
-  cout << "offsetORIGIN " << x << " " << y << endl;
 }
 
 void DSLDevice::LogicalToDevice( float * x, float * y ) const {
@@ -580,7 +577,6 @@ void DSLDevice::PushPenWidth( float width)
   unsigned char id = 53;
   fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&width, sizeof(float));
-  cout << "WIDTH " << width << endl;
 }
 
 void DSLDevice::PopPenWidth() {
