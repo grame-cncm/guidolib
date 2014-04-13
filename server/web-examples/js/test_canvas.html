@@ -5,9 +5,9 @@
     <script type="text/javascript" src="jsDSLdevice.js"></script>
     <script>
       function processGMN() {
-        $.post("http://guidoeditor.grame.fr",  "data="+encodeURIComponent($("#gmnSandbox").val()), function(data) {
+        $.post("http://guidoservice.grame.fr/",  "data="+encodeURIComponent($("#gmnSandbox").val()), function(data) {
           var xhr = new XMLHttpRequest();
-          xhr.open('GET',"http://guidoeditor.grame.fr/"+data.ID+"/?format=dsl", true);
+          xhr.open('GET',"http://guidoservice.grame.fr/"+data.ID+"/?format=dsl", true);
           xhr.responseType = 'arraybuffer';
           xhr.onload = function(e) {
             console.log(this.status);
