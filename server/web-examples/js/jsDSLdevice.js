@@ -1,3 +1,8 @@
+/*
+  If you want to use dynamic resizing, make sure that the div containing the
+  canvas has the id "canvasContainer".
+*/
+
 // abstraction such that javascript-specific code is higher, general
 // code is lower
 var GUIDO_BEGIN_DRAW_CODE = 0;
@@ -74,23 +79,27 @@ function moveReadPositionByString(place, str) {
   return place + str.length + 1; // 1 for the escape char
 }
 
-var CHAR_MAX_AS_FLOAT = 255.0;
-var CURRENT_TRANSFORM_MATRIX = [1, 0, 0, 1, 0, 0];
-var PEN_COLORS = [];
-var PEN_WIDTHS = [];
-var MUSIC_FONT = ['normal','12px','Guido2'];
-var TEXT_FONT = ['normal','12px','Times'];
+var gU1D0 = {}
+gU1D0.CHAR_MAX_AS_FLOAT = 255.0;
+gU1D0.GLOBAL_RESCALE_FACTOR = 1.0;
+gU1D0.GLOBAL_VERBOSE_FLAG = 0;
+gU1D0.GLOBAL_SCALE_TO_DIV_SIZE = 1;
+gU1D0.CURRENT_TRANSFORM_MATRIX = [1, 0, 0, 1, 0, 0];
+gU1D0.PEN_COLORS = [];
+gU1D0.PEN_WIDTHS = [];
+gU1D0.MUSIC_FONT = ['normal','12px','Guido2'];
+gU1D0.TEXT_FONT = ['normal','12px','Times'];
 function updateMatrices(context, a, b, c, d, e, f, g) {
-  CURRENT_TRANSFORM_MATRIX[0] = a;
-  CURRENT_TRANSFORM_MATRIX[1] = b;
-  CURRENT_TRANSFORM_MATRIX[2] = c;
-  CURRENT_TRANSFORM_MATRIX[3] = d;
-  CURRENT_TRANSFORM_MATRIX[4] = e;
-  CURRENT_TRANSFORM_MATRIX[5] = f;
+  gU1D0.CURRENT_TRANSFORM_MATRIX[0] = a;
+  gU1D0.CURRENT_TRANSFORM_MATRIX[1] = b;
+  gU1D0.CURRENT_TRANSFORM_MATRIX[2] = c;
+  gU1D0.CURRENT_TRANSFORM_MATRIX[3] = d;
+  gU1D0.CURRENT_TRANSFORM_MATRIX[4] = e;
+  gU1D0.CURRENT_TRANSFORM_MATRIX[5] = f;
   context.setTransform(a, b, c, d, e, f, g);
 }
 function matrixAt(idx) {
-  return CURRENT_TRANSFORM_MATRIX[idx];
+  return gU1D0.CURRENT_TRANSFORM_MATRIX[idx];
 }
 function propertiesToFontProperties(properties) {
   if (properties == 0)
@@ -106,6 +115,18 @@ function propertiesToFontProperties(properties) {
 function makeFont(font) {
   return font[0]+' '+font[1]+' '+font[2];
 }
+function correctTransformMatrix(context) {
+  context.save();
+  context.scale(gU1D0.GLOBAL_RESCALE_FACTOR, gU1D0.GLOBAL_RESCALE_FACTOR);
+}
+function resetTransformMatrix(context) {
+  context.restore();
+}
+function verbose(a, b, c, d, e, f) {
+  if (gU1D0.GLOBAL_VERBOSE_FLAG) {
+    console.log(a, b, c, d, e, f);
+  }
+}
 
 function _BeginDraw() {
   var canvas = $('canvas')[0];
@@ -115,22 +136,25 @@ function _BeginDraw() {
 }
 
 function _EndDraw() {
-  PEN_COLORS.length = 0;
-  PEN_WIDTHS.length = 0;
+  gU1D0.PEN_COLORS.length = 0;
+  gU1D0.PEN_WIDTHS.length = 0;
 }
 
 function _Line(x1, y1, x2, y2) {
   var canvas = $('canvas')[0];
   var context = canvas.getContext('2d');
+  correctTransformMatrix(context);
   context.beginPath();
   context.moveTo(x1, y1);
   context.lineTo(x2, y2);
   context.stroke();
+  resetTransformMatrix(context);
 }
 
 function _Polygon(xCoords, yCoords, count) {
   var canvas = $('canvas')[0];
   var context = canvas.getContext('2d');
+  correctTransformMatrix(context);
   context.beginPath();
   context.moveTo(xCoords[0], yCoords[0]);
   for (var i = 1; i < xCoords.length; i++) {
@@ -138,20 +162,23 @@ function _Polygon(xCoords, yCoords, count) {
   }
   context.closePath();
   context.fill();
+  resetTransformMatrix(context);
 }
 
 function _Rectangle(left, top, right, bottom) {
   var canvas = $('canvas')[0];
   var context = canvas.getContext('2d');
+  correctTransformMatrix(context);
   context.beginPath();
   context.rect(left, top, right - left, bottom - top);
   context.fill();
+  resetTransformMatrix(context);
 }
 
 function _SetMusicFont(name, size, properties) {
-  MUSIC_FONT[0] = propertiesToFontProperties(properties);
-  MUSIC_FONT[1] = size+"px";
-  MUSIC_FONT[2] = name;
+  gU1D0.MUSIC_FONT[0] = propertiesToFontProperties(properties);
+  gU1D0.MUSIC_FONT[1] = size+"px";
+  gU1D0.MUSIC_FONT[2] = name;
 }
 
 function _GetMusicFont() {
@@ -159,9 +186,9 @@ function _GetMusicFont() {
 }
 
 function _SetTextFont(name, size, properties) {
-  TEXT_FONT[0] = propertiesToFontProperties(properties);
-  TEXT_FONT[1] = size+"px";
-  TEXT_FONT[2] = name;
+  gU1D0.TEXT_FONT[0] = propertiesToFontProperties(properties);
+  gU1D0.TEXT_FONT[1] = size+"px";
+  gU1D0.TEXT_FONT[2] = name;
 }
 
 function _GetTextFont() {
@@ -175,12 +202,18 @@ function _SetScale(x, y) {
 }
 
 function _SetOrigin(x, y) {
+  verbose("SetOrigin", x, y);
+  x = x * gU1D0.GLOBAL_RESCALE_FACTOR;
+  y = y * gU1D0.GLOBAL_RESCALE_FACTOR;
   var canvas = $('canvas')[0];
   var context = canvas.getContext('2d');
   updateMatrices(context, matrixAt(0), 0, 0, matrixAt(3), x, y);
 }
 
 function _OffsetOrigin(x, y) {
+  verbose("OffsetOrigin", x, y);
+  x = x * gU1D0.GLOBAL_RESCALE_FACTOR;
+  y = y * gU1D0.GLOBAL_RESCALE_FACTOR;
   var canvas = $('canvas')[0];
   var context = canvas.getContext('2d');
   updateMatrices(context, matrixAt(0), 0, 0, matrixAt(3), matrixAt(4) + x, matrixAt(5) + y);
@@ -189,22 +222,30 @@ function _OffsetOrigin(x, y) {
 function _NotifySize(width, height) {
   var canvas = $('canvas')[0];
   var context = canvas.getContext('2d');
-  canvas.width = width;
-  canvas.height = height;
+  if (gU1D0.GLOBAL_SCALE_TO_DIV_SIZE) {
+    var w = $("#canvasContainer").width();
+    canvas.width = w;
+    canvas.height = height * w / width;
+    gU1D0.GLOBAL_RESCALE_FACTOR = w / width;
+  }
 }
 
 function _DrawMusicSymbol(x, y, inSymbolId) {
   var canvas = $('canvas')[0];
   var context = canvas.getContext('2d');
-  context.font = makeFont(MUSIC_FONT);
+  correctTransformMatrix(context);
+  context.font = makeFont(gU1D0.MUSIC_FONT);
   context.fillText(String.fromCharCode(inSymbolId), x, y);
+  resetTransformMatrix(context);
 }
 
 function _DrawString(x, y, s, inCharCount) {
   var canvas = $('canvas')[0];
   var context = canvas.getContext('2d');
-  context.font = makeFont(TEXT_FONT);
+  correctTransformMatrix(context);
+  context.font = makeFont(gU1D0.TEXT_FONT);
   context.fillText(s.substring(0, inCharCount + 1), x, y);
+  resetTransformMatrix(context);
 }
 
 function _GetFontColor() {
@@ -227,15 +268,15 @@ function _SetFontAlign(inAlign) {
 function _SelectPenColor(alpha, red, green, blue) {
   var canvas = $('canvas')[0];
   var context = canvas.getContext('2d');
-  var strokeStyle = "rgb("+red+","+green+","+blue+","+(alpha/CHAR_MAX_AS_FLOAT)+")"
-  PEN_COLORS.length = 0;
-  PEN_COLORS.push(strokeStyle);
+  var strokeStyle = "rgb("+red+","+green+","+blue+","+(alpha/gU1D0.CHAR_MAX_AS_FLOAT)+")"
+  gU1D0.PEN_COLORS.length = 0;
+  gU1D0.PEN_COLORS.push(strokeStyle);
   canvas.strokeStyle = strokeStyle;
 }
 
 function _PopPenColor() {
-  PEN_COLORS.pop();
-  if (PEN_COLORS.length > 0) {
+  gU1D0.PEN_COLORS.pop();
+  if (gU1D0.PEN_COLORS.length > 0) {
     canvas.strokeStyle = PEN_COLORS[PEN_COLORS.length - 1];
   } else {
     console.log("Popping pen color but the queue is empty");
@@ -243,15 +284,15 @@ function _PopPenColor() {
 }
 
 function _PushPenWidth(width) {
-  PEN_WIDTHS.push(width);
+  gU1D0.PEN_WIDTHS.push(width);
   var canvas = $('canvas')[0];
   var context = canvas.getContext('2d');
   context.lineWidth = width;
 }
 
 function _PopPenWidth() {
-  PEN_WIDTHS.pop();
-  if (PEN_WIDTHS.length > 0) {
+  gU1D0.PEN_WIDTHS.pop();
+  if (gU1D0.PEN_WIDTHS.length > 0) {
     canvas.lineWidth = PEN_WIDTHS[PEN_WIDTHS.length - 1];
   } else {
     console.log("Popping pen width but the queue is empty");

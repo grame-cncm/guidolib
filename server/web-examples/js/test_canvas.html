@@ -1,6 +1,10 @@
 <html>
   <head>
-    <!-- may need to use translate for anti-aliasing-->
+    <style>
+      canvas {
+        /*width: 100%;*/
+      }
+    </style>
     <script type="text/javascript" src="jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="jsDSLdevice.js"></script>
     <script>
@@ -47,7 +51,7 @@
 [a b c d]
       </textarea>
     </div>
-    <div class="column" style="float:right">
+    <div id="canvasContainer" class="column" style="float:right">
       <canvas>
       </canvas>
     </div>
