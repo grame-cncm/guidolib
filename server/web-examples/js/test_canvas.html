@@ -1,7 +1,6 @@
 <html>
   <head>
     <link rel="stylesheet" href="guidostylesheet.css" type="text/css" charset="utf-8" />
-    
     <script type="text/javascript" src="jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="jsDSLdevice.js"></script>
     <script>
@@ -25,8 +24,7 @@
         $("#warning").text("Processing . . .");
       }
       $(function () {
-        $('body').append("<div id='loadfont' style='font-family: Guido2;'>.</div>");
-        $('#loadfont').remove();
+        console.log("loading");
         $("#gmnSandbox").on('keyup', processGMN);
         processGMN();
       });
@@ -55,7 +53,9 @@
       <canvas>
       </canvas>
     </div>
-    <div style="clear:both"></div>
+    <div style="clear:both;"></div>
     <div id="warning"></div>
+    <!-- need to insert dummy paragraph to load font -->
+    <p style="visibility:hidden;font-family:Guido2;">a</p>
   </body>
 </html>
