@@ -18,6 +18,7 @@
             if (this.status == 201) {
               success = true;
               parseGuidoDSL(this.response, 0);
+              $("#warning").text("");
             }
           }
           xhr.send();
