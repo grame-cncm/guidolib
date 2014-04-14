@@ -1,9 +1,16 @@
 <html>
   <head>
-    <style>
-      canvas {
-        /*width: 100%;*/
-      }
+    <style type="text/css">
+	@font-face {
+	    font-family: 'Guido2';
+	    src: url('guido2-webfont.eot');
+	    src: url('guido2-webfont.eot?#iefix') format('embedded-opentype'),
+	         url('guido2-webfont.woff') format('woff'),
+	         url('guido2-webfont.ttf') format('truetype'),
+	    font-weight: normal;
+	    font-style: normal;
+
+	}
     </style>
     <script type="text/javascript" src="jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="jsDSLdevice.js"></script>
@@ -28,6 +35,8 @@
         $("#warning").text("Processing . . .");
       }
       $(function () {
+        $('body').append("<div id='loadfont' style='font-family: Guido2;'>.</div>");
+        $('#loadfont').remove();
         $("#gmnSandbox").on('keyup', processGMN);
         processGMN();
       });
