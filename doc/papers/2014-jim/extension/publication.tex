@@ -44,7 +44,7 @@
 
 \begin{abstract}
 
-Le projet \guido{} regroupe à la fois un format textuel de description de partitions musicales, un moteur de rendu basé sur ce format, et une librairie qui fournit aux développeurs d'applications, un support de haut niveau pour l'ensemble des services liés au format \guido{} et à son rendu sous forme graphique. 
+Le projet \guido{} regroupe à la fois un format textuel de description de partitions musicales, un moteur de rendu basé sur ce format, et une librairie qui fournit aux développeurs d'applications un support de haut niveau pour l'ensemble des services liés au format \guido{} et à son rendu sous forme graphique. 
 A l'origine, le projet \guido{} traite de la notation traditionnelle de la musique occidentale. Le projet a été récemment étendu, tant du point de vue du format que du point de vue du rendu, pour adresser également les besoins les plus courants de la musique contemporaine. Cet article présente ces extensions et montre comment les choix de design fournissent à l'utilisateur une large palette de solutions pour la notation de la musique. 
 
 %La librairie \guido{} offre un grand nombre de symboles musicaux correspondant aux plus larges besoins de l'écriture musicale. Elle fournit un moteur de rendu de partitions embarquable dans d'autres applications. Dans une volonté d'étendre cette librairie à la musique contemporaine, nous avons implémenté un ensemble de nouvelles notations jusqu'à présent pas, ou très sommairement, implémentées. L'objectif était de répondre aux demandes des compositeurs en ajoutant certaines notations de la manière la plus adaptée à l'écriture musicale, tout en laissant une large liberté à l'utilisateur.
@@ -162,7 +162,7 @@ La micro-tonalité est également introduite dans les armures de clef libres. De
 %********************** TÊTES DE NOTES *****************************
 \subsection{Têtes de notes}\label{subsec:tetes_notes}
 
-La librairie \guido{} a été étendue avec 6 nouveaux symboles de têtes de note. Son implémentation repose sur le tag \guidotag{noteFormat}, déjà existant, qui modifie l'apparence des notes qui le suivent (couleur, taille, offset, etc.), et auquel nous avons ajouté un attribut de style, permettant à l'utilisateur de choisir l'apparence des têtes de notes.
+La librairie \guido{} a été étendue avec 6 nouveaux symboles de têtes de notes. Son implémentation repose sur le tag \guidotag{noteFormat}, déjà existant, qui modifie l'apparence des notes qui le suivent (couleur, taille, offset, etc.), et auquel nous avons ajouté un attribut de style, permettant à l'utilisateur de choisir l'apparence des têtes de notes.
 
 \begin{gmncode}
   \noteFormat<style=noteHeadStyle>
