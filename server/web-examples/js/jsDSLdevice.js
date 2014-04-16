@@ -20,6 +20,7 @@ var GUIDO_OFFSET_ORIGIN_CODE = 29;
 var GUIDO_NOTIFY_SIZE_CODE = 36;
 var GUIDO_DRAW_MUSIC_SYMBOL_CODE = 39;
 var GUIDO_DRAW_STRING_CODE = 40;
+var GUIDO_SET_FONT_COLOR_CODE = 41;
 var GUIDO_GET_FONT_COLOR_CODE = 42;
 var GUIDO_SET_FONT_ALIGN_CODE = 45;
 var GUIDO_SELECT_PEN_COLOR_CODE = 49;
@@ -86,6 +87,7 @@ gU1D0.GLOBAL_VERBOSE_FLAG = 0;
 gU1D0.GLOBAL_SCALE_TO_DIV_SIZE = 1;
 gU1D0.CURRENT_TRANSFORM_MATRIX = [1, 0, 0, 1, 0, 0];
 gU1D0.PEN_COLORS = [];
+gU1D0.FONT_COLOR = 'rgba(0, 0, 0, 255)';
 gU1D0.PEN_WIDTHS = [];
 gU1D0.MUSIC_FONT = ['normal','12px','Guido2'];
 gU1D0.TEXT_FONT = ['normal','12px','Times'];
@@ -243,13 +245,19 @@ function _DrawString(x, y, s, inCharCount) {
   var canvas = $('canvas')[0];
   var context = canvas.getContext('2d');
   correctTransformMatrix(context);
+  // now that save has happened, make change
   context.font = makeFont(gU1D0.TEXT_FONT);
+  context.fillStyle = gU1DO.FONT_COLOR;
   context.fillText(s.substring(0, inCharCount + 1), x, y);
   resetTransformMatrix(context);
 }
 
+function _SetFontColor(alpha, red, green, blue) {
+  gU1D0.FONT_COLOR = "rgb("+red+","+green+","+blue+","+(alpha/gU1D0.CHAR_MAX_AS_FLOAT)+")"
+}
+
+
 function _GetFontColor() {
-  // ?????
 }
 
 function _SetFontAlign(inAlign) {
@@ -332,6 +340,8 @@ function parseGuidoDSL(data, place) {
     place = DrawMusicSymbol(data, place);
   } else if (head == GUIDO_DRAW_STRING_CODE) {
     place = DrawString(data, place);
+  } else if (head == GUIDO_SET_FONT_COLOR_CODE) {
+    place = SetFontColor(data, place);
   } else if (head == GUIDO_GET_FONT_COLOR_CODE) {
     place = GetFontColor(data, place);
   } else if (head == GUIDO_SET_FONT_ALIGN_CODE) {
@@ -517,6 +527,20 @@ function DrawString(data, place) {
   place = place - 1;
   ///////////////////////////
   _DrawString(x, y, s, inCharCount);
+  return place;
+}
+
+function SetFontColor(data, place) {
+  var alpha = getUnsignedChar(data, place);
+  place = moveReadPositionByChar(place);
+  var red = getUnsignedChar(data, place);
+  place = moveReadPositionByChar(place);
+  var green = getUnsignedChar(data, place);
+  place = moveReadPositionByChar(place);
+  var blue = getUnsignedChar(data, place);
+  place = moveReadPositionByChar(place);
+  /////////////////////////////////////////
+  _SetFontColor(alpha, red, green, blue);
   return place;
 }
 
