@@ -247,7 +247,7 @@ function _DrawString(x, y, s, inCharCount) {
   correctTransformMatrix(context);
   // now that save has happened, make change
   context.font = makeFont(gU1D0.TEXT_FONT);
-  context.fillStyle = gU1DO.FONT_COLOR;
+  context.fillStyle = gU1D0.FONT_COLOR;
   context.fillText(s.substring(0, inCharCount + 1), x, y);
   resetTransformMatrix(context);
 }
