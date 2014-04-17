@@ -288,62 +288,60 @@ function _PopPenWidth() {
 }
 
 function parseGuidoDSL(data, place) {
-  var head = getUnsignedChar(data, place);
-  place = moveReadPositionByChar(place);
-  if (head == GUIDO_BEGIN_DRAW_CODE) {
-    place = BeginDraw(data, place);
-  } else if (head == GUIDO_END_DRAW_CODE) {
-    place = EndDraw(data, place);
-  } else if (head == GUIDO_LINE_CODE) {
-    place = Line(data, place);
-  } else if (head == GUIDO_POLYGON_CODE) {
-    place = Polygon(data, place);
-  } else if (head == GUIDO_RECTANGLE_CODE) {
-    place = Rectangle(data, place);
-  } else if (head == GUIDO_SET_MUSIC_FONT_CODE) {
-    place = SetMusicFont(data, place);
-  } else if (head == GUIDO_GET_MUSIC_FONT_CODE) {
-    place = GetMusicFont(data, place);
-  } else if (head == GUIDO_SET_TEXT_FONT_CODE) {
-    place = SetTextFont(data, place);
-  } else if (head == GUIDO_GET_TEXT_FONT_CODE) {
-    place = GetTextFont(data, place);
-  } else if (head == GUIDO_SET_SCALE_CODE) {
-    place = SetScale(data, place);
-  } else if (head == GUIDO_SET_ORIGIN_CODE) {
-    place = SetOrigin(data, place);
-  } else if (head == GUIDO_OFFSET_ORIGIN_CODE) {
-    place = OffsetOrigin(data, place);
-  } else if (head == GUIDO_NOTIFY_SIZE_CODE) {
-    place = NotifySize(data, place);
-  } else if (head == GUIDO_DRAW_MUSIC_SYMBOL_CODE) {
-    place = DrawMusicSymbol(data, place);
-  } else if (head == GUIDO_DRAW_STRING_CODE) {
-    place = DrawString(data, place);
-  } else if (head == GUIDO_SET_FONT_COLOR_CODE) {
-    place = SetFontColor(data, place);
-  } else if (head == GUIDO_GET_FONT_COLOR_CODE) {
-    place = GetFontColor(data, place);
-  } else if (head == GUIDO_SET_FONT_ALIGN_CODE) {
-    place = SetFontAlign(data, place);
-  } else if (head == GUIDO_SELECT_PEN_COLOR_CODE) {
-    place = SelectPenColor(data, place);
-  } else if (head == GUIDO_POP_PEN_COLOR_CODE) {
-    place = PopPenColor(data, place);
-  } else if (head == GUIDO_PUSH_PEN_WIDTH_CODE) {
-    place = PushPenWidth(data, place);
-  } else if (head == GUIDO_POP_PEN_WIDTH_CODE) {
-    place = PopPenWidth(data, place);
-  } else {
-    // panic
-    console.log("don't know ", head);
-    place = -1;
+  while ((place >= 0) && (place < data.byteLength)) {
+    var head = getUnsignedChar(data, place);
+    place = moveReadPositionByChar(place);
+    if (head == GUIDO_BEGIN_DRAW_CODE) {
+      place = BeginDraw(data, place);
+    } else if (head == GUIDO_END_DRAW_CODE) {
+      place = EndDraw(data, place);
+    } else if (head == GUIDO_LINE_CODE) {
+      place = Line(data, place);
+    } else if (head == GUIDO_POLYGON_CODE) {
+      place = Polygon(data, place);
+    } else if (head == GUIDO_RECTANGLE_CODE) {
+      place = Rectangle(data, place);
+    } else if (head == GUIDO_SET_MUSIC_FONT_CODE) {
+      place = SetMusicFont(data, place);
+    } else if (head == GUIDO_GET_MUSIC_FONT_CODE) {
+      place = GetMusicFont(data, place);
+    } else if (head == GUIDO_SET_TEXT_FONT_CODE) {
+      place = SetTextFont(data, place);
+    } else if (head == GUIDO_GET_TEXT_FONT_CODE) {
+      place = GetTextFont(data, place);
+    } else if (head == GUIDO_SET_SCALE_CODE) {
+      place = SetScale(data, place);
+    } else if (head == GUIDO_SET_ORIGIN_CODE) {
+      place = SetOrigin(data, place);
+    } else if (head == GUIDO_OFFSET_ORIGIN_CODE) {
+      place = OffsetOrigin(data, place);
+    } else if (head == GUIDO_NOTIFY_SIZE_CODE) {
+      place = NotifySize(data, place);
+    } else if (head == GUIDO_DRAW_MUSIC_SYMBOL_CODE) {
+      place = DrawMusicSymbol(data, place);
+    } else if (head == GUIDO_DRAW_STRING_CODE) {
+      place = DrawString(data, place);
+    } else if (head == GUIDO_SET_FONT_COLOR_CODE) {
+      place = SetFontColor(data, place);
+    } else if (head == GUIDO_GET_FONT_COLOR_CODE) {
+      place = GetFontColor(data, place);
+    } else if (head == GUIDO_SET_FONT_ALIGN_CODE) {
+      place = SetFontAlign(data, place);
+    } else if (head == GUIDO_SELECT_PEN_COLOR_CODE) {
+      place = SelectPenColor(data, place);
+    } else if (head == GUIDO_POP_PEN_COLOR_CODE) {
+      place = PopPenColor(data, place);
+    } else if (head == GUIDO_PUSH_PEN_WIDTH_CODE) {
+      place = PushPenWidth(data, place);
+    } else if (head == GUIDO_POP_PEN_WIDTH_CODE) {
+      place = PopPenWidth(data, place);
+    } else {
+      // panic
+      console.log("don't know ", head);
+      place = -1;
+    }
   }
-  if ((place >= 0) && (place < data.byteLength)) {
-    return parseGuidoDSL(data, place);
-  } else {
-    console.log("finished drawing");
-  }
+  console.log("finished drawing");
 }
 
 function BeginDraw(data, place) {
