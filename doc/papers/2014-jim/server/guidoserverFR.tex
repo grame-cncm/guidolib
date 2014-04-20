@@ -57,7 +57,7 @@ La librairie \guido\ embarque un moteur de rendu de partitions musicales et four
 Pendant les dix dernières années, plusieurs outils de gravure musicale ont été développés selon un modèle client-serveur, à destination d'utilisateurs finaux et d'usagers du \emph{cloud computing}. Le serveur GUIDO allie la gravure musicale sur Internet aux principes de l'architecture REST (élaborés dans la section~\ref{section:rest}) afin d'exposer l'API de la librairie \guido\ \cite{guidolib1.52} \cite{guido} \cite{daudin09a} par le biais d'URIs. Après un survol des outils d'édition musicale en ligne, nous dégagerons les thématiques sur lesquelles se basent les services actuellement disponibles et nous situerons le serveur \guido\ dans le paysage de la gravure musicale sur Internet.
 
 \subsection{Editeurs de musique sur Internet}\label{subsection:editor}
-Il y a actuellement trois outils majeurs d'édition musicale sur le web -- Noteflight\footnote{\url{http://www.noteflight.com}}, Melodus\footnote{\url{http://www.melod.us}} et Score\footnote{\url{https://scorio.com}}. Noteflight et Melodus fournissent un environment immersif d'édition musicale sur Internet comparable à Finale ou Sibelius. Scorio est un outil hybride qui utilise des algorithmes de mise en page élémentaires pour sa plate-forme mobile et propose le téléchargement des documents de haute qualité compilés avec GNU LilyPond.
+Il y a actuellement trois outils majeurs d'édition musicale sur le web -- Noteflight\footnote{\url{http://www.noteflight.com}}, Melodus\footnote{\url{http://www.melod.us}} et Scorio\footnote{\url{https://scorio.com}}. Noteflight et Melodus fournissent un environment immersif d'édition musicale sur Internet comparable à Finale ou Sibelius. Scorio est un outil hybride qui utilise des algorithmes de mise en page élémentaires pour sa plate-forme mobile et propose le téléchargement des documents de haute qualité compilés avec GNU LilyPond.
 
 \subsection{Outils de partage de partitions sur Internet}\label{subsection:sharing}
 Plusieurs outils musicaux dont Sibelius\footnote{\url{http://www.sibelius.com}}, Muse\-Score \cite{musescore}, Maestro\footnote{\url{http://www.musicaleditor.com}} et Capriccio\footnote{\url{http://cdefgabc.com}}, proposent des services de partage sur Internet des partitions créées à partir de ces logiciels. Ces services permettent le téléchargement, la lecture et parfois le rendu sonore de ces partitions. Capriccio propose une application web écrite en Java qui reproduit les aspects essentiels de son éditeur principal alors que MuseScore, Sibelius et Maestro permettent la synchronisation automatique des partitions avec leurs représentations MIDI.
@@ -67,7 +67,7 @@ WebLily\footnote{\url{http://weblily.net}}, LilyBin\footnote{\url{http://www.lil
 
 \subsection{Une alternative RESTful}\label{subsection:restful}
 Tous les outils exposés ci-dessous permettent la création et la visualisation de partitions par le biais de différentes méthodes d'entrée (représentation textuelle, MusicXML, etc.). En revanche, ils ne sont pas adaptés à des échanges d'information dynamiques entre un serveur et un client, du fait qu'ils ne proposent pas d'API publique et ne fournissent pas d'information au-delà d'une représentation graphique de la partition. Le serveur \guido\ résout ce problème en fournissant une API HTTP, qui agit comme une passerelle entre le client HTTP et l'API C/C++ de la librairie. Le serveur fournit donc aussi bien des représentations graphiques de la partition qu'un ensemble d'information liées à la partition : nombre pages, durée, répartition des éléments musicaux sur la page et dans le temps, représentation MIDI...
-Le serveur \guido\ comble donc une lacune dans le paysage des outils de gravure musicale sur Internet en fournissnt à la fois des services de rendu de partition et en permettant le déploiement d'applications basées sur ces services.
+Le serveur \guido\ comble donc une lacune dans le paysage des outils de gravure musicale sur Internet en fournissant à la fois des services de rendu de partition et en permettant le déploiement d'applications basées sur ces services.
 
 %---------------------------------------
 \section{Representational state transfer}\label{section:rest}
@@ -106,7 +106,7 @@ Sans autre information dans l'URL, l'objet de retour par défaut est illustré p
 \begin{figure}[h]
   \centering
     \includegraphics[width=0.65\columnwidth]{figure1}
-  \cprotect\caption{\label{fig:figure1}Score with SHA-1 tag \verb=<key>=.}
+  \cprotect\caption{\label{fig:figure1}Partition générée par défaut pour le GMN [a b c d].}
 \end{figure}
 
 Pour un fonctionnement totalement RESTful, le code GMN devrait être fournit avec toute requête le concernant. Dans la pratique, on peut considérer que la clé SHA-1 remplace ce code sans effet de bord. Son utilisation minimise la déviation du style RESTful tout en proposant un point d'accès unique à la partition. 
@@ -291,8 +291,16 @@ produit la réponse suivante du serveur (abrégée pour des raison de commodité
 Le serveur \guido\ repose sur une architecture architecture RESTful afin d'exposer l'API C/C++ de la librairie \guido\ à travers une  API HTTP. La spécification cette API permet de traiter les requêtes sans gérer d'états successifs, dans la mesure où toutes les informations nécessaires à une requête sont contenues dans son URI. 
 La disponibilité de ce service sur Internet ouvre de nouvelles perspectives dans le développement d'applications Web qui souhaitent incorporer la notation musicale symbolique, que ce soit pour visualiser des partitions ou encore pour exploiter des données sur ces partitions. 
 
+L'architecture stateless proposée permet de réaliser plusieurs
+formes d'édition à distance dont une utilisation à partir de la ligne de
+commande et un éditeur web qui fait appel au serveur. Le serveur GUIDO peut également être
+utilisé comme noyau de calcul pour une plate-forme d'édition distribuée à l'analogue de
+Google Doc. Un système d'hébergement externe pourrait stocker les données GMN qui seraient
+envoyées au serveur au fur et à mesure afin d'être compilées.
+
 Le projet \guido\ est un projet \emph{open source} hébergé sur sourceforge (\icode{\url{http://guidolib.sf.net}}). Le serveur est actuellement accessible à l'adresse \\
-\icode{\url{http://guidoservice.grame.fr/}}.
+\icode{\url{http://guidoservice.grame.fr/}}. Un simple éditeur de partitions
+GUIDO qui utilise ce service se trouve sur le site \icode{\url{http://guidoeditor.grame.fr/}}.
 
 \balance
 \bibliographystyle{plain}
