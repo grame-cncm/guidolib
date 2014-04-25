@@ -45,9 +45,19 @@ class_export AbstractDevice : public VGDevice
 	std::ostream&	fStream;
 	std::string		fSpace;
 	
+	// color is written in the abstract device as four values
+	// from 0 to 255 that represent ARGB
 	void		writeColor (const VGColor& color) const;
+	// formatted images (bitmaps) are written in the form:
+	// Width Height Mimetype Length(inBytes) bytes
+	// for example
+	// 20 30 image/png 40 #@#%!@!@%%
 	void		writeFormattedImage (VGDevice* pSrcDC) const;
+	// translates RasterOpMode enum to a human readable string
 	void		writeRasterOpModeToString(VRasterOpMode mode) const;
+	// writes the font's name, size and properties
+	// properties are an integer corresponding to Guido's internal
+	// properties representation
 	void		writeFont(const VGFont *font) const;
 	public:
 				 AbstractDevice(std::ostream& outstream, AbstractSystem* system);
