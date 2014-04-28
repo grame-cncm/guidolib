@@ -459,7 +459,7 @@ units.
 		\param out the output stream.
 		\return a Guido error code
 	*/
-    GUIDOAPI(GuidoErrCode) 	GuidoDSLExport( const GRHandler handle, int page, std::ostream& out);
+    GUIDOAPI(GuidoErrCode) 	GuidoBinaryExport( const GRHandler handle, int page, std::ostream& out);
 
 	/** \brief Control bounding boxes drawing.
 

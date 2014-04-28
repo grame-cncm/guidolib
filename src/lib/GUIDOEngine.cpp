@@ -67,9 +67,9 @@ using namespace std;
 #include "AbstractDevice.h"
 #include "AbstractFont.h"
 
-#include "DSLSystem.h"
-#include "DSLDevice.h"
-#include "DSLFont.h"
+#include "BinarySystem.h"
+#include "BinaryDevice.h"
+#include "BinaryFont.h"
 
 
 // ==========================================================================
@@ -582,12 +582,12 @@ GUIDOAPI(GuidoErrCode) 	GuidoAbstractExport( const GRHandler handle, int page, s
 }
 
 // --------------------------------------------------------------------------
-//		- Score export to a DSL representation -
+//		- Score export to a Binary representation -
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) 	GuidoDSLExport( const GRHandler handle, int page, std::ostream& out)
+GUIDOAPI(GuidoErrCode) 	GuidoBinaryExport( const GRHandler handle, int page, std::ostream& out)
 {
- 	DSLSystem sys;
-	DSLDevice dev (out, &sys);
+ 	BinarySystem sys;
+	BinaryDevice dev (out, &sys);
     
         GuidoOnDrawDesc desc;              // declare a data structure for drawing
 	desc.handle = handle;

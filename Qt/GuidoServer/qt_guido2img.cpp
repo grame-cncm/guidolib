@@ -37,9 +37,9 @@ int qt_guido2img::convert (guidosession* const currentSession)
         fBuffer.setData(cc_svg, svg.size());
         return err;
     }
-    case GUIDO_WEB_API_DSL : {
+    case GUIDO_WEB_API_BINARY : {
         stringstream stream;
-        int err = currentSession->simpleDSLHelper(&stream);
+        int err = currentSession->simpleBinaryHelper(&stream);
         string ss_str = stream.str();
         const char *ss_cstr = ss_str.c_str();
         fBuffer.setData(ss_cstr, ss_str.size());

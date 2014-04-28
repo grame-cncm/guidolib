@@ -66,9 +66,9 @@ int cairo_guido2img::convert (guidosession* const currentSession)
       strcpy(fBuffer.data_, cc_svg);
       return err;
     }
-    else if (format == GUIDO_WEB_API_DSL) {
+    else if (format == GUIDO_WEB_API_BINARY) {
       stringstream stream;
-      int err = currentSession->simpleDSLHelper(&stream);
+      int err = currentSession->simpleBinaryHelper(&stream);
       string ss_str = stream.str();
       const char *ss_cstr = ss_str.c_str();
       fBuffer.size_ = ss_str.size();

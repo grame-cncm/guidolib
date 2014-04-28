@@ -43,7 +43,7 @@ enum GuidoWebApiFormat { GUIDO_WEB_API_PNG,
                          GUIDO_WEB_API_JPEG,
                          GUIDO_WEB_API_GIF,
                          GUIDO_WEB_API_SVG,
-                         GUIDO_WEB_API_DSL,
+                         GUIDO_WEB_API_BINARY,
                          GUIDO_WEB_API_UNDEFINED
                        };
 //--------------------------------------------------------------------------
@@ -204,7 +204,7 @@ public :
 
     // -----------------------------
     int simpleSVGHelper(string svgfontfile, string *output);
-    int simpleDSLHelper(stringstream *output);
+    int simpleBinaryHelper(stringstream *output);
     guidosessionresponse genericReturnImage();
     guidosessionresponse genericReturnMidi();
     guidosessionresponse genericReturnId();

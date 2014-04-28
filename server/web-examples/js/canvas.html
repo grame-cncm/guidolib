@@ -2,18 +2,18 @@
   <head>
     <link rel="stylesheet" href="guidostylesheet.css" type="text/css" charset="utf-8" />
     <script type="text/javascript" src="jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="jsDSLdevice.js"></script>
+    <script type="text/javascript" src="jsBinarydevice.js"></script>
     <script>
       function processGMN() {
         $.post("http://guidoservice.grame.fr/",  "data="+encodeURIComponent($("#gmnSandbox").val()), function(data) {
           var xhr = new XMLHttpRequest();
-          xhr.open('GET',"http://guidoservice.grame.fr/"+data.ID+"/?format=dsl", true);
+          xhr.open('GET',"http://guidoservice.grame.fr/"+data.ID+"/?format=binary", true);
           xhr.responseType = 'arraybuffer';
           xhr.onload = function(e) {
             console.log(this.status);
             if (this.status == 201) {
               success = true;
-              parseGuidoDSL(this.response, 0);
+              parseGuidoBinary(this.response, 0);
               $("#warning").text("");
             }
           }
