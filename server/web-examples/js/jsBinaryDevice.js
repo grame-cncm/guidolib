@@ -287,7 +287,7 @@ function _PopPenWidth() {
   }
 }
 
-function parseGuidoDSL(data, place) {
+function parseGuidoBinary(data, place) {
   while ((place >= 0) && (place < data.byteLength)) {
     var head = getUnsignedChar(data, place);
     place = moveReadPositionByChar(place);
