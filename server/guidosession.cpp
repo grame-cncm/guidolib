@@ -451,7 +451,10 @@ void guidosession::updateValuesFromDefaults(const TArgs &args)
     
 string guidosession::formatToMIMEType ()
 {
-    return ("image/" + string(formatToLayType())).c_str();
+    string head = "image/";
+    if (format_ == GUIDO_WEB_API_BINARY)
+      head = "application/";
+    return head + string(formatToLayType());
 }
 
 string guidosession::formatToLayType ()
@@ -459,6 +462,8 @@ string guidosession::formatToLayType ()
     switch(format_) {
     case GUIDO_WEB_API_PNG :
         return "png";
+    case GUIDO_WEB_API_BINARY :
+        return "octet-stream";
     case GUIDO_WEB_API_JPEG :
         return "jpeg";
     case GUIDO_WEB_API_GIF :
@@ -477,6 +482,8 @@ GuidoWebApiFormat guidosession::formatToWebApiFormat(string format)
 {
     if (strcmp("png", format.c_str()) == 0) {
         return GUIDO_WEB_API_PNG;
+    } else if (strcmp("binary", format.c_str()) == 0) {
+        return GUIDO_WEB_API_BINARY;
     } else if (strcmp("jpeg", format.c_str()) == 0) {
         return GUIDO_WEB_API_JPEG;
     } else if (strcmp("jpg", format.c_str()) == 0) {
@@ -832,6 +839,13 @@ int guidosession::simpleSVGHelper (string svgfontfile, string *output)
 
     err = GuidoSVGExport(grh_, page_, mystream, fontfile);
     *output = mystream.str();
+    return err;
+}
+
+int guidosession::simpleBinaryHelper (stringstream *output)
+{
+    GuidoErrCode err;
+    err = GuidoBinaryExport(grh_, page_, *output);
     return err;
 }
 

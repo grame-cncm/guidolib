@@ -1,5 +1,5 @@
-#ifndef __SVGSystem__
-#define __SVGSystem__
+#ifndef __AbstractSystem__
+#define __AbstractSystem__
 
 /*
   GUIDO Library
@@ -29,17 +29,15 @@
 */
 
 // --------------------------------------------------------------
-class_export SVGSystem : public VGSystem
+class_export AbstractSystem : public VGSystem
 {
 	public:
-					 SVGSystem() {}
-		virtual		~SVGSystem() {}
+					 AbstractSystem() {}
+		virtual		~AbstractSystem() {}
 
-		virtual VGDevice*		CreateDisplayDevice( std::ostream& outstream, const char* fontfile=0 );
+		virtual VGDevice*		CreateDisplayDevice( std::ostream& outstream);
 		virtual VGDevice*		CreateDisplayDevice();
-		virtual VGDevice*		CreateDisplayDevice(const char* fontfile);
 		virtual VGDevice*		CreateMemoryDevice( int inWidth, int inHeight);
-		virtual VGDevice*		CreateMemoryDevice( int inWidth, int inHeight, const char* fontfile=0 );
 		virtual	VGDevice*		CreateMemoryDevice( const char * inPath );
 		virtual VGDevice*		CreatePrinterDevice( );
 		virtual VGDevice*		CreateAntiAliasedMemoryDevice( int inWidth, int inHeight );
