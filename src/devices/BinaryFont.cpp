@@ -11,46 +11,46 @@
 
 */
 
-#include "SVGFont.h"
+#include "BinaryFont.h"
 
 #ifdef __APPLE__
 #include "GFontOSX.h"
 #include "GSystemOSX.h"
-GSystemOSX gSVGSystem (0, 0);
+GSystemOSX gBinarySystem (0, 0);
 
 #elif defined (WIN32)
 #include "GFontWin32.h"
 #include "GSystemWin32.h"
-GSystemWin32 gSVGSystem (0, 0);
+GSystemWin32 gBinarySystem (0, 0);
 
 #elif linux
 #include "CairoSystem.h"
-CairoSystem gSVGSystem (0);
+CairoSystem gBinarySystem (0);
 
 #else
-#error "unknown system for compiling SVGFont"
+#error "unknown system for compiling BinaryFont"
 
 #endif
 
 
 
 //______________________________________________________________________________
-SVGFont::SVGFont(const char * name, int size, int properties) 
+BinaryFont::BinaryFont(const char * name, int size, int properties) 
 {
-	fDevice = gSVGSystem.CreateMemoryDevice (10,10);
-	fFont = gSVGSystem.CreateVGFont (name, size, properties);
+	fDevice = gBinarySystem.CreateMemoryDevice (10,10);
+	fFont = gBinarySystem.CreateVGFont (name, size, properties);
 }
 
-SVGFont::~SVGFont() { delete fFont; delete fDevice; }
+BinaryFont::~BinaryFont() { delete fFont; delete fDevice; }
 
 //______________________________________________________________________________
-void SVGFont::GetExtent( const char * s, int inCharCount, float * outWidth, float * outHeight, VGDevice * context ) const
+void BinaryFont::GetExtent( const char * s, int inCharCount, float * outWidth, float * outHeight, VGDevice * context ) const
 {
 	fFont->GetExtent (s, inCharCount, outWidth, outHeight, fDevice);
 }
 
 //______________________________________________________________________________
-void SVGFont::GetExtent( unsigned char c, float * outWidth, float * outHeight, VGDevice * context ) const
+void BinaryFont::GetExtent( unsigned char c, float * outWidth, float * outHeight, VGDevice * context ) const
 {
 	fFont->GetExtent( c, outWidth, outHeight, fDevice );
 }

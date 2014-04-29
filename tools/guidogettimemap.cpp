@@ -40,7 +40,13 @@ class TimeMapPrinter : public TimeMapCollector
 	public:
 		virtual ~TimeMapPrinter() {}
 		virtual void Time2TimeMap( const TimeSegment& from, const TimeSegment& to ) {
-			cout << from << " " << to << endl;
+			//cout << from << " " << to << endl;
+                        // ugh - bug
+                        cout << "[" << from.first << ", " << from.second << "]";
+                        cout << " ";
+                        cout << "[" << to.first << ", " << to.second << "]";
+                        cout << endl;
+
 		}
 };
 

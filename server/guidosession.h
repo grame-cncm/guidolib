@@ -25,6 +25,7 @@
 #define __guidosession__
 
 #include <string>
+#include <sstream>
 #include "GUIDOEngine.h"
 #include "GUIDOScoreMap.h"
 #include "utilities.h"
@@ -42,6 +43,7 @@ enum GuidoWebApiFormat { GUIDO_WEB_API_PNG,
                          GUIDO_WEB_API_JPEG,
                          GUIDO_WEB_API_GIF,
                          GUIDO_WEB_API_SVG,
+                         GUIDO_WEB_API_BINARY,
                          GUIDO_WEB_API_UNDEFINED
                        };
 //--------------------------------------------------------------------------
@@ -202,6 +204,7 @@ public :
 
     // -----------------------------
     int simpleSVGHelper(string svgfontfile, string *output);
+    int simpleBinaryHelper(stringstream *output);
     guidosessionresponse genericReturnImage();
     guidosessionresponse genericReturnMidi();
     guidosessionresponse genericReturnId();
