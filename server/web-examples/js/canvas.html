@@ -2,7 +2,8 @@
   <head>
     <link rel="stylesheet" href="guidostylesheet.css" type="text/css" charset="utf-8" />
     <script type="text/javascript" src="jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="jsBinaryDevice.js"></script>
+    <script type="text/javascript" src="jsBinaryDeviceParser.js"></script>
+    <script type="text/javascript" src="jsCanvasDeviceFromBinary.js"></script>
     <script>
       function processGMN() {
         $.post("http://guidoservice.grame.fr/",  "data="+encodeURIComponent($("#gmnSandbox").val()), function(data) {
@@ -13,7 +14,7 @@
             console.log(this.status);
             if (this.status == 201) {
               success = true;
-              parseGuidoBinary(this.response, 0);
+              gU1D0pAR$ER.parseGuidoBinary(this.response, 0);
               $("#warning").text("");
             }
           }
@@ -26,7 +27,7 @@
       $(function () {
         console.log("loading");
         $("#gmnSandbox").on('keyup', processGMN);
-        initGuidoCanvas();
+        gU1D0cANVA$.initGuidoCanvas();
         processGMN();
       });
     </script>
