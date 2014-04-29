@@ -10,3 +10,5 @@ version 0.60
 	- improves MIDI export
 	- caches only 100 GMN strings in the server's memory
 	- empty requests to the server now generate a welcome message
+version 0.61
+	- removes Qt dependency for file system reads

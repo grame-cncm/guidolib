@@ -24,6 +24,7 @@
 #include <iostream>
 #include <sstream>
 #include <cstring>
+#include <stdlib.h> 
 
 #include "guidosession.h"
 #include "GUIDOEngine.h"
@@ -120,6 +121,7 @@ guidosession::guidosession(guido2img* g2svg, string gmn, string id)
     whyIFailed_ = 0;
     initializeUserSettableParameters();
     initializeARHandGRH();
+    maybeResize();
 }
 
 guidosession::~guidosession()
@@ -181,21 +183,31 @@ void guidosession::initializeARHandGRH() {
     
     GuidoPageFormat pf;
     fillGuidoPageFormatUsingCurrentSettings(&pf);
-    
+
     GuidoSetDefaultPageFormat(&pf);
     err = GuidoAR2GR (arh_, 0, &grh_);
     if (err != guidoNoErr) {
         whyIFailed_ = new guidoAPIresponse(err);
         return;
     }
+}
 
+void guidosession::maybeResize() {
+    GuidoErrCode err;
     if (resizeToPage_) {
       err = GuidoResizePageToMusic (grh_);
       if (err != guidoNoErr) {
         whyIFailed_ = new guidoAPIresponse(err);
         return;
       }
+      GuidoPageFormat npf;
+      GuidoGetPageFormat(grh_, 1, &npf);
+      fillCurrentSettingsUsingGuidoPageFormat(&npf);
     }
+}
+
+const GRHandler guidosession::getGRHandler() const {
+  return grh_;
 }
 
 bool guidosession::success() {
@@ -439,7 +451,10 @@ void guidosession::updateValuesFromDefaults(const TArgs &args)
     
 string guidosession::formatToMIMEType ()
 {
-    return ("image/" + string(formatToLayType())).c_str();
+    string head = "image/";
+    if (format_ == GUIDO_WEB_API_BINARY)
+      head = "application/";
+    return head + string(formatToLayType());
 }
 
 string guidosession::formatToLayType ()
@@ -447,12 +462,16 @@ string guidosession::formatToLayType ()
     switch(format_) {
     case GUIDO_WEB_API_PNG :
         return "png";
+    case GUIDO_WEB_API_BINARY :
+        return "octet-stream";
     case GUIDO_WEB_API_JPEG :
         return "jpeg";
     case GUIDO_WEB_API_GIF :
         return "gif";
     case GUIDO_WEB_API_SVG :
         return "xml+svg";
+    case GUIDO_WEB_API_UNDEFINED :
+        return "undefined";
     default :
         return "png";
     }
@@ -463,6 +482,8 @@ GuidoWebApiFormat guidosession::formatToWebApiFormat(string format)
 {
     if (strcmp("png", format.c_str()) == 0) {
         return GUIDO_WEB_API_PNG;
+    } else if (strcmp("binary", format.c_str()) == 0) {
+        return GUIDO_WEB_API_BINARY;
     } else if (strcmp("jpeg", format.c_str()) == 0) {
         return GUIDO_WEB_API_JPEG;
     } else if (strcmp("jpg", format.c_str()) == 0) {
@@ -472,7 +493,7 @@ GuidoWebApiFormat guidosession::formatToWebApiFormat(string format)
     } else if (strcmp("svg", format.c_str()) == 0) {
         return GUIDO_WEB_API_SVG;
     } else {
-        return GUIDO_WEB_API_PNG;
+        return GUIDO_WEB_API_UNDEFINED;
     }
     return GUIDO_WEB_API_PNG;
 }
@@ -487,6 +508,16 @@ void guidosession::fillGuidoPageFormatUsingCurrentSettings(GuidoPageFormat *pf)
     pf->marginleft = GuidoCM2Unit(marginleft_);
     pf->marginright = GuidoCM2Unit(marginright_);
     pf->marginbottom = GuidoCM2Unit(marginbottom_);
+}
+
+void guidosession::fillCurrentSettingsUsingGuidoPageFormat(GuidoPageFormat *pf)
+{
+    height_ = GuidoUnit2CM(pf->height);
+    width_ = GuidoUnit2CM(pf->width);
+    margintop_ = GuidoUnit2CM(pf->margintop);
+    marginleft_ = GuidoUnit2CM(pf->marginleft);
+    marginbottom_ = GuidoUnit2CM(pf->marginbottom);
+    marginright_ = GuidoUnit2CM(pf->marginright);
 }
 
 void guidosession::fillGuidoLayoutSettingsUsingCurrentSettings(GuidoLayoutSettings *ls)
@@ -689,7 +720,7 @@ string guidosession::getVersion() {
 
 string guidosession::getServerVersion() {
     // TODO - un-hardcode this
-    return "0.50";
+    return "0.61";
 }
 
 float guidosession::getLineSpace() {
@@ -794,38 +825,45 @@ guidoAPIresponse guidosession::getMap (GuidoSessionMapType map, int aux, Time2Gr
 
 // ---- Abstractions
 
-guidosessionresponse guidosession::genericReturnImage()
+int guidosession::simpleSVGHelper (string svgfontfile, string *output)
 {
-  return genericReturnImage("");
+    GuidoErrCode err;
+    stringstream mystream;
+    const char *fontfile = svgfontfile != ""
+                           ? svgfontfile.c_str ()
+                           : 0;
+
+    if (!fontfile) {
+      cerr << "No svg font file found." << endl;
+    }
+
+    err = GuidoSVGExport(grh_, page_, mystream, fontfile);
+    *output = mystream.str();
+    return err;
 }
 
-guidosessionresponse guidosession::genericReturnImage(string svgfontfile)
+int guidosession::simpleBinaryHelper (stringstream *output)
 {
-    if (format_ == GUIDO_WEB_API_SVG) {
-      if (whyIFailed_) {
-        return genericFailure(whyIFailed_->errorMsg(), 400, id_);
-      }
-      GuidoErrCode err;
-      stringstream mystream;
-      const char *fontfile = svgfontfile != ""
-                             ? svgfontfile.c_str ()
-                             : 0;
-      if (!fontfile) {
-        cerr << "No svg font file found." << endl;
-      }
-      err = GuidoSVGExport(grh_, page_, mystream, fontfile);
-      if (err != guidoNoErr) {
-        return genericFailure ("Could not convert the image.", 400, id_);
-      }
-      string svg = mystream.str();
-      return guidosessionresponse(svg, formatToMIMEType(), 201);
+    GuidoErrCode err;
+    err = GuidoBinaryExport(grh_, page_, *output);
+    return err;
+}
+
+guidosessionresponse guidosession::genericReturnImage()
+{
+    if (whyIFailed_) {
+      return genericFailure(whyIFailed_->errorMsg(), 400, id_);
     }
+
     int err = fConverter->convert(this);
-    if (err == 0) {
+    if (err == guidoNoErr) {
         const char *fcd = fConverter->data();
         return guidosessionresponse(fcd, fConverter->size(), formatToMIMEType(), 201);
     }
-    return genericFailure ("Could not convert the image.", 400, id_);
+    
+    return genericFailure (format_ == GUIDO_WEB_API_UNDEFINED
+                           ? "Return file format is undefined."
+                           : "Server could not generate an image of type "+formatToLayType()+".", 400, id_);
 }
 
 

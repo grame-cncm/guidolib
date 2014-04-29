@@ -25,6 +25,7 @@
 #define __guidosession__
 
 #include <string>
+#include <sstream>
 #include "GUIDOEngine.h"
 #include "GUIDOScoreMap.h"
 #include "utilities.h"
@@ -38,7 +39,11 @@ namespace guidohttpd
 {
 enum GuidoSessionMapType {PAGE, STAFF, VOICE, SYSTEM, NO_TYPE};
 enum GuidoSessionParsingError { GUIDO_SESSION_PARSING_SUCCESS, GUIDO_SESSION_PARSING_FAILURE };
-enum GuidoWebApiFormat { GUIDO_WEB_API_PNG, GUIDO_WEB_API_JPEG, GUIDO_WEB_API_GIF, GUIDO_WEB_API_SVG,
+enum GuidoWebApiFormat { GUIDO_WEB_API_PNG,
+                         GUIDO_WEB_API_JPEG,
+                         GUIDO_WEB_API_GIF,
+                         GUIDO_WEB_API_SVG,
+                         GUIDO_WEB_API_BINARY,
                          GUIDO_WEB_API_UNDEFINED
                        };
 //--------------------------------------------------------------------------
@@ -85,7 +90,6 @@ class GuidoServerTimeMap : public TimeMapCollector
 
 class guidosession
 {
-    friend class guido2img;
     guido2img* fConverter;
 
 private :
@@ -139,8 +143,8 @@ private :
     static GuidoWebApiFormat formatToWebApiFormat(string format);
 
     // used for graphical representation building
-    void fillGuidoPageFormatUsingCurrentSettings(GuidoPageFormat *pf);
-    void fillGuidoLayoutSettingsUsingCurrentSettings(GuidoLayoutSettings *ls);
+    void fillCurrentSettingsUsingGuidoPageFormat(GuidoPageFormat *pf);
+
     // private function to wrap json in the ID of a current session
     guidosessionresponse wrapObjectInId(json::json_object *obj);
     
@@ -151,11 +155,19 @@ public :
     virtual ~guidosession();
     void initializeUserSettableParameters();
     void initializeARHandGRH();
+    void maybeResize();
     void updateValuesFromDefaults();
     void updateValuesFromDefaults(const TArgs& args);
     void changeDefaultValues(const TArgs &args);
     bool success();
     string errorMsg();
+
+    // gets GR Handler
+    const GRHandler getGRHandler() const;
+
+    // used for graphical representation building
+    void fillGuidoPageFormatUsingCurrentSettings(GuidoPageFormat *pf);
+    void fillGuidoLayoutSettingsUsingCurrentSettings(GuidoLayoutSettings *ls);
 
     // returns session responses with information for server to send
     static guidosessionresponse handleSimpleIntQuery(string, int);
@@ -191,7 +203,8 @@ public :
     static guidoAPIresponse verifyGMN(string gmn);
 
     // -----------------------------
-    guidosessionresponse genericReturnImage(string svgfontfile);
+    int simpleSVGHelper(string svgfontfile, string *output);
+    int simpleBinaryHelper(stringstream *output);
     guidosessionresponse genericReturnImage();
     guidosessionresponse genericReturnMidi();
     guidosessionresponse genericReturnId();
@@ -199,7 +212,15 @@ public :
     guidosessionresponse mapGet (const TArgs& args, unsigned int n, string thingToGet);
     guidosessionresponse pointGet (const TArgs& args, unsigned int n);
 
-    //static json_type swapTypeForName (string type);
+    // getters ---------------------
+    float getWidth() { return width_; }
+    float getHeight() { return height_; }
+    int getPage() { return page_; }
+    float getZoom() { return zoom_; }
+    string getGMN() { return gmn_; }
+    bool getResizeToPage() { return resizeToPage_; }
+    GuidoWebApiFormat getFormat() { return format_; }
+
 };
 
 } // end namespoace

@@ -85,8 +85,8 @@ int main(int argc, char **argv)
 
 	GuidoErrCode err;
 	SVGSystem sys(0, 0);
-	SVGDevice dev(cout, &sys, 0, 0);
-	GuidoInitDesc id = { &dev, 0, 0, 0 };
+	VGDevice *dev = sys.CreateDisplayDevice();
+	GuidoInitDesc id = { dev, 0, 0, 0 };
 	err = GuidoInit(&id);
 	if (err != guidoNoErr)
         error(err);

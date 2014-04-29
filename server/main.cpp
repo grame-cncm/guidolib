@@ -18,10 +18,6 @@
  */
 #include <errno.h>
 
-#include <QApplication>
-#include <QDir>
-
-#include "QGuidoPainter.h"
 #include "guido2img.h"
 #include "server.h"
 #include "utilities.h"
@@ -31,8 +27,8 @@
 using namespace std;
 using namespace guidohttpd;
 
-#define kVersion 0.60f
-#define kVersionStr "0.60"
+#define kVersion 0.61f
+#define kVersionStr "0.61"
 
 static const char* kPortOpt = "--port";
 static const int kDefaultPort = 8000;
@@ -123,9 +119,9 @@ static void usage (char* name)
 static bool launchServer (int port, int verbose, int logmode, string cachedir, string svgfontfile, bool daemon)
 {
     bool ret = false;
-    guido2img converter;
+    guido2img *converter = makeConverter(svgfontfile);
     startEngine();
-    HTTPDServer server(verbose, logmode, cachedir, svgfontfile, &converter);
+    HTTPDServer server(verbose, logmode, cachedir, converter);
     server.readFromCache();
     if (server.start(port)) {
         if (daemon) {
@@ -161,8 +157,15 @@ int main(int argc, char **argv)
         cout << "Guido server v." << kVersionStr << " with Guido v." << GuidoGetVersionStr() << "." << endl;
         exit (0);
     }
-    QApplication app(argc , argv); // required by Qt
-    string applicationPath = QDir(QDir(QApplication::applicationFilePath()).absoluteFilePath("../")).canonicalPath().toStdString();
+    makeApplication(argc, argv);
+    char resolved_path[256];
+    #ifdef WIN32
+      _fullpath(resolved_path, ".");
+    #else
+      realpath(".", resolved_path);
+    #endif
+    string applicationPath(resolved_path);
+
     srand(time(0));
     int port = get_private_profile_int(portSectionName, portNumberName, lopt (argv, kPortOpt, kDefaultPort), kDefaultInitfile.c_str());
 
@@ -176,7 +179,7 @@ int main(int argc, char **argv)
       logmode = 0;
 
     char buff[512];
-    string logfile = sopt (argv, kLogfileOpt, QDir(applicationPath.c_str()).absoluteFilePath(kDefaultLogfile.c_str()).toStdString());
+    string logfile = sopt (argv, kLogfileOpt, (applicationPath + "/" + kDefaultLogfile).c_str());
     get_private_profile_string(logSectionName, logFilenameName, logfile.c_str(), buff, 512, kDefaultInitfile.c_str());
     logfile = string(buff);
 
@@ -186,17 +189,18 @@ int main(int argc, char **argv)
            ? new logstream (logfile.c_str())
            : new logstream();
 
-    string cachedir = sopt (argv, kCachedirOpt, QDir(applicationPath.c_str()).absoluteFilePath(kDefaultCachedir.c_str()).toStdString());
+    string cachedir = sopt (argv, kCachedirOpt, (applicationPath + "/" + kDefaultCachedir).c_str());
     get_private_profile_string(cacheSectionName, cacheDirectoryName, cachedir.c_str(), buff, 512, kDefaultInitfile.c_str());
     cachedir = string(buff);
 
-    string svgfontfile = sopt (argv, kSvgFontFileOpt, QDir(applicationPath.c_str()).absoluteFilePath(kDefaultSvgFontFile.c_str()).toStdString());
+    string svgfontfile = sopt (argv, kCachedirOpt, (applicationPath + "/" + kDefaultSvgFontFile).c_str());
     get_private_profile_string(fontSectionName, fontFilenameName, svgfontfile.c_str(), buff, 512, kDefaultInitfile.c_str());
     svgfontfile = string(buff);
 
     // check to see if svgfontfile exists
-    QFile qSvgfontfile(svgfontfile.c_str());
-    if(!qSvgfontfile.exists()) {
+
+    ifstream myfile(svgfontfile.c_str());
+    if (!myfile.is_open()) {
       svgfontfile = "";
     }
     if (daemon) {

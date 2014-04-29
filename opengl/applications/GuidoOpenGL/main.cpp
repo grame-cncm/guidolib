@@ -29,7 +29,7 @@ const char * curFont=0;
 float eyex=w_win/2.0f, eyey=h_win/2.0f, eyez=370.0f;
 
 enum { kFirst=1, kNext, kPrevious, kLast };
-enum { kLoad=1, kReload, kFullScreen, kWindow, kQuit };
+enum { kReload, kFullScreen, kWindow, kQuit };
 enum { kBorder = 10 };
 
 void rect(int x, int y) {
@@ -93,9 +93,6 @@ void specialkey (int key, int x, int y)
 static void main_menu(int i)
 {
     switch(i) {
-		case kLoad:
-			gAppl.OpenFile();
-			break;
 		case kReload: 
 			gAppl.Reload();
 			break;
@@ -126,7 +123,7 @@ static void create_menus(void)
     glutAddMenuEntry("Last", kLast);
 
     gMainMenu = glutCreateMenu(main_menu);
-    glutAddMenuEntry("Load", kLoad);
+    //glutAddMenuEntry("Load", kLoad);
     glutAddMenuEntry("Reload", kReload);
     glutAddMenuEntry("-----------", -1);
 	glutAddSubMenu("Pages", gPageMenu);
@@ -188,11 +185,11 @@ int main(int argc, char** argv)
 	glutSpecialFunc(specialkey);
 //	glutKeyboardFunc(parsekey);
 	myinit();
-//#ifdef linux
 	if (argc > 1)
-		gAppl.OpenFile (argv[1]);
-//#endif	
+#ifndef WIN32
+        gAppl.OpenFile (argv[1]);
 	glutMainLoop();
+#endif
 	return 0;
 }
 

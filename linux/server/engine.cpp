@@ -1,6 +1,6 @@
 /*
 
-  Copyright (C) 2012 Grame
+  Copyright (C) 2011 Grame
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -21,38 +21,36 @@
 
 */
 
+#include "GUIDOEngine.h"
+#include "CairoSystem.h"
+#include "cairo_guido2img.h"
+#include <Magick++.h>
 
-#ifndef __guido2img__
-#define __guido2img__
+namespace guidohttpd {
 
-#include "guidosession.h"
+guido2img* makeConverter(std::string svgfontfile) {
+  cairo_guido2img *converter = new cairo_guido2img(svgfontfile);
+  return converter;
+}
 
-#include "../JuceLibraryCode/JuceHeader.h"
-#include "../../Device/GuidoComponent.h"
+GuidoErrCode startEngine () {
+	CairoSystem * sys = new CairoSystem(0);
+	VGDevice * dev = sys->CreateMemoryDevice(10,10);
 
-namespace guidohttpd
-{
-class guidosession;
-//--------------------------------------------------------------------------
-class guido2img : GuidoComponent
-{
+	GuidoInitDesc desc;
+	desc.graphicDevice = dev;
+	desc.musicFont = "guido2";
+	desc.textFont  = "Times";
+	GuidoErrCode err = GuidoInit (&desc);
+	return err;
+}
 
-  MemoryOutputStream fBuffer;
+void makeApplication (int argc, char **argv) {
+  Magick::InitializeMagick(*argv);
+}
 
-public:
-    guido2img() {}
-    virtual ~guido2img() {}
+void stopEngine () {
+  GuidoShutdown();
+}
 
-    int convert (guidosession *currentSession);
-
-    const char* data()	{
-        return (const char *)fBuffer.getData();
-    }
-    int size()	{
-        return fBuffer.getDataSize();
-    }
-};
-
-} // end namespoace
-
-#endif
+} // end namespace

@@ -25,12 +25,15 @@
 #ifndef __engine__
 #define __engine__
 
-#include "QGuidoPainter.h"
+#include "GUIDOEngine.h"
+#include "guido2img.h"
 
 namespace guidohttpd
 {
 
-void startEngine (int argc, char **argv);
+guido2img* makeConverter(std::string svgfontfile);
+void makeApplication (int argc, char **argv);
+GuidoErrCode startEngine ();
 void stopEngine ();
 
 } // end namespace

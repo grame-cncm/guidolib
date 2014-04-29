@@ -6034,6 +6034,7 @@ void ARMusicalVoice::doAutoTrill()
 								do
                                 {
 									ARMusicalObject * nextObject = GetNext(posNote, armvs);
+									if (!nextObject) break;
 									nextNote = dynamic_cast<ARNote *>(nextObject);
 								}
                                 while(posObj && !nextNote);

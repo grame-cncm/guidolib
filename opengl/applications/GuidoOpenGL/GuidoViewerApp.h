@@ -15,7 +15,6 @@ class GuidoViewerApp
 		virtual				~GuidoViewerApp();
 
 				bool 		Initialize();
-		virtual void 		OpenFile();
 		virtual void 		Reload();
 		virtual void 		OpenFile(const char * file);
 		virtual void		DrawScore();
@@ -28,8 +27,6 @@ class GuidoViewerApp
 				GuidoDoc *	OpenGuidoFile( const char * file );
 				GuidoDoc *	OpenXMLFile( const char * file);
 				void		SetCamera (int w, int h, bool perspective=false);
-
-				string		SelectOneFile();
 
 				void		ReportGuidoError( GuidoErrCode inGuidoErr );
 				void		ReportError( const char * inMessage, const char * inDetail = 0 );

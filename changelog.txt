@@ -2,7 +2,8 @@ GUIDO Engine history
 
 
 ----------------------------------------------------------------
-2013-09-13  version 1.5.3
+2014-??-??  version 1.5.3
+- infinite loop in trill computation corrected
 - accidental spacing changed : a bit more space is inserted between the accidental and the note head
   to conform more to engraving practices
 - incorrect coloring of trills (forced to black even when no color specified)

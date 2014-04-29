@@ -197,8 +197,8 @@ int main(int argc, char **argv)
 	}
 
 	SVGSystem sys(fontfile, 0);
-	SVGDevice dev(cout, &sys, fontfile, 0);
-    GuidoInitDesc gd = { &dev, 0, 0, 0 };
+	VGDevice *dev = sys.CreateDisplayDevice(fontfile);
+    GuidoInitDesc gd = { dev, 0, 0, 0 };
     GuidoInit(&gd);                    // Initialise the Guido Engine first
 
 	GuidoErrCode err;

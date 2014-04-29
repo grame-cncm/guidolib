@@ -59,8 +59,8 @@ int main(int argc, char **argv)
 
 
 	SVGSystem sys;
-	SVGDevice dev(cout, &sys, 0, 0);
-    GuidoInitDesc gd = { &dev, 0, 0, 0 };
+	VGDevice *dev = sys.CreateDisplayDevice();
+    GuidoInitDesc gd = { dev, 0, 0, 0 };
     GuidoInit(&gd);                   // Initialise the Guido Engine first
 
 	GuidoErrCode err;
