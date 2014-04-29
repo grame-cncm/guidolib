@@ -44,6 +44,19 @@ class_export AbstractDevice : public VGDevice
 	AbstractSystem*		fSystem;
 	std::ostream&	fStream;
 	std::string		fSpace;
+    int fWidth;
+    int fHeight;
+    const VGFont * fMusicFont;
+    const VGFont * fTextFont;
+    VRasterOpMode fOpMode;
+    float fXScale;
+    float fYScale;
+    float fXOrigin;
+    float fYOrigin;
+    unsigned int fFontAlign;
+    float fDPI;
+    VGColor fFontColor;
+    VGColor fFontBackgroundColor;
 	
 	// color is written in the abstract device as four values
 	// from 0 to 255 that represent ARGB

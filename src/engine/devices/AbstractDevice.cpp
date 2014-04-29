@@ -29,7 +29,18 @@ using namespace std;
 AbstractDevice::AbstractDevice(std::ostream& outstream, AbstractSystem* system) : 
 	fSystem (system),
 	fStream(outstream), 
-	fSpace(" ")
+	fSpace(" "),
+	fWidth(1000),
+	fHeight(1000),
+	fMusicFont(0),
+	fTextFont(0),
+	fOpMode(kUnknown),
+	fXScale(1),
+	fYScale(1),
+	fXOrigin(0),
+	fYOrigin(0),
+	fFontAlign(kAlignBase),
+	fDPI(0)
 {
 }
 
@@ -62,9 +73,11 @@ void AbstractDevice::InvalidateRect( float left, float top, float right, float b
 void AbstractDevice::MoveTo( float x, float y )  {
   fStream << "MoveTo" << fSpace << x << fSpace << y << endl;
 }
+
 void AbstractDevice::LineTo( float x, float y ) {
   fStream << "LineTo" << fSpace << x << fSpace << y << endl;
 }
+
 void AbstractDevice::Line( float x1, float y1, float x2, float y2 )
 {
   fStream << "Line" << fSpace << x1 << fSpace << y1 << fSpace << x2 << fSpace << y2 << endl;
@@ -125,19 +138,25 @@ void	AbstractDevice::SetMusicFont( const VGFont * font )	{
     fStream << "SetMusicFont" << fSpace;
     writeFont(font);
     fStream << endl;
+    //////////////////
+    fMusicFont = font;
 }
 const VGFont *	AbstractDevice::GetMusicFont() const {
     fStream << "GetMusicFont" << endl;
-    return 0;
+    //////////////////
+    return fMusicFont;
 }
+
 void			AbstractDevice::SetTextFont( const VGFont * font )	{
     fStream << "SetTextFont" << fSpace;
     writeFont(font);
     fStream << endl;
+    //////////////////
+    fTextFont = font;
 }
 const VGFont *	AbstractDevice::GetTextFont() const	{
     fStream << "GetMusicFont" << endl;
-    return 0;
+    return fTextFont;
 }
 
 //______________________________________________________________________________
@@ -149,6 +168,7 @@ void AbstractDevice::SelectPen( const VGColor & c, float w )
 	writeColor(c);
 	fStream << fSpace << w << endl;
 }
+
 void AbstractDevice::SelectFillColor( const VGColor & c )
 {
 	fStream << "SelectFillColor" << fSpace;
@@ -162,6 +182,7 @@ void AbstractDevice::PushPen( const VGColor & color, float width )
 	writeColor(color);
 	fStream << fSpace << width << endl;
 }
+
 void AbstractDevice::PushFillColor( const VGColor & color )
 {
 	fStream << "PushFillColor" << fSpace;
@@ -170,6 +191,7 @@ void AbstractDevice::PushFillColor( const VGColor & color )
 }
 
 void AbstractDevice::PopPen() { fStream << "PopPen" << endl; }
+
 void AbstractDevice::PopFillColor() { fStream << "PopFillColor" << endl; }
 
 void AbstractDevice::writeRasterOpModeToString(VRasterOpMode mode) const {
@@ -183,13 +205,17 @@ void AbstractDevice::writeRasterOpModeToString(VRasterOpMode mode) const {
 }
 
 void AbstractDevice::SetRasterOpMode( VRasterOpMode mode) {
-	fStream << "SetRasterOpMode" << fSpace;
+    fStream << "SetRasterOpMode" << fSpace;
     writeRasterOpModeToString(mode);
     fStream << endl;
+    ///////////////
+    fOpMode = mode;
 }
+
 VGDevice::VRasterOpMode AbstractDevice::GetRasterOpMode() const {
 	fStream << "GetRasterOpMode" << endl;
-    return kUnknown;
+    ////////////////
+    return fOpMode;
 }
 
 
@@ -249,11 +275,17 @@ bool AbstractDevice::CopyPixels( int xDest, int yDest, int dstWidth, int dstHeig
 void AbstractDevice::SetScale( float x, float y )
 {
   fStream << "SetScale" << fSpace << x << fSpace << y << endl;
+  ////////////
+  fXScale = x;
+  fYScale = y;
 }
 
 void AbstractDevice::SetOrigin( float x, float y )
 { 
   fStream << "SetOrigin" << fSpace << x << fSpace << y << endl;
+  /////////////
+  fXOrigin = x;
+  fYOrigin = y;
 }
 
 void AbstractDevice::OffsetOrigin( float x, float y )	
@@ -271,33 +303,45 @@ void AbstractDevice::DeviceToLogical( float * x, float * y ) const {
 
 float AbstractDevice::GetXScale() const {
   fStream << "GetXScale" << endl;
-  return 0.0;
+  ///////////////
+  return fXScale;
 }
+
 float AbstractDevice::GetYScale() const {
   fStream << "GetYSclae" << endl;
-  return 0.0;
+  ///////////////
+  return fYScale;
 }
+
 float AbstractDevice::GetXOrigin() const {
   fStream << "GetXOrigin" << endl;
-  return 0.0;
+  ///////////////
+  return fXOrigin;
 }
+
 float AbstractDevice::GetYOrigin() const {
   fStream << "GetYOrigin" << endl;
-  return 0.0;
+  ///////////////
+  return fYOrigin;
 }
 
 void AbstractDevice::NotifySize( int w, int h ) {
   fStream << "NotifySize" << fSpace << w << fSpace << h << endl;
+  ///////////
+  fWidth = w;
+  fHeight = h;
 }
 
 int AbstractDevice::GetWidth() const {
   fStream << "GetWidth" << endl;
-  return 0;
+  //////////////
+  return fWidth;
 }
 
 int AbstractDevice::GetHeight() const {
   fStream << "GetWidth" << endl;
-  return 0;
+  ///////////////
+  return fHeight;
 }
 
 
@@ -314,34 +358,43 @@ void AbstractDevice::DrawString( float x, float y, const char * s, int inCharCou
 	fStream << "DrawString" << fSpace << x << fSpace << y << fSpace << s << fSpace << inCharCount << endl;
 }
 
-void	AbstractDevice::SetFontColor( const VGColor & color ) {
+void AbstractDevice::SetFontColor( const VGColor & color ) {
 	fStream << "SetFontColor" << fSpace;
 	writeColor(color);
 	fStream << endl;
+	//////////////////
+	fFontColor = color;
 }
+
 VGColor AbstractDevice::GetFontColor() const	{
   fStream << "GetFontColor" << endl;
-  return VGColor();
+  //////////////////
+  return fFontColor;
 }
 
 void	AbstractDevice::SetFontBackgroundColor( const VGColor & color ) {
 	fStream << "SetFontBackgroundColor" << fSpace;
 	writeColor(color);
 	fStream << endl;
+	/////////////////////////////
+	fFontBackgroundColor = color;
 }
 
 VGColor AbstractDevice::GetFontBackgroundColor() const	{
   fStream << "GetFontBackgroundColor" << endl;
-  return VGColor();
+  ////////////////////////////
+  return fFontBackgroundColor;
 }
 
 void	AbstractDevice::SetFontAlign( unsigned int inAlign ) {
 	fStream << "SetFontAlign" << fSpace << inAlign << endl;
+	fFontAlign = inAlign;
 }
 
 unsigned int AbstractDevice::GetFontAlign() const	{
   fStream << "GetFontAlign" << endl;
-  return 0;
+  //////////////////
+  return fFontAlign;
 }
 
 //______________________________________________________________________________
@@ -349,11 +402,13 @@ unsigned int AbstractDevice::GetFontAlign() const	{
 //______________________________________________________________________________
 void	AbstractDevice::SetDPITag( float inDPI ) {
 	fStream << "SetDPITag" << fSpace << inDPI << endl;
+	////////////
+	fDPI = inDPI;
 }
 
 float AbstractDevice::GetDPITag() const	{
   fStream << "GetDPITag" << endl;
-  return 0.0;
+  return fDPI;
 }
 
 //______________________________________________________________________________
@@ -382,9 +437,11 @@ void AbstractDevice::PushPenWidth( float width)
 {
 	fStream << "PushPenWidth" << fSpace << width << endl;
 }
+
 void AbstractDevice::PopPenColor() {
 	fStream << "PopPenColor" << endl;
 }
+
 void AbstractDevice::PopPenWidth() {
 	fStream << "PopPenWidth" << endl;
 }

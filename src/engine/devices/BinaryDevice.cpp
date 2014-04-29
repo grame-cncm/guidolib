@@ -40,7 +40,18 @@ using namespace std;
 //______________________________________________________________________________
 BinaryDevice::BinaryDevice(std::ostream& outstream, BinarySystem* system) : 
 	fSystem (system),
-	fStream(outstream)
+	fStream(outstream),
+	fWidth(1000),
+	fHeight(1000),
+	fMusicFont(0),
+	fTextFont(0),
+	fOpMode(kUnknown),
+	fXScale(1),
+	fYScale(1),
+	fXOrigin(0),
+	fYOrigin(0),
+	fFontAlign(kAlignBase),
+	fDPI(0)
 {
 }
 
@@ -196,21 +207,27 @@ void	BinaryDevice::SetMusicFont( const VGFont * font )	{
   unsigned char id = 11;
   fStream.write((char *)&id, sizeof(unsigned char));
   writeFont(font);
+  //////////////////
+  fMusicFont = font;
 }
 const VGFont *	BinaryDevice::GetMusicFont() const {
   unsigned char id = 12;
   fStream.write((char *)&id, sizeof(unsigned char));
-  return 0;
+  //////////////////
+  return fMusicFont;
 }
 void			BinaryDevice::SetTextFont( const VGFont * font )	{
   unsigned char id = 13;
   fStream.write((char *)&id, sizeof(unsigned char));
   writeFont(font);
+  /////////////////
+  fTextFont = font;
 }
 const VGFont *	BinaryDevice::GetTextFont() const	{
   unsigned char id = 14;
   fStream.write((char *)&id, sizeof(unsigned char));
-  return 0;
+  /////////////////
+  return fTextFont;
 }
 
 //______________________________________________________________________________
@@ -273,11 +290,14 @@ void BinaryDevice::SetRasterOpMode( VRasterOpMode mode) {
   unsigned char id = 21;
   fStream.write((char *)&id, sizeof(unsigned char));
   writeRasterOpModeToString(mode);
+  ///////////////
+  fOpMode = mode;
 }
 VGDevice::VRasterOpMode BinaryDevice::GetRasterOpMode() const {
   unsigned char id = 22;
   fStream.write((char *)&id, sizeof(unsigned char));
-  return kUnknown;
+  ///////////////
+  return fOpMode;
 }
 
 
@@ -392,6 +412,9 @@ void BinaryDevice::SetScale( float x, float y )
   fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&x, sizeof(float));
   fStream.write((char *)&y, sizeof(float));
+  ////////////
+  fXScale = x;
+  fYScale = y;
 }
 
 void BinaryDevice::SetOrigin( float x, float y )
@@ -400,6 +423,9 @@ void BinaryDevice::SetOrigin( float x, float y )
   fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&x, sizeof(float));
   fStream.write((char *)&y, sizeof(float));
+  /////////////
+  fXOrigin = x;
+  fYOrigin = y;
 }
 
 void BinaryDevice::OffsetOrigin( float x, float y )	
@@ -427,22 +453,26 @@ void BinaryDevice::DeviceToLogical( float * x, float * y ) const {
 float BinaryDevice::GetXScale() const {
   unsigned char id = 32;
   fStream.write((char *)&id, sizeof(unsigned char));
-    return 0.0;
+  ///////////////
+  return fXScale;
 }
 float BinaryDevice::GetYScale() const {
   unsigned char id = 33;
   fStream.write((char *)&id, sizeof(unsigned char));
-    return 0.0;
+  ///////////////
+  return fYScale;
 }
 float BinaryDevice::GetXOrigin() const {
   unsigned char id = 34;
   fStream.write((char *)&id, sizeof(unsigned char));
-    return 0.0;
+  ////////////////
+  return fXOrigin;
 }
 float BinaryDevice::GetYOrigin() const {
   unsigned char id = 35;
   fStream.write((char *)&id, sizeof(unsigned char));
-    return 0.0;
+  ////////////////
+  return fYOrigin;
 }
 
 void BinaryDevice::NotifySize( int w, int h ) {
@@ -452,18 +482,23 @@ void BinaryDevice::NotifySize( int w, int h ) {
   fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&w32, sizeof(int32_t));
   fStream.write((char *)&h32, sizeof(int32_t));
+  ///////////
+  fWidth = w;
+  fHeight = h;
 }
 
 int BinaryDevice::GetWidth() const {
   unsigned char id = 37;
   fStream.write((char *)&id, sizeof(unsigned char));
-  return 0;
+  //////////////
+  return fWidth;
 }
 
 int BinaryDevice::GetHeight() const {
   unsigned char id = 38;
   fStream.write((char *)&id, sizeof(unsigned char));
-  return 0;
+  ///////////////
+  return fHeight;
 }
 
 
@@ -520,12 +555,15 @@ void	BinaryDevice::SetFontAlign( unsigned int inAlign ) {
   uint32_t inAlign32 = (uint32_t)inAlign;
   fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&inAlign32, sizeof(uint32_t));
+  /////////////////////
+  fFontAlign = inAlign;
 }
 
 unsigned int BinaryDevice::GetFontAlign() const	{
   unsigned char id = 46;
   fStream.write((char *)&id, sizeof(unsigned char));
-  return 0;
+  //////////////////
+  return fFontAlign;
 }
 
 //______________________________________________________________________________
@@ -535,12 +573,15 @@ void	BinaryDevice::SetDPITag( float inDPI ) {
   unsigned char id = 47;
   fStream.write((char *)&id, sizeof(unsigned char));
   fStream.write((char *)&inDPI, sizeof(float));
+  /////////////
+  fDPI = inDPI;
 }
 
 float BinaryDevice::GetDPITag() const	{
   unsigned char id = 48;
   fStream.write((char *)&id, sizeof(unsigned char));
-  return 0.0;
+  ////////////
+  return fDPI;
 }
 
 //______________________________________________________________________________

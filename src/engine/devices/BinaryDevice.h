@@ -41,6 +41,19 @@ class_export BinaryDevice : public VGDevice
 {
 	BinarySystem*		fSystem;
 	std::ostream&	fStream;
+    int fWidth;
+    int fHeight;
+    const VGFont * fMusicFont;
+    const VGFont * fTextFont;
+    VRasterOpMode fOpMode;
+    float fXScale;
+    float fYScale;
+    float fXOrigin;
+    float fYOrigin;
+    unsigned int fFontAlign;
+    float fDPI;
+    VGColor fFontColor;
+    VGColor fFontBackgroundColor;
 	
 	void		writeColor (const VGColor& color) const;
 	void		writeString (const char *str) const;
