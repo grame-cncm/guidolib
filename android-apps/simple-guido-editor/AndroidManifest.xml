@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.grame.simpleguidoeditor"
+    package="fr.grame.simpleguidoeditor"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -17,7 +17,7 @@
         android:theme="@style/AppTheme" >
     <!-- This is a standard Activity invocation for SimpleGuidoEditor. -->
     <activity
-        android:name="com.grame.simpleguidoeditor.SimpleGuidoEditor"
+        android:name="fr.grame.simpleguidoeditor.SimpleGuidoEditor"
         android:label="@string/app_name" >
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />

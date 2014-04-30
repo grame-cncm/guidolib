@@ -10,14 +10,14 @@
 #include <jni.h>
 
 extern "C" {
-  JNIEXPORT jint JNICALL Java_com_grame_simpleguidoeditor_SimpleGuidoEditor_init(JNIEnv *env, jclass kls);
-  JNIEXPORT jint JNICALL Java_com_grame_simpleguidoeditor_SimpleGuidoEditor_shutdown(JNIEnv *env, jclass kls);
-  JNIEXPORT jstring JNICALL Java_com_grame_simpleguidoeditor_SimpleGuidoEditor_gmntosvg(JNIEnv *env, jclass kls, jstring java_gmn);
+  JNIEXPORT jint JNICALL Java_fr_grame_simpleguidoeditor_SimpleGuidoEditor_init(JNIEnv *env, jclass kls);
+  JNIEXPORT jint JNICALL Java_fr_grame_simpleguidoeditor_SimpleGuidoEditor_shutdown(JNIEnv *env, jclass kls);
+  JNIEXPORT jstring JNICALL Java_fr_grame_simpleguidoeditor_SimpleGuidoEditor_gmntosvg(JNIEnv *env, jclass kls, jstring java_gmn);
 };
 
 JNIEXPORT
 jint JNICALL
-Java_com_grame_simpleguidoeditor_SimpleGuidoEditor_init(JNIEnv *env, jclass kls)
+Java_fr_grame_simpleguidoeditor_SimpleGuidoEditor_init(JNIEnv *env, jclass kls)
 {
    SVGSystem *sys = new SVGSystem(0, reinterpret_cast<char *>(______src_guido2_svg));
    VGDevice *dev = sys->CreateMemoryDevice(10,10);
@@ -33,7 +33,7 @@ Java_com_grame_simpleguidoeditor_SimpleGuidoEditor_init(JNIEnv *env, jclass kls)
 
 JNIEXPORT
 jint JNICALL
-Java_com_grame_simpleguidoeditor_SimpleGuidoEditor_shutdown(JNIEnv *env, jclass kls)
+Java_fr_grame_simpleguidoeditor_SimpleGuidoEditor_shutdown(JNIEnv *env, jclass kls)
 {
    //GuidoShutdown();
    return 0;
@@ -41,7 +41,7 @@ Java_com_grame_simpleguidoeditor_SimpleGuidoEditor_shutdown(JNIEnv *env, jclass 
 
 JNIEXPORT
 jstring JNICALL
-Java_com_grame_simpleguidoeditor_SimpleGuidoEditor_gmntosvg(JNIEnv *env, jclass kls, jstring java_gmn)
+Java_fr_grame_simpleguidoeditor_SimpleGuidoEditor_gmntosvg(JNIEnv *env, jclass kls, jstring java_gmn)
 {
    const char *gmn = env->GetStringUTFChars(java_gmn, NULL);
    if (NULL == gmn) {
