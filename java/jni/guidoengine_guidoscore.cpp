@@ -276,6 +276,27 @@ JNIEXPORT jstring JNICALL Java_guidoengine_guidoscore_SVGExport (JNIEnv * env, j
 
 /*
  * Class:     guidoengine_guidoscore
+ * Method:    SVGExportWithFontSpec
+ * Signature: (ILjava/lang/String;)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_guidoengine_guidoscore_SVGExportWithFontSpec (JNIEnv * env, jobject obj, jint page, jstring font, jstring fontspec)
+{
+	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
+	std::stringstream sstr;
+	GuidoErrCode err = guidoErrInvalidHandle;
+	if (gr) {
+		const char *guidofont  = env->GetStringUTFChars(font, JNI_FALSE);
+		const char *guidofontspec  = env->GetStringUTFChars(fontspec, JNI_FALSE);
+		err = GuidoSVGExportWithFontSpec(gr, page, sstr, *guidofont ? guidofont : 0, *guidofontspec ? guidofontspec : 0);
+		env->ReleaseStringUTFChars(font, guidofont);
+		if (err == guidoNoErr)
+			return env->NewStringUTF(sstr.str().c_str());
+	}
+	return env->NewStringUTF(GuidoGetErrorString(err));
+}
+
+/*
+ * Class:     guidoengine_guidoscore
  * Method:    UpdateGR
  * Signature: ()I
  */
