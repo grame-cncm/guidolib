@@ -15,13 +15,20 @@ import android.view.LayoutInflater;
 import android.widget.EditText;
 import android.webkit.WebView;
 
+import guidoengine.*;
+
 public class SimpleGuidoEditor extends TabActivity {
 
+    guidoscore m_gmnscore;
+    public boolean opened() { return m_gmnscore.fARHandler != 0; }
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         System.loadLibrary("GUIDOEngine-android");
-        init();
+        //init();
+        guido.Init("Guido2", "Times");
+        m_gmnscore = new guidoscore();
         TabHost tabHost = getTabHost();
 
         LayoutInflater.from(this).inflate(R.layout.main, tabHost.getTabContentView(), true);
@@ -76,7 +83,7 @@ public class SimpleGuidoEditor extends TabActivity {
                     }
                   }});
     }
-    public static native String gmntosvg(String java_gmn);
-    public static native int init();
-    public static native int shutdown();
+    //public static native String gmntosvg(String java_gmn);
+    //public static native int init();
+    //public static native int shutdown();
 }

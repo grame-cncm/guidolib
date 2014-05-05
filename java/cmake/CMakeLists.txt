@@ -60,7 +60,13 @@ set (SRC "${JNI_PATH}/*.cpp")				# add source files
 set (HEADERS "${JNI_PATH}/*.h")				# add header files
 set (INCL ${JNI_INCLUDE_DIRS} ${GUIDO_SRC}/include ${GUIDO_SRC}/tools)
 
-if(APPLE)
+
+if (INDEPENDENTSVG STREQUAL "yes")
+	message (STATUS "Independent SVG will be enforced and all SVG fonts must be elaborated in SVG files - Use -DINDEPENDENTSVG=no to change.")
+	add_definitions(-DINDEPENDENTSVG)
+	set (SRC ${SRC} "${JNI_PATH}/svg/*.cpp")
+	set (INCL ${INCL} "${JNI_PATH}/svg/*.h")
+elseif(APPLE)
 	set (INCL ${INCL} ${GUIDO_SRC}/include ${CMAKE_CURRENT_SOURCE_DIR}/../../macosx/src)
 	set (SRC ${SRC} "${JNI_PATH}/macos/*.cpp")
 elseif(WIN32)
@@ -78,8 +84,12 @@ elseif(UNIX)
 	set (SRC ${SRC} "${JNI_PATH}/linux/*.cpp")
 else(UNIX)
 	message (FATAL_ERROR "Unknown target platform")
-endif(APPLE)
-#endif(WIN32)
+endif()
+
+if (INDEPENDENTSVG STREQUAL "yes")
+else()
+	message (STATUS "Independent SVG will not be enforced and SVG fonts will be approximated using system fonts - Use -DINDEPENDENTSVG=yes to change.")
+endif()
 
 #######################################
 # set includes
