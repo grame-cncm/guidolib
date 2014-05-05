@@ -32,7 +32,9 @@ public class SimpleGuidoEditor extends TabActivity {
         int err = gmnscore.ParseString(gmn);
         err = gmnscore.AR2GR();
         err = gmnscore.ResizePageToMusic();
-        return gmnscore.SVGExportWithFontSpec(1, "", font);
+        String out = gmnscore.SVGExportWithFontSpec(1, "", font);
+        gmnscore.close();
+        return out;
     }
     private String getFont() {
         BufferedReader temp_br = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.guido2)));

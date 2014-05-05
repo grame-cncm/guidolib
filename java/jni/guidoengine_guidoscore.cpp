@@ -134,6 +134,7 @@ JNIEXPORT void JNICALL Java_guidoengine_guidoscore_Init (JNIEnv * env, jclass cl
 	if (!getID (env, cls, gARHandlerID, "fARHandler", "J")) return;
 	if (!getID (env, cls, gGRHandlerID, "fGRHandler", "J")) return;
 
+# ifndef android
 	jclass 	colorClass = env->FindClass("java/awt/Color");
 	if (colorClass == NULL) 
  		fprintf(stderr, "Java_guidoengine_guidoscore_Init got NULL color class\n");
@@ -143,6 +144,7 @@ JNIEXPORT void JNICALL Java_guidoengine_guidoscore_Init (JNIEnv * env, jclass cl
 			fprintf(stderr, "JavaTimeMapCollector::Time2TimeMap got NULL jmethodID\n");
 		env->DeleteLocalRef(colorClass);		
 	}
+# endif
 }
 
 /*
