@@ -5,7 +5,7 @@ LOCAL_PATH := $(call my-dir)
 
 # then, we link to the premade lib GUIDO-engine
 # make sure to make this via nkd-build in the guido-engine-android folder
-# also, make sure to change x86 to armeabi if you are using an armeabi architecture
+# also, make sure to change x86 to armeabi if you are using an armeabi architecture or vice versa
 include $(CLEAR_VARS)
 LOCAL_MODULE := GUIDOEngine-prebuilt
 LOCAL_SRC_FILES := ../../guido-engine-android/obj/local/armeabi/libGUIDOEngine.a
