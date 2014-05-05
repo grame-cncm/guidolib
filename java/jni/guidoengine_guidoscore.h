@@ -71,6 +71,14 @@ JNIEXPORT jstring JNICALL Java_guidoengine_guidoscore_SVGExport
 
 /*
  * Class:     guidoengine_guidoscore
+ * Method:    SVGExportWithFontSpec
+ * Signature: (ILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_guidoengine_guidoscore_SVGExportWithFontSpec
+  (JNIEnv *, jobject, jint, jstring, jstring);
+
+/*
+ * Class:     guidoengine_guidoscore
  * Method:    UpdateGR
  * Signature: ()I
  */

@@ -558,7 +558,7 @@ GUIDOAPI(GuidoErrCode) GuidoOnDraw( GuidoOnDrawDesc * desc )
 	desc->hdc->EndDraw(); // must be called even if BeginDraw has failed.
 	return result;
 }
-
+#ifndef INDEPENDENTSVG
 // --------------------------------------------------------------------------
 //		- Score export to an abstract graphical representation -
 // --------------------------------------------------------------------------
@@ -610,6 +610,7 @@ GUIDOAPI(GuidoErrCode) 	GuidoBinaryExport( const GRHandler handle, int page, std
         dev.SelectPenColor(VGColor(0,0,0));
         return GuidoOnDraw (&desc);
 }
+#endif
 
 // --------------------------------------------------------------------------
 //		- Score export to svg -

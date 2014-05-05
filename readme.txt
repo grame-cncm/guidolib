@@ -51,6 +51,18 @@ Note for Android:
       export PATH=$PATH:$PATH_TO_SDK/platform-tools
       export PATH=$PATH:$PATH_TO_STANDALONE_TOOLCHAIN/bin
 
+    The GUIDO android applications use the guidoengine java package
+    called guidoengine.jar.
+
+    To compile this, go to the java directory and do:
+
+    make headers
+    make class
+    make jar
+
+    The jar is simlinked into all the android sample projects that need it
+    under the libs/ directory.
+
     From the directory android-apps/guido-engine-android, run
 
       ndk-build
