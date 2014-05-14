@@ -1,0 +1,27 @@
+% glissando.gmn
+
+% \glissando-tag is used to create glissandi between notes.
+
+% Usage : \glissando( notes {chords}...)
+%
+% Parameters :
+%       - color
+%       - size
+%       - dx1/dy1/dx2/dy2 : modify position of begin and end points of the glissando
+%       - fill : set as "true" it fills the space between two glissandi of the same chord or cluster
+%       - thickness
+%       - lineStyle (not implemented yet) : set as "wavy", it draws a wavy line instead of a straight line
+
+{
+[\meter<"2/4">
+\glissando(b a) 
+\glissando<color="green", thickness=1>(e g# d& d d# b c)
+\glissando<fill="true">({b, e} {a/2, f} {g/4, c2} {e1, b, c} {g, c2, f}) 
+\glissando<fill="true", dx1=-2, dx2=2, thickness=2>({c1, g} {g, b} {e, f2})
+\noteFormat<size=1.5, dx=2> 
+\glissando(e1 g 
+\noteFormat<dy=2> f b 
+\noteFormat e/2)
+],
+[\staff<1> empty \glissando(e a)]
+}

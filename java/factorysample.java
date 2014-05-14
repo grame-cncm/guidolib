@@ -38,6 +38,13 @@ public class factorysample extends Canvas
 		f.CloseEvent();
 	}
 
+	public void addRest(guidofactory f, int n, int d, int dots) {
+		f.OpenEvent("_");
+		f.SetDuration(n, d);
+		f.SetEventDots(dots);
+		f.CloseEvent();
+	}
+
 	public void addTag(guidofactory f, String name) {
 		f.OpenTag (name, 0);
 		f.CloseTag();
@@ -75,6 +82,7 @@ public class factorysample extends Canvas
 		addEvent(f, "g", 1, 4, 0, 1, 0);
 		addEvent(f, "f", 1, 4, 1, 1, 1);
 		addEvent(f, "c", 1, 8, 0, 2, 0);
+		addRest(f, 1, 4, 0);
 		f.EndTag();
 		f.CloseVoice();
 

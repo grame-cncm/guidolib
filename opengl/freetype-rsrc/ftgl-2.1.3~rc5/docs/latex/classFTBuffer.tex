@@ -1,0 +1,188 @@
+\section{FTBuffer Class Reference}
+\label{classFTBuffer}\index{FTBuffer@{FTBuffer}}
+
+
+\doxyref{FTBuffer}{p.}{classFTBuffer} is a helper class for pixel buffers.  
+
+
+
+
+{\ttfamily \#include $<$FTBuffer.h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\bf FTBuffer} ()
+\begin{DoxyCompactList}\small\item\em Default constructor. \item\end{DoxyCompactList}\item 
+{\bf $\sim$FTBuffer} ()
+\begin{DoxyCompactList}\small\item\em Destructor. \item\end{DoxyCompactList}\item 
+{\bf FTPoint} {\bf Pos} () const 
+\begin{DoxyCompactList}\small\item\em Get the pen's position in the buffer. \item\end{DoxyCompactList}\item 
+void {\bf Pos} ({\bf FTPoint} arg)
+\begin{DoxyCompactList}\small\item\em Set the pen's position in the buffer. \item\end{DoxyCompactList}\item 
+void {\bf Size} (int w, int h)
+\begin{DoxyCompactList}\small\item\em Set the buffer's size. \item\end{DoxyCompactList}\item 
+int {\bf Width} () const 
+\begin{DoxyCompactList}\small\item\em Get the buffer's width. \item\end{DoxyCompactList}\item 
+int {\bf Height} () const 
+\begin{DoxyCompactList}\small\item\em Get the buffer's height. \item\end{DoxyCompactList}\item 
+unsigned char $\ast$ {\bf Pixels} () const 
+\begin{DoxyCompactList}\small\item\em Get the buffer's direct pixel buffer. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\doxyref{FTBuffer}{p.}{classFTBuffer} is a helper class for pixel buffers. It provides the interface between \doxyref{FTBufferFont}{p.}{classFTBufferFont} and \doxyref{FTBufferGlyph}{p.}{classFTBufferGlyph} to optimise rendering operations.
+
+\begin{DoxySeeAlso}{See also}
+\doxyref{FTBufferGlyph}{p.}{classFTBufferGlyph} 
+
+\doxyref{FTBufferFont}{p.}{classFTBufferFont} 
+\end{DoxySeeAlso}
+
+
+Definition at line 45 of file FTBuffer.h.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{FTBuffer@{FTBuffer}!FTBuffer@{FTBuffer}}
+\index{FTBuffer@{FTBuffer}!FTBuffer@{FTBuffer}}
+\subsubsection[{FTBuffer}]{\setlength{\rightskip}{0pt plus 5cm}FTBuffer::FTBuffer (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classFTBuffer_a424fd4161942b61338e72dbe5c4ff74a}
+
+
+Default constructor. 
+
+\index{FTBuffer@{FTBuffer}!$\sim$FTBuffer@{$\sim$FTBuffer}}
+\index{$\sim$FTBuffer@{$\sim$FTBuffer}!FTBuffer@{FTBuffer}}
+\subsubsection[{$\sim$FTBuffer}]{\setlength{\rightskip}{0pt plus 5cm}FTBuffer::$\sim$FTBuffer (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classFTBuffer_a26cbf457816ec8ea07cbc207c10281c6}
+
+
+Destructor. 
+
+
+
+\subsection{Member Function Documentation}
+\index{FTBuffer@{FTBuffer}!Height@{Height}}
+\index{Height@{Height}!FTBuffer@{FTBuffer}}
+\subsubsection[{Height}]{\setlength{\rightskip}{0pt plus 5cm}int FTBuffer::Height (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  [inline]}}\label{classFTBuffer_a97c058c883b1b6d25242964a025faf0f}
+
+
+Get the buffer's height. 
+
+\begin{DoxyReturn}{Returns}
+The buffer's height, in pixels. 
+\end{DoxyReturn}
+
+
+Definition at line 98 of file FTBuffer.h.
+
+\index{FTBuffer@{FTBuffer}!Pixels@{Pixels}}
+\index{Pixels@{Pixels}!FTBuffer@{FTBuffer}}
+\subsubsection[{Pixels}]{\setlength{\rightskip}{0pt plus 5cm}unsigned char$\ast$ FTBuffer::Pixels (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  [inline]}}\label{classFTBuffer_a394321c98ce6bc4f016337cb1e9237fb}
+
+
+Get the buffer's direct pixel buffer. 
+
+\begin{DoxyReturn}{Returns}
+A read-\/write pointer to the buffer's pixels. 
+\end{DoxyReturn}
+
+
+Definition at line 105 of file FTBuffer.h.
+
+\index{FTBuffer@{FTBuffer}!Pos@{Pos}}
+\index{Pos@{Pos}!FTBuffer@{FTBuffer}}
+\subsubsection[{Pos}]{\setlength{\rightskip}{0pt plus 5cm}void FTBuffer::Pos (
+\begin{DoxyParamCaption}
+\item[{{\bf FTPoint}}]{ arg}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  [inline]}}\label{classFTBuffer_a97ae51522466bfa08a719f439e0059a0}
+
+
+Set the pen's position in the buffer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em arg} & An \doxyref{FTPoint}{p.}{classFTPoint} object with the desired pen's position. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 73 of file FTBuffer.h.
+
+\index{FTBuffer@{FTBuffer}!Pos@{Pos}}
+\index{Pos@{Pos}!FTBuffer@{FTBuffer}}
+\subsubsection[{Pos}]{\setlength{\rightskip}{0pt plus 5cm}{\bf FTPoint} FTBuffer::Pos (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  [inline]}}\label{classFTBuffer_a5b5dedc85576f519bd804bb0e8a6b8a0}
+
+
+Get the pen's position in the buffer. 
+
+\begin{DoxyReturn}{Returns}
+The pen's position as an \doxyref{FTPoint}{p.}{classFTPoint} object. 
+\end{DoxyReturn}
+
+
+Definition at line 63 of file FTBuffer.h.
+
+\index{FTBuffer@{FTBuffer}!Size@{Size}}
+\index{Size@{Size}!FTBuffer@{FTBuffer}}
+\subsubsection[{Size}]{\setlength{\rightskip}{0pt plus 5cm}void FTBuffer::Size (
+\begin{DoxyParamCaption}
+\item[{int}]{ w, }
+\item[{int}]{ h}
+\end{DoxyParamCaption}
+)}\label{classFTBuffer_a8b37679226ffbaa187236d7c371efcec}
+
+
+Set the buffer's size. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em w} & The buffer's desired width, in pixels. \\
+\hline
+{\em h} & The buffer's desired height, in pixels. \\
+\hline
+\end{DoxyParams}
+\index{FTBuffer@{FTBuffer}!Width@{Width}}
+\index{Width@{Width}!FTBuffer@{FTBuffer}}
+\subsubsection[{Width}]{\setlength{\rightskip}{0pt plus 5cm}int FTBuffer::Width (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  [inline]}}\label{classFTBuffer_a19cfff5527c3e04ec59f0cfa295d6abe}
+
+
+Get the buffer's width. 
+
+\begin{DoxyReturn}{Returns}
+The buffer's width, in pixels. 
+\end{DoxyReturn}
+
+
+Definition at line 91 of file FTBuffer.h.
+
+
+
+The documentation for this class was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+{\bf FTBuffer.h}\end{DoxyCompactItemize}

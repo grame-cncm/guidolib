@@ -1,0 +1,14 @@
+{ 
+[   
+   \barFormat<style="system"> 
+   \meter<"2/4"> 
+   c d  
+   \repeatEnd 
+   \repeatBegin 
+   { e/2 , g }
+   \repeatEnd 
+   \repeatBegin
+   d/4 e  
+   \repeatEnd 
+]
+}

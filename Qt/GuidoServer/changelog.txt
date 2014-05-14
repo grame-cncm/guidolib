@@ -1,6 +1,0 @@
-====================================
- guidohttpserver - change log
-====================================
-  
-version 0.50
-	- first version

@@ -21,9 +21,23 @@
 
 */
 
+#include "../JuceLibraryCode/JuceHeader.h"
+#include "GuidoComponent.h"
+#include "juce_guido2img.h"
+
 namespace guidohttpd {
 
-void startEngine (int argc, char **argv) {
+guido2img* makeConverter(std::string svgfontfile) {
+  juce_guido2img *converter = new juce_guido2img(svgfontfile);
+  return converter;
+}
+
+GuidoErrCode startEngine () {
+    GuidoComponent::GuidoInit();
+    return guidoNoErr;
+}
+
+void makeApplication (int argc, char **argv) {
 }
 
 void stopEngine () {

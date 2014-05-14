@@ -4,7 +4,7 @@ MIDI rendering
 .. index::
   single: midi
 
-MIDI file export is available from the ``midi`` path and may use optional export parameters. 
+MIDI file export is available from the ``ar2midifile`` path and may use optional export parameters. 
 
 .. toctree::
    :maxdepth: 1
@@ -12,7 +12,7 @@ MIDI file export is available from the ``midi`` path and may use optional export
    params/midi
 
 **Path**
-	*ScoreID*/``midi``
+	*ScoreID*/``ar2midifile``
 
 **Response body**
 	* in case of success: 
@@ -36,4 +36,9 @@ Example
 
 Using jQuery::
 
-	$.get('http://guido.server.org/XXX/midi');
+	$.get('http://guido.server.org/XXX/ar2midifile');
+
+Internals
+^^^^^^^^^^^
+
+The ``ar2midifile`` request corresponds to the ``GuidoAR2MIDIFile`` C/C++ API.

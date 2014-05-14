@@ -1,0 +1,14 @@
+% \marcato-Tag
+%
+% The \marcato-Tag can be used to place a marcato on a note.
+% Parameters:
+%     - position  		 defines the marcato position. Can be "above" or "below".
+%                                By default, marcato places itself automatically.
+%     - dx / dy  			 defines the horizontal / vertical marcato's offset
+%
+[
+    \marcato(b)
+    \marcato(a)
+    \marcato<position="above", dy=4>(a)
+    \marcato<"below", dx=3, dy=-4>(b)
+]

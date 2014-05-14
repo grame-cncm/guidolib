@@ -1,0 +1,15 @@
+{
+[
+  \text<"the \alter tag provides quarter tones notation", dx=-5hs, dy=14hs>(
+  a&&/1 \alter<detune=-1.5> (a)  \alter<detune=-1> (a)  \alter<detune=-0.5> (a)  
+  a  \alter<detune=0.5> (a) \alter<detune=1> (a) \alter<detune=1.5> (a) \alter<detune=1.8> (a)
+   )
+],
+[
+  \text<"note that it alters existing note state", dx=-5hs, dy=14hs>(
+ \text<"detune is rounded to the nearest quarter tone", dx=-5hs, dy=-2hs>( 
+ a&&/1 \alter<detune=-0.5> (a&) a&   \alter<detune=-0.5> (a)
+  a  \alter<detune=0.5> (a) \alter<detune=1> (a) \alter<detune=0.5> (a#) \alter<detune=1.8> (a)
+   ))
+]
+}

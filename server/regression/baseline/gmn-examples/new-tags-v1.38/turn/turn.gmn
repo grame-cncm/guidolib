@@ -1,0 +1,12 @@
+% Release 1.3.8
+% turn.gmn
+{
+% The regular turn ; the accidental can be moved with adx et ady
+[\turn({g, a, g} {g, f, g} {g, a&}) \turn<dy=1.5,  ady=-5.5, adx=0.3>({g2, a&}) ],
+
+% the "complex" turn
+[\turn<dy=-1>({g/2, g, f} {g/4, g, a&})],
+
+% The cautionary accidentals can be shown with "cautionary"
+[\key<3> \turn<"cautionary">({c, d} {e, f#}) ]
+}

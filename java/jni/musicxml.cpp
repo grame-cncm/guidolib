@@ -25,6 +25,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <string.h>
 
 #ifdef WIN32
 # define UNICODE

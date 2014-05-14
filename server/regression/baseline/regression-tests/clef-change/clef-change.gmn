@@ -1,0 +1,10 @@
+%
+% - clef change bug correction: key signature was lost after a key change
+% - a clef change resets the current accident (as described in Gould "Behind bars" p.78)
+% 
+[
+	\clef<g> \key<2>  
+	g c c b0 a#  a#
+	\clef<"f"> f# a#
+	| a& \clef<g> a&  
+]

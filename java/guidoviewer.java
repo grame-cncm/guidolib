@@ -27,10 +27,14 @@
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.*;
 import java.awt.print.*;
+import java.awt.geom.*;
 import java.io.*;
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.imageio.*;
+import com.sun.image.codec.jpeg.ImageFormatException;
 import guidoengine.*;
 
 //--------------------------------------------------------------------
@@ -177,6 +181,20 @@ class scorePanel extends Canvas implements Printable {
 		repaint();							// and trigger the paint function
 	}
 
+
+	public void saveAsPNG(File file) throws ImageFormatException, IOException {
+
+       int screenDpi = Toolkit.getDefaultToolkit().getScreenResolution();
+       float w = guido.Inches2Unit(getWidth() / screenDpi);
+       float h = guido.Inches2Unit(getHeight() / screenDpi);
+       BufferedImage bi = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
+       Graphics2D g2d = bi.createGraphics();
+       g2d.fill(new Rectangle2D.Float(0, 0, getWidth(), getHeight()));
+       m_gmnscore.Draw(g2d, getWidth(), getHeight(), new guidodrawdesc(getWidth(), getHeight()), new guidopaint());
+       g2d.dispose();
+       ImageIO.write(bi, "png", file);
+   }
+   
 	//--------------------------------------------------------------------
 	// draw the score
 	public void paint(Graphics g) {
@@ -234,6 +252,7 @@ class guidoviewerGUI extends JFrame {
     MenuItem m_openItem = new MenuItem("Open");	// create new menu item
     MenuItem m_midiexportItem = new MenuItem("Export to MIDI file");	// create new menu item
     MenuItem m_svgexportItem = new MenuItem("Export to SVG");	// create new menu item
+    MenuItem m_pngexportItem = new MenuItem("Export to PNG");	// create new menu item
     MenuItem m_printItem = new MenuItem("Print");	// create new menu item
     MenuItem m_quitItem = new MenuItem("Quit");	// another menu item
 
@@ -258,6 +277,7 @@ class guidoviewerGUI extends JFrame {
         m_openItem.setShortcut(new MenuShortcut('O'));
         m_midiexportItem.addActionListener(new MidiExportAction(this));
         m_svgexportItem.addActionListener(new SVGExportAction(this));
+        m_pngexportItem.addActionListener(new PNGExportAction(this));
         m_printItem.addActionListener(new PrintAction(m_score));
         m_quitItem.addActionListener(new QuitAction());
  		//... Add listeners to map menu items
@@ -277,6 +297,7 @@ class guidoviewerGUI extends JFrame {
         //... disable some items
 		m_midiexportItem.setEnabled (false);
         m_svgexportItem.setEnabled (false);
+		m_pngexportItem.setEnabled (false);
         m_printItem.setEnabled (false);
         m_mapMenu.setEnabled (false);
         m_miscMenu.setEnabled (false);
@@ -287,6 +308,7 @@ class guidoviewerGUI extends JFrame {
 		m_fileMenu.add(m_openItem);			// add the menu item to the menu
 		m_fileMenu.add(m_midiexportItem);
 		m_fileMenu.add(m_svgexportItem);
+		m_fileMenu.add(m_pngexportItem);
 		m_fileMenu.add(m_printItem);
 		m_fileMenu.addSeparator();			// add separator line to menu
 		m_fileMenu.add(m_quitItem);
@@ -351,6 +373,7 @@ class guidoviewerGUI extends JFrame {
  		m_score.setGMN(file.getPath(), false); 
 		m_midiexportItem.setEnabled (true);
         m_svgexportItem.setEnabled (true);
+		m_pngexportItem.setEnabled (true);
         m_printItem.setEnabled (true);
 		m_mapMenu.setEnabled (true);
         m_miscMenu.setEnabled (true);
@@ -434,6 +457,24 @@ class guidoviewerGUI extends JFrame {
 					String svg = m_viewer.score().SVGExport (1, "");
 					w.write ( svg);
 					w.flush ();
+				}
+				catch (IOException x) {
+					System.err.println("writing to file " + chooser.getSelectedFile().getPath() + " failed");
+				}
+			}
+    	}
+    }
+
+	//--------------------------------------------------------------------
+	//// SVG export
+	class PNGExportAction implements ActionListener  {
+		guidoviewerGUI m_viewer;
+        public PNGExportAction (guidoviewerGUI viewer)	{ m_viewer = viewer; }
+		public void actionPerformed(ActionEvent e) {
+			JFileChooser chooser = new JFileChooser();
+    		if(m_viewer.m_score.opened() && (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION)) {
+				try {
+					m_viewer.m_score.saveAsPNG(chooser.getSelectedFile());
 				}
 				catch (IOException x) {
 					System.err.println("writing to file " + chooser.getSelectedFile().getPath() + " failed");

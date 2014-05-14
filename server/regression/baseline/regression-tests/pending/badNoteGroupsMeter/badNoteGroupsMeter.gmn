@@ -1,0 +1,4 @@
+% Notes should be grouped by 2 since meter is 2+2+2
+[
+    \meter<"2+2+2/8"> c/8 c c c c c
+]

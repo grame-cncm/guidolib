@@ -1,0 +1,5 @@
+{
+	[ \text<"accidentals should be repeated at octave change", fsize=2.5, dy=14hs, dx=-20hs>(e& e&2 e e1) ],
+	[ \staff<2>\stemsUp  g0  g#0  f0  g0 ],
+	[ \staff<2>\stemsDown  \text<"including for different voices", fsize=2.5, dy=-10hs, dx=-5hs>(d#-1  g#-1  a#-1  d#-1) ]
+}

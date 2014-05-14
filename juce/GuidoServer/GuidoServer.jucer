@@ -1,57 +1,110 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="yKLG22" name="GuidoServer" projectType="consoleapp" version="1.0.0"
-              bundleIdentifier="com.grame.GuidoServer" jucerVersion="3.0.0"
-              defines="">
-  <EXPORTFORMATS>
-    <XCODE_MAC targetFolder="Builds/MacOSX" objCExtraSuffix="QI1Enl" juceFolder="../../JuceLibraryCode"
-               extraCompilerFlags="-I../../../../src/include" extraLinkerFlags="-F../../../../cmake  -framework GUIDOEngine">
-      <CONFIGURATIONS>
-        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="GuidoServer"
-                       osxSDK="default" osxCompatibility="default" osxArchitecture="default"/>
-        <CONFIGURATION name="Release" isDebug="0" optimisation="2" targetName="GuidoServer"
-                       osxSDK="default" osxCompatibility="default" osxArchitecture="default"/>
-      </CONFIGURATIONS>
-    </XCODE_MAC>
-  </EXPORTFORMATS>
-  <MAINGROUP id="gigIFR" name="GuidoServer">
-    <GROUP id="{AED83729-06B5-9655-0381-AD5638653EE3}" name="Source">
-      <FILE id="gcjDC7" name="guido2img.cpp" compile="1" resource="0" file="Source/guido2img.cpp"/>
-      <FILE id="fnaUVK" name="guido2img.h" compile="0" resource="0" file="Source/guido2img.h"/>
-      <FILE id="kJuVba" name="GuidoComponent.cpp" compile="1" resource="0"
-            file="../Device/GuidoComponent.cpp"/>
-      <FILE id="vVBu2V" name="GuidoComponent.h" compile="0" resource="0"
-            file="../Device/GuidoComponent.h"/>
-      <FILE id="K5XU86" name="JuceDevice.cpp" compile="1" resource="0" file="../Device/JuceDevice.cpp"/>
-      <FILE id="cjLpqp" name="JuceDevice.h" compile="0" resource="0" file="../Device/JuceDevice.h"/>
-      <FILE id="xvmC3n" name="JuceFont.cpp" compile="1" resource="0" file="../Device/JuceFont.cpp"/>
-      <FILE id="bPsX6a" name="JuceFont.h" compile="0" resource="0" file="../Device/JuceFont.h"/>
-      <FILE id="zkc6xE" name="JuceSystem.cpp" compile="1" resource="0" file="../Device/JuceSystem.cpp"/>
-      <FILE id="Kki31F" name="JuceSystem.h" compile="0" resource="0" file="../Device/JuceSystem.h"/>
-      <FILE id="OYlOMp" name="guidosession.cpp" compile="1" resource="0"
+<JUCERPROJECT id="GUc1gH" name="GuidoServer" projectType="consoleapp" version="1.0.0"
+              bundleIdentifier="com.yourcompany.GuidoServer" includeBinaryInAppConfig="1"
+              jucerVersion="3.1.0">
+  <MAINGROUP id="VYBBw4" name="GuidoServer">
+    <GROUP id="{0CAA9048-9F5D-D0B5-4348-4BBE518378F0}" name="Source">
+      <FILE id="EP72nU" name="engine.h" compile="0" resource="0" file="../../server/engine.h"/>
+      <FILE id="Zu1UPM" name="guido2img.h" compile="0" resource="0" file="../../server/guido2img.h"/>
+      <FILE id="kRzhDa" name="guidosession.cpp" compile="1" resource="0"
             file="../../server/guidosession.cpp"/>
-      <FILE id="b4qAc8" name="guidosession.h" compile="0" resource="0" file="../../server/guidosession.h"/>
-      <FILE id="h9GGeq" name="guidouser.cpp" compile="1" resource="0" file="../../server/guidouser.cpp"/>
-      <FILE id="K1Nvnn" name="guidouser.h" compile="0" resource="0" file="../../server/guidouser.h"/>
-      <FILE id="i64sEu" name="HTTPDServer.cpp" compile="1" resource="0" file="../../server/HTTPDServer.cpp"/>
-      <FILE id="LCGuEB" name="HTTPDServer.h" compile="0" resource="0" file="../../server/HTTPDServer.h"/>
-      <FILE id="bNplQb" name="json.c" compile="1" resource="0" file="../../server/json.c"/>
-      <FILE id="yUKIrQ" name="json.h" compile="0" resource="0" file="../../server/json.h"/>
-      <FILE id="qJzval" name="jsonhelper.cpp" compile="1" resource="0" file="../../server/jsonhelper.cpp"/>
-      <FILE id="LVa9gP" name="jsonhelper.h" compile="0" resource="0" file="../../server/jsonhelper.h"/>
-      <FILE id="Srv9Yq" name="main.cpp" compile="1" resource="0" file="../../server/main.cpp"/>
-      <FILE id="x4VYh4" name="utilities.cpp" compile="1" resource="0" file="../../server/utilities.cpp"/>
-      <FILE id="wIsG5g" name="utilities.h" compile="0" resource="0" file="../../server/utilities.h"/>
-      <FILE id="WJkezM" name="engine.cpp" compile="1" resource="0" file="Source/engine.cpp"/>
-      <FILE id="YwaDDR" name="engine.h" compile="0" resource="0" file="Source/engine.h"/>
+      <FILE id="Ovcds4" name="guidosession.h" compile="0" resource="0" file="../../server/guidosession.h"/>
+      <FILE id="DZWCMp" name="main.cpp" compile="1" resource="0" file="../../server/main.cpp"/>
+      <FILE id="ZOlN04" name="profport.c" compile="1" resource="0" file="../../server/profport.c"/>
+      <FILE id="YnIqPC" name="profport.h" compile="0" resource="0" file="../../server/profport.h"/>
+      <FILE id="FAHdfK" name="juce_guido2img.cpp" compile="1" resource="0"
+            file="Source/juce_guido2img.cpp"/>
+      <FILE id="IxA37k" name="juce_guido2img.h" compile="0" resource="0"
+            file="Source/juce_guido2img.h"/>
+      <FILE id="sMmsEv" name="server.cpp" compile="1" resource="0" file="../../server/server.cpp"/>
+      <FILE id="WrrhTs" name="server.h" compile="0" resource="0" file="../../server/server.h"/>
+      <FILE id="tz2oaX" name="export.h" compile="0" resource="0" file="../../server/json/export.h"/>
+      <FILE id="x3j5Cx" name="json_array.cpp" compile="1" resource="0" file="../../server/json/json_array.cpp"/>
+      <FILE id="pya2KP" name="GuidoComponent.cpp" compile="1" resource="0"
+            file="../Device/GuidoComponent.cpp"/>
+      <FILE id="UDyKL6" name="GuidoComponent.h" compile="0" resource="0"
+            file="../Device/GuidoComponent.h"/>
+      <FILE id="hTFQgL" name="JuceDevice.cpp" compile="1" resource="0" file="../Device/JuceDevice.cpp"/>
+      <FILE id="D3XYV1" name="JuceDevice.h" compile="0" resource="0" file="../Device/JuceDevice.h"/>
+      <FILE id="aPXWPk" name="JuceFont.cpp" compile="1" resource="0" file="../Device/JuceFont.cpp"/>
+      <FILE id="cmVSdt" name="JuceFont.h" compile="0" resource="0" file="../Device/JuceFont.h"/>
+      <FILE id="t6RAA4" name="JuceSystem.cpp" compile="1" resource="0" file="../Device/JuceSystem.cpp"/>
+      <FILE id="LZ6XpB" name="JuceSystem.h" compile="0" resource="0" file="../Device/JuceSystem.h"/>
+      <FILE id="IWDYVX" name="json_array.h" compile="0" resource="0" file="../../server/json/json_array.h"/>
+      <FILE id="vDXxs0" name="json_element.h" compile="0" resource="0" file="../../server/json/json_element.h"/>
+      <FILE id="TITyzu" name="json_object.cpp" compile="1" resource="0" file="../../server/json/json_object.cpp"/>
+      <FILE id="SsK2v5" name="json_object.h" compile="0" resource="0" file="../../server/json/json_object.h"/>
+      <FILE id="d3SdPY" name="json_parser.cpp" compile="1" resource="0" file="../../server/json/json_parser.cpp"/>
+      <FILE id="MVao4e" name="json_parser.h" compile="0" resource="0" file="../../server/json/json_parser.h"/>
+      <FILE id="QauZ59" name="json_stream.cpp" compile="1" resource="0" file="../../server/json/json_stream.cpp"/>
+      <FILE id="YdBgo5" name="json_stream.h" compile="0" resource="0" file="../../server/json/json_stream.h"/>
+      <FILE id="VpwKJt" name="json_value.cpp" compile="1" resource="0" file="../../server/json/json_value.cpp"/>
+      <FILE id="FRgxxi" name="json_value.h" compile="0" resource="0" file="../../server/json/json_value.h"/>
+      <FILE id="WJEc9C" name="json2osc.cpp" compile="1" resource="0" file="../../server/json/json2osc.cpp"/>
+      <FILE id="jCEhUa" name="json2osc.h" compile="0" resource="0" file="../../server/json/json2osc.h"/>
+      <FILE id="kKDF9o" name="jsonlex.cpp" compile="1" resource="0" file="../../server/json/jsonlex.cpp"/>
+      <FILE id="D0Uioo" name="jsonparse.cpp" compile="1" resource="0" file="../../server/json/jsonparse.cpp"/>
+      <FILE id="R9peV4" name="jsonparse.hpp" compile="0" resource="0" file="../../server/json/jsonparse.hpp"/>
+      <FILE id="mnkgEy" name="tinydir.h" compile="0" resource="0" file="../../server/tinydir.h"/>
+      <FILE id="zf0XmP" name="utilities.cpp" compile="1" resource="0" file="../../server/utilities.cpp"/>
+      <FILE id="sygZCN" name="utilities.h" compile="0" resource="0" file="../../server/utilities.h"/>
+      <FILE id="cGthIj" name="engine.cpp" compile="1" resource="0" file="Source/engine.cpp"/>
     </GROUP>
   </MAINGROUP>
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX" extraLinkerFlags="-L/usr/local/include -lmicrohttpd -F../../../../build/MacOS/Debug  -framework GUIDOEngine"
+               extraCompilerFlags="-I../../../../src/include -DJSON_ONLY -I/usr/local/include">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" osxSDK="default" osxCompatibility="default" osxArchitecture="default"
+                       isDebug="1" optimisation="1" targetName="GuidoServer" linkTimeOptimisation="0"
+                       cppLibType=""/>
+        <CONFIGURATION name="Release" osxSDK="default" osxCompatibility="default" osxArchitecture="default"
+                       isDebug="0" optimisation="2" targetName="GuidoServer" cppLibType=""/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_core" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_video" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../JUCE/modules"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+    <LINUX_MAKE targetFolder="Builds/Linux" extraCompilerFlags="-I../../../../server&#10;-I../../../../server/json&#10;-I../../../../src/include -DJSON_ONLY -I/usr/local/include"
+                extraLinkerFlags="-L/usr/local/include -lmicrohttpd -l../../../../build/unix  -lGUIDOEngine">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/" isDebug="1" optimisation="1"
+                       targetName="GuidoServer"/>
+        <CONFIGURATION name="Release" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="2"
+                       targetName="GuidoServer"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_video" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../../JUCE/modules"/>
+      </MODULEPATHS>
+    </LINUX_MAKE>
+  </EXPORTFORMATS>
   <MODULES>
-    <MODULE id="juce_core" showAllCode="1" useLocalCopy="1"/>
-    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="1"/>
-    <MODULE id="juce_gui_audio" showAllCode="1" useLocalCopy="1"/>
-    <MODULE id="juce_events" showAllCode="1" useLocalCopy="1"/>
-    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_core" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_cryptography" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_data_structures" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_events" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_graphics" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_gui_basics" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_gui_extra" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_opengl" showAllCode="1" useLocalCopy="1"/>
+    <MODULES id="juce_video" showAllCode="1" useLocalCopy="1"/>
   </MODULES>
   <JUCEOPTIONS/>
 </JUCERPROJECT>

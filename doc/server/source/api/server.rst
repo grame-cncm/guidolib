@@ -1,5 +1,5 @@
 Getting GUIDO Server information
-----------------------------
+--------------------------------
 
 .. index::
   single: server

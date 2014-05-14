@@ -1,0 +1,547 @@
+\section{FTPoint Class Reference}
+\label{classFTPoint}\index{FTPoint@{FTPoint}}
+
+
+\doxyref{FTPoint}{p.}{classFTPoint} class is a basic 3-\/dimensional point or vector.  
+
+
+
+
+{\ttfamily \#include $<$FTPoint.h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\bf FTPoint} ()
+\begin{DoxyCompactList}\small\item\em Default constructor. \item\end{DoxyCompactList}\item 
+{\bf FTPoint} (const {\bf FTGL\_\-DOUBLE} x, const {\bf FTGL\_\-DOUBLE} y, const {\bf FTGL\_\-DOUBLE} z=0)
+\begin{DoxyCompactList}\small\item\em Constructor. \item\end{DoxyCompactList}\item 
+{\bf FTPoint} (const FT\_\-Vector \&ft\_\-vector)
+\begin{DoxyCompactList}\small\item\em Constructor. \item\end{DoxyCompactList}\item 
+{\bf FTPoint} {\bf Normalise} ()
+\begin{DoxyCompactList}\small\item\em Normalise a point's coordinates. \item\end{DoxyCompactList}\item 
+{\bf FTPoint} \& {\bf operator+=} (const {\bf FTPoint} \&point)
+\begin{DoxyCompactList}\small\item\em Operator += In Place Addition. \item\end{DoxyCompactList}\item 
+{\bf FTPoint} {\bf operator+} (const {\bf FTPoint} \&point) const 
+\begin{DoxyCompactList}\small\item\em Operator +. \item\end{DoxyCompactList}\item 
+{\bf FTPoint} \& {\bf operator-\/=} (const {\bf FTPoint} \&point)
+\begin{DoxyCompactList}\small\item\em Operator -\/= In Place Substraction. \item\end{DoxyCompactList}\item 
+{\bf FTPoint} {\bf operator-\/} (const {\bf FTPoint} \&point) const 
+\begin{DoxyCompactList}\small\item\em Operator -\/. \item\end{DoxyCompactList}\item 
+{\bf FTPoint} {\bf operator$\ast$} (double multiplier) const 
+\begin{DoxyCompactList}\small\item\em Operator $\ast$ Scalar multiplication. \item\end{DoxyCompactList}\item 
+{\bf FTPoint} {\bf operator$^\wedge$} (const {\bf FTPoint} \&point)
+\begin{DoxyCompactList}\small\item\em Operator $^\wedge$ Vector product. \item\end{DoxyCompactList}\item 
+{\bf operator const FTGL\_\-DOUBLE $\ast$} () const 
+\begin{DoxyCompactList}\small\item\em Cast to FTGL\_\-DOUBLE$\ast$. \item\end{DoxyCompactList}\item 
+void {\bf X} ({\bf FTGL\_\-DOUBLE} x)
+\begin{DoxyCompactList}\small\item\em Setters. \item\end{DoxyCompactList}\item 
+void {\bf Y} ({\bf FTGL\_\-DOUBLE} y)
+\item 
+void {\bf Z} ({\bf FTGL\_\-DOUBLE} z)
+\item 
+{\bf FTGL\_\-DOUBLE} {\bf X} () const 
+\begin{DoxyCompactList}\small\item\em Getters. \item\end{DoxyCompactList}\item 
+{\bf FTGL\_\-DOUBLE} {\bf Y} () const 
+\item 
+{\bf FTGL\_\-DOUBLE} {\bf Z} () const 
+\item 
+{\bf FTGL\_\-FLOAT} {\bf Xf} () const 
+\item 
+{\bf FTGL\_\-FLOAT} {\bf Yf} () const 
+\item 
+{\bf FTGL\_\-FLOAT} {\bf Zf} () const 
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+{\bf FTPoint} {\bf operator$\ast$} (double multiplier, {\bf FTPoint} \&point)
+\begin{DoxyCompactList}\small\item\em Operator $\ast$ Scalar multiplication. \item\end{DoxyCompactList}\item 
+double {\bf operator$\ast$} ({\bf FTPoint} \&a, {\bf FTPoint} \&b)
+\begin{DoxyCompactList}\small\item\em Operator $\ast$ Scalar product. \item\end{DoxyCompactList}\item 
+bool {\bf operator==} (const {\bf FTPoint} \&a, const {\bf FTPoint} \&b)
+\begin{DoxyCompactList}\small\item\em Operator == Tests for equality. \item\end{DoxyCompactList}\item 
+bool {\bf operator!=} (const {\bf FTPoint} \&a, const {\bf FTPoint} \&b)
+\begin{DoxyCompactList}\small\item\em Operator != Tests for non equality. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\doxyref{FTPoint}{p.}{classFTPoint} class is a basic 3-\/dimensional point or vector. 
+
+Definition at line 42 of file FTPoint.h.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{FTPoint@{FTPoint}!FTPoint@{FTPoint}}
+\index{FTPoint@{FTPoint}!FTPoint@{FTPoint}}
+\subsubsection[{FTPoint}]{\setlength{\rightskip}{0pt plus 5cm}FTPoint::FTPoint (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  [inline]}}\label{classFTPoint_a6c00bdf61c452b16980169c61dcf4514}
+
+
+Default constructor. 
+
+Point is set to zero. 
+
+Definition at line 48 of file FTPoint.h.
+
+\index{FTPoint@{FTPoint}!FTPoint@{FTPoint}}
+\index{FTPoint@{FTPoint}!FTPoint@{FTPoint}}
+\subsubsection[{FTPoint}]{\setlength{\rightskip}{0pt plus 5cm}FTPoint::FTPoint (
+\begin{DoxyParamCaption}
+\item[{const {\bf FTGL\_\-DOUBLE}}]{ x, }
+\item[{const {\bf FTGL\_\-DOUBLE}}]{ y, }
+\item[{const {\bf FTGL\_\-DOUBLE}}]{ z = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  [inline]}}\label{classFTPoint_a62568cd075b9f58ca56d3645f78ce1d5}
+
+
+Constructor. 
+
+Z coordinate is set to zero if unspecified.
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & First component \\
+\hline
+{\em y} & Second component \\
+\hline
+{\em z} & Third component \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 62 of file FTPoint.h.
+
+\index{FTPoint@{FTPoint}!FTPoint@{FTPoint}}
+\index{FTPoint@{FTPoint}!FTPoint@{FTPoint}}
+\subsubsection[{FTPoint}]{\setlength{\rightskip}{0pt plus 5cm}FTPoint::FTPoint (
+\begin{DoxyParamCaption}
+\item[{const FT\_\-Vector \&}]{ ft\_\-vector}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  [inline]}}\label{classFTPoint_acdd9d671667825e31bc5008890abbac1}
+
+
+Constructor. 
+
+This converts an FT\_\-Vector to an \doxyref{FTPoint}{p.}{classFTPoint}
+
+
+\begin{DoxyParams}{Parameters}
+{\em ft\_\-vector} & A freetype vector \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 75 of file FTPoint.h.
+
+
+
+\subsection{Member Function Documentation}
+\index{FTPoint@{FTPoint}!Normalise@{Normalise}}
+\index{Normalise@{Normalise}!FTPoint@{FTPoint}}
+\subsubsection[{Normalise}]{\setlength{\rightskip}{0pt plus 5cm}{\bf FTPoint} FTPoint::Normalise (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classFTPoint_a9578b007e1f9c222f89353bfca519500}
+
+
+Normalise a point's coordinates. 
+
+If the coordinates are zero, the point is left untouched.
+
+\begin{DoxyReturn}{Returns}
+A vector of norm one. 
+\end{DoxyReturn}
+\index{FTPoint@{FTPoint}!operator const FTGL\_\-DOUBLE $\ast$@{operator const FTGL\_\-DOUBLE $\ast$}}
+\index{operator const FTGL\_\-DOUBLE $\ast$@{operator const FTGL\_\-DOUBLE $\ast$}!FTPoint@{FTPoint}}
+\subsubsection[{operator const FTGL\_\-DOUBLE $\ast$}]{\setlength{\rightskip}{0pt plus 5cm}FTPoint::operator const {\bf FTGL\_\-DOUBLE} $\ast$ (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  [inline]}}\label{classFTPoint_a1c64e553bcf305042f61f014f256d47a}
+
+
+Cast to FTGL\_\-DOUBLE$\ast$. 
+
+
+
+Definition at line 240 of file FTPoint.h.
+
+\index{FTPoint@{FTPoint}!operator$\ast$@{operator$\ast$}}
+\index{operator$\ast$@{operator$\ast$}!FTPoint@{FTPoint}}
+\subsubsection[{operator$\ast$}]{\setlength{\rightskip}{0pt plus 5cm}{\bf FTPoint} FTPoint::operator$\ast$ (
+\begin{DoxyParamCaption}
+\item[{double}]{ multiplier}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  [inline]}}\label{classFTPoint_a5194bac39f94b1d1cfd876d6fdea51ca}
+
+
+Operator $\ast$ Scalar multiplication. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em multiplier} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily this} multiplied by {\ttfamily multiplier}. 
+\end{DoxyReturn}
+
+
+Definition at line 159 of file FTPoint.h.
+
+\index{FTPoint@{FTPoint}!operator+@{operator+}}
+\index{operator+@{operator+}!FTPoint@{FTPoint}}
+\subsubsection[{operator+}]{\setlength{\rightskip}{0pt plus 5cm}{\bf FTPoint} FTPoint::operator+ (
+\begin{DoxyParamCaption}
+\item[{const {\bf FTPoint} \&}]{ point}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  [inline]}}\label{classFTPoint_a8463c959f8db1592b8fa4d9468483b28}
+
+
+Operator +. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em point} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+this plus point. 
+\end{DoxyReturn}
+
+
+Definition at line 112 of file FTPoint.h.
+
+\index{FTPoint@{FTPoint}!operator+=@{operator+=}}
+\index{operator+=@{operator+=}!FTPoint@{FTPoint}}
+\subsubsection[{operator+=}]{\setlength{\rightskip}{0pt plus 5cm}{\bf FTPoint}\& FTPoint::operator+= (
+\begin{DoxyParamCaption}
+\item[{const {\bf FTPoint} \&}]{ point}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  [inline]}}\label{classFTPoint_a087f24c3952a77fb1159fe109db12b57}
+
+
+Operator += In Place Addition. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em point} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+this plus point. 
+\end{DoxyReturn}
+
+
+Definition at line 97 of file FTPoint.h.
+
+\index{FTPoint@{FTPoint}!operator-\/@{operator-\/}}
+\index{operator-\/@{operator-\/}!FTPoint@{FTPoint}}
+\subsubsection[{operator-\/}]{\setlength{\rightskip}{0pt plus 5cm}{\bf FTPoint} FTPoint::operator-\/ (
+\begin{DoxyParamCaption}
+\item[{const {\bf FTPoint} \&}]{ point}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  [inline]}}\label{classFTPoint_af32afeabde2a0b1fa8f83c816f8177fb}
+
+
+Operator -\/. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em point} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+this minus point. 
+\end{DoxyReturn}
+
+
+Definition at line 143 of file FTPoint.h.
+
+\index{FTPoint@{FTPoint}!operator-\/=@{operator-\/=}}
+\index{operator-\/=@{operator-\/=}!FTPoint@{FTPoint}}
+\subsubsection[{operator-\/=}]{\setlength{\rightskip}{0pt plus 5cm}{\bf FTPoint}\& FTPoint::operator-\/= (
+\begin{DoxyParamCaption}
+\item[{const {\bf FTPoint} \&}]{ point}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  [inline]}}\label{classFTPoint_a8fc27f0cb5454436443cf80b117d343e}
+
+
+Operator -\/= In Place Substraction. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em point} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+this minus point. 
+\end{DoxyReturn}
+
+
+Definition at line 128 of file FTPoint.h.
+
+\index{FTPoint@{FTPoint}!operator$^\wedge$@{operator$^\wedge$}}
+\index{operator$^\wedge$@{operator$^\wedge$}!FTPoint@{FTPoint}}
+\subsubsection[{operator$^\wedge$}]{\setlength{\rightskip}{0pt plus 5cm}{\bf FTPoint} FTPoint::operator$^\wedge$ (
+\begin{DoxyParamCaption}
+\item[{const {\bf FTPoint} \&}]{ point}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  [inline]}}\label{classFTPoint_a5944e73a8b8bcd35c79de1df2e542e4a}
+
+
+Operator $^\wedge$ Vector product. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em point} & Second point \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+this vector point. 
+\end{DoxyReturn}
+
+
+Definition at line 204 of file FTPoint.h.
+
+\index{FTPoint@{FTPoint}!X@{X}}
+\index{X@{X}!FTPoint@{FTPoint}}
+\subsubsection[{X}]{\setlength{\rightskip}{0pt plus 5cm}void FTPoint::X (
+\begin{DoxyParamCaption}
+\item[{{\bf FTGL\_\-DOUBLE}}]{ x}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  [inline]}}\label{classFTPoint_af027f8076fcdfe488aea94fddf6bf7a3}
+
+
+Setters. 
+
+
+
+Definition at line 249 of file FTPoint.h.
+
+
+
+Referenced by FTBBox::operator$|$=().
+
+\index{FTPoint@{FTPoint}!X@{X}}
+\index{X@{X}!FTPoint@{FTPoint}}
+\subsubsection[{X}]{\setlength{\rightskip}{0pt plus 5cm}{\bf FTGL\_\-DOUBLE} FTPoint::X (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  [inline]}}\label{classFTPoint_a457293e822d995d3bab82dc021d39b6a}
+
+
+Getters. 
+
+
+
+Definition at line 257 of file FTPoint.h.
+
+\index{FTPoint@{FTPoint}!Xf@{Xf}}
+\index{Xf@{Xf}!FTPoint@{FTPoint}}
+\subsubsection[{Xf}]{\setlength{\rightskip}{0pt plus 5cm}{\bf FTGL\_\-FLOAT} FTPoint::Xf (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  [inline]}}\label{classFTPoint_ab1d302e6449554c1436344f53d837567}
+
+
+Definition at line 260 of file FTPoint.h.
+
+
+
+Referenced by FTFont::BBox().
+
+\index{FTPoint@{FTPoint}!Y@{Y}}
+\index{Y@{Y}!FTPoint@{FTPoint}}
+\subsubsection[{Y}]{\setlength{\rightskip}{0pt plus 5cm}{\bf FTGL\_\-DOUBLE} FTPoint::Y (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  [inline]}}\label{classFTPoint_a49d45371eb101c2b85963338b01af6d3}
+
+
+Definition at line 258 of file FTPoint.h.
+
+\index{FTPoint@{FTPoint}!Y@{Y}}
+\index{Y@{Y}!FTPoint@{FTPoint}}
+\subsubsection[{Y}]{\setlength{\rightskip}{0pt plus 5cm}void FTPoint::Y (
+\begin{DoxyParamCaption}
+\item[{{\bf FTGL\_\-DOUBLE}}]{ y}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  [inline]}}\label{classFTPoint_a050f6a715fe7934cb899cb13c0bca20f}
+
+
+Definition at line 250 of file FTPoint.h.
+
+
+
+Referenced by FTBBox::operator$|$=().
+
+\index{FTPoint@{FTPoint}!Yf@{Yf}}
+\index{Yf@{Yf}!FTPoint@{FTPoint}}
+\subsubsection[{Yf}]{\setlength{\rightskip}{0pt plus 5cm}{\bf FTGL\_\-FLOAT} FTPoint::Yf (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  [inline]}}\label{classFTPoint_a053519d9a0a76828a4f66850755316d0}
+
+
+Definition at line 261 of file FTPoint.h.
+
+
+
+Referenced by FTFont::BBox().
+
+\index{FTPoint@{FTPoint}!Z@{Z}}
+\index{Z@{Z}!FTPoint@{FTPoint}}
+\subsubsection[{Z}]{\setlength{\rightskip}{0pt plus 5cm}void FTPoint::Z (
+\begin{DoxyParamCaption}
+\item[{{\bf FTGL\_\-DOUBLE}}]{ z}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  [inline]}}\label{classFTPoint_a1119a7cda143b4ac4ae970519a8a53ce}
+
+
+Definition at line 251 of file FTPoint.h.
+
+
+
+Referenced by FTBBox::operator$|$=().
+
+\index{FTPoint@{FTPoint}!Z@{Z}}
+\index{Z@{Z}!FTPoint@{FTPoint}}
+\subsubsection[{Z}]{\setlength{\rightskip}{0pt plus 5cm}{\bf FTGL\_\-DOUBLE} FTPoint::Z (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  [inline]}}\label{classFTPoint_a2a5784d1b50ff47e07ff327b295fe2ba}
+
+
+Definition at line 259 of file FTPoint.h.
+
+\index{FTPoint@{FTPoint}!Zf@{Zf}}
+\index{Zf@{Zf}!FTPoint@{FTPoint}}
+\subsubsection[{Zf}]{\setlength{\rightskip}{0pt plus 5cm}{\bf FTGL\_\-FLOAT} FTPoint::Zf (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  [inline]}}\label{classFTPoint_a00c075c3d15a95a611094e1d13bf32b9}
+
+
+Definition at line 262 of file FTPoint.h.
+
+
+
+Referenced by FTFont::BBox().
+
+
+
+\subsection{Friends And Related Function Documentation}
+\index{FTPoint@{FTPoint}!operator!=@{operator!=}}
+\index{operator!=@{operator!=}!FTPoint@{FTPoint}}
+\subsubsection[{operator!=}]{\setlength{\rightskip}{0pt plus 5cm}bool operator!= (
+\begin{DoxyParamCaption}
+\item[{const {\bf FTPoint} \&}]{ a, }
+\item[{const {\bf FTPoint} \&}]{ b}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  [friend]}}\label{classFTPoint_a223901a6d036c1bcf01a3ab0e3cb80da}
+
+
+Operator != Tests for non equality. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em a} & \\
+\hline
+{\em b} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if a \& b are not equal 
+\end{DoxyReturn}
+\index{FTPoint@{FTPoint}!operator$\ast$@{operator$\ast$}}
+\index{operator$\ast$@{operator$\ast$}!FTPoint@{FTPoint}}
+\subsubsection[{operator$\ast$}]{\setlength{\rightskip}{0pt plus 5cm}double operator$\ast$ (
+\begin{DoxyParamCaption}
+\item[{{\bf FTPoint} \&}]{ a, }
+\item[{{\bf FTPoint} \&}]{ b}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  [friend]}}\label{classFTPoint_afa70ba765b2dfb14bf7a22c9ee76c37f}
+
+
+Operator $\ast$ Scalar product. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em a} & First vector. \\
+\hline
+{\em b} & Second vector. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily a.b} scalar product. 
+\end{DoxyReturn}
+
+
+Definition at line 190 of file FTPoint.h.
+
+\index{FTPoint@{FTPoint}!operator$\ast$@{operator$\ast$}}
+\index{operator$\ast$@{operator$\ast$}!FTPoint@{FTPoint}}
+\subsubsection[{operator$\ast$}]{\setlength{\rightskip}{0pt plus 5cm}{\bf FTPoint} operator$\ast$ (
+\begin{DoxyParamCaption}
+\item[{double}]{ multiplier, }
+\item[{{\bf FTPoint} \&}]{ point}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  [friend]}}\label{classFTPoint_a7903e518fd65dda8330101cd39e09bb1}
+
+
+Operator $\ast$ Scalar multiplication. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em point} & \\
+\hline
+{\em multiplier} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily multiplier} multiplied by {\ttfamily point}. 
+\end{DoxyReturn}
+
+
+Definition at line 177 of file FTPoint.h.
+
+\index{FTPoint@{FTPoint}!operator==@{operator==}}
+\index{operator==@{operator==}!FTPoint@{FTPoint}}
+\subsubsection[{operator==}]{\setlength{\rightskip}{0pt plus 5cm}bool operator== (
+\begin{DoxyParamCaption}
+\item[{const {\bf FTPoint} \&}]{ a, }
+\item[{const {\bf FTPoint} \&}]{ b}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  [friend]}}\label{classFTPoint_a1016185e21378b2e0663d39f5015e46c}
+
+
+Operator == Tests for equality. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em a} & \\
+\hline
+{\em b} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if a \& b are equal 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+{\bf FTPoint.h}\end{DoxyCompactItemize}

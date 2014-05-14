@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+<svg viewBox="0 0 444 116" xmlns="http://www.w3.org/2000/svg"  version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <desc> SVG file generated using the GuidoEngine version 1.5.2</desc>
+    <g style="stroke:#000000; stroke-opacity:1">
+        <g transform="scale(0.123977, 0.123977)">
+            <g transform="translate(-0, -0)">
+            </g>
+            <g transform="translate(237.106, 237.106)">
+            </g>
+            <g transform="translate(237.106, 367.106)">
+                <g style="stroke-width:4">
+                    <line x1="0" y1="0" x2="3200.94" y2="0" />
+                    <line x1="0" y1="50" x2="3200.94" y2="50" />
+                    <line x1="0" y1="100" x2="3200.94" y2="100" />
+                    <line x1="0" y1="150" x2="3200.94" y2="150" />
+                    <line x1="0" y1="200" x2="3200.94" y2="200" />
+                </g>
+            </g>
+            <g transform="translate(237.106, 367.106)">
+                <g font-family="Guido2">
+                    <text x="50" y="200"  font-size="200" stroke="#000000" fill="#000000">&#38;</text>
+                    <text x="277.629" y="250"  font-size="200" stroke="#000000" fill="#000000">&#95;</text>
+                    <text x="298.629" y="250"  font-size="200" stroke="#000000" fill="#000000">&#88;</text>
+                    <text x="298.629" y="241.667"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="298.629" y="225"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="298.629" y="200"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="298.629" y="175"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="298.629" y="150"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="298.629" y="125"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="298.629" y="125"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="429.91" y="200"  font-size="200" stroke="#000000" fill="#000000">&#63;</text>
+                    <text x="582.91" y="-50"  font-size="200" stroke="#000000" fill="#000000">&#95;</text>
+                    <text x="603.91" y="-50"  font-size="200" stroke="#000000" fill="#000000">&#88;</text>
+                    <text x="603.91" y="-41.6667"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="603.91" y="-25"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="603.91" y="0"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="603.91" y="25"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="603.91" y="50"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="603.91" y="75"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="603.91" y="75"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="736.191" y="200"  font-size="200" stroke="#000000" fill="#000000">&#66;</text>
+                    <text x="890.191" y="100"  font-size="200" stroke="#000000" fill="#000000">&#88;</text>
+                    <text x="890.191" y="108.333"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="890.191" y="125"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="890.191" y="150"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="890.191" y="175"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="890.191" y="200"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="890.191" y="225"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="890.191" y="225"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1022.47" y="150"  font-size="200" stroke="#000000" fill="#000000">&#66;</text>
+                    <text x="1176.47" y="50"  font-size="200" stroke="#000000" fill="#000000">&#88;</text>
+                    <text x="1176.47" y="58.3333"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1176.47" y="75"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1176.47" y="100"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1176.47" y="125"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1176.47" y="150"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1176.47" y="175"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1176.47" y="175"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1314.25" y="150"  font-size="200" stroke="#000000" fill="#000000">&#38;</text>
+                    <text x="1457.25" y="200"  font-size="200" stroke="#000000" fill="#000000">&#88;</text>
+                    <text x="1457.25" y="191.667"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="1457.25" y="175"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="1457.25" y="150"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="1457.25" y="125"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="1457.25" y="100"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="1457.25" y="75"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="1457.25" y="75"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="1595.03" y="200"  font-size="200" stroke="#000000" fill="#000000">&#38;</text>
+                </g>
+                <g font-family="Times">
+                    <text x="1666.53" y="-55" text-anchor="middle" font-size="75" stroke="#000000" fill="#000000">
+                        8
+                    </text>
+                </g>
+                <g font-family="Guido2">
+                    <text x="1717.03" y="250"  font-size="200" stroke="#000000" fill="#000000">&#95;</text>
+                    <text x="1717.03" y="300"  font-size="200" stroke="#000000" fill="#000000">&#95;</text>
+                    <text x="1717.03" y="350"  font-size="200" stroke="#000000" fill="#000000">&#95;</text>
+                    <text x="1717.03" y="400"  font-size="200" stroke="#000000" fill="#000000">&#95;</text>
+                    <text x="1738.03" y="425"  font-size="200" stroke="#000000" fill="#000000">&#88;</text>
+                    <text x="1738.03" y="416.667"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="1738.03" y="400"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="1738.03" y="375"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="1738.03" y="350"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="1738.03" y="325"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="1738.03" y="300"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="1738.03" y="275"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="1738.03" y="250"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="1738.03" y="225"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="1738.03" y="200"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="1738.03" y="175"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="1738.03" y="150"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="1738.03" y="150"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="1869.32" y="200"  font-size="200" stroke="#000000" fill="#000000">&#63;</text>
+                </g>
+                <g font-family="Times">
+                    <text x="1947.32" y="0" text-anchor="middle" font-size="75" stroke="#000000" fill="#000000">
+                        8
+                    </text>
+                </g>
+                <g font-family="Guido2">
+                    <text x="2025.31" y="125"  font-size="200" stroke="#000000" fill="#000000">&#88;</text>
+                    <text x="2025.31" y="116.667"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2025.31" y="100"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2025.31" y="75"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2025.31" y="50"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2025.31" y="25"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2025.31" y="0"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2025.31" y="0"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2156.6" y="350"  font-size="200" stroke="#000000" fill="#000000">&#63;</text>
+                </g>
+                <g font-family="Times">
+                    <text x="2234.6" y="150" text-anchor="middle" font-size="75" stroke="#000000" fill="#000000">
+                        8
+                    </text>
+                </g>
+                <g font-family="Guido2">
+                    <text x="2291.6" y="250"  font-size="200" stroke="#000000" fill="#000000">&#95;</text>
+                    <text x="2312.6" y="275"  font-size="200" stroke="#000000" fill="#000000">&#88;</text>
+                    <text x="2312.6" y="266.667"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2312.6" y="250"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2312.6" y="225"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2312.6" y="200"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2312.6" y="175"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2312.6" y="150"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2312.6" y="150"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2455.88" y="150"  font-size="200" stroke="#000000" fill="#000000">&#114;</text>
+                    <text x="2566.88" y="250"  font-size="200" stroke="#000000" fill="#000000">&#95;</text>
+                    <text x="2587.88" y="250"  font-size="200" stroke="#000000" fill="#000000">&#88;</text>
+                    <text x="2587.88" y="241.667"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2587.88" y="225"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2587.88" y="200"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2587.88" y="175"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2587.88" y="150"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2587.88" y="125"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2587.88" y="125"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2725.66" y="200"  font-size="200" stroke="#000000" fill="#000000">&#38;</text>
+                    <text x="2848.66" y="200"  font-size="200" stroke="#000000" fill="#000000">&#38;</text>
+                    <text x="2970.66" y="250"  font-size="200" stroke="#000000" fill="#000000">&#95;</text>
+                    <text x="2991.66" y="250"  font-size="200" stroke="#000000" fill="#000000">&#88;</text>
+                    <text x="2991.66" y="241.667"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2991.66" y="225"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2991.66" y="200"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2991.66" y="175"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2991.66" y="150"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2991.66" y="125"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2991.66" y="125"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <rect x="3158.74" y="-2" width="7.19995" height="204" />
+                    <rect x="3178.74" y="-2" width="25" height="204" />
+                </g>
+            </g>
+            <g transform="translate(237.106, 367.106)">
+            </g>
+            <g transform="translate(237.106, 237.106)">
+            </g>
+            <g transform="translate(0, 1.52588e-05)">
+            </g>
+        </g>
+    </g>
+</svg>
