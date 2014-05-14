@@ -1,0 +1,25 @@
+% staffOffOn.gmn
+%
+% \staffOn- \staffOff- tags are used to force the staff to draw or not
+%
+% Usage : the staff is drawn (default) .... \staffOff  ... it isn't drawn
+%          ... \staffOn ... it is drawn ... etc...
+%
+%
+% Parameters : none
+%
+% the bar line has to be put explicitely before the \staffOn if we don't want it to draw.
+    
+
+[
+ 	\staffOff \meter<"4/4">  empty/2 \staffOn g/4 d 
+	c h f e |
+	\staffOff b g e f | \staffOn
+	g d c h
+	f e f g 
+	d c \staffOff h  f \staffOn
+	e f g d 
+	c h  \staffOff f f
+	c h \staffOn f f
+]
+

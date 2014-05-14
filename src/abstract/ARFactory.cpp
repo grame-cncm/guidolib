@@ -569,7 +569,7 @@ void ARFactory::createTag( const char * name, int no )
 	switch( c )
 	{
 		case 'a':
-			if (!strcmp(name,"accel"))
+			if (!strcmp(name,"accelerando") || !strcmp(name,"accel"))
 			{
 				ARAccelerando * tmp = new ARAccelerando();
 				mTags.AddHead(tmp);
@@ -601,14 +601,14 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
-			else if (!strcmp(name,"accol"))
+			else if (!strcmp(name,"accolade") || !strcmp(name,"accol"))
 			{
 				ARAccol * tmp = new ARAccol;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 				
 			}
-			else if (!strcmp(name,"acc"))
+			else if (!strcmp(name,"acc") || !strcmp(name,"accidental"))
 			{
 				ARAcc * tmp = new ARAcc();
 				mTags.AddHead(tmp);
@@ -764,7 +764,7 @@ void ARFactory::createTag( const char * name, int no )
 				mCurrentVoice->AddTail(tmp);
 				
 			}
-            else if (!strcmp(name,"cresc"))
+            else if (!strcmp(name,"cresc") || !strcmp(name,"crescendo"))
 			{
 				ARCrescendo * tmp = new ARCrescendo();
 				mTags.AddHead(tmp); // push()
@@ -846,7 +846,7 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp); // push()
 				mCurrentVoice->AddTail(tmp);				
 			}
-			else if (!strcmp(name,"decresc") || !strcmp(name,"dim") || !strcmp(name,"diminuendo")) {
+			else if (!strcmp(name,"decresc") || !strcmp(name,"decrescendo") || !strcmp(name,"dim") || !strcmp(name,"diminuendo")) {
 				ARDiminuendo * tmp = new ARDiminuendo;
 				mTags.AddHead(tmp); // push();
 				mCurrentVoice->AddPositionTag(tmp);			
@@ -1012,13 +1012,13 @@ void ARFactory::createTag( const char * name, int no )
 			break;
 
 		case 'i':
-			if (!strcmp(name,"instr"))
+			if (!strcmp(name,"instrument") || !strcmp(name,"instr"))
 			{
 				ARInstrument * tmp = new ARInstrument;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
-			else if (!strcmp(name,"intens") || !strcmp(name,"i"))
+			else if (!strcmp(name,"intensity") || !strcmp(name,"intens") || !strcmp(name,"i"))
 			{
 				ARIntens * tmp = new ARIntens;
 				mTags.AddHead(tmp);
@@ -1064,7 +1064,7 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"mord"))
+			else if (!strcmp(name,"mordent") || !strcmp(name,"mord"))
 			{
 				ARTrill * tmp =new ARTrill(ARTrill::MORD);
 				//mTags.AddHead(tmp);
@@ -1121,7 +1121,7 @@ void ARFactory::createTag( const char * name, int no )
 			break;
 
 		case 'o':	
-			if (!strcmp(name,"oct"))
+			if (!strcmp(name,"oct") || !strcmp(name,"octava"))
 			{
 				AROctava * tmp = new AROctava(mCurrentOctava);
 				mTags.AddHead(tmp);
@@ -1136,7 +1136,7 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
-			else if (!strcmp(name, "pizz"))
+			else if (!strcmp(name, "pizzicato") || !strcmp(name, "pizz"))
 			{
 				ARPizz * tmp = new ARPizz;
 				mTags.AddHead(tmp);
@@ -1159,7 +1159,7 @@ void ARFactory::createTag( const char * name, int no )
 				mCurrentVoice->AddPositionTag(tmp);
 				
 			}
-			else if (!strcmp(name,"rit"))
+			else if (!strcmp(name,"ritardando") || !strcmp(name,"rit"))
 			{
 				ARRitardando * tmp = new ARRitardando;
 				mTags.AddHead(tmp);
@@ -1245,7 +1245,7 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
-			else if(!strcmp(name,"stacc"))
+			else if(!strcmp(name,"staccato") || !strcmp(name,"stacc"))
 			{
 				ARStaccato * tmp = new ARStaccato;
 				mTags.AddHead(tmp);
@@ -1398,7 +1398,7 @@ void ARFactory::createTag( const char * name, int no )
 				mCurrentVoice->setPositionTagEndPos(no, tmp);
 				mTags.AddHead(tmp);				
 			} 
-			else if(!strcmp(name,"ten"))
+			else if(!strcmp(name,"tenuto") || !strcmp(name,"ten"))
 			{
 				ARTenuto * tmp = new ARTenuto;
 				mTags.AddHead(tmp);
@@ -1441,7 +1441,7 @@ void ARFactory::createTag( const char * name, int no )
 					mCurrentTrill = tmp;
 				else delete tmp;
 			}
-			else if(!strcmp(name,"trem"))
+			else if(!strcmp(name,"tremolo") || !strcmp(name,"trem"))
 			{
 				ARTremolo * tmp = new ARTremolo;
 				mTags.AddHead(tmp);

@@ -1,0 +1,3 @@
+[
+    \staffFormat<size=0pt> \meter<"4/4"> e/1 \repeatBegin a a b c d \doubleBar  g \repeatEnd f
+]

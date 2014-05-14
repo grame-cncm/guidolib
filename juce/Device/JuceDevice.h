@@ -154,6 +154,11 @@ class JuceDevice : public VGDevice
 		virtual void *			GetNativeContext() const	{ return fGraphics; }
 
 
+		/// Gives the current device data and returns the data associated mime type.
+		virtual const char*		GetImageData(const char* & outDataPtr, int& outLength) { return 0; }
+		/// Release the pointer returned by GetImageData
+		virtual void			ReleaseImageData(const char *) const {}
+
 		// - VGDevice extension --------------------------------------------
 		virtual	void			SelectPenColor( const VGColor & inColor);
 		virtual	void			SelectPenWidth( float witdh);

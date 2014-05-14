@@ -230,7 +230,16 @@ void GRTempo::DrawText( VGDevice & hdc, const char * cp, float xOffset, float yO
 	if( outWidth ) {
 		float fooHeight;
 //		hdc.GetTextExtent(cp, (int)strlen(cp), outWidth, &fooHeight);
-		hdc.GetTextFont()->GetExtent(cp, (int)strlen(cp), outWidth, &fooHeight, &hdc);
+                const VGFont *font = hdc.GetTextFont();
+                if (!font) {
+                        font = FontManager::gFontText;
+                }
+                if (!font) {
+                        std::cerr << "Cannot find text font" << std::endl;
+                        *outWidth = 0;
+                } else {
+		        font->GetExtent(cp, (int)strlen(cp), outWidth, &fooHeight, &hdc);
+                }
 	}
 }
 

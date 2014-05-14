@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<svg viewBox="0 0 86 75" xmlns="http://www.w3.org/2000/svg"  version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <desc> SVG file generated using the GuidoEngine version 1.5.2</desc>
+    <g style="stroke:#000000; stroke-opacity:1">
+        <g transform="scale(0.123832, 0.123832)">
+            <g transform="translate(-0, -0)">
+            </g>
+            <g transform="translate(237.106, 237.106)">
+            </g>
+            <g transform="translate(237.106, 237.106)">
+                <g style="stroke-width:4">
+                    <line x1="0" y1="0" x2="325" y2="0" />
+                    <line x1="0" y1="50" x2="325" y2="50" />
+                    <line x1="0" y1="100" x2="325" y2="100" />
+                    <line x1="0" y1="150" x2="325" y2="150" />
+                    <line x1="0" y1="200" x2="325" y2="200" />
+                    <line x1="325" y1="0" x2="333" y2="0" />
+                    <line x1="325" y1="50" x2="333" y2="50" />
+                    <line x1="325" y1="100" x2="333" y2="100" />
+                    <line x1="325" y1="150" x2="333" y2="150" />
+                    <line x1="325" y1="200" x2="333" y2="200" />
+                </g>
+            </g>
+            <g transform="translate(237.106, 237.106)">
+                <g font-family="Guido2">
+                    <text x="129" y="100"  font-size="400" stroke="#000000" fill="#000000">&#99;</text>
+                </g>
+            </g>
+            <g transform="translate(237.106, 237.106)">
+            </g>
+            <g transform="translate(237.106, 237.106)">
+            </g>
+            <g transform="translate(0, 0)">
+            </g>
+        </g>
+    </g>
+</svg>

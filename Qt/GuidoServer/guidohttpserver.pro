@@ -1,5 +1,6 @@
-SOURCES += ../../server/main.cpp ../../server/server.cpp guido2img.cpp ../../server/guidosession.cpp ../../server/utilities.cpp engine.cpp
-HEADERS += ../../server/server.h guido2img.h ../../server/guidosession.h ../../server/utilities.h engine.h
+SOURCES += $$files(../../server/*.cpp) $$files(../../server/*.c) $$files(*.cpp) $$files(../../server/json/*.cpp)
+HEADERS += $$files(../../server/*.h) $$files(*.h) $$files(../../server/json/*.h)
+
 DEFINES += "JSON_ONLY"
 
 TEMPLATE = app
@@ -14,7 +15,7 @@ macx:CONFIG -= app_bundle
 # GuidoQt library link for each platform
 win32:LIBS += ../GuidoQt.lib
 unix:LIBS += -L.. -lGuidoQt -L/usr/local/lib
-unix:LIBS += -lmicrohttpd -ljson -lcrypto -lcurl
+unix:LIBS += -lmicrohttpd -lcrypto -lcurl
 INCLUDEPATH += ../GuidoQt/include
 INCLUDEPATH += ../../server
 INCLUDEPATH += /usr/local/include

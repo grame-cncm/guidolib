@@ -1,0 +1,13 @@
+{ 
+[   
+   \barFormat<style="system"> 
+   \meter<"2/4"> 
+   c d  
+   \daCoda 
+   {e, g } f  
+   \daCapo
+   d e  
+   \coda
+   d c  
+]
+}

@@ -1,0 +1,18 @@
+{
+	"f06310ac691fb14acd4fa21e94ca6d07e2ad7a5d": {
+		"systemmap": [
+			{
+				"graph": {
+					"left": 916.18,
+					"top": 404.073,
+					"right": 1383.73,
+					"bottom": 983.495
+				},
+				"time": {
+					"start": "\"0/1\"",
+					"end": "\"1/4\""
+				}
+			}
+		]
+	}
+}

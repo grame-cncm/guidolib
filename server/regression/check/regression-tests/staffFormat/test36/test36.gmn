@@ -1,0 +1,3 @@
+[
+    \staffFormat<"5-lines", size=3pt, lineThickness=0.8> a \doubleBar
+]

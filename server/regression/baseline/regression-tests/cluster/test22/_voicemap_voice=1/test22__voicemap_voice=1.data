@@ -1,0 +1,18 @@
+{
+	"0a03f3f3df29e66c38b894df7c59fb5fdaacd25a": {
+		"voicemap": [
+			{
+				"graph": {
+					"left": 865.054,
+					"top": 497.803,
+					"right": 1323.23,
+					"bottom": 838.64
+				},
+				"time": {
+					"start": "\"0/1\"",
+					"end": "\"1/4\""
+				}
+			}
+		]
+	}
+}

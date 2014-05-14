@@ -1,0 +1,18 @@
+\beamer@endinputifotherversion {3.26pt}
+\select@language {french}
+\beamer@sectionintoc {1}{Sommaire}{2}{0}{1}
+\beamer@sectionintoc {2}{Guido}{3}{0}{2}
+\beamer@sectionintoc {3}{Nouvelles notations}{5}{0}{3}
+\beamer@subsectionintoc {3}{1}{microtonalit\IeC {\'e}s}{6}{0}{3}
+\beamer@subsectionintoc {3}{2}{glissandi}{7}{0}{3}
+\beamer@subsectionintoc {3}{3}{clusters}{8}{0}{3}
+\beamer@subsectionintoc {3}{4}{fbeam}{9}{0}{3}
+\beamer@subsectionintoc {3}{5}{graphiques}{10}{0}{3}
+\beamer@subsectionintoc {3}{6}{staffOff}{11}{0}{3}
+\beamer@sectionintoc {4}{Am\IeC {\'e}liorations}{12}{0}{4}
+\beamer@subsectionintoc {4}{1}{metriques}{13}{0}{4}
+\beamer@subsectionintoc {4}{2}{param\IeC {\`e}tres}{14}{0}{4}
+\beamer@subsectionintoc {4}{3}{tetesnotes}{15}{0}{4}
+\beamer@subsectionintoc {4}{4}{trilles}{16}{0}{4}
+\beamer@subsectionintoc {4}{5}{streaming}{17}{0}{4}
+\beamer@sectionintoc {5}{Conclusion}{18}{0}{5}

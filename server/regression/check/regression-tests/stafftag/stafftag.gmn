@@ -1,0 +1,23 @@
+{ 
+ [ 
+	\title<"Staff tag test", dx=-14> \clef<"g2"> 
+	\meter<"2/4">  \barFormat<style="system">  
+	\stemsUp d e f g 
+ ],
+ [ 
+ 	\staff<1> 
+	\stemsDown d \noteFormat<dx=1hs>(c) \cue(d c)
+ ],
+ [ 
+	\staff<2> 
+	\clef<"g2"> 
+ ],
+(*
+ [ 
+ 	\staff<3> \clef<"f4"> \bm(\stemsUp c/16 d \staff<2> \stemsDown e/8 f e) \bm(g/8 e \staff<3> \stemsUp d c) 
+ ],
+ *)
+ [ 
+	\clef<"g2">\stacc( { \grace(c2/1), e, g } )  c/8 { c, d } e f
+ ]
+}

@@ -4,25 +4,25 @@
 /?format=svg
 
 # The number of voices in the score
-/voicescount
+/countvoices
 
 # The number of pages in the score
-/pagescount
+/getpagecount
 
 # The duration of the score
 /duration
 
 # Find the page at the given date
 # The long one should fail
-/pageat?date="0/4"
-/pageat?date="3/4"
-/pageat?date="4000/4"
+/findpageat?date="0/4"
+/findpageat?date="3/4"
+/findpageat?date="4000/4"
 
 # Find the date at the start of a given page
 # The large one should fail
-/pagedate?page=1
-/pagedate?page=2
-/pagedate?page=1000
+/getpagedate?page=1
+/getpagedate?page=2
+/getpagedate?page=1000
 
 # Find the staffmap for a piece
 # The large staff index should fail
@@ -31,16 +31,16 @@
 /staffmap?staff=1000
 
 # Find the staffmap for a piece
-/pagemap
+/getpagemap
 
 # Find the staffmap for a piece
-/systemmap
+/getsystemmap
 
 # Find the voicemap for a piece
 # The large voice index should fail
-/voicemap?voice=1
-/voicemap?voice=2
-/voicemap?voice=1000
+/getvoicemap?voice=1
+/getvoicemap?voice=2
+/getvoicemap?voice=1000
 
 # Find the timemap for a piece
-/timemap
+/gettimemap

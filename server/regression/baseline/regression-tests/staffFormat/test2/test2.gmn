@@ -1,0 +1,3 @@
+[
+    \staffFormat<"1-lines"> e \repeatBegin a \doubleBar  g \repeatEnd f
+]

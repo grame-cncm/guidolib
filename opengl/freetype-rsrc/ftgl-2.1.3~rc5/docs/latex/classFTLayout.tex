@@ -1,0 +1,225 @@
+\section{FTLayout Class Reference}
+\label{classFTLayout}\index{FTLayout@{FTLayout}}
+
+
+\doxyref{FTLayout}{p.}{classFTLayout} is the interface for layout managers that render text.  
+
+
+
+
+{\ttfamily \#include $<$FTLayout.h$>$}
+
+Inheritance diagram for FTLayout:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classFTLayout}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual {\bf $\sim$FTLayout} ()
+\begin{DoxyCompactList}\small\item\em Destructor. \item\end{DoxyCompactList}\item 
+virtual {\bf FTBBox} {\bf BBox} (const char $\ast$string, const int len=-\/1, {\bf FTPoint} position={\bf FTPoint}())=0
+\begin{DoxyCompactList}\small\item\em Get the bounding box for a formatted string. \item\end{DoxyCompactList}\item 
+virtual {\bf FTBBox} {\bf BBox} (const wchar\_\-t $\ast$string, const int len=-\/1, {\bf FTPoint} position={\bf FTPoint}())=0
+\begin{DoxyCompactList}\small\item\em Get the bounding box for a formatted string. \item\end{DoxyCompactList}\item 
+virtual void {\bf Render} (const char $\ast$string, const int len=-\/1, {\bf FTPoint} position={\bf FTPoint}(), int renderMode=FTGL::RENDER\_\-ALL)=0
+\begin{DoxyCompactList}\small\item\em Render a string of characters. \item\end{DoxyCompactList}\item 
+virtual void {\bf Render} (const wchar\_\-t $\ast$string, const int len=-\/1, {\bf FTPoint} position={\bf FTPoint}(), int renderMode=FTGL::RENDER\_\-ALL)=0
+\begin{DoxyCompactList}\small\item\em Render a string of characters. \item\end{DoxyCompactList}\item 
+virtual FT\_\-Error {\bf Error} () const 
+\begin{DoxyCompactList}\small\item\em Queries the Layout for errors. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\bf FTLayout} ()
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+class {\bf FTSimpleLayout}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\doxyref{FTLayout}{p.}{classFTLayout} is the interface for layout managers that render text. Specific layout manager classes are derived from this class. This class is abstract and deriving classes must implement the protected {\ttfamily Render} methods to render formatted text and {\ttfamily BBox} methods to determine the bounding box of output text.
+
+\begin{DoxySeeAlso}{See also}
+\doxyref{FTFont}{p.}{classFTFont} 
+
+\doxyref{FTBBox}{p.}{classFTBBox} 
+\end{DoxySeeAlso}
+
+
+Definition at line 52 of file FTLayout.h.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{FTLayout@{FTLayout}!FTLayout@{FTLayout}}
+\index{FTLayout@{FTLayout}!FTLayout@{FTLayout}}
+\subsubsection[{FTLayout}]{\setlength{\rightskip}{0pt plus 5cm}FTLayout::FTLayout (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  [protected]}}\label{classFTLayout_a7b51099482c3f3171337915d42c9cd2b}
+\index{FTLayout@{FTLayout}!$\sim$FTLayout@{$\sim$FTLayout}}
+\index{$\sim$FTLayout@{$\sim$FTLayout}!FTLayout@{FTLayout}}
+\subsubsection[{$\sim$FTLayout}]{\setlength{\rightskip}{0pt plus 5cm}virtual FTLayout::$\sim$FTLayout (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  [virtual]}}\label{classFTLayout_aee0787f8975a809261fb49813f0baac4}
+
+
+Destructor. 
+
+
+
+\subsection{Member Function Documentation}
+\index{FTLayout@{FTLayout}!BBox@{BBox}}
+\index{BBox@{BBox}!FTLayout@{FTLayout}}
+\subsubsection[{BBox}]{\setlength{\rightskip}{0pt plus 5cm}virtual {\bf FTBBox} FTLayout::BBox (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{ string, }
+\item[{const int}]{ len = {\ttfamily -\/1}, }
+\item[{{\bf FTPoint}}]{ position = {\ttfamily {\bf FTPoint}()}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  [pure virtual]}}\label{classFTLayout_ae79561f22ee39e69ce27d84b1d47fe2e}
+
+
+Get the bounding box for a formatted string. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em string} & A char string. \\
+\hline
+{\em len} & The length of the string. If $<$ 0 then all characters will be checked until a null character is encountered (optional). \\
+\hline
+{\em position} & The pen position of the first character (optional). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The corresponding bounding box. 
+\end{DoxyReturn}
+
+
+Implemented in {\bf FTSimpleLayout} \doxyref{}{p.}{classFTSimpleLayout_a132c938c66912fe0b2360152349f887c}.
+
+\index{FTLayout@{FTLayout}!BBox@{BBox}}
+\index{BBox@{BBox}!FTLayout@{FTLayout}}
+\subsubsection[{BBox}]{\setlength{\rightskip}{0pt plus 5cm}virtual {\bf FTBBox} FTLayout::BBox (
+\begin{DoxyParamCaption}
+\item[{const wchar\_\-t $\ast$}]{ string, }
+\item[{const int}]{ len = {\ttfamily -\/1}, }
+\item[{{\bf FTPoint}}]{ position = {\ttfamily {\bf FTPoint}()}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  [pure virtual]}}\label{classFTLayout_abf64582771a2281d901af1e074535c2a}
+
+
+Get the bounding box for a formatted string. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em string} & A wchar\_\-t string. \\
+\hline
+{\em len} & The length of the string. If $<$ 0 then all characters will be checked until a null character is encountered (optional). \\
+\hline
+{\em position} & The pen position of the first character (optional). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The corresponding bounding box. 
+\end{DoxyReturn}
+
+
+Implemented in {\bf FTSimpleLayout} \doxyref{}{p.}{classFTSimpleLayout_afdec41319af9fbeec0316e38d0661107}.
+
+\index{FTLayout@{FTLayout}!Error@{Error}}
+\index{Error@{Error}!FTLayout@{FTLayout}}
+\subsubsection[{Error}]{\setlength{\rightskip}{0pt plus 5cm}virtual FT\_\-Error FTLayout::Error (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily  [virtual]}}\label{classFTLayout_a83cf3e7565bf9d9d2aec6d0614d1e6fc}
+
+
+Queries the Layout for errors. 
+
+\begin{DoxyReturn}{Returns}
+The current error code. 
+\end{DoxyReturn}
+\index{FTLayout@{FTLayout}!Render@{Render}}
+\index{Render@{Render}!FTLayout@{FTLayout}}
+\subsubsection[{Render}]{\setlength{\rightskip}{0pt plus 5cm}virtual void FTLayout::Render (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{ string, }
+\item[{const int}]{ len = {\ttfamily -\/1}, }
+\item[{{\bf FTPoint}}]{ position = {\ttfamily {\bf FTPoint}()}, }
+\item[{int}]{ renderMode = {\ttfamily FTGL::RENDER\_\-ALL}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  [pure virtual]}}\label{classFTLayout_a0e18bf877bbfe871e93ec0ebf1437a0f}
+
+
+Render a string of characters. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em string} & 'C' style string to be output. \\
+\hline
+{\em len} & The length of the string. If $<$ 0 then all characters will be displayed until a null character is encountered (optional). \\
+\hline
+{\em position} & The pen position of the first character (optional). \\
+\hline
+{\em renderMode} & Render mode to display (optional) \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in {\bf FTSimpleLayout} \doxyref{}{p.}{classFTSimpleLayout_afc122918b71e571155ca714eeb5c4888}.
+
+\index{FTLayout@{FTLayout}!Render@{Render}}
+\index{Render@{Render}!FTLayout@{FTLayout}}
+\subsubsection[{Render}]{\setlength{\rightskip}{0pt plus 5cm}virtual void FTLayout::Render (
+\begin{DoxyParamCaption}
+\item[{const wchar\_\-t $\ast$}]{ string, }
+\item[{const int}]{ len = {\ttfamily -\/1}, }
+\item[{{\bf FTPoint}}]{ position = {\ttfamily {\bf FTPoint}()}, }
+\item[{int}]{ renderMode = {\ttfamily FTGL::RENDER\_\-ALL}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  [pure virtual]}}\label{classFTLayout_a793a7b371c885420d73acc56a667d53a}
+
+
+Render a string of characters. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em string} & wchar\_\-t string to be output. \\
+\hline
+{\em len} & The length of the string. If $<$ 0 then all characters will be displayed until a null character is encountered (optional). \\
+\hline
+{\em position} & The pen position of the first character (optional). \\
+\hline
+{\em renderMode} & Render mode to display (optional) \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in {\bf FTSimpleLayout} \doxyref{}{p.}{classFTSimpleLayout_aeea681385258bf9cd20c355555c9dbaf}.
+
+
+
+\subsection{Friends And Related Function Documentation}
+\index{FTLayout@{FTLayout}!FTSimpleLayout@{FTSimpleLayout}}
+\index{FTSimpleLayout@{FTSimpleLayout}!FTLayout@{FTLayout}}
+\subsubsection[{FTSimpleLayout}]{\setlength{\rightskip}{0pt plus 5cm}friend class {\bf FTSimpleLayout}\hspace{0.3cm}{\ttfamily  [friend]}}\label{classFTLayout_ae27eaa779922d14c8eb0f476456c7099}
+
+
+Definition at line 67 of file FTLayout.h.
+
+
+
+The documentation for this class was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+{\bf FTLayout.h}\end{DoxyCompactItemize}

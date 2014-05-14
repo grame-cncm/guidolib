@@ -628,7 +628,7 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 					// this must be the parameter from ARGrace...
 					// check whether this is an empty-event anyhow...
 					TYPE_DURATION dur (o->getDuration());
-					if (curvst->curdispdur) dur = curvst->curdispdur->getDisplayDuration();
+					if (curvst->fCurdispdur) dur = curvst->fCurdispdur->getDisplayDuration();
 
 					ev = CreateGraceNote(timepos,o,dur);
 					// this adds the Grace-Note as a regular  event...
@@ -637,7 +637,7 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 				else
 				{
 					// careful, what happens to dispDur !!!!
-					if (curvst->curdispdur != NULL && curvst->curdispdur->getDisplayDuration() > DURATION_0)
+					if (curvst->fCurdispdur != NULL && curvst->fCurdispdur->getDisplayDuration() > DURATION_0)
 					{
 						if (dynamic_cast<ARNote *>(o))			ev = CreateNote(timepos,o);
 						else if (dynamic_cast<ARRest *>(o))		ev = CreateRest(timepos,o);
@@ -1787,7 +1787,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 			GRGlobalStem * grgstem = new GRGlobalStem(mCurGrStaff,
 				static_cast<ARShareStem *>(apt),
 				curstemstate,
-				curvst->curdispdur,
+				curvst->fCurdispdur,
 				curnoteformat);
 
 			grgstem->setError(1);
@@ -1802,7 +1802,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 			GRGlobalStem * grgstem = new GRGlobalStem(mCurGrStaff,
 							static_cast<ARShareStem *>(apt),
 				curstemstate,
-				curvst->curdispdur,
+				curvst->fCurdispdur,
 				curnoteformat);
 				addGRTag(grgstem);
 
@@ -2019,7 +2019,7 @@ void GRVoiceManager::checkCenterRest(GRStaff * grstaff, float lastpos, float new
 GREvent * GRVoiceManager::CreateNote( const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject)
 {
 	ARNote * arnote = dynamic_cast<ARNote *>(arObject);	
-	if ((arObject->getDuration() <= DURATION_0) && (curvst->curdispdur == NULL))
+	if ((arObject->getDuration() <= DURATION_0) && (curvst->fCurdispdur == NULL))
 		return NULL;		// this should not happen...
 
 	else if (arnote->getPitch() == EMPTY)
@@ -2034,11 +2034,12 @@ GRSingleNote * GRVoiceManager::CreateSingleNote( const TYPE_TIMEPOSITION & tp, A
 {
 	curev = ARMusicalEvent::cast(arObject);
 	// make sure to recognize the displayduration-tag...
+
 	TYPE_DURATION dtempl;
-	if (curvst->curdispdur != NULL)
+	if (curvst->fCurdispdur != NULL)
 	{
-		dtempl = curvst->curdispdur->getDisplayDuration();
-		int i = curvst->curdispdur->getDots();
+		dtempl = curvst->fCurdispdur->getDisplayDuration();
+		int i = curvst->fCurdispdur->getDots();
 		TYPE_DURATION tmpdur (dtempl);
 		while (i>0)
 		{
@@ -2141,10 +2142,10 @@ GREvent * GRVoiceManager::CreateRest( const TYPE_TIMEPOSITION & tp, ARMusicalObj
 		curev = ARMusicalEvent::cast(arObject);
 		// this is new:
 		TYPE_DURATION dtempl;
-		if (curvst->curdispdur != NULL)
+		if (curvst->fCurdispdur != NULL)
 		{
-			dtempl = curvst->curdispdur->getDisplayDuration();
-			int i = curvst->curdispdur->getDots();
+			dtempl = curvst->fCurdispdur->getDisplayDuration();
+			int i = curvst->fCurdispdur->getDots();
 			TYPE_DURATION tmpdur (dtempl);
 			while (i>0)
 			{

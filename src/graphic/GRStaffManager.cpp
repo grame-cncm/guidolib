@@ -2794,11 +2794,11 @@ GRGlobalStem * GRStaffManager::getOtherGlobalStem(GRSystemSlice * psys,
 			{
 				if (vcmgr->curchordtag->getLabel() == label)
 				{
-					if (vcmgr->curvst->curdispdur &&
-						curvcmgr->curvst->curdispdur)
+					if (vcmgr->curvst->fCurdispdur &&
+						curvcmgr->curvst->fCurdispdur)
 					{
-						if (vcmgr->curvst->curdispdur->getDisplayDuration() ==
-							curvcmgr->curvst->curdispdur->getDisplayDuration())
+						if (vcmgr->curvst->fCurdispdur->getDisplayDuration() ==
+							curvcmgr->curvst->fCurdispdur->getDisplayDuration())
 							return vcmgr->curglobalstem;
 					}
 					else

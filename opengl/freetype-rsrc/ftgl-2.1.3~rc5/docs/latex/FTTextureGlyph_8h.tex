@@ -1,0 +1,50 @@
+\section{FTTextureGlyph.h File Reference}
+\label{FTTextureGlyph_8h}\index{FTTextureGlyph.h@{FTTextureGlyph.h}}
+{\ttfamily \#include $<$FTGL/ftgl.h$>$}\par
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+class {\bf FTTextureGlyph}
+\begin{DoxyCompactList}\small\item\em \doxyref{FTTextureGlyph}{p.}{classFTTextureGlyph} is a specialisation of \doxyref{FTGlyph}{p.}{classFTGlyph} for creating texture glyphs. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\bf FTGLglyph} $\ast$ {\bf ftglCreateTextureGlyph} (FT\_\-GlyphSlot glyph, int id, int xOffset, int yOffset, int width, int height)
+\begin{DoxyCompactList}\small\item\em Create a specialisation of FTGLglyph for creating pixmaps. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{FTTextureGlyph.h@{FTTextureGlyph.h}!ftglCreateTextureGlyph@{ftglCreateTextureGlyph}}
+\index{ftglCreateTextureGlyph@{ftglCreateTextureGlyph}!FTTextureGlyph.h@{FTTextureGlyph.h}}
+\subsubsection[{ftglCreateTextureGlyph}]{\setlength{\rightskip}{0pt plus 5cm}{\bf FTGLglyph}$\ast$ ftglCreateTextureGlyph (
+\begin{DoxyParamCaption}
+\item[{FT\_\-GlyphSlot}]{ glyph, }
+\item[{int}]{ id, }
+\item[{int}]{ xOffset, }
+\item[{int}]{ yOffset, }
+\item[{int}]{ width, }
+\item[{int}]{ height}
+\end{DoxyParamCaption}
+)}\label{FTTextureGlyph_8h_ab6445b416371daf7646155a435419fe9}
+
+
+Create a specialisation of FTGLglyph for creating pixmaps. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em glyph} & The Freetype glyph to be processed. \\
+\hline
+{\em id} & The id of the texture that this glyph will be drawn in. \\
+\hline
+{\em xOffset} & The x offset into the parent texture to draw this glyph. \\
+\hline
+{\em yOffset} & The y offset into the parent texture to draw this glyph. \\
+\hline
+{\em width} & The width of the parent texture. \\
+\hline
+{\em height} & The height (number of rows) of the parent texture. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An FTGLglyph$\ast$ object. 
+\end{DoxyReturn}

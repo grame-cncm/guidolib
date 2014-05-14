@@ -3,7 +3,7 @@ INC = -I../src/include -I../src/devices
 
 system	:= $(shell uname -s)
 ifeq ($(system), Darwin)
-  lib =  -F../build/MacOS/Release/ -framework GUIDOEngine
+  lib =  -mmacosx-version-min=10.6 -F../build/MacOS/Release/ -framework GUIDOEngine
   INC := $(INC)  -I../macosx/src
 else
 ifeq ($(system), MINGW32_NT-6.1)
@@ -14,7 +14,7 @@ else
 endif
 endif
 
-TOOLS = guidogetversion guidogetpagecount guidogetvoicecount guidogetpagemap guidogetsystemmap guidogetstaffmap guidogetvoicemap guido2svg guido2svgmap
+TOOLS = guidogetversion guidogetpagecount guidogetvoicecount guidogettimemap guidogetpagemap guidogetsystemmap guidogetstaffmap guidogetvoicemap guido2svg guido2svgmap guido2abstract guido2dsl
 
 .PHONY: checkall
 
@@ -31,6 +31,12 @@ guido2midi : guido2midi.cpp
 guido2svg : guido2svg.cpp
 	g++ guido2svg.cpp $(INC) $(lib) -o guido2svg
 
+guido2abstract : guido2abstract.cpp
+	g++ guido2abstract.cpp $(INC) $(lib) -o guido2abstract
+
+guido2dsl : guido2dsl.cpp
+	g++ guido2dsl.cpp $(INC) $(lib) -o guido2dsl
+
 guido2svgmap : guido2svgmap.cpp
 	g++ guido2svgmap.cpp $(INC) $(lib) -o guido2svgmap
 
@@ -39,6 +45,9 @@ guidogetpagecount : guidogetpagecount.cpp
 
 guidogetvoicecount : guidogetvoicecount.cpp
 	g++ guidogetvoicecount.cpp $(INC) $(lib) -o guidogetvoicecount
+
+guidogettimemap : guidogettimemap.cpp
+	g++ guidogettimemap.cpp $(INC) $(lib) -o guidogettimemap
 
 guidogetpagemap : guidogetpagemap.cpp
 	g++ guidogetpagemap.cpp $(INC) $(lib) -o guidogetpagemap

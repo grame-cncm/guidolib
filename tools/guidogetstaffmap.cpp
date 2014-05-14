@@ -100,7 +100,10 @@ int main(int argc, char **argv)
 							cout << "######################### " << endl;
 							for (Time2GraphicMap::const_iterator m = map.begin(); m != map.end(); m++)
                             {
-								cout << m->first << " " << m->second << endl;
+                                                                //cout << m->first << " " << m->second << endl;
+                                                                // ugh - bug
+                                                                cout << "[" << m->first.first << ", " << m->first.second << "]";
+                                                                cout << " " << m->second << endl; 
                             }
 						}
 					}

@@ -16,7 +16,6 @@
 #include "GRStaff.h"
 #include "GRStaccato.h"
 #include "GREvent.h"
-// #include "GRStdNoteHead.h"
 
 
 GRRange::GRRange(GRStaff * pstaff,ARMusicalTag * mtag)

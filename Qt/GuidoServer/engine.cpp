@@ -23,16 +23,23 @@
 
 #include "QGuidoPainter.h"
 #include <QApplication>
+#include "qt_guido2img.h"
 
 namespace guidohttpd {
 
-void startEngine () {
-    QGuidoPainter::startGuidoEngine(); // starts the guido engine
+guido2img* makeConverter(std::string svgfontfile) {
+  qt_guido2img *converter = new qt_guido2img(svgfontfile);
+  return converter;
 }
 
-//void makeApplication (int argc, char **argv) {
-//    QApplication app(argc , argv); // required by Qt
-//}
+GuidoErrCode startEngine () {
+    QGuidoPainter::startGuidoEngine(); // starts the guido engine
+    return guidoNoErr;
+}
+
+void makeApplication (int argc, char **argv) {
+    QApplication *app = new QApplication(argc , argv); // required by Qt
+}
 
 void stopEngine () {
     QGuidoPainter::stopGuidoEngine(); // stop the guido engine

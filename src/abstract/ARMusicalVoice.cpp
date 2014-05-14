@@ -1709,10 +1709,10 @@ void ARMusicalVoice::doAutoBeaming()
 			{
 				// possible Start-Position
 				int durok = 1;
-				if (vst.curdispdur != NULL)
+				if (vst.fCurdispdur != NULL)
 				{
 					// check, wheter the displayduration is zero
-					if (vst.curdispdur->getDisplayDuration() == DURATION_0)
+					if (vst.fCurdispdur->getDisplayDuration() == DURATION_0)
 						durok = 0;
 				}
 				if (durok)
@@ -1773,10 +1773,10 @@ void ARMusicalVoice::doAutoBeaming()
 			{
 				// possible Start-Position
 				int durok = 1;
-				if (vst.curdispdur != NULL)
+				if (vst.fCurdispdur != NULL)
 				{
 					// check, wehter the displayduration
-					if (vst.curdispdur->getDisplayDuration() == DURATION_0)
+					if (vst.fCurdispdur->getDisplayDuration() == DURATION_0)
 						durok = 0;
 				}
 				if (durok)
@@ -2243,11 +2243,11 @@ obsolete: an end repeatbar is now ARBar
 				if (vst.curchordtag)
 				{
 					// then, we have to set the duration also of the dispDur tag that must be present somewhere ....
-					if (vst.curdispdur)
+					if (vst.fCurdispdur)
 					{
 						// how can we make sure, that the new duration is displayable?
 						// must be checked in doAutoDisplayCheck!
-						vst.curdispdur->setDisplayDuration(newdur);
+						vst.fCurdispdur->setDisplayDuration(newdur);
 
 					}
 					// we have to set the timepositions of the other events and tags within the chord-range ....
@@ -3097,10 +3097,10 @@ bool ARMusicalVoice::DurationFitsBase( const TYPE_DURATION &dur,
 			newbase.setNumerator(val);
 			newbase.setDenominator(8);
 			break;
-		default:
-			newbase.setNumerator(val);
-			newbase.setDenominator(dur.getNumerator());
-			break;
+//		default:
+//			newbase.setNumerator(val);
+//			newbase.setDenominator(dur.getNumerator());
+//			break;
 	}
 	return false;
 }
@@ -3142,7 +3142,7 @@ bool ARMusicalVoice::DurationIsDisplayable(TYPE_DURATION & dur, int & outDotCoun
 	dur.normalize();
 
 	// assert, that the duration is a power of two
-	assert(IsPowerOfTwoDenom(dur/*,8*/));
+//	assert(IsPowerOfTwoDenom(dur/*,8*/));   DF - removed on march 19 2014 when trying to improve incorrect displayed duration (e.g. a/21)
 
 	const int num = dur.getNumerator();
 
@@ -3710,12 +3710,12 @@ void ARMusicalVoice::doAutoDisplayCheck()
 					// then, we have to set the duration also of
 					// the dispDur tag that must be present
 					// somewhere ....
-					if (vst.curdispdur)
+					if (vst.fCurdispdur)
 					{
 						// how can we make sure, that the
 						// new duration is displayable?
 						// must be checked in doAutoDisplayCheck!
-						vst.curdispdur->setDisplayDuration(newdur);
+						vst.fCurdispdur->setDisplayDuration(newdur);
 
 					}
 					// we have to set the timepositions of the other
@@ -4446,12 +4446,12 @@ void ARMusicalVoice::SplitEventAtPos( ARMusicalVoiceState & vst, const TYPE_TIME
 		// then, we have to set the duration also of
 		// the dispDur tag that must be present
 		// somewhere ....
-		if (vst.curdispdur)
+		if (vst.fCurdispdur)
 		{
 			// how can we make sure, that the
 			// new duration is displayable?
 			// must be checked in doAutoDisplayCheck!
-			vst.curdispdur->setDisplayDuration(newdur);
+			vst.fCurdispdur->setDisplayDuration(newdur);
 
 		}
 		// we have to set the timepositions of the other
@@ -5712,7 +5712,7 @@ void ARMusicalVoice::FinishChord()
 			// how do we know ?
 			ARDisplayDuration * dispdur = NULL;
 			ARDummyRangeEnd * dispdum = NULL;
-			//if (!vst.curdispdur)
+			//if (!vst.fCurdispdur)
 			{
 				dispdur = new ARDisplayDuration();
 				dispdur->setDisplayDuration(group->dur);
@@ -6034,6 +6034,7 @@ void ARMusicalVoice::doAutoTrill()
 								do
                                 {
 									ARMusicalObject * nextObject = GetNext(posNote, armvs);
+									if (!nextObject) break;
 									nextNote = dynamic_cast<ARNote *>(nextObject);
 								}
                                 while(posObj && !nextNote);

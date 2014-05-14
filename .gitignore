@@ -11,5 +11,5 @@ tmpSrc
 *.o
 *~
 DerivedData
-doc/server/build/*
-doc/papers/2014-lac/server/guidoserver.pdf
+doc/server/build
+doc/server/build/html/*.html

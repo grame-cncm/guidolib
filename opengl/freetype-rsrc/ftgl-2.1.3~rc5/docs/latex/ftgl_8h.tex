@@ -1,0 +1,104 @@
+\section{ftgl.h File Reference}
+\label{ftgl_8h}\index{ftgl.h@{ftgl.h}}
+{\ttfamily \#include $<$ft2build.h$>$}\par
+{\ttfamily \#include $<$FT\_\-FREETYPE\_\-H$>$}\par
+{\ttfamily \#include $<$FT\_\-GLYPH\_\-H$>$}\par
+{\ttfamily \#include $<$FT\_\-OUTLINE\_\-H$>$}\par
+{\ttfamily \#include $<$FTGL/FTPoint.h$>$}\par
+{\ttfamily \#include $<$FTGL/FTBBox.h$>$}\par
+{\ttfamily \#include $<$FTGL/FTBuffer.h$>$}\par
+{\ttfamily \#include $<$FTGL/FTGlyph.h$>$}\par
+{\ttfamily \#include $<$FTGL/FTBitmapGlyph.h$>$}\par
+{\ttfamily \#include $<$FTGL/FTBufferGlyph.h$>$}\par
+{\ttfamily \#include $<$FTGL/FTExtrdGlyph.h$>$}\par
+{\ttfamily \#include $<$FTGL/FTOutlineGlyph.h$>$}\par
+{\ttfamily \#include $<$FTGL/FTPixmapGlyph.h$>$}\par
+{\ttfamily \#include $<$FTGL/FTPolyGlyph.h$>$}\par
+{\ttfamily \#include $<$FTGL/FTTextureGlyph.h$>$}\par
+{\ttfamily \#include $<$FTGL/FTFont.h$>$}\par
+{\ttfamily \#include $<$FTGL/FTGLBitmapFont.h$>$}\par
+{\ttfamily \#include $<$FTGL/FTBufferFont.h$>$}\par
+{\ttfamily \#include $<$FTGL/FTGLExtrdFont.h$>$}\par
+{\ttfamily \#include $<$FTGL/FTGLOutlineFont.h$>$}\par
+{\ttfamily \#include $<$FTGL/FTGLPixmapFont.h$>$}\par
+{\ttfamily \#include $<$FTGL/FTGLPolygonFont.h$>$}\par
+{\ttfamily \#include $<$FTGL/FTGLTextureFont.h$>$}\par
+{\ttfamily \#include $<$FTGL/FTLayout.h$>$}\par
+{\ttfamily \#include $<$FTGL/FTSimpleLayout.h$>$}\par
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace {\bf FTGL}
+\end{DoxyCompactItemize}
+\subsection*{Defines}
+\begin{DoxyCompactItemize}
+\item 
+\#define {\bf FTGL\_\-BEGIN\_\-C\_\-DECLS}~extern \char`\"{}C\char`\"{} \{ namespace FTGL \{
+\item 
+\#define {\bf FTGL\_\-END\_\-C\_\-DECLS}~\} \}
+\item 
+\#define {\bf FTGL\_\-EXPORT}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef double {\bf FTGL\_\-DOUBLE}
+\item 
+typedef float {\bf FTGL\_\-FLOAT}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum {\bf FTGL::RenderMode} \{ {\bf FTGL::RENDER\_\-FRONT} =  0x0001, 
+{\bf FTGL::RENDER\_\-BACK} =  0x0002, 
+{\bf FTGL::RENDER\_\-SIDE} =  0x0004, 
+{\bf FTGL::RENDER\_\-ALL} =  0xffff
+ \}
+\item 
+enum {\bf FTGL::TextAlignment} \{ {\bf FTGL::ALIGN\_\-LEFT} =  0, 
+{\bf FTGL::ALIGN\_\-CENTER} =  1, 
+{\bf FTGL::ALIGN\_\-RIGHT} =  2, 
+{\bf FTGL::ALIGN\_\-JUSTIFY} =  3
+ \}
+\end{DoxyCompactItemize}
+
+
+\subsection{Define Documentation}
+\index{ftgl.h@{ftgl.h}!FTGL\_\-BEGIN\_\-C\_\-DECLS@{FTGL\_\-BEGIN\_\-C\_\-DECLS}}
+\index{FTGL\_\-BEGIN\_\-C\_\-DECLS@{FTGL\_\-BEGIN\_\-C\_\-DECLS}!ftgl.h@{ftgl.h}}
+\subsubsection[{FTGL\_\-BEGIN\_\-C\_\-DECLS}]{\setlength{\rightskip}{0pt plus 5cm}\#define FTGL\_\-BEGIN\_\-C\_\-DECLS~extern \char`\"{}C\char`\"{} \{ namespace FTGL \{}\label{ftgl_8h_a1543f6485dcd3ef6db0a10396071a6f6}
+
+
+Definition at line 43 of file ftgl.h.
+
+\index{ftgl.h@{ftgl.h}!FTGL\_\-END\_\-C\_\-DECLS@{FTGL\_\-END\_\-C\_\-DECLS}}
+\index{FTGL\_\-END\_\-C\_\-DECLS@{FTGL\_\-END\_\-C\_\-DECLS}!ftgl.h@{ftgl.h}}
+\subsubsection[{FTGL\_\-END\_\-C\_\-DECLS}]{\setlength{\rightskip}{0pt plus 5cm}\#define FTGL\_\-END\_\-C\_\-DECLS~\} \}}\label{ftgl_8h_aba8b33a81b5c655eb7c4b358419a17d5}
+
+
+Definition at line 44 of file ftgl.h.
+
+\index{ftgl.h@{ftgl.h}!FTGL\_\-EXPORT@{FTGL\_\-EXPORT}}
+\index{FTGL\_\-EXPORT@{FTGL\_\-EXPORT}!ftgl.h@{ftgl.h}}
+\subsubsection[{FTGL\_\-EXPORT}]{\setlength{\rightskip}{0pt plus 5cm}\#define FTGL\_\-EXPORT}\label{ftgl_8h_ae472b08d77a4ead09abe74fe37220270}
+
+
+Definition at line 107 of file ftgl.h.
+
+
+
+\subsection{Typedef Documentation}
+\index{ftgl.h@{ftgl.h}!FTGL\_\-DOUBLE@{FTGL\_\-DOUBLE}}
+\index{FTGL\_\-DOUBLE@{FTGL\_\-DOUBLE}!ftgl.h@{ftgl.h}}
+\subsubsection[{FTGL\_\-DOUBLE}]{\setlength{\rightskip}{0pt plus 5cm}typedef double {\bf FTGL\_\-DOUBLE}}\label{ftgl_8h_ae792fb2619b3890381a8b68babbdac74}
+
+
+Definition at line 38 of file ftgl.h.
+
+\index{ftgl.h@{ftgl.h}!FTGL\_\-FLOAT@{FTGL\_\-FLOAT}}
+\index{FTGL\_\-FLOAT@{FTGL\_\-FLOAT}!ftgl.h@{ftgl.h}}
+\subsubsection[{FTGL\_\-FLOAT}]{\setlength{\rightskip}{0pt plus 5cm}typedef float {\bf FTGL\_\-FLOAT}}\label{ftgl_8h_ad08e479bb6a0dbe611100e8549d55a1b}
+
+
+Definition at line 39 of file ftgl.h.
+

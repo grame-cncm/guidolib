@@ -41,7 +41,7 @@ ARMusicalVoiceState::ARMusicalVoiceState()
 	
 	curmeter = NULL;
 	curbeamstate = NULL;
-	curdispdur = NULL;
+	fCurdispdur = NULL;
 	curchordtag = NULL;
 	curgracetag = NULL;
 //	curbreakstate = NULL;
@@ -65,7 +65,7 @@ ARMusicalVoiceState::ARMusicalVoiceState(const ARMusicalVoiceState & vst)
 				
 	curmeter = NULL;
 	curbeamstate = NULL;
-	curdispdur = NULL;
+	fCurdispdur = NULL;
 	curchordtag = NULL;
 	curgracetag = NULL;
 //	curbreakstate = NULL;
@@ -129,7 +129,7 @@ ARMusicalVoiceState & ARMusicalVoiceState::operator = (const ARMusicalVoiceState
 	
 	curmeter = vst.curmeter;
 	curbeamstate = vst.curbeamstate;
-	curdispdur = vst.curdispdur;
+	fCurdispdur = vst.fCurdispdur;
 	curchordtag = vst.curchordtag;
 	curgracetag = vst.curgracetag;
 	
@@ -266,7 +266,7 @@ void ARMusicalVoiceState::AddPositionTag(ARPositionTag * ntag, int addtoaddedlis
 	ARDisplayDuration * arddur;
 	if ( (arddur = dynamic_cast<ARDisplayDuration *>(ntag)) != NULL)
 	{
-		curdispdur = arddur;
+		fCurdispdur = arddur;
 	}
 
 	ARChordTag * chordtag;
@@ -323,7 +323,7 @@ void ARMusicalVoiceState::RemovePositionTag(ARPositionTag * ntag, int addtoremov
 	ARDisplayDuration * arddur;
 	if ( (arddur = dynamic_cast<ARDisplayDuration *>(ntag)) != NULL)
 	{
-		curdispdur = NULL;
+		fCurdispdur = NULL;
 		checkforcurtags = 1;
 	}
 
@@ -381,9 +381,9 @@ void ARMusicalVoiceState::RemovePositionTag(ARPositionTag * ntag, int addtoremov
 	
 	if (artgend)
 	{
-		if (artgend->getCorrespondence() == curdispdur)
+		if (artgend->getCorrespondence() == fCurdispdur)
 		{
-			curdispdur = NULL;
+			fCurdispdur = NULL;
 		}
 		if (artgend->getCorrespondence() == curchordtag)
 		{
@@ -406,7 +406,7 @@ void ARMusicalVoiceState::RemovePositionTag(ARPositionTag * ntag, int addtoremov
 			ARDisplayDuration * tag = dynamic_cast<ARDisplayDuration *>(curpositiontags->GetPrev(pos));
 			if (tag)
 			{
-				curdispdur = tag;
+				fCurdispdur = tag;
 				break;
 			}
 		}		

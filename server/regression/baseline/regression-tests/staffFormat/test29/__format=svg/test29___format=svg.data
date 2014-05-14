@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<svg viewBox="0 0 194 59" xmlns="http://www.w3.org/2000/svg"  version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <desc> SVG file generated using the GuidoEngine version 1.5.2</desc>
+    <g style="stroke:#000000; stroke-opacity:1">
+        <g transform="scale(0.123364, 0.123364)">
+            <g transform="translate(-0, -0)">
+            </g>
+            <g transform="translate(237.106, 237.106)">
+            </g>
+            <g transform="translate(237.106, 286.706)">
+                <g style="stroke-width:8">
+                    <line x1="0" y1="0" x2="1197.52" y2="0" />
+                    <line x1="0" y1="16" x2="1197.52" y2="16" />
+                    <line x1="0" y1="32" x2="1197.52" y2="32" />
+                </g>
+            </g>
+            <g transform="translate(237.106, 286.706)">
+                <g font-family="Guido2">
+                    <text x="98.62" y="32"  font-size="64" stroke="#000000" fill="#000000">&#38;</text>
+                    <text x="225.78" y="48"  font-size="64" stroke="#000000" fill="#000000">&#95;</text>
+                    <text x="232.5" y="48"  font-size="64" stroke="#000000" fill="#000000">&#88;</text>
+                    <text x="232.5" y="45.3333"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="232.5" y="40"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="232.5" y="32"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="232.5" y="24"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="232.5" y="16"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="232.5" y="8"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="232.5" y="8"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="471.354" y="40"  font-size="64" stroke="#000000" fill="#000000">&#88;</text>
+                    <text x="471.354" y="37.3333"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="471.354" y="32"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="471.354" y="24"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="471.354" y="16"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="471.354" y="8"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="471.354" y="0"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="471.354" y="0"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="710.208" y="32"  font-size="64" stroke="#000000" fill="#000000">&#88;</text>
+                    <text x="710.208" y="29.3333"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="710.208" y="24"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="710.208" y="16"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="710.208" y="8"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="710.208" y="0"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="710.208" y="-8"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="710.208" y="-8"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="949.062" y="24"  font-size="64" stroke="#000000" fill="#000000">&#88;</text>
+                    <text x="949.062" y="21.3333"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="949.062" y="16"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="949.062" y="8"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="949.062" y="0"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="949.062" y="-8"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="949.062" y="-16"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="949.062" y="-16"  font-size="64" stroke="#000000" fill="#000000">&#120;</text>
+                    <rect x="1188.05" y="-0.64" width="2.30396" height="33.28" />
+                    <rect x="1194.45" y="-0.64" width="8" height="33.28" />
+                </g>
+            </g>
+            <g transform="translate(237.106, 286.706)">
+            </g>
+            <g transform="translate(237.106, 237.106)">
+            </g>
+            <g transform="translate(0, -1.52588e-05)">
+            </g>
+        </g>
+    </g>
+</svg>

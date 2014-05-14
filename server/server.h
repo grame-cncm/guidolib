@@ -72,7 +72,6 @@ class HTTPDServer
     int fVerbose;
     int fLogmode;
     string fCachedir;
-    string fSvgFontFile;
     struct MHD_Daemon *	fServer;
     guido2img* fConverter;
     int fMaxSessions;
@@ -82,7 +81,7 @@ class HTTPDServer
 
 public:
 
-    HTTPDServer(int verbose, int logmode, string cachedir, string svgfontfile, guido2img* g2img);
+    HTTPDServer(int verbose, int logmode, string cachedir, guido2img* g2img);
     virtual ~HTTPDServer();
 
     /// \brief starts the httpd server

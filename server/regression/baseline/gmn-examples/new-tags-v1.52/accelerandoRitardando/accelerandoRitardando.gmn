@@ -1,0 +1,36 @@
+% accel.gmn
+%
+% \accel-tag indicates an accelerando (acceleration of a musical part)
+% \rit-tag indicates a ritatrdando (deceleration of a musical part)
+%
+% Usage :
+% 		- \accel<tempo, abstempo, font, fattrib, fsize, color, dx/dy>(notes)
+% 		- \rit<tempo, abstempo, font, fattrib, fsize, color, dx/dy>(notes)
+%
+% Parameters : 
+%		- tempo (string): the tempo at the beginnig
+%		- abstempo (string): the tempo at the end
+%		- font (string): the text font
+%		- fattrib (string): attribute of the font ("b" for bold, "i" for italic, "bi" for both)
+% 		- fsize : font size
+%
+{
+    [
+        \rit(e g b f a) 
+
+        \accel<tempo="60", color="red", abstempo="80", dy=22, font="Andalus">
+        (
+            e d e2 e3 f1 a
+        )
+    ],
+    [
+        \rit<abstempo="120", tempo="100", color="blue">
+        (
+            e c b f a
+        )
+        \accel<fattrib="bi">
+        (
+            e d e c d f
+        )
+    ]
+}

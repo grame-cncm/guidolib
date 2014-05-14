@@ -1,0 +1,165 @@
+<?xml version="1.0"?>
+<svg viewBox="0 0 444 116" xmlns="http://www.w3.org/2000/svg"  version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <desc> SVG file generated using the GuidoEngine version 1.5.2</desc>
+    <g style="stroke:#000000; stroke-opacity:1">
+        <g transform="scale(0.124643, 0.124643)">
+            <g transform="translate(-0, -0)">
+            </g>
+            <g transform="translate(237.106, 237.106)">
+            </g>
+            <g transform="translate(237.106, 387.106)">
+                <g style="stroke-width:4">
+                    <line x1="0" y1="0" x2="2889.89" y2="0" />
+                    <line x1="0" y1="50" x2="2889.89" y2="50" />
+                    <line x1="0" y1="100" x2="2889.89" y2="100" />
+                    <line x1="0" y1="150" x2="2889.89" y2="150" />
+                    <line x1="0" y1="200" x2="2889.89" y2="200" />
+                    <line x1="2889.89" y1="0" x2="3200.94" y2="0" />
+                    <line x1="2889.89" y1="50" x2="3200.94" y2="50" />
+                    <line x1="2889.89" y1="100" x2="3200.94" y2="100" />
+                    <line x1="2889.89" y1="150" x2="3200.94" y2="150" />
+                    <line x1="2889.89" y1="200" x2="3200.94" y2="200" />
+                </g>
+            </g>
+            <g transform="translate(237.106, 387.106)">
+                <g font-family="Guido2">
+                    <text x="50" y="200"  font-size="200" stroke="#000000" fill="#000000">&#38;</text>
+                    <polygon points="365.146 -124.823  365.146 -102.323  619.92 -127.8  619.92 -150.3  " />
+                    <polygon points="365.146 -122.323  365.146 -102.323  619.92 -127.5  619.92 -147.5  " />
+                    <polygon points="365.146 -84.8226  365.146 -64.8226  619.92 -90  619.92 -110  " />
+                    <text x="288.146" y="250"  font-size="200" stroke="#000000" fill="#000000">&#95;</text>
+                    <text x="309.146" y="250"  font-size="200" stroke="#000000" fill="#000000">&#88;</text>
+                    <text x="309.146" y="241.667"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="309.146" y="225"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="309.146" y="200"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="309.146" y="175"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="309.146" y="150"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="309.146" y="125"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="309.146" y="100"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="309.146" y="75"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="309.146" y="50"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="309.146" y="25"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="309.146" y="0"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="309.146" y="-25"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="309.146" y="-50"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="309.146" y="-72.3226"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="560.92" y="25"  font-size="200" stroke="#000000" fill="#000000">&#88;</text>
+                    <text x="560.92" y="16.6667"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="560.92" y="0"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="560.92" y="-25"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="560.92" y="-50"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="560.92" y="-75"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="560.92" y="-97.5"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <polygon points="812.694 399.823  812.694 377.323  1069.47 403  1069.47 425.5  " />
+                    <polygon points="812.694 397.323  812.694 377.323  1069.47 402.5  1069.47 422.5  " />
+                    <polygon points="812.694 359.823  812.694 339.823  1069.47 365  1069.47 385  " />
+                    <text x="812.694" y="25"  font-size="200" stroke="#000000" fill="#000000">&#88;</text>
+                    <text x="812.694" y="33.3333"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="812.694" y="50"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="812.694" y="75"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="812.694" y="100"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="812.694" y="125"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="812.694" y="150"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="812.694" y="175"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="812.694" y="200"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="812.694" y="225"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="812.694" y="250"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="812.694" y="275"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="812.694" y="300"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="812.694" y="325"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="812.694" y="347.323"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1043.47" y="250"  font-size="200" stroke="#000000" fill="#000000">&#95;</text>
+                    <text x="1064.47" y="250"  font-size="200" stroke="#000000" fill="#000000">&#88;</text>
+                    <text x="1064.47" y="258.333"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1064.47" y="275"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1064.47" y="300"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1064.47" y="325"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1064.47" y="350"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1064.47" y="372.5"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <polygon points="1316.24 350  1316.24 327.5  1573.02 301.823  1573.02 324.323  " />
+                    <polygon points="1316.24 347.5  1316.24 327.5  1573.02 302.323  1573.02 322.323  " />
+                    <polygon points="1316.24 310  1316.24 290  1573.02 264.823  1573.02 284.823  " />
+                    <text x="1316.24" y="175"  font-size="200" stroke="#000000" fill="#000000">&#88;</text>
+                    <text x="1316.24" y="183.333"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1316.24" y="200"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1316.24" y="225"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1316.24" y="250"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1316.24" y="275"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1316.24" y="297.5"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1568.02" y="-25"  font-size="200" stroke="#000000" fill="#000000">&#88;</text>
+                    <text x="1568.02" y="-16.6667"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1568.02" y="0"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1568.02" y="25"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1568.02" y="50"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1568.02" y="75"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1568.02" y="100"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1568.02" y="125"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1568.02" y="150"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1568.02" y="175"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1568.02" y="200"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1568.02" y="225"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1568.02" y="250"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1568.02" y="272.323"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <polygon points="1819.79 324.823  1819.79 302.323  2076.56 328  2076.56 350.5  " />
+                    <polygon points="1819.79 322.323  1819.79 302.323  2076.56 327.5  2076.56 347.5  " />
+                    <polygon points="1819.79 284.823  1819.79 264.823  2076.56 290  2076.56 310  " />
+                    <text x="1819.79" y="-25"  font-size="200" stroke="#000000" fill="#000000">&#88;</text>
+                    <text x="1819.79" y="-16.6667"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1819.79" y="0"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1819.79" y="25"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1819.79" y="50"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1819.79" y="75"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1819.79" y="100"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1819.79" y="125"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1819.79" y="150"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1819.79" y="175"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1819.79" y="200"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1819.79" y="225"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1819.79" y="250"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="1819.79" y="272.323"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="2071.56" y="175"  font-size="200" stroke="#000000" fill="#000000">&#88;</text>
+                    <text x="2071.56" y="183.333"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="2071.56" y="200"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="2071.56" y="225"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="2071.56" y="250"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="2071.56" y="275"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <text x="2071.56" y="297.5"  font-size="200" stroke="#000000" fill="#000000">&#104;</text>
+                    <polygon points="2379.34 25  2379.34 47.5  3200.94 47.5  3200.94 25  " />
+                    <polygon points="2379.34 27.5  2379.34 47.5  3205.94 47.5  3205.94 27.5  " />
+                    <polygon points="2379.34 65  2379.34 85  2634.11 85  2634.11 65  " />
+                    <text x="2302.34" y="250"  font-size="200" stroke="#000000" fill="#000000">&#95;</text>
+                    <text x="2323.34" y="250"  font-size="200" stroke="#000000" fill="#000000">&#88;</text>
+                    <text x="2323.34" y="241.667"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2323.34" y="225"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2323.34" y="200"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2323.34" y="175"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2323.34" y="150"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2323.34" y="125"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2323.34" y="100"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2323.34" y="77.5"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2575.11" y="225"  font-size="200" stroke="#000000" fill="#000000">&#88;</text>
+                    <text x="2575.11" y="216.667"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2575.11" y="200"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2575.11" y="175"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2575.11" y="150"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2575.11" y="125"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2575.11" y="100"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2575.11" y="77.5"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2826.89" y="200"  font-size="200" stroke="#000000" fill="#000000">&#88;</text>
+                    <text x="2826.89" y="191.667"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2826.89" y="175"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2826.89" y="150"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2826.89" y="125"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2826.89" y="100"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                    <text x="2826.89" y="77.5"  font-size="200" stroke="#000000" fill="#000000">&#120;</text>
+                </g>
+            </g>
+            <g transform="translate(237.106, 387.106)">
+            </g>
+            <g transform="translate(237.106, 237.106)">
+            </g>
+            <g transform="translate(0, 1.52588e-05)">
+            </g>
+        </g>
+    </g>
+</svg>
