@@ -59,6 +59,7 @@
 
 %%%%%%%%%%% GUIDO %%%%%%%%%%%%%    
 
+% -------------------------------- Général ------------------------------
     \begin{frame}
     \frametitle{GUIDO : Description textuelle de la musique}
     \section{Guido}
@@ -69,8 +70,10 @@
       \item Notes : a, b, c, d, e, f, g, h
       \item Altérations : \#, \&
       \item Silences : \_
-      \item Durées : de la quadruple croche (1/64) à la blanche (1/1)
-      \item Tags : \begin{code} \textbackslash{}meter \textbackslash{}clef \textbackslash{}cresc \textbackslash{}noteFormat \end{code} ...
+      \item Durées : de la quadruple croche (1/64)\\ à la ronde (1/1)
+      \item Tags \begin{code} \textbackslash{}tag<paramètres>\end{code} :\\ 
+      \vspace{2mm}
+      \begin{code} \textbackslash{}noteFormat \textbackslash{}meter \textbackslash{}clef \textbackslash{}cresc \end{code} ...
     \end{itemize}
     
     \end{frame}
@@ -79,15 +82,23 @@
     \begin{frame}
     \frametitle{Contrôle de rendu}
     
-    \begin{code}
     \begin{itemize}
-      \item dx, dy
-      \item size
-      \item color
-      \item headsLeft, headsRight, headsCenter, headsNormal
-      \item stemsOff, stemsAuto, stemsUp, stemsDown
+      \item Paramètres standards :
+      \begin{code}
+      \begin{itemize}
+        \item dx, dy
+        \item size
+        \item color
+      \end{itemize}
+      \end{code}
+      \item Tags de contrôle des notes :
+      \begin{code}
+      \begin{itemize}
+        \item \textbackslash{}headsLeft, \textbackslash{}headsRight, \textbackslash{}headsCenter, \textbackslash{}headsNormal
+        \item \textbackslash{}stemsOff, \textbackslash{}stemsAuto, \textbackslash{}stemsUp, \textbackslash{}stemsDown
+      \end{itemize}
+      \end{code}
     \end{itemize}
-    \end{code}
     
     \end{frame}
 
@@ -118,7 +129,7 @@
     \subsection{microtonalités}
 
     \begin{code} \textbackslash{}alter \textless{}detune\textgreater{} \end{code} \hspace{3cm} \includegraphics[width=4cm]{img/partitions/freekey.pdf} \\
-    \begin{code} \textbackslash{}alter \textless{}detune\textgreater{} (note-series) \end{code}
+    \begin{code} \textbackslash{}alter \textless{}detune\textgreater{} (notes) \end{code}
     
     
     \vspace{5mm}
@@ -169,7 +180,7 @@
     \frametitle{Clusters}
     \subsection{clusters}
     
-    \begin{code} \textbackslash{}cluster \textless{} params \textgreater{} (chord-series) \end{code}
+    \begin{code} \textbackslash{}cluster \textless{} params \textgreater{} (accords) \end{code}
     
     \vspace{5mm}
     \centering  \includegraphics[width=4cm]{img/partitions/cluster.pdf}
@@ -184,7 +195,7 @@
 
 % ------------------------- Feathered Beaming ---------------------------
     \begin{frame}
-    \frametitle{Feathered Beaming}
+    \frametitle{Feathered Beaming \small ( liens de croches en soufflet )}
     \subsection{fbeam}
 
     \begin{code} \textbackslash{}fBeam \textless{} params \textgreater{} (notes)\\ 
@@ -367,7 +378,7 @@
     
     \begin{center} \includegraphics[width=4cm]{img/trill2.pdf} \end{center}
     
-    \begin{code} \textbackslash{}trill \textless{} params \textgreater{} (chord-series)\\ 
+    \begin{code} \textbackslash{}trill \textless{} params \textgreater{} (accords)\\ 
     \hspace{2mm} params :\\
       - tr = [ true | false ]\\
       - anchor  = [ note | tr ]
