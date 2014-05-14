@@ -157,8 +157,8 @@ _post_params (void *coninfo_cls, enum MHD_ValueKind , const char *key,
 //--------------------------------------------------------------------------
 // the http server
 //--------------------------------------------------------------------------
-HTTPDServer::HTTPDServer(int verbose, int logmode, string cachedir, guido2img* g2svg)
-    : fVerbose(verbose), fLogmode(logmode), fCachedir(cachedir), fServer(0), fConverter(g2svg), fMaxSessions(100)
+HTTPDServer::HTTPDServer(int verbose, int logmode, string cachedir, guido2img* g2svg, bool alloworigin)
+    : fAccessControlAllowOrigin(alloworigin), fVerbose(verbose), fLogmode(logmode), fCachedir(cachedir), fServer(0), fConverter(g2svg), fMaxSessions(100)
 {
 }
 
@@ -175,7 +175,7 @@ HTTPDServer::~HTTPDServer()
 //--------------------------------------------------------------------------
 bool HTTPDServer::start(int port)
 {
-    // USE_SELECT_INTERALLY makes the server single threaded
+	// USE_SELECT_INTERALLY makes the server single threaded
     // this guarantees that operations will be queued, which prevents
     // issues involving the use of shared resources
     fServer = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY, port,
@@ -246,7 +246,8 @@ int HTTPDServer::send (struct MHD_Connection *connection, const char *page, int 
         return MHD_NO;
     }
     MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE, type ? type : "text/plain");
-    MHD_add_response_header (response, MHD_HTTP_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+    if (fAccessControlAllowOrigin)
+		MHD_add_response_header (response, MHD_HTTP_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, "*");
     int ret = MHD_queue_response (connection, status, response);
     MHD_destroy_response (response);
     return ret;

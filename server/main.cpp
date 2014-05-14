@@ -40,6 +40,9 @@ static const int kDefaultVerbose = IP_VERBOSE | HEADER_VERBOSE
   | REQUEST_VERBOSE | URL_VERBOSE | QUERY_VERBOSE
   | CODE_VERBOSE | MIME_VERBOSE | LENGTH_VERBOSE;
 
+
+static const char* kAccessControlAllowOrigin = "--access-control-allow-origin";
+
 static const char* kLogfileOpt = "--logfile";
 static const string kDefaultLogfile = "guidohttpdserver.log";
 
@@ -97,6 +100,7 @@ static void usage (char* name)
     cout << tab << kCachedirOpt << " cache dir name : (defaults to a directory cache in the directory of the current executable)" << endl;
     cout << tab << kSvgFontFileOpt << " name of the svg font file - defaults to a file called " << kDefaultSvgFontFile << " in the executable's directory" << endl;
     cout << tab << kVersionOpt << " version of the server and GUIDO" << endl;
+    cout << tab << kAccessControlAllowOrigin << " set 'Access-Control-Allow-Origin' to '*' in headers" << endl;
 /*
     cout << tab << kVerboseOpt << " verbosity. an integer bitmap that can combine:" << endl;
     cout << tab << tab << "1 (print ip to log)" << endl;
@@ -116,12 +120,12 @@ static void usage (char* name)
 }
 
 //---------------------------------------------------------------------------------
-static bool launchServer (int port, int verbose, int logmode, string cachedir, string svgfontfile, bool daemon)
+static bool launchServer (int port, int verbose, int logmode, string cachedir, string svgfontfile, bool daemon, bool alloworigin)
 {
     bool ret = false;
     guido2img *converter = makeConverter(svgfontfile);
     startEngine();
-    HTTPDServer server(verbose, logmode, cachedir, converter);
+    HTTPDServer server(verbose, logmode, cachedir, converter, alloworigin);
     server.readFromCache();
     if (server.start(port)) {
         if (daemon) {
@@ -185,6 +189,9 @@ int main(int argc, char **argv)
 
     bool daemon = bopt (argv, kSafeOpt, false);
     daemon = get_private_profile_int(daemonSectionName, daemonOnName, daemon ? 1 : 0, kDefaultInitfile.c_str()) ? true : false;
+
+    bool allowOrigin = bopt (argv, kAccessControlAllowOrigin, false);
+
     gLog = logfile != ""
            ? new logstream (logfile.c_str())
            : new logstream();
@@ -239,5 +246,5 @@ int main(int argc, char **argv)
         close(STDOUT_FILENO);
         close(STDERR_FILENO);
     }
-    return launchServer (port, verbose, logmode, cachedir, svgfontfile, daemon) ? 0 : 1;
+    return launchServer (port, verbose, logmode, cachedir, svgfontfile, daemon, allowOrigin) ? 0 : 1;
 }
