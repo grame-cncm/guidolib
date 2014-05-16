@@ -1,8 +1,0 @@
-% Release 0.8:
-
-% centerrests.gmn
-
-% Whole measure rests are now centered in the middle
-% of the measure where they appear:
-
-[ \meter<"4/4">  _/1 |   c/4 e d f _/1 c/4 d e f ]

@@ -1,7 +1,0 @@
-% Release 0.8
-
-% grace.gmn
-
-% the \grace-tag now works with chords as well.
-
-[  \grace( e/8) d/4 \slurBegin \grace( {  e/16,g} )  d/4 \slurEnd ]

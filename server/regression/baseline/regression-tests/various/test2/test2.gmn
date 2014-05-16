@@ -1,8 +1,0 @@
-{
-    [
-        \meter<"4/4"> \accol<id=1, range="1-2", dx=-4, type="straightBrace"> a b c a b cd
-    ],
-    [
-        \meter<"4/4"> \accol<id=2, range="1-2", type="thinBrace"> a b c a b cd
-    ]
-}
