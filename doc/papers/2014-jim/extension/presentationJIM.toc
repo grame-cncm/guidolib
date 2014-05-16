@@ -1,4 +1,4 @@
-\beamer@endinputifotherversion {3.33pt}
+\beamer@endinputifotherversion {3.10pt}
 \select@language {french}
 \beamer@sectionintoc {1}{Sommaire}{2}{0}{1}
 \beamer@sectionintoc {2}{Guido}{3}{0}{2}
