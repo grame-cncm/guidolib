@@ -1,9 +1,0 @@
-% Release 1.3.8
-% trill.gmn
-{
-% The regular trill ; the accidental can be moved with adx et ady
-[\trill({g} {g, a&}) \trill<ady=0.5, adx=-2>({g, a&}) ],
-
-% The cautionary accidentals can be shown with "cautionary"
-[\key<3> \trill<"cautionary">({c, d} {e, f#}) ]
-}

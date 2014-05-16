@@ -1,6 +1,0 @@
-[ 
-	\staffFormat<style="1-line"> 
-	\clef<"perc"> g \clef<"perc", size=0.5> c | \clef<"perc", size=2.2> f 
-	\clef<"g", size=2> g \doubleBar
-	\clef<"f", size=0.5> e0 \repeatBegin f e \repeatEnd d
-]
