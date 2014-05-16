@@ -1,8 +1,0 @@
-(*
-	incorrect accidentals rendering: no flat on the second C
-*)
-{
-	[
-	  \barFormat<style="system"> \staff<1>\stemsUp | c#2*1/8  c2   ]
-,	[ \staff<1>\stemsDown  \text<"was incorrect accidentals", fsize=8pt, dx=-12hs>(g) ]
-}

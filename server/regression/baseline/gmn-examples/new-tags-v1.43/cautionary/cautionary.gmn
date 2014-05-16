@@ -1,7 +1,0 @@
-[
- \key<2> \meter<"2/4"> 
-  \text<"\acc tag supports style=\"cautionary\"",dx=-5hs,dy=16hs>(
-  c f# \acc<style="cautionary"> (f#) \alter<1.5>f/8\acc<style="cautionary">(f)
-  \alter<0> f#/2  
-  )
-]

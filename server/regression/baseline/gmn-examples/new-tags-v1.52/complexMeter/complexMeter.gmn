@@ -1,8 +1,0 @@
-% complexMeter.gmn
-%
-%
-% The user has now the possibility of writing sums in metric numerator.
-%
-[
-  \meter<"2+2+3/4"> a a c2 a1 e2 e d c
-]
