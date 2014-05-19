@@ -130,11 +130,11 @@
     \frametitle{Micro -Tonalités}
     \subsection{microtonalités}
 
-    \begin{code} \textbackslash{}alter \textless{}detune\textgreater{} \end{code} \hspace{3cm} \includegraphics[width=4cm]{img/partitions/freekey.pdf} \\
+    \begin{code} \textbackslash{}alter \textless{}detune\textgreater{} \end{code} \hspace{2cm} \vspace{-1cm} \includegraphics[width=5.3cm]{img/partitions/freekey.pdf} \\
     \begin{code} \textbackslash{}alter \textless{}detune\textgreater{} (notes) \end{code}
     
     
-    \vspace{5mm}
+    \vspace{10mm}
     
     \begin{itemize}
       \item Range-tag optionnel : concerne certaines notes, ou toutes les suivantes
@@ -184,8 +184,8 @@
     
     \begin{code} \textbackslash{}cluster \textless{} params \textgreater{} (accords) \end{code}
     
-    \vspace{5mm}
-    \centering  \includegraphics[width=4cm]{img/partitions/cluster.pdf}
+    \vspace{2mm}
+    \centering  \includegraphics[width=5cm]{img/partitions/cluster.pdf}
     
     \begin{itemize}
       \item Range-tag s’appliquant \`a des accords de deux notes (les notes extr\^emes du cluster)  
@@ -223,8 +223,7 @@
     \end{itemize}
 
     \columnbreak
-    
-    \includegraphics[width=4cm]{img/fbeamsimple.pdf}
+    \includegraphics[width=5cm]{img/fbeamsimple.pdf}
     
     \end{multicols}
     
@@ -239,7 +238,7 @@
     \begin{code} 
     \textbackslash{}symbol\textless{}params\textgreater{}\\
     \textbackslash{}symbol\textless{}params\textgreater{}(notes)\\
-   \end{code}
+    \end{code}
     
     \begin{multicols}{2}
     
@@ -250,17 +249,16 @@
     \end{code}
     
     \columnbreak
-    
-   \hspace{1cm}  \includegraphics[width=4cm]{img/partitions/symbol.pdf}
+    \includegraphics[width=5cm]{img/partitions/symbol.pdf}
     
     \end{multicols}
     
-    \vspace{-3mm}
+    \vspace{-10mm}
     \begin{itemize}
       \item Permet d'insérer une image
       \item Range-tag optionnel : \begin{itemize}
         \item l'image prend la place qu'il lui faut sur la portée
-        \item l'image possède une durée et peut remplacer un ou plusieurs évènements
+        \item l'image prend la durée des évènements entre parenthèses
       \end{itemize}
       \item Formats graphiques supportés : png, jpg ou bmp
       \item Fichier indiqué par un chemin absolu ou relatif
@@ -276,13 +274,28 @@
     \begin{code} ... \textbackslash{}staffOff ... \hspace{1cm} \end{code} \\
     \begin{code} ... \textbackslash{}staffOn ... \end{code}
     
-    \begin{center} \includegraphics[width=6cm]{img/staffoff.pdf} \end{center}
+    \begin{center} \includegraphics[width=7cm]{img/staffoff.pdf} \end{center}
+    
+    \vspace{-0.5cm}
     
     \begin{itemize}
       \item Permet de faire apparaître et disparaître des parties de la partition
       \item Respecte strictement l'ordre de la description textuelle (même pour les éléments simultanés)
     \end{itemize}
     
+    \end{frame}
+    
+    
+    \begin{frame}
+        \frametitle{Démo}
+        \subsection{demo}
+        
+        \begin{itemize}
+        	\item Glissandi
+        	\item Feathered beaming
+        	\item Symbols
+        \end{itemize}
+        
     \end{frame}
 
 %%%%%%%%% AMELIORATIONS DU RENDU %%%%%%%
@@ -362,7 +375,7 @@
     
     \columnbreak
 
-    \includegraphics[width=4cm]{img/partitions/noteheads.pdf}
+    \includegraphics[width=5cm]{img/partitions/noteheads.pdf}
     
    \end{multicols}
 
