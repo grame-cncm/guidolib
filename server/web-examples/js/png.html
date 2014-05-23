@@ -1,15 +1,16 @@
 <html>
   <head>
     <script type="text/javascript" src="jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="server.js"></script>
     <script>
       var current = 0;
       function processGMN() {
         var internalCurrent = current;
         current = current + 1;
-        $.post("http://guidoservice.grame.fr",
+        $.post(guidoservice,
         "data="+encodeURIComponent($("#gmnSandbox").val()), function(data) {
           var xhr = new XMLHttpRequest();
-          xhr.open('GET',"http://guidoservice.grame.fr/"+data.ID, true);
+          xhr.open('GET',guidoservice+data.ID, true);
           xhr.responseType = 'arraybuffer';
           xhr.onload = function(e) {
             console.log(this.status);
