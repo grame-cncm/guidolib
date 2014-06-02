@@ -235,7 +235,7 @@ int main(int argc, char **argv)
 	if (err != guidoNoErr)
         error(err);
 
-	err = GuidoDSLExport( grh, page, cout);
+	err = GuidoAbstractExport ( grh, page, cout);
 
 	if (err != guidoNoErr)
         error(err);
