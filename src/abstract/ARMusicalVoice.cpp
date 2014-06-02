@@ -795,6 +795,28 @@ void ARMusicalVoice::print() const
 }
 
 //____________________________________________________________________________________
+void ARMusicalVoice::printPosTags(std::ostream & os, GuidoPos& pos, GuidoPos prevpos, bool lookend) const
+{
+	if (mPosTagList)
+	{
+		while (pos)
+		{
+			ARPositionTag * pt = mPosTagList->GetAt(pos);
+			ARTagEnd * artgend = ARTagEnd::cast(pt);
+			if (!lookend){ if (artgend)	break; }
+			else if (!artgend)	break;
+			if ( pt && pt->getPosition() == prevpos)
+			{
+				ARMusicalObject * o = dynamic_cast<ARMusicalObject *>(pt);
+				if (o)	o->operator<<(os);
+			}
+			else	break;
+			mPosTagList->GetNext(pos);
+		}
+	}
+}
+
+//____________________________________________________________________________________
 std::ostream & ARMusicalVoice::operator<<(std::ostream & os) const
 {
 	// Attention: when calling this function you have to set readmode beforehand if you
@@ -814,40 +836,9 @@ std::ostream & ARMusicalVoice::operator<<(std::ostream & os) const
 		ARMusicalObject * e = ObjectList::GetNext(pos);
 
 		// now we check the positiontaglist up to the event
-		if (mPosTagList)
-		{
-			while (ptagpos)
-			{
-				ARPositionTag * pt = mPosTagList->GetAt(ptagpos);
-				ARTagEnd * artgend = ARTagEnd::cast(pt);
-				if (artgend)	break;
-				if ( pt && pt->getPosition() == prevpos)
-				{
-					ARMusicalObject * o = dynamic_cast<ARMusicalObject *>(pt);
-					if (o)	o->operator<<(os);
-				}
-				else	break;
-				mPosTagList->GetNext(ptagpos);
-			}
-		}
-
+		printPosTags (os, ptagpos, prevpos, false);
 		e->operator<<(os);
-		if (mPosTagList)
-		{
-			while (ptagpos)
-			{
-				ARPositionTag * pt = mPosTagList->GetAt(ptagpos);
-				ARTagEnd * artgend = ARTagEnd::cast(pt);
-				if (!artgend)	break;
-				if (pt->getPosition() == prevpos)
-				{
-					ARMusicalObject * o = dynamic_cast<ARMusicalObject *>(pt);
-					if (o)	o->operator<<(os);
-				}
-				else	break;
-				mPosTagList->GetNext(ptagpos);
-			}
-		}
+		printPosTags (os, ptagpos, prevpos, true);
 	}
 
 	// now, we deal with the staff coming after.
