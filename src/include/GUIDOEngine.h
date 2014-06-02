@@ -297,6 +297,22 @@ representations.
     */
     GUIDOAPI(GuidoErrCode)	GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings* settings, GRHandler* gr);
 
+
+
+	/*!
+        Transforms a Guido abstract representation into a piano roll representation.
+
+		\param ar the handler to the abstract representation.
+		\param width the drawing area width.
+		\param height the drawing area height.
+		\param start start date of the time zone to be displayed.
+		\param end end date of the time zone to be displayed, when 0, the score duration is used.
+		\param dev a graphic device.
+		\return a Guido error code.
+    */
+    GUIDOAPI(GuidoErrCode)	GuidoAR2PRoll( ARHandler ar, int width, int height, const GuidoDate& start, const GuidoDate& end, VGDevice* dev);
+
+
 	/*!
         Applies new layout settings to an existing Guido graphic representation.
 		\param gr the handler to the graphic representation.

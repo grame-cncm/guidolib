@@ -303,6 +303,30 @@ class TestTimeMap : public TimeMapCollector
 #endif
 
 // --------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoAR2PRoll( ARHandler ar, int width, int height, const GuidoDate& start, const GuidoDate& end, VGDevice* dev)
+{
+	if( ar == 0 )	return guidoErrInvalidHandle;
+	if( !gInited )	return guidoErrNotInitialized;
+
+	ARMusic * arMusic = ar->armusic; // (JB) was guido_PopARMusic()
+	if( arMusic == 0 ) 
+		return guidoErrInvalidHandle;
+
+	dev->BeginDraw();
+	dev->PushPenColor(VGColor (100,100,100));
+	dev->PushFillColor(VGColor (0,0,0));
+
+	TYPE_TIMEPOSITION d1(start.num, start.denom);
+	TYPE_TIMEPOSITION d2(end.num, end.denom);
+	arMusic->toPianoRoll(width, height, d1, d2, dev);
+
+	dev->PopPenColor();
+	dev->PopFillColor();
+	dev->EndDraw();
+	return guidoNoErr;
+}
+
+// --------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * settings, GRHandler * gr)
 {
 	if( gr == 0 ) 	return guidoErrBadParameter;

@@ -4,6 +4,7 @@ INC = -I../src/include -I../src/devices
 system	:= $(shell uname -s)
 ifeq ($(system), Darwin)
   lib =  -mmacosx-version-min=10.6 -F../build/MacOS/Release/ -framework GUIDOEngine
+  debuglib =  -mmacosx-version-min=10.6 -F../build/MacOS/Debug/ -framework GUIDOEngine
   INC := $(INC)  -I../macosx/src
 else
 ifeq ($(system), MINGW32_NT-6.1)
@@ -14,7 +15,7 @@ else
 endif
 endif
 
-TOOLS = guidogetversion guidogetpagecount guidogetvoicecount guidogettimemap guidogetpagemap guidogetsystemmap guidogetstaffmap guidogetvoicemap guido2svg guido2svgmap guido2abstract guido2dsl
+TOOLS = guidogetversion guidogetpagecount guidogetvoicecount guidogettimemap guidogetpagemap guidogetsystemmap guidogetstaffmap guidogetvoicemap guido2svg guido2svgmap guido2abstract guido2dsl guido2proll
 
 .PHONY: checkall
 
@@ -24,6 +25,9 @@ tools: $(TOOLS)
 
 guidogetversion : guidogetversion.cpp
 	g++ guidogetversion.cpp -I../src/include $(lib) -o guidogetversion
+
+guido2proll : guido2proll.cpp
+	g++ guido2proll.cpp $(INC) $(lib) -o guido2proll
 
 guido2midi : guido2midi.cpp
 	g++ guido2midi.cpp $(INC) $(lib) -o guido2midi
