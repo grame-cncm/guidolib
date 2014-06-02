@@ -104,8 +104,10 @@ int main(int argc, char **argv)
     ifs.close();
 
     arh = GuidoString2AR(parser, streamBuffer.str().c_str());
-	if (arh)
-        error(err);
+	if (!arh) {
+        int line, col;
+		error(GuidoParserGetErrorCode (parser, line, col, 0));
+	}
 
 /*
 	GuidoAR2MIDIFile operates using an ARHandler
