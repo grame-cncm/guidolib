@@ -27,13 +27,16 @@ guidogetversion : guidogetversion.cpp
 	g++ guidogetversion.cpp -I../src/include $(lib) -o guidogetversion
 
 midi2proll : midi2proll.cpp
-	g++ midi2proll.cpp $(INC) $(debuglib) -o midi2proll
+	g++ midi2proll.cpp $(INC) $(lib) -o midi2proll
 
 guido2proll : guido2proll.cpp
 	g++ guido2proll.cpp $(INC) $(lib) -o guido2proll
 
 guido2midi : guido2midi.cpp
 	g++ guido2midi.cpp $(INC) $(lib) -o guido2midi
+
+midi2guido : midi2guido.cpp
+	g++ midi2guido.cpp $(INC) $(lib) -o midi2guido
 
 guido2svg : guido2svg.cpp
 	g++ guido2svg.cpp $(INC) $(lib) -o guido2svg
