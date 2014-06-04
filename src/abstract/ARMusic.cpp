@@ -21,7 +21,7 @@
 #include "ARVoiceManager.h"
 #include "ARAuto.h"
 #include "ARMusicalVoice.h"
-#include "AR2PianoRoll.h"
+#include "Guido2PianoRoll.h"
 #include "TimeMapper.h"
 
 #include "benchtools.h"
@@ -96,7 +96,7 @@ void ARMusic::toPianoRoll(int width, int height, TYPE_TIMEPOSITION start, TYPE_T
 {
 	GuidoPos pos = GetHeadPosition();
 	if (!end) end = getDuration();
-	AR2PianoRoll proll(start, end, width, height);
+	GuidoPianoRoll proll(start, end, width, height);
 	proll.DrawGrid (dev);
 	while(pos) {
 		ARMusicalVoice * e = GetNext(pos);

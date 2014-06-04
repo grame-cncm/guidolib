@@ -15,7 +15,7 @@ else
 endif
 endif
 
-TOOLS = guidogetversion guidogetpagecount guidogetvoicecount guidogettimemap guidogetpagemap guidogetsystemmap guidogetstaffmap guidogetvoicemap guido2svg guido2svgmap guido2abstract guido2dsl guido2proll
+TOOLS = guidogetversion guidogetpagecount guidogetvoicecount guidogettimemap guidogetpagemap guidogetsystemmap guidogetstaffmap guidogetvoicemap guido2svg guido2svgmap guido2abstract guido2dsl guido2proll midi2proll 
 
 .PHONY: checkall
 
@@ -25,6 +25,9 @@ tools: $(TOOLS)
 
 guidogetversion : guidogetversion.cpp
 	g++ guidogetversion.cpp -I../src/include $(lib) -o guidogetversion
+
+midi2proll : midi2proll.cpp
+	g++ midi2proll.cpp $(INC) $(debuglib) -o midi2proll
 
 guido2proll : guido2proll.cpp
 	g++ guido2proll.cpp $(INC) $(lib) -o guido2proll

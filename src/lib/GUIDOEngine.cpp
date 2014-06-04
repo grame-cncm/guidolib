@@ -38,6 +38,7 @@ using namespace std;
 #include "ARPageFormat.h"
 #include "ARMusic.h"
 #include "ARMusicalVoice.h"
+#include "Guido2PianoRoll.h"
 #include "TagParameterFloat.h"
 
 // - Guido GR
@@ -303,10 +304,37 @@ class TestTimeMap : public TimeMapCollector
 #endif
 
 // --------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoMIDI2PRoll( const char* file, int width, int height, const GuidoDate& start, const GuidoDate& end, VGDevice* dev)
+{
+#ifdef MIDIEXPORT
+	if( !dev || !file)		return guidoErrBadParameter;
+
+	dev->BeginDraw();
+	dev->PushPenColor(VGColor (100,100,100));
+	dev->PushFillColor(VGColor (0,0,0));
+
+	TYPE_TIMEPOSITION d1(start.num, start.denom);
+	TYPE_TIMEPOSITION d2(end.num, end.denom);
+	
+	GuidoPianoRoll proll (d1, d2, width, height);
+	proll.Draw(file, dev);
+
+	dev->PopPenColor();
+	dev->PopFillColor();
+	dev->EndDraw();
+	return guidoNoErr;
+#else
+	cerr << "Can't convert to piano roll: GUIDO Engine has been compiled without MIDI support" << endl;
+	return guidoErrActionFailed;
+#endif
+}
+
+// --------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoAR2PRoll( ARHandler ar, int width, int height, const GuidoDate& start, const GuidoDate& end, VGDevice* dev)
 {
 	if( ar == 0 )	return guidoErrInvalidHandle;
 	if( !gInited )	return guidoErrNotInitialized;
+	if( !dev )		return guidoErrBadParameter;
 
 	ARMusic * arMusic = ar->armusic; // (JB) was guido_PopARMusic()
 	if( arMusic == 0 ) 
