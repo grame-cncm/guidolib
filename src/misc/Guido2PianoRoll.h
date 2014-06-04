@@ -16,6 +16,7 @@
 #define AR2PianoRoll_h
 
 #include "ARMusicalVoice.h"
+#include "MidiShareLight.h"
 
 class ARTie;
 class ARMusicalObject;
@@ -40,8 +41,8 @@ class GuidoPianoRoll
 	TYPE_DURATION	fChordDuration;		// the chord duration (notes in a chord have a null duration)
 	
 	
-	int		date2xpos (TYPE_TIMEPOSITION pos) const;
-	int		duration2width (TYPE_DURATION dur) const;
+	int		date2xpos (double pos) const;
+	int		duration2width (double dur) const;
 	int		pitch2ypos (int midipitch) const;
 	int		pitchrange () const			{ return fHighPitch - fLowPitch + 1; }
 	int		stepheight () const			{ return fHeight / pitchrange(); }
@@ -49,7 +50,9 @@ class GuidoPianoRoll
 
 	protected:
 	
+		virtual void Draw(int pitch, double date, double dur, VGDevice* dev);
 		virtual void Draw (ARMusicalObject* o, TYPE_TIMEPOSITION date, TYPE_DURATION dur, VGDevice* dev);
+		virtual void Draw (MidiSeqPtr seq, int tpqn, VGDevice* dev);
 	
 	public:
 				 GuidoPianoRoll(TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, int width, int height);

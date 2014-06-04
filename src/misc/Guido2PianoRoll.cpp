@@ -12,6 +12,7 @@
 */
 
 #include <iostream>
+#include <map>
 
 #include "GUIDOEngine.h"
 #include "Guido2PianoRoll.h"
@@ -29,7 +30,6 @@
 #include "TagParameterString.h"
 #include "VGDevice.h"
 
-#include "MidiShareLight.h"
 #include "midifile.h"
 
 using namespace std;
@@ -45,8 +45,8 @@ GuidoPianoRoll::GuidoPianoRoll(TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, i
 }
 
 //-------------------------------------------------------------------
-int	GuidoPianoRoll::date2xpos (TYPE_TIMEPOSITION pos) const		{ return int(fWidth * double(pos-fStartDate) / fDuration); }
-int	GuidoPianoRoll::duration2width (TYPE_DURATION dur) const		{ return int(fWidth * double(dur) / fDuration); }
+int	GuidoPianoRoll::date2xpos (double pos) const		{ return int(fWidth * (pos- double(fStartDate)) / fDuration); }
+int	GuidoPianoRoll::duration2width (double dur) const	{ return int(fWidth * dur / fDuration); }
 
 //-------------------------------------------------------------------
 int	GuidoPianoRoll::pitch2ypos (int midipitch) const
@@ -116,6 +116,18 @@ bool GuidoPianoRoll::handleColor (ARNoteFormat* nf, VGDevice* dev)
 }
 
 //-------------------------------------------------------------------
+void GuidoPianoRoll::Draw(int pitch, double date, double dur, VGDevice* dev)
+{
+	int x = date2xpos (date);
+	int w = duration2width (dur);
+	int y = pitch2ypos (pitch);
+	int halfstep = stepheight() / 2;
+	if (!halfstep) halfstep = 1;
+	
+	dev->Rectangle( x, y-halfstep, x+(w ? w : 1), y+halfstep);
+}
+
+//-------------------------------------------------------------------
 void GuidoPianoRoll::Draw(ARMusicalObject* e, TYPE_TIMEPOSITION date, TYPE_DURATION dur, VGDevice* dev)
 {
 	ARNote * note = dynamic_cast<ARNote*>(e);
@@ -127,13 +139,7 @@ void GuidoPianoRoll::Draw(ARMusicalObject* e, TYPE_TIMEPOSITION date, TYPE_DURAT
 
 		else {
 			if (note->getName() != ARNoteName::empty) {
-				int x = date2xpos (date);
-				int w = duration2width (dur);
-				int y = pitch2ypos (note->midiPitch());
-				int halfstep = stepheight() / 2;
-				if (!halfstep) halfstep = 1;
-				
-				dev->Rectangle( x, y-halfstep, x+(w ? w : 1), y+halfstep);
+				Draw (note->midiPitch(), double(date), double(dur), dev);
 			}
 //			cerr << e->getRelativeTimePosition() << ": note duration " <<  dur << " pitch " << note->midiPitch() << " (" << note->getName() <<")" << endl;
 			fChord = false;
@@ -185,10 +191,81 @@ void GuidoPianoRoll::Draw(ARMusicalVoice* v, VGDevice* dev)
 //-------------------------------------------------------------------
 // MIDI Piano roll
 //-------------------------------------------------------------------
+static MidiSeqPtr KeyOnOff2Note(MidiSeqPtr seq, MidiLight* midi)
+{
+	if (!seq) return 0;
+	map<int, MidiEvPtr> pitchMap;
+	MidiEvPtr ev = FirstEv(seq);
+	MidiSeqPtr outseq = midi->NewSeq();
+	while (ev) {
+		switch (EvType(ev)) {
+			case typeKeyOn:
+				pitchMap[Pitch(ev)] = ev;
+				break;
+			case typeKeyOff: {
+					MidiEvPtr note = midi->CopyEv(pitchMap[Pitch(ev)]);
+					pitchMap[Pitch(ev)] = 0;
+					if (note) {
+						EvType(note) = typeNote;
+						Dur(note) = Date(ev) - Date(note);
+						midi->AddSeq (outseq, note);
+					}
+					else cerr << "KeyOnOff2Note: key off " << int(Pitch(ev)) << " without matching key on at date " << Date(ev) << endl;
+				}
+				break;
+			default:
+				midi->AddSeq (outseq, midi->CopyEv(ev));
+		}
+		ev = Link(ev);
+	}
+	midi->FreeSeq(seq);
+	return outseq;
+}
+
+//-------------------------------------------------------------------
+void GuidoPianoRoll::Draw(MidiSeqPtr seq, int tpqn, VGDevice* dev)
+{
+	MidiEvPtr ev = FirstEv(seq);
+	int tpwn = tpqn * 4;
+	while (ev) {
+		if (EvType(ev) == typeNote)
+			Draw (Pitch(ev), double(Date(ev))/tpwn, double(Dur(ev))/tpwn, dev);
+		ev = Link(ev);
+	}
+}
+
+//-------------------------------------------------------------------
 GuidoErrCode GuidoPianoRoll::Draw(const char* file, VGDevice* dev)
 {
 	if (!file || !dev) return guidoErrBadParameter;
+	MIDIFile mf;
+	if (mf.Open(file, MidiFileRead)) {
 
+		int n= mf.infos().ntrks;				/* get the number of tracks */
+		int tpqn = mf.infos().time;
+		vector<MidiSeqPtr> vseq;
+		long maxTime = 0;
+		while( n--) {
+			MidiSeqPtr seq = KeyOnOff2Note(mf.ReadTrack(), mf.midi());	/* read every track			*/
+			if (seq) {
+				vseq.push_back(seq);
+				long t = Date(LastEv(seq));
+				if (t > maxTime) maxTime = t;
+			}
+		}
+		if (!fDuration) fDuration = double(maxTime) / (tpqn*4);
+		for (int i=0; i<vseq.size(); i++) {
+			Draw (vseq[i], tpqn, dev);
+			mf.midi()->FreeSeq(vseq[i]);
+		}
+		mf.Close();
+		DrawGrid (dev);
+	}
+	else {
+		cerr << "can't open MIDI file " << file << endl;
+		return guidoErrFileAccess;
+	}
 	return guidoNoErr;
 }
+
 

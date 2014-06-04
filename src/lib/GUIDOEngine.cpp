@@ -38,7 +38,6 @@ using namespace std;
 #include "ARPageFormat.h"
 #include "ARMusic.h"
 #include "ARMusicalVoice.h"
-#include "Guido2PianoRoll.h"
 #include "TagParameterFloat.h"
 
 // - Guido GR
@@ -71,6 +70,8 @@ using namespace std;
 #include "BinarySystem.h"
 #include "BinaryDevice.h"
 #include "BinaryFont.h"
+
+#include "Guido2PianoRoll.h"
 
 
 // ==========================================================================
