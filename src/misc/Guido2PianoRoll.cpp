@@ -227,9 +227,22 @@ void GuidoPianoRoll::Draw(MidiSeqPtr seq, int tpqn, VGDevice* dev)
 {
 	MidiEvPtr ev = FirstEv(seq);
 	int tpwn = tpqn * 4;
+	double start = double(fStartDate);
+	double end = double(fEndDate);
 	while (ev) {
-		if (EvType(ev) == typeNote)
-			Draw (Pitch(ev), double(Date(ev))/tpwn, double(Dur(ev))/tpwn, dev);
+		if (EvType(ev) == typeNote) {
+			double date = double(Date(ev))/tpwn;
+			double dur = double(Dur(ev))/tpwn;
+			if (date >= start) {
+				double remain = end - date;
+				Draw (Pitch(ev), date, (dur > remain ? remain : dur), dev);
+			}
+			else if ((date + dur) > start) {
+				dur -= (start - date);
+				double remain = end - start;
+				Draw (Pitch(ev), start, (dur > remain ? remain : dur), dev);
+			}
+		}
 		ev = Link(ev);
 	}
 }
@@ -253,7 +266,10 @@ GuidoErrCode GuidoPianoRoll::Draw(const char* file, VGDevice* dev)
 				if (t > maxTime) maxTime = t;
 			}
 		}
-		if (!fDuration) fDuration = double(maxTime) / (tpqn*4);
+		if (!fEndDate) {
+			fEndDate = TYPE_TIMEPOSITION (int(double(maxTime) / (tpqn*4)*256), 256);
+			fDuration = double(fEndDate - fStartDate);
+		}
 		for (int i=0; i<vseq.size(); i++) {
 			Draw (vseq[i], tpqn, dev);
 			mf.midi()->FreeSeq(vseq[i]);
