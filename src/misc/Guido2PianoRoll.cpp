@@ -13,7 +13,8 @@
 
 #include <iostream>
 
-#include "AR2PianoRoll.h"
+#include "GUIDOEngine.h"
+#include "Guido2PianoRoll.h"
 #include "ARMusicalVoiceState.h"
 #include "ARMusicalTag.h"
 #include "ARNote.h"
@@ -28,12 +29,15 @@
 #include "TagParameterString.h"
 #include "VGDevice.h"
 
+#include "MidiShareLight.h"
+#include "midifile.h"
+
 using namespace std;
 
 #define kMinDist	4		// the minimum distance between lines of the grid
 
 //-------------------------------------------------------------------
-AR2PianoRoll::AR2PianoRoll(TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, int width, int height)
+GuidoPianoRoll::GuidoPianoRoll(TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, int width, int height)
 	: fWidth(width), fHeight(height), fStartDate(start), fEndDate(end), fDuration(double(end-start)), fLowPitch(0), fHighPitch(127)
 {
 	fNoteHeight = fHeight / pitchrange();
@@ -41,18 +45,18 @@ AR2PianoRoll::AR2PianoRoll(TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, int w
 }
 
 //-------------------------------------------------------------------
-int	AR2PianoRoll::date2xpos (TYPE_TIMEPOSITION pos) const		{ return int(fWidth * double(pos-fStartDate) / fDuration); }
-int	AR2PianoRoll::duration2width (TYPE_DURATION dur) const		{ return int(fWidth * double(dur) / fDuration); }
+int	GuidoPianoRoll::date2xpos (TYPE_TIMEPOSITION pos) const		{ return int(fWidth * double(pos-fStartDate) / fDuration); }
+int	GuidoPianoRoll::duration2width (TYPE_DURATION dur) const		{ return int(fWidth * double(dur) / fDuration); }
 
 //-------------------------------------------------------------------
-int	AR2PianoRoll::pitch2ypos (int midipitch) const
+int	GuidoPianoRoll::pitch2ypos (int midipitch) const
 {
 	int p = midipitch - fLowPitch;
 	return fHeight - int((fHeight * p) / pitchrange());
 }
 
 //-------------------------------------------------------------------
-void AR2PianoRoll::DrawGrid (VGDevice* dev) const
+void GuidoPianoRoll::DrawGrid (VGDevice* dev) const
 {
 	dev->PushPenWidth(0.3);
 	for (int i=fLowPitch; i < fHighPitch; i++) {
@@ -92,7 +96,7 @@ void AR2PianoRoll::DrawGrid (VGDevice* dev) const
 }
 
 //-------------------------------------------------------------------
-bool AR2PianoRoll::handleColor (ARNoteFormat* nf, VGDevice* dev)
+bool GuidoPianoRoll::handleColor (ARNoteFormat* nf, VGDevice* dev)
 {
 	if (nf) {
 		const TagParameterString *s = nf->getColor();
@@ -112,7 +116,7 @@ bool AR2PianoRoll::handleColor (ARNoteFormat* nf, VGDevice* dev)
 }
 
 //-------------------------------------------------------------------
-void AR2PianoRoll::Draw(ARMusicalObject* e, TYPE_TIMEPOSITION date, TYPE_DURATION dur, VGDevice* dev)
+void GuidoPianoRoll::Draw(ARMusicalObject* e, TYPE_TIMEPOSITION date, TYPE_DURATION dur, VGDevice* dev)
 {
 	ARNote * note = dynamic_cast<ARNote*>(e);
 
@@ -129,7 +133,7 @@ void AR2PianoRoll::Draw(ARMusicalObject* e, TYPE_TIMEPOSITION date, TYPE_DURATIO
 				int halfstep = stepheight() / 2;
 				if (!halfstep) halfstep = 1;
 				
-				dev->Rectangle( x, y-halfstep, x+w, y+halfstep);
+				dev->Rectangle( x, y-halfstep, x+(w ? w : 1), y+halfstep);
 			}
 //			cerr << e->getRelativeTimePosition() << ": note duration " <<  dur << " pitch " << note->midiPitch() << " (" << note->getName() <<")" << endl;
 			fChord = false;
@@ -138,7 +142,7 @@ void AR2PianoRoll::Draw(ARMusicalObject* e, TYPE_TIMEPOSITION date, TYPE_DURATIO
 }
 
 //-------------------------------------------------------------------
-void AR2PianoRoll::Draw(ARMusicalVoice* v, VGDevice* dev)
+void GuidoPianoRoll::Draw(ARMusicalVoice* v, VGDevice* dev)
 {
 //cerr << "--------------------------" << endl;
 	fColored = fChord = false;
@@ -174,5 +178,17 @@ void AR2PianoRoll::Draw(ARMusicalVoice* v, VGDevice* dev)
 		else handleColor (dynamic_cast<ARNoteFormat*>(e), dev);
 	}
 	if (fColored) dev->PopFillColor();
+}
+
+
+
+//-------------------------------------------------------------------
+// MIDI Piano roll
+//-------------------------------------------------------------------
+GuidoErrCode GuidoPianoRoll::Draw(const char* file, VGDevice* dev)
+{
+	if (!file || !dev) return guidoErrBadParameter;
+
+	return guidoNoErr;
 }
 

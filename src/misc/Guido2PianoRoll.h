@@ -22,7 +22,7 @@ class ARMusicalObject;
 class ARNoteFormat;
 class VGDevice;
 
-class AR2PianoRoll
+class GuidoPianoRoll
 {
 	int		fWidth;						// the image width
 	int		fHeight;					// the image height
@@ -46,13 +46,17 @@ class AR2PianoRoll
 	int		pitchrange () const			{ return fHighPitch - fLowPitch + 1; }
 	int		stepheight () const			{ return fHeight / pitchrange(); }
 	bool	handleColor (ARNoteFormat* e, VGDevice* dev);
+
+	protected:
+	
+		virtual void Draw (ARMusicalObject* o, TYPE_TIMEPOSITION date, TYPE_DURATION dur, VGDevice* dev);
 	
 	public:
-				 AR2PianoRoll(TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, int width, int height);
-		virtual ~AR2PianoRoll() {}
+				 GuidoPianoRoll(TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, int width, int height);
+		virtual ~GuidoPianoRoll() {}
 		
+		virtual GuidoErrCode Draw (const char* midifile, VGDevice* dev);
 		virtual void Draw (ARMusicalVoice* v, VGDevice* dev);
-		virtual void Draw (ARMusicalObject* o, TYPE_TIMEPOSITION date, TYPE_DURATION dur, VGDevice* dev);
 		virtual void DrawGrid (VGDevice* dev) const;
 };
 
