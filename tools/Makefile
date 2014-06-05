@@ -44,9 +44,6 @@ guido2svg : guido2svg.cpp
 guido2abstract : guido2abstract.cpp
 	g++ guido2abstract.cpp $(INC) $(lib) -o guido2abstract
 
-guido2dsl : guido2dsl.cpp
-	g++ guido2dsl.cpp $(INC) $(lib) -o guido2dsl
-
 guido2svgmap : guido2svgmap.cpp
 	g++ guido2svgmap.cpp $(INC) $(lib) -o guido2svgmap
 
