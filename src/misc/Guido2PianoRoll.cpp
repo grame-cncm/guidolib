@@ -104,10 +104,12 @@ bool GuidoPianoRoll::handleColor (ARNoteFormat* nf, VGDevice* dev)
 		if (s && s->getRGB( colref )) {
 			fColor = VGColor(colref[0], colref[1], colref[2], colref[3]);
 			dev->PushFillColor(fColor);
+			dev->PushPenColor(fColor);
 			fColored = true;
 		}
 		else if (fColored) {
 			fColored = false;
+			dev->PopPenColor();
 			dev->PopFillColor();
 		}
 		return true;
@@ -187,7 +189,10 @@ void GuidoPianoRoll::Draw(ARMusicalVoice* v, VGDevice* dev)
 			fChord = true;
 		else handleColor (dynamic_cast<ARNoteFormat*>(e), dev);
 	}
-	if (fColored) dev->PopFillColor();
+	if (fColored) {
+		dev->PopPenColor();
+		dev->PopFillColor();
+	}
 }
 
 
