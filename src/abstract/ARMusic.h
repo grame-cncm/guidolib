@@ -54,8 +54,19 @@ class ARMusic : public MusicalVoiceList, public ARMusicalEvent
 		\param end end date of the time zone to be displayed, when 0, the scure duration is used.
 		\param dev a graphic device.
 	*/
-
 	virtual void 	toPianoRoll(int width, int height, TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, VGDevice * dev) const;
+
+	/*!
+		Converts an abstract representation to a simplified proportional representation
+
+		\param width the drawing area width.
+		\param height the drawing area height.
+		\param start start date of the time zone to be displayed.
+		\param end end date of the time zone to be displayed, when 0, the scure duration is used.
+		\param dev a graphic device.
+	*/
+	virtual void 	toReducedProportional(int width, int height, TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, bool drawdur, VGDevice * dev) const;
+
 	virtual void 	print() const;
 	virtual void	print (std::ostream & os) const;
 	virtual std::ostream & output(std::ostream & os, bool isauto = true) const;

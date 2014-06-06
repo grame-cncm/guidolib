@@ -17,6 +17,7 @@
 
 #include "ARMusicalVoice.h"
 #include "MidiShareLight.h"
+#include "VGColor.h"
 
 class ARTie;
 class ARMusicalObject;
@@ -25,14 +26,20 @@ class VGDevice;
 
 class GuidoPianoRoll
 {
+	int		duration2width (double dur) const;
+	int		pitchrange () const			{ return fHighPitch - fLowPitch + 1; }
+	bool	handleColor (ARNoteFormat* e, VGDevice* dev);
+
+	protected:
+
 	int		fWidth;						// the image width
 	int		fHeight;					// the image height
 	
 	TYPE_TIMEPOSITION	fStartDate;		// start of time zone to be displayed
 	TYPE_TIMEPOSITION	fEndDate;		// end of time zone to be displayed
 	
-	double	fDuration;			// the time zone duration
-	int		fLowPitch;			// the lowest pitch
+	double	fDuration;					// the time zone duration
+	int		fLowPitch;					// the lowest pitch
 	int		fHighPitch;
 	int		fNoteHeight;
 	
@@ -40,19 +47,15 @@ class GuidoPianoRoll
 	bool			fChord;				// a flag to indicate that next note (or rest) is in a chord
 	TYPE_DURATION	fChordDuration;		// the chord duration (notes in a chord have a null duration)
 	
+	VGColor			fColor;				// the current color when colored
 	
-	int		date2xpos (double pos) const;
-	int		duration2width (double dur) const;
-	int		pitch2ypos (int midipitch) const;
-	int		pitchrange () const			{ return fHighPitch - fLowPitch + 1; }
-	int		stepheight () const			{ return fHeight / pitchrange(); }
-	bool	handleColor (ARNoteFormat* e, VGDevice* dev);
-
-	protected:
-	
-		virtual void Draw(int pitch, double date, double dur, VGDevice* dev);
+				int	 date2xpos (double pos) const;
+		virtual int	 stepheight () const			{ return fHeight / pitchrange(); }
+		virtual void Draw(int pitch, double date, double dur, VGDevice* dev) const;
+		virtual void DrawRect(int x, int y, double dur, VGDevice* dev) const;
 		virtual void Draw (ARMusicalObject* o, TYPE_TIMEPOSITION date, TYPE_DURATION dur, VGDevice* dev);
 		virtual void Draw (MidiSeqPtr seq, int tpqn, VGDevice* dev);
+		virtual int	 pitch2ypos (int midipitch) const;
 	
 	public:
 				 GuidoPianoRoll(TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, int width, int height);

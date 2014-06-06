@@ -22,6 +22,7 @@
 #include "ARAuto.h"
 #include "ARMusicalVoice.h"
 #include "Guido2PianoRoll.h"
+#include "Guido2ReducedProportional.h"
 #include "TimeMapper.h"
 
 #include "benchtools.h"
@@ -89,6 +90,20 @@ void ARMusic::getTimeMap (TimeMapCollector& f) const
             TimeMapper mapper (f, voice);
             voice->browse(mapper);	// actually browse the first voice only
         }
+	}
+}
+
+void ARMusic::toReducedProportional(int width, int height, TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, bool drawdur, VGDevice * dev) const
+{
+	GuidoPos pos = GetHeadPosition();
+	if (!end) end = getDuration();
+	GuidoReducedProportional rprop(start, end, width, height, drawdur);
+	rprop.SetMusicFont(dev);
+	rprop.DrawGrid (dev);
+	GuidoPianoRoll * proll = &rprop;
+	while(pos) {
+		ARMusicalVoice * e = GetNext(pos);
+		proll->Draw(e, dev);
 	}
 }
 

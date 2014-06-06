@@ -299,6 +299,21 @@ representations.
 
 
 	/*!
+        Transforms a Guido abstract representation into a simplified proportional representation.
+
+		\param ar the handler to the abstract representation.
+		\param width the drawing area width.
+		\param height the drawing area height.
+		\param start start date of the time zone to be displayed.
+		\param end end date of the time zone to be displayed, when 0, the score duration is used.
+		\param drawdur control duration lines drawing.
+		\param dev a graphic device.
+		\return a Guido error code.
+    */
+    GUIDOAPI(GuidoErrCode)	GuidoAR2RProportional( ARHandler ar, int width, int height, const GuidoDate& start, const GuidoDate& end, bool drawdur, VGDevice* dev);
+
+
+	/*!
         Transforms a Guido abstract representation into a piano roll representation.
 
 		\param ar the handler to the abstract representation.
@@ -310,6 +325,20 @@ representations.
 		\return a Guido error code.
     */
     GUIDOAPI(GuidoErrCode)	GuidoAR2PRoll( ARHandler ar, int width, int height, const GuidoDate& start, const GuidoDate& end, VGDevice* dev);
+
+	/*!
+        Transforms a MIDI file into a simplified proportional representation.
+
+		\param midifile the MIDI file name
+		\param width the drawing area width.
+		\param height the drawing area height.
+		\param start start date of the time zone to be displayed.
+		\param end end date of the time zone to be displayed, when 0, the score duration is used.
+		\param drawdur control duration lines drawing.
+		\param dev a graphic device.
+		\return a Guido error code.
+    */
+    GUIDOAPI(GuidoErrCode)	GuidoMIDI2RProportional( const char* midifile, int width, int height, const GuidoDate& start, const GuidoDate& end, bool drawdur, VGDevice* dev);
 
 	/*!
         Transforms a MIDI file into a piano roll representation.

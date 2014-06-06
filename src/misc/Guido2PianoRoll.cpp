@@ -102,8 +102,8 @@ bool GuidoPianoRoll::handleColor (ARNoteFormat* nf, VGDevice* dev)
 		const TagParameterString *s = nf->getColor();
 		unsigned char colref[4];
 		if (s && s->getRGB( colref )) {
-			VGColor c(colref[0], colref[1], colref[2], colref[3]);
-			dev->PushFillColor(c);
+			fColor = VGColor(colref[0], colref[1], colref[2], colref[3]);
+			dev->PushFillColor(fColor);
 			fColored = true;
 		}
 		else if (fColored) {
@@ -114,17 +114,21 @@ bool GuidoPianoRoll::handleColor (ARNoteFormat* nf, VGDevice* dev)
 	}
 	return false;
 }
-
 //-------------------------------------------------------------------
-void GuidoPianoRoll::Draw(int pitch, double date, double dur, VGDevice* dev)
+void GuidoPianoRoll::DrawRect(int x, int y, double dur, VGDevice* dev) const
 {
-	int x = date2xpos (date);
 	int w = duration2width (dur);
-	int y = pitch2ypos (pitch);
 	int halfstep = stepheight() / 2;
 	if (!halfstep) halfstep = 1;
-	
 	dev->Rectangle( x, y-halfstep, x+(w ? w : 1), y+halfstep);
+}
+
+//-------------------------------------------------------------------
+void GuidoPianoRoll::Draw(int pitch, double date, double dur, VGDevice* dev) const
+{
+	int x = date2xpos (date);
+	int y = pitch2ypos (pitch);
+	DrawRect (x, y, dur, dev);
 }
 
 //-------------------------------------------------------------------
