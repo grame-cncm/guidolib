@@ -2,10 +2,13 @@ GUIDO Engine history
 
 
 ----------------------------------------------------------------
-2014-??-??  version 1.5.3
-- support for piano roll representation based on AR representation: 
-  new API: GuidoAR2PRoll
-  new tool: guido2proll
+version 1.5.3
+- experimental proportional notation based on AR or MIDI representation: 
+  new API: GuidoAR2RProportional, GuidoMIDI2RProportional
+  new tool: guido2rproportional, midi2rproportional
+- support for piano roll representation based on AR or MIDI representation: 
+  new API: GuidoAR2PRoll, GuidoMIDI2PRoll
+  new tool: guido2proll, midi2proll
 - bug in MIDI export corrected: incorrect handling of successive tied similar notes 
 - infinite loop in trill computation corrected
 - accidental spacing changed : a bit more space is inserted between the accidental and the note head
