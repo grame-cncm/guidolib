@@ -1,14 +1,6 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <EditText android:id="@+id/view1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/tab_1"/>
-
-    <WebView android:id="@+id/view2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-</FrameLayout>
+<android.support.v4.view.ViewPager
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/pager"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+</android.support.v4.view.ViewPager>

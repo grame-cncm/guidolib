@@ -30,7 +30,7 @@ class ARDimBegin : public ARTagBegin
 		virtual ostream & operator<<(ostream &os) const
 		{
 			return os << " //dimBegin ";
-		}
+k		}
 };
 
 #endif
