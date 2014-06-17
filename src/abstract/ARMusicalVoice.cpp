@@ -6009,12 +6009,13 @@ void ARMusicalVoice::doAutoTrill()
 				// if it has, we can check if the note is tied to another
 				// if it is tied, we will let its status as "begin" (default)
 				// and we'll affect an ARtrill to the next note, whose boolean "begin" will be set as false with setContinue()
-				if(armvs.getCurPositionTags())
+				const PositionTagList * ptags = armvs.getCurPositionTags();
+				if(ptags)
                 {
-					GuidoPos pos = armvs.getCurPositionTags()->GetHeadPosition();
+					GuidoPos pos = ptags->GetHeadPosition();
 					while(pos)
                     {
-						ARPositionTag * arpt = armvs.getCurPositionTags()->GetNext(pos);
+						ARPositionTag * arpt = ptags->GetNext(pos);
 						if(arpt)
                         {
 							ARTie * tie = dynamic_cast<ARTie *>(arpt);
@@ -6064,12 +6065,13 @@ void ARMusicalVoice::doAutoCluster()
             {
 				// if it has, we can check if the note is tied to another
 				// if it is tied, we'll affect an ARCluster to the next note
-				if(armvs.getCurPositionTags())
+				const PositionTagList * ptags = armvs.getCurPositionTags();
+				if(ptags)
                 {
-					GuidoPos pos = armvs.getCurPositionTags()->GetHeadPosition();
+					GuidoPos pos = ptags->GetHeadPosition();
 					while(pos)
                     {
-						ARPositionTag * arpt = armvs.getCurPositionTags()->GetNext(pos);
+						ARPositionTag * arpt = ptags->GetNext(pos);
 						if(arpt)
                         {
 							ARTie * tie = dynamic_cast<ARTie *>(arpt);
@@ -6175,12 +6177,13 @@ void ARMusicalVoice::doAutoFeatheredBeam()
 	while(pos)
 	{
 		GetNext(pos,armvs);
-		if(armvs.getCurPositionTags())
+		const PositionTagList * ptags = armvs.getCurPositionTags();
+		if(ptags)
 		{
-			GuidoPos posTag = armvs.getCurPositionTags()->GetHeadPosition();
+			GuidoPos posTag = ptags->GetHeadPosition();
 			while(posTag)
 			{
-				ARPositionTag * tag = armvs.getCurPositionTags()->GetNext(posTag);
+				ARPositionTag * tag = ptags->GetNext(posTag);
 				ARFeatheredBeam * curfBeam = dynamic_cast<ARFeatheredBeam *>(tag);
 				if(curfBeam)
 				{
