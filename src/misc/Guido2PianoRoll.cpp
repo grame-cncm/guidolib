@@ -30,7 +30,9 @@
 #include "TagParameterString.h"
 #include "VGDevice.h"
 
+#ifdef MIDIEXPORT
 #include "midifile.h"
+#endif
 
 using namespace std;
 
@@ -197,6 +199,7 @@ void GuidoPianoRoll::Draw(ARMusicalVoice* v, VGDevice* dev)
 
 
 
+#ifdef MIDIEXPORT
 //-------------------------------------------------------------------
 // MIDI Piano roll
 //-------------------------------------------------------------------
@@ -292,5 +295,6 @@ GuidoErrCode GuidoPianoRoll::Draw(const char* file, VGDevice* dev)
 	}
 	return guidoNoErr;
 }
+#endif
 
 

@@ -16,7 +16,9 @@
 #define AR2PianoRoll_h
 
 #include "ARMusicalVoice.h"
+#ifdef MIDIEXPORT
 #include "MidiShareLight.h"
+#endif
 #include "VGColor.h"
 
 class ARTie;
@@ -54,14 +56,18 @@ class GuidoPianoRoll
 		virtual void Draw(int pitch, double date, double dur, VGDevice* dev) const;
 		virtual void DrawRect(int x, int y, double dur, VGDevice* dev) const;
 		virtual void Draw (ARMusicalObject* o, TYPE_TIMEPOSITION date, TYPE_DURATION dur, VGDevice* dev);
+#ifdef MIDIEXPORT
 		virtual void Draw (MidiSeqPtr seq, int tpqn, VGDevice* dev);
+#endif
 		virtual int	 pitch2ypos (int midipitch) const;
 	
 	public:
 				 GuidoPianoRoll(TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, int width, int height);
 		virtual ~GuidoPianoRoll() {}
 		
+#ifdef MIDIEXPORT
 		virtual GuidoErrCode Draw (const char* midifile, VGDevice* dev);
+#endif
 		virtual void Draw (ARMusicalVoice* v, VGDevice* dev);
 		virtual void DrawGrid (VGDevice* dev) const;
 };
