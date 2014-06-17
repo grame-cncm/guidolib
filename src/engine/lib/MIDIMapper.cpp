@@ -47,17 +47,6 @@ void MidiMapper::Clear()
 	fTiedNotes.clear();
 }
 
-//------------------------------------------------------------------------------
-void MidiMapper::TiedNote (MidiEvPtr note)
-{
-	MidiEvPtr e = fTiedNotes[Pitch(note)];
-	if (!e) fTiedNotes[Pitch(note)] = note;
-	else {
-		Dur(e) += Dur(note);
-		fMidi->FreeEv (note);
-	}
-}
-
 void MidiMapper::MoveTime (TYPE_DURATION dur)	{
 //cout << "MidiMapper::MoveTime from " << fUPosition;
 	fUPosition += dur;
@@ -164,6 +153,20 @@ void MidiMapper::AtPos (const ARMusicalObject * ev, EventType type)
 }
 
 //------------------------------------------------------------------------------
+void MidiMapper::TiedNote (MidiEvPtr note)
+{
+	MidiEvPtr e = fTiedNotes[Pitch(note)];
+	if (!e) {
+		fTiedNotes[Pitch(note)] = note;
+		fMidi->AddSeq (fSeq, note);
+	}
+	else {
+		Dur(e) += Dur(note);
+		fMidi->FreeEv (note);
+	}
+}
+
+//------------------------------------------------------------------------------
 void MidiMapper::Note(const ARMusicalObject * ev)
 {
 	if (ev->getDuration().getNumerator() < 0) return;
@@ -176,15 +179,20 @@ void MidiMapper::Note(const ARMusicalObject * ev)
 	const ARNote* arn = dynamic_cast<const ARNote*>(ev);
 	if (arn ) {
 		if (arn->getName() != ARNoteName::empty) {
-				
 			MidiEvPtr note = fMidi->NewEv(typeNote);
 			Chan(note)	= fChan;
 			Dur(note)	= AdjustDuration(Ticks (fChord ? fEmptyDur : ev->getDuration()), fParams);
 			Vel(note)	= char(AdjustVelocity (fCurrVelocity, fParams));
 			Pitch(note)	= arn->midiPitch();
 			Date(note)  = Ticks (fUPosition);
-			if (fFlags & hasTie) TiedNote (note);
-			else fMidi->AddSeq (fSeq, note);
+			if (fFlags & hasTie) {
+				TiedNote (note);
+				fFlags &= ~hasTie;
+			}
+			else {
+				fTiedNotes.clear();
+				fMidi->AddSeq (fSeq, note);
+			}
 		}
 		else {
 			// chords duration is encoded using "empty" notes that carry the chord duration

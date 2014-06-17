@@ -21,6 +21,8 @@
 #include "ARVoiceManager.h"
 #include "ARAuto.h"
 #include "ARMusicalVoice.h"
+#include "Guido2PianoRoll.h"
+#include "Guido2ReducedProportional.h"
 #include "TimeMapper.h"
 
 #include "benchtools.h"
@@ -91,6 +93,32 @@ void ARMusic::getTimeMap (TimeMapCollector& f) const
 	}
 }
 
+void ARMusic::toReducedProportional(int width, int height, TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, bool drawdur, VGDevice * dev) const
+{
+	GuidoPos pos = GetHeadPosition();
+	if (!end) end = getDuration();
+	GuidoReducedProportional rprop(start, end, width, height, drawdur);
+	rprop.SetMusicFont(dev);
+	rprop.DrawGrid (dev);
+	GuidoPianoRoll * proll = &rprop;
+	while(pos) {
+		ARMusicalVoice * e = GetNext(pos);
+		proll->Draw(e, dev);
+	}
+}
+
+void ARMusic::toPianoRoll(int width, int height, TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, VGDevice * dev) const
+{
+	GuidoPos pos = GetHeadPosition();
+	if (!end) end = getDuration();
+	GuidoPianoRoll proll(start, end, width, height);
+	proll.DrawGrid (dev);
+	while(pos) {
+		ARMusicalVoice * e = GetNext(pos);
+		proll.Draw(e, dev);
+	}
+}
+
 void ARMusic::print() const
 {
 	GuidoPos pos = GetHeadPosition();
@@ -106,46 +134,34 @@ void ARMusic::print(std::ostream &os) const
 {
 	GuidoPos pos=GetHeadPosition();
 	ARMusicalVoice * e;
-	int first = 1;
-	os << " { ";
+	const char* sep = "";
+	os << "{\n";
 	while(pos)
 	{
-		if (first)
-			first = 0;
-		else
-			os << " , ";
-
+		os << sep;
 		e=GetNext(pos);
-
 		e->setReadMode(ARMusicalVoice::EVENTMODE);
 		e->operator<<(os);
 		e->setReadMode(ARMusicalVoice::CHORDMODE);
-
+		sep = "\n,\n";
 	}
-	os << " } ";
+	os << "\n}\n";
 }
 
 std::ostream & ARMusic::output(std::ostream & os, bool isauto) const
 {
 	GuidoPos pos = GetHeadPosition();
 	ARMusicalVoice * e;
-	bool first = true;
-	os << " { ";
+	const char* sep = "";
+	os << "{\n";
 	while(pos)
 	{
-		if (first)
-		{
-			first = false;
-		}
-		else
-		{
-			os << " , ";
-		}
-
+		os << sep;
 		e = GetNext(pos);
 		e->output(os,isauto);
+		sep = "\n,\n";
 	}
-	os << " } ";
+	os << "\n}\n";
 	return os;
 }
 
