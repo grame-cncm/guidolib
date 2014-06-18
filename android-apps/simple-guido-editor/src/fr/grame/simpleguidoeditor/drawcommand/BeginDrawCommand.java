@@ -21,8 +21,9 @@ public class BeginDrawCommand extends GuidoDrawCommand implements PrintableDrawC
   
   @Override
   public void drawToCanvas(Canvas canvas, GuidoCanvasView view) {
-    canvas.setMatrix(new Matrix());
-    canvas.drawColor(Color.WHITE);
+    // since it is always redrawn, we don't need to do this...
+    //canvas.setMatrix(new Matrix());
+    //canvas.drawColor(Color.WHITE);
   }
 
 }

@@ -29,6 +29,7 @@ public class SetScaleCommand extends GuidoDrawCommand implements PrintableDrawCo
   }
   @Override
   public void drawToCanvas(Canvas canvas, GuidoCanvasView view) {
+    canvas.scale(_x, _y);
   }
   
 }

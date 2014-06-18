@@ -4,9 +4,13 @@ import java.lang.StringBuilder;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import fr.grame.simpleguidoeditor.GuidoCanvasView;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
 
 import java.util.*;
-   
+import android.util.Log;
+import android.graphics.Color;
+
 public class RectangleCommand extends GuidoDrawCommand implements PrintableDrawCommand, DrawToCanvas {
 
   public float _left;
@@ -38,10 +42,12 @@ public class RectangleCommand extends GuidoDrawCommand implements PrintableDrawC
   }
   @Override
   public void drawToCanvas(Canvas canvas, GuidoCanvasView view) {
+    Log.i("SimpleGuidoEditor", "drawing line");
     view.correctTransformMatrix(canvas);
-    Paint paint = view.currentPaint();
-    paint.setStyle(Paint.Style.FILL);
-    canvas.drawRect(_left, _top, _right, _bottom, paint);
+    ShapeDrawable rect = new ShapeDrawable(new RectShape());
+    rect.getPaint().setColor(Color.BLACK);
+    rect.setBounds(0, 0, (int) Math.abs(_top - _bottom), (int) Math.abs(_right - _left));
+    rect.draw(canvas);
     view.resetTransformMatrix(canvas);
   }
 }
