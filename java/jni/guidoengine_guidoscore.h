@@ -63,6 +63,14 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_AR2MIDIFile
 
 /*
  * Class:     guidoengine_guidoscore
+ * Method:    BinaryExport
+ * Signature: (I)[B
+ */
+JNIEXPORT jbyteArray JNICALL Java_guidoengine_guidoscore_BinaryExport
+  (JNIEnv *, jobject, jint);
+
+/*
+ * Class:     guidoengine_guidoscore
  * Method:    SVGExport
  * Signature: (ILjava/lang/String;)Ljava/lang/String;
  */

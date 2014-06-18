@@ -1,7 +1,11 @@
 package fr.grame.simpleguidoeditor;
- 
+
+import fr.grame.simpleguidoeditor.GuidoWebView; 
+import fr.grame.simpleguidoeditor.GuidoCanvasView; 
 import fr.grame.simpleguidoeditor.TabsPagerAdapter;
+import fr.grame.simpleguidoeditor.fragment.*;
 import fr.grame.simpleguidoeditor.R;
+
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
@@ -9,8 +13,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
+import android.view.View;
 import android.widget.EditText;
-import android.webkit.WebView;
 
 import android.content.Context;
 import android.view.inputmethod.InputMethodManager;
@@ -26,6 +30,7 @@ public class SimpleGuidoEditor extends FragmentActivity implements
     private ActionBar actionBar;
     // Tab titles
     private String[] tabs = { "GMN", "SVG", "Canvas" };
+    public static String _gmn = null;
  
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,22 +84,15 @@ public class SimpleGuidoEditor extends FragmentActivity implements
     @Override
     public void onTabSelected(Tab tab, FragmentTransaction ft) {
         // on tab selected
-        // show respected fragment view
-        Log.w("SimpleGuidoEditor", "Tab position");
-        Log.w("SimpleGuidoEditor", Integer.toString(tab.getPosition()));
-        int tabPosition = tab.getPosition();
-        if (tabPosition == 1) {
-          // ugh...kludgy in how it passes data around
-          ((GuidoSVGFragment) (mAdapter.getItem(tabPosition))).generateGuidoSVG((EditText) findViewById(R.id.gmn_text),
-                                                                                (WebView) findViewById(R.id.guido_svg));
-        }
+        // show correct fragment view
+        int tabPosition = tab.getPosition(); 
         viewPager.setCurrentItem(tabPosition);
-        
-        if (tabPosition != 0) {
+        /*
+        if (tabPosition == 1) {
           final InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-          imm.hideSoftInputFromWindow(mAdapter.getItem(tabPosition).getView().getWindowToken(), 0);
+          imm.hideSoftInputFromWindow(mAdapter.getItem(0).getView().getWindowToken(), 0);
         }
-        
+        */
     }
  
     @Override

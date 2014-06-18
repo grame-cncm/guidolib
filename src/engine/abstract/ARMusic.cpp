@@ -21,8 +21,10 @@
 #include "ARVoiceManager.h"
 #include "ARAuto.h"
 #include "ARMusicalVoice.h"
-#include "Guido2PianoRoll.h"
-#include "Guido2ReducedProportional.h"
+#ifdef MIDIEXPORT
+  #include "Guido2PianoRoll.h"
+  #include "Guido2ReducedProportional.h"
+#endif
 #include "TimeMapper.h"
 
 #include "benchtools.h"
@@ -93,6 +95,7 @@ void ARMusic::getTimeMap (TimeMapCollector& f) const
 	}
 }
 
+#ifdef MIDIEXPORT
 void ARMusic::toReducedProportional(int width, int height, TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, bool drawdur, VGDevice * dev) const
 {
 	GuidoPos pos = GetHeadPosition();
@@ -118,6 +121,7 @@ void ARMusic::toPianoRoll(int width, int height, TYPE_TIMEPOSITION start, TYPE_T
 		proll.Draw(e, dev);
 	}
 }
+#endif
 
 void ARMusic::print() const
 {

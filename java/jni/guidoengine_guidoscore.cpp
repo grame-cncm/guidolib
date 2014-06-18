@@ -270,10 +270,38 @@ JNIEXPORT jstring JNICALL Java_guidoengine_guidoscore_SVGExport (JNIEnv * env, j
 		const char *guidofont  = env->GetStringUTFChars(font, JNI_FALSE);
 		err = GuidoSVGExport(gr, page, sstr, *guidofont ? guidofont : 0);
 		env->ReleaseStringUTFChars(font, guidofont);
-		if (err == guidoNoErr)
-			return env->NewStringUTF(sstr.str().c_str());
+		if (err == guidoNoErr) {
+			const char* result = sstr.str().c_str();
+			return env->NewStringUTF(result);
+		}
 	}
 	return env->NewStringUTF(GuidoGetErrorString(err));
+}
+
+/*
+ * Class:     guidoengine_guidoscore
+ * Method:    BinaryExport
+ * Signature: (ILjava/lang/String;)Ljava/lang/String;
+ */
+JNIEXPORT jbyteArray JNICALL Java_guidoengine_guidoscore_BinaryExport (JNIEnv * env, jobject obj, jint page)
+{
+	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
+	std::stringstream sstr;
+	GuidoErrCode err = guidoErrInvalidHandle;
+	if (gr) {
+		err = GuidoBinaryExport(gr, page, sstr);
+		if (err == guidoNoErr) {
+		        std::string output = sstr.str();
+			const char* result = output.c_str();
+			jbyte* buf = new jbyte[output.size()];
+			memcpy(buf, result, output.size());
+			jbyteArray arr = env->NewByteArray(output.size());
+			env->SetByteArrayRegion (arr, 0, output.size(), buf);
+			delete[] buf;
+			return arr;
+		}
+	}
+	return env->NewByteArray(0);
 }
 
 /*

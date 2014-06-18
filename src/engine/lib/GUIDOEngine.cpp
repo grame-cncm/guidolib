@@ -75,8 +75,10 @@ using namespace std;
 #include "BinaryDevice.h"
 #include "BinaryFont.h"
 
-#include "Guido2PianoRoll.h"
-#include "Guido2ReducedProportional.h"
+#ifdef MIDIEXPORT
+  #include "Guido2PianoRoll.h"
+  #include "Guido2ReducedProportional.h"
+#endif
 
 // ==========================================================================
 // - Guido Global variables
@@ -365,6 +367,7 @@ GUIDOAPI(GuidoErrCode) GuidoMIDI2RProportional( const char* file, int width, int
 // --------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoAR2RProportional( ARHandler ar, int width, int height, const GuidoDate& start, const GuidoDate& end, bool drawDur, VGDevice* dev)
 {
+#ifdef MIDIEXPORT
 	if( ar == 0 )	return guidoErrInvalidHandle;
 	if( !gInited )	return guidoErrNotInitialized;
 	if( !dev )		return guidoErrBadParameter;
@@ -385,12 +388,17 @@ GUIDOAPI(GuidoErrCode) GuidoAR2RProportional( ARHandler ar, int width, int heigh
 	dev->PopFillColor();
 	dev->EndDraw();
 	return guidoNoErr;
+#else
+	cerr << "Can't convert to reduced proportional representation: GUIDO Engine has been compiled without MIDI support" << endl;
+	return guidoErrActionFailed;
+#endif
 }
 
 
 // --------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoAR2PRoll( ARHandler ar, int width, int height, const GuidoDate& start, const GuidoDate& end, VGDevice* dev)
 {
+#ifdef MIDIEXPORT
 	if( ar == 0 )	return guidoErrInvalidHandle;
 	if( !gInited )	return guidoErrNotInitialized;
 	if( !dev )		return guidoErrBadParameter;
@@ -411,6 +419,10 @@ GUIDOAPI(GuidoErrCode) GuidoAR2PRoll( ARHandler ar, int width, int height, const
 	dev->PopFillColor();
 	dev->EndDraw();
 	return guidoNoErr;
+#else
+	cerr << "Can't convert to reduced proportional representation: GUIDO Engine has been compiled without MIDI support" << endl;
+	return guidoErrActionFailed;
+#endif
 }
 
 // --------------------------------------------------------------------------
@@ -665,7 +677,6 @@ GUIDOAPI(GuidoErrCode) GuidoOnDraw( GuidoOnDrawDesc * desc )
 	desc->hdc->EndDraw(); // must be called even if BeginDraw has failed.
 	return result;
 }
-#ifndef INDEPENDENTSVG
 // --------------------------------------------------------------------------
 //		- Score export to an abstract graphical representation -
 // --------------------------------------------------------------------------
@@ -717,7 +728,7 @@ GUIDOAPI(GuidoErrCode) 	GuidoBinaryExport( const GRHandler handle, int page, std
         dev.SelectPenColor(VGColor(0,0,0));
         return GuidoOnDraw (&desc);
 }
-#endif
+
 
 // --------------------------------------------------------------------------
 //		- Score export to svg -

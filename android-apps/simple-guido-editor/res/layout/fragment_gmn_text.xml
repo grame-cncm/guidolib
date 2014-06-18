@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
      
-    <EditText android:id="@+id/gmn_text"
+    <fr.grame.simpleguidoeditor.GuidoEditText android:id="@+id/gmn_text"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:gravity="center"

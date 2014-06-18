@@ -13,7 +13,11 @@
 
 #include "BinaryFont.h"
 
-#ifdef __APPLE__
+#ifdef INDEPENDENTSVG
+#include "SVGFont.h"
+#include "SVGSystem.h"
+SVGSystem gBinarySystem (0, 0);
+#elif __APPLE__
 #include "GFontOSX.h"
 #include "GSystemOSX.h"
 GSystemOSX gBinarySystem (0, 0);

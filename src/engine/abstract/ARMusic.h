@@ -44,7 +44,7 @@ class ARMusic : public MusicalVoiceList, public ARMusicalEvent
       		GuidoPos AddTail(ARMusicalVoice * newMusicalVoice);
 
       		void 	adjustDuration(TYPE_DURATION newDuration);
-
+#ifdef MIDIEXPORT
 	/*!
 		Converts an abstract representation to piano roll representation
 
@@ -66,7 +66,7 @@ class ARMusic : public MusicalVoiceList, public ARMusicalEvent
 		\param dev a graphic device.
 	*/
 	virtual void 	toReducedProportional(int width, int height, TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, bool drawdur, VGDevice * dev) const;
-
+#endif
 	virtual void 	print() const;
 	virtual void	print (std::ostream & os) const;
 	virtual std::ostream & output(std::ostream & os, bool isauto = true) const;

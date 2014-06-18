@@ -13,7 +13,11 @@
 
 #include "AbstractFont.h"
 
-#ifdef __APPLE__
+#ifdef INDEPENDENTSVG
+#include "SVGFont.h"
+#include "SVGSystem.h"
+SVGSystem gAbstractSystem (0, 0);
+#elif __APPLE__
 #include "GFontOSX.h"
 #include "GSystemOSX.h"
 GSystemOSX gAbstractSystem (0, 0);
