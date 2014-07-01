@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import fr.grame.simpleguidoeditor.GuidoCanvasView;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 
 import java.util.*;
    
@@ -21,9 +22,16 @@ public class BeginDrawCommand extends GuidoDrawCommand implements PrintableDrawC
   
   @Override
   public void drawToCanvas(Canvas canvas, GuidoCanvasView view) {
-    // since it is always redrawn, we don't need to do this...
-    //canvas.setMatrix(new Matrix());
-    //canvas.drawColor(Color.WHITE);
+    double left = 0;
+    double right = canvas.getWidth();
+    double top = canvas.getHeight();
+    double bottom = 0;
+
+    Paint paint = new Paint();
+    paint.setColor(Color.WHITE);
+    paint.setStyle(Paint.Style.FILL);
+    canvas.drawRect((float)left, (float)top, (float)right, (float)bottom, paint);
+
   }
 
 }

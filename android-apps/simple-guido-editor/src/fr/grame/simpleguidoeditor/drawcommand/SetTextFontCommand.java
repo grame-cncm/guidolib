@@ -1,8 +1,9 @@
-package fr.grame.simpleguidoeditor.drawcommand;
+ package fr.grame.simpleguidoeditor.drawcommand;
 
 import java.lang.StringBuilder;
 import android.graphics.Canvas;
 import fr.grame.simpleguidoeditor.GuidoCanvasView;
+import android.graphics.Typeface;
 
 import java.util.*;
    
@@ -34,5 +35,7 @@ public class SetTextFontCommand extends GuidoDrawCommand implements PrintableDra
   
   @Override
   public void drawToCanvas(Canvas canvas, GuidoCanvasView view) {
+    view._TEXT_FONT = Typeface.createFromAsset(view.getContext().getAssets(), "fonts/" + _name + ".ttf");
+    view._TEXT_FONT_SIZE = _size;
   }
 }

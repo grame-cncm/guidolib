@@ -2,6 +2,7 @@ package fr.grame.simpleguidoeditor.drawcommand;
 
 import java.lang.StringBuilder;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import fr.grame.simpleguidoeditor.GuidoCanvasView;
 
 import java.util.*;
@@ -37,5 +38,6 @@ public class SetFontColorCommand extends GuidoDrawCommand implements PrintableDr
   }
   @Override
   public void drawToCanvas(Canvas canvas, GuidoCanvasView view) {
+    view._FONT_COLOR = Color.argb(_alpha, _red, _green, _blue);
   }
 }

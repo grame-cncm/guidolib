@@ -19,5 +19,6 @@ public class PopPenColorCommand extends GuidoDrawCommand implements PrintableDra
   
   @Override
   public void drawToCanvas(Canvas canvas, GuidoCanvasView view) {
+    view._PEN_COLORS.remove(view._PEN_COLORS.size() - 1);
   }
 }

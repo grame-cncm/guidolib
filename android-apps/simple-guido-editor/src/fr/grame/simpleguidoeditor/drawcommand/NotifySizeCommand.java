@@ -27,8 +27,11 @@ public class NotifySizeCommand extends GuidoDrawCommand implements PrintableDraw
     out.append(_height);
     return out.toString();
   }
+
   @Override
   public void drawToCanvas(Canvas canvas, GuidoCanvasView view) {
-    view._GLOBAL_RESCALE_FACTOR = view.getWidth() / _width;
+    double rescale_x = (view.getWidth() * 1.0) / _width;
+    double rescale_y = (view.getHeight() * 1.0) / _height;
+    view._GLOBAL_RESCALE_FACTOR = Math.min(rescale_x, rescale_y);
   }
 }

@@ -4,6 +4,8 @@ import java.lang.StringBuilder;
 import android.graphics.Canvas;
 import fr.grame.simpleguidoeditor.GuidoCanvasView;
 
+import android.graphics.Paint;
+
 import java.util.*;
    
 public class DrawStringCommand extends GuidoDrawCommand implements PrintableDrawCommand, DrawToCanvas {
@@ -38,6 +40,19 @@ public class DrawStringCommand extends GuidoDrawCommand implements PrintableDraw
   
   @Override
   public void drawToCanvas(Canvas canvas, GuidoCanvasView view) {
+    double x = _x;
+    double y = _y;
+    double size = view._MUSIC_FONT_SIZE;
+
+    view.correctTransformMatrix(canvas);
+
+    Paint paint = new Paint();
+    paint.setTypeface(view._TEXT_FONT);
+    paint.setColor(view._FONT_COLOR);
+    paint.setTextSize((float)(view._TEXT_FONT_SIZE));
+
+    canvas.drawText(_s, (float) x, (float) y, paint);
+    view.resetTransformMatrix(canvas);
   }
 
 }

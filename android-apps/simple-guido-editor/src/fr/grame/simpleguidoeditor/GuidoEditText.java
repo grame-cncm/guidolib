@@ -30,14 +30,10 @@ import android.text.Editable;
 
 public class GuidoEditText extends EditText implements TextWatcher {
 
-  private static String _defaultGMN = "[a b c d]";
-
   public GuidoEditText(Context context, AttributeSet attributeSet) {
     super(context, attributeSet);
-    Log.i("SimpleGuidoEditor", "GUIDO EDIT TEXT BEING CREATED");
     if (SimpleGuidoEditor._gmn == null) {
-      setText(_defaultGMN);
-      SimpleGuidoEditor._gmn = _defaultGMN;
+      SimpleGuidoEditor._gmn = getText().toString();
     }
   }
 
@@ -51,7 +47,6 @@ public class GuidoEditText extends EditText implements TextWatcher {
 
   @Override
   public void onTextChanged(CharSequence s, int start, int before, int count) {
-      Log.i("SimpleGuidoEditor", "TEXT CHANGED NOW");
       SimpleGuidoEditor._gmn = s.toString();
   }
 }

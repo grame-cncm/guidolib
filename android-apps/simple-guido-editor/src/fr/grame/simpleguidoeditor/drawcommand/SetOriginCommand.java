@@ -4,6 +4,9 @@ import java.lang.StringBuilder;
 import android.graphics.Canvas;
 import fr.grame.simpleguidoeditor.GuidoCanvasView;
 
+import android.graphics.Point;
+
+import android.util.Log;
 import java.util.*;
    
 public class SetOriginCommand extends GuidoDrawCommand implements PrintableDrawCommand, DrawToCanvas {
@@ -29,8 +32,10 @@ public class SetOriginCommand extends GuidoDrawCommand implements PrintableDrawC
   }
   @Override
   public void drawToCanvas(Canvas canvas, GuidoCanvasView view) {
-    float x = _x * (float) view._GLOBAL_RESCALE_FACTOR;
-    float y = _y * (float) view._GLOBAL_RESCALE_FACTOR;
+    int x = (int)(_x * view._GLOBAL_RESCALE_FACTOR);
+    int y = (int)(_y * view._GLOBAL_RESCALE_FACTOR);
+
+    canvas.translate(0, 0);
     canvas.translate(x, y);
   }
 }

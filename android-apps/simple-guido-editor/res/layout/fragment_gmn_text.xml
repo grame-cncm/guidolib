@@ -8,7 +8,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:gravity="center"
-        android:text="[a b c d]"
+        android:text="[\\key&lt;3&gt; \\instr&lt;&quot;clarinet in A&quot;&gt; a \\slur (b \\intens&lt;&quot;p&quot;&gt; f ) g]"
         android:textSize="20dp"
         android:layout_centerInParent="true"/>
      
