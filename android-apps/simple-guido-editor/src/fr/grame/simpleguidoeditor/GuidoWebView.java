@@ -7,9 +7,6 @@ import android.util.Log;
 
 import android.graphics.Rect;
 
-import fr.grame.simpleguidoeditor.parser.GuidoBinaryParser;
-import fr.grame.simpleguidoeditor.drawcommand.GuidoDrawCommand;
-
 import android.graphics.drawable.ShapeDrawable;
 import android.view.View;
 import android.content.Context;

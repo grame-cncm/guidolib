@@ -11,8 +11,8 @@ import java.util.*;
 import java.lang.StringBuilder;
 import android.util.Log;
 
-import fr.grame.simpleguidoeditor.parser.GuidoBinaryParser;
-import fr.grame.simpleguidoeditor.drawcommand.GuidoDrawCommand;
+//import fr.grame.simpleguidoeditor.parser.GuidoBinaryParser;
+//import fr.grame.simpleguidoeditor.drawcommand.GuidoDrawCommand;
 import fr.grame.simpleguidoeditor.GuidoCanvasView;
 
 import android.graphics.drawable.ShapeDrawable;
@@ -31,7 +31,7 @@ import android.graphics.Typeface;
 import fr.grame.simpleguidoeditor.SimpleGuidoEditor;
 
 public class GuidoCanvasView extends View {
-  private List<GuidoDrawCommand> _drawCommands;
+  private AndroidGuidoCommandBattery _commandBattery;
   public double _CHAR_MAX;
   public double _GLOBAL_RESCALE_FACTOR;
   public Matrix _CURRENT_TRANSFORM_MATRIX;
@@ -53,7 +53,7 @@ public class GuidoCanvasView extends View {
   }
 
   public void do_inits() {
-    _drawCommands = null;
+    _commandBattery = new AndroidGuidoCommandBattery();
     _CHAR_MAX = 255.0;
     _GLOBAL_RESCALE_FACTOR = 1.0;
     _CURRENT_TRANSFORM_MATRIX = new Matrix();
@@ -92,7 +92,8 @@ public class GuidoCanvasView extends View {
     if (SimpleGuidoEditor._gmn != null) {
       byte[] binary = gmntobinary(SimpleGuidoEditor._gmn);
       if (binary.length > 0) {
-        _drawCommands = GuidoBinaryParser.parseIntoDrawCommands(binary);
+        _commandBattery.flush();
+        guidobinaryparser.parseIntoDrawCommands(binary, _commandBattery);
       }
     }
   }
@@ -104,11 +105,9 @@ public class GuidoCanvasView extends View {
   
   @Override
   protected void onDraw(Canvas canvas) {
-    if (_drawCommands != null) {
-      for (int i = 0; i < _drawCommands.size(); i++) {
-        //Log.i("SimpleGuidoEditor", _drawCommands.get(i).asString());
-        _drawCommands.get(i).drawToCanvas(canvas, this);
-      }
+    for (int i = 0; i < _commandBattery.drawCommands.size(); i++) {
+      //Log.i("SimpleGuidoEditor", _commandBattery.get(i).asString());
+      _commandBattery.drawCommands.get(i).drawToCanvas(canvas, this);
     }
   }
 }
