@@ -26,18 +26,24 @@ using namespace std;
 static void fontwidth(QFontMetrics& m, int max)
 {
 	cout << "static const int kGuidoFontWidth = {" << endl;
-	for (int i=0; i < max; i++)
-		cout << "	" << m.width( QChar(i)) << ",	// " << i << endl;
-	cout << "	" << m.width( QChar(max)) << "	// " << max << endl;
+	for (int i=0; i < max; i++) {
+	        QRect rect = m.boundingRect( QChar(i) );
+		cout << "	" << rect.width() << ",	// " << i << endl;
+        }
+        QRect rect = m.boundingRect( QChar(max) );
+	cout << "	" << rect.width() << "	// " << max << endl;
 	cout << "};" << endl;
 }
 
 static void fontheight(QFontMetrics& m, int max)
 {
 	cout << "static const int kGuidoFontHeight = {" << endl;
-	for (int i=0; i < max; i++)
-		cout << "	" << m.height() << ",	// " << i << endl;
-	cout << "	" << m.height() << "	// " << max << endl;
+	for (int i=0; i < max; i++) {
+	        QRect rect = m.boundingRect( QChar(i) );
+		cout << "	" << rect.height() << ",	// " << i << endl;
+        }
+        QRect rect = m.boundingRect( QChar(max) );
+	cout << "	" << rect.height() << "	// " << max << endl;
 	cout << "};" << endl;
 }
 
