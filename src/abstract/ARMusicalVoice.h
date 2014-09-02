@@ -92,7 +92,7 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		void			MarkVoice(int fromnum,int fromdenom, int lengthnum, int lengthdenom, unsigned char red, unsigned char green, unsigned char blue);
 
 		virtual void	initChordNote();
-		virtual void	FinishChord();
+		virtual void	FinishChord(bool trill);
 		virtual void	BeginChord();
 
 		ARNote        * setTrillChord(CHORD_TYPE & param_type, CHORD_ACCIDENTAL & param_accidental);

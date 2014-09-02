@@ -697,7 +697,7 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 					ARMusicalObject * o = arVoice->GetAt(curvst->vpos);
 					
 					//we give to the object the information about the state on-off of the staff
-					o->setDrawGR(GRVoiceManager::getCurStaffDraw(staffnum));
+					o->setDrawGR(GRVoiceManager::getCurStaffDraw(staffnum) && o->getDrawGR());
 				
 					if (o->getDuration() == DURATION_0)
 						return DONE_ZEROFOLLOWS;
@@ -751,7 +751,7 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 				ARMusicalObject * o = arVoice->GetAt(curvst->vpos);
 				
 				//we give to the object the information about the state on-off of the staff
-				o->setDrawGR(GRVoiceManager::getCurStaffDraw(staffnum));
+				o->setDrawGR(GRVoiceManager::getCurStaffDraw(staffnum) && o->getDrawGR());
 
 				if ( o->getDuration() == DURATION_0)
 					return DONE_ZEROFOLLOWS;
@@ -768,7 +768,7 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 		ARMusicalObject *o = arVoice->GetAt(curvst->vpos);
 		
 		// We give to the object the information about the state on-off of the staff
-		o->setDrawGR(GRVoiceManager::getCurStaffDraw(staffnum));
+		o->setDrawGR(GRVoiceManager::getCurStaffDraw(staffnum) && o->getDrawGR());
 
 		if (o->getDuration() == DURATION_0)
 		{
@@ -820,7 +820,7 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 				ARMusicalObject *o = arVoice->GetAt(curvst->vpos);
 				
 				//we give to the object the information about the state on-off of the staff
-				o->setDrawGR(GRVoiceManager::getCurStaffDraw(staffnum));
+				o->setDrawGR(GRVoiceManager::getCurStaffDraw(staffnum) && o->getDrawGR());
 
 				if (o->getDuration() == DURATION_0)
 					return DONE_ZEROFOLLOWS;
@@ -1473,7 +1473,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 	if (mtag && mtag->getError()) return;	// do nothing in case of error -- added
 
 	//we give to the tag the information about the state on-off of the staff
-	mtag->setDrawGR(GRVoiceManager::getCurStaffDraw(staffnum));
+	mtag->setDrawGR(GRVoiceManager::getCurStaffDraw(staffnum) && mtag->getDrawGR());
 
 
 	const std::type_info & tinf = typeid(*apt);

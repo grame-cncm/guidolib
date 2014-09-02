@@ -5470,9 +5470,10 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE & chord_type, CHORD_ACCIDENTAL
 			if (comptTemp == 2)
 				accidentalsTemp = noteTmp->getAccidentals();
 			pitches[comptTemp] = noteTmp->getPitch();
-			noteTmp -> setPitch(pitches[0]); // "hides" this note behind the first one
-			noteTmp -> setOctave(firstNoteOctave);
-			noteTmp -> setAccidentals(firstNoteAccidentals);
+            // we now directly set a flag to tell to the note not to draw itself, rather than hide it behind the first one...
+			noteTmp -> setPitch(EMPTY);
+			noteTmp->setDrawGR(false);
+            
 			comptTemp++;
 		}
 	}
@@ -5484,9 +5485,9 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE & chord_type, CHORD_ACCIDENTAL
 		ARNote * noteTmp = dynamic_cast<ARNote *>(musicalObject);
 		if (noteTmp && noteTmp->getPitch()!=0)
 		{
-			noteTmp -> setPitch(pitches[0]); // "hides" this note behind the first one
-			noteTmp -> setOctave(firstNoteOctave);
-			noteTmp -> setAccidentals(firstNoteAccidentals);
+			// we now directly set a flag to tell to the note not to draw itself, rather than hide it behind the first one...
+			noteTmp -> setPitch(EMPTY);
+            noteTmp->setDrawGR(false);
 		}
 	}
 
@@ -5661,7 +5662,7 @@ void ARMusicalVoice::setClusterChord(ARCluster *inCurrentCluster)
 /** \brief this finished a chord after parsing it.
 	it involves setting all the event-times and stuff !?
 */
-void ARMusicalVoice::FinishChord()
+void ARMusicalVoice::FinishChord(bool trill)
 {
     if (!currentChord)
         return;
@@ -5720,16 +5721,21 @@ void ARMusicalVoice::FinishChord()
 				dispdur->setCorrespondence(dispdum);
 			}
 
-			ARShareStem * shrstem = new ARShareStem();
-			shrstem->setIsAuto(true);
-			shrstem->setPosition(group->startpos);
-			shrstem->setAssociation(ARMusicalTag::RA);
-			ARDummyRangeEnd * shrdum = new ARDummyRangeEnd(SHARESTEMEND);
-			shrdum->setIsAuto(true);
-			shrdum->setPosition(group->endpos);
-			shrdum->setCorrespondence(shrstem);
-			shrdum->setAssociation(ARMusicalTag::LA);
-			shrstem->setCorrespondence(shrdum);
+            ARShareStem * shrstem = new ARShareStem();
+            ARDummyRangeEnd * shrdum = new ARDummyRangeEnd(SHARESTEMEND);
+            
+			if(!trill)
+            {
+            	shrstem->setIsAuto(true);
+                shrstem->setPosition(group->startpos);
+                shrstem->setAssociation(ARMusicalTag::RA);
+                shrdum->setIsAuto(true);
+                shrdum->setPosition(group->endpos);
+                shrdum->setCorrespondence(shrstem);
+                shrdum->setAssociation(ARMusicalTag::LA);
+                shrstem->setCorrespondence(shrdum);
+            }
+
 
 			while (vst.vpos && vst.vpos != group->startpos)
 				GetNext(vst.vpos,vst);
@@ -5738,7 +5744,8 @@ void ARMusicalVoice::FinishChord()
 			{
 				if (dispdur)
 					mPosTagList->AddElementAt(vst.ptagpos,dispdur);
-				mPosTagList->AddElementAt(vst.ptagpos,shrstem);
+				if(!trill)
+                    mPosTagList->AddElementAt(vst.ptagpos,shrstem);
 				if (!onlyonegroup)
 				{
 					// this adds the tags to the curpositiontags
@@ -5747,14 +5754,16 @@ void ARMusicalVoice::FinishChord()
 					// tags can be removed correctly.
 					if (dispdur)
 						vst.AddPositionTag(dispdur,0);
-					vst.AddPositionTag(shrstem,0);
+					if(!trill)
+                        vst.AddPositionTag(shrstem,0);
 				}
 			}
 			else
 			{
 				if (dispdur)
 					mPosTagList->AddTail(dispdur);
-				mPosTagList->AddTail(shrstem);
+				if(!trill)
+                    mPosTagList->AddTail(shrstem);
 			}
 
 			while (vst.vpos && vst.vpos != group->endpos)
@@ -5769,7 +5778,8 @@ void ARMusicalVoice::FinishChord()
 			}
 			else
 			{ */
-				mPosTagList->AddTail(shrdum);
+				if(!trill)
+                    mPosTagList->AddTail(shrdum);
 				if (dispdum)
 					mPosTagList->AddTail(dispdum);
 			// }

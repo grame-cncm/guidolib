@@ -349,12 +349,16 @@ void ARFactory::addChord()
         FirstNote->setOrnament(mCurrentTrill);
         //		delete mCurrentTrill;
         //		mCurrentTrill = 0;
+    
+        mCurrentVoice->FinishChord(true);
     }
+    else
+    {
+        if (mCurrentCluster)
+            mCurrentVoice->setClusterChord(mCurrentCluster);
 
-    if (mCurrentCluster)
-        mCurrentVoice->setClusterChord(mCurrentCluster);
-
-    mCurrentVoice->FinishChord();
+        mCurrentVoice->FinishChord(false);
+    }
 }
 
 // ----------------------------------------------------------------------------
