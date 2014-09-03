@@ -202,6 +202,11 @@ Guido2ImageErrorCodes Guido2Image::guidoPainterToImage( QGuidoPainter * guidoPai
 
 #define PDF_FORMAT				QString(".pdf")
 //----------------------------------------------------------------------------
+#ifdef IOS
+void Guido2Image::writePDF( QGuidoPainter * , int , const char *  )
+{
+}
+#else
 void Guido2Image::writePDF( QGuidoPainter * guidoPainter, int pageIndex, const char * fname )
 {
 	QString fileName (fname);
@@ -238,6 +243,7 @@ void Guido2Image::writePDF( QGuidoPainter * guidoPainter, int pageIndex, const c
 	}
 	painter.end();
 }
+#endif
 
 //----------------------------------------------------------------------------
 void Guido2Image::writeImage( QGuidoPainter * guidoPainter, const Params& p)
