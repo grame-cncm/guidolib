@@ -5,7 +5,9 @@ cmake_*
 *.xcodeproj
 build
 Debug
+Debug-iphoneos
 Release
+Release-iphoneos
 tmpSrc
 .DS_Store
 *.o
@@ -13,3 +15,7 @@ tmpSrc
 DerivedData
 doc/server/build
 doc/server/build/html/*.html
+tools/*.gmn
+tools/*.svg
+tools/*.mid
+.qmake.stash
