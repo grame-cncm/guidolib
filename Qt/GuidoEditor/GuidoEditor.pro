@@ -27,14 +27,26 @@ RCC_DIR = ./tmpSrc
 UI_DIR = ./tmpSrc
 
 macx {
+	message("generates project for MacOS")
 	RC_FILE+=$$RESOURCES_DIR/English.lproj/InfoPlist.strings 
 	QMAKE_INFO_PLIST = $$RESOURCES_DIR/GuidoEditorInfo.plist
 	ICON =  $$RESOURCES_DIR/guido.icns
 	FONT.files  = ../../src/guido2.svg
 	FONT.files += ../../src/guido2.ttf
-	FONT.path  = Contents/Resources
+	FONT.path  = Contents/Fonts
 	QMAKE_BUNDLE_DATA += FONT
 }
+ios {
+	message("generates project for iOS")
+#	RC_FILE+=$$RESOURCES_DIR/English.lproj/InfoPlist.strings 
+#	QMAKE_INFO_PLIST = $$RESOURCES_DIR/GuidoEditorInfo.plist
+	ICON =  $$RESOURCES_DIR/guido.icns
+	FONT.files  = ../../src/guido2.svg
+	FONT.files += ../../src/guido2.ttf
+	FONT.path  = Contents/Fonts
+	QMAKE_BUNDLE_DATA += FONT
+}
+
 win32 {
 	RC_FILE = $$RESOURCES_DIR/GuidoEditor.rc
 }
