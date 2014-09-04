@@ -40,17 +40,18 @@ GRNote::GRNote( GRStaff * grstaf,
         mClusterNote = true;
         mClusterHaveToBeDrawn = abstractRepresentationOfNote->doesClusterHaveToBeDrawn();
     }
+    mIsGraceNote = false;
 }
 
 GRNote::GRNote(GRStaff * grstaf, const TYPE_DURATION & inDuration )
-  : GREvent(grstaf,new ARNote( inDuration ),1)
+  : GREvent(grstaf,new ARNote( inDuration ),1), mIsGraceNote(false)
 {
 	// dor "Dummys": not with duration theDuration, matching ARNote will be created
 	// ARNote will be not deleted automatically!!
 }
 
 GRNote::GRNote(GRStaff * grstaf, ARNote * abstractRepresentationOfNote)
-  							: GREvent(grstaf,abstractRepresentationOfNote)
+  							: GREvent(grstaf,abstractRepresentationOfNote), mIsGraceNote(false)
 {
 	assert(abstractRepresentationOfNote);
 }

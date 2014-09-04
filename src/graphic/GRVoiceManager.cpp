@@ -2030,7 +2030,7 @@ GREvent * GRVoiceManager::CreateNote( const TYPE_TIMEPOSITION & tp, ARMusicalObj
 
 /** \brief Creates a GRNote from a ARNote
 */
-GRSingleNote * GRVoiceManager::CreateSingleNote( const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject, float size)
+GRSingleNote * GRVoiceManager::CreateSingleNote( const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject, float size, bool isGrace)
 {
 	curev = ARMusicalEvent::cast(arObject);
 	// make sure to recognize the displayduration-tag...
@@ -2058,6 +2058,7 @@ GRSingleNote * GRVoiceManager::CreateSingleNote( const TYPE_TIMEPOSITION & tp, A
 	dtempl.normalize();
 
 	GRSingleNote * grnote = new GRSingleNote(mCurGrStaff, tmpNote, tp, arObject->getDuration());
+    grnote->setGraceNote(isGrace);
 	if (size)						grnote->setSize(size);
 	if (curglobalstem)				grnote->setGlobalStem(curglobalstem);
 	else if (curstemstate)
@@ -2118,7 +2119,7 @@ GREvent * GRVoiceManager::CreateGraceNote( const TYPE_TIMEPOSITION & tp, ARMusic
 		empty->setSize(size);
 		return empty;
 	} 
-	GRSingleNote * grnote = CreateSingleNote (tp, arObject, size);
+	GRSingleNote * grnote = CreateSingleNote (tp, arObject, size, true);
 	const TagParameterFloat * tpf = curstemstate ? curstemstate->getLength() : 0;
 	if (tpf && tpf->TagIsSet())
 		grnote->setStemLength((float)(tpf->getValue()));

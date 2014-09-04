@@ -180,7 +180,10 @@ void GRBeam::addAssociation(GRNotationElement * grnot)
 	const GRStaff * grstf = grnot->getGRStaff();
 	if (grstf == 0) return;
 
-	if (grnot->getDuration() == DURATION_0)
+    GRNote * grnote = dynamic_cast<GRNote*>(grnot);
+    bool isGrace = grnote ? grnote->isGraceNote() : false;
+    
+	if (grnot->getDuration() == DURATION_0 && !isGrace)
 	{
 		GREvent * grn = GREvent::cast(grnot);
 		if (!grn || grn->getGlobalStem() == NULL)
@@ -214,7 +217,7 @@ void GRBeam::addAssociation(GRNotationElement * grnot)
 
 	// ignore all elements with duration 0
 	// but only, if I already have the stem
-	if (grnot->getDuration() == DURATION_0)
+	if (grnot->getDuration() == DURATION_0 && !isGrace)
 	{
 		if (mAssociated)
 		{
@@ -830,7 +833,12 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 				if (tagtype == SYSTEMTAG)
 					ly -= (float)sn->getGRStaff()->getPosition().y;
 				
-				float offbase = 3.5f * infos.currentLSPACE;
+                // if we have a beam between grace notes, we don't want an offbase that whould make the stems too long
+                GRNote * gnote = dynamic_cast<GRNote*>(startEl);
+                bool isGrace = gnote ? gnote->isGraceNote() : false;
+				
+                float offbase = isGrace ? 0 : 3.5f * infos.currentLSPACE;
+                
 				if (ly < 0)
 				{
 					if (needsadjust) {
