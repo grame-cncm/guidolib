@@ -5721,12 +5721,14 @@ void ARMusicalVoice::FinishChord(bool trill)
 				dispdur->setCorrespondence(dispdum);
 			}
 
-            ARShareStem * shrstem = new ARShareStem();
-            ARDummyRangeEnd * shrdum = new ARDummyRangeEnd(SHARESTEMEND);
+            ARShareStem * shrstem = 0;
+            ARDummyRangeEnd * shrdum = 0;
             
 			if(!trill)
             {
-            	shrstem->setIsAuto(true);
+				shrstem = new ARShareStem();
+				shrdum = new ARDummyRangeEnd(SHARESTEMEND);
+				shrstem->setIsAuto(true);
                 shrstem->setPosition(group->startpos);
                 shrstem->setAssociation(ARMusicalTag::RA);
                 shrdum->setIsAuto(true);
