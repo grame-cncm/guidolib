@@ -85,8 +85,8 @@ int main(int argc, char **argv)
 
 	GuidoErrCode err;
 	SVGSystem sys;
-	SVGDevice dev(cout, &sys);
-	GuidoInitDesc id = { &dev, 0, 0, 0 };
+	VGDevice *dev = sys.CreateDisplayDevice();
+	GuidoInitDesc id = { dev, 0, 0, 0 };
 	err = GuidoInit(&id);
 	if (err != guidoNoErr)
         error(err);
@@ -104,8 +104,10 @@ int main(int argc, char **argv)
     ifs.close();
 
     arh = GuidoString2AR(parser, streamBuffer.str().c_str());
-	if (arh)
-        error(err);
+	if (!arh) {
+        int line, col;
+		error(GuidoParserGetErrorCode (parser, line, col, 0));
+	}
 
 /*
 	GuidoAR2MIDIFile operates using an ARHandler

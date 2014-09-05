@@ -19,7 +19,7 @@
 #include <map>
 
 /*!
-\addtogroup midi MIDI Export
+\addtogroup midi MIDI support
 @{
 */
 

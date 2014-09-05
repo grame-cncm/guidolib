@@ -47,6 +47,14 @@ void CairoFont::SelectFont( cairo_t * cr ) const
 // --------------------------------------------------------------
 void CairoFont::GetExtent( const char * s, float * outWidth, float * outHeight, cairo_t * context ) const
 {
+        bool newcontext = false;
+	if (!context) {
+        	cairo_surface_t* surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 1000, 1000);
+                context = cairo_create (surface);
+		cairo_surface_destroy (surface);	
+		newcontext = true;
+		std::cerr << "Your device has no native context.  Probably due to mixing and matching cairo with another device. Creating an ad hoc context and crossing fingers." << std::endl;
+	}
 	SelectFont (context);
 
 //	cairo_matrix_t matrix;
@@ -62,6 +70,8 @@ void CairoFont::GetExtent( const char * s, float * outWidth, float * outHeight, 
 //	*outHeight	= (extents.height - extents.y_advance) * matrix.yy;
 //std::cout << "CairoFont::GetExtent -" << s << "- w/h " << *outWidth << "/" << *outHeight 
 //	<< " - adv x/y " << extents.x_advance << "/" << extents.y_advance << std::endl;
+        if (newcontext)
+                cairo_destroy(context);
 }
 
 void CairoFont::GetExtent( const char * s, int charCount, float * outWidth, float * outHeight, VGDevice * dev ) const

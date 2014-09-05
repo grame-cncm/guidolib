@@ -176,7 +176,7 @@ Guido2ImageErrorCodes Guido2Image::gmnFile2Image	( const  Params& p )
 		if (p.layout) painter->setGuidoLayoutSettings (*p.layout);
 		painter->setGMNFile(p.input);
 	}
-		return GUIDO_2_IMAGE_GUIDO_ENGINE_NOT_STARTED;			// likely
+	else return GUIDO_2_IMAGE_GUIDO_ENGINE_NOT_STARTED;			// likely
 	return guidoPainterToImage(painter, p);
 }
 
@@ -202,6 +202,11 @@ Guido2ImageErrorCodes Guido2Image::guidoPainterToImage( QGuidoPainter * guidoPai
 
 #define PDF_FORMAT				QString(".pdf")
 //----------------------------------------------------------------------------
+#ifdef IOS
+void Guido2Image::writePDF( QGuidoPainter * , int , const char *  )
+{
+}
+#else
 void Guido2Image::writePDF( QGuidoPainter * guidoPainter, int pageIndex, const char * fname )
 {
 	QString fileName (fname);
@@ -238,6 +243,7 @@ void Guido2Image::writePDF( QGuidoPainter * guidoPainter, int pageIndex, const c
 	}
 	painter.end();
 }
+#endif
 
 //----------------------------------------------------------------------------
 void Guido2Image::writeImage( QGuidoPainter * guidoPainter, const Params& p)

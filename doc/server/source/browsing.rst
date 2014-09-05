@@ -8,11 +8,11 @@ Browsing music pages
 .. toctree::
    :maxdepth: 1
 
-   api/voicescount
-   api/pagescount
+   api/countvoices
+   api/getpagecount
    api/duration
-   api/pageat
-   api/pagedate
+   api/findpageat
+   api/getpagedate
 
 Internals
 ---------

@@ -168,7 +168,6 @@ GRTrill::~GRTrill()
 void GRTrill::OnDraw( VGDevice & hdc , float right, float noteY, int nVoice)
 {
 	VGColor oldColor = hdc.GetFontColor();
-	hdc.SetFontColor(VGColor( mColRef ));
 	
 	if(fType==0)//TRILL=0
 	{

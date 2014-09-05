@@ -33,4 +33,3 @@ GUIDO Music Notation
 --------------------
 
 The `GUIDO Music Notation format <http://guidolib.sourceforge.net/doc/GUIDO-Music%20Notation%20Format.html>`_ is a formal language for score level music representation. It is a plain-text, i.e. readable and platform independent format capable of representing all information contained in conventional musical scores. The basic GUIDO Format is very flexible and can be easily extended and adapted to capture a wide variety of musical features beyond conventional musical notation (CMN). The GUIDO design is strongly influenced by objective oriented programming to facilitate an adequate representation of musical material, from tiny motives up to complex symphonic scores.
-

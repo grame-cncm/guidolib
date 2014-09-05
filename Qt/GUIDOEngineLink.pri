@@ -1,15 +1,17 @@
 # Universal binary on MAC
-#macx:QMAKE_MAC_SDK=macosx10.7
-
-macx:CONFIG+= i386 x86_64
 
 macx {
-	QMAKE_CXXFLAGS += -mmacosx-version-min=10.7
-	system( [ $(uname -r | cut -d. -f1) -gt 12 ] ):CONFIG+=CPP11
-	CPP11 {
-		message ("using C++11")
-		CONFIG += c++11
-	} 
+	message("generates project for MacOS")
+	CONFIG+= i386 x86_64
+	QMAKE_CXXFLAGS += -mmacosx-version-min=10.6
+}
+
+ios {
+	message("generates project for iOS")
+	QMAKE_CXXFLAGS += -DIOS
+	CONFIG += c++11
+	CONFIG+= arm64 armv7 armv7s
+	LIBS += -L../../build/iOS/Release-iphoneos -lGUIDOEngine
 }
 
 win32: {

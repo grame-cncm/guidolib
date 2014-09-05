@@ -795,6 +795,28 @@ void ARMusicalVoice::print() const
 }
 
 //____________________________________________________________________________________
+void ARMusicalVoice::printPosTags(std::ostream & os, GuidoPos& pos, GuidoPos prevpos, bool lookend) const
+{
+	if (mPosTagList)
+	{
+		while (pos)
+		{
+			ARPositionTag * pt = mPosTagList->GetAt(pos);
+			ARTagEnd * artgend = ARTagEnd::cast(pt);
+			if (!lookend){ if (artgend)	break; }
+			else if (!artgend)	break;
+			if ( pt && pt->getPosition() == prevpos)
+			{
+				ARMusicalObject * o = dynamic_cast<ARMusicalObject *>(pt);
+				if (o)	o->operator<<(os);
+			}
+			else	break;
+			mPosTagList->GetNext(pos);
+		}
+	}
+}
+
+//____________________________________________________________________________________
 std::ostream & ARMusicalVoice::operator<<(std::ostream & os) const
 {
 	// Attention: when calling this function you have to set readmode beforehand if you
@@ -814,40 +836,9 @@ std::ostream & ARMusicalVoice::operator<<(std::ostream & os) const
 		ARMusicalObject * e = ObjectList::GetNext(pos);
 
 		// now we check the positiontaglist up to the event
-		if (mPosTagList)
-		{
-			while (ptagpos)
-			{
-				ARPositionTag * pt = mPosTagList->GetAt(ptagpos);
-				ARTagEnd * artgend = ARTagEnd::cast(pt);
-				if (artgend)	break;
-				if ( pt && pt->getPosition() == prevpos)
-				{
-					ARMusicalObject * o = dynamic_cast<ARMusicalObject *>(pt);
-					if (o)	o->operator<<(os);
-				}
-				else	break;
-				mPosTagList->GetNext(ptagpos);
-			}
-		}
-
+		printPosTags (os, ptagpos, prevpos, false);
 		e->operator<<(os);
-		if (mPosTagList)
-		{
-			while (ptagpos)
-			{
-				ARPositionTag * pt = mPosTagList->GetAt(ptagpos);
-				ARTagEnd * artgend = ARTagEnd::cast(pt);
-				if (!artgend)	break;
-				if (pt->getPosition() == prevpos)
-				{
-					ARMusicalObject * o = dynamic_cast<ARMusicalObject *>(pt);
-					if (o)	o->operator<<(os);
-				}
-				else	break;
-				mPosTagList->GetNext(ptagpos);
-			}
-		}
+		printPosTags (os, ptagpos, prevpos, true);
 	}
 
 	// now, we deal with the staff coming after.
@@ -1713,10 +1704,10 @@ void ARMusicalVoice::doAutoBeaming()
 			{
 				// possible Start-Position
 				int durok = 1;
-				if (vst.curdispdur != NULL)
+				if (vst.fCurdispdur != NULL)
 				{
 					// check, wheter the displayduration is zero
-					if (vst.curdispdur->getDisplayDuration() == DURATION_0)
+					if (vst.fCurdispdur->getDisplayDuration() == DURATION_0)
 						durok = 0;
 				}
 				if (durok)
@@ -1777,10 +1768,10 @@ void ARMusicalVoice::doAutoBeaming()
 			{
 				// possible Start-Position
 				int durok = 1;
-				if (vst.curdispdur != NULL)
+				if (vst.fCurdispdur != NULL)
 				{
 					// check, wehter the displayduration
-					if (vst.curdispdur->getDisplayDuration() == DURATION_0)
+					if (vst.fCurdispdur->getDisplayDuration() == DURATION_0)
 						durok = 0;
 				}
 				if (durok)
@@ -2247,11 +2238,11 @@ obsolete: an end repeatbar is now ARBar
 				if (vst.curchordtag)
 				{
 					// then, we have to set the duration also of the dispDur tag that must be present somewhere ....
-					if (vst.curdispdur)
+					if (vst.fCurdispdur)
 					{
 						// how can we make sure, that the new duration is displayable?
 						// must be checked in doAutoDisplayCheck!
-						vst.curdispdur->setDisplayDuration(newdur);
+						vst.fCurdispdur->setDisplayDuration(newdur);
 
 					}
 					// we have to set the timepositions of the other events and tags within the chord-range ....
@@ -3149,10 +3140,10 @@ bool ARMusicalVoice::DurationFitsBase( const TYPE_DURATION &dur,
 			newbase.setNumerator(val);
 			newbase.setDenominator(8);
 			break;
-		default:
-			newbase.setNumerator(val);
-			newbase.setDenominator(dur.getNumerator());
-			break;
+//		default:
+//			newbase.setNumerator(val);
+//			newbase.setDenominator(dur.getNumerator());
+//			break;
 	}
 	return false;
 }
@@ -3194,7 +3185,7 @@ bool ARMusicalVoice::DurationIsDisplayable(TYPE_DURATION & dur, int & outDotCoun
 	dur.normalize();
 
 	// assert, that the duration is a power of two
-	assert(IsPowerOfTwoDenom(dur/*,8*/));
+//	assert(IsPowerOfTwoDenom(dur/*,8*/));   DF - removed on march 19 2014 when trying to improve incorrect displayed duration (e.g. a/21)
 
 	const int num = dur.getNumerator();
 
@@ -3762,12 +3753,12 @@ void ARMusicalVoice::doAutoDisplayCheck()
 					// then, we have to set the duration also of
 					// the dispDur tag that must be present
 					// somewhere ....
-					if (vst.curdispdur)
+					if (vst.fCurdispdur)
 					{
 						// how can we make sure, that the
 						// new duration is displayable?
 						// must be checked in doAutoDisplayCheck!
-						vst.curdispdur->setDisplayDuration(newdur);
+						vst.fCurdispdur->setDisplayDuration(newdur);
 
 					}
 					// we have to set the timepositions of the other
@@ -4498,12 +4489,12 @@ void ARMusicalVoice::SplitEventAtPos( ARMusicalVoiceState & vst, const TYPE_TIME
 		// then, we have to set the duration also of
 		// the dispDur tag that must be present
 		// somewhere ....
-		if (vst.curdispdur)
+		if (vst.fCurdispdur)
 		{
 			// how can we make sure, that the
 			// new duration is displayable?
 			// must be checked in doAutoDisplayCheck!
-			vst.curdispdur->setDisplayDuration(newdur);
+			vst.fCurdispdur->setDisplayDuration(newdur);
 
 		}
 		// we have to set the timepositions of the other
@@ -5764,7 +5755,7 @@ void ARMusicalVoice::FinishChord()
 			// how do we know ?
 			ARDisplayDuration * dispdur = NULL;
 			ARDummyRangeEnd * dispdum = NULL;
-			//if (!vst.curdispdur)
+			//if (!vst.fCurdispdur)
 			{
 				dispdur = new ARDisplayDuration();
 				dispdur->setDisplayDuration(group->dur);
@@ -6070,12 +6061,13 @@ void ARMusicalVoice::doAutoTrill()
 				// if it has, we can check if the note is tied to another
 				// if it is tied, we will let its status as "begin" (default)
 				// and we'll affect an ARtrill to the next note, whose boolean "begin" will be set as false with setContinue()
-				if(armvs.getCurPositionTags())
+				const PositionTagList * ptags = armvs.getCurPositionTags();
+				if(ptags)
                 {
-					GuidoPos pos = armvs.getCurPositionTags()->GetHeadPosition();
+					GuidoPos pos = ptags->GetHeadPosition();
 					while(pos)
                     {
-						ARPositionTag * arpt = armvs.getCurPositionTags()->GetNext(pos);
+						ARPositionTag * arpt = ptags->GetNext(pos);
 						if(arpt)
                         {
 							ARTie * tie = dynamic_cast<ARTie *>(arpt);
@@ -6086,6 +6078,7 @@ void ARMusicalVoice::doAutoTrill()
 								do
                                 {
 									ARMusicalObject * nextObject = GetNext(posNote, armvs);
+									if (!nextObject) break;
 									nextNote = dynamic_cast<ARNote *>(nextObject);
 								}
                                 while(posObj && !nextNote);
@@ -6124,12 +6117,13 @@ void ARMusicalVoice::doAutoCluster()
             {
 				// if it has, we can check if the note is tied to another
 				// if it is tied, we'll affect an ARCluster to the next note
-				if(armvs.getCurPositionTags())
+				const PositionTagList * ptags = armvs.getCurPositionTags();
+				if(ptags)
                 {
-					GuidoPos pos = armvs.getCurPositionTags()->GetHeadPosition();
+					GuidoPos pos = ptags->GetHeadPosition();
 					while(pos)
                     {
-						ARPositionTag * arpt = armvs.getCurPositionTags()->GetNext(pos);
+						ARPositionTag * arpt = ptags->GetNext(pos);
 						if(arpt)
                         {
 							ARTie * tie = dynamic_cast<ARTie *>(arpt);
@@ -6235,12 +6229,13 @@ void ARMusicalVoice::doAutoFeatheredBeam()
 	while(pos)
 	{
 		GetNext(pos,armvs);
-		if(armvs.getCurPositionTags())
+		const PositionTagList * ptags = armvs.getCurPositionTags();
+		if(ptags)
 		{
-			GuidoPos posTag = armvs.getCurPositionTags()->GetHeadPosition();
+			GuidoPos posTag = ptags->GetHeadPosition();
 			while(posTag)
 			{
-				ARPositionTag * tag = armvs.getCurPositionTags()->GetNext(posTag);
+				ARPositionTag * tag = ptags->GetNext(posTag);
 				ARFeatheredBeam * curfBeam = dynamic_cast<ARFeatheredBeam *>(tag);
 				if(curfBeam)
 				{

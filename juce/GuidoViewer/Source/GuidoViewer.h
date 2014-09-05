@@ -36,8 +36,8 @@ public:
 
 
     //==============================================================================
-    const StringArray getMenuBarNames();
-    const PopupMenu getMenuForIndex (int menuIndex, const String& /*menuName*/);
+    StringArray getMenuBarNames();
+    PopupMenu getMenuForIndex (int menuIndex, const String& /*menuName*/);
     void menuItemSelected (int menuItemID, int /*topLevelMenuIndex*/);
 
     //==============================================================================

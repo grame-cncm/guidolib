@@ -871,21 +871,25 @@ unsigned int GDeviceQt::GetFontAlign() const
 //--------------------------------------------------------------------
 void GDeviceQt::SetDPITag( float )
 {
+#ifndef IOS
 	QPrinter * device = dynamic_cast<QPrinter *>( mQPainter->device() );
 	if ( device != 0 )
 	{
 		//device->setResolution ( inDPI );
 	}
+#endif
 }
 
 //--------------------------------------------------------------------
 float GDeviceQt::GetDPITag()const
 {  
+#ifndef IOS
 	QPrinter * device = dynamic_cast<QPrinter *>( mQPainter->device() );
 	if ( device != 0 )
 	{
 		return device->resolution ();
 	}
+#endif
 	return -1;
 }
 

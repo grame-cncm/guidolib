@@ -34,8 +34,9 @@ The Guido engine has been designed by Kai Renz. It became an open source library
 December 2002 at the initiative of the Grame Computer Music Research Lab. Since then,
 many persons have been contributing to the Guido library project.
 I would like to thank them and especially: 
-J. Scott Amort, Jérôme Berthet, Samuel Brochot, Yannick Chapuis, Christophe Daudin,
-Colas Decron, Torben Hohn, Camille Le Roi, François Levy, Benjamen Ruprechter, Mike Solomon
+J. Scott Amort, Jérôme Berthet, Samuel Brochot, Yannick Chapuis, Thomas Coffy, 
+Christophe Daudin, Colas Decron, Torben Hohn, Camille Le Roi, François Levy, 
+Benjamen Ruprechter, Mike Solomon
 and of course, my colleagues and friends Stéphane Letz and Yann Orlarey
 
 Dominique Fober

@@ -23,8 +23,14 @@
 
 #include <arpa/inet.h>
 
-#include <QDir>
-#include <QTextStream>
+#include "tinydir.h"
+
+#ifdef WIN32
+  #include <libgen.h>
+#else
+  #include <sys/stat.h>
+#endif
+
 
 #include <iostream>
 #include <sstream>
@@ -59,6 +65,15 @@ using namespace std;
 
 namespace guidohttpd
 {
+
+// mymkdir is system dependent
+int mymkdir(string name) {
+  #ifdef WIN32
+    return _mkdir(name.c_str());
+  #else
+    return mkdir(name.c_str(), 0777);
+  #endif
+}
 
 //--------------------------------------------------------------------------
 // static functions
@@ -142,8 +157,8 @@ _post_params (void *coninfo_cls, enum MHD_ValueKind , const char *key,
 //--------------------------------------------------------------------------
 // the http server
 //--------------------------------------------------------------------------
-HTTPDServer::HTTPDServer(int verbose, int logmode, string cachedir, string svgfontfile, guido2img* g2svg)
-    : fVerbose(verbose), fLogmode(logmode), fCachedir(cachedir), fSvgFontFile(svgfontfile), fServer(0), fConverter(g2svg), fMaxSessions(1000)
+HTTPDServer::HTTPDServer(int verbose, int logmode, string cachedir, guido2img* g2svg, bool alloworigin)
+    : fAccessControlAllowOrigin(alloworigin), fVerbose(verbose), fLogmode(logmode), fCachedir(cachedir), fServer(0), fConverter(g2svg), fMaxSessions(100)
 {
 }
 
@@ -160,7 +175,7 @@ HTTPDServer::~HTTPDServer()
 //--------------------------------------------------------------------------
 bool HTTPDServer::start(int port)
 {
-    // USE_SELECT_INTERALLY makes the server single threaded
+	// USE_SELECT_INTERALLY makes the server single threaded
     // this guarantees that operations will be queued, which prevents
     // issues involving the use of shared resources
     fServer = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY, port,
@@ -231,6 +246,8 @@ int HTTPDServer::send (struct MHD_Connection *connection, const char *page, int 
         return MHD_NO;
     }
     MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE, type ? type : "text/plain");
+    if (fAccessControlAllowOrigin)
+		MHD_add_response_header (response, MHD_HTTP_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, "*");
     int ret = MHD_queue_response (connection, status, response);
     MHD_destroy_response (response);
     return ret;
@@ -291,21 +308,41 @@ std::string generate_sha1(std::string setter)
 
 void HTTPDServer::readFromCache(string target)
 {
-  QDir myDir(fCachedir.c_str());
-  QStringList filesList = myDir.entryList();
+  tinydir_dir myDir;
+  tinydir_open_sorted(&myDir, fCachedir.c_str());
 
-  for (int i = 0; i < filesList.size(); i++) {
+  for (int i = 0; i < myDir.n_files; i++) {
     if (i >= fMaxSessions) {
+      tinydir_close(&myDir);
       return;
     }
-    QDir subDir(myDir.absoluteFilePath(filesList[i]));
-    QStringList subFilesList = subDir.entryList();
-    string folder = filesList[i].toStdString();
+
+    tinydir_file maybeSubDir;
+    tinydir_readfile_n(&myDir, &maybeSubDir, i);
+    if (!maybeSubDir.is_dir) {
+      continue;
+    }
+    
+    string folder(maybeSubDir.name);
+    if ((folder == ".") || (folder == "..")) {
+      continue;
+    }
+
     if ((target != "") && (folder.substr(0,2) != target.substr(0,2))) {
       continue;
     }
-    for (int j = 0; j < subFilesList.size(); j++) {
-      string fn = subFilesList[j].toStdString();
+
+    tinydir_dir subDir;
+    tinydir_open_sorted(&subDir, (fCachedir + "/" +string(maybeSubDir.name)).c_str());
+    for (int j = 0; j < subDir.n_files; j++) {
+      tinydir_file file;
+      tinydir_readfile_n(&subDir, &file, j);
+
+      string fn(file.name);
+      if ((fn == ".") || (fn == "..")) {
+        continue;
+      }
+
       if ((target != "") && (fn.substr(0,40) != target)) {
         continue;
       }
@@ -317,19 +354,30 @@ void HTTPDServer::readFromCache(string target)
         continue;
 
       string unique_id = fn.substr(0,40);
-      QFile file((fCachedir+"/"+unique_id.substr(0,2)+"/"+unique_id+".gmn").c_str());
-      if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+      ifstream myfile ((fCachedir+"/"+unique_id.substr(0,2)+"/"+unique_id+".gmn").c_str());
+      if (!myfile.is_open())
         continue;
-                  
-      QTextStream in(&file);
-      string all = in.readAll().toStdString();
-      file.close();
+
+      stringstream ss;
+      string line;
+      while (getline(myfile, line))
+      {
+        ss << line << '\n';
+      }
+      myfile.close();
+      
+      string all = ss.str();
+
       (void) registerGMN(unique_id, all);
       if (target != "") {
+        tinydir_close(&myDir);
+        tinydir_close(&subDir);
         return;
       }
     }
+    tinydir_close(&subDir);
   }
+  tinydir_close(&myDir);
 }
 
 guidosessionresponse HTTPDServer::registerGMN(string unique_id, string gmn)
@@ -348,16 +396,23 @@ guidosessionresponse HTTPDServer::registerGMN(string unique_id, string gmn)
       }
       fSessions[unique_id] = maybe;
     }
-    QDir dir((fCachedir+'/'+unique_id.substr(0,2)).c_str());
-    if (!dir.exists()) {
-      dir.mkpath(".");
+    tinydir_dir myDir;
+    int success = tinydir_open_sorted(&myDir, (fCachedir+'/'+unique_id.substr(0,2)).c_str());
+    if (success != 0) {
+      success = mymkdir(fCachedir+'/'+unique_id.substr(0,2));
+      if (success != 0) {
+        // can't do io
+        return fSessions[unique_id]->genericReturnId();
+      }
     }
-    QFile file(dir.absoluteFilePath((unique_id+".gmn").c_str()));
-    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-      QTextStream out(&file);
-      out << gmn.c_str();
-      file.close();
+
+    tinydir_close(&myDir);
+    ofstream myfile((fCachedir+'/'+unique_id.substr(0,2)+'/'+unique_id+".gmn").c_str());
+    if (myfile.is_open()) {
+      myfile << gmn;
+      myfile.close();
     }
+
     return fSessions[unique_id]->genericReturnId();
 }
 
@@ -541,17 +596,20 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
 
     if (!elems.size()) {
         if (type != POST) {
-            guidosessionresponse response = guidosession::genericFailure("Requests without scores MUST be POST.", 403);
+            guidosessionresponse response = guidosession::welcomeMessage();
             return send (connection, response);
         }
         return sendGuidoPostRequest(connection, args);
     }
 
     if (elems[0] == "version") {
-        guidosessionresponse response = guidosession::handleSimpleStringQuery("version", guidosession::getVersion());
+        guidosessionresponse response = guidosession::handleSimpleStringQuery("guidolib", guidosession::getVersion());
         return send(connection, response);
     } else if (elems[0] == "server") {
-        guidosessionresponse response = guidosession::handleSimpleStringQuery("server", guidosession::getServerVersion());
+        guidosessionresponse response = guidosession::handleSimpleStringQuery("guidoserver", guidosession::getServerVersion());
+        return send(connection, response);
+    } else if (elems[0] == "versions") {
+        guidosessionresponse response = guidosession::getGuidoAndServerVersions();
         return send(connection, response);
     } else if (elems[0] == "linespace") {
         guidosessionresponse response = guidosession::handleSimpleFloatQuery("linespace", guidosession::getLineSpace());
@@ -576,9 +634,10 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
         sendGuidoDeleteRequest(connection, args);
     } else if ((type == GET) || (type == HEAD)) {
         currentSession->updateValuesFromDefaults(args);
+        currentSession->maybeResize();
         if (elems.size() == 1) {
             // must be getting the score
-            guidosessionresponse response = currentSession->genericReturnImage(fSvgFontFile);
+            guidosessionresponse response = currentSession->genericReturnImage();
             return send (connection, response);
         }
         if (elems.size() == 2) {
@@ -586,18 +645,18 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
             // is there a way to streamline this...a lot of logic dup but not much code dup...
             // maybe templates...but it is sufficiently different to perhaps warrant writing
             // all this stuff out
-            if (elems[1] == "voicescount") {
+            if (elems[1] == "countvoices") {
                 int nvoices;
-                guidoAPIresponse gar = currentSession->voicesCount(nvoices);
+                guidoAPIresponse gar = currentSession->countVoices(nvoices);
                 guidosessionresponse response = gar.is_happy()
-                    ? currentSession->handleSimpleIDdIntQuery("voicescount", nvoices)
+                    ? currentSession->handleSimpleIDdIntQuery("voicecount", nvoices)
                     : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
-            } else if (elems[1] == "pagescount") {
+            } else if (elems[1] == "getpagecount") {
                 int npages;
-                guidoAPIresponse gar = currentSession->voicesCount(npages);
+                guidoAPIresponse gar = currentSession->getPageCount(npages);
                 guidosessionresponse response = gar.is_happy()
-                    ? currentSession->handleSimpleIDdIntQuery("pagescount", npages)
+                    ? currentSession->handleSimpleIDdIntQuery("pagecount", npages)
                     : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
             } else if (elems[1] == "duration") {
@@ -607,7 +666,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                     ? currentSession->handleSimpleIDdStringQuery("duration", duration)
                     : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
-            } else if (elems[1] == "pageat") {
+            } else if (elems[1] == "findpageat") {
                 GuidoDate date;
                 string mydate = "";
                 if (args.find("date") != args.end()) {
@@ -615,40 +674,40 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                 }
                 stringToDate(mydate, date);
                 int page;
-                guidoAPIresponse gar = currentSession->pageAt(date, page);
+                guidoAPIresponse gar = currentSession->findPageAt(date, page);
                 guidosessionresponse response = gar.is_happy()
                     ? currentSession->datePageJson(mydate, page)
                     : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
-            } else if (elems[1] == "pagedate") {
+            } else if (elems[1] == "getpagedate") {
                 GuidoDate date;
                 int mypage = 1;
                 if (args.find("page") != args.end()) {
                     mypage = atoi(args.find("page")->second.c_str());
                 }
-                guidoAPIresponse gar = currentSession->pageDate(mypage, date);
+                guidoAPIresponse gar = currentSession->getPageDate(mypage, date);
                 guidosessionresponse response = gar.is_happy()
                     ? currentSession->datePageJson(dateToString(date), mypage)
                     : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
-            } else if (elems[1] == "pagemap") {
+            } else if (elems[1] == "getpagemap") {
                 Time2GraphicMap outmap;
                 guidoAPIresponse gar = currentSession->getMap(PAGE, 0, outmap);
                 guidosessionresponse response = gar.is_happy()
                     ? currentSession->mapJson("pagemap", outmap)
                     : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
-            } else if (elems[1] == "midi") {
+            } else if (elems[1] == "ar2midifile") {
                 guidosessionresponse response = currentSession->genericReturnMidi();
                 return send(connection, response);
-            } else if (elems[1] == "systemmap") {
+            } else if (elems[1] == "getsystemmap") {
                 Time2GraphicMap outmap;
                 guidoAPIresponse gar = currentSession->getMap(SYSTEM, 0, outmap);
                 guidosessionresponse response = gar.is_happy()
                     ? currentSession->mapJson("systemmap", outmap)
                     : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
-            } else if (elems[1] == "staffmap") {
+            } else if (elems[1] == "getstaffmap") {
                 Time2GraphicMap outmap;
                 int mystaff = 1;
                 if (args.find("staff") != args.end()) {
@@ -659,7 +718,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                     ? currentSession->mapJson("staffmap", outmap)
                     : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
-            } else if (elems[1] == "voicemap") {
+            } else if (elems[1] == "getvoicemap") {
                 Time2GraphicMap outmap;
                 int myvoice = 1;
                 if (args.find("voice") != args.end()) {
@@ -670,7 +729,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                     ? currentSession->mapJson("voicemap", outmap)
                     : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
-            } else if (elems[1] == "timemap") {
+            } else if (elems[1] == "gettimemap") {
                 GuidoServerTimeMap outmap;
                 guidoAPIresponse gar = currentSession->getTimeMap(outmap);
                 guidosessionresponse response = gar.is_happy()

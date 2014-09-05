@@ -7,7 +7,8 @@
 
 The GUIDOLib project aims at the development of a generic, portable library and API for 
 the graphical rendering of musical scores. The library is based on the GUIDO Music Notation 
-format as the underlying data format. It is an open source project covered by the GNU LGPL license.
+format as the underlying data format. It is an open source project covered by the Mozilla 
+Public License.
 
 The project has started in December 2002, based on the source code of the GUIDO NoteViewer 
 developed by Kai Renz.
