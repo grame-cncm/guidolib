@@ -3101,8 +3101,13 @@ traceslice(cout << "GRStaffManager::FindOptimumBreaks num slices is " << numslic
 				float wishext = mGrPage->getInnerWidth();
 				if (count == 0 && mCurSysFormat)
 				{
-					float dx = mCurSysFormat->getDX()->getValue();
-					wishext = wishext - dx ;
+                    const TagParameterFloat *tpf = mCurSysFormat->getDX();
+                    float dx = 0;
+
+                    if (tpf)
+					    dx = tpf->getValue();
+					
+                    wishext = wishext - dx ;
 				}
 				float reqforce = (wishext - curxmin) * curconstant;
 				// if reqforce is in the range of optforce then we have found an optimum break ....
