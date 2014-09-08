@@ -1,0 +1,17 @@
+% New \staffFormat-Tag attribute :
+%
+% dy defines the staff vertical offset.
+%            Unit is the half space.
+%            Default value is 0
+%
+{
+    [
+        a b c
+    ],
+    [
+        \staffFormat<dy=15> a b c
+    ],
+    [
+        \staffFormat<dy=-5> a b c
+    ]
+}
