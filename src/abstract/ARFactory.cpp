@@ -1814,7 +1814,13 @@ void ARFactory::endTag()
         {
             // bereich ueber den der Text laueft ?
             // why is this? -> check it out later!
-            atext->setRelativeEndTimePosition(mCurrentVoice->getDuration());
+            if ((atext = dynamic_cast<ARComposer *>(tag)) == 0
+                && (atext = dynamic_cast<ARFingering *>(tag)) == 0
+                && (atext = dynamic_cast<ARLabel *>(tag)) == 0
+                && (atext = dynamic_cast<ARMark *>(tag)) == 0
+                && (atext = dynamic_cast<ARTitle *>(tag)) == 0)
+                atext->setRelativeEndTimePosition(mCurrentVoice->getDuration());
+            
             tag = NULL;
         }
         else if(( asymbol = dynamic_cast<ARSymbol *>(tag)) != 0 )
