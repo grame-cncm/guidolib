@@ -403,8 +403,8 @@ GUIDOAPI(GuidoErrCode) GuidoAR2PRoll( ARHandler ar, int width, int height, const
 	TYPE_TIMEPOSITION d2(end.num, end.denom);
 	arMusic->toPianoRoll(width, height, d1, d2, dev);
 
-	dev->PopPenColor();
 	dev->PopFillColor();
+    dev->PopPenColor();
 	dev->EndDraw();
 	return guidoNoErr;
 }

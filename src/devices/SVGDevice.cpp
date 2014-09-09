@@ -46,7 +46,7 @@ SVGDevice::SVGDevice(std::ostream& outstream, SVGSystem* system, const char* gui
 	fMusicFont(0), fTextFont(0), fOpMode(kUnknown),
 	fXScale(1), fYScale(1), fXOrigin(0), fYOrigin(0), fXPos(0), fYPos(0),
 	fFontAlign(kAlignBase), fDPI(0),
-	fPushedPen(false), fPushedPenColor(false), fPushedPenWidth(false), fPushedFill(false), fOffset(false),
+	fPushedPen(false), fPushedPenColor(false), fPushedPenWidth(false), fPushedFill(false), fScaled(false), fOffset(false),
     fCurrFont (kNoFont), fCurrFontProperties (VGFont::kFontNone),
 	fPendingStrokeColor(0),
 	fBeginDone(false)
