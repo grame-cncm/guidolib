@@ -60,6 +60,8 @@ class GRNote : public GREvent
     GRCluster *getGRCluster() const {return mCluster;}
     void       setGRCluster(GRCluster *inCluster, bool inSignificativeNote = true);
     bool       getClusterNoteBoolean() const {return mClusterNote;}
+    bool       isGraceNote() {return mIsGraceNote;}
+    void       setGraceNote(bool isGrace) {mIsGraceNote = isGrace;}
 
     GRCluster *createCluster(ARNoteFormat *inCurnoteformat);
 
@@ -72,6 +74,7 @@ protected :
         GRCluster *mCluster;
         bool mClusterNote;
         bool mClusterHaveToBeDrawn;
+        bool mIsGraceNote;
 };
 
 

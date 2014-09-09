@@ -4,6 +4,9 @@ GUIDO Engine history
 ----------------------------------------------------------------
 version 1.5.4
 
+- conflicts with note durations in the trill : bug solved
+- beams can be applied to grace notes
+
 ----------------------------------------------------------------
 version 1.5.3
 - experimental proportional notation based on AR or MIDI representation: 
