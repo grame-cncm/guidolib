@@ -107,11 +107,11 @@ void ARMusic::toReducedProportional(int width, int height, TYPE_TIMEPOSITION sta
 	}
 }
 
-void ARMusic::toPianoRoll(int width, int height, TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, VGDevice * dev) const
+void ARMusic::toPianoRoll(int width, int height, TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, int minPitch, int maxPitch, VGDevice * dev) const
 {
 	GuidoPos pos = GetHeadPosition();
 	if (!end) end = getDuration();
-	GuidoPianoRoll proll(start, end, width, height);
+    GuidoPianoRoll proll(start, end, width, height, minPitch, maxPitch);
 	proll.DrawGrid (dev);
 	while(pos) {
 		ARMusicalVoice * e = GetNext(pos);

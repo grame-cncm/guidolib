@@ -385,7 +385,7 @@ GUIDOAPI(GuidoErrCode) GuidoAR2RProportional( ARHandler ar, int width, int heigh
 
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoAR2PRoll( ARHandler ar, int width, int height, const GuidoDate& start, const GuidoDate& end, VGDevice* dev)
+GUIDOAPI(GuidoErrCode) GuidoAR2PRoll( ARHandler ar, int width, int height, const GuidoDate& start, const GuidoDate& end, int minPitch, int maxPitch, VGDevice* dev)
 {
 	if( ar == 0 )	return guidoErrInvalidHandle;
 	if( !gInited )	return guidoErrNotInitialized;
@@ -401,7 +401,7 @@ GUIDOAPI(GuidoErrCode) GuidoAR2PRoll( ARHandler ar, int width, int height, const
 
 	TYPE_TIMEPOSITION d1(start.num, start.denom);
 	TYPE_TIMEPOSITION d2(end.num, end.denom);
-	arMusic->toPianoRoll(width, height, d1, d2, dev);
+	arMusic->toPianoRoll(width, height, d1, d2, minPitch, maxPitch, dev);
 
 	dev->PopFillColor();
     dev->PopPenColor();

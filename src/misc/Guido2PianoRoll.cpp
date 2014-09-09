@@ -39,11 +39,12 @@ using namespace std;
 #define kMinDist	4		// the minimum distance between lines of the grid
 
 //-------------------------------------------------------------------
-GuidoPianoRoll::GuidoPianoRoll(TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, int width, int height)
-	: fWidth(width), fHeight(height), fStartDate(start), fEndDate(end), fDuration(double(end-start)), fLowPitch(0), fHighPitch(127)
+GuidoPianoRoll::GuidoPianoRoll(TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, int width, int height, int minPitch, int maxPitch)
+    : fWidth(width), fHeight(height), fStartDate(start), fEndDate(end), fDuration(double(end-start)), fLowPitch(minPitch), fHighPitch(maxPitch)
 {
 	fNoteHeight = fHeight / pitchrange();
-	if (! fNoteHeight) fNoteHeight = 1;
+	if (!fNoteHeight)
+        fNoteHeight = 1;
 }
 
 //-------------------------------------------------------------------
@@ -61,18 +62,18 @@ int	GuidoPianoRoll::pitch2ypos (int midipitch) const
 void GuidoPianoRoll::DrawGrid (VGDevice* dev) const
 {
 	dev->PushPenWidth(0.3);
-	for (int i=fLowPitch; i < fHighPitch; i++) {
+	for (int i = fLowPitch; i < fHighPitch; i++) {
 		int y = pitch2ypos (i);
 		int step = i % 12;		// the note in chromatic step
 		if (fNoteHeight < kMinDist) {
 			switch (step) {
 				case 0 :			// C notes are highlighted
-					dev->PushPenWidth((i==60) ? 1.0 : 0.6);
-					dev->Line( 0, y, fWidth, y);
+					dev->PushPenWidth((i == 60) ? 1.0 : 0.6);
+					dev->Line(0, y, fWidth, y);
 					dev->PopPenWidth();
 					break;
 				case 7:				// G
-					dev->Line( 0, y, fWidth, y);
+					dev->Line(0, y, fWidth, y);
 					break;
 			}
 		}
@@ -144,11 +145,10 @@ void GuidoPianoRoll::Draw(ARMusicalObject* e, TYPE_TIMEPOSITION date, TYPE_DURAT
 		int pitch = note->midiPitch();
 		if (pitch < 0)
 			fChordDuration = dur;		// prepare for potential chord
+        else if (pitch >= fLowPitch && pitch <= fHighPitch) {
+			if (note->getName() != ARNoteName::empty)
+				Draw (pitch, double(date), double(dur), dev);
 
-		else {
-			if (note->getName() != ARNoteName::empty) {
-				Draw (note->midiPitch(), double(date), double(dur), dev);
-			}
 //			cerr << e->getRelativeTimePosition() << ": note duration " <<  dur << " pitch " << note->midiPitch() << " (" << note->getName() <<")" << endl;
 			fChord = false;
 		}

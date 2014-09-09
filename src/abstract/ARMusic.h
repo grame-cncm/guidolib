@@ -54,7 +54,7 @@ class ARMusic : public MusicalVoiceList, public ARMusicalEvent
 		\param end end date of the time zone to be displayed, when 0, the scure duration is used.
 		\param dev a graphic device.
 	*/
-	virtual void 	toPianoRoll(int width, int height, TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, VGDevice * dev) const;
+	virtual void 	toPianoRoll(int width, int height, TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, int minPitch, int maxPitch, VGDevice * dev) const;
 
 	/*!
 		Converts an abstract representation to a simplified proportional representation

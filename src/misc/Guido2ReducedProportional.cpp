@@ -40,7 +40,7 @@ static const float kLineThickness = 0.5;
 
 //-------------------------------------------------------------------
 GuidoReducedProportional::GuidoReducedProportional(TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, int width, int height, bool drawdur)
-	: GuidoPianoRoll(start, end, width, height), fDrawDurationLine(drawdur)
+	: GuidoPianoRoll(start, end, width, height, 0 /* changer ça ? */, 127 /*changer ça ? */), fDrawDurationLine(drawdur)
 {
 	fNumStaves = 4;			// 4 staves - hard coded for the moment
 	fLineHeight = float(height) / ((fNumStaves * (kStaffLines - 1)) + ((fNumStaves-1) * kStaffSpacing) + (kStaffBorder * 2));

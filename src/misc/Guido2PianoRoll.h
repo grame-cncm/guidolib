@@ -62,7 +62,7 @@ class GuidoPianoRoll
 		virtual int	 pitch2ypos (int midipitch) const;
 	
 	public:
-				 GuidoPianoRoll(TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, int width, int height);
+				 GuidoPianoRoll(TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, int width, int height, int minPitch, int maxPitch);
 		virtual ~GuidoPianoRoll() {}
 		
 #ifdef MIDIEXPORT
