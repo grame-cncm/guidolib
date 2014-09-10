@@ -7,6 +7,7 @@
 
 #include "GUIDOParse.h"
 #include "GUIDOEngine.h"
+#include "GUIDOPianoRollAPI.h"
 #include "SVGDevice.h"
 #include "SVGSystem.h"
 
@@ -34,13 +35,17 @@ static void usage (char* name)
 	cerr << "         -end date       : set time zone end" << endl;
     cerr << "         -minpitch value : set minimum midi pitch (default is " << kDefaultMinPitch << ")" << endl;
 	cerr << "         -maxpitch value : set maximum midi pitch (default is " << kDefaultMaxPitch << ")" << endl;
-	exit (1);
+	system("PAUSE");
+    exit (1);
 }
 
-static void error (GuidoErrCode err)
+static void error(GuidoErrCode err)
 {
-	cerr << "error #" << err << ": " << GuidoGetErrorString (err) << endl;
-	exit (err);
+    if (err != guidoNoErr) {
+        cerr << "error #" << err << ": " << GuidoGetErrorString (err) << endl;
+        system("PAUSE");
+        exit(err);
+    }
 }
 
 static void checkusage (int argc, char **argv)
@@ -117,9 +122,11 @@ int main(int argc, char **argv)
  	SVGSystem sys;
 
     /* REM: TMP */
-    /*ofstream fichier("C:/Users/Colas/Desktop/test.svg", ios::out | ios::trunc);*/
+    ofstream fichier("C:/Users/Colas/Desktop/test.svg",  ios::out | ios::trunc);
+    ofstream fichier2("C:/Users/Colas/Desktop/test2.svg", ios::out | ios::trunc);
 
-	SVGDevice dev (cout/*fichier*/, &sys, 0);
+	SVGDevice dev(fichier/*cout*/, &sys, 0);
+	SVGDevice dev2(fichier2/*cout*/, &sys, 0);
 	
 	checkusage (argc, argv);
 
@@ -133,37 +140,52 @@ int main(int argc, char **argv)
     int minPitch = lintopt(argc, argv, kOptions[kMinPitch], kDefaultMinPitch);
     int maxPitch = lintopt(argc, argv, kOptions[kMaxPitch], kDefaultMaxPitch);
 
-
-    /* REM: faire fonction séparée ? */
-    if (minPitch > maxPitch) {
-        int minPitchTmp = minPitch;
-        minPitch = maxPitch;
-        maxPitch = minPitchTmp;
-    }
-
-    minPitch = minPitch < 0 ? 0 : minPitch;
-    maxPitch = maxPitch > 127 ? 127 : maxPitch;
-    /*********************************/
-
 	GuidoDate defDate = {0,1};
-	GuidoDate start = ldateopt(argc, argv, kOptions[kStart], defDate);
-	GuidoDate end = ldateopt(argc, argv, kOptions[kEnd], defDate);
-	dev.NotifySize (w, h);
+	GuidoDate start   = ldateopt(argc, argv, kOptions[kStart], defDate);
+	GuidoDate end     = ldateopt(argc, argv, kOptions[kEnd], defDate);
 
 	GuidoParser *parser = GuidoOpenParser();
 	ARHandler arh = GuidoFile2AR(parser, fileName);
+
+    GuidoErrCode err;
+
 	if (arh) {
-        GuidoErrCode err = GuidoAR2PRoll(arh, w, h, start, end, minPitch, maxPitch, &dev);
+        /**************/
+        GuidoPianoRoll *pianoRoll = GuidoCreatePianoRoll();
+
+        GuidoDate teststart = {-1, 1};
+        GuidoDate testend   = {-1, 1};
+
+        err = GuidoSetPianoRollTimeLimits(pianoRoll, teststart, testend);
+        error(err);
+        
+        err = GuidoGetPianoRollRendering(pianoRoll, &dev);
+        error(err);
+        
+        err = GuidoSetARToPianoRoll(pianoRoll, arh);
+        error(err);
+
+        GuidoDate teststart2 = {-1, 1};
+        GuidoDate testend2   = {-1, 1};
+
+        err = GuidoSetPianoRollTimeLimits(pianoRoll, teststart2, testend2);
+        error(err);
+        
+        err = GuidoGetPianoRollRendering(pianoRoll, &dev2);
+        error(err);
+
+        GuidoDestroyPianoRoll(pianoRoll);
+
 		GuidoFreeAR (arh);
 	}
 	else {
 		int line, col;
-		GuidoErrCode err = GuidoParserGetErrorCode(parser, line, col, 0); // REM: l'erreur n'est pas récupérée si l'arh a simplement mal été instancié
+		
+        err = GuidoParserGetErrorCode(parser, line, col, 0); // REM: l'erreur n'est pas récupérée si l'arh a simplement mal été instancié
 		error (err);
 	}
 
 	GuidoCloseParser(parser);
+
     return 0;
 }
-
-

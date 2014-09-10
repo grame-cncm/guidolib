@@ -26,7 +26,7 @@ class ARMusicalObject;
 class ARNoteFormat;
 class VGDevice;
 
-class GuidoPianoRoll
+class Guido2PianoRoll
 {
 	int		duration2width (double dur) const;
 	int		pitchrange () const			{ return fHighPitch - fLowPitch + 1; }
@@ -62,8 +62,8 @@ class GuidoPianoRoll
 		virtual int	 pitch2ypos (int midipitch) const;
 	
 	public:
-				 GuidoPianoRoll(TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, int width, int height, int minPitch, int maxPitch);
-		virtual ~GuidoPianoRoll() {}
+				 Guido2PianoRoll(TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, int width, int height, int minPitch, int maxPitch);
+		virtual ~Guido2PianoRoll() {}
 		
 #ifdef MIDIEXPORT
 		virtual GuidoErrCode Draw (const char* midifile, VGDevice* dev);

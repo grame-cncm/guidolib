@@ -95,7 +95,8 @@ void ARMusic::getTimeMap (TimeMapCollector& f) const
 
 void ARMusic::toReducedProportional(int width, int height, TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, bool drawdur, VGDevice * dev) const
 {
-	GuidoPos pos = GetHeadPosition();
+    /* REM: TODO */
+	/*GuidoPos pos = GetHeadPosition();
 	if (!end) end = getDuration();
 	GuidoReducedProportional rprop(start, end, width, height, drawdur);
 	rprop.SetMusicFont(dev);
@@ -104,19 +105,7 @@ void ARMusic::toReducedProportional(int width, int height, TYPE_TIMEPOSITION sta
 	while(pos) {
 		ARMusicalVoice * e = GetNext(pos);
 		proll->Draw(e, dev);
-	}
-}
-
-void ARMusic::toPianoRoll(int width, int height, TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, int minPitch, int maxPitch, VGDevice * dev) const
-{
-	GuidoPos pos = GetHeadPosition();
-	if (!end) end = getDuration();
-    GuidoPianoRoll proll(start, end, width, height, minPitch, maxPitch);
-	proll.DrawGrid (dev);
-	while(pos) {
-		ARMusicalVoice * e = GetNext(pos);
-		proll.Draw(e, dev);
-	}
+	}*/
 }
 
 void ARMusic::print() const

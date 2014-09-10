@@ -15,7 +15,7 @@
 #ifndef GuidoReducedProportional_h
 #define GuidoReducedProportional_h
 
-#include "Guido2PianoRoll.h"
+#include "GuidoPianoRoll.h"
 
 class GuidoReducedProportional : public GuidoPianoRoll
 {
@@ -47,6 +47,5 @@ class GuidoReducedProportional : public GuidoPianoRoll
 		virtual void DrawGrid (VGDevice* dev) const;
 		virtual void SetMusicFont(VGDevice* dev);
 };
-
 
 #endif

@@ -317,7 +317,7 @@ GUIDOAPI(GuidoErrCode) GuidoMIDI2PRoll( const char* file, int width, int height,
 	TYPE_TIMEPOSITION d1(start.num, start.denom);
 	TYPE_TIMEPOSITION d2(end.num, end.denom);
 	
-	GuidoPianoRoll proll (d1, d2, width, height);
+	Guido2PianoRoll proll (d1, d2, width, height);
 	proll.Draw(file, dev);
 
 	dev->PopPenColor();
@@ -344,7 +344,7 @@ GUIDOAPI(GuidoErrCode) GuidoMIDI2RProportional( const char* file, int width, int
 	TYPE_TIMEPOSITION d2(end.num, end.denom);
 	
 	GuidoReducedProportional rprop (d1, d2, width, height, drawDur);
-	GuidoPianoRoll* proll = &rprop;
+	Guido2PianoRoll* proll = &rprop;
 	rprop.SetMusicFont(dev);
 	proll->Draw(file, dev);
 
@@ -379,32 +379,6 @@ GUIDOAPI(GuidoErrCode) GuidoAR2RProportional( ARHandler ar, int width, int heigh
 
 	dev->PopPenColor();
 	dev->PopFillColor();
-	dev->EndDraw();
-	return guidoNoErr;
-}
-
-
-// --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoAR2PRoll( ARHandler ar, int width, int height, const GuidoDate& start, const GuidoDate& end, int minPitch, int maxPitch, VGDevice* dev)
-{
-	if( ar == 0 )	return guidoErrInvalidHandle;
-	if( !gInited )	return guidoErrNotInitialized;
-	if( !dev )		return guidoErrBadParameter;
-
-	ARMusic * arMusic = ar->armusic; // (JB) was guido_PopARMusic()
-	if( arMusic == 0 ) 
-		return guidoErrInvalidHandle;
-
-	dev->BeginDraw();
-	dev->PushPenColor(VGColor (100,100,100));
-	dev->PushFillColor(VGColor (0,0,0));
-
-	TYPE_TIMEPOSITION d1(start.num, start.denom);
-	TYPE_TIMEPOSITION d2(end.num, end.denom);
-	arMusic->toPianoRoll(width, height, d1, d2, minPitch, maxPitch, dev);
-
-	dev->PopFillColor();
-    dev->PopPenColor();
 	dev->EndDraw();
 	return guidoNoErr;
 }

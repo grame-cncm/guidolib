@@ -46,17 +46,6 @@ class ARMusic : public MusicalVoiceList, public ARMusicalEvent
       		void 	adjustDuration(TYPE_DURATION newDuration);
 
 	/*!
-		Converts an abstract representation to piano roll representation
-
-		\param width the drawing area width.
-		\param height the drawing area height.
-		\param start start date of the time zone to be displayed.
-		\param end end date of the time zone to be displayed, when 0, the scure duration is used.
-		\param dev a graphic device.
-	*/
-	virtual void 	toPianoRoll(int width, int height, TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, int minPitch, int maxPitch, VGDevice * dev) const;
-
-	/*!
 		Converts an abstract representation to a simplified proportional representation
 
 		\param width the drawing area width.

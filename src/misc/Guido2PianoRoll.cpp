@@ -39,67 +39,20 @@ using namespace std;
 #define kMinDist	4		// the minimum distance between lines of the grid
 
 //-------------------------------------------------------------------
-GuidoPianoRoll::GuidoPianoRoll(TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, int width, int height, int minPitch, int maxPitch)
+Guido2PianoRoll::Guido2PianoRoll(TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, int width, int height, int minPitch, int maxPitch)
     : fWidth(width), fHeight(height), fStartDate(start), fEndDate(end), fDuration(double(end-start)), fLowPitch(minPitch), fHighPitch(maxPitch)
 {
-	fNoteHeight = fHeight / pitchrange();
+	/*fNoteHeight = fHeight / pitchrange();
 	if (!fNoteHeight)
-        fNoteHeight = 1;
+        fNoteHeight = 1;-*/
 }
 
 //-------------------------------------------------------------------
-int	GuidoPianoRoll::date2xpos (double pos) const		{ return int(fWidth * (pos- double(fStartDate)) / fDuration); }
-int	GuidoPianoRoll::duration2width (double dur) const	{ return int(fWidth * dur / fDuration); }
+int	Guido2PianoRoll::date2xpos (double pos) const		{ return int(fWidth * (pos- double(fStartDate)) / fDuration); }
+int	Guido2PianoRoll::duration2width (double dur) const	{ return int(fWidth * dur / fDuration); }
 
 //-------------------------------------------------------------------
-int	GuidoPianoRoll::pitch2ypos (int midipitch) const
-{
-	int p = midipitch - fLowPitch;
-	return fHeight - int((fHeight * p) / pitchrange());
-}
-
-//-------------------------------------------------------------------
-void GuidoPianoRoll::DrawGrid (VGDevice* dev) const
-{
-	dev->PushPenWidth(0.3);
-	for (int i = fLowPitch; i < fHighPitch; i++) {
-		int y = pitch2ypos (i);
-		int step = i % 12;		// the note in chromatic step
-		if (fNoteHeight < kMinDist) {
-			switch (step) {
-				case 0 :			// C notes are highlighted
-					dev->PushPenWidth((i == 60) ? 1.0 : 0.6);
-					dev->Line(0, y, fWidth, y);
-					dev->PopPenWidth();
-					break;
-				case 7:				// G
-					dev->Line(0, y, fWidth, y);
-					break;
-			}
-		}
-		else {
-			switch (step) {
-				case 0 :			// C notes are highlighted
-					dev->PushPenWidth((i==60) ? 1.0 : 0.6);
-					dev->Line( 0, y, fWidth, y);
-					dev->PopPenWidth();
-					break;
-				case 2:				// D
-				case 4:				// E
-				case 5:				// F
-				case 7:				// G
-				case 9:				// A
-				case 11:			// B
-					dev->Line( 0, y, fWidth, y);
-					break;
-			}
-		}
-	}
-	dev->PopPenWidth();
-}
-
-//-------------------------------------------------------------------
-bool GuidoPianoRoll::handleColor (ARNoteFormat* nf, VGDevice* dev)
+bool Guido2PianoRoll::handleColor (ARNoteFormat* nf, VGDevice* dev)
 {
 	if (nf) {
 		const TagParameterString *s = nf->getColor();
@@ -120,7 +73,7 @@ bool GuidoPianoRoll::handleColor (ARNoteFormat* nf, VGDevice* dev)
 	return false;
 }
 //-------------------------------------------------------------------
-void GuidoPianoRoll::DrawRect(int x, int y, double dur, VGDevice* dev) const
+void Guido2PianoRoll::DrawRect(int x, int y, double dur, VGDevice* dev) const
 {
 	int w = duration2width (dur);
 	int halfstep = stepheight() / 2;
@@ -129,7 +82,7 @@ void GuidoPianoRoll::DrawRect(int x, int y, double dur, VGDevice* dev) const
 }
 
 //-------------------------------------------------------------------
-void GuidoPianoRoll::Draw(int pitch, double date, double dur, VGDevice* dev) const
+void Guido2PianoRoll::Draw(int pitch, double date, double dur, VGDevice* dev) const
 {
 	int x = date2xpos (date);
 	int y = pitch2ypos (pitch);
@@ -137,7 +90,7 @@ void GuidoPianoRoll::Draw(int pitch, double date, double dur, VGDevice* dev) con
 }
 
 //-------------------------------------------------------------------
-void GuidoPianoRoll::Draw(ARMusicalObject* e, TYPE_TIMEPOSITION date, TYPE_DURATION dur, VGDevice* dev)
+void Guido2PianoRoll::Draw(ARMusicalObject* e, TYPE_TIMEPOSITION date, TYPE_DURATION dur, VGDevice* dev)
 {
 	ARNote * note = dynamic_cast<ARNote*>(e);
 
@@ -156,7 +109,7 @@ void GuidoPianoRoll::Draw(ARMusicalObject* e, TYPE_TIMEPOSITION date, TYPE_DURAT
 }
 
 //-------------------------------------------------------------------
-void GuidoPianoRoll::Draw(ARMusicalVoice* v, VGDevice* dev)
+void Guido2PianoRoll::Draw(ARMusicalVoice* v, VGDevice* dev)
 {
 //cerr << "--------------------------" << endl;
 	fColored = fChord = false;
@@ -235,7 +188,7 @@ static MidiSeqPtr KeyOnOff2Note(MidiSeqPtr seq, MidiLight* midi)
 }
 
 //-------------------------------------------------------------------
-void GuidoPianoRoll::Draw(MidiSeqPtr seq, int tpqn, VGDevice* dev)
+void Guido2PianoRoll::Draw(MidiSeqPtr seq, int tpqn, VGDevice* dev)
 {
 	MidiEvPtr ev = FirstEv(seq);
 	int tpwn = tpqn * 4;
@@ -260,7 +213,7 @@ void GuidoPianoRoll::Draw(MidiSeqPtr seq, int tpqn, VGDevice* dev)
 }
 
 //-------------------------------------------------------------------
-GuidoErrCode GuidoPianoRoll::Draw(const char* file, VGDevice* dev)
+GuidoErrCode Guido2PianoRoll::Draw(const char* file, VGDevice* dev)
 {
 	if (!file || !dev) return guidoErrBadParameter;
 	MIDIFile mf;
