@@ -5627,6 +5627,7 @@ void ARMusicalVoice::setClusterChord(ARCluster *inCurrentCluster)
         {
             noteTmp->setCluster(currentCluster);
             noteTmp->setClusterPitchAndOctave();
+            noteTmp->setDrawGR(false);
 
             isThereASecondNote = true;
 
@@ -5642,9 +5643,12 @@ void ARMusicalVoice::setClusterChord(ARCluster *inCurrentCluster)
         ARNote * noteTmp = dynamic_cast<ARNote *>(musicalObject);
         if (noteTmp && noteTmp->getPitch()!=0)
         {
-            noteTmp->setPitch(firstNote->getPitch()); // "hides" this note behind the first one
+            // "hides" this note behind the first one
             noteTmp->setOctave(firstNote->getOctave());
             noteTmp->setCluster(currentCluster);
+            // we now directly set a flag to tell to the note not to draw itself, rather than hide it behind the first one...
+			noteTmp->setDrawGR(false);
+            
             noteTmp->setClusterPitchAndOctave();
         }
     }
