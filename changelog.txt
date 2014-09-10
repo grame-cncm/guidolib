@@ -4,7 +4,7 @@ GUIDO Engine history
 ----------------------------------------------------------------
 version 1.5.4
 
-- conflicts with note durations in the trill : bug solved
+- conflicts with note durations in the trill and in the clusters : bug solved
 - beams can be applied to grace notes
 
 ----------------------------------------------------------------
