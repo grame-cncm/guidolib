@@ -301,34 +301,6 @@ class TestTimeMap : public TimeMapCollector
 };
 #endif
 
-// ---------------------- REM: TODO------------------------------------
-/*GUIDOAPI(GuidoErrCode) GuidoMIDI2RProportional( const char* file, int width, int height, const GuidoDate& start, const GuidoDate& end, bool drawDur, VGDevice* dev)
-{
-#ifdef MIDIEXPORT
-	if( !dev || !file)		return guidoErrBadParameter;
-
-	dev->BeginDraw();
-	dev->PushPenColor(VGColor (100,100,100));
-	dev->PushFillColor(VGColor (0,0,0));
-
-	TYPE_TIMEPOSITION d1(start.num, start.denom);
-	TYPE_TIMEPOSITION d2(end.num, end.denom);
-	
-	GuidoReducedProportional rprop (d1, d2, width, height, drawDur);
-	Guido2PianoRoll* proll = &rprop;
-	rprop.SetMusicFont(dev);
-	proll->Draw(file, dev);
-
-	dev->PopPenColor();
-	dev->PopFillColor();
-	dev->EndDraw();
-	return guidoNoErr;
-#else
-	cerr << "Can't convert to reduced proportional representation: GUIDO Engine has been compiled without MIDI support" << endl;
-	return guidoErrActionFailed;
-#endif
-}*/
-
 // --------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * settings, GRHandler * gr)
 {

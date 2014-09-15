@@ -70,8 +70,8 @@ void GuidoReducedProportional::getRenderingFromAR(VGDevice* dev)
     
     fDev->NotifySize(fWidth, fHeight);
     fDev->BeginDraw();
-	fDev->PushPenColor(VGColor(100,100,100));
-	fDev->PushFillColor(VGColor(0,0,0));
+	fDev->PushPenColor(VGColor(100, 100, 100));
+	fDev->PushFillColor(VGColor(0, 0, 0));
 
     if (!fIsEndDateSet)
         fEndDate = fARMusic->getDuration();
@@ -91,6 +91,25 @@ void GuidoReducedProportional::getRenderingFromAR(VGDevice* dev)
 	fDev->PopPenColor();
 	fDev->PopFillColor();
 	fDev->EndDraw();
+}
+
+//--------------------------------------------------------------------------
+void GuidoReducedProportional::getRenderingFromMidi(VGDevice* dev)
+{
+    fDev = dev;
+    
+    fDev->NotifySize(fWidth, fHeight);
+    fDev->BeginDraw();
+	fDev->PushPenColor(VGColor(100, 100, 100));
+	fDev->PushFillColor(VGColor(0, 0, 0));
+
+	SetMusicFont();
+
+    DrawFromMidi();
+
+    fDev->PopFillColor();
+    fDev->PopPenColor();
+    fDev->EndDraw();
 }
 
 //--------------------------------------------------------------------------
@@ -236,25 +255,27 @@ void GuidoReducedProportional::DrawHead(float x, float y, int alter) const
 //--------------------------------------------------------------------------
 void GuidoReducedProportional::DrawNote(int pitch, double date, double dur) const
 {
-	int alter, halfspaces;
-    float x   = (float) date2xpos(date);
-	int staff = pitch2staff(pitch, halfspaces, alter);
-	float y   = halfspaces2ypos(halfspaces, staff);
-	int ll    = halfSpaces2LedgerLines(halfspaces);
+    if (pitch >= fLowPitch && pitch <= fHighPitch) {
+        int   alter, halfspaces;
+        float x     = (float) date2xpos(date);
+        int   staff = pitch2staff(pitch, halfspaces, alter);
+        float y     = halfspaces2ypos(halfspaces, staff);
+        int   ll    = halfSpaces2LedgerLines(halfspaces);
 
-	if (ll)
-		DrawLedgerLines(x, (ll > 0 ? staffBottomPos(staff) : staffTopPos(staff)), ll);
+        if (ll)
+            DrawLedgerLines(x, (ll > 0 ? staffBottomPos(staff) : staffTopPos(staff)), ll);
 
-	if (fDrawDurationLine)
-        DrawRect((int) x, (int) y, dur);
+        if (fDrawDurationLine)
+            DrawRect((int) x, (int) y, dur);
 
-	DrawHead(x - 1, y, alter);
+        DrawHead(x - 1, y, alter);
+    }
 }
 
 //--------------------------------------------------------------------------
 void GuidoReducedProportional::DrawRect(int x, int y, double dur) const
 {
-	int w                =   duration2width(dur);
+	int   w              =   duration2width(dur);
 	float rectHalfHeight =   fLineHeight / 4;
     float xLeftOffset    =   fLineHeight / 2;
     float xRightOffset   = - fLineHeight / 4;

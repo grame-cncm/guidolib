@@ -136,8 +136,8 @@ void GuidoPianoRoll::getRenderingFromAR(VGDevice *dev)
 
     fDev->NotifySize(fWidth, fHeight);
     fDev->BeginDraw();
-    fDev->PushPenColor(VGColor(100,100,100));
-    fDev->PushFillColor(VGColor(0,0,0));
+    fDev->PushPenColor(VGColor(100, 100, 100));
+    fDev->PushFillColor(VGColor(0, 0, 0));
 
     if (!fIsEndDateSet)
         fEndDate = fARMusic->getDuration();
@@ -165,8 +165,8 @@ void GuidoPianoRoll::getRenderingFromMidi(VGDevice *dev)
 
     fDev->NotifySize(fWidth, fHeight);
     fDev->BeginDraw();
-    fDev->PushPenColor(VGColor(100,100,100));
-    fDev->PushFillColor(VGColor(0,0,0));
+    fDev->PushPenColor(VGColor(100, 100, 100));
+    fDev->PushFillColor(VGColor(0, 0, 0));
 
     DrawFromMidi();
 
@@ -401,8 +401,10 @@ void GuidoPianoRoll::DrawMidiSeq(MidiSeqPtr seq, int tpqn)
 			double dur  = double(Dur(ev))  / tpwn * 1.25; // REM: I don't know why it works but it does !
 
 			if (date >= start) {
-				double remain = end - date;
-				DrawNote(Pitch(ev), date, (dur > remain ? remain : dur));
+                if (date < end) {
+                    double remain = end - date;
+                    DrawNote(Pitch(ev), date, (dur > remain ? remain : dur));
+                }
 			}
 			else if ((date + dur) > start) {
 				dur -= (start - date);

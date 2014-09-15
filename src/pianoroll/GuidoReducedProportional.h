@@ -29,6 +29,7 @@ public:
     void setDurationEnabled(bool enabled) { fDrawDurationLine = enabled; }
 
     void getRenderingFromAR(VGDevice *dev);
+    void getRenderingFromMidi(VGDevice* dev);
 
 protected:
     void DrawGrid() const;

@@ -72,7 +72,7 @@ static void checkusage(int argc, char **argv)
     }
 }
 
-static const char* getFile(int argc, char *argv[])
+static const char* getInputFile(int argc, char *argv[])
 {
 	int i;
 
@@ -173,7 +173,7 @@ int main(int argc, char **argv)
 	GuidoInitDesc gd = { &dev, 0, 0, 0 };
     GuidoInit(&gd);
 
-    const char* fileName = getFile(argc, argv);
+    const char* fileName = getInputFile(argc, argv);
 
 	int w        = lintopt(argc, argv, kOptions[kWidth], kDefaultWidth);
 	int h        = lintopt(argc, argv, kOptions[kHeight], kDefaultHeight);

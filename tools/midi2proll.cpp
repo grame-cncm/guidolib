@@ -70,7 +70,7 @@ static void checkusage(int argc, char **argv)
     }
 }
 
-static const char* getFile(int argc, char *argv[])
+static const char* getInputFile(int argc, char *argv[])
 {
 	int i;
 
@@ -85,13 +85,13 @@ static const char* getFile(int argc, char *argv[])
 static GuidoDate ldateopt(int argc, char **argv, const char* opt, GuidoDate defaultvalue)
 {
 	for (int i = 1; i < argc; i++) {
-		if (!strcmp (argv[i], opt)) {
+		if (!strcmp(argv[i], opt)) {
 			i++;
 
 			if (i >= argc)
                 usage(argv[0]);
 			else {
-				int n,d;
+				int n, d;
 
 				if (sscanf(argv[i], "%d/%d", &n, &d) == 2) {
 					GuidoDate ret = {n, d};
@@ -115,6 +115,7 @@ static int lintopt(int argc, char **argv, const char* opt, int defaultvalue)
 	for (int i = 1; i < argc; i++) {
 		if (!strcmp (argv[i], opt)) {
 			i++;
+
 			if (i >= argc)
                 usage(argv[0]);
 			else
@@ -169,14 +170,14 @@ int main(int argc, char **argv)
 	GuidoInitDesc gd = { &dev, 0, 0, 0 };
     GuidoInit(&gd);
 
-    const char* fileName = getFile(argc, argv);
+    const char* fileName = getInputFile(argc, argv);
 	
-	int w        = lintopt(argc, argv, kOptions[kWidth], kDefaultWidth);
-	int h        = lintopt(argc, argv, kOptions[kHeight], kDefaultHeight);
+	int w        = lintopt(argc, argv, kOptions[kWidth],    kDefaultWidth);
+	int h        = lintopt(argc, argv, kOptions[kHeight],   kDefaultHeight);
     int minPitch = lintopt(argc, argv, kOptions[kMinPitch], kDefaultMinPitch);
     int maxPitch = lintopt(argc, argv, kOptions[kMaxPitch], kDefaultMaxPitch);
 
-	GuidoDate defDate = {0,1};
+	GuidoDate defDate = {0, 1};
 	GuidoDate start   = ldateopt(argc, argv, kOptions[kStart], defDate);
 	GuidoDate end     = ldateopt(argc, argv, kOptions[kEnd], defDate);
 
@@ -187,10 +188,13 @@ int main(int argc, char **argv)
     err = GuidoSetMidiToPianoRoll(pianoRoll, fileName);
     error(err);
 
-    /*err = GuidoSetPianoRollTimeLimits(pianoRoll, start, end);
-    error(err);*/
+    /*err = GuidoSetPianoRollCanvasDimensions(pianoRoll, w, h);
+    error(err);
 
-    /*err = GuidoSetPianoRollPitchLimits(pianoRoll, minPitch, maxPitch);
+    err = GuidoSetPianoRollTimeLimits(pianoRoll, start, end);
+    error(err);
+
+    err = GuidoSetPianoRollPitchLimits(pianoRoll, minPitch, maxPitch);
     error(err);*/
         
     err = GuidoGetPianoRollRenderingFromMidi(pianoRoll, &dev);
@@ -198,5 +202,3 @@ int main(int argc, char **argv)
 
 	return 0;
 }
-
-
