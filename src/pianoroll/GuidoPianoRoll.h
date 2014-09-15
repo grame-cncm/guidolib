@@ -32,36 +32,50 @@ public:
              GuidoPianoRoll(TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, int width, int height, int minPitch, int maxPitch);
     virtual ~GuidoPianoRoll();
 
-    void setARMusic(ARMusic *arMusic);
-    void setCanvasDimensions(int width, int height);
-    void setLimitDates(GuidoDate start, GuidoDate end);
-    void setPitchRange(int minPitch, int maxPitch);
+    virtual void setARMusic(ARMusic *arMusic);
+    virtual void setMidiFile(const char *midiFileName);
+    virtual void setCanvasDimensions(int width, int height);
+    virtual void setLimitDates(GuidoDate start, GuidoDate end);
+    virtual void setPitchRange(int minPitch, int maxPitch);
+    virtual void setDurationEnabled(bool enabled) { }
 
-    bool ownsARMusic();    
+    bool ownsARMusic();
+    bool ownsMidi();
 
-    void getRendering(VGDevice *dev);
+    virtual void getRenderingFromAR(VGDevice *dev);
+    virtual void getRenderingFromMidi(VGDevice *dev);
 
 protected:
-	virtual void DrawGrid    (VGDevice *dev) const;
-	virtual void Draw        (ARMusicalVoice *v, VGDevice *dev);
-	virtual void Draw        (ARMusicalObject *o, TYPE_TIMEPOSITION date, TYPE_DURATION dur, VGDevice *dev); // REM: stocker dev comme membre, ça sera plus simple
-	virtual void Draw        (int pitch, double date, double dur, VGDevice* dev) const;
-	virtual void DrawRect    (int x, int y, double dur, VGDevice* dev) const;
-	virtual int	 pitch2ypos  (int midipitch) const;
-	bool	     handleColor (ARNoteFormat *e, VGDevice *dev);
+	virtual void DrawGrid         () const;
+	virtual void DrawVoice        (ARMusicalVoice *v);
+	virtual void DrawMusicalObject(ARMusicalObject *o, TYPE_TIMEPOSITION date, TYPE_DURATION dur);
+	virtual void DrawNote         (int pitch, double date, double dur) const;
+	virtual void DrawRect         (int x, int y, double dur) const;
+
+	virtual int	 pitch2ypos       (int midipitch) const;
+	virtual bool handleColor      (ARNoteFormat *e);
+
+#ifdef MIDIEXPORT
+    virtual void DrawFromMidi();
+    virtual void DrawMidiSeq (MidiSeqPtr seq, int tpqn);
+#endif
     
     virtual int	pitchRange     ()           const    { return fHighPitch - fLowPitch + 1;                          }
-    virtual int date2xpos      (double pos) const    { return int(fWidth * (pos- double(fStartDate)) / fDuration); }
+    virtual int date2xpos      (double pos) const    { return int(fWidth * (pos - double(fStartDate)) / fDuration); }
     virtual int duration2width (double dur) const	 { return int(fWidth * dur / fDuration);                       }
 	virtual int stepheight     ()           const    { return fHeight / pitchRange();                              }
 
-    ARMusic *fARMusic;
+    ARMusic    *fARMusic;
+    const char *fMidiFileName;
+
+    VGDevice *fDev;
     
     int  fWidth;
     int  fHeight;
 
     TYPE_TIMEPOSITION fStartDate;
     TYPE_TIMEPOSITION fEndDate;
+    bool fIsEndDateSet;
 
     int  fLowPitch;
     int  fHighPitch;
@@ -73,11 +87,7 @@ protected:
 
 	VGColor       fColor;         // the current color when colored
 	TYPE_DURATION fChordDuration; // the chord duration (notes in a chord have a null duration)
-	double	fDuration;            // the time zone duration
-
-    #ifdef MIDIEXPORT
-		virtual GuidoErrCode Draw (const char* midifile, VGDevice* dev);
-    #endif
+	double	      fDuration;      // the time zone duration
 };
 
 #endif

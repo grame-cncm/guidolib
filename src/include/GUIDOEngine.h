@@ -324,7 +324,7 @@ representations.
 		\param dev a graphic device.
 		\return a Guido error code.
     */
-    GUIDOAPI(GuidoErrCode)	GuidoMIDI2RProportional( const char* midifile, int width, int height, const GuidoDate& start, const GuidoDate& end, bool drawdur, VGDevice* dev);
+    //GUIDOAPI(GuidoErrCode)	GuidoMIDI2RProportional( const char* midifile, int width, int height, const GuidoDate& start, const GuidoDate& end, bool drawdur, VGDevice* dev);
 
 	/*!
         Transforms a MIDI file into a piano roll representation.
@@ -337,7 +337,7 @@ representations.
 		\param dev a graphic device.
 		\return a Guido error code.
     */
-    GUIDOAPI(GuidoErrCode)	GuidoMIDI2PRoll( const char* midifile, int width, int height, const GuidoDate& start, const GuidoDate& end, VGDevice* dev);
+    //GUIDOAPI(GuidoErrCode)	GuidoMIDI2PRoll( const char* midifile, int width, int height, const GuidoDate& start, const GuidoDate& end, VGDevice* dev);
 
 
 	/*!

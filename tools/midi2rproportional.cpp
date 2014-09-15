@@ -112,8 +112,8 @@ int main(int argc, char **argv)
 	bool drawdur = lopt(argc, argv, kOptions[kNoDur]) ? false : true;
 	dev.NotifySize (w, h);
 
-	GuidoErrCode err = GuidoMIDI2RProportional (argv[1], w, h, start, end, drawdur, &dev);
-	if (err) error (err);
+	/*GuidoErrCode err = GuidoMIDI2RProportional (argv[1], w, h, start, end, drawdur, &dev);
+	if (err) error (err);*/
 	return 0;
 }
 

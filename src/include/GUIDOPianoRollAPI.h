@@ -19,6 +19,7 @@
 #include "GUIDOExport.h"
 
 class GuidoPianoRoll;
+class GuidoReducedProportional;
 
 #ifdef __cplusplus
 extern "C" {
@@ -37,7 +38,7 @@ extern "C" {
 		\brief Creates a new piano roll
 		\return a guido piano roll.
 	*/
-	GUIDOAPI(GuidoPianoRoll *)  GuidoCreatePianoRoll();
+	GUIDOAPI(GuidoPianoRoll *)  GuidoCreatePianoRoll(bool forReducedProportional);
 
 	/*!
 		\brief Destroys a guido piano roll and releases all the associated ressources
@@ -53,12 +54,20 @@ extern "C" {
         \return a Guido error code
 	*/
     GUIDOAPI(GuidoErrCode)      GuidoSetARToPianoRoll(GuidoPianoRoll *pr, ARHandler arh);
+    
+	/*!
+		\brief Sets an midi file to a piano roll
+		\param pr a pianoroll previously created with GuidoCreatePianoRoll
+        \param midiFileName a midi file name
+        \return a Guido error code
+	*/
+    GUIDOAPI(GuidoErrCode)      GuidoSetMidiToPianoRoll(GuidoPianoRoll *pr, const char *midiFileName);
 
 	/*!
 		\brief Sets dimensions to a piano roll
 		\param pr a pianoroll previously created with GuidoCreatePianoRoll
-		\param width the width of the canvas (-1 to let default width) // REM: à changer ?
-        \param height the height of the canvas (-1 to let default height) // REM: à changer ?
+		\param width the width of the canvas (-1 to set the default width)
+        \param height the height of the canvas (-1 to set the default height)
         \return a Guido error code
 	*/
     GUIDOAPI(GuidoErrCode)      GuidoSetPianoRollCanvasDimensions(GuidoPianoRoll *pr, int width, int height);
@@ -66,8 +75,8 @@ extern "C" {
 	/*!
 		\brief Sets time limits to a piano roll
 		\param pr a pianoroll previously created with GuidoCreatePianoRoll
-		\param start the start date (-1/1 to let default start date) // REM: à changer ?
-        \param end the end date (-1/1 to let default date) // REM: à changer ?
+		\param start the start date (-0/0 to set the default start date)
+        \param end the end date (-0/0 to set the default end date)
         \return a Guido error code
 	*/
 	GUIDOAPI(GuidoErrCode)      GuidoSetPianoRollTimeLimits(GuidoPianoRoll *pr, GuidoDate start, GuidoDate end);
@@ -75,19 +84,51 @@ extern "C" {
 	/*!
 		\brief Sets pitch limits to a piano roll
 		\param pr a pianoroll previously created with GuidoCreatePianoRoll
-		\param minPitch the minimal pitch (midi notation) (-1 to let default minimal pitch) // REM: à changer ?
-        \param maxPitch the maximal pitch (midi notation) (-1 to let default maximal pitch) // REM: à changer ?
+		\param minPitch the minimal pitch (midi notation) (-1 to set the default minimal pitch)
+        \param maxPitch the maximal pitch (midi notation) (-1 to set the default maximal pitch)
         \return a Guido error code
 	*/
 	GUIDOAPI(GuidoErrCode)      GuidoSetPianoRollPitchLimits(GuidoPianoRoll *pr, int minPitch, int maxPitch);
 
+    /*!
+		\brief Sets if duration lines will de drawn (only for a GuidoReducedProportional)
+		\param pr a pianoroll (GuidoReducedProportional) previously created with GuidoCreatePianoRoll
+		\param enabled a boolean corresponding to the draw state
+        \return a Guido error code
+	*/
+	GUIDOAPI(GuidoErrCode)      GuidoSetPianoRollDurationEnabled(GuidoPianoRoll *pr, bool enabled);
+
 	/*!
-		\brief Get a rendered piano roll, wrote on a VGDevice
+		\brief Get a rendered piano roll from AR, writing it on a VGDevice
 		\param pr a pianoroll previously created with GuidoCreatePianoRoll
         \param dev the device where the piano will be rendered
         \return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoGetPianoRollRendering(GuidoPianoRoll *pr, VGDevice* dev);
+	GUIDOAPI(GuidoErrCode)      GuidoGetPianoRollRenderingFromAR(GuidoPianoRoll *pr, VGDevice* dev);
+
+	/*!
+		\brief Get a rendered piano roll from midi, writing it on a VGDevice
+		\param pr a pianoroll previously created with GuidoCreatePianoRoll
+        \param dev the device where the piano will be rendered
+        \return a Guido error code
+	*/
+	GUIDOAPI(GuidoErrCode)      GuidoGetPianoRollRenderingFromMidi(GuidoPianoRoll *pr, VGDevice* dev);
+
+	/*!
+		\brief Get a rendered reduced proportional from AR, writing it on a VGDevice
+		\param pr a pianoroll previously created with GuidoCreatePianoRoll
+        \param dev the device where the piano will be rendered
+        \return a Guido error code
+	*/
+	GUIDOAPI(GuidoErrCode)      GuidoGetRProportionalRenderingFromAR(GuidoPianoRoll *rp, VGDevice* dev);
+
+	/*!
+		\brief Get a rendered reduced proportional from midi, writing it on a VGDevice
+		\param pr a pianoroll previously created with GuidoCreatePianoRoll
+        \param dev the device where the piano will be rendered
+        \return a Guido error code
+	*/
+	GUIDOAPI(GuidoErrCode)      GuidoGetRProportionalRenderingFromMidi(GuidoPianoRoll *rp, VGDevice* dev);
 
 /*! @} */
 

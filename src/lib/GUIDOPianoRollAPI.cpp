@@ -19,6 +19,8 @@
 
 #include "GUIDOInternal.h"
 #include "GuidoPianoRoll.h"
+#include "GuidoReducedProportional.h"
+#include "midifile.h"
 
 #include "GUIDOPianoRollAPI.h"
 
@@ -28,9 +30,14 @@
 // ==========================================================================
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoPianoRoll *) GuidoCreatePianoRoll()
+GUIDOAPI(GuidoPianoRoll *) GuidoCreatePianoRoll(/*REM: TMP */bool forReducedProportional)
 {
-    GuidoPianoRoll *newPianoRoll = new GuidoPianoRoll();
+    GuidoPianoRoll *newPianoRoll;
+
+    if (forReducedProportional)
+        newPianoRoll = (GuidoPianoRoll *) new GuidoReducedProportional();
+    else
+        newPianoRoll = new GuidoPianoRoll();
 
 	return newPianoRoll;
 }
@@ -63,6 +70,26 @@ GUIDOAPI(GuidoErrCode) GuidoSetARToPianoRoll(GuidoPianoRoll *pr, ARHandler arh)
 }
 
 // ------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoSetMidiToPianoRoll(GuidoPianoRoll *pr, const char *midiFileName)
+{
+#ifdef MIDIEXPORT
+    if (!pr || !midiFileName)
+        return guidoErrBadParameter;
+
+    MIDIFile mf;
+    
+    if (!mf.Open(midiFileName, MidiFileRead))
+		return guidoErrFileAccess;
+
+    pr->setMidiFile(midiFileName);
+
+	return guidoNoErr;
+#else
+    return guidoErrActionFailed;
+#endif
+}
+
+// ------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoSetPianoRollCanvasDimensions(GuidoPianoRoll *pr, int width, int height)
 {
     if (!pr || width < -1 || height < -1)
@@ -79,14 +106,18 @@ GUIDOAPI(GuidoErrCode) GuidoSetPianoRollTimeLimits(GuidoPianoRoll *pr, GuidoDate
     if (!pr)
         return guidoErrBadParameter;
 
-    if (start.denom <= 0 || end.denom <= 0 || start.num < -1 || end.num < -1)
+    if (start.denom < 0 || end.denom < 0 || (start.denom == 0 && start.num != 0) || (end.denom == 0 && end.num != 0))
         return guidoErrBadParameter;
     
-    float startTime = (float) start.num / start.denom;
-    float endTime   = (float) end.num / end.denom;
+    if (start.denom != 0 && end.denom != 0) {
+        float startTime = (float) start.num / start.denom;
+        float endTime   = (float) end.num / end.denom;
 
-    if ((start.num != -1 || start.denom != 1) && (end.num != -1 || end.denom != 1) && startTime > endTime)
-        return guidoErrBadParameter;
+        if (startTime > endTime)
+            return guidoErrBadParameter;
+        else
+            pr->setLimitDates(start, end);
+    }
     else
         pr->setLimitDates(start, end);
 
@@ -108,7 +139,18 @@ GUIDOAPI(GuidoErrCode) GuidoSetPianoRollPitchLimits(GuidoPianoRoll *pr, int minP
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoGetPianoRollRendering(GuidoPianoRoll *pr, VGDevice* dev)
+GUIDOAPI(GuidoErrCode) GuidoSetPianoRollDurationEnabled(GuidoPianoRoll *pr, bool enabled)
+{
+    if (!pr)
+        return guidoErrBadParameter;
+
+    pr->setDurationEnabled(enabled);
+
+	return guidoNoErr;
+}
+
+// ------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoGetPianoRollRenderingFromAR(GuidoPianoRoll *pr, VGDevice *dev)
 {
     if (!pr || !dev)
         return guidoErrBadParameter;
@@ -116,7 +158,49 @@ GUIDOAPI(GuidoErrCode) GuidoGetPianoRollRendering(GuidoPianoRoll *pr, VGDevice* 
     if (!pr->ownsARMusic())
         return guidoErrInvalidHandle;
 
-    pr->getRendering(dev);
+    pr->getRenderingFromAR(dev);
+
+	return guidoNoErr;
+}
+
+// ------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoGetPianoRollRenderingFromMidi(GuidoPianoRoll *pr, VGDevice *dev)
+{
+    if (!pr || !dev)
+        return guidoErrBadParameter;
+
+    if (!pr->ownsMidi())
+        return guidoErrInvalidHandle;
+
+    pr->getRenderingFromMidi(dev);
+
+	return guidoNoErr;
+}
+
+// ------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoGetRProportionalRenderingFromAR(GuidoPianoRoll *pr, VGDevice *dev)
+{
+    if (!pr || !dev)
+        return guidoErrBadParameter;
+
+    if (!pr->ownsARMusic())
+        return guidoErrInvalidHandle;
+
+    pr->getRenderingFromAR(dev);
+
+	return guidoNoErr;
+}
+
+// ------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoGetRProportionalRenderingFromMidi(GuidoPianoRoll *pr, VGDevice *dev)
+{
+    if (!pr || !dev)
+        return guidoErrBadParameter;
+
+    if (!pr->ownsMidi())
+        return guidoErrInvalidHandle;
+
+    pr->getRenderingFromMidi(dev);
 
 	return guidoNoErr;
 }
