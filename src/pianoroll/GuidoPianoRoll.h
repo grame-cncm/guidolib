@@ -40,6 +40,7 @@ public:
     virtual void setLimitDates(GuidoDate start, GuidoDate end);
     virtual void setPitchRange(int minPitch, int maxPitch);
     virtual void enableDurationLines(bool enabled) { }
+    virtual void enableKeyboard(bool enabled) { fKeyboardEnabled = enabled; }
     virtual void enableRandomVoicesColor(bool enabled) { fVoicesAutoColored = enabled; }
     virtual void setColorToVoice(int voiceNum, int r, int g, int b, int a);
 
@@ -50,13 +51,14 @@ public:
     virtual void getRenderingFromMidi(VGDevice *dev);
 
 protected:
-    virtual void initRendering    ();
-    virtual void endRendering     ();
-	virtual void DrawGrid         () const;
-	virtual void DrawVoice        (ARMusicalVoice *v);
-	virtual void DrawMusicalObject(ARMusicalObject *o, TYPE_TIMEPOSITION date, TYPE_DURATION dur);
-	virtual void DrawNote         (int pitch, double date, double dur) const;
-	virtual void DrawRect         (int x, int y, double dur) const;
+    virtual void initRendering         ();
+    virtual void endRendering          ();
+	virtual void DrawGrid              () const;
+	virtual void DrawKeyboard          () const;
+	virtual void DrawVoice             (ARMusicalVoice *v);
+	virtual void DrawMusicalObject     (ARMusicalObject *o, TYPE_TIMEPOSITION date, TYPE_DURATION dur);
+	virtual void DrawNote              (int pitch, double date, double dur) const;
+	virtual void DrawRect              (int x, int y, double dur) const;
 
 	virtual int	 pitch2ypos       (int midipitch) const;
 	virtual bool handleColor      (ARNoteFormat *e);
@@ -69,8 +71,8 @@ protected:
 #endif
     
     virtual int	pitchRange     ()           const    { return fHighPitch - fLowPitch + 1;                          }
-    virtual int date2xpos      (double pos) const    { return int(fWidth * (pos - double(fStartDate)) / fDuration); }
-    virtual int duration2width (double dur) const	 { return int(fWidth * dur / fDuration);                       }
+    virtual int date2xpos      (double pos) const    { return int((fWidth - fKeyboardWidth) * (pos - double(fStartDate)) / fDuration + fKeyboardWidth); }
+    virtual int duration2width (double dur) const	 { return int((fWidth - fKeyboardWidth) * dur / fDuration);                       }
 	virtual int stepheight     ()           const    { return fHeight / pitchRange();                              }
 
     ARMusic    *fARMusic;
@@ -98,6 +100,10 @@ protected:
 
 	bool fChord;                  // a flag to indicate that next note (or rest) is in a chord
     TYPE_DURATION fChordDuration; // the chord duration (notes in a chord have a null duration)
+
+    bool fKeyboardEnabled; // does the keyboard will be displayed ?
+    int  fNoteHeight;
+    int  fKeyboardWidth;
 };
 
 #endif

@@ -82,7 +82,7 @@ extern "C" {
 	GUIDOAPI(GuidoErrCode)      GuidoSetPianoRollTimeLimits(GuidoPianoRoll *pr, GuidoDate start, GuidoDate end);
 
 	/*!
-		\brief Sets pitch limits to a piano roll
+		\brief Sets pitch limits to a piano roll (minimum 1 octave)
 		\param pr a pianoroll previously created with GuidoCreatePianoRoll
 		\param minPitch the minimal pitch (midi notation) (-1 to set the default minimal pitch)
         \param maxPitch the maximal pitch (midi notation) (-1 to set the default maximal pitch)
@@ -97,9 +97,17 @@ extern "C" {
         \return a Guido error code
 	*/
 	GUIDOAPI(GuidoErrCode)      GuidoPianoRollEnableDurationLines(GuidoPianoRoll *pr, bool enabled);
+    
+    /*!
+		\brief Enables keyboard or not (not for GuidoReducedProportional)
+		\param pr a pianoroll previously created with GuidoCreatePianoRoll
+		\param enabled a boolean corresponding to the keyboard draw state
+        \return a Guido error code
+	*/
+	GUIDOAPI(GuidoErrCode)      GuidoPianoRollEnableKeyboard(GuidoPianoRoll *pr, bool enabled);
 
     /*!
-		\brief Enable or not the automatic voices coloration (if a color is manually set with
+		\brief Enables or not the automatic voices coloration (if a color is manually set with
             GuidoPianoRollSetColorToVoice, random color will not be applied for this voice)
 		\param pr a pianoroll previously created with GuidoCreatePianoRoll
 		\param enabled a boolean corresponding to the color state

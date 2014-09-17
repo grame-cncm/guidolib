@@ -144,7 +144,6 @@ static char *getOutputFileOpt(int argc, char **argv)
     return NULL;
 }
 
-
 int main(int argc, char **argv)
 {
  	SVGSystem sys;
@@ -199,9 +198,12 @@ int main(int argc, char **argv)
         error(err);
         
         err = GuidoSetPianoRollTimeLimits(pianoRoll, start, end);
+        error(err);*/
+
+        /*err = GuidoSetPianoRollPitchLimits(pianoRoll, 48, 84);
         error(err);
 
-        err = GuidoSetPianoRollPitchLimits(pianoRoll, minPitch, maxPitch);
+        err = GuidoPianoRollEnableKeyboard(pianoRoll, true);
         error(err);*/
 
         /*err = GuidoPianoRollEnableRandomVoicesColor(pianoRoll, false);

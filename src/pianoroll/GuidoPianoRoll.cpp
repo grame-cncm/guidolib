@@ -44,6 +44,7 @@ using namespace std;
 GuidoPianoRoll::GuidoPianoRoll() :
     fWidth(kDefaultWidth), fHeight(kDefaultHeight),
     fLowPitch(kDefaultLowPitch), fHighPitch(kDefaultHighPitch),
+    fKeyboardEnabled(false),
     fVoicesAutoColored(false), fVoicesColors(NULL),
     fARMusic(NULL), fDev(NULL), fIsEndDateSet(false)
 {
@@ -162,6 +163,9 @@ void GuidoPianoRoll::getRenderingFromAR(VGDevice *dev)
         fEndDate = fARMusic->getDuration();
 
     fDuration = double(fEndDate - fStartDate);
+    
+    if (fKeyboardEnabled)
+        DrawKeyboard();
 
     DrawGrid();
 
@@ -190,6 +194,18 @@ void GuidoPianoRoll::getRenderingFromMidi(VGDevice *dev)
 //--------------------------------------------------------------------------
 void GuidoPianoRoll::initRendering()
 {
+    fNoteHeight = fHeight / pitchRange();
+
+	if (!fNoteHeight)
+        fNoteHeight = 1;
+    
+    fKeyboardWidth = 0;
+
+    if (fKeyboardEnabled)
+        fKeyboardWidth = 6 * fNoteHeight;
+
+    fWidth = fWidth + fKeyboardWidth;
+
     fDev->NotifySize(fWidth, fHeight);
     fDev->BeginDraw();
     fDev->PushPenColor(VGColor(100, 100, 100));
@@ -212,26 +228,21 @@ void GuidoPianoRoll::endRendering()
 //--------------------------------------------------------------------------
 void GuidoPianoRoll::DrawGrid() const
 {
-    int noteHeight = fHeight / pitchRange();
-
-	if (!noteHeight)
-        noteHeight = 1;
-
 	fDev->PushPenWidth(0.3f);
 
 	for (int i = fLowPitch; i < fHighPitch; i++) {
 		int y = pitch2ypos(i);
 		int step = i % 12;		// the note in chromatic step
 
-		if (noteHeight < kMinDist) {
+		if (fNoteHeight < kMinDist) {
 			switch (step) {
 				case 0 :			// C notes are highlighted
 					fDev->PushPenWidth((i == 60) ? 1.0f : 0.6f);
-					fDev->Line(0, (float) y, (float) fWidth, (float) y);
+					fDev->Line(fKeyboardWidth, (float) y, (float) fWidth, (float) y);
 					fDev->PopPenWidth();
 					break;
 				case 7:				// G
-					fDev->Line(0, (float) y, (float) fWidth, (float) y);
+					fDev->Line(fKeyboardWidth, (float) y, (float) fWidth, (float) y);
 					break;
 			}
 		}
@@ -239,7 +250,7 @@ void GuidoPianoRoll::DrawGrid() const
 			switch (step) {
 				case 0 :			// C notes are highlighted
 					fDev->PushPenWidth((i == 60) ? 1.0f : 0.6f);
-					fDev->Line(0, (float) y, (float) fWidth, (float) y);
+					fDev->Line(fKeyboardWidth, (float) y, (float) fWidth, (float) y);
 					fDev->PopPenWidth();
 					break;
 				case 2:				// D
@@ -248,11 +259,51 @@ void GuidoPianoRoll::DrawGrid() const
 				case 7:				// G
 				case 9:				// A
 				case 11:			// B
-					fDev->Line(0, (float) y, (float) fWidth, (float) y);
+					fDev->Line(fKeyboardWidth, (float) y, (float) fWidth, (float) y);
 					break;
 			}
 		}
 	}
+
+	fDev->PopPenWidth();
+}
+
+//--------------------------------------------------------------------------
+void GuidoPianoRoll::DrawKeyboard() const
+{
+    int keyboardBlackNotesWidth = fKeyboardWidth / 1.5;
+
+	fDev->PushPenWidth(0.8f);
+
+	for (int i = 0; i <= 127; i++) {
+        int step = i % 12;
+        int y = pitch2ypos(i) + 0.5 * fNoteHeight;
+        
+        switch (step) {
+        case 0:
+        case 5:
+            fDev->Line(0, (float) y, fKeyboardWidth, (float) y);
+            break;
+        case 2:
+        case 4:
+        case 7:
+        case 9:
+        case 11:
+            fDev->Line(keyboardBlackNotesWidth, (float) y + 0.5 * fNoteHeight, fKeyboardWidth, (float) y + 0.5 * fNoteHeight);
+            break;
+        case 1:
+        case 3:
+        case 6:
+        case 8:
+        case 10:
+            fDev->Rectangle(0, (float) y - fNoteHeight, keyboardBlackNotesWidth, (float) y);
+            break;
+        }
+    }
+    
+    int yMin = pitch2ypos(0) + 0.5 * fNoteHeight;
+    int yMax = pitch2ypos(127) + fNoteHeight;
+    fDev->Line(fKeyboardWidth, (float) yMin, fKeyboardWidth, (float) yMax);
 
 	fDev->PopPenWidth();
 }
@@ -312,7 +363,7 @@ void GuidoPianoRoll::DrawVoice(ARMusicalVoice* v)
                 DrawMusicalObject(e, date, dur);
             }
 		}
-		else if (end > fStartDate) { // To make the note end appear
+		else if (end > fStartDate) { // to make the note end appear
 			date = fStartDate;	
 			
             if (end > fEndDate)
@@ -360,8 +411,8 @@ void GuidoPianoRoll::DrawMusicalObject(ARMusicalObject *e, TYPE_TIMEPOSITION dat
 //--------------------------------------------------------------------------
 void GuidoPianoRoll::DrawNote(int pitch, double date, double dur) const
 {
-	int x = date2xpos  (date);
-	int y = pitch2ypos (pitch);
+	int x = date2xpos (date);
+	int y = pitch2ypos(pitch);
 	DrawRect(x, y, dur);
 }
 
@@ -570,6 +621,8 @@ void GuidoPianoRoll::DrawFromMidi()
     }
 
     mf.Close();
+
+    DrawKeyboard();
     DrawGrid();
 }
 
