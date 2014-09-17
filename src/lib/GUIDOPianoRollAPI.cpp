@@ -139,12 +139,44 @@ GUIDOAPI(GuidoErrCode) GuidoSetPianoRollPitchLimits(GuidoPianoRoll *pr, int minP
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoSetPianoRollDurationEnabled(GuidoPianoRoll *pr, bool enabled)
+GUIDOAPI(GuidoErrCode) GuidoPianoRollEnableDurationLines(GuidoPianoRoll *pr, bool enabled)
 {
     if (!pr)
         return guidoErrBadParameter;
 
-    pr->setDurationEnabled(enabled);
+    pr->enableDurationLines(enabled);
+
+	return guidoNoErr;
+}
+
+// ------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoPianoRollEnableRandomVoicesColor(GuidoPianoRoll *pr, bool enabled)
+{
+    if (!pr)
+        return guidoErrBadParameter;
+
+    pr->enableRandomVoicesColor(enabled);
+
+	return guidoNoErr;
+}
+
+// ------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoPianoRollSetColorToVoice(GuidoPianoRoll *pr, int voiceNum, int r, int g, int b, int a)
+{
+    if (!pr)
+        return guidoErrBadParameter;
+
+    if (voiceNum < 1
+        || r < 0 || r > 255
+        || g < 0 || g > 255
+        || b < 0 || b > 255
+        || a < 0 || a > 255)
+        return guidoErrBadParameter;
+
+    /*if (pr->ownsARMusic)
+    ...*/ // Check le nombre de voix
+
+    pr->setColorToVoice(voiceNum, r, g, b, a);
 
 	return guidoNoErr;
 }

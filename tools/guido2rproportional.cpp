@@ -220,6 +220,18 @@ int main(int argc, char **argv)
         err = GuidoSetPianoRollDurationEnabled(pianoRoll, drawdur);
         error(err);*/
 
+        /*err = GuidoPianoRollEnableRandomVoicesColor(pianoRoll, false);
+        error(err);
+        
+        err = GuidoPianoRollSetColorToVoice(pianoRoll, 1, 255, 0, 0, 100);
+        error(err);
+        
+        err = GuidoPianoRollSetColorToVoice(pianoRoll, 2, 0, 255, 0, 100);
+        error(err);
+        
+        err = GuidoPianoRollSetColorToVoice(pianoRoll, 3, 0, 0, 255, 100);
+        error(err);*/
+
         err = GuidoGetRProportionalRenderingFromAR(pianoRoll, &dev);
         error(err);
 

@@ -96,7 +96,28 @@ extern "C" {
 		\param enabled a boolean corresponding to the draw state
         \return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoSetPianoRollDurationEnabled(GuidoPianoRoll *pr, bool enabled);
+	GUIDOAPI(GuidoErrCode)      GuidoPianoRollEnableDurationLines(GuidoPianoRoll *pr, bool enabled);
+
+    /*!
+		\brief Enable or not the automatic voices coloration (if a color is manually set with
+            GuidoPianoRollSetColorToVoice, random color will not be applied for this voice)
+		\param pr a pianoroll previously created with GuidoCreatePianoRoll
+		\param enabled a boolean corresponding to the color state
+        \return a Guido error code
+	*/
+	GUIDOAPI(GuidoErrCode)      GuidoPianoRollEnableRandomVoicesColor(GuidoPianoRoll *pr, bool enabled);
+
+    /*!
+		\brief Sets a color to a voice
+		\param pr a pianoroll previously created with GuidoCreatePianoRoll
+		\param voiceNum the voice number
+        \param r the red param of RGB color
+        \param g the green param of RGB color
+        \param b the blue param of RGB color
+        \param a the alpha param of RGB color
+        \return a Guido error code
+	*/
+	GUIDOAPI(GuidoErrCode)      GuidoPianoRollSetColorToVoice(GuidoPianoRoll *pr, int voiceNum, int r, int g, int b, int a);
 
 	/*!
 		\brief Get a rendered piano roll from AR, writing it on a VGDevice

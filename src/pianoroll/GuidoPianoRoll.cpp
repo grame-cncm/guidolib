@@ -11,6 +11,10 @@
  
  */
 
+#include <cmath>
+#include <cstdlib>
+#include <time.h>
+
 #include "ARMusic.h"
 #include "VGDevice.h"
 #include "ARRest.h"
@@ -34,17 +38,18 @@ using namespace std;
 #define kDefaultStartDate TYPE_TIMEPOSITION(0, 1) // the default start date
 #define kMinDist          4                       // the minimum distance between lines of the grid
 
+#define kGoldenRatio      0.618033988749895
+
 //--------------------------------------------------------------------------
 GuidoPianoRoll::GuidoPianoRoll() :
     fWidth(kDefaultWidth), fHeight(kDefaultHeight),
     fLowPitch(kDefaultLowPitch), fHighPitch(kDefaultHighPitch),
-    fARMusic(NULL), fDev(NULL),
-    fIsEndDateSet(false)
+    fVoicesAutoColored(false), fVoicesColors(NULL),
+    fARMusic(NULL), fDev(NULL), fIsEndDateSet(false)
 {
-    fNoteHeight = fHeight / pitchRange();
+    srand(time(NULL));
 
-	if (!fNoteHeight)
-        fNoteHeight = 1;
+    fColors = new std::stack<VGColor>();
 }
 
 //--------------------------------------------------------------------------
@@ -76,11 +81,6 @@ void GuidoPianoRoll::setCanvasDimensions(int width, int height)
         fHeight = kDefaultHeight;
     else
         fHeight = height;
-
-    fNoteHeight = fHeight / pitchRange();
-
-	if (!fNoteHeight)
-        fNoteHeight = 1;
 }
 
 //--------------------------------------------------------------------------
@@ -114,6 +114,28 @@ void GuidoPianoRoll::setPitchRange(int minPitch, int maxPitch)
 }
 
 //--------------------------------------------------------------------------
+void GuidoPianoRoll::setColorToVoice(int voiceNum, int r, int g, int b, int a)
+{
+    if (!fVoicesColors)
+        fVoicesColors = new std::vector<std::pair<int, VGColor>>();
+    else {
+        for (int i = 0; i < fVoicesColors->size(); i++) {
+            std::pair<int, VGColor> pair = fVoicesColors->at(i);
+
+            if (pair.first == voiceNum) {
+                fVoicesColors->erase(fVoicesColors->begin() + i);
+                break;
+            }
+        }
+    }
+
+    VGColor color(r, g, b, a);
+    std::pair<int, VGColor> newVoiceColor(voiceNum, color);
+
+    fVoicesColors->push_back(newVoiceColor);
+}
+
+//--------------------------------------------------------------------------
 bool GuidoPianoRoll::ownsARMusic() {
     if (fARMusic)
         return true;
@@ -134,10 +156,7 @@ void GuidoPianoRoll::getRenderingFromAR(VGDevice *dev)
 {
     fDev = dev;
 
-    fDev->NotifySize(fWidth, fHeight);
-    fDev->BeginDraw();
-    fDev->PushPenColor(VGColor(100, 100, 100));
-    fDev->PushFillColor(VGColor(0, 0, 0));
+    initRendering();
 
     if (!fIsEndDateSet)
         fEndDate = fARMusic->getDuration();
@@ -153,9 +172,7 @@ void GuidoPianoRoll::getRenderingFromAR(VGDevice *dev)
         DrawVoice(e);
     }
 
-    fDev->PopFillColor();
-    fDev->PopPenColor();
-    fDev->EndDraw();
+    endRendering();
 }
 
 //--------------------------------------------------------------------------
@@ -163,13 +180,30 @@ void GuidoPianoRoll::getRenderingFromMidi(VGDevice *dev)
 {
     fDev = dev;
 
+    initRendering();
+
+    DrawFromMidi();
+
+    endRendering();
+}
+
+//--------------------------------------------------------------------------
+void GuidoPianoRoll::initRendering()
+{
     fDev->NotifySize(fWidth, fHeight);
     fDev->BeginDraw();
     fDev->PushPenColor(VGColor(100, 100, 100));
     fDev->PushFillColor(VGColor(0, 0, 0));
 
-    DrawFromMidi();
+    if (fVoicesAutoColored) {
+        rand();
+        fColorSeed = (rand() / (float)(RAND_MAX + 1.0));
+    }
+}
 
+//--------------------------------------------------------------------------
+void GuidoPianoRoll::endRendering()
+{
     fDev->PopFillColor();
     fDev->PopPenColor();
     fDev->EndDraw();
@@ -178,13 +212,18 @@ void GuidoPianoRoll::getRenderingFromMidi(VGDevice *dev)
 //--------------------------------------------------------------------------
 void GuidoPianoRoll::DrawGrid() const
 {
+    int noteHeight = fHeight / pitchRange();
+
+	if (!noteHeight)
+        noteHeight = 1;
+
 	fDev->PushPenWidth(0.3f);
 
 	for (int i = fLowPitch; i < fHighPitch; i++) {
 		int y = pitch2ypos(i);
 		int step = i % 12;		// the note in chromatic step
 
-		if (fNoteHeight < kMinDist) {
+		if (noteHeight < kMinDist) {
 			switch (step) {
 				case 0 :			// C notes are highlighted
 					fDev->PushPenWidth((i == 60) ? 1.0f : 0.6f);
@@ -221,7 +260,33 @@ void GuidoPianoRoll::DrawGrid() const
 //--------------------------------------------------------------------------
 void GuidoPianoRoll::DrawVoice(ARMusicalVoice* v)
 {
-	fColored = false;
+    if (fVoicesColors != NULL) {
+        int voiceNum = v->getVoiceNum();
+        
+        for (int i = 0; i < fVoicesColors->size() && fColors->empty(); i++) {
+            std::pair<int, VGColor> pair = fVoicesColors->at(i);
+
+            if (pair.first == voiceNum)
+                fColors->push(pair.second);
+        }
+    }
+    
+    if (!fColors->empty() || fVoicesAutoColored) {
+        if (fColors->empty()) {
+            int r, g, b;
+
+            fColorSeed += kGoldenRatio;
+            fColorSeed  = fmod(fColorSeed, 1);
+
+            HSVtoRGB((float) fColorSeed, 0.5f, 0.9f, r, g, b);
+
+            fColors->push(VGColor(r, g, b, 255));
+        }
+        
+        fDev->PushPenColor(fColors->top());
+        fDev->PushFillColor(fColors->top());
+    }
+
     fChord   = false;
 	ObjectList *ol  = (ObjectList *)v;
 	GuidoPos    pos = ol->GetHeadPosition();
@@ -265,9 +330,11 @@ void GuidoPianoRoll::DrawVoice(ARMusicalVoice* v)
             handleColor(dynamic_cast<ARNoteFormat *>(e));
 	}
 
-	if (fColored) {
-		fDev->PopPenColor();
+    while (!fColors->empty()) {
 		fDev->PopFillColor();
+		fDev->PopPenColor();
+
+        fColors->pop();
 	}
 }
 
@@ -318,15 +385,16 @@ bool GuidoPianoRoll::handleColor(ARNoteFormat* noteFormat)
 		unsigned char colref[4];
 		
         if (tps && tps->getRGB(colref)) {
-			fColor = VGColor(colref[0], colref[1], colref[2], colref[3]);
-			fDev->PushFillColor(fColor);
-			fDev->PushPenColor(fColor);
-			fColored = true;
+            fColors->push(VGColor(colref[0], colref[1], colref[2], colref[3]));
+            
+			fDev->PushPenColor(fColors->top());
+            fDev->PushFillColor(fColors->top());
 		}
-		else if (fColored) {
-			fColored = false;
+		else if (!fColors->empty()) {
 			fDev->PopPenColor();
 			fDev->PopFillColor();
+
+            fColors->pop();
 		}
 
 		return true;
@@ -341,6 +409,56 @@ int	GuidoPianoRoll::pitch2ypos (int midipitch) const
 	int p = midipitch - fLowPitch;
 
 	return fHeight - int((fHeight * p) / pitchRange());
+}
+
+//--------------------------------------------------------------------------
+void GuidoPianoRoll::HSVtoRGB(float h, float s, float v, int &r, int &g, int &b)
+{
+    int   i = (int) floor((float) h * 6);
+    float f = h * 6 - i;
+    float p = v * (1 - s);
+    float q = v * (1 - f * s);
+    float t = v * (1 - (1 - f) * s);
+
+    float rTmp, gTmp, bTmp;
+
+    switch (i % 6)
+    {
+        case 0:
+            rTmp = v;
+            gTmp = t;
+            bTmp = p;
+            break;
+        case 1:
+            rTmp = q;
+            gTmp = v;
+            bTmp = p;
+            break;
+        case 2:
+            rTmp = p;
+            gTmp = v;
+            bTmp = t;
+            break;
+        case 3:
+            rTmp = p;
+            gTmp = q;
+            bTmp = v;
+            break;
+        case 4:
+            rTmp = t;
+            gTmp = p;
+            bTmp = v;
+            break;
+        case 5:
+            rTmp = v;
+            gTmp = p;
+            bTmp = q;
+            break;
+    }
+
+    r = (int) floor((float) rTmp * 256);
+    g = (int) floor((float) gTmp * 256);
+    b = (int) floor((float) bTmp * 256);
 }
 
 #ifdef MIDIEXPORT

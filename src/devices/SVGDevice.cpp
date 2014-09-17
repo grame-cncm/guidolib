@@ -511,6 +511,13 @@ void SVGDevice::PushPenWidth( float width)
 	fStream << fEndl << "<g style=\"stroke-width:" << width << "\">"; 
 	fEndl++ ;
 }
-void SVGDevice::PopPenColor()								{ closegroup(); }
-void SVGDevice::PopPenWidth()								{ closegroup(); }
+void SVGDevice::PopPenColor() {
+    checkfont();
+    closegroup();
+}
+
+void SVGDevice::PopPenWidth() {
+    checkfont();
+    closegroup();
+}
 

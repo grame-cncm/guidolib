@@ -26,7 +26,7 @@ public:
     virtual ~GuidoReducedProportional() {}
 
     void setCanvasDimensions(int width, int height);
-    void setDurationEnabled(bool enabled) { fDrawDurationLine = enabled; }
+    void enableDurationLines(bool enabled) { fDrawDurationLine = enabled; }
 
     void getRenderingFromAR(VGDevice *dev);
     void getRenderingFromMidi(VGDevice* dev);

@@ -203,6 +203,18 @@ int main(int argc, char **argv)
 
         err = GuidoSetPianoRollPitchLimits(pianoRoll, minPitch, maxPitch);
         error(err);*/
+
+        /*err = GuidoPianoRollEnableRandomVoicesColor(pianoRoll, false);
+        error(err);
+        
+        err = GuidoPianoRollSetColorToVoice(pianoRoll, 1, 255, 0, 0, 100);
+        error(err);
+        
+        err = GuidoPianoRollSetColorToVoice(pianoRoll, 2, 0, 255, 0, 100);
+        error(err);
+        
+        err = GuidoPianoRollSetColorToVoice(pianoRoll, 3, 0, 0, 255, 100);
+        error(err);*/
         
         err = GuidoGetPianoRollRenderingFromAR(pianoRoll, &dev);
         error(err);
@@ -219,6 +231,6 @@ int main(int argc, char **argv)
 	}
 
 	GuidoCloseParser(parser);
-
+    
     return 0;
 }

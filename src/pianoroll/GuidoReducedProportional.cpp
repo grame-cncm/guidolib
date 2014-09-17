@@ -43,8 +43,6 @@ GuidoReducedProportional::GuidoReducedProportional() :
     GuidoPianoRoll(), fDrawDurationLine(true)
 {
 	fNumStaves = 4; // REM: 4 staves - hard coded for the moment
-	
-    fLineHeight = float(fHeight) / ((fNumStaves * (kStaffLines - 1)) + ((fNumStaves - 1) * kStaffSpacing) + (kStaffBorder * 2));
 }
 
 //--------------------------------------------------------------------------
@@ -59,8 +57,6 @@ void GuidoReducedProportional::setCanvasDimensions(int width, int height)
         fHeight = kDefaultHeight;
     else
         fHeight = height;
-
-    fLineHeight = float(fHeight) / ((fNumStaves * (kStaffLines - 1)) + ((fNumStaves - 1) * kStaffSpacing) + (kStaffBorder * 2));
 }
 
 //--------------------------------------------------------------------------
@@ -68,15 +64,14 @@ void GuidoReducedProportional::getRenderingFromAR(VGDevice* dev)
 {
     fDev = dev;
     
-    fDev->NotifySize(fWidth, fHeight);
-    fDev->BeginDraw();
-	fDev->PushPenColor(VGColor(100, 100, 100));
-	fDev->PushFillColor(VGColor(0, 0, 0));
+    initRendering();
 
     if (!fIsEndDateSet)
         fEndDate = fARMusic->getDuration();
 
     fDuration = double(fEndDate - fStartDate);
+
+    fLineHeight = float(fHeight) / ((fNumStaves * (kStaffLines - 1)) + ((fNumStaves - 1) * kStaffSpacing) + (kStaffBorder * 2));
 
 	SetMusicFont();
 	DrawGrid();
@@ -88,9 +83,7 @@ void GuidoReducedProportional::getRenderingFromAR(VGDevice* dev)
 		DrawVoice(e);
 	}
 
-	fDev->PopPenColor();
-	fDev->PopFillColor();
-	fDev->EndDraw();
+	endRendering();
 }
 
 //--------------------------------------------------------------------------
@@ -98,18 +91,13 @@ void GuidoReducedProportional::getRenderingFromMidi(VGDevice* dev)
 {
     fDev = dev;
     
-    fDev->NotifySize(fWidth, fHeight);
-    fDev->BeginDraw();
-	fDev->PushPenColor(VGColor(100, 100, 100));
-	fDev->PushFillColor(VGColor(0, 0, 0));
+    initRendering();
 
 	SetMusicFont();
 
     DrawFromMidi();
 
-    fDev->PopFillColor();
-    fDev->PopPenColor();
-    fDev->EndDraw();
+    endRendering();
 }
 
 //--------------------------------------------------------------------------
@@ -155,6 +143,7 @@ void GuidoReducedProportional::DrawGrid() const
 void GuidoReducedProportional::DrawLedgerLines(float x, float y, int count) const
 {
 	fDev->PushPenWidth(kLineThickness);
+
 	int n = (count > 0 ? count : - count);
 	int step = (count > 0 ? (int) fLineHeight : (int) - fLineHeight);
 	float w = getNoteWidth();
@@ -236,8 +225,8 @@ float GuidoReducedProportional::halfspaces2ypos(int halfspaces, int staff) const
 //--------------------------------------------------------------------------
 void GuidoReducedProportional::DrawHead(float x, float y, int alter) const
 {
-	if (fColored)
-        fDev->SetFontColor(fColor);
+    if (!fColors->empty())
+        fDev->SetFontColor(fColors->top());
 	else
         fDev->SetFontColor(fFontSavedColor);
 

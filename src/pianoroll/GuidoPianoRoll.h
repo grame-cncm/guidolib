@@ -14,6 +14,8 @@
 #ifndef __GuidoPianoRoll__
 #define __GuidoPianoRoll__
 
+#include <stack>
+
 #include "ARMusicalVoice.h"
 #include "ARNoteFormat.h"
 #include "VGColor.h"
@@ -37,7 +39,9 @@ public:
     virtual void setCanvasDimensions(int width, int height);
     virtual void setLimitDates(GuidoDate start, GuidoDate end);
     virtual void setPitchRange(int minPitch, int maxPitch);
-    virtual void setDurationEnabled(bool enabled) { }
+    virtual void enableDurationLines(bool enabled) { }
+    virtual void enableRandomVoicesColor(bool enabled) { fVoicesAutoColored = enabled; }
+    virtual void setColorToVoice(int voiceNum, int r, int g, int b, int a);
 
     bool ownsARMusic();
     bool ownsMidi();
@@ -46,6 +50,8 @@ public:
     virtual void getRenderingFromMidi(VGDevice *dev);
 
 protected:
+    virtual void initRendering    ();
+    virtual void endRendering     ();
 	virtual void DrawGrid         () const;
 	virtual void DrawVoice        (ARMusicalVoice *v);
 	virtual void DrawMusicalObject(ARMusicalObject *o, TYPE_TIMEPOSITION date, TYPE_DURATION dur);
@@ -54,6 +60,8 @@ protected:
 
 	virtual int	 pitch2ypos       (int midipitch) const;
 	virtual bool handleColor      (ARNoteFormat *e);
+
+    void HSVtoRGB(float h, float s, float v, int &r, int &g, int &b);
 
 #ifdef MIDIEXPORT
     virtual void DrawFromMidi();
@@ -70,24 +78,26 @@ protected:
 
     VGDevice *fDev;
     
-    int  fWidth;
-    int  fHeight;
+    int  fWidth;  // the pianoroll width
+    int  fHeight; // the pianoroll height
 
-    TYPE_TIMEPOSITION fStartDate;
-    TYPE_TIMEPOSITION fEndDate;
-    bool fIsEndDateSet;
+    TYPE_TIMEPOSITION fStartDate; // the score start date
+    TYPE_TIMEPOSITION fEndDate;   // the score end date
+    bool   fIsEndDateSet;           // is the end date set by user ?
+    double fDuration;      // the time zone duration
 
-    int  fLowPitch;
-    int  fHighPitch;
+    int  fLowPitch;               // the lower score pitch
+    int  fHighPitch;              // the higher score pitch
 
-    int  fNoteHeight;
+    bool   fVoicesAutoColored; // does the user wants voices to be auto colored ?
+    double fColorSeed;         // base random color
+
+    std::vector<std::pair<int, VGColor>> *fVoicesColors; // voices colors that the user set himself
     
-	bool fColored;  // a flag to indicate coloring (due to noteFormat tag)
-	bool fChord;    // a flag to indicate that next note (or rest) is in a chord
+    std::stack<VGColor> *fColors;        // the colors stack (voice color, noteFormat color)
 
-	VGColor       fColor;         // the current color when colored
-	TYPE_DURATION fChordDuration; // the chord duration (notes in a chord have a null duration)
-	double	      fDuration;      // the time zone duration
+	bool fChord;                  // a flag to indicate that next note (or rest) is in a chord
+    TYPE_DURATION fChordDuration; // the chord duration (notes in a chord have a null duration)
 };
 
 #endif
