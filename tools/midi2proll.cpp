@@ -197,10 +197,7 @@ int main(int argc, char **argv)
     err = GuidoSetPianoRollPitchLimits(pianoRoll, 48, 84);
     error(err);
 
-    err = GuidoPianoRollEnableKeyboard(pianoRoll, true);
-    error(err);
-
-    err = GuidoPianoRollEnableRandomVoicesColor(pianoRoll, false);
+    err = GuidoPianoRollEnableKeyboard(pianoRoll, false);
     error(err);
 
     err = GuidoPianoRollSetColorToVoice(pianoRoll, 1, 255, 0, 0, 100);
@@ -210,8 +207,12 @@ int main(int argc, char **argv)
     error(err);
 
     err = GuidoPianoRollSetColorToVoice(pianoRoll, 3, 0, 0, 255, 100);
+    error(err);
+
+    int keyboardWidth;
+    err = GuidoGetPianoRollKeyboardWidth(pianoRoll, keyboardWidth);
     error(err);*/
-        
+
     err = GuidoGetPianoRollRenderingFromMidi(pianoRoll, &dev);
     error(err);
 

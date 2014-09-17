@@ -126,9 +126,17 @@ extern "C" {
         \return a Guido error code
 	*/
 	GUIDOAPI(GuidoErrCode)      GuidoPianoRollSetColorToVoice(GuidoPianoRoll *pr, int voiceNum, int r, int g, int b, int a);
+    
+	/*!
+		\brief Gets the piano roll keyboard width (not for GuidoReducedProportional)
+		\param pr a pianoroll previously created with GuidoCreatePianoRoll
+        \param keyboardWidth the keyboard width
+        \return a Guido error code
+	*/
+	GUIDOAPI(GuidoErrCode)      GuidoGetPianoRollKeyboardWidth(GuidoPianoRoll *pr, int &keyboardWidth);
 
 	/*!
-		\brief Get a rendered piano roll from AR, writing it on a VGDevice
+		\brief Gets a rendered piano roll from AR, writing it on a VGDevice
 		\param pr a pianoroll previously created with GuidoCreatePianoRoll
         \param dev the device where the piano will be rendered
         \return a Guido error code
@@ -136,7 +144,7 @@ extern "C" {
 	GUIDOAPI(GuidoErrCode)      GuidoGetPianoRollRenderingFromAR(GuidoPianoRoll *pr, VGDevice* dev);
 
 	/*!
-		\brief Get a rendered piano roll from midi, writing it on a VGDevice
+		\brief Gets a rendered piano roll from midi, writing it on a VGDevice
 		\param pr a pianoroll previously created with GuidoCreatePianoRoll
         \param dev the device where the piano will be rendered
         \return a Guido error code
@@ -144,7 +152,7 @@ extern "C" {
 	GUIDOAPI(GuidoErrCode)      GuidoGetPianoRollRenderingFromMidi(GuidoPianoRoll *pr, VGDevice* dev);
 
 	/*!
-		\brief Get a rendered reduced proportional from AR, writing it on a VGDevice
+		\brief Gets a rendered reduced proportional from AR, writing it on a VGDevice
 		\param pr a pianoroll previously created with GuidoCreatePianoRoll
         \param dev the device where the piano will be rendered
         \return a Guido error code
@@ -152,7 +160,7 @@ extern "C" {
 	GUIDOAPI(GuidoErrCode)      GuidoGetRProportionalRenderingFromAR(GuidoPianoRoll *rp, VGDevice* dev);
 
 	/*!
-		\brief Get a rendered reduced proportional from midi, writing it on a VGDevice
+		\brief Gets a rendered reduced proportional from midi, writing it on a VGDevice
 		\param pr a pianoroll previously created with GuidoCreatePianoRoll
         \param dev the device where the piano will be rendered
         \return a Guido error code

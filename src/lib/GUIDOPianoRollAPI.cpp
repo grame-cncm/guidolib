@@ -190,6 +190,17 @@ GUIDOAPI(GuidoErrCode) GuidoPianoRollSetColorToVoice(GuidoPianoRoll *pr, int voi
 }
 
 // ------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoGetPianoRollKeyboardWidth(GuidoPianoRoll *pr, int &keyboardWidth)
+{
+    if (!pr || dynamic_cast<GuidoReducedProportional *>(pr))
+        return guidoErrBadParameter;
+
+    keyboardWidth = pr->getKeyboardWidth();
+
+	return guidoNoErr;
+}
+
+// ------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoGetPianoRollRenderingFromAR(GuidoPianoRoll *pr, VGDevice *dev)
 {
     if (!pr || !dev)

@@ -153,6 +153,14 @@ bool GuidoPianoRoll::ownsMidi() {
 }
 
 //--------------------------------------------------------------------------
+int GuidoPianoRoll::getKeyboardWidth()
+{
+    initKeyboard();
+
+    return fKeyboardWidth;
+}
+
+//--------------------------------------------------------------------------
 void GuidoPianoRoll::getRenderingFromAR(VGDevice *dev)
 {
     fDev = dev;
@@ -194,15 +202,7 @@ void GuidoPianoRoll::getRenderingFromMidi(VGDevice *dev)
 //--------------------------------------------------------------------------
 void GuidoPianoRoll::initRendering()
 {
-    fNoteHeight = fHeight / pitchRange();
-
-	if (!fNoteHeight)
-        fNoteHeight = 1;
-    
-    fKeyboardWidth = 0;
-
-    if (fKeyboardEnabled)
-        fKeyboardWidth = 6 * fNoteHeight;
+    initKeyboard();
 
     fWidth = fWidth + fKeyboardWidth;
 
@@ -223,6 +223,20 @@ void GuidoPianoRoll::endRendering()
     fDev->PopFillColor();
     fDev->PopPenColor();
     fDev->EndDraw();
+}
+
+//--------------------------------------------------------------------------
+void GuidoPianoRoll::initKeyboard()
+{
+    fNoteHeight = fHeight / pitchRange();
+
+	if (!fNoteHeight)
+        fNoteHeight = 1;
+    
+    fKeyboardWidth = 0;
+
+    if (fKeyboardEnabled)
+        fKeyboardWidth = 6 * fNoteHeight;
 }
 
 //--------------------------------------------------------------------------

@@ -47,12 +47,15 @@ public:
     bool ownsARMusic();
     bool ownsMidi();
 
+    int getKeyboardWidth();
+
     virtual void getRenderingFromAR(VGDevice *dev);
     virtual void getRenderingFromMidi(VGDevice *dev);
 
 protected:
     virtual void initRendering         ();
     virtual void endRendering          ();
+    virtual void initKeyboard          ();
 	virtual void DrawGrid              () const;
 	virtual void DrawKeyboard          () const;
 	virtual void DrawVoice             (ARMusicalVoice *v);
