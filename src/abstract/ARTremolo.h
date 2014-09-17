@@ -28,25 +28,42 @@ class ARTremolo : public ARMTParameter, public ARPositionTag
 public:			
 
 
-					ARTremolo() : ARMTParameter(), mDur(0) 
-						{ rangesetting = ONLY; }
-
+					ARTremolo();
+                    ARTremolo(const ARTremolo * tremolo);
 	virtual 		~ARTremolo();
 
 	virtual void setTagParameterList(TagParameterList & tpl);
+	virtual TagParameterList * getTagParameterList() const;
+
+	virtual bool 	MatchEndTag(const char * s);
+	bool getParSet() const	{ return mParSet; }
+
+	const TagParameterString * getStyle() const	{ return fStyle; }
+	const TagParameterInt * getSpeed() const	{ return fSpeed; }
+	const TagParameterString * getPitch() const	{ return fPitch; }
+	const TagParameterFloat * getDx() const	{ return dx; }
+	const TagParameterFloat * getDy() const	{ return dy; }
+	const TagParameterFloat * getThickness() const	{ return fThickness; }
+	const TagParameterString * getText() const	{ return fText; }
 
 	// routines to access TagParameters ..
 	virtual void print() const;
 	
-	virtual void PrintName(std::ostream &os) const;
-	virtual void PrintParameters(std::ostream &os) const;	
+	virtual void PrintName(std::ostream &os) const;	
 
 protected:
 
 	// TagParameters ..
 	// TagParameterString *textformat;
 	// TagParameterFloat  *fsize;
-	TagParameterInt	  * mDur;
+	const TagParameterString *fStyle;
+	const TagParameterInt *fSpeed;
+	const TagParameterString *fPitch;
+	const TagParameterFloat *dx;
+	const TagParameterFloat *dy;
+	const TagParameterFloat *fThickness;
+	const TagParameterString *fText;
+	bool mParSet;
 
 
 	// this is important for allowed

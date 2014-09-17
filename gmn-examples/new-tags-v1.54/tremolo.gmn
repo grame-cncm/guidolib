@@ -1,0 +1,23 @@
+% tremolo.gmn
+
+% tremolo-tag is useful to create tremolo on notes.
+
+% Usage : \tremolo(notes or chords)
+%
+% Parameters :
+%       - style (to chose the number of strokes)
+%       - speed (the speed of the repetition)
+%       - pitch (the pitch of the optional other note/chord)
+%       - dx/dy (modify position of tremolo strokes)
+%       - thickness (modify the thickness)
+%       - text (optional text written above the note)
+{
+[
+\meter<"2/4"> \tremolo<style="//">(e)  \trem(g) 
+\tremolo({a, f}) \trem<style="/">({e2, g})
+]
+,
+[
+\meter<"2/4"> \clef<"f"> \trem(c0/2) \trem<style="////">({c,e,g})
+]
+}

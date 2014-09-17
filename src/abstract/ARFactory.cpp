@@ -1451,6 +1451,23 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
+			else if (!strcmp(name,"tremoloBegin") || !strcmp(name,"tremBegin"))
+			{
+				// this is the id-number!
+				ARTremolo * tmp = new ARTremolo;
+				tmp->setAssociation(ARMusicalTag::ER);
+				tmp->setAllowRange(0);
+				tmp->setID(no);
+				mTags.AddHead(tmp);
+				mCurrentVoice->AddPositionTag(tmp);
+			}
+			else if (!strcmp(name,"tremoloEnd") || !strcmp(name,"tremEnd"))
+			{
+				ARDummyRangeEnd * tmp = new ARDummyRangeEnd("\\tremoloEnd");
+				tmp->setID(no);
+				mCurrentVoice->setPositionTagEndPos(no, tmp);
+				mTags.AddHead(tmp);				
+			} 
 			else if(!strcmp(name,"tempo"))
 			{
 				assert(mCurrentVoice); //...and also it must be the first voice 
