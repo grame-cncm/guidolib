@@ -153,8 +153,6 @@ void GRTremolo::updateTremolo( GRStaff * inStaff )
 
 	ARTremolo * artrem = static_cast<ARTremolo *>(getAbstractRepresentation());
     assert(artrem);
-    
-    //parseSecondPitch(fPitch);
 
 }
 
@@ -186,22 +184,6 @@ GRGlobalStem * GRTremolo::findGlobalStem( GRSystemStartEndStruct * sse, GRNotati
 		}
 	}
 	return 0;
-}
-
-void GRTremolo::parseSecondPitch(std::string pitch) const
-{
-    
-/*    ARHandler * music = new ARHandler();
-    GuidoParseString(fPitch.c_str(), music);
-    
-    ARMusic * am = (*music)->armusic;
-    GuidoPos pos = am->GetHeadPosition();
-    ARMusicalObject * obj = am->GetNext(pos);
-
-    ARNote * note = dynamic_cast<ARNote*>(obj);
-    if(note)
-        std::cout << "note " << note->getPitch() << std::endl;
-*/
 }
 
 unsigned int GRTremolo::getTextAlign() const

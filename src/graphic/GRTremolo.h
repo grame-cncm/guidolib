@@ -42,7 +42,6 @@ class GRTremolo : public GRPTagARNotationElement
         virtual void updateTremolo( GRStaff * grstaff );
         GRGlobalStem * findGlobalStem( GRSystemStartEndStruct * sse, GRNotationElement * stemOwner ) const;
         void computeStrokesCoordinates( NVPoint pos, float coorX[4], float coorY[4] ) const;
-        void parseSecondPitch(std::string pitch) const;
     
         int fNumberOfStrokes;
         TYPE_DURATION fSpeed;
