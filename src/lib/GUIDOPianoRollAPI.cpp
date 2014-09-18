@@ -161,6 +161,17 @@ GUIDOAPI(GuidoErrCode) GuidoPianoRollEnableKeyboard(GuidoPianoRoll *pr, bool ena
 }
 
 // ------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoGetPianoRollKeyboardWidth(GuidoPianoRoll *pr, int &keyboardWidth)
+{
+    if (!pr || dynamic_cast<GuidoReducedProportional *>(pr))
+        return guidoErrBadParameter;
+
+    keyboardWidth = pr->getKeyboardWidth();
+
+	return guidoNoErr;
+}
+
+// ------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoPianoRollEnableRandomVoicesColor(GuidoPianoRoll *pr, bool enabled)
 {
     if (!pr)
@@ -190,12 +201,23 @@ GUIDOAPI(GuidoErrCode) GuidoPianoRollSetColorToVoice(GuidoPianoRoll *pr, int voi
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoGetPianoRollKeyboardWidth(GuidoPianoRoll *pr, int &keyboardWidth)
+GUIDOAPI(GuidoErrCode) GuidoPianoRollEnableMeasureBars(GuidoPianoRoll *pr, bool enabled)
 {
-    if (!pr || dynamic_cast<GuidoReducedProportional *>(pr))
+    if (!pr)
         return guidoErrBadParameter;
 
-    keyboardWidth = pr->getKeyboardWidth();
+    pr->enableMeasureBars(enabled);
+
+	return guidoNoErr;
+}
+
+// ------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoSetPianoRollPitchLinesDisplayMode(GuidoPianoRoll *pr, int mode)
+{
+    if (!pr || mode < -1 || mode > 4)
+        return guidoErrBadParameter;
+
+    pr->setPitchLinesDisplayMode(mode);
 
 	return guidoNoErr;
 }

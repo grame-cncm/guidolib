@@ -208,29 +208,46 @@ int main(int argc, char **argv)
         err = GuidoSetARToPianoRoll(pianoRoll, arh);
         error(err);
 
-        /*err = GuidoSetPianoRollCanvasDimensions(pianoRoll, w, h);
-        error(err);
-        
-        err = GuidoSetPianoRollTimeLimits(pianoRoll, start, end);
-        error(err);
 
-        err = GuidoSetPianoRollPitchLimits(pianoRoll, minPitch, maxPitch);
-        error(err);
+        /**** SIZE ****/
+        //err = GuidoSetPianoRollCanvasDimensions(pianoRoll, w, h);
+        //error(err);
+        /**************/
+        
+        /**** TIME LIMITS ****/
+        //err = GuidoSetPianoRollTimeLimits(pianoRoll, start, end);
+        //error(err);
+        /*********************/
 
-        err = GuidoSetPianoRollDurationEnabled(pianoRoll, drawdur);
-        error(err);*/
+        /**** PITCH LIMITS ****/
+        //err = GuidoSetPianoRollPitchLimits(pianoRoll, minPitch, maxPitch);
+        //error(err);
+        /**********************/
 
-        /*err = GuidoPianoRollEnableRandomVoicesColor(pianoRoll, false);
-        error(err);
+        /**** DURATION LINES ****/
+        //err = GuidoPianoRollEnableDurationLines(pianoRoll, drawDur);
+        //error(err);
+        /************************/
+
+        /**** VOICES COLOR ****/
+        //err = GuidoPianoRollEnableRandomVoicesColor(pianoRoll, true);
+        //error(err);
         
-        err = GuidoPianoRollSetColorToVoice(pianoRoll, 1, 255, 0, 0, 100);
-        error(err);
+        //err = GuidoPianoRollSetColorToVoice(pianoRoll, 1, 255, 0, 0, 100);
+        //error(err);
         
-        err = GuidoPianoRollSetColorToVoice(pianoRoll, 2, 0, 255, 0, 100);
-        error(err);
+        //err = GuidoPianoRollSetColorToVoice(pianoRoll, 2, 0, 255, 0, 100);
+        //error(err);
         
-        err = GuidoPianoRollSetColorToVoice(pianoRoll, 3, 0, 0, 255, 100);
-        error(err);*/
+        //err = GuidoPianoRollSetColorToVoice(pianoRoll, 3, 0, 0, 255, 100);
+        //error(err);
+        /**********************/
+
+        /**** MEASURE BARS ****/
+        //err = GuidoPianoRollEnableMeasureBars(pianoRoll, true);
+        //error(err);
+        /**********************/
+
 
         err = GuidoGetRProportionalRenderingFromAR(pianoRoll, &dev);
         error(err);

@@ -105,6 +105,14 @@ extern "C" {
         \return a Guido error code
 	*/
 	GUIDOAPI(GuidoErrCode)      GuidoPianoRollEnableKeyboard(GuidoPianoRoll *pr, bool enabled);
+    
+	/*!
+		\brief Gets the piano roll keyboard width (not for GuidoReducedProportional)
+		\param pr a pianoroll previously created with GuidoCreatePianoRoll
+        \param keyboardWidth the keyboard width
+        \return a Guido error code
+	*/
+	GUIDOAPI(GuidoErrCode)      GuidoGetPianoRollKeyboardWidth(GuidoPianoRoll *pr, int &keyboardWidth);
 
     /*!
 		\brief Enables or not the automatic voices coloration (if a color is manually set with
@@ -127,14 +135,27 @@ extern "C" {
 	*/
 	GUIDOAPI(GuidoErrCode)      GuidoPianoRollSetColorToVoice(GuidoPianoRoll *pr, int voiceNum, int r, int g, int b, int a);
     
-	/*!
-		\brief Gets the piano roll keyboard width (not for GuidoReducedProportional)
+    /*!
+		\brief Enables or not measure bars (not for a midi rendering)
 		\param pr a pianoroll previously created with GuidoCreatePianoRoll
-        \param keyboardWidth the keyboard width
+		\param enabled a boolean corresponding to the measure bars draw state
         \return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoGetPianoRollKeyboardWidth(GuidoPianoRoll *pr, int &keyboardWidth);
-
+	GUIDOAPI(GuidoErrCode)      GuidoPianoRollEnableMeasureBars(GuidoPianoRoll *pr, bool enabled);
+    
+    /*!
+		\brief Sets the pitch lines display mode : -1 -> automatic
+                                                    0 -> no pitch lines
+                                                    1 -> only C lines
+                                                    2 -> only C and G lines
+                                                    3 -> only diatonic scale lines
+                                                    4 -> all lines (chromatic scale) // REM: faire une enum pour ça
+		\param pr a pianoroll previously created with GuidoCreatePianoRoll
+		\param mode an int corresponding to the pitch lines display mode
+        \return a Guido error code
+	*/
+	GUIDOAPI(GuidoErrCode)      GuidoSetPianoRollPitchLinesDisplayMode(GuidoPianoRoll *pr, int mode);
+    
 	/*!
 		\brief Gets a rendered piano roll from AR, writing it on a VGDevice
 		\param pr a pianoroll previously created with GuidoCreatePianoRoll

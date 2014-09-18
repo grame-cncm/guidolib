@@ -205,17 +205,27 @@ int main(int argc, char **argv)
     err = GuidoSetMidiToPianoRoll(pianoRoll, fileName);
     error(err);
 
-    /*err = GuidoSetPianoRollTimeLimits(pianoRoll, start, end);
-    error(err);
 
-    err = GuidoSetPianoRollCanvasDimensions(pianoRoll, w, h);
-    error(err);
+    /**** SIZE ****/
+    //err = GuidoSetPianoRollCanvasDimensions(pianoRoll, w, h);
+    //error(err);
+    /**************/
 
-    err = GuidoSetPianoRollPitchLimits(pianoRoll, minPitch, maxPitch);
-    error(err);
+    /**** TIME LIMITS ****/
+    //err = GuidoSetPianoRollTimeLimits(pianoRoll, start, end);
+    //error(err);
+    /*********************/
 
-    err = GuidoSetPianoRollDurationEnabled(pianoRoll, drawdur);
-    error(err);*/
+    /**** PITCH LIMITS ****/
+    //err = GuidoSetPianoRollPitchLimits(pianoRoll, minPitch, maxPitch);
+    //error(err);
+    /**********************/
+
+    /**** DURATION LINES ****/
+    //err = GuidoPianoRollEnableDurationLines(pianoRoll, drawDur);
+    //error(err);
+    /************************/
+
 
     err = GuidoGetRProportionalRenderingFromMidi(pianoRoll, &dev);
     error(err);

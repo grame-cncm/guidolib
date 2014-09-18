@@ -43,6 +43,8 @@ public:
     virtual void enableKeyboard(bool enabled);
     virtual void enableRandomVoicesColor(bool enabled) { fVoicesAutoColored = enabled; }
     virtual void setColorToVoice(int voiceNum, int r, int g, int b, int a);
+    virtual void enableMeasureBars(bool enabled) { fMeasureBarsEnabled = enabled; }
+    virtual void setPitchLinesDisplayMode(int mode) { fPitchLinesDisplayMode = mode; }
 
     bool ownsARMusic();
     bool ownsMidi();
@@ -53,21 +55,28 @@ public:
     virtual void getRenderingFromMidi(VGDevice *dev);
 
 protected:
-    void computeNoteHeight();
-    void computeKeyboardWidth();
+            void computeNoteHeight();
+            void computeKeyboardWidth();
     virtual void initRendering         ();
     virtual void endRendering          ();
+
 	virtual void DrawGrid              () const;
+	virtual void DrawOctavesGrid       () const;
+	virtual void DrawTwoLinesGrid      () const;
+	virtual void DrawChromaticGrid     () const;
+	virtual void DrawDiatonicGrid      () const;
+
 	virtual void DrawKeyboard          () const;
 	virtual void DrawVoice             (ARMusicalVoice *v);
 	virtual void DrawMusicalObject     (ARMusicalObject *o, TYPE_TIMEPOSITION date, TYPE_DURATION dur);
 	virtual void DrawNote              (int pitch, double date, double dur) const;
 	virtual void DrawRect              (int x, int y, double dur) const;
+	virtual void DrawMeasureBar        (double date) const;
 
-	virtual int	 pitch2ypos       (int midipitch) const;
-	virtual bool handleColor      (ARNoteFormat *e);
+	virtual int	 pitch2ypos            (int midipitch) const;
+	virtual bool handleColor           (ARNoteFormat *e);
 
-    void HSVtoRGB(float h, float s, float v, int &r, int &g, int &b);
+            void HSVtoRGB              (float h, float s, float v, int &r, int &g, int &b);
 
 #ifdef MIDIEXPORT
     virtual void DrawFromMidi();
@@ -108,6 +117,10 @@ protected:
     bool fKeyboardEnabled; // does the keyboard will be displayed ?
     int  fNoteHeight;
     int  fKeyboardWidth;
+
+    bool fMeasureBarsEnabled;
+
+    int  fPitchLinesDisplayMode;
 };
 
 #endif

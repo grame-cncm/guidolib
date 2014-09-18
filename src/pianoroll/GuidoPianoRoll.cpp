@@ -19,6 +19,7 @@
 #include "VGDevice.h"
 #include "ARRest.h"
 #include "ARNote.h"
+#include "ARBar.h"
 #include "ARChordComma.h"
 #include "ARNoteFormat.h"
 #include "TagParameterString.h"
@@ -36,7 +37,16 @@ using namespace std;
 #define kDefaultLowPitch  0                       // the default canvas width
 #define kDefaultHighPitch 127                     // the default canvas height
 #define kDefaultStartDate TYPE_TIMEPOSITION(0, 1) // the default start date
-#define kMinDist          4                       // the minimum distance between lines of the grid
+#define kMainLineWidth    1.6f
+#define kSubMainLineWidth 1.1f
+#define kNormalLineWidth  0.6f
+
+#define kLimitDist34Mode  6                       // the minimum distance between lines of the grid
+                                                  //     (to switch between mode 4 and mode 3 of pitch line display)
+#define kLimitDist23Mode  10                      // the medium distance between lines of the grid
+                                                  //     (to switch between mode 3 and mode 2 of pitch line display)
+#define kLimitDist12      14                      // the minimum distance between lines of the grid
+                                                  //     (to switch between mode 2 and mode 1 of pitch line display)
 
 #define kGoldenRatio      0.618033988749895
 
@@ -46,9 +56,10 @@ GuidoPianoRoll::GuidoPianoRoll() :
     fLowPitch(kDefaultLowPitch), fHighPitch(kDefaultHighPitch),
     fKeyboardEnabled(false),
     fVoicesAutoColored(false), fVoicesColors(NULL),
+    fMeasureBarsEnabled(false), fPitchLinesDisplayMode(-1),
     fARMusic(NULL), fDev(NULL), fIsEndDateSet(false)
 {
-    srand(time(NULL));
+    srand((unsigned int) (time(NULL)));
 
     fColors = new std::stack<VGColor>();
     
@@ -120,6 +131,7 @@ void GuidoPianoRoll::setPitchRange(int minPitch, int maxPitch)
     fNoteHeight = fHeight / pitchRange();
 }
 
+//--------------------------------------------------------------------------
 void GuidoPianoRoll::enableKeyboard(bool enabled)
 {
     fKeyboardEnabled = enabled;
@@ -133,7 +145,7 @@ void GuidoPianoRoll::setColorToVoice(int voiceNum, int r, int g, int b, int a)
     if (!fVoicesColors)
         fVoicesColors = new std::vector<std::pair<int, VGColor>>();
     else {
-        for (int i = 0; i < fVoicesColors->size(); i++) {
+        for (unsigned int i = 0; i < fVoicesColors->size(); i++) {
             std::pair<int, VGColor> pair = fVoicesColors->at(i);
 
             if (pair.first == voiceNum) {
@@ -251,82 +263,154 @@ void GuidoPianoRoll::endRendering()
 //--------------------------------------------------------------------------
 void GuidoPianoRoll::DrawGrid() const
 {
-	fDev->PushPenWidth(0.3f);
+    fDev->PushPenColor(VGColor(0, 0, 0));
 
-	for (int i = fLowPitch; i < fHighPitch; i++) {
-		int y = pitch2ypos(i);
-		int step = i % 12;		// the note in chromatic step
+    switch (fPitchLinesDisplayMode) {
+    case -1:
+        if (fNoteHeight < kLimitDist34Mode)
+            DrawOctavesGrid();
+        else if (fNoteHeight < kLimitDist23Mode)
+            DrawTwoLinesGrid();
+        else if (fNoteHeight < kLimitDist12)
+            DrawChromaticGrid();
+        else
+            DrawDiatonicGrid();
 
-		if (fNoteHeight < kMinDist) {
-			switch (step) {
-				case 0 :			// C notes are highlighted
-					fDev->PushPenWidth((i == 60) ? 1.0f : 0.6f);
-					fDev->Line(fKeyboardWidth, (float) y, (float) fWidth, (float) y);
-					fDev->PopPenWidth();
-					break;
-				case 7:				// G
-					fDev->Line(fKeyboardWidth, (float) y, (float) fWidth, (float) y);
-					break;
-			}
-		}
-		else {
-			switch (step) {
-				case 0 :			// C notes are highlighted
-					fDev->PushPenWidth((i == 60) ? 1.0f : 0.6f);
-					fDev->Line(fKeyboardWidth, (float) y, (float) fWidth, (float) y);
-					fDev->PopPenWidth();
-					break;
-				case 2:				// D
-				case 4:				// E
-				case 5:				// F
-				case 7:				// G
-				case 9:				// A
-				case 11:			// B
-					fDev->Line(fKeyboardWidth, (float) y, (float) fWidth, (float) y);
-					break;
-			}
-		}
-	}
+        break;
+    case 1:
+        DrawOctavesGrid();
+        break;
+    case 2:
+        DrawTwoLinesGrid();
+        break;
+    case 3:
+        DrawChromaticGrid();
+        break;
+    case 4:
+        DrawDiatonicGrid();
+        break;
+    }
 
-	fDev->PopPenWidth();
+    fDev->PopPenColor();
+}
+
+//--------------------------------------------------------------------------
+void GuidoPianoRoll::DrawOctavesGrid() const
+{
+	for (int i = fLowPitch; i <= fHighPitch; i++) {
+        int y = pitch2ypos(i) + (int) (0.5 * fNoteHeight);
+		int step = i % 12; // the note in chromatic step
+
+        if (step == 0) { // C notes are highlighted
+            fDev->PushPenWidth((i == 60) ? kSubMainLineWidth : kNormalLineWidth);
+            fDev->Line((float) fKeyboardWidth, (float) y, (float) fWidth, (float) y);
+            fDev->PopPenWidth();
+        }
+    }
+}
+
+//--------------------------------------------------------------------------
+void GuidoPianoRoll::DrawTwoLinesGrid() const
+{
+	for (int i = fLowPitch; i <= fHighPitch; i++) {
+        int y = pitch2ypos(i) + (int) (0.5 * fNoteHeight);
+		int step = i % 12; // the note in chromatic step
+
+        if (step == 0 || step == 7) {
+            float width = kNormalLineWidth;
+
+            if (i == 60)
+                width = kMainLineWidth;
+            else if (step == 0)
+                width = kSubMainLineWidth;
+
+            fDev->PushPenWidth(width);
+            fDev->Line((float) fKeyboardWidth, (float) y, (float) fWidth, (float) y);
+            fDev->PopPenWidth();
+        }
+    }
+}
+
+//--------------------------------------------------------------------------
+void GuidoPianoRoll::DrawChromaticGrid() const
+{
+	for (int i = fLowPitch; i <= fHighPitch; i++) {
+        int y = pitch2ypos(i) + (int) (0.5 * fNoteHeight);
+		int step = i % 12; // the note in chromatic step
+
+        if (step == 0 || step == 2 || step == 4
+            || step == 5 || step == 7 || step == 9
+            || step == 11) {
+                float width = kNormalLineWidth;
+
+                if (i == 60)
+                    width = kMainLineWidth;
+                else if (step == 0)
+                    width = kSubMainLineWidth;
+
+                fDev->PushPenWidth(width);
+                fDev->Line((float) fKeyboardWidth, (float) y, (float) fWidth, (float) y);
+                fDev->PopPenWidth();
+        }
+    }
+}
+
+//--------------------------------------------------------------------------
+void GuidoPianoRoll::DrawDiatonicGrid() const
+{
+	for (int i = fLowPitch; i <= fHighPitch; i++) {
+        int y = pitch2ypos(i) + (int) (0.5 * fNoteHeight);
+		int step = i % 12; // the note in chromatic step
+        
+        float width = kNormalLineWidth;
+
+        if (i == 60)
+             width = kMainLineWidth;
+        else if (step == 0)
+             width = kSubMainLineWidth;
+
+        fDev->PushPenWidth(width);
+        fDev->Line((float) fKeyboardWidth, (float) y, (float) fWidth, (float) y);
+        fDev->PopPenWidth();
+    }
 }
 
 //--------------------------------------------------------------------------
 void GuidoPianoRoll::DrawKeyboard() const
 {
-    int keyboardBlackNotesWidth = fKeyboardWidth / 1.5;
+    int keyboardBlackNotesWidth = (int) floor(fKeyboardWidth / 1.5);
 
 	fDev->PushPenWidth(0.8f);
 
 	for (int i = 0; i <= 127; i++) {
         int step = i % 12;
-        int y = pitch2ypos(i) + 0.5 * fNoteHeight;
+        int y = (int) floor(pitch2ypos(i) + 0.5 * fNoteHeight);
         
         switch (step) {
         case 0:
         case 5:
-            fDev->Line(0, (float) y, fKeyboardWidth, (float) y);
+            fDev->Line(0, (float) y, (float) fKeyboardWidth, (float) y);
             break;
         case 2:
         case 4:
         case 7:
         case 9:
         case 11:
-            fDev->Line(keyboardBlackNotesWidth, (float) y + 0.5 * fNoteHeight, fKeyboardWidth, (float) y + 0.5 * fNoteHeight);
+            fDev->Line((float) keyboardBlackNotesWidth, (float) (y + 0.5 * fNoteHeight), (float) fKeyboardWidth, (float) (y + 0.5 * fNoteHeight));
             break;
         case 1:
         case 3:
         case 6:
         case 8:
         case 10:
-            fDev->Rectangle(0, (float) y - fNoteHeight, keyboardBlackNotesWidth, (float) y);
+            fDev->Rectangle(0, (float) (y - fNoteHeight), (float) keyboardBlackNotesWidth, (float) y);
             break;
         }
     }
     
-    int yMin = pitch2ypos(0) + 0.5 * fNoteHeight;
+    int yMin = (int) floor(pitch2ypos(0) + 0.5 * fNoteHeight);
     int yMax = pitch2ypos(127) + fNoteHeight;
-    fDev->Line(fKeyboardWidth, (float) yMin, fKeyboardWidth, (float) yMax);
+    fDev->Line((float) fKeyboardWidth, (float) yMin, (float) fKeyboardWidth, (float) yMax);
 
 	fDev->PopPenWidth();
 }
@@ -337,7 +421,7 @@ void GuidoPianoRoll::DrawVoice(ARMusicalVoice* v)
     if (fVoicesColors != NULL) {
         int voiceNum = v->getVoiceNum();
         
-        for (int i = 0; i < fVoicesColors->size() && fColors->empty(); i++) {
+        for (unsigned int i = 0; i < fVoicesColors->size() && fColors->empty(); i++) {
             std::pair<int, VGColor> pair = fVoicesColors->at(i);
 
             if (pair.first == voiceNum)
@@ -402,6 +486,8 @@ void GuidoPianoRoll::DrawVoice(ARMusicalVoice* v)
 			fChord = true;
 		else if (dynamic_cast<ARNoteFormat *>(e))
             handleColor(dynamic_cast<ARNoteFormat *>(e));
+        else if (dynamic_cast<ARBar *>(e) && fMeasureBarsEnabled)
+            DrawMeasureBar(date);
 	}
 
     while (!fColors->empty()) {
@@ -452,6 +538,24 @@ void GuidoPianoRoll::DrawRect(int x, int y, double dur) const
 }
 
 //--------------------------------------------------------------------------
+void GuidoPianoRoll::DrawMeasureBar(double date) const
+{
+    int x    = date2xpos(date);
+	int yMin = pitch2ypos(0);   // REM: 0   or fLowPitch ?
+	int yMax = pitch2ypos(127); // REM: 127 or fHighPitch ?
+    
+    fDev->PushPenColor(VGColor(0, 0, 0));
+    fDev->PushFillColor(VGColor(0, 0, 0));
+
+    fDev->PushPenWidth(0.3f);
+    fDev->Line((float) x, (float) yMin, (float) x, (float) yMax);
+    fDev->PopPenWidth();
+
+    fDev->PopFillColor();
+    fDev->PopPenColor();
+}
+
+//--------------------------------------------------------------------------
 bool GuidoPianoRoll::handleColor(ARNoteFormat* noteFormat)
 {
 	if (noteFormat) {
@@ -465,8 +569,8 @@ bool GuidoPianoRoll::handleColor(ARNoteFormat* noteFormat)
             fDev->PushFillColor(fColors->top());
 		}
 		else if (!fColors->empty()) {
-			fDev->PopPenColor();
 			fDev->PopFillColor();
+			fDev->PopPenColor();
 
             fColors->pop();
 		}
@@ -638,7 +742,7 @@ void GuidoPianoRoll::DrawFromMidi()
 
     fDuration = double(fEndDate - fStartDate);
 
-    for (int i = 0; i < vseq.size(); i++) {
+    for (unsigned int i = 0; i < vseq.size(); i++) {
         DrawMidiSeq(vseq[i], tpqn);
         mf.midi()->FreeSeq(vseq[i]);
     }

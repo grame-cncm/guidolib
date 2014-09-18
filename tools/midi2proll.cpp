@@ -188,32 +188,42 @@ int main(int argc, char **argv)
     err = GuidoSetMidiToPianoRoll(pianoRoll, fileName);
     error(err);
 
-    /*err = GuidoSetPianoRollCanvasDimensions(pianoRoll, w, h);
-    error(err);
 
-    err = GuidoSetPianoRollTimeLimits(pianoRoll, start, end);
-    error(err);
+    /**** SIZE ****/
+    //err = GuidoSetPianoRollCanvasDimensions(pianoRoll, w, h);
+    //error(err);
+    /**************/
 
-    err = GuidoSetPianoRollPitchLimits(pianoRoll, 48, 84);
-    error(err);
+    /**** TIME LIMITS ****/
+    //err = GuidoSetPianoRollTimeLimits(pianoRoll, start, end);
+    //error(err);
+    /*********************/
 
-    err = GuidoPianoRollEnableKeyboard(pianoRoll, false);
-    error(err);
+    /**** PITCH LIMITS ****/
+    //err = GuidoSetPianoRollPitchLimits(pianoRoll, minPitch, maxPitch);
+    //error(err);
+    /**********************/
 
-    err = GuidoPianoRollSetColorToVoice(pianoRoll, 1, 255, 0, 0, 100);
-    error(err);
+    /**** KEYBOARD ****/
+    //err = GuidoPianoRollEnableKeyboard(pianoRoll, true);
+    //error(err);
 
-    err = GuidoPianoRollSetColorToVoice(pianoRoll, 2, 0, 255, 0, 100);
-    error(err);
+    //int keyboardWidth;
+    //err = GuidoGetPianoRollKeyboardWidth(pianoRoll, keyboardWidth);
+    //error(err);
+    /******************/
 
-    err = GuidoPianoRollSetColorToVoice(pianoRoll, 3, 0, 0, 255, 100);
-    error(err);
+    /**** PITCH LINES ****/
+    //err = GuidoSetPianoRollPitchLinesDisplayMode(pianoRoll, 3);
+    //error(err);
+    /*********************/
 
-    int keyboardWidth;
-    err = GuidoGetPianoRollKeyboardWidth(pianoRoll, keyboardWidth);
-    error(err);*/
 
     err = GuidoGetPianoRollRenderingFromMidi(pianoRoll, &dev);
+    error(err);
+
+    GuidoDestroyPianoRoll(pianoRoll);
+
     error(err);
 
 	return 0;

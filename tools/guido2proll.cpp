@@ -194,33 +194,55 @@ int main(int argc, char **argv)
         err = GuidoSetARToPianoRoll(pianoRoll, arh);
         error(err);
 
-        /*err = GuidoSetPianoRollCanvasDimensions(pianoRoll, w, h);
-        error(err);
-        
-        err = GuidoSetPianoRollTimeLimits(pianoRoll, start, end);
-        error(err);
 
-        err = GuidoSetPianoRollPitchLimits(pianoRoll, 60, 71);
-        error(err);
-
-        err = GuidoPianoRollEnableKeyboard(pianoRoll, false);
-        error(err);
-
-        err = GuidoPianoRollEnableRandomVoicesColor(pianoRoll, true);
-        error(err);
+        /**** SIZE ****/
+        //err = GuidoSetPianoRollCanvasDimensions(pianoRoll, w, h);
+        //error(err);
+        /**************/
         
-        err = GuidoPianoRollSetColorToVoice(pianoRoll, 1, 255, 0, 0, 100);
-        error(err);
-        
-        err = GuidoPianoRollSetColorToVoice(pianoRoll, 2, 0, 255, 0, 100);
-        error(err);
-        
-        err = GuidoPianoRollSetColorToVoice(pianoRoll, 3, 0, 0, 255, 100);
-        error(err);
+        /**** TIME LIMITS ****/
+        //err = GuidoSetPianoRollTimeLimits(pianoRoll, start, end);
+        //error(err);
+        /*********************/
 
-        int keyboardWidth;
-        err = GuidoGetPianoRollKeyboardWidth(pianoRoll, keyboardWidth);
-        error(err);*/
+        /**** PITCH LIMITS ****/
+        //err = GuidoSetPianoRollPitchLimits(pianoRoll, minPitch, maxPitch);
+        //error(err);
+        /**********************/
+
+        /**** KEYBOARD ****/
+        //err = GuidoPianoRollEnableKeyboard(pianoRoll, true);
+        //error(err);
+
+        //int keyboardWidth;
+        //err = GuidoGetPianoRollKeyboardWidth(pianoRoll, keyboardWidth);
+        //error(err);
+        /******************/
+
+        /**** VOICES COLOR ****/
+        //err = GuidoPianoRollEnableRandomVoicesColor(pianoRoll, true);
+        //error(err);
+        
+        //err = GuidoPianoRollSetColorToVoice(pianoRoll, 1, 255, 0, 0, 100);
+        //error(err);
+        
+        //err = GuidoPianoRollSetColorToVoice(pianoRoll, 2, 0, 255, 0, 100);
+        //error(err);
+        
+        //err = GuidoPianoRollSetColorToVoice(pianoRoll, 3, 0, 0, 255, 100);
+        //error(err);
+        /**********************/
+
+        /**** MEASURE BARS ****/
+        //err = GuidoPianoRollEnableMeasureBars(pianoRoll, true);
+        //error(err);
+        /**********************/
+
+        /**** PITCH LINES ****/
+        //err = GuidoSetPianoRollPitchLinesDisplayMode(pianoRoll, 3);
+        //error(err);
+        /*********************/
+
 
         err = GuidoGetPianoRollRenderingFromAR(pianoRoll, &dev);
         error(err);
