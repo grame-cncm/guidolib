@@ -51,6 +51,8 @@ GuidoPianoRoll::GuidoPianoRoll() :
     srand(time(NULL));
 
     fColors = new std::stack<VGColor>();
+    
+    computeNoteHeight();
 }
 
 //--------------------------------------------------------------------------
@@ -82,6 +84,8 @@ void GuidoPianoRoll::setCanvasDimensions(int width, int height)
         fHeight = kDefaultHeight;
     else
         fHeight = height;
+    
+    computeNoteHeight();
 }
 
 //--------------------------------------------------------------------------
@@ -112,6 +116,15 @@ void GuidoPianoRoll::setPitchRange(int minPitch, int maxPitch)
         fHighPitch = kDefaultHighPitch;
     else
         fHighPitch = maxPitch;
+    
+    fNoteHeight = fHeight / pitchRange();
+}
+
+void GuidoPianoRoll::enableKeyboard(bool enabled)
+{
+    fKeyboardEnabled = enabled;
+
+    computeKeyboardWidth();
 }
 
 //--------------------------------------------------------------------------
@@ -150,14 +163,6 @@ bool GuidoPianoRoll::ownsMidi() {
         return true;
     else
         return false;
-}
-
-//--------------------------------------------------------------------------
-int GuidoPianoRoll::getKeyboardWidth()
-{
-    initKeyboard();
-
-    return fKeyboardWidth;
 }
 
 //--------------------------------------------------------------------------
@@ -200,10 +205,28 @@ void GuidoPianoRoll::getRenderingFromMidi(VGDevice *dev)
 }
 
 //--------------------------------------------------------------------------
+void GuidoPianoRoll::computeNoteHeight()
+{
+    fNoteHeight = fHeight / pitchRange();
+
+    if (!fNoteHeight)
+        fNoteHeight = 1;
+
+    computeKeyboardWidth();
+}
+
+//--------------------------------------------------------------------------
+void GuidoPianoRoll::computeKeyboardWidth()
+{
+    fKeyboardWidth = 0;
+
+    if (fKeyboardEnabled)
+        fKeyboardWidth = 6 * fNoteHeight;
+}
+
+//--------------------------------------------------------------------------
 void GuidoPianoRoll::initRendering()
 {
-    initKeyboard();
-
     fWidth = fWidth + fKeyboardWidth;
 
     fDev->NotifySize(fWidth, fHeight);
@@ -223,20 +246,6 @@ void GuidoPianoRoll::endRendering()
     fDev->PopFillColor();
     fDev->PopPenColor();
     fDev->EndDraw();
-}
-
-//--------------------------------------------------------------------------
-void GuidoPianoRoll::initKeyboard()
-{
-    fNoteHeight = fHeight / pitchRange();
-
-	if (!fNoteHeight)
-        fNoteHeight = 1;
-    
-    fKeyboardWidth = 0;
-
-    if (fKeyboardEnabled)
-        fKeyboardWidth = 6 * fNoteHeight;
 }
 
 //--------------------------------------------------------------------------

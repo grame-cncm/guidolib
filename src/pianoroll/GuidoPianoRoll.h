@@ -40,22 +40,23 @@ public:
     virtual void setLimitDates(GuidoDate start, GuidoDate end);
     virtual void setPitchRange(int minPitch, int maxPitch);
     virtual void enableDurationLines(bool enabled) { }
-    virtual void enableKeyboard(bool enabled) { fKeyboardEnabled = enabled; }
+    virtual void enableKeyboard(bool enabled);
     virtual void enableRandomVoicesColor(bool enabled) { fVoicesAutoColored = enabled; }
     virtual void setColorToVoice(int voiceNum, int r, int g, int b, int a);
 
     bool ownsARMusic();
     bool ownsMidi();
 
-    int getKeyboardWidth();
+    int getKeyboardWidth() { return fKeyboardWidth; }
 
     virtual void getRenderingFromAR(VGDevice *dev);
     virtual void getRenderingFromMidi(VGDevice *dev);
 
 protected:
+    void computeNoteHeight();
+    void computeKeyboardWidth();
     virtual void initRendering         ();
     virtual void endRendering          ();
-    virtual void initKeyboard          ();
 	virtual void DrawGrid              () const;
 	virtual void DrawKeyboard          () const;
 	virtual void DrawVoice             (ARMusicalVoice *v);

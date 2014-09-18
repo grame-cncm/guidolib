@@ -200,10 +200,10 @@ int main(int argc, char **argv)
         err = GuidoSetPianoRollTimeLimits(pianoRoll, start, end);
         error(err);
 
-        err = GuidoSetPianoRollPitchLimits(pianoRoll, 48, 84);
+        err = GuidoSetPianoRollPitchLimits(pianoRoll, 60, 71);
         error(err);
 
-        err = GuidoPianoRollEnableKeyboard(pianoRoll, true);
+        err = GuidoPianoRollEnableKeyboard(pianoRoll, false);
         error(err);
 
         err = GuidoPianoRollEnableRandomVoicesColor(pianoRoll, true);
@@ -237,5 +237,6 @@ int main(int argc, char **argv)
 	}
 
 	GuidoCloseParser(parser);
+
     return 0;
 }
