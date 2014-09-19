@@ -12,6 +12,11 @@
 */
 
 #include "ARMusic.h"
+#include "ARRest.h"
+#include "ARNoteFormat.h"
+#include "ARChordComma.h"
+#include "ARMeter.h"
+#include "ARBar.h"
 #include "GUIDOEngine.h"
 #include "MusicalSymbols.h"
 #include "GuidoReducedProportional.h"
@@ -42,7 +47,7 @@ static const float kLineThickness = 0.5;
 GuidoReducedProportional::GuidoReducedProportional() :
     GuidoPianoRoll(), fDrawDurationLine(true)
 {
-	fNumStaves = 4; // REM: 4 staves - hard coded for the moment
+	fNumStaves = 1; // REM: 1 staff - hard coded for the moment
 }
 
 //--------------------------------------------------------------------------
@@ -140,6 +145,91 @@ void GuidoReducedProportional::DrawGrid() const
 }
 
 //--------------------------------------------------------------------------
+void GuidoReducedProportional::DrawVoice(ARMusicalVoice* v)
+{
+    if (fVoicesColors != NULL) {
+        int voiceNum = v->getVoiceNum();
+        
+        for (unsigned int i = 0; i < fVoicesColors->size() && fColors->empty(); i++) {
+            std::pair<int, VGColor> pair = fVoicesColors->at(i);
+
+            if (pair.first == voiceNum)
+                fColors->push(pair.second);
+        }
+    }
+    
+    if (!fColors->empty() || fVoicesAutoColored) {
+        if (fColors->empty()) {
+            int r, g, b;
+
+            fColorSeed += kGoldenRatio;
+            fColorSeed  = fmod(fColorSeed, 1);
+
+            HSVtoRGB((float) fColorSeed, 0.5f, 0.9f, r, g, b);
+
+            fColors->push(VGColor(r, g, b, 255));
+        }
+        
+        fDev->PushPenColor(fColors->top());
+        fDev->PushFillColor(fColors->top());
+    }
+
+    fChord          = false;
+	ObjectList *ol  = (ObjectList *)v;
+	GuidoPos    pos = ol->GetHeadPosition();
+
+	while(pos)
+	{
+		ARMusicalObject  *e    = ol->GetNext(pos);
+		TYPE_DURATION     dur  = e->getDuration();
+		TYPE_TIMEPOSITION date = e->getRelativeTimePosition();
+
+        if (fChord) {
+            dur   = fChordDuration;
+            date -= dur;
+        }
+
+		TYPE_TIMEPOSITION end = date + dur;
+
+		if (date >= fStartDate) {
+            if (date < fEndDate) {
+                if (end > fEndDate)
+                    dur = fEndDate - date;
+
+                DrawMusicalObject(e, date, dur);
+            }
+		}
+		else if (end > fStartDate) { // to make the note end appear
+			date = fStartDate;	
+			
+            if (end > fEndDate)
+                dur = fEndDate - date;
+			else
+                dur = end - date;
+			
+            DrawMusicalObject(e, date, dur);
+		}
+		if (dynamic_cast<ARRest *>(e))
+			fChord = false;
+		else if (dynamic_cast<ARChordComma *>(e))
+			fChord = true;
+		else if (dynamic_cast<ARNoteFormat *>(e))
+            handleColor(dynamic_cast<ARNoteFormat *>(e));
+        else if (dynamic_cast<ARBar *>(e) && fMeasureBarsEnabled)
+            DrawMeasureBar(date);
+        else if (dynamic_cast<ARMeter *>(e))
+            DrawMeter(dynamic_cast<ARMeter *>(e), v->getVoiceNum(), date);
+	}
+
+    while (!fColors->empty()) {
+		fDev->PopFillColor();
+		fDev->PopPenColor();
+
+        fColors->pop();
+	}
+}
+
+//--------------------------------------------------------------------------
 void GuidoReducedProportional::DrawLedgerLines(float x, float y, int count) const
 {
 	fDev->PushPenWidth(kLineThickness);
@@ -160,12 +250,14 @@ void GuidoReducedProportional::DrawLedgerLines(float x, float y, int count) cons
 //--------------------------------------------------------------------------
 int	GuidoReducedProportional::pitch2staff(int midipitch) const
 {
-	for (int i = 3; i > 0; i--) {
+	/*for (int i = 3; i > 0; i--) {
 		if (midipitch < kStaffUpPitch[i - 1])
             return i;
-    }
+    }*/
 
-	return 0;
+    /* REM: TODO */
+
+	return 2;
 }
 
 //--------------------------------------------------------------------------
@@ -203,7 +295,7 @@ int	GuidoReducedProportional::halfSpaces2LedgerLines(int halfspaces) const
 int	GuidoReducedProportional::pitch2staff(int midipitch, int& halfspaces, int& alter) const
 {
 	int oct;
-	int p = diatonic (midipitch, oct, alter);
+	int p = diatonic(midipitch, oct, alter);
 
 	int staff   = pitch2staff (midipitch);
 	int topOct	= kStaffTopOct[staff];
@@ -211,8 +303,21 @@ int	GuidoReducedProportional::pitch2staff(int midipitch, int& halfspaces, int& a
 
 	halfspaces = (topDiat - p) + ((topOct - oct) * kHalSpacesPerOct);
 
-	return staff;
+    /* REM: TODO */
+
+	return 2;
 }
+
+//--------------------------------------------------------------------------
+/*int	GuidoReducedProportional::getHalfspaces(int voiceNum) const
+{
+	int topOct	= kStaffTopOct[voiceNum];
+	int topDiat = kStaffTopDiat[voiceNum];
+
+	int halfspaces = (topDiat - p) + ((topOct - oct) * kHalSpacesPerOct);
+
+	return staff;
+}*/
 
 //--------------------------------------------------------------------------
 float GuidoReducedProportional::halfspaces2ypos(int halfspaces, int staff) const
@@ -271,4 +376,15 @@ void GuidoReducedProportional::DrawRect(int x, int y, double dur) const
     float yOffset        =   fLineHeight / 8;
 
 	fDev->Rectangle((float) x + xLeftOffset, (float) (y - rectHalfHeight + yOffset), (float) (x + xRightOffset + (w ? w : 1)), (float) (y + rectHalfHeight + yOffset));
+}
+
+//--------------------------------------------------------------------------
+void GuidoReducedProportional::DrawMeter(ARMeter *meter, int voiceNum, double date) const
+{
+    int halfspaces;
+
+    float x = (float) date2xpos(date); // REM: et si le meter n'est pas placé au début de la portée ?
+    //float y = halfspaces2ypos(halfspaces, voiceNum);
+
+    fDev->DrawMusicSymbol(x, 0, '4');
 }

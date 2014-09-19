@@ -32,17 +32,19 @@ public:
     void getRenderingFromMidi(VGDevice* dev);
 
 protected:
-    void DrawGrid() const;
+    void DrawGrid        () const;
     void DrawStaff       (int i) const;
+    void DrawVoice       (ARMusicalVoice* v);
     void DrawLedgerLines (float x, float y, int n) const;
     void DrawHead        (float x, float y, int alter) const;
     void DrawNote        (int pitch, double date, double dur) const;
-	virtual void DrawRect         (int x, int y, double dur) const;
+	void DrawRect        (int x, int y, double dur) const;
+    void DrawMeter       (ARMeter *meter, int voiceNum, double date) const;
 
     void SetMusicFont();
 
-    int   pitch2staff(int midipitch) const;                              // gives a staff number for a given midi pitch
-    int   pitch2staff(int midipitch, int& halfspaces, int& alter) const; // gives a staff number for a given midi pitch + position and accidental
+    int   pitch2staff            (int midipitch) const;                              // gives a staff number for a given midi pitch
+    int   pitch2staff            (int midipitch, int& halfspaces, int& alter) const; // gives a staff number for a given midi pitch + position and accidental
     float halfspaces2ypos        (int halfspaces, int staff) const;
     int	  halfSpaces2LedgerLines (int halfspaces) const;
 

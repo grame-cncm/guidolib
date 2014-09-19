@@ -29,6 +29,8 @@
 /* \brief a class to create and configure a piano roll
 */
 class GuidoPianoRoll {
+    #define kGoldenRatio      0.618033988749895
+
 public:
              GuidoPianoRoll();
              GuidoPianoRoll(TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, int width, int height, int minPitch, int maxPitch);
@@ -49,7 +51,7 @@ public:
     bool ownsARMusic();
     bool ownsMidi();
 
-    int getKeyboardWidth() { return fKeyboardWidth; }
+    int getKeyboardWidth() { return fUntimedLeftElementWidth; }
 
     virtual void getRenderingFromAR(VGDevice *dev);
     virtual void getRenderingFromMidi(VGDevice *dev);
@@ -84,8 +86,8 @@ protected:
 #endif
     
     virtual int	pitchRange     ()           const    { return fHighPitch - fLowPitch + 1;                          }
-    virtual int date2xpos      (double pos) const    { return int((fWidth - fKeyboardWidth) * (pos - double(fStartDate)) / fDuration + fKeyboardWidth); }
-    virtual int duration2width (double dur) const	 { return int((fWidth - fKeyboardWidth) * dur / fDuration);                       }
+    virtual int date2xpos      (double pos) const    { return int((fWidth - fUntimedLeftElementWidth) * (pos - double(fStartDate)) / fDuration + fUntimedLeftElementWidth); }
+    virtual int duration2width (double dur) const	 { return int((fWidth - fUntimedLeftElementWidth) * dur / fDuration);                       }
 	virtual int stepheight     ()           const    { return fHeight / pitchRange();                              }
 
     ARMusic    *fARMusic;
@@ -111,12 +113,13 @@ protected:
     
     std::stack<VGColor> *fColors;        // the colors stack (voice color, noteFormat color)
 
-	bool fChord;                  // a flag to indicate that next note (or rest) is in a chord
-    TYPE_DURATION fChordDuration; // the chord duration (notes in a chord have a null duration)
+	bool fChord;                   // a flag to indicate that next note (or rest) is in a chord
+    TYPE_DURATION fChordDuration;  // the chord duration (notes in a chord have a null duration)
 
-    bool fKeyboardEnabled; // does the keyboard will be displayed ?
+    bool fKeyboardEnabled;         // does the keyboard will be displayed ?
     int  fNoteHeight;
-    int  fKeyboardWidth;
+    int  fUntimedLeftElementWidth; // keyboard width if GuidoPianoRoll,
+                                   // key and armor width if GuidoRProportional
 
     bool fMeasureBarsEnabled;
 

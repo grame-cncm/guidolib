@@ -225,7 +225,7 @@ void GRMeter::OnDraw(VGDevice & hdc) const
 
         bool hastwo = false;
 
-        const char charPlus= '+';
+        const char charPlus = '+';
         float extentCharPlusx;
         float extentCharPlusy;
         FontManager::gFontScriab->GetExtent(charPlus, &extentCharPlusx, &extentCharPlusy, gGlobalSettings.gDevice );
@@ -301,6 +301,7 @@ void GRMeter::OnDraw(VGDevice & hdc) const
 		}
 
 		OnDrawSymbol(hdc, buffer.c_str()[0], currentDx, (3 * curLSPACE), mTagSize);
+
 		if (buffer.c_str()[1])
 			OnDrawSymbol(hdc, buffer.c_str()[1], dx2, (3 * curLSPACE), mTagSize);
 
@@ -312,7 +313,7 @@ void GRMeter::OnDraw(VGDevice & hdc) const
         float extentBuffery;
         FontManager::gFontScriab->GetExtent(kCSymbol, &extentBufferx, &extentBuffery, gGlobalSettings.gDevice );
 
-		OnDrawSymbol( hdc, kCSymbol, 0, - 200 * (mTagSize - 1) / 2, mTagSize );
+		OnDrawSymbol(hdc, kCSymbol, 0, - 200 * (mTagSize - 1) / 2, mTagSize);
 	}
 	else if (mtype == ARMeter::C2)
 	{
@@ -320,7 +321,7 @@ void GRMeter::OnDraw(VGDevice & hdc) const
         float extentBuffery;
         FontManager::gFontScriab->GetExtent(kC2Symbol, &extentBufferx, &extentBuffery, gGlobalSettings.gDevice );
 
-		OnDrawSymbol( hdc, kC2Symbol, 0, - 200 * (mTagSize - 1) / 2, mTagSize );
+		OnDrawSymbol(hdc, kC2Symbol, 0, - 200 * (mTagSize - 1) / 2, mTagSize);
 	}
 }
 

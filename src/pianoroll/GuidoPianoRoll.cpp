@@ -48,8 +48,6 @@ using namespace std;
 #define kLimitDist12      14                      // the minimum distance between lines of the grid
                                                   //     (to switch between mode 2 and mode 1 of pitch line display)
 
-#define kGoldenRatio      0.618033988749895
-
 //--------------------------------------------------------------------------
 GuidoPianoRoll::GuidoPianoRoll() :
     fWidth(kDefaultWidth), fHeight(kDefaultHeight),
@@ -230,16 +228,16 @@ void GuidoPianoRoll::computeNoteHeight()
 //--------------------------------------------------------------------------
 void GuidoPianoRoll::computeKeyboardWidth()
 {
-    fKeyboardWidth = 0;
+    fUntimedLeftElementWidth = 0;
 
     if (fKeyboardEnabled)
-        fKeyboardWidth = 6 * fNoteHeight;
+        fUntimedLeftElementWidth = 6 * fNoteHeight;
 }
 
 //--------------------------------------------------------------------------
 void GuidoPianoRoll::initRendering()
 {
-    fWidth = fWidth + fKeyboardWidth;
+    fWidth = fWidth + fUntimedLeftElementWidth;
 
     fDev->NotifySize(fWidth, fHeight);
     fDev->BeginDraw();
@@ -303,7 +301,7 @@ void GuidoPianoRoll::DrawOctavesGrid() const
 
         if (step == 0) { // C notes are highlighted
             fDev->PushPenWidth((i == 60) ? kSubMainLineWidth : kNormalLineWidth);
-            fDev->Line((float) fKeyboardWidth, (float) y, (float) fWidth, (float) y);
+            fDev->Line((float) fUntimedLeftElementWidth, (float) y, (float) fWidth, (float) y);
             fDev->PopPenWidth();
         }
     }
@@ -325,7 +323,7 @@ void GuidoPianoRoll::DrawTwoLinesGrid() const
                 width = kSubMainLineWidth;
 
             fDev->PushPenWidth(width);
-            fDev->Line((float) fKeyboardWidth, (float) y, (float) fWidth, (float) y);
+            fDev->Line((float) fUntimedLeftElementWidth, (float) y, (float) fWidth, (float) y);
             fDev->PopPenWidth();
         }
     }
@@ -349,7 +347,7 @@ void GuidoPianoRoll::DrawChromaticGrid() const
                     width = kSubMainLineWidth;
 
                 fDev->PushPenWidth(width);
-                fDev->Line((float) fKeyboardWidth, (float) y, (float) fWidth, (float) y);
+                fDev->Line((float) fUntimedLeftElementWidth, (float) y, (float) fWidth, (float) y);
                 fDev->PopPenWidth();
         }
     }
@@ -370,7 +368,7 @@ void GuidoPianoRoll::DrawDiatonicGrid() const
              width = kSubMainLineWidth;
 
         fDev->PushPenWidth(width);
-        fDev->Line((float) fKeyboardWidth, (float) y, (float) fWidth, (float) y);
+        fDev->Line((float) fUntimedLeftElementWidth, (float) y, (float) fWidth, (float) y);
         fDev->PopPenWidth();
     }
 }
@@ -378,7 +376,7 @@ void GuidoPianoRoll::DrawDiatonicGrid() const
 //--------------------------------------------------------------------------
 void GuidoPianoRoll::DrawKeyboard() const
 {
-    int keyboardBlackNotesWidth = (int) floor(fKeyboardWidth / 1.5);
+    int keyboardBlackNotesWidth = (int) floor(fUntimedLeftElementWidth / 1.5);
 
 	fDev->PushPenWidth(0.8f);
 
@@ -389,14 +387,14 @@ void GuidoPianoRoll::DrawKeyboard() const
         switch (step) {
         case 0:
         case 5:
-            fDev->Line(0, (float) y, (float) fKeyboardWidth, (float) y);
+            fDev->Line(0, (float) y, (float) fUntimedLeftElementWidth, (float) y);
             break;
         case 2:
         case 4:
         case 7:
         case 9:
         case 11:
-            fDev->Line((float) keyboardBlackNotesWidth, (float) (y + 0.5 * fNoteHeight), (float) fKeyboardWidth, (float) (y + 0.5 * fNoteHeight));
+            fDev->Line((float) keyboardBlackNotesWidth, (float) (y + 0.5 * fNoteHeight), (float) fUntimedLeftElementWidth, (float) (y + 0.5 * fNoteHeight));
             break;
         case 1:
         case 3:
@@ -410,7 +408,7 @@ void GuidoPianoRoll::DrawKeyboard() const
     
     int yMin = (int) floor(pitch2ypos(0) + 0.5 * fNoteHeight);
     int yMax = pitch2ypos(127) + fNoteHeight;
-    fDev->Line((float) fKeyboardWidth, (float) yMin, (float) fKeyboardWidth, (float) yMax);
+    fDev->Line((float) fUntimedLeftElementWidth, (float) yMin, (float) fUntimedLeftElementWidth, (float) yMax);
 
 	fDev->PopPenWidth();
 }

@@ -244,7 +244,7 @@ int main(int argc, char **argv)
         /**********************/
 
         /**** MEASURE BARS ****/
-        //err = GuidoPianoRollEnableMeasureBars(pianoRoll, true);
+        err = GuidoPianoRollEnableMeasureBars(pianoRoll, true);
         //error(err);
         /**********************/
 
