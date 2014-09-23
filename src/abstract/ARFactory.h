@@ -45,6 +45,7 @@ class ARCluster;
 class ARGlissando;
 class ARCrescendo;
 class ARDiminuendo;
+class ARTremolo;
 
 
 // typedef KF_IPointerList<ARMusicalObject> ARMusicalObjectList;
@@ -148,6 +149,7 @@ protected:
 	ARMusicalVoice *	mSaveCurrentVoice;
 	ARStaff *			mCurrentStaff;
 	ARCluster *         mCurrentCluster;
+    ARTremolo *         mCurrentTremolo;
 	int					mVoiceNum;
 	int					mCurrentTags;
 	bool				mTagRanged;

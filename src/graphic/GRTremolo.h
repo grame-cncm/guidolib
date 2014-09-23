@@ -39,9 +39,9 @@ class GRTremolo : public GRPTagARNotationElement
     
     protected:
     
-        virtual void updateTremolo( GRStaff * grstaff );
         GRGlobalStem * findGlobalStem( GRSystemStartEndStruct * sse, GRNotationElement * stemOwner ) const;
-        void computeStrokesCoordinates( NVPoint pos, float coorX[4], float coorY[4] ) const;
+        void computeSimpleStrokesCoordinates( NVPoint pos, float coorX[4], float coorY[4] ) const;
+        void computeTwoNotesStrokesCoordinates( NVPoint firstPos, NVPoint endPos, float coorX[4], float coorY[4] ) const;
     
         int fNumberOfStrokes;
         TYPE_DURATION fSpeed;
@@ -52,6 +52,8 @@ class GRTremolo : public GRPTagARNotationElement
         float fThickness;
         bool isTwoNotesTremolo;
         NVPoint textPos;
+        NVPoint fStartPos;
+        NVPoint fEndPos;
         float fStep;
         float fDeltaY;
         float fWidth;

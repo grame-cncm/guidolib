@@ -5711,7 +5711,10 @@ void ARMusicalVoice::FinishChord(bool trill)
 			//if (!vst.fCurdispdur)
 			{
 				dispdur = new ARDisplayDuration();
-				dispdur->setDisplayDuration(group->dur);
+                if(vst.fCurdispdur)
+                    dispdur->setDisplayDuration(vst.fCurdispdur->getDisplayDuration());
+                else
+                    dispdur->setDisplayDuration(group->dur);
 				dispdur->setIsAuto(true);
 				dispdur->setAssociation(ARMusicalTag::RA);
 				// dispdur->setRange(0);

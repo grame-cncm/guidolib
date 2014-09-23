@@ -17,6 +17,7 @@
 
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
+#include "ARNote.h"
 
 class TagParameterInt;
 
@@ -45,6 +46,8 @@ public:
 	const TagParameterFloat * getDy() const	{ return dy; }
 	const TagParameterFloat * getThickness() const	{ return fThickness; }
 	const TagParameterString * getText() const	{ return fText; }
+    
+    std::vector<ARNote*> createSecondNotes(TYPE_DURATION dur, int oct);
 
 	// routines to access TagParameters ..
 	virtual void print() const;

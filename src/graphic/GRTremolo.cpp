@@ -50,12 +50,16 @@ GRTremolo::GRTremolo( GRStaff * stf, ARTremolo * artrem )
         fNumberOfStrokes = 1;
     else if( type == "//" )
         fNumberOfStrokes = 2;
+    else if (type == "///")
+        fNumberOfStrokes = 3;
     else if( type == "////")
         fNumberOfStrokes = 4;
     else // default
         fNumberOfStrokes = 3;
     
     fPitch = artrem->getPitch() ? artrem->getPitch()->getValue() : "";
+    if(fPitch != "")
+        isTwoNotesTremolo = true;
     
     fText = artrem->getText() ? artrem->getText()->getValue() : "";
     fThickness = artrem->getThickness() ? artrem->getThickness()->getValue() : LSPACE/2;
@@ -75,13 +79,28 @@ void GRTremolo::OnDraw( VGDevice & hdc ) const
     
     float coorX[4];
     float coorY[4];
-    NVPoint pos = getPosition();
     
-    for(int i = 0; i < fNumberOfStrokes ; i++)
+    if(isTwoNotesTremolo)
     {
-        computeStrokesCoordinates(pos, coorX, coorY);
-        hdc.Polygon(coorX, coorY, 4);
-        pos.y += fStep;
+        NVPoint pos1 = fStartPos;
+        NVPoint pos2 = fEndPos;
+        for(int i = 0; i < fNumberOfStrokes ; i++)
+        {
+            computeTwoNotesStrokesCoordinates(pos1, pos2, coorX, coorY);
+            hdc.Polygon(coorX, coorY, 4);
+            pos1.y += fStep;
+            pos2.y += fStep;
+        }
+    }
+    else
+    {
+        NVPoint pos = fStartPos;
+        for(int i = 0; i < fNumberOfStrokes ; i++)
+        {
+            computeSimpleStrokesCoordinates(pos, coorX, coorY);
+            hdc.Polygon(coorX, coorY, 4);
+            pos.y += fStep;
+        }
     }
     GRPTagARNotationElement::OnDrawText(hdc,fText.c_str());
 }
@@ -99,8 +118,6 @@ void GRTremolo::tellPosition(GObject * caller, const NVPoint &np)
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( staff->getGRSystem());
 	if (sse == 0)
         return;
-
-    updateTremolo(staff);
     
     GRSingleNote * sng = dynamic_cast<GRSingleNote *>(grel);
     NVPoint pos;
@@ -118,12 +135,21 @@ void GRTremolo::tellPosition(GObject * caller, const NVPoint &np)
             pos.y += LSPACE/2 + sng->getStemLength()/2;
         }
         pos.y -= (fNumberOfStrokes-1)*fStep/2;
-        setPosition(pos);
     }
     else
     {
         GRGlobalStem * stem = findGlobalStem( sse, grel );
-        if(stem)
+        NEPointerList * list = staff->getElements();
+        GuidoPos gpos = list->GetElementPos(grel);
+        bool foundStem = false;
+        while(gpos != sse->startpos && !foundStem )
+        {
+            GRNotationElement * prevEl = list->GetPrev(gpos);
+            stem = prevEl ? findGlobalStem( sse, prevEl ) : 0 ;
+            if(stem)
+                foundStem = true;
+        }
+        if(foundStem)
         {
             pos = stem->getStemStartPos();
             GDirection direction = stem->getStemDir();
@@ -140,23 +166,19 @@ void GRTremolo::tellPosition(GObject * caller, const NVPoint &np)
                 pos.y = lowerNoteY + realStemLength/2 + LSPACE/2;
             }
             pos.y -= (fNumberOfStrokes-1)*fStep/2;
-            setPosition(pos);
         }
     }
+    
+    const GRNotationElement * startElement = sse->startElement;
+	const GRNotationElement * endElement = sse->endElement;
+	if(grel == startElement)
+        fStartPos = pos;
+    else if (grel == endElement)
+        fEndPos = pos;
 }
 
-void GRTremolo::updateTremolo( GRStaff * inStaff )
-{
-	GRSystemStartEndStruct * sse = getSystemStartEndStruct(inStaff->getGRSystem());
-	if (sse == 0)
-        return;
 
-	ARTremolo * artrem = static_cast<ARTremolo *>(getAbstractRepresentation());
-    assert(artrem);
-
-}
-
-void GRTremolo::computeStrokesCoordinates( NVPoint pos, float coorX[4], float coorY[4] ) const
+void GRTremolo::computeSimpleStrokesCoordinates( NVPoint pos, float coorX[4], float coorY[4] ) const
 {
     float x = pos.x;
     float y = pos.y;
@@ -169,6 +191,24 @@ void GRTremolo::computeStrokesCoordinates( NVPoint pos, float coorX[4], float co
     coorY[2] = y-(fDeltaY+fThickness)/2;
     coorY[3] = y-(fDeltaY-fThickness)/2;
 }
+
+void GRTremolo::computeTwoNotesStrokesCoordinates( NVPoint firstPos, NVPoint endPos, float coorX[4], float coorY[4] ) const
+{
+
+    float xFirst = firstPos.x;
+    float xEnd = endPos.x;
+    float yFirst = firstPos.y;
+    float yEnd = endPos.y;
+    
+    coorX[0] = coorX[1] = xFirst + fWidth/2;
+    coorX[2] = coorX[3] = xEnd - fWidth/2;
+    
+    coorY[0] = yFirst+fThickness/2;
+    coorY[1] = yFirst-fThickness/2;
+    coorY[2] = yEnd-fThickness/2;
+    coorY[3] = yEnd+fThickness/2;
+}
+
 
 GRGlobalStem * GRTremolo::findGlobalStem( GRSystemStartEndStruct * sse, GRNotationElement * stemOwner ) const
 {

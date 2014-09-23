@@ -13,11 +13,11 @@
 %       - text (optional text written above the note)
 {
 [
-\meter<"2/4"> \tremolo<style="//">(e)  \trem(g) 
+\meter<"2/4"> \tremolo<style="//", pitch="c">(e)  \trem<pitch="{e,a}">(g) 
 \tremolo({a, f}) \trem<style="/">({e2, g})
 ]
 ,
 [
-\meter<"2/4"> \clef<"f"> \trem(c0/2) \trem<style="////">({c,e,g})
+\meter<"2/4"> \clef<"f"> \trem<pitch="f">(c0/2) \trem<style="////">({c,e,g})
 ]
 }
