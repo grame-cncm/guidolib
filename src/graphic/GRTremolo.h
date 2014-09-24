@@ -51,7 +51,6 @@ class GRTremolo : public GRPTagARNotationElement
         float dy;
         float fThickness;
         bool isTwoNotesTremolo;
-        NVPoint textPos;
         NVPoint fStartPos;
         NVPoint fEndPos;
         float fStep;

@@ -37,6 +37,7 @@ ARTremolo::ARTremolo()
 	mParSet = false;
 }
 
+// -----------------------------------------------------------------------------
 ARTremolo::ARTremolo(const ARTremolo * tremolo)	: ARMTParameter(-1, tremolo)
 {
 	rangesetting = ONLY;
@@ -69,7 +70,8 @@ ARTremolo::ARTremolo(const ARTremolo * tremolo)	: ARMTParameter(-1, tremolo)
 
 
 
-ARTremolo::~ARTremolo() 
+// -----------------------------------------------------------------------------
+ARTremolo::~ARTremolo()
 {
     delete fStyle;
     delete fSpeed;
@@ -80,6 +82,7 @@ ARTremolo::~ARTremolo()
     delete fText;
 };
 
+// -----------------------------------------------------------------------------
 void ARTremolo::setTagParameterList(TagParameterList& tpl)
 {
 	if (ltpls.GetCount() == 0)
@@ -152,6 +155,7 @@ void ARTremolo::setTagParameterList(TagParameterList& tpl)
 	tpl.RemoveAll();
 }
 
+// -----------------------------------------------------------------------------
 TagParameterList * ARTremolo::getTagParameterList() const
 {
 	TagParameterList * tpl = new TagParameterList(1);
@@ -191,16 +195,19 @@ TagParameterList * ARTremolo::getTagParameterList() const
 	return tpl;
 }
 
+// -----------------------------------------------------------------------------
 void ARTremolo::print() const
 {
 }
 
+// -----------------------------------------------------------------------------
 void ARTremolo::PrintName(std::ostream & os) const
 {
 	os << "\\trem";
 
 }
 
+// -----------------------------------------------------------------------------
 bool ARTremolo::MatchEndTag(const char * s)
 {
 	if (ARMusicalTag::MatchEndTag(s))
@@ -210,6 +217,7 @@ bool ARTremolo::MatchEndTag(const char * s)
 	return 0;
 }
 
+// -----------------------------------------------------------------------------
 std::vector<ARNote*> ARTremolo::createSecondNotes(TYPE_DURATION dur, int oct)
 {
     std::vector<ARNote*> notes;
