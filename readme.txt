@@ -30,7 +30,20 @@ Note about MIDI export:
     MIDI export requires libmidisharelight. For MacOS and Windows, the library is embedded 
     in binary form in the src/midisharelight folder. Thus there is no additional step.
     On linux, you must get the library source code, compile and install.
-	
+
+Note for emscripten:
+--------------------
+Make an emscripten directory in the build directory and compile using:
+cmake \
+-DCMAKE_TOOLCHAIN_FILE=/path/to/toolchain \
+-DCMAKE_BUILD_TYPE=Debug \
+-DINDEPENDENTSVG=yes \
+-G "Unix Makefiles" ../../cmake
+
+The path to your toolchain probably vaguely resembles something like:
+/Users/mikesolomon/devel/emsdk_portable/emscripten/1.16.0/cmake/Platform/Emscripten.cmake
+The toolchain (a .cmake file) should be in your emscripten distribution.
+
 Note for Android:
 -------------------------
     Download the Android SDK and NDK.
