@@ -170,6 +170,7 @@ void GuidoPianoRollTrajectory::DrawFinalEvent(double dur)
                     (float) currentEventInfos->at(i).x + w,
                     (float) currentEventInfos->at(i).x
                 };
+
                 float yCoords[4] = {
                     (float) currentEventInfos->at(i).y - 0.5f * fNoteHeight,
                     (float) currentEventInfos->at(i).y - 0.5f * fNoteHeight,

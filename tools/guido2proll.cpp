@@ -189,7 +189,7 @@ int main(int argc, char **argv)
     GuidoErrCode err;
 
 	if (arh) {
-        GuidoPianoRoll *pianoRoll = GuidoCreatePianoRoll(SimplePianoRoll);
+        GuidoPianoRoll *pianoRoll = GuidoCreatePianoRoll(simplePianoRoll);
 
         err = GuidoPianoRollSetAR(pianoRoll, arh);
         error(err);
@@ -220,7 +220,7 @@ int main(int argc, char **argv)
         /******************/
 
         /**** VOICES COLOR ****/
-        //err = GuidoPianoRollEnableRandomVoicesColor(pianoRoll, true);
+        //err = GuidoPianoRollEnableAutoVoicesColoration(pianoRoll, false);
         //error(err);
         
         //err = GuidoPianoRollSetColorToVoice(pianoRoll, 1, 255, 0, 0, 100);
@@ -239,7 +239,7 @@ int main(int argc, char **argv)
         /**********************/
 
         /**** PITCH LINES ****/
-        //err = GuidoPianoRollSetPitchLinesDisplayMode(pianoRoll, 4);
+        //err = GuidoPianoRollSetPitchLinesDisplayMode(pianoRoll, automatic);
         //error(err);
         /*********************/
 

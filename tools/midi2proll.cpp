@@ -181,7 +181,7 @@ int main(int argc, char **argv)
 	GuidoDate start   = ldateopt(argc, argv, kOptions[kStart], defDate);
 	GuidoDate end     = ldateopt(argc, argv, kOptions[kEnd], defDate);
 
-    GuidoPianoRoll *pianoRoll = GuidoCreatePianoRoll(SimplePianoRoll);
+    GuidoPianoRoll *pianoRoll = GuidoCreatePianoRoll(simplePianoRoll);
 
     GuidoErrCode err;
 
@@ -214,7 +214,7 @@ int main(int argc, char **argv)
     /******************/
 
     /**** PITCH LINES ****/
-    //err = GuidoPianoRollSetPitchLinesDisplayMode(pianoRoll, 3);
+    //err = GuidoPianoRollSetPitchLinesDisplayMode(pianoRoll, automatic);
     //error(err);
     /*********************/
 

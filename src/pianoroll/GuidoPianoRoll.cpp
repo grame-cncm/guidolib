@@ -56,7 +56,7 @@ GuidoPianoRoll::GuidoPianoRoll() :
     fLowPitch(kDefaultLowPitch), fHighPitch(kDefaultHighPitch),
     fKeyboardEnabled(false),
     fVoicesAutoColored(false), fVoicesColors(NULL),
-    fMeasureBarsEnabled(false), fPitchLinesDisplayMode(-1),
+    fMeasureBarsEnabled(false), fPitchLinesDisplayMode(automatic),
     fARMusic(NULL), fDev(NULL), fIsEndDateSet(false)
 {
     fColors = new std::stack<VGColor>();
@@ -263,7 +263,7 @@ void GuidoPianoRoll::DrawGrid() const
     fDev->PushPenColor(VGColor(0, 0, 0));
 
     switch (fPitchLinesDisplayMode) {
-    case -1:
+    case automatic:
         if (fNoteHeight < kLimitDist34Mode)
             DrawOctavesGrid();
         else if (fNoteHeight < kLimitDist23Mode)
@@ -274,16 +274,16 @@ void GuidoPianoRoll::DrawGrid() const
             DrawDiatonicGrid();
 
         break;
-    case 1:
+    case one_line:
         DrawOctavesGrid();
         break;
-    case 2:
+    case two_line:
         DrawTwoLinesGrid();
         break;
-    case 3:
+    case chromatic:
         DrawChromaticGrid();
         break;
-    case 4:
+    case diatonic:
         DrawDiatonicGrid();
         break;
     }

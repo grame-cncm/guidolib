@@ -35,11 +35,11 @@ GUIDOAPI(GuidoPianoRoll *) GuidoCreatePianoRoll(PianoRollType type)
 {
     GuidoPianoRoll *newPianoRoll;
 
-    if (type == SimplePianoRoll)
+    if (type == simplePianoRoll)
         newPianoRoll = new GuidoPianoRoll();
-    else if (type == TrajectoryPianoRoll)
+    else if (type == trajectoryPianoRoll)
         newPianoRoll = (GuidoPianoRollTrajectory *) new GuidoPianoRollTrajectory();
-    else if (type == ReducedProportional)
+    else if (type == reducedProportional)
         newPianoRoll = (GuidoPianoRoll *) new GuidoReducedProportional();
 
 	return newPianoRoll;
@@ -178,7 +178,7 @@ GUIDOAPI(GuidoErrCode) GuidoPianoRollGetKeyboardWidth(GuidoPianoRoll *pr, float 
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoPianoRollEnableRandomVoicesColor(GuidoPianoRoll *pr, bool enabled)
+GUIDOAPI(GuidoErrCode) GuidoPianoRollEnableAutoVoicesColoration(GuidoPianoRoll *pr, bool enabled)
 {
     if (!pr)
         return guidoErrBadParameter;
@@ -218,9 +218,9 @@ GUIDOAPI(GuidoErrCode) GuidoPianoRollEnableMeasureBars(GuidoPianoRoll *pr, bool 
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoPianoRollSetPitchLinesDisplayMode(GuidoPianoRoll *pr, int mode)
+GUIDOAPI(GuidoErrCode) GuidoPianoRollSetPitchLinesDisplayMode(GuidoPianoRoll *pr, PitchLinesDisplayMode mode)
 {
-    if (!pr || mode < -1 || mode > 4 || dynamic_cast<GuidoReducedProportional *>(pr))
+    if (!pr || dynamic_cast<GuidoReducedProportional *>(pr))
         return guidoErrBadParameter;
 
     pr->setPitchLinesDisplayMode(mode);

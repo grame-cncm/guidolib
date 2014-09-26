@@ -21,12 +21,23 @@
 class GuidoPianoRoll;
 class GuidoReducedProportional;
 
-/** \brief Bounding boxes drawing control constants.
+/** \brief PianoRollType
 */
 enum PianoRollType {
-	SimplePianoRoll,
-    TrajectoryPianoRoll,
-    ReducedProportional
+	simplePianoRoll,
+    trajectoryPianoRoll,
+    reducedProportional
+};
+
+/** \brief PitchLinesDisplayMode
+*/
+enum PitchLinesDisplayMode {
+    automatic,
+    no_line,
+    one_line,
+    two_line,
+    chromatic,
+    diatonic
 };
 
 #ifdef __cplusplus
@@ -130,7 +141,7 @@ extern "C" {
 		\param enabled a boolean corresponding to the color state
         \return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoPianoRollEnableRandomVoicesColor(GuidoPianoRoll *pr, bool enabled);
+	GUIDOAPI(GuidoErrCode)      GuidoPianoRollEnableAutoVoicesColoration(GuidoPianoRoll *pr, bool enabled);
 
     /*!
 		\brief Sets a color to a voice
@@ -164,7 +175,7 @@ extern "C" {
 		\param mode an int corresponding to the pitch lines display mode
         \return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoPianoRollSetPitchLinesDisplayMode(GuidoPianoRoll *pr, int mode);
+	GUIDOAPI(GuidoErrCode)      GuidoPianoRollSetPitchLinesDisplayMode(GuidoPianoRoll *pr, PitchLinesDisplayMode mode);
     
 	/*!
 		\brief Gets a rendered piano roll from AR, writing it on a VGDevice

@@ -198,7 +198,7 @@ int main(int argc, char **argv)
 
     bool drawDur = lopt(argc, argv, kOptions[kNoDur]) ? false : true;
 
-    GuidoPianoRoll *pianoRoll = GuidoCreatePianoRoll(ReducedProportional);
+    GuidoPianoRoll *pianoRoll = GuidoCreatePianoRoll(reducedProportional);
 
     GuidoErrCode err;
 

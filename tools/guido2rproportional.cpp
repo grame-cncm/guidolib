@@ -203,7 +203,7 @@ int main(int argc, char **argv)
     GuidoErrCode err;
 
 	if (arh) {
-        GuidoPianoRoll *pianoRoll = GuidoCreatePianoRoll(ReducedProportional);
+        GuidoPianoRoll *pianoRoll = GuidoCreatePianoRoll(reducedProportional);
 
         err = GuidoPianoRollSetAR(pianoRoll, arh);
         error(err);
@@ -230,7 +230,7 @@ int main(int argc, char **argv)
         /************************/
 
         /**** VOICES COLOR ****/
-        //err = GuidoPianoRollEnableRandomVoicesColor(pianoRoll, true);
+        //err = GuidoPianoRollEnableAutoVoicesColoration(pianoRoll, true);
         //error(err);
         
         //err = GuidoPianoRollSetColorToVoice(pianoRoll, 1, 255, 0, 0, 100);

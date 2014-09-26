@@ -19,6 +19,7 @@
 #include "ARMusicalVoice.h"
 #include "ARNoteFormat.h"
 #include "VGColor.h"
+#include "GUIDOPianoRollAPI.h"
 
 #ifdef MIDIEXPORT
 #include "MidiShareLight.h"
@@ -46,7 +47,7 @@ public:
     virtual void enableRandomVoicesColor(bool enabled) { fVoicesAutoColored = enabled; }
     virtual void setColorToVoice(int voiceNum, int r, int g, int b, int a);
     virtual void enableMeasureBars(bool enabled) { fMeasureBarsEnabled = enabled; }
-    virtual void setPitchLinesDisplayMode(int mode) { fPitchLinesDisplayMode = mode; }
+    virtual void setPitchLinesDisplayMode(PitchLinesDisplayMode mode) { fPitchLinesDisplayMode = mode; }
 
     bool ownsARMusic();
     bool ownsMidi();
@@ -120,11 +121,10 @@ protected:
     bool  fKeyboardEnabled;         // does the keyboard will be displayed ?
     float fNoteHeight;
     float fUntimedLeftElementWidth; // keyboard width if GuidoPianoRoll,
-                                   // key and armor width if GuidoRProportional
 
     bool fMeasureBarsEnabled;
 
-    int  fPitchLinesDisplayMode;
+    PitchLinesDisplayMode fPitchLinesDisplayMode;
 };
 
 #endif
