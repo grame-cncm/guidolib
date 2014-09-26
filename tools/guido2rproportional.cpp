@@ -195,7 +195,7 @@ int main(int argc, char **argv)
 	GuidoDate start   = ldateopt(argc, argv, kOptions[kStart], defDate);
 	GuidoDate end     = ldateopt(argc, argv, kOptions[kEnd], defDate);
 
-	bool drawdur = lopt(argc, argv, kOptions[kNoDur]) ? false : true;
+	bool drawDur = lopt(argc, argv, kOptions[kNoDur]) ? false : true;
 
 	GuidoParser *parser = GuidoOpenParser();
 	ARHandler    arh    = GuidoFile2AR(parser, argv[1]);
@@ -203,24 +203,24 @@ int main(int argc, char **argv)
     GuidoErrCode err;
 
 	if (arh) {
-        GuidoPianoRoll *pianoRoll = GuidoCreatePianoRoll(true);
+        GuidoPianoRoll *pianoRoll = GuidoCreatePianoRoll(ReducedProportional);
 
-        err = GuidoSetARToPianoRoll(pianoRoll, arh);
+        err = GuidoPianoRollSetAR(pianoRoll, arh);
         error(err);
 
 
         /**** SIZE ****/
-        //err = GuidoSetPianoRollCanvasDimensions(pianoRoll, w, h);
+        //err = GuidoPianoRollSetCanvasDimensions(pianoRoll, w, h);
         //error(err);
         /**************/
         
         /**** TIME LIMITS ****/
-        //err = GuidoSetPianoRollTimeLimits(pianoRoll, start, end);
+        //err = GuidoPianoRollSetTimeLimits(pianoRoll, start, end);
         //error(err);
         /*********************/
 
         /**** PITCH LIMITS ****/
-        //err = GuidoSetPianoRollPitchLimits(pianoRoll, minPitch, maxPitch);
+        //err = GuidoPianoRollSetPitchLimits(pianoRoll, minPitch, maxPitch);
         //error(err);
         /**********************/
 
@@ -244,12 +244,12 @@ int main(int argc, char **argv)
         /**********************/
 
         /**** MEASURE BARS ****/
-        err = GuidoPianoRollEnableMeasureBars(pianoRoll, true);
+        //err = GuidoPianoRollEnableMeasureBars(pianoRoll, true);
         //error(err);
         /**********************/
 
 
-        err = GuidoGetRProportionalRenderingFromAR(pianoRoll, &dev);
+        err = GuidoPianoRollGetRenderingFromAR(pianoRoll, &dev);
         error(err);
 
         GuidoDestroyPianoRoll(pianoRoll);

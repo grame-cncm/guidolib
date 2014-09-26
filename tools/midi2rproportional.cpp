@@ -196,28 +196,28 @@ int main(int argc, char **argv)
 	GuidoDate start   = ldateopt(argc, argv, kOptions[kStart], defDate);
 	GuidoDate end     = ldateopt(argc, argv, kOptions[kEnd],   defDate);
 
-    bool drawdur = lopt(argc, argv, kOptions[kNoDur]) ? false : true;
+    bool drawDur = lopt(argc, argv, kOptions[kNoDur]) ? false : true;
 
-    GuidoPianoRoll *pianoRoll = GuidoCreatePianoRoll(true);
+    GuidoPianoRoll *pianoRoll = GuidoCreatePianoRoll(ReducedProportional);
 
     GuidoErrCode err;
 
-    err = GuidoSetMidiToPianoRoll(pianoRoll, fileName);
+    err = GuidoPianoRollSetMidi(pianoRoll, fileName);
     error(err);
 
 
     /**** SIZE ****/
-    //err = GuidoSetPianoRollCanvasDimensions(pianoRoll, w, h);
+    //err = GuidoPianoRollSetCanvasDimensions(pianoRoll, w, h);
     //error(err);
     /**************/
 
     /**** TIME LIMITS ****/
-    //err = GuidoSetPianoRollTimeLimits(pianoRoll, start, end);
+    //err = GuidoPianoRollSetTimeLimits(pianoRoll, start, end);
     //error(err);
     /*********************/
 
     /**** PITCH LIMITS ****/
-    //err = GuidoSetPianoRollPitchLimits(pianoRoll, minPitch, maxPitch);
+    //err = GuidoPianoRollSetPitchLimits(pianoRoll, minPitch, maxPitch);
     //error(err);
     /**********************/
 
@@ -227,7 +227,7 @@ int main(int argc, char **argv)
     /************************/
 
 
-    err = GuidoGetRProportionalRenderingFromMidi(pianoRoll, &dev);
+    err = GuidoPianoRollGetRenderingFromMidi(pianoRoll, &dev);
     error(err);
 
     GuidoDestroyPianoRoll(pianoRoll);

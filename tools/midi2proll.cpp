@@ -181,26 +181,26 @@ int main(int argc, char **argv)
 	GuidoDate start   = ldateopt(argc, argv, kOptions[kStart], defDate);
 	GuidoDate end     = ldateopt(argc, argv, kOptions[kEnd], defDate);
 
-    GuidoPianoRoll *pianoRoll = GuidoCreatePianoRoll(false);
+    GuidoPianoRoll *pianoRoll = GuidoCreatePianoRoll(SimplePianoRoll);
 
     GuidoErrCode err;
 
-    err = GuidoSetMidiToPianoRoll(pianoRoll, fileName);
+    err = GuidoPianoRollSetMidi(pianoRoll, fileName);
     error(err);
 
 
     /**** SIZE ****/
-    //err = GuidoSetPianoRollCanvasDimensions(pianoRoll, w, h);
+    //err = GuidoPianoRollSetCanvasDimensions(pianoRoll, w, h);
     //error(err);
     /**************/
 
     /**** TIME LIMITS ****/
-    //err = GuidoSetPianoRollTimeLimits(pianoRoll, start, end);
+    //err = GuidoPianoRollSetTimeLimits(pianoRoll, start, end);
     //error(err);
     /*********************/
 
     /**** PITCH LIMITS ****/
-    //err = GuidoSetPianoRollPitchLimits(pianoRoll, minPitch, maxPitch);
+    //err = GuidoPianoRollSetPitchLimits(pianoRoll, minPitch, maxPitch);
     //error(err);
     /**********************/
 
@@ -209,17 +209,17 @@ int main(int argc, char **argv)
     //error(err);
 
     //int keyboardWidth;
-    //err = GuidoGetPianoRollKeyboardWidth(pianoRoll, keyboardWidth);
+    //err = GuidoPianoRollGetKeyboardWidth(pianoRoll, keyboardWidth);
     //error(err);
     /******************/
 
     /**** PITCH LINES ****/
-    //err = GuidoSetPianoRollPitchLinesDisplayMode(pianoRoll, 3);
+    //err = GuidoPianoRollSetPitchLinesDisplayMode(pianoRoll, 3);
     //error(err);
     /*********************/
 
 
-    err = GuidoGetPianoRollRenderingFromMidi(pianoRoll, &dev);
+    err = GuidoPianoRollGetRenderingFromMidi(pianoRoll, &dev);
     error(err);
 
     GuidoDestroyPianoRoll(pianoRoll);

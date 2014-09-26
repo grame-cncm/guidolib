@@ -21,6 +21,14 @@
 class GuidoPianoRoll;
 class GuidoReducedProportional;
 
+/** \brief Bounding boxes drawing control constants.
+*/
+enum PianoRollType {
+	SimplePianoRoll,
+    TrajectoryPianoRoll,
+    ReducedProportional
+};
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -36,12 +44,10 @@ extern "C" {
 
 	/*!
 		\brief Creates a new piano roll
-		\param type the piano roll type : 0 for basic piano roll
-                                          1 for reduced proportional
-                                          2 for trajectory piano roll
+		\param PianoRollType the piano roll type
 		\return a guido piano roll.
 	*/
-	GUIDOAPI(GuidoPianoRoll *)  GuidoCreatePianoRoll(int type);
+	GUIDOAPI(GuidoPianoRoll *)  GuidoCreatePianoRoll(PianoRollType type);
 
 	/*!
 		\brief Destroys a guido piano roll and releases all the associated ressources
@@ -56,7 +62,7 @@ extern "C" {
         \param arh an AR handler
         \return a Guido error code
 	*/
-    GUIDOAPI(GuidoErrCode)      GuidoSetARToPianoRoll(GuidoPianoRoll *pr, ARHandler arh);
+    GUIDOAPI(GuidoErrCode)      GuidoPianoRollSetAR(GuidoPianoRoll *pr, ARHandler arh);
     
 	/*!
 		\brief Sets an midi file to a piano roll
@@ -64,7 +70,7 @@ extern "C" {
         \param midiFileName a midi file name
         \return a Guido error code
 	*/
-    GUIDOAPI(GuidoErrCode)      GuidoSetMidiToPianoRoll(GuidoPianoRoll *pr, const char *midiFileName);
+    GUIDOAPI(GuidoErrCode)      GuidoPianoRollSetMidi(GuidoPianoRoll *pr, const char *midiFileName);
 
 	/*!
 		\brief Sets dimensions to a piano roll
@@ -73,7 +79,7 @@ extern "C" {
         \param height the height of the canvas (-1 to set the default height)
         \return a Guido error code
 	*/
-    GUIDOAPI(GuidoErrCode)      GuidoSetPianoRollCanvasDimensions(GuidoPianoRoll *pr, int width, int height);
+    GUIDOAPI(GuidoErrCode)      GuidoPianoRollSetCanvasDimensions(GuidoPianoRoll *pr, int width, int height);
 
 	/*!
 		\brief Sets time limits to a piano roll
@@ -82,7 +88,7 @@ extern "C" {
         \param end the end date (-0/0 to set the default end date)
         \return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoSetPianoRollTimeLimits(GuidoPianoRoll *pr, GuidoDate start, GuidoDate end);
+	GUIDOAPI(GuidoErrCode)      GuidoPianoRollSetTimeLimits(GuidoPianoRoll *pr, GuidoDate start, GuidoDate end);
 
 	/*!
 		\brief Sets pitch limits to a piano roll (minimum 1 octave)
@@ -91,7 +97,7 @@ extern "C" {
         \param maxPitch the maximal pitch (midi notation) (-1 to set the default maximal pitch)
         \return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoSetPianoRollPitchLimits(GuidoPianoRoll *pr, int minPitch, int maxPitch);
+	GUIDOAPI(GuidoErrCode)      GuidoPianoRollSetPitchLimits(GuidoPianoRoll *pr, int minPitch, int maxPitch);
 
     /*!
 		\brief Sets if duration lines will de drawn (only for a GuidoReducedProportional)
@@ -115,7 +121,7 @@ extern "C" {
         \param keyboardWidth the keyboard width
         \return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoGetPianoRollKeyboardWidth(GuidoPianoRoll *pr, int &keyboardWidth);
+	GUIDOAPI(GuidoErrCode)      GuidoPianoRollGetKeyboardWidth(GuidoPianoRoll *pr, int &keyboardWidth);
 
     /*!
 		\brief Enables or not the automatic voices coloration (if a color is manually set with
@@ -147,7 +153,8 @@ extern "C" {
 	GUIDOAPI(GuidoErrCode)      GuidoPianoRollEnableMeasureBars(GuidoPianoRoll *pr, bool enabled);
     
     /*!
-		\brief Sets the pitch lines display mode : -1 -> automatic
+		\brief Sets the pitch lines display mode (not for GuidoReducedProportional) :
+                                                   -1 -> automatic
                                                     0 -> no pitch lines
                                                     1 -> only C lines
                                                     2 -> only C and G lines
@@ -157,7 +164,7 @@ extern "C" {
 		\param mode an int corresponding to the pitch lines display mode
         \return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoSetPianoRollPitchLinesDisplayMode(GuidoPianoRoll *pr, int mode);
+	GUIDOAPI(GuidoErrCode)      GuidoPianoRollSetPitchLinesDisplayMode(GuidoPianoRoll *pr, int mode);
     
 	/*!
 		\brief Gets a rendered piano roll from AR, writing it on a VGDevice
@@ -165,7 +172,7 @@ extern "C" {
         \param dev the device where the piano will be rendered
         \return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoGetPianoRollRenderingFromAR(GuidoPianoRoll *pr, VGDevice* dev);
+	GUIDOAPI(GuidoErrCode)      GuidoPianoRollGetRenderingFromAR(GuidoPianoRoll *pr, VGDevice* dev);
 
 	/*!
 		\brief Gets a rendered piano roll from midi, writing it on a VGDevice
@@ -173,23 +180,7 @@ extern "C" {
         \param dev the device where the piano will be rendered
         \return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoGetPianoRollRenderingFromMidi(GuidoPianoRoll *pr, VGDevice* dev);
-
-	/*!
-		\brief Gets a rendered reduced proportional from AR, writing it on a VGDevice
-		\param pr a pianoroll previously created with GuidoCreatePianoRoll
-        \param dev the device where the piano will be rendered
-        \return a Guido error code
-	*/
-	GUIDOAPI(GuidoErrCode)      GuidoGetRProportionalRenderingFromAR(GuidoPianoRoll *rp, VGDevice* dev);
-
-	/*!
-		\brief Gets a rendered reduced proportional from midi, writing it on a VGDevice
-		\param pr a pianoroll previously created with GuidoCreatePianoRoll
-        \param dev the device where the piano will be rendered
-        \return a Guido error code
-	*/
-	GUIDOAPI(GuidoErrCode)      GuidoGetRProportionalRenderingFromMidi(GuidoPianoRoll *rp, VGDevice* dev);
+	GUIDOAPI(GuidoErrCode)      GuidoPianoRollGetRenderingFromMidi(GuidoPianoRoll *pr, VGDevice* dev);
 
 /*! @} */
 
