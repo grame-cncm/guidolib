@@ -51,8 +51,8 @@ protected:
     void DrawAllLinksBetweenTwoEvents();
     void DrawLinkBetween(EventInfos leftEvent, EventInfos rightEvent);
 
-	bool handleColor (ARNoteFormat *e);
-	void handleRest  (double date);
+	bool handleColor(ARNoteFormat *e);
+	void handleRest (double date);
 	//void handleEmpty (double date);
 
     double fCurrentDate;

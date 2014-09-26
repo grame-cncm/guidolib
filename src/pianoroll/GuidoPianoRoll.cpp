@@ -613,7 +613,7 @@ void GuidoPianoRoll::DrawMeasureBar(double date) const
 //--------------------------------------------------------------------------
 bool GuidoPianoRoll::handleColor(ARNoteFormat* noteFormat)
 {
-	if (noteFormat) {
+    if (noteFormat) {
 		const TagParameterString *tps = noteFormat->getColor();
 		unsigned char colref[4];
 		
@@ -621,11 +621,6 @@ bool GuidoPianoRoll::handleColor(ARNoteFormat* noteFormat)
             fColors->push(VGColor(colref[0], colref[1], colref[2], colref[3]));
             
             fDev->PushFillColor(fColors->top());
-		}
-		else if (!fColors->empty()) {
-			fDev->PopFillColor();
-
-            fColors->pop();
 		}
 
 		return true;
