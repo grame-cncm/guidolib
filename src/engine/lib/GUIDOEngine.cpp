@@ -80,6 +80,11 @@ using namespace std;
   #include "Guido2ReducedProportional.h"
 #endif
 
+#ifdef JS
+#include "guido2.h"
+#endif
+
+
 // ==========================================================================
 // - Guido Global variables
 // ==========================================================================
@@ -108,6 +113,19 @@ int gBoundingBoxesMap = kNoBB;	// a bits field to control bounding boxes draxing
 // --------------------------------------------------------------------------
 //		- Building abstract and graphic representations -
 // --------------------------------------------------------------------------
+#ifdef JS
+GUIDOAPI(GuidoErrCode) GuidoInitJS()
+{
+	GuidoInitDesc desc;
+
+	VGSystem * gSystem= new SVGSystem(0, reinterpret_cast<char *>(______src_guido2_svg));
+	desc.graphicDevice = gSystem->CreateMemoryDevice(20,20);
+	desc.musicFont = "guido2";
+	desc.textFont  = "Times";
+	GuidoErrCode errcode = GuidoInit (&desc);
+	return errcode;
+}
+#endif
 
 GUIDOAPI(GuidoErrCode) GuidoInit( GuidoInitDesc * desc )
 {
@@ -425,6 +443,16 @@ GUIDOAPI(GuidoErrCode) GuidoAR2PRoll( ARHandler ar, int width, int height, const
 #endif
 }
 
+#ifdef JS
+// --------------------------------------------------------------------------
+GRHandler GuidoAR2GRJS( ARHandler ar, const GuidoLayoutSettings * settings)
+{
+	GRHandler gr;
+	GuidoErrCode err = GuidoAR2GR (ar, settings, &gr);
+	return err ? 0 : gr;
+}
+#endif
+
 // --------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * settings, GRHandler * gr)
 {
@@ -738,6 +766,16 @@ GUIDOAPI(GuidoErrCode) GuidoSVGExport( const GRHandler handle, int page, std::os
 {
   return GuidoSVGExportWithFontSpec( handle, page, out, fontfile, 0);
 }
+
+#ifdef JS
+const char * GuidoSVGExportWithFontSpecJS( const GRHandler handle, int page)
+{
+	static stringstream sstr;
+	sstr.clear();
+	GuidoErrCode err = GuidoSVGExportWithFontSpec (handle, page, sstr, 0, reinterpret_cast<char *>(______src_guido2_svg));
+	return err ? "" : sstr.str().c_str();
+}
+#endif
 
 GUIDOAPI(GuidoErrCode) GuidoSVGExportWithFontSpec( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec)
 {

@@ -251,6 +251,9 @@ representations.
     */
     GUIDOAPI(GuidoErrCode)	GuidoInit(GuidoInitDesc * desc);
 
+#ifdef JS
+	GUIDOAPI(GuidoErrCode)      GuidoInitJS();
+#endif
 	/*!
         Guido Engine shutdown
 		
@@ -300,6 +303,11 @@ representations.
 		\return a Guido error code.
     */
     GUIDOAPI(GuidoErrCode)	GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings* settings, GRHandler* gr);
+
+
+#ifdef JS
+    GRHandler	GuidoAR2GRJS( ARHandler ar, const GuidoLayoutSettings* settings);
+#endif
 
 
 	/*!
@@ -686,6 +694,11 @@ The number of version functions is due to historical reasons.
 		\return otherwise guidoErrActionFailed.
 	*/
     GUIDOAPI(GuidoErrCode) GuidoGetSymbolPath(const ARHandler inHandleAR, std::vector<std::string> &inPathVector);
+
+
+#ifdef JS
+    const char *  GuidoSVGExportWithFontSpecJS( const GRHandler handle, int page );
+#endif
 
 /*! @} */
 
