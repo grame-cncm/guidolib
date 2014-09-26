@@ -468,23 +468,6 @@ void ARFactory::addEvent()
                 mCurrentEvent->setDuration(duration);
                 mCurrentVoice->AddTail( mCurrentEvent );
                 
-                ARNote * note = notes[0];
-                
-                if(notes.size()>1)
-                    createChord();
-                
-                mCurrentVoice->AddTail(note);
-                int i = 1;
-                while(i < notes.size())
-                {
-                    ARNote * chordNote = notes[i];
-                    mCurrentVoice->AddTail(chordNote);
-                    i++;
-                }
-                
-                if(notes.size()>1)
-                    addChord();
-                
                 ARDummyRangeEnd * dummy = new ARDummyRangeEnd("\\dispDurEnd");
                 mCurrentVoice->setPositionTagEndPos(-1,dummy,tmpdspdur1);
             }
@@ -1757,6 +1740,53 @@ void ARFactory::endTag()
                 // then we have to delete the grace (it will be ignored completely)
                 GuidoTrace("Tremolo-tag without range ignored!");
             }
+            
+            //GuidoPos posTrem = mCurrentTremolo->getPosition();
+            GuidoPos lastEventPos = mCurrentVoice->getLastEventPosition();
+            TYPE_TIMEPOSITION timePos;
+            bool found = false;
+            int oct;
+            while(lastEventPos && !found)
+            {
+                ARNote * n = dynamic_cast<ARNote*>(mCurrentVoice->GetPrev(lastEventPos));
+                if(n && n->getPitch())
+                    oct = n->getOctave();
+                if(n && n->getDuration())
+                {
+                    found = true;
+                    Fraction duration = n->getDuration();
+                    Fraction totalDuration = Fraction(n->getDuration().getNumerator()*2, n->getDuration().getDenominator());
+                    std::vector<ARNote*> notes = mCurrentTremolo->createSecondNotes(duration, oct);
+                    if(notes.size()) // if we have at least one note in the vector, we'll have to devide the duration of our main note and adjust the graphical aspect with DisplayDuration
+                    {
+                        ARDisplayDuration * tmpdspdur = new ARDisplayDuration;
+                        tmpdspdur->setDisplayDuration( totalDuration);
+                        mCurrentVoice->AddPositionTag(tmpdspdur);
+                
+                
+                        ARNote * note = notes[0];
+                
+                        if(notes.size()>1)
+                            createChord();
+                
+                        mCurrentVoice->AddTail(note);
+                        int i = 1;
+                        while(i < notes.size())
+                        {
+                            ARNote * chordNote = notes[i];
+                            mCurrentVoice->AddTail(chordNote);
+                            i++;
+                        }
+                
+                        if(notes.size()>1)
+                            addChord();
+                
+                        ARDummyRangeEnd * dummy = new ARDummyRangeEnd("\\dispDurEnd");
+                        mCurrentVoice->setPositionTagEndPos(-1,dummy,tmpdspdur);
+                    }
+                }
+            }
+            
             // then we also delete the dispdur-tag ....
             mCurrentTremolo = NULL;
         }
