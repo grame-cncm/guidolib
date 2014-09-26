@@ -57,8 +57,8 @@ public:
     virtual void getRenderingFromMidi(VGDevice *dev);
 
 protected:
-            void computeNoteHeight();
-            void computeKeyboardWidth();
+            void computeNoteHeight     ();
+            void computeKeyboardWidth  ();
     virtual void initRendering         ();
     virtual void endRendering          ();
 
@@ -71,12 +71,13 @@ protected:
 	virtual void DrawKeyboard          () const;
 	virtual void DrawVoice             (ARMusicalVoice *v);
 	virtual void DrawMusicalObject     (ARMusicalObject *o, TYPE_TIMEPOSITION date, TYPE_DURATION dur);
-	virtual void DrawNote              (int pitch, double date, double dur) const;
+	virtual void DrawNote              (int pitch, double date, double dur);
 	virtual void DrawRect              (int x, int y, double dur) const;
 	virtual void DrawMeasureBar        (double date) const;
 
 	virtual int	 pitch2ypos            (int midipitch) const;
 	virtual bool handleColor           (ARNoteFormat *e);
+	//virtual void handleEmpty           (double date);
 
             void HSVtoRGB              (float h, float s, float v, int &r, int &g, int &b);
 
@@ -100,8 +101,8 @@ protected:
 
     TYPE_TIMEPOSITION fStartDate; // the score start date
     TYPE_TIMEPOSITION fEndDate;   // the score end date
-    bool   fIsEndDateSet;           // is the end date set by user ?
-    double fDuration;      // the time zone duration
+    bool   fIsEndDateSet;         // is the end date set by user ?
+    double fDuration;             // the time zone duration
 
     int  fLowPitch;               // the lower score pitch
     int  fHighPitch;              // the higher score pitch
@@ -111,7 +112,7 @@ protected:
 
     std::vector<std::pair<int, VGColor>> *fVoicesColors; // voices colors that the user set himself
     
-    std::stack<VGColor> *fColors;        // the colors stack (voice color, noteFormat color)
+    std::stack<VGColor> *fColors;  // the colors stack (voice color, noteFormat color)
 
 	bool fChord;                   // a flag to indicate that next note (or rest) is in a chord
     TYPE_DURATION fChordDuration;  // the chord duration (notes in a chord have a null duration)

@@ -36,9 +36,12 @@ extern "C" {
 
 	/*!
 		\brief Creates a new piano roll
+		\param type the piano roll type : 0 for basic piano roll
+                                          1 for reduced proportional
+                                          2 for trajectory piano roll
 		\return a guido piano roll.
 	*/
-	GUIDOAPI(GuidoPianoRoll *)  GuidoCreatePianoRoll(bool forReducedProportional);
+	GUIDOAPI(GuidoPianoRoll *)  GuidoCreatePianoRoll(int type);
 
 	/*!
 		\brief Destroys a guido piano roll and releases all the associated ressources

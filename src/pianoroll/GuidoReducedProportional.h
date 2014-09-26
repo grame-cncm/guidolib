@@ -37,7 +37,7 @@ protected:
     void DrawVoice       (ARMusicalVoice* v);
     void DrawLedgerLines (float x, float y, int n) const;
     void DrawHead        (float x, float y, int alter) const;
-    void DrawNote        (int pitch, double date, double dur) const;
+    void DrawNote        (int pitch, double date, double dur);
 	void DrawRect        (int x, int y, double dur) const;
     void DrawMeter       (ARMeter *meter, int voiceNum, double date) const;
 

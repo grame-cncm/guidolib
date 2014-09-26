@@ -14,15 +14,18 @@
 #include <cmath>
 #include <cstdlib>
 #include <time.h>
+#include <sstream>
 
 #include "ARMusic.h"
 #include "VGDevice.h"
+#include "ARNoteName.h"
 #include "ARRest.h"
 #include "ARNote.h"
 #include "ARBar.h"
 #include "ARChordComma.h"
 #include "ARNoteFormat.h"
 #include "TagParameterString.h"
+#include "FontManager.h"
 
 #ifdef MIDIEXPORT
     #include "midifile.h"
@@ -376,16 +379,65 @@ void GuidoPianoRoll::DrawDiatonicGrid() const
 //--------------------------------------------------------------------------
 void GuidoPianoRoll::DrawKeyboard() const
 {
-    int keyboardBlackNotesWidth = (int) floor(fUntimedLeftElementWidth / 1.5);
+    int keyboardBlackNotesWidth = (int) (fUntimedLeftElementWidth / 1.5);
+
+    /* C notes indication settings */
+    int oct;
+    ostringstream octaveString;
+    std::string cNoteString;
+    
+    NVstring *font = new NVstring("Arial");
+    const VGFont *hTextFont;
+	if (font && font->length() > 0)
+		hTextFont = FontManager::FindOrCreateFont(fNoteHeight, font, new NVstring(""));
+
+	fDev->SetTextFont(hTextFont);
+    /******************************/
 
 	fDev->PushPenWidth(0.8f);
 
-	for (int i = 0; i <= 127; i++) {
+    for (int i = fLowPitch; i <= fHighPitch; i++) {
         int step = i % 12;
-        int y = (int) floor(pitch2ypos(i) + 0.5 * fNoteHeight);
+        int y = (int) (pitch2ypos(i) + 0.5 * fNoteHeight);
         
         switch (step) {
         case 0:
+            if (i == 60) { // Tint C4 note in grey
+                fDev->PushFillColor(VGColor(200, 200, 200));
+
+                float xCoords[6] = {
+                    0,
+                    (float) keyboardBlackNotesWidth,
+                    (float)keyboardBlackNotesWidth,
+                    (float)fUntimedLeftElementWidth,
+                    (float)fUntimedLeftElementWidth,
+                    0
+                };
+
+                float yCoords[6] = {
+                    (float) y - fNoteHeight,
+                    (float) y - fNoteHeight,
+                    (float) (y - 1.5 * fNoteHeight),
+                    (float) (y - 1.5 * fNoteHeight),
+                    (float) y,
+                    (float) y
+                };
+
+                fDev->Polygon(xCoords, yCoords, 6);
+
+                fDev->PopFillColor();
+            }
+            else
+                fDev->Line(0, (float) y, (float) fUntimedLeftElementWidth, (float) y);
+
+            oct = (i - 12) / 12;
+            octaveString.str("");
+            octaveString << oct;
+            cNoteString = "C" + octaveString.str();
+
+            fDev->DrawString((float) fUntimedLeftElementWidth * 0.75f, (float) y - fNoteHeight * 0.4f, cNoteString.c_str(), 2);
+
+            break;
         case 5:
             fDev->Line(0, (float) y, (float) fUntimedLeftElementWidth, (float) y);
             break;
@@ -406,8 +458,8 @@ void GuidoPianoRoll::DrawKeyboard() const
         }
     }
     
-    int yMin = (int) floor(pitch2ypos(0) + 0.5 * fNoteHeight);
-    int yMax = pitch2ypos(127) + fNoteHeight;
+    int yMin = pitch2ypos(fLowPitch) + (int) (0.5 * fNoteHeight);
+    int yMax = pitch2ypos(fHighPitch) + (int) (0.5 * fNoteHeight);
     fDev->Line((float) fUntimedLeftElementWidth, (float) yMin, (float) fUntimedLeftElementWidth, (float) yMax);
 
 	fDev->PopPenWidth();
@@ -439,7 +491,6 @@ void GuidoPianoRoll::DrawVoice(ARMusicalVoice* v)
             fColors->push(VGColor(r, g, b, 255));
         }
         
-        fDev->PushPenColor(fColors->top());
         fDev->PushFillColor(fColors->top());
     }
 
@@ -447,7 +498,7 @@ void GuidoPianoRoll::DrawVoice(ARMusicalVoice* v)
 	ObjectList *ol  = (ObjectList *)v;
 	GuidoPos    pos = ol->GetHeadPosition();
 
-	while(pos)
+	while (pos)
 	{
 		ARMusicalObject  *e    = ol->GetNext(pos);
 		TYPE_DURATION     dur  = e->getDuration();
@@ -478,6 +529,7 @@ void GuidoPianoRoll::DrawVoice(ARMusicalVoice* v)
 			
             DrawMusicalObject(e, date, dur);
 		}
+
 		if (dynamic_cast<ARRest *>(e))
 			fChord = false;
 		else if (dynamic_cast<ARChordComma *>(e))
@@ -490,7 +542,6 @@ void GuidoPianoRoll::DrawVoice(ARMusicalVoice* v)
 
     while (!fColors->empty()) {
 		fDev->PopFillColor();
-		fDev->PopPenColor();
 
         fColors->pop();
 	}
@@ -502,10 +553,10 @@ void GuidoPianoRoll::DrawMusicalObject(ARMusicalObject *e, TYPE_TIMEPOSITION dat
 	ARNote *note = dynamic_cast<ARNote *>(e);
 
 	if (note) {
-		int pitch = note->midiPitch();
+		int pitch  = note->midiPitch();
 
-		if (pitch < 0)
-			fChordDuration = dur; // prepare for potential chord
+        if (pitch < 0)
+            fChordDuration = dur; // prepare for potential chord
         else if (pitch >= fLowPitch && pitch <= fHighPitch) {
 			if (note->getName() != ARNoteName::empty)
 				DrawNote(pitch, double(date), double(dur));
@@ -516,7 +567,7 @@ void GuidoPianoRoll::DrawMusicalObject(ARMusicalObject *e, TYPE_TIMEPOSITION dat
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::DrawNote(int pitch, double date, double dur) const
+void GuidoPianoRoll::DrawNote(int pitch, double date, double dur)
 {
 	int x = date2xpos (date);
 	int y = pitch2ypos(pitch);
@@ -539,8 +590,8 @@ void GuidoPianoRoll::DrawRect(int x, int y, double dur) const
 void GuidoPianoRoll::DrawMeasureBar(double date) const
 {
     int x    = date2xpos(date);
-	int yMin = pitch2ypos(0);   // REM: 0   or fLowPitch ?
-	int yMax = pitch2ypos(127); // REM: 127 or fHighPitch ?
+	int yMin = pitch2ypos(fLowPitch) + (int) (0.5 * fNoteHeight);
+	int yMax = pitch2ypos(fHighPitch) + (int) (0.5 * fNoteHeight);
     
     fDev->PushPenColor(VGColor(0, 0, 0));
     fDev->PushFillColor(VGColor(0, 0, 0));
@@ -563,12 +614,10 @@ bool GuidoPianoRoll::handleColor(ARNoteFormat* noteFormat)
         if (tps && tps->getRGB(colref)) {
             fColors->push(VGColor(colref[0], colref[1], colref[2], colref[3]));
             
-			fDev->PushPenColor(fColors->top());
             fDev->PushFillColor(fColors->top());
 		}
 		else if (!fColors->empty()) {
 			fDev->PopFillColor();
-			fDev->PopPenColor();
 
             fColors->pop();
 		}
@@ -578,6 +627,12 @@ bool GuidoPianoRoll::handleColor(ARNoteFormat* noteFormat)
 
 	return false;
 }
+
+//--------------------------------------------------------------------------
+/*void GuidoPianoRoll::handleEmpty(double date)
+{
+    // REM: TODO ?
+}*/
 
 //--------------------------------------------------------------------------
 int	GuidoPianoRoll::pitch2ypos (int midipitch) const

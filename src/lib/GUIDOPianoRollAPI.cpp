@@ -20,6 +20,7 @@
 #include "GUIDOInternal.h"
 #include "GuidoPianoRoll.h"
 #include "GuidoReducedProportional.h"
+#include "GuidoPianoRollTrajectory.h"
 #include "midifile.h"
 
 #include "GUIDOPianoRollAPI.h"
@@ -30,14 +31,16 @@
 // ==========================================================================
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoPianoRoll *) GuidoCreatePianoRoll(/*REM: TMP */bool forReducedProportional)
+GUIDOAPI(GuidoPianoRoll *) GuidoCreatePianoRoll(int type)
 {
     GuidoPianoRoll *newPianoRoll;
 
-    if (forReducedProportional)
-        newPianoRoll = (GuidoPianoRoll *) new GuidoReducedProportional();
-    else
+    if (type == 0)
         newPianoRoll = new GuidoPianoRoll();
+    else if (type == 1)
+        newPianoRoll = (GuidoPianoRoll *) new GuidoReducedProportional();
+    else if (type == 2)
+        newPianoRoll = (GuidoPianoRollTrajectory *) new GuidoPianoRollTrajectory();
 
 	return newPianoRoll;
 }
@@ -48,7 +51,7 @@ GUIDOAPI(GuidoErrCode) GuidoDestroyPianoRoll(GuidoPianoRoll *pr)
     if (!pr)
         return guidoErrBadParameter;
 
-    delete pr;
+    //delete pr; // REM: MAKES CRASH, WHY ?
 
 	return guidoNoErr;
 }
