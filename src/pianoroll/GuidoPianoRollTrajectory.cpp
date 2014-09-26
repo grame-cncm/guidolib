@@ -126,8 +126,8 @@ void GuidoPianoRollTrajectory::DrawVoice(ARMusicalVoice* v)
 //--------------------------------------------------------------------------
 void GuidoPianoRollTrajectory::DrawNote(int pitch, double date, double dur)
 {
-    int     x     = date2xpos(date);
-    int     y     = pitch2ypos(pitch);
+    float   x     = date2xpos(date);
+    float   y     = pitch2ypos(pitch);
     VGColor color = fColors->empty() ? NULL : fColors->top();
 
     if (fCurrentDate == date)
@@ -155,7 +155,7 @@ void GuidoPianoRollTrajectory::DrawLinks()
 void GuidoPianoRollTrajectory::DrawFinalEvent(double dur)
 {
     if (!currentEventInfos->empty()) {
-        int w = duration2width(dur);
+        float w = duration2width(dur);
 
         for (unsigned int i = 0; i < currentEventInfos->size(); i++) {
             if (!currentEventInfos->at(i).isRest) {
@@ -255,7 +255,7 @@ void GuidoPianoRollTrajectory::handleRest(double date)
     if (!fChord) {
         DrawLinks();
 
-        int x = date2xpos(date);
+        float x = date2xpos(date);
 
         previousEventInfos = new std::vector<EventInfos>(*currentEventInfos);
 
@@ -271,7 +271,7 @@ void GuidoPianoRollTrajectory::handleRest(double date)
 }*/
 
 //--------------------------------------------------------------------------
-GuidoPianoRollTrajectory::EventInfos GuidoPianoRollTrajectory::createNoteInfos(int x, int y, VGColor color)
+GuidoPianoRollTrajectory::EventInfos GuidoPianoRollTrajectory::createNoteInfos(float x, float y, VGColor color)
 {
     EventInfos newNoteInfos;
 
@@ -279,12 +279,12 @@ GuidoPianoRollTrajectory::EventInfos GuidoPianoRollTrajectory::createNoteInfos(i
     newNoteInfos.x      = x;
     newNoteInfos.y      = y;
     newNoteInfos.isRest = false;
-
+    
     return newNoteInfos;
 }
 
 //--------------------------------------------------------------------------
-GuidoPianoRollTrajectory::EventInfos GuidoPianoRollTrajectory::createRestInfos(int x)
+GuidoPianoRollTrajectory::EventInfos GuidoPianoRollTrajectory::createRestInfos(float x)
 {
     EventInfos newRestInfos;
 

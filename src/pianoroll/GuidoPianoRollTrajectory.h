@@ -24,14 +24,14 @@ public:
 
 private:
     typedef struct {
-        int x;
-        int y;
+        float x;
+        float y;
         VGColor color;
         bool isRest;
     } EventInfos;
 
-    EventInfos createNoteInfos(int x, int y, VGColor color);
-    EventInfos createRestInfos(int x);
+    EventInfos createNoteInfos(float x, float y, VGColor color);
+    EventInfos createRestInfos(float x);
 
     /**** Chords ****/
     /* Computes if some rights chords points have several links towards them */

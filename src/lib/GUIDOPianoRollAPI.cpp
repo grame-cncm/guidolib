@@ -167,7 +167,7 @@ GUIDOAPI(GuidoErrCode) GuidoPianoRollEnableKeyboard(GuidoPianoRoll *pr, bool ena
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoPianoRollGetKeyboardWidth(GuidoPianoRoll *pr, int &keyboardWidth)
+GUIDOAPI(GuidoErrCode) GuidoPianoRollGetKeyboardWidth(GuidoPianoRoll *pr, float &keyboardWidth)
 {
     if (!pr || dynamic_cast<GuidoReducedProportional *>(pr))
         return guidoErrBadParameter;

@@ -51,32 +51,32 @@ public:
     bool ownsARMusic();
     bool ownsMidi();
 
-    int getKeyboardWidth() { return fUntimedLeftElementWidth; }
+    float getKeyboardWidth() { return fUntimedLeftElementWidth; }
 
     virtual void getRenderingFromAR(VGDevice *dev);
     virtual void getRenderingFromMidi(VGDevice *dev);
 
 protected:
-            void computeNoteHeight     ();
-            void computeKeyboardWidth  ();
-    virtual void initRendering         ();
-    virtual void endRendering          ();
+            void  computeNoteHeight     ();
+            void  computeKeyboardWidth  ();
+    virtual void  initRendering         ();
+    virtual void  endRendering          ();
 
-	virtual void DrawGrid              () const;
-	virtual void DrawOctavesGrid       () const;
-	virtual void DrawTwoLinesGrid      () const;
-	virtual void DrawChromaticGrid     () const;
-	virtual void DrawDiatonicGrid      () const;
+	virtual void  DrawGrid              () const;
+	virtual void  DrawOctavesGrid       () const;
+	virtual void  DrawTwoLinesGrid      () const;
+	virtual void  DrawChromaticGrid     () const;
+	virtual void  DrawDiatonicGrid      () const;
 
-	virtual void DrawKeyboard          () const;
-	virtual void DrawVoice             (ARMusicalVoice *v);
-	virtual void DrawMusicalObject     (ARMusicalObject *o, TYPE_TIMEPOSITION date, TYPE_DURATION dur);
-	virtual void DrawNote              (int pitch, double date, double dur);
-	virtual void DrawRect              (int x, int y, double dur) const;
-	virtual void DrawMeasureBar        (double date) const;
+	virtual void  DrawKeyboard          () const;
+	virtual void  DrawVoice             (ARMusicalVoice *v);
+	virtual void  DrawMusicalObject     (ARMusicalObject *o, TYPE_TIMEPOSITION date, TYPE_DURATION dur);
+	virtual void  DrawNote              (int pitch, double date, double dur);
+	virtual void  DrawRect              (float x, float y, double dur) const;
+	virtual void  DrawMeasureBar        (double date) const;
 
-	virtual int	 pitch2ypos            (int midipitch) const;
-	virtual bool handleColor           (ARNoteFormat *e);
+	virtual float pitch2ypos            (int midipitch) const;
+	virtual bool  handleColor           (ARNoteFormat *e);
 	//virtual void handleEmpty           (double date);
 
             void HSVtoRGB              (float h, float s, float v, int &r, int &g, int &b);
@@ -86,10 +86,10 @@ protected:
     virtual void DrawMidiSeq (MidiSeqPtr seq, int tpqn);
 #endif
     
-    virtual int	pitchRange     ()           const    { return fHighPitch - fLowPitch + 1;                          }
-    virtual int date2xpos      (double pos) const    { return int((fWidth - fUntimedLeftElementWidth) * (pos - double(fStartDate)) / fDuration + fUntimedLeftElementWidth); }
-    virtual int duration2width (double dur) const	 { return int((fWidth - fUntimedLeftElementWidth) * dur / fDuration);                       }
-	virtual int stepheight     ()           const    { return fHeight / pitchRange();                              }
+    virtual float date2xpos      (double pos) const;
+    virtual float duration2width (double dur) const;
+    virtual int   pitchRange     ()           const  { return fHighPitch - fLowPitch + 1; }
+	virtual float stepheight     ()           const  { return (float) fHeight / (float) pitchRange(); }
 
     ARMusic    *fARMusic;
     const char *fMidiFileName;
@@ -117,9 +117,9 @@ protected:
 	bool fChord;                   // a flag to indicate that next note (or rest) is in a chord
     TYPE_DURATION fChordDuration;  // the chord duration (notes in a chord have a null duration)
 
-    bool fKeyboardEnabled;         // does the keyboard will be displayed ?
-    int  fNoteHeight;
-    int  fUntimedLeftElementWidth; // keyboard width if GuidoPianoRoll,
+    bool  fKeyboardEnabled;         // does the keyboard will be displayed ?
+    float fNoteHeight;
+    float fUntimedLeftElementWidth; // keyboard width if GuidoPianoRoll,
                                    // key and armor width if GuidoRProportional
 
     bool fMeasureBarsEnabled;

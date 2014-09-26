@@ -351,7 +351,7 @@ void GuidoReducedProportional::DrawNote(int pitch, double date, double dur)
 //--------------------------------------------------------------------------
 void GuidoReducedProportional::DrawRect(int x, int y, double dur) const
 {
-	int   w              =   duration2width(dur);
+	float w              =   duration2width(dur);
 	float rectHalfHeight =   fLineHeight / 4;
     float xLeftOffset    =   fLineHeight / 2;
     float xRightOffset   = - fLineHeight / 4;

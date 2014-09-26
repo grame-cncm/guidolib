@@ -121,7 +121,7 @@ extern "C" {
         \param keyboardWidth the keyboard width
         \return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoPianoRollGetKeyboardWidth(GuidoPianoRoll *pr, int &keyboardWidth);
+	GUIDOAPI(GuidoErrCode)      GuidoPianoRollGetKeyboardWidth(GuidoPianoRoll *pr, float &keyboardWidth);
 
     /*!
 		\brief Enables or not the automatic voices coloration (if a color is manually set with
