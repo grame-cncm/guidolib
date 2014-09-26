@@ -38,11 +38,19 @@ cmake \
 -DCMAKE_TOOLCHAIN_FILE=/path/to/toolchain \
 -DCMAKE_BUILD_TYPE=Debug \
 -DINDEPENDENTSVG=yes \
+-DSTATICLIB=yes \
 -G "Unix Makefiles" ../../cmake
 
 The path to your toolchain probably vaguely resembles something like:
 /Users/mikesolomon/devel/emsdk_portable/emscripten/1.16.0/cmake/Platform/Emscripten.cmake
 The toolchain (a .cmake file) should be in your emscripten distribution.
+
+Then, in this directory, run:
+emcc libSGUIDOEngine.a -o libGUIDOEngine.js \
+-s EXPORTED_FUNCTIONS="['_GuidoAbstractExport','_GuidoSVGExport','_GuidoInit','_GuidoOpenParser','_GuidoString2AR','_GuidoCloseParser','_GuidoAR2GR']"
+
+(you can export whatever functions you want from the api in the array above -
+make sure to put the leading underscore!)
 
 Note for Android:
 -------------------------
