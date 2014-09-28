@@ -697,7 +697,7 @@ The number of version functions is due to historical reasons.
 
 
 #ifdef JS
-    const char *  GuidoSVGExportWithFontSpecJS( const GRHandler handle, int page );
+    char *  GuidoSVGExportWithFontSpecJS( const GRHandler handle, int page );
 #endif
 
 /*! @} */

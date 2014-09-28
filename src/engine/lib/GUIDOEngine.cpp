@@ -768,12 +768,17 @@ GUIDOAPI(GuidoErrCode) GuidoSVGExport( const GRHandler handle, int page, std::os
 }
 
 #ifdef JS
-const char * GuidoSVGExportWithFontSpecJS( const GRHandler handle, int page)
+char * GuidoSVGExportWithFontSpecJS( const GRHandler handle, int page)
 {
 	static stringstream sstr;
 	sstr.clear();
 	GuidoErrCode err = GuidoSVGExportWithFontSpec (handle, page, sstr, 0, reinterpret_cast<char *>(______src_guido2_svg));
-	return err ? "" : sstr.str().c_str();
+	if (err) {
+	  return "";
+	}
+	char *out = (char *) malloc(strlen(sstr.str().c_str()) + 1);
+	strcpy(out, sstr.str().c_str());
+	return out;
 }
 #endif
 
