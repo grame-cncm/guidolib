@@ -120,7 +120,7 @@ GUIDOAPI(GuidoErrCode) GuidoInitJS()
 
 	VGSystem * gSystem= new SVGSystem(0, reinterpret_cast<char *>(______src_guido2_svg));
 	desc.graphicDevice = gSystem->CreateMemoryDevice(20,20);
-	desc.musicFont = "guido2";
+	desc.musicFont = "Guido2";
 	desc.textFont  = "Times";
 	GuidoErrCode errcode = GuidoInit (&desc);
 	return errcode;
