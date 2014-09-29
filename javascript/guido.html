@@ -1,0 +1,40 @@
+<html>
+<body>
+<script src="libGUIDOEngine.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+guidoinit = Module.cwrap('GuidoInitJS', 'number', ['number']);
+guidoopenparser = Module.cwrap('GuidoOpenParser', 'number', []);
+guidocloseparser = Module.cwrap('GuidoCloseParser', 'number', ['number']);
+guidostring2ar = Module.cwrap('GuidoString2AR', 'number', ['number', 'string']);
+guidoar2gr = Module.cwrap('GuidoAR2GRJS', 'number', ['number', 'number']);
+guido2svg = Module.cwrap('GuidoSVGExportWithFontSpecJS', 'number', ['number', 'number']);
+guidoreleasecstring = Module.cwrap('GuidoReleaseCStringJS', '', ['number']);
+
+out = guidoinit()
+
+function doit( gmn ) {
+	p=guidoopenparser();
+	//console.log ("parser is " + p );
+	ar = guidostring2ar (p, gmn);
+	//console.log ("ar is " + ar);
+	gr = guidoar2gr (ar, 0);
+	//console.log ("gr is " + gr);
+	svg_n=guido2svg(gr, 1);
+	svg = Pointer_stringify(svg_n);
+	foobar = document.getElementById('foobar');
+	foobar.innerHTML = svg;
+	guidoreleasecstring(svg_n);
+}
+
+</script>
+
+<div id="foobar"></div>
+
+<script type="text/javascript">
+  doit("[f# g# a& b&]");
+</script>
+
+</body>
+
+</html>

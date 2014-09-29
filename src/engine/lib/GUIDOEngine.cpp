@@ -780,6 +780,9 @@ char * GuidoSVGExportWithFontSpecJS( const GRHandler handle, int page)
 	strcpy(out, sstr.str().c_str());
 	return out;
 }
+void  GuidoReleaseCStringJS( char *stringToRelease ) {
+    free(stringToRelease);
+}
 #endif
 
 GUIDOAPI(GuidoErrCode) GuidoSVGExportWithFontSpec( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec)
