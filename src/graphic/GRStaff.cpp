@@ -1537,7 +1537,7 @@ void GRStaff::setStaffFormat(ARStaffFormat * staffrmt)
         mStaffState.lineThickness = mStaffState.curstaffrmt->getLineThickness();
 
         if (mStaffState.curstaffrmt->getDY())
-            mStaffState.yOffset = mStaffState.curstaffrmt->getDY()->getValue();
+            mStaffState.yOffset = - (mStaffState.curstaffrmt->getDY()->getValue());
 	}
 
 	// I have to deal with Size - parameter!
