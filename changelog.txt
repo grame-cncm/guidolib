@@ -4,6 +4,8 @@ GUIDO Engine history
 ----------------------------------------------------------------
 version 1.5.4
 
+- Piano Roll implemented
+- new 'dy' attribute for the \staffFormat-tag to insert an vertical offset
 - conflicts with note durations in the trill : bug solved
 - beams can be applied to grace notes
 
