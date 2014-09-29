@@ -11,6 +11,8 @@
 
 */
 
+#include <math.h>
+
 #include "ARMusic.h"
 #include "ARRest.h"
 #include "ARNoteFormat.h"

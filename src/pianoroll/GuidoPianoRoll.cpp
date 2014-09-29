@@ -13,6 +13,7 @@
 
 #include <cstdlib>
 #include <time.h>
+#include <math.h>
 #include <sstream>
 
 #include "ARMusic.h"
@@ -141,7 +142,7 @@ void GuidoPianoRoll::enableKeyboard(bool enabled)
 void GuidoPianoRoll::setColorToVoice(int voiceNum, int r, int g, int b, int a)
 {
     if (!fVoicesColors)
-        fVoicesColors = new std::vector<std::pair<int, VGColor>>();
+        fVoicesColors = new std::vector<std::pair<int, VGColor> >();
     else {
         for (unsigned int i = 0; i < fVoicesColors->size(); i++) {
             std::pair<int, VGColor> pair = fVoicesColors->at(i);
