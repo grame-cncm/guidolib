@@ -53,19 +53,19 @@ ARTremolo::ARTremolo(const ARTremolo * tremolo)	: ARMTParameter(-1, tremolo)
 
 
 	if(tremolo->fStyle)
-		TagParameterString::cast( tremolo->fStyle->getCopy());
+		fStyle = TagParameterString::cast( tremolo->fStyle->getCopy());
 	if(tremolo->fSpeed)
-		TagParameterInt::cast( tremolo->fSpeed->getCopy());
+		fSpeed = TagParameterInt::cast( tremolo->fSpeed->getCopy());
 	if(tremolo->fPitch)
-		TagParameterString::cast( tremolo->fPitch->getCopy());
+		fPitch = TagParameterString::cast( tremolo->fPitch->getCopy());
 	if(tremolo->dx)
-		TagParameterFloat::cast( tremolo->dx->getCopy());
+		dx = TagParameterFloat::cast( tremolo->dx->getCopy());
 	if(tremolo->dy)
-		TagParameterFloat::cast( tremolo->dy->getCopy());
+		dy = TagParameterFloat::cast( tremolo->dy->getCopy());
 	if(tremolo->fThickness)
-		TagParameterFloat::cast( tremolo->fThickness->getCopy());
+		fThickness = TagParameterFloat::cast( tremolo->fThickness->getCopy());
 	if(tremolo->fText)
-		TagParameterString::cast( tremolo->fText->getCopy());
+		fText = TagParameterString::cast( tremolo->fText->getCopy());
 }
 
 

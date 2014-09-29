@@ -153,6 +153,7 @@ ARFactory::ARFactory()
 	mCurrentStaff(NULL),
 	mCurrentCluster(NULL),
     mCurrentTremolo(NULL),
+    mCurrentChordTag(NULL),
 	mVoiceNum(1),
 	mCurrentTags(0),
 	mVoiceAdded(false),
@@ -314,9 +315,23 @@ void ARFactory::createChord()
 	// now, we have to save the position of the voice...
 	assert(mCurrentVoice);
 
-    mCurrentVoice->BeginChord();
+    if(mCurrentTremolo)
+    {
+        ARMusicalObject * obj = mCurrentVoice->getLastEventPosition() ? mCurrentVoice->GetAt(mCurrentVoice->getLastEventPosition()) : 0;
+        ARNote * prevNote = obj ? dynamic_cast<ARNote*>(obj) : 0;
+        if(prevNote && prevNote->getTremolo() == mCurrentTremolo)
+        {
+            ARTremolo * newTrem = new ARTremolo(mCurrentTremolo);
+            endTag();
+            mTags.AddHead(newTrem);
+            mCurrentVoice->AddPositionTag(newTrem);
+            mCurrentTags++;
+            mCurrentTremolo = newTrem;
+        }
+    }
+    
+    mCurrentChordTag = mCurrentVoice->BeginChord();
 }
-
 // ----------------------------------------------------------------------------
 /** \brief Notifies the current voice that you have finished adding notes
 	to the current chord. 
@@ -361,6 +376,7 @@ void ARFactory::addChord()
 
         mCurrentVoice->FinishChord(false);
     }
+    mCurrentChordTag = NULL;
 }
 
 // ----------------------------------------------------------------------------
@@ -454,6 +470,19 @@ void ARFactory::addEvent()
         ARNote * n = dynamic_cast<ARNote*>(mCurrentEvent);
         if(n)
         {
+            ARMusicalObject * obj = mCurrentVoice->getLastEventPosition() ? mCurrentVoice->GetAt(mCurrentVoice->getLastEventPosition()) : 0;
+            ARNote * prevNote = obj ? dynamic_cast<ARNote*>(obj) : 0;
+            if(prevNote && prevNote->getTremolo() == mCurrentTremolo && !mCurrentChordTag)
+            {
+                ARTremolo * newTrem = new ARTremolo(mCurrentTremolo);
+                endTag();
+                mTags.AddHead(newTrem);
+                mCurrentVoice->AddPositionTag(newTrem);
+                mCurrentTags++;
+                mCurrentTremolo = newTrem;
+            }
+            
+            n->setTremolo(mCurrentTremolo);
             Fraction totalDuration = n->getDuration();
             Fraction duration = Fraction(mCurrentEvent->getDuration().getNumerator(), mCurrentEvent->getDuration().getDenominator()*2);
             

@@ -5404,7 +5404,7 @@ void ARMusicalVoice::removeAutoTags()
 /** This routine must remember the state of the
 	voice (including ptagpos...)
 */
-void ARMusicalVoice::BeginChord()
+ARChordTag * ARMusicalVoice::BeginChord()
 {
 	// we create the empty event first with duration_0
 	// we add the chord-tag...
@@ -5423,6 +5423,8 @@ void ARMusicalVoice::BeginChord()
 
     //	mPosTagList->GetNext(mCurVoiceState->ptagpos);
     chordBeginState = new ARMusicalVoiceState(*mCurVoiceState);
+    
+    return currentChord;
 }
 
 //____________________________________________________________________________________

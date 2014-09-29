@@ -23,6 +23,7 @@ Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
 
 class ARTrill;
 class ARCluster;
+class ARTremolo;
 
 /** \brief Representation of a GUIDO note.
 */
@@ -76,8 +77,10 @@ class ARNote : public ARMusicalEvent
     ARCluster   *getARCluster() 			           	{ return fCluster;}
 
     void setIsLonelyInCluster()                         { fIsLonelyInCluster = true; }
+    void setTremolo(ARTremolo* trem)                    { fTremolo = trem; }
     bool isLonelyInCluster()                            { return fIsLonelyInCluster; }
     bool doesClusterHaveToBeDrawn()                     { return fClusterHaveToBeDrawn; }
+    ARTremolo* getTremolo()                             { return fTremolo; }
 
     int		midiPitch() const;
 
@@ -95,6 +98,7 @@ class ARNote : public ARMusicalEvent
     ARCluster *fCluster;
     bool       fIsLonelyInCluster;
     bool       fClusterHaveToBeDrawn;
+    ARTremolo *fTremolo;
 
     TYPE_TIMEPOSITION	fStartPosition;
 };
