@@ -229,6 +229,16 @@ GUIDOAPI(GuidoErrCode) GuidoPianoRollSetPitchLinesDisplayMode(GuidoPianoRoll *pr
 }
 
 // ------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoPianoRollGetSize(GuidoPianoRoll *pr, int &width, int &height) {
+    if (!pr)
+        return guidoErrBadParameter;
+
+    pr->getSize(width, height);
+
+	return guidoNoErr;
+}
+
+// ------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoPianoRollGetRenderingFromAR(GuidoPianoRoll *pr, VGDevice *dev)
 {
     if (!pr || !dev)

@@ -178,6 +178,15 @@ extern "C" {
 	GUIDOAPI(GuidoErrCode)      GuidoPianoRollSetPitchLinesDisplayMode(GuidoPianoRoll *pr, PitchLinesDisplayMode mode);
     
 	/*!
+		\brief Gets the piano roll total size
+		\param pr a pianoroll previously created with GuidoCreatePianoRoll
+        \param width the piano roll width
+        \param heigt the piano roll height
+        \return a Guido error code
+	*/
+	GUIDOAPI(GuidoErrCode)      GuidoPianoRollGetSize(GuidoPianoRoll *pr, int &width, int &height);
+
+	/*!
 		\brief Gets a rendered piano roll from AR, writing it on a VGDevice
 		\param pr a pianoroll previously created with GuidoCreatePianoRoll
         \param dev the device where the piano will be rendered

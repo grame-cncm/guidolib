@@ -54,7 +54,7 @@ extern "C" {
 		\param gStream a GuidoStream
         \return a std::string.
 	*/
-    GUIDOAPI(const char *) GuidoGetStream (GuidoStream * gStream);
+    GUIDOAPI(const char *)      GuidoGetStream (GuidoStream * gStream);
 
 	/*!
 		\brief Parse a file and create the corresponding AR

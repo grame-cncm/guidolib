@@ -22,6 +22,7 @@
 #include "QGuidoPainter.h"
 #include "GUIDOEngine.h"
 #include "GUIDOParse.h"
+#include "GUIDOPianoRollAPI.h"
 #include "VGColor.h"
 
 #include <QVariant>
@@ -363,6 +364,25 @@ void QGuidoPainter::draw( QPainter * painter , int page , const QRect& drawRecta
 	
 //	qDebug("Score : width = %d , height = %d" , mDesc.sizex , mDesc.sizey );
 //	qDebug("QGuidoPainter: Draw time : %d ms" , time.elapsed() );
+	
+	delete dev;
+	delete sys;
+	
+	painter->restore();
+}
+
+//-------------------------------------------------------------------------
+void QGuidoPainter::drawPianoRoll(QPainter *painter, const QRect& drawRectangle, GuidoPianoRoll *pianoRoll)
+{
+	painter->save();
+	painter->setClipRect(drawRectangle);
+	painter->translate(drawRectangle.x(), drawRectangle.y());
+	
+	//Creation of temporaries Qt implementations of VGSystem & VGDevice.
+	VGSystem * sys = new GSystemQt(painter);
+	VGDevice * dev = sys->CreateDisplayDevice();
+
+    GuidoPianoRollGetRenderingFromAR(pianoRoll, dev);
 	
 	delete dev;
 	delete sys;

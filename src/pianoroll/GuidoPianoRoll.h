@@ -48,6 +48,7 @@ public:
     virtual void setColorToVoice(int voiceNum, int r, int g, int b, int a);
     virtual void enableMeasureBars(bool enabled) { fMeasureBarsEnabled = enabled; }
     virtual void setPitchLinesDisplayMode(PitchLinesDisplayMode mode) { fPitchLinesDisplayMode = mode; }
+    virtual void getSize(int &width, int &height) { width = fWidth; height = fHeight; }
 
     bool ownsARMusic();
     bool ownsMidi();
@@ -97,8 +98,8 @@ protected:
 
     VGDevice *fDev;
     
-    int  fWidth;  // the pianoroll width
-    int  fHeight; // the pianoroll height
+    int fWidth;  // the pianoroll width
+    int fHeight; // the pianoroll height
 
     TYPE_TIMEPOSITION fStartDate; // the score start date
     TYPE_TIMEPOSITION fEndDate;   // the score end date
