@@ -35,8 +35,8 @@ private:
 
     /**** Chords ****/
     /* Computes if some rights chords points have several links towards them */
-    bool GuidoPianoRollTrajectory::isTherePointOverlap(int x, int y);
-    void GuidoPianoRollTrajectory::sortPoints();
+    bool isTherePointOverlap(int x, int y);
+    void sortPoints();
     std::vector<EventInfos> *sortList(std::vector<EventInfos> *listToSort);
     /****************/
 

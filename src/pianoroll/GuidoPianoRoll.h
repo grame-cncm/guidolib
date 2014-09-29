@@ -111,7 +111,7 @@ protected:
     bool   fVoicesAutoColored; // does the user wants voices to be auto colored ?
     double fColorSeed;         // base random color
 
-    std::vector<std::pair<int, VGColor>> *fVoicesColors; // voices colors that the user set himself
+    std::vector<std::pair<int, VGColor> > *fVoicesColors; // voices colors that the user set himself
     
     std::stack<VGColor> *fColors;  // the colors stack (voice color, noteFormat color)
 
