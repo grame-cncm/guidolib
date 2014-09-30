@@ -51,6 +51,7 @@ SVGDevice::SVGDevice(std::ostream& outstream, SVGSystem* system, const char* gui
 	fPendingStrokeColor(0),
 	fBeginDone(false)
 {
+    fTagTypesVector = new std::vector<TagType>();
 }
 
 SVGDevice::~SVGDevice() 
@@ -250,6 +251,8 @@ void SVGDevice::PushPen( const VGColor & color, float width )
 	print(fStream, color);
 	fStream << "; stroke-opacity:" << alpha2float(color) << "; stroke-width:" << width << "\">"; 
 	fEndl++ ;
+
+    fTagTypesVector->push_back(penTag);
 }
 void SVGDevice::PushFillColor( const VGColor & color )
 {
@@ -257,10 +260,15 @@ void SVGDevice::PushFillColor( const VGColor & color )
 	print(fStream, color);
 	fStream << "; fill-opacity:" << alpha2float(color) << ";\">"; 
 	fEndl++ ;
+
+    fTagTypesVector->push_back(fillColorTag);
 }
 
-void SVGDevice::PopPen()			{ closegroup(); }
-void SVGDevice::PopFillColor()		{ closegroup(); }
+void SVGDevice::PopPen() {
+    checkTagsOrder(penTag);
+
+    closegroup();
+}
 
 void SVGDevice::SetRasterOpMode( VRasterOpMode mode)			{ fOpMode = mode; }
 VGDevice::VRasterOpMode SVGDevice::GetRasterOpMode() const		{ return fOpMode; }
@@ -325,13 +333,11 @@ bool SVGDevice::CopyPixels( int xDest, int yDest, int dstWidth, int dstHeight, V
 // - Coordinate services
 //______________________________________________________________________________
 void SVGDevice::SetScale( float x, float y )
-{ 
+{
     if ((x > (1 / fXScale) - 0.01) && (x < (1 / fXScale) + 0.01)       // Ugly but necessary to avoid floating approximations
         && (y > (1 / fYScale) - 0.01) && (y < (1 / fYScale) + 0.01))
     {
-        fXScale = 1;
-        fYScale = 1;
-
+        checkTagsOrder(scaleTag);
         closegroup();
     }
     else
@@ -340,6 +346,8 @@ void SVGDevice::SetScale( float x, float y )
         fXScale = x; fYScale = y;
         fStream << fEndl << "<g transform=\"scale(" << x << ", " << y << ")\">";
         fEndl++;
+
+        fTagTypesVector->push_back(scaleTag);
     }
 }
 
@@ -351,6 +359,8 @@ void SVGDevice::SetOrigin( float x, float y )
 	fXOrigin = x; fYOrigin = y;
 	fEndl++ ;
 	fOffset = true;
+
+    fTagTypesVector->push_back(originTag);
 }
 
 void SVGDevice::OffsetOrigin( float x, float y )	
@@ -429,6 +439,8 @@ void SVGDevice::selectfont (int fonttype)
 
         fEndl++ ;
 		fCurrFont = fonttype;
+
+        fTagTypesVector->push_back(fontTag);
 	}
 }
 
@@ -491,10 +503,10 @@ void SVGDevice::SelectPenColor( const VGColor & color)
 	else fPendingStrokeColor = new VGColor(color);
 }
 
-void SVGDevice::SelectPenWidth( float witdh)
+void SVGDevice::SelectPenWidth( float width)
 {
 	if (fPushedPenWidth) closegroup();
-	PushPenWidth (witdh);
+	PushPenWidth (width);
 	fPushedPenWidth = true;
 }
 
@@ -503,21 +515,52 @@ void SVGDevice::PushPenColor( const VGColor & color)
 	fStream << fEndl << "<g style=\"stroke:";
 	print(fStream, color);
 	fStream << "; stroke-opacity:" << alpha2float(color) << "\">"; 
-	fEndl++ ;
+	fEndl++;
+
+    fTagTypesVector->push_back(penColorTag);
 }
 
 void SVGDevice::PushPenWidth( float width)
 {
 	fStream << fEndl << "<g style=\"stroke-width:" << width << "\">"; 
 	fEndl++ ;
+
+    fTagTypesVector->push_back(penWidthTag);
 }
+
 void SVGDevice::PopPenColor() {
-    checkfont();
+    checkTagsOrder(penColorTag);
     closegroup();
 }
 
 void SVGDevice::PopPenWidth() {
-    checkfont();
+    checkTagsOrder(penWidthTag);
     closegroup();
 }
 
+void SVGDevice::PopFillColor() {
+    checkTagsOrder(fillColorTag);
+    closegroup();
+}
+
+void SVGDevice::checkTagsOrder(TagType tagToClose) {
+    if (!fTagTypesVector->empty() && fTagTypesVector->back() == tagToClose) {
+        if (tagToClose == scaleTag) {
+            fXScale = 1;
+            fYScale = 1;
+        }
+
+        fTagTypesVector->pop_back();
+    }
+    else if (!fTagTypesVector->empty() && fTagTypesVector->back() == fontTag) {
+        checkfont();
+
+        fTagTypesVector->pop_back();
+
+        if (!fTagTypesVector->empty())
+            fTagTypesVector->pop_back();
+    }
+    else {
+        // error ?
+    }
+}
