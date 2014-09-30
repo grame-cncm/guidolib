@@ -222,7 +222,7 @@ std::vector<ARNote*> ARTremolo::createSecondNotes(TYPE_DURATION dur, int oct)
 {
     std::vector<ARNote*> notes;
     int octave = oct;
-    if(fPitch->TagIsSet())
+    if(fPitch && fPitch->TagIsSet())
     {
         std::string pitch = fPitch->getValue();
         int it = 0;
