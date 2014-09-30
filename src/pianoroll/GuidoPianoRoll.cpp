@@ -37,8 +37,8 @@ using namespace std;
 
 #define kDefaultWidth     1024                    // the default canvas width
 #define kDefaultHeight    400                     // the default canvas height
-#define kDefaultLowPitch  0                       // the default canvas width
-#define kDefaultHighPitch 127                     // the default canvas height
+#define kDefaultLowPitch  0                       // the default min pitch
+#define kDefaultHighPitch 127                     // the default max pitch
 #define kDefaultStartDate TYPE_TIMEPOSITION(0, 1) // the default start date
 #define kMainLineWidth    1.6f
 #define kSubMainLineWidth 1.1f
@@ -117,16 +117,9 @@ void GuidoPianoRoll::setLimitDates(GuidoDate start, GuidoDate end)
 //--------------------------------------------------------------------------
 void GuidoPianoRoll::setPitchRange(int minPitch, int maxPitch)
 {
-    if (minPitch == -1)
-        fLowPitch = kDefaultLowPitch;
-    else
-        fLowPitch = minPitch;
+    fLowPitch = minPitch;
+    fHighPitch = maxPitch;
 
-    if (maxPitch == -1)
-        fHighPitch = kDefaultHighPitch;
-    else
-        fHighPitch = maxPitch;
-    
     computeNoteHeight();
 }
 
@@ -179,6 +172,9 @@ bool GuidoPianoRoll::ownsMidi() {
 //--------------------------------------------------------------------------
 void GuidoPianoRoll::getRenderingFromAR(VGDevice *dev)
 {
+    if (fLowPitch == -1 || fHighPitch == -1)
+        initPitchRange();
+
     fDev = dev;
 
     initRendering();
@@ -206,6 +202,9 @@ void GuidoPianoRoll::getRenderingFromAR(VGDevice *dev)
 //--------------------------------------------------------------------------
 void GuidoPianoRoll::getRenderingFromMidi(VGDevice *dev)
 {
+    if (fLowPitch == -1 || fHighPitch == -1)
+        initPitchRange();
+
     fDev = dev;
 
     initRendering();
@@ -715,6 +714,96 @@ void GuidoPianoRoll::HSVtoRGB(float h, float s, float v, int &r, int &g, int &b)
     b = (int) floor((float) bTmp * 256);
 }
 
+//--------------------------------------------------------------------------
+void GuidoPianoRoll::initPitchRange() {
+    int autoLowPitch  = fLowPitch;
+    int autoHighPitch = fHighPitch;
+
+    if (fLowPitch == -1)
+        autoLowPitch = (fARMusic ? detectARExtremePitch(true) : detectMidiExtremePitch(true));
+
+    if (fHighPitch == -1)
+        autoHighPitch = (fARMusic ? detectARExtremePitch(false) : detectMidiExtremePitch(false));
+
+    if (autoHighPitch - autoLowPitch < 11)
+        autoAdjustPitchRange(autoLowPitch, autoHighPitch);
+
+    setPitchRange(autoLowPitch, autoHighPitch);
+}
+
+//--------------------------------------------------------------------------
+int GuidoPianoRoll::detectARExtremePitch(bool detectLowerPitch)
+{
+    bool containsNote = false;
+    int  extremePitch;
+
+    if (detectLowerPitch)
+        extremePitch = 127;
+    else
+        extremePitch = 0;
+
+    GuidoPos pos = fARMusic->GetHeadPosition();
+
+    while(pos) {
+        ARMusicalVoice *voice = fARMusic->GetNext(pos);
+
+        ObjectList *ol  = (ObjectList *)voice;
+        GuidoPos    pos = ol->GetHeadPosition();
+
+        while (pos)
+        {
+            ARMusicalObject *musicalObject = ol->GetNext(pos);
+
+            ARNote *note = dynamic_cast<ARNote *>(musicalObject);
+
+            if (note) {
+                int pitch = note->midiPitch();
+
+                if (detectLowerPitch) {
+                    if (pitch >= 0 && note->getOctave() >= -4 && pitch < extremePitch) {
+                        extremePitch = pitch;
+                        containsNote = true;
+                    }
+                }
+                else {
+                    if (pitch > extremePitch) {
+                        extremePitch = pitch;
+                        containsNote = true;
+                    }
+                }
+            }
+        }
+    }
+
+    if (detectLowerPitch) {
+        if (containsNote)
+        return extremePitch;
+    else
+        return kDefaultLowPitch;
+    }
+    else {
+        if (containsNote)
+        return extremePitch;
+    else
+        return kDefaultHighPitch;
+    }    
+}
+
+//--------------------------------------------------------------------------
+void GuidoPianoRoll::autoAdjustPitchRange(int &lowerPitch, int &higherPitch)
+{
+    int difference = 11 - (higherPitch - lowerPitch);
+
+    if (difference % 2 == 0) {
+        lowerPitch  -= difference / 2;
+        higherPitch += difference / 2;
+    }
+    else {
+        lowerPitch  -= difference / 2;
+        higherPitch += difference / 2 + 1;
+    }
+}
+
 #ifdef MIDIEXPORT
 //--------------------------------------------------------------------------
 // MIDI Piano roll
@@ -824,6 +913,83 @@ void GuidoPianoRoll::DrawFromMidi()
     }
 
     mf.Close();
+}
+
+//--------------------------------------------------------------------------
+int GuidoPianoRoll::detectMidiExtremePitch(bool detectLowerPitch)
+{
+    bool containsNote = false;
+    int  extremePitch;
+
+    if (detectLowerPitch)
+        extremePitch = 127;
+    else
+        extremePitch = 0;
+
+    MIDIFile mf;
+
+    mf.Open(fMidiFileName, MidiFileRead);
+
+    int n    = mf.infos().ntrks; /* get the number of tracks */
+    int tpqn = mf.infos().time;
+    vector<MidiSeqPtr> vseq;
+    long maxTime = 0;
+
+    while (n--) {
+        MidiSeqPtr seq = KeyOnOff2Note(mf.ReadTrack(), mf.midi()); /* read every track */
+
+        if (seq) {
+            vseq.push_back(seq);
+            long t = Date(LastEv(seq));
+
+            if (t > maxTime)
+                maxTime = t;
+        }
+    }
+
+    for (unsigned int i = 0; i < vseq.size(); i++) {
+        MidiSeqPtr seq = vseq[i];
+
+        MidiEvPtr ev = FirstEv(seq);
+
+        while (ev) {
+            if (EvType(ev) == typeNote) {
+                int pitch = Pitch(ev);
+
+                if (detectLowerPitch) {
+                    if (pitch >= 0 && pitch < extremePitch) {
+                        extremePitch = pitch;
+                        containsNote = true;
+                    }
+                }
+                else {
+                    if (pitch > extremePitch) {
+                        extremePitch = pitch;
+                        containsNote = true;
+                    }
+                }
+            }
+
+            ev = Link(ev);
+        }
+
+        mf.midi()->FreeSeq(vseq[i]);
+    }
+
+    mf.Close();
+
+    if (detectLowerPitch) {
+        if (containsNote)
+        return extremePitch;
+    else
+        return kDefaultLowPitch;
+    }
+    else {
+        if (containsNote)
+        return extremePitch;
+    else
+        return kDefaultHighPitch;
+    }  
 }
 
 #endif

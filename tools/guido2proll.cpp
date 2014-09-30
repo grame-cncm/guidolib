@@ -15,8 +15,8 @@ using namespace std;
 
 const int  kDefaultWidth           = 1024;
 const int  kDefaultHeight          = 400;
-const int  kDefaultMinPitch        = 0;
-const int  kDefaultMaxPitch        = 127;
+const int  kDefaultMinPitch        = -1;
+const int  kDefaultMaxPitch        = -1;
 const bool kDefaultKeyboard        = false;
 const bool kDefaultVoicesAutoColor = false;
 const bool kDefaultMeasureBars     = false;
@@ -41,10 +41,10 @@ static void usage(char* name)
     cerr << "                                        trajectory" << endl;
 	cerr << "         -width           value  : set the output width (default is " << kDefaultWidth << ")" << endl;
 	cerr << "         -height          value  : set the output height (default is " << kDefaultHeight << ")" << endl;
-	cerr << "         -start           date   : set time zone start" << endl;
-	cerr << "         -end             date   : set time zone end" << endl;
-    cerr << "         -minpitch        value  : set minimum midi pitch (default is " << kDefaultMinPitch << ")" << endl;
-	cerr << "         -maxpitch        value  : set maximum midi pitch (default is " << kDefaultMaxPitch << ")" << endl;
+	cerr << "         -start           date   : set time zone start (default is 0/0 -> start time is automatically adjusted)" << endl;
+	cerr << "         -end             date   : set time zone end (default is 0/0 -> end time is automatically adjusted)" << endl;
+    cerr << "         -minpitch        value  : set minimum midi pitch (default is " << kDefaultMinPitch << " -> min pitch is automatically adjusted)" << endl;
+	cerr << "         -maxpitch        value  : set maximum midi pitch (default is " << kDefaultMaxPitch << " -> max pitch is automatically adjusted)" << endl;
 	cerr << "         -keyboard        bool   : set if keyboard will be displayed (default is " << kDefaultKeyboard << ")" << endl;
 	cerr << "         -voicesautocolor bool   : set if voices will be auto colored (default is " << kDefaultVoicesAutoColor << ")" << endl;
 	cerr << "         -measurebars     bool   : set if measure bars will be enabled (default is " << kDefaultMeasureBars << ")" << endl;

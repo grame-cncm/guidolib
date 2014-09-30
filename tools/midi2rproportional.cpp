@@ -15,8 +15,8 @@ using namespace std;
 
 const int kDefaultWidth         = 1024;
 const int kDefaultHeight        = 400;
-const int kDefaultMinPitch      = 0;
-const int kDefaultMaxPitch      = 127;
+const int kDefaultMinPitch      = -1;
+const int kDefaultMaxPitch      = -1;
 const bool kDefaultDrawDurLines = false;
 const bool kDefaultMeasureBars  = false;
 
@@ -34,10 +34,10 @@ static void usage (char* name)
 	cerr << "options: -o                  : set the output file (if not, output is standard output)" << endl;
 	cerr << "         -width        value : set the output width (default is " << kDefaultWidth << ")" << endl;
 	cerr << "         -height       value : set the output height (default is " << kDefaultHeight << ")" << endl;
-	cerr << "         -start        date  : set time zone start" << endl;
-	cerr << "         -end          date  : set time zone end" << endl;
-    cerr << "         -minpitch     value : set minimum midi pitch (default is " << kDefaultMinPitch << ")" << endl;
-	cerr << "         -maxpitch     value : set maximum midi pitch (default is " << kDefaultMaxPitch << ")" << endl;
+	cerr << "         -start        date  : set time zone start (default is 0/0 -> start time is automatically adjusted)" << endl;
+	cerr << "         -end          date  : set time zone end (default is 0/0 -> end time is automatically adjusted)" << endl;
+    cerr << "         -minpitch     value : set minimum midi pitch (default is " << kDefaultMinPitch << " -> min pitch is automatically adjusted)" << endl;
+	cerr << "         -maxpitch     value : set maximum midi pitch (default is " << kDefaultMaxPitch << " -> max pitch is automatically adjusted)" << endl;
 	cerr << "         -measurebars  bool  : set if measure bars will be enabled (default is " << kDefaultMeasureBars << ")" << endl;
     cerr << "         -drawdurlines bool  : set if duration lines will be drawn (default is " << kDefaultDrawDurLines << ")" << endl;
     system("PAUSE"); // REM: tmp

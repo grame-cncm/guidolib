@@ -107,8 +107,8 @@ extern "C" {
 	/*!
 		\brief Sets pitch limits to a piano roll (minimum 1 octave)
 		\param pr a pianoroll previously created with GuidoCreatePianoRoll
-		\param minPitch the minimal pitch (midi notation) (-1 to set the default minimal pitch)
-        \param maxPitch the maximal pitch (midi notation) (-1 to set the default maximal pitch)
+		\param minPitch the minimal pitch (midi notation) (-1 to adjust automatically min pitch to the score's minimal pitch)
+        \param maxPitch the maximal pitch (midi notation) (-1 to adjust automatically max pitch to the score's maximal pitch)
         \return a Guido error code
 	*/
 	GUIDOAPI(GuidoErrCode)      GuidoPianoRollSetPitchLimits(GuidoPianoRoll *pr, int minPitch, int maxPitch);

@@ -290,3 +290,48 @@ GuidoPianoRollTrajectory::EventInfos GuidoPianoRollTrajectory::createRestInfos(f
 
     return newRestInfos;
 }
+
+
+#ifdef MIDIEXPORT
+
+//--------------------------------------------------------------------------
+void GuidoPianoRollTrajectory::DrawMidiSeq(MidiSeqPtr seq, int tpqn)
+{
+	MidiEvPtr ev = FirstEv(seq);
+	int tpwn     = tpqn * 4;
+	double start = double(fStartDate);
+	double end   = double(fEndDate);
+    TYPE_DURATION finalDur;
+
+	while (ev) {
+		if (EvType(ev) == typeNote) {
+			double date = double(Date(ev)) / tpwn;
+			double dur  = double(Dur(ev))  / tpwn * 1.25; // REM: I don't know why it works but it does !
+
+            finalDur = (dur ? dur : finalDur);
+
+			if (date >= start) {
+                if (date < end) {
+                    double remain = end - date;
+                    DrawNote(Pitch(ev), date, (dur > remain ? remain : dur));
+                }
+			}
+			else if ((date + dur) > start) {
+				dur -= (start - date);
+				double remain = end - start;
+				DrawNote(Pitch(ev), start, (dur > remain ? remain : dur));
+			}
+		}
+
+		ev = Link(ev);
+	}
+
+    DrawLinks();              // Draws link to final event
+    DrawFinalEvent(finalDur); // Draws link after final event
+
+    previousEventInfos->clear();
+    currentEventInfos->clear();
+    fCurrentDate = 0;
+}
+
+#endif

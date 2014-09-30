@@ -58,33 +58,38 @@ public:
     virtual void getRenderingFromMidi(VGDevice *dev);
 
 protected:
-            void  computeKeyboardWidth  ();
-    virtual void  computeNoteHeight     ();
-    virtual void  initRendering         ();
-    virtual void  endRendering          ();
+            void  computeKeyboardWidth();
+    virtual void  computeNoteHeight   ();
+    virtual void  initRendering       ();
+    virtual void  endRendering        ();
 
-	virtual void  DrawGrid              () const;
-	virtual void  DrawOctavesGrid       () const;
-	virtual void  DrawTwoLinesGrid      () const;
-	virtual void  DrawDiatonicGrid      () const;
-	virtual void  DrawChromaticGrid     () const;
+	virtual void  DrawGrid            () const;
+	virtual void  DrawOctavesGrid     () const;
+	virtual void  DrawTwoLinesGrid    () const;
+	virtual void  DrawDiatonicGrid    () const;
+	virtual void  DrawChromaticGrid   () const;
 
-	virtual void  DrawKeyboard          () const;
-	virtual void  DrawVoice             (ARMusicalVoice *v);
-	virtual void  DrawMusicalObject     (ARMusicalObject *o, TYPE_TIMEPOSITION date, TYPE_DURATION dur);
-	virtual void  DrawNote              (int pitch, double date, double dur);
-	virtual void  DrawRect              (float x, float y, double dur) const;
-	virtual void  DrawMeasureBar        (double date) const;
+	virtual void  DrawKeyboard        () const;
+	virtual void  DrawVoice           (ARMusicalVoice *v);
+	virtual void  DrawMusicalObject   (ARMusicalObject *o, TYPE_TIMEPOSITION date, TYPE_DURATION dur);
+	virtual void  DrawNote            (int pitch, double date, double dur);
+	virtual void  DrawRect            (float x, float y, double dur) const;
+	virtual void  DrawMeasureBar      (double date) const;
 
-	virtual float pitch2ypos            (int midipitch) const;
-	virtual void  handleColor           (ARNoteFormat *e);
-	//virtual void handleEmpty           (double date);
+	virtual float pitch2ypos          (int midipitch) const;
+	virtual void  handleColor         (ARNoteFormat *e);
+	//virtual void handleEmpty        (double date);
 
-            void HSVtoRGB              (float h, float s, float v, int &r, int &g, int &b);
+            void HSVtoRGB             (float h, float s, float v, int &r, int &g, int &b);
+            
+            void initPitchRange        ();
+            int  detectARExtremePitch  (bool detectLowerPitch);
+            void autoAdjustPitchRange  (int &lowerPitch, int &higherPitch); // in the case of pitch range lower than 12
 
 #ifdef MIDIEXPORT
-    virtual void DrawFromMidi();
-    virtual void DrawMidiSeq (MidiSeqPtr seq, int tpqn);
+    virtual void DrawFromMidi          ();
+    virtual void DrawMidiSeq           (MidiSeqPtr seq, int tpqn);
+            int  detectMidiExtremePitch(bool detectLowerPitch);
 #endif
     
     virtual float date2xpos      (double pos) const;

@@ -55,6 +55,8 @@ protected:
 	void handleRest (double date);
 	//void handleEmpty (double date);
 
+    void DrawMidiSeq(MidiSeqPtr seq, int tpqn);
+
     double fCurrentDate;
 
     EventInfos test();
