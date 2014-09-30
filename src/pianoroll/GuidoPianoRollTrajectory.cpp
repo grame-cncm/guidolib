@@ -234,22 +234,16 @@ void GuidoPianoRollTrajectory::DrawLinkBetween(GuidoPianoRollTrajectory::EventIn
 }
 
 //--------------------------------------------------------------------------
-bool GuidoPianoRollTrajectory::handleColor(ARNoteFormat* noteFormat)
+void GuidoPianoRollTrajectory::handleColor(ARNoteFormat* noteFormat)
 {
-	if (noteFormat) {
-		const TagParameterString *tps = noteFormat->getColor();
-		unsigned char colref[4];
-		
-        if (tps && tps->getRGB(colref))
-            fColors->push(VGColor(colref[0], colref[1], colref[2], colref[3]));
-        else if (fVoicesAutoColored && fColors->size() > 1
-            || !fVoicesAutoColored && !fColors->empty())
-            fColors->pop();
+    const TagParameterString *tps = noteFormat->getColor();
+    unsigned char colref[4];
 
-		return true;
-	}
-
-	return false;
+    if (tps && tps->getRGB(colref))
+        fColors->push(VGColor(colref[0], colref[1], colref[2], colref[3]));
+    else if (fVoicesAutoColored && fColors->size() > 1
+        || !fVoicesAutoColored && !fColors->empty())
+        fColors->pop();
 }
 
 //--------------------------------------------------------------------------

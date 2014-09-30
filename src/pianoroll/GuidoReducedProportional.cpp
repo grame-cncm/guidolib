@@ -24,6 +24,7 @@
 #include "VGDevice.h"
 #include "VGSystem.h"
 #include "VGFont.h"
+#include "TagParameterString.h"
 
 using namespace std;
 
@@ -49,20 +50,8 @@ GuidoReducedProportional::GuidoReducedProportional() :
     GuidoPianoRoll(), fDrawDurationLine(true)
 {
 	fNumStaves = 4; // REM: 4 staff - hard coded for the moment
-}
-
-//--------------------------------------------------------------------------
-void GuidoReducedProportional::setCanvasDimensions(int width, int height)
-{
-    if (width == -1)
-        fWidth = kDefaultWidth;
-    else
-        fWidth = width;
-
-    if (height == -1)
-        fHeight = kDefaultHeight;
-    else
-        fHeight = height;
+    
+    computeNoteHeight();
 }
 
 //--------------------------------------------------------------------------
@@ -76,8 +65,6 @@ void GuidoReducedProportional::getRenderingFromAR(VGDevice* dev)
         fEndDate = fARMusic->getDuration();
 
     fDuration = double(fEndDate - fStartDate);
-
-    fLineHeight = float(fHeight) / ((fNumStaves * (kStaffLines - 1)) + ((fNumStaves - 1) * kStaffSpacing) + (kStaffBorder * 2));
 
 	SetMusicFont();
 	DrawGrid();
@@ -100,6 +87,8 @@ void GuidoReducedProportional::getRenderingFromMidi(VGDevice* dev)
     initRendering();
 
 	SetMusicFont();
+
+    DrawGrid();
 
     DrawFromMidi();
 
@@ -143,89 +132,6 @@ void GuidoReducedProportional::DrawGrid() const
 		DrawStaff(i);
 
 	fDev->PopPenWidth();
-}
-
-//--------------------------------------------------------------------------
-void GuidoReducedProportional::DrawVoice(ARMusicalVoice* v)
-{
-    if (fVoicesColors != NULL) {
-        int voiceNum = v->getVoiceNum();
-        
-        for (unsigned int i = 0; i < fVoicesColors->size() && fColors->empty(); i++) {
-            std::pair<int, VGColor> pair = fVoicesColors->at(i);
-
-            if (pair.first == voiceNum)
-                fColors->push(pair.second);
-        }
-    }
-    
-    if (!fColors->empty() || fVoicesAutoColored) {
-        if (fColors->empty()) {
-            int r, g, b;
-
-            fColorSeed += kGoldenRatio;
-            fColorSeed  = fmod(fColorSeed, 1);
-
-            HSVtoRGB((float) fColorSeed, 0.5f, 0.9f, r, g, b);
-
-            fColors->push(VGColor(r, g, b, 255));
-        }
-        
-        fDev->PushPenColor(fColors->top());
-        fDev->PushFillColor(fColors->top());
-    }
-
-    fChord          = false;
-	ObjectList *ol  = (ObjectList *)v;
-	GuidoPos    pos = ol->GetHeadPosition();
-
-	while(pos)
-	{
-		ARMusicalObject  *e    = ol->GetNext(pos);
-		TYPE_DURATION     dur  = e->getDuration();
-		TYPE_TIMEPOSITION date = e->getRelativeTimePosition();
-
-        if (fChord) {
-            dur   = fChordDuration;
-            date -= dur;
-        }
-
-		TYPE_TIMEPOSITION end = date + dur;
-
-		if (date >= fStartDate) {
-            if (date < fEndDate) {
-                if (end > fEndDate)
-                    dur = fEndDate - date;
-
-                DrawMusicalObject(e, date, dur);
-            }
-		}
-		else if (end > fStartDate) { // to make the note end appear
-			date = fStartDate;	
-			
-            if (end > fEndDate)
-                dur = fEndDate - date;
-			else
-                dur = end - date;
-			
-            DrawMusicalObject(e, date, dur);
-		}
-		if (dynamic_cast<ARRest *>(e))
-			fChord = false;
-		else if (dynamic_cast<ARChordComma *>(e))
-			fChord = true;
-		else if (dynamic_cast<ARNoteFormat *>(e))
-            handleColor(dynamic_cast<ARNoteFormat *>(e));
-        else if (dynamic_cast<ARBar *>(e) && fMeasureBarsEnabled)
-            DrawMeasureBar(date);
-	}
-
-    while (!fColors->empty()) {
-		fDev->PopFillColor();
-		fDev->PopPenColor();
-
-        fColors->pop();
-	}
 }
 
 //--------------------------------------------------------------------------
@@ -312,6 +218,90 @@ float GuidoReducedProportional::halfspaces2ypos(int halfspaces, int staff) const
 }
 
 //--------------------------------------------------------------------------
+void GuidoReducedProportional::DrawVoice(ARMusicalVoice* v)
+{
+    if (fVoicesColors != NULL) {
+        int voiceNum = v->getVoiceNum();
+        
+        for (unsigned int i = 0; i < fVoicesColors->size() && fColors->empty(); i++) {
+            std::pair<int, VGColor> pair = fVoicesColors->at(i);
+
+            if (pair.first == voiceNum)
+                fColors->push(pair.second);
+        }
+    }
+    
+    if (!fColors->empty() || fVoicesAutoColored) {
+        if (fColors->empty()) {
+            int r, g, b;
+
+            fColorSeed += kGoldenRatio;
+            fColorSeed  = fmod(fColorSeed, 1);
+
+            HSVtoRGB((float) fColorSeed, 0.5f, 0.9f, r, g, b);
+
+            fColors->push(VGColor(r, g, b, 255));
+        }
+        
+        fDev->PushPenColor(fColors->top());
+        fDev->PushFillColor(fColors->top());
+    }
+
+    fChord   = false;
+	ObjectList *ol  = (ObjectList *)v;
+	GuidoPos    pos = ol->GetHeadPosition();
+
+	while (pos)
+	{
+		ARMusicalObject  *e    = ol->GetNext(pos);
+		TYPE_DURATION     dur  = e->getDuration();
+		TYPE_TIMEPOSITION date = e->getRelativeTimePosition();
+
+        if (fChord) {
+            dur   = fChordDuration;
+            date -= dur;
+        }
+
+		TYPE_TIMEPOSITION end = date + dur;
+
+		if (date >= fStartDate) {
+            if (date < fEndDate) {
+                if (end > fEndDate)
+                    dur = fEndDate - date;
+
+                DrawMusicalObject(e, date, dur);
+            }
+		}
+		else if (end > fStartDate) { // to make the note end appear
+			date = fStartDate;	
+			
+            if (end > fEndDate)
+                dur = fEndDate - date;
+			else
+                dur = end - date;
+			
+            DrawMusicalObject(e, date, dur);
+		}
+
+		if (dynamic_cast<ARRest *>(e))
+			fChord = false;
+		else if (dynamic_cast<ARChordComma *>(e))
+			fChord = true;
+		else if (dynamic_cast<ARNoteFormat *>(e))
+            handleColor(dynamic_cast<ARNoteFormat *>(e));
+        else if (dynamic_cast<ARBar *>(e) && fMeasureBarsEnabled)
+            DrawMeasureBar(date);
+	}
+
+    while (!fColors->empty()) {
+		fDev->PopFillColor();
+		fDev->PopPenColor();
+
+        fColors->pop();
+	}
+}
+
+//--------------------------------------------------------------------------
 void GuidoReducedProportional::DrawHead(float x, float y, int alter) const
 {
     if (!fColors->empty())
@@ -360,4 +350,30 @@ void GuidoReducedProportional::DrawRect(int x, int y, double dur) const
     float yOffset        =   fLineHeight / 8;
 
 	fDev->Rectangle((float) x + xLeftOffset, (float) (y - rectHalfHeight + yOffset), (float) (x + xRightOffset + (w ? w : 1)), (float) (y + rectHalfHeight + yOffset));
+}
+
+//--------------------------------------------------------------------------
+void GuidoReducedProportional::handleColor(ARNoteFormat* noteFormat)
+{
+    const TagParameterString *tps = noteFormat->getColor();
+    unsigned char colref[4];
+
+    if (tps && tps->getRGB(colref)) {
+        fColors->push(VGColor(colref[0], colref[1], colref[2], colref[3]));
+
+        fDev->PushPenColor(fColors->top());
+        fDev->PushFillColor(fColors->top());
+    }
+    else {
+        fColors->pop();
+
+        fDev->PopFillColor();
+        fDev->PopPenColor();
+    }
+}
+
+//--------------------------------------------------------------------------
+void GuidoReducedProportional::computeNoteHeight()
+{
+    fLineHeight = float(fHeight) / ((fNumStaves * (kStaffLines - 1)) + ((fNumStaves - 1) * kStaffSpacing) + (kStaffBorder * 2));
 }

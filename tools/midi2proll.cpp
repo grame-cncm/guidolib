@@ -12,13 +12,17 @@
 
 using namespace std;
 
-const int kDefaultWidth  = 1024;
-const int kDefaultHeight = 400;
-const int kDefaultMinPitch = 0;
-const int kDefaultMaxPitch = 127;
+const int  kDefaultWidth     = 1024;
+const int  kDefaultHeight    = 400;
+const int  kDefaultMinPitch  = 0;
+const int  kDefaultMaxPitch  = 127;
+const bool kDefaultKeyboard = false;
 
-const char* kOptions[] = { "-help", "-o", "-width", "-height", "-start", "-end", "-minpitch", "-maxpitch" };
-enum { kHelp, kOutput, kWidth, kHeight, kStart, kEnd, kMinPitch, kMaxPitch, kMaxOpt };
+const PianoRollType         kDefaultPianoRoll  = simplePianoRoll;
+const PitchLinesDisplayMode kDefaultPitchLines = automatic;
+
+const char* kOptions[] = { "-help", "-o", "-pianoroll", "-width", "-height", "-start", "-end", "-minpitch", "-maxpitch", "-keyboard", "-pitchlines" };
+enum { kHelp, kOutput, kPianoRoll, kWidth, kHeight, kStart, kEnd, kMinPitch, kMaxPitch, kKeyboard, kPitchLines, kMaxOpt };
 
 static void usage(char* name)
 {
@@ -28,13 +32,24 @@ static void usage(char* name)
 	const char* tool = name;
 #endif
 	cerr << "usage: " << tool << " midifile [options] " << endl;
-	cerr << "options: -o              : set the output file (if not, output is standard output)" << endl;
-	cerr << "         -width value    : set the output width (default is " << kDefaultWidth << ")" << endl;
-	cerr << "         -height value   : set the output height (default is " << kDefaultHeight << ")" << endl;
-	cerr << "         -start date     : set time zone start" << endl;
-	cerr << "         -end date       : set time zone end" << endl;
-    cerr << "         -minpitch value : set minimum midi pitch (default is " << kDefaultMinPitch << ")" << endl;
-	cerr << "         -maxpitch value : set maximum midi pitch (default is " << kDefaultMaxPitch << ")" << endl;
+	cerr << "options: -o                 : set the output file (if not, output is standard output)" << endl;
+	cerr << "         -pianoroll  string : set the pianoroll type (default is " << kDefaultPianoRoll << ")" << endl;
+	cerr << "                                   simple" << endl;
+    cerr << "                                   trajectory" << endl;
+	cerr << "         -width      value  : set the output width (default is " << kDefaultWidth << ")" << endl;
+	cerr << "         -height     value  : set the output height (default is " << kDefaultHeight << ")" << endl;
+	cerr << "         -start      date   : set time zone start" << endl;
+	cerr << "         -end        date   : set time zone end" << endl;
+    cerr << "         -minpitch   value  : set minimum midi pitch (default is " << kDefaultMinPitch << ")" << endl;
+	cerr << "         -maxpitch   value  : set maximum midi pitch (default is " << kDefaultMaxPitch << ")" << endl;
+	cerr << "         -keyboard   bool   : set if keyboard will be displayed (default is " << kDefaultKeyboard << ")" << endl;
+	cerr << "         -pitchlines string : set pitch lines display mode (default is " << kDefaultPitchLines << ")" << endl;
+	cerr << "                                   automatic" << endl;
+    cerr << "                                   noline" << endl;
+    cerr << "                                   oneline" << endl;
+    cerr << "                                   twolines" << endl;
+    cerr << "                                   diatonic" << endl;
+    cerr << "                                   chromatic" << endl;
     system("PAUSE"); // REM: tmp
     exit (1);
 }
@@ -126,6 +141,78 @@ static int lintopt(int argc, char **argv, const char* opt, int defaultvalue)
 	return defaultvalue;
 }
 
+static bool lboolopt(int argc, char **argv, const char* opt, bool defaultvalue)
+{
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], opt)) {
+			i++;
+
+			if (i >= argc)
+                usage(argv[0]);
+			else {
+                if (!strcmp(argv[i], "true"))
+                    return true;
+                else
+                    return false;
+            }
+		}
+	}
+
+	return defaultvalue;
+}
+
+static PianoRollType lPianoRollTypeopt(int argc, char **argv, const char* opt, PianoRollType defaultvalue)
+{
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], opt)) {
+			i++;
+
+			if (i >= argc)
+                usage(argv[0]);
+			else {
+                if (!strcmp(argv[i], "simple"))
+                    return simplePianoRoll;
+                else if (!strcmp(argv[i], "trajectory"))
+                    return trajectoryPianoRoll;
+                else
+                    return simplePianoRoll;
+            }
+		}
+	}
+
+	return defaultvalue;
+}
+
+static PitchLinesDisplayMode lPitchLinesopt(int argc, char **argv, const char* opt, PitchLinesDisplayMode defaultvalue)
+{
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], opt)) {
+			i++;
+
+			if (i >= argc)
+                usage(argv[0]);
+			else {
+                if (!strcmp(argv[i], "automatic"))
+                    return automatic;
+                else if (!strcmp(argv[i], "noline"))
+                    return no_line;
+                else if (!strcmp(argv[i], "oneline"))
+                    return one_line;
+                else if (!strcmp(argv[i], "twolines"))
+                    return two_lines;
+                else if (!strcmp(argv[i], "diatonic"))
+                    return diatonic;
+                else if (!strcmp(argv[i], "chromatic"))
+                    return chromatic;
+                else
+                    return automatic;
+            }
+		}
+	}
+
+	return defaultvalue;
+}
+
 static char *getOutputFileOpt(int argc, char **argv)
 {
 	for (int i = 1; i < argc; i++) {
@@ -172,16 +259,20 @@ int main(int argc, char **argv)
 
     const char* fileName = getInputFile(argc, argv);
 	
-	int w        = lintopt(argc, argv, kOptions[kWidth],    kDefaultWidth);
-	int h        = lintopt(argc, argv, kOptions[kHeight],   kDefaultHeight);
-    int minPitch = lintopt(argc, argv, kOptions[kMinPitch], kDefaultMinPitch);
-    int maxPitch = lintopt(argc, argv, kOptions[kMaxPitch], kDefaultMaxPitch);
+	int  w        = lintopt (argc, argv, kOptions[kWidth],    kDefaultWidth);
+	int  h        = lintopt (argc, argv, kOptions[kHeight],   kDefaultHeight);
+    int  minPitch = lintopt (argc, argv, kOptions[kMinPitch], kDefaultMinPitch);
+    int  maxPitch = lintopt (argc, argv, kOptions[kMaxPitch], kDefaultMaxPitch);
+    bool keyboard = lboolopt(argc, argv, kOptions[kKeyboard], kDefaultKeyboard);
+    
+    PianoRollType         pianoRollType = lPianoRollTypeopt(argc, argv, kOptions[kPianoRoll],  kDefaultPianoRoll);
+    PitchLinesDisplayMode pitchLines    = lPitchLinesopt(argc, argv, kOptions[kPitchLines], kDefaultPitchLines);
 
-	GuidoDate defDate = {0, 1};
+	GuidoDate defDate = {0, 0};
 	GuidoDate start   = ldateopt(argc, argv, kOptions[kStart], defDate);
 	GuidoDate end     = ldateopt(argc, argv, kOptions[kEnd], defDate);
 
-    GuidoPianoRoll *pianoRoll = GuidoCreatePianoRoll(simplePianoRoll);
+    GuidoPianoRoll *pianoRoll = GuidoCreatePianoRoll(pianoRollType);
 
     GuidoErrCode err;
 
@@ -190,32 +281,32 @@ int main(int argc, char **argv)
 
 
     /**** SIZE ****/
-    //err = GuidoPianoRollSetCanvasDimensions(pianoRoll, w, h);
-    //error(err);
+    err = GuidoPianoRollSetCanvasDimensions(pianoRoll, w, h);
+    error(err);
     /**************/
 
     /**** TIME LIMITS ****/
-    //err = GuidoPianoRollSetTimeLimits(pianoRoll, start, end);
-    //error(err);
+    err = GuidoPianoRollSetTimeLimits(pianoRoll, start, end);
+    error(err);
     /*********************/
 
     /**** PITCH LIMITS ****/
-    //err = GuidoPianoRollSetPitchLimits(pianoRoll, minPitch, maxPitch);
-    //error(err);
+    err = GuidoPianoRollSetPitchLimits(pianoRoll, minPitch, maxPitch);
+    error(err);
     /**********************/
 
     /**** KEYBOARD ****/
-    //err = GuidoPianoRollEnableKeyboard(pianoRoll, true);
-    //error(err);
+    err = GuidoPianoRollEnableKeyboard(pianoRoll, keyboard);
+    error(err);
 
-    //int keyboardWidth;
-    //err = GuidoPianoRollGetKeyboardWidth(pianoRoll, keyboardWidth);
-    //error(err);
+    float keyboardWidth;
+    err = GuidoPianoRollGetKeyboardWidth(pianoRoll, keyboardWidth);
+    error(err);
     /******************/
 
     /**** PITCH LINES ****/
-    //err = GuidoPianoRollSetPitchLinesDisplayMode(pianoRoll, automatic);
-    //error(err);
+    err = GuidoPianoRollSetPitchLinesDisplayMode(pianoRoll, pitchLines);
+    error(err);
     /*********************/
 
 

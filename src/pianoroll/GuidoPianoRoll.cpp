@@ -209,10 +209,24 @@ void GuidoPianoRoll::getRenderingFromMidi(VGDevice *dev)
     fDev = dev;
 
     initRendering();
+    
+    if (fKeyboardEnabled)
+        DrawKeyboard();
+
+    DrawGrid();
 
     DrawFromMidi();
 
     endRendering();
+}
+
+//--------------------------------------------------------------------------
+void GuidoPianoRoll::computeKeyboardWidth()
+{
+    fUntimedLeftElementWidth = 0;
+
+    if (fKeyboardEnabled)
+        fUntimedLeftElementWidth = 6.0f * fNoteHeight;
 }
 
 //--------------------------------------------------------------------------
@@ -227,27 +241,18 @@ void GuidoPianoRoll::computeNoteHeight()
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::computeKeyboardWidth()
-{
-    fUntimedLeftElementWidth = 0;
-
-    if (fKeyboardEnabled)
-        fUntimedLeftElementWidth = 6.0f * fNoteHeight;
-}
-
-//--------------------------------------------------------------------------
 void GuidoPianoRoll::initRendering()
 {
     fWidth = fWidth + (int) floor(fUntimedLeftElementWidth);
 
     fDev->NotifySize(fWidth, fHeight);
     fDev->BeginDraw();
+
     fDev->PushPenColor(VGColor(100, 100, 100));
     fDev->PushFillColor(VGColor(0, 0, 0));
 
-    if (fVoicesAutoColored) {
+    if (fVoicesAutoColored)
         fColorSeed = 0.5;
-    }
 }
 
 //--------------------------------------------------------------------------
@@ -270,22 +275,22 @@ void GuidoPianoRoll::DrawGrid() const
         else if (fNoteHeight < kLimitDist23Mode)
             DrawTwoLinesGrid();
         else if (fNoteHeight < kLimitDist12)
-            DrawChromaticGrid();
-        else
             DrawDiatonicGrid();
+        else
+            DrawChromaticGrid();
 
         break;
     case one_line:
         DrawOctavesGrid();
         break;
-    case two_line:
+    case two_lines:
         DrawTwoLinesGrid();
-        break;
-    case chromatic:
-        DrawChromaticGrid();
         break;
     case diatonic:
         DrawDiatonicGrid();
+        break;
+    case chromatic:
+        DrawChromaticGrid();
         break;
     }
 
@@ -330,7 +335,7 @@ void GuidoPianoRoll::DrawTwoLinesGrid() const
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::DrawChromaticGrid() const
+void GuidoPianoRoll::DrawDiatonicGrid() const
 {
 	for (int i = fLowPitch; i <= fHighPitch + 1; i++) {
         float y = pitch2ypos(i) + 0.5f * fNoteHeight;
@@ -354,7 +359,7 @@ void GuidoPianoRoll::DrawChromaticGrid() const
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::DrawDiatonicGrid() const
+void GuidoPianoRoll::DrawChromaticGrid() const
 {
 	for (int i = fLowPitch; i <= fHighPitch + 1; i++) {
         float y = pitch2ypos(i) + 0.5f * fNoteHeight;
@@ -612,22 +617,21 @@ void GuidoPianoRoll::DrawMeasureBar(double date) const
 }
 
 //--------------------------------------------------------------------------
-bool GuidoPianoRoll::handleColor(ARNoteFormat* noteFormat)
+void GuidoPianoRoll::handleColor(ARNoteFormat* noteFormat)
 {
-    if (noteFormat) {
-		const TagParameterString *tps = noteFormat->getColor();
-		unsigned char colref[4];
-		
-        if (tps && tps->getRGB(colref)) {
-            fColors->push(VGColor(colref[0], colref[1], colref[2], colref[3]));
-            
-            fDev->PushFillColor(fColors->top());
-		}
+    const TagParameterString *tps = noteFormat->getColor();
+    unsigned char colref[4];
 
-		return true;
-	}
+    if (tps && tps->getRGB(colref)) {
+        fColors->push(VGColor(colref[0], colref[1], colref[2], colref[3]));
 
-	return false;
+        fDev->PushFillColor(fColors->top());
+    }
+    else {
+        fColors->pop();
+
+        fDev->PopFillColor();
+    }
 }
 
 //--------------------------------------------------------------------------
@@ -820,9 +824,6 @@ void GuidoPianoRoll::DrawFromMidi()
     }
 
     mf.Close();
-
-    DrawKeyboard();
-    DrawGrid();
 }
 
 #endif

@@ -25,7 +25,6 @@ public:
              GuidoReducedProportional();
     virtual ~GuidoReducedProportional() {}
 
-    void setCanvasDimensions(int width, int height);
     void enableDurationLines(bool enabled) { fDrawDurationLine = enabled; }
 
     void getRenderingFromAR(VGDevice *dev);
@@ -42,11 +41,14 @@ protected:
     void DrawMeter       (ARMeter *meter, int voiceNum, double date) const;
 
     void SetMusicFont();
+    
+	void  handleColor(ARNoteFormat *e);
 
     int   pitch2staff            (int midipitch) const;                              // gives a staff number for a given midi pitch
     int   pitch2staff            (int midipitch, int& halfspaces, int& alter) const; // gives a staff number for a given midi pitch + position and accidental
     float halfspaces2ypos        (int halfspaces, int staff) const;
     int	  halfSpaces2LedgerLines (int halfspaces) const;
+    void  computeNoteHeight      ();
 
     int   diatonic       (int pitch, int& octave, int& alter) const; // converts a midi pitch in diatonic pitch class + octave and accidental
     float staffTopPos    (int i) const;                              // gives a staff top y position

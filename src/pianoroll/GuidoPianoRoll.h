@@ -34,7 +34,6 @@ class GuidoPianoRoll {
 
 public:
              GuidoPianoRoll();
-             GuidoPianoRoll(TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, int width, int height, int minPitch, int maxPitch);
     virtual ~GuidoPianoRoll();
 
     virtual void setARMusic(ARMusic *arMusic);
@@ -59,16 +58,16 @@ public:
     virtual void getRenderingFromMidi(VGDevice *dev);
 
 protected:
-            void  computeNoteHeight     ();
             void  computeKeyboardWidth  ();
+    virtual void  computeNoteHeight     ();
     virtual void  initRendering         ();
     virtual void  endRendering          ();
 
 	virtual void  DrawGrid              () const;
 	virtual void  DrawOctavesGrid       () const;
 	virtual void  DrawTwoLinesGrid      () const;
-	virtual void  DrawChromaticGrid     () const;
 	virtual void  DrawDiatonicGrid      () const;
+	virtual void  DrawChromaticGrid     () const;
 
 	virtual void  DrawKeyboard          () const;
 	virtual void  DrawVoice             (ARMusicalVoice *v);
@@ -78,7 +77,7 @@ protected:
 	virtual void  DrawMeasureBar        (double date) const;
 
 	virtual float pitch2ypos            (int midipitch) const;
-	virtual bool  handleColor           (ARNoteFormat *e);
+	virtual void  handleColor           (ARNoteFormat *e);
 	//virtual void handleEmpty           (double date);
 
             void HSVtoRGB              (float h, float s, float v, int &r, int &g, int &b);

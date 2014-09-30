@@ -35,9 +35,9 @@ enum PitchLinesDisplayMode {
     automatic,
     no_line,
     one_line,
-    two_line,
-    chromatic,
-    diatonic
+    two_lines,
+    diatonic,
+    chromatic
 };
 
 #ifdef __cplusplus
@@ -54,7 +54,10 @@ extern "C" {
 	//---------------------------------------------------------------------------
 
 	/*!
-		\brief Creates a new piano roll
+		\brief Creates a new piano roll corresponding to type :
+                             simplePianoRoll     -> basic piano roll
+                             trajectoryPianoRoll -> every event is graphically linked to the previous one
+                             reducedProportional -> mix between piano roll (for event timing) and classic score (for graphic display)
 		\param PianoRollType the piano roll type
 		\return a guido piano roll.
 	*/
@@ -95,8 +98,8 @@ extern "C" {
 	/*!
 		\brief Sets time limits to a piano roll
 		\param pr a pianoroll previously created with GuidoCreatePianoRoll
-		\param start the start date (-0/0 to set the default start date)
-        \param end the end date (-0/0 to set the default end date)
+		\param start the start date (0/0 to set the default start date)
+        \param end the end date (0/0 to set the default end date)
         \return a Guido error code
 	*/
 	GUIDOAPI(GuidoErrCode)      GuidoPianoRollSetTimeLimits(GuidoPianoRoll *pr, GuidoDate start, GuidoDate end);
@@ -165,12 +168,12 @@ extern "C" {
     
     /*!
 		\brief Sets the pitch lines display mode (not for GuidoReducedProportional) :
-                                                   -1 -> automatic
-                                                    0 -> no pitch lines
-                                                    1 -> only C lines
-                                                    2 -> only C and G lines
-                                                    3 -> only diatonic scale lines
-                                                    4 -> all lines (chromatic scale) // REM: faire une enum pour ça
+                                                   automatic -> automatic
+                                                   no_line   -> no pitch lines
+                                                   one_line  -> only C lines
+                                                   two_line  -> only C and G lines
+                                                   diatonic  -> only diatonic scale lines
+                                                   chromatic -> all lines
 		\param pr a pianoroll previously created with GuidoCreatePianoRoll
 		\param mode an int corresponding to the pitch lines display mode
         \return a Guido error code

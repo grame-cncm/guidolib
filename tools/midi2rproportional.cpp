@@ -13,13 +13,15 @@
 
 using namespace std;
 
-const int kDefaultWidth    = 1024;
-const int kDefaultHeight   = 400;
-const int kDefaultMinPitch = 0;
-const int kDefaultMaxPitch = 127;
+const int kDefaultWidth         = 1024;
+const int kDefaultHeight        = 400;
+const int kDefaultMinPitch      = 0;
+const int kDefaultMaxPitch      = 127;
+const bool kDefaultDrawDurLines = false;
+const bool kDefaultMeasureBars  = false;
 
-const char* kOptions[] = { "-help", "-o", "-width", "-height", "-start", "-end", "-minpitch", "-maxpitch", "-nodur" };
-enum { kHelp, kOutput, kWidth, kHeight, kStart, kEnd, kMinPitch, kMaxPitch, kNoDur, kMaxOpt };
+const char* kOptions[] = { "-help", "-o", "-width", "-height", "-start", "-end", "-minpitch", "-maxpitch", "-measurebars", "-drawdurlines" };
+enum { kHelp, kOutput, kWidth, kHeight, kStart, kEnd, kMinPitch, kMaxPitch, kMeasureBars, kDrawDurLines, kMaxOpt };
 
 static void usage (char* name)
 {
@@ -29,14 +31,15 @@ static void usage (char* name)
 	const char* tool = name;
 #endif
 	cerr << "usage: " << tool << " midifile [options] " << endl;
-	cerr << "options: -o              : set the output file (if not, output is standard output)" << endl;
-	cerr << "         -width value    : set the output width (default is " << kDefaultWidth << ")" << endl;
-	cerr << "         -height value   : set the output height (default is " << kDefaultHeight << ")" << endl;
-	cerr << "         -start date     : set time zone start" << endl;
-	cerr << "         -end date       : set time zone end" << endl;
-    cerr << "         -minpitch value : set minimum midi pitch (default is " << kDefaultMinPitch << ")" << endl;
-	cerr << "         -maxpitch value : set maximum midi pitch (default is " << kDefaultMaxPitch << ")" << endl;
-	cerr << "         -nodur		  : don't draw duration lines" << endl;
+	cerr << "options: -o                  : set the output file (if not, output is standard output)" << endl;
+	cerr << "         -width        value : set the output width (default is " << kDefaultWidth << ")" << endl;
+	cerr << "         -height       value : set the output height (default is " << kDefaultHeight << ")" << endl;
+	cerr << "         -start        date  : set time zone start" << endl;
+	cerr << "         -end          date  : set time zone end" << endl;
+    cerr << "         -minpitch     value : set minimum midi pitch (default is " << kDefaultMinPitch << ")" << endl;
+	cerr << "         -maxpitch     value : set maximum midi pitch (default is " << kDefaultMaxPitch << ")" << endl;
+	cerr << "         -measurebars  bool  : set if measure bars will be enabled (default is " << kDefaultMeasureBars << ")" << endl;
+    cerr << "         -drawdurlines bool  : set if duration lines will be drawn (default is " << kDefaultDrawDurLines << ")" << endl;
     system("PAUSE"); // REM: tmp
 	exit (1);
 }
@@ -66,10 +69,8 @@ static void checkusage(int argc, char **argv)
                         unknownOpt = false;
                 }
 
-                if (unknownOpt || strcmp(argv[i], "-nodur")) {
-                    if (unknownOpt || i + 1 >= argc || *(argv[i + 1]) == '-')
-                        usage(argv[0]);
-                }
+                if (unknownOpt || i + 1 >= argc || *(argv[i + 1]) == '-')
+                    usage(argv[0]);
             }
         }
     }
@@ -141,6 +142,26 @@ static int lintopt(int argc, char **argv, const char* opt, int defaultvalue)
 	return defaultvalue;
 }
 
+static bool lboolopt(int argc, char **argv, const char* opt, bool defaultvalue)
+{
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], opt)) {
+			i++;
+
+			if (i >= argc)
+                usage(argv[0]);
+			else {
+                if (!strcmp(argv[i], "true"))
+                    return true;
+                else
+                    return false;
+            }
+		}
+	}
+
+	return defaultvalue;
+}
+
 static char *getOutputFileOpt(int argc, char **argv)
 {
 	for (int i = 1; i < argc; i++) {
@@ -187,16 +208,16 @@ int main(int argc, char **argv)
 	
     const char* fileName = getInputFile(argc, argv);
 
-	int w        = lintopt(argc, argv, kOptions[kWidth],    kDefaultWidth);
-	int h        = lintopt(argc, argv, kOptions[kHeight],   kDefaultHeight);
-    int minPitch = lintopt(argc, argv, kOptions[kMinPitch], kDefaultMinPitch);
-    int maxPitch = lintopt(argc, argv, kOptions[kMaxPitch], kDefaultMaxPitch);
+	int  w            = lintopt (argc, argv, kOptions[kWidth],        kDefaultWidth);
+	int  h            = lintopt (argc, argv, kOptions[kHeight],       kDefaultHeight);
+    int  minPitch     = lintopt (argc, argv, kOptions[kMinPitch],     kDefaultMinPitch);
+    int  maxPitch     = lintopt (argc, argv, kOptions[kMaxPitch],     kDefaultMaxPitch);
+    bool measureBars  = lboolopt(argc, argv, kOptions[kMeasureBars],  kDefaultMeasureBars);
+	bool drawDurLines = lboolopt(argc, argv, kOptions[kDrawDurLines], kDefaultDrawDurLines);
 
-	GuidoDate defDate = {0, 1};
+	GuidoDate defDate = {0, 0};
 	GuidoDate start   = ldateopt(argc, argv, kOptions[kStart], defDate);
 	GuidoDate end     = ldateopt(argc, argv, kOptions[kEnd],   defDate);
-
-    bool drawDur = lopt(argc, argv, kOptions[kNoDur]) ? false : true;
 
     GuidoPianoRoll *pianoRoll = GuidoCreatePianoRoll(reducedProportional);
 
@@ -207,23 +228,32 @@ int main(int argc, char **argv)
 
 
     /**** SIZE ****/
-    //err = GuidoPianoRollSetCanvasDimensions(pianoRoll, w, h);
-    //error(err);
+    err = GuidoPianoRollSetCanvasDimensions(pianoRoll, w, h);
+    error(err);
+
+    int width, height;
+    err = GuidoPianoRollGetSize(pianoRoll, width, height);
+    error(err);
     /**************/
 
     /**** TIME LIMITS ****/
-    //err = GuidoPianoRollSetTimeLimits(pianoRoll, start, end);
-    //error(err);
+    err = GuidoPianoRollSetTimeLimits(pianoRoll, start, end);
+    error(err);
     /*********************/
 
     /**** PITCH LIMITS ****/
-    //err = GuidoPianoRollSetPitchLimits(pianoRoll, minPitch, maxPitch);
-    //error(err);
+    err = GuidoPianoRollSetPitchLimits(pianoRoll, minPitch, maxPitch);
+    error(err);
+    /**********************/
+
+    /**** MEASURE BARS ****/
+    err = GuidoPianoRollEnableMeasureBars(pianoRoll, measureBars);
+    error(err);
     /**********************/
 
     /**** DURATION LINES ****/
-    //err = GuidoPianoRollEnableDurationLines(pianoRoll, drawDur);
-    //error(err);
+    err = GuidoPianoRollEnableDurationLines(pianoRoll, drawDurLines);
+    error(err);
     /************************/
 
 
