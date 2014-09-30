@@ -130,19 +130,32 @@ void GRTremolo::tellPosition(GObject * caller, const NVPoint &np)
         pos = np;
         pos.x = textPos.x = sng->getStemStartPos().x;
         GDirection direction = sng->getStemDirection();
-        if(direction == dirUP)
+        float length = 3*LSPACE;
+        if(direction == dirOFF)
         {
-            textPos.y = np.y - (2*LSPACE + sng->getStemLength());
+            textPos.y = np.y > 2*LSPACE ? np.y - (2*LSPACE + length) : np.y + length;
             if(textPos.y > - 2*LSPACE )
                 textPos.y = - 2*LSPACE;
-            pos.y -= LSPACE/2 + sng->getStemLength()/2;
+            if(np.y > 2*LSPACE)
+                pos.y -= LSPACE/2 + length/2;
+            else
+                pos.y += LSPACE/2 + length/2;
+        }
+        else if(direction == dirUP)
+        {
+            length = sng->getStemLength();
+            textPos.y = np.y - (2*LSPACE + length);
+            if(textPos.y > - 2*LSPACE )
+                textPos.y = - 2*LSPACE;
+            pos.y -= LSPACE/2 + length/2;
         }
         else
         {
-            textPos.y = np.y + sng->getStemLength();
+            length = sng->getStemLength();
+            textPos.y = np.y + length;
             if(textPos.y < 4*LSPACE)
                 textPos.y = 4*LSPACE;
-            pos.y += LSPACE/2 + sng->getStemLength()/2;
+            pos.y += LSPACE/2 + length/2;
         }
         pos.y -= (fNumberOfStrokes-1)*fStep/2;
     }
@@ -163,10 +176,29 @@ void GRTremolo::tellPosition(GObject * caller, const NVPoint &np)
         {
             pos = textPos = stem->getStemStartPos();
             GDirection direction = stem->getStemDir();
-            if(direction == dirUP)
+            float upperNoteY = stem->getAssociations()->GetHead()->getPosition().y;
+            float lowerNoteY = stem->getAssociations()->GetTail()->getPosition().y;
+            float realStemLength = 3*LSPACE;
+            if(direction == dirOFF)
             {
-                float upperNoteY = stem->getAssociations()->GetHead()->getPosition().y;
-                float realStemLength = upperNoteY - stem->getStemStartPos().y;
+                if(upperNoteY > 2*LSPACE)
+                {
+                    pos.y = upperNoteY - realStemLength/2 - LSPACE/2;
+                    textPos.y = upperNoteY - realStemLength - 2*LSPACE;
+                    if(textPos.y > -2*LSPACE)
+                        textPos.y = -2*LSPACE;
+                }
+                else
+                {
+                    pos.y = lowerNoteY + realStemLength/2 + LSPACE/2;
+                    textPos.y = lowerNoteY + realStemLength;
+                    if(textPos.y < 4*LSPACE)
+                        textPos.y = 4*LSPACE;
+                }
+            }
+            else if(direction == dirUP)
+            {
+                realStemLength = upperNoteY - stem->getStemStartPos().y;
                 pos.y = upperNoteY - realStemLength/2 - LSPACE/2;
                 textPos.y = upperNoteY - realStemLength - 2*LSPACE;
                 if(textPos.y > -2*LSPACE )
@@ -174,8 +206,7 @@ void GRTremolo::tellPosition(GObject * caller, const NVPoint &np)
             }
             else
             {
-                float lowerNoteY = stem->getAssociations()->GetTail()->getPosition().y;
-                float realStemLength = stem->getStemStartPos().y - lowerNoteY;
+                realStemLength = stem->getStemStartPos().y - lowerNoteY;
                 pos.y = lowerNoteY + realStemLength/2 + LSPACE/2;
                 textPos.y = lowerNoteY + realStemLength;
                 if(textPos.y < 4*LSPACE)
