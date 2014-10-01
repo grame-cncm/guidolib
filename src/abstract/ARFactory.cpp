@@ -111,6 +111,8 @@
 #include "ARGlissando.h"
 #include "ARSymbol.h"
 #include "ARFeatheredBeam.h"
+#include "NoteAndChordFactory.h"
+#include "NoteAndChordParser.h"
 
 #include "TagParameterString.h"
 #include "TagParameterInt.h"
@@ -320,6 +322,7 @@ void ARFactory::createChord()
     {
         GuidoPos lastEventPos = mCurrentVoice->getLastEventPosition();
         bool found = false;
+        // We look for a previous tremolo to close. In this case we copy it and create a new one
         while(lastEventPos && !found)
         {
             ARMusicalObject * obj = mCurrentVoice->getLastEventPosition() ? mCurrentVoice->GetPrev(lastEventPos) : 0;
@@ -478,6 +481,7 @@ void ARFactory::addEvent()
         ARNote * n = dynamic_cast<ARNote*>(mCurrentEvent);
         if(n)
         {
+            // We look for a previous tremolo to close. In this case we copy it and create a new one
             GuidoPos lastEventPos = mCurrentVoice->getLastEventPosition();
             bool found = false;
             while(lastEventPos && !found)
@@ -497,14 +501,15 @@ void ARFactory::addEvent()
                 }
             }
             
+            // We need to store the information in the note, so that the step of detecting the previous tremolo can work
             n->setTremolo(mCurrentTremolo);
-            Fraction totalDuration = n->getDuration();
-            Fraction duration = Fraction(mCurrentEvent->getDuration().getNumerator(), mCurrentEvent->getDuration().getDenominator()*2);
             
-            std::vector<ARNote*> notes = mCurrentTremolo->createSecondNotes(duration, n->getOctave());
-            
-            if(notes.size()) // if we have at least one note in the vector, we'll have to devide the duration of our main note and adjust the graphical aspect with DisplayDuration
+            // If we have a second pitch given by the user, we divide the duration, but keep the graphical aspect of the note
+            if(mCurrentTremolo->isSecondPitchCorrect())
             {
+                Fraction totalDuration = n->getDuration();
+                Fraction duration = Fraction(mCurrentEvent->getDuration().getNumerator(), mCurrentEvent->getDuration().getDenominator()*2);
+                
                 ARDisplayDuration * tmpdspdur1 = new ARDisplayDuration;
                 tmpdspdur1->setDisplayDuration( totalDuration);
                 mCurrentVoice->AddPositionTag(tmpdspdur1);
@@ -1783,12 +1788,13 @@ void ARFactory::endTag()
                 GuidoTrace("Tremolo-tag without range ignored!");
             }
             
-            //GuidoPos posTrem = mCurrentTremolo->getPosition();
             GuidoPos lastEventPos = mCurrentVoice->getLastEventPosition();
             TYPE_TIMEPOSITION timePos;
             bool found = false;
             int oct;
-            while(lastEventPos && !found)
+            
+            // In order to create the possible second pitch, we look for the main note of the tremolo (or one of the main notes, in the case of chord)
+            while(lastEventPos && mCurrentTremolo->isSecondPitchCorrect() && !found)
             {
                 ARNote * n = dynamic_cast<ARNote*>(mCurrentVoice->GetPrev(lastEventPos));
                 if(n && n->getPitch())
@@ -1796,36 +1802,28 @@ void ARFactory::endTag()
                 if(n && n->getDuration())
                 {
                     found = true;
-                    Fraction duration = n->getDuration();
+                    
                     Fraction totalDuration = Fraction(n->getDuration().getNumerator()*2, n->getDuration().getDenominator());
-                    std::vector<ARNote*> notes = mCurrentTremolo->createSecondNotes(duration, oct);
-                    if(notes.size()) // if we have at least one note in the vector, we'll have to devide the duration of our main note and adjust the graphical aspect with DisplayDuration
-                    {
-                        ARDisplayDuration * tmpdspdur = new ARDisplayDuration;
-                        tmpdspdur->setDisplayDuration( totalDuration);
-                        mCurrentVoice->AddPositionTag(tmpdspdur);
-                
-                
-                        ARNote * note = notes[0];
-                
-                        if(notes.size()>1)
-                            mCurrentVoice->BeginChord();
-                
-                        mCurrentVoice->AddTail(note);
-                        int i = 1;
-                        while(i < notes.size())
-                        {
-                            ARNote * chordNote = notes[i];
-                            mCurrentVoice->AddTail(chordNote);
-                            i++;
-                        }
-                
-                        if(notes.size()>1)
-                            mCurrentVoice->FinishChord(false);
-                
-                        ARDummyRangeEnd * dummy = new ARDummyRangeEnd("\\dispDurEnd");
-                        mCurrentVoice->setPositionTagEndPos(-1,dummy,tmpdspdur);
-                    }
+                    ARDisplayDuration * tmpdspdur = new ARDisplayDuration;
+                    tmpdspdur->setDisplayDuration( totalDuration);
+                    mCurrentVoice->AddPositionTag(tmpdspdur);
+                    
+                    NoteAndChordFactory * newFactory = new NoteAndChordFactory();
+                    newFactory->setVoice(mCurrentVoice);
+                    newFactory->setRegister(oct);
+                    newFactory->setNumerator(n->getDuration().getNumerator());
+                    newFactory->setDenominator(n->getDuration().getDenominator());
+                    
+                    NoteAndChordParser * newParser = new NoteAndChordParser();
+                    newParser->setFactory(newFactory);
+                    std::string pitch = mCurrentTremolo->getPitch() ? mCurrentTremolo->getPitch()->getValue() : 0;
+                    pitch.insert(pitch.begin(), 1, '[');
+                    std::stringstream pitchStr(pitch);
+                    newParser->setStream(&pitchStr);
+                    newParser->parseNoteOrChord();
+                    
+                    ARDummyRangeEnd * dummy = new ARDummyRangeEnd("\\dispDurEnd");
+                    mCurrentVoice->setPositionTagEndPos(-1,dummy,tmpdspdur);
                 }
             }
             

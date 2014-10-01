@@ -67,54 +67,54 @@ class ARFactory
 					ARFactory();
      virtual 		~ARFactory();
 
-		void 		createMusic();
-		ARMusic * 	getMusic();
+		virtual void 		createMusic();
+		virtual ARMusic * 	getMusic();
 
-		void 		createVoice();
-		void 		addVoice();
+		virtual void 		createVoice();
+		virtual void 		addVoice();
 
-		void 		createChord();
-		void 		addChord();
+		virtual void 		createChord();
+		virtual void 		addChord();
 
-	  	void 		initChordNote();
+	  	virtual void 		initChordNote();
 
-		void 		createEvent( const char * name );
-		void 		addEvent();
+		virtual void 		createEvent( const char * name );
+		virtual void 		addEvent();
 
-		void 		addSharp();
-		void 		addFlat();
+		virtual void 		addSharp();
+		virtual void 		addFlat();
 
-		void		setPoints( int pointCount );
-		void 		setAccidentals( TYPE_ACCIDENTALS accidentals );
+		virtual void		setPoints( int pointCount );
+		virtual void 		setAccidentals( TYPE_ACCIDENTALS accidentals );
 
-		void 		setRegister(TYPE_REGISTER newRegister);
+		virtual void 		setRegister(TYPE_REGISTER newRegister);
 
-		void 		setNumerator(int newNumerator);
-		void 		setDenominator(int newDenominator);
+		virtual void 		setNumerator(int newNumerator);
+		virtual void 		setDenominator(int newDenominator);
 
-		void 		createTag( TYPE_TAG_NAME_CONST name, int no = -1) ;
+		virtual void 		createTag( TYPE_TAG_NAME_CONST name, int no = -1) ;
 
 					// manages the tag-range. will be called if the tag has a range
-		void 		tagRange();
+		virtual void 		tagRange();
 
 					// for the closing bracket ")"
 					// the last tag will be popped from the stack and added
 					// to the current voice
-		void 		endTag();
-		void 		addTag();
+		virtual void 		endTag();
+		virtual void 		addTag();
 
 
 
-		void 		addTagParameter( const char * parameter );
-		void 		addTagParameter( TYPE_TAGPARAMETER_INT parameter );
-		void 		addTagParameter( TYPE_TAGPARAMETER_REAL parameter );
-		void 		setTagParameterList( TagParameterList theTagParameterList );
+		virtual void 		addTagParameter( const char * parameter );
+		virtual void 		addTagParameter( TYPE_TAGPARAMETER_INT parameter );
+		virtual void 		addTagParameter( TYPE_TAGPARAMETER_REAL parameter );
+		virtual void 		setTagParameterList( TagParameterList theTagParameterList );
 
-	  	float 		UndoTransform( const float val );
-	  	void 		setParameterName( const char * name );
-	  	void 		setUnit( const char * s );
+	  	virtual float 		UndoTransform( const float val );
+	  	virtual void 		setParameterName( const char * name );
+	  	virtual void 		setUnit( const char * s );
 
-        void        setFilePath(const char* inFilePath) { mFilePath = inFilePath; }
+        virtual void        setFilePath(const char* inFilePath) { mFilePath = inFilePath; }
   	
   private:
 

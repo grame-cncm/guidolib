@@ -218,89 +218,31 @@ bool ARTremolo::MatchEndTag(const char * s)
 }
 
 // -----------------------------------------------------------------------------
-std::vector<ARNote*> ARTremolo::createSecondNotes(TYPE_DURATION dur, int oct)
+bool ARTremolo::isSecondPitchCorrect()
 {
-    std::vector<ARNote*> notes;
-    int octave = oct;
+    bool isReadable = false;
     if(fPitch && fPitch->TagIsSet())
     {
         std::string pitch = fPitch->getValue();
         int it = 0;
         char c = pitch[it];
+        
         if(c == '{')
             it++;
         
-        while(it < pitch.size())
+        if(it < pitch.size())
         {
             c = pitch[it];
-            int pitchInt = 0;
-            if(c == 'a')
-                pitchInt = NOTE_A;
-            else if(c == 'b')
-                pitchInt = NOTE_H;
-            else if(c == 'c')
-                pitchInt = NOTE_C;
-            else if(c == 'd')
-                pitchInt = NOTE_D;
-            else if(c == 'e')
-                pitchInt = NOTE_E;
-            else if(c == 'f')
-                pitchInt = NOTE_F;
-            else if(c == 'g')
-                pitchInt = NOTE_G;
-            else if(c == 'h')
-                pitchInt = NOTE_H;
+            std::string possibleChars = "abcdefgh";
+            if(possibleChars.find(c) != std::string::npos)
+                isReadable = true;
             else
-                pitchInt = EMPTY;
-        
-        
-            if(pitchInt != EMPTY)
             {
-                ARNote * note = new ARNote(dur);
-                //if(notes.empty()) // if it is the first note we add, we set its duration, otherwise it is a chord and the other notes have no duration
-                  //  note->setDuration(dur);
-                note->setPitch(pitchInt);
-            
-                it++;
-                c = pitch[it];
-                if(c == '#')
-                {
-                    note->setAccidentals(ARMusicalVoice::SHARP);
-                    it++;
-                }
-                else if (c == '&')
-                {
-                    note->setAccidentals(ARMusicalVoice::FLAT);
-                    it++;
-                }
-                else
-                    note->setAccidentals(ARMusicalVoice::NATURAL);
-            
-                c = pitch[it];
-                std::string octStr;
-                std::string possibleOct = "0123456789";
-                if(c == '-')
-                {
-                    octStr.push_back(c);
-                    it++;
-                    c = pitch[it];
-                }
-                while(c && possibleOct.find(c) != std::string::npos)
-                {
-                    octStr.push_back(c);
-                    it++;
-                    c = pitch[it];
-                }
-                
-                if(octStr.size())
-                    octave = atoi( octStr.c_str() );
-                    
-                note->setOctave(octave);
-        
-                notes.push_back(note);
+                char c2 = pitch[it+1];
+                if((c == 'r' && c2 == 'e') || ((c == 'm' || c == 't') && c2 == 'i') || (c == 'l' && c2 == 'a') || (c == 's' && (c2 == 'i' || (c2 == 'o' && pitch[it+2] == 'l'))))
+                    isReadable = true;
             }
-            it++;
         }
     }
-    return notes;
+    return isReadable;
 }

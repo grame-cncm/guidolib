@@ -57,14 +57,13 @@ GRTremolo::GRTremolo( GRStaff * stf, ARTremolo * artrem )
     else // default
         fNumberOfStrokes = 3;
     
-    fPitch = artrem->getPitch() ? artrem->getPitch()->getValue() : "";
-    if(fPitch != "")
+    if(artrem->isSecondPitchCorrect())
         isTwoNotesTremolo = true;
     
     fText = artrem->getText() ? artrem->getText()->getValue() : "";
     fThickness = artrem->getThickness() ? artrem->getThickness()->getValue() : LSPACE/2;
     dx = artrem->getDx() ? artrem->getDx()->getValue() : 0;
-    dy = artrem->getDy() ? artrem->getDy()->getValue() : 0;
+    dy = artrem->getDy() ? (-1) * artrem->getDy()->getValue() : 0;
     
 }
 

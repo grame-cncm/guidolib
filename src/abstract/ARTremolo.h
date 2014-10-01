@@ -47,7 +47,7 @@ public:
 	const TagParameterFloat * getThickness() const	{ return fThickness; }
 	const TagParameterString * getText() const	{ return fText; }
     
-    std::vector<ARNote*> createSecondNotes(TYPE_DURATION dur, int oct);
+    bool isSecondPitchCorrect();
 
 	// routines to access TagParameters ..
 	virtual void print() const;
