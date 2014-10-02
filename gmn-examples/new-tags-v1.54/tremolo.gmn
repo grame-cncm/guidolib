@@ -12,13 +12,13 @@
 %       - thickness (modify the thickness)
 %       - text (optional text written above the note)
 {
-[
-\meter<"2/4"> \tremolo<style="//", pitch="c">(e)  \trem<pitch="{e,a}", text="trem">(g) 
-\tremolo<dx=-1>({a, f}) \trem<style="/", dx=1>({e2, g})
-]
+	[
+		\meter<"2/4"> \tremolo<style="//", pitch="c">(e)  \trem<pitch="{e,a}", text="trem">(g) 
+		\tremolo<dx=-1>({a, f}) \trem<style="/", dx=1>({e2, g})
+	]
 ,
-[
-\meter<"2/4"> \clef<"f"> \trem<pitch="{d,f}",thickness=0.5>({e0/2,g}) 
-\trem<style="////">({c,e,g})
-]
+	[
+		\meter<"2/4"> \clef<"f"> \trem<pitch="{d,f}",thickness=0.5>({e0/2,g}) 
+		\trem<style="////">({c,e,g})
+	]
 }
