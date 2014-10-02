@@ -38,6 +38,14 @@ class NoteAndChordParser : public GuidoParser {
 		
 		void parseNoteOrChord();
     
+        // We ignore the durations
+		virtual void noteEnum		(long int n){}
+		virtual void noteDenom		(long int n){}
+		virtual void noteDot		(){}
+		virtual void noteDdot		(){}
+		virtual void noteTdot		(){}
+		virtual void noteAbsDur		(long int n){}
+    
         void seqInit		(){}
 		void seqExit		(){}
 
@@ -45,6 +53,7 @@ class NoteAndChordParser : public GuidoParser {
 		void segmExit		(){}
 		void segmAppendSeq	(){}
 
+        // We ignore the tags
 		void tagStart		(const char* id, long int no){}
 		void tagIntArg		(long int n){}
 		void tagFloatArg	(double r){}

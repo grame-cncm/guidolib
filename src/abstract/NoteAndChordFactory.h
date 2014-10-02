@@ -65,7 +65,7 @@ class NoteAndChordFactory : public ARFactory
 	  	virtual void 		setParameterName( const char * name ){}
 	  	virtual void 		setUnit( const char * s ){}
 
-        virtual void        setRegister(TYPE_REGISTER newRegister){mCurrentRegister = newRegister;}
+        virtual void        setRegister(TYPE_REGISTER newRegister);
 
 		virtual void 		setNumerator(int newNumerator);
 		virtual void 		setDenominator(int newDenominator);

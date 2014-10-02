@@ -108,6 +108,13 @@ void NoteAndChordFactory::initChordNote()
         mCurrentVoice->initChordNote();
 }
 
+void NoteAndChordFactory::setRegister(TYPE_REGISTER newRegister)
+{
+    mCurrentRegister = newRegister;
+    ARNote * note = mCurrentEvent ? dynamic_cast<ARNote*>(mCurrentEvent) : 0;
+    if(note)
+        note->setRegister(newRegister);
+}
 
 // ----------------------------------------------------------------------------
 void NoteAndChordFactory::createEvent( const char * name )
