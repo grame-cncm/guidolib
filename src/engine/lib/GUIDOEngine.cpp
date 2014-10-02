@@ -80,9 +80,8 @@ using namespace std;
   #include "Guido2ReducedProportional.h"
 #endif
 
-#ifdef JS
+// for embedding of SVG
 #include "guido2.h"
-#endif
 
 
 // ==========================================================================
@@ -113,8 +112,8 @@ int gBoundingBoxesMap = kNoBB;	// a bits field to control bounding boxes draxing
 // --------------------------------------------------------------------------
 //		- Building abstract and graphic representations -
 // --------------------------------------------------------------------------
-#ifdef JS
-GUIDOAPI(GuidoErrCode) GuidoInitJS()
+
+GUIDOAPI(GuidoErrCode) GuidoInitWithIndependentSVG()
 {
 	GuidoInitDesc desc;
 
@@ -125,7 +124,6 @@ GUIDOAPI(GuidoErrCode) GuidoInitJS()
 	GuidoErrCode errcode = GuidoInit (&desc);
 	return errcode;
 }
-#endif
 
 GUIDOAPI(GuidoErrCode) GuidoInit( GuidoInitDesc * desc )
 {
@@ -443,15 +441,13 @@ GUIDOAPI(GuidoErrCode) GuidoAR2PRoll( ARHandler ar, int width, int height, const
 #endif
 }
 
-#ifdef JS
 // --------------------------------------------------------------------------
-GRHandler GuidoAR2GRJS( ARHandler ar, const GuidoLayoutSettings * settings)
+GRHandler GuidoARretGR( ARHandler ar, const GuidoLayoutSettings * settings)
 {
 	GRHandler gr;
 	GuidoErrCode err = GuidoAR2GR (ar, settings, &gr);
 	return err ? 0 : gr;
 }
-#endif
 
 // --------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * settings, GRHandler * gr)
@@ -767,23 +763,21 @@ GUIDOAPI(GuidoErrCode) GuidoSVGExport( const GRHandler handle, int page, std::os
   return GuidoSVGExportWithFontSpec( handle, page, out, fontfile, 0);
 }
 
-#ifdef JS
-char * GuidoSVGExportWithFontSpecJS( const GRHandler handle, int page)
+char * GuidoSVGExportWithFontSpec_retCString( const GRHandler handle, int page)
 {
 	static stringstream sstr;
 	sstr.clear();
 	GuidoErrCode err = GuidoSVGExportWithFontSpec (handle, page, sstr, 0, reinterpret_cast<char *>(______src_guido2_svg));
 	if (err) {
-	  return "";
+	  return 0;
 	}
 	char *out = (char *) malloc(strlen(sstr.str().c_str()) + 1);
 	strcpy(out, sstr.str().c_str());
 	return out;
 }
-void  GuidoReleaseCStringJS( char *stringToRelease ) {
+void  GuidoReleaseCString( char *stringToRelease ) {
     free(stringToRelease);
 }
-#endif
 
 GUIDOAPI(GuidoErrCode) GuidoSVGExportWithFontSpec( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec)
 {

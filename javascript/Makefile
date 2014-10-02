@@ -13,16 +13,15 @@ sources = $(wildcard $(srcdir)/*/*.cpp)
 objects = $(patsubst ../src/engine%,obj%, $(patsubst %.cpp,%.o,$(sources)))
 
 GCC = emcc
-CXXFLAGS += $(addprefix -I, $(subprojects)) -DINDEPENDENTSVG -DJS
+CXXFLAGS += $(addprefix -I, $(subprojects)) -DINDEPENDENTSVG
 
-EXPORT := "['_GuidoAbstractExport', \
-			'_GuidoSVGExportWithFontSpecJS',\
-			'_GuidoInitJS',\
+EXPORT := "['_GuidoSVGExportWithFontSpec_retCString',\
+			'_GuidoInitWithIndependentSVG',\
 			'_GuidoOpenParser',\
 			'_GuidoString2AR',\
 			'_GuidoCloseParser',\
-			'_GuidoReleaseCStringJS',\
-			'_GuidoAR2GRJS']"
+			'_GuidoReleaseCString',\
+			'_GuidoARretGR']"
 
 target = libGUIDOEngine.js
 

@@ -26,16 +26,8 @@ option ( IOS 	"Generates project for iOS" off )
 option ( DIST 	"Compiles universal binaries (x86_64 i386) on MacOSX" off )
 option ( MIDIEXPORT "MIDI export support (requires MidiShareLight)" off)
 option ( INDEPENDENTSVG "Independent SVG support (gets all font information from provided SVG files)" off)
-option ( JS "Javascript support" off)
 option ( STATICLIB  "Generates a static library (default for iOS)" off)
 option ( GL "Links to opengl device" off)
-
-if (JS)
-	message (STATUS "Generates project for javascript - Use -DJS=no to change.")
-	add_definitions(-DJS -Wno-warn-absolute-paths)
-else()
-	message (STATUS "No Javascript support - Use -DJS=yes to change.")
-endif()
 
 if(APPLE)
 

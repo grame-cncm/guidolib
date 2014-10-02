@@ -251,9 +251,12 @@ representations.
     */
     GUIDOAPI(GuidoErrCode)	GuidoInit(GuidoInitDesc * desc);
 
-#ifdef JS
-	GUIDOAPI(GuidoErrCode)      GuidoInitJS();
-#endif
+	/*!
+        Initialises the Guido Engine with an independent SVG device, avoiding
+        the need to pass a description. Useful for contexts (like javascript)
+        where structures cannot be easily manipulated.
+    */
+    GUIDOAPI(GuidoErrCode)      GuidoInitWithIndependentSVG();
 	/*!
         Guido Engine shutdown
 		
@@ -304,10 +307,11 @@ representations.
     */
     GUIDOAPI(GuidoErrCode)	GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings* settings, GRHandler* gr);
 
-
-#ifdef JS
-    GRHandler	GuidoAR2GRJS( ARHandler ar, const GuidoLayoutSettings* settings);
-#endif
+    /*!
+       Same as GuidoAR2GR, except it returns a GRHandler or 0 in case
+       of a failure.
+    */
+    GRHandler	GuidoARretGR( ARHandler ar, const GuidoLayoutSettings* settings);
 
 
 	/*!
@@ -696,10 +700,8 @@ The number of version functions is due to historical reasons.
     GUIDOAPI(GuidoErrCode) GuidoGetSymbolPath(const ARHandler inHandleAR, std::vector<std::string> &inPathVector);
 
 
-#ifdef JS
-    char *  GuidoSVGExportWithFontSpecJS( const GRHandler handle, int page );
-    void  GuidoReleaseCStringJS( char *stringToRelease );
-#endif
+    char *  GuidoSVGExportWithFontSpec_retCString( const GRHandler handle, int page );
+    void  GuidoReleaseCString( char *stringToRelease );
 
 /*! @} */
 
