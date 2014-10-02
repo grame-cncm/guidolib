@@ -107,6 +107,13 @@ enum  {	kNoBB, kPageBB,
 };
 
 
+enum GuidoInternalDevice
+{
+  guido_svg_with_font_spec = 0,
+  guido_abstract = 1,
+  guido_binary = 2
+};
+
 /*!
 \addtogroup Errors Error codes
 @{
@@ -390,7 +397,34 @@ representations.
 		\param gr the handler to the graphic representation.
     */
     GUIDOAPI(void)	GuidoFreeGR (GRHandler gr);
+	/*!
+		Makes a Guido Date
 
+		\param num the numerator of a date
+		\param denom the denomenator of a date
+		\return a date num/denom
+	*/
+    GuidoDate * 	GuidoMakeDate( int num, int denom );
+	/*!
+		Get a GuidoDate's numerator.
+
+		\param date the date whose numerator we need
+		\return the numerator
+	*/
+    GUIDOAPI(int) 	GuidoGetDateNum( GuidoDate *date );
+	/*!
+		Get a GuidoDate's denominator.
+
+		\param date the date whose denominator we need
+		\return the denominator
+	*/
+    GUIDOAPI(int) 	GuidoGetDateDenom( GuidoDate *date );
+	/*!
+		Free a GuidoDate
+
+		\param date the date to free
+	*/
+    GUIDOAPI(void) 	GuidoFreeDate( GuidoDate *date );
 	/*!
 		Gives a textual description of a Guido error code.
 
@@ -460,6 +494,15 @@ as by date. Page numbers start at 1.
 	*/
 	GUIDOAPI(GuidoErrCode)	GuidoDuration( CGRHandler inHandleGR, GuidoDate * date );
 
+	/** \brief Same as GuidoDuration, but returns date
+
+		Returns 0 if error.
+
+		\param inHandleGR a Guido opaque handle to a GR structure.
+		\return a pointer to a GuidoDate or 0 if error.
+	*/
+	GuidoDate * GuidoDuration_retDate( CGRHandler inHandleGR);
+
 
 	/** \brief Finds the page which has an event (note or rest) at a given date.
 
@@ -470,6 +513,10 @@ as by date. Page numbers start at 1.
                 0 if no page found,
 	*/
 	GUIDOAPI(int)	GuidoFindEventPage( CGRHandler inHandleGR, const GuidoDate& date );
+
+	/** \brief Like GuidoFindEventPage, but takes a pointer to a date
+	*/
+	GUIDOAPI(int)	GuidoFindEventPage_p( CGRHandler inHandleGR, const GuidoDate * const date );
 
 
 	/** \brief Finds the page which contain a given date.
@@ -482,6 +529,9 @@ as by date. Page numbers start at 1.
 	*/
 	GUIDOAPI(int) GuidoFindPageAt( CGRHandler inHandleGR, const GuidoDate& date );
 
+	/** \brief Like GuidoFindPageAt, but takes a pointer to a date
+	*/
+	GUIDOAPI(int)	GuidoFindPageAt_p( CGRHandler inHandleGR, const GuidoDate * const date );
 
 
 	/** \brief Gives the time location of a Page.
@@ -492,6 +542,14 @@ as by date. Page numbers start at 1.
 		\return a Guido error code.
 	*/
 	GUIDOAPI(GuidoErrCode) GuidoGetPageDate( CGRHandler inHandleGR, int pageNum, GuidoDate* date);
+
+	/** \brief Like GuidoGetPageDate, but returns a pointer to a date
+
+		\param inHandleGR a Guido opaque handle to a GR structure.
+		\param pageNum a page number (starts at 1).
+		\return a pointer to a Date or 0 if null
+	*/
+	GuidoDate * GuidoGetPageDate_retDate( CGRHandler inHandleGR, int pageNum);
 
 
 /*! @} */
@@ -701,6 +759,8 @@ The number of version functions is due to historical reasons.
 
 
     char *  GuidoSVGExportWithFontSpec_retCString( const GRHandler handle, int page );
+    char *  GuidoAbstractExport_retCString( const GRHandler handle, int page );
+    char *  GuidoBinaryExport_retCString( const GRHandler handle, int page );
     void  GuidoReleaseCString( char *stringToRelease );
 
 /*! @} */

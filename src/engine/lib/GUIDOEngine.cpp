@@ -25,7 +25,6 @@
 
 #include <iostream>
 #include <fstream>
-#include <sstream>
 using namespace std;
 
 //#define TIMING
@@ -80,7 +79,6 @@ using namespace std;
   #include "Guido2ReducedProportional.h"
 #endif
 
-// for embedding of SVG
 #include "guido2.h"
 
 
@@ -526,6 +524,39 @@ GUIDOAPI(void)	GuidoFreeGR (GRHandler gr)
 }
 
 // --------------------------------------------------------------------------
+GuidoDate * 	GuidoMakeDate( int num, int denom )
+{
+  GuidoDate *date =  new GuidoDate();
+  date->num = num;
+  date->denom = denom;
+  return date;
+}
+
+// --------------------------------------------------------------------------
+GUIDOAPI(int) 	GuidoGetDateNum( GuidoDate *date )
+{
+  if (date) {
+    return date->num;
+  }
+  return 0;
+}
+
+// --------------------------------------------------------------------------
+GUIDOAPI(int) 	GuidoGetDateDenom( GuidoDate *date )
+{
+  if (date) {
+    return date->denom;
+  }
+  return 0;
+}
+
+// --------------------------------------------------------------------------
+GUIDOAPI(void) 	GuidoFreeDate( GuidoDate *date )
+{
+  delete date;
+}
+// --------------------------------------------------------------------------
+
 GUIDOAPI(const char *) GuidoGetErrorString( GuidoErrCode errCode )
 {
 	switch( errCode )
@@ -623,6 +654,19 @@ GUIDOAPI(GuidoErrCode)	GuidoDuration( CGRHandler inHandleGR, GuidoDate * date )
 }
 
 // --------------------------------------------------------------------------
+GuidoDate * GuidoDuration_retDate( CGRHandler inHandleGR)
+{
+  GuidoDate *date = new GuidoDate();
+  GuidoErrCode err = GuidoDuration( inHandleGR, date );
+  if (err != guidoNoErr) {
+    delete date;
+    return 0;
+  }
+  return date;
+  
+}
+
+// --------------------------------------------------------------------------
 // was GuidoGetPageNum
 GUIDOAPI(int) GuidoFindEventPage( CGRHandler inHandleGR, const GuidoDate & date )
 {
@@ -631,6 +675,10 @@ GUIDOAPI(int) GuidoFindEventPage( CGRHandler inHandleGR, const GuidoDate & date 
 	return inHandleGR->grmusic ? inHandleGR->grmusic->getPageNum(date.num, date.denom) : 0;
 }
 
+GUIDOAPI(int) GuidoFindEventPage_p( CGRHandler inHandleGR, const GuidoDate * const date )
+{
+  return GuidoFindEventPage(inHandleGR, *date);
+}
 // --------------------------------------------------------------------------
 // was GuidoFindPageNumForDate
 GUIDOAPI(int) GuidoFindPageAt( CGRHandler inHandleGR, const GuidoDate & date )
@@ -640,6 +688,10 @@ GUIDOAPI(int) GuidoFindPageAt( CGRHandler inHandleGR, const GuidoDate & date )
 	return inHandleGR->grmusic ? inHandleGR->grmusic->getPageNumForTimePos( date.num, date.denom ) : 0;
 }
 
+GUIDOAPI(int) GuidoFindPageAt_p( CGRHandler inHandleGR, const GuidoDate * const date )
+{
+  return GuidoFindPageAt(inHandleGR, *date);
+}
 // --------------------------------------------------------------------------
 // was GuidoGetPageRTP
 GUIDOAPI(GuidoErrCode) GuidoGetPageDate( CGRHandler inHandleGR, int pageNum, GuidoDate * date)
@@ -652,6 +704,18 @@ GUIDOAPI(GuidoErrCode) GuidoGetPageDate( CGRHandler inHandleGR, int pageNum, Gui
 
 	bool result = inHandleGR->grmusic->getRTPofPage( pageNum, &date->num, &date->denom );
 	return result ? guidoNoErr : guidoErrBadParameter;
+}
+
+GuidoDate * GuidoGetPageDate_retDate( CGRHandler inHandleGR, int pageNum)
+{
+  GuidoDate *date = new GuidoDate();
+  GuidoErrCode err = GuidoGetPageDate( inHandleGR, pageNum, date);
+  if (err != guidoNoErr) {
+    delete date;
+    return 0;
+  }
+  return date;
+
 }
 
 // --------------------------------------------------------------------------
@@ -763,11 +827,21 @@ GUIDOAPI(GuidoErrCode) GuidoSVGExport( const GRHandler handle, int page, std::os
   return GuidoSVGExportWithFontSpec( handle, page, out, fontfile, 0);
 }
 
-char * GuidoSVGExportWithFontSpec_retCString( const GRHandler handle, int page)
+char * GuidoInternalDeviceExport_retCString( const GRHandler handle, int page, GuidoInternalDevice dev)
 {
 	static stringstream sstr;
 	sstr.clear();
-	GuidoErrCode err = GuidoSVGExportWithFontSpec (handle, page, sstr, 0, reinterpret_cast<char *>(______src_guido2_svg));
+	GuidoErrCode err;
+	if (dev == guido_svg_with_font_spec) {
+	  err = GuidoSVGExportWithFontSpec (handle, page, sstr, 0, reinterpret_cast<char *>(______src_guido2_svg));
+	} else if (dev == guido_abstract) {
+	  err = GuidoAbstractExport(handle, page, sstr);
+	} else if (dev == guido_binary) {
+	  err = GuidoBinaryExport(handle, page, sstr);
+	} else {
+	  return 0;
+	}
+
 	if (err) {
 	  return 0;
 	}
@@ -775,6 +849,22 @@ char * GuidoSVGExportWithFontSpec_retCString( const GRHandler handle, int page)
 	strcpy(out, sstr.str().c_str());
 	return out;
 }
+
+char * GuidoSVGExportWithFontSpec_retCString( const GRHandler handle, int page)
+{
+  return GuidoInternalDeviceExport_retCString(handle, page, guido_svg_with_font_spec);
+}
+
+char * GuidoAbstractExport_retCString( const GRHandler handle, int page)
+{
+  return GuidoInternalDeviceExport_retCString(handle, page, guido_abstract);
+}
+
+char * GuidoBinaryExport_retCString( const GRHandler handle, int page)
+{
+  return GuidoInternalDeviceExport_retCString(handle, page, guido_binary);
+}
+
 void  GuidoReleaseCString( char *stringToRelease ) {
     free(stringToRelease);
 }

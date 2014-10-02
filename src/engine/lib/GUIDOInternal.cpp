@@ -20,6 +20,7 @@
 */
 
 #include <iostream>
+#include <sstream>
 
 #include "defines.h"		// for GuidoWarn and GuidoTrace
 #include "guido.h"			

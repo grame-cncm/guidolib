@@ -16,11 +16,26 @@ GCC = emcc
 CXXFLAGS += $(addprefix -I, $(subprojects)) -DINDEPENDENTSVG
 
 EXPORT := "['_GuidoSVGExportWithFontSpec_retCString',\
+			'_GuidoAbstractExport_retCString',\
+			'_GuidoBinaryExport_retCString',\
 			'_GuidoInitWithIndependentSVG',\
 			'_GuidoOpenParser',\
 			'_GuidoString2AR',\
 			'_GuidoCloseParser',\
 			'_GuidoReleaseCString',\
+			'_GuidoCountVoices',\
+			'_GuidoGetPageCount',\
+			'_GuidoGetSystemCount',\
+			'_GuidoMakeDate',\
+			'_GuidoGetDateNum',\
+			'_GuidoGetDateDenom',\
+			'_GuidoFreeDate',\
+			'_GuidoFreeAR',\
+			'_GuidoFreeGR',\
+			'_GuidoDuration_retDate',\
+			'_GuidoFindEventPage_p',\
+			'_GuidoFindPageAt_p',\
+			'_GuidoGetPageDate_retDate',\
 			'_GuidoARretGR']"
 
 target = libGUIDOEngine.js
