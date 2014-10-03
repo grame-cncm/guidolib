@@ -17,6 +17,7 @@
 
 #include <vector>
 #include "export.h"
+#include "json_printable.h"
 
 namespace json
 {
@@ -28,7 +29,7 @@ class osc_stream;
 /*!
 	\brief a json array, as defined by the json spec (see http://json.org/)
 */
-class jsonexport json_array
+class jsonexport json_array : public json_printable
 {
 	std::vector<const json_value *>	fValues;
 	

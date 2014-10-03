@@ -17,6 +17,7 @@
 
 #include <vector>
 #include "json_element.h"
+#include "json_printable.h"
 #include "export.h"
 
 namespace json
@@ -28,7 +29,7 @@ class osc_stream;
 /*!
 	\brief a json object, as defined by the json spec (see http://json.org/)
 */
-class jsonexport json_object
+class jsonexport json_object : public json_printable
 {
 	std::vector<const json_element*>	fElements;
 	

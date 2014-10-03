@@ -160,6 +160,7 @@ typedef struct
     int num;
 	//! the date denominator
     int denom;
+
 } GuidoDate;
 
 

@@ -13,7 +13,7 @@ sources = $(wildcard $(srcdir)/*/*.cpp)
 objects = $(patsubst ../src/engine%,obj%, $(patsubst %.cpp,%.o,$(sources)))
 
 GCC = emcc
-CXXFLAGS += $(addprefix -I, $(subprojects)) -DINDEPENDENTSVG
+CXXFLAGS += $(addprefix -I, $(subprojects)) -DINDEPENDENTSVG -DJSON_ONLY
 
 EXPORT := "['_GuidoSVGExportWithFontSpec_retCString',\
 			'_GuidoAbstractExport_retCString',\
@@ -36,6 +36,10 @@ EXPORT := "['_GuidoSVGExportWithFontSpec_retCString',\
 			'_GuidoFindEventPage_p',\
 			'_GuidoFindPageAt_p',\
 			'_GuidoGetPageDate_retDate',\
+			'_GuidoGetPageMap_JSON',\
+			'_GuidoGetStaffMap_JSON',\
+			'_GuidoGetVoiceMap_JSON',\
+			'_GuidoGetSystemMap_JSON',\
 			'_GuidoARretGR']"
 
 target = libGUIDOEngine.js

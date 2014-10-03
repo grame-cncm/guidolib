@@ -26,4 +26,9 @@ GuidoFindEventPage_p = Module.cwrap('GuidoFindEventPage_p','number', ['number','
 GuidoFindPageAt_p = Module.cwrap('GuidoFindPageAt_p','number', ['number','number']);
 GuidoGetPageDate_retDate = Module.cwrap('GuidoGetPageDate_retDate','number', ['number','number']);
 
+GuidoGetPageMap_JSON = Module.cwrap('GuidoGetPageMap_JSON','number', ['number','number','number','number']);
+GuidoGetStaffMap_JSON = Module.cwrap('GuidoGetStaffMap_JSON','number', ['number','number','number','number','number']);
+GuidoGetVoiceMap_JSON = Module.cwrap('GuidoGetVoiceMap_JSON','number', ['number','number','number','number','number']);
+GuidoGetSystemMap_JSON = Module.cwrap('GuidoGetSystemMap_JSON','number', ['number','number','number','number']);
+
 GuidoARretGR = Module.cwrap('GuidoARretGR', 'number', ['number', 'number']);

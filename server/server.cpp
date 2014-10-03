@@ -730,7 +730,7 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
                     : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
                 return send(connection, response);
             } else if (elems[1] == "gettimemap") {
-                GuidoServerTimeMap outmap;
+                JSONFriendlyTimeMap outmap;
                 guidoAPIresponse gar = currentSession->getTimeMap(outmap);
                 guidosessionresponse response = gar.is_happy()
                     ? currentSession->timeMapJson(outmap)

@@ -51,6 +51,11 @@ function doit( gmn ) {
 	date = GuidoGetPageDate_retDate(gr, 1);
 	guidoGetPageDate_retDate.innerHTML = "Page date for page 1: "+GuidoGetDateNum(date)+"/"+GuidoGetDateDenom(date);
 	GuidoFreeDate(date);
+
+	guidoGetPageMap_JSON = document.getElementById('guidoGetPageMap_JSON');
+	pagemap_n = GuidoGetPageMap_JSON( gr, 1, 1000.0, 1000.0 )
+	guidoGetPageMap_JSON.innerHTML = "Page map for page 1: "+Pointer_stringify(pagemap_n);
+	GuidoReleaseCString(pagemap_n);
 }
 
 </script>
@@ -62,6 +67,10 @@ function doit( gmn ) {
 <div id="guidoFindEventPage_p"></div>
 <div id="guidoFindPageAt_p"></div>
 <div id="guidoGetPageDate_retDate"></div>
+<div id="guidoGetPageMap_JSON"></div>
+<div id="guidoGetStaffMap_JSON"></div>
+<div id="guidoGetVoiceMap_JSON"></div>
+<div id="guidoGetSystemMap_JSON"></div>
 <div id="guido_svg"></div>
 
 <script type="text/javascript">

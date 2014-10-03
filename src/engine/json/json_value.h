@@ -18,6 +18,7 @@
 #include <string>
 #include <iostream>
 #include "json_stream.h"
+#include "json_printable.h"
 #ifndef JSON_ONLY
 #include "osc_stream.h"
 #endif
@@ -35,7 +36,7 @@ class json_array;
 	json values are as defined by the json spec (see http://json.org/)
 	each kind of value is embedded in a specific class derived from json_value
 */
-class jsonexport json_value
+class jsonexport json_value : public json_printable
 {
 	public:
 		virtual ~json_value() {}
