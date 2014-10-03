@@ -142,8 +142,9 @@ char *	GuidoGetVoiceMap_JSON( CGRHandler gr, int pagenum, float w, float h, int 
 //----------------------------------------------------------------------
 char*	GuidoGetSystemMap_JSON( CGRHandler gr, int pagenum, float w, float h)
 {
-	Time2GraphicMap outmap;
-	GuidoErrCode err = GuidoGetSystemMap(gr, pagenum, w, h, outmap);
+        printf("system map called... %d %d %4.4f %4.4f\n", gr, pagenum, w, h);
+	Time2GraphicMap outmap;printf("created ttgm...\n");
+	GuidoErrCode err = GuidoGetSystemMap(gr, pagenum, w, h, outmap);printf("finished processing...\n");
 	if (err != guidoNoErr) return 0;
 	return Time2GraphicMap2JSON(outmap);
 }
