@@ -4,16 +4,16 @@
 
 using namespace std;
 
-void stringToDate(std::string raw, GuidoDate &date)
+void stringToDate(string raw, GuidoDate &date)
 {
     // get rid of the encapsulating quotation marks
-    std::string str = raw;
+    string str = raw;
     str.erase(str.end() - 1, str.end());
     str.erase(str.begin(), str.begin()+1);
 
     // first, parse the fraction
-    std::stringstream ss(str);
-    std::string item;
+    stringstream ss(str);
+    string item;
     vector<string> elems;
     while (getline(ss, item, '/')) {
         if (item != "") {
@@ -33,7 +33,7 @@ void stringToDate(std::string raw, GuidoDate &date)
 string dateToString(GuidoDate &date)
 {
     // first, parse the fraction
-    std::stringstream ss;
+    stringstream ss;
     ss << "\"";
     ss << date.num;
     ss << "/";
