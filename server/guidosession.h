@@ -31,7 +31,8 @@
 #include "utilities.h"
 #include "guido2img.h"
 
-#include "json/json_value.h"
+#include "json_value.h"
+#include "map2json.h"
 
 using namespace std;
 

@@ -36,4 +36,4 @@ win32: {
 
 win32:LIBS += $$GUIDO
 
-INCLUDEPATH += ../../src/include
+INCLUDEPATH += ../../src/engine/include ../../src/engine/json

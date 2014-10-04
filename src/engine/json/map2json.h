@@ -21,11 +21,7 @@ class JSONFriendlyTimeMap : public TimeMapCollector
     }
 };
 
-void stringToDate(string, GuidoDate &date);
-string dateToString(GuidoDate &date);
-float dateToFloat(const GuidoDate &date);
-
-json_array * populate_json_array_with_time_map_collector(TimeMapCollector &info);
+json_array * populate_json_array_with_time_map_collector(JSONFriendlyTimeMap &info);
 json_array * populate_json_array_with_time_2_graphic_map(Time2GraphicMap &info);
 
 string print_and_free_printable(json_printable *printable);

@@ -52,6 +52,8 @@
 #include "json/json_parser.h"
 #include "json/json_stream.h"
 
+#include "date_tools.h"
+
 // curl
 #include <curl/curl.h>
 
