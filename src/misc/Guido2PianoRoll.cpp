@@ -24,7 +24,7 @@
 #include "ARNoteFormat.h"
 #include "ARTagEnd.h"
 #include "ARTie.h"
-#include "GuidoTypes.h"
+#include "GUIDOTypes.h"
 #include "ObjectList.h"
 #include "TagParameterRGBColor.h"
 #include "TagParameterString.h"
