@@ -182,7 +182,7 @@ Guido2ImageErrorCodes Guido2Image::gmnFile2Image( const  Params& p )
 }
 
 //----------------------------------------------------------------------------
-Guido2ImageErrorCodes Guido2Image::guidoPianoRoll2Image(const  Params& p, GuidoPianoRoll *pianoRoll)
+Guido2ImageErrorCodes Guido2Image::guidoPianoRoll2Image(const  Params& p, GuidoPianoRoll *pianoRoll, int width, int height)
 {
 	QGuidoPainter *painter = QGuidoPainter::createGuidoPainter();
 
@@ -190,9 +190,9 @@ Guido2ImageErrorCodes Guido2Image::guidoPianoRoll2Image(const  Params& p, GuidoP
         return GUIDO_2_IMAGE_GUIDO_ENGINE_NOT_STARTED;
 
     if (p.format == GUIDO_2_IMAGE_PDF)
-        writePianoRollPDF(painter, p.output, pianoRoll);
+        writePianoRollPDF(painter, p.output, pianoRoll, width, height);
     else
-        writePianoRollImage(painter, p, pianoRoll);
+        writePianoRollImage(painter, p, pianoRoll, width, height);
 
 	QGuidoPainter::destroyGuidoPainter(painter);
 
@@ -263,18 +263,14 @@ void Guido2Image::writePDF( QGuidoPainter * guidoPainter, int pageIndex, const c
 	painter.end();
 }
 
-void Guido2Image::writePianoRollPDF(QGuidoPainter *guidoPainter, const char *fname, GuidoPianoRoll *pianoRoll)
+void Guido2Image::writePianoRollPDF(QGuidoPainter *guidoPainter, const char *fname, GuidoPianoRoll *pianoRoll, int width, int height)
 {
-    int width;
-    int height;
-    GuidoPianoRollGetSize(pianoRoll, width, height);
-
 	QString fileName(fname);
 
 	if (!fileName.toUpper().endsWith(PDF_FORMAT.toUpper()))
         fileName += PDF_FORMAT;
 
-	QPrinter printer(QPrinter::HighResolution);
+    QPrinter printer(QPrinter::ScreenResolution);
 	printer.setOutputFormat(QPrinter::PdfFormat);
 	printer.setOutputFileName(QString(fileName));
 
@@ -336,12 +332,8 @@ void Guido2Image::writeImage( QGuidoPainter * guidoPainter, const Params& p)
 }
 
 //----------------------------------------------------------------------------
-void Guido2Image::writePianoRollImage( QGuidoPainter * guidoPainter, const Params& p, GuidoPianoRoll *pianoRoll)
+void Guido2Image::writePianoRollImage( QGuidoPainter * guidoPainter, const Params& p, GuidoPianoRoll *pianoRoll, int width, int height)
 {
-    int width;
-    int height;
-    GuidoPianoRollGetSize(pianoRoll, width, height);
-
 	QImage image(width, height, QImage::Format_ARGB32);
 	image.fill(QColor(255, 255, 255, 0).rgba());
 

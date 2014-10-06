@@ -358,11 +358,10 @@ int main(int argc, char *argv[])
         else
             arh = GuidoString2AR(parser, options.inputFile);
         
-        GuidoPianoRoll *pianoRoll = GuidoCreatePianoRoll(simplePianoRoll);
-        GuidoPianoRollSetAR(pianoRoll, arh);
+        GuidoPianoRoll *pianoRoll = GuidoAR2PianoRoll(kSimplePianoRoll, arh);
         GuidoPianoRollEnableKeyboard(pianoRoll, true);
 
-        Guido2Image::guidoPianoRoll2Image(p, pianoRoll);
+        Guido2Image::guidoPianoRoll2Image(p, pianoRoll, 1024, 512);
 
         GuidoDestroyPianoRoll(pianoRoll);
     }

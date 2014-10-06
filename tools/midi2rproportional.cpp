@@ -40,7 +40,7 @@ static void usage (char* name)
 	cerr << "         -maxpitch     value : set maximum midi pitch (default is " << kDefaultMaxPitch << " -> max pitch is automatically adjusted)" << endl;
 	cerr << "         -measurebars  bool  : set if measure bars will be enabled (default is " << kDefaultMeasureBars << ")" << endl;
     cerr << "         -drawdurlines bool  : set if duration lines will be drawn (default is " << kDefaultDrawDurLines << ")" << endl;
-    system("PAUSE"); // REM: tmp
+
 	exit (1);
 }
 
@@ -48,7 +48,7 @@ static void error (GuidoErrCode err)
 {
 	if (err != guidoNoErr) {
         cerr << "error #" << err << ": " << GuidoGetErrorString (err) << endl;
-        system("PAUSE"); // REM: tmp
+
         exit(err);
     }
 }
@@ -219,48 +219,35 @@ int main(int argc, char **argv)
 	GuidoDate start   = ldateopt(argc, argv, kOptions[kStart], defDate);
 	GuidoDate end     = ldateopt(argc, argv, kOptions[kEnd],   defDate);
 
-    GuidoPianoRoll *pianoRoll = GuidoCreatePianoRoll(reducedProportional);
+    //GuidoPianoRoll *pianoRoll = GuidoMidi2PianoRoll(reducedProportional, fileName);
 
-    GuidoErrCode err;
-
-    err = GuidoPianoRollSetMidi(pianoRoll, fileName);
-    error(err);
+    //GuidoErrCode err;
 
 
-    /**** SIZE ****/
-    err = GuidoPianoRollSetCanvasDimensions(pianoRoll, w, h);
-    error(err);
+    ///**** LIMITS ****/
+    //err = GuidoPianoRollSetLimits(pianoRoll, limitParams);
+    //error(err);
+    ///*********************/
 
-    int width, height;
-    err = GuidoPianoRollGetSize(pianoRoll, width, height);
-    error(err);
-    /**************/
+    ///**** MEASURE BARS ****/
+    //err = GuidoPianoRollEnableMeasureBars(pianoRoll, measureBars);
+    //error(err);
+    ///**********************/
 
-    /**** TIME LIMITS ****/
-    err = GuidoPianoRollSetTimeLimits(pianoRoll, start, end);
-    error(err);
-    /*********************/
+    ///**** DURATION LINES ****/
+    //err = GuidoPianoRollEnableDurationLines(pianoRoll, drawDurLines);
+    //error(err);
+    ///************************/
+    
+    ///**** DRAW ****/
+    //err = GuidoPianoRollOnDraw(pianoRoll, w, h, &dev);
+    //error(err);
+    ///**************/
 
-    /**** PITCH LIMITS ****/
-    err = GuidoPianoRollSetPitchLimits(pianoRoll, minPitch, maxPitch);
-    error(err);
-    /**********************/
+    //err = GuidoPianoRollOnDraw(pianoRoll, &dev);
+    //error(err);
 
-    /**** MEASURE BARS ****/
-    err = GuidoPianoRollEnableMeasureBars(pianoRoll, measureBars);
-    error(err);
-    /**********************/
-
-    /**** DURATION LINES ****/
-    err = GuidoPianoRollEnableDurationLines(pianoRoll, drawDurLines);
-    error(err);
-    /************************/
-
-
-    err = GuidoPianoRollGetRenderingFromMidi(pianoRoll, &dev);
-    error(err);
-
-    GuidoDestroyPianoRoll(pianoRoll);
+    //GuidoDestroyPianoRoll(pianoRoll);
 
     return 0;
 }

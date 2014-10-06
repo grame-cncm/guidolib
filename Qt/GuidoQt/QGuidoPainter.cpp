@@ -376,13 +376,13 @@ void QGuidoPainter::drawPianoRoll(QPainter *painter, const QRect& drawRectangle,
 {
 	painter->save();
 	painter->setClipRect(drawRectangle);
-	painter->translate(drawRectangle.x(), drawRectangle.y());
+    painter->translate(drawRectangle.x(), drawRectangle.y());
 	
 	//Creation of temporaries Qt implementations of VGSystem & VGDevice.
 	VGSystem * sys = new GSystemQt(painter);
 	VGDevice * dev = sys->CreateDisplayDevice();
 
-    GuidoPianoRollGetRenderingFromAR(pianoRoll, dev);
+    GuidoPianoRollOnDraw(pianoRoll, drawRectangle.width(), drawRectangle.height(), dev);
 	
 	delete dev;
 	delete sys;

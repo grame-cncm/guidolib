@@ -8,21 +8,22 @@
 #include "GUIDOParse.h"
 #include "GUIDOEngine.h"
 #include "GUIDOPianoRollAPI.h"
+#include "GUIDOScoreMap.h"
 #include "SVGDevice.h"
 #include "SVGSystem.h"
 
 using namespace std;
 
-const int  kDefaultWidth           = 1024;
-const int  kDefaultHeight          = 400;
+const int  kDefaultWidth           = -1;
+const int  kDefaultHeight          = -1;
 const int  kDefaultMinPitch        = -1;
 const int  kDefaultMaxPitch        = -1;
 const bool kDefaultKeyboard        = false;
 const bool kDefaultVoicesAutoColor = false;
 const bool kDefaultMeasureBars     = false;
+const int  kDefaultPitchLines      = kAutoLines;
 
-const PianoRollType         kDefaultPianoRoll  = simplePianoRoll;
-const PitchLinesDisplayMode kDefaultPitchLines = automatic;
+const PianoRollType kDefaultPianoRoll = kSimplePianoRoll;
 
 const char* kOptions[] = { "-help", "-o", "-pianoroll", "-width", "-height", "-start", "-end", "-minpitch", "-maxpitch", "-keyboard", "-voicesautocolor", "-measurebars", "-pitchlines" };
 enum { kHelp, kOutput, kPianoRoll, kWidth, kHeight, kStart, kEnd, kMinPitch, kMaxPitch, kKeyboard, kVoicesAutoColor, kMeasureBars, kPitchLines, kMaxOpt };
@@ -55,7 +56,7 @@ static void usage(char* name)
     cerr << "                                        twolines" << endl;
     cerr << "                                        diatonic" << endl;
     cerr << "                                        chromatic" << endl;
-	system("PAUSE"); // REM: tmp
+
     exit(1);
 }
 
@@ -63,7 +64,7 @@ static void error(GuidoErrCode err)
 {
     if (err != guidoNoErr) {
         cerr << "error #" << err << ": " << GuidoGetErrorString (err) << endl;
-        system("PAUSE"); // REM: tmp
+
         exit(err);
     }
 }
@@ -177,11 +178,11 @@ static PianoRollType lPianoRollTypeopt(int argc, char **argv, const char* opt, P
                 usage(argv[0]);
 			else {
                 if (!strcmp(argv[i], "simple"))
-                    return simplePianoRoll;
+                    return kSimplePianoRoll;
                 else if (!strcmp(argv[i], "trajectory"))
-                    return trajectoryPianoRoll;
+                    return kTrajectoryPianoRoll;
                 else
-                    return simplePianoRoll;
+                    return kSimplePianoRoll;
             }
 		}
 	}
@@ -189,7 +190,7 @@ static PianoRollType lPianoRollTypeopt(int argc, char **argv, const char* opt, P
 	return defaultvalue;
 }
 
-static PitchLinesDisplayMode lPitchLinesopt(int argc, char **argv, const char* opt, PitchLinesDisplayMode defaultvalue)
+static int lPitchLinesopt(int argc, char **argv, const char* opt, int defaultvalue)
 {
 	for (int i = 1; i < argc; i++) {
 		if (!strcmp(argv[i], opt)) {
@@ -199,19 +200,10 @@ static PitchLinesDisplayMode lPitchLinesopt(int argc, char **argv, const char* o
                 usage(argv[0]);
 			else {
                 if (!strcmp(argv[i], "automatic"))
-                    return automatic;
+                    return kAutoLines;
                 else if (!strcmp(argv[i], "noline"))
-                    return no_line;
-                else if (!strcmp(argv[i], "oneline"))
-                    return one_line;
-                else if (!strcmp(argv[i], "twolines"))
-                    return two_lines;
-                else if (!strcmp(argv[i], "diatonic"))
-                    return diatonic;
-                else if (!strcmp(argv[i], "chromatic"))
-                    return chromatic;
-                else
-                    return automatic;
+                    return kNoLine;
+                /* Complete with other choices*/
             }
 		}
 	}
@@ -265,16 +257,16 @@ int main(int argc, char **argv)
 
     const char* fileName = getInputFile(argc, argv);
 
-	int  w               = lintopt (argc, argv, kOptions[kWidth],           kDefaultWidth);
-	int  h               = lintopt (argc, argv, kOptions[kHeight],          kDefaultHeight);
-    int  minPitch        = lintopt (argc, argv, kOptions[kMinPitch],        kDefaultMinPitch);
-    int  maxPitch        = lintopt (argc, argv, kOptions[kMaxPitch],        kDefaultMaxPitch);
-    bool keyboard        = lboolopt(argc, argv, kOptions[kKeyboard],        kDefaultKeyboard);
-    bool voicesAutoColor = lboolopt(argc, argv, kOptions[kVoicesAutoColor], kDefaultVoicesAutoColor);
-    bool measureBars     = lboolopt(argc, argv, kOptions[kMeasureBars],     kDefaultMeasureBars);
-    
+	int  w               = lintopt       (argc, argv, kOptions[kWidth],           kDefaultWidth);
+	int  h               = lintopt       (argc, argv, kOptions[kHeight],          kDefaultHeight);
+    int  minPitch        = lintopt       (argc, argv, kOptions[kMinPitch],        kDefaultMinPitch);
+    int  maxPitch        = lintopt       (argc, argv, kOptions[kMaxPitch],        kDefaultMaxPitch);
+    bool keyboard        = lboolopt      (argc, argv, kOptions[kKeyboard],        kDefaultKeyboard);
+    bool voicesAutoColor = lboolopt      (argc, argv, kOptions[kVoicesAutoColor], kDefaultVoicesAutoColor);
+    bool measureBars     = lboolopt      (argc, argv, kOptions[kMeasureBars],     kDefaultMeasureBars);
+    int  pitchLines      = lPitchLinesopt(argc, argv, kOptions[kPitchLines],      kDefaultPitchLines);
+
     PianoRollType         pianoRollType = lPianoRollTypeopt(argc, argv, kOptions[kPianoRoll],  kDefaultPianoRoll);
-    PitchLinesDisplayMode pitchLines    = lPitchLinesopt(argc, argv, kOptions[kPitchLines], kDefaultPitchLines);
 
 	GuidoDate defDate = {0, 0};
 	GuidoDate start   = ldateopt(argc, argv, kOptions[kStart], defDate);
@@ -286,37 +278,25 @@ int main(int argc, char **argv)
     GuidoErrCode err;
 
 	if (arh) {
-        GuidoPianoRoll *pianoRoll = GuidoCreatePianoRoll(pianoRollType);
-
-        err = GuidoPianoRollSetAR(pianoRoll, arh);
-        error(err);
-
+        GuidoPianoRoll *pianoRoll = GuidoAR2PianoRoll(pianoRollType, arh);
         
-        /**** SIZE ****/
-        err = GuidoPianoRollSetCanvasDimensions(pianoRoll, w, h);
-        error(err);
+        LimitParams limitParams;
+        limitParams.startDate = start;
+        limitParams.endDate   = end;
+        limitParams.lowPitch  = minPitch;
+        limitParams.highPitch = maxPitch;
 
-        int width, height;
-        err = GuidoPianoRollGetSize(pianoRoll, width, height);
-        error(err);
-        /**************/
-        
-        /**** TIME LIMITS ****/
-        err = GuidoPianoRollSetTimeLimits(pianoRoll, start, end);
+        /**** LIMITS ****/
+        err = GuidoPianoRollSetLimits(pianoRoll, limitParams);
         error(err);
         /*********************/
-
-        /**** PITCH LIMITS ****/
-        err = GuidoPianoRollSetPitchLimits(pianoRoll, minPitch, maxPitch);
-        error(err);
-        /**********************/
 
         /**** KEYBOARD ****/
         err = GuidoPianoRollEnableKeyboard(pianoRoll, keyboard);
         error(err);
 
         float keyboardWidth;
-        err = GuidoPianoRollGetKeyboardWidth(pianoRoll, keyboardWidth);
+        err = GuidoPianoRollGetKeyboardWidth(pianoRoll, w, h, keyboardWidth);
         error(err);
         /******************/
 
@@ -340,13 +320,20 @@ int main(int argc, char **argv)
         /**********************/
 
         /**** PITCH LINES ****/
-        err = GuidoPianoRollSetPitchLinesDisplayMode(pianoRoll, pitchLines);
+        err = GuidoPianoRollSetPitchLinesDisplayMode(pianoRoll, kAutoLines);
         error(err);
         /*********************/
 
-
-        err = GuidoPianoRollGetRenderingFromAR(pianoRoll, &dev);
+        /**** MAP ****/
+        Time2GraphicMap map;
+        err = GuidoPianoRollGetMap(pianoRoll, w, h, map);
         error(err);
+        /*************/
+
+        /**** DRAW ****/
+        err = GuidoPianoRollOnDraw(pianoRoll, w, h, &dev);
+        error(err);
+        /**************/
 
         GuidoDestroyPianoRoll(pianoRoll);
 
