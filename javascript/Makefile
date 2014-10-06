@@ -44,6 +44,7 @@ EXPORT := "['_GuidoSVGExportWithFontSpec_retCString',\
 
 target = libGUIDOEngine.js
 
+# emcc -O0 -g4 -s ASSERTIONS=2 -s SAFE_HEAP=1 -s ALIASING_FUNCTION_POINTERS=0 $(objects) -o $(target) -s ALLOW_MEMORY_GROWTH=1 -s EXPORTED_FUNCTIONS=$(EXPORT)
 $(target) : $(objects)
 	emcc -O2 $(objects) -o $(target) -s ALLOW_MEMORY_GROWTH=1 -s EXPORTED_FUNCTIONS=$(EXPORT)
 

@@ -67,11 +67,11 @@ function doit( gmn ) {
 	guidoGetVoiceMap_JSON.innerHTML = "<b>Voice map for page 1, voice 1:</b> "+Pointer_stringify(voicemap_n);
 	GuidoReleaseCString(voicemap_n);
 
-	/*guidoGetSystemMap_JSON = document.getElementById('guidoGetSystemMap_JSON');
+	guidoGetSystemMap_JSON = document.getElementById('guidoGetSystemMap_JSON');
 	systemmap_n = GuidoGetSystemMap_JSON( gr, 1, 1000.0, 1000.0)
 	console.log(systemmap_n);
 	guidoGetSystemMap_JSON.innerHTML = "<b>System map for page 1:</b> "+Pointer_stringify(systemmap_n);
-	GuidoReleaseCString(systemmap_n);*/
+	GuidoReleaseCString(systemmap_n);
 }
 
 </script>
@@ -90,7 +90,9 @@ function doit( gmn ) {
 <div id="guido_svg"></div>
 
 <script type="text/javascript">
-  doit("{ [f# g# a& b& f# g# a& b&] , [f g a b f g a b] } ");
+  //doit("{ [f# g# a& b& f# g# a&], [f g a b f g a] } "); // doesn't work
+  doit("{ [f# g# a& b& f# g#], [f g a b f g] } "); // doesn't work
+  //doit("{ [a b c d e], [a b c d e] } "); // works
 </script>
 
 </body>

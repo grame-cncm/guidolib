@@ -91,6 +91,7 @@ message(STATUS "Magick++ link flags: " ${Magick++_PKGCONF_LDFLAGS})
 
 if(APPLE)
   set(LINK ${LINK}  "-framework GUIDOEngine  -F../../build/MacOS/Release")
+  #set(LINK ${LINK}  "-l SGUIDOEngine  -L../../build/MacOS/Release")
 else()
   set(LINK ${LINK}  "-l GUIDOEngine  -L../../build/unix/")
 endif(APPLE)

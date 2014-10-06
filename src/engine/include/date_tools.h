@@ -3,7 +3,9 @@
 
 #include "GUIDOEngine.h"
 
-void stringToDate(std::string str, GuidoDate &date);
-std::string dateToString(GuidoDate &date);
+using namespace std;
+
+void stringToDate(string str, GuidoDate &date);
+string dateToString(GuidoDate &date);
 float dateToFloat(const GuidoDate &date);
 #endif
