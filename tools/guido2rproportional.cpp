@@ -13,8 +13,8 @@
 
 using namespace std;
 
-const int  kDefaultWidth           = 1024;
-const int  kDefaultHeight          = 400;
+const int  kDefaultWidth           = -1;
+const int  kDefaultHeight          = -1;
 const int  kDefaultMinPitch        = -1;
 const int  kDefaultMaxPitch        = -1;
 const bool kDefaultDrawDurLines    = false;
@@ -42,7 +42,7 @@ static void usage(char* name)
     cerr << "         -voicesautocolor bool  : set if voices will be auto colored (default is " << kDefaultVoicesAutoColor << ")" << endl;
 	cerr << "         -measurebars     bool  : set if measure bars will be enabled (default is " << kDefaultMeasureBars << ")" << endl;
     cerr << "         -drawdurlines    bool  : set if duration lines will be drawn (default is " << kDefaultDrawDurLines << ")" << endl;
-    system("PAUSE"); // REM: tmp
+
 	exit(1);
 }
 
@@ -50,7 +50,7 @@ static void error(GuidoErrCode err)
 {
     if (err != guidoNoErr) {
         cerr << "error #" << err << ": " << GuidoGetErrorString (err) << endl;
-        system("PAUSE"); // REM: tmp
+
         exit(err);
     }
 }
@@ -224,74 +224,64 @@ int main(int argc, char **argv)
 	GuidoParser *parser = GuidoOpenParser();
 	ARHandler    arh    = GuidoFile2AR(parser, argv[1]);
     
-    GuidoErrCode err;
+ // GuidoErrCode err;
 
-	if (arh) {
-        GuidoPianoRoll *pianoRoll = GuidoCreatePianoRoll(reducedProportional);
+ // if (arh) {
+ //       GuidoPianoRoll *pianoRoll = GuidoAR2PianoRoll(reducedProportional, arh);
 
-        err = GuidoPianoRollSetAR(pianoRoll, arh);
-        error(err);
+   
+ //       LimitParams limitParams;
+ //       limitParams.startDate = start;
+ //       limitParams.endDate   = end;
+ //       limitParams.lowPitch  = minPitch;
+ //       limitParams.highPitch = maxPitch;
 
+ //       /**** LIMITS ****/
+ //       err = GuidoPianoRollSetLimits(pianoRoll, limitParams);
+ //       error(err);
+ //       /*********************/
 
-        /**** SIZE ****/
-        err = GuidoPianoRollSetCanvasDimensions(pianoRoll, w, h);
-        error(err);
+ //       /**** DURATION LINES ****/
+ //       err = GuidoPianoRollEnableDurationLines(pianoRoll, drawDurLines);
+ //       error(err);
+ //       /************************/
 
-        int width, height;
-        err = GuidoPianoRollGetSize(pianoRoll, width, height);
-        error(err);
-        /**************/
-        
-        /**** TIME LIMITS ****/
-        err = GuidoPianoRollSetTimeLimits(pianoRoll, start, end);
-        error(err);
-        /*********************/
+ //       /**** VOICES COLOR ****/
+ //       err = GuidoPianoRollEnableAutoVoicesColoration(pianoRoll, voicesAutoColor);
+ //       error(err);
+ //       
+ //       //err = GuidoPianoRollSetColorToVoice(pianoRoll, 1, 255, 0, 0, 100);
+ //       //error(err);
+ //       
+ //       //err = GuidoPianoRollSetColorToVoice(pianoRoll, 2, 0, 255, 0, 100);
+ //       //error(err);
+ //       
+ //       //err = GuidoPianoRollSetColorToVoice(pianoRoll, 3, 0, 0, 255, 100);
+ //       //error(err);
+ //       /**********************/
 
-        /**** PITCH LIMITS ****/
-        err = GuidoPianoRollSetPitchLimits(pianoRoll, minPitch, maxPitch);
-        error(err);
-        /**********************/
+ //       /**** MEASURE BARS ****/
+ //       err = GuidoPianoRollEnableMeasureBars(pianoRoll, measureBars);
+ //       error(err);
+ //       /**********************/
 
-        /**** DURATION LINES ****/
-        err = GuidoPianoRollEnableDurationLines(pianoRoll, drawDurLines);
-        error(err);
-        /************************/
+ //       /**** DRAW ****/
+ //       err = GuidoPianoRollOnDraw(pianoRoll, w, h, &dev);
+ //       error(err);
+ //       /**************/
 
-        /**** VOICES COLOR ****/
-        err = GuidoPianoRollEnableAutoVoicesColoration(pianoRoll, voicesAutoColor);
-        error(err);
-        
-        //err = GuidoPianoRollSetColorToVoice(pianoRoll, 1, 255, 0, 0, 100);
-        //error(err);
-        
-        //err = GuidoPianoRollSetColorToVoice(pianoRoll, 2, 0, 255, 0, 100);
-        //error(err);
-        
-        //err = GuidoPianoRollSetColorToVoice(pianoRoll, 3, 0, 0, 255, 100);
-        //error(err);
-        /**********************/
+ //       GuidoDestroyPianoRoll(pianoRoll);
 
-        /**** MEASURE BARS ****/
-        err = GuidoPianoRollEnableMeasureBars(pianoRoll, measureBars);
-        error(err);
-        /**********************/
+	//	GuidoFreeAR(arh);
+	//}
+	//else {
+	//	int line, col;
 
+	//	GuidoErrCode err = GuidoParserGetErrorCode(parser, line, col, 0); // REM: l'erreur n'est pas récupérée si l'arh a simplement mal été instancié
+	//	error (err);
+	//}
 
-        err = GuidoPianoRollGetRenderingFromAR(pianoRoll, &dev);
-        error(err);
-
-        GuidoDestroyPianoRoll(pianoRoll);
-
-		GuidoFreeAR(arh);
-	}
-	else {
-		int line, col;
-
-		GuidoErrCode err = GuidoParserGetErrorCode(parser, line, col, 0); // REM: l'erreur n'est pas récupérée si l'arh a simplement mal été instancié
-		error (err);
-	}
-
-	GuidoCloseParser(parser);
+	//GuidoCloseParser(parser);
 
 	return 0;
 }

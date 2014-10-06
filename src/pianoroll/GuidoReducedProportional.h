@@ -22,41 +22,43 @@
 class GuidoReducedProportional : public GuidoPianoRoll
 {
 public:
-             GuidoReducedProportional();
+             GuidoReducedProportional(ARMusic *arMusic);
+             GuidoReducedProportional(const char *midiFileName);
     virtual ~GuidoReducedProportional() {}
 
     void enableDurationLines(bool enabled) { fDrawDurationLine = enabled; }
 
-    void getRenderingFromAR(VGDevice *dev);
-    void getRenderingFromMidi(VGDevice* dev);
+    void onDraw(int width, int height, VGDevice *dev);
 
 protected:
-    void DrawGrid        () const;
-    void DrawStaff       (int i) const;
-    void DrawVoice       (ARMusicalVoice* v);
-    void DrawLedgerLines (float x, float y, int n) const;
-    void DrawHead        (float x, float y, int alter) const;
-    void DrawNote        (int pitch, double date, double dur);
-	void DrawRect        (int x, int y, double dur) const;
-    void DrawMeter       (ARMeter *meter, int voiceNum, double date) const;
+    void init();
 
-    void SetMusicFont();
+    DrawParams createDrawParamsStructure(int width, int height, VGDevice *dev) const;
+
+    void DrawGrid        (DrawParams drawParams) const;
+    void DrawStaff       (int n, DrawParams drawParams) const;
+    void DrawVoice       (ARMusicalVoice* v, DrawParams drawParams);
+    void DrawLedgerLines (float x, float y, int count, DrawParams drawParams) const;
+    void DrawHead        (float x, float y, int alter, DrawParams drawParams) const;
+    void DrawNote        (int pitch, double date, double dur, DrawParams drawParams);
+	void DrawRect        (int x, int y, double dur, DrawParams drawParams) const;
+
+    void SetMusicFont(DrawParams drawParams);
     
-	void  handleColor(ARNoteFormat *e);
+	void  handleColor(ARNoteFormat *e, DrawParams drawParams) const;
 
     int   pitch2staff            (int midipitch) const;                              // gives a staff number for a given midi pitch
     int   pitch2staff            (int midipitch, int& halfspaces, int& alter) const; // gives a staff number for a given midi pitch + position and accidental
-    float halfspaces2ypos        (int halfspaces, int staff) const;
+    float halfspaces2ypos        (int halfspaces, int staff, float noteHeight) const;
     int	  halfSpaces2LedgerLines (int halfspaces) const;
-    void  computeNoteHeight      ();
+    float computeNoteHeight      (int height) const;
 
     int   diatonic       (int pitch, int& octave, int& alter) const; // converts a midi pitch in diatonic pitch class + octave and accidental
-    float staffTopPos    (int i) const;                              // gives a staff top y position
-    float staffBottomPos (int i) const { return staffTopPos(i) + ((kStaffLines - 1) * fLineHeight); }  // gives a staff bottom y position
-    float getNoteWidth   ()      const { return fLineHeight * 1.8f; }
+    float staffTopPos    (int i, float noteHeight) const;                              // gives a staff top y position
+    float staffBottomPos (int i, float noteHeight) const { return staffTopPos(i, noteHeight) + ((kStaffLines - 1) * noteHeight); }  // gives a staff bottom y position
+    float getNoteWidth   (float noteHeight) const { return noteHeight * 1.8f; }
 
     int	    fNumStaves;        // the number of staves
-    float   fLineHeight;       // a staff line height
     bool    fDrawDurationLine; // duration lines control
     VGColor fFontSavedColor;   // the saved font color
 };

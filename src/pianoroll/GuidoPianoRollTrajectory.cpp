@@ -29,15 +29,28 @@
 using namespace std;
 
 //--------------------------------------------------------------------------
-GuidoPianoRollTrajectory::GuidoPianoRollTrajectory() :
-    GuidoPianoRoll(), fCurrentDate(0)
+GuidoPianoRollTrajectory::GuidoPianoRollTrajectory(ARMusic *arMusic) :
+    GuidoPianoRoll(arMusic), fCurrentDate(0)
+{
+    init();
+}
+
+//--------------------------------------------------------------------------
+GuidoPianoRollTrajectory::GuidoPianoRollTrajectory(const char *midiFileName) :
+    GuidoPianoRoll(midiFileName), fCurrentDate(0)
+{
+    init();
+}
+
+//--------------------------------------------------------------------------
+void GuidoPianoRollTrajectory::init()
 {
     previousEventInfos = new std::vector<EventInfos>;
     currentEventInfos  = new std::vector<EventInfos>;
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRollTrajectory::DrawVoice(ARMusicalVoice* v)
+void GuidoPianoRollTrajectory::DrawVoice(ARMusicalVoice* v, DrawParams drawParams)
 {
     if (fVoicesColors != NULL) {
         int voiceNum = v->getVoiceNum();
@@ -54,10 +67,10 @@ void GuidoPianoRollTrajectory::DrawVoice(ARMusicalVoice* v)
         if (fColors->empty()) {
             int r, g, b;
 
-            fColorSeed += kGoldenRatio;
-            fColorSeed  = fmod(fColorSeed, 1);
+            drawParams.colorHue += kGoldenRatio;
+            drawParams.colorHue  = fmod(drawParams.colorHue, 1);
 
-            HSVtoRGB((float) fColorSeed, 0.5f, 0.9f, r, g, b);
+            HSVtoRGB((float) drawParams.colorHue, 0.5f, 0.9f, r, g, b);
 
             fColors->push(VGColor(r, g, b, 255));
         }
@@ -74,7 +87,7 @@ void GuidoPianoRollTrajectory::DrawVoice(ARMusicalVoice* v)
 		TYPE_DURATION     dur  = e->getDuration();
 		TYPE_TIMEPOSITION date = e->getRelativeTimePosition();
 
-        finalDur = (dur ? dur : finalDur); // REM: pas sur que ça soit le mieux à faire
+        finalDur = (dur ? dur : finalDur);
 
         if (fChord) {
             dur   = fChordDuration;
@@ -88,7 +101,7 @@ void GuidoPianoRollTrajectory::DrawVoice(ARMusicalVoice* v)
                 if (end > fEndDate)
                     dur = fEndDate - date;
 
-                DrawMusicalObject(e, date, dur);
+                DrawMusicalObject(e, date, dur, drawParams);
             }
 		}
 		else if (end > fStartDate) { // to make the note end appear
@@ -99,11 +112,11 @@ void GuidoPianoRollTrajectory::DrawVoice(ARMusicalVoice* v)
 			else
                 dur = end - date;
 			
-            DrawMusicalObject(e, date, dur);
+            DrawMusicalObject(e, date, dur, drawParams);
 		}
 
 		if (dynamic_cast<ARRest *>(e)) {
-            handleRest(date);
+            handleRest(date, drawParams);
 			fChord = false;
         }
 		else if (dynamic_cast<ARChordComma *>(e))
@@ -111,11 +124,11 @@ void GuidoPianoRollTrajectory::DrawVoice(ARMusicalVoice* v)
 		else if (dynamic_cast<ARNoteFormat *>(e))
             handleColor(dynamic_cast<ARNoteFormat *>(e));
         else if (dynamic_cast<ARBar *>(e) && fMeasureBarsEnabled)
-            DrawMeasureBar(date);
+            DrawMeasureBar(date, drawParams);
 	}
 
-    DrawLinks();              // Draws link to final event
-    DrawFinalEvent(finalDur); // Draws link after final event
+    DrawLinks(drawParams);                // Draws link to final event
+    DrawFinalEvent(finalDur, drawParams); // Draws link after final event
 
     while (!fColors->empty())
         fColors->pop();
@@ -126,16 +139,16 @@ void GuidoPianoRollTrajectory::DrawVoice(ARMusicalVoice* v)
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRollTrajectory::DrawNote(int pitch, double date, double dur)
+void GuidoPianoRollTrajectory::DrawNote(int pitch, double date, double dur, DrawParams drawParams)
 {
-    float   x     = date2xpos(date);
-    float   y     = pitch2ypos(pitch);
-    VGColor color = fColors->empty() ? NULL : fColors->top();
+    float   x     = date2xpos(date, drawParams.width, drawParams.untimedLeftElementWidth);
+    float   y     = pitch2ypos(pitch, drawParams.height);
+    VGColor color = (fColors == NULL || fColors->empty()) ? NULL : fColors->top();
 
     if (fCurrentDate == date)
         currentEventInfos->push_back(createNoteInfos(x, y, color));
     else {
-        DrawLinks();
+        DrawLinks(drawParams);
         
         previousEventInfos = new std::vector<EventInfos>(*currentEventInfos);
 
@@ -147,24 +160,24 @@ void GuidoPianoRollTrajectory::DrawNote(int pitch, double date, double dur)
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRollTrajectory::DrawLinks()
+void GuidoPianoRollTrajectory::DrawLinks(DrawParams drawParams) const
 {
     if (!previousEventInfos->empty() && !currentEventInfos->empty())
-        DrawAllLinksBetweenTwoEvents();
+        DrawAllLinksBetweenTwoEvents(drawParams);
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRollTrajectory::DrawFinalEvent(double dur)
+void GuidoPianoRollTrajectory::DrawFinalEvent(double dur, DrawParams drawParams)
 {
     if (!currentEventInfos->empty()) {
-        float w = duration2width(dur);
+        float w = duration2width(dur, drawParams.width, drawParams.untimedLeftElementWidth);
 
         for (unsigned int i = 0; i < currentEventInfos->size(); i++) {
             if (!currentEventInfos->at(i).isRest) {
                 VGColor color = currentEventInfos->at(i).color;
 
                 if (color != NULL)
-                    fDev->PushFillColor(color);
+                    drawParams.dev->PushFillColor(color);
 
                 float xCoords[4] = {
                     (float) currentEventInfos->at(i).x,
@@ -174,39 +187,39 @@ void GuidoPianoRollTrajectory::DrawFinalEvent(double dur)
                 };
 
                 float yCoords[4] = {
-                    (float) currentEventInfos->at(i).y - 0.5f * fNoteHeight,
-                    (float) currentEventInfos->at(i).y - 0.5f * fNoteHeight,
-                    (float) currentEventInfos->at(i).y + 0.5f * fNoteHeight,
-                    (float) currentEventInfos->at(i).y + 0.5f * fNoteHeight
+                    (float) currentEventInfos->at(i).y - 0.5f * drawParams.noteHeight,
+                    (float) currentEventInfos->at(i).y - 0.5f * drawParams.noteHeight,
+                    (float) currentEventInfos->at(i).y + 0.5f * drawParams.noteHeight,
+                    (float) currentEventInfos->at(i).y + 0.5f * drawParams.noteHeight
                 };
 
-                fDev->Polygon(xCoords, yCoords, 4);
+                drawParams.dev->Polygon(xCoords, yCoords, 4);
                 
                 if (color != NULL)
-                    fDev->PopFillColor();
+                    drawParams.dev->PopFillColor();
             }
         }
     }
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRollTrajectory::DrawAllLinksBetweenTwoEvents()
+void GuidoPianoRollTrajectory::DrawAllLinksBetweenTwoEvents(DrawParams drawParams) const
 {
     for (unsigned int i = 0; i < previousEventInfos->size(); i++) {
         for (unsigned int j = 0; j < currentEventInfos->size(); j++) {
             if (!previousEventInfos->at(i).isRest)
-                DrawLinkBetween(previousEventInfos->at(i), currentEventInfos->at(j));
+                DrawLinkBetween(previousEventInfos->at(i), currentEventInfos->at(j), drawParams);
         }
     }
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRollTrajectory::DrawLinkBetween(GuidoPianoRollTrajectory::EventInfos leftEvent, GuidoPianoRollTrajectory::EventInfos rightEvent)
+void GuidoPianoRollTrajectory::DrawLinkBetween(GuidoPianoRollTrajectory::EventInfos leftEvent, GuidoPianoRollTrajectory::EventInfos rightEvent, DrawParams drawParams) const
 {
     VGColor color = leftEvent.color;
 
     if (color != NULL)
-        fDev->PushFillColor(color);
+        drawParams.dev->PushFillColor(color);
 
     float xCoords[4] = {
         (float) leftEvent.x,
@@ -215,26 +228,26 @@ void GuidoPianoRollTrajectory::DrawLinkBetween(GuidoPianoRollTrajectory::EventIn
         (float) leftEvent.x
     };
 
-    float y1 = (float) leftEvent.y - 0.5f * fNoteHeight;
-    float y4 = (float) leftEvent.y + 0.5f * fNoteHeight;
+    float y1 = (float) leftEvent.y - 0.5f * drawParams.noteHeight;
+    float y4 = (float) leftEvent.y + 0.5f * drawParams.noteHeight;
     float y2 = y1;
     float y3 = y4;
 
     if (!rightEvent.isRest) {
-        y2 = (float) rightEvent.y - 0.5f * fNoteHeight;
-        y3 = (float) rightEvent.y + 0.5f * fNoteHeight;
+        y2 = (float) rightEvent.y - 0.5f * drawParams.noteHeight;
+        y3 = (float) rightEvent.y + 0.5f * drawParams.noteHeight;
     }
 
     float yCoords[4] = { y1, y2, y3, y4 };
 
-    fDev->Polygon(xCoords, yCoords, 4);
+    drawParams.dev->Polygon(xCoords, yCoords, 4);
 
     if (color != NULL)
-        fDev->PopFillColor();
+        drawParams.dev->PopFillColor();
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRollTrajectory::handleColor(ARNoteFormat* noteFormat)
+void GuidoPianoRollTrajectory::handleColor(ARNoteFormat* noteFormat) const
 {
     const TagParameterString *tps = noteFormat->getColor();
     unsigned char colref[4];
@@ -247,12 +260,12 @@ void GuidoPianoRollTrajectory::handleColor(ARNoteFormat* noteFormat)
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRollTrajectory::handleRest(double date)
+void GuidoPianoRollTrajectory::handleRest(double date, DrawParams drawParams)
 {
     if (!fChord) {
-        DrawLinks();
+        DrawLinks(drawParams);
 
-        float x = date2xpos(date);
+        float x = date2xpos(date, drawParams.width, drawParams.untimedLeftElementWidth);
 
         previousEventInfos = new std::vector<EventInfos>(*currentEventInfos);
 
@@ -268,7 +281,7 @@ void GuidoPianoRollTrajectory::handleRest(double date)
 }*/
 
 //--------------------------------------------------------------------------
-GuidoPianoRollTrajectory::EventInfos GuidoPianoRollTrajectory::createNoteInfos(float x, float y, VGColor color)
+GuidoPianoRollTrajectory::EventInfos GuidoPianoRollTrajectory::createNoteInfos(float x, float y, VGColor color) const
 {
     EventInfos newNoteInfos;
 
@@ -281,7 +294,7 @@ GuidoPianoRollTrajectory::EventInfos GuidoPianoRollTrajectory::createNoteInfos(f
 }
 
 //--------------------------------------------------------------------------
-GuidoPianoRollTrajectory::EventInfos GuidoPianoRollTrajectory::createRestInfos(float x)
+GuidoPianoRollTrajectory::EventInfos GuidoPianoRollTrajectory::createRestInfos(float x) const
 {
     EventInfos newRestInfos;
 
@@ -295,7 +308,7 @@ GuidoPianoRollTrajectory::EventInfos GuidoPianoRollTrajectory::createRestInfos(f
 #ifdef MIDIEXPORT
 
 //--------------------------------------------------------------------------
-void GuidoPianoRollTrajectory::DrawMidiSeq(MidiSeqPtr seq, int tpqn)
+void GuidoPianoRollTrajectory::DrawMidiSeq(MidiSeqPtr seq, int tpqn, DrawParams drawParams)
 {
 	MidiEvPtr ev = FirstEv(seq);
 	int tpwn     = tpqn * 4;
@@ -306,28 +319,28 @@ void GuidoPianoRollTrajectory::DrawMidiSeq(MidiSeqPtr seq, int tpqn)
 	while (ev) {
 		if (EvType(ev) == typeNote) {
 			double date = double(Date(ev)) / tpwn;
-			double dur  = double(Dur(ev))  / tpwn * 1.25; // REM: I don't know why it works but it does !
+			double dur  = double(Dur(ev))  / tpwn;
 
             finalDur = (dur ? dur : finalDur);
 
 			if (date >= start) {
                 if (date < end) {
                     double remain = end - date;
-                    DrawNote(Pitch(ev), date, (dur > remain ? remain : dur));
+                    DrawNote(Pitch(ev), date, (dur > remain ? remain : dur), drawParams);
                 }
 			}
 			else if ((date + dur) > start) {
 				dur -= (start - date);
 				double remain = end - start;
-				DrawNote(Pitch(ev), start, (dur > remain ? remain : dur));
+				DrawNote(Pitch(ev), start, (dur > remain ? remain : dur), drawParams);
 			}
 		}
 
 		ev = Link(ev);
 	}
 
-    DrawLinks();              // Draws link to final event
-    DrawFinalEvent(finalDur); // Draws link after final event
+    DrawLinks(drawParams);                // Draws link to final event
+    DrawFinalEvent(finalDur, drawParams); // Draws link after final event
 
     previousEventInfos->clear();
     currentEventInfos->clear();

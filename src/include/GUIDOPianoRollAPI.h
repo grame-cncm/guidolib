@@ -3,8 +3,7 @@
 
 /*
   GUIDO Library
-  Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2003, 2004, 1013  Grame
+  Copyright (C) 2014 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -17,28 +16,40 @@
 
 #include "GUIDOEngine.h"
 #include "GUIDOExport.h"
+#include "GUIDOScoreMap.h"
 
 class GuidoPianoRoll;
-class GuidoReducedProportional;
 
 /** \brief PianoRollType
 */
 enum PianoRollType {
-	simplePianoRoll,
-    trajectoryPianoRoll,
-    reducedProportional
+	kSimplePianoRoll,
+    kTrajectoryPianoRoll
 };
 
-/** \brief PitchLinesDisplayMode
+/** \brief Pitch lines display mode
 */
-enum PitchLinesDisplayMode {
-    automatic,
-    no_line,
-    one_line,
-    two_lines,
-    diatonic,
-    chromatic
-};
+const int kCLine      =  1;
+const int kCSharpLine =  1<<1;
+const int kDLine      =  1<<2;
+const int kDSharpLine =  1<<3;
+const int kELine      =  1<<4;
+const int kFLine      =  1<<5;
+const int kFSharpLine =  1<<6;
+const int kGLine      =  1<<7;
+const int kGSharpLine =  1<<8;
+const int kALine      =  1<<9;
+const int kASharpLine =  1<<10;
+const int kBLine      =  1<<11;
+const int kAutoLines  =  0;
+const int kNoLine     = -1;
+
+typedef struct LimitParams {
+    GuidoDate startDate;
+    GuidoDate endDate;
+    int       lowPitch;
+    int       highPitch;
+} LimitParams;
 
 #ifdef __cplusplus
 extern "C" {
@@ -54,102 +65,77 @@ extern "C" {
 	//---------------------------------------------------------------------------
 
 	/*!
-		\brief Creates a new piano roll corresponding to type :
+		\brief Creates a new piano roll from AR, corresponding to type :
                              simplePianoRoll     -> basic piano roll
                              trajectoryPianoRoll -> every event is graphically linked to the previous one
-                             reducedProportional -> mix between piano roll (for event timing) and classic score (for graphic display)
 		\param PianoRollType the piano roll type
+        \param arh an AR handler
 		\return a guido piano roll.
 	*/
-	GUIDOAPI(GuidoPianoRoll *)  GuidoCreatePianoRoll(PianoRollType type);
+	GUIDOAPI(GuidoPianoRoll *)  GuidoAR2PianoRoll(PianoRollType type, ARHandler arh);
+    
+	/*!
+		\brief Creates a new piano roll from Midi, corresponding to type :
+                             simplePianoRoll     -> basic piano roll
+                             trajectoryPianoRoll -> every event is graphically linked to the previous one
+		\param PianoRollType the piano roll type
+        \param midiFileName a midi file name
+		\return a guido piano roll.
+	*/
+	GUIDOAPI(GuidoPianoRoll *)  GuidoMidi2PianoRoll(PianoRollType type, const char *midiFileName);
 
 	/*!
 		\brief Destroys a guido piano roll and releases all the associated ressources
-		\param pr a pianoroll previously created with GuidoCreatePianoRoll
+		\param pr a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll
 		\return a Guido error code
 	*/
 	GUIDOAPI(GuidoErrCode)	    GuidoDestroyPianoRoll(GuidoPianoRoll *pr);
 
 	/*!
-		\brief Sets an AR to a piano roll
-		\param pr a pianoroll previously created with GuidoCreatePianoRoll
-        \param arh an AR handler
+		\brief Sets limits to a piano roll (start/end date, lower/higher pitch)
+		\param pr a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll
+		\param limitParams the structure containing limits :
+                      start date    (GuidoDate)     (0/0 to adjust automatically start date to the score's start date)
+                      end date      (GuidoDate)     (0/0 to adjust automatically end date to the score's end date)
+                      minimal pitch (midi notation) (-1 to adjust automatically min pitch to the score's minimal pitch)
+                      maximal pitch (midi notation) (-1 to adjust automatically max pitch to the score's maximal pitch)
+                Remark : minimal range pitch accepted is 1 octave.
         \return a Guido error code
 	*/
-    GUIDOAPI(GuidoErrCode)      GuidoPianoRollSetAR(GuidoPianoRoll *pr, ARHandler arh);
-    
-	/*!
-		\brief Sets an midi file to a piano roll
-		\param pr a pianoroll previously created with GuidoCreatePianoRoll
-        \param midiFileName a midi file name
-        \return a Guido error code
-	*/
-    GUIDOAPI(GuidoErrCode)      GuidoPianoRollSetMidi(GuidoPianoRoll *pr, const char *midiFileName);
-
-	/*!
-		\brief Sets dimensions to a piano roll
-		\param pr a pianoroll previously created with GuidoCreatePianoRoll
-		\param width the width of the canvas (-1 to set the default width)
-        \param height the height of the canvas (-1 to set the default height)
-        \return a Guido error code
-	*/
-    GUIDOAPI(GuidoErrCode)      GuidoPianoRollSetCanvasDimensions(GuidoPianoRoll *pr, int width, int height);
-
-	/*!
-		\brief Sets time limits to a piano roll
-		\param pr a pianoroll previously created with GuidoCreatePianoRoll
-		\param start the start date (0/0 to set the default start date)
-        \param end the end date (0/0 to set the default end date)
-        \return a Guido error code
-	*/
-	GUIDOAPI(GuidoErrCode)      GuidoPianoRollSetTimeLimits(GuidoPianoRoll *pr, GuidoDate start, GuidoDate end);
-
-	/*!
-		\brief Sets pitch limits to a piano roll (minimum 1 octave)
-		\param pr a pianoroll previously created with GuidoCreatePianoRoll
-		\param minPitch the minimal pitch (midi notation) (-1 to adjust automatically min pitch to the score's minimal pitch)
-        \param maxPitch the maximal pitch (midi notation) (-1 to adjust automatically max pitch to the score's maximal pitch)
-        \return a Guido error code
-	*/
-	GUIDOAPI(GuidoErrCode)      GuidoPianoRollSetPitchLimits(GuidoPianoRoll *pr, int minPitch, int maxPitch);
+	GUIDOAPI(GuidoErrCode)      GuidoPianoRollSetLimits(GuidoPianoRoll *pr, LimitParams limitParams);
 
     /*!
-		\brief Sets if duration lines will de drawn (only for a GuidoReducedProportional)
-		\param pr a pianoroll (GuidoReducedProportional) previously created with GuidoCreatePianoRoll
-		\param enabled a boolean corresponding to the draw state
-        \return a Guido error code
-	*/
-	GUIDOAPI(GuidoErrCode)      GuidoPianoRollEnableDurationLines(GuidoPianoRoll *pr, bool enabled);
-    
-    /*!
-		\brief Enables keyboard or not (not for GuidoReducedProportional)
-		\param pr a pianoroll previously created with GuidoCreatePianoRoll
+		\brief Enables keyboard or not (not enabled by default)
+		\param pr a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll
 		\param enabled a boolean corresponding to the keyboard draw state
         \return a Guido error code
 	*/
 	GUIDOAPI(GuidoErrCode)      GuidoPianoRollEnableKeyboard(GuidoPianoRoll *pr, bool enabled);
     
 	/*!
-		\brief Gets the piano roll keyboard width (not for GuidoReducedProportional)
-		\param pr a pianoroll previously created with GuidoCreatePianoRoll
-        \param keyboardWidth the keyboard width
+		\brief Gets the piano roll keyboard width
+		\param pr a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll
+        \param width the width of the piano roll (-1 to set the default width : 1024)
+        \param height the height of the canvas (-1 to set the default height : 512)
+        \param keyboardWidth the pianoroll keyboard width
         \return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoPianoRollGetKeyboardWidth(GuidoPianoRoll *pr, float &keyboardWidth);
+	GUIDOAPI(GuidoErrCode)      GuidoPianoRollGetKeyboardWidth(GuidoPianoRoll *pr, int width, int height, float &keyboardWidth);
 
     /*!
-		\brief Enables or not the automatic voices coloration (if a color is manually set with
-            GuidoPianoRollSetColorToVoice, random color will not be applied for this voice)
-		\param pr a pianoroll previously created with GuidoCreatePianoRoll
+		\brief Enables or not the automatic voices coloration (not enabled by default) (not for a midi rendering) // REM: à voir
+               If a color is manually set with GuidoPianoRollSetColorToVoice, automatic
+               color will not be applied for this voice.
+		\param pr a pianoroll previously created with GuidoAR2PianoRoll
 		\param enabled a boolean corresponding to the color state
         \return a Guido error code
 	*/
 	GUIDOAPI(GuidoErrCode)      GuidoPianoRollEnableAutoVoicesColoration(GuidoPianoRoll *pr, bool enabled);
 
     /*!
-		\brief Sets a color to a voice
-		\param pr a pianoroll previously created with GuidoCreatePianoRoll
-		\param voiceNum the voice number
+		\brief Sets a color to a voice (black by default)
+		\param pr a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll
+		\param voiceNum the voice number (first voice is number 1)
         \param r the red param of RGB color
         \param g the green param of RGB color
         \param b the blue param of RGB color
@@ -159,51 +145,42 @@ extern "C" {
 	GUIDOAPI(GuidoErrCode)      GuidoPianoRollSetColorToVoice(GuidoPianoRoll *pr, int voiceNum, int r, int g, int b, int a);
     
     /*!
-		\brief Enables or not measure bars (not for a midi rendering)
-		\param pr a pianoroll previously created with GuidoCreatePianoRoll
+		\brief Enables or not measure bars (false by default)
+		\param pr a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll
 		\param enabled a boolean corresponding to the measure bars draw state
         \return a Guido error code
 	*/
 	GUIDOAPI(GuidoErrCode)      GuidoPianoRollEnableMeasureBars(GuidoPianoRoll *pr, bool enabled);
     
     /*!
-		\brief Sets the pitch lines display mode (not for GuidoReducedProportional) :
-                                                   automatic -> automatic
-                                                   no_line   -> no pitch lines
-                                                   one_line  -> only C lines
-                                                   two_line  -> only C and G lines
-                                                   diatonic  -> only diatonic scale lines
-                                                   chromatic -> all lines
-		\param pr a pianoroll previously created with GuidoCreatePianoRoll
+		\brief Sets the pitch lines display mode (automatic by default). Use Pitch lines display mode constants to pick lines
+               which will be be displayed.
+               Example : "kCLine + kGLine" will displayed C and G line. "kNoLine" doesn't display any line. "kAutoLines" adjust line display
+                         according to piano roll pitch range (automatic possibilities : no line, C line, C and G line, chromatic scale, diatonic scale);
+		\param pr a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll
 		\param mode an int corresponding to the pitch lines display mode
         \return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoPianoRollSetPitchLinesDisplayMode(GuidoPianoRoll *pr, PitchLinesDisplayMode mode);
-    
-	/*!
-		\brief Gets the piano roll total size
-		\param pr a pianoroll previously created with GuidoCreatePianoRoll
-        \param width the piano roll width
-        \param heigt the piano roll height
-        \return a Guido error code
+	GUIDOAPI(GuidoErrCode)      GuidoPianoRollSetPitchLinesDisplayMode(GuidoPianoRoll *pr, int mode);
+
+    /*!
+		\brief Gets the piano roll map
+		\param pr a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll
+        \param width the width of the piano roll (-1 to set the default width : 1024)
+        \param height the height of the canvas (-1 to set the default height : 512)
+        \return a Guido error code (returns guidoErrBadParameter if keyboard width is higher than width param)
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoPianoRollGetSize(GuidoPianoRoll *pr, int &width, int &height);
+    GUIDOAPI(GuidoErrCode)      GuidoPianoRollGetMap(GuidoPianoRoll *pr, int width, int height, Time2GraphicMap &outmap);
 
 	/*!
-		\brief Gets a rendered piano roll from AR, writing it on a VGDevice
-		\param pr a pianoroll previously created with GuidoCreatePianoRoll
-        \param dev the device where the piano will be rendered
-        \return a Guido error code
+		\brief Draw the piano roll on a VGDevice
+		\param pr a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll
+        \param width the width on which piano roll will be drawn (-1 to set the default width : 1024)
+        \param height the height on which piano roll will be drawn (-1 to set the default height : 512)
+        \param dev the device on which piano will be drawn
+        \return a Guido error code (returns guidoErrBadParameter if keyboard width is higher than width param)
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoPianoRollGetRenderingFromAR(GuidoPianoRoll *pr, VGDevice* dev);
-
-	/*!
-		\brief Gets a rendered piano roll from midi, writing it on a VGDevice
-		\param pr a pianoroll previously created with GuidoCreatePianoRoll
-        \param dev the device where the piano will be rendered
-        \return a Guido error code
-	*/
-	GUIDOAPI(GuidoErrCode)      GuidoPianoRollGetRenderingFromMidi(GuidoPianoRoll *pr, VGDevice* dev);
+	GUIDOAPI(GuidoErrCode)      GuidoPianoRollOnDraw(GuidoPianoRoll *pr, int width, int height, VGDevice* dev);
 
 /*! @} */
 

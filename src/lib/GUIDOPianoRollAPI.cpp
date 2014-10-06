@@ -19,9 +19,9 @@
 
 #include "GUIDOInternal.h"
 #include "GuidoPianoRoll.h"
-#include "GuidoReducedProportional.h"
 #include "GuidoPianoRollTrajectory.h"
 #include "midifile.h"
+#include <cmath>
 
 #include "GUIDOPianoRollAPI.h"
 
@@ -31,18 +31,49 @@
 // ==========================================================================
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoPianoRoll *) GuidoCreatePianoRoll(PianoRollType type)
+GUIDOAPI(GuidoPianoRoll *) GuidoAR2PianoRoll(PianoRollType type, ARHandler arh)
 {
+    if (!arh)
+        return NULL;
+
+    ARMusic *arMusic = arh->armusic;
+
+    if (!arMusic)
+        return NULL;
+
     GuidoPianoRoll *newPianoRoll;
 
-    if (type == simplePianoRoll)
-        newPianoRoll = new GuidoPianoRoll();
-    else if (type == trajectoryPianoRoll)
-        newPianoRoll = (GuidoPianoRollTrajectory *) new GuidoPianoRollTrajectory();
-    else if (type == reducedProportional)
-        newPianoRoll = (GuidoPianoRoll *) new GuidoReducedProportional();
+    if (type == kSimplePianoRoll)
+        newPianoRoll = new GuidoPianoRoll(arMusic);
+    else if (type == kTrajectoryPianoRoll)
+        newPianoRoll = (GuidoPianoRollTrajectory *) new GuidoPianoRollTrajectory(arMusic);
 
 	return newPianoRoll;
+}
+
+// ------------------------------------------------------------------------
+GUIDOAPI(GuidoPianoRoll *) GuidoMidi2PianoRoll(PianoRollType type, const char *midiFileName)
+{
+#ifdef MIDIEXPORT
+    if (!midiFileName)
+        return NULL;
+
+    MIDIFile mf;
+
+    if (!mf.Open(midiFileName, MidiFileRead))
+        return NULL;
+
+    GuidoPianoRoll *newPianoRoll;
+
+    if (type == kSimplePianoRoll)
+        newPianoRoll = new GuidoPianoRoll(midiFileName);
+    else if (type == kTrajectoryPianoRoll)
+        newPianoRoll = (GuidoPianoRollTrajectory *) new GuidoPianoRollTrajectory(midiFileName);
+
+    return newPianoRoll;
+#else
+    return NULL;
+#endif
 }
 
 // ------------------------------------------------------------------------
@@ -51,63 +82,21 @@ GUIDOAPI(GuidoErrCode) GuidoDestroyPianoRoll(GuidoPianoRoll *pr)
     if (!pr)
         return guidoErrBadParameter;
 
-    //delete pr; // REM: MAKES CRASH, WHY ?
+    delete pr;
 
 	return guidoNoErr;
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoPianoRollSetAR(GuidoPianoRoll *pr, ARHandler arh)
-{
-    if (!pr || !arh)
-        return guidoErrBadParameter;
-
-    ARMusic *arMusic = arh->armusic;
-
-    if (!arMusic)
-        return guidoErrInvalidHandle;
-
-    pr->setARMusic(arMusic);
-
-	return guidoNoErr;
-}
-
-// ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoPianoRollSetMidi(GuidoPianoRoll *pr, const char *midiFileName)
-{
-#ifdef MIDIEXPORT
-    if (!pr || !midiFileName)
-        return guidoErrBadParameter;
-
-    MIDIFile mf;
-    
-    if (!mf.Open(midiFileName, MidiFileRead))
-		return guidoErrFileAccess;
-
-    pr->setMidiFile(midiFileName);
-
-	return guidoNoErr;
-#else
-    return guidoErrActionFailed;
-#endif
-}
-
-// ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoPianoRollSetCanvasDimensions(GuidoPianoRoll *pr, int width, int height)
-{
-    if (!pr || width < -1 || height < -1)
-        return guidoErrBadParameter;
-
-    pr->setCanvasDimensions(width, height);
-
-	return guidoNoErr;
-}
-
-// ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoPianoRollSetTimeLimits(GuidoPianoRoll *pr, GuidoDate start, GuidoDate end)
+GUIDOAPI(GuidoErrCode) GuidoPianoRollSetLimits(GuidoPianoRoll *pr, LimitParams limitParams)
 {
     if (!pr)
         return guidoErrBadParameter;
+
+    /**** SET TIME LIMITS ****/
+
+    GuidoDate start = limitParams.startDate;
+    GuidoDate end   = limitParams.endDate;
 
     if (start.denom < 0 || end.denom < 0 || (start.denom == 0 && start.num != 0) || (end.denom == 0 && end.num != 0))
         return guidoErrBadParameter;
@@ -124,13 +113,14 @@ GUIDOAPI(GuidoErrCode) GuidoPianoRollSetTimeLimits(GuidoPianoRoll *pr, GuidoDate
     else
         pr->setLimitDates(start, end);
 
-	return guidoNoErr;
-}
+    /*************************/
 
-// ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoPianoRollSetPitchLimits(GuidoPianoRoll *pr, int minPitch, int maxPitch)
-{
-    if (!pr || minPitch < -1 || maxPitch < -1 || minPitch > 127 || maxPitch > 127)
+    /**** SET PITCH LIMIT ****/
+
+    int minPitch = limitParams.lowPitch;
+    int maxPitch = limitParams.highPitch;
+
+    if (minPitch < -1 || maxPitch < -1 || minPitch > 127 || maxPitch > 127)
         return guidoErrBadParameter;
 
     if (minPitch != -1 && maxPitch != -1 && minPitch > (maxPitch - 11))
@@ -138,19 +128,7 @@ GUIDOAPI(GuidoErrCode) GuidoPianoRollSetPitchLimits(GuidoPianoRoll *pr, int minP
 
     pr->setPitchRange(minPitch, maxPitch);
 
-	return guidoNoErr;
-}
-
-// ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoPianoRollEnableDurationLines(GuidoPianoRoll *pr, bool enabled)
-{
-    if (!pr)
-        return guidoErrBadParameter;
-
-    if (!dynamic_cast<GuidoReducedProportional *>(pr))
-        return guidoErrBadParameter;
-
-    pr->enableDurationLines(enabled);
+    /*************************/
 
 	return guidoNoErr;
 }
@@ -158,7 +136,7 @@ GUIDOAPI(GuidoErrCode) GuidoPianoRollEnableDurationLines(GuidoPianoRoll *pr, boo
 // ------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoPianoRollEnableKeyboard(GuidoPianoRoll *pr, bool enabled)
 {
-    if (!pr || dynamic_cast<GuidoReducedProportional *>(pr))
+    if (!pr)
         return guidoErrBadParameter;
 
     pr->enableKeyboard(enabled);
@@ -167,12 +145,12 @@ GUIDOAPI(GuidoErrCode) GuidoPianoRollEnableKeyboard(GuidoPianoRoll *pr, bool ena
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoPianoRollGetKeyboardWidth(GuidoPianoRoll *pr, float &keyboardWidth)
+GUIDOAPI(GuidoErrCode) GuidoPianoRollGetKeyboardWidth(GuidoPianoRoll *pr, int width, int height, float &keyboardWidth)
 {
-    if (!pr || dynamic_cast<GuidoReducedProportional *>(pr))
+    if (!pr || width < -1 || width < -1 || width == 0 || height == 0)
         return guidoErrBadParameter;
 
-    keyboardWidth = pr->getKeyboardWidth();
+    keyboardWidth = pr->getKeyboardWidth(width, height);
 
 	return guidoNoErr;
 }
@@ -218,9 +196,9 @@ GUIDOAPI(GuidoErrCode) GuidoPianoRollEnableMeasureBars(GuidoPianoRoll *pr, bool 
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoPianoRollSetPitchLinesDisplayMode(GuidoPianoRoll *pr, PitchLinesDisplayMode mode)
+GUIDOAPI(GuidoErrCode) GuidoPianoRollSetPitchLinesDisplayMode(GuidoPianoRoll *pr, int mode)
 {
-    if (!pr || dynamic_cast<GuidoReducedProportional *>(pr))
+    if (!pr || mode < -1 || mode > pow(2.0, 12) - 1)
         return guidoErrBadParameter;
 
     pr->setPitchLinesDisplayMode(mode);
@@ -229,39 +207,35 @@ GUIDOAPI(GuidoErrCode) GuidoPianoRollSetPitchLinesDisplayMode(GuidoPianoRoll *pr
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoPianoRollGetSize(GuidoPianoRoll *pr, int &width, int &height) {
-    if (!pr)
+GUIDOAPI(GuidoErrCode) GuidoPianoRollGetMap(GuidoPianoRoll *pr, int width, int height, Time2GraphicMap &outmap)
+{
+    if (!pr || width < -1 || width < -1 || width == 0 || height == 0)
         return guidoErrBadParameter;
 
-    pr->getSize(width, height);
+    int autoWidth  = (width  == -1 ? kDefaultWidth  : width);
+    int autoHeight = (height == -1 ? kDefaultHeight : height);
 
-	return guidoNoErr;
+    if (pr->getKeyboardWidth(autoWidth, autoHeight) > autoWidth)
+        return guidoErrBadParameter; // Keyboard takes to much place (create a new error code ?)
+    else
+        pr->getMap(autoWidth, autoHeight, outmap);
+
+    return guidoNoErr;
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoPianoRollGetRenderingFromAR(GuidoPianoRoll *pr, VGDevice *dev)
+GUIDOAPI(GuidoErrCode) GuidoPianoRollOnDraw(GuidoPianoRoll *pr, int width, int height, VGDevice *dev)
 {
-    if (!pr || !dev)
+    if (!pr || !dev || width < -1 || width < -1 || width == 0 || height == 0)
         return guidoErrBadParameter;
 
-    if (!pr->ownsARMusic())
-        return guidoErrInvalidHandle;
+    int autoWidth  = (width  == -1 ? kDefaultWidth : width);
+    int autoHeight = (height == -1 ? kDefaultHeight : height);
 
-    pr->getRenderingFromAR(dev);
-
-	return guidoNoErr;
-}
-
-// ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoPianoRollGetRenderingFromMidi(GuidoPianoRoll *pr, VGDevice *dev)
-{
-    if (!pr || !dev)
-        return guidoErrBadParameter;
-
-    if (!pr->ownsMidi())
-        return guidoErrInvalidHandle;
-
-    pr->getRenderingFromMidi(dev);
+    if (pr->getKeyboardWidth(autoWidth, autoHeight) > autoWidth)
+        return guidoErrBadParameter; // Keyboard takes to much place (create a new error code ?)
+    else
+        pr->onDraw(autoWidth, autoHeight, dev);
 
 	return guidoNoErr;
 }

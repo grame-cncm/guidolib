@@ -19,7 +19,8 @@
 class GuidoPianoRollTrajectory : public GuidoPianoRoll
 {
 public:
-             GuidoPianoRollTrajectory();
+             GuidoPianoRollTrajectory(ARMusic *arMusic);
+             GuidoPianoRollTrajectory(const char *midiFileName);
     virtual ~GuidoPianoRollTrajectory() {}
 
 private:
@@ -30,8 +31,8 @@ private:
         bool isRest;
     } EventInfos;
 
-    EventInfos createNoteInfos(float x, float y, VGColor color);
-    EventInfos createRestInfos(float x);
+    EventInfos createNoteInfos(float x, float y, VGColor color) const;
+    EventInfos createRestInfos(float x) const;
 
     /**** Chords ****/
     /* Computes if some rights chords points have several links towards them */
@@ -44,22 +45,22 @@ private:
     std::vector<EventInfos> *currentEventInfos;
 
 protected:
-	void DrawVoice(ARMusicalVoice *v);
-    void DrawNote (int pitch, double date, double dur);
-    void DrawLinks();
-    void DrawFinalEvent(double dur);
-    void DrawAllLinksBetweenTwoEvents();
-    void DrawLinkBetween(EventInfos leftEvent, EventInfos rightEvent);
+    void init();
 
-	void handleColor(ARNoteFormat *e);
-	void handleRest (double date);
+	void DrawVoice(ARMusicalVoice* v, DrawParams drawParams);
+    void DrawNote (int pitch, double date, double dur, DrawParams drawParams);
+    void DrawLinks(DrawParams drawParams) const;
+    void DrawFinalEvent(double dur, DrawParams drawParams);
+    void DrawAllLinksBetweenTwoEvents(DrawParams drawParams) const;
+    void DrawLinkBetween(GuidoPianoRollTrajectory::EventInfos leftEvent, GuidoPianoRollTrajectory::EventInfos rightEvent, DrawParams drawParams) const;
+
+	void handleColor(ARNoteFormat *e) const;
+	void handleRest (double date, DrawParams drawParams);
 	//void handleEmpty (double date);
 
-    void DrawMidiSeq(MidiSeqPtr seq, int tpqn);
+    void DrawMidiSeq(MidiSeqPtr seq, int tpqn, DrawParams drawParams);
 
     double fCurrentDate;
-
-    EventInfos test();
 };
 
 #endif
