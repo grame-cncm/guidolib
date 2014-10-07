@@ -860,9 +860,20 @@ char * GuidoAbstractExport_retCString( const GRHandler handle, int page)
   return GuidoInternalDeviceExport_retCString(handle, page, guido_abstract);
 }
 
-char * GuidoBinaryExport_retCString( const GRHandler handle, int page)
+int GuidoBinaryExport_retSize( const GRHandler handle, int page, char * in_arr )
 {
-  return GuidoInternalDeviceExport_retCString(handle, page, guido_binary);
+	static stringstream sstr;
+	sstr.clear();
+	GuidoErrCode err;
+	err = GuidoBinaryExport(handle, page, sstr);
+	if (err) {
+	  return 0;
+	}
+	const char * underlying_string = sstr.str().c_str();
+	for (int i = 0; i < sstr.str().size(); i++) {
+	  in_arr[i] = underlying_string[i];
+	}
+	return sstr.str().size();
 }
 
 void  GuidoReleaseCString( char *stringToRelease ) {

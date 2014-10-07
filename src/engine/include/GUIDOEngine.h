@@ -761,7 +761,7 @@ The number of version functions is due to historical reasons.
 
     char *  GuidoSVGExportWithFontSpec_retCString( const GRHandler handle, int page );
     char *  GuidoAbstractExport_retCString( const GRHandler handle, int page );
-    char *  GuidoBinaryExport_retCString( const GRHandler handle, int page );
+    int  GuidoBinaryExport_retSize( const GRHandler handle, int page, char * in_arr  );
     void  GuidoReleaseCString( char *stringToRelease );
 
 /*! @} */

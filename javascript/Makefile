@@ -17,7 +17,7 @@ CXXFLAGS += $(addprefix -I, $(subprojects)) -DINDEPENDENTSVG -DJSON_ONLY
 
 EXPORT := "['_GuidoSVGExportWithFontSpec_retCString',\
 			'_GuidoAbstractExport_retCString',\
-			'_GuidoBinaryExport_retCString',\
+			'_GuidoBinaryExport_retSize',\
 			'_GuidoInitWithIndependentSVG',\
 			'_GuidoOpenParser',\
 			'_GuidoString2AR',\

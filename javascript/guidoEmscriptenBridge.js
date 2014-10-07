@@ -1,6 +1,6 @@
 GuidoSVGExportWithFontSpec_retCString = Module.cwrap('GuidoSVGExportWithFontSpec_retCString', 'number', ['number', 'number']);
 GuidoAbstractExport_retCString = Module.cwrap('GuidoAbstractExport_retCString', 'number', ['number', 'number']);
-GuidoBinaryExport_retCString = Module.cwrap('GuidoBinaryExport_retCString', 'number', ['number', 'number']);
+GuidoBinaryExport_retSize = Module.cwrap('GuidoBinaryExport_retSize', 'number', ['number', 'number', 'number']);
 
 GuidoInitWithIndependentSVG = Module.cwrap('GuidoInitWithIndependentSVG', 'number', ['number']);
 GuidoOpenParser = Module.cwrap('GuidoOpenParser', 'number', []);
