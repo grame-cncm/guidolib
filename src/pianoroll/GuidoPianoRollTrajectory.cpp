@@ -122,7 +122,7 @@ void GuidoPianoRollTrajectory::DrawVoice(ARMusicalVoice* v, DrawParams drawParam
 		else if (dynamic_cast<ARChordComma *>(e))
 			fChord = true;
 		else if (dynamic_cast<ARNoteFormat *>(e))
-            handleColor(dynamic_cast<ARNoteFormat *>(e));
+            handleColor(dynamic_cast<ARNoteFormat *>(e), drawParams);
         else if (dynamic_cast<ARBar *>(e) && fMeasureBarsEnabled)
             DrawMeasureBar(date, drawParams);
 	}
@@ -251,15 +251,15 @@ void GuidoPianoRollTrajectory::DrawLinkBetween(GuidoPianoRollTrajectory::EventIn
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRollTrajectory::handleColor(ARNoteFormat* noteFormat) const
+void GuidoPianoRollTrajectory::handleColor(ARNoteFormat* noteFormat, DrawParams drawParams) const
 {
     const TagParameterString *tps = noteFormat->getColor();
     unsigned char colref[4];
 
     if (tps && tps->getRGB(colref))
         fColors->push(VGColor(colref[0], colref[1], colref[2], colref[3]));
-    else if (fVoicesAutoColored && fColors->size() > 1
-        || !fVoicesAutoColored && !fColors->empty())
+    else if ((fVoicesAutoColored && fColors->size() > 1)
+        || (!fVoicesAutoColored && !fColors->empty()))
         fColors->pop();
 }
 
@@ -314,18 +314,18 @@ GuidoPianoRollTrajectory::EventInfos GuidoPianoRollTrajectory::createRestInfos(f
 //--------------------------------------------------------------------------
 void GuidoPianoRollTrajectory::DrawMidiSeq(MidiSeqPtr seq, int tpqn, DrawParams drawParams)
 {
-	MidiEvPtr ev = FirstEv(seq);
-	int tpwn     = tpqn * 4;
-	double start = double(fStartDate);
-	double end   = double(fEndDate);
-    TYPE_DURATION finalDur;
+	MidiEvPtr ev       = FirstEv(seq);
+	int       tpwn     = tpqn * 4;
+	double    start    = double(fStartDate);
+	double    end      = double(fEndDate);
+    double    finalDur = 0;
 
 	while (ev) {
 		if (EvType(ev) == typeNote) {
 			double date = double(Date(ev)) / tpwn;
 			double dur  = double(Dur(ev))  / tpwn;
 
-            finalDur = (dur ? dur : finalDur);
+            finalDur = (dur > 0 ? dur : finalDur);
 
 			if (date >= start) {
                 if (date < end) {

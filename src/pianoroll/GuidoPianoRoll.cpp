@@ -50,11 +50,10 @@ using namespace std;
 
 //--------------------------------------------------------------------------
 GuidoPianoRoll::GuidoPianoRoll(ARMusic *arMusic) :
-    fKeyboardEnabled(false),
+    fARMusic(NULL),
     fVoicesAutoColored(false), fVoicesColors(NULL),
-    fMeasureBarsEnabled(false),
-    fPitchLinesDisplayMode(kAutoLines),
-    fARMusic(NULL)
+    fKeyboardEnabled(false), fMeasureBarsEnabled(false),
+    fPitchLinesDisplayMode(kAutoLines)    
 {
     fARMusic = arMusic;
 
@@ -63,11 +62,10 @@ GuidoPianoRoll::GuidoPianoRoll(ARMusic *arMusic) :
 
 //--------------------------------------------------------------------------
 GuidoPianoRoll::GuidoPianoRoll(const char *midiFileName) :
-    fKeyboardEnabled(false),
+    fARMusic(NULL),
     fVoicesAutoColored(false), fVoicesColors(NULL),
-    fMeasureBarsEnabled(false),
-    fPitchLinesDisplayMode(kAutoLines),
-    fARMusic(NULL)
+    fKeyboardEnabled(false), fMeasureBarsEnabled(false),
+    fPitchLinesDisplayMode(kAutoLines)
 {
     fMidiFileName = midiFileName;
 
@@ -125,9 +123,8 @@ void GuidoPianoRoll::setPitchRange(int minPitch, int maxPitch)
 }
 
 //--------------------------------------------------------------------------
-float GuidoPianoRoll::getKeyboardWidth(int width, int height)
+float GuidoPianoRoll::getKeyboardWidth(int height)
 {
-    int currentWidth  = (width  == -1 ? kDefaultWidth  : width);
     int currentHeight = (height == -1 ? kDefaultHeight : height);
 
     float noteHeight              = computeNoteHeight(currentHeight);
@@ -278,8 +275,6 @@ float GuidoPianoRoll::computeNoteHeight(int height) const
 //--------------------------------------------------------------------------
 void GuidoPianoRoll::initRendering(GuidoPianoRoll::DrawParams drawParams)
 {
-    float currentWidth =(float) drawParams.width + (int) floor(drawParams.untimedLeftElementWidth);
-
     drawParams.dev->NotifySize(drawParams.width, drawParams.height);
     drawParams.dev->BeginDraw();
 
@@ -1016,7 +1011,6 @@ int GuidoPianoRoll::detectMidiExtremePitch(bool detectLowerPitch)
     mf.Open(fMidiFileName, MidiFileRead);
 
     int n    = mf.infos().ntrks; /* get the number of tracks */
-    int tpqn = mf.infos().time;
     vector<MidiSeqPtr> vseq;
     long maxTime = 0;
 

@@ -342,7 +342,7 @@ void GuidoReducedProportional::DrawNote(int pitch, double date, double dur, Draw
 }
 
 //--------------------------------------------------------------------------
-void GuidoReducedProportional::DrawRect(int x, int y, double dur, DrawParams drawParams) const
+void GuidoReducedProportional::DrawRect(float x, float y, double dur, DrawParams drawParams) const
 {
 	float w              =   duration2width(dur, drawParams.width, drawParams.untimedLeftElementWidth);
 	float rectHalfHeight =   drawParams.noteHeight / 4;

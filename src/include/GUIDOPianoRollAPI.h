@@ -115,12 +115,11 @@ extern "C" {
 	/*!
 		\brief Gets the piano roll keyboard width
 		\param pr a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll
-        \param width the width of the piano roll (-1 to set the default width : 1024)
         \param height the height of the canvas (-1 to set the default height : 512)
         \param keyboardWidth the pianoroll keyboard width
         \return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoPianoRollGetKeyboardWidth(GuidoPianoRoll *pr, int width, int height, float &keyboardWidth);
+	GUIDOAPI(GuidoErrCode)      GuidoPianoRollGetKeyboardWidth(GuidoPianoRoll *pr, int height, float &keyboardWidth);
 
     /*!
 		\brief Enables or not the automatic voices coloration (not enabled by default) (not for a midi rendering) // REM: à voir
