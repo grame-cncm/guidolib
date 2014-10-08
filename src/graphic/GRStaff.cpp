@@ -2107,8 +2107,12 @@ float	GRStaff::getXEndPosition(TYPE_TIMEPOSITION pos, TYPE_DURATION dur)
 				NVPoint position = elmt->getPosition();
 				float X = position.x;
 				GREvent * gevent = dynamic_cast<GREvent *>(elmt);
-				if (gevent)
+				
+                if (gevent)
 					X -= LSPACE;
+                
+                delete elmtsAtEndOfDuration;
+                
 				return X;
 			}
 		}

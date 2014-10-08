@@ -20,6 +20,7 @@
 #include "ARNoteFormat.h"
 #include "ARMusic.h"
 #include "VGColor.h"
+#include "math.h"
 #include "GUIDOPianoRollAPI.h"
 #include "GUIDOScoreMap.h"
 
@@ -52,7 +53,7 @@ public:
     virtual void  setPitchRange(int minPitch, int maxPitch);
     virtual void  enableDurationLines(bool enabled) { }
     virtual void  enableKeyboard(bool enabled) { fKeyboardEnabled = enabled; }
-            float getKeyboardWidth(int width, int height);
+            float getKeyboardWidth(int height);
     virtual void  enableRandomVoicesColor(bool enabled) { fVoicesAutoColored = enabled; }
     virtual void  setColorToVoice(int voiceNum, int r, int g, int b, int a);
     virtual void  enableMeasureBars(bool enabled) { fMeasureBarsEnabled = enabled; }
@@ -65,7 +66,7 @@ public:
     virtual void onDraw(int width, int height, VGDevice *dev);
 
 protected:
-    typedef struct DrawParams {
+    struct DrawParams {
         DrawParams(int inWidth, int inHeight, float inNoteHeight, float inUntimedLeftElementWidth, VGDevice *inDev) {
             width                   = inWidth;
             height                  = inHeight;

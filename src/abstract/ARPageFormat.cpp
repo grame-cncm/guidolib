@@ -153,28 +153,29 @@ void ARPageFormat::setTagParameterList(	TagParameterList & tpl )
 		{
 			// Then, we now the match for the first ParameterList
 			// w, h, ml, mt, mr, mb
-
-			TagParameterFloat * tpf = TagParameterFloat::cast(rtpl->RemoveHead());
+            GuidoPos pos = rtpl->GetHeadPosition();
+            
+			TagParameterFloat * tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
 			assert(tpf);			
 			mSizeX = tpf->getValue();
 
-			tpf = TagParameterFloat::cast(rtpl->RemoveHead());
+			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
 			assert(tpf);
 			mSizeY = tpf->getValue();
 
-			tpf = TagParameterFloat::cast(rtpl->RemoveHead());
+			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
 			assert(tpf);			
 			mLeft = tpf->getValue();
 
-			tpf = TagParameterFloat::cast(rtpl->RemoveHead());
+			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
 			assert(tpf);			
 			mTop = tpf->getValue();
 
-			tpf = TagParameterFloat::cast(rtpl->RemoveHead());
+			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
 			assert(tpf);			
 			mRight = tpf->getValue();
 
-			tpf = TagParameterFloat::cast(rtpl->RemoveHead());
+			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
 			assert(tpf);			
 			mBottom = tpf->getValue();
 
@@ -184,8 +185,9 @@ void ARPageFormat::setTagParameterList(	TagParameterList & tpl )
 		{
 			// it matches the second parameter list
 			// pagesize, ml, mt, mr, mb
+            GuidoPos pos = rtpl->GetHeadPosition();
 
-			TagParameterString * tps = TagParameterString::cast(rtpl->RemoveHead());
+			TagParameterString * tps = TagParameterString::cast(rtpl->GetNext(pos));
 			assert(tps);
 			mFormat = tps->getValue();
 
@@ -206,19 +208,19 @@ void ARPageFormat::setTagParameterList(	TagParameterList & tpl )
 				mSizeY = (float) ( 31 * kCmToVirtual ) ;
 			}
 
-			TagParameterFloat * tpf = TagParameterFloat::cast(rtpl->RemoveHead());
+			TagParameterFloat * tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
 			assert(tpf);
 			mLeft = tpf->getValue();
 
-			tpf = TagParameterFloat::cast(rtpl->RemoveHead());
+			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
 			assert(tpf);
 			mTop = tpf->getValue();
 
-			tpf = TagParameterFloat::cast(rtpl->RemoveHead());
+			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
 			assert(tpf);
 			mRight = tpf->getValue();
 
-			tpf = TagParameterFloat::cast(rtpl->RemoveHead());
+			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
 			assert(tpf);
 			mBottom = tpf->getValue();
 		}

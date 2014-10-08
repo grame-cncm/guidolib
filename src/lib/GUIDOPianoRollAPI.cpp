@@ -145,12 +145,12 @@ GUIDOAPI(GuidoErrCode) GuidoPianoRollEnableKeyboard(GuidoPianoRoll *pr, bool ena
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoPianoRollGetKeyboardWidth(GuidoPianoRoll *pr, int width, int height, float &keyboardWidth)
+GUIDOAPI(GuidoErrCode) GuidoPianoRollGetKeyboardWidth(GuidoPianoRoll *pr, int height, float &keyboardWidth)
 {
-    if (!pr || width < -1 || width < -1 || width == 0 || height == 0)
+    if (!pr || height < -1 || height == 0)
         return guidoErrBadParameter;
 
-    keyboardWidth = pr->getKeyboardWidth(width, height);
+    keyboardWidth = pr->getKeyboardWidth(height);
 
 	return guidoNoErr;
 }
@@ -209,13 +209,13 @@ GUIDOAPI(GuidoErrCode) GuidoPianoRollSetPitchLinesDisplayMode(GuidoPianoRoll *pr
 // ------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoPianoRollGetMap(GuidoPianoRoll *pr, int width, int height, Time2GraphicMap &outmap)
 {
-    if (!pr || width < -1 || width < -1 || width == 0 || height == 0)
+    if (!pr || width < -1 || height < -1 || width == 0 || height == 0)
         return guidoErrBadParameter;
 
     int autoWidth  = (width  == -1 ? kDefaultWidth  : width);
     int autoHeight = (height == -1 ? kDefaultHeight : height);
 
-    if (pr->getKeyboardWidth(autoWidth, autoHeight) > autoWidth)
+    if (pr->getKeyboardWidth(autoHeight) > autoWidth)
         return guidoErrBadParameter; // Keyboard takes to much place (create a new error code ?)
     else
         pr->getMap(autoWidth, autoHeight, outmap);
@@ -226,13 +226,13 @@ GUIDOAPI(GuidoErrCode) GuidoPianoRollGetMap(GuidoPianoRoll *pr, int width, int h
 // ------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoPianoRollOnDraw(GuidoPianoRoll *pr, int width, int height, VGDevice *dev)
 {
-    if (!pr || !dev || width < -1 || width < -1 || width == 0 || height == 0)
+    if (!pr || !dev || width < -1 || height < -1 || width == 0 || height == 0)
         return guidoErrBadParameter;
 
     int autoWidth  = (width  == -1 ? kDefaultWidth : width);
     int autoHeight = (height == -1 ? kDefaultHeight : height);
 
-    if (pr->getKeyboardWidth(autoWidth, autoHeight) > autoWidth)
+    if (pr->getKeyboardWidth(autoHeight) > autoWidth)
         return guidoErrBadParameter; // Keyboard takes to much place (create a new error code ?)
     else
         pr->onDraw(autoWidth, autoHeight, dev);

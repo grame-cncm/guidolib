@@ -2470,9 +2470,6 @@ void ARMusicalVoice::doAutoMeasuresNumbering()
 		ARMusicalObject * o = GetAt(pos);
 		ARBar * bar = dynamic_cast<ARBar *>(o);
 
-		ARNewPage * page = dynamic_cast<ARNewPage *>(o);
-		ARNewSystem * sys = dynamic_cast<ARNewSystem *>(o);
-
 		if (bar && displayMeasureNumber)
 		{
 			bar->setMeasureNumber(measureNumber);

@@ -41,7 +41,7 @@ protected:
     void DrawLedgerLines (float x, float y, int count, DrawParams drawParams) const;
     void DrawHead        (float x, float y, int alter, DrawParams drawParams) const;
     void DrawNote        (int pitch, double date, double dur, DrawParams drawParams);
-	void DrawRect        (int x, int y, double dur, DrawParams drawParams) const;
+	void DrawRect        (float x, float y, double dur, DrawParams drawParams) const;
 
     void SetMusicFont(DrawParams drawParams);
     

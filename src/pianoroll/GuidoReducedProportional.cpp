@@ -335,14 +335,14 @@ void GuidoReducedProportional::DrawNote(int pitch, double date, double dur, Draw
             DrawLedgerLines(x, (ll > 0 ? staffBottomPos(staff, drawParams.noteHeight) : staffTopPos(staff, drawParams.noteHeight)), ll, drawParams);
 
         if (fDrawDurationLine)
-            DrawRect((int) x, (int) y, dur, drawParams);
+            DrawRect(x, y, dur, drawParams);
 
         DrawHead(x - 1, y, alter, drawParams);
     }
 }
 
 //--------------------------------------------------------------------------
-void GuidoReducedProportional::DrawRect(int x, int y, double dur, DrawParams drawParams) const
+void GuidoReducedProportional::DrawRect(float x, float y, double dur, DrawParams drawParams) const
 {
 	float w              =   duration2width(dur, drawParams.width, drawParams.untimedLeftElementWidth);
 	float rectHalfHeight =   drawParams.noteHeight / 4;
