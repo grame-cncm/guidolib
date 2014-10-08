@@ -6077,9 +6077,27 @@ void ARMusicalVoice::doAutoTrill()
 				if(ptags)
                 {
 					GuidoPos pos = ptags->GetHeadPosition();
+
+                    ARPositionTag * arpt = NULL;
+
 					while(pos)
                     {
-						ARPositionTag * arpt = ptags->GetNext(pos);
+                        /****/ // ptags list can be modified during this while loop, that's why we look if arpt still exists
+                        if (arpt != NULL) {
+                            pos = ptags->GetHeadPosition();
+
+                            ARPositionTag * arptTmp = ptags->GetNext(pos);
+
+                            while (arptTmp != arpt && pos)
+                                arptTmp = ptags->GetNext(pos);
+
+                            if (pos == NULL)
+                                break;
+                        }
+                        /****/
+
+						arpt = ptags->GetNext(pos);
+
 						if(arpt)
                         {
 							ARTie * tie = dynamic_cast<ARTie *>(arpt);
@@ -6089,7 +6107,7 @@ void ARMusicalVoice::doAutoTrill()
 								ARNote * nextNote;
 								do
                                 {
-									ARMusicalObject * nextObject = GetNext(posNote, armvs);
+								    ARMusicalObject * nextObject = GetNext(posNote, armvs);
 									if (!nextObject) break;
 									nextNote = dynamic_cast<ARNote *>(nextObject);
 								}
