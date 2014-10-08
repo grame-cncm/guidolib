@@ -82,7 +82,7 @@ GUIDOAPI(GuidoErrCode) GuidoDestroyPianoRoll(GuidoPianoRoll *pr)
     if (!pr)
         return guidoErrBadParameter;
 
-    delete pr; pr = 0;
+    delete pr;
 
 	return guidoNoErr;
 }
