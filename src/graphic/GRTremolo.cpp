@@ -25,6 +25,7 @@
 #include "ARNote.h"
 #include "GRSingleNote.h"
 #include "GRStdNoteHead.h"
+#include "GRBeam.h"
 // #include "NEPointerList.h"
 
 
@@ -44,19 +45,8 @@ GRTremolo::GRTremolo( GRStaff * stf, ARTremolo * artrem )
     fStep = LSPACE/2;
     fDeltaY = LSPACE/4;
     fWidth = LSPACE;
-    
-    std::string type = artrem->getStyle() ? artrem->getStyle()->getValue() : "";
-    if( type == "/" )
-        fNumberOfStrokes = 1;
-    else if( type == "//" )
-        fNumberOfStrokes = 2;
-    else if (type == "///")
-        fNumberOfStrokes = 3;
-    else if( type == "////")
-        fNumberOfStrokes = 4;
-    else // default
-        fNumberOfStrokes = 3;
-    
+    fBeamCount = 0;
+    fNumberOfStrokes = artrem->getNumberOfStrokes();
     if(artrem->isSecondPitchCorrect())
         isTwoNotesTremolo = true;
     
@@ -82,7 +72,7 @@ void GRTremolo::OnDraw( VGDevice & hdc ) const
     float coorY[4];
     NVPoint pos1 = fStartPos;
     NVPoint pos2 = fEndPos;
-    for(int i = 0; i < fNumberOfStrokes ; i++)
+    for(int i = 0; i < (fNumberOfStrokes - fBeamCount) ; i++)
     {
         if(isTwoNotesTremolo)
         {
@@ -100,7 +90,7 @@ void GRTremolo::OnDraw( VGDevice & hdc ) const
 // -----------------------------------------------------------------------------
 void GRTremolo::tellPosition(GObject * caller, const NVPoint &np)
 {
-    GRNotationElement * grel = dynamic_cast<GRNotationElement *>(caller);
+    GREvent * grel = dynamic_cast<GREvent *>(caller);
 	if (grel == 0)
         return;
 
@@ -116,6 +106,12 @@ void GRTremolo::tellPosition(GObject * caller, const NVPoint &np)
     NVPoint pos;
     NVPoint textPos;
     
+    GRNotationElement * startElement = sse->startElement;
+	GRNotationElement * endElement = sse->endElement;
+	
+    if(grel == startElement)
+        fBeamCount = grel->getNumFaehnchen();
+    
     if (sng != 0)
     {
         GDirection direction = sng->getStemDirection();
@@ -130,8 +126,8 @@ void GRTremolo::tellPosition(GObject * caller, const NVPoint &np)
         }
         else if(direction == dirUP)
         {
-            if(!isTwoNotesTremolo) pos.y += LSPACE/2;
-            
+            if(!isTwoNotesTremolo) pos.y += LSPACE/2 + fBeamCount * fStep;
+            else pos.y += fBeamCount*fStep*1.5;
             textPos.y -= 2*LSPACE;
             if(textPos.y > - 2*LSPACE ) textPos.y = - 2*LSPACE;
         }
@@ -139,7 +135,7 @@ void GRTremolo::tellPosition(GObject * caller, const NVPoint &np)
         {
             pos.y -= fThickness + (fNumberOfStrokes-1)*fStep;
             if(!isTwoNotesTremolo) pos.y -= LSPACE/2;
-            
+            else pos.y -= fBeamCount*fStep*0.5;
             if(textPos.y < 4*LSPACE) textPos.y = 4*LSPACE;
         }
     }
@@ -163,7 +159,6 @@ void GRTremolo::tellPosition(GObject * caller, const NVPoint &np)
             {
                 float upperNoteY = stem->getAssociations()->GetHead()->getPosition().y;
                 float lowerNoteY = stem->getAssociations()->GetTail()->getPosition().y;
-                
                 textPos.y = upperNoteY -2.5*LSPACE;
                 if(textPos.y > -2.5*LSPACE) textPos.y = -2.5*LSPACE;
                 
@@ -172,24 +167,22 @@ void GRTremolo::tellPosition(GObject * caller, const NVPoint &np)
             }
             else if(direction == dirUP)
             {
-                if(!isTwoNotesTremolo) pos.y += LSPACE/2;
-                
+                if(!isTwoNotesTremolo) pos.y += LSPACE/2 + fBeamCount * fStep;
+                else pos.y += fBeamCount*fStep*1.5;
                 textPos.y -= 2*LSPACE;
                 if(textPos.y > - 2*LSPACE ) textPos.y = - 2*LSPACE;
             }
             else
             {
-                if(!isTwoNotesTremolo) pos.y -= LSPACE/2;
                 pos.y -= fThickness + (fNumberOfStrokes-1)*fStep;
-             
+                if(!isTwoNotesTremolo) pos.y -= LSPACE/2;
+                else pos.y -= fBeamCount*fStep*0.5;
                 if(textPos.y < 4*LSPACE) textPos.y = 4*LSPACE;
             }
         }
     }
     
-    const GRNotationElement * startElement = sse->startElement;
-	const GRNotationElement * endElement = sse->endElement;
-	if(grel == startElement)
+    if(grel == startElement)
     {
         fStartPos = pos;
         setPosition(textPos);

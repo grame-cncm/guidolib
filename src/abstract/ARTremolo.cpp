@@ -228,8 +228,15 @@ bool ARTremolo::isSecondPitchCorrect()
         char c = pitch[it];
         
         if(c == '{')
+        {
+            if(pitch[pitch.size()-1] != '}')
+                return isReadable;
+            std::string possibleLastChars = "1234567890abcdefghoils#&";
+            char l = pitch[pitch.size()-2];
+            if(possibleLastChars.find(l) == std::string::npos)
+                return isReadable;
             it++;
-        
+        }
         if(it < pitch.size())
         {
             c = pitch[it];
@@ -245,4 +252,22 @@ bool ARTremolo::isSecondPitchCorrect()
         }
     }
     return isReadable;
+}
+
+// -----------------------------------------------------------------------------
+int ARTremolo::getNumberOfStrokes()
+{
+    int nbOfStrokes = 3;
+
+    std::string type = fStyle->getValue();
+    if( type == "/" )
+        nbOfStrokes = 1;
+    else if( type == "//" )
+        nbOfStrokes = 2;
+    else if (type == "///")
+        nbOfStrokes = 3;
+    else if( type == "////")
+        nbOfStrokes = 4;
+    
+    return nbOfStrokes;
 }

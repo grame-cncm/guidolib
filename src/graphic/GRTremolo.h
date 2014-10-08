@@ -44,6 +44,7 @@ class GRTremolo : public GRPTagARNotationElement
         void computeTwoNotesStrokesCoordinates( NVPoint firstPos, NVPoint endPos, float coorX[4], float coorY[4] ) const;
     
         int fNumberOfStrokes;
+        int fBeamCount;
         TYPE_DURATION fSpeed;
         std::string fPitch;
         std::string fText;

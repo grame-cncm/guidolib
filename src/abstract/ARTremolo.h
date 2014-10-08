@@ -48,6 +48,7 @@ public:
 	const TagParameterString * getText() const	{ return fText; }
     
     bool isSecondPitchCorrect();
+    int getNumberOfStrokes();
 
 	// routines to access TagParameters ..
 	virtual void print() const;

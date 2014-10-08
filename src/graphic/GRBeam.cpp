@@ -31,6 +31,7 @@
 #include "VGDevice.h"
 #include "secureio.h"
 #include "FontManager.h"
+#include "GRTremolo.h"
 
 // #include "NEPointerList.h"	// for template instanciation
 #include <iostream>
@@ -1307,6 +1308,23 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 		if (oldpos == sse->endpos)
 			break;
 	}
+
+    GuidoPos stemPos = sse->startpos;
+    while(stemPos)
+    {
+        GREvent * stemNote = GREvent::cast(mAssociated->GetNext(stemPos));
+        if(stemNote)
+        {
+            GuidoPos tagpos = stemNote->getAssociations()->GetHeadPosition();
+            while(tagpos)
+            {
+                GRNotationElement * tag = stemNote->getAssociations()->GetNext(tagpos);
+                GRTremolo * trem = dynamic_cast<GRTremolo*>(tag);
+                if(trem)
+                    trem->tellPosition(stemNote,stemNote->getPosition());
+            }
+        }
+    }
 
 	// now we have to make sure, that the original positions
 	// for the beam are set for the right staff

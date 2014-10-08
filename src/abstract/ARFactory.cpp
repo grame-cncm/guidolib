@@ -1802,8 +1802,8 @@ void ARFactory::endTag()
                 if(n && n->getDuration())
                 {
                     found = true;
-                    
                     Fraction totalDuration = Fraction(n->getDuration().getNumerator()*2, n->getDuration().getDenominator());
+                    mCurrentTremolo->setDuration(totalDuration);
                     ARDisplayDuration * tmpdspdur = new ARDisplayDuration;
                     tmpdspdur->setDisplayDuration( totalDuration);
                     mCurrentVoice->AddPositionTag(tmpdspdur);
