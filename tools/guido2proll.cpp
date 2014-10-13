@@ -7,8 +7,9 @@
 
 #include "GUIDOParse.h"
 #include "GUIDOEngine.h"
-#include "GUIDOPianoRollAPI.h"
+#include "GUIDOPianoRoll.h"
 #include "GUIDOScoreMap.h"
+#include "Colors.h"
 #include "SVGDevice.h"
 #include "SVGSystem.h"
 
@@ -278,7 +279,7 @@ int main(int argc, char **argv)
     GuidoErrCode err;
 
 	if (arh) {
-        GuidoPianoRoll *pianoRoll = GuidoAR2PianoRoll(pianoRollType, arh);
+        PianoRoll *pianoRoll = GuidoAR2PianoRoll(pianoRollType, arh);
         
         LimitParams limitParams;
         limitParams.startDate = start;
@@ -296,7 +297,7 @@ int main(int argc, char **argv)
         error(err);
 
         float keyboardWidth;
-        err = GuidoPianoRollGetKeyboardWidth(pianoRoll, w, h, keyboardWidth);
+        err = GuidoPianoRollGetKeyboardWidth(pianoRoll, h, keyboardWidth);
         error(err);
         /******************/
 
@@ -304,13 +305,13 @@ int main(int argc, char **argv)
         err = GuidoPianoRollEnableAutoVoicesColoration(pianoRoll, voicesAutoColor);
         error(err);
         
-        //err = GuidoPianoRollSetColorToVoice(pianoRoll, 1, 255, 0, 0, 100);
+        //err = GuidoPianoRollSetHtmlColorToVoice(pianoRoll, 1, kaqua);
         //error(err);
         
-        //err = GuidoPianoRollSetColorToVoice(pianoRoll, 2, 0, 255, 0, 100);
+        //err = GuidoPianoRollSetHtmlColorToVoice(pianoRoll, 2, knavy);
         //error(err);
         
-        //err = GuidoPianoRollSetColorToVoice(pianoRoll, 3, 0, 0, 255, 100);
+        //err = GuidoPianoRollSetRGBColorToVoice(pianoRoll, 3, 0, 0, 255, 100);
         //error(err);
         /**********************/
 

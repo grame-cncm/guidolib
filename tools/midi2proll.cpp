@@ -6,7 +6,7 @@
 #endif
 
 #include "GUIDOEngine.h"
-#include "GUIDOPianoRollAPI.h"
+#include "GUIDOPianoRoll.h"
 #include "SVGDevice.h"
 #include "SVGSystem.h"
 
@@ -263,7 +263,7 @@ int main(int argc, char **argv)
 	GuidoDate start   = ldateopt(argc, argv, kOptions[kStart], defDate);
 	GuidoDate end     = ldateopt(argc, argv, kOptions[kEnd], defDate);
 
-    GuidoPianoRoll *pianoRoll = GuidoMidi2PianoRoll(pianoRollType, fileName);
+    PianoRoll *pianoRoll = GuidoMidi2PianoRoll(pianoRollType, fileName);
 
     GuidoErrCode err;
 
@@ -283,7 +283,7 @@ int main(int argc, char **argv)
     error(err);
 
     float keyboardWidth;
-    err = GuidoPianoRollGetKeyboardWidth(pianoRoll, w, h, keyboardWidth);
+    err = GuidoPianoRollGetKeyboardWidth(pianoRoll, h, keyboardWidth);
     error(err);
     /******************/
 

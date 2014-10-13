@@ -22,7 +22,7 @@
 #include "QGuidoPainter.h"
 #include "GUIDOEngine.h"
 #include "GUIDOParse.h"
-#include "GUIDOPianoRollAPI.h"
+#include "GUIDOPianoRoll.h"
 #include "VGColor.h"
 
 #include <QVariant>
@@ -372,7 +372,7 @@ void QGuidoPainter::draw( QPainter * painter , int page , const QRect& drawRecta
 }
 
 //-------------------------------------------------------------------------
-void QGuidoPainter::drawPianoRoll(QPainter *painter, const QRect& drawRectangle, GuidoPianoRoll *pianoRoll)
+void QGuidoPainter::drawPianoRoll(QPainter *painter, const QRect& drawRectangle, PianoRoll *pianoRoll)
 {
 	painter->save();
 	painter->setClipRect(drawRectangle);

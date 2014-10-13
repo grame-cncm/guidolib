@@ -7,7 +7,7 @@
 
 #include "GUIDOParse.h"
 #include "GUIDOEngine.h"
-#include "GUIDOPianoRollAPI.h"
+#include "GUIDOPianoRoll.h"
 #include "SVGDevice.h"
 #include "SVGSystem.h"
 
@@ -227,7 +227,7 @@ int main(int argc, char **argv)
  // GuidoErrCode err;
 
  // if (arh) {
- //       GuidoPianoRoll *pianoRoll = GuidoAR2PianoRoll(reducedProportional, arh);
+ //       PianoRoll *pianoRoll = GuidoAR2PianoRoll(reducedProportional, arh);
 
    
  //       LimitParams limitParams;
@@ -250,13 +250,13 @@ int main(int argc, char **argv)
  //       err = GuidoPianoRollEnableAutoVoicesColoration(pianoRoll, voicesAutoColor);
  //       error(err);
  //       
- //       //err = GuidoPianoRollSetColorToVoice(pianoRoll, 1, 255, 0, 0, 100);
+ //       //err = GuidoPianoRollSetRGBColorToVoice(pianoRoll, 1, 255, 0, 0, 100);
  //       //error(err);
  //       
- //       //err = GuidoPianoRollSetColorToVoice(pianoRoll, 2, 0, 255, 0, 100);
+ //       //err = GuidoPianoRollSetRGBColorToVoice(pianoRoll, 2, 0, 255, 0, 100);
  //       //error(err);
  //       
- //       //err = GuidoPianoRollSetColorToVoice(pianoRoll, 3, 0, 0, 255, 100);
+ //       //err = GuidoPianoRollSetRGBColorToVoice(pianoRoll, 3, 0, 0, 255, 100);
  //       //error(err);
  //       /**********************/
 

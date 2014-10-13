@@ -182,7 +182,7 @@ Guido2ImageErrorCodes Guido2Image::gmnFile2Image( const  Params& p )
 }
 
 //----------------------------------------------------------------------------
-Guido2ImageErrorCodes Guido2Image::guidoPianoRoll2Image(const  Params& p, GuidoPianoRoll *pianoRoll, int width, int height)
+Guido2ImageErrorCodes Guido2Image::guidoPianoRoll2Image(const Params& p, PianoRoll *pianoRoll, int width, int height)
 {
 	QGuidoPainter *painter = QGuidoPainter::createGuidoPainter();
 
@@ -263,7 +263,7 @@ void Guido2Image::writePDF( QGuidoPainter * guidoPainter, int pageIndex, const c
 	painter.end();
 }
 
-void Guido2Image::writePianoRollPDF(QGuidoPainter *guidoPainter, const char *fname, GuidoPianoRoll *pianoRoll, int width, int height)
+void Guido2Image::writePianoRollPDF(QGuidoPainter *guidoPainter, const char *fname, PianoRoll *pianoRoll, int width, int height)
 {
 	QString fileName(fname);
 
@@ -332,7 +332,7 @@ void Guido2Image::writeImage( QGuidoPainter * guidoPainter, const Params& p)
 }
 
 //----------------------------------------------------------------------------
-void Guido2Image::writePianoRollImage( QGuidoPainter * guidoPainter, const Params& p, GuidoPianoRoll *pianoRoll, int width, int height)
+void Guido2Image::writePianoRollImage( QGuidoPainter * guidoPainter, const Params& p, PianoRoll *pianoRoll, int width, int height)
 {
 	QImage image(width, height, QImage::Format_ARGB32);
 	image.fill(QColor(255, 255, 255, 0).rgba());

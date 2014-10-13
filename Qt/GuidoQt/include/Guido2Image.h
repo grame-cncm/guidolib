@@ -20,7 +20,7 @@
 #include <QIODevice>
 
 #include "GUIDOEngine.h"
-#include "GUIDOPianoRollAPI.h"
+#include "GUIDOPianoRoll.h"
 
 #ifdef WIN32
 #define warndeprecated __declspec(deprecated("** method is deprecated **"))
@@ -130,7 +130,7 @@ class Guido2Image
         /*!
 		*	\brief	converts a gmn file to an image
 		*/
-        static Guido2ImageErrorCodes guidoPianoRoll2Image(const Params& p, GuidoPianoRoll *pianoRoll, int width, int height);
+        static Guido2ImageErrorCodes guidoPianoRoll2Image(const Params& p, PianoRoll *pianoRoll, int width, int height);
 
 	private :
 
@@ -138,9 +138,9 @@ class Guido2Image
 		
 		static Guido2ImageErrorCodes	guidoPainterToImage ( QGuidoPainter * guidoPainter, const Params& p );
 		static void						writeImage			( QGuidoPainter * guidoPainter, const Params& p );
-        static void						writePianoRollImage	( QGuidoPainter * guidoPainter, const Params& p, GuidoPianoRoll *pianoRoll, int width, int height );
+        static void						writePianoRollImage	( QGuidoPainter * guidoPainter, const Params& p, PianoRoll *pianoRoll, int width, int height );
 		static void						writePDF			( QGuidoPainter * guidoPainter, int pageIndex, const char * fileName );
-		static void						writePianoRollPDF	( QGuidoPainter * guidoPainter, const char * fileName, GuidoPianoRoll *pianoRoll, int width, int height );
+		static void						writePianoRollPDF	( QGuidoPainter * guidoPainter, const char * fileName, PianoRoll *pianoRoll, int width, int height );
 		
 //		static QRectF			getPictureRect(QGuidoPainter * guidoPainter, int pageIndex, const QSize& outputSizeConstraint, float zoom );
 		static void				save(QPaintDevice * paintDevice, const Params& p);

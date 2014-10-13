@@ -18,12 +18,13 @@
  */
 
 #include "GUIDOInternal.h"
-#include "GuidoPianoRoll.h"
-#include "GuidoPianoRollTrajectory.h"
+#include "PianoRoll.h"
+#include "PianoRollTrajectory.h"
 #include "midifile.h"
+#include "HtmlColors.h"
 #include <cmath>
 
-#include "GUIDOPianoRollAPI.h"
+#include "GUIDOPianoRoll.h"
 
 
 // ==========================================================================
@@ -31,7 +32,7 @@
 // ==========================================================================
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoPianoRoll *) GuidoAR2PianoRoll(PianoRollType type, ARHandler arh)
+GUIDOAPI(PianoRoll *) GuidoAR2PianoRoll(PianoRollType type, ARHandler arh)
 {
     if (!arh)
         return NULL;
@@ -41,18 +42,18 @@ GUIDOAPI(GuidoPianoRoll *) GuidoAR2PianoRoll(PianoRollType type, ARHandler arh)
     if (!arMusic)
         return NULL;
 
-    GuidoPianoRoll *newPianoRoll;
+    PianoRoll *newPianoRoll;
 
     if (type == kSimplePianoRoll)
-        newPianoRoll = new GuidoPianoRoll(arMusic);
+        newPianoRoll = new PianoRoll(arMusic);
     else if (type == kTrajectoryPianoRoll)
-        newPianoRoll = (GuidoPianoRollTrajectory *) new GuidoPianoRollTrajectory(arMusic);
+        newPianoRoll = (PianoRollTrajectory *) new PianoRollTrajectory(arMusic);
 
 	return newPianoRoll;
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoPianoRoll *) GuidoMidi2PianoRoll(PianoRollType type, const char *midiFileName)
+GUIDOAPI(PianoRoll *) GuidoMidi2PianoRoll(PianoRollType type, const char *midiFileName)
 {
 #ifdef MIDIEXPORT
     if (!midiFileName)
@@ -63,12 +64,12 @@ GUIDOAPI(GuidoPianoRoll *) GuidoMidi2PianoRoll(PianoRollType type, const char *m
     if (!mf.Open(midiFileName, MidiFileRead))
         return NULL;
 
-    GuidoPianoRoll *newPianoRoll;
+    PianoRoll *newPianoRoll;
 
     if (type == kSimplePianoRoll)
-        newPianoRoll = new GuidoPianoRoll(midiFileName);
+        newPianoRoll = new PianoRoll(midiFileName);
     else if (type == kTrajectoryPianoRoll)
-        newPianoRoll = (GuidoPianoRollTrajectory *) new GuidoPianoRollTrajectory(midiFileName);
+        newPianoRoll = (PianoRollTrajectory *) new PianoRollTrajectory(midiFileName);
 
     return newPianoRoll;
 #else
@@ -77,7 +78,7 @@ GUIDOAPI(GuidoPianoRoll *) GuidoMidi2PianoRoll(PianoRollType type, const char *m
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoDestroyPianoRoll(GuidoPianoRoll *pr)
+GUIDOAPI(GuidoErrCode) GuidoDestroyPianoRoll(PianoRoll *pr)
 {
     if (!pr)
         return guidoErrBadParameter;
@@ -88,7 +89,7 @@ GUIDOAPI(GuidoErrCode) GuidoDestroyPianoRoll(GuidoPianoRoll *pr)
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoPianoRollSetLimits(GuidoPianoRoll *pr, LimitParams limitParams)
+GUIDOAPI(GuidoErrCode) GuidoPianoRollSetLimits(PianoRoll *pr, LimitParams limitParams)
 {
     if (!pr)
         return guidoErrBadParameter;
@@ -134,7 +135,7 @@ GUIDOAPI(GuidoErrCode) GuidoPianoRollSetLimits(GuidoPianoRoll *pr, LimitParams l
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoPianoRollEnableKeyboard(GuidoPianoRoll *pr, bool enabled)
+GUIDOAPI(GuidoErrCode) GuidoPianoRollEnableKeyboard(PianoRoll *pr, bool enabled)
 {
     if (!pr)
         return guidoErrBadParameter;
@@ -145,7 +146,7 @@ GUIDOAPI(GuidoErrCode) GuidoPianoRollEnableKeyboard(GuidoPianoRoll *pr, bool ena
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoPianoRollGetKeyboardWidth(GuidoPianoRoll *pr, int height, float &keyboardWidth)
+GUIDOAPI(GuidoErrCode) GuidoPianoRollGetKeyboardWidth(PianoRoll *pr, int height, float &keyboardWidth)
 {
     if (!pr || height < -1 || height == 0)
         return guidoErrBadParameter;
@@ -156,7 +157,7 @@ GUIDOAPI(GuidoErrCode) GuidoPianoRollGetKeyboardWidth(GuidoPianoRoll *pr, int he
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoPianoRollEnableAutoVoicesColoration(GuidoPianoRoll *pr, bool enabled)
+GUIDOAPI(GuidoErrCode) GuidoPianoRollEnableAutoVoicesColoration(PianoRoll *pr, bool enabled)
 {
     if (!pr)
         return guidoErrBadParameter;
@@ -167,13 +168,12 @@ GUIDOAPI(GuidoErrCode) GuidoPianoRollEnableAutoVoicesColoration(GuidoPianoRoll *
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoPianoRollSetColorToVoice(GuidoPianoRoll *pr, int voiceNum, int r, int g, int b, int a)
+GUIDOAPI(GuidoErrCode) GuidoPianoRollSetRGBColorToVoice(PianoRoll *pr, int voiceNum, int r, int g, int b, int a)
 {
-    if (!pr)
+    if (!pr || voiceNum < 1)
         return guidoErrBadParameter;
 
-    if (voiceNum < 1
-        || r < 0 || r > 255
+    if (r < 0 || r > 255
         || g < 0 || g > 255
         || b < 0 || b > 255
         || a < 0 || a > 255)
@@ -185,7 +185,22 @@ GUIDOAPI(GuidoErrCode) GuidoPianoRollSetColorToVoice(GuidoPianoRoll *pr, int voi
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoPianoRollEnableMeasureBars(GuidoPianoRoll *pr, bool enabled)
+GUIDOAPI(GuidoErrCode) GuidoPianoRollSetHtmlColorToVoice(PianoRoll *pr, int voiceNum, long color)
+{
+    if (!pr || voiceNum < 1)
+        return guidoErrBadParameter;
+
+    unsigned char colref[4] = {0, 0, 0, 255};
+
+	HtmlColor::get(color, colref);
+
+    pr->setColorToVoice(voiceNum, colref[0], colref[1], colref[2], colref[3]);
+
+	return guidoNoErr;
+}
+
+// ------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoPianoRollEnableMeasureBars(PianoRoll *pr, bool enabled)
 {
     if (!pr)
         return guidoErrBadParameter;
@@ -196,7 +211,7 @@ GUIDOAPI(GuidoErrCode) GuidoPianoRollEnableMeasureBars(GuidoPianoRoll *pr, bool 
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoPianoRollSetPitchLinesDisplayMode(GuidoPianoRoll *pr, int mode)
+GUIDOAPI(GuidoErrCode) GuidoPianoRollSetPitchLinesDisplayMode(PianoRoll *pr, int mode)
 {
     if (!pr || mode < -1 || mode > pow(2.0, 12) - 1)
         return guidoErrBadParameter;
@@ -207,7 +222,7 @@ GUIDOAPI(GuidoErrCode) GuidoPianoRollSetPitchLinesDisplayMode(GuidoPianoRoll *pr
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoPianoRollGetMap(GuidoPianoRoll *pr, int width, int height, Time2GraphicMap &outmap)
+GUIDOAPI(GuidoErrCode) GuidoPianoRollGetMap(PianoRoll *pr, int width, int height, Time2GraphicMap &outmap)
 {
     if (!pr || width < -1 || height < -1 || width == 0 || height == 0)
         return guidoErrBadParameter;
@@ -224,7 +239,7 @@ GUIDOAPI(GuidoErrCode) GuidoPianoRollGetMap(GuidoPianoRoll *pr, int width, int h
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoPianoRollOnDraw(GuidoPianoRoll *pr, int width, int height, VGDevice *dev)
+GUIDOAPI(GuidoErrCode) GuidoPianoRollOnDraw(PianoRoll *pr, int width, int height, VGDevice *dev)
 {
     if (!pr || !dev || width < -1 || height < -1 || width == 0 || height == 0)
         return guidoErrBadParameter;

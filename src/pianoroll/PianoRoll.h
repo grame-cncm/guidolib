@@ -21,7 +21,7 @@
 #include "ARMusic.h"
 #include "VGColor.h"
 #include "math.h"
-#include "GUIDOPianoRollAPI.h"
+#include "PianoRoll.h"
 #include "GUIDOScoreMap.h"
 
 #ifdef MIDIEXPORT
@@ -41,13 +41,13 @@
 
 /* \brief a class to create and configure a piano roll
 */
-class GuidoPianoRoll {
+class PianoRoll {
     #define kGoldenRatio 0.618033988749895 // To generate only different colors
 
 public:
-             GuidoPianoRoll(ARMusic *arMusic);
-             GuidoPianoRoll(const char *midiFileName);
-    virtual ~GuidoPianoRoll();
+             PianoRoll(ARMusic *arMusic);
+             PianoRoll(const char *midiFileName);
+    virtual ~PianoRoll();
 
     virtual void  setLimitDates(GuidoDate start, GuidoDate end);
     virtual void  setPitchRange(int minPitch, int maxPitch);

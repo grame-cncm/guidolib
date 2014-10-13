@@ -12,19 +12,19 @@
 
 */
 
-#ifndef GuidoReducedProportional__
-#define GuidoReducedProportional__
+#ifndef ReducedProportional__
+#define ReducedProportional__
 
-#include "GuidoPianoRoll.h"
+#include "PianoRoll.h"
 
 #define kStaffLines 5    // number of lines per staff
 
-class GuidoReducedProportional : public GuidoPianoRoll
+class ReducedProportional : public PianoRoll
 {
 public:
-             GuidoReducedProportional(ARMusic *arMusic);
-             GuidoReducedProportional(const char *midiFileName);
-    virtual ~GuidoReducedProportional() {}
+             ReducedProportional(ARMusic *arMusic);
+             ReducedProportional(const char *midiFileName);
+    virtual ~ReducedProportional() {}
 
     void enableDurationLines(bool enabled) { fDrawDurationLine = enabled; }
 

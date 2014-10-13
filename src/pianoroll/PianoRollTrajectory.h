@@ -11,17 +11,17 @@
 
 */
 
-#ifndef GuidoPianoRollTrajectory__
-#define GuidoPianoRollTrajectory__
+#ifndef PianoRollTrajectory__
+#define PianoRollTrajectory__
 
-#include "GuidoPianoRoll.h"
+#include "PianoRoll.h"
 
-class GuidoPianoRollTrajectory : public GuidoPianoRoll
+class PianoRollTrajectory : public PianoRoll
 {
 public:
-             GuidoPianoRollTrajectory(ARMusic *arMusic);
-             GuidoPianoRollTrajectory(const char *midiFileName);
-    virtual ~GuidoPianoRollTrajectory() {}
+             PianoRollTrajectory(ARMusic *arMusic);
+             PianoRollTrajectory(const char *midiFileName);
+    virtual ~PianoRollTrajectory() {}
 
 private:
     typedef struct {
@@ -52,7 +52,7 @@ protected:
     void DrawLinks(DrawParams drawParams) const;
     void DrawFinalEvent(double dur, DrawParams drawParams);
     void DrawAllLinksBetweenTwoEvents(DrawParams drawParams) const;
-    void DrawLinkBetween(GuidoPianoRollTrajectory::EventInfos leftEvent, GuidoPianoRollTrajectory::EventInfos rightEvent, DrawParams drawParams) const;
+    void DrawLinkBetween(PianoRollTrajectory::EventInfos leftEvent, PianoRollTrajectory::EventInfos rightEvent, DrawParams drawParams) const;
 
 	void handleColor(ARNoteFormat *e, DrawParams drawParams) const;
 	void handleRest (double date, DrawParams drawParams);

@@ -20,7 +20,7 @@
 #include "ARBar.h"
 #include "GUIDOEngine.h"
 #include "MusicalSymbols.h"
-#include "GuidoReducedProportional.h"
+#include "ReducedProportional.h"
 #include "VGDevice.h"
 #include "VGSystem.h"
 #include "VGFont.h"
@@ -44,27 +44,27 @@ static int kStaffTopOct [] = { 8, 6, 4, 2 };
 static const float kLineThickness = 0.5;
 
 //--------------------------------------------------------------------------
-GuidoReducedProportional::GuidoReducedProportional(ARMusic *arMusic) :
-    GuidoPianoRoll(arMusic), fDrawDurationLine(true)
+ReducedProportional::ReducedProportional(ARMusic *arMusic) :
+    PianoRoll(arMusic), fDrawDurationLine(true)
 {
 	init();
 }
 
 //--------------------------------------------------------------------------
-GuidoReducedProportional::GuidoReducedProportional(const char *midiFileName) :
-    GuidoPianoRoll(midiFileName), fDrawDurationLine(true)
+ReducedProportional::ReducedProportional(const char *midiFileName) :
+    PianoRoll(midiFileName), fDrawDurationLine(true)
 {
 	init();
 }
 
 //--------------------------------------------------------------------------
-void GuidoReducedProportional::init()
+void ReducedProportional::init()
 {
 	fNumStaves = 4; // REM: 4 staff - hard coded for the moment
 }
 
 //--------------------------------------------------------------------------
-void GuidoReducedProportional::onDraw(int width, int height, VGDevice* dev)
+void ReducedProportional::onDraw(int width, int height, VGDevice* dev)
 {
     DrawParams drawParams = createDrawParamsStructure(width, height, dev);
     
@@ -82,7 +82,7 @@ void GuidoReducedProportional::onDraw(int width, int height, VGDevice* dev)
 }
 
 //--------------------------------------------------------------------------
-void GuidoReducedProportional::SetMusicFont(DrawParams drawParams)
+void ReducedProportional::SetMusicFont(DrawParams drawParams)
 {
 	VGSystem * sys = drawParams.dev->getVGSystem();
 	int fontSize = (int) (drawParams.noteHeight * 3.5); // value experimentaly defined
@@ -92,14 +92,14 @@ void GuidoReducedProportional::SetMusicFont(DrawParams drawParams)
 }
 
 //--------------------------------------------------------------------------
-float GuidoReducedProportional::staffTopPos(int i, float noteHeight) const
+float ReducedProportional::staffTopPos(int i, float noteHeight) const
 {
 	float offset = (kStaffSpacing + (kStaffLines - 1)) * (float) i;
 	return (kStaffBorder + offset) * noteHeight;
 }
 
 //--------------------------------------------------------------------------
-GuidoPianoRoll::DrawParams GuidoReducedProportional::createDrawParamsStructure(int width, int height, VGDevice *dev) const
+PianoRoll::DrawParams ReducedProportional::createDrawParamsStructure(int width, int height, VGDevice *dev) const
 {
     int currentWidth  = (width  == -1 ? kDefaultWidth  : width);
     int currentHeight = (height == -1 ? kDefaultHeight : height);
@@ -107,13 +107,13 @@ GuidoPianoRoll::DrawParams GuidoReducedProportional::createDrawParamsStructure(i
     float noteHeight              = computeNoteHeight(currentHeight);
     float untimedLeftElementWidth = 0;
 
-    GuidoPianoRoll::DrawParams drawParams(currentWidth, currentHeight, noteHeight, untimedLeftElementWidth, dev);
+    PianoRoll::DrawParams drawParams(currentWidth, currentHeight, noteHeight, untimedLeftElementWidth, dev);
 
     return drawParams;
 }
 
 //--------------------------------------------------------------------------
-void GuidoReducedProportional::DrawStaff(int n, DrawParams drawParams) const
+void ReducedProportional::DrawStaff(int n, DrawParams drawParams) const
 {
     float y = staffTopPos(n, drawParams.noteHeight);
 
@@ -124,7 +124,7 @@ void GuidoReducedProportional::DrawStaff(int n, DrawParams drawParams) const
 }
 
 //--------------------------------------------------------------------------
-void GuidoReducedProportional::DrawGrid(DrawParams drawParams) const
+void ReducedProportional::DrawGrid(DrawParams drawParams) const
 {
 	drawParams.dev->PushPenWidth(kLineThickness);
 
@@ -135,7 +135,7 @@ void GuidoReducedProportional::DrawGrid(DrawParams drawParams) const
 }
 
 //--------------------------------------------------------------------------
-void GuidoReducedProportional::DrawLedgerLines(float x, float y, int count, DrawParams drawParams) const
+void ReducedProportional::DrawLedgerLines(float x, float y, int count, DrawParams drawParams) const
 {
 	drawParams.dev->PushPenWidth(kLineThickness);
 
@@ -154,7 +154,7 @@ void GuidoReducedProportional::DrawLedgerLines(float x, float y, int count, Draw
 }
 
 //--------------------------------------------------------------------------
-int	GuidoReducedProportional::pitch2staff(int midipitch) const
+int	ReducedProportional::pitch2staff(int midipitch) const
 {
 	for (int i = 3; i > 0; i--) {
 		if (midipitch < kStaffUpPitch[i - 1])
@@ -165,7 +165,7 @@ int	GuidoReducedProportional::pitch2staff(int midipitch) const
 }
 
 //--------------------------------------------------------------------------
-int	GuidoReducedProportional::diatonic(int midipitch, int& octave, int& alter) const
+int	ReducedProportional::diatonic(int midipitch, int& octave, int& alter) const
 {
 	octave = midipitch / 12;
 	int p  = midipitch % 12;
@@ -182,7 +182,7 @@ int	GuidoReducedProportional::diatonic(int midipitch, int& octave, int& alter) c
 }
 
 //--------------------------------------------------------------------------
-int	GuidoReducedProportional::halfSpaces2LedgerLines(int halfspaces) const
+int	ReducedProportional::halfSpaces2LedgerLines(int halfspaces) const
 {
 	if (halfspaces < 0)
         return halfspaces / 2;
@@ -196,7 +196,7 @@ int	GuidoReducedProportional::halfSpaces2LedgerLines(int halfspaces) const
 }
 
 //--------------------------------------------------------------------------
-int	GuidoReducedProportional::pitch2staff(int midipitch, int& halfspaces, int& alter) const
+int	ReducedProportional::pitch2staff(int midipitch, int& halfspaces, int& alter) const
 {
 	int oct;
 	int p = diatonic(midipitch, oct, alter);
@@ -211,7 +211,7 @@ int	GuidoReducedProportional::pitch2staff(int midipitch, int& halfspaces, int& a
 }
 
 //--------------------------------------------------------------------------
-float GuidoReducedProportional::halfspaces2ypos(int halfspaces, int staff, float noteHeight) const
+float ReducedProportional::halfspaces2ypos(int halfspaces, int staff, float noteHeight) const
 {
 	float y = (halfspaces * noteHeight) / 2;
 
@@ -219,7 +219,7 @@ float GuidoReducedProportional::halfspaces2ypos(int halfspaces, int staff, float
 }
 
 //--------------------------------------------------------------------------
-void GuidoReducedProportional::DrawVoice(ARMusicalVoice* v, DrawParams drawParams)
+void ReducedProportional::DrawVoice(ARMusicalVoice* v, DrawParams drawParams)
 {
     if (fVoicesColors != NULL) {
         int voiceNum = v->getVoiceNum();
@@ -303,7 +303,7 @@ void GuidoReducedProportional::DrawVoice(ARMusicalVoice* v, DrawParams drawParam
 }
 
 //--------------------------------------------------------------------------
-void GuidoReducedProportional::DrawHead(float x, float y, int alter, DrawParams drawParams) const
+void ReducedProportional::DrawHead(float x, float y, int alter, DrawParams drawParams) const
 {
     if (!fColors->empty())
         drawParams.dev->SetFontColor(fColors->top());
@@ -322,7 +322,7 @@ void GuidoReducedProportional::DrawHead(float x, float y, int alter, DrawParams 
 }
 
 //--------------------------------------------------------------------------
-void GuidoReducedProportional::DrawNote(int pitch, double date, double dur, DrawParams drawParams)
+void ReducedProportional::DrawNote(int pitch, double date, double dur, DrawParams drawParams)
 {
     if (pitch >= fLowPitch && pitch <= fHighPitch) {
         int   alter, halfspaces;
@@ -342,7 +342,7 @@ void GuidoReducedProportional::DrawNote(int pitch, double date, double dur, Draw
 }
 
 //--------------------------------------------------------------------------
-void GuidoReducedProportional::DrawRect(float x, float y, double dur, DrawParams drawParams) const
+void ReducedProportional::DrawRect(float x, float y, double dur, DrawParams drawParams) const
 {
 	float w              =   duration2width(dur, drawParams.width, drawParams.untimedLeftElementWidth);
 	float rectHalfHeight =   drawParams.noteHeight / 4;
@@ -354,7 +354,7 @@ void GuidoReducedProportional::DrawRect(float x, float y, double dur, DrawParams
 }
 
 //--------------------------------------------------------------------------
-void GuidoReducedProportional::handleColor(ARNoteFormat* noteFormat, DrawParams drawParams) const
+void ReducedProportional::handleColor(ARNoteFormat* noteFormat, DrawParams drawParams) const
 {
     const TagParameterString *tps = noteFormat->getColor();
     unsigned char colref[4];
@@ -374,7 +374,7 @@ void GuidoReducedProportional::handleColor(ARNoteFormat* noteFormat, DrawParams 
 }
 
 //--------------------------------------------------------------------------
-float GuidoReducedProportional::computeNoteHeight(int height) const
+float ReducedProportional::computeNoteHeight(int height) const
 {
     float noteHeight = float(height) / ((fNumStaves * (kStaffLines - 1)) + ((fNumStaves - 1) * kStaffSpacing) + (kStaffBorder * 2));
 

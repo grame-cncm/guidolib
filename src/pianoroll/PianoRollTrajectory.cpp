@@ -20,7 +20,7 @@
 #include "ARBar.h"
 #include "GUIDOEngine.h"
 #include "MusicalSymbols.h"
-#include "GuidoPianoRollTrajectory.h"
+#include "PianoRollTrajectory.h"
 #include "VGDevice.h"
 #include "VGSystem.h"
 #include "VGFont.h"
@@ -29,28 +29,28 @@
 using namespace std;
 
 //--------------------------------------------------------------------------
-GuidoPianoRollTrajectory::GuidoPianoRollTrajectory(ARMusic *arMusic) :
-    GuidoPianoRoll(arMusic), fCurrentDate(0)
+PianoRollTrajectory::PianoRollTrajectory(ARMusic *arMusic) :
+    PianoRoll(arMusic), fCurrentDate(0)
 {
     init();
 }
 
 //--------------------------------------------------------------------------
-GuidoPianoRollTrajectory::GuidoPianoRollTrajectory(const char *midiFileName) :
-    GuidoPianoRoll(midiFileName), fCurrentDate(0)
+PianoRollTrajectory::PianoRollTrajectory(const char *midiFileName) :
+    PianoRoll(midiFileName), fCurrentDate(0)
 {
     init();
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRollTrajectory::init()
+void PianoRollTrajectory::init()
 {
     previousEventInfos = new std::vector<EventInfos>;
     currentEventInfos  = new std::vector<EventInfos>;
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRollTrajectory::DrawVoice(ARMusicalVoice* v, DrawParams drawParams)
+void PianoRollTrajectory::DrawVoice(ARMusicalVoice* v, DrawParams drawParams)
 {
     if (fVoicesColors != NULL) {
         int voiceNum = v->getVoiceNum();
@@ -139,7 +139,7 @@ void GuidoPianoRollTrajectory::DrawVoice(ARMusicalVoice* v, DrawParams drawParam
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRollTrajectory::DrawNote(int pitch, double date, double dur, DrawParams drawParams)
+void PianoRollTrajectory::DrawNote(int pitch, double date, double dur, DrawParams drawParams)
 {
     float   x     = date2xpos(date, drawParams.width, drawParams.untimedLeftElementWidth);
     float   y     = pitch2ypos(pitch, drawParams);
@@ -160,14 +160,14 @@ void GuidoPianoRollTrajectory::DrawNote(int pitch, double date, double dur, Draw
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRollTrajectory::DrawLinks(DrawParams drawParams) const
+void PianoRollTrajectory::DrawLinks(DrawParams drawParams) const
 {
     if (!previousEventInfos->empty() && !currentEventInfos->empty())
         DrawAllLinksBetweenTwoEvents(drawParams);
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRollTrajectory::DrawFinalEvent(double dur, DrawParams drawParams)
+void PianoRollTrajectory::DrawFinalEvent(double dur, DrawParams drawParams)
 {
     if (!currentEventInfos->empty()) {
         float w = duration2width(dur, drawParams.width, drawParams.untimedLeftElementWidth);
@@ -203,7 +203,7 @@ void GuidoPianoRollTrajectory::DrawFinalEvent(double dur, DrawParams drawParams)
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRollTrajectory::DrawAllLinksBetweenTwoEvents(DrawParams drawParams) const
+void PianoRollTrajectory::DrawAllLinksBetweenTwoEvents(DrawParams drawParams) const
 {
     for (unsigned int i = 0; i < previousEventInfos->size(); i++) {
         for (unsigned int j = 0; j < currentEventInfos->size(); j++) {
@@ -214,7 +214,7 @@ void GuidoPianoRollTrajectory::DrawAllLinksBetweenTwoEvents(DrawParams drawParam
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRollTrajectory::DrawLinkBetween(GuidoPianoRollTrajectory::EventInfos leftEvent, GuidoPianoRollTrajectory::EventInfos rightEvent, DrawParams drawParams) const
+void PianoRollTrajectory::DrawLinkBetween(PianoRollTrajectory::EventInfos leftEvent, PianoRollTrajectory::EventInfos rightEvent, DrawParams drawParams) const
 {
     VGColor color = leftEvent.color;
 
@@ -251,7 +251,7 @@ void GuidoPianoRollTrajectory::DrawLinkBetween(GuidoPianoRollTrajectory::EventIn
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRollTrajectory::handleColor(ARNoteFormat* noteFormat, DrawParams drawParams) const
+void PianoRollTrajectory::handleColor(ARNoteFormat* noteFormat, DrawParams drawParams) const
 {
     const TagParameterString *tps = noteFormat->getColor();
     unsigned char colref[4];
@@ -264,7 +264,7 @@ void GuidoPianoRollTrajectory::handleColor(ARNoteFormat* noteFormat, DrawParams 
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRollTrajectory::handleRest(double date, DrawParams drawParams)
+void PianoRollTrajectory::handleRest(double date, DrawParams drawParams)
 {
     if (!fChord) {
         DrawLinks(drawParams);
@@ -279,13 +279,13 @@ void GuidoPianoRollTrajectory::handleRest(double date, DrawParams drawParams)
 }
 
 //--------------------------------------------------------------------------
-/*void GuidoPianoRollTrajectory::handleEmpty(double date)
+/*void PianoRollTrajectory::handleEmpty(double date)
 {
     handleRest(date);
 }*/
 
 //--------------------------------------------------------------------------
-GuidoPianoRollTrajectory::EventInfos GuidoPianoRollTrajectory::createNoteInfos(float x, float y, VGColor color) const
+PianoRollTrajectory::EventInfos PianoRollTrajectory::createNoteInfos(float x, float y, VGColor color) const
 {
     EventInfos newNoteInfos;
 
@@ -298,7 +298,7 @@ GuidoPianoRollTrajectory::EventInfos GuidoPianoRollTrajectory::createNoteInfos(f
 }
 
 //--------------------------------------------------------------------------
-GuidoPianoRollTrajectory::EventInfos GuidoPianoRollTrajectory::createRestInfos(float x) const
+PianoRollTrajectory::EventInfos PianoRollTrajectory::createRestInfos(float x) const
 {
     EventInfos newRestInfos;
 
@@ -312,7 +312,7 @@ GuidoPianoRollTrajectory::EventInfos GuidoPianoRollTrajectory::createRestInfos(f
 #ifdef MIDIEXPORT
 
 //--------------------------------------------------------------------------
-void GuidoPianoRollTrajectory::DrawMidiSeq(MidiSeqPtr seq, int tpqn, DrawParams drawParams)
+void PianoRollTrajectory::DrawMidiSeq(MidiSeqPtr seq, int tpqn, DrawParams drawParams)
 {
 	MidiEvPtr ev       = FirstEv(seq);
 	int       tpwn     = tpqn * 4;

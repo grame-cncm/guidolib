@@ -7,7 +7,7 @@
 
 #include "GUIDOParse.h"
 #include "GUIDOEngine.h"
-#include "GUIDOPianoRollAPI.h"
+#include "GUIDOPianoRoll.h"
 #include "SVGDevice.h"
 #include "SVGSystem.h"
 
@@ -219,7 +219,7 @@ int main(int argc, char **argv)
 	GuidoDate start   = ldateopt(argc, argv, kOptions[kStart], defDate);
 	GuidoDate end     = ldateopt(argc, argv, kOptions[kEnd],   defDate);
 
-    //GuidoPianoRoll *pianoRoll = GuidoMidi2PianoRoll(reducedProportional, fileName);
+    //PianoRoll *pianoRoll = GuidoMidi2PianoRoll(reducedProportional, fileName);
 
     //GuidoErrCode err;
 

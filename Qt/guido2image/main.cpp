@@ -38,7 +38,7 @@
 #include "Guido2Image.h"
 #include "QGuidoPainter.h"
 
-#include "GUIDOPianoRollAPI.h"
+#include "GUIDOPianoRoll.h"
 
 #ifdef USE_UNISTD
 	#include <unistd.h>
@@ -358,7 +358,7 @@ int main(int argc, char *argv[])
         else
             arh = GuidoString2AR(parser, options.inputFile);
         
-        GuidoPianoRoll *pianoRoll = GuidoAR2PianoRoll(kSimplePianoRoll, arh);
+        PianoRoll *pianoRoll = GuidoAR2PianoRoll(kSimplePianoRoll, arh);
         GuidoPianoRollEnableKeyboard(pianoRoll, true);
 
         Guido2Image::guidoPianoRoll2Image(p, pianoRoll, 1024, 512);

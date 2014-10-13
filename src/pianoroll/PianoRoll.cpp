@@ -31,7 +31,8 @@
     #include "midifile.h"
 #endif
 
-#include "GuidoPianoRoll.h"
+#include "PianoRoll.h"
+#include "GUIDOPianoRoll.h"
 
 using namespace std;
 
@@ -49,7 +50,7 @@ using namespace std;
                                                   //     (to switch between mode 2 and mode 1 of pitch line display)
 
 //--------------------------------------------------------------------------
-GuidoPianoRoll::GuidoPianoRoll(ARMusic *arMusic) :
+PianoRoll::PianoRoll(ARMusic *arMusic) :
     fARMusic(NULL),
     fVoicesAutoColored(false), fVoicesColors(NULL),
     fKeyboardEnabled(false), fMeasureBarsEnabled(false),
@@ -61,7 +62,7 @@ GuidoPianoRoll::GuidoPianoRoll(ARMusic *arMusic) :
 }
 
 //--------------------------------------------------------------------------
-GuidoPianoRoll::GuidoPianoRoll(const char *midiFileName) :
+PianoRoll::PianoRoll(const char *midiFileName) :
     fARMusic(NULL),
     fVoicesAutoColored(false), fVoicesColors(NULL),
     fKeyboardEnabled(false), fMeasureBarsEnabled(false),
@@ -73,12 +74,12 @@ GuidoPianoRoll::GuidoPianoRoll(const char *midiFileName) :
 }
 
 //--------------------------------------------------------------------------
-GuidoPianoRoll::~GuidoPianoRoll() 
+PianoRoll::~PianoRoll() 
 {
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::init() 
+void PianoRoll::init() 
 {
     GuidoDate defaultStartDate = {kDefaultStartDateNum, kDefaultStartDateDenom};
     GuidoDate defaultEndDate   = {kDefaultEndDateNum, kDefaultEndDateDenom};
@@ -90,7 +91,7 @@ void GuidoPianoRoll::init()
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::setLimitDates(GuidoDate start, GuidoDate end)
+void PianoRoll::setLimitDates(GuidoDate start, GuidoDate end)
 {
     if (start.num == 0 && start.denom == 0)
         fStartDate = TYPE_TIMEPOSITION(kDefaultStartDateNum, kDefaultStartDateDenom);
@@ -106,7 +107,7 @@ void GuidoPianoRoll::setLimitDates(GuidoDate start, GuidoDate end)
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::setPitchRange(int minPitch, int maxPitch)
+void PianoRoll::setPitchRange(int minPitch, int maxPitch)
 {
     if (minPitch == -1)
         fLowPitch = (ownsARMusic() ? detectARExtremePitch(true) : detectMidiExtremePitch(true));
@@ -123,7 +124,7 @@ void GuidoPianoRoll::setPitchRange(int minPitch, int maxPitch)
 }
 
 //--------------------------------------------------------------------------
-float GuidoPianoRoll::getKeyboardWidth(int height)
+float PianoRoll::getKeyboardWidth(int height)
 {
     int currentHeight = (height == -1 ? kDefaultHeight : height);
 
@@ -133,7 +134,7 @@ float GuidoPianoRoll::getKeyboardWidth(int height)
     return untimedLeftElementWidth;
 }
 
-void GuidoPianoRoll::setPitchLinesDisplayMode(int mode)
+void PianoRoll::setPitchLinesDisplayMode(int mode)
 {
     fPitchLinesDisplayMode = mode;
 
@@ -150,7 +151,7 @@ void GuidoPianoRoll::setPitchLinesDisplayMode(int mode)
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::setColorToVoice(int voiceNum, int r, int g, int b, int a)
+void PianoRoll::setColorToVoice(int voiceNum, int r, int g, int b, int a)
 {
     if (!fVoicesColors)
         fVoicesColors = new std::vector<std::pair<int, VGColor> >();
@@ -172,7 +173,7 @@ void GuidoPianoRoll::setColorToVoice(int voiceNum, int r, int g, int b, int a)
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::getMap(int width, int height, Time2GraphicMap &outmap)
+void PianoRoll::getMap(int width, int height, Time2GraphicMap &outmap)
 {
     int currentWidth  = (width  == -1 ? kDefaultWidth  : width);
     int currentHeight = (height == -1 ? kDefaultHeight : height);
@@ -190,7 +191,7 @@ void GuidoPianoRoll::getMap(int width, int height, Time2GraphicMap &outmap)
 }
 
 //--------------------------------------------------------------------------
-bool GuidoPianoRoll::ownsARMusic() {
+bool PianoRoll::ownsARMusic() {
     if (fARMusic)
         return true;
     else
@@ -198,7 +199,7 @@ bool GuidoPianoRoll::ownsARMusic() {
 }
 
 //--------------------------------------------------------------------------
-bool GuidoPianoRoll::ownsMidi() {
+bool PianoRoll::ownsMidi() {
     if (fMidiFileName)
         return true;
     else
@@ -206,7 +207,7 @@ bool GuidoPianoRoll::ownsMidi() {
 }
 
 //--------------------------------------------------------------------------
-GuidoPianoRoll::DrawParams GuidoPianoRoll::createDrawParamsStructure(int width, int height, VGDevice *dev) const
+PianoRoll::DrawParams PianoRoll::createDrawParamsStructure(int width, int height, VGDevice *dev) const
 {
     int currentWidth  = (width  == -1 ? kDefaultWidth  : width);
     int currentHeight = (height == -1 ? kDefaultHeight : height);
@@ -214,13 +215,13 @@ GuidoPianoRoll::DrawParams GuidoPianoRoll::createDrawParamsStructure(int width, 
     float noteHeight              = computeNoteHeight(currentHeight);
     float untimedLeftElementWidth = computeKeyboardWidth(noteHeight);
 
-    GuidoPianoRoll::DrawParams drawParams(currentWidth, currentHeight, noteHeight, untimedLeftElementWidth, dev);
+    PianoRoll::DrawParams drawParams(currentWidth, currentHeight, noteHeight, untimedLeftElementWidth, dev);
 
     return drawParams;
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::onDraw(int width, int height, VGDevice *dev)
+void PianoRoll::onDraw(int width, int height, VGDevice *dev)
 {
     DrawParams drawParams = createDrawParamsStructure(width, height, dev);
 
@@ -240,7 +241,7 @@ void GuidoPianoRoll::onDraw(int width, int height, VGDevice *dev)
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::DrawFromAR(GuidoPianoRoll::DrawParams drawParams)
+void PianoRoll::DrawFromAR(PianoRoll::DrawParams drawParams)
 {
     GuidoPos pos = fARMusic->GetHeadPosition();
 
@@ -251,7 +252,7 @@ void GuidoPianoRoll::DrawFromAR(GuidoPianoRoll::DrawParams drawParams)
 }
 
 //--------------------------------------------------------------------------
-float GuidoPianoRoll::computeKeyboardWidth(float noteHeight) const
+float PianoRoll::computeKeyboardWidth(float noteHeight) const
 {
     float untimedLeftElementWidth = 0;
 
@@ -262,7 +263,7 @@ float GuidoPianoRoll::computeKeyboardWidth(float noteHeight) const
 }
 
 //--------------------------------------------------------------------------
-float GuidoPianoRoll::computeNoteHeight(int height) const
+float PianoRoll::computeNoteHeight(int height) const
 {
     float noteHeight = (float) height / (float) pitchRange();
 
@@ -273,7 +274,7 @@ float GuidoPianoRoll::computeNoteHeight(int height) const
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::initRendering(GuidoPianoRoll::DrawParams drawParams)
+void PianoRoll::initRendering(PianoRoll::DrawParams drawParams)
 {
     drawParams.dev->NotifySize(drawParams.width, drawParams.height);
     drawParams.dev->BeginDraw();
@@ -283,7 +284,7 @@ void GuidoPianoRoll::initRendering(GuidoPianoRoll::DrawParams drawParams)
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::endRendering(GuidoPianoRoll::DrawParams drawParams)
+void PianoRoll::endRendering(PianoRoll::DrawParams drawParams)
 {
     drawParams.dev->PopFillColor();
     drawParams.dev->PopPenColor();
@@ -291,7 +292,7 @@ void GuidoPianoRoll::endRendering(GuidoPianoRoll::DrawParams drawParams)
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::DrawGrid(GuidoPianoRoll::DrawParams drawParams) const
+void PianoRoll::DrawGrid(PianoRoll::DrawParams drawParams) const
 {
     drawParams.dev->PushPenColor(VGColor(0, 0, 0));
 
@@ -312,7 +313,7 @@ void GuidoPianoRoll::DrawGrid(GuidoPianoRoll::DrawParams drawParams) const
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::DrawOctavesGrid(GuidoPianoRoll::DrawParams drawParams) const
+void PianoRoll::DrawOctavesGrid(PianoRoll::DrawParams drawParams) const
 {
 	for (int i = fLowPitch; i <= fHighPitch + 1; i++) {
         float y = pitch2ypos(i, drawParams) + 0.5f * drawParams.noteHeight;
@@ -331,7 +332,7 @@ void GuidoPianoRoll::DrawOctavesGrid(GuidoPianoRoll::DrawParams drawParams) cons
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::DrawTwoLinesGrid(GuidoPianoRoll::DrawParams drawParams) const
+void PianoRoll::DrawTwoLinesGrid(PianoRoll::DrawParams drawParams) const
 {
 	for (int i = fLowPitch; i <= fHighPitch + 1; i++) {
         float y = pitch2ypos(i, drawParams) + 0.5f * drawParams.noteHeight;
@@ -357,7 +358,7 @@ void GuidoPianoRoll::DrawTwoLinesGrid(GuidoPianoRoll::DrawParams drawParams) con
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::DrawDiatonicGrid(GuidoPianoRoll::DrawParams drawParams) const
+void PianoRoll::DrawDiatonicGrid(PianoRoll::DrawParams drawParams) const
 {
 	for (int i = fLowPitch; i <= fHighPitch + 1; i++) {
         float y = pitch2ypos(i, drawParams) + 0.5f * drawParams.noteHeight;
@@ -385,7 +386,7 @@ void GuidoPianoRoll::DrawDiatonicGrid(GuidoPianoRoll::DrawParams drawParams) con
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::DrawChromaticGrid(GuidoPianoRoll::DrawParams drawParams, bool isUserDefined) const
+void PianoRoll::DrawChromaticGrid(PianoRoll::DrawParams drawParams, bool isUserDefined) const
 {
 	for (int i = fLowPitch; i <= fHighPitch + 1; i++) {
         float y = pitch2ypos(i, drawParams) + 0.5f * drawParams.noteHeight;
@@ -411,7 +412,7 @@ void GuidoPianoRoll::DrawChromaticGrid(GuidoPianoRoll::DrawParams drawParams, bo
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::DrawKeyboard(GuidoPianoRoll::DrawParams drawParams) const
+void PianoRoll::DrawKeyboard(PianoRoll::DrawParams drawParams) const
 {
     float keyboardBlackNotesWidth = drawParams.untimedLeftElementWidth / 1.5f;
 
@@ -540,7 +541,7 @@ void GuidoPianoRoll::DrawKeyboard(GuidoPianoRoll::DrawParams drawParams) const
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::DrawVoice(ARMusicalVoice* v, GuidoPianoRoll::DrawParams drawParams)
+void PianoRoll::DrawVoice(ARMusicalVoice* v, PianoRoll::DrawParams drawParams)
 {
     if (fVoicesColors != NULL) {
         int voiceNum = v->getVoiceNum();
@@ -622,7 +623,7 @@ void GuidoPianoRoll::DrawVoice(ARMusicalVoice* v, GuidoPianoRoll::DrawParams dra
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::DrawMusicalObject(ARMusicalObject *e, TYPE_TIMEPOSITION date, TYPE_DURATION dur, GuidoPianoRoll::DrawParams drawParams)
+void PianoRoll::DrawMusicalObject(ARMusicalObject *e, TYPE_TIMEPOSITION date, TYPE_DURATION dur, PianoRoll::DrawParams drawParams)
 {
 	ARNote *note = dynamic_cast<ARNote *>(e);
 
@@ -643,7 +644,7 @@ void GuidoPianoRoll::DrawMusicalObject(ARMusicalObject *e, TYPE_TIMEPOSITION dat
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::DrawNote(int pitch, double date, double dur, GuidoPianoRoll::DrawParams drawParams)
+void PianoRoll::DrawNote(int pitch, double date, double dur, PianoRoll::DrawParams drawParams)
 {
 	float x = date2xpos (date, drawParams.width, drawParams.untimedLeftElementWidth);
 	float y = pitch2ypos(pitch, drawParams);
@@ -651,7 +652,7 @@ void GuidoPianoRoll::DrawNote(int pitch, double date, double dur, GuidoPianoRoll
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::DrawRect(float x, float y, double dur, GuidoPianoRoll::DrawParams drawParams) const
+void PianoRoll::DrawRect(float x, float y, double dur, PianoRoll::DrawParams drawParams) const
 {
 	float w        = duration2width(dur, drawParams.width, drawParams.untimedLeftElementWidth);
 	float halfstep = stepheight(drawParams.height) / 2.0f;
@@ -667,7 +668,7 @@ void GuidoPianoRoll::DrawRect(float x, float y, double dur, GuidoPianoRoll::Draw
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::DrawMeasureBar(double date, GuidoPianoRoll::DrawParams drawParams) const
+void PianoRoll::DrawMeasureBar(double date, PianoRoll::DrawParams drawParams) const
 {
     float x    = date2xpos(date, drawParams.width, drawParams.untimedLeftElementWidth);
 	float yMin = pitch2ypos(fLowPitch, drawParams)  + 0.5f * drawParams.noteHeight;
@@ -689,7 +690,7 @@ void GuidoPianoRoll::DrawMeasureBar(double date, GuidoPianoRoll::DrawParams draw
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::handleColor(ARNoteFormat* noteFormat, DrawParams drawParams) const
+void PianoRoll::handleColor(ARNoteFormat* noteFormat, DrawParams drawParams) const
 {
     const TagParameterString *tps = noteFormat->getColor();
     unsigned char colref[4];
@@ -713,7 +714,7 @@ void GuidoPianoRoll::handleColor(ARNoteFormat* noteFormat, DrawParams drawParams
 }*/
 
 //--------------------------------------------------------------------------
-float GuidoPianoRoll::pitch2ypos(int midipitch, DrawParams drawParams) const
+float PianoRoll::pitch2ypos(int midipitch, DrawParams drawParams) const
 {
 	int   p = midipitch - fLowPitch;
     float h = ((float) (drawParams.height * p) / (float) pitchRange());
@@ -722,7 +723,7 @@ float GuidoPianoRoll::pitch2ypos(int midipitch, DrawParams drawParams) const
 }
 
 //--------------------------------------------------------------------------
-float GuidoPianoRoll::date2xpos(double pos, int width, float untimedLeftElementWidth) const
+float PianoRoll::date2xpos(double pos, int width, float untimedLeftElementWidth) const
 {
     float  fTimedWidth = width - untimedLeftElementWidth;
     double posDiff     = pos - double(fStartDate);
@@ -731,7 +732,7 @@ float GuidoPianoRoll::date2xpos(double pos, int width, float untimedLeftElementW
 }
 
 //--------------------------------------------------------------------------
-float GuidoPianoRoll::duration2width(double dur, int width, float untimedLeftElementWidth) const
+float PianoRoll::duration2width(double dur, int width, float untimedLeftElementWidth) const
 {
     float  fTimedWidth = width - untimedLeftElementWidth;
 
@@ -739,7 +740,7 @@ float GuidoPianoRoll::duration2width(double dur, int width, float untimedLeftEle
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::HSVtoRGB(float h, float s, float v, int &r, int &g, int &b) const
+void PianoRoll::HSVtoRGB(float h, float s, float v, int &r, int &g, int &b) const
 {
     int   i = (int) floor((float) h * 6);
     float f = h * 6 - i;
@@ -789,7 +790,7 @@ void GuidoPianoRoll::HSVtoRGB(float h, float s, float v, int &r, int &g, int &b)
 }
 
 //--------------------------------------------------------------------------
-int GuidoPianoRoll::detectARExtremePitch(bool detectLowerPitch)
+int PianoRoll::detectARExtremePitch(bool detectLowerPitch)
 {
     bool containsNote = false;
     int  extremePitch;
@@ -847,7 +848,7 @@ int GuidoPianoRoll::detectARExtremePitch(bool detectLowerPitch)
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::autoAdjustPitchRange(int &lowerPitch, int &higherPitch)
+void PianoRoll::autoAdjustPitchRange(int &lowerPitch, int &higherPitch)
 {
     int difference = 11 - (higherPitch - lowerPitch);
 
@@ -907,7 +908,7 @@ static MidiSeqPtr KeyOnOff2Note(MidiSeqPtr seq, MidiLight* midi)
 }
 
 //--------------------------------------------------------------------------
-TYPE_TIMEPOSITION GuidoPianoRoll::getMidiEndDate() const
+TYPE_TIMEPOSITION PianoRoll::getMidiEndDate() const
 {
     MIDIFile mf;
 
@@ -934,7 +935,7 @@ TYPE_TIMEPOSITION GuidoPianoRoll::getMidiEndDate() const
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::DrawMidiSeq(MidiSeqPtr seq, int tpqn, GuidoPianoRoll::DrawParams drawParams)
+void PianoRoll::DrawMidiSeq(MidiSeqPtr seq, int tpqn, PianoRoll::DrawParams drawParams)
 {
 	MidiEvPtr ev = FirstEv(seq);
 	int tpwn     = tpqn * 4;
@@ -964,7 +965,7 @@ void GuidoPianoRoll::DrawMidiSeq(MidiSeqPtr seq, int tpqn, GuidoPianoRoll::DrawP
 }
 
 //--------------------------------------------------------------------------
-void GuidoPianoRoll::DrawFromMidi(GuidoPianoRoll::DrawParams drawParams)
+void PianoRoll::DrawFromMidi(PianoRoll::DrawParams drawParams)
 {
     MIDIFile mf;
 
@@ -996,7 +997,7 @@ void GuidoPianoRoll::DrawFromMidi(GuidoPianoRoll::DrawParams drawParams)
 }
 
 //--------------------------------------------------------------------------
-int GuidoPianoRoll::detectMidiExtremePitch(bool detectLowerPitch)
+int PianoRoll::detectMidiExtremePitch(bool detectLowerPitch)
 {
     bool containsNote = false;
     int  extremePitch;
