@@ -38,18 +38,20 @@ class ARBar : // public ARMusicalObject,
 
 		int getBarNumber() const { return barnumber; }
 
-		void setMeasureNumber(int inMeasureNumber) { measureNumber = inMeasureNumber; }
-		int  getMeasureNumber()                    { return measureNumber; }
+		void                setMeasureNumber(int inMeasureNumber) { measureNumber = inMeasureNumber; }
+		int                 getMeasureNumber()                    { return measureNumber; }
+        TagParameterString *getMeasureNumberDisplayed()           { return measureNumberDisplayed; }
 
-		float  getMeasureNumberDxOffset()            { return numDx; }
-		float  getMeasureNumberDyOffset()            { return numDy; }
+		float  getMeasureNumberDxOffset()                         { return numDx; }
+		float  getMeasureNumberDyOffset()                         { return numDy; }
 
 		virtual bool operator==(const ARBar & bar)
 			{ return (barnumber == bar.barnumber); }
 
   protected:
-		int barnumber; // number of bar where barline starts
-		int measureNumber;
+		int  barnumber; // number of bar where barline starts
+		int  measureNumber;
+        TagParameterString *measureNumberDisplayed;
 
 		float numDx;
 		float numDy;

@@ -8,6 +8,7 @@ version 1.5.4
 - new 'dy' attribute for the \staffFormat-tag to insert an vertical offset
 - conflicts with note durations in the trill : bug solved
 - beams can be applied to grace notes
+- new 'display' attribute for the \bar-tag to display or not measure number
 
 ----------------------------------------------------------------
 version 1.5.3

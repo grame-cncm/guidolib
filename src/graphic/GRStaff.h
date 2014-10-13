@@ -194,6 +194,7 @@ class GRStaff : public GRCompositeNotationElement
 		GRStaffState &          getGRStaffState() { return mStaffState; }
 		const GRStaffState &    getGRStaffState() const { return mStaffState; }
 		float			getXEndPosition(TYPE_TIMEPOSITION pos, TYPE_DURATION dur);
+        ARMeter        *getCurMeter() const { return mStaffState.curmeter; }
 
 		virtual float       getNotePosition(TYPE_PITCH pit, TYPE_REGISTER oct) const;
 		virtual GDirection  getDefaultThroatDirection(TYPE_PITCH pit, TYPE_REGISTER oct) const;

@@ -26,7 +26,7 @@ ifeq ($(system), MINGW32_NT-6.1)
   libbin  := ../build/win32/Release
   toolbin := ../tools/build/win32/Release
   lib       = $(libbin)/GUIDOEngine.lib
-  LEAKTOOLS = GUIDOEngine.dll guidogetversion.exe guido2svg.exe guidoparse.exe guidoar2gr.exe guidodraw.exe guido2image.exe guido2midi.exe
+  LEAKTOOLS = GUIDOEngine.dll guidogetversion.exe guido2svg.exe guidoparse.exe guidoar2gr.exe guidodraw.exe guido2image.exe guidogetstaffmap.exe guidogetsystemmap.exe guidogettimemap.exe guidogetvoicemap.exe guido2midi.exe
 else
   lib = -lGUIDOEngine
 endif
@@ -62,7 +62,7 @@ leaksfiles  := $(patsubst ../%.gmn, $(version)/$(TOOLPATH)/%.leaks.out, $(gmnfil
 validpdf 	= $(patsubst %.pdf, %.outpdf, $(allpdf))
 validsvg 	= $(patsubst %.svg, %.outsvg, $(allsvg))
 validmap 	= $(patsubst %.map, %.outmap, $(allmap))
-validsvgwin 	= $(patsubst %.svg, %.outsvgwin, $(allsvg))
+validsvgwin = $(patsubst %.svg, %.outsvgwin, $(allsvg))
 
 .PHONY: pdf svg
 
@@ -77,6 +77,7 @@ help:
 	@echo "'midi'         : makes MIDI files for a set of gmn files"
 	@echo "                 the output folder name is the current guido engine version number."
 	@echo "'validate    VERSION=another_version': compares the current version svg output with another one"
+	@echo "'validateWin VERSION=another_version': compares on Windows the current version svg output with another one (Firefox has to be installed (and opened) in C:/Program Files (x86)/Mozilla Firefox/firefox, if not change Makefile)"
 	@echo "'pdfvalidate VERSION=another_version': compares the current version pdf output with another one"
 	@echo "'checkleaks TOOL=a_tool': check memory leaks on a set of gmn files using various tools"
 	@echo "                 the basic tool set is included in this folder but any tool arbitrary tool could be used as well"
@@ -240,6 +241,18 @@ guidoar2gr.exe:
 
 guidodraw.exe:
 	cp $(toolbin)/guidodraw.exe .
+
+guidogetstaffmap.exe:
+	cp $(toolbin)/guidogetstaffmap.exe .
+
+guidogetsystemmap.exe:
+	cp $(toolbin)/guidogetsystemmap.exe .
+
+guidogettimemap.exe:
+	cp $(toolbin)/guidogettimemap.exe .
+
+guidogetvoicemap.exe:
+	cp $(toolbin)/guidogetvoicemap.exe .
 
 guido2image.exe:
 	cp ../Qt/bin/guido2image.exe .

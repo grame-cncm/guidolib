@@ -20,11 +20,13 @@
 
 #include "ARBar.h"
 
+#include "ARMeter.h"
 #include "GRBar.h"
 #include "GRStaff.h"
 #include "GRDoubleBar.h"
 #include "GRSystemSlice.h"
 #include "VGDevice.h"
+#include "TagParameterString.h"
 #include "math.h"
 
 #include "FontManager.h"
@@ -189,7 +191,19 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
     if (staffSize < kMinNoteSize) // Too small, don't draw
         return;
 
-	if (getARBar()->getMeasureNumber() != 0)
+    bool currentMeterAutoMeasNumEnabled = (mGrStaff->getCurMeter() != NULL ? mGrStaff->getCurMeter()->getAutoMeasuresNum() : false);
+    TagParameterString *currentBarMeasNumEnabled = getARBar()->getMeasureNumberDisplayed();
+
+    bool displayMeasureNumber = false;
+
+    if (currentBarMeasNumEnabled) {
+        if (currentBarMeasNumEnabled->TagIsSet() && !strcmp(currentBarMeasNumEnabled->getValue(), "true"))
+            displayMeasureNumber = true;
+        else if (currentBarMeasNumEnabled->TagIsNotSet() && currentMeterAutoMeasNumEnabled == true)
+            displayMeasureNumber = true;
+    }
+
+    if (displayMeasureNumber && getARBar()->getMeasureNumber() != 0)
 	{
 		const VGFont* hmyfont = FontManager::gFontText;
 		hdc.SetTextFont( hmyfont );

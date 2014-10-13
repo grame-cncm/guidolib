@@ -28,8 +28,8 @@ ListOfTPLs ARMeter::ltpls(1);
 ARMeter::ARMeter()
 {
 	mtype = NONE;
-	autoBarlines = 1;
-	autoMeasuresNum = 0;
+	autoBarlines    = true;
+	autoMeasuresNum = false;
 
     numerator = 0;
     denominator = 0;
@@ -45,8 +45,8 @@ ARMeter::ARMeter(int p_numerator, int p_denominator)
 
 	mMeterName = bufferSStream.str().c_str();
 	mtype = NUMERIC;
-	autoBarlines = 1;
-	autoMeasuresNum = 0;
+	autoBarlines    = true;
+	autoMeasuresNum = false;
 }
 
 
@@ -104,18 +104,18 @@ void ARMeter::setTagParameterList(TagParameterList& tpl)
 
 			std::string off("off");
 			if (off == tps->getValue())
-				autoBarlines = 0;
+				autoBarlines = false;
 			else
-				autoBarlines = 1;
+				autoBarlines = true;
 
 			tps = TagParameterString::cast(rtpl->GetNext(pos));
 			assert(tps);
 
 			std::string on("on");
 			if (on == tps->getValue())
-				autoMeasuresNum = 1;
+				autoMeasuresNum = true;
 			else
-				autoMeasuresNum = 0;
+				autoMeasuresNum = false;
 
 
             //Meter string analysis to set numerator/denominator

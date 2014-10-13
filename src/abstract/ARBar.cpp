@@ -30,6 +30,7 @@ ARBar::ARBar(const TYPE_TIMEPOSITION &timeposition)
 {
 	barnumber = -1; // not specified
 	measureNumber = 0;
+    measureNumberDisplayed = NULL;
 
 	numDx = 0;
 	numDy = 0;
@@ -40,6 +41,7 @@ ARBar::ARBar() : ARMTParameter()
 {
 	barnumber = -1; // not specified
 	measureNumber = 0;
+    measureNumberDisplayed = NULL;
 
 	numDx = 0;
 	numDy = 0;
@@ -74,7 +76,7 @@ void ARBar::setTagParameterList(TagParameterList& tpl)
 
 		ListOfStrings lstrs; // (1); std::vector test impl
 		lstrs.AddTail(
-			("I,number,-1,o;U,numDx,0,o;U,numDy,0,o"));
+			("I,number,-1,o;S,display,false,o;U,numDx,0,o;U,numDy,0,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -89,20 +91,22 @@ void ARBar::setTagParameterList(TagParameterList& tpl)
 			// then, we now the match for
 			// the first ParameterList
 			// w, h, ml, mt, mr, mb
-			GuidoPos pos = rtpl->GetHeadPosition();
-
-			TagParameterInt * tpi =  TagParameterInt::cast(rtpl->GetNext(pos));
+            TagParameterInt * tpi =  TagParameterInt::cast(rtpl->RemoveHead());
 			assert(tpi);
-
 			if (tpi->pflag != TagParameter::NOTSET)
 				barnumber = tpi->getValue();
+            delete tpi;
+
+            measureNumberDisplayed = TagParameterString::cast(rtpl->RemoveHead());
 
 			// - dx/dy for measure number
-			TagParameterFloat *f = TagParameterFloat::cast(rtpl->GetNext(pos));
+			TagParameterFloat *f = TagParameterFloat::cast(rtpl->RemoveHead());
 			numDx = f->getValue();
+            delete f;
 
-			f = TagParameterFloat::cast(rtpl->GetNext(pos));
+			f = TagParameterFloat::cast(rtpl->RemoveHead());
 			numDy = f->getValue();
+            delete f;
 		}
 
 		delete rtpl;
