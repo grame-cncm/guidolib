@@ -236,7 +236,8 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
 	if (mColRef) hdc.SetFontColor( VGColor( mColRef ));
 
 	// - Draw elements (stems, dots...)
-	DrawSubElements( hdc );
+    if (getARNote()->haveSubElementsToBeDrawn())
+	    DrawSubElements( hdc );
 
 	// - draw articulations & ornament
 	const GRNEList * articulations = getArticulations();

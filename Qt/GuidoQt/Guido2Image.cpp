@@ -163,7 +163,7 @@ Guido2ImageErrorCodes Guido2Image::gmnString2Image( const Params& p )
 }
 
 //----------------------------------------------------------------------------
-Guido2ImageErrorCodes Guido2Image::gmnFile2Image	( const  Params& p )
+Guido2ImageErrorCodes Guido2Image::gmnFile2Image( const  Params& p )
 {
 	Guido2ImageErrorCodes errorCode = check( p );
 	if ( errorCode != GUIDO_2_IMAGE_SUCCESS )
@@ -177,7 +177,26 @@ Guido2ImageErrorCodes Guido2Image::gmnFile2Image	( const  Params& p )
 		painter->setGMNFile(p.input);
 	}
 	else return GUIDO_2_IMAGE_GUIDO_ENGINE_NOT_STARTED;			// likely
-	return guidoPainterToImage(painter, p);
+
+    return guidoPainterToImage(painter, p);
+}
+
+//----------------------------------------------------------------------------
+Guido2ImageErrorCodes Guido2Image::guidoPianoRoll2Image(const Params& p, PianoRoll *pianoRoll, int width, int height)
+{
+	QGuidoPainter *painter = QGuidoPainter::createGuidoPainter();
+
+	if (!painter)
+        return GUIDO_2_IMAGE_GUIDO_ENGINE_NOT_STARTED;
+
+    if (p.format == GUIDO_2_IMAGE_PDF)
+        writePianoRollPDF(painter, p.output, pianoRoll, width, height);
+    else
+        writePianoRollImage(painter, p, pianoRoll, width, height);
+
+	QGuidoPainter::destroyGuidoPainter(painter);
+
+	return GUIDO_2_IMAGE_SUCCESS;
 }
 
 //----------------------------------------------------------------------------
@@ -243,6 +262,29 @@ void Guido2Image::writePDF( QGuidoPainter * guidoPainter, int pageIndex, const c
 	}
 	painter.end();
 }
+
+void Guido2Image::writePianoRollPDF(QGuidoPainter *guidoPainter, const char *fname, PianoRoll *pianoRoll, int width, int height)
+{
+	QString fileName(fname);
+
+	if (!fileName.toUpper().endsWith(PDF_FORMAT.toUpper()))
+        fileName += PDF_FORMAT;
+
+    QPrinter printer(QPrinter::ScreenResolution);
+	printer.setOutputFormat(QPrinter::PdfFormat);
+	printer.setOutputFileName(QString(fileName));
+
+    printer.setFullPage(true);
+    printer.setPaperSize(QSizeF(width, height), QPrinter::DevicePixel);
+
+	QPainter painter(&printer);
+	painter.setRenderHint(QPainter::Antialiasing);
+	painter.setWindow(QRect(0, 0, width, height));
+	
+    guidoPainter->drawPianoRoll(&painter, QRect(0, 0, width, height), pianoRoll);
+
+	painter.end();
+}
 #endif
 
 //----------------------------------------------------------------------------
@@ -287,6 +329,22 @@ void Guido2Image::writeImage( QGuidoPainter * guidoPainter, const Params& p)
 //	}
 	painter.end();
 	Guido2Image::save (&image, p);
+}
+
+//----------------------------------------------------------------------------
+void Guido2Image::writePianoRollImage( QGuidoPainter * guidoPainter, const Params& p, PianoRoll *pianoRoll, int width, int height)
+{
+	QImage image(width, height, QImage::Format_ARGB32);
+	image.fill(QColor(255, 255, 255, 0).rgba());
+
+	QPainter painter;
+	painter.begin(&image);
+	painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform, true);
+	
+	guidoPainter->drawPianoRoll(&painter, QRect(0, 0, width, height), pianoRoll);
+
+	painter.end();
+	Guido2Image::save(&image, p);
 }
 
 //----------------------------------------------------------------------------

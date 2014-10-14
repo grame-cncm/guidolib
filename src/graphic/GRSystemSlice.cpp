@@ -299,11 +299,16 @@ void GRSystemSlice::Finish()
 			  myrect.bottom += (GCoord)theStaff->getStaffLSPACE();
 
 			// the question is, wether the top margin ends at the staff or at the top element?
-			if (prev && !prev->getStaffState()->distanceset)	nextposition.y -= myrect.top;
+			if (prev && !prev->getStaffState()->distanceset)
+                nextposition.y -= myrect.top;
+
+            float staffYOffset = theStaff->getStaffState()->getYOffset(); // Y offset doesn't work for first staff
+            nextposition.y += staffYOffset;
 
 			theStaff->setPosition(nextposition);
+
 			if (first) {
-				mBoundingBox.top = theStaff->getBoundingBox().top;
+                mBoundingBox.top = theStaff->getBoundingBox().top;
 				first = false;
 			}
 
@@ -313,9 +318,9 @@ void GRSystemSlice::Finish()
 #else
 			GCoord min = myrect.bottom;
 #endif
-			if (theStaff->getStaffState()->distanceset) {
+			if (theStaff->getStaffState()->distanceset)
 				min = theStaff->getDredgeSize() + theStaff->getStaffState()->distance;
-			}
+			
 			nextposition.y += min;
 			prev = theStaff;
 		}

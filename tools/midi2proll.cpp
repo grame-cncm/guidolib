@@ -5,22 +5,26 @@
 #include <stdio.h>
 #endif
 
-#include "GUIDOParse.h"
 #include "GUIDOEngine.h"
+#include "GUIDOPianoRoll.h"
 #include "SVGDevice.h"
 #include "SVGSystem.h"
 
 using namespace std;
 
-const int kDefaultWith	= 1024;
-const int kDefaultHeight= 400;
+const int  kDefaultWidth      = -1;
+const int  kDefaultHeight     = -1;
+const int  kDefaultMinPitch   = -1;
+const int  kDefaultMaxPitch   = -1;
+const bool kDefaultKeyboard   = false;
+const int  kDefaultPitchLines = kAutoLines;
 
-const string kWithOption("-width");
-const string kHelpOption("-help");
-const char* kOptions[] = { "-help", "-width", "-height", "-start", "-end" };
-enum { kHelp, kWidth, kHeight, kStart, kEnd, kMaxOpt };
+const PianoRollType kDefaultPianoRoll = kSimplePianoRoll;
 
-static void usage (char* name)
+const char* kOptions[] = { "-help", "-o", "-pianoroll", "-width", "-height", "-start", "-end", "-minpitch", "-maxpitch", "-keyboard", "-pitchlines" };
+enum { kHelp, kOutput, kPianoRoll, kWidth, kHeight, kStart, kEnd, kMinPitch, kMaxPitch, kKeyboard, kPitchLines, kMaxOpt };
+
+static void usage(char* name)
 {
 #ifndef WIN32
 	const char* tool = basename (name);
@@ -28,84 +32,280 @@ static void usage (char* name)
 	const char* tool = name;
 #endif
 	cerr << "usage: " << tool << " midifile [options] " << endl;
-	cerr << "options: -width value  : set the output width (default is " << kDefaultWith << ")" << endl;
-	cerr << "         -height value : set the output height (default is " << kDefaultHeight << ")" << endl;
-	cerr << "         -start date   : set time zone start" << endl;
-	cerr << "         -end date     : set time zone end" << endl;
-	exit (1);
+	cerr << "options: -o                 : set the output file (if not, output is standard output)" << endl;
+	cerr << "         -pianoroll  string : set the pianoroll type (default is " << kDefaultPianoRoll << ")" << endl;
+	cerr << "                                   simple" << endl;
+    cerr << "                                   trajectory" << endl;
+	cerr << "         -width      value  : set the output width (default is " << kDefaultWidth << ")" << endl;
+	cerr << "         -height     value  : set the output height (default is " << kDefaultHeight << ")" << endl;
+	cerr << "         -start      date   : set time zone start (default is 0/0 -> start time is automatically adjusted)" << endl;
+	cerr << "         -end        date   : set time zone end (default is 0/0 -> end time is automatically adjusted)" << endl;
+    cerr << "         -minpitch   value  : set minimum midi pitch (default is " << kDefaultMinPitch << " -> min pitch is automatically adjusted)" << endl;
+	cerr << "         -maxpitch   value  : set maximum midi pitch (default is " << kDefaultMaxPitch << " -> max pitch is automatically adjusted)" << endl;
+	cerr << "         -keyboard   bool   : set if keyboard will be displayed (default is " << kDefaultKeyboard << ")" << endl;
+	cerr << "         -pitchlines string : set pitch lines display mode (default is " << kDefaultPitchLines << ")" << endl;
+	cerr << "                                   automatic" << endl;
+    cerr << "                                   noline" << endl;
+    cerr << "                                   oneline" << endl;
+    cerr << "                                   twolines" << endl;
+    cerr << "                                   diatonic" << endl;
+    cerr << "                                   chromatic" << endl;
+
+    exit (1);
 }
 
-static void error (GuidoErrCode err)
+static void error(GuidoErrCode err)
 {
-	cerr << "error #" << err << ": " << GuidoGetErrorString (err) << endl;
-	exit (err);
+    if (err != guidoNoErr) {
+        cerr << "error #" << err << ": " << GuidoGetErrorString (err) << endl;
+
+        exit(err);
+    }
 }
 
-static void checkusage (int argc, char **argv)
+static void checkusage(int argc, char **argv)
 {
-	if (argc == 1) usage(argv[0]);
-	for (int i=2; i< argc; i++) {
-		if (!strcmp (argv[i], kOptions[kHelp])) usage(argv[0]);
-		else if (*argv[i] == '-') {
-			bool unknownOpt = true;
-			for (int n=1; (n < kMaxOpt) && unknownOpt; n++) {
-				if (!strcmp (argv[i], kOptions[n])) unknownOpt = false;
-			}
-			if (unknownOpt) usage (argv[0]);
-		}
-	}
+	if (argc == 1 || *(argv[1]) == '-')
+        usage(argv[0]);
+    else {
+        for (int i = 1; i < argc; i++) {
+            if (!strcmp(argv[i], kOptions[kHelp]))
+                usage(argv[0]);
+            else if (*argv[i] == '-') {
+                bool unknownOpt = true;
+                for (int n = 1; (n < kMaxOpt) && unknownOpt; n++) {
+                    if (!strcmp (argv[i], kOptions[n]))
+                        unknownOpt = false;
+                }
+
+                if (unknownOpt || i + 1 >= argc || *(argv[i + 1]) == '-')
+                    usage(argv[0]);
+            }
+        }
+    }
 }
 
-static GuidoDate ldateopt (int argc, char **argv, const char* opt, GuidoDate defaultvalue)
+static const char* getInputFile(int argc, char *argv[])
 {
-	for (int i=2; i< argc; i++) {
-		if (!strcmp (argv[i], opt)) {
+	int i;
+
+	for (i = 1; i < argc; i++) {
+		if (*(argv[i]) != '-')
+            break;
+    }
+
+	return (i < argc) ? argv[i] : 0;
+}
+
+static GuidoDate ldateopt(int argc, char **argv, const char* opt, GuidoDate defaultvalue)
+{
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], opt)) {
 			i++;
-			if (i >= argc) usage(argv[0]);
+
+			if (i >= argc)
+                usage(argv[0]);
 			else {
-				int n,d;
+				int n, d;
+
 				if (sscanf(argv[i], "%d/%d", &n, &d) == 2) {
-					GuidoDate ret = {n,d};
+					GuidoDate ret = {n, d};
 					return ret;
 				}
+                else if (sscanf(argv[i], "%d", &n) == 1) {
+					GuidoDate ret = {n, 1};
+					return ret;
+				}
+                else
+                    usage(argv[0]);
 			}
 		}
 	}
+
 	return defaultvalue;
 }
 
-static int lintopt (int argc, char **argv, const char* opt, int defaultvalue)
+static int lintopt(int argc, char **argv, const char* opt, int defaultvalue)
 {
-	for (int i=2; i< argc; i++) {
+	for (int i = 1; i < argc; i++) {
 		if (!strcmp (argv[i], opt)) {
 			i++;
-			if (i >= argc) usage(argv[0]);
-			else {
-				return atoi (argv[i]);
-			}
+
+			if (i >= argc)
+                usage(argv[0]);
+			else
+				return atoi(argv[i]);
 		}
 	}
+
 	return defaultvalue;
 }
 
+static bool lboolopt(int argc, char **argv, const char* opt, bool defaultvalue)
+{
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], opt)) {
+			i++;
+
+			if (i >= argc)
+                usage(argv[0]);
+			else {
+                if (!strcmp(argv[i], "true"))
+                    return true;
+                else
+                    return false;
+            }
+		}
+	}
+
+	return defaultvalue;
+}
+
+static PianoRollType lPianoRollTypeopt(int argc, char **argv, const char* opt, PianoRollType defaultvalue)
+{
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], opt)) {
+			i++;
+
+			if (i >= argc)
+                usage(argv[0]);
+			else {
+                if (!strcmp(argv[i], "simple"))
+                    return kSimplePianoRoll;
+                else if (!strcmp(argv[i], "trajectory"))
+                    return kTrajectoryPianoRoll;
+                else
+                    return kSimplePianoRoll;
+            }
+		}
+	}
+
+	return defaultvalue;
+}
+
+static int lPitchLinesopt(int argc, char **argv, const char* opt, int defaultvalue)
+{
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], opt)) {
+			i++;
+
+			if (i >= argc)
+                usage(argv[0]);
+			else {
+                if (!strcmp(argv[i], "automatic"))
+                    return kAutoLines;
+                else if (!strcmp(argv[i], "noline"))
+                    return kNoLine;
+                /* Complete with other choices*/
+            }
+		}
+	}
+
+	return defaultvalue;
+}
+
+static char *getOutputFileOpt(int argc, char **argv)
+{
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], "-o")) {
+			i++;
+
+			if (i >= argc || *(argv[i]) == '-')
+                usage(argv[0]);
+			else
+				return argv[i];
+		}
+	}
+
+    return NULL;
+}
 
 int main(int argc, char **argv)
 {
  	SVGSystem sys;
-	SVGDevice dev (cout, &sys, 0);
+
+    std::streambuf *buf = std::cout.rdbuf();
+
+    /**** Check output file ****/
+    const char *outputFile = getOutputFileOpt(argc, argv);
+
+    ofstream fileOutput;
+
+    if (outputFile != NULL) {
+        fileOutput = ofstream(outputFile, ios::out | ios::trunc);
+
+        if (!fileOutput.fail())
+            buf = fileOutput.rdbuf();
+    }
+    /***************************/
+
+    std::ostream out(buf);
+
+    SVGDevice dev(out, &sys, 0);
 	
 	checkusage (argc, argv);
 	
-	int w = lintopt(argc, argv, kOptions[kWidth], kDefaultWith);
-	int h = lintopt(argc, argv, kOptions[kHeight], kDefaultHeight);
-	GuidoDate defDate = {0,1};
-	GuidoDate start = ldateopt(argc, argv, kOptions[kStart], defDate);
-	GuidoDate end = ldateopt(argc, argv, kOptions[kEnd], defDate);
-	dev.NotifySize (w, h);
+	GuidoInitDesc gd = { &dev, 0, 0, 0 };
+    GuidoInit(&gd);
 
-	GuidoErrCode err = GuidoMIDI2PRoll (argv[1], w, h, start, end, &dev);
-	if (err) error (err);
+    const char* fileName = getInputFile(argc, argv);
+	
+	int  w          = lintopt       (argc, argv, kOptions[kWidth],      kDefaultWidth);
+	int  h          = lintopt       (argc, argv, kOptions[kHeight],     kDefaultHeight);
+    int  minPitch   = lintopt       (argc, argv, kOptions[kMinPitch],   kDefaultMinPitch);
+    int  maxPitch   = lintopt       (argc, argv, kOptions[kMaxPitch],   kDefaultMaxPitch);
+    bool keyboard   = lboolopt      (argc, argv, kOptions[kKeyboard],   kDefaultKeyboard);
+    int  pitchLines = lPitchLinesopt(argc, argv, kOptions[kPitchLines], kDefaultPitchLines);
+    
+    PianoRollType         pianoRollType = lPianoRollTypeopt(argc, argv, kOptions[kPianoRoll],  kDefaultPianoRoll);
+
+	GuidoDate defDate = {0, 0};
+	GuidoDate start   = ldateopt(argc, argv, kOptions[kStart], defDate);
+	GuidoDate end     = ldateopt(argc, argv, kOptions[kEnd], defDate);
+
+    PianoRoll *pianoRoll = GuidoMidi2PianoRoll(pianoRollType, fileName);
+
+    GuidoErrCode err;
+
+    LimitParams limitParams;
+    limitParams.startDate = start;
+    limitParams.endDate   = end;
+    limitParams.lowPitch  = minPitch;
+    limitParams.highPitch = maxPitch;
+
+    /**** LIMITS ****/
+    err = GuidoPianoRollSetLimits(pianoRoll, limitParams);
+    error(err);
+    /*********************/
+
+    /**** KEYBOARD ****/
+    err = GuidoPianoRollEnableKeyboard(pianoRoll, keyboard);
+    error(err);
+
+    float keyboardWidth;
+    err = GuidoPianoRollGetKeyboardWidth(pianoRoll, h, keyboardWidth);
+    error(err);
+    /******************/
+
+    /**** PITCH LINES ****/
+    err = GuidoPianoRollSetPitchLinesDisplayMode(pianoRoll, pitchLines);
+    error(err);
+    /*********************/
+
+    /**** MAP ****/
+    Time2GraphicMap map;
+    err = GuidoPianoRollGetMap(pianoRoll, w, h, map);
+    error(err);
+    /*************/
+
+    /**** DRAW ****/
+    err = GuidoPianoRollOnDraw(pianoRoll, w, h, &dev);
+    error(err);
+    /**************/    
+
+    GuidoDestroyPianoRoll(pianoRoll);
+
+    error(err);
+
 	return 0;
 }
-
-

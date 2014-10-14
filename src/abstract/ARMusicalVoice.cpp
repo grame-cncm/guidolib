@@ -1169,6 +1169,7 @@ void ARMusicalVoice::doAutoStuff1()
 	// introduce naturalkeys ...
 	timebench("doAutoKeys", doAutoKeys());
 
+
 	// introduce barlines ...
 	// this breaks notes if needed the new barlines are put right before
 	// newSystem or newPage-Tags (if present) otherwise right before the event.
@@ -1176,8 +1177,11 @@ void ARMusicalVoice::doAutoStuff1()
 	//cout<<"avant autoBarLines"<<endl;
 	//this->operator<< (cout);
 	
-	
 	timebench("doAutoBarlines", doAutoBarlines());
+
+
+	// introduce mesures numbering	
+	timebench("doAutoMeasuresNumbering", doAutoMeasuresNumbering());
 
 	
 	//cout<<endl<<"après"<<endl;
@@ -2142,7 +2146,7 @@ void ARMusicalVoice::doAutoBarlines()
 		ARCoda * coda = dynamic_cast<ARCoda *>(o);
 		ARSegno * segno = dynamic_cast<ARSegno *>(o);
 
-		// (DF) tests to inhibit auto barlines when a repat bar is present
+		// (DF) tests to inhibit auto barlines when a repeat bar is present
 		bool isRepeatBar = false;
         TYPE_TIMEPOSITION posdate;
         if (o) {
@@ -2431,13 +2435,58 @@ obsolete: an end repeatbar is now ARBar
 	}
 }
 
-	class PointerClass
+//____________________________________________________________________________________
+/** \brief Does a GNF transformation
+
+(from GNF to GNF) introducing measures numbering dependant on the Meter-Information (if present)
+*/
+void ARMusicalVoice::doAutoMeasuresNumbering()
+{
+	ARMeter * curmeter = NULL;
+	TYPE_DURATION curmetertime;
+
+	int measureNumber = 1;
+
+	bool displayMeasureNumber = true;
+
+	ARMusicalVoiceState vst;
+
+	GuidoPos pos = GetHeadPosition(vst);
+
+	while (pos)
 	{
-	public:
-		ARMusicalObject * pobj;
-		GuidoPos		 pos1;
-		GuidoPos		 pos2;
-	};
+		if (curmeter != vst.curmeter)
+		{
+			curmeter = vst.curmeter;
+
+			curmetertime.setNumerator(curmeter->getNumerator());
+			curmetertime.setDenominator(curmeter->getDenominator());
+			curmetertime.normalize();
+
+			if (curmetertime.getNumerator() == 0 || curmeter->getAutoBarlines() == 0 || curmeter->getAutoMeasuresNum() == 0)
+				displayMeasureNumber = false;
+		}
+
+		ARMusicalObject * o = GetAt(pos);
+		ARBar * bar = dynamic_cast<ARBar *>(o);
+
+		if (bar)
+		{
+			bar->setMeasureNumber(measureNumber);
+			measureNumber++;
+		}
+		
+		GetNext(pos,vst);
+	}
+}
+
+class PointerClass
+{
+public:
+	ARMusicalObject * pobj;
+	GuidoPos		 pos1;
+	GuidoPos		 pos2;
+};
 
 
 //____________________________________________________________________________________
@@ -3058,7 +3107,7 @@ bool ARMusicalVoice::DurationFitsBase( const TYPE_DURATION &dur,
 
 	// no
 	// OK, there is work to do: we need to determine the new base
-	int val = dur.getDenominator();
+	int val = ndur.getDenominator();
 
 	// this removes divides l as long as it can be
 	// divided (removes powers of 2)
@@ -3071,7 +3120,7 @@ bool ARMusicalVoice::DurationFitsBase( const TYPE_DURATION &dur,
 	switch (val)
 	{
 		case 1:
-			newbase.setNumerator(1);
+			newbase.setNumerator(val);
 			newbase.setDenominator(1);
 			break;
 		case 3:
@@ -5623,11 +5672,11 @@ void ARMusicalVoice::setClusterChord(ARCluster *inCurrentCluster)
         musicalObject = ObjectList::GetNext(posTmp);
 
         ARNote * noteTmp = dynamic_cast<ARNote *>(musicalObject);
-        if (noteTmp && noteTmp->getPitch()!=0)
+        if (noteTmp && noteTmp->getPitch() != 0)
         {
             noteTmp->setCluster(currentCluster);
             noteTmp->setClusterPitchAndOctave();
-            noteTmp->setDrawGR(false);
+            noteTmp->enableSubElements(false);
 
             isThereASecondNote = true;
 
@@ -5643,11 +5692,10 @@ void ARMusicalVoice::setClusterChord(ARCluster *inCurrentCluster)
         ARNote * noteTmp = dynamic_cast<ARNote *>(musicalObject);
         if (noteTmp && noteTmp->getPitch()!=0)
         {
-            // "hides" this note behind the first one
+            noteTmp->setPitch(firstNote->getPitch()); // "hides" this note behind the first one
             noteTmp->setOctave(firstNote->getOctave());
             noteTmp->setCluster(currentCluster);
-            // we now directly set a flag to tell to the note not to draw itself, rather than hide it behind the first one...
-			noteTmp->setDrawGR(false);
+            noteTmp->setDrawGR(false);
             
             noteTmp->setClusterPitchAndOctave();
         }
@@ -6029,9 +6077,27 @@ void ARMusicalVoice::doAutoTrill()
 				if(ptags)
                 {
 					GuidoPos pos = ptags->GetHeadPosition();
+
+                    ARPositionTag * arpt = NULL;
+
 					while(pos)
                     {
-						ARPositionTag * arpt = ptags->GetNext(pos);
+                        /****/ // ptags list can be modified during this while loop, that's why we look if arpt still exists
+                        if (arpt != NULL) {
+                            pos = ptags->GetHeadPosition();
+
+                            ARPositionTag * arptTmp = ptags->GetNext(pos);
+
+                            while (arptTmp != arpt && pos)
+                                arptTmp = ptags->GetNext(pos);
+
+                            if (pos == NULL)
+                                break;
+                        }
+                        /****/
+
+						arpt = ptags->GetNext(pos);
+
 						if(arpt)
                         {
 							ARTie * tie = dynamic_cast<ARTie *>(arpt);
@@ -6041,7 +6107,7 @@ void ARMusicalVoice::doAutoTrill()
 								ARNote * nextNote;
 								do
                                 {
-									ARMusicalObject * nextObject = GetNext(posNote, armvs);
+								    ARMusicalObject * nextObject = GetNext(posNote, armvs);
 									if (!nextObject) break;
 									nextNote = dynamic_cast<ARNote *>(nextObject);
 								}

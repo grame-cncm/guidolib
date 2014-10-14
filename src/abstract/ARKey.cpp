@@ -123,6 +123,9 @@ void ARKey::setTagParameterList(TagParameterList & tpl)
 				newgetKeyArray (name.substr(5, name.length()-5));
 			}
 			else {
+                if (name.size() == 0)
+                    name = "C"; // C by default
+
 				mIsFree = false;
 				int t = (int)name[0];
 				int major = (t == toupper(t));
@@ -138,7 +141,9 @@ void ARKey::setTagParameterList(TagParameterList & tpl)
 					case 'E': 	fKeyNumber = 4;	break;
 					case 'H':
 					case 'B':	fKeyNumber = 5;	break;
-					default:	fKeyNumber = 0;
+					default:
+                        major = true;
+                        fKeyNumber = 0;
 				}
 				
 				if (!major)				fKeyNumber -= 3;		// minus 3 accidentals  (A-Major ->  a-minor ...)				

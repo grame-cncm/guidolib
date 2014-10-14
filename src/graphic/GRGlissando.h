@@ -95,7 +95,7 @@ class GRGlissando : public GRPTagARNotationElement
 	protected:
 		
 		virtual void updateGlissando( GRStaff * grstaff );
-		virtual	void getGlissandoBeginingContext( GRGlissandoContext * ioContext, GRSystemStartEndStruct * sse );
+		virtual	void getGlissandoBeginningContext( GRGlissandoContext * ioContext, GRSystemStartEndStruct * sse );
 		virtual void getGlissandoEndingContext( GRGlissandoContext * ioContext, GRSystemStartEndStruct * sse );
 		bool wavy;
 		bool fill;

@@ -75,9 +75,11 @@ class ARNote : public ARMusicalEvent
     ARTrill     *getOrnament()		    				{ return fOrnament;}
     ARCluster   *getARCluster() 			           	{ return fCluster;}
 
-    void setIsLonelyInCluster()                         { fIsLonelyInCluster = true; }
-    bool isLonelyInCluster()                            { return fIsLonelyInCluster; }
-    bool doesClusterHaveToBeDrawn()                     { return fClusterHaveToBeDrawn; }
+    void         setIsLonelyInCluster()                 { fIsLonelyInCluster = true; }
+    bool         isLonelyInCluster()                    { return fIsLonelyInCluster; }
+    bool         doesClusterHaveToBeDrawn()             { return fClusterHaveToBeDrawn; }
+    void         enableSubElements(bool enabled)                { fSubElementsHaveToBeDrawn = enabled; }
+    bool         haveSubElementsToBeDrawn()  const       { return fSubElementsHaveToBeDrawn; }
 
     int		midiPitch() const;
 
@@ -95,6 +97,7 @@ class ARNote : public ARMusicalEvent
     ARCluster *fCluster;
     bool       fIsLonelyInCluster;
     bool       fClusterHaveToBeDrawn;
+    bool       fSubElementsHaveToBeDrawn;
 
     TYPE_TIMEPOSITION	fStartPosition;
 };

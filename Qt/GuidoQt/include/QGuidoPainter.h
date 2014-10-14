@@ -16,6 +16,7 @@
 
 #include "GUIDOEngine.h"
 #include "GUIDOParse.h"
+#include "GUIDOPianoRoll.h"
 
 #include <QString>
 #include <QPainter>
@@ -143,6 +144,20 @@ class QGuidoPainter
 		*	QPaintDevice coordinates.
 		*/
 		void draw( QPainter * painter , int page , const QRect& drawRectangle ,  const QRect& redrawRectangle = QRect() );
+
+        /**
+		*	\brief Draws the current Guido Score using the specified QPainter, under Piano Roll form.
+		*
+		*	The Guido Score won't be
+		*	streched and will keep its width/height ratio.
+		*
+		*	\param painter The QPainter to be used for the draw.
+		*	\param drawRectangle Specifies the zone of the QPaintDevice in which to draw.
+        *   \param pianoRoll the current PianoRoll
+		*
+		*	\note drawRectangle is in QPainter's QPaintDevice coordinates.
+		*/
+        void drawPianoRoll(QPainter * painter, const QRect& drawRectangle, PianoRoll *pianoRoll);
 		
 		/**
 		*	\brief Returns the height corresponding to the specified width for the

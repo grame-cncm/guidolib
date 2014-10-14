@@ -71,9 +71,6 @@ using namespace std;
 #include "BinaryDevice.h"
 #include "BinaryFont.h"
 
-#include "Guido2PianoRoll.h"
-#include "Guido2ReducedProportional.h"
-
 // ==========================================================================
 // - Guido Global variables
 // ==========================================================================
@@ -303,111 +300,6 @@ class TestTimeMap : public TimeMapCollector
 		}
 };
 #endif
-
-// --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoMIDI2PRoll( const char* file, int width, int height, const GuidoDate& start, const GuidoDate& end, VGDevice* dev)
-{
-#ifdef MIDIEXPORT
-	if( !dev || !file)		return guidoErrBadParameter;
-
-	dev->BeginDraw();
-	dev->PushPenColor(VGColor (100,100,100));
-	dev->PushFillColor(VGColor (0,0,0));
-
-	TYPE_TIMEPOSITION d1(start.num, start.denom);
-	TYPE_TIMEPOSITION d2(end.num, end.denom);
-	
-	GuidoPianoRoll proll (d1, d2, width, height);
-	proll.Draw(file, dev);
-
-	dev->PopPenColor();
-	dev->PopFillColor();
-	dev->EndDraw();
-	return guidoNoErr;
-#else
-	cerr << "Can't convert to piano roll: GUIDO Engine has been compiled without MIDI support" << endl;
-	return guidoErrActionFailed;
-#endif
-}
-
-// --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoMIDI2RProportional( const char* file, int width, int height, const GuidoDate& start, const GuidoDate& end, bool drawDur, VGDevice* dev)
-{
-#ifdef MIDIEXPORT
-	if( !dev || !file)		return guidoErrBadParameter;
-
-	dev->BeginDraw();
-	dev->PushPenColor(VGColor (100,100,100));
-	dev->PushFillColor(VGColor (0,0,0));
-
-	TYPE_TIMEPOSITION d1(start.num, start.denom);
-	TYPE_TIMEPOSITION d2(end.num, end.denom);
-	
-	GuidoReducedProportional rprop (d1, d2, width, height, drawDur);
-	GuidoPianoRoll* proll = &rprop;
-	rprop.SetMusicFont(dev);
-	proll->Draw(file, dev);
-
-	dev->PopPenColor();
-	dev->PopFillColor();
-	dev->EndDraw();
-	return guidoNoErr;
-#else
-	cerr << "Can't convert to reduced proportional representation: GUIDO Engine has been compiled without MIDI support" << endl;
-	return guidoErrActionFailed;
-#endif
-}
-
-// --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoAR2RProportional( ARHandler ar, int width, int height, const GuidoDate& start, const GuidoDate& end, bool drawDur, VGDevice* dev)
-{
-	if( ar == 0 )	return guidoErrInvalidHandle;
-	if( !gInited )	return guidoErrNotInitialized;
-	if( !dev )		return guidoErrBadParameter;
-
-	ARMusic * arMusic = ar->armusic; // (JB) was guido_PopARMusic()
-	if( arMusic == 0 ) 
-		return guidoErrInvalidHandle;
-
-	dev->BeginDraw();
-	dev->PushPenColor(VGColor (100,100,100));
-	dev->PushFillColor(VGColor (0,0,0));
-
-	TYPE_TIMEPOSITION d1(start.num, start.denom);
-	TYPE_TIMEPOSITION d2(end.num, end.denom);
-	arMusic->toReducedProportional (width, height, d1, d2, drawDur, dev);
-
-	dev->PopPenColor();
-	dev->PopFillColor();
-	dev->EndDraw();
-	return guidoNoErr;
-}
-
-
-// --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoAR2PRoll( ARHandler ar, int width, int height, const GuidoDate& start, const GuidoDate& end, VGDevice* dev)
-{
-	if( ar == 0 )	return guidoErrInvalidHandle;
-	if( !gInited )	return guidoErrNotInitialized;
-	if( !dev )		return guidoErrBadParameter;
-
-	ARMusic * arMusic = ar->armusic; // (JB) was guido_PopARMusic()
-	if( arMusic == 0 ) 
-		return guidoErrInvalidHandle;
-
-	dev->BeginDraw();
-	dev->PushPenColor(VGColor (100,100,100));
-	dev->PushFillColor(VGColor (0,0,0));
-
-	TYPE_TIMEPOSITION d1(start.num, start.denom);
-	TYPE_TIMEPOSITION d2(end.num, end.denom);
-	arMusic->toPianoRoll(width, height, d1, d2, dev);
-
-	dev->PopPenColor();
-	dev->PopFillColor();
-	dev->EndDraw();
-	return guidoNoErr;
-}
 
 // --------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * settings, GRHandler * gr)

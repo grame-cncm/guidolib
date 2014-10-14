@@ -172,6 +172,7 @@ GRStaffState::GRStaffState()
 	staffLSPACE = LSPACE;
 	numlines = 5;				// Standard
     lineThickness = LSPACE * 0.08f;
+    yOffset = 0;
 
 	curkey = NULL;
 
@@ -1512,16 +1513,13 @@ staff_debug("AddSecondGlue");
 void GRStaff::setStaffFormat(ARStaffFormat * staffrmt)
 {
 	mStaffState.curstaffrmt = staffrmt;
-
+    
 	if (mStaffState.curstaffrmt)
 	{
 		if (mStaffState.curstaffrmt->getSize() && mStaffState.curstaffrmt->getSize()->TagIsSet())
-		{
 			mStaffState.staffLSPACE = mStaffState.curstaffrmt->getSize()->getValue() * 2;
-		}
 		
-        if (mStaffState.curstaffrmt->getStyle() &&
-			mStaffState.curstaffrmt->getStyle()->TagIsSet())
+        if (mStaffState.curstaffrmt->getStyle() && mStaffState.curstaffrmt->getStyle()->TagIsSet())
 		{
 			// other than standard? -> rather n-line ....?
 			const NVstring & mystr = mStaffState.curstaffrmt->getStyle()->getValue();
@@ -1537,6 +1535,9 @@ void GRStaff::setStaffFormat(ARStaffFormat * staffrmt)
 		}
         
         mStaffState.lineThickness = mStaffState.curstaffrmt->getLineThickness();
+
+        if (mStaffState.curstaffrmt->getDY())
+            mStaffState.yOffset = - (mStaffState.curstaffrmt->getDY()->getValue());
 	}
 
 	// I have to deal with Size - parameter!
@@ -2106,8 +2107,12 @@ float	GRStaff::getXEndPosition(TYPE_TIMEPOSITION pos, TYPE_DURATION dur)
 				NVPoint position = elmt->getPosition();
 				float X = position.x;
 				GREvent * gevent = dynamic_cast<GREvent *>(elmt);
-				if (gevent)
+				
+                if (gevent)
 					X -= LSPACE;
+                
+                delete elmtsAtEndOfDuration;
+                
 				return X;
 			}
 		}

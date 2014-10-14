@@ -7,16 +7,21 @@
 
 #include "GUIDOParse.h"
 #include "GUIDOEngine.h"
+#include "GUIDOPianoRoll.h"
 #include "SVGDevice.h"
 #include "SVGSystem.h"
 
 using namespace std;
 
-const int kDefaultWith	= 1024;
-const int kDefaultHeight= 400;
+const int kDefaultWidth         = 1024;
+const int kDefaultHeight        = 400;
+const int kDefaultMinPitch      = -1;
+const int kDefaultMaxPitch      = -1;
+const bool kDefaultDrawDurLines = false;
+const bool kDefaultMeasureBars  = false;
 
-const char* kOptions[] = { "-help", "-width", "-height", "-start", "-end", "-nodur" };
-enum { kHelp, kWidth, kHeight, kStart, kEnd, kNoDur, kMaxOpt };
+const char* kOptions[] = { "-help", "-o", "-width", "-height", "-start", "-end", "-minpitch", "-maxpitch", "-measurebars", "-drawdurlines" };
+enum { kHelp, kOutput, kWidth, kHeight, kStart, kEnd, kMinPitch, kMaxPitch, kMeasureBars, kDrawDurLines, kMaxOpt };
 
 static void usage (char* name)
 {
@@ -26,95 +31,223 @@ static void usage (char* name)
 	const char* tool = name;
 #endif
 	cerr << "usage: " << tool << " midifile [options] " << endl;
-	cerr << "options: -width value  : set the output width (default is " << kDefaultWith << ")" << endl;
-	cerr << "         -height value : set the output height (default is " << kDefaultHeight << ")" << endl;
-	cerr << "         -start date   : set time zone start" << endl;
-	cerr << "         -end date     : set time zone end" << endl;
-	cerr << "         -nodur		: don't draw duration lines" << endl;
+	cerr << "options: -o                  : set the output file (if not, output is standard output)" << endl;
+	cerr << "         -width        value : set the output width (default is " << kDefaultWidth << ")" << endl;
+	cerr << "         -height       value : set the output height (default is " << kDefaultHeight << ")" << endl;
+	cerr << "         -start        date  : set time zone start (default is 0/0 -> start time is automatically adjusted)" << endl;
+	cerr << "         -end          date  : set time zone end (default is 0/0 -> end time is automatically adjusted)" << endl;
+    cerr << "         -minpitch     value : set minimum midi pitch (default is " << kDefaultMinPitch << " -> min pitch is automatically adjusted)" << endl;
+	cerr << "         -maxpitch     value : set maximum midi pitch (default is " << kDefaultMaxPitch << " -> max pitch is automatically adjusted)" << endl;
+	cerr << "         -measurebars  bool  : set if measure bars will be enabled (default is " << kDefaultMeasureBars << ")" << endl;
+    cerr << "         -drawdurlines bool  : set if duration lines will be drawn (default is " << kDefaultDrawDurLines << ")" << endl;
+
 	exit (1);
 }
 
 static void error (GuidoErrCode err)
 {
-	cerr << "error #" << err << ": " << GuidoGetErrorString (err) << endl;
-	exit (err);
+	if (err != guidoNoErr) {
+        cerr << "error #" << err << ": " << GuidoGetErrorString (err) << endl;
+
+        exit(err);
+    }
 }
 
-static void checkusage (int argc, char **argv)
+static void checkusage(int argc, char **argv)
 {
-	if (argc == 1) usage(argv[0]);
-	for (int i=2; i< argc; i++) {
-		if (!strcmp (argv[i], kOptions[kHelp])) usage(argv[0]);
-		else if (*argv[i] == '-') {
-			bool unknownOpt = true;
-			for (int n=1; (n < kMaxOpt) && unknownOpt; n++) {
-				if (!strcmp (argv[i], kOptions[n])) unknownOpt = false;
-			}
-			if (unknownOpt) usage (argv[0]);
-		}
-	}
+	if (argc == 1 || *(argv[1]) == '-')
+        usage(argv[0]);
+    else {
+        for (int i = 1; i < argc; i++) {
+            if (!strcmp(argv[i], kOptions[kHelp]))
+                usage(argv[0]);
+            else if (*argv[i] == '-') {
+                bool unknownOpt = true;
+
+                for (int n = 1; (n < kMaxOpt) && unknownOpt; n++) {
+                    if (!strcmp(argv[i], kOptions[n]))
+                        unknownOpt = false;
+                }
+
+                if (unknownOpt || i + 1 >= argc || *(argv[i + 1]) == '-')
+                    usage(argv[0]);
+            }
+        }
+    }
 }
 
-static GuidoDate ldateopt (int argc, char **argv, const char* opt, GuidoDate defaultvalue)
+static const char* getInputFile(int argc, char *argv[])
 {
-	for (int i=2; i< argc; i++) {
-		if (!strcmp (argv[i], opt)) {
+	int i;
+
+	for (i = 1; i < argc; i++) {
+		if (*(argv[i]) != '-')
+            break;
+    }
+
+	return (i < argc) ? argv[i] : 0;
+}
+
+static GuidoDate ldateopt(int argc, char **argv, const char* opt, GuidoDate defaultvalue)
+{
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], opt)) {
 			i++;
-			if (i >= argc) usage(argv[0]);
+
+			if (i >= argc)
+                usage(argv[0]);
 			else {
-				int n,d;
+				int n, d;
+
 				if (sscanf(argv[i], "%d/%d", &n, &d) == 2) {
-					GuidoDate ret = {n,d};
+					GuidoDate ret = {n, d};
 					return ret;
 				}
+                else if (sscanf(argv[i], "%d", &n) == 1) {
+					GuidoDate ret = {n, 1};
+					return ret;
+				}
+                else
+                    usage(argv[0]);
 			}
 		}
 	}
+
 	return defaultvalue;
 }
 
-static bool lopt (int argc, char **argv, const char* opt)
+static bool lopt(int argc, char **argv, const char* opt)
 {
-	for (int i=2; i< argc; i++) {
-		if (!strcmp (argv[i], opt))
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], opt))
 			return true;
 	}
+
 	return false;
 }
 
-static int lintopt (int argc, char **argv, const char* opt, int defaultvalue)
+static int lintopt(int argc, char **argv, const char* opt, int defaultvalue)
 {
-	for (int i=2; i< argc; i++) {
+	for (int i = 1; i < argc; i++) {
 		if (!strcmp (argv[i], opt)) {
 			i++;
-			if (i >= argc) usage(argv[0]);
-			else {
-				return atoi (argv[i]);
-			}
+
+			if (i >= argc)
+                usage(argv[0]);
+			else
+				return atoi(argv[i]);
 		}
 	}
+
 	return defaultvalue;
 }
 
+static bool lboolopt(int argc, char **argv, const char* opt, bool defaultvalue)
+{
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], opt)) {
+			i++;
+
+			if (i >= argc)
+                usage(argv[0]);
+			else {
+                if (!strcmp(argv[i], "true"))
+                    return true;
+                else
+                    return false;
+            }
+		}
+	}
+
+	return defaultvalue;
+}
+
+static char *getOutputFileOpt(int argc, char **argv)
+{
+	for (int i = 1; i < argc; i++) {
+		if (!strcmp(argv[i], "-o")) {
+			i++;
+
+			if (i >= argc || *(argv[i]) == '-')
+                usage(argv[0]);
+			else
+				return argv[i];
+		}
+	}
+
+    return NULL;
+}
 
 int main(int argc, char **argv)
 {
  	SVGSystem sys;
-	SVGDevice dev (cout, &sys, 0);
+	
+    std::streambuf *buf = std::cout.rdbuf();
+
+    /**** Check output file ****/
+    const char *outputFile = getOutputFileOpt(argc, argv);
+
+    ofstream fileOutput;
+
+    if (outputFile != NULL) {
+        fileOutput = ofstream(outputFile, ios::out | ios::trunc);
+
+        if (!fileOutput.fail())
+            buf = fileOutput.rdbuf();
+    }
+    /***************************/
+
+    std::ostream out(buf);
+
+    SVGDevice dev(out, &sys, 0);
 	
 	checkusage (argc, argv);
+
+    GuidoInitDesc gd = { &dev, 0, 0, 0 };
+    GuidoInit(&gd);
 	
-	int w = lintopt(argc, argv, kOptions[kWidth], kDefaultWith);
-	int h = lintopt(argc, argv, kOptions[kHeight], kDefaultHeight);
-	GuidoDate defDate = {0,1};
-	GuidoDate start = ldateopt(argc, argv, kOptions[kStart], defDate);
-	GuidoDate end = ldateopt(argc, argv, kOptions[kEnd], defDate);
-	bool drawdur = lopt(argc, argv, kOptions[kNoDur]) ? false : true;
-	dev.NotifySize (w, h);
+    const char* fileName = getInputFile(argc, argv);
 
-	GuidoErrCode err = GuidoMIDI2RProportional (argv[1], w, h, start, end, drawdur, &dev);
-	if (err) error (err);
-	return 0;
+	int  w            = lintopt (argc, argv, kOptions[kWidth],        kDefaultWidth);
+	int  h            = lintopt (argc, argv, kOptions[kHeight],       kDefaultHeight);
+    int  minPitch     = lintopt (argc, argv, kOptions[kMinPitch],     kDefaultMinPitch);
+    int  maxPitch     = lintopt (argc, argv, kOptions[kMaxPitch],     kDefaultMaxPitch);
+    bool measureBars  = lboolopt(argc, argv, kOptions[kMeasureBars],  kDefaultMeasureBars);
+	bool drawDurLines = lboolopt(argc, argv, kOptions[kDrawDurLines], kDefaultDrawDurLines);
+
+	GuidoDate defDate = {0, 0};
+	GuidoDate start   = ldateopt(argc, argv, kOptions[kStart], defDate);
+	GuidoDate end     = ldateopt(argc, argv, kOptions[kEnd],   defDate);
+
+    //PianoRoll *pianoRoll = GuidoMidi2PianoRoll(reducedProportional, fileName);
+
+    //GuidoErrCode err;
+
+
+    ///**** LIMITS ****/
+    //err = GuidoPianoRollSetLimits(pianoRoll, limitParams);
+    //error(err);
+    ///*********************/
+
+    ///**** MEASURE BARS ****/
+    //err = GuidoPianoRollEnableMeasureBars(pianoRoll, measureBars);
+    //error(err);
+    ///**********************/
+
+    ///**** DURATION LINES ****/
+    //err = GuidoPianoRollEnableDurationLines(pianoRoll, drawDurLines);
+    //error(err);
+    ///************************/
+    
+    ///**** DRAW ****/
+    //err = GuidoPianoRollOnDraw(pianoRoll, w, h, &dev);
+    //error(err);
+    ///**************/
+
+    //err = GuidoPianoRollOnDraw(pianoRoll, &dev);
+    //error(err);
+
+    //GuidoDestroyPianoRoll(pianoRoll);
+
+    return 0;
 }
-
-

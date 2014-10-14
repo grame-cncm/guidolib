@@ -1814,11 +1814,17 @@ void ARFactory::endTag()
         ARRepeatEnd  * arre;
         ARText * atext;
         ARSymbol *asymbol;
-        if(( atext = dynamic_cast<ARText *>(tag)) != 0 )
+        if ((atext = dynamic_cast<ARText *>(tag)) != 0 )
         {
             // bereich ueber den der Text laueft ?
             // why is this? -> check it out later!
-            atext->setRelativeEndTimePosition(mCurrentVoice->getDuration());
+            if ((dynamic_cast<ARComposer *>(tag)) == 0
+                && (dynamic_cast<ARFingering *>(tag)) == 0
+                && (dynamic_cast<ARLabel *>(tag)) == 0
+                && (dynamic_cast<ARMark *>(tag)) == 0
+                && (dynamic_cast<ARTitle *>(tag)) == 0)
+                atext->setRelativeEndTimePosition(mCurrentVoice->getDuration());
+            
             tag = NULL;
         }
         else if(( asymbol = dynamic_cast<ARSymbol *>(tag)) != 0 )

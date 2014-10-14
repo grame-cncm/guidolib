@@ -183,6 +183,7 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		void doAutoCheckStaffStateTags();
 		void doAutoDisplayCheck();
 		void doAutoBarlines();
+		void doAutoMeasuresNumbering();
 		void doAutoEndBar();
 		void doAutoBeaming();
 		void doAutoGlissando();
