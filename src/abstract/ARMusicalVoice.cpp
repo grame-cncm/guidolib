@@ -3107,7 +3107,7 @@ bool ARMusicalVoice::DurationFitsBase( const TYPE_DURATION &dur,
 
 	// no
 	// OK, there is work to do: we need to determine the new base
-	int val = dur.getDenominator();
+	int val = ndur.getDenominator();
 
 	// this removes divides l as long as it can be
 	// divided (removes powers of 2)
@@ -3120,7 +3120,7 @@ bool ARMusicalVoice::DurationFitsBase( const TYPE_DURATION &dur,
 	switch (val)
 	{
 		case 1:
-			newbase.setNumerator(1);
+			newbase.setNumerator(val);
 			newbase.setDenominator(1);
 			break;
 		case 3:

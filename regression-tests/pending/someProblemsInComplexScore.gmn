@@ -2,7 +2,7 @@
 %
 %     1. Bad vertical position of first \clef<"perc">
 %     2. Too much space before the meter, in the four staves
-%     3. Beaming doesn't work for grace notes
+%     3. Beaming doesn't work well here
 %     4. Staff 2, notes shoulg be "g" but are on the "e" line
 %     5. Staff 3, sharps are hidden by some chord notes
 %
