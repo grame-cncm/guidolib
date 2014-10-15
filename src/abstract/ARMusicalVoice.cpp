@@ -5690,7 +5690,7 @@ void ARMusicalVoice::setClusterChord(ARCluster *inCurrentCluster)
         musicalObject = ObjectList::GetNext(posTmp);
 
         ARNote * noteTmp = dynamic_cast<ARNote *>(musicalObject);
-        if (noteTmp && noteTmp->getPitch()!=0)
+        if (noteTmp && noteTmp->getPitch() != 0)
         {
             noteTmp->setPitch(firstNote->getPitch()); // "hides" this note behind the first one
             noteTmp->setOctave(firstNote->getOctave());
@@ -6205,6 +6205,7 @@ void ARMusicalVoice::doAutoCluster()
 
                                     tmpCluster2 = note->setCluster(cluster, true, true);
                                     nextNote->setCluster(tmpCluster2);
+                                    nextNote->enableSubElements(false);
 
                                     if (clusterNoteNumber > 2)
                                     {
@@ -6217,8 +6218,10 @@ void ARMusicalVoice::doAutoCluster()
                                             {
                                                 currentNoteNumber++;
 
-                                                if (currentNoteNumber <= 2 * clusterNoteNumber)
+                                                if (currentNoteNumber <= 2 * clusterNoteNumber) {
                                                     note->setCluster(tmpCluster2);
+                                                    note->enableSubElements(false);
+                                                }
                                             }
                                         }
                                         while(!note || note->getPitch() == 0 || currentNoteNumber < 2 * clusterNoteNumber);

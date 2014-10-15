@@ -672,7 +672,7 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 
 
                     /* ...vertically */
-                    if (note->getDot())
+                    if (note->getGRCluster() == NULL && note->getDot())
                     {
                         float dotPosition = note->getDot()->getPosition().y + note->getDot()->getOffset().y;
 
@@ -817,7 +817,7 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 
 
                     /* ...vertically */
-                    if (note->getDot())
+                    if (note->getGRCluster() == NULL && note->getDot())
                     {
                         float dotPosition = note->getDot()->getPosition().y + note->getDot()->getOffset().y;
 

@@ -229,7 +229,7 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
     for (int i = 0; i < sum; ++i, posy += incy)
         GRNote::DrawSymbol( hdc, kLedgerLineSymbol, ledXPos/* + noteheadOffset.x*/, ( posy - mPosition.y ));
 
-	if (mCluster)
+	if (fCluster)
 		getNoteHead()->setHaveToBeDrawn(false);
 
 	const VGColor oldcolor = hdc.GetFontColor();
@@ -250,11 +250,11 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
 		}
 	}
 
-	if (mOrnament)
+	if (fOrnament)
 	{
 		// to draw the trill line...
 		float Y = getPosition().y + getBoundingBox().Height()/2;
-		mOrnament->OnDraw(hdc,X,Y, numVoice);
+		fOrnament->OnDraw(hdc,X,Y, numVoice);
 	}
 
 	// - Restore
@@ -262,8 +262,8 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
 	if (gBoundingBoxesMap & kEventsBB)
 		DrawBoundingBox( hdc, kEventBBColor);
 
-	if (mClusterHaveToBeDrawn)
-		mCluster->OnDraw(hdc);
+	if (fClusterHaveToBeDrawn)
+		fCluster->OnDraw(hdc);
 }
 
 //____________________________________________________________________________________
@@ -577,11 +577,11 @@ void GRSingleNote::setHPosition( GCoord nx )
 {
 	GRNote::setHPosition(nx);
 	// - Notify ornament
-	if (mOrnament)
-		mOrnament->tellPosition(this, getPosition());
+	if (fOrnament)
+		fOrnament->tellPosition(this, getPosition());
     // - Notify cluster
-    if (mCluster)
-		mCluster->tellPosition(this, getPosition());
+    if (fCluster)
+		fCluster->tellPosition(this, getPosition());
 	updateBoundingBox();
 }
 
@@ -592,11 +592,11 @@ void GRSingleNote::setPosition( const NVPoint & inPos )
 	GRNote::setPosition( inPos );
 
 	// - Notify Ornament
-	if (mOrnament)
-		mOrnament->tellPosition(this, getPosition());
+	if (fOrnament)
+		fOrnament->tellPosition(this, getPosition());
     // - Notify cluster
-    if (mCluster)
-        mCluster->tellPosition(this, getPosition());
+    if (fCluster)
+        fCluster->tellPosition(this, getPosition());
 
 	// - Watch for the Accidentals
 	GRAccidentalList accList;
