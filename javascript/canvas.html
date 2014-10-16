@@ -20,14 +20,10 @@
     </style>
     <script>
       var data = new Uint8Array(2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2);
-      function str2ab(str) {
-        var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
-        var bufView = new Uint16Array(buf);
-        for (var i=0, strLen=str.length; i<strLen; i++) {
-          bufView[i] = str.charCodeAt(i);
-        }
-        return buf;
-      }
+      //var nDataBytes = data.length * data.BYTES_PER_ELEMENT;
+      //var dataPtr = Module._malloc(nDataBytes);
+      //var dataHeap = new Uint8Array(Module.HEAPU8.buffer, dataPtr, nDataBytes);
+      //dataHeap.set(new Uint8Array(data.buffer));
                     
       function processGMN() {
 	var p=GuidoOpenParser();
@@ -42,8 +38,6 @@
 	var result = new Uint8Array(new Uint8Array(dataHeap.buffer, dataHeap.byteOffset,
 	size));
 	Module._free(dataHeap.byteOffset);
-	//var binary = Pointer_stringify(binary_n);
-	//console.log(binary, binary.length);
 	gU1D0pAR$ER.parseGuidoBinary(result.buffer, 0, {verbose:true});
       }
       $(function () {
@@ -60,9 +54,7 @@
   <body>
     <div class="column" style="float:left">
       <p>Type your GMN code here:</p>
-      <textarea id="gmnSandbox" rows="40">
-
-      </textarea>
+      <textarea id="gmnSandbox" rows="40"></textarea>
     </div>
     <div id="canvasContainer" class="column" style="float:right">
       <canvas>
