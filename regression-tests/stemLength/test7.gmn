@@ -1,0 +1,12 @@
+% Stem length adjusted (cf. Elaine Gould's book, page 16)
+%
+{
+    [ \staffFormat<"3-lines"> {e2/64, f} _ {f, g} _ {g, a} _ {a, b} _ {b, c3} _ {c, d}  _ {d, e} _ {e, f} _ {f, g} _ {g, a}],
+    [ \staffFormat<"3-lines"> {e2/32, f} _ {f, g} _ {g, a} _ {a, b} _ {b, c3} _ {c, d}  _ {d, e} _ {e, f} _ {f, g} _ {g, a}],
+    [ \staffFormat<"3-lines"> {e2/16, f} _ {f, g} _ {g, a} _ {a, b} _ {b, c3} _ {c, d}  _ {d, e} _ {e, f} _ {f, g} _ {g, a}],
+    [ \staffFormat<"3-lines"> {e2/8, f} _ {f, g} _ {g, a} _ {a, b} _ {b, c3} _ {c, d}  _ {d, e} _ {e, f} _ {f, g} _ {g, a}],
+    [ \staffFormat<"3-lines"> {e0/64, f} _ {f, g} _ {g, a} _ {a, b} _ {b, c1} _ {c, d}  _ {d, e} _ {e, f} _ {f, g} _ {g, a}],
+    [ \staffFormat<"3-lines"> {e0/32, f} _ {f, g} _ {g, a} _ {a, b} _ {b, c1} _ {c, d}  _ {d, e} _ {e, f} _ {f, g} _ {g, a}],
+    [ \staffFormat<"3-lines"> {e0/16, f} _ {f, g} _ {g, a} _ {a, b} _ {b, c1} _ {c, d}  _ {d, e} _ {e, f} _ {f, g} _ {g, a}],
+    [ \staffFormat<"3-lines"> {e0/8, f} _ {f, g} _ {g, a} _ {a, b} _ {b, c1} _ {c, d}  _ {d, e} _ {e, f} _ {f, g} _ {g, a}]
+}

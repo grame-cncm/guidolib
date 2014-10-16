@@ -435,14 +435,13 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 				NVPoint stemendpos (stem->getPosition());
 				stemendpos.y -= stem->mStemLen;
                 float coef = 0;
-                int numberLines = mGrStaff->getNumlines();
 
-                // Stem length adaptation according to staff lines number
-                if (numberLines != 0)
-                {
-                    // Stem length is set everytime as far as the middle of the staff.
-                    coef = 0.5f * numberLines - 0.5f;
-                }
+                if ((float) mDurTemplate.getNumerator() / (float) mDurTemplate.getDenominator() <= 1.0f / 64.0f && mPosition.y > 250)
+                    coef = 0;
+                else if ((float) mDurTemplate.getNumerator() / (float) mDurTemplate.getDenominator() <= 1.0f / 32.0f && mPosition.y > 250)
+                    coef = 1;
+                else
+                    coef = 0.5f * mGrStaff->getNumlines() - 0.5f; // Stem length is set everytime as far as the middle of the staff.
 
                 if (stemendpos.y > coef * mCurLSPACE)
                 {
@@ -456,15 +455,13 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 				NVPoint stemendpos (stem->getPosition());
 				stemendpos.y += stem->mStemLen;
                 float coef = 0;
-                int numberLines = mGrStaff->getNumlines();
 
-                // Stem length adaptation according to staff lines number
-                if (numberLines != 0)
-                {
-                    // Stem length is set everytime as far as the middle of the staff.
-                    // Can be changed easily if it's not the good behaviour to adopt.
-                    coef = 0.5f * numberLines - 0.5f;
-                }
+                if ((float) mDurTemplate.getNumerator() / (float) mDurTemplate.getDenominator() <= 1.0f / 64.0f && mPosition.y < - 50)
+                    coef = 4;
+                else if ((float) mDurTemplate.getNumerator() / (float) mDurTemplate.getDenominator() <= 1.0f / 32.0f && mPosition.y < - 50)
+                    coef = 3;
+                else
+                    coef = 0.5f * mGrStaff->getNumlines() - 0.5f; // Stem length is set everytime as far as the middle of the staff.
 
 				if (stemendpos.y < coef * mCurLSPACE)
 				{
