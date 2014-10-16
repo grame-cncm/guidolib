@@ -1,0 +1,8 @@
+{
+    [
+        \meter<"2/43", size=1> a b c
+    ],
+    [
+        \meter<"2/43", size=3> a b c
+    ]
+}
