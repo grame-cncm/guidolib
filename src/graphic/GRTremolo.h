@@ -37,6 +37,8 @@ class GRTremolo : public GRPTagARNotationElement
 
         virtual unsigned int getTextAlign() const;
     
+        bool    isTwoNotesTremolo() { return fIsTwoNotesTremolo; }
+    
     protected:
     
         GRGlobalStem * findGlobalStem( GRSystemStartEndStruct * sse, GRNotationElement * stemOwner ) const;
@@ -51,7 +53,7 @@ class GRTremolo : public GRPTagARNotationElement
         float dx;
         float dy;
         float fThickness;
-        bool isTwoNotesTremolo;
+        bool fIsTwoNotesTremolo;
         NVPoint fStartPos;
         NVPoint fEndPos;
         float fStep;

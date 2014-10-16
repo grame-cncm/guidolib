@@ -41,14 +41,14 @@ GRTremolo::GRTremolo( GRStaff * stf, ARTremolo * artrem )
 
 	mStartEndList.AddTail(sse);
     
-    isTwoNotesTremolo = false;
+    fIsTwoNotesTremolo = false;
     fStep = LSPACE/2;
     fDeltaY = LSPACE/4;
     fWidth = LSPACE;
     fBeamCount = 0;
     fNumberOfStrokes = artrem->getNumberOfStrokes();
     if(artrem->isSecondPitchCorrect())
-        isTwoNotesTremolo = true;
+        fIsTwoNotesTremolo = true;
     
     fText = artrem->getText() ? artrem->getText()->getValue() : "";
     fThickness = artrem->getThickness() ? artrem->getThickness()->getValue() : LSPACE/2;
@@ -74,7 +74,7 @@ void GRTremolo::OnDraw( VGDevice & hdc ) const
     NVPoint pos2 = fEndPos;
     for(int i = 0; i < (fNumberOfStrokes - fBeamCount) ; i++)
     {
-        if(isTwoNotesTremolo)
+        if(fIsTwoNotesTremolo)
         {
             computeTwoNotesStrokesCoordinates(pos1, pos2, coorX, coorY);
             pos2.y += fStep;
@@ -107,7 +107,6 @@ void GRTremolo::tellPosition(GObject * caller, const NVPoint &np)
     NVPoint textPos;
     
     GRNotationElement * startElement = sse->startElement;
-	GRNotationElement * endElement = sse->endElement;
 	
     if(grel == startElement)
         fBeamCount = grel->getNumFaehnchen();
@@ -126,7 +125,7 @@ void GRTremolo::tellPosition(GObject * caller, const NVPoint &np)
         }
         else if(direction == dirUP)
         {
-            if(!isTwoNotesTremolo) pos.y += LSPACE/2 + fBeamCount * fStep;
+            if(!fIsTwoNotesTremolo) pos.y += LSPACE/2 + fBeamCount * fStep;
             else pos.y += fBeamCount*fStep*1.5;
             textPos.y -= 2*LSPACE;
             if(textPos.y > - 2*LSPACE ) textPos.y = - 2*LSPACE;
@@ -134,7 +133,7 @@ void GRTremolo::tellPosition(GObject * caller, const NVPoint &np)
         else
         {
             pos.y -= fThickness + (fNumberOfStrokes-1)*fStep;
-            if(!isTwoNotesTremolo) pos.y -= LSPACE/2;
+            if(!fIsTwoNotesTremolo) pos.y -= LSPACE/2;
             else pos.y -= fBeamCount*fStep*0.5;
             if(textPos.y < 4*LSPACE) textPos.y = 4*LSPACE;
         }
@@ -167,7 +166,7 @@ void GRTremolo::tellPosition(GObject * caller, const NVPoint &np)
             }
             else if(direction == dirUP)
             {
-                if(!isTwoNotesTremolo) pos.y += LSPACE/2 + fBeamCount * fStep;
+                if(!fIsTwoNotesTremolo) pos.y += LSPACE/2 + fBeamCount * fStep;
                 else pos.y += fBeamCount*fStep*1.5;
                 textPos.y -= 2*LSPACE;
                 if(textPos.y > - 2*LSPACE ) textPos.y = - 2*LSPACE;
@@ -175,7 +174,7 @@ void GRTremolo::tellPosition(GObject * caller, const NVPoint &np)
             else
             {
                 pos.y -= fThickness + (fNumberOfStrokes-1)*fStep;
-                if(!isTwoNotesTremolo) pos.y -= LSPACE/2;
+                if(!fIsTwoNotesTremolo) pos.y -= LSPACE/2;
                 else pos.y -= fBeamCount*fStep*0.5;
                 if(textPos.y < 4*LSPACE) textPos.y = 4*LSPACE;
             }
@@ -187,7 +186,7 @@ void GRTremolo::tellPosition(GObject * caller, const NVPoint &np)
         fStartPos = pos;
         setPosition(textPos);
     }
-    else if (grel == endElement)
+    else
         fEndPos = pos;
 }
 

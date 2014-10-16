@@ -1321,7 +1321,14 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
                 GRNotationElement * tag = stemNote->getAssociations()->GetNext(tagpos);
                 GRTremolo * trem = dynamic_cast<GRTremolo*>(tag);
                 if(trem)
+                {
                     trem->tellPosition(stemNote,stemNote->getPosition());
+                    if(trem->isTwoNotesTremolo()) // in order to force the second pitch (especially the chords) to update
+                    {
+                        GREvent * secondPitch = dynamic_cast<GREvent*>(mAssociated->GetNext(stemPos));
+                        if(secondPitch) trem->tellPosition(secondPitch, secondPitch->getPosition());
+                    }
+                }
             }
         }
     }
