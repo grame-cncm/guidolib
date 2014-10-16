@@ -93,7 +93,7 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 
 		virtual void	initChordNote();
 		virtual void	FinishChord(bool trill);
-		virtual void	BeginChord();
+		virtual ARChordTag*	BeginChord();
 
 		ARNote        * setTrillChord(CHORD_TYPE & param_type, CHORD_ACCIDENTAL & param_accidental);
         void            setClusterChord(ARCluster *inCurrentCluster);

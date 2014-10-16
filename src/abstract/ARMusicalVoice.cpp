@@ -5453,7 +5453,7 @@ void ARMusicalVoice::removeAutoTags()
 /** This routine must remember the state of the
 	voice (including ptagpos...)
 */
-void ARMusicalVoice::BeginChord()
+ARChordTag * ARMusicalVoice::BeginChord()
 {
 	// we create the empty event first with duration_0
 	// we add the chord-tag...
@@ -5472,6 +5472,8 @@ void ARMusicalVoice::BeginChord()
 
     //	mPosTagList->GetNext(mCurVoiceState->ptagpos);
     chordBeginState = new ARMusicalVoiceState(*mCurVoiceState);
+    
+    return currentChord;
 }
 
 //____________________________________________________________________________________
@@ -5759,7 +5761,10 @@ void ARMusicalVoice::FinishChord(bool trill)
 			//if (!vst.fCurdispdur)
 			{
 				dispdur = new ARDisplayDuration();
-				dispdur->setDisplayDuration(group->dur);
+                if(vst.fCurdispdur)
+                    dispdur->setDisplayDuration(vst.fCurdispdur->getDisplayDuration());
+                else
+                    dispdur->setDisplayDuration(group->dur);
 				dispdur->setIsAuto(true);
 				dispdur->setAssociation(ARMusicalTag::RA);
 				// dispdur->setRange(0);

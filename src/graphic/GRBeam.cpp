@@ -31,6 +31,7 @@
 #include "VGDevice.h"
 #include "secureio.h"
 #include "FontManager.h"
+#include "GRTremolo.h"
 
 // #include "NEPointerList.h"	// for template instanciation
 #include <iostream>
@@ -1307,6 +1308,30 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 		if (oldpos == sse->endpos)
 			break;
 	}
+
+    GuidoPos stemPos = sse->startpos;
+    while(stemPos)
+    {
+        GREvent * stemNote = GREvent::cast(mAssociated->GetNext(stemPos));
+        if(stemNote)
+        {
+            GuidoPos tagpos = stemNote->getAssociations()->GetHeadPosition();
+            while(tagpos)
+            {
+                GRNotationElement * tag = stemNote->getAssociations()->GetNext(tagpos);
+                GRTremolo * trem = dynamic_cast<GRTremolo*>(tag);
+                if(trem)
+                {
+                    trem->tellPosition(stemNote,stemNote->getPosition());
+                    if(trem->isTwoNotesTremolo()) // in order to force the second pitch (especially the chords) to update
+                    {
+                        GREvent * secondPitch = dynamic_cast<GREvent*>(mAssociated->GetNext(stemPos));
+                        if(secondPitch) trem->tellPosition(secondPitch, secondPitch->getPosition());
+                    }
+                }
+            }
+        }
+    }
 
 	// now we have to make sure, that the original positions
 	// for the beam are set for the right staff
