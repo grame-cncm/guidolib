@@ -98,7 +98,8 @@ void ARStaffFormat::setTagParameterList(TagParameterList & tpl)
 			TagParameterFloat* fval =  TagParameterFloat::cast(rtpl->RemoveHead());
 			assert(fval);
 			if (fval->TagIsSet())
-				fLineThickness = LSPACE * fval->getValue();
+				fLineThickness = (LSPACE * fval->getValue() >= 0 ? LSPACE * fval->getValue() : 0);
+
 			delete fval;
 		}
 		delete rtpl;

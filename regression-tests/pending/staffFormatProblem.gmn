@@ -1,5 +1,0 @@
-% two bugs here
-{
-    [ \staffFormat<lineThickness=0> d ],
-    [ \staffFormat<lineThickness=-10> d ]
-}

@@ -19,6 +19,7 @@ version 1.5.4
 	- problems on dotted trills / cluster
 	- bad vertical position of the flags of very low/high notes or chord
 	- size param of \meter tag working properly now
+	- problems on small lineThickness values in \staffFormat-tag
     - various other bugs fixed
 - crashes correction :
     - when a \composer, \fingering, \label, \mark or \title tag was set under range-tag form
