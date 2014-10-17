@@ -47,7 +47,7 @@ BEGIN
             VALUE "FileDescription", "GuidoEditor"
             VALUE "FileVersion", "2, 5, 0, 0"
             VALUE "InternalName", "GuidoEditor"
-            VALUE "LegalCopyright", "Copyright © Grame 2008-2012"
+            VALUE "LegalCopyright", "Copyright © Grame 2008-2014"
             VALUE "OriginalFilename", "GuidoEditor.exe"
             VALUE "ProductName", "GuidoEditor"
             VALUE "ProductVersion", "2, 5, 0, 0"

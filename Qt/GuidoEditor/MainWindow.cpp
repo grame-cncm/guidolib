@@ -724,7 +724,7 @@ void MainWindow::about()
 	QString version(mastr + '.' + mistr + '.' + substr);
 	QMessageBox::about(this, tr(QString("About " + APP_NAME).toUtf8().data()),
              tr(QString("<h2>" + APP_NAME + "</h2>" + 
-                "<p>Copyright &copy; 2008-2011 Grame. " 
+                "<p>Copyright &copy; 2008-2014 Grame. " 
                 "<p>A Guido score viewer and GMN editor, using Qt. "
 				"<p>Using the Guido Engine version " + version).toUtf8().data()));
 }
