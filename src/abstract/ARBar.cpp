@@ -45,7 +45,13 @@ ARBar::ARBar() : ARMTParameter()
 
 	numDx = 0;
 	numDy = 0;
-}   
+}
+
+void ARBar::setMeasureNumberDisplayed(bool display) {
+    delete measureNumberDisplayed;
+    measureNumberDisplayed = (display ? new TagParameterString("true") : new TagParameterString("false"));
+    measureNumberDisplayed->pflag = TagParameter::SETBYNAME;
+}
 
 ARBar::~ARBar() // does nothing
 {
@@ -76,7 +82,7 @@ void ARBar::setTagParameterList(TagParameterList& tpl)
 
 		ListOfStrings lstrs; // (1); std::vector test impl
 		lstrs.AddTail(
-			("I,number,-1,o;S,display,false,o;U,numDx,0,o;U,numDy,0,o"));
+			("I,number,-1,o;S,displayMeasNum,false,o;U,numDx,0,o;U,numDy,0,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
