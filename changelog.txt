@@ -10,7 +10,9 @@ version 1.5.4
 - new 'dy' attribute for the \staffFormat-tag to insert an vertical offset
 - beams can be applied to grace notes
 - new 'autoMeasuresNum' attribute for the \meter-tag to display or not measures number
-- new 'displayMeasNum' attribute for the \bar-tag to choose for each bar to display or not measure number
+- \bar-tag :
+    - new 'displayMeasNum' attribute to choose for each bar to display or not measure number
+	- new 'numDx' / 'numDy' attribute to adjust measure number position
 - bugs correction
 	- some SVG export bug fixed
     - conflicts with note durations in the trill solved

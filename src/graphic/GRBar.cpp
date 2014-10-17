@@ -204,8 +204,8 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
 		barNumberString = barNumberStream.str();
 		// Prendre en compte la staffSize ?
 
-		float measureNumDxOffset = arBar->getMeasureNumberDxOffset();
-		float measureNumDyOffset = arBar->getMeasureNumberDyOffset();
+		float measureNumDxOffset =   arBar->getMeasureNumberDxOffset();
+		float measureNumDyOffset = - arBar->getMeasureNumberDyOffset();
 
 		hdc.DrawString(mPosition.x - 15 + measureNumDxOffset, mPosition.y - 40 + measureNumDyOffset, barNumberString.c_str(), barNumberString.size());
 	}
