@@ -58,8 +58,8 @@ QMap< QString , QMap< unsigned int, QPainterPath > > * GDeviceQt::mCachedMusicFo
 //
 GDeviceQt::GDeviceQt(QPainter * qPainter , GSystemQt * sys)
 		: 
-		mCurrTextFont(NULL), mCurrMusicFont(NULL), mCurrPenPos(0,0),
-        mScaleX(1), mScaleY(1)
+		mCurrTextFont(NULL), mCurrMusicFont(NULL), mScaleX(1), mScaleY(1), mCurrPenPos(0,0)
+
 {
 #ifdef USE_CACHED_MUSIC_FONT
 	// Static member initialization
