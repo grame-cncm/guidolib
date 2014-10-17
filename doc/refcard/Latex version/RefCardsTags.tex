@@ -3,8 +3,16 @@
 \usepackage{tabularx}
 \usepackage{lipsum}
 \usepackage{geometry}
+\usepackage{fancyhdr}
 
 \geometry{hmargin=1.5cm, vmargin=1.5cm}
+
+\pagestyle{fancy}
+
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyfoot[C]{\textbf{\thepage}}
+\fancyfoot[R]{GUIDOLib v1.54}
 
 \makeatletter
 \renewcommand{\maketitle}{
@@ -12,7 +20,7 @@
       \large
       {\LARGE\@title}
       \par\vspace{1ex}
-      \@date
+      GUIDOLib v1.54
     \end{center}
 }
 \makeatother
