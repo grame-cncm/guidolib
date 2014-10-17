@@ -191,31 +191,21 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
     if (staffSize < kMinNoteSize) // Too small, don't draw
         return;
 
-    bool currentMeterAutoMeasNumEnabled = (mGrStaff->getCurMeter() != NULL ? mGrStaff->getCurMeter()->getAutoMeasuresNum() : false);
-    TagParameterString *currentBarMeasNumEnabled = getARBar()->getMeasureNumberDisplayed();
+    ARBar *arBar = getARBar();
 
-    bool displayMeasureNumber = false;
-
-    if (currentBarMeasNumEnabled) {
-        if (currentBarMeasNumEnabled->TagIsSet() && !strcmp(currentBarMeasNumEnabled->getValue(), "true"))
-            displayMeasureNumber = true;
-        else if (currentBarMeasNumEnabled->TagIsNotSet() && currentMeterAutoMeasNumEnabled == true)
-            displayMeasureNumber = true;
-    }
-
-    if (displayMeasureNumber && getARBar()->getMeasureNumber() != 0)
+    if (!strcmp(arBar->getMeasureNumberDisplayed()->getValue(), "true") && arBar->getMeasureNumber() != 0)
 	{
 		const VGFont* hmyfont = FontManager::gFontText;
 		hdc.SetTextFont( hmyfont );
 
 		string barNumberString;
 		ostringstream barNumberStream;
-		barNumberStream << getARBar()->getMeasureNumber();
+		barNumberStream << arBar->getMeasureNumber();
 		barNumberString = barNumberStream.str();
 		// Prendre en compte la staffSize ?
 
-		float measureNumDxOffset = getARBar()->getMeasureNumberDxOffset();
-		float measureNumDyOffset = getARBar()->getMeasureNumberDyOffset();
+		float measureNumDxOffset =   arBar->getMeasureNumberDxOffset();
+		float measureNumDyOffset = - arBar->getMeasureNumberDyOffset();
 
 		hdc.DrawString(mPosition.x - 15 + measureNumDxOffset, mPosition.y - 40 + measureNumDyOffset, barNumberString.c_str(), barNumberString.size());
 	}

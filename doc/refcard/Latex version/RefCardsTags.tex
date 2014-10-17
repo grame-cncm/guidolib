@@ -3,8 +3,16 @@
 \usepackage{tabularx}
 \usepackage{lipsum}
 \usepackage{geometry}
+\usepackage{fancyhdr}
 
 \geometry{hmargin=1.5cm, vmargin=1.5cm}
+
+\pagestyle{fancy}
+
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyfoot[C]{\textbf{\thepage}}
+\fancyfoot[R]{GUIDOLib v1.54}
 
 \makeatletter
 \renewcommand{\maketitle}{
@@ -12,7 +20,7 @@
       \large
       {\LARGE\@title}
       \par\vspace{1ex}
-      \@date
+      GUIDOLib v1.54
     \end{center}
 }
 \makeatother
@@ -46,7 +54,7 @@
     \hline
     %\textbf{\textbackslash{}auto}&\textbackslash{}set&&&\\ % A COMPLETER
     %\hline
-    \textbf{\textbackslash{}bar}&\textbar&&measure bar&number\\
+    \textbf{\textbackslash{}bar}&\textbar&&measure bar&number - displayMeasNum - numDx - numDy\\
     \hline
     %\textbf{\textbackslash{}barFormat}&&&bar formatting&\\ % Useless tag for now ?
     %\hline
@@ -145,7 +153,8 @@
     \hline
     %\textbf{\textbackslash{}merge}&&&&\\ % Useless tag for now ?
     %\hline
-    \textbf{\textbackslash{}meter}&&&meter indication&\textbf{type} - autoBarlines - dx/dy - color - size\\
+    \textbf{\textbackslash{}meter}&&&meter indication&\textbf{type} - autoBarlines - autoMeasuresNum - \\
+        &&&&dx/dy - color - size\\
     \hline
     \textbf{\textbackslash{}mordent}&\textbackslash{}mord&RT&mordent sign&mode - adx/ady - dx/dy - color - size\\
     \hline

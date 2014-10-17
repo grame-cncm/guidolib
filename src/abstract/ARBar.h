@@ -39,8 +39,9 @@ class ARBar : // public ARMusicalObject,
 		int getBarNumber() const { return barnumber; }
 
 		void                setMeasureNumber(int inMeasureNumber) { measureNumber = inMeasureNumber; }
-		int                 getMeasureNumber()                    { return measureNumber; }
-        TagParameterString *getMeasureNumberDisplayed()           { return measureNumberDisplayed; }
+		int                 getMeasureNumber()          const     { return measureNumber; }
+        TagParameterString *getMeasureNumberDisplayed() const     { return measureNumberDisplayed; }
+        void                setMeasureNumberDisplayed(bool display);
 
 		float  getMeasureNumberDxOffset()                         { return numDx; }
 		float  getMeasureNumberDyOffset()                         { return numDy; }

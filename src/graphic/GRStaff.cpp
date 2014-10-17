@@ -1986,6 +1986,8 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 
     if (sizeRatio < kMinNoteSize) // Too small, don't draw
         return;
+    if (currentLineThikness() < 0.5)
+        return;
 
 	const float lspace = getStaffLSPACE(); // Space between two lines
 	const NVPoint & staffPos = getPosition();

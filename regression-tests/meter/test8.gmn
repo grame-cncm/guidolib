@@ -1,0 +1,19 @@
+{[
+  \meter<"23", size=1> a b c
+],
+[
+  \meter<"", size=1> a b c
+],
+[
+  \meter<"C/2", size=1> a b c
+],
+[
+  \meter<"C+2", size=1> a b c
+],
+[
+  \meter<"2+C", size=1> a b c
+],
+[
+  \meter<"C/", size=1> a b c
+]
+}

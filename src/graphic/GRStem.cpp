@@ -157,7 +157,13 @@ GRStem::setStemDir(GDirection dir)
 // TODO: draw only one scaled symbol
 void GRStem::OnDraw( VGDevice & hdc ) const
 {
-	if(!mDraw)
+    DrawWithGlyph(hdc);
+    //DrawWithLine(hdc);
+}
+
+void GRStem::DrawWithGlyph( VGDevice & hdc ) const
+{
+    if(!mDraw)
 		return;
 	if (mStemDir == dirOFF)
         return;
@@ -272,6 +278,57 @@ void GRStem::OnDraw( VGDevice & hdc ) const
 
 	// - Restore context
 	if (colref) hdc.SetFontColor( prevTextColor );  //(TODO: in a parent method)
+}
+
+// Not used for now, but use it would avoid some stem length problems (cf. regression-tests/pending/badStemLength.gmn)
+void GRStem::DrawWithLine( VGDevice & hdc ) const
+{
+	if(!mDraw)
+		return;
+	if (mStemDir == dirOFF)
+        return;
+	if (mSize < kMinNoteSize)
+        return;			// size is too small, don't draw
+
+	// - Setup colors
+	const unsigned char *colref = getColRef();
+	
+	const float spaceBySize = LSPACE * mSize;
+	const float halfSpaceBySize = 0.5f * spaceBySize;
+
+    if (mStemLen >= halfSpaceBySize) {
+        float width       = 6.0f * mSize;
+        float noteXextent = 60 * mSize; // REM: harcoded
+        float noteYextent = 50 * mSize; // REM: harcoded
+        float x1, y1, x2, y2;
+
+        if (colref)
+            hdc.PushPenColor(VGColor(colref));
+
+        hdc.PushPenWidth(width);
+
+        if (mStemDir == dirUP)
+        {
+            x1 = mPosition.x + mOffset.x + noteXextent * 0.5f - width * 0.5f;
+            y1 = mPosition.y + mOffset.y - width * 0.5f - (noteYextent * 0.5f / 6);
+            x2 = mPosition.x + mOffset.x + noteXextent * 0.5f - width * 0.5f;
+            y2 = mPosition.y + mOffset.y - mStemLen + width * 0.5f;
+        }
+        else if (mStemDir == dirDOWN)
+        {
+            x1 = mPosition.x + mOffset.x - noteXextent * 0.5f + width * 0.5f,
+            y1 = mPosition.y + mOffset.y + width * 0.5f + (noteYextent * 0.5f / 6),
+            x2 = mPosition.x + mOffset.x - noteXextent * 0.5f + width * 0.5f,
+            y2 = mPosition.y + mOffset.y + mStemLen - width * 0.5f;
+        }
+
+        hdc.Line(x1, y1, x2, y2);
+
+        hdc.PopPenWidth();
+
+        if (colref)
+            hdc.PopPenColor();
+    }
 }
 
 void GRStem::GGSOutput() const

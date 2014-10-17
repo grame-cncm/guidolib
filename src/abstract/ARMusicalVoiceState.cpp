@@ -29,6 +29,7 @@ using namespace std;
 
 ARMusicalVoiceState::ARMusicalVoiceState()
 {
+    curlastbarpos = NULL;
 	curstatetags = NULL;
 	curtags = NULL;
 	curpositiontags = NULL;

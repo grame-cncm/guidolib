@@ -37,7 +37,7 @@ ARMeter::ARMeter()
 
 ARMeter::ARMeter(int p_numerator, int p_denominator)
 {
-	numerator = p_numerator;
+	numerator   = p_numerator;
 	denominator = p_denominator;
 
     std::stringstream bufferSStream;
@@ -118,23 +118,48 @@ void ARMeter::setTagParameterList(TagParameterList& tpl)
 				autoMeasuresNum = false;
 
 
-            //Meter string analysis to set numerator/denominator
-            std::string meterStr(mMeterName);
-            std::string delimiterSlash = "/";
+            /**** Meter type analysis ****/
 
-            size_t posSlash = 0;
-            std::string completeNumeratorStr;
-            std::string denominatorStr;
-
-            posSlash = meterStr.find(delimiterSlash);
-            completeNumeratorStr = meterStr.substr(0, posSlash);
-            denominatorStr = meterStr;
-            denominatorStr.erase(0, posSlash + 1);
-
-            if (sscanf(denominatorStr.c_str(), "%d", &denominator) == 1)
+            if (mMeterName == "")
             {
-                while(denominator > 99)
-                    denominator = (int)(denominator / 10);
+                mtype = NONE;
+                numeratorsVector.push_back(4);
+                denominator = 4;
+            }
+            else if (mMeterName == "C")
+            {
+                mtype = C;
+                numeratorsVector.push_back(4);
+                denominator = 4;
+            }
+            else if (mMeterName == "C/")
+            {
+                mtype = C2;
+                numeratorsVector.push_back(2);
+                denominator = 2;
+            }
+            else
+            {
+                mtype       = NUMERIC;
+                denominator = 1;
+
+                //Meter string analysis to set numerator/denominator
+                std::string meterStr(mMeterName);
+                std::string delimiterSlash = "/";
+
+                size_t posSlash = 0;
+                std::string completeNumeratorStr;
+                std::string denominatorStr = "";
+
+                posSlash = meterStr.find(delimiterSlash);
+
+                if (posSlash == std::string::npos)
+                    completeNumeratorStr = meterStr;
+                else {
+                    completeNumeratorStr = meterStr.substr(0, posSlash);
+                    denominatorStr       = meterStr;
+                    denominatorStr.erase(0, posSlash + 1);
+                }
 
 
                 /* Numerator check */
@@ -142,10 +167,19 @@ void ARMeter::setTagParameterList(TagParameterList& tpl)
                 int tmpNumeratorX = 0;
                 std::string delimiterPlus = "+";
                 size_t posPlus = 0;
+                size_t endStr;
                 std::string tpmNumeratorXStr;
-                while ((posPlus = completeNumeratorStr.find(delimiterPlus)) != std::string::npos)
-                {
-                    tpmNumeratorXStr = completeNumeratorStr.substr(0, posPlus);
+
+                do {
+                    posPlus = completeNumeratorStr.find(delimiterPlus);
+                    
+                    if (posPlus == std::string::npos)
+                        endStr = completeNumeratorStr.size();
+                    else
+                        endStr = posPlus;
+
+                    tpmNumeratorXStr = completeNumeratorStr.substr(0, endStr);
+
                     if (sscanf(tpmNumeratorXStr.c_str(), "%d", &tmpNumeratorX) == 1)
                     {
                         /* We keep only the first 2 figures */
@@ -153,41 +187,27 @@ void ARMeter::setTagParameterList(TagParameterList& tpl)
                             tmpNumeratorX = (int)(tmpNumeratorX / 10);
 
                         numeratorsVector.push_back(tmpNumeratorX);
+
+                        completeNumeratorStr.erase(0, endStr + delimiterPlus.length());
                     }
-                    completeNumeratorStr.erase(0, posPlus + delimiterPlus.length());
+                    else {
+                        numeratorsVector.clear();
+                        posPlus = std::string::npos;
+                    }
                 }
+                while (posPlus != std::string::npos);
 
-                if (sscanf(completeNumeratorStr.c_str(), "%d", &tmpNumeratorX) == 1)
-                { // last sum member
-                    /* We keep only the first 2 figures */
-                    while(tmpNumeratorX > 99)
-                        tmpNumeratorX = (int)(tmpNumeratorX / 10);
-
-                    numeratorsVector.push_back(tmpNumeratorX);
+                if (!numeratorsVector.empty()) {
+                    if (denominatorStr.size() > 0 && sscanf(denominatorStr.c_str(), "%d", &denominator) == 1)
+                    {
+                        while(denominator > 99)
+                            denominator = (int)(denominator / 10);
+                    }
                 }
-
-                if (!numeratorsVector.empty())
-                    mtype = NUMERIC;
-            }
-            else
-            { // read error
-                if (mMeterName == "C")
-                {
+                else { // default
                     mtype = C;
                     numeratorsVector.push_back(4);
                     denominator = 4;
-                }
-                else if (mMeterName == "C/")
-                {
-                    mtype = C2;
-                    numeratorsVector.push_back(2);
-                    denominator = 2;
-                }
-                else
-                {
-                    numeratorsVector.push_back(0);
-                    denominator = 1;
-                    mtype = NONE;
                 }
             }
 		}
