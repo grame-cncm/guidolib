@@ -427,6 +427,8 @@ GRSystem::GRSystem(	GRStaffManager * staffmgr, GRPage * inPage,
 			{
 				spr->stretchWithForce(mSystemforce);
                 spr->setGRPositionX(curx);
+                if(spr->hasGraceNote()) // if we have a grace note, we don't want the next note to be too close to it...
+                    spr->setlength(spr->x + 5);
 				curx += spr->x;
 			}
 		}
