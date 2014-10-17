@@ -1315,7 +1315,10 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
         GREvent * stemNote = GREvent::cast(mAssociated->GetNext(stemPos));
         if(stemNote)
         {
-            GuidoPos tagpos = stemNote->getAssociations()->GetHeadPosition();
+            GuidoPos tagpos = NULL;
+            if (stemNote->getAssociations())
+                tagpos = stemNote->getAssociations()->GetHeadPosition();
+
             while(tagpos)
             {
                 GRNotationElement * tag = stemNote->getAssociations()->GetNext(tagpos);
