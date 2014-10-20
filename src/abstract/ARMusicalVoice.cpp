@@ -75,6 +75,7 @@ using namespace std;
 #include "ARCluster.h"
 #include "ARSymbol.h"
 #include "ARFeatheredBeam.h"
+#include "ARTremolo.h"
 
 #include "ARRepeatBegin.h"
 #include "ARCoda.h"
@@ -5773,7 +5774,14 @@ void ARMusicalVoice::FinishChord(bool trill)
 			//if (!vst.fCurdispdur)
 			{
 				dispdur = new ARDisplayDuration();
-                if(vst.fCurdispdur)
+                const PositionTagList* list = vst.getCurPositionTags();
+                GuidoPos tagpos = list->GetHeadPosition();
+                ARTremolo * trem = NULL;
+                while(tagpos && !trem)
+                {
+                    trem = dynamic_cast<ARTremolo*>(list->GetNext(tagpos));
+                }
+                if(vst.fCurdispdur && trem)
                     dispdur->setDisplayDuration(vst.fCurdispdur->getDisplayDuration());
                 else
                     dispdur->setDisplayDuration(group->dur);
