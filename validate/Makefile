@@ -185,6 +185,7 @@ checkcrash: $(LEAKTOOLS)
 
 #########################################################################
 # tools to generate svg files
+svgWin: $(svgout)
 svg: $(svgout) $(mapsout)
 
 svgclean: 
