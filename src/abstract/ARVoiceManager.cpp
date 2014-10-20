@@ -265,7 +265,6 @@ float ARVoiceManager::CheckBreakPosition(const TYPE_TIMEPOSITION &tp)
 	ARMusicalVoiceState vst;
 	GuidoPos vpos = mVoice->GetHeadPosition(vst);
 	while (vpos) {
-		ARMusicalObject * o = mVoice->GetNext(vpos, vst);
 		ARMusicalObject * o = mVoice->GetNextObject(vpos);
 		ARRepeatBegin * rb = dynamic_cast<ARRepeatBegin *>(o);
 		if (!rb) continue;
