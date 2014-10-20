@@ -149,6 +149,7 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		virtual			GuidoPos GetHeadPosition(ARMusicalVoiceState & vst) const;
 		virtual void	GetPrevEvent(GuidoPos & pos, ARMusicalVoiceState & vst) const;
 		virtual			ARMusicalObject * GetNext(GuidoPos & pos, ARMusicalVoiceState & vst) const;
+		virtual			ARMusicalObject * GetNextObject(GuidoPos & pos) const;
 		virtual const	ARMusicalVoiceState * getVoiceState() const		{ return mCurVoiceState; }
 
 		// for automatic-beaming ...
