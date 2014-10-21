@@ -1457,8 +1457,8 @@ if (mPosTagList)
 
 				while (ptagpos)
 				{
-					ARPositionTag * ptag = mPosTagList->GetAt(ptagpos);
-					ARMusicalTag * armt = dynamic_cast<ARMusicalTag *>(ptag);
+					ARPositionTag *ptag = mPosTagList->GetAt(ptagpos);
+                    ARMusicalTag  *armt = dynamic_cast<ARMusicalTag *>(ptag);//static_cast<ARMusicalTag *>(ptag->isARMusicalTag());
 					if (armt)
 					{
 						if ( (armt->getAssociation() != ARMusicalTag::LA &&
@@ -4063,7 +4063,7 @@ void ARMusicalVoice::doAutoDisplayCheck()
 void ARMusicalVoice::TupletdurToDispdur( TYPE_DURATION & dur, const TYPE_DURATION & base)
 {
 	dur = dur * base;
-	assert(IsPowerOfTwoDenom(dur/*,8*/));
+	//assert(IsPowerOfTwoDenom(dur/*,8*/)); // Commented 21/10/14
 }
 
 //____________________________________________________________________________________
@@ -5501,7 +5501,7 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE & chord_type, CHORD_ACCIDENTAL
 	{
 		musicalObject = ObjectList::GetNext(posTmp);
 
-		ARNote * noteTmp = dynamic_cast<ARNote *>(musicalObject);
+        ARNote * noteTmp = static_cast<ARNote *>(musicalObject->isARNote());
 		if (noteTmp && noteTmp->getPitch()!=0)
 		{
 			if (comptTemp == 1)
@@ -5521,7 +5521,7 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE & chord_type, CHORD_ACCIDENTAL
 	{
 		musicalObject = ObjectList::GetNext(posTmp);
 		//musicalObject->print();
-		ARNote * noteTmp = dynamic_cast<ARNote *>(musicalObject);
+		ARNote * noteTmp = static_cast<ARNote *>(musicalObject->isARNote());
 		if (noteTmp && noteTmp->getPitch()!=0)
 		{
 			// we now directly set a flag to tell to the note not to draw itself, rather than hide it behind the first one...
@@ -5568,11 +5568,11 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE & chord_type, CHORD_ACCIDENTAL
 
 	int keyNumber;
 	GuidoPos pos = vst.vpos;
-	ARKey * key = NULL;
+	ARKey   *key = NULL;
+
 	while (pos && !key)
-	{
-		key = dynamic_cast<ARKey *>(ObjectList::GetPrev(pos));
-	}
+		key = static_cast<ARKey *>(ObjectList::GetPrev(pos)->isARKey());
+
 	if (key)
 		keyNumber = key->getKeyNumber();
 	else
@@ -5584,8 +5584,7 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE & chord_type, CHORD_ACCIDENTAL
 
 	//std::cout << "accidentals : " << accidentals << '\n';
 
-	if (accidentals == 0)
-	{
+	if (accidentals == 0) {
 		if (( pitches[1] == 2 && (keyNumber <= -6 || keyNumber >= 2) ) ||
 			( pitches[1] == 3 && (keyNumber <= -4 || keyNumber >= 4) ) ||
 			( pitches[1] == 4 && (keyNumber <= -2 || keyNumber >= 6) ) ||
@@ -5597,8 +5596,7 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE & chord_type, CHORD_ACCIDENTAL
 		else
 			chord_accidental = CAU_NATURAL;
 	}
-	else if (accidentals == 1)
-	{
+	else if (accidentals == 1) {
 		if (( pitches[1] == 2 && keyNumber < 2 ) ||
 			( pitches[1] == 3 && keyNumber < 4 ) ||
 			( pitches[1] == 4 && keyNumber < 6 ) ||
@@ -5610,8 +5608,7 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE & chord_type, CHORD_ACCIDENTAL
 		else
 			chord_accidental = CAU_SHARP; // std::cout << "(diese)" << '\n';
 	}
-	else if (accidentals == -1)
-	{
+	else if (accidentals == -1) {
 		if (( pitches[1] == 2 && keyNumber > -6 ) ||
 			( pitches[1] == 3 && keyNumber > -4 ) ||
 			( pitches[1] == 4 && keyNumber > -2 ) ||
@@ -6095,7 +6092,7 @@ void ARMusicalVoice::doAutoTrill()
                                         break;
 									nextNote = dynamic_cast<ARNote *>(nextObject);
 								}
-                                while(posObj && !nextNote);
+                                while(posNote && !nextNote);
 
 								if (nextNote) {
 									nextNote->setVoiceNum(note->getVoiceNum());

@@ -112,6 +112,7 @@ class ARMusicalObject
     virtual ARMusicalObject *isARNewPage()     { return NULL; }
     virtual ARMusicalObject *isARNewSystem()   { return NULL; }
     virtual ARMusicalObject *isARStaff()       { return NULL; }
+    virtual ARMusicalObject *isARKey()         { return NULL; }
     /*****************************************/
 
   protected:

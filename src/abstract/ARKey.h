@@ -53,7 +53,11 @@ class ARKey : public ARMTParameter
 
 		virtual void getOctArray(int *) const;
 		virtual void getFreeKeyArray(float *) const;
+        
 
+        /**** Function to avoid dynamic_cast ****/
+        ARMusicalObject *isARKey() { return this; }
+        /****************************************/
 
   protected:
 	
