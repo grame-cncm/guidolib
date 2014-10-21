@@ -117,7 +117,7 @@ void PianoRoll::setPitchRange(int minPitch, int maxPitch)
     if (maxPitch == -1)
         fHighPitch = (ownsARMusic() ? detectARExtremePitch(false) : maxPitch = detectMidiExtremePitch(false));
     else
-        fHighPitch = fHighPitch;
+        fHighPitch = maxPitch;
 
     if (fHighPitch - fLowPitch < 11)
         autoAdjustPitchRange(fLowPitch, fHighPitch);
@@ -422,7 +422,7 @@ void PianoRoll::DrawKeyboard(PianoRoll::DrawParams drawParams) const
     std::string cNoteString;
     
     NVstring *font = new NVstring("Arial");
-    const VGFont *hTextFont;
+    const VGFont *hTextFont = 0;
 	if (font && font->length() > 0)
 		hTextFont = FontManager::FindOrCreateFont((int) floor(drawParams.noteHeight * 0.8), font, new NVstring(""));
 
