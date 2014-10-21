@@ -48,6 +48,10 @@ class ARBar : // public ARMusicalObject,
 
 		virtual bool operator==(const ARBar & bar)
 			{ return (barnumber == bar.barnumber); }
+        
+        /**** Function to avoid dynamic_cast ****/
+        ARMusicalObject *isARBar() { return this; }
+        /*****************************************/
 
   protected:
 		int  barnumber; // number of bar where barline starts

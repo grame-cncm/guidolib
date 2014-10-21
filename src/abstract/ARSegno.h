@@ -26,6 +26,10 @@ class ARSegno : public ARJump
 	virtual 	~ARSegno();
 	virtual void    PrintName( std::ostream & os ) const;
 	virtual void	browse(TimeUnwrap& mapper) const;
+
+    /**** Function to avoid dynamic_cast ****/
+    ARMusicalObject *isARSegno() { return this; }
+    /*****************************************/
 };
 
 #endif

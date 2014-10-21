@@ -398,13 +398,13 @@ ARMusicalObject * ARMusicalVoice::GetNext(GuidoPos &pos, ARMusicalVoiceState &vs
 		if (first == 0)
             first = obj;
 
-		ARMusicalTag *mytag = dynamic_cast<ARMusicalTag *>(obj);
+        ARMusicalTag *mytag = static_cast<ARMusicalTag *>(obj->isARMusicalTag());
 
 		if (mytag) {
 			if (mytag->IsStateTag()) {
-				ARStaff * mynewstf;
-				if ((mynewstf = dynamic_cast<ARStaff *>(mytag)) != 0) {
-					ARStaff *tmp = dynamic_cast<ARStaff *>(vst.getCurStateTag(typeid(ARStaff)));
+                ARStaff *mynewstf = static_cast<ARStaff *>(mytag->isARStaff());
+				if ((mynewstf) != NULL) {
+					ARStaff *tmp = (ARStaff *)(vst.getCurStateTag(typeid(ARStaff)));
 
 					if (tmp && tmp->getStaffNumber() != mynewstf->getStaffNumber()) {
 						vst.RemoveCurStateTag(typeid(ARClef));
@@ -415,7 +415,7 @@ ARMusicalObject * ARMusicalVoice::GetNext(GuidoPos &pos, ARMusicalVoiceState &vs
 				vst.AddStateTag(mytag);
 			}
 
-			if (dynamic_cast<ARBar *>(mytag)) {
+			if (mytag->isARBar()) {
 				vst.curlastbartp  = obj->getRelativeTimePosition();
 				vst.curlastbarpos = prevpos;
 			}
@@ -2080,7 +2080,7 @@ void ARMusicalVoice::doAutoBarlines()
 	TYPE_DURATION curmetertime;
 
 	bool isvalidmeter = false;
-	bool lookahead = false;
+	bool lookahead    = false;
 	bool foundbarline = false;
 
 	// this is the position of a newSystem or newPage-Tag that was encountered while looking ahead.
@@ -2122,10 +2122,10 @@ void ARMusicalVoice::doAutoBarlines()
 		}
 
 		ARMusicalObject * o = GetAt(pos);
-		ARMusicalEvent * ev = ARMusicalEvent::cast(o);
-		ARBar * bar = dynamic_cast<ARBar *>(o);
-		ARCoda * coda = dynamic_cast<ARCoda *>(o);
-		ARSegno * segno = dynamic_cast<ARSegno *>(o);
+		ARMusicalEvent * ev = ARMusicalEvent::cast(o); // REM c'est quoi ça ?
+        ARBar   *bar   = static_cast<ARBar *>(o->isARBar());
+		ARCoda  *coda  = static_cast<ARCoda *>(o->isARCoda());
+		ARSegno *segno = static_cast<ARSegno *>(o->isARSegno());
 
 		// (DF) tests to inhibit auto barlines when a repeat bar is present
 		bool isRepeatBar = false;
@@ -2148,35 +2148,33 @@ obsolete: an end repeatbar is now ARBar
             }
 */
 		}
-        if ((closestRepeatBar == posdate) || dynamic_cast<ARRepeatBegin *>(o))
-            foundbarline= isRepeatBar = true;
+        if ((closestRepeatBar == posdate) || o->isARRepeatBegin())
+            foundbarline = isRepeatBar = true;
 
-		if (lookahead)
-		{
+		if (lookahead) {
 			// we are in lookahead-mode, that
 			// is, we have found a measureend already ...
 
 			// we need to track explicit bars until
 			// we have an event with duration>0
 
-			ARNewPage * page = dynamic_cast<ARNewPage *>(o);
-			ARNewSystem * sys = dynamic_cast<ARNewSystem *>(o);
-			if (bar || isRepeatBar) {
+            ARNewPage   *page = static_cast<ARNewPage *>(o->isARNewPage());
+			ARNewSystem *sys  = static_cast<ARNewSystem *>(o->isARNewSystem());
+
+			if (bar || isRepeatBar)
 				foundbarline = true;
-			}
-			else if (page || sys ) {
-				if (newSystemOrPagepos == NULL) {
+			else if (page || sys) {
+				if (newSystemOrPagepos == NULL)
 					newSystemOrPagepos = pos;
-				}
 			}
 			else if (ev || coda || segno) {
-				if( coda || segno || ( ev->getDuration() > DURATION_0 ) ) {
+				if (coda || segno || (ev->getDuration() > DURATION_0)) {
 //				if( ( ev->getDuration() > DURATION_0 ) ) {
 					// now, we are at the end of the lookahead ...
 					if (!foundbarline) {
 						// insert a barline right before the current event
 						lastbartp = o->getRelativeTimePosition();
-						ARBar * arbar = new ARBar( lastbartp );
+						ARBar *arbar = new ARBar(lastbartp);
 						arbar->setIsAuto( true );
 
 						if (newSystemOrPagepos == NULL) {
@@ -2282,9 +2280,8 @@ obsolete: an end repeatbar is now ARBar
 					// now we create a new event, that
 					// is a copy of ev and has a
 					// new duration ...
-					ARMusicalEvent * ev2 = /*dynamic*/static_cast<ARMusicalEvent *>(ev->Copy());
-					if (ev2)
-					{
+					ARMusicalEvent *ev2 = static_cast<ARMusicalEvent *>(ev->Copy());
+					if (ev2) {
 						ev2->setRelativeTimePosition( lastbartp );
 						ev2->setDuration( olddur - newdur );
 						newpos = AddElementAfter( newpos, ev2 );
@@ -2299,12 +2296,9 @@ obsolete: an end repeatbar is now ARBar
 
 					GuidoPos newptagpos = NULL;
 
-					ARNote * nt = dynamic_cast<ARNote *>(ev2);
-					if (nt && nt->getName() == ARNoteName::empty)
-					{
-					}
-					else
-					{
+                    ARNote *nt = static_cast<ARNote *>(ev2->isARNote());
+
+					if (!nt || nt->getName() != ARNoteName::empty) {
 						// old: // now look, if there are any ties
 						//      // and merge-tags ..
 						//				// if (tiemergecount==0)
@@ -5758,10 +5752,10 @@ void ARMusicalVoice::FinishChord(bool trill)
                 const PositionTagList* list = vst.getCurPositionTags();
                 GuidoPos tagpos = list->GetHeadPosition();
                 ARTremolo * trem = NULL;
+
                 while(tagpos && !trem)
-                {
                     trem = dynamic_cast<ARTremolo*>(list->GetNext(tagpos));
-                }
+
                 if(vst.fCurdispdur && trem)
                     dispdur->setDisplayDuration(vst.fCurdispdur->getDisplayDuration());
                 else
@@ -5798,7 +5792,7 @@ void ARMusicalVoice::FinishChord(bool trill)
 
 
 			while (vst.vpos && vst.vpos != group->startpos)
-				GetNext(vst.vpos,vst);
+				GetNext(vst.vpos, vst);
 
 			if (vst.ptagpos)
 			{
@@ -5827,9 +5821,7 @@ void ARMusicalVoice::FinishChord(bool trill)
 			}
 
 			while (vst.vpos && vst.vpos != group->endpos)
-			{
-				GetNext(vst.vpos,vst);
-			}
+				GetNext(vst.vpos, vst);
 
 /*			if (vst.ptagpos)
 			{
@@ -5881,7 +5873,9 @@ void ARMusicalVoice::FinishChord(bool trill)
 	TYPE_TIMEPOSITION starttp (vst.curtp);
     TYPE_TIMEPOSITION newtp (starttp + chorddur);
 	int firstevent = 0;
-
+    
+    static int okTest6 = 0;
+    okTest6++;
 	mPosTagList->GetNext(vst.ptagpos);
 	if (onlyonegroup)
 	{
@@ -5895,11 +5889,12 @@ void ARMusicalVoice::FinishChord(bool trill)
 
 	while (vst.vpos && vst.curchordtag == currentChord)
 	{
+        static int okTest7 = 0;
+        okTest7++;
 		ARMusicalObject *o = GetNext(vst.vpos,vst);
 		ARMusicalEvent *ev = ARMusicalEvent::cast(o);
-
-		if (vst.addedpositiontags)
-		{
+        
+		if (vst.addedpositiontags) {
 			TYPE_TIMEPOSITION mytp;
 			if (firstevent)
 				mytp = newtp;
@@ -5919,6 +5914,7 @@ void ARMusicalVoice::FinishChord(bool trill)
 				}
 			}
 		}
+
 		if (!firstevent && ev)
 		{
 			// we have our first event...
@@ -6258,12 +6254,12 @@ void ARMusicalVoice::doAutoFeatheredBeam()
 			while(posTag)
 			{
 				ARPositionTag   *tag      = ptags->GetNext(posTag);
-				ARFeatheredBeam *curfBeam = dynamic_cast<ARFeatheredBeam *>(tag);
+                ARFeatheredBeam *curfBeam = static_cast<ARFeatheredBeam *>(tag->isARFeatheredBeam());
 
 				if (curfBeam) {
 					GuidoPos posBegin = curfBeam->getPosition();
 					ARMusicalObject *object = GetAt(posBegin);
-					ARNote          *note   = dynamic_cast<ARNote *>(object);
+                    ARNote          *note   = static_cast<ARNote *>(object->isARNote());
 
 					if (note) {
 						curfBeam->setBeginTimePosition(note->getRelativeTimePosition());
@@ -6272,7 +6268,7 @@ void ARMusicalVoice::doAutoFeatheredBeam()
 
 					GuidoPos posEnd = curfBeam->getEndPosition();
 					object = GetAt(posEnd);
-					note = dynamic_cast<ARNote *>(object);
+					note = static_cast<ARNote *>(object->isARNote());
 
 					if (note) {
 						curfBeam->setEndDuration(note->getDuration());

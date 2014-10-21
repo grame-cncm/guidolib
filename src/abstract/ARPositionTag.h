@@ -101,6 +101,13 @@ class ARPositionTag
 #endif
 		virtual bool	isEndTagClass() const { return false; }
 
+        /**** Functions to avoid dynamic_cast ****/
+        virtual ARMusicalObject *isARDisplayDuration() { return NULL; }
+        virtual ARMusicalObject *isARChordTag()        { return NULL; }
+        virtual ARMusicalObject *isARGrace()           { return NULL; }
+        virtual ARMusicalObject *isARFeatheredBeam()   { return NULL; }
+        /*****************************************/
+
 	protected:
 
 		GuidoPos pos;

@@ -250,44 +250,40 @@ void ARMusicalVoiceState::AddStateTag(ARMusicalTag * ntag)
 	}
 }
 
-void ARMusicalVoiceState::AddPositionTag(ARPositionTag * ntag, int addtoaddedlist)
+void ARMusicalVoiceState::AddPositionTag(ARPositionTag *ntag, int addtoaddedlist)
 {
 	if (!curpositiontags)
 		curpositiontags = new PositionTagList(0);
 
 	curpositiontags->AddTail(ntag);
 	
-	if (addtoaddedlist)
-	{
+	if (addtoaddedlist) {
 		if (!addedpositiontags)
 			addedpositiontags = new PositionTagList(0);
+
 		addedpositiontags->AddTail(ntag);
 	}
 	
-	ARDisplayDuration * arddur;
-	if ( (arddur = dynamic_cast<ARDisplayDuration *>(ntag)) != NULL)
-	{
+	ARDisplayDuration *arddur = static_cast<ARDisplayDuration *>(ntag->isARDisplayDuration());
+	if (arddur)
 		fCurdispdur = arddur;
-	}
 
-	ARChordTag * chordtag;
-	if ( (chordtag = dynamic_cast<ARChordTag *>(ntag)) != NULL )
-	{
-		if (curchordtag != NULL)
-		{
+    ARChordTag *chordtag = static_cast<ARChordTag *>(ntag->isARChordTag());
+	if (chordtag) {
+		if (curchordtag != NULL) {
 			GuidoTrace("nested chordtags are not allowed!");
 			assert(false);
 		}
 		curchordtag = chordtag;
 	}
-	ARGrace * gracetag;
-	if ( (gracetag = dynamic_cast<ARGrace *>(ntag)) != NULL)
-	{
-		if (curgracetag != NULL)
-		{
+
+    ARGrace *gracetag = static_cast<ARGrace *>(ntag->isARGrace());
+	if (gracetag) {
+		if (curgracetag != NULL) {
 			GuidoTrace("nested gracetags are notallowed!");
 			assert(false);
 		}
+
 		curgracetag = gracetag;
 	}
 }
@@ -321,39 +317,31 @@ void ARMusicalVoiceState::RemovePositionTag(ARPositionTag * ntag, int addtoremov
 		start = ntag;
 	
 	int checkforcurtags = 0;
-	ARDisplayDuration * arddur;
-	if ( (arddur = dynamic_cast<ARDisplayDuration *>(ntag)) != NULL)
-	{
+
+    if (ntag->isARDisplayDuration() != NULL) {
 		fCurdispdur = NULL;
 		checkforcurtags = 1;
 	}
 
-	ARChordTag * chordtag;
-	if ( (chordtag = dynamic_cast<ARChordTag *>(ntag)) != NULL )
-	{
+	if (ntag->isARChordTag() != NULL)
 		curchordtag = NULL;
-	}
 
-	ARGrace * gracetag;
-	if ( (gracetag = dynamic_cast<ARGrace *>(ntag)) != NULL )
-	{
+	if (ntag->isARGrace() != NULL)
 		curgracetag = NULL;
-	}
 
 	GuidoPos pos = curpositiontags->GetHeadPosition();
 	bool found = false;
-	while (pos)
-	{
-		if (curpositiontags->GetAt(pos) == start)
-		{
+	while (pos) {
+		if (curpositiontags->GetAt(pos) == start) {
 			curpositiontags->RemoveElementAt(pos);
 			found = true;
 			break;
 		}
+
 		curpositiontags->GetNext(pos);
 	}
-	if (found == false)
-	{
+
+	if (found == false) {
 		// Attention; think about what happens
 		// here; we have a closing tag without
 		// a matching beginning tag.
@@ -362,8 +350,7 @@ void ARMusicalVoiceState::RemovePositionTag(ARPositionTag * ntag, int addtoremov
 		return;
 	}
 
-	if (addtoremovedlist)
-	{
+	if (addtoremovedlist) {
 		if (!removedpositiontags)
 			removedpositiontags = new PositionTagList(0);
 		
@@ -376,37 +363,26 @@ void ARMusicalVoiceState::RemovePositionTag(ARPositionTag * ntag, int addtoremov
 	// this may also happen in Chord-Overread-mode
 	// tags within chords are not interessting!
 	if (addedpositiontags)
-	{
 		addedpositiontags->RemoveElement(ntag);
-	}
 	
-	if (artgend)
-	{
+	if (artgend) {
 		if (artgend->getCorrespondence() == fCurdispdur)
-		{
 			fCurdispdur = NULL;
-		}
-		if (artgend->getCorrespondence() == curchordtag)
-		{
-			curchordtag = NULL;
-		}
-		if (artgend->getCorrespondence() == curgracetag)
-		{
-			curgracetag = NULL;
-		}
 
+		if (artgend->getCorrespondence() == curchordtag)
+			curchordtag = NULL;
+
+		if (artgend->getCorrespondence() == curgracetag)
+			curgracetag = NULL;
 	}
 
 	// here, we have to check wether there are
 	// any tags in the curpositiontags ...
-	if (checkforcurtags)
-	{
+	if (checkforcurtags) {
 		GuidoPos pos = curpositiontags->GetTailPosition();
-		while (pos)
-		{
-			ARDisplayDuration * tag = dynamic_cast<ARDisplayDuration *>(curpositiontags->GetPrev(pos));
-			if (tag)
-			{
+		while (pos) {
+            ARDisplayDuration *tag = static_cast<ARDisplayDuration *>(curpositiontags->GetPrev(pos)->isARDisplayDuration());
+			if (tag) {
 				fCurdispdur = tag;
 				break;
 			}
@@ -440,13 +416,11 @@ ARMusicalTag * ARMusicalVoiceState::RemoveCurStateTag(const std::type_info &ti)
 		return NULL;
 	
 	GuidoPos pos = curstatetags->GetHeadPosition();
-	while (pos)
-	{
+	while (pos) {
 		GuidoPos prevpos = pos;
 		ARMusicalTag * tmp = curstatetags->GetNext(pos);
 		
-		if ( typeid(*tmp) == ti )
-		{
+		if (typeid(*tmp) == ti) {
 			curstatetags->RemoveElementAt(prevpos);
 			return tmp;
 		}
@@ -457,23 +431,20 @@ ARMusicalTag * ARMusicalVoiceState::RemoveCurStateTag(const std::type_info &ti)
 
 /** \brief Returns a state-tag with the given type.
 */
-ARMusicalTag * ARMusicalVoiceState::getCurStateTag(const std::type_info & ti)
+ARMusicalTag *ARMusicalVoiceState::getCurStateTag(const std::type_info & ti)
 {
 	if (curstatetags == 0)
-		return 0;
+		return NULL;
 	
 	GuidoPos pos = curstatetags->GetHeadPosition();
-	while (pos)
-	{
-		ARMusicalTag * tmp = curstatetags->GetNext(pos);
+	while (pos) {
+		ARMusicalTag *tmp = curstatetags->GetNext(pos);
 		
-		if ( typeid(*tmp) == ti )
-		{
+		if (typeid(*tmp) == ti)
 			return tmp;
-		}
 	}
 	
-	return 0;
+	return NULL;
 }
 
 
