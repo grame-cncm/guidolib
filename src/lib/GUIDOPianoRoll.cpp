@@ -42,7 +42,7 @@ GUIDOAPI(PianoRoll *) GuidoAR2PianoRoll(PianoRollType type, ARHandler arh)
     if (!arMusic)
         return NULL;
 
-    PianoRoll *newPianoRoll;
+    PianoRoll *newPianoRoll = 0;
 
     if (type == kSimplePianoRoll)
         newPianoRoll = new PianoRoll(arMusic);
@@ -64,7 +64,7 @@ GUIDOAPI(PianoRoll *) GuidoMidi2PianoRoll(PianoRollType type, const char *midiFi
     if (!mf.Open(midiFileName, MidiFileRead))
         return NULL;
 
-    PianoRoll *newPianoRoll;
+    PianoRoll *newPianoRoll = 0;
 
     if (type == kSimplePianoRoll)
         newPianoRoll = new PianoRoll(midiFileName);
