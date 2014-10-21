@@ -14,8 +14,6 @@
 
 */
 
-#include <istream>
-
 #include "GUIDOEngine.h"
 #include "GUIDOExport.h"
 
