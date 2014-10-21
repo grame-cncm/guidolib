@@ -5792,7 +5792,7 @@ void ARMusicalVoice::FinishChord(bool trill)
 
 
 			while (vst.vpos && vst.vpos != group->startpos)
-				GetNext(vst.vpos,vst);
+				GetNext(vst.vpos, vst);
 
 			if (vst.ptagpos)
 			{
@@ -5821,7 +5821,7 @@ void ARMusicalVoice::FinishChord(bool trill)
 			}
 
 			while (vst.vpos && vst.vpos != group->endpos)
-				GetNextObject(vst.vpos);
+				GetNext(vst.vpos, vst);
 
 /*			if (vst.ptagpos)
 			{
@@ -5894,7 +5894,6 @@ void ARMusicalVoice::FinishChord(bool trill)
 		ARMusicalObject *o = GetNext(vst.vpos,vst);
 		ARMusicalEvent *ev = ARMusicalEvent::cast(o);
         
-		//if (vst.curpositiontags) {
 		if (vst.addedpositiontags) {
 			TYPE_TIMEPOSITION mytp;
 			if (firstevent)

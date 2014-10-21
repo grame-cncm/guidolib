@@ -277,7 +277,7 @@ void ARMusicalVoiceState::AddPositionTag(ARPositionTag *ntag, int addtoaddedlist
 		curchordtag = chordtag;
 	}
 
-	ARGrace *gracetag = static_cast<ARGrace *>(ntag->isARGrace());
+    ARGrace *gracetag = static_cast<ARGrace *>(ntag->isARGrace());
 	if (gracetag) {
 		if (curgracetag != NULL) {
 			GuidoTrace("nested gracetags are notallowed!");
