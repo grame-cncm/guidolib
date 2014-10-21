@@ -356,10 +356,8 @@ staff_debug("addNotationElement");
 	// this time, the time-check is disabled, if
 	// we have a positiontag (because those are
 	// added some more times than just once!)
-	if(( dynamic_cast<GRPositionTag *>(notationElement)) == 0 )
-	{		
-		if (mCompElements.GetTail())
-		{ 
+	if ((dynamic_cast<GRPositionTag *>(notationElement)) == NULL) {		
+		if (mCompElements.GetTail()) { 
 			const TYPE_TIMEPOSITION tp1 (notationElement->getRelativeTimePosition());
 
 			// no notation element may be added to the staff, that
@@ -397,7 +395,7 @@ staff_debug("addNotationElement");
 	// OLD: mGrSystem->AddToSpace(notationElement);
 
 	// count the notes, evaluates the accidentals.
-	GRNote * mynote = dynamic_cast<GRNote *>(notationElement);
+    GRNote * mynote = static_cast<GRNote *>(notationElement->isGRNote());
 	setNoteParameters(mynote);
 }
 

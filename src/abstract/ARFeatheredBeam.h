@@ -50,6 +50,10 @@ class ARFeatheredBeam :  public ARBeam
 	TYPE_TIMEPOSITION getEndTimePosition (){return endTimePos;}
 	void findDefaultPoints();
 
+    /**** Function to avoid dynamic_cast ****/
+    ARMusicalObject *isARFeatheredBeam() { return this; }
+    /*****************************************/
+
 	protected:
 
 		static ListOfTPLs ltpls;

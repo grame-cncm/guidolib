@@ -88,6 +88,10 @@ class ARNote : public ARMusicalEvent
 
     static int	detune2Quarters(float detune);
 
+    /**** Function to avoid dynamic_cast ****/
+    virtual ARMusicalObject *isARNote() { return this; }
+    /*****************************************/
+
   private:
     ARNoteName fName;
 

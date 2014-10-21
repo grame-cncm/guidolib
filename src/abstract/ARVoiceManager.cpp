@@ -257,7 +257,7 @@ float ARVoiceManager::CheckBreakPosition(const TYPE_TIMEPOSITION &tp) const
 
 	while (vpos) {
 		ARMusicalObject *o  = mVoice->GetNextObject(vpos);
-        ARRepeatBegin   *rb = (ARRepeatBegin *) o->isRepeatBegin();
+        ARRepeatBegin   *rb = static_cast<ARRepeatBegin *>(o->isARRepeatBegin());
 
         if (rb) {
             TYPE_TIMEPOSITION rt = o->getRelativeTimePosition();

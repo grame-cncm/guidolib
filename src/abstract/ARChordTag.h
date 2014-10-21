@@ -48,6 +48,10 @@ public:
 	virtual void PrintParameters(std::ostream & os) const;
 
 	virtual void setTagParameterList(TagParameterList & tpl);
+    
+    /**** Function to avoid dynamic_cast ****/
+    ARMusicalObject *isARChordTag() { return this; }
+    /*****************************************/
 
 protected:
 	static ListOfTPLs ltpls;

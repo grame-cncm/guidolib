@@ -114,6 +114,10 @@ public:
 															float mysize = 0.0f ) const;
 	inline const NEPointerList* associated() const { return mAssociated; }
 
+    /**** Functions to avoid dynamic_cast ****/
+    virtual GRNotationElement *isGRNote()        { return NULL; }
+    /*****************************************/
+
 protected:
 	
 	void		DrawExtents( VGDevice & hdc, const VGColor & inColor ) const; // Debug
