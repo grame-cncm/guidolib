@@ -42,6 +42,10 @@ class ARRepeatBegin : public ARMTParameter	// ,public ARMusicalObject
 
 		virtual std::ostream & operator << ( std::ostream & os ) const;
 		virtual void	setRepeatEnd( const ARRepeatEnd * );
+
+        /**** Functions to avoid dynamic_cast ****/
+        ARMusicalObject *isRepeatBegin() { return this; }
+        /*****************************************/
 	
 	protected:
 

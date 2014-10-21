@@ -102,6 +102,10 @@ class ARMusicalObject
 	virtual void	setDrawGR(bool onoff){drawGR = onoff;}
 	virtual bool	getDrawGR(){return drawGR;}
 
+    /**** Functions to avoid dynamic_cast ****/
+    virtual ARMusicalObject *isRepeatBegin() { return NULL; }
+    /*****************************************/
+
   protected:
 		TYPE_TIMEPOSITION	relativeTimePosition;
 		TYPE_DURATION		duration;

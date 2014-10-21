@@ -240,95 +240,87 @@ int ARVoiceManager::InsertBreak( const TYPE_TIMEPOSITION & tp, int breaktype, fl
 	If a BarLine is here, 1 is returned	meaning: feasable.
 	If we are in the middle of a bar, then 0.25	is returned.
 */
-float ARVoiceManager::CheckBreakPosition(const TYPE_TIMEPOSITION &tp)
+float ARVoiceManager::CheckBreakPosition(const TYPE_TIMEPOSITION &tp) const
 {
-	if (tp == DURATION_0)				return -1.0f;
-	if (tp == mVoice->getDuration())	return -1.0f;
+	if (tp == DURATION_0)
+        return -1.0f;
+	if (tp == mVoice->getDuration())
+        return -1.0f;
 	
 	// then, there will be no break here!
 	if (tp == mLastBreakTimePos)
 		return -10000.0f;
     
-    // D.F. generates a break for range repeat end
-/*
-	ARMusicalVoiceState vst;
-	GuidoPos vpos = mVoice->GetHeadPosition(vst);
-	while (vpos) {
-		ARMusicalObject * o = mVoice->GetNext(vpos, vst);
-		ARRepeatEnd * re = dynamic_cast<ARRepeatEnd *>(o);
-		if (!re) continue;
-		TYPE_TIMEPOSITION rt = o->getRelativeTimePosition();
-		if (rt == tp) return 1.5f;
-	}
-*/
     // D.F. generates a break for range repeat begin
 	ARMusicalVoiceState vst;
 	GuidoPos vpos = mVoice->GetHeadPosition(vst);
+
 	while (vpos) {
-		ARMusicalObject * o = mVoice->GetNextObject(vpos);
-		ARRepeatBegin * rb = dynamic_cast<ARRepeatBegin *>(o);
-		if (!rb) continue;
-		TYPE_TIMEPOSITION rt = o->getRelativeTimePosition();
-		if (rt == tp) return 1.5f;
+		ARMusicalObject *o  = mVoice->GetNextObject(vpos);
+        ARRepeatBegin   *rb = (ARRepeatBegin *) o->isRepeatBegin();
+
+        if (rb) {
+            TYPE_TIMEPOSITION rt = o->getRelativeTimePosition();
+            if (rt == tp)
+                return 1.5f;
+        }
 	}
 
 	// this only happens, if there is no meter
 	// in the current voice ....
-	if (mCurrVoiceState.curtp>tp)
-	{
-		Fraction tmp( 2, 1 );
+	if (mCurrVoiceState.curtp > tp) {
+		Fraction tmp(2, 1);
+
 		if (tp - mLastBreakTimePos < tmp)
 			return -2.0f;
-		if (!mCurrVoiceState.curmeter || mCurrVoiceState.curmeter->getNumerator() == 0)
-		{
-			ARMusicalObject * obj;
-			if (mCurrVoiceState.vpos == NULL)
-			{
+
+		if (!mCurrVoiceState.curmeter || mCurrVoiceState.curmeter->getNumerator() == 0) {
+			ARMusicalObject *obj;
+
+			if (mCurrVoiceState.vpos == NULL) {
 				// then we are at the end
 				obj = mVoice->GetTail();
 			}
-			else
-			{
+			else {
 				GuidoPos tmp = mCurrVoiceState.vpos;				
 				obj = mVoice->GetPrev(tmp);
+
 				if (tmp)
 					obj = mVoice->GetAt(tmp);
 			}
 
-			if (obj) //  && dynamic cast<ARRest *>(obj))
+			if (obj)
 				return 0;
 		}
-		else
-		{
+		else {
 			// we have a meter
-			if (tp  - mLastBreakTimePos > tmp)
+			if (tp - mLastBreakTimePos > tmp)
 				return 2.0f;
 		}
+
 		return -2.0f;
 	}
-	else if (mCurrVoiceState.curtp<tp)
-		assert(false);
 	
 	// if the voice is at the end already ...
 	// assert commented to avoid spurious exit (due to dynamic score coding)
 	// assert (mCurrVoiceState.vpos != NULL);
 	if (mCurrVoiceState.vpos == NULL)
-		return -1;
+		return -1.0f;
 
 	assert(mCurrVoiceState.curtp == tp);
+
 	if (mCurrVoiceState.curlastbartp == tp)	// it is a barline-position
 		return 1.5f;
+    else if (mCurrVoiceState.curmeter) {
+        if (mCurrVoiceState.curtp - (mCurrVoiceState.curmeter->getMeterTime() * DURATION_2) == mCurrVoiceState.curlastbartp)
+            return -1.0f;
+        else {
+            TYPE_TIMEPOSITION tmptp(tp - mCurrVoiceState.curlastbartp);
 
-	else if (mCurrVoiceState.curmeter &&
-		mCurrVoiceState.curtp - (mCurrVoiceState.curmeter->getMeterTime()*DURATION_2) == mCurrVoiceState.curlastbartp)
-	{
-		return (float) -1.0;
-	}
-	else if (mCurrVoiceState.curmeter)
-	{
-		TYPE_TIMEPOSITION tmptp (tp - mCurrVoiceState.curlastbartp);
-		if (tmptp.getDenominator() == mCurrVoiceState.curmeter->getDenominator())
-			return (float) -1;
-	}
- 	return (float) -1;
+            if (tmptp.getDenominator() == mCurrVoiceState.curmeter->getDenominator())
+                return -1.0f;
+        }
+    }
+
+ 	return -1.0f;
 }

@@ -250,44 +250,41 @@ void ARMusicalVoiceState::AddStateTag(ARMusicalTag * ntag)
 	}
 }
 
-void ARMusicalVoiceState::AddPositionTag(ARPositionTag * ntag, int addtoaddedlist)
+void ARMusicalVoiceState::AddPositionTag(ARPositionTag *ntag, int addtoaddedlist)
 {
 	if (!curpositiontags)
 		curpositiontags = new PositionTagList(0);
 
 	curpositiontags->AddTail(ntag);
 	
-	if (addtoaddedlist)
-	{
+	if (addtoaddedlist) {
 		if (!addedpositiontags)
 			addedpositiontags = new PositionTagList(0);
+
 		addedpositiontags->AddTail(ntag);
 	}
 	
-	ARDisplayDuration * arddur;
-	if ( (arddur = dynamic_cast<ARDisplayDuration *>(ntag)) != NULL)
-	{
+	ARDisplayDuration *arddur;
+	if ((arddur = dynamic_cast<ARDisplayDuration *>(ntag)) != NULL)
 		fCurdispdur = arddur;
-	}
 
-	ARChordTag * chordtag;
-	if ( (chordtag = dynamic_cast<ARChordTag *>(ntag)) != NULL )
-	{
-		if (curchordtag != NULL)
-		{
+	ARChordTag *chordtag;
+	if ((chordtag = dynamic_cast<ARChordTag *>(ntag)) != NULL) {
+		if (curchordtag != NULL) {
 			GuidoTrace("nested chordtags are not allowed!");
 			assert(false);
 		}
 		curchordtag = chordtag;
 	}
-	ARGrace * gracetag;
-	if ( (gracetag = dynamic_cast<ARGrace *>(ntag)) != NULL)
+
+	ARGrace *gracetag;
+	if ((gracetag = dynamic_cast<ARGrace *>(ntag)) != NULL)
 	{
-		if (curgracetag != NULL)
-		{
+		if (curgracetag != NULL) {
 			GuidoTrace("nested gracetags are notallowed!");
 			assert(false);
 		}
+
 		curgracetag = gracetag;
 	}
 }

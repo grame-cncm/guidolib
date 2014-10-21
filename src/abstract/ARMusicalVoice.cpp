@@ -5758,10 +5758,10 @@ void ARMusicalVoice::FinishChord(bool trill)
                 const PositionTagList* list = vst.getCurPositionTags();
                 GuidoPos tagpos = list->GetHeadPosition();
                 ARTremolo * trem = NULL;
+
                 while(tagpos && !trem)
-                {
                     trem = dynamic_cast<ARTremolo*>(list->GetNext(tagpos));
-                }
+
                 if(vst.fCurdispdur && trem)
                     dispdur->setDisplayDuration(vst.fCurdispdur->getDisplayDuration());
                 else
@@ -5827,9 +5827,7 @@ void ARMusicalVoice::FinishChord(bool trill)
 			}
 
 			while (vst.vpos && vst.vpos != group->endpos)
-			{
-				GetNext(vst.vpos,vst);
-			}
+				GetNextObject(vst.vpos);
 
 /*			if (vst.ptagpos)
 			{
@@ -5881,7 +5879,9 @@ void ARMusicalVoice::FinishChord(bool trill)
 	TYPE_TIMEPOSITION starttp (vst.curtp);
     TYPE_TIMEPOSITION newtp (starttp + chorddur);
 	int firstevent = 0;
-
+    
+    static int okTest6 = 0;
+    okTest6++;
 	mPosTagList->GetNext(vst.ptagpos);
 	if (onlyonegroup)
 	{
@@ -5895,11 +5895,13 @@ void ARMusicalVoice::FinishChord(bool trill)
 
 	while (vst.vpos && vst.curchordtag == currentChord)
 	{
+        static int okTest7 = 0;
+        okTest7++;
 		ARMusicalObject *o = GetNext(vst.vpos,vst);
 		ARMusicalEvent *ev = ARMusicalEvent::cast(o);
-
-		if (vst.addedpositiontags)
-		{
+        
+		//if (vst.curpositiontags) {
+		if (vst.addedpositiontags) {
 			TYPE_TIMEPOSITION mytp;
 			if (firstevent)
 				mytp = newtp;
@@ -5919,6 +5921,7 @@ void ARMusicalVoice::FinishChord(bool trill)
 				}
 			}
 		}
+
 		if (!firstevent && ev)
 		{
 			// we have our first event...
