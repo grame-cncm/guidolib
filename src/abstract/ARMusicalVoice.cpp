@@ -5687,8 +5687,8 @@ void ARMusicalVoice::FinishChord(bool trill)
 
 	TYPE_DURATION chorddur;
 
-	ARMusicalVoiceState vst = *chordBeginState;
-	mPosTagList->GetNext(vst.ptagpos);
+	ARMusicalVoiceState vst;
+
 	_readmode oldreadmode = readmode;
 	readmode = EVENTMODE;
 
@@ -5697,9 +5697,11 @@ void ARMusicalVoice::FinishChord(bool trill)
 	// now we have to go through the grouplist...
     if (chordgrouplist) {
         if (chordgrouplist->GetCount() == 1)
-            finishChordWithOneChordGroup(chorddur, vst, trill);
-        else
+            finishChordWithOneChordGroup(chorddur, trill);
+        else {
+            vst = *chordBeginState;
             finishChordWithSeveralChordGroups(chorddur, vst, trill);
+        }
     }
 
 	// now we have to traverse the chord to see that we set the timepositions and also
@@ -5753,7 +5755,7 @@ void ARMusicalVoice::FinishChord(bool trill)
     }
 
 	while (vst.vpos && vst.curchordtag == currentChord) {
-		ARMusicalObject *o  = GetNext(vst.vpos,vst);
+		ARMusicalObject *o  = GetNext(vst.vpos, vst);
 		ARMusicalEvent  *ev = ARMusicalEvent::cast(o);
 
 		if (vst.addedpositiontags) {
@@ -5840,7 +5842,11 @@ void ARMusicalVoice::FinishChord(bool trill)
 /** \brief Called by FinishChord(), to finish chords which have only one chord group. This function
            has been implemented for optimization.
 */
-void ARMusicalVoice::finishChordWithOneChordGroup(TYPE_DURATION &chorddur, ARMusicalVoiceState vst, bool trill) {
+void ARMusicalVoice::finishChordWithOneChordGroup(TYPE_DURATION &chorddur, bool trill) {
+    GuidoPos ptagposBackup = chordBeginState->ptagpos;
+
+    mPosTagList->GetNext(chordBeginState->ptagpos);
+
     ARChordGroup *group = chordgrouplist->GetAt(chordgrouplist->GetHeadPosition());
 
     if (group->dur > chorddur)
@@ -5848,7 +5854,7 @@ void ARMusicalVoice::finishChordWithOneChordGroup(TYPE_DURATION &chorddur, ARMus
 
     // then we have to delete the one empty-event that is not needed any longer...
     RemoveElementAt(group->startpos);
-    group->startpos = vst.vpos;
+    group->startpos = chordBeginState->vpos;
 
     // now we have to add the sharestem and dispdur-tags to the group...
 
@@ -5859,7 +5865,7 @@ void ARMusicalVoice::finishChordWithOneChordGroup(TYPE_DURATION &chorddur, ARMus
     ARDisplayDuration *dispdur = new ARDisplayDuration();
     ARDummyRangeEnd   *dispdum = new ARDummyRangeEnd(DISPDUREND);
 
-    const PositionTagList *list = vst.getCurPositionTags();
+    const PositionTagList *list = chordBeginState->getCurPositionTags();
 
     GuidoPos tagpos = list->GetHeadPosition();
     ARTremolo *trem = NULL;
@@ -5867,8 +5873,8 @@ void ARMusicalVoice::finishChordWithOneChordGroup(TYPE_DURATION &chorddur, ARMus
     while (tagpos && !trem)
         trem = dynamic_cast<ARTremolo*>(list->GetNext(tagpos));
 
-    if (vst.fCurdispdur && trem)
-        dispdur->setDisplayDuration(vst.fCurdispdur->getDisplayDuration());
+    if (chordBeginState->fCurdispdur && trem)
+        dispdur->setDisplayDuration(chordBeginState->fCurdispdur->getDisplayDuration());
     else
         dispdur->setDisplayDuration(group->dur);
 
@@ -5898,12 +5904,12 @@ void ARMusicalVoice::finishChordWithOneChordGroup(TYPE_DURATION &chorddur, ARMus
         shrstem->setCorrespondence(shrdum);
     }
 
-    if (vst.ptagpos) {
+    if (chordBeginState->ptagpos) {
         if (dispdur)
-            mPosTagList->AddElementAt(vst.ptagpos, dispdur);
+            mPosTagList->AddElementAt(chordBeginState->ptagpos, dispdur);
 
         if (!trill)
-            mPosTagList->AddElementAt(vst.ptagpos, shrstem);
+            mPosTagList->AddElementAt(chordBeginState->ptagpos, shrstem);
     }
     else {
         if (dispdur)
@@ -5918,13 +5924,17 @@ void ARMusicalVoice::finishChordWithOneChordGroup(TYPE_DURATION &chorddur, ARMus
 
     if (dispdum)
         mPosTagList->AddTail(dispdum);
+
+    chordBeginState->ptagpos = ptagposBackup;
 }
 
 //____________________________________________________________________________________
 /** \brief Called by FinishChord(), to finish chords which have several chord groups. This function
            has been implemented for optimization.
 */
-void ARMusicalVoice::finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur, ARMusicalVoiceState vst, bool trill) {
+void ARMusicalVoice::finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur, ARMusicalVoiceState &vst, bool trill) {
+    mPosTagList->GetNext(vst.ptagpos);
+
     GuidoPos pos = chordgrouplist->GetHeadPosition();
 
     while (pos) {

@@ -88,7 +88,7 @@ ARMusicalVoiceState & ARMusicalVoiceState::operator = (const ARMusicalVoiceState
 	DeleteAll();
 
 	if (vst.curtags)
-		curtags = new TagList(*vst.curtags, 0); // does not own!
+		curtags = new TagList(*vst.curtags,0); // does not own
 	else
 		curtags = NULL;
 	
