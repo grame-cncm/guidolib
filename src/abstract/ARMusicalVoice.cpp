@@ -16,6 +16,7 @@
 #include <typeinfo>
 #include <fstream>
 #include <cstring>	// strcat
+#include <vector>
 
 using namespace std;
 
@@ -103,6 +104,8 @@ ARMusicalVoice::ARMusicalVoice()	: ObjectList(1), // owns elements ...
 	sum = 0;
 
 	mCurVoiceState = new ARMusicalVoiceState();
+
+    repeatBeginList = new std::vector<ARRepeatBegin *>();
 }
 
 //____________________________________________________________________________________
@@ -135,6 +138,7 @@ ARMusicalVoice::~ARMusicalVoice()
 	delete mStartPosTagList;	mStartPosTagList = 0;
 	delete mCurVoiceState;		mCurVoiceState = 0;
 	delete endState;			endState = 0;
+    delete repeatBeginList;     repeatBeginList = 0;
 }
 
 //____________________________________________________________________________________

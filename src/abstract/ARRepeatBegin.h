@@ -44,8 +44,7 @@ class ARRepeatBegin : public ARMTParameter	// ,public ARMusicalObject
 		virtual void	setRepeatEnd( const ARRepeatEnd * );
 
         /**** Function to avoid dynamic_cast ****/
-        ARMusicalObject  *isARRepeatBegin()                    { return this; }
-        TYPE_TIMEPOSITION getRepeatBeginRelativeTimePosition() { return getRelativeTimePosition(); }
+        ARMusicalObject *isARRepeatBegin() { return this; }
         /*****************************************/
 	
 	protected:

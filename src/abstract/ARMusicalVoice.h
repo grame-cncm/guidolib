@@ -16,6 +16,7 @@
 */
 
 //#include <typeinfo>
+#include <vector>
 
 #include "ObjectList.h"
 #include "ARMusicalEvent.h"
@@ -42,6 +43,7 @@ class ARNote;
 class ARClef;
 class ARKey;
 class ARCluster;
+class ARRepeatBegin;
 
 class GRVoiceManager;
 class TimeUnwrap;
@@ -167,6 +169,10 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		void			setReadMode(_readmode newreadmode)	{ readmode = newreadmode; }
 		_readmode getReadMode() const						{ return readmode; }
 
+        // C.D. 22/10/2014 Perf improvement : prevent CheckBreakPosition from searching a RepeatBegin tag in all voice list
+        void addRepeatBegin(ARRepeatBegin *repeatBegin) { repeatBeginList->push_back(repeatBegin); }
+        std::vector<ARRepeatBegin *> *getRepeatBeginList() { return repeatBeginList; }
+
 	protected:
 		ARChordTag          *currentChord;
 		ARShareLocation     *currentShareLocation;
@@ -218,7 +224,9 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 
 		GuidoPos	CopyChord( ARMusicalVoiceState & vst, TYPE_TIMEPOSITION tp, const TYPE_DURATION & newdur);
 		ARClef*		newAutoClef(ARClef* oldclef, const TYPE_TIMEPOSITION& tp);
-		ARKey *		newAutoKey(ARKey * oldkey, const TYPE_TIMEPOSITION& tp);	
+		ARKey *		newAutoKey(ARKey * oldkey, const TYPE_TIMEPOSITION& tp);
+
+        std::vector<ARRepeatBegin *> *repeatBeginList;
 };
 
 #endif

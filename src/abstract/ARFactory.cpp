@@ -1279,6 +1279,7 @@ void ARFactory::createTag( const char * name, int no )
 				ARRepeatBegin * tmp = new ARRepeatBegin;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
+                mCurrentVoice->addRepeatBegin(tmp);
 				// only one nesting allowed
 				mCurrentRepeatBegin = tmp;				
 			}

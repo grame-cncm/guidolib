@@ -113,7 +113,6 @@ class ARMusicalObject
     virtual ARMusicalObject  *isARNewSystem()                      { return NULL; }
     virtual ARMusicalObject  *isARStaff()                          { return NULL; }
     virtual ARMusicalObject  *isARKey()                            { return NULL; }
-    virtual TYPE_TIMEPOSITION getRepeatBeginRelativeTimePosition() { return NULL; }
     /*****************************************/
 
   protected:
