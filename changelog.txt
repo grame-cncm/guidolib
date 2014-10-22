@@ -13,6 +13,7 @@ version 1.5.4
 - \bar-tag :
     - new 'displayMeasNum' attribute to choose for each bar to display or not measure number
 	- new 'numDx' / 'numDy' attribute to adjust measure number position
+- huge performances improvement (to quantify : time ratio until 60 for very big scores and 8 for standard 2-pages scores)
 - bugs correction
 	- some SVG export bug fixed
     - conflicts with note durations in the trill solved
