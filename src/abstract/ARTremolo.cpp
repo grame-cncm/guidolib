@@ -224,7 +224,7 @@ bool ARTremolo::isSecondPitchCorrect()
     if(fPitch && fPitch->TagIsSet())
     {
         std::string pitch = fPitch->getValue();
-        int it = 0;
+        unsigned int it = 0;
         char c = pitch[it];
         
         if(c == '{')

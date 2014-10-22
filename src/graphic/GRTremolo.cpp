@@ -115,27 +115,42 @@ void GRTremolo::tellPosition(GObject * caller, const NVPoint &np)
     {
         GDirection direction = sng->getStemDirection();
         pos = textPos = sng->getStemStartPos();
-        if(direction == dirOFF)
+
+        if (direction == dirOFF)
         {
-            textPos.y -= 2.5*LSPACE;
-            if(textPos.y > -2.5*LSPACE) textPos.y = -2.5*LSPACE;
+            textPos.y -= 2.5f * LSPACE;
+
+            if (textPos.y > -2.5f * LSPACE)
+                textPos.y = -2.5f * LSPACE;
             
-            if(pos.y > 2*LSPACE) pos.y -= 3*LSPACE;
-            else pos.y += 2*LSPACE;
+            if (pos.y > 2 * LSPACE)
+                pos.y -= 3 * LSPACE;
+            else
+                pos.y += 2 * LSPACE;
         }
-        else if(direction == dirUP)
+        else if (direction == dirUP)
         {
-            if(!fIsTwoNotesTremolo) pos.y += LSPACE/2 + fBeamCount * fStep;
-            else pos.y += fBeamCount*fStep*1.5;
+            if (!fIsTwoNotesTremolo)
+                pos.y += LSPACE / 2 + fBeamCount * fStep;
+            else
+                pos.y += fBeamCount * fStep * 1.5f;
+
             textPos.y -= 2*LSPACE;
-            if(textPos.y > - 2*LSPACE ) textPos.y = - 2*LSPACE;
+
+            if (textPos.y > - 2 * LSPACE )
+                textPos.y = - 2 * LSPACE;
         }
         else
         {
-            pos.y -= fThickness + (fNumberOfStrokes-1)*fStep;
-            if(!fIsTwoNotesTremolo) pos.y -= LSPACE/2;
-            else pos.y -= fBeamCount*fStep*0.5;
-            if(textPos.y < 4*LSPACE) textPos.y = 4*LSPACE;
+            pos.y -= fThickness + (fNumberOfStrokes-1) * fStep;
+
+            if (!fIsTwoNotesTremolo)
+                pos.y -= LSPACE / 2;
+            else
+                pos.y -= fBeamCount * fStep * 0.5f;
+
+            if (textPos.y < 4*LSPACE)
+                textPos.y = 4*LSPACE;
         }
     }
     else
@@ -158,25 +173,36 @@ void GRTremolo::tellPosition(GObject * caller, const NVPoint &np)
             {
                 float upperNoteY = stem->getAssociations()->GetHead()->getPosition().y;
                 float lowerNoteY = stem->getAssociations()->GetTail()->getPosition().y;
-                textPos.y = upperNoteY -2.5*LSPACE;
-                if(textPos.y > -2.5*LSPACE) textPos.y = -2.5*LSPACE;
+                textPos.y = upperNoteY -2.5f * LSPACE;
+                if (textPos.y > -2.5 * LSPACE)
+                    textPos.y = -2.5f * LSPACE;
                 
-                if(upperNoteY > 2*LSPACE) pos.y = upperNoteY - 3*LSPACE;
-                else pos.y = lowerNoteY + 2*LSPACE;
+                if (upperNoteY > 2*LSPACE)
+                    pos.y = upperNoteY - 3 * LSPACE;
+                else
+                    pos.y = lowerNoteY + 2 * LSPACE;
             }
-            else if(direction == dirUP)
+            else if (direction == dirUP)
             {
-                if(!fIsTwoNotesTremolo) pos.y += LSPACE/2 + fBeamCount * fStep;
-                else pos.y += fBeamCount*fStep*1.5;
-                textPos.y -= 2*LSPACE;
-                if(textPos.y > - 2*LSPACE ) textPos.y = - 2*LSPACE;
+                if (!fIsTwoNotesTremolo)
+                    pos.y += LSPACE / 2 + fBeamCount * fStep;
+                else
+                    pos.y += fBeamCount * fStep * 1.5f;
+
+                textPos.y -= 2 * LSPACE;
+                if(textPos.y > - 2 * LSPACE ) textPos.y = - 2 * LSPACE;
             }
             else
             {
-                pos.y -= fThickness + (fNumberOfStrokes-1)*fStep;
-                if(!fIsTwoNotesTremolo) pos.y -= LSPACE/2;
-                else pos.y -= fBeamCount*fStep*0.5;
-                if(textPos.y < 4*LSPACE) textPos.y = 4*LSPACE;
+                pos.y -= fThickness + (fNumberOfStrokes - 1) * fStep;
+                
+                if (!fIsTwoNotesTremolo)
+                    pos.y -= LSPACE / 2;
+                else
+                    pos.y -= fBeamCount * fStep * 0.5f;
+
+                if (textPos.y < 4 * LSPACE)
+                    textPos.y = 4 * LSPACE;
             }
         }
     }

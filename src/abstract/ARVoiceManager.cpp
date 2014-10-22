@@ -251,20 +251,12 @@ float ARVoiceManager::CheckBreakPosition(const TYPE_TIMEPOSITION &tp) const
 	if (tp == mLastBreakTimePos)
 		return -10000.0f;
     
-    // D.F. generates a break for range repeat begin
-	ARMusicalVoiceState vst;
-	GuidoPos vpos = mVoice->GetHeadPosition(vst);
+    std::vector<ARRepeatBegin *> *repeatBeginList = mVoice->getRepeatBeginList();
 
-	while (vpos) {
-		ARMusicalObject *o  = mVoice->GetNextObject(vpos);
-        ARRepeatBegin   *rb = static_cast<ARRepeatBegin *>(o->isARRepeatBegin());
-
-        if (rb) {
-            TYPE_TIMEPOSITION rt = o->getRelativeTimePosition();
-            if (rt == tp)
-                return 1.5f;
-        }
-	}
+    for (unsigned int i = 0; i < repeatBeginList->size(); i++) {
+        if (repeatBeginList->at(i)->getRelativeTimePosition() == tp)
+            return 1.5f;
+    }
 
 	// this only happens, if there is no meter
 	// in the current voice ....
@@ -277,10 +269,8 @@ float ARVoiceManager::CheckBreakPosition(const TYPE_TIMEPOSITION &tp) const
 		if (!mCurrVoiceState.curmeter || mCurrVoiceState.curmeter->getNumerator() == 0) {
 			ARMusicalObject *obj;
 
-			if (mCurrVoiceState.vpos == NULL) {
-				// then we are at the end
-				obj = mVoice->GetTail();
-			}
+			if (mCurrVoiceState.vpos == NULL)
+				obj = mVoice->GetTail(); // then we are at the end
 			else {
 				GuidoPos tmp = mCurrVoiceState.vpos;				
 				obj = mVoice->GetPrev(tmp);

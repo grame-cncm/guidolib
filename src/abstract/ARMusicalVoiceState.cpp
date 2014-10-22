@@ -86,58 +86,47 @@ ARMusicalVoiceState::~ARMusicalVoiceState()
 ARMusicalVoiceState & ARMusicalVoiceState::operator = (const ARMusicalVoiceState & vst)
 {
 	DeleteAll();
+
 	if (vst.curtags)
-	{
-		curtags = new TagList(*vst.curtags,0); // does not own!
-	}
+		curtags = new TagList(*vst.curtags,0); // does not own
 	else
 		curtags = NULL;
 	
 	if (vst.curstatetags)
-	{
-		curstatetags = new TagList(*vst.curstatetags,0);
-	}
+		curstatetags = new TagList(*vst.curstatetags, 0); // does not own
 	else
 		curstatetags = NULL;
 	
 	if (vst.curpositiontags)
-	{
-		curpositiontags = new PositionTagList(*vst.curpositiontags,0);
-	}
+		curpositiontags = new PositionTagList(*vst.curpositiontags, 0); // does not own
 	else
 		curpositiontags = NULL;
 	
 	if (vst.addedpositiontags)
-	{
-		// does not own
-		addedpositiontags = new PositionTagList(*vst.addedpositiontags,0);
-	}
+		addedpositiontags = new PositionTagList(*vst.addedpositiontags, 0); // does not own
 	else
 		addedpositiontags = NULL;
 	
 	if (vst.removedpositiontags)
-	{
-		// does not own
-		removedpositiontags = new PositionTagList(*vst.removedpositiontags,0);
-	}
+		removedpositiontags = new PositionTagList(*vst.removedpositiontags, 0); // does not own
 	else
 		removedpositiontags = NULL;
 	
-	vpos = vst.vpos;
+	vpos  = vst.vpos;
 	curtp = vst.curtp;
 	
 	ptagpos = vst.ptagpos;
 	
-	curmeter = vst.curmeter;
+	curmeter     = vst.curmeter;
 	curbeamstate = vst.curbeamstate;
-	fCurdispdur = vst.fCurdispdur;
-	curchordtag = vst.curchordtag;
-	curgracetag = vst.curgracetag;
+	fCurdispdur  = vst.fCurdispdur;
+	curchordtag  = vst.curchordtag;
+	curgracetag  = vst.curgracetag;
 	
 //	curbreakstate = vst.curbreakstate;
-	curautostate = vst.curautostate;
+	curautostate  = vst.curautostate;
 
-	curlastbartp = vst.curlastbartp;
+	curlastbartp  = vst.curlastbartp;
 	curlastbarpos = vst.curlastbarpos;
 
 	delete chordState;
