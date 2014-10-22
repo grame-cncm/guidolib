@@ -140,7 +140,7 @@ ARMusicalVoice::~ARMusicalVoice()
 //____________________________________________________________________________________
 /** \brief Sets the ARMusicalVoiceState at the beginning of the voice.
 */
-GuidoPos ARMusicalVoice::GetHeadPosition(ARMusicalVoiceState & vst) const
+GuidoPos ARMusicalVoice::GetHeadPosition(ARMusicalVoiceState &vst) const
 {
 	// we have to deal with chords, just as if we were in the GetNext->routine.
 	// if the very first thing in the voice is a chord, then I have to set the chordState ....
@@ -148,35 +148,36 @@ GuidoPos ARMusicalVoice::GetHeadPosition(ARMusicalVoiceState & vst) const
 
 	// set the position to the very start.
 	vst.vpos = ObjectList::GetHeadPosition();
-	if (mPosTagList)		vst.ptagpos = mPosTagList->GetHeadPosition();
-	else					vst.ptagpos = NULL;
+
+	if (mPosTagList)
+        vst.ptagpos = mPosTagList->GetHeadPosition();
+	else
+        vst.ptagpos = NULL;
 
 	// there is NOTHING in the voice.
-	if (vst.vpos == NULL)
-	{
+	if (vst.vpos == NULL) {
 		vst.curtp = DURATION_0;
 		return vst.vpos;
 	}
 
 //	ARMusicalTag * mytag;
-	ARMusicalObject * obj = GetAt(vst.vpos);
+	ARMusicalObject *obj = GetAt(vst.vpos);
 
 	// now for the new mPosTagList-stuff: the position is remembered in vst.ptagpos ...
-	if (mPosTagList)
-	{
-		while (vst.ptagpos)
-		{
-			ARPositionTag * ptag = mPosTagList->GetAt(vst.ptagpos);
+	if (mPosTagList) {
+		while (vst.ptagpos) {
+			ARPositionTag *ptag = mPosTagList->GetAt(vst.ptagpos);
 			// remember that we are at the beginning ...
-			ARTagEnd * artgend = ARTagEnd::cast(ptag);
-			if (artgend) break;
+			ARTagEnd *artgend = ARTagEnd::cast(ptag);
+
+			if (artgend)
+                break;
 
 			else if (ptag->getPosition() == vst.vpos)
-			{
-				// add the tag to the current position tags ...
-				vst.AddPositionTag(ptag);
-			}
-			else break;
+				vst.AddPositionTag(ptag); // add the tag to the current position tags ...
+			else
+                break;
+
 			mPosTagList->GetNext(vst.ptagpos);
 		}
 	}
@@ -184,8 +185,10 @@ GuidoPos ARMusicalVoice::GetHeadPosition(ARMusicalVoiceState & vst) const
 	/* now we are not eating all the state-tags any longer. This needs to be done in the voice-manager.
 	Otherwise, no real graphical representations can be made .... */
 //	mytag = NULL;
-	if (obj)	vst.curtp = obj->getRelativeTimePosition();
-	else		vst.curtp = DURATION_0;
+	if (obj)
+        vst.curtp = obj->getRelativeTimePosition();
+	else
+        vst.curtp = DURATION_0;
 
 	// now I have to see whether we are in chordmode ....
 	if (readmode == CHORDMODE && vst.curchordtag)
@@ -198,10 +201,16 @@ GuidoPos ARMusicalVoice::GetHeadPosition(ARMusicalVoiceState & vst) const
 		// temporarily I save the prevchordState and the chordState because they must
 		// not be copied at all (all this is only done to be able to back up one event
 		// position when inserting breaks)
-		vst.prevchordState =NULL;
+		vst.prevchordState = NULL;
 		vst.chordState = new ARMusicalVoiceState(vst);
 	}
+
 	return vst.vpos;
+}
+
+GuidoPos ARMusicalVoice::GetHeadPosition() const
+{
+    return ObjectList::GetHeadPosition();
 }
 
 //____________________________________________________________________________________
@@ -5402,16 +5411,14 @@ void ARMusicalVoice::removeAutoTags()
 		}
     }
 
-	ARMusicalVoiceState vst;
-	GuidoPos pos = GetHeadPosition(vst);
-	while (pos)
-    {
+	GuidoPos pos = GetHeadPosition();
+
+	while (pos) {
 		GuidoPos tmppos = pos;
-		ARMusicalTag * tg = dynamic_cast<ARMusicalTag *>(GetNext(pos,vst));
-		if (tg && tg->getIsAuto())
-		{
+		ARMusicalTag *tg = dynamic_cast<ARMusicalTag *>(GetNextObject(pos));
+		
+        if (tg && tg->getIsAuto())
 			RemoveElementAt(tmppos);
-		}
     }
 }
 
@@ -5445,47 +5452,45 @@ ARChordTag * ARMusicalVoice::BeginChord()
 //____________________________________________________________________________________
 /** \brief this method is called when the chord is an ornament parameter (SB)
 */
-ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE & chord_type, CHORD_ACCIDENTAL & chord_accidental)
+// C.D. optimized 22/10/2014
+ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE &chord_type, CHORD_ACCIDENTAL &chord_accidental)
 {	
-	const int nbNotes = 3;
-	int pitches[nbNotes]; // we only need 3 pitches for analysis
-	int firstNoteOctave = 0; //the first note's octave
+	const int nbNotes        = 3;
+	int pitches[nbNotes];         // we only need 3 pitches for analysis
+	int firstNoteOctave      = 0; //the first note's octave
 	int firstNoteAccidentals = 0;
-	int accidentals = 0; // the second note's accidental, needed for the ornament
-	int accidentalsTemp = 0; //the third note's accidental, needed for the turn in some cases
+	int accidentals          = 0; // the second note's accidental, needed for the ornament
+	int accidentalsTemp      = 0; //the third note's accidental, needed for the turn in some cases
 
-	for(int i=0 ; i<nbNotes ; i++)
-		pitches[i]=0;
+	for (int i = 0; i < nbNotes; i++)
+		pitches[i] = 0;
 
-	ARMusicalVoiceState vst = * chordBeginState;
-	GuidoPos posTmp = vst.vpos;
+	GuidoPos posTmp = chordBeginState->vpos;
 
-	for(int i=0 ; i<3 ; i++)
-	{
+	for (int i = 0 ; i < 3; i++)
 		ObjectList::GetNext(posTmp); // skip "empty, chordcomma, empty"
-	}
 
 	int comptTemp = 0;
-	ARMusicalObject * musicalObject = ObjectList::GetNext(posTmp);
-	ARNote * firstNote = ((ARNote *) musicalObject);
+	ARMusicalObject *musicalObject = ObjectList::GetNext(posTmp);
+	ARNote          *firstNote     = static_cast<ARNote *>(musicalObject->isARNote());
 
-	pitches[0] = firstNote->getPitch();
-	firstNoteOctave = firstNote -> getOctave();
+	pitches[0]           = firstNote->getPitch();
+	firstNoteOctave      = firstNote->getOctave();
 	firstNoteAccidentals = firstNote->getAccidentals();
 	comptTemp++; // the first note is conserved
 
-
-	while (posTmp && comptTemp < nbNotes) // we only need to know the first nbNotes notes
-	{
+	while (posTmp && comptTemp < nbNotes) { // we only need to know the first nbNotes notes
 		musicalObject = ObjectList::GetNext(posTmp);
 
-        ARNote * noteTmp = static_cast<ARNote *>(musicalObject->isARNote());
-		if (noteTmp && noteTmp->getPitch()!=0)
-		{
+        ARNote *noteTmp = static_cast<ARNote *>(musicalObject->isARNote());
+
+		if (noteTmp && noteTmp->getPitch() != 0) {
 			if (comptTemp == 1)
 				accidentals = noteTmp->getAccidentals();
+
 			if (comptTemp == 2)
 				accidentalsTemp = noteTmp->getAccidentals();
+
 			pitches[comptTemp] = noteTmp->getPitch();
             // we now directly set a flag to tell to the note not to draw itself, rather than hide it behind the first one...
 			noteTmp -> setPitch(EMPTY);
@@ -5495,45 +5500,41 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE & chord_type, CHORD_ACCIDENTAL
 		}
 	}
 
-	while (posTmp) // "removes" the remaining notes
-	{
+	while (posTmp) { // "removes" the remaining notes
 		musicalObject = ObjectList::GetNext(posTmp);
 		//musicalObject->print();
-		ARNote * noteTmp = static_cast<ARNote *>(musicalObject->isARNote());
-		if (noteTmp && noteTmp->getPitch()!=0)
-		{
+		ARNote *noteTmp = static_cast<ARNote *>(musicalObject->isARNote());
+
+		if (noteTmp && noteTmp->getPitch() != 0) {
 			// we now directly set a flag to tell to the note not to draw itself, rather than hide it behind the first one...
-			noteTmp -> setPitch(EMPTY);
+			noteTmp->setPitch(EMPTY);
             noteTmp->setDrawGR(false);
 		}
 	}
 
-
 	// Analysis ; the second note of the chord must be either the note right above the first one,
 				// or the note right below or the same note.
 
-	if (pitches[1]-2 == (pitches[0]-2 + 1 ) % 7) // e.g. "c, d"
-	{
-		if (pitches[2]==pitches[0])
+	if (pitches[1] - 2 == (pitches[0] - 2 + 1 ) % 7) { // e.g. "c, d"
+		if (pitches[2] == pitches[0])
 			chord_type = UP;
 		else
 			chord_type = UP_SIMPLE;
 	}
-	else if (-(pitches[1]-8) == (-(pitches[0]-8) + 1) % 7) // e.g. "c, b"
-	{
+	else if (-(pitches[1]-8) == (-(pitches[0]-8) + 1) % 7) { // e.g. "c, b"
 		if (pitches[2] == pitches[0])
 			chord_type = DOWN;
 		else
 			chord_type = DOWN_SIMPLE;
 	}
-	else if (pitches[1] == pitches[0]) // e.g. "c, c"
-	{
-		if (pitches[2]-2 == (pitches[1]-2 + 1 ) % 7) // e.g. "c, c, d"
+	else if (pitches[1] == pitches[0]) { // e.g. "c, c"
+		if (pitches[2] - 2 == (pitches[1] - 2 + 1 ) % 7) // e.g. "c, c, d"
 			chord_type = UP_COMPLEX;
-		else if (-(pitches[2]-8) == (-(pitches[1]-8) + 1) % 7) // e.g. "c, c, b"
+		else if (- (pitches[2] - 8) == (- (pitches[1] - 8) + 1) % 7) // e.g. "c, c, b"
 			chord_type = DOWN_COMPLEX;
 		else
 			chord_type = ERROR;
+
 		accidentals = accidentalsTemp;
 	}
 	else if (pitches[0] != 0 && pitches[1] == 0)
@@ -5545,7 +5546,7 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE & chord_type, CHORD_ACCIDENTAL
 	// Recupération de l'armure...
 
 	int keyNumber;
-	GuidoPos pos = vst.vpos;
+	GuidoPos pos = chordBeginState->vpos;
 	ARKey   *key = NULL;
 
 	while (pos && !key)
@@ -5609,12 +5610,10 @@ void ARMusicalVoice::setClusterChord(ARCluster *inCurrentCluster)
 {
     if (!chordBeginState)
         return;
+    
+	GuidoPos posTmp = chordBeginState->vpos;
 
-	ARMusicalVoiceState vst = *chordBeginState;
-	GuidoPos posTmp = vst.vpos;
-
-    for(int i=0 ; i<3 ; i++)
-    {
+    for(int i = 0 ; i < 3 ; i++) {
         ObjectList::GetNext(posTmp); // skip "empty, chordcomma, empty"
 
         if (!posTmp)
@@ -6119,7 +6118,7 @@ void ARMusicalVoice::doAutoTrill()
 
 	while(posObj) {
 		ARMusicalObject *obj  = GetNext(posObj, armvs);
-		ARNote          *note = dynamic_cast<ARNote *>(obj);
+		ARNote          *note = static_cast<ARNote *>(obj->isARNote());
 
 		if (note) {
 			ARTrill *trill = note->getOrnament();
@@ -6147,7 +6146,7 @@ void ARMusicalVoice::doAutoTrill()
 								    ARMusicalObject * nextObject = ObjectList::GetNext(posNote);
 									if (!nextObject)
                                         break;
-									nextNote = dynamic_cast<ARNote *>(nextObject);
+									nextNote = static_cast<ARNote *>(nextObject->isARNote());
 								}
                                 while(posNote && !nextNote);
 
@@ -6173,31 +6172,27 @@ void ARMusicalVoice::doAutoCluster()
     ARCluster *tmpCluster  = NULL;
     ARCluster *tmpCluster2 = NULL;
 
-	while(posObj)
-    {
+	while (posObj) {
         ARMusicalObject *obj  = GetNext(posObj, armvs);
-		ARNote          *note = dynamic_cast<ARNote *>(obj);
+		ARNote          *note = static_cast<ARNote *>(obj->isARNote());
 
-		if (note)
-        {
+		if (note) {
 			ARCluster *cluster = note->getARCluster();
-			if (cluster)
-            {
+
+			if (cluster) {
 				// if it has, we can check if the note is tied to another
 				// if it is tied, we'll affect an ARCluster to the next note
 				const PositionTagList *ptags = armvs.getCurPositionTags();
 
-				if (ptags)
-                {
+				if (ptags) {
 					GuidoPos pos = ptags->GetHeadPosition();
-					while(pos)
-                    {
-						ARPositionTag * arpt = ptags->GetNext(pos);
-						if(arpt)
-                        {
+					while (pos) {
+						ARPositionTag *arpt = ptags->GetNext(pos);
+
+						if (arpt) {
 							ARTie * tie = dynamic_cast<ARTie *>(arpt);
-                            if(tie)
-                            {
+
+                            if(tie) {
                                 GuidoPos posNote = posObj;
                                 ARNote * nextNote;
 
@@ -6205,26 +6200,22 @@ void ARMusicalVoice::doAutoCluster()
 
                                 tmpCluster = note->setCluster(cluster, true, true);
 
-                                if (clusterNoteNumber > 1)
-                                {
+                                if (clusterNoteNumber > 1) {
                                     int currentNoteNumber = 2;
 
-                                    do
-                                    {
+                                    do {
                                         ARMusicalObject *nextObject = GetNext(posNote, armvs);
-                                        nextNote = dynamic_cast<ARNote *>(nextObject);
+                                        nextNote = static_cast<ARNote *>(nextObject->isARNote());
                                     }
                                     while(!nextNote || nextNote->getPitch() == 0);
 
                                     nextNote->setCluster(tmpCluster);
 
-                                    do
-                                    {
+                                    do {
                                         ARMusicalObject *nextObject = GetNext(posNote, armvs);
-                                        note = dynamic_cast<ARNote *>(nextObject);
+                                        note = static_cast<ARNote *>(nextObject->isARNote());
 
-                                        if (note && note->getPitch() != 0)
-                                        {
+                                        if (note && note->getPitch() != 0) {
                                             currentNoteNumber++;
 
                                             if (currentNoteNumber <= clusterNoteNumber)
@@ -6233,10 +6224,9 @@ void ARMusicalVoice::doAutoCluster()
                                     }
                                     while(!note || note->getPitch() == 0 || currentNoteNumber <= clusterNoteNumber);
 
-                                    do
-                                    {
+                                    do {
                                         ARMusicalObject *nextObject = GetNext(posNote, armvs);
-                                        nextNote = dynamic_cast<ARNote *>(nextObject);
+                                        nextNote = static_cast<ARNote *>(nextObject->isARNote());
                                     }
                                     while(!nextNote || nextNote->getPitch() == 0);
 
@@ -6246,15 +6236,13 @@ void ARMusicalVoice::doAutoCluster()
                                     nextNote->setCluster(tmpCluster2);
                                     nextNote->enableSubElements(false);
 
-                                    if (clusterNoteNumber > 2)
-                                    {
+                                    if (clusterNoteNumber > 2) {
                                         do
                                         {
                                             ARMusicalObject *nextObject = GetNext(posNote, armvs);
-                                            note = dynamic_cast<ARNote *>(nextObject);
+                                            note = static_cast<ARNote *>(nextObject->isARNote());
 
-                                            if (note && note->getPitch() != 0)
-                                            {
+                                            if (note && note->getPitch() != 0) {
                                                 currentNoteNumber++;
 
                                                 if (currentNoteNumber <= 2 * clusterNoteNumber) {
@@ -6266,14 +6254,12 @@ void ARMusicalVoice::doAutoCluster()
                                         while(!note || note->getPitch() == 0 || currentNoteNumber < 2 * clusterNoteNumber);
                                     }
                                 }
-                                else
-                                {
+                                else {
                                     note->setCluster(tmpCluster);
 
-                                    do
-                                    {
+                                    do {
                                         ARMusicalObject *nextObject = GetNext(posNote, armvs);
-                                        note = dynamic_cast<ARNote *>(nextObject);
+                                        note = static_cast<ARNote *>(nextObject->isARNote());
                                     }
                                     while(!note || note->getPitch() == 0);
 

@@ -91,9 +91,9 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		void			MarkVoice(float from,float length, unsigned char red, unsigned char green, unsigned char blue);
 		void			MarkVoice(int fromnum,int fromdenom, int lengthnum, int lengthdenom, unsigned char red, unsigned char green, unsigned char blue);
 
-		virtual void	initChordNote();
-		virtual void	FinishChord(bool trill);
-		virtual ARChordTag*	BeginChord();
+		virtual void	    initChordNote();
+		virtual void	    FinishChord(bool trill);
+		virtual ARChordTag *BeginChord();
 
 		ARNote        * setTrillChord(CHORD_TYPE & param_type, CHORD_ACCIDENTAL & param_accidental);
         void            setClusterChord(ARCluster *inCurrentCluster);
@@ -147,6 +147,7 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 
 		// functions for the voicestate...
 		virtual			GuidoPos GetHeadPosition(ARMusicalVoiceState & vst) const;
+		virtual			GuidoPos GetHeadPosition() const;
 		virtual void	GetPrevEvent(GuidoPos & pos, ARMusicalVoiceState & vst) const;
 		virtual			ARMusicalObject * GetNext(GuidoPos & pos, ARMusicalVoiceState & vst) const;
 		virtual			ARMusicalObject * GetNextObject(GuidoPos & pos) const;
