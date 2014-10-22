@@ -21,7 +21,7 @@ WINLIB   := $(DEVKIT)-windows
 QTLIB    := $(DEVKIT)-Qt
 SRC 	 := guidolib-$(VERSION)-src
 
-files   := ../changelog.txt license.txt readme.txt ../src/guido2.ttf
+files   := ../changelog.txt license.txt readme.txt ../src/guido2.ttf ../src/guido2.svg
 modules := guidolib
 
 ######### documentation files 
@@ -29,7 +29,9 @@ DOC		:= ../doc/GUIDO-Format_de_Notation_Musicale.pdf \
 			"../doc/GUIDO-Music Notation Format.pdf" \
 			../doc/GUIDO_Additional_Specifications_1.3.8.pdf \
 			../doc/GUIDO_Additional_Specifications_1.5.1.pdf \
-			../doc/refcard/GMNRefCard.pdf
+			../doc/refcard/GMNRefCard.pdf \
+			../doc/refcard/latex/RefCardsParams.pdf \
+			../doc/refcard/latex/RefCardsTags.pdf
 
 SAMPLES := $(wildcard ../samples/*.cpp ../validate/guido*.cpp ../src/tools/Null*.h)
 
@@ -133,9 +135,8 @@ commondoc:
 	mkdir -p $(DEST)/doc
 	cp -R ../doc/doxygen/guidolib-$(DOCVERS) $(DEST)/doc || echo "WARNING ! doxygen doc not found"
 	cp -R ../doc/html $(DEST)/doc
-	cp $(DOC) $(DEST)/doc
-	rm -rf $(shell find $(DEST)/doc -name .svn)
-	
+	rm -rf $(DEST)/doc/html/api
+	cp $(DOC) $(DEST)/doc	
 
 samples:
 	[ -d $(DEST)/samples ] || mkdir $(DEST)/samples
