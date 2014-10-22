@@ -4685,8 +4685,8 @@ void ARMusicalVoice::doAutoTies()
 	ARMusicalVoiceState vst;
 	GetHeadPosition(vst);
 
-	ARChordTag * curchordtag = vst.curchordtag;
-	ARChordTag * prevchordtag = NULL;
+	ARChordTag *curchordtag  = vst.curchordtag;
+	ARChordTag *prevchordtag = NULL;
 
 	while (vst.vpos)
 	{
@@ -5426,7 +5426,8 @@ void ARMusicalVoice::removeAutoTags()
 /** This routine must remember the state of the
 	voice (including ptagpos...)
 */
-ARChordTag * ARMusicalVoice::BeginChord()
+// C.D. optimized 22/10/14
+ARChordTag *ARMusicalVoice::BeginChord()
 {
 	// we create the empty event first with duration_0
 	// we add the chord-tag...
@@ -5439,11 +5440,10 @@ ARChordTag * ARMusicalVoice::BeginChord()
 	AddPositionTag(currentShareLocation);
 
 	// this is the first event
-	ARNote * tmp = new ARNote("empty",0,0,0,1,80);
+	ARNote *tmp     = new ARNote("empty", 0, 0, 0, 1, 80);
 	posfirstinchord = AddTail(tmp);
-	numchordvoice = 0;
+	numchordvoice   = 0;
 
-    //	mPosTagList->GetNext(mCurVoiceState->ptagpos);
     chordBeginState = new ARMusicalVoiceState(*mCurVoiceState);
     
     return currentChord;

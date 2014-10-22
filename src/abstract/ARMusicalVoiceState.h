@@ -51,7 +51,7 @@ class ARMusicalVoiceState
 
 	public:
 				ARMusicalVoiceState();
-				ARMusicalVoiceState(const ARMusicalVoiceState & vst);
+				ARMusicalVoiceState(const ARMusicalVoiceState &vst);
 				ARMusicalVoiceState & operator=(const ARMusicalVoiceState & vst);
 
 		virtual ~ARMusicalVoiceState();
