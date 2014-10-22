@@ -559,51 +559,37 @@ GuidoPos ARMusicalVoice::InsertAtTail(ARMusicalObject *newMusicalObject)
 	There is no way of restoring the original input later (that is :   \\meter<"3/4"> \\stemsUp { c } is
 	identical to { \\meter<"3/4"> \\stemsUp c }
 */
-GuidoPos ARMusicalVoice::AddTail(ARMusicalObject * newMusicalObject)
+// C.D. optimized 22/10/14
+GuidoPos ARMusicalVoice::AddTail(ARMusicalObject *newMusicalObject)
 {
 	assert(newMusicalObject);
 
 	newMusicalObject->setVoiceNum (getVoiceNum());
 	// test, if positiontags are falsely entered here:
-	ARPositionTag * ptag = dynamic_cast<ARPositionTag *>(newMusicalObject);
-	ARMusicalTag * mtag = dynamic_cast<ARMusicalTag *>(newMusicalObject);
-	if (ptag && mtag)
-	{
-		// if this assertion fails:
-		// you have added an element to the voice that is actually a position tag with a range!
-//		assert(!mtag->getRange());		// assert removed (crashes)
-	}
+	ARPositionTag *ptag = dynamic_cast<ARPositionTag *>(newMusicalObject);
+	ARMusicalTag  *mtag = dynamic_cast<ARMusicalTag *>(newMusicalObject);
 
-	else if (mtag)
-	{
-		// then a tag is being added.
-		// let's check whether we are in the first voice of a chord.
-	}
+	ARChordGroup *group = 0;
 
-	ARChordGroup * group = 0;
-	if (chordBeginState && ARMusicalEvent::cast(newMusicalObject))
-	{
+	if (chordBeginState && ARMusicalEvent::cast(newMusicalObject)) {
 		// we are within a chord...
 		// then I have to deal with displayduration and stem-sharing issues...
 		if (!chordgrouplist)
-		{
-			// owns elements...
-			chordgrouplist = new ChordGroupList(1);
-		}
+			chordgrouplist = new ChordGroupList(1); // owns elements...
 
 		group = chordgrouplist->GetTail();
-		if (!group)
-		{
+        
+		if (!group) {
 			group = new ARChordGroup();
 			group->dur = newMusicalObject->getDuration();
 			chordgrouplist->AddTail(group);
 
 			// now I have to insert an empty event
 			// because shareStem needs an empty event at the beginning...
-			ARNote * tmpnote = new ARNote("empty", 0, 0, 0, 1, 80);
+			ARNote *tmpnote = new ARNote("empty", 0, 0, 0, 1, 80);
 			group->startpos = ObjectList::AddTail(tmpnote);
 		}
-		group = chordgrouplist->GetTail();
+
 		if (group->dur != newMusicalObject->getDuration())
 		{
 			group = new ARChordGroup();
@@ -616,22 +602,18 @@ GuidoPos ARMusicalVoice::AddTail(ARMusicalObject * newMusicalObject)
 			group->startpos = ObjectList::AddTail(tmpnote);
 		}
 		newMusicalObject->setDuration(DURATION_0);
-		++ numchordvoice;
+		++numchordvoice;
 	}
 
 	newMusicalObject->setRelativeTimePosition(duration);
 	duration += newMusicalObject->getDuration();
 	GuidoPos tmp = NULL;
-	if (mtag && numchordvoice==0 && mtag->IsStateTag())
-	{
-		// OK, then we have to add the elements at posfirstinchord
-		// the timeposition is still OK...
-		tmp = ObjectList::AddElementAt(posfirstinchord,newMusicalObject);
-	}
+
+	if (mtag && numchordvoice == 0 && mtag->IsStateTag())
+		tmp = ObjectList::AddElementAt(posfirstinchord, newMusicalObject); // OK, then we have to add the elements at posfirstinchord
+		                                                                   // the timeposition is still OK...
 	else
-	{
 		tmp = ObjectList::AddTail(newMusicalObject);
-	}
 
 	// now check, if there are and Tags, that need to be added to the current Position
 
@@ -641,10 +623,8 @@ GuidoPos ARMusicalVoice::AddTail(ARMusicalObject * newMusicalObject)
 	// I am not sure about this... maybe it helps not to rely only on Musical-Events...
 	// NO, one golden rule of GUIDO is:
 	// a range in GUIDO always has events inside (maybe even an empty-note with zero-duration...)
-	if (ARMusicalEvent::cast(newMusicalObject))
-	{
-		while (mStartPosTagList->GetCount()>0)
-		{
+	if (ARMusicalEvent::cast(newMusicalObject)) {
+		while (mStartPosTagList->GetCount() > 0) {
 			ARPositionTag * tb = mStartPosTagList->RemoveHead();
 			tb->setStartPosition(tmp); // Position
 		}
@@ -652,20 +632,18 @@ GuidoPos ARMusicalVoice::AddTail(ARMusicalObject * newMusicalObject)
 		lastevposition = tmp;
 		// we also do a statistics on pitch ...
 		ARNote * arnote = dynamic_cast<ARNote *>(newMusicalObject);
-		if (arnote && arnote->getPitch() != EMPTY)
-		{
-			pitchsum += arnote->getOctave() *7 + arnote->getPitch();
+		if (arnote && arnote->getPitch() != EMPTY) {
+			pitchsum += arnote->getOctave() * 7 + arnote->getPitch();
 			++ sum;
 		}
 	}
 
 	if (group)
-	{
 		group->endpos = tmp;
-	}
 
 	mCurVoiceState->vpos = tmp;
 	mCurVoiceState->curtp = duration;
+
 	return tmp;
 }
 
@@ -5701,6 +5679,7 @@ void ARMusicalVoice::setClusterChord(ARCluster *inCurrentCluster)
 /** \brief this finished a chord after parsing it.
 	it involves setting all the event-times and stuff !?
 */
+// C.D. method optimized 22/10/14
 void ARMusicalVoice::FinishChord(bool trill)
 {
     if (!currentChord)
@@ -5708,143 +5687,34 @@ void ARMusicalVoice::FinishChord(bool trill)
 
 	TYPE_DURATION chorddur;
 
-	ARMusicalVoiceState vst = * chordBeginState;
+	ARMusicalVoiceState vst = *chordBeginState;
 	mPosTagList->GetNext(vst.ptagpos);
 	_readmode oldreadmode = readmode;
 	readmode = EVENTMODE;
 
 	int onlyonegroup = 0;
+
 	// now we have to go through the grouplist...
-	if (chordgrouplist)
-	{
-		if (chordgrouplist->GetCount() == 1)
-		{
-			onlyonegroup = 1;
-		}
-		GuidoPos pos = chordgrouplist->GetHeadPosition();
-		while (pos)
-		{
-			ARChordGroup * group = chordgrouplist->GetNext(pos);
-			if (group->dur > chorddur)
-				chorddur = group->dur;
-
-			if (onlyonegroup)
-			{
-				// then we have to delete the one empty-event that is not needed any longer...
-				RemoveElementAt(group->startpos);
-				group->startpos = vst.vpos;
-			}
-
-			// now we have to add the sharestem and dispdur-tags to the group...
-
-			// we have to add the dispdur-tag only,
-			// if there is not one already present because of grace-notes, example :
-			// \grace( { e/8,g } ) c/4
-			// how do we know ?
-			ARDisplayDuration * dispdur = NULL;
-			ARDummyRangeEnd * dispdum = NULL;
-			//if (!vst.fCurdispdur)
-			{
-				dispdur = new ARDisplayDuration();
-                const PositionTagList* list = vst.getCurPositionTags();
-                GuidoPos tagpos = list->GetHeadPosition();
-                ARTremolo * trem = NULL;
-
-                while(tagpos && !trem)
-                    trem = dynamic_cast<ARTremolo*>(list->GetNext(tagpos));
-
-                if(vst.fCurdispdur && trem)
-                    dispdur->setDisplayDuration(vst.fCurdispdur->getDisplayDuration());
-                else
-                    dispdur->setDisplayDuration(group->dur);
-				dispdur->setIsAuto(true);
-				dispdur->setAssociation(ARMusicalTag::RA);
-				// dispdur->setRange(0);
-				dispdur->setPosition(group->startpos);
-
-				dispdum = new ARDummyRangeEnd(DISPDUREND);
-				dispdum->setIsAuto(true);
-				dispdum->setPosition(group->endpos);
-				dispdum->setCorrespondence(dispdur);
-				dispdum->setAssociation(ARMusicalTag::LA);
-				dispdur->setCorrespondence(dispdum);
-			}
-
-            ARShareStem * shrstem = 0;
-            ARDummyRangeEnd * shrdum = 0;
-            
-			if(!trill)
-            {
-				shrstem = new ARShareStem();
-				shrdum = new ARDummyRangeEnd(SHARESTEMEND);
-				shrstem->setIsAuto(true);
-                shrstem->setPosition(group->startpos);
-                shrstem->setAssociation(ARMusicalTag::RA);
-                shrdum->setIsAuto(true);
-                shrdum->setPosition(group->endpos);
-                shrdum->setCorrespondence(shrstem);
-                shrdum->setAssociation(ARMusicalTag::LA);
-                shrstem->setCorrespondence(shrdum);
-            }
-
-
-			while (vst.vpos && vst.vpos != group->startpos)
-				GetNext(vst.vpos, vst);
-
-			if (vst.ptagpos)
-			{
-				if (dispdur)
-					mPosTagList->AddElementAt(vst.ptagpos,dispdur);
-				if(!trill)
-                    mPosTagList->AddElementAt(vst.ptagpos,shrstem);
-				if (!onlyonegroup)
-				{
-					// this adds the tags to the curpositiontags
-					// this is needed, because we traverse the voice later (GetNext) and then,
-					// these tags must be in the curpositiontag list, so that the corresponding remove
-					// tags can be removed correctly.
-					if (dispdur)
-						vst.AddPositionTag(dispdur,0);
-					if(!trill)
-                        vst.AddPositionTag(shrstem,0);
-				}
-			}
-			else
-			{
-				if (dispdur)
-					mPosTagList->AddTail(dispdur);
-				if(!trill)
-                    mPosTagList->AddTail(shrstem);
-			}
-
-			while (vst.vpos && vst.vpos != group->endpos)
-				GetNext(vst.vpos, vst);
-
-/*			if (vst.ptagpos)
-			{
-				mPosTagList->AddElementAt(vst.ptagpos,shrdum);
-				mPosTagList->AddElementAt(vst.ptagpos,dispdum);
-			}
-			else
-			{ */
-				if(!trill)
-                    mPosTagList->AddTail(shrdum);
-				if (dispdum)
-					mPosTagList->AddTail(dispdum);
-			// }
-		}
-	}
+    if (chordgrouplist) {
+        if (chordgrouplist->GetCount() == 1)
+            finishChordWithOneChordGroup(chorddur, vst, trill);
+        else
+            finishChordWithSeveralChordGroups(chorddur, vst, trill);
+    }
 
 	// now we have to traverse the chord to see that we set the timepositions and also
 	// remember the lastchordpos and ptagpos for adding the tags that end after the chord...
 
 	// now I insert one more empty event...
-	ARNote * tmpnote = new ARNote("empty",0,1,0,1,80);
-	if (chordgrouplist)
-	{
-		ARChordGroup * tmp = chordgrouplist->GetTail();
-		if (tmp) tmpnote->setDuration(tmp->dur);
+	ARNote *tmpnote = new ARNote("empty", 0, 1, 0, 1, 80);
+
+	if (chordgrouplist) {
+		ARChordGroup *tmp = chordgrouplist->GetTail();
+
+		if (tmp)
+            tmpnote->setDuration(tmp->dur);
 	}
+
 	AddTail(tmpnote);
 
 	ARDummyRangeEnd * dummy = new ARDummyRangeEnd("\\shareLocationEnd");
@@ -5867,100 +5737,92 @@ void ARMusicalVoice::FinishChord(bool trill)
 
 	// now we have to traverse the voice once more to set the timepositions correctly
 	vst = *chordBeginState;
-	TYPE_TIMEPOSITION starttp (vst.curtp);
-    TYPE_TIMEPOSITION newtp (starttp + chorddur);
+	TYPE_TIMEPOSITION starttp(vst.curtp);
+    TYPE_TIMEPOSITION newtp(starttp + chorddur);
 	int firstevent = 0;
-    
-    static int okTest6 = 0;
-    okTest6++;
-	mPosTagList->GetNext(vst.ptagpos);
-	if (onlyonegroup)
-	{
-		// we have to move the mPosTagList two more...
-		// what about adding the correponding tags (at least to the curpositiontags...)?
-		ARPositionTag *ptag = mPosTagList->GetNext(vst.ptagpos);
-		vst.curpositiontags->AddTail(ptag);
-		ptag = mPosTagList->GetNext(vst.ptagpos);
-		vst.curpositiontags->AddTail(ptag);
-	}
 
-	while (vst.vpos && vst.curchordtag == currentChord)
-	{
-        static int okTest7 = 0;
-        okTest7++;
-		ARMusicalObject *o = GetNext(vst.vpos,vst);
-		ARMusicalEvent *ev = ARMusicalEvent::cast(o);
-        
+	mPosTagList->GetNext(vst.ptagpos);
+
+    if (onlyonegroup) {
+        // we have to move the mPosTagList two more...
+        // what about adding the correponding tags (at least to the curpositiontags...)?
+        ARPositionTag *ptag = mPosTagList->GetNext(vst.ptagpos);
+        vst.curpositiontags->AddTail(ptag);
+        ptag = mPosTagList->GetNext(vst.ptagpos);
+        vst.curpositiontags->AddTail(ptag);
+    }
+
+	while (vst.vpos && vst.curchordtag == currentChord) {
+		ARMusicalObject *o  = GetNext(vst.vpos,vst);
+		ARMusicalEvent  *ev = ARMusicalEvent::cast(o);
+
 		if (vst.addedpositiontags) {
 			TYPE_TIMEPOSITION mytp;
+
 			if (firstevent)
 				mytp = newtp;
 			else
 				mytp = starttp;
+
 			GuidoPos mypos = vst.addedpositiontags->GetHeadPosition();
-			while (mypos)
-			{
+
+			while (mypos) {
 				ARPositionTag * ptag = vst.addedpositiontags->GetNext(mypos);
-				if (ptag)
-				{
+
+				if (ptag) {
 					ARMusicalObject * po = dynamic_cast<ARMusicalObject *>(ptag);
+
 					if (po)
-					{
 						po->setRelativeTimePosition(mytp);
-					}
 				}
 			}
 		}
 
-		if (!firstevent && ev)
-		{
+		if (!firstevent && ev) {
 			// we have our first event...
 			firstevent = 1;
 			ev->setDuration(chorddur);
 		}
-		else if (firstevent)
-		{
+		else if (firstevent) {
 			// the first event has happened
 			o->setStartTimePosition(starttp);
 			o->setRelativeTimePosition(newtp);
 		}
 		else
-			// aber dass muesste ja eh schon so sein...?
-			o->setRelativeTimePosition(starttp);
+			o->setRelativeTimePosition(starttp); // aber dass muesste ja eh schon so sein...?
 
-		if (vst.removedpositiontags)
-		{
+		if (vst.removedpositiontags) {
 			TYPE_TIMEPOSITION mytp;
+
 			if (firstevent)
 				mytp = newtp;
 			else
 				mytp = starttp;
 
 			GuidoPos mypos = vst.removedpositiontags->GetHeadPosition();
-			while (mypos)
-			{
-				ARPositionTag * ptag = vst.removedpositiontags->GetNext(mypos);
 
-				if (ptag)
-				{
-					ARTagEnd * tgend = ARTagEnd::cast(ptag->getCorrespondence());
-					if (tgend)
-					{
-						ARMusicalObject * po = /*dynamic cast<ARMusicalObject *>*/(tgend);
+			while (mypos) {
+				ARPositionTag *ptag = vst.removedpositiontags->GetNext(mypos);
+
+				if (ptag) {
+					ARTagEnd *tgend = ARTagEnd::cast(ptag->getCorrespondence());
+					
+                    if (tgend) {
+						ARMusicalObject * po = tgend;
+
 						if (po)
-						{
 							po->setRelativeTimePosition(mytp);
-						}
 					}
 				}
 			}
 		}
 	}
+
 	duration += chorddur;
 
 	mCurVoiceState->RemovePositionTag(currentChord);
 	mCurVoiceState->RemovePositionTag(currentShareLocation);
-	currentChord = NULL;
+	currentChord         = NULL;
 	currentShareLocation = NULL;
 
 	delete chordBeginState;
@@ -5969,9 +5831,194 @@ void ARMusicalVoice::FinishChord(bool trill)
 	delete chordgrouplist;
 	chordgrouplist = NULL;
 
-	readmode = oldreadmode;
+	readmode        = oldreadmode;
 	posfirstinchord = NULL;
-	numchordvoice = -1;
+	numchordvoice   = -1;
+}
+
+//____________________________________________________________________________________
+/** \brief Called by FinishChord(), to finish chords which have only one chord group. This function
+           has been implemented for optimization.
+*/
+void ARMusicalVoice::finishChordWithOneChordGroup(TYPE_DURATION &chorddur, ARMusicalVoiceState vst, bool trill) {
+    ARChordGroup *group = chordgrouplist->GetAt(chordgrouplist->GetHeadPosition());
+
+    if (group->dur > chorddur)
+        chorddur = group->dur;
+
+    // then we have to delete the one empty-event that is not needed any longer...
+    RemoveElementAt(group->startpos);
+    group->startpos = vst.vpos;
+
+    // now we have to add the sharestem and dispdur-tags to the group...
+
+    // we have to add the dispdur-tag only,
+    // if there is not one already present because of grace-notes, example :
+    // \grace( { e/8,g } ) c/4
+    // how do we know ?
+    ARDisplayDuration *dispdur = new ARDisplayDuration();
+    ARDummyRangeEnd   *dispdum = new ARDummyRangeEnd(DISPDUREND);
+
+    const PositionTagList *list = vst.getCurPositionTags();
+
+    GuidoPos tagpos = list->GetHeadPosition();
+    ARTremolo *trem = NULL;
+
+    while (tagpos && !trem)
+        trem = dynamic_cast<ARTremolo*>(list->GetNext(tagpos));
+
+    if (vst.fCurdispdur && trem)
+        dispdur->setDisplayDuration(vst.fCurdispdur->getDisplayDuration());
+    else
+        dispdur->setDisplayDuration(group->dur);
+
+    dispdur->setIsAuto(true);
+    dispdur->setAssociation(ARMusicalTag::RA);
+    dispdur->setPosition(group->startpos);
+
+    dispdum->setIsAuto(true);
+    dispdum->setPosition(group->endpos);
+    dispdum->setCorrespondence(dispdur);
+    dispdum->setAssociation(ARMusicalTag::LA);
+    dispdur->setCorrespondence(dispdum);
+
+    ARShareStem     *shrstem = 0;
+    ARDummyRangeEnd *shrdum  = 0;
+
+    if (!trill) {
+        shrstem = new ARShareStem();
+        shrdum = new ARDummyRangeEnd(SHARESTEMEND);
+        shrstem->setIsAuto(true);
+        shrstem->setPosition(group->startpos);
+        shrstem->setAssociation(ARMusicalTag::RA);
+        shrdum->setIsAuto(true);
+        shrdum->setPosition(group->endpos);
+        shrdum->setCorrespondence(shrstem);
+        shrdum->setAssociation(ARMusicalTag::LA);
+        shrstem->setCorrespondence(shrdum);
+    }
+
+    if (vst.ptagpos) {
+        if (dispdur)
+            mPosTagList->AddElementAt(vst.ptagpos, dispdur);
+
+        if (!trill)
+            mPosTagList->AddElementAt(vst.ptagpos, shrstem);
+    }
+    else {
+        if (dispdur)
+            mPosTagList->AddTail(dispdur);
+
+        if (!trill)
+            mPosTagList->AddTail(shrstem);
+    }
+
+    if (!trill)
+        mPosTagList->AddTail(shrdum);
+
+    if (dispdum)
+        mPosTagList->AddTail(dispdum);
+}
+
+//____________________________________________________________________________________
+/** \brief Called by FinishChord(), to finish chords which have several chord groups. This function
+           has been implemented for optimization.
+*/
+void ARMusicalVoice::finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur, ARMusicalVoiceState vst, bool trill) {
+    GuidoPos pos = chordgrouplist->GetHeadPosition();
+
+    while (pos) {
+        ARChordGroup *group = chordgrouplist->GetNext(pos);
+
+        if (group->dur > chorddur)
+            chorddur = group->dur;
+
+        // now we have to add the sharestem and dispdur-tags to the group...
+
+        // we have to add the dispdur-tag only,
+        // if there is not one already present because of grace-notes, example :
+        // \grace( { e/8,g } ) c/4
+        // how do we know ?
+        ARDisplayDuration *dispdur = new ARDisplayDuration();
+        ARDummyRangeEnd   *dispdum = new ARDummyRangeEnd(DISPDUREND);
+
+        const PositionTagList* list = vst.getCurPositionTags();
+
+        GuidoPos tagpos = list->GetHeadPosition();
+        ARTremolo * trem = NULL;
+
+        while(tagpos && !trem)
+            trem = dynamic_cast<ARTremolo*>(list->GetNext(tagpos));
+
+        if (vst.fCurdispdur && trem)
+            dispdur->setDisplayDuration(vst.fCurdispdur->getDisplayDuration());
+        else
+            dispdur->setDisplayDuration(group->dur);
+
+        dispdur->setIsAuto(true);
+        dispdur->setAssociation(ARMusicalTag::RA);
+        dispdur->setPosition(group->startpos);
+        dispdum->setIsAuto(true);
+        dispdum->setPosition(group->endpos);
+        dispdum->setCorrespondence(dispdur);
+        dispdum->setAssociation(ARMusicalTag::LA);
+        dispdur->setCorrespondence(dispdum);
+
+        ARShareStem     *shrstem = 0;
+        ARDummyRangeEnd *shrdum  = 0;
+
+        if (!trill) {
+            shrstem = new ARShareStem();
+            shrdum = new ARDummyRangeEnd(SHARESTEMEND);
+            shrstem->setIsAuto(true);
+            shrstem->setPosition(group->startpos);
+            shrstem->setAssociation(ARMusicalTag::RA);
+            shrdum->setIsAuto(true);
+            shrdum->setPosition(group->endpos);
+            shrdum->setCorrespondence(shrstem);
+            shrdum->setAssociation(ARMusicalTag::LA);
+            shrstem->setCorrespondence(shrdum);
+        }
+
+        while (vst.vpos && vst.vpos != group->startpos)
+            GetNext(vst.vpos, vst);
+
+        if (vst.ptagpos) {
+            if (dispdur)
+                mPosTagList->AddElementAt(vst.ptagpos, dispdur);
+
+            if (!trill)
+                mPosTagList->AddElementAt(vst.ptagpos, shrstem);
+
+            // this adds the tags to the curpositiontags
+            // this is needed, because we traverse the voice later (GetNext) and then,
+            // these tags must be in the curpositiontag list, so that the corresponding remove
+            // tags can be removed correctly.
+            if (dispdur)
+                vst.AddPositionTag(dispdur, 0);
+
+            if (!trill)
+                vst.AddPositionTag(shrstem, 0);
+        }
+        else {
+            if (dispdur)
+                mPosTagList->AddTail(dispdur);
+
+            if(!trill)
+                mPosTagList->AddTail(shrstem);
+        }
+
+        if (pos != NULL) {
+            while (vst.vpos && vst.vpos != group->endpos)
+                GetNext(vst.vpos, vst);
+        }
+
+        if(!trill)
+            mPosTagList->AddTail(shrdum);
+
+        if (dispdum)
+            mPosTagList->AddTail(dispdum);
+    }
 }
 
 //____________________________________________________________________________________

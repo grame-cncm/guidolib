@@ -212,6 +212,9 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		StartPositionTagList *	mStartPosTagList;
 	
 	private:
+        void        finishChordWithOneChordGroup     (TYPE_DURATION &chorddur, ARMusicalVoiceState vst, bool trill);
+        void        finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur, ARMusicalVoiceState vst, bool trill);
+
 		GuidoPos	CopyChord( ARMusicalVoiceState & vst, TYPE_TIMEPOSITION tp, const TYPE_DURATION & newdur);
 		ARClef*		newAutoClef(ARClef* oldclef, const TYPE_TIMEPOSITION& tp);
 		ARKey *		newAutoKey(ARKey * oldkey, const TYPE_TIMEPOSITION& tp);	
