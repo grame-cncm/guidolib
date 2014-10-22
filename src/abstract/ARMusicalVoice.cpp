@@ -579,7 +579,7 @@ GuidoPos ARMusicalVoice::AddTail(ARMusicalObject *newMusicalObject)
 
 	newMusicalObject->setVoiceNum (getVoiceNum());
 	// test, if positiontags are falsely entered here:
-	ARPositionTag *ptag = dynamic_cast<ARPositionTag *>(newMusicalObject);
+//	ARPositionTag *ptag = dynamic_cast<ARPositionTag *>(newMusicalObject);
 	ARMusicalTag  *mtag = dynamic_cast<ARMusicalTag *>(newMusicalObject);
 
 	ARChordGroup *group = 0;
