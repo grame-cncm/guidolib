@@ -75,7 +75,7 @@ doc:
 
 docpack:
 	make commondoc DEST=.
-	mv doc $(DOCPACK)
+	cp -r doc $(DOCPACK)
 	tar czf $(DOCPACK).tgz $(DOCPACK)
 	
 srcpack:
