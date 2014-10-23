@@ -1,0 +1,1109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<title>GUIDO Additional Specifications 1.5.2</title>
+		<meta name="Author" content="Camille Le Roi, Colas Decron">
+
+		<style type="text/css">
+			BODY { font-family : verdana,Arial,Helvetica; font-size : 10pt; font-weight : normal; color: black; background-color: white; margin: 20px 40px 20px 40px;}
+			h1	 { font-size : 31pt; font-weight : bold; padding: 0; line-height: 1.0; }
+			h2	 { font-size : 18pt; font-weight : bold; letter-spacing: 1pt;}
+			h3	 { font-size : 14pt; font-weight : bold; }
+			h4	 { font-size : 12pt; font-weight : bold; margin-left: 50px}
+
+			pre	 { font-family : Monaco, Courier; font-size : 8pt; margin-left: 50px; background-color: #E0D7CB; line-height: 2.0;}
+
+			A:link    { color:#4561CA; text-decoration: none; }
+			A:visited { color:#4561CA; text-decoration: none; }
+			A:hover   { color:#990000; text-decoration: none; }
+
+			p		 { margin-left: 50px; }
+			p.notes  { font-style: italic; margin-left: 50px; }
+			p.tag    { margin-left: 90px; text-indent: -40px}
+			ul li  	 { margin-left: 50px; }
+			ul li ul { margin-left: -20px; }
+			ul li ul li ul li ul li { margin-left: 10px; }
+			pre      { margin-left: 0px; }
+			
+    
+			span.tag { font-weight : bold; }
+		</style>
+	</head>
+	
+	<body>
+
+		<h1>The GUIDO Music Notation Format</h1>
+		<h2>Additionnal and new specifications</h2>
+		<p>
+			<span class="tag">
+				Supported by the <a href="http://sourceforge.net/projects/guidolib/">GUIDO Engine</a> version 1.5.2
+			</span>
+			<br>
+			<a href="http://www.grame.fr/Recherche/">Grame</a> - October 2013
+		</p>
+		
+		
+		<p>
+			<p>
+				<a href="#1.">1. Meter</a>
+			</p>
+			<p>
+				<a href="#2.">2. Tuplet</a>
+			</p>
+			<p>
+				<a href="#3.">3. Staff format</a>
+			</p>
+			<p>
+				<a href="#4.">4. Accelerando / Ritardando</a>
+			</p>
+			<p>
+				<a href="#5.">5. Marcato</a>
+			</p>
+			<p>
+				<a href="#6.">6. Crescendo</a>
+			</p>
+			<p>
+				<a href="#7.">7. Accolade</a>
+			</p>
+			
+			
+			<hr>
+			
+			
+			<a name="1."></a>
+			<h4>1. Meter</h4>
+
+			<p class="tag">
+				<p>
+					<span class="tag">\meter</span>&lt;<i>type, size, autoBarlines</i>&gt;
+				</p>
+				<p>
+					Sets the meter of the voice. Meter can be complex : numerator can be a sum. See examples.
+				</p>
+				
+				<ul>
+					<li>
+						<i><b>Parameters</b> (in the order of their default positions):</i>
+						
+						<ul>
+							<br>
+							
+							<li>
+								<b><i>type</i></b> (<i>optional</i>) - meter type
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>string</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>"4/4"</b>
+									</li>
+								</ul>
+							</li>
+						
+							<br>
+						
+							<li>
+								<b><i>size</i></b> (<i>optional</i>) - graphic size of the meter
+						
+								<ul>
+									<li>
+										<i>value type:</i> <b>unit</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>1</b>
+									</li>
+								</ul>
+							</li>
+						
+							<br>
+							
+							<li>
+								<b><i>autoBarlines</i></b> (<i>optional</i>) - sets auto barlines on or off
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>string</b>
+									</li>
+									
+									<li>
+										<i>standard values:</i>
+										<ul>
+											<li>
+												<b>"on"</b>
+											</li>
+											<li>
+												<b>"off"</b>
+											</li>
+										</ul>
+									</li>
+									
+									<li>
+										<i>default value:</i> <b>"on"</b>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					
+					<br>
+									
+					<li>
+						<i><b>Range:</b> none</i>
+					</li>
+					
+					<br>
+					
+					<li>
+						<b><i>Semantics:</i></b>
+								
+						<ul>
+							<li>
+								Meter corresponds to the segmentation of music part's duration.
+							</li>
+						</ul>
+					</li>
+					
+					<br>
+					
+					<li>
+						<b><i>Examples:</i></b>
+						
+						<ul>
+							<li>
+								<pre>[ \meter&lt;"2+2+3/4"&gt; a a c2 a1 e2 e d c ]</pre>
+								<center> <IMG SRC="imgs/meter1.png"> </center>
+							</li>
+							
+							<li>
+								<pre>[ \meter&lt;"C"&gt; a b c d e ]</pre>
+								<center> <IMG SRC="imgs/meter2.png"> </center>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</p>
+			
+			
+			<hr>		
+			
+			
+			<a name="2."></a>
+			<h4>2. Tuplet</h4>
+
+			<p class="tag">
+				<p>
+					<span class="tag">\tuplet</span>&lt;<i>format, dy1, dy2, lineThickness, bold, textSize</i>&gt;(<i>notes</i>) 
+				</p>
+				<p>
+					Sets a <i>tuplet</i>.
+				</p>
+				
+				<ul>
+					<li>
+						<i><b>Parameters</b> (in the order of their default positions):</i>
+						
+						<ul>
+							<br>
+							
+							<li>
+								<b><i>format</i></b> (<i>optional</i>) - meter format
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>string</b>
+									</li>
+									
+									<li>
+										<i>syntax:</i> <b>"[leftBrace][numerator]:[denominator][rightBrace]"</b>
+									</li>
+										
+									<li>
+										<i>examples:</i>
+
+										<ul>
+											<li>
+												<b>"-3-"</b>
+											</li>
+											<li>
+												<b>"3:5-"</b>
+											</li>
+											<li>
+												<b>"2:7"</b>
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>"--"</b>
+									</li>
+								</ul>
+							</li>
+						
+							<br>
+							
+							<li>
+								<b><i>dy1, dy2</i></b> (<i>optional</i>) - graphic vertical offsets of the two ends of the <i>tuplet</i>'s line (defines <i>tuplet</i>'s line slope)
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>unit</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>0</b>
+									</li>
+								</ul>
+							</li>
+						
+							<br>
+							
+							<li>
+								<b><i>lineThickness</i></b> (<i>optional</i>) - graphic thickness of <i>tuplet</i>'s line
+						
+								<ul>
+									<li>
+										<i>value type:</i> <b>unit</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>0.08</b>
+									</li>
+								</ul>
+							</li>
+							
+							<br>
+							
+							<li>
+								<b><i>bold</i></b> (<i>optional</i>) - defines if the text is bold or not
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>string</b>
+									</li>
+									
+									<li>
+										<i>standard values:</i>
+										<ul>
+											<li>
+												<b>"true"</b>
+											</li>
+											<li>
+												<b>"false"</b>
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>"false"</b>
+									</li>
+								</ul>
+							</li>
+							
+							<br>
+							
+							<li>
+								<b><i>textSize</i></b> (<i>optional</i>) - graphic size of the text
+						
+								<ul>
+									<li>
+										<i>value type:</i> <b>unit</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>1</b>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					
+					<br>
+									
+					<li>
+						<i><b>Range:</b> obligatory</i>
+					</li>
+					
+					<br>
+					
+					<li>
+						<b><i>Semantics:</i></b>
+								
+						<ul>
+							<li>
+								A <i>tuplet</i> corresponds to any rhythm that involves dividing the beat into a different number of equal subdivisions from that usually permitted by the time-signature.
+							</li>
+						</ul>
+					</li>
+					
+					<br>
+					
+					<li>
+						<b><i>Examples:</i></b>
+								
+						<ul>
+							<li>
+								<pre>[ \tuplet&lt;"-3-", textSize=1.5, bold="true", lineThickness=0.2, dy1=10&gt; (a/3 a a) ]</pre>
+								<center> <IMG SRC="imgs/tuplet1.png"> </center>
+							</li>
+							
+							<li>
+								<pre>[ \tuplet&lt;"2:5-", dy1=7, dy2=9&gt; (g b b) ]</pre>
+								<center> <IMG SRC="imgs/tuplet2.png"> </center>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</p>
+			
+			
+			<hr>
+			
+			
+			<a name="3."></a>
+			<h4>3. Staff format</h4>
+
+			<p class="tag">
+				<p>
+					<span class="tag">\staffFormat</span>&lt;<i>style, size, lineThickness</i>&gt;
+				</p>
+				<p>
+					Changes the appearance of the staff.
+				</p>
+				
+				<ul>
+					<li>
+						<i><b>Parameters</b> (in the order of their default positions):</i>
+						
+						<ul>
+							<br>
+							<li>
+								<b><i>style</i></b> (<i>optional</i>) - staff style
+							    
+								<ul>
+									<li>
+										<i>value type:</i> <b>string</b>
+									</li>
+									
+									<li>
+										<i>syntax:</i> <b>"[n]-lines"</b>, where <i>n</i> is the number of lines to display
+									</li>
+									
+									<li>
+										<i>default value:</i> <b>"5-lines"</b>
+									</li>
+								</ul>
+							</li>
+						
+							<br>
+							
+							<li>
+								<b><i>size</i></b> (<i>optional</i>) - graphic size of the staff
+						
+								<ul>
+									<li>
+										<i>value type:</i> <b>unit</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>1</b>
+									</li>
+								</ul>
+							</li>
+							
+							<br>
+						
+							<li>
+								<b><i>lineThickness</i></b> (<i>optional</i>) - defines the staff lines thickness
+						
+								<ul>
+									<li>
+										<i>value type</i> <b>unit</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>0.08</b>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					
+					<br>
+									
+					<li>
+						<i><b>Range:</b> none</i>
+					</li>
+					
+					<br>
+					
+					<li>
+						<b><i>Examples:</i></b>
+								
+						<ul>
+							<li>
+								<pre>[ \staffFormat&lt;size=5pt, lineThickness=0.3&gt; c d e f g a h c2 ]</pre>
+								<center> <IMG SRC="imgs/staffFormat1.png"> </center>
+							</li>
+							
+							<li>
+								<pre>[ \staffFormat&lt;style="1-line"> \clef<"none"&gt; g g g g g e h ]</pre>
+								<center> <IMG SRC="imgs/staffFormat2.png"> </center>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</p>
+			
+			<a name="4."></a>
+			<h4>4. Accelerando - Ritardando</h4>
+			
+			<p class="tag">
+				<p>
+					<span class="tag">\accel</span>&lt;<i>dx, dy, color, tempo, abstempo, font, fattrib, fsize</i>&gt;(<i>notes</i>) 
+				</p>
+				<p>
+					<span class="tag">\rit</span>&lt;<i>dx, dy, color, tempo, abstempo, font, fattrib, fsize</i>&gt;(<i>notes</i>) 
+				</p>
+				<p>
+					Places the text "accel." or "rit." under the staff where it occurs, and draws a dotted line to the end position.
+				</p>
+				
+				<ul>
+					<li>
+						<i><b>Parameters</b> (in the order of their default positions):</i>
+						
+						<ul>
+							<br>
+							<li>
+								<b><i>dx, dy</i></b> (<i>optional</i>) - graphic offsets of the <i>accelerando</i> / <i>ritardando</i>
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>unit</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>0</b>
+									</li>
+								</ul>
+							</li>
+							
+							<br>
+						
+							<li>
+								<b><i>color</i></b> (<i>optional</i>) - graphic color of the <i>accelerando</i> / <i>ritardando</i>
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>color string</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>"black"</b>
+									</li>
+								</ul>
+							</li>
+							
+							<br>
+						
+							<li>
+								<b><i>tempo</i></b> (<i>optional</i>) - tempo for the beginning note
+								
+								<ul>
+									<li>
+										<i>value type:</i> <b>tempo string</b>
+									</li>
+						
+									<li>
+										<i>examples:</i>
+
+										<ul>
+											<li>
+												<b>"60"</b>
+											</li>
+											<li>
+												<b>"80"</b>
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>""</b>
+									</li>
+								</ul>
+							</li>
+							
+							<br>
+							
+							<li>
+								<b><i>abstempo</i></b> (<i>optional</i>) - tempo for the ending note
+								<ul>
+									<li>
+										<i>value type:</i> <b>tempo string</b>
+									</li>
+									
+									<li>
+										<i>examples:</i>
+
+										<ul>
+											<li>
+												<b>"60"</b>
+											</li>
+											<li>
+												<b>"80"</b>
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>""</b>
+									</li>
+								</ul>
+							</li>
+							
+							<br>
+							
+							<li>
+								<b><i>font</i></b> (<i>optional</i>) - the font name for the text accel or rit
+								
+								<ul>
+									<li>
+										<i>type value:</i> <b>font string</b>
+						
+									</li>
+									
+									<li>
+										<i>examples:</i>
+
+										<ul>
+											<li>
+												<b>"Arial"</b>
+											</li>
+											<li>
+												<b>"Andalus"</b>
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> "Times new Roman"
+									</li>
+								</ul>
+							</li>
+							
+							<br>
+							
+							<li>
+								<b><i>fattrib</i></b> (<i>optional</i>) - the font attributes
+								
+								<ul>
+									<li>
+										<i>value type:</i> <b>attributes string</b>
+									</li>
+									
+									<li>
+										<i>standard values:</i>
+										
+										<ul>
+											<li>
+												<b>"b"</b> (for bold)
+											</li>
+											
+											<li>
+												<b>"i"</b> (for italic)
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>""</b>
+									</li>
+								</ul>
+							</li>
+							
+							<br>
+							
+							<li>
+								<b><i>fsize</i></b> (<i>optional</i>) - the font size
+								
+								<ul>
+									<li>
+										<i>value type:</i> unit
+									</li>
+									
+									<li>
+										<i>default value:</i> <b>9pt</b>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					
+					<br>
+									
+					<li>
+						<i><b>Range:</b> obligatory</i>
+					</li>
+					
+					<br>
+					
+					<li>
+						<b><i>Semantics:</i></b>
+								
+						<ul>
+							<li>
+								Acceleration or deceleration within a group of notes.
+							</li>
+						</ul>
+					</li>
+					
+					<br>
+					
+					<li>
+						<b><i>Examples:</i></b>
+								
+						<ul>
+							<li>
+								<pre>[ \rit&lt;fattrib="b"&gt;(e g b f a) \accel&lt;tempo="60", color="red", abstempo="80", dy=22, font="Andalus"&gt;(e d e2 e3 f1 a) ]</pre>
+								<center> <IMG SRC="imgs/accelRit.png"> </center>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</p>
+			
+			
+			<hr>
+			
+			
+			<a name="5."></a>
+			<h4>5. Marcato</h4>
+
+			<p class="tag">
+				<p>
+					<span class="tag">\marcato</span>&lt;<i>position, dx, dy</i>&gt;(<i>notes</i>) 
+				</p>
+				<p>
+					Places a <i>marcato</i> on a note.
+				</p>
+				
+				<ul>
+					<li>
+						<i><b>Parameters</b> (in the order of their default positions):</i>
+						
+						<ul>
+							<br>
+							
+							<li>
+								<b><i>position</i></b> (<i>optional</i>) - <i>marcato</i> position
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>string</b>
+									</li>
+									
+									<li>
+										<i>standard values:</i>
+										
+										<ul>
+											<li>
+												<b>"above"</b>
+											</li>
+											
+											<li>
+												<b>"below"</b>
+											</li>
+										</ul>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>""</b>, let the <i>marcato</i> places itself automatically
+									</li>
+								</ul>
+							</li>
+						
+							<br>
+						
+							<li>
+								<b><i>dx, dy</i></b> (<i>optional</i>) - graphic offsets of the <i>marcato</i>
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>unit</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>0</b>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					
+					<br>
+									
+					<li>
+						<i><b>Range:</b> obligatory</i>
+					</li>
+					
+					<br>
+					
+					<li>
+						<b><i>Semantics:</i></b>
+								
+						<ul>
+							<li>
+								The <i>marcato</i> is a musical instruction indicating a note, chord, or passage which has to be played louder or more forcefully than surrounding music.
+							</li>
+						</ul>
+					</li>
+					
+					<br>
+					
+					<li>
+						<b><i>Examples:</i></b>
+						
+						<ul>
+							<li>
+								<pre>[ \marcato(b) \marcato(a) \marcato&lt;position="above", dy=4&gt;(a) \marcato&lt;"below", dx=3, dy=-4&gt;(b) ]</pre>
+								<center> <IMG SRC="imgs/marcato.png"> </center>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</p>
+			
+			
+			<hr>
+			
+			
+			<a name="6."></a>
+			<h4>6. Crescendo - Decrescendo</h4>
+
+			<p class="tag">
+				<p>
+					<span class="tag">\cresc</span>&lt;<i>dx1, dx2, dy, deltaY, color</i>&gt;(<i>notes</i>) 
+				</p>
+				<p>
+					<span class="tag">\decresc</span>&lt;<i>dx1, dx2, dy, deltaY, color</i>&gt;(<i>notes</i>) 
+				</p>
+				<p>
+					Places a <i>crescendo</i> / <i>decrescendo</i> under selected notes.
+				</p>
+				
+				<ul>
+					<li>
+						<i><b>Parameters</b> (in the order of their default positions):</i>
+						
+						<ul>
+							<br>
+							
+							<li>
+								<b><i>dm</i></b> (<i>optional</i>) - <i>dynamic marking</i>, displays intensity at the symbol's right
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>intensity string</b>
+									</li>
+							
+									<li>
+										<i>examples:</i>
+										
+										<ul>
+											<li>
+												<b>"ppp"</b>
+											</li>
+											<li>
+												<b>"f"</b>
+											</li>
+											<li>
+												<b>"mf"</b>
+											</li>
+										</ul>
+									</li>
+									
+									<li>
+										<i>default value:</i> <b>""</b>
+									</li>
+								</ul>
+							</li>
+							
+							<br>
+							
+							<li>
+								<b><i>dx1</i></b> (<i>optional</i>) - graphic horizontal offset of the symbol's left
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>unit</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>0</b>
+									</li>
+								</ul>
+							</li>
+						
+							<br>
+						
+							<li>
+								<b><i>dx2</i></b> (<i>optional</i>) - graphic horizontal offset of the symbol's right
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>unit</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>0</b>
+									</li>
+								</ul>
+							</li>
+							
+							<br>
+						
+							<li>
+								<b><i>dy</i></b> (<i>optional</i>) - graphic vertical offset of the symbol
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>unit</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>0</b>
+									</li>
+								</ul>
+							</li>
+							
+							<br>
+						
+							<li>
+								<b><i>deltaY</i></b> (<i>optional</i>) - graphic vertical spacing between the two symbol's lines
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>unit</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>3</b>
+									</li>
+								</ul>
+							</li>
+							
+							<br>
+						
+							<li>
+								<b><i>color</i></b> (<i>optional</i>) - graphic color of the symbol
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>color string</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>"black"</b>
+									</li>
+								</ul>
+							</li>
+							
+							<br>
+							
+							<li>
+								<b><i>size</i></b> (<i>optional</i>) - graphic size of the <i>marking</i>
+						
+								<ul>
+									<li>
+										<i>value type:</i> <b>unit</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>1</b>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					
+					<br>
+									
+					<li>
+						<i><b>Range:</b> obligatory</i>
+					</li>
+					
+					<br>
+					
+					<li>
+						<b><i>Semantics:</i></b>
+								
+						<ul>
+							<li>
+								The <i>crescendo</i> (<i>decrescendo</i>) marks a passage of a music during which the volume gradually increases (decreases).
+							</li>
+						</ul>
+					</li>
+					
+					<br>
+					
+					<li>
+						<b><i>Examples:</i></b>
+						
+						<ul>
+							<li>
+								<pre>[ \cresc&lt;dm="ff", dx1=2, dx2=-4, dy=1.5, deltaY=5, color="red", size=1.5&gt;(a b c) ]</pre>
+								<center> <IMG SRC="imgs/crescendo.png"> </center>
+								<pre>[ \decresc&lt;thickness=0.5&gt;(a f/2 f/4 empty) ]</pre>
+								<center> <IMG SRC="imgs/decrescendo.png"> </center>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</p>
+			
+			
+			<hr>
+			
+			
+			<a name="7."></a>
+			<h4>7. Accolade</h4>
+
+			<p class="tag">
+				<p>
+					<span class="tag">\accol</span>&lt;<i>id, range, type, dx</i>&gt;
+				</p>
+				<p>
+					Changes the style and position of <i>accolade(s)</i> joining the staves.
+				</p>
+				
+				<ul>
+					<li>
+						<i><b>Parameters</b> (in the order of their default positions):</i>
+						
+						<ul>
+							<br>
+							
+							<li>
+								<b><i>id</i></b> (<i>required</i>) - <i>accolade</i>'s id
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>integer</b>
+									</li>
+								</ul>
+							</li>
+						
+							<br>
+						
+							<li>
+								<b><i>range</i></b> (<i>required</i>) - beginning and ending staves concerned by the <i>accolade</i>
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>string</b>
+									</li>
+							
+									<li>
+										<i>syntax:</i> <b>"[m]-[n]"</b> (with <b>m</b> the beginning staff, <b>n</b> the ending staff)
+									</li>
+									
+									<li>
+										<i>examples:</i>
+										
+										<ul>
+											<li>
+												<b>"1-3"</b>
+											</li>
+											
+											<li>
+												<b>"2-2"</b> (concerns only staff 2)
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							
+							<br>
+						
+							<li>
+								<b><i>type</i></b> (<i>optional</i>) - <i>accolade</i>'s style
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>string</b>
+									</li>
+							
+									<li>
+										<i>standard values:</i>
+										
+										<ul>
+											<li>
+												<b>""</b>
+											</li>
+											
+											<li>
+												<b>"none"</b>
+											</li>
+											
+											<li>
+												<b>"straightBrace"</b>
+											</li>
+											
+											<li>
+												<b>"thinBrace"</b>
+											</li>
+										</ul>
+									</li>
+									
+									<li>
+										<i>default value:</i> <b>""</b>
+									</li>
+								</ul>
+							</li>
+							
+							<br>
+						
+							<li>
+								<b><i>dx</i></b> (<i>optional</i>) - graphic horizontal offset of the <i>accolade</i>
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>unit</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>0</b>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					
+					<br>
+									
+					<li>
+						<i><b>Range:</b> none</i>
+					</li>
+					
+					<br>
+					
+					<li>
+						<b><i>Examples:</i></b>
+						
+						<ul>
+							<li>
+								<pre>{ [ \accol&lt;id=1, range="1-3", dx=-4, type="straightBrace"&gt; a b c ], [ \accol&lt;id=2, range="2-3", type="thinBrace"&gt; \clef<"f"> ], [ f f e ] }</pre>
+								<center> <IMG SRC="imgs/accol.png"> </center>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</p>
+		</p>
+	</body>
+</html>
