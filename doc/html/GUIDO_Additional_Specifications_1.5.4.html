@@ -4,7 +4,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta http-equiv="Content-Style-Type" content="text/css">
 		<title>GUIDO Additional Specifications 1.5.4</title>
-		<meta name="Author" content="Camille Le Roi">
+		<meta name="Author" content="Camille Le Roi, Colas Decron">
 
 		<style type="text/css">
 			BODY { font-family : verdana,Arial,Helvetica; font-size : 10pt; font-weight : normal; color: black; background-color: white; margin: 20px 40px 20px 40px;}
@@ -47,9 +47,17 @@
 		
 		<p>
 			<p>
-				<a href="#1.">1. Tremolo </a>
+				<a href="#1.">1. Tremolo</a>
 			</p>
-
+			<p>
+				<a href="#2.">2. Meter</a>
+			</p>
+			<p>
+				<a href="#3.">3. Bar</a>
+			</p>
+			<p>
+				<a href="#4.">4. Staff format</a>
+			</p>
 			
 			
 			<hr>
@@ -277,6 +285,229 @@
 			
 			<hr>		
 			
+			
+			<a name="2."></a>
+			<h4>2. Meter</h4>
+
+			<p class="tag">
+				<p>
+					<span class="tag">\meter</span>&lt;<i>type, autoBarlines, autoMeasuresNum, size</i>&gt;
+				</p>
+				<p>
+					Cf. html doc v1.5.2. New parameter <i>autoMeasuresNum</i>.
+				</p>
+				
+				<ul>
+					<li>
+						<i><b>New parameter</b> :</i>
+						
+						<ul>
+							<br>
+							
+							<li>
+								<b><i>autoMeasuresNum</i></b> (<i>optional</i>) - sets display of auto measures number on or off
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>string</b>
+									</li>
+									
+									<li>
+										<i>standard values:</i>
+										<ul>
+											<li>
+												<b>"on"</b>
+											</li>
+											<li>
+												<b>"off"</b>
+											</li>
+										</ul>
+									</li>
+									
+									<li>
+										<i>default value:</i> <b>"off"</b>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					
+					<br>
+					
+					<li>
+						<b><i>Examples:</i></b>
+						
+						<ul>
+							<li>
+								<pre>[ \meter&lt;"2/4", autoMeasuresNum="on"&gt; a a c2 a1 e2 e d c ]</pre>
+								<center> <IMG SRC="imgs/meter3.png"> </center>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</p>
+			
+			
+			<hr>		
+			
+			
+			<a name="3."></a>
+			<h4>3. Bar</h4>
+
+			<p class="tag">
+				<p>
+					<span class="tag">\bar</span>&lt;<i>displayMeasNum, numDx, numDy</i>&gt;
+				</p>
+				<p>
+					Inserts a measure bar.
+				</p>
+				
+				<ul>
+					<li>
+						<i><b>Parameters</b> (in the order of their default positions):</i>
+						
+						<ul>
+							<br>
+							
+							<li>
+								<b><i>displayMeasNum</i></b> (<i>optional</i>) - display (on concerned bar) measure number or not
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>string</b>
+									</li>
+									
+									<li>
+										<i>standard values:</i>
+										<ul>
+											<li>
+												<b>"true"</b>
+											</li>
+											<li>
+												<b>"false"</b>
+											</li>
+										</ul>
+									</li>
+									
+									<li>
+										<i>default value:</i> <b>meter "autoMeasuresNum" value</b> if meter is set, <b>"false"</b> otherwise (see examples)
+									</li>
+								</ul>
+							</li>
+						
+							<br>
+							
+							<li>
+								<b><i>numDx, numDy</i></b> (<i>optional</i>) - graphic offset of the measure number displayed
+							
+								<ul>
+									<li>
+										<i>value type:</i> <b>unit</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>0</b>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					
+					<br>
+									
+					<li>
+						<i><b>Range:</b> none</i>
+					</li>
+					
+					<br>
+					
+					<li>
+						<b><i>Semantics:</i></b>
+								
+						<ul>
+							<li>
+								Measures bar divide staff in several measures.
+							</li>
+						</ul>
+					</li>
+					
+					<br>
+					
+					<li>
+						<b><i>Examples:</i></b>
+						
+						<ul>
+							<li>
+								<pre>[ a/2 b \bar c d \bar&lt;displayMeasNum="true"&gt; e f ]</pre>
+								<center> <IMG SRC="imgs/bar1.png"> </center>
+							</li>
+							
+							<li>
+								<pre>[ \meter&lt;"4/4", autoMeasuresNum="on"&gt; a/2 b c d \bar&lt;displayMeasNum="false"&gt; e f g \bar a b ]</pre>
+								<center> <IMG SRC="imgs/bar2.png"> </center>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</p>
+			
+			
+			<hr>
+			
+			
+			<a name="4."></a>
+			<h4>4. Staff format</h4>
+
+			<p class="tag">
+				<p>
+					<span class="tag">\staffFormat</span>&lt;<i>style, size, lineThickness, dy</i>&gt;
+				</p>
+				<p>
+					Cf. html doc v1.5.2. New parameter <i>dy</i>.
+				</p>
+				
+				<ul>
+					<li>
+						<i><b>New parameter</b> :</i>
+						
+						<ul>
+							<br>
+							<li>
+								<b><i>dy</i></b> (<i>optional</i>) - inserts a staff vertical offset
+						
+								<ul>
+									<li>
+										<i>value type</i> <b>unit</b>
+									</li>
+							
+									<li>
+										<i>default value:</i> <b>0</b>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					
+					<br>
+									
+					<li>
+						<i><b>Range:</b> none</i>
+					</li>
+					
+					<br>
+					
+					<li>
+						<b><i>Examples:</i></b>
+								
+						<ul>
+							<li>
+								<pre>{ [ a b c ], [ \staffFormat&lt;dy=8&gt; a b c ] }</pre>
+								<center> <IMG SRC="imgs/staffFormat3.png"> </center>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</p>
 		</p>
 	</body>
 </html>
