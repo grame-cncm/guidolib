@@ -259,15 +259,17 @@ int ARTremolo::getNumberOfStrokes()
 {
     int nbOfStrokes = 3;
 
-    std::string type = fStyle->getValue();
-    if( type == "/" )
-        nbOfStrokes = 1;
-    else if( type == "//" )
-        nbOfStrokes = 2;
-    else if (type == "///")
-        nbOfStrokes = 3;
-    else if( type == "////")
-        nbOfStrokes = 4;
+    if (fStyle) {
+        std::string type = fStyle->getValue();
+        if( type == "/" )
+            nbOfStrokes = 1;
+        else if( type == "//" )
+            nbOfStrokes = 2;
+        else if (type == "///")
+            nbOfStrokes = 3;
+        else if( type == "////")
+            nbOfStrokes = 4;
+    }
     
     return nbOfStrokes;
 }

@@ -279,20 +279,25 @@
     &textformat&text format&string&``cc''&&``l'' - ``cl''\\ % incomplete
     &dx/dy - color&&&&&\\
     \hline
-    \textbf{\textbackslash{}tremolo}&dx/dy - color&&&&&\\
-    \hline
-    \textbf{\textbackslash{}trill}&mode&mode type&string&``cautionnary''&``cautionnary''&\\
-    &tr&``tr'' display&boolean string&``true''&``true'' - ``false''&\\
-    &anchor&anchor place&string&``above''&``note'' - ``above''&\\
-    &adx/ady&accidental horiz./vert. offset&unit&0&&\\
-    &dx/dy - color - size&&&&&\\
-    \hline
 \end{tabularx}
 
 
 \begin{tabularx}{\linewidth}{p{3cm}p{3cm}p{5cm}p{3cm}p{2.5cm}p{3.5cm}p{4cm}}
     \hline
     \textbf{Tag}&\textbf{Parameters}&\textbf{Description}&\textbf{Type}&\textbf{Default value}&\textbf{Authorized values}&\textbf{Examples}\\
+    \hline
+    \textbf{\textbackslash{}tremolo}&style&strokes number&string&``///''&``/'' - ``//'' - ``////''&\\
+    &speed&repeated notes duration&integer&32&&\\
+    &pitch&other event with which tremolo is done&string&&&``a'' - ``\{c, e\}''\\
+    &thickness&tremolo strokes thickness&float&0.75&&\\
+    &text&tremolo text&string&&&\\
+    &dx/dy&&&&&\\
+    \hline
+    \textbf{\textbackslash{}trill}&mode&mode type&string&``cautionnary''&``cautionnary''&\\
+    &tr&``tr'' display&boolean string&``true''&``true'' - ``false''&\\
+    &anchor&anchor place&string&``above''&``note'' - ``above''&\\
+    &adx/ady&accidental horiz./vert. offset&unit&0&&\\
+    &dx/dy - color - size&&&&&\\
     \hline
     \textbf{\textbackslash{}tuplet}&\textbf{format}&tuplet format&string&``- -''&&``-3-'' - ``2:7-''\\
     &dy1&tuplet left vertical offset&unit&0&&\\
