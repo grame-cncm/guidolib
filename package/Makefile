@@ -46,7 +46,7 @@ win32inc := $(patsubst %, ../win32/src/%, $(win32inc))
 qtinc 	:= 	GUIDOEngine.h GUIDOExport.h MusicalSymbols.h VGColor.h VGFont.h VGSystem.h VGDevice.h
 qtinc  := $(patsubst %, ../src/include/%, $(qtinc))
 
-qtfiles =  ../Qt/LICENSE.LGPL ../Qt/package/readme.txt
+qtfiles =  ../Qt/LICENSE.MPL.txt ../Qt/package/readme.txt
 
 QT_SRC_FILES   = $(shell find $(QTLIB)/src -type f)
 QT_SRC_FOLDERS = $(shell find $(QTLIB)/src -type d)
