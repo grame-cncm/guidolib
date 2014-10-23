@@ -95,7 +95,9 @@ linux:
 
 windows:
 	[ -d $(WINLIB) ] || mkdir $(WINLIB)
-	make common DEST=$(WINLIB)
+	cp -r doc $(WINLIB)
+	make samples DEST=$(WINLIB)
+	cp -f $(files) $(WINLIB)
 	make incl DEST=$(WINLIB) SYSINC="$(win32inc)"
 	cp $(bin)/GUIDOEngine*.dll $(WINLIB)
 	cp $(bin)/GUIDOEngine*.lib $(WINLIB)
