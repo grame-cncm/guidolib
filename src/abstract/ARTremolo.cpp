@@ -13,6 +13,8 @@
 */
 
 #include <iostream>
+#include <string.h>
+
 #include "ARTremolo.h"
 #include "TagParameterInt.h"
 #include "TagParameterFloat.h"

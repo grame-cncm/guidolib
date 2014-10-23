@@ -203,8 +203,6 @@ void GRMeter::OnDraw(VGDevice & hdc) const
         float totalExtent = mBoundingBox.right - mBoundingBox.left;
         float emptyNumeratorSpace;
 
-        bool hastwo = false;
-
         const char charPlus = '+';
         float extentCharPlusx;
         float extentCharPlusy;
@@ -242,8 +240,6 @@ void GRMeter::OnDraw(VGDevice & hdc) const
 
             if (numerator > 9)
             {
-                hastwo = true;
-
                 float extentFirstCharx;
                 float extentFirstChary;
                 FontManager::gFontScriab->GetExtent(buffer.c_str()[0], &extentFirstCharx, &extentFirstChary, gGlobalSettings.gDevice);
@@ -286,8 +282,6 @@ void GRMeter::OnDraw(VGDevice & hdc) const
 
 		if (denominator > 9)
         {
-			hastwo = true;
-
             float extentFirstCharx;
             float extentFirstChary;
             FontManager::gFontScriab->GetExtent(buffer.c_str()[0], &extentFirstCharx, &extentFirstChary, gGlobalSettings.gDevice);
