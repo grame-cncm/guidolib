@@ -36,7 +36,7 @@ ARNote::ARNote(const TYPE_DURATION & durationOfNote)
 ARNote::ARNote(const TYPE_TIMEPOSITION & relativeTimePositionOfNote, const TYPE_DURATION & durationOfNote)
 	:	ARMusicalEvent( relativeTimePositionOfNote, durationOfNote), fName("noname"), fPitch(UNKNOWN),
 		fOctave(MIN_REGISTER), fAccidentals(0), fDetune(0), fIntensity(MIN_INTENSITY), fOrnament(NULL), fCluster(NULL),
-        fIsLonelyInCluster(false), fClusterHaveToBeDrawn(false),fTremolo(0), fSubElementsHaveToBeDrawn(true), fStartPosition(-1,1)
+        fIsLonelyInCluster(false), fClusterHaveToBeDrawn(false), fSubElementsHaveToBeDrawn(true), fTremolo(0), fStartPosition(-1,1)
 {
 }
 

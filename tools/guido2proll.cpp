@@ -1,9 +1,11 @@
-
 #ifndef WIN32
 #include <libgen.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
 #endif
+
+#include <string.h>
 
 #include "GUIDOParse.h"
 #include "GUIDOEngine.h"
@@ -317,7 +319,7 @@ int main(int argc, char **argv)
 	else {
 		int line, col;
 		
-        err = GuidoParserGetErrorCode(parser, line, col, 0); // REM: l'erreur n'est pas récupérée si l'arh a simplement mal été instancié
+        err = GuidoParserGetErrorCode(parser, line, col, 0); // REM: l'erreur n'est pas r\E9cup\E9r\E9e si l'arh a simplement mal \E9t\E9 instanci\E9
 		error(err);
 	}
 
