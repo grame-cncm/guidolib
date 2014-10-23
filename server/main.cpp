@@ -18,20 +18,17 @@
  */
 #include <errno.h>
 
-#include <QApplication>
-#include <QDir>
-
-#include "QGuidoPainter.h"
 #include "guido2img.h"
 #include "server.h"
 #include "utilities.h"
 #include "engine.h"
+#include "profport.h"
 
 using namespace std;
 using namespace guidohttpd;
 
-#define kVersion 0.50f
-#define kVersionStr "0.50"
+#define kVersion 0.61f
+#define kVersionStr "0.61"
 
 static const char* kPortOpt = "--port";
 static const int kDefaultPort = 8000;
@@ -43,8 +40,14 @@ static const int kDefaultVerbose = IP_VERBOSE | HEADER_VERBOSE
   | REQUEST_VERBOSE | URL_VERBOSE | QUERY_VERBOSE
   | CODE_VERBOSE | MIME_VERBOSE | LENGTH_VERBOSE;
 
+
+static const char* kAccessControlAllowOrigin = "--access-control-allow-origin";
+
 static const char* kLogfileOpt = "--logfile";
 static const string kDefaultLogfile = "guidohttpdserver.log";
+
+static const char* kInitfileOpt = "--initfile";
+static const string kDefaultInitfile = "guidohttpdserver.ini";
 
 static const char* kLogmodeOpt = "--logmode";
 static const int kDefaultLogmode = 0;
@@ -61,6 +64,24 @@ static const char* kSvgFontFileOpt = "--svgfontfile";
 static const string kDefaultSvgFontFile = "guido2.svg";
 
 //---------------------------------------------------------------------------------
+// for the initfile
+static const char* logSectionName = "Log";
+static const char* logModeName = "mode";
+static const char* logFilenameName = "filename";
+
+static const char* fontSectionName = "SVG Font";
+static const char* fontFilenameName = "filename";
+
+static const char* cacheSectionName = "Cache";
+static const char* cacheDirectoryName = "directory";
+
+static const char* daemonSectionName = "Daemon";
+static const char* daemonOnName = "on";
+
+static const char* portSectionName = "Port";
+static const char* portNumberName = "number";
+
+//---------------------------------------------------------------------------------
 static void usage (char* name)
 {
 #ifndef WIN32
@@ -71,6 +92,7 @@ static void usage (char* name)
     cout << "where options are in:" << endl;
     cout << tab << kPortOpt << " portnum : sets the communication port number (defaults to " << kDefaultPort << ")"<< endl;
     cout << tab << kSafeOpt  << " : used with nohup to make this run as a daemon" << endl;
+    cout << tab << kInitfileOpt << " init file name : (defaults to " << kDefaultInitfile << " in the directory of the current executable)" << endl;
     cout << tab << kLogfileOpt << " log file name : (defaults to " << kDefaultLogfile << " in the directory of the current executable - use an empty string to write to STDOUT)" << endl;
     cout << tab << kLogmodeOpt << " log file mode : (defaults to " << kDefaultLogmode << ")" << endl;
     cout << tab << tab << "0 = Apache-like log" << endl;
@@ -78,6 +100,7 @@ static void usage (char* name)
     cout << tab << kCachedirOpt << " cache dir name : (defaults to a directory cache in the directory of the current executable)" << endl;
     cout << tab << kSvgFontFileOpt << " name of the svg font file - defaults to a file called " << kDefaultSvgFontFile << " in the executable's directory" << endl;
     cout << tab << kVersionOpt << " version of the server and GUIDO" << endl;
+    cout << tab << kAccessControlAllowOrigin << " set 'Access-Control-Allow-Origin' to '*' in headers" << endl;
 /*
     cout << tab << kVerboseOpt << " verbosity. an integer bitmap that can combine:" << endl;
     cout << tab << tab << "1 (print ip to log)" << endl;
@@ -97,17 +120,17 @@ static void usage (char* name)
 }
 
 //---------------------------------------------------------------------------------
-static bool launchServer (int port, int verbose, int logmode, string cachedir, string svgfontfile, bool daemon)
+static bool launchServer (int port, int verbose, int logmode, string cachedir, string svgfontfile, bool daemon, bool alloworigin)
 {
     bool ret = false;
-    guido2img converter;
+    guido2img *converter = makeConverter(svgfontfile);
     startEngine();
-    HTTPDServer server(verbose, logmode, cachedir, svgfontfile, &converter);
+    HTTPDServer server(verbose, logmode, cachedir, converter, alloworigin);
     server.readFromCache();
     if (server.start(port)) {
         if (daemon) {
             log << "Guido server v." << kVersionStr << " with Guido v." << GuidoGetVersionStr() << " is running on port " << port << logend;
-            while (true) { }
+            while (true) { sleep(1); }
         } else {
             cout << "Guido server v." << kVersionStr << " with Guido v." << GuidoGetVersionStr() << " is running on port " << port << endl;
             cout << "Type 'q' to quit" << endl;
@@ -138,28 +161,53 @@ int main(int argc, char **argv)
         cout << "Guido server v." << kVersionStr << " with Guido v." << GuidoGetVersionStr() << "." << endl;
         exit (0);
     }
-    QApplication app(argc , argv); // required by Qt
-    string applicationPath = QDir(QDir(QApplication::applicationFilePath()).absoluteFilePath("../")).canonicalPath().toStdString();
+    makeApplication(argc, argv);
+    char resolved_path[256];
+    #ifdef WIN32
+      _fullpath(resolved_path, ".");
+    #else
+      realpath(".", resolved_path);
+    #endif
+    string applicationPath(resolved_path);
+
     srand(time(0));
-    int port = lopt (argv, kPortOpt, kDefaultPort);
+    int port = get_private_profile_int(portSectionName, portNumberName, lopt (argv, kPortOpt, kDefaultPort), kDefaultInitfile.c_str());
+
     (void) kVerboseOpt;
     int verbose = kDefaultVerbose;//lopt (argv, kVerboseOpt, kDefaultVerbose);
-    int logmode = lopt (argv, kLogmodeOpt, kDefaultLogmode);
+
+    int logmode = get_private_profile_int(logSectionName, logModeName, lopt (argv, kLogmodeOpt, kDefaultLogmode), kDefaultInitfile.c_str());
     if (logmode > 1)
       logmode = 1;
     if (logmode < 0)
       logmode = 0;
 
-    string logfile = sopt (argv, kLogfileOpt, QDir(applicationPath.c_str()).absoluteFilePath(kDefaultLogfile.c_str()).toStdString());
+    char buff[512];
+    string logfile = sopt (argv, kLogfileOpt, (applicationPath + "/" + kDefaultLogfile).c_str());
+    get_private_profile_string(logSectionName, logFilenameName, logfile.c_str(), buff, 512, kDefaultInitfile.c_str());
+    logfile = string(buff);
+
     bool daemon = bopt (argv, kSafeOpt, false);
+    daemon = get_private_profile_int(daemonSectionName, daemonOnName, daemon ? 1 : 0, kDefaultInitfile.c_str()) ? true : false;
+
+    bool allowOrigin = bopt (argv, kAccessControlAllowOrigin, false);
+
     gLog = logfile != ""
            ? new logstream (logfile.c_str())
            : new logstream();
-    string cachedir = sopt (argv, kCachedirOpt, QDir(applicationPath.c_str()).absoluteFilePath(kDefaultCachedir.c_str()).toStdString());
-    string svgfontfile = sopt (argv, kSvgFontFileOpt, QDir(applicationPath.c_str()).absoluteFilePath(kDefaultSvgFontFile.c_str()).toStdString());
+
+    string cachedir = sopt (argv, kCachedirOpt, (applicationPath + "/" + kDefaultCachedir).c_str());
+    get_private_profile_string(cacheSectionName, cacheDirectoryName, cachedir.c_str(), buff, 512, kDefaultInitfile.c_str());
+    cachedir = string(buff);
+
+    string svgfontfile = sopt (argv, kCachedirOpt, (applicationPath + "/" + kDefaultSvgFontFile).c_str());
+    get_private_profile_string(fontSectionName, fontFilenameName, svgfontfile.c_str(), buff, 512, kDefaultInitfile.c_str());
+    svgfontfile = string(buff);
+
     // check to see if svgfontfile exists
-    QFile qSvgfontfile(svgfontfile.c_str());
-    if(!qSvgfontfile.exists()) {
+
+    ifstream myfile(svgfontfile.c_str());
+    if (!myfile.is_open()) {
       svgfontfile = "";
     }
     if (daemon) {
@@ -198,5 +246,5 @@ int main(int argc, char **argv)
         close(STDOUT_FILENO);
         close(STDERR_FILENO);
     }
-    return launchServer (port, verbose, logmode, cachedir, svgfontfile, daemon) ? 0 : 1;
+    return launchServer (port, verbose, logmode, cachedir, svgfontfile, daemon, allowOrigin) ? 0 : 1;
 }

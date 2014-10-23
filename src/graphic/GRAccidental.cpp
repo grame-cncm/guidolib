@@ -171,7 +171,8 @@ unsigned int GRAccidental::accidentalID2symbol(int inAccidentalID) const
 void GRAccidental::setAccidentalLayout(float notebreite, float curLSPACE)
 {
 	const float extent = mSymbol ? GetSymbolExtent( mSymbol ) : 0;
-	const float halfExtent = extent * 0.5f;
+//	const float halfExtent = extent * 0.5f;
+	float halfExtent = extent * 0.5f;
 
 	mBoundingBox.left = -halfExtent;
 	mBoundingBox.right = halfExtent;
@@ -234,6 +235,7 @@ void GRAccidental::setAccidentalLayout(float notebreite, float curLSPACE)
 	mBoundingBox.right *= float(mAccidentalSize);
 	mBoundingBox.bottom *= float(mAccidentalSize);
 
+	halfExtent *= 1.2f;
 	getRefPos().x = -halfExtent;
 
 	mLeftSpace = (GCoord)(( halfExtent * mAccidentalSize ) + 0.2f * curLSPACE );

@@ -2,6 +2,48 @@ GUIDO Engine history
 
 
 ----------------------------------------------------------------
+2014-10-22  version 1.5.4
+- new piano roll API available :
+    - piano roll can be generated from an gmn file, an AR, etc. and exported to any classic file format
+	- two piano roll types available : classic (notes are horizontal) and trajectory (notes are graphically linked to the following note)
+- new 'dy' attribute for the \staffFormat-tag to insert an vertical offset
+- beams can be applied to grace notes
+- new 'autoMeasuresNum' attribute for the \meter-tag to display or not measures number
+- \bar-tag :
+    - new 'displayMeasNum' attribute to choose for each bar to display or not measure number
+	- new 'numDx' / 'numDy' attribute to adjust measure number position
+- huge performances improvement (to quantify : time ratio until 60 for very big scores and 8 for standard 2-pages scores)
+- bugs correction
+	- some SVG export bug fixed
+    - conflicts with note durations in the trill solved
+	- problems on dotted trills / cluster
+	- bad vertical position of the flags of very low/high notes or chord
+	- size param of \meter tag working properly now
+	- problems on small lineThickness values in \staffFormat-tag
+    - various other bugs fixed
+- crashes correction :
+    - when a \composer, \fingering, \label, \mark or \title tag was set under range-tag form
+	- when a trill composed of a chord containing several different durations was separated into two tied trills
+    - various other crashes avoided
+
+----------------------------------------------------------------
+version 1.5.3
+- experimental proportional notation based on AR or MIDI representation: 
+  new API: GuidoAR2RProportional, GuidoMIDI2RProportional
+  new tool: guido2rproportional, midi2rproportional
+- support for piano roll representation based on AR or MIDI representation: 
+  new API: GuidoAR2PRoll, GuidoMIDI2PRoll
+  new tool: guido2proll, midi2proll
+- bug in MIDI export corrected: incorrect handling of successive tied similar notes 
+- infinite loop in trill computation corrected
+- accidental spacing changed : a bit more space is inserted between the accidental and the note head
+  to conform more to engraving practices
+- incorrect coloring of trills (forced to black even when no color specified)
+- bug corrected with the mappings (was introduced with comparison operator on time segments)
+- improves graphic rendering of 'exotic' durations (e.g. 1/21)
+
+
+----------------------------------------------------------------
 2013-09-13  version 1.5.2
 - improvement of \ritardando-tag and \accelerando-tag: now a dotted line is drawn and it is possible to indicate the tempo of beginning
 and end (also possible to change the text style and color)
@@ -14,7 +56,7 @@ and end (also possible to change the text style and color)
 - \pageFormat-tag modified : from now, when horizontal / vertical margins sum is superior than width / height, they are set to 0
 - new 'lineThickness' attribute for the \staffFormat-tag
 - new attributes for the \tuplet-tag: 'lineThickness', 'textSize', 'bold'
-- new attributes for the \cres-tag and \decresc-tag: now it's fully customizable
+- new attributes for the \cresc-tag and \decresc-tag: now it's fully customizable
 - bugs correction
     - on windows, sometimes Guido crashed when user left-clicked on the score
     - dotted events (clusters, chords (vertical dot alignment and collision avoidance) and rests)

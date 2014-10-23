@@ -23,6 +23,7 @@ Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
 
 class ARTrill;
 class ARCluster;
+class ARTremolo;
 
 /** \brief Representation of a GUIDO note.
 */
@@ -75,13 +76,21 @@ class ARNote : public ARMusicalEvent
     ARTrill     *getOrnament()		    				{ return fOrnament;}
     ARCluster   *getARCluster() 			           	{ return fCluster;}
 
-    void setIsLonelyInCluster()                         { fIsLonelyInCluster = true; }
-    bool isLonelyInCluster()                            { return fIsLonelyInCluster; }
-    bool doesClusterHaveToBeDrawn()                     { return fClusterHaveToBeDrawn; }
+    void         setIsLonelyInCluster()                 { fIsLonelyInCluster = true; }
+    bool         isLonelyInCluster()                    { return fIsLonelyInCluster; }
+    bool         doesClusterHaveToBeDrawn()             { return fClusterHaveToBeDrawn; }
+    void         enableSubElements(bool enabled)                { fSubElementsHaveToBeDrawn = enabled; }
+    bool         haveSubElementsToBeDrawn()  const       { return fSubElementsHaveToBeDrawn; }
+	void 		 setTremolo(ARTremolo* trem)                    { fTremolo = trem; }
+    ARTremolo* getTremolo()                             { return fTremolo; }
 
     int		midiPitch() const;
 
     static int	detune2Quarters(float detune);
+
+    /**** Function to avoid dynamic_cast ****/
+    virtual ARMusicalObject *isARNote() { return this; }
+    /*****************************************/
 
   private:
     ARNoteName fName;
@@ -95,6 +104,8 @@ class ARNote : public ARMusicalEvent
     ARCluster *fCluster;
     bool       fIsLonelyInCluster;
     bool       fClusterHaveToBeDrawn;
+    bool       fSubElementsHaveToBeDrawn;
+    ARTremolo *fTremolo;
 
     TYPE_TIMEPOSITION	fStartPosition;
 };

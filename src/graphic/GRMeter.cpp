@@ -16,6 +16,7 @@
 #include <sstream>
 #include <string.h>
 
+#include "ARMeter.h"
 #include "GRMeter.h"
 #include "GRDefine.h"
 #include "GRMusic.h"
@@ -29,34 +30,27 @@
 
 using namespace std;
 
-NVPoint GRMeter::refposC;
-NVPoint GRMeter::refposC2;
-
-
 GRMeter::GRMeter( ARMeter * abstractRepresentationOfMeter, GRStaff * curstaff, bool p_ownsAR )
-  : GRTagARNotationElement(abstractRepresentationOfMeter, curstaff->getStaffLSPACE(),p_ownsAR),
+  : GRTagARNotationElement(abstractRepresentationOfMeter, curstaff->getStaffLSPACE(), p_ownsAR),
 	numerator(0), denominator(1)
 {
 	assert(abstractRepresentationOfMeter);
 	assert(curstaff);
 
 	curLSPACE = curstaff->getStaffLSPACE();
+    mTagSize *= curstaff->getSizeRatio() * abstractRepresentationOfMeter->getSize();
 
 	mtype = getARMeter()->getMeterType();
 	if (mtype == ARMeter::NUMERIC)
 	{
 	  numeratorsVector = getARMeter()->getNumeratorsVector();
-	  denominator = getARMeter()->getDenominator();
+	  denominator      = getARMeter()->getDenominator();
     }
 
     numerator = getARMeter()->getNumerator();
 
-
-	//spacing= LSPACE;
 	mNeedsSpring = 1;
 	sconst = SCONST_METER;
-	// obsolete
-	// spacing = 0;
 
 	mBoundingBox.left = 0;
 	mBoundingBox.top  = 0;
@@ -76,8 +70,10 @@ GRMeter::GRMeter( ARMeter * abstractRepresentationOfMeter, GRStaff * curstaff, b
         if (numeratorsVector.size() > 1)
         {
             char bufferPlus = '+';
-            FontManager::gFontScriab->GetExtent(bufferPlus, &x, &y, gGlobalSettings.gDevice ); 
-            extentPlus = x;
+            FontManager::gFontScriab->GetExtent(bufferPlus, &x, &y, gGlobalSettings.gDevice);
+            x *= mTagSize;
+            y *= mTagSize;
+            extentPlus  = x;
         }
 
 		if( gGlobalSettings.gDevice )
@@ -91,66 +87,51 @@ GRMeter::GRMeter( ARMeter * abstractRepresentationOfMeter, GRStaff * curstaff, b
 
                 bufferNumeratorTmpSStream << numeratorsVector[i];
                 std::string bufferNumeratorTmp = bufferNumeratorTmpSStream.str();
-                FontManager::gFontScriab->GetExtent(bufferNumeratorTmp.c_str(), bufferNumeratorTmp.size(), &x, &y, gGlobalSettings.gDevice); 
+                FontManager::gFontScriab->GetExtent(bufferNumeratorTmp.c_str(), bufferNumeratorTmp.size(), &x, &y, gGlobalSettings.gDevice);
+                x *= mTagSize;
+                y *= mTagSize;
 
                 bufferNumeratorTmpSStream.clear();
 
                 extentsNumeratorsVector.push_back(x);
             }
 		
-            FontManager::gFontScriab->GetExtent(bufferDenominator.c_str(), bufferDenominator.size(), &x, &y, gGlobalSettings.gDevice); 
+            FontManager::gFontScriab->GetExtent(bufferDenominator.c_str(), bufferDenominator.size(), &x, &y, gGlobalSettings.gDevice);
+            x *= mTagSize;
+            y *= mTagSize;
 			extentDenominator = x;
 		}
 
         totalNumeratorExtent = 0;
 
-        for(size_t i = 0; i < extentsNumeratorsVector.size(); i++)
-                totalNumeratorExtent += extentsNumeratorsVector[i];
+        for (size_t i = 0; i < extentsNumeratorsVector.size(); i++)
+            totalNumeratorExtent += extentsNumeratorsVector[i];
 
 		extent = totalNumeratorExtent > extentDenominator ? totalNumeratorExtent : extentDenominator;
 		
-		mBoundingBox.left  = (GCoord)(-extent * 0.5f - LSPACE / 5);
-		mBoundingBox.right = (GCoord)(extent * 0.5f + LSPACE);
+		mBoundingBox.left  = (GCoord)(- extent * 0.5f);
+		mBoundingBox.right = (GCoord)(  extent * 0.5f);
 	}
 	else if (mtype == ARMeter::C || mtype == ARMeter::C2)
 	{
-		extent = GetSymbolExtent( kCSymbol);
-		mBoundingBox.left  = (GCoord)(-extent * 0.5f - LSPACE / 5);
-		mBoundingBox.right = (GCoord)(extent * 0.5f + LSPACE);
+        extent = GetSymbolExtent(kCSymbol) * mTagSize;
+		mBoundingBox.left  = (GCoord)(- extent * 0.5f);
+		mBoundingBox.right = (GCoord)(  extent * 0.5f);
 	}
 
-    mTagSize *= curstaff->getSizeRatio() * abstractRepresentationOfMeter->getSize();
-	mBoundingBox.bottom = (GCoord)(5*curLSPACE);
+	mBoundingBox.bottom = (GCoord)(5 * curLSPACE);
 
 	// set leftSpace, rightSpace 
-
-	mLeftSpace = (GCoord)(- mBoundingBox.left * 2 * mTagSize);
-	mRightSpace = 100; //hardcoded -> initially was (GCoord)(mBoundingBox.right * mTagSize)
-
-	switch (mtype)
-	{
-		case ARMeter::C :
-			refposC.x  = (GCoord)(- extent * 0.5f - LSPACE / 5.0);
-			refposC.y  = (GCoord)(2*LSPACE);								// no break ?
-		case ARMeter::C2:
-			refposC2.x  = (GCoord)(- extent * 0.5f - LSPACE / 5.0);
-			refposC2.y  = (GCoord)(2*LSPACE);								// no break
-		case ARMeter::NUMERIC:
-			refpos.x  = (GCoord)(- extent * 0.5f - LSPACE / 5.0);
-			refpos.y  = 0;
-			break;
-			
-		default:	
-			break;
-	}
+    mLeftSpace  = curLSPACE * 0.5f + (mTagSize - 1) * 2 * curLSPACE + (extent - (68 * mTagSize)) * 1.0f;
+	mRightSpace = 2 * curLSPACE;
 
 	// y position correction according to staff lines count - DF sept. 23 2009
-	if( curstaff ) {
+	if (curstaff) {
 		const float curLSPACE = curstaff->getStaffLSPACE();
 		int linesOffset = curstaff->getNumlines() - 5;
-		if (linesOffset) {
+
+		if (linesOffset)
 			mPosition.y += curLSPACE * linesOffset / 2;
-		}
 	}
 
 	// what about reference-position?
@@ -209,7 +190,8 @@ void GRMeter::GGSOutput() const
 
 void GRMeter::OnDraw(VGDevice & hdc) const
 {
-	if (error) return;
+	if (error)
+		return;
 	if(!mDraw)
 		return;
 
@@ -221,12 +203,12 @@ void GRMeter::OnDraw(VGDevice & hdc) const
         float totalExtent = mBoundingBox.right - mBoundingBox.left;
         float emptyNumeratorSpace;
 
-        bool hastwo = false;
-
-        const char charPlus= '+';
+        const char charPlus = '+';
         float extentCharPlusx;
         float extentCharPlusy;
-        FontManager::gFontScriab->GetExtent(charPlus, &extentCharPlusx, &extentCharPlusy, gGlobalSettings.gDevice );
+        FontManager::gFontScriab->GetExtent(charPlus, &extentCharPlusx, &extentCharPlusy, gGlobalSettings.gDevice);
+        extentCharPlusx *= mTagSize;
+        extentCharPlusy *= mTagSize;
 
         float dx2 = 0;
 
@@ -239,7 +221,10 @@ void GRMeter::OnDraw(VGDevice & hdc) const
             }
             else
             {
-                OnDrawSymbol(hdc, charPlus, currentDx, curLSPACE, mTagSize);
+                float dxOffsetPlus = (extentCharPlusx - extentCharPlusx * 0.9f) * 0.5f; // Offset to center the "+" between to numbers
+                float dxOffsetNum  = (mTagSize - 1) * (- curLSPACE * 0.8f) - (totalExtent - (68 * mTagSize)) * 0.5f;
+                float dyOffsetPlus = curLSPACE - (mTagSize - 1) * (curLSPACE * 0.9f);
+                OnDrawSymbol(hdc, charPlus, currentDx + dxOffsetNum + dxOffsetPlus, dyOffsetPlus, mTagSize * 0.9f);
                 currentDx += extentCharPlusx;
             }
 
@@ -249,22 +234,28 @@ void GRMeter::OnDraw(VGDevice & hdc) const
 
             float extentBufferx;
             float extentBuffery;
-            FontManager::gFontScriab->GetExtent(buffer.c_str(), buffer.size(), &extentBufferx, &extentBuffery, gGlobalSettings.gDevice ); 
+            FontManager::gFontScriab->GetExtent(buffer.c_str(), buffer.size(), &extentBufferx, &extentBuffery, gGlobalSettings.gDevice);
+            extentBufferx *= mTagSize;
+            extentBuffery *= mTagSize;
 
             if (numerator > 9)
             {
-                hastwo = true;
-
                 float extentFirstCharx;
                 float extentFirstChary;
-                FontManager::gFontScriab->GetExtent(buffer.c_str()[0], &extentFirstCharx, &extentFirstChary, gGlobalSettings.gDevice ); 
+                FontManager::gFontScriab->GetExtent(buffer.c_str()[0], &extentFirstCharx, &extentFirstChary, gGlobalSettings.gDevice);
+                extentFirstCharx *= mTagSize;
+                extentFirstChary *= mTagSize;
 
                 dx2 = currentDx + extentFirstCharx;
             }
+            
+            float dxOffsetNum = (mTagSize - 1) * (- curLSPACE * 0.8f) - (totalExtent - (68 * mTagSize)) * 0.5f;
+            float dyOffsetNum = curLSPACE - (mTagSize - 1) * (curLSPACE * 0.9f);
 
-            OnDrawSymbol(hdc, buffer.c_str()[0], currentDx, curLSPACE, mTagSize);
+            OnDrawSymbol(hdc, buffer.c_str()[0], currentDx + dxOffsetNum, dyOffsetNum , mTagSize);
+            
             if (buffer.c_str()[1])
-                OnDrawSymbol(hdc, buffer.c_str()[1], dx2, curLSPACE, mTagSize);
+                OnDrawSymbol(hdc, buffer.c_str()[1], dx2 + dxOffsetNum, dyOffsetNum, mTagSize);
 
             currentDx += extentBufferx;
         }
@@ -282,25 +273,30 @@ void GRMeter::OnDraw(VGDevice & hdc) const
 
         float extentBufferx;
         float extentBuffery;
-        FontManager::gFontScriab->GetExtent(buffer.c_str(), buffer.size(), &extentBufferx, &extentBuffery, gGlobalSettings.gDevice ); 
+        FontManager::gFontScriab->GetExtent(buffer.c_str(), buffer.size(), &extentBufferx, &extentBuffery, gGlobalSettings.gDevice);
+        extentBufferx *= mTagSize;
+        extentBuffery *= mTagSize;
 
         float emptyDenominatorSpace = totalExtent - extentBufferx;
         currentDx = mBoundingBox.left + emptyDenominatorSpace / 2;
 
 		if (denominator > 9)
         {
-			hastwo = true;
-
             float extentFirstCharx;
             float extentFirstChary;
-            FontManager::gFontScriab->GetExtent(buffer.c_str()[0], &extentFirstCharx, &extentFirstChary, gGlobalSettings.gDevice ); 
+            FontManager::gFontScriab->GetExtent(buffer.c_str()[0], &extentFirstCharx, &extentFirstChary, gGlobalSettings.gDevice);
+            extentFirstCharx *= mTagSize;
+            extentFirstChary *= mTagSize;
 
 			dx2 = currentDx + extentFirstCharx;
 		}
+        
+        float dxOffsetNum   = (mTagSize - 1) * (- curLSPACE * 0.8f) - (totalExtent - (68 * mTagSize)) * 0.5f;
+        float dyOffsetDenom = (3 * curLSPACE) + (mTagSize - 1) * (curLSPACE * 0.9f);
+		OnDrawSymbol(hdc, buffer.c_str()[0], currentDx + dxOffsetNum, dyOffsetDenom, mTagSize);
 
-		OnDrawSymbol(hdc, buffer.c_str()[0], currentDx, (3 * curLSPACE), mTagSize);
 		if (buffer.c_str()[1])
-			OnDrawSymbol(hdc, buffer.c_str()[1], dx2, (3 * curLSPACE), mTagSize);
+			OnDrawSymbol(hdc, buffer.c_str()[1], dx2 + dxOffsetNum, dyOffsetDenom, mTagSize);
 
         /*********************/
 	}
@@ -308,17 +304,25 @@ void GRMeter::OnDraw(VGDevice & hdc) const
 	{
         float extentBufferx;
         float extentBuffery;
-        FontManager::gFontScriab->GetExtent(kCSymbol, &extentBufferx, &extentBuffery, gGlobalSettings.gDevice );
-
-		OnDrawSymbol( hdc, kCSymbol, 0, - 200 * (mTagSize - 1) / 2, mTagSize );
+        FontManager::gFontScriab->GetExtent(kCSymbol, &extentBufferx, &extentBuffery, gGlobalSettings.gDevice);
+        extentBufferx *= mTagSize;
+        extentBuffery *= mTagSize;
+        
+        float dxOffsetNum   = - curLSPACE + (mTagSize - 1) * (- curLSPACE * 2.0f);
+        float dyOffsetDenom = 2 * curLSPACE;
+		OnDrawSymbol(hdc, kCSymbol, dxOffsetNum, dyOffsetDenom, mTagSize);
 	}
 	else if (mtype == ARMeter::C2)
 	{
         float extentBufferx;
         float extentBuffery;
-        FontManager::gFontScriab->GetExtent(kC2Symbol, &extentBufferx, &extentBuffery, gGlobalSettings.gDevice );
-
-		OnDrawSymbol( hdc, kC2Symbol, 0, - 200 * (mTagSize - 1) / 2, mTagSize );
+        FontManager::gFontScriab->GetExtent(kC2Symbol, &extentBufferx, &extentBuffery, gGlobalSettings.gDevice);
+        extentBufferx *= mTagSize;
+        extentBuffery *= mTagSize;
+        
+        float dxOffsetNum   = - curLSPACE + (mTagSize - 1) * (- curLSPACE * 2.0f);
+        float dyOffsetDenom = 2 * curLSPACE;
+		OnDrawSymbol(hdc, kC2Symbol, dxOffsetNum, dyOffsetDenom, mTagSize);
 	}
 }
 
@@ -351,19 +355,5 @@ bool GRMeter::operator==(const GRTag  &tag) const
 		return this->operator ==(*meter);
 
 	return false;
-}
-
-const NVPoint & GRMeter::getReferencePosition() const
-{
-	const ARMeter::metertype mtype = getARMeter()->getMeterType();
-	switch (mtype)
-	{
-		case ARMeter::C:		return refposC;
-		case ARMeter::C2:		return refposC2;
-		case ARMeter::NUMERIC:	return refpos;
-		default:	
-			break;
-	}
-	return refpos;
 }
 

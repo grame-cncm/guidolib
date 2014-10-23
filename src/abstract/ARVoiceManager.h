@@ -47,7 +47,7 @@ class ARVoiceManager
 		virtual 		~ARVoiceManager();
 
 		
-				float CheckBreakPosition( const TYPE_TIMEPOSITION & tp );
+				float CheckBreakPosition(const TYPE_TIMEPOSITION & tp) const;
 				int InsertBreak( const TYPE_TIMEPOSITION &tp, int breaktype,float value = 0.0f );
 
 

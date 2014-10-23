@@ -2794,11 +2794,11 @@ GRGlobalStem * GRStaffManager::getOtherGlobalStem(GRSystemSlice * psys,
 			{
 				if (vcmgr->curchordtag->getLabel() == label)
 				{
-					if (vcmgr->curvst->curdispdur &&
-						curvcmgr->curvst->curdispdur)
+					if (vcmgr->curvst->fCurdispdur &&
+						curvcmgr->curvst->fCurdispdur)
 					{
-						if (vcmgr->curvst->curdispdur->getDisplayDuration() ==
-							curvcmgr->curvst->curdispdur->getDisplayDuration())
+						if (vcmgr->curvst->fCurdispdur->getDisplayDuration() ==
+							curvcmgr->curvst->fCurdispdur->getDisplayDuration())
 							return vcmgr->curglobalstem;
 					}
 					else
@@ -3101,8 +3101,13 @@ traceslice(cout << "GRStaffManager::FindOptimumBreaks num slices is " << numslic
 				float wishext = mGrPage->getInnerWidth();
 				if (count == 0 && mCurSysFormat)
 				{
-					float dx = mCurSysFormat->getDX()->getValue();
-					wishext = wishext - dx ;
+                    const TagParameterFloat *tpf = mCurSysFormat->getDX();
+                    float dx = 0;
+
+                    if (tpf)
+					    dx = tpf->getValue();
+					
+                    wishext = wishext - dx ;
 				}
 				float reqforce = (wishext - curxmin) * curconstant;
 				// if reqforce is in the range of optforce then we have found an optimum break ....

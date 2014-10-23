@@ -16,16 +16,16 @@
 #ifdef __APPLE__
 #include "GFontOSX.h"
 #include "GSystemOSX.h"
-GSystemOSX gSystem (0, 0);
+GSystemOSX gSVGSystem (0, 0);
 
 #elif defined (WIN32)
 #include "GFontWin32.h"
 #include "GSystemWin32.h"
-GSystemWin32 gSystem (0, 0);
+GSystemWin32 gSVGSystem (0, 0);
 
 #elif linux
 #include "CairoSystem.h"
-CairoSystem gSystem (0);
+CairoSystem gSVGSystem (0);
 
 #else
 #error "unknown system for compiling SVGFont"
@@ -37,8 +37,8 @@ CairoSystem gSystem (0);
 //______________________________________________________________________________
 SVGFont::SVGFont(const char * name, int size, int properties) 
 {
-	fDevice = gSystem.CreateMemoryDevice (10,10);
-	fFont = gSystem.CreateVGFont (name, size, properties);
+	fDevice = gSVGSystem.CreateMemoryDevice (10,10);
+	fFont = gSVGSystem.CreateVGFont (name, size, properties);
 }
 
 SVGFont::~SVGFont() { delete fFont; delete fDevice; }

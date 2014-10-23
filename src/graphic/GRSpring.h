@@ -83,6 +83,7 @@ public:
 	static void setFunctionParameter(float npar);
 	void addElement(GRNotationElement * el,GRVoice * vce);
 	bool hasType(const std::type_info & ti);
+    bool hasGraceNote();
 	void setNoExtent();
 	int removeElement(GRNotationElement * el);
 	int setGRPositionX(float p_posx);

@@ -42,7 +42,7 @@ class GRNote : public GREvent
 	virtual void setNoteFormat( const ARNoteFormat * frmt );
 
 
-		ARNote * 	getARNote();
+		ARNote       * getARNote();
 		const ARNote * getARNote() const;
 
 	virtual void 	OnDraw( VGDevice & hdc ) const		= 0;
@@ -57,21 +57,28 @@ class GRNote : public GREvent
 	virtual GDirection	getDefaultThroatDirection() const;
 	virtual GDirection	getThroatDirection() const;
 
-    GRCluster *getGRCluster() const {return mCluster;}
+    GRCluster *getGRCluster() const {return fCluster;}
     void       setGRCluster(GRCluster *inCluster, bool inSignificativeNote = true);
-    bool       getClusterNoteBoolean() const {return mClusterNote;}
+    bool       getClusterNoteBoolean() const {return fClusterNote;}
+    bool       isGraceNote() {return fIsGraceNote;}
+    void       setGraceNote(bool isGrace) {fIsGraceNote = isGrace;}
 
     GRCluster *createCluster(ARNoteFormat *inCurnoteformat);
 
 	// Tell me: is a note splitted over several systems? 
 	// should only occur for CompositeNotes.
 	virtual bool isSplit(); // const;
+
+    /**** Function to avoid dynamic_cast ****/
+    GRNotationElement *isGRNote() { return this; }
+    /*****************************************/
 	
 protected :
-		GRTrill   *mOrnament;
-        GRCluster *mCluster;
-        bool mClusterNote;
-        bool mClusterHaveToBeDrawn;
+		GRTrill   *fOrnament;
+        GRCluster *fCluster;
+        bool fClusterNote;
+        bool fClusterHaveToBeDrawn;
+        bool fIsGraceNote;
 };
 
 

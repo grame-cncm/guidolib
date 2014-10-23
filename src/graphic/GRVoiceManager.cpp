@@ -628,7 +628,7 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 					// this must be the parameter from ARGrace...
 					// check whether this is an empty-event anyhow...
 					TYPE_DURATION dur (o->getDuration());
-					if (curvst->curdispdur) dur = curvst->curdispdur->getDisplayDuration();
+					if (curvst->fCurdispdur) dur = curvst->fCurdispdur->getDisplayDuration();
 
 					ev = CreateGraceNote(timepos,o,dur);
 					// this adds the Grace-Note as a regular  event...
@@ -637,7 +637,7 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 				else
 				{
 					// careful, what happens to dispDur !!!!
-					if (curvst->curdispdur != NULL && curvst->curdispdur->getDisplayDuration() > DURATION_0)
+					if (curvst->fCurdispdur != NULL && curvst->fCurdispdur->getDisplayDuration() > DURATION_0)
 					{
 						if (dynamic_cast<ARNote *>(o))			ev = CreateNote(timepos,o);
 						else if (dynamic_cast<ARRest *>(o))		ev = CreateRest(timepos,o);
@@ -697,7 +697,7 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 					ARMusicalObject * o = arVoice->GetAt(curvst->vpos);
 					
 					//we give to the object the information about the state on-off of the staff
-					o->setDrawGR(GRVoiceManager::getCurStaffDraw(staffnum));
+					o->setDrawGR(GRVoiceManager::getCurStaffDraw(staffnum) && o->getDrawGR());
 				
 					if (o->getDuration() == DURATION_0)
 						return DONE_ZEROFOLLOWS;
@@ -751,7 +751,7 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 				ARMusicalObject * o = arVoice->GetAt(curvst->vpos);
 				
 				//we give to the object the information about the state on-off of the staff
-				o->setDrawGR(GRVoiceManager::getCurStaffDraw(staffnum));
+				o->setDrawGR(GRVoiceManager::getCurStaffDraw(staffnum) && o->getDrawGR());
 
 				if ( o->getDuration() == DURATION_0)
 					return DONE_ZEROFOLLOWS;
@@ -768,7 +768,7 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 		ARMusicalObject *o = arVoice->GetAt(curvst->vpos);
 		
 		// We give to the object the information about the state on-off of the staff
-		o->setDrawGR(GRVoiceManager::getCurStaffDraw(staffnum));
+		o->setDrawGR(GRVoiceManager::getCurStaffDraw(staffnum) && o->getDrawGR());
 
 		if (o->getDuration() == DURATION_0)
 		{
@@ -820,7 +820,7 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION & timepos, int filltagmode)
 				ARMusicalObject *o = arVoice->GetAt(curvst->vpos);
 				
 				//we give to the object the information about the state on-off of the staff
-				o->setDrawGR(GRVoiceManager::getCurStaffDraw(staffnum));
+				o->setDrawGR(GRVoiceManager::getCurStaffDraw(staffnum) && o->getDrawGR());
 
 				if (o->getDuration() == DURATION_0)
 					return DONE_ZEROFOLLOWS;
@@ -1473,7 +1473,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 	if (mtag && mtag->getError()) return;	// do nothing in case of error -- added
 
 	//we give to the tag the information about the state on-off of the staff
-	mtag->setDrawGR(GRVoiceManager::getCurStaffDraw(staffnum));
+	mtag->setDrawGR(GRVoiceManager::getCurStaffDraw(staffnum) && mtag->getDrawGR());
 
 
 	const std::type_info & tinf = typeid(*apt);
@@ -1787,7 +1787,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 			GRGlobalStem * grgstem = new GRGlobalStem(mCurGrStaff,
 				static_cast<ARShareStem *>(apt),
 				curstemstate,
-				curvst->curdispdur,
+				curvst->fCurdispdur,
 				curnoteformat);
 
 			grgstem->setError(1);
@@ -1802,7 +1802,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 			GRGlobalStem * grgstem = new GRGlobalStem(mCurGrStaff,
 							static_cast<ARShareStem *>(apt),
 				curstemstate,
-				curvst->curdispdur,
+				curvst->fCurdispdur,
 				curnoteformat);
 				addGRTag(grgstem);
 
@@ -2019,7 +2019,7 @@ void GRVoiceManager::checkCenterRest(GRStaff * grstaff, float lastpos, float new
 GREvent * GRVoiceManager::CreateNote( const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject)
 {
 	ARNote * arnote = dynamic_cast<ARNote *>(arObject);	
-	if ((arObject->getDuration() <= DURATION_0) && (curvst->curdispdur == NULL))
+	if ((arObject->getDuration() <= DURATION_0) && (curvst->fCurdispdur == NULL))
 		return NULL;		// this should not happen...
 
 	else if (arnote->getPitch() == EMPTY)
@@ -2030,15 +2030,16 @@ GREvent * GRVoiceManager::CreateNote( const TYPE_TIMEPOSITION & tp, ARMusicalObj
 
 /** \brief Creates a GRNote from a ARNote
 */
-GRSingleNote * GRVoiceManager::CreateSingleNote( const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject, float size)
+GRSingleNote * GRVoiceManager::CreateSingleNote( const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject, float size, bool isGrace)
 {
 	curev = ARMusicalEvent::cast(arObject);
 	// make sure to recognize the displayduration-tag...
+
 	TYPE_DURATION dtempl;
-	if (curvst->curdispdur != NULL)
+	if (curvst->fCurdispdur != NULL)
 	{
-		dtempl = curvst->curdispdur->getDisplayDuration();
-		int i = curvst->curdispdur->getDots();
+		dtempl = curvst->fCurdispdur->getDisplayDuration();
+		int i = curvst->fCurdispdur->getDots();
 		TYPE_DURATION tmpdur (dtempl);
 		while (i>0)
 		{
@@ -2057,6 +2058,7 @@ GRSingleNote * GRVoiceManager::CreateSingleNote( const TYPE_TIMEPOSITION & tp, A
 	dtempl.normalize();
 
 	GRSingleNote * grnote = new GRSingleNote(mCurGrStaff, tmpNote, tp, arObject->getDuration());
+    grnote->setGraceNote(isGrace);
 	if (size)						grnote->setSize(size);
 	if (curglobalstem)				grnote->setGlobalStem(curglobalstem);
 	else if (curstemstate)
@@ -2117,7 +2119,7 @@ GREvent * GRVoiceManager::CreateGraceNote( const TYPE_TIMEPOSITION & tp, ARMusic
 		empty->setSize(size);
 		return empty;
 	} 
-	GRSingleNote * grnote = CreateSingleNote (tp, arObject, size);
+	GRSingleNote * grnote = CreateSingleNote (tp, arObject, size, true);
 	const TagParameterFloat * tpf = curstemstate ? curstemstate->getLength() : 0;
 	if (tpf && tpf->TagIsSet())
 		grnote->setStemLength((float)(tpf->getValue()));
@@ -2141,10 +2143,10 @@ GREvent * GRVoiceManager::CreateRest( const TYPE_TIMEPOSITION & tp, ARMusicalObj
 		curev = ARMusicalEvent::cast(arObject);
 		// this is new:
 		TYPE_DURATION dtempl;
-		if (curvst->curdispdur != NULL)
+		if (curvst->fCurdispdur != NULL)
 		{
-			dtempl = curvst->curdispdur->getDisplayDuration();
-			int i = curvst->curdispdur->getDots();
+			dtempl = curvst->fCurdispdur->getDisplayDuration();
+			int i = curvst->fCurdispdur->getDots();
 			TYPE_DURATION tmpdur (dtempl);
 			while (i>0)
 			{

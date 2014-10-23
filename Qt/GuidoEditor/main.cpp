@@ -31,7 +31,7 @@ static QString getGuidoFontPath()
 	CFRelease(appUrlRef);
 	CFRelease(macPath );
 	
-	QString guidoFontPath = QString(bundlePath) + "/Contents/Resources/" + QString(GUIDO_FONT_FILE);
+	QString guidoFontPath = QString(bundlePath) + "/Contents/Fonts/" + QString(GUIDO_FONT_FILE);
 	
 	if ( QFile::exists(guidoFontPath) )
 		return guidoFontPath ;

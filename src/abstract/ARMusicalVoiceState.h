@@ -51,7 +51,7 @@ class ARMusicalVoiceState
 
 	public:
 				ARMusicalVoiceState();
-				ARMusicalVoiceState(const ARMusicalVoiceState & vst);
+				ARMusicalVoiceState(const ARMusicalVoiceState &vst);
 				ARMusicalVoiceState & operator=(const ARMusicalVoiceState & vst);
 
 		virtual ~ARMusicalVoiceState();
@@ -113,7 +113,7 @@ class ARMusicalVoiceState
 		ARMeter * curmeter;
 
 		// the current displayduration (if set) ...
-		ARDisplayDuration * curdispdur;
+		ARDisplayDuration * fCurdispdur;
 
 		// we also save the beamstate ... makes it more elegant for autobeaming ...
 		ARBeamState * curbeamstate;

@@ -21,17 +21,21 @@
 
 class ARNewSystem : public ARMTParameter
 {
-  public:
+public:
 
-				ARNewSystem() {}
+    ARNewSystem() {}
 
-		virtual ~ARNewSystem() {}
-		virtual void print() const {}
+      virtual ~ARNewSystem() {}
+      virtual void print() const {}
 
-		virtual void PrintName(std::ostream & os) const;
-		virtual void PrintParameters(std::ostream & os) const;
+      virtual void PrintName(std::ostream & os) const;
+      virtual void PrintParameters(std::ostream & os) const;
 
-		virtual void setTagParameterList(TagParameterList & tpl);
+      virtual void setTagParameterList(TagParameterList & tpl);
+
+      /**** Function to avoid dynamic_cast ****/
+      ARMusicalObject *isARNewSystem() { return this; }
+      /*****************************************/
 
   protected:
 

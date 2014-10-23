@@ -27,19 +27,35 @@ ListOfTPLs ARBar::ltpls(1);
 
 ARBar::ARBar(const TYPE_TIMEPOSITION &timeposition)
 	: ARMTParameter(timeposition)
-  {
-  barnumber = -1; // not specified
-  }
+{
+	barnumber = -1; // not specified
+	measureNumber = 0;
+    measureNumberDisplayed = NULL;
+
+	numDx = 0;
+	numDy = 0;
+}
 
 
 ARBar::ARBar() : ARMTParameter()
-  {
-  barnumber = -1; // not specified
-  }   
+{
+	barnumber = -1; // not specified
+	measureNumber = 0;
+    measureNumberDisplayed = NULL;
+
+	numDx = 0;
+	numDy = 0;
+}
+
+void ARBar::setMeasureNumberDisplayed(bool display) {
+    delete measureNumberDisplayed;
+    measureNumberDisplayed = (display ? new TagParameterString("true") : new TagParameterString("false"));
+    measureNumberDisplayed->pflag = TagParameter::SETBYNAME;
+}
 
 ARBar::~ARBar() // does nothing
-  {
-  }
+{
+}
 
 void ARBar::print() const
 {
@@ -56,7 +72,6 @@ void ARBar::PrintParameters(std::ostream &os) const
 	{
 		os << "<" << barnumber << ">";
 	}
-
 }
 
 void ARBar::setTagParameterList(TagParameterList& tpl)
@@ -67,8 +82,7 @@ void ARBar::setTagParameterList(TagParameterList& tpl)
 
 		ListOfStrings lstrs; // (1); std::vector test impl
 		lstrs.AddTail(
-			(
-			"I,number,-1,o"));
+			("I,number,-1,o;S,displayMeasNum,false,o;U,numDx,0,o;U,numDy,0,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -83,15 +97,22 @@ void ARBar::setTagParameterList(TagParameterList& tpl)
 			// then, we now the match for
 			// the first ParameterList
 			// w, h, ml, mt, mr, mb
-			GuidoPos pos = rtpl->GetHeadPosition();
-
-			TagParameterInt * tpi =  TagParameterInt::cast(rtpl->GetNext(pos));
+            TagParameterInt * tpi =  TagParameterInt::cast(rtpl->RemoveHead());
 			assert(tpi);
-
 			if (tpi->pflag != TagParameter::NOTSET)
-			{
 				barnumber = tpi->getValue();
-			}
+            delete tpi;
+
+            measureNumberDisplayed = TagParameterString::cast(rtpl->RemoveHead());
+
+			// - dx/dy for measure number
+			TagParameterFloat *f = TagParameterFloat::cast(rtpl->RemoveHead());
+			numDx = f->getValue();
+            delete f;
+
+			f = TagParameterFloat::cast(rtpl->RemoveHead());
+			numDy = f->getValue();
+            delete f;
 		}
 
 		delete rtpl;
@@ -102,7 +123,4 @@ void ARBar::setTagParameterList(TagParameterList& tpl)
 	}
 
 	tpl.RemoveAll();
-
-  }
-
-
+}

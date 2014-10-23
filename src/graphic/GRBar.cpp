@@ -12,19 +12,26 @@
 
 */
 
+#include <iostream>
+#include <sstream>
+#include <string.h>
+
 #include "GUIDOEngine.h"
 #include "GUIDOInternal.h"
 
 #include "ARBar.h"
 
+#include "ARMeter.h"
 #include "GRBar.h"
 #include "GRStaff.h"
 #include "GRDoubleBar.h"
 #include "GRSystemSlice.h"
 #include "VGDevice.h"
+#include "TagParameterString.h"
 #include "math.h"
 
-#include <iostream>
+#include "FontManager.h"
+
 using namespace std;
 
 //#define TRACE
@@ -184,6 +191,25 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
 
     if (staffSize < kMinNoteSize) // Too small, don't draw
         return;
+
+    ARBar *arBar = getARBar();
+
+    if (!strcmp(arBar->getMeasureNumberDisplayed()->getValue(), "true") && arBar->getMeasureNumber() != 0)
+	{
+		const VGFont* hmyfont = FontManager::gFontText;
+		hdc.SetTextFont( hmyfont );
+
+		string barNumberString;
+		ostringstream barNumberStream;
+		barNumberStream << arBar->getMeasureNumber();
+		barNumberString = barNumberStream.str();
+		// Prendre en compte la staffSize ?
+
+		float measureNumDxOffset =   arBar->getMeasureNumberDxOffset();
+		float measureNumDyOffset = - arBar->getMeasureNumberDyOffset();
+
+		hdc.DrawString(mPosition.x - 15 + measureNumDxOffset, mPosition.y - 40 + measureNumDyOffset, barNumberString.c_str(), barNumberString.size());
+	}
 
     // - Vertical adjustement according to staff's line number
     float offsety1 = (fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;

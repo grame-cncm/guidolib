@@ -27,9 +27,11 @@ class ARFactory;
 /* \brief a class for reading gmn streams
 */
 class GuidoParser {
-		
-	void initScanner();
-	void destroyScanner();
+	
+    protected:
+    
+	virtual void initScanner();
+	virtual void destroyScanner();
 
 	int fzaehlerSet;
 	int faccidentals;
@@ -40,13 +42,13 @@ class GuidoParser {
 	long int fnt_denom;
 
 	int fErrorLine;			//< filled in case of syntax error
-	int fErrorColumn;		//< filled in case of syntax error
+    int fErrorColumn;		//< filled in case of syntax error
 	std::string fErrorMsg;	//< filled in case of syntax error
 	
-	int	_yyparse();
+	virtual int	_yyparse();
 	
 	public:
-		void              *fScanner;   // the flex scanner
+        void              *fScanner;   // the flex scanner
 		std::istream      *fStream;    // input stream
 		ARFactory         *fFactory;
 		std::string	       fText;      // the current text
@@ -54,49 +56,49 @@ class GuidoParser {
 				 GuidoParser();
 		virtual ~GuidoParser();
 		
-		ARHandler           parse();
-        const ARFactory    *getFactory() const  { return fFactory; }
+		virtual ARHandler           parse();
+        virtual const ARFactory    *getFactory() const  { return fFactory; }
 
-        void                setStream(std::istream *stream);
+        virtual void                setStream(std::istream *stream);
 
-		void noteInit		(const char *id);
-		void noteAcc		(int n);
-		void noteOct		(int n);
-		void noteEnum		(long int n);
-		void noteDenom		(long int n);
-		void noteDot		();
-		void noteDdot		();
-		void noteTdot		();
-		void noteAbsDur		(long int n);
-		void appendNote	();
+		virtual void noteInit		(const char *id);
+		virtual void noteAcc		(int n);
+		virtual void noteOct		(int n);
+		virtual void noteEnum		(long int n);
+		virtual void noteDenom		(long int n);
+		virtual void noteDot		();
+		virtual void noteDdot		();
+		virtual void noteTdot		();
+		virtual void noteAbsDur		(long int n);
+		virtual void appendNote	();
 
-		void chordInit		();
-		void chordInitNote	();
-		void seqAppendChord	();
+		virtual void chordInit		();
+		virtual void chordInitNote	();
+		virtual void seqAppendChord	();
 
-		void seqInit		();
-		void seqExit		();
+		virtual void seqInit		();
+		virtual void seqExit		();
 
-		void segmInit		();
-		void segmExit		();
-		void segmAppendSeq	();
+		virtual void segmInit		();
+		virtual void segmExit		();
+		virtual void segmAppendSeq	();
 
-		void tagStart		(const char* id, long int no);
-		void tagIntArg		(long int n);
-		void tagFloatArg	(double r);
-		void tagArgUnit		(const char* unit);
-		void tagStrArg		(const char *s);
-		void tagAdd			();
-		void tagAddArg		(const char *s);
-		void tagEnd			();
-		void tagRange		();
+		virtual void tagStart		(const char* id, long int no);
+		virtual void tagIntArg		(long int n);
+		virtual void tagFloatArg	(double r);
+		virtual void tagArgUnit		(const char* unit);
+		virtual void tagStrArg		(const char *s);
+		virtual void tagAdd			();
+		virtual void tagAddArg		(const char *s);
+		virtual void tagEnd			();
+		virtual void tagRange		();
 
-		void setError(int line, int column, const char *msg)
+		virtual void setError(int line, int column, const char *msg)
 					{ fErrorLine = line; fErrorColumn = column; fErrorMsg = msg; }
 
-		int getErrorLine() const				{ return fErrorLine; }
-		int getErrorColumn() const				{ return fErrorColumn; }
-		const char* getErrorMsg() const			{ return fErrorMsg.c_str(); }
+		virtual int getErrorLine() const				{ return fErrorLine; }
+		virtual int getErrorColumn() const				{ return fErrorColumn; }
+		virtual const char* getErrorMsg() const			{ return fErrorMsg.c_str(); }
 };
 
 #endif

@@ -166,7 +166,7 @@ protected:
 
 private:
 
-	GRSingleNote *	CreateSingleNote	(const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject, float size=0);
+	GRSingleNote *	CreateSingleNote	(const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject, float size=0, bool isGrace=false);
 	void			AddRegularEvent		(GREvent * ev);
 	void			organizeGlissando(GRTag * g);
 	std::vector<GRBeam *> curbeam;

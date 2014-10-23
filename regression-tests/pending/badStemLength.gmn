@@ -1,3 +1,1 @@
-% Stem should be longer (cf. Elaine Gould's book, page 16)
-%
-[a3/64]
+[\stemsAuto<length=0> d]

@@ -1,0 +1,34 @@
+% New \meter-tag attribute :
+% "autoMeasuresNum" defines if measures number will be displayed.
+%            Values : "on" or "off".
+%            Default value : "off".
+%
+% New \bar-tag attribute :
+% "displayMeasNum" defines if measure number will be displayed at this precise bar
+%            Values : "true" or "false".
+%            Default value is "true" if meter is set and "autoMeasuresNum" meter param is "on", false otherwise. 
+% "numDx"/"numDy" defines the measure number horiz./vert. offset on this bar
+%            Values : unit.
+%
+{
+    [
+        a/2 b \bar
+        c d \bar<displayMeasNum="true", numDy=5>
+        e f
+    ],
+    [
+        \meter<"4/4", autoMeasuresNum="on">
+        a/2 b
+        c d \bar<displayMeasNum="false">
+        e f
+        g \bar a b
+    ],
+    [
+        \meter<"4/4", autoMeasuresNum="off">
+        a/2 b
+        c d \bar<displayMeasNum="true", numDx=5>
+        e f
+        g \bar
+        a b
+    ]
+}

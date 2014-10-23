@@ -16,6 +16,7 @@
 */
 
 //#include <typeinfo>
+#include <vector>
 
 #include "ObjectList.h"
 #include "ARMusicalEvent.h"
@@ -42,6 +43,7 @@ class ARNote;
 class ARClef;
 class ARKey;
 class ARCluster;
+class ARRepeatBegin;
 
 class GRVoiceManager;
 class TimeUnwrap;
@@ -78,6 +80,8 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 	friend class GRVoiceManager;
 	friend class ARMusic;
 	
+	void printPosTags(std::ostream & os, GuidoPos& pos, GuidoPos prevpos, bool lookend) const;
+	
 	public:
 		typedef enum		CHORD_TYPE {UP_SIMPLE, DOWN_SIMPLE, UP, DOWN, UP_COMPLEX, DOWN_COMPLEX, ERROR} CHORD_TYPE;
 		typedef enum		CHORD_ACCIDENTAL {NATURAL, FLAT, SHARP, CAU_NATURAL, CAU_FLAT, CAU_SHARP, NONE} CHORD_ACCIDENTAL;
@@ -89,9 +93,9 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		void			MarkVoice(float from,float length, unsigned char red, unsigned char green, unsigned char blue);
 		void			MarkVoice(int fromnum,int fromdenom, int lengthnum, int lengthdenom, unsigned char red, unsigned char green, unsigned char blue);
 
-		virtual void	initChordNote();
-		virtual void	FinishChord();
-		virtual void	BeginChord();
+		virtual void	    initChordNote();
+		virtual void	    FinishChord(bool trill);
+		virtual ARChordTag *BeginChord();
 
 		ARNote        * setTrillChord(CHORD_TYPE & param_type, CHORD_ACCIDENTAL & param_accidental);
         void            setClusterChord(ARCluster *inCurrentCluster);
@@ -145,8 +149,10 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 
 		// functions for the voicestate...
 		virtual			GuidoPos GetHeadPosition(ARMusicalVoiceState & vst) const;
+		virtual			GuidoPos GetHeadPosition() const;
 		virtual void	GetPrevEvent(GuidoPos & pos, ARMusicalVoiceState & vst) const;
 		virtual			ARMusicalObject * GetNext(GuidoPos & pos, ARMusicalVoiceState & vst) const;
+		virtual			ARMusicalObject * GetNextObject(GuidoPos & pos) const;
 		virtual const	ARMusicalVoiceState * getVoiceState() const		{ return mCurVoiceState; }
 
 		// for automatic-beaming ...
@@ -162,6 +168,10 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		void			removeAutoTags();
 		void			setReadMode(_readmode newreadmode)	{ readmode = newreadmode; }
 		_readmode getReadMode() const						{ return readmode; }
+
+        // C.D. 22/10/2014 Perf improvement : prevent CheckBreakPosition from searching a RepeatBegin tag in all voice list
+        void addRepeatBegin(ARRepeatBegin *repeatBegin) { repeatBeginList->push_back(repeatBegin); }
+        std::vector<ARRepeatBegin *> *getRepeatBeginList() { return repeatBeginList; }
 
 	protected:
 		ARChordTag          *currentChord;
@@ -181,6 +191,7 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		void doAutoCheckStaffStateTags();
 		void doAutoDisplayCheck();
 		void doAutoBarlines();
+		void doAutoMeasuresNumbering();
 		void doAutoEndBar();
 		void doAutoBeaming();
 		void doAutoGlissando();
@@ -208,9 +219,14 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		StartPositionTagList *	mStartPosTagList;
 	
 	private:
+        void        finishChordWithOneChordGroup     (TYPE_DURATION &chorddur, bool trill);
+        void        finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur, ARMusicalVoiceState &vst, bool trill);
+
 		GuidoPos	CopyChord( ARMusicalVoiceState & vst, TYPE_TIMEPOSITION tp, const TYPE_DURATION & newdur);
 		ARClef*		newAutoClef(ARClef* oldclef, const TYPE_TIMEPOSITION& tp);
-		ARKey *		newAutoKey(ARKey * oldkey, const TYPE_TIMEPOSITION& tp);	
+		ARKey *		newAutoKey(ARKey * oldkey, const TYPE_TIMEPOSITION& tp);
+
+        std::vector<ARRepeatBegin *> *repeatBeginList;
 };
 
 #endif

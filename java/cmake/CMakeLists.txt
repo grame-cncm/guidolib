@@ -4,7 +4,12 @@
 project(guidojni)
 cmake_minimum_required(VERSION 2.6)
 
-set (target jniGUIDOEngine)
+if(${CMAKE_SYSTEM_PROCESSOR} STREQUAL "x86_64")
+  set (target jniGUIDOEngine64)
+else()
+  set (target jniGUIDOEngine)
+endif()
+
 #######################################
 # versions management
 set (VERSION 1.21)
@@ -22,9 +27,8 @@ FIND_PACKAGE(JNI REQUIRED)
 
 
 if(APPLE)
-	set (CMAKE_OSX_ARCHITECTURES "x86_64 i386")
-	set (CMAKE_OSX_SYSROOT /Developer/SDKs/MacOSX10.6.sdk)
-	set (CMAKE_C++_FLAGS -mmacosx-version-min=10.4)
+	set (CMAKE_OSX_ARCHITECTURES "x86_64")
+	set (CMAKE_C++_FLAGS -mmacosx-version-min=10.6)
 endif(APPLE)
 
 if(WIN32)
@@ -37,18 +41,18 @@ if(WIN32)
   add_definitions(-DVC2005)
  elseif(${CMAKE_GENERATOR} STREQUAL "Visual Studio 9 2008")
   add_definitions(-DVC2005)
- endif(${CMAKE_GENERATOR} STREQUAL "Visual Studio 6")
- 
+ endif()
+  set (LIBDEST /usr/lib64)
+
  if (${CMAKE_GENERATOR} MATCHES ".*Win64")
   set (WIN64 1)
   set (target jniGUIDOEngine64)
- endif (${CMAKE_GENERATOR} MATCHES ".*Win64")
+ endif ()
 
 endif(WIN32)
 
 #######################################
 # set directories, src and headers.
-set (JAVA_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../guidoengine)
 set (JNI_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../jni)
 set (GUIDO_SRC ${CMAKE_CURRENT_SOURCE_DIR}/../../src)
 
@@ -57,10 +61,8 @@ set (HEADERS "${JNI_PATH}/*.h")				# add header files
 set (INCL ${JNI_INCLUDE_DIRS} ${GUIDO_SRC}/include ${GUIDO_SRC}/tools)
 
 if(APPLE)
-#	set (SRC ${SRC} ${JNI_PATH}/macosx/guidoengine_native_paint.mm)
 	set (INCL ${INCL} ${GUIDO_SRC}/include ${CMAKE_CURRENT_SOURCE_DIR}/../../macosx/src)
 elseif(WIN32)
-#	set (SRC ${SRC} ${JNI_PATH}/win32/guidoengine_native_paint.cpp)
 	set (INCL ${INCL} ${GUIDO_SRC}/include ${CMAKE_CURRENT_SOURCE_DIR}/../../win32/src)
 elseif(UNIX)
 	set (SRC ${SRC} )
@@ -85,12 +87,14 @@ include_directories( ${INCL})
 file (GLOB JAVA RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${JAVA_PATH}/*.java")
 file (GLOB LIBSRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${SRC})
 file (GLOB LIBH RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${HEADERS})
-set (GUIDO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../cmake)
+set (GUIDO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../build)
 if (WIN64)
- find_library (GUIDO GUIDOEngine64 PATHS ${GUIDO_PATH}/Release NO_DEFAULT_PATH)
-else(WIN64)
- find_library (GUIDO GUIDOEngine PATHS ${GUIDO_PATH}/Release NO_DEFAULT_PATH)
-endif(WIN64)
+ find_library (GUIDO GUIDOEngine64 PATHS ${GUIDO_PATH}/win64/Release NO_DEFAULT_PATH)
+elseif(APPLE)
+ find_library (GUIDO GUIDOEngine PATHS ${GUIDO_PATH}/MacOS/Release NO_DEFAULT_PATH)
+else()
+ find_library (GUIDO GUIDOEngine)
+endif()
 
 set (LIBCONTENT ${LIBSRC} ${LIBH})
 #set (LINK ${JNI_LIBRARIES} ${GUIDO})
@@ -110,12 +114,8 @@ target_link_libraries (${target} ${LINK})
 
 #######################################
 # install settings
-if(!WIN32)
+if (NOT WIN32 AND NOT IOS)
 set (LIBDEST /usr/lib)
-if(${CMAKE_SYSTEM_PROCESSOR} STREQUAL "x86_64")
-  set (LIBDEST /usr/lib64)
-  message (STATUS "64 bits system detected : setting install dir to ${LIBDEST}")
-endif(${CMAKE_SYSTEM_PROCESSOR} STREQUAL "x86_64")
-
 install ( TARGETS ${target}	LIBRARY DESTINATION ${LIBDEST})
-endif(!WIN32)
+endif()
+

@@ -73,6 +73,10 @@ public:
 
 	int getDots() const
 	{ return dots; }
+    
+    /**** Function to avoid dynamic_cast ****/
+    ARMusicalObject *isARDisplayDuration() { return this; }
+    /*****************************************/
 
 protected:
 	static ListOfTPLs ltpls;
@@ -84,7 +88,6 @@ protected:
 	// the parameters ...
 	TYPE_DURATION dur; // the dur of this tuplet
 	int dots;
-
 };
 
 

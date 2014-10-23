@@ -79,7 +79,7 @@ GRSystemStartEndStruct * GRGlissando::initGRGlissando( GRStaff * grstaff )
 	sse->grsystem = grstaff->getGRSystem();
 
 	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
-	sse->endflag = GRSystemStartEndStruct::RIGHTMOST;
+	sse->endflag   = GRSystemStartEndStruct::RIGHTMOST;
 
 	mStartEndList.AddTail(sse);
 		
@@ -251,7 +251,7 @@ void GRGlissando::updateGlissando( GRStaff * inStaff )
 	// Collects informations about the context
 
 	fglissContext.staff = inStaff;
-	getGlissandoBeginingContext( &fglissContext, sse );
+	getGlissandoBeginningContext( &fglissContext, sse );
 	getGlissandoEndingContext( &fglissContext, sse );
 
 	ARGlissando * arGliss = static_cast<ARGlissando *>(getAbstractRepresentation());
@@ -296,63 +296,62 @@ void GRGlissando::updateGlissando( GRStaff * inStaff )
 	float acc = 0;
 	
 	
-	if(fglissContext.firstRightHead)
+	if (fglissContext.firstRightHead)
 	{
 		// position of the noteHead + its offset
 		XRight = fglissContext.firstRightHead->getPosition().x + fglissContext.rightNoteDX;
 		YRight = fglissContext.firstRightHead->getPosition().y + fglissContext.rightNoteDY;
 		// the basic x-offset will be 3/4 of the noteHead size.
-		dFirstRightx = fglissContext.firstRightHead->getBoundingBox().Width()*3/4*fglissContext.sizeRight;
+		dFirstRightx = fglissContext.firstRightHead->getBoundingBox().Width() * 3/4 * fglissContext.sizeRight;
 
-		if(fglissContext.accidentalRight)
-		{
-			acc = fglissContext.accidentalRight->getBoundingBox().Width()*getSize();
-		}
+		if (fglissContext.accidentalRight)
+			acc = fglissContext.accidentalRight->getBoundingBox().Width() * getSize() + LSPACE * 0.5f;
 	}
 
 
-	if(fglissContext.firstLeftHead)
+	if (fglissContext.firstLeftHead)
 	{
 		// position of the noteHead + its offset
 		XLeft = fglissContext.firstLeftHead->getPosition().x + fglissContext.leftNoteDX; 
 		YLeft = fglissContext.firstLeftHead->getPosition().y + fglissContext.leftNoteDY;
 		// the basic x-offset will be 3/4 of the noteHead size.
-		dFirstLeftx = fglissContext.firstLeftHead->getBoundingBox().Width()*3/4*fglissContext.sizeLeft;
+		dFirstLeftx = fglissContext.firstLeftHead->getBoundingBox().Width() * 3/4 * fglissContext.sizeLeft;
 	}
 
 	// the thickness entered by the user
-	float thicknessWanted = arGliss->getThickness()->getValue( staffLSpace );
+	float thicknessWanted = arGliss->getThickness()->getValue(staffLSpace);
 	
-	if(fill && fglissContext.secondLeftHead && fglissContext.secondRightHead)
+	if (fill && fglissContext.secondLeftHead && fglissContext.secondRightHead)
 	{
 		// now we are in the case of the "fill" option, and we have two glissandi in parallel (chords or clusters)
 
-		YLeft2 = fglissContext.secondLeftHead->getPosition().y + fglissContext.leftNoteDY;
+		YLeft2  = fglissContext.secondLeftHead->getPosition().y + fglissContext.leftNoteDY;
 		YRight2 = fglissContext.secondRightHead->getPosition().y + fglissContext.rightNoteDY;
 
 		// we add all the variables
-		if(YLeft>YLeft2)
+		if(YLeft > YLeft2)
 		{
-			fglissInfos->points[0].y = YLeft - dy1 + thicknessWanted/2;
+			fglissInfos->points[0].y = YLeft  - dy1 + thicknessWanted/2;
 			fglissInfos->points[1].y = YLeft2 - dy1 - thicknessWanted/2;
 		}
 		else
 		{
-			fglissInfos->points[0].y = YLeft - dy1 - thicknessWanted/2;
+			fglissInfos->points[0].y = YLeft  - dy1 - thicknessWanted/2;
 			fglissInfos->points[1].y = YLeft2 - dy1 + thicknessWanted/2;	
 		}
-		if(YRight>YRight2)
+
+		if (YRight > YRight2)
 		{
-			fglissInfos->points[3].y = YRight - dy2 + thicknessWanted/2;
+			fglissInfos->points[3].y = YRight  - dy2 + thicknessWanted/2;
 			fglissInfos->points[2].y = YRight2 - dy2 - thicknessWanted/2;
 		}
 		else
 		{
-			fglissInfos->points[3].y = YRight - dy2 - thicknessWanted/2;
+			fglissInfos->points[3].y = YRight  - dy2 - thicknessWanted/2;
 			fglissInfos->points[2].y = YRight2 - dy2 + thicknessWanted/2;
 		}
 		
-		fglissInfos->points[0].x = fglissInfos->points[1].x = XLeft + dx1 + dFirstLeftx;
+		fglissInfos->points[0].x = fglissInfos->points[1].x = XLeft  + dx1 + dFirstLeftx;
 		fglissInfos->points[3].x = fglissInfos->points[2].x = XRight + dx2 - dFirstRightx - acc;
 		fglissInfos->position = fglissInfos->points[0];
 		
@@ -363,19 +362,19 @@ void GRGlissando::updateGlissando( GRStaff * inStaff )
 	else
 	{
 		// now we manage the case of same Y but different pitches...
-		if(YRight == YLeft)
+		if (YRight == YLeft)
 		{
 			bool forceUp = false;
 			bool forceDown = false;
-			compareAccidentals( sse, &forceUp, &forceDown);
+			compareAccidentals(sse, &forceUp, &forceDown);
 			if(forceUp)
 			{
-				YLeft += LSPACE/4;
+				YLeft  += LSPACE/4;
 				YRight -= LSPACE/4;
 			}
 			else if (forceDown)
 			{
-				YLeft -= LSPACE/4;
+				YLeft  -= LSPACE/4;
 				YRight += LSPACE/4;
 			}
 		}
@@ -385,15 +384,15 @@ void GRGlissando::updateGlissando( GRStaff * inStaff )
 		float deltaY = YRight - YLeft;
 
 		// basic y-offset
-		dFirstLefty = dFirstLeftx*deltaY/deltaX;
-		dFirstRighty = dFirstRightx*deltaY/deltaX;
+		dFirstLefty  = dFirstLeftx * deltaY/deltaX;
+		dFirstRighty = dFirstRightx * deltaY/deltaX;
 
 		// in order to have the same thickness, independently from the orientation of the line
 		float thickness = thicknessWanted*sqrt(deltaX*deltaX + deltaY*deltaY)/deltaX*getSize();
 
 		// we add all the variables
-		fglissInfos->points[0].y = YLeft - dy1 + dFirstLefty + thickness/2;
-		fglissInfos->points[1].y = YLeft - dy1 + dFirstLefty - thickness/2;
+		fglissInfos->points[0].y = YLeft  - dy1 + dFirstLefty + thickness/2;
+		fglissInfos->points[1].y = YLeft  - dy1 + dFirstLefty - thickness/2;
 		fglissInfos->points[3].y = YRight - dy2 - dFirstRighty + thickness/2;
 		fglissInfos->points[2].y = YRight - dy2 - dFirstRighty - thickness/2;
 		fglissInfos->points[0].x = fglissInfos->points[1].x = XLeft + dx1 + dFirstLeftx;
@@ -402,33 +401,34 @@ void GRGlissando::updateGlissando( GRStaff * inStaff )
 	}
 }
 
-void GRGlissando::getGlissandoBeginingContext( GRGlissandoContext * ioContext, GRSystemStartEndStruct * sse )
+void GRGlissando::getGlissandoBeginningContext( GRGlissandoContext * ioContext, GRSystemStartEndStruct * sse )
 {
 	GRNotationElement * startElement = sse->startElement;
 	if(sse->startflag == GRSystemStartEndStruct::OPENLEFT)
 		startElement = flaststartElement;
 		
 	GRSingleNote * note = dynamic_cast<GRSingleNote *>(startElement);
-	if( note )
+
+	if(note)
 	{
 		ioContext->firstLeftHead = note->getNoteHead();
 
 		// fill = true  &&  a previous glissando exists ?
-		if(fill && prevGRGlissando && prevGRGlissando->getContext()->firstLeftHead)
+		if (fill && prevGRGlissando && prevGRGlissando->getContext()->firstLeftHead)
 		{
-			if(prevGRGlissando->getContext()->firstLeftHead->getPosition().x == fglissContext.firstLeftHead->getPosition().x)
+			if (prevGRGlissando->getContext()->firstLeftHead->getPosition().x == fglissContext.firstLeftHead->getPosition().x)
 			{
 				ioContext->secondLeftHead = prevGRGlissando->getContext()->firstLeftHead;
 				// if this glissando fills the space between him and the previous one, we don't need to draw the line of the previous one
 				// except in the case of another filled glissando.
-				if(!prevGRGlissando->isFilled())
+				if (!prevGRGlissando->isFilled())
 					prevGRGlissando->setHidden();
 			}
 		}
 		else
 			ioContext->secondLeftHead = NULL;
 
-		ioContext->sizeLeft = note->getSize();
+		ioContext->sizeLeft   = note->getSize();
 		ioContext->leftNoteDX = note->getOffset().x;
 		ioContext->leftNoteDY = note->getOffset().y;
 	}
@@ -437,11 +437,13 @@ void GRGlissando::getGlissandoBeginingContext( GRGlissandoContext * ioContext, G
 void GRGlissando::getGlissandoEndingContext( GRGlissandoContext * ioContext, GRSystemStartEndStruct * sse )
 {	
 	GRNotationElement * endElement = sse->endElement;
-	if(sse->endflag == GRSystemStartEndStruct::OPENRIGHT)
+
+	if (sse->endflag == GRSystemStartEndStruct::OPENRIGHT)
 		endElement = lastendElement;
 
 	GRSingleNote * note = dynamic_cast<GRSingleNote *>(endElement);
-	if( note )
+
+	if(note)
 	{
 		//noteHead
 		ioContext->firstRightHead = note->getNoteHead();
@@ -452,7 +454,7 @@ void GRGlissando::getGlissandoEndingContext( GRGlissandoContext * ioContext, GRS
 			ioContext->accidentalRight = noteacclist.GetHead();
 
 		// fill = true  &&  a previous glissando exists ?
-		if(fill && prevGRGlissando && prevGRGlissando->getContext()->firstRightHead)
+		if (fill && prevGRGlissando && prevGRGlissando->getContext()->firstRightHead)
 		{
 			if(prevGRGlissando->getContext()->firstRightHead->getPosition().x == fglissContext.firstRightHead->getPosition().x)
 			{
@@ -471,7 +473,7 @@ void GRGlissando::getGlissandoEndingContext( GRGlissandoContext * ioContext, GRS
 		else
 			ioContext->secondRightHead = NULL;
 		
-		ioContext->sizeRight = note->getSize();
+		ioContext->sizeRight   = note->getSize();
 		ioContext->rightNoteDX = note->getOffset().x;
 		ioContext->rightNoteDY = note->getOffset().y;
 	}

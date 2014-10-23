@@ -37,7 +37,7 @@ class_export SVGSystem : public VGSystem
 
 		virtual VGDevice*		CreateDisplayDevice( std::ostream& outstream, const char* fontfile=0 );
 		virtual VGDevice*		CreateDisplayDevice();
-		virtual VGDevice*		CreateDisplayDevice(const char* fontfile=0);
+		virtual VGDevice*		CreateDisplayDevice(const char* fontfile);
 		virtual VGDevice*		CreateMemoryDevice( int inWidth, int inHeight);
 		virtual VGDevice*		CreateMemoryDevice( int inWidth, int inHeight, const char* fontfile=0 );
 		virtual	VGDevice*		CreateMemoryDevice( const char * inPath );

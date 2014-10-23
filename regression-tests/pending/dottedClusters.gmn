@@ -1,8 +1,0 @@
-{
-    [
-        \meter<"4/4"> a b c \cluster({a/1, b})
-    ],
-    [
-        \meter<"4/4"> \cluster({a., c})
-    ]
-}

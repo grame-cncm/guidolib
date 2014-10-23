@@ -143,8 +143,9 @@ private:
 	void exportToPdf( QGuidoPainter * painter, const QString& filename);
 	void exportToSVG( QGuidoPainter * painter, const QString& filename);
 	void exportToMidi( CARHandler ar, const QString& filename);
+#ifndef IOS
 	void print(QGuidoPainter * guidoPainter, QPrinter& printer);
-
+#endif
 	// AdjustMode defines zoom auto-adjustement modes :
 	typedef enum  AdjustMode {
 		AdjustNone=0 ,	// no auto-adjustement

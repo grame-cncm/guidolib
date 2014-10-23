@@ -26,7 +26,7 @@ ifeq ($(system), MINGW32_NT-6.1)
   libbin  := ../build/win32/Release
   toolbin := ../tools/build/win32/Release
   lib       = $(libbin)/GUIDOEngine.lib
-  LEAKTOOLS = GUIDOEngine.dll guidogetversion.exe guido2svg.exe guidoparse.exe guidoar2gr.exe guidodraw.exe guido2image.exe guido2midi.exe
+  LEAKTOOLS = GUIDOEngine.dll guidogetversion.exe guido2svg.exe guidoparse.exe guidoar2gr.exe guidodraw.exe guido2image.exe guidogetstaffmap.exe guidogetsystemmap.exe guidogettimemap.exe guidogetvoicemap.exe guido2midi.exe
 else
   lib = -lGUIDOEngine
 endif
@@ -43,16 +43,26 @@ noplost	= "possibly lost: 0"
 gmnfiles     = $(shell find ../gmn-examples -name "*.gmn") $(shell find ../regression-tests -name "*.gmn")
 pdfout		:= $(patsubst ../%.gmn, $(version)/%.pdf, $(gmnfiles))
 svgout		:= $(patsubst ../%.gmn, $(version)/%.svg, $(gmnfiles))
+
+sysmapout		:= $(patsubst ../%.gmn, $(version)/maps/system/%.map, $(gmnfiles))
+staffmapout		:= $(patsubst ../%.gmn, $(version)/maps/staff/%.map, $(gmnfiles))
+voicemapout		:= $(patsubst ../%.gmn, $(version)/maps/voice/%.map, $(gmnfiles))
+timemapout		:= $(patsubst ../%.gmn, $(version)/maps/time/%.map, $(gmnfiles))
+mapsout		:= $(sysmapout) $(staffmapout) $(voicemapout) $(timemapout)
+
 leaksout 	:= $(patsubst ../%.gmn, $(version)/$(TOOLPATH)/%.leaks.txt, $(gmnfiles))
 midiout     := $(patsubst ../%.gmn, $(version)/%.mid, $(gmnfiles))
 
+
 allpdf 		 = $(shell [ -d $(version) ] && find $(version) -name "*.pdf")
 allsvg 		 = $(shell [ -d $(version) ] && find $(version) -name "*.svg")
+allmap 		 = $(shell [ -d $(version) ] && find $(version)/maps -name "*.map")
 leaksfiles  := $(patsubst ../%.gmn, $(version)/$(TOOLPATH)/%.leaks.out, $(gmnfiles))
 
 validpdf 	= $(patsubst %.pdf, %.outpdf, $(allpdf))
 validsvg 	= $(patsubst %.svg, %.outsvg, $(allsvg))
-validsvgwin 	= $(patsubst %.svg, %.outsvgwin, $(allsvg))
+validmap 	= $(patsubst %.map, %.outmap, $(allmap))
+validsvgwin = $(patsubst %.svg, %.outsvgwin, $(allsvg))
 
 .PHONY: pdf svg
 
@@ -67,6 +77,7 @@ help:
 	@echo "'midi'         : makes MIDI files for a set of gmn files"
 	@echo "                 the output folder name is the current guido engine version number."
 	@echo "'validate    VERSION=another_version': compares the current version svg output with another one"
+	@echo "'validateWin VERSION=another_version': compares on Windows the current version svg output with another one (Firefox has to be installed (and opened) in C:/Program Files (x86)/Mozilla Firefox/firefox, if not change Makefile)"
 	@echo "'pdfvalidate VERSION=another_version': compares the current version pdf output with another one"
 	@echo "'checkleaks TOOL=a_tool': check memory leaks on a set of gmn files using various tools"
 	@echo "                 the basic tool set is included in this folder but any tool arbitrary tool could be used as well"
@@ -84,6 +95,11 @@ help:
 validate: $(validsvg)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
 	@echo Validating version $(version) with $(VERSION) $(tmp)
+	make validmap
+
+validmap: $(validmap)
+	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
+	@echo Validating version maps $(version) with $(VERSION) $(tmp)
 	
 validateWin: $(validsvgwin)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
@@ -92,19 +108,28 @@ validateWin: $(validsvgwin)
 pdfvalidate: $(validpdf)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
 	@echo Validating version $(version) with $(VERSION) $(tmp)
+	make validmap
 	
+#########################################################################
+# rules
 %.outsvg: %.svg
-		$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
-		@[ -f  $(tmp) ] || echo $< : new file
-		$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
-		@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open -t $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
+	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
+	@[ -f  $(tmp) ] || echo $< : new file
+	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
+	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open -t $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
+	
+%.outmap: %.map
+	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
+	@[ -f  $(tmp) ] || echo $< : new file
+	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
+	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open -t $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
 	
 %.outsvgwin: %.svg
 	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
 	@[ -f  $(tmp) ] || echo $< : new file
 	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
 	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && C:/Program\ Files\ \(x86\)/Mozilla\ Firefox/firefox -new-tab $(patsubst $(version)/%, $(VERSION)/%, $<) -new-tab $<; true)
-	
+		
 %.outpdf: %.pdf
 	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
 	@[ -f  $(tmp) ] || echo $< : new file
@@ -113,7 +138,7 @@ pdfvalidate: $(validpdf)
 
 #########################################################################
 # pdf output generation
-pdf: forcepdfdate $(pdfout)
+pdf: forcepdfdate $(pdfout) $(mapsout)
 	@./forcepdfdate 20100101120000 $(pdfout)
 
 pdfclean: 
@@ -160,7 +185,8 @@ checkcrash: $(LEAKTOOLS)
 
 #########################################################################
 # tools to generate svg files
-svg: $(svgout)
+svgWin: $(svgout)
+svg: $(svgout) $(mapsout)
 
 svgclean: 
 	rm -f $(svgout)
@@ -168,6 +194,27 @@ svgclean:
 $(version)/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	-$(guido2svg) $< | grep -v "SVG file generated using" > __tmp.svg  &&  mv __tmp.svg $@
+
+
+#########################################################################
+# tools to generate map files
+map: $(mapsout)
+
+$(version)/maps/system/%.map: ../%.gmn
+	@[ -d $(@D) ] || mkdir -p $(@D)
+	-guidogetsystemmap $<  > $@
+
+$(version)/maps/staff/%.map: ../%.gmn
+	@[ -d $(@D) ] || mkdir -p $(@D)
+	-guidogetstaffmap $<  > $@
+
+$(version)/maps/voice/%.map: ../%.gmn
+	@[ -d $(@D) ] || mkdir -p $(@D)
+	-guidogetvoicemap $<  > $@
+
+$(version)/maps/time/%.map: ../%.gmn
+	@[ -d $(@D) ] || mkdir -p $(@D)
+	-guidogettimemap $<  > $@
 
 
 #########################################################################
@@ -194,6 +241,18 @@ guidoar2gr.exe:
 
 guidodraw.exe:
 	cp $(toolbin)/guidodraw.exe .
+
+guidogetstaffmap.exe:
+	cp $(toolbin)/guidogetstaffmap.exe .
+
+guidogetsystemmap.exe:
+	cp $(toolbin)/guidogetsystemmap.exe .
+
+guidogettimemap.exe:
+	cp $(toolbin)/guidogettimemap.exe .
+
+guidogetvoicemap.exe:
+	cp $(toolbin)/guidogetvoicemap.exe .
 
 guido2image.exe:
 	cp ../Qt/bin/guido2image.exe .

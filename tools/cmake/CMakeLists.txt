@@ -18,7 +18,7 @@ endif(UNIX)
 
 if(APPLE)
 	add_definitions(-D_USE_QD_COORDINATES_)
-	set (CMAKE_OSX_ARCHITECTURES "x86_64 i386")
+	set (CMAKE_OSX_ARCHITECTURES "x86_64")
 	set (CMAKE_C++_FLAGS -mmacosx-version-min=10.6)
 	set (CMAKE_LDFLAGS -mmacosx-version-min=10.6)
 	set (DEVICE ${GUIDO}/../macosx/src)
@@ -55,12 +55,12 @@ else()
 	string (STRIP ${TMP} CAIRO)
 	set(LINK ${LINK} ${CAIRO})
 
-	find_library (GUIDOLIB GUIDOEngine PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../../cmake NO_DEFAULT_PATH)
+	find_library (GUIDOLIB GUIDOEngine PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../../build/unix NO_DEFAULT_PATH)
 endif()
 
 #######################################
 # tools generation
-set(TOOLS guido2midi guido2svg guido2svgmap guidogetversion guidogetpagecount guidogetvoicecount guidogetpagemap guidogetstaffmap guidogetsystemmap guidogetvoicemap)
+set(TOOLS guido2midi guido2svg guido2abstract guido2proll midi2proll guido2rproportional midi2rproportional guido2svgmap guidogetversion guidogetpagecount guidogetvoicecount guidogettimemap guidogetpagemap guidogetstaffmap guidogetsystemmap guidogetvoicemap) #guido2dsl temporary removed
 foreach(tool ${TOOLS})
 	add_executable( ${tool} ${TOOLS_PATH}/${tool}.cpp )
 	target_link_libraries( ${tool} ${GUIDOLIB})
