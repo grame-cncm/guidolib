@@ -1,7 +1,7 @@
 
 arch	:= $(shell arch)
 debarch := $(shell dpkg --print-architecture)
-dist	:= ubuntu-13.04
+dist	:= ubuntu-14.04
 package := GUIDOQt-$(version)-$(dist)-$(arch).deb
 appls	:= guido2image guidoeditor guidoscenecomposer
 tools	:= guido2midi guido2svg guidogetversion
