@@ -3,7 +3,10 @@
 #include <libgen.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
 #endif
+
+#include <string.h>
 
 #include "GUIDOParse.h"
 #include "GUIDOEngine.h"
