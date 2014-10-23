@@ -20,8 +20,8 @@ const int kDefaultMaxPitch      = -1;
 const bool kDefaultDrawDurLines = false;
 const bool kDefaultMeasureBars  = false;
 
-const char* kOptions[] = { "-help", "-o", "-width", "-height", "-start", "-end", "-minpitch", "-maxpitch", "-measurebars", "-drawdurlines" };
-enum { kHelp, kOutput, kWidth, kHeight, kStart, kEnd, kMinPitch, kMaxPitch, kMeasureBars, kDrawDurLines, kMaxOpt };
+const char* kOptions[] = { "-help", "-width", "-height", "-start", "-end", "-minpitch", "-maxpitch", "-measurebars", "-drawdurlines" };
+enum { kHelp, kWidth, kHeight, kStart, kEnd, kMinPitch, kMaxPitch, kMeasureBars, kDrawDurLines, kMaxOpt };
 
 static void usage (char* name)
 {
@@ -31,8 +31,7 @@ static void usage (char* name)
 	const char* tool = name;
 #endif
 	cerr << "usage: " << tool << " midifile [options] " << endl;
-	cerr << "options: -o                  : set the output file (if not, output is standard output)" << endl;
-	cerr << "         -width        value : set the output width (default is " << kDefaultWidth << ")" << endl;
+	cerr << "options: -width        value : set the output width (default is " << kDefaultWidth << ")" << endl;
 	cerr << "         -height       value : set the output height (default is " << kDefaultHeight << ")" << endl;
 	cerr << "         -start        date  : set time zone start (default is 0/0 -> start time is automatically adjusted)" << endl;
 	cerr << "         -end          date  : set time zone end (default is 0/0 -> end time is automatically adjusted)" << endl;
@@ -55,23 +54,32 @@ static void error (GuidoErrCode err)
 
 static void checkusage(int argc, char **argv)
 {
-	if (argc == 1 || *(argv[1]) == '-')
+    if (argc == 1)
         usage(argv[0]);
-    else {
-        for (int i = 1; i < argc; i++) {
-            if (!strcmp(argv[i], kOptions[kHelp]))
+
+    for (int i = 1; i < argc - 1; i++) {
+        if (!strcmp(argv[i], kOptions[kHelp]))
+            usage(argv[0]);
+        else if (*argv[i] == '-') {
+            bool unknownOpt = true;
+
+            for (int n = 1; (n < kMaxOpt) && unknownOpt; n++) {
+                if (!strcmp (argv[i], kOptions[n]))
+                    unknownOpt = false;
+            }
+
+            if (unknownOpt || i + 1 >= argc || *(argv[i + 1]) == '-')
                 usage(argv[0]);
-            else if (*argv[i] == '-') {
-                bool unknownOpt = true;
+            else {
+                i++;
 
-                for (int n = 1; (n < kMaxOpt) && unknownOpt; n++) {
-                    if (!strcmp(argv[i], kOptions[n]))
-                        unknownOpt = false;
-                }
-
-                if (unknownOpt || i + 1 >= argc || *(argv[i + 1]) == '-')
+                if (i >= argc - 1)
                     usage(argv[0]);
             }
+        }
+        else {
+            if (i != argc - 2)
+                usage(argv[0]);
         }
     }
 }
@@ -80,10 +88,10 @@ static const char* getInputFile(int argc, char *argv[])
 {
 	int i;
 
-	for (i = 1; i < argc; i++) {
-		if (*(argv[i]) != '-')
-            break;
-    }
+	for (i = 1; i < argc - 1; i++) {
+		if (*argv[i] == '-')
+            i++;	// skip option value
+	}
 
 	return (i < argc) ? argv[i] : 0;
 }
@@ -162,44 +170,10 @@ static bool lboolopt(int argc, char **argv, const char* opt, bool defaultvalue)
 	return defaultvalue;
 }
 
-static char *getOutputFileOpt(int argc, char **argv)
-{
-	for (int i = 1; i < argc; i++) {
-		if (!strcmp(argv[i], "-o")) {
-			i++;
-
-			if (i >= argc || *(argv[i]) == '-')
-                usage(argv[0]);
-			else
-				return argv[i];
-		}
-	}
-
-    return NULL;
-}
-
 int main(int argc, char **argv)
 {
  	SVGSystem sys;
-	
-    std::streambuf *buf = std::cout.rdbuf();
-
-    /**** Check output file ****/
-    const char *outputFile = getOutputFileOpt(argc, argv);
-
-    ofstream fileOutput;
-
-    if (outputFile != NULL) {
-        fileOutput = ofstream(outputFile, ios::out | ios::trunc);
-
-        if (!fileOutput.fail())
-            buf = fileOutput.rdbuf();
-    }
-    /***************************/
-
-    std::ostream out(buf);
-
-    SVGDevice dev(out, &sys, 0);
+    SVGDevice dev(cout, &sys, 0);
 	
 	checkusage (argc, argv);
 
