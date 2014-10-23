@@ -2,8 +2,7 @@ GUIDO Engine history
 
 
 ----------------------------------------------------------------
-version 1.5.4
-
+2014-10-22  version 1.5.4
 - new piano roll API available :
     - piano roll can be generated from an gmn file, an AR, etc. and exported to any classic file format
 	- two piano roll types available : classic (notes are horizontal) and trajectory (notes are graphically linked to the following note)

@@ -314,7 +314,7 @@ void GRStem::DrawWithLine( VGDevice & hdc ) const
             x2 = mPosition.x + mOffset.x + noteXextent * 0.5f - width * 0.5f;
             y2 = mPosition.y + mOffset.y - mStemLen + width * 0.5f;
         }
-        else if (mStemDir == dirDOWN)
+        else // if (mStemDir == dirDOWN)	assume dir is down
         {
             x1 = mPosition.x + mOffset.x - noteXextent * 0.5f + width * 0.5f,
             y1 = mPosition.y + mOffset.y + width * 0.5f + (noteYextent * 0.5f / 6),
