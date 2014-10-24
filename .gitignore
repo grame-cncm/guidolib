@@ -22,3 +22,6 @@ tools/*.svg
 tools/*.mid
 .qmake.stash
 guidolib-1.??-*
+*.deb
+*.so*
+
