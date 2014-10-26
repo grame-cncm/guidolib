@@ -225,18 +225,19 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
     // draw ledger lines
     const float ledXPos = -60 * 0.85f * mSize;
     //NVPoint noteheadOffset(getNoteHead()->getOffset()); //REM: fonctionne pour les \headsReverse et [{a2,b}] mais pas s'il y a
-                                                          //décalage \noteFormat<dx=X> : [\noteFormat<dx=-2> c] par exemple
+                                                          //dï¿½calage \noteFormat<dx=X> : [\noteFormat<dx=-2> c] par exemple
     for (int i = 0; i < sum; ++i, posy += incy)
         GRNote::DrawSymbol( hdc, kLedgerLineSymbol, ledXPos/* + noteheadOffset.x*/, ( posy - mPosition.y ));
 
-	if (mCluster)
+	if (fCluster)
 		getNoteHead()->setHaveToBeDrawn(false);
 
 	const VGColor oldcolor = hdc.GetFontColor();
 	if (mColRef) hdc.SetFontColor( VGColor( mColRef ));
 
 	// - Draw elements (stems, dots...)
-	DrawSubElements( hdc );
+    if (getARNote()->haveSubElementsToBeDrawn())
+	    DrawSubElements( hdc );
 
 	// - draw articulations & ornament
 	const GRNEList * articulations = getArticulations();
@@ -249,11 +250,11 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
 		}
 	}
 
-	if (mOrnament)
+	if (fOrnament)
 	{
 		// to draw the trill line...
 		float Y = getPosition().y + getBoundingBox().Height()/2;
-		mOrnament->OnDraw(hdc,X,Y, numVoice);
+		fOrnament->OnDraw(hdc,X,Y, numVoice);
 	}
 
 	// - Restore
@@ -261,8 +262,8 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
 	if (gBoundingBoxesMap & kEventsBB)
 		DrawBoundingBox( hdc, kEventBBColor);
 
-	if (mClusterHaveToBeDrawn)
-		mCluster->OnDraw(hdc);
+	if (fClusterHaveToBeDrawn)
+		fCluster->OnDraw(hdc);
 }
 
 //____________________________________________________________________________________
@@ -434,14 +435,13 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 				NVPoint stemendpos (stem->getPosition());
 				stemendpos.y -= stem->mStemLen;
                 float coef = 0;
-                int numberLines = mGrStaff->getNumlines();
 
-                // Stem length adaptation according to staff lines number
-                if (numberLines != 0)
-                {
-                    // Stem length is set everytime as far as the middle of the staff.
-                    coef = 0.5f * numberLines - 0.5f;
-                }
+                if ((float) mDurTemplate.getNumerator() / (float) mDurTemplate.getDenominator() <= 1.0f / 64.0f && mPosition.y > 250)
+                    coef = 0;
+                else if ((float) mDurTemplate.getNumerator() / (float) mDurTemplate.getDenominator() <= 1.0f / 32.0f && mPosition.y > 250)
+                    coef = 1;
+                else
+                    coef = 0.5f * mGrStaff->getNumlines() - 0.5f; // Stem length is set everytime as far as the middle of the staff.
 
                 if (stemendpos.y > coef * mCurLSPACE)
                 {
@@ -455,15 +455,13 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 				NVPoint stemendpos (stem->getPosition());
 				stemendpos.y += stem->mStemLen;
                 float coef = 0;
-                int numberLines = mGrStaff->getNumlines();
 
-                // Stem length adaptation according to staff lines number
-                if (numberLines != 0)
-                {
-                    // Stem length is set everytime as far as the middle of the staff.
-                    // Can be changed easily if it's not the good behaviour to adopt.
-                    coef = 0.5f * numberLines - 0.5f;
-                }
+                if ((float) mDurTemplate.getNumerator() / (float) mDurTemplate.getDenominator() <= 1.0f / 64.0f && mPosition.y < - 50)
+                    coef = 4;
+                else if ((float) mDurTemplate.getNumerator() / (float) mDurTemplate.getDenominator() <= 1.0f / 32.0f && mPosition.y < - 50)
+                    coef = 3;
+                else
+                    coef = 0.5f * mGrStaff->getNumlines() - 0.5f; // Stem length is set everytime as far as the middle of the staff.
 
 				if (stemendpos.y < coef * mCurLSPACE)
 				{
@@ -576,11 +574,11 @@ void GRSingleNote::setHPosition( GCoord nx )
 {
 	GRNote::setHPosition(nx);
 	// - Notify ornament
-	if (mOrnament)
-		mOrnament->tellPosition(this, getPosition());
+	if (fOrnament)
+		fOrnament->tellPosition(this, getPosition());
     // - Notify cluster
-    if (mCluster)
-		mCluster->tellPosition(this, getPosition());
+    if (fCluster)
+		fCluster->tellPosition(this, getPosition());
 	updateBoundingBox();
 }
 
@@ -591,11 +589,11 @@ void GRSingleNote::setPosition( const NVPoint & inPos )
 	GRNote::setPosition( inPos );
 
 	// - Notify Ornament
-	if (mOrnament)
-		mOrnament->tellPosition(this, getPosition());
+	if (fOrnament)
+		fOrnament->tellPosition(this, getPosition());
     // - Notify cluster
-    if (mCluster)
-        mCluster->tellPosition(this, getPosition());
+    if (fCluster)
+        fCluster->tellPosition(this, getPosition());
 
 	// - Watch for the Accidentals
 	GRAccidentalList accList;

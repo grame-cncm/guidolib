@@ -235,7 +235,7 @@ void GRAccidental::setAccidentalLayout(float notebreite, float curLSPACE)
 	mBoundingBox.right *= float(mAccidentalSize);
 	mBoundingBox.bottom *= float(mAccidentalSize);
 
-	halfExtent *= 1.2;
+	halfExtent *= 1.2f;
 	getRefPos().x = -halfExtent;
 
 	mLeftSpace = (GCoord)(( halfExtent * mAccidentalSize ) + 0.2f * curLSPACE );

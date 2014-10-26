@@ -24,11 +24,22 @@
 #include <ostream>
 #include <fstream>
 #include <string>
+#include <vector>
 
 /*!
 \addtogroup VGSys Virtual Graphic System
 @{
 */
+
+enum TagType {
+    penTag,
+    penWidthTag,
+    penColorTag,
+    fillColorTag,
+    fontTag,
+    scaleTag,
+    originTag
+};
 
 //______________________________________________________________________________
 /*!
@@ -93,6 +104,10 @@ class_export SVGDevice : public VGDevice
 	const char* baseline2str (int align) const;
 	void		putbase64 (VGDevice* pSrcDC) const;
 	
+private:
+    void checkTagsOrder(TagType tagToClose);
+    std::vector<TagType> *fTagTypesVector; // Necessary to maintain tags order and to know when to close "font-family" tag
+
 	public:
 		enum	{ kSVGSizeDivider = 8 };		// used to compute the svg view size GuidoSVGExport and GuidoGetSVGMap
 				 SVGDevice(std::ostream& outstream, SVGSystem* system, const char* guidofontfile, const char* guidofontspec);

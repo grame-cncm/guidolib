@@ -49,18 +49,12 @@ class GRMeter : public GRTagARNotationElement
 		std::vector<int> getNumeratorsVector() const { return numeratorsVector; }
 		            int  getDenominator()      const { return denominator; }
 
-		const NVPoint & getReferencePosition() const;
-
   protected:
 		ARMeter::metertype mtype;
         float totalNumeratorExtent;
 		std::vector<int> numeratorsVector;
         int numerator;
 		int denominator;
-
-		static NVPoint refposC;
-		static NVPoint refposC2;
-		NVPoint refpos;
 
 		float curLSPACE;
 };

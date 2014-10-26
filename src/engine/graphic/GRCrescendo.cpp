@@ -247,7 +247,8 @@ void GRCrescendo::OnDraw( VGDevice & hdc) const
     const float xMarkingOffset = fCrescInfos->points[1].x + 30;
     const float yMarkingOffset = fCrescInfos->points[0].y - 277 + (mTagSize - 1) * 25;
 
-    OnDrawSymbol(hdc, fCrescInfos->fMarkingSymbol, xMarkingOffset, yMarkingOffset, mTagSize);
+    if (fCrescInfos->fMarkingSymbol != 0)
+        OnDrawSymbol(hdc, fCrescInfos->fMarkingSymbol, xMarkingOffset, yMarkingOffset, mTagSize);
     
     hdc.PopPenWidth();
 

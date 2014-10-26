@@ -26,38 +26,39 @@ GRNote::GRNote( GRStaff * grstaf,
 	const TYPE_TIMEPOSITION & relativeTimePositionOfGRNote,
 	const TYPE_DURATION & durationOfGRNote)
   : GREvent(grstaf,abstractRepresentationOfNote,relativeTimePositionOfGRNote,durationOfGRNote), 
-  mCluster(NULL), mClusterNote(false), mClusterHaveToBeDrawn(false)
+  fCluster(NULL), fClusterNote(false), fClusterHaveToBeDrawn(false)
 {
     // builds a graphical "part" of abstractRepresentation
     assert(abstractRepresentationOfNote);
     if (abstractRepresentationOfNote->getOrnament())
-        mOrnament = new GRTrill( mGrStaff, abstractRepresentationOfNote->getOrnament());
+        fOrnament = new GRTrill( mGrStaff, abstractRepresentationOfNote->getOrnament());
     else
-        mOrnament = NULL;
+        fOrnament = NULL;
 
     if (abstractRepresentationOfNote->getARCluster())
     {
-        mClusterNote = true;
-        mClusterHaveToBeDrawn = abstractRepresentationOfNote->doesClusterHaveToBeDrawn();
+        fClusterNote = true;
+        fClusterHaveToBeDrawn = abstractRepresentationOfNote->doesClusterHaveToBeDrawn();
     }
+    fIsGraceNote = false;
 }
 
 GRNote::GRNote(GRStaff * grstaf, const TYPE_DURATION & inDuration )
-  : GREvent(grstaf,new ARNote( inDuration ),1)
+  : GREvent(grstaf,new ARNote( inDuration ),1), fIsGraceNote(false)
 {
 	// dor "Dummys": not with duration theDuration, matching ARNote will be created
 	// ARNote will be not deleted automatically!!
 }
 
 GRNote::GRNote(GRStaff * grstaf, ARNote * abstractRepresentationOfNote)
-  							: GREvent(grstaf,abstractRepresentationOfNote)
+  							: GREvent(grstaf,abstractRepresentationOfNote), fIsGraceNote(false)
 {
 	assert(abstractRepresentationOfNote);
 }
 
 GRNote::~GRNote()
 {
-	delete mOrnament;
+	delete fOrnament;
 }
 
 
@@ -158,15 +159,15 @@ GRCluster *GRNote::createCluster(ARNoteFormat *inCurnoteformat)
 
     ARNote *arNote = getARNote();
     
-    mCluster = new GRCluster(mGrStaff, arNote->getARCluster(), singleNote, inCurnoteformat);
+    fCluster = new GRCluster(mGrStaff, arNote->getARCluster(), singleNote, inCurnoteformat);
 
-    return mCluster;
+    return fCluster;
 }
 
 void GRNote::setGRCluster(GRCluster *inCluster, bool inSignificativeNote)
 {
-    mCluster = inCluster;
+    fCluster = inCluster;
 
     if (inSignificativeNote)
-        mCluster->setSecondNoteYPosition();
+        fCluster->setSecondNoteYPosition();
 }

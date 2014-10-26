@@ -427,6 +427,8 @@ GRSystem::GRSystem(	GRStaffManager * staffmgr, GRPage * inPage,
 			{
 				spr->stretchWithForce(mSystemforce);
                 spr->setGRPositionX(curx);
+                if(spr->hasGraceNote()) // if we have a grace note, we don't want the next note to be too close to it...
+                    spr->setlength(spr->x + 5);
 				curx += spr->x;
 			}
 		}
@@ -658,6 +660,7 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 				endstaffPos.y += staffHeight; // Set to the bottom of last staff
 				GRAccolade * onlyAccol = new GRAccolade();
 				onlyAccol->draw(hdc, firstStaffPos, endstaffPos);
+                delete onlyAccol;
 			}
 			
 			std::map<int, bool> StavesOn;

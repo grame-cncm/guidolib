@@ -38,6 +38,8 @@
 #include "Guido2Image.h"
 #include "QGuidoPainter.h"
 
+#include "GUIDOPianoRoll.h"
+
 #ifdef USE_UNISTD
 	#include <unistd.h>
 #else
@@ -69,6 +71,7 @@ typedef struct Guido2ImageOptions {
 	const char * inputString;
 	const char * outputFile; 
 	const char * imageFormat;
+    const char * scoreFormat;
 	float	zoom;
 	int		height;
 	int		width;
@@ -80,7 +83,7 @@ typedef struct Guido2ImageOptions {
 
 	Guido2ImageOptions () 
 		: stdInMode(false), hasLayout(false), page(1),
-		  inputFile(0), inputString(0), outputFile(0), imageFormat(0),
+		  inputFile(0), inputString(0), outputFile(0), imageFormat(0), scoreFormat("classic"),
 		  zoom(-1.f), height(-1), width(-1), 
 		  systemsDistance(-1.f), systemsDistribution(0), optimalPageFill(0)  {}
 } Guido2ImageOptions;
@@ -105,6 +108,8 @@ static void usage(const char * name)
 	cerr << "           -p num (int)           print page number 'num' (default is 1)" << endl;
 	cerr << "           -t format              Image format" << endl; 
 	cerr << "                                  Supported formats: PDF, BMP, GIF, JPG, JPEG, PNG, PGM, PPM, SVG, TIFF, XBM, XPM" << endl;
+	cerr << "           -q format              Score format" << endl; 
+	cerr << "                                  Supported formats: pianoroll, classic (default is classic)" << endl;
 	cerr << "           -v                     print the version number and exit." << endl;
 	cerr << "           -?                     print this help message." << endl;
 	cerr << "options controlling the Guido Engine layout settings:" << endl;
@@ -145,7 +150,7 @@ static void parseOptions(int argc, char *argv[] , Guido2ImageOptions& opts )
 {
 	int c;
 	opterr = 0;
-	while ((c = getopt (argc, argv, "f:s:o:pw:h:z:t:d:a:b:?:v")) != -1)
+	while ((c = getopt (argc, argv, "f:s:o:pw:h:z:t:q:d:a:b:?:v")) != -1)
 		switch (c)
 		{
 			case 'f':	opts.inputFile = optarg;		break;
@@ -157,6 +162,7 @@ static void parseOptions(int argc, char *argv[] , Guido2ImageOptions& opts )
 			case 'h':	opts.height = (int)strtol(optarg, 0, 10);	break;
 			case 'z':	opts.zoom = strtod(optarg, 0);				break;
 			case 't':	opts.imageFormat = optarg;		break;
+            case 'q':	opts.scoreFormat = optarg;		break;
 
 			case 'd':	opts.systemsDistance = strtod(optarg, 0);
 						opts.hasLayout = true;
@@ -285,11 +291,12 @@ int main(int argc, char *argv[])
 	Guido2Image::Params p;		// a struct used as arg of the conversion function
 	string stdinstr;			// a string to read the standard input
 	Guido2ImageErrorCodes (*convertFunction)(const Guido2Image::Params &);	// a pointer to the conversion function
-	if ( options.inputString ) {							// string parsing mode
-		convertFunction = &Guido2Image::gmnString2Image;
+
+    if (options.inputString) {							    // string parsing mode
+        convertFunction = &Guido2Image::gmnString2Image;
 		p.input = options.inputString;
 	}
-	else if ( options.inputFile ) {							// file parsing mode
+	else if (options.inputFile) {							// file parsing mode
 		convertFunction = &Guido2Image::gmnFile2Image;
 		p.input = options.inputFile;
 	}
@@ -340,10 +347,32 @@ int main(int argc, char *argv[])
 //		if ( error == GUIDO_2_IMAGE_INVALID_PAGE_INDEX )
 //			error = GUIDO_2_IMAGE_SUCCESS;
 //	}
-	error = convertFunction( p );							// convert to an image
+
+    if (!strcmp(options.scoreFormat, GUIDO_2_IMAGE_PIANO_ROLL_STR)) {
+        GuidoParser *parser = GuidoOpenParser();
+
+        ARHandler arh;
+
+        if (options.inputFile)
+            arh = GuidoFile2AR(parser, options.inputFile);
+        else
+            arh = GuidoString2AR(parser, options.inputFile);
+        
+        PianoRoll *pianoRoll = GuidoAR2PianoRoll(kSimplePianoRoll, arh);
+        GuidoPianoRollEnableKeyboard(pianoRoll, true);
+
+        Guido2Image::guidoPianoRoll2Image(p, pianoRoll, 1024, 512);
+
+        GuidoDestroyPianoRoll(pianoRoll);
+    }
+    else
+	    error = convertFunction(p);			                // convert to an image
+
 	QGuidoPainter::stopGuidoEngine();						// stop the guido engine
 	
-	if ( error ) cerr << Guido2Image::getErrorString(error) << endl;
-	return error;
+	if (error)
+        cerr << Guido2Image::getErrorString(error) << endl;
+	
+    return error;
 }
 

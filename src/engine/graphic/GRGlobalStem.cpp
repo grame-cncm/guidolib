@@ -543,20 +543,21 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 		NVPoint stemendpos (theStem->getPosition());
 		stemendpos.y -= theStem->getStemLength();
         float coef = 0;
-        int numberLines = inStaff->getNumlines();
 
-        // Stem length adaptation according to staff lines number
-        if (numberLines != 0)
-        {
-            // Stem length is set everytime as far as the middle of the staff.
-            // Can be changed easily if it's not the good behaviour to adopt.
-            coef = 0.5f * numberLines - 0.5f;
-        }
+        if ((float) dispdur.getNumerator() / (float) dispdur.getDenominator() <= 1.0f / 64.0f && mHighestY > 250)
+            coef = 0;
+        else if ((float) dispdur.getNumerator() / (float) dispdur.getDenominator() <= 1.0f / 32.0f && mHighestY > 250)
+            coef = 1;
+        else
+            coef = 0.5f * inStaff->getNumlines() - 0.5f; // Stem length is set everytime as far as the middle of the staff.
 
         if (stemendpos.y > coef * curLSPACEtmp)
         {
             const float newlength = (theStem->getPosition().y - coef * curLSPACEtmp);
+            float lengthDiff = newlength - getStemLength();
             changeStemLength(newlength);
+
+            theFlag->setPosition(NVPoint(theFlag->getPosition().x, theFlag->getPosition().y - lengthDiff));
         }
 	}
 	else if (stemdir == dirDOWN)
@@ -564,20 +565,21 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 		NVPoint stemendpos (theStem->getPosition());
 		stemendpos.y += theStem->getStemLength();
         float coef = 0;
-        int numberLines = inStaff->getNumlines();
 
-        // Stem length adaptation according to staff lines number
-        if (numberLines != 0)
-        {
-            // Stem length is set everytime as far as the middle of the staff.
-            // Can be changed easily if it's not the good behaviour to adopt.
-            coef = 0.5f * numberLines - 0.5f;
-        }
+        if ((float) dispdur.getNumerator() / (float) dispdur.getDenominator() <= 1.0f / 64.0f && mLowestY < - 50)
+            coef = 4;
+        else if ((float) dispdur.getNumerator() / (float) dispdur.getDenominator() <= 1.0f / 32.0f && mLowestY < - 50)
+            coef = 3;
+        else
+            coef = 0.5f * inStaff->getNumlines() - 0.5f; // Stem length is set everytime as far as the middle of the staff.
 
         if (stemendpos.y < coef * curLSPACEtmp)
         {
             const float newlength = (coef * curLSPACEtmp - theStem->getPosition().y);
+            float lengthDiff = newlength - getStemLength();
             changeStemLength(newlength);
+
+            theFlag->setPosition(NVPoint(theFlag->getPosition().x, theFlag->getPosition().y + lengthDiff));
         }
 	}
 }
@@ -672,7 +674,7 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 
 
                     /* ...vertically */
-                    if (note->getDot())
+                    if (note->getGRCluster() == NULL && note->getDot())
                     {
                         float dotPosition = note->getDot()->getPosition().y + note->getDot()->getOffset().y;
 
@@ -817,7 +819,7 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 
 
                     /* ...vertically */
-                    if (note->getDot())
+                    if (note->getGRCluster() == NULL && note->getDot())
                     {
                         float dotPosition = note->getDot()->getPosition().y + note->getDot()->getOffset().y;
 
@@ -971,7 +973,8 @@ float GRGlobalStem::changeStemLength( float inLen )
 	}
 	else if (theStem)
 	{
-		theStem->setStemLength( inLen );
+		theStem->setStemLength(inLen);
+    
 		return theStem->getStemLength();
 	}
 	return 0;

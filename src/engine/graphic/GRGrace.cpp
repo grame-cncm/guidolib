@@ -79,12 +79,12 @@ void GRGrace::setPosition(const NVPoint &np)
 
 void GRGrace::tellPosition(GObject *caller, const NVPoint & inPos )
 {
-	if (mAssociated->GetCount() != 1)
+	/*if (mAssociated->GetCount() != 1)
 	{
 		GuidoWarn("More than one association for GRGrace");
 		return;
 	}
-
+*/
 	// this is called by the "super-event"
 
 	const float graceOffset = 60; // Hardcoded

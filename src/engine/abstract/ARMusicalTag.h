@@ -100,6 +100,9 @@ class ARMusicalTag : public ARMusicalObject
 				void	setSize(float newsize);
 				const	TagParameterFloat * getSize() const		{ return size; }
 
+    /**** Function to avoid dynamic_cast ****/
+    ARMusicalObject *isARMusicalTag() { return this; }
+    /*****************************************/
 
   protected: //  id(-1), isAuto(0), rangesetting(NO), error(0), hasRange(0)
 

@@ -77,6 +77,8 @@ public:
     float getOffsetStartPosition() { return fOffsetStartPosition; }
 
 protected:
+	virtual void DrawWithGlyph( VGDevice & hdc ) const;
+	virtual void DrawWithLine ( VGDevice & hdc ) const;
 
 	float 		mStemLen;
 	GDirection 	mStemDir;

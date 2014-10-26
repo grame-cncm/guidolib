@@ -20,6 +20,7 @@
 #include <QIODevice>
 
 #include "GUIDOEngine.h"
+#include "GUIDOPianoRoll.h"
 
 #ifdef WIN32
 #define warndeprecated __declspec(deprecated("** method is deprecated **"))
@@ -88,6 +89,9 @@ enum Guido2ImageImageFormat
 #define GUIDO_2_IMAGE_XPM_STR "xpm"
 #define GUIDO_2_IMAGE_SVG_STR "svg"
 
+#define GUIDO_2_IMAGE_PIANO_ROLL_STR    "pianoroll"
+#define GUIDO_2_IMAGE_CLASSIC_SCORE_STR "classic"
+
 /**
 *	\brief Offers functions to export GMN code (from a string or a file) to various formats of images, or to PDF.
 */
@@ -114,21 +118,29 @@ class Guido2Image
 		static const char* getErrorString( Guido2ImageErrorCodes err );
 
 		/*!
-		*	\brief	converts a gmn sdtring to an image
+		*	\brief	converts a gmn string to an image
 		*/
 		static Guido2ImageErrorCodes gmnString2Image( const Params& p);
+
 		/*!
 		*	\brief	converts a gmn file to an image
 		*/
 		static Guido2ImageErrorCodes gmnFile2Image	( const Params& p);
+        
+        /*!
+		*	\brief	converts a gmn file to an image
+		*/
+        static Guido2ImageErrorCodes guidoPianoRoll2Image(const Params& p, PianoRoll *pianoRoll, int width, int height);
 
 	private :
 
 		static Guido2ImageErrorCodes	check( const Params& p );
 		
-		static Guido2ImageErrorCodes	guidoPainterToImage	( QGuidoPainter * guidoPainter, const Params& p );
-		static void						writeImage			( QGuidoPainter * guidoPainter, const Params& p);
+		static Guido2ImageErrorCodes	guidoPainterToImage ( QGuidoPainter * guidoPainter, const Params& p );
+		static void						writeImage			( QGuidoPainter * guidoPainter, const Params& p );
+        static void						writePianoRollImage	( QGuidoPainter * guidoPainter, const Params& p, PianoRoll *pianoRoll, int width, int height );
 		static void						writePDF			( QGuidoPainter * guidoPainter, int pageIndex, const char * fileName );
+		static void						writePianoRollPDF	( QGuidoPainter * guidoPainter, const char * fileName, PianoRoll *pianoRoll, int width, int height );
 		
 //		static QRectF			getPictureRect(QGuidoPainter * guidoPainter, int pageIndex, const QSize& outputSizeConstraint, float zoom );
 		static void				save(QPaintDevice * paintDevice, const Params& p);

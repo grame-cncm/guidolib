@@ -399,6 +399,21 @@ bool GRSpring::hasType(const std::type_info & ti)
 	return false;
 }
 
+/** \brief Returns true if there is grace note.
+*/
+bool GRSpring::hasGraceNote()
+{
+	GuidoPos pos = grolst.GetHeadPosition();
+	while (pos)
+	{
+		GRNotationElement * el = grolst.GetNext(pos);
+		GRSingleNote * note = dynamic_cast<GRSingleNote*>(el);
+        if(note && note->isGraceNote())
+            return true;
+	}
+	return false;
+}
+
 bool GRSpring::containsBar() const
 {
 	GuidoPos pos = grolst.GetHeadPosition();

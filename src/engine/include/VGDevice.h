@@ -187,7 +187,7 @@ class VGDevice
 		virtual	const VGFont *	GetTextFont() const = 0;
 
         /// Selects a font (only for SVG device).
-        virtual	void        	selectfont(int font) {};
+        virtual	void        	selectfont(int) {};
 
 
 		// - Pen & brush services --------------------------------------------

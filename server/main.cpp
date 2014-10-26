@@ -130,7 +130,7 @@ static bool launchServer (int port, int verbose, int logmode, string cachedir, s
     if (server.start(port)) {
         if (daemon) {
             log << "Guido server v." << kVersionStr << " with Guido v." << GuidoGetVersionStr() << " is running on port " << port << logend;
-            while (true) { }
+            while (true) { sleep(1); }
         } else {
             cout << "Guido server v." << kVersionStr << " with Guido v." << GuidoGetVersionStr() << " is running on port " << port << endl;
             cout << "Type 'q' to quit" << endl;

@@ -46,6 +46,10 @@ class ARStaff : // public ARMusicalObject,
 
 		int			getStaffNumber() const;
 		const char* getStaffID() const;
+        
+    /**** Function to avoid dynamic_cast ****/
+    ARMusicalObject *isARStaff() { return this; }
+    /*****************************************/
 
   protected:
 	  TagParameterString * ids;

@@ -2,7 +2,34 @@ GUIDO Engine history
 
 
 ----------------------------------------------------------------
-version 1.5.4
+2014-10-22  version 1.5.4
+- new piano roll API available :
+    - piano roll can be generated from an gmn file, an AR, etc. and exported to any classic file format
+	- two piano roll types available : classic (notes are horizontal) and trajectory (notes are graphically linked to the following note)
+- new 'dy' attribute for the \staffFormat-tag to insert an vertical offset
+- beams can be applied to grace notes
+- new 'autoMeasuresNum' attribute for the \meter-tag to display or not measures number
+- \bar-tag :
+    - new 'displayMeasNum' attribute to choose for each bar to display or not measure number
+	- new 'numDx' / 'numDy' attribute to adjust measure number position
+- huge performances improvement (to quantify : time ratio until 60 for very big scores and 8 for standard 2-pages scores)
+- bugs correction
+	- some SVG export bug fixed
+    - conflicts with note durations in the trill solved
+	- problems on dotted trills / cluster
+	- bad vertical position of the flags of very low/high notes or chord
+	- size param of \meter tag working properly now
+	- problems on small lineThickness values in \staffFormat-tag
+    - various other bugs fixed
+- crashes correction :
+    - when a \composer, \fingering, \label, \mark or \title tag was set under range-tag form
+	- when a trill composed of a chord containing several different durations was separated into two tied trills
+    - various other crashes avoided
+- new tremolo tag
+- grace notes :
+	- they have slightly bigger spring to avoid being too close to the next note
+	- the beaming is now possible
+
 
 ----------------------------------------------------------------
 version 1.5.3

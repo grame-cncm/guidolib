@@ -659,7 +659,7 @@ void MainWindow::exportToSVG(QGuidoPainter * guidoPainter, const QString& filena
 #if linux
 #elif !defined(WIN32)
 	dir.cdUp();
-	dir.cd("Resources");
+	dir.cd("Fonts");
 #endif
 	QString guidofont = dir.absoluteFilePath("guido2.svg");
 
@@ -673,12 +673,14 @@ void MainWindow::exportToSVG(QGuidoPainter * guidoPainter, const QString& filena
 //-------------------------------------------------------------------------
 void MainWindow::exportToPdf(QGuidoPainter * guidoPainter, const QString& filename)
 {
+#ifndef IOS
 	QPrinter printer(QPrinter::HighResolution);
 //	printer.setFullPage(true);
 	printer.setOutputFormat( QPrinter::PdfFormat );
 	printer.setOutputFileName( QString(filename) );
 	printer.setPaperSize( QPrinter::A4 );
 	print (guidoPainter, printer);
+#endif
 }
 
 //-------------------------------------------------------------------------
@@ -722,7 +724,7 @@ void MainWindow::about()
 	QString version(mastr + '.' + mistr + '.' + substr);
 	QMessageBox::about(this, tr(QString("About " + APP_NAME).toUtf8().data()),
              tr(QString("<h2>" + APP_NAME + "</h2>" + 
-                "<p>Copyright &copy; 2008-2011 Grame. " 
+                "<p>Copyright &copy; 2008-2014 Grame. " 
                 "<p>A Guido score viewer and GMN editor, using Qt. "
 				"<p>Using the Guido Engine version " + version).toUtf8().data()));
 }
@@ -736,7 +738,8 @@ void MainWindow::preferences()
 }
 
 //------------------------------------------------------------------------- 
-void MainWindow::print(QGuidoPainter * guidoPainter, QPrinter& printer) 
+#ifndef IOS
+void MainWindow::print(QGuidoPainter * guidoPainter, QPrinter& printer)
 {
 	QPainter painter (&printer);
 	painter.setRenderHint( QPainter::Antialiasing );
@@ -754,8 +757,10 @@ void MainWindow::print(QGuidoPainter * guidoPainter, QPrinter& printer)
 			printer.newPage();
 	}
 }
+#endif
 
-//------------------------------------------------------------------------- 
+#ifndef IOS
+//-------------------------------------------------------------------------
 void MainWindow::print() 
 {
 	QGuidoPainter * guidoPainter = QGuidoPainter::createGuidoPainter();
@@ -777,7 +782,9 @@ void MainWindow::print()
 //	else statusBar()->showMessage(tr("Error reading file."));
 	QGuidoPainter::destroyGuidoPainter( guidoPainter );
 }
-
+#else
+void MainWindow::print()	{}
+#endif
 
 //-------------------------------------------------------------------------
 void MainWindow::nextPage()		{ setCurrentPage( mGuidoWidget->firstVisiblePage() + 1 ); }

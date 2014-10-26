@@ -38,9 +38,7 @@ void ARSystemFormat::setTagParameterList(TagParameterList &tpl)
 		// create a list of string ...
 
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(
-			(
-			"S,staves,,o;U,dx,,o"));
+		lstrs.AddTail(("S,staves,,o;U,dx,,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 
 	}

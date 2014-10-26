@@ -8,3 +8,6 @@ GuidoQtFontViewer/Makefile
 GuidoSceneComposer/Makefile
 GuidoServer/guidohttpserver
 guido2image/Makefile
+GuidoQtApplsMacOSX-*
+package/GUIDOQt-?.*.deb
+

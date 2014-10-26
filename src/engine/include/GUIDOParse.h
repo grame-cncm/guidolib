@@ -3,8 +3,7 @@
 
 /*
   GUIDO Library
-  Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2003, 2004, 1013  Grame
+  Copyright (C) 2014 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,8 +13,6 @@
   research@grame.fr
 
 */
-
-#include <istream>
 
 #include "GUIDOEngine.h"
 #include "GUIDOExport.h"
@@ -54,7 +51,7 @@ extern "C" {
 		\param gStream a GuidoStream
         \return a std::string.
 	*/
-    GUIDOAPI(const char *) GuidoGetStream (GuidoStream * gStream);
+    GUIDOAPI(const char *)      GuidoGetStream (GuidoStream * gStream);
 
 	/*!
 		\brief Parse a file and create the corresponding AR

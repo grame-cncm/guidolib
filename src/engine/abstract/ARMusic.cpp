@@ -95,6 +95,7 @@ void ARMusic::getTimeMap (TimeMapCollector& f) const
 	}
 }
 
+<<<<<<< HEAD:src/engine/abstract/ARMusic.cpp
 #ifdef MIDIEXPORT
 void ARMusic::toReducedProportional(int width, int height, TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, bool drawdur, VGDevice * dev) const
 {
@@ -123,6 +124,8 @@ void ARMusic::toPianoRoll(int width, int height, TYPE_TIMEPOSITION start, TYPE_T
 }
 #endif
 
+=======
+>>>>>>> origin/dev:src/abstract/ARMusic.cpp
 void ARMusic::print() const
 {
 	GuidoPos pos = GetHeadPosition();

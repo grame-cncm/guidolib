@@ -112,6 +112,8 @@ class GRStaffState
 		int				getInstrKeyNumber() const				{ return instrNumKeys; }
 		void			reset2key();
 
+        float getYOffset() const                                { return yOffset; }
+
 	protected:
 		// Meter-Parameters
 		bool	meterset;		// flag if meter-sig is given . TRUE, FALSE
@@ -148,6 +150,7 @@ class GRStaffState
 		float	staffLSPACE;	// distance between two lines
 		int		numlines;		// Zahl der Notenlinien.
         float   lineThickness;
+        float   yOffset;
 		float	distance;
 		bool	distanceset;
 		// this is VOICE-Stuff!
@@ -191,6 +194,7 @@ class GRStaff : public GRCompositeNotationElement
 		GRStaffState &          getGRStaffState() { return mStaffState; }
 		const GRStaffState &    getGRStaffState() const { return mStaffState; }
 		float			getXEndPosition(TYPE_TIMEPOSITION pos, TYPE_DURATION dur);
+        ARMeter        *getCurMeter() const { return mStaffState.curmeter; }
 
 		virtual float       getNotePosition(TYPE_PITCH pit, TYPE_REGISTER oct) const;
 		virtual GDirection  getDefaultThroatDirection(TYPE_PITCH pit, TYPE_REGISTER oct) const;

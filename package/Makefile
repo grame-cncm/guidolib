@@ -1,5 +1,5 @@
-VERSION := 1.54
-DOCVERS := 1.52
+VERSION := 1.55
+DOCVERS := 1.54
 DEST    := .
 
 system	:= $(shell uname -s)
@@ -21,15 +21,16 @@ WINLIB   := $(DEVKIT)-windows
 QTLIB    := $(DEVKIT)-Qt
 SRC 	 := guidolib-$(VERSION)-src
 
-files   := ../changelog.txt license.txt readme.txt ../src/guido2.ttf
+files   := ../changelog.txt license.txt readme.txt ../src/guido2.ttf ../src/guido2.svg
 modules := guidolib
 
 ######### documentation files 
 DOC		:= ../doc/GUIDO-Format_de_Notation_Musicale.pdf \
-			"../doc/GUIDO-Music Notation Format.pdf" \
-			../doc/GUIDO_Additional_Specifications_1.3.8.pdf \
-			../doc/GUIDO_Additional_Specifications_1.5.1.pdf \
-			../doc/refcard/GMNRefCard.pdf
+			../doc/GUIDO-Music-Notation-Format.pdf \
+			../doc/GUIDO_Additional_Specifications_1*.pdf \
+			../doc/refcard/GMNRefCard.pdf \
+			../doc/refcard/latex/RefCardsParams.pdf \
+			../doc/refcard/latex/RefCardsTags.pdf
 
 SAMPLES := $(wildcard ../samples/*.cpp ../validate/guido*.cpp ../src/tools/Null*.h)
 
@@ -44,7 +45,7 @@ win32inc := $(patsubst %, ../win32/src/%, $(win32inc))
 qtinc 	:= 	GUIDOEngine.h GUIDOExport.h MusicalSymbols.h VGColor.h VGFont.h VGSystem.h VGDevice.h
 qtinc  := $(patsubst %, ../src/include/%, $(qtinc))
 
-qtfiles =  ../Qt/LICENSE.LGPL ../Qt/package/readme.txt
+qtfiles =  ../Qt/LICENSE.MPL.txt ../Qt/package/readme.txt
 
 QT_SRC_FILES   = $(shell find $(QTLIB)/src -type f)
 QT_SRC_FOLDERS = $(shell find $(QTLIB)/src -type d)
@@ -74,7 +75,7 @@ doc:
 
 docpack:
 	make commondoc DEST=.
-	mv doc $(DOCPACK)
+	cp -r doc $(DOCPACK)
 	tar czf $(DOCPACK).tgz $(DOCPACK)
 	
 srcpack:
@@ -94,7 +95,9 @@ linux:
 
 windows:
 	[ -d $(WINLIB) ] || mkdir $(WINLIB)
-	make common DEST=$(WINLIB)
+	cp -r doc $(WINLIB)
+	make samples DEST=$(WINLIB)
+	cp -f $(files) $(WINLIB)
 	make incl DEST=$(WINLIB) SYSINC="$(win32inc)"
 	cp $(bin)/GUIDOEngine*.dll $(WINLIB)
 	cp $(bin)/GUIDOEngine*.lib $(WINLIB)
@@ -133,9 +136,8 @@ commondoc:
 	mkdir -p $(DEST)/doc
 	cp -R ../doc/doxygen/guidolib-$(DOCVERS) $(DEST)/doc || echo "WARNING ! doxygen doc not found"
 	cp -R ../doc/html $(DEST)/doc
-	cp $(DOC) $(DEST)/doc
-	rm -rf $(shell find $(DEST)/doc -name .svn)
-	
+	rm -rf $(DEST)/doc/html/api
+	cp $(DOC) $(DEST)/doc	
 
 samples:
 	[ -d $(DEST)/samples ] || mkdir $(DEST)/samples
