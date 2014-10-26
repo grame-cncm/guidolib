@@ -118,10 +118,13 @@ protected:
             void autoAdjustPitchRange (int &lowerPitch, int &higherPitch); // in the case of pitch range lower than 12
 
 #ifdef MIDIEXPORT
-TYPE_TIMEPOSITION getMidiEndDate        () const;
     virtual void  DrawFromMidi          (DrawParams drawParams);
     virtual void  DrawMidiSeq           (MidiSeqPtr seq, int tpqn, DrawParams drawParams);
-            int   detectMidiExtremePitch(bool detectLowerPitch);
+			TYPE_TIMEPOSITION	getMidiEndDate        () const;
+            int					detectMidiExtremePitch(bool detectLowerPitch);
+#else
+			TYPE_TIMEPOSITION	getMidiEndDate        () const			{ return Fraction(0);}
+            int					detectMidiExtremePitch(bool)			{ return 0; }
 #endif
     
     virtual float date2xpos      (double pos, int width, float untimedLeftElementWidth) const;

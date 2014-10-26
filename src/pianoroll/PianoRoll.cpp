@@ -224,9 +224,7 @@ PianoRoll::DrawParams PianoRoll::createDrawParamsStructure(int width, int height
 void PianoRoll::onDraw(int width, int height, VGDevice *dev)
 {
     DrawParams drawParams = createDrawParamsStructure(width, height, dev);
-
     initRendering(drawParams);
-    
     DrawGrid(drawParams);
 
     if (fKeyboardEnabled)
@@ -234,10 +232,14 @@ void PianoRoll::onDraw(int width, int height, VGDevice *dev)
 
     if (ownsARMusic())
         DrawFromAR(drawParams);
-    else
+		endRendering(drawParams);
+#ifdef MIDIEXPORT
+    }
+	else {
         DrawFromMidi(drawParams);
-
-    endRendering(drawParams);
+		endRendering(drawParams);
+	}
+#endif
 }
 
 //--------------------------------------------------------------------------
