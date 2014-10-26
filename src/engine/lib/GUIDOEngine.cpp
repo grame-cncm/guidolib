@@ -325,7 +325,6 @@ class TestTimeMap : public TimeMapCollector
 #endif
 
 // --------------------------------------------------------------------------
-<<<<<<< HEAD:src/engine/lib/GUIDOEngine.cpp
 GUIDOAPI(GuidoErrCode) GuidoMIDI2PRoll( const char* file, int width, int height, const GuidoDate& start, const GuidoDate& end, VGDevice* dev)
 {
 #ifdef MIDIEXPORT
@@ -449,8 +448,7 @@ GRHandler GuidoARretGR( ARHandler ar, const GuidoLayoutSettings * settings)
 }
 
 // --------------------------------------------------------------------------
-=======
->>>>>>> origin/dev:src/lib/GUIDOEngine.cpp
+
 GUIDOAPI(GuidoErrCode) GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * settings, GRHandler * gr)
 {
 	if( gr == 0 ) 	return guidoErrBadParameter;
