@@ -8,4 +8,7 @@ GuidoQtFontViewer/Makefile
 GuidoSceneComposer/Makefile
 GuidoServer/guidohttpserver
 guido2image/Makefile
-GuidoQtApplsMacOSX-*
+package/GuidoQtApplsMacOSX*
+.qmake.stash
+Debug-iphone*
+Release-iphone*
