@@ -2414,8 +2414,6 @@ void ARMusicalVoice::doAutoMeasuresNumbering()
 
 	int measureNumber = 2;
 
-	bool displayMeasureNumber = true;
-
 	ARMusicalVoiceState vst;
 
 	GuidoPos pos = GetHeadPosition(vst);
@@ -2429,9 +2427,6 @@ void ARMusicalVoice::doAutoMeasuresNumbering()
 			curmetertime.setNumerator(curmeter->getNumerator());
 			curmetertime.setDenominator(curmeter->getDenominator());
 			curmetertime.normalize();
-
-			if (curmetertime.getNumerator() == 0 || curmeter->getAutoBarlines() == 0 || curmeter->getAutoMeasuresNum() == 0)
-				displayMeasureNumber = false;
 		}
 
 		ARMusicalObject * o = GetAt(pos);
@@ -5461,8 +5456,6 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE &chord_type, CHORD_ACCIDENTAL 
 {	
 	const int nbNotes        = 3;
 	int pitches[nbNotes];         // we only need 3 pitches for analysis
-	int firstNoteOctave      = 0; //the first note's octave
-	int firstNoteAccidentals = 0;
 	int accidentals          = 0; // the second note's accidental, needed for the ornament
 	int accidentalsTemp      = 0; //the third note's accidental, needed for the turn in some cases
 
@@ -5479,8 +5472,6 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE &chord_type, CHORD_ACCIDENTAL 
 	ARNote          *firstNote     = static_cast<ARNote *>(musicalObject->isARNote());
 
 	pitches[0]           = firstNote->getPitch();
-	firstNoteOctave      = firstNote->getOctave();
-	firstNoteAccidentals = firstNote->getAccidentals();
 	comptTemp++; // the first note is conserved
 
 	while (posTmp && comptTemp < nbNotes) { // we only need to know the first nbNotes notes

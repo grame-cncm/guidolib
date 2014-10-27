@@ -35,17 +35,17 @@ protected:
 
     DrawParams createDrawParamsStructure(int width, int height, VGDevice *dev) const;
 
-    void DrawGrid        (DrawParams drawParams) const;
-    void DrawStaff       (int n, DrawParams drawParams) const;
-    void DrawVoice       (ARMusicalVoice* v, DrawParams drawParams);
-    void DrawLedgerLines (float x, float y, int count, DrawParams drawParams) const;
-    void DrawHead        (float x, float y, int alter, DrawParams drawParams) const;
-    void DrawNote        (int pitch, double date, double dur, DrawParams drawParams);
-	void DrawRect        (float x, float y, double dur, DrawParams drawParams) const;
+    void DrawGrid        (DrawParams &drawParams) const;
+    void DrawStaff       (int n, DrawParams &drawParams) const;
+    void DrawVoice       (ARMusicalVoice* v, DrawParams &drawParams);
+    void DrawLedgerLines (float x, float y, int count, DrawParams &drawParams) const;
+    void DrawHead        (float x, float y, int alter, DrawParams &drawParams) const;
+    void DrawNote        (int pitch, double date, double dur, DrawParams &drawParams);
+	void DrawRect        (float x, float y, double dur, DrawParams &drawParams) const;
 
-    void SetMusicFont(DrawParams drawParams);
+    void SetMusicFont(DrawParams &drawParams);
     
-	void  handleColor(ARNoteFormat *e, DrawParams drawParams) const;
+	void  handleColor(ARNoteFormat *e, DrawParams &drawParams) const;
 
     int   pitch2staff            (int midipitch) const;                              // gives a staff number for a given midi pitch
     int   pitch2staff            (int midipitch, int& halfspaces, int& alter) const; // gives a staff number for a given midi pitch + position and accidental

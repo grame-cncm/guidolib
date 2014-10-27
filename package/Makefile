@@ -1,5 +1,5 @@
-VERSION := 1.54
-DOCVERS := 1.52
+VERSION := 1.55
+DOCVERS := 1.54
 DEST    := .
 
 system	:= $(shell uname -s)
@@ -26,9 +26,8 @@ modules := guidolib
 
 ######### documentation files 
 DOC		:= ../doc/GUIDO-Format_de_Notation_Musicale.pdf \
-			"../doc/GUIDO-Music Notation Format.pdf" \
-			../doc/GUIDO_Additional_Specifications_1.3.8.pdf \
-			../doc/GUIDO_Additional_Specifications_1.5.1.pdf \
+			../doc/GUIDO-Music-Notation-Format.pdf \
+			../doc/GUIDO_Additional_Specifications_1*.pdf \
 			../doc/refcard/GMNRefCard.pdf \
 			../doc/refcard/latex/RefCardsParams.pdf \
 			../doc/refcard/latex/RefCardsTags.pdf
@@ -46,7 +45,7 @@ win32inc := $(patsubst %, ../win32/src/%, $(win32inc))
 qtinc 	:= 	GUIDOEngine.h GUIDOExport.h MusicalSymbols.h VGColor.h VGFont.h VGSystem.h VGDevice.h
 qtinc  := $(patsubst %, ../src/include/%, $(qtinc))
 
-qtfiles =  ../Qt/LICENSE.LGPL ../Qt/package/readme.txt
+qtfiles =  ../Qt/LICENSE.MPL.txt ../Qt/package/readme.txt
 
 QT_SRC_FILES   = $(shell find $(QTLIB)/src -type f)
 QT_SRC_FOLDERS = $(shell find $(QTLIB)/src -type d)
@@ -76,7 +75,7 @@ doc:
 
 docpack:
 	make commondoc DEST=.
-	mv doc $(DOCPACK)
+	cp -r doc $(DOCPACK)
 	tar czf $(DOCPACK).tgz $(DOCPACK)
 	
 srcpack:
@@ -96,7 +95,9 @@ linux:
 
 windows:
 	[ -d $(WINLIB) ] || mkdir $(WINLIB)
-	make common DEST=$(WINLIB)
+	cp -r doc $(WINLIB)
+	make samples DEST=$(WINLIB)
+	cp -f $(files) $(WINLIB)
 	make incl DEST=$(WINLIB) SYSINC="$(win32inc)"
 	cp $(bin)/GUIDOEngine*.dll $(WINLIB)
 	cp $(bin)/GUIDOEngine*.lib $(WINLIB)

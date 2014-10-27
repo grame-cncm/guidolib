@@ -11,11 +11,17 @@ Release-iphoneos
 tmpSrc
 .DS_Store
 *.o
+*.mak
 *~
 DerivedData
 doc/server/build
 doc/server/build/html/*.html
+doc/refcard/latex/*.pdf
 tools/*.gmn
 tools/*.svg
 tools/*.mid
 .qmake.stash
+guidolib-1.??-*
+*.deb
+*.so*
+

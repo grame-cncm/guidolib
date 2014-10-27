@@ -14,6 +14,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <string.h>
 
 #include "GUIDOEngine.h"
 #include "GUIDOInternal.h"
