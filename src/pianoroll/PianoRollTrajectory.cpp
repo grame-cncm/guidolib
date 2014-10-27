@@ -50,7 +50,7 @@ void PianoRollTrajectory::init()
 }
 
 //--------------------------------------------------------------------------
-void PianoRollTrajectory::DrawVoice(ARMusicalVoice* v, DrawParams drawParams)
+void PianoRollTrajectory::DrawVoice(ARMusicalVoice* v, DrawParams &drawParams)
 {
     if (fVoicesColors != NULL) {
         int voiceNum = v->getVoiceNum();
@@ -139,7 +139,7 @@ void PianoRollTrajectory::DrawVoice(ARMusicalVoice* v, DrawParams drawParams)
 }
 
 //--------------------------------------------------------------------------
-void PianoRollTrajectory::DrawNote(int pitch, double date, double dur, DrawParams drawParams)
+void PianoRollTrajectory::DrawNote(int pitch, double date, double dur, DrawParams &drawParams)
 {
     float   x     = date2xpos(date, drawParams.width, drawParams.untimedLeftElementWidth);
     float   y     = pitch2ypos(pitch, drawParams);
@@ -160,14 +160,14 @@ void PianoRollTrajectory::DrawNote(int pitch, double date, double dur, DrawParam
 }
 
 //--------------------------------------------------------------------------
-void PianoRollTrajectory::DrawLinks(DrawParams drawParams) const
+void PianoRollTrajectory::DrawLinks(DrawParams &drawParams) const
 {
     if (!previousEventInfos->empty() && !currentEventInfos->empty())
         DrawAllLinksBetweenTwoEvents(drawParams);
 }
 
 //--------------------------------------------------------------------------
-void PianoRollTrajectory::DrawFinalEvent(double dur, DrawParams drawParams)
+void PianoRollTrajectory::DrawFinalEvent(double dur, DrawParams &drawParams)
 {
     if (!currentEventInfos->empty()) {
         float w = duration2width(dur, drawParams.width, drawParams.untimedLeftElementWidth);
@@ -203,7 +203,7 @@ void PianoRollTrajectory::DrawFinalEvent(double dur, DrawParams drawParams)
 }
 
 //--------------------------------------------------------------------------
-void PianoRollTrajectory::DrawAllLinksBetweenTwoEvents(DrawParams drawParams) const
+void PianoRollTrajectory::DrawAllLinksBetweenTwoEvents(DrawParams &drawParams) const
 {
     for (unsigned int i = 0; i < previousEventInfos->size(); i++) {
         for (unsigned int j = 0; j < currentEventInfos->size(); j++) {
@@ -214,7 +214,7 @@ void PianoRollTrajectory::DrawAllLinksBetweenTwoEvents(DrawParams drawParams) co
 }
 
 //--------------------------------------------------------------------------
-void PianoRollTrajectory::DrawLinkBetween(PianoRollTrajectory::EventInfos leftEvent, PianoRollTrajectory::EventInfos rightEvent, DrawParams drawParams) const
+void PianoRollTrajectory::DrawLinkBetween(PianoRollTrajectory::EventInfos leftEvent, PianoRollTrajectory::EventInfos rightEvent, DrawParams &drawParams) const
 {
     VGColor color = leftEvent.color;
 
@@ -251,7 +251,7 @@ void PianoRollTrajectory::DrawLinkBetween(PianoRollTrajectory::EventInfos leftEv
 }
 
 //--------------------------------------------------------------------------
-void PianoRollTrajectory::handleColor(ARNoteFormat* noteFormat, DrawParams drawParams) const
+void PianoRollTrajectory::handleColor(ARNoteFormat* noteFormat, DrawParams &drawParams) const
 {
     const TagParameterString *tps = noteFormat->getColor();
     unsigned char colref[4];
@@ -264,7 +264,7 @@ void PianoRollTrajectory::handleColor(ARNoteFormat* noteFormat, DrawParams drawP
 }
 
 //--------------------------------------------------------------------------
-void PianoRollTrajectory::handleRest(double date, DrawParams drawParams)
+void PianoRollTrajectory::handleRest(double date, DrawParams &drawParams)
 {
     if (!fChord) {
         DrawLinks(drawParams);
@@ -312,7 +312,7 @@ PianoRollTrajectory::EventInfos PianoRollTrajectory::createRestInfos(float x) co
 #ifdef MIDIEXPORT
 
 //--------------------------------------------------------------------------
-void PianoRollTrajectory::DrawMidiSeq(MidiSeqPtr seq, int tpqn, DrawParams drawParams)
+void PianoRollTrajectory::DrawMidiSeq(MidiSeqPtr seq, int tpqn, DrawParams &drawParams)
 {
 	MidiEvPtr ev       = FirstEv(seq);
 	int       tpwn     = tpqn * 4;

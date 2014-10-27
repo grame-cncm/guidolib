@@ -88,28 +88,28 @@ protected:
     
     DrawParams    createDrawParamsStructure(int width, int height, VGDevice *dev) const;
 
-    virtual void  DrawFromAR(DrawParams drawParams);
+    virtual void  DrawFromAR(DrawParams &drawParams);
 
             float computeKeyboardWidth(float noteHeight) const;
     virtual float computeNoteHeight   (int height) const;
-    virtual void  initRendering       (DrawParams drawParams);
-    virtual void  endRendering        (DrawParams drawParams);
+    virtual void  initRendering       (DrawParams &drawParams);
+    virtual void  endRendering        (DrawParams &drawParams);
 
-	        void  DrawGrid            (DrawParams drawParams) const;
-	        void  DrawOctavesGrid     (DrawParams drawParams) const;
-	        void  DrawTwoLinesGrid    (DrawParams drawParams) const;
-	        void  DrawDiatonicGrid    (DrawParams drawParams) const;
-	        void  DrawChromaticGrid   (DrawParams drawParams, bool isUserDefined = false) const;
+	        void  DrawGrid            (DrawParams &drawParams) const;
+	        void  DrawOctavesGrid     (DrawParams &drawParams) const;
+	        void  DrawTwoLinesGrid    (DrawParams &drawParams) const;
+	        void  DrawDiatonicGrid    (DrawParams &drawParams) const;
+	        void  DrawChromaticGrid   (DrawParams &drawParams, bool isUserDefined = false) const;
 
-	virtual void  DrawKeyboard        (DrawParams drawParams) const;
-	virtual void  DrawVoice           (ARMusicalVoice* v, DrawParams drawParams);
-	virtual void  DrawMusicalObject   (ARMusicalObject *e, TYPE_TIMEPOSITION date, TYPE_DURATION dur, DrawParams drawParams);
-	virtual void  DrawNote            (int pitch, double date, double dur, DrawParams drawParams);
-	virtual void  DrawRect            (float x, float y, double dur, DrawParams drawParams) const;
-	virtual void  DrawMeasureBar      (double date, DrawParams drawParams) const;
+	virtual void  DrawKeyboard        (DrawParams &drawParams) const;
+	virtual void  DrawVoice           (ARMusicalVoice* v, DrawParams &drawParams);
+	virtual void  DrawMusicalObject   (ARMusicalObject *e, TYPE_TIMEPOSITION date, TYPE_DURATION dur, DrawParams &drawParams);
+	virtual void  DrawNote            (int pitch, double date, double dur, DrawParams &drawParams);
+	virtual void  DrawRect            (float x, float y, double dur, DrawParams &drawParams) const;
+	virtual void  DrawMeasureBar      (double date, DrawParams &drawParams) const;
 
-	        float pitch2ypos          (int midipitch, DrawParams drawParams) const;
-	virtual void  handleColor         (ARNoteFormat *e, DrawParams drawParams) const;
+	        float pitch2ypos          (int midipitch, DrawParams &drawParams) const;
+	virtual void  handleColor         (ARNoteFormat *e, DrawParams &drawParams) const;
 	//virtual void handleEmpty        (double date);
 
             void HSVtoRGB             (float h, float s, float v, int &r, int &g, int &b) const;
@@ -118,10 +118,13 @@ protected:
             void autoAdjustPitchRange (int &lowerPitch, int &higherPitch); // in the case of pitch range lower than 12
 
 #ifdef MIDIEXPORT
-TYPE_TIMEPOSITION getMidiEndDate        () const;
-    virtual void  DrawFromMidi          (DrawParams drawParams);
-    virtual void  DrawMidiSeq           (MidiSeqPtr seq, int tpqn, DrawParams drawParams);
-            int   detectMidiExtremePitch(bool detectLowerPitch);
+    virtual void  DrawFromMidi          (DrawParams &drawParams);
+    virtual void  DrawMidiSeq           (MidiSeqPtr seq, int tpqn, DrawParams &drawParams);
+			TYPE_TIMEPOSITION	getMidiEndDate        () const;
+            int					detectMidiExtremePitch(bool detectLowerPitch);
+#else
+			TYPE_TIMEPOSITION	getMidiEndDate        () const			{ return Fraction(0);}
+            int					detectMidiExtremePitch(bool)			{ return 0; }
 #endif
     
     virtual float date2xpos      (double pos, int width, float untimedLeftElementWidth) const;

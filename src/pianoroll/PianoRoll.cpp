@@ -224,9 +224,7 @@ PianoRoll::DrawParams PianoRoll::createDrawParamsStructure(int width, int height
 void PianoRoll::onDraw(int width, int height, VGDevice *dev)
 {
     DrawParams drawParams = createDrawParamsStructure(width, height, dev);
-
     initRendering(drawParams);
-    
     DrawGrid(drawParams);
 
     if (fKeyboardEnabled)
@@ -234,14 +232,16 @@ void PianoRoll::onDraw(int width, int height, VGDevice *dev)
 
     if (ownsARMusic())
         DrawFromAR(drawParams);
-    else
+#ifdef MIDIEXPORT
+	else if (ownsMidi())
         DrawFromMidi(drawParams);
-
-    endRendering(drawParams);
+#endif
+    
+	endRendering(drawParams);
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::DrawFromAR(PianoRoll::DrawParams drawParams)
+void PianoRoll::DrawFromAR(PianoRoll::DrawParams &drawParams)
 {
     GuidoPos pos = fARMusic->GetHeadPosition();
 
@@ -274,7 +274,7 @@ float PianoRoll::computeNoteHeight(int height) const
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::initRendering(PianoRoll::DrawParams drawParams)
+void PianoRoll::initRendering(PianoRoll::DrawParams &drawParams)
 {
     drawParams.dev->NotifySize(drawParams.width, drawParams.height);
     drawParams.dev->BeginDraw();
@@ -284,7 +284,7 @@ void PianoRoll::initRendering(PianoRoll::DrawParams drawParams)
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::endRendering(PianoRoll::DrawParams drawParams)
+void PianoRoll::endRendering(PianoRoll::DrawParams &drawParams)
 {
     drawParams.dev->PopFillColor();
     drawParams.dev->PopPenColor();
@@ -292,7 +292,7 @@ void PianoRoll::endRendering(PianoRoll::DrawParams drawParams)
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::DrawGrid(PianoRoll::DrawParams drawParams) const
+void PianoRoll::DrawGrid(PianoRoll::DrawParams &drawParams) const
 {
     drawParams.dev->PushPenColor(VGColor(0, 0, 0));
 
@@ -313,7 +313,7 @@ void PianoRoll::DrawGrid(PianoRoll::DrawParams drawParams) const
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::DrawOctavesGrid(PianoRoll::DrawParams drawParams) const
+void PianoRoll::DrawOctavesGrid(PianoRoll::DrawParams &drawParams) const
 {
 	for (int i = fLowPitch; i <= fHighPitch + 1; i++) {
         float y = pitch2ypos(i, drawParams) + 0.5f * drawParams.noteHeight;
@@ -332,7 +332,7 @@ void PianoRoll::DrawOctavesGrid(PianoRoll::DrawParams drawParams) const
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::DrawTwoLinesGrid(PianoRoll::DrawParams drawParams) const
+void PianoRoll::DrawTwoLinesGrid(PianoRoll::DrawParams &drawParams) const
 {
 	for (int i = fLowPitch; i <= fHighPitch + 1; i++) {
         float y = pitch2ypos(i, drawParams) + 0.5f * drawParams.noteHeight;
@@ -358,7 +358,7 @@ void PianoRoll::DrawTwoLinesGrid(PianoRoll::DrawParams drawParams) const
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::DrawDiatonicGrid(PianoRoll::DrawParams drawParams) const
+void PianoRoll::DrawDiatonicGrid(PianoRoll::DrawParams &drawParams) const
 {
 	for (int i = fLowPitch; i <= fHighPitch + 1; i++) {
         float y = pitch2ypos(i, drawParams) + 0.5f * drawParams.noteHeight;
@@ -386,7 +386,7 @@ void PianoRoll::DrawDiatonicGrid(PianoRoll::DrawParams drawParams) const
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::DrawChromaticGrid(PianoRoll::DrawParams drawParams, bool isUserDefined) const
+void PianoRoll::DrawChromaticGrid(PianoRoll::DrawParams &drawParams, bool isUserDefined) const
 {
 	for (int i = fLowPitch; i <= fHighPitch + 1; i++) {
         float y = pitch2ypos(i, drawParams) + 0.5f * drawParams.noteHeight;
@@ -412,7 +412,7 @@ void PianoRoll::DrawChromaticGrid(PianoRoll::DrawParams drawParams, bool isUserD
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::DrawKeyboard(PianoRoll::DrawParams drawParams) const
+void PianoRoll::DrawKeyboard(PianoRoll::DrawParams &drawParams) const
 {
     float keyboardBlackNotesWidth = drawParams.untimedLeftElementWidth / 1.5f;
 
@@ -541,7 +541,7 @@ void PianoRoll::DrawKeyboard(PianoRoll::DrawParams drawParams) const
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::DrawVoice(ARMusicalVoice* v, PianoRoll::DrawParams drawParams)
+void PianoRoll::DrawVoice(ARMusicalVoice* v, PianoRoll::DrawParams &drawParams)
 {
     if (fVoicesColors != NULL) {
         int voiceNum = v->getVoiceNum();
@@ -623,7 +623,7 @@ void PianoRoll::DrawVoice(ARMusicalVoice* v, PianoRoll::DrawParams drawParams)
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::DrawMusicalObject(ARMusicalObject *e, TYPE_TIMEPOSITION date, TYPE_DURATION dur, PianoRoll::DrawParams drawParams)
+void PianoRoll::DrawMusicalObject(ARMusicalObject *e, TYPE_TIMEPOSITION date, TYPE_DURATION dur, PianoRoll::DrawParams &drawParams)
 {
 	ARNote *note = dynamic_cast<ARNote *>(e);
 
@@ -644,7 +644,7 @@ void PianoRoll::DrawMusicalObject(ARMusicalObject *e, TYPE_TIMEPOSITION date, TY
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::DrawNote(int pitch, double date, double dur, PianoRoll::DrawParams drawParams)
+void PianoRoll::DrawNote(int pitch, double date, double dur, PianoRoll::DrawParams &drawParams)
 {
 	float x = date2xpos (date, drawParams.width, drawParams.untimedLeftElementWidth);
 	float y = pitch2ypos(pitch, drawParams);
@@ -652,7 +652,7 @@ void PianoRoll::DrawNote(int pitch, double date, double dur, PianoRoll::DrawPara
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::DrawRect(float x, float y, double dur, PianoRoll::DrawParams drawParams) const
+void PianoRoll::DrawRect(float x, float y, double dur, PianoRoll::DrawParams &drawParams) const
 {
 	float w        = duration2width(dur, drawParams.width, drawParams.untimedLeftElementWidth);
 	float halfstep = stepheight(drawParams.height) / 2.0f;
@@ -668,7 +668,7 @@ void PianoRoll::DrawRect(float x, float y, double dur, PianoRoll::DrawParams dra
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::DrawMeasureBar(double date, PianoRoll::DrawParams drawParams) const
+void PianoRoll::DrawMeasureBar(double date, PianoRoll::DrawParams &drawParams) const
 {
     float x    = date2xpos(date, drawParams.width, drawParams.untimedLeftElementWidth);
 	float yMin = pitch2ypos(fLowPitch, drawParams)  + 0.5f * drawParams.noteHeight;
@@ -690,7 +690,7 @@ void PianoRoll::DrawMeasureBar(double date, PianoRoll::DrawParams drawParams) co
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::handleColor(ARNoteFormat* noteFormat, DrawParams drawParams) const
+void PianoRoll::handleColor(ARNoteFormat* noteFormat, DrawParams &drawParams) const
 {
     const TagParameterString *tps = noteFormat->getColor();
     unsigned char colref[4];
@@ -714,7 +714,7 @@ void PianoRoll::handleColor(ARNoteFormat* noteFormat, DrawParams drawParams) con
 }*/
 
 //--------------------------------------------------------------------------
-float PianoRoll::pitch2ypos(int midipitch, DrawParams drawParams) const
+float PianoRoll::pitch2ypos(int midipitch, DrawParams &drawParams) const
 {
 	int   p = midipitch - fLowPitch;
     float h = ((float) (drawParams.height * p) / (float) pitchRange());
@@ -935,7 +935,7 @@ TYPE_TIMEPOSITION PianoRoll::getMidiEndDate() const
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::DrawMidiSeq(MidiSeqPtr seq, int tpqn, PianoRoll::DrawParams drawParams)
+void PianoRoll::DrawMidiSeq(MidiSeqPtr seq, int tpqn, PianoRoll::DrawParams &drawParams)
 {
 	MidiEvPtr ev = FirstEv(seq);
 	int tpwn     = tpqn * 4;
@@ -965,7 +965,7 @@ void PianoRoll::DrawMidiSeq(MidiSeqPtr seq, int tpqn, PianoRoll::DrawParams draw
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::DrawFromMidi(PianoRoll::DrawParams drawParams)
+void PianoRoll::DrawFromMidi(PianoRoll::DrawParams &drawParams)
 {
     MIDIFile mf;
 
