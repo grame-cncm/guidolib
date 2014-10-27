@@ -98,24 +98,40 @@ void PianoRoll::setLimitDates(GuidoDate start, GuidoDate end)
     else
 	    fStartDate = TYPE_TIMEPOSITION(start.num, start.denom);
 
-    if (end.num == 0 && end.denom == 0)
-        fEndDate = (ownsARMusic() ? fARMusic->getDuration() : getMidiEndDate());
+    if (end.num == 0 && end.denom == 0) {
+        Fraction perhapsMidiDate(kDefaultStartDateNum, kDefaultStartDateDenom);
+        #ifdef MIDIEXPORT
+          perhapsMidiDate = getMidiEndDate();
+        #endif
+        fEndDate = (ownsARMusic() ? fARMusic->getDuration() : perhapsMidiDate);
+    }
     else
 	    fEndDate = TYPE_TIMEPOSITION(end.num, end.denom);
 
     fDuration = double(fEndDate - fStartDate);
 }
 
+
 //--------------------------------------------------------------------------
 void PianoRoll::setPitchRange(int minPitch, int maxPitch)
 {
-    if (minPitch == -1)
-        fLowPitch = (ownsARMusic() ? detectARExtremePitch(true) : detectMidiExtremePitch(true));
+    if (minPitch == -1) {
+        int perhapsMinPitch = 0;
+        #ifdef MIDIEXPORT
+          perhapsMinPitch = detectMidiExtremePitch(true);
+        #endif
+        fLowPitch = (ownsARMusic() ? detectARExtremePitch(true) : minPitch = perhapsMinPitch);
+    }
     else
         fLowPitch = minPitch;
 
-    if (maxPitch == -1)
-        fHighPitch = (ownsARMusic() ? detectARExtremePitch(false) : maxPitch = detectMidiExtremePitch(false));
+    if (maxPitch == -1) {
+        int perhapsMaxPitch = 0;
+        #ifdef MIDIEXPORT
+          perhapsMaxPitch = detectMidiExtremePitch(false);
+        #endif
+        fHighPitch = (ownsARMusic() ? detectARExtremePitch(false) : maxPitch = perhapsMaxPitch);
+    }
     else
         fHighPitch = maxPitch;
 
@@ -234,8 +250,11 @@ void PianoRoll::onDraw(int width, int height, VGDevice *dev)
 
     if (ownsARMusic())
         DrawFromAR(drawParams);
-    else
-        DrawFromMidi(drawParams);
+    else {
+        #ifdef MIDIEXPORT
+           DrawFromMidi(drawParams);
+        #endif
+    }
 
     endRendering(drawParams);
 }

@@ -58,8 +58,9 @@ protected:
 	void handleRest (double date, DrawParams drawParams);
 	//void handleEmpty (double date);
 
+#ifdef MIDIEXPORT
     void DrawMidiSeq(MidiSeqPtr seq, int tpqn, DrawParams drawParams);
-
+#endif
     double fCurrentDate;
 };
 

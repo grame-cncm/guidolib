@@ -75,8 +75,11 @@ void ReducedProportional::onDraw(int width, int height, VGDevice* dev)
 
     if (ownsARMusic())
         DrawFromAR(drawParams);
-    else
-        DrawFromMidi(drawParams);
+    else {
+        #ifdef MIDIEXPORT
+           DrawFromMidi(drawParams);
+        #endif
+    }
 
     endRendering(drawParams);
 }

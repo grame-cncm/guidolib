@@ -20,7 +20,9 @@
 #include "GUIDOInternal.h"
 #include "PianoRoll.h"
 #include "PianoRollTrajectory.h"
-#include "midifile.h"
+#ifdef MIDIEXPORT
+  #include "midifile.h"
+#endif
 #include "HtmlColors.h"
 #include <cmath>
 
