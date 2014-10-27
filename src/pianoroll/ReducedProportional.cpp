@@ -73,20 +73,18 @@ void ReducedProportional::onDraw(int width, int height, VGDevice* dev)
 	DrawGrid(drawParams);
     SetMusicFont(drawParams);
 
-    if (ownsARMusic()) {
+    if (ownsARMusic())
         DrawFromAR(drawParams);
-		endRendering(drawParams);
-	}
 #ifdef MIDIEXPORT
-    else {
+	else if (ownsMidi())
         DrawFromMidi(drawParams);
-		endRendering(drawParams);
-	}
 #endif
+    
+	endRendering(drawParams);
 }
 
 //--------------------------------------------------------------------------
-void ReducedProportional::SetMusicFont(DrawParams drawParams)
+void ReducedProportional::SetMusicFont(DrawParams &drawParams)
 {
 	VGSystem * sys = drawParams.dev->getVGSystem();
 	int fontSize = (int) (drawParams.noteHeight * 3.5); // value experimentaly defined
@@ -117,7 +115,7 @@ PianoRoll::DrawParams ReducedProportional::createDrawParamsStructure(int width, 
 }
 
 //--------------------------------------------------------------------------
-void ReducedProportional::DrawStaff(int n, DrawParams drawParams) const
+void ReducedProportional::DrawStaff(int n, DrawParams &drawParams) const
 {
     float y = staffTopPos(n, drawParams.noteHeight);
 
@@ -128,7 +126,7 @@ void ReducedProportional::DrawStaff(int n, DrawParams drawParams) const
 }
 
 //--------------------------------------------------------------------------
-void ReducedProportional::DrawGrid(DrawParams drawParams) const
+void ReducedProportional::DrawGrid(DrawParams &drawParams) const
 {
 	drawParams.dev->PushPenWidth(kLineThickness);
 
@@ -139,7 +137,7 @@ void ReducedProportional::DrawGrid(DrawParams drawParams) const
 }
 
 //--------------------------------------------------------------------------
-void ReducedProportional::DrawLedgerLines(float x, float y, int count, DrawParams drawParams) const
+void ReducedProportional::DrawLedgerLines(float x, float y, int count, DrawParams &drawParams) const
 {
 	drawParams.dev->PushPenWidth(kLineThickness);
 
@@ -223,7 +221,7 @@ float ReducedProportional::halfspaces2ypos(int halfspaces, int staff, float note
 }
 
 //--------------------------------------------------------------------------
-void ReducedProportional::DrawVoice(ARMusicalVoice* v, DrawParams drawParams)
+void ReducedProportional::DrawVoice(ARMusicalVoice* v, DrawParams &drawParams)
 {
     if (fVoicesColors != NULL) {
         int voiceNum = v->getVoiceNum();
@@ -307,7 +305,7 @@ void ReducedProportional::DrawVoice(ARMusicalVoice* v, DrawParams drawParams)
 }
 
 //--------------------------------------------------------------------------
-void ReducedProportional::DrawHead(float x, float y, int alter, DrawParams drawParams) const
+void ReducedProportional::DrawHead(float x, float y, int alter, DrawParams &drawParams) const
 {
     if (!fColors->empty())
         drawParams.dev->SetFontColor(fColors->top());
@@ -326,7 +324,7 @@ void ReducedProportional::DrawHead(float x, float y, int alter, DrawParams drawP
 }
 
 //--------------------------------------------------------------------------
-void ReducedProportional::DrawNote(int pitch, double date, double dur, DrawParams drawParams)
+void ReducedProportional::DrawNote(int pitch, double date, double dur, DrawParams &drawParams)
 {
     if (pitch >= fLowPitch && pitch <= fHighPitch) {
         int   alter, halfspaces;
@@ -346,7 +344,7 @@ void ReducedProportional::DrawNote(int pitch, double date, double dur, DrawParam
 }
 
 //--------------------------------------------------------------------------
-void ReducedProportional::DrawRect(float x, float y, double dur, DrawParams drawParams) const
+void ReducedProportional::DrawRect(float x, float y, double dur, DrawParams &drawParams) const
 {
 	float w              =   duration2width(dur, drawParams.width, drawParams.untimedLeftElementWidth);
 	float rectHalfHeight =   drawParams.noteHeight / 4;
@@ -358,7 +356,7 @@ void ReducedProportional::DrawRect(float x, float y, double dur, DrawParams draw
 }
 
 //--------------------------------------------------------------------------
-void ReducedProportional::handleColor(ARNoteFormat* noteFormat, DrawParams drawParams) const
+void ReducedProportional::handleColor(ARNoteFormat* noteFormat, DrawParams &drawParams) const
 {
     const TagParameterString *tps = noteFormat->getColor();
     unsigned char colref[4];
