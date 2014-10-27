@@ -12,3 +12,5 @@ package/GuidoQtApplsMacOSX*
 .qmake.stash
 Debug-iphone*
 Release-iphone*
+GuidoQtApplsMacOSX-*
+package/GUIDOQt-?.*.deb
