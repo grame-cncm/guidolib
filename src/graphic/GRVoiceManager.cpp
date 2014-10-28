@@ -222,14 +222,17 @@ bool GRVoiceManager::checkRepeatBeginNext()
 {
     ARMusicalVoiceState vst (*curvst);
     GuidoPos pos = curvst->vpos;
-    ARMusicalObject * next;
+    ARMusicalObject *next;
 
     next = arVoice->GetNext(pos, vst);
     next = arVoice->GetNext(pos, vst);
-	if (dynamic_cast<ARPossibleBreak *>(next)) {
-        next = arVoice->GetNext(pos, vst);
+
+    if (next) {
+        if (static_cast<ARPossibleBreak *>(next->isARPossibleBreak()))
+            next = arVoice->GetNext(pos, vst);
     }
-    return dynamic_cast<ARRepeatBegin *>(next) ? true : false;
+
+    return (next && next->isARRepeatBegin()) ? true : false;
 }
 
 /** \brief Parses the state tags that are important for the voice-manager.
@@ -468,13 +471,15 @@ int GRVoiceManager::DoBreak(const TYPE_TIMEPOSITION & tp,
 	if (curvst->vpos)
         o = arVoice->GetAt(curvst->vpos);
 
-	if (o && dynamic_cast<ARPossibleBreak *>(o))		arVoice->GetNext(curvst->vpos, *curvst);
-	else if ( o && dynamic_cast<ARNewSystem *>(o)) {
+    if (o && static_cast<ARPossibleBreak *>(o->isARPossibleBreak()))
+        arVoice->GetNext(curvst->vpos, *curvst);
+    else if ( o && static_cast<ARNewSystem *>(o->isARNewSystem())) {
 //		debugstate ("before next:", curvst->getCurStateTags());
 		arVoice->GetNext(curvst->vpos,*curvst);
 //		debugstate ("after next:", curvst->getCurStateTags());
 	}
-	else if (o && dynamic_cast<ARNewPage *>(o))			arVoice->GetNext(curvst->vpos,*curvst);
+    else if (o && static_cast<ARNewPage *>(o->isARNewPage()))
+        arVoice->GetNext(curvst->vpos,*curvst);
 
 	// newSystem or newPage we need to get a new mCurGrStaff... This automatically adds the startglue 
 	if (system_or_page == 1 || system_or_page == 2)
@@ -592,7 +597,7 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION &timepos, int filltagmode)
 	if (filltagmode) {
 		ARMusicalObject *o = arVoice->GetAt(curvst->vpos);
 		
-		ARNewSystem *tmp = dynamic_cast<ARNewSystem *>(o);
+        ARNewSystem *tmp = static_cast<ARNewSystem *>(o->isARNewSystem());
 
 		if (tmp) {
 			if (tmp->getDY() && tmp->getDY()->TagIsSet()) // then we have a distance to the next system...
@@ -600,9 +605,9 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION &timepos, int filltagmode)
 
 			return NEWSYSTEM;
 		}
-		else if (dynamic_cast<ARNewPage *>(o))
+        else if (static_cast<ARNewPage *>(o->isARNewPage()))
             return NEWPAGE;
-		else if (dynamic_cast<ARPossibleBreak *>(o)) {
+		else if (static_cast<ARPossibleBreak *>(o->isARPossibleBreak())) {
 			pbreakval = static_cast<ARPossibleBreak *>(o)->value;
 
 			return PBREAK;
@@ -634,9 +639,9 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION &timepos, int filltagmode)
 				else {
 					// careful, what happens to dispDur !!!!
 					if (curvst->fCurdispdur != NULL && curvst->fCurdispdur->getDisplayDuration() > DURATION_0) {
-						if (dynamic_cast<ARNote *>(o))
+                        if (static_cast<ARNote *>(o->isARNote()))
                             ev = CreateNote(timepos,o);
-						else if (dynamic_cast<ARRest *>(o))
+                        else if (static_cast<ARRest *>(o->isARRest()))
                             ev = CreateRest(timepos,o);
 					}
 					// changed on Apr 19 2011 DF
@@ -728,13 +733,13 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION &timepos, int filltagmode)
                         mStaffMgr->AddGRSyncElement(grne, mCurGrStaff,voicenum,grvoice);
 				}
 			}
-			else {
-				// not handled !?
-				ARMusicalTag *armt = dynamic_cast<ARMusicalTag *>(o);
+            else {
+                // not handled !?
+                ARMusicalTag *armt = static_cast<ARMusicalTag *>(o->isARMusicalTag());
 
-				if (!armt || !armt->IsStateTag())
-					GuidoTrace("Warning, Tag not handled");
-			}
+                if (!armt || !armt->IsStateTag())
+                    GuidoTrace("Warning, Tag not handled");
+            }
 
 			// increment the position...
 			arVoice->GetNext(curvst->vpos, *curvst);
@@ -777,8 +782,11 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION &timepos, int filltagmode)
 			// This creates the graphical representation for position-tags, that start at the current position...
 			checkStartPTags(curvst->vpos);			
 			GREvent * grev = NULL;
-			if (dynamic_cast<ARNote *>(arev))			grev = CreateNote(timepos,arev);
-			else if (dynamic_cast<ARRest *>(arev))		grev = CreateRest(timepos,arev);
+
+            if (static_cast<ARNote *>(arev->isARNote()))
+                grev = CreateNote(timepos,arev);
+            else if (static_cast<ARRest *>(arev->isARRest()))
+                grev = CreateRest(timepos,arev);
 			
 			assert(grev);
 			if (grev->getDuration() > DURATION_0)
@@ -968,14 +976,14 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 	
 
 	const std::type_info & tinf = typeid(*arOfCompleteObject);
-	ARMusicalTag * mytag = dynamic_cast<ARMusicalTag *>(arOfCompleteObject);
+	ARMusicalTag * mytag = static_cast<ARMusicalTag *>(arOfCompleteObject->isARMusicalTag());
 	if (mytag)
 	{
 		if (mytag->getRange()){
 			GuidoTrace("range without range tag");
 		}
 	}
-	else if (dynamic_cast<ARDummyRangeEnd *>(arOfCompleteObject))
+    else if (static_cast<ARDummyRangeEnd *>(arOfCompleteObject->isARDummyRangeEnd()))
 	{
 	}
 	// DF - 24/08/2009 - assert commented to avoid spurious exit
@@ -2012,7 +2020,7 @@ void GRVoiceManager::checkCenterRest(GRStaff * grstaff, float lastpos, float new
 */
 GREvent * GRVoiceManager::CreateNote( const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject)
 {
-	ARNote * arnote = dynamic_cast<ARNote *>(arObject);	
+    ARNote * arnote = static_cast<ARNote *>(arObject->isARNote());	
 	if ((arObject->getDuration() <= DURATION_0) && (curvst->fCurdispdur == NULL))
 		return NULL;		// this should not happen...
 
@@ -2046,7 +2054,7 @@ GRSingleNote * GRVoiceManager::CreateSingleNote( const TYPE_TIMEPOSITION & tp, A
 	else	dtempl = curev->getDuration();
 
 	// we need to take care of dots !
-	ARNote * tmpNote = dynamic_cast<ARNote *>(curev);
+    ARNote * tmpNote = static_cast<ARNote *>(curev->isARNote());
 	AROctava * aroct = dynamic_cast<AROctava *>( curvst->getCurStateTag(typeid(AROctava)));
 	if (aroct && tmpNote)			tmpNote->setRegister( tmpNote->getOctave() + aroct->getOctava());
 	dtempl.normalize();
@@ -2099,7 +2107,7 @@ GRSingleNote * GRVoiceManager::CreateSingleNote( const TYPE_TIMEPOSITION & tp, A
 */
 GREvent * GRVoiceManager::CreateGraceNote( const TYPE_TIMEPOSITION & tp, ARMusicalObject *arObject, const TYPE_DURATION & dur)
 {
-	ARNote * arnote = dynamic_cast<ARNote *>(arObject);
+    ARNote * arnote = static_cast<ARNote *>(arObject->isARNote());
 	if (!arnote) return NULL;
 
 	float size = 0.75f;
@@ -2332,7 +2340,7 @@ void GRVoiceManager::ReadBeginTags(const TYPE_TIMEPOSITION & tp)
 		    return; 
 		}
 
-		ARMusicalTag * mtag = dynamic_cast<ARMusicalTag *>(o);
+		ARMusicalTag * mtag = static_cast<ARMusicalTag *>(o->isARMusicalTag());
 		if (mtag == 0)
 		{ 
 			delete mystate;

@@ -114,7 +114,7 @@ void GRNotationElement::print(ostream& os) const
 	ARMusicalObject * ar = getAbstractRepresentation();
 	os << "notation element at " << getPosition() << " - " << getBoundingBox() << endl;
 	if (ar) {
-        ARMusicalTag * tag = dynamic_cast<ARMusicalTag *>(ar);
+        ARMusicalTag * tag = static_cast<ARMusicalTag *>(ar->isARMusicalTag());
         if (tag) { *ar << os; os << endl; }
         else ar->print();
 	}

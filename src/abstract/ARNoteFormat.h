@@ -41,7 +41,12 @@ class ARNoteFormat :  public ARMTParameter, public ARPositionTag
 		virtual void PrintName(std::ostream & os) const;
 		virtual void PrintParameters(std::ostream &os) const;
 
-		virtual ARNoteFormat * getEndTag() const		{ return new ARNoteFormat(NULL,savenf); } 
+		virtual ARNoteFormat * getEndTag() const		{ return new ARNoteFormat(NULL,savenf); }
+        
+
+        /**** Function to avoid dynamic_cast ****/
+        ARMusicalObject *isARNoteFormat() { return this; }
+        /****************************************/
 
 	protected:
 		ARNoteFormat * savenf;

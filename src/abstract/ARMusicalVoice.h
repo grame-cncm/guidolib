@@ -179,11 +179,18 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		ChordGroupList      *chordgrouplist;
 		GuidoPos             posfirstinchord;
 		int                  numchordvoice;
-		ARMusicalVoiceState *chordBeginState;
+        bool                 isInChord;
+		//ARMusicalVoiceState *chordBeginState;
 		void                 doAutoKeys();
 		int	                 sum;
 		int                  pitchsum;
 		int                  voicenum;
+
+
+        GuidoPos      curVoiceStateVposBackup; // mCurVoiceState params backup to avoid heavy "new" on MusicalVoiceState
+        TYPE_DURATION curVoiceStateCurtpBackup;
+        GuidoPos      curVoiceStatePtagposBackup;
+        PositionTagList *addedPositionTagsBackup;
 
 		void doAutoDispatchLyrics();
 		void doAutoFermatas();

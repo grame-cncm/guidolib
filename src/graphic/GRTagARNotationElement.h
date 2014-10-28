@@ -27,7 +27,7 @@ class GRTagARNotationElement : public GRTag, public GRARNotationElement
 {
 public:
 	GRTagARNotationElement (ARMusicalObject * el, float curLSPACE, bool ownsAR = false )
-				: GRTag( dynamic_cast<ARMusicalTag *>(el), curLSPACE), GRARNotationElement(el, ownsAR)
+        : GRTag(static_cast<ARMusicalTag *>(el->isARMusicalTag()), curLSPACE), GRARNotationElement(el, ownsAR)
 	{}
 
 	virtual ~GRTagARNotationElement();

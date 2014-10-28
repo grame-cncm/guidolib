@@ -103,16 +103,29 @@ class ARMusicalObject
 	virtual bool	getDrawGR(){return drawGR;}
 
     /**** Functions to avoid dynamic_cast ****/
-    virtual ARMusicalObject  *isARRepeatBegin()                    { return NULL; }
-    virtual ARMusicalObject  *isARMusicalTag()                     { return NULL; }
-    virtual ARMusicalObject  *isARNote()                           { return NULL; }
-    virtual ARMusicalObject  *isARBar()                            { return NULL; }
-    virtual ARMusicalObject  *isARCoda()                           { return NULL; }
-    virtual ARMusicalObject  *isARSegno()                          { return NULL; }
-    virtual ARMusicalObject  *isARNewPage()                        { return NULL; }
-    virtual ARMusicalObject  *isARNewSystem()                      { return NULL; }
-    virtual ARMusicalObject  *isARStaff()                          { return NULL; }
-    virtual ARMusicalObject  *isARKey()                            { return NULL; }
+    virtual ARMusicalObject  *isARRepeatBegin()   { return NULL; }
+    virtual ARMusicalObject  *isARMusicalTag()    { return NULL; }
+    virtual ARMusicalObject  *isARNote()          { return NULL; }
+    virtual ARMusicalObject  *isARBar()           { return NULL; }
+    virtual ARMusicalObject  *isARCoda()          { return NULL; }
+    virtual ARMusicalObject  *isARSegno()         { return NULL; }
+    virtual ARMusicalObject  *isARNewPage()       { return NULL; }
+    virtual ARMusicalObject  *isARNewSystem()     { return NULL; }
+    virtual ARMusicalObject  *isARStaff()         { return NULL; }
+    virtual ARMusicalObject  *isARKey()           { return NULL; }
+    virtual ARMusicalObject  *isARBeamState()     { return NULL; }
+    virtual ARMusicalObject  *isARChordComma()    { return NULL; }
+    virtual ARMusicalObject  *isARClef()          { return NULL; }
+    virtual ARMusicalObject  *isARDummyRangeEnd() { return NULL; }
+    virtual ARMusicalObject  *isARFinishBar()     { return NULL; }
+    virtual ARMusicalObject  *isARMeter()         { return NULL; }
+    virtual ARMusicalObject  *isARNoteFormat()    { return NULL; }
+    virtual ARMusicalObject  *isARRepeatEnd()     { return NULL; }
+    virtual ARMusicalObject  *isARRest()          { return NULL; }
+    virtual ARMusicalObject  *isARSecondGlue()    { return NULL; }
+    virtual ARMusicalObject  *isARUserChordTag()  { return NULL; }
+    virtual ARMusicalObject  *isARJump()          { return NULL; }
+    virtual ARMusicalObject  *isARPossibleBreak() { return NULL; }
     /*****************************************/
 
   protected:

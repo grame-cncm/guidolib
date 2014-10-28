@@ -31,6 +31,11 @@ class ARPossibleBreak :  public ARMusicalTag // , public ARMusicalObject
 		virtual std::ostream & operator<<(std::ostream & os) const;
 
 		  float value;
+        
+
+    /**** Function to avoid dynamic_cast ****/
+    ARMusicalObject *isARPossibleBreak() { return this; }
+    /****************************************/
 };
 
 

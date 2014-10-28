@@ -74,10 +74,10 @@ int ARVoiceManager::Iterate( TYPE_TIMEPOSITION & tp, int filltagmode )
 		if ((double)o->getDuration() > 0)
 			return MODEERROR;
 
-		if (dynamic_cast<ARNewSystem *>(o))
+        if (static_cast<ARNewSystem *>(o->isARNewSystem()))
 			return NEWSYSTEM;
 
-		if (dynamic_cast<ARNewPage *>(o))
+        if (static_cast<ARNewPage *>(o->isARNewPage()))
 			return NEWPAGE;
 
 		// here we have a regular tag.
@@ -200,7 +200,7 @@ int ARVoiceManager::InsertBreak( const TYPE_TIMEPOSITION & tp, int breaktype, fl
 		}
 
 		ARMusicalObject * o = mVoice->GetAt( mCurrVoiceState.vpos );
-		if (dynamic_cast<ARNewPage *>(o) || dynamic_cast<ARNewSystem *>(o))
+        if (static_cast<ARNewPage *>(o->isARNewPage()) || static_cast<ARNewSystem *>(o->isARNewSystem()))
 		{
 			// then we just need an increment ...
 			mVoice->GetNext(mCurrVoiceState.vpos,mCurrVoiceState);

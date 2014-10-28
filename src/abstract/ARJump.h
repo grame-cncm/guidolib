@@ -33,6 +33,11 @@ public:
 
     const FormatStringParserResult&   getMark() const     { return mMark; }
     int								  getID() const       { return mID; }
+        
+
+    /**** Function to avoid dynamic_cast ****/
+    ARMusicalObject *isARJump() { return this; }
+    /****************************************/
 
 protected:
     static ListOfTPLs ltpls;

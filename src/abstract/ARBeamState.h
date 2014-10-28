@@ -52,6 +52,11 @@ class ARBeamState : public ARMusicalTag
 		virtual void PrintParameters(std::ostream &) const { }
 	
 			beamstate getBeamState() const { return state; }
+        
+
+    /**** Function to avoid dynamic_cast ****/
+    ARMusicalObject *isARBeamState() { return this; }
+    /****************************************/
 
   protected:
 

@@ -45,7 +45,6 @@ class ARIntens :  public ARMTParameter
 
 		virtual void	browse(TimeUnwrap& mapper) const;
 
-
 	protected:
 		NVstring mIntensText; // der entsprechende Text ...
 		float value;

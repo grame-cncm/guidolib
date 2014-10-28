@@ -284,7 +284,10 @@ void ARMusicalVoiceState::RemovePositionTag(ARPositionTag * ntag, int addtoremov
 		assert(false);
 		return; 
 	}
-		
+	
+    if (!ntag)
+        return;
+
 	// this either deletes the matching begin-Tag or 
 	// just the position-tag that was given!
 	ARTagEnd * artgend = ARTagEnd::cast(ntag);
@@ -369,13 +372,14 @@ void ARMusicalVoiceState::RemovePositionTag(ARPositionTag * ntag, int addtoremov
 	// any tags in the curpositiontags ...
 	if (checkforcurtags) {
 		GuidoPos pos = curpositiontags->GetTailPosition();
-		while (pos) {
-            ARDisplayDuration *tag = static_cast<ARDisplayDuration *>(curpositiontags->GetPrev(pos)->isARDisplayDuration());
-			if (tag) {
-				fCurdispdur = tag;
-				break;
-			}
-		}		
+        while (pos) {
+            ARDisplayDuration *tag = dynamic_cast<ARDisplayDuration *>(curpositiontags->GetPrev(pos));
+
+            if (tag) {
+                fCurdispdur = tag;
+                break;
+            }
+        }		
 	}	
 }
 

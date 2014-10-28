@@ -57,6 +57,11 @@ class ARMeter : public ARMTParameter
 		void setTimeOffset(const TYPE_TIMEPOSITION &tp) { timeoffset = tp; }
 
         float        getSize() const {return size;}
+        
+
+        /**** Function to avoid dynamic_cast ****/
+        ARMusicalObject *isARMeter() { return this; }
+        /****************************************/
 
   protected:
 	  // timeoffset describes the offset from the current meter-position within a staff. 

@@ -40,15 +40,9 @@ public:
 	virtual void PrintParameters(std::ostream & os) const;
 
 
-	const TagParameterFloat * getDD() const
-	{
-		return mDD;
-	}
+	const TagParameterFloat * getDD() const	{ return mDD; }
 
-	virtual ARDotFormat * getEndTag() const
-	{
-		return new ARDotFormat(NULL,savedf);
-	}
+	virtual ARDotFormat * getEndTag() const	{ return new ARDotFormat(NULL, savedf); }
 
 protected:
 

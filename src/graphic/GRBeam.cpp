@@ -50,7 +50,7 @@ GRBeam::GRBeam(GRStaff * grstaf,ARBeam * arbeam) : GRPTagARNotationElement(arbea
 	isFeathered = arbeam->isFeatheredBeam();
 	if(isFeathered)
 	{
-		ARFeatheredBeam * ar = dynamic_cast<ARFeatheredBeam *>(arbeam);
+        ARFeatheredBeam * ar = static_cast<ARFeatheredBeam *>(arbeam->isARFeatheredBeam());
 		drawDur = ar->drawDuration();
 	}
 	else
@@ -951,7 +951,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	
 	if(isFeathered)
 	{
-		ARFeatheredBeam * ar = dynamic_cast<ARFeatheredBeam *>(getARBeam());
+        ARFeatheredBeam * ar = static_cast<ARFeatheredBeam *>(getARBeam()->isARFeatheredBeam());
 		int begin = 0;
 		int end = 0;
 		GREvent * stemNoteBegin = GREvent::cast(mAssociated->GetHead());

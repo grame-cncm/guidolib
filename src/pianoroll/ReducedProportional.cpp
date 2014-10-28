@@ -286,13 +286,13 @@ void ReducedProportional::DrawVoice(ARMusicalVoice* v, DrawParams &drawParams)
             DrawMusicalObject(e, date, dur, drawParams);
 		}
 
-		if (dynamic_cast<ARRest *>(e))
+        if (static_cast<ARRest *>(e->isARRest()))
 			fChord = false;
-		else if (dynamic_cast<ARChordComma *>(e))
+        else if (static_cast<ARChordComma *>(e->isARChordComma()))
 			fChord = true;
-		else if (dynamic_cast<ARNoteFormat *>(e))
-            handleColor(dynamic_cast<ARNoteFormat *>(e), drawParams);
-        else if (dynamic_cast<ARBar *>(e) && fMeasureBarsEnabled)
+        else if (static_cast<ARNoteFormat *>(e->isARNoteFormat()))
+            handleColor(static_cast<ARNoteFormat *>(e->isARNoteFormat()), drawParams);
+        else if (static_cast<ARBar *>(e->isARBar()) && fMeasureBarsEnabled)
             DrawMeasureBar(date, drawParams);
 	}
 

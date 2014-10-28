@@ -32,7 +32,6 @@ public:
 	virtual void PrintParameters(std::ostream & os) const;
 	virtual void setTagParameterList(TagParameterList & tpl);
 
-
 protected:
 	
 	static ListOfTPLs ltpls;

@@ -39,6 +39,11 @@ class ARChordComma : // public ARMusicalObject,
 
 		virtual void setTagParameterList(TagParameterList & theTagParameterList);
 		virtual void browse(TimeUnwrap& mapper) const;
+        
+
+    /**** Function to avoid dynamic_cast ****/
+    ARMusicalObject *isARChordComma() { return this; }
+    /****************************************/
 
   protected:
 

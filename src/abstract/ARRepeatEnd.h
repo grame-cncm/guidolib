@@ -46,6 +46,11 @@ class ARRepeatEnd : public ARBar
 		virtual void	browse(TimeUnwrap& mapper) const;
 
 		virtual std::ostream & operator<<(std::ostream & os) const;
+        
+
+        /**** Function to avoid dynamic_cast ****/
+        ARMusicalObject *isARRepeatEnd() { return this; }
+        /****************************************/
 
 	protected:
 

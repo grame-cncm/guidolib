@@ -34,6 +34,11 @@ class ARRest : public ARMusicalEvent
 	virtual void	print() const;
 	virtual std::ostream & operator<<(std::ostream & os) const;
 	virtual void	browse(TimeUnwrap& mapper) const;
+        
+
+    /**** Function to avoid dynamic_cast ****/
+    ARMusicalObject *isARRest() { return this; }
+    /****************************************/
 };
 
 #endif

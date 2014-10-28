@@ -32,6 +32,11 @@ class ARDummyRangeEnd : public ARTagEnd
 		virtual void PrintName(std::ostream & os) const;
 
   		NVstring endstr;
+        
+
+        /**** Function to avoid dynamic_cast ****/
+        ARMusicalObject *isARDummyRangeEnd() { return this; }
+        /****************************************/
  
    		/* virtual ostream &operator<<(ostream &os) const
 		{

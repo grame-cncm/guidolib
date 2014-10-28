@@ -32,6 +32,11 @@ class ARSecondGlue : public ARMusicalTag
 		virtual void	print() const {}
 		virtual void	PrintName(std::ostream & os) const;
 		virtual bool	IsStateTag() const { return true; }
+        
+
+        /**** Function to avoid dynamic_cast ****/
+        ARMusicalObject *isARSecondGlue() { return this; }
+        /****************************************/
 };
 
 #endif

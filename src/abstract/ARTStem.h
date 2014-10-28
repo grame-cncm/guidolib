@@ -47,17 +47,11 @@ class ARTStem : public ARMTParameter, public ARPositionTag
 
 		virtual void setTagParameterList(TagParameterList & tpl);
 
-		const TagParameterFloat * getLength() const
-		{
-			return mTpfLength;
-		}
+		const TagParameterFloat * getLength() const { return mTpfLength; }
 
 		virtual const STEMSTATE getStemState() const { return mStemState; }
 
-		virtual ARMusicalObject * getEndTag() const
-		{
-			return new ARTStem(AUTO, NULL, mSaveStem);
-		}
+		virtual ARMusicalObject * getEndTag() const { return new ARTStem(AUTO, NULL, mSaveStem); }
 
 	protected:
 

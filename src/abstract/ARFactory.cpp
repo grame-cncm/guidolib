@@ -326,7 +326,7 @@ void ARFactory::createChord()
         while(lastEventPos && !found)
         {
             ARMusicalObject * obj = mCurrentVoice->getLastEventPosition() ? mCurrentVoice->GetPrev(lastEventPos) : 0;
-            ARNote * prevNote = obj ? dynamic_cast<ARNote*>(obj) : 0;
+            ARNote * prevNote = obj ? static_cast<ARNote*>(obj->isARNote()) : 0;
         
             if(prevNote && prevNote->getTremolo() == mCurrentTremolo)
             {
@@ -478,7 +478,7 @@ void ARFactory::addEvent()
     {
         assert(mCurrentTremolo->getRange());
         
-        ARNote * n = dynamic_cast<ARNote*>(mCurrentEvent);
+        ARNote * n = static_cast<ARNote*>(mCurrentEvent->isARNote());
         if(n)
         {
             // We look for a previous tremolo to close. In this case we copy it and create a new one
@@ -487,7 +487,7 @@ void ARFactory::addEvent()
             while(lastEventPos && !found)
             {
                 ARMusicalObject * obj = mCurrentVoice->getLastEventPosition() ? mCurrentVoice->GetPrev(lastEventPos) : 0;
-                ARNote * prevNote = obj ? dynamic_cast<ARNote*>(obj) : 0;
+                ARNote * prevNote = obj ? static_cast<ARNote*>(obj->isARNote()) : 0;
         
                 if(prevNote && prevNote->getTremolo() == mCurrentTremolo && !mCurrentChordTag)
                 {
@@ -555,7 +555,7 @@ void ARFactory::addEvent()
 */
 void ARFactory::addSharp()
 {
-	ARNote * note = dynamic_cast<ARNote *>(mCurrentEvent);
+	ARNote * note = static_cast<ARNote*>(mCurrentEvent->isARNote());
 	assert( note );
 	note->addSharp();
 }
@@ -566,7 +566,7 @@ void ARFactory::addSharp()
 */
 void ARFactory::addFlat()
 {
-	ARNote * note = dynamic_cast<ARNote *>(mCurrentEvent);
+	ARNote * note = static_cast<ARNote*>(mCurrentEvent->isARNote());
 	assert( note );
 	note->addFlat();
 }
@@ -585,7 +585,7 @@ void ARFactory::setPoints( int pointCount )
 */
 void ARFactory::setAccidentals(TYPE_ACCIDENTALS accidentals)
 {
-	ARNote * note = dynamic_cast<ARNote *>(mCurrentEvent);
+	ARNote * note = static_cast<ARNote*>(mCurrentEvent->isARNote());
 	assert(note);
 	note->setAccidentals(accidentals);
 }
@@ -603,7 +603,7 @@ void ARFactory::setRegister(TYPE_REGISTER newRegister)
 
 		assert(dynamic cast<ARNote*>(mCurrentEvent)); */
 	
-	ARNote * note = dynamic_cast<ARNote *>(mCurrentEvent);
+	ARNote * note = static_cast<ARNote*>(mCurrentEvent->isARNote());
 	if( note == 0 ) return;
 	
 	note->setRegister( newRegister );
@@ -1797,7 +1797,8 @@ void ARFactory::endTag()
             // In order to create the possible second pitch, we look for the main note of the tremolo (or one of the main notes, in the case of chord)
             while(lastEventPos && mCurrentTremolo->isSecondPitchCorrect() && !found)
             {
-                ARNote * n = dynamic_cast<ARNote*>(mCurrentVoice->GetPrev(lastEventPos));
+                ARMusicalObject *obj = mCurrentVoice->GetPrev(lastEventPos);
+                ARNote * n = obj ? static_cast<ARNote*>(obj->isARNote()) : NULL;
                 if(n && n->getPitch())
                     oct = n->getOctave();
                 if(n && n->getDuration())

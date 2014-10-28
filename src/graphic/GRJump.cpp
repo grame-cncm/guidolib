@@ -100,7 +100,7 @@ const VGFont* GRJump::SelectTextFont( VGDevice & hdc ) const
 //----------------------------------------------------------------------------------
 const ARJump * GRJump::getARJump() const
 {
-	return dynamic_cast<ARJump *>(getAbstractRepresentation());
+	return static_cast<ARJump *>(getAbstractRepresentation()->isARJump());
 }
 
 //----------------------------------------------------------------------------------

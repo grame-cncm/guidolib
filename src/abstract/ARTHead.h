@@ -41,15 +41,9 @@ class ARTHead : public ARMTParameter, public ARPositionTag
 		virtual std::ostream & operator << (std::ostream & os) const;
 		virtual void setTagParameterList(TagParameterList& tpl);
 
-		virtual const HEADSTATE getHeadState() const
-		{
-			return  headstate;
-		}
+		virtual const HEADSTATE getHeadState() const { return  headstate; }
 
-		virtual ARMusicalObject * getEndTag() const
-		{
-			return new ARTHead(NOTSET,NULL,savehead);
-		}
+		virtual ARMusicalObject * getEndTag() const	{ return new ARTHead(NOTSET,NULL,savehead);	}
 
 	protected:
 

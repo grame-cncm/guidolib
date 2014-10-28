@@ -38,10 +38,7 @@ public:
 	virtual void PrintName(std::ostream & os) const;
 	virtual void PrintParameters(std::ostream & os) const;
 
-	virtual ARRestFormat * getEndTag() const
-	{
-		return new ARRestFormat(NULL,saverf);
-	}
+	virtual ARRestFormat * getEndTag() const { return new ARRestFormat(NULL,saverf); }
 
 protected:
 

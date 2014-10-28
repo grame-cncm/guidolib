@@ -31,7 +31,6 @@ class ARMark : public ARText// public ARMusicalObject,
 
 		virtual void setTagParameterList(TagParameterList & tpl);
 
-
 	protected:
 		
 		static ListOfTPLs ltpls;

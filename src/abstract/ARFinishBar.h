@@ -27,7 +27,11 @@ class ARFinishBar: public ARBar
 		virtual void print() const;
 		// virtual ostream & operator<<(ostream &os) const;
 		virtual void PrintName(std::ostream & os) const;
+        
 
+        /**** Function to avoid dynamic_cast ****/
+        ARMusicalObject *isARFinishBar() { return this; }
+        /****************************************/
 };
 
 #endif

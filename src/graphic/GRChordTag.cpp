@@ -74,6 +74,6 @@ void GRChordTag::checkPosition(const GRSystem * grsys)
 
 const char* GRChordTag::getLabel() const
 {
-	const ARUserChordTag * puct = dynamic_cast<const ARUserChordTag *>(getAbstractRepresentation());
+	const ARUserChordTag * puct = static_cast<const ARUserChordTag *>(getAbstractRepresentation()->isARUserChordTag());
 	return puct ? puct->getLabelValue() : "";
 }

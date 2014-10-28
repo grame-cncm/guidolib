@@ -55,7 +55,11 @@ class ARClef :
 		int			getLine() const 		{ return mStaffLine; }
 		cleftype	getClefType() const 	{ return mClef;  }
 		octavatype	getOctavaType() const 	{ return fOctava; }
+        
 
+        /**** Function to avoid dynamic_cast ****/
+        ARMusicalObject *isARClef() { return this; }
+        /****************************************/
 
 	protected:
 			
