@@ -180,17 +180,10 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		GuidoPos             posfirstinchord;
 		int                  numchordvoice;
         bool                 isInChord;
-		//ARMusicalVoiceState *chordBeginState;
 		void                 doAutoKeys();
 		int	                 sum;
 		int                  pitchsum;
 		int                  voicenum;
-
-
-        GuidoPos      curVoiceStateVposBackup; // mCurVoiceState params backup to avoid heavy "new" on MusicalVoiceState
-        TYPE_DURATION curVoiceStateCurtpBackup;
-        GuidoPos      curVoiceStatePtagposBackup;
-        PositionTagList *addedPositionTagsBackup;
 
 		void doAutoDispatchLyrics();
 		void doAutoFermatas();
@@ -227,7 +220,7 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 	
 	private:
         void        finishChordWithOneChordGroup     (TYPE_DURATION &chorddur, bool trill);
-        void        finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur, ARMusicalVoiceState &vst, bool trill);
+        void        finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur, bool trill);
 
 		GuidoPos	CopyChord( ARMusicalVoiceState & vst, TYPE_TIMEPOSITION tp, const TYPE_DURATION & newdur);
 		ARClef*		newAutoClef(ARClef* oldclef, const TYPE_TIMEPOSITION& tp);

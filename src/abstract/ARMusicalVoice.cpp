@@ -92,7 +92,7 @@ using namespace std;
 //____________________________________________________________________________________
 ARMusicalVoice::ARMusicalVoice()	: ObjectList(1), // owns elements ...
   currentChord(NULL), currentShareLocation(NULL), chordgrouplist(NULL),
-  numchordvoice(-1), isInChord(false), /*chordBeginState(NULL), */voicenum(0),
+  numchordvoice(-1), isInChord(false), voicenum(0),
   endState(NULL), readmode(CHORDMODE), mPosTagList(NULL)
 {
 	// AddHead(new ARVoiceStart);
@@ -106,9 +106,6 @@ ARMusicalVoice::ARMusicalVoice()	: ObjectList(1), // owns elements ...
 	mCurVoiceState = new ARMusicalVoiceState();
 
     repeatBeginList = new std::vector<ARRepeatBegin *>();
-    addedPositionTagsBackup    = NULL;
-    curVoiceStateVposBackup    = NULL;
-    curVoiceStatePtagposBackup = NULL;
 }
 
 //____________________________________________________________________________________
@@ -590,7 +587,7 @@ GuidoPos ARMusicalVoice::AddTail(ARMusicalObject *newMusicalObject)
 
 	ARChordGroup *group = 0;
 
-	if (isInChord/*chordBeginState*/ && ARMusicalEvent::cast(newMusicalObject)) {
+	if (isInChord && ARMusicalEvent::cast(newMusicalObject)) {
 		// we are within a chord...
 		// then I have to deal with displayduration and stem-sharing issues...
 		if (!chordgrouplist)
@@ -663,10 +660,6 @@ GuidoPos ARMusicalVoice::AddTail(ARMusicalObject *newMusicalObject)
     if (!isInChord) {
         mCurVoiceState->vpos = tmp;
         mCurVoiceState->curtp = duration;
-    }
-    else {
-        curVoiceStateVposBackup  = tmp;
-        curVoiceStateCurtpBackup = duration;
     }
 
 	return tmp;
@@ -1251,13 +1244,6 @@ void ARMusicalVoice::AddPositionTag(ARPositionTag *tag)
     if (!isInChord) {
         mCurVoiceState->ptagpos = mPosTagList->GetTailPosition();
         mCurVoiceState->AddPositionTag(tag);
-    }
-    else {
-        if (addedPositionTagsBackup == NULL)
-            addedPositionTagsBackup = new PositionTagList(0);
-        
-        curVoiceStatePtagposBackup = mPosTagList->GetTailPosition();
-        addedPositionTagsBackup->AddTail(tag);
     }
 }
 
@@ -5486,7 +5472,6 @@ ARChordTag *ARMusicalVoice::BeginChord()
 	numchordvoice   = 0;
 
     isInChord = true;
-    //chordBeginState = new ARMusicalVoiceState(*mCurVoiceState);
     
     return currentChord;
 }
@@ -5505,7 +5490,7 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE &chord_type, CHORD_ACCIDENTAL 
 	for (int i = 0; i < nbNotes; i++)
 		pitches[i] = 0;
 
-	GuidoPos posTmp = mCurVoiceState/*chordBeginState*/->vpos;
+	GuidoPos posTmp = mCurVoiceState->vpos;
 
 	for (int i = 0 ; i < 3; i++)
 		ObjectList::GetNext(posTmp); // skip "empty, chordcomma, empty"
@@ -5584,7 +5569,7 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE &chord_type, CHORD_ACCIDENTAL 
 	// Recupération de l'armure...
 
 	int keyNumber;
-	GuidoPos pos = mCurVoiceState/*chordBeginState*/->vpos;
+	GuidoPos pos = mCurVoiceState->vpos;
 	ARKey   *key = NULL;
 
 	while (pos && !key) {
@@ -5649,10 +5634,10 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE &chord_type, CHORD_ACCIDENTAL 
 */
 void ARMusicalVoice::setClusterChord(ARCluster *inCurrentCluster)
 {
-    if (!isInChord/*chordBeginState*/)
+    if (!isInChord)
         return;
     
-	GuidoPos posTmp = mCurVoiceState/*chordBeginState*/->vpos;
+	GuidoPos posTmp = mCurVoiceState->vpos;
 
     for(int i = 0 ; i < 3 ; i++) {
         ObjectList::GetNext(posTmp); // skip "empty, chordcomma, empty"
@@ -5727,8 +5712,6 @@ void ARMusicalVoice::FinishChord(bool trill)
 
 	TYPE_DURATION chorddur;
 
-	ARMusicalVoiceState *vst;
-
 	_readmode oldreadmode = readmode;
 	readmode = EVENTMODE;
 
@@ -5736,12 +5719,20 @@ void ARMusicalVoice::FinishChord(bool trill)
 
 	// now we have to go through the grouplist...
     if (chordgrouplist) {
+        GuidoPos ptagposBackup = mCurVoiceState->ptagpos;
+
+        /* Separated for performance improvement */
         if (chordgrouplist->GetCount() == 1)
             finishChordWithOneChordGroup(chorddur, trill);
         else {
-            vst = new ARMusicalVoiceState(*mCurVoiceState/*chordBeginState*/); // REM: Checker ça
-            finishChordWithSeveralChordGroups(chorddur, *vst, trill);
+            GuidoPos vposBackup = mCurVoiceState->vpos;
+            
+            finishChordWithSeveralChordGroups(chorddur, trill);
+            
+            mCurVoiceState->vpos = vposBackup;
         }
+
+        mCurVoiceState->ptagpos = ptagposBackup;
     }
 
 	// now we have to traverse the chord to see that we set the timepositions and also
@@ -5778,27 +5769,26 @@ void ARMusicalVoice::FinishChord(bool trill)
 	mPosTagList->AddTail(dummy);
 
 	// now we have to traverse the voice once more to set the timepositions correctly
-	vst = new ARMusicalVoiceState(*mCurVoiceState/*chordBeginState*/); // REM: Checker ça
-	TYPE_TIMEPOSITION starttp(vst->curtp);
+	TYPE_TIMEPOSITION starttp(mCurVoiceState->curtp);
     TYPE_TIMEPOSITION newtp(starttp + chorddur);
 	int firstevent = 0;
 
-	mPosTagList->GetNext(vst->ptagpos);
+	mPosTagList->GetNext(mCurVoiceState->ptagpos);
 
     if (onlyonegroup) {
         // we have to move the mPosTagList two more...
         // what about adding the correponding tags (at least to the curpositiontags...)?
-        ARPositionTag *ptag = mPosTagList->GetNext(vst->ptagpos);
-        vst->curpositiontags->AddTail(ptag);
-        ptag = mPosTagList->GetNext(vst->ptagpos);
-        vst->curpositiontags->AddTail(ptag);
+        ARPositionTag *ptag = mPosTagList->GetNext(mCurVoiceState->ptagpos);
+        mCurVoiceState->curpositiontags->AddTail(ptag);
+        ptag = mPosTagList->GetNext(mCurVoiceState->ptagpos);
+        mCurVoiceState->curpositiontags->AddTail(ptag);
     }
 
-	while (vst->vpos && vst->curchordtag == currentChord) {
-		ARMusicalObject *o  = GetNext(vst->vpos, *vst);
+	while (mCurVoiceState->vpos && mCurVoiceState->curchordtag == currentChord) {
+		ARMusicalObject *o  = GetNext(mCurVoiceState->vpos, *mCurVoiceState);
 		ARMusicalEvent  *ev = ARMusicalEvent::cast(o);
 
-		if (vst->addedpositiontags) {
+		if (mCurVoiceState->addedpositiontags) {
 			TYPE_TIMEPOSITION mytp;
 
 			if (firstevent)
@@ -5806,10 +5796,10 @@ void ARMusicalVoice::FinishChord(bool trill)
 			else
 				mytp = starttp;
 
-			GuidoPos mypos = vst->addedpositiontags->GetHeadPosition();
+			GuidoPos mypos = mCurVoiceState->addedpositiontags->GetHeadPosition();
 
 			while (mypos) {
-				ARPositionTag * ptag = vst->addedpositiontags->GetNext(mypos);
+				ARPositionTag * ptag = mCurVoiceState->addedpositiontags->GetNext(mypos);
 
 				if (ptag) {
 					ARMusicalObject * po = dynamic_cast<ARMusicalObject *>(ptag);
@@ -5833,7 +5823,7 @@ void ARMusicalVoice::FinishChord(bool trill)
 		else
 			o->setRelativeTimePosition(starttp); // aber dass muesste ja eh schon so sein...?
 
-		if (vst->removedpositiontags) {
+		if (mCurVoiceState->removedpositiontags) {
 			TYPE_TIMEPOSITION mytp;
 
 			if (firstevent)
@@ -5841,16 +5831,16 @@ void ARMusicalVoice::FinishChord(bool trill)
 			else
 				mytp = starttp;
 
-			GuidoPos mypos = vst->removedpositiontags->GetHeadPosition();
+			GuidoPos mypos = mCurVoiceState->removedpositiontags->GetHeadPosition();
 
 			while (mypos) {
-				ARPositionTag *ptag = vst->removedpositiontags->GetNext(mypos);
+				ARPositionTag *ptag = mCurVoiceState->removedpositiontags->GetNext(mypos);
 
 				if (ptag) {
 					ARTagEnd *tgend = ARTagEnd::cast(ptag->getCorrespondence());
 					
                     if (tgend) {
-						ARMusicalObject * po = tgend;
+						ARMusicalObject *po = tgend;
 
 						if (po)
 							po->setRelativeTimePosition(mytp);
@@ -5867,8 +5857,6 @@ void ARMusicalVoice::FinishChord(bool trill)
 	currentChord         = NULL;
 	currentShareLocation = NULL;
 
-	/*delete chordBeginState;
-	chordBeginState = NULL;*/
     isInChord = false;
 
 	delete chordgrouplist;
@@ -5877,24 +5865,6 @@ void ARMusicalVoice::FinishChord(bool trill)
 	readmode        = oldreadmode;
 	posfirstinchord = NULL;
 	numchordvoice   = -1;
-
-    mCurVoiceState->vpos    = curVoiceStateVposBackup;
-    mCurVoiceState->curtp   = curVoiceStateCurtpBackup;
-    mCurVoiceState->ptagpos = curVoiceStatePtagposBackup;
-    
-    if (addedPositionTagsBackup != NULL) {
-        while (!addedPositionTagsBackup->empty()) {
-            mCurVoiceState->AddPositionTag(addedPositionTagsBackup->GetHead());
-            addedPositionTagsBackup->RemoveHead();
-        }
-
-        addedPositionTagsBackup  = NULL;
-    }
-
-    curVoiceStateVposBackup    = NULL;
-    curVoiceStatePtagposBackup = NULL;
-
-    //output(cout);
 }
 
 //____________________________________________________________________________________
@@ -5902,9 +5872,7 @@ void ARMusicalVoice::FinishChord(bool trill)
            has been implemented for optimization.
 */
 void ARMusicalVoice::finishChordWithOneChordGroup(TYPE_DURATION &chorddur, bool trill) {
-    GuidoPos ptagposBackup = mCurVoiceState/*chordBeginState*/->ptagpos;
-
-    mPosTagList->GetNext(mCurVoiceState/*chordBeginState*/->ptagpos);
+    mPosTagList->GetNext(mCurVoiceState->ptagpos);
 
     ARChordGroup *group = chordgrouplist->GetAt(chordgrouplist->GetHeadPosition());
 
@@ -5913,7 +5881,7 @@ void ARMusicalVoice::finishChordWithOneChordGroup(TYPE_DURATION &chorddur, bool 
 
     // then we have to delete the one empty-event that is not needed any longer...
     RemoveElementAt(group->startpos);
-    group->startpos = mCurVoiceState/*chordBeginState*/->vpos;
+    group->startpos = mCurVoiceState->vpos;
 
     // now we have to add the sharestem and dispdur-tags to the group...
 
@@ -5924,7 +5892,7 @@ void ARMusicalVoice::finishChordWithOneChordGroup(TYPE_DURATION &chorddur, bool 
     ARDisplayDuration *dispdur = new ARDisplayDuration();
     ARDummyRangeEnd   *dispdum = new ARDummyRangeEnd(DISPDUREND);
 
-    const PositionTagList *list = mCurVoiceState/*chordBeginState*/->getCurPositionTags();
+    const PositionTagList *list = mCurVoiceState->getCurPositionTags();
 
     GuidoPos tagpos = list->GetHeadPosition();
     ARTremolo *trem = NULL;
@@ -5932,8 +5900,8 @@ void ARMusicalVoice::finishChordWithOneChordGroup(TYPE_DURATION &chorddur, bool 
     while (tagpos && !trem)
         trem = dynamic_cast<ARTremolo*>(list->GetNext(tagpos));
 
-    if (mCurVoiceState/*chordBeginState*/->fCurdispdur && trem)
-        dispdur->setDisplayDuration(mCurVoiceState/*chordBeginState*/->fCurdispdur->getDisplayDuration());
+    if (mCurVoiceState->fCurdispdur && trem)
+        dispdur->setDisplayDuration(mCurVoiceState->fCurdispdur->getDisplayDuration());
     else
         dispdur->setDisplayDuration(group->dur);
 
@@ -5963,12 +5931,12 @@ void ARMusicalVoice::finishChordWithOneChordGroup(TYPE_DURATION &chorddur, bool 
         shrstem->setCorrespondence(shrdum);
     }
 
-    if (mCurVoiceState/*chordBeginState*/->ptagpos) {
+    if (mCurVoiceState->ptagpos) {
         if (dispdur)
-            mPosTagList->AddElementAt(mCurVoiceState/*chordBeginState*/->ptagpos, dispdur);
+            mPosTagList->AddElementAt(mCurVoiceState->ptagpos, dispdur);
 
         if (!trill)
-            mPosTagList->AddElementAt(mCurVoiceState/*chordBeginState*/->ptagpos, shrstem);
+            mPosTagList->AddElementAt(mCurVoiceState->ptagpos, shrstem);
     }
     else {
         if (dispdur)
@@ -5983,16 +5951,14 @@ void ARMusicalVoice::finishChordWithOneChordGroup(TYPE_DURATION &chorddur, bool 
 
     if (dispdum)
         mPosTagList->AddTail(dispdum);
-
-    mCurVoiceState/*chordBeginState*/->ptagpos = ptagposBackup;
 }
 
 //____________________________________________________________________________________
 /** \brief Called by FinishChord(), to finish chords which have several chord groups. This function
            has been implemented for optimization.
 */
-void ARMusicalVoice::finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur, ARMusicalVoiceState &vst, bool trill) {
-    mPosTagList->GetNext(vst.ptagpos);
+void ARMusicalVoice::finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur, bool trill) {
+    mPosTagList->GetNext(mCurVoiceState->ptagpos);
 
     GuidoPos pos = chordgrouplist->GetHeadPosition();
 
@@ -6011,7 +5977,7 @@ void ARMusicalVoice::finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur, 
         ARDisplayDuration *dispdur = new ARDisplayDuration();
         ARDummyRangeEnd   *dispdum = new ARDummyRangeEnd(DISPDUREND);
 
-        const PositionTagList* list = vst.getCurPositionTags();
+        const PositionTagList* list = mCurVoiceState->getCurPositionTags();
 
         GuidoPos tagpos = list->GetHeadPosition();
         ARTremolo * trem = NULL;
@@ -6019,8 +5985,8 @@ void ARMusicalVoice::finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur, 
         while(tagpos && !trem)
             trem = dynamic_cast<ARTremolo*>(list->GetNext(tagpos));
 
-        if (vst.fCurdispdur && trem)
-            dispdur->setDisplayDuration(vst.fCurdispdur->getDisplayDuration());
+        if (mCurVoiceState->fCurdispdur && trem)
+            dispdur->setDisplayDuration(mCurVoiceState->fCurdispdur->getDisplayDuration());
         else
             dispdur->setDisplayDuration(group->dur);
 
@@ -6049,25 +6015,25 @@ void ARMusicalVoice::finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur, 
             shrstem->setCorrespondence(shrdum);
         }
 
-        while (vst.vpos && vst.vpos != group->startpos)
-            GetNext(vst.vpos, vst);
+        while (mCurVoiceState->vpos && mCurVoiceState->vpos != group->startpos)
+            GetNext(mCurVoiceState->vpos, *mCurVoiceState);
 
-        if (vst.ptagpos) {
+        if (mCurVoiceState->ptagpos) {
             if (dispdur)
-                mPosTagList->AddElementAt(vst.ptagpos, dispdur);
+                mPosTagList->AddElementAt(mCurVoiceState->ptagpos, dispdur);
 
             if (!trill)
-                mPosTagList->AddElementAt(vst.ptagpos, shrstem);
+                mPosTagList->AddElementAt(mCurVoiceState->ptagpos, shrstem);
 
             // this adds the tags to the curpositiontags
             // this is needed, because we traverse the voice later (GetNext) and then,
             // these tags must be in the curpositiontag list, so that the corresponding remove
             // tags can be removed correctly.
             if (dispdur)
-                vst.AddPositionTag(dispdur, 0);
+                mCurVoiceState->AddPositionTag(dispdur, 0);
 
             if (!trill)
-                vst.AddPositionTag(shrstem, 0);
+                mCurVoiceState->AddPositionTag(shrstem, 0);
         }
         else {
             if (dispdur)
@@ -6078,8 +6044,8 @@ void ARMusicalVoice::finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur, 
         }
 
         if (pos != NULL) {
-            while (vst.vpos && vst.vpos != group->endpos)
-                GetNext(vst.vpos, vst);
+            while (mCurVoiceState->vpos && mCurVoiceState->vpos != group->endpos)
+                GetNext(mCurVoiceState->vpos, *mCurVoiceState);
         }
 
         if(!trill)
