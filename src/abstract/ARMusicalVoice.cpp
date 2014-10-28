@@ -108,7 +108,6 @@ ARMusicalVoice::ARMusicalVoice()	: ObjectList(1), // owns elements ...
     repeatBeginList = new std::vector<ARRepeatBegin *>();
     addedPositionTagsBackup    = NULL;
     curVoiceStateVposBackup    = NULL;
-    curVoiceStateCurtpBackup   = NULL;
     curVoiceStatePtagposBackup = NULL;
 }
 
@@ -933,8 +932,10 @@ std::ostream & ARMusicalVoice::output(std::ostream & os, bool isauto) const
             if (o)
                 t = static_cast<ARMusicalTag *>(o->isARMusicalTag());
 
-            if (t && !isauto)
-                if (!t->getIsAuto()) t->operator<<(os);
+            if (t && !isauto) {
+                if (!t->getIsAuto())
+                    t->operator<<(os);
+            }
             else
                 o->operator<<(os);
 		}
@@ -5891,7 +5892,6 @@ void ARMusicalVoice::FinishChord(bool trill)
     }
 
     curVoiceStateVposBackup    = NULL;
-    curVoiceStateCurtpBackup   = NULL;
     curVoiceStatePtagposBackup = NULL;
 
     //output(cout);
