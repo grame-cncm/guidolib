@@ -32,7 +32,7 @@ GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, GRSingleNote *sngNote, AR
                         gDuration(0),
                         gClusterOrientation(ARTHead::NORMAL),
                         gStemDir(dirAUTO),
-                        gClusterColor(NULL)
+                        noteFormatColor(0)
 {
 	assert(stf);
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
@@ -60,9 +60,8 @@ GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, GRSingleNote *sngNote, AR
         tmpColor = curnoteformat->getColor();
         if (tmpColor)
         {
-            if (!mColRef)
-                mColRef = new unsigned char[4];
-            tmpColor->getRGB(mColRef);
+            noteFormatColor = new unsigned char[4];
+            tmpColor->getRGB(noteFormatColor);
         }
 
         // - Offset
@@ -73,16 +72,6 @@ GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, GRSingleNote *sngNote, AR
 			mTagOffset.x = (GCoord)(tmpdx->getValue(stf->getStaffLSPACE()));
 		if (tmpdy)
 			mTagOffset.y = (GCoord)(tmpdy->getValue(stf->getStaffLSPACE()));
-    }
-
-    const TagParameterString *tmps = arcls->getColor();
-    if (tmps)
-    {
-        gClusterColor = new unsigned char[4];
-        tmps->getRGB(gClusterColor);
-
-        if (*tmps->getValue())
-            mColRef = NULL;
     }
 
     gdx = arcls->getadx();
@@ -115,17 +104,18 @@ void GRCluster::OnDraw(VGDevice &hdc) const
 {
     if (mDraw)
 	{
-    	if (mColRef)
-        {
+        if (noteFormatColor) {
+            VGColor color(noteFormatColor);
+            hdc.PushPen(color, 1);
+
+            if (!mColRef)
+                hdc.PushFillColor(color);
+        }
+
+    	if (mColRef) {
             VGColor color(mColRef);
             hdc.PushFillColor(color);
-            hdc.PushPen(color, 1);
-        }
-   		else if (gClusterColor)
-        {
-            VGColor color(gClusterColor);
-            hdc.PushFillColor(color);
-            hdc.PushPen(color, 1);
+            hdc.PushPenColor(color);
         }
 
     	NVRect r = getBoundingBox();
@@ -198,11 +188,17 @@ void GRCluster::OnDraw(VGDevice &hdc) const
         }
 
 	    // - Restore context
-	    if (mColRef || gClusterColor)
-	    {
-		    hdc.PopPen();
+	    if (mColRef) {
+            hdc.PopPenColor();
 		    hdc.PopFillColor();
-	    }
+        }
+
+        if (noteFormatColor) {
+            if (!mColRef)
+                hdc.PopFillColor();
+
+            hdc.PopPen();
+        }
 	}
 }
 

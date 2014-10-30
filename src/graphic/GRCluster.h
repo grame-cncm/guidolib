@@ -61,11 +61,10 @@ protected:
     float gSecondNoteYPosition;
     GRStaff *gStaff;
     TYPE_DURATION gDuration;
+    unsigned char *noteFormatColor;
 
     ARTHead::HEADSTATE gClusterOrientation;
     GDirection gStemDir;
-
-    unsigned char *gClusterColor;
 
     int gNoteCount;
 };

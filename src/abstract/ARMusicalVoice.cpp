@@ -4671,10 +4671,10 @@ struct ARTieStruct
 
 	This facilitates the handling of Ties in a System-Break-Setting
 	This also complies with the notion, that all Graphical elements should be represented
-	by a sinlge ARObject ...
+	by a single ARObject ...
 	The algorithm works as follows: Traverse the voice and keep track of tie-tags.
 	whenever a tie-Tag is encountered, the tag (and its position in the mPosTagList
-	is saved) and the tielookaheadstate is set. a new tagBegin is build, and added at the current ptagpos.
+	is saved) and the tielookaheadstate is set. A new tagBegin is build, and added at the current ptagpos.
 	then traversal continues.
 	if the tielookahead is active, the current new tie-tag is closed (endposition is the current one).
 	if the current position is not the former-tag endposition, a new Tie-Tag is build again.
@@ -4707,20 +4707,18 @@ void ARMusicalVoice::doAutoTies()
 	ARChordTag *curchordtag  = vst.curchordtag;
 	ARChordTag *prevchordtag = NULL;
 
-	while (vst.vpos)
-	{
-		ARMusicalObject * o = GetAt(vst.vpos);
-		ARMusicalEvent * ev = ARMusicalEvent::cast(o);
+	while (vst.vpos) {
+		ARMusicalObject *o  = GetAt(vst.vpos);
+		ARMusicalEvent  *ev = ARMusicalEvent::cast(o);
 
 		// the ties that are added
-		if (vst.addedpositiontags)
-		{
+		if (vst.addedpositiontags) {
 			GuidoPos tmppos = vst.addedpositiontags->GetHeadPosition();
-			while (tmppos)
-			{
+
+			while (tmppos) {
 				ARTie *tie = dynamic_cast<ARTie *>(vst.addedpositiontags->GetNext(tmppos));
-				if (tie)
-				{
+
+				if (tie) {
 					ARTieStruct * tiestruct = new ARTieStruct();
 					tiestruct->tie = tie;
 					tiestruct->curchordtag = vst.curchordtag;
@@ -4731,11 +4729,10 @@ void ARMusicalVoice::doAutoTies()
 		}
 
 		// then we check the tiestructlist and add autoties, if needed .
-		if (ev)
-		{
+		if (ev) {
 			GuidoPos postiestructlist = tiestructlist.GetHeadPosition();
-			while (postiestructlist)
-			{
+			
+            while (postiestructlist) {
 				ARTieStruct *tiestruct = tiestructlist.GetNext(postiestructlist);
 
 				// now check, whether this tie should be copied.
@@ -4748,14 +4745,12 @@ void ARMusicalVoice::doAutoTies()
 				// test first, if the startnote of the tie is
 				// an empty event .... (and if the tie began in a chord!
 				int ischordtie = 0;
-				if (tiestruct->curchordtag)
-				{
+
+				if (tiestruct->curchordtag) {
 					ARNote *nt = tiestruct->startnote;
-					if (nt && nt->getName() == ARNoteName::empty)
-					{
-						// then, we have a tie that covers the whole chord.
+
+					if (nt && nt->getName() == ARNoteName::empty) // then, we have a tie that covers the whole chord.
 						ischordtie = 1;
-					}
 				}
 
 				int mustcreate = 0;
@@ -4763,79 +4758,66 @@ void ARMusicalVoice::doAutoTies()
 				// only, if it is not a chordtie!, otherwise
 				// I have to create a tie everywhereelse...
 
-				if (!ischordtie &&
-					tiestruct->tie->getPosition() == vst.vpos)
-				{
-					// this means, the tie origniated at the
-					// current position.
-					// we build a new one...
-					// at least it starts here...
-					// then we have to create a new one...
-						mustcreate = 1;
-				}
-
-				else if (vst.curchordtag)
-				{
+				if (!ischordtie && tiestruct->tie->getPosition() == vst.vpos) // this means, the tie originated at the
+					mustcreate = 1;                                           // current position.
+					                                                          // we build a new one...
+					                                                          // at least it starts here...
+					                                                          // then we have to create a new one...
+				else if (vst.curchordtag) {
 					// we are inside a chord...
 					// then we have to check two things...
 					// 1. we are not in the chord that has
 					// already been handled by the first
 					// case (vst.vpos is equal)
 					// 2. the name and position match...
-					if (ischordtie && tiestruct->tie->getPosition() != vst.vpos)
-					{
-                        ARNote * nt = static_cast<ARNote *>(o->isARNote());
+
+					if (ischordtie && tiestruct->tie->getPosition() != vst.vpos) {
+                        ARNote *nt = static_cast<ARNote *>(o->isARNote());
+
 						if (nt && !(nt->getName() == ARNoteName::empty))
 							mustcreate = 1;
 					}
-					else if (tiestruct->curchordtag != vst.curchordtag)
-					{
-                        ARNote * nt = static_cast<ARNote *>(o->isARNote());
-						if (nt && tiestruct->startnote &&
-							nt->CompareNameOctavePitch(*tiestruct->startnote))
-						{
-							mustcreate = 1;
-						}
-					}
-				}
-				else
-				{
-					// we are not in a chord...
-                    ARNote * nt = static_cast<ARNote *>(o->isARNote());
-					if (nt && tiestruct->startnote &&
-						nt->CompareNameOctavePitch(*tiestruct->startnote))
-					{
-						mustcreate = 1;
-					}
+					else if (tiestruct->curchordtag != vst.curchordtag) {
+                        ARNote *nt = static_cast<ARNote *>(o->isARNote());
 
+						if (nt && tiestruct->startnote && nt->CompareNameOctavePitch(*tiestruct->startnote))
+							mustcreate = 1;
+					}
 				}
-				if (mustcreate)
-				{
-					ARTie * mytie = new ARTie();
+				else {
+					// we are not in a chord...
+                    ARNote *nt = static_cast<ARNote *>(o->isARNote());
+
+					if (nt && tiestruct->startnote && nt->CompareNameOctavePitch(*tiestruct->startnote))
+						mustcreate = 1;
+				}
+				if (mustcreate) {
+					ARTie *mytie = new ARTie();
 					mytie->setID(gCurArMusic->mMaxTagId++);
 					//the tie is set to auto only if it has been generated by do AutoDisplayCheck (note split)
 					//we will need this information for the trill
-					if(tiestruct->tie->getIsAuto())
+					if (tiestruct->tie->getIsAuto())
 						mytie->setIsAuto(true);
+
 					mytie->setStartPosition(vst.vpos);
+
 					// now we copy the parameters from the
 					// old tie (if they are set...)
 					TagParameterList * tpl = tiestruct->tie->getTagParameterList();
 					mytie->setTagParameterList(*tpl);
 					delete tpl;
-					mPosTagList->AddElementAt(vst.ptagpos,mytie);
+					mPosTagList->AddElementAt(vst.ptagpos, mytie);
 
-					ARTieStruct * atstruct = new ARTieStruct;
+					ARTieStruct *atstruct = new ARTieStruct;
 					atstruct->tie = mytie;
 					// this is needed so that the tie
 					// can remove this autotie when it
 					// is closed...
-					atstruct->origtie = tiestruct->tie;
+					atstruct->origtie     = tiestruct->tie;
 					atstruct->curchordtag = vst.curchordtag;
                     atstruct->startnote = static_cast<ARNote *>(o->isARNote());
 					autotiestructlist.AddTail(atstruct);
 				}
-
 			// check the first element...
 			}
 
@@ -4844,12 +4826,11 @@ void ARMusicalVoice::doAutoTies()
 			// then we have to end the autoties that
 			// need to be ended...
 			GuidoPos mypos = autotiestructlist.GetHeadPosition();
-			while (mypos)
-			{
+
+			while (mypos) {
 				ARTieStruct * tiestruct = autotiestructlist.GetAt(mypos);
 
-				if (tiestruct->tie->getPosition() == vst.vpos)
-				{
+				if (tiestruct->tie->getPosition() == vst.vpos) {
 					// his means, we have just created this
 					// autotie at the current position...
 					autotiestructlist.GetNext(mypos);
@@ -4857,24 +4838,19 @@ void ARMusicalVoice::doAutoTies()
 				}
 
 				int mustclose = 0;
-                ARNote * nt = static_cast<ARNote *>(o->isARNote());
-				if (vst.curchordtag)
-				{
-					if (tiestruct->curchordtag != vst.curchordtag)
-					{
-					// then we are in another chord
+
+                ARNote *nt = static_cast<ARNote *>(o->isARNote());
+				
+                if (vst.curchordtag) {
+					if (tiestruct->curchordtag != vst.curchordtag) {
+					    // then we are in another chord
 						// check, if the name matches...
-						if (nt && tiestruct->startnote &&
-							nt->CompareNameOctavePitch(*tiestruct->startnote))
-						{
+						if (nt && tiestruct->startnote && nt->CompareNameOctavePitch(*tiestruct->startnote))
 							mustclose = 1;
-						}
-						else
-						{
+						else {
 							// check, whether the autotie is
 							// in the correct domain...
-							if (tiestruct->curchordtag != prevchordtag)
-							{
+							if (tiestruct->curchordtag != prevchordtag) {
 								// then we delete it...
 								// then, this is considered an error...
 								// then we have to remove the
@@ -4887,17 +4863,12 @@ void ARMusicalVoice::doAutoTies()
 						}
 					}
 				}
-				else
-				{
+				else {
 					// no chords currently...
 
-					if (nt && tiestruct->startnote &&
-						nt->CompareNameOctavePitch(*tiestruct->startnote))
-					{
+					if (nt && tiestruct->startnote && nt->CompareNameOctavePitch(*tiestruct->startnote))
 						mustclose = 1;
-					}
-					else
-					{
+					else {
 						// then, this is considered an error...
 						mPosTagList->RemoveElement(tiestruct->tie);
 
@@ -4906,11 +4877,10 @@ void ARMusicalVoice::doAutoTies()
 					}
 				}
 
-				if (mustclose)
-				{
+				if (mustclose) {
 					// then close the tie...
 					// now we end the tie...
-					ARDummyRangeEnd * arde = new ARDummyRangeEnd(TIEEND);
+					ARDummyRangeEnd *arde = new ARDummyRangeEnd(TIEEND);
 					arde->setID(tiestruct->tie->getID());
 					arde->setPosition(vst.vpos);
 					tiestruct->tie->setCorrespondence(arde);
@@ -4926,8 +4896,7 @@ void ARMusicalVoice::doAutoTies()
 					autotiestructlist.RemoveElementAt(mypos);
 					mypos = autotiestructlist.GetHeadPosition();
 				}
-				else
-				{
+				else {
 					// go to the next event...
 					if (mypos)
 						autotiestructlist.GetNext(mypos);
@@ -4936,77 +4905,64 @@ void ARMusicalVoice::doAutoTies()
 		}
 
 		// go to the next event...
-		GetNext(vst.vpos,vst);
+		GetNext(vst.vpos, vst);
 
-		ARMusicalObject * nexto = NULL;
-		ARMusicalEvent * nextev  = NULL;
+		ARMusicalObject *nexto  = NULL;
+		ARMusicalEvent  *nextev = NULL;
 
-		if (vst.vpos)
-		{
-			nexto = GetAt(vst.vpos);
+		if (vst.vpos) {
+			nexto  = GetAt(vst.vpos);
 			nextev = ARMusicalEvent::cast(nexto);
 		}
 
-//		int nexttiestep = 0;
-		if (nextev && curchordtag != vst.curchordtag)
-		{
-//			nexttiestep = 1;
+		if (nextev && curchordtag != vst.curchordtag) {
 			prevchordtag = curchordtag;
-			curchordtag = vst.curchordtag;
-
+			curchordtag  = vst.curchordtag;
 		}
 		else if (nextev && vst.curchordtag == NULL)
-		{
 			prevchordtag = curchordtag;
-//			nexttiestep = 1;
-		}
-		//ARTagEnd *mytagend = NULL;
-		//GuidoPos postieendinchord = NULL;
 
 		// those that are removed
-		if (vst.removedpositiontags)
-		{
+		if (vst.removedpositiontags) {
 			GuidoPos tmppos = vst.removedpositiontags->GetHeadPosition();
-			while (tmppos)
-			{
-				ARTie * tie = dynamic_cast<ARTie *>
-					(vst.removedpositiontags->GetNext(tmppos));
-				if (tie)
-				{
+			
+            while (tmppos) {
+				ARTie *tie = dynamic_cast<ARTie *>(vst.removedpositiontags->GetNext(tmppos));
+
+				if (tie) {
 					// remove the tie from the tielist...
 					// find the element in the tiestructlist...
 					GuidoPos postiestructlist = tiestructlist.GetHeadPosition();
-					while (postiestructlist)
-					{
-						ARTieStruct *tiestruct = tiestructlist.GetAt(
-							postiestructlist);
+
+					while (postiestructlist) {
+						ARTieStruct *tiestruct = tiestructlist.GetAt(postiestructlist);
+
 						if (tiestruct->tie == tie)
 							break;
+
 						tiestructlist.GetNext(postiestructlist);
 					}
 
-					if (postiestructlist)
-					{
+					if (postiestructlist) {
 						//ARTieStruct *tiestruct = tiestructlist.GetAt(postiestructlist);
 						// then we have to find the ones in the autostructlist
 						// and remove them...
 						ARTieStruct *atstruct = NULL;
-						do
-						{
+						
+                        do {
 							atstruct = NULL;
 							GuidoPos mypos = autotiestructlist.GetHeadPosition();
 
-							while (mypos)
-							{
+							while (mypos) {
 								atstruct = autotiestructlist.GetAt(mypos);
+
 								if (atstruct->origtie == tie)
-								{
 									break;
-								}
+
 								autotiestructlist.GetNext(mypos);
 							}
-							if (mypos)
-							{
+
+							if (mypos) {
 								assert(atstruct);
 								// remove this one (and the
 								// already started autotie...)
@@ -5020,32 +4976,27 @@ void ARMusicalVoice::doAutoTies()
 
 						tiestructlist.RemoveElementAt(postiestructlist);
 					}
-					deletelist.AddTail(tie);
 
+					deletelist.AddTail(tie);
 				}
 			}
 		}
 
 	} // while (vst.vpos) -> the whole voice.
 
-	if (deletelist.GetCount() > 0)
-	{
+	if (deletelist.GetCount() > 0) {
 		GuidoPos pos = deletelist.GetHeadPosition();
-		while (pos)
-		{
-			ARTie * tie = deletelist.GetNext(pos);
+
+		while (pos) {
+			ARTie *tie = deletelist.GetNext(pos);
 
 			// then, we delete this tie out
 			// of the positiontags!
-			if (tie->getCorrespondence())
-			{
-				// the list owns this one...
+			if (tie->getCorrespondence()) // the list owns this one...
 				mPosTagList->RemoveElement(tie->getCorrespondence());
-			}
 
 			// the mPosTagList owns the ties!
 			mPosTagList->RemoveElement(tie);
-
 		}
 	}
 

@@ -2,6 +2,11 @@ GUIDO Engine history
 
 
 ----------------------------------------------------------------
+version 1.5.5
+- color param added for \tremolo-tag and \dotFormat-tag
+
+
+----------------------------------------------------------------
 2014-10-22  version 1.5.4
 - new piano roll API available :
     - piano roll can be generated from an gmn file, an AR, etc. and exported to any classic file format

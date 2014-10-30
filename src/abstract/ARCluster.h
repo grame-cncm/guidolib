@@ -29,7 +29,7 @@ class ARCluster : public ARMTParameter, public ARPositionTag
 public:
 
     ARCluster();
-	ARCluster(ARCluster *inCopyCluster);
+	ARCluster(const ARCluster *inCopyCluster);
 
 	virtual		 	~ARCluster();
 
@@ -50,7 +50,6 @@ public:
     float	     getahdy() const {return ahdy;}
     float        getSize() const {return aSize;}
     int          getNoteCount() const {return aNoteCount;}
-    TagParameterString *getColor() const {return aColor;}
     bool         getIsThereOnlyOneNoteInCluster() const {return aOnlyOneNoteInCluster;}
 
     void         setOnlyOneNoteInCluster() {aOnlyOneNoteInCluster = true;}
@@ -62,7 +61,6 @@ protected:
     float ahdx;
     float ahdy;
     float aSize;
-    TagParameterString *aColor;
     int   aNoteCount;
     bool  aOnlyOneNoteInCluster;
 

@@ -20,6 +20,7 @@ using namespace std;
 #include "ARMusicalEvent.h"
 #include "ARDotFormat.h"
 #include "TagParameterFloat.h"
+#include "TagParameterString.h"
 
 #include "GREvent.h"
 #include "GRStaff.h"
@@ -179,21 +180,16 @@ void GREvent::setDotFormat(const ARDotFormat * inFormat)
 */
 void GREvent::setDotFormat( GRNoteDot * inDot, const ARDotFormat * inFormat )
 {
-	if( inDot == 0 || inFormat == 0 ) return;
+	if (inDot == 0 || inFormat == 0 )
+        return;
 
 	if (inFormat->getDX())
-	{
 		inDot->mOffset.x += (float)(inFormat->getDX()->getValue(mCurLSPACE));
-	}
 
 	if (inFormat->getDY() && inFormat->getDY()->TagIsSet())
-	{
 		inDot->mOffset.y -= (float)(inFormat->getDY()->getValue(mCurLSPACE));
-	}
-	else if (inFormat->getDY())
-	{
-		if(positionIsOnStaffLine( mPosition.y, mCurLSPACE ))
-        {
+	else if (inFormat->getDY()) {
+		if (positionIsOnStaffLine( mPosition.y, mCurLSPACE )) {
             double result;
             bool conversionOk = TagParameterFloat::convertValue(1.0f, result, "hs", mCurLSPACE);
 			
@@ -203,9 +199,16 @@ void GREvent::setDotFormat( GRNoteDot * inDot, const ARDotFormat * inFormat )
 	}
 
 	if (inFormat->getSize())
-	{
 		inDot->size *= inFormat->getSize()->getValue();
-	}
+
+    const TagParameterString *tps = inFormat->getColor();
+    if (tps) {
+        if (!inDot->mColRef)
+            inDot->mColRef = new unsigned char[4];
+
+        tps->getRGB(inDot->mColRef);
+    }
+
 	// what about dd ?
 }
 
