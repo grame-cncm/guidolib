@@ -67,6 +67,11 @@ void GRTremolo::OnDraw( VGDevice & hdc ) const
 {
 	if(!mDraw)
 		return;
+
+    if (mColRef) {
+        VGColor color(mColRef);
+        hdc.PushFillColor(color);
+    }
     
     float coorX[4];
     float coorY[4];
@@ -85,6 +90,9 @@ void GRTremolo::OnDraw( VGDevice & hdc ) const
         pos1.y += fStep;
     }
     GRPTagARNotationElement::OnDrawText(hdc,fText.c_str());
+
+    if (mColRef)
+        hdc.PopFillColor();
 }
 
 // -----------------------------------------------------------------------------

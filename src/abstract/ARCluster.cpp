@@ -23,7 +23,7 @@ using namespace std;
 
 ListOfTPLs ARCluster::ltpls(1);
 
-ARCluster::ARCluster() : ARMTParameter(), adx(0), ady(0), ahdx(0), ahdy(0), aSize(1.0), aColor(NULL), aNoteCount(1),
+ARCluster::ARCluster() : ARMTParameter(), adx(0), ady(0), ahdx(0), ahdy(0), aSize(1.0), aNoteCount(1),
     aOnlyOneNoteInCluster(false)
 {
 	rangesetting = ONLY;
@@ -35,7 +35,7 @@ ARCluster::ARCluster() : ARMTParameter(), adx(0), ady(0), ahdx(0), ahdy(0), aSiz
     }
 }
 
-ARCluster::ARCluster(ARCluster *inCopyCluster) : ARMTParameter()
+ARCluster::ARCluster(const ARCluster *inCopyCluster) : ARMTParameter(-1, inCopyCluster)
 {
 	rangesetting = ONLY;
 
@@ -46,7 +46,6 @@ ARCluster::ARCluster(ARCluster *inCopyCluster) : ARMTParameter()
         ahdx = inCopyCluster->getahdx();
         ahdy = inCopyCluster->getahdy();
         aSize = inCopyCluster->getSize();
-        aColor = inCopyCluster->getColor();
         aNoteCount = inCopyCluster->getNoteCount();
         aOnlyOneNoteInCluster = inCopyCluster->getIsThereOnlyOneNoteInCluster();
         for(int i = 0; i <= 1; i++)
@@ -70,19 +69,17 @@ void ARCluster::setTagParameterList(TagParameterList& tpl)
 	if (ltpls.GetCount() == 0)
 	{
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail("S,color,,o;F,size,1.0,o;U,hdx,0hs,o;U,hdy,0hs,o;U,dx,0hs,o;U,dy,0hs,o");
+		lstrs.AddTail("F,size,1.0,o;U,hdx,0hs,o;U,hdy,0hs,o;U,dx,0hs,o;U,dy,0hs,o");
 		CreateListOfTPLs(ltpls, lstrs);
 	}
 
 	TagParameterList *rtpl = NULL;
-	int ret = MatchListOfTPLsWithTPL(ltpls, tpl, &rtpl);
+ 	int ret = MatchListOfTPLsWithTPL(ltpls, tpl, &rtpl);
 	if (ret >= 0 && rtpl)
 	{
 		// we found a match!
 		if (ret == 0)
 		{
-            aColor = TagParameterString::cast(rtpl->RemoveHead());
-
             TagParameterFloat *f = TagParameterFloat::cast(rtpl->RemoveHead());
 			aSize = f->getValue();
 			delete f;
