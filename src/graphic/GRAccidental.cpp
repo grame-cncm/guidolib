@@ -17,6 +17,7 @@
 #include "ARNote.h"
 #include "GRAccidental.h"
 #include "GREvent.h"
+#include "TagParameterString.h"
 
 NVPoint GRAccidental::sRefposNone;
 NVPoint GRAccidental::sRefposSharp;
@@ -41,21 +42,21 @@ GRAccidental::GRAccidental( GREvent * sngnot, float notebreite, float inAccident
 	: offsetset(false)
 {
 	initialize(sngnot, p_size);
-	setAccidental( inAccidentalID, notebreite, curLSPACE);
+ 	setAccidental( inAccidentalID, notebreite, curLSPACE);
 }
 
 //____________________________________________________________________________________
 void GRAccidental::initialize( GREvent * sngnot, float p_size)
 {
 	mColRef = 0;
-	if (sngnot)
-	{
+    
+    if (sngnot) {
 		mGrStaff = sngnot->getGRStaff();
 		mAccidentalSize = sngnot->getSize();
 		offset = sngnot->getOffset();
 		const unsigned char * tmpcolref = sngnot->getColRef();
-		if (tmpcolref)
-		{
+
+		if (tmpcolref) {
 			mColRef = new unsigned char[4];
 			mColRef[0] = tmpcolref[0];
 			mColRef[1] = tmpcolref[1];
@@ -63,7 +64,8 @@ void GRAccidental::initialize( GREvent * sngnot, float p_size)
 			mColRef[3] = tmpcolref[3];
 		}
 	}
-	else mAccidentalSize = p_size;
+	else
+        mAccidentalSize = p_size;
 }
 
 //____________________________________________________________________________________
@@ -280,6 +282,15 @@ void GRAccidental::setCautionary(int noteoffset, float notebreite, float curLSPA
 		offset.x = (float)noteoffset;
 		setAccidentalLayout (notebreite, curLSPACE);
 	}
+}
+
+//____________________________________________________________________________________
+void GRAccidental::setColor(const TagParameterString *tps)
+{
+    if (!mColRef)
+        mColRef = new unsigned char[4];
+
+    tps->getRGB(mColRef);
 }
 
 //____________________________________________________________________________________

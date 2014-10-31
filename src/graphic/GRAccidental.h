@@ -17,6 +17,8 @@
 
 #include "GRNotationElement.h"
 
+#include "ARAcc.h"
+
 class GREvent;
 
 
@@ -56,11 +58,12 @@ class GRAccidental : public GRNotationElement
 	 virtual	~GRAccidental();
 
 //	 virtual void GGSOutput() const;
-//	 virtual void OnDraw( VGDevice & hdc ) const;
+//	 virtual void OnDraw(VGDevice & hdc) const;
 //	 virtual void setPosition( const NVPoint & position );
 	 virtual void setAccidental		 ( float inAccidentalID, float notebreite, float curLSPACE );
 	 virtual void setAccidentalByQuarter( int quarterTones, int offset, float notebreite, float curLSPACE = 50.0f );
 	 virtual void setCautionary(int offset, float notebreite, float curLSPACE = 50.0f );
+	 virtual void setColor(const TagParameterString *tps);
 	 virtual void setAccidentalLayout( float notebreite, float curLSPACE );
 	 virtual void print() const;
 
@@ -102,7 +105,7 @@ class GRAccidental : public GRNotationElement
 	  float mAccidentalSize;
 	
 	private:
-		void 			initialize			( GREvent * sngnot, float p_size);
+		void 			initialize			(GREvent * sngnot, float p_size);
 		int				accidentalID2acc	(int inAccidentalID, bool& cautionary) const;
 		unsigned int	accidentalID2symbol	(int inAccidentalID) const;
 		unsigned int	accidentalDetunedID2symbol	(float inAccidentalID) const;

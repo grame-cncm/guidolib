@@ -658,7 +658,7 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 				const float staffHeight = (theStaff->getNumlines() - 1) * theStaff->getStaffLSPACE();
 				NVPoint endstaffPos = lastStaffPos;
 				endstaffPos.y += staffHeight; // Set to the bottom of last staff
-				GRAccolade * onlyAccol = new GRAccolade();
+                GRAccolade * onlyAccol = new GRAccolade(new ARAccol());
 				onlyAccol->draw(hdc, firstStaffPos, endstaffPos);
                 delete onlyAccol;
 			}
@@ -735,29 +735,6 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
     if (gBoundingBoxesMap & kSystemsBB)
         DrawBoundingBox( hdc, kSystemBBColor);
 }
-
-// --------------------------------------------------------------------------
-/** \brief Scales and draws the accolade. Also draws the left staff borderline
-*/
-/*
-
-// (CL) -> useless if everything is done in OnDraw ?
-
-void GRSystem::DrawAccolade( VGDevice & hdc, const NVPoint & leftTop, const NVPoint & leftBottom, int id ) const
-{
-	// TODO: draw accolades
-	// GRAccoladeList::const_iterator ptr;
-	// for( ptr = mAccolades.begin(); ptr != mAccolades.end(); ++ptr )
-	if( ! mAccolade.empty() )
-	{
-		for(std::vector<GRAccolade *>::const_iterator it = mAccolade.begin(); it < mAccolade.end(); it++)
-		{
-			if((*it)->getAccoladeID() == id)
-				(*it)->draw(hdc, leftTop, leftBottom);
-		}
-	}
-}
-*/
 
 // --------------------------------------------------------------------------
 /** \brief Draws the springs used for the spacing.
@@ -1119,81 +1096,8 @@ GRSystemSlice * GRSystem::getFirstGRSystemSlice()
 void GRSystem::notifyAccoladeTag( ARAccol * inAccoladeTag )
 {
 	traceMethod("notifyAccoladeTag");
-	int accolType = GRAccolade::kAccoladeCurly;
-
-	// - Get the type
-	const TagParameterString * paramType = inAccoladeTag->getType();
-	if( paramType && paramType->TagIsSet())
-	{
-		if(( *paramType == "straightBrace" ) || (*paramType == "standard" ))
-		{
-			accolType = GRAccolade::kAccoladeStraight;
-		}
-		else if( *paramType == "curlyBrace" )
-		{
-			accolType = GRAccolade::kAccoladeCurly;
-		}
-		else if( *paramType == "thinBrace" )
-		{
-			accolType = GRAccolade::kAccoladeThin;
-		}
-		else if( *paramType == "none" )
-		{
-			accolType = GRAccolade::kAccoladeNone;
-		}
-	}
-
-	// - Get the x-offest
-	const TagParameterFloat * paramDx = inAccoladeTag->getDX();
-	float dx = 0;
-	if( paramDx && paramDx->TagIsSet())
-		dx = paramDx->getValue();
-
-	int beginRange = 0;
-	int endRange = 0;
-
-	const TagParameterString * range = inAccoladeTag->getAccolRange();
-	std::string stringRange;
-	if( range && range->TagIsSet())
-	{
-		stringRange = range->getValue();
 	
-
-		std::size_t begin = 0;
-		std::size_t dashPos = stringRange.find("-", begin);
-	
-		if(dashPos != std::string::npos)
-		{
-			std::string beginString = stringRange.substr(begin, dashPos);
-			std::stringstream stream(beginString);
-			stream >> beginRange;
-
-			std::string endString = stringRange.substr(dashPos+1);
-			std::stringstream stream2(endString);
-			stream2 >> endRange;
-		}
-		else
-		{
-			std::string beginString = stringRange.substr(begin);
-			std::stringstream stream(beginString);
-			stream >> beginRange;
-
-			endRange = beginRange;
-		}
-	}
-	
-	int accolID = 0;
-	const TagParameterInt * IDint = inAccoladeTag->getIDInt();
-	if( IDint && IDint->TagIsSet())
-		accolID = IDint->getValue();
-
-	GRAccolade * accolade = new GRAccolade;
-
-	accolade->setAccoladeType( accolType );
-	accolade->setDx( dx );
-	accolade->setAccoladeID(accolID);
-	accolade->setBeginRange(beginRange);
-	accolade->setEndRange(endRange);
+	GRAccolade *accolade = new GRAccolade(inAccoladeTag);
 
 	mAccolade.push_back(accolade);
 

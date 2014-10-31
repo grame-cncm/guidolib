@@ -3,7 +3,12 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
 version 1.5.5
-- color param added for \tremolo-tag and \dotFormat-tag
+- performances improvement (principally for scores containing lots of chords : time ratio until 3)
+- color param added for:
+    - \tremolo-tag
+	- \dotFormat-tag
+	- \accidental-tag
+	- \accolade-tag
 
 
 ----------------------------------------------------------------

@@ -11,16 +11,91 @@
 
 */
 
+#include <sstream>
+
+#include "VGColor.h"
+#include "ARAccol.h"
 #include "GRAccolade.h"
 #include "VGDevice.h"
 #include "GuidoDefs.h"
 #include "GraphTools.h"
+#include "TagParameterString.h"
+#include "TagParameterFloat.h"
+#include "TagParameterInt.h"
+
+using namespace std;
 
 // --------------------------------------------------------------------------
-GRAccolade::GRAccolade(int inAccoladeType, float inDx)
+GRAccolade::GRAccolade(ARAccol *arAccol)
+		: GRTagARNotationElement(arAccol, LSPACE)
 {
-	mAccoladeType = inAccoladeType;
-	mDx = inDx;
+    int accolType = GRAccolade::kAccoladeCurly;
+
+	// - Get the type
+	const TagParameterString *paramType = arAccol->getType();
+
+    if (paramType && paramType->TagIsSet()) {
+		if (( *paramType == "straightBrace" ) || (*paramType == "standard" ))
+			accolType = GRAccolade::kAccoladeStraight;
+		else if(*paramType == "curlyBrace")
+			accolType = GRAccolade::kAccoladeCurly;
+		else if(*paramType == "thinBrace")
+			accolType = GRAccolade::kAccoladeThin;
+		else if(*paramType == "none")
+			accolType = GRAccolade::kAccoladeNone;
+	}
+
+	// - Get the x-offest
+	const TagParameterFloat * paramDx = arAccol->getDX();
+	float dx = 0;
+
+	if(paramDx && paramDx->TagIsSet())
+		dx = paramDx->getValue();
+
+	int arAccolBeginRange = 0;
+	int arAccolEndRange   = 0;
+
+	const TagParameterString * range = arAccol->getAccolRange();
+	std::string stringRange;
+
+	if (range && range->TagIsSet()) {
+		stringRange = range->getValue();
+
+		std::size_t begin = 0;
+		std::size_t dashPos = stringRange.find("-", begin);
+	
+		if (dashPos != std::string::npos) {
+			std::string beginString = stringRange.substr(begin, dashPos);
+			std::stringstream stream(beginString);
+			stream >> arAccolBeginRange;
+
+			std::string endString = stringRange.substr(dashPos+1);
+			std::stringstream stream2(endString);
+			stream2 >> arAccolEndRange;
+		}
+		else {
+			std::string beginString = stringRange.substr(begin);
+			std::stringstream stream(beginString);
+			stream >> arAccolBeginRange;
+
+			arAccolEndRange = arAccolBeginRange;
+		}
+	}
+	
+    // - Get the id
+	int accolID = 0;
+	const TagParameterInt * IDint = arAccol->getIDInt();
+
+	if (IDint && IDint->TagIsSet())
+		accolID = IDint->getValue();
+
+
+    mAccoladeType = accolType;
+    mDx = dx;
+    id = accolID;
+	rangeBegin = arAccolBeginRange;
+	rangeEnd   = arAccolEndRange;
+
     fHasBeenDrawn = false;
 }
 
@@ -34,6 +109,9 @@ void
 GRAccolade::draw( VGDevice & hdc, const NVPoint & leftTop, 
 								const NVPoint & leftBottom ) const
 {
+    if (mColRef)
+        hdc.PushFillColor(VGColor(mColRef));
+
 	// - Accolade, can be scaled 
 	switch( mAccoladeType )
 	{
@@ -80,6 +158,9 @@ GRAccolade::draw( VGDevice & hdc, const NVPoint & leftTop,
 			break;
 		}
 	}
+
+    if (mColRef)
+        hdc.PopFillColor();
 }
 
 // --------------------------------------------------------------------------

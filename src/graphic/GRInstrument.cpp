@@ -20,7 +20,7 @@
 #include "ARInstrument.h"
 
 GRInstrument::GRInstrument(ARInstrument * par)
-		: GRTagARNotationElement(/*dynamic cast<ARMusicalObject *>*/(par), LSPACE)
+		: GRTagARNotationElement(par, LSPACE)
 {
 	mBoundingBox.left = 0;
 	mBoundingBox.top = 0;

@@ -200,67 +200,69 @@ void GRSingleNote::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos&
 //____________________________________________________________________________________
 void GRSingleNote::OnDraw( VGDevice & hdc) const
 {
-	if(!mDraw)
+	if (!mDraw)
 		return;
+
     int numVoice = this->getAbstractRepresentation()->getVoiceNum();
     float X = mGrStaff->getXEndPosition(getARNote()->getRelativeTimePosition(), getARNote()->getDuration());
 
     float incy = 1;
     float posy = 0;
     int sum = mNumHelpLines;
-    if (mNumHelpLines > 0)
-    { 	// ledger lines up
+
+    if (mNumHelpLines > 0) { 	// ledger lines up
         incy = -mCurLSPACE;
         posy = -mCurLSPACE;
-        hdc.SetFontAlign( VGDevice::kAlignLeft | VGDevice::kAlignBase );
+        hdc.SetFontAlign(VGDevice::kAlignLeft | VGDevice::kAlignBase);
     }
-    else if( mNumHelpLines < 0 )
-    {
+    else if (mNumHelpLines < 0) {
         incy = mCurLSPACE;
         posy = mGrStaff->getNumlines() * mCurLSPACE;
         sum = - sum;
-        hdc.SetFontAlign( VGDevice::kAlignLeft | VGDevice::kAlignBase );
+        hdc.SetFontAlign(VGDevice::kAlignLeft | VGDevice::kAlignBase);
     }
 
     // draw ledger lines
-    const float ledXPos = -60 * 0.85f * mSize;
+    const float ledXPos = - 60 * 0.85f * mSize;
     //NVPoint noteheadOffset(getNoteHead()->getOffset()); //REM: fonctionne pour les \headsReverse et [{a2,b}] mais pas s'il y a
                                                           //d�calage \noteFormat<dx=X> : [\noteFormat<dx=-2> c] par exemple
     for (int i = 0; i < sum; ++i, posy += incy)
-        GRNote::DrawSymbol( hdc, kLedgerLineSymbol, ledXPos/* + noteheadOffset.x*/, ( posy - mPosition.y ));
+        GRNote::DrawSymbol(hdc, kLedgerLineSymbol, ledXPos/* + noteheadOffset.x*/, (posy - mPosition.y));
 
 	if (fCluster)
 		getNoteHead()->setHaveToBeDrawn(false);
 
 	const VGColor oldcolor = hdc.GetFontColor();
-	if (mColRef) hdc.SetFontColor( VGColor( mColRef ));
+
+	if (mColRef)
+        hdc.SetFontColor(VGColor(mColRef));
 
 	// - Draw elements (stems, dots...)
     if (getARNote()->haveSubElementsToBeDrawn())
-	    DrawSubElements( hdc );
+	    DrawSubElements(hdc);
 
 	// - draw articulations & ornament
-	const GRNEList * articulations = getArticulations();
-	if( articulations )
-	{
-		for( GRNEList::const_iterator ptr = articulations->begin(); ptr != articulations->end(); ++ptr )
-		{
-			GRNotationElement * el = *ptr;
+	const GRNEList *articulations = getArticulations();
+
+	if (articulations) {
+		for (GRNEList::const_iterator ptr = articulations->begin(); ptr != articulations->end(); ++ptr) {
+			GRNotationElement *el = *ptr;
 			el->OnDraw(hdc);
 		}
 	}
 
-	if (fOrnament)
-	{
+	if (fOrnament) {
 		// to draw the trill line...
-		float Y = getPosition().y + getBoundingBox().Height()/2;
-		fOrnament->OnDraw(hdc,X,Y, numVoice);
+		float Y = getPosition().y + getBoundingBox().Height() / 2;
+		fOrnament->OnDraw(hdc, X, Y, numVoice);
 	}
 
 	// - Restore
-	if (mColRef) hdc.SetFontColor( oldcolor );
+	if (mColRef)
+        hdc.SetFontColor(oldcolor);
+
 	if (gBoundingBoxesMap & kEventsBB)
-		DrawBoundingBox( hdc, kEventBBColor);
+		DrawBoundingBox(hdc, kEventBBColor);
 
 	if (fClusterHaveToBeDrawn)
 		fCluster->OnDraw(hdc);
@@ -410,9 +412,8 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 	AccList * mylist = mGrStaff->askAccidentals(pitch, octave, accidentals, arNote->getDetune());
 	if (!mylist->empty()) {
 		GuidoPos pos = mylist->GetHeadPosition();
-		while (pos) {
+		while (pos)
 			AddTail(new GRAccidental(this, mNoteBreite, mylist->GetNext(pos)));
-		}
 	}
 	delete mylist;
 
@@ -1128,6 +1129,8 @@ void GRSingleNote::handleAccidental (const ARAcc* acc)
 	{
 		const int kNaturalAccidental = -10; // see the hard coded values in GRAccidental::accidentalID2symbol
 		GRAccidental * myacc = new GRAccidental( this, mNoteBreite, (float)kNaturalAccidental );
+        if (acc && acc->getColor())
+            myacc->setColor(acc->getColor());
 
 		// no accidentals! we need to force accidentals ...
 		int mynewacc = arnote->getAccidentals() * 2 + ARNote::detune2Quarters(arnote->getDetune());
@@ -1146,20 +1149,29 @@ void GRSingleNote::handleAccidental (const ARAcc* acc)
 		// this element is an accidental...
 		// now we have to set the parameters (offset and all that...)
 		NVPoint pt ( el->getOffset());
+
 		if (acc->getDX() && acc->getDX()->TagIsSet())
 			pt.x += (acc->getDX()->getValue());
 
 		if (acc->getDY() && acc->getDY()->TagIsSet())
 			pt.y -= (acc->getDY()->getValue());
+
 		el->setOffset(pt);
+
 		if (acc->getSize() && acc->getSize()->TagIsSet())
 			el->setSize(acc->getSize()->getValue());
 
 		if (acc->getStyle() == ARAcc::kCautionary) {
-			if (el) el->setCautionary ((int)getOffset().x, mNoteBreite);			
-		}
-		// color...
+			if (el)
+                el->setCautionary((int)getOffset().x, mNoteBreite);
+        }
+
+        if (acc->getColor() && acc->getColor()->TagIsSet()) {
+            if (el)
+                el->setColor(acc->getColor());
+        }
 	}
+
 	updateBoundingBox();
 }
 
