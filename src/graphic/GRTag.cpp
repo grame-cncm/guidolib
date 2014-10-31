@@ -39,29 +39,27 @@ GRTag::GRTag( const ARMusicalTag * artag, float curLSPACE ) :
 	fontAttrib = NULL;
 	mFontSize = (int) (1.5f * LSPACE); // default ...
 	
-	if (artag)
-	{
-		const TagParameterString * color = artag->getColor();
-		if (color)
-		{
+	if (artag) {
+		const TagParameterString *color = artag->getColor();
+
+		if (color) {
 			mColRef = new unsigned char [4];
 			color->getRGB(mColRef);
 		}
+
 		const TagParameterFloat * dx = artag->getDX();
 		const TagParameterFloat * dy = artag->getDY();
+
 		if (dx)
-		{
 			mTagOffset.x = (GCoord) dx->getValue(curLSPACE);
-		}
+
 		if (dy)
-		{
 			mTagOffset.y -= (GCoord) dy->getValue(curLSPACE);
-		}
+
 		const TagParameterFloat * tps = artag->getSize();
+
 		if (tps)
-		{
 			mTagSize = tps->getValue();
-		}
 		else 
 			mTagSize = 1.0f;
 	}
@@ -70,18 +68,17 @@ GRTag::GRTag( const ARMusicalTag * artag, float curLSPACE ) :
 GRTag::~GRTag()
 {
 	delete [] mColRef;
+    mColRef = 0;
 	delete font;
 	delete fontAttrib;
 }
 
- void GRTag::RangeEnd(GRStaff * grstaff)
+void GRTag::RangeEnd(GRStaff * grstaff)
 {
-
 }
 
 void GRTag::StaffFinished(GRStaff * grstaff)
 {
-
 }
 
 void GRTag::StaffBegin(GRStaff * grstaff)

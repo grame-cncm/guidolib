@@ -129,16 +129,23 @@ void GRJump::OnDraw( VGDevice & hdc ) const
 				pos.x += GetSymbolExtent( symbol ) * getSymbolSize();
 			}
 		}
-		else {
-			const VGFont* font = SelectTextFont (hdc);
-			const char * text = assoc->first.c_str();
-			int size = int(assoc->first.size());
-			float w, h, texty = pos.y + r.bottom + getOffset().y;
-			font->GetExtent ( 'a', &w, &h, &hdc );
-			texty += (r.bottom - r.top - h) / 2;
-			hdc.DrawString( pos.x + getOffset().x, texty, text, size);
-			font->GetExtent ( text, size, &w, &h, &hdc );
-			pos.x += w;
+        else {
+            const VGColor prevTextColor = hdc.GetFontColor();
+            if (mColRef)
+                hdc.SetFontColor(VGColor(mColRef));
+
+            const VGFont* font = SelectTextFont (hdc);
+            const char * text = assoc->first.c_str();
+            int size = int(assoc->first.size());
+            float w, h, texty = pos.y + r.bottom + getOffset().y;
+            font->GetExtent ( 'a', &w, &h, &hdc );
+            texty += (r.bottom - r.top - h) / 2;
+            hdc.DrawString( pos.x + getOffset().x, texty, text, size);
+            font->GetExtent ( text, size, &w, &h, &hdc );
+            pos.x += w;
+
+            if (mColRef)
+                hdc.SetFontColor(prevTextColor);
 		}
 	}
 }

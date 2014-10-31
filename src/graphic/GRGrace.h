@@ -34,7 +34,6 @@ class GRGrace : public GRARCompositeNotationElement,
 //		virtual void setPosition( const NVPoint & inPos );
 		virtual void tellPosition( GObject * caller,const NVPoint & inPos );
 
-		virtual void OnDraw( VGDevice & hdc ) const;
 		virtual void print() const { };
 		virtual void addAssociation( GRNotationElement * p );
 

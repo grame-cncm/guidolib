@@ -91,6 +91,7 @@ GRFlag::GRFlag( GREvent * sngnot, const TYPE_DURATION & duration, GDirection ste
 GRFlag::~GRFlag() 
 {
 	delete [] mColRef;
+    mColRef = 0;
 }
 
 

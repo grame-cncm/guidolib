@@ -62,11 +62,25 @@ void GRSText::GGSOutput() const
 {
 }
 
+void GRSText::setColRef(const TagParameterString *tps) {
+    if (!mColRef)
+        mColRef = new unsigned char[4];
+
+    tps->getRGB(mColRef);
+}
+
 void GRSText::OnDraw( VGDevice & hdc) const
 {
 	const char * cp = txt->c_str();
 #if 1
+    VGColor prevTextColor = hdc.GetFontColor();
+    if (mColRef)
+        hdc.SetFontColor(VGColor(mColRef));
+
 	OnDrawText(hdc,  cp, int(txt->length()) );
+
+    if (mColRef)
+        hdc.SetFontColor(prevTextColor);
 #else
 	const VGFont* hmyfont = FontManager::gFontText;
 	

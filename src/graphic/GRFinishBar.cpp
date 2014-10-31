@@ -90,6 +90,9 @@ void GRFinishBar::DrawWithLines( VGDevice & hdc ) const
     if (fSize < kMinNoteSize) // Too small, don't draw
         return;
 
+    if (mColRef)
+        hdc.PushFillColor(VGColor(mColRef));
+
     // - Vertical adjustement according to staff's line number
     float offsety1 = (fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;
     float offsety2 = 0;
@@ -109,6 +112,9 @@ void GRFinishBar::DrawWithLines( VGDevice & hdc ) const
 
 	hdc.Rectangle(x1, y1, x1 + leftLineThickness, y2);
 	hdc.Rectangle(x2, y1, x2 + fBaseThickness, y2);
+
+    if (mColRef)
+        hdc.PopFillColor();
 }
 
 ARFinishBar * GRFinishBar::getARFinishBar()

@@ -128,6 +128,7 @@ GRStem::GRStem( GREvent * sngnot,
 GRStem::~GRStem()
 {
 	delete [] mColRef;
+    mColRef = 0;
 }
 
 void 

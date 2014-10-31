@@ -72,6 +72,7 @@ void GRAccidental::initialize( GREvent * sngnot, float p_size)
 GRAccidental::~GRAccidental()
 {
 	delete [] mColRef;
+    mColRef = 0;
 }
 
 //____________________________________________________________________________________
@@ -291,6 +292,18 @@ void GRAccidental::setColor(const TagParameterString *tps)
         mColRef = new unsigned char[4];
 
     tps->getRGB(mColRef);
+}
+
+//____________________________________________________________________________________
+void GRAccidental::setColRef(unsigned char *colRef)
+{
+    if (!mColRef)
+        mColRef = new unsigned char[4];
+
+    mColRef[0] = colRef[0];
+    mColRef[1] = colRef[1];
+    mColRef[2] = colRef[2];
+    mColRef[3] = colRef[3];
 }
 
 //____________________________________________________________________________________

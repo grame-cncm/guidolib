@@ -832,6 +832,8 @@ GRNotationElement * GRStaff::AddOctava(AROctava * aroct)
 	
 	GRSText * grstxt = new GRSText(this, s, -1);
 	grstxt->setRelativeTimePosition( aroct->getRelativeTimePosition());
+    if (aroct->getColor() && aroct->getColor()->getValue())
+        grstxt->setColRef(aroct->getColor());
 	AddTag(grstxt);
 
 	mStaffState.octava  = aroct->getOctava();	

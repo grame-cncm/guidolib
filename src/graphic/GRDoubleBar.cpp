@@ -65,6 +65,9 @@ void GRDoubleBar::DrawWithLines( VGDevice & hdc ) const
     if (fSize < kMinNoteSize) // Too small, don't draw
         return;
 
+    if (mColRef)
+        hdc.PushPenColor(VGColor(mColRef));
+
     // - Vertical adjustement according to staff's line number
     float offsety1 = (fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;
     float offsety2 = 0;
@@ -87,6 +90,9 @@ void GRDoubleBar::DrawWithLines( VGDevice & hdc ) const
     hdc.Line(x1, y1 + lineThickness / 2, x1, y2 - lineThickness / 2);
     hdc.Line(x2, y1 + lineThickness / 2, x2, y2 - lineThickness / 2);
     hdc.PopPenWidth();
+
+    if (mColRef)
+        hdc.PopPenColor();
 }
 
 ARDoubleBar * GRDoubleBar::getARDoubleBar()	{ return static_cast<ARDoubleBar *>(mAbstractRepresentation); }

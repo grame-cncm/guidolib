@@ -188,6 +188,8 @@ void GRKey::createAccidentals()
 			else
 				acc = new GRAccidental( NULL,0L, keyarr[ quint[j] - NOTE_C ], mTagSize, mCurLSPACE );
 			acc->setGRStaff( getGRStaff());
+            if (mColRef)
+                acc->setColRef(mColRef);
 			pos.x += mCurLSPACE / 10 + acc->getLeftSpace();
 			
 			int mypitch = quint[j];

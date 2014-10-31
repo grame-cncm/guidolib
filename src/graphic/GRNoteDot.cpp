@@ -84,6 +84,7 @@ GRNoteDot::GRNoteDotInit( GREvent * inNote, float notebreite )
 GRNoteDot::~GRNoteDot()
 {
 	delete [] mColRef;
+    mColRef = 0;
 }
 
 // ------------------------------------------------------------------------

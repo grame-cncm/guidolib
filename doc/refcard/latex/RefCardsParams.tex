@@ -67,6 +67,7 @@
     \textbf{\textbackslash{}bar}&number&&&&&\\ % Does number param is working ?
     &displayMeasNum&display measure number or not&boolean string&``false''&``true'' - ``false''&\\
     &numDx / numDy&measure number horiz./vert. offset&unit&0&&\\
+    &color&&&&&\\
     \hline
     %\textbf{\textbackslash{}barFormat}&&&&&&\\ % Useless tag for now ?
     %\hline
@@ -78,6 +79,8 @@
     &dx4/dy4&horiz./vert. offset (point 4)&unit&0hs/1hs&&\\
     &dy&vert. offset&unit&7hs&&\\
     &color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}breathMark}&color&&&&&\\
     \hline
     %\textbf{\textbackslash{}bembel}&&&&&&\\ % Useless tag for now ?
     %\hline
@@ -112,15 +115,15 @@
     \textbf{\textbackslash{}cue}&name&cue text&string&`` ''&&\\
     &dx/dy - color&&&&&\\
     \hline
-    \textbf{\textbackslash{}daCapo}&dx/dy&&&&&\\
+    \textbf{\textbackslash{}daCapo}&dx/dy - color&&&&&\\
     \hline
-    \textbf{\textbackslash{}daCapoAlFine}&dx/dy&&&&&\\
+    \textbf{\textbackslash{}daCapoAlFine}&dx/dy - color&&&&&\\
     \hline
     \textbf{\textbackslash{}daCoda}&dx/dy - color&&&&&\\
     \hline
-    \textbf{\textbackslash{}dalSegno}&dx/dy&&&&&\\
+    \textbf{\textbackslash{}dalSegno}&dx/dy - color&&&&&\\
     \hline
-    \textbf{\textbackslash{}dalSegnoAlFine}&dx/dy&&&&&\\
+    \textbf{\textbackslash{}dalSegnoAlFine}&dx/dy - color&&&&&\\
     \hline
     \textbf{\textbackslash{}decrescendo}&dm&dynamic mark&intensity string&`` ''&&``ff'' - ``mp''\\
     &dx1&left symbol horiz. offset&unit&0&&\\
@@ -136,11 +139,15 @@
     \textbf{\textbackslash{}dotFormat}&dd&&&&&\\ % Does dd param is working ?
     &dx/dy - color - size&&&&&\\
     \hline
+    \textbf{\textbackslash{}doubleBar}&color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}endBar}&color&&&&&\\
+    \hline
     \textbf{\textbackslash{}fermata}&type&fermata type&string&``short''&``short'' - ``long''&\\
     &position&fermata position&string&``above''&``below'' - ``above''&\\
     &dx/dy - color - size&&&&&\\
     \hline
-    \textbf{\textbackslash{}fine}&dx/dy&&&&&\\
+    \textbf{\textbackslash{}fine}&dx/dy - color&&&&&\\
     \hline
     \textbf{\textbackslash{}fingering}&\textbf{text}&fingering text&string&&&\\
     &fsize&text size&unit&1.0&&\\
@@ -172,6 +179,7 @@
     &dx/dy - color - size&&&&&\\
     \hline
     \textbf{\textbackslash{}key}&\textbf{key}&key value&key string&&&``G'' - ``F\#''\\
+    &color&&&&&\\
     \hline
     \textbf{\textbackslash{}label}&\textbf{text}&label text&string&&&\\
     &dx/dy - color&&&&&\\
@@ -202,6 +210,7 @@
 	&dx/dy - color - size&&&&&\\
     \hline
     \textbf{\textbackslash{}octava}&\textbf{i}&octave value&unit&&&\\
+    &color&&&&&\\
     \hline
     \textbf{\textbackslash{}pageFormat}&\textbf{w/h}&weight/height&unit&&&\\
     &\textbf{type}&page type&string&&&``A4'' - ``A3'' - ``letter''\\

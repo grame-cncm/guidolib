@@ -34,7 +34,7 @@ public:
 
 protected:
 
-//	static ListOfTPLs ltpls;
+	static ListOfTPLs ltpls;
 };
 
 #endif

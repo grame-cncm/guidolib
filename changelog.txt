@@ -4,11 +4,16 @@ GUIDO Engine history
 ----------------------------------------------------------------
 version 1.5.5
 - performances improvement (principally for scores containing lots of chords : time ratio until 3)
-- color param added for:
-    - \tremolo-tag
-	- \dotFormat-tag
-	- \accidental-tag
-	- \accolade-tag
+- color param added for tag:
+    - \tremolo
+	- \dotFormat
+	- \accidental
+	- \accolade
+	- \bar, \doubleBar, \endBar
+	- \daCapo, \daCapoAlFine, \dalSegno, \dalSegnoAlFine, \fine
+	- \breathMark
+	- \key
+	- \octava
 
 
 ----------------------------------------------------------------

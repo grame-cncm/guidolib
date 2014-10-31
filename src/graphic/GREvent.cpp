@@ -109,6 +109,7 @@ GREvent::~GREvent()
 	DeleteContent( mArtilist );
 	delete mArtilist; mArtilist = 0;
 	delete [] mColRef;
+    mColRef = 0;
 }
 
 /* 

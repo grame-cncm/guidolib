@@ -15,6 +15,7 @@
 
 */
 
+#include "TagParameterString.h"
 #include "GRNotationElement.h"
 #include "GRTag.h"
 // #include "GRDefine.h"
@@ -30,13 +31,14 @@ class GRSText : public GRNotationElement, public GRTag
 {
 
   public:
-						GRSText( GRStaff *, const NVstring & txt, int p_offsety );
-		virtual 		~GRSText();
+					 GRSText( GRStaff *, const NVstring & txt, int p_offsety );
+		virtual 	~GRSText();
 
-	 	virtual void 	tellPosition(GObject *caller, const NVPoint & );
-	  	virtual void 	addAssociation(GRNotationElement *el);
-		virtual void 	GGSOutput() const;
-		virtual void 	OnDraw( VGDevice & hdc ) const;
+	 	virtual void tellPosition(GObject *caller, const NVPoint & );
+	  	virtual void addAssociation(GRNotationElement *el);
+		virtual void GGSOutput() const;
+		virtual void OnDraw( VGDevice & hdc ) const;
+        virtual void setColRef(const TagParameterString *tps);
 			
 		virtual void print() const;
 

@@ -64,6 +64,7 @@ class GRAccidental : public GRNotationElement
 	 virtual void setAccidentalByQuarter( int quarterTones, int offset, float notebreite, float curLSPACE = 50.0f );
 	 virtual void setCautionary(int offset, float notebreite, float curLSPACE = 50.0f );
 	 virtual void setColor(const TagParameterString *tps);
+     virtual void setColRef(unsigned char *colRef);
 	 virtual void setAccidentalLayout( float notebreite, float curLSPACE );
 	 virtual void print() const;
 

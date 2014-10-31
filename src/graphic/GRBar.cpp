@@ -149,29 +149,32 @@ void GRBar::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos 
 // --------------------------------------------------------------------------
 void GRBar::DrawWithGlyphs( VGDevice & hdc ) const
 {
-//	if (mGrStaff)
+	const VGColor prevTextColor = hdc.GetFontColor();
+    if (mColRef)
+        hdc.SetFontColor(VGColor(mColRef));
+
 	if (getTagType() != GRTag::SYSTEMTAG)
-	{
 		GRTagARNotationElement::OnDraw(hdc);
-	}
-	else		// this is a system bar
-	{
-		float curLSPACE = LSPACE;
+	else {		// this is a system bar
+		const float curLSPACE   = LSPACE;
 		const float glyphHeight = 4 * curLSPACE;  // - The barline is 4 * currLSpace high
 		
-		bool finished = false;
-		float posy = mBoundingBox.top;
-		while ( !finished && ( posy < mBoundingBox.bottom ))
-		{
-			if(( posy + glyphHeight ) > ( mBoundingBox.bottom))
-			{
-				posy = ( mBoundingBox.bottom - glyphHeight );
+		bool  finished = false;
+		float posy     = mBoundingBox.top;
+
+		while (!finished && ( posy < mBoundingBox.bottom)) {
+			if ((posy + glyphHeight) > (mBoundingBox.bottom)) {
+				posy = (mBoundingBox.bottom - glyphHeight);
 				finished = true;
 			}
-			OnDrawSymbol( hdc, mSymbol, 0, posy );
+
+			OnDrawSymbol(hdc, mSymbol, 0, posy);
 			posy += glyphHeight * 0.75f;	// 0.75 for test (was: 1, symbol did not connect each others)
 		}
 	}
+    
+	if (mColRef)
+        hdc.SetFontColor(prevTextColor);
 }
 
 // --------------------------------------------------------------------------
@@ -186,6 +189,9 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
 {
 	if ((getTagType() != GRTag::SYSTEMTAG) && isSystemSlice())
 		return;			// don't draw staff bars on system slices
+    
+    if (mColRef)
+        hdc.PushPenColor(VGColor(mColRef));
 
     const float staffSize = mGrStaff->getSizeRatio();
 
@@ -194,8 +200,7 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
 
     ARBar *arBar = getARBar();
 
-    if (!strcmp(arBar->getMeasureNumberDisplayed()->getValue(), "true") && arBar->getMeasureNumber() != 0)
-	{
+    if (!strcmp(arBar->getMeasureNumberDisplayed()->getValue(), "true") && arBar->getMeasureNumber() != 0) {
 		const VGFont* hmyfont = FontManager::gFontText;
 		hdc.SetTextFont( hmyfont );
 
@@ -227,6 +232,9 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
     hdc.PushPenWidth( mGrStaff ? mGrStaff->currentLineThikness() * staffSize : kLineThick * staffSize );
     hdc.Line(x, y1, x, y2);
     hdc.PopPenWidth();
+
+    if (mColRef)
+        hdc.PopPenColor();
 }
 
 // --------------------------------------------------------------------------
@@ -237,14 +245,14 @@ void GRBar::OnDraw(VGDevice & hdc ) const
 		return;
 	traceMethod("OnDraw");
 #if 1
-		DrawWithLines (hdc);
+	DrawWithLines (hdc);
 #else
 	DrawWithGlyphs (hdc, map);
 #endif
 	
 //	Map (hdc, map);
 	if (gBoundingBoxesMap & kMeasureBB)
-		DrawBoundingBox( hdc, kMeasureBBColor);
+		DrawBoundingBox(hdc, kMeasureBBColor);
 }
 
 // --------------------------------------------------------------------------
