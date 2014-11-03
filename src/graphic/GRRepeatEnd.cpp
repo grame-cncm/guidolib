@@ -116,6 +116,12 @@ void GRRepeatEnd::OnDraw( VGDevice & hdc ) const
     if (!mDraw || fSize < kMinNoteSize)
         return;
 
+    VGColor prevColor = hdc.GetFontColor();
+    if (mColRef) {
+        hdc.PushFillColor(VGColor(mColRef));
+        hdc.SetFontColor(VGColor(mColRef));
+    }
+
     // - Vertical adjustement according to staff's line number
     float offsety1 = (fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;
     float offsety2 = 0;
@@ -160,6 +166,11 @@ void GRRepeatEnd::OnDraw( VGDevice & hdc ) const
     DrawSymbol(hdc, pointSymbol, pointOffsetx, pointOffsety1, pointSize);
     DrawSymbol(hdc, pointSymbol, pointOffsetx, pointOffsety2, pointSize);
     /**********************/
+
+    if (mColRef) {
+        hdc.SetFontColor(prevColor);
+        hdc.PopFillColor();
+    }
 }
 
 // --------------------------------------------------------------------------

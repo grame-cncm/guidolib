@@ -50,7 +50,7 @@
     \hline
     \textbf{\textbackslash{}accolade}&\textbackslash{}accol&&accolade configuration&\textbf{id} - \textbf{range} - type - dx - color\\
     \hline
-    \textbf{\textbackslash{}alter}&&ORT&microtonal accidentals&\textbf{detune} - text\\ % Does text param work ?
+    \textbf{\textbackslash{}alter}&&ORT&microtonal accidentals&\textbf{detune}\\
     \hline
     %\textbf{\textbackslash{}auto}&\textbackslash{}set&&&\\ % A COMPLETER
     %\hline
@@ -173,9 +173,9 @@
     \hline
     \textbf{\textbackslash{}pizzicato}&\textbackslash{}pizz&RT&pizzicato sign&type - dx/dy - color - size\\
     \hline
-    \textbf{\textbackslash{}repeatBegin}&&&repeat begin bar&num - dx/dy\\
+    \textbf{\textbackslash{}repeatBegin}&&&repeat begin bar&num - dx/dy - color\\
     \hline
-    \textbf{\textbackslash{}repeatEnd}&&&repeat end bar&num - dx/dy\\
+    \textbf{\textbackslash{}repeatEnd}&&&repeat end bar&num - dx/dy - color\\
     \hline
     \textbf{\textbackslash{}restFormat}&&ORT&rests formatting&posy - dx/dy - color - size\\
     \hline
@@ -195,7 +195,7 @@
     \hline
     \textbf{\textbackslash{}staff}&&&staff assignation&\textbf{id} - dy\\
     \hline
-    \textbf{\textbackslash{}staffFormat}&&&staff formatting&style - lineThickness - dy - size\\
+    \textbf{\textbackslash{}staffFormat}&&&staff formatting&style - lineThickness - dy - color - size\\
     \hline
     \textbf{\textbackslash{}staffOff}&&&disable staff display&\\
     \hline
@@ -213,7 +213,7 @@
     \hline
     \textbf{\textbackslash{}systemFormat}&&&system formatting&dx\\ % Does dx work ?
     \hline
-    \textbf{\textbackslash{}tempo}&&&tempo mark&\textbf{tempo} - bpm - dx/dy\\
+    \textbf{\textbackslash{}tempo}&&&tempo mark&\textbf{tempo} - bpm - dx/dy - color\\
     \hline
     \textbf{\textbackslash{}tenuto}&\textbackslash{}ten&RT&tenuto mark&dx/dy - color - size\\
     \hline
@@ -227,7 +227,7 @@
     \hline
     \textbf{\textbackslash{}text}&\textbackslash{}t&ORT&text annotation&\textbf{text} - dx/dy - color\\
     \hline
-    \textbf{\textbackslash{}tie}&&RT - BE&tie notes&\\
+    \textbf{\textbackslash{}tie}&&RT - BE&tie notes&color\\
     \hline
     \textbf{\textbackslash{}title}&&&score title&\textbf{name} - pageformat - textformat - dx/dy - color\\
     \hline
@@ -235,13 +235,14 @@
     \hline
     \textbf{\textbackslash{}trill}&&RT&trill sign&mode - tr - anchor - adx/ady - dx/dy - color - size\\
     \hline
-    \textbf{\textbackslash{}tuplet}&&RT&tuplet mark&\textbf{format} - dy1 - dy2 - lineThickness - bold - textSize\\
+    \textbf{\textbackslash{}tuplet}&&RT&tuplet mark&\textbf{format} - dy1 - dy2 - lineThickness - bold - textSize -\\
+    &&&&color\\
     \hline
     \textbf{\textbackslash{}turn}&&RT&turn sign&mode - adx/ady - dx/dy - color - size\\
     \hline
     \textbf{\textbackslash{}units}&&&unit specification&\textbf{type}\\
     \hline
-    \textbf{\textbackslash{}volta}&&RT - BE&volta mark&\textbf{pass} - \textbf{m} - format\\ % Bad chars display (at least on Windows)
+    \textbf{\textbackslash{}volta}&&RT - BE&volta mark&\textbf{mark} - format - color\\
     \hline
 \end{tabularx}
 

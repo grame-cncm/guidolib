@@ -49,8 +49,6 @@ ARTuplet::ARTuplet()
 
 void ARTuplet::setTagParameterList(TagParameterList & tpl)
 {
-//	fDy1 = fDy2 = float(0.0);
-
 	if (ltpls.GetCount() == 0)
 	{
 		// create a list of string ...

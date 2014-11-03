@@ -416,6 +416,13 @@ void GRTuplet::OnDraw(VGDevice & hdc) const
 	if (sse == 0)
 		return;
 
+    VGColor prevFontColor = hdc.GetFontColor();
+
+    if (mColRef) {
+        hdc.SetFontColor(VGColor(mColRef));
+        hdc.PushPenColor(VGColor(mColRef));
+    }
+
 	GRTupletSaveStruct * st = (GRTupletSaveStruct *)sse->p;	
 
 	const ARTuplet * arTuplet = getARTuplet();
@@ -468,32 +475,30 @@ void GRTuplet::OnDraw(VGDevice & hdc) const
 	const float slope = (st->p2.y - st->p1.y) / (st->p2.x - st->p1.x); //<- could be stored
     const float textSpace = ((float)charCount + float(0.5)) * LSPACE * float(0.5) * arTuplet->getTextSize();
 
-	if( mShowLeftBrace | mShowRightBrace )
-	{
+	if (mShowLeftBrace | mShowRightBrace) {
 		hdc.PushPenWidth(thickness);
 		
-		if( mShowLeftBrace ) //arTuplet->getLeftBrace()) // (mBraceState & BRACELEFT)
-		{
-			if( sse->startflag == GRSystemStartEndStruct::LEFTMOST)
-			{
+		if (mShowLeftBrace) { //arTuplet->getLeftBrace()) // (mBraceState & BRACELEFT)
+			if (sse->startflag == GRSystemStartEndStruct::LEFTMOST)
 				hdc.Line(st->p1.x, st->p1.y + 0.5f * LSPACE * mDirection, st->p1.x, st->p1.y);
-			}
 
 			hdc.Line( st->p1.x, st->p1.y, middleX - textSpace, middleY - slope * textSpace );
 		}
 
-		if( mShowRightBrace ) //arTuplet->getRightBrace()) // (mBraceState & BRACERIGHT)
-		{
-			hdc.Line( middleX + textSpace, middleY + slope * textSpace, st->p2.x, st->p2.y );
+		if (mShowRightBrace) { //arTuplet->getRightBrace()) // (mBraceState & BRACERIGHT)
+			hdc.Line(middleX + textSpace, middleY + slope * textSpace, st->p2.x, st->p2.y);
 
-			if( sse->endflag == GRSystemStartEndStruct::RIGHTMOST)
-			{
+			if (sse->endflag == GRSystemStartEndStruct::RIGHTMOST)
 				hdc.Line( st->p2.x, st->p2.y, st->p2.x, st->p2.y + 0.5f * LSPACE * (float)mDirection);
-			}
 		}
 
 		hdc.PopPenWidth();
 	}
+
+    if (mColRef) {
+        hdc.SetFontColor(prevFontColor);
+        hdc.PopPenColor();
+    }
 }
 
 // ----------------------------------------------------------------------------

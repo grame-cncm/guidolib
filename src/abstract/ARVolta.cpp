@@ -28,6 +28,10 @@ ListOfTPLs ARVolta::ltpls(1);
 ARVolta::ARVolta()
 {
 	rangesetting = ONLY;
+
+    mark   = NULL;
+    pass   = NULL;
+    format = NULL;
 }
 
 ARVolta::~ARVolta()
@@ -54,23 +58,31 @@ void ARVolta::setTagParameterList(TagParameterList & tpl)
 {
 	if (ltpls.empty()) {
 		ListOfStrings lstrs;
-		lstrs.AddTail( "S,pass,,r;S,m,,r;S,format,,o" );
+		lstrs.AddTail(/*"S,pass,,r;"*/ "S,mark,,r;S,format,,o");
 		CreateListOfTPLs(ltpls,lstrs);
 	}
+
 	TagParameterList * rtpl = NULL;
 	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
 
-	if( ret >= 0 && rtpl ) {
-		if( ret == 0 ) {
-			TagParameterString * tps = TagParameterString::cast(rtpl->RemoveHead());
-			if (tps) mPass = tps->getValue();
-			tps = TagParameterString::cast(rtpl->RemoveHead());
-			if (tps) mMark = tps->getValue();
-			tps = TagParameterString::cast(rtpl->RemoveHead());
-			if (tps) mFormat = tps->getValue();
+	if (ret >= 0 && rtpl) {
+		if (ret == 0) {
+			/*delete pass;
+			pass = TagParameterString::cast(rtpl->RemoveHead());
+			assert(pass);*/
+            
+			delete mark;
+			mark = TagParameterString::cast(rtpl->RemoveHead());
+			assert(mark);
+            
+			delete format;
+			format = TagParameterString::cast(rtpl->RemoveHead());
+			assert(format);
 		}	
+
 		delete rtpl;
 	}
+
 	tpl.RemoveAll();
 }
 

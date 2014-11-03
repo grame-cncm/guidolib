@@ -2311,36 +2311,39 @@ obsolete: an end repeatbar is now ARBar
 						//				// if (tiemergecount==0)
 
 						// new: just insert a tie anyways ....
-						if (mPosTagList == NULL)
-						{
+						if (mPosTagList == NULL) {
 							mPosTagList = createPositionTagList();
 							vst.ptagpos = mPosTagList->GetHeadPosition();
 						}
 
-						// so we add our tie ...
-						ARTie * artie = new ARTie();
-						artie->setID(gCurArMusic->mMaxTagId ++);
-						artie->setIsAuto(true);
-						artie->setRelativeTimePosition( ev->getRelativeTimePosition());
-						// the tie has a range!
-						// artie->setRange(1);
-						artie->setPosition(pos);
-						ARDummyRangeEnd * arde = new ARDummyRangeEnd(TIEEND);
-						arde->setID(artie->getID());
-						arde->setPosition(newpos);
-						artie->setCorrespondence(arde);
-						arde->setCorrespondence(artie);
+                        // so we add our tie ...
+                        ARTie *artie = new ARTie();
+                        ARTie *existingTie = dynamic_cast<ARTie *>(mPosTagList->GetHead());
+                        artie->setID(gCurArMusic->mMaxTagId ++);
+                        artie->setIsAuto(true);
+                        artie->setRelativeTimePosition(ev->getRelativeTimePosition());
+                        // the tie has a range!
+                        // artie->setRange(1);
+                        artie->setPosition(pos);
+                        if (existingTie) {
+                            TagParameterList *tpl = existingTie->getTagParameterList();
+					        artie->setTagParameterList(*tpl);
+                        }
 
-						if (vst.ptagpos != NULL)
-						{
+                        ARDummyRangeEnd *arde = new ARDummyRangeEnd(TIEEND);
+                        arde->setID(artie->getID());
+                        arde->setPosition(newpos);
+                        artie->setCorrespondence(arde);
+                        arde->setCorrespondence(artie);
+
+						if (vst.ptagpos != NULL) {
 							// this is OK ....
 							mPosTagList->AddElementAt(vst.ptagpos,artie);
 
 							// the position of this element must be saved!
 							newptagpos = mPosTagList->AddElementAt(vst.ptagpos,arde);
 						}
-						else
-						{
+						else {
 							mPosTagList->AddTail(artie);
 
 							// remember this position!
@@ -4791,6 +4794,7 @@ void ARMusicalVoice::doAutoTies()
 					if (nt && tiestruct->startnote && nt->CompareNameOctavePitch(*tiestruct->startnote))
 						mustcreate = 1;
 				}
+
 				if (mustcreate) {
 					ARTie *mytie = new ARTie();
 					mytie->setID(gCurArMusic->mMaxTagId++);

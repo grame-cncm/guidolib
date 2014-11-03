@@ -60,16 +60,18 @@ GRVolta::GRVolta( GRStaff * inStaff, ARVolta * ar )
     mBroken = false;
     mCurrSystem = 0;
     mShape = kDefault;
-    if (!ar->getFormat().empty()) {
-        if (ar->getFormat() == "|-")
+
+    if (ar->getFormat()) {
+        if (!strcmp(ar->getFormat(), "|-"))
             mShape = kRightOpened;
-        else if (ar->getFormat() == "-|")
+        else if (!strcmp(ar->getFormat(), "-|"))
             mShape = kLeftOpened;
-        else if (ar->getFormat() == "-")
+        else if (!strcmp(ar->getFormat(), "-"))
             mShape = kOpened;
     }
-    mString = ar->getString().c_str();
-    mStringSize = int(ar->getString().size());
+
+    mString = ar->getMark();
+    mStringSize = strlen(mString);
 }
 
 GRVolta::~GRVolta()
@@ -309,17 +311,21 @@ GRNotationElement * GRVolta::getEndElt(GRNotationElement *after) {
 // -----------------------------------------------------------------------------
 void GRVolta::OnDraw( VGDevice & hdc ) const
 {
-//  DrawBoundingBox(hdc, VGColor(0,255,0));
 	if(!mDraw)
 		return;
-    static bool start=true;
-//    hdc.PushPen( VGColor( 0, 0, 0, ALPHA_OPAQUE ), 4);	//opaque black
-    hdc.PushPenWidth(4);
+
+    static bool start = true;
+
+    if (mColRef)
+        hdc.PushPenColor(VGColor(mColRef));
+
+    hdc.PushPenWidth(4.0f);
     int shape = mShape;
     NVRect r = getBoundingBox();
     r += getPosition ();
 
     bool drawText= true;
+
     if (mBroken) {
         if (start) {
             r = mFirstPart;
@@ -342,6 +348,7 @@ void GRVolta::OnDraw( VGDevice & hdc ) const
 
     float bottom = r.bottom - (LSPACE/2);
     hdc.Line (r.left, r.top, r.right, r.top);
+
     switch (shape) {
         case kDefault:
             hdc.Line (r.left, r.top, r.left, bottom);
@@ -354,16 +361,24 @@ void GRVolta::OnDraw( VGDevice & hdc ) const
             hdc.Line (r.left, r.top, r.left, bottom);
             break;
     }
-//    hdc.PopPen();
+
+    if (mColRef)
+        hdc.PopPenColor();
+
     hdc.PopPenWidth();
 
     if (drawText) {
-//        const VGColor prevTextColor = hdc.GetFontColor();
-        hdc.SetTextFont( FontManager::gFontText );
-//        hdc.SetFontColor( VGColor( 0, 0, 0, ALPHA_OPAQUE ) );	//opaque black
+        const VGColor prevTextColor = hdc.GetFontColor();
+        hdc.SetTextFont(FontManager::gFontText);
+
+        if (mColRef)
+            hdc.SetFontColor(VGColor(mColRef));
+
         hdc.SetFontAlign (VGDevice::kAlignBaseLeft);
-        hdc.DrawString( r.left + LSPACE/2, bottom, mString, mStringSize );
-//        hdc.SetFontColor( prevTextColor );
+        hdc.DrawString(r.left + LSPACE / 2, bottom, mString, mStringSize);
+
+        if (mColRef)
+            hdc.SetFontColor(prevTextColor);
     }
 }
 

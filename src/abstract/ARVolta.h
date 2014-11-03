@@ -17,6 +17,7 @@
 #include <string>
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
+#include "TagParameterString.h"
 
 /** \brief for different repeat endings
 */
@@ -34,18 +35,19 @@ public:
 	virtual void setTagParameterList( TagParameterList & tpl );
 	virtual bool MatchEndTag(const char * s);
    
-    const std::string getString() const     { return mMark; }
-    const std::string getPass() const       { return mPass; }
-    const std::string getFormat() const     { return mFormat; }
+	const char* getPass() const   { return pass   ? pass->getValue() : ""; }
+	const char* getMark() const   { return mark   ? mark->getValue() : ""; }
+	const char* getFormat() const { return format ? format->getValue() : ""; }
 
     virtual std::ostream & operator<<(std::ostream & os) const;
 
 protected:
 	static ListOfTPLs ltpls;
+
 private:
-    std::string mPass;       // the pass(es) at which notes are played
-    std::string mMark;       // text to be displayed under the bracket
-    std::string mFormat;     // format string
+    TagParameterString *pass;   // the pass(es) at which notes are played
+    TagParameterString *mark;   // text to be displayed under the bracket
+    TagParameterString *format; // format string
 };
 
 #endif

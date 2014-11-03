@@ -9,11 +9,20 @@ version 1.5.5
 	- \dotFormat
 	- \accidental
 	- \accolade
-	- \bar, \doubleBar, \endBar
+	- \bar, \doubleBar, \endBar, \repeatBegin, \repeatEnd
 	- \daCapo, \daCapoAlFine, \dalSegno, \dalSegnoAlFine, \fine
 	- \breathMark
 	- \key
 	- \octava
+	- \staffFormat
+	- \tempo
+	- \tie
+	- \tuplet
+	- \volta
+- \volta-tag :
+    - display bug fixed
+    - useless param 'pass' removed
+	- 'm' param changed to 'mark'
 
 
 ----------------------------------------------------------------

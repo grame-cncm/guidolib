@@ -222,12 +222,21 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
         hdc.SetFontAlign(VGDevice::kAlignLeft | VGDevice::kAlignBase);
     }
 
+	const VGColor prevFontColor = hdc.GetFontColor();
+
+    if (mGrStaff->getStffrmtColRef())
+        hdc.SetFontColor(VGColor(mGrStaff->getStffrmtColRef()));
+
     // draw ledger lines
     const float ledXPos = - 60 * 0.85f * mSize;
     //NVPoint noteheadOffset(getNoteHead()->getOffset()); //REM: fonctionne pour les \headsReverse et [{a2,b}] mais pas s'il y a
-                                                          //d�calage \noteFormat<dx=X> : [\noteFormat<dx=-2> c] par exemple
+                                                          //décalage \noteFormat<dx=X> : [\noteFormat<dx=-2> c] par exemple
     for (int i = 0; i < sum; ++i, posy += incy)
-        GRNote::DrawSymbol(hdc, kLedgerLineSymbol, ledXPos/* + noteheadOffset.x*/, (posy - mPosition.y));
+        GRNote::DrawSymbol(hdc, kLedgerLineSymbol, ledXPos/* + noteheadOffset.x*/, (posy - mPosition.y)); // REM: the ledger line width can't change with staffFormat width
+                                                                                                          //      because it's drawn with the font, not with a line
+
+    if (mGrStaff->getStffrmtColRef())
+        hdc.SetFontColor(prevFontColor);
 
 	if (fCluster)
 		getNoteHead()->setHaveToBeDrawn(false);

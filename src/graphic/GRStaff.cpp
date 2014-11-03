@@ -161,36 +161,37 @@ MeasureAccidentals & MeasureAccidentals::operator=(const MeasureAccidentals &ma)
 GRStaffState::GRStaffState()
 {
 	meterset = false;	// meter information set?. TRUE, false
-	mnum = 0;			// start at bar 0... (important for upbeat, maybe to be changed!)
+	mnum     = 0;	 	// start at bar 0... (important for upbeat, maybe to be changed!)
 
 	curmeter = NULL;
-	keyset = false; 			// key signatur set?
-	numkeys = 0;
+	keyset   = false; 			// key signatur set?
+	numkeys  = 0;
 
-	curbarfrmt = NULL;
-	curstaffrmt = NULL;
-	staffLSPACE = LSPACE;
-	numlines = 5;				// Standard
+	curbarfrmt    = NULL;
+	curstaffrmt   = NULL;
+	staffLSPACE   = LSPACE;
+	numlines      = 5;              // Standard
     lineThickness = LSPACE * 0.08f;
-    yOffset = 0;
+    yOffset       = 0;
+    colRef        = 0;
 
 	curkey = NULL;
 
 	// clef-Parameter
-	clefset = CLEFAUTO;			// CLEFINTERN, CLEFEXPLICIT, CLEFAUTO, [ CLEFOFF ]
-	clefname = "g2";			// Standard
-	basepit = NOTE_G;
-	basepitoffs = 0;
+	clefset      = CLEFAUTO;   // CLEFINTERN, CLEFEXPLICIT, CLEFAUTO, [ CLEFOFF ]
+	clefname     = "g2";       // Standard
+	basepit      = NOTE_G;
+	basepitoffs  = 0;
 	instrNumKeys = 0;
-	baseoct = 1;
-	octava = 0;
-	baseline = 3;
-	curclef = NULL;
+	baseoct      = 1;
+	octava       = 0;
+	baseline     = 3;
+	curclef      = NULL;
 
 	distanceset = false;
-	distance = 0;
-	for (int i = 0; i < NUMNOTES; ++i)
-	{
+	distance    = 0;
+
+	for (int i = 0; i < NUMNOTES; ++i) {
 		instrKeyArray[i] = 0; 
 		KeyArray[i] = 0; 
 	}
@@ -1250,7 +1251,7 @@ staff_debug("CreateBeginElements");
 	if (state.curstaffrmt != NULL)
 	{
 		setStaffFormat(state.curstaffrmt);
-		// we have a stafffrmt ...
+		// we have a staffrmt ...
 	}
 
 	if (state.curclef != NULL)
@@ -1514,33 +1515,37 @@ void GRStaff::setStaffFormat(ARStaffFormat * staffrmt)
 {
 	mStaffState.curstaffrmt = staffrmt;
     
-	if (mStaffState.curstaffrmt)
-	{
-		if (mStaffState.curstaffrmt->getSize() && mStaffState.curstaffrmt->getSize()->TagIsSet())
-			mStaffState.staffLSPACE = mStaffState.curstaffrmt->getSize()->getValue() * 2;
+	if (staffrmt) {
+		if (staffrmt->getSize() && staffrmt->getSize()->TagIsSet())
+			mStaffState.staffLSPACE = staffrmt->getSize()->getValue() * 2;
 		
-        if (mStaffState.curstaffrmt->getStyle() && mStaffState.curstaffrmt->getStyle()->TagIsSet())
-		{
+        if (staffrmt->getStyle() && staffrmt->getStyle()->TagIsSet()) {
 			// other than standard? -> rather n-line ....?
-			const NVstring & mystr = mStaffState.curstaffrmt->getStyle()->getValue();
+			const NVstring & mystr = staffrmt->getStyle()->getValue();
+
 			if   (isdigit(mystr[0])
               && (mystr.size() == 6 || mystr.size() == 7)
               &&   mystr.substr(1, 5) == "-line"
-              && (!mystr[6] || mystr[6] == 's'))
-			{
+              && (!mystr[6] || mystr[6] == 's')) {
 				const int tmp = atoi(mystr.substr(0, 1).c_str());
+
 				if (tmp >= 0 && tmp <= 7)
 					mStaffState.numlines = tmp;
 			}
 		}
         
-        mStaffState.lineThickness = mStaffState.curstaffrmt->getLineThickness();
+        mStaffState.lineThickness = staffrmt->getLineThickness();
 
-        if (mStaffState.curstaffrmt->getDY())
-            mStaffState.yOffset = - (mStaffState.curstaffrmt->getDY()->getValue());
+        if (staffrmt->getDY())
+            mStaffState.yOffset = - (staffrmt->getDY()->getValue());
+
+        if (staffrmt->getColor()) {
+            if (!mStaffState.colRef)
+                mStaffState.colRef = new unsigned char[4];
+
+            staffrmt->getColor()->getRGB(mStaffState.colRef);
+        }
 	}
-
-	// I have to deal with Size - parameter!
 }
 
 // ----------------------------------------------------------------------------
@@ -2000,8 +2005,12 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 	hdc.Line( xStart, yPos - 100, xStart, yPos + 100 );
 	hdc.PopPen();
 	*/
+    
+    if (mStaffState.colRef)
+        hdc.PushPenColor(VGColor(mStaffState.colRef));
 
     hdc.PushPenWidth(currentLineThikness() * getSizeRatio());
+
     std::map<float,float>::const_iterator it = positions.begin();
 
     while (it != positions.end())
@@ -2020,6 +2029,9 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
     }
 
     hdc.PopPenWidth();
+
+    if (mStaffState.colRef)
+        hdc.PopPenColor();
 }
 
 // ----------------------------------------------------------------------------

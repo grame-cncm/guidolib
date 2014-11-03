@@ -60,7 +60,6 @@
     &dx - color&&&&&\\
     \hline
     \textbf{\textbackslash{}alter}&\textbf{detune}&detune value&float&0.0&&\\
-    &text&&string&`` ''&&\\ % Does text param is working ?
     \hline
     %\textbf{\textbackslash{}auto}&&&&&&\\ % A COMPLETER
     %\hline
@@ -222,10 +221,10 @@
     &dx/dy - color - size&&&&&\\
     \hline
     \textbf{\textbackslash{}repeatBegin}&num&&&&&\\ % Does num param work ?
-    &dx/dy&&&&&\\
+    &dx/dy - color&&&&&\\
     \hline
     \textbf{\textbackslash{}repeatEnd}&num&&&&&\\ % Does num param work ?
-    &dx/dy&&&&&\\
+    &dx/dy - color&&&&&\\
     \hline
     \textbf{\textbackslash{}restFormat}&posy&&&&&\\ % Does posy param work ?
     &dx/dy - color - size&&&&&\\
@@ -259,7 +258,7 @@
     \textbf{\textbackslash{}staffFormat}&style&staff style&string&``5-lines''&&``2-lines'' - ``7-lines''\\
     &lineThickness&staff lines thickness&unit&0.08&&\\
     &dy&staff vertical offset&unit&0&&\\
-    &size&&&&&\\
+    &color - size&&&&&\\
     \hline
     \textbf{\textbackslash{}stemsAuto}&length&stem length&unit&7.0&&\\
     \hline
@@ -276,12 +275,14 @@
     \hline
     \textbf{\textbackslash{}tempo}&\textbf{tempo}&tempo mark&string&&&``Andante [1/4]=60''\\
     &bpm&midi bpm&string&&&``1/8=80''\\
-    &dx/dy&&&&&\\
+    &dx/dy - color&&&&&\\
     \hline
     \textbf{\textbackslash{}tenuto}&dx/dy - color - size&&&&&\\
     \hline
     \textbf{\textbackslash{}text}&\textbf{text}&text&string&&&\\
     &dx/dy - color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}tie}&color&&&&&\\
     \hline
     \textbf{\textbackslash{}title}&\textbf{name}&title text&string&&&\\
     &pageformat&page format&string&``c2''&&\\ % incomplete
@@ -314,6 +315,7 @@
     &lineThickness&tuplet line thickness&unit&0.08&&\\
     &bold&bold text or not&boolean string&``false''&``true'' - ``false''&\\
     &textSize&text size&unit&1.0&&\\
+     &color&&&&&\\
     \hline
     \textbf{\textbackslash{}turn}&mode&mode type&string&``cautionnary''&``cautionnary''&\\
     &adx/ady&accidental horiz./vert. offset&unit&0&&\\
@@ -321,9 +323,9 @@
     \hline
     \textbf{\textbackslash{}units}&\textbf{type}&unit type&unit string&``cm''&&``mm'' - ``pt'' - ``hs''\\
     \hline
-    \textbf{\textbackslash{}volta}&\textbf{pass}&&&&&\\ % Bad characters display (on Windows at least)
-    &\textbf{m}&&&&&\\
-    &format&&&&&\\
+    \textbf{\textbackslash{}volta}&\textbf{mark}&volta mark&string&&&\\
+    &format&volta style&string&``\textbar-\textbar''&``\textbar-'' - ``-\textbar'' - ``-''&\\
+    &color&&&&&\\
     \hline
 \end{tabularx}
 

@@ -54,7 +54,7 @@ class GRVolta : public GRPTagARNotationElement
         GRNotationElement * mEnd, *mBeg;// these are for graphic adjustments
         
 
-        int         mShape;             // the volta shape (from ARVolta)
+        int         mShape;             // the volta shape  (from ARVolta)
         const char* mString;            // the volta string (from ARVolta)
         int         mStringSize;
         

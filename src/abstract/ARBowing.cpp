@@ -317,6 +317,10 @@ TagParameterList * ARBowing::getTagParameterList() const
 	{
 		tpl->AddTail(h->getCopy());
 	}
+	if (color && color->TagIsSet())
+	{
+		tpl->AddTail(color->getCopy());
+	}
 
 	return tpl;
 }

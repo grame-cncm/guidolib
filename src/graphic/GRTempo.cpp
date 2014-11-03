@@ -92,20 +92,28 @@ TYPE_DURATION GRTempo::getDuration (const char * str) const
 // ----------------------------------------------------------------------------
 void GRTempo::OnDraw( VGDevice & hdc ) const
 {
-//	DrawBoundingBox (hdc, GColor(0,0,255));
 	if(!mDraw)
 		return; 
-	ARTempo * ar = static_cast<ARTempo *>(mAbstractRepresentation); // was a dynamic cast
-	if (!ar ) return;
+	
+    ARTempo *ar = static_cast<ARTempo *>(mAbstractRepresentation);
+	
+    if (!ar)
+        return;
+
+    VGColor prevFontColor = hdc.GetFontColor();
+
+    if (mColRef)
+        hdc.SetFontColor(VGColor(mColRef));
 
 	const float noteOffsetY = 0; // LSPACE * 1.85f;
 	float currX = getOffset().x;
 
 	float dy = 0;
 	if (ar->getDY())
-		dy = -ar->getDY()->getValue( LSPACE );
+		dy = - ar->getDY()->getValue(LSPACE);
 
 	FormatStringParserResult::const_iterator assoc;
+
 	for (assoc = ar->getTempoMark().begin(); assoc != ar->getTempoMark().end(); assoc++) {
 		if ((*assoc).second == FormatStringParser::kSpecial) {
 			TYPE_DURATION duration = getDuration((*assoc).first.c_str());
@@ -117,6 +125,9 @@ void GRTempo::OnDraw( VGDevice & hdc ) const
 			currX += textwidth;
 		}
 	}
+
+    if (mColRef)
+        hdc.SetFontColor(prevFontColor);
 }
 
 // ----------------------------------------------------------------------------

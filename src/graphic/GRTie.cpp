@@ -20,6 +20,7 @@
 #include "GRDefine.h"
 #include "GRStdNoteHead.h"
 #include "GRStaff.h"
+#include "TagParameterString.h"
 
 const int kGuidoLongTieDistance = 12; // unit: dent. // 30 is too much
 

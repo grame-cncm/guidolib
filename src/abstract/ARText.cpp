@@ -25,31 +25,28 @@
 
 ListOfTPLs ARText::ltpls(1);
 
-ARText::ARText(const NVstring & p_txt, float /*p_offsety*/ )
+ARText::ARText(const NVstring & p_txt, float)
 {
-	// ASSERT(FALSE);
-	// dy = new TagParameterFloat(p_offsety);
-	ypos = NULL;
-	text = new TagParameterString(p_txt.c_str());
-	textformat = NULL;
-	font = NULL;
-	fsize = NULL;
-	fattrib = NULL;
+	ypos         = NULL;
+	text         = new TagParameterString(p_txt.c_str());
+	textformat   = NULL;
+	font         = NULL;
+	fsize        = NULL;
+	fattrib      = NULL;
 	rangesetting = RANGEDC;
 }
 
 ARText::ARText() : ARMTParameter()	
 {
 	relativeTimePosition = TYPE_TIMEPOSITION(-1,1);
-	duration = DURATION_0;
-	// dy = new TagParameterFloat(-6 * LSPACE/2);
-	ypos = NULL;
-	text = NULL;
-	textformat = NULL;
-	font = NULL;
-	fsize = NULL;
-	fattrib = NULL;
-	rangesetting = RANGEDC;
+	duration             = DURATION_0;
+	ypos                 = NULL;
+	text                 = NULL;
+	textformat           = NULL;
+	font                 = NULL;
+	fsize                = NULL;
+	fattrib              = NULL;
+	rangesetting         = RANGEDC;
 }
 
 ARText::~ARText() 
