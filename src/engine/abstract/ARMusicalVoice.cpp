@@ -488,7 +488,7 @@ ObjectList * ARMusicalVoice::getARMusicalObjectsAtTimePosition( const TYPE_TIMEP
 
 	assert(timeposition>=relativeTimePosition);
 	assert(timeposition<getRelativeEndTimePosition());
-	if(timeposition>=duration)
+	if(timeposition >= getDuration())
 		return NULL; // timeposition ist ausserhalb Staff...
 	// ...because oft asserts this should never happen
 	// ... must be done that GRStaff::createStaffElements can work also with "empty" Staffs!
@@ -521,7 +521,7 @@ GuidoPos ARMusicalVoice::getPosAtTimePosition(const TYPE_TIMEPOSITION & timeposi
 
 	assert(timeposition>=relativeTimePosition);
 	assert(timeposition<getRelativeEndTimePosition());
-	if(timeposition >= duration)
+	if(timeposition >= getDuration())
 		return NULL; // timeposition is outside of staff
 	// ...should never happen because of asserts
 	// ... must be checked that GRStaff::createStaffElements works also with "empty" Staffs!
@@ -618,8 +618,10 @@ GuidoPos ARMusicalVoice::AddTail(ARMusicalObject *newMusicalObject)
 		++numchordvoice;
 	}
 
-	newMusicalObject->setRelativeTimePosition(duration);
-	duration += newMusicalObject->getDuration();
+	TYPE_DURATION d = getDuration();
+	newMusicalObject->setRelativeTimePosition(d);
+	d += newMusicalObject->getDuration();
+	setDuration(d);
 	GuidoPos tmp = NULL;
 
 	if (mtag && numchordvoice == 0 && mtag->IsStateTag())
@@ -655,7 +657,7 @@ GuidoPos ARMusicalVoice::AddTail(ARMusicalObject *newMusicalObject)
 		group->endpos = tmp;
 
 	mCurVoiceState->vpos = tmp;
-	mCurVoiceState->curtp = duration;
+	mCurVoiceState->curtp = getDuration();
 
 	return tmp;
 }
@@ -665,8 +667,9 @@ GuidoPos ARMusicalVoice::AddTail(ARMusicalObject *newMusicalObject)
 void ARMusicalVoice::adjustDuration(const TYPE_DURATION & newDuration)
 {
 	// rigth now no shortening is allowed
-	assert(newDuration>=duration);
-	const TYPE_DURATION fill (newDuration - duration);
+	TYPE_DURATION d = getDuration();
+	assert(newDuration >= d);
+	const TYPE_DURATION fill (newDuration - d);
 	if (fill != DURATION_0)
 	{
 		// this is for cue-voices...
@@ -689,7 +692,7 @@ void ARMusicalVoice::adjustDuration(const TYPE_DURATION & newDuration)
 			}
 		}
 	}
-	duration = newDuration;
+	setDuration ( newDuration );
 	// if last event is a rest, it could be also made longer inside fill instead of insert a new rest?
 }
 
@@ -1220,7 +1223,7 @@ void ARMusicalVoice::AddPositionTag(ARPositionTag *tag)
 	mStartPosTagList->AddTail(tag);
 	ARMusicalObject *arobj = dynamic_cast<ARMusicalObject *>(tag);
 	if (arobj)
-		arobj->setRelativeTimePosition(duration);
+		arobj->setRelativeTimePosition( getDuration());
 	ARMusicalTag *armtg = dynamic_cast<ARMusicalTag *>(tag);
 	if (armtg) {
 		// Position-Tags are associated with the following event (rechtsassoziativ)
@@ -1344,7 +1347,7 @@ void ARMusicalVoice::setPositionTagEndPos(int id, ARMusicalTag * end, ARMusicalT
 	}
 	// now we add the tag to the current-tag-list
 	ARMusicalObject * arobj = dynamic_cast<ARMusicalObject *>(end);
-	if (arobj)		  arobj->setRelativeTimePosition(duration);
+	if (arobj)		  arobj->setRelativeTimePosition( getDuration() );
 	mPosTagList->AddTail(artgend);
 }
 
@@ -5814,7 +5817,9 @@ void ARMusicalVoice::FinishChord(bool trill)
 		}
 	}
 
-	duration += chorddur;
+	TYPE_DURATION d = getDuration();
+	d += chorddur;
+	setDuration( d );
 
 	mCurVoiceState->RemovePositionTag(currentChord);
 	mCurVoiceState->RemovePositionTag(currentShareLocation);

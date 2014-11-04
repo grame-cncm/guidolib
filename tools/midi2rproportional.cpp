@@ -197,34 +197,37 @@ int main(int argc, char **argv)
 	GuidoDate end     = ldateopt(argc, argv, kOptions[kEnd],   defDate);
 
     //PianoRoll *pianoRoll = GuidoMidi2PianoRoll(reducedProportional, fileName);
-
-    //GuidoErrCode err;
-
-
-    ///**** LIMITS ****/
-    //err = GuidoPianoRollSetLimits(pianoRoll, limitParams);
-    //error(err);
-    ///*********************/
-
-    ///**** MEASURE BARS ****/
-    //err = GuidoPianoRollEnableMeasureBars(pianoRoll, measureBars);
-    //error(err);
-    ///**********************/
-
-    ///**** DURATION LINES ****/
-    //err = GuidoPianoRollEnableDurationLines(pianoRoll, drawDurLines);
-    //error(err);
-    ///************************/
     
-    ///**** DRAW ****/
-    //err = GuidoPianoRollOnDraw(pianoRoll, w, h, &dev);
-    //error(err);
-    ///**************/
+    //if (pianoRoll) {
+        //GuidoErrCode err;
 
-    //err = GuidoPianoRollOnDraw(pianoRoll, &dev);
-    //error(err);
+        ///**** LIMITS ****/
+        //err = GuidoPianoRollSetLimits(pianoRoll, limitParams);
+        //error(err);
+        ///*********************/
 
-    //GuidoDestroyPianoRoll(pianoRoll);
+        ///**** MEASURE BARS ****/
+        //err = GuidoPianoRollEnableMeasureBars(pianoRoll, measureBars);
+        //error(err);
+        ///**********************/
+
+        ///**** DURATION LINES ****/
+        //err = GuidoPianoRollEnableDurationLines(pianoRoll, drawDurLines);
+        //error(err);
+        ///************************/
+    
+        ///**** DRAW ****/
+        //err = GuidoPianoRollOnDraw(pianoRoll, w, h, &dev);
+        //error(err);
+        ///**************/
+
+        //err = GuidoPianoRollOnDraw(pianoRoll, &dev);
+        //error(err);
+
+        //GuidoDestroyPianoRoll(pianoRoll);
+    //}
+    //else
+        //cout << "Piano roll hasn't been correctly created" << endl;
 
     return 0;
 }

@@ -33,8 +33,8 @@ class SVGFont : public VGFont
 	std::string	fGuidoFontFile;
 	std::string	fGuidoFontSpec;
 	std::string	fName;
-	int fSize;
-	int fProperties;
+//	int fSize;
+//	int fProperties;
 
 #ifdef INDEPENDENTSVG
 	struct NSVGfont *	fNSVGfont;

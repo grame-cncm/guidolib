@@ -72,8 +72,8 @@ class Fraction
 		Fraction & operator *=(const int tmp);
 
 	private:
-		int numerator;
-		int denominator;
+		long long numerator;
+		long long denominator;
 		double dval;
 };
 

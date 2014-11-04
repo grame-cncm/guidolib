@@ -1,0 +1,34 @@
+---------------------------------
+PianoRoll
+---------------------------------
+clipping dans l'espace des hauteurs
+stratégies à expérimenter pour les repères (lignes horizontales) -> utilistateur i.e. API
+clavier de piano -> mapping (API)
+affichage (option) des barres de mesures
+affichage (option) des dynamiques (avec de la transparence)
+coloriage (option) des différentes voix
+autres infos intéressantes de guido ?
+
+-> design : objet de rendu en proll qui maintien un état et qu'on peut interroger pour le mapping
+
+compatibilité avec le streaming ?
+
+idem pour RProportionnel
+- affichage des clefs
+- mapping
+
+question d'une représentation intermédiaire ?
+Optimisations
+
+---------------------------------
+GUIDO ANTESCOFO
+---------------------------------
+- trills voir différentes formes dans MuseScore et/ou Lilypond
+- optimisation du rendu pour les grosses partitions
+
+
+---------------------------------
+- graces beaming
+- trills dot
+- prise en compte des dx, dy pour le mapping
+- pas de mapping avec staff off

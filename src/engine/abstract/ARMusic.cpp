@@ -21,10 +21,6 @@
 #include "ARVoiceManager.h"
 #include "ARAuto.h"
 #include "ARMusicalVoice.h"
-#ifdef MIDIEXPORT
-  #include "Guido2PianoRoll.h"
-  #include "Guido2ReducedProportional.h"
-#endif
 #include "TimeMapper.h"
 
 #include "benchtools.h"
@@ -58,11 +54,12 @@ GuidoPos ARMusic::AddTail(ARMusicalVoice * newMusicalVoice)
 */
 void ARMusic::adjustDuration(TYPE_DURATION newDuration)
 {
-	assert(newDuration >= duration); // keine Verk�rzung m�glich
+	TYPE_DURATION d = getDuration();
+	assert(newDuration >= d); // keine Verk�rzung m�glich
 	ARMusicalVoice * v=NULL;
 	GuidoPos pos=GetHeadPosition();
 
-	duration=newDuration;
+	setDuration (newDuration);
 	while(pos) // alle Stimmen des Segments auf die neue L�nge bringen
 	{
 		v=GetNext(pos);
@@ -94,34 +91,6 @@ void ARMusic::getTimeMap (TimeMapCollector& f) const
         }
 	}
 }
-
-#ifdef MIDIEXPORT
-void ARMusic::toReducedProportional(int width, int height, TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, bool drawdur, VGDevice * dev) const
-{
-	GuidoPos pos = GetHeadPosition();
-	if (!end) end = getDuration();
-	GuidoReducedProportional rprop(start, end, width, height, drawdur);
-	rprop.SetMusicFont(dev);
-	rprop.DrawGrid (dev);
-	GuidoPianoRoll * proll = &rprop;
-	while(pos) {
-		ARMusicalVoice * e = GetNext(pos);
-		proll->Draw(e, dev);
-	}
-}
-
-void ARMusic::toPianoRoll(int width, int height, TYPE_TIMEPOSITION start, TYPE_TIMEPOSITION end, VGDevice * dev) const
-{
-	GuidoPos pos = GetHeadPosition();
-	if (!end) end = getDuration();
-	GuidoPianoRoll proll(start, end, width, height);
-	proll.DrawGrid (dev);
-	while(pos) {
-		ARMusicalVoice * e = GetNext(pos);
-		proll.Draw(e, dev);
-	}
-}
-#endif
 
 void ARMusic::print() const
 {

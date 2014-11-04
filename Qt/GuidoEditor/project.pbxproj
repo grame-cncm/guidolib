@@ -1,0 +1,1429 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+		5E618435888B9D49F8540165 = {
+			buildActionMask = 2147483647;
+			files = (
+				);
+			isa = PBXShellScriptBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Qt Qmake";
+			shellPath = "/bin/sh";
+			shellScript = "make -C /Users/fober/src/guido/git/guidolib/Qt -f GuidoEditor/qt_makeqmake.mak";
+		};
+		9AD5330E3CDDFDAFEB3272F6 = {
+			isa = PBXFileReference;
+			path = "CodeEditor.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		F36C3342DCF76EE24F002212 = {
+			fileRef = "9AD5330E3CDDFDAFEB3272F6";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		DA070BD597E5E81753F8C0FE = {
+			isa = PBXFileReference;
+			path = "GuidoHighlighter.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		E136FD776000AE3ACA8067BC = {
+			fileRef = "DA070BD597E5E81753F8C0FE";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		682A50D19E416195436708E4 = {
+			isa = PBXFileReference;
+			path = "main.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		2D367B399AA57F7319FEA1FA = {
+			fileRef = "682A50D19E416195436708E4";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		31CC76CCC4119F7C4C6F7939 = {
+			isa = PBXFileReference;
+			path = "MainWindow.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		D57788AE352739BAA654234C = {
+			fileRef = "31CC76CCC4119F7C4C6F7939";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		045802B662E9786CA940CCE3 = {
+			isa = PBXFileReference;
+			path = "MusicNotationHighlighter.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		E5861741E5BA48BD72770D1E = {
+			fileRef = "045802B662E9786CA940CCE3";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		E910BF41D337ED565CA49271 = {
+			isa = PBXFileReference;
+			path = "QFindWidget.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		09C1E58DB3E3E5C09738911C = {
+			fileRef = "E910BF41D337ED565CA49271";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		52BA75C0F3D5EFE72A0B5AE7 = {
+			isa = PBXFileReference;
+			path = "SetupDialog.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		1DAA0660EA5E712422CC673B = {
+			fileRef = "52BA75C0F3D5EFE72A0B5AE7";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		0880E1AFEB9FBAC2A9B3E4B5 = {
+			isa = PBXFileReference;
+			path = "rsc/guido.icns";
+			name = "guido.icns";
+			sourceTree = "<absolute>";
+		};
+		16ACBB6009DCB5B5D4946445 = {
+			isa = PBXFileReference;
+			path = "tmpSrc/qrc_application.cpp";
+			name = "qrc_application.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		539628AB60BB5A033C86A6D1 = {
+			fileRef = "16ACBB6009DCB5B5D4946445";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		C6BC46B0426CC5CBC1F8ABE9 = {
+			isa = PBXFileReference;
+			path = "tmpSrc/moc_CodeEditor.cpp";
+			name = "moc_CodeEditor.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		43EF2345931ECC2A0F8FCABC = {
+			fileRef = "C6BC46B0426CC5CBC1F8ABE9";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		580B1DAA0A42E77BFBCA5C82 = {
+			isa = PBXFileReference;
+			path = "tmpSrc/moc_MainWindow.cpp";
+			name = "moc_MainWindow.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		8644810A5780B59D84415D2C = {
+			fileRef = "580B1DAA0A42E77BFBCA5C82";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		1407064818E923530FC4AB55 = {
+			isa = PBXFileReference;
+			path = "tmpSrc/moc_QFindWidget.cpp";
+			name = "moc_QFindWidget.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		F6B2770158644B13AEBCF4B2 = {
+			fileRef = "1407064818E923530FC4AB55";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		F6FBD184C7711236E7394973 = {
+			isa = PBXFileReference;
+			path = "tmpSrc/moc_SetupDialog.cpp";
+			name = "moc_SetupDialog.cpp";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.cpp.cpp";
+		};
+		35B3653454D633E70DCCA2F9 = {
+			fileRef = "F6FBD184C7711236E7394973";
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					);
+			};
+		};
+		ADA4DE8A3696B38434CA0E03 = {
+			isa = PBXFileReference;
+			path = "tmpSrc/ui_findwidget.h";
+			name = "ui_findwidget.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		DA5D968461B5F2F41AD7E4A1 = {
+			isa = PBXFileReference;
+			path = "tmpSrc/ui_setupDialog.h";
+			name = "ui_setupDialog.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		F5CCB959FECAE675D615960B = {
+			isa = PBXFileReference;
+			path = "CodeEditor.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		31CA7012BDE65B68B545AB51 = {
+			isa = PBXFileReference;
+			path = "GuidoHighlighter.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		B0A2CC1112B650E46475854B = {
+			isa = PBXFileReference;
+			path = "MainWindow.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		129402AF0730E209F75098B9 = {
+			isa = PBXFileReference;
+			path = "MusicNotationHighlighter.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		77010999091A49AC576CD7AB = {
+			isa = PBXFileReference;
+			path = "QFindWidget.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		CA85178F820A7933F53B40EF = {
+			isa = PBXFileReference;
+			path = "SetupDialog.h";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "sourcecode.c.h";
+		};
+		A5B68F9F1F15F9ABBABF33CF = {
+			isa = PBXFileReference;
+			path = "GuidoEditor/GuidoEditor.pro";
+			name = "GuidoEditor.pro";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "text";
+		};
+		F58277397239F7EC0864D9F1 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/qdevice.pri";
+			sourceTree = "<absolute>";
+		};
+		C7CA1B8D1F5B365FA655024F = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/common/shell-unix.conf";
+			sourceTree = "<absolute>";
+		};
+		5425809393C65276F550FA1D = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/common/unix.conf";
+			sourceTree = "<absolute>";
+		};
+		28085AB2F033A01F26CF4783 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/common/mac.conf";
+			sourceTree = "<absolute>";
+		};
+		F4AAE91EFA6CE26D40A558A7 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/common/macx.conf";
+			sourceTree = "<absolute>";
+		};
+		2405654B0328839D4394471A = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/common/gcc-base.conf";
+			sourceTree = "<absolute>";
+		};
+		41FB1E593EE7ACC25C63796A = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/common/gcc-base-mac.conf";
+			sourceTree = "<absolute>";
+		};
+		C6FDA14DE8CD3E2A67579D30 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/common/clang.conf";
+			sourceTree = "<absolute>";
+		};
+		CDB56300CD6A729E6A5036D2 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/common/clang-mac.conf";
+			sourceTree = "<absolute>";
+		};
+		2F2BD123710726B2DDB7A580 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/qconfig.pri";
+			sourceTree = "<absolute>";
+		};
+		736C702D08B9772CBEF83FC7 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_bluetooth.pri";
+			sourceTree = "<absolute>";
+		};
+		529A0D2491AF55A4ED17F010 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_bluetooth_private.pri";
+			sourceTree = "<absolute>";
+		};
+		7C90D78F030CAEADA434AEA7 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_bootstrap_private.pri";
+			sourceTree = "<absolute>";
+		};
+		CDF28E63AFC9C9B93E40170E = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_clucene_private.pri";
+			sourceTree = "<absolute>";
+		};
+		3EBE12913E1D0524113287B9 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_concurrent.pri";
+			sourceTree = "<absolute>";
+		};
+		AEA7972D950918E100F6FE15 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_concurrent_private.pri";
+			sourceTree = "<absolute>";
+		};
+		2F5801D43E9489A142F35404 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_core.pri";
+			sourceTree = "<absolute>";
+		};
+		E72F5BC38FC1D25EAAB672DE = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_core_private.pri";
+			sourceTree = "<absolute>";
+		};
+		0EB8968EBE05867C79AA7D81 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_dbus.pri";
+			sourceTree = "<absolute>";
+		};
+		236BA6BAC4E45BB781E46213 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_dbus_private.pri";
+			sourceTree = "<absolute>";
+		};
+		38CD020D28F3A312A666D317 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_declarative.pri";
+			sourceTree = "<absolute>";
+		};
+		AC7A1D16625946D4B1AFA1BF = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_declarative_private.pri";
+			sourceTree = "<absolute>";
+		};
+		670CF3BA7370D66444FA3952 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_designer.pri";
+			sourceTree = "<absolute>";
+		};
+		391BB6EED4527CDB07A4458A = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_designer_private.pri";
+			sourceTree = "<absolute>";
+		};
+		AE7242FD867067B526A449F7 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_designercomponents_private.pri";
+			sourceTree = "<absolute>";
+		};
+		D32F0992CCBF77979F24A4D6 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_enginio.pri";
+			sourceTree = "<absolute>";
+		};
+		EFE0C3BA54FE3B3B1190769A = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_enginio_private.pri";
+			sourceTree = "<absolute>";
+		};
+		477990D86798E473054C08E8 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_gui.pri";
+			sourceTree = "<absolute>";
+		};
+		1019021B92C082E711660D92 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_gui_private.pri";
+			sourceTree = "<absolute>";
+		};
+		C4D38251651118B635D1664F = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_help.pri";
+			sourceTree = "<absolute>";
+		};
+		C625C6808AFF9CA022795ECE = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_help_private.pri";
+			sourceTree = "<absolute>";
+		};
+		EA502E127F2E35167D07729E = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_macextras.pri";
+			sourceTree = "<absolute>";
+		};
+		C5BDDA0919C207063B8FE0BF = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_macextras_private.pri";
+			sourceTree = "<absolute>";
+		};
+		0E87184ECF42520AA5B01E87 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_multimedia.pri";
+			sourceTree = "<absolute>";
+		};
+		B1F12AF1E356560717CD966C = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_multimedia_private.pri";
+			sourceTree = "<absolute>";
+		};
+		6E95D92368F38C5DBFC51C0E = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_multimediawidgets.pri";
+			sourceTree = "<absolute>";
+		};
+		445F6F4FC8EBA5F1D1E59AD6 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_multimediawidgets_private.pri";
+			sourceTree = "<absolute>";
+		};
+		E546CF032409F6A78507048F = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_network.pri";
+			sourceTree = "<absolute>";
+		};
+		52585EF39AADFA99A395E2E2 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_network_private.pri";
+			sourceTree = "<absolute>";
+		};
+		5F14CB199989A6AD52027744 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_nfc.pri";
+			sourceTree = "<absolute>";
+		};
+		F12173A77710DC365986124A = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_nfc_private.pri";
+			sourceTree = "<absolute>";
+		};
+		3C873E531CE7C9BBC595FE7D = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_opengl.pri";
+			sourceTree = "<absolute>";
+		};
+		187286118BEA0261064F6DC1 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_opengl_private.pri";
+			sourceTree = "<absolute>";
+		};
+		EC502F750830E306A04EB26D = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_openglextensions.pri";
+			sourceTree = "<absolute>";
+		};
+		526066D0FB4EAEC9D6114B4B = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_openglextensions_private.pri";
+			sourceTree = "<absolute>";
+		};
+		234DF1FF7DFEE0551BE3F963 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_platformsupport_private.pri";
+			sourceTree = "<absolute>";
+		};
+		AF8C33B3660C511AEBA87158 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_positioning.pri";
+			sourceTree = "<absolute>";
+		};
+		2414BDFC68D9E5A7EE9DE524 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_positioning_private.pri";
+			sourceTree = "<absolute>";
+		};
+		945A2ADF86F29ED322343307 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_printsupport.pri";
+			sourceTree = "<absolute>";
+		};
+		F9E8BF965D089791C15B7097 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_printsupport_private.pri";
+			sourceTree = "<absolute>";
+		};
+		5AA38BBEB2F7B8870F62664A = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_qml.pri";
+			sourceTree = "<absolute>";
+		};
+		4672483440CB36AB9FD222B9 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_qml_private.pri";
+			sourceTree = "<absolute>";
+		};
+		A9EB469B047AC200ED70E677 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_qmldevtools_private.pri";
+			sourceTree = "<absolute>";
+		};
+		2D3B146D25F22D7A02534A56 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_qmltest.pri";
+			sourceTree = "<absolute>";
+		};
+		E8E6A926E37D806B7B6767F4 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_qmltest_private.pri";
+			sourceTree = "<absolute>";
+		};
+		A61ACB5701CFC147AF11D585 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_qtmultimediaquicktools_private.pri";
+			sourceTree = "<absolute>";
+		};
+		D77894BD6B6949E22A25EC01 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_quick.pri";
+			sourceTree = "<absolute>";
+		};
+		ED070404C1192180304DA8EA = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_quick_private.pri";
+			sourceTree = "<absolute>";
+		};
+		70B49E8EF2D1ED85661FC849 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_quickparticles_private.pri";
+			sourceTree = "<absolute>";
+		};
+		6BA7CC641F9BC1BBF331D0D2 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_quickwidgets.pri";
+			sourceTree = "<absolute>";
+		};
+		2A5C32058D94A05D217FBC8F = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_quickwidgets_private.pri";
+			sourceTree = "<absolute>";
+		};
+		1B51D15DCADFF11A60305214 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_script.pri";
+			sourceTree = "<absolute>";
+		};
+		E5DB9E71647C11B360B1E772 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_script_private.pri";
+			sourceTree = "<absolute>";
+		};
+		BBD461910D35428B87C3A518 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_scripttools.pri";
+			sourceTree = "<absolute>";
+		};
+		9F1891AEF1E8B804C878A2AE = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_scripttools_private.pri";
+			sourceTree = "<absolute>";
+		};
+		EAEF528787F049B0C1597CFE = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_sensors.pri";
+			sourceTree = "<absolute>";
+		};
+		EB68FE3A689A0BA2E597EBC3 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_sensors_private.pri";
+			sourceTree = "<absolute>";
+		};
+		B489D6D6EA79F9F05C0E0647 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_serialport.pri";
+			sourceTree = "<absolute>";
+		};
+		7D21E39190F37F7B6A4D0DC9 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_serialport_private.pri";
+			sourceTree = "<absolute>";
+		};
+		67CFE52DF034F8AAAF71569D = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_sql.pri";
+			sourceTree = "<absolute>";
+		};
+		3FC93AEF341865C6FE5B585B = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_sql_private.pri";
+			sourceTree = "<absolute>";
+		};
+		84C358566A2043F8643B0098 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_svg.pri";
+			sourceTree = "<absolute>";
+		};
+		21FF35867C665DF6E172D916 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_svg_private.pri";
+			sourceTree = "<absolute>";
+		};
+		9841F47B95793D1336ED2FB6 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_testlib.pri";
+			sourceTree = "<absolute>";
+		};
+		1EC9D54CD4057D4DC514FB46 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_testlib_private.pri";
+			sourceTree = "<absolute>";
+		};
+		B7BAA2121C49A1BAB1CE01D9 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_uitools.pri";
+			sourceTree = "<absolute>";
+		};
+		5891087DAD9B8C235EBBB8D2 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_uitools_private.pri";
+			sourceTree = "<absolute>";
+		};
+		D89D3E9DC15385DBC9BB12DD = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_webkit.pri";
+			sourceTree = "<absolute>";
+		};
+		25EF2722ABB0FC3A439DCAE6 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_webkit_private.pri";
+			sourceTree = "<absolute>";
+		};
+		89A5420B12B5C1116DBC578A = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_webkitwidgets.pri";
+			sourceTree = "<absolute>";
+		};
+		02C4B4B573E659FEA48B8932 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_webkitwidgets_private.pri";
+			sourceTree = "<absolute>";
+		};
+		C7E038B0A7FC49445B902674 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_websockets.pri";
+			sourceTree = "<absolute>";
+		};
+		D7B9124596E8FF6EC86DCB51 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_websockets_private.pri";
+			sourceTree = "<absolute>";
+		};
+		5BDC2AE5B2995D0ECE0A9233 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_widgets.pri";
+			sourceTree = "<absolute>";
+		};
+		10DC78CBD8F67E4D69A6EDE4 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_widgets_private.pri";
+			sourceTree = "<absolute>";
+		};
+		6D99FBAFC946D852A6B27B27 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_xml.pri";
+			sourceTree = "<absolute>";
+		};
+		55F79D87E852DC08AF349C09 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_xml_private.pri";
+			sourceTree = "<absolute>";
+		};
+		6E6F74F27E6E7FD942236974 = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_xmlpatterns.pri";
+			sourceTree = "<absolute>";
+		};
+		6ACFF9F57D4607267277343F = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/modules/qt_lib_xmlpatterns_private.pri";
+			sourceTree = "<absolute>";
+		};
+		190250B79D3E61E1B8A206ED = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/macx-clang/qmake.conf";
+			sourceTree = "<absolute>";
+		};
+		36334F4E8F4836CAC3DA988A = {
+			isa = PBXFileReference;
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/macx-xcode/qmake.conf";
+			sourceTree = "<absolute>";
+		};
+		AB745978DF0F41D1801ABDA6 = {
+			isa = PBXFileReference;
+			path = ".qmake.stash";
+			sourceTree = "<absolute>";
+		};
+		6F2DACBB91FC3672D8E5CF07 = {
+			isa = PBXFileReference;
+			path = "../GUIDOEngineLink.pri";
+			name = "GUIDOEngineLink.pri";
+			sourceTree = "<absolute>";
+		};
+		2BE305A84898441F4ED7E9A2 = {
+			isa = PBXFileReference;
+			path = "GuidoEditor.pro";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "text";
+		};
+		642DE88857A02CE32F4B4A4E = {
+			isa = PBXFileReference;
+			path = "rsc/application.qrc";
+			name = "application.qrc";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "text";
+		};
+		642DE88857A02CE32F4B4A4E = {
+			isa = PBXFileReference;
+			path = "rsc/application.qrc";
+			name = "application.qrc";
+			sourceTree = "<absolute>";
+			lastKnownFileType = "text";
+		};
+		B81A1118FAB31EE6B2CF890E = {
+			isa = PBXFileReference;
+			path = "rsc/findwidget.ui";
+			name = "findwidget.ui";
+			sourceTree = "<absolute>";
+		};
+		14C9369E830FC74B6AEB16D6 = {
+			isa = PBXFileReference;
+			path = "rsc/setupDialog.ui";
+			name = "setupDialog.ui";
+			sourceTree = "<absolute>";
+		};
+		25B08E2869634E9BCBA333A2 = {
+			isa = PBXGroup;
+			children = (
+				"865087C1F707FEB60CDA0F54");
+			name = "Generated Sources";
+			sourceTree = "<Group>";
+		};
+		865087C1F707FEB60CDA0F54 = {
+			isa = PBXGroup;
+			children = (
+				"16ACBB6009DCB5B5D4946445",
+				"C6BC46B0426CC5CBC1F8ABE9",
+				"580B1DAA0A42E77BFBCA5C82",
+				"1407064818E923530FC4AB55",
+				"F6FBD184C7711236E7394973",
+				"ADA4DE8A3696B38434CA0E03",
+				"DA5D968461B5F2F41AD7E4A1");
+			name = "tmpSrc";
+			sourceTree = "<Group>";
+		};
+		4C4DCEC47EE8B142C935C7EC = {
+			isa = PBXGroup;
+			children = (
+				"642DE88857A02CE32F4B4A4E");
+			name = "rsc";
+			sourceTree = "<Group>";
+		};
+		0674AE2D2ECDD657AEC62E5D = {
+			isa = PBXGroup;
+			children = (
+				"B81A1118FAB31EE6B2CF890E",
+				"14C9369E830FC74B6AEB16D6");
+			name = "rsc";
+			sourceTree = "<Group>";
+		};
+		BA2F9042BC4038B0C24AB510 = {
+			isa = PBXGroup;
+			children = (
+				"0880E1AFEB9FBAC2A9B3E4B5");
+			name = "rsc";
+			sourceTree = "<Group>";
+		};
+		A3E1AA9917EC82D3446C262A = {
+			isa = PBXGroup;
+			children = (
+				"6F2DACBB91FC3672D8E5CF07");
+			name = "..";
+			sourceTree = "<Group>";
+		};
+		B2510C356A7D40728E71096A = {
+			isa = PBXGroup;
+			children = (
+				"A5B68F9F1F15F9ABBABF33CF");
+			name = "GuidoEditor";
+			sourceTree = "<Group>";
+		};
+		6B0DECC3CC1794284C7D1E2A = {
+			isa = PBXGroup;
+			children = (
+				"642DE88857A02CE32F4B4A4E");
+			name = "rsc";
+			sourceTree = "<Group>";
+		};
+		87DF60DE337FB58864343E39 = {
+			isa = PBXGroup;
+			children = (
+				"4C4DCEC47EE8B142C935C7EC");
+			name = "Resources";
+			sourceTree = "<Group>";
+		};
+		2EB56BE3C2D93CDAB0C52E67 = {
+			isa = PBXGroup;
+			children = (
+				"9AD5330E3CDDFDAFEB3272F6",
+				"DA070BD597E5E81753F8C0FE",
+				"682A50D19E416195436708E4",
+				"31CC76CCC4119F7C4C6F7939",
+				"045802B662E9786CA940CCE3",
+				"E910BF41D337ED565CA49271",
+				"52BA75C0F3D5EFE72A0B5AE7",
+				"BA2F9042BC4038B0C24AB510",
+				"F5CCB959FECAE675D615960B",
+				"31CA7012BDE65B68B545AB51",
+				"B0A2CC1112B650E46475854B",
+				"129402AF0730E209F75098B9",
+				"77010999091A49AC576CD7AB",
+				"CA85178F820A7933F53B40EF");
+			name = "Sources";
+			sourceTree = "<Group>";
+		};
+		12E908B8A1C3C07C115504F5 = {
+			isa = PBXGroup;
+			children = (
+				"0674AE2D2ECDD657AEC62E5D");
+			name = "Sources [uic]";
+			sourceTree = "<Group>";
+		};
+		74B182DB50CB5611B5C1C297 = {
+			isa = PBXGroup;
+			children = (
+				"B2510C356A7D40728E71096A",
+				"F58277397239F7EC0864D9F1",
+				"C7CA1B8D1F5B365FA655024F",
+				"5425809393C65276F550FA1D",
+				"28085AB2F033A01F26CF4783",
+				"F4AAE91EFA6CE26D40A558A7",
+				"2405654B0328839D4394471A",
+				"41FB1E593EE7ACC25C63796A",
+				"C6FDA14DE8CD3E2A67579D30",
+				"CDB56300CD6A729E6A5036D2",
+				"2F2BD123710726B2DDB7A580",
+				"736C702D08B9772CBEF83FC7",
+				"529A0D2491AF55A4ED17F010",
+				"7C90D78F030CAEADA434AEA7",
+				"CDF28E63AFC9C9B93E40170E",
+				"3EBE12913E1D0524113287B9",
+				"AEA7972D950918E100F6FE15",
+				"2F5801D43E9489A142F35404",
+				"E72F5BC38FC1D25EAAB672DE",
+				"0EB8968EBE05867C79AA7D81",
+				"236BA6BAC4E45BB781E46213",
+				"38CD020D28F3A312A666D317",
+				"AC7A1D16625946D4B1AFA1BF",
+				"670CF3BA7370D66444FA3952",
+				"391BB6EED4527CDB07A4458A",
+				"AE7242FD867067B526A449F7",
+				"D32F0992CCBF77979F24A4D6",
+				"EFE0C3BA54FE3B3B1190769A",
+				"477990D86798E473054C08E8",
+				"1019021B92C082E711660D92",
+				"C4D38251651118B635D1664F",
+				"C625C6808AFF9CA022795ECE",
+				"EA502E127F2E35167D07729E",
+				"C5BDDA0919C207063B8FE0BF",
+				"0E87184ECF42520AA5B01E87",
+				"B1F12AF1E356560717CD966C",
+				"6E95D92368F38C5DBFC51C0E",
+				"445F6F4FC8EBA5F1D1E59AD6",
+				"E546CF032409F6A78507048F",
+				"52585EF39AADFA99A395E2E2",
+				"5F14CB199989A6AD52027744",
+				"F12173A77710DC365986124A",
+				"3C873E531CE7C9BBC595FE7D",
+				"187286118BEA0261064F6DC1",
+				"EC502F750830E306A04EB26D",
+				"526066D0FB4EAEC9D6114B4B",
+				"234DF1FF7DFEE0551BE3F963",
+				"AF8C33B3660C511AEBA87158",
+				"2414BDFC68D9E5A7EE9DE524",
+				"945A2ADF86F29ED322343307",
+				"F9E8BF965D089791C15B7097",
+				"5AA38BBEB2F7B8870F62664A",
+				"4672483440CB36AB9FD222B9",
+				"A9EB469B047AC200ED70E677",
+				"2D3B146D25F22D7A02534A56",
+				"E8E6A926E37D806B7B6767F4",
+				"A61ACB5701CFC147AF11D585",
+				"D77894BD6B6949E22A25EC01",
+				"ED070404C1192180304DA8EA",
+				"70B49E8EF2D1ED85661FC849",
+				"6BA7CC641F9BC1BBF331D0D2",
+				"2A5C32058D94A05D217FBC8F",
+				"1B51D15DCADFF11A60305214",
+				"E5DB9E71647C11B360B1E772",
+				"BBD461910D35428B87C3A518",
+				"9F1891AEF1E8B804C878A2AE",
+				"EAEF528787F049B0C1597CFE",
+				"EB68FE3A689A0BA2E597EBC3",
+				"B489D6D6EA79F9F05C0E0647",
+				"7D21E39190F37F7B6A4D0DC9",
+				"67CFE52DF034F8AAAF71569D",
+				"3FC93AEF341865C6FE5B585B",
+				"84C358566A2043F8643B0098",
+				"21FF35867C665DF6E172D916",
+				"9841F47B95793D1336ED2FB6",
+				"1EC9D54CD4057D4DC514FB46",
+				"B7BAA2121C49A1BAB1CE01D9",
+				"5891087DAD9B8C235EBBB8D2",
+				"D89D3E9DC15385DBC9BB12DD",
+				"25EF2722ABB0FC3A439DCAE6",
+				"89A5420B12B5C1116DBC578A",
+				"02C4B4B573E659FEA48B8932",
+				"C7E038B0A7FC49445B902674",
+				"D7B9124596E8FF6EC86DCB51",
+				"5BDC2AE5B2995D0ECE0A9233",
+				"10DC78CBD8F67E4D69A6EDE4",
+				"6D99FBAFC946D852A6B27B27",
+				"55F79D87E852DC08AF349C09",
+				"6E6F74F27E6E7FD942236974",
+				"6ACFF9F57D4607267277343F",
+				"190250B79D3E61E1B8A206ED",
+				"36334F4E8F4836CAC3DA988A",
+				"AB745978DF0F41D1801ABDA6",
+				"A3E1AA9917EC82D3446C262A",
+				"2BE305A84898441F4ED7E9A2",
+				"6B0DECC3CC1794284C7D1E2A");
+			name = "Supporting Files";
+			sourceTree = "<Group>";
+		};
+		7EF0942E79C014DCEC8976BC = {
+			buildActionMask = 2147483647;
+			files = (
+				);
+			isa = PBXShellScriptBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Qt Preprocessors";
+			shellPath = "/bin/sh";
+			shellScript = "make -C /Users/fober/src/guido/git/guidolib/Qt -f GuidoEditor/qt_preprocess.mak";
+		};
+		F7E50F631C51CD5B5DC0BC43 = {
+			buildActionMask = 2147483647;
+			files = (
+				"F36C3342DCF76EE24F002212",
+				"E136FD776000AE3ACA8067BC",
+				"2D367B399AA57F7319FEA1FA",
+				"D57788AE352739BAA654234C",
+				"E5861741E5BA48BD72770D1E",
+				"09C1E58DB3E3E5C09738911C",
+				"1DAA0660EA5E712422CC673B",
+				"539628AB60BB5A033C86A6D1",
+				"43EF2345931ECC2A0F8FCABC",
+				"8644810A5780B59D84415D2C",
+				"F6B2770158644B13AEBCF4B2",
+				"35B3653454D633E70DCCA2F9");
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Compile Sources";
+		};
+		4D765E1B1EA6C757220C63E7 = {
+			isa = PBXFileReference;
+			name = "CoreFoundation.framework";
+			path = "/System/Library/Frameworks/CoreFoundation.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		F8B465CE34D8DF87AAE95913 = {
+			fileRef = "4D765E1B1EA6C757220C63E7";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		66A8D874B4158348F727B475 = {
+			isa = PBXFileReference;
+			name = "QtPrintSupport.framework";
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/lib/QtPrintSupport.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		E9FBAD9643BE8F24F1E3D2AA = {
+			fileRef = "66A8D874B4158348F727B475";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		5FBFBD576F955AF3CB1C7DC3 = {
+			isa = PBXFileReference;
+			name = "QtWidgets.framework";
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/lib/QtWidgets.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		7DCA47C78A6DCD8D3FDD6526 = {
+			fileRef = "5FBFBD576F955AF3CB1C7DC3";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		A9111170672B77F472D843A1 = {
+			isa = PBXFileReference;
+			name = "QtGui.framework";
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/lib/QtGui.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		3C3BF4508C5DDAD758E3F678 = {
+			fileRef = "A9111170672B77F472D843A1";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B98D6A88EFB0C0EA64E2106E = {
+			isa = PBXFileReference;
+			name = "QtCore.framework";
+			path = "/Users/fober/Qt5.3.2/5.3/clang_64/lib/QtCore.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		277E8D24C83B4BA9D82C4047 = {
+			fileRef = "B98D6A88EFB0C0EA64E2106E";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D4B32C2222F82AC56BADEB21 = {
+			isa = PBXFileReference;
+			name = "OpenGL.framework";
+			path = "/System/Library/Frameworks/OpenGL.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		8771A8C96E9C391044035D99 = {
+			fileRef = "D4B32C2222F82AC56BADEB21";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		8D9815BDB5BD9F90D2BC05C5 = {
+			isa = PBXFileReference;
+			name = "AGL.framework";
+			path = "/System/Library/Frameworks/AGL.framework";
+			refType = 0;
+			sourceTree = "<absolute>";
+			lastKnownFileType = "wrapper.framework";
+		};
+		E45E51A644D5FC9F942ECE55 = {
+			fileRef = "8D9815BDB5BD9F90D2BC05C5";
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		AF39DD055C3EF8226FBE929D = {
+			children = (
+				"4D765E1B1EA6C757220C63E7",
+				"66A8D874B4158348F727B475",
+				"5FBFBD576F955AF3CB1C7DC3",
+				"A9111170672B77F472D843A1",
+				"B98D6A88EFB0C0EA64E2106E",
+				"D4B32C2222F82AC56BADEB21",
+				"8D9815BDB5BD9F90D2BC05C5");
+			isa = PBXGroup;
+			name = "Frameworks";
+			sourceTree = "<Group>";
+		};
+		D1C883685E82D5676953459A = {
+			buildActionMask = 2147483647;
+			files = (
+				"F8B465CE34D8DF87AAE95913",
+				"E9FBAD9643BE8F24F1E3D2AA",
+				"7DCA47C78A6DCD8D3FDD6526",
+				"3C3BF4508C5DDAD758E3F678",
+				"277E8D24C83B4BA9D82C4047",
+				"8771A8C96E9C391044035D99",
+				"E45E51A644D5FC9F942ECE55");
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Link Binary With Libraries";
+		};
+		9C316F444A62BF296E3E1F25 = {
+			isa = PBXShellScriptBuildPhase;
+			name = "Project Copy";
+			buildActionMask = 2147483647;
+			files = (
+				);
+			inputPaths = (
+				);
+			outputPaths = (
+				);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = "/bin/sh";
+			shellScript = "cp -r $BUILT_PRODUCTS_DIR/$FULL_PRODUCT_NAME /Users/fober/src/guido/git/guidolib/bin";
+		};
+		187362E5ECE4969661157D54 = {
+			isa = PBXFileReference;
+			path = "../src/guido2.svg";
+			sourceTree = "<absolute>";
+		};
+		6E1BFA5746EADE5A52027E2A = {
+			fileRef = "187362E5ECE4969661157D54";
+			isa = PBXBuildFile;
+		};
+		B633400EC619BFB447C80D1A = {
+			isa = PBXFileReference;
+			path = "../src/guido2.ttf";
+			sourceTree = "<absolute>";
+		};
+		3A9311E34C0769303B5B0873 = {
+			fileRef = "B633400EC619BFB447C80D1A";
+			isa = PBXBuildFile;
+		};
+		E17F84B3DC5EBED3E8DFD480 = {
+			name = "Copy 'FONT' Files to Bundle";
+			buildActionMask = 2147483647;
+			dstPath = "Contents/Fonts";
+			dstSubfolderSpec = 1;
+			files = (
+				"6E1BFA5746EADE5A52027E2A",
+				"3A9311E34C0769303B5B0873");
+			isa = PBXCopyFilesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		30414803F31797EB689AE508 = {
+			buildActionMask = 2147483647;
+			files = (
+				"67FCD27E39B13144B1CE1F30");
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Copy Bundle Resources";
+		};
+		858FCAB0EB1F29CF8B07677C = {
+			children = (
+				"187362E5ECE4969661157D54",
+				"B633400EC619BFB447C80D1A");
+			isa = PBXGroup;
+			name = "Bundle Resources";
+			sourceTree = "<Group>";
+		};
+		C482181DBC8EE5325DBD70BE = {
+			isa = PBXFileReference;
+			includeInIndex = 0;
+			explicitFileType = "wrapper.application";
+			path = "guidoeditor.app";
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		FE0A091FDBFB3E9C31B7A1BD = {
+			children = (
+				"C482181DBC8EE5325DBD70BE");
+			isa = PBXGroup;
+			name = "Products";
+			sourceTree = "<Group>";
+		};
+		E8C543AB96796ECAA2E65C57 = {
+			children = (
+				"2EB56BE3C2D93CDAB0C52E67",
+				"25B08E2869634E9BCBA333A2",
+				"74B182DB50CB5611B5C1C297",
+				"87DF60DE337FB58864343E39",
+				"12E908B8A1C3C07C115504F5",
+				"AF39DD055C3EF8226FBE929D",
+				"858FCAB0EB1F29CF8B07677C",
+				"FE0A091FDBFB3E9C31B7A1BD");
+			isa = PBXGroup;
+			name = "guidoeditor";
+			sourceTree = "<Group>";
+		};
+		FFBCDF3633B0C0A5D4BB7CB2 = {
+			buildPhases = (
+				"5E618435888B9D49F8540165",
+				"7EF0942E79C014DCEC8976BC");
+			dependencies = (
+				);
+			buildConfigurationList = 6CC3B5D2136C7CD6A5CF5A59;
+			isa = PBXAggregateTarget;
+			buildRules = (
+);
+			productName = "Qt Preprocess";
+			name = "Qt Preprocess";
+		};
+		D7C1DD828C137CEF96EEC893 = {
+			isa = PBXTargetDependency;
+			target = "FFBCDF3633B0C0A5D4BB7CB2";
+		};
+		45ECB7855072FE1F76D899D3 = {
+			buildPhases = (
+				"F7E50F631C51CD5B5DC0BC43",
+				"D1C883685E82D5676953459A",
+				"9C316F444A62BF296E3E1F25",
+				"E17F84B3DC5EBED3E8DFD480",
+				"30414803F31797EB689AE508");
+			dependencies = (
+				"D7C1DD828C137CEF96EEC893");
+			productReference = "C482181DBC8EE5325DBD70BE";
+			buildConfigurationList = 6CC3B5D2136C7CD6A5CF5A59;
+			isa = PBXNativeTarget;
+			buildRules = (
+);
+			productType = "com.apple.product-type.application";
+			name = "guidoeditor";
+			productName = "guidoeditor";
+			productInstallPath = "../bin/";
+		};
+		3AA6C32AC930069E80220CF1 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = "NO";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = "YES";
+				GCC_OPTIMIZATION_LEVEL = "0";
+				PRODUCT_NAME = "guidoeditor";
+				QT_LIBRARY_SUFFIX = "_debug";
+				SDKROOT = "macosx10.8";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				CC = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang";
+				LDPLUSPLUS = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++";
+				INFOPLIST_FILE = "GuidoEditor/rsc/GuidoEditorInfo.plist";
+				SYMROOT = "/Users/fober/src/guido/git/guidolib/Qt";
+				INSTALL_DIR = "/Users/fober/src/guido/git/guidolib/Qt/../bin/";
+				DYLIB_CURRENT_VERSION = "1.0.0";
+				DYLIB_COMPATIBILITY_VERSION = "1.0";
+				MACOSX_DEPLOYMENT_TARGET = "10.6";
+				HEADER_SEARCH_PATHS = (
+					"../GuidoQt/include",
+					"../../src/include",
+					"/Users/fober/Qt5.3.2/5.3/clang_64/lib/QtPrintSupport.framework/Versions/5/Headers",
+					"/Users/fober/Qt5.3.2/5.3/clang_64/lib/QtWidgets.framework/Versions/5/Headers",
+					"/Users/fober/Qt5.3.2/5.3/clang_64/lib/QtGui.framework/Versions/5/Headers",
+					"/Users/fober/Qt5.3.2/5.3/clang_64/lib/QtCore.framework/Versions/5/Headers",
+					"tmpSrc",
+					"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/OpenGL.framework/Versions/A/Headers",
+					"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/AGL.framework/Headers",
+					"tmpSrc",
+					"/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/macx-clang");
+				LIBRARY_SEARCH_PATHS = (
+					"/System/Library/Frameworks/",
+					"..",
+					"/Users/fober/Qt5.3.2/5.3/clang_64/lib");
+				FRAMEWORK_SEARCH_PATHS = (
+					"/Users/fober/Qt5.3.2/5.3/clang_64/lib",
+					"/Users/fober/Qt5.3.2/5.3/clang_64/lib",
+					"../../build/MacOS/Release");
+				OTHER_CFLAGS = (
+					"-pipe",
+					"-O2",
+					"-Wall",
+					"-W",
+					"-fPIE",
+					"-DQT_NO_DEBUG",
+					"-DQT_PRINTSUPPORT_LIB",
+					"-DQT_WIDGETS_LIB",
+					"-DQT_GUI_LIB",
+					"-DQT_CORE_LIB");
+				OTHER_CPLUSPLUSFLAGS = (
+					"-pipe",
+					"-mmacosx-version-min=10.6",
+					"-O2",
+					"-Wall",
+					"-W",
+					"-fPIE",
+					"-DQT_NO_DEBUG",
+					"-DQT_PRINTSUPPORT_LIB",
+					"-DQT_WIDGETS_LIB",
+					"-DQT_GUI_LIB",
+					"-DQT_CORE_LIB");
+				OTHER_LDFLAGS = (
+						"-headerpad_max_install_names",
+						"-F/Users/fober/Qt5.3.2/5.3/clang_64/lib",
+						"-L..",
+						"-lGuidoQt",
+						"-F../../build/MacOS/Release",
+						"-framework",
+						"GUIDOEngine");
+				ARCHS = "x86_64";
+			};
+			name = "Debug";
+		};
+		77418F46922677BB04ED38DD = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = "NO";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = "YES";
+				GCC_OPTIMIZATION_LEVEL = "0";
+				PRODUCT_NAME = "guidoeditor";
+				QT_LIBRARY_SUFFIX = "_debug";
+				SDKROOT = "macosx10.8";
+				PRODUCT_NAME = "guidoeditor";
+			};
+			name = "Debug";
+		};
+		339EE1B2CC4FC24589A0EA95 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = "YES";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = "NO";
+				PRODUCT_NAME = "guidoeditor";
+				QT_LIBRARY_SUFFIX = "";
+				SDKROOT = "macosx10.8";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				CC = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang";
+				LDPLUSPLUS = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++";
+				INFOPLIST_FILE = "GuidoEditor/rsc/GuidoEditorInfo.plist";
+				SYMROOT = "/Users/fober/src/guido/git/guidolib/Qt";
+				INSTALL_DIR = "/Users/fober/src/guido/git/guidolib/Qt/../bin/";
+				DYLIB_CURRENT_VERSION = "1.0.0";
+				DYLIB_COMPATIBILITY_VERSION = "1.0";
+				MACOSX_DEPLOYMENT_TARGET = "10.6";
+				HEADER_SEARCH_PATHS = (
+					"../GuidoQt/include",
+					"../../src/include",
+					"/Users/fober/Qt5.3.2/5.3/clang_64/lib/QtPrintSupport.framework/Versions/5/Headers",
+					"/Users/fober/Qt5.3.2/5.3/clang_64/lib/QtWidgets.framework/Versions/5/Headers",
+					"/Users/fober/Qt5.3.2/5.3/clang_64/lib/QtGui.framework/Versions/5/Headers",
+					"/Users/fober/Qt5.3.2/5.3/clang_64/lib/QtCore.framework/Versions/5/Headers",
+					"tmpSrc",
+					"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/OpenGL.framework/Versions/A/Headers",
+					"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/AGL.framework/Headers",
+					"tmpSrc",
+					"/Users/fober/Qt5.3.2/5.3/clang_64/mkspecs/macx-clang");
+				LIBRARY_SEARCH_PATHS = (
+					"/System/Library/Frameworks/",
+					"..",
+					"/Users/fober/Qt5.3.2/5.3/clang_64/lib");
+				FRAMEWORK_SEARCH_PATHS = (
+					"/Users/fober/Qt5.3.2/5.3/clang_64/lib",
+					"/Users/fober/Qt5.3.2/5.3/clang_64/lib",
+					"../../build/MacOS/Release");
+				OTHER_CFLAGS = (
+					"-pipe",
+					"-O2",
+					"-Wall",
+					"-W",
+					"-fPIE",
+					"-DQT_NO_DEBUG",
+					"-DQT_PRINTSUPPORT_LIB",
+					"-DQT_WIDGETS_LIB",
+					"-DQT_GUI_LIB",
+					"-DQT_CORE_LIB");
+				OTHER_CPLUSPLUSFLAGS = (
+					"-pipe",
+					"-mmacosx-version-min=10.6",
+					"-O2",
+					"-Wall",
+					"-W",
+					"-fPIE",
+					"-DQT_NO_DEBUG",
+					"-DQT_PRINTSUPPORT_LIB",
+					"-DQT_WIDGETS_LIB",
+					"-DQT_GUI_LIB",
+					"-DQT_CORE_LIB");
+				OTHER_LDFLAGS = (
+						"-headerpad_max_install_names",
+						"-F/Users/fober/Qt5.3.2/5.3/clang_64/lib",
+						"-L..",
+						"-lGuidoQt",
+						"-F../../build/MacOS/Release",
+						"-framework",
+						"GUIDOEngine");
+				ARCHS = "x86_64";
+			};
+			name = "Release";
+		};
+		6666AA5E688052234F6758D8 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = "YES";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = "NO";
+				PRODUCT_NAME = "guidoeditor";
+				QT_LIBRARY_SUFFIX = "";
+				SDKROOT = "macosx10.8";
+				PRODUCT_NAME = "guidoeditor";
+			};
+			name = "Release";
+		};
+		DAC4C1AA5EDEA1C85E9CA5E6 = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				"3AA6C32AC930069E80220CF1",
+				"339EE1B2CC4FC24589A0EA95");
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "Release";
+		};
+		6CC3B5D2136C7CD6A5CF5A59 = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				"77418F46922677BB04ED38DD",
+				"6666AA5E688052234F6758D8");
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "Release";
+		};
+		6DB9C3763D02B1415CD9D565 = {
+			hasScannedForEncodings = 1;
+			compatibilityVersion = "Xcode 3.2";
+			isa = PBXProject;
+			mainGroup = "E8C543AB96796ECAA2E65C57";
+			productRefGroup = "FE0A091FDBFB3E9C31B7A1BD";
+			buildConfigurationList = "DAC4C1AA5EDEA1C85E9CA5E6";
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				"45ECB7855072FE1F76D899D3",
+				"FFBCDF3633B0C0A5D4BB7CB2");
+		};
+	};
+	rootObject = "6DB9C3763D02B1415CD9D565";
+}

@@ -2067,7 +2067,7 @@ void GRStaff::GGSOutput() const
 {
 	char buffer[200];
 	assert(endglue);
-	snprintf(buffer, 200, "\\draw_staff<%ld,%d,%d,%d,%d,%d>\n", 
+	snprintf(buffer, 200, "\\draw_staff<%ld,%d,%f,%d,%d,%d>\n", 
 		getID(), 
 		mStaffState.numlines,
         mStaffState.lineThickness,

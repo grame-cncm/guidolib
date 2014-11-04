@@ -27,7 +27,7 @@ ListOfTPLs ARSymbol::ltpls(1);
 ARSymbol::ARSymbol() : ARMTParameter(), aSize(1)
 {
 	relativeTimePosition = TYPE_TIMEPOSITION(-1,1);
-	duration = DURATION_0;
+	setDuration( DURATION_0 );
     aPosition = NULL;
     aFilePath = NULL;
     aFixedWidth = NULL;

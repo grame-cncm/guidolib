@@ -17,14 +17,15 @@
 	The Guido pianoroll API
  */
 
+#include <cmath>
+
 #include "GUIDOInternal.h"
 #include "PianoRoll.h"
 #include "PianoRollTrajectory.h"
-#ifdef MIDIEXPORT
-  #include "midifile.h"
-#endif
 #include "HtmlColors.h"
-#include <cmath>
+#ifdef MIDIEXPORT
+#include "midifile.h"
+#endif
 
 #include "GUIDOPianoRoll.h"
 

@@ -243,47 +243,49 @@ int main(int argc, char **argv)
 
     PianoRoll *pianoRoll = GuidoMidi2PianoRoll(pianoRollType, fileName);
 
-    GuidoErrCode err;
+    if (pianoRoll) {
+        GuidoErrCode err;
 
-    LimitParams limitParams;
-    limitParams.startDate = start;
-    limitParams.endDate   = end;
-    limitParams.lowPitch  = minPitch;
-    limitParams.highPitch = maxPitch;
+        LimitParams limitParams;
+        limitParams.startDate = start;
+        limitParams.endDate   = end;
+        limitParams.lowPitch  = minPitch;
+        limitParams.highPitch = maxPitch;
 
-    /**** LIMITS ****/
-    err = GuidoPianoRollSetLimits(pianoRoll, limitParams);
-    error(err);
-    /*********************/
+        /**** LIMITS ****/
+        err = GuidoPianoRollSetLimits(pianoRoll, limitParams);
+        error(err);
+        /*********************/
 
-    /**** KEYBOARD ****/
-    err = GuidoPianoRollEnableKeyboard(pianoRoll, keyboard);
-    error(err);
+        /**** KEYBOARD ****/
+        err = GuidoPianoRollEnableKeyboard(pianoRoll, keyboard);
+        error(err);
 
-    float keyboardWidth;
-    err = GuidoPianoRollGetKeyboardWidth(pianoRoll, h, keyboardWidth);
-    error(err);
-    /******************/
+        float keyboardWidth;
+        err = GuidoPianoRollGetKeyboardWidth(pianoRoll, h, keyboardWidth);
+        error(err);
+        /******************/
 
-    /**** PITCH LINES ****/
-    err = GuidoPianoRollSetPitchLinesDisplayMode(pianoRoll, pitchLines);
-    error(err);
-    /*********************/
+        /**** PITCH LINES ****/
+        err = GuidoPianoRollSetPitchLinesDisplayMode(pianoRoll, pitchLines);
+        error(err);
+        /*********************/
 
-    /**** MAP ****/
-    Time2GraphicMap map;
-    err = GuidoPianoRollGetMap(pianoRoll, w, h, map);
-    error(err);
-    /*************/
+        /**** MAP ****/
+        Time2GraphicMap map;
+        err = GuidoPianoRollGetMap(pianoRoll, w, h, map);
+        error(err);
+        /*************/
 
-    /**** DRAW ****/
-    err = GuidoPianoRollOnDraw(pianoRoll, w, h, &dev);
-    error(err);
-    /**************/    
+        /**** DRAW ****/
+        err = GuidoPianoRollOnDraw(pianoRoll, w, h, &dev);
+        error(err);
+        /**************/    
 
-    GuidoDestroyPianoRoll(pianoRoll);
-
-    error(err);
+        GuidoDestroyPianoRoll(pianoRoll);
+    }
+    else
+        cout << "Piano roll hasn't been correctly created" << endl;
 
 	return 0;
 }

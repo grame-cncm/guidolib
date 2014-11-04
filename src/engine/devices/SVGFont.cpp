@@ -40,7 +40,7 @@ CairoSystem gSystem (0);
 
 //______________________________________________________________________________
 SVGFont::SVGFont(const char * name, int size, int properties, const char * guidofontfile, const char * guidofontspec) :
-    fGuidoFontFile(guidofontfile), fGuidoFontSpec(guidofontspec), fSize(size), fName(name), fProperties(properties)
+    fGuidoFontFile(guidofontfile), fGuidoFontSpec(guidofontspec), /*fSize(size),*/ fName(name)/*, fProperties(properties)*/
 {
 #ifdef INDEPENDENTSVG
     struct NSVGimage *fNSVGimage = 0;

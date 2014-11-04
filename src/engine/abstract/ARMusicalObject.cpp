@@ -24,12 +24,12 @@
 // Class ARMusicalObject 
 
 ARMusicalObject::ARMusicalObject()
-		: relativeTimePosition(MIN_TIMEPOSITION), duration(DURATION_0), fVoiceNum(0), drawGR(true), mGrObject(NULL)
+		: relativeTimePosition(MIN_TIMEPOSITION), fVoiceNum(0), drawGR(true), mGrObject(NULL), fDuration(DURATION_0)
 {
 }
 
 ARMusicalObject::ARMusicalObject(const TYPE_TIMEPOSITION & relativeTimeposition)
-		: relativeTimePosition(relativeTimeposition), duration(DURATION_0), fVoiceNum(0), drawGR(true), mGrObject(NULL)
+		: relativeTimePosition(relativeTimeposition), fVoiceNum(0), drawGR(true), mGrObject(NULL), fDuration(DURATION_0)
 {
 	assert(relativeTimePosition >= MIN_TIMEPOSITION);
 }
@@ -38,7 +38,9 @@ ARMusicalObject::ARMusicalObject(const ARMusicalObject & armo)
 {
 	relativeTimePosition = armo.relativeTimePosition;
 	// export = armo.export;
-	duration = armo.duration;
+	fDuration = armo.fDuration;
+	assert(fDuration >= DURATION_0);
+
 	fVoiceNum = 0;
 
 	assert(armo.mGrObject == NULL);
@@ -62,7 +64,7 @@ ARMusicalObject * ARMusicalObject::Copy() const
 
 TYPE_TIMEPOSITION ARMusicalObject::getRelativeEndTimePosition() const
 {
-	return relativeTimePosition + duration; // EndTimeposition==relativeTimeposition,
+	return relativeTimePosition + fDuration; // EndTimeposition==relativeTimeposition,
 	// da duration==0 !
 }
 

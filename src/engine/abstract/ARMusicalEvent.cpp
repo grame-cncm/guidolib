@@ -41,7 +41,7 @@ ARMusicalEvent::ARMusicalEvent(int theNumerator, int theDenominator) : mPoints(0
 //	assert(theDenominator>=MUSICAL_MIN_DENOMINATOR);
 //	assert(theNumerator<=MUSICAL_MAX_NUMERATOR);
 
-	duration.set( theNumerator,theDenominator);
+	setDuration ( Fraction(theNumerator,theDenominator) );
 }
 
 
@@ -49,19 +49,18 @@ ARMusicalEvent::ARMusicalEvent(const TYPE_TIMEPOSITION & relativeTimePositionOfE
 	const TYPE_DURATION & durationOfEvent)
   : ARMusicalObject(relativeTimePositionOfEvent)
 {
-
-	duration = durationOfEvent;
 	mPoints = 0;
-	assert(duration.getNumerator() >= MUSICAL_MIN_NUMERATOR);
-	const int tmp = duration.getDenominator();
+	assert(durationOfEvent.getNumerator() >= MUSICAL_MIN_NUMERATOR);
+	const int tmp = durationOfEvent.getDenominator();
 	if (tmp < MUSICAL_MIN_DENOMINATOR)
-		assert(duration.getDenominator() >= MUSICAL_MIN_DENOMINATOR);
+		assert(durationOfEvent.getDenominator() >= MUSICAL_MIN_DENOMINATOR);
 	// so now what .... take it out there
+	setDuration ( durationOfEvent );
 }
 
 ARMusicalEvent::ARMusicalEvent(const TYPE_DURATION & durationOfEvent)
 {
-	duration = durationOfEvent;
+	setDuration ( durationOfEvent );
 	mPoints = 0;
 }
 
@@ -91,7 +90,9 @@ void ARMusicalEvent::setDenominator(int newDenominator)
 		GuidoWarn("Denominator is too small" );
 		newDenominator= MUSICAL_MIN_DENOMINATOR;
 	}
-	duration.setDenominator(newDenominator);
+	TYPE_DURATION d (getDuration());
+	d.setDenominator(newDenominator);
+	setDuration(d);
 }
 
 void ARMusicalEvent::setNumerator(int newNumerator)
@@ -106,7 +107,11 @@ void ARMusicalEvent::setNumerator(int newNumerator)
 	}
 //	assert(newNumerator>=MUSICAL_MIN_NUMERATOR);
 //	assert(newNumerator<=MUSICAL_MAX_NUMERATOR);
-	duration.setNumerator(newNumerator);
+
+	TYPE_DURATION d (getDuration());
+	d.setNumerator(newNumerator);
+	setDuration(d);
+
 // ACHTUNG modified by  kf for WCHT ...
 //	assert(duration>MIN_DURATION);
   //## end ARMusicalEvent::setNumerator%858535960.body
@@ -114,18 +119,21 @@ void ARMusicalEvent::setNumerator(int newNumerator)
 
 void ARMusicalEvent::setPoints( int pointCount )
 {
-	assert(duration > MIN_DURATION);
+	TYPE_DURATION d (getDuration());
+
+	assert(d > MIN_DURATION);
 //	assert(pointCount > 0);
 	assert(pointCount < 4);
 
 	mPoints = pointCount;
-	TYPE_DURATION d (duration);
+	TYPE_DURATION tmp (d);
 
 	for(int i=1,n=1;i<=mPoints;i++)
 	{
 		n <<= 1;
-		duration += d * TYPE_DURATION( 1, n );
+		d += tmp * TYPE_DURATION( 1, n );
 	}
+	setDuration(d);
 }
 
 /** \brief Returns the number of duration dots of a note or rest.
