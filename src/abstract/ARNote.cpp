@@ -140,7 +140,7 @@ std::ostream & ARNote::operator<<(std::ostream &os) const
 	// there is a distinction between notes that
 	// were put in with dots and those that weren't.
 
-	TYPE_DURATION tmpdur (duration);
+	TYPE_DURATION tmpdur (getDuration());
 	if (mPoints==1)
 	{
 		tmpdur.setNumerator(2);

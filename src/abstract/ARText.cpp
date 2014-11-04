@@ -41,7 +41,7 @@ ARText::ARText(const NVstring & p_txt, float /*p_offsety*/ )
 ARText::ARText() : ARMTParameter()	
 {
 	relativeTimePosition = TYPE_TIMEPOSITION(-1,1);
-	duration = DURATION_0;
+	setDuration( DURATION_0 );
 	// dy = new TagParameterFloat(-6 * LSPACE/2);
 	ypos = NULL;
 	text = NULL;

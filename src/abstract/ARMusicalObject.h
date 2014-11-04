@@ -66,7 +66,7 @@ class ARMusicalObject
 
 		// should be re-designed!!! Should be put to another place but is needed here for spacing alg.
 		// returns here 0, simple objects have no durations (Clefs, Bars, ...)
-		virtual const TYPE_DURATION & getDuration() const						{ return duration; }
+		virtual const TYPE_DURATION & getDuration() const						{ return fDuration; }
 		virtual const TYPE_TIMEPOSITION & getRelativeTimePosition() const		{ return relativeTimePosition; }
 
 		// must be re-designed!!! Should be put to another place  but is needed here from several alg.
@@ -81,8 +81,8 @@ class ARMusicalObject
 		virtual void setStartTimePosition(const TYPE_TIMEPOSITION  & pos)	{}
 		
 		virtual void setRelativeTimePosition(const TYPE_TIMEPOSITION  & newRelativeTimePosition);
-		virtual void setRelativeEndTimePosition(const TYPE_TIMEPOSITION & tp)	{ duration = tp - relativeTimePosition; }
-		virtual void setDuration(const TYPE_DURATION & dur)						{ duration = dur; }
+		virtual void setRelativeEndTimePosition(const TYPE_TIMEPOSITION & tp)	{ fDuration = tp - relativeTimePosition; }
+		virtual void setDuration(const TYPE_DURATION & dur)						{ fDuration = dur; }
 
 		virtual GObject * getFirstGRRepresentation();
 		virtual GObject * getLastGRRepresentation();
@@ -117,7 +117,6 @@ class ARMusicalObject
 
   protected:
 		TYPE_TIMEPOSITION	relativeTimePosition;
-		TYPE_DURATION		duration;
 		int					fVoiceNum;		// voice number added for mapping info [DF - 10-11-09]
 		
 		bool	drawGR;
@@ -125,6 +124,10 @@ class ARMusicalObject
 		void * mGrObject;  	// ptr to belonging graphical object or GRMultipleGRObject
 							// There can be multiple graphical objects linked to a single object
 							// (JB) currently, it's always a GRMultipleGRObject *
+
+  private:
+		TYPE_DURATION		fDuration;
+
 };
 
 #endif

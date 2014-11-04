@@ -30,7 +30,7 @@ ARAlter::ARAlter(ARAlter * p_savealter, ARAlter * copyalter )
 	: ARMTParameter(-1,copyalter) 
 {
 	relativeTimePosition = TYPE_TIMEPOSITION(-1,1);
-	duration = DURATION_0;
+	setDuration (DURATION_0);
 	rangesetting = RANGEDC;	// RANGEDC replaced by ONLY while impl. finalzed [DF 2001-04-20];
 	savealter = p_savealter;
 	alterstring = NULL;

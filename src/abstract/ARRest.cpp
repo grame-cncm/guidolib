@@ -58,9 +58,10 @@ void ARRest::print() const
 
 std::ostream & ARRest::operator<<(std::ostream &os) const
 {
-	return (os << "_*" << 
-		duration.getNumerator() << "/" <<
-		duration.getDenominator() << " ");
+	TYPE_DURATION d = getDuration();
+	return (os << "_*" <<
+		d.getNumerator() << "/" <<
+		d.getDenominator() << " ");
 }
 
 

@@ -31,7 +31,7 @@ class ARIntens :  public ARMTParameter
 			ARIntens() : ARMTParameter(), value(-1.0f)
 			 {
 			 	relativeTimePosition.set( -1, 1 );
-			 	duration = DURATION_0;
+			 	setDuration ( DURATION_0 );
 			 }
 		virtual void setTagParameterList(TagParameterList & tpl);
 

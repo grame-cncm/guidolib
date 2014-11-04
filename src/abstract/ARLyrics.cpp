@@ -25,7 +25,7 @@ ListOfTPLs ARLyrics::ltpls(1);
 ARLyrics::ARLyrics() : ARMTParameter()
 {
 	relativeTimePosition.set(-1,1);
-	duration = DURATION_0;
+	setDuration ( DURATION_0 );
 	// dy = new TagParameterFloat(-6 * LSPACE/2);
 	mText = NULL;
 	mTextFormat = NULL;

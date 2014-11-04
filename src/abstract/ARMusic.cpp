@@ -54,11 +54,12 @@ GuidoPos ARMusic::AddTail(ARMusicalVoice * newMusicalVoice)
 */
 void ARMusic::adjustDuration(TYPE_DURATION newDuration)
 {
-	assert(newDuration >= duration); // keine Verk�rzung m�glich
+	TYPE_DURATION d = getDuration();
+	assert(newDuration >= d); // keine Verk�rzung m�glich
 	ARMusicalVoice * v=NULL;
 	GuidoPos pos=GetHeadPosition();
 
-	duration=newDuration;
+	setDuration (newDuration);
 	while(pos) // alle Stimmen des Segments auf die neue L�nge bringen
 	{
 		v=GetNext(pos);
