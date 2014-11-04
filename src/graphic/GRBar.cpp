@@ -28,6 +28,7 @@
 #include "GRSystemSlice.h"
 #include "VGDevice.h"
 #include "TagParameterString.h"
+#include "TagParameterFloat.h"
 #include "math.h"
 
 #include "FontManager.h"
@@ -53,6 +54,7 @@ GRBar::GRBar(ARBar * p_arbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTim
 	mNeedsSpring = 1;
 	setTagType(GRTag::STAFFTAG);
 	sconst = SCONST_BAR;
+    mStaffRatio = 1.0f;
 	InitGRBar( inTimePos, inStaff );
 
     fLineNumber = inStaff->getNumlines();
@@ -104,21 +106,31 @@ void GRBar::InitGRBar( const TYPE_TIMEPOSITION & inTimePos, const GRStaff * inSt
 	mBoundingBox.left = -halfExtent;
 	mBoundingBox.right = halfExtent;
 	mBoundingBox.bottom = curLSPACE * 4;
-	if( inStaff )
-	{
-		mTagSize *= inStaff->getSizeRatio();
+
+	if (inStaff) {
+		mStaffRatio = inStaff->getSizeRatio();
 		int linesOffset = inStaff->getNumlines() - 5;
-		if (linesOffset) {
+
+		if (linesOffset)
 			mPosition.y += curLSPACE * linesOffset / 2;
-		}
 	}
 	
 	// - Setup left and right spaces	
-	mLeftSpace =  (GCoord)((curLSPACE * 0.5f > halfExtent ? curLSPACE * 0.5f : halfExtent) * mTagSize);
-	mRightSpace = (GCoord)(halfExtent * mTagSize);
+	mLeftSpace =  (GCoord)((curLSPACE * 0.5f > halfExtent ? curLSPACE * 0.5f : halfExtent) * mTagSize * mStaffRatio);
+	mRightSpace = (GCoord)(halfExtent * mTagSize * mStaffRatio);
 
 	sRefPos.y = (GCoord)(4 * LSPACE);
 	sRefPos.x = (GCoord)(- halfExtent);
+    
+    // - Get the x/y offset
+	const TagParameterFloat *paramDx = getARBar()->getDX();
+	const TagParameterFloat *paramDy = getARBar()->getDY();
+
+	mDx = (paramDx && paramDx->TagIsSet() ? paramDx->getValue() : 0);
+	mDy = (paramDy && paramDy->TagIsSet() ? paramDy->getValue() : 0);
+    
+    // - Get the size
+	const TagParameterFloat *paramSize = getARBar()->getSize();
 }
 
 // --------------------------------------------------------------------------
@@ -190,8 +202,12 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
 	if ((getTagType() != GRTag::SYSTEMTAG) && isSystemSlice())
 		return;			// don't draw staff bars on system slices
     
-    if (mColRef)
+    VGColor prevFontColor = hdc.GetFontColor();
+
+    if (mColRef) {
+        hdc.SetFontColor(VGColor(mColRef));
         hdc.PushPenColor(VGColor(mColRef));
+    }
 
     const float staffSize = mGrStaff->getSizeRatio();
 
@@ -201,8 +217,10 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
     ARBar *arBar = getARBar();
 
     if (!strcmp(arBar->getMeasureNumberDisplayed()->getValue(), "true") && arBar->getMeasureNumber() != 0) {
-		const VGFont* hmyfont = FontManager::gFontText;
-		hdc.SetTextFont( hmyfont );
+        const NVstring fontName("Arial");
+        string attr("");
+        const VGFont* hmyfont = FontManager::FindOrCreateFont((int) (80.0f * mTagSize), &fontName, &attr);
+		hdc.SetTextFont(hmyfont);
 
 		string barNumberString;
 		ostringstream barNumberStream;
@@ -213,7 +231,10 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
 		float measureNumDxOffset =   arBar->getMeasureNumberDxOffset();
 		float measureNumDyOffset = - arBar->getMeasureNumberDyOffset();
 
-		hdc.DrawString(mPosition.x - 15 + measureNumDxOffset, mPosition.y - 40 + measureNumDyOffset, barNumberString.c_str(), barNumberString.size());
+        float totalXOffset = mPosition.x - 18  - 20 * (mTagSize - 1) + measureNumDxOffset + mDx;
+        float totalYOffset = mPosition.y - 40 - 110 * (mTagSize - 1) + measureNumDyOffset - mDy;
+
+        hdc.DrawString(totalXOffset, totalYOffset, barNumberString.c_str(), barNumberString.size());
 	}
 
     // - Vertical adjustement according to staff's line number
@@ -225,16 +246,21 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
 
     const float offsetX = 3 + (staffSize - 1) * 2;
 
-    const float x = mPosition.x + offsetX;
-	const float y1 = mPosition.y + mBoundingBox.top + offsety1 * staffSize;
-	const float y2 = y1 + mBoundingBox.bottom + offsety2 * staffSize;
+    const float x  = mPosition.x + offsetX + mDx;
+	float y1 = mPosition.y + mBoundingBox.top + offsety1 * staffSize - mDy;
+	float y2 = y1 + mBoundingBox.bottom + offsety2 * staffSize;
+    float barLength = y2 - y1;
+    y1 -= barLength / 2 * (mTagSize - 1);
+    y2 += barLength / 2 * (mTagSize - 1);
 
-    hdc.PushPenWidth( mGrStaff ? mGrStaff->currentLineThikness() * staffSize : kLineThick * staffSize );
+    hdc.PushPenWidth(mGrStaff ? mGrStaff->currentLineThikness() * staffSize * mTagSize : kLineThick * staffSize * mTagSize);
     hdc.Line(x, y1, x, y2);
     hdc.PopPenWidth();
 
-    if (mColRef)
+    if (mColRef) {
+        hdc.SetFontColor(prevFontColor);
         hdc.PopPenColor();
+    }
 }
 
 // --------------------------------------------------------------------------

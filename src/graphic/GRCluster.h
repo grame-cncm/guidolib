@@ -22,6 +22,7 @@ class ARCluster;
 class ARNoteFormat;
 class GRStaff;
 class GRSingleNote;
+class GRNote;
 
 /** \brief Graphical representation of a cluster.
 */
@@ -33,33 +34,33 @@ public:
 				 GRCluster(GRStaff * stf, ARCluster * arcls, GRSingleNote *sngNote, ARNoteFormat * curnoteformat);
 	virtual	 	~GRCluster();
 
+    virtual void updateBoundingBox();
+
 	virtual void OnDraw(VGDevice &hdc) const;
 	virtual void tellPosition( GObject * caller, const NVPoint & np );
-
-	virtual void addAssociation( GRNotationElement * p );
-    virtual GuidoPos AddTail( GRNotationElement * el );
-
-    void setSecondNoteYPosition();
 
     virtual const unsigned char * getColRef() const { return mColRef; }
 
     int getNoteCount() const { return gNoteCount;}
 
     void setClusterOrientation(GDirection inStemDir, ARTHead::HEADSTATE inHeadStateOrientation);
+    void setSecondGRNote(GRNote *inGRNote) { secondNote = inGRNote; }
+    GRNote *getFirstNote() { return firstNote; }
 
     ARCluster *getARCluster() const;
 
-protected:
+    void GetMap(GuidoeElementSelector sel, MapCollector& f, MapInfos& infos) const;
 
+protected:
     float gdx;
     float gdy;
     float ghdx;
     float ghdy;
     float gSize;
 
-    float gFirstNoteYPosition;
-    float gSecondNoteYPosition;
-    GRStaff *gStaff;
+    GRNote *firstNote;
+    GRNote *secondNote;
+
     TYPE_DURATION gDuration;
     unsigned char *noteFormatColor;
 

@@ -14,9 +14,11 @@
 
 */
 
+#include <string>
+
+#include "ARNote.h"
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
-#include <string>
 
 class TagParameterInt;
 class TagParameterString;
@@ -39,20 +41,20 @@ public:
 
 	virtual void    setTagParameterList(TagParameterList & tpl);
 
-    void setNotePitchAndOctave(int inPitch, int inOctave);
+    void setARNote(ARNote *arNote);
 
-    int *getFirstNoteParameters() {return aFirstNote;}
-    int *getSecondNoteParameters() {return aSecondNote;}
+    ARNote *getFirstNote()  const { return firstNote; }
+    ARNote *getSecondNote() const { return secondNote; }
 
-    float        getadx() const {return adx;}
-    float	     getady() const {return ady;}
-    float        getahdx() const {return ahdx;}
-    float	     getahdy() const {return ahdy;}
-    float        getSize() const {return aSize;}
-    int          getNoteCount() const {return aNoteCount;}
-    bool         getIsThereOnlyOneNoteInCluster() const {return aOnlyOneNoteInCluster;}
+    float getadx() const                         { return adx; }
+    float getady() const                         { return ady; }
+    float getahdx() const                        { return ahdx; }
+    float getahdy() const                        { return ahdy; }
+    float getSize() const                        { return aSize; }
+    int   getNoteCount() const                   { return aNoteCount; }
+    bool  getIsThereOnlyOneNoteInCluster() const { return aOnlyOneNoteInCluster; }
 
-    void         setOnlyOneNoteInCluster() {aOnlyOneNoteInCluster = true;}
+    void  setOnlyOneNoteInCluster() {aOnlyOneNoteInCluster = true;}
 
 protected:
 
@@ -66,8 +68,8 @@ protected:
 
     static ListOfTPLs ltpls;
 
-    int aFirstNote[2];
-    int aSecondNote[2];
+    ARNote *firstNote;
+    ARNote *secondNote;
 };
 
 #endif

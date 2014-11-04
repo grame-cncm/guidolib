@@ -30,7 +30,7 @@ GRDoubleBar::GRDoubleBar( ARDoubleBar * ardbar, GRStaff * inStaff, const TYPE_TI
 	const float spacing = inStaff->getStaffLSPACE() * 0.2f;
 	mBoundingBox.left  -= spacing;
 	mBoundingBox.right += spacing;
-	mRightSpace = mBoundingBox.right * mTagSize;
+    mRightSpace = mBoundingBox.right * mTagSize * inStaff->getSizeRatio();
 
     fLineNumber = inStaff->getNumlines();
     fStaffThickness = inStaff->getLineThickness();
@@ -45,7 +45,7 @@ GRDoubleBar::GRDoubleBar(ARDoubleBar * ardbar, GRSystem * p_grsystem, GRStaff * 
 	const float spacing = inStaff->getStaffLSPACE() * 0.2f;
 	mBoundingBox.left  -= spacing;
 	mBoundingBox.right += spacing;
-	mRightSpace = mBoundingBox.right * mTagSize;
+	mRightSpace = mBoundingBox.right * mTagSize * inStaff->getSizeRatio();
 
     fLineNumber = inStaff->getNumlines();
     fStaffThickness = inStaff->getLineThickness();

@@ -28,19 +28,15 @@ ARCluster::ARCluster() : ARMTParameter(), adx(0), ady(0), ahdx(0), ahdy(0), aSiz
 {
 	rangesetting = ONLY;
 
-    for(int i = 0; i <= 1; i++)
-    {
-        aFirstNote[i] = 0;
-        aSecondNote[i] = 0;
-    }
+    firstNote = NULL;
+    secondNote = NULL;
 }
 
 ARCluster::ARCluster(const ARCluster *inCopyCluster) : ARMTParameter(-1, inCopyCluster)
 {
 	rangesetting = ONLY;
 
-    if (inCopyCluster)
-    {
+    if (inCopyCluster) {
         adx = inCopyCluster->getadx();
         ady = inCopyCluster->getady();
         ahdx = inCopyCluster->getahdx();
@@ -48,15 +44,11 @@ ARCluster::ARCluster(const ARCluster *inCopyCluster) : ARMTParameter(-1, inCopyC
         aSize = inCopyCluster->getSize();
         aNoteCount = inCopyCluster->getNoteCount();
         aOnlyOneNoteInCluster = inCopyCluster->getIsThereOnlyOneNoteInCluster();
-        for(int i = 0; i <= 1; i++)
-        {
-            aFirstNote[i] = inCopyCluster->aFirstNote[i];
-            aSecondNote[i] = inCopyCluster->aSecondNote[i];
-        }
-    }
-    else
-    {
-        //Failure
+
+        firstNote = inCopyCluster->getFirstNote();
+        secondNote = inCopyCluster->getSecondNote();
+
+        setVoiceNum(inCopyCluster->getVoiceNum());
     }
 }
 
@@ -66,8 +58,7 @@ ARCluster::~ARCluster()
 
 void ARCluster::setTagParameterList(TagParameterList& tpl)
 {
-	if (ltpls.GetCount() == 0)
-	{
+	if (ltpls.GetCount() == 0) {
 		ListOfStrings lstrs; // (1); std::vector test impl
 		lstrs.AddTail("F,size,1.0,o;U,hdx,0hs,o;U,hdy,0hs,o;U,dx,0hs,o;U,dy,0hs,o");
 		CreateListOfTPLs(ltpls, lstrs);
@@ -125,24 +116,16 @@ void ARCluster::PrintParameters(std::ostream & os) const
 	os << "<i=\"" << num->getValue() << "\">";*/
 }
 
-void ARCluster::setNotePitchAndOctave(int inPitch, int inOctave)
+void ARCluster::setARNote(ARNote *arNote)
 {
-    if (inPitch != 0)
-    {
-        if (aFirstNote[0] == 0)
-        {
-            aFirstNote[0] = inPitch;
-            aFirstNote[1] = inOctave;
-        }
-        else if (aSecondNote[0] == 0)
-        {
-            aSecondNote[0] = inPitch;
-            aSecondNote[1] = inOctave;
+    if (firstNote == NULL)
+        firstNote = arNote;
+    else if (secondNote == NULL) {
+        secondNote = arNote;
 
-            if (!aOnlyOneNoteInCluster)
-                aNoteCount++;
-        }
-        else
+        if (!aOnlyOneNoteInCluster)
             aNoteCount++;
     }
+    else
+        aNoteCount++;
 }

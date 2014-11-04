@@ -5591,7 +5591,7 @@ void ARMusicalVoice::setClusterChord(ARCluster *inCurrentCluster)
 {
     if (!isInChord)
         return;
-    
+
 	GuidoPos posTmp = mCurVoiceState->vpos;
 
     for(int i = 0 ; i < 3 ; i++) {
@@ -5606,21 +5606,20 @@ void ARMusicalVoice::setClusterChord(ARCluster *inCurrentCluster)
     ARNote *firstNote = static_cast<ARNote *>(musicalObject->isARNote());
 
     ARCluster *currentCluster = firstNote->setCluster(inCurrentCluster, true, true);
-    firstNote->setClusterPitchAndOctave();
+    currentCluster->setARNote(firstNote);
 
     comptTemp++; // the first note is conserved
 
     bool isThereASecondNote = false;
 
-    while (posTmp && comptTemp < 2) // we only need to know the first 2 notes
-    {
+    while (posTmp && comptTemp < 2) { // we only need to know the first 2 notes
         musicalObject = ObjectList::GetNext(posTmp);
 
         ARNote * noteTmp = static_cast<ARNote *>(musicalObject->isARNote());
-        if (noteTmp && noteTmp->getPitch() != 0)
-        {
+
+        if (noteTmp && noteTmp->getPitch() != 0) {
+            currentCluster->setARNote(noteTmp);
             noteTmp->setCluster(currentCluster);
-            noteTmp->setClusterPitchAndOctave();
             noteTmp->enableSubElements(false);
 
             isThereASecondNote = true;
@@ -5630,28 +5629,25 @@ void ARMusicalVoice::setClusterChord(ARCluster *inCurrentCluster)
     }
 
     //Other notes deletion
-    while (posTmp) // we only need to know the first 2 notes
-    {
+    while (posTmp) { // we only need to know the first 2 notes
         musicalObject = ObjectList::GetNext(posTmp);
 
         ARNote * noteTmp = static_cast<ARNote *>(musicalObject->isARNote());
-        if (noteTmp && noteTmp->getPitch() != 0)
-        {
+
+        if (noteTmp && noteTmp->getPitch() != 0) {
+            currentCluster->setARNote(noteTmp);
             noteTmp->setPitch(firstNote->getPitch()); // "hides" this note behind the first one
             noteTmp->setOctave(firstNote->getOctave());
             noteTmp->setCluster(currentCluster);
             noteTmp->setDrawGR(false);
-            
-            noteTmp->setClusterPitchAndOctave();
         }
     }
 
-    if (!isThereASecondNote)
-    {
-        firstNote->setIsLonelyInCluster();
+    if (!isThereASecondNote) {
         currentCluster->setOnlyOneNoteInCluster();
+        currentCluster->setARNote(firstNote);
+        firstNote->setIsLonelyInCluster();
         firstNote->setCluster(currentCluster);
-        firstNote->setClusterPitchAndOctave();
     }
 }
 

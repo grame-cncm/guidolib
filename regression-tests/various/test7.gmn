@@ -1,1 +1,1 @@
-[\meter<"4/4"> a b c d \bar<color="red"> e]
+[ a b \bar<displayMeasNum="true", color="red", dx=2, dy=2, numDx=-4, numDy=-3, size=2> c ]

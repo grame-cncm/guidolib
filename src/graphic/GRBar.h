@@ -60,6 +60,10 @@ class GRBar : public GRTagARNotationElement
 		static NVPoint sRefPos;
         int    fLineNumber;
 
+        float mDx;
+        float mDy;
+        float mStaffRatio;
+
 	private:
 		void InitGRBar( const TYPE_TIMEPOSITION & inTimePos, const GRStaff * inStaff );		
 };

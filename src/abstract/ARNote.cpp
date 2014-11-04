@@ -62,6 +62,7 @@ ARNote::ARNote(const ARNote & arnote)
 	fAccidentals = arnote.fAccidentals;
 	fDetune = arnote.fDetune;
 	fIntensity = arnote.fIntensity;
+    fVoiceNum = arnote.getVoiceNum(); // Added to fix a bug during chord copy (in doAutoBarlines)
 }
 
 ARNote::~ARNote()
@@ -265,17 +266,14 @@ ARCluster *ARNote::setCluster(ARCluster *inCluster,
     if (!fClusterHaveToBeDrawn && inClusterHaveToBeDrawn)
         fClusterHaveToBeDrawn = true;
 
+    inCluster->setVoiceNum(getVoiceNum());
+
     if (inHaveToBeCreated)
         fCluster = new ARCluster(inCluster);
     else
         fCluster = inCluster;
 
     return fCluster;
-}
-
-void ARNote::setClusterPitchAndOctave()
-{
-    fCluster->setNotePitchAndOctave(fPitch, fOctave);
 }
 
 bool ARNote::CanBeMerged(const ARMusicalEvent * ev2)

@@ -59,6 +59,7 @@ protected:
 
     int			mAccoladeType;
     float		mDx;
+    float       mDy;
     int			id;
     int			rangeBegin;
     int			rangeEnd;

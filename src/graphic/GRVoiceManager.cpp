@@ -655,7 +655,6 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION &timepos, int filltagmode)
                         AddRegularEvent (ev);
 
                         if (GRNote *grnote = dynamic_cast<GRNote *>(ev)) {
-
                             if (!mCurCluster) {
                                 if (grnote->getClusterNoteBoolean()) {
                                     mCurCluster = grnote->createCluster(curnoteformat);

@@ -158,7 +158,7 @@ GRCluster *GRNote::createCluster(ARNoteFormat *inCurnoteformat)
     GRSingleNote *singleNote = dynamic_cast<GRSingleNote *>(this);
 
     ARNote *arNote = getARNote();
-    
+
     fCluster = new GRCluster(mGrStaff, arNote->getARCluster(), singleNote, inCurnoteformat);
 
     return fCluster;
@@ -169,5 +169,5 @@ void GRNote::setGRCluster(GRCluster *inCluster, bool inSignificativeNote)
     fCluster = inCluster;
 
     if (inSignificativeNote)
-        fCluster->setSecondNoteYPosition();
+        inCluster->setSecondGRNote(this);
 }

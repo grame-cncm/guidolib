@@ -110,8 +110,7 @@ public:
 	virtual void print() const 	{}
 	virtual void print(std::ostream& os) const;
 	virtual void GGSOutput() const;
-	virtual void GGSOutputAt(unsigned int tmptype, long offsx = 0, long offsy = 0, 
-															float mysize = 0.0f ) const;
+	virtual void GGSOutputAt(unsigned int tmptype, long offsx = 0, long offsy = 0, float mysize = 0.0f ) const;
 	inline const NEPointerList* associated() const { return mAssociated; }
 
     /**** Functions to avoid dynamic_cast ****/

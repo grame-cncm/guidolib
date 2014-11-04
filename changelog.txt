@@ -4,26 +4,15 @@ GUIDO Engine history
 ----------------------------------------------------------------
 version 1.5.5
 - performances improvement (principally for scores containing lots of chords : time ratio until 3)
-- color param added for tag:
-    - \tremolo
-	- \dotFormat
-	- \accidental
-	- \accolade
-	- \bar, \doubleBar, \endBar, \repeatBegin, \repeatEnd
-	- \daCapo, \daCapoAlFine, \dalSegno, \dalSegnoAlFine, \fine
-	- \breathMark
-	- \key
-	- \octava
-	- \staffFormat
-	- \tempo
-	- \tie
-	- \tuplet
-	- \volta
+- color param added for tags: \tremolo, \dotFormat, \accidental, \accolade, \bar, \doubleBar, \endBar, \repeatBegin, \repeatEnd, \daCapo, \daCapoAlFine, \dalSegno, \dalSegnoAlFine, \fine, \breathMark, \key, \octava, \staffFormat, \tempo, \tie, \tuplet, \volta
+- size param added for tags: \accolade, \bar
+- dx param added for tags: \bar
+- dy param added for tags: \accolade, \bar
 - \volta-tag :
     - display bug fixed
     - useless param 'pass' removed
 	- 'm' param changed to 'mark'
-
+- mapping bug fixed on \cluster-tag
 
 ----------------------------------------------------------------
 2014-10-22  version 1.5.4

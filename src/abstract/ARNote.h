@@ -72,7 +72,6 @@ class ARNote : public ARMusicalEvent
     void		 setOrnament(ARTrill *newOrnament);
     ARCluster   *setCluster(ARCluster *inCluster, bool inClusterHaveToBeDrawn = false,
                                                   bool inHaveToBeCreated = false);
-    void         setClusterPitchAndOctave();
     ARTrill     *getOrnament()		    				{ return fOrnament;}
     ARCluster   *getARCluster() 			           	{ return fCluster;}
 

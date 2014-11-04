@@ -184,7 +184,11 @@ void GRSingleNote::GGSOutput() const
 //____________________________________________________________________________________
 void GRSingleNote::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const
 {
-	if (sel == kGuidoEvent) {
+    if (fCluster) {
+        if (this == fCluster->getFirstNote())
+            fCluster->GetMap(sel, f, infos);
+    }
+    else if (sel == kGuidoEvent) {
 		TYPE_DURATION dur = getDuration();
 		if (dur.getNumerator() == 0) {		// notes in chords have a null duration
 			dur = getDurTemplate();
@@ -285,28 +289,27 @@ void GRSingleNote::updateBoundingBox()
 	GRNote::updateBoundingBox();
 
 	// - Check for notebreite (?)
-	if( mBoundingBox.left > (-mNoteBreite * 0.5f))
+	if (mBoundingBox.left > (-mNoteBreite * 0.5f))
 		mBoundingBox.left = (-mNoteBreite * 0.5f);	// (JB) test, was: 0
 
-	if( mBoundingBox.right < (mNoteBreite * 0.5f))
+	if (mBoundingBox.right < (mNoteBreite * 0.5f))
 		mBoundingBox.right = (mNoteBreite * 0.5f);	// width of the note. (JB) test, was: 0
 
 	// - Check for ledger lines
 	//  (note that the bounding box does not take account of ledger lines, for now)
-	if (mNumHelpLines > 0 )
-	{
+	if (mNumHelpLines > 0) {
 		const float theSize = (mNoteBreite * 0.8f * mSize); // harcoded
 
-		if (mLeftSpace < theSize)	mLeftSpace  = theSize;
-		if (mRightSpace < theSize )	mRightSpace = theSize;
+		if (mLeftSpace < theSize)
+            mLeftSpace  = theSize;
+		if (mRightSpace < theSize)
+            mRightSpace = theSize;
 	}
 
 	// - Check for stem
-	if (mGlobalStem)
-	{
+	if (mGlobalStem) {
 		GRNotationElement * e = mGlobalStem->getGRFlag();
-		if( e )
-		{
+		if(e) {
 			if (e->getRightSpace() > mRightSpace)
 				mRightSpace = e->getRightSpace();
 
