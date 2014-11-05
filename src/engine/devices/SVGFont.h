@@ -33,10 +33,11 @@ class SVGFont : public VGFont
 	std::string	fGuidoFontFile;
 	std::string	fGuidoFontSpec;
 	std::string	fName;
-//	int fSize;
-//	int fProperties;
 
 #ifdef INDEPENDENTSVG
+	int fSize;
+	int fProperties;
+
 	struct NSVGfont *	fNSVGfont;
         static std::map<std::string, std::string> makeHexToCharMap();
         static const std::map<std::string, std::string> hexToCharMap;
