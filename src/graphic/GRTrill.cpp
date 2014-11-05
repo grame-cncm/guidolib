@@ -97,7 +97,7 @@ GRTrill::GRTrill(GRStaff * inStaff, ARTrill * artrem ) : GRPTagARNotationElement
 		case ARTrill::TRILL:
 			switch (chordType)
 			{
-				case ARMusicalVoice::ERROR:
+				case ARMusicalVoice::CHORDERROR:
 					setTrillSymbol( kNoneSymbol );
 					break;
 					
@@ -121,7 +121,7 @@ GRTrill::GRTrill(GRStaff * inStaff, ARTrill * artrem ) : GRPTagARNotationElement
 					setupTurnComplex();
 					break;
 					
-				case ARMusicalVoice::ERROR:
+				case ARMusicalVoice::CHORDERROR:
 					setTrillSymbol( kNoneSymbol );
 					break;
 					
@@ -145,7 +145,7 @@ GRTrill::GRTrill(GRStaff * inStaff, ARTrill * artrem ) : GRPTagARNotationElement
 					setupPrallPrall();
 					break;
 					
-				case ARMusicalVoice::ERROR:
+				case ARMusicalVoice::CHORDERROR:
 					setTrillSymbol( kNoneSymbol );
 					break;
 					
@@ -165,12 +165,11 @@ GRTrill::~GRTrill()
 
 /** \brief Manage the drawing of trill line
 */
-void GRTrill::OnDraw( VGDevice & hdc , float right, float noteY, int nVoice)
+void GRTrill::OnDraw(VGDevice & hdc , float right, float noteY, int nVoice)
 {
 	VGColor oldColor = hdc.GetFontColor();
 	
-	if(fType==0)//TRILL=0
-	{
+	if (fType == 0) { //TRILL=0
 		NVRect r = mBoundingBox;
 		r += getPosition();
 		float left;
@@ -178,10 +177,11 @@ void GRTrill::OnDraw( VGDevice & hdc , float right, float noteY, int nVoice)
 
 		// we check if the trill line is begining or continuing another
 
-		if(begin){
+		if (begin) {
 			// the 'tr' is drawn only at the begining of the trill, if the parameter 'tr' isn't set as false
-			if(fShowTR)
-				GRNotationElement::OnDraw( hdc );
+			if (fShowTR)
+				GRNotationElement::OnDraw(hdc);
+
 			// in order to adapt the accidental to the size of the trill :
 			fAccidental->setPosition(fAccidental->getPosition() + NVPoint(mBoundingBox.Width()/2*(mTagSize-1), - mBoundingBox.Height()/2*(mTagSize-1)));
 			fAccidental->setSize(mTagSize/2);
@@ -191,14 +191,15 @@ void GRTrill::OnDraw( VGDevice & hdc , float right, float noteY, int nVoice)
 			rAcc += fAccidental->getPosition();
 			float leftR = r.left + r.Width()*mTagSize;
 			float leftA = rAcc.left + rAcc.Width()*mTagSize + fAccidental->getOffset().x - mTagOffset.x;
+
 			// check the position of the accidental to know where to begin the trill line
-			if(leftA > leftR && (fAccidental->getOffset().y - mTagOffset.y)>0 && (fAccidental->getOffset().y-mTagOffset.y)<r.Height()+rAcc.Height())
+			if (leftA > leftR && (fAccidental->getOffset().y - mTagOffset.y) > 0 && (fAccidental->getOffset().y - mTagOffset.y) < r.Height()+rAcc.Height())
 				left = leftA;
 			else
 				left = leftR;
 		}
-		else{	// continue the line from the last position (or at the begining of a new system)
-			if(lastPos<right)
+		else {	// continue the line from the last position (or at the begining of a new system)
+			if (lastPos < right)
 				left = lastPos;
 			else
 				left = r.left - LSPACE;
@@ -206,23 +207,28 @@ void GRTrill::OnDraw( VGDevice & hdc , float right, float noteY, int nVoice)
 
 		// now we iterates the symbol kTilde as many times as posible from "left" to "right"
 		float x = (left - r.left);
-		if(!begin)
-			x-=mTagOffset.x;
+
+		if (!begin)
+			x -= mTagOffset.x;
 		else
 			left += mTagOffset.x;
-		while(left + widthOfTilde <= right){
-			if(fDrawOnNoteHead)
+
+		while (left + widthOfTilde <= right) {
+			if (fDrawOnNoteHead)
 				GRNotationElement::OnDrawSymbol(hdc, kTilde, x, noteY - getPosition().y, mTagSize);
 			else
 				GRNotationElement::OnDrawSymbol(hdc, kTilde, x, 0, mTagSize);
-			x += widthOfTilde;
+
+			x    += widthOfTilde;
 			left += widthOfTilde;
 		}
-		GRTrill::getLastPosX(nVoice) = left;
-				
-	}else{	
-		if(fShowTR)
-			GRNotationElement::OnDraw( hdc );
+
+		GRTrill::getLastPosX(nVoice) = left;		
+	}
+    else {	
+		if (fShowTR)
+			GRNotationElement::OnDraw(hdc);
+
 		fAccidental->OnDraw(hdc);
 	}
 	

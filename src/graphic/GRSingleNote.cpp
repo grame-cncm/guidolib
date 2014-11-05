@@ -207,8 +207,7 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
 	if (!mDraw)
 		return;
 
-    int numVoice = this->getAbstractRepresentation()->getVoiceNum();
-    float X = mGrStaff->getXEndPosition(getARNote()->getRelativeTimePosition(), getARNote()->getDuration());
+    int numVoice = getAbstractRepresentation()->getVoiceNum();
 
     float incy = 1;
     float posy = 0;
@@ -265,6 +264,7 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
 	}
 
 	if (fOrnament) {
+        float X = mGrStaff->getXEndPosition(getARNote()->getRelativeTimePosition(), getARNote()->getDuration());
 		// to draw the trill line...
 		float Y = getPosition().y + getBoundingBox().Height() / 2;
 		fOrnament->OnDraw(hdc, X, Y, numVoice);

@@ -211,6 +211,8 @@ void NEPointerList::setZeroSpacing(const TYPE_TIMEPOSITION & timePosition,
 
 NEPointerList* NEPointerList::getElementsWithTimePosition(const TYPE_TIMEPOSITION & timePosition)
 {
+    static int called = 0;
+    called++;
 	NEPointerList* list=new NEPointerList;
 	GRNotationElement * e = NULL;
 	GuidoPos pos=GetHeadPosition();

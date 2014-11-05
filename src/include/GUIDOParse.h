@@ -136,6 +136,14 @@ extern "C" {
 	*/
 	GUIDOAPI(GuidoErrCode)		GuidoResetStream (GuidoStream *s);
 
+    /*!
+		\brief Gets parsing time
+
+		\param time an int to write parsing time on
+		\return a Guido error code.
+	*/
+    GUIDOAPI(GuidoErrCode)      GuidoGetParseTime (GuidoParser *p, int &time);
+
 /*! @} */
 
 

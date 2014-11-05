@@ -19,6 +19,8 @@
 #include <sstream>
 #include <locale.h>
 
+#include "GuidoTimer.h"
+
 #include "GuidoStream.h"
 #include "GUIDOFactory.h"
 
@@ -46,7 +48,9 @@ class GuidoParser {
 	std::string fErrorMsg;	//< filled in case of syntax error
 	
 	virtual int	_yyparse();
-	
+
+    GuidoTimer *guidoTimer;
+
 	public:
         void              *fScanner;   // the flex scanner
 		std::istream      *fStream;    // input stream
@@ -96,9 +100,11 @@ class GuidoParser {
 		virtual void setError(int line, int column, const char *msg)
 					{ fErrorLine = line; fErrorColumn = column; fErrorMsg = msg; }
 
-		virtual int getErrorLine() const				{ return fErrorLine; }
-		virtual int getErrorColumn() const				{ return fErrorColumn; }
-		virtual const char* getErrorMsg() const			{ return fErrorMsg.c_str(); }
+		virtual int getErrorLine() const		{ return fErrorLine; }
+		virtual int getErrorColumn() const		{ return fErrorColumn; }
+		virtual const char* getErrorMsg() const { return fErrorMsg.c_str(); }
+
+        virtual int getParseTime()              { return guidoTimer->getParseTime(); }
 };
 
 #endif

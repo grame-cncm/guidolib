@@ -119,6 +119,10 @@ class QGuidoPainter
 		*/
 		QString gmnCode() const;
 		
+        /** \brief Neck to convert AR to GR and get conversion time
+		*/
+		GuidoErrCode convertAR2GR(ARHandler ar, const GuidoLayoutSettings* settings, GRHandler* gr);
+
 		/** \brief Returns the validity of the last GMN code loaded with setGMNCode or setGMNFile
 		*/
 		bool isGMNValid() const;

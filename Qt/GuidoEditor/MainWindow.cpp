@@ -89,7 +89,6 @@ typedef GuidoErrCode (* GuidoAR2MIDIFilePtr)(const struct NodeAR* ar, const char
 #define VERTICAL_BORDER_MARGIN		20
 #define TOOL_BAR_ICON_SIZE			20
 #define TEXT_EDIT_TEMPO 500
-#define TEXT_EDIT_TEMPO_FACTOR 0.1f
 #define MIN_FONT_SIZE 2
 #define MAX_FONT_SIZE 72
 #define DEFAULT_TOOL_BAR_VISIBILITY true
@@ -539,8 +538,8 @@ void MainWindow::reload()
 void MainWindow::documentWasModified()
 {
     setWindowModified( mTextEdit->document()->isModified() );
-	
-	mTextEditTimer->start( TEXT_EDIT_TEMPO + mTextEdit->document()->characterCount() * TEXT_EDIT_TEMPO_FACTOR );
+
+	mTextEditTimer->start( TEXT_EDIT_TEMPO);
 //	mTextEdit->highlightErrorLine( 0 );
 }
 

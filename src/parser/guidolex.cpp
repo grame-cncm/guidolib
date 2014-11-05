@@ -971,17 +971,17 @@ yyextra->fText = yytext; return NNUMBER;
 case 4:
 YY_RULE_SETUP
 #line 80 "guido.l"
-yyextra->fText = yytext; return FLOAT;
+yyextra->fText = yytext; return FFLOAT;
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
 #line 81 "guido.l"
-yyextra->fText = yytext; return FLOAT;
+yyextra->fText = yytext; return FFLOAT;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
 #line 82 "guido.l"
-yyextra->fText = yytext; return FLOAT;
+yyextra->fText = yytext; return FFLOAT;
 	YY_BREAK
 case 7:
 YY_RULE_SETUP

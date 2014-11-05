@@ -110,11 +110,13 @@ GUIDOAPI(ARHandler)	GuidoStream2AR (GuidoParser *p, GuidoStream* s)
 // --------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoParserGetErrorCode (GuidoParser *p, int &line, int &col, const char** msg)
 {
-    if (!p) return guidoErrBadParameter;
+    if (!p)
+        return guidoErrBadParameter;
 
     line = p->getErrorLine();
     col  = p->getErrorColumn();
-    if (msg) *msg = p->getErrorMsg();
+    if (msg)
+        *msg = p->getErrorMsg();
 	
 	return (line) ? guidoErrParse : guidoNoErr;
 }
@@ -162,6 +164,17 @@ GUIDOAPI(GuidoErrCode) GuidoResetStream (GuidoStream *s)
         return guidoErrBadParameter;
 
     s->ReinitStream();
+
+	return guidoNoErr;
+}
+
+// --------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoGetParseTime (GuidoParser *p, int &time)
+{
+    if (!p)
+        return guidoErrBadParameter;
+
+    time = p->getParseTime();
 
 	return guidoNoErr;
 }

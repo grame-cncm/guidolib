@@ -2106,7 +2106,7 @@ void GRStaff::GGSOutput() const
 //-------------------------------------------------
 /** \brief Find the spatial x end position from the time position and the duration
 */
-float	GRStaff::getXEndPosition(TYPE_TIMEPOSITION pos, TYPE_DURATION dur)
+float GRStaff::getXEndPosition(TYPE_TIMEPOSITION pos, TYPE_DURATION dur)
 {
 	TYPE_TIMEPOSITION end = pos + dur;
 	NEPointerList * elmts = getElements();

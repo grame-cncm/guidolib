@@ -141,6 +141,8 @@ enum GuidoErrCode
 	//! the action failed
 	guidoErrActionFailed		= -10
 };
+
+
 /*! @} */
 
 /**
@@ -222,6 +224,7 @@ typedef struct
     float marginbottom;
 } GuidoPageFormat;
 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -295,7 +298,7 @@ representations.
                 It's the caller responsability to free the handle using GuidoFreeGR.
 		\return a Guido error code.
     */
-    GUIDOAPI(GuidoErrCode)	GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings* settings, GRHandler* gr);
+    GUIDOAPI(GuidoErrCode)	GuidoAR2GR(ARHandler ar, const GuidoLayoutSettings* settings, GRHandler* gr);
 
 
 	/*!
@@ -310,7 +313,7 @@ representations.
 		\param dev a graphic device.
 		\return a Guido error code.
     */
-    GUIDOAPI(GuidoErrCode)	GuidoAR2RProportional( ARHandler ar, int width, int height, const GuidoDate& start, const GuidoDate& end, bool drawdur, VGDevice* dev);
+    GUIDOAPI(GuidoErrCode)	GuidoAR2RProportional(ARHandler ar, int width, int height, const GuidoDate& start, const GuidoDate& end, bool drawdur, VGDevice* dev);
 
 	/*!
         Transforms a MIDI file into a simplified proportional representation.
@@ -664,6 +667,28 @@ The number of version functions is due to historical reasons.
 		\return otherwise guidoErrActionFailed.
 	*/
     GUIDOAPI(GuidoErrCode) GuidoGetSymbolPath(const ARHandler inHandleAR, std::vector<std::string> &inPathVector);
+
+
+    /*! @} */
+
+
+/*!
+\addtogroup Guido timer
+@{
+*/
+    /** \brief Gets AR to GR procedure time
+
+		\param time the int to write time on
+		\return a Guido error code
+	*/
+    GUIDOAPI(GuidoErrCode) 	GuidoGetAR2GRProcedureTime(int &time);
+
+    /** \brief Gets GR to display procedure time
+
+		\param time the int to write time on
+		\return a Guido error code
+	*/
+    GUIDOAPI(GuidoErrCode) 	GuidoGetDrawProcedureTime(int &time);
 
 /*! @} */
 

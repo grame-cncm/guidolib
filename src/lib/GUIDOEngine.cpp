@@ -92,6 +92,8 @@ int	gParseErrorLine = -1;
 
 int gBoundingBoxesMap = kNoBB;	// a bits field to control bounding boxes draxing [added on May 11 2009 - DF ]
 
+GuidoTimer *gGuidoTimer = new GuidoTimer();
+
 // ==========================================================================
 // - Guido Main API
 // ==========================================================================
@@ -317,14 +319,19 @@ GUIDOAPI(GuidoErrCode) GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * set
 
 	// - Find the AR object corresponding to inHandleAR.
 	ARMusic * arMusic = ar->armusic; // (JB) was guido_PopARMusic()
-	if( arMusic == 0 ) 
-	{
+
+	if (arMusic == 0)
 		return guidoErrInvalidHandle;
-	}
+
 	// - Now create the GRMusic object from  the abstract representation.
-	guido_applySettings( settings );
-	GRMusic * grMusic = new GRMusic( arMusic, gARPageFormat, false );
-	if( grMusic == 0 ) return guidoErrMemory;
+	guido_applySettings(settings);
+
+    gGuidoTimer->startAR2GR();
+	GRMusic *grMusic = new GRMusic(arMusic, gARPageFormat, false);
+    gGuidoTimer->stopAR2GR();
+
+	if (grMusic == 0)
+        return guidoErrMemory;
 
 	// - The GR structure needs its AR equivalent during all its lifetime.
 	ar->refCount++;
@@ -333,9 +340,10 @@ GUIDOAPI(GuidoErrCode) GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * set
 	grMusic->setName(arMusic->getName().c_str());
 
 	//  - Add the GRMusic object to the global list
-	GRHandler outHandleGR = guido_RegisterGRMusic( grMusic, ar );
+	GRHandler outHandleGR = guido_RegisterGRMusic(grMusic, ar);
 
 	*gr = outHandleGR;
+
 	return guidoNoErr;
 }
 
@@ -535,7 +543,9 @@ GUIDOAPI(GuidoErrCode) GuidoOnDraw( GuidoOnDrawDesc * desc )
 		desc->hdc->SelectFillColor(myTestColor);
 		desc->hdc->SetFontColor(myTestColor);
 #endif
+        gGuidoTimer->startDraw();
 		desc->handle->grmusic->OnDraw( *(desc->hdc), *desc );
+        gGuidoTimer->stopDraw();
 #ifdef TIMING
 		clock_t elapsed = clock() - startTime;
 #ifdef WIN32
@@ -806,6 +816,26 @@ GUIDOAPI(GuidoErrCode) GuidoGetSymbolPath(const ARHandler inHandleAR, std::vecto
         return guidoErrInvalidHandle;
 
     inPathVector = inHandleAR->armusic->getPath();
+
+    return guidoNoErr;
+}
+
+// --------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode)	GuidoGetAR2GRProcedureTime(int &time) {
+    if (!gGuidoTimer)
+        return guidoErrActionFailed;
+
+    time = gGuidoTimer->getAR2GRTime();
+
+    return guidoNoErr;
+}
+
+// --------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode)	GuidoGetDrawProcedureTime(int &time) {
+    if (!gGuidoTimer)
+        return guidoErrActionFailed;
+
+    time = gGuidoTimer->getDrawTime();
 
     return guidoNoErr;
 }

@@ -5511,14 +5511,14 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE &chord_type, CHORD_ACCIDENTAL 
 		else if (- (pitches[2] - 8) == (- (pitches[1] - 8) + 1) % 7) // e.g. "c, c, b"
 			chord_type = DOWN_COMPLEX;
 		else
-			chord_type = ERROR;
+			chord_type = CHORDERROR;
 
 		accidentals = accidentalsTemp;
 	}
 	else if (pitches[0] != 0 && pitches[1] == 0)
 		chord_type = UP_SIMPLE;
 	else
-		chord_type = ERROR;
+		chord_type = CHORDERROR;
 
 
 	// Recupération de l'armure...

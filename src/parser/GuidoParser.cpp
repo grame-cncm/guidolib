@@ -27,6 +27,7 @@ GuidoParser::GuidoParser()
     initScanner();
 	fErrorLine = fErrorColumn = 0;
     fStream = NULL;
+    guidoTimer = new GuidoTimer();
 }
 
 //--------------------------------------------------------------------------
@@ -174,6 +175,8 @@ void GuidoParser::tagRange ()					{ fFactory->tagRange(); }
 //--------------------------------------------------------------------------
 ARHandler GuidoParser::parse()
 {
+    guidoTimer->startParse();
+
     /* Parser reinitialization */
 	fzaehlerSet = 0;
 	faccidentals = 0;
@@ -194,5 +197,12 @@ ARHandler GuidoParser::parse()
 
 	_yyparse ();
 
-    return (fErrorLine == 0) ? GuidoFactoryCloseMusic (fFactory) : 0;
+    ARHandler arh = 0;
+
+    if (fErrorLine == 0)
+        arh = GuidoFactoryCloseMusic (fFactory);
+    
+    guidoTimer->stopParse()
+    
+    return arh;
 }

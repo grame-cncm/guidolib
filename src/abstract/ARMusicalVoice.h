@@ -83,7 +83,7 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 	void printPosTags(std::ostream & os, GuidoPos& pos, GuidoPos prevpos, bool lookend) const;
 	
 	public:
-		typedef enum		CHORD_TYPE {UP_SIMPLE, DOWN_SIMPLE, UP, DOWN, UP_COMPLEX, DOWN_COMPLEX, ERROR} CHORD_TYPE;
+		typedef enum		CHORD_TYPE {UP_SIMPLE, DOWN_SIMPLE, UP, DOWN, UP_COMPLEX, DOWN_COMPLEX, CHORDERROR} CHORD_TYPE;
 		typedef enum		CHORD_ACCIDENTAL {NATURAL, FLAT, SHARP, CAU_NATURAL, CAU_FLAT, CAU_SHARP, NONE} CHORD_ACCIDENTAL;
 		// cau_natural, cau_flat, cau_sharp : cautionary accidentals
 	
