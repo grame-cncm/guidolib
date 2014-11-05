@@ -37,6 +37,7 @@ public:
     int  getDrawTime();
 
 protected:
+#ifdef WIN32
     void keepTime(LARGE_INTEGER &startTime);
     int getSpentTime(LARGE_INTEGER &startTime, LARGE_INTEGER &endTime);
 
@@ -50,6 +51,8 @@ protected:
 
     LARGE_INTEGER startDrawTime;
     LARGE_INTEGER endDrawTime;
+#else
+#endif
 };
 
 #endif

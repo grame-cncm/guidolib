@@ -89,8 +89,8 @@ void GuidoTimer::keepTime(LARGE_INTEGER &time)
 #endif
 }
 
-int GuidoTimer::getSpentTime(LARGE_INTEGER &startTime, LARGE_INTEGER &endTime) {
 #ifdef WIN32
+int GuidoTimer::getSpentTime(LARGE_INTEGER &startTime, LARGE_INTEGER &endTime) {
     LARGE_INTEGER spentTimeInMs;
     
     spentTimeInMs.QuadPart = endTime.QuadPart - startTime.QuadPart;
@@ -99,8 +99,6 @@ int GuidoTimer::getSpentTime(LARGE_INTEGER &startTime, LARGE_INTEGER &endTime) {
     spentTimeInMs.QuadPart /= frequency.QuadPart;
 
     return spentTimeInMs.LowPart;
+}
 #else
 #endif
-
-    return 0;
-}

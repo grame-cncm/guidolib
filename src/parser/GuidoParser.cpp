@@ -202,7 +202,7 @@ ARHandler GuidoParser::parse()
     if (fErrorLine == 0)
         arh = GuidoFactoryCloseMusic (fFactory);
     
-    guidoTimer->stopParse()
+    guidoTimer->stopParse();
     
     return arh;
 }
