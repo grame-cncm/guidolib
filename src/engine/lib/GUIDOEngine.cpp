@@ -319,6 +319,16 @@ class TestTimeMap : public TimeMapCollector
 };
 #endif
 
+
+// --------------------------------------------------------------------------
+GRHandler GuidoARretGR( ARHandler ar, const GuidoLayoutSettings * settings)
+{
+	GRHandler gr;
+	GuidoErrCode err = GuidoAR2GR (ar, settings, &gr);
+	return err ? 0 : gr;
+}
+
+
 // --------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * settings, GRHandler * gr)
 {
