@@ -1,6 +1,8 @@
 #include "map2json.h"
 #include <sstream>
 #include <iostream>
+#include <cstring>
+#include <cstdlib>
 #include "json_stream.h"
 #include "date_tools.h"
 
