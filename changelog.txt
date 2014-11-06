@@ -2,6 +2,12 @@ GUIDO Engine history
 
 
 ----------------------------------------------------------------
+2014-10-22  version 1.5.5
+- Fraction is now using 'long long' instead 'int' for numerator and denominator
+  (negative dates were found with complex non-quantified scores, due to overflow)
+
+
+----------------------------------------------------------------
 2014-10-22  version 1.5.4
 - new piano roll API available :
     - piano roll can be generated from an gmn file, an AR, etc. and exported to any classic file format
