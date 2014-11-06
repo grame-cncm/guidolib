@@ -16,8 +16,7 @@
 
 class GuidoTimer {
 public:
-    static int getCurrentmsTime();
-    static int stop();
+    static long getCurrentmsTime();
 
 protected:
 #ifdef WIN32

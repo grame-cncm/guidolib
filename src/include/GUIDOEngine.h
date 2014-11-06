@@ -680,26 +680,26 @@ The number of version functions is due to historical reasons.
 		\brief Gets parsing time
 
 		\param ar the ar handler given to extract the parsing time
-		\param time an int to write parsing time on
-		\return a Guido error code.
+		\param time a long to write parsing time on
+		\return a Guido error code
 	*/
-    GUIDOAPI(GuidoErrCode)  GuidoGetParsingTime (const ARHandler ar, int &time);
+    GUIDOAPI(GuidoErrCode)  GuidoGetParsingTime (const ARHandler ar, long &time);
 
     /** \brief Gets AR to GR procedure time
 
 		\param gr the gr handler given to extract the AR2GR time
-		\param time the int to write time on
+		\param time a long to write AR to GR procedure time on
 		\return a Guido error code
 	*/
-    GUIDOAPI(GuidoErrCode) 	GuidoGetAR2GRProcedureTime(const GRHandler gr, int &time);
+    GUIDOAPI(GuidoErrCode) 	GuidoGetAR2GRProcedureTime(const GRHandler gr, long &time);
 
     /** \brief Gets GR drawing procedure time
 
 		\param gr the gr handler given to extract the drawing time
-		\param time the int to write time on
+		\param time a long to write drawing time on
 		\return a Guido error code
 	*/
-    GUIDOAPI(GuidoErrCode) 	GuidoGetDrawingProcedureTime(const GRHandler gr, int &time);
+    GUIDOAPI(GuidoErrCode) 	GuidoGetDrawingProcedureTime(const GRHandler gr, long &time);
 
 /*! @} */
 

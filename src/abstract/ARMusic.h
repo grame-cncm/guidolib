@@ -60,8 +60,8 @@ class ARMusic : public MusicalVoiceList, public ARMusicalEvent
     const std::vector<std::string> &getPath() const  { return mPaths; }  
     void  setPath( std::vector<std::string> inPaths) { mPaths = inPaths; }
 
-    void setParseTime(int time) { mParseTime = time; }
-    int  getParseTime()         { return mParseTime; }
+    void setParseTime(long time) { mParseTime = time; }
+    long  getParseTime()         { return mParseTime; }
 
     long       mMaxTagId;
     static int mRefCount;
@@ -72,7 +72,8 @@ protected:
 
     NVstring mName;
     std::vector<std::string> mPaths;
-    int mParseTime;
+    
+    long mParseTime;
 };
 
 inline std::ostream & operator<<(std::ostream & os, const ARMusic* m)	{ m->print(os); return os; }

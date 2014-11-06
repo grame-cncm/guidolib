@@ -19,15 +19,15 @@
 
 #include "GuidoTimer.h"
 
-int GuidoTimer::getCurrentmsTime() {
-    struct timeval start;
+long GuidoTimer::getCurrentmsTime() {
+    struct timeval time;
 
     long seconds, useconds;    
 
-    gettimeofday(&start, NULL);
+    gettimeofday(&time, NULL);
     
-    seconds  = start.tv_sec;
-    useconds = start.tv_usec;
+    seconds  = time.tv_sec;
+    useconds = time.tv_usec;
 
     return (seconds * 1000 + useconds / 1000.0) + 0.5;
 }
