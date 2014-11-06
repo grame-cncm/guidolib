@@ -226,6 +226,7 @@ bool QGuidoPainter::setGMNDataStream (GuidoStream * guidoStream)
 	return (mLastErr == guidoNoErr);
 
 }
+
 //-------------------------------------------------------------------------
 bool QGuidoPainter::setGMNData( const QString& gmncode, const char* dataPath)
 {
@@ -235,12 +236,6 @@ bool QGuidoPainter::setGMNData( const QString& gmncode, const char* dataPath)
 	GRHandler grh;
 
     arh = GuidoString2AR(fParser, gmncode.toUtf8().data());
-
-    /*int parseTime;
-    GuidoGetParseTime(fParser, parseTime);
-    std::ofstream outFile("C:/Users/Colas/Desktop/timing.txt", std::ios::out | std::ios::trunc);
-    outFile << parseTime << "ms spent for AR generation\n";
-    outFile.close();*/
 
     if (!arh)
         return false;
@@ -269,12 +264,6 @@ bool QGuidoPainter::setGMNData( const QString& gmncode, const char* dataPath)
 
 GuidoErrCode QGuidoPainter::convertAR2GR(ARHandler ar, const GuidoLayoutSettings* settings, GRHandler* gr) {
 	GuidoErrCode errCode = GuidoAR2GR(ar, settings , gr);
-
-    /*int AR2GRTime;
-    GuidoGetAR2GRProcedureTime(AR2GRTime);
-    std::ofstream outFile("C:/Users/Colas/Desktop/timing.txt", std::ios::app);
-    outFile << AR2GRTime << "ms spent during AR to GR procedure\n";
-    outFile.close();*/
 
     return errCode;
 }
@@ -378,12 +367,6 @@ void QGuidoPainter::draw( QPainter * painter , int page , const QRect& drawRecta
 	mDesc.sizey = ys;
 #endif
 	GuidoOnDraw (&mDesc);
-
-    /*int drawTime;
-    GuidoGetDrawProcedureTime(drawTime);
-    std::ofstream outFile("C:/Users/Colas/Desktop/timing.txt", std::ios::app);
-    outFile << drawTime << "ms spent for GR drawing\n";
-    outFile.close();*/
 	
 //	qDebug("Score : width = %d , height = %d" , mDesc.sizex , mDesc.sizey );
 //	qDebug("QGuidoPainter: Draw time : %d ms" , time.elapsed() );

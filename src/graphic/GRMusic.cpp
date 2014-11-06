@@ -59,6 +59,9 @@ GRMusic::GRMusic(ARMusic * inARMusic, ARPageFormat * inFormat, bool ownsAR ) // 
 {	
 	assert( inARMusic );
 
+    mAR2GRTime = 0;
+    mDrawTime  = 0;
+
 	gCurMusic = this;
 	createGR( inFormat );
 }

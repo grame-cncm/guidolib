@@ -30,6 +30,9 @@ using namespace std;
 
 #include "GUIDOParse.h"
 
+#define TIMING
+#include "GuidoTimer.h"
+
 
 // ==========================================================================
 // - Guido Parser API
@@ -67,7 +70,18 @@ GUIDOAPI(ARHandler) GuidoFile2AR (GuidoParser *p, const char *file)
 
     p->setStream(&ifs);
 
+    int startTime = GuidoTimer::getCurrentmsTime();
     ARHandler ar = p->parse();
+    int endTime = GuidoTimer::getCurrentmsTime();
+    
+    if (ar) {
+        ar->armusic->setParseTime(endTime - startTime);
+
+#ifdef TIMING
+        int parseTime = ar->armusic->getParseTime();
+        std::cerr << "  --> " << parseTime << "ms spent for AR generation" << std::endl;
+#endif
+    }
 
     ifs.close();
 
@@ -83,8 +97,19 @@ GUIDOAPI(ARHandler)	GuidoString2AR (GuidoParser *p, const char *str)
     std::istringstream iss(str);
 
     p->setStream(&iss);
-
+    
+    int startTime = GuidoTimer::getCurrentmsTime();
     ARHandler ar = p->parse();
+    int endTime = GuidoTimer::getCurrentmsTime();
+
+    if (ar) {
+        ar->armusic->setParseTime(endTime - startTime);
+
+#ifdef TIMING
+        int parseTime = ar->armusic->getParseTime();
+        std::cerr << "  --> " << parseTime << "ms spent for AR generation" << std::endl;
+#endif
+    }
 
 	return ar;
 }
@@ -102,7 +127,18 @@ GUIDOAPI(ARHandler)	GuidoStream2AR (GuidoParser *p, GuidoStream* s)
     p->setStream(s);
 
     /* Parse ! */
+    int startTime = GuidoTimer::getCurrentmsTime();
     ARHandler ar = p->parse();
+    int endTime = GuidoTimer::getCurrentmsTime();
+    
+    if (ar) {
+        ar->armusic->setParseTime(endTime - startTime);
+
+#ifdef TIMING
+        int parseTime = ar->armusic->getParseTime();
+        std::cerr << "  --> " << parseTime << "ms spent for AR generation" << std::endl;
+#endif
+    }
 
 	return ar;
 }
@@ -164,17 +200,6 @@ GUIDOAPI(GuidoErrCode) GuidoResetStream (GuidoStream *s)
         return guidoErrBadParameter;
 
     s->ReinitStream();
-
-	return guidoNoErr;
-}
-
-// --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoGetParseTime (GuidoParser *p, int &time)
-{
-    if (!p)
-        return guidoErrBadParameter;
-
-    time = p->getParseTime();
 
 	return guidoNoErr;
 }

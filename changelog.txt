@@ -3,7 +3,9 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
 version 1.5.5
-- performances improvement (principally for scores containing lots of chords : time ratio until 3)
+- performances improvement:
+    - during AR2GR procedure, principally for scores containing lots of chords (time ratio until 3)
+	- during drawing procedure, principally for very big scores (time ratio until 3)
 - color param added for tags: \tremolo, \dotFormat, \accidental, \accolade, \bar, \doubleBar, \endBar, \repeatBegin, \repeatEnd, \daCapo, \daCapoAlFine, \dalSegno, \dalSegnoAlFine, \fine, \breathMark, \key, \octava, \staffFormat, \tempo, \tie, \tuplet, \volta
 - size param added for tags: \accolade, \bar
 - dx param added for tags: \bar

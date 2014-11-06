@@ -54,22 +54,25 @@ class ARMusic : public MusicalVoiceList, public ARMusicalEvent
 
 			void 	removeAutoTags();
 
-  const NVstring  & getName() const	                                        { return mName; }
-	  		void 	setName(const char * in)	                            { mName = in; }
+    const NVstring  & getName() const { return mName; }
+    void  setName(const char * in)    { mName = in; }
+    
+    const std::vector<std::string> &getPath() const  { return mPaths; }  
+    void  setPath( std::vector<std::string> inPaths) { mPaths = inPaths; }
 
-                          void setPath( std::vector<std::string> inPaths)   { mPaths = inPaths; }
-const std::vector<std::string> &getPath() const                              { return mPaths; }     
+    void setParseTime(int time) { mParseTime = time; }
+    int  getParseTime()         { return mParseTime; }
 
-	        long    mMaxTagId;
+    long       mMaxTagId;
+    static int mRefCount;
 
-	  static int    mRefCount;
+protected:
 
-  protected:
+    void doAutoBreaks();
 
-  	  void doAutoBreaks();
-
-	  NVstring mName;
-      std::vector<std::string> mPaths;
+    NVstring mName;
+    std::vector<std::string> mPaths;
+    int mParseTime;
 };
 
 inline std::ostream & operator<<(std::ostream & os, const ARMusic* m)	{ m->print(os); return os; }

@@ -676,19 +676,30 @@ The number of version functions is due to historical reasons.
 \addtogroup Guido timer
 @{
 */
+    /*!
+		\brief Gets parsing time
+
+		\param ar the ar handler given to extract the parsing time
+		\param time an int to write parsing time on
+		\return a Guido error code.
+	*/
+    GUIDOAPI(GuidoErrCode)  GuidoGetParsingTime (const ARHandler ar, int &time);
+
     /** \brief Gets AR to GR procedure time
 
+		\param gr the gr handler given to extract the AR2GR time
 		\param time the int to write time on
 		\return a Guido error code
 	*/
-    GUIDOAPI(GuidoErrCode) 	GuidoGetAR2GRProcedureTime(int &time);
+    GUIDOAPI(GuidoErrCode) 	GuidoGetAR2GRProcedureTime(const GRHandler gr, int &time);
 
-    /** \brief Gets GR to display procedure time
+    /** \brief Gets GR drawing procedure time
 
+		\param gr the gr handler given to extract the drawing time
 		\param time the int to write time on
 		\return a Guido error code
 	*/
-    GUIDOAPI(GuidoErrCode) 	GuidoGetDrawProcedureTime(int &time);
+    GUIDOAPI(GuidoErrCode) 	GuidoGetDrawingProcedureTime(const GRHandler gr, int &time);
 
 /*! @} */
 

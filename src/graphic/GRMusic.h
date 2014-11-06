@@ -106,12 +106,20 @@ class GRMusic : public GREvent
 				float 	getOptForce();
 				int 	getVoiceNum( ARMusicalVoice * arvoice ) const; 
 				void 	addPage( GRPage * newPage );
+                
+                void    setAR2GRTime(int time) { mAR2GRTime = time; }
+                int     getAR2GRTime()         { return mAR2GRTime; }
+                void    setDrawTime(int time)  { mDrawTime = time; }
+                int     getDrawTime()          { return mDrawTime; }
 
 	protected:
 				void 	addVoiceElement( GRVoice * voice, GRNotationElement * el );
 
 	  	NVstring 	mName;
 		VoiceList 	mVoiceList;
+
+        int         mAR2GRTime;
+        int         mDrawTime;
 
 	private:  
 		PageList 	mPages;

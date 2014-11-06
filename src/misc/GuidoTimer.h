@@ -14,44 +14,14 @@
 
 */
 
-#ifdef WIN32
-    #include <windows.h>
-#else
-#endif
-
 class GuidoTimer {
 public:
-    GuidoTimer();
-
-    void startParse();
-    void stopParse();
-
-    void startAR2GR();
-    void stopAR2GR();
-
-    void startDraw();
-    void stopDraw();
-
-    int  getParseTime();
-    int  getAR2GRTime();
-    int  getDrawTime();
+    static int getCurrentmsTime();
+    static int stop();
 
 protected:
 #ifdef WIN32
-    void keepTime(LARGE_INTEGER &startTime);
-    int getSpentTime(LARGE_INTEGER &startTime, LARGE_INTEGER &endTime);
-
-    LARGE_INTEGER frequency;
-
-    LARGE_INTEGER startParseTime;
-    LARGE_INTEGER endParseTime;
-
-    LARGE_INTEGER startAR2GRTime;
-    LARGE_INTEGER endAR2GRTime;
-
-    LARGE_INTEGER startDrawTime;
-    LARGE_INTEGER endDrawTime;
-#else
+    static int gettimeofday(struct timeval *tv, struct timezone *tz);
 #endif
 };
 

@@ -11,94 +11,72 @@
 
 */
 
+#ifdef WIN32
+    #include <Windows.h>
+#else
+    #include <sys/time.h>
+#endif
+
 #include "GuidoTimer.h"
 
-GuidoTimer::GuidoTimer()
+int GuidoTimer::getCurrentmsTime() {
+    struct timeval start;
+
+    long seconds, useconds;    
+
+    gettimeofday(&start, NULL);
+    
+    seconds  = start.tv_sec;
+    useconds = start.tv_usec;
+
+    return (seconds * 1000 + useconds / 1000.0) + 0.5;
+}
+
+#ifdef WIN32
+
+struct timezone 
 {
-#ifdef WIN32
-    startParseTime = LARGE_INTEGER();
-    endParseTime   = LARGE_INTEGER();
-    
-    startAR2GRTime = LARGE_INTEGER();
-    endAR2GRTime   = LARGE_INTEGER();
-    
-    startDrawTime = LARGE_INTEGER();
-    endDrawTime   = LARGE_INTEGER();
-    
-    QueryPerformanceFrequency(&frequency); 
+	int  tz_minuteswest; /* minutes W of Greenwich */
+	int  tz_dsttime;     /* type of dst correction */
+};
+
+#if defined(_MSC_VER) || defined(_MSC_EXTENSIONS)
+    #define DELTA_EPOCH_IN_MICROSECS  11644473600000000Ui64
 #else
-#endif
-}
-
-void GuidoTimer::startParse() {
-    keepTime(startParseTime);
-}
-
-void GuidoTimer::stopParse() {
-    keepTime(endParseTime);
-}
-
-void GuidoTimer::startAR2GR() {
-    keepTime(startAR2GRTime);
-}
-
-void GuidoTimer::stopAR2GR() {
-    keepTime(endAR2GRTime);
-}
-
-void GuidoTimer::startDraw() {
-    keepTime(startDrawTime);
-}
-
-void GuidoTimer::stopDraw() {
-    keepTime(endDrawTime);
-}
-
-int GuidoTimer::getParseTime() {
-#ifdef WIN32
-    return getSpentTime(startParseTime, endParseTime);
-#else
+    #define DELTA_EPOCH_IN_MICROSECS  11644473600000000ULL
 #endif
 
-    return 0;
-}
-
-int GuidoTimer::getAR2GRTime() {
-#ifdef WIN32
-    return getSpentTime(startAR2GRTime, endAR2GRTime);
-#else
-#endif
-
-    return 0;
-}
-
-int GuidoTimer::getDrawTime() {
-#ifdef WIN32
-    return getSpentTime(startDrawTime, endDrawTime);
-#else
-#endif
-
-    return 0;
-}
-	
-void GuidoTimer::keepTime(LARGE_INTEGER &time)
+int GuidoTimer::gettimeofday(struct timeval *tv, struct timezone *tz)
 {
-#ifdef WIN32
-    QueryPerformanceCounter(&time);
-#else
-#endif
+    FILETIME ft;
+    unsigned __int64 tmpres = 0;
+    static int tzflag;
+
+    if (NULL != tv) {
+        GetSystemTimeAsFileTime(&ft);
+
+        tmpres |= ft.dwHighDateTime;
+        tmpres <<= 32;
+        tmpres |= ft.dwLowDateTime;
+
+        /*converting file time to unix epoch*/
+        tmpres -= DELTA_EPOCH_IN_MICROSECS; 
+        tmpres /= 10;  //convert into microseconds
+        tv->tv_sec  = (long)(tmpres / 1000000UL);
+        tv->tv_usec = (long)(tmpres % 1000000UL);
+    }
+
+    /*if (NULL != tz) {
+        if (!tzflag) {
+            _tzset();
+            tzflag++;
+        }
+
+        tz->tz_minuteswest = _timezone / 60;
+        tz->tz_dsttime     = _daylight;
+    }*/
+
+    return 0;
 }
 
-#ifdef WIN32
-int GuidoTimer::getSpentTime(LARGE_INTEGER &startTime, LARGE_INTEGER &endTime) {
-    LARGE_INTEGER spentTimeInMs;
-    
-    spentTimeInMs.QuadPart = endTime.QuadPart - startTime.QuadPart;
-
-    spentTimeInMs.QuadPart *= 1000;
-    spentTimeInMs.QuadPart /= frequency.QuadPart;
-
-    return spentTimeInMs.LowPart;
-}
-#else
 #endif
