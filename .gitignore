@@ -24,4 +24,4 @@ tools/*.mid
 guidolib-1.??-*
 *.deb
 *.so*
-
+android-apps/*/obj

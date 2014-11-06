@@ -1,6 +1,7 @@
 #include "date_tools.h"
 #include "GUIDOEngine.h"
 #include <sstream>
+#include <cstdlib>
 
 using namespace std;
 
