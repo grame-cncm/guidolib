@@ -13,7 +13,7 @@ sources = $(wildcard $(srcdir)/*/*.cpp)
 objects = $(patsubst ../src/engine%,obj%, $(patsubst %.cpp,%.o,$(sources)))
 
 GCC = emcc
-CXXFLAGS += $(addprefix -I, $(subprojects)) -DINDEPENDENTSVG -DJSON_ONLY
+CXXFLAGS += $(addprefix -I, $(subprojects)) -DINDEPENDENTSVG -DJSON_ONLY -O2
 
 EXPORT := "['_GuidoSVGExportWithFontSpec_retCString',\
 			'_GuidoAbstractExport_retCString',\
