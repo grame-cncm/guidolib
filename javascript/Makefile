@@ -8,12 +8,12 @@
 #
 
 srcdir := ../src/engine
-subprojects :=  $(wildcard $(srcdir)/*)
-sources = $(wildcard $(srcdir)/*/*.cpp)
-objects = $(patsubst ../src/engine%,obj%, $(patsubst %.cpp,%.o,$(sources)))
+subprojects :=  $(wildcard $(srcdir)/* json)
+sources = $(wildcard $(srcdir)/*/*.cpp json/*.cpp)
+objects = $(patsubst json%,obj/json%, $(patsubst ../src/engine%,obj%, $(patsubst %.cpp,%.o,$(sources))))
 
 GCC = emcc
-CXXFLAGS += $(addprefix -I, $(subprojects)) -DINDEPENDENTSVG -DJSON_ONLY -O2
+CXXFLAGS += $(addprefix -I, $(subprojects)) -Ijson -DINDEPENDENTSVG -DJSON_ONLY -O2
 
 EXPORT := "['_GuidoSVGExportWithFontSpec_retCString',\
 			'_GuidoAbstractExport_retCString',\
@@ -55,5 +55,9 @@ depend :
 	makedepend -fMakefile -Y -- $(CXXFLAGS) -- $(sources)
 
 obj/%.o: $(srcdir)/%.cpp
+	@[ -d $(@D) ] || mkdir -p $(@D)
+	$(GCC) -c $(CXXFLAGS) $< -o $@
+
+obj/%.o: json/%.cpp
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	$(GCC) -c $(CXXFLAGS) $< -o $@
