@@ -1,5 +1,5 @@
-#ifndef GuidoTimer_H
-#define GuidoTimer_H
+#ifndef GuidoTiming_H
+#define GuidoTiming_H
 
 /*
   GUIDO Library
@@ -14,7 +14,7 @@
 
 */
 
-class GuidoTimer {
+class GuidoTiming {
 public:
     static long getCurrentmsTime();
 
