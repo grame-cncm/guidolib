@@ -136,7 +136,7 @@ bool SVGDevice::BeginDraw()
 		SelectPenColor (*fPendingStrokeColor);
 		delete fPendingStrokeColor;
 		fPendingStrokeColor = 0;
-	}fStream << std::endl;
+	}
 	return true;
 }
 
