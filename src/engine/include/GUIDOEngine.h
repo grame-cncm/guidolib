@@ -20,6 +20,14 @@
 #include <vector>
 #include "GUIDOExport.h"
 
+
+#ifdef WIN32
+    #define GUIDOAPI_deprecated
+#else
+    #define GUIDOAPI_deprecated __attribute__((deprecated))
+#endif
+
+
 class GuidoFeedback;
 class VGDevice;
 
@@ -285,20 +293,11 @@ representations.
                 It's the caller responsability to free the handle using GuidoFreeAR.
 		\return a Guido error code.
     */
-#ifdef __linux__
-    #define deprecated __attribute__((deprecated))
-#else
-#ifndef ANDROID
+
+#ifdef WIN32
     __declspec(deprecated("Deprecated function (will be erased soon) : use GUIDOAPI(ARHandler) GuidoFile2AR (GuidoParser *parser, const char * file) instead."))
-#else
-    #define deprecated __attribute__((deprecated))
 #endif
-#endif
-    GUIDOAPI(GuidoErrCode)	GuidoParseFile(const char * filename, ARHandler* ar)
-#ifndef WIN32
-        deprecated
-#endif
-    ;
+    GUIDOAPI(GuidoErrCode)	GuidoParseFile(const char * filename, ARHandler* ar) GUIDOAPI_deprecated;
 
 	/*!
         Parses a buffer and builds the corresponding abstract representation.
@@ -308,20 +307,10 @@ representations.
                 It's the caller responsability to free the handle using GuidoFreeAR.
 		\return a Guido error code.
     */
-#ifdef __linux__
-    #define deprecated __attribute__((deprecated))
-#else
-#ifndef ANDROID
+#ifdef WIN32
     __declspec(deprecated("Deprecated function (will be erased soon) : use GUIDOAPI(ARHandler) GuidoString2AR (GuidoParser *parser, const char * str) instead."))
-#else
-    #define deprecated __attribute__((deprecated))
 #endif
-#endif
-    GUIDOAPI(GuidoErrCode)	GuidoParseString(const char * str, ARHandler* ar)
-#ifndef WIN32
-        deprecated
-#endif
-    ;
+    GUIDOAPI(GuidoErrCode)	GuidoParseString(const char * str, ARHandler* ar) GUIDOAPI_deprecated;
 
 	/*!
         Transforms a Guido abstract representation into a Guido graphic representation.
@@ -447,20 +436,11 @@ representations.
         Gives the line of a Guido script where the last parse error has occured.
 		\return a line number.
 	*/
-#ifdef __linux__
-    #define deprecated __attribute__((deprecated))
-#else
-#ifndef ANDROID
+
+#ifdef WIN32
     __declspec(deprecated("Deprecated function (will be erased soon) : use GUIDOAPI(GuidoErrCode) GuidoParserGetErrorCode (GuidoParser* p, int& line, int& col) instead."))
-#else
-    #define deprecated __attribute__((deprecated))
 #endif
-#endif
-    GUIDOAPI(int)   GuidoGetParseErrorLine()
-#ifndef WIN32
-    deprecated
-#endif
-    ;
+    GUIDOAPI(int)   GuidoGetParseErrorLine() GUIDOAPI_deprecated;
 
 	/*!
         Gives the default values of the layout settings.
