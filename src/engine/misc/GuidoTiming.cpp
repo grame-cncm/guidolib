@@ -17,9 +17,9 @@
     #include <sys/time.h>
 #endif
 
-#include "GuidoTimer.h"
+#include "GuidoTiming.h"
 
-long GuidoTimer::getCurrentmsTime() {
+long GuidoTiming::getCurrentmsTime() {
     struct timeval time;
 
     long seconds, useconds;    
@@ -46,7 +46,7 @@ struct timezone
     #define DELTA_EPOCH_IN_MICROSECS  11644473600000000ULL
 #endif
 
-int GuidoTimer::gettimeofday(struct timeval *tv, struct timezone *tz)
+int GuidoTiming::gettimeofday(struct timeval *tv, struct timezone *tz)
 {
     FILETIME ft;
     unsigned __int64 tmpres = 0;

@@ -20,6 +20,14 @@
 #include <vector>
 #include "GUIDOExport.h"
 
+
+#ifdef WIN32
+    #define GUIDOAPI_deprecated
+#else
+    #define GUIDOAPI_deprecated __attribute__((deprecated))
+#endif
+
+
 class GuidoFeedback;
 class VGDevice;
 
@@ -285,20 +293,11 @@ representations.
                 It's the caller responsability to free the handle using GuidoFreeAR.
 		\return a Guido error code.
     */
-#ifdef __linux__
-    #define deprecated __attribute__((deprecated))
-#else
-#ifndef ANDROID
+
+#ifdef WIN32
     __declspec(deprecated("Deprecated function (will be erased soon) : use GUIDOAPI(ARHandler) GuidoFile2AR (GuidoParser *parser, const char * file) instead."))
-#else
-    #define deprecated __attribute__((deprecated))
 #endif
-#endif
-    GUIDOAPI(GuidoErrCode)	GuidoParseFile(const char * filename, ARHandler* ar)
-#ifndef WIN32
-        deprecated
-#endif
-    ;
+    GUIDOAPI(GuidoErrCode)	GuidoParseFile(const char * filename, ARHandler* ar) GUIDOAPI_deprecated;
 
 	/*!
         Parses a buffer and builds the corresponding abstract representation.
@@ -308,20 +307,10 @@ representations.
                 It's the caller responsability to free the handle using GuidoFreeAR.
 		\return a Guido error code.
     */
-#ifdef __linux__
-    #define deprecated __attribute__((deprecated))
-#else
-#ifndef ANDROID
+#ifdef WIN32
     __declspec(deprecated("Deprecated function (will be erased soon) : use GUIDOAPI(ARHandler) GuidoString2AR (GuidoParser *parser, const char * str) instead."))
-#else
-    #define deprecated __attribute__((deprecated))
 #endif
-#endif
-    GUIDOAPI(GuidoErrCode)	GuidoParseString(const char * str, ARHandler* ar)
-#ifndef WIN32
-        deprecated
-#endif
-    ;
+    GUIDOAPI(GuidoErrCode)	GuidoParseString(const char * str, ARHandler* ar) GUIDOAPI_deprecated;
 
 	/*!
         Transforms a Guido abstract representation into a Guido graphic representation.
@@ -358,33 +347,6 @@ representations.
 		\return a Guido error code.
     */
     GUIDOAPI(GuidoErrCode)	GuidoAR2RProportional(ARHandler ar, int width, int height, const GuidoDate& start, const GuidoDate& end, bool drawdur, VGDevice* dev);
-
-	/*!
-        Transforms a MIDI file into a simplified proportional representation.
-
-		\param midifile the MIDI file name
-		\param width the drawing area width.
-		\param height the drawing area height.
-		\param start start date of the time zone to be displayed.
-		\param end end date of the time zone to be displayed, when 0, the score duration is used.
-		\param drawdur control duration lines drawing.
-		\param dev a graphic device.
-		\return a Guido error code.
-    */
-    //GUIDOAPI(GuidoErrCode)	GuidoMIDI2RProportional( const char* midifile, int width, int height, const GuidoDate& start, const GuidoDate& end, bool drawdur, VGDevice* dev);
-
-	/*!
-        Transforms a MIDI file into a piano roll representation.
-
-		\param midifile the MIDI file name
-		\param width the drawing area width.
-		\param height the drawing area height.
-		\param start start date of the time zone to be displayed.
-		\param end end date of the time zone to be displayed, when 0, the score duration is used.
-		\param dev a graphic device.
-		\return a Guido error code.
-    */
-    //GUIDOAPI(GuidoErrCode)	GuidoMIDI2PRoll( const char* midifile, int width, int height, const GuidoDate& start, const GuidoDate& end, VGDevice* dev);
 
 
 	/*!
@@ -447,20 +409,11 @@ representations.
         Gives the line of a Guido script where the last parse error has occured.
 		\return a line number.
 	*/
-#ifdef __linux__
-    #define deprecated __attribute__((deprecated))
-#else
-#ifndef ANDROID
+
+#ifdef WIN32
     __declspec(deprecated("Deprecated function (will be erased soon) : use GUIDOAPI(GuidoErrCode) GuidoParserGetErrorCode (GuidoParser* p, int& line, int& col) instead."))
-#else
-    #define deprecated __attribute__((deprecated))
 #endif
-#endif
-    GUIDOAPI(int)   GuidoGetParseErrorLine()
-#ifndef WIN32
-    deprecated
-#endif
-    ;
+    GUIDOAPI(int)   GuidoGetParseErrorLine() GUIDOAPI_deprecated;
 
 	/*!
         Gives the default values of the layout settings.
@@ -798,7 +751,7 @@ The number of version functions is due to historical reasons.
 		\param time a long to write parsing time on
 		\return a Guido error code
 	*/
-    GUIDOAPI(GuidoErrCode)  GuidoGetParsingTime (const ARHandler ar, long &time);
+    GUIDOAPI(long)  GuidoGetParsingTime (const ARHandler ar);
 
     /** \brief Gets AR to GR procedure time
 
@@ -806,15 +759,14 @@ The number of version functions is due to historical reasons.
 		\param time a long to write AR to GR procedure time on
 		\return a Guido error code
 	*/
-    GUIDOAPI(GuidoErrCode) 	GuidoGetAR2GRProcedureTime(const GRHandler gr, long &time);
+    GUIDOAPI(long) 	GuidoGetAR2GRTime(const GRHandler gr);
 
     /** \brief Gets GR drawing procedure time
 
 		\param gr the gr handler given to extract the drawing time
-		\param time a long to write drawing time on
-		\return a Guido error code
+		\return the time spent on the last OnDraw call or -1 if OnDraw has not yet been called or for invalid handler
 	*/
-    GUIDOAPI(GuidoErrCode) 	GuidoGetDrawingProcedureTime(const GRHandler gr, long &time);
+    GUIDOAPI(long) 	GuidoGetOnDrawTime(const GRHandler gr);
 
 /*! @} */
 
