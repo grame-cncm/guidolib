@@ -35,7 +35,7 @@ ARMusic * gCurArMusic = NULL;
 ARMusic::ARMusic() : MusicalVoiceList(1) // owns Elements
 {
 	mRefCount++;
-    mParseTime = 0;
+    mParseTime = -1;
 }
 
 ARMusic::~ARMusic()

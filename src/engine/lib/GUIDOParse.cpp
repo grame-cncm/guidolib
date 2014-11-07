@@ -31,7 +31,7 @@ using namespace std;
 #include "GUIDOParse.h"
 
 #define TIMING
-#include "GuidoTimer.h"
+#include "GuidoTiming.h"
 #include "ARMusic.h"
 
 
@@ -71,9 +71,9 @@ GUIDOAPI(ARHandler) GuidoFile2AR (GuidoParser *p, const char *file)
 
     p->setStream(&ifs);
 
-    long startTime = GuidoTimer::getCurrentmsTime();
+    long startTime = GuidoTiming::getCurrentmsTime();
     ARHandler ar = p->parse();
-    long endTime = GuidoTimer::getCurrentmsTime();
+    long endTime = GuidoTiming::getCurrentmsTime();
     
     if (ar) {
         ar->armusic->setParseTime(endTime - startTime);
@@ -99,9 +99,9 @@ GUIDOAPI(ARHandler)	GuidoString2AR (GuidoParser *p, const char *str)
 
     p->setStream(&iss);
     
-    long startTime = GuidoTimer::getCurrentmsTime();
+    long startTime = GuidoTiming::getCurrentmsTime();
     ARHandler ar = p->parse();
-    long endTime = GuidoTimer::getCurrentmsTime();
+    long endTime = GuidoTiming::getCurrentmsTime();
 
     if (ar) {
         ar->armusic->setParseTime(endTime - startTime);
@@ -128,9 +128,9 @@ GUIDOAPI(ARHandler)	GuidoStream2AR (GuidoParser *p, GuidoStream* s)
     p->setStream(s);
 
     /* Parse ! */
-    long startTime = GuidoTimer::getCurrentmsTime();
+    long startTime = GuidoTiming::getCurrentmsTime();
     ARHandler ar = p->parse();
-    long endTime = GuidoTimer::getCurrentmsTime();
+    long endTime = GuidoTiming::getCurrentmsTime();
     
     if (ar) {
         ar->armusic->setParseTime(endTime - startTime);
