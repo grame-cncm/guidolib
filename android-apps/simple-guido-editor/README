@@ -1,0 +1,14 @@
+From this directory, run:
+
+  android update project -p .
+  ndk-build
+  ant debug
+  adb install -r bin/SimpleGuidoEditor-debug.apk
+
+Make sure that ndk-build (ships with the NDK, should be in the bin/
+directory), ant (Apache ant, http://ant.apache.org/) and adb
+fromt the android sdk are in your path. Also, make sure you have an emulator
+up and running that is recognized by adb.
+
+To learn how to set up emulators and whatnot, check out
+http://developer.android.com/.

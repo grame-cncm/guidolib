@@ -1,0 +1,68 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="../server/web-examples/js/guidostylesheet.css" type="text/css" charset="utf-8" />
+    <script src="libGUIDOEngine.js" type="text/javascript"></script>
+    <script src="guidoEmscriptenBridge.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../server/web-examples/js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="../server/web-examples/js/jsBinaryDeviceParser.js"></script>
+    <script type="text/javascript" src="../server/web-examples/js/jsCanvasDeviceFromBinary.js"></script>
+    <style type="text/css">
+      div.column {
+        display: block;
+        width: 50%;
+      }
+      #gmnSandbox {
+        width: 95%;
+      }
+      #guidoResult {
+        /*border: 0px;*/
+      }
+    </style>
+    <script>
+      var data = new Uint8Array(2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2);
+      //var nDataBytes = data.length * data.BYTES_PER_ELEMENT;
+      //var dataPtr = Module._malloc(nDataBytes);
+      //var dataHeap = new Uint8Array(Module.HEAPU8.buffer, dataPtr, nDataBytes);
+      //dataHeap.set(new Uint8Array(data.buffer));
+                    
+      function processGMN() {
+	var p=GuidoOpenParser();
+	var ar = GuidoString2AR (p, $("#gmnSandbox").val());
+	GuidoCloseParser(p);
+	var gr = GuidoARretGR (ar, 0);
+	var nDataBytes = data.length * data.BYTES_PER_ELEMENT;
+	var dataPtr = Module._malloc(nDataBytes);
+	var dataHeap = new Uint8Array(Module.HEAPU8.buffer, dataPtr, nDataBytes);
+	dataHeap.set(new Uint8Array(data.buffer));
+	var size = GuidoBinaryExport_retSize(gr, 1, dataHeap.byteOffset);
+	var result = new Uint8Array(new Uint8Array(dataHeap.buffer, dataHeap.byteOffset,
+	size));
+	Module._free(dataHeap.byteOffset);
+	gU1D0pAR$ER.parseGuidoBinary(result.buffer, 0, {verbose:true});
+      }
+      $(function () {
+        GuidoInitWithIndependentSVG();
+        console.log("loading");
+        $("#gmnSandbox").on('keyup', processGMN);
+        gU1D0cANVA$.initGuidoCanvas();
+        //processGMN();
+        //$("#gmnSandbox").val('[a b c d]');
+        //processGMN();
+      });
+    </script>
+  </head>
+  <body>
+    <div class="column" style="float:left">
+      <p>Type your GMN code here:</p>
+      <textarea id="gmnSandbox" rows="40"></textarea>
+    </div>
+    <div id="canvasContainer" class="column" style="float:right">
+      <canvas>
+      </canvas>
+    </div>
+    <div style="clear:both;"></div>
+    <div id="warning"></div>
+    <!-- need to insert dummy paragraph to load font -->
+    <p style="visibility:hidden;font-family:Guido2;">& </p>
+  </body>
+</html>

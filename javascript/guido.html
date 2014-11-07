@@ -1,0 +1,101 @@
+<html>
+<body>
+<script src="libGUIDOEngine.js" type="text/javascript"></script>
+<script src="guidoEmscriptenBridge.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+
+out = GuidoInitWithIndependentSVG()
+
+function doit( gmn ) {
+	p=GuidoOpenParser();
+	//console.log ("parser is " + p );
+	ar = GuidoString2AR (p, gmn);
+	GuidoCloseParser(p);
+	//console.log ("ar is " + ar);
+	gr = GuidoARretGR (ar, 0);
+	//console.log ("gr is " + gr);
+	svg_n=GuidoSVGExportWithFontSpec_retCString(gr, 1);
+	svg = Pointer_stringify(svg_n);
+	guido_svg = document.getElementById('guido_svg');
+	guido_svg.innerHTML = svg;
+	GuidoReleaseCString(svg_n);
+
+	guidoCountVoices = document.getElementById('guidoCountVoices');
+	guidoCountVoices.innerHTML = "<b>Number of voices:</b> "+GuidoCountVoices(ar);
+
+	guidoGetPageCount = document.getElementById('guidoGetPageCount');
+	guidoGetPageCount.innerHTML = "<b>Number of pages:</b> "+GuidoGetPageCount(gr);
+
+	guidoGetSystemCount = document.getElementById('guidoGetSystemCount');
+	guidoGetSystemCount.innerHTML = "<b>Number of systems on page 1:</b> "+GuidoGetSystemCount(gr, 1);
+	
+	guidoDuration_retDate = document.getElementById('guidoDuration_retDate');
+	date = GuidoDuration_retDate(gr);
+	guidoDuration_retDate.innerHTML = "<b>Duration:</b> "+GuidoGetDateNum(date)+"/"+GuidoGetDateDenom(date);
+	GuidoFreeDate(date);
+
+	guidoFindEventPage_p = document.getElementById('guidoFindEventPage_p');
+	date = GuidoMakeDate(1,4);
+	page = GuidoFindEventPage_p(gr, date);
+	guidoFindEventPage_p.innerHTML = "<b>Page at event 1/4:</b> "+page;
+	GuidoFreeDate(date);
+
+	guidoFindPageAt_p = document.getElementById('guidoFindPageAt_p');
+	date = GuidoMakeDate(1,4);
+	page = GuidoFindPageAt_p(gr, date);
+	guidoFindPageAt_p.innerHTML = "<b>Page at 1/4:</b> "+page;
+	GuidoFreeDate(date);
+
+	guidoGetPageDate_retDate = document.getElementById('guidoGetPageDate_retDate');
+	date = GuidoGetPageDate_retDate(gr, 1);
+	guidoGetPageDate_retDate.innerHTML = "<b>Page date for page 1:</b> "+GuidoGetDateNum(date)+"/"+GuidoGetDateDenom(date);
+	GuidoFreeDate(date);
+
+	guidoGetPageMap_JSON = document.getElementById('guidoGetPageMap_JSON');
+	pagemap_n = GuidoGetPageMap_JSON( gr, 1, 1000.0, 1000.0 )
+	guidoGetPageMap_JSON.innerHTML = "<b>Page map for page 1:</b> "+Pointer_stringify(pagemap_n);
+	GuidoReleaseCString(pagemap_n);
+
+	guidoGetStaffMap_JSON = document.getElementById('guidoGetStaffMap_JSON');
+	staffmap_n = GuidoGetStaffMap_JSON( gr, 1, 1000.0, 1000.0, 1 )
+	guidoGetStaffMap_JSON.innerHTML = "<b>Staff map for page 1, staff 1:</b> "+Pointer_stringify(staffmap_n);
+	GuidoReleaseCString(staffmap_n);
+
+	guidoGetVoiceMap_JSON = document.getElementById('guidoGetVoiceMap_JSON');
+	voicemap_n = GuidoGetVoiceMap_JSON( gr, 1, 1000.0, 1000.0, 1 )
+	guidoGetVoiceMap_JSON.innerHTML = "<b>Voice map for page 1, voice 1:</b> "+Pointer_stringify(voicemap_n);
+	GuidoReleaseCString(voicemap_n);
+
+	guidoGetSystemMap_JSON = document.getElementById('guidoGetSystemMap_JSON');
+	systemmap_n = GuidoGetSystemMap_JSON( gr, 1, 1000.0, 1000.0)
+	console.log(systemmap_n);
+	guidoGetSystemMap_JSON.innerHTML = "<b>System map for page 1:</b> "+Pointer_stringify(systemmap_n);
+	GuidoReleaseCString(systemmap_n);
+}
+
+</script>
+
+<div id="guidoCountVoices"></div>
+<div id="guidoGetPageCount"></div>
+<div id="guidoGetSystemCount"></div>
+<div id="guidoDuration_retDate"></div>
+<div id="guidoFindEventPage_p"></div>
+<div id="guidoFindPageAt_p"></div>
+<div id="guidoGetPageDate_retDate"></div>
+<div id="guidoGetPageMap_JSON"></div>
+<div id="guidoGetStaffMap_JSON"></div>
+<div id="guidoGetVoiceMap_JSON"></div>
+<div id="guidoGetSystemMap_JSON"></div>
+<div id="guido_svg"></div>
+
+<script type="text/javascript">
+  doit("{ [f# g# a& b& \\bar f# g# a&], [f g a b f g a b c c c \\bar c c] } "); //works
+  //doit("{ [f# g# a& b& f# g# a&], [f g a b f g a] } "); // doesn't work
+  doit("{ [f# g# a& b& f# g#], [f g a b f g] } "); // doesn't work
+  //doit("{ [a b c d e], [a b c d e] } "); // works
+</script>
+
+</body>
+
+</html>

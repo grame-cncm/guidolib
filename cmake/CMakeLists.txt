@@ -1,6 +1,7 @@
 #######################################
 # CMAKE guidolib
 #######################################
+
 project(guidolib)
 cmake_minimum_required(VERSION 2.6)
 
@@ -17,14 +18,16 @@ set (SOVERS 1)
 if(UNIX)
 	add_definitions(-Wall -DGCC)
 endif(UNIX)
-
+add_definitions(-DJSON_ONLY)
 
 #######################################
 # Options disabled by default
 option ( IOS 	"Generates project for iOS" off )
 option ( DIST 	"Compiles universal binaries (x86_64 i386) on MacOSX" off )
 option ( MIDIEXPORT "MIDI export support (requires MidiShareLight)" off)
+option ( INDEPENDENTSVG "Independent SVG support (gets all font information from provided SVG files)" off)
 option ( STATICLIB  "Generates a static library (default for iOS)" off)
+option ( GL "Links to opengl device" off)
 
 if(APPLE)
 
@@ -81,31 +84,35 @@ add_definitions(-DGUIDOExport)
 #######################################
 # set directories, src and headers.
 set (GUIDO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/..)
-set (SRC_PATH	${GUIDO_PATH}/src)
-set (SRCFOLDERS  lib graphic abstract parser pianoroll tools misc include devices maps)
-set (HEADERS_PATH ${SRC_PATH}/include)
-if(WIN32)
+set (SRC_PATH	${GUIDO_PATH}/src/engine)
+#set (SRCFOLDERS  lib graphic abstract parser tools misc json include devices maps)
+set (HEADERS_PATH ${SRC_PATH}/include ${SRC_PATH}/json)
+if (GL STREQUAL "yes")
+	set(VGDEV_PATH ${GUIDO_PATH}/opengl/device)
+elseif(WIN32)
 	set(VGDEV_PATH ${GUIDO_PATH}/win32/src)
 elseif(APPLE)
 	set(VGDEV_PATH ${GUIDO_PATH}/macosx/src)
 elseif(UNIX)
 	set(VGDEV_PATH ${GUIDO_PATH}/linux/src)
-endif(WIN32)
+endif()
 
 #######################################
 # midi export support
 if (MIDIEXPORT STREQUAL "yes")
 	message (STATUS "MIDI export will be generated (requires MidiShareLight) - Use -DMIDIEXPORT=no to change.")
-	set (SRCFOLDERS  ${SRCFOLDERS} midisharelight)
+	set (MSLIGHT_PATH	${GUIDO_PATH}/src/midisharelight)
 	add_definitions(-DMIDIEXPORT)
+	
+	set(INCL ${INCL} "${MSLIGHT_PATH}")			# add include folders
 	if (WIN32)
 		if (${CMAKE_CL_64})
-			set(LINK ${LINK} "${SRC_PATH}/midisharelight/win64/midisharelight64.lib")
+			set(LINK ${LINK} "${MSLIGHT_PATH}/win64/midisharelight64.lib")
 		else()
-			set(LINK ${LINK} "${SRC_PATH}/midisharelight/win32/midisharelight.lib")
+			set(LINK ${LINK} "${MSLIGHT_PATH}/win32/midisharelight.lib")
 		endif()
 	elseif(APPLE)
-		set(LINK ${LINK} "-L${SRC_PATH}/midisharelight/macos -lmidisharelight")
+		set(LINK ${LINK} "-L${MSLIGHT_PATH}/macos -lmidisharelight")
 	elseif(UNIX)
 		set(LINK ${LINK} "-L/usr/local/lib -lmidisharelight")
 	endif (WIN32)
@@ -113,11 +120,69 @@ else()
 	message (STATUS "MIDI export will not be generated - Use -DMIDIEXPORT=yes to change (requires MidiShareLight).")
 endif()
 
+# OPENGL
+if (GL STREQUAL "yes")
+	message (STATUS "Open GL device will be built. Use -DGL=no to change.")
+else()
+	message (STATUS "Open GL device won't be built. Use -DGL=yes to change.")
+endif()
 
-foreach(folder ${SRCFOLDERS})
-	set (SRC ${SRC} "${SRC_PATH}/${folder}/*.cpp")					# add source files
-endforeach(folder)
-if(WIN32)
+set (SRC ${SRC} "${SRC_PATH}/*/*.cpp")					# add source files
+# independent svg support
+if (INDEPENDENTSVG STREQUAL "yes")
+	message (STATUS "Independent SVG will be enforced and all SVG fonts must be elaborated in SVG files - Use -DINDEPENDENTSVG=no to change.")
+	add_definitions(-DINDEPENDENTSVG)
+else()
+	message (STATUS "Independent SVG will not be enforced and SVG fonts will be approximated using system fonts - Use -DINDEPENDENTSVG=yes to change.")
+endif()
+
+# vgdev
+if (GL STREQUAL "yes")
+	# independent svg needs to be enabled with this device
+	add_definitions(-DINDEPENDENTSVG)
+	set (VGDEV_SRC "${VGDEV_PATH}/*.cpp")
+	string (REPLACE .cpp .h VGDEV_H ${VGDEV_SRC})
+	set(LINK ${LINK} "-l glut -l GLU")
+	# gl
+	EXECUTE_PROCESS ( COMMAND "pkg-config"  "--cflags" "gl"
+                OUTPUT_VARIABLE TMP
+                ERROR_VARIABLE TMP
+        )
+	string (STRIP ${TMP} GLINCL)
+	add_definitions(${GLINCL})
+        EXECUTE_PROCESS ( COMMAND "pkg-config"  "--libs" "gl"
+                  OUTPUT_VARIABLE TMP
+                  ERROR_VARIABLE TMP
+        )
+	string (STRIP ${TMP} GLLIB)
+	set(LINK ${LINK} ${GLLIB})
+	# freetype
+	EXECUTE_PROCESS ( COMMAND "pkg-config"  "--cflags" "freetype2"
+                OUTPUT_VARIABLE TMP
+                ERROR_VARIABLE TMP
+        )
+	string (STRIP ${TMP} FREETYPEINCL)
+	add_definitions(${FREETYPEINCL})
+        EXECUTE_PROCESS ( COMMAND "pkg-config"  "--libs" "freetype2"
+                  OUTPUT_VARIABLE TMP
+                  ERROR_VARIABLE TMP
+        )
+	string (STRIP ${TMP} FREETYPELIB)
+	set(LINK ${LINK} ${FREETYPELIB})
+	# ftgl
+	EXECUTE_PROCESS ( COMMAND "pkg-config"  "--cflags" "ftgl"
+                OUTPUT_VARIABLE TMP
+                ERROR_VARIABLE TMP
+        )
+	string (STRIP ${TMP} FTGLINCL)
+	add_definitions(${FTGLINCL})
+        EXECUTE_PROCESS ( COMMAND "pkg-config"  "--libs" "ftgl"
+                  OUTPUT_VARIABLE TMP
+                  ERROR_VARIABLE TMP
+        )
+	string (STRIP ${TMP} FTGLLIB)
+	set(LINK ${LINK} ${FTGLLIB})
+elseif(WIN32)
 	set (VGDEV_SRC "${VGDEV_PATH}/GDeviceWin32.cpp" "${VGDEV_PATH}/GFontWin32.cpp" "${VGDEV_PATH}/GSystemWin32.cpp"
 		"${VGDEV_PATH}/GDeviceWin32GDIPlus.cpp" "${VGDEV_PATH}/GFontWin32GDIPlus.cpp" "${VGDEV_PATH}/GSystemWin32GDIPlus.cpp")
 	string (REPLACE .cpp .h VGDEV_H ${VGDEV_SRC})
@@ -133,23 +198,21 @@ elseif(UNIX)
         )
 	string (STRIP ${TMP} UINCL)
 	add_definitions(${UINCL})
-endif(WIN32)
+endif()
+
 file (GLOB LIBSRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${SRC} ${VGDEV_SRC})
 
-foreach(folder ${SRCFOLDERS})
-	set(HEADERS ${HEADERS} "${SRC_PATH}/${folder}/*.h")		# add header files
-endforeach(folder)
+set(HEADERS ${HEADERS} "${SRC_PATH}/*/*.h")		# add header files
 file (GLOB LIBH RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${HEADERS} ${VGDEV_H})
 file (GLOB PUBLICHEADERS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${HEADERS_PATH}/*.h" "${VGDEV_H}" "${SRC_PATH}/devices/*H")
 
-foreach(folder ${SRCFOLDERS})
-	set(INCL ${INCL} "${SRC_PATH}/${folder}")			# add include folders
-endforeach(folder)
-set(INCL ${INCL} "${VGDEV_PATH}")						# add include folders
+set(INCL ${INCL} "${SRC_PATH}/*")			# add include folders
+set(INCL ${INCL} "${VGDEV_PATH}")			# add include folders
+file (GLOB INCDIRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${INCL})
 
 #######################################
 # set includes
-include_directories( ${INCL})
+include_directories( ${INCDIRS})
 set_source_files_properties (${INCL} PROPERTIES HEADER_FILE_ONLY TRUE)
 
 #######################################

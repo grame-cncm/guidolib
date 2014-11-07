@@ -143,11 +143,11 @@ static void myinit()
 
 
 	create_menus();
-#ifdef WIN32
-	infoFont = new FTGLPixmapFont("times.ttf");
-#else
-	infoFont = new FTGLPixmapFont("Times");
-#endif
+//#ifdef WIN32
+	infoFont = new FTGLPixmapFont("../times.ttf");
+//#else
+//	infoFont = new FTGLPixmapFont("Times");
+//#endif
 	if (!infoFont || infoFont->Error()) {
 		cout << "erreur : infoFont creation failed!" << endl;
 		delete infoFont;

@@ -30,7 +30,70 @@ Note about MIDI export:
     MIDI export requires libmidisharelight. For MacOS and Windows, the library is embedded 
     in binary form in the src/midisharelight folder. Thus there is no additional step.
     On linux, you must get the library source code, compile and install.
-	
+
+Note for emscripten:
+--------------------
+Make an emscripten directory in the build directory and compile using:
+cmake -DCMAKE_TOOLCHAIN_FILE=/path/to/toolchain -DCMAKE_BUILD_TYPE=Debug -DINDEPENDENTSVG=yes -DSTATICLIB=yes -G "Unix Makefiles" ../../cmake
+
+The path to your toolchain probably vaguely resembles something like:
+/Users/mikesolomon/devel/emsdk_portable/emscripten/1.16.0/cmake/Platform/Emscripten.cmake
+The toolchain (a .cmake file) should be in your emscripten distribution.
+
+Then, in this directory, run:
+emcc libSGUIDOEngine.a -o libGUIDOEngine.js \
+-s EXPORTED_FUNCTIONS="['_GuidoAbstractExport','_GuidoSVGExport','_GuidoInit','_GuidoOpenParser','_GuidoString2AR','_GuidoCloseParser','_GuidoAR2GR']"
+
+(you can export whatever functions you want from the api in the array above -
+make sure to put the leading underscore!)
+
+Note for Android:
+-------------------------
+    Download the Android SDK and NDK.
+
+    From the build/tools directory of the NDK, invoke make-standalone-toolchain.sh
+    to make a standalone toolchain in the directory of your choice (see NDK)
+    documentation for how.  More precisely, read section 4 in the document
+    STANDALONE-TOOLCHAIN.html that ships with the NDK. Make sure to use a recent
+    platform (at least android-18). I will call the path to your standalone toolchain
+    $PATH_TO_STANDALONE_TOOLCHAIN, the path to the NDK $PATH_TO_NDK and the path to
+    the SDK $PATH_TO_SDK.
+
+    Modify your path to contain the following.  Otherwise, the compiler
+    won't find things like the standard library.
+
+      export PATH=$PATH:$PATH_TO_NDK
+      export PATH=$PATH:$PATH_TO_SDK/tools
+      export PATH=$PATH:$PATH_TO_SDK/platform-tools
+      export PATH=$PATH:$PATH_TO_STANDALONE_TOOLCHAIN/bin
+
+    The GUIDO android applications use the guidoengine java package
+    called guidoengine.jar.
+
+    To compile this, go to the java directory and do:
+
+    make headers
+    make class
+    make jar
+
+    The jar is simlinked into all the android sample projects that need it
+    under the libs/ directory.
+
+    From the directory android-apps/guido-engine-android, run
+
+      ndk-build
+
+    And this will build the library for android.
+    To test with a sample project, from the directory
+    android-apps/simple-guido-editor, run:
+
+      ndk-build
+      ant debug
+
+    And then install the application on your device.
+
+      
+
 Note for Linux platforms:
 --------------------------
 	You need to have libcairo2-dev installed to compile the GUIDOEngine.

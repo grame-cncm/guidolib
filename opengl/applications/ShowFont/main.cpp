@@ -69,7 +69,7 @@ static void myinit()
 	glClearColor( 1.0, 1.0, 1.0, 1.0);
     glShadeModel(GL_SMOOTH);
 //#ifdef WIN32
-	infoFont = new FTGLPixmapFont("times.ttf");
+	infoFont = new FTGLPixmapFont("../times.ttf");
 //#else
 //	infoFont = new FTGLPixmapFont("Times");
 //#endif

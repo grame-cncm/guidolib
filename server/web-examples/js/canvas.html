@@ -15,7 +15,8 @@
             console.log(this.status);
             if (this.status == 201) {
               success = true;
-              gU1D0pAR$ER.parseGuidoBinary(this.response, 0);
+              console.log(new Uint8Array(this.response));
+              gU1D0pAR$ER.parseGuidoBinary(this.response, 0, {verbose:true});
               $("#warning").text("");
             }
           }

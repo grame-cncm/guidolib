@@ -1,4 +1,4 @@
-SRC = $(wildcard guidoengine/*.java)
+SRC = $(wildcard guidoengine/*.java guidoengine/drawcommand/*.java)
 CLASS = $(patsubst %.java, %.class, $(SRC) )
 JNI   = $(patsubst guidoengine/%.java, jni/guidoengine_%.h, $(SRC) )
 

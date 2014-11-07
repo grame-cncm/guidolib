@@ -34,9 +34,11 @@
 #include "utilities.h"
 
 // json
-#include "json/json_object.h"
-#include "json/json_array.h"
-#include "json/json_stream.h"
+#include "json_object.h"
+#include "json_array.h"
+#include "json_stream.h"
+
+#include "date_tools.h"
 
 using namespace std;
 using namespace json;
@@ -672,41 +674,15 @@ guidosessionresponse guidosession::datePageJson(string date, int page)
 guidosessionresponse guidosession::mapJson (string thingToGet, Time2GraphicMap &outmap)
 {
     json_object *obj = new json_object();
-    json_array *arr = new json_array();
-    for (int i = 0; i < (int)(outmap.size()); i++) {
-        json_object*  holder = new json_object();
-        json_object*  graph = new json_object();
-        json_object*  mytime = new json_object();
-        graph->add(new json_element("left", new json_float_value(outmap[i].second.left)));
-        graph->add(new json_element("top", new json_float_value(outmap[i].second.top)));
-        graph->add(new json_element("right", new json_float_value(outmap[i].second.right)));
-        graph->add(new json_element("bottom", new json_float_value(outmap[i].second.bottom)));
-        mytime->add(new json_element("start", new json_string_value(dateToString(outmap[i].first.first).c_str())));
-        mytime->add(new json_element("end", new json_string_value(dateToString(outmap[i].first.second).c_str())));
-        holder->add(new json_element("graph", new json_object_value(graph)));
-        holder->add(new json_element("time", new json_object_value(mytime)));
-        arr->add(new json_object_value(holder));
-    }
+    json_array *arr = populate_json_array_with_time_2_graphic_map(outmap);
     obj->add(new json_element(thingToGet.c_str(), new json_array_value(arr)));
     return wrapObjectInId(obj);
 }
 
-guidosessionresponse guidosession::timeMapJson (GuidoServerTimeMap &outmap)
+guidosessionresponse guidosession::timeMapJson (JSONFriendlyTimeMap &outmap)
 {
     json_object *obj = new json_object();
-    json_array *arr = new json_array();
-    for (int i = 0; i < (int)(outmap.segments_.size()); i++) {
-        json_object*  holder = new json_object();
-        json_object*  score = new json_object();
-        json_object*  perf = new json_object();
-        score->add(new json_element("start", new json_string_value(dateToString(outmap.segments_[i].first.first).c_str())));
-        score->add(new json_element("end", new json_string_value(dateToString(outmap.segments_[i].first.second).c_str())));
-        perf->add(new json_element("start", new json_string_value(dateToString(outmap.segments_[i].second.first).c_str())));
-        perf->add(new json_element("end", new json_string_value(dateToString(outmap.segments_[i].second.second).c_str())));
-        holder->add(new json_element("score", new json_object_value(score)));
-        holder->add(new json_element("perf", new json_object_value(perf)));
-        arr->add(new json_object_value(holder));
-    }
+    json_array *arr = populate_json_array_with_time_map_collector(outmap);
     obj->add(new json_element("timemap", new json_array_value(arr)));
     return wrapObjectInId(obj);
 }
@@ -789,7 +765,7 @@ guidoAPIresponse guidosession::getPageDate(int page, GuidoDate &date)
     return guidoAPIresponse(GuidoGetPageDate(grh_, page, &date));
 }
 
-guidoAPIresponse guidosession::getTimeMap (GuidoServerTimeMap& outmap)
+guidoAPIresponse guidosession::getTimeMap (JSONFriendlyTimeMap& outmap)
 {
     if (whyIFailed_)
       return *whyIFailed_;
