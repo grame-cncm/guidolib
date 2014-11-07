@@ -29,7 +29,7 @@
 using namespace std;
 
 #define TIMING
-#include "GuidoTimer.h"
+#include "GuidoTiming.h"
 
 // - Guido AR
 #include "ARFactory.h"
@@ -76,8 +76,8 @@ using namespace std;
 // ==========================================================================
 const int GUIDOENGINE_MAJOR_VERSION = 1;
 const int GUIDOENGINE_MINOR_VERSION = 5;
-const int GUIDOENGINE_SUB_VERSION   = 5;
-const char* GUIDOENGINE_VERSION_STR = "1.5.5";
+const int GUIDOENGINE_SUB_VERSION   = 6;
+const char* GUIDOENGINE_VERSION_STR = "1.5.6";
 
 ARPageFormat * gARPageFormat = 0;
 
@@ -346,9 +346,9 @@ GUIDOAPI(GuidoErrCode) GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * set
 	// - Now create the GRMusic object from  the abstract representation.
 	guido_applySettings(settings);
     
-    long startTime = GuidoTimer::getCurrentmsTime();
+    long startTime = GuidoTiming::getCurrentmsTime();
 	GRMusic *grMusic = new GRMusic(arMusic, gARPageFormat, false);
-    long endTime = GuidoTimer::getCurrentmsTime();
+    long endTime = GuidoTiming::getCurrentmsTime();
 
 	if (grMusic == 0)
         return guidoErrMemory;
@@ -622,7 +622,7 @@ GUIDOAPI(GuidoErrCode) GuidoOnDraw( GuidoOnDrawDesc * desc )
  
   	GuidoErrCode result = guidoErrActionFailed;
  	
-    long startTime = GuidoTimer::getCurrentmsTime();
+    long startTime = GuidoTiming::getCurrentmsTime();
 
 	const bool drawReady = desc->hdc->BeginDraw();
 	if( drawReady )
@@ -644,7 +644,7 @@ GUIDOAPI(GuidoErrCode) GuidoOnDraw( GuidoOnDrawDesc * desc )
 		
 	desc->hdc->EndDraw(); // must be called even if BeginDraw has failed.
     
-    long endTime = GuidoTimer::getCurrentmsTime();
+    long endTime = GuidoTiming::getCurrentmsTime();
 
     desc->handle->grmusic->setDrawTime(endTime - startTime);
 
@@ -972,49 +972,23 @@ GUIDOAPI(GuidoErrCode) GuidoGetSymbolPath(const ARHandler inHandleAR, std::vecto
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoGetParsingTime(const ARHandler ar, long &time)
+GUIDOAPI(long)  GuidoGetParsingTime (const ARHandler ar)
 {
-    if (!ar)
-        return guidoErrBadParameter;
-
-    ARMusic *arMusic = ar->armusic;
-    
-    if (arMusic)
-        time = arMusic->getParseTime();
-    else
-        return guidoErrBadParameter;
-
-	return guidoNoErr;
+    ARMusic *arMusic = ar ? ar->armusic : 0;
+	return arMusic ? arMusic->getParseTime() : -1;
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoGetAR2GRProcedureTime(const GRHandler gr, long &time)
+GUIDOAPI(long) 	GuidoGetAR2GRTime(const GRHandler gr)
 {
-    if (!gr)
-        return guidoErrBadParameter;
-
-    GRMusic *grMusic = gr->grmusic;
-    
-    if (grMusic)
-        time = grMusic->getAR2GRTime();
-    else
-        return guidoErrBadParameter;
-
-    return guidoNoErr;
+    GRMusic *grMusic = gr ? gr->grmusic : 0;
+    return grMusic ? grMusic->getAR2GRTime() : -1;
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoGetDrawingProcedureTime(const GRHandler gr, long &time)
+GUIDOAPI(long) 	GuidoGetOnDrawTime(const GRHandler gr)
 {
-    if (!gr)
-        return guidoErrBadParameter;
-
-    GRMusic *grMusic = gr->grmusic;
-    
-    if (grMusic)
-        time = grMusic->getDrawTime();
-    else
-        return guidoErrBadParameter;
-
-    return guidoNoErr;
+    GRMusic *grMusic = gr ? gr->grmusic : 0;
+    return grMusic ? grMusic->getDrawTime() : -1;
 }
+

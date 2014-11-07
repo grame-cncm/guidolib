@@ -348,33 +348,6 @@ representations.
     */
     GUIDOAPI(GuidoErrCode)	GuidoAR2RProportional(ARHandler ar, int width, int height, const GuidoDate& start, const GuidoDate& end, bool drawdur, VGDevice* dev);
 
-	/*!
-        Transforms a MIDI file into a simplified proportional representation.
-
-		\param midifile the MIDI file name
-		\param width the drawing area width.
-		\param height the drawing area height.
-		\param start start date of the time zone to be displayed.
-		\param end end date of the time zone to be displayed, when 0, the score duration is used.
-		\param drawdur control duration lines drawing.
-		\param dev a graphic device.
-		\return a Guido error code.
-    */
-    //GUIDOAPI(GuidoErrCode)	GuidoMIDI2RProportional( const char* midifile, int width, int height, const GuidoDate& start, const GuidoDate& end, bool drawdur, VGDevice* dev);
-
-	/*!
-        Transforms a MIDI file into a piano roll representation.
-
-		\param midifile the MIDI file name
-		\param width the drawing area width.
-		\param height the drawing area height.
-		\param start start date of the time zone to be displayed.
-		\param end end date of the time zone to be displayed, when 0, the score duration is used.
-		\param dev a graphic device.
-		\return a Guido error code.
-    */
-    //GUIDOAPI(GuidoErrCode)	GuidoMIDI2PRoll( const char* midifile, int width, int height, const GuidoDate& start, const GuidoDate& end, VGDevice* dev);
-
 
 	/*!
         Applies new layout settings to an existing Guido graphic representation.
@@ -773,28 +746,24 @@ The number of version functions is due to historical reasons.
 */
     /*!
 		\brief Gets parsing time
-
 		\param ar the ar handler given to extract the parsing time
-		\param time a long to write parsing time on
-		\return a Guido error code
+		\return the time spent on building the AR representation (in msl) or -1 for invalid handlers
 	*/
-    GUIDOAPI(GuidoErrCode)  GuidoGetParsingTime (const ARHandler ar, long &time);
+    GUIDOAPI(long)  GuidoGetParsingTime (const ARHandler ar);
 
     /** \brief Gets AR to GR procedure time
 
 		\param gr the gr handler given to extract the AR2GR time
-		\param time a long to write AR to GR procedure time on
-		\return a Guido error code
+		\return the time spent to convert the AR representation to GR (in msl) or -1 for invalid handlers
 	*/
-    GUIDOAPI(GuidoErrCode) 	GuidoGetAR2GRProcedureTime(const GRHandler gr, long &time);
+    GUIDOAPI(long) 	GuidoGetAR2GRTime(const GRHandler gr);
 
     /** \brief Gets GR drawing procedure time
 
 		\param gr the gr handler given to extract the drawing time
-		\param time a long to write drawing time on
-		\return a Guido error code
+		\return the time spent on the last OnDraw call (in msl) or -1 if OnDraw has not yet been called or for invalid handlers
 	*/
-    GUIDOAPI(GuidoErrCode) 	GuidoGetDrawingProcedureTime(const GRHandler gr, long &time);
+    GUIDOAPI(long) 	GuidoGetOnDrawTime(const GRHandler gr);
 
 /*! @} */
 

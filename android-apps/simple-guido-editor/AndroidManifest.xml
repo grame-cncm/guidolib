@@ -7,7 +7,7 @@
     <!-- While ViewPager will work on API 4 or above, tabs require an ActionBar. ActionBar is only
          available in API 11 or above. -->
     <uses-sdk
-        android:minSdkVersion="11"
+        android:minSdkVersion="14"
         android:targetSdkVersion="18" />
 
     <application
