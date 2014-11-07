@@ -48,7 +48,8 @@ doc:
 headers : $(JNI)
 
 jni/guidoengine_%.h: guidoengine/%.class
-	javah -jni -d jni $(patsubst guidoengine/%.class, guidoengine.%, $<) 
+	javah -jni -d jni $(patsubst guidoengine/%.class, guidoengine.%, $<) # temporary
+	javah -jni -d jni $(patsubst guidoengine/drawcommand/%.class, guidoengine.drawcommand.%, $<) # temporary
 
 ##################################################################
 # rule for java compiling
