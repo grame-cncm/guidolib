@@ -746,25 +746,22 @@ The number of version functions is due to historical reasons.
 */
     /*!
 		\brief Gets parsing time
-
 		\param ar the ar handler given to extract the parsing time
-		\param time a long to write parsing time on
-		\return a Guido error code
+		\return the time spent on building the AR representation (in msl) or -1 for invalid handlers
 	*/
     GUIDOAPI(long)  GuidoGetParsingTime (const ARHandler ar);
 
     /** \brief Gets AR to GR procedure time
 
 		\param gr the gr handler given to extract the AR2GR time
-		\param time a long to write AR to GR procedure time on
-		\return a Guido error code
+		\return the time spent to convert the AR representation to GR (in msl) or -1 for invalid handlers
 	*/
     GUIDOAPI(long) 	GuidoGetAR2GRTime(const GRHandler gr);
 
     /** \brief Gets GR drawing procedure time
 
 		\param gr the gr handler given to extract the drawing time
-		\return the time spent on the last OnDraw call or -1 if OnDraw has not yet been called or for invalid handler
+		\return the time spent on the last OnDraw call (in msl) or -1 if OnDraw has not yet been called or for invalid handlers
 	*/
     GUIDOAPI(long) 	GuidoGetOnDrawTime(const GRHandler gr);
 
