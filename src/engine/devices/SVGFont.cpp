@@ -62,6 +62,8 @@ SVGFont::SVGFont(const char * name, int size, int properties, const char * guido
         }
       }
     }
+    fSize = size;
+    fProperties = properties;
 #else
     fDevice = gSystem.CreateMemoryDevice (10,10);
     fFont = gSystem.CreateVGFont (name, size, properties);
