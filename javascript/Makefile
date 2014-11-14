@@ -8,12 +8,12 @@
 #
 
 srcdir := ../src/engine
-subprojects :=  $(wildcard $(srcdir)/* json)
-sources = $(wildcard $(srcdir)/*/*.cpp json/*.cpp)
-objects = $(patsubst json%,obj/json%, $(patsubst ../src/engine%,obj%, $(patsubst %.cpp,%.o,$(sources))))
+subprojects :=  $(wildcard $(srcdir)/* json main)
+sources = $(wildcard $(srcdir)/*/*.cpp json/*.cpp main/*.cpp)
+objects = $(patsubst main%, obj/main%, $(patsubst json%,obj/json%, $(patsubst ../src/engine%,obj%, $(patsubst %.cpp,%.o,$(sources)))))
 
 GCC = emcc
-CXXFLAGS += $(addprefix -I, $(subprojects)) -Ijson -DINDEPENDENTSVG -DJSON_ONLY -O2
+CXXFLAGS += $(addprefix -I, $(subprojects)) -DINDEPENDENTSVG -DJSON_ONLY -O2
 
 EXPORT := "['_GuidoSVGExportWithFontSpec_retCString',\
 			'_GuidoAbstractExport_retCString',\
@@ -40,13 +40,14 @@ EXPORT := "['_GuidoSVGExportWithFontSpec_retCString',\
 			'_GuidoGetStaffMap_JSON',\
 			'_GuidoGetVoiceMap_JSON',\
 			'_GuidoGetSystemMap_JSON',\
-			'_GuidoARretGR']"
+			'_GuidoARretGR',\
+			'_main']"
 
 target = libGUIDOEngine.js
 
 # emcc -O0 -g4 -s ASSERTIONS=2 -s SAFE_HEAP=1 -s ALIASING_FUNCTION_POINTERS=0 $(objects) -o $(target) -s ALLOW_MEMORY_GROWTH=1 -s EXPORTED_FUNCTIONS=$(EXPORT)
 $(target) : $(objects)
-	emcc -O2 $(objects) -o $(target) -s ALLOW_MEMORY_GROWTH=0 -s ASM_JS=1 -s EXPORTED_FUNCTIONS=$(EXPORT)
+	emcc -O2 $(objects) -o $(target) -s ALLOW_MEMORY_GROWTH=1 -s ASM_JS=1 -s ASSERTIONS=1 -s EXPORTED_FUNCTIONS=$(EXPORT)
 
 clean:
 	rm -f $(objects) $(target)
@@ -59,5 +60,9 @@ obj/%.o: $(srcdir)/%.cpp
 	$(GCC) -c $(CXXFLAGS) $< -o $@
 
 obj/json/%.o: json/%.cpp
+	@[ -d $(@D) ] || mkdir -p $(@D)
+	$(GCC) -c $(CXXFLAGS) $< -o $@
+
+obj/main/%.o: main/%.cpp
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	$(GCC) -c $(CXXFLAGS) $< -o $@

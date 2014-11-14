@@ -1,5 +1,6 @@
 <html>
   <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="../server/web-examples/js/guidostylesheet.css" type="text/css" charset="utf-8" />
     <script src="libGUIDOEngine.js" type="text/javascript"></script>
     <script src="guidoEmscriptenBridge.js" type="text/javascript"></script>
@@ -40,15 +41,16 @@
 	Module._free(dataHeap.byteOffset);
 	gU1D0pAR$ER.parseGuidoBinary(result.buffer, 0, {verbose:true});
       }
-      $(function () {
-        GuidoInitWithIndependentSVG();
+      function allReady() {
+	Module["noExitRuntime"] = true;
+	var err = GuidoInitWithIndependentSVG();
         console.log("loading");
         $("#gmnSandbox").on('keyup', processGMN);
         gU1D0cANVA$.initGuidoCanvas();
         //processGMN();
         //$("#gmnSandbox").val('[a b c d]');
         //processGMN();
-      });
+      }
     </script>
   </head>
   <body>
