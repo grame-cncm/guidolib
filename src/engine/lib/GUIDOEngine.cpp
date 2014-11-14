@@ -126,13 +126,12 @@ GUIDOAPI(GuidoErrCode) GuidoInit( GuidoInitDesc * desc )
 	gGlobalSettings.gFeedback = 0;
 
 	// - Skip if already initialized
-	if( gInited == false )
-	{
+    if( gInited == false )
+    {
 		// gets the standard-scriabin font at 4 times LSPACE (4*2*HSPACE)
 		NVstring musicFontStr ( musicFont );
 		FontManager::gFontScriab = FontManager::FindOrCreateFont((int)(4 * LSPACE), &musicFontStr );
-
-		// gets the standard Text-Font..
+        // gets the standard Text-Font..
 		NVstring textFontStr ( textFont );
 		FontManager::gFontText = FontManager::FindOrCreateFont((int)(1.5f * LSPACE), &textFontStr );
 
@@ -697,7 +696,7 @@ GUIDOAPI(GuidoErrCode) 	GuidoBinaryExport( const GRHandler handle, int page, std
 	GuidoResizePageToMusic (handle);
 	GuidoGetPageFormat (handle, page, &pf);
  
-	desc.hdc = &dev;                    // we'll draw on the svg device
+    desc.hdc = &dev;                    // we'll draw on the binary device
         desc.page = page;
         desc.updateRegion.erase = true;     // and draw everything
 	desc.scrollx = desc.scrolly = 0;    // from the upper left page corner
@@ -719,8 +718,9 @@ GUIDOAPI(GuidoErrCode) GuidoSVGExport( const GRHandler handle, int page, std::os
 
 char * GuidoInternalDeviceExport_retCString( const GRHandler handle, int page, GuidoInternalDevice dev)
 {
-	static stringstream sstr;
-	sstr.clear();
+    static stringstream sstr;
+    sstr.str(""); // Empty String
+    sstr.clear(); // Reset flags
 	GuidoErrCode err;
 	if (dev == guido_svg_with_font_spec) {
 	  err = GuidoSVGExportWithFontSpec (handle, page, sstr, 0, reinterpret_cast<char *>(______src_guido2_svg));
@@ -753,6 +753,7 @@ char * GuidoAbstractExport_retCString( const GRHandler handle, int page)
 int GuidoBinaryExport_retSize( const GRHandler handle, int page, char * in_arr )
 {
 	static stringstream sstr;
+    sstr.str("");
 	sstr.clear();
 	GuidoErrCode err;
 	err = GuidoBinaryExport(handle, page, sstr);
