@@ -25,3 +25,8 @@ guidolib-1.??-*
 *.deb
 *.so*
 android-apps/*/obj
+android-apps/simple-guido-editor/bin
+java/jni/guidoengine_*
+android-apps/simple-guido-editor/.classpath
+android-apps/simple-guido-editor/.project
+android-apps/simple-guido-editor/.settings
