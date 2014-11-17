@@ -1,7 +1,7 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" href="../server/web-examples/js/guidostylesheet.css" type="text/css" charset="utf-8" />
+    <link rel="stylesheet" href="../server/web-examples/js/guidostylesheet.css" type="text/css" charset="UTF-8" />
     <script src="libGUIDOEngine.js" type="text/javascript"></script>
     <script src="guidoEmscriptenBridge.js" type="text/javascript"></script>
     <script type="text/javascript" src="../server/web-examples/js/jquery-1.10.2.min.js"></script>
@@ -22,12 +22,13 @@
 	var p=GuidoOpenParser();
 	var ar = GuidoString2AR (p, $("#gmnSandbox").val());
 	GuidoCloseParser(p);
-	var gr = GuidoARretGR (ar, 0);
+	var gr = GuidoGetAR2GR (ar, 0);
 
-	var result = GuidoSVGExportWithFontSpec_retCString(gr, 1);
+	var result = GuidoGetSVGExportWithFontSpec(gr, 1);
 	$("#canvasContainer").html(Pointer_stringify(result));
 	$("#canvasContainer2").html("<plaintext>" + result + Pointer_stringify(result) + "</plaintext>");
-	GuidoReleaseCString(result);	
+	GuidoReleaseCString(result);
+	GuidoFreeGR(gr);
       }
       function allReady() {
 	Module["noExitRuntime"] = true;
@@ -39,7 +40,7 @@
   </head>
   <body>
     <div class="column" style="float:left">
-      <p>Type your GMN code here:</p>
+      <p>Type your GMN code here :</p>
       <textarea id="gmnSandbox" rows="40"></textarea>
     </div>
     <div id="canvasContainer" class="column" style="float:right">
@@ -50,6 +51,6 @@
    
     </div>   <div id="warning"></div>
     <!-- need to insert dummy paragraph to load font -->
-    <p style="visibility:hidden;font-family:Guido2;">& </p>
+    <p id="myP" style="visibility:hidden;font-family:Guido2;font-size:200px"></p>
   </body>
 </html>
