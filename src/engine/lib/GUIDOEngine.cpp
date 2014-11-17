@@ -69,7 +69,7 @@ using namespace std;
 #include "BinaryDevice.h"
 #include "BinaryFont.h"
 
-#include "guido2.h"
+// #include "guido2.h" TODO GGX
 
 // ==========================================================================
 // - Guido Global variables
@@ -104,7 +104,7 @@ GUIDOAPI(GuidoErrCode) GuidoInitWithIndependentSVG()
 {
 	GuidoInitDesc desc;
 
-	VGSystem * gSystem= new SVGSystem(0, reinterpret_cast<char *>(______src_guido2_svg));
+    VGSystem * gSystem= new SVGSystem(0, 0); // TODO GGX reinterpret_cast<char *>(______src_guido2_svg));
 	desc.graphicDevice = gSystem->CreateMemoryDevice(20,20);
 	desc.musicFont = "Guido2";
 	desc.textFont  = "Times";
@@ -227,7 +227,7 @@ GUIDOAPI(GuidoErrCode) GuidoParseFile(const char * filename, ARHandler * ar)
 		gGlobalSettings.gFeedback->UpdateStatusMessage( 0 );
 		if( gGlobalSettings.gFeedback->ProgDialogAbort())
 		{
-			GuidoFreeAR (music);
+            GuidoFreeAR (music);
 			gGlobalSettings.gFeedback->Notify( GuidoFeedback::kIdle );
 			return guidoErrUserCancel;
 		}
@@ -314,7 +314,7 @@ class TestTimeMap : public TimeMapCollector
 
 
 // --------------------------------------------------------------------------
-GRHandler GuidoARretGR( ARHandler ar, const GuidoLayoutSettings * settings)
+GRHandler GuidoGetAR2GR( ARHandler ar, const GuidoLayoutSettings * settings)
 {
 	GRHandler gr;
 	GuidoErrCode err = GuidoAR2GR (ar, settings, &gr);
@@ -543,7 +543,7 @@ GUIDOAPI(GuidoErrCode)	GuidoDuration( CGRHandler inHandleGR, GuidoDate * date )
 }
 
 // --------------------------------------------------------------------------
-GuidoDate * GuidoDuration_retDate( CGRHandler inHandleGR)
+GuidoDate * GuidoGetDuration( CGRHandler inHandleGR)
 {
   GuidoDate *date = new GuidoDate();
   GuidoErrCode err = GuidoDuration( inHandleGR, date );
@@ -552,7 +552,6 @@ GuidoDate * GuidoDuration_retDate( CGRHandler inHandleGR)
     return 0;
   }
   return date;
-  
 }
 
 // --------------------------------------------------------------------------
@@ -595,7 +594,7 @@ GUIDOAPI(GuidoErrCode) GuidoGetPageDate( CGRHandler inHandleGR, int pageNum, Gui
 	return result ? guidoNoErr : guidoErrBadParameter;
 }
 
-GuidoDate * GuidoGetPageDate_retDate( CGRHandler inHandleGR, int pageNum)
+GuidoDate * GuidoGetDatePageDate( CGRHandler inHandleGR, int pageNum)
 {
   GuidoDate *date = new GuidoDate();
   GuidoErrCode err = GuidoGetPageDate( inHandleGR, pageNum, date);
@@ -604,7 +603,6 @@ GuidoDate * GuidoGetPageDate_retDate( CGRHandler inHandleGR, int pageNum)
     return 0;
   }
   return date;
-
 }
 
 // --------------------------------------------------------------------------
@@ -716,14 +714,15 @@ GUIDOAPI(GuidoErrCode) GuidoSVGExport( const GRHandler handle, int page, std::os
   return GuidoSVGExportWithFontSpec( handle, page, out, fontfile, 0);
 }
 
-char * GuidoInternalDeviceExport_retCString( const GRHandler handle, int page, GuidoInternalDevice dev)
+char * GuidoGetInternalDeviceExport( const GRHandler handle, int page, GuidoInternalDevice dev)
 {
     static stringstream sstr;
     sstr.str(""); // Empty String
     sstr.clear(); // Reset flags
 	GuidoErrCode err;
 	if (dev == guido_svg_with_font_spec) {
-	  err = GuidoSVGExportWithFontSpec (handle, page, sstr, 0, reinterpret_cast<char *>(______src_guido2_svg));
+      err = GuidoSVGExportWithFontSpec (handle, page, sstr, 0, 0);
+                                        // TODO GGX reinterpret_cast<char *>(______src_guido2_svg));
 	} else if (dev == guido_abstract) {
 	  err = GuidoAbstractExport(handle, page, sstr);
 	} else if (dev == guido_binary) {
@@ -735,22 +734,23 @@ char * GuidoInternalDeviceExport_retCString( const GRHandler handle, int page, G
 	if (err) {
 	  return 0;
 	}
-	char *out = (char *) malloc(strlen(sstr.str().c_str()) + 1);
-	strcpy(out, sstr.str().c_str());
+    string str = sstr.str();
+    char *out = (char *) malloc(strlen(str.c_str()) + 1);
+    strcpy(out, str.c_str());
 	return out;
 }
 
-char * GuidoSVGExportWithFontSpec_retCString( const GRHandler handle, int page)
+char * GuidoGetSVGExportWithFontSpec( const GRHandler handle, int page)
 {
-  return GuidoInternalDeviceExport_retCString(handle, page, guido_svg_with_font_spec);
+  return GuidoGetInternalDeviceExport(handle, page, guido_svg_with_font_spec);
 }
 
-char * GuidoAbstractExport_retCString( const GRHandler handle, int page)
+char * GuidoGetAbstractExport( const GRHandler handle, int page)
 {
-  return GuidoInternalDeviceExport_retCString(handle, page, guido_abstract);
+  return GuidoGetInternalDeviceExport(handle, page, guido_abstract);
 }
 
-int GuidoBinaryExport_retSize( const GRHandler handle, int page, char * in_arr )
+int GuidoGetBinaryExport( const GRHandler handle, int page, char * in_arr )
 {
 	static stringstream sstr;
     sstr.str("");
@@ -761,10 +761,11 @@ int GuidoBinaryExport_retSize( const GRHandler handle, int page, char * in_arr )
 	  return 0;
 	}
 	const char * underlying_string = sstr.str().c_str();
-	for (int i = 0; i < sstr.str().size(); i++) {
+    size_t size = sstr.str().size();
+    for (size_t i = 0; i < size; i++) {
 	  in_arr[i] = underlying_string[i];
 	}
-	return sstr.str().size();
+    return size;
 }
 
 void  GuidoReleaseCString( char *stringToRelease ) {

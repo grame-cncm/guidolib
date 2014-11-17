@@ -15,9 +15,9 @@ objects = $(patsubst main%, obj/main%, $(patsubst json%,obj/json%, $(patsubst ..
 GCC = emcc
 CXXFLAGS += $(addprefix -I, $(subprojects)) -DINDEPENDENTSVG -DJSON_ONLY -O2
 
-EXPORT := "['_GuidoSVGExportWithFontSpec_retCString',\
-			'_GuidoAbstractExport_retCString',\
-			'_GuidoBinaryExport_retSize',\
+EXPORT := "['_GuidoGetSVGExportWithFontSpec',\
+			'_GuidoGetAbstractExport',\
+			'_GuidoGetBinaryExport',\
 			'_GuidoInitWithIndependentSVG',\
 			'_GuidoOpenParser',\
 			'_GuidoString2AR',\
@@ -32,15 +32,19 @@ EXPORT := "['_GuidoSVGExportWithFontSpec_retCString',\
 			'_GuidoFreeDate',\
 			'_GuidoFreeAR',\
 			'_GuidoFreeGR',\
-			'_GuidoDuration_retDate',\
+			'_GuidoGetDuration',\
 			'_GuidoFindEventPage_p',\
 			'_GuidoFindPageAt_p',\
-			'_GuidoGetPageDate_retDate',\
+			'_GuidoGetDatePageDate',\
 			'_GuidoGetPageMap_JSON',\
 			'_GuidoGetStaffMap_JSON',\
 			'_GuidoGetVoiceMap_JSON',\
 			'_GuidoGetSystemMap_JSON',\
-			'_GuidoARretGR',\
+			'_GuidoGetAR2GR',\
+			'_GuidoShutdown',\
+			'_GuidoGetParsingTime',\
+			'_GuidoDrawBoundingBoxes',\
+			'_GuidoGetDrawBoundingBoxes',\
 			'_main']"
 
 target = libGUIDOEngine.js

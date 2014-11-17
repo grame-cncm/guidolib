@@ -331,7 +331,7 @@ representations.
        Same as GuidoAR2GR, except it returns a GRHandler or 0 in case
        of a failure.
     */
-    GRHandler	GuidoARretGR( ARHandler ar, const GuidoLayoutSettings* settings);
+    GRHandler	GuidoGetAR2GR( ARHandler ar, const GuidoLayoutSettings* settings);
 
 
 	/*!
@@ -474,7 +474,7 @@ as by date. Page numbers start at 1.
 		\param inHandleGR a Guido opaque handle to a GR structure.
 		\return a pointer to a GuidoDate or 0 if error.
 	*/
-	GuidoDate * GuidoDuration_retDate( CGRHandler inHandleGR);
+    GuidoDate * GuidoGetDuration( CGRHandler inHandleGR);
 
 
 	/** \brief Finds the page which has an event (note or rest) at a given date.
@@ -516,13 +516,13 @@ as by date. Page numbers start at 1.
 	*/
 	GUIDOAPI(GuidoErrCode) GuidoGetPageDate( CGRHandler inHandleGR, int pageNum, GuidoDate* date);
 
-	/** \brief Like GuidoGetPageDate, but returns a pointer to a date
+    /** \brief Same as GuidoGetPageDate(CGRHandler, int, GuidoDate*), except it return a pointer to a date
 
 		\param inHandleGR a Guido opaque handle to a GR structure.
 		\param pageNum a page number (starts at 1).
 		\return a pointer to a Date or 0 if null
 	*/
-	GuidoDate * GuidoGetPageDate_retDate( CGRHandler inHandleGR, int pageNum);
+    GuidoDate * GuidoGetDatePageDate( CGRHandler inHandleGR, int pageNum);
 
 
 /*! @} */
@@ -546,6 +546,7 @@ units.
 
 	/** \brief Exports one page of score to SVG.
 
+        \param a graphic representation.
 		\param page the page number.
 		\param out the output stream.
 		\param fontfile path of the guido svg font file.
@@ -553,14 +554,41 @@ units.
 		\return a Guido error code
 	*/
     GUIDOAPI(GuidoErrCode) 	GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile );
+
+    /** \brief Exports one page of score to SVG.
+
+        \param a graphic representation.
+        \param page the page number.
+        \param out the output stream.
+        \param fontfile path of the guido svg font file.
+        \param fontspec an actual svg font if there is no font file.
+        \return a Guido error code
+    */
     GUIDOAPI(GuidoErrCode) 	GuidoSVGExportWithFontSpec( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec );
+
+    /** \brief Exports one page of score to SVG.
+
+        \param a graphic representation.
+        \param page the page number.
+        \return a c string which have to be released. See GuidoReleaseCString().
+    */
+    char *  GuidoGetSVGExportWithFontSpec( const GRHandler handle, int page );
 
 	/** \brief Exports an abstract representation of GUIDO draw commands.
 
+        \param a graphic representation.
 		\param out the output stream.
 		\return a Guido error code
 	*/
     GUIDOAPI(GuidoErrCode) 	GuidoAbstractExport( const GRHandler handle, int page, std::ostream& out);
+
+    /** \brief Same as GuidoAbstractExport( const GRHandler, int, std::ostream&) but return a c string.
+
+        \param a graphic representation.
+        \param page
+        \return a c string
+    */
+    char *  GuidoGetAbstractExport( const GRHandler handle, int page );
 
 	/** \brief Exports an representation of GUIDO draw commands in a data-reduced dsl
 
@@ -568,6 +596,15 @@ units.
 		\return a Guido error code
 	*/
     GUIDOAPI(GuidoErrCode) 	GuidoBinaryExport( const GRHandler handle, int page, std::ostream& out);
+
+    /*!
+     * \brief GuidoBinaryExport same as GuidoBinaryExport(const GRHandler, int, std::ostream&).
+     * \param handle the graphic representation
+     * \param page
+     * \param in_arr a char tab in which write the binary export. The in_arr tab must have a sufficient size.
+     * \return the size of the export write in in_arr
+     */
+    int  GuidoGetBinaryExport( const GRHandler handle, int page, char * in_arr  );
 
 	/** \brief Control bounding boxes drawing.
 
@@ -730,11 +767,10 @@ The number of version functions is due to historical reasons.
 	*/
     GUIDOAPI(GuidoErrCode) GuidoGetSymbolPath(const ARHandler inHandleAR, std::vector<std::string> &inPathVector);
 
-
-
-    char *  GuidoSVGExportWithFontSpec_retCString( const GRHandler handle, int page );
-    char *  GuidoAbstractExport_retCString( const GRHandler handle, int page );
-    int  GuidoBinaryExport_retSize( const GRHandler handle, int page, char * in_arr  );
+    /*! Release memory reserved for a c string.
+     * \brief GuidoReleaseCString
+     * \param stringToRelease
+     */
     void  GuidoReleaseCString( char *stringToRelease );
 
     /*! @} */
