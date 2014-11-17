@@ -155,7 +155,7 @@ void			AbstractDevice::SetTextFont( const VGFont * font )	{
     fTextFont = font;
 }
 const VGFont *	AbstractDevice::GetTextFont() const	{
-    fStream << "GetMusicFont" << endl;
+    fStream << "GetTextFont" << endl;
     return fTextFont;
 }
 
