@@ -11,9 +11,12 @@
 
 */
 
+#include <string.h>
+
 #include "SVGSystem.h"
 #include "SVGDevice.h"
 #include "SVGFont.h"
+#include "GuidoFont.h"
 
 using namespace std;
 //______________________________________________________________________________
@@ -63,6 +66,11 @@ VGDevice* SVGSystem::CreateAntiAliasedMemoryDevice( int w, int h )
 //______________________________________________________________________________
 const VGFont* SVGSystem::CreateVGFont( const char * faceName, int size, int properties ) const
 {
+#ifdef INDEPENDENTSVG
+    if(strcmp("Guido2", faceName) == 0 && size == GuidoFont::kFontSize) {
+        return new GuidoFont(faceName, properties);
+    }
+#endif
 	return new SVGFont (faceName, size, properties, fGuidoFontFile ? fGuidoFontFile : "", fGuidoFontSpec ? fGuidoFontSpec : "");
 }
 
