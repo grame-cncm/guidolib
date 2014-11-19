@@ -24,7 +24,7 @@ long GuidoTiming::getCurrentmsTime() {
 
     long seconds, useconds;    
 
-    gettimeofday(&time, NULL);
+    gettimeofday(&time, 0);
     
     seconds  = time.tv_sec;
     useconds = time.tv_usec;
