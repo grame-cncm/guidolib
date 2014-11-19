@@ -57,7 +57,7 @@ ARBar::~ARBar() // does nothing
 {
 }
 
-void ARBar::print() const
+void ARBar::print(int &indent) const
 {
 }
 

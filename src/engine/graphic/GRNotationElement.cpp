@@ -53,6 +53,7 @@ GRNotationElement::GRNotationElement()
 	mRightSpace = 0;
 	mSymbol =  kNoneSymbol;
 	mDraw = true;
+    mIsInHeader = false;
 }
 
 GRNotationElement::~GRNotationElement()
@@ -115,10 +116,13 @@ void GRNotationElement::print(ostream& os) const
 	os << "notation element at " << getPosition() << " - " << getBoundingBox() << endl;
 	if (ar) {
         ARMusicalTag * tag = static_cast<ARMusicalTag *>(ar->isARMusicalTag());
-        if (tag) { *ar << os; os << endl; }
-        else ar->print();
+        if (tag)
+            *ar << os; os << endl;
+        /*else
+            ar->print(0);*/
 	}
-	else os << "=> no ARMusicalObject" << endl;
+	else
+        os << "=> no ARMusicalObject" << endl;
 }
 
 // -------------------------------------------------------------------------

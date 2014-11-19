@@ -142,7 +142,7 @@ void GRIntens::OnDraw(VGDevice & hdc) const
 }
 
 
-void GRIntens::print() const
+void GRIntens::print(int &indent) const
 {
 }
 

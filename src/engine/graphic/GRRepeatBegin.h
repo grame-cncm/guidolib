@@ -32,7 +32,7 @@ public:
     virtual 	~GRRepeatBegin();
 
 
-    virtual void            print() const {}
+    virtual void            print(int &indent) const {}
     virtual unsigned int    getTextAlign() const;
     virtual const NVPoint & getReferencePosition() const { return refpos; }
     virtual void            OnDraw(VGDevice & hdc ) const;

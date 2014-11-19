@@ -90,9 +90,10 @@
 using namespace std;
 
 // - Static members
-bool GRStaffManager::sOptPageFill = kSettingDefaultOptimalPageFill;
-bool GRStaffManager::sNeedSpecialSpacing = kSettingDefaultNeighborhood;	// (NeighborhoodSpacing)
+bool  GRStaffManager::sOptPageFill           = kSettingDefaultOptimalPageFill;
+bool  GRStaffManager::sNeedSpecialSpacing    = kSettingDefaultNeighborhood;	// (NeighborhoodSpacing)
 float GRStaffManager::sDefaultSystemDistance = kSettingDefaultSystemDistance;
+float GRStaffManager::sPropRender            = kSettingDefaultProportionalRendering;
 
 int GRStaffManager::sSystemDistribution = kSettingDefaultSystemDistrib; //GRStaffManager::kAuto; // 1 auto, 2 = always, 3 = never
 float GRStaffManager::sSystemDistribLimit = kSettingDefaultDistribLimit;
@@ -348,6 +349,7 @@ void GRStaffManager::createStaves()
 			//    ret = tmp->Next(tmptp, filltagmode);
 			
 			// see Iterate-description for documentation
+
 			int ret = voiceManager->Iterate(tmptp, filltagmode);
 
 			// there is still a voice active ...
@@ -434,15 +436,18 @@ void GRStaffManager::createStaves()
 				{
 					// this builds the current Spring-Force-Function (that is, rods and springs and stuff is created).
 					sff = BuildSFF();
-					// I must create a new possiblebreakstate and add that to the syncslice
-					GRPossibleBreakState * pbs = new GRPossibleBreakState();
 
-					pbs->sff = sff;
-					pbs->copyofcompletesff = NULL;					
-					float force = 0;
-					pbs->SaveState( mMyStaffs, mVoiceMgrList, this, timePos, force, pbreakval);
+                    if (!sPropRender) {
+                        // I must create a new possiblebreakstate and add that to the syncslice
+                        GRPossibleBreakState * pbs = new GRPossibleBreakState();
 
-					mGrSystemSlice->addPossibleBreakState(pbs);
+                        pbs->sff = sff;
+                        pbs->copyofcompletesff = NULL;					
+                        float force = 0;
+                        pbs->SaveState( mMyStaffs, mVoiceMgrList, this, timePos, force, pbreakval);
+
+                        mGrSystemSlice->addPossibleBreakState(pbs);
+                    }
 
 					// now we need to add the systemslice to the list of available system-slices ....
 					mGrSystemSlice->setNumber(mSystemSlices->GetCount() + 1);
@@ -580,16 +585,19 @@ void GRStaffManager::createStaves()
 		if (mSpringID > mLastSpringID)
 		{
 			sff = BuildSFF();
-			// add the thing to the slice-list 
-			GRPossibleBreakState * pbs = new GRPossibleBreakState();
 
-			pbs->sff = sff;
-			pbs->copyofcompletesff = NULL;
-			
-			float force = 0;
-			pbs->SaveState(mMyStaffs, mVoiceMgrList, this, timePos, force, pbreakval);
+            if (!sPropRender) {
+                // add the thing to the slice-list 
+                GRPossibleBreakState * pbs = new GRPossibleBreakState();
 
-			mGrSystemSlice->addPossibleBreakState(pbs);
+                pbs->sff = sff;
+                pbs->copyofcompletesff = NULL;
+
+                float force = 0;
+                pbs->SaveState(mMyStaffs, mVoiceMgrList, this, timePos, force, pbreakval);
+
+                mGrSystemSlice->addPossibleBreakState(pbs);
+            }
 
 			// now we need to add the systemslice to the list of available system-slices ....
 			mGrSystemSlice->setNumber(mSystemSlices->GetCount() + 1);
@@ -1042,7 +1050,7 @@ int GRStaffManager::FinishSyncSlice(const TYPE_TIMEPOSITION & tp)
 			if (syncHash.GetNext(pos,tmphash))
 			{
 				// Now, we construct the Spring to put it in the SpaceForceFunction.
-				GRSpring * spr = new GRSpring(tp,DURATION_0);
+				GRSpring * spr = new GRSpring(tp, DURATION_0);
 				spr->setID(mSpringID);
 #ifdef SPRINGLOG
 				springlog << "\tCreating Spring: " << mSpringID << endl;
@@ -3064,21 +3072,22 @@ traceslice(cout << "GRStaffManager::FindOptimumBreaks num slices is " << numslic
 						slc->pbs->sff->writeAllExtents(myout);
 				}
 #endif
-				float optconst = slc->mPossibleBreakState->sff->getOptConstant();
+                float optconst = 0;
+
+                if (slc->mPossibleBreakState)
+				    optconst = slc->mPossibleBreakState->sff->getOptConstant();
+
 				if (curconstant == -1)
-				{
 					curconstant = optconst;
-				}
-				else
-				{
+				else {
 					// we just add the constant ...
 					float calt = curconstant;
 					float cneu = 1.0f / ( (1.0f /calt) + (1.0f /optconst) );
 					curconstant = cneu;
 				}
 
-				// we also just add the curxmin-value ....
-				curxmin += slc->mPossibleBreakState->sff->getXminOpt();
+                if (slc->mPossibleBreakState)
+				    curxmin += slc->mPossibleBreakState->sff->getXminOpt(); // we also just add the curxmin-value ....
 
 				// we have to deal with the height ...
 				sliceheight.AddSystemSlice(slc);
@@ -3702,7 +3711,7 @@ void GRStaffManager::UpdateBeginningSFF(int staffnum)
 		const float lengthkey = maxrectkey.Width();
 
 		GRSpring * spr;
-		spr = new GRSpring(DURATION_0,DURATION_0);
+		spr = new GRSpring(DURATION_0, DURATION_0);
 		spr->set_const(SCONST_GLUESTART);
 		spr->setlength(lengthclef * 0.5f );
 		beg_spr_list->AddTail(spr);

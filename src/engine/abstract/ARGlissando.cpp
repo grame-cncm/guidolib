@@ -79,7 +79,7 @@ ARGlissando::~ARGlissando(void)
 	delete fLineStyle;
 }
 
-void ARGlissando::print() const
+void ARGlissando::print(int &indent) const
 {
 }
 

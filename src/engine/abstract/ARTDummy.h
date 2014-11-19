@@ -26,7 +26,7 @@ class ARTDummy : public ARMusicalTag
       	
       	virtual ~ARTDummy();
 
-		virtual void print() const;
+		virtual void print(int &indent) const;
 };
 
 

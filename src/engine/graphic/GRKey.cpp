@@ -53,6 +53,8 @@ GRKey::GRKey( GRStaff * inStaff, ARKey * key, int p_natural, bool ownsAR )
 		// GRNotationElement "verwaltet".
 
 	mRelativeTimePositionOfGR = key->getRelativeTimePosition();
+
+    mIsInHeader = key->isInHeader();
 }
 
 GRKey::~GRKey()
@@ -268,7 +270,7 @@ void GRKey::updateBoundingBox()
 
 }
 
-void GRKey::print() const
+void GRKey::print(int &indent) const
 {
 }
 

@@ -63,7 +63,7 @@ class GRSingleNote : public GRNote
 		virtual void	OnDraw( VGDevice & hdc ) const;
 		virtual void	GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 
-		virtual void	print() const { }
+		virtual void	print(int &indent) const { }
 
 		virtual void	setSize(float nsize)
 		{

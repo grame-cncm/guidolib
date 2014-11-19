@@ -94,7 +94,7 @@ void ARAccelerando::setTagParameterList(TagParameterList& tpl)
 	tpl.RemoveAll();
 }
 
-void ARAccelerando::print() const
+void ARAccelerando::print(int &indent) const
 {
 }
 

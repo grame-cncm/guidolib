@@ -213,7 +213,7 @@ void GRText::OnDraw( VGDevice & hdc ) const
 	// hdc.SetBackgroundMode( nBackmode );
 }
 
-void GRText::print() const
+void GRText::print(int &indent) const
 {
 }
 

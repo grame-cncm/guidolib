@@ -24,12 +24,14 @@
 #include "GRRest.h"
 #include "GREmpty.h"
 #include "GRBar.h"
+#include "GRMeter.h"
 #include "GRStaff.h"
 #include "GRKey.h"
 #include "GRSpringCollider.h"
 #include "GRSingleNote.h"
 #include "GRVoice.h"
 #include "GRRepeatEnd.h"
+#include "GRStaffManager.h"
 
 /* For proportionnal rendering */
 #include "GRClef.h"
@@ -41,15 +43,15 @@
 #include "GuidoDefs.h"		 // For kLayoutSettingDefaultSpring
 #include "kf_vect.h"
 #include "VGDevice.h"
+#include "GUIDOInternal.h"
 
 using namespace std;
 
 float GRSpring::funcpar = kSettingDefaultSpring;
 
-GRSpring::GRSpring( GRNotationElement * grn,GRVoice * vce ) :
+GRSpring::GRSpring(GRNotationElement *grn, GRVoice *vce) :
 	grolst(0),grvlst(0),sprcol(NULL)
 {
-		
 	isfrozen = 0;
 	id = -1;
 	x  = 0;
@@ -66,8 +68,9 @@ GRSpring::GRSpring( GRNotationElement * grn,GRVoice * vce ) :
 
 	sconst = calcconst(grn);
 
-	assert(sconst != 0);
+    isProportionalElement = false;
 
+	assert(sconst != 0);
 }
 
 GRSpring::GRSpring(const TYPE_TIMEPOSITION & vtp,
@@ -82,12 +85,10 @@ GRSpring::GRSpring(const TYPE_TIMEPOSITION & vtp,
 	dur = vdur;
 	tp  = vtp;
 
-	hasDurElement = false;
-
-	sconst = defconst(dur);
+	hasDurElement         = false;
+    isProportionalElement = false;
 
 	assert(sconst != 0);
-
 }
 
 GRSpring::~GRSpring()
@@ -97,28 +98,28 @@ GRSpring::~GRSpring()
 
 /** \brief Calculates the default spring-constant
 */ 
-float GRSpring::defconst(const TYPE_DURATION &dur) 
+float GRSpring::defconst(const TYPE_DURATION &dur) // REM: merger avec la fonction de dessous
 {
-	float retval;
-	if (dur == DURATION_0)
-		return 20.0f;
-	else
-	{
-		// This needs to be externally controlled!
-		retval = (float)(1.0 / log( funcpar *( (double)dur + 1.0 ))); 
-		long l = (long)floor( retval * 1000.0 + 0.5 );
-		retval = (float)l  / 1000.0f;
-		return retval;
-	}
+    float retval;
+
+    if (dur == DURATION_0)
+        return 20.0f;
+    else {
+        // This needs to be externally controlled!
+        retval = (float)(1.0 / log( funcpar *( (double)dur + 1.0 ))); 
+        long l = (long)floor( retval * 1000.0 + 0.5 );
+        retval = (float)l  / 1000.0f;
+        return retval;
+    }
 }
 
 float GRSpring::defconst(float dur) 
 {
 	float retval;
+
 	if (dur == 0)
 		return 20.0f;
-	else
-	{
+	else {
 		// This needs to be externally controlled!
 		retval = (float)(1.0/log( funcpar *( dur + 1.0 ))); 
 		long l = (long)floor( retval * 1000.0 + 0.5 );
@@ -199,29 +200,34 @@ float GRSpring::change_force(float df)
 */
 float GRSpring::set_const(float dc)
 {
-	assert(dc>0);
-	sconst = dc;
-	force = x*dc;
+    if (isProportionalElement)
+        dc = 1;
 
-	return force;
+    assert(dc>0);
+    sconst = dc;
+    force = x*dc;
 
+    return force;
 }
 
 /** \brief force remains const, x is adjusted
 */
 float GRSpring::change_const(float dc)
 {
-	assert(dc > 0);
-	long l = long(floor(dc * 100000.0+0.5));
-	dc = l/100000.0f;
-	sconst = dc;
+    if (isProportionalElement)
+        dc = 1;
 
-	x = force / sconst;
+    assert(dc > 0);
+    long l = long(floor(dc * 100000.0+0.5));
+    dc = l/100000.0f;
+    sconst = dc;
 
-	l = long(floor(x * 100000.0+0.5));
-	x = l / 100000.0f;
+    x = force / sconst;
 
-	return x;
+    l = long(floor(x * 100000.0+0.5));
+    x = l / 100000.0f;
+
+    return x;
 }
 
 /** \brief Sets the length of the spring (from the rods)
@@ -314,10 +320,9 @@ void GRSpring::setID(int _id)
 void GRSpring::setGRSpringID()
 {
 	GuidoPos pos = grolst.GetHeadPosition();
-	while (pos)
-	{
+	
+    while (pos)
 		grolst.GetNext(pos)->tellSpringID(id);
-	}
 }
 
 int sprcomp(const GRSpring &gr1, const GRSpring &gr2)
@@ -335,8 +340,7 @@ int GRSpring::setGRPositionX(GCoord p_posx)
 	posx = p_posx;
 	GuidoPos pos = grolst.GetHeadPosition();
 
-	while (pos)
-	{
+	while (pos) {
 		GRNotationElement * el = grolst.GetNext(pos);
 		el->setHPosition(posx);
 	}
@@ -348,16 +352,17 @@ int GRSpring::removeElement(GRNotationElement *el)
 {
 	GuidoPos pos = grolst.GetHeadPosition();
 	GuidoPos pos2 = grvlst.GetHeadPosition();
-	while (pos)
-	{
+
+	while (pos) {
 		GRNotationElement *tmpel = grolst.GetAt(pos);
-		if (tmpel == el)
-		{
+
+		if (tmpel == el) {
 			sprcol->RemoveElement(el,pos);
 			grolst.RemoveElementAt(pos);
 			grvlst.RemoveElementAt(pos2);
 			break;
 		}
+
 		grolst.GetNext(pos);
 		grvlst.GetNext(pos2);
 	}
@@ -372,11 +377,10 @@ void GRSpring::setNoExtent()
 {
 
 	GuidoPos pos = grolst.GetHeadPosition();
-	while (pos)
-	{
+
+	while (pos) {
 		GRNotationElement * el = grolst.GetNext(pos);
-		if (typeid(*el) == typeid(GRGlue))
-		{
+		if (typeid(*el) == typeid(GRGlue)) {
 			el->getReferenceBoundingBox().left = 0;
 			el->getReferenceBoundingBox().right = 0;
 		}
@@ -390,12 +394,14 @@ void GRSpring::setNoExtent()
 bool GRSpring::hasType(const std::type_info & ti)
 {
 	GuidoPos pos = grolst.GetHeadPosition();
-	while (pos)
-	{
+	
+    while (pos) {
 		GRNotationElement * el = grolst.GetNext(pos);
-		if ( typeid(*el) == ti)
+
+		if (typeid(*el) == ti)
 			return true;
 	}
+
 	return false;
 }
 
@@ -404,50 +410,65 @@ bool GRSpring::hasType(const std::type_info & ti)
 bool GRSpring::hasGraceNote()
 {
 	GuidoPos pos = grolst.GetHeadPosition();
-	while (pos)
-	{
-		GRNotationElement * el = grolst.GetNext(pos);
-		GRSingleNote * note = dynamic_cast<GRSingleNote*>(el);
-        if(note && note->isGraceNote())
+
+	while (pos) {
+		GRNotationElement *el   = grolst.GetNext(pos);
+		GRSingleNote      *note = dynamic_cast<GRSingleNote*>(el);
+
+        if (note && note->isGraceNote())
             return true;
 	}
+
 	return false;
 }
 
 bool GRSpring::containsBar() const
 {
 	GuidoPos pos = grolst.GetHeadPosition();
-	while (pos)
-	{
+	
+    while (pos) {
 		GRNotationElement * el = grolst.GetNext(pos);
-		if ( dynamic_cast<GRBar *>(el)) // || dynamic_cast<GRRepeatEnd *>(el))
+
+		if (dynamic_cast<GRBar *>(el)) // || dynamic_cast<GRRepeatEnd *>(el))
 			return true;
 	}
+
 	return false;
 }
 
-void GRSpring::addElement(GRNotationElement * el,GRVoice * vce)
+float GRSpring::setProportionalForce()
 {
-	if (el->getRelativeTimePosition() != tp)
-	{
+    return change_force((float) ((double)dur * GRStaffManager::sPropRender * 3));
+}
+
+void GRSpring::addElement(GRNotationElement * el, GRVoice * vce)
+{
+    if (GRStaffManager::sPropRender != 0) {
+        if (!el->isInHeader()) {
+            isProportionalElement = true;
+
+            change_const(1);
+            setProportionalForce();
+        }
+    }
+
+	if (el->getRelativeTimePosition() != tp) {
 		if (el->getNeedsSpring() == 1)
 			tp = el->getRelativeTimePosition();
 	}
+
 	GuidoPos tmppos = grolst.AddTail(el);
 	grvlst.AddTail(vce);
 
 	const TYPE_DURATION & durel = el->getDuration();
+
 	if (durel == dur)
-	{
 		hasDurElement = true;
-	}
 
 	if (sprcol == 0)
-	{
 		sprcol = new GRSpringCollider();
-	}
-	sprcol->AddElement(el,tmppos);
 
+	sprcol->AddElement(el,tmppos);
 }
 
 void GRSpring::setFunctionParameter(float npar)
@@ -466,11 +487,9 @@ float GRSpring::recalcConstant()
 
 	GRNotationElement * grn = grolst.GetHead();
 
-	sconst = calcconst(grn);
+	sconst = (isProportionalElement ? 1 : calcconst(grn));
 
-	if (oldconst != sconst
-		&& (x != 0 || force!=0 ) )
-	{
+	if (oldconst != sconst && (x != 0 || force != 0)) {
 		// then we have to recaluate the
 		// force and all that ...
 		// what happens with SPF?
@@ -548,15 +567,13 @@ float GRSpring::calcconst(GRNotationElement * grn)
 	else if (grn && 
 		(tmp = dynamic_cast<GRTag *>(grn)) != NULL)
 		sconst = tmp->getSConst();
-	else if (dur == DURATION_0)
-	{
+	else if (dur == DURATION_0) {
 		if (dynamic_cast<GREmpty *>(grn))
-			sconst = 200;
+            sconst = (isProportionalElement ? 1 : 200.0f);
 		else
-			sconst = 20.0f;
+			sconst = (isProportionalElement ? 1 : 20.0f);
 	}
-	else if (grn && (dynamic_cast<GRRest *>(grn)))
-	{
+	else if (grn && (dynamic_cast<GRRest *>(grn))) {
 		// rests are treated as if they were
 		// 8 times shorter -> this results
 		// in a nicer spacing when rests occur ...
@@ -567,10 +584,10 @@ float GRSpring::calcconst(GRNotationElement * grn)
 		else
 			mydur = dur;
 
-		sconst = defconst(mydur);
+        sconst = (isProportionalElement ? 1 : defconst(mydur));
 	}
 	else
-		sconst = defconst(dur);
+		sconst = (isProportionalElement ? 1 : defconst(dur));
 
 	assert(sconst != 0);
 
@@ -585,22 +602,22 @@ float GRSpring::getFunctionParameter()
 bool GRSpring::hasStaffAndType(const GRStaff * grstaff,const std::type_info & ti)
 {
 	GuidoPos pos = grolst.GetHeadPosition();
-	while (pos)
-	{
+
+	while (pos) {
 		GRNotationElement *el = grolst.GetNext(pos);
-		if ( typeid(*el) == ti)
-		{
+
+		if (typeid(*el) == ti) {
 			// Staff only defined for Key right now...
 			// maybe needs to be changed ...?
-			GRKey * key = dynamic_cast<GRKey *>(el);
-			if (key)
-			{
+			GRKey *key = dynamic_cast<GRKey *>(el);
+
+			if (key) {
 				if (key->getGRStaff() == grstaff)
 					return true;
 			}
-
 		}
 	}
+
 	return false;
 }
 
@@ -612,10 +629,14 @@ bool GRSpring::hasStaffAndType(const GRStaff * grstaff,const std::type_info & ti
 */
 float GRSpring::stretchWithForce(float newforce)
 {
-	if (force >= newforce || isfrozen)
-		return x;
+    if (!isProportionalElement) {
+        if (force >= newforce || isfrozen)
+            return x;
 
-	return change_force(newforce);
+        return change_force(newforce);
+    }
+    else
+        return setProportionalForce();
 }
 
 
@@ -711,7 +732,7 @@ float GRSpring::GetMaxDistance(GRSpring * nextspring)
 */
 void GRSpring::checkLocalCollisions()
 {
-	checkAccidentalCollisions();
+	//checkAccidentalCollisions();
 }
 
 /** \brief Goes through the elements and finds notes and then checkes,
@@ -767,11 +788,10 @@ void GRSpring::checkAccidentalCollisions()
 		pos = grolst.GetHeadPosition();
 		while (pos)
 		{
-			GRSingleNote * sngnot = dynamic_cast<GRSingleNote *>(grolst.GetNext(pos));
+			GRSingleNote *sngnot = dynamic_cast<GRSingleNote *>(grolst.GetNext(pos));
+
 			if (sngnot)
-			{
 				sngnot->updateBoundingBox();
-			}
 		}
 	}
 	delete myacclist;

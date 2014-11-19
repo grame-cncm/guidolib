@@ -42,7 +42,7 @@ class ARMusicalEvent : public ARMusicalObject
  
 		virtual ARMusicalObject * Copy() const;
 
-		virtual void	print() const;
+		virtual void	print(int &indent) const;
 
 				void	setDenominator(int newDenominator);
 				void	setNumerator(int newNumerator);

@@ -38,7 +38,7 @@ void GRSpace::OnDraw( VGDevice & hdc) const
 {
 }
 
-void GRSpace::print() const
+void GRSpace::print(int &indent) const
 {
 }
 

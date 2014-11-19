@@ -260,7 +260,7 @@ void GRCrescendo::OnDraw( VGDevice & hdc) const
     }
 }
 
-void GRCrescendo::print() const
+void GRCrescendo::print(int &indent) const
 {
 }
 

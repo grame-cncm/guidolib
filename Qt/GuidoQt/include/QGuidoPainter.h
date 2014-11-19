@@ -208,7 +208,7 @@ class QGuidoPainter
 		/// \brief Disable/enable automatic ResizePageToMusic
 		void setResizePageToMusic(bool isOn);
 		/// \brief Returns the state of the automatic ResizePageToMusic mode (enabled or disabled)
-		bool isResizePageToMusic() const { return mResizePageToMusic; }
+        bool isResizePageToMusicOn() const { return mLayoutSettings.resizePage2Music; }
 
 		/// \brief Sets the page format used when no page format is specified by the GMN
 		void setGuidoPageFormat(const GuidoPageFormat& pageFormat);
@@ -252,7 +252,6 @@ class QGuidoPainter
         GuidoStream * mGMNStream;
 		GuidoErrCode mLastErr;
 
-		bool mResizePageToMusic;
 		GuidoLayoutSettings mLayoutSettings;		
 		GuidoPageFormat mPageFormat;
 

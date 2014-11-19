@@ -48,7 +48,7 @@ void ARHarmonic::setTagParameterList(TagParameterList& tpl)
 	tpl.RemoveAll();
 }
 
-void ARHarmonic::print() const
+void ARHarmonic::print(int &indent) const
 {
 }
 

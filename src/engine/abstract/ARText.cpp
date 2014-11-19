@@ -104,7 +104,7 @@ ARText::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARText::print() const
+void ARText::print(int &indent) const
 {
 }
 

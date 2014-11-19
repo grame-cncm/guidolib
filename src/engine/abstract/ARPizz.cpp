@@ -60,7 +60,7 @@ void ARPizz::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARPizz::print() const
+void ARPizz::print(int &indent) const
 {
 }
 

@@ -21,6 +21,7 @@
 
 #include "ARBar.h"
 
+#include "GRStaffManager.h"
 #include "ARMeter.h"
 #include "GRBar.h"
 #include "GRStaff.h"
@@ -246,7 +247,11 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
 
     const float offsetX = 3 + (staffSize - 1) * 2;
 
-    const float x  = mPosition.x + offsetX + mDx;
+    float proportionalRenderingXOffset = 0;
+    if (GRStaffManager::sPropRender != 0)
+        proportionalRenderingXOffset = - 90; // REM: 30 hardcoded (1.5 * note extent)
+    
+    const float x  = mPosition.x + offsetX + mDx + proportionalRenderingXOffset;
 	float y1 = mPosition.y + mBoundingBox.top + offsety1 * staffSize - mDy;
 	float y2 = y1 + mBoundingBox.bottom + offsety2 * staffSize;
     float barLength = y2 - y1;
@@ -282,7 +287,7 @@ void GRBar::OnDraw(VGDevice & hdc ) const
 }
 
 // --------------------------------------------------------------------------
-void GRBar::print() const
+void GRBar::print(int &indent) const
 {
 }
 

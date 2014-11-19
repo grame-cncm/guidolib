@@ -81,7 +81,7 @@ void ARColor::setTagParameterList(TagParameterList & tpl)
 
 }
 
-void ARColor::print() const
+void ARColor::print(int &indent) const
 {
 }
 void ARColor::PrintName(std::ostream &os) const

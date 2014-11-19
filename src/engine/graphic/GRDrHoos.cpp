@@ -56,7 +56,7 @@ GRDrHoos::~GRDrHoos()
 	delete face;
 }
 
-void GRDrHoos::print() const
+void GRDrHoos::print(int &indent) const
 {
 }
 

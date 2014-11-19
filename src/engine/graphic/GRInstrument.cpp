@@ -49,7 +49,7 @@ GRInstrument::~GRInstrument()
 {
 }
 
-void GRInstrument::print() const
+void GRInstrument::print(int &indent) const
 {
 }
 

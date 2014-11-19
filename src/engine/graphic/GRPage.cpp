@@ -335,10 +335,9 @@ void GRPage::OnDraw( VGDevice & hdc ) const
 {	
 // TODO: test if the element intersect with the clipping box
 	GuidoPos pagepos = First();
+
 	while (pagepos)
-	{
 		GetNext(pagepos)->OnDraw(hdc);
-	}
 
 	// - Convert from centimeter to logical.
 	const float tstx = mLeftMargin;	// (JB) sign change
@@ -487,7 +486,7 @@ void GRPage::updateBoundingBox()
 }
 
 // ----------------------------------------------------------------------------
-void GRPage::print() const
+void GRPage::print(int &indent) const
 {
 }
 

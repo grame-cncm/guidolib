@@ -76,13 +76,13 @@ using namespace std;
 // ==========================================================================
 const int GUIDOENGINE_MAJOR_VERSION = 1;
 const int GUIDOENGINE_MINOR_VERSION = 5;
-const int GUIDOENGINE_SUB_VERSION   = 5;
-const char* GUIDOENGINE_VERSION_STR = "1.5.5";
+const int GUIDOENGINE_SUB_VERSION   = 6;
+const char* GUIDOENGINE_VERSION_STR = "1.5.6";
 
 ARPageFormat * gARPageFormat = 0;
 
 // - Misc globals
-GuidoGlobalSettings gGlobalSettings = { /*1 to draw the springs*/0, 0, 1, 1, 1, 1, 0, 0 };
+GuidoGlobalSettings gGlobalSettings = { /*1 to draw the springs*/0, 0, 1, 0, 0 };
 
 bool gInited = false;		// GuidoInit() Flag
 int gARHandlerRefCount = 0;
@@ -477,17 +477,17 @@ GUIDOAPI(int) GuidoGetParseErrorLine()
 
 // --------------------------------------------------------------------------
 GUIDOAPI(void)	
-GuidoGetDefaultLayoutSettings (GuidoLayoutSettings * settings)
+GuidoGetDefaultLayoutSettings (GuidoLayoutSettings *settings)
 {
-	if( settings == 0 ) return;
-	settings->systemsDistance = kSettingDefaultSystemDistance;
- 	settings->systemsDistribution = kSettingDefaultSystemDistrib;
- 	settings->systemsDistribLimit = kSettingDefaultDistribLimit;
-	settings->force = kSettingDefaultForce;
-    settings->spring = kSettingDefaultSpring;
-	settings->neighborhoodSpacing = kSettingDefaultNeighborhood;
-	settings->optimalPageFill = kSettingDefaultOptimalPageFill;
-    settings->resizePage2Music = kSettingDefaultResizePage;
+	settings->systemsDistance       = kSettingDefaultSystemDistance;
+ 	settings->systemsDistribution   = kSettingDefaultSystemDistrib;
+ 	settings->systemsDistribLimit   = kSettingDefaultDistribLimit;
+	settings->force                 = kSettingDefaultForce;
+    settings->spring                = kSettingDefaultSpring;
+	settings->neighborhoodSpacing   = kSettingDefaultNeighborhood;
+	settings->optimalPageFill       = kSettingDefaultOptimalPageFill;
+    settings->resizePage2Music      = kSettingDefaultResizePage2Music;
+    settings->proportionalRenderingForceMultiplicator = kSettingDefaultProportionalRendering;
 }
 
 
@@ -664,22 +664,22 @@ GUIDOAPI(GuidoErrCode) 	GuidoAbstractExport( const GRHandler handle, int page, s
  	AbstractSystem sys;
 	AbstractDevice dev (out, &sys);
     
-        GuidoOnDrawDesc desc;              // declare a data structure for drawing
-	desc.handle = handle;
+    GuidoOnDrawDesc desc;              // declare a data structure for drawing
+    desc.handle = handle;
 
-	GuidoPageFormat	pf;
-	GuidoResizePageToMusic (handle);
-	GuidoGetPageFormat (handle, page, &pf);
- 
-	desc.hdc = &dev;                    // we'll draw on the svg device
-        desc.page = page;
-        desc.updateRegion.erase = true;     // and draw everything
-	desc.scrollx = desc.scrolly = 0;    // from the upper left page corner
-        desc.sizex = pf.width;
-	desc.sizey = pf.height;
-        dev.NotifySize(desc.sizex, desc.sizey);
-        dev.SelectPenColor(VGColor(0,0,0));
-        return GuidoOnDraw (&desc);
+    GuidoPageFormat	pf;
+    GuidoResizePageToMusic (handle);
+    GuidoGetPageFormat (handle, page, &pf);
+
+    desc.hdc = &dev;                    // we'll draw on the svg device
+    desc.page = page;
+    desc.updateRegion.erase = true;     // and draw everything
+    desc.scrollx = desc.scrolly = 0;    // from the upper left page corner
+    desc.sizex = pf.width;
+    desc.sizey = pf.height;
+    dev.NotifySize(desc.sizex, desc.sizey);
+    dev.SelectPenColor(VGColor(0,0,0));
+    return GuidoOnDraw (&desc);
 }
 
 // --------------------------------------------------------------------------
@@ -690,22 +690,23 @@ GUIDOAPI(GuidoErrCode) 	GuidoBinaryExport( const GRHandler handle, int page, std
  	BinarySystem sys;
 	BinaryDevice dev (out, &sys);
     
-        GuidoOnDrawDesc desc;              // declare a data structure for drawing
-	desc.handle = handle;
+    GuidoOnDrawDesc desc;              // declare a data structure for drawing
+    desc.handle = handle;
 
-	GuidoPageFormat	pf;
-	GuidoResizePageToMusic (handle);
-	GuidoGetPageFormat (handle, page, &pf);
- 
-	desc.hdc = &dev;                    // we'll draw on the svg device
-        desc.page = page;
-        desc.updateRegion.erase = true;     // and draw everything
-	desc.scrollx = desc.scrolly = 0;    // from the upper left page corner
-        desc.sizex = pf.width;
-	desc.sizey = pf.height;
-        dev.NotifySize(desc.sizex, desc.sizey);
-        dev.SelectPenColor(VGColor(0,0,0));
-        return GuidoOnDraw (&desc);
+    GuidoPageFormat	pf;
+    GuidoResizePageToMusic (handle);
+    GuidoGetPageFormat (handle, page, &pf);
+
+    desc.hdc = &dev;                    // we'll draw on the svg device
+    desc.page = page;
+    desc.updateRegion.erase = true;     // and draw everything
+    desc.scrollx = desc.scrolly = 0;    // from the upper left page corner
+    desc.sizex = pf.width;
+    desc.sizey = pf.height;
+    dev.NotifySize(desc.sizex, desc.sizey);
+    dev.SelectPenColor(VGColor(0,0,0));
+
+    return GuidoOnDraw (&desc);
 }
 
 // --------------------------------------------------------------------------
@@ -790,6 +791,7 @@ GUIDOAPI(GuidoErrCode) GuidoSVGExportWithFontSpec( const GRHandler handle, int p
 	desc.sizey = int(pf.height/SVGDevice::kSVGSizeDivider);
     dev.NotifySize(desc.sizex, desc.sizey);
     dev.SelectPenColor(VGColor(0,0,0));
+
     return GuidoOnDraw (&desc);
 }
 

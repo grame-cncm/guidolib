@@ -86,7 +86,7 @@ void ARRitardando::setTagParameterList(TagParameterList& tpl)
 	tpl.RemoveAll();
 }
 
-void ARRitardando::print() const
+void ARRitardando::print(int &indent) const
 {
 }
 

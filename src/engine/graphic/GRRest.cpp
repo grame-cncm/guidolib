@@ -52,7 +52,7 @@ ARRest * GRRest::getARRest() const
 	return /*dynamic*/static_cast<ARRest*>(getAbstractRepresentation());
 }
 
-void GRRest::print() const
+void GRRest::print(int &indent) const
 {
 	fprintf(stderr,"(R%.2f,%.2f)",(float) getRelativeTimePosition(),
 		(float) getDuration());

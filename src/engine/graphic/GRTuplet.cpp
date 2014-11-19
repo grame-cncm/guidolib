@@ -502,7 +502,7 @@ void GRTuplet::OnDraw(VGDevice & hdc) const
 }
 
 // ----------------------------------------------------------------------------
-void GRTuplet::print() const
+void GRTuplet::print(int &indent) const
 {
 }
 

@@ -105,7 +105,7 @@ void ARDiminuendo::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARDiminuendo::print() const 
+void ARDiminuendo::print(int &indent) const 
 {
 }
 

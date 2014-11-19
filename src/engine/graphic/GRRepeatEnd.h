@@ -35,7 +35,7 @@ class GRRepeatEnd : public GRBar
 				 GRRepeatEnd( ARRepeatEnd * ar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos );
 		virtual	~GRRepeatEnd();
 	
-		virtual void	print() const { }
+		virtual void	print(int &indent) const { }
 		virtual unsigned int getTextAlign() const;
 		virtual void	updateBoundingBox();
 		virtual void	setHPosition( float nx);

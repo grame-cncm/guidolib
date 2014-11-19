@@ -65,7 +65,7 @@ public:
 
     virtual void    tellPosition(GObject * caller, const NVPoint & newPosition);
 
-    virtual void	print() const;
+    virtual void	print(int &indent) const;
 
 protected:
     virtual void updateCrescendo(GRStaff *grstaff);

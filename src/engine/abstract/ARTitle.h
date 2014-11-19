@@ -27,7 +27,7 @@ class ARTitle : public ARText
 	  virtual ~ARTitle();
 
 
-		virtual void print() const;
+		virtual void print(int &indent) const;
 
 		virtual void setTagParameterList(TagParameterList & tpl);
 

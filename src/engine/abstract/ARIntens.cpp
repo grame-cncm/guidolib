@@ -86,7 +86,7 @@ void ARIntens::browse(TimeUnwrap& mapper) const
 	mapper.AtPos (this, TimeUnwrap::kIntens);
 }
 
-void ARIntens::print() const
+void ARIntens::print(int &indent) const
 {
 }
 

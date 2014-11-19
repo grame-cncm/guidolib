@@ -38,7 +38,7 @@ public:
 
 	virtual ARMusicalObject * Copy() const;
 
-	virtual void print() const
+	virtual void print(int &indent) const
 	{
 	}
 

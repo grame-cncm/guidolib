@@ -42,7 +42,7 @@ public:
 	virtual ~ARUserChordTag();
 
 	virtual ARMusicalObject * Copy() const;
-	virtual void print() const { }
+	virtual void print(int &indent) const { }
 
 			const char* getLabelValue() const;
 	virtual void PrintName(std::ostream &os) const;

@@ -1,7 +1,12 @@
 GUIDO Engine history
 
 ----------------------------------------------------------------
-2014-10-22  version 1.5.5
+2014-11-19  version 1.5.6
+- Proportional rendering available (enabled with GuidoLayoutSettings parameters)
+
+
+----------------------------------------------------------------
+2014-11-7  version 1.5.5
 - Fraction is now using 'long long' instead 'int' for numerator and denominator (negative dates were found with complex non-quantified scores, due to overflow)
 - new timing API for performance measurements (GuidoGetParsingTime, GuidoGetAR2GRTime, GuidoGetOnDrawTime)
 - performances improvement:

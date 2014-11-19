@@ -107,7 +107,7 @@ public:
 	virtual void addAssociation( GRNotationElement * grnot );
 
 	// - Text, streams
-	virtual void print() const 	{}
+	virtual void print(int &indent) const 	{}
 	virtual void print(std::ostream& os) const;
 	virtual void GGSOutput() const;
 	virtual void GGSOutputAt(unsigned int tmptype, long offsx = 0, long offsy = 0, float mysize = 0.0f ) const;
@@ -116,6 +116,9 @@ public:
     /**** Functions to avoid dynamic_cast ****/
     virtual GRNotationElement *isGRNote()        { return NULL; }
     /*****************************************/
+    
+    virtual void setIsInHeader(bool state) { mIsInHeader = state; }
+    virtual bool isInHeader() const        { return mIsInHeader; }
 
 protected:
 	
@@ -128,6 +131,8 @@ protected:
 	float 		mLeftSpace;		// Can't we deal only with bounding boxes ?
 	float 		mRightSpace;
 	bool		mDraw;
+
+    bool        mIsInHeader; // For proportional rendering
 
 	TYPE_DURATION mDurationOfGR;
 	TYPE_TIMEPOSITION mRelativeTimePositionOfGR;

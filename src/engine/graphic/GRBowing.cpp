@@ -645,7 +645,7 @@ void GRBowing::setOffset(int n_point,const NVPoint & p)
 }
 
 // -----------------------------------------------------------------------------
-void GRBowing::print() const
+void GRBowing::print(int &indent) const
 {
 }
 

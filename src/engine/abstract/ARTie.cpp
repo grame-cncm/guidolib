@@ -25,7 +25,7 @@ ARTie::~ARTie()
 {
 }
 
-void ARTie::print() const
+void ARTie::print(int &indent) const
 {
 }
 

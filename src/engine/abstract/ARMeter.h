@@ -34,7 +34,7 @@ class ARMeter : public ARMTParameter
 		virtual ~ARMeter();
 
 		virtual bool IsStateTag() const;
-		virtual void print() const;
+		virtual void print(int &indent) const;
 		virtual std::ostream & operator<<(std::ostream & os) const;
 
 		virtual void setTagParameterList(TagParameterList & tpl);

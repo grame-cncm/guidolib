@@ -68,6 +68,22 @@ struct GPaintStruct
 	int		bottom;
 };
 
+
+/*! @} */
+
+/**
+    A Guido date is expressed as a fractional value where 1/1 represents
+    the whole note.
+*/
+typedef struct
+{
+	//! the date numerator
+    int num;
+	//! the date denominator
+    int denom;
+
+} GuidoDate;
+
 /** \brief Contains all graphic-related information required by GuidoOnDraw()
 
 	Used to render a page of score into a device context.
@@ -158,22 +174,6 @@ enum GuidoErrCode
 };
 
 
-/*! @} */
-
-/**
-    A Guido date is expressed as a fractional value where 1/1 represents
-    the whole note.
-*/
-typedef struct
-{
-	//! the date numerator
-    int num;
-	//! the date denominator
-    int denom;
-
-} GuidoDate;
-
-
 enum { kAutoDistrib = 1, kAlwaysDistrib = 2, kNeverDistrib = 3 };
 
 /**
@@ -221,6 +221,12 @@ typedef struct GuidoLayoutSettings
 		(default value: 1)
 	*/
 	int resizePage2Music;
+
+    /** float value to tell the engine what is the force multiplicator applied to proportional rendering
+        If value is 0, proportional mode is not enabled, otherwise value corresponds to the force multiplicator value
+		(default value: 0)
+	*/
+	float proportionalRenderingForceMultiplicator;
 	
 } GuidoLayoutSettings;
 
@@ -335,21 +341,6 @@ representations.
 
 
 	/*!
-        Transforms a Guido abstract representation into a simplified proportional representation.
-
-		\param ar the handler to the abstract representation.
-		\param width the drawing area width.
-		\param height the drawing area height.
-		\param start start date of the time zone to be displayed.
-		\param end end date of the time zone to be displayed, when 0, the score duration is used.
-		\param drawdur control duration lines drawing.
-		\param dev a graphic device.
-		\return a Guido error code.
-    */
-    GUIDOAPI(GuidoErrCode)	GuidoAR2RProportional(ARHandler ar, int width, int height, const GuidoDate& start, const GuidoDate& end, bool drawdur, VGDevice* dev);
-
-
-	/*!
         Applies new layout settings to an existing Guido graphic representation.
 		\param gr the handler to the graphic representation.
 		\param settings a pointer to the settings for the graphic layout. If null, default
@@ -420,7 +411,7 @@ representations.
 
 		\param settings on output, a pointer to the settings to be filled with default values.
     */
-    GUIDOAPI(void)	GuidoGetDefaultLayoutSettings (GuidoLayoutSettings * settings);
+    GUIDOAPI(void)	GuidoGetDefaultLayoutSettings (GuidoLayoutSettings *settings);
 
 /*! @} */
 

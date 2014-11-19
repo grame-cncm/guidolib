@@ -79,13 +79,14 @@ typedef struct Guido2ImageOptions {
 	float			systemsDistance;
 	const char *	systemsDistribution; 
 	const char *	optimalPageFill;
+    float           proportionalRendering;
     const char *    resize2Page;
 
 	Guido2ImageOptions () 
 		: stdInMode(false), hasLayout(false), page(1),
 		  inputFile(0), inputString(0), outputFile(0), imageFormat(0), scoreFormat("classic"),
 		  zoom(-1.f), height(-1), width(-1), 
-		  systemsDistance(-1.f), systemsDistribution(0), optimalPageFill(0)  {}
+          systemsDistance(-1.f), systemsDistribution(0), optimalPageFill(0), proportionalRendering(0), resize2Page("on")  {}
 } Guido2ImageOptions;
 
 //------------------------------------------------------------------------------------------
@@ -102,20 +103,22 @@ static void usage(const char * name)
 	cerr << "              (2) takes a GMN string as argument and an output file name" << endl;
 	cerr << "              (3) reads the standard input" << endl;
 	cerr << endl;
-	cerr << "options:   -h imageHeight (int)   Output image height in pixels" << endl;
-	cerr << "           -w imageWidth  (int)   Output image width in pixels" << endl;
-	cerr << "           -z imageZoom   (float) Output image zoom (bigger/smaller image)" << endl;
-	cerr << "           -p num (int)           print page number 'num' (default is 1)" << endl;
-	cerr << "           -t format              Image format" << endl; 
-	cerr << "                                  Supported formats: PDF, BMP, GIF, JPG, JPEG, PNG, PGM, PPM, SVG, TIFF, XBM, XPM" << endl;
-	cerr << "           -q format              Score format" << endl; 
-	cerr << "                                  Supported formats: pianoroll, classic (default is classic)" << endl;
-	cerr << "           -v                     print the version number and exit." << endl;
-	cerr << "           -?                     print this help message." << endl;
+	cerr << "options:   -h imageHeight (int)    Output image height in pixels" << endl;
+	cerr << "           -w imageWidth  (int)    Output image width in pixels" << endl;
+	cerr << "           -z imageZoom   (float)  Output image zoom (bigger/smaller image)" << endl;
+	cerr << "           -p num (int)            print page number 'num' (default is 1)" << endl;
+	cerr << "           -t format               Image format" << endl; 
+	cerr << "                                   Supported formats: PDF, BMP, GIF, JPG, JPEG, PNG, PGM, PPM, SVG, TIFF, XBM, XPM" << endl;
+	cerr << "           -q format               Score format" << endl; 
+	cerr << "                                   Supported formats: pianoroll, classic (default is classic)" << endl;
+	cerr << "           -v                      print the version number and exit." << endl;
+	cerr << "           -?                      print this help message." << endl;
 	cerr << "options controlling the Guido Engine layout settings:" << endl;
-	cerr << "           -d distance (int)      control the systems distance (default value is 75)." << endl;
-	cerr << "           -a [auto|always|never] control systems distribution (default value is 'auto')." << endl;
-	cerr << "           -b [on|off]			   control the optimal page fill (default value is 'on')." << endl;
+	cerr << "           -d distance (int)       control the systems distance (default value is 75)." << endl;
+	cerr << "           -a [auto|always|never]  control systems distribution (default value is 'auto')." << endl;
+	cerr << "           -b [on|off]			    control the optimal page fill (default value is 'on')." << endl;
+	cerr << "           -r [on|off]             automatically resize page to music (default value is 'on')." << endl;
+	cerr << "           -c (float)			    sets the proportional force multiplicator (0 is default value and disables proportional rendering)." << endl;
 	cerr << endl;
 	cerr << "notes:        * If you use both -h and -w options, the score will be reduced/enlarged to fit" << endl;
 	cerr << "                inside the height*width rect ; the score's aspect ratio will be preserved." << endl;
@@ -150,7 +153,7 @@ static void parseOptions(int argc, char *argv[] , Guido2ImageOptions& opts )
 {
 	int c;
 	opterr = 0;
-	while ((c = getopt (argc, argv, "f:s:o:pw:h:z:t:q:d:a:b:?:v")) != -1)
+	while ((c = getopt (argc, argv, "f:s:o:pw:h:z:t:q:d:a:b:r:c:?:v")) != -1)
 		switch (c)
 		{
 			case 'f':	opts.inputFile = optarg;		break;
@@ -171,6 +174,12 @@ static void parseOptions(int argc, char *argv[] , Guido2ImageOptions& opts )
 						opts.hasLayout = true;
 						break;
 			case 'b':	opts.optimalPageFill = optarg;
+						opts.hasLayout = true;
+						break;
+			case 'r':	opts.resize2Page = optarg;
+						opts.hasLayout = true;
+						break;
+			case 'c':	opts.proportionalRendering = strtod(optarg, 0);
 						opts.hasLayout = true;
 						break;
 			case 'v':	cout << basename(argv[0]) << " version " << kVersion << " using Guido Engine v." << GuidoGetVersionStr() << endl;
@@ -255,7 +264,9 @@ static GuidoLayoutSettings* options2layout (const Guido2ImageOptions& opts)
 {
 	static GuidoLayoutSettings layout = { 75.f, kAutoDistrib, 0.25f, 750, 1.1f, 0, 1, 1 };
 	if (opts.hasLayout) {
-		if (opts.systemsDistance > 0) layout.systemsDistance = opts.systemsDistance;
+		if (opts.systemsDistance > 0)
+            layout.systemsDistance = opts.systemsDistance;
+
 		if (opts.systemsDistribution) {
 			string str (toLower (opts.systemsDistribution));
 			if (str == "auto")			layout.systemsDistribution = kAutoDistrib;
@@ -263,18 +274,23 @@ static GuidoLayoutSettings* options2layout (const Guido2ImageOptions& opts)
 			else if (str == "never")	layout.systemsDistribution = kNeverDistrib;
 			else error ("invalid system distribution mode");
 		}
+
 		if (opts.optimalPageFill) {
 			string str (toLower (opts.optimalPageFill));
 			if (str == "on")		layout.optimalPageFill = 1;
 			else if (str == "off")	layout.optimalPageFill = 0;
 			else error ("invalid optimal page fill mode");
 		}
+
         if (opts.resize2Page) {
 			string str (toLower (opts.resize2Page));
 			if (str == "on")		layout.resizePage2Music = 1;
 			else if (str == "off")	layout.resizePage2Music = 0;
 			else error ("invalid resize page to music mode");
 		}
+
+        layout.proportionalRenderingForceMultiplicator = opts.proportionalRendering;
+
 		return &layout;
 	}
 	return 0;

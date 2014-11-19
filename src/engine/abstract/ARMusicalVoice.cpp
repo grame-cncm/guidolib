@@ -762,16 +762,24 @@ void ARMusicalVoice::browse(TimeUnwrap& mapper, const ARMusicalObject * start, c
 }
 
 //____________________________________________________________________________________
-void ARMusicalVoice::print() const
+void ARMusicalVoice::print(int &indent) const
 {
+    cout << "Musical voice: voice number: " << voicenum << "; duration: " << (float) getDuration() << std::endl;
+
+    indent++;
+
+    std::string indentStr = "";
+
+    for (int i = 0; i < indent; i++)
+        indentStr += "    ";
+
 	GuidoPos pos = ObjectList::GetHeadPosition();
-	while(pos)
-	{
-		ARMusicalObject * e = ObjectList::GetNext(pos);
-		cout << e->getRelativeTimePosition() << ": "; e->print();
+	while(pos) {
+		ARMusicalObject *e = ObjectList::GetNext(pos);
+		cout << indentStr << e->getRelativeTimePosition() << ": "; e->print(indent);
 	}
-	fprintf(stderr," duration:%.2f",(float) getDuration());
-	fprintf(stderr,"\n");
+
+    indent--;
 }
 
 //____________________________________________________________________________________
@@ -4326,6 +4334,7 @@ void ARMusicalVoice::doAutoCheckStaffStateTags()
 				if (needsclef)
 				{
 					ARClef * tmp = newAutoClef (dynamic_cast<ARClef *>(vst.getCurStateTag(typeid(ARClef))), tp);
+                    tmp->setIsInHeader(true);
 					GuidoPos newpos = AddElementAt(keypos,tmp);
 					vst.AddStateTag(tmp);
 					if (keypos == firstpos)					// this is important for auto-ordering ...
@@ -4335,6 +4344,7 @@ void ARMusicalVoice::doAutoCheckStaffStateTags()
 				if (needskey)
 				{
                     ARKey * tmp = newAutoKey (dynamic_cast<ARKey *>(vst.getCurStateTag(typeid(ARKey))), tp);
+                    tmp->setIsInHeader(true);
 					GuidoPos newpos = AddElementAt(meterpos,tmp);
 					if (meterpos == firstpos)	firstpos = newpos;
 					vst.AddStateTag(tmp);
@@ -4344,6 +4354,7 @@ void ARMusicalVoice::doAutoCheckStaffStateTags()
 				ARSecondGlue * arsglue = new ARSecondGlue();
 				arsglue->setIsAuto(true);
 				arsglue->setRelativeTimePosition(tp);
+                arsglue->setIsInHeader(true);
 				GuidoPos newpos = AddElementAt(evpos,arsglue);
 				vst.AddStateTag(arsglue);
 				if (evpos == firstpos)
@@ -4392,17 +4403,23 @@ void ARMusicalVoice::doAutoCheckStaffStateTags()
 				needsclef = 1;
 				needskey = 1;
 			}
-			else if (clef)			needsclef = 0;		// then we don't need a clef ...
-			else if (key)
-			{
+			else if (clef) { // then we don't need a clef ...
+                clef->setIsInHeader(true);
+                needsclef = 0;
+            }
+			else if (key) {
+                key->setIsInHeader(true);
 				needskey = 0;				// then we don't need a key
-				if (meterpos) GuidoWarn("Meter set before key !");
+				if (meterpos)
+                    GuidoWarn("Meter set before key !");
 				keypos = lastpos;
 			}
-			else if (meter)			meterpos = lastpos;
-			else
-			{
-				// this ensures, that clefs are added REALY before any other tag.
+			else if (meter) {
+                meter->setIsInHeader(true);
+                meterpos = lastpos;
+            }
+			else {
+				// this ensures, that clefs are added REALLY before any other tag.
 				if (!meterpos)		meterpos = lastpos;
 				if (!keypos)		keypos = meterpos;
 			}
@@ -5483,7 +5500,7 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE &chord_type, CHORD_ACCIDENTAL 
 
 	while (posTmp) { // "removes" the remaining notes
 		musicalObject = ObjectList::GetNext(posTmp);
-		//musicalObject->print();
+		//musicalObject->print(int &indent);
 		ARNote *noteTmp = static_cast<ARNote *>(musicalObject->isARNote());
 
 		if (noteTmp && noteTmp->getPitch() != 0) {

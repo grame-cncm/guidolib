@@ -109,7 +109,7 @@ void GRNoteDot::OnDraw(VGDevice & hdc) const
 }
 
 // ------------------------------------------------------------------------
-void GRNoteDot::print() const
+void GRNoteDot::print(int &indent) const
 {
 }
 

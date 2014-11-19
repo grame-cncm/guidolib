@@ -91,7 +91,7 @@ void ARMarcato::browse(TimeUnwrap& mapper) const
 	mapper.AtPos (this, TimeUnwrap::kMarcato);
 }
 
-void ARMarcato::print() const
+void ARMarcato::print(int &indent) const
 {
 }
 

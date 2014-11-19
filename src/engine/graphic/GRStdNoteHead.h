@@ -38,7 +38,7 @@ public:
 
 	virtual void GGSOutput() const;
 
-	virtual void print() const;
+	virtual void print(int &indent) const;
 
 	virtual unsigned int getSymbol() const;
 
