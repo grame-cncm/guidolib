@@ -314,10 +314,11 @@ class TestTimeMap : public TimeMapCollector
 
 
 // --------------------------------------------------------------------------
-GRHandler GuidoGetAR2GR( ARHandler ar, const GuidoLayoutSettings * settings)
+GUIDOAPI(GRHandler) GuidoGetAR2GR( ARHandler ar, const GuidoLayoutSettings * settings)
 {
 	GRHandler gr;
 	GuidoErrCode err = GuidoAR2GR (ar, settings, &gr);
+    gr->error = err;
 	return err ? 0 : gr;
 }
 
@@ -406,14 +407,12 @@ GUIDOAPI(void)	GuidoFreeGR (GRHandler gr)
 	// The GR does not use its AR anymore, so we decrement the  
 	// reference counter of the AR - and frees it if necessary.
 	GuidoFreeAR( gr->arHandle );
-
-	delete gr->grmusic;		
-	delete gr;
-
+    delete gr->grmusic;
+    delete gr;
 }
 
 // --------------------------------------------------------------------------
-GuidoDate * 	GuidoMakeDate( int num, int denom )
+GUIDOAPI(GuidoDate *) 	GuidoMakeDate( int num, int denom )
 {
   GuidoDate *date =  new GuidoDate();
   date->num = num;
@@ -444,6 +443,7 @@ GUIDOAPI(void) 	GuidoFreeDate( GuidoDate *date )
 {
   delete date;
 }
+
 // --------------------------------------------------------------------------
 
 GUIDOAPI(const char *) GuidoGetErrorString( GuidoErrCode errCode )
@@ -489,6 +489,31 @@ GuidoGetDefaultLayoutSettings (GuidoLayoutSettings * settings)
     settings->resizePage2Music = kSettingDefaultResizePage;
 }
 
+// --------------------------------------------------------------------------
+GUIDOAPI(GuidoLayoutSettings) GuidoGetNewDefaultLayoutSettings() {
+    // TODO GGX voir la pertinance de tout ça suivant comment on communique avec le javascript
+    GuidoLayoutSettings settings;// = new GuidoLayoutSettings;
+    GuidoGetDefaultLayoutSettings(&settings);
+    return settings;
+}
+
+// TODO GGX Pour test de communication avec javascript
+GUIDOAPI(void) GuidoSetNewDefaultLayoutSettings(GuidoLayoutSettings settings) {
+    cout<< "systemsDistance"<<settings.systemsDistance<<endl;
+    cout<< "systemsDistribution"<<settings.systemsDistribution<<endl;
+}
+
+GUIDOAPI(void) GuidoDeleteLayoutSettings(GuidoLayoutSettings * settings) {
+    delete settings;
+}
+
+GUIDOAPI(GuidoErrCode) GuidoGetArError(CARHandler ar) {
+    return ar->error;
+}
+
+GUIDOAPI(GuidoErrCode) GuidoGetGrError(CGRHandler gr) {
+    return gr->error;
+}
 
 // --------------------------------------------------------------------------
 //		- Browsing music pages -
@@ -532,7 +557,7 @@ GUIDOAPI(GuidoErrCode)	GuidoDuration( CGRHandler inHandleGR, GuidoDate * date )
 	
 		date->num = dur.getNumerator();
 		date->denom = dur.getDenominator();
-		return guidoNoErr;
+        return guidoNoErr;
 	}
 	else
 	{
@@ -543,10 +568,11 @@ GUIDOAPI(GuidoErrCode)	GuidoDuration( CGRHandler inHandleGR, GuidoDate * date )
 }
 
 // --------------------------------------------------------------------------
-GuidoDate * GuidoGetDuration( CGRHandler inHandleGR)
+GUIDOAPI(GuidoDate *) GuidoGetDuration( GRHandler inHandleGR)
 {
   GuidoDate *date = new GuidoDate();
   GuidoErrCode err = GuidoDuration( inHandleGR, date );
+  inHandleGR->error = err;
   if (err != guidoNoErr) {
     delete date;
     return 0;
@@ -594,7 +620,7 @@ GUIDOAPI(GuidoErrCode) GuidoGetPageDate( CGRHandler inHandleGR, int pageNum, Gui
 	return result ? guidoNoErr : guidoErrBadParameter;
 }
 
-GuidoDate * GuidoGetDatePageDate( CGRHandler inHandleGR, int pageNum)
+GUIDOAPI(GuidoDate *) GuidoGetNewPageDate( CGRHandler inHandleGR, int pageNum)
 {
   GuidoDate *date = new GuidoDate();
   GuidoErrCode err = GuidoGetPageDate( inHandleGR, pageNum, date);
@@ -714,7 +740,7 @@ GUIDOAPI(GuidoErrCode) GuidoSVGExport( const GRHandler handle, int page, std::os
   return GuidoSVGExportWithFontSpec( handle, page, out, fontfile, 0);
 }
 
-char * GuidoGetInternalDeviceExport( const GRHandler handle, int page, GuidoInternalDevice dev)
+GUIDOAPI(char *) GuidoGetInternalDeviceExport( const GRHandler handle, int page, GuidoInternalDevice dev)
 {
     static stringstream sstr;
     sstr.str(""); // Empty String
@@ -740,17 +766,17 @@ char * GuidoGetInternalDeviceExport( const GRHandler handle, int page, GuidoInte
 	return out;
 }
 
-char * GuidoGetSVGExportWithFontSpec( const GRHandler handle, int page)
+GUIDOAPI(char *) GuidoGetSVGExportWithFontSpec( const GRHandler handle, int page)
 {
   return GuidoGetInternalDeviceExport(handle, page, guido_svg_with_font_spec);
 }
 
-char * GuidoGetAbstractExport( const GRHandler handle, int page)
+GUIDOAPI(char *) GuidoGetAbstractExport( const GRHandler handle, int page)
 {
   return GuidoGetInternalDeviceExport(handle, page, guido_abstract);
 }
 
-int GuidoGetBinaryExport( const GRHandler handle, int page, char * in_arr )
+GUIDOAPI(int) GuidoGetBinaryExport( const GRHandler handle, int page, char * in_arr )
 {
 	static stringstream sstr;
     sstr.str("");
@@ -768,7 +794,7 @@ int GuidoGetBinaryExport( const GRHandler handle, int page, char * in_arr )
     return size;
 }
 
-void  GuidoReleaseCString( char *stringToRelease ) {
+GUIDOAPI(void)  GuidoReleaseCString( char *stringToRelease ) {
     free(stringToRelease);
 }
 
@@ -839,8 +865,15 @@ GUIDOAPI(void) 	GuidoGetDefaultPageFormat( GuidoPageFormat * outFormat )
 	outFormat->margintop = omt;
 	outFormat->marginright = omr;
 	outFormat->marginbottom = omb;
-
 }
+
+// --------------------------------------------------------------------------
+GUIDOAPI(GuidoPageFormat*) GuidoGetNewDefaultPageFormat() {
+    GuidoPageFormat * outFormat = new GuidoPageFormat;
+    GuidoGetDefaultPageFormat(outFormat);
+    return outFormat;
+}
+
 // --------------------------------------------------------------------------
 GUIDOAPI(void) 	GuidoDrawBoundingBoxes(int bbMap)	{ gBoundingBoxesMap = bbMap; }
 GUIDOAPI(int) 	GuidoGetDrawBoundingBoxes()			{ return gBoundingBoxesMap; }
@@ -856,6 +889,19 @@ GUIDOAPI(void) 	GuidoGetPageFormat(	CGRHandler inHandleGR, int pageNum, GuidoPag
 	const GRPage * thePage = inHandleGR->grmusic->getPage( pageNum );
 	if( thePage )
 		thePage->getPageFormat( format );
+}
+
+// --------------------------------------------------------------------------
+GUIDOAPI(GuidoPageFormat*) GuidoGetNewPageFormat(	CGRHandler inHandleGR, int pageNum)
+{
+    GuidoPageFormat* pf = new GuidoPageFormat;
+    GuidoGetPageFormat(inHandleGR, pageNum, pf);
+    return pf;
+}
+
+// --------------------------------------------------------------------------
+GUIDOAPI(void) GuidoDeletePageFormat(GuidoPageFormat* format) {
+    delete format;
 }
 
 // --------------------------------------------------------------------------
@@ -960,8 +1006,6 @@ GUIDOAPI(GuidoErrCode) GuidoSetSymbolPath(ARHandler inHandleAR, const std::vecto
 // --------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoGetSymbolPath(const ARHandler inHandleAR, std::vector<std::string> &inPathVector)
 {
-    std::vector<std::string> returnedPath;
-
     if (!inHandleAR)
         return guidoErrInvalidHandle;
 

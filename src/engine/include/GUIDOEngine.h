@@ -266,7 +266,7 @@ representations.
         \return a Guido error code.
 
 	  	WARNING: the caller must ensure desc maintains a constant reference on a
-		valid VGDevice, because Guido keeps it internally (to calculate fonts, etc.)
+        valid VGDevice, because Guido keeps it internally (to calculate fonts, etc.)
     */
     GUIDOAPI(GuidoErrCode)	GuidoInit(GuidoInitDesc * desc);
 
@@ -331,7 +331,7 @@ representations.
        Same as GuidoAR2GR, except it returns a GRHandler or 0 in case
        of a failure.
     */
-    GRHandler	GuidoGetAR2GR( ARHandler ar, const GuidoLayoutSettings* settings);
+    GUIDOAPI(GRHandler)	GuidoGetAR2GR( ARHandler ar, const GuidoLayoutSettings* settings);
 
 
 	/*!
@@ -376,7 +376,7 @@ representations.
 		\param denom the denomenator of a date
 		\return a date num/denom
 	*/
-    GuidoDate * 	GuidoMakeDate( int num, int denom );
+    GUIDOAPI(GuidoDate*) 	GuidoMakeDate( int num, int denom );
 	/*!
 		Get a GuidoDate's numerator.
 
@@ -422,6 +422,35 @@ representations.
     */
     GUIDOAPI(void)	GuidoGetDefaultLayoutSettings (GuidoLayoutSettings * settings);
 
+    /*!
+        Same as GuidoGetDefaultLayoutSettings (GuidoLayoutSettings *).
+
+        \return layout settings
+    */
+    GUIDOAPI(GuidoLayoutSettings)	GuidoGetNewDefaultLayoutSettings();
+
+    GUIDOAPI(void) GuidoSetNewDefaultLayoutSettings(GuidoLayoutSettings settings);
+
+    /*!
+      Delete a GuidoLayoutSettings.
+
+      \param settings the GuidoLayoutSettings to delete.
+    */
+    GUIDOAPI(void) GuidoDeleteLayoutSettings(GuidoLayoutSettings * settings);
+
+    /*!
+      Get an error code in a abstract representation.
+
+      \return An error code.
+     */
+    GUIDOAPI(GuidoErrCode) GuidoGetArError(CARHandler ar);
+
+    /*!
+      Get an error code in a graphic representation.
+
+      \return An error code.
+     */
+    GUIDOAPI(GuidoErrCode) GuidoGetGrError(CGRHandler gr);
 /*! @} */
 
 
@@ -474,7 +503,7 @@ as by date. Page numbers start at 1.
 		\param inHandleGR a Guido opaque handle to a GR structure.
 		\return a pointer to a GuidoDate or 0 if error.
 	*/
-    GuidoDate * GuidoGetDuration( CGRHandler inHandleGR);
+    GUIDOAPI(GuidoDate*) GuidoGetDuration(GRHandler inHandleGR);
 
 
 	/** \brief Finds the page which has an event (note or rest) at a given date.
@@ -522,7 +551,7 @@ as by date. Page numbers start at 1.
 		\param pageNum a page number (starts at 1).
 		\return a pointer to a Date or 0 if null
 	*/
-    GuidoDate * GuidoGetDatePageDate( CGRHandler inHandleGR, int pageNum);
+    GUIDOAPI(GuidoDate*) GuidoGetNewPageDate( CGRHandler inHandleGR, int pageNum);
 
 
 /*! @} */
@@ -572,7 +601,7 @@ units.
         \param page the page number.
         \return a c string which have to be released. See GuidoReleaseCString().
     */
-    char *  GuidoGetSVGExportWithFontSpec( const GRHandler handle, int page );
+    GUIDOAPI(char *)  GuidoGetSVGExportWithFontSpec( const GRHandler handle, int page );
 
 	/** \brief Exports an abstract representation of GUIDO draw commands.
 
@@ -588,7 +617,7 @@ units.
         \param page
         \return a c string
     */
-    char *  GuidoGetAbstractExport( const GRHandler handle, int page );
+    GUIDOAPI(char *)  GuidoGetAbstractExport( const GRHandler handle, int page );
 
 	/** \brief Exports an representation of GUIDO draw commands in a data-reduced dsl
 
@@ -604,7 +633,7 @@ units.
      * \param in_arr a char tab in which write the binary export. The in_arr tab must have a sufficient size.
      * \return the size of the export write in in_arr
      */
-    int  GuidoGetBinaryExport( const GRHandler handle, int page, char * in_arr  );
+    GUIDOAPI(int)  GuidoGetBinaryExport( const GRHandler handle, int page, char * in_arr  );
 
 	/** \brief Control bounding boxes drawing.
 
@@ -623,6 +652,15 @@ units.
 		\param format on output: the page format
 	*/
 	GUIDOAPI(void) 	GuidoGetPageFormat(	CGRHandler inHandleGR, int pageNum, GuidoPageFormat* format );
+
+    /** \brief Same as GuidoGetPageFormat(CGRHandler, int, GuidoPageFormat*). The return object can be
+     * deleted with GuidoDeletePageFormat().
+
+        \param inHandleGR a Guido opaque handle to a GR structure.
+        \param pageNum a page number.
+        \return the page format in a new Object
+    */
+    GUIDOAPI(GuidoPageFormat*) GuidoGetNewPageFormat(	CGRHandler inHandleGR, int pageNum);
 
 	/** \brief Sets the default score page format.
 
@@ -644,6 +682,19 @@ units.
 		\param format on output: the page format
 	*/
 	GUIDOAPI(void) 	GuidoGetDefaultPageFormat( GuidoPageFormat* format );
+
+    /** \brief Same as GuidoGetDefaultPageFormat( GuidoPageFormat*). The return object can be
+     * deleted with GuidoDeletePageFormat().
+
+        \return the default page format in a new object.
+    */
+    GUIDOAPI(GuidoPageFormat*) GuidoGetNewDefaultPageFormat();
+
+    /** \brief Delete a GuidoPageFormat Object.
+
+        \param format the page format to delete.
+    */
+    GUIDOAPI(void) GuidoDeletePageFormat(GuidoPageFormat* format);
 
 	/** \brief Converts internal Guido units into centimeters.
 
@@ -771,7 +822,7 @@ The number of version functions is due to historical reasons.
      * \brief GuidoReleaseCString
      * \param stringToRelease
      */
-    void  GuidoReleaseCString( char *stringToRelease );
+    GUIDOAPI(void)  GuidoReleaseCString( char *stringToRelease );
 
     /*! @} */
 
@@ -803,9 +854,8 @@ The number of version functions is due to historical reasons.
 
 /*! @} */
 
-void AddGGSOutput(const char *s);
+    void AddGGSOutput(const char *s);
 void AddGuidoOutput(const char *s);
-
 #ifdef __cplusplus
 }
 #endif
