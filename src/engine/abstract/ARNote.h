@@ -43,7 +43,7 @@ class ARNote : public ARMusicalEvent
 
     virtual ARMusicalObject * Copy() const;
 
-    virtual void print(int &indent) const;
+    virtual void print(std::ostream& os) const;
     virtual std::ostream & operator<<(std::ostream & os ) const;
     virtual void	browse(TimeUnwrap& mapper) const;
 

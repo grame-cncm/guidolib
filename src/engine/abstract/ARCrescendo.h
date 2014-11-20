@@ -32,7 +32,7 @@ public:
     virtual void setTagParameterList(TagParameterList & tlist);
     virtual bool MatchEndTag(const char * s);
 
-    virtual void print(int &indent) const;
+    virtual void print(std::ostream& os) const;
     virtual void PrintName(std::ostream & os) const;
 
     const NVstring &getDynamicMarking() const { return dynamicMarking; }

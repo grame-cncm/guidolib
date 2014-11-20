@@ -113,7 +113,7 @@ void GRSText::OnDraw( VGDevice & hdc) const
 #endif
 }
 
-void GRSText::print(int &indent) const
+void GRSText::print(std::ostream& os) const
 {
 }
 

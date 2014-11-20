@@ -31,7 +31,7 @@ public:
 	ARDrRenz(int p_inv = 0);
 	virtual ~ARDrRenz();
 
-	virtual void print(int &indent) const { };
+	virtual void print(std::ostream& os) const;
 
 	virtual void PrintName(std::ostream & os) const;
 	virtual void PrintParameters(std::ostream & os) const;

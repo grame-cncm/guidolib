@@ -170,3 +170,7 @@ unsigned int GRRepeatBegin::getTextAlign() const
 {
 	return (VGDevice::kAlignCenter | VGDevice::kAlignBase);
 }
+
+void GRRepeatBegin::print(std::ostream& os) const
+{
+}

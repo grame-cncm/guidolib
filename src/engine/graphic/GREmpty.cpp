@@ -74,5 +74,9 @@ void GREmpty::tellPosition( GObject * caller, const NVPoint & newPosition )
 		setHPosition(newPosition.x);
 }
 
+void GREmpty::print(std::ostream& os) const
+{
+}
+
 
 

@@ -30,21 +30,17 @@ class ARInstrument : public ARMTParameter
 
 		virtual void setTagParameterList(TagParameterList & theTagParameterList);
 
-		virtual void print(int &indent) const;
+		virtual void print(std::ostream& os) const;
 
 		const char* getName() const;
-		const char* getSecondName() const;
-		const TagParameterString * getPar1() const	 	{ return s1; }
-		const TagParameterString *getPar2() const	 	{ return s2; }
-		const TagParameterString *getTransp() const	 	{ return transp; }
-		virtual bool IsStateTag() const 				{ return true; }
+		const TagParameterString *getTransp() const { return transp; }
+		virtual bool IsStateTag() const 		    { return true; }
 	
 		virtual std::ostream &operator<<(std::ostream &os) const;
 
 	protected:
 
-		TagParameterString *s1;
-		TagParameterString *s2;
+		TagParameterString *name;
 		TagParameterString *transp;
 
 		static ListOfTPLs ltpls;

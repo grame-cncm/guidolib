@@ -28,7 +28,6 @@
 #endif
 
 
-class GuidoFeedback;
 class VGDevice;
 
 struct NodeAR;

@@ -54,14 +54,13 @@ ARMeter::~ARMeter()
 {
 }
 
-
-void ARMeter::print(int &indent) const
+void ARMeter::print(std::ostream& os) const
 {
     std::string autoBarLinesStr    = (autoBarlines    ? "true" : "false");
     std::string autoMeasuresNumStr = (autoMeasuresNum ? "true" : "false");
 
-    std::cout << "ARMeter: name: \"" << mMeterName << "\"; autoBarlines: \"" << autoBarLinesStr <<
-        "\"; autoMeasuresNum: \"" << autoMeasuresNumStr << "\"" << std::endl;
+    os << "ARMeter: name: \"" << mMeterName << "\"; autoBarlines: " << autoBarLinesStr <<
+        "; autoMeasuresNum: " << autoMeasuresNumStr << "" << std::endl;
 }
 
 std::ostream & ARMeter::operator<<(std::ostream & os) const

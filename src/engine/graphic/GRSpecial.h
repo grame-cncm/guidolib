@@ -29,7 +29,7 @@ class GRSpecial : public GRARNotationElement, public GRTag
 		virtual 		~GRSpecial() {}
 
 		virtual void 	OnDraw( VGDevice & hdc ) const;		
-		virtual void 	print(int &indent) const { }
+        virtual void 	print(std::ostream& os) const;
 
 		virtual void 	setPosition(const NVPoint & point)		{ GRARNotationElement::setPosition(point); } 
 };

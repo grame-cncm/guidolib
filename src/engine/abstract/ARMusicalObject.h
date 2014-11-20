@@ -74,7 +74,7 @@ class ARMusicalObject
 
 		virtual std::ostream & operator<<(std::ostream &os) const;
 
-		virtual void print(int &indent) const;
+		virtual void print(std::ostream& os) const;
 
 		// introduced to get correct tie pos for notes in chords [DF 2012-03-19]
 		// do nothing at this level

@@ -29,12 +29,10 @@ ListOfTPLs ARSpecial::ltpls(1);
 
 ARSpecial::ARSpecial()
 {
-
 }
 
 ARSpecial::~ARSpecial()
 {
-
 }
 
 void ARSpecial::setTagParameterList(TagParameterList & tpl)
@@ -147,4 +145,9 @@ std::ostream & ARSpecial::operator<<(std::ostream &os) const
 		<< dy * kVirtualToCm << "cm,"
 		<< space * kVirtualToCm << "cm," << scale << "> ";
 	return os;
+}
+
+void ARSpecial::print(std::ostream& os) const
+{
+    os << "ARSpecial;" << std::endl;
 }

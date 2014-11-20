@@ -39,48 +39,14 @@ ARTHead::ARTHead(const ARTHead & arthead)
 	savehead = NULL;
 }
 
-ARMusicalObject * ARTHead::Copy() const
+ARMusicalObject *ARTHead::Copy() const
 {
 	return new ARTHead(*this);
 }
 
-void ARTHead::setTagParameterList(TagParameterList & tpl)
-{
-	if (ltpls.GetCount() == 0)
-	{
-		// create a list of string ...
-
-		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(( ""));
-		CreateListOfTPLs(ltpls,lstrs);
-	}
-
-	TagParameterList * rtpl = NULL;
-	int ret = MatchListOfTPLsWithTPL(ltpls, tpl, &rtpl);
-
-	if (ret>=0 && rtpl)
-	{
-		// we found a match!
-		if (ret == 0)
-		{
-
-		}
-
-		delete rtpl;
-
-	}
-	else
-	{
-		// failure...
-	}
-
-	tpl.RemoveAll();
-}
-
 std::ostream & ARTHead::operator<<(std::ostream & os) const
 {
-	switch (headstate)
-	{
+	switch (headstate) {
 		case NORMAL:
 		case NOTSET:	os << "\\headsNormal";		break;
 		case REVERSE: 	os << "\\headsReverse";		break;
@@ -88,9 +54,26 @@ std::ostream & ARTHead::operator<<(std::ostream & os) const
 		case RIGHT: 	os << "\\headsRight";		break;
 		case LEFT: 		os << "\\headsLeft";		break;
 	}
+
 	if (getRange())
 		os << "(";
 
 	return os << " ";
+}
+
+void ARTHead::print(std::ostream& os) const
+{
+    os << "ARTHead: state: ";
+    
+	switch (headstate) {
+		case NORMAL:
+		case NOTSET:	os << "normal";  break;
+		case REVERSE: 	os << "reverse"; break;
+		case CENTER: 	os << "center";  break;
+		case RIGHT: 	os << "right";   break;
+		case LEFT: 		os << "left";    break;
+	}
+
+    os << ";" << std::endl;
 }
 

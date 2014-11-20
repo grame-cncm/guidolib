@@ -59,10 +59,6 @@ const char * ARTitle::getPageFormat()
 		return pageformat->getValue();
 }
 
-void ARTitle::print(int &indent) const
-{
-}
-
 void ARTitle::setTagParameterList(TagParameterList & tpl)
 {
 	if (ltpls.GetCount() == 0)
@@ -111,4 +107,20 @@ void ARTitle::setTagParameterList(TagParameterList & tpl)
 		// failure
 	}
 	tpl.RemoveAll();
+}
+
+void ARTitle::print(std::ostream& os) const
+{
+    os << "ARTitle: ";
+
+    if (name)
+        os << "name: \"" << name->getValue() << "\"; ";
+
+    if (pageformat)
+        os << "pageformat: " << pageformat->getValue() << "; ";
+
+    if (textformat)
+        os << "textformat" << textformat->getValue() << ";";
+    
+    os << std::endl;
 }

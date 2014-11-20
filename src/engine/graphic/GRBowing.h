@@ -95,7 +95,7 @@ public:
 		virtual void addAssociation(GRNotationElement * );
 
 		virtual void tellPosition(GObject * caller, const NVPoint & newPosition);
-		virtual void print(int &indent) const;
+		virtual void print(std::ostream& os) const;
 		virtual GRNotationElement * getStartElement(GRStaff * grstaff) const;
 		virtual GRNotationElement * getEndElement(GRStaff * grstaff) const;
 		

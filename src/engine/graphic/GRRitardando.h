@@ -30,7 +30,7 @@ class GRRitardando : public GRPTagARNotationElement
 		virtual ~GRRitardando();
 
 		virtual void OnDraw( VGDevice & hdc ) const;
-		virtual void print(int &indent) const {};
+        virtual void print(std::ostream& os) const;
 
 		virtual void tellPosition(GObject *caller,const NVPoint &np);
 

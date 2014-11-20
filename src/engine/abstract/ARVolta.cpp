@@ -36,7 +36,6 @@ ARVolta::ARVolta()
 
 ARVolta::~ARVolta()
 {
-
 }
 
 void ARVolta::browse(TimeUnwrap& mapper) const
@@ -97,6 +96,19 @@ std::ostream & ARVolta::operator<<(std::ostream & os) const
 	if (getRange())
 		os << "(";
 	return os << " ";
+}
+
+void ARVolta::print(std::ostream& os) const
+{
+    os << "ARVolta: ";
+
+    if (mark)
+        os << "mark: " << mark->getValue() << "; ";
+
+    if (format)
+        os << "format: " << format->getValue() << "; ";
+
+    os << std::endl;
 }
 
 

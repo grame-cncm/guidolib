@@ -55,7 +55,6 @@ class GRInstrument;
 class GRRepeatEnd;
 class GRRepeatBegin;
 class GRDoubleBar;
-class GRFermata;
 class GRIntens;
 class GRText;
 class GRBar;
@@ -255,7 +254,7 @@ class GRStaff : public GRCompositeNotationElement
 		virtual void GGSOutput() const;
 		virtual void OnDraw( VGDevice & hdc ) const;
 		virtual void GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
-		virtual void print(int &indent) const;
+		virtual void print(std::ostream& os) const;
 		void		setOnOff(bool onoff, TYPE_TIMEPOSITION tp);
 		void		setOnOff(bool onoff);
 		bool		isStaffBeginOn();

@@ -17,25 +17,22 @@
 
 ARDoubleBar::ARDoubleBar()
 {
-
 }
 
 ARDoubleBar::~ARDoubleBar()
 {
-
 }
 
-void ARDoubleBar::print(int &indent) const
+void ARDoubleBar::print(std::ostream& os) const
 {
-	/* fprintf(stderr,"(%.2f:Bar ",(float) relativeTimePosition);
-	fprintf(stderr,"%d ", barnumber);
-	fprintf(stderr,")"); */
+    os << "ARDoubleBar;" << std::endl;
 }
 
 /* ostream & ARDoubleBar::operator<<(ostream &os) const
 {
 	return os << "\\doublebar ";
 } */
+
 void ARDoubleBar::PrintName(std::ostream &os) const
 {
 	os << "\\doublebar ";

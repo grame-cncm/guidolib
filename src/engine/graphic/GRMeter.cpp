@@ -328,7 +328,7 @@ void GRMeter::OnDraw(VGDevice & hdc) const
 	}
 }
 
-void GRMeter::print(int &indent) const
+void GRMeter::print(std::ostream& os) const
 {
 	fprintf(stderr,"(M%.2f,%.2f)",float(getRelativeTimePosition()),float(getDuration()));
 }

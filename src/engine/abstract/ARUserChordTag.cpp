@@ -33,17 +33,13 @@ ARUserChordTag::ARUserChordTag(const ARUserChordTag * uct)
 	if (uct->labels)
 		labels = TagParameterString::cast
 		(uct->labels->getCopy());
-	else if (uct->labeli)
-	{
+	else if (uct->labeli) {
 		labeli = TagParameterInt::cast
 		(uct->labeli->getCopy());
 
 		if (uct->labelistr)
-		{
 			labelistr = new NVstring(*uct->labelistr);
-		}
-		else
-		{
+		else {
 			labelistr = new NVstring("intlabel");
 			char buf[100];			
 			snprintf(buf, 100, "%d", labeli->getValue()); 
@@ -81,6 +77,7 @@ const char* ARUserChordTag::getLabelValue() const
 
 	return "";
 }
+
 void ARUserChordTag::setTagParameterList(TagParameterList& tpl)
 {
 	if (ltpls.GetCount() == 0)
@@ -122,12 +119,20 @@ void ARUserChordTag::setTagParameterList(TagParameterList& tpl)
 void ARUserChordTag::PrintParameters(std::ostream & os) const
 {
 	if (labels && labels->TagIsSet())
-	{
 		os << "<label=\"" << labels->getValue() << "\">";
-	}
 	else if (labeli && labeli->TagIsSet())
-	{
 		os << "<label=" << labeli->getValue() << ">";
-	}
+}
+
+void ARUserChordTag::print(std::ostream& os) const
+{
+    os << "ARUserChordTag: ";
+
+    if (labels)
+        os << "label: \"" << labels->getValue() << "\"; ";
+    else if (labeli)
+        os << "label: " << labeli->getValue() << "; ";
+
+    os << std::endl;
 }
 

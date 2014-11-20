@@ -30,7 +30,7 @@ public:
 	
 	virtual void setTagParameterList(TagParameterList & tlist);
 	virtual TagParameterList * getTagParameterList() const;
-	virtual void 	print(int &indent) const;
+	virtual void 	print(std::ostream& os) const;
 	virtual void	browse(TimeUnwrap& mapper) const;
 	virtual bool 	MatchEndTag(const char * s);
 	bool getParSet() const	{ return mParSet; }
@@ -51,7 +51,6 @@ protected:
 	const TagParameterFloat *dy2;
 	const TagParameterFloat *fThickness;
 	const TagParameterString *fLineStyle;
-	const TagParameterString *fill;
 	bool mWavy;
 	bool mFill;
 	bool mParSet;

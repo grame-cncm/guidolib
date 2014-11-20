@@ -96,6 +96,9 @@ void ARABreak::setTagParameterList(TagParameterList & tpl)
 	// issue warning...
 	tpl.RemoveAll();
 	return;
+}
 
-
+void ARABreak::print(std::ostream& os) const
+{
+    os << "ARABreak;" << std::endl;
 }

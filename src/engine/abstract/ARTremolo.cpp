@@ -161,45 +161,55 @@ void ARTremolo::setTagParameterList(TagParameterList& tpl)
 TagParameterList * ARTremolo::getTagParameterList() const
 {
 	TagParameterList * tpl = new TagParameterList(1);
+
 	if (fStyle && fStyle->TagIsSet())
-	{
 		tpl->AddTail(fStyle->getCopy());
-	}
+
 	if (fSpeed && fSpeed->TagIsSet())
-	{
 		tpl->AddTail(fSpeed->getCopy());
-	}
+
 	if (fPitch && fPitch->TagIsSet())
-	{
 		tpl->AddTail(fPitch->getCopy());
-	}
+
 	if (dx && dx->TagIsSet())
-	{
 		tpl->AddTail(dx->getCopy());
-	}
+
 	if (dy && dy->TagIsSet())
-	{
 		tpl->AddTail(dy->getCopy());
-	}
+
 	if (fThickness && fThickness->TagIsSet())
-	{
 		tpl->AddTail(fThickness->getCopy());
-	}
+
 	if (fText && fText->TagIsSet())
-	{
 		tpl->AddTail(fText->getCopy());
-	}
+
 	if (color && color->TagIsSet())
-	{
 		tpl->AddTail(color->getCopy());
-	}
 
 	return tpl;
 }
 
 // -----------------------------------------------------------------------------
-void ARTremolo::print(int &indent) const
+void ARTremolo::print(std::ostream& os) const
 {
+    os << "ARTremolo: ";
+
+    if (fSpeed)
+        os << "speed: " << fSpeed->getValue() << "; ";
+
+    if (fStyle)
+        os << "style: " << fStyle->getValue() << "; ";
+
+    if (fPitch)
+        os << "pitch: " << fPitch->getValue() << ";";
+
+    if (fThickness)
+        os << "thickness: " << fThickness->getValue() << ";";
+
+    if (fText)
+        os << "text: " << fText->getValue() << ";";
+
+    os << std::endl;
 }
 
 // -----------------------------------------------------------------------------

@@ -32,7 +32,7 @@ class ARChordComma : // public ARMusicalObject,
 
 		virtual ~ARChordComma();
 
-		virtual void print(int &indent) const;
+		virtual void print(std::ostream& os) const;
        // virtual ostream & operator<<(ostream &os) const;
 		virtual void PrintName(std::ostream & os) const;
 		virtual void PrintParameters(std::ostream & os) const;

@@ -46,7 +46,7 @@ class GRKey : public GRARCompositeNotationElement, public GRTag
 		virtual void 	setPosition(const NVPoint & point);
 
 
-		virtual void 	print(int &indent) const;
+		virtual void 	print(std::ostream& os) const;
 
 		virtual void 	GGSOutput() const;
 		virtual void 	OnDraw(VGDevice & dev ) const;

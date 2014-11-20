@@ -28,7 +28,7 @@ class GRSimpleBeam : public GRNotationElement
 				GRSimpleBeam(GRBeam * p_parent, const NVPoint par[4]);
 
 
-		virtual void print(int &indent) const   { }
+		virtual void print(std::ostream& os) const;
 
 		virtual void GGSOutput() const;
 		virtual const unsigned char * getColRef() const;

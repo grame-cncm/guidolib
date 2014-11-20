@@ -29,7 +29,7 @@ public:
 	virtual void checkPosition(const GRSystem * grsys);
 	virtual void OnDraw( VGDevice & hdc ) const;
 
-	virtual void print(int &indent) const;
+	virtual void print(std::ostream& os) const;
 
 protected:
 	GRSystemTagInterface * itag;

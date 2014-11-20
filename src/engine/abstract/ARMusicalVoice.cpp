@@ -762,24 +762,15 @@ void ARMusicalVoice::browse(TimeUnwrap& mapper, const ARMusicalObject * start, c
 }
 
 //____________________________________________________________________________________
-void ARMusicalVoice::print(int &indent) const
+void ARMusicalVoice::print(std::ostream& os) const
 {
-    cout << "Musical voice: voice number: " << voicenum << "; duration: " << (float) getDuration() << std::endl;
-
-    indent++;
-
-    std::string indentStr = "";
-
-    for (int i = 0; i < indent; i++)
-        indentStr += "    ";
+    os << "Musical voice: voice number: " << voicenum << "; duration: " << (float) getDuration() << std::endl;
 
 	GuidoPos pos = ObjectList::GetHeadPosition();
 	while(pos) {
 		ARMusicalObject *e = ObjectList::GetNext(pos);
-		cout << indentStr << e->getRelativeTimePosition() << ": "; e->print(indent);
+		os << "    " << e->getRelativeTimePosition() << ": "; e->print(os);
 	}
-
-    indent--;
 }
 
 //____________________________________________________________________________________
@@ -5500,7 +5491,7 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE &chord_type, CHORD_ACCIDENTAL 
 
 	while (posTmp) { // "removes" the remaining notes
 		musicalObject = ObjectList::GetNext(posTmp);
-		//musicalObject->print(int &indent);
+		//musicalObject->print(std::ostream& os);
 		ARNote *noteTmp = static_cast<ARNote *>(musicalObject->isARNote());
 
 		if (noteTmp && noteTmp->getPitch() != 0) {

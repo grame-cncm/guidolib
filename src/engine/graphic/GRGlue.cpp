@@ -69,3 +69,7 @@ void GRGlue::tellPosition(GObject * caller, const NVPoint & point)
 {
 	setPosition(point);
 }
+
+void GRGlue::print(std::ostream& os) const
+{
+}

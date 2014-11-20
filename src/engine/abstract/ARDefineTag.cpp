@@ -89,3 +89,8 @@ void ARDefineTag::PrintParameters(std::ostream & os) const
 		<< "\"> ";
 }
 
+void ARDefineTag::print(std::ostream& os) const
+{
+    os << "ARDefineTag;" << std::endl;
+}
+

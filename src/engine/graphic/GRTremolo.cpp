@@ -283,3 +283,7 @@ unsigned int GRTremolo::getTextAlign() const
 { 
 	return (VGDevice::kAlignLeft | VGDevice::kAlignTop); 
 }
+
+void GRTremolo::print(std::ostream& os) const
+{
+}

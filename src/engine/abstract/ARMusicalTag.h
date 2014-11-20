@@ -49,7 +49,7 @@ class ARMusicalTag : public ARMusicalObject
 		virtual void	CreateListOfTPLs( ListOfTPLs & ltpl, ListOfStrings & lstrs );
 		virtual bool	MatchEndTag( const char * endstr );
 				void	setAllowRange( int pallow );
-		virtual void    print(int &indent) const = 0;
+		virtual void    print(std::ostream& os) const = 0;
 		virtual void	PrintParameters( std::ostream & os ) const;
 		virtual void	PrintName( std::ostream & os ) const;
 				void	setIsAuto( bool isauto )	{ isAuto = isauto; }

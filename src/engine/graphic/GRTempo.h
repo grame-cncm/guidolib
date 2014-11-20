@@ -34,7 +34,7 @@ class GRTempo : public GRTagARNotationElement
 		virtual 	~GRTempo();
 		
 		virtual void OnDraw( VGDevice & dev ) const;
-		virtual void print(int &indent) const;
+		virtual void print(std::ostream& os) const;
 		virtual unsigned int getTextAlign() const;
 
 	protected:

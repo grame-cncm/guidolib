@@ -26,28 +26,25 @@ class ARIntens :  public ARMTParameter
 {
 	public:
 
-			ARIntens(const char * txt, float val = -1.0f);
+			ARIntens(const char * txt);
 
-			ARIntens() : ARMTParameter(), value(-1.0f)
-			 {
+			ARIntens() : ARMTParameter() {
 			 	relativeTimePosition.set( -1, 1 );
 			 	setDuration ( DURATION_0 );
 			 }
 		virtual void setTagParameterList(TagParameterList & tpl);
 
 		virtual const NVstring & getText() const { return mIntensText; }
-		virtual float getValue() const { return value; }
 
-		virtual void print(int &indent) const;
+		virtual void print(std::ostream& os) const;
 		// virtual ostream & operator<<(ostream &os) const;
 		virtual void PrintName(std::ostream &os) const;
 		virtual void PrintParameters(std::ostream &os) const;
 
-		virtual void	browse(TimeUnwrap& mapper) const;
+		virtual void browse(TimeUnwrap& mapper) const;
 
 	protected:
 		NVstring mIntensText; // der entsprechende Text ...
-		float value;
 
 		static ListOfTPLs ltpls;
 };

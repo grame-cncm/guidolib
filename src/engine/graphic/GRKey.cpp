@@ -270,7 +270,7 @@ void GRKey::updateBoundingBox()
 
 }
 
-void GRKey::print(int &indent) const
+void GRKey::print(std::ostream& os) const
 {
 }
 

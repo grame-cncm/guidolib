@@ -77,3 +77,13 @@ void ARLabel::PrintParameters(std::ostream &os) const
 	os << "<text=\"" << text->getValue() << "\">";
 }
 
+void ARLabel::print(std::ostream& os) const
+{
+    os << "ARLabel: ";
+
+    if (text)
+        os << "text: \"" << text->getValue() << "\"; ";
+
+    os << std::endl;
+}
+

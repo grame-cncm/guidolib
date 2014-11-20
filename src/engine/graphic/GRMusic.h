@@ -98,7 +98,7 @@ class GRMusic : public GREvent
 		virtual int		GGSInputPage( int inPageNum, const char * str);
 		virtual char *	getGGSInfo( int infotype ) const;
 
-		virtual void	print(int &indent) const;
+		virtual void	print(std::ostream& os) const;
 		virtual void	trace(VGDevice & hdc);
 		virtual void	voicetrace(VGDevice & hdc);
 

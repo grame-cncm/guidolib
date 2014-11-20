@@ -48,11 +48,11 @@ ARClef::ARClef(const ARClef & clef)
 	fOctava = clef.fOctava;
 }
 
-ARClef::~ARClef()		{}
+ARClef::~ARClef() {}
 
-void ARClef::print(int &indent) const
+void ARClef::print(std::ostream& os) const
 {
-    std::cout << "ARClef: name: \"" << getName() << "\"" << endl;
+    os << "ARClef: name: \"" << getName() << "\"" << endl;
 }
 
 void ARClef::PrintName(std::ostream &os) const

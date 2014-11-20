@@ -40,7 +40,7 @@ class GRSText : public GRNotationElement, public GRTag
 		virtual void OnDraw( VGDevice & hdc ) const;
         virtual void setColRef(const TagParameterString *tps);
 			
-		virtual void print(int &indent) const;
+		virtual void print(std::ostream& os) const;
 
   protected:
   	

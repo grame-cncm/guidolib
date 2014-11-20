@@ -59,13 +59,11 @@ void ARRestFormat::setTagParameterList(TagParameterList &tpl)
 	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
 
 	posy = NULL;
-	if (ret >= 0 && rtpl)
-	{
+
+	if (ret >= 0 && rtpl) {
 		// we found a match!
 		if (ret == 0)
-		{
 			posy = TagParameterFloat::cast(rtpl->RemoveHead()); 
-		}
 
 		delete rtpl;
 	}
@@ -89,5 +87,15 @@ void ARRestFormat::PrintParameters(std::ostream &os) const
 		os << "<posy=\"" << posy->getUnitValue() << posy->getUnit() << "> ";
 //		\",size=" 
 //		<< size << ",dx=" << dx << "> ";
+}
+
+void ARRestFormat::print(std::ostream& os) const
+{
+    os << "ARRestFormat: ";
+
+    if (posy)
+        os << "posy: " << posy->getValue() << "; ";
+
+    os << std::endl;
 }
 

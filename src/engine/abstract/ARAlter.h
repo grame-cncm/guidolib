@@ -37,7 +37,7 @@ class ARAlter : public ARMTParameter, public ARPositionTag
 		virtual std::string getAlterText() const;
 		virtual float getDetune() const;
 
-		virtual void print(int &indent) const;
+		virtual void print(std::ostream& os) const;
         // virtual ostream & operator<<(ostream &os) const;
 		virtual void PrintName(std::ostream & os) const;
 		virtual void PrintParameters(std::ostream & os) const;

@@ -17,7 +17,6 @@ using namespace std;
 
 // - Guido Misc
 #include "secureio.h"
-#include "GuidoFeedback.h"
 #include "GUIDOInternal.h"
 #include "VGDevice.h"
 
@@ -81,19 +80,6 @@ GRPage::GRPage( GRMusic * grmusic, GRStaffManager * grstafmgr,
 // ----------------------------------------------------------------------------
 GRPage::~GRPage()
 {
-	// - Progress feedback
-	if( gGlobalSettings.gFeedback )
-	{
-		float progress = 0;
-		if( mCurMusic && ( (float)mCurMusic->getDuration() > 0.0f ))
-		{
-			progress = (float) this->getRelativeTimePosition() /
-				(float) mCurMusic->getDuration();
-			
-			gGlobalSettings.gFeedback->UpdateStatusMessage( str_DeletingPages, 
-										(int) (progress * 100.0));
-		}
-	}
 	DeleteContent( &mSystems );
 }
 
@@ -486,7 +472,7 @@ void GRPage::updateBoundingBox()
 }
 
 // ----------------------------------------------------------------------------
-void GRPage::print(int &indent) const
+void GRPage::print(std::ostream& os) const
 {
 }
 

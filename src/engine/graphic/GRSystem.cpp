@@ -38,7 +38,7 @@
 #include "ARSystemFormat.h"
 #include "ARMusicalVoice.h"	// for template instanciation
 #include "ARMusic.h"
-#include "ARAccol.h"
+#include "ARAccolade.h"
 #include "TagParameterFloat.h"
 #include "TagParameterString.h"
 #include "TagParameterInt.h"
@@ -660,7 +660,7 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 				const float staffHeight = (theStaff->getNumlines() - 1) * theStaff->getStaffLSPACE();
 				NVPoint endstaffPos = lastStaffPos;
 				endstaffPos.y += staffHeight; // Set to the bottom of last staff
-                GRAccolade * onlyAccol = new GRAccolade(new ARAccol());
+                GRAccolade * onlyAccol = new GRAccolade(new ARAccolade());
 				onlyAccol->draw(hdc, firstStaffPos, endstaffPos);
                 delete onlyAccol;
 			}
@@ -782,7 +782,7 @@ void GRSystem::addStaff( GRStaff * newStaff, int num )
 }
 
 // ----------------------------------------------------------------------------
-void GRSystem::print(int &indent) const
+void GRSystem::print(std::ostream& os) const
 {
 }
 
@@ -1093,9 +1093,9 @@ GRSystemSlice * GRSystem::getFirstGRSystemSlice()
 //
 // -> (CL) done in 2013 :  several accolades can be displayed, 
 // GRAccolade mAccolade is now replaced by a std::vector<GRAccolade *>, 
-// as well as mCurAccolade Tag in GRStaffManager (std::vector<ARAccol *>)
+// as well as mCurAccolade Tag in GRStaffManager (std::vector<ARAccolade *>)
 
-void GRSystem::notifyAccoladeTag( ARAccol * inAccoladeTag )
+void GRSystem::notifyAccoladeTag( ARAccolade * inAccoladeTag )
 {
 	traceMethod("notifyAccoladeTag");
 	

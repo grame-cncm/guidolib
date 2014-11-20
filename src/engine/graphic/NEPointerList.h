@@ -41,7 +41,7 @@ class NEPointerList : public NEList
 
 		virtual ~NEPointerList();
 
-		void print(int &indent);
+		void print(std::ostream& os) const;
 
 	  virtual void setHPosition( float nx );
 		int getMaxSpacing();

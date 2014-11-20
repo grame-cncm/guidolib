@@ -336,7 +336,7 @@ void GRStdNoteHead::OnDraw( VGDevice & hdc ) const
 	}
 }
 
-void GRStdNoteHead::print(int &indent) const
+void GRStdNoteHead::print(std::ostream& os) const
 {
 }
 

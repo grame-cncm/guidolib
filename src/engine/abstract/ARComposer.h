@@ -29,7 +29,7 @@ class ARComposer : public ARText
 		const char* getPageFormat() const;
 
 
-		virtual void print(int &indent) const;
+		virtual void print(std::ostream& os) const;
 		virtual void setTagParameterList(TagParameterList & tpl);
 		virtual std::ostream & operator<<(std::ostream & os) const;
 

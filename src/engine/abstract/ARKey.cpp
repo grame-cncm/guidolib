@@ -73,9 +73,9 @@ bool ARKey::operator ==(const ARKey & k) const
 	return true;
 	
 }
-void ARKey::print(int &indent) const
+void ARKey::print(std::ostream& os) const
 {
-    std::cout << "ARKey: key: " << fKeyNumber << endl;
+    os << "ARKey: key: " << fKeyNumber << endl;
 }
 
 void ARKey::PrintName(std::ostream & os) const

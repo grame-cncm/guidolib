@@ -35,30 +35,32 @@ public:
 
     virtual void 	setTagParameterList(TagParameterList & theTagParameterList);
 
-    virtual const char* getSymbolPath() const				{ return aFilePath ? aFilePath->getValue() : 0; }
+    virtual const char* getSymbolPath() const				{ return filePath ? filePath->getValue() : 0; }
 
-    virtual void print(int &indent) const;
+    virtual void print(std::ostream& os) const;
     virtual void PrintName(std::ostream & os) const;
     virtual void PrintParameters(std::ostream & os) const;
-    float		 getSize() const                            { return aSize; }
-    const char*  getPositionString() const                  { return aPosition ? aPosition->getValue() : NULL; }
-    int          getFixedWidth() const                           { return aFixedWidth ? aFixedWidth->getValue() : 0; }
-    int          getFixedHeight() const                          { return aFixedHeight ? aFixedHeight->getValue() : 0; }
 
-            void setCurrentARMusic(ARMusic *inARMusic);
-    const std::vector<std::string> &getPath() const        { return aCurrentARMusic->getPath(); }
+    float		 getSize() const                    { return size; }
+    const char*  getPositionString() const          { return position ? position->getValue() : NULL; }
+    int          getFixedWidth() const              { return width ? width->getValue() : 0; }
+    int          getFixedHeight() const             { return height ? height->getValue() : 0; }
+    
+    void setCurrentARMusic(ARMusic *inARMusic)      { currentARMusic = inARMusic; }
+
+    const std::vector<std::string> &getPath() const { return currentARMusic->getPath(); }
 
 protected:
 
     virtual const char *getTagFormat() const;
 
-	TagParameterString *aFilePath;
-	             float  aSize;
-    TagParameterString *aPosition;
-    TagParameterInt    *aFixedWidth;
-    TagParameterInt    *aFixedHeight;
+	TagParameterString *filePath;
+	             float  size;
+    TagParameterString *position;
+    TagParameterInt    *width;
+    TagParameterInt    *height;
 
-               ARMusic *aCurrentARMusic;
+               ARMusic *currentARMusic;
 
 	static ListOfTPLs ltpls;
 };

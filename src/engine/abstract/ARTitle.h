@@ -22,18 +22,17 @@
 class ARTitle : public ARText
 {
 	public:
-	  ARTitle();
+        ARTitle();
 
-	  virtual ~ARTitle();
+        virtual ~ARTitle();
 
+        virtual void print(std::ostream& os) const;
 
-		virtual void print(int &indent) const;
+        virtual void setTagParameterList(TagParameterList & tpl);
 
-		virtual void setTagParameterList(TagParameterList & tpl);
-
-		virtual std::ostream & operator<<(std::ostream &os) const;
-		const char* getName();
-		const char* getPageFormat();
+        virtual std::ostream & operator<<(std::ostream &os) const;
+        const char* getName();
+        const char* getPageFormat();
 
 	protected:
 			static ListOfTPLs ltpls;

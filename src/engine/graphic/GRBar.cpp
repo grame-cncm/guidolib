@@ -287,7 +287,7 @@ void GRBar::OnDraw(VGDevice & hdc ) const
 }
 
 // --------------------------------------------------------------------------
-void GRBar::print(int &indent) const
+void GRBar::print(std::ostream& os) const
 {
 }
 

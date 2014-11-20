@@ -62,3 +62,13 @@ void ARCue::PrintParameters(std::ostream & os) const
 	if (!name || name->TagIsNotSet()) return;
 	os << "<name=\"" << name->getValue() << "\">";
 }
+
+void ARCue::print(std::ostream& os) const
+{
+    os << "ARCue: ";
+
+    if (name)
+        os << "name: \"" << name->getValue() << "\"; ";
+
+    os << std::endl;
+}

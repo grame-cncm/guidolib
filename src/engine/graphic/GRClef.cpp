@@ -284,7 +284,7 @@ void GRClef::GGSOutput() const
 	}
 }
 
-void GRClef::print(int &indent) const
+void GRClef::print(std::ostream& os) const
 {
 }
 

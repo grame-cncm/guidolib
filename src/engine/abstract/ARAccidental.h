@@ -21,31 +21,30 @@
 /** \brief Abstract representation of an accidental element.
 */
 
-class ARAcc : public ARMTParameter, public ARPositionTag
+class ARAccidental : public ARMTParameter, public ARPositionTag
 {
 public:
 	enum Style { kNone, kCautionary };
 	
-			 ARAcc(const ARAcc & acc);
-			 ARAcc();
-	virtual ~ARAcc();
+			 ARAccidental(const ARAccidental & acc);
+			 ARAccidental();
+	virtual ~ARAccidental();
 
 
 
-	virtual ARMusicalObject * Copy() const	{ return new ARAcc(*this); }
+	virtual ARMusicalObject * Copy() const	{ return new ARAccidental(*this); }
 
-	virtual void print(int &indent) const { }
+	virtual void print(std::ostream& os) const;
 	virtual void PrintName(std::ostream & os) const;
 	virtual void PrintParameters(std::ostream & os) const;
 
 	virtual void setTagParameterList(TagParameterList & tpl);
 
-	const char* getStyleStr() const;
 	Style		getStyle() const;
 
 protected:
 
-	TagParameterString * mStyle;
+	TagParameterString *mStyle;
 	static ListOfTPLs ltpls;
 };
 

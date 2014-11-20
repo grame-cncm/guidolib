@@ -19,10 +19,9 @@ ARTDummy::~ARTDummy()
 {
 }
 
-
-
-void ARTDummy::print(int &indent) const
+void ARTDummy::print(std::ostream& os) const
 {
+    os << "ARTDummy;" << std::endl;
 }
 
 

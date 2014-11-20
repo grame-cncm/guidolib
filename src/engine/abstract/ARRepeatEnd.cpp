@@ -93,4 +93,9 @@ std::ostream & ARRepeatEnd::operator<<(std::ostream & os) const
 	return os << " ";
 }
 
+void ARRepeatEnd::print(std::ostream& os) const
+{    
+    os << "ARRepeatEnd: numrepeat: " << numrepeat << ";";
 
+    os << std::endl;
+}

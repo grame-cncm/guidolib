@@ -221,8 +221,7 @@ ARTuplet::parseTupletFormatString()
 	fRightBrace = hasRightBrace;
 }
 
-void 
-ARTuplet::setName(const char * inName)
+void ARTuplet::setName(const char * inName)
 {
 	fTupletFormat = inName;
 }
@@ -272,6 +271,15 @@ std::ostream & ARTuplet::operator<<(std::ostream & os) const
 	if (getRange())
 		os << "(";
 	return os << " ";
+}
+
+void ARTuplet::print(std::ostream& os) const
+{
+    os << "ARTuplet: ";
+
+    os << std::endl;
+
+    /* TODO compléter */
 }
 
 

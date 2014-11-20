@@ -71,7 +71,7 @@ void GRRange::OnDraw( VGDevice & hdc) const
 
 }
 
-void GRRange::print(int &indent) const
+void GRRange::print(std::ostream& os) const
 {
 
 }

@@ -48,7 +48,8 @@ void ARStaccato::setTagParameterList(TagParameterList& tpl)
 			{
 				if (str->getValue() == std::string("heavy"))
 					type = HEAVY;
-				else type = REGULAR;
+				else
+                    type = REGULAR;
 			}
 			delete str;
 		}
@@ -63,8 +64,20 @@ void ARStaccato::browse(TimeUnwrap& mapper) const
 	mapper.AtPos (this, TimeUnwrap::kStaccato);
 }
 
-void ARStaccato::print(int &indent) const
+void ARStaccato::print(std::ostream& os) const
 {
+    os << "ARStaccato: type: ";
+
+    switch (type) {
+    case HEAVY:
+        os << "heavy";
+        break;
+    case REGULAR:
+        os << "regular";
+        break;
+    }
+
+    os << ";" << std::endl;
 }
 
 void ARStaccato::PrintName(std::ostream &os) const

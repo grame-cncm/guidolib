@@ -59,4 +59,11 @@ void ARJump::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
+void ARJump::print(std::ostream& os) const
+{
+    os << "ARJump;" << std::endl;
+
+    /* TODO params ? */
+}
+
 

@@ -60,13 +60,10 @@ void ARUnits::setTagParameterList(TagParameterList & tpl)
 			// w, h, ml, mt, mr, mb
 			GuidoPos pos = rtpl->GetHeadPosition();
 
-			TagParameterString * tps = 
-				TagParameterString::cast(rtpl->GetNext(pos));
+			TagParameterString * tps = TagParameterString::cast(rtpl->GetNext(pos));
 			assert(tps);
 
 			sType = tps->getValue();
-
-
 		}
 
 		delete rtpl;
@@ -77,4 +74,9 @@ void ARUnits::setTagParameterList(TagParameterList & tpl)
 	}
 
 	tpl.RemoveAll();
+}
+
+void ARUnits::print(std::ostream& os) const
+{
+    os << "ARUnits: type: " << sType << "; " << std::endl;
 }

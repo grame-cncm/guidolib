@@ -18,8 +18,6 @@
 #include <iostream>
 
 // - Guido Misc
-#include "GuidoFeedback.h"
-#include "GUIDOInternal.h"			// for gGlobalSettings.gFeedback
 #include "kf_vect.h"
 
 // - Guido AR
@@ -37,7 +35,7 @@
 #include "ARABreak.h"
 #include "ARAuto.h"
 #include "ARDisplayDuration.h"
-#include "ARAccol.h"
+#include "ARAccolade.h"
 
 // - Guido GR
 #include "GRSystem.h"
@@ -64,10 +62,7 @@
 #include "GRBreakMatrix.h"
 #include "GRSliceHeight.h"
 #include "GRVoiceManager.h"
-#include "GRStaffManager.h" 
-
-
-//extern GuidoFeedback * gFeedback;	// deprecated
+#include "GRStaffManager.h"
 
 // if _DEBUGSFF is set, then the temporary SpaceForceFunctions
 // for all potentail system breaks are written into files.
@@ -312,16 +307,6 @@ void GRStaffManager::createStaves()
 
 		pbreakval = 0;		// the pbreakval ...
 
-		if (gGlobalSettings.gFeedback)
-		{
-			float progress = 1;
-			if ((float) ardur > 0)
-				progress = (float) timePos / (float) ardur;
-			gGlobalSettings.gFeedback->UpdateStatusMessage ( str_CreatingGraphSymbols, (int)(progress * 100.0));
-			if( gGlobalSettings.gFeedback->ProgDialogAbort())
-				return;	
-		}
-
 		// now, we go through all the voices sequentially
 		for (int i = 0; i < cnt; i++)
 		{
@@ -435,19 +420,17 @@ void GRStaffManager::createStaves()
 				if (newline == 1 || newline == 2 || newline == 3)
 				{
 					// this builds the current Spring-Force-Function (that is, rods and springs and stuff is created).
-					sff = BuildSFF();
+                    sff = BuildSFF();
 
-                    if (!sPropRender) {
-                        // I must create a new possiblebreakstate and add that to the syncslice
-                        GRPossibleBreakState * pbs = new GRPossibleBreakState();
+                    // I must create a new possiblebreakstate and add that to the syncslice
+                    GRPossibleBreakState * pbs = new GRPossibleBreakState();
 
-                        pbs->sff = sff;
-                        pbs->copyofcompletesff = NULL;					
-                        float force = 0;
-                        pbs->SaveState( mMyStaffs, mVoiceMgrList, this, timePos, force, pbreakval);
+                    pbs->sff = sff;
+                    pbs->copyofcompletesff = NULL;					
+                    float force = 0;
+                    pbs->SaveState( mMyStaffs, mVoiceMgrList, this, timePos, force, pbreakval);
 
-                        mGrSystemSlice->addPossibleBreakState(pbs);
-                    }
+                    mGrSystemSlice->addPossibleBreakState(pbs);
 
 					// now we need to add the systemslice to the list of available system-slices ....
 					mGrSystemSlice->setNumber(mSystemSlices->GetCount() + 1);
@@ -586,33 +569,24 @@ void GRStaffManager::createStaves()
 		{
 			sff = BuildSFF();
 
-            if (!sPropRender) {
-                // add the thing to the slice-list 
-                GRPossibleBreakState * pbs = new GRPossibleBreakState();
+            // add the thing to the slice-list 
+            GRPossibleBreakState * pbs = new GRPossibleBreakState();
 
-                pbs->sff = sff;
-                pbs->copyofcompletesff = NULL;
+            pbs->sff = sff;
+            pbs->copyofcompletesff = NULL;
 
-                float force = 0;
-                pbs->SaveState(mMyStaffs, mVoiceMgrList, this, timePos, force, pbreakval);
+            float force = 0;
+            pbs->SaveState(mMyStaffs, mVoiceMgrList, this, timePos, force, pbreakval);
 
-                mGrSystemSlice->addPossibleBreakState(pbs);
-            }
+            mGrSystemSlice->addPossibleBreakState(pbs);
 
-			// now we need to add the systemslice to the list of available system-slices ....
+            // now we need to add the systemslice to the list of available system-slices ....
 			mGrSystemSlice->setNumber(mSystemSlices->GetCount() + 1);
 			mGrSystemSlice->mEndSpringID = mSpringID-1;
 			mGrSystemSlice->Finish();
 			mSystemSlices->AddTail(mGrSystemSlice);
 			mGrSystemSlice = NULL;
 		}
-	}
-
-	if( gGlobalSettings.gFeedback )
-	{
-		gGlobalSettings.gFeedback->UpdateStatusMessage( str_CalcLineAndPageBreak );
-		if( gGlobalSettings.gFeedback->ProgDialogAbort())
-			return;	
 	}
 
 	FindOptimumBreaks( 0, beginheight );
@@ -3510,20 +3484,12 @@ traceslice(cout << "GRStaffManager::FindOptimumBreaks  =>  CreateBeginSlice" << 
 			tp = mSystemSlices->GetHead()->getRelativeTimePosition();
 		}
 
-		if( gGlobalSettings.gFeedback )
-		{
-			float progress = 0;
-			if ((float) gCurMusic->getDuration() > 0)
-				progress = (float) tp / (float) gCurMusic->getDuration();
-			gGlobalSettings.gFeedback->UpdateStatusMessage ( str_CreatingLinesAndSystems, (int) (progress * 100.0));
-		}
-
 		mGrSystem = new GRSystem(this, mGrPage, tp, &mSystemSlices, breakent->numslices, beginslice, &mSpringVector, mCurSysFormat,
 				pos == NULL && inPageOrSystemBreak == 0);
 		
 		if( ! mCurAccoladeTag.empty() )	
 		{
-			for(std::vector<ARAccol *>::const_iterator it = mCurAccoladeTag.begin(); it < mCurAccoladeTag.end(); it++)
+			for(std::vector<ARAccolade *>::const_iterator it = mCurAccoladeTag.begin(); it < mCurAccoladeTag.end(); it++)
 			{
 				mGrSystem->notifyAccoladeTag( *it );	
 			}
@@ -3557,7 +3523,7 @@ traceslice(cout << ">>>> GRStaffManager::FindOptimumBreaks  =>  end pos loop" <<
 		
 		if( ! mCurAccoladeTag.empty() )	
 		{
-			for(std::vector<ARAccol *>::const_iterator it = mCurAccoladeTag.begin(); it < mCurAccoladeTag.end(); it++)
+			for(std::vector<ARAccolade *>::const_iterator it = mCurAccoladeTag.begin(); it < mCurAccoladeTag.end(); it++)
 			{
 				mGrSystem->notifyAccoladeTag( *it );	
 			}
@@ -3924,7 +3890,7 @@ void GRStaffManager::ResumeOpenTags( GRSystemSlice * lastslice,
 // ----------------------------------------------------------------------------
 // (JB) Each system should have a list of accolade tags.
 void	
-GRStaffManager::notifyAccoladeTag( ARAccol * inAccoladeTag )
+GRStaffManager::notifyAccoladeTag( ARAccolade * inAccoladeTag )
 {
 	//	if( mGrSystem )
 	//		mGrSystem->notifyAccoladeTag( inAccoladeTag );

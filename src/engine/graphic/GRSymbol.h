@@ -53,7 +53,7 @@ class GRSymbol : public GRPTagARNotationElement
 		
 		virtual void 	OnDraw( VGDevice & hdc ) const;
 		
-		virtual void 	print(int &indent) const;
+		virtual void 	print(std::ostream& os) const;
 		
 		const ARSymbol *getARSymbol() const;
 

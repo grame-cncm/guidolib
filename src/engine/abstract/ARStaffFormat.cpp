@@ -130,3 +130,13 @@ void ARStaffFormat::PrintParameters(std::ostream & os) const
 		size->getUnit() << ">";
 	
 }
+
+void ARStaffFormat::print(std::ostream& os) const
+{
+    os << "ARStaffFormat: ";
+
+    if (style)
+        os << "style:" << style->getValue() << "; ";
+    
+    os << "lineThickness: " << fLineThickness << std::endl;
+}

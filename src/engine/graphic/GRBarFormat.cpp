@@ -34,7 +34,7 @@ GRBarFormat::~GRBarFormat()
 
 }
 
-void GRBarFormat::print(int &indent) const
+void GRBarFormat::print(std::ostream& os) const
 {
 }
 

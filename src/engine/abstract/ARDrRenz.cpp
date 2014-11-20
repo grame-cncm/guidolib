@@ -28,7 +28,6 @@ ARDrRenz::ARDrRenz(int p_inv)
 
 ARDrRenz::~ARDrRenz()
 {
-
 }
 
 void ARDrRenz::setTagParameterList(TagParameterList & tpl)
@@ -80,11 +79,16 @@ void ARDrRenz::setTagParameterList(TagParameterList & tpl)
 
 void ARDrRenz::PrintName(std::ostream & os) const
 {
-		os << "\\DrRenz";
+    os << "\\DrRenz";
 }
 
 void ARDrRenz::PrintParameters(std::ostream & os) const
 {
-		if (inverse)
-			os << "<-1>";
+    if (inverse)
+        os << "<-1>";
 } 
+
+void ARDrRenz::print(std::ostream& os) const
+{
+    os << "ARDrRenz: inverse: " << inverse << ";" << std::endl;
+}

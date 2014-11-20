@@ -28,7 +28,7 @@ public:
 				ARJump(std::string mark = "");
 	virtual 	~ARJump();
 
-    virtual void print(int &indent) const { PrintName(std::cout); }
+    virtual void print(std::ostream& os) const;
 	virtual void setTagParameterList( TagParameterList & tpl );
 
     const FormatStringParserResult&   getMark() const     { return mMark; }

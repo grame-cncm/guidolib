@@ -62,11 +62,11 @@
 #include "ARUnits.h"
 #include "ARDotFormat.h"
 #include "ARNoteFormat.h"
-#include "ARAccol.h"
+#include "ARAccolade.h"
 #include "ARTitle.h"
 #include "ARComposer.h"
 #include "ARStaccato.h"
-#include "ARPizz.h"
+#include "ARPizzicato.h"
 #include "ARMarcato.h"
 #include "ARAccent.h"
 #include "ARTenuto.h"
@@ -82,7 +82,7 @@
 #include "ARAccelerando.h"
 #include "ARInstrument.h"
 #include "ARFinishBar.h"
-#include "ARAcc.h"
+#include "ARAccidental.h"
 #include "ARABreak.h"
 #include "ARAuto.h"
 #include "ARBase.h"
@@ -1178,7 +1178,7 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 	{
 		// This is a singular Fermata...
 		// it should appear inbetween the current events...
-		// Create a GRFermata that is spaced correctly...		
+		// Create a fermata that is spaced correctly...		
 		GRArticulation * grarti = new GRArticulation(mytag, LSPACE);
 		grarti->setNeedsSpring(1);
 		mCurGrStaff->addNotationElement(grarti);
@@ -1628,9 +1628,9 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 		mCurGrStaff->AddTag(gtext);
 		gCurMusic->addVoiceElement(arVoice,gtext);
 	}
-	else if (tinf == typeid(ARAcc))
+	else if (tinf == typeid(ARAccidental))
 	{
-		ARAcc * aracc = static_cast<ARAcc *>(apt);
+		ARAccidental * aracc = static_cast<ARAccidental *>(apt);
 		GRRange * range = new GRRange(mCurGrStaff, aracc);
 
 		addGRTag(range);
@@ -1682,9 +1682,9 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 		mCurGrStaff->AddTag(range);
 		gCurMusic->addVoiceElement(arVoice,range);
 	}
-	else if (tinf == typeid(ARPizz))
+	else if (tinf == typeid(ARPizzicato))
 	{
-		GRRange * range = new GRRange(mCurGrStaff, static_cast<ARPizz *>(apt));
+		GRRange * range = new GRRange(mCurGrStaff, static_cast<ARPizzicato *>(apt));
 		
 		addGRTag(range);
 		mCurGrStaff->AddTag(range);
@@ -2324,7 +2324,7 @@ void GRVoiceManager::ReadBeginTags(const TYPE_TIMEPOSITION & tp)
 	ARPageFormat * pform = NULL;
 	ARSystemFormat * sysform = NULL;
 	ARUnits * units = NULL;
-	ARAccol * accol = NULL;
+	ARAccolade * accol = NULL;
 	ARABreak * arabreak = NULL;
 	ARAuto * arauto = NULL;
 
@@ -2379,7 +2379,7 @@ void GRVoiceManager::ReadBeginTags(const TYPE_TIMEPOSITION & tp)
 		{
 			// just ignore the units tag...
 		}
-		else if ( !accol && (accol = dynamic_cast<ARAccol *>(mtag)) != 0 )
+		else if ( !accol && (accol = dynamic_cast<ARAccolade *>(mtag)) != 0 )
 		{
 			// (JB) Each system should have a list of accolade tags.
 			mStaffMgr->notifyAccoladeTag( accol );

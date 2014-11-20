@@ -33,7 +33,7 @@ class GRBreathMark : public GRTagARNotationElement
 		
 		virtual void	OnDraw( VGDevice & hdc ) const;
 
-	//	virtual void print(int &indent) const;
+		virtual void print(std::ostream& os) const;
 
 		virtual const	NVPoint & getReferencePosition() const
 			{ return refpos; }

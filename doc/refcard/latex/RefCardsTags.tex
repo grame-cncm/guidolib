@@ -108,6 +108,8 @@
     \hline
     \textbf{\textbackslash{}endBar}&&&end bar&color\\
     \hline
+    \textbf{\textbackslash{}fBeam}&&RT - BE&feathered beaming&durations - drawDuration - color\\
+    \hline
     \textbf{\textbackslash{}fermata}&&ORT&fermata sign&type - position - dx/dy - color - size\\
     \hline
     \textbf{\textbackslash{}fine}&&&fine sign&dx/dy - color\\
@@ -122,10 +124,6 @@
     \hline
     \textbf{\textbackslash{}headsCenter}&&ORT&noteheads centered on stem&\\
     \hline
-    \textbf{\textbackslash{}headsLeft}&&ORT&noteheads at the left of the stem&\\
-    \hline
-    \textbf{\textbackslash{}headsNormal}&&ORT&auto noteheads placement (default)&\\
-    \hline
 \end{tabularx}
 %
 % Because the table can't divide itself...
@@ -134,13 +132,17 @@
     \hline
     \textbf{Tag}&\textbf{Shortcuts}&\textbf{Form support}&\textbf{Notation element}&\textbf{Parameters}\\
     \hline
+    \textbf{\textbackslash{}headsLeft}&&ORT&noteheads at the left of the stem&\\
+    \hline
+    \textbf{\textbackslash{}headsNormal}&&ORT&auto noteheads placement (default)&\\
+    \hline
     \textbf{\textbackslash{}headsReverse}&&ORT&reverted placement of noteheads&\\
     \hline
     \textbf{\textbackslash{}headsRight}&&ORT&noteheads at the right of the stem&\\
     \hline
-    \textbf{\textbackslash{}instrument}&\textbackslash{}instr&&instrument specification&\textbf{name} - midiname - transp - dx/dy - color\\
+    \textbf{\textbackslash{}instrument}&\textbackslash{}instr&&instrument specification&\textbf{name} - transp - dx/dy - color\\
     \hline
-    \textbf{\textbackslash{}intensity}&\textbackslash{}i \textbackslash{}intens&&nuance marking&\textbf{type} - value - dx/dy - color - size\\
+    \textbf{\textbackslash{}intensity}&\textbackslash{}i \textbackslash{}intens&&nuance marking&\textbf{type} - dx/dy - color - size\\
     \hline
     \textbf{\textbackslash{}key}&&&key signature&\textbf{key} - color\\
     \hline
@@ -214,10 +216,6 @@
     \hline
     \textbf{\textbackslash{}systemFormat}&&&system formatting&dx\\ % Does dx work ?
     \hline
-    \textbf{\textbackslash{}tempo}&&&tempo mark&\textbf{tempo} - bpm - dx/dy - color\\
-    \hline
-    \textbf{\textbackslash{}tenuto}&\textbackslash{}ten&RT&tenuto mark&dx/dy - color - size\\
-    \hline
 \end{tabularx}
 %
 % Because the table can't divide itself...
@@ -225,6 +223,10 @@
 \begin{tabularx}{\linewidth}{p{3cm}p{4.5cm}p{3cm}p{5.5cm}l}
     \hline
     \textbf{Tag}&\textbf{Shortcuts}&\textbf{Form support}&\textbf{Notation element}&\textbf{Parameters}\\
+    \hline
+    \textbf{\textbackslash{}tempo}&&&tempo mark&\textbf{tempo} - bpm - dx/dy - color\\
+    \hline
+    \textbf{\textbackslash{}tenuto}&\textbackslash{}ten&RT&tenuto mark&dx/dy - color - size\\
     \hline
     \textbf{\textbackslash{}text}&\textbackslash{}t&ORT&text annotation&\textbf{text} - dx/dy - color\\
     \hline
@@ -234,7 +236,7 @@
     \hline
     \textbf{\textbackslash{}tremolo}&\textbackslash{}trem&RT&tremolo sign&style - speed - pitch - thickness - text - dx/dy - color\\
     \hline
-    \textbf{\textbackslash{}trill}&&RT&trill sign&mode - tr - anchor - adx/ady - dx/dy - color - size\\
+    \textbf{\textbackslash{}trill}&&RT&trill sign&mode - adx/ady - tr - anchor - dx/dy - color - size\\
     \hline
     \textbf{\textbackslash{}tuplet}&&RT&tuplet mark&\textbf{format} - dy1 - dy2 - lineThickness - bold - textSize -\\
     &&&&color\\

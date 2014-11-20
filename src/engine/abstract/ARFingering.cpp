@@ -87,3 +87,16 @@ void ARFingering::PrintParameters(std::ostream & os) const
 		os << "<text=\"" << text->getValue() << "\">";
 }
 
+void ARFingering::print(std::ostream& os) const
+{
+    os << "ARFingering: ";
+
+    if (text)
+        os << "text: \"" << text->getValue() << "\"; ";
+
+    if (fsize)
+        os << "fsize: " << fsize->getValue() << ";";
+
+    os << std::endl;
+}
+

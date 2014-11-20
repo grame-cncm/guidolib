@@ -25,14 +25,18 @@ ListOfTPLs ARRitardando::ltpls(1);
 ARRitardando::ARRitardando() : ARMTParameter()
 {
 	rangesetting = ONLY;
-	s1 = 0;
-	s2 = 0;
+    
+    tempo    = 0;
+    abstempo = 0;
+	font     = 0;
+	fattrib  = 0;
+	fsize    = 0;
 }
 
 ARRitardando::~ARRitardando() 
 {
-	delete s1;
-	delete s2;
+	delete tempo;
+	delete abstempo;
 };
 
 void ARRitardando::setTagParameterList(TagParameterList& tpl)
@@ -56,9 +60,9 @@ void ARRitardando::setTagParameterList(TagParameterList& tpl)
 		if (ret == 0)
 		{
 			// Get The TagParameters ...
-			s1 = TagParameterString::cast(rtpl->RemoveHead());
+			tempo = TagParameterString::cast(rtpl->RemoveHead());
 			//assert(text);
-			s2 = TagParameterString::cast(rtpl->RemoveHead());
+			abstempo = TagParameterString::cast(rtpl->RemoveHead());
 			
 			// the font
 			font = TagParameterString::cast(rtpl->RemoveHead());
@@ -86,9 +90,28 @@ void ARRitardando::setTagParameterList(TagParameterList& tpl)
 	tpl.RemoveAll();
 }
 
-void ARRitardando::print(int &indent) const
+void ARRitardando::print(std::ostream& os) const
 {
+    os << "ARRitardando: ";
+
+    if (tempo)
+        os << "tempo: " << tempo->getValue() << "; ";
+
+    if (abstempo)
+        os << "abstempo: " << abstempo->getValue() << "; ";
+
+    if (font)
+        os << "font: " << font->getValue() << "; ";
+
+    if (fattrib)
+        os << "fattrib: " << fattrib->getValue() << "; ";
+
+    if (fsize)
+        os << "fsize: " << fsize->getValue() << "; ";
+
+    os << std::endl;
 }
+
 
 void ARRitardando::PrintName(std::ostream &os) const
 {
@@ -98,10 +121,10 @@ void ARRitardando::PrintName(std::ostream &os) const
 //	if (getRange()) os << "(";
 
 }
+
 void ARRitardando::PrintParameters(std::ostream & ) const
 {
 }
-
 
 bool ARRitardando::MatchEndTag(const char *s)
 {

@@ -31,7 +31,7 @@ public:
 	virtual void setTagParameterList(TagParameterList & tpl);
 
 	// routines to access TagParameters ..
-	virtual void print(int &indent) const;
+	virtual void print(std::ostream& os) const;
 	
 	virtual void PrintName(std::ostream & os) const;
 	virtual void PrintParameters(std::ostream & os) const;

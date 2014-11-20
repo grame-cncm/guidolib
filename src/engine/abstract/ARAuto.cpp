@@ -187,3 +187,8 @@ void ARAuto::PrintParameters(std::ostream & os) const
 		os << ">";
 	}
 }
+
+void ARAuto::print(std::ostream & os) const
+{
+    os << "ARAuto: " << std::endl;
+}

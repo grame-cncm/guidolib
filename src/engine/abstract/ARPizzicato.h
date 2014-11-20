@@ -19,22 +19,22 @@
 
 /*brief	The pizzicato articulation tag */
 
-class ARPizz : public ARMTParameter, public ARPositionTag
+class ARPizzicato : public ARMTParameter, public ARPositionTag
 {
 public :
 	enum			tTypePizz {SNAP, BUZZ, FINGERNAIL, LEFTHAND};
 
-	ARPizz() : ARMTParameter()
+	ARPizzicato() : ARMTParameter()
 	{
 		rangesetting = ONLY;
 		type = LEFTHAND;
 	}
-	virtual			~ARPizz() { };
+	virtual			~ARPizzicato() { };
 	
 	virtual void	setTagParameterList(TagParameterList & tpl);
 	
 	// Routines to access TagpParameters
-	virtual void	print(int &indent) const;
+	virtual void	print(std::ostream& os) const;
 	virtual void	PrintName(std::ostream & os) const;
 	virtual void	PrintParameters(std::ostream & os) const;
 	

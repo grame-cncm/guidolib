@@ -40,7 +40,7 @@ class ARRepeatEndRangeEnd :  public ARMTParameter // ,public ARMusicalObject
 
 		virtual void setTagParameterList(TagParameterList & pl);
 
-		virtual void print(int &indent) const {};
+        virtual void print(std::ostream& os) const { os << "ARRepeatEndRangeEnd;" << std::endl; }
 
 		virtual std::ostream & operator<<( std::ostream & os ) const
 		{

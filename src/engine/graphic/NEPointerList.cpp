@@ -31,9 +31,8 @@ NEPointerList::~NEPointerList()
 {
 }
 
-void NEPointerListprint(int &indent)
+void NEPointerListprint(std::ostream& os)
 {
-
 }
 
 int NEPointerList::getMaxSpacing()

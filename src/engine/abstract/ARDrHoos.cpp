@@ -28,7 +28,6 @@ ARDrHoos::ARDrHoos(int p_inv)
 
 ARDrHoos::~ARDrHoos()
 {
-
 }
 
 void ARDrHoos::setTagParameterList(TagParameterList & tpl)
@@ -62,10 +61,7 @@ void ARDrHoos::setTagParameterList(TagParameterList & tpl)
 			assert(tpi);
 
 			if (tpi->pflag != TagParameter::NOTSET)
-			{
 				inverse = tpi->getValue();
-			}
-
 		}
 
 		delete rtpl;
@@ -88,4 +84,9 @@ void ARDrHoos::PrintParameters(std::ostream & os) const
 {
 	if (inverse)
 		os << "<-1>";
-} 
+}
+
+void ARDrHoos::print(std::ostream& os) const
+{
+    os << "ARDrHoos: inverse: " << inverse << ";" << std::endl;
+}

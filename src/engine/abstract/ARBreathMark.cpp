@@ -26,7 +26,6 @@ ARBreathMark::ARBreathMark()
 
 ARBreathMark::~ARBreathMark()
 {
-
 }
 
 void ARBreathMark::setTagParameterList(TagParameterList & tpl)
@@ -77,3 +76,7 @@ void ARBreathMark::PrintParameters(std::ostream & os) const
 {
 }*/
 
+void ARBreathMark::print(std::ostream& os) const
+{
+    os << "ARBreathMark;" << std::endl;
+}

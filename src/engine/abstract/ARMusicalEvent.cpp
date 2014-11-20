@@ -79,8 +79,9 @@ ARMusicalEvent::~ARMusicalEvent()
 {
 }
 
-void ARMusicalEvent::print(int &indent) const
+void ARMusicalEvent::print(std::ostream& os) const
 {
+    /* TODO ? */
 }
 
 void ARMusicalEvent::setDenominator(int newDenominator)

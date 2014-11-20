@@ -89,3 +89,13 @@ void AROctava::PrintParameters(std::ostream & os) const
 		value = noct->getValue();
 	os << "<i=" << value << ">";
 }
+
+void AROctava::print(std::ostream& os) const
+{
+    os << "AROctava: ";
+
+    if (noct)
+        os << "i: " << noct->getValue() << "; ";
+
+    os << std::endl;
+}

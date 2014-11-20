@@ -34,7 +34,7 @@ class ARStaffOff : public ARMTParameter
 		virtual			~ARStaffOff() { }
 
 		virtual void setTagParameterList(TagParameterList & pl);
-		virtual void print(int &indent) const { };
+		virtual void print(std::ostream& os) const { os << "ARStaffOff;" << std::endl; }
 
 		virtual std::ostream & operator <<(std::ostream & os) const;
 

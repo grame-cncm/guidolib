@@ -451,3 +451,7 @@ float & GRTrill::getLastPosX(int i){
 	static std::map<int, float> lastPosX;
 	return lastPosX[i];
 }
+
+void GRTrill::print(std::ostream& os) const
+{
+}

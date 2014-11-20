@@ -107,7 +107,6 @@ public:
 	virtual void addAssociation( GRNotationElement * grnot );
 
 	// - Text, streams
-	virtual void print(int &indent) const 	{}
 	virtual void print(std::ostream& os) const;
 	virtual void GGSOutput() const;
 	virtual void GGSOutputAt(unsigned int tmptype, long offsx = 0, long offsy = 0, float mysize = 0.0f ) const;

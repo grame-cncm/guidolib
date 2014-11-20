@@ -279,3 +279,16 @@ ARPageFormat::AdjustMargins()
 	if (mSizeY - mTop - mBottom <= 0.1 )  // Idem for vertical margins.
 		mTop = mBottom = 0;
 }
+
+void ARPageFormat::print(std::ostream& os) const
+{
+    os << "ARPageFormat: ";
+
+    if (!mFormat.empty())
+        os << "format: " << mFormat;
+    else
+        os << "width: " << mSizeX << "; height: " << mSizeY;
+
+    os << "; left margin: " << mLeft << "; top margin: "
+        << mTop << "; right margin: " << mRight << "; bottom margin: " << mBottom << std::endl;
+}

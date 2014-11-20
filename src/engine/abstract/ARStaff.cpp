@@ -64,8 +64,14 @@ ARStaff::~ARStaff()
 	delete ids;
 }
 
-void ARStaff::print(int &indent) const
+void ARStaff::print(std::ostream& os) const
 {
+    os << "ARStaff: ";
+
+    if (idi)
+        os << "id: " << idi->getValue() << ";";
+
+    os << std::endl;
 }
 
 void ARStaff::setTagParameterList(TagParameterList& tpl)

@@ -37,10 +37,17 @@ ARComposer::~ARComposer()
 	delete pageformat;
 }
 
-
-
-void ARComposer::print(int &indent) const
+void ARComposer::print(std::ostream& os) const
 {
+    os << "ARComposer: ";
+
+    if (name)
+        os << "name: \"" << name->getValue() << "\"; ";
+
+    if (pageformat)
+        os << "pageformat: " << pageformat->getValue() << ";";
+
+    os << std::endl;
 }
 
 void ARComposer::setTagParameterList(TagParameterList& tpl)

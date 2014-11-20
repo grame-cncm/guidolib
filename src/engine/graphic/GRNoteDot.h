@@ -44,7 +44,7 @@ class GRNoteDot : public GRNotationElement
 	 virtual void	GGSOutput() const;
 	 virtual void	OnDraw( VGDevice & hdc ) const;
 	 // virtual void setPosition(const NVPoint &position);
-	 virtual void	print(int &indent) const;
+	 virtual void	print(std::ostream& os) const;
 
 	 virtual int	getNumDots() const						{ return mDots; }
 

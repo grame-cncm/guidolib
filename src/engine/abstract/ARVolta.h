@@ -27,7 +27,7 @@ public:
 				ARVolta();
 	virtual 	~ARVolta();
 
-	virtual void print(int &indent) const { }
+	virtual void print(std::ostream& os) const;
 
 	virtual void browse (TimeUnwrap& mapper) const;
 	virtual void PrintName( std::ostream & os ) const;

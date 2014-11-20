@@ -72,4 +72,9 @@ void ARSpace::PrintParameters(std::ostream & os) const
 	os << "<dd=" << val * kVirtualToCm << "cm> ";
 }
 
+void ARSpace::print(std::ostream& os) const
+{
+    os << "ARSpace: dd:" << val << ";" << std::endl;
+}
+
 

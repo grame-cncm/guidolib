@@ -30,7 +30,7 @@ class ARTagBegin : public ARMTParameter,
 				ARTagBegin(int id = 0) :  ARMTParameter(id) { }
 		virtual ~ARTagBegin() {}
 
-		virtual void print(int &indent) const { }
+		virtual void print(std::ostream& os) const;
 		virtual void setTagParameterList(TagParameterList& theTagParameterList);
 
 	protected:

@@ -34,7 +34,7 @@ class ARBeamState : public ARMusicalTag
 		
 		virtual bool IsStateTag() const { return true; }
 
-		virtual void print(int &indent) const { }
+		virtual void print(std::ostream& os) const { os << "ARBeamState: state:" << (state == AUTO ? "Auto" : "off") << std::endl; }
 
 /*		virtual ostream &operator<<(ostream &os) const
 			{

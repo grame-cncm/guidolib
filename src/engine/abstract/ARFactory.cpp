@@ -76,15 +76,15 @@
 #include "ARStaffFormat.h"
 #include "ARBarFormat.h"
 #include "ARUnits.h"
-#include "ARAccol.h"
-#include "ARAcc.h"
+#include "ARAccolade.h"
+#include "ARAccidental.h"
 #include "ARDotFormat.h"
 #include "ARNoteFormat.h"
 #include "ARRestFormat.h"
 #include "ARComposer.h"
 #include "ARTitle.h"
 #include "ARStaccato.h"
-#include "ARPizz.h"
+#include "ARPizzicato.h"
 #include "ARMarcato.h"
 #include "ARAccent.h"
 #include "ARTenuto.h"
@@ -228,7 +228,6 @@ ARMusic * ARFactory::getMusic()
     music->output(cout, true);
     cout << "\nARFactory::getMusic - end ----------- " << endl;
 #endif
-
 
     mCurrentMusic = 0;
     ARFactory::sMaxTagId = -1;
@@ -692,14 +691,14 @@ void ARFactory::createTag( const char * name, int no )
 			}
 			else if (!strcmp(name,"accolade") || !strcmp(name,"accol"))
 			{
-				ARAccol * tmp = new ARAccol;
+				ARAccolade * tmp = new ARAccolade;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 				
 			}
 			else if (!strcmp(name,"acc") || !strcmp(name,"accidental"))
 			{
-				ARAcc * tmp = new ARAcc();
+				ARAccidental * tmp = new ARAccidental();
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
@@ -1227,7 +1226,7 @@ void ARFactory::createTag( const char * name, int no )
 			}
 			else if (!strcmp(name, "pizzicato") || !strcmp(name, "pizz"))
 			{
-				ARPizz * tmp = new ARPizz;
+				ARPizzicato * tmp = new ARPizzicato;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}

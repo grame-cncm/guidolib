@@ -68,3 +68,8 @@ void ARNewSystem::PrintName(std::ostream & os) const
 	os << "\\newSystem";
 }
 
+void ARNewSystem::print(std::ostream& os) const
+{
+    os << "ARNewSystem;" << std::endl;
+}
+

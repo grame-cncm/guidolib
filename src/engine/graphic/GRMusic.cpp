@@ -34,8 +34,7 @@ using namespace std;
 #include "GRDefine.h"
 
 // - Guido Misc
-#include "GuidoFeedback.h"
-#include "GUIDOInternal.h" 	// for gGlobalSettings.gFeedback, AddGGSOutput
+#include "GUIDOInternal.h" 	// for AddGGSOutput
 #include "VGDevice.h"
 
 // - Guido debug
@@ -71,17 +70,11 @@ GRMusic::~GRMusic()
 	if( gCurMusic == this )
 		gCurMusic = 0;
 
-	if( gGlobalSettings.gFeedback )
-		gGlobalSettings.gFeedback->SetCancelButtonState( 0 );
-
 	DeleteContent( &mPages );
 
 	// deletes all, because voicelist owns it 
 	// elements which are GRVoice-Objects
 	DeleteContent( &mVoiceList );
-
-	if( gGlobalSettings.gFeedback )
-		gGlobalSettings.gFeedback->SetCancelButtonState( 1 );
 }
 
 /** \brief Guido Graphic Stream.
@@ -170,12 +163,12 @@ void GRMusic::addPage(GRPage * newPage)
 
 /** \brief Prints all pages of music.
 */
-void GRMusic::print(int &indent) const
+void GRMusic::print(std::ostream& os) const
 {
 	for( PageList::const_iterator ptr = mPages.begin(); ptr != mPages.end(); ++ptr )
 	{
 		const GRPage * page = *ptr;
-		page->print(indent);
+		page->print(os);
 	}
 }
 
@@ -457,9 +450,6 @@ void GRMusic::startNewSystem(GRSystem * grsystem)
 */
 void GRMusic::createGR(ARPageFormat * inPageFormat)
 {
-	if( gGlobalSettings.gFeedback ) 
-		gGlobalSettings.gFeedback->SetCancelButtonState(0);
-
 	// - Reset the previous GR
 	ARMusic * arm = getARMusic();
 	arm->resetGRRepresentation();	// (JB) this may conflicts with the new 
@@ -468,9 +458,6 @@ void GRMusic::createGR(ARPageFormat * inPageFormat)
 	DeleteContent( &mVoiceList );
 
 	gCurMusic = this;
-
-	if( gGlobalSettings.gFeedback ) 
-		gGlobalSettings.gFeedback->SetCancelButtonState(1);
 
 	// - Creates new voices
 

@@ -142,3 +142,13 @@ void ARDotFormat::PrintParameters(std::ostream & os) const
 		os << ">";
 }
 
+void ARDotFormat::print(std::ostream& os) const
+{
+    os << "ARDotFormat: ";
+
+    if (mDD)
+        os << "dd: " << mDD->getValue() << "; ";
+
+    os << std::endl;
+}
+

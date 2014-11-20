@@ -24,24 +24,25 @@
 
 ListOfTPLs ARSymbol::ltpls(1);
 
-ARSymbol::ARSymbol() : ARMTParameter(), aSize(1)
+ARSymbol::ARSymbol() : ARMTParameter(), size(1)
 {
-	relativeTimePosition = TYPE_TIMEPOSITION(-1,1);
-	setDuration( DURATION_0 );
-    aPosition = NULL;
-    aFilePath = NULL;
-    aFixedWidth = NULL;
-    aFixedHeight = NULL;
-    aCurrentARMusic = NULL;
     rangesetting = RANGEDC;
+	relativeTimePosition = TYPE_TIMEPOSITION(-1, 1);
+	setDuration( DURATION_0 );
+
+    position       = 0;
+    filePath       = 0;
+    width          = 0;
+    height         = 0;
+    currentARMusic = 0;
 }
 
 ARSymbol::~ARSymbol() 
 {
-	delete aFilePath;
-    delete aPosition;
-    delete aFixedWidth;
-    delete aFixedHeight;
+	delete filePath;
+    delete position;
+    delete width;
+    delete height;
 };
 
 const char *ARSymbol::getTagFormat() const
@@ -66,25 +67,25 @@ void ARSymbol::setTagParameterList(TagParameterList & tpl)
 	{
 		if (ret == 0)
 		{
-			delete aFilePath;
-			aFilePath = TagParameterString::cast(rtpl->RemoveHead());
-			assert(aFilePath);
+			delete filePath;
+			filePath = TagParameterString::cast(rtpl->RemoveHead());
+			assert(filePath);
 
             TagParameterFloat *f = TagParameterFloat::cast(rtpl->RemoveHead());
-			aSize = f->getValue();
+			size = f->getValue();
             delete f;
 
-            delete aPosition;
-			aPosition = TagParameterString::cast(rtpl->RemoveHead());
-			assert(aPosition);
+            delete position;
+			position = TagParameterString::cast(rtpl->RemoveHead());
+			assert(position);
 
-            delete aFixedWidth;
-            aFixedWidth = TagParameterInt::cast(rtpl->RemoveHead());
-            assert(aFixedWidth);
+            delete width;
+            width = TagParameterInt::cast(rtpl->RemoveHead());
+            assert(width);
 
-            delete aFixedHeight;
-            aFixedHeight = TagParameterInt::cast(rtpl->RemoveHead());
-            assert(aFixedHeight);
+            delete height;
+            height = TagParameterInt::cast(rtpl->RemoveHead());
+            assert(height);
 		}
 		delete rtpl;
 	}
@@ -95,8 +96,23 @@ void ARSymbol::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARSymbol::print(int &indent) const
+void ARSymbol::print(std::ostream& os) const
 {
+    os << "ARSymbol: ";
+
+    if (filePath)
+        os << "file: \"" << filePath->getValue() << "\"; ";
+
+    if (position)
+        os << "position: " << position->getValue() << "; ";
+
+    if (width)
+        os << "w: " << width->getValue() << "; ";
+
+    if (height)
+        os << "h: " << height->getValue() << "; ";
+
+    os << std::endl;
 }
 
 void ARSymbol::PrintName(std::ostream &os) const
@@ -106,31 +122,23 @@ void ARSymbol::PrintName(std::ostream &os) const
 
 void ARSymbol::PrintParameters(std::ostream &os) const
 {
-    if (aFilePath || mDx || mDy)
-    {
+    if (filePath || mDx || mDy) {
         os << "<\"";
-        if (aFilePath)
-        {
-            os << aFilePath->getValue();
+        if (filePath) {
+            os << filePath->getValue();
             if (mDx || mDy)
                 os << "\",";
         }
 
-        if (mDx)
-        {
+        if (mDx) {
             os << mDx->getUnitValue() << mDx->getUnit();
             if (mDy)
                 os << "\",";
         }
+
         if (mDy)
-        {
             os << mDy->getUnitValue() << mDy->getUnit();
-        }
+
         os << ">";
     }
-}
-
-void ARSymbol::setCurrentARMusic(ARMusic *inARMusic)
-{
-    aCurrentARMusic = inARMusic;
 }

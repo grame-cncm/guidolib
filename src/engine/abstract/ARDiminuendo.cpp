@@ -105,10 +105,6 @@ void ARDiminuendo::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARDiminuendo::print(int &indent) const 
-{
-}
-
 bool ARDiminuendo::MatchEndTag(const char * s)
 {
 	if (ARMusicalTag::MatchEndTag(s))
@@ -125,5 +121,18 @@ void ARDiminuendo::PrintName(std::ostream & os) const
 		os << "\\dim";
 	else
 		os << "\\dimBegin";
+}
+
+void ARDiminuendo::print(std::ostream& os) const
+{
+    os << "ARCrescendo: ";
+
+    os << "dm: "        << dynamicMarking << "; ";
+    os << "dx1: "       << dx1 << "; ";
+    os << "dx2: "       << dx2 << "; ";
+    os << "deltaY: "    << deltaY << "; ";
+    os << "thickness: " << thickness << "; ";
+
+    os << std::endl;
 }
 

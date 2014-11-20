@@ -30,7 +30,7 @@ class ARAutoBeamEnd : public ARTagEnd
 
 		virtual		~ARAutoBeamEnd() {}
 
-		virtual void print(int &indent) const {}
+        virtual void print(std::ostream& os) const { os << "ARAutoBeamEnd;" << std::endl; }
 		/* virtual ostream &operator<<(ostream &os) const
 			{
 				return os << "\\autobeamEnd ";

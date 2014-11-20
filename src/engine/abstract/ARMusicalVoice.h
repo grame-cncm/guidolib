@@ -138,7 +138,7 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		// adjust the duration of a voice by adding a rest-event
 		void			adjustDuration(const TYPE_DURATION & newDuration);
 
-		virtual void	print(int &indent) const;
+		virtual void	print(std::ostream& os) const;
 		virtual std::ostream & operator<< (std::ostream & os) const;
 		virtual std::ostream & output(std::ostream & os, bool isauto = true) const;
 		virtual void	browse(TimeUnwrap& mapper) const;

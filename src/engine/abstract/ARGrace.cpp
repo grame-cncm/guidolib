@@ -76,3 +76,8 @@ void ARGrace::PrintParameters(std::ostream & os) const
 	
 	os << "<i=\"" << num->getValue() << "\">";
 }
+
+void ARGrace::print(std::ostream& os) const
+{
+    os << "ARGrace;" << std::endl;
+}

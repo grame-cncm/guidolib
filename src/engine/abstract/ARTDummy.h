@@ -26,7 +26,7 @@ class ARTDummy : public ARMusicalTag
       	
       	virtual ~ARTDummy();
 
-		virtual void print(int &indent) const;
+		virtual void print(std::ostream& os) const;
 };
 
 

@@ -106,17 +106,11 @@ float ARAlter::getDetune() const
 	return altervalue ? altervalue->getValue() : 0;
 }
 
-void ARAlter::print(int &indent) const
-{
-	PrintName(cout);
-	PrintParameters(cout);
-	cout << endl;
-}
-
 void ARAlter::PrintName(std::ostream & os) const
 {
 	os << "\\alter";
 }
+
 void ARAlter::PrintParameters(std::ostream & os) const
 {
 	if (altervalue)
@@ -142,3 +136,12 @@ void ARAlter::PrintParameters(std::ostream & os) const
 	return os << " ";
 } */
 
+void ARAlter::print(std::ostream& os) const
+{
+    os << "ARAlter: ";
+
+    if (altervalue)
+        os << "detune: " << altervalue->getValue() << "; ";
+
+    os << std::endl;
+}

@@ -66,10 +66,6 @@ void ARAccent::browse(TimeUnwrap& mapper) const
 	mapper.AtPos (this, TimeUnwrap::kAccent);
 }
 
-void ARAccent::print(int &indent) const
-{
-}
-
 void ARAccent::PrintName(std::ostream & os) const
 {
 	os << "\\accent";
@@ -79,6 +75,11 @@ void ARAccent::PrintName(std::ostream & os) const
 
 void ARAccent::PrintParameters(std::ostream & ) const
 {
+}
+
+void ARAccent::print(std::ostream& os) const
+{
+    os << "ARAccent;" << std::endl;
 }
 
 

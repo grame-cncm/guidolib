@@ -25,9 +25,9 @@ ARFinishBar::~ARFinishBar()
 
 }
 
-void ARFinishBar::print(int &indent) const
+void ARFinishBar::print(std::ostream& os) const
 {
-	std::cout << "ARFinishBar" << std::endl;
+	os << "ARFinishBar" << std::endl;
 }
 
 /* ostream & ARDoubleBar::operator<<(ostream &os) const

@@ -35,7 +35,7 @@ class GRCompositeNote : public GRNote
 
 		virtual void OnDraw( VGDevice & hdc ) const;
 
-		virtual void print(int &indent) const;
+		virtual void print(std::ostream& os) const;
 
 		virtual void updateBoundingBox();
 

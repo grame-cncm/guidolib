@@ -35,6 +35,8 @@ using namespace std;
 #include "ARMusic.h"
 
 
+#define DEBUG
+
 // ==========================================================================
 // - Guido Parser API
 // ==========================================================================
@@ -86,6 +88,14 @@ GUIDOAPI(ARHandler) GuidoFile2AR (GuidoParser *p, const char *file)
 
     ifs.close();
 
+#ifdef DEBUG
+    if (ar) {
+        cout << std::endl;
+        ar->armusic->print(cerr);
+        cout << std::endl;
+    }
+#endif
+
     return ar;
 }
 
@@ -111,13 +121,14 @@ GUIDOAPI(ARHandler)	GuidoString2AR (GuidoParser *p, const char *str)
         std::cerr << "  --> " << parseTime << "ms spent for AR generation" << std::endl;
 #endif
     }
-
+    
+#ifdef DEBUG
     if (ar) {
-        int indentTmp = 0;
         cout << std::endl;
-        ar->armusic->print(indentTmp);
+        ar->armusic->print(cerr);
         cout << std::endl;
     }
+#endif
 
 	return ar;
 }
@@ -147,6 +158,14 @@ GUIDOAPI(ARHandler)	GuidoStream2AR (GuidoParser *p, GuidoStream* s)
         std::cerr << "  --> " << parseTime << "ms spent for AR generation" << std::endl;
 #endif
     }
+
+#ifdef DEBUG
+    if (ar) {
+        cout << std::endl;
+        ar->armusic->print(cerr);
+        cout << std::endl;
+    }
+#endif
 
 	return ar;
 }

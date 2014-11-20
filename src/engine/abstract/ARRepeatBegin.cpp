@@ -31,7 +31,6 @@ void ARRepeatBegin::setTagParameterList(TagParameterList & tpl)
 		ListOfStrings lstrs; // (1); std::vector test impl
 		lstrs.AddTail( ( "I,num,-1,o"));
 		CreateListOfTPLs(ltpls,lstrs);
-
 	}
 
 	TagParameterList * rtpl = NULL;
@@ -88,10 +87,14 @@ std::ostream & ARRepeatBegin::operator<<(std::ostream & os) const
 {
 	os << "\\repeatBegin";
 	if (numrepeat != 2)
-	{
 		os << "<" << numrepeat << ">";
-	}
+
 	return (os << " ");
 }
 
+void ARRepeatBegin::print(std::ostream& os) const
+{    
+    os << "ARRepeatBegin: numrepeat: " << numrepeat << ";";
 
+    os << std::endl;
+}

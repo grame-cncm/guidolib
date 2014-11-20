@@ -91,10 +91,6 @@ ARBowing::~ARBowing()
 	delete mCurve;
 }
 
-void ARBowing::print(int &indent) const
-{
-}
-
 void ARBowing::setTagParameterList(TagParameterList & tpl)
 {
 	if (ltpls.GetCount() == 0)
@@ -226,14 +222,12 @@ void ARBowing::setTagParameterList(TagParameterList & tpl)
 void ARBowing::PrintParameters(std::ostream & os) const
 {
 	int previous = 0;
+
 	if (mParSet)
-	{
 		os << "<";
-	}
+
 	if (mCurve && mCurve->TagIsSet())
-	{
 		os << "curve=\"" << mCurve->getValue() << "\"";
-	}
 	else
 	{
 		if (dx1 && dx1->TagIsSet())
@@ -287,40 +281,31 @@ TagParameterList * ARBowing::getTagParameterList() const
 	TagParameterList * tpl = new TagParameterList(1);
 
 	// now we see, which parameters are set ....
-	if (mCurve && mCurve->TagIsSet())
-	{
+	if (mCurve && mCurve->TagIsSet()) {
 		tpl->AddTail(mCurve->getCopy());
 		return tpl;
 	}
 
 	if (dx1 && dx1->TagIsSet())
-	{
 		tpl->AddTail(dx1->getCopy());
-	}
+
 	if (dy1 && dy1->TagIsSet())
-	{
 		tpl->AddTail(dy1->getCopy());
-	}
+
 	if (dx2 && dx2->TagIsSet())
-	{
 		tpl->AddTail(dx2->getCopy());
-	}
+
 	if (dy2 && dy2->TagIsSet())
-	{
 		tpl->AddTail(dy2->getCopy());
-	}
+
 	if (r3 && r3->TagIsSet())
-	{
 		tpl->AddTail(r3->getCopy());
-	}
+
 	if (h && h->TagIsSet())
-	{
 		tpl->AddTail(h->getCopy());
-	}
+
 	if (color && color->TagIsSet())
-	{
 		tpl->AddTail(color->getCopy());
-	}
 
 	return tpl;
 }
@@ -431,4 +416,13 @@ void ARBowing::setCurve(int ,const NVPoint & p1, const NVPoint & p2)
 		h->setUnit("hs");
 	}
 */
+}
+
+void ARBowing::print(std::ostream& os) const
+{
+    os << "ARBowing; ";
+
+    /* TODO params ? */
+
+    os << std::endl;
 }

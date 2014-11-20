@@ -85,3 +85,7 @@ void GRGrace::tellPosition(GObject *caller, const NVPoint & inPos )
 	
 	// mAssociated->setPosition(position);
 }
+
+void GRGrace::print(std::ostream& os) const
+{
+}

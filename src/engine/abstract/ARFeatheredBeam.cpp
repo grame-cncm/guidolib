@@ -169,3 +169,12 @@ void ARFeatheredBeam::convertDurationToBeams(float valor, float valor2)
 	else
 		beams.second=4;
 }
+
+void ARFeatheredBeam::print(std::ostream& os) const
+{
+    os << "ARFeatheredBeam: ";
+
+    /* REM: TODO reste des params */
+    
+    os << "drawDuration: " << drawDur << ";" << std::endl;
+}

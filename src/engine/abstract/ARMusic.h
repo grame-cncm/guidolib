@@ -45,8 +45,7 @@ class ARMusic : public MusicalVoiceList, public ARMusicalEvent
 
       		void 	adjustDuration(TYPE_DURATION newDuration);
 
-	virtual void 	print(int &indent) const;
-	virtual void	print (std::ostream & os) const;
+	virtual void 	print(std::ostream& os) const;
 	virtual std::ostream & output(std::ostream & os, bool isauto = true) const;
 
 	virtual void 	resetGRRepresentation();

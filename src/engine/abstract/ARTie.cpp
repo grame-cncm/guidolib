@@ -25,8 +25,14 @@ ARTie::~ARTie()
 {
 }
 
-void ARTie::print(int &indent) const
+void ARTie::print(std::ostream& os) const
 {
+    os << "ARTie";
+
+	if (!getRange())
+		os <<": Begin";
+
+    os << ";" << std::endl;
 }
 
 // --------------------------------------------------------------------------
@@ -40,9 +46,7 @@ void ARTie::PrintName(std::ostream & os) const
 	os << "\\tie";
 
 	if (!getRange())
-	{
-		os <<"Begin";		
-	}
+		os <<"Begin";
 }
 
 bool ARTie::MatchEndTag(const char * s)

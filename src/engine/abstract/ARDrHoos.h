@@ -31,7 +31,7 @@ public:
 	ARDrHoos(int p_inv = 0);
 	virtual ~ARDrHoos();
 
-	virtual void print(int &indent) const { };
+	virtual void print(std::ostream& os) const;
 	/* virtual ostream &operator<<(ostream &os) const
 		{
 			os << "\\DrHoos";

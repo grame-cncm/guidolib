@@ -57,8 +57,16 @@ ARBar::~ARBar() // does nothing
 {
 }
 
-void ARBar::print(int &indent) const
-{
+void ARBar::print(std::ostream& os) const
+{    
+    os << "ARBar: barnumber: " << barnumber << "; measureNumber: " << measureNumber << "; ";
+
+    if (measureNumberDisplayed)
+        os << "measureNumberDisplayed: " << measureNumberDisplayed->getValue() << "; ";
+
+    os << "numDx: " << numDx << "; numDy: " << numDy << "; ";
+
+    os << std::endl;
 }
 
 void ARBar::PrintName(std::ostream &os) const

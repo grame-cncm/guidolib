@@ -732,7 +732,7 @@ float GRSpring::GetMaxDistance(GRSpring * nextspring)
 */
 void GRSpring::checkLocalCollisions()
 {
-	//checkAccidentalCollisions();
+	checkAccidentalCollisions();
 }
 
 /** \brief Goes through the elements and finds notes and then checkes,

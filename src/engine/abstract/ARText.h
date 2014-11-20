@@ -40,7 +40,7 @@ public:
 	virtual const char* getText() const					{ return text ? text->getValue() : 0; }
 	virtual void		copyLyricsParams(const ARLyrics * lyrics);
 	
-	virtual void print(int &indent) const;
+	virtual void print(std::ostream& os) const;
 	// virtual ostream & operator<<(ostream &os) const;
 	virtual void PrintName(std::ostream & os) const;
 	virtual void PrintParameters(std::ostream & os) const;

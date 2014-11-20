@@ -44,7 +44,7 @@ public:
 	virtual void setTagParameterList(TagParameterList& tpl);
 
 	// routines to access TagParameters ..
-	virtual void print(int &indent) const;
+	virtual void print(std::ostream& os) const;
 
 	virtual void	browse(TimeUnwrap& mapper) const;
 	

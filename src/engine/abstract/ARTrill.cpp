@@ -68,7 +68,7 @@ void ARTrill::setTagParameterList(TagParameterList& tpl)
 		// we found a match!
 		if (ret == 0)
 		{
-			TagParameterString * str = TagParameterString::cast(rtpl->RemoveHead());
+			TagParameterString *str = TagParameterString::cast(rtpl->RemoveHead());
 			assert(str);
 			if (str->TagIsSet() && (str->getValue() == std::string("cautionary")))
 				fShowCautionaryAccidentals = true;
@@ -103,8 +103,10 @@ void ARTrill::setTagParameterList(TagParameterList& tpl)
 			delete anchor;
 
 		}
+
 		delete rtpl;
 	}
+
 	tpl.RemoveAll();
 }
 
@@ -118,8 +120,17 @@ float ARTrill::getady() const
 	return ady;
 }
 
-void ARTrill::print(int &indent) const
+void ARTrill::print(std::ostream& os) const
 {
+    os << "ARTrill: ";
+
+    os << "mode: " << (fShowCautionaryAccidentals ? "cautionnary" : "none") << "; ";
+    os << "adx: " << adx << "; ";
+    os << "ady: " << ady << "; ";
+    os << "tr: " << (fShowTR ? "true" : "false") << "; ";
+    os << "anchor: " << (fDrawOnNoteHead ? "note" : "above") << "; ";
+
+    os << std::endl;
 }
 
 void ARTrill::PrintName(std::ostream & os) const

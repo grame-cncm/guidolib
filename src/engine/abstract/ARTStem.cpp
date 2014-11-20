@@ -115,3 +115,22 @@ void ARTStem::setTagParameterList(TagParameterList & tpl)
 
 	tpl.RemoveAll();
 }
+
+void ARTStem::print(std::ostream& os) const
+{
+    std::string stateStr;
+
+	switch (mStemState) {
+		case UP: 	stateStr = "stemsUp";   break;
+		case DOWN: 	stateStr = "stemsDown";	break;
+		case AUTO: 	stateStr = "stemsAuto";	break;
+		case OFF: 	stateStr = "stemsOff";  break;
+	}
+    
+    os << "ARTStem: state: " << stateStr << ";";
+
+    if (mTpfLength)
+        os << "length: " << mTpfLength->getValue() << ";";
+
+    os << std::endl;
+}

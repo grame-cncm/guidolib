@@ -32,7 +32,7 @@ class ARAutoBeam : public ARBeam
 		} */
 
 		virtual ~ARAutoBeam() {}
-		virtual void print(int &indent) const {}
+		virtual void print(std::ostream& os) const { os << "ARAutoBeam;" << std::endl; }
 		virtual void PrintName(std::ostream & os) const;
 
 		// virtual ostream &operator<<(std::ostream &os) const;

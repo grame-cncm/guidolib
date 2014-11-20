@@ -264,3 +264,7 @@ unsigned int GRRitardando::getTextAlign() const
 	return VGDevice::kAlignLeft | VGDevice::kAlignTop; 
 }
 
+void GRRitardando::print(std::ostream& os) const
+{
+}
+

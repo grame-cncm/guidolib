@@ -202,7 +202,7 @@ void GRSymbol::OnDraw( VGDevice & hdc ) const
     }
 }
 
-void GRSymbol::print(int &indent) const
+void GRSymbol::print(std::ostream& os) const
 {
 }
 

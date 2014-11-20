@@ -106,3 +106,8 @@ void ARChordTag::PrintName(std::ostream & os) const
 		os << "Begin";
 }
 
+void ARChordTag::print(std::ostream& os) const
+{
+    os << "ARChordTag;" << std::endl;
+}
+

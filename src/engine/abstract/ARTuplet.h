@@ -36,7 +36,7 @@ class ARTuplet :
 		const NVstring & 	getName() const 	{ return fTupletFormat; }
 
 		virtual void 		setTagParameterList(TagParameterList & tl);
-		virtual void 		print(int &indent) const	{ }
+		virtual void 		print(std::ostream& os) const;
 		virtual std::ostream & 	operator << (std::ostream & os) const;
 
 				void		setupTuplet( ARBase * inBase );

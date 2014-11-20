@@ -129,3 +129,8 @@ void ARCluster::setARNote(ARNote *arNote)
     else
         aNoteCount++;
 }
+
+void ARCluster::print(std::ostream& os) const
+{
+    os << "ARCluster: hdx: " << ahdx << "; hdy: " << ahdy << ";" << std::endl;
+}

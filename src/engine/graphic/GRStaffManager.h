@@ -42,7 +42,7 @@ class ARBarFormat;
 class ARSystemFormat;
 class ARABreak;
 class ARAuto;
-class ARAccol;
+class ARAccolade;
 
 class GRClef;
 class GREvent;
@@ -245,7 +245,7 @@ class GRStaffManager
 		GRMusic * getGRMusic() { return mGrMusic; }
 		int getNumVoices() const;
 
-		void	notifyAccoladeTag( ARAccol * inAccoladeTag );
+		void	notifyAccoladeTag( ARAccolade * inAccoladeTag );
 
 		// this routine takes care of breaking the positiontags of
 		// a new system.
@@ -408,8 +408,7 @@ class GRStaffManager
 
 		ARABreak * mArABreak;
 		ARAuto * mArAuto;
-		GuidoFeedback * mFeedback;
-		std::vector<ARAccol	*> mCurAccoladeTag;
+		std::vector<ARAccolade	*> mCurAccoladeTag;
 };
 
 #endif

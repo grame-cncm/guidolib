@@ -33,7 +33,7 @@ class ARTagEnd : public ARMTParameter, public ARPositionTag
 		
 		virtual ARMusicalObject * Copy() const 	{ return 0; }
 		
-		virtual void print(int &indent) const {}
+		virtual void print(std::ostream& os) const;
 		virtual void setTagParameterList(TagParameterList & theTagParameterList);
 
 		virtual void setEndPosition(GuidoPos p_pos);

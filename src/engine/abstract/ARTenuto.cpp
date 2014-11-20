@@ -44,7 +44,6 @@ void ARTenuto::setTagParameterList(TagParameterList& tpl)
 		if (ret == 0)
 		{
 			// Get The TagParameters ...
-
 		}
 
 		delete rtpl;
@@ -63,8 +62,9 @@ void ARTenuto::browse(TimeUnwrap& mapper) const
 	mapper.AtPos (this, TimeUnwrap::kTenuto);
 }
 
-void ARTenuto::print(int &indent) const
+void ARTenuto::print(std::ostream& os) const
 {
+    os << "ARTenuto;" << std::endl;
 }
 
 void ARTenuto::PrintName(std::ostream & os) const

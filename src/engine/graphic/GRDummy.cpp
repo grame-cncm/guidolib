@@ -34,7 +34,7 @@ GRDummy::~GRDummy()
 {
 }
 
-void GRDummy::print(int &indent) const
+void GRDummy::print(std::ostream& os) const
 {
 }
 

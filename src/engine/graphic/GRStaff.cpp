@@ -65,7 +65,6 @@ using namespace std;
 #include "GRCompositeNote.h"
 #include "GRDoubleBar.h"
 #include "GRDummy.h"
-#include "GRFermata.h"
 #include "GRFinishBar.h"
 #include "GRGlue.h"
 #include "GRInstrument.h"
@@ -2061,16 +2060,16 @@ void GRStaff::DrawNotationElements( VGDevice & hdc ) const
 }
 
 // ----------------------------------------------------------------------------
-void GRStaff::print(int &indent) const
+void GRStaff::print(std::ostream& os) const
 {
 	GRNotationElement * e;
-	fprintf(stderr, "GRStaffprint(int &indent): %.2f-%.2f ", 
+	fprintf(stderr, "GRStaffprint(std::ostream& os): %.2f-%.2f ", 
 		(float) mRelativeTimePositionOfGR, (float) getRelativeEndTimePosition());
 	GuidoPos pos = mCompElements.GetHeadPosition();
 	while(pos)
 	{
 		e = mCompElements.GetNext(pos);
-		e->print(indent);
+		e->print(os);
 	}
 	fprintf(stderr, "\n");
 }

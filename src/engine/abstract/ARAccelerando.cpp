@@ -29,17 +29,17 @@ ARAccelerando::ARAccelerando()
 {
     rangesetting = ONLY;
     
-    s1 = 0;
-    s2 = 0;
-	font = 0;
-	fattrib = 0;
-	fsize = 0;
+    tempo    = 0;
+    abstempo = 0;
+	font     = 0;
+	fattrib  = 0;
+	fsize    = 0;
 }
 
 ARAccelerando::~ARAccelerando()
 {
-	delete s1;
-	delete s2;
+	delete tempo;
+	delete abstempo;
 	// delete TagParameterPointer ...
 }
 
@@ -66,9 +66,9 @@ void ARAccelerando::setTagParameterList(TagParameterList& tpl)
 		if (ret == 0)
 		{
 			// Get The TagParameters ...
-			s1 = TagParameterString::cast(rtpl->RemoveHead());
+			tempo = TagParameterString::cast(rtpl->RemoveHead());
 			//assert(text);
-			s2 = TagParameterString::cast(rtpl->RemoveHead());
+			abstempo = TagParameterString::cast(rtpl->RemoveHead());
 			
 			// the font
 			font = TagParameterString::cast(rtpl->RemoveHead());
@@ -94,10 +94,6 @@ void ARAccelerando::setTagParameterList(TagParameterList& tpl)
 	tpl.RemoveAll();
 }
 
-void ARAccelerando::print(int &indent) const
-{
-}
-
 void ARAccelerando::PrintName(ostream &os) const
 {
 	if (getRange())
@@ -110,7 +106,7 @@ void ARAccelerando::PrintParameters(ostream &os) const
 {
 		//	"S,tempo,,o;S,abstempo,,o"
 	int first = 1;
-	if (s1 && s1->TagIsSet())
+	if (tempo && tempo->TagIsSet())
 	{
 		if (first)
 		{
@@ -118,11 +114,10 @@ void ARAccelerando::PrintParameters(ostream &os) const
 			first = 0;
 		}
 
-
-		os << "\"" << s1->getValue() << "\"";
+		os << "\"" << tempo->getValue() << "\"";
 
 	}
-	if (s2 && s2->TagIsSet())
+	if (abstempo && abstempo->TagIsSet())
 	{
 		if (first)
 		{
@@ -131,9 +126,10 @@ void ARAccelerando::PrintParameters(ostream &os) const
 		}
 		else 
 			os << ",";
-		os << "\"" << s2->getValue() << "\"";
 
+		os << "\"" << abstempo->getValue() << "\"";
 	}
+
 	if (!first)
 		os << ">";
 }
@@ -148,4 +144,26 @@ bool ARAccelerando::MatchEndTag(const char *s)
 		!strcmp("\\accelEnd",s))
 		return 1;
 	return 0;
+}
+
+void ARAccelerando::print(std::ostream& os) const
+{
+    os << "ARAccelerando: ";
+
+    if (tempo)
+        os << "tempo: " << tempo->getValue() << "; ";
+
+    if (abstempo)
+        os << "abstempo: " << abstempo->getValue() << "; ";
+
+    if (font)
+        os << "font: " << font->getValue() << "; ";
+
+    if (fattrib)
+        os << "fattrib: " << fattrib->getValue() << "; ";
+
+    if (fsize)
+        os << "fsize: " << fsize->getValue() << "; ";
+
+    os << std::endl;
 }

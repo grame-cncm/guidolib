@@ -21,3 +21,8 @@ void ARTagEnd::setTagParameterList(TagParameterList & theTagParameterList)
 	theTagParameterList.RemoveAll();
 
 }
+
+void ARTagEnd::print(std::ostream& os) const
+{
+    os << "ARTagEnd;" << std::endl;
+}

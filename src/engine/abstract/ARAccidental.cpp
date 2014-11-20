@@ -15,40 +15,35 @@
 #include <iostream>
 
 
-#include "ARAcc.h"
+#include "ARAccidental.h"
 //#include "ARFactory.h"
 #include "TagParameterInt.h"
 #include "TagParameterString.h"
 #include "ListOfStrings.h"
 #include "TagParameterList.h"
 
-ListOfTPLs ARAcc::ltpls(1);
+ListOfTPLs ARAccidental::ltpls(1);
 
-ARAcc::ARAcc()
+ARAccidental::ARAccidental()
 {
 	rangesetting = ONLY;
 	mStyle = NULL;
 }
 
-ARAcc::ARAcc(const ARAcc & acc)
+ARAccidental::ARAccidental(const ARAccidental & acc)
 {
 	if (acc.mStyle) mStyle = new TagParameterString(acc.mStyle->getValue());
 	else			mStyle = NULL;
 }
 
-ARAcc::~ARAcc()		{ delete mStyle; }
+ARAccidental::~ARAccidental()		{ delete mStyle; }
 
-void ARAcc::PrintName(std::ostream & os) const
+void ARAccidental::PrintName(std::ostream & os) const
 {
 	os << "\\acc";
 }
 
-const char* ARAcc::getStyleStr() const	
-{ 
-	return mStyle ? mStyle->getValue() : "none"; 
-}
-
-ARAcc::Style ARAcc::getStyle() const	
+ARAccidental::Style ARAccidental::getStyle() const	
 { 
 	std::string str("cautionary");
 	if (mStyle && (str == mStyle->getValue())) 
@@ -56,13 +51,13 @@ ARAcc::Style ARAcc::getStyle() const
 	return kNone;
 }
 
-void ARAcc::PrintParameters(std::ostream & os) const
+void ARAccidental::PrintParameters(std::ostream & os) const
 {
 	if (mStyle)
 		os << "<style=\"" << mStyle->getValue() << "\">";
 }
 
-void ARAcc::setTagParameterList(TagParameterList & tpl)
+void ARAccidental::setTagParameterList(TagParameterList & tpl)
 {
 	if (ltpls.empty())
 	{
@@ -89,5 +84,15 @@ void ARAcc::setTagParameterList(TagParameterList & tpl)
 		// failure
 	}
 	tpl.RemoveAll();
+}
+
+void ARAccidental::print(std::ostream& os) const
+{
+    os << "ARAccidental: ";
+
+    if (mStyle)
+        os << "style: " << mStyle->getValue() << "; ";
+
+    os << std::endl;
 }
 

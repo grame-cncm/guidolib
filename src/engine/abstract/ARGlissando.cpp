@@ -32,7 +32,6 @@ ARGlissando::ARGlissando()
 	
 	dx1 = dy1 = dx2 = dy2 = fThickness = 0;
 	fLineStyle = NULL;
-	fill = NULL;
 
 	mParSet = false;
 	mWavy = false;
@@ -58,8 +57,6 @@ ARGlissando::ARGlissando(const ARGlissando * glissando)	: ARMTParameter(-1, glis
 		TagParameterFloat::cast( glissando->dx2->getCopy());
 	if(glissando->dy2)
 		TagParameterFloat::cast( glissando->dy2->getCopy());
-	if(glissando->fill)
-		TagParameterString::cast( glissando->fill->getCopy());
 	if(glissando->fThickness)
 		TagParameterFloat::cast( glissando->fThickness->getCopy());
 	if(glissando->fLineStyle)
@@ -75,14 +72,8 @@ ARGlissando::~ARGlissando(void)
 	delete dx2;
 	delete dy2;
 	delete fThickness;
-	delete fill;
 	delete fLineStyle;
 }
-
-void ARGlissando::print(int &indent) const
-{
-}
-
 
 void ARGlissando::setTagParameterList(TagParameterList & tpl)
 {
@@ -125,7 +116,7 @@ void ARGlissando::setTagParameterList(TagParameterList & tpl)
 			if (dy2->TagIsSet())
 				mParSet = true;
 
-			fill = TagParameterString::cast(rtpl->RemoveHead());
+            TagParameterString *fill = TagParameterString::cast(rtpl->RemoveHead());
 			assert(fill);
 			if (fill->TagIsSet()) 
 				mParSet = true;
@@ -162,48 +153,35 @@ void ARGlissando::setTagParameterList(TagParameterList & tpl)
 TagParameterList * ARGlissando::getTagParameterList() const
 {
 	TagParameterList * tpl = new TagParameterList(1);
+
 	if (dx1 && dx1->TagIsSet())
-	{
 		tpl->AddTail(dx1->getCopy());
-	}
+
 	if (dy1 && dy1->TagIsSet())
-	{
 		tpl->AddTail(dy1->getCopy());
-	}
+
 	if (dx2 && dx2->TagIsSet())
-	{
 		tpl->AddTail(dx2->getCopy());
-	}
+
 	if (dy2 && dy2->TagIsSet())
-	{
 		tpl->AddTail(dy2->getCopy());
-	}
-	if (fill && fill->TagIsSet())
-	{
-		tpl->AddTail(fill->getCopy());
-	}
+
 	if (fThickness && fThickness->TagIsSet())
-	{
 		tpl->AddTail(fThickness->getCopy());
-	}
+
 	if (fLineStyle && fLineStyle->TagIsSet())
-	{
 		tpl->AddTail(fLineStyle->getCopy());
-	}
+
 	if (color && color->TagIsSet())
-	{
 		tpl->AddTail(color->getCopy());
-	}
 
 	return tpl;
-}
-	
+}	
 
 void ARGlissando::browse(TimeUnwrap& mapper) const
 {
 	mapper.AtPos (this, TimeUnwrap::kGlissando);
 }
-
 
 bool ARGlissando::MatchEndTag(const char * s)
 {
@@ -211,5 +189,33 @@ bool ARGlissando::MatchEndTag(const char * s)
 		return 1;
 	if (!getRange() && !strcmp("\\glissandoEnd",s))
 		return 1;
+
 	return 0;
+}
+
+void ARGlissando::print(std::ostream& os) const
+{
+    os << "ARGlissando: ";
+
+    if (dx1)
+        os << "dx1: " << dx1->getValue() << "; ";
+
+    if (dy1)
+        os << "dy1: " << dy1->getValue() << "; ";
+
+    if (dx2)
+        os << "dx2: " << dx2->getValue() << "; ";
+
+    if (dy2)
+        os << "dy2: " << dy2->getValue() << "; ";
+
+    os << "fill: " << (mFill ? "true" : "false") << ";";
+
+    if (fThickness)
+        os << "thickness: " << fThickness->getValue() << "; ";
+
+    if (fLineStyle)
+        os << "lineStyle: " << fLineStyle->getValue() << "; ";
+
+    os << std::endl;
 }

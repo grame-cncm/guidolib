@@ -48,8 +48,9 @@ void ARHarmonic::setTagParameterList(TagParameterList& tpl)
 	tpl.RemoveAll();
 }
 
-void ARHarmonic::print(int &indent) const
+void ARHarmonic::print(std::ostream& os) const
 {
+    os << "ARHarmonic;" << std::endl;
 }
 
 void ARHarmonic::PrintName(std::ostream &os) const

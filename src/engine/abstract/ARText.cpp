@@ -104,8 +104,26 @@ ARText::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARText::print(int &indent) const
+void ARText::print(std::ostream& os) const
 {
+    os << "ARText: ";
+
+    if (text)
+        os << "text: \"" << text->getValue() << "\"; ";
+
+    if (textformat)
+        os << "textformat: " << textformat->getValue() << "; ";
+
+    if (font)
+        os << "font: " << font->getValue() << "; ";
+
+    if (fsize)
+        os << "fsize: " << fsize->getValue() << "; ";
+
+    if (fattrib)
+        os << "fattrib: " << fattrib->getValue() << "; ";
+
+    os << std::endl;
 }
 
 void ARText::PrintName(std::ostream &os) const

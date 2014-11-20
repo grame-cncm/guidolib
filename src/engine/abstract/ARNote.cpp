@@ -123,13 +123,13 @@ int ARNote::midiPitch() const
 }
 
 //## Other Operations (implementation)
-void ARNote::print(int &indent) const
+void ARNote::print(std::ostream& os) const
 {
-	std::cout << "ARNote: name: \"" << getName() << "\" fPitch: " << getPitch()
+	os << "ARNote: name: \"" << getName() << "\" fPitch: " << getPitch()
 		<< " oct: " << getOctave() << " accidental: " << getAccidentals() << " detune: " << getDetune()
         << " duration: " << getDuration().getNumerator() << "/" << getDuration().getDenominator() << std::endl;
 
-	ARMusicalEvent::print(indent);
+	ARMusicalEvent::print(os);
 }
 
 std::ostream & ARNote::operator<<(std::ostream &os) const

@@ -30,7 +30,7 @@ class ARSpecial : // public ARMusicalObject,
 
 		virtual std::ostream & operator<<(std::ostream &os) const;
 
-		virtual void print(int &indent) const { }
+		virtual void print(std::ostream& os) const;
 
 		float 		dx;
 		float 		dy;

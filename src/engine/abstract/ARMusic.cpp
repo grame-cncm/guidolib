@@ -14,9 +14,6 @@
 
 #include <fstream>
 
-#include "GuidoFeedback.h"
-#include "GUIDOInternal.h"	// for gGlobalSettings.gFeedback
-
 #include "ARMusic.h"
 #include "ARVoiceManager.h"
 #include "ARAuto.h"
@@ -93,18 +90,18 @@ void ARMusic::getTimeMap (TimeMapCollector& f) const
 	}
 }
 
-void ARMusic::print(int &indent) const
+void ARMusic::print(std::ostream& os) const
 {
 	GuidoPos pos = GetHeadPosition();
 	while(pos) {
 		ARMusicalVoice * e = GetNext(pos);
-		e->print(indent);
+		e->print(os);
 	}
 }
 
 /** \brief Prints the music into a stream
 */
-void ARMusic::print(std::ostream &os) const
+/*void ARMusic::print(std::ostream &os) const
 {
 	GuidoPos pos=GetHeadPosition();
 	ARMusicalVoice * e;
@@ -120,7 +117,7 @@ void ARMusic::print(std::ostream &os) const
 		sep = "\n,\n";
 	}
 	os << "\n}\n";
-}
+}*/
 
 std::ostream & ARMusic::output(std::ostream & os, bool isauto) const
 {
@@ -384,12 +381,6 @@ void ARMusic::doAutoStuff()
 		++counter;
 		ARMusicalVoice * arvc = GetNext(pos);
 
-		if( gGlobalSettings.gFeedback )
-		{
-			gGlobalSettings.gFeedback->UpdateStatusMessage ( str_MusicalPreProcessing1, counter, nvoices );
-			if (gGlobalSettings.gFeedback->ProgDialogAbort())
-				return;
-		}
 		timebench("doAutoStuff1", arvc->doAutoStuff1());
 	}
 
@@ -407,12 +398,6 @@ void ARMusic::doAutoStuff()
 		// also do AutoDisplayCheck and autoBeaming.
 		ARMusicalVoice * arvc = GetNext(pos);
 
-		if( gGlobalSettings.gFeedback )
-		{
-			gGlobalSettings.gFeedback->UpdateStatusMessage ( str_MusicalPreProcessing2, counter, nvoices );
-			if (gGlobalSettings.gFeedback->ProgDialogAbort())
-				return;
-		}
 		timebench("doAutoStuff2", arvc->doAutoStuff2());
 	}
 }

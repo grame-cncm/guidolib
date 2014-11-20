@@ -79,4 +79,14 @@ void ARMark::PrintParameters(std::ostream & os) const
 	os << "<text=\"" <<  text->getValue() << "\">";
 }
 
+void ARMark::print(std::ostream& os) const
+{
+    os << "ARMark: ";
+
+    if (text)
+        os << "text: \"" << text->getValue() << "\"; ";
+
+    os << std::endl;
+}
+
 

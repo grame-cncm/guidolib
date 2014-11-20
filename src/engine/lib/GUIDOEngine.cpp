@@ -50,7 +50,6 @@ using namespace std;
 #include "GUIDOParse.h"
 #include "guido.h"
 #include "VGDevice.h"
-#include "GuidoFeedback.h"
 #include "GuidoParser.h"
 
 #include "GUIDOEngine.h"
@@ -74,15 +73,15 @@ using namespace std;
 // ==========================================================================
 // - Guido Global variables
 // ==========================================================================
-const int GUIDOENGINE_MAJOR_VERSION = 1;
-const int GUIDOENGINE_MINOR_VERSION = 5;
-const int GUIDOENGINE_SUB_VERSION   = 6;
+const int   GUIDOENGINE_MAJOR_VERSION = 1;
+const int   GUIDOENGINE_MINOR_VERSION = 5;
+const int   GUIDOENGINE_SUB_VERSION   = 6;
 const char* GUIDOENGINE_VERSION_STR = "1.5.6";
 
 ARPageFormat * gARPageFormat = 0;
 
 // - Misc globals
-GuidoGlobalSettings gGlobalSettings = { /*1 to draw the springs*/0, 0, 1, 0, 0 };
+GuidoGlobalSettings gGlobalSettings = { /*1 to draw the springs*/0, 0, 1, 0 };
 
 bool gInited = false;		// GuidoInit() Flag
 int gARHandlerRefCount = 0;
@@ -123,7 +122,6 @@ GUIDOAPI(GuidoErrCode) GuidoInit( GuidoInitDesc * desc )
 
 	if( desc->graphicDevice )
 		gGlobalSettings.gDevice = desc->graphicDevice;
-	gGlobalSettings.gFeedback = 0;
 
 	// - Skip if already initialized
 	if( gInited == false )
@@ -197,9 +195,7 @@ GUIDOAPI(GuidoErrCode) GuidoParseFile(const char * filename, ARHandler * ar)
 {
 	if( !filename || !ar )	return guidoErrBadParameter;
 	
-	*ar = 0;		
-	if( gGlobalSettings.gFeedback )
-		gGlobalSettings.gFeedback->Notify( GuidoFeedback::kProcessing );
+	*ar = 0;
 
  	// first convert unicode files
 	uniconv(filename);
@@ -210,38 +206,14 @@ GUIDOAPI(GuidoErrCode) GuidoParseFile(const char * filename, ARHandler * ar)
     music = GuidoFile2AR(parser, filename);
     GuidoCloseParser(parser);
 
-	// - Update the feedback status text ....
-	if( gGlobalSettings.gFeedback )
-		gGlobalSettings.gFeedback->UpdateStatusMessage( str_ARMusicCreated );
-
 	if (music == 0)
-	{
-		// - The factory failed to create our music.
-		if( gGlobalSettings.gFeedback )
-			gGlobalSettings.gFeedback->Notify( GuidoFeedback::kIdle );
-
 		return guidoErrMemory;
-	}
-
-	if( gGlobalSettings.gFeedback )
-	{
-		gGlobalSettings.gFeedback->UpdateStatusMessage( 0 );
-		if( gGlobalSettings.gFeedback->ProgDialogAbort())
-		{
-			GuidoFreeAR (music);
-			gGlobalSettings.gFeedback->Notify( GuidoFeedback::kIdle );
-			return guidoErrUserCancel;
-		}
-	}
 
 	// - Use the filename as the new music name
 	music->armusic->setName( filename );
 
-	// - Restore feedback state
-	if( gGlobalSettings.gFeedback )
-		gGlobalSettings.gFeedback->Notify( GuidoFeedback::kIdle );
-
 	*ar = music;
+
 	return guidoNoErr;
 }
 
@@ -251,8 +223,6 @@ GUIDOAPI(GuidoErrCode) GuidoParseString (const char * str, ARHandler* ar)
 	if( !str || !ar )	return guidoErrBadParameter;
 	
 	*ar = 0;
-	if( gGlobalSettings.gFeedback )
-		gGlobalSettings.gFeedback->Notify( GuidoFeedback::kProcessing );
 
     ARHandler music = 0;
 
@@ -260,28 +230,10 @@ GUIDOAPI(GuidoErrCode) GuidoParseString (const char * str, ARHandler* ar)
     music = GuidoString2AR(parser, str);
     GuidoCloseParser(parser);
 
-	if (!music || ( gGlobalSettings.gFeedback && gGlobalSettings.gFeedback->ProgDialogAbort())) {
-		// Something failed, do some cleanup
+	if (!music) // Something failed, do some cleanup
 		return music ? guidoErrUserCancel : guidoErrParse;
-	}
 
-	// - Update the feedback status text ....
-	if( gGlobalSettings.gFeedback )
-		gGlobalSettings.gFeedback->UpdateStatusMessage( str_ARMusicCreated );
-
-	if( gGlobalSettings.gFeedback ) {
-		gGlobalSettings.gFeedback->UpdateStatusMessage( 0 );
-		if( gGlobalSettings.gFeedback->ProgDialogAbort()) {
-			delete music;
-			gGlobalSettings.gFeedback->Notify( GuidoFeedback::kIdle );
-			return guidoErrUserCancel;
-		}
-	}
-	music->armusic->setName( "" );						// - Use the filename as the new music name
-
-	// - Restore feedback state
-	if( gGlobalSettings.gFeedback )
-        gGlobalSettings.gFeedback->Notify( GuidoFeedback::kIdle );
+	music->armusic->setName(""); // - Use the filename as the new music name
 
 	*ar = music;
 	return guidoNoErr;

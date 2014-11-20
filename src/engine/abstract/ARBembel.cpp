@@ -87,3 +87,8 @@ void ARBembel::PrintParameters(std::ostream & os) const
 		os << "<-1>";
 }
 
+void ARBembel::print(std::ostream& os) const
+{
+    os << "ARBembel;" << std::endl;
+}
+

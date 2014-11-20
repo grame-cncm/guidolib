@@ -87,10 +87,9 @@ void ARBarFormat::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARBarFormat::print(int &indent) const 
-{ 
-	PrintName (std::cout); 
-	PrintParameters (std::cout);
+void ARBarFormat::print(std::ostream& os) const 
+{
+    os << "ARBarFormat:" << std::endl;
 }
 
 void ARBarFormat::PrintName(std::ostream & os) const
@@ -102,7 +101,6 @@ void ARBarFormat::PrintParameters(std::ostream & os) const
 {
 	if (style)
 		os << "<style=\"" << style->getValue() << "\"" << ">";
-	
 }
 
 

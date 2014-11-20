@@ -100,3 +100,12 @@ void ARNoteFormat::PrintName(std::ostream & os) const
 	}
 }
 
+void ARNoteFormat::print(std::ostream& os) const
+{    
+    os << "ARNoteFormat: ";
+
+    if (style)
+        os << "style: " << style->getValue() << ";";
+
+    os << std::endl;
+}

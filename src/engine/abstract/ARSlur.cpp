@@ -35,15 +35,15 @@ ARMusicalObject * ARSlur::Copy() const
 	return new ARSlur(this);
 }
 
-
 // --------------------------------------------------------------------------
 void ARSlur::browse(TimeUnwrap& mapper) const
 {
 	mapper.AtPos (this, TimeUnwrap::kSlur);
 }
 
-void ARSlur::print(int &indent) const
+void ARSlur::print(std::ostream& os) const
 {
+    os << "ARSlur;" << std::endl;
 }
 
 void ARSlur::PrintName(std::ostream &os) const

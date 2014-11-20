@@ -31,7 +31,7 @@ class GRGlobalStem;
 class GRBeam;
 
 class ARTHead;
-class ARAcc;
+class ARAccidental;
 class ARAlter;
 
 /** \brief Graphical representation of a note event.
@@ -63,7 +63,7 @@ class GRSingleNote : public GRNote
 		virtual void	OnDraw( VGDevice & hdc ) const;
 		virtual void	GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 
-		virtual void	print(int &indent) const { }
+        virtual void	print(std::ostream& os) const;
 
 		virtual void	setSize(float nsize)
 		{
@@ -134,7 +134,7 @@ class GRSingleNote : public GRNote
 	  TYPE_DURATION mDurTemplate; // the template for the display
 
   private:
-	void handleAccidental	(const ARAcc* acc);
+	void handleAccidental	(const ARAccidental* acc);
 	void createNote(const TYPE_DURATION & p_durtemplate /*= DURATION_0*/ );
 
 	GRStdNoteHead *	mNoteHead; // exists also in element list.

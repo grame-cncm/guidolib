@@ -90,8 +90,14 @@ void ARLyrics::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARLyrics::print(int &indent) const
+void ARLyrics::print(std::ostream& os) const
 {
+    os << "ARLyrics: ";
+
+    if (mText)
+        os << "text: \"" << mText->getValue() << "\"; ";
+
+    os << std::endl;
 }
 
 void ARLyrics::PrintName(std::ostream &os) const

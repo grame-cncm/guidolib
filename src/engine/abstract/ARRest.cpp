@@ -52,8 +52,11 @@ void ARRest::browse(TimeUnwrap& mapper) const
 	mapper.AtPos (this, TimeUnwrap::kRest);
 }
 
-void ARRest::print(int &indent) const
+void ARRest::print(std::ostream& os) const
 {
+	os << "ARRest: duration: " << getDuration().getNumerator() << "/" << getDuration().getDenominator() << std::endl;
+
+	ARMusicalEvent::print(os);
 }
 
 std::ostream & ARRest::operator<<(std::ostream &os) const
