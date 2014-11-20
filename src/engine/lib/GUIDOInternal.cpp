@@ -134,7 +134,6 @@ GRHandler guido_RegisterGRMusic( GRMusic * inMusic, ARHandler inHandleAR )
 	newNode->page = 1;	// page is obsolete. Just here for compatibility.
 	newNode->grmusic = inMusic;
 	newNode->arHandle = inHandleAR;
-
 	return newNode;  // returns the brand new guido handle.
 }
 
