@@ -1,10 +1,10 @@
 <html>
 <body>
 <script src="libGUIDOEngine.js" type="text/javascript"></script>
-<script src="guidoEmscriptenBridge.js" type="text/javascript"></script>
+<script src="js/guidoEmscriptenBridge.js" type="text/javascript"></script>
 <script type="text/javascript">
 
-
+alert("toto");
 out = GuidoInitWithIndependentSVG()
 
 function doit( gmn ) {
@@ -48,7 +48,7 @@ function doit( gmn ) {
 	GuidoFreeDate(date);
 
 	guidoGetPageDate_retDate = document.getElementById('guidoGetPageDate_retDate');
-	date = GuidoGetDatePageDate(gr, 1);
+	date = GuidoGetNewPageDate(gr, 1);
 	guidoGetPageDate_retDate.innerHTML = "<b>Page date for page 1:</b> "+GuidoGetDateNum(date)+"/"+GuidoGetDateDenom(date);
 	GuidoFreeDate(date);
 
@@ -69,9 +69,14 @@ function doit( gmn ) {
 
 	guidoGetSystemMap_JSON = document.getElementById('guidoGetSystemMap_JSON');
 	systemmap_n = GuidoGetSystemMap_JSON( gr, 1, 1000.0, 1000.0)
-	console.log(systemmap_n);
+	//console.log(systemmap_n);
 	guidoGetSystemMap_JSON.innerHTML = "<b>System map for page 1:</b> "+Pointer_stringify(systemmap_n);
 	GuidoReleaseCString(systemmap_n);
+	
+	GuidoFreeGR(gr);
+	
+	var settings = Module.getSettings();
+	Module.GuidoSetNewDefaultLayoutSettings(settings);
 }
 
 </script>
@@ -92,7 +97,7 @@ function doit( gmn ) {
 <script type="text/javascript">
   doit("{ [f# g# a& b& \\bar f# g# a&], [f g a b f g a b c c c \\bar c c] } "); //works
   //doit("{ [f# g# a& b& f# g# a&], [f g a b f g a] } "); // doesn't work
-  doit("{ [f# g# a& b& f# g#], [f g a b f g] } "); // doesn't work
+  doit("{ [f# g#/8 a&/4 b&/8 f#/4 g#], [f g a/8 b f/4 g] } "); // doesn't work
   //doit("{ [a b c d e], [a b c d e] } "); // works
 </script>
 
