@@ -13,7 +13,7 @@ sources = $(wildcard $(srcdir)/*/*.cpp json/*.cpp main/*.cpp)
 objects = $(patsubst main%, obj/main%, $(patsubst json%,obj/json%, $(patsubst ../src/engine%,obj%, $(patsubst %.cpp,%.o,$(sources)))))
 
 GCC = emcc
-CXXFLAGS += $(addprefix -I, $(subprojects)) -DINDEPENDENTSVG -DJSON_ONLY
+CXXFLAGS += $(addprefix -I, $(subprojects)) -DINDEPENDENTSVG -DJSON_ONLY -Oz
 
 EXPORT := "['_GuidoGetSVGExportWithFontSpec',\
 			'_GuidoGetAbstractExport',\
@@ -59,18 +59,15 @@ EXPORT := "['_GuidoGetSVGExportWithFontSpec',\
 			'_GuidoCheckVersionNums',\
 			'_GuidoGetLineSpace',\
 			'_GuidoDeleteLayoutSettings',\
-			'_GuidoGetArError',\
-			'_GuidoGetGrError',\
-			'_GuidoGetErrorString',\
-			'_main']"
+			'_GuidoGetErrorString']"
+#			'_main']"
 #'_GuidoGetNewDefaultLayoutSettings',\
 			
 target = libGUIDOEngine.js
 
 # emcc -O0 -g4 -s ASSERTIONS=2 -s SAFE_HEAP=1 -s ALIASING_FUNCTION_POINTERS=0 $(objects) -o $(target) -s ALLOW_MEMORY_GROWTH=1 -s EXPORTED_FUNCTIONS=$(EXPORT)
 $(target) : $(objects)
-	emcc -O2 --bind $(objects) -o $(target) -s ALLOW_MEMORY_GROWTH=1 -s ASM_JS=1 -s ASSERTIONS=1 -s EXPORTED_FUNCTIONS=$(EXPORT)
-
+	emcc -O3 --bind --memory-init-file 0 $(objects) -o $(target) -s ALLOW_MEMORY_GROWTH=0 -s ASM_JS=1 -s TOTAL_MEMORY=83886080 -s DISABLE_EXCEPTION_CATCHING=0 -s ASSERTIONS=1 -s EXPORTED_FUNCTIONS=$(EXPORT)
 clean:
 	rm -f $(objects) $(target)
 	
