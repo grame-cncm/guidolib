@@ -1,11 +1,17 @@
 <html>
-<body>
+	<head>
+
 <script src="libGUIDOEngine.js" type="text/javascript"></script>
 <script src="js/guidoEmscriptenBridge.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
 <script type="text/javascript">
-
-alert("toto");
-out = GuidoInitWithIndependentSVG()
+$( document ).ready(function() {
+	out = GuidoInitWithIndependentSVG();
+	doit("{ [f# g# a& b& \\bar f# g# a&], [f g a b f g a b c c c \\bar c c] } "); //works
+  //doit("{ [f# g# a& b& f# g# a&], [f g a b f g a] } "); // doesn't work
+  doit("{ [f# g#/8 a&/4 b&/8 f#/4 g#], [f g a/8 b f/4 g] } "); // doesn't work
+  //doit("{ [a b c d e], [a b c d e] } "); // works
+});
 
 function doit( gmn ) {
 	p=GuidoOpenParser();
@@ -81,6 +87,8 @@ function doit( gmn ) {
 
 </script>
 
+</head>
+<body>
 <div id="guidoCountVoices"></div>
 <div id="guidoGetPageCount"></div>
 <div id="guidoGetSystemCount"></div>
@@ -94,12 +102,6 @@ function doit( gmn ) {
 <div id="guidoGetSystemMap_JSON"></div>
 <div id="guido_svg"></div>
 
-<script type="text/javascript">
-  doit("{ [f# g# a& b& \\bar f# g# a&], [f g a b f g a b c c c \\bar c c] } "); //works
-  //doit("{ [f# g# a& b& f# g# a&], [f g a b f g a] } "); // doesn't work
-  doit("{ [f# g#/8 a&/4 b&/8 f#/4 g#], [f g a/8 b f/4 g] } "); // doesn't work
-  //doit("{ [a b c d e], [a b c d e] } "); // works
-</script>
 
 </body>
 

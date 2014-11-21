@@ -41,16 +41,16 @@
 	Module._free(dataHeap.byteOffset);
 	gU1D0pAR$ER.parseGuidoBinary(result.buffer, 0, {verbose:true});
       }
-      function allReady() {
-	Module["noExitRuntime"] = true;
-	var err = GuidoInitWithIndependentSVG();
+      
+    $( document ).ready(function() {
+		var err = GuidoInitWithIndependentSVG();
         console.log("loading");
         $("#gmnSandbox").on('keyup', processGMN);
         gU1D0cANVA$.initGuidoCanvas();
         //processGMN();
         //$("#gmnSandbox").val('[a b c d]');
         //processGMN();
-      }
+      });
     </script>
   </head>
   <body>

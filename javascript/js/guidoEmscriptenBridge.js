@@ -55,8 +55,6 @@ GuidoGetLineSpace = Module.cwrap('GuidoGetLineSpace', 'number', []);
 //GuidoGetNewDefaultLayoutSettings = Module.cwrap('GuidoGetNewDefaultLayoutSettings', 'number', ['number']);
 GuidoDeleteLayoutSettings = Module.cwrap('GuidoDeleteLayoutSettings', null, ['number']);
 
-GuidoGetArError = Module.cwrap('GuidoGetGrError', 'number', ['number']);
-GuidoGetGrError = Module.cwrap('GuidoGetGrError', 'number', ['number']);
 GuidoGetErrorString = Module.cwrap('GuidoGetErrorString', 'number', ['number']);
 
 GuidoShutdown = Module.cwrap('GuidoShutdown', null, []);

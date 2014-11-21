@@ -31,12 +31,11 @@
 
 		GuidoFreeGR(gr);
 	}
-	function allReady() {
-		Module["noExitRuntime"] = true;
+	$( document ).ready(function() {
 		var err = GuidoInitWithIndependentSVG();
 		console.log("loading");
 		$("#gmnSandbox").on('keyup', processGMN);
-	}
+	});
     </script>
   </head>
   <body>

@@ -4,7 +4,6 @@
     <link rel="stylesheet" href="stylesheets/guidostylesheet.css" type="text/css" charset="UTF-8" />
     <script src="libGUIDOEngine.js" type="text/javascript"></script>
     <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
-   <!-- <script src="libengine.js" type="text/javascript"></script>-->
     <style type="text/css">
       div.column {
         display: block;
@@ -24,35 +23,39 @@
 		var guidoEngine = new Module.GuidoEngineAdapter;
 		guidoEngine.GuidoInit();
 		var p = guidoEngine.GuidoOpenParser();
-		//var ar = guidoEngine.GuidoString2AR(p, $("#gmnSandbox").val());
+		var ar = guidoEngine.GuidoString2AR(p, $("#gmnSandbox").val());
 		//alert (ar);
 		var result = guidoEngine.getSvg(p, $("#gmnSandbox").val());
 		guidoEngine.CloseParser(p);
 		//var vector = guidoEngine.returnVector();
 		//alert(vector);
 		//alert(vector.get(0) + vector.get(1));
-		//guidoEngine.delete();
-		guidoEngine = 0;
+		
+		var settings= {
+			systemsDistance : 75,
+			systemsDistribution : 1,
+			systemsDistribLimit : 0.25,
+			force : 750,
+			spring : 1.1,
+			neighborhoodSpacing : 0,
+			optimalPageFill : 1,
+			resizePage2Music : 1
+		};
+		//var gr = guidoEngine.GuidoGetAR2GR(ar);
+		//GuidoFreeGR(gr);
+		gr = guidoEngine.GuidoGetAR2GRSettings(ar, settings);
+		//GuidoFreeGR(gr);
+		guidoEngine.delete();
+		
 		$("#canvasContainer").html(result);
 		$("#canvasContainer2").html("<plaintext>" + result + "</plaintext>");
 	}
-	function allReady() {
-		Module["noExitRuntime"] = true;
+	$( document ).ready(function() {
 		//guidoEngine = new Module.GuidoEngineAdapter;
 		//guidoEngine.GuidoInit();
-		console.log("loading");
 		$("#gmnSandbox").on('keyup', processGMN);
-	}
+	});
 	
-	/*
-	alert("toto");
-	var B = new Module.B;
-	var A = B.getA();
-	B.addA(A);
-	alert(B.get());
-	B.setString("bonjour !");
-	alert(B.getString());
-*/
     </script>
   </head>
   <body>
