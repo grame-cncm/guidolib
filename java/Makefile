@@ -1,6 +1,6 @@
 SRC = $(wildcard guidoengine/*.java guidoengine/drawcommand/*.java)
 CLASS = $(patsubst %.java, %.class, $(SRC) )
-JNI   = $(patsubst guidoengine/%.java, jni/guidoengine_%.h, $(SRC) )
+JNI   = $(addprefix jni/, $(subst /,_,$(patsubst guidoengine/%.java, guidoengine_%.h, $(SRC) )))
 
 ifeq ($(ARCH), 64)
 	JAVA  = "C:\Program Files\Java\jdk1.6.0_20\bin\java"
@@ -43,13 +43,21 @@ doc:
 	[ -d doc ] || mkdir doc
 	javadoc -d doc guidoengine/*.java
 
+print-%:
+	@echo '$*=$($*)'
+	@echo '  origin = $(origin $*)'
+	@echo '  flavor = $(flavor $*)'
+	@echo '   value = $(value  $*)'
+
 ##################################################################
 # rule to make JNI headers
 headers : $(JNI)
 
 jni/guidoengine_%.h: guidoengine/%.class
-	javah -jni -d jni $(patsubst guidoengine/%.class, guidoengine.%, $<) # temporary
-	javah -jni -d jni $(patsubst guidoengine/drawcommand/%.class, guidoengine.drawcommand.%, $<) # temporary
+	javah -jni -d jni $(patsubst guidoengine/%.class, $(subst _,.,guidoengine.%), $<)
+
+jni/guidoengine_drawcommand_%.h: guidoengine/drawcommand/%.class
+	javah -jni -d jni $(patsubst guidoengine/drawcommand/%.class, guidoengine.drawcommand.%, $<)
 
 ##################################################################
 # rule for java compiling
