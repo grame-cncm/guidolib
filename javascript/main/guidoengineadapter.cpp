@@ -1,6 +1,7 @@
 #include "guidoengineadapter.h"
 #include "GUIDOEngine.h"
 #include "GUIDOParse.h"
+#include <cstring>
 
 int GuidoEngineAdapter::nbinstantiation = 0;
 
@@ -29,15 +30,26 @@ void GuidoEngineAdapter::CloseParser(GuidoParser * parser) {
     ::GuidoCloseParser(parser);
 }
 
-ARHandler GuidoEngineAdapter::GuidoString2AR(GuidoParser * p, const string guidoCode) {
+ARHandler GuidoEngineAdapter::GuidoString2AR(GuidoParser * p, const string &guidoCode) {
     cout << "GuidoString2AR" << endl;
     return ::GuidoString2AR (p, guidoCode.c_str());
 }
 
-string GuidoEngineAdapter::getSvg(GuidoParser * p, const string guidoCode) {
+GRHandler GuidoEngineAdapter::GuidoGetAR2GR (ARHandler ar, const GuidoLayoutSettings &settings) {
+    cout << "GuidoGetAR2GR with settings" << endl;
+    return ::GuidoGetAR2GR (ar, &settings);
+}
+
+GRHandler GuidoEngineAdapter::GuidoGetAR2GR (ARHandler ar) {
+    return ::GuidoGetAR2GR (ar, 0);
+}
+
+string GuidoEngineAdapter::getSvg(GuidoParser * p, const string &guidoCode) {
     ARHandler ar = ::GuidoString2AR (p, guidoCode.c_str());
     GRHandler gr = ::GuidoGetAR2GR (ar, 0);
-    string result = GuidoGetSVGExportWithFontSpec(gr, 1);
+    char * resExport = ::GuidoGetSVGExportWithFontSpec(gr, 1);
+    string result(resExport);
+    free(resExport);
     ::GuidoFreeGR(gr);
 
     return result;
