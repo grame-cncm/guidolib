@@ -1,6 +1,7 @@
 CMakeFiles
 CMakeScripts
 CMakeCache.txt
+CMakeLists.txt.user
 cmake_*
 *.xcodeproj
 build
@@ -30,3 +31,4 @@ java/jni/guidoengine_*
 android-apps/simple-guido-editor/.classpath
 android-apps/simple-guido-editor/.project
 android-apps/simple-guido-editor/.settings
+javascript/obj
