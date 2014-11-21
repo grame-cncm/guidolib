@@ -355,6 +355,12 @@ void ARMusic::doAutoBreaks()
 
 void ARMusic::doAutoStuff()
 {
+    cout << "BEFORE" << std::endl;
+    print(cout);
+    cout << std::endl;
+
+
+
 	// this is important so that the voices now about the maximum tag-id.
 	gCurArMusic = this;
 
@@ -367,7 +373,6 @@ void ARMusic::doAutoStuff()
 		tmp = GetNext(pos)->getDuration();
 		if (tmp>maxdur)
 			maxdur = tmp;
-
 	}
 
 	adjustDuration(maxdur);
@@ -376,8 +381,8 @@ void ARMusic::doAutoStuff()
 	int counter = 0;
 	pos = GetHeadPosition();
 	//char statusmsg[100];
-	while (pos)
-	{
+
+	while (pos) {
 		++counter;
 		ARMusicalVoice * arvc = GetNext(pos);
 
@@ -391,8 +396,8 @@ void ARMusic::doAutoStuff()
 
 	counter = 0;
 	pos = GetHeadPosition();
-	while (pos)
-	{
+
+	while (pos) {
 		counter++;
 		// now we can check, wether newSystem and newPage are followed by correct clef/key information ...
 		// also do AutoDisplayCheck and autoBeaming.
@@ -400,6 +405,12 @@ void ARMusic::doAutoStuff()
 
 		timebench("doAutoStuff2", arvc->doAutoStuff2());
 	}
+
+
+    
+    cout << "AFTER" << std::endl;
+    print(cout);
+    cout << std::endl;
 }
 
 /** \brief Removes tags that were added automatically

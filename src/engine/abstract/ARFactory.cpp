@@ -834,7 +834,6 @@ void ARFactory::createTag( const char * name, int no )
 				ARComposer * tmp = new ARComposer();
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
-				
 			}
 			else if(!strcmp(name,"clef"))
 			{
@@ -843,14 +842,12 @@ void ARFactory::createTag( const char * name, int no )
 				ARClef * tmp = new ARClef;
 				mTags.AddHead(tmp); // push()
 				mCurrentVoice->AddTail(tmp);
-				
 			}
 			else if (!strcmp(name,"color") || !strcmp(name,"colour"))
 			{
 				ARColor * tmp = new ARColor;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
-				
 			}
             else if (!strcmp(name,"cresc") || !strcmp(name,"crescendo"))
 			{
@@ -917,7 +914,7 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
-			else if (!strcmp(name,"dispDur")) {
+			else if (!strcmp(name,"dispDur") || !strcmp(name,"displayDuration")) {
 				ARDisplayDuration * tmp = new ARDisplayDuration();
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
@@ -1993,7 +1990,7 @@ void ARFactory::endTag()
         }
         else if ((arre = dynamic_cast<ARRepeatEnd *>(tag)) != 0 )
         {
-            if (arre->repbeg) // a repeat-end
+            /*if (arre->repbeg) // a repeat-end
             {
                 TYPE_DURATION dur (arre->repbeg->dur);
                 int numrepeat = arre->numrepeat;
@@ -2003,7 +2000,8 @@ void ARFactory::endTag()
                 dur.setNumerator(dur.getNumerator() * numrepeat);
                 dur.normalize();
                 //mCurrentVoice->setDuration(arre->repbeg->getRelativeTimePosition() + dur);
-            }
+            }*/
+
             if (arre->getRange()) // the tag has a range ...
             {
                 ARRepeatEndRangeEnd * tmp = new ARRepeatEndRangeEnd(arre); // !

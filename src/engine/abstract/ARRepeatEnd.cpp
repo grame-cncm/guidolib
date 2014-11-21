@@ -24,8 +24,7 @@ ListOfTPLs ARRepeatEnd::ltpls(1);
 
 ARRepeatEnd::ARRepeatEnd(ARRepeatBegin * curbeg)
 { 
-	repbeg = curbeg;
-	numrepeat = 0; 
+	repbeg       = curbeg;
 	rangesetting = RANGEDC;
 }
 
@@ -36,7 +35,7 @@ void ARRepeatEnd::setTagParameterList(TagParameterList & tpl)
 		// create a list of string ...
 
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail( "I,num,-1,o" );
+		lstrs.AddTail("");
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -48,21 +47,6 @@ void ARRepeatEnd::setTagParameterList(TagParameterList & tpl)
 		// we found a match!
 		if (ret == 0)
 		{
-			// then, we now the match for
-			// the first ParameterList
-			// w, h, ml, mt, mr, mb
-			GuidoPos pos = rtpl->GetHeadPosition();
-
-			TagParameterInt * tpi = TagParameterInt::cast(rtpl->GetNext(pos));
-			assert(tpi);
-
-			if (tpi->pflag != TagParameter::NOTSET)
-			{
-				numrepeat = tpi->getValue();
-				
-				if (numrepeat < 0)
-					numrepeat = 0;			
-			}
 		}
 
 		delete rtpl;
@@ -83,10 +67,7 @@ void ARRepeatEnd::browse(TimeUnwrap& mapper) const
 std::ostream & ARRepeatEnd::operator<<(std::ostream & os) const
 {
 	os << "\\repeatEnd";
-	if (numrepeat != 0)
-	{
-		os << "<" << numrepeat << ">";
-	}
+
 	if (getRange())
 		os << "(";
 
@@ -95,7 +76,5 @@ std::ostream & ARRepeatEnd::operator<<(std::ostream & os) const
 
 void ARRepeatEnd::print(std::ostream& os) const
 {    
-    os << "ARRepeatEnd: numrepeat: " << numrepeat << ";";
-
-    os << std::endl;
+    os << "ARRepeatEnd: numrepeat: " << std::endl;
 }

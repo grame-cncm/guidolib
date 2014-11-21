@@ -36,8 +36,6 @@ class ARRepeatEndRangeEnd :  public ARMTParameter // ,public ARMusicalObject
 
 		virtual ~ARRepeatEndRangeEnd() { }
 
-		int getNumRepeat() const;
-
 		virtual void setTagParameterList(TagParameterList & pl);
 
         virtual void print(std::ostream& os) const { os << "ARRepeatEndRangeEnd;" << std::endl; }

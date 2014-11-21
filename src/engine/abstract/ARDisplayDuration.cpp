@@ -51,8 +51,7 @@ void ARDisplayDuration::setTagParameterList(TagParameterList& tpl)
 		// create a list of string ...
 
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(
-			( "I,n,,r;I,d,,r;I,ndots,0,o"));
+		lstrs.AddTail(("I,n,,r;I,d,,r;I,ndots,0,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -105,6 +104,22 @@ bool ARDisplayDuration::MatchEndTag(const char * s)
 	return 0;
 }
 
+void ARDisplayDuration::print(std::ostream & os) const
+{
+    os << "ARDisplayDuration: ";
+
+    if (num)
+        os << "n: " << num->getValue() << "; ";
+
+    if (denom)
+        os << "d: " << denom->getValue() << "; ";
+
+    if (ndots)
+        os << "ndots: " << ndots->getValue() << ";";
+
+    os << std::endl;
+}
+
 void ARDisplayDuration::PrintName(std::ostream & os) const
 {
 	os << "\\dispDur";
@@ -114,7 +129,6 @@ void ARDisplayDuration::PrintName(std::ostream & os) const
 
 void ARDisplayDuration::PrintParameters(std::ostream & os) const
 {
-
 	os << "<" << dur.getNumerator() <<
 		"," << dur.getDenominator() <<
 		"," << dots << ">";

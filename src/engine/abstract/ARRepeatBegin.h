@@ -32,7 +32,7 @@ class ARRepeatBegin : public ARMTParameter	// ,public ARMusicalObject
 		friend class ARRepeatEnd;
 		friend class ARFactory;
 
-					 ARRepeatBegin() : numrepeat(0) { dur.setNumerator(-1); }
+					 ARRepeatBegin() { dur.setNumerator(-1); }
 		virtual		~ARRepeatBegin()	{ }
 
 		virtual void	setTagParameterList(TagParameterList & tpl);
@@ -50,7 +50,6 @@ class ARRepeatBegin : public ARMTParameter	// ,public ARMusicalObject
 	protected:
 
 		static ListOfTPLs ltpls;
-		int numrepeat;
 		TYPE_DURATION dur;
 };
 

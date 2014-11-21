@@ -661,7 +661,7 @@ GuidoPos ARMusicalVoice::AddTail(ARMusicalObject *newMusicalObject)
     
     if (!isInChord) {
         mCurVoiceState->vpos = tmp;
-	mCurVoiceState->curtp = getDuration();
+	    mCurVoiceState->curtp = getDuration();
     }
 
 	return tmp;
@@ -3047,13 +3047,10 @@ void ARMusicalVoice::doAutoEndBar()
 			// check if we need to add a FinishBar ...
 			bool finishbar = true;
 			ARMusicalTag * mtag = endState->getCurStateTag( typeid(ARAuto) );
-			if (mtag)
-			{
+			if (mtag) {
 				ARAuto * autotag = dynamic_cast<ARAuto *>(mtag);
 				if (autotag && autotag->getEndBarState() == ARAuto::OFF)
-				{
 					finishbar = false;
-				}
 			}
 			// now check whether there is a bar tag at the end ...
 			// if this is the case, we do not set an endbar ....

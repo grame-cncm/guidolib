@@ -36,8 +36,6 @@ class ARBar : // public ARMusicalObject,
 
 		virtual void setTagParameterList(TagParameterList & theTagParameterList);
 
-		int getBarNumber() const { return barnumber; }
-
 		void                setMeasureNumber(int inMeasureNumber) { measureNumber = inMeasureNumber; }
 		int                 getMeasureNumber()          const     { return measureNumber; }
         TagParameterString *getMeasureNumberDisplayed() const     { return measureNumberDisplayed; }
@@ -45,16 +43,12 @@ class ARBar : // public ARMusicalObject,
 
 		float  getMeasureNumberDxOffset()                         { return numDx; }
 		float  getMeasureNumberDyOffset()                         { return numDy; }
-
-		virtual bool operator==(const ARBar & bar)
-			{ return (barnumber == bar.barnumber); }
         
         /**** Function to avoid dynamic_cast ****/
         ARMusicalObject *isARBar() { return this; }
         /*****************************************/
 
   protected:
-		int  barnumber; // number of bar where barline starts
 		int  measureNumber;
         TagParameterString *measureNumberDisplayed;
 

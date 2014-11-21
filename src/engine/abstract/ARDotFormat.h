@@ -39,15 +39,11 @@ public:
 	virtual void PrintName(std::ostream & os) const;
 	virtual void PrintParameters(std::ostream & os) const;
 
-
-	const TagParameterFloat * getDD() const	{ return mDD; }
-
 	virtual ARDotFormat * getEndTag() const	{ return new ARDotFormat(NULL, savedf); }
 
 protected:
 
 	ARDotFormat *		savedf;
-	TagParameterFloat *	mDD;
 	static ListOfTPLs 	ltpls;
 };
 

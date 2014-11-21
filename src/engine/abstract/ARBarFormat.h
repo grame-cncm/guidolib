@@ -35,8 +35,7 @@ public:
 	virtual void PrintName(std::ostream & os) const;
 	virtual void PrintParameters(std::ostream & os) const;
 
-	const TagParameterString * getStyle() const
-	{ return style; }
+	const TagParameterString *getStyle() const { return style; }
 
 protected:
 

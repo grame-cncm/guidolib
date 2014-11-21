@@ -46,11 +46,8 @@ void ARBarFormat::setTagParameterList(TagParameterList & tpl)
 		// create a list of string ...
 
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(
-			(
-			"S,style,staff,o"));
+		lstrs.AddTail(("S,style,staff,o"));
 		CreateListOfTPLs(ltpls,lstrs);
-
 	}
 
 	TagParameterList * rtpl = NULL;
@@ -68,13 +65,11 @@ void ARBarFormat::setTagParameterList(TagParameterList & tpl)
 			style = TagParameterString::cast(rtpl->RemoveHead());
 			assert(style);
 
-			if( style->TagIsSet() == false )
+			if (style->TagIsSet() == false )
 			{
 				delete style;
 				style = NULL;
 			}
-
-
 		}
 
 		delete rtpl;
@@ -89,7 +84,7 @@ void ARBarFormat::setTagParameterList(TagParameterList & tpl)
 
 void ARBarFormat::print(std::ostream& os) const 
 {
-    os << "ARBarFormat:" << std::endl;
+    os << "ARBarFormat;" << std::endl;
 }
 
 void ARBarFormat::PrintName(std::ostream & os) const

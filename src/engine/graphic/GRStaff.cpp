@@ -164,7 +164,6 @@ MeasureAccidentals & MeasureAccidentals::operator=(const MeasureAccidentals &ma)
 GRStaffState::GRStaffState()
 {
 	meterset = false;	// meter information set?. TRUE, false
-	mnum     = 0;	 	// start at bar 0... (important for upbeat, maybe to be changed!)
 
 	curmeter = NULL;
 	keyset   = false; 			// key signatur set?
@@ -217,7 +216,6 @@ void GRStaffState::reset2key()
 GRStaffState & GRStaffState::operator=(const GRStaffState & tmp)
 {
 	meterset = tmp.meterset; // is meter-signture set?. TRUE, false
-	mnum = tmp.mnum;
 	curmeter = tmp.curmeter;
 
 	// Noteparameter
@@ -789,7 +787,6 @@ staff_debug("newMeasure");
 	// quick-hack-implementation -> encode which accidentals are already set
 	// and which must be deleted in the next measure etc.
 	mStaffState.reset2key ();
-	++ mStaffState.mnum;
 }
 
 // ----------------------------------------------------------------------------
@@ -1022,8 +1019,6 @@ GRBar * GRStaff::AddBar(ARBar * abar, const TYPE_TIMEPOSITION & von)
 {
 staff_debug("AddBar");
 	newMeasure(von); // erhoeht u.a. mnum!
-	if (abar->getBarNumber() != -1)
-		mStaffState.mnum = abar->getBarNumber();
 
 	GRBar * ntakt = new GRBar( abar, this, von);
 	// depending on current bar Format, we have to tell the staffmanager (or the system) 
@@ -1188,8 +1183,6 @@ GRDoubleBar * GRStaff::AddDoubleBar(ARDoubleBar * ardbar, const TYPE_TIMEPOSITIO
 {
 staff_debug("AddDoubleBar");
 	newMeasure(von); // erhoeht u.a. mnum!
-	if (ardbar->getBarNumber() != -1)
-		mStaffState.mnum = ardbar->getBarNumber();
 
 	GRDoubleBar * ntakt = new GRDoubleBar( ardbar, this, von);
 	// depending on current bar Format, we have to tell the staffmanager (or the system) 
@@ -1210,8 +1203,6 @@ GRFinishBar * GRStaff::AddFinishBar(ARFinishBar * arfbar, const TYPE_TIMEPOSITIO
 {
 staff_debug("AddFinishBar");
 	newMeasure(von); // erhoeht u.a. mnum!
-	if (arfbar->getBarNumber() != -1)
-		mStaffState.mnum = arfbar->getBarNumber();
 
 	GRFinishBar * ntakt = new GRFinishBar( arfbar, this, von);
 

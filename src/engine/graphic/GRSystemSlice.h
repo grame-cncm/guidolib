@@ -82,8 +82,8 @@ public:
 	void		addFinishBar( GRFinishBar * mybar,int btype, GRStaff * grstaff);
 	void		addPossibleBreakState( GRPossibleBreakState * in );
 
-	void		setNumber( int num )		{ mNumber = num; }
-	bool		hasSystemBars( )			{ return mHasSystemBars; }
+	void		setNumber(int num )	{ mNumber = num; }
+	bool		hasSystemBars( )	{ return mHasSystemBars; }
 
 protected:
 	// this variable holds the current begin
@@ -103,7 +103,7 @@ protected:
 	
 	int				mStartSpringID;
 	int				mEndSpringID;
-	bool			mHasSystemBars;
+	bool			mHasSystemBars;     // Totally useless for now, I guess
 	float			mFirstEvXPosition;  // used by the first slice to split the mapping consistently to the next systems
 };
 

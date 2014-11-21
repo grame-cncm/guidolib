@@ -35,18 +35,15 @@ class ARRepeatEnd : public ARBar
 		friend class ARRepeatBegin;
 
 	public:
-
 					ARRepeatEnd(ARRepeatBegin * curbeg = 0);
 		virtual		~ARRepeatEnd() { }
 
-		int			getNumRepeat() const { return numrepeat; }
 		virtual void setTagParameterList( TagParameterList & tpl);
 
 		virtual void	print(std::ostream& os) const;
 		virtual void	browse(TimeUnwrap& mapper) const;
 
 		virtual std::ostream & operator<<(std::ostream & os) const;
-        
 
         /**** Function to avoid dynamic_cast ****/
         ARMusicalObject *isARRepeatEnd() { return this; }
@@ -56,7 +53,6 @@ class ARRepeatEnd : public ARBar
 
 		static ListOfTPLs ltpls;
 		ARRepeatBegin * repbeg;
-		int numrepeat;
 };
 
 #endif

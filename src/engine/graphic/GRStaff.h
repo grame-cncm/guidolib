@@ -116,7 +116,6 @@ class GRStaffState
 	protected:
 		// Meter-Parameters
 		bool	meterset;		// flag if meter-sig is given . TRUE, FALSE
-		int		mnum;			// MeasureNumber
 
 		ARMeter * curmeter;
 		// Noteparameter

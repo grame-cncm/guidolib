@@ -257,8 +257,8 @@ bool GRVoiceManager::parseStateTag(ARMusicalTag * mtag)
 	ARAuto * arauto;
 
 	mstaff = dynamic_cast<ARStaff *>(mtag);
-	if( mstaff )
-	{
+
+	if (mstaff) {
 		// it is a staff-tag...
 
 		// then, the staff will be changed...
@@ -268,37 +268,27 @@ bool GRVoiceManager::parseStateTag(ARMusicalTag * mtag)
 		staffnum = mstaff->getStaffNumber();
 		mStaffMgr->prepareStaff(staffnum);
 		mCurGrStaff = mStaffMgr->getStaff(staffnum);
-		if (mstaff->getDY() && mstaff->getDY()->TagIsSet())
-		{
+		if (mstaff->getDY() && mstaff->getDY()->TagIsSet()) {
 			// what about staff-format and HS-values here ?
 			mCurGrStaff->setDistance(mstaff->getDY()->getValue());
 		}
+
 		assert(mCurGrStaff);
-
-
 	}
-	else if ( (staffrmt = dynamic_cast<ARStaffFormat *>(mtag))!= 0)
-	{
+	else if ((staffrmt = dynamic_cast<ARStaffFormat *>(mtag)) != 0)
 		mCurGrStaff->setStaffFormat(staffrmt);
-	}
-	else if ( (barfrmt = dynamic_cast<ARBarFormat *>(mtag))!= 0)
-	{
+	else if ( (barfrmt = dynamic_cast<ARBarFormat *>(mtag)) != 0)
 		mStaffMgr->setBarFormat(barfrmt,mCurGrStaff);
-	}
-	else if ( (mstem = dynamic_cast<ARTStem *>(mtag))!= 0)
-	{
+	else if ( (mstem = dynamic_cast<ARTStem *>(mtag)) != 0) {
 		// it is a stem-tag (stemsUp, stemsDown, stemsAuto)
 		// stemstate = mstem->getStemState();
 		curstemstate = mstem;
-
 	}
-	else if ( (mhead = dynamic_cast<ARTHead*>(mtag))!= 0)
-	{
+	else if ( (mhead = dynamic_cast<ARTHead*>(mtag)) != 0) {
 		// the headstate... 
 		curheadstate = mhead;
 	}
-	else if ( (theColor = dynamic_cast<ARColor *>(mtag))!= 0)
-	{
+	else if ((theColor = dynamic_cast<ARColor *>(mtag)) != 0) {
 		// it is a color tag...
 
 	/*	mColor.Set(	(unsigned char) theColor->getColorR(),
@@ -306,30 +296,21 @@ bool GRVoiceManager::parseStateTag(ARMusicalTag * mtag)
 					(unsigned char) theColor->getColorB(),
 					(unsigned char) theColor->getColorA());*/
 	}
-	else if (typeid(*mtag) == typeid(ARUnits))
-	{
+	else if (typeid(*mtag) == typeid(ARUnits)) {
 		// just ignore units tag... (it is a state
 		// tag after all...)
 	}
 	else if ((dotfrmt = dynamic_cast<ARDotFormat *>(mtag)) != 0)
-	{
 		curdotformat = dotfrmt;
-	}
 	else if ((notefrmt = dynamic_cast<ARNoteFormat *>(mtag)) != 0)
-	{
 		curnoteformat = notefrmt;
-	}
 	else if ((restfrmt = dynamic_cast<ARRestFormat *>(mtag)) != 0)
-	{
 		currestformat = restfrmt;
-	}
-	else if ((arabreak = dynamic_cast<ARABreak *>(mtag)) != 0)
-	{
+	else if ((arabreak = dynamic_cast<ARABreak *>(mtag)) != 0) {
 			// we have an autoBreak-Tag set...
 			mStaffMgr->setAutoBreak(arabreak);
 	}
-	else if ((arauto = dynamic_cast<ARAuto *>(mtag)) != 0)
-	{
+	else if ((arauto = dynamic_cast<ARAuto *>(mtag)) != 0) {
 			// we have an auto(set)-Tag set...
 			mStaffMgr->setAutoTag(arauto);
 	}

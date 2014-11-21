@@ -77,12 +77,6 @@ ARRepeatEndRangeEnd::ARRepeatEndRangeEnd( ARRepeatEnd * in ) : mRepeatEnd( in )
 { 
 }
 
-int 
-ARRepeatEndRangeEnd::getNumRepeat() const
-{ 
-	return mRepeatEnd ? mRepeatEnd->getNumRepeat() : -1;
-}
-
 void
 ARRepeatEndRangeEnd::setTagParameterList(TagParameterList & pl)
 {

@@ -28,7 +28,6 @@ ListOfTPLs ARBar::ltpls(1);
 ARBar::ARBar(const TYPE_TIMEPOSITION &timeposition)
 	: ARMTParameter(timeposition)
 {
-	barnumber = -1; // not specified
 	measureNumber = 0;
     measureNumberDisplayed = NULL;
 
@@ -39,7 +38,6 @@ ARBar::ARBar(const TYPE_TIMEPOSITION &timeposition)
 
 ARBar::ARBar() : ARMTParameter()
 {
-	barnumber = -1; // not specified
 	measureNumber = 0;
     measureNumberDisplayed = NULL;
 
@@ -59,7 +57,7 @@ ARBar::~ARBar() // does nothing
 
 void ARBar::print(std::ostream& os) const
 {    
-    os << "ARBar: barnumber: " << barnumber << "; measureNumber: " << measureNumber << "; ";
+    os << "ARBar: measureNumber: " << measureNumber << "; ";
 
     if (measureNumberDisplayed)
         os << "measureNumberDisplayed: " << measureNumberDisplayed->getValue() << "; ";
@@ -76,10 +74,6 @@ void ARBar::PrintName(std::ostream &os) const
 
 void ARBar::PrintParameters(std::ostream &os) const
 {
-	if (barnumber!=-1)
-	{
-		os << "<" << barnumber << ">";
-	}
 }
 
 void ARBar::setTagParameterList(TagParameterList& tpl)
@@ -90,7 +84,7 @@ void ARBar::setTagParameterList(TagParameterList& tpl)
 
 		ListOfStrings lstrs; // (1); std::vector test impl
 		lstrs.AddTail(
-			("I,number,-1,o;S,displayMeasNum,false,o;U,numDx,0,o;U,numDy,0,o"));
+			("S,displayMeasNum,false,o;U,numDx,0,o;U,numDy,0,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -105,11 +99,6 @@ void ARBar::setTagParameterList(TagParameterList& tpl)
 			// then, we now the match for
 			// the first ParameterList
 			// w, h, ml, mt, mr, mb
-            TagParameterInt * tpi =  TagParameterInt::cast(rtpl->RemoveHead());
-			assert(tpi);
-			if (tpi->pflag != TagParameter::NOTSET)
-				barnumber = tpi->getValue();
-            delete tpi;
 
             measureNumberDisplayed = TagParameterString::cast(rtpl->RemoveHead());
 

@@ -61,14 +61,14 @@
     \hline
     \textbf{\textbackslash{}alter}&\textbf{detune}&detune value&float&0.0&&\\
     \hline
-    %\textbf{\textbackslash{}auto}&&&&&&\\ % A COMPLETER
-    %\hline
-    \textbf{\textbackslash{}bar}&number&&&&&\\ % Does number param is working ?
-    &displayMeasNum&display measure number or not&boolean string&``false''&``true'' - ``false''&\\
+    \textbf{\textbackslash{}auto}&autoEndBar&enable or not automatic end bar&on/off string&``on''&``on'' - ``off''&\\
+    % Other params are not used for now
+    \hline
+    \textbf{\textbackslash{}bar}&displayMeasNum&display measure number or not&boolean string&``false''&``true'' - ``false''&\\
     &numDx / numDy&measure number horiz./vert. offset&unit&0&&\\
     &dx/dy - color - size&&&&&\\
     \hline
-    %\textbf{\textbackslash{}barFormat}&&&&&&\\ % Useless tag for now ?
+    %\textbf{\textbackslash{}barFormat}&&&&&&\\ % Useless tag for now
     %\hline
     \textbf{\textbackslash{}beam}&dy1&vert. offset (left of beam)&unit&7hs&&\\
     &dy2&vert. offset (right of beam)&unit&7hs&&\\
@@ -81,7 +81,7 @@
     \hline
     \textbf{\textbackslash{}breathMark}&color&&&&&\\
     \hline
-    %\textbf{\textbackslash{}bembel}&&&&&&\\ % Useless tag for now ?
+    %\textbf{\textbackslash{}bembel}&&&&&&\\ % Useless tag for now
     %\hline
     \textbf{\textbackslash{}clef}&\textbf{type}&clef type&string&``treble''&&``tenor'' - ``g+8''\\
     &dx/dy - color - size&&&&&\\
@@ -91,7 +91,7 @@
     \hline
     \textbf{\textbackslash{}coda}&dx/dy - color&&&&&\\
     \hline
-    %\textbf{\textbackslash{}color}&&&&&&\\ % Useless tag for now ?
+    %\textbf{\textbackslash{}color}&&&&&&\\ % Useless tag for now
     %\hline
 \end{tabularx}
 
@@ -130,13 +130,15 @@
     &deltaY&aperture vert. offset&unit&3&&\\
     &thickness&lines thickness&unit&0.16&&\\
     &dy - color&&&&&\\
-    \hline    
-    %\textbf{\textbackslash{}defineTag}&&&&&&\\ % Useless tag for now ?
+    \hline
+    %\textbf{\textbackslash{}defineTag}&&&&&&\\ % Useless tag for now
     %\hline
-    %\textbf{\textbackslash{}dispDur}&&&&&&\\ % Je ne comprends pas ce qu'il fait ! % A COMPLETER
-    %\hline
-    \textbf{\textbackslash{}dotFormat}&dd&&&&&\\ % Does dd param is working ?
-    &dx/dy - color - size&&&&&\\
+    \textbf{\textbackslash{}displayDuration}&\textbf{n}&displayed numerator&integer&&&\\
+    &\textbf{d}&displayed denominator&integer&&&\\
+    &ndots&displayed dots number&integer&0&&\\
+    \hline 
+    \textbf{\textbackslash{}dotFormat}&dx/dy - color - size&&&&&\\
+    &&&&&&\\
     \hline
     \textbf{\textbackslash{}doubleBar}&color&&&&&\\
     \hline
@@ -156,19 +158,19 @@
     &fsize&text size&unit&1.0&&\\
     &dx/dy - color&&&&&\\
     \hline
-    \textbf{\textbackslash{}glissando}&dx1/dy1&glissando left horiz./vert. offset&unit&0&&\\
-    &dx2/dy2&glissando left horiz./vert. offset&unit&0&&\\
-    &fill&fill glissando or not&boolean string&``false''&``true'' - ``false''&\\
-    &thickness&glissando line thickness&unit&0.3&&\\
-    &lineStyle&glissando line style&string&``line''&``line'' - ``wavy''&\\ % Does lineStyle param work ?
-    &color&&&&&\\
-    \hline
 \end{tabularx}
 
 
 \begin{tabularx}{\linewidth}{p{3cm}p{3cm}p{5cm}p{3cm}p{2.5cm}p{3.5cm}p{4cm}}
     \hline
     \textbf{Tag}&\textbf{Parameters}&\textbf{Description}&\textbf{Type}&\textbf{Default value}&\textbf{Authorized values}&\textbf{Examples}\\
+    \hline
+    \textbf{\textbackslash{}glissando}&dx1/dy1&glissando left horiz./vert. offset&unit&0&&\\
+    &dx2/dy2&glissando left horiz./vert. offset&unit&0&&\\
+    &fill&fill glissando or not&boolean string&``false''&``true'' - ``false''&\\
+    &thickness&glissando line thickness&unit&0.3&&\\
+    %&lineStyle&glissando line style&string&``line''&``line'' - ``wavy''&\\ % Doesn't work yet
+    &color&&&&&\\
     \hline
     \textbf{\textbackslash{}harmonic}&dx/dy - color - size&&&&&\\
     \hline
@@ -203,9 +205,7 @@
     &adx/ady&accidental horiz./vert. offset&unit&0&&\\
     &dx/dy - color - size&&&&&\\
     \hline
-    \textbf{\textbackslash{}newLine}&dy&&&&&\\ % Does dy param work ?
-    \hline
-    \textbf{\textbackslash{}newSystem}&dy&&&&&\\ % Does dy param work ?
+    \textbf{\textbackslash{}newSystem}&dy&&&&&\\
     \hline
     \textbf{\textbackslash{}noteFormat}&style&notehead style&notehead string&``standard''&&``diamond'' - ``square''\\
 	&dx/dy - color - size&&&&&\\
@@ -219,9 +219,6 @@
     &tm&top margin&unit&5cm&&\\
     &bm&bot margin&unit&3cm&&\\
     \hline
-    \textbf{\textbackslash{}pizzicato}&type&pizzicato type&string&``lefthand''&``lefthand'' - ``buzz'' - ``snap'' - ``bartok'' - ``fingernail''&\\
-    &dx/dy - color - size&&&&&\\
-    \hline
 \end{tabularx}
 
 
@@ -229,14 +226,14 @@
     \hline
     \textbf{Tag}&\textbf{Parameters}&\textbf{Description}&\textbf{Type}&\textbf{Default value}&\textbf{Authorized values}&\textbf{Examples}\\
     \hline
-    \textbf{\textbackslash{}repeatBegin}&num&&&&&\\ % Does num param work ?
-    &dx/dy - color&&&&&\\
+    \textbf{\textbackslash{}pizzicato}&type&pizzicato type&string&``lefthand''&``lefthand'' - ``buzz'' - ``snap'' - ``bartok'' - ``fingernail''&\\
+        &dx/dy - color - size&&&&&\\
     \hline
-    \textbf{\textbackslash{}repeatEnd}&num&&&&&\\ % Does num param work ?
-    &dx/dy - color&&&&&\\
+    \textbf{\textbackslash{}repeatBegin}&dx/dy - color&&&&&\\
     \hline
-    \textbf{\textbackslash{}restFormat}&posy&&&&&\\ % Does posy param work ?
-    &dx/dy - color - size&&&&&\\
+    \textbf{\textbackslash{}repeatEnd}&dx/dy - color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}restFormat}&dx/dy - color - size&&&&&\\
     \hline
     \textbf{\textbackslash{}ritardando}&tempo&tempo for the beginning note&tempo string&`` ''&&``60'' - ``80''\\
     &abstempo&tempo for the ending note&tempo string&`` ''&&``60'' - ``80''\\

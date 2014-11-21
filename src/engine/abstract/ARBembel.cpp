@@ -28,7 +28,6 @@ ARBembel::ARBembel(int p_inv)
 
 ARBembel::~ARBembel()
 {
-
 }
 
 void ARBembel::setTagParameterList(TagParameterList & tpl)
@@ -38,9 +37,7 @@ void ARBembel::setTagParameterList(TagParameterList & tpl)
 		// create a list of string ...
 
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(
-			(
-			"I,inverse,0,o"));
+		lstrs.AddTail(("I,inverse,0,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -61,9 +58,7 @@ void ARBembel::setTagParameterList(TagParameterList & tpl)
 			assert(tpi);
 
 			if (tpi->pflag != TagParameter::NOTSET)
-			{
 				inverse = tpi->getValue();
-			}
 		}
 
 		delete rtpl;

@@ -31,14 +31,8 @@ ARDotFormat::ARDotFormat(ARDotFormat *p_savedf,ARDotFormat *copydf)
 	// but then we have to take care of saving state-information ....
 	rangesetting = ARMusicalTag::RANGEDC;
 	savedf = p_savedf;
-	mDD = NULL;
-
-	if (copydf && copydf->getDD())
-	{
-		mDD = TagParameterFloat::cast(copydf->getDD()->getCopy());
-	}
-	else if (!copydf)
-	{
+    
+    if (!copydf) {
 		TagParameterList tpl;
 		setTagParameterList(tpl);
 	}
@@ -47,7 +41,6 @@ ARDotFormat::ARDotFormat(ARDotFormat *p_savedf,ARDotFormat *copydf)
 
 ARDotFormat::~ARDotFormat()
 {
-	delete mDD;
 }
 
 void ARDotFormat::setTagParameterList(TagParameterList &tpl)
@@ -56,7 +49,7 @@ void ARDotFormat::setTagParameterList(TagParameterList &tpl)
 	{
 		// create a list of string ...
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(("U,dx,0hs,o;U,dy,,o;F,size,1.0,o;U,dd,1hs,o"));
+		lstrs.AddTail(("U,dx,0hs,o;U,dy,,o;F,size,1.0,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -81,10 +74,6 @@ void ARDotFormat::setTagParameterList(TagParameterList &tpl)
 			delete size;
 			size = TagParameterFloat::cast(rtpl->RemoveHead()); 
 			assert(size);
-
-			delete mDD;
-			mDD = TagParameterFloat::cast(rtpl->RemoveHead()); 
-			assert(mDD);
 		}
 		delete rtpl;
 	}
@@ -104,38 +93,29 @@ void ARDotFormat::PrintParameters(std::ostream & os) const
 {
 	int previous = 0;
 	int isset = 0;
-	if ((mDx && mDx->TagIsSet()) || (mDy && mDy->TagIsSet()) || (size && size->TagIsSet()) || (mDD && mDD->TagIsSet()))
-	{
+	if ((mDx && mDx->TagIsSet()) || (mDy && mDy->TagIsSet()) || (size && size->TagIsSet()))
 		isset = 1;
-	}
 
 	if (isset)
 		os << "<";
 
-	if (mDx && mDx->TagIsSet())
-	{
+	if (mDx && mDx->TagIsSet()) {
 		os << "dx=" << mDx->getUnitValue() << mDx->getUnit();
 		previous = 1;
 	}
-	if (mDy && mDy->TagIsSet())
-	{
+
+	if (mDy && mDy->TagIsSet()) {
 		if (previous)
 			os << ",";
 		os << "dy=" << mDy->getUnitValue() << mDy->getUnit();
 		previous = 1;
 	}
-	if (size && size->TagIsSet())
-	{
+
+	if (size && size->TagIsSet()) {
 		if (previous)
 			os << ",";
 		os << "dy=" << size->getValue(); // Should not be "size=" instead of "dy=" ?
 		previous = 1;
-	}
-	if (mDD && mDD->TagIsSet())
-	{
-		if (previous)
-			os << ",";
-		os << "mDD=" << mDD->getUnitValue() << mDD->getUnit();
 	}
 
 	if (isset)
@@ -144,10 +124,7 @@ void ARDotFormat::PrintParameters(std::ostream & os) const
 
 void ARDotFormat::print(std::ostream& os) const
 {
-    os << "ARDotFormat: ";
-
-    if (mDD)
-        os << "dd: " << mDD->getValue() << "; ";
+    os << "ARDotFormat;";
 
     os << std::endl;
 }

@@ -13,6 +13,7 @@
 */
 
 #include <iostream>
+
 #include "ARRepeatBegin.h"
 #include "ARRepeatEnd.h"
 #include "TagParameterInt.h"
@@ -29,33 +30,18 @@ void ARRepeatBegin::setTagParameterList(TagParameterList & tpl)
 		// create a list of string ...
 
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail( ( "I,num,-1,o"));
+		lstrs.AddTail("");
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
 	TagParameterList * rtpl = NULL;
 	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
 
-	if (ret>=0 && rtpl)
+	if (ret >= 0 && rtpl)
 	{
 		// we found a match!
 		if (ret == 0)
 		{
-			// then, we now the match for
-			// the first ParameterList
-			// w, h, ml, mt, mr, mb
-			GuidoPos pos = rtpl->GetHeadPosition();
-
-			TagParameterInt * tpi = TagParameterInt::cast(rtpl->GetNext(pos));
-			assert(tpi);
-
-			if (tpi->pflag != TagParameter::NOTSET)
-			{
-				numrepeat = tpi->getValue();
-				
-				if (numrepeat < 0)
-					numrepeat = 0;			
-			}
 		}
 
 		delete rtpl;
@@ -77,24 +63,17 @@ void ARRepeatBegin::browse(TimeUnwrap& mapper) const
 void ARRepeatBegin::setRepeatEnd(const ARRepeatEnd *myr)
 {
 	if (dur.getNumerator() == -1)
-	{
-		dur = myr->getRelativeTimePosition() -
-			getRelativeTimePosition();
-	}
+		dur = myr->getRelativeTimePosition() - getRelativeTimePosition();
 }
 
 std::ostream & ARRepeatBegin::operator<<(std::ostream & os) const
 {
 	os << "\\repeatBegin";
-	if (numrepeat != 2)
-		os << "<" << numrepeat << ">";
 
 	return (os << " ");
 }
 
 void ARRepeatBegin::print(std::ostream& os) const
 {    
-    os << "ARRepeatBegin: numrepeat: " << numrepeat << ";";
-
-    os << std::endl;
+    os << "ARRepeatBegin;" << std::endl;
 }

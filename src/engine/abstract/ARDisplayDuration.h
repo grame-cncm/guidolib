@@ -42,8 +42,7 @@ public:
 
 	virtual ARMusicalObject * Copy() const;
 
-	virtual void print(std::ostream& os) const
-	{}
+	virtual void print(std::ostream& os) const;
 
 	/* virtual ostream & operator<<(ostream &os) const
 	{
@@ -62,17 +61,14 @@ public:
 	virtual void PrintParameters(std::ostream & os) const;
 	void setDisplayDuration(const TYPE_DURATION & tmp);
 
-	void setDisplayDuration(const TYPE_DURATION & tmp, int numdots)
-	{ 
+	void setDisplayDuration(const TYPE_DURATION & tmp, int numdots) { 
 		dur = tmp; 
 		dots = numdots; 
 	}
 
-	TYPE_DURATION getDisplayDuration() const
-	{ return dur; }
+	TYPE_DURATION getDisplayDuration() const { return dur; }
 
-	int getDots() const
-	{ return dots; }
+	int getDots() const { return dots; }
     
     /**** Function to avoid dynamic_cast ****/
     ARMusicalObject *isARDisplayDuration() { return this; }

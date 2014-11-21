@@ -23,13 +23,13 @@ ListOfTPLs ARAuto::ltpls(1);
 
 ARAuto::ARAuto()
 {
-	numparset = 0;
-	endBarState = ON;
-	pageBreakState = ON;
-	systemBreakState = ON;
+	numparset              = 0;
+	endBarState            = ON;
+	pageBreakState         = ON;
+	systemBreakState       = ON;
 	clefKeyMeterOrderState = ON;
-	stretchLastLineState = OFF;
-	stretchFirstLineState = OFF;
+	stretchLastLineState   = OFF;
+	stretchFirstLineState  = OFF;
 }
 
 ARAuto::~ARAuto()
