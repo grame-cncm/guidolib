@@ -31,7 +31,6 @@ struct NodeAR
 {
     int refCount;			// Number of GRMusic using this NodeAR.
 	ARMusic * armusic;
-    GuidoErrCode error;
 };
 
 struct NodeGR
@@ -39,7 +38,6 @@ struct NodeGR
 	int page;				// page is obsolete. Just here for compatibility.
 	GRMusic * grmusic;
 	NodeAR * arHandle;		// the corresponding AR handle
-    GuidoErrCode error;
 };
 
 /** \brief Contains all global settings required by engine (moved from nview.h)

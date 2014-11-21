@@ -69,7 +69,7 @@ using namespace std;
 #include "BinaryDevice.h"
 #include "BinaryFont.h"
 
-// #include "guido2.h" TODO GGX
+#include "guido2.h"
 
 // ==========================================================================
 // - Guido Global variables
@@ -104,7 +104,7 @@ GUIDOAPI(GuidoErrCode) GuidoInitWithIndependentSVG()
 {
 	GuidoInitDesc desc;
 
-    VGSystem * gSystem= new SVGSystem(0, 0); // TODO GGX reinterpret_cast<char *>(______src_guido2_svg));
+    VGSystem * gSystem= new SVGSystem(0, reinterpret_cast<char *>(______src_guido2_svg));
 	desc.graphicDevice = gSystem->CreateMemoryDevice(20,20);
 	desc.musicFont = "Guido2";
 	desc.textFont  = "Times";
@@ -318,8 +318,7 @@ GUIDOAPI(GRHandler) GuidoGetAR2GR( ARHandler ar, const GuidoLayoutSettings * set
 {
 	GRHandler gr;
 	GuidoErrCode err = GuidoAR2GR (ar, settings, &gr);
-    gr->error = err;
-	return err ? 0 : gr;
+    return err ? 0 : gr;
 }
 
 
@@ -507,14 +506,6 @@ GUIDOAPI(void) GuidoDeleteLayoutSettings(GuidoLayoutSettings * settings) {
     delete settings;
 }
 
-GUIDOAPI(GuidoErrCode) GuidoGetArError(CARHandler ar) {
-    return ar->error;
-}
-
-GUIDOAPI(GuidoErrCode) GuidoGetGrError(CGRHandler gr) {
-    return gr->error;
-}
-
 // --------------------------------------------------------------------------
 //		- Browsing music pages -
 // --------------------------------------------------------------------------
@@ -572,7 +563,6 @@ GUIDOAPI(GuidoDate *) GuidoGetDuration( GRHandler inHandleGR)
 {
   GuidoDate *date = new GuidoDate();
   GuidoErrCode err = GuidoDuration( inHandleGR, date );
-  inHandleGR->error = err;
   if (err != guidoNoErr) {
     delete date;
     return 0;
@@ -747,8 +737,7 @@ GUIDOAPI(char *) GuidoGetInternalDeviceExport( const GRHandler handle, int page,
     sstr.clear(); // Reset flags
 	GuidoErrCode err;
 	if (dev == guido_svg_with_font_spec) {
-      err = GuidoSVGExportWithFontSpec (handle, page, sstr, 0, 0);
-                                        // TODO GGX reinterpret_cast<char *>(______src_guido2_svg));
+      err = GuidoSVGExportWithFontSpec (handle, page, sstr, 0, reinterpret_cast<char *>(______src_guido2_svg));
 	} else if (dev == guido_abstract) {
 	  err = GuidoAbstractExport(handle, page, sstr);
 	} else if (dev == guido_binary) {

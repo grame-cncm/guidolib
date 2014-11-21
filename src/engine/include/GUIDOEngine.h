@@ -437,20 +437,6 @@ representations.
       \param settings the GuidoLayoutSettings to delete.
     */
     GUIDOAPI(void) GuidoDeleteLayoutSettings(GuidoLayoutSettings * settings);
-
-    /*!
-      Get an error code in a abstract representation.
-
-      \return An error code.
-     */
-    GUIDOAPI(GuidoErrCode) GuidoGetArError(CARHandler ar);
-
-    /*!
-      Get an error code in a graphic representation.
-
-      \return An error code.
-     */
-    GUIDOAPI(GuidoErrCode) GuidoGetGrError(CGRHandler gr);
 /*! @} */
 
 
