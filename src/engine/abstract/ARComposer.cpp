@@ -39,7 +39,7 @@ ARComposer::~ARComposer()
 
 
 
-void ARComposer::print() const
+void ARComposer::print(int &indent) const
 {
 }
 

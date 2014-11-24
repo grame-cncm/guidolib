@@ -52,7 +52,7 @@ void ARRest::browse(TimeUnwrap& mapper) const
 	mapper.AtPos (this, TimeUnwrap::kRest);
 }
 
-void ARRest::print() const
+void ARRest::print(int &indent) const
 {
 }
 

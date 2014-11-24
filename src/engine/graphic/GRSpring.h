@@ -50,8 +50,8 @@ class GRSpring
 	friend class GRSystem;
 public:
 
-			GRSpring( const TYPE_TIMEPOSITION  & vtp,
-						const TYPE_DURATION & vdur );
+			GRSpring(const TYPE_TIMEPOSITION  & vtp,
+						const TYPE_DURATION & vdur);
 			
 			GRSpring( GRNotationElement *, GRVoice * );
 
@@ -134,6 +134,8 @@ public:
 	int isfrozen;
 	float posx;	// (JB) was int
 
+    float setProportionalForce();
+
 protected:
 	float calcconst(GRNotationElement * grn);
 	TYPE_TIMEPOSITION tp;
@@ -148,9 +150,9 @@ protected:
 	GROList			  grolst;  //
 	GRVList		      grvlst;
 
+	GRSpringCollider *sprcol;
 
-	GRSpringCollider * sprcol;
-
+    bool              isProportionalElement;
 };
 
 int sprcomp(const GRSpring &gr1,const GRSpring &gr2);

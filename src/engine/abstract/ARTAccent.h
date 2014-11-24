@@ -25,7 +25,7 @@ class ARTAccent : public ARTArticulation
   public:
 		virtual ~ARTAccent();
 
-		virtual void print() const;
+		virtual void print(int &indent) const;
 
 
 };

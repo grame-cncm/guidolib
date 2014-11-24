@@ -37,7 +37,7 @@ class ARTHead : public ARMTParameter, public ARPositionTag
 
 		virtual bool IsStateTag() const { return true; }
 
-		virtual void print() const { }
+		virtual void print(int &indent) const { }
 		virtual std::ostream & operator << (std::ostream & os) const;
 		virtual void setTagParameterList(TagParameterList& tpl);
 

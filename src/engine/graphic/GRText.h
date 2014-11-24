@@ -53,7 +53,7 @@ class GRText : public GRPTagARNotationElement
 		
 		virtual void 	OnDraw( VGDevice & hdc ) const;
 		
-		virtual void 	print() const;
+		virtual void 	print(int &indent) const;
 		
 		const ARText * 	getARText() const;
 		

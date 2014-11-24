@@ -21,7 +21,7 @@ ARTDummy::~ARTDummy()
 
 
 
-void ARTDummy::print() const
+void ARTDummy::print(int &indent) const
 {
 }
 

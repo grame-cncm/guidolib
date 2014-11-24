@@ -50,8 +50,9 @@ ARClef::ARClef(const ARClef & clef)
 
 ARClef::~ARClef()		{}
 
-void ARClef::print() const
+void ARClef::print(int &indent) const
 {
+    std::cout << "ARClef: name: \"" << getName() << "\"" << endl;
 }
 
 void ARClef::PrintName(std::ostream &os) const

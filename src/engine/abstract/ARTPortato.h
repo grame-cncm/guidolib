@@ -26,7 +26,7 @@ class ARTPortato : public ARTArticulation
       			ARTPortato() { }
       virtual ~ARTPortato();
 
-      virtual void print() const;
+      virtual void print(int &indent) const;
 
 };
 

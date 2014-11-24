@@ -31,7 +31,7 @@ class GRSpace : public GRARNotationElement
 
 		virtual 		~GRSpace();
 		virtual void 	OnDraw( VGDevice & hdc ) const;
-		virtual void 	print() const;
+		virtual void 	print(int &indent) const;
 
 		const ARSpace * getARSpace() const;
 		virtual int 	getStandardSpacing() const;

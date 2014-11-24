@@ -347,7 +347,9 @@ GRSystem::GRSystem(	GRStaffManager * staffmgr, GRPage * inPage,
     assert (endslice);
 
 	// now we add the endglue to the system .....
-	TYPE_TIMEPOSITION mytp (endslice->mPossibleBreakState->tp);
+	TYPE_TIMEPOSITION mytp;
+    if (endslice->mPossibleBreakState)
+        mytp = TYPE_TIMEPOSITION(endslice->mPossibleBreakState->tp);
 	spr = new GRSpring(mytp, DURATION_0);
 	spr->setID(++endspring);
 	spr->isfrozen = 1;
@@ -780,7 +782,7 @@ void GRSystem::addStaff( GRStaff * newStaff, int num )
 }
 
 // ----------------------------------------------------------------------------
-void GRSystem::print() const
+void GRSystem::print(int &indent) const
 {
 }
 

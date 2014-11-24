@@ -821,7 +821,7 @@ void GRArticulation::OnDraw(VGDevice & hdc) const
 	GRTagARNotationElement::OnDraw(hdc);
 }
 
-void GRArticulation::print() const
+void GRArticulation::print(int &indent) const
 {
 }
 

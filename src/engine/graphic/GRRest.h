@@ -45,7 +45,7 @@ class GRRest : public GREvent
 
 		ARRest * getARRest() const;
 
-		virtual void print() const;
+		virtual void print(int &indent) const;
 
 	private:
 

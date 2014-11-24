@@ -122,11 +122,10 @@ void GRMusic::OnDraw( VGDevice & hdc) const
 */
 void GRMusic::OnDraw( VGDevice & hdc, const GuidoOnDrawDesc & inDrawInfos ) 
 {
-	const GRPage * drawpage = getPage( inDrawInfos.page );
-	if( drawpage ) 
-	{
-		drawpage->OnDraw( hdc, inDrawInfos );
-	}
+	const GRPage * drawpage = getPage(inDrawInfos.page);
+
+	if (drawpage)
+		drawpage->OnDraw(hdc, inDrawInfos);
 }
 	
 void GRMusic::GetMap( int inPage, float w, float h, GuidoeElementSelector sel, MapCollector& f ) const 
@@ -171,12 +170,12 @@ void GRMusic::addPage(GRPage * newPage)
 
 /** \brief Prints all pages of music.
 */
-void GRMusic::print() const
+void GRMusic::print(int &indent) const
 {
 	for( PageList::const_iterator ptr = mPages.begin(); ptr != mPages.end(); ++ptr )
 	{
 		const GRPage * page = *ptr;
-		page->print();
+		page->print(indent);
 	}
 }
 

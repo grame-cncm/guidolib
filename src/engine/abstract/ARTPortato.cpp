@@ -22,7 +22,7 @@ ARTPortato::~ARTPortato()
 
 
 
-void ARTPortato::print() const
+void ARTPortato::print(int &indent) const
 {
 }
 

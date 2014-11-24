@@ -23,6 +23,7 @@
 #include "PianoRoll.h"
 #include "PianoRollTrajectory.h"
 #include "HtmlColors.h"
+
 #ifdef MIDIEXPORT
 #include "midifile.h"
 #endif

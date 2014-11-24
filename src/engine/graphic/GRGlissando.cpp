@@ -91,7 +91,7 @@ GRSystemStartEndStruct * GRGlissando::initGRGlissando( GRStaff * grstaff )
 	return sse;
 }
 
-void GRGlissando::print() const
+void GRGlissando::print(int &indent) const
 {
 }
 

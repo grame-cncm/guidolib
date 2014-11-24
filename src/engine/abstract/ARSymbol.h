@@ -37,7 +37,7 @@ public:
 
     virtual const char* getSymbolPath() const				{ return aFilePath ? aFilePath->getValue() : 0; }
 
-    virtual void print() const;
+    virtual void print(int &indent) const;
     virtual void PrintName(std::ostream & os) const;
     virtual void PrintParameters(std::ostream & os) const;
     float		 getSize() const                            { return aSize; }

@@ -73,14 +73,15 @@ const float DF_MR = 2.0f;
 const float DF_MB = 2.0f;
 
 // - The layout settings default values
-const float	kSettingDefaultSystemDistance = float(1.5 * LSPACE);
-const int	kSettingDefaultSystemDistrib = 1; // 1=auto, 2=always, 3=never
-const float kSettingDefaultDistribLimit = float(0.25);	// % of the height of the page
-const float kSettingDefaultForce = float(750.0);
-const float kSettingDefaultSpring = float(1.1);
-const bool	kSettingDefaultNeighborhood = 0;
-const bool	kSettingDefaultOptimalPageFill = 1;
-const bool  kSettingDefaultResizePage = 1;
+const float	kSettingDefaultSystemDistance        = float(1.5 * LSPACE);
+const int	kSettingDefaultSystemDistrib         = 1; // 1=auto, 2=always, 3=never
+const float kSettingDefaultDistribLimit          = float(0.25);	// % of the height of the page
+const float kSettingDefaultForce                 = float(750.0);
+const float kSettingDefaultSpring                = float(1.1);
+const bool	kSettingDefaultNeighborhood          = 0;
+const bool	kSettingDefaultOptimalPageFill       = 1;
+const bool  kSettingDefaultResizePage2Music      = 1;
+const float kSettingDefaultProportionalRendering = 0;
 
 // - Notes *must* stay in this order. Several algorithms rely on it
 enum

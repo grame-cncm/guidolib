@@ -95,7 +95,7 @@ void ARSymbol::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARSymbol::print() const
+void ARSymbol::print(int &indent) const
 {
 }
 

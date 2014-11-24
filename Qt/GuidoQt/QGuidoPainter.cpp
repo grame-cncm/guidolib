@@ -114,8 +114,6 @@ QGuidoPainter::QGuidoPainter()
 	mFileName = "";
     fParser = GuidoOpenParser();
 
-	mResizePageToMusic = true;
-
 	GuidoGetDefaultLayoutSettings ( &mLayoutSettings );
 //	mLayoutSettings.optimalPageFill = 0;
 	GuidoGetDefaultPageFormat ( &mPageFormat );	
@@ -189,7 +187,8 @@ void QGuidoPainter::setARHandler( ARHandler ar )
 	GuidoSetDefaultPageFormat( &mPageFormat );
 	convertAR2GR (mARHandler, &mLayoutSettings , &mDesc.handle);
 	GuidoSetDefaultPageFormat( &currentFormat );
-	if ( mResizePageToMusic )
+    
+    if (mLayoutSettings.resizePage2Music)
 		mLastErr = GuidoResizePageToMusic( mDesc.handle );
 }
 
@@ -220,7 +219,8 @@ bool QGuidoPainter::setGMNDataStream (GuidoStream * guidoStream)
 		mDesc.handle = grh;
 		GuidoFreeAR( mARHandler );
 		mARHandler = arh;
-		if ( mResizePageToMusic )
+
+        if ( mLayoutSettings.resizePage2Music )
 			mLastErr = GuidoResizePageToMusic( mDesc.handle );
 	}
 	return (mLastErr == guidoNoErr);
@@ -256,7 +256,7 @@ bool QGuidoPainter::setGMNData( const QString& gmncode, const char* dataPath)
 		mDesc.handle = grh;
 		GuidoFreeAR( mARHandler );
 		mARHandler = arh;
-		if ( mResizePageToMusic )
+        if ( mLayoutSettings.resizePage2Music )
 			mLastErr = GuidoResizePageToMusic( mDesc.handle );
 	}
 	return (mLastErr == guidoNoErr);
@@ -459,14 +459,12 @@ const QString& QGuidoPainter::fileName() const
 void QGuidoPainter::setGuidoLayoutSettings(const GuidoLayoutSettings& layoutSettings)
 {
 	mLayoutSettings = layoutSettings;
-    mResizePageToMusic = layoutSettings.resizePage2Music;
 
-	if ( hasValidGR() )
-	{
-		GuidoUpdateGR( mDesc.handle , &mLayoutSettings );
+	if (hasValidGR()) {
+		GuidoUpdateGR(mDesc.handle , &mLayoutSettings);
 
-		if ( mResizePageToMusic )
-			GuidoResizePageToMusic( mDesc.handle );
+        if (mLayoutSettings.resizePage2Music)
+			GuidoResizePageToMusic(mDesc.handle);
 	}
 }
 
@@ -495,9 +493,10 @@ float QGuidoPainter::getSystemsDistance() const
 //-------------------------------------------------------------------------
 void QGuidoPainter::setResizePageToMusic(bool isOn)
 {
-	if ( mResizePageToMusic != isOn )
-	{
-		mResizePageToMusic = isOn;
+    int booleanInt = (isOn ? 1 : 0);
+
+	if (mLayoutSettings.resizePage2Music != booleanInt) {
+		mLayoutSettings.resizePage2Music = booleanInt;
 		setGMNCode(gmnCode());
 	}
 }

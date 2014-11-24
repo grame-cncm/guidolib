@@ -31,7 +31,7 @@ class ARMerge : // public ARMusicalObject,
 
 		virtual void	setError(int i = 1);
 
-		virtual void	print() const	{ }
+		virtual void	print(int &indent) const	{ }
 		virtual std::ostream & operator<<(std::ostream & os) const;
 };
 

@@ -91,7 +91,7 @@ ARBowing::~ARBowing()
 	delete mCurve;
 }
 
-void ARBowing::print() const
+void ARBowing::print(int &indent) const
 {
 }
 

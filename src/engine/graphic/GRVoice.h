@@ -89,7 +89,7 @@ class GRVoice : public GRARCompositeNotationElement
 
 	virtual void GGSOutput() const {}
 	virtual void OnDraw( VGDevice & ) const {}
-    virtual void print() const {}
+    virtual void print(int &indent) const {}
 
 	ARMusicalVoice * getARMusicalVoice();
 

@@ -49,7 +49,7 @@ class ARMusicalTag : public ARMusicalObject
 		virtual void	CreateListOfTPLs( ListOfTPLs & ltpl, ListOfStrings & lstrs );
 		virtual bool	MatchEndTag( const char * endstr );
 				void	setAllowRange( int pallow );
-		virtual void    print() const = 0;
+		virtual void    print(int &indent) const = 0;
 		virtual void	PrintParameters( std::ostream & os ) const;
 		virtual void	PrintName( std::ostream & os ) const;
 				void	setIsAuto( bool isauto )	{ isAuto = isauto; }
@@ -104,6 +104,9 @@ class ARMusicalTag : public ARMusicalObject
     ARMusicalObject *isARMusicalTag() { return this; }
     /*****************************************/
 
+    virtual void setIsInHeader(bool state) { mIsInHeader = state; }
+    virtual bool isInHeader() const        { return mIsInHeader; }
+
   protected: //  id(-1), isAuto(0), rangesetting(NO), error(0), hasRange(0)
 
 	  int id;
@@ -126,6 +129,8 @@ class ARMusicalTag : public ARMusicalObject
 	  TagParameterFloat * mDx;
 	  TagParameterFloat * mDy;
 	  TagParameterFloat * size;
+
+      bool mIsInHeader; // For proportional rendering
 };
 
 #endif

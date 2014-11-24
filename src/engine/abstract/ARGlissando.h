@@ -30,7 +30,7 @@ public:
 	
 	virtual void setTagParameterList(TagParameterList & tlist);
 	virtual TagParameterList * getTagParameterList() const;
-	virtual void 	print() const;
+	virtual void 	print(int &indent) const;
 	virtual void	browse(TimeUnwrap& mapper) const;
 	virtual bool 	MatchEndTag(const char * s);
 	bool getParSet() const	{ return mParSet; }

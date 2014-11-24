@@ -40,7 +40,7 @@ class AROctava : public ARMTParameter, public ARPositionTag
 		{ return noct; }
 
 		virtual int getOctava() const;
-		virtual void print() const { };
+		virtual void print(int &indent) const { };
 		virtual void PrintName(std::ostream & os) const;
 		virtual void PrintParameters(std::ostream & os) const;
 		virtual void setTagParameterList(TagParameterList& tpl);

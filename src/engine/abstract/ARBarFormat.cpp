@@ -87,7 +87,7 @@ void ARBarFormat::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARBarFormat::print() const 
+void ARBarFormat::print(int &indent) const 
 { 
 	PrintName (std::cout); 
 	PrintParameters (std::cout);

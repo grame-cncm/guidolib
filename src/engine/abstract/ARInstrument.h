@@ -30,7 +30,7 @@ class ARInstrument : public ARMTParameter
 
 		virtual void setTagParameterList(TagParameterList & theTagParameterList);
 
-		virtual void print() const;
+		virtual void print(int &indent) const;
 
 		const char* getName() const;
 		const char* getSecondName() const;

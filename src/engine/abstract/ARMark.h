@@ -25,7 +25,7 @@ class ARMark : public ARText// public ARMusicalObject,
 		ARMark();
 		virtual ~ARMark();
 
-		virtual void print() const { };
+		virtual void print(int &indent) const { };
 		virtual void PrintName( std::ostream & os) const;
 		virtual void PrintParameters( std::ostream & os) const;
 

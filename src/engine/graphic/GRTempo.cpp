@@ -256,7 +256,7 @@ void GRTempo::DrawText( VGDevice & hdc, const char * cp, float xOffset, float yO
 
 
 // ----------------------------------------------------------------------------
-void GRTempo::print() const		{}
+void GRTempo::print(int &indent) const		{}
 
 // ----------------------------------------------------------------------------
 unsigned int GRTempo::getTextAlign() const

@@ -64,7 +64,7 @@ ARStaff::~ARStaff()
 	delete ids;
 }
 
-void ARStaff::print() const
+void ARStaff::print(int &indent) const
 {
 }
 

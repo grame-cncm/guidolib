@@ -66,7 +66,7 @@ void ARAccent::browse(TimeUnwrap& mapper) const
 	mapper.AtPos (this, TimeUnwrap::kAccent);
 }
 
-void ARAccent::print() const
+void ARAccent::print(int &indent) const
 {
 }
 

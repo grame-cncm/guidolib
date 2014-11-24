@@ -68,14 +68,14 @@ TYPE_TIMEPOSITION ARMusicalObject::getRelativeEndTimePosition() const
 	// da duration==0 !
 }
 
-void ARMusicalObject::print() const
+void ARMusicalObject::print(int &indent) const
 {
 	TYPE_DURATION dur = getDuration();
 	TYPE_TIMEPOSITION tpos = getRelativeTimePosition();
 	std::cout << "ARMusicalObject: duration: " 
 		<<  dur.getNumerator() << '/' << dur.getDenominator()
 		<< " time pos: " 
-		<<  tpos.getNumerator() << '/' << tpos.getDenominator() << '\n';
+        <<  tpos.getNumerator() << '/' << tpos.getDenominator() << std::endl;
 }
 
 // provides a GUIDO/SALIERI-Conform output of the current object

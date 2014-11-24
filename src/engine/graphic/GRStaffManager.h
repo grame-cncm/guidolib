@@ -34,6 +34,7 @@ class GRSpaceForceFunction;
 #endif
 // #include "GRSpringForceIndex.h"
 
+class ARMusicalTag;
 class ARMusic;
 class ARMusicalVoice;
 class ARPageFormat;
@@ -181,10 +182,11 @@ class GRStaffManager
 
 
 
-	static bool sOptPageFill;
-	static bool sNeedSpecialSpacing;
+	static bool  sOptPageFill;
+	static float sPropRender;
+	static bool  sNeedSpecialSpacing;
 	static float sDefaultSystemDistance;
-	static int sSystemDistribution;	// kAuto, kAlways, kNever
+	static int   sSystemDistribution;	// kAuto, kAlways, kNever
 	static float sSystemDistribLimit; 
 
 		// this routine is used to get the current beginning_sff

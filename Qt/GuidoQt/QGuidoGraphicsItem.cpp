@@ -159,7 +159,7 @@ float QGuidoGraphicsItem::getSystemsDistance() const
 //-------------------------------------------------------------------------
 void QGuidoGraphicsItem::setResizePageToMusic(bool isOn)
 {
-	if ( isOn != isResizePageToMusic() )
+	if ( isOn != isResizePageToMusicOn() )
 	{
 		mGuidoPainter->setResizePageToMusic(isOn);
 		updateGuidoPagesSizes();
@@ -168,9 +168,9 @@ void QGuidoGraphicsItem::setResizePageToMusic(bool isOn)
 }
 
 //-------------------------------------------------------------------------
-bool QGuidoGraphicsItem::isResizePageToMusic() const
+bool QGuidoGraphicsItem::isResizePageToMusicOn() const
 { 
-	return mGuidoPainter->isResizePageToMusic(); 
+	return mGuidoPainter->isResizePageToMusicOn(); 
 }
 
 //-------------------------------------------------------------------------

@@ -50,7 +50,7 @@ GRBembel::~GRBembel()
 {
 }
 
-void GRBembel::print() const
+void GRBembel::print(int &indent) const
 {
 }
 

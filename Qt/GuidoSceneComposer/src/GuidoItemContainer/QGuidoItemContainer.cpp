@@ -35,14 +35,9 @@
 #include <assert.h>
 #include <QtDebug>
 
-#define PROPORTIONAL_SPRING		1.0f
-#define PROPORTIONAL_FORCE		1500.0f
-#define NO_PROPORTIONAL_SPRING	1.1f
-#define NO_PROPORTIONAL_FORCE	750.0f
-
-#define DEFAULT_PROPORTIONAL		false
-#define DEFAULT_OPTIMAL_PAGE_FILL	true
-#define DEFAULT_RESIZE_PAGE			true
+#define DEFAULT_OPTIMAL_PAGE_FILL	   true
+#define DEFAULT_PROPORTIONAL_RENDERING false
+#define DEFAULT_RESIZE_PAGE			   true
 
 #define SELECTION_FLAG_SELECTED		2
 #define SELECTION_FLAG_HIGHLIGHTED	1
@@ -169,9 +164,9 @@ QDomElement QGuidoItemContainer::saveToDomElement( QDomDocument * doc)
 {
 	QDomElement element = QLanguageItem::saveToDomElement(doc);
 	
-	element.setAttribute( DOM_GUIDO_ITEM_PROPORTIONAL_LAYOUT , mIsProportionalOn );
 	element.setAttribute( DOM_GUIDO_ITEM_OPTIMAL_PAGE_FILL , mIsOptimalPageFillOn );
-	element.setAttribute( DOM_GUIDO_ITEM_RESIZE_PAGE_ON , mGuidoItem->isResizePageToMusic() );
+    element.setAttribute( DOM_GUIDO_ITEM_PROPORTIONAL_RENDERING , mIsProportionalRenderingOn );
+	element.setAttribute( DOM_GUIDO_ITEM_RESIZE_PAGE_ON , mGuidoItem->isResizePageToMusicOn() );
 	element.setAttribute( DOM_GUIDO_ITEM_SCALE , mGuidoItem->transform().m11() );
 
 	element.setAttribute( DOM_GUIDO_ITEM_CURRENT_PAGE, mGuidoItem->firstVisiblePage() );
@@ -185,12 +180,6 @@ QDomElement QGuidoItemContainer::saveToDomElement( QDomDocument * doc)
 bool QGuidoItemContainer::recognizes( const QMimeData * mimeData )
 {
 	return mimeData->hasFormat( GMN_CONTAINER_MIME_FLAG );
-}
-
-//-------------------------------------------------------------------------
-bool QGuidoItemContainer::recognizes( const QDomElement * e )
-{
-	return ( QVariant( e->attribute( DOM_GUIDO_ITEM_PROPORTIONAL_LAYOUT, "-1" ) ).toInt() != -1 );
 }
 
 //-------------------------------------------------------------------------
@@ -242,8 +231,6 @@ bool QGuidoItemContainer::isEqualTo( QLanguageItem * item ) const
 		return false;
 
 //	if ( mIsOptimalPageFillOn != otherContainer->mIsOptimalPageFillOn )
-//		return false;
-//	if ( mIsProportionalOn != otherContainer->mIsProportionalOn )
 //		return false;
 		
 //	if ( mGuidoItem->firstVisiblePage()!= other->mGuidoItem->firstVisiblePage())
@@ -359,15 +346,15 @@ void QGuidoItemContainer::switchOptimalPageFill()
 }
 
 //-------------------------------------------------------------------------
-void QGuidoItemContainer::switchProportional()
+void QGuidoItemContainer::switchProportionalRendering()
 {
-	setProportional( !mIsProportionalOn );
+    setProportionalRendering( !mIsProportionalRenderingOn );
 }
 
 //-------------------------------------------------------------------------
 void QGuidoItemContainer::switchResizePage()
 {
-	setResizePageToMusic( !mGuidoItem->isResizePageToMusic() );
+	setResizePageToMusic( !mGuidoItem->isResizePageToMusicOn() );
 }
 
 //-------------------------------------------------------------------------
@@ -402,8 +389,8 @@ void QGuidoItemContainer::init()
 
 	connect( mGuidoItem , SIGNAL(geometryHasChanged()), this, SLOT(guidoGeometryChanged()) );
 
-	mIsProportionalOn		= DEFAULT_PROPORTIONAL;
-	mIsOptimalPageFillOn	= DEFAULT_OPTIMAL_PAGE_FILL;
+	mIsOptimalPageFillOn	   = DEFAULT_OPTIMAL_PAGE_FILL;
+    mIsProportionalRenderingOn = DEFAULT_PROPORTIONAL_RENDERING;
 	mGuidoItem->setResizePageToMusic( DEFAULT_RESIZE_PAGE );
 
 	setMinMaxScale(0,0);
@@ -486,16 +473,16 @@ void QGuidoItemContainer::init(const QGuidoItemContainer * other)
 void QGuidoItemContainer::loadFromMimeData( const QMimeData * mimeData )
 {
 	load( mimeData );
-
-	if ( mimeData->hasFormat(GMN_CONTAINER_MIME_PROPORTIONAL_ON) )
-		mIsProportionalOn	= mimeData->data( GMN_CONTAINER_MIME_PROPORTIONAL_ON ).toInt();
-	else
-		mIsProportionalOn = DEFAULT_PROPORTIONAL;
 		
 	if ( mimeData->hasFormat(GMN_CONTAINER_MIME_OPTIMAL_PAGE_FILL_ON) )
-		mIsOptimalPageFillOn	= mimeData->data( GMN_CONTAINER_MIME_OPTIMAL_PAGE_FILL_ON ).toInt();
+		mIsOptimalPageFillOn = mimeData->data( GMN_CONTAINER_MIME_OPTIMAL_PAGE_FILL_ON ).toInt();
 	else
 		mIsOptimalPageFillOn = DEFAULT_OPTIMAL_PAGE_FILL;
+		
+    if ( mimeData->hasFormat(GMN_CONTAINER_MIME_PROPORTIONAL_RENDERING_ON) )
+        mIsProportionalRenderingOn = mimeData->data( GMN_CONTAINER_MIME_PROPORTIONAL_RENDERING_ON ).toInt();
+	else
+        mIsProportionalRenderingOn = DEFAULT_PROPORTIONAL_RENDERING;
 
 	if ( mimeData->hasFormat(GMN_CONTAINER_MIME_RESIZE_PAGE_ON) )
 		setResizePageToMusic( mimeData->data( GMN_CONTAINER_MIME_RESIZE_PAGE_ON ).toInt() );
@@ -519,10 +506,10 @@ void QGuidoItemContainer::loadFromMimeData( const QMimeData * mimeData )
 //-------------------------------------------------------------------------
 void QGuidoItemContainer::loadFromOtherContainer( const QGuidoItemContainer * otherContainer )
 {
-	setResizePageToMusic( otherContainer->mGuidoItem->isResizePageToMusic() );
+	setResizePageToMusic( otherContainer->mGuidoItem->isResizePageToMusicOn() );
 	load( otherContainer );
-	mIsOptimalPageFillOn	= otherContainer->mIsOptimalPageFillOn;
-	mIsProportionalOn		= otherContainer->mIsProportionalOn;
+	mIsOptimalPageFillOn	   = otherContainer->mIsOptimalPageFillOn;
+    mIsProportionalRenderingOn = otherContainer->mIsProportionalRenderingOn;
 
 	float xs = otherContainer->mGuidoItem->transform().m11();
 	float ys = otherContainer->mGuidoItem->transform().m22();
@@ -543,8 +530,8 @@ void QGuidoItemContainer::loadFromDomElement( const QDomElement * e)
 	if ( e->tagName() != DOM_LANGUAGE_ITEM )
 		return;
  
-	mIsProportionalOn		= QVariant( e->attribute( DOM_GUIDO_ITEM_PROPORTIONAL_LAYOUT, "#DEFAULT_PROPORTIONAL" ) ).toBool();
-	mIsOptimalPageFillOn	= QVariant( e->attribute( DOM_GUIDO_ITEM_OPTIMAL_PAGE_FILL, "#DEFAULT_OPTIMAL_PAGE_FILL" ) ).toBool();
+	mIsOptimalPageFillOn	   = QVariant( e->attribute( DOM_GUIDO_ITEM_OPTIMAL_PAGE_FILL, "#DEFAULT_OPTIMAL_PAGE_FILL" ) ).toBool();
+    mIsProportionalRenderingOn = QVariant( e->attribute( DOM_GUIDO_ITEM_PROPORTIONAL_RENDERING, "#DEFAULT_PROPORTIONAL_RENDERING" ) ).toBool();
 	setResizePageToMusic( QVariant( e->attribute( DOM_GUIDO_ITEM_RESIZE_PAGE_ON, "#DEFAULT_RESIZE_PAGE" ) ).toBool() );
 
 	load( e );
@@ -573,12 +560,6 @@ QMenu *  QGuidoItemContainer::buildContextMenu()
 
 	QMenu * layoutMenu = menu->addMenu( CONTEXT_MENU_LAYOUT );
 	layoutMenu->setObjectName( CONTEXT_MENU_LAYOUT );
-	
-	//Layout actions :Proportional layout
-	QString layoutProportionalMsg = QString("Switch ") + ( mIsProportionalOn ? "OFF" : "ON" ) + " Proportionnal layout";
-	QAction * layoutProportionalSwitch = new QAction( layoutProportionalMsg , layoutMenu );
-	connect( layoutProportionalSwitch , SIGNAL(triggered()) , this , SLOT(switchProportional()) );
-	layoutMenu->addAction(layoutProportionalSwitch);
 
 	//Layout actions : Optimal page fill
 	QString layoutOptimalPageFillMsg = QString("Switch ") + ( mIsOptimalPageFillOn ? "OFF" : "ON" ) + " Optimal page fill";		
@@ -586,8 +567,14 @@ QMenu *  QGuidoItemContainer::buildContextMenu()
 	connect( layoutOptimalPageFillSwitch , SIGNAL(triggered()) , this , SLOT(switchOptimalPageFill()) );
 	layoutMenu->addAction(layoutOptimalPageFillSwitch);	
 
+	//Layout actions : Proportional Rendering
+    QString layoutProportionalRenderingMsg = QString("Switch ") + ( mIsProportionalRenderingOn ? "OFF" : "ON" ) + " Proportional rendering";		
+	QAction * layoutProportionalRenderingSwitch = new QAction( layoutProportionalRenderingMsg , layoutMenu );
+	connect( layoutProportionalRenderingSwitch , SIGNAL(triggered()) , this , SLOT(switchProportionalRendering()) );
+	layoutMenu->addAction(layoutProportionalRenderingSwitch);	
+
 	//Layout actions : Auto-resizePageToMusic
-	QString layoutResizePageMsg = QString("Switch ") + ( mGuidoItem->isResizePageToMusic() ? "OFF" : "ON" ) + " Auto Resize-Page";		
+	QString layoutResizePageMsg = QString("Switch ") + ( mGuidoItem->isResizePageToMusicOn() ? "OFF" : "ON" ) + " Auto Resize-Page";		
 	QAction * layoutResizePageSwitch = new QAction( layoutResizePageMsg , layoutMenu );
 	connect( layoutResizePageSwitch , SIGNAL(triggered()) , this , SLOT(switchResizePage()) );
 	layoutMenu->addAction(layoutResizePageSwitch);	
@@ -680,8 +667,7 @@ void QGuidoItemContainer::updateLayoutSettings()
 	GuidoLayoutSettings settings = mGuidoItem->guidoLayoutSettings();
 		
 	settings.optimalPageFill = ( mIsOptimalPageFillOn ) ? 1 : 0;
-	settings.force  = ( mIsProportionalOn ) ? PROPORTIONAL_FORCE : NO_PROPORTIONAL_FORCE;
-	settings.spring = ( mIsProportionalOn ) ? PROPORTIONAL_SPRING : NO_PROPORTIONAL_SPRING;
+    settings.proportionalRenderingForceMultiplicator = ( mIsProportionalRenderingOn ) ? settings.force : 0;
 		
 	mGuidoItem->setGuidoLayoutSettings( settings );
 }
@@ -700,9 +686,9 @@ void QGuidoItemContainer::setResizePageToMusic(bool isResizePageOn)
 }
 
 //-------------------------------------------------------------------------
-void QGuidoItemContainer::setProportional(bool isProportionalOn)
+void QGuidoItemContainer::setProportionalRendering(bool isProportionalRenderingOn)
 {
-	mIsProportionalOn = isProportionalOn;
+	mIsProportionalRenderingOn = isProportionalRenderingOn;
 	updateLayoutSettings();
 }
 
@@ -711,9 +697,9 @@ QMimeData * QGuidoItemContainer::buildMimeData()
 {
 	QMimeData * data = QLanguageItem::buildMimeData();
 	data->setData( GMN_CONTAINER_MIME_FLAG , 0 );
-	data->setData( GMN_CONTAINER_MIME_PROPORTIONAL_ON , QByteArray::number(mIsProportionalOn) );
 	data->setData( GMN_CONTAINER_MIME_OPTIMAL_PAGE_FILL_ON , QByteArray::number(mIsOptimalPageFillOn) );
-	data->setData( GMN_CONTAINER_MIME_RESIZE_PAGE_ON , QByteArray::number(mGuidoItem->isResizePageToMusic()) );
+    data->setData( GMN_CONTAINER_MIME_PROPORTIONAL_RENDERING_ON , QByteArray::number(mIsProportionalRenderingOn) );
+	data->setData( GMN_CONTAINER_MIME_RESIZE_PAGE_ON , QByteArray::number(mGuidoItem->isResizePageToMusicOn()) );
 	data->setData( GMN_CONTAINER_MIME_SCALE , QByteArray::number(mGuidoItem->transform().m11() ) );
 	
 	data->setData( GMN_CONTAINER_MIME_PAGE_INDEX , QByteArray::number( mGuidoItem->firstVisiblePage()) );

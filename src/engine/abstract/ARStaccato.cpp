@@ -63,7 +63,7 @@ void ARStaccato::browse(TimeUnwrap& mapper) const
 	mapper.AtPos (this, TimeUnwrap::kStaccato);
 }
 
-void ARStaccato::print() const
+void ARStaccato::print(int &indent) const
 {
 }
 

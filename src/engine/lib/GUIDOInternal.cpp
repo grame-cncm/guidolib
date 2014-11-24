@@ -72,7 +72,10 @@ void guido_applySettings( const GuidoLayoutSettings * settings )
 	GRStaffManager::sNeedSpecialSpacing = (settings->neighborhoodSpacing == 1 ? true : false);
 
 	// - Optimal page fill on/off
-	GRStaffManager::sOptPageFill = (settings->optimalPageFill == 1 ? true : false);	
+	GRStaffManager::sOptPageFill = (settings->optimalPageFill == 1 ? true : false);
+
+	// - Optimal page fill on/off
+	GRStaffManager::sPropRender = (settings->proportionalRenderingForceMultiplicator < 0.0001 ? 0 : settings->proportionalRenderingForceMultiplicator);
 }
 
 // --------------------------------------------------------------------------

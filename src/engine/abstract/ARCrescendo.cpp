@@ -105,7 +105,7 @@ void ARCrescendo::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARCrescendo::print() const 
+void ARCrescendo::print(int &indent) const 
 {
 }
 

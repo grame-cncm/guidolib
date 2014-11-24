@@ -124,7 +124,7 @@ void GRPageText::OnDraw(VGDevice & hdc) const
 	if (fPageText.size()) GRTagARNotationElement::OnDrawText(hdc, fPageText.c_str(), (int)fPageText.size());
 }
 
-void GRPageText::print() const
+void GRPageText::print(int &indent) const
 {
 }
 

@@ -42,7 +42,7 @@ ARMusicalObject * ARChordComma::Copy() const
 	return new ARChordComma(this);
 }
 
-void ARChordComma::print() const
+void ARChordComma::print(int &indent) const
 {
 	std::cout << "ARChordComma" << '\n';
 }

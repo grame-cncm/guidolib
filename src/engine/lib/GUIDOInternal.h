@@ -53,39 +53,24 @@ struct GuidoGlobalSettings
 	// if 0: no display of force. [default]
 	int gDisplayForce;
 
-	// if 1: staff creates rods  [default]
-	// if 2: GRVoice creates rods
-	int gStaffVoiceRods;
-
-	// if 1: elements are sorted in the staff  [default]
-	// if 0: elements are not sorted in the staff
-	int gSortElements;
-
 	// if 1: barlines are introduced automatically  [default]
 	// if 0: no automatic barlines.
 	int gAutoBarlines;
 
-	// if 1: notes are tied together  [default]
-	// if 0: a merge-tag is used instead
-	// this parameter is important
-	// for automatic barline-introcution
-	int gAutoTies;
-
 	// TODO: what are these for?
 	VGDevice * gDevice;
 	GuidoFeedback * gFeedback;
-	
 };
 
 // these are the default global settings
 extern GuidoGlobalSettings gGlobalSettings;
 extern int gBoundingBoxesMap;
-#define kPageBBColor		VGColor( 0, 0, 255 )
-#define kSystemBBColor		VGColor( 0, 0, 0 )
-#define kSystemSliceBBColor	VGColor( 0, 0, 200 )
-#define kStaffBBColor		VGColor( 255, 0, 0 )
-#define kMeasureBBColor		VGColor( 0, 255, 0 )
-#define kEventBBColor		VGColor( 255, 0, 0 )
+#define kPageBBColor		VGColor(   0,   0, 255 )
+#define kSystemBBColor		VGColor(   0,   0,   0 )
+#define kSystemSliceBBColor	VGColor(   0,   0, 200 )
+#define kStaffBBColor		VGColor( 255,   0,   0 )
+#define kMeasureBBColor		VGColor(   0, 255,   0 )
+#define kEventBBColor		VGColor( 255,   0,   0 )
 
 
 // - Internal function declarations

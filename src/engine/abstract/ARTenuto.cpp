@@ -63,7 +63,7 @@ void ARTenuto::browse(TimeUnwrap& mapper) const
 	mapper.AtPos (this, TimeUnwrap::kTenuto);
 }
 
-void ARTenuto::print() const
+void ARTenuto::print(int &indent) const
 {
 }
 

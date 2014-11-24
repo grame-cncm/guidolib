@@ -27,7 +27,7 @@ class ARPossibleBreak :  public ARMusicalTag // , public ARMusicalObject
 						ARPossibleBreak() { }
 
 		virtual 		~ARPossibleBreak() { }
-		virtual void 	print() const { }
+		virtual void 	print(int &indent) const { }
 		virtual std::ostream & operator<<(std::ostream & os) const;
 
 		  float value;

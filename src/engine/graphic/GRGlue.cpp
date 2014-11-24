@@ -15,6 +15,7 @@
 #include "GRGlue.h"
 #include "GRStaff.h"
 #include "GuidoDefs.h"
+#include "ARMusicalObject.h"
 
 GRGlue::GRGlue(GRStaff * grstf, int _isstart)	// (JB) Something obscur: sometimes, GRGlue is
 												// created with _isstart = -1, why is that ?
@@ -54,6 +55,8 @@ GRGlue::GRGlue(GRStaff * grstf, int _isstart)	// (JB) Something obscur: sometime
 	else
 		mBoundingBox.left = -LSPACE;
 		*/
+
+    mIsInHeader = true;
 }
 
 GRGlue::~GRGlue()

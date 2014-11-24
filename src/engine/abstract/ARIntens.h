@@ -38,7 +38,7 @@ class ARIntens :  public ARMTParameter
 		virtual const NVstring & getText() const { return mIntensText; }
 		virtual float getValue() const { return value; }
 
-		virtual void print() const;
+		virtual void print(int &indent) const;
 		// virtual ostream & operator<<(ostream &os) const;
 		virtual void PrintName(std::ostream &os) const;
 		virtual void PrintParameters(std::ostream &os) const;

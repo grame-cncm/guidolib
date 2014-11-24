@@ -35,7 +35,7 @@ class GRTrill : public GRPTagARNotationElement
 
 		virtual void OnDraw( VGDevice & hdc) const;
 		virtual void OnDraw( VGDevice & hdc, float pos, float noteY, int numVoice);
-		virtual void print() const {};
+		virtual void print(int &indent) const {};
 		virtual void tellPosition( GObject * caller, const NVPoint & np );
 
 		virtual unsigned int getTextAlign() const;

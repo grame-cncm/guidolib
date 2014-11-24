@@ -41,7 +41,7 @@ class NEPointerList : public NEList
 
 		virtual ~NEPointerList();
 
-		void print();
+		void print(int &indent);
 
 	  virtual void setHPosition( float nx );
 		int getMaxSpacing();

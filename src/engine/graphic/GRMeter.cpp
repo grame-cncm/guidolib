@@ -135,6 +135,8 @@ GRMeter::GRMeter( ARMeter * abstractRepresentationOfMeter, GRStaff * curstaff, b
 	}
 
 	// what about reference-position?
+
+    mIsInHeader = abstractRepresentationOfMeter->isInHeader();
 }
 
 GRMeter::~GRMeter()
@@ -326,7 +328,7 @@ void GRMeter::OnDraw(VGDevice & hdc) const
 	}
 }
 
-void GRMeter::print() const
+void GRMeter::print(int &indent) const
 {
 	fprintf(stderr,"(M%.2f,%.2f)",float(getRelativeTimePosition()),float(getDuration()));
 }
