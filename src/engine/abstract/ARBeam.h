@@ -25,34 +25,35 @@ class GRBeam;
 */
 class ARBeam :  public ARMTParameter, public ARPositionTag
 {
-	  friend class GRBeam;
+    friend class GRBeam;
 
-  public:
-					ARBeam();
-	virtual 		~ARBeam();
+public:
+             ARBeam();
+	virtual ~ARBeam();
 
-	  bool isGuidoSpecBeam() const;
-	  bool isFeatheredBeam() const {return feathered;}
+	bool isGuidoSpecBeam() const;
+	bool isFeatheredBeam() const {return feathered;}
 
 	virtual bool MatchEndTag(const char * s);
-	virtual void print(std::ostream& os) const;
-	virtual void PrintName(std::ostream & os) const;
+
+	virtual void printName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
+
 	virtual void setTagParameterList(TagParameterList & tpl);
 		
-	protected:
+protected:
+    static ListOfTPLs ltpls;
 
-		static ListOfTPLs ltpls;
+    TagParameterFloat * dx1;
+    TagParameterFloat * dy1;
+    TagParameterFloat * dx2;
+    TagParameterFloat * dy2;
+    TagParameterFloat * dx3;
+    TagParameterFloat * dy3;
+    TagParameterFloat * dx4;
+    TagParameterFloat * dy4;
 
-		TagParameterFloat * dx1;
-		TagParameterFloat * dy1;
-		TagParameterFloat * dx2;
-		TagParameterFloat * dy2;
-		TagParameterFloat * dx3;
-		TagParameterFloat * dy3;
-		TagParameterFloat * dx4;
-		TagParameterFloat * dy4;
-
-		bool feathered;
+    bool feathered;
 };
 
 #endif

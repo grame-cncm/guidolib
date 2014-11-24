@@ -65,8 +65,6 @@ public:
 
     virtual void    tellPosition(GObject * caller, const NVPoint & newPosition);
 
-    virtual void	print(std::ostream& os) const;
-
 protected:
     virtual void updateCrescendo(GRStaff *grstaff);
     virtual	void getCrescendoBeginingContext(GRCrescendoContext *ioContext, GRSystemStartEndStruct * sse);

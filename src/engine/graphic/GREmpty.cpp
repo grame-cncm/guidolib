@@ -73,10 +73,3 @@ void GREmpty::tellPosition( GObject * caller, const NVPoint & newPosition )
 	if (mNeedsSpring == 0 && mSpringID == -1)
 		setHPosition(newPosition.x);
 }
-
-void GREmpty::print(std::ostream& os) const
-{
-}
-
-
-

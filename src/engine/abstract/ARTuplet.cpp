@@ -226,7 +226,7 @@ void ARTuplet::setName(const char * inName)
 	fTupletFormat = inName;
 }
 
-std::ostream & ARTuplet::operator<<(std::ostream & os) const
+/*std::ostream & ARTuplet::operator<<(std::ostream & os) const
 {
 	if (getRange())	os << "\\tuplet";
 	else			os << "\\tupletBegin";
@@ -271,15 +271,19 @@ std::ostream & ARTuplet::operator<<(std::ostream & os) const
 	if (getRange())
 		os << "(";
 	return os << " ";
+}*/
+
+void ARTuplet::printName(std::ostream& os) const
+{
+    os << "ARTuplet";
+    ARMusicalTag::printName(os);
 }
 
-void ARTuplet::print(std::ostream& os) const
+void ARTuplet::printParameters(std::ostream& os) const
 {
-    os << "ARTuplet: ";
+    /* TODO (cf. plus haut) */
 
-    os << std::endl;
-
-    /* TODO compléter */
+    ARMusicalTag::printParameters(os);
 }
 
 

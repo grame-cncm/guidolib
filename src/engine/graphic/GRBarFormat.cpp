@@ -34,10 +34,6 @@ GRBarFormat::~GRBarFormat()
 
 }
 
-void GRBarFormat::print(std::ostream& os) const
-{
-}
-
 void GRBarFormat::OnDraw( VGDevice & hdc) const
 {
 }

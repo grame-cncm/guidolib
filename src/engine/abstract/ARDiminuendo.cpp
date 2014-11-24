@@ -115,24 +115,20 @@ bool ARDiminuendo::MatchEndTag(const char * s)
 	return false;
 }
 
-void ARDiminuendo::PrintName(std::ostream & os) const
+void ARDiminuendo::printName(std::ostream& os) const
 {
-	if (getRange())
-		os << "\\dim";
-	else
-		os << "\\dimBegin";
+    os << "ARDiminuendo";
+    ARMusicalTag::printName(os);
 }
 
-void ARDiminuendo::print(std::ostream& os) const
+void ARDiminuendo::printParameters(std::ostream& os) const
 {
-    os << "ARCrescendo: ";
-
     os << "dm: "        << dynamicMarking << "; ";
     os << "dx1: "       << dx1 << "; ";
     os << "dx2: "       << dx2 << "; ";
     os << "deltaY: "    << deltaY << "; ";
     os << "thickness: " << thickness << "; ";
 
-    os << std::endl;
+    ARMusicalTag::printParameters(os);
 }
 

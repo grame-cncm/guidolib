@@ -13,6 +13,7 @@
 */
 
 #include <iostream>
+#include <sstream>
 #include <typeinfo>
 #include <fstream>
 #include <cstring>	// strcat
@@ -31,7 +32,6 @@ using namespace std;
 #include "ARStaff.h"
 #include "ARClef.h"
 #include "ARTStem.h"
-#include "ARRangeEnd.h"
 #include "ARColor.h"
 #include "ARAutoBeam.h"
 #include "ARBeamState.h"
@@ -764,13 +764,64 @@ void ARMusicalVoice::browse(TimeUnwrap& mapper, const ARMusicalObject * start, c
 //____________________________________________________________________________________
 void ARMusicalVoice::print(std::ostream& os) const
 {
+    int  indentNumber = 1;
+    bool firstPass = true;
+
     os << "Musical voice: voice number: " << voicenum << "; duration: " << (float) getDuration() << std::endl;
 
-	GuidoPos pos = ObjectList::GetHeadPosition();
+    ARMusicalVoiceState vst;
+
+	GuidoPos pos = GetHeadPosition(vst);
+
 	while(pos) {
-		ARMusicalObject *e = ObjectList::GetNext(pos);
-		os << "    " << e->getRelativeTimePosition() << ": "; e->print(os);
+		ARMusicalObject *e = GetNext(pos, vst);
+
+        if (firstPass) { // Like that, range-tags beginning at the start of musical voice will be displayed
+            os << analyzeAndDisplayList(e->getRelativeTimePosition(), vst.curpositiontags, indentNumber);
+
+            firstPass = false;
+        }
+
+        os << getIndentStr(indentNumber) << e->getRelativeTimePosition() << ": ";
+        e->print(os);
+
+        os << analyzeAndDisplayList(e->getRelativeTimePosition(), vst.addedpositiontags, indentNumber);
+        os << analyzeAndDisplayList(e->getRelativeTimePosition(), vst.removedpositiontags, indentNumber, false);
 	}
+}
+
+std::string ARMusicalVoice::analyzeAndDisplayList(TYPE_TIMEPOSITION startDate, PositionTagList *tagsList, int &indentNumber, bool addTag) const
+{
+    std::stringstream stringToReturn = std::stringstream();
+
+    if (tagsList != 0) {
+        GuidoPos tagPos = tagsList->GetHeadPosition();
+
+        while(tagPos) {
+            ARPositionTag *curTag = tagsList->GetNext(tagPos);
+
+            if (!addTag)
+                indentNumber--;
+
+            stringToReturn << getIndentStr(indentNumber) << startDate << ": ";
+            curTag->print(stringToReturn);
+
+            if (addTag)
+                indentNumber++;
+        }
+    }
+
+    return stringToReturn.str();
+}
+
+std::string ARMusicalVoice::getIndentStr(int indentNumber) const
+{
+    std::string indentStr = "";
+
+    for (int i = 0; i < indentNumber; i++)
+        indentStr += "    ";
+
+    return indentStr;
 }
 
 //____________________________________________________________________________________
@@ -5325,33 +5376,31 @@ void ARMusicalVoice::doAutoFermatas()
 */
 void ARMusicalVoice::doAutoKeys()
 {
-
 	int numkeys = 0;
 
 	GuidoPos pos = ObjectList::GetHeadPosition();
-	while (pos)
-	{
+
+	while (pos) {
         ARMusicalObject *obj = GetAt(pos);
 
         if (obj) {
             ARKey * key = static_cast<ARKey *>(obj->isARKey());
-            if (key)
-            {
-                if (numkeys != 0 && key->getKeyNumber() != numkeys)
-                {
+
+            if (key) {
+                if (numkeys != 0 && key->getKeyNumber() != numkeys) {
                     // then we insert a key at this position
                     ARNaturalKey * natkey = new ARNaturalKey();
                     natkey->setIsAuto(true);
                     natkey->setRelativeTimePosition(key->getRelativeTimePosition());
                     AddElementAt(pos,natkey);
                 }
+
                 numkeys = key->getKeyNumber();
             }
         }
+
         ObjectList::GetNext(pos);
-
 	}
-
 }
 
 //____________________________________________________________________________________

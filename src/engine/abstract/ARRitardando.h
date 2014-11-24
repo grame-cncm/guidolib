@@ -36,11 +36,9 @@ public:
 
 	virtual void setTagParameterList(TagParameterList & tpl);
 
-	// routines to access TagParameters ..
-	virtual void print(std::ostream& os) const;
-	
-	virtual void PrintName(std::ostream & os) const;
-	virtual void PrintParameters(std::ostream & os) const;
+	virtual void printName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
+
 	TagParameterString * getTempo()             { return tempo; }
 	TagParameterString * getAbsTempo()          { return abstempo; }
 	const char* getFont() const	                { return font ? font->getValue() : 0; }
@@ -58,7 +56,6 @@ protected:
 	// this is important for allowed
 	// TagParameters ....
 	static ListOfTPLs ltpls;
-
 };
 
 #endif

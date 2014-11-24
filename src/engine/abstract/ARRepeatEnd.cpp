@@ -64,17 +64,13 @@ void ARRepeatEnd::browse(TimeUnwrap& mapper) const
 	mapper.AtPos (this, TimeUnwrap::kRepeatEnd);
 }
 
-std::ostream & ARRepeatEnd::operator<<(std::ostream & os) const
+void ARRepeatEnd::printName(std::ostream& os) const
 {
-	os << "\\repeatEnd";
-
-	if (getRange())
-		os << "(";
-
-	return os << " ";
+    os << "ARRepeatEnd";
+    ARMusicalTag::printName(os);
 }
 
-void ARRepeatEnd::print(std::ostream& os) const
-{    
-    os << "ARRepeatEnd: numrepeat: " << std::endl;
+void ARRepeatEnd::printParameters(std::ostream& os) const
+{
+    ARMusicalTag::printParameters(os);
 }

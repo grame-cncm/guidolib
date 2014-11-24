@@ -78,8 +78,7 @@ void ARAlter::setTagParameterList(TagParameterList & tpl)
 			alterstring = TagParameterString::cast(rtpl->RemoveHead());
 			assert(alterstring);
 	
-			if (alterstring->TagIsNotSet())
-			{
+			if (alterstring->TagIsNotSet()) {
 				// then we can set it to the value ...
 				char tmp[10];
 				snprintf(tmp, 10, "%.2f", altervalue->getValue());
@@ -93,6 +92,7 @@ void ARAlter::setTagParameterList(TagParameterList & tpl)
 	{
 		// failure
 	}
+
 	tpl.RemoveAll();
 }
 
@@ -106,42 +106,16 @@ float ARAlter::getDetune() const
 	return altervalue ? altervalue->getValue() : 0;
 }
 
-void ARAlter::PrintName(std::ostream & os) const
+void ARAlter::printName(std::ostream& os) const
 {
-	os << "\\alter";
+    os << "ARAlter";
+    ARMusicalTag::printName(os);
 }
 
-void ARAlter::PrintParameters(std::ostream & os) const
+void ARAlter::printParameters(std::ostream& os) const
 {
-	if (altervalue)
-	{		
-		os << "<detune=" << altervalue->getValue();
-		if (alterstring && alterstring->TagIsSet())
-			os << ",";
-		else  
-			os << ">";
-	}
-	if (alterstring && alterstring->TagIsSet())
-	{
-		assert(altervalue && altervalue->TagIsSet());
-		os << "text=\"" << alterstring->getValue() << "\">";
-	}
-}
-
-/* ostream & ARAlter::operator<<(ostream &os) const
-{
-	os << "\\alter<" << alterv << ">";
-	if (getRange())
-		os << "(";
-	return os << " ";
-} */
-
-void ARAlter::print(std::ostream& os) const
-{
-    os << "ARAlter: ";
-
     if (altervalue)
         os << "detune: " << altervalue->getValue() << "; ";
 
-    os << std::endl;
+    ARMusicalTag::printParameters(os);
 }

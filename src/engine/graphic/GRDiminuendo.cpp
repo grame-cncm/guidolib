@@ -258,10 +258,3 @@ void GRDiminuendo::OnDraw( VGDevice & hdc) const
         hdc.SetFontColor(VGColor());
     }
 }
-
-void GRDiminuendo::print(std::ostream& os) const
-{
-}
-
-
-

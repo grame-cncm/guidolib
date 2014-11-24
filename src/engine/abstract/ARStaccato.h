@@ -34,38 +34,27 @@ public:
 		type = REGULAR;
 	}
 
-	virtual ~ARStaccato() 
-	{
-
-		// delete TagParameterPointer ...
-
-	};
+	virtual ~ARStaccato() { /* delete TagParameterPointer ...*/	};
 
 	virtual void setTagParameterList(TagParameterList& tpl);
 
-	virtual void	browse(TimeUnwrap& mapper) const;
+	virtual void browse(TimeUnwrap& mapper) const;
 
-	// routines to access TagParameters ..
-	virtual void print(std::ostream& os) const;
-	
-	virtual void PrintName(std::ostream &os) const;
-	virtual void PrintParameters(std::ostream &os) const;
+	virtual void printName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 	
 	tTypeStacc getType() const {return type;};
 
 protected:
-
 	// TagParameters ..
 	// TagParameterString *textformat;
 	// TagParameterFloat  *fsize;
 	// TagParameterInt	  *fnumber;
 
-
 	// this is important for allowed
 	// TagParameters ....
 	static ListOfTPLs ltpls;
 	tTypeStacc	type;
-
 };
 
 #endif

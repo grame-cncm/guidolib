@@ -40,12 +40,11 @@ class ARMusic : public MusicalVoiceList, public ARMusicalEvent
 	 		int 	countVoices() const;
 	  		void 	doAutoStuff();
 
-
       		GuidoPos AddTail(ARMusicalVoice * newMusicalVoice);
 
       		void 	adjustDuration(TYPE_DURATION newDuration);
 
-	virtual void 	print(std::ostream& os) const;
+	
 	virtual std::ostream & output(std::ostream & os, bool isauto = true) const;
 
 	virtual void 	resetGRRepresentation();
@@ -65,6 +64,8 @@ class ARMusic : public MusicalVoiceList, public ARMusicalEvent
     long       mMaxTagId;
     static int mRefCount;
 
+    void print(std::ostream& os) const;
+
 protected:
 
     void doAutoBreaks();
@@ -75,10 +76,4 @@ protected:
     long mParseTime;
 };
 
-inline std::ostream & operator<<(std::ostream & os, const ARMusic* m)	{ m->print(os); return os; }
-
-
 #endif
-
-
-

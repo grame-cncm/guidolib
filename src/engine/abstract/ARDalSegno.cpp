@@ -16,19 +16,29 @@
 #include "TimeUnwrap.h"
 
 ARDalSegno::ARDalSegno() : ARJump ("D.S.") {}
-ARDalSegno::~ARDalSegno()   {}
-void ARDalSegno::PrintName( std::ostream & os ) const  { os << "\\dalSegno"; }
+ARDalSegno::~ARDalSegno() {}
 
 void ARDalSegno::browse(TimeUnwrap& mapper) const
 {
 	mapper.AtPos (this, TimeUnwrap::kDalSegno);
 }
 
+void ARDalSegno::printName(std::ostream& os) const
+{
+    os << "ARDalSegno";
+    ARMusicalTag::printName(os);
+}
+
 ARDalSegnoAlFine::ARDalSegnoAlFine() : ARJump ("D.S. al Fine") {}
-ARDalSegnoAlFine::~ARDalSegnoAlFine()   {}
-void ARDalSegnoAlFine::PrintName( std::ostream & os ) const  { os << "\\dalSegnoAlFine"; }
+ARDalSegnoAlFine::~ARDalSegnoAlFine() {}
 
 void ARDalSegnoAlFine::browse(TimeUnwrap& mapper) const
 {
 	mapper.AtPos (this, TimeUnwrap::kDalSegnoAlFine);
+}
+
+void ARDalSegnoAlFine::printName(std::ostream& os) const
+{
+    os << "ARDalSegnoAlFine";
+    ARMusicalTag::printName(os);
 }

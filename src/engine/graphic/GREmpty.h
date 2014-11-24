@@ -38,8 +38,7 @@ class GREmpty : public GREvent
 		virtual void GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 		virtual void tellPosition( GObject * caller, const NVPoint & newPosition );
 
-		virtual void print(std::ostream& os) const;
-		virtual void updateBoundingBox();
+				virtual void updateBoundingBox();
 		
 	protected: 
 };

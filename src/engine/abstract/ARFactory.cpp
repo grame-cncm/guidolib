@@ -26,7 +26,6 @@
 #include "ARFinishBar.h"
 #include "ARText.h"
 #include "ARLyrics.h"
-#include "ARRangeEnd.h"
 #include "ARFermata.h"
 #include "ARHarmonic.h"
 #include "ARTStem.h"
@@ -374,8 +373,6 @@ void ARFactory::addChord()
         mCurrentTrill->setChordAccidental(chord_accidental);
 
         FirstNote->setOrnament(mCurrentTrill);
-        //		delete mCurrentTrill;
-        //		mCurrentTrill = 0;
     
         mCurrentVoice->FinishChord(true);
     }
@@ -386,6 +383,7 @@ void ARFactory::addChord()
 
         mCurrentVoice->FinishChord(false);
     }
+
     mCurrentChordTag = NULL;
 }
 
@@ -875,10 +873,10 @@ void ARFactory::createTag( const char * name, int no )
 			else if (!strcmp(name,"cluster"))
 			{
                 ARCluster *tmp = new ARCluster();
+                mTags.AddHead(tmp);
+                mCurrentVoice->AddPositionTag(tmp);
 
-				if (mCurrentCluster == 0)
-					mCurrentCluster = tmp;
-				else delete tmp;
+				mCurrentCluster = tmp;
 			}
 			break;
 
@@ -1035,7 +1033,6 @@ void ARFactory::createTag( const char * name, int no )
 				ARGlissando * tmp = new ARGlissando();
 				mTags.AddHead(tmp); // push()
 				mCurrentVoice->AddPositionTag(tmp);
-				
 			}
 			else if (!strcmp(name,"glissandoBegin"))
 			{
@@ -1151,12 +1148,11 @@ void ARFactory::createTag( const char * name, int no )
 			}
 			else if (!strcmp(name,"mordent") || !strcmp(name,"mord"))
 			{
-				ARTrill * tmp =new ARTrill(ARTrill::MORD);
-				//mTags.AddHead(tmp);
-				//mCurrentVoice->AddPositionTag(tmp);
-				if (mCurrentTrill == 0)
-					mCurrentTrill = tmp;
-				else delete tmp;
+				ARTrill * tmp = new ARTrill(ARTrill::MORD);
+				mTags.AddHead(tmp);
+				mCurrentVoice->AddPositionTag(tmp);
+
+				mCurrentTrill = tmp;
 			}
 			else if(!strcmp(name,"meter"))
 			{
@@ -1492,23 +1488,22 @@ void ARFactory::createTag( const char * name, int no )
 			}
 			else if (!strcmp(name,"trill"))
 			{
-				ARTrill * tmp =new ARTrill(ARTrill::TRILL);
-				//mTags.AddHead(tmp);
-				//mCurrentVoice->AddPositionTag(tmp);
+				ARTrill * tmp = new ARTrill(ARTrill::TRILL);
+				mTags.AddHead(tmp);
+				mCurrentVoice->AddPositionTag(tmp);
 
-				if (!mCurrentTrill)
-					mCurrentTrill = tmp;
-				else delete tmp;
+				mCurrentTrill = tmp;
 			}
-			else if (!strcmp(name,"trillBegin"))
+			else if (!strcmp(name,"trillBegin")) // REM: A TESTER
 			{
 				ARTrill * tmp = new ARTrill(ARTrill::TRILL);
+				mTags.AddHead(tmp);
+				mCurrentVoice->AddPositionTag(tmp);
 				
 				tmp->setID(no);
 				tmp->setAllowRange(0);
-				if (!mCurrentTrill)
-					mCurrentTrill = tmp;
-				else delete tmp;
+
+				mCurrentTrill = tmp;
 			}
 			else if (!strcmp(name,"trillEnd"))
 			{
@@ -1519,13 +1514,11 @@ void ARFactory::createTag( const char * name, int no )
 			}
 			else if (!strcmp(name,"turn"))
 			{
-				ARTrill * tmp =new ARTrill(ARTrill::TURN);
-				//mTags.AddHead(tmp);
-				//mCurrentVoice->AddPositionTag(tmp);
+				ARTrill * tmp = new ARTrill(ARTrill::TURN);
+				mTags.AddHead(tmp);
+				mCurrentVoice->AddPositionTag(tmp);
 
-				if (mCurrentTrill == 0)
-					mCurrentTrill = tmp;
-				else delete tmp;
+				mCurrentTrill = tmp;
 			}
 			else if(!strcmp(name,"tremolo") || !strcmp(name,"trem"))
 			{
@@ -1734,10 +1727,19 @@ void ARFactory::endTag()
             // then we also delete the dispdur-tag ....
             mCurrentGrace = NULL;
         }
+        else if (tag == mCurrentCluster)
+        {
+            if (tag->getRange() == false)
+                GuidoTrace("cluster-tag without range ignored!");
+
+            mCurrentCluster = NULL;
+        }
         else if (tag == mCurrentTrill)
         {
             if (tag->getRange() == false)
                 GuidoTrace("trill-tag without range ignored!");
+
+            mCurrentTrill = NULL;
         }
         else if (tag == mCurrentCue)
         {
@@ -1771,11 +1773,6 @@ void ARFactory::endTag()
             delete tag;
             tag = NULL;
             return;
-        }
-        else if (tag == mCurrentCluster)
-        {
-            if (tag->getRange() == false)
-                GuidoTrace("cluster-tag without range ignored!");
         }
         else if (tag == mCurrentTremolo)
         {
@@ -1828,26 +1825,14 @@ void ARFactory::endTag()
             mCurrentTremolo = NULL;
         }
 
-        ARPositionTag * myptag = dynamic_cast<ARPositionTag *>(tag); 
-        if (tag->getRange() && tag->getRangeSetting() == ARMusicalTag::NO)
-        {
-            if (mCurrentTrill)
-            {
-                delete mCurrentTrill;
-                mCurrentTrill = NULL;
-            }
-            else if (mCurrentCluster)
-            {
-                delete mCurrentCluster;
-                mCurrentCluster = NULL;
-            }
+        ARPositionTag * myptag = dynamic_cast<ARPositionTag *>(tag);
 
+        if (tag->getRange() && tag->getRangeSetting() == ARMusicalTag::NO) {
             GuidoWarn("Tag range ignored (1)");
             tag->setRange( false );	
         }
 
-        if (!tag->getRange() && tag->getRangeSetting() == ARMusicalTag::ONLY)
-        {
+        if (!tag->getRange() && tag->getRangeSetting() == ARMusicalTag::ONLY) {
             GuidoWarn("Tag has no range - ignored");
             if (myptag) mCurrentVoice->RemovePositionTag(myptag);
             delete tag;
@@ -2037,12 +2022,8 @@ void ARFactory::addTag()
 	// end of parameter list reached
 	// set the tag parameter
 
-	ARMTParameter * theTag = dynamic_cast<ARMTParameter *>(mTags.GetHead());	
-	if (mCurrentTrill)
-		mCurrentTrill->setTagParameterList(mTagParameterList);
-    else if (mCurrentCluster)
-        mCurrentCluster->setTagParameterList(mTagParameterList);
-	else if (theTag)
+	ARMTParameter * theTag = dynamic_cast<ARMTParameter *>(mTags.GetHead());
+	if (theTag)
 		theTag->setTagParameterList( mTagParameterList );
 	// the remaining will just be stored
 
@@ -2090,7 +2071,7 @@ void ARFactory::addTagParameter(const char * parameter)
 #if ARFTrace
  	 cout << "ARFactory::addTagParameter TYPE_TAGPARAMETER_STRING " << parameter << endl;
 #endif
-	if (dynamic_cast<ARMTParameter*>(mTags.GetHead()) || mCurrentTrill || mCurrentCluster)
+	if (dynamic_cast<ARMTParameter*>(mTags.GetHead()))
 		mTagParameterList.AddTail(new TagParameterString(parameter));
 }
 
@@ -2103,7 +2084,7 @@ void ARFactory::addTagParameter(TYPE_TAGPARAMETER_INT parameter)
 	cout << "ARFactory::addTagParameter TYPE_TAGPARAMETER_INT " << parameter << endl;
 #endif
 	// we have assume the DEFAULT Unit here....
-	if (dynamic_cast<ARMTParameter*>(mTags.GetHead()) || mCurrentTrill || mCurrentCluster)
+	if (dynamic_cast<ARMTParameter*>(mTags.GetHead()))
 	{
 		TagParameterInt * ntpi = new TagParameterInt(parameter);
 		// float npar = (float) (parameter * LSPACE/2);
@@ -2120,7 +2101,7 @@ void ARFactory::addTagParameter(TYPE_TAGPARAMETER_REAL parameter)
 #if ARFTrace
 	cout << "ARFactory::addTagParameter TYPE_TAGPARAMETER_REAL " << parameter << endl;
 #endif
-	if (dynamic_cast<ARMTParameter*>(mTags.GetHead()) || mCurrentTrill || mCurrentCluster)
+	if (dynamic_cast<ARMTParameter*>(mTags.GetHead()))
 	{
 		TagParameterFloat * ntpf = new TagParameterFloat((float) parameter);
 		// float npar = (float) (parameter * LSPACE/2);

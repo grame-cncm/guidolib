@@ -19,9 +19,15 @@ ARTDummy::~ARTDummy()
 {
 }
 
-void ARTDummy::print(std::ostream& os) const
+void ARTDummy::printName(std::ostream& os) const
 {
-    os << "ARTDummy;" << std::endl;
+    os << "ARTDummy";
+    ARMusicalTag::printName(os);
+}
+
+void ARTDummy::printParameters(std::ostream& os) const
+{
+    ARMusicalTag::printParameters(os);
 }
 
 

@@ -1250,7 +1250,6 @@ staff_debug("CreateBeginElements");
 
 	if (state.curclef != NULL)
 	{
-
 		// now I have to deal with basepitoffs (for transposed instruments)
 
 		ARClef * arclef = new ARClef(*state.curclef);
@@ -1260,7 +1259,7 @@ staff_debug("CreateBeginElements");
 		GRClef * grclef = new GRClef(arclef, this, 1);
 
 		// grclef->setRelativeTimePosition(relativeTimePositionOfGR);
-		assert(grclef->getRelativeTimePosition() == mRelativeTimePositionOfGR );
+		assert(grclef->getRelativeTimePosition() == mRelativeTimePositionOfGR);
 
 		setClefParameters(grclef, GRStaffState::CLEFEXPLICIT);
 		addNotationElement(grclef);

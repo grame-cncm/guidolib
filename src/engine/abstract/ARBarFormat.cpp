@@ -82,20 +82,15 @@ void ARBarFormat::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARBarFormat::print(std::ostream& os) const 
+void ARBarFormat::printName(std::ostream& os) const
 {
-    os << "ARBarFormat;" << std::endl;
+    os << "ARAuto";
+    ARMusicalTag::printName(os);
 }
 
-void ARBarFormat::PrintName(std::ostream & os) const
+void ARBarFormat::printParameters(std::ostream& os) const
 {
-	os << "\\barFormat";
-}
-
-void ARBarFormat::PrintParameters(std::ostream & os) const
-{
-	if (style)
-		os << "<style=\"" << style->getValue() << "\"" << ">";
+    ARMusicalTag::printParameters(os);
 }
 
 

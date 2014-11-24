@@ -20,10 +20,15 @@
 #include "TimeMapper.h"
 
 ARCoda::ARCoda() : ARJump ("[coda] Coda") {}
-ARCoda::~ARCoda()   {}
-void ARCoda::PrintName( std::ostream & os ) const  { os << "\\coda"; }
+ARCoda::~ARCoda() {}
 
 void ARCoda::browse(TimeUnwrap& mapper) const
 {
 	mapper.AtPos (this, TimeUnwrap::kCoda);
+}
+
+void ARCoda::printName(std::ostream& os) const
+{
+    os << "ARCoda";
+    ARMusicalTag::printName(os);
 }

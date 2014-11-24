@@ -32,8 +32,7 @@ public:
 	
 	virtual void OnDraw(VGDevice & hdc ) const;
 
-	virtual void print(std::ostream& os) const;
-
+	
 	virtual void tellPosition(GObject *caller,const NVPoint &newPosition);
 
 protected:

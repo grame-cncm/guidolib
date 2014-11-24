@@ -21,30 +21,20 @@
 */
 class ARDummyRangeEnd : public ARTagEnd
 {
-	public:
+public:
+			ARDummyRangeEnd(const ARDummyRangeEnd * copy);
+			ARDummyRangeEnd(const char * txt = 0);
 
-					ARDummyRangeEnd(const ARDummyRangeEnd * copy);
-					ARDummyRangeEnd(const char * txt = 0);
-
-
-		virtual ARMusicalObject * Copy() const;
-
-		virtual void PrintName(std::ostream & os) const;
-
-  		NVstring endstr;
+	virtual ARMusicalObject * Copy() const;
         
+	virtual void printName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 
-        /**** Function to avoid dynamic_cast ****/
-        ARMusicalObject *isARDummyRangeEnd() { return this; }
-        /****************************************/
- 
-   		/* virtual ostream &operator<<(ostream &os) const
-		{
-			os << endstr.c_str();
-			if (id != -1)
-				os << ":" << id;
-			return os << " ";
-		} */
+  	NVstring endstr;
+
+    /**** Function to avoid dynamic_cast ****/
+    ARMusicalObject *isARDummyRangeEnd() { return this; }
+    /****************************************/
 };
 
 #endif

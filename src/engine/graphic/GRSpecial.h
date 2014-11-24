@@ -28,8 +28,7 @@ class GRSpecial : public GRARNotationElement, public GRTag
 						 GRSpecial( ARSpecial * arspec, bool p_ownsar = false );
 		virtual 		~GRSpecial() {}
 
-		virtual void 	OnDraw( VGDevice & hdc ) const;		
-        virtual void 	print(std::ostream& os) const;
+		virtual void 	OnDraw( VGDevice & hdc ) const;
 
 		virtual void 	setPosition(const NVPoint & point)		{ GRARNotationElement::setPosition(point); } 
 };

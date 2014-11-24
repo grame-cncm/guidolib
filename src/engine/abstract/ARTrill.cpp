@@ -120,37 +120,40 @@ float ARTrill::getady() const
 	return ady;
 }
 
-void ARTrill::print(std::ostream& os) const
-{
-    os << "ARTrill: ";
-
-    os << "mode: " << (fShowCautionaryAccidentals ? "cautionnary" : "none") << "; ";
-    os << "adx: " << adx << "; ";
-    os << "ady: " << ady << "; ";
-    os << "tr: " << (fShowTR ? "true" : "false") << "; ";
-    os << "anchor: " << (fDrawOnNoteHead ? "note" : "above") << "; ";
-
-    os << std::endl;
-}
-
-void ARTrill::PrintName(std::ostream & os) const
-{
-	if		(mTrillType == TRILL)	os << "\\trill";
-	else if (mTrillType == TURN)	os << "\\turn";
-	else if (mTrillType == MORD)	os << "\\mord";
-}
-void ARTrill::PrintParameters(std::ostream & os) const
-{
-	/*if (mDur && mDur->TagIsSet())
-	{
-		os << "<dur=" << mDur->getValue() << ">";
-	}*/
-}
-
 bool ARTrill::getStatus() const{
 	return begin;
 }
 
 void ARTrill::setContinue(){
 	begin = false;
+}
+
+void ARTrill::printName(std::ostream& os) const
+{
+    os << "ARTrill";
+
+    switch (mTrillType) {
+    case TRILL:
+        os << " (trill)";
+        break;
+    case TURN:
+        os << " (turn)";
+        break;
+    case MORD:
+        os << " (mord)";
+        break;
+    }
+
+    ARMusicalTag::printName(os);
+}
+
+void ARTrill::printParameters(std::ostream& os) const
+{
+    os << "mode: "   << (fShowCautionaryAccidentals ? "cautionnary" : "none") << "; ";
+    os << "adx: "    << adx << "; ";
+    os << "ady: "    << ady << "; ";
+    os << "tr: "     << (fShowTR ? "true" : "false") << "; ";
+    os << "anchor: " << (fDrawOnNoteHead ? "note" : "above") << "; ";
+
+    ARMusicalTag::printParameters(os);
 }

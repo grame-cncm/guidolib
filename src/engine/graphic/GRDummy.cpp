@@ -34,10 +34,6 @@ GRDummy::~GRDummy()
 {
 }
 
-void GRDummy::print(std::ostream& os) const
-{
-}
-
 void GRDummy::OnDraw( VGDevice & hdc) const
 {
 	if (myptag && mDraw)

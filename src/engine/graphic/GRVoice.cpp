@@ -937,7 +937,6 @@ GuidoPos GRVoice::AddTail(GRNotationElement * el)
 	return pos;
 }
 
-
 GRPage * GRVoice::getPageNum(int num,int denom)
 {
 	// I have to travers the voice and find the element
@@ -1015,9 +1014,3 @@ GRPage * GRVoice::getPageForTimePos( int num, int denom ) const
 	
 	return outPage;
 }
-
-void GRVoice::print(std::ostream& os) const
-{
-}
-
-

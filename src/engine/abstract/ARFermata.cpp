@@ -91,22 +91,14 @@ void ARFermata::browse(TimeUnwrap& mapper) const
 	mapper.AtPos (this, TimeUnwrap::kFermata);
 }
 
-
-void ARFermata::PrintName(std::ostream &os) const
+void ARFermata::printName(std::ostream& os) const
 {
-	os << "\\fermata";
-}
-void ARFermata::PrintParameters(std::ostream &) const
-{
-	// is this correct?
-	//if (getRange())
-	//	os << "(";
+    os << "ARFermata";
+    ARMusicalTag::printName(os);
 }
 
-void ARFermata::print(std::ostream& os) const
+void ARFermata::printParameters(std::ostream& os) const
 {
-    os << "ARFermata: type: ";
-
     switch (type) {
         case SHORT:
             os << "short";
@@ -130,6 +122,8 @@ void ARFermata::print(std::ostream& os) const
             break;
     }
 
-    os << ";" << std::endl;
+    os << ";";
+
+    ARMusicalTag::printParameters(os);
 }
 

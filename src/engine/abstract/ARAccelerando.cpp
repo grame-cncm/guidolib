@@ -94,46 +94,6 @@ void ARAccelerando::setTagParameterList(TagParameterList& tpl)
 	tpl.RemoveAll();
 }
 
-void ARAccelerando::PrintName(ostream &os) const
-{
-	if (getRange())
-		os << "\\accel";
-	else 
-		os << "\\accelBegin";
-}
-
-void ARAccelerando::PrintParameters(ostream &os) const
-{
-		//	"S,tempo,,o;S,abstempo,,o"
-	int first = 1;
-	if (tempo && tempo->TagIsSet())
-	{
-		if (first)
-		{
-			os << "<";
-			first = 0;
-		}
-
-		os << "\"" << tempo->getValue() << "\"";
-
-	}
-	if (abstempo && abstempo->TagIsSet())
-	{
-		if (first)
-		{
-			os << "<";
-			first = 0;
-		}
-		else 
-			os << ",";
-
-		os << "\"" << abstempo->getValue() << "\"";
-	}
-
-	if (!first)
-		os << ">";
-}
-
 
 bool ARAccelerando::MatchEndTag(const char *s)
 {
@@ -146,10 +106,14 @@ bool ARAccelerando::MatchEndTag(const char *s)
 	return 0;
 }
 
-void ARAccelerando::print(std::ostream& os) const
+void ARAccelerando::printName(std::ostream& os) const
 {
-    os << "ARAccelerando: ";
+    os << "ARAccelerando";
+    ARMusicalTag::printName(os);
+}
 
+void ARAccelerando::printParameters(std::ostream& os) const
+{
     if (tempo)
         os << "tempo: " << tempo->getValue() << "; ";
 
@@ -165,5 +129,5 @@ void ARAccelerando::print(std::ostream& os) const
     if (fsize)
         os << "fsize: " << fsize->getValue() << "; ";
 
-    os << std::endl;
+    ARMusicalTag::printParameters(os);
 }

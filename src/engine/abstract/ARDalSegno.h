@@ -20,22 +20,28 @@
 */
 class ARDalSegno : public ARJump
 {
-    public:	
-				ARDalSegno();
+public:	
+				 ARDalSegno();
 	virtual 	~ARDalSegno();
-	virtual void    PrintName( std::ostream & os ) const;
-	virtual void	browse(TimeUnwrap& mapper) const;
+
+	virtual void printName(std::ostream& os) const;
+    virtual void printParameters(std::ostream& os) const {};
+
+	virtual void browse(TimeUnwrap& mapper) const;
 };
 
 /** \brief dal segno al fine
 */
 class ARDalSegnoAlFine : public ARJump
 {
-    public:	
-				ARDalSegnoAlFine();
+public:	
+				 ARDalSegnoAlFine();
 	virtual 	~ARDalSegnoAlFine();
-	virtual void    PrintName( std::ostream & os ) const;
-	virtual void	browse(TimeUnwrap& mapper) const;
+
+	virtual void printName(std::ostream& os) const;
+    virtual void printParameters(std::ostream& os) const {};
+
+	virtual void browse(TimeUnwrap& mapper) const;
 };
 
 #endif

@@ -44,28 +44,15 @@ ARMusicalObject *ARTHead::Copy() const
 	return new ARTHead(*this);
 }
 
-std::ostream & ARTHead::operator<<(std::ostream & os) const
+void ARTHead::printName(std::ostream& os) const
 {
-	switch (headstate) {
-		case NORMAL:
-		case NOTSET:	os << "\\headsNormal";		break;
-		case REVERSE: 	os << "\\headsReverse";		break;
-		case CENTER: 	os << "\\headsCenter";		break;
-		case RIGHT: 	os << "\\headsRight";		break;
-		case LEFT: 		os << "\\headsLeft";		break;
-	}
-
-	if (getRange())
-		os << "(";
-
-	return os << " ";
+    os << "ARTHead";
+    ARMusicalTag::printName(os);
 }
 
-void ARTHead::print(std::ostream& os) const
+void ARTHead::printParameters(std::ostream& os) const
 {
-    os << "ARTHead: state: ";
-    
-	switch (headstate) {
+    switch (headstate) {
 		case NORMAL:
 		case NOTSET:	os << "normal";  break;
 		case REVERSE: 	os << "reverse"; break;
@@ -74,6 +61,7 @@ void ARTHead::print(std::ostream& os) const
 		case LEFT: 		os << "left";    break;
 	}
 
-    os << ";" << std::endl;
-}
+    os << ";";
 
+    ARMusicalTag::printParameters(os);
+}

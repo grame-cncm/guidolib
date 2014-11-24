@@ -29,7 +29,6 @@ ARRestFormat::ARRestFormat(ARRestFormat *p_saverf, ARRestFormat *copyrf)
 	saverf       = p_saverf;
 }
 
-
 ARRestFormat::~ARRestFormat()
 {
 }
@@ -59,17 +58,14 @@ void ARRestFormat::setTagParameterList(TagParameterList &tpl)
 	tpl.RemoveAll();
 }
 
-void ARRestFormat::PrintName(std::ostream & os) const
+void ARRestFormat::printName(std::ostream& os) const
 {
-	os << "\\restFormat";
+    os << "ARRestFormat";
+    ARMusicalTag::printName(os);
 }
 
-void ARRestFormat::PrintParameters(std::ostream &os) const
+void ARRestFormat::printParameters(std::ostream& os) const
 {
-}
-
-void ARRestFormat::print(std::ostream& os) const
-{
-    os << "ARRestFormat;" << std::endl;
+    ARMusicalTag::printParameters(os);
 }
 

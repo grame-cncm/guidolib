@@ -24,7 +24,6 @@
 class ARCrescendo : public ARMTParameter, public ARPositionTag
 {
 public:
-
     ARCrescendo();
     ARCrescendo(const ARCrescendo* crescendo);
     virtual		~ARCrescendo();
@@ -32,8 +31,8 @@ public:
     virtual void setTagParameterList(TagParameterList & tlist);
     virtual bool MatchEndTag(const char * s);
 
-    virtual void print(std::ostream& os) const;
-    virtual void PrintName(std::ostream & os) const;
+	virtual void printName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 
     const NVstring &getDynamicMarking() const { return dynamicMarking; }
     const float     getDx1()            const { return dx1; }

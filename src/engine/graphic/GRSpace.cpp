@@ -38,10 +38,6 @@ void GRSpace::OnDraw( VGDevice & hdc) const
 {
 }
 
-void GRSpace::print(std::ostream& os) const
-{
-}
-
 const ARSpace * GRSpace::getARSpace() const
 {
 	return /*dynamic*/static_cast<const ARSpace *>(getAbstractRepresentation());

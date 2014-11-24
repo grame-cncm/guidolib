@@ -77,23 +77,17 @@ void ARIntens::browse(TimeUnwrap& mapper) const
 	mapper.AtPos (this, TimeUnwrap::kIntens);
 }
 
-void ARIntens::print(std::ostream& os) const
+void ARIntens::printName(std::ostream& os) const
 {
-    os << "ARIntens: ";
+    os << "ARIntens";
+    ARMusicalTag::printName(os);
+}
 
+void ARIntens::printParameters(std::ostream& os) const
+{
     os << "type: " << mIntensText << ";";
 
-    os << std::endl;
-}
-
-void ARIntens::PrintName(std::ostream &os) const
-{
-		os << "\\intens";
-}
-
-void ARIntens::PrintParameters(std::ostream &os) const
-{
-	os << "<\"" << mIntensText << "\"" << ">";
+    ARMusicalTag::printParameters(os);
 }
 
 

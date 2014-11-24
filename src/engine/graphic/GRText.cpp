@@ -213,10 +213,6 @@ void GRText::OnDraw( VGDevice & hdc ) const
 	// hdc.SetBackgroundMode( nBackmode );
 }
 
-void GRText::print(std::ostream& os) const
-{
-}
-
 const ARText * GRText::getARText() const
 {
 	return /*dynamic*/static_cast<const ARText*>(getAbstractRepresentation());

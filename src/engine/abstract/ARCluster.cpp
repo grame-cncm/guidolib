@@ -23,8 +23,8 @@ using namespace std;
 
 ListOfTPLs ARCluster::ltpls(1);
 
-ARCluster::ARCluster() : ARMTParameter(), adx(0), ady(0), ahdx(0), ahdy(0), aSize(1.0), aNoteCount(1),
-    aOnlyOneNoteInCluster(false)
+ARCluster::ARCluster() : ARMTParameter(), hdx(0), hdy(0), noteCount(1),
+    onlyOneNoteInCluster(false)
 {
 	rangesetting = ONLY;
 
@@ -37,13 +37,10 @@ ARCluster::ARCluster(const ARCluster *inCopyCluster) : ARMTParameter(-1, inCopyC
 	rangesetting = ONLY;
 
     if (inCopyCluster) {
-        adx = inCopyCluster->getadx();
-        ady = inCopyCluster->getady();
-        ahdx = inCopyCluster->getahdx();
-        ahdy = inCopyCluster->getahdy();
-        aSize = inCopyCluster->getSize();
-        aNoteCount = inCopyCluster->getNoteCount();
-        aOnlyOneNoteInCluster = inCopyCluster->getIsThereOnlyOneNoteInCluster();
+        hdx = inCopyCluster->getahdx();
+        hdy = inCopyCluster->getahdy();
+        noteCount = inCopyCluster->getNoteCount();
+        onlyOneNoteInCluster = inCopyCluster->getIsThereOnlyOneNoteInCluster();
 
         firstNote = inCopyCluster->getFirstNote();
         secondNote = inCopyCluster->getSecondNote();
@@ -60,7 +57,7 @@ void ARCluster::setTagParameterList(TagParameterList& tpl)
 {
 	if (ltpls.GetCount() == 0) {
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail("F,size,1.0,o;U,hdx,0hs,o;U,hdy,0hs,o;U,dx,0hs,o;U,dy,0hs,o");
+		lstrs.AddTail("U,hdx,0hs,o;U,hdy,0hs,o");
 		CreateListOfTPLs(ltpls, lstrs);
 	}
 
@@ -71,26 +68,13 @@ void ARCluster::setTagParameterList(TagParameterList& tpl)
 		// we found a match!
 		if (ret == 0)
 		{
-            TagParameterFloat *f = TagParameterFloat::cast(rtpl->RemoveHead());
-			aSize = f->getValue();
-			delete f;
-
             // - dx/dy for cluster head only
-			f = TagParameterFloat::cast(rtpl->RemoveHead());
-			ahdx = f->getValue();
+			TagParameterFloat *f = TagParameterFloat::cast(rtpl->RemoveHead());
+			hdx = f->getValue();
 			delete f;
 
 			f = TagParameterFloat::cast(rtpl->RemoveHead());
-			ahdy = f->getValue();
-			delete f;
-
-            // - dx/dy for entire cluster
-            f = TagParameterFloat::cast(rtpl->RemoveHead());
-			adx = f->getValue();
-			delete f;
-
-            f = TagParameterFloat::cast(rtpl->RemoveHead());
-			ady = f->getValue();
+			hdy = f->getValue();
 			delete f;
 		}
 
@@ -104,18 +88,6 @@ void ARCluster::setTagParameterList(TagParameterList& tpl)
 	tpl.RemoveAll();
 }
 
-void ARCluster::PrintName(std::ostream & os) const
-{
-	os << "\\cluster";
-}
-
-void ARCluster::PrintParameters(std::ostream & os) const
-{
-	/*if (!num) return;
-	
-	os << "<i=\"" << num->getValue() << "\">";*/
-}
-
 void ARCluster::setARNote(ARNote *arNote)
 {
     if (firstNote == NULL)
@@ -123,14 +95,23 @@ void ARCluster::setARNote(ARNote *arNote)
     else if (secondNote == NULL) {
         secondNote = arNote;
 
-        if (!aOnlyOneNoteInCluster)
-            aNoteCount++;
+        if (!onlyOneNoteInCluster)
+            noteCount++;
     }
     else
-        aNoteCount++;
+        noteCount++;
 }
 
-void ARCluster::print(std::ostream& os) const
+void ARCluster::printName(std::ostream& os) const
 {
-    os << "ARCluster: hdx: " << ahdx << "; hdy: " << ahdy << ";" << std::endl;
+    os << "ARCluster";
+    ARMusicalTag::printName(os);
+}
+
+void ARCluster::printParameters(std::ostream& os) const
+{
+    os << "hdx: " << hdx << "; ";
+    os << "hdy: " << hdy << "; ";
+
+    ARMusicalTag::printParameters(os);
 }

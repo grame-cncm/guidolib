@@ -137,7 +137,7 @@ void ARSpecial::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-std::ostream & ARSpecial::operator<<(std::ostream &os) const
+/*std::ostream & ARSpecial::operator<<(std::ostream& os) const
 {
 	os << "\\special<";
 	os << "\"\\" << (unsigned int) mDrawChar
@@ -145,9 +145,17 @@ std::ostream & ARSpecial::operator<<(std::ostream &os) const
 		<< dy * kVirtualToCm << "cm,"
 		<< space * kVirtualToCm << "cm," << scale << "> ";
 	return os;
+}*/
+
+void ARSpecial::printName(std::ostream& os) const
+{
+    os << "ARSpecial";
+    ARMusicalTag::printName(os);
 }
 
-void ARSpecial::print(std::ostream& os) const
+void ARSpecial::printParameters(std::ostream& os) const
 {
-    os << "ARSpecial;" << std::endl;
+    /* TODO (cf. plus haut) */
+
+    ARMusicalTag::printParameters(os);
 }

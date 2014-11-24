@@ -40,7 +40,6 @@ class ARMusicalVoice;
 class ARPageFormat;
 class ARBarFormat;
 class ARSystemFormat;
-class ARABreak;
 class ARAuto;
 class ARAccolade;
 
@@ -195,12 +194,10 @@ class GRStaffManager
 		// to calculate the actual optimum linebreaks ....
 		GRBeginSpaceForceFunction2 * getCurrentBegSFF();
 
-		int IsAutoPageBreak() const;
-		void setAutoBreak(ARABreak * p_arabreak);
+		int  IsAutoPageBreak() const;
 		void setAutoTag(ARAuto *p_arauto);
 		void setBarFormat(ARBarFormat * barfrmt,GRStaff * curstaff);
-		void setSystemDistance(float distance,
-			const GRVoiceManager & p_vcmgr);
+		void setSystemDistance(float distance, const GRVoiceManager & p_vcmgr);
 		void setPageFormat(ARPageFormat * pform);
 		void setSystemFormat(ARSystemFormat * sysfrm);
 		void NewPage(GRPage *newpage);
@@ -406,7 +403,6 @@ class GRStaffManager
 
 		GRPBList * pblist;
 
-		ARABreak * mArABreak;
 		ARAuto * mArAuto;
 		std::vector<ARAccolade	*> mCurAccoladeTag;
 };

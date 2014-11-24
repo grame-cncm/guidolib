@@ -36,11 +36,9 @@ ARAccidental::ARAccidental(const ARAccidental & acc)
 	else			mStyle = NULL;
 }
 
-ARAccidental::~ARAccidental()		{ delete mStyle; }
-
-void ARAccidental::PrintName(std::ostream & os) const
+ARAccidental::~ARAccidental()
 {
-	os << "\\acc";
+    delete mStyle;
 }
 
 ARAccidental::Style ARAccidental::getStyle() const	
@@ -49,12 +47,6 @@ ARAccidental::Style ARAccidental::getStyle() const
 	if (mStyle && (str == mStyle->getValue())) 
 		return kCautionary;
 	return kNone;
-}
-
-void ARAccidental::PrintParameters(std::ostream & os) const
-{
-	if (mStyle)
-		os << "<style=\"" << mStyle->getValue() << "\">";
 }
 
 void ARAccidental::setTagParameterList(TagParameterList & tpl)
@@ -86,13 +78,16 @@ void ARAccidental::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARAccidental::print(std::ostream& os) const
+void ARAccidental::printName(std::ostream& os) const
 {
-    os << "ARAccidental: ";
+    os << "ARAccidental";
+    ARMusicalTag::printName(os);
+}
 
+void ARAccidental::printParameters(std::ostream& os) const
+{
     if (mStyle)
         os << "style: " << mStyle->getValue() << "; ";
 
-    os << std::endl;
+    ARMusicalTag::printParameters(os);
 }
-

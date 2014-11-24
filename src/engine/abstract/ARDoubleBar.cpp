@@ -23,17 +23,12 @@ ARDoubleBar::~ARDoubleBar()
 {
 }
 
-void ARDoubleBar::print(std::ostream& os) const
+void ARDoubleBar::printName(std::ostream& os) const
 {
-    os << "ARDoubleBar;" << std::endl;
+    os << "ARDoubleBar " << (getRange() ? "" : "(begin)") << ":";
 }
 
-/* ostream & ARDoubleBar::operator<<(ostream &os) const
+void ARDoubleBar::printParameters(std::ostream& os) const
 {
-	return os << "\\doublebar ";
-} */
-
-void ARDoubleBar::PrintName(std::ostream &os) const
-{
-	os << "\\doublebar ";
-} 
+    ARMusicalTag::printParameters(os);
+}

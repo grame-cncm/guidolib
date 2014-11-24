@@ -202,10 +202,6 @@ void GRSymbol::OnDraw( VGDevice & hdc ) const
     }
 }
 
-void GRSymbol::print(std::ostream& os) const
-{
-}
-
 const ARSymbol * GRSymbol::getARSymbol() const
 {
 	return /*dynamic*/static_cast<const ARSymbol*>(getAbstractRepresentation());

@@ -21,11 +21,14 @@
 */
 class ARSegno : public ARJump
 {
-    public:
-				ARSegno();
+public:
+				 ARSegno();
 	virtual 	~ARSegno();
-	virtual void    PrintName( std::ostream & os ) const;
-	virtual void	browse(TimeUnwrap& mapper) const;
+
+	virtual void printName(std::ostream& os) const;
+    virtual void printParameters(std::ostream& os) const {}
+
+	virtual void browse(TimeUnwrap& mapper) const;
 
     /**** Function to avoid dynamic_cast ****/
     ARMusicalObject *isARSegno() { return this; }

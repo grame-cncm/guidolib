@@ -32,90 +32,93 @@
 #include "ARSecondGlue.h"
 #include "ARTagEnd.h"
 
-// ============================================================================
+// ==================== ARBase ====================
+
 ARBase::ARBase() 
 {
 	rangesetting = ONLY;
 	setAssociation(ARMusicalTag::RA);
 }
 
-void 
-ARBase::PrintName( std::ostream & os) const
+void ARBase::printName(std::ostream& os) const
 {
-	os << "\\baseBegin";
+    os << "ARBase";
+    ARMusicalTag::printName(os);
 }
 
-void 
-ARBase::PrintParameters( std::ostream & os) const
+void ARBase::printParameters(std::ostream& os) const
 {
-	os << "<" << base.getNumerator() << "," <<
-		base.getDenominator() << "," <<
-		dur.getNumerator() << "," <<
-		dur.getDenominator() << ">";
+	os << "base: " << base.getNumerator() << "/" << base.getDenominator();
+    os << ", dur:" << dur.getNumerator()  << "/" << dur.getDenominator();
+    
+    os << ";";
+
+    ARMusicalTag::printParameters(os);
 }
 
-void 
-ARBase::addEvent(const ARMusicalEvent * ev)
+void ARBase::addEvent(const ARMusicalEvent * ev)
 {
 	// this adds an event to the current base
 	dur += ev->getDuration();
 }
 
-// ============================================================================
-std::ostream & 
-ARNewPage::operator<<(std::ostream &os) const
-{
-	os << "\\newPage";
-	if (getRange())
-		os << "(";
-	return os << " ";
-}
-
-// ============================================================================
+// ==================== ARRepeatEndRangeEnd ====================
 
 ARRepeatEndRangeEnd::ARRepeatEndRangeEnd( ARRepeatEnd * in ) : mRepeatEnd( in ) 
 { 
 }
 
-void
-ARRepeatEndRangeEnd::setTagParameterList(TagParameterList & pl)
+void ARRepeatEndRangeEnd::setTagParameterList(TagParameterList & pl)
 {
 	pl.RemoveAll();
 }
 
-// ============================================================================
+void ARRepeatEndRangeEnd::printName(std::ostream& os) const
+{
+    os << "ARRepeatEndRangeEnd";
+    ARMusicalTag::printName(os);
+}
+
+void ARRepeatEndRangeEnd::printParameters(std::ostream& os) const
+{
+    ARMusicalTag::printParameters(os);
+}
+
+// ==================== ARAutoBeam ====================
+
 ARAutoBeam::ARAutoBeam()
 {
 	setAssociation(ARMusicalTag::RA);
 	isAuto = true;
 }
 
-void 
-ARAutoBeam::PrintName(std::ostream & os) const
+void ARAutoBeam::printName(std::ostream& os) const
 {
-	os << "\\autobeamBegin";
+    os << "ARAutoBeam";
+    ARMusicalTag::printName(os);
 }
 
-// ============================================================================
-void
-ARAutoBeamEnd::PrintName(std::ostream & os) const
+void ARAutoBeam::printParameters(std::ostream& os) const
 {
-	os << "\\autobeamEnd ";
+    ARMusicalTag::printParameters(os);
 }
 
-// ============================================================================
-std::ostream & 
-ARMerge::operator<<(std::ostream & os) const
-{
-	os << "\\merge";
-	if (getRange())
-		os << "(";
+// ==================== ARAutoBeamEnd ====================
 
-	return os << " ";
+void ARAutoBeamEnd::printName(std::ostream& os) const
+{
+    os << "ARAutoBeamEnd";
+    ARMusicalTag::printName(os);
 }
 
-void 
-ARMerge::setError(int i)
+void ARAutoBeamEnd::printParameters(std::ostream& os) const
+{
+    ARMusicalTag::printParameters(os);
+}
+
+// ==================== ARMerge ====================
+
+void ARMerge::setError(int i)
 {
 	ARMusicalTag::setError(i);
 	if (i!=0)
@@ -131,7 +134,19 @@ ARMerge::setError(int i)
 	}
 }
 
-// ============================================================================
+void ARMerge::printName(std::ostream& os) const
+{
+    os << "ARMerge";
+    ARMusicalTag::printName(os);
+}
+
+void ARMerge::printParameters(std::ostream& os) const
+{
+    ARMusicalTag::printParameters(os);
+}
+
+// ==================== ARDummyRangeEnd ====================
+
 ARDummyRangeEnd::ARDummyRangeEnd(const ARDummyRangeEnd * copy)
 	: ARTagEnd(-1,copy)
 {
@@ -145,75 +160,89 @@ ARDummyRangeEnd::ARDummyRangeEnd(const char * txt)
 	 else		 endstr = ")";
 };
 
-ARMusicalObject * 
-ARDummyRangeEnd::Copy() const
+ARMusicalObject * ARDummyRangeEnd::Copy() const
 {
 	return new ARDummyRangeEnd(this);
 }
 
-void 
-ARDummyRangeEnd::PrintName(std::ostream & os) const
+void ARDummyRangeEnd::printName(std::ostream& os) const
 {
-	os << endstr.c_str();
+    os << "ARDummyRangeEnd";
+    ARMusicalTag::printName(os);
 }
 
-// ============================================================================
-void 
-ARStaffOn::setTagParameterList(TagParameterList & pl)
+void ARDummyRangeEnd::printParameters(std::ostream& os) const
 {
-	pl.RemoveAll();
+    ARMusicalTag::printParameters(os);
 }
 
-std::ostream & 
-ARStaffOn::operator<<(std::ostream & os) const
-{
-	return os << "\\staffOn ";
-}
+// ==================== ARStaffOn ====================
 
-// ============================================================================
-void 
-ARStaffOff::setTagParameterList(TagParameterList & pl)
+void ARStaffOn::setTagParameterList(TagParameterList & pl)
 {
 	pl.RemoveAll();
 }
 
-std::ostream & 
-ARStaffOff::operator<<(std::ostream & os) const
+void ARStaffOn::printName(std::ostream& os) const
 {
-	return os << "\\staffOff ";
+    os << "ARStaffOn";
+    ARMusicalTag::printName(os);
 }
 
-// ============================================================================
-void 
-ARBeamState::PrintName(std::ostream & os) const
+void ARStaffOn::printParameters(std::ostream& os) const
 {
-	os << "\\beams";
-	if (state == AUTO)
-		os << "Auto";
-	else if (state == OFF)
-		os << "Off";
-
+    ARMusicalTag::printParameters(os);
 }
 
-// ============================================================================
-std::ostream & 
-ARPossibleBreak::operator<<(std::ostream & os) const
+// ==================== ARStaffOff ====================
+
+void ARStaffOff::setTagParameterList(TagParameterList & pl)
 {
-	os << "\\pBreak";
-	os << "<" << value << ">";
-	if (getRange())
-		os << "(";
-	return os << " ";
+	pl.RemoveAll();
 }
 
-// ============================================================================
-void 
-ARSecondGlue::PrintName(std::ostream & os) const
+void ARStaffOff::printName(std::ostream& os) const
 {
-	os << "\\secGlue ";
+    os << "ARStaffOff";
+    ARMusicalTag::printName(os);
 }
 
-// ============================================================================
+void ARStaffOff::printParameters(std::ostream& os) const
+{
+    ARMusicalTag::printParameters(os);
+}
+
+// ==================== ARBeamState ====================
+
+void ARBeamState::printName(std::ostream& os) const
+{
+    os << "ARBeamState";
+    ARMusicalTag::printName(os);
+}
+
+void ARBeamState::printParameters(std::ostream& os) const
+{
+    os << "state:" << (state == AUTO ? "Auto" : "off");
+    os << ";";
+
+    ARMusicalTag::printParameters(os);
+}
+
+// ==================== ARSecondGlue ====================
+
+void ARSecondGlue::printName(std::ostream& os) const
+{
+    os << "ARSecondGlue";
+    ARMusicalTag::printName(os);
+}
+
+void ARSecondGlue::printParameters(std::ostream& os) const
+{
+    ARMusicalTag::printParameters(os);
+}
+
+// ==================== ARTagEnd ====================
+
 ARTagEnd::ARTagEnd(int id, const ARTagEnd * copy ) 
 			: ARMTParameter(id,copy)
 {

@@ -32,7 +32,7 @@ class ARBowing : public ARMTParameter, public ARPositionTag
 				ARBowing();
 				ARBowing(const ARBowing * bowing);
 
-	virtual		~ARBowing();
+	   virtual ~ARBowing();
 
 		const TagParameterFloat * getDX1() const	{ return dx1; }
 		const TagParameterFloat * getDY1() const	{ return dy1; }
@@ -46,13 +46,13 @@ class ARBowing : public ARMTParameter, public ARPositionTag
 		bool getParSet() const	{ return mParSet; }
 		virtual void setTagParameterList(TagParameterList & tlist);
 		virtual TagParameterList * getTagParameterList() const;
-		virtual void PrintParameters(std::ostream & os) const;
-		virtual void print(std::ostream& os) const;
+
+	    virtual void printName(std::ostream& os) const;
+	    virtual void printParameters(std::ostream& os) const;
 
 		virtual void setCurve(int curve, const NVPoint & p1, const NVPoint & p2);
 
   protected:
-
 	  TagParameterFloat * dx1;	// offset to the first control point
 	  TagParameterFloat * dy1;
 	  TagParameterFloat * dx2;	// offset to the last control point
@@ -63,11 +63,7 @@ class ARBowing : public ARMTParameter, public ARPositionTag
 
 	  bool mParSet;	// true if at least one of the 6 params has been set.
 
-
-		static ListOfTPLs ltpls;
+	  static ListOfTPLs ltpls;
 };
 
-
 #endif
-
-

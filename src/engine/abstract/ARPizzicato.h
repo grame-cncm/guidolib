@@ -32,11 +32,9 @@ public :
 	virtual			~ARPizzicato() { };
 	
 	virtual void	setTagParameterList(TagParameterList & tpl);
-	
-	// Routines to access TagpParameters
-	virtual void	print(std::ostream& os) const;
-	virtual void	PrintName(std::ostream & os) const;
-	virtual void	PrintParameters(std::ostream & os) const;
+
+	virtual void    printName(std::ostream& os) const;
+	virtual void    printParameters(std::ostream& os) const;
 	
 	tTypePizz		getType() const {return type;}
 	

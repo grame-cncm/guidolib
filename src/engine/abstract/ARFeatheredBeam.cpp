@@ -90,13 +90,6 @@ void ARFeatheredBeam::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARFeatheredBeam::PrintName(std::ostream & os) const
-{
-	os << "\\fBeam";
-	if (!getRange())
-		os << "Begin";
-}
-
 void ARFeatheredBeam::findPoints(std::string durations)
 {
 	std::size_t begin = 0;
@@ -170,11 +163,15 @@ void ARFeatheredBeam::convertDurationToBeams(float valor, float valor2)
 		beams.second=4;
 }
 
-void ARFeatheredBeam::print(std::ostream& os) const
+void ARFeatheredBeam::printName(std::ostream& os) const
 {
-    os << "ARFeatheredBeam: ";
+    os << "ARFeatheredBeam";
+    ARMusicalTag::printName(os);
+}
 
-    /* REM: TODO reste des params */
-    
-    os << "drawDuration: " << drawDur << ";" << std::endl;
+void ARFeatheredBeam::printParameters(std::ostream& os) const
+{
+    os << "drawDuration: " << drawDur << "; ";
+
+    ARMusicalTag::printParameters(os);
 }

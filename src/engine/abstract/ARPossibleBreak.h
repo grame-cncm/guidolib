@@ -22,18 +22,22 @@
 */
 class ARPossibleBreak :  public ARMusicalTag // , public ARMusicalObject
 {
-  public:
-      ARPossibleBreak() { }
+public:
+                 ARPossibleBreak() { }
+    virtual     ~ARPossibleBreak() { }
 
-      virtual 		~ARPossibleBreak() { }
-      virtual void 	print(std::ostream& os) const { os << "ARPossibleBreak;" << std::endl; }
-      virtual std::ostream & operator<<(std::ostream & os) const;
+    virtual void printName(std::ostream& os) const { os << "ARPossibleBreak"; ARMusicalTag::printName(os); }
+    virtual void printParameters(std::ostream& os) const {}
 
-      float value;
+    virtual float getValue()                { return value; }
+    virtual void  setValue(float newValue) { value = newValue; }
 
-      /**** Function to avoid dynamic_cast ****/
-      ARMusicalObject *isARPossibleBreak() { return this; }
-      /****************************************/
+    /**** Function to avoid dynamic_cast ****/
+    ARMusicalObject *isARPossibleBreak() { return this; }
+    /****************************************/
+
+protected:
+    float value;
 };
 
 

@@ -820,8 +820,3 @@ void GRArticulation::OnDraw(VGDevice & hdc) const
 {
 	GRTagARNotationElement::OnDraw(hdc);
 }
-
-void GRArticulation::print(std::ostream& os) const
-{
-}
-

@@ -110,33 +110,16 @@ void ARStaffFormat::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARStaffFormat::PrintName(std::ostream & os) const
+void ARStaffFormat::printName(std::ostream& os) const
 {
-	os << "\\staffFormat";
+    os << "ARStaffFormat";
+    ARMusicalTag::printName(os);
 }
 
-void ARStaffFormat::PrintParameters(std::ostream & os) const
+void ARStaffFormat::printParameters(std::ostream& os) const
 {
-	if (style)
-		os << "<style=\"" << style->getValue() << "\"";
-	if (style && size)
-		os << ",";
-	else if (size)
-		os << "<";
-	else
-		os << ">";
-	if (size)
-		os << "size=" << size->getUnitValue() << 
-		size->getUnit() << ">";
-	
-}
-
-void ARStaffFormat::print(std::ostream& os) const
-{
-    os << "ARStaffFormat: ";
-
     if (style)
         os << "style:" << style->getValue() << "; ";
-    
-    os << "lineThickness: " << fLineThickness << std::endl;
+
+    ARMusicalTag::printParameters(os);
 }

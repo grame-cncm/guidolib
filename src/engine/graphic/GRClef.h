@@ -48,8 +48,7 @@ public:
 
 	virtual const NVPoint & getReferencePosition() const;
 	virtual unsigned int getTextAlign() const { return sClefTextAlign; }
-	virtual void print(std::ostream& os) const;
-	
+		
 	const ARClef * getARClef() const;
 	
 	

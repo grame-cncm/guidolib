@@ -45,8 +45,7 @@ class GRRest : public GREvent
 
 		ARRest * getARRest() const;
 
-		virtual void print(std::ostream& os) const;
-
+		
 	private:
 
 		int mWholeMeasure;

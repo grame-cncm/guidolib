@@ -336,10 +336,6 @@ void GRStdNoteHead::OnDraw( VGDevice & hdc ) const
 	}
 }
 
-void GRStdNoteHead::print(std::ostream& os) const
-{
-}
-
 unsigned int GRStdNoteHead::getSymbol() const
 {
 	return mSymbol;

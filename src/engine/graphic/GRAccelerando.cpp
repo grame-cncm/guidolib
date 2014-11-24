@@ -256,7 +256,3 @@ void GRAccelerando::tellPosition(GObject * caller, const NVPoint & np)
 	setPosition(startPos);
 	startPos.x += 4.5f * LSPACE;
 }
-
-void GRAccelerando::print(std::ostream& os) const
-{
-}

@@ -68,10 +68,4 @@ void GRRange::removeAssociation(GRNotationElement * el)
 
 void GRRange::OnDraw( VGDevice & hdc) const
 {
-
-}
-
-void GRRange::print(std::ostream& os) const
-{
-
 }

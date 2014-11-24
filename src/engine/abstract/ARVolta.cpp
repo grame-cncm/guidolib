@@ -85,30 +85,21 @@ void ARVolta::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARVolta::PrintName( std::ostream & os ) const
+void ARVolta::printName(std::ostream& os) const
 {
-	os << "\\volta";
+    os << "ARVolta";
+    ARMusicalTag::printName(os);
 }
 
-std::ostream & ARVolta::operator<<(std::ostream & os) const
+void ARVolta::printParameters(std::ostream& os) const
 {
-	PrintName(os);
-	if (getRange())
-		os << "(";
-	return os << " ";
-}
-
-void ARVolta::print(std::ostream& os) const
-{
-    os << "ARVolta: ";
-
     if (mark)
         os << "mark: " << mark->getValue() << "; ";
 
     if (format)
         os << "format: " << format->getValue() << "; ";
 
-    os << std::endl;
+    ARMusicalTag::printParameters(os);
 }
 
 

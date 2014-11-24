@@ -42,9 +42,7 @@ void ARNewSystem::setTagParameterList(TagParameterList & tpl)
 	{
 		// we found a match!
 		if (ret == 0)
-		{
 			mDy =  TagParameterFloat::cast(rtpl->RemoveHead());
-		}
 
 		delete rtpl;
 	}
@@ -57,19 +55,13 @@ void ARNewSystem::setTagParameterList(TagParameterList & tpl)
 
 }
 
-void ARNewSystem::PrintParameters(std::ostream & os) const
+void ARNewSystem::printName(std::ostream& os) const
 {
-	if (mDy)
-		os << "<" << mDy->getValue() * kVirtualToCm << "cm> ";
+    os << "ARNewSystem";
+    ARMusicalTag::printName(os);
 }
 
-void ARNewSystem::PrintName(std::ostream & os) const
+void ARNewSystem::printParameters(std::ostream& os) const
 {
-	os << "\\newSystem";
+    ARMusicalTag::printParameters(os);
 }
-
-void ARNewSystem::print(std::ostream& os) const
-{
-    os << "ARNewSystem;" << std::endl;
-}
-

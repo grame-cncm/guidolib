@@ -25,17 +25,6 @@ ARUnits::ARUnits()
 {
 }
 
-void ARUnits::PrintName(std::ostream & os) const
-{
-	os << "\\units";
-}
-
-void ARUnits::PrintParameters(std::ostream & os) const
-{
-	// todo !
-	os << "<\"" << sType.c_str() << "> ";
-}
-
 void ARUnits::setTagParameterList(TagParameterList & tpl)
 {
 	if (ltpls.GetCount() == 0)
@@ -76,7 +65,15 @@ void ARUnits::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARUnits::print(std::ostream& os) const
+void ARUnits::printName(std::ostream& os) const
 {
-    os << "ARUnits: type: " << sType << "; " << std::endl;
+    os << "ARUnits";
+    ARMusicalTag::printName(os);
+}
+
+void ARUnits::printParameters(std::ostream& os) const
+{
+    os << "type: " << sType << "; ";
+
+    ARMusicalTag::printParameters(os);
 }

@@ -66,8 +66,7 @@ class GRAccidental : public GRNotationElement
 	 virtual void setColor(const TagParameterString *tps);
      virtual void setColRef(unsigned char *colRef);
 	 virtual void setAccidentalLayout( float notebreite, float curLSPACE );
-	 virtual void print(std::ostream& os) const;
-
+	 
 	 virtual void addToOffset( const NVPoint & pt );
 	 virtual const NVPoint &	getReferencePosition() const;
 

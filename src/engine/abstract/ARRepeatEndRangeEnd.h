@@ -27,27 +27,20 @@ class TagParameterList;
 */
 class ARRepeatEndRangeEnd :  public ARMTParameter // ,public ARMusicalObject
 {
-	public:
+public:
+	friend class ARRepeatEnd;
+	friend class ARFactory;
 
-		friend class ARRepeatEnd;
-		friend class ARFactory;
+			 ARRepeatEndRangeEnd( ARRepeatEnd * in );
+	virtual ~ARRepeatEndRangeEnd() { }
 
-				ARRepeatEndRangeEnd( ARRepeatEnd * in );
+	virtual void setTagParameterList(TagParameterList & pl);
 
-		virtual ~ARRepeatEndRangeEnd() { }
+    virtual void printName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 
-		virtual void setTagParameterList(TagParameterList & pl);
-
-        virtual void print(std::ostream& os) const { os << "ARRepeatEndRangeEnd;" << std::endl; }
-
-		virtual std::ostream & operator<<( std::ostream & os ) const
-		{
-			return os;
-		}
-
-	protected:
-
-		ARRepeatEnd * mRepeatEnd;
+protected:
+	ARRepeatEnd * mRepeatEnd;
 };
 
 #endif

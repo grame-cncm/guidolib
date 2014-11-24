@@ -88,8 +88,7 @@ class GRVoice : public GRARCompositeNotationElement
 
 	virtual void GGSOutput() const {}
 	virtual void OnDraw( VGDevice & ) const {}
-    virtual void print(std::ostream& os) const;
-
+    
 	ARMusicalVoice * getARMusicalVoice();
 
 	void startNewSystem(GRSystem * grsystem);

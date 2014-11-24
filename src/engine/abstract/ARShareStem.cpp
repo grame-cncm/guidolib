@@ -23,11 +23,11 @@ ListOfTPLs ARShareStem::ltpls(1);
 ARShareStem::ARShareStem(const ARShareStem * stm)
 : ARMTParameter(-1,stm)
 {
-
+	rangesetting = ONLY;
 }
 ARShareStem::~ARShareStem()
-	{
-	}
+{
+}
 
 void ARShareStem::setTagParameterList(TagParameterList & tpl)
 {
@@ -68,13 +68,13 @@ ARMusicalObject * ARShareStem::Copy() const
 	return new ARShareStem(this);
 }
 
-void ARShareStem::PrintName(std::ostream & os) const
+void ARShareStem::printName(std::ostream& os) const
 {
-	os << "\\shareStem";
-	if (!getRange())
-		os << "Begin";
+    os << "ARShareStem";
+    ARMusicalTag::printName(os);
 }
 
-void ARShareStem::PrintParameters(std::ostream & ) const
+void ARShareStem::printParameters(std::ostream& os) const
 {
+    ARMusicalTag::printParameters(os);
 }

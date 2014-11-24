@@ -90,10 +90,24 @@ void ARRitardando::setTagParameterList(TagParameterList& tpl)
 	tpl.RemoveAll();
 }
 
-void ARRitardando::print(std::ostream& os) const
+bool ARRitardando::MatchEndTag(const char *s)
 {
-    os << "ARRitardando: ";
+	if (ARMusicalTag::MatchEndTag(s))
+		return true;
 
+	if (!getRange() && !strcmp("\\ritEnd",s))
+		return true;
+	return false;
+}
+
+void ARRitardando::printName(std::ostream& os) const
+{
+    os << "ARRitardando";
+    ARMusicalTag::printName(os);
+}
+
+void ARRitardando::printParameters(std::ostream& os) const
+{
     if (tempo)
         os << "tempo: " << tempo->getValue() << "; ";
 
@@ -109,29 +123,5 @@ void ARRitardando::print(std::ostream& os) const
     if (fsize)
         os << "fsize: " << fsize->getValue() << "; ";
 
-    os << std::endl;
-}
-
-
-void ARRitardando::PrintName(std::ostream &os) const
-{
-	os << "\\rit";
-	if (!getRange())
-		os << "Begin";
-//	if (getRange()) os << "(";
-
-}
-
-void ARRitardando::PrintParameters(std::ostream & ) const
-{
-}
-
-bool ARRitardando::MatchEndTag(const char *s)
-{
-	if (ARMusicalTag::MatchEndTag(s))
-		return true;
-
-	if (!getRange() && !strcmp("\\ritEnd",s))
-		return true;
-	return false;
+    ARMusicalTag::printParameters(os);
 }

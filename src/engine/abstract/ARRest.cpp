@@ -52,19 +52,14 @@ void ARRest::browse(TimeUnwrap& mapper) const
 	mapper.AtPos (this, TimeUnwrap::kRest);
 }
 
-void ARRest::print(std::ostream& os) const
+void ARRest::printName(std::ostream& os) const
 {
-	os << "ARRest: duration: " << getDuration().getNumerator() << "/" << getDuration().getDenominator() << std::endl;
-
-	ARMusicalEvent::print(os);
+    os << "ARRest: ";
 }
 
-std::ostream & ARRest::operator<<(std::ostream &os) const
+void ARRest::printParameters(std::ostream& os) const
 {
-	TYPE_DURATION d = getDuration();
-	return (os << "_*" <<
-		d.getNumerator() << "/" <<
-		d.getDenominator() << " ");
+    os << "duration: " << getDuration().getNumerator() << "/" << getDuration().getDenominator() << "; ";
 }
 
 

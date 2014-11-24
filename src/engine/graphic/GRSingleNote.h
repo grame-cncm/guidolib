@@ -63,8 +63,6 @@ class GRSingleNote : public GRNote
 		virtual void	OnDraw( VGDevice & hdc ) const;
 		virtual void	GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 
-        virtual void	print(std::ostream& os) const;
-
 		virtual void	setSize(float nsize)
 		{
 			 mSize = nsize;

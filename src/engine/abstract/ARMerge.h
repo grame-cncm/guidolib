@@ -24,16 +24,14 @@ class ARMerge : // public ARMusicalObject,
 	public ARMusicalTag,
 	public ARPositionTag
 {
-	public:
+public:
+				 ARMerge()  { rangesetting = ONLY; }
+	virtual	    ~ARMerge()	{ }
 
-						ARMerge()  { rangesetting = ONLY; }
-		virtual			~ARMerge()	{ }
+	virtual void setError(int i = 1);
 
-		virtual void	setError(int i = 1);
-
-        virtual void	print(std::ostream& os) const { os << "ARMerge;" << std::endl; }
-		virtual std::ostream & operator<<(std::ostream & os) const;
+    virtual void printName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 };
-
 
 #endif

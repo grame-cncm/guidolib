@@ -23,14 +23,13 @@ class GRPage;
 */
 class ARPageFormat :  public ARMTParameter
 {
-		friend class GRPage;
+    friend class GRPage;
+
 public:
-
-				ARPageFormat( float px, float py, float ml, float mt, float mr, float mb );
-				ARPageFormat( char * px, char * py, char * ml, char * mt, char * mr, char * mb );
-				ARPageFormat( const ARPageFormat & arp );
-				ARPageFormat();
-
+				 ARPageFormat( float px, float py, float ml, float mt, float mr, float mb );
+				 ARPageFormat( char * px, char * py, char * ml, char * mt, char * mr, char * mb );
+				 ARPageFormat( const ARPageFormat & arp );
+				 ARPageFormat();
 	virtual 	~ARPageFormat();
 
 	void		 getPageFormat(float * sx, float * sy, float * ml, float * mt, 
@@ -39,15 +38,13 @@ public:
 	virtual bool IsStateTag() const { return true; }
 	
 	virtual void setTagParameterList( TagParameterList & theTagParameterList );
-	virtual void print(std::ostream& os) const;
 
-	virtual std::ostream & operator<<(std::ostream &os) const
-	  			{ return os;   }
+	virtual void printName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 
 protected:
-
-			void	ClipSize();
-			void	AdjustMargins();
+	void  ClipSize();
+	void  AdjustMargins();
 	
 	float mSizeX;		// All sizes are in internal (logical) units.
 	float mSizeY;
@@ -58,7 +55,6 @@ protected:
 	NVstring mFormat;
 
 	static ListOfTPLs ltpls;
-
 };
 
 #endif

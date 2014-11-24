@@ -782,11 +782,6 @@ void GRSystem::addStaff( GRStaff * newStaff, int num )
 }
 
 // ----------------------------------------------------------------------------
-void GRSystem::print(std::ostream& os) const
-{
-}
-
-// ----------------------------------------------------------------------------
 ARMusic * GRSystem::getARMusic() const
 {
 	return /*dynamic*/static_cast<ARMusic *>(getAbstractRepresentation());

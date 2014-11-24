@@ -35,7 +35,6 @@ ARBar::ARBar(const TYPE_TIMEPOSITION &timeposition)
 	numDy = 0;
 }
 
-
 ARBar::ARBar() : ARMTParameter()
 {
 	measureNumber = 0;
@@ -52,27 +51,6 @@ void ARBar::setMeasureNumberDisplayed(bool display) {
 }
 
 ARBar::~ARBar() // does nothing
-{
-}
-
-void ARBar::print(std::ostream& os) const
-{    
-    os << "ARBar: measureNumber: " << measureNumber << "; ";
-
-    if (measureNumberDisplayed)
-        os << "measureNumberDisplayed: " << measureNumberDisplayed->getValue() << "; ";
-
-    os << "numDx: " << numDx << "; numDy: " << numDy << "; ";
-
-    os << std::endl;
-}
-
-void ARBar::PrintName(std::ostream &os) const
-{
-	os << "\\bar";
-}
-
-void ARBar::PrintParameters(std::ostream &os) const
 {
 }
 
@@ -120,4 +98,22 @@ void ARBar::setTagParameterList(TagParameterList& tpl)
 	}
 
 	tpl.RemoveAll();
+}
+
+void ARBar::printName(std::ostream& os) const
+{
+    os << "ARBar";
+    ARMusicalTag::printName(os);
+}
+
+void ARBar::printParameters(std::ostream& os) const
+{
+    os << "measureNumber: " << measureNumber << "; ";
+
+    if (measureNumberDisplayed)
+        os << "measureNumberDisplayed: " << measureNumberDisplayed->getValue() << "; ";
+
+    os << "numDx: " << numDx << "; numDy: " << numDy << ";";
+
+    ARMusicalTag::printParameters(os);
 }

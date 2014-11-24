@@ -22,11 +22,12 @@
 
 class ARNaturalKey : public ARKey  
 {
-	public:
-					ARNaturalKey();
-		virtual 	~ARNaturalKey();
+public:
+				 ARNaturalKey() {};
+	virtual 	~ARNaturalKey() {};
 
-		std::ostream & operator<<(std::ostream & os) const;
+    virtual void printName(std::ostream& os) const { os << "ARNaturalKey"; ARMusicalTag::printName(os); }
+    virtual void printParameters(std::ostream& os) const {}
 };
 
 #endif

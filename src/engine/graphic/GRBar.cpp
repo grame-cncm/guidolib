@@ -287,11 +287,6 @@ void GRBar::OnDraw(VGDevice & hdc ) const
 }
 
 // --------------------------------------------------------------------------
-void GRBar::print(std::ostream& os) const
-{
-}
-
-// --------------------------------------------------------------------------
 ARBar * GRBar::getARBar() const
 {
 	return /*dynamic*/static_cast<ARBar *>(getAbstractRepresentation());

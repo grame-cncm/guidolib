@@ -30,30 +30,32 @@ public:
 	
 	virtual void setTagParameterList(TagParameterList & tlist);
 	virtual TagParameterList * getTagParameterList() const;
-	virtual void 	print(std::ostream& os) const;
+
+	virtual void    printName(std::ostream& os) const;
+	virtual void    printParameters(std::ostream& os) const;
+
 	virtual void	browse(TimeUnwrap& mapper) const;
 	virtual bool 	MatchEndTag(const char * s);
-	bool getParSet() const	{ return mParSet; }
 
-	const TagParameterFloat * getDx1() const	{ return dx1; }
-	const TagParameterFloat * getDy1() const	{ return dy1; }
-	const TagParameterFloat * getDx2() const	{ return dx2; }
-	const TagParameterFloat * getDy2() const	{ return dy2; }
-	const TagParameterFloat * getThickness() const	{ return fThickness; }
-	const TagParameterString * getLineStyle() const	{ return fLineStyle; }
-	bool isWavy() {return mWavy;}
-	bool isFill() {return mFill;}
+	const TagParameterFloat  *getDx1() const	    { return dx1; }
+	const TagParameterFloat  *getDy1() const	    { return dy1; }
+	const TagParameterFloat  *getDx2() const	    { return dx2; }
+	const TagParameterFloat  *getDy2() const	    { return dy2; }
+	const TagParameterFloat  *getThickness() const	{ return fThickness; }
+	const TagParameterString *getLineStyle() const	{ return fLineStyle; }
+	bool  isWavy()                                  { return mWavy; }
+    bool  isFill();
 	
 protected:
-	const TagParameterFloat *dx1;
-	const TagParameterFloat *dy1;
-	const TagParameterFloat *dx2;
-	const TagParameterFloat *dy2;
-	const TagParameterFloat *fThickness;
+	const TagParameterFloat  *dx1;
+	const TagParameterFloat  *dy1;
+	const TagParameterFloat  *dx2;
+	const TagParameterFloat  *dy2;
+    const TagParameterString *fill;
+	const TagParameterFloat  *fThickness;
 	const TagParameterString *fLineStyle;
-	bool mWavy;
-	bool mFill;
-	bool mParSet;
+
+	bool  mWavy;
 
 	static ListOfTPLs ltpls;
 };

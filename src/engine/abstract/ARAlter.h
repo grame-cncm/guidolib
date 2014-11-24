@@ -25,8 +25,8 @@
 class ARAlter : public ARMTParameter, public ARPositionTag
 {
 	public:
-				ARAlter(ARAlter * p_savealter = NULL, ARAlter * copyalter = NULL); 
-		virtual ~ARAlter();
+				     ARAlter(ARAlter * p_savealter = NULL, ARAlter * copyalter = NULL); 
+		virtual     ~ARAlter();
 
 		virtual bool IsStateTag() const									{ return true; }
 		virtual void setTagParameterList(TagParameterList & theTagParameterList);
@@ -37,15 +37,12 @@ class ARAlter : public ARMTParameter, public ARPositionTag
 		virtual std::string getAlterText() const;
 		virtual float getDetune() const;
 
-		virtual void print(std::ostream& os) const;
-        // virtual ostream & operator<<(ostream &os) const;
-		virtual void PrintName(std::ostream & os) const;
-		virtual void PrintParameters(std::ostream & os) const;
+	    virtual void printName(std::ostream& os) const;
+	    virtual void printParameters(std::ostream& os) const;
 
 		virtual ARAlter * getEndTag() const								{ return new ARAlter(NULL, savealter); }
 
 	protected:
-
 		ARAlter * savealter;
 
 		TagParameterString * alterstring;

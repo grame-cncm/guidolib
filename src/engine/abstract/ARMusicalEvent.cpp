@@ -44,7 +44,6 @@ ARMusicalEvent::ARMusicalEvent(int theNumerator, int theDenominator) : mPoints(0
 	setDuration ( Fraction(theNumerator,theDenominator) );
 }
 
-
 ARMusicalEvent::ARMusicalEvent(const TYPE_TIMEPOSITION & relativeTimePositionOfEvent,
 	const TYPE_DURATION & durationOfEvent)
   : ARMusicalObject(relativeTimePositionOfEvent)
@@ -81,7 +80,9 @@ ARMusicalEvent::~ARMusicalEvent()
 
 void ARMusicalEvent::print(std::ostream& os) const
 {
-    /* TODO ? */
+    printName(os);
+    printParameters(os);
+    os << std::endl;
 }
 
 void ARMusicalEvent::setDenominator(int newDenominator)

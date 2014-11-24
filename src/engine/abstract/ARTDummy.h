@@ -20,16 +20,12 @@
 /** \brief not yet documented
 */
 class ARTDummy : public ARMusicalTag
-
 {
 	public:
-      	
       	virtual ~ARTDummy();
 
-		virtual void print(std::ostream& os) const;
+	    virtual void printName(std::ostream& os) const;
+	    virtual void printParameters(std::ostream& os) const;
 };
 
-
 #endif
-
-

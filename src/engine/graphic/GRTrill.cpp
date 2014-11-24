@@ -367,7 +367,7 @@ void GRTrill::setTrillSymbol( unsigned int inSymbolID )
 void GRTrill::tellPosition( GObject * caller, const NVPoint & np )
 {
 	fType = static_cast<ARTrill *>(mAbstractRepresentation)->getType();
-	GREvent * ev = dynamic_cast<GREvent *>(caller);
+	GRSingleNote * ev = dynamic_cast<GRSingleNote *>(caller);
 	if (ev)
 	{
 		const int dir = chooseDirection(ev);
@@ -393,6 +393,10 @@ void GRTrill::tellPosition( GObject * caller, const NVPoint & np )
 		accidentalPos.y -= 1.5f*LSPACE;	
 		fAccidental->setPosition(accidentalPos);
 	}
+    else {
+        mDraw = false;
+        fAccidental->setDrawOnOff(false);
+    }
 }
 
 
@@ -450,8 +454,4 @@ unsigned int GRTrill::getTextAlign() const
 float & GRTrill::getLastPosX(int i){
 	static std::map<int, float> lastPosX;
 	return lastPosX[i];
-}
-
-void GRTrill::print(std::ostream& os) const
-{
 }

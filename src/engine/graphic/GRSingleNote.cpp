@@ -192,7 +192,7 @@ void GRSingleNote::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos&
 		TYPE_DURATION dur = getDuration();
 		if (dur.getNumerator() == 0) {		// notes in chords have a null duration
 			dur = getDurTemplate();
-		}
+        }
 //		const ARNote * ar = getARNote();
 //		std::cout << "mapped pos: " << ar->getStartTimePosition() << " ar pos: " << ar->getRelativeTimePosition() << " ";
 //		ar->print(std::ostream& os);
@@ -1220,8 +1220,4 @@ void GRSingleNote::setHeadState( const ARTHead * pheadstate )
 void GRSingleNote::addToOffset( const NVPoint & pt )
 {
 	mOffset += pt;
-}
-
-void GRSingleNote::print(std::ostream& os) const
-{
 }

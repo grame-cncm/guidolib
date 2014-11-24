@@ -96,10 +96,14 @@ void ARSymbol::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARSymbol::print(std::ostream& os) const
+void ARSymbol::printName(std::ostream& os) const
 {
-    os << "ARSymbol: ";
+    os << "ARSymbol";
+    ARMusicalTag::printName(os);
+}
 
+void ARSymbol::printParameters(std::ostream& os) const
+{
     if (filePath)
         os << "file: \"" << filePath->getValue() << "\"; ";
 
@@ -112,33 +116,5 @@ void ARSymbol::print(std::ostream& os) const
     if (height)
         os << "h: " << height->getValue() << "; ";
 
-    os << std::endl;
-}
-
-void ARSymbol::PrintName(std::ostream &os) const
-{
-	os << "\\symbol";
-}
-
-void ARSymbol::PrintParameters(std::ostream &os) const
-{
-    if (filePath || mDx || mDy) {
-        os << "<\"";
-        if (filePath) {
-            os << filePath->getValue();
-            if (mDx || mDy)
-                os << "\",";
-        }
-
-        if (mDx) {
-            os << mDx->getUnitValue() << mDx->getUnit();
-            if (mDy)
-                os << "\",";
-        }
-
-        if (mDy)
-            os << mDy->getUnitValue() << mDy->getUnit();
-
-        os << ">";
-    }
+    ARMusicalTag::printParameters(os);
 }

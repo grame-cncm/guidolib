@@ -67,7 +67,3 @@ const unsigned char * GRSimpleBeam::getColRef() const
 {
 	return fParent ? fParent->getColRef() : 0;
 }
-
-void GRSimpleBeam::print(std::ostream& os) const
-{
-}

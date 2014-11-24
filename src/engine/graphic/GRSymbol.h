@@ -26,49 +26,46 @@ class Bitmap;
 
 class GRSymbol : public GRPTagARNotationElement
 {	
-	bool			absolutePath( const char* file ) const;
-	std::string		makeAbsolutePath( const std::string& path, const char* file ) const;
-	std::string		findFile( const char* file, const std::vector<std::string>& paths ) const;
+    bool			absolutePath( const char* file ) const;
+    std::string		makeAbsolutePath( const std::string& path, const char* file ) const;
+    std::string		findFile( const char* file, const std::vector<std::string>& paths ) const;
 
-	public:
-		class GRSymbolSaveStruct : public GRPositionTag::GRSaveStruct
-		{
-			public:
-				
-						GRSymbolSaveStruct()  {}
-				virtual ~GRSymbolSaveStruct() {};
-				
-				NVPoint  position;
-				NVRect   boundingBox;
-                NVstring positionString;
-                Bitmap  *bitmap;
-		};
+public:
+    class GRSymbolSaveStruct : public GRPositionTag::GRSaveStruct
+    {
+    public:
+        GRSymbolSaveStruct()  {}
+        virtual ~GRSymbolSaveStruct() {};
 
-						GRSymbol( GRStaff *, ARSymbol * abstractRepresentationOfSymbol );
-		virtual 		~GRSymbol();
+        NVPoint  position;
+        NVRect   boundingBox;
+        NVstring positionString;
+        Bitmap  *bitmap;
+    };
 
-		virtual void 	removeAssociation( GRNotationElement * el );
-		virtual void 	tellPosition( GObject * caller, const NVPoint & inPosition );
-		virtual void 	addAssociation( GRNotationElement * el );
-		
-		virtual void 	OnDraw( VGDevice & hdc ) const;
-		
-		virtual void 	print(std::ostream& os) const;
-		
-		const ARSymbol *getARSymbol() const;
+                    GRSymbol( GRStaff *, ARSymbol * abstractRepresentationOfSymbol );
+    virtual 	   ~GRSymbol();
 
-		virtual float 	getLeftSpace() const;
-		virtual float 	getRightSpace() const;
+    virtual void 	removeAssociation( GRNotationElement * el );
+    virtual void 	tellPosition( GObject * caller, const NVPoint & inPosition );
+    virtual void 	addAssociation( GRNotationElement * el );
 
-        virtual void 	setPosition(const NVPoint & inPosition);
-		virtual void 	setHPosition( float nx );
+    virtual void 	OnDraw( VGDevice & hdc ) const;
 
-	protected:
+    const ARSymbol *getARSymbol() const;
 
-		virtual GRPositionTag::GRSaveStruct * getNewGRSaveStruct()
-        { return new GRSymbolSaveStruct; }
+    virtual float 	getLeftSpace() const;
+    virtual float 	getRightSpace() const;
 
-        bool haveToDisplayWarningMsg;
+    virtual void 	setPosition(const NVPoint & inPosition);
+    virtual void 	setHPosition( float nx );
+
+protected:
+
+    virtual GRPositionTag::GRSaveStruct * getNewGRSaveStruct()
+    { return new GRSymbolSaveStruct; }
+
+    bool haveToDisplayWarningMsg;
 };
 
 #endif

@@ -21,18 +21,14 @@
 */
 class ARBar : // public ARMusicalObject, 
 	public ARMTParameter
-  {
-  public:
-		ARBar(const TYPE_TIMEPOSITION & timeposition);
-		
-		ARBar();
-
+ {
+ public:
+		         ARBar(const TYPE_TIMEPOSITION & timeposition);
+		         ARBar();
 		virtual ~ARBar();
 
-		virtual void print(std::ostream& os) const;
-       // virtual ostream & operator<<(ostream &os) const;
-		virtual void PrintName(std::ostream & os) const;
-		virtual void PrintParameters(std::ostream & os) const;
+	    virtual void printName(std::ostream& os) const;
+	    virtual void printParameters(std::ostream& os) const;
 
 		virtual void setTagParameterList(TagParameterList & theTagParameterList);
 
@@ -56,7 +52,6 @@ class ARBar : // public ARMusicalObject,
 		float numDy;
 
 		static ListOfTPLs ltpls;
-  };
-
+};
 
 #endif

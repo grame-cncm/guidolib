@@ -21,20 +21,19 @@
 */
 class ARRest : public ARMusicalEvent 
 {
-  public:
+public:
+			 ARRest (const TYPE_DURATION & durationOfRest);
+			 ARRest (const TYPE_TIMEPOSITION & starttimeOfRest, const TYPE_DURATION & durationOfRest);
+			 ARRest (int theNumerator, int theDenominator);
+		     ARRest (const ARRest &arrest);
+    virtual ~ARRest();
 
-				ARRest (const TYPE_DURATION & durationOfRest);
-				ARRest (const TYPE_TIMEPOSITION & starttimeOfRest, const TYPE_DURATION & durationOfRest);
-				ARRest (int theNumerator, int theDenominator);
-				ARRest (const ARRest &arrest);
-      virtual ~ARRest();
+	virtual ARMusicalObject * Copy() const;
 
-	  virtual ARMusicalObject * Copy() const;
+	virtual void printName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 
-	virtual void	print(std::ostream& os) const;
-	virtual std::ostream & operator<<(std::ostream & os) const;
-	virtual void	browse(TimeUnwrap& mapper) const;
-        
+	virtual void browse(TimeUnwrap& mapper) const;
 
     /**** Function to avoid dynamic_cast ****/
     ARMusicalObject *isARRest() { return this; }

@@ -41,8 +41,7 @@ class GRStaccato : public GRARNotationElement
 
 		virtual void OnDraw( VGDevice & hdc ) const;
 
-		virtual void print(std::ostream& os) const;
-
+		
 
 
 

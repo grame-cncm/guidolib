@@ -25,21 +25,16 @@ class ARFactory;
 class ARStaffOn : public ARMTParameter
 	// ,public ARMusicalObject
 {
-	public:
+public:
+	friend class ARFactory;
 
-		friend class ARFactory;
+			 ARStaffOn() {}
+	virtual	~ARStaffOn() {};
 
-						ARStaffOn() {}
-		virtual			~ARStaffOn() {};
+	virtual void setTagParameterList(TagParameterList & pl);
 
-		virtual void setTagParameterList(TagParameterList & pl);
-
-        virtual void print(std::ostream& os) const { os << "ARStaffOn;" << std::endl; }
-
-		virtual std::ostream & operator<<(std::ostream & os) const;
-
-	protected:
-		
+    virtual void printName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 };
 
 #endif

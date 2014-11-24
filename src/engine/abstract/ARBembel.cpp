@@ -71,19 +71,13 @@ void ARBembel::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARBembel::PrintName(std::ostream & os) const
+void ARBembel::printName(std::ostream& os) const
 {
-	os << "\\bembel";
+    os << "ARBembel";
+    ARMusicalTag::printName(os);
 }
 
-void ARBembel::PrintParameters(std::ostream & os) const
+void ARBembel::printParameters(std::ostream& os) const
 {
-	if (inverse)
-		os << "<-1>";
+    ARMusicalTag::printParameters(os);
 }
-
-void ARBembel::print(std::ostream& os) const
-{
-    os << "ARBembel;" << std::endl;
-}
-

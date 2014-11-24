@@ -42,26 +42,10 @@ ARMusicalObject * ARChordComma::Copy() const
 	return new ARChordComma(this);
 }
 
-void ARChordComma::print(std::ostream& os) const
-{
-	os << "ARChordComma" << '\n';
-}
-
-void ARChordComma::PrintName(std::ostream & os) const
-{
-	os << "\\chordComma";
-}
-
-void ARChordComma::PrintParameters(std::ostream & ) const
-{
-}
-
-
 void ARChordComma::browse(TimeUnwrap& mapper) const
 {
 	mapper.AtPos (this, TimeUnwrap::kChordComma);
 }
-
 
 void ARChordComma::setTagParameterList(TagParameterList & tpl)
 {
@@ -94,4 +78,13 @@ void ARChordComma::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
+void ARChordComma::printName(std::ostream& os) const
+{
+    os << "ARChordComma";
+    ARMusicalTag::printName(os);
+}
 
+void ARChordComma::printParameters(std::ostream& os) const
+{
+    ARMusicalTag::printParameters(os);
+}

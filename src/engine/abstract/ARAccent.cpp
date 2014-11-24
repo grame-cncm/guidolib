@@ -66,20 +66,13 @@ void ARAccent::browse(TimeUnwrap& mapper) const
 	mapper.AtPos (this, TimeUnwrap::kAccent);
 }
 
-void ARAccent::PrintName(std::ostream & os) const
+void ARAccent::printName(std::ostream& os) const
 {
-	os << "\\accent";
-	if (getRange()) os << "(";
-
+	os << "ARAccent";
+    ARMusicalTag::printName(os);
 }
 
-void ARAccent::PrintParameters(std::ostream & ) const
+void ARAccent::printParameters(std::ostream& os) const
 {
+    ARMusicalTag::printParameters(os);
 }
-
-void ARAccent::print(std::ostream& os) const
-{
-    os << "ARAccent;" << std::endl;
-}
-
-

@@ -65,22 +65,16 @@ void ARSystemFormat::setTagParameterList(TagParameterList &tpl)
 	tpl.RemoveAll();
 }
 
-void ARSystemFormat::PrintName(std::ostream & os) const
+void ARSystemFormat::printName(std::ostream& os) const
 {
-	os << "\\systemFormat";
+    os << "ARSystemFormat";
+    ARMusicalTag::printName(os);
 }
 
-void ARSystemFormat::PrintParameters(std::ostream & ) const
+void ARSystemFormat::printParameters(std::ostream& os) const
 {
-	// todo !
-}
-
-void ARSystemFormat::print(std::ostream& os) const
-{
-    os << "ARSystemFormat: ";
-
     if (mDx)
         os << "dx: " << mDx->getValue() << ";";
 
-     os << std::endl;
+    ARMusicalTag::printParameters(os);
 }

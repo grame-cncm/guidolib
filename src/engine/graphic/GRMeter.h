@@ -41,8 +41,7 @@ class GRMeter : public GRTagARNotationElement
 		virtual void GGSOutput() const;
 		virtual void OnDraw(VGDevice & hdc ) const;
 
-		virtual void print(std::ostream& os) const;
-
+		
 		ARMeter* getARMeter();
 		const ARMeter* getARMeter() const;
 

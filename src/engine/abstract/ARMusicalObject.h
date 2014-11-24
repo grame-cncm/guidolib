@@ -72,10 +72,9 @@ class ARMusicalObject
 		// must be re-designed!!! Should be put to another place  but is needed here from several alg.
 		virtual TYPE_TIMEPOSITION getRelativeEndTimePosition() const;
 
-		virtual std::ostream & operator<<(std::ostream &os) const;
+		virtual std::ostream & operator<<(std::ostream& os) const;
 
-		virtual void print(std::ostream& os) const;
-
+	    
 		// introduced to get correct tie pos for notes in chords [DF 2012-03-19]
 		// do nothing at this level
 		virtual void setStartTimePosition(const TYPE_TIMEPOSITION  & pos)	{}
@@ -97,10 +96,12 @@ class ARMusicalObject
 		virtual void	setVoiceNum(int num)						{ fVoiceNum = num; }
 		virtual int		getVoiceNum() const							{ return fVoiceNum; }
 
-	static		bool	IsPowerOfTwoDenom(const TYPE_DURATION & dur);
+	static	bool	IsPowerOfTwoDenom(const TYPE_DURATION & dur);
 
 	virtual void	setDrawGR(bool onoff){drawGR = onoff;}
 	virtual bool	getDrawGR(){return drawGR;}
+
+    virtual void print(std::ostream& os) const;
 
     /**** Functions to avoid dynamic_cast ****/
     virtual ARMusicalObject  *isARRepeatBegin()   { return NULL; }
@@ -140,7 +141,6 @@ class ARMusicalObject
 
   private:
 		TYPE_DURATION		fDuration;
-
 };
 
 #endif

@@ -26,28 +26,15 @@ ListOfTPLs ARComposer::ltpls(1);
 
 ARComposer::ARComposer()
 {
-	name = pageformat = NULL;
-	rangesetting = NO;
+	name         = 0;
+    pageformat   = 0;
+    rangesetting = NO;
 }
-
 
 ARComposer::~ARComposer()
 {
 	delete name;
 	delete pageformat;
-}
-
-void ARComposer::print(std::ostream& os) const
-{
-    os << "ARComposer: ";
-
-    if (name)
-        os << "name: \"" << name->getValue() << "\"; ";
-
-    if (pageformat)
-        os << "pageformat: " << pageformat->getValue() << ";";
-
-    os << std::endl;
 }
 
 void ARComposer::setTagParameterList(TagParameterList& tpl)
@@ -98,13 +85,25 @@ void ARComposer::setTagParameterList(TagParameterList& tpl)
 	tpl.RemoveAll();
 }
 
-std::ostream & ARComposer::operator<<(std::ostream & os) const
-{
-	return os << "\\composer<\"" << name << "\"> ";
-}
-
 const char* ARComposer::getName() const			{ return name ? name->getValue() : 0; }
 const char* ARComposer::getPageFormat() const	{ return pageformat ? pageformat->getValue() : 0; }
+
+void ARComposer::printName(std::ostream& os) const
+{
+    os << "ARComposer";
+    ARMusicalTag::printName(os);
+}
+
+void ARComposer::printParameters(std::ostream& os) const
+{
+    if (name)
+        os << "name: \"" << name->getValue() << "\"; ";
+
+    if (pageformat)
+        os << "pageformat: " << pageformat->getValue() << ";";
+
+    ARMusicalTag::printParameters(os);
+}
 
 
 

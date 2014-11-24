@@ -219,63 +219,6 @@ void ARBowing::setTagParameterList(TagParameterList & tpl)
 //	hascontrol = 0;
 //}
 
-void ARBowing::PrintParameters(std::ostream & os) const
-{
-	int previous = 0;
-
-	if (mParSet)
-		os << "<";
-
-	if (mCurve && mCurve->TagIsSet())
-		os << "curve=\"" << mCurve->getValue() << "\"";
-	else
-	{
-		if (dx1 && dx1->TagIsSet())
-		{
-			os << "dx1=" << dx1->getUnitValue() << dx1->getUnit();
-			previous = 1;
-		}
-		if (dy1 && dy1->TagIsSet())
-		{
-			if (previous)
-				os << ",";
-			os << "dy1=" << dy1->getUnitValue() << dy1->getUnit();
-			previous = 1;
-		}
-		if (dx2 && dx2->TagIsSet())
-		{
-			if (previous)
-				os << ",";
-			os << "dx2=" << dx2->getUnitValue() << dx2->getUnit();
-			previous = 1;
-		}
-		if (dy2 && dy2->TagIsSet())
-		{
-			if (previous)
-				os << ",";
-			os << "dy2=" << dy2->getUnitValue() << dy2->getUnit();
-			previous = 1;
-		}
-		if (r3 && r3->TagIsSet())
-		{
-			if (previous)
-				os << ",";
-			os << "r3=" << r3->getUnitValue();
-			previous = 1;
-		}
-		if (h && h->TagIsSet())
-		{
-			if (previous)
-				os << ",";
-			os << "h=" << h->getUnitValue() << h->getUnit();
-			previous = 1;
-		}
-	}
-	
-	if (mParSet)
-		os << ">";
-}
-
 TagParameterList * ARBowing::getTagParameterList() const
 {
 	TagParameterList * tpl = new TagParameterList(1);
@@ -418,11 +361,15 @@ void ARBowing::setCurve(int ,const NVPoint & p1, const NVPoint & p2)
 */
 }
 
-void ARBowing::print(std::ostream& os) const
+void ARBowing::printName(std::ostream& os) const
 {
-    os << "ARBowing; ";
+    os << "ARBowing";
+    ARMusicalTag::printName(os);
+}
 
-    /* TODO params ? */
+void ARBowing::printParameters(std::ostream& os) const
+{
+    /* TODO */
 
-    os << std::endl;
+    ARMusicalTag::printParameters(os);
 }

@@ -190,36 +190,6 @@ TagParameterList * ARTremolo::getTagParameterList() const
 }
 
 // -----------------------------------------------------------------------------
-void ARTremolo::print(std::ostream& os) const
-{
-    os << "ARTremolo: ";
-
-    if (fSpeed)
-        os << "speed: " << fSpeed->getValue() << "; ";
-
-    if (fStyle)
-        os << "style: " << fStyle->getValue() << "; ";
-
-    if (fPitch)
-        os << "pitch: " << fPitch->getValue() << ";";
-
-    if (fThickness)
-        os << "thickness: " << fThickness->getValue() << ";";
-
-    if (fText)
-        os << "text: " << fText->getValue() << ";";
-
-    os << std::endl;
-}
-
-// -----------------------------------------------------------------------------
-void ARTremolo::PrintName(std::ostream & os) const
-{
-	os << "\\trem";
-
-}
-
-// -----------------------------------------------------------------------------
 bool ARTremolo::MatchEndTag(const char * s)
 {
 	if (ARMusicalTag::MatchEndTag(s))
@@ -284,4 +254,31 @@ int ARTremolo::getNumberOfStrokes()
     }
     
     return nbOfStrokes;
+}
+
+// -----------------------------------------------------------------------------
+void ARTremolo::printName(std::ostream& os) const
+{
+    os << "ARTremolo";
+    ARMusicalTag::printName(os);
+}
+
+void ARTremolo::printParameters(std::ostream& os) const
+{
+    if (fSpeed)
+        os << "speed: " << fSpeed->getValue() << "; ";
+
+    if (fStyle)
+        os << "style: " << fStyle->getValue() << "; ";
+
+    if (fPitch)
+        os << "pitch: " << fPitch->getValue() << "; ";
+
+    if (fThickness)
+        os << "thickness: " << fThickness->getValue() << "; ";
+
+    if (fText)
+        os << "text: " << fText->getValue() << ";";
+
+    ARMusicalTag::printParameters(os);
 }

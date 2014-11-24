@@ -41,8 +41,6 @@ using namespace std;
 extern long ggsoffsetx;
 extern long ggsoffsety;
 
-ostream& operator<< (ostream& os, const GRNotationElement& e) { e.print (os); return os;}
-
 GRNotationElement::GRNotationElement()
 {
 	mAssociated = 0;

@@ -66,14 +66,13 @@ void ARRepeatBegin::setRepeatEnd(const ARRepeatEnd *myr)
 		dur = myr->getRelativeTimePosition() - getRelativeTimePosition();
 }
 
-std::ostream & ARRepeatBegin::operator<<(std::ostream & os) const
+void ARRepeatBegin::printName(std::ostream& os) const
 {
-	os << "\\repeatBegin";
-
-	return (os << " ");
+    os << "ARRepeatBegin";
+    ARMusicalTag::printName(os);
 }
 
-void ARRepeatBegin::print(std::ostream& os) const
-{    
-    os << "ARRepeatBegin;" << std::endl;
+void ARRepeatBegin::printParameters(std::ostream& os) const
+{
+    ARMusicalTag::printParameters(os);
 }

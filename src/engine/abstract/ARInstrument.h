@@ -24,22 +24,19 @@ class TagParameterString;
 class ARInstrument : public ARMTParameter
 {
 	public:
-
-						ARInstrument();	
-		virtual 		~ARInstrument();	
+				 ARInstrument();	
+		virtual ~ARInstrument();	
 
 		virtual void setTagParameterList(TagParameterList & theTagParameterList);
 
-		virtual void print(std::ostream& os) const;
+	    virtual void printName(std::ostream& os) const;
+	    virtual void printParameters(std::ostream& os) const;
 
 		const char* getName() const;
 		const TagParameterString *getTransp() const { return transp; }
 		virtual bool IsStateTag() const 		    { return true; }
-	
-		virtual std::ostream &operator<<(std::ostream &os) const;
 
 	protected:
-
 		TagParameterString *name;
 		TagParameterString *transp;
 

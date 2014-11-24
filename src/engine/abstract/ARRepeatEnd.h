@@ -40,17 +40,16 @@ class ARRepeatEnd : public ARBar
 
 		virtual void setTagParameterList( TagParameterList & tpl);
 
-		virtual void	print(std::ostream& os) const;
-		virtual void	browse(TimeUnwrap& mapper) const;
+	    virtual void printName(std::ostream& os) const;
+	    virtual void printParameters(std::ostream& os) const;
 
-		virtual std::ostream & operator<<(std::ostream & os) const;
+		virtual void browse(TimeUnwrap& mapper) const;
 
         /**** Function to avoid dynamic_cast ****/
         ARMusicalObject *isARRepeatEnd() { return this; }
         /****************************************/
 
 	protected:
-
 		static ListOfTPLs ltpls;
 		ARRepeatBegin * repbeg;
 };

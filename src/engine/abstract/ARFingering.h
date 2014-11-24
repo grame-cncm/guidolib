@@ -23,21 +23,19 @@
 */
 class ARFingering : public ARText
 {
-	public:
-						ARFingering();
-		virtual			~ARFingering();
+public:
+                 ARFingering();
+    virtual		~ARFingering();
 
-		virtual void print(std::ostream& os) const;
-		virtual void PrintName(std::ostream & os) const;
-		virtual void PrintParameters(std::ostream & os) const;
+    virtual void printName(std::ostream& os) const;
+    virtual void printParameters(std::ostream& os) const;
 
-//		virtual void setTagParameterList(TagParameterList & tpl);// (JB) remove
+    //virtual void setTagParameterList(TagParameterList & tpl);// (JB) remove
 
-	protected:
+protected:
+    virtual const char * getTagFormat() const;	 // (JB) new
 
-		virtual const char * getTagFormat() const;	 // (JB) new
-		
-//		static ListOfTPLs ltpls;	 // (JB) remove
+    //static ListOfTPLs ltpls;	 // (JB) remove
 };
 
 #endif

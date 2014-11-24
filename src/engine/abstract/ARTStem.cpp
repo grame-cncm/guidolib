@@ -60,26 +60,6 @@ ARMusicalObject * ARTStem::Copy() const
 	return new ARTStem(this);
 }
 
-void ARTStem::PrintName(std::ostream & os) const
-{
-	switch (mStemState)
-	{
-		case UP: 	os << "\\stemsUp";		break;
-		case DOWN: 	os << "\\stemsDown";	break;
-		case AUTO: 	os << "\\stemsAuto";	break;
-		case OFF: 	os << "\\stemsOff";		break;
-	}
-}
-
-void ARTStem::PrintParameters(std::ostream & os) const
-{
-	if (mTpfLength && mTpfLength->TagIsSet())
-	{
-		os << "<" << mTpfLength->getUnitValue() <<
-			mTpfLength->getUnit() << ">";
-	}
-}
-
 void ARTStem::setTagParameterList(TagParameterList & tpl)
 {
 	if (ltpls.GetCount() == 0)
@@ -116,21 +96,32 @@ void ARTStem::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARTStem::print(std::ostream& os) const
+void ARTStem::printName(std::ostream& os) const
 {
-    std::string stateStr;
+    os << "ARTStem";
 
 	switch (mStemState) {
-		case UP: 	stateStr = "stemsUp";   break;
-		case DOWN: 	stateStr = "stemsDown";	break;
-		case AUTO: 	stateStr = "stemsAuto";	break;
-		case OFF: 	stateStr = "stemsOff";  break;
+		case UP:
+            os << " (stemsUp)";
+            break;
+		case DOWN:
+            os << " (stemsDown)";
+            break;
+		case AUTO:
+            os << " (stemsAuto)";
+            break;
+		case OFF:
+            os << " (stemsOff)";
+            break;
 	}
-    
-    os << "ARTStem: state: " << stateStr << ";";
 
+    ARMusicalTag::printName(os);
+}
+
+void ARTStem::printParameters(std::ostream& os) const
+{
     if (mTpfLength)
         os << "length: " << mTpfLength->getValue() << ";";
 
-    os << std::endl;
+    ARMusicalTag::printParameters(os);
 }

@@ -32,7 +32,6 @@
 #include "ARStaff.h"
 #include "ARPageFormat.h"
 #include "ARSystemFormat.h"
-#include "ARABreak.h"
 #include "ARAuto.h"
 #include "ARDisplayDuration.h"
 #include "ARAccolade.h"
@@ -123,8 +122,7 @@ GRStaffManager::GRStaffManager(GRMusic * p_grmusic, ARPageFormat * inPageFormat)
 #endif
 
 	mIsBreak = false;
-	mArABreak = NULL;
-	mArAuto = NULL;
+	mArAuto  = NULL;
 
 	mStaffStateVect = NULL;
 	mTempSpringID = 1;
@@ -2734,11 +2732,6 @@ void GRStaffManager::setBarFormat(ARBarFormat * barfrmt, GRStaff * curstaff)
 	curstaff->setBarFormat(barfrmt);
 }
 
-void GRStaffManager::setAutoBreak(ARABreak * p_arabreak)
-{
-	mArABreak = p_arabreak;
-}
-
 void GRStaffManager::setAutoTag(ARAuto * p_arauto)
 {
 	mArAuto = p_arauto;
@@ -2748,9 +2741,6 @@ int GRStaffManager::IsAutoPageBreak() const
 {
 	if (mArAuto)
 		return (mArAuto->getPageBreakState() == ARAuto::ON);
-
-	if (mArABreak)
-		return (mArABreak->getPageBreakState() == ARABreak::ON);
 
 	return 1;
 }

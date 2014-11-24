@@ -75,18 +75,13 @@ void ARDrHoos::setTagParameterList(TagParameterList & tpl)
 
 }
 
-void ARDrHoos::PrintName(std::ostream & os) const
+void ARDrHoos::printName(std::ostream& os) const
 {
-	os << "\\DrHoos";
+    os << "ARDrHoos";
+    ARMusicalTag::printName(os);
 }
 
-void ARDrHoos::PrintParameters(std::ostream & os) const
+void ARDrHoos::printParameters(std::ostream& os) const
 {
-	if (inverse)
-		os << "<-1>";
-}
-
-void ARDrHoos::print(std::ostream& os) const
-{
-    os << "ARDrHoos: inverse: " << inverse << ";" << std::endl;
+    ARMusicalTag::printParameters(os);
 }

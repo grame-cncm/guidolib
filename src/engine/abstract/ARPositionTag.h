@@ -101,6 +101,10 @@ class ARPositionTag
 #endif
 		virtual bool	isEndTagClass() const { return false; }
 
+                void	print(std::ostream & os) const { printName(os); printParameters(os); os << std::endl; }
+		virtual void	printName(std::ostream & os)       const = 0;
+		virtual void	printParameters(std::ostream & os) const = 0;
+
         /**** Functions to avoid dynamic_cast ****/
         virtual ARMusicalObject *isARDisplayDuration() { return NULL; }
         virtual ARMusicalObject *isARChordTag()        { return NULL; }

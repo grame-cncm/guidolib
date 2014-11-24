@@ -50,10 +50,6 @@ GRBembel::~GRBembel()
 {
 }
 
-void GRBembel::print(std::ostream& os) const
-{
-}
-
 void GRBembel::OnDraw(VGDevice & hdc) const
 {
 	GRTagARNotationElement::OnDraw(hdc);

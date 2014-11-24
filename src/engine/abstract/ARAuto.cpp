@@ -134,61 +134,15 @@ void ARAuto::setTagParameterList(TagParameterList& tpl)
 	return;
 }
 
-void ARAuto::PrintName(std::ostream & os) const
+void ARAuto::printName(std::ostream& os) const
 {
-	os << "\\set";
+    os << "ARAuto";
+    ARMusicalTag::printName(os);
 }
 
-void ARAuto::PrintParameters(std::ostream & os) const
+void ARAuto::printParameters(std::ostream& os) const
 {
-	if (numparset)
-	{
-		int prev = 0;
-		os << "<";
-		
-		if (endBarState == OFF)
-		{
-			os << "endBar=\"off\"";
-			prev = 1;
-		}
-		if (pageBreakState == OFF)
-		{
+    os << "autoEndBar: " << (endBarState == ON ? "on" : "off") << "; ";
 
-			if (prev) os << ",";
-			os << "pageBreak=\"off\"";
-			prev = 1;
-		}
-		
-		if (systemBreakState == OFF)
-		{ 
-			if (prev) os << ",";
-			os << "systemBreak=\"off\"";
-			prev = 1;
-		}
-
-		if (clefKeyMeterOrderState == OFF)
-		{ 
-			if (prev) os << ",";
-			os << "clefKeyMeterOrder=\"off\"";
-			prev = 1;
-		}
-		if (stretchLastLineState == ON)
-		{
-			if (prev) os << ",";
-			os << "stretchLastLine=\"on\"";
-			prev = 1;
-		}
-		if (stretchFirstLineState == ON)
-		{
-			if (prev) os << ",";
-			os << "stretchFirstLine=\"on\"";
-			prev = 1;
-		}
-		os << ">";
-	}
-}
-
-void ARAuto::print(std::ostream & os) const
-{
-    os << "ARAuto: " << std::endl;
+    ARMusicalTag::printParameters(os);
 }

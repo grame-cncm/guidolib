@@ -31,7 +31,6 @@ class GRRange : public GRARNotationElement,	public GRPositionTag
 						GRRange(GRStaff * pstaff, ARMusicalTag * mtag);
 		virtual 		~GRRange();
 
-		virtual void 	print(std::ostream& os) const;
 		virtual void 	OnDraw( VGDevice & hdc ) const;
 		// const ARTFermata * getARTFermata() const;
 		virtual void 	addAssociation(GRNotationElement * el);

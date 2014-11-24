@@ -253,8 +253,7 @@ class GRStaff : public GRCompositeNotationElement
 		virtual void GGSOutput() const;
 		virtual void OnDraw( VGDevice & hdc ) const;
 		virtual void GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
-		virtual void print(std::ostream& os) const;
-		void		setOnOff(bool onoff, TYPE_TIMEPOSITION tp);
+				void		setOnOff(bool onoff, TYPE_TIMEPOSITION tp);
 		void		setOnOff(bool onoff);
 		bool		isStaffBeginOn();
 		bool		isStaffEndOn();
@@ -273,10 +272,10 @@ class GRStaff : public GRCompositeNotationElement
 
 		void	generatePositions();
 		float	currentLineThikness() const;
-
+        
+        void    print(std::ostream& os) const;
 
   protected:
-
 		void	DebugPrintState(const char * info) const;
 
 		void	DrawStaffUsingSymbolScale( VGDevice & hdc ) const;

@@ -21,25 +21,24 @@
 */
 class ARComposer : public ARText
 {
-	public:
-				 ARComposer();
-	  virtual	~ARComposer();
+public:
+                 ARComposer();
+    virtual     ~ARComposer();
 
-		const char* getName() const;
-		const char* getPageFormat() const;
+    const char*  getName() const;
+    const char*  getPageFormat() const;
 
+    virtual void printName(std::ostream& os) const;
+    virtual void printParameters(std::ostream& os) const;
 
-		virtual void print(std::ostream& os) const;
-		virtual void setTagParameterList(TagParameterList & tpl);
-		virtual std::ostream & operator<<(std::ostream & os) const;
+    virtual void setTagParameterList(TagParameterList & tpl);
 
-	protected:
-			static ListOfTPLs ltpls;
+protected:
+    static ListOfTPLs ltpls;
 
-	private:
-	  TagParameterString * name;
-	  TagParameterString * pageformat;
-
+private:
+    TagParameterString * name;
+    TagParameterString * pageformat;
 };
 
 

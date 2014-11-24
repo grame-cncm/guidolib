@@ -77,18 +77,13 @@ void ARDrRenz::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARDrRenz::PrintName(std::ostream & os) const
+void ARDrRenz::printName(std::ostream& os) const
 {
-    os << "\\DrRenz";
+    os << "ARDrRenz";
+    ARMusicalTag::printName(os);
 }
 
-void ARDrRenz::PrintParameters(std::ostream & os) const
+void ARDrRenz::printParameters(std::ostream& os) const
 {
-    if (inverse)
-        os << "<-1>";
-} 
-
-void ARDrRenz::print(std::ostream& os) const
-{
-    os << "ARDrRenz: inverse: " << inverse << ";" << std::endl;
+    ARMusicalTag::printParameters(os);
 }

@@ -26,20 +26,15 @@ class TagParameterList;
 class ARStaffOff : public ARMTParameter
 	// ,public ARMusicalObject
 {
-	public:
+public:
+	friend class ARFactory;
 
-		friend class ARFactory;
+				 ARStaffOff() { }
+	virtual	    ~ARStaffOff() { }
 
-						ARStaffOff() { }
-		virtual			~ARStaffOff() { }
-
-		virtual void setTagParameterList(TagParameterList & pl);
-		virtual void print(std::ostream& os) const { os << "ARStaffOff;" << std::endl; }
-
-		virtual std::ostream & operator <<(std::ostream & os) const;
-
-	protected:
-		
+	virtual void setTagParameterList(TagParameterList & pl);
+	virtual void printName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 };
 
 #endif

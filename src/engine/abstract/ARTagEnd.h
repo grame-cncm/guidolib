@@ -25,21 +25,21 @@ class ARMusicalObject;
 */
 class ARTagEnd : public ARMTParameter, public ARPositionTag
 {
-
 	public:
-
-					ARTagEnd(int id = -1,const ARTagEnd * copy = 0);
+					 ARTagEnd(int id = -1,const ARTagEnd * copy = 0);
 		virtual		~ARTagEnd() {}
 		
 		virtual ARMusicalObject * Copy() const 	{ return 0; }
-		
-		virtual void print(std::ostream& os) const;
+
+	    virtual void printName(std::ostream& os) const;
+	    virtual void printParameters(std::ostream& os) const;
+
 		virtual void setTagParameterList(TagParameterList & theTagParameterList);
 
 		virtual void setEndPosition(GuidoPos p_pos);
 		virtual GuidoPos getEndPosition() const;
 		
-		virtual bool	isEndTagClass() const { return true; }
+		virtual bool isEndTagClass() const { return true; }
 		
 		static ARTagEnd * cast( ARPositionTag * inTag )
 					{ return ( inTag && inTag->isEndTagClass() ? static_cast<ARTagEnd *>( inTag ) : 0 ); }

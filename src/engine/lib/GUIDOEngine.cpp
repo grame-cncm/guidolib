@@ -84,12 +84,12 @@ ARPageFormat * gARPageFormat = 0;
 GuidoGlobalSettings gGlobalSettings = { /*1 to draw the springs*/0, 0, 1, 0 };
 
 bool gInited = false;		// GuidoInit() Flag
-int gARHandlerRefCount = 0;
+int  gARHandlerRefCount = 0;
 
-int	gParseErrorLine = -1;
+int	 gParseErrorLine = -1;
 //int gParseErrorCol = -1;
 
-int gBoundingBoxesMap = kNoBB;	// a bits field to control bounding boxes draxing [added on May 11 2009 - DF ]
+int  gBoundingBoxesMap = kNoBB;	// a bits field to control bounding boxes draxing [added on May 11 2009 - DF ]
 
 // ==========================================================================
 // - Guido Main API
@@ -627,8 +627,8 @@ GUIDOAPI(GuidoErrCode) 	GuidoAbstractExport( const GRHandler handle, int page, s
     desc.page = page;
     desc.updateRegion.erase = true;     // and draw everything
     desc.scrollx = desc.scrolly = 0;    // from the upper left page corner
-    desc.sizex = pf.width;
-    desc.sizey = pf.height;
+    desc.sizex = (int) pf.width;
+    desc.sizey = (int) pf.height;
     dev.NotifySize(desc.sizex, desc.sizey);
     dev.SelectPenColor(VGColor(0,0,0));
     return GuidoOnDraw (&desc);
@@ -653,8 +653,8 @@ GUIDOAPI(GuidoErrCode) 	GuidoBinaryExport( const GRHandler handle, int page, std
     desc.page = page;
     desc.updateRegion.erase = true;     // and draw everything
     desc.scrollx = desc.scrolly = 0;    // from the upper left page corner
-    desc.sizex = pf.width;
-    desc.sizey = pf.height;
+    desc.sizex = (int) pf.width;
+    desc.sizey = (int) pf.height;
     dev.NotifySize(desc.sizex, desc.sizey);
     dev.SelectPenColor(VGColor(0,0,0));
 
@@ -713,7 +713,7 @@ int GuidoBinaryExport_retSize( const GRHandler handle, int page, char * in_arr )
 	  return 0;
 	}
 	const char * underlying_string = sstr.str().c_str();
-	for (int i = 0; i < sstr.str().size(); i++) {
+	for (unsigned int i = 0; i < sstr.str().size(); i++) {
 	  in_arr[i] = underlying_string[i];
 	}
 	return sstr.str().size();

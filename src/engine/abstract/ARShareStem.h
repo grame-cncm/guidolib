@@ -27,29 +27,19 @@ class ARShareStem :
 	public ARPositionTag
 {
 public:
-
-	ARShareStem(const ARShareStem * stm);
-	ARShareStem() 
-	{
-		rangesetting = ONLY;
-	}
+	         ARShareStem(const ARShareStem * stm);
+	         ARShareStem() { rangesetting = ONLY; }
 	virtual ~ARShareStem();
 
 	virtual ARMusicalObject * Copy() const;
 
-    virtual void print(std::ostream& os) const { os << "ARShareStem;" << std::endl; }
-
-	virtual void PrintName(std::ostream & os) const;
-	virtual void PrintParameters(std::ostream & os) const;
+    virtual void printName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 
 	virtual void setTagParameterList(TagParameterList & tpl);
 
 protected:
-
 	static ListOfTPLs ltpls;
-
-
 };
-
 
 #endif

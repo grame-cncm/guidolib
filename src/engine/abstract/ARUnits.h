@@ -27,22 +27,19 @@ public:
 					ARUnits();
 	virtual 		~ARUnits() {}
 
-
 	static const NVstring & getUnit()  { return sType; }
 
 	virtual bool IsStateTag() const { return true; }
 	
 	virtual void setTagParameterList( TagParameterList & tpl );
-	virtual void print(std::ostream& os) const;
-	virtual void PrintName(std::ostream & os) const;
-	virtual void PrintParameters(std::ostream & os) const;
+
+	virtual void printName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 
 protected:
-
 	static NVstring sType;
 
 	static ListOfTPLs ltpls;
-
 };
 
 #endif 

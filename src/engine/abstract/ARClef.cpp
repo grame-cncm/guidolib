@@ -50,21 +50,6 @@ ARClef::ARClef(const ARClef & clef)
 
 ARClef::~ARClef() {}
 
-void ARClef::print(std::ostream& os) const
-{
-    os << "ARClef: name: \"" << getName() << "\"" << endl;
-}
-
-void ARClef::PrintName(std::ostream &os) const
-{
-	os << "\\clef";
-}
-
-void ARClef::PrintParameters(std::ostream &os) const
-{
-	os << "<\"" << fName << "\"> ";
-}
-
 void ARClef::setTagParameterList(TagParameterList& tpl)
 {
 	if (ltpls.GetCount() == 0)
@@ -206,4 +191,17 @@ bool ARClef::operator==(const ARClef &clef)
 bool ARClef::IsStateTag() const
 {
 	return true;
+}
+
+void ARClef::printName(std::ostream& os) const
+{
+    os << "ARClef";
+    ARMusicalTag::printName(os);
+}
+
+void ARClef::printParameters(std::ostream& os) const
+{
+    os << "name: \"" << getName() << "\";";
+
+    ARMusicalTag::printParameters(os);
 }

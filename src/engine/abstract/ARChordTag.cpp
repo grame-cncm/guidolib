@@ -23,6 +23,8 @@ ListOfTPLs ARChordTag::ltpls(1);
 
 ARChordTag::ARChordTag(const ARChordTag * chrd)
 {
+    rangesetting = ONLY;
+
 	labels = NULL;
 	labeli = NULL;
 	if (chrd->labels)
@@ -88,26 +90,18 @@ void ARChordTag::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARChordTag::PrintParameters(std::ostream &os) const
+void ARChordTag::printName(std::ostream& os) const
+{
+    os << "ARChordTag";
+    ARMusicalTag::printName(os);
+}
+
+void ARChordTag::printParameters(std::ostream& os) const
 {
 	if (labels)
 		os << "<label=\"" << labels->getValue() << "\">";
 	else if (labeli)
 		os << "<label=" << labeli->getValue() << ">";
-}
 
-void ARChordTag::PrintName(std::ostream & os) const
-{
-	if (isAuto)
-		os << "\\autoChord";
-	else
-		os << "\\chord";
-	if (!getRange())
-		os << "Begin";
+    ARMusicalTag::printParameters(os);
 }
-
-void ARChordTag::print(std::ostream& os) const
-{
-    os << "ARChordTag;" << std::endl;
-}
-

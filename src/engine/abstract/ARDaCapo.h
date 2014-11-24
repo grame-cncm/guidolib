@@ -20,22 +20,28 @@
 */
 class ARDaCapo : public ARJump
 {
-    public:	
-				ARDaCapo();
+public:	
+				 ARDaCapo();
 	virtual 	~ARDaCapo();
-	virtual void    PrintName( std::ostream & os ) const;
-	virtual void	browse(TimeUnwrap& mapper) const;
+
+	virtual void printName(std::ostream& os) const;
+    virtual void printParameters(std::ostream& os) const {};
+
+	virtual void browse(TimeUnwrap& mapper) const;
 };
 
 /** \brief da capo al fine
 */
 class ARDaCapoAlFine : public ARJump
 {
-    public:	
-				ARDaCapoAlFine();
+public:	
+				 ARDaCapoAlFine();
 	virtual 	~ARDaCapoAlFine();
-	virtual void    PrintName( std::ostream & os ) const;
-	virtual void	browse(TimeUnwrap& mapper) const;
+
+	virtual void printName(std::ostream& os) const;
+    virtual void printParameters(std::ostream& os) const {};
+
+	virtual void browse(TimeUnwrap& mapper) const;
 };
 
 #endif

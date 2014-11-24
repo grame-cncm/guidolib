@@ -17,12 +17,15 @@
 #include "TimeUnwrap.h"
 
 ARSegno::ARSegno() : ARJump ("[segno]") {}
-ARSegno::~ARSegno()     {}
-void ARSegno::PrintName( std::ostream & os ) const  { os << "\\segno"; }
+ARSegno::~ARSegno() {}
 
 void ARSegno::browse(TimeUnwrap& mapper) const
 {
 	mapper.AtPos (this, TimeUnwrap::kSegno);
 }
 
-
+void ARSegno::printName(std::ostream& os) const
+{
+    os << "ARSegno";
+    ARMusicalTag::printName(os);
+}

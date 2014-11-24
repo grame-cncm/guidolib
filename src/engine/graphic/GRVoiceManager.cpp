@@ -29,7 +29,6 @@
 #include "ARBeam.h"
 #include "ARDoubleBar.h"
 #include "ARFermata.h"
-#include "ARRangeEnd.h"
 #include "ARTie.h"
 #include "ARColor.h"
 #include "ARCrescendo.h"
@@ -83,7 +82,6 @@
 #include "ARInstrument.h"
 #include "ARFinishBar.h"
 #include "ARAccidental.h"
-#include "ARABreak.h"
 #include "ARAuto.h"
 #include "ARBase.h"
 #include "ARShareStem.h"
@@ -244,17 +242,16 @@ bool GRVoiceManager::parseStateTag(ARMusicalTag * mtag)
 {
 	bool retval = true;
 
-	ARStaff * mstaff;
-	ARTStem * mstem;
-	ARTHead * mhead;
-	ARColor * theColor;
+	ARStaff       * mstaff;
+	ARTStem       * mstem;
+	ARTHead       * mhead;
+	ARColor       * theColor;
 	ARStaffFormat * staffrmt;
-	ARBarFormat * barfrmt;
-	ARNoteFormat * notefrmt;
-	ARDotFormat * dotfrmt;
-	ARRestFormat * restfrmt;
-	ARABreak * arabreak;
-	ARAuto * arauto;
+	ARBarFormat   * barfrmt;
+	ARNoteFormat  * notefrmt;
+	ARDotFormat   * dotfrmt;
+	ARRestFormat  * restfrmt;
+	ARAuto        * arauto;
 
 	mstaff = dynamic_cast<ARStaff *>(mtag);
 
@@ -306,10 +303,6 @@ bool GRVoiceManager::parseStateTag(ARMusicalTag * mtag)
 		curnoteformat = notefrmt;
 	else if ((restfrmt = dynamic_cast<ARRestFormat *>(mtag)) != 0)
 		currestformat = restfrmt;
-	else if ((arabreak = dynamic_cast<ARABreak *>(mtag)) != 0) {
-			// we have an autoBreak-Tag set...
-			mStaffMgr->setAutoBreak(arabreak);
-	}
 	else if ((arauto = dynamic_cast<ARAuto *>(mtag)) != 0) {
 			// we have an auto(set)-Tag set...
 			mStaffMgr->setAutoTag(arauto);
@@ -589,7 +582,7 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION &timepos, int filltagmode)
         else if (static_cast<ARNewPage *>(o->isARNewPage()))
             return NEWPAGE;
 		else if (static_cast<ARPossibleBreak *>(o->isARPossibleBreak())) {
-			pbreakval = static_cast<ARPossibleBreak *>(o)->value;
+			pbreakval = static_cast<ARPossibleBreak *>(o)->getValue();
 
 			return PBREAK;
 		} 
@@ -1354,13 +1347,6 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 			GRTag * grt = new GRTag();
 			addGRTag(grt);
 		}
-	}
-	else if (tinf == typeid(ARRangeEnd))
-	{
-		// This ensures, that RangeEnds at beginning of Lines are ignored!		
-		// We do not have any ARRangeEnds anymore !
- 
-		assert(false); 
 	}
     else if (tinf == typeid(ARSymbol))
 	{
@@ -2299,15 +2285,14 @@ void GRVoiceManager::ReadBeginTags(const TYPE_TIMEPOSITION & tp)
 	// this really for example consider \title, \pageNumber or whatever tag...?
 	// as a rule we can state: the very first tag after a \newSystem or \newPage tag MUST be a \staff-Tag, 
 	// iff the staff in this voice is changing then !
-	ARStaff * mstaff = NULL;
-	bool staffread = false;
-	ARStaffFormat * stffrm = NULL;
-	ARPageFormat * pform = NULL;
+	bool staffread           = false;
+	ARStaff        * mstaff  = NULL;
+	ARStaffFormat  * stffrm  = NULL;
+	ARPageFormat   * pform   = NULL;
 	ARSystemFormat * sysform = NULL;
-	ARUnits * units = NULL;
-	ARAccolade * accol = NULL;
-	ARABreak * arabreak = NULL;
-	ARAuto * arauto = NULL;
+	ARUnits        * units   = NULL;
+	ARAccolade     * accol   = NULL;
+	ARAuto         * arauto  = NULL;
 
 	while (mystate->vpos && !ende)
 	{
@@ -2329,24 +2314,16 @@ void GRVoiceManager::ReadBeginTags(const TYPE_TIMEPOSITION & tp)
 
 		if ( !pform && (pform = dynamic_cast<ARPageFormat *>(mtag)) != 0)
 			mStaffMgr->setPageFormat(pform);		// we have a page-Format-tag
-
 		else if ( !sysform && (sysform = dynamic_cast<ARSystemFormat *>(mtag)) != 0)
 			mStaffMgr->setSystemFormat(sysform);	// we have a systemFormat-tag
-
-		else if (!arabreak && (arabreak = dynamic_cast<ARABreak *>(mtag)) != 0)
-			mStaffMgr->setAutoBreak(arabreak);		// we have an autoBreak-Tag set...
-
 		else if (!arauto && (arauto = dynamic_cast<ARAuto *>(mtag)) != 0)
 			mStaffMgr->setAutoTag(arauto);
-
-		else if (!stffrm && (stffrm = dynamic_cast<ARStaffFormat *>(mtag)) != NULL)
-		{
+		else if (!stffrm && (stffrm = dynamic_cast<ARStaffFormat *>(mtag)) != NULL) {
 			// we have a staffFormat-tag if we do not have a mCurGrStaff yet ?
 			mCurGrStaff = mStaffMgr->getStaff(staffnum);
 			mCurGrStaff->setStaffFormat(stffrm);
 		}
-		else if (!staffread && (mstaff = dynamic_cast<ARStaff *>(mtag)) != 0)
-		{
+		else if (!staffread && (mstaff = dynamic_cast<ARStaff *>(mtag)) != 0) {
 			// it is a staff-tag...
 			// then, the staff will be changed... the StaffManager (which is the owner
 			// of this VoiceManager) is called; it then prepares the staff...
@@ -2355,22 +2332,23 @@ void GRVoiceManager::ReadBeginTags(const TYPE_TIMEPOSITION & tp)
 			mCurGrStaff = mStaffMgr->getStaff(staffnum);
 			assert(mCurGrStaff);
 		}
-
-		else if ( !units && (units = dynamic_cast<ARUnits *>(mtag)) != 0)
-		{
+		else if ( !units && (units = dynamic_cast<ARUnits *>(mtag)) != 0) {
 			// just ignore the units tag...
 		}
-		else if ( !accol && (accol = dynamic_cast<ARAccolade *>(mtag)) != 0 )
-		{
+		else if ( !accol && (accol = dynamic_cast<ARAccolade *>(mtag)) != 0) {
 			// (JB) Each system should have a list of accolade tags.
 			mStaffMgr->notifyAccoladeTag( accol );
 		}
 		else if ( o->getRelativeTimePosition() > tp)
 			ende = true;		
-		if (!ende)		arVoice->GetNext(mystate->vpos,*mystate);
+
+		if (!ende)
+            arVoice->GetNext(mystate->vpos,*mystate);
 		// this means: only the VERY FIRST TAG can be a \staff-Tag everything else is discarded...
+
 		staffread = true;
-	}	
+	}
+
 	delete mystate;	
 }
 

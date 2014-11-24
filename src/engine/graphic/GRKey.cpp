@@ -270,10 +270,6 @@ void GRKey::updateBoundingBox()
 
 }
 
-void GRKey::print(std::ostream& os) const
-{
-}
-
 void GRKey::GGSOutput() const
 {
 	if (error) return;

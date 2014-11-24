@@ -16,10 +16,15 @@
 #include "TimeUnwrap.h"
 
 ARFine::ARFine() : ARJump ("Fine") {}
-ARFine::~ARFine()   {}
-void ARFine::PrintName( std::ostream & os ) const  { os << "\\fine"; }
+ARFine::~ARFine() {}
 
 void ARFine::browse(TimeUnwrap& mapper) const
 {
 	mapper.AtPos (this, TimeUnwrap::kFine);
+}
+
+void ARFine::printName(std::ostream& os) const
+{
+    os << "ARFine";
+    ARMusicalTag::printName(os);
 }

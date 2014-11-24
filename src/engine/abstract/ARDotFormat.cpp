@@ -84,48 +84,14 @@ void ARDotFormat::setTagParameterList(TagParameterList &tpl)
 	tpl.RemoveAll();
 }
 
-void ARDotFormat::PrintName(std::ostream & os) const
+void ARDotFormat::printName(std::ostream& os) const
 {
-	os << "\\dotFormat";
+    os << "ARDotFormat";
+    ARMusicalTag::printName(os);
 }
 
-void ARDotFormat::PrintParameters(std::ostream & os) const
+void ARDotFormat::printParameters(std::ostream& os) const
 {
-	int previous = 0;
-	int isset = 0;
-	if ((mDx && mDx->TagIsSet()) || (mDy && mDy->TagIsSet()) || (size && size->TagIsSet()))
-		isset = 1;
-
-	if (isset)
-		os << "<";
-
-	if (mDx && mDx->TagIsSet()) {
-		os << "dx=" << mDx->getUnitValue() << mDx->getUnit();
-		previous = 1;
-	}
-
-	if (mDy && mDy->TagIsSet()) {
-		if (previous)
-			os << ",";
-		os << "dy=" << mDy->getUnitValue() << mDy->getUnit();
-		previous = 1;
-	}
-
-	if (size && size->TagIsSet()) {
-		if (previous)
-			os << ",";
-		os << "dy=" << size->getValue(); // Should not be "size=" instead of "dy=" ?
-		previous = 1;
-	}
-
-	if (isset)
-		os << ">";
-}
-
-void ARDotFormat::print(std::ostream& os) const
-{
-    os << "ARDotFormat;";
-
-    os << std::endl;
+    ARMusicalTag::printParameters(os);
 }
 

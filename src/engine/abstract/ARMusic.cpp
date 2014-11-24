@@ -101,7 +101,7 @@ void ARMusic::print(std::ostream& os) const
 
 /** \brief Prints the music into a stream
 */
-/*void ARMusic::print(std::ostream &os) const
+/*void ARMusic::print(std::ostream& os) const
 {
 	GuidoPos pos=GetHeadPosition();
 	ARMusicalVoice * e;
@@ -355,12 +355,6 @@ void ARMusic::doAutoBreaks()
 
 void ARMusic::doAutoStuff()
 {
-    cout << "BEFORE" << std::endl;
-    print(cout);
-    cout << std::endl;
-
-
-
 	// this is important so that the voices now about the maximum tag-id.
 	gCurArMusic = this;
 
@@ -405,12 +399,6 @@ void ARMusic::doAutoStuff()
 
 		timebench("doAutoStuff2", arvc->doAutoStuff2());
 	}
-
-
-    
-    cout << "AFTER" << std::endl;
-    print(cout);
-    cout << std::endl;
 }
 
 /** \brief Removes tags that were added automatically

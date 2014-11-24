@@ -22,24 +22,13 @@
 class ARBembel : public ARMTParameter
 {
 public:
-	
-				ARBembel(int p_inv = 0);
+				 ARBembel(int p_inv = 0);
 	virtual 	~ARBembel();
 
-	virtual void print(std::ostream& os) const;
-	/* virtual ostream &operator<<(ostream &os) const
-		{
-			os << "\\bembel";
-			if (inverse)
-				os << "<-1>";
-			if (getRange())
-				os << "(";
-			return os << " ";
-	} */
-	virtual void PrintName(std::ostream & os) const;
-	virtual void PrintParameters(std::ostream & os) const;
-	virtual void setTagParameterList(TagParameterList & tpl);
+	virtual void printName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 
+	virtual void setTagParameterList(TagParameterList & tpl);
 
 	int getInverse() const { return inverse; }
 

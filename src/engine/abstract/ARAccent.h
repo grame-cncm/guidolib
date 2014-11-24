@@ -24,27 +24,17 @@ class ARAccent : public ARMTParameter,  public ARPositionTag
 {		
 public:			
 
-			ARAccent() : ARMTParameter()
-			{
-				rangesetting = ONLY;
-			}
-
-	virtual ~ARAccent() 
-	{
-		// delete TagParameterPointer ...
-	};
+			 ARAccent() : ARMTParameter() { rangesetting = ONLY; }
+	virtual ~ARAccent()  { /*delete TagParameterPointer ...*/ };
 
 	virtual void setTagParameterList(TagParameterList & tpl);
 
-	// routines to access TagParameters ..
-	virtual void print(std::ostream& os) const;	
-	virtual void PrintName(std::ostream & os) const;
-	virtual void PrintParameters(std::ostream & os) const;	
+	virtual void printName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 
 	virtual void	browse(TimeUnwrap& mapper) const;
 
 protected:
-
 	// TagParameters ..
 	// TagParameterString *textformat;
 	// TagParameterFloat  *fsize;

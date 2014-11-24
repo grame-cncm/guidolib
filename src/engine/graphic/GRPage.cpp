@@ -472,11 +472,6 @@ void GRPage::updateBoundingBox()
 }
 
 // ----------------------------------------------------------------------------
-void GRPage::print(std::ostream& os) const
-{
-}
-
-// ----------------------------------------------------------------------------
 /** \brief Trim the page size to the actual Music score. 
 	
 	This is done using the bounding box. (Note that the

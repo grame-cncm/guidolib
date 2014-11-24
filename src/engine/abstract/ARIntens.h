@@ -32,14 +32,13 @@ class ARIntens :  public ARMTParameter
 			 	relativeTimePosition.set( -1, 1 );
 			 	setDuration ( DURATION_0 );
 			 }
+
 		virtual void setTagParameterList(TagParameterList & tpl);
 
 		virtual const NVstring & getText() const { return mIntensText; }
 
-		virtual void print(std::ostream& os) const;
-		// virtual ostream & operator<<(ostream &os) const;
-		virtual void PrintName(std::ostream &os) const;
-		virtual void PrintParameters(std::ostream &os) const;
+	    virtual void printName(std::ostream& os) const;
+	    virtual void printParameters(std::ostream& os) const;
 
 		virtual void browse(TimeUnwrap& mapper) const;
 

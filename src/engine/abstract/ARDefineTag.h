@@ -23,12 +23,12 @@ class ARDefineTag : public ARMTParameter
 {
 public:
 	ARDefineTag();
-	virtual void print(std::ostream& os) const;
+
+	virtual void printName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 
 	virtual ~ARDefineTag();
 	virtual void setTagParameterList(TagParameterList & tpl);
-	virtual void PrintName(std::ostream & os) const;
-	virtual void PrintParameters(std::ostream & os) const;
 
 protected:
 	TagParameterString * tagname;

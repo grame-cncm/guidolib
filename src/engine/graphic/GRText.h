@@ -34,7 +34,6 @@ class GRText : public GRPTagARNotationElement
 		class GRTextSaveStruct : public GRPositionTag::GRSaveStruct
 		{
 			public:
-				
 						GRTextSaveStruct()  {}
 				virtual ~GRTextSaveStruct() {};
 				
@@ -50,10 +49,7 @@ class GRText : public GRPTagARNotationElement
 		virtual void 	tellPosition( GObject * caller, const NVPoint & inPosition );
 		virtual void 	addAssociation( GRNotationElement * el );
 		
-		
 		virtual void 	OnDraw( VGDevice & hdc ) const;
-		
-		virtual void 	print(std::ostream& os) const;
 		
 		const ARText * 	getARText() const;
 		

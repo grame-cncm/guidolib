@@ -30,8 +30,6 @@ class GRDrRenz : public GRTagARNotationElement
 		
 		virtual void	OnDraw(VGDevice & hdc ) const;
 
-		virtual void	print(std::ostream& os) const;
-
 	protected:
 
 		Bitmap * mFace;

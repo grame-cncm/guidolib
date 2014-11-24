@@ -37,9 +37,8 @@ public:
 
     virtual const char* getSymbolPath() const				{ return filePath ? filePath->getValue() : 0; }
 
-    virtual void print(std::ostream& os) const;
-    virtual void PrintName(std::ostream & os) const;
-    virtual void PrintParameters(std::ostream & os) const;
+	virtual void printName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 
     float		 getSize() const                    { return size; }
     const char*  getPositionString() const          { return position ? position->getValue() : NULL; }

@@ -29,7 +29,6 @@ class GRGlue : public GRNotationElement
 		virtual 		~GRGlue();
 		
 		virtual void 	OnDraw(VGDevice &) const	{ }
-		virtual void 	print(std::ostream& os) const;
 		
 				void 	tellPosition( GObject *, const  NVPoint & );
 	

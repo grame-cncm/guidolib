@@ -16,19 +16,29 @@
 #include "TimeUnwrap.h"
 
 ARDaCapo::ARDaCapo() : ARJump ("D.C.") {}
-ARDaCapo::~ARDaCapo()   {}
-void ARDaCapo::PrintName( std::ostream & os ) const  { os << "\\daCapo"; }
+ARDaCapo::~ARDaCapo() {}
 
 void ARDaCapo::browse(TimeUnwrap& mapper) const
 {
 	mapper.AtPos (this, TimeUnwrap::kDaCapo);
 }
 
+void ARDaCapo::printName(std::ostream& os) const
+{
+    os << "ARDaCapo";
+    ARMusicalTag::printName(os);
+}
+
 ARDaCapoAlFine::ARDaCapoAlFine() : ARJump ("D.C. al Fine") {}
-ARDaCapoAlFine::~ARDaCapoAlFine()   {}
-void ARDaCapoAlFine::PrintName( std::ostream & os ) const  { os << "\\daCapoAlFine"; }
+ARDaCapoAlFine::~ARDaCapoAlFine() {}
 
 void ARDaCapoAlFine::browse(TimeUnwrap& mapper) const
 {
 	mapper.AtPos (this, TimeUnwrap::kDaCapoAlFine);
+}
+
+void ARDaCapoAlFine::printName(std::ostream& os) const
+{
+    os << "ARDaCapoAlFine";
+    ARMusicalTag::printName(os);
 }

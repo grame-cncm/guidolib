@@ -87,10 +87,14 @@ void ARMarcato::browse(TimeUnwrap& mapper) const
 	mapper.AtPos (this, TimeUnwrap::kMarcato);
 }
 
-void ARMarcato::print(std::ostream& os) const
+void ARMarcato::printName(std::ostream& os) const
 {
-    os << "ARMarcato: position: ";
+    os << "ARMarcato";
+    ARMusicalTag::printName(os);
+}
 
+void ARMarcato::printParameters(std::ostream& os) const
+{
     switch (position) {
     case ABOVE:
         os << "above";
@@ -103,16 +107,9 @@ void ARMarcato::print(std::ostream& os) const
         break;
     }
 
-    os << ";" << std::endl;
-}
+    os << ";";
 
-void ARMarcato::PrintName(std::ostream &os) const
-{
-	os << "\\marcato";
-	if (getRange()) os << "(";
-}
-void ARMarcato::PrintParameters(std::ostream &) const
-{
+    ARMusicalTag::printParameters(os);
 }
 
 

@@ -35,16 +35,6 @@ ARAccolade::~ARAccolade()
 	delete type;
 }
 
-void ARAccolade::PrintName(std::ostream & os) const
-{
-	os << "\\accol";
-}
-
-void ARAccolade::PrintParameters(std::ostream & ) const
-{
-	// todo !
-}
-
 void ARAccolade::setTagParameterList(TagParameterList & tpl)
 {
 	if (ltpls.empty())
@@ -93,20 +83,26 @@ void ARAccolade::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARAccolade::print(std::ostream& os) const
+void ARAccolade::printName(std::ostream& os) const
 {
-    os << "ARAccolade: ";
+    os << "ARAccolade";
+    ARMusicalTag::printName(os);
+}
 
+void ARAccolade::printParameters(std::ostream& os) const
+{
     if (sid)
         os << "id: " << sid->getValue() << "; ";
     else if (nid)
         os << "id: " << nid->getValue() << "; ";
 
     if (range)
-        os << "range: " << range->getValue() << ";";
+        os << "range: " << range->getValue() << "; ";
 
     if (type)
         os << "type: " << type->getValue() << ";";
 
     os << std::endl;
+
+    ARMusicalTag::printParameters(os);
 }

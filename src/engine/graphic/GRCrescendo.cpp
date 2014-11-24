@@ -259,10 +259,3 @@ void GRCrescendo::OnDraw( VGDevice & hdc) const
         hdc.SetFontColor(VGColor());
     }
 }
-
-void GRCrescendo::print(std::ostream& os) const
-{
-}
-
-
-

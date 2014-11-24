@@ -25,16 +25,14 @@
 class ARTagBegin : public ARMTParameter, 
 				   public ARPositionTag 
 {
+public:
+			 ARTagBegin(int id = 0) : ARMTParameter(id) { }
+	virtual ~ARTagBegin() {}
 
-	public:
-				ARTagBegin(int id = 0) :  ARMTParameter(id) { }
-		virtual ~ARTagBegin() {}
+	virtual void printName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 
-		virtual void print(std::ostream& os) const;
-		virtual void setTagParameterList(TagParameterList& theTagParameterList);
-
-	protected:
-
+	virtual void setTagParameterList(TagParameterList& theTagParameterList);
 };
 
 #endif

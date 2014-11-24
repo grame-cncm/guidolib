@@ -62,10 +62,14 @@ void ARPizzicato::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARPizzicato::print(std::ostream& os) const
+void ARPizzicato::printName(std::ostream& os) const
 {
-    os << "ARPizzicato: type: ";
+    os << "ARPizzicato";
+    ARMusicalTag::printName(os);
+}
 
+void ARPizzicato::printParameters(std::ostream& os) const
+{
     switch (type) {
     case BUZZ:
         os << "buzz";
@@ -81,14 +85,7 @@ void ARPizzicato::print(std::ostream& os) const
         break;
     }
 
-    os << ";" << std::endl;
-}
-void ARPizzicato::PrintName(std::ostream &os) const
-{
-	os << "\\pizzicato";
-	if (getRange()) os << "(";
-}
+    os << ";";
 
-void ARPizzicato::PrintParameters(std::ostream & ) const
-{
+    ARMusicalTag::printParameters(os);
 }

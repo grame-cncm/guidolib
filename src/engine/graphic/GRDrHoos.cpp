@@ -56,10 +56,6 @@ GRDrHoos::~GRDrHoos()
 	delete face;
 }
 
-void GRDrHoos::print(std::ostream& os) const
-{
-}
-
 void GRDrHoos::OnDraw( VGDevice & hdc) const
 {
 	// Here now will be something painted ...

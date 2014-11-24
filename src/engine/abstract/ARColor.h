@@ -22,30 +22,26 @@
 
 class ARColor : public ARMTParameter 
 {
-	public:
+public:
+    ARColor() : colorR(0), colorG(0), colorB(0), colorA(0) { }
 
-					ARColor() : colorR(0), colorG(0), colorB(0), colorA(0) { }
+    virtual bool IsStateTag() const;
+    virtual void setTagParameterList( TagParameterList & tpl );
 
-		virtual bool IsStateTag() const;
-		virtual void setTagParameterList( TagParameterList & tpl );
+    virtual void printName(std::ostream& os) const;
+    virtual void printParameters(std::ostream& os) const;
 
-		virtual void print(std::ostream& os) const;
-        // virtual ostream & operator<<(ostream &os) const;
-		virtual void PrintName( std::ostream & os ) const;
-		virtual void PrintParameters( std::ostream & os) const;
+    float getColorR() const { return colorR; }
+    float getColorG() const { return colorG; }
+    float getColorB() const { return colorB; }
+    float getColorA() const { return colorA; }
 
-				float getColorR() const { return colorR; }
-				float getColorG() const { return colorG; }
-				float getColorB() const { return colorB; }
-				float getColorA() const { return colorA; }
-
-	protected:
-
-		static ListOfTPLs ltpls;
-		float colorR;			// (JB) should be unsigned char components ?
-		float colorG;
-		float colorB;
-		float colorA;
+protected:
+    static ListOfTPLs ltpls;
+    float colorR;			// (JB) should be unsigned char components ?
+    float colorG;
+    float colorB;
+    float colorA;
 };
 
 #endif

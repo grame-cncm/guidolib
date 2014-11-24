@@ -26,12 +26,10 @@ class TagParameterInt;
 
 class ARTremolo : public ARMTParameter, public ARPositionTag
 {		
-public:			
-
-
-					ARTremolo();
-                    ARTremolo(const ARTremolo * tremolo);
-	virtual 		~ARTremolo();
+public:
+			 ARTremolo();
+             ARTremolo(const ARTremolo * tremolo);
+	virtual ~ARTremolo();
 
 	virtual void setTagParameterList(TagParameterList & tpl);
 	virtual TagParameterList * getTagParameterList() const;
@@ -50,10 +48,8 @@ public:
     bool isSecondPitchCorrect();
     int getNumberOfStrokes();
 
-	// routines to access TagParameters ..
-	virtual void print(std::ostream& os) const;
-	
-	virtual void PrintName(std::ostream &os) const;	
+	virtual void printName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 
 protected:
 
@@ -68,7 +64,6 @@ protected:
 	const TagParameterFloat *fThickness;
 	const TagParameterString *fText;
 	bool mParSet;
-
 
 	// this is important for allowed
 	// TagParameters ....

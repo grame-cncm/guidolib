@@ -116,24 +116,20 @@ bool ARCrescendo::MatchEndTag(const char * s)
 	return false;
 }
 
-void ARCrescendo::PrintName(std::ostream & os) const
+void ARCrescendo::printName(std::ostream& os) const
 {
-	if (getRange())
-		os << "\\cresc";
-	else
-		os << "\\crescBegin";
+    os << "ARCrescendo";
+    ARMusicalTag::printName(os);
 }
 
-void ARCrescendo::print(std::ostream& os) const
+void ARCrescendo::printParameters(std::ostream& os) const
 {
-    os << "ARCrescendo: ";
-
     os << "dm: "        << dynamicMarking << "; ";
     os << "dx1: "       << dx1 << "; ";
     os << "dx2: "       << dx2 << "; ";
     os << "deltaY: "    << deltaY << "; ";
     os << "thickness: " << thickness << "; ";
 
-    os << std::endl;
+    ARMusicalTag::printParameters(os);
 }
 

@@ -47,7 +47,3 @@ void GRSpecial::OnDraw(VGDevice & hdc) const
 	const unsigned int theSymbol = ar->mDrawChar;
 	hdc.DrawMusicSymbol( (mPosition.x + ar->dx), (mPosition.y + ar->dy), theSymbol );
 }
-
-void GRSpecial::print(std::ostream& os) const
-{
-}

@@ -21,30 +21,24 @@
 */
 class ARTitle : public ARText
 {
-	public:
-        ARTitle();
+public:
+                 ARTitle();
+    virtual     ~ARTitle();
 
-        virtual ~ARTitle();
+    virtual void printName(std::ostream& os) const;
+    virtual void printParameters(std::ostream& os) const;
 
-        virtual void print(std::ostream& os) const;
+    virtual void setTagParameterList(TagParameterList & tpl);
 
-        virtual void setTagParameterList(TagParameterList & tpl);
+    const char*  getName();
+    const char*  getPageFormat();
 
-        virtual std::ostream & operator<<(std::ostream &os) const;
-        const char* getName();
-        const char* getPageFormat();
+protected:
+    static ListOfTPLs ltpls;
 
-	protected:
-			static ListOfTPLs ltpls;
-
- 	private:
-	  TagParameterString  * name;
-	  TagParameterString * pageformat;
-
+private:
+    TagParameterString  * name;
+    TagParameterString * pageformat;
 };
-
-
-
-
 
 #endif

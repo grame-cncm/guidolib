@@ -62,19 +62,14 @@ void ARTenuto::browse(TimeUnwrap& mapper) const
 	mapper.AtPos (this, TimeUnwrap::kTenuto);
 }
 
-void ARTenuto::print(std::ostream& os) const
+void ARTenuto::printName(std::ostream& os) const
 {
-    os << "ARTenuto;" << std::endl;
+	os << "ARTenuto";
+    ARMusicalTag::printName(os);
 }
-
-void ARTenuto::PrintName(std::ostream & os) const
+void ARTenuto::printParameters(std::ostream& os) const
 {
-	os << "\\ten";
-	if (getRange()) os << "(";
-
-}
-void ARTenuto::PrintParameters(std::ostream & ) const
-{
+    ARMusicalTag::printParameters(os);
 }
 
 

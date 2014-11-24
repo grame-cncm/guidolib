@@ -41,24 +41,23 @@ void ARSlur::browse(TimeUnwrap& mapper) const
 	mapper.AtPos (this, TimeUnwrap::kSlur);
 }
 
-void ARSlur::print(std::ostream& os) const
-{
-    os << "ARSlur;" << std::endl;
-}
-
-void ARSlur::PrintName(std::ostream &os) const
-{
-	os << "\\slur";
-	if (!getRange())
-		os <<"Begin";
-}
-
 bool ARSlur::MatchEndTag(const char *s)
 {
 	if (ARMusicalTag::MatchEndTag(s))
 		return 1;
 	if (!getRange() && !strcmp("\\slurEnd",s))
 		return 1;
-	return 0;
 
+	return 0;
+}
+
+void ARSlur::printName(std::ostream& os) const
+{
+    os << "ARSlur";
+    ARMusicalTag::printName(os);
+}
+
+void ARSlur::printParameters(std::ostream& os) const
+{
+    ARMusicalTag::printParameters(os);
 }

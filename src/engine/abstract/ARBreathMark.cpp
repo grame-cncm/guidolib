@@ -66,17 +66,14 @@ void ARBreathMark::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARBreathMark::PrintName( std::ostream & os ) const
+void ARBreathMark::printName(std::ostream& os) const
 {
-	os << "\\breathMark";
+    os << "ARBreathMark";
+    ARMusicalTag::printName(os);
 }
 
-/*
-void ARBreathMark::PrintParameters(std::ostream & os) const
+void ARBreathMark::printParameters(std::ostream& os) const
 {
-}*/
-
-void ARBreathMark::print(std::ostream& os) const
-{
-    os << "ARBreathMark;" << std::endl;
+    ARMusicalTag::printParameters(os);
 }
+

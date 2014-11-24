@@ -67,26 +67,16 @@ void ARMark::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARMark::PrintName(std::ostream & os) const
+void ARMark::printName(std::ostream& os) const
 {
-	os << "\\mark";
+    os << "ARMark";
+    ARMusicalTag::printName(os);
 }
 
-void ARMark::PrintParameters(std::ostream & os) const
+void ARMark::printParameters(std::ostream& os) const
 {
-	if (!text) return;
-	
-	os << "<text=\"" <<  text->getValue() << "\">";
-}
-
-void ARMark::print(std::ostream& os) const
-{
-    os << "ARMark: ";
-
     if (text)
         os << "text: \"" << text->getValue() << "\"; ";
 
-    os << std::endl;
+    ARMusicalTag::printParameters(os);
 }
-
-

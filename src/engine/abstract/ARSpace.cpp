@@ -62,19 +62,15 @@ void ARSpace::setTagParameterList(TagParameterList & tpl)
 	
 }
 
-void ARSpace::PrintName(std::ostream  &os) const
+void ARSpace::printName(std::ostream  &os) const
 {
-	os << "\\space";
+    os << "ARSpace";
+    ARMusicalTag::printName(os);
 }
 
-void ARSpace::PrintParameters(std::ostream & os) const
+void ARSpace::printParameters(std::ostream& os) const
 {
-	os << "<dd=" << val * kVirtualToCm << "cm> ";
+	os << "dd: " << val << "; ";
+
+    ARMusicalTag::printParameters(os);
 }
-
-void ARSpace::print(std::ostream& os) const
-{
-    os << "ARSpace: dd:" << val << ";" << std::endl;
-}
-
-

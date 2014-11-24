@@ -76,27 +76,19 @@ void ARFingering::setTagParameterList(TagParameterList & tpl)
 }
 */
 
-void ARFingering::PrintName(std::ostream & os) const
+void ARFingering::printName(std::ostream& os) const
 {
-		os << "\\fingering";
+    os << "ARFingering";
+    ARMusicalTag::printName(os);
 }
 
-void ARFingering::PrintParameters(std::ostream & os) const
+void ARFingering::printParameters(std::ostream& os) const
 {
-	if (!text) return;
-		os << "<text=\"" << text->getValue() << "\">";
-}
-
-void ARFingering::print(std::ostream& os) const
-{
-    os << "ARFingering: ";
-
     if (text)
         os << "text: \"" << text->getValue() << "\"; ";
 
     if (fsize)
         os << "fsize: " << fsize->getValue() << ";";
 
-    os << std::endl;
+    ARMusicalTag::printParameters(os);
 }
-

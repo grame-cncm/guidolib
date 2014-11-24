@@ -25,11 +25,11 @@ class ARNewPage : public ARMusicalTag
 {
 public:
 
-      ARNewPage() { }
+             ARNewPage() { }
+    virtual ~ARNewPage() { }
 
-      virtual ~ARNewPage() { }
-      virtual void print(std::ostream& os) const { os << "ARNewPage;" << std::endl; }
-      virtual std::ostream & operator<<(std::ostream & os) const;
+    virtual void printName(std::ostream& os) const { os << "ARNewPage"; ARMusicalTag::printName(os); }
+    virtual void printParameters(std::ostream& os) const {}
 
     /**** Function to avoid dynamic_cast ****/
     ARMusicalObject *isARNewPage() { return this; }
@@ -37,4 +37,3 @@ public:
 };
 
 #endif
-

@@ -61,16 +61,6 @@ float ARTempo::getQpmValue() const
 }
 
 // --------------------------------------------------------------------------
-void ARTempo::print(std::ostream& os) const
-{
-    os << "ARTempo: ";
-
-    /* TODO compléter ? */
-
-    os << std::endl;
-}
-
-// --------------------------------------------------------------------------
 void ARTempo::setTagParameterList( TagParameterList & tpl )
 {
 	if( ltpls.GetCount() == 0 ) {
@@ -119,19 +109,6 @@ void ARTempo::setTagParameterList( TagParameterList & tpl )
 }
 
 // --------------------------------------------------------------------------
-std::ostream & ARTempo::operator<<(std::ostream & os) const
-{
-/* (JB) out of date
-	os << "\\tempo<\"";
-	os << mName << "\"";
-	if (mBpmstring.length()>0)
-		os << ",\"" << mBpmstring << "\"";
-	os << "> ";
-*/
-	return os;
-}
-
-// --------------------------------------------------------------------------
 /*
 void ARTempo::ParseTempoMark( TagParameterString * inTag )
 {
@@ -168,5 +145,19 @@ void ARTempo::ParseBpm( TagParameterString * inTag )
 	else {
 		// - The format is incorrect. TODO: report the error.
 	}
+}
+
+// --------------------------------------------------------------------------
+void ARTempo::printName(std::ostream& os) const
+{
+    os << "ARTempo";
+    ARMusicalTag::printName(os);
+}
+
+void ARTempo::printParameters(std::ostream& os) const
+{
+    /* TODO */
+
+    ARMusicalTag::printParameters(os);
 }
 

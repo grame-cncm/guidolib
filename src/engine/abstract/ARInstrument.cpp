@@ -73,21 +73,19 @@ const char* ARInstrument::getName() const
 	return name->getValue();
 }
 
-void ARInstrument::print(std::ostream& os) const
+void ARInstrument::printName(std::ostream& os) const
 {
-    os << "ARInstrument: ";
+    os << "ARInstrument";
+    ARMusicalTag::printName(os);
+}
 
+void ARInstrument::printParameters(std::ostream& os) const
+{
     if (name)
         os << "name: \"" << name->getValue() << "\"; ";
 
     if (transp)
         os << "transp: " << transp->getValue() << "; ";
 
-    os << std::endl;
+    ARMusicalTag::printParameters(os);
 }
-
-std::ostream & ARInstrument::operator<<(std::ostream &os) const
-{
-	return os << "\\instr<\"" << getName() << "\">";
-}
-

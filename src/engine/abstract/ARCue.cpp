@@ -51,24 +51,16 @@ void ARCue::setTagParameterList(TagParameterList& tpl)
 	tpl.RemoveAll();
 }
 
-
-void ARCue::PrintName(std::ostream & os) const
+void ARCue::printName(std::ostream& os) const
 {
-	os << "\\cue";
+    os << "ARCue";
+    ARMusicalTag::printName(os);
 }
 
-void ARCue::PrintParameters(std::ostream & os) const
+void ARCue::printParameters(std::ostream& os) const
 {
-	if (!name || name->TagIsNotSet()) return;
-	os << "<name=\"" << name->getValue() << "\">";
-}
-
-void ARCue::print(std::ostream& os) const
-{
-    os << "ARCue: ";
-
     if (name)
         os << "name: \"" << name->getValue() << "\"; ";
 
-    os << std::endl;
+    ARMusicalTag::printParameters(os);
 }
