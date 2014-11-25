@@ -313,16 +313,6 @@ class TestTimeMap : public TimeMapCollector
 };
 #endif
 
-
-// --------------------------------------------------------------------------
-GUIDOAPI(GRHandler) GuidoGetAR2GR( ARHandler ar, const GuidoLayoutSettings * settings)
-{
-	GRHandler gr;
-	GuidoErrCode err = GuidoAR2GR (ar, settings, &gr);
-	return err ? 0 : gr;
-}
-
-
 // --------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * settings, GRHandler * gr)
 {
@@ -421,30 +411,6 @@ GUIDOAPI(GuidoDate *) 	GuidoMakeDate( int num, int denom )
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(int) 	GuidoGetDateNum( GuidoDate *date )
-{
-  if (date) {
-    return date->num;
-  }
-  return 0;
-}
-
-// --------------------------------------------------------------------------
-GUIDOAPI(int) 	GuidoGetDateDenom( GuidoDate *date )
-{
-  if (date) {
-    return date->denom;
-  }
-  return 0;
-}
-
-// --------------------------------------------------------------------------
-GUIDOAPI(void) 	GuidoFreeDate( GuidoDate *date )
-{
-  delete date;
-}
-
-// --------------------------------------------------------------------------
 
 GUIDOAPI(const char *) GuidoGetErrorString( GuidoErrCode errCode )
 {
@@ -487,24 +453,6 @@ GuidoGetDefaultLayoutSettings (GuidoLayoutSettings *settings)
 	settings->optimalPageFill       = kSettingDefaultOptimalPageFill;
     settings->resizePage2Music      = kSettingDefaultResizePage2Music;
     settings->proportionalRenderingForceMultiplicator = kSettingDefaultProportionalRendering;
-}
-
-// --------------------------------------------------------------------------
-GUIDOAPI(GuidoLayoutSettings) GuidoGetNewDefaultLayoutSettings() {
-    // TODO GGX voir la pertinance de tout ça suivant comment on communique avec le javascript
-    GuidoLayoutSettings settings;// = new GuidoLayoutSettings;
-    GuidoGetDefaultLayoutSettings(&settings);
-    return settings;
-}
-
-// TODO GGX Pour test de communication avec javascript
-GUIDOAPI(void) GuidoSetNewDefaultLayoutSettings(GuidoLayoutSettings settings) {
-    cout<< "systemsDistance"<<settings.systemsDistance<<endl;
-    cout<< "systemsDistribution"<<settings.systemsDistribution<<endl;
-}
-
-GUIDOAPI(void) GuidoDeleteLayoutSettings(GuidoLayoutSettings * settings) {
-    delete settings;
 }
 
 // --------------------------------------------------------------------------
@@ -560,18 +508,6 @@ GUIDOAPI(GuidoErrCode)	GuidoDuration( CGRHandler inHandleGR, GuidoDate * date )
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoDate *) GuidoGetDuration( GRHandler inHandleGR)
-{
-  GuidoDate *date = new GuidoDate();
-  GuidoErrCode err = GuidoDuration( inHandleGR, date );
-  if (err != guidoNoErr) {
-    delete date;
-    return 0;
-  }
-  return date;
-}
-
-// --------------------------------------------------------------------------
 // was GuidoGetPageNum
 GUIDOAPI(int) GuidoFindEventPage( CGRHandler inHandleGR, const GuidoDate & date )
 {
@@ -580,10 +516,6 @@ GUIDOAPI(int) GuidoFindEventPage( CGRHandler inHandleGR, const GuidoDate & date 
 	return inHandleGR->grmusic ? inHandleGR->grmusic->getPageNum(date.num, date.denom) : 0;
 }
 
-GUIDOAPI(int) GuidoFindEventPage_p( CGRHandler inHandleGR, const GuidoDate * const date )
-{
-  return GuidoFindEventPage(inHandleGR, *date);
-}
 // --------------------------------------------------------------------------
 // was GuidoFindPageNumForDate
 GUIDOAPI(int) GuidoFindPageAt( CGRHandler inHandleGR, const GuidoDate & date )
@@ -593,10 +525,6 @@ GUIDOAPI(int) GuidoFindPageAt( CGRHandler inHandleGR, const GuidoDate & date )
 	return inHandleGR->grmusic ? inHandleGR->grmusic->getPageNumForTimePos( date.num, date.denom ) : 0;
 }
 
-GUIDOAPI(int) GuidoFindPageAt_p( CGRHandler inHandleGR, const GuidoDate * const date )
-{
-  return GuidoFindPageAt(inHandleGR, *date);
-}
 // --------------------------------------------------------------------------
 // was GuidoGetPageRTP
 GUIDOAPI(GuidoErrCode) GuidoGetPageDate( CGRHandler inHandleGR, int pageNum, GuidoDate * date)
@@ -609,17 +537,6 @@ GUIDOAPI(GuidoErrCode) GuidoGetPageDate( CGRHandler inHandleGR, int pageNum, Gui
 
 	bool result = inHandleGR->grmusic->getRTPofPage( pageNum, &date->num, &date->denom );
 	return result ? guidoNoErr : guidoErrBadParameter;
-}
-
-GUIDOAPI(GuidoDate *) GuidoGetNewPageDate( CGRHandler inHandleGR, int pageNum)
-{
-  GuidoDate *date = new GuidoDate();
-  GuidoErrCode err = GuidoGetPageDate( inHandleGR, pageNum, date);
-  if (err != guidoNoErr) {
-    delete date;
-    return 0;
-  }
-  return date;
 }
 
 // --------------------------------------------------------------------------
@@ -731,63 +648,6 @@ GUIDOAPI(GuidoErrCode) GuidoSVGExport( const GRHandler handle, int page, std::os
   return GuidoSVGExportWithFontSpec( handle, page, out, fontfile, 0);
 }
 
-GUIDOAPI(char *) GuidoGetInternalDeviceExport( const GRHandler handle, int page, GuidoInternalDevice dev)
-{
-    static stringstream sstr;
-    sstr.str(""); // Empty String
-    sstr.clear(); // Reset flags
-	GuidoErrCode err;
-	if (dev == guido_svg_with_font_spec) {
-      err = GuidoSVGExportWithFontSpec (handle, page, sstr, 0, reinterpret_cast<char *>(______src_guido2_svg));
-	} else if (dev == guido_abstract) {
-	  err = GuidoAbstractExport(handle, page, sstr);
-	} else if (dev == guido_binary) {
-	  err = GuidoBinaryExport(handle, page, sstr);
-	} else {
-	  return 0;
-	}
-
-	if (err) {
-	  return 0;
-	}
-    string str = sstr.str();
-    char *out = (char *) malloc(strlen(str.c_str()) + 1);
-    strcpy(out, str.c_str());
-	return out;
-}
-
-GUIDOAPI(char *) GuidoGetSVGExportWithFontSpec( const GRHandler handle, int page)
-{
-  return GuidoGetInternalDeviceExport(handle, page, guido_svg_with_font_spec);
-}
-
-GUIDOAPI(char *) GuidoGetAbstractExport( const GRHandler handle, int page)
-{
-  return GuidoGetInternalDeviceExport(handle, page, guido_abstract);
-}
-
-GUIDOAPI(int) GuidoGetBinaryExport( const GRHandler handle, int page, char * in_arr )
-{
-	static stringstream sstr;
-    sstr.str("");
-	sstr.clear();
-	GuidoErrCode err;
-	err = GuidoBinaryExport(handle, page, sstr);
-	if (err) {
-	  return 0;
-	}
-	const char * underlying_string = sstr.str().c_str();
-    size_t size = sstr.str().size();
-    for (size_t i = 0; i < size; i++) {
-	  in_arr[i] = underlying_string[i];
-	}
-    return size;
-}
-
-GUIDOAPI(void)  GuidoReleaseCString( char *stringToRelease ) {
-    free(stringToRelease);
-}
-
 GUIDOAPI(GuidoErrCode) GuidoSVGExportWithFontSpec( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec)
 {
  	SVGSystem sys(fontfile, fontspec);
@@ -813,6 +673,10 @@ GUIDOAPI(GuidoErrCode) GuidoSVGExportWithFontSpec( const GRHandler handle, int p
 }
 
 // --------------------------------------------------------------------------
+GUIDOAPI(void) 	GuidoDrawBoundingBoxes(int bbMap)	{ gBoundingBoxesMap = bbMap; }
+GUIDOAPI(int) 	GuidoGetDrawBoundingBoxes()			{ return gBoundingBoxesMap; }
+
+// --------------------------------------------------------------------------
 GUIDOAPI(void) 	GuidoSetDefaultPageFormat( const GuidoPageFormat * inFormat)
 {
 	delete gARPageFormat;
@@ -821,8 +685,8 @@ GUIDOAPI(void) 	GuidoSetDefaultPageFormat( const GuidoPageFormat * inFormat)
 	if( inFormat )
 	{
 		const GuidoPageFormat & pf = *inFormat;
-		gARPageFormat = new ARPageFormat( pf.width, pf.height, 
-											pf.marginleft, pf.margintop, 
+		gARPageFormat = new ARPageFormat( pf.width, pf.height,
+											pf.marginleft, pf.margintop,
 											pf.marginright, pf.marginbottom );
 
 	}
@@ -859,17 +723,6 @@ GUIDOAPI(void) 	GuidoGetDefaultPageFormat( GuidoPageFormat * outFormat )
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(GuidoPageFormat*) GuidoGetNewDefaultPageFormat() {
-    GuidoPageFormat * outFormat = new GuidoPageFormat;
-    GuidoGetDefaultPageFormat(outFormat);
-    return outFormat;
-}
-
-// --------------------------------------------------------------------------
-GUIDOAPI(void) 	GuidoDrawBoundingBoxes(int bbMap)	{ gBoundingBoxesMap = bbMap; }
-GUIDOAPI(int) 	GuidoGetDrawBoundingBoxes()			{ return gBoundingBoxesMap; }
-
-// --------------------------------------------------------------------------
 // // in internal units
 GUIDOAPI(void) 	GuidoGetPageFormat(	CGRHandler inHandleGR, int pageNum, GuidoPageFormat* format )
 {
@@ -880,19 +733,6 @@ GUIDOAPI(void) 	GuidoGetPageFormat(	CGRHandler inHandleGR, int pageNum, GuidoPag
 	const GRPage * thePage = inHandleGR->grmusic->getPage( pageNum );
 	if( thePage )
 		thePage->getPageFormat( format );
-}
-
-// --------------------------------------------------------------------------
-GUIDOAPI(GuidoPageFormat*) GuidoGetNewPageFormat(	CGRHandler inHandleGR, int pageNum)
-{
-    GuidoPageFormat* pf = new GuidoPageFormat;
-    GuidoGetPageFormat(inHandleGR, pageNum, pf);
-    return pf;
-}
-
-// --------------------------------------------------------------------------
-GUIDOAPI(void) GuidoDeletePageFormat(GuidoPageFormat* format) {
-    delete format;
 }
 
 // --------------------------------------------------------------------------
