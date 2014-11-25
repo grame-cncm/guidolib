@@ -1,108 +1,169 @@
 <html>
 	<head>
+		<link rel="stylesheet" href="stylesheets/guidostylesheet.css" type="text/css" charset="UTF-8" />
+    
+		<script src="libGUIDOEngine.js" type="text/javascript"></script>
+		<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript">
+	var guidoEngine;
+	$( document ).ready(function() {
+		guidoEngine = new Module.GuidoEngineAdapter;
+		guidoEngine.guidoInitWithIndependentSVG();
+		//doit("{ [f# g# a& b& \\bar f# g# a&], [f g a b f g a b c c c \\bar c c] } "); //works
+		//doit("{ [f# g# a& b& f# g# a&], [f g a b f g a] } "); // doesn't work
+		doit("{ [f# g#/8 a&/4 b&/8 f#/4 g#], [f g a/8 b f/4 g] } "); // doesn't work
+		//doit("{ [a b c d e], [a b c d e] } "); // works
+		
+		guidoEngine.guidoShutdown();
+		delete guidoEngine;
+	});
 
-<script src="libGUIDOEngine.js" type="text/javascript"></script>
-<script src="js/guidoEmscriptenBridge.js" type="text/javascript"></script>
-<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
-<script type="text/javascript">
-$( document ).ready(function() {
-	out = GuidoInitWithIndependentSVG();
-	doit("{ [f# g# a& b& \\bar f# g# a&], [f g a b f g a b c c c \\bar c c] } "); //works
-  //doit("{ [f# g# a& b& f# g# a&], [f g a b f g a] } "); // doesn't work
-  doit("{ [f# g#/8 a&/4 b&/8 f#/4 g#], [f g a/8 b f/4 g] } "); // doesn't work
-  //doit("{ [a b c d e], [a b c d e] } "); // works
-});
+	function doit( gmn ) {
+		var p = guidoEngine.guidoOpenParser();
+		var ar = guidoEngine.guidoString2AR (p, gmn);
+		guidoEngine.guidoMarkVoice(ar, 2, {num : 1, denom : 4}, {num : 3, denom : 4}, 255, 0, 0);
+		
+		var gr = guidoEngine.guidoAR2GR(ar);
+		var result = guidoEngine.guidoSVGExport(gr, 1);
+		
+		// Draw the export svg on page
+		$("#guido_svg").html(result);
+		
+		// Test stream
+		var stream = guidoEngine.guidoOpenStream();
+		guidoEngine.guidoWriteStream(stream, "{ [f# g# a& b&");
+		var ar2 = guidoEngine.guidoStream2AR(p, stream);
+		var gr2 = guidoEngine.guidoAR2GR(ar2);
+		var result2 = guidoEngine.guidoSVGExport(gr2, 1);
+		$("#guido_svg2").html(result2);
+		
+		$("#guidoGetStream").html("<b>guidoGetStream </b>" + guidoEngine.guidoGetStream(stream));
+		guidoEngine.guidoResetStream(stream);
+		$("#guidoGetStream2").html("<b>guidoGetStream after reset</b>" + guidoEngine.guidoGetStream(stream));
+		guidoEngine.guidoCloseStream(stream);
+		guidoEngine.guidoFreeGR(gr2);
+		guidoEngine.guidoFreeAR(ar2);
+		
+		// Test method
+		var layoutSettings = guidoEngine.guidoGetDefaultLayoutSettings();
+		$("#guidolayoutsettings").html("<b>Default layout settings</b> systemsDistance = " + layoutSettings.systemsDistance + " / spring = " + layoutSettings.spring);
+		$("#guidoCountVoices").html("<b>Number of voices:</b> " + guidoEngine.guidoCountVoices(ar));
+		$("#guidoGetPageCount").html("<b>Number of pages:</b> " + guidoEngine.guidoGetPageCount(gr));
+		$("#guidoGetSystemCount").html("<b>Number of systems on page 1:</b> " + guidoEngine.guidoGetSystemCount(gr, 1));
+		var date = guidoEngine.guidoDuration(gr);
+		$("#guidoDuration").html("<b>Duration :</b> num = " + date.num + " / denom = "+ date.denom);
+		
+		date = { num : 1, denom : 4};
+		var page = guidoEngine.guidoFindEventPage(gr, date);
+		$("#guidoFindEventPage").html("<b>Page at event 1/4:</b> " + page);
+		
+		page = guidoEngine.guidoFindPageAt(gr, date);
+		$("#guidoFindPageAt").html("<b>Page at 1/4:</b> " + page);
+		
+		date = guidoEngine.guidoGetPageDate(gr, 1);
+		$("#guidoGetPageDate").html("<b>Page date for page 1:</b> num = " + date.num + " / denom = "+ date.denom);
+		
+		$("#guidoGetDrawBoundingBoxes").html("<b>guidoGetDrawBoundingBoxes : </b>" + guidoEngine.guidoGetDrawBoundingBoxes());
+		guidoEngine.guidoSetDrawBoundingBoxes(2);
+		$("#guidoGetDrawBoundingBoxes2").html("<b>guidoGetDrawBoundingBoxes after set 2 : </b>" + guidoEngine.guidoGetDrawBoundingBoxes());
+		
+		var pageFormat = guidoEngine.guidoGetPageFormat(gr, 1);
+		$("#guidoGetPageFormat").html("<b>guidoGetPageFormat = </b> width = " + pageFormat.width + " / height = " + pageFormat.height);
+		pageFormat.width = 2000.2;
+		pageFormat.height = 3000.1;		
+		guidoEngine.guidoSetDefaultPageFormat(pageFormat);
+		pageFormat = guidoEngine.guidoGetDefaultPageFormat()
+		$("#guidoGetDefaultPageFormat").html("<b>guidoGetDefaultPageFormat after set = </b> width = " + pageFormat.width + " / height = " + pageFormat.height);
+		$("#guidoUnit2CM").html("<b>guidoUnit2CM 2.3</b> " + guidoEngine.guidoUnit2CM(2.3));
+		$("#guidoCM2Unit").html("<b>guidoCM2Unit 2.5</b> " + guidoEngine.guidoCM2Unit(2.5));
+		$("#guidoUnit2Inches").html("<b>guidoUnit2Inches 3.1</b> " + guidoEngine.guidoUnit2Inches(3.1));
+		$("#guidoInches2Unit").html("<b>guidoInches2Unit 3.1</b> " + guidoEngine.guidoInches2Unit(1.3));
+		$("#guidoResizePageToMusic").html("<b>guidoResizePageToMusic Error Code : </b>" + guidoEngine.guidoResizePageToMusic(gr).value);
+		var version = guidoEngine.guidoGetVersion();
+		$("#guidoGetVersionNums").html("<b>guidoGetVersionNums </b>" + 
+				version.major + "." +
+				version.minor + "." +
+				version.sub + 
+				" / String version = " + version.str);
+		$("#guidoCheckVersionNums").html("<b>guidoCheckVersionNums 1.5.9 error code </b>" + guidoEngine.guidoCheckVersionNums(1, 5, 9).value);
+		$("#guidoGetLineSpace").html("<b>guidoGetLineSpace </b>" + guidoEngine.guidoGetLineSpace());
+		
+		// Test parser error
+		var parser = guidoEngine.guidoOpenParser();
+		var ar3 = guidoEngine.guidoString2AR(parser, "[a b c ( b]");
+		var errorCode = guidoEngine.guidoParserGetErrorCode(parser);
+		guidoEngine.guidoCloseParser(parser);
+		$("#guidoParserGetErrorCode").html("<b>guidoParserGetErrorCode with [a b c ( b] = line = </b>" + errorCode.line + " / col = " + errorCode.col + " / message =" + errorCode.msg );
+		
+		guidoEngine.guidoFreeAR(ar3);
+		
+		/*
+		guidoGetPageMap_JSON = document.getElementById('guidoGetPageMap_JSON');
+		pagemap_n = GuidoGetPageMap_JSON( gr, 1, 1000.0, 1000.0 )
+		guidoGetPageMap_JSON.innerHTML = "<b>Page map for page 1:</b> "+Pointer_stringify(pagemap_n);
+		GuidoReleaseCString(pagemap_n);
 
-function doit( gmn ) {
-	p=GuidoOpenParser();
-	//console.log ("parser is " + p );
-	ar = GuidoString2AR (p, gmn);
-	GuidoCloseParser(p);
-	//console.log ("ar is " + ar);
-	gr = GuidoGetAR2GR (ar, 0);
-	//console.log ("gr is " + gr);
-	svg_n=GuidoGetSVGExportWithFontSpec(gr, 1);
-	svg = Pointer_stringify(svg_n);
-	guido_svg = document.getElementById('guido_svg');
-	guido_svg.innerHTML = svg;
-	GuidoReleaseCString(svg_n);
+		guidoGetStaffMap_JSON = document.getElementById('guidoGetStaffMap_JSON');
+		staffmap_n = GuidoGetStaffMap_JSON( gr, 1, 1000.0, 1000.0, 1 )
+		guidoGetStaffMap_JSON.innerHTML = "<b>Staff map for page 1, staff 1:</b> "+Pointer_stringify(staffmap_n);
+		GuidoReleaseCString(staffmap_n);
 
-	guidoCountVoices = document.getElementById('guidoCountVoices');
-	guidoCountVoices.innerHTML = "<b>Number of voices:</b> "+GuidoCountVoices(ar);
+		guidoGetVoiceMap_JSON = document.getElementById('guidoGetVoiceMap_JSON');
+		voicemap_n = GuidoGetVoiceMap_JSON( gr, 1, 1000.0, 1000.0, 1 )
+		guidoGetVoiceMap_JSON.innerHTML = "<b>Voice map for page 1, voice 1:</b> "+Pointer_stringify(voicemap_n);
+		GuidoReleaseCString(voicemap_n);
 
-	guidoGetPageCount = document.getElementById('guidoGetPageCount');
-	guidoGetPageCount.innerHTML = "<b>Number of pages:</b> "+GuidoGetPageCount(gr);
-
-	guidoGetSystemCount = document.getElementById('guidoGetSystemCount');
-	guidoGetSystemCount.innerHTML = "<b>Number of systems on page 1:</b> "+GuidoGetSystemCount(gr, 1);
-	
-	guidoDuration_retDate = document.getElementById('guidoDuration_retDate');
-	date = GuidoGetDuration(gr);
-	guidoDuration_retDate.innerHTML = "<b>Duration:</b> "+GuidoGetDateNum(date)+"/"+GuidoGetDateDenom(date);
-	GuidoFreeDate(date);
-
-	guidoFindEventPage_p = document.getElementById('guidoFindEventPage_p');
-	date = GuidoMakeDate(1,4);
-	page = GuidoFindEventPage_p(gr, date);
-	guidoFindEventPage_p.innerHTML = "<b>Page at event 1/4:</b> "+page;
-	GuidoFreeDate(date);
-
-	guidoFindPageAt_p = document.getElementById('guidoFindPageAt_p');
-	date = GuidoMakeDate(1,4);
-	page = GuidoFindPageAt_p(gr, date);
-	guidoFindPageAt_p.innerHTML = "<b>Page at 1/4:</b> "+page;
-	GuidoFreeDate(date);
-
-	guidoGetPageDate_retDate = document.getElementById('guidoGetPageDate_retDate');
-	date = GuidoGetNewPageDate(gr, 1);
-	guidoGetPageDate_retDate.innerHTML = "<b>Page date for page 1:</b> "+GuidoGetDateNum(date)+"/"+GuidoGetDateDenom(date);
-	GuidoFreeDate(date);
-
-	guidoGetPageMap_JSON = document.getElementById('guidoGetPageMap_JSON');
-	pagemap_n = GuidoGetPageMap_JSON( gr, 1, 1000.0, 1000.0 )
-	guidoGetPageMap_JSON.innerHTML = "<b>Page map for page 1:</b> "+Pointer_stringify(pagemap_n);
-	GuidoReleaseCString(pagemap_n);
-
-	guidoGetStaffMap_JSON = document.getElementById('guidoGetStaffMap_JSON');
-	staffmap_n = GuidoGetStaffMap_JSON( gr, 1, 1000.0, 1000.0, 1 )
-	guidoGetStaffMap_JSON.innerHTML = "<b>Staff map for page 1, staff 1:</b> "+Pointer_stringify(staffmap_n);
-	GuidoReleaseCString(staffmap_n);
-
-	guidoGetVoiceMap_JSON = document.getElementById('guidoGetVoiceMap_JSON');
-	voicemap_n = GuidoGetVoiceMap_JSON( gr, 1, 1000.0, 1000.0, 1 )
-	guidoGetVoiceMap_JSON.innerHTML = "<b>Voice map for page 1, voice 1:</b> "+Pointer_stringify(voicemap_n);
-	GuidoReleaseCString(voicemap_n);
-
-	guidoGetSystemMap_JSON = document.getElementById('guidoGetSystemMap_JSON');
-	systemmap_n = GuidoGetSystemMap_JSON( gr, 1, 1000.0, 1000.0)
-	//console.log(systemmap_n);
-	guidoGetSystemMap_JSON.innerHTML = "<b>System map for page 1:</b> "+Pointer_stringify(systemmap_n);
-	GuidoReleaseCString(systemmap_n);
-	
-	GuidoFreeGR(gr);
-	
-	var settings = Module.getSettings();
-	Module.GuidoSetNewDefaultLayoutSettings(settings);
-}
-
-</script>
+		guidoGetSystemMap_JSON = document.getElementById('guidoGetSystemMap_JSON');
+		systemmap_n = GuidoGetSystemMap_JSON( gr, 1, 1000.0, 1000.0)
+		//console.log(systemmap_n);
+		guidoGetSystemMap_JSON.innerHTML = "<b>System map for page 1:</b> "+Pointer_stringify(systemmap_n);
+		GuidoReleaseCString(systemmap_n);
+		*/		
+		guidoEngine.guidoFreeGR(gr);
+		guidoEngine.guidoFreeAR(ar);
+		
+		guidoEngine.guidoCloseParser(p);
+		
+	}
+		</script>
 
 </head>
 <body>
+<div id="guidolayoutsettings"></div>
 <div id="guidoCountVoices"></div>
 <div id="guidoGetPageCount"></div>
 <div id="guidoGetSystemCount"></div>
-<div id="guidoDuration_retDate"></div>
-<div id="guidoFindEventPage_p"></div>
-<div id="guidoFindPageAt_p"></div>
-<div id="guidoGetPageDate_retDate"></div>
+<div id="guidoDuration"></div>
+<div id="guidoFindEventPage"></div>
+<div id="guidoFindPageAt"></div>
+<div id="guidoGetPageDate"></div>
+<div id="guidoGetDrawBoundingBoxes"></div>
+<div id="guidoGetDrawBoundingBoxes2"></div>
+<div id="guidoGetPageFormat"></div>
+<div id="guidoGetDefaultPageFormat"></div>
+<div id="guidoUnit2CM"></div>
+<div id="guidoCM2Unit"></div>
+<div id="guidoUnit2Inches"></div>
+<div id="guidoInches2Unit"></div>
+<div id="guidoResizePageToMusic"></div>
+<div id="guidoGetVersionNums"></div>
+<div id="guidoCheckVersionNums"></div>
+<div id="guidoGetLineSpace"></div>
+<div id="guidoGetStream"></div>
+<div id="guidoGetStream2"></div>
+<div id="guidoParserGetErrorCode"></div>
+
+<!--
 <div id="guidoGetPageMap_JSON"></div>
 <div id="guidoGetStaffMap_JSON"></div>
 <div id="guidoGetVoiceMap_JSON"></div>
 <div id="guidoGetSystemMap_JSON"></div>
+-->
+
 <div id="guido_svg"></div>
+<div id="guido_svg2"></div>
 
-
+<p id="myP" style="visibility:hidden;font-family:Guido2;font-size:200px"></p>
 </body>
 
 </html>
