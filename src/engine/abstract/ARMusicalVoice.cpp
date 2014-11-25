@@ -14,6 +14,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <string>
 #include <typeinfo>
 #include <fstream>
 #include <cstring>	// strcat
@@ -764,35 +765,82 @@ void ARMusicalVoice::browse(TimeUnwrap& mapper, const ARMusicalObject * start, c
 //____________________________________________________________________________________
 void ARMusicalVoice::print(std::ostream& os) const
 {
-    int  indentNumber = 1;
-    bool firstPass = true;
+    int      indentNumber = 1;
+    bool     firstPass    = true;
+    GuidoPos chordTagPos  = 0;
 
     os << "Musical voice: voice number: " << voicenum << "; duration: " << (float) getDuration() << std::endl;
 
     ARMusicalVoiceState vst;
 
-	GuidoPos pos = GetHeadPosition(vst);
+	GuidoPos posInVoice = GetHeadPosition(vst);
 
-	while(pos) {
-		ARMusicalObject *e = GetNext(pos, vst);
+    bool chordTagFound = false;
 
+	while (posInVoice) {
         if (firstPass) { // Like that, range-tags beginning at the start of musical voice will be displayed
-            os << analyzeAndDisplayList(e->getRelativeTimePosition(), vst.curpositiontags, indentNumber);
+            chordTagFound = analyzeAndDisplayList(os, 0, vst.curpositiontags, indentNumber);
 
             firstPass = false;
+
+            if (chordTagFound)
+                chordTagPos = posInVoice;
         }
 
-        os << getIndentStr(indentNumber) << e->getRelativeTimePosition() << ": ";
-        e->print(os);
+		ARMusicalObject *voiceElement = GetNext(posInVoice, vst);
 
-        os << analyzeAndDisplayList(e->getRelativeTimePosition(), vst.addedpositiontags, indentNumber);
-        os << analyzeAndDisplayList(e->getRelativeTimePosition(), vst.removedpositiontags, indentNumber, false);
+        printElement(os, voiceElement, indentNumber);
+
+        if (chordTagPos) {
+            int spaceDecayNumber = getSpacesDecayNumber(voiceElement);
+
+            GetNextObject(chordTagPos);
+            ARMusicalObject *inChordObject = GetNextObject(chordTagPos);
+
+            do {
+                printChordElement(os, inChordObject, indentNumber, spaceDecayNumber);
+                inChordObject = GetNextObject(chordTagPos);
+            } while (chordTagPos != posInVoice);
+        }
+
+        chordTagFound = analyzeAndDisplayList(os, voiceElement->getRelativeTimePosition(), vst.addedpositiontags, indentNumber);
+
+        if (chordTagFound)
+            chordTagPos = posInVoice;
+        else
+            chordTagPos = 0;
+
+        analyzeAndDisplayList(os, voiceElement->getRelativeTimePosition(), vst.removedpositiontags, indentNumber, false);
 	}
 }
 
-std::string ARMusicalVoice::analyzeAndDisplayList(TYPE_TIMEPOSITION startDate, PositionTagList *tagsList, int &indentNumber, bool addTag) const
+int ARMusicalVoice::getSpacesDecayNumber(ARMusicalObject *obj) const
 {
-    std::stringstream stringToReturn = std::stringstream();
+    TYPE_TIMEPOSITION timePos = obj->getRelativeTimePosition();
+
+    int num   = timePos.getNumerator();
+    int denom = timePos.getNumerator();
+
+    ostringstream ss;
+    ss << num << "/" << denom << ": ";
+    return ss.str().length();
+}
+
+void ARMusicalVoice::printElement(std::ostream& os, ARMusicalObject *obj, int indentNumber) const
+{
+    os << getIndentStr(indentNumber) << obj->getRelativeTimePosition() << ": ";
+    obj->print(os);
+}
+
+void ARMusicalVoice::printChordElement(std::ostream& os, ARMusicalObject *obj, int indentNumber, int spaceDecayNumber) const
+{
+    os << getIndentStr(indentNumber) << getSpacesIndentStr(spaceDecayNumber);
+    obj->print(os);
+}
+
+bool ARMusicalVoice::analyzeAndDisplayList(std::ostream& os, TYPE_TIMEPOSITION startDate, PositionTagList *tagsList, int &indentNumber, bool addTag) const
+{
+    bool chordTagBeginFound = false;
 
     if (tagsList != 0) {
         GuidoPos tagPos = tagsList->GetHeadPosition();
@@ -803,15 +851,19 @@ std::string ARMusicalVoice::analyzeAndDisplayList(TYPE_TIMEPOSITION startDate, P
             if (!addTag)
                 indentNumber--;
 
-            stringToReturn << getIndentStr(indentNumber) << startDate << ": ";
-            curTag->print(stringToReturn);
+            os << getIndentStr(indentNumber) << startDate << ": ";
+            curTag->print(os);
 
-            if (addTag)
+            if (addTag) {
                 indentNumber++;
+
+                if (dynamic_cast<ARChordTag *>(curTag))
+                    chordTagBeginFound = true;
+            }
         }
     }
 
-    return stringToReturn.str();
+    return chordTagBeginFound;
 }
 
 std::string ARMusicalVoice::getIndentStr(int indentNumber) const
@@ -822,6 +874,16 @@ std::string ARMusicalVoice::getIndentStr(int indentNumber) const
         indentStr += "    ";
 
     return indentStr;
+}
+
+std::string ARMusicalVoice::getSpacesIndentStr(int decaySpacesNumber) const
+{
+    std::string spacesIndentStr = "";
+
+    for (int i = 0; i < decaySpacesNumber; i++)
+        spacesIndentStr += " ";
+
+    return spacesIndentStr;
 }
 
 //____________________________________________________________________________________

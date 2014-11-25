@@ -221,8 +221,12 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		StartPositionTagList *	mStartPosTagList;
 	
 	private:
+        void        printElement(std::ostream& os, ARMusicalObject *obj, int indentNumber) const;
+        void        printChordElement(std::ostream& os, ARMusicalObject *obj, int indentNumber, int spacesDecayNumber) const;
         std::string getIndentStr(int indentNumber) const;
-        std::string analyzeAndDisplayList(TYPE_TIMEPOSITION startDate, PositionTagList *tagsList, int &indentNumber, bool addTag = true) const;
+        std::string getSpacesIndentStr(int decaySpacesNumber) const;
+        int         getSpacesDecayNumber(ARMusicalObject *obj) const;
+        bool        analyzeAndDisplayList(std::ostream& os, TYPE_TIMEPOSITION startDate, PositionTagList *tagsList, int &indentNumber, bool addTag = true) const;
 
         void        finishChordWithOneChordGroup     (TYPE_DURATION &chorddur, bool trill);
         void        finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur, bool trill);
