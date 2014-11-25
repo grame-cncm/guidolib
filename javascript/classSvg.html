@@ -17,20 +17,15 @@
       }
     </style>
     <script>
-		
+		var guidoEngine;
 	function processGMN() {
 		console.log("processGMN");
-		var guidoEngine = new Module.GuidoEngineAdapter;
-		guidoEngine.GuidoInit();
-		var p = guidoEngine.GuidoOpenParser();
-		var ar = guidoEngine.GuidoString2AR(p, $("#gmnSandbox").val());
-		//alert (ar);
-		var result = guidoEngine.getSvg(p, $("#gmnSandbox").val());
-		guidoEngine.CloseParser(p);
-		//var vector = guidoEngine.returnVector();
-		//alert(vector);
-		//alert(vector.get(0) + vector.get(1));
-		
+		var p = guidoEngine.guidoOpenParser();
+		var ar = guidoEngine.guidoString2AR(p, $("#gmnSandbox").val());
+		guidoEngine.guidoCloseParser(p);
+		var gr = guidoEngine.guidoAR2GR(ar);
+		var result = guidoEngine.guidoSVGExport(gr, 1);
+		/*
 		var settings= {
 			systemsDistance : 75,
 			systemsDistribution : 1,
@@ -41,20 +36,29 @@
 			optimalPageFill : 1,
 			resizePage2Music : 1
 		};
-		//var gr = guidoEngine.GuidoGetAR2GR(ar);
-		//GuidoFreeGR(gr);
 		gr = guidoEngine.GuidoGetAR2GRSettings(ar, settings);
-		//GuidoFreeGR(gr);
-		guidoEngine.delete();
+		*/
+		guidoEngine.guidoFreeGR(gr);
+		guidoEngine.guidoFreeAR(ar);
 		
 		$("#canvasContainer").html(result);
 		$("#canvasContainer2").html("<plaintext>" + result + "</plaintext>");
 	}
 	$( document ).ready(function() {
-		//guidoEngine = new Module.GuidoEngineAdapter;
-		//guidoEngine.GuidoInit();
+		guidoEngine = new Module.GuidoEngineAdapter;
+		guidoEngine.guidoInitWithIndependentSVG();
 		$("#gmnSandbox").on('keyup', processGMN);
 	});
+	$(window).unload(function(){
+		guidoEngine.guidoShutdown();
+		delete guidoEngine;
+	});
+	window.addEventListener("beforeunload", function( event ) {
+		guidoEngine.guidoShutdown();
+		delete guidoEngine;
+		
+	});
+		
 	
     </script>
   </head>
