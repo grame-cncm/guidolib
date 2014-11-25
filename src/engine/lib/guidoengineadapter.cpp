@@ -2,134 +2,315 @@
 #include "GUIDOEngine.h"
 #include "GUIDOParse.h"
 #include <cstring>
+#include <sstream>
+#include "guido2.h"
 
 int GuidoEngineAdapter::nbinstantiation = 0;
 
 GuidoEngineAdapter::GuidoEngineAdapter()
 {
-    nbinstantiation++;
-    cout << "Constructor n°"<< nbinstantiation << endl;
+	nbinstantiation++;
+	cout << "Constructor n°"<< nbinstantiation << endl;
 }
 
 GuidoEngineAdapter::~GuidoEngineAdapter()
 {
-    cout << "Destructor n°"<< nbinstantiation << endl;
+	cout << "Destructor n°"<< nbinstantiation << endl;
 }
 
-void GuidoEngineAdapter::GuidoInit()
+
+GUIDOAPI(GuidoErrCode) GuidoEngineAdapter::guidoInit(GuidoInitDesc * desc)
 {
-    cout << "Intialisation" << endl;
-    GuidoInitWithIndependentSVG();
+	return ::GuidoInit(desc);
 }
 
-GuidoParser * GuidoEngineAdapter::GuidoOpenParser() {
-    return ::GuidoOpenParser();
+GUIDOAPI(void) GuidoEngineAdapter::guidoInitWithIndependentSVG()
+{
+	::GuidoInitWithIndependentSVG();
 }
 
-void GuidoEngineAdapter::CloseParser(GuidoParser * parser) {
-    ::GuidoCloseParser(parser);
+GUIDOAPI(void) GuidoEngineAdapter::guidoShutdown()
+{
+	::GuidoShutdown();
 }
 
-ARHandler GuidoEngineAdapter::GuidoString2AR(GuidoParser * p, const string &guidoCode) {
-    cout << "GuidoString2AR" << endl;
-    return ::GuidoString2AR (p, guidoCode.c_str());
+GUIDOAPI(GRHandler) GuidoEngineAdapter::guidoAR2GR(ARHandler ar)
+{
+	GRHandler gr;
+	GuidoErrCode err = ::GuidoAR2GR (ar, 0, &gr);
+	return err ? 0 : gr;
 }
 
-GRHandler GuidoEngineAdapter::GuidoGetAR2GR (ARHandler ar, const GuidoLayoutSettings &settings) {
-    cout << "GuidoGetAR2GR with settings" << endl;
-    return ::GuidoGetAR2GR (ar, &settings);
+GUIDOAPI(GRHandler) GuidoEngineAdapter::guidoAR2GR(ARHandler ar, const GuidoLayoutSettings &settings)
+{
+	GRHandler gr;
+	GuidoErrCode err = ::GuidoAR2GR (ar, &settings, &gr);
+	return err ? 0 : gr;
 }
 
-GRHandler GuidoEngineAdapter::GuidoGetAR2GR (ARHandler ar) {
-    return ::GuidoGetAR2GR (ar, 0);
+GUIDOAPI(GuidoErrCode) GuidoEngineAdapter::guidoUpdateGR(GRHandler gr)
+{
+	return ::GuidoUpdateGR(gr, 0);
 }
 
-string GuidoEngineAdapter::getSvg(GuidoParser * p, const string &guidoCode) {
-    ARHandler ar = ::GuidoString2AR (p, guidoCode.c_str());
-    GRHandler gr = ::GuidoGetAR2GR (ar, 0);
-    char * resExport = ::GuidoGetSVGExportWithFontSpec(gr, 1);
-    string result(resExport);
-    free(resExport);
-    ::GuidoFreeGR(gr);
-
-    return result;
+GUIDOAPI(GuidoErrCode) GuidoEngineAdapter::guidoUpdateGR(GRHandler gr, const GuidoLayoutSettings &settings)
+{
+	return ::GuidoUpdateGR(gr, &settings);
 }
 
-vector<string> GuidoEngineAdapter::returnVector() {
-    this->testvector.push_back("bonjour");
-    this->testvector.push_back("le monde");
-    return this->testvector;
+GUIDOAPI(void) GuidoEngineAdapter::guidoFreeAR(ARHandler ar)
+{
+	::GuidoFreeAR(ar);
 }
 
-/*
-#include <emscripten.h>
-#include <bind.h>
-#include <iostream>
-#include <string>
-using namespace emscripten;
-
-
-  class A {
-      public:
-          A () {
-              a=5;
-          }
-          void add() {
-              a = a+1;
-          }
-          int get() {
-              return a;
-          }
-      private:
-          int a;
-  };
-
-  class B {
-      public:
-          B () {
-              b=10;
-          }
-          void add() {
-              b = b+1;
-          }
-          int get() {
-              return b;
-          }
-
-          A* getA() {
-              return new A;
-          }
-
-          void addA(A* a) {
-              b+=a->get();
-          }
-          std::string getString() {
-              return str;
-          }
-          void setString (std::string str) {
-              this->str = str;
-          }
-      private:
-          int b;
-          std::string str;
-  };
-
-
-EMSCRIPTEN_BINDINGS(test) {
-    class_<A>("A");
-
-    class_<B>("B")
-          .constructor<>()
-          .function("add",&B::add)
-          .function("get",&B::get)
-          .function("getA",&B::getA, allow_raw_pointers())
-          .function("addA",&B::addA, allow_raw_pointers())
-          .function("getString",&B::getString)
-          .function("setString",&B::setString)
-          ;
+GUIDOAPI(void) GuidoEngineAdapter::guidoFreeGR(GRHandler gr)
+{
+	::GuidoFreeGR(gr);
 }
-*/
-/*
-emcc -c  --bind -std=c++11 main/guidoengineadapter.cpp -o obj/main/guidoengineadapter.o
-emcc -O2 --bind obj/main/guidoengineadapter.o -o libengine.js -s ALLOW_MEMORY_GROWTH=1 -s ASM_JS=1
-*/
+
+GUIDOAPI(string) GuidoEngineAdapter::guidoGetErrorString(GuidoErrCode errCode)
+{
+	return ::GuidoGetErrorString(errCode);
+}
+
+GUIDOAPI(GuidoLayoutSettings) GuidoEngineAdapter::guidoGetDefaultLayoutSettings()
+{
+	GuidoLayoutSettings settings;
+	::GuidoGetDefaultLayoutSettings(&settings);
+	return settings;
+}
+
+GUIDOAPI(int) GuidoEngineAdapter::guidoCountVoices(CARHandler inHandleAR)
+{
+	return ::GuidoCountVoices(inHandleAR);
+}
+
+GUIDOAPI(int) GuidoEngineAdapter::guidoGetPageCount(CGRHandler inHandleGR)
+{
+	return ::GuidoGetPageCount(inHandleGR);
+}
+
+GUIDOAPI(int) GuidoEngineAdapter::guidoGetSystemCount(CGRHandler inHandleGR, int page)
+{
+	return ::GuidoGetSystemCount(inHandleGR, page);
+}
+
+GUIDOAPI(GuidoDate) GuidoEngineAdapter::guidoDuration(CGRHandler inHandleGR)
+{
+	GuidoDate date;
+	::GuidoDuration(inHandleGR, &date);
+	return date;
+}
+
+GUIDOAPI(int) GuidoEngineAdapter::guidoFindEventPage(CGRHandler inHandleGR, const GuidoDate& date)
+{
+	return ::GuidoFindEventPage(inHandleGR, date);
+}
+
+GUIDOAPI(int) GuidoEngineAdapter::guidoFindPageAt(CGRHandler inHandleGR, const GuidoDate& date)
+{
+	return ::GuidoFindPageAt(inHandleGR, date);
+}
+
+GUIDOAPI(GuidoDate) GuidoEngineAdapter::guidoGetPageDate( CGRHandler inHandleGR, int pageNum)
+{
+	GuidoDate date;
+	::GuidoGetPageDate( inHandleGR, pageNum, &date);
+	return date;
+}
+
+GUIDOAPI(GuidoErrCode) GuidoEngineAdapter::guidoOnDraw(GuidoOnDrawDesc * desc)
+{
+	return ::GuidoOnDraw(desc);
+}
+
+GUIDOAPI(GuidoErrCode) GuidoEngineAdapter::guidoSVGExport(const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec)
+{
+	return ::GuidoSVGExportWithFontSpec(handle, page, out, fontfile, fontspec);
+}
+
+GUIDOAPI(string) GuidoEngineAdapter::guidoSVGExport(const GRHandler handle, int page)
+{
+	stringstream sstr;
+	::GuidoSVGExportWithFontSpec(handle, page, sstr, 0, reinterpret_cast<char *>(______src_guido2_svg));
+	return sstr.str();
+}
+
+GUIDOAPI(GuidoErrCode) GuidoEngineAdapter::guidoAbstractExport(const GRHandler handle, int page, std::ostream& out)
+{
+	return ::GuidoAbstractExport(handle, page, out);
+}
+
+GUIDOAPI(string) GuidoEngineAdapter::guidoAbstractExport(const GRHandler handle, int page)
+{
+	stringstream sstr;
+	::GuidoAbstractExport(handle, page, sstr);
+	return sstr.str();
+}
+
+GUIDOAPI(GuidoErrCode) GuidoEngineAdapter::guidoBinaryExport(const GRHandler handle, int page, std::ostream& out)
+{
+	return ::GuidoBinaryExport(handle, page, out);
+}
+
+// TODO GGX a revoir pour le retour (un vector ?)
+GUIDOAPI(string) GuidoEngineAdapter::guidoBinaryExport(const GRHandler handle, int page)
+{
+	stringstream sstr;
+	::GuidoBinaryExport(handle, page, sstr);
+	return sstr.str();
+}
+
+GUIDOAPI(void) GuidoEngineAdapter::guidoSetDrawBoundingBoxes(int bbMap)
+{
+	::GuidoDrawBoundingBoxes(bbMap);
+}
+
+GUIDOAPI(int) GuidoEngineAdapter::guidoGetDrawBoundingBoxes()
+{
+	return GuidoGetDrawBoundingBoxes();
+}
+
+GUIDOAPI(GuidoPageFormat) GuidoEngineAdapter::guidoGetPageFormat(CGRHandler inHandleGR, int pageNum)
+{
+	GuidoPageFormat pf;
+	::GuidoGetPageFormat(inHandleGR, pageNum, &pf);
+	return pf;
+}
+
+GUIDOAPI(void) GuidoEngineAdapter::guidoSetDefaultPageFormat(const GuidoPageFormat &format)
+{
+	::GuidoSetDefaultPageFormat(&format);
+}
+
+GUIDOAPI(GuidoPageFormat) GuidoEngineAdapter::guidoGetDefaultPageFormat()
+{
+	GuidoPageFormat pf;
+	::GuidoGetDefaultPageFormat(&pf);
+	return pf;
+}
+
+GUIDOAPI(float) GuidoEngineAdapter::guidoUnit2CM(float val)
+{
+	return ::GuidoUnit2CM(val);
+}
+
+GUIDOAPI(float) GuidoEngineAdapter::guidoCM2Unit(float val)
+{
+	return ::GuidoCM2Unit(val);
+}
+
+GUIDOAPI(float) GuidoEngineAdapter::guidoUnit2Inches(float val)
+{
+	return ::GuidoUnit2Inches(val);
+}
+
+GUIDOAPI(float) GuidoEngineAdapter::guidoInches2Unit(float val)
+{
+	return ::GuidoInches2Unit(val);
+}
+
+GUIDOAPI(GuidoErrCode) GuidoEngineAdapter::guidoResizePageToMusic(GRHandler inHandleGR)
+{
+	return ::GuidoResizePageToMusic(inHandleGR);
+}
+
+GUIDOAPI(GuidoVersion) GuidoEngineAdapter::guidoGetVersion()
+{
+	GuidoVersion version;
+	::GuidoGetVersionNums(&version.major, &version.minor, &version.sub);
+	version.str = ::GuidoGetVersionStr();
+	return version;
+}
+
+GUIDOAPI(GuidoErrCode) GuidoEngineAdapter::guidoCheckVersionNums(int major, int minor, int sub)
+{
+	return ::GuidoCheckVersionNums(major, minor, sub);
+}
+
+GUIDOAPI(float) GuidoEngineAdapter::guidoGetLineSpace()
+{
+	return ::GuidoGetLineSpace();
+}
+
+GUIDOAPI(GuidoErrCode) GuidoEngineAdapter::guidoMarkVoice(ARHandler inHandleAR, int voicenum, const GuidoDate & date,
+									  const GuidoDate & duration, unsigned char red, unsigned char green,
+									  unsigned char blue)
+{
+	return ::GuidoMarkVoice(inHandleAR, voicenum, date, duration, red, green, blue);
+}
+
+GUIDOAPI(GuidoErrCode) GuidoEngineAdapter::guidoSetSymbolPath(ARHandler inHandleAR, const std::vector<std::string> &inPaths)
+{
+	return ::GuidoSetSymbolPath(inHandleAR, inPaths);
+}
+GUIDOAPI(GuidoErrCode) GuidoEngineAdapter::guidoGetSymbolPath(const ARHandler inHandleAR, std::vector<std::string> &inPathVector)
+{
+	return ::GuidoGetSymbolPath(inHandleAR, inPathVector);
+}
+
+// Parser section
+GUIDOAPI(GuidoParser *) GuidoEngineAdapter::guidoOpenParser()
+{
+	return ::GuidoOpenParser();
+}
+
+GUIDOAPI(GuidoErrCode) GuidoEngineAdapter::guidoCloseParser(GuidoParser * parser)
+{
+	return ::GuidoCloseParser(parser);
+}
+
+GUIDOAPI(ARHandler)	GuidoEngineAdapter::guidoFile2AR(GuidoParser *p, const string &file)
+{
+	return ::GuidoFile2AR(p, file.c_str());
+}
+
+
+GUIDOAPI(ARHandler) GuidoEngineAdapter::guidoString2AR(GuidoParser * p, const string &gmnCode)
+{
+	return ::GuidoString2AR (p, gmnCode.c_str());
+}
+
+GUIDOAPI(string) GuidoEngineAdapter::guidoGetStream(GuidoStream *gStream)
+{
+	string str = ::GuidoGetStream(gStream);
+	cout << "stream = " << ::GuidoGetStream(gStream) << endl;
+	return str;
+	//return ::GuidoGetStream(gStream);
+}
+
+GUIDOAPI(ARHandler) GuidoEngineAdapter::guidoStream2AR(GuidoParser *p, GuidoStream* stream)
+{
+	return ::GuidoStream2AR(p, stream);
+}
+
+GUIDOAPI(ParserError) GuidoEngineAdapter::guidoParserGetErrorCode(GuidoParser *p)
+{
+	ParserError parseErr;
+	const char * msg;
+	::GuidoParserGetErrorCode(p, parseErr.line, parseErr.col, &msg);
+	if(msg) {
+		parseErr.msg = msg;
+	}
+	return parseErr;
+}
+
+GUIDOAPI(GuidoStream *) GuidoEngineAdapter::guidoOpenStream()
+{
+	return ::GuidoOpenStream();
+}
+
+GUIDOAPI(GuidoErrCode) GuidoEngineAdapter::guidoCloseStream(GuidoStream *s)
+{
+	return ::GuidoCloseStream(s);
+}
+
+GUIDOAPI(GuidoErrCode) GuidoEngineAdapter::guidoWriteStream(GuidoStream *s, const string &str)
+{
+	return ::GuidoWriteStream(s, str.c_str());
+}
+
+GUIDOAPI(GuidoErrCode) GuidoEngineAdapter::guidoResetStream(GuidoStream *s)
+{
+	return ::GuidoResetStream(s);
+}
