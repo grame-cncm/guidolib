@@ -25,11 +25,9 @@ ARFinishBar::~ARFinishBar()
 
 }
 
-void ARFinishBar::print() const
+void ARFinishBar::print(int &indent) const
 {
-	/* fprintf(stderr,"(%.2f:Bar ",(float) relativeTimePosition);
-	fprintf(stderr,"%d ", barnumber);
-	fprintf(stderr,")"); */
+	std::cout << "ARFinishBar" << std::endl;
 }
 
 /* ostream & ARDoubleBar::operator<<(ostream &os) const

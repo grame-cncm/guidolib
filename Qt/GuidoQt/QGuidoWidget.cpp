@@ -287,7 +287,7 @@ void QGuidoWidget::clearCache()
 //-------------------------------------------------------------------------
 void QGuidoWidget::setResizePageToMusic(bool isOn)
 {
-	if ( isOn != isResizePageToMusic() )
+	if ( isOn != isResizePageToMusicOn() )
 	{
 		mGuidoPainter->setResizePageToMusic(isOn);
 		updateGuidoPagesSizes();
@@ -296,9 +296,9 @@ void QGuidoWidget::setResizePageToMusic(bool isOn)
 }
 
 //-------------------------------------------------------------------------
-bool QGuidoWidget::isResizePageToMusic() const
+bool QGuidoWidget::isResizePageToMusicOn() const
 { 
-	return mGuidoPainter->isResizePageToMusic(); 
+	return mGuidoPainter->isResizePageToMusicOn(); 
 }
 
 //-------------------------------------------------------------------------

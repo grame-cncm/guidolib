@@ -81,7 +81,7 @@ class GRGlissando : public GRPTagARNotationElement
 		virtual void addAssociation(GRNotationElement * el);
 
 		virtual void tellPosition(GObject * caller, const NVPoint & newPosition);
-		virtual void print() const;
+		virtual void print(int &indent) const;
 		virtual GRNotationElement * getStartElement(GRStaff * grstaff) const;
 		virtual GRNotationElement * getEndElement(GRStaff * grstaff) const;
 		virtual void BreakTag(GRStaff * grstaff, GuidoPos & assocpos);

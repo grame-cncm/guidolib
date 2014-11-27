@@ -170,7 +170,7 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 
 }
 
-void GRBeam::print() const
+void GRBeam::print(int &indent) const
 {
 }
 

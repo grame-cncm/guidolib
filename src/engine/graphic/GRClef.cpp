@@ -219,6 +219,8 @@ GRClef::GRClef(ARClef * arClef, GRStaff *curstaff, bool ownsAR)
 	}
 	sClefTextAlign = (VGDevice::kAlignLeft | VGDevice::kAlignBase);
 	mGrStaff = curstaff;
+
+    mIsInHeader = arClef->isInHeader();
 }
 
 GRClef::~GRClef()
@@ -282,7 +284,7 @@ void GRClef::GGSOutput() const
 	}
 }
 
-void GRClef::print() const
+void GRClef::print(int &indent) const
 {
 }
 

@@ -98,7 +98,7 @@ class GRMusic : public GREvent
 		virtual int		GGSInputPage( int inPageNum, const char * str);
 		virtual char *	getGGSInfo( int infotype ) const;
 
-		virtual void	print() const;
+		virtual void	print(int &indent) const;
 		virtual void	trace(VGDevice & hdc);
 		virtual void	voicetrace(VGDevice & hdc);
 
@@ -108,9 +108,9 @@ class GRMusic : public GREvent
 				void 	addPage( GRPage * newPage );
                 
                 void    setAR2GRTime(long time) { mAR2GRTime = time; }
-                long     getAR2GRTime()         { return mAR2GRTime; }
+                long    getAR2GRTime()          { return mAR2GRTime; }
                 void    setDrawTime(long time)  { mDrawTime = time; }
-                long     getDrawTime()          { return mDrawTime; }
+                long    getDrawTime()           { return mDrawTime; }
 
 	protected:
 				void 	addVoiceElement( GRVoice * voice, GRNotationElement * el );
@@ -118,8 +118,8 @@ class GRMusic : public GREvent
 	  	NVstring 	mName;
 		VoiceList 	mVoiceList;
 
-        long         mAR2GRTime;
-        long         mDrawTime;
+        long        mAR2GRTime;
+        long        mDrawTime;
 
 	private:  
 		PageList 	mPages;

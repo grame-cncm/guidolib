@@ -28,7 +28,7 @@ public:
       ARNewPage() { }
 
       virtual ~ARNewPage() { }
-      virtual void print() const { }
+      virtual void print(int &indent) const { }
       virtual std::ostream & operator<<(std::ostream & os) const;
 
     /**** Function to avoid dynamic_cast ****/

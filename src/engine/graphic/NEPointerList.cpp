@@ -31,7 +31,7 @@ NEPointerList::~NEPointerList()
 {
 }
 
-void NEPointerList::print()
+void NEPointerListprint(int &indent)
 {
 
 }

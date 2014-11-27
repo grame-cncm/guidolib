@@ -35,7 +35,7 @@ class ARBeam :  public ARMTParameter, public ARPositionTag
 	  bool isFeatheredBeam() const {return feathered;}
 
 	virtual bool MatchEndTag(const char * s);
-	virtual void print() const { }
+	virtual void print(int &indent) const { }
 	virtual void PrintName(std::ostream & os) const;
 	virtual void setTagParameterList(TagParameterList & tpl);
 		

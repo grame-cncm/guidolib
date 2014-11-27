@@ -14,6 +14,9 @@
 
 #include <math.h>
 
+#include "GUIDOInternal.h"
+
+#include "GRStaffManager.h"
 #include "GRDoubleBar.h"
 #include "ARDoubleBar.h"
 #include "GRStaff.h"
@@ -75,8 +78,12 @@ void GRDoubleBar::DrawWithLines( VGDevice & hdc ) const
     if (fLineNumber != 0 && fLineNumber != 1)
         offsety2 = ((fLineNumber - 5) % 6) * LSPACE;
 
+    float proportionalRenderingXOffset = 0;
+    if (GRStaffManager::sPropRender != 0)
+        proportionalRenderingXOffset = - 90; // REM: 30 hardcoded (1.5 * note extent)
+
     // - Horizontal adjustement according to staff's lines size and staff's size
-    const float offsetX = (fStaffThickness - 4) * 0.5f - 24;
+    const float offsetX = (fStaffThickness - 4) * 0.5f - 24 + proportionalRenderingXOffset;
 
     const float spacing = LSPACE * 0.7f * fSize;
 	const float x1 = mPosition.x + offsetX;

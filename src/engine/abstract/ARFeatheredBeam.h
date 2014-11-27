@@ -34,7 +34,7 @@ class ARFeatheredBeam :  public ARBeam
 	virtual 		~ARFeatheredBeam();
 
 	virtual bool MatchEndTag(const char * s);
-	virtual void print() const { }
+	virtual void print(int &indent) const { }
 	virtual void PrintName(std::ostream & os) const;
 	virtual void setTagParameterList(TagParameterList & tpl);
 

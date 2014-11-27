@@ -112,6 +112,13 @@ GUIDOAPI(ARHandler)	GuidoString2AR (GuidoParser *p, const char *str)
 #endif
     }
 
+    if (ar) {
+        int indentTmp = 0;
+        cout << std::endl;
+        ar->armusic->print(indentTmp);
+        cout << std::endl;
+    }
+
 	return ar;
 }
 

@@ -83,7 +83,7 @@ const char* ARInstrument::getSecondName() const
 	return s2->getValue();
 }
 
-void ARInstrument::print() const
+void ARInstrument::print(int &indent) const
 {
 }
 

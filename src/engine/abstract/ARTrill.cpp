@@ -118,7 +118,7 @@ float ARTrill::getady() const
 	return ady;
 }
 
-void ARTrill::print() const
+void ARTrill::print(int &indent) const
 {
 }
 

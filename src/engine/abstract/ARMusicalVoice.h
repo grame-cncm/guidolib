@@ -138,7 +138,7 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		// adjust the duration of a voice by adding a rest-event
 		void			adjustDuration(const TYPE_DURATION & newDuration);
 
-		virtual void	print() const;
+		virtual void	print(int &indent) const;
 		virtual std::ostream & operator<< (std::ostream & os) const;
 		virtual std::ostream & output(std::ostream & os, bool isauto = true) const;
 		virtual void	browse(TimeUnwrap& mapper) const;
@@ -174,17 +174,17 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
         std::vector<ARRepeatBegin *> *getRepeatBeginList() { return repeatBeginList; }
 
 	protected:
-		ARChordTag          *currentChord;
-		ARShareLocation     *currentShareLocation;
-		ChordGroupList      *chordgrouplist;
-		GuidoPos             posfirstinchord;
-		int                  numchordvoice;
-        bool                 isInChord;
-		void                 doAutoKeys();
-		int	                 sum;
-		int                  pitchsum;
-		int                  voicenum;
-
+		ARChordTag      *currentChord;
+		ARShareLocation *currentShareLocation;
+		ChordGroupList  *chordgrouplist;
+		GuidoPos         posfirstinchord;
+		int              numchordvoice;
+        bool             isInChord;
+		int	             sum;
+		int              pitchsum;
+		int              voicenum;
+        
+		void doAutoKeys();
 		void doAutoDispatchLyrics();
 		void doAutoFermatas();
 		void doAutoTies();

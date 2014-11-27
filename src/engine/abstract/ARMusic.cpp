@@ -93,12 +93,12 @@ void ARMusic::getTimeMap (TimeMapCollector& f) const
 	}
 }
 
-void ARMusic::print() const
+void ARMusic::print(int &indent) const
 {
 	GuidoPos pos = GetHeadPosition();
 	while(pos) {
 		ARMusicalVoice * e = GetNext(pos);
-		e->print();
+		e->print(indent);
 	}
 }
 

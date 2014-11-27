@@ -259,7 +259,7 @@ void GRDiminuendo::OnDraw( VGDevice & hdc) const
     }
 }
 
-void GRDiminuendo::print() const
+void GRDiminuendo::print(int &indent) const
 {
 }
 

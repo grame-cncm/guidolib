@@ -26,7 +26,7 @@ public:
 				ARBembel(int p_inv = 0);
 	virtual 	~ARBembel();
 
-	virtual void print() const {}
+	virtual void print(int &indent) const {}
 	/* virtual ostream &operator<<(ostream &os) const
 		{
 			os << "\\bembel";

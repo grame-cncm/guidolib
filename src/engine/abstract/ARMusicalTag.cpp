@@ -26,7 +26,7 @@
 #include "ARMusicalTag.h"
 
 ARMusicalTag::ARMusicalTag(const TYPE_TIMEPOSITION & tp, const ARMusicalTag * copy)
-  	: ARMusicalObject(tp), id(-1), isAuto(0), rangesetting(NO), error(0), mHasRange(false)
+  	: ARMusicalObject(tp), id(-1), isAuto(0), rangesetting(NO), error(0), mHasRange(false), mIsInHeader(false)
 {
 	assoc = DC;
 	color = 0;
@@ -59,7 +59,8 @@ ARMusicalTag::ARMusicalTag(int pid, const ARMusicalTag * copy)
   id(pid),
   rangesetting(NO) ,
   error(0),
-  mHasRange(false)
+  mHasRange(false),
+mIsInHeader(false)
 {
 	assoc = DC; // don't care ...
 	isAuto = 0;

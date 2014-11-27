@@ -105,7 +105,7 @@ public:
 	virtual void		OnDraw( VGDevice & hdc ) const;
 	virtual void		GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 	virtual void		GGSOutput() const;
-	virtual void		print() const;
+	virtual void		print(int &indent) const;
 	virtual void		setPosition( class NVPoint const & );
 	virtual void		updateBoundingBox();
 

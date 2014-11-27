@@ -32,7 +32,7 @@ void GRSystemTag::checkPosition(const GRSystem *grsys)
 
 }
 
-void GRSystemTag::print() const
+void GRSystemTag::print(int &indent) const
 {
 }
 

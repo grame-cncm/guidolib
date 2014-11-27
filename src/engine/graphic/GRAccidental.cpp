@@ -95,7 +95,7 @@ GRAccidental::~GRAccidental()
 //}
 
 //____________________________________________________________________________________
-void GRAccidental::print() const
+void GRAccidental::print(int &indent) const
 {
 }
 

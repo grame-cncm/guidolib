@@ -59,7 +59,7 @@ const char * ARTitle::getPageFormat()
 		return pageformat->getValue();
 }
 
-void ARTitle::print() const
+void ARTitle::print(int &indent) const
 {
 }
 

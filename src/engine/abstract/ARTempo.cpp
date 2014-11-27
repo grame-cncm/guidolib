@@ -60,7 +60,7 @@ float ARTempo::getQpmValue() const
 }
 
 // --------------------------------------------------------------------------
-void ARTempo::print() const
+void ARTempo::print(int &indent) const
 {
 }
 

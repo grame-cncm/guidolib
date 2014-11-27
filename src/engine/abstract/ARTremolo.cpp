@@ -198,7 +198,7 @@ TagParameterList * ARTremolo::getTagParameterList() const
 }
 
 // -----------------------------------------------------------------------------
-void ARTremolo::print() const
+void ARTremolo::print(int &indent) const
 {
 }
 

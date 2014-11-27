@@ -48,7 +48,7 @@ class GRTuplet : public GRPTagARNotationElement
 		virtual 		~GRTuplet();
 
 		virtual void 	OnDraw( VGDevice & hdc ) const;
-		virtual void 	print() const;
+		virtual void 	print(int &indent) const;
 		virtual void 	tellPosition( GObject * caller, const NVPoint & inPos );
 
 	protected:

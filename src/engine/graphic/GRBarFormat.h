@@ -29,7 +29,7 @@ class GRBarFormat : public GRTagARNotationElement
 		
 		virtual void OnDraw( VGDevice & hdc ) const;
 
-		virtual void print() const;
+		virtual void print(int &indent) const;
 
 	protected:
 };

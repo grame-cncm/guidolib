@@ -51,7 +51,7 @@ GRSpaceForceFunction2::~GRSpaceForceFunction2()
 */
 void GRSpaceForceFunction2::addSpring(GRSpring *spr)
 {
-	float force = spr->force;
+	float force  = spr->force;
 	float sconst = spr->sconst;
 
 	// this increases the minimum extent of the SFF

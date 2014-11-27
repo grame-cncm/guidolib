@@ -42,7 +42,7 @@ void ARSlur::browse(TimeUnwrap& mapper) const
 	mapper.AtPos (this, TimeUnwrap::kSlur);
 }
 
-void ARSlur::print() const
+void ARSlur::print(int &indent) const
 {
 }
 

@@ -79,7 +79,7 @@ ARMusicalEvent::~ARMusicalEvent()
 {
 }
 
-void ARMusicalEvent::print() const
+void ARMusicalEvent::print(int &indent) const
 {
 }
 

@@ -1265,6 +1265,7 @@ staff_debug("CreateBeginElements");
 
 		ARClef * arclef = new ARClef(*state.curclef);
 		arclef->setRelativeTimePosition( mRelativeTimePositionOfGR );
+        arclef->setIsInHeader(true);
 		// owns abstract ....!
 		GRClef * grclef = new GRClef(arclef, this, 1);
 
@@ -1283,6 +1284,7 @@ staff_debug("CreateBeginElements");
 
 		ARKey * arkey = new ARKey(*state.curkey);
 		arkey->setRelativeTimePosition(mRelativeTimePositionOfGR);
+        arkey->setIsInHeader(true);
 
 		GRKey * grkey = new GRKey(this, arkey, 0, 1);
 
@@ -1886,10 +1888,9 @@ void GRStaff::OnDraw( VGDevice & hdc ) const
 	
 	// - 
 	DrawNotationElements(hdc);
+
 	if (gBoundingBoxesMap & kStavesBB)
-    {
 		DrawBoundingBox(hdc, kStaffBBColor);
-	}
 }
 
 // ----------------------------------------------------------------------------
@@ -2017,18 +2018,17 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 
     std::map<float,float>::const_iterator it = positions.begin();
 
-    while (it != positions.end())
-    {
+    while (it != positions.end()) {
         float x1 = it->first;
         float x2 = it->second;
 
         yPos = staffPos.y;
 
-        for (int i = 0; i < mStaffState.numlines; i++)
-        {
+        for (int i = 0; i < mStaffState.numlines; i++) {
             hdc.Line(x1, yPos, x2, yPos);
             yPos += lspace;
         }
+
         it++;
     }
 
@@ -2041,17 +2041,16 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 // ----------------------------------------------------------------------------
 void GRStaff::DrawNotationElements( VGDevice & hdc ) const
 {
-
 	const float xOffset = 0; 					// mPosition.x	
 	const float yOffset = mPosition.y;			// (JB) sign change
 
 	hdc.OffsetOrigin( xOffset, yOffset );  		// Set the origin at beginning of staff
 	GuidoPos pos = mCompElements.GetHeadPosition();
 
-	while (pos)
-	{
+	while (pos) {
 		GRNotationElement * e = mCompElements.GetNext(pos);
-		e->OnDraw(hdc);
+
+        e->OnDraw(hdc);
 		
 #ifdef _DEBUG
 		//draw element's bounding box
@@ -2062,16 +2061,16 @@ void GRStaff::DrawNotationElements( VGDevice & hdc ) const
 }
 
 // ----------------------------------------------------------------------------
-void GRStaff::print() const
+void GRStaff::print(int &indent) const
 {
 	GRNotationElement * e;
-	fprintf(stderr, "GRStaff::print(): %.2f-%.2f ", 
+	fprintf(stderr, "GRStaffprint(int &indent): %.2f-%.2f ", 
 		(float) mRelativeTimePositionOfGR, (float) getRelativeEndTimePosition());
 	GuidoPos pos = mCompElements.GetHeadPosition();
 	while(pos)
 	{
 		e = mCompElements.GetNext(pos);
-		e->print();
+		e->print(indent);
 	}
 	fprintf(stderr, "\n");
 }
@@ -2208,35 +2207,34 @@ void GRStaff::generatePositions()
 
 	it++;
 
-	while (it != isOn.end())
-	{
+	while (it != isOn.end()) {
 		t = t2;
 		t2 = it->first;
 		x = next;
 		TYPE_DURATION dur = t2 - t;
 		next = getXEndPosition(t, dur);
-		if(draw)
-		{
+
+		if (draw)
 			positions.insert(std::pair<float,float>(x, next));
-		}
+
 		draw = it->second;
-		if(next==0)
+
+		if (next == 0)
 			draw = false;
+
 		it++;
 	}
 
 	// when we arrive to the last element (possibly the same as the first one) we draw
 	// from the last x posititon to the end of the measure
-	if(it == isOn.end() && draw)
-	{
+	if (it == isOn.end() && draw)
 		positions.insert(std::pair<float,float>(next, xEnd2));
-	}
 		
 	// the begining of the next measure has to be drawn by this staff...
-	if(isNextOn && xEnd != xEnd2)
-	{
-		if(positions.count(xEnd2)>0)
+	if (isNextOn && xEnd != xEnd2) {
+		if (positions.count(xEnd2) > 0)
 			positions.erase(xEnd2);
+
 		positions.insert(std::pair<float,float>(xEnd2, xEnd));
 	}
 }

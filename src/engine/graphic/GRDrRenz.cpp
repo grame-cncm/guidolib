@@ -59,7 +59,7 @@ GRDrRenz::~GRDrRenz()
 	delete mFace;
 }
 
-void GRDrRenz::print() const
+void GRDrRenz::print(int &indent) const
 {
 }
 

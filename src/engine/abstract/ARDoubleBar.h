@@ -24,7 +24,7 @@ class ARDoubleBar : public ARBar
 public:
 	ARDoubleBar();
 	virtual ~ARDoubleBar();
-	virtual void print() const;
+	virtual void print(int &indent) const;
 	// virtual ostream & operator<<(ostream &os) const;
 	virtual void PrintName(std::ostream & os) const;
 

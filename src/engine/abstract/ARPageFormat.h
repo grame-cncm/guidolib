@@ -39,7 +39,7 @@ public:
 	virtual bool IsStateTag() const { return true; }
 	
 	virtual void setTagParameterList( TagParameterList & theTagParameterList );
-	virtual void print() const { }
+	virtual void print(int &indent) const { }
 
 	virtual std::ostream & operator<<(std::ostream &os) const
 	  			{ return os;   }

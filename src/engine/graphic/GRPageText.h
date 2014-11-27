@@ -41,7 +41,7 @@ class GRPageText : public GRTagARNotationElement
 		virtual ~GRPageText();
 
 		virtual void OnDraw( VGDevice & hdc ) const;
-		virtual void print() const;
+		virtual void print(int &indent) const;
 				void setGRPage(GRPage * page) 		{ fGRPage = page; }
 
 		virtual void			calcPosition();

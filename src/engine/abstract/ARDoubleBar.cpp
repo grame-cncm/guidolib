@@ -25,7 +25,7 @@ ARDoubleBar::~ARDoubleBar()
 
 }
 
-void ARDoubleBar::print() const
+void ARDoubleBar::print(int &indent) const
 {
 	/* fprintf(stderr,"(%.2f:Bar ",(float) relativeTimePosition);
 	fprintf(stderr,"%d ", barnumber);

@@ -27,7 +27,7 @@ class ARTStaccato : public ARTArticulation
 		virtual ~ARTStaccato();
 
 
-		virtual void print() const;
+		virtual void print(int &indent) const;
 };
 
 #endif

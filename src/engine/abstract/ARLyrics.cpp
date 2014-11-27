@@ -90,7 +90,7 @@ void ARLyrics::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARLyrics::print() const
+void ARLyrics::print(int &indent) const
 {
 }
 

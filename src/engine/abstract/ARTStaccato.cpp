@@ -19,7 +19,7 @@ ARTStaccato::~ARTStaccato()
 }
 
 
-void ARTStaccato::print() const
+void ARTStaccato::print(int &indent) const
 {
 }
 

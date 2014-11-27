@@ -106,7 +106,7 @@ float ARAlter::getDetune() const
 	return altervalue ? altervalue->getValue() : 0;
 }
 
-void ARAlter::print() const
+void ARAlter::print(int &indent) const
 {
 	PrintName(cout);
 	PrintParameters(cout);

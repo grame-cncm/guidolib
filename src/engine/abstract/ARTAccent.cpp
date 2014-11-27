@@ -18,7 +18,7 @@ ARTAccent::~ARTAccent()
 {
 }
 
-void ARTAccent::print() const
+void ARTAccent::print(int &indent) const
 {
 }
 

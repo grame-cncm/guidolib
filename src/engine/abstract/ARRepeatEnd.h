@@ -42,7 +42,7 @@ class ARRepeatEnd : public ARBar
 		int			getNumRepeat() const { return numrepeat; }
 		virtual void setTagParameterList( TagParameterList & tpl);
 
-		virtual void	print() const { };
+		virtual void	print(int &indent) const { };
 		virtual void	browse(TimeUnwrap& mapper) const;
 
 		virtual std::ostream & operator<<(std::ostream & os) const;

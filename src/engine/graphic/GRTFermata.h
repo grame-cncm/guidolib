@@ -27,7 +27,7 @@ class GRTFermata : public GRARNotationElement, public GRPositionTag
 {
 
 public:
-	virtual void print() const;
+	virtual void print(int &indent) const;
 	virtual void OnDraw( VGDevice & hdc ) const;
 	const ARTFermata * getARTFermata() const;
 	virtual void addAssociation(GRNotationElement * el);

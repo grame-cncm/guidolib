@@ -29,7 +29,8 @@ class ARSecondGlue : public ARMusicalTag
 						ARSecondGlue() {}
 		virtual			~ARSecondGlue() {}
 
-		virtual void	print() const {}
+        virtual void	print(int &indent) const { std::cout << "ARSecondGlue" << std::endl; }
+
 		virtual void	PrintName(std::ostream & os) const;
 		virtual bool	IsStateTag() const { return true; }
         
