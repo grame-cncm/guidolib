@@ -125,7 +125,8 @@ GUIDOAPI(ARHandler)	GuidoString2AR (GuidoParser *p, const char *str)
 #ifdef DEBUG
     if (ar) {
         cout << std::endl;
-        ar->armusic->print(cerr);
+        PrintVisitor *visitor = new PrintVisitor(cout);
+        ar->armusic->goThrough(visitor);
         cout << std::endl;
     }
 #endif

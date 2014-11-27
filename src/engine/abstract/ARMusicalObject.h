@@ -17,6 +17,9 @@
 
 #include "defines.h"	// for TYPE_TIMEPOSITION
 
+#include "PrintVisitor.h"
+#include "Visitable.h"
+
 #define MIN_TIMEPOSITION Frac_0
 #define DURATION_7_4  Frac_7_4
 #define DURATION_3_2  Frac_3_2
@@ -53,7 +56,7 @@ class TimeUnwrap;
 /** \brief The base class for all AR objects. 
 	It contains all musical information : duration and time position.
 */
-class ARMusicalObject
+class ARMusicalObject : public Visitable
 {
   public:
 				 ARMusicalObject();
@@ -128,6 +131,9 @@ class ARMusicalObject
     virtual ARMusicalObject  *isARJump()          { return NULL; }
     virtual ARMusicalObject  *isARPossibleBreak() { return NULL; }
     /*****************************************/
+
+	/* Visitor design pattern */
+    virtual void accept(BaseVisitor *visitor);
 
   protected:
 		TYPE_TIMEPOSITION	relativeTimePosition;

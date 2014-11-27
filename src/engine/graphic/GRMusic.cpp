@@ -647,7 +647,7 @@ void GRMusic::getGuido() const
 
   // no AUTO-tags !
 
-	arm->output( os,0 );
+    arm->print(os);
   
 //#ifdef LINUX	
 //  os.freeze();	// Deprecated: it was here because of old ostrstream.

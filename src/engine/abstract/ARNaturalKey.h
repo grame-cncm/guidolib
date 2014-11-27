@@ -20,7 +20,7 @@
 
 #include "ARKey.h"
 
-class ARNaturalKey : public ARKey  
+class ARNaturalKey : public ARKey
 {
 public:
 				 ARNaturalKey() {};

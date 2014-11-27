@@ -79,6 +79,8 @@ using namespace std;
 #include "ARFeatheredBeam.h"
 #include "ARTremolo.h"
 
+#include "BaseVisitor.h"
+
 #include "ARRepeatBegin.h"
 #include "ARCoda.h"
 #include "ARSegno.h"
@@ -762,296 +764,66 @@ void ARMusicalVoice::browse(TimeUnwrap& mapper, const ARMusicalObject * start, c
 	}
 }
 
-//____________________________________________________________________________________
-void ARMusicalVoice::print(std::ostream& os) const
+void ARMusicalVoice::printName(std::ostream& os) const
 {
-    int      indentNumber = 1;
-    bool     firstPass    = true;
-    GuidoPos chordTagPos  = 0;
+    os << "Musical voice";
+}
 
-    os << "Musical voice: voice number: " << voicenum << "; duration: " << (float) getDuration() << std::endl;
+void ARMusicalVoice::printParameters(std::ostream& os) const
+{
+    os << "voice number: " << getVoiceNum() << "; duration: " << (float) getDuration() << ";";
+}
 
-    ARMusicalVoiceState vst;
+void ARMusicalVoice::goThrough(BaseVisitor *visitor)
+{
+    accept(visitor);
 
-	GuidoPos posInVoice = GetHeadPosition(vst);
+	GuidoPos posInVoice = ObjectList::GetHeadPosition();
+    GuidoPos prevPos    = 0;
+    GuidoPos pTagPos    = 0;
 
-    bool chordTagFound = false;
+    if (mPosTagList)
+		pTagPos = mPosTagList->GetHeadPosition();
 
 	while (posInVoice) {
-        if (firstPass) { // Like that, range-tags beginning at the start of musical voice will be displayed
-            chordTagFound = analyzeAndDisplayList(os, 0, vst.curpositiontags, indentNumber);
+        prevPos = posInVoice;
 
-            firstPass = false;
-
-            if (chordTagFound)
-                chordTagPos = posInVoice;
-        }
-
-		ARMusicalObject *voiceElement = GetNext(posInVoice, vst);
-
-        printElement(os, voiceElement, indentNumber);
-
-        if (chordTagPos) {
-            int spaceDecayNumber = getSpacesDecayNumber(voiceElement);
-
-            GetNextObject(chordTagPos);
-            ARMusicalObject *inChordObject = GetNextObject(chordTagPos);
-
-            do {
-                printChordElement(os, inChordObject, indentNumber, spaceDecayNumber);
-                inChordObject = GetNextObject(chordTagPos);
-            } while (chordTagPos != posInVoice);
-        }
-
-        chordTagFound = analyzeAndDisplayList(os, voiceElement->getRelativeTimePosition(), vst.addedpositiontags, indentNumber);
-
-        if (chordTagFound)
-            chordTagPos = posInVoice;
-        else
-            chordTagPos = 0;
-
-        analyzeAndDisplayList(os, voiceElement->getRelativeTimePosition(), vst.removedpositiontags, indentNumber, false);
-	}
-}
-
-int ARMusicalVoice::getSpacesDecayNumber(ARMusicalObject *obj) const
-{
-    TYPE_TIMEPOSITION timePos = obj->getRelativeTimePosition();
-
-    int num   = timePos.getNumerator();
-    int denom = timePos.getNumerator();
-
-    ostringstream ss;
-    ss << num << "/" << denom << ": ";
-    return ss.str().length();
-}
-
-void ARMusicalVoice::printElement(std::ostream& os, ARMusicalObject *obj, int indentNumber) const
-{
-    os << getIndentStr(indentNumber) << obj->getRelativeTimePosition() << ": ";
-    obj->print(os);
-}
-
-void ARMusicalVoice::printChordElement(std::ostream& os, ARMusicalObject *obj, int indentNumber, int spaceDecayNumber) const
-{
-    os << getIndentStr(indentNumber) << getSpacesIndentStr(spaceDecayNumber);
-    obj->print(os);
-}
-
-bool ARMusicalVoice::analyzeAndDisplayList(std::ostream& os, TYPE_TIMEPOSITION startDate, PositionTagList *tagsList, int &indentNumber, bool addTag) const
-{
-    bool chordTagBeginFound = false;
-
-    if (tagsList != 0) {
-        GuidoPos tagPos = tagsList->GetHeadPosition();
-
-        while(tagPos) {
-            ARPositionTag *curTag = tagsList->GetNext(tagPos);
-
-            if (!addTag)
-                indentNumber--;
-
-            os << getIndentStr(indentNumber) << startDate << ": ";
-            curTag->print(os);
-
-            if (addTag) {
-                indentNumber++;
-
-                if (dynamic_cast<ARChordTag *>(curTag))
-                    chordTagBeginFound = true;
-            }
-        }
+		ARMusicalObject *object = ObjectList::GetNext(posInVoice);
+        
+        goThroughTagsList(visitor, pTagPos, prevPos, true);
+        object->accept(visitor);
+        goThroughTagsList(visitor, pTagPos, prevPos, false);
     }
 
-    return chordTagBeginFound;
+    if (mPosTagList) {
+        while (pTagPos) {
+            ARMusicalObject *object = dynamic_cast<ARMusicalObject *> (mPosTagList->GetNext(pTagPos));
+
+            if (object)
+                object->accept(visitor);
+        }
+    }
 }
 
-std::string ARMusicalVoice::getIndentStr(int indentNumber) const
+void ARMusicalVoice::goThroughTagsList(BaseVisitor *visitor, GuidoPos& posTag, GuidoPos prevPos, bool addTag) const
 {
-    std::string indentStr = "";
+	if (mPosTagList) {
+		while (posTag) {
+            ARPositionTag *positionTag = mPosTagList->GetAt(posTag);
+            ARTagEnd      *artgend     = ARTagEnd::cast(positionTag);
 
-    for (int i = 0; i < indentNumber; i++)
-        indentStr += "    ";
+            if (!addTag && artgend || addTag && !artgend) {
+                if (positionTag && positionTag->getPosition() == prevPos)
+                    positionTag->accept(visitor);
+                else
+                    break;
 
-    return indentStr;
-}
-
-std::string ARMusicalVoice::getSpacesIndentStr(int decaySpacesNumber) const
-{
-    std::string spacesIndentStr = "";
-
-    for (int i = 0; i < decaySpacesNumber; i++)
-        spacesIndentStr += " ";
-
-    return spacesIndentStr;
-}
-
-//____________________________________________________________________________________
-void ARMusicalVoice::printPosTags(std::ostream & os, GuidoPos& pos, GuidoPos prevpos, bool lookend) const
-{
-	if (mPosTagList)
-	{
-		while (pos)
-		{
-			ARPositionTag * pt = mPosTagList->GetAt(pos);
-			ARTagEnd * artgend = ARTagEnd::cast(pt);
-			if (!lookend){ if (artgend)	break; }
-			else if (!artgend)	break;
-			if ( pt && pt->getPosition() == prevpos)
-			{
-				ARMusicalObject * o = dynamic_cast<ARMusicalObject *>(pt);
-				if (o)	o->operator<<(os);
-			}
-			else	break;
-			mPosTagList->GetNext(pos);
-		}
-	}
-}
-
-//____________________________________________________________________________________
-std::ostream & ARMusicalVoice::operator<<(std::ostream & os) const
-{
-	// Attention: when calling this function you have to set readmode beforehand if you
-	// want chords to appear as GUIDO-chords.
-	os << " [ ";
-
-	GuidoPos pos = ObjectList::GetHeadPosition();
-	GuidoPos prevpos = NULL;
-	// this now optimizes access to the position tag list, because they are saved in Normal-Form!
-	GuidoPos ptagpos = NULL;
-	if (mPosTagList)
-		ptagpos = mPosTagList->GetHeadPosition();
-
-	while(pos)
-	{
-		prevpos = pos;
-		ARMusicalObject * e = ObjectList::GetNext(pos);
-
-		// now we check the positiontaglist up to the event
-		printPosTags (os, ptagpos, prevpos, false);
-		e->operator<<(os);
-		printPosTags (os, ptagpos, prevpos, true);
-	}
-
-	// now, we deal with the staff coming after.
-	if (mPosTagList)
-	{
-		while (ptagpos)
-		{
-			ARMusicalObject * o = dynamic_cast<ARMusicalObject *> (mPosTagList->GetNext(ptagpos));
-			if (o)	o->operator<<(os);
-		}
-	}
-	os << " ] ";
-	return os;
-}
-
-//____________________________________________________________________________________
-std::ostream & ARMusicalVoice::output(std::ostream & os, bool isauto) const
-{
-	// this has to be done in whatever mode ...?
-	// reconvert chords into GUIDO-Chords!?!?
-
-	os << " [ ";
-
-	GuidoPos pos = ObjectList::GetHeadPosition();
-	GuidoPos prevpos = NULL;
-	// this now optimizes access to the position tag list, because they are saved in Normal-Form!
-	GuidoPos ptagpos = NULL;
-	if (mPosTagList) ptagpos = mPosTagList->GetHeadPosition();
-
-	while(pos)
-	{
-		prevpos = pos;
-		ARMusicalObject * e = ObjectList::GetNext(pos);
-
-		// now we check the positiontaglist up to the event
-		if (mPosTagList)
-		{
-			while (ptagpos)
-			{
-				ARPositionTag * pt = mPosTagList->GetAt(ptagpos);
-				ARTagEnd * artgend = ARTagEnd::cast(pt);
-				if (artgend) break;
-				if (pt->getPosition() == prevpos)
-				{
-					ARMusicalObject * o = dynamic_cast<ARMusicalObject *>(pt);
-					ARMusicalTag * t = dynamic_cast<ARMusicalTag *>(pt);
-					if (o)
-					{
-					    if (t && !isauto)
-						{
-							if (!t->getIsAuto()) t->operator<<(os);
-						}
-					    else o->operator<<(os);
-					}
-				}
-				else break;
-				mPosTagList->GetNext(ptagpos);
-			}
-		}
-
-        ARMusicalTag *t = NULL;
-        if (e)
-            t = static_cast<ARMusicalTag *>(e->isARMusicalTag());
-
-		if (t && !isauto) {
-		    if (!t->getIsAuto())
-		      t->operator<<(os);
-		}
-		else
-            e->operator<<(os);
-
-		if (mPosTagList)
-		{
-			while (ptagpos)
-			{
-				ARPositionTag  * pt = mPosTagList->GetAt(ptagpos);
-				ARTagEnd * artgend = ARTagEnd::cast(pt);
-				if (artgend == 0) break;
-
-				if (pt->getPosition() == prevpos)
-				{
-					ARMusicalObject * o = dynamic_cast<ARMusicalObject *>(pt);
-					ARMusicalTag * t = dynamic_cast<ARMusicalTag *>(pt);
-					if (o)
-					{
-					    if (t && !isauto)
-					 	{
-							if (t->getIsAuto() == false) t->operator<<(os);
-					  	}
-					    else o->operator<<(os);
-					  }
-				}
-				else break;
-				mPosTagList->GetNext(ptagpos);
-			}
-		}
-	}
-
-	// now, we deal with the staff coming after.
-	if (mPosTagList)
-	{
-		while (ptagpos)
-		{
-			ARMusicalObject *o = dynamic_cast<ARMusicalObject *>(mPosTagList->GetNext(ptagpos));
-            ARMusicalTag    *t = NULL;
-
-            if (o)
-                t = static_cast<ARMusicalTag *>(o->isARMusicalTag());
-
-            if (t && !isauto) {
-                if (!t->getIsAuto())
-                    t->operator<<(os);
+                mPosTagList->GetNext(posTag);
             }
             else
-                o->operator<<(os);
+                break;
 		}
 	}
-
-	os << " ] ";
-
-	return os;
 }
 
 //____________________________________________________________________________________
@@ -2026,7 +1798,7 @@ public:
 		}
 		size_t length = (size_t)(end-start);
 		char c = '\0';
-		if(text->size()>end)
+		if ((int)text->size() > end)
 			c = (*text)[end];
 		if (c == '-' || c == '_')
 		{

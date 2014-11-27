@@ -54,7 +54,7 @@ void ARRest::browse(TimeUnwrap& mapper) const
 
 void ARRest::printName(std::ostream& os) const
 {
-    os << "ARRest: ";
+    os << "ARRest";
 }
 
 void ARRest::printParameters(std::ostream& os) const

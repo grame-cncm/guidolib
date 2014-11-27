@@ -15,6 +15,8 @@
 
 */
 
+#include "PrintVisitor.h"
+#include "Visitable.h"
 #include "GUIDOTypes.h"	// For GuidoPos
 
 #define oldv 1 
@@ -24,10 +26,9 @@ class ARMusicalObject;
 /** \brief The base class for all range tags.
 */
 
-class ARPositionTag
+class ARPositionTag : public Visitable
 {
 	public:
-
 		ARPositionTag() : pos(0), ep(0), mPositionTag(0)
 		{
 #if !oldv
@@ -101,7 +102,7 @@ class ARPositionTag
 #endif
 		virtual bool	isEndTagClass() const { return false; }
 
-                void	print(std::ostream & os) const { printName(os); printParameters(os); os << std::endl; }
+                void	print(std::ostream & os) const { printName(os); os << ": "; printParameters(os); os << std::endl; }
 		virtual void	printName(std::ostream & os)       const = 0;
 		virtual void	printParameters(std::ostream & os) const = 0;
 
@@ -112,8 +113,10 @@ class ARPositionTag
         virtual ARMusicalObject *isARFeatheredBeam()   { return NULL; }
         /*****************************************/
 
-	protected:
+		/* Visitor design pattern */
+        virtual void accept(BaseVisitor *visitor) { visitor->visit(*this); }
 
+protected:
 		GuidoPos pos;
 		GuidoPos ep;
 

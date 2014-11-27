@@ -90,50 +90,13 @@ void ARMusic::getTimeMap (TimeMapCollector& f) const
 	}
 }
 
-void ARMusic::print(std::ostream& os) const
+void ARMusic::goThrough(BaseVisitor *visitor) const
 {
 	GuidoPos pos = GetHeadPosition();
-	while(pos) {
+	while (pos) {
 		ARMusicalVoice * e = GetNext(pos);
-		e->print(os);
+		e->goThrough(visitor);
 	}
-}
-
-/** \brief Prints the music into a stream
-*/
-/*void ARMusic::print(std::ostream& os) const
-{
-	GuidoPos pos=GetHeadPosition();
-	ARMusicalVoice * e;
-	const char* sep = "";
-	os << "{\n";
-	while(pos)
-	{
-		os << sep;
-		e=GetNext(pos);
-		e->setReadMode(ARMusicalVoice::EVENTMODE);
-		e->operator<<(os);
-		e->setReadMode(ARMusicalVoice::CHORDMODE);
-		sep = "\n,\n";
-	}
-	os << "\n}\n";
-}*/
-
-std::ostream & ARMusic::output(std::ostream & os, bool isauto) const
-{
-	GuidoPos pos = GetHeadPosition();
-	ARMusicalVoice * e;
-	const char* sep = "";
-	os << "{\n";
-	while(pos)
-	{
-		os << sep;
-		e = GetNext(pos);
-		e->output(os,isauto);
-		sep = "\n,\n";
-	}
-	os << "\n}\n";
-	return os;
 }
 
 void ARMusic::resetGRRepresentation()

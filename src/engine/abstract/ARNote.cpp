@@ -265,7 +265,7 @@ int ARNote::CompareNameOctavePitch(const ARNote & nt)
 
 void ARNote::printName(std::ostream& os) const
 {
-    os << "ARNote: ";
+    os << "ARNote";
 }
 
 void ARNote::printParameters(std::ostream& os) const

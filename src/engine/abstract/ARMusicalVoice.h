@@ -80,8 +80,6 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 	friend class GRVoiceManager;
 	friend class ARMusic;
 	
-	void printPosTags(std::ostream & os, GuidoPos& pos, GuidoPos prevpos, bool lookend) const;
-	
 	public:
 		typedef enum   CHORD_TYPE {UP_SIMPLE, DOWN_SIMPLE, UP, DOWN, UP_COMPLEX, DOWN_COMPLEX, CHORDERROR} CHORD_TYPE;
 		typedef enum   CHORD_ACCIDENTAL {NATURAL, FLAT, SHARP, CAU_NATURAL, CAU_FLAT, CAU_SHARP, NONE} CHORD_ACCIDENTAL;
@@ -138,9 +136,6 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		// adjust the duration of a voice by adding a rest-event
 		void			adjustDuration(const TYPE_DURATION & newDuration);
 
-	    
-		virtual std::ostream & operator<< (std::ostream & os) const;
-		virtual std::ostream & output(std::ostream & os, bool isauto = true) const;
 		virtual void browse(TimeUnwrap& mapper) const;
 		virtual void browse(TimeUnwrap& mapper, ARMusicalVoiceState& state) const;
 		virtual void browse(TimeUnwrap& mapper, const ARMusicalObject * start, const ARMusicalObject * end=0) const;
@@ -173,7 +168,12 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
         void addRepeatBegin(ARRepeatBegin *repeatBegin) { repeatBeginList->push_back(repeatBegin); }
         std::vector<ARRepeatBegin *> *getRepeatBeginList() { return repeatBeginList; }
 
-        void print(std::ostream& os) const;
+        void printName(std::ostream& os) const;
+        void printParameters(std::ostream& os) const;
+
+		/* Visitor design pattern */
+        void goThrough(BaseVisitor *visitor);
+        void goThroughTagsList(BaseVisitor *visitor, GuidoPos& posTag, GuidoPos prevPos, bool addTag) const;
 
 	protected:
 		ARChordTag      *currentChord;
@@ -221,13 +221,6 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		StartPositionTagList *	mStartPosTagList;
 	
 	private:
-        void        printElement(std::ostream& os, ARMusicalObject *obj, int indentNumber) const;
-        void        printChordElement(std::ostream& os, ARMusicalObject *obj, int indentNumber, int spacesDecayNumber) const;
-        std::string getIndentStr(int indentNumber) const;
-        std::string getSpacesIndentStr(int decaySpacesNumber) const;
-        int         getSpacesDecayNumber(ARMusicalObject *obj) const;
-        bool        analyzeAndDisplayList(std::ostream& os, TYPE_TIMEPOSITION startDate, PositionTagList *tagsList, int &indentNumber, bool addTag = true) const;
-
         void        finishChordWithOneChordGroup     (TYPE_DURATION &chorddur, bool trill);
         void        finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur, bool trill);
 

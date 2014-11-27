@@ -783,6 +783,10 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
+			else if (!strcmp(name,"chord"))	// same as "splitChord"
+			{
+				GuidoTrace("chord-Tag is no longer supported!");
+			}
 			else if (!strcmp(name,"cue"))
 			{
 				if (mCurrentCue)
@@ -1432,10 +1436,7 @@ void ARFactory::createTag( const char * name, int no )
 			}
 			else if (!strcmp(name,"splitChord"))	// same as "chord"
 			{
-//				GuidoTrace("splitChord-Tag is no longer supported!");
-//				ARUserChordTag * tmp = new ARUserChordTag;
-//				mTags.AddHead(tmp);
-//				mCurrentVoice->AddPositionTag(tmp);
+				GuidoTrace("splitChord-Tag is no longer supported!");
 			}
 			// (JB) experimental implementation of Signa
 			else if (!strcmp(name,"segno"))	

@@ -81,6 +81,7 @@ ARMusicalEvent::~ARMusicalEvent()
 void ARMusicalEvent::print(std::ostream& os) const
 {
     printName(os);
+    os << ": ";
     printParameters(os);
     os << std::endl;
 }

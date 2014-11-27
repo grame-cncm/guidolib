@@ -66,13 +66,13 @@ GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, GRSingleNote *sngNote, AR
 		const TagParameterFloat * tmpdy = curnoteformat->getDY();
 
 		if (tmpdx)
-			noteFormatDx = (GCoord)(tmpdx->getValue(stf->getStaffLSPACE()));
+			noteFormatDx = (int) (tmpdx->getValue(stf->getStaffLSPACE()));
 		if (tmpdy)
-			noteFormatDy = (GCoord)(tmpdy->getValue(stf->getStaffLSPACE()));
+			noteFormatDy = (int) (tmpdy->getValue(stf->getStaffLSPACE()));
     }
 
-    int clusterDx = mTagOffset.x;
-    int clusterDy = mTagOffset.y;
+    float clusterDx = mTagOffset.x;
+    float clusterDy = mTagOffset.y;
 
     mTagOffset.x += noteFormatDx;
     mTagOffset.y += noteFormatDy;

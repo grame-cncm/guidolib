@@ -167,7 +167,9 @@ ARMusicalObject * ARDummyRangeEnd::Copy() const
 
 void ARDummyRangeEnd::printName(std::ostream& os) const
 {
-    os << "ARDummyRangeEnd";
+    os << "ARDummyRangeEnd (";
+    mPositionTag->printName(os);
+    os << ")";
     ARMusicalTag::printName(os);
 }
 
