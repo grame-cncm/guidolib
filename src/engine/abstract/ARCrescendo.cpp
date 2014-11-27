@@ -119,7 +119,11 @@ bool ARCrescendo::MatchEndTag(const char * s)
 void ARCrescendo::printName(std::ostream& os) const
 {
     os << "ARCrescendo";
-    ARMusicalTag::printName(os);
+}
+
+void ARCrescendo::printGMNName(std::ostream& os) const
+{
+    os << "\\crescendo";
 }
 
 void ARCrescendo::printParameters(std::ostream& os) const

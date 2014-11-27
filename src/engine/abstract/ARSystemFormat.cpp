@@ -68,7 +68,11 @@ void ARSystemFormat::setTagParameterList(TagParameterList &tpl)
 void ARSystemFormat::printName(std::ostream& os) const
 {
     os << "ARSystemFormat";
-    ARMusicalTag::printName(os);
+}
+
+void ARSystemFormat::printGMNName(std::ostream& os) const
+{
+    os << "\\systemFormat";
 }
 
 void ARSystemFormat::printParameters(std::ostream& os) const

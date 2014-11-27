@@ -65,7 +65,11 @@ void ARPizzicato::setTagParameterList(TagParameterList & tpl)
 void ARPizzicato::printName(std::ostream& os) const
 {
     os << "ARPizzicato";
-    ARMusicalTag::printName(os);
+}
+
+void ARPizzicato::printGMNName(std::ostream& os) const
+{
+    os << "\\pizzicato";
 }
 
 void ARPizzicato::printParameters(std::ostream& os) const

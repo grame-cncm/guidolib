@@ -26,5 +26,9 @@ void ARFine::browse(TimeUnwrap& mapper) const
 void ARFine::printName(std::ostream& os) const
 {
     os << "ARFine";
-    ARMusicalTag::printName(os);
+}
+
+void ARFine::printGMNName(std::ostream& os) const
+{
+    os << "\\fine";
 }

@@ -82,7 +82,11 @@ const char* ARNoteFormat::getStyle() const
 void ARNoteFormat::printName(std::ostream& os) const
 {
     os << "ARNoteFormat";
-    ARMusicalTag::printName(os);
+}
+
+void ARNoteFormat::printGMNName(std::ostream& os) const
+{
+    os << "\\noteFormat";
 }
 
 void ARNoteFormat::printParameters(std::ostream& os) const

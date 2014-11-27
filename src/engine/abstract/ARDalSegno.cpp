@@ -26,7 +26,11 @@ void ARDalSegno::browse(TimeUnwrap& mapper) const
 void ARDalSegno::printName(std::ostream& os) const
 {
     os << "ARDalSegno";
-    ARMusicalTag::printName(os);
+}
+
+void ARDalSegno::printGMNName(std::ostream& os) const
+{
+    os << "\\dalSegno";
 }
 
 ARDalSegnoAlFine::ARDalSegnoAlFine() : ARJump ("D.S. al Fine") {}
@@ -40,5 +44,9 @@ void ARDalSegnoAlFine::browse(TimeUnwrap& mapper) const
 void ARDalSegnoAlFine::printName(std::ostream& os) const
 {
     os << "ARDalSegnoAlFine";
-    ARMusicalTag::printName(os);
+}
+
+void ARDalSegnoAlFine::printGMNName(std::ostream& os) const
+{
+    os << "\\dalSegnoAlFine";
 }

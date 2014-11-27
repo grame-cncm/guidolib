@@ -351,7 +351,11 @@ bool ARKey::IsStateTag() const
 void ARKey::printName(std::ostream& os) const
 {
     os << "ARKey";
-    ARMusicalTag::printName(os);
+}
+
+void ARKey::printGMNName(std::ostream& os) const
+{
+    os << "\\key";
 }
 
 void ARKey::printParameters(std::ostream& os) const

@@ -68,7 +68,11 @@ void ARLabel::setTagParameterList(TagParameterList & tpl)
 void ARLabel::printName(std::ostream& os) const
 {
     os << "ARLabel";
-    ARMusicalTag::printName(os);
+}
+
+void ARLabel::printGMNName(std::ostream& os) const
+{
+    os << "\\label";
 }
 
 void ARLabel::printParameters(std::ostream& os) const

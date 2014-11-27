@@ -143,8 +143,23 @@ void ARTrill::printName(std::ostream& os) const
         os << " (mord)";
         break;
     }
+}
 
-    ARMusicalTag::printName(os);
+void ARTrill::printGMNName(std::ostream& os) const
+{
+    os << "\\";
+
+    switch (mTrillType) {
+    case TRILL:
+        os << "trill";
+        break;
+    case TURN:
+        os << "turn";
+        break;
+    case MORD:
+        os << "mord";
+        break;
+    }
 }
 
 void ARTrill::printParameters(std::ostream& os) const

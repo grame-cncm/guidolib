@@ -103,7 +103,11 @@ void ARBar::setTagParameterList(TagParameterList& tpl)
 void ARBar::printName(std::ostream& os) const
 {
     os << "ARBar";
-    ARMusicalTag::printName(os);
+}
+
+void ARBar::printGMNName(std::ostream& os) const
+{
+    os << "\\bar";
 }
 
 void ARBar::printParameters(std::ostream& os) const

@@ -80,7 +80,11 @@ void ARDrRenz::setTagParameterList(TagParameterList & tpl)
 void ARDrRenz::printName(std::ostream& os) const
 {
     os << "ARDrRenz";
-    ARMusicalTag::printName(os);
+}
+
+void ARDrRenz::printGMNName(std::ostream& os) const
+{
+    os << "\\drRenz";
 }
 
 void ARDrRenz::printParameters(std::ostream& os) const

@@ -276,7 +276,11 @@ void ARTuplet::setName(const char * inName)
 void ARTuplet::printName(std::ostream& os) const
 {
     os << "ARTuplet";
-    ARMusicalTag::printName(os);
+}
+
+void ARTuplet::printGMNName(std::ostream& os) const
+{
+    os << "\\tuplet";
 }
 
 void ARTuplet::printParameters(std::ostream& os) const

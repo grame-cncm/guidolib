@@ -28,6 +28,7 @@ public:
 	virtual	~ARBase() {}
 
     virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
 	virtual void printParameters(std::ostream& os) const;
 
 	void setBaseDuration(const TYPE_DURATION & tmp) { dur = tmp; }

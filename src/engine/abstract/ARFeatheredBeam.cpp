@@ -166,7 +166,11 @@ void ARFeatheredBeam::convertDurationToBeams(float valor, float valor2)
 void ARFeatheredBeam::printName(std::ostream& os) const
 {
     os << "ARFeatheredBeam";
-    ARMusicalTag::printName(os);
+}
+
+void ARFeatheredBeam::printGMNName(std::ostream& os) const
+{
+    os << "\\featheredBeam";
 }
 
 void ARFeatheredBeam::printParameters(std::ostream& os) const

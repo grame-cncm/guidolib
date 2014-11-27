@@ -776,7 +776,7 @@ void ARMusicalVoice::printParameters(std::ostream& os) const
 
 void ARMusicalVoice::goThrough(BaseVisitor *visitor)
 {
-    accept(visitor);
+    acceptIn(visitor);
 
 	GuidoPos posInVoice = ObjectList::GetHeadPosition();
     GuidoPos prevPos    = 0;
@@ -803,6 +803,8 @@ void ARMusicalVoice::goThrough(BaseVisitor *visitor)
                 object->accept(visitor);
         }
     }
+
+    acceptOut(visitor);
 }
 
 void ARMusicalVoice::goThroughTagsList(BaseVisitor *visitor, GuidoPos& posTag, GuidoPos prevPos, bool addTag) const

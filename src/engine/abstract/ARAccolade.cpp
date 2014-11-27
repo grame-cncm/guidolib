@@ -86,7 +86,11 @@ void ARAccolade::setTagParameterList(TagParameterList & tpl)
 void ARAccolade::printName(std::ostream& os) const
 {
     os << "ARAccolade";
-    ARMusicalTag::printName(os);
+}
+
+void ARAccolade::printGMNName(std::ostream& os) const
+{
+    os << "\\accolade";
 }
 
 void ARAccolade::printParameters(std::ostream& os) const

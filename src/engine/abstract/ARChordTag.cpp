@@ -93,7 +93,11 @@ void ARChordTag::setTagParameterList(TagParameterList & tpl)
 void ARChordTag::printName(std::ostream& os) const
 {
     os << "ARChordTag";
-    ARMusicalTag::printName(os);
+}
+
+void ARChordTag::printGMNName(std::ostream& os) const
+{
+    os << "\\chordTag";
 }
 
 void ARChordTag::printParameters(std::ostream& os) const

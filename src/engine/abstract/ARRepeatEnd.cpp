@@ -67,7 +67,11 @@ void ARRepeatEnd::browse(TimeUnwrap& mapper) const
 void ARRepeatEnd::printName(std::ostream& os) const
 {
     os << "ARRepeatEnd";
-    ARMusicalTag::printName(os);
+}
+
+void ARRepeatEnd::printGMNName(std::ostream& os) const
+{
+    os << "\\repeatEnd";
 }
 
 void ARRepeatEnd::printParameters(std::ostream& os) const

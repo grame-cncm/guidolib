@@ -283,7 +283,11 @@ ARPageFormat::AdjustMargins()
 void ARPageFormat::printName(std::ostream& os) const
 {
     os << "ARPageFormat";
-    ARMusicalTag::printName(os);
+}
+
+void ARPageFormat::printGMNName(std::ostream& os) const
+{
+    os << "\\pageFormat";
 }
 
 void ARPageFormat::printParameters(std::ostream& os) const

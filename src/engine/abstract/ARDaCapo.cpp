@@ -26,7 +26,11 @@ void ARDaCapo::browse(TimeUnwrap& mapper) const
 void ARDaCapo::printName(std::ostream& os) const
 {
     os << "ARDaCapo";
-    ARMusicalTag::printName(os);
+}
+
+void ARDaCapo::printGMNName(std::ostream& os) const
+{
+    os << "\\daCapo";
 }
 
 ARDaCapoAlFine::ARDaCapoAlFine() : ARJump ("D.C. al Fine") {}
@@ -40,5 +44,9 @@ void ARDaCapoAlFine::browse(TimeUnwrap& mapper) const
 void ARDaCapoAlFine::printName(std::ostream& os) const
 {
     os << "ARDaCapoAlFine";
-    ARMusicalTag::printName(os);
+}
+
+void ARDaCapoAlFine::printGMNName(std::ostream& os) const
+{
+    os << "\\daCapoAlFine";
 }

@@ -51,7 +51,11 @@ void ARHarmonic::setTagParameterList(TagParameterList& tpl)
 void ARHarmonic::printName(std::ostream& os) const
 {
     os << "ARHarmonic";
-    ARMusicalTag::printName(os);
+}
+
+void ARHarmonic::printGMNName(std::ostream& os) const
+{
+    os << "\\harmonic";
 }
 
 void ARHarmonic::printParameters(std::ostream& os) const

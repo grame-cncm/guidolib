@@ -70,7 +70,11 @@ void ARMark::setTagParameterList(TagParameterList & tpl)
 void ARMark::printName(std::ostream& os) const
 {
     os << "ARMark";
-    ARMusicalTag::printName(os);
+}
+
+void ARMark::printGMNName(std::ostream& os) const
+{
+    os << "\\mark";
 }
 
 void ARMark::printParameters(std::ostream& os) const

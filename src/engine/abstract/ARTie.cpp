@@ -43,7 +43,11 @@ bool ARTie::MatchEndTag(const char * s)
 void ARTie::printName(std::ostream& os) const
 {
     os << "ARTie";
-    ARMusicalTag::printName(os);
+}
+
+void ARTie::printGMNName(std::ostream& os) const
+{
+    os << "\\tie";
 }
 
 void ARTie::printParameters(std::ostream& os) const

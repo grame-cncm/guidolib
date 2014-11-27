@@ -88,9 +88,13 @@ bool ARColor::IsStateTag() const
 void ARColor::printName(std::ostream& os) const
 {
     os << "ARColor";
-    ARMusicalTag::printName(os);
-	
 }
+
+void ARColor::printGMNName(std::ostream& os) const
+{
+    os << "\\color";
+}
+
 void ARColor::printParameters(std::ostream& os) const
 {
     os << "red: "   << colorR << "; ";

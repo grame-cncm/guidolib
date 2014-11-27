@@ -71,7 +71,11 @@ ARMusicalObject * ARShareStem::Copy() const
 void ARShareStem::printName(std::ostream& os) const
 {
     os << "ARShareStem";
-    ARMusicalTag::printName(os);
+}
+
+void ARShareStem::printGMNName(std::ostream& os) const
+{
+    os << "\\shareStem";
 }
 
 void ARShareStem::printParameters(std::ostream& os) const

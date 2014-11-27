@@ -109,7 +109,11 @@ float ARAlter::getDetune() const
 void ARAlter::printName(std::ostream& os) const
 {
     os << "ARAlter";
-    ARMusicalTag::printName(os);
+}
+
+void ARAlter::printGMNName(std::ostream& os) const
+{
+    os << "\\alter";
 }
 
 void ARAlter::printParameters(std::ostream& os) const

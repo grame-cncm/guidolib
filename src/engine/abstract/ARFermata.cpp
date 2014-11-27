@@ -94,7 +94,11 @@ void ARFermata::browse(TimeUnwrap& mapper) const
 void ARFermata::printName(std::ostream& os) const
 {
     os << "ARFermata";
-    ARMusicalTag::printName(os);
+}
+
+void ARFermata::printGMNName(std::ostream& os) const
+{
+    os << "\\fermata";
 }
 
 void ARFermata::printParameters(std::ostream& os) const

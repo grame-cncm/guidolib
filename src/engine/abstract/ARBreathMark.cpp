@@ -69,7 +69,11 @@ void ARBreathMark::setTagParameterList(TagParameterList & tpl)
 void ARBreathMark::printName(std::ostream& os) const
 {
     os << "ARBreathMark";
-    ARMusicalTag::printName(os);
+}
+
+void ARBreathMark::printGMNName(std::ostream& os) const
+{
+    os << "\\breathMark";
 }
 
 void ARBreathMark::printParameters(std::ostream& os) const

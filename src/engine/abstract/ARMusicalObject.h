@@ -132,8 +132,8 @@ class ARMusicalObject : public Visitable
     virtual ARMusicalObject  *isARPossibleBreak() { return NULL; }
     /*****************************************/
 
-	/* Visitor design pattern */
-    virtual void accept(BaseVisitor *visitor);
+    /* Visitor design pattern */
+    virtual void accept(BaseVisitor *visitor) { visitor->visit(*this); }
 
   protected:
 		TYPE_TIMEPOSITION	relativeTimePosition;
@@ -150,5 +150,3 @@ class ARMusicalObject : public Visitable
 };
 
 #endif
-
-

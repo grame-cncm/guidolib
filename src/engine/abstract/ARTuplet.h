@@ -37,6 +37,7 @@ public:
 		virtual void  setTagParameterList(TagParameterList & tl);
 
 	    virtual void  printName(std::ostream& os) const;
+	    virtual void  printGMNName(std::ostream& os) const;
 	    virtual void  printParameters(std::ostream& os) const;
 
 				void  setupTuplet( ARBase * inBase );

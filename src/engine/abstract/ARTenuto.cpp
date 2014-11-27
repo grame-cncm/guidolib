@@ -65,8 +65,13 @@ void ARTenuto::browse(TimeUnwrap& mapper) const
 void ARTenuto::printName(std::ostream& os) const
 {
 	os << "ARTenuto";
-    ARMusicalTag::printName(os);
 }
+
+void ARTenuto::printGMNName(std::ostream& os) const
+{
+    os << "\\tenuto";
+}
+
 void ARTenuto::printParameters(std::ostream& os) const
 {
     ARMusicalTag::printParameters(os);

@@ -53,6 +53,7 @@ public:
 
             void print(std::ostream& os) const;
     virtual void printName(std::ostream& os) const       { os << "printName() needs to be implemented in subclasses; "; }
+    virtual void printGMNName(std::ostream& os) const    { os << "printGMNName() needs to be implemented in subclasses; "; }
     virtual void printParameters(std::ostream& os) const { os << "printParameters() needs to be implemented in subclasses; "; }
 
 protected:

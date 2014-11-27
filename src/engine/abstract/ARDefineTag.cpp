@@ -75,7 +75,11 @@ void ARDefineTag::setTagParameterList(TagParameterList & tpl)
 void ARDefineTag::printName(std::ostream& os) const
 {
     os << "ARDefineTag";
-    ARMusicalTag::printName(os);
+}
+
+void ARDefineTag::printGMNName(std::ostream& os) const
+{
+    os << "\\defineTag";
 }
 
 void ARDefineTag::printParameters(std::ostream& os) const

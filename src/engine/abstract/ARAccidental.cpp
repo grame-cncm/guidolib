@@ -81,7 +81,11 @@ void ARAccidental::setTagParameterList(TagParameterList & tpl)
 void ARAccidental::printName(std::ostream& os) const
 {
     os << "ARAccidental";
-    ARMusicalTag::printName(os);
+}
+
+void ARAccidental::printGMNName(std::ostream& os) const
+{
+    os << "\\accidental";
 }
 
 void ARAccidental::printParameters(std::ostream& os) const

@@ -260,7 +260,11 @@ int ARTremolo::getNumberOfStrokes()
 void ARTremolo::printName(std::ostream& os) const
 {
     os << "ARTremolo";
-    ARMusicalTag::printName(os);
+}
+
+void ARTremolo::printGMNName(std::ostream& os) const
+{
+    os << "\\tremolo";
 }
 
 void ARTremolo::printParameters(std::ostream& os) const

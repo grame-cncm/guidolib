@@ -68,7 +68,11 @@ void ARUnits::setTagParameterList(TagParameterList & tpl)
 void ARUnits::printName(std::ostream& os) const
 {
     os << "ARUnits";
-    ARMusicalTag::printName(os);
+}
+
+void ARUnits::printGMNName(std::ostream& os) const
+{
+    os << "\\units";
 }
 
 void ARUnits::printParameters(std::ostream& os) const

@@ -79,7 +79,11 @@ void ARFingering::setTagParameterList(TagParameterList & tpl)
 void ARFingering::printName(std::ostream& os) const
 {
     os << "ARFingering";
-    ARMusicalTag::printName(os);
+}
+
+void ARFingering::printGMNName(std::ostream& os) const
+{
+    os << "\\fingering";
 }
 
 void ARFingering::printParameters(std::ostream& os) const

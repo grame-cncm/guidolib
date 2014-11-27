@@ -105,7 +105,11 @@ void ARTitle::setTagParameterList(TagParameterList & tpl)
 void ARTitle::printName(std::ostream& os) const
 {
     os << "ARTitle";
-    ARMusicalTag::printName(os);
+}
+
+void ARTitle::printGMNName(std::ostream& os) const
+{
+    os << "\\title";
 }
 
 void ARTitle::printParameters(std::ostream& os) const

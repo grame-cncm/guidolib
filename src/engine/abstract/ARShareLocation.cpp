@@ -66,8 +66,11 @@ void ARShareLocation::setTagParameterList(TagParameterList & tpl)
 void ARShareLocation::printName(std::ostream& os) const
 {
     os << "ARShareLocation";
-    
-    ARMusicalTag::printName(os);
+}
+
+void ARShareLocation::printGMNName(std::ostream& os) const
+{
+    os << "\\shareLocation";
 }
 
 void ARShareLocation::printParameters(std::ostream& os) const

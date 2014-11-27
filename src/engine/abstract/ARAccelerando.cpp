@@ -109,7 +109,11 @@ bool ARAccelerando::MatchEndTag(const char *s)
 void ARAccelerando::printName(std::ostream& os) const
 {
     os << "ARAccelerando";
-    ARMusicalTag::printName(os);
+}
+
+void ARAccelerando::printGMNName(std::ostream& os) const
+{
+    os << "\\accelerando";
 }
 
 void ARAccelerando::printParameters(std::ostream& os) const

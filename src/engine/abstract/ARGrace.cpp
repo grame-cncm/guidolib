@@ -68,7 +68,11 @@ void ARGrace::setTagParameterList(TagParameterList& tpl)
 void ARGrace::printName(std::ostream& os) const
 {
     os << "ARGrace";
-    ARMusicalTag::printName(os);
+}
+
+void ARGrace::printGMNName(std::ostream& os) const
+{
+    os << "\\grace";
 }
 
 void ARGrace::printParameters(std::ostream& os) const

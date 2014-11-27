@@ -30,5 +30,9 @@ void ARCoda::browse(TimeUnwrap& mapper) const
 void ARCoda::printName(std::ostream& os) const
 {
     os << "ARCoda";
-    ARMusicalTag::printName(os);
+}
+
+void ARCoda::printGMNName(std::ostream& os) const
+{
+    os << "\\coda";
 }

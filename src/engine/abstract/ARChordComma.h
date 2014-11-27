@@ -32,6 +32,7 @@ public:
 	virtual ~ARChordComma();
 
 	virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
     virtual void printParameters(std::ostream& os) const;
 
 	virtual void setTagParameterList(TagParameterList & theTagParameterList);

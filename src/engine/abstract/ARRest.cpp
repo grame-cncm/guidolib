@@ -57,6 +57,11 @@ void ARRest::printName(std::ostream& os) const
     os << "ARRest";
 }
 
+void ARRest::printGMNName(std::ostream& os) const
+{
+    os << "_" << "*" << getDuration().getNumerator() << "/" << getDuration().getDenominator();
+}
+
 void ARRest::printParameters(std::ostream& os) const
 {
     os << "duration: " << getDuration().getNumerator() << "/" << getDuration().getDenominator() << "; ";

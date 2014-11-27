@@ -84,8 +84,12 @@ void ARBarFormat::setTagParameterList(TagParameterList & tpl)
 
 void ARBarFormat::printName(std::ostream& os) const
 {
-    os << "ARAuto";
-    ARMusicalTag::printName(os);
+    os << "ARBarFormat";
+}
+
+void ARBarFormat::printGMNName(std::ostream& os) const
+{
+    os << "\\barFormat";
 }
 
 void ARBarFormat::printParameters(std::ostream& os) const

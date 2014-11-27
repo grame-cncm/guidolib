@@ -196,7 +196,11 @@ bool ARClef::IsStateTag() const
 void ARClef::printName(std::ostream& os) const
 {
     os << "ARClef";
-    ARMusicalTag::printName(os);
+}
+
+void ARClef::printGMNName(std::ostream& os) const
+{
+    os << "\\clef";
 }
 
 void ARClef::printParameters(std::ostream& os) const

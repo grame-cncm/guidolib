@@ -364,7 +364,11 @@ void ARBowing::setCurve(int ,const NVPoint & p1, const NVPoint & p2)
 void ARBowing::printName(std::ostream& os) const
 {
     os << "ARBowing";
-    ARMusicalTag::printName(os);
+}
+
+void ARBowing::printGMNName(std::ostream& os) const
+{
+    os << "\\bowing";
 }
 
 void ARBowing::printParameters(std::ostream& os) const

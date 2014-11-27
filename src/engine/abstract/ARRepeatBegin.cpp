@@ -69,7 +69,11 @@ void ARRepeatBegin::setRepeatEnd(const ARRepeatEnd *myr)
 void ARRepeatBegin::printName(std::ostream& os) const
 {
     os << "ARRepeatBegin";
-    ARMusicalTag::printName(os);
+}
+
+void ARRepeatBegin::printGMNName(std::ostream& os) const
+{
+    os << "\\repeatBegin";
 }
 
 void ARRepeatBegin::printParameters(std::ostream& os) const

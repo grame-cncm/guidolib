@@ -25,7 +25,11 @@ void ARTagEnd::setTagParameterList(TagParameterList & theTagParameterList)
 void ARTagEnd::printName(std::ostream& os) const
 {
     os << "ARTagEnd";
-    ARMusicalTag::printName(os);
+}
+
+void ARTagEnd::printGMNName(std::ostream& os) const
+{
+    os << "\\tagEnd";
 }
 
 void ARTagEnd::printParameters(std::ostream& os) const

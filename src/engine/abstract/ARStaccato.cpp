@@ -77,7 +77,11 @@ bool ARStaccato::MatchEndTag(const char *s)
 void ARStaccato::printName(std::ostream& os) const
 {
     os << "ARStaccato";
-    ARMusicalTag::printName(os);
+}
+
+void ARStaccato::printGMNName(std::ostream& os) const
+{
+    os << "\\staccato";
 }
 
 void ARStaccato::printParameters(std::ostream& os) const

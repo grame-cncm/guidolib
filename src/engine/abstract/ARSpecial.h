@@ -28,6 +28,7 @@ public:
     virtual void setTagParameterList(TagParameterList &tlist);
 
     virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
     virtual void printParameters(std::ostream& os) const;
 
     float 		dx;

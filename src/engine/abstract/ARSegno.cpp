@@ -27,5 +27,9 @@ void ARSegno::browse(TimeUnwrap& mapper) const
 void ARSegno::printName(std::ostream& os) const
 {
     os << "ARSegno";
-    ARMusicalTag::printName(os);
+}
+
+void ARSegno::printGMNName(std::ostream& os) const
+{
+    os << "\\segno";
 }

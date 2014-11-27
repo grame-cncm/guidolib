@@ -231,7 +231,11 @@ TYPE_TIMEPOSITION ARMeter::getMeterTime() const
 void ARMeter::printName(std::ostream& os) const
 {
     os << "ARMeter";
-    ARMusicalTag::printName(os);
+}
+
+void ARMeter::printGMNName(std::ostream& os) const
+{
+    os << "\\meter";
 }
 
 void ARMeter::printParameters(std::ostream& os) const

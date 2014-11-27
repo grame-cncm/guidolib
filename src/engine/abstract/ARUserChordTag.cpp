@@ -114,7 +114,11 @@ void ARUserChordTag::setTagParameterList(TagParameterList& tpl)
 void ARUserChordTag::printName(std::ostream& os) const
 {
     os << "ARUserChordTag";
-    ARMusicalTag::printName(os);
+}
+
+void ARUserChordTag::printGMNName(std::ostream& os) const
+{
+    os << "\\userChordTag";
 }
 
 void ARUserChordTag::printParameters(std::ostream& os) const

@@ -27,7 +27,11 @@ ARFinishBar::~ARFinishBar()
 void ARFinishBar::printName(std::ostream& os) const
 {
     os << "ARFinishBar";
-    ARMusicalTag::printName(os);
+}
+
+void ARFinishBar::printGMNName(std::ostream& os) const
+{
+    os << "\\finishBar";
 }
 
 void ARFinishBar::printParameters(std::ostream& os) const

@@ -76,7 +76,11 @@ const char* ARInstrument::getName() const
 void ARInstrument::printName(std::ostream& os) const
 {
     os << "ARInstrument";
-    ARMusicalTag::printName(os);
+}
+
+void ARInstrument::printGMNName(std::ostream& os) const
+{
+    os << "\\instrument";
 }
 
 void ARInstrument::printParameters(std::ostream& os) const

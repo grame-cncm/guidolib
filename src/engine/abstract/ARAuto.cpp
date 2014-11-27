@@ -137,7 +137,11 @@ void ARAuto::setTagParameterList(TagParameterList& tpl)
 void ARAuto::printName(std::ostream& os) const
 {
     os << "ARAuto";
-    ARMusicalTag::printName(os);
+}
+
+void ARAuto::printGMNName(std::ostream& os) const
+{
+    os << "\\auto";
 }
 
 void ARAuto::printParameters(std::ostream& os) const

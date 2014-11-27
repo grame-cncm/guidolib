@@ -411,12 +411,13 @@ int ARMusicalTag::MatchListOfTPLsWithTPL(const ListOfTPLs &ltpls, TagParameterLi
 void ARMusicalTag::print(std::ostream & os) const
 {
     printName(os);
+    printAttributes(os);
     os << ": ";
     printParameters(os);
     os << std::endl;
 }
 
-void ARMusicalTag::printName(std::ostream & os) const
+void ARMusicalTag::printAttributes(std::ostream & os) const
 {
     os << (getRange() || rangesetting == ONLY ? " (ranged)" : "") << (getIsAuto() ? " (auto)" : "");
 }

@@ -78,7 +78,11 @@ void ARDrHoos::setTagParameterList(TagParameterList & tpl)
 void ARDrHoos::printName(std::ostream& os) const
 {
     os << "ARDrHoos";
-    ARMusicalTag::printName(os);
+}
+
+void ARDrHoos::printGMNName(std::ostream& os) const
+{
+    os << "\\drHoos";
 }
 
 void ARDrHoos::printParameters(std::ostream& os) const

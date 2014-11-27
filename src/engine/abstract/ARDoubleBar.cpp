@@ -28,6 +28,11 @@ void ARDoubleBar::printName(std::ostream& os) const
     os << "ARDoubleBar " << (getRange() ? "" : "(begin)") << ":";
 }
 
+void ARDoubleBar::printGMNName(std::ostream& os) const
+{
+    os << "\\doubleBar";
+}
+
 void ARDoubleBar::printParameters(std::ostream& os) const
 {
     ARMusicalTag::printParameters(os);

@@ -74,7 +74,11 @@ void ARBembel::setTagParameterList(TagParameterList & tpl)
 void ARBembel::printName(std::ostream& os) const
 {
     os << "ARBembel";
-    ARMusicalTag::printName(os);
+}
+
+void ARBembel::printGMNName(std::ostream& os) const
+{
+    os << "\\bembel";
 }
 
 void ARBembel::printParameters(std::ostream& os) const

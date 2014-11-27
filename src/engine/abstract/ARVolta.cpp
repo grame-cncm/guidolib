@@ -88,7 +88,11 @@ void ARVolta::setTagParameterList(TagParameterList & tpl)
 void ARVolta::printName(std::ostream& os) const
 {
     os << "ARVolta";
-    ARMusicalTag::printName(os);
+}
+
+void ARVolta::printGMNName(std::ostream& os) const
+{
+    os << "\\volta";
 }
 
 void ARVolta::printParameters(std::ostream& os) const

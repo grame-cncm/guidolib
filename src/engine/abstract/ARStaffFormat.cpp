@@ -113,7 +113,11 @@ void ARStaffFormat::setTagParameterList(TagParameterList & tpl)
 void ARStaffFormat::printName(std::ostream& os) const
 {
     os << "ARStaffFormat";
-    ARMusicalTag::printName(os);
+}
+
+void ARStaffFormat::printGMNName(std::ostream& os) const
+{
+    os << "\\staffFormat";
 }
 
 void ARStaffFormat::printParameters(std::ostream& os) const

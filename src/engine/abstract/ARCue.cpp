@@ -54,7 +54,11 @@ void ARCue::setTagParameterList(TagParameterList& tpl)
 void ARCue::printName(std::ostream& os) const
 {
     os << "ARCue";
-    ARMusicalTag::printName(os);
+}
+
+void ARCue::printGMNName(std::ostream& os) const
+{
+    os << "\\cue";
 }
 
 void ARCue::printParameters(std::ostream& os) const

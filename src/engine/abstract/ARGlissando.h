@@ -31,11 +31,12 @@ public:
 	virtual void setTagParameterList(TagParameterList & tlist);
 	virtual TagParameterList * getTagParameterList() const;
 
-	virtual void    printName(std::ostream& os) const;
-	virtual void    printParameters(std::ostream& os) const;
+	virtual void printName(std::ostream& os) const;
+    virtual void printGMNName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 
-	virtual void	browse(TimeUnwrap& mapper) const;
-	virtual bool 	MatchEndTag(const char * s);
+	virtual void browse(TimeUnwrap& mapper) const;
+	virtual bool MatchEndTag(const char * s);
 
 	const TagParameterFloat  *getDx1() const	    { return dx1; }
 	const TagParameterFloat  *getDy1() const	    { return dy1; }

@@ -145,7 +145,11 @@ void ARDisplayDuration::setDisplayDuration(const TYPE_DURATION & tmp)
 void ARDisplayDuration::printName(std::ostream& os) const
 {
     os << "ARDisplayDuration";
-    ARMusicalTag::printName(os);
+}
+
+void ARDisplayDuration::printGMNName(std::ostream& os) const
+{
+    os << "\\displayDuration";
 }
 
 void ARDisplayDuration::printParameters(std::ostream& os) const

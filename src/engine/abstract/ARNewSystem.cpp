@@ -58,7 +58,11 @@ void ARNewSystem::setTagParameterList(TagParameterList & tpl)
 void ARNewSystem::printName(std::ostream& os) const
 {
     os << "ARNewSystem";
-    ARMusicalTag::printName(os);
+}
+
+void ARNewSystem::printGMNName(std::ostream& os) const
+{
+    os << "\\newSystem";
 }
 
 void ARNewSystem::printParameters(std::ostream& os) const

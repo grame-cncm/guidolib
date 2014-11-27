@@ -40,6 +40,7 @@ public:
 	virtual void		copyLyricsParams(const ARLyrics * lyrics);
 
 	virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
 	virtual void printParameters(std::ostream& os) const;
 	
 	virtual int  MatchListOfTPLsWithTPL(const ListOfTPLs & ltpls, TagParameterList & tpl, TagParameterList ** rtpl);

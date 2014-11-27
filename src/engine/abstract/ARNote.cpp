@@ -267,6 +267,35 @@ void ARNote::printName(std::ostream& os) const
 {
     os << "ARNote";
 }
+#include <sstream>
+void ARNote::printGMNName(std::ostream& os) const
+{
+    std::string accidentalStr = "";
+
+    switch (getAccidentals()) {
+    case -1:
+        accidentalStr = "#";
+        break;
+    case 1:
+        accidentalStr = "b";
+        break;
+    default:
+        /* TODO */
+        break;
+    }
+    
+    std::ostringstream durationStream;
+    
+    if (getDuration().getNumerator() != 1)
+        durationStream << "*" << getDuration().getNumerator();
+
+    durationStream << "/" << getDuration().getDenominator();
+    
+    if (!strcmp(getName().c_str(), "empty"))
+        os << getName() << durationStream.str();
+    else
+        os << getName() << accidentalStr << getOctave() << durationStream.str();
+}
 
 void ARNote::printParameters(std::ostream& os) const
 {

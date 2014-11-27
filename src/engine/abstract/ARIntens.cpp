@@ -80,7 +80,11 @@ void ARIntens::browse(TimeUnwrap& mapper) const
 void ARIntens::printName(std::ostream& os) const
 {
     os << "ARIntens";
-    ARMusicalTag::printName(os);
+}
+
+void ARIntens::printGMNName(std::ostream& os) const
+{
+    os << "\\intens";
 }
 
 void ARIntens::printParameters(std::ostream& os) const

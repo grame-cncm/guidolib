@@ -99,7 +99,11 @@ void ARSymbol::setTagParameterList(TagParameterList & tpl)
 void ARSymbol::printName(std::ostream& os) const
 {
     os << "ARSymbol";
-    ARMusicalTag::printName(os);
+}
+
+void ARSymbol::printGMNName(std::ostream& os) const
+{
+    os << "\\symbol";
 }
 
 void ARSymbol::printParameters(std::ostream& os) const

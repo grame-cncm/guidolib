@@ -24,19 +24,20 @@ class ARPizzicato : public ARMTParameter, public ARPositionTag
 public :
 	enum			tTypePizz {SNAP, BUZZ, FINGERNAIL, LEFTHAND};
 
-	ARPizzicato() : ARMTParameter()
-	{
+	ARPizzicato() : ARMTParameter() {
 		rangesetting = ONLY;
 		type = LEFTHAND;
 	}
-	virtual			~ARPizzicato() { };
-	
-	virtual void	setTagParameterList(TagParameterList & tpl);
 
-	virtual void    printName(std::ostream& os) const;
-	virtual void    printParameters(std::ostream& os) const;
+	virtual		~ARPizzicato() { };
 	
-	tTypePizz		getType() const {return type;}
+	virtual void setTagParameterList(TagParameterList & tpl);
+
+	virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
+	
+	tTypePizz	 getType() const {return type;}
 	
 protected:
 

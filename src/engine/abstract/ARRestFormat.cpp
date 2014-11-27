@@ -61,7 +61,11 @@ void ARRestFormat::setTagParameterList(TagParameterList &tpl)
 void ARRestFormat::printName(std::ostream& os) const
 {
     os << "ARRestFormat";
-    ARMusicalTag::printName(os);
+}
+
+void ARRestFormat::printGMNName(std::ostream& os) const
+{
+    os << "\\restFormat";
 }
 
 void ARRestFormat::printParameters(std::ostream& os) const

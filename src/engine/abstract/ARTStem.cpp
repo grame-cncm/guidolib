@@ -114,8 +114,11 @@ void ARTStem::printName(std::ostream& os) const
             os << " (stemsOff)";
             break;
 	}
+}
 
-    ARMusicalTag::printName(os);
+void ARTStem::printGMNName(std::ostream& os) const
+{
+    os << "\\stem";
 }
 
 void ARTStem::printParameters(std::ostream& os) const

@@ -26,5 +26,9 @@ void ARDaCoda::browse(TimeUnwrap& mapper) const
 void ARDaCoda::printName(std::ostream& os) const
 {
     os << "ARDaCoda";
-    ARMusicalTag::printName(os);
+}
+
+void ARDaCoda::printGMNName(std::ostream& os) const
+{
+    os << "\\daCoda";
 }

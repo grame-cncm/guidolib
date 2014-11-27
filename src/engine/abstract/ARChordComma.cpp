@@ -81,7 +81,11 @@ void ARChordComma::setTagParameterList(TagParameterList & tpl)
 void ARChordComma::printName(std::ostream& os) const
 {
     os << "ARChordComma";
-    ARMusicalTag::printName(os);
+}
+
+void ARChordComma::printGMNName(std::ostream& os) const
+{
+    os << "\\chordComma";
 }
 
 void ARChordComma::printParameters(std::ostream& os) const

@@ -62,10 +62,14 @@ void ARSpace::setTagParameterList(TagParameterList & tpl)
 	
 }
 
-void ARSpace::printName(std::ostream  &os) const
+void ARSpace::printName(std::ostream& os) const
 {
     os << "ARSpace";
-    ARMusicalTag::printName(os);
+}
+
+void ARSpace::printGMNName(std::ostream  &os) const
+{
+    os << "\\space";
 }
 
 void ARSpace::printParameters(std::ostream& os) const

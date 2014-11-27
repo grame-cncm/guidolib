@@ -118,7 +118,11 @@ bool ARDiminuendo::MatchEndTag(const char * s)
 void ARDiminuendo::printName(std::ostream& os) const
 {
     os << "ARDiminuendo";
-    ARMusicalTag::printName(os);
+}
+
+void ARDiminuendo::printGMNName(std::ostream& os) const
+{
+    os << "\\diminuendo";
 }
 
 void ARDiminuendo::printParameters(std::ostream& os) const

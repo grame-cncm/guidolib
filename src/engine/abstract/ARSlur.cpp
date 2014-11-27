@@ -54,7 +54,11 @@ bool ARSlur::MatchEndTag(const char *s)
 void ARSlur::printName(std::ostream& os) const
 {
     os << "ARSlur";
-    ARMusicalTag::printName(os);
+}
+
+void ARSlur::printGMNName(std::ostream& os) const
+{
+    os << "\\slur";
 }
 
 void ARSlur::printParameters(std::ostream& os) const

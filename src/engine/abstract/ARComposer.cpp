@@ -91,7 +91,11 @@ const char* ARComposer::getPageFormat() const	{ return pageformat ? pageformat->
 void ARComposer::printName(std::ostream& os) const
 {
     os << "ARComposer";
-    ARMusicalTag::printName(os);
+}
+
+void ARComposer::printGMNName(std::ostream& os) const
+{
+    os << "\\composer";
 }
 
 void ARComposer::printParameters(std::ostream& os) const

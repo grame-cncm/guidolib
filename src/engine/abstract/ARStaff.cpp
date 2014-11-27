@@ -141,7 +141,11 @@ int ARStaff::getStaffNumber() const
 void ARStaff::printName(std::ostream& os) const
 {
     os << "ARStaff";
-    ARMusicalTag::printName(os);
+}
+
+void ARStaff::printGMNName(std::ostream& os) const
+{
+    os << "\\staff";
 }
 
 void ARStaff::printParameters(std::ostream& os) const

@@ -150,7 +150,11 @@ void ARSpecial::setTagParameterList(TagParameterList & tpl)
 void ARSpecial::printName(std::ostream& os) const
 {
     os << "ARSpecial";
-    ARMusicalTag::printName(os);
+}
+
+void ARSpecial::printGMNName(std::ostream& os) const
+{
+    os << "\\special";
 }
 
 void ARSpecial::printParameters(std::ostream& os) const

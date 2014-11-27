@@ -47,7 +47,11 @@ ARMusicalObject *ARTHead::Copy() const
 void ARTHead::printName(std::ostream& os) const
 {
     os << "ARTHead";
-    ARMusicalTag::printName(os);
+}
+
+void ARTHead::printGMNName(std::ostream& os) const
+{
+    os << "\\head";
 }
 
 void ARTHead::printParameters(std::ostream& os) const

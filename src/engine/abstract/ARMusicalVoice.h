@@ -175,6 +175,10 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
         void goThrough(BaseVisitor *visitor);
         void goThroughTagsList(BaseVisitor *visitor, GuidoPos& posTag, GuidoPos prevPos, bool addTag) const;
 
+        virtual void acceptIn (BaseVisitor *visitor) { visitor->visitIn (*this); }
+        virtual void acceptOut(BaseVisitor *visitor) { visitor->visitOut(*this); }
+        /**************************/
+
 	protected:
 		ARChordTag      *currentChord;
 		ARShareLocation *currentShareLocation;

@@ -87,7 +87,11 @@ void ARDotFormat::setTagParameterList(TagParameterList &tpl)
 void ARDotFormat::printName(std::ostream& os) const
 {
     os << "ARDotFormat";
-    ARMusicalTag::printName(os);
+}
+
+void ARDotFormat::printGMNName(std::ostream& os) const
+{
+    os << "\\dotFormat";
 }
 
 void ARDotFormat::printParameters(std::ostream& os) const

@@ -68,7 +68,6 @@ void ARMarcato::setTagParameterList(TagParameterList& tpl)
 			// text = 
 			//	TagParameterString::cast(rtpl->RemoveHead());
 			//assert(text);
-
 		}
 
 		delete rtpl;
@@ -90,7 +89,11 @@ void ARMarcato::browse(TimeUnwrap& mapper) const
 void ARMarcato::printName(std::ostream& os) const
 {
     os << "ARMarcato";
-    ARMusicalTag::printName(os);
+}
+
+void ARMarcato::printGMNName(std::ostream& os) const
+{
+    os << "\\marcato";
 }
 
 void ARMarcato::printParameters(std::ostream& os) const

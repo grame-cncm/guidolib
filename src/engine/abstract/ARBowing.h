@@ -48,6 +48,7 @@ class ARBowing : public ARMTParameter, public ARPositionTag
 		virtual TagParameterList * getTagParameterList() const;
 
 	    virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
 	    virtual void printParameters(std::ostream& os) const;
 
 		virtual void setCurve(int curve, const NVPoint & p1, const NVPoint & p2);

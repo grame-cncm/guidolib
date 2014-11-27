@@ -188,7 +188,11 @@ bool ARGlissando::MatchEndTag(const char * s)
 void ARGlissando::printName(std::ostream& os) const
 {
     os << "ARGlissando";
-    ARMusicalTag::printName(os);
+}
+
+void ARGlissando::printGMNName(std::ostream& os) const
+{
+    os << "\\glissando";
 }
 
 void ARGlissando::printParameters(std::ostream& os) const

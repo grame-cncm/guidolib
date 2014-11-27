@@ -22,7 +22,11 @@ ARTDummy::~ARTDummy()
 void ARTDummy::printName(std::ostream& os) const
 {
     os << "ARTDummy";
-    ARMusicalTag::printName(os);
+}
+
+void ARTDummy::printGMNName(std::ostream& os) const
+{
+    os << "\\dummy";
 }
 
 void ARTDummy::printParameters(std::ostream& os) const

@@ -151,7 +151,11 @@ void ARTempo::ParseBpm( TagParameterString * inTag )
 void ARTempo::printName(std::ostream& os) const
 {
     os << "ARTempo";
-    ARMusicalTag::printName(os);
+}
+
+void ARTempo::printGMNName(std::ostream& os) const
+{
+    os << "\\tempo";
 }
 
 void ARTempo::printParameters(std::ostream& os) const

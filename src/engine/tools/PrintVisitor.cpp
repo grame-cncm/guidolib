@@ -1,6 +1,6 @@
 /*
   GUIDO Library
-  Copyright (C) 2011 Grame
+  Copyright (C) 2014 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -36,20 +36,27 @@ PrintVisitor::PrintVisitor(std::ostream& stream)
     os = &stream;
 }
 
+void PrintVisitor::visitIn(ARMusicalVoice& voice)
+{
+    printMusicalVoice(voice);
+
+    currentIndentNumber++;
+}
+
+void PrintVisitor::visitOut(ARMusicalVoice& voice)
+{
+    printMusicalVoice(voice);
+
+    currentStartDate    = 0;
+    currentIndentNumber = 0;
+}
+
 void PrintVisitor::visit(ARMusicalObject &object)
 {
     ARMusicalVoice *voice = dynamic_cast<ARMusicalVoice *>(&object);
 
-    if (voice) {
-        printMusicalVoice(*voice);
-        
-        currentStartDate    = 0;
-        currentIndentNumber = 1;
-    }
-    else {
-        currentStartDate = object.getRelativeTimePosition();
-        printMusicalObject(object);
-    }
+    currentStartDate = object.getRelativeTimePosition();
+    printMusicalObject(object);
 }
 
 void PrintVisitor::visit(ARPositionTag &positionTag)

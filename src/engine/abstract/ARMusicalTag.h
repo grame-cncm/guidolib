@@ -49,9 +49,11 @@ class ARMusicalTag : public ARMusicalObject
 		virtual bool	MatchEndTag( const char * endstr );
 				void	setAllowRange( int pallow );
 
-		        void	print(std::ostream & os) const;
-		virtual void	printName(std::ostream & os)       const;
-        virtual void	printParameters(std::ostream & os) const;;
+		        void	print          (std::ostream & os) const;
+		virtual void	printName      (std::ostream & os) const { os << "printName() needs to be implemented in subclasses; "; };
+		virtual void	printGMNName   (std::ostream & os) const { os << "printGMNName() needs to be implemented in subclasses; "; };
+		        void	printAttributes(std::ostream & os) const;
+        virtual void	printParameters(std::ostream & os) const;
 
 				void	setIsAuto( bool isauto )	{ isAuto = isauto; }
 

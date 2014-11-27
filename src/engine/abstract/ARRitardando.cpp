@@ -103,7 +103,11 @@ bool ARRitardando::MatchEndTag(const char *s)
 void ARRitardando::printName(std::ostream& os) const
 {
     os << "ARRitardando";
-    ARMusicalTag::printName(os);
+}
+
+void ARRitardando::printGMNName(std::ostream& os) const
+{
+    os << "\\ritardando";
 }
 
 void ARRitardando::printParameters(std::ostream& os) const

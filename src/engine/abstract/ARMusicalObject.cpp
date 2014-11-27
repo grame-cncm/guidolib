@@ -161,8 +161,3 @@ void ARMusicalObject::print(std::ostream& os) const
 {
     os << "print() needs to be implemented in ARMusicalObject subclasses" << std::endl;
 }
-
-void ARMusicalObject::accept(BaseVisitor *visitor)
-{
-    visitor->visit(*this);
-}

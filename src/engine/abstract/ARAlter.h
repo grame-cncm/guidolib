@@ -38,6 +38,7 @@ class ARAlter : public ARMTParameter, public ARPositionTag
 		virtual float getDetune() const;
 
 	    virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
 	    virtual void printParameters(std::ostream& os) const;
 
 		virtual ARAlter * getEndTag() const								{ return new ARAlter(NULL, savealter); }

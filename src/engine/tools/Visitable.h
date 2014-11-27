@@ -3,7 +3,7 @@
 
 /*
   GUIDO Library
-  Copyright (C) 2011 Grame
+  Copyright (C) 2014 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -21,8 +21,10 @@ class Visitable
 public:
              Visitable() {};
     virtual ~Visitable() {};
-
-    virtual void accept(BaseVisitor *visitor) = 0;
+    
+    virtual void accept   (BaseVisitor *visitor) {};
+    virtual void acceptIn (BaseVisitor *visitor) {};
+    virtual void acceptOut(BaseVisitor *visitor) {};
 };
 
 #endif

@@ -228,7 +228,11 @@ int ARText::getFSize(float curLSPACE) const
 void ARText::printName(std::ostream& os) const
 {
     os << "ARText";
-    ARMusicalTag::printName(os);
+}
+
+void ARText::printGMNName(std::ostream& os) const
+{
+    os << "\\text";
 }
 
 void ARText::printParameters(std::ostream& os) const

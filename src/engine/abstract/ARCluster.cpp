@@ -105,7 +105,11 @@ void ARCluster::setARNote(ARNote *arNote)
 void ARCluster::printName(std::ostream& os) const
 {
     os << "ARCluster";
-    ARMusicalTag::printName(os);
+}
+
+void ARCluster::printGMNName(std::ostream& os) const
+{
+    os << "\\cluster";
 }
 
 void ARCluster::printParameters(std::ostream& os) const

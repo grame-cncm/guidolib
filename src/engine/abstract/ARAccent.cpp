@@ -69,7 +69,11 @@ void ARAccent::browse(TimeUnwrap& mapper) const
 void ARAccent::printName(std::ostream& os) const
 {
 	os << "ARAccent";
-    ARMusicalTag::printName(os);
+}
+
+void ARAccent::printGMNName(std::ostream& os) const
+{
+    os << "\\accent";
 }
 
 void ARAccent::printParameters(std::ostream& os) const

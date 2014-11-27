@@ -43,7 +43,11 @@ ARBase::ARBase()
 void ARBase::printName(std::ostream& os) const
 {
     os << "ARBase";
-    ARMusicalTag::printName(os);
+}
+
+void ARBase::printGMNName(std::ostream& os) const
+{
+    os << "\\base";
 }
 
 void ARBase::printParameters(std::ostream& os) const
@@ -76,7 +80,11 @@ void ARRepeatEndRangeEnd::setTagParameterList(TagParameterList & pl)
 void ARRepeatEndRangeEnd::printName(std::ostream& os) const
 {
     os << "ARRepeatEndRangeEnd";
-    ARMusicalTag::printName(os);
+}
+
+void ARRepeatEndRangeEnd::printGMNName(std::ostream& os) const
+{
+    os << "\\repeatEndRangeEnd";
 }
 
 void ARRepeatEndRangeEnd::printParameters(std::ostream& os) const
@@ -95,7 +103,11 @@ ARAutoBeam::ARAutoBeam()
 void ARAutoBeam::printName(std::ostream& os) const
 {
     os << "ARAutoBeam";
-    ARMusicalTag::printName(os);
+}
+
+void ARAutoBeam::printGMNName(std::ostream& os) const
+{
+    os << "\\autoBeam";
 }
 
 void ARAutoBeam::printParameters(std::ostream& os) const
@@ -108,7 +120,11 @@ void ARAutoBeam::printParameters(std::ostream& os) const
 void ARAutoBeamEnd::printName(std::ostream& os) const
 {
     os << "ARAutoBeamEnd";
-    ARMusicalTag::printName(os);
+}
+
+void ARAutoBeamEnd::printGMNName(std::ostream& os) const
+{
+    os << "\\autoBeamEnd";
 }
 
 void ARAutoBeamEnd::printParameters(std::ostream& os) const
@@ -137,7 +153,11 @@ void ARMerge::setError(int i)
 void ARMerge::printName(std::ostream& os) const
 {
     os << "ARMerge";
-    ARMusicalTag::printName(os);
+}
+
+void ARMerge::printGMNName(std::ostream& os) const
+{
+    os << "\\merge";
 }
 
 void ARMerge::printParameters(std::ostream& os) const
@@ -170,7 +190,12 @@ void ARDummyRangeEnd::printName(std::ostream& os) const
     os << "ARDummyRangeEnd (";
     mPositionTag->printName(os);
     os << ")";
-    ARMusicalTag::printName(os);
+}
+
+void ARDummyRangeEnd::printGMNName(std::ostream& os) const
+{
+    mPositionTag->printGMNName(os);
+    os << "End";
 }
 
 void ARDummyRangeEnd::printParameters(std::ostream& os) const
@@ -188,7 +213,11 @@ void ARStaffOn::setTagParameterList(TagParameterList & pl)
 void ARStaffOn::printName(std::ostream& os) const
 {
     os << "ARStaffOn";
-    ARMusicalTag::printName(os);
+}
+
+void ARStaffOn::printGMNName(std::ostream& os) const
+{
+    os << "\\staffOn";
 }
 
 void ARStaffOn::printParameters(std::ostream& os) const
@@ -206,7 +235,11 @@ void ARStaffOff::setTagParameterList(TagParameterList & pl)
 void ARStaffOff::printName(std::ostream& os) const
 {
     os << "ARStaffOff";
-    ARMusicalTag::printName(os);
+}
+
+void ARStaffOff::printGMNName(std::ostream& os) const
+{
+    os << "\\staffOff";
 }
 
 void ARStaffOff::printParameters(std::ostream& os) const
@@ -219,7 +252,11 @@ void ARStaffOff::printParameters(std::ostream& os) const
 void ARBeamState::printName(std::ostream& os) const
 {
     os << "ARBeamState";
-    ARMusicalTag::printName(os);
+}
+
+void ARBeamState::printGMNName(std::ostream& os) const
+{
+    os << "\\beamState";
 }
 
 void ARBeamState::printParameters(std::ostream& os) const
@@ -235,7 +272,11 @@ void ARBeamState::printParameters(std::ostream& os) const
 void ARSecondGlue::printName(std::ostream& os) const
 {
     os << "ARSecondGlue";
-    ARMusicalTag::printName(os);
+}
+
+void ARSecondGlue::printGMNName(std::ostream& os) const
+{
+    os << "\\secondGlue";
 }
 
 void ARSecondGlue::printParameters(std::ostream& os) const
