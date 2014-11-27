@@ -4,6 +4,7 @@
 #include <cstring>
 #include <sstream>
 #include "guido2.h"
+#include "GuidoStream.h"
 
 int GuidoEngineAdapter::nbinstantiation = 0;
 
@@ -273,10 +274,10 @@ GUIDOAPI(ARHandler) GuidoEngineAdapter::guidoString2AR(GuidoParser * p, const st
 
 GUIDOAPI(string) GuidoEngineAdapter::guidoGetStream(GuidoStream *gStream)
 {
-	string str = ::GuidoGetStream(gStream);
-	cout << "stream = " << ::GuidoGetStream(gStream) << endl;
-	return str;
-	//return ::GuidoGetStream(gStream);
+	// Don't use GuidoGetStream because there is a problem with char * pointer in emscripten
+	// return ::GuidoGetStream(gStream);
+
+	return gStream->getGlobalStringStream()->str();
 }
 
 GUIDOAPI(ARHandler) GuidoEngineAdapter::guidoStream2AR(GuidoParser *p, GuidoStream* stream)
