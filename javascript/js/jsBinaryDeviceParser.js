@@ -6,7 +6,7 @@
 /* creates guido namespace */
 var gU1D0pAR$ER = {}
 
-/* codes for parser */
+/* Command codes for parser */
 gU1D0pAR$ER.BEGIN_DRAW_CODE = 0;
 gU1D0pAR$ER.END_DRAW_CODE = 1;
 gU1D0pAR$ER.LINE_CODE = 5;
@@ -16,6 +16,10 @@ gU1D0pAR$ER.SET_MUSIC_FONT_CODE = 11;
 gU1D0pAR$ER.GET_MUSIC_FONT_CODE = 12;
 gU1D0pAR$ER.SET_TEXT_FONT_CODE = 13;
 gU1D0pAR$ER.GET_TEXT_FONT_CODE = 14;
+gU1D0pAR$ER.PUSH_PEN = 17;
+gU1D0pAR$ER.POP_PEN = 18;
+gU1D0pAR$ER.PUSH_FILL_COLOR = 19;
+gU1D0pAR$ER.POP_FILL_COLOR = 20;
 gU1D0pAR$ER.SET_SCALE_CODE = 27;
 gU1D0pAR$ER.SET_ORIGIN_CODE = 28;
 gU1D0pAR$ER.OFFSET_ORIGIN_CODE = 29;
@@ -26,6 +30,7 @@ gU1D0pAR$ER.SET_FONT_COLOR_CODE = 41;
 gU1D0pAR$ER.GET_FONT_COLOR_CODE = 42;
 gU1D0pAR$ER.SET_FONT_ALIGN_CODE = 45;
 gU1D0pAR$ER.SELECT_PEN_COLOR_CODE = 49;
+gU1D0pAR$ER.PUSH_PEN_COLOR_CODE = 51;
 gU1D0pAR$ER.POP_PEN_COLOR_CODE = 52;
 gU1D0pAR$ER.PUSH_PEN_WIDTH_CODE = 53;
 gU1D0pAR$ER.POP_PEN_WIDTH_CODE = 54;
@@ -33,8 +38,7 @@ gU1D0pAR$ER.POP_PEN_WIDTH_CODE = 54;
 /* holds registered functions */
 gU1D0pAR$ER.drawFunctions = [];
 
-/* getters for data types */
-
+/* getters for data types from buffer 'data' at index 'place' */
 gU1D0pAR$ER.getUnsignedChar = function(data, place) {
   var head = new Uint8Array(data, place, Uint8Array.BYTES_PER_ELEMENT);
   return head[0];
@@ -77,7 +81,6 @@ gU1D0pAR$ER.getString = function(data, place, n) {
 }
 
 /* move read position */
-
 gU1D0pAR$ER.moveReadPositionByChar = function(place) {
   return place + Uint8Array.BYTES_PER_ELEMENT;
 }
@@ -98,6 +101,12 @@ gU1D0pAR$ER.moveReadPositionByString = function(place, str) {
   return place + str.length + 1; // 1 for the escape char
 }
 
+/* 
+ * Parse the binary export 
+ * data : the binary
+ * place : index to begin 
+ * opts : options (only verbose mode )
+ */
 gU1D0pAR$ER.parseGuidoBinary = function(data, place, opts) {
   opts = opts ? opts : {};
   while ((place >= 0) && (place < data.byteLength)) {
@@ -121,6 +130,14 @@ gU1D0pAR$ER.parseGuidoBinary = function(data, place, opts) {
       place = gU1D0pAR$ER.SetTextFont(data, place, opts);
     } else if (head == gU1D0pAR$ER.GET_TEXT_FONT_CODE) {
       place = gU1D0pAR$ER.GetTextFont(data, place, opts);
+    } else if (head == gU1D0pAR$ER.POP_PEN) {
+      place = gU1D0pAR$ER.PopPen(data, place, opts);
+    } else if (head == gU1D0pAR$ER.PUSH_PEN) {
+      place = gU1D0pAR$ER.PushPen(data, place, opts);
+    } else if (head == gU1D0pAR$ER.PUSH_FILL_COLOR) {
+      place = gU1D0pAR$ER.PushFillColor(data, place, opts);
+    } else if (head == gU1D0pAR$ER.POP_FILL_COLOR) {
+      place = gU1D0pAR$ER.PopFillColor(data, place, opts);
     } else if (head == gU1D0pAR$ER.SET_SCALE_CODE) {
       place = gU1D0pAR$ER.SetScale(data, place, opts);
     } else if (head == gU1D0pAR$ER.SET_ORIGIN_CODE) {
@@ -141,6 +158,8 @@ gU1D0pAR$ER.parseGuidoBinary = function(data, place, opts) {
       place = gU1D0pAR$ER.SetFontAlign(data, place, opts);
     } else if (head == gU1D0pAR$ER.SELECT_PEN_COLOR_CODE) {
       place = gU1D0pAR$ER.SelectPenColor(data, place, opts);
+    } else if (head == gU1D0pAR$ER.PUSH_PEN_COLOR_CODE) {
+      place = gU1D0pAR$ER.PushPenColor(data, place, opts);
     } else if (head == gU1D0pAR$ER.POP_PEN_COLOR_CODE) {
       place = gU1D0pAR$ER.PopPenColor(data, place, opts);
     } else if (head == gU1D0pAR$ER.PUSH_PEN_WIDTH_CODE) {
@@ -285,6 +304,71 @@ gU1D0pAR$ER.GetTextFont = function(data, place, opts) {
   }
   //////////////////////////
   gU1D0pAR$ER.drawFunctions["GetTextFont"]();
+  return place;
+}
+
+// PUSH_PEN = 17;
+gU1D0pAR$ER.PushPen = function(data, place, opts) {
+  // read Color
+  var alpha = gU1D0pAR$ER.getUnsignedChar(data, place);
+  place = gU1D0pAR$ER.moveReadPositionByChar(place);
+  var red = gU1D0pAR$ER.getUnsignedChar(data, place);
+  place = gU1D0pAR$ER.moveReadPositionByChar(place);
+  var green = gU1D0pAR$ER.getUnsignedChar(data, place);
+  place = gU1D0pAR$ER.moveReadPositionByChar(place);
+  var blue = gU1D0pAR$ER.getUnsignedChar(data, place);
+  place = gU1D0pAR$ER.moveReadPositionByChar(place);
+  
+  // read Width
+  var width = gU1D0pAR$ER.getFloat(data, place);
+  place = gU1D0pAR$ER.moveReadPositionByFloat(place);
+  
+  if (opts.verbose == true) {
+    console.log("PushPen");
+  }
+  //////////////////////////
+  gU1D0pAR$ER.drawFunctions["PushPen"](alpha, red, green, blue, width);
+  return place;
+}
+
+// POP_PEN = 18;
+gU1D0pAR$ER.PopPen = function(data, place, opts) {
+  
+  if (opts.verbose == true) {
+    console.log("PopPen");
+  }
+  //////////////////////////
+  gU1D0pAR$ER.drawFunctions["PopPen"]();
+  return place;
+}
+
+// PUSH_FILL_COLOR = 19
+gU1D0pAR$ER.PushFillColor = function(data, place, opts) {
+  // read Color
+  var alpha = gU1D0pAR$ER.getUnsignedChar(data, place);
+  place = gU1D0pAR$ER.moveReadPositionByChar(place);
+  var red = gU1D0pAR$ER.getUnsignedChar(data, place);
+  place = gU1D0pAR$ER.moveReadPositionByChar(place);
+  var green = gU1D0pAR$ER.getUnsignedChar(data, place);
+  place = gU1D0pAR$ER.moveReadPositionByChar(place);
+  var blue = gU1D0pAR$ER.getUnsignedChar(data, place);
+  place = gU1D0pAR$ER.moveReadPositionByChar(place);
+  if (opts.verbose == true) {
+    console.log("PushFillColor");
+  }
+  //////////////////////////
+  gU1D0pAR$ER.drawFunctions["PushFillColor"](alpha, red, green, blue);
+  return place;
+}
+
+// POP_FILL_COLOR = 20
+gU1D0pAR$ER.PopFillColor = function(data, place, opts) {
+  
+  if (opts.verbose == true) {
+    console.log("PopFillColor");
+  }
+  //////////////////////////
+  gU1D0pAR$ER.drawFunctions["PopFillColor"]();
   return place;
 }
 
@@ -438,6 +522,24 @@ gU1D0pAR$ER.SelectPenColor = function(data, place, opts) {
   return place;
 }
 
+gU1D0pAR$ER.PushPenColor = function(data, place, opts) {
+  var alpha = gU1D0pAR$ER.getUnsignedChar(data, place);
+  place = gU1D0pAR$ER.moveReadPositionByChar(place);
+  var red = gU1D0pAR$ER.getUnsignedChar(data, place);
+  place = gU1D0pAR$ER.moveReadPositionByChar(place);
+  var green = gU1D0pAR$ER.getUnsignedChar(data, place);
+  place = gU1D0pAR$ER.moveReadPositionByChar(place);
+  var blue = gU1D0pAR$ER.getUnsignedChar(data, place);
+  place = gU1D0pAR$ER.moveReadPositionByChar(place);
+  /////////////////////////////////////////
+  if (opts.verbose == true) {
+    console.log("PushPenColor");
+  }
+  //////////////////////////
+  gU1D0pAR$ER.drawFunctions["PushPenColor"](alpha, red, green, blue);
+  return place;
+}
+
 gU1D0pAR$ER.PopPenColor = function(data, place, opts) {
   /////////////////////////////////////////
   if (opts.verbose == true) {
@@ -508,6 +610,22 @@ gU1D0pAR$ER.registerGetTextFont = function(fn) {
   gU1D0pAR$ER.drawFunctions["GetTextFont"] = fn
 }
 
+gU1D0pAR$ER.registerPushPen = function(fn) {
+  gU1D0pAR$ER.drawFunctions["PushPen"] = fn;
+}
+
+gU1D0pAR$ER.registerPopPen = function(fn) {
+  gU1D0pAR$ER.drawFunctions["PopPen"] = fn;
+}
+
+gU1D0pAR$ER.registerPushFillColor = function(fn) {
+  gU1D0pAR$ER.drawFunctions["PushFillColor"] = fn;
+}
+
+gU1D0pAR$ER.registerPopFillColor = function(fn) {
+  gU1D0pAR$ER.drawFunctions["PopFillColor"] = fn;
+}
+
 gU1D0pAR$ER.registerSetScale = function(fn) {
   gU1D0pAR$ER.drawFunctions["SetScale"] = fn
 }
@@ -546,6 +664,10 @@ gU1D0pAR$ER.registerSetFontAlign = function(fn) {
 
 gU1D0pAR$ER.registerSelectPenColor = function(fn) {
   gU1D0pAR$ER.drawFunctions["SelectPenColor"] = fn
+}
+
+gU1D0pAR$ER.registerPushPenColor = function(fn) {
+  gU1D0pAR$ER.drawFunctions["PushPenColor"] = fn
 }
 
 gU1D0pAR$ER.registerPopPenColor = function(fn) {
