@@ -288,7 +288,7 @@ class GuidoEngineAdapter
 			\param page the page number.
 			\return a Guido error code
 		*/
-		GUIDOAPI(string) guidoBinaryExport(const GRHandler handle, int page); // TODO GGX a revoir pour le retour (un vector ?)
+		GUIDOAPI(string) guidoBinaryExport(const GRHandler handle, int page);
 
 		/** \brief Control bounding boxes drawing.
 

@@ -154,7 +154,6 @@ GUIDOAPI(GuidoErrCode) GuidoEngineAdapter::guidoBinaryExport(const GRHandler han
 	return ::GuidoBinaryExport(handle, page, out);
 }
 
-// TODO GGX a revoir pour le retour (un vector ?)
 GUIDOAPI(string) GuidoEngineAdapter::guidoBinaryExport(const GRHandler handle, int page)
 {
 	stringstream sstr;
