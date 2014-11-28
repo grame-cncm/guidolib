@@ -46,7 +46,6 @@ static void error (GuidoErrCode err)
 }
 
 
-
 //--------------------------------------------------------------------------
 // utility for command line arguments 
 //--------------------------------------------------------------------------
@@ -77,85 +76,26 @@ static const char* getFile (int argc, char *argv[])
 	return (i < argc) ? argv[i] : 0;
 }
 
-//static void lopts(int argc, char **argv, int& page, int& file, int& fontfile)
-//{
-//	page = 1;
-//	if (argc < 3) usage(argv[0]);
-//	if (argc == 3) {
-//		page = atoi(argv[2]);
-//		if (page <= 0) usage(argv[0]);
-//		file = 1;
-//		fontfile = 0;
-//	}
-//	else if (argc == 5) {
-//		if (strcmp(argv[1], "-f")) usage(argv[0]);
-//		page = atoi(argv[4]);
-//		if (page <= 0) usage(argv[0]);
-//		file = 3;
-//		fontfile = 2;	 
-//	}
-//}
-
+#ifdef WIN32
+const char pathSep = '\\';
+#else
+const char pathSep = '/';
+#endif
 //--------------------------------------------------------------------------
 // utility for making correspondance between ar and directory path
 //--------------------------------------------------------------------------
-vector<string> fillPathsVector (char *argv[])
+vector<string> fillPathsVector (const char *filename)
 {
     vector<string> pathsVector;
-
-    string fileDirectoryStr(argv[0]);
-    string fileNameStr(argv[1]);
-
-    if (fileNameStr[0] == '.' && fileNameStr[1] == '.')
-    {
-        for (size_t i = 0; i < 2; i++)
-        {
-            size_t posSlash = 0;
-
-            for (size_t j = 0; j < fileDirectoryStr.size(); j++)
-            {
-                if (fileDirectoryStr[j] == '/' || fileDirectoryStr[j] == '\\')
-                    posSlash = j;
-            }
-
-            fileDirectoryStr.erase(posSlash, fileDirectoryStr.size());
-        }
-
-        size_t posSlash = 0;
-
-        for (size_t i = 0; i < fileNameStr.size(); i++)
-        {
-            if (fileNameStr[i] == '/' || fileNameStr[i] == '\\')
-            {
-                fileNameStr[i] = '\\';
-                posSlash = i;
-            }
-        }
-
-        fileNameStr.erase(posSlash + 1, fileNameStr.size());
-
-        fileNameStr.erase(0, 2);
-        fileDirectoryStr.append(fileNameStr);
-
-        pathsVector.push_back(fileDirectoryStr);
-    }
-    else
-    {
-        size_t posSlash = 0;
-
-        for (size_t i = 0; i < fileNameStr.size(); i++)
-        {
-            if (fileNameStr[i] == '/' || fileNameStr[i] == '\\')
-            {
-                fileNameStr[i] = '\\';
-                posSlash = i;
-            }
-        }
-
-        fileNameStr.erase(posSlash + 1, fileNameStr.size());
-
-        pathsVector.push_back(fileNameStr);
-    }
+	pathsVector.push_back(".");			// look first for external rsrc in the current folder
+	if (filename) {
+		string s(filename);
+		size_t n = s.find_last_of (pathSep);
+		if (n != string::npos) {		// add also the gmn file path
+			cerr << "fillPathsVector add " << s.substr(0,n) << endl;
+			pathsVector.push_back(s.substr(0,n));
+		}
+	}
 
 #ifdef WIN32
     // For windows
@@ -165,17 +105,42 @@ vector<string> fillPathsVector (char *argv[])
     // For unix
     string homePath(getenv("HOME"));
 #endif
-    pathsVector.push_back(homePath);
+    pathsVector.push_back(homePath);	// and add the HOME directory
 
     return pathsVector;
 }
 
+//_______________________________________________________________________________
+static void check (int argc, char *argv[]) {
+	if (argc > 6) usage(argv[0]);
+	for (int i=1; i < argc; i++) {
+		const char* ptr = argv[i];
+		if (*ptr++ == '-') {
+			if ((*ptr != 'p') && (*ptr != 'f'))	usage(argv[0]);
+		}
+	}
+}
+
+
+//_______________________________________________________________________________
+static bool readfile (FILE * fd, string& content) 
+{
+	if (!fd) return false;
+	do {
+		int c = getc(fd);
+		if (feof(fd) || ferror(fd)) break;
+		content += c;
+	} while (true);
+	return ferror(fd) == 0;
+}
+
+//_______________________________________________________________________________
 int main(int argc, char **argv)
 {
+	check (argc, argv);
 	int page = getIntOption (argc, argv, "-p", 1);
 
-	if (page < 0)
-    {
+	if (page < 0) {
 		cerr << "page number should be positive" << endl;
 		usage(argv[0]);
 	}
@@ -183,18 +148,9 @@ int main(int argc, char **argv)
 	const char* fontfile = getOption (argc, argv, "-f", 0);
 	const char* filename = getFile (argc, argv);
 
-//	int page, font, file;
-//	lopts (argc, argv, page, file, font);
-//	const char* filename = argv[file];
-//	const char* fontfile = font ? argv[font] : 0;
-
 	string gmn;							// a string to read the standard input
 	if (!filename)						// std in mode
-    {
-		int c;
-		while (read(0, &c, 1) == 1)
-			gmn += char(c);				// read the standard input into a string
-	}
+		readfile (stdin, gmn);
 
 	SVGSystem sys(fontfile, 0);
 	VGDevice *dev = sys.CreateDisplayDevice();
@@ -205,45 +161,34 @@ int main(int argc, char **argv)
     ARHandler arh;
 
     /* For symbol-tag */
-    vector<string> pathsVector = fillPathsVector(argv);
-
+    vector<string> pathsVector = fillPathsVector(filename);
     GuidoParser *parser = GuidoOpenParser();
-
-	if (gmn.size())
+	if (gmn.size()) {
 		arh = GuidoString2AR(parser, gmn.c_str());
+	}
 	else
     {
         std::ifstream ifs(filename, ios::in);
-        if (!ifs)
-            return 0;
-
+        if (!ifs)  return 0;
         std::stringstream streamBuffer;
         streamBuffer << ifs.rdbuf();
         ifs.close();
 
 		arh = GuidoString2AR(parser, streamBuffer.str().c_str());
     }
-
-	if (!arh)
-        error(err);
+	if (!arh)  error(err);
 
     /* For symbol-tag */
     GuidoSetSymbolPath(arh, pathsVector);
     /******************/
-
 	GRHandler grh;
     err = GuidoAR2GR (arh, 0, &grh);
-
 	if (err != guidoNoErr)
         error(err);
-
 	err = GuidoSVGExport( grh, page, cout, fontfile);
-
 	if (err != guidoNoErr)
         error(err);
-
     GuidoCloseParser(parser);
-
 	return 0;
 }
 
