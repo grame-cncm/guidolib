@@ -1,3 +1,4 @@
+<!doctype html>
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -25,19 +26,7 @@
 		guidoEngine.guidoCloseParser(p);
 		var gr = guidoEngine.guidoAR2GR(ar);
 		var result = guidoEngine.guidoSVGExport(gr, 1);
-		/*
-		var settings= {
-			systemsDistance : 75,
-			systemsDistribution : 1,
-			systemsDistribLimit : 0.25,
-			force : 750,
-			spring : 1.1,
-			neighborhoodSpacing : 0,
-			optimalPageFill : 1,
-			resizePage2Music : 1
-		};
-		gr = guidoEngine.GuidoGetAR2GRSettings(ar, settings);
-		*/
+
 		guidoEngine.guidoFreeGR(gr);
 		guidoEngine.guidoFreeAR(ar);
 		
@@ -55,11 +44,8 @@
 	});
 	window.addEventListener("beforeunload", function( event ) {
 		guidoEngine.guidoShutdown();
-		delete guidoEngine;
-		
+		delete guidoEngine;		
 	});
-		
-	
     </script>
   </head>
   <body>
