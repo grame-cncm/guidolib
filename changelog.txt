@@ -3,6 +3,10 @@ GUIDO Engine history
 ----------------------------------------------------------------
 2014-11-19  version 1.5.6
 - Proportional rendering available (enabled with GuidoLayoutSettings parameters)
+- \special-tag :
+    - "space" param suppressed (was useless)
+    - "scale" param changed for "size"
+    - "color" param added
 
 
 ----------------------------------------------------------------

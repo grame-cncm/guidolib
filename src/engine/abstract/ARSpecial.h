@@ -31,13 +31,11 @@ public:
 	virtual void printGMNName(std::ostream& os) const;
     virtual void printParameters(std::ostream& os) const;
 
-    float 		dx;
-    float 		dy;
-    float 		space;
-    float 		scale;
-    unsigned char mDrawChar;	// may become int...
+    unsigned char getDrawChar() const { return mDrawChar; }
 
 protected:
+    unsigned char mDrawChar; // may become int...
+
     static ListOfTPLs ltpls;
 };
 
