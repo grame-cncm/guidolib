@@ -89,7 +89,9 @@ bool TimeSegment::operator < (const TimeSegment& ts) const
 {
 	if (fdate(this->first) < fdate(ts.first)) return true;
 	if (fdate(this->first) > fdate(ts.first)) return false;
-	return ts.include (*this);
+    if (fdate(this->second) < fdate(ts.second)) return true;    // C.D. Bug fix for windows
+    if (fdate(this->second) >= fdate(ts.second)) return false;
+	/*return ts.include (*this);*/
 }
 
 bool TimeSegment::operator == (const TimeSegment& ts) const

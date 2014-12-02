@@ -1645,10 +1645,12 @@ float GRStaff::getDistance() const
 */
 float GRStaff::getDredgeSize() const
 {
-	const int lineCount = getNumlines();
+    const int   lineCount = (getNumlines() > 0 ? getNumlines() : 1);
 	const float lineSpace = getStaffLSPACE();
 
-	return ((lineCount - 1) *  lineSpace); // TODO: add kLineThick ?
+    float result = (lineCount - 1) * lineSpace + getLineThickness() * 0.5 + 1; // 1 in order to have a non-null height
+
+	return result;
 }
 
 // ----------------------------------------------------------------------------
@@ -1770,10 +1772,10 @@ void GRStaff::updateBoundingBox()
         }
     }
 	mBoundingBox.Merge (r);
-	mMapping.top = mMapping.left = 0;
-	mMapping.right = mLength;
+	mMapping.top    = mMapping.left = - getLineThickness() / 2;
+	mMapping.right  = mLength + getLineThickness() / 2;;
 	mMapping.bottom = getDredgeSize();
-	mMapping += mPosition + getOffset();
+	mMapping       += mPosition + getOffset();
 }
 
 // ----------------------------------------------------------------------------

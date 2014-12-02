@@ -302,7 +302,7 @@ void GuidoSystemCollector::processNoDiv (int page, float w, float h, Time2Graphi
 			float y = slicesIter->second.top;
 			if ((x < prevx) || (y < sysy)) break;			
 			prevx = x;
-			slicesIter++;
+		    slicesIter++;
 		}
 		systemIter++;
 	}
