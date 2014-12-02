@@ -28,7 +28,7 @@
 #include <sstream>
 using namespace std;
 
-#define TIMING
+//#define TIMING
 #include "GuidoTiming.h"
 
 // - Guido AR
