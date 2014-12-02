@@ -61,7 +61,7 @@ public:
 	virtual void	tellPosition(GObject * caller, const NVPoint & newPosition);
 	virtual void	setHPosition( GCoord nx);
 	virtual void 	OnDraw( VGDevice & hdc ) const;
-	virtual void	GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
+	virtual void	GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 	virtual void 	updateBoundingBox();
 
 

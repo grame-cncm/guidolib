@@ -96,7 +96,7 @@ class GObject
 		void setID(long id) { mGId = id; }
 
 		virtual void	OnDraw( VGDevice & hdc ) const = 0;
-		virtual void	GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos) const {};
+		virtual void	GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos) const {};
 		virtual	void	DrawBoundingBox( VGDevice & hdc, const VGColor & inBrushColor ) const; // debug
 		virtual char *	getGGSInfo(int) const    { return 0; }
 		virtual void	GGSOutput() const;

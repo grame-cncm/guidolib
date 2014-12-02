@@ -52,7 +52,7 @@ class GRSingleRest : public GRRest
 		
 		virtual void GGSOutput() const;
 		virtual void OnDraw( VGDevice & hdc ) const;
-		virtual void GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
+		virtual void GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 		
 		virtual void setPosition(const NVPoint & point);
 		virtual void updateBoundingBox();

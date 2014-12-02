@@ -49,7 +49,7 @@ public:
 
     ARCluster *getARCluster() const;
 
-    void GetMap(GuidoeElementSelector sel, MapCollector& f, MapInfos& infos) const;
+    void GetMap(GuidoElementSelector sel, MapCollector& f, MapInfos& infos) const;
 
 protected:
     float fdx;

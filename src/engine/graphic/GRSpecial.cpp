@@ -21,6 +21,9 @@ using namespace std;
 #include "FontManager.h"
 #include "GRSpecial.h"
 
+#include "TagParameterFloat.h"
+#include "TagParameterString.h"
+
 
 // ===========================================================================
 // 		GRSpecial
@@ -39,11 +42,30 @@ void GRSpecial::OnDraw(VGDevice & hdc) const
 	
 	// try to get the correctly scaled musical font ...
 	// TODO: scale the graphic context instead.
-	const int fontSize = (int)((ar->scale * 4 * LSPACE) + float(0.5));	// +0.5 to round from float to int.
+    const int fontSize = (int)(((ar->getSize() ? ar->getSize()->getValue() : 1) * 4 * LSPACE) + float(0.5)); // +0.5 to round from float to int.
 	const VGFont* myfont = FontManager::FindOrCreateFont( fontSize );
 	hdc.SetMusicFont( myfont );
 	hdc.SetFontAlign( VGDevice::kAlignLeft | VGDevice::kAlignBase );
 
-	const unsigned int theSymbol = ar->mDrawChar;
-	hdc.DrawMusicSymbol( (mPosition.x + ar->dx), (mPosition.y + ar->dy), theSymbol );
+	const unsigned int theSymbol = ar->getDrawChar();
+
+    float specialXOffset = (ar->getDX() ? ar->getDX()->getValue() : 0);
+    float specialYOffset = (ar->getDY() ? ar->getDY()->getValue() : 0);
+    
+    const TagParameterString *tps = ar->getColor();
+
+    const VGColor prevTextColor = hdc.GetFontColor();
+    unsigned char *colRef = 0;
+    if (tps) {
+        colRef = new unsigned char[4];
+        tps->getRGB(colRef);
+    }
+
+    if (colRef)
+        hdc.SetFontColor(VGColor(colRef));
+
+    hdc.DrawMusicSymbol((mPosition.x + specialXOffset), (mPosition.y + specialYOffset), theSymbol);
+
+    if (colRef)
+        hdc.SetFontColor(prevTextColor);
 }

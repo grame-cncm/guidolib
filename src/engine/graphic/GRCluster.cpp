@@ -237,7 +237,7 @@ ARCluster *GRCluster::getARCluster() const
 	return /*dynamic*/static_cast<ARCluster*>(getAbstractRepresentation());
 }
 
-void GRCluster::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const
+void GRCluster::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const
 {
 	if (sel == kGuidoEvent)
         SendMap(f, firstNote->getARNote()->getStartTimePosition(), fDuration, kNote, infos);

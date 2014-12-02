@@ -121,7 +121,7 @@ void GRMusic::OnDraw( VGDevice & hdc, const GuidoOnDrawDesc & inDrawInfos )
 		drawpage->OnDraw(hdc, inDrawInfos);
 }
 	
-void GRMusic::GetMap( int inPage, float w, float h, GuidoeElementSelector sel, MapCollector& f ) const 
+void GRMusic::GetMap( int inPage, float w, float h, GuidoElementSelector sel, MapCollector& f ) const 
 {
 	const GRPage * page = getPage( inPage );
 	if( page ) {

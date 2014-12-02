@@ -557,7 +557,57 @@ GuidoDate * GuidoGetPageDate_retDate( CGRHandler inHandleGR, int pageNum)
     return 0;
   }
   return date;
+}
 
+static void drawMapFromSelector(GuidoOnDrawDesc * desc, GuidoElementSelector sel)
+{
+    std::vector<MapElement> *outMap = new std::vector<MapElement>();
+    GuidoGetSVGMap(desc->handle, desc->page, sel, *outMap);
+
+    for (unsigned int i = 0; i < outMap->size(); i++) {
+        MapElement elem = outMap->at(i);
+        desc->hdc->Rectangle(elem.first.left, elem.first.top, elem.first.right, elem.first.bottom);
+    }
+}
+
+static void drawSVGMap(GuidoOnDrawDesc * desc)
+{
+    int  currentMode = desc->mappingMode;
+    bool drawMap[3] = { false, false, false }; // Order : voice, system, staff
+
+    for (int i = 2; i >= 0; i--) {
+        if (currentMode - (1<<i) >= 0) {
+            currentMode -= 1<<i;
+            drawMap[i] = true;
+        }
+    }
+    
+    desc->hdc->SetScale(SVGDevice::kSVGSizeDivider, SVGDevice::kSVGSizeDivider);
+
+    desc->hdc->PushPenColor(VGColor(100, 100, 255, 50));
+    desc->hdc->PushFillColor(VGColor(100, 100, 200, 128));
+
+    GuidoElementSelector sel;
+
+    if (drawMap[0] == true) {
+        sel = kGuidoEvent;
+        drawMapFromSelector(desc, sel);
+    }
+
+    if (drawMap[1] == true) {
+        sel = kGuidoSystem;
+        drawMapFromSelector(desc, sel);
+    }
+
+    if (drawMap[2] == true) {
+        sel = kGuidoStaff;
+        drawMapFromSelector(desc, sel);
+    }
+
+    desc->hdc->PopPenColor();
+    desc->hdc->PopFillColor();
+
+    desc->hdc->SetScale(1.0f / SVGDevice::kSVGSizeDivider, 1.0f / SVGDevice::kSVGSizeDivider);
 }
 
 // --------------------------------------------------------------------------
@@ -593,6 +643,8 @@ GUIDOAPI(GuidoErrCode) GuidoOnDraw( GuidoOnDrawDesc * desc )
 
 		result = guidoNoErr;
 	}
+
+    drawSVGMap(desc);
 		
 	desc->hdc->EndDraw(); // must be called even if BeginDraw has failed.
     
@@ -665,9 +717,9 @@ GUIDOAPI(GuidoErrCode) 	GuidoBinaryExport( const GRHandler handle, int page, std
 //		- Score export to svg -
 // --------------------------------------------------------------------------
 
-GUIDOAPI(GuidoErrCode) GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile )
+GUIDOAPI(GuidoErrCode) GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const int mappingMode )
 {
-  return GuidoSVGExportWithFontSpec( handle, page, out, fontfile, 0);
+    return GuidoSVGExportWithFontSpec( handle, page, out, fontfile, 0, mappingMode);
 }
 
 char * GuidoInternalDeviceExport_retCString( const GRHandler handle, int page, GuidoInternalDevice dev)
@@ -723,7 +775,7 @@ void  GuidoReleaseCString( char *stringToRelease ) {
     free(stringToRelease);
 }
 
-GUIDOAPI(GuidoErrCode) GuidoSVGExportWithFontSpec( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec)
+GUIDOAPI(GuidoErrCode) GuidoSVGExportWithFontSpec(const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec, const int mappingMode )
 {
  	SVGSystem sys(fontfile, fontspec);
 	SVGDevice dev (out, &sys, fontfile, fontspec);
@@ -741,6 +793,7 @@ GUIDOAPI(GuidoErrCode) GuidoSVGExportWithFontSpec( const GRHandler handle, int p
 	desc.scrollx = desc.scrolly = 0;    // from the upper left page corner
     desc.sizex = int(pf.width/SVGDevice::kSVGSizeDivider);
 	desc.sizey = int(pf.height/SVGDevice::kSVGSizeDivider);
+    desc.mappingMode = mappingMode;
     dev.NotifySize(desc.sizex, desc.sizey);
     dev.SelectPenColor(VGColor(0,0,0));
 

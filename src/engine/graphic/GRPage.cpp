@@ -291,7 +291,7 @@ void GRPage::trace(VGDevice & hdc) const
 // ----------------------------------------------------------------------------
 /** \brief Retrieves the mapping
 */
-void GRPage::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const
+void GRPage::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const
 {
 	GuidoPos pagepos = First();
 	while (pagepos)

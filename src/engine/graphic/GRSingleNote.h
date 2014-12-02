@@ -61,7 +61,7 @@ class GRSingleNote : public GRNote
 		virtual char*	getGGSInfo(int infotype) const; 
 		virtual void	GGSOutput() const;
 		virtual void	OnDraw( VGDevice & hdc ) const;
-		virtual void	GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
+		virtual void	GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 
 		virtual void	setSize(float nsize)
 		{

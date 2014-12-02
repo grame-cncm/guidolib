@@ -232,8 +232,9 @@ void GRCrescendo::OnDraw( VGDevice & hdc) const
 	if (sse == 0)
 		return;
 
-    if (mColRef)
-    {
+    const VGColor prevTextColor = hdc.GetFontColor();
+
+    if (mColRef) {
         hdc.PushPenColor(VGColor(mColRef));
         hdc.PushFillColor(VGColor(mColRef));
         hdc.SetFontColor(VGColor(mColRef));
@@ -252,10 +253,9 @@ void GRCrescendo::OnDraw( VGDevice & hdc) const
     
     hdc.PopPenWidth();
 
-    if (mColRef)
-    {
-        hdc.PopPenColor();
+    if (mColRef) {
+        hdc.SetFontColor(prevTextColor);
         hdc.PopFillColor();
-        hdc.SetFontColor(VGColor());
+        hdc.PopPenColor();
     }
 }

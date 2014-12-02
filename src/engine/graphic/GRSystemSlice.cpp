@@ -153,7 +153,7 @@ void GRSystemSlice::addPossibleBreakState(GRPossibleBreakState * in)
 // ----------------------------------------------------------------------------
 /** \brief Retrieves the mapping
 */
-void GRSystemSlice::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const
+void GRSystemSlice::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const
 {
 	if (sel == kGuidoSystemSlice) {
 		if (mFirstEvXPosition) {

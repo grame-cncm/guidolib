@@ -182,7 +182,7 @@ void GRSingleNote::GGSOutput() const
 }
 
 //____________________________________________________________________________________
-void GRSingleNote::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const
+void GRSingleNote::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const
 {
     if (fCluster) {
         if (this == fCluster->getFirstNote())

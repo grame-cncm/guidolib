@@ -252,7 +252,7 @@ class GRStaff : public GRCompositeNotationElement
 
 		virtual void GGSOutput() const;
 		virtual void OnDraw( VGDevice & hdc ) const;
-		virtual void GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
+		virtual void GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 				void		setOnOff(bool onoff, TYPE_TIMEPOSITION tp);
 		void		setOnOff(bool onoff);
 		bool		isStaffBeginOn();

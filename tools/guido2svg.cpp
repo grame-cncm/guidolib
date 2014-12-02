@@ -18,6 +18,7 @@
 
 #include "GUIDOParse.h"
 #include "GUIDOEngine.h"
+#include "GUIDOScoreMap.h"
 
 #define NANOSVG_IMPLEMENTATION
 
@@ -33,9 +34,12 @@ static void usage (char* name)
 	cerr << "usage: " << tool << " [options] <gmn file>" << endl;
 	cerr << "       convert GMN code to svg" << endl;
 	cerr << "       options:" << endl;
-	cerr << "           	-f fontfile : include the guido font taken from fontfile" << endl;
-	cerr << "           	-p pagenum  : an optional page number (default is 1)" << endl;
+	cerr << "           	-f fontfile       : include the guido font taken from fontfile" << endl;
+	cerr << "           	-p pagenum        : an optional page number (default is 1)" << endl;
 	cerr << "       reads the standard input when gmn file is omitted." << endl;
+	cerr << "           	-eventmap  boolean : enables or not event mapping draw (default is false)" << endl;
+    cerr << "           	-staffmap  boolean : enables or not staff mapping draw (default is false)" << endl;
+    cerr << "           	-systemmap boolean : enables or not system mapping draw (default is false)" << endl;
 	exit(1);
 }
 
@@ -51,28 +55,47 @@ static void error (GuidoErrCode err)
 //--------------------------------------------------------------------------
 static int getIntOption (int argc, char *argv[], const std::string& option, int defaultValue)
 {
-	for (int i=1; i < argc-1; i++) {
+	for (int i = 1; i < argc - 1; i++) {
 		if (option == argv[i]) {
-			int val = strtol( argv[i+1], 0, 10);
-			if (val) return val;
+			int val = strtol(argv[i + 1], 0, 10);
+			if (val)
+                return val;
 		}
 	}
+
 	return defaultValue;
 }
+
+static int getBoolOption (int argc, char *argv[], const std::string& option, int defaultValue)
+{
+	for (int i = 1; i < argc - 1; i++) {
+		if (option == argv[i]) {
+            if (!strcmp(argv[i + 1], "true"))
+			    return true;
+            else
+                return false;
+		}
+	}
+
+	return defaultValue;
+}
+
 static const char* getOption (int argc, char *argv[], const std::string& option, const char* defaultValue)
 {
-	for (int i=1; i < argc-1; i++) {
+	for (int i = 1; i < argc - 1; i++) {
 		if (option == argv[i])
-			return argv[i+1];
+			return argv[i + 1];
 	}
+
 	return defaultValue;
 }
+
 static const char* getFile (int argc, char *argv[])
 {
 	int i;
-	for (i=1; i < argc-1; i++) {
+	for (i = 1; i < argc - 1; i++)
 		if (*argv[i] == '-') i++;	// skip option value
-	}
+
 	return (i < argc) ? argv[i] : 0;
 }
 
@@ -112,25 +135,30 @@ vector<string> fillPathsVector (const char *filename)
 
 //_______________________________________________________________________________
 static void check (int argc, char *argv[]) {
-	if (argc > 6) usage(argv[0]);
-	for (int i=1; i < argc; i++) {
+	if (argc > 12)
+        usage(argv[0]);
+
+	for (int i = 1; i < argc; i++) {
 		const char* ptr = argv[i];
 		if (*ptr++ == '-') {
-			if ((*ptr != 'p') && (*ptr != 'f'))	usage(argv[0]);
+			if ((*ptr != 'p') && (*ptr != 'f') && (strcmp(ptr, "staffmap")) && (strcmp(ptr, "eventmap")) && (strcmp(ptr, "systemmap")))
+                usage(argv[0]);
 		}
 	}
 }
 
-
 //_______________________________________________________________________________
 static bool readfile (FILE * fd, string& content) 
 {
-	if (!fd) return false;
+	if (!fd)
+        return false;
+
 	do {
 		int c = getc(fd);
 		if (feof(fd) || ferror(fd)) break;
 		content += c;
 	} while (true);
+
 	return ferror(fd) == 0;
 }
 
@@ -163,11 +191,9 @@ int main(int argc, char **argv)
     /* For symbol-tag */
     vector<string> pathsVector = fillPathsVector(filename);
     GuidoParser *parser = GuidoOpenParser();
-	if (gmn.size()) {
+	if (gmn.size())
 		arh = GuidoString2AR(parser, gmn.c_str());
-	}
-	else
-    {
+	else {
         std::ifstream ifs(filename, ios::in);
         if (!ifs)  return 0;
         std::stringstream streamBuffer;
@@ -176,19 +202,37 @@ int main(int argc, char **argv)
 
 		arh = GuidoString2AR(parser, streamBuffer.str().c_str());
     }
-	if (!arh)  error(err);
+
+	if (!arh)
+        error(err);
 
     /* For symbol-tag */
     GuidoSetSymbolPath(arh, pathsVector);
     /******************/
-	GRHandler grh;
+	
+    GRHandler grh;
     err = GuidoAR2GR (arh, 0, &grh);
-	if (err != guidoNoErr)
+	
+    if (err != guidoNoErr)
         error(err);
-	err = GuidoSVGExport( grh, page, cout, fontfile);
-	if (err != guidoNoErr)
+
+    /**** MAP ****/
+    int mapMode = 0;
+    if (getBoolOption(argc, argv, "-eventmap", false))
+        mapMode += kEventMapping;
+    if (getBoolOption(argc, argv, "-staffmap", false))
+        mapMode += kStaffMapping;
+    if (getBoolOption(argc, argv, "-systemmap", false))
+        mapMode += kSystemMapping;
+    /*************/
+
+	err = GuidoSVGExport(grh, page, cout, fontfile, mapMode);
+	
+    if (err != guidoNoErr)
         error(err);
+    
     GuidoCloseParser(parser);
+
 	return 0;
 }
 

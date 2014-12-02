@@ -60,18 +60,8 @@ singleStemDirection(inStemDirection),
 			mSymbol = full ? kFullTriangleHeadSymbol : kHalfTriangleHeadSymbol;
 		else if( mStyle == "reversedTriangle" )
 			mSymbol = full ? kFullReversedTriangleHeadSymbol : kHalfReversedTriangleHeadSymbol;
-		else if( mStyle == "noHeads" ) {
-#ifndef WIN32	// transparency not supported on WIN32
-			if (!mColRef) mColRef = new unsigned char[4];
-			if (mColRef) mColRef[3] = 255;
-			mSymbol = durationToHeadSymbol( inDur );
-#else
-			mSymbol = kNoneSymbol;
-#endif
-		}
 
 		// - Noteheads ornaments
-
 		else if (mStyle == "()" || mStyle == "(standard)")
 		{
 			mBracketsType = Round; // - Round brackets
@@ -183,6 +173,19 @@ singleStemDirection(inStemDirection),
 		{
 			mBracketsType = Angled;
 			mSymbol = full ? kFullReversedTriangleHeadSymbol : kHalfReversedTriangleHeadSymbol;
+		}
+        
+		// - If nothing
+		else {
+			if (!mColRef) mColRef = new unsigned char[4];
+            if (mColRef) {
+                mColRef[0] = 255;
+                mColRef[1] = 0;
+                mColRef[2] = 0;
+                mColRef[3] = 0;
+            }
+
+			mSymbol = durationToHeadSymbol( inDur );
 		}
 	}
 

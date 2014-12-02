@@ -1648,7 +1648,7 @@ float GRStaff::getDredgeSize() const
     const int   lineCount = (getNumlines() > 0 ? getNumlines() : 1);
 	const float lineSpace = getStaffLSPACE();
 
-    float result = (lineCount - 1) * lineSpace + getLineThickness() * 0.5 + 1; // 1 in order to have a non-null height
+    float result = (lineCount - 1) * lineSpace + getLineThickness() * 0.5f + 1; // 1 in order to have a non-null height
 
 	return result;
 }
@@ -1831,7 +1831,7 @@ GRStaff * GRStaff::getNextStaff() const
 // ----------------------------------------------------------------------------
 /** \brief Retrieves the mapping
 */
-void GRStaff::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const
+void GRStaff::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const
 {
 	if (sel == kGuidoStaff) {
 		SendMap (f, getRelativeTimePosition(), getDuration(), kStaff, infos);

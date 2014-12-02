@@ -152,7 +152,7 @@ void GRBar::GGSOutput() const
 // ----------------------------------------------------------------------------
 /** \brief Retrieves the mapping
 */
-void GRBar::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const
+void GRBar::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const
 {
 	if (sel == kGuidoBar)
 		SendMap (f, getRelativeTimePosition(), getDuration(), kBar, infos);

@@ -58,7 +58,7 @@ class GRPage : public GREvent
 	virtual void	trace( VGDevice & hdc ) const;
 	virtual void	OnDraw( VGDevice & hdc ) const;
 	virtual void	OnDraw( VGDevice & hdc, const GuidoOnDrawDesc & inDrawInfos ) const;
-	virtual void	GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
+	virtual void	GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 	
 	virtual void	GGSOutput() const;
 	

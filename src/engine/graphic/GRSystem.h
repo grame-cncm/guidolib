@@ -103,7 +103,7 @@ public:
 	void        setMeterOfStaffs( int num, int denom );
 
 	virtual void		OnDraw( VGDevice & hdc ) const;
-	virtual void		GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
+	virtual void		GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 	virtual void		GGSOutput() const;
 	virtual void		setPosition( class NVPoint const & );
 	virtual void		updateBoundingBox();

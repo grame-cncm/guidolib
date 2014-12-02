@@ -269,7 +269,7 @@ void NEPointerList::OnDraw( VGDevice & hdc ) const
 	while(pos) GetNext(pos)->OnDraw(hdc);
 }
 
-void NEPointerList::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const
+void NEPointerList::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const
 {
 	//GRNotationElement* e;
 	GuidoPos pos = GetHeadPosition();

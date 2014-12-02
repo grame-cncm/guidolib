@@ -120,7 +120,7 @@ static GuidoErrCode checkParams( CGRHandler handle, int page)
 }
 
 //----------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode)	GuidoGetMap( CGRHandler handle, int page, float w, float h, GuidoeElementSelector sel, MapCollector& f)
+GUIDOAPI(GuidoErrCode)	GuidoGetMap( CGRHandler handle, int page, float w, float h, GuidoElementSelector sel, MapCollector& f)
 {
 	GuidoErrCode err = checkParams (handle, page);
 	if (err != guidoNoErr) return err;
@@ -198,7 +198,7 @@ GUIDOAPI(bool)	GuidoGetPoint( float x, float y, const Time2GraphicMap map, TimeS
 }
 
 //----------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode)	GuidoGetSVGMap( GRHandler handle, int page, GuidoeElementSelector sel, vector<MapElement>& outMap)
+GUIDOAPI(GuidoErrCode)	GuidoGetSVGMap( GRHandler handle, int page, GuidoElementSelector sel, vector<MapElement>& outMap)
 {
 	if( handle == 0 ) 	return guidoErrInvalidHandle;
   	if( handle->grmusic == 0 ) return guidoErrInvalidHandle;

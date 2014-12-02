@@ -116,6 +116,8 @@ struct GuidoOnDrawDesc
 	//! If true, the engine ignores scroll, zoom and sizes parameters.
     //! If false, the engine draws a white background in the graphic device.
     int isprint;
+
+    int mappingMode; // REM: TMP
 };
 
 
@@ -170,6 +172,16 @@ enum GuidoErrCode
 	guidoErrNotInitialized		= -9,
 	//! the action failed
 	guidoErrActionFailed		= -10
+};
+
+
+/** \brief Mapping mode for SVG export
+*/
+enum {
+    kNoMapping     =  0,
+    kEventMapping  =  1,
+    kSystemMapping =  1<<1,
+    kStaffMapping  =  1<<2
 };
 
 
@@ -540,10 +552,11 @@ units.
 		\param out the output stream.
 		\param fontfile path of the guido svg font file.
 		\param fontspec an actual svg font if there is no font file.
+		\param mappingMode the mapping mode (see mapping mode enum).
 		\return a Guido error code
 	*/
-    GUIDOAPI(GuidoErrCode) 	GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile );
-    GUIDOAPI(GuidoErrCode) 	GuidoSVGExportWithFontSpec( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec );
+    GUIDOAPI(GuidoErrCode) 	GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const int mappingMode = kNoMapping );
+    GUIDOAPI(GuidoErrCode) 	GuidoSVGExportWithFontSpec( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec, const int mappingMode = kNoMapping );
 
 	/** \brief Exports an abstract representation of GUIDO draw commands.
 

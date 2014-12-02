@@ -61,7 +61,7 @@ class NEPointerList : public NEList
 		TYPE_TIMEPOSITION getNextTimePosition(const TYPE_TIMEPOSITION & timePosition);
 
 		virtual void OnDraw( VGDevice & hdc ) const;
-		virtual void GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
+		virtual void GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 
 		virtual void setPosition(const NVPoint & newPosition);
 

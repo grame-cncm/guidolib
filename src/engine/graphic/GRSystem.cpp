@@ -520,7 +520,7 @@ void GRSystem::AddSystemSlice( GRSystemSlice * inSlice )
 // ----------------------------------------------------------------------------
 /** \brief Retrieves the mapping
 */
-void GRSystem::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const
+void GRSystem::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const
 {
 	if (sel == kGuidoSystem) {
 		SendMap (f, getRelativeTimePosition(), getDuration(), kSystem, infos);
