@@ -20,7 +20,8 @@ EMSCRIPTEN_BINDINGS(CStruct) {
 			.field("spring", &GuidoLayoutSettings::spring)
 			.field("neighborhoodSpacing", &GuidoLayoutSettings::neighborhoodSpacing)
 			.field("optimalPageFill", &GuidoLayoutSettings::optimalPageFill)
-			.field("resizePage2Music", &GuidoLayoutSettings::resizePage2Music);
+			.field("resizePage2Music", &GuidoLayoutSettings::resizePage2Music)
+			.field("proportionalRenderingForceMultiplicator", &GuidoLayoutSettings::proportionalRenderingForceMultiplicator);
 
 	emscripten::value_object<GuidoDate>("GuidoDate")
 			.field("num", &GuidoDate::num)
@@ -65,6 +66,7 @@ EMSCRIPTEN_BINDINGS(Adapter) {
 			//.smart_ptr_constructor("GuidoEngineAdapter",&std::make_shared<GuidoEngineAdapter>)
 			.constructor<>()
 			.function("guidoInitWithIndependentSVG", &GuidoEngineAdapter::guidoInitWithIndependentSVG)
+			.function("guidoInitWithJavascript", &GuidoEngineAdapter::guidoInitWithJavascript)
 			.function("guidoShutdown", &GuidoEngineAdapter::guidoShutdown)
 			.function("guidoAR2GR", select_overload<NodeGR*(NodeAR*)>(&GuidoEngineAdapter::guidoAR2GR), allow_raw_pointers())
 			.function("guidoAR2GRSettings", select_overload<NodeGR*(NodeAR*, const GuidoLayoutSettings &)>(&GuidoEngineAdapter::guidoAR2GR), allow_raw_pointers())
@@ -84,6 +86,7 @@ EMSCRIPTEN_BINDINGS(Adapter) {
 			.function("guidoSVGExport", select_overload<string (NodeGR*, int)>(&GuidoEngineAdapter::guidoSVGExport), allow_raw_pointers())
 			.function("guidoAbstractExport", select_overload<string (NodeGR*, int)>(&GuidoEngineAdapter::guidoAbstractExport), allow_raw_pointers())
 			.function("guidoBinaryExport", select_overload<string (NodeGR*, int)>(&GuidoEngineAdapter::guidoBinaryExport), allow_raw_pointers())
+			.function("guidoJavascriptExport", &GuidoEngineAdapter::guidoJavascriptExport, allow_raw_pointers())
 			.function("guidoSetDrawBoundingBoxes", &GuidoEngineAdapter::guidoSetDrawBoundingBoxes)
 			.function("guidoGetDrawBoundingBoxes", &GuidoEngineAdapter::guidoGetDrawBoundingBoxes)
 			.function("guidoGetPageFormat", &GuidoEngineAdapter::guidoGetPageFormat, allow_raw_pointers())

@@ -69,8 +69,15 @@ class GuidoEngineAdapter
 		 * \brief Initialise the Guido Engine with a SVGSystem.
 		 *
 		 */
-		GUIDOAPI(void) guidoInitWithIndependentSVG();
+		GUIDOAPI(GuidoErrCode) guidoInitWithIndependentSVG();
 
+#ifdef CANVASSYSTEM
+		/*!
+		 * \brief Initialise the Guido Engine with a CanvasSystem for drawing on a html canvas with javasccript.
+		 *
+		 */
+		GUIDOAPI(GuidoErrCode) guidoInitWithJavascript();
+#endif
 		/*!
 			Guido Engine shutdown
 
@@ -290,6 +297,15 @@ class GuidoEngineAdapter
 		*/
 		GUIDOAPI(string) guidoBinaryExport(const GRHandler handle, int page);
 
+#ifdef CANVASSYSTEM
+		/** \brief Exports one page of score on html canvas.
+
+			\param a graphic representation.
+			\param page the page number.
+			\return a Guido error code
+		*/
+		GUIDOAPI(GuidoErrCode) guidoJavascriptExport(const GRHandler handle, int page);
+#endif
 		/** \brief Control bounding boxes drawing.
 
 			\param bbMap a bits field indicating the set of bounding boxes to draw (default to none).
@@ -578,7 +594,6 @@ class GuidoEngineAdapter
 		/*! @} */
 
 	private :
-		static int nbinstantiation;
 };
 
 #endif // GUIDOENGINEADAPTER_H

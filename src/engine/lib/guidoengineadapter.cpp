@@ -6,17 +6,17 @@
 #include "guido2.h"
 #include "GuidoStream.h"
 
-int GuidoEngineAdapter::nbinstantiation = 0;
+#ifdef CANVASSYSTEM
+#include "canvassystem.h"
+#include "canvasdevice.h"
+#endif
 
 GuidoEngineAdapter::GuidoEngineAdapter()
 {
-	nbinstantiation++;
-	cout << "Constructor n°"<< nbinstantiation << endl;
 }
 
 GuidoEngineAdapter::~GuidoEngineAdapter()
 {
-	cout << "Destructor n°"<< nbinstantiation << endl;
 }
 
 
@@ -25,10 +25,22 @@ GUIDOAPI(GuidoErrCode) GuidoEngineAdapter::guidoInit(GuidoInitDesc * desc)
 	return ::GuidoInit(desc);
 }
 
-GUIDOAPI(void) GuidoEngineAdapter::guidoInitWithIndependentSVG()
+GUIDOAPI(GuidoErrCode) GuidoEngineAdapter::guidoInitWithIndependentSVG()
 {
-	::GuidoInitWithIndependentSVG();
+	return ::GuidoInitWithIndependentSVG();
 }
+
+#ifdef CANVASSYSTEM
+GUIDOAPI(GuidoErrCode) GuidoEngineAdapter::guidoInitWithJavascript() {
+	GuidoInitDesc desc;
+
+	VGSystem * gSystem= new CanvasSystem(reinterpret_cast<char *>(______src_guido2_svg));
+	desc.graphicDevice = gSystem->CreateMemoryDevice(20,20);
+	desc.musicFont = "Guido2";
+	desc.textFont  = "Times";
+	return GuidoInit (&desc);
+}
+#endif
 
 GUIDOAPI(void) GuidoEngineAdapter::guidoShutdown()
 {
@@ -160,6 +172,31 @@ GUIDOAPI(string) GuidoEngineAdapter::guidoBinaryExport(const GRHandler handle, i
 	::GuidoBinaryExport(handle, page, sstr);
 	return sstr.str();
 }
+
+#ifdef CANVASSYSTEM
+GUIDOAPI(GuidoErrCode) GuidoEngineAdapter::guidoJavascriptExport(const GRHandler handle, int page)
+{
+	CanvasSystem sys(reinterpret_cast<char *>(______src_guido2_svg));
+	CanvasDevice dev(&sys);
+
+	GuidoOnDrawDesc desc;              // declare a data structure for drawing
+	desc.handle = handle;
+
+	GuidoPageFormat	pf;
+	GuidoResizePageToMusic (handle);
+	GuidoGetPageFormat (handle, page, &pf);
+
+	desc.hdc = &dev;                    // we'll draw on the device
+	desc.page = page;
+	desc.updateRegion.erase = true;     // and draw everything
+	desc.scrollx = desc.scrolly = 0;    // from the upper left page corner
+	desc.sizex = pf.width;
+	desc.sizey = pf.height;
+	dev.NotifySize(desc.sizex, desc.sizey);
+	dev.SelectPenColor(VGColor(0,0,0));
+	return GuidoOnDraw (&desc);
+}
+#endif
 
 GUIDOAPI(void) GuidoEngineAdapter::guidoSetDrawBoundingBoxes(int bbMap)
 {
