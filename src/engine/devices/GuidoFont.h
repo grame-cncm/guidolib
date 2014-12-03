@@ -19,9 +19,10 @@ class GuidoFont : public VGFont
 {
     public:
         /*!
-         *  \brief Construct font with fix size (200).
+		 *  \brief Construct guido font with precaculate metrics.
+		 *
          */
-        GuidoFont(const char * name, int properties);
+		GuidoFont(const char * name, int size, int properties);
         virtual ~GuidoFont();
 
         const char *	GetName() const;
@@ -31,12 +32,9 @@ class GuidoFont : public VGFont
         void	GetExtent( const char * s, int inCharCount, float * outWidth, float * outHeight, VGDevice * context ) const;
         void	GetExtent( unsigned char c, float * outWidth, float * outHeight, VGDevice * context ) const;
 
-
-        // Fixed size for this font
-        static const int kFontSize = 200;
     private:
         std::string name;
-
+		int size;
         int properties;
 };
 //---------------------------------------------

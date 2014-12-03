@@ -1,6 +1,18 @@
+/*
+  GUIDO Library
+  Copyright (C) 2014	Grame
+
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
+
+*/
 #include "GuidoFont.h"
 
-GuidoFont::GuidoFont(const char *name, int properties) : name(name), properties(properties)
+GuidoFont::GuidoFont(const char *name, int size, int properties) : name(name), size(size), properties(properties)
 {
 }
 
@@ -15,7 +27,7 @@ inline const char * GuidoFont::GetName() const
 
 inline int GuidoFont::GetSize() const
 {
-    return kFontSize;
+	return size;
 }
 
 inline int GuidoFont::GetProperties() const
@@ -29,13 +41,13 @@ void GuidoFont::GetExtent( const char * s, int inCharCount, float * outWidth, fl
 	*outHeight = 0;
     for(int i = 0; i < inCharCount; i++)
     {
-		*outWidth += kGuidoFontWidth[s[inCharCount]];
-		*outHeight += kGuidoFontHeight[s[inCharCount]];
+		*outWidth += kGuidoFontWidth[s[inCharCount]] * size / kFontSize;
+		*outHeight += kGuidoFontHeight[s[inCharCount]] * size / kFontSize;
     }
 }
 
 void GuidoFont::GetExtent( unsigned char c, float * outWidth, float * outHeight, VGDevice * context ) const
 {
-    *outWidth = kGuidoFontWidth[c];
-    *outHeight = kGuidoFontHeight[c];
+	*outWidth = kGuidoFontWidth[c] * size / kFontSize;
+	*outHeight = kGuidoFontHeight[c] * size / kFontSize;
 }
