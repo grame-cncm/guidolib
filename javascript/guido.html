@@ -36,7 +36,8 @@
 			spring : 1.1,
 			neighborhoodSpacing : 0,
 			optimalPageFill : 1,
-			resizePage2Music : 1
+			resizePage2Music : 1,
+			proportionalRenderingForceMultiplicator : 0
 		};
 		var gr = guidoEngine.guidoAR2GRSettings(ar, settings);
 		//var gr = guidoEngine.guidoAR2GR(ar);
@@ -56,7 +57,8 @@
 			spring : 1.7,
 			neighborhoodSpacing : 0,
 			optimalPageFill : 1,
-			resizePage2Music : 1
+			resizePage2Music : 1,
+			proportionalRenderingForceMultiplicator : 0
 		};
 		guidoEngine.guidoUpdateGRSettings(gr, settings);
 		result = guidoEngine.guidoSVGExport(gr, 1);
@@ -206,6 +208,6 @@
 		<div id="guidoAbstractExport"></div>
 		
 		<!-- need to insert dummy paragraph to load font -->
-		<p id="myP" style="visibility:hidden;font-family:Guido2;font-size:200px"></p>
+		<p id="myP" style="visibility:hidden;font-family:Guido2;font-size:200px">x</p>
 	</body>
 </html>
