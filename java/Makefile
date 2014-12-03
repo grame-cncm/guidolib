@@ -1,4 +1,7 @@
-SRC = $(wildcard guidoengine/*.java guidoengine/drawcommand/*.java)
+
+
+
+SRC = $(wildcard guidoengine/*.java)
 CLASS = $(patsubst %.java, %.class, $(SRC) )
 JNI   = $(patsubst guidoengine/%.java, jni/guidoengine_%.h, $(SRC) )
 
@@ -10,6 +13,7 @@ endif
 
 
 .PHONY: doc
+
 
 help:
 	@echo  This makefile is intended to manage guido java ressources.
@@ -37,7 +41,7 @@ factorysample : factorysample.class
 	$(JAVA) factorysample 
 
 clean :
-	rm -f $(CLASS) *.class
+	rm -f $(CLASS) *.class guidoengine/*.class
 
 doc:
 	[ -d doc ] || mkdir doc
@@ -49,7 +53,6 @@ headers : $(JNI)
 
 jni/guidoengine_%.h: guidoengine/%.class
 	javah -jni -d jni $(patsubst guidoengine/%.class, guidoengine.%, $<) # temporary
-	javah -jni -d jni $(patsubst guidoengine/drawcommand/%.class, guidoengine.drawcommand.%, $<) # temporary
 
 ##################################################################
 # rule for java compiling
