@@ -1,11 +1,11 @@
 #ifndef GUIDOENGINEADAPTER_H
 #define GUIDOENGINEADAPTER_H
 
-#include <iostream>
-#include "GUIDOParse.h"
+#include <string>
+#include "GUIDOEngine.h"
 
-using namespace std;
-
+class GuidoParser;
+class GuidoStream;
 
 /*!
  * \brief A structure for parser error.
@@ -16,7 +16,7 @@ typedef struct {
 	//!	col a reference that will contain a column number in case of syntax error
 	int col;
 	//!	msg a string that will contain the error message
-	string msg;
+	std::string msg;
 } ParserError;
 
 /*!
@@ -30,14 +30,15 @@ typedef struct {
 	//! sub sub number version
 	int sub;
 	//! String representation of guido version
-	string str;
+	std::string str;
 } GuidoVersion;
 
 /*!
- * \brief The GuidoEngineAdapter class
+ * \brief A C++ interface to the Guido API
+ *
  * A C++ class to manupilate GuidoEngine.
  */
-class GuidoEngineAdapter
+class_export GuidoEngineAdapter
 {
     public:
 		/*!
@@ -63,20 +64,20 @@ class GuidoEngineAdapter
 			WARNING: the caller must ensure desc maintains a constant reference on a
 			valid VGDevice, because Guido keeps it internally (to calculate fonts, etc.)
 		*/
-		GUIDOAPI(GuidoErrCode)	guidoInit(GuidoInitDesc * desc);
+		GuidoErrCode	guidoInit(GuidoInitDesc * desc);
 
 		/*!
 		 * \brief Initialise the Guido Engine with a SVGSystem.
 		 *
 		 */
-		GUIDOAPI(GuidoErrCode) guidoInitWithIndependentSVG();
+		GuidoErrCode guidoInitWithIndependentSVG();
 
 #ifdef CANVASSYSTEM
 		/*!
 		 * \brief Initialise the Guido Engine with a CanvasSystem for drawing on a html canvas with javasccript.
 		 *
 		 */
-		GUIDOAPI(GuidoErrCode) guidoInitWithJavascript();
+		GuidoErrCode guidoInitWithJavascript();
 #endif
 		/*!
 			Guido Engine shutdown
@@ -85,7 +86,7 @@ class GuidoEngineAdapter
 			Anyway, the fonts are release when the client application exit but
 			the function provides control over the time of the release.
 		*/
-		GUIDOAPI(void)	guidoShutdown();
+		void	guidoShutdown();
 
 		/*!
 			Transforms a Guido abstract representation into a Guido graphic representation.
@@ -97,7 +98,7 @@ class GuidoEngineAdapter
 			\return a Guido opaque handle to a graphic music representation.
 					It's the caller responsability to free the handle using GuidoFreeGR.
 		*/
-		GUIDOAPI(GRHandler) guidoAR2GR(ARHandler ar);
+		GRHandler guidoAR2GR(ARHandler ar);
 
 		/*!
 			Transforms a Guido abstract representation into a Guido graphic representation.
@@ -110,7 +111,7 @@ class GuidoEngineAdapter
 			\return a Guido opaque handle to a graphic music representation.
 					It's the caller responsability to free the handle using GuidoFreeGR.
 		*/
-		GUIDOAPI(GRHandler) guidoAR2GR(ARHandler ar, const GuidoLayoutSettings &settings);
+		GRHandler guidoAR2GR(ARHandler ar, const GuidoLayoutSettings &settings);
 
 		/*!
 			Applies new layout settings to an existing Guido graphic representation.
@@ -118,7 +119,7 @@ class GuidoEngineAdapter
 			\param gr the handler to the graphic representation.
 			\return a Guido error code.
 		*/
-		GUIDOAPI(GuidoErrCode) guidoUpdateGR(GRHandler gr);
+		GuidoErrCode guidoUpdateGR(GRHandler gr);
 
 		/*!
 			Applies new layout settings to an existing Guido graphic representation.
@@ -126,19 +127,19 @@ class GuidoEngineAdapter
 			\param settings the settings for the graphic layout.
 			\return a Guido error code.
 		*/
-		GUIDOAPI(GuidoErrCode) guidoUpdateGR(GRHandler gr, const GuidoLayoutSettings &settings);
+		GuidoErrCode guidoUpdateGR(GRHandler gr, const GuidoLayoutSettings &settings);
 
 		/*!
 			Releases a Guido abstract representation.
 			\param ar the handler to the abstract representation.
 		*/
-		GUIDOAPI(void) guidoFreeAR(ARHandler ar);
+		void guidoFreeAR(ARHandler ar);
 
 		/*!
 			Releases a Guido graphic representation.
 			\param gr the handler to the graphic representation.
 		*/
-		GUIDOAPI(void) guidoFreeGR(GRHandler gr);
+		void guidoFreeGR(GRHandler gr);
 
 		/*!
 			Gives a textual description of a Guido error code.
@@ -146,14 +147,14 @@ class GuidoEngineAdapter
 			\param errCode a Guido error code.
 			\return a string describing the error.
 		*/
-		GUIDOAPI(string) guidoGetErrorString(GuidoErrCode errCode);
+		std::string guidoGetErrorString(GuidoErrCode errCode);
 
 		/*!
 			Gives the default values of the layout settings.
 
 			\param settings on output, a pointer to the settings to be filled with default values.
 		*/
-		GUIDOAPI(GuidoLayoutSettings) guidoGetDefaultLayoutSettings();
+		GuidoLayoutSettings guidoGetDefaultLayoutSettings();
 		/*! @} */
 
 		/*!
@@ -170,14 +171,14 @@ class GuidoEngineAdapter
 			\param inHandleAR a Guido opaque handle to a AR structure.
 			\return the number of voices or a guido error code.
 		*/
-		GUIDOAPI(int) guidoCountVoices(CARHandler inHandleAR);
+		int guidoCountVoices(CARHandler inHandleAR);
 
 		/** \brief Gives the number of score pages of the graphic representation.
 
 			\param inHandleGR a Guido opaque handle to a GR structure.
 			\return a number of pages or a guido error code.
 		*/
-		GUIDOAPI(int) guidoGetPageCount(CGRHandler inHandleGR);
+		int guidoGetPageCount(CGRHandler inHandleGR);
 
 		/** \brief Gives the number of systems on a given page.
 
@@ -185,7 +186,7 @@ class GuidoEngineAdapter
 			\param page a page number (starts at 1).
 			\return the systems count on the given page or a guido error code.
 		*/
-		GUIDOAPI(int) guidoGetSystemCount(CGRHandler inHandleGR, int page);
+		int guidoGetSystemCount(CGRHandler inHandleGR, int page);
 
 		/** \brief Returns the music duration of a score.
 
@@ -195,7 +196,7 @@ class GuidoEngineAdapter
 			\param inHandleGR a Guido opaque handle to a GR structure.
 			\return the duration expressed as a fractional value.
 		*/
-		GUIDOAPI(GuidoDate) guidoDuration(CGRHandler inHandleGR);
+		GuidoDate guidoDuration(CGRHandler inHandleGR);
 
 		/** \brief Finds the page which has an event (note or rest) at a given date.
 
@@ -205,7 +206,7 @@ class GuidoEngineAdapter
 			\return a page number if greater than 0,
 					0 if no page found,
 		*/
-		GUIDOAPI(int) guidoFindEventPage(CGRHandler inHandleGR, const GuidoDate& date);
+		int guidoFindEventPage(CGRHandler inHandleGR, const GuidoDate& date);
 
 		/** \brief Finds the page which contain a given date.
 
@@ -215,7 +216,7 @@ class GuidoEngineAdapter
 			\return a page number if greater than 0,
 					0 if no page found,
 		*/
-		GUIDOAPI(int) guidoFindPageAt(CGRHandler inHandleGR, const GuidoDate& date);
+		int guidoFindPageAt(CGRHandler inHandleGR, const GuidoDate& date);
 
 		/** \brief Gives the time location of a Page.
 
@@ -224,7 +225,7 @@ class GuidoEngineAdapter
 			\param date on output: the page date if the page number is valid
 			\return a Guido error code.
 		*/
-		GUIDOAPI(GuidoDate) guidoGetPageDate(CGRHandler inHandleGR, int pageNum);
+		GuidoDate guidoGetPageDate(CGRHandler inHandleGR, int pageNum);
 		/*! @} */
 
 		/*!
@@ -241,7 +242,7 @@ class GuidoEngineAdapter
 			\param desc informations about what to draw and how to draw.
 			\return a Guido error code
 		*/
-		GUIDOAPI(GuidoErrCode) guidoOnDraw(GuidoOnDrawDesc * desc);
+		GuidoErrCode guidoOnDraw(GuidoOnDrawDesc * desc);
 
 		/** \brief Exports one page of score to SVG.
 
@@ -252,7 +253,7 @@ class GuidoEngineAdapter
 			\param fontspec an actual svg font if there is no font file.
 			\return a Guido error code
 		*/
-		GUIDOAPI(GuidoErrCode) guidoSVGExport(const GRHandler handle, int page, std::ostream& out, const char* fontfile = 0, const char* fontspec = 0);
+		GuidoErrCode guidoSVGExport(const GRHandler handle, int page, std::ostream& out, const char* fontfile = 0, const char* fontspec = 0);
 
 		/** \brief Exports one page of score to SVG.
 			Embedded font spec is use for the export.
@@ -261,7 +262,7 @@ class GuidoEngineAdapter
 			\param page the page number.
 			\return the export in a string.
 		*/
-		GUIDOAPI(string) guidoSVGExport(const GRHandler handle, int page);
+		std::string guidoSVGExport(const GRHandler handle, int page);
 
 		/** \brief Exports an abstract representation of GUIDO draw commands.
 
@@ -270,7 +271,7 @@ class GuidoEngineAdapter
 			\param out the output stream.
 			\return a Guido error code
 		*/
-		GUIDOAPI(GuidoErrCode) guidoAbstractExport(const GRHandler handle, int page, std::ostream& out);
+		GuidoErrCode guidoAbstractExport(const GRHandler handle, int page, std::ostream& out);
 
 		/** \brief Exports an abstract representation of GUIDO draw commands.
 
@@ -278,7 +279,7 @@ class GuidoEngineAdapter
 			\param page the page number.
 			\return the export in a string
 		*/
-		GUIDOAPI(string) guidoAbstractExport(const GRHandler handle, int page);
+		std::string guidoAbstractExport(const GRHandler handle, int page);
 
 		/** \brief Exports an representation of GUIDO draw commands in a data-reduced dsl
 
@@ -287,7 +288,7 @@ class GuidoEngineAdapter
 			\param out the output stream.
 			\return a Guido error code
 		*/
-		GUIDOAPI(GuidoErrCode) guidoBinaryExport(const GRHandler handle, int page, std::ostream& out);
+		GuidoErrCode guidoBinaryExport(const GRHandler handle, int page, std::ostream& out);
 
 		/** \brief Exports an representation of GUIDO draw commands in a data-reduced dsl
 
@@ -295,7 +296,7 @@ class GuidoEngineAdapter
 			\param page the page number.
 			\return a Guido error code
 		*/
-		GUIDOAPI(string) guidoBinaryExport(const GRHandler handle, int page);
+		std::string guidoBinaryExport(const GRHandler handle, int page);
 
 #ifdef CANVASSYSTEM
 		/** \brief Exports one page of score on html canvas.
@@ -304,18 +305,18 @@ class GuidoEngineAdapter
 			\param page the page number.
 			\return a Guido error code
 		*/
-		GUIDOAPI(GuidoErrCode) guidoJavascriptExport(const GRHandler handle, int page);
+		GuidoErrCode guidoJavascriptExport(const GRHandler handle, int page);
 #endif
 		/** \brief Control bounding boxes drawing.
 
 			\param bbMap a bits field indicating the set of bounding boxes to draw (default to none).
 		*/
-		GUIDOAPI(void) guidoSetDrawBoundingBoxes(int bbMap);
+		void guidoSetDrawBoundingBoxes(int bbMap);
 
 		/** \brief Gives bounding boxes drawing state.
 		 *	\return the bit field.
 		*/
-		GUIDOAPI(int) guidoGetDrawBoundingBoxes();
+		int guidoGetDrawBoundingBoxes();
 
 		/** \brief Gives a score page format.
 
@@ -323,7 +324,7 @@ class GuidoEngineAdapter
 			\param pageNum a page number.
 			\return the page format
 		*/
-		GUIDOAPI(GuidoPageFormat) guidoGetPageFormat(CGRHandler inHandleGR, int pageNum);
+		GuidoPageFormat guidoGetPageFormat(CGRHandler inHandleGR, int pageNum);
 
 		/** \brief Sets the default score page format.
 
@@ -338,13 +339,13 @@ class GuidoEngineAdapter
 
 			\param format the page format
 		*/
-		GUIDOAPI(void) guidoSetDefaultPageFormat(const GuidoPageFormat &format);
+		void guidoSetDefaultPageFormat(const GuidoPageFormat &format);
 
 		/** \brief Gives the default score page format.
 
 			\return the page format
 		*/
-		GUIDOAPI(GuidoPageFormat) guidoGetDefaultPageFormat();
+		GuidoPageFormat guidoGetDefaultPageFormat();
 
 
 		/** \brief Converts internal Guido units into centimeters.
@@ -352,35 +353,35 @@ class GuidoEngineAdapter
 			\param val the value to be converted
 			\return the converted value
 		*/
-		GUIDOAPI(float) guidoUnit2CM(float val);
+		float guidoUnit2CM(float val);
 
 		/** \brief Converts centimeters into internal Guido units.
 
 			\param val the value to be converted
 			\return the converted value
 		*/
-		GUIDOAPI(float) guidoCM2Unit(float val);
+		float guidoCM2Unit(float val);
 
 		/** \brief Converts internal Guido units into inches.
 
 			\param val the value to be converted
 			\return the converted value
 		*/
-		GUIDOAPI(float) guidoUnit2Inches(float val);
+		float guidoUnit2Inches(float val);
 
 		/** \brief Converts inches into internal Guido units.
 
 			\param val the value to be converted
 			\return the converted value
 		*/
-		GUIDOAPI(float) guidoInches2Unit(float val);
+		float guidoInches2Unit(float val);
 
 		/** \brief Resize the page sizes to the music size.
 
 			\param inHandleGR a Guido opaque handle to a GR structure.
 			\return a Guido error code.
 		*/
-		GUIDOAPI(GuidoErrCode) guidoResizePageToMusic( GRHandler inHandleGR );
+		GuidoErrCode guidoResizePageToMusic( GRHandler inHandleGR );
 		/*! @} */
 
 
@@ -396,7 +397,7 @@ class GuidoEngineAdapter
 
 			\return a GuidoVersion structure.
 		*/
-		GUIDOAPI(GuidoVersion) guidoGetVersion();
+		GuidoVersion guidoGetVersion();
 
 		/**	\brief Checks a required library version number.
 
@@ -407,7 +408,7 @@ class GuidoEngineAdapter
 				passed as argument.
 			\return otherwise guidoErrActionFailed.
 		*/
-		GUIDOAPI(GuidoErrCode) guidoCheckVersionNums(int major, int minor, int sub);
+		GuidoErrCode guidoCheckVersionNums(int major, int minor, int sub);
 
 
 		/** \brief Gives the distance between two staff lines.
@@ -417,7 +418,7 @@ class GuidoEngineAdapter
 
 			\return the distance between two lines of staff, in Guido internal units.
 		*/
-		GUIDOAPI(float) guidoGetLineSpace();
+		float guidoGetLineSpace();
 
 
 		/** \brief Gives a color to all notes of a voice between a given time interval.
@@ -434,7 +435,7 @@ class GuidoEngineAdapter
 			\param blue blue color component.
 			\return a Guido error code.
 		*/
-		GUIDOAPI(GuidoErrCode) guidoMarkVoice( ARHandler inHandleAR, int voicenum,
+		GuidoErrCode guidoMarkVoice( ARHandler inHandleAR, int voicenum,
 												const GuidoDate & date, const GuidoDate & duration,
 												unsigned char red, unsigned char green, unsigned char blue );
 
@@ -446,7 +447,7 @@ class GuidoEngineAdapter
 			\return noErr if the association has been made with success
 			\return otherwise guidoErrActionFailed.
 		*/
-		GUIDOAPI(GuidoErrCode) guidoSetSymbolPath(ARHandler inHandleAR, const std::vector<std::string> &inPaths);
+		GuidoErrCode guidoSetSymbolPath(ARHandler inHandleAR, const std::vector<std::string> &inPaths);
 
 
 		/**	\brief Returns the path corresponding to an AR.
@@ -456,7 +457,7 @@ class GuidoEngineAdapter
 			\return noErr if the association has been made with success
 			\return otherwise guidoErrActionFailed.
 		*/
-		GUIDOAPI(GuidoErrCode) guidoGetSymbolPath(const ARHandler inHandleAR, std::vector<std::string> &inPathVector);
+		GuidoErrCode guidoGetSymbolPath(const ARHandler inHandleAR, std::vector<std::string> &inPathVector);
 
 		/*! @} */
 
@@ -470,21 +471,21 @@ class GuidoEngineAdapter
 			\param ar the ar handler given to extract the parsing time
 			\return the time spent on building the AR representation (in msl) or -1 for invalid handlers
 		*/
-		GUIDOAPI(long) guidoGetParsingTime (const ARHandler ar);
+		long guidoGetParsingTime (const ARHandler ar);
 
 		/** \brief Gets AR to GR procedure time
 
 			\param gr the gr handler given to extract the AR2GR time
 			\return the time spent to convert the AR representation to GR (in msl) or -1 for invalid handlers
 		*/
-		GUIDOAPI(long) guidoGetAR2GRTime(const GRHandler gr);
+		long guidoGetAR2GRTime(const GRHandler gr);
 
 		/** \brief Gets GR drawing procedure time
 
 			\param gr the gr handler given to extract the drawing time
 			\return the time spent on the last OnDraw call (in msl) or -1 if OnDraw has not yet been called or for invalid handlers
 		*/
-		GUIDOAPI(long) guidoGetOnDrawTime(const GRHandler gr);
+		long guidoGetOnDrawTime(const GRHandler gr);
 
 		/*! @} */
 		/*!
@@ -495,14 +496,14 @@ class GuidoEngineAdapter
 			\brief Creates a new parser
 			\return a guido parser.
 		*/
-		GUIDOAPI(GuidoParser *) guidoOpenParser();
+		GuidoParser * guidoOpenParser();
 
 		/*!
 			\brief Close a guido parser and releases all the associated ressources
 			\param p a parser previously opened with GuidoOpenParser
 			\return a Guido error code.
 		*/
-		GUIDOAPI(GuidoErrCode) guidoCloseParser(GuidoParser *p);
+		GuidoErrCode guidoCloseParser(GuidoParser *p);
 
 		/*!
 			\brief Parse a file and create the corresponding AR
@@ -510,7 +511,7 @@ class GuidoEngineAdapter
 			\param file the file to parse.
 			\return a ARHandler or 0 in case of error.
 		*/
-		GUIDOAPI(ARHandler)	guidoFile2AR(GuidoParser *p, const string &file);
+		ARHandler	guidoFile2AR(GuidoParser *p, const std::string &file);
 
 		/*!
 			\brief Parse a string and create the corresponding AR
@@ -518,14 +519,14 @@ class GuidoEngineAdapter
 			\param gmnCode the string to parse.
 			\return a ARHandler or 0 in case of error.
 		*/
-		GUIDOAPI(ARHandler) guidoString2AR(GuidoParser *parser, const string &gmnCode);
+		ARHandler guidoString2AR(GuidoParser *parser, const std::string &gmnCode);
 
 		/*!
 			\brief returns the string of the GuidoStream
 			\param gStream a GuidoStream
 			\return a std::string.
 		*/
-		GUIDOAPI(string) guidoGetStream(GuidoStream *gStream);
+		std::string guidoGetStream(GuidoStream *gStream);
 
 		/*!
 			\brief Parse a GuidoStream and create the corresponding AR
@@ -534,14 +535,14 @@ class GuidoEngineAdapter
 			\param stream the GuidoStream to parse.
 			\return a ARHandler or 0 in case of error.
 		*/
-		GUIDOAPI(ARHandler) guidoStream2AR(GuidoParser *p, GuidoStream* stream);
+		ARHandler guidoStream2AR(GuidoParser *p, GuidoStream* stream);
 
 		/*!
 			\brief Get the error syntax line/column/message
 			\param p a parser previously opened with GuidoOpenParser
 			\return a ParserError structure.
 		*/
-		GUIDOAPI(ParserError) guidoParserGetErrorCode(GuidoParser *p);
+		ParserError guidoParserGetErrorCode(GuidoParser *p);
 
 		/*!
 			\brief Open a guido stream
@@ -550,14 +551,14 @@ class GuidoEngineAdapter
 			In particular, streams allow to retrieve an AR in while the stream is still opened.
 			\return a guido stream.
 		*/
-		GUIDOAPI(GuidoStream *) guidoOpenStream ();
+		GuidoStream * guidoOpenStream ();
 
 		/*!
 			\brief Close a guido stream
 			\param s a GuidoStream
 			\return a Guido error code.
 		*/
-		GUIDOAPI(GuidoErrCode) guidoCloseStream (GuidoStream *s);
+		GuidoErrCode guidoCloseStream (GuidoStream *s);
 
 		/*!
 			\brief Write data to the stream
@@ -581,7 +582,7 @@ class GuidoEngineAdapter
 			\param str a string containing a portion of gmn code
 			\return a Guido error code.
 		*/
-		GUIDOAPI(GuidoErrCode) guidoWriteStream (GuidoStream *s, const string &str);
+		GuidoErrCode guidoWriteStream (GuidoStream *s, const std::string &str);
 
 		/*!
 			\brief Erase all stream content in order to reuse it
@@ -589,7 +590,7 @@ class GuidoEngineAdapter
 			\param s a GuidoStream previoulsy opened with GuidoOpenStream
 			\return a Guido error code.
 		*/
-		GUIDOAPI(GuidoErrCode) guidoResetStream (GuidoStream *s);
+		GuidoErrCode guidoResetStream (GuidoStream *s);
 
 		/*! @} */
 

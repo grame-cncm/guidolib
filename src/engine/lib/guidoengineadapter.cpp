@@ -1,8 +1,10 @@
+
+#include <cstring>
+#include <sstream>
+
 #include "guidoengineadapter.h"
 #include "GUIDOEngine.h"
 #include "GUIDOParse.h"
-#include <cstring>
-#include <sstream>
 #include "guido2.h"
 #include "GuidoStream.h"
 
