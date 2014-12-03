@@ -78,7 +78,7 @@
 	
 	function initGuidoEngine() {
 		guidoEngine = new Module.GuidoEngineAdapter;
-		guidoEngine.guidoInitWithIndependentSVG();
+		guidoEngine.init();
 		/*
 		var pageFormat = {
 			width : 4000,
@@ -88,16 +88,16 @@
 			marginright : 10,
 			marginbottom : 80
 		};
-		guidoEngine.guidoSetDefaultPageFormat(pageFormat);
+		guidoEngine.setDefaultPageFormat(pageFormat);
 		*/
 	}
 	
 	function processGMN(sandBox, container) {
 		console.log("processGMN");
-		var p = guidoEngine.guidoOpenParser();
+		var p = guidoEngine.openParser();
 		
-		var ar = guidoEngine.guidoString2AR(p, sandBox.value);
-		guidoEngine.guidoCloseParser(p);
+		var ar = guidoEngine.string2AR(p, sandBox.value);
+		guidoEngine.closeParser(p);
 		
 		if(ar) {
 			/*
@@ -113,13 +113,13 @@
 				proportionalRenderingForceMultiplicator : 0
 			};
 			
-			var gr = guidoEngine.guidoAR2GRSettings(ar, settings);
+			var gr = guidoEngine.ar2grSettings(ar, settings);
 			*/
-			var gr = guidoEngine.guidoAR2GR(ar);
-			var result = guidoEngine.guidoSVGExport(gr, 1);
+			var gr = guidoEngine.ar2gr(ar);
+			var result = guidoEngine.svgExport(gr, 1);
 
-			guidoEngine.guidoFreeGR(gr);
-			guidoEngine.guidoFreeAR(ar);
+			guidoEngine.freeGR(gr);
+			guidoEngine.freeAR(ar);
 			
 			container.innerHTML = result;
 		}

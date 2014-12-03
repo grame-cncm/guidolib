@@ -24,23 +24,23 @@
 		
 	// Process guido code
 	function processGMN() {
-		var p = guidoEngine.guidoOpenParser();
-		var ar = guidoEngine.guidoString2AR(p, $("#gmnSandbox").val());
-		guidoEngine.guidoCloseParser(p);
-		var gr = guidoEngine.guidoAR2GR(ar);
+		var p = guidoEngine.openParser();
+		var ar = guidoEngine.string2AR(p, $("#gmnSandbox").val());
+		guidoEngine.closeParser(p);
+		var gr = guidoEngine.ar2gr(ar);
 		
 		// draw score in html canvas
-		var result = guidoEngine.guidoJavascriptExport(gr, 1);
+		var result = guidoEngine.javascriptExport(gr, 1);
 		
 		// Free handler
-		guidoEngine.guidoFreeGR(gr);
-		guidoEngine.guidoFreeAR(ar);
+		guidoEngine.freeGR(gr);
+		guidoEngine.freeAR(ar);
 	}
   
 	$( document ).ready(function() {
 		// Init guido engine
 		guidoEngine = new Module.GuidoEngineAdapter;
-		guidoEngine.guidoInitWithJavascript();
+		guidoEngine.init();
 		
 		$("#gmnSandbox").on('keyup', processGMN);
 		

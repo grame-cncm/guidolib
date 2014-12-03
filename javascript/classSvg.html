@@ -21,30 +21,26 @@
 		var guidoEngine;
 	function processGMN() {
 		console.log("processGMN");
-		var p = guidoEngine.guidoOpenParser();
-		var ar = guidoEngine.guidoString2AR(p, $("#gmnSandbox").val());
-		guidoEngine.guidoCloseParser(p);
-		var gr = guidoEngine.guidoAR2GR(ar);
-		var result = guidoEngine.guidoSVGExport(gr, 1);
+		var p = guidoEngine.openParser();
+		var ar = guidoEngine.string2AR(p, $("#gmnSandbox").val());
+		guidoEngine.closeParser(p);
+		var gr = guidoEngine.ar2gr(ar);
+		var result = guidoEngine.svgExport(gr, 1);
 
-		guidoEngine.guidoFreeGR(gr);
-		guidoEngine.guidoFreeAR(ar);
+		guidoEngine.freeGR(gr);
+		guidoEngine.freeAR(ar);
 		
 		$("#canvasContainer").html(result);
 		$("#canvasContainer2").html("<plaintext>" + result + "</plaintext>");
 	}
 	$( document ).ready(function() {
 		guidoEngine = new Module.GuidoEngineAdapter;
-		guidoEngine.guidoInitWithIndependentSVG();
+		guidoEngine.init();
 		$("#gmnSandbox").on('keyup', processGMN);
 	});
 	$(window).unload(function(){
-		guidoEngine.guidoShutdown();
+		guidoEngine.shutdown();
 		delete guidoEngine;
-	});
-	window.addEventListener("beforeunload", function( event ) {
-		guidoEngine.guidoShutdown();
-		delete guidoEngine;		
 	});
     </script>
   </head>

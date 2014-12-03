@@ -25,14 +25,14 @@
 		
 	// Process guido code
 	function processGMN() {
-		var p = guidoEngine.guidoOpenParser();
-		var ar = guidoEngine.guidoString2AR(p, $("#gmnSandbox").val());
-		guidoEngine.guidoCloseParser(p);
-		var gr = guidoEngine.guidoAR2GR(ar);
+		var p = guidoEngine.openParser();
+		var ar = guidoEngine.string2AR(p, $("#gmnSandbox").val());
+		guidoEngine.closeParser(p);
+		var gr = guidoEngine.ar2gr(ar);
 
-		var result = guidoEngine.guidoBinaryExport(gr, 1);
-		guidoEngine.guidoFreeGR(gr);
-		guidoEngine.guidoFreeAR(ar);
+		var result = guidoEngine.binaryExport(gr, 1);
+		guidoEngine.freeGR(gr);
+		guidoEngine.freeAR(ar);
 
 
 		var buf = str2ab(result);
@@ -55,7 +55,7 @@
 	$( document ).ready(function() {
 		// Init guido engine
 		guidoEngine = new Module.GuidoEngineAdapter;
-		guidoEngine.guidoInitWithIndependentSVG();
+		guidoEngine.init();
 		
 		$("#gmnSandbox").on('keyup', processGMN);
 		
