@@ -1,3 +1,16 @@
+/*
+  GUIDO Library
+  Copyright (C) 2014	Grame
+
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
+
+*/
+
 #include "canvasdevice.h"
 
 CanvasDevice::CanvasDevice(CanvasSystem* system):fSystem (system)
@@ -361,6 +374,8 @@ VGColor CanvasDevice::GetFontBackgroundColor() const
 // 45
 void CanvasDevice::SetFontAlign(unsigned int inAlign)
 {
+	this->inAlign = inAlign;
+
 	EM_ASM_ARGS({
 		var align = 'left';
 		if ($0 & 8) {
@@ -369,13 +384,19 @@ void CanvasDevice::SetFontAlign(unsigned int inAlign)
 		if ($0 & 32) {
 			align = 'right';
 		}
+		if ($0 & 4) {
+			gU1D0cANVA$.CONTEXT.textBaseline = 'hanging';
+		} else {
+			// Default value
+			gU1D0cANVA$.CONTEXT.textBaseline = 'alphabetic';
+		}
 		gU1D0cANVA$.CONTEXT.textAlign = align;
 	}, inAlign);
 }
 // 46
 unsigned int CanvasDevice::GetFontAlign() const
 {
-	return 0;
+	return inAlign;
 }
 
 // - Printer informations services ----------------------------------------

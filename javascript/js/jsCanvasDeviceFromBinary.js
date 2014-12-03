@@ -200,6 +200,7 @@ gU1D0cANVA$.DrawMusicSymbol = function(x, y, inSymbolId) {
 gU1D0cANVA$.DrawString = function(x, y, s, inCharCount) {
   gU1D0cANVA$.correctTransformMatrix(gU1D0cANVA$.CONTEXT);
   // now that save has happened, make change
+    
   gU1D0cANVA$.CONTEXT.font = gU1D0cANVA$.makeFont(gU1D0cANVA$.TEXT_FONT);
   gU1D0cANVA$.CONTEXT.fillStyle = gU1D0cANVA$.FONT_COLOR;
   gU1D0cANVA$.CONTEXT.fillText(s.substring(0, inCharCount + 1), x, y);
@@ -220,6 +221,12 @@ gU1D0cANVA$.SetFontAlign = function(inAlign) {
   }
   if (inAlign & 32) {
     align = 'right';
+  }
+  if (inAlign & 4) {
+	gU1D0cANVA$.CONTEXT.textBaseline = 'hanging';
+  } else {
+	// Default value
+	gU1D0cANVA$.CONTEXT.textBaseline = 'alphabetic';
   }
   gU1D0cANVA$.CONTEXT.textAlign = align;
 }

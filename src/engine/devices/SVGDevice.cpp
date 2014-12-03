@@ -399,7 +399,7 @@ const char* SVGDevice::align2str (int align) const
 }
 const char* SVGDevice::baseline2str (int align) const
 {
-	if (align & kAlignTop)	return " alignment-baseline=\"hanging\"";
+	if (align & kAlignTop)	return " dominant-baseline=\"hanging\"";
 //	return "baseline"; // default value is "baseline"
 	return "";
 }
