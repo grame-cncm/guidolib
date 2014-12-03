@@ -1,7 +1,20 @@
+/*
+  GUIDO Library
+  Copyright (C) 2014	Grame
+
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
+
+*/
+
 #include <emscripten.h>
 #include <bind.h>
 #include "GUIDOEngine.h"
-#include "guidoengineadapter.h"
+#include "GUIDOEngineAdapter.h"
 #include "GUIDOInternal.h"
 #include "GuidoParser.h"
 
@@ -65,53 +78,52 @@ EMSCRIPTEN_BINDINGS(Adapter) {
 	emscripten::class_<GuidoEngineAdapter>("GuidoEngineAdapter")
 			//.smart_ptr_constructor("GuidoEngineAdapter",&std::make_shared<GuidoEngineAdapter>)
 			.constructor<>()
-			.function("guidoInitWithIndependentSVG", &GuidoEngineAdapter::guidoInitWithIndependentSVG)
-			.function("guidoInitWithJavascript", &GuidoEngineAdapter::guidoInitWithJavascript)
-			.function("guidoShutdown", &GuidoEngineAdapter::guidoShutdown)
-			.function("guidoAR2GR", select_overload<NodeGR*(NodeAR*)>(&GuidoEngineAdapter::guidoAR2GR), allow_raw_pointers())
-			.function("guidoAR2GRSettings", select_overload<NodeGR*(NodeAR*, const GuidoLayoutSettings &)>(&GuidoEngineAdapter::guidoAR2GR), allow_raw_pointers())
-			.function("guidoUpdateGR", select_overload<GuidoErrCode(NodeGR*)>(&GuidoEngineAdapter::guidoUpdateGR), allow_raw_pointers())
-			.function("guidoUpdateGRSettings", select_overload<GuidoErrCode(NodeGR*, const GuidoLayoutSettings &)>(&GuidoEngineAdapter::guidoUpdateGR), allow_raw_pointers())
-			.function("guidoFreeAR", &GuidoEngineAdapter::guidoFreeAR, allow_raw_pointers())
-			.function("guidoFreeGR", &GuidoEngineAdapter::guidoFreeGR, allow_raw_pointers())
-			.function("guidoGetErrorString", &GuidoEngineAdapter::guidoGetErrorString)
-			.function("guidoGetDefaultLayoutSettings", &GuidoEngineAdapter::guidoGetDefaultLayoutSettings)
-			.function("guidoCountVoices", &GuidoEngineAdapter::guidoCountVoices, allow_raw_pointers())
-			.function("guidoGetPageCount", &GuidoEngineAdapter::guidoGetPageCount, allow_raw_pointers())
-			.function("guidoGetSystemCount", &GuidoEngineAdapter::guidoGetSystemCount, allow_raw_pointers())
-			.function("guidoDuration", &GuidoEngineAdapter::guidoDuration, allow_raw_pointers())
-			.function("guidoFindEventPage", &GuidoEngineAdapter::guidoFindEventPage, allow_raw_pointers())
-			.function("guidoFindPageAt", &GuidoEngineAdapter::guidoFindPageAt, allow_raw_pointers())
-			.function("guidoGetPageDate", &GuidoEngineAdapter::guidoGetPageDate, allow_raw_pointers())
-			.function("guidoSVGExport", select_overload<string (NodeGR*, int)>(&GuidoEngineAdapter::guidoSVGExport), allow_raw_pointers())
-			.function("guidoAbstractExport", select_overload<string (NodeGR*, int)>(&GuidoEngineAdapter::guidoAbstractExport), allow_raw_pointers())
-			.function("guidoBinaryExport", select_overload<string (NodeGR*, int)>(&GuidoEngineAdapter::guidoBinaryExport), allow_raw_pointers())
-			.function("guidoJavascriptExport", &GuidoEngineAdapter::guidoJavascriptExport, allow_raw_pointers())
-			.function("guidoSetDrawBoundingBoxes", &GuidoEngineAdapter::guidoSetDrawBoundingBoxes)
-			.function("guidoGetDrawBoundingBoxes", &GuidoEngineAdapter::guidoGetDrawBoundingBoxes)
-			.function("guidoGetPageFormat", &GuidoEngineAdapter::guidoGetPageFormat, allow_raw_pointers())
-			.function("guidoSetDefaultPageFormat", &GuidoEngineAdapter::guidoSetDefaultPageFormat)
-			.function("guidoGetDefaultPageFormat", &GuidoEngineAdapter::guidoGetDefaultPageFormat)
-			.function("guidoUnit2CM", &GuidoEngineAdapter::guidoUnit2CM)
-			.function("guidoCM2Unit", &GuidoEngineAdapter::guidoCM2Unit)
-			.function("guidoUnit2Inches", &GuidoEngineAdapter::guidoUnit2Inches)
-			.function("guidoInches2Unit", &GuidoEngineAdapter::guidoInches2Unit)
-			.function("guidoResizePageToMusic", &GuidoEngineAdapter::guidoResizePageToMusic, allow_raw_pointers())
-			.function("guidoGetVersion", &GuidoEngineAdapter::guidoGetVersion)
-			.function("guidoCheckVersionNums", &GuidoEngineAdapter::guidoCheckVersionNums)
-			.function("guidoGetLineSpace", &GuidoEngineAdapter::guidoGetLineSpace)
-			.function("guidoMarkVoice", &GuidoEngineAdapter::guidoMarkVoice, allow_raw_pointers())
-			.function("guidoOpenParser", &GuidoEngineAdapter::guidoOpenParser, allow_raw_pointers())
-			.function("guidoCloseParser", &GuidoEngineAdapter::guidoCloseParser, allow_raw_pointers())
-			.function("guidoFile2AR", &GuidoEngineAdapter::guidoFile2AR, allow_raw_pointers())
-			.function("guidoString2AR", &GuidoEngineAdapter::guidoString2AR, allow_raw_pointers())
-			.function("guidoGetStream", &GuidoEngineAdapter::guidoGetStream, allow_raw_pointers())
-			.function("guidoStream2AR", &GuidoEngineAdapter::guidoStream2AR, allow_raw_pointers())
-			.function("guidoParserGetErrorCode", &GuidoEngineAdapter::guidoParserGetErrorCode, allow_raw_pointers())
-			.function("guidoOpenStream", &GuidoEngineAdapter::guidoOpenStream, allow_raw_pointers())
-			.function("guidoCloseStream", &GuidoEngineAdapter::guidoCloseStream, allow_raw_pointers())
-			.function("guidoWriteStream", &GuidoEngineAdapter::guidoWriteStream, allow_raw_pointers())
-			.function("guidoResetStream", &GuidoEngineAdapter::guidoResetStream, allow_raw_pointers());
+			.function("init", select_overload<GuidoErrCode(void)>(&GuidoEngineAdapter::init))
+			.function("shutdown", &GuidoEngineAdapter::shutdown)
+			.function("ar2gr", select_overload<NodeGR*(NodeAR*)>(&GuidoEngineAdapter::ar2gr), allow_raw_pointers())
+			.function("ar2grSettings", select_overload<NodeGR*(NodeAR*, const GuidoLayoutSettings &)>(&GuidoEngineAdapter::ar2gr), allow_raw_pointers())
+			.function("updateGR", select_overload<GuidoErrCode(NodeGR*)>(&GuidoEngineAdapter::updateGR), allow_raw_pointers())
+			.function("updateGRSettings", select_overload<GuidoErrCode(NodeGR*, const GuidoLayoutSettings &)>(&GuidoEngineAdapter::updateGR), allow_raw_pointers())
+			.function("freeAR", &GuidoEngineAdapter::freeAR, allow_raw_pointers())
+			.function("freeGR", &GuidoEngineAdapter::freeGR, allow_raw_pointers())
+			.function("getErrorString", &GuidoEngineAdapter::getErrorString)
+			.function("getDefaultLayoutSettings", &GuidoEngineAdapter::getDefaultLayoutSettings)
+			.function("countVoices", &GuidoEngineAdapter::countVoices, allow_raw_pointers())
+			.function("getPageCount", &GuidoEngineAdapter::getPageCount, allow_raw_pointers())
+			.function("getSystemCount", &GuidoEngineAdapter::getSystemCount, allow_raw_pointers())
+			.function("duration", &GuidoEngineAdapter::duration, allow_raw_pointers())
+			.function("findEventPage", &GuidoEngineAdapter::findEventPage, allow_raw_pointers())
+			.function("findPageAt", &GuidoEngineAdapter::findPageAt, allow_raw_pointers())
+			.function("getPageDate", &GuidoEngineAdapter::getPageDate, allow_raw_pointers())
+			.function("svgExport", select_overload<string (NodeGR*, int)>(&GuidoEngineAdapter::svgExport), allow_raw_pointers())
+			.function("abstractExport", select_overload<string (NodeGR*, int)>(&GuidoEngineAdapter::abstractExport), allow_raw_pointers())
+			.function("binaryExport", select_overload<string (NodeGR*, int)>(&GuidoEngineAdapter::binaryExport), allow_raw_pointers())
+			.function("javascriptExport", &GuidoEngineAdapter::javascriptExport, allow_raw_pointers())
+			.function("setDrawBoundingBoxes", &GuidoEngineAdapter::setDrawBoundingBoxes)
+			.function("getDrawBoundingBoxes", &GuidoEngineAdapter::getDrawBoundingBoxes)
+			.function("getPageFormat", &GuidoEngineAdapter::getPageFormat, allow_raw_pointers())
+			.function("setDefaultPageFormat", &GuidoEngineAdapter::setDefaultPageFormat)
+			.function("getDefaultPageFormat", &GuidoEngineAdapter::getDefaultPageFormat)
+			.function("unit2CM", &GuidoEngineAdapter::unit2CM)
+			.function("cm2Unit", &GuidoEngineAdapter::cm2Unit)
+			.function("unit2Inches", &GuidoEngineAdapter::unit2Inches)
+			.function("inches2Unit", &GuidoEngineAdapter::inches2Unit)
+			.function("resizePageToMusic", &GuidoEngineAdapter::resizePageToMusic, allow_raw_pointers())
+			.function("getVersion", &GuidoEngineAdapter::getVersion)
+			.function("checkVersionNums", &GuidoEngineAdapter::checkVersionNums)
+			.function("getLineSpace", &GuidoEngineAdapter::getLineSpace)
+			.function("markVoice", &GuidoEngineAdapter::markVoice, allow_raw_pointers())
+			.function("openParser", &GuidoEngineAdapter::openParser, allow_raw_pointers())
+			.function("closeParser", &GuidoEngineAdapter::closeParser, allow_raw_pointers())
+			.function("file2AR", &GuidoEngineAdapter::file2AR, allow_raw_pointers())
+			.function("string2AR", &GuidoEngineAdapter::string2AR, allow_raw_pointers())
+			.function("getStream", &GuidoEngineAdapter::getStream, allow_raw_pointers())
+			.function("stream2AR", &GuidoEngineAdapter::stream2AR, allow_raw_pointers())
+			.function("parserGetErrorCode", &GuidoEngineAdapter::parserGetErrorCode, allow_raw_pointers())
+			.function("openStream", &GuidoEngineAdapter::openStream, allow_raw_pointers())
+			.function("closeStream", &GuidoEngineAdapter::closeStream, allow_raw_pointers())
+			.function("writeStream", &GuidoEngineAdapter::writeStream, allow_raw_pointers())
+			.function("resetStream", &GuidoEngineAdapter::resetStream, allow_raw_pointers());
 
 	// Black box object, just for passing argument pointer in method
 	emscripten::class_<GuidoParser>("GuidoParser");
