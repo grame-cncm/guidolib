@@ -3,7 +3,7 @@
 
 /*
   GUIDO Library
-  Copyright (C) 2011 Grame
+  Copyright (C) 2014	Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -13,13 +13,13 @@
   research@grame.fr
 
 */
-
 #include "VGSystem.h"
 
 #include <ostream>
 #include <string.h>
 #include "canvasdevice.h"
 #include "GuidoFont.h"
+#include "TimesFont.h"
 #include "SVGFont.h"
 
 
