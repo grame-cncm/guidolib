@@ -17,6 +17,7 @@
 #include "nanosvg.h"
 #include <map>
 #include <sstream>
+#include <cstring>
 #elif __APPLE__
 #include "GFontOSX.h"
 #include "GSystemOSX.h"
