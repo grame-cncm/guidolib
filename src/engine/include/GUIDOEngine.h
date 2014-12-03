@@ -172,6 +172,7 @@ enum GuidoErrCode
 	//! the action failed
 	guidoErrActionFailed		= -10
 };
+/*! @} */
 
 
 enum { kAutoDistrib = 1, kAlwaysDistrib = 2, kNeverDistrib = 3 };
@@ -672,7 +673,8 @@ The number of version functions is due to historical reasons.
 
 
 /*!
-\addtogroup Guido timer
+\addtogroup time Timing measurements
+Includes functions to query the time spent by the main Guido Engine operations.
 @{
 */
     /*!
