@@ -11,7 +11,8 @@ GUIDO Engine history
     - \staffFormat + mapping:
 		- staff mapping height is not null anymore when we set \staffFormat "style" param to "0-line or "1-line"
 		- line thickness is now taken in account in staff mapping
-    - some SVG export bugs fixed
+	- some SVG export bugs fixed
+	- fix for a mapping bug in some particular cases
 
 
 ----------------------------------------------------------------
