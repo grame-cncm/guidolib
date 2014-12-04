@@ -30,7 +30,7 @@ using namespace std;
 
 #include "GUIDOParse.h"
 
-#define TIMING
+//#define TIMING
 #include "GuidoTiming.h"
 #include "ARMusic.h"
 

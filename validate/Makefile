@@ -44,11 +44,12 @@ gmnfiles     = $(shell find ../gmn-examples -name "*.gmn") $(shell find ../regre
 pdfout		:= $(patsubst ../%.gmn, $(version)/%.pdf, $(gmnfiles))
 svgout		:= $(patsubst ../%.gmn, $(version)/%.svg, $(gmnfiles))
 
-sysmapout		:= $(patsubst ../%.gmn, $(version)/maps/system/%.map, $(gmnfiles))
-staffmapout		:= $(patsubst ../%.gmn, $(version)/maps/staff/%.map, $(gmnfiles))
-voicemapout		:= $(patsubst ../%.gmn, $(version)/maps/voice/%.map, $(gmnfiles))
-timemapout		:= $(patsubst ../%.gmn, $(version)/maps/time/%.map, $(gmnfiles))
-mapsout		:= $(sysmapout) $(staffmapout) $(voicemapout) $(timemapout)
+sysmapout	:= $(patsubst ../%.gmn, $(version)/maps/system/%.svg, $(gmnfiles))
+staffmapout	:= $(patsubst ../%.gmn, $(version)/maps/staff/%.svg, $(gmnfiles))
+voicemapout	:= $(patsubst ../%.gmn, $(version)/maps/voice/%.svg, $(gmnfiles))
+#timemapout	:= $(patsubst ../%.gmn, $(version)/maps/time/%.svg, $(gmnfiles))
+mapsout		:= $(sysmapout) $(staffmapout) $(voicemapout)
+# $(timemapout) #add to previous line
 
 leaksout 	:= $(patsubst ../%.gmn, $(version)/$(TOOLPATH)/%.leaks.txt, $(gmnfiles))
 midiout     := $(patsubst ../%.gmn, $(version)/%.mid, $(gmnfiles))
@@ -63,6 +64,7 @@ validpdf 	= $(patsubst %.pdf, %.outpdf, $(allpdf))
 validsvg 	= $(patsubst %.svg, %.outsvg, $(allsvg))
 validmap 	= $(patsubst %.map, %.outmap, $(allmap))
 validsvgwin = $(patsubst %.svg, %.outsvgwin, $(allsvg))
+validmapwin = $(patsubst %.svg, %.outmapwin, $(allmap))
 
 .PHONY: pdf svg
 
@@ -104,6 +106,11 @@ validmap: $(validmap)
 validateWin: $(validsvgwin)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
 	@echo Validating version $(version) with $(VERSION) $(tmp)
+	make validmapWin
+
+validmapWin: $(validmapwin)
+	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
+	@echo Validating version maps $(version) with $(VERSION) $(tmp)
 
 pdfvalidate: $(validpdf)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
@@ -125,6 +132,12 @@ pdfvalidate: $(validpdf)
 	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open -t $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
 	
 %.outsvgwin: %.svg
+	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
+	@[ -f  $(tmp) ] || echo $< : new file
+	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
+	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && C:/Program\ Files\ \(x86\)/Mozilla\ Firefox/firefox -new-tab $(patsubst $(version)/%, $(VERSION)/%, $<) -new-tab $<; true)
+	
+%.outmapwin: %.map
 	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
 	@[ -f  $(tmp) ] || echo $< : new file
 	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
@@ -185,7 +198,7 @@ checkcrash: $(LEAKTOOLS)
 
 #########################################################################
 # tools to generate svg files
-svgWin: $(svgout)
+svgWin: $(svgout) $(mapsout)
 svg: $(svgout) $(mapsout)
 
 svgclean: 
@@ -200,21 +213,21 @@ $(version)/%.svg: ../%.gmn
 # tools to generate map files
 map: $(mapsout)
 
-$(version)/maps/system/%.map: ../%.gmn
+$(version)/maps/system/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	-guidogetsystemmap $<  > $@
+	-$(guido2svg) -systemmap true $<  > $@
 
-$(version)/maps/staff/%.map: ../%.gmn
+$(version)/maps/staff/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	-guidogetstaffmap $<  > $@
+	-$(guido2svg) -staffmap true $<  > $@
 
-$(version)/maps/voice/%.map: ../%.gmn
+$(version)/maps/voice/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	-guidogetvoicemap $<  > $@
+	-$(guido2svg) -voicemap true $<  > $@
 
-$(version)/maps/time/%.map: ../%.gmn
-	@[ -d $(@D) ] || mkdir -p $(@D)
-	-guidogettimemap $<  > $@
+#$(version)/maps/time/%.map: ../%.gmn
+#	@[ -d $(@D) ] || mkdir -p $(@D)
+#	-guidogettimemap $<  > $@
 
 
 #########################################################################
