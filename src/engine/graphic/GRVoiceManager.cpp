@@ -225,7 +225,6 @@ bool GRVoiceManager::checkRepeatBeginNext()
     ARMusicalObject *next;
 
     next = arVoice->GetNext(pos, vst);
-    next = arVoice->GetNext(pos, vst);
 
     if (next) {
         if (static_cast<ARPossibleBreak *>(next->isARPossibleBreak()))

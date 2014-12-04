@@ -220,7 +220,7 @@ void  GRTuplet::automaticPosition(GObject * caller, const NVPoint & inPos )
 
 	// - Get first and last element positions to work with
 	float startX, endX;
-	startX = endX = 0;
+	endX = 0;
 	float startUpY, startDownY, endUpY, endDownY;
 
 		// x positions

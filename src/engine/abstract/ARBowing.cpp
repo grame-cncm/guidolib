@@ -274,7 +274,6 @@ void ARBowing::PrintParameters(std::ostream & os) const
 			if (previous)
 				os << ",";
 			os << "h=" << h->getUnitValue() << h->getUnit();
-			previous = 1;
 		}
 	}
 	

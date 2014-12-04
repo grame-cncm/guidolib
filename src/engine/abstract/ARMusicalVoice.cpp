@@ -895,7 +895,7 @@ std::ostream & ARMusicalVoice::output(std::ostream & os, bool isauto) const
 		    if (!t->getIsAuto())
 		      t->operator<<(os);
 		}
-		else
+		else if (e)
             e->operator<<(os);
 
 		if (mPosTagList)
@@ -940,7 +940,7 @@ std::ostream & ARMusicalVoice::output(std::ostream & os, bool isauto) const
                 if (!t->getIsAuto())
                     t->operator<<(os);
             }
-            else
+            else if (o)
                 o->operator<<(os);
 		}
 	}

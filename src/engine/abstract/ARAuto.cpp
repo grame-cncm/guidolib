@@ -182,7 +182,6 @@ void ARAuto::PrintParameters(std::ostream & os) const
 		{
 			if (prev) os << ",";
 			os << "stretchFirstLine=\"on\"";
-			prev = 1;
 		}
 		os << ">";
 	}
