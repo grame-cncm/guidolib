@@ -3,7 +3,7 @@
 
 SRC = $(wildcard guidoengine/*.java)
 CLASS = $(patsubst %.java, %.class, $(SRC) )
-JNI   = $(patsubst guidoengine/%.java, jni/guidoengine_%.h, $(SRC) )
+JNI   = $(addprefix jni/, $(subst /,_,$(patsubst guidoengine/%.java, guidoengine_%.h, $(SRC) )))
 
 ifeq ($(ARCH), 64)
 	JAVA  = "C:\Program Files\Java\jdk1.6.0_20\bin\java"
@@ -46,6 +46,12 @@ clean :
 doc:
 	[ -d doc ] || mkdir doc
 	javadoc -d doc guidoengine/*.java
+
+print-%:
+	@echo '$*=$($*)'
+	@echo '  origin = $(origin $*)'
+	@echo '  flavor = $(flavor $*)'
+	@echo '   value = $(value  $*)'
 
 ##################################################################
 # rule to make JNI headers

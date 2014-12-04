@@ -198,7 +198,7 @@ private:
 
 		virtual void*			GetBitMapPixels()		{ return 0; }
 		virtual void			ReleaseBitMapPixels()	{}
-		virtual const char*		GetImageData(const char* & outDataPtr, int& outLength)	{ return 0; };
+		virtual const char*		GetImageData(const char* & outDataPtr, int& outLength)	{ return 0; }
 		virtual void			ReleaseImageData(const char *) const					{}
 
 		/// temporary hack - must be removed asap
