@@ -37,7 +37,7 @@ static void usage (char* name)
 	cerr << "           	-f fontfile       : include the guido font taken from fontfile" << endl;
 	cerr << "           	-p pagenum        : an optional page number (default is 1)" << endl;
 	cerr << "       reads the standard input when gmn file is omitted." << endl;
-	cerr << "           	-eventmap  boolean : enables or not event mapping draw (default is false)" << endl;
+	cerr << "           	-voicemap  boolean : enables or not event mapping draw (default is false)" << endl;
     cerr << "           	-staffmap  boolean : enables or not staff mapping draw (default is false)" << endl;
     cerr << "           	-systemmap boolean : enables or not system mapping draw (default is false)" << endl;
 	exit(1);
@@ -141,7 +141,7 @@ static void check (int argc, char *argv[]) {
 	for (int i = 1; i < argc; i++) {
 		const char* ptr = argv[i];
 		if (*ptr++ == '-') {
-			if ((*ptr != 'p') && (*ptr != 'f') && (strcmp(ptr, "staffmap")) && (strcmp(ptr, "eventmap")) && (strcmp(ptr, "systemmap")))
+			if ((*ptr != 'p') && (*ptr != 'f') && (strcmp(ptr, "staffmap")) && (strcmp(ptr, "voicemap")) && (strcmp(ptr, "systemmap")))
                 usage(argv[0]);
 		}
 	}
@@ -216,17 +216,22 @@ int main(int argc, char **argv)
     if (err != guidoNoErr)
         error(err);
 
-    /**** MAP ****/
-    int mapMode = 0;
-    if (getBoolOption(argc, argv, "-eventmap", false))
-        mapMode += kEventMapping;
+    /**** MAPS ****/
+    
+    int mappingMode = kNoMapping;
+
+    if (getBoolOption(argc, argv, "-voicemap", false))
+        mappingMode += kVoiceMapping;
+
     if (getBoolOption(argc, argv, "-staffmap", false))
-        mapMode += kStaffMapping;
+        mappingMode += kStaffMapping;
+
     if (getBoolOption(argc, argv, "-systemmap", false))
-        mapMode += kSystemMapping;
+        mappingMode += kSystemMapping;
+
     /*************/
 
-	err = GuidoSVGExport(grh, page, cout, fontfile, mapMode);
+	err = GuidoSVGExport(grh, page, cout, fontfile, mappingMode);
 	
     if (err != guidoNoErr)
         error(err);

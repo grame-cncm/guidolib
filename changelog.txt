@@ -7,6 +7,10 @@ GUIDO Engine history
     - "space" param suppressed (was useless)
     - "scale" param changed for "size"
     - "color" param added
+- bug fixes:
+    - \staffFormat + mapping:
+		- staff mapping height is not null anymore when we set \staffFormat "style" param to "0-line or "1-line"
+		- line thickness is now taken in account in staff mapping
 
 
 ----------------------------------------------------------------

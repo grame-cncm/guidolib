@@ -116,8 +116,6 @@ struct GuidoOnDrawDesc
 	//! If true, the engine ignores scroll, zoom and sizes parameters.
     //! If false, the engine draws a white background in the graphic device.
     int isprint;
-
-    int mappingMode; // REM: TMP
 };
 
 
@@ -179,9 +177,9 @@ enum GuidoErrCode
 */
 enum {
     kNoMapping     =  0,
-    kEventMapping  =  1,
-    kSystemMapping =  1<<1,
-    kStaffMapping  =  1<<2
+    kVoiceMapping  =  1,
+    kStaffMapping  =  1<<1,
+    kSystemMapping =  1<<2
 };
 
 
@@ -555,8 +553,8 @@ units.
 		\param mappingMode the mapping mode (see mapping mode enum).
 		\return a Guido error code
 	*/
-    GUIDOAPI(GuidoErrCode) 	GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const int mappingMode = kNoMapping );
-    GUIDOAPI(GuidoErrCode) 	GuidoSVGExportWithFontSpec( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec, const int mappingMode = kNoMapping );
+    GUIDOAPI(GuidoErrCode) 	GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const int mappingMode = 0 );
+    GUIDOAPI(GuidoErrCode) 	GuidoSVGExportWithFontSpec( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec, const int mappingMode = 0 );
 
 	/** \brief Exports an abstract representation of GUIDO draw commands.
 

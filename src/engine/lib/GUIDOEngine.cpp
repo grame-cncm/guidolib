@@ -58,6 +58,7 @@ using namespace std;
 
 #include "SVGSystem.h"
 #include "SVGDevice.h"
+#include "SVGMapDevice.h"
 #include "SVGFont.h"
 
 #include "AbstractSystem.h"
@@ -559,57 +560,6 @@ GuidoDate * GuidoGetPageDate_retDate( CGRHandler inHandleGR, int pageNum)
   return date;
 }
 
-static void drawMapFromSelector(GuidoOnDrawDesc * desc, GuidoElementSelector sel)
-{
-    std::vector<MapElement> *outMap = new std::vector<MapElement>();
-    GuidoGetSVGMap(desc->handle, desc->page, sel, *outMap);
-
-    for (unsigned int i = 0; i < outMap->size(); i++) {
-        MapElement elem = outMap->at(i);
-        desc->hdc->Rectangle(elem.first.left, elem.first.top, elem.first.right, elem.first.bottom);
-    }
-}
-
-static void drawSVGMap(GuidoOnDrawDesc * desc)
-{
-    int  currentMode = desc->mappingMode;
-    bool drawMap[3] = { false, false, false }; // Order : voice, system, staff
-
-    for (int i = 2; i >= 0; i--) {
-        if (currentMode - (1<<i) >= 0) {
-            currentMode -= 1<<i;
-            drawMap[i] = true;
-        }
-    }
-    
-    desc->hdc->SetScale(SVGDevice::kSVGSizeDivider, SVGDevice::kSVGSizeDivider);
-
-    desc->hdc->PushPenColor(VGColor(100, 100, 255, 50));
-    desc->hdc->PushFillColor(VGColor(100, 100, 200, 128));
-
-    GuidoElementSelector sel;
-
-    if (drawMap[0] == true) {
-        sel = kGuidoEvent;
-        drawMapFromSelector(desc, sel);
-    }
-
-    if (drawMap[1] == true) {
-        sel = kGuidoSystem;
-        drawMapFromSelector(desc, sel);
-    }
-
-    if (drawMap[2] == true) {
-        sel = kGuidoStaff;
-        drawMapFromSelector(desc, sel);
-    }
-
-    desc->hdc->PopPenColor();
-    desc->hdc->PopFillColor();
-
-    desc->hdc->SetScale(1.0f / SVGDevice::kSVGSizeDivider, 1.0f / SVGDevice::kSVGSizeDivider);
-}
-
 // --------------------------------------------------------------------------
 //		- Score drawing and pages formating -
 // --------------------------------------------------------------------------
@@ -644,7 +594,30 @@ GUIDOAPI(GuidoErrCode) GuidoOnDraw( GuidoOnDrawDesc * desc )
 		result = guidoNoErr;
 	}
 
-    drawSVGMap(desc);
+    /**** MAPS ****/
+    
+    GuidoErrCode err;
+
+    if (SVGMapDevice *mapDevice = dynamic_cast<SVGMapDevice *>(desc->hdc)) {
+        int voicesNumber = GuidoCountVoices(desc->handle->arHandle);
+
+        for (int i = 1; i <= voicesNumber; i++) {
+            Time2GraphicMap voiceMap;
+            Time2GraphicMap staffMap;
+            
+            err = GuidoGetVoiceMap(desc->handle, desc->page, (float) desc->sizex, (float) desc->sizey, i, voiceMap);
+            err = GuidoGetStaffMap(desc->handle, desc->page, (float) desc->sizex, (float) desc->sizey, i, staffMap);
+
+            mapDevice->addVoiceMap(voiceMap);
+            mapDevice->addStaffMap(staffMap);
+        }
+
+        Time2GraphicMap systemMap;
+        err = GuidoGetSystemMap(desc->handle, desc->page, (float) desc->sizex, (float) desc->sizey, systemMap);
+        mapDevice->addSystemMap(systemMap);
+    }
+
+    /**************/
 		
 	desc->hdc->EndDraw(); // must be called even if BeginDraw has failed.
     
@@ -683,6 +656,7 @@ GUIDOAPI(GuidoErrCode) 	GuidoAbstractExport( const GRHandler handle, int page, s
     desc.sizey = (int) pf.height;
     dev.NotifySize(desc.sizex, desc.sizey);
     dev.SelectPenColor(VGColor(0,0,0));
+
     return GuidoOnDraw (&desc);
 }
 
@@ -778,7 +752,15 @@ void  GuidoReleaseCString( char *stringToRelease ) {
 GUIDOAPI(GuidoErrCode) GuidoSVGExportWithFontSpec(const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec, const int mappingMode )
 {
  	SVGSystem sys(fontfile, fontspec);
-	SVGDevice dev (out, &sys, fontfile, fontspec);
+    SVGDevice    *dev    = 0;
+    SVGMapDevice *devMap = 0;
+
+    if (mappingMode != kNoMapping) {
+	    devMap = new SVGMapDevice(out, &sys, fontfile, fontspec, mappingMode); // Maps need to be drawn
+        dev    = devMap;
+    }
+    else
+        dev = new SVGDevice(out, &sys, fontfile, fontspec);
     
     GuidoOnDrawDesc desc;              // declare a data structure for drawing
 	desc.handle = handle;
@@ -787,17 +769,20 @@ GUIDOAPI(GuidoErrCode) GuidoSVGExportWithFontSpec(const GRHandler handle, int pa
 	GuidoResizePageToMusic (handle);
 	GuidoGetPageFormat (handle, page, &pf);
  
-	desc.hdc = &dev;                    // we'll draw on the svg device
+	desc.hdc = dev;                    // we'll draw on the svg device
     desc.page = page;
     desc.updateRegion.erase = true;     // and draw everything
 	desc.scrollx = desc.scrolly = 0;    // from the upper left page corner
     desc.sizex = int(pf.width/SVGDevice::kSVGSizeDivider);
 	desc.sizey = int(pf.height/SVGDevice::kSVGSizeDivider);
-    desc.mappingMode = mappingMode;
-    dev.NotifySize(desc.sizex, desc.sizey);
-    dev.SelectPenColor(VGColor(0,0,0));
+    dev->NotifySize(desc.sizex, desc.sizey);
+    dev->SelectPenColor(VGColor(0,0,0));
 
-    return GuidoOnDraw (&desc);
+    GuidoErrCode error = GuidoOnDraw (&desc);
+
+    delete dev;
+
+    return error;
 }
 
 // --------------------------------------------------------------------------
