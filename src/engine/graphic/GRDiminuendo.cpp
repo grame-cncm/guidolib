@@ -247,7 +247,8 @@ void GRDiminuendo::OnDraw( VGDevice & hdc) const
     const float xMarkingOffset = fDimInfos->points[1].x + 30;
     const float yMarkingOffset = fDimInfos->points[1].y - 277 + (mTagSize - 1) * 25;
 
-    OnDrawSymbol(hdc, fDimInfos->fMarkingSymbol, xMarkingOffset, yMarkingOffset, mTagSize);
+	if(fDimInfos->fMarkingSymbol)
+		OnDrawSymbol(hdc, fDimInfos->fMarkingSymbol, xMarkingOffset, yMarkingOffset, mTagSize);
     
     hdc.PopPenWidth();
 

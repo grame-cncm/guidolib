@@ -88,6 +88,8 @@ GRSpring::GRSpring(const TYPE_TIMEPOSITION & vtp,
 	hasDurElement         = false;
     isProportionalElement = false;
 
+	sconst = defconst(vdur);
+
 	assert(sconst != 0);
 }
 

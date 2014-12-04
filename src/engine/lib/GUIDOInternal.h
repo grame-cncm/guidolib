@@ -29,7 +29,7 @@ class GuidoFeedback;
 
 struct NodeAR
 {
-	int refCount;			// Number of GRMusic using this NodeAR.
+    int refCount;			// Number of GRMusic using this NodeAR.
 	ARMusic * armusic;
 };
 

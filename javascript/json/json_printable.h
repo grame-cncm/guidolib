@@ -23,6 +23,7 @@ namespace json
 class jsonexport json_printable
 {
   public :
+		virtual ~json_printable() {}
 		virtual void	print(json_stream& out) const = 0;
 #ifndef JSON_ONLY
 		virtual void	print(osc_stream& out) const = 0;
