@@ -203,6 +203,7 @@ class GRStaff : public GRCompositeNotationElement
         virtual unsigned char* getStffrmtColRef() const { return mStaffState.colRef; }
         virtual float       getLineThickness() const { return mStaffState.lineThickness; }
 		virtual	float       getDredgeSize() const;
+        virtual float       getMappingDredgeSize() const;
 		virtual float       getKeyPosition(TYPE_PITCH pitch, int numkeys = 1) const;
 		virtual GRNote *    getLastNote() const;
 

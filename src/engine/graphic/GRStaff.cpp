@@ -1645,6 +1645,19 @@ float GRStaff::getDistance() const
 */
 float GRStaff::getDredgeSize() const
 {
+	const int lineCount = getNumlines();
+	const float lineSpace = getStaffLSPACE();
+
+	return ((lineCount - 1) *  lineSpace); // TODO: add kLineThick ?
+}
+
+// ----------------------------------------------------------------------------
+/** \brief Returns the height covered by the staff lines, only for staff mapping !
+
+    It takes line thickness in account.
+*/
+float GRStaff::getMappingDredgeSize() const
+{
     const int   lineCount = (getNumlines() > 0 ? getNumlines() : 1);
 	const float lineSpace = getStaffLSPACE();
 
@@ -1774,7 +1787,7 @@ void GRStaff::updateBoundingBox()
 	mBoundingBox.Merge (r);
 	mMapping.top    = mMapping.left = - getLineThickness() / 2;
 	mMapping.right  = mLength + getLineThickness() / 2;;
-	mMapping.bottom = getDredgeSize();
+	mMapping.bottom = getMappingDredgeSize();
 	mMapping       += mPosition + getOffset();
 }
 
