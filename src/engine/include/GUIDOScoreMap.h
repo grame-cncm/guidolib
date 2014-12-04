@@ -38,7 +38,7 @@
 typedef enum { 
 	kGuidoPage, kGuidoSystem, kGuidoSystemSlice, kGuidoStaff, /*kGuidoMeasure,*/ kGuidoBar, kGuidoEvent, 
 	kGuidoScoreElementEnd
-} GuidoeElementSelector;
+} GuidoElementSelector;
 
 // graphic elements type definitions
 typedef enum { 
@@ -145,12 +145,12 @@ extern "C" {
 	\param pagenum a page index, starting from 1.
 	\param width the page width.
 	\param height the page height.
-	\param sel GuidoeElementSelector to filter undesired objects out.
+	\param sel GuidoElementSelector to filter undesired objects out.
 	\param f a MapCollector object that will be called for each selected element.
 	\return an error code.
 */
 GUIDOAPI(GuidoErrCode)	GuidoGetMap( CGRHandler gr, int pagenum, float width, float height, 
-									 GuidoeElementSelector sel, MapCollector& f);
+									 GuidoElementSelector sel, MapCollector& f);
 
 
 /** \brief Retrieves a guido page graphic to time mapping. 
@@ -224,11 +224,14 @@ GUIDOAPI(bool)	GuidoGetPoint( float x, float y, const Time2GraphicMap map, TimeS
 
 	\param gr a Guido opaque handle to a GR structure.
 	\param pagenum a page index, starting from 1.
-	\param sel GuidoeElementSelector to filter undesired objects out.
+	\param sel GuidoElementSelector to filter undesired objects out.
 	\param outMap on output: a vector containing the map elements
 	\return an error code.
 */
-GUIDOAPI(GuidoErrCode)	GuidoGetSVGMap( GRHandler gr, int pagenum, GuidoeElementSelector sel, std::vector<MapElement>& outMap);
+#ifdef WIN32
+    __declspec(deprecated("Deprecated function (not maintained code)."))
+#endif
+GUIDOAPI(GuidoErrCode)	GuidoGetSVGMap( GRHandler gr, int pagenum, GuidoElementSelector sel, std::vector<MapElement>& outMap) GUIDOAPI_deprecated;
 
 /** \brief Retrieves the rolled to unrolled time mapping
 

@@ -730,6 +730,17 @@ void MainWindow::about()
 				"<p>Using the Guido Engine version " + version).toUtf8().data()));
 }
 
+//-------------------------------------------------------------------------
+void MainWindow::docTags()
+{
+    QDesktopServices::openUrl(QUrl(QApplication::applicationDirPath() + "/RefCardsTags.pdf", QUrl::TolerantMode));
+}
+
+//-------------------------------------------------------------------------
+void MainWindow::docParams()
+{
+    QDesktopServices::openUrl(QUrl(QApplication::applicationDirPath() + "/RefCardsParams.pdf", QUrl::TolerantMode));
+}
 
 //-------------------------------------------------------------------------
 void MainWindow::preferences()
@@ -1209,6 +1220,14 @@ void MainWindow::createActions()
     mExitAct->setStatusTip(tr("Exit the application"));
     connect(mExitAct, SIGNAL(triggered()), this, SLOT(close()));
 
+    mDocTagsAct = new QAction(tr("&Guido tags"), this);
+    mDocTagsAct->setStatusTip(tr("Show the guido tags documentation"));
+    connect(mDocTagsAct, SIGNAL(triggered()), this, SLOT(docTags()));
+
+    mDocParamsAct = new QAction(tr("&Guido params"), this);
+    mDocParamsAct->setStatusTip(tr("Show the guido params documentation"));
+    connect(mDocParamsAct, SIGNAL(triggered()), this, SLOT(docParams()));
+
     mAboutAct = new QAction(tr("&About"), this);
     mAboutAct->setStatusTip(tr("Show the application's About box"));
     connect(mAboutAct, SIGNAL(triggered()), this, SLOT(about()));
@@ -1369,6 +1388,9 @@ void MainWindow::createMenus()
 	menuBar()->addMenu( mWindowMenu );
 	
     mHelpMenu = menuBar()->addMenu(tr("&Help"));
+	QMenu * docMenu = mHelpMenu->addMenu(tr("&Guido documentation") );
+	docMenu->addAction(mDocTagsAct);
+	docMenu->addAction(mDocParamsAct);
     mHelpMenu->addAction(mAboutAct);
     mHelpMenu->addAction(mAboutQtAct);
 }

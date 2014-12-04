@@ -104,30 +104,6 @@ ARText::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARText::print(int &indent) const
-{
-}
-
-void ARText::PrintName(std::ostream &os) const
-{
-	os << "\\text";
-}
-
-void ARText::PrintParameters(std::ostream &os) const
-{
-	if (text || mDy)
-	{
-		if (text)
-			os << "<\"" << text->getValue();
-		if (text && mDy) 
-			os << "\",";
-		if (mDy)
-			os << mDy->getUnitValue() << mDy->getUnit();
-		os << ">";
-	}
-}
-
-
 /** \brief Grabs the added Text-Parametersif a match has been found.
 */
 int ARText::MatchListOfTPLsWithTPL(const ListOfTPLs &ltpls,TagParameterList &tpl,
@@ -247,6 +223,36 @@ void ARText::setFSize(const TagParameterFloat *fs)
 int ARText::getFSize(float curLSPACE) const
 {
 	return fsize ? (int) fsize->getValue(curLSPACE) : 0;
+}
+
+void ARText::printName(std::ostream& os) const
+{
+    os << "ARText";
+}
+
+void ARText::printGMNName(std::ostream& os) const
+{
+    os << "\\text";
+}
+
+void ARText::printParameters(std::ostream& os) const
+{
+    if (text)
+        os << "text: \"" << text->getValue() << "\"; ";
+
+    if (textformat)
+        os << "textformat: " << textformat->getValue() << "; ";
+
+    if (font)
+        os << "font: " << font->getValue() << "; ";
+
+    if (fsize)
+        os << "fsize: " << fsize->getValue() << "; ";
+
+    if (fattrib)
+        os << "fattrib: " << fattrib->getValue() << "; ";
+
+    ARMusicalTag::printParameters(os);
 }
 
 

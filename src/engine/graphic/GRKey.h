@@ -45,9 +45,6 @@ class GRKey : public GRARCompositeNotationElement, public GRTag
 		virtual void 	setHPosition( GCoord nx);
 		virtual void 	setPosition(const NVPoint & point);
 
-
-		virtual void 	print(int &indent) const;
-
 		virtual void 	GGSOutput() const;
 		virtual void 	OnDraw(VGDevice & dev ) const;
 

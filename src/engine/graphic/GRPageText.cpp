@@ -124,10 +124,6 @@ void GRPageText::OnDraw(VGDevice & hdc) const
 	if (fPageText.size()) GRTagARNotationElement::OnDrawText(hdc, fPageText.c_str(), (int)fPageText.size());
 }
 
-void GRPageText::print(int &indent) const
-{
-}
-
 /** \brief Calculates the position of
 	the text using the grpage and the format tag.
 */

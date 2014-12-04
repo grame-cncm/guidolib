@@ -20,11 +20,15 @@
 */
 class ARFine : public ARJump
 {
-    public:	
-				ARFine();
+public:	
+				 ARFine();
 	virtual 	~ARFine();
-	virtual void    PrintName( std::ostream & os ) const;
-	virtual void	browse(TimeUnwrap& mapper) const;
+
+	virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+    virtual void printParameters(std::ostream& os) const {};
+
+	virtual void browse(TimeUnwrap& mapper) const;
 };
 
 #endif

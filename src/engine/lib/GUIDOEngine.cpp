@@ -28,7 +28,7 @@
 #include <sstream>
 using namespace std;
 
-#define TIMING
+//#define TIMING
 #include "GuidoTiming.h"
 
 // - Guido AR
@@ -50,7 +50,6 @@ using namespace std;
 #include "GUIDOParse.h"
 #include "guido.h"
 #include "VGDevice.h"
-#include "GuidoFeedback.h"
 #include "GuidoParser.h"
 
 #include "GUIDOEngine.h"
@@ -59,6 +58,7 @@ using namespace std;
 
 #include "SVGSystem.h"
 #include "SVGDevice.h"
+#include "SVGMapDevice.h"
 #include "SVGFont.h"
 
 #include "AbstractSystem.h"
@@ -82,7 +82,7 @@ const char* GUIDOENGINE_VERSION_STR = "1.5.6";
 ARPageFormat * gARPageFormat = 0;
 
 // - Misc globals
-GuidoGlobalSettings gGlobalSettings = { /*1 to draw the springs*/0, 0, 1, 0, 0 };
+GuidoGlobalSettings gGlobalSettings = { /*1 to draw the springs*/0, 0, 1, 0 };
 
 bool gInited = false;		// GuidoInit() Flag
 int gARHandlerRefCount = 0;
@@ -123,7 +123,6 @@ GUIDOAPI(GuidoErrCode) GuidoInit( GuidoInitDesc * desc )
 
 	if( desc->graphicDevice )
 		gGlobalSettings.gDevice = desc->graphicDevice;
-	gGlobalSettings.gFeedback = 0;
 
 	// - Skip if already initialized
     if( gInited == false )
@@ -197,9 +196,7 @@ GUIDOAPI(GuidoErrCode) GuidoParseFile(const char * filename, ARHandler * ar)
 {
 	if( !filename || !ar )	return guidoErrBadParameter;
 	
-	*ar = 0;		
-	if( gGlobalSettings.gFeedback )
-		gGlobalSettings.gFeedback->Notify( GuidoFeedback::kProcessing );
+	*ar = 0;
 
  	// first convert unicode files
 	uniconv(filename);
@@ -210,38 +207,14 @@ GUIDOAPI(GuidoErrCode) GuidoParseFile(const char * filename, ARHandler * ar)
     music = GuidoFile2AR(parser, filename);
     GuidoCloseParser(parser);
 
-	// - Update the feedback status text ....
-	if( gGlobalSettings.gFeedback )
-		gGlobalSettings.gFeedback->UpdateStatusMessage( str_ARMusicCreated );
-
 	if (music == 0)
-	{
-		// - The factory failed to create our music.
-		if( gGlobalSettings.gFeedback )
-			gGlobalSettings.gFeedback->Notify( GuidoFeedback::kIdle );
-
 		return guidoErrMemory;
-	}
-
-	if( gGlobalSettings.gFeedback )
-	{
-		gGlobalSettings.gFeedback->UpdateStatusMessage( 0 );
-		if( gGlobalSettings.gFeedback->ProgDialogAbort())
-		{
-            GuidoFreeAR (music);
-			gGlobalSettings.gFeedback->Notify( GuidoFeedback::kIdle );
-			return guidoErrUserCancel;
-		}
-	}
 
 	// - Use the filename as the new music name
 	music->armusic->setName( filename );
 
-	// - Restore feedback state
-	if( gGlobalSettings.gFeedback )
-		gGlobalSettings.gFeedback->Notify( GuidoFeedback::kIdle );
-
 	*ar = music;
+
 	return guidoNoErr;
 }
 
@@ -251,8 +224,6 @@ GUIDOAPI(GuidoErrCode) GuidoParseString (const char * str, ARHandler* ar)
 	if( !str || !ar )	return guidoErrBadParameter;
 	
 	*ar = 0;
-	if( gGlobalSettings.gFeedback )
-		gGlobalSettings.gFeedback->Notify( GuidoFeedback::kProcessing );
 
     ARHandler music = 0;
 
@@ -260,28 +231,10 @@ GUIDOAPI(GuidoErrCode) GuidoParseString (const char * str, ARHandler* ar)
     music = GuidoString2AR(parser, str);
     GuidoCloseParser(parser);
 
-	if (!music || ( gGlobalSettings.gFeedback && gGlobalSettings.gFeedback->ProgDialogAbort())) {
-		// Something failed, do some cleanup
+	if (!music) // Something failed, do some cleanup
 		return music ? guidoErrUserCancel : guidoErrParse;
-	}
 
-	// - Update the feedback status text ....
-	if( gGlobalSettings.gFeedback )
-		gGlobalSettings.gFeedback->UpdateStatusMessage( str_ARMusicCreated );
-
-	if( gGlobalSettings.gFeedback ) {
-		gGlobalSettings.gFeedback->UpdateStatusMessage( 0 );
-		if( gGlobalSettings.gFeedback->ProgDialogAbort()) {
-			delete music;
-			gGlobalSettings.gFeedback->Notify( GuidoFeedback::kIdle );
-			return guidoErrUserCancel;
-		}
-	}
-	music->armusic->setName( "" );						// - Use the filename as the new music name
-
-	// - Restore feedback state
-	if( gGlobalSettings.gFeedback )
-        gGlobalSettings.gFeedback->Notify( GuidoFeedback::kIdle );
+	music->armusic->setName(""); // - Use the filename as the new music name
 
 	*ar = music;
 	return guidoNoErr;
@@ -539,6 +492,17 @@ GUIDOAPI(GuidoErrCode) GuidoGetPageDate( CGRHandler inHandleGR, int pageNum, Gui
 	return result ? guidoNoErr : guidoErrBadParameter;
 }
 
+GuidoDate * GuidoGetPageDate_retDate( CGRHandler inHandleGR, int pageNum)
+{
+  GuidoDate *date = new GuidoDate();
+  GuidoErrCode err = GuidoGetPageDate( inHandleGR, pageNum, date);
+  if (err != guidoNoErr) {
+    delete date;
+    return 0;
+  }
+  return date;
+}
+
 // --------------------------------------------------------------------------
 //		- Score drawing and pages formating -
 // --------------------------------------------------------------------------
@@ -572,6 +536,31 @@ GUIDOAPI(GuidoErrCode) GuidoOnDraw( GuidoOnDrawDesc * desc )
 
 		result = guidoNoErr;
 	}
+
+    /**** MAPS ****/
+		
+    GuidoErrCode err;
+
+    if (SVGMapDevice *mapDevice = dynamic_cast<SVGMapDevice *>(desc->hdc)) {
+        int voicesNumber = GuidoCountVoices(desc->handle->arHandle);
+
+        for (int i = 1; i <= voicesNumber; i++) {
+            Time2GraphicMap voiceMap;
+            Time2GraphicMap staffMap;
+            
+            err = GuidoGetVoiceMap(desc->handle, desc->page, (float) desc->sizex, (float) desc->sizey, i, voiceMap);
+            err = GuidoGetStaffMap(desc->handle, desc->page, (float) desc->sizex, (float) desc->sizey, i, staffMap);
+
+            mapDevice->addVoiceMap(voiceMap);
+            mapDevice->addStaffMap(staffMap);
+        }
+
+        Time2GraphicMap systemMap;
+        err = GuidoGetSystemMap(desc->handle, desc->page, (float) desc->sizex, (float) desc->sizey, systemMap);
+        mapDevice->addSystemMap(systemMap);
+    }
+
+    /**************/
 		
 	desc->hdc->EndDraw(); // must be called even if BeginDraw has failed.
     
@@ -606,10 +595,11 @@ GUIDOAPI(GuidoErrCode) 	GuidoAbstractExport( const GRHandler handle, int page, s
     desc.page = page;
     desc.updateRegion.erase = true;     // and draw everything
     desc.scrollx = desc.scrolly = 0;    // from the upper left page corner
-    desc.sizex = pf.width;
-    desc.sizey = pf.height;
+    desc.sizex = (int) pf.width;
+    desc.sizey = (int) pf.height;
     dev.NotifySize(desc.sizex, desc.sizey);
     dev.SelectPenColor(VGColor(0,0,0));
+
     return GuidoOnDraw (&desc);
 }
 
@@ -632,8 +622,8 @@ GUIDOAPI(GuidoErrCode) 	GuidoBinaryExport( const GRHandler handle, int page, std
         desc.page = page;
         desc.updateRegion.erase = true;     // and draw everything
 	desc.scrollx = desc.scrolly = 0;    // from the upper left page corner
-        desc.sizex = pf.width;
-	desc.sizey = pf.height;
+    desc.sizex = (int) pf.width;
+    desc.sizey = (int) pf.height;
         dev.NotifySize(desc.sizex, desc.sizey);
         dev.SelectPenColor(VGColor(0,0,0));
         return GuidoOnDraw (&desc);
@@ -643,15 +633,76 @@ GUIDOAPI(GuidoErrCode) 	GuidoBinaryExport( const GRHandler handle, int page, std
 //		- Score export to svg -
 // --------------------------------------------------------------------------
 
-GUIDOAPI(GuidoErrCode) GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile )
+GUIDOAPI(GuidoErrCode) GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const int mappingMode )
 {
-  return GuidoSVGExportWithFontSpec( handle, page, out, fontfile, 0);
+    return GuidoSVGExportWithFontSpec( handle, page, out, fontfile, 0, mappingMode);
 }
 
-GUIDOAPI(GuidoErrCode) GuidoSVGExportWithFontSpec( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec)
+char * GuidoInternalDeviceExport_retCString( const GRHandler handle, int page, GuidoInternalDevice dev)
+{
+	static stringstream sstr;
+	sstr.clear();
+	GuidoErrCode err;
+	if (dev == guido_svg_with_font_spec) {
+	  err = GuidoSVGExportWithFontSpec (handle, page, sstr, 0, reinterpret_cast<char *>(______src_guido2_svg));
+	} else if (dev == guido_abstract) {
+	  err = GuidoAbstractExport(handle, page, sstr);
+	} else if (dev == guido_binary) {
+	  err = GuidoBinaryExport(handle, page, sstr);
+	} else {
+	  return 0;
+	}
+
+	if (err) {
+	  return 0;
+	}
+	char *out = (char *) malloc(strlen(sstr.str().c_str()) + 1);
+	strcpy(out, sstr.str().c_str());
+	return out;
+}
+
+char * GuidoSVGExportWithFontSpec_retCString( const GRHandler handle, int page)
+{
+  return GuidoInternalDeviceExport_retCString(handle, page, guido_svg_with_font_spec);
+}
+
+char * GuidoAbstractExport_retCString( const GRHandler handle, int page)
+{
+  return GuidoInternalDeviceExport_retCString(handle, page, guido_abstract);
+}
+
+int GuidoBinaryExport_retSize( const GRHandler handle, int page, char * in_arr )
+{
+	static stringstream sstr;
+	sstr.clear();
+	GuidoErrCode err;
+	err = GuidoBinaryExport(handle, page, sstr);
+	if (err) {
+	  return 0;
+	}
+	const char * underlying_string = sstr.str().c_str();
+	for (unsigned int i = 0; i < sstr.str().size(); i++) {
+	  in_arr[i] = underlying_string[i];
+	}
+	return sstr.str().size();
+}
+
+void  GuidoReleaseCString( char *stringToRelease ) {
+    free(stringToRelease);
+}
+
+GUIDOAPI(GuidoErrCode) GuidoSVGExportWithFontSpec(const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec, const int mappingMode )
 {
  	SVGSystem sys(fontfile, fontspec);
-	SVGDevice dev (out, &sys, fontfile, fontspec);
+    SVGDevice    *dev    = 0;
+    SVGMapDevice *devMap = 0;
+
+    if (mappingMode != kNoMapping) {
+	    devMap = new SVGMapDevice(out, &sys, fontfile, fontspec, mappingMode); // Maps need to be drawn
+        dev    = devMap;
+    }
+    else
+        dev = new SVGDevice(out, &sys, fontfile, fontspec);
     
     GuidoOnDrawDesc desc;              // declare a data structure for drawing
 	desc.handle = handle;
@@ -660,16 +711,20 @@ GUIDOAPI(GuidoErrCode) GuidoSVGExportWithFontSpec( const GRHandler handle, int p
 	GuidoResizePageToMusic (handle);
 	GuidoGetPageFormat (handle, page, &pf);
  
-	desc.hdc = &dev;                    // we'll draw on the svg device
+	desc.hdc = dev;                    // we'll draw on the svg device
     desc.page = page;
     desc.updateRegion.erase = true;     // and draw everything
 	desc.scrollx = desc.scrolly = 0;    // from the upper left page corner
     desc.sizex = int(pf.width/SVGDevice::kSVGSizeDivider);
 	desc.sizey = int(pf.height/SVGDevice::kSVGSizeDivider);
-    dev.NotifySize(desc.sizex, desc.sizey);
-    dev.SelectPenColor(VGColor(0,0,0));
+    dev->NotifySize(desc.sizex, desc.sizey);
+    dev->SelectPenColor(VGColor(0,0,0));
 
-    return GuidoOnDraw (&desc);
+    GuidoErrCode error = GuidoOnDraw (&desc);
+
+    delete dev;
+
+    return error;
 }
 
 // --------------------------------------------------------------------------

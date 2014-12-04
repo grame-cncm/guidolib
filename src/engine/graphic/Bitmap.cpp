@@ -16,10 +16,10 @@
 #include "NVPoint.h"
 #include "NVRect.h"
 
+#include "GUIDOInternal.h"
+
 #include "VGDevice.h"
 #include "SVGDevice.h"
-
-#include "GUIDOInternal.h"		// for gGlobalSettings.gFeedback
 
 
 // --------------------------------------------------------------

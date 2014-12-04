@@ -21,25 +21,24 @@
 */
 class ARSpace :  public ARMTParameter 
 {
-  public:
-	  virtual float getValue() const { return val; }
+public:
+    virtual float getValue() const { return val; }
 
-		ARSpace() : val(0.0f) { }
+    ARSpace() : val(0.0f) { }
 
-		virtual ~ARSpace() {};
-		virtual void print(int &indent) const {};
-		virtual void PrintName(std::ostream  &os) const;
-		virtual void PrintParameters(std::ostream & os) const;
+    virtual ~ARSpace() {};
 
-		virtual void setTagParameterList(TagParameterList & tpl);
+	virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 
-  protected:
+    virtual void setTagParameterList(TagParameterList & tpl);
 
-	float val;
+protected:
+    float val;
 
-	static ListOfTPLs ltpls;
+    static ListOfTPLs ltpls;
 };
-
 
 #endif
 

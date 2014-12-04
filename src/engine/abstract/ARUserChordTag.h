@@ -29,8 +29,6 @@ class ARUserChordTag :
 	public ARPositionTag
 {
 public:
-
-
 	ARUserChordTag(const ARUserChordTag * uct);
 	ARUserChordTag() 
 	{
@@ -42,21 +40,20 @@ public:
 	virtual ~ARUserChordTag();
 
 	virtual ARMusicalObject * Copy() const;
-	virtual void print(int &indent) const { }
 
-			const char* getLabelValue() const;
-	virtual void PrintName(std::ostream &os) const;
-	virtual void PrintParameters(std::ostream & os) const;
+	virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
+
+	const char* getLabelValue() const;
 
 	virtual void setTagParameterList(TagParameterList & tpl);
-        
 
     /**** Function to avoid dynamic_cast ****/
     ARMusicalObject *isARUserChordTag() { return this; }
     /****************************************/
 
 protected:
-
 	static ListOfTPLs ltpls;
 
 	TagParameterString *labels;

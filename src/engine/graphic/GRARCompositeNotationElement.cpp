@@ -177,7 +177,7 @@ void GRARCompositeNotationElement::DrawSubElements( VGDevice & hdc ) const
 }
 
 // ----------------------------------------------------------------------------
-void GRARCompositeNotationElement::GetSubElementsMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const
+void GRARCompositeNotationElement::GetSubElementsMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const
 {
 	mCompositeElements.GetMap( sel, f, infos );
 }

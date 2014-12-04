@@ -58,13 +58,9 @@ void ARMarcato::setTagParameterList(TagParameterList& tpl)
             std::string above ("above");
 
             if (str->TagIsSet() && (below == str->getValue()))
-			{
 				position = BELOW;
-			}
 			else if (str->TagIsSet() && (above == str->getValue()))
-            {
                 position = ABOVE;
-            }
 
             delete str;
 
@@ -72,7 +68,6 @@ void ARMarcato::setTagParameterList(TagParameterList& tpl)
 			// text = 
 			//	TagParameterString::cast(rtpl->RemoveHead());
 			//assert(text);
-
 		}
 
 		delete rtpl;
@@ -91,18 +86,33 @@ void ARMarcato::browse(TimeUnwrap& mapper) const
 	mapper.AtPos (this, TimeUnwrap::kMarcato);
 }
 
-void ARMarcato::print(int &indent) const
+void ARMarcato::printName(std::ostream& os) const
 {
+    os << "ARMarcato";
 }
 
-void ARMarcato::PrintName(std::ostream &os) const
+void ARMarcato::printGMNName(std::ostream& os) const
 {
-	os << "\\marcato";
-	if (getRange()) os << "(";
-
+    os << "\\marcato";
 }
-void ARMarcato::PrintParameters(std::ostream &) const
+
+void ARMarcato::printParameters(std::ostream& os) const
 {
+    switch (position) {
+    case ABOVE:
+        os << "above";
+        break;
+    case BELOW:
+        os << "below";
+        break;
+    default:
+        os << "notset";
+        break;
+    }
+
+    os << ";";
+
+    ARMusicalTag::printParameters(os);
 }
 
 

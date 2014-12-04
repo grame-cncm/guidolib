@@ -34,10 +34,6 @@ GRBarFormat::~GRBarFormat()
 
 }
 
-void GRBarFormat::print(int &indent) const
-{
-}
-
 void GRBarFormat::OnDraw( VGDevice & hdc) const
 {
 }

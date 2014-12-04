@@ -26,7 +26,7 @@
 #include "ARAlter.h"
 #include "ARNoteFormat.h"
 #include "ARDotFormat.h"
-#include "ARAcc.h"
+#include "ARAccidental.h"
 #include "ARNote.h"
 #include "TagParameterString.h"
 #include "TagParameterFloat.h"
@@ -182,7 +182,7 @@ void GRSingleNote::GGSOutput() const
 }
 
 //____________________________________________________________________________________
-void GRSingleNote::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const
+void GRSingleNote::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const
 {
     if (fCluster) {
         if (this == fCluster->getFirstNote())
@@ -192,10 +192,10 @@ void GRSingleNote::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos&
 		TYPE_DURATION dur = getDuration();
 		if (dur.getNumerator() == 0) {		// notes in chords have a null duration
 			dur = getDurTemplate();
-		}
+        }
 //		const ARNote * ar = getARNote();
 //		std::cout << "mapped pos: " << ar->getStartTimePosition() << " ar pos: " << ar->getRelativeTimePosition() << " ";
-//		ar->print(int &indent);
+//		ar->print(std::ostream& os);
 		// ARNote and GRNote don't have the same time position in chords
 		// actually chord notes have a wrong time position, it has been corrected in ARMusicalVoice::FinishChord
 		SendMap (f, getARNote()->getStartTimePosition(), dur, kNote, infos);
@@ -1126,7 +1126,7 @@ void GRSingleNote::removeElements()
 }
 
 //____________________________________________________________________________________
-void GRSingleNote::handleAccidental (const ARAcc* acc)
+void GRSingleNote::handleAccidental (const ARAccidental* acc)
 {
 	// this is an Acc-Tag -> all accidentals must be shown ...
 	//
@@ -1173,7 +1173,7 @@ void GRSingleNote::handleAccidental (const ARAcc* acc)
 		if (acc->getSize() && acc->getSize()->TagIsSet())
 			el->setSize(acc->getSize()->getValue());
 
-		if (acc->getStyle() == ARAcc::kCautionary) {
+		if (acc->getStyle() == ARAccidental::kCautionary) {
 			if (el)
                 el->setCautionary((int)getOffset().x, mNoteBreite);
         }
@@ -1190,7 +1190,7 @@ void GRSingleNote::handleAccidental (const ARAcc* acc)
 //____________________________________________________________________________________
 void GRSingleNote::addArticulation(ARMusicalTag * mtag)
 {
-	ARAcc * acc =  dynamic_cast<ARAcc *>(mtag);
+	ARAccidental * acc =  dynamic_cast<ARAccidental *>(mtag);
 	if( acc )		{ handleAccidental (acc); return; }
 	GRNote::addArticulation(mtag); // => GREvent::addArticulation(mtag);
 }

@@ -40,9 +40,8 @@ class ARMusicalVoice;
 class ARPageFormat;
 class ARBarFormat;
 class ARSystemFormat;
-class ARABreak;
 class ARAuto;
-class ARAccol;
+class ARAccolade;
 
 class GRClef;
 class GREvent;
@@ -195,12 +194,10 @@ class GRStaffManager
 		// to calculate the actual optimum linebreaks ....
 		GRBeginSpaceForceFunction2 * getCurrentBegSFF();
 
-		int IsAutoPageBreak() const;
-		void setAutoBreak(ARABreak * p_arabreak);
+		int  IsAutoPageBreak() const;
 		void setAutoTag(ARAuto *p_arauto);
 		void setBarFormat(ARBarFormat * barfrmt,GRStaff * curstaff);
-		void setSystemDistance(float distance,
-			const GRVoiceManager & p_vcmgr);
+		void setSystemDistance(float distance, const GRVoiceManager & p_vcmgr);
 		void setPageFormat(ARPageFormat * pform);
 		void setSystemFormat(ARSystemFormat * sysfrm);
 		void NewPage(GRPage *newpage);
@@ -245,7 +242,7 @@ class GRStaffManager
 		GRMusic * getGRMusic() { return mGrMusic; }
 		int getNumVoices() const;
 
-		void	notifyAccoladeTag( ARAccol * inAccoladeTag );
+		void	notifyAccoladeTag( ARAccolade * inAccoladeTag );
 
 		// this routine takes care of breaking the positiontags of
 		// a new system.
@@ -406,10 +403,8 @@ class GRStaffManager
 
 		GRPBList * pblist;
 
-		ARABreak * mArABreak;
 		ARAuto * mArAuto;
-		GuidoFeedback * mFeedback;
-		std::vector<ARAccol	*> mCurAccoladeTag;
+		std::vector<ARAccolade	*> mCurAccoladeTag;
 };
 
 #endif

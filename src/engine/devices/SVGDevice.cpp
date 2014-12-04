@@ -459,6 +459,7 @@ void SVGDevice::DrawMusicSymbol(float x, float y, unsigned int inSymbolID )
 	print(fStream, fFontColor);
 	fStream << "\" fill=\""; 
 	print(fStream, fFontColor);
+	fStream << "\" opacity=\"" << alpha2float(fFontColor);
 	fStream << "\">&#" << inSymbolID << ";</text>"; 
 }
 

@@ -26,8 +26,7 @@
 #include "GRSingleNote.h"
 #include "GRStdNoteHead.h"
 #include "GRBeam.h"
-// #include "NEPointerList.h"
-
+#include "FontManager.h"
 
 GRTremolo::GRTremolo( GRStaff * stf, ARTremolo * artrem )
 					 	: GRPTagARNotationElement(artrem)				
@@ -68,9 +67,12 @@ void GRTremolo::OnDraw( VGDevice & hdc ) const
 	if(!mDraw)
 		return;
 
+    const VGColor prevTextColor = hdc.GetFontColor();
+
     if (mColRef) {
         VGColor color(mColRef);
         hdc.PushFillColor(color);
+        hdc.SetFontColor(color);
     }
     
     float coorX[4];
@@ -89,10 +91,16 @@ void GRTremolo::OnDraw( VGDevice & hdc ) const
         hdc.Polygon(coorX, coorY, 4);
         pos1.y += fStep;
     }
-    GRPTagARNotationElement::OnDrawText(hdc,fText.c_str());
+    
+    const VGFont *theFont = FontManager::gFontText;
+	hdc.SetTextFont(theFont);
 
-    if (mColRef)
+    hdc.DrawString(getPosition().x, getPosition().y, fText.c_str(), fText.length());
+
+    if (mColRef) {
+        hdc.SetFontColor(prevTextColor);
         hdc.PopFillColor();
+    }
 }
 
 // -----------------------------------------------------------------------------

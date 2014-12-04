@@ -13,21 +13,21 @@
 */
 
 #include <iostream>
-#include "ARAccol.h"
+#include "ARAccolade.h"
 #include "TagParameterString.h"
 #include "TagParameterInt.h"
 #include "TagParameterList.h"
 #include "ListOfStrings.h"
 
-ListOfTPLs ARAccol::ltpls(1);
+ListOfTPLs ARAccolade::ltpls(1);
 
-ARAccol::ARAccol()
+ARAccolade::ARAccolade()
 {
 	nid = NULL;
 	sid = range = type = NULL;
 }
 
-ARAccol::~ARAccol()
+ARAccolade::~ARAccolade()
 {
 	delete nid;
 	delete sid;
@@ -35,17 +35,7 @@ ARAccol::~ARAccol()
 	delete type;
 }
 
-void ARAccol::PrintName(std::ostream & os) const
-{
-	os << "\\accol";
-}
-
-void ARAccol::PrintParameters(std::ostream & ) const
-{
-	// todo !
-}
-
-void ARAccol::setTagParameterList(TagParameterList & tpl)
+void ARAccolade::setTagParameterList(TagParameterList & tpl)
 {
 	if (ltpls.empty())
 	{
@@ -91,4 +81,32 @@ void ARAccol::setTagParameterList(TagParameterList & tpl)
 	}
 
 	tpl.RemoveAll();
+}
+
+void ARAccolade::printName(std::ostream& os) const
+{
+    os << "ARAccolade";
+}
+
+void ARAccolade::printGMNName(std::ostream& os) const
+{
+    os << "\\accolade";
+}
+
+void ARAccolade::printParameters(std::ostream& os) const
+{
+    if (sid)
+        os << "id: " << sid->getValue() << "; ";
+    else if (nid)
+        os << "id: " << nid->getValue() << "; ";
+
+    if (range)
+        os << "range: " << range->getValue() << "; ";
+
+    if (type)
+        os << "type: " << type->getValue() << ";";
+
+    os << std::endl;
+
+    ARMusicalTag::printParameters(os);
 }

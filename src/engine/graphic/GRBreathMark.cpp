@@ -49,9 +49,7 @@ GRBreathMark::~GRBreathMark()
 {
 }
 
-
 void GRBreathMark::OnDraw(VGDevice & hdc) const
 {
 	GRTagARNotationElement::OnDraw(hdc);
 }
-

@@ -25,44 +25,39 @@ class Fraction;
 
 class ARMusicalEvent : public ARMusicalObject
 {
-	public:
-    
-						ARMusicalEvent() : mPoints(0) { }
-						ARMusicalEvent(int theNumerator, int theDenominator);
-						ARMusicalEvent(const TYPE_TIMEPOSITION & relativeTimePositionOfEvent,
-									const TYPE_DURATION & durationOfEvent);
+public:
+             ARMusicalEvent() : mPoints(0) { }
+             ARMusicalEvent(int theNumerator, int theDenominator);
+             ARMusicalEvent(const TYPE_TIMEPOSITION & relativeTimePositionOfEvent, const TYPE_DURATION & durationOfEvent);
+             ARMusicalEvent(const TYPE_DURATION & durationOfEvent);
+             ARMusicalEvent(const ARMusicalEvent &armev);
+    virtual	~ARMusicalEvent();
 
-						ARMusicalEvent(const TYPE_DURATION & durationOfEvent);
-						ARMusicalEvent(const ARMusicalEvent &armev);
-		virtual			~ARMusicalEvent();
+    virtual bool	CanBeMerged(const ARMusicalEvent * ev2);
+            void    setPointsNoDurationChange( int pointCount );
 
-		virtual bool	CanBeMerged(const ARMusicalEvent * ev2);
-				void	setPointsNoDurationChange( int pointCount );
- 
- 
-		virtual ARMusicalObject * Copy() const;
+    virtual ARMusicalObject * Copy() const;
 
-		virtual void	print(int &indent) const;
+    void	setDenominator(int newDenominator);
+    void	setNumerator(int newNumerator);
 
-				void	setDenominator(int newDenominator);
-				void	setNumerator(int newNumerator);
+    //	Setzt die Anzahl der Punktierungen und passt duration
+    //	und fraction entsprechend an...
 
-		//	Setzt die Anzahl der Punktierungen und passt duration
-      //	und fraction entsprechend an...
+    void setPoints( int pointCount );
+    int	 getPoints() const;	// duration dots
 
-				void setPoints( int pointCount );
-		int		getPoints() const;	// duration dots
+    virtual bool isEventClass() const { return true; }
 
-		virtual bool isEventClass() const { return true; }
+    static ARMusicalEvent * cast( ARMusicalObject * inObj ) { return (inObj->isEventClass() ? static_cast<ARMusicalEvent *>(inObj) : 0 ); }
 
-	static ARMusicalEvent * cast( ARMusicalObject * inObj )
-			{ return (inObj->isEventClass() ? static_cast<ARMusicalEvent *>(inObj) : 0 ); }
+            void print(std::ostream& os) const;
+    virtual void printName(std::ostream& os) const       { os << "printName() needs to be implemented in subclasses; "; }
+    virtual void printGMNName(std::ostream& os) const    { os << "printGMNName() needs to be implemented in subclasses; "; }
+    virtual void printParameters(std::ostream& os) const { os << "printParameters() needs to be implemented in subclasses; "; }
 
-   protected:
-
-  		int mPoints;
+protected:
+    int mPoints;
 };
 
 #endif
-
-

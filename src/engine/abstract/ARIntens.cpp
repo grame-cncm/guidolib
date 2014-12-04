@@ -26,8 +26,7 @@
 
 ListOfTPLs ARIntens::ltpls(1);
 
-ARIntens::ARIntens(const char * txt, float val)
-	: ARMTParameter(), value(val)
+ARIntens::ARIntens(const char * txt) : ARMTParameter()
 {
 	mIntensText = txt;
 }
@@ -39,7 +38,7 @@ void ARIntens::setTagParameterList(TagParameterList & tpl)
 		// create a list of string ...
 
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(( "S,type,,r;F,value,-1.0,o"));
+		lstrs.AddTail(( "S,type,,r"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -60,14 +59,6 @@ void ARIntens::setTagParameterList(TagParameterList & tpl)
 			assert(tps);
 
 			mIntensText = tps->getValue();
-
-			TagParameterFloat * tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
-			assert(tpf);
-
-			if (tpf->pflag != TagParameter::NOTSET)
-			{
-				value = tpf->getValue();
-			}
 		}
 
 		delete rtpl;
@@ -86,23 +77,21 @@ void ARIntens::browse(TimeUnwrap& mapper) const
 	mapper.AtPos (this, TimeUnwrap::kIntens);
 }
 
-void ARIntens::print(int &indent) const
+void ARIntens::printName(std::ostream& os) const
 {
+    os << "ARIntens";
 }
 
-void ARIntens::PrintName(std::ostream &os) const
+void ARIntens::printGMNName(std::ostream& os) const
 {
-		os << "\\intens";
+    os << "\\intens";
 }
 
-void ARIntens::PrintParameters(std::ostream &os) const
+void ARIntens::printParameters(std::ostream& os) const
 {
-	os << "<\"" << mIntensText << "\"";
-	if (value != -1.0)
-	{
-		os << "," << value * kVirtualToCm << "cm";
-	}
-	os << ">";
+    os << "type: " << mIntensText << ";";
+
+    ARMusicalTag::printParameters(os);
 }
 
 

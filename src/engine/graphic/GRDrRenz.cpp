@@ -59,10 +59,6 @@ GRDrRenz::~GRDrRenz()
 	delete mFace;
 }
 
-void GRDrRenz::print(int &indent) const
-{
-}
-
 void GRDrRenz::OnDraw( VGDevice & hdc) const
 {
 	if (mFace && mDraw)

@@ -26,17 +26,13 @@ class ARTie : public ARBowing
      				ARTie();
       virtual 		~ARTie();
 
-	  virtual bool 	MatchEndTag(const char * s);
-	  virtual void 	PrintName(std::ostream & os) const;
-	  virtual void	browse(TimeUnwrap& mapper) const;
- 
-	  virtual void 	print(int &indent) const;
+	  virtual bool MatchEndTag(const char * s);
 
-	  // virtual ostream & operator<<(ostream &os) const;
+	  virtual void browse(TimeUnwrap& mapper) const;
 
+	  virtual void printName(std::ostream& os) const;
+	  virtual void printGMNName(std::ostream& os) const;
+	  virtual void printParameters(std::ostream& os) const;
 };
 
-
 #endif
-
-

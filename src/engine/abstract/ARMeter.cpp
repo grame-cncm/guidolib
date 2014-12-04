@@ -54,23 +54,6 @@ ARMeter::~ARMeter()
 {
 }
 
-
-void ARMeter::print(int &indent) const
-{
-    std::string autoBarLinesStr    = (autoBarlines    ? "true" : "false");
-    std::string autoMeasuresNumStr = (autoMeasuresNum ? "true" : "false");
-
-    std::cout << "ARMeter: name: \"" << mMeterName << "\"; autoBarlines: \"" << autoBarLinesStr <<
-        "\"; autoMeasuresNum: \"" << autoMeasuresNumStr << "\"" << std::endl;
-}
-
-std::ostream & ARMeter::operator<<(std::ostream & os) const
-{
-	// ATTENTION: evtl. problem, if we impl. a meter-sig that has no name
-	if (mtype == NONE) return os;
-	return os << "\\meter<\"" << mMeterName << "\"> ";
-}
-
 void ARMeter::setTagParameterList(TagParameterList& tpl)
 {
 	if (ltpls.GetCount() == 0)
@@ -243,4 +226,23 @@ bool ARMeter::IsStateTag() const
 TYPE_TIMEPOSITION ARMeter::getMeterTime() const
 {
 	return TYPE_TIMEPOSITION(numerator,denominator);
+}
+
+void ARMeter::printName(std::ostream& os) const
+{
+    os << "ARMeter";
+}
+
+void ARMeter::printGMNName(std::ostream& os) const
+{
+    os << "\\meter";
+}
+
+void ARMeter::printParameters(std::ostream& os) const
+{
+    os << "name: \"" << mMeterName << "\"; ";
+    os << "autoBarlines: " << (autoBarlines ? "true" : "false") << "; ";
+    os << "autoMeasuresNum: " << (autoMeasuresNum ? "true" : "false") << "; ";
+
+    ARMusicalTag::printParameters(os);
 }

@@ -73,19 +73,6 @@ bool ARKey::operator ==(const ARKey & k) const
 	return true;
 	
 }
-void ARKey::print(int &indent) const
-{
-    std::cout << "ARKey: key: " << fKeyNumber << endl;
-}
-
-void ARKey::PrintName(std::ostream & os) const
-{
-	os << "\\key";
-}
-void ARKey::PrintParameters(std::ostream & os) const
-{
-	os << "<" << fKeyNumber << "> ";
-}
 
 void ARKey::setTagParameterList(TagParameterList & tpl)
 {
@@ -356,8 +343,24 @@ void ARKey::getOctArray(int * OctArray) const
 	for (int i=0;i<NUMNOTES;i++) OctArray[i]=fOctarray[i];
 }
 
-
 bool ARKey::IsStateTag() const
 {
 	return true;
+}
+
+void ARKey::printName(std::ostream& os) const
+{
+    os << "ARKey";
+}
+
+void ARKey::printGMNName(std::ostream& os) const
+{
+    os << "\\key";
+}
+
+void ARKey::printParameters(std::ostream& os) const
+{
+	os << "key: " << fKeyNumber << "; ";
+
+    ARMusicalTag::printParameters(os);
 }

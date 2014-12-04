@@ -34,8 +34,7 @@ using namespace std;
 #include "GRDefine.h"
 
 // - Guido Misc
-#include "GuidoFeedback.h"
-#include "GUIDOInternal.h" 	// for gGlobalSettings.gFeedback, AddGGSOutput
+#include "GUIDOInternal.h" 	// for AddGGSOutput
 #include "VGDevice.h"
 
 // - Guido debug
@@ -71,17 +70,11 @@ GRMusic::~GRMusic()
 	if( gCurMusic == this )
 		gCurMusic = 0;
 
-	if( gGlobalSettings.gFeedback )
-		gGlobalSettings.gFeedback->SetCancelButtonState( 0 );
-
 	DeleteContent( &mPages );
 
 	// deletes all, because voicelist owns it 
 	// elements which are GRVoice-Objects
 	DeleteContent( &mVoiceList );
-
-	if( gGlobalSettings.gFeedback )
-		gGlobalSettings.gFeedback->SetCancelButtonState( 1 );
 }
 
 /** \brief Guido Graphic Stream.
@@ -128,7 +121,7 @@ void GRMusic::OnDraw( VGDevice & hdc, const GuidoOnDrawDesc & inDrawInfos )
 		drawpage->OnDraw(hdc, inDrawInfos);
 }
 	
-void GRMusic::GetMap( int inPage, float w, float h, GuidoeElementSelector sel, MapCollector& f ) const 
+void GRMusic::GetMap( int inPage, float w, float h, GuidoElementSelector sel, MapCollector& f ) const 
 {
 	const GRPage * page = getPage( inPage );
 	if( page ) {
@@ -170,12 +163,12 @@ void GRMusic::addPage(GRPage * newPage)
 
 /** \brief Prints all pages of music.
 */
-void GRMusic::print(int &indent) const
+void GRMusic::print(std::ostream& os) const
 {
 	for( PageList::const_iterator ptr = mPages.begin(); ptr != mPages.end(); ++ptr )
 	{
 		const GRPage * page = *ptr;
-		page->print(indent);
+		page->print(os);
 	}
 }
 
@@ -457,9 +450,6 @@ void GRMusic::startNewSystem(GRSystem * grsystem)
 */
 void GRMusic::createGR(ARPageFormat * inPageFormat)
 {
-	if( gGlobalSettings.gFeedback ) 
-		gGlobalSettings.gFeedback->SetCancelButtonState(0);
-
 	// - Reset the previous GR
 	ARMusic * arm = getARMusic();
 	arm->resetGRRepresentation();	// (JB) this may conflicts with the new 
@@ -468,9 +458,6 @@ void GRMusic::createGR(ARPageFormat * inPageFormat)
 	DeleteContent( &mVoiceList );
 
 	gCurMusic = this;
-
-	if( gGlobalSettings.gFeedback ) 
-		gGlobalSettings.gFeedback->SetCancelButtonState(1);
 
 	// - Creates new voices
 
@@ -660,7 +647,7 @@ void GRMusic::getGuido() const
 
   // no AUTO-tags !
 
-	arm->output( os,0 );
+    arm->print(os);
   
 //#ifdef LINUX	
 //  os.freeze();	// Deprecated: it was here because of old ostrstream.

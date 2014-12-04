@@ -23,12 +23,10 @@ ListOfTPLs ARSystemFormat::ltpls(1);
 
 ARSystemFormat::ARSystemFormat()
 {
-	mStaves = 0;
 }
 
 ARSystemFormat::~ARSystemFormat() 
 {
-	delete mStaves; 
 }
 
 void ARSystemFormat::setTagParameterList(TagParameterList &tpl)
@@ -38,9 +36,8 @@ void ARSystemFormat::setTagParameterList(TagParameterList &tpl)
 		// create a list of string ...
 
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(("S,staves,,o;U,dx,,o"));
+		lstrs.AddTail(("U,dx,,o"));
 		CreateListOfTPLs(ltpls,lstrs);
-
 	}
 
 	TagParameterList * rtpl = NULL;
@@ -56,7 +53,6 @@ void ARSystemFormat::setTagParameterList(TagParameterList &tpl)
 			// w, h, ml, mt, mr, mb
 			// GuidoPos pos = rtpl->GetHeadPosition();
 
-			mStaves = TagParameterString::cast(rtpl->RemoveHead());
 			mDx = TagParameterFloat::cast(rtpl->RemoveHead());
 		}
 		delete rtpl;
@@ -69,12 +65,20 @@ void ARSystemFormat::setTagParameterList(TagParameterList &tpl)
 	tpl.RemoveAll();
 }
 
-void ARSystemFormat::PrintName(std::ostream & os) const
+void ARSystemFormat::printName(std::ostream& os) const
 {
-	os << "\\systemFormat";
+    os << "ARSystemFormat";
 }
 
-void ARSystemFormat::PrintParameters(std::ostream & ) const
+void ARSystemFormat::printGMNName(std::ostream& os) const
 {
-	// todo !
+    os << "\\systemFormat";
+}
+
+void ARSystemFormat::printParameters(std::ostream& os) const
+{
+    if (mDx)
+        os << "dx: " << mDx->getValue() << ";";
+
+    ARMusicalTag::printParameters(os);
 }

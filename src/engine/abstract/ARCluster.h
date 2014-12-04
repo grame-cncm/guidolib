@@ -29,15 +29,13 @@ class TagParameterString;
 class ARCluster : public ARMTParameter, public ARPositionTag
 {		
 public:
-
-    ARCluster();
-	ARCluster(const ARCluster *inCopyCluster);
-
+                     ARCluster();
+	                 ARCluster(const ARCluster *inCopyCluster);
 	virtual		 	~ARCluster();
 
-	virtual void print(int &indent) const {};
-	virtual void PrintName(std::ostream & os) const;
-	virtual void PrintParameters(std::ostream & os) const;
+	virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 
 	virtual void    setTagParameterList(TagParameterList & tpl);
 
@@ -46,25 +44,18 @@ public:
     ARNote *getFirstNote()  const { return firstNote; }
     ARNote *getSecondNote() const { return secondNote; }
 
-    float getadx() const                         { return adx; }
-    float getady() const                         { return ady; }
-    float getahdx() const                        { return ahdx; }
-    float getahdy() const                        { return ahdy; }
-    float getSize() const                        { return aSize; }
-    int   getNoteCount() const                   { return aNoteCount; }
-    bool  getIsThereOnlyOneNoteInCluster() const { return aOnlyOneNoteInCluster; }
+    float getahdx() const                        { return hdx; }
+    float getahdy() const                        { return hdy; }
+    int   getNoteCount() const                   { return noteCount; }
+    bool  getIsThereOnlyOneNoteInCluster() const { return onlyOneNoteInCluster; }
 
-    void  setOnlyOneNoteInCluster() {aOnlyOneNoteInCluster = true;}
+    void  setOnlyOneNoteInCluster() {onlyOneNoteInCluster = true;}
 
 protected:
-
-    float adx;
-    float ady;
-    float ahdx;
-    float ahdy;
-    float aSize;
-    int   aNoteCount;
-    bool  aOnlyOneNoteInCluster;
+    float hdx;
+    float hdy;
+    int   noteCount;
+    bool  onlyOneNoteInCluster;
 
     static ListOfTPLs ltpls;
 

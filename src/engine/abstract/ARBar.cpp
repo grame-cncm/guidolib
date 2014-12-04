@@ -28,7 +28,6 @@ ListOfTPLs ARBar::ltpls(1);
 ARBar::ARBar(const TYPE_TIMEPOSITION &timeposition)
 	: ARMTParameter(timeposition)
 {
-	barnumber = -1; // not specified
 	measureNumber = 0;
     measureNumberDisplayed = NULL;
 
@@ -36,10 +35,8 @@ ARBar::ARBar(const TYPE_TIMEPOSITION &timeposition)
 	numDy = 0;
 }
 
-
 ARBar::ARBar() : ARMTParameter()
 {
-	barnumber = -1; // not specified
 	measureNumber = 0;
     measureNumberDisplayed = NULL;
 
@@ -57,23 +54,6 @@ ARBar::~ARBar() // does nothing
 {
 }
 
-void ARBar::print(int &indent) const
-{
-}
-
-void ARBar::PrintName(std::ostream &os) const
-{
-	os << "\\bar";
-}
-
-void ARBar::PrintParameters(std::ostream &os) const
-{
-	if (barnumber!=-1)
-	{
-		os << "<" << barnumber << ">";
-	}
-}
-
 void ARBar::setTagParameterList(TagParameterList& tpl)
 {
 	if (ltpls.GetCount() == 0)
@@ -82,7 +62,7 @@ void ARBar::setTagParameterList(TagParameterList& tpl)
 
 		ListOfStrings lstrs; // (1); std::vector test impl
 		lstrs.AddTail(
-			("I,number,-1,o;S,displayMeasNum,false,o;U,numDx,0,o;U,numDy,0,o"));
+			("S,displayMeasNum,false,o;U,numDx,0,o;U,numDy,0,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -97,11 +77,6 @@ void ARBar::setTagParameterList(TagParameterList& tpl)
 			// then, we now the match for
 			// the first ParameterList
 			// w, h, ml, mt, mr, mb
-            TagParameterInt * tpi =  TagParameterInt::cast(rtpl->RemoveHead());
-			assert(tpi);
-			if (tpi->pflag != TagParameter::NOTSET)
-				barnumber = tpi->getValue();
-            delete tpi;
 
             measureNumberDisplayed = TagParameterString::cast(rtpl->RemoveHead());
 
@@ -123,4 +98,26 @@ void ARBar::setTagParameterList(TagParameterList& tpl)
 	}
 
 	tpl.RemoveAll();
+}
+
+void ARBar::printName(std::ostream& os) const
+{
+    os << "ARBar";
+}
+
+void ARBar::printGMNName(std::ostream& os) const
+{
+    os << "\\bar";
+}
+
+void ARBar::printParameters(std::ostream& os) const
+{
+    os << "measureNumber: " << measureNumber << "; ";
+
+    if (measureNumberDisplayed)
+        os << "measureNumberDisplayed: " << measureNumberDisplayed->getValue() << "; ";
+
+    os << "numDx: " << numDx << "; numDy: " << numDy << ";";
+
+    ARMusicalTag::printParameters(os);
 }

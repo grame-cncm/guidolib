@@ -28,22 +28,25 @@
 GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, GRSingleNote *sngNote, ARNoteFormat * curnoteformat) :
 						GRARCompositeNotationElement(arcls),
 						GRPositionTag(arcls->getEndPosition(), arcls),
-                        gDuration(0),
-                        gClusterOrientation(ARTHead::NORMAL),
-                        gStemDir(dirAUTO),
-                        noteFormatColor(0)
+                        fDuration(0),
+                        fClusterOrientation(ARTHead::NORMAL),
+                        fStemDir(dirAUTO),
+                        fNoteFormatColor(0)
 {
 	assert(stf);
 
     mGrStaff = stf;
 
-    gDuration = sngNote->getDurTemplate();
+    fDuration = sngNote->getDurTemplate();
 
     const TagParameterString *tmpColor;
 
     mTagSize = stf->getSizeRatio();
 
     firstNote = secondNote = sngNote;
+
+    int noteFormatDx = 0;
+    int noteFormatDy = 0;
 
     if (curnoteformat) {
         // - Size
@@ -54,8 +57,8 @@ GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, GRSingleNote *sngNote, AR
         // - Color
         tmpColor = curnoteformat->getColor();
         if (tmpColor) {
-            noteFormatColor = new unsigned char[4];
-            tmpColor->getRGB(noteFormatColor);
+            fNoteFormatColor = new unsigned char[4];
+            tmpColor->getRGB(fNoteFormatColor);
         }
 
         // - Offset
@@ -63,27 +66,30 @@ GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, GRSingleNote *sngNote, AR
 		const TagParameterFloat * tmpdy = curnoteformat->getDY();
 
 		if (tmpdx)
-			mTagOffset.x = (GCoord)(tmpdx->getValue(stf->getStaffLSPACE()));
+			noteFormatDx = (int) (tmpdx->getValue(stf->getStaffLSPACE()));
 		if (tmpdy)
-			mTagOffset.y = (GCoord)(tmpdy->getValue(stf->getStaffLSPACE()));
+			noteFormatDy = (int) (tmpdy->getValue(stf->getStaffLSPACE()));
     }
 
-    gdx   = arcls->getadx();
-    gdy   = arcls->getady();
-    ghdx  = arcls->getahdx();
-    ghdy  = arcls->getahdy();
-    gSize = arcls->getSize();
+    float clusterDx = mTagOffset.x;
+    float clusterDy = mTagOffset.y;
+
+    mTagOffset.x += noteFormatDx;
+    mTagOffset.y += noteFormatDy;
+
+    fdx   = mTagOffset.x;
+    fdy   = mTagOffset.y;
+    fhdx  = arcls->getahdx();
+    fhdy  = arcls->getahdy();
+    fsize = (arcls->getSize() ? arcls->getSize()->getValue() : 1.0f);
 
     GREvent *grEvent = dynamic_cast<GREvent *>(sngNote);
     if (grEvent) {
-        grEvent->getGlobalStem()->setOffsetXY(gdx, -gdy);
-        grEvent->getGlobalStem()->setMultiplicatedSize(gSize);
+        grEvent->getGlobalStem()->setOffsetXY(clusterDx, - clusterDy);
+        grEvent->getGlobalStem()->setMultiplicatedSize(fsize);
     }
 
-    gdy += mTagOffset.y;
-    gdx += mTagOffset.x;
-
-    gNoteCount = arcls->getNoteCount();
+    fNoteCount = arcls->getNoteCount();
 }
 
 GRCluster::~GRCluster() {}
@@ -91,14 +97,14 @@ GRCluster::~GRCluster() {}
 void GRCluster::updateBoundingBox()
 {
     float curLSpace = mGrStaff->getStaffLSPACE();
-    float dx        = getBoundingBox().left + gdx + ghdx;
-    float dy        = - gdy - ghdy;
+    float dx        = getBoundingBox().left + fdx + fhdx;
+    float dy        = - fdy - fhdy;
 
     float xOrientation = 0;
 
-    if (gClusterOrientation == ARTHead::LEFT && gStemDir == dirDOWN)
+    if (fClusterOrientation == ARTHead::LEFT && fStemDir == dirDOWN)
         xOrientation = - 55;
-    else if (gClusterOrientation == ARTHead::RIGHT && gStemDir == dirUP)
+    else if (fClusterOrientation == ARTHead::RIGHT && fStemDir == dirUP)
         xOrientation =   55;
 
     NVPoint pFirstNote  = (firstNote->getPosition().y < secondNote->getPosition().y ? firstNote->getPosition() : secondNote->getPosition());
@@ -106,8 +112,8 @@ void GRCluster::updateBoundingBox()
 
     mMapping.top    = dy + pFirstNote.y + curLSpace / 2;
     mMapping.bottom = dy + pSecondNote.y + 3 * curLSpace / 2;
-    mMapping.left   = dx + (xOrientation - 31) * mTagSize * gSize;
-    mMapping.right  = dx + (xOrientation + 29) * mTagSize * gSize;
+    mMapping.left   = dx + (xOrientation - 31) * mTagSize * fsize;
+    mMapping.right  = dx + (xOrientation + 29) * mTagSize * fsize;
 
     mMapping += mPosition;
 }
@@ -115,8 +121,8 @@ void GRCluster::updateBoundingBox()
 void GRCluster::OnDraw(VGDevice &hdc) const
 {
     if (mDraw) {
-        if (noteFormatColor) {
-            VGColor color(noteFormatColor);
+        if (fNoteFormatColor) {
+            VGColor color(fNoteFormatColor);
             hdc.PushPen(color, 1);
 
             if (!mColRef)
@@ -130,7 +136,7 @@ void GRCluster::OnDraw(VGDevice &hdc) const
         }
 
     	// - Quarter notes and less
-    	if (gDuration < DURATION_2) {
+    	if (fDuration < DURATION_2) {
             const float xCoords [] = {
                 mMapping.left,
                 mMapping.right,
@@ -153,13 +159,13 @@ void GRCluster::OnDraw(VGDevice &hdc) const
             const float yCoords1 [] = {
                 mMapping.top,
                 mMapping.top,
-                mMapping.top + 6 * mTagSize * gSize,
-                mMapping.top + 6 * mTagSize * gSize};
+                mMapping.top + 6 * mTagSize * fsize,
+                mMapping.top + 6 * mTagSize * fsize};
             const float xCoords2 [] = {
-                mMapping.right - 6 * mTagSize * gSize,
+                mMapping.right - 6 * mTagSize * fsize,
                 mMapping.right,
                 mMapping.right,
-                mMapping.right - 6 * mTagSize * gSize};
+                mMapping.right - 6 * mTagSize * fsize};
             const float yCoords2 [] = {
                 mMapping.top,
                 mMapping.top,
@@ -171,14 +177,14 @@ void GRCluster::OnDraw(VGDevice &hdc) const
                 mMapping.right,
                 mMapping.left};
             const float yCoords3 [] = {
-                mMapping.bottom - 6 * mTagSize * gSize,
-                mMapping.bottom - 6 * mTagSize * gSize,
+                mMapping.bottom - 6 * mTagSize * fsize,
+                mMapping.bottom - 6 * mTagSize * fsize,
                 mMapping.bottom,
                 mMapping.bottom};
             const float xCoords4 [] = {
                 mMapping.left,
-                mMapping.left + 6 * mTagSize * gSize,
-                mMapping.left + 6 * mTagSize * gSize,
+                mMapping.left + 6 * mTagSize * fsize,
+                mMapping.left + 6 * mTagSize * fsize,
                 mMapping.left};
             const float yCoords4 [] = {
                 mMapping.top,
@@ -198,7 +204,7 @@ void GRCluster::OnDraw(VGDevice &hdc) const
 		    hdc.PopFillColor();
         }
 
-        if (noteFormatColor) {
+        if (fNoteFormatColor) {
             if (!mColRef)
                 hdc.PopFillColor();
 
@@ -222,8 +228,8 @@ void GRCluster::tellPosition(GObject * caller, const NVPoint & np)
 
 void GRCluster::setClusterOrientation(GDirection inStemDir, ARTHead::HEADSTATE inHeadStateOrientation)
 {
-    gClusterOrientation = inHeadStateOrientation;
-    gStemDir            = inStemDir;
+    fClusterOrientation = inHeadStateOrientation;
+    fStemDir            = inStemDir;
 }
 
 ARCluster *GRCluster::getARCluster() const
@@ -231,8 +237,8 @@ ARCluster *GRCluster::getARCluster() const
 	return /*dynamic*/static_cast<ARCluster*>(getAbstractRepresentation());
 }
 
-void GRCluster::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const
+void GRCluster::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const
 {
 	if (sel == kGuidoEvent)
-        SendMap(f, firstNote->getARNote()->getStartTimePosition(), gDuration, kNote, infos);
+        SendMap(f, firstNote->getARNote()->getStartTimePosition(), fDuration, kNote, infos);
 }

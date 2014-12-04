@@ -56,17 +56,12 @@ float ARTempo::getQpmValue() const
 		float unitfactor = float(getBpmUnit() * 4);
 		return float(getBpmValue()) * unitfactor;
 	}
+
 	return 0.;
 }
 
 // --------------------------------------------------------------------------
-void ARTempo::print(int &indent) const
-{
-}
-
-// --------------------------------------------------------------------------
-void
-ARTempo::setTagParameterList( TagParameterList & tpl )
+void ARTempo::setTagParameterList( TagParameterList & tpl )
 {
 	if( ltpls.GetCount() == 0 ) {
 		ListOfStrings lstrs;
@@ -102,7 +97,7 @@ ARTempo::setTagParameterList( TagParameterList & tpl )
 
 			// - extract bpm informations
 			tps = TagParameterString::cast(rtpl->RemoveHead());
-			ParseBpm( tps );
+			ParseBpm(tps);
 			delete tps;
 
 			delete mDy;
@@ -111,19 +106,6 @@ ARTempo::setTagParameterList( TagParameterList & tpl )
 		delete rtpl;
 	}
 	tpl.RemoveAll();
-}
-
-// --------------------------------------------------------------------------
-std::ostream & ARTempo::operator<<(std::ostream & os) const
-{
-/* (JB) out of date
-	os << "\\tempo<\"";
-	os << mName << "\"";
-	if (mBpmstring.length()>0)
-		os << ",\"" << mBpmstring << "\"";
-	os << "> ";
-*/
-	return os;
 }
 
 // --------------------------------------------------------------------------
@@ -146,8 +128,7 @@ void ARTempo::ParseBpm( TagParameterString * inTag )
 	int num1, num2, denom1, denom2;
 
 	// - Look for something like "a/b=x/y" (note equivalent format)
-	if( sscanf(bpmString.c_str(),"%d/%d=%d/%d", &num1, &denom1, &num2, &denom2 ) == 4 )
-	{
+	if (sscanf(bpmString.c_str(),"%d/%d=%d/%d", &num1, &denom1, &num2, &denom2 ) == 4) {
 		mBpmUnit.set( num1, denom1 );
 		mBpmValue.set( num2, denom2 );
 		mBpmNoteEquiv = true;
@@ -155,18 +136,32 @@ void ARTempo::ParseBpm( TagParameterString * inTag )
 	}
 
 	// Look for something like "a/b=x"
-	else if( sscanf( bpmString.c_str(),"%d/%d=%d", &num1, &denom1, &num2 ) == 3 )
-	{
+	else if (sscanf( bpmString.c_str(),"%d/%d=%d", &num1, &denom1, &num2 ) == 3) {
 		mBpmUnit.set( num1, denom1 );
 		mBpmValue.set( num2, 1 );
 		mBpmNoteEquiv = false;
 		mHasBpmInfos = true;
-
 	}
-
-	else
-	{
+	else {
 		// - The format is incorrect. TODO: report the error.
 	}
+}
+
+// --------------------------------------------------------------------------
+void ARTempo::printName(std::ostream& os) const
+{
+    os << "ARTempo";
+}
+
+void ARTempo::printGMNName(std::ostream& os) const
+{
+    os << "\\tempo";
+}
+
+void ARTempo::printParameters(std::ostream& os) const
+{
+    /* TODO */
+
+    ARMusicalTag::printParameters(os);
 }
 

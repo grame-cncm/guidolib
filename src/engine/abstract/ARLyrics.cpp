@@ -90,27 +90,6 @@ void ARLyrics::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARLyrics::print(int &indent) const
-{
-}
-
-void ARLyrics::PrintName(std::ostream &os) const
-{
-	os << "\\text";
-}
-void ARLyrics::PrintParameters(std::ostream &os) const
-{
-	if (mText || mDy)
-	{
-		// what about dy ?
-		if (mText)
-			os << "<\"" << mText->getValue() << "\"";
-
-		os << ">";
-	}
-}
-
-
 /** \brief Grabs the added Text-Parameters if a match has been found.
 */
 int ARLyrics::MatchListOfTPLsWithTPL(const ListOfTPLs &ltpls,TagParameterList & tpl,
@@ -202,5 +181,23 @@ const char* ARLyrics::getFAttrib() const
 int ARLyrics::getFSize(float curLSPACE) const
 {
 	return mFSize ? (int) mFSize->getValue(curLSPACE) : 0;
+}
+
+void ARLyrics::printName(std::ostream& os) const
+{
+    os << "ARLyrics";
+}
+
+void ARLyrics::printGMNName(std::ostream& os) const
+{
+    os << "\\lyrics";
+}
+
+void ARLyrics::printParameters(std::ostream& os) const
+{
+    if (mText)
+        os << "text: \"" << mText->getValue() << "\"; ";
+
+    ARMusicalTag::printParameters(os);
 }
 

@@ -109,11 +109,6 @@ void GRNoteDot::OnDraw(VGDevice & hdc) const
 }
 
 // ------------------------------------------------------------------------
-void GRNoteDot::print(int &indent) const
-{
-}
-
-// ------------------------------------------------------------------------
 int	GRNoteDot::DurationToDotCount( const TYPE_DURATION & duration )
 {
 	// WARNING ! the method expect to receive normalized durations

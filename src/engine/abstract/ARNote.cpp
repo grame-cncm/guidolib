@@ -122,60 +122,6 @@ int ARNote::midiPitch() const
 	return oct + pitch + fAccidentals;
 }
 
-//## Other Operations (implementation)
-void ARNote::print(int &indent) const
-{
-	std::cout << "ARNote: name: \"" << getName() << "\" fPitch: " << getPitch()
-		<< " oct: " << getOctave() << " accidental: " << getAccidentals() << " detune: " << getDetune()
-        << " duration: " << getDuration().getNumerator() << "/" << getDuration().getDenominator() << std::endl;
-
-	ARMusicalEvent::print(indent);
-}
-
-std::ostream & ARNote::operator<<(std::ostream &os) const
-{
-	os << fName;
-	if(fAccidentals>0) for(int i=0;i<fAccidentals;i++) os << "#";
-	else if(fAccidentals<0) for(int i=0;i>fAccidentals;i--) os << "&";
-
-	// here we have to "uncalculate" the dots ...
-	// there is a distinction between notes that
-	// were put in with dots and those that weren't.
-
-	TYPE_DURATION tmpdur (getDuration());
-	if (mPoints==1)
-	{
-		tmpdur.setNumerator(2);
-		tmpdur.normalize();
-	}
-	else if (mPoints == 2)
-	{
-		tmpdur.setNumerator(4);
-		tmpdur.normalize();
-	}
-	else if (mPoints == 3)
-	{
-		tmpdur.setNumerator(8);
-		tmpdur.normalize();
-	}
-	else if (mPoints != 0)
-	{
-		// there can only be 0,1, or 2 dots
-		assert(false);
-	}
-
-	os << fOctave << "*" << 
-		tmpdur.getNumerator() << "/" <<
-		tmpdur.getDenominator();
-	for (int i=0;i< (int) mPoints;i++)
-	{
-		os << ".";
-	}
-	os << " ";
-	return os;
-}
-
-
 void ARNote::addFlat()
 {
 	--fAccidentals;
@@ -315,4 +261,48 @@ int ARNote::CompareNameOctavePitch(const ARNote & nt)
 		return 1;
 
 	return 0;
+}
+
+void ARNote::printName(std::ostream& os) const
+{
+    os << "ARNote";
+}
+#include <sstream>
+void ARNote::printGMNName(std::ostream& os) const
+{
+    std::string accidentalStr = "";
+
+    switch (getAccidentals()) {
+    case -1:
+        accidentalStr = "#";
+        break;
+    case 1:
+        accidentalStr = "b";
+        break;
+    default:
+        /* TODO */
+        break;
+    }
+    
+    std::ostringstream durationStream;
+    
+    if (getDuration().getNumerator() != 1)
+        durationStream << "*" << getDuration().getNumerator();
+
+    durationStream << "/" << getDuration().getDenominator();
+    
+    if (!strcmp(getName().c_str(), "empty"))
+        os << getName() << durationStream.str();
+    else
+        os << getName() << accidentalStr << getOctave() << durationStream.str();
+}
+
+void ARNote::printParameters(std::ostream& os) const
+{
+    os << "name: \"" << getName() << "\"; ";
+    os << "pitch: " << getPitch() << "; ";
+    os << "oct: " << getOctave() << "; ";
+    os << "accidental: " << getAccidentals() << "; ";
+    os << "detune: " << getDetune() << "; ";
+    os << "duration: " << getDuration().getNumerator() << "/" << getDuration().getDenominator() << "; ";
 }

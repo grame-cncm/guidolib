@@ -113,10 +113,6 @@ void GRSText::OnDraw( VGDevice & hdc) const
 #endif
 }
 
-void GRSText::print(int &indent) const
-{
-}
-
 void GRSText::addAssociation(GRNotationElement * el)
 {
 	// attention, otherwise this is cyclic!

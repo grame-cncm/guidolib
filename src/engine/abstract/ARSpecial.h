@@ -21,26 +21,22 @@
 class ARSpecial : // public ARMusicalObject,
 	public ARMTParameter  
 {
-	public:
+public:
+             ARSpecial();
+    virtual ~ARSpecial();
 
-						ARSpecial();
-		virtual 		~ARSpecial();
+    virtual void setTagParameterList(TagParameterList &tlist);
 
-		virtual void setTagParameterList(TagParameterList &tlist);
+    virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+    virtual void printParameters(std::ostream& os) const;
 
-		virtual std::ostream & operator<<(std::ostream &os) const;
+    unsigned char getDrawChar() const { return mDrawChar; }
 
-		virtual void print(int &indent) const { }
+protected:
+    unsigned char mDrawChar; // may become int...
 
-		float 		dx;
-		float 		dy;
-		float 		space;
-		float 		scale;
-		unsigned char mDrawChar;	// may become int...
-
-	protected:
-
-		static ListOfTPLs ltpls;
+    static ListOfTPLs ltpls;
 };
 
 #endif

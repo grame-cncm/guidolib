@@ -92,13 +92,13 @@ class GRMusic : public GREvent
 
 		virtual void	OnDraw( VGDevice & hdc ) const;
 		virtual void	OnDraw( VGDevice & hdc, const GuidoOnDrawDesc & inDrawInfos );
-		virtual void	GetMap( int inPage, float w, float h, GuidoeElementSelector sel, MapCollector& f ) const;
+		virtual void	GetMap( int inPage, float w, float h, GuidoElementSelector sel, MapCollector& f ) const;
 
 		virtual void	GGSOutputPage( int inPageNum ) const;
 		virtual int		GGSInputPage( int inPageNum, const char * str);
 		virtual char *	getGGSInfo( int infotype ) const;
 
-		virtual void	print(int &indent) const;
+		virtual void	print(std::ostream& os) const;
 		virtual void	trace(VGDevice & hdc);
 		virtual void	voicetrace(VGDevice & hdc);
 

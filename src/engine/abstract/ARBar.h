@@ -21,22 +21,17 @@
 */
 class ARBar : // public ARMusicalObject, 
 	public ARMTParameter
-  {
-  public:
-		ARBar(const TYPE_TIMEPOSITION & timeposition);
-		
-		ARBar();
-
+ {
+ public:
+		         ARBar(const TYPE_TIMEPOSITION & timeposition);
+		         ARBar();
 		virtual ~ARBar();
 
-		virtual void print(int &indent) const;
-       // virtual ostream & operator<<(ostream &os) const;
-		virtual void PrintName(std::ostream & os) const;
-		virtual void PrintParameters(std::ostream & os) const;
+	    virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+	    virtual void printParameters(std::ostream& os) const;
 
 		virtual void setTagParameterList(TagParameterList & theTagParameterList);
-
-		int getBarNumber() const { return barnumber; }
 
 		void                setMeasureNumber(int inMeasureNumber) { measureNumber = inMeasureNumber; }
 		int                 getMeasureNumber()          const     { return measureNumber; }
@@ -45,16 +40,12 @@ class ARBar : // public ARMusicalObject,
 
 		float  getMeasureNumberDxOffset()                         { return numDx; }
 		float  getMeasureNumberDyOffset()                         { return numDy; }
-
-		virtual bool operator==(const ARBar & bar)
-			{ return (barnumber == bar.barnumber); }
         
         /**** Function to avoid dynamic_cast ****/
         ARMusicalObject *isARBar() { return this; }
         /*****************************************/
 
   protected:
-		int  barnumber; // number of bar where barline starts
 		int  measureNumber;
         TagParameterString *measureNumberDisplayed;
 
@@ -62,7 +53,6 @@ class ARBar : // public ARMusicalObject,
 		float numDy;
 
 		static ListOfTPLs ltpls;
-  };
-
+};
 
 #endif

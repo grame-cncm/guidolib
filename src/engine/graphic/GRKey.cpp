@@ -270,10 +270,6 @@ void GRKey::updateBoundingBox()
 
 }
 
-void GRKey::print(int &indent) const
-{
-}
-
 void GRKey::GGSOutput() const
 {
 	if (error) return;

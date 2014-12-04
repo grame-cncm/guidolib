@@ -29,25 +29,24 @@ class ARKey : public ARMTParameter
 	bool	getOctave		(const char*& ptr, int& oct) const;
 	float	getAccidental	(const char*& ptr) const;
 
-  public:
-						ARKey(const TYPE_TIMEPOSITION & timeposition);
-      					ARKey(int p_keynumber);
-						ARKey();
-						ARKey(const ARKey & key);
-
-		virtual 		~ARKey() {}
+public:
+					 ARKey(const TYPE_TIMEPOSITION & timeposition);
+      				 ARKey(int p_keynumber);
+					 ARKey();
+					 ARKey(const ARKey & key);
+		virtual 	~ARKey() {}
 
 	  	virtual bool operator==(const ARKey & k) const;
 	  	virtual bool IsStateTag() const;
-		virtual void print(int &indent) const;
-		virtual void PrintName(std::ostream & os) const;
-		virtual void PrintParameters(std::ostream & os) const;
+
+	    virtual void printName(std::ostream& os) const;
+	    virtual void printGMNName(std::ostream& os) const;
+	    virtual void printParameters(std::ostream& os) const;
 
 		virtual void setTagParameterList(TagParameterList & theTagParameterList);
 
-
-				int		getKeyNumber() const			{ return fKeyNumber; }
-				void	setKeyNumber(int newnumber)		{ fKeyNumber = newnumber; }
+				int	 getKeyNumber() const		 { return fKeyNumber; }
+				void setKeyNumber(int newnumber) { fKeyNumber = newnumber; }
 
 		bool mIsFree; // True if accidental free specified
 

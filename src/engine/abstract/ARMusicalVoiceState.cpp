@@ -218,25 +218,14 @@ void ARMusicalVoiceState::AddStateTag(ARMusicalTag * ntag)
 	
 	ARMeter * armt;
 	ARBeamState * arbms;
-//	ARABreak *arabreak;
 	ARAuto * arauto;
-	if ( (armt = dynamic_cast<ARMeter *>(ntag)) != NULL)
-	{
+
+	if ((armt = dynamic_cast<ARMeter *>(ntag)) != NULL)
 		curmeter = armt;
-	}
 	else if ( (arbms = dynamic_cast<ARBeamState *>(ntag)) != NULL)
-	{
 		curbeamstate = arbms;
-	}
-//	else if ( (arabreak = dynamic cast<ARABreak *>(ntag))
-//		!= NULL)
-//	{
-//		curbreakstate = arabreak;
-//	}
 	else if ( (arauto = dynamic_cast<ARAuto *>(ntag)) != NULL)
-	{
 		curautostate = arauto;
-	}
 }
 
 void ARMusicalVoiceState::AddPositionTag(ARPositionTag *ntag, int addtoaddedlist)

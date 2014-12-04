@@ -315,7 +315,7 @@ int main(int argc, char **argv)
 	else {
 		int line, col;
 		
-        err = GuidoParserGetErrorCode(parser, line, col, 0); // REM: l'erreur n'est pas r\E9cup\E9r\E9e si l'arh a simplement mal \E9t\E9 instanci\E9
+        err = GuidoParserGetErrorCode(parser, line, col, 0); // REM: l'erreur n'est pas récuperée si l'arh a simplement mal été instancié
 		error(err);
 	}
 

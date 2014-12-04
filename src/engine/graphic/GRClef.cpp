@@ -284,10 +284,6 @@ void GRClef::GGSOutput() const
 	}
 }
 
-void GRClef::print(int &indent) const
-{
-}
-
 const ARClef * GRClef::getARClef() const
 {
 	return /*dynamic*/static_cast<const ARClef*>(getAbstractRepresentation());

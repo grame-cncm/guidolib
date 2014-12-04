@@ -25,6 +25,8 @@ ListOfTPLs ARDisplayDuration::ltpls(1);
 ARDisplayDuration::ARDisplayDuration(const ARDisplayDuration * dspdur)
 						: ARMTParameter(-1,dspdur)
 {
+	rangesetting = ONLY;
+
 	num = denom = ndots = 0;
 	
 	if (dspdur->num)
@@ -35,6 +37,14 @@ ARDisplayDuration::ARDisplayDuration(const ARDisplayDuration * dspdur)
 
 	if (dspdur->ndots)
 		ndots = TagParameterInt::cast(dspdur->ndots->getCopy());
+}
+
+ARDisplayDuration::ARDisplayDuration() 
+{
+    rangesetting = ONLY;
+
+    dots = 0;
+    num = denom = ndots = NULL;
 }
 
 ARDisplayDuration::~ARDisplayDuration()
@@ -51,8 +61,7 @@ void ARDisplayDuration::setTagParameterList(TagParameterList& tpl)
 		// create a list of string ...
 
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(
-			( "I,n,,r;I,d,,r;I,ndots,0,o"));
+		lstrs.AddTail(("I,n,,r;I,d,,r;I,ndots,0,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -105,50 +114,60 @@ bool ARDisplayDuration::MatchEndTag(const char * s)
 	return 0;
 }
 
-void ARDisplayDuration::PrintName(std::ostream & os) const
-{
-	os << "\\dispDur";
-	if (!getRange())
-		os << "Begin";
-}
-
-void ARDisplayDuration::PrintParameters(std::ostream & os) const
-{
-
-	os << "<" << dur.getNumerator() <<
-		"," << dur.getDenominator() <<
-		"," << dots << ">";
-}
-
 void ARDisplayDuration::setDisplayDuration(const TYPE_DURATION & tmp)
 {
 	dots = 0;
 	TYPE_DURATION mydur (tmp);
 	mydur.normalize();
+
 	if (mydur.getNumerator() == 1)
-	{
 		dots = 0;
-	}
-	else if (mydur.getNumerator() == 3
-		&& mydur.getDenominator() > 1)
-	{
+	else if (mydur.getNumerator() == 3 && mydur.getDenominator() > 1) {
 		dots = 1;
 		mydur.setNumerator(1);
 		int denom = mydur.getDenominator();
 		mydur.setDenominator(denom/2);
 	}	
-	else if (mydur.getNumerator() == 7
-		&& mydur.getDenominator() > 1)
-	{
+	else if (mydur.getNumerator() == 7 && mydur.getDenominator() > 1) {
 		dots = 2;
 		mydur.setNumerator(1);
 		int denom = mydur.getDenominator();
 		mydur.setDenominator(denom/4);
 	}
-	else
-	{
+	else {
 		// ASSERT(FALSE);
 		//TRACE("dispduration of unknown length");
 	}
+
 	dur = mydur;		
+}
+
+void ARDisplayDuration::printName(std::ostream& os) const
+{
+    os << "ARDisplayDuration";
+}
+
+void ARDisplayDuration::printGMNName(std::ostream& os) const
+{
+    os << "\\displayDuration";
+}
+
+void ARDisplayDuration::printParameters(std::ostream& os) const
+{
+    if (num)
+        os << "n: " << num->getValue() << "; ";
+    else
+        os << "n: " << dur.getNumerator() << "; ";
+
+    if (denom)
+        os << "d: " << denom->getValue() << "; ";
+    else
+     os << "d: " << dur.getDenominator() << "; ";
+
+    if (ndots)
+        os << "ndots: " << ndots->getValue() << ";";
+    else
+        os << "ndots: " << dots << ";";
+
+    ARMusicalTag::printParameters(os);
 }

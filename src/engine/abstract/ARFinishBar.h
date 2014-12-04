@@ -21,17 +21,17 @@
 */
 class ARFinishBar: public ARBar  
 {
-	public:
-		ARFinishBar();
-		virtual ~ARFinishBar();
-		virtual void print(int &indent) const;
-		// virtual ostream & operator<<(ostream &os) const;
-		virtual void PrintName(std::ostream & os) const;
-        
+public:
+    ARFinishBar();
+    virtual ~ARFinishBar();
 
-        /**** Function to avoid dynamic_cast ****/
-        ARMusicalObject *isARFinishBar() { return this; }
-        /****************************************/
+    virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+    virtual void printParameters(std::ostream& os) const;        
+
+    /**** Function to avoid dynamic_cast ****/
+    ARMusicalObject *isARFinishBar() { return this; }
+    /****************************************/
 };
 
 #endif

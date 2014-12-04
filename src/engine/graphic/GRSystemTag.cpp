@@ -32,10 +32,6 @@ void GRSystemTag::checkPosition(const GRSystem *grsys)
 
 }
 
-void GRSystemTag::print(int &indent) const
-{
-}
-
 void GRSystemTag::OnDraw( VGDevice & hdc ) const
 {
 }

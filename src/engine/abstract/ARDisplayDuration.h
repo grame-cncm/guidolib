@@ -30,49 +30,29 @@ class ARDisplayDuration :
 public:
 
 	ARDisplayDuration(const ARDisplayDuration * dspdur);
-	ARDisplayDuration() 
-	{
-		rangesetting = ONLY;
-		dots = 0;
-		num = denom = ndots = NULL;
-	}
+	ARDisplayDuration();
+
 	virtual ~ARDisplayDuration();
 
 	virtual bool MatchEndTag(const char * s);
 
 	virtual ARMusicalObject * Copy() const;
 
-	virtual void print(int &indent) const
-	{}
-
-	/* virtual ostream & operator<<(ostream &os) const
-	{
-		os << "\\dispDurBegin";
-		os << "<" << dur.getNumerator() <<
-			"," << dur.getDenominator() <<
-			"," << dots << ">";
-		if (getRange())
-			os << "(";
-		return os << " ";
-	} */
+	virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 
 	virtual void setTagParameterList(TagParameterList & theTagParameterList);
-
-	virtual void PrintName(std::ostream & os) const;
-	virtual void PrintParameters(std::ostream & os) const;
 	void setDisplayDuration(const TYPE_DURATION & tmp);
 
-	void setDisplayDuration(const TYPE_DURATION & tmp, int numdots)
-	{ 
+	void setDisplayDuration(const TYPE_DURATION & tmp, int numdots) { 
 		dur = tmp; 
 		dots = numdots; 
 	}
 
-	TYPE_DURATION getDisplayDuration() const
-	{ return dur; }
+	TYPE_DURATION getDisplayDuration() const { return dur; }
 
-	int getDots() const
-	{ return dots; }
+	int getDots() const { return dots; }
     
     /**** Function to avoid dynamic_cast ****/
     ARMusicalObject *isARDisplayDuration() { return this; }
@@ -89,6 +69,5 @@ protected:
 	TYPE_DURATION dur; // the dur of this tuplet
 	int dots;
 };
-
 
 #endif

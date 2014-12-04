@@ -64,10 +64,6 @@ ARStaff::~ARStaff()
 	delete ids;
 }
 
-void ARStaff::print(int &indent) const
-{
-}
-
 void ARStaff::setTagParameterList(TagParameterList& tpl)
 {
 	if (ltpls.GetCount() == 0)
@@ -142,17 +138,22 @@ int ARStaff::getStaffNumber() const
   	return 0;
 }
 
-void ARStaff::PrintName(std::ostream & os) const
+void ARStaff::printName(std::ostream& os) const
 {
-	os << "\\staff";
+    os << "ARStaff";
 }
 
-void ARStaff::PrintParameters(std::ostream & os) const
+void ARStaff::printGMNName(std::ostream& os) const
 {
-	if (idi && (idi->TagIsSet() || idi->TagIsSetByAuto()))
-		os << "<" << idi->getValue() << ">";
-	if (ids && ids->TagIsSet())
-		os << "<\"" << ids->getValue() << "\">";
+    os << "\\staff";
+}
+
+void ARStaff::printParameters(std::ostream& os) const
+{
+    if (idi)
+        os << "id: " << idi->getValue() << ";";
+
+    ARMusicalTag::printParameters(os);
 }	
 	
 

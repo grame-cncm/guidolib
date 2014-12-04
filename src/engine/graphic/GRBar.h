@@ -47,9 +47,8 @@ class GRBar : public GRTagARNotationElement
 		virtual void OnDraw( VGDevice & hdc ) const;
 		virtual void DrawWithGlyphs( VGDevice & hdc ) const;
 		virtual void DrawWithLines( VGDevice & hdc ) const;
-		virtual void GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
-		virtual void print(int &indent) const;
-		
+		virtual void GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
+				
 		virtual const NVPoint & getReferencePosition() const { return sRefPos; }
 		
 		ARBar * getARBar() const;

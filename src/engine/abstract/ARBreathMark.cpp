@@ -26,7 +26,6 @@ ARBreathMark::ARBreathMark()
 
 ARBreathMark::~ARBreathMark()
 {
-
 }
 
 void ARBreathMark::setTagParameterList(TagParameterList & tpl)
@@ -67,13 +66,18 @@ void ARBreathMark::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARBreathMark::PrintName( std::ostream & os ) const
+void ARBreathMark::printName(std::ostream& os) const
 {
-	os << "\\breathMark";
+    os << "ARBreathMark";
 }
 
-/*
-void ARBreathMark::PrintParameters(std::ostream & os) const
+void ARBreathMark::printGMNName(std::ostream& os) const
 {
-}*/
+    os << "\\breathMark";
+}
+
+void ARBreathMark::printParameters(std::ostream& os) const
+{
+    ARMusicalTag::printParameters(os);
+}
 
