@@ -28,7 +28,7 @@
 #include <sstream>
 using namespace std;
 
-//#define TIMING
+#define TIMING
 #include "GuidoTiming.h"
 
 // - Guido AR
@@ -104,7 +104,7 @@ GUIDOAPI(GuidoErrCode) GuidoInitWithIndependentSVG()
 {
 	GuidoInitDesc desc;
 
-    VGSystem * gSystem= new SVGSystem(0, reinterpret_cast<char *>(______src_guido2_svg));
+	VGSystem * gSystem= new SVGSystem(0, ______src_guido2_svg);
 	desc.graphicDevice = gSystem->CreateMemoryDevice(20,20);
 	desc.musicFont = "Guido2";
 	desc.textFont  = "Times";
