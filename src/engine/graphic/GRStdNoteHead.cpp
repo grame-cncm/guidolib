@@ -177,13 +177,13 @@ singleStemDirection(inStemDirection),
         
 		// - If nothing
 		else {
-			if (!mColRef) mColRef = new unsigned char[4];
-            if (mColRef) {
-                mColRef[0] = 255;
-                mColRef[1] = 0;
-                mColRef[2] = 0;
-                mColRef[3] = 0;
-            }
+			if (!mColRef)
+                mColRef = new unsigned char[4];
+
+            mColRef[0] = 0;
+            mColRef[1] = 0;
+            mColRef[2] = 0;
+            mColRef[3] = 0;
 
 			mSymbol = durationToHeadSymbol( inDur );
 		}
