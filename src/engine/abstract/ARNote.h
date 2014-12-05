@@ -85,7 +85,7 @@ class ARNote : public ARMusicalEvent
 	void 		 setTremolo(ARTremolo* trem)            { fTremolo = trem; }
     ARTremolo*   getTremolo()                           { return fTremolo; }
 
-    int		midiPitch() const;
+    int		     getMidiPitch() const;
 
     static int	detune2Quarters(float detune);
 

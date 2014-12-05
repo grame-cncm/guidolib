@@ -91,7 +91,7 @@ void ARNote::browse(TimeUnwrap& mapper) const
 	mapper.AtPos (this, TimeUnwrap::kNote);
 }
 
-int ARNote::midiPitch() const
+int ARNote::getMidiPitch() const
 {
 	int oct = 12 * (fOctave+4);
 	if (oct < 0) return 0;
