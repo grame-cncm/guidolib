@@ -59,4 +59,21 @@ void ARJump::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
+void ARJump::printName(std::ostream& os) const
+{
+    os << "ARJump";
+}
+
+void ARJump::printGMNName(std::ostream& os) const
+{
+    os << "\\jump";
+}
+
+void ARJump::printParameters(std::ostream& os) const
+{
+    /* TODO */
+
+    ARMusicalTag::printParameters(os);
+}
+
 

@@ -86,10 +86,6 @@ const ARNote * GRNote::getARNote() const
 	return /*dynamic*/static_cast<const ARNote*>(getAbstractRepresentation());
 }
 
-void GRNote::print(int &indent) const
-{
-}
-
 bool GRNote::isSplit()
 {
 	return (getARNote()->getRelativeTimePosition() != mRelativeTimePositionOfGR);

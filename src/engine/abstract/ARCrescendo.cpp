@@ -105,10 +105,6 @@ void ARCrescendo::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARCrescendo::print(int &indent) const 
-{
-}
-
 bool ARCrescendo::MatchEndTag(const char * s)
 {
 	if (ARMusicalTag::MatchEndTag(s))
@@ -116,14 +112,28 @@ bool ARCrescendo::MatchEndTag(const char * s)
 
 	if ((getRange() == false ) && !strcmp("\\crescEnd",s))
 		return true;
+
 	return false;
 }
 
-void ARCrescendo::PrintName(std::ostream & os) const
+void ARCrescendo::printName(std::ostream& os) const
 {
-	if (getRange())
-		os << "\\cresc";
-	else
-		os << "\\crescBegin";
+    os << "ARCrescendo";
+}
+
+void ARCrescendo::printGMNName(std::ostream& os) const
+{
+    os << "\\crescendo";
+}
+
+void ARCrescendo::printParameters(std::ostream& os) const
+{
+    os << "dm: "        << dynamicMarking << "; ";
+    os << "dx1: "       << dx1 << "; ";
+    os << "dx2: "       << dx2 << "; ";
+    os << "deltaY: "    << deltaY << "; ";
+    os << "thickness: " << thickness << "; ";
+
+    ARMusicalTag::printParameters(os);
 }
 

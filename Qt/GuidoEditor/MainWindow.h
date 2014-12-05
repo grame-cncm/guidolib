@@ -112,6 +112,8 @@ private slots:
 	void updateCode();
 	void lineWrapSwitch();
 	void doexport();
+	void docTags();
+    void docParams();
 	void about();
 	void preferences();
 	void print();
@@ -236,6 +238,8 @@ private:
 	QAction *mExportToImageAct;
 	QAction *mPrintAct;
     QAction *mExitAct;
+    QAction *mDocTagsAct;
+    QAction *mDocParamsAct;
     QAction *mAboutAct;
     QAction *mAboutQtAct;
     QAction *mSetupAct;

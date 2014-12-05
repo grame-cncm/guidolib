@@ -25,17 +25,6 @@ ARUnits::ARUnits()
 {
 }
 
-void ARUnits::PrintName(std::ostream & os) const
-{
-	os << "\\units";
-}
-
-void ARUnits::PrintParameters(std::ostream & os) const
-{
-	// todo !
-	os << "<\"" << sType.c_str() << "> ";
-}
-
 void ARUnits::setTagParameterList(TagParameterList & tpl)
 {
 	if (ltpls.GetCount() == 0)
@@ -60,13 +49,10 @@ void ARUnits::setTagParameterList(TagParameterList & tpl)
 			// w, h, ml, mt, mr, mb
 			GuidoPos pos = rtpl->GetHeadPosition();
 
-			TagParameterString * tps = 
-				TagParameterString::cast(rtpl->GetNext(pos));
+			TagParameterString * tps = TagParameterString::cast(rtpl->GetNext(pos));
 			assert(tps);
 
 			sType = tps->getValue();
-
-
 		}
 
 		delete rtpl;
@@ -77,4 +63,21 @@ void ARUnits::setTagParameterList(TagParameterList & tpl)
 	}
 
 	tpl.RemoveAll();
+}
+
+void ARUnits::printName(std::ostream& os) const
+{
+    os << "ARUnits";
+}
+
+void ARUnits::printGMNName(std::ostream& os) const
+{
+    os << "\\units";
+}
+
+void ARUnits::printParameters(std::ostream& os) const
+{
+    os << "type: " << sType << "; ";
+
+    ARMusicalTag::printParameters(os);
 }

@@ -19,10 +19,19 @@ ARTDummy::~ARTDummy()
 {
 }
 
-
-
-void ARTDummy::print(int &indent) const
+void ARTDummy::printName(std::ostream& os) const
 {
+    os << "ARTDummy";
+}
+
+void ARTDummy::printGMNName(std::ostream& os) const
+{
+    os << "\\dummy";
+}
+
+void ARTDummy::printParameters(std::ostream& os) const
+{
+    ARMusicalTag::printParameters(os);
 }
 
 

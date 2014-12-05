@@ -91,10 +91,6 @@ GRSystemStartEndStruct * GRGlissando::initGRGlissando( GRStaff * grstaff )
 	return sse;
 }
 
-void GRGlissando::print(int &indent) const
-{
-}
-
 void GRGlissando::OnDraw( VGDevice & hdc ) const
 {
 	if(!mDraw) return;

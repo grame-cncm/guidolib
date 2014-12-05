@@ -27,27 +27,21 @@ extern const ARDotFormat defaultARDotFormat;
 class ARDotFormat : public ARMTParameter, public ARPositionTag
 {
 public:
-
-	ARDotFormat(ARDotFormat * p_savedf = NULL,ARDotFormat * copydf = NULL); 
+	         ARDotFormat(ARDotFormat * p_savedf = NULL,ARDotFormat * copydf = NULL); 
 	virtual ~ARDotFormat();
 
 	virtual bool IsStateTag() const { return true; }
-
 	
 	virtual void setTagParameterList( TagParameterList & tpl);
-	virtual void print(int &indent) const { }
-	virtual void PrintName(std::ostream & os) const;
-	virtual void PrintParameters(std::ostream & os) const;
 
-
-	const TagParameterFloat * getDD() const	{ return mDD; }
+	virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 
 	virtual ARDotFormat * getEndTag() const	{ return new ARDotFormat(NULL, savedf); }
 
 protected:
-
 	ARDotFormat *		savedf;
-	TagParameterFloat *	mDD;
 	static ListOfTPLs 	ltpls;
 };
 

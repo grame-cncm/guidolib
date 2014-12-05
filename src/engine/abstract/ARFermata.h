@@ -27,20 +27,21 @@
 class ARFermata : public ARMTParameter, public ARPositionTag
 {
 public:
-	enum			tTypeFermata {SHORT, REGULAR, LONG};
-	enum			tPositionFermata {ABOVE, BELOW};
+	enum			 tTypeFermata {SHORT, REGULAR, LONG};
+	enum			 tPositionFermata {ABOVE, BELOW};
 
-					ARFermata();
-	virtual 		~ARFermata();
-	virtual void 	setTagParameterList(TagParameterList & theTagParameterList);
-	virtual void 	PrintName(std::ostream & os) const;
-	virtual void 	PrintParameters(std::ostream & os) const;
+					 ARFermata();
+	virtual 		 ~ARFermata();
+	virtual void 	 setTagParameterList(TagParameterList & theTagParameterList);
 
-	virtual void	print(int &indent) const { };
-	virtual void	browse(TimeUnwrap& mapper) const;
+	virtual void     printName(std::ostream& os) const;
+    virtual void     printGMNName(std::ostream& os) const;
+	virtual void     printParameters(std::ostream& os) const;
 
-	tTypeFermata	getType() const {return type;};
-	tPositionFermata	getPositionFermata() const {return position;};
+	virtual void	 browse(TimeUnwrap& mapper) const;
+
+	tTypeFermata	 getType() const {return type;};
+	tPositionFermata getPositionFermata() const {return position;};
 
 protected:
 

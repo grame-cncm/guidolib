@@ -32,8 +32,6 @@ class GRDrHoos : public GRTagARNotationElement
 		
 		virtual void 	OnDraw(VGDevice & hdc ) const;
 
-		virtual void 	print(int &indent) const;
-
 	protected:
 
 		Bitmap * face;

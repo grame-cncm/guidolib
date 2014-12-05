@@ -221,13 +221,12 @@ ARTuplet::parseTupletFormatString()
 	fRightBrace = hasRightBrace;
 }
 
-void 
-ARTuplet::setName(const char * inName)
+void ARTuplet::setName(const char * inName)
 {
 	fTupletFormat = inName;
 }
 
-std::ostream & ARTuplet::operator<<(std::ostream & os) const
+/*std::ostream & ARTuplet::operator<<(std::ostream & os) const
 {
 	if (getRange())	os << "\\tuplet";
 	else			os << "\\tupletBegin";
@@ -272,6 +271,23 @@ std::ostream & ARTuplet::operator<<(std::ostream & os) const
 	if (getRange())
 		os << "(";
 	return os << " ";
+}*/
+
+void ARTuplet::printName(std::ostream& os) const
+{
+    os << "ARTuplet";
+}
+
+void ARTuplet::printGMNName(std::ostream& os) const
+{
+    os << "\\tuplet";
+}
+
+void ARTuplet::printParameters(std::ostream& os) const
+{
+    /* TODO (cf. plus haut) */
+
+    ARMusicalTag::printParameters(os);
 }
 
 

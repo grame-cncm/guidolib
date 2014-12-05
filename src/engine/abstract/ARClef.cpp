@@ -48,22 +48,7 @@ ARClef::ARClef(const ARClef & clef)
 	fOctava = clef.fOctava;
 }
 
-ARClef::~ARClef()		{}
-
-void ARClef::print(int &indent) const
-{
-    std::cout << "ARClef: name: \"" << getName() << "\"" << endl;
-}
-
-void ARClef::PrintName(std::ostream &os) const
-{
-	os << "\\clef";
-}
-
-void ARClef::PrintParameters(std::ostream &os) const
-{
-	os << "<\"" << fName << "\"> ";
-}
+ARClef::~ARClef() {}
 
 void ARClef::setTagParameterList(TagParameterList& tpl)
 {
@@ -206,4 +191,21 @@ bool ARClef::operator==(const ARClef &clef)
 bool ARClef::IsStateTag() const
 {
 	return true;
+}
+
+void ARClef::printName(std::ostream& os) const
+{
+    os << "ARClef";
+}
+
+void ARClef::printGMNName(std::ostream& os) const
+{
+    os << "\\clef";
+}
+
+void ARClef::printParameters(std::ostream& os) const
+{
+    os << "name: \"" << getName() << "\";";
+
+    ARMusicalTag::printParameters(os);
 }

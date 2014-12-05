@@ -78,25 +78,29 @@ void ARColor::setTagParameterList(TagParameterList & tpl)
 	}
 
 	tpl.RemoveAll();
-
-}
-
-void ARColor::print(int &indent) const
-{
-}
-void ARColor::PrintName(std::ostream &os) const
-{
-	os << "\\color";
-	
-}
-void ARColor::PrintParameters(std::ostream &os) const
-{
-	// TODO: add the alpha color component ?
-	os << "<" << colorR << "," 
-	   << colorG << "," << colorB << ">";
 }
 
 bool ARColor::IsStateTag() const
 {
 	return true;
+}
+
+void ARColor::printName(std::ostream& os) const
+{
+    os << "ARColor";
+}
+
+void ARColor::printGMNName(std::ostream& os) const
+{
+    os << "\\color";
+}
+
+void ARColor::printParameters(std::ostream& os) const
+{
+    os << "red: "   << colorR << "; ";
+    os << "green: " << colorG << "; ";
+    os << "blue: "  << colorB << "; ";
+    os << "alpha: " << colorA << "; ";
+
+    ARMusicalTag::printParameters(os);
 }

@@ -27,35 +27,36 @@ class ARTuplet :
 	public ARMTParameter,
 	public ARPositionTag
 {
-	public:
+public:
+						ARTuplet(); 
+		virtual 	   ~ARTuplet() {}
 
-							ARTuplet(); 
-		virtual 			~ARTuplet()		{ }
+				void    setName(const char * inName);
+		const NVstring& getName() const 	{ return fTupletFormat; }
 
-				void 		setName(const char * inName);
-		const NVstring & 	getName() const 	{ return fTupletFormat; }
+		virtual void  setTagParameterList(TagParameterList & tl);
 
-		virtual void 		setTagParameterList(TagParameterList & tl);
-		virtual void 		print(int &indent) const	{ }
-		virtual std::ostream & 	operator << (std::ostream & os) const;
+	    virtual void  printName(std::ostream& os) const;
+	    virtual void  printGMNName(std::ostream& os) const;
+	    virtual void  printParameters(std::ostream& os) const;
 
-				void		setupTuplet( ARBase * inBase );
-				void		parseTupletFormatString();
+				void  setupTuplet( ARBase * inBase );
+				void  parseTupletFormatString();
 
-				int			getNumerator() const { return fBaseNumerator; }
-				int			getDenominator() const { return fBaseDenominator; }
-				float		getDy1() const { return fDy1; }
-				float		getDy2() const { return fDy2; }		
-                float		getThickness() const { return fLineThickness; }
-                bool		getIsBold() const { return fTextBold; }
-                float		getTextSize() const { return fTextSize; }
-				bool		getLeftBrace() const { return fLeftBrace; }
-				bool		getRightBrace() const { return fRightBrace; }
+				int	  getNumerator() const { return fBaseNumerator; }
+				int   getDenominator() const { return fBaseDenominator; }
+				float getDy1() const { return fDy1; }
+				float getDy2() const { return fDy2; }		
+                float getThickness() const { return fLineThickness; }
+                bool  getIsBold() const { return fTextBold; }
+                float getTextSize() const { return fTextSize; }
+				bool  getLeftBrace() const { return fLeftBrace; }
+				bool  getRightBrace() const { return fRightBrace; }
 
-				bool		isDySet() const { return (fDy1Set || fDy2Set); }
-				bool		isFormatSet() const { return fFormatSet; } 
+				bool  isDySet() const { return (fDy1Set || fDy2Set); }
+				bool  isFormatSet() const { return fFormatSet; } 
+
 	protected:
-
 		NVstring fTupletFormat;	// format string <"-x:y-">
 
 		float	fDy1;
@@ -78,6 +79,5 @@ class ARTuplet :
 		static ListOfTPLs ltpls;
 		// a string ...
 };
-
 
 #endif

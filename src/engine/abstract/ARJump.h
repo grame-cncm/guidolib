@@ -28,12 +28,14 @@ public:
 				ARJump(std::string mark = "");
 	virtual 	~ARJump();
 
-    virtual void print(int &indent) const { PrintName(std::cout); }
+	virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
+
 	virtual void setTagParameterList( TagParameterList & tpl );
 
     const FormatStringParserResult&   getMark() const     { return mMark; }
     int								  getID() const       { return mID; }
-        
 
     /**** Function to avoid dynamic_cast ****/
     ARMusicalObject *isARJump() { return this; }
@@ -41,6 +43,7 @@ public:
 
 protected:
     static ListOfTPLs ltpls;
+
 private:
 	FormatStringParserResult	mMark;
     int							mID;             // the tag ID

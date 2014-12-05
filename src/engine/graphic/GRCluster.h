@@ -41,7 +41,7 @@ public:
 
     virtual const unsigned char * getColRef() const { return mColRef; }
 
-    int getNoteCount() const { return gNoteCount;}
+    int getNoteCount() const { return fNoteCount;}
 
     void setClusterOrientation(GDirection inStemDir, ARTHead::HEADSTATE inHeadStateOrientation);
     void setSecondGRNote(GRNote *inGRNote) { secondNote = inGRNote; }
@@ -49,25 +49,25 @@ public:
 
     ARCluster *getARCluster() const;
 
-    void GetMap(GuidoeElementSelector sel, MapCollector& f, MapInfos& infos) const;
+    void GetMap(GuidoElementSelector sel, MapCollector& f, MapInfos& infos) const;
 
 protected:
-    float gdx;
-    float gdy;
-    float ghdx;
-    float ghdy;
-    float gSize;
+    float fdx;
+    float fdy;
+    float fhdx;
+    float fhdy;
+    float fsize;
 
     GRNote *firstNote;
     GRNote *secondNote;
 
-    TYPE_DURATION gDuration;
-    unsigned char *noteFormatColor;
+    TYPE_DURATION fDuration;
+    unsigned char *fNoteFormatColor;
 
-    ARTHead::HEADSTATE gClusterOrientation;
-    GDirection gStemDir;
+    ARTHead::HEADSTATE fClusterOrientation;
+    GDirection fStemDir;
 
-    int gNoteCount;
+    int fNoteCount;
 };
 
 #endif

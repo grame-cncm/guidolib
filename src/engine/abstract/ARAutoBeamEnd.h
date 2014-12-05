@@ -22,21 +22,17 @@
 class ARAutoBeamEnd : public ARTagEnd
 {
   public:
-					ARAutoBeamEnd()
-					{
-						setAssociation(ARMusicalTag::LA);
-						isAuto = true;
-					}
+				ARAutoBeamEnd()
+				{
+					setAssociation(ARMusicalTag::LA);
+					isAuto = true;
+				}
 
-		virtual		~ARAutoBeamEnd() {}
+	virtual		~ARAutoBeamEnd() {}
 
-		virtual void print(int &indent) const {}
-		/* virtual ostream &operator<<(ostream &os) const
-			{
-				return os << "\\autobeamEnd ";
-			} */
-		virtual void PrintName(std::ostream & os) const;
+    virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 };
 
 #endif
-

@@ -34,8 +34,10 @@ class ARMeter : public ARMTParameter
 		virtual ~ARMeter();
 
 		virtual bool IsStateTag() const;
-		virtual void print(int &indent) const;
-		virtual std::ostream & operator<<(std::ostream & os) const;
+
+	    virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+	    virtual void printParameters(std::ostream& os) const;
 
 		virtual void setTagParameterList(TagParameterList & tpl);
 
@@ -56,8 +58,7 @@ class ARMeter : public ARMTParameter
 		const TYPE_TIMEPOSITION & getTimeOffset() const	{ return timeoffset; }
 		void setTimeOffset(const TYPE_TIMEPOSITION &tp) { timeoffset = tp; }
 
-        float        getSize() const {return size;}
-        
+        float getSize() const { return size; }
 
         /**** Function to avoid dynamic_cast ****/
         ARMusicalObject *isARMeter() { return this; }

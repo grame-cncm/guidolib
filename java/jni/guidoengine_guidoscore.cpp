@@ -562,7 +562,7 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetMap (JNIEnv * env, jobject
 {
 	JavaMapCollector collector (env, jcollector);
 	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
-	GuidoeElementSelector sel = GuidoeElementSelector(jsel);
+	GuidoElementSelector sel = GuidoElementSelector(jsel);
 	return GuidoGetMap( gr, pagenum, width, height, sel, collector);
 }
 

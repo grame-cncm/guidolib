@@ -22,22 +22,20 @@
 class ARAutoBeam : public ARBeam
   // , public ARPositionTag
 {
-  public:
-		ARAutoBeam();
+public:
+    ARAutoBeam();
 
-		/* ARAutoBeam(POSITION psp, POSITION pep)
-		{
-			sp = psp;
-			ep = pep;
-		} */
+    /* ARAutoBeam(POSITION psp, POSITION pep)
+    {
+    sp = psp;
+    ep = pep;
+    } */
 
-		virtual ~ARAutoBeam() {}
-		virtual void print(int &indent) const {}
-		virtual void PrintName(std::ostream & os) const;
+    virtual ~ARAutoBeam() {}
 
-		// virtual ostream &operator<<(std::ostream &os) const;
-
+    virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+    virtual void printParameters(std::ostream& os) const;
 };
 
 #endif
-

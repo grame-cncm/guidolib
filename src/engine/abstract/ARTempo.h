@@ -45,63 +45,62 @@
 */
 class ARTempo : public ARMTParameter
 {
-	public:
-						ARTempo();
-		virtual 		~ARTempo();
+public:
+             ARTempo();
+    virtual ~ARTempo();
 
-		virtual void 	print(int &indent) const;
-		virtual void 	setTagParameterList(TagParameterList & tpl);
-		virtual std::ostream & operator << (std::ostream & os) const;
+	virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 
+    virtual void setTagParameterList(TagParameterList & tpl);
 
-			//! Gives the tempo information strings vector.
-			const FormatStringParserResult& getTempoMark() const { return mTempoMark; }		
-			
-			//! Tells if the optional bpm informations have been specified.
-			bool			hasBpmInfos() const { return mHasBpmInfos; }
-			
-			/** Tells if bpm is in "note equivalent" format.
-			
-				\return true when we have a/b=c/d, false for a/b=c.
-			*/
-			bool			isNoteEquiv() const { return mBpmNoteEquiv; }
+    //! Gives the tempo information strings vector.
+    const FormatStringParserResult& getTempoMark() const { return mTempoMark; }		
 
-			
-			/** Gives the unit of the bpm tempo.
+    //! Tells if the optional bpm informations have been specified.
+    bool hasBpmInfos() const { return mHasBpmInfos; }
 
-				example: for 1/4=120, 1/4 is the unit.
-				\return a musical duration, (1/4 is a quarter note)
-			*/
-			TYPE_DURATION	getBpmUnit() const { return mBpmUnit; }	
+    /** Tells if bpm is in "note equivalent" format.
+
+    \return true when we have a/b=c/d, false for a/b=c.
+    */
+    bool isNoteEquiv() const { return mBpmNoteEquiv; }
 
 
-			/** Gives the value of the bpm tempo.
+    /** Gives the unit of the bpm tempo.
 
-				example: for 1/4=120, 120 is the value.
-				\return a tempo as bpm or as a note equivalent.
-			*/
-			TYPE_DURATION	getBpmValue() const { return mBpmValue; }	
+    example: for 1/4=120, 1/4 is the unit.
+    \return a musical duration, (1/4 is a quarter note)
+    */
+    TYPE_DURATION getBpmUnit() const { return mBpmUnit; }	
 
-			/** Gives the value of the tempo in quarters per minute.
-			*/
-			float	getQpmValue() const;	
 
-		virtual void	browse(TimeUnwrap& mapper) const;
-	
-	protected:
+    /** Gives the value of the bpm tempo.
 
-		static ListOfTPLs ltpls;
+    example: for 1/4=120, 120 is the value.
+    \return a tempo as bpm or as a note equivalent.
+    */
+    TYPE_DURATION getBpmValue() const { return mBpmValue; }	
 
-	private:
-			void		ParseBpm( TagParameterString * inTag );
+    /** Gives the value of the tempo in quarters per minute.
+    */
+    float getQpmValue() const;	
 
-			FormatStringParserResult	mTempoMark;
-			
-			TYPE_DURATION	mBpmUnit;			// bpm="mBpmUnit=mBpmValue">
-			TYPE_DURATION	mBpmValue;
-			bool			mBpmNoteEquiv;	// true if bpm value is a note equivalent.
-			bool			mHasBpmInfos;
+    virtual void browse(TimeUnwrap& mapper) const;
 
+protected:
+    static ListOfTPLs ltpls;
+
+private:
+    void		ParseBpm( TagParameterString * inTag );
+
+    FormatStringParserResult	mTempoMark;
+
+    TYPE_DURATION	mBpmUnit;			// bpm="mBpmUnit=mBpmValue">
+    TYPE_DURATION	mBpmValue;
+    bool			mBpmNoteEquiv;	// true if bpm value is a note equivalent.
+    bool			mHasBpmInfos;
 };
 
 

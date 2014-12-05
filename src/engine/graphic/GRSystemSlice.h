@@ -61,7 +61,7 @@ public:
 	virtual void	tellPosition(GObject * caller, const NVPoint & newPosition);
 	virtual void	setHPosition( GCoord nx);
 	virtual void 	OnDraw( VGDevice & hdc ) const;
-	virtual void	GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
+	virtual void	GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 	virtual void 	updateBoundingBox();
 
 
@@ -82,8 +82,8 @@ public:
 	void		addFinishBar( GRFinishBar * mybar,int btype, GRStaff * grstaff);
 	void		addPossibleBreakState( GRPossibleBreakState * in );
 
-	void		setNumber( int num )		{ mNumber = num; }
-	bool		hasSystemBars( )			{ return mHasSystemBars; }
+	void		setNumber(int num )	{ mNumber = num; }
+	bool		hasSystemBars( )	{ return mHasSystemBars; }
 
 protected:
 	// this variable holds the current begin
@@ -103,7 +103,7 @@ protected:
 	
 	int				mStartSpringID;
 	int				mEndSpringID;
-	bool			mHasSystemBars;
+	bool			mHasSystemBars;     // Totally useless for now, I guess
 	float			mFirstEvXPosition;  // used by the first slice to split the mapping consistently to the next systems
 };
 

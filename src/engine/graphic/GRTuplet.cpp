@@ -502,10 +502,6 @@ void GRTuplet::OnDraw(VGDevice & hdc) const
 }
 
 // ----------------------------------------------------------------------------
-void GRTuplet::print(int &indent) const
-{
-}
-
 /* First new version
 // ----------------------------------------------------------------------------
 void 

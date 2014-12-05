@@ -72,20 +72,20 @@ void ARDefineTag::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARDefineTag::PrintName(std::ostream & os) const
+void ARDefineTag::printName(std::ostream& os) const
 {
-	os << "\\defineTag";
+    os << "ARDefineTag";
 }
 
-void ARDefineTag::PrintParameters(std::ostream & os) const
+void ARDefineTag::printGMNName(std::ostream& os) const
 {
-	if (!(tagname && tagparameters && ggstext))
-		return;
-	os << "<\"" << tagname->getValue()
-		<< "\",\""
-		<< tagparameters->getValue()
-		<< "\",\""
-		<< ggstext->getValue()
-		<< "\"> ";
+    os << "\\defineTag";
+}
+
+void ARDefineTag::printParameters(std::ostream& os) const
+{
+    /* TODO */
+
+    ARMusicalTag::printParameters(os);
 }
 

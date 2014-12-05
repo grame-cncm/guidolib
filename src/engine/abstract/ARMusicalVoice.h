@@ -80,15 +80,13 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 	friend class GRVoiceManager;
 	friend class ARMusic;
 	
-	void printPosTags(std::ostream & os, GuidoPos& pos, GuidoPos prevpos, bool lookend) const;
-	
 	public:
-		typedef enum		CHORD_TYPE {UP_SIMPLE, DOWN_SIMPLE, UP, DOWN, UP_COMPLEX, DOWN_COMPLEX, CHORDERROR} CHORD_TYPE;
-		typedef enum		CHORD_ACCIDENTAL {NATURAL, FLAT, SHARP, CAU_NATURAL, CAU_FLAT, CAU_SHARP, NONE} CHORD_ACCIDENTAL;
+		typedef enum   CHORD_TYPE {UP_SIMPLE, DOWN_SIMPLE, UP, DOWN, UP_COMPLEX, DOWN_COMPLEX, CHORDERROR} CHORD_TYPE;
+		typedef enum   CHORD_ACCIDENTAL {NATURAL, FLAT, SHARP, CAU_NATURAL, CAU_FLAT, CAU_SHARP, NONE} CHORD_ACCIDENTAL;
 		// cau_natural, cau_flat, cau_sharp : cautionary accidentals
 	
-						 ARMusicalVoice();
-		virtual			~ARMusicalVoice();
+					    ARMusicalVoice();
+		virtual		   ~ARMusicalVoice();
 
 		void			MarkVoice(float from,float length, unsigned char red, unsigned char green, unsigned char blue);
 		void			MarkVoice(int fromnum,int fromdenom, int lengthnum, int lengthdenom, unsigned char red, unsigned char green, unsigned char blue);
@@ -138,12 +136,9 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		// adjust the duration of a voice by adding a rest-event
 		void			adjustDuration(const TYPE_DURATION & newDuration);
 
-		virtual void	print(int &indent) const;
-		virtual std::ostream & operator<< (std::ostream & os) const;
-		virtual std::ostream & output(std::ostream & os, bool isauto = true) const;
-		virtual void	browse(TimeUnwrap& mapper) const;
-		virtual void	browse(TimeUnwrap& mapper, ARMusicalVoiceState& state) const;
-		virtual void	browse(TimeUnwrap& mapper, const ARMusicalObject * start, const ARMusicalObject * end=0) const;
+		virtual void browse(TimeUnwrap& mapper) const;
+		virtual void browse(TimeUnwrap& mapper, ARMusicalVoiceState& state) const;
+		virtual void browse(TimeUnwrap& mapper, const ARMusicalObject * start, const ARMusicalObject * end=0) const;
 
 		virtual void	resetGRRepresentation();
 
@@ -172,6 +167,17 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
         // C.D. 22/10/2014 Perf improvement : prevent CheckBreakPosition from searching a RepeatBegin tag in all voice list
         void addRepeatBegin(ARRepeatBegin *repeatBegin) { repeatBeginList->push_back(repeatBegin); }
         std::vector<ARRepeatBegin *> *getRepeatBeginList() { return repeatBeginList; }
+
+        void printName(std::ostream& os) const;
+        void printParameters(std::ostream& os) const;
+
+		/* Visitor design pattern */
+        void goThrough(BaseVisitor *visitor);
+        void goThroughTagsList(BaseVisitor *visitor, GuidoPos& posTag, GuidoPos prevPos, bool addTag) const;
+
+        virtual void acceptIn (BaseVisitor *visitor) { visitor->visitIn (*this); }
+        virtual void acceptOut(BaseVisitor *visitor) { visitor->visitOut(*this); }
+        /**************************/
 
 	protected:
 		ARChordTag      *currentChord;

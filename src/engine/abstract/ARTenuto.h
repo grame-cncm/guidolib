@@ -28,32 +28,20 @@
 */
 class ARTenuto : public ARMTParameter, public ARPositionTag
 {		
-public:			
+public:		
+	ARTenuto() : ARMTParameter() { rangesetting = ONLY; }
 
-
-	ARTenuto() : ARMTParameter()
-	{
-		rangesetting = ONLY;
-	}
-
-	virtual ~ARTenuto() 
-	{
-		// delete TagParameterPointer ...
-	};
+    virtual ~ARTenuto() {};
 
 	virtual void setTagParameterList(TagParameterList& tpl);
 
-	// routines to access TagParameters ..
-	virtual void print(int &indent) const;
+	virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 
-	virtual void	browse(TimeUnwrap& mapper) const;
-	
-	virtual void PrintName(std::ostream & os) const;
-	virtual void PrintParameters(std::ostream & os) const;
-	
+	virtual void browse(TimeUnwrap& mapper) const;
 
 protected:
-
 	// TagParameters ..
 	// TagParameterString *textformat;
 	// TagParameterFloat  *fsize;
@@ -63,7 +51,6 @@ protected:
 	// this is important for allowed
 	// TagParameters ....
 	static ListOfTPLs ltpls;
-
 };
 
 #endif

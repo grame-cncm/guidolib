@@ -29,7 +29,6 @@ class GRSingleNote;
 class GRNoteDot : public GRNotationElement
 {
   public:
-
 		friend class GREvent;
 		friend class GRSingleNote;
 		using GObject::addToOffset;
@@ -44,7 +43,6 @@ class GRNoteDot : public GRNotationElement
 	 virtual void	GGSOutput() const;
 	 virtual void	OnDraw( VGDevice & hdc ) const;
 	 // virtual void setPosition(const NVPoint &position);
-	 virtual void	print(int &indent) const;
 
 	 virtual int	getNumDots() const						{ return mDots; }
 

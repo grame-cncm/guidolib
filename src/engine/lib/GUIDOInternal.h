@@ -25,7 +25,6 @@
 class GRMusic;
 class ARMusic;
 class VGDevice;
-class GuidoFeedback;
 
 struct NodeAR
 {
@@ -59,7 +58,6 @@ struct GuidoGlobalSettings
 
 	// TODO: what are these for?
 	VGDevice * gDevice;
-	GuidoFeedback * gFeedback;
 };
 
 // these are the default global settings

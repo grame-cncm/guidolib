@@ -14,9 +14,6 @@
 
 #include <fstream>
 
-#include "GuidoFeedback.h"
-#include "GUIDOInternal.h"	// for gGlobalSettings.gFeedback
-
 #include "ARMusic.h"
 #include "ARVoiceManager.h"
 #include "ARAuto.h"
@@ -93,50 +90,13 @@ void ARMusic::getTimeMap (TimeMapCollector& f) const
 	}
 }
 
-void ARMusic::print(int &indent) const
+void ARMusic::goThrough(BaseVisitor *visitor) const
 {
 	GuidoPos pos = GetHeadPosition();
-	while(pos) {
+	while (pos) {
 		ARMusicalVoice * e = GetNext(pos);
-		e->print(indent);
+		e->goThrough(visitor);
 	}
-}
-
-/** \brief Prints the music into a stream
-*/
-void ARMusic::print(std::ostream &os) const
-{
-	GuidoPos pos=GetHeadPosition();
-	ARMusicalVoice * e;
-	const char* sep = "";
-	os << "{\n";
-	while(pos)
-	{
-		os << sep;
-		e=GetNext(pos);
-		e->setReadMode(ARMusicalVoice::EVENTMODE);
-		e->operator<<(os);
-		e->setReadMode(ARMusicalVoice::CHORDMODE);
-		sep = "\n,\n";
-	}
-	os << "\n}\n";
-}
-
-std::ostream & ARMusic::output(std::ostream & os, bool isauto) const
-{
-	GuidoPos pos = GetHeadPosition();
-	ARMusicalVoice * e;
-	const char* sep = "";
-	os << "{\n";
-	while(pos)
-	{
-		os << sep;
-		e = GetNext(pos);
-		e->output(os,isauto);
-		sep = "\n,\n";
-	}
-	os << "\n}\n";
-	return os;
 }
 
 void ARMusic::resetGRRepresentation()
@@ -370,7 +330,6 @@ void ARMusic::doAutoStuff()
 		tmp = GetNext(pos)->getDuration();
 		if (tmp>maxdur)
 			maxdur = tmp;
-
 	}
 
 	adjustDuration(maxdur);
@@ -379,17 +338,11 @@ void ARMusic::doAutoStuff()
 	int counter = 0;
 	pos = GetHeadPosition();
 	//char statusmsg[100];
-	while (pos)
-	{
+
+	while (pos) {
 		++counter;
 		ARMusicalVoice * arvc = GetNext(pos);
 
-		if( gGlobalSettings.gFeedback )
-		{
-			gGlobalSettings.gFeedback->UpdateStatusMessage ( str_MusicalPreProcessing1, counter, nvoices );
-			if (gGlobalSettings.gFeedback->ProgDialogAbort())
-				return;
-		}
 		timebench("doAutoStuff1", arvc->doAutoStuff1());
 	}
 
@@ -400,19 +353,13 @@ void ARMusic::doAutoStuff()
 
 	counter = 0;
 	pos = GetHeadPosition();
-	while (pos)
-	{
+
+	while (pos) {
 		counter++;
 		// now we can check, wether newSystem and newPage are followed by correct clef/key information ...
 		// also do AutoDisplayCheck and autoBeaming.
 		ARMusicalVoice * arvc = GetNext(pos);
 
-		if( gGlobalSettings.gFeedback )
-		{
-			gGlobalSettings.gFeedback->UpdateStatusMessage ( str_MusicalPreProcessing2, counter, nvoices );
-			if (gGlobalSettings.gFeedback->ProgDialogAbort())
-				return;
-		}
 		timebench("doAutoStuff2", arvc->doAutoStuff2());
 	}
 }

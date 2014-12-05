@@ -12,14 +12,14 @@
 */
 
 #include <iostream>
-#include "ARPizz.h"
+#include "ARPizzicato.h"
 #include "TagParameterList.h"
 #include "TagParameterString.h"
 #include "ListOfStrings.h"
 
-ListOfTPLs ARPizz::ltpls(1);
+ListOfTPLs ARPizzicato::ltpls(1);
 
-void ARPizz::setTagParameterList(TagParameterList & tpl)
+void ARPizzicato::setTagParameterList(TagParameterList & tpl)
 {
 	if (ltpls.GetCount() == 0)
 	{
@@ -47,9 +47,11 @@ void ARPizz::setTagParameterList(TagParameterList & tpl)
 					type = SNAP;
 				else if (val == "fingernail")
 					type = FINGERNAIL;
-				else type = LEFTHAND;
+				else
+                    type = LEFTHAND;
 			}
-			else type = LEFTHAND;
+			else
+                type = LEFTHAND;
 			
 			delete str;
 		}
@@ -60,16 +62,34 @@ void ARPizz::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARPizz::print(int &indent) const
+void ARPizzicato::printName(std::ostream& os) const
 {
+    os << "ARPizzicato";
 }
 
-void ARPizz::PrintName(std::ostream &os) const
+void ARPizzicato::printGMNName(std::ostream& os) const
 {
-	os << "\\pizzicato";
-	if (getRange()) os << "(";
+    os << "\\pizzicato";
 }
 
-void ARPizz::PrintParameters(std::ostream & ) const
+void ARPizzicato::printParameters(std::ostream& os) const
 {
+    switch (type) {
+    case BUZZ:
+        os << "buzz";
+        break;
+    case SNAP:
+        os << "snap";
+        break;
+    case FINGERNAIL:
+        os << "fingernail";
+        break;
+    default:
+        os << "lefthand";
+        break;
+    }
+
+    os << ";";
+
+    ARMusicalTag::printParameters(os);
 }

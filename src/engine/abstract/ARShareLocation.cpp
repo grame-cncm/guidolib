@@ -23,7 +23,7 @@ ListOfTPLs ARShareLocation::ltpls(1);
 ARShareLocation::ARShareLocation(const ARShareLocation * sloc)
 : ARMTParameter(-1,sloc)
 {
-
+    rangesetting = ONLY;
 }
 
 ARShareLocation::~ARShareLocation()
@@ -63,15 +63,19 @@ void ARShareLocation::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARShareLocation::PrintName(std::ostream & os) const
+void ARShareLocation::printName(std::ostream& os) const
 {
-	os << "\\shareLocation";
-	if (!getRange())
-		os << "Begin";
+    os << "ARShareLocation";
 }
 
-void ARShareLocation::PrintParameters(std::ostream & ) const
+void ARShareLocation::printGMNName(std::ostream& os) const
 {
+    os << "\\shareLocation";
+}
+
+void ARShareLocation::printParameters(std::ostream& os) const
+{
+    ARMusicalTag::printParameters(os);
 }
 
 

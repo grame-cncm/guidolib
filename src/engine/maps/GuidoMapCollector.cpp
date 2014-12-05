@@ -282,7 +282,7 @@ void GuidoSystemCollector::processNoDiv (int page, float w, float h, Time2Graphi
 
 	Time2GraphicMap::const_iterator slicesIter = slicesMap.begin();
 	Time2GraphicMap::const_iterator systemIter = systemMap.begin();
-	
+
 	while (systemIter != systemMap.end()) {
 		if (slicesIter == slicesMap.end()) {
 			cerr << "unexpected slices segmentation end while collecting system map" << endl;
@@ -295,14 +295,14 @@ void GuidoSystemCollector::processNoDiv (int page, float w, float h, Time2Graphi
 		outmap->push_back( make_pair(systemIter->first, adjusted));
 
 		// skip the remaining slices until the next line
-		float prevx = slicerect.left;
-		float sysy  = sysrect.top;
-		while (slicesIter != slicesMap.end()) {
-			float x = slicesIter->second.left;
-			float y = slicesIter->second.top;
-			if ((x < prevx) || (y < sysy)) break;			
-			prevx = x;
-			slicesIter++;
+		float prevSliceBot = slicerect.bottom;
+        float sysy         = sysrect.top;
+        slicesIter++;
+        while (slicesIter != slicesMap.end()) {
+            float currSliceTop = slicesIter->second.top;
+            if ((currSliceTop > prevSliceBot) || (currSliceTop < sysy)) break;
+            prevSliceBot = currSliceTop;	
+            slicesIter++;	    
 		}
 		systemIter++;
 	}

@@ -44,7 +44,6 @@ void ARTenuto::setTagParameterList(TagParameterList& tpl)
 		if (ret == 0)
 		{
 			// Get The TagParameters ...
-
 		}
 
 		delete rtpl;
@@ -63,18 +62,19 @@ void ARTenuto::browse(TimeUnwrap& mapper) const
 	mapper.AtPos (this, TimeUnwrap::kTenuto);
 }
 
-void ARTenuto::print(int &indent) const
+void ARTenuto::printName(std::ostream& os) const
 {
+	os << "ARTenuto";
 }
 
-void ARTenuto::PrintName(std::ostream & os) const
+void ARTenuto::printGMNName(std::ostream& os) const
 {
-	os << "\\ten";
-	if (getRange()) os << "(";
-
+    os << "\\tenuto";
 }
-void ARTenuto::PrintParameters(std::ostream & ) const
+
+void ARTenuto::printParameters(std::ostream& os) const
 {
+    ARMusicalTag::printParameters(os);
 }
 
 

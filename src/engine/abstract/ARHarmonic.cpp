@@ -48,16 +48,17 @@ void ARHarmonic::setTagParameterList(TagParameterList& tpl)
 	tpl.RemoveAll();
 }
 
-void ARHarmonic::print(int &indent) const
+void ARHarmonic::printName(std::ostream& os) const
 {
+    os << "ARHarmonic";
 }
 
-void ARHarmonic::PrintName(std::ostream &os) const
+void ARHarmonic::printGMNName(std::ostream& os) const
 {
-	os << "\\marcato";
-	if (getRange()) os << "(";
+    os << "\\harmonic";
 }
 
-void ARHarmonic::PrintParameters(std::ostream & ) const
+void ARHarmonic::printParameters(std::ostream& os) const
 {
+    ARMusicalTag::printParameters(os);
 }

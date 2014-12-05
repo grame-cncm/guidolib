@@ -21,35 +21,25 @@ class TagParameterInt;
 
 /** \brief Accolade tag to group staves into accolades.
 */
-class ARAccol : public ARMTParameter
+class ARAccolade : public ARMTParameter
 {
 public:
-	ARAccol();
-	virtual ~ARAccol();
+	ARAccolade();
+	virtual ~ARAccolade();
 
-	const TagParameterString * getIDString() const
-	{ return sid; }
-
-	const TagParameterInt * getIDInt() const
-	{ return nid; }
-
-	const TagParameterString * getAccolRange() const
-	{ return range; }
-
-	const TagParameterString * getType() const
-	{
-		return type;
-	}
-
-	virtual bool IsStateTag() const { return true; }
+	const TagParameterString * getIDString() const   { return sid; }
+	const TagParameterInt * getIDInt() const         { return nid; }
+	const TagParameterString * getAccolRange() const { return range; }
+	const TagParameterString * getType() const       { return type; }
+	virtual bool IsStateTag() const                  { return true; }
 	
 	virtual void setTagParameterList( TagParameterList & tpl);
-	virtual void print(int &indent) const { }
-	virtual void PrintName(std::ostream & os) const;
-	virtual void PrintParameters(std::ostream & os) const;
+
+	virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 
 protected:
-
 	TagParameterInt * 		nid;
 	TagParameterString *	sid;
 
@@ -57,7 +47,6 @@ protected:
 	TagParameterString *	type;
 
 	static ListOfTPLs 		ltpls;
-
 };
 
 #endif 

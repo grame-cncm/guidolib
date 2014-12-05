@@ -142,10 +142,6 @@ void GRIntens::OnDraw(VGDevice & hdc) const
 }
 
 
-void GRIntens::print(int &indent) const
-{
-}
-
 const ARIntens* GRIntens::getARIntens() const
 {
 	return /*dynamic*/static_cast<const ARIntens*>(getAbstractRepresentation());

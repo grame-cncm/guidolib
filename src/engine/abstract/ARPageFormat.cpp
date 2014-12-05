@@ -279,3 +279,28 @@ ARPageFormat::AdjustMargins()
 	if (mSizeY - mTop - mBottom <= 0.1 )  // Idem for vertical margins.
 		mTop = mBottom = 0;
 }
+
+void ARPageFormat::printName(std::ostream& os) const
+{
+    os << "ARPageFormat";
+}
+
+void ARPageFormat::printGMNName(std::ostream& os) const
+{
+    os << "\\pageFormat";
+}
+
+void ARPageFormat::printParameters(std::ostream& os) const
+{
+    if (!mFormat.empty())
+        os << "format: " << mFormat << "; ";
+    else
+        os << "width: " << mSizeX << "; height: " << mSizeY << "; ";
+
+    os << "left margin: " << mLeft << "; ";
+    os << "top margin: " << mTop << "; ";
+    os << "right margin: " << mRight << "; ";
+    os << "bottom margin: " << mBottom  << "; ";
+
+    ARMusicalTag::printParameters(os);
+}

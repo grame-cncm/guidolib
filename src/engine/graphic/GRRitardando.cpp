@@ -263,4 +263,3 @@ unsigned int GRRitardando::getTextAlign() const
 {
 	return VGDevice::kAlignLeft | VGDevice::kAlignTop; 
 }
-

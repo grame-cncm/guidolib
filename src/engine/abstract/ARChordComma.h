@@ -21,34 +21,29 @@
 */
 class ARChordComma : // public ARMusicalObject, 
 	public ARMTParameter
-  {
-  public:
+{
+public:
 	
-	  ARChordComma(const ARChordComma *cc);
+	ARChordComma(const ARChordComma *cc);
 
-	  virtual ARMusicalObject *Copy() const;
+	virtual ARMusicalObject *Copy() const;
 
-		ARChordComma();
+		     ARChordComma();
+	virtual ~ARChordComma();
 
-		virtual ~ARChordComma();
+	virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+    virtual void printParameters(std::ostream& os) const;
 
-		virtual void print(int &indent) const;
-       // virtual ostream & operator<<(ostream &os) const;
-		virtual void PrintName(std::ostream & os) const;
-		virtual void PrintParameters(std::ostream & os) const;
-
-		virtual void setTagParameterList(TagParameterList & theTagParameterList);
-		virtual void browse(TimeUnwrap& mapper) const;
+	virtual void setTagParameterList(TagParameterList & theTagParameterList);
+	virtual void browse(TimeUnwrap& mapper) const;
         
-
     /**** Function to avoid dynamic_cast ****/
     ARMusicalObject *isARChordComma() { return this; }
     /****************************************/
 
-  protected:
-
-		static ListOfTPLs ltpls;
-  };
-
+protected:
+	static ListOfTPLs ltpls;
+};
 
 #endif

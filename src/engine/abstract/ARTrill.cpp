@@ -68,7 +68,7 @@ void ARTrill::setTagParameterList(TagParameterList& tpl)
 		// we found a match!
 		if (ret == 0)
 		{
-			TagParameterString * str = TagParameterString::cast(rtpl->RemoveHead());
+			TagParameterString *str = TagParameterString::cast(rtpl->RemoveHead());
 			assert(str);
 			if (str->TagIsSet() && (str->getValue() == std::string("cautionary")))
 				fShowCautionaryAccidentals = true;
@@ -103,8 +103,10 @@ void ARTrill::setTagParameterList(TagParameterList& tpl)
 			delete anchor;
 
 		}
+
 		delete rtpl;
 	}
+
 	tpl.RemoveAll();
 }
 
@@ -118,28 +120,55 @@ float ARTrill::getady() const
 	return ady;
 }
 
-void ARTrill::print(int &indent) const
-{
-}
-
-void ARTrill::PrintName(std::ostream & os) const
-{
-	if		(mTrillType == TRILL)	os << "\\trill";
-	else if (mTrillType == TURN)	os << "\\turn";
-	else if (mTrillType == MORD)	os << "\\mord";
-}
-void ARTrill::PrintParameters(std::ostream & os) const
-{
-	/*if (mDur && mDur->TagIsSet())
-	{
-		os << "<dur=" << mDur->getValue() << ">";
-	}*/
-}
-
 bool ARTrill::getStatus() const{
 	return begin;
 }
 
 void ARTrill::setContinue(){
 	begin = false;
+}
+
+void ARTrill::printName(std::ostream& os) const
+{
+    os << "ARTrill";
+
+    switch (mTrillType) {
+    case TRILL:
+        os << " (trill)";
+        break;
+    case TURN:
+        os << " (turn)";
+        break;
+    case MORD:
+        os << " (mord)";
+        break;
+    }
+}
+
+void ARTrill::printGMNName(std::ostream& os) const
+{
+    os << "\\";
+
+    switch (mTrillType) {
+    case TRILL:
+        os << "trill";
+        break;
+    case TURN:
+        os << "turn";
+        break;
+    case MORD:
+        os << "mord";
+        break;
+    }
+}
+
+void ARTrill::printParameters(std::ostream& os) const
+{
+    os << "mode: "   << (fShowCautionaryAccidentals ? "cautionnary" : "none") << "; ";
+    os << "adx: "    << adx << "; ";
+    os << "ady: "    << ady << "; ";
+    os << "tr: "     << (fShowTR ? "true" : "false") << "; ";
+    os << "anchor: " << (fDrawOnNoteHead ? "note" : "above") << "; ";
+
+    ARMusicalTag::printParameters(os);
 }

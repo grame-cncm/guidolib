@@ -16,10 +16,19 @@
 #include "TimeUnwrap.h"
 
 ARDaCoda::ARDaCoda() : ARJump ("to Coda [coda]") {}
-ARDaCoda::~ARDaCoda()   {}
-void ARDaCoda::PrintName( std::ostream & os ) const  { os << "\\daCoda"; }
+ARDaCoda::~ARDaCoda() {}
 
 void ARDaCoda::browse(TimeUnwrap& mapper) const
 {
 	mapper.AtPos (this, TimeUnwrap::kDaCoda);
+}
+
+void ARDaCoda::printName(std::ostream& os) const
+{
+    os << "ARDaCoda";
+}
+
+void ARDaCoda::printGMNName(std::ostream& os) const
+{
+    os << "\\daCoda";
 }
