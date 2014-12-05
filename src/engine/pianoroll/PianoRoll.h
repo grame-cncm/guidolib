@@ -148,7 +148,7 @@ protected:
 
     std::vector<std::pair<int, VGColor> > *fVoicesColors; // voices colors that the user set himself
     
-    std::stack<VGColor> *fColors;  // the colors stack (voice color, noteFormat color)
+    std::stack<VGColor *> *fColors;  // the colors stack (voice color, noteFormat color)
 
 	bool fChord;                   // a flag to indicate that next note (or rest) is in a chord
     TYPE_DURATION fChordDuration;  // the chord duration (notes in a chord have a null duration)

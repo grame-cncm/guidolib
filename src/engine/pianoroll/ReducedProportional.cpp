@@ -230,7 +230,7 @@ void ReducedProportional::DrawVoice(ARMusicalVoice* v, DrawParams &drawParams)
             std::pair<int, VGColor> pair = fVoicesColors->at(i);
 
             if (pair.first == voiceNum)
-                fColors->push(pair.second);
+                fColors->push(&pair.second);
         }
     }
     
@@ -243,11 +243,11 @@ void ReducedProportional::DrawVoice(ARMusicalVoice* v, DrawParams &drawParams)
 
             HSVtoRGB((float) drawParams.colorHue, 0.5f, 0.9f, r, g, b);
 
-            fColors->push(VGColor(r, g, b, 255));
+            fColors->push(new VGColor(r, g, b, 255));
         }
         
-        drawParams.dev->PushPenColor(fColors->top());
-        drawParams.dev->PushFillColor(fColors->top());
+        drawParams.dev->PushPenColor(*fColors->top());
+        drawParams.dev->PushFillColor(*fColors->top());
     }
 
     fChord   = false;
@@ -308,7 +308,7 @@ void ReducedProportional::DrawVoice(ARMusicalVoice* v, DrawParams &drawParams)
 void ReducedProportional::DrawHead(float x, float y, int alter, DrawParams &drawParams) const
 {
     if (!fColors->empty())
-        drawParams.dev->SetFontColor(fColors->top());
+        drawParams.dev->SetFontColor(*fColors->top());
 	else
         drawParams.dev->SetFontColor(fFontSavedColor);
 
@@ -362,10 +362,10 @@ void ReducedProportional::handleColor(ARNoteFormat* noteFormat, DrawParams &draw
     unsigned char colref[4];
 
     if (tps && tps->getRGB(colref)) {
-        fColors->push(VGColor(colref[0], colref[1], colref[2], colref[3]));
+        fColors->push(new VGColor(colref[0], colref[1], colref[2], colref[3]));
 
-        drawParams.dev->PushPenColor(fColors->top());
-        drawParams.dev->PushFillColor(fColors->top());
+        drawParams.dev->PushPenColor(*fColors->top());
+        drawParams.dev->PushFillColor(*fColors->top());
     }
     else {
         fColors->pop();
