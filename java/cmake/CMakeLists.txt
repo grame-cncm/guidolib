@@ -106,7 +106,7 @@ if (WIN64)
 elseif(APPLE)
  find_library (GUIDO GUIDOEngine PATHS ${GUIDO_PATH}/MacOS/Release NO_DEFAULT_PATH)
 else()
- find_library (GUIDO GUIDOEngine)
+ find_library (GUIDO GUIDOEngine PATHS ${GUIDO_PATH}/win32/Release NO_DEFAULT_PATH)
 endif()
 
 set (LIBCONTENT ${LIBSRC} ${LIBH})
