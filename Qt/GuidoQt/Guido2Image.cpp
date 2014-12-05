@@ -116,15 +116,18 @@ Guido2ImageErrorCodes checkParams( bool isFile , const char * gmnSource , const 
 const char* Guido2Image::getErrorString( Guido2ImageErrorCodes err )
 {
 	switch (err) {
-		case GUIDO_2_IMAGE_SUCCESS:					return "success";
-		case GUIDO_2_IMAGE_SOURCE_IS_NULL:			return "invalid input";
-		case GUIDO_2_IMAGE_OUTPUT_IS_NULL:			return "invalid output";
-		case GUIDO_2_IMAGE_INPUT_FILE_ERROR:		return "no such input file";
-		case GUIDO_2_IMAGE_INVALID_SIZE_AND_ZOOM:	return "invalid size and zoom";
-		case GUIDO_2_IMAGE_INVALID_PAGE_INDEX:		return "invalid page index";
-		case GUIDO_2_IMAGE_INVALID_GMN_CODE:		return "invalid gmn code";
+		case GUIDO_2_IMAGE_SUCCESS:					 return "success";
+		case GUIDO_2_IMAGE_SOURCE_IS_NULL:			 return "invalid input";
+		case GUIDO_2_IMAGE_OUTPUT_IS_NULL:			 return "invalid output";
+		case GUIDO_2_IMAGE_INPUT_FILE_ERROR:		 return "no such input file";
+		case GUIDO_2_IMAGE_INVALID_SIZE_AND_ZOOM:	 return "invalid size and zoom";
+		case GUIDO_2_IMAGE_INVALID_PAGE_INDEX:		 return "invalid page index";
+		case GUIDO_2_IMAGE_INVALID_GMN_CODE:		 return "invalid gmn code";
 		case GUIDO_2_IMAGE_GUIDO_ENGINE_NOT_STARTED: return "Guido Engine not started";
-		case GUIDO_2_IMAGE_INVALID_IMAGE_FORMAT:	return "invalid image format";
+		case GUIDO_2_IMAGE_INVALID_IMAGE_FORMAT:	 return "invalid image format";
+        case GUIDO_2_IMAGE_OUTPUT_FILE_OVERSIZED:	 return "output size is too big";
+        case GUIDO_2_IMAGE_OUTPUT_FILE_UNDERSIZED:	 return "output size is too small";
+        case GUIDO_2_IMAGE_UNSPECIFIED_ERROR:        return "unspecified error";
 	}
 	return "unknown error";
 }
@@ -147,18 +150,24 @@ Guido2ImageErrorCodes Guido2Image::check( const Params& p )
 }
 
 //----------------------------------------------------------------------------
-Guido2ImageErrorCodes Guido2Image::gmnString2Image( const Params& p )
+Guido2ImageErrorCodes Guido2Image::gmnString2Image(const Params& p)
 {
 	Guido2ImageErrorCodes errorCode = check(p);
-	if ( errorCode != GUIDO_2_IMAGE_SUCCESS )
+
+	if (errorCode != GUIDO_2_IMAGE_SUCCESS)
 		return errorCode;
 		
 	QGuidoPainter * painter = QGuidoPainter::createGuidoPainter();
+
 	if (painter) {
-		if (p.layout) painter->setGuidoLayoutSettings (*p.layout);
+		if (p.layout)
+            painter->setGuidoLayoutSettings (*p.layout);
+
         painter->setGMNCode(p.input);
 	}
-	else return GUIDO_2_IMAGE_GUIDO_ENGINE_NOT_STARTED;			// likely
+	else
+        return GUIDO_2_IMAGE_GUIDO_ENGINE_NOT_STARTED;			// likely
+
 	return guidoPainterToImage(painter, p);
 }
 
@@ -182,39 +191,47 @@ Guido2ImageErrorCodes Guido2Image::gmnFile2Image( const  Params& p )
 }
 
 //----------------------------------------------------------------------------
-Guido2ImageErrorCodes Guido2Image::guidoPianoRoll2Image(const Params& p, PianoRoll *pianoRoll, int width, int height)
+Guido2ImageErrorCodes Guido2Image::guidoPianoRoll2Image(const Params& p, PianoRoll *pianoRoll)
 {
+	Guido2ImageErrorCodes result = GUIDO_2_IMAGE_SUCCESS;
+
 	QGuidoPainter *painter = QGuidoPainter::createGuidoPainter();
 
 	if (!painter)
         return GUIDO_2_IMAGE_GUIDO_ENGINE_NOT_STARTED;
 
     if (p.format == GUIDO_2_IMAGE_PDF)
-        writePianoRollPDF(painter, p.output, pianoRoll, width, height);
+        result = writePianoRollPDF(painter, p.output, pianoRoll, p.sizeConstraints.width(), p.sizeConstraints.height());
     else
-        writePianoRollImage(painter, p, pianoRoll, width, height);
+        result = writePianoRollImage(painter, p, pianoRoll);
 
 	QGuidoPainter::destroyGuidoPainter(painter);
 
-	return GUIDO_2_IMAGE_SUCCESS;
+	return result;
 }
 
 //----------------------------------------------------------------------------
-Guido2ImageErrorCodes Guido2Image::guidoPainterToImage( QGuidoPainter * guidoPainter, const Params& p )
+Guido2ImageErrorCodes Guido2Image::guidoPainterToImage(QGuidoPainter * guidoPainter, const Params& p)
 {
 	Guido2ImageErrorCodes result = GUIDO_2_IMAGE_SUCCESS;
-	if ( guidoPainter->isGMNValid() )
-	{
+
+	if (guidoPainter->isGMNValid()) {
 		int page = p.pageIndex;
-		if ( page < 0 )  page = 0;
-		else if ( page > guidoPainter->pageCount() ) page = guidoPainter->pageCount();
-		if ( p.format == GUIDO_2_IMAGE_PDF )
-			writePDF( guidoPainter, page, p.output );
+		if (page < 0)
+            page = 0;
+		else if (page > guidoPainter->pageCount())
+            page = guidoPainter->pageCount();
+
+		if (p.format == GUIDO_2_IMAGE_PDF)
+			result = writePDF(guidoPainter, page, p.output);
 		else
-			writeImage(guidoPainter, p);
+			result = writeImage(guidoPainter, p);
 	}
-	else result = GUIDO_2_IMAGE_INVALID_GMN_CODE;
-	QGuidoPainter::destroyGuidoPainter( guidoPainter );
+	else
+        result = GUIDO_2_IMAGE_INVALID_GMN_CODE;
+
+	QGuidoPainter::destroyGuidoPainter(guidoPainter);
+
 	return result;
 }
 
@@ -226,7 +243,7 @@ void Guido2Image::writePDF( QGuidoPainter * , int , const char *  )
 {
 }
 #else
-void Guido2Image::writePDF( QGuidoPainter * guidoPainter, int pageIndex, const char * fname )
+Guido2ImageErrorCodes Guido2Image::writePDF( QGuidoPainter * guidoPainter, int pageIndex, const char * fname )
 {
 	QString fileName (fname);
 	if ( !fileName.toUpper().endsWith( PDF_FORMAT.toUpper())) fileName += PDF_FORMAT;
@@ -261,9 +278,11 @@ void Guido2Image::writePDF( QGuidoPainter * guidoPainter, int pageIndex, const c
 			printer.newPage();
 	}
 	painter.end();
+
+    return GUIDO_2_IMAGE_SUCCESS;
 }
 
-void Guido2Image::writePianoRollPDF(QGuidoPainter *guidoPainter, const char *fname, PianoRoll *pianoRoll, int width, int height)
+Guido2ImageErrorCodes Guido2Image::writePianoRollPDF(QGuidoPainter *guidoPainter, const char *fname, PianoRoll *pianoRoll, int width, int height)
 {
 	QString fileName(fname);
 
@@ -281,24 +300,34 @@ void Guido2Image::writePianoRollPDF(QGuidoPainter *guidoPainter, const char *fna
 	painter.setRenderHint(QPainter::Antialiasing);
 	painter.setWindow(QRect(0, 0, width, height));
 	
-    guidoPainter->drawPianoRoll(&painter, QRect(0, 0, width, height), pianoRoll);
+    GuidoErrCode result = guidoPainter->drawPianoRoll(&painter, QRect(0, 0, width, height), pianoRoll);
 
 	painter.end();
+    
+    if (result != guidoNoErr)
+        return GUIDO_2_IMAGE_UNSPECIFIED_ERROR;
+
+    return GUIDO_2_IMAGE_SUCCESS;
 }
 #endif
 
 //----------------------------------------------------------------------------
-void Guido2Image::writeImage( QGuidoPainter * guidoPainter, const Params& p)
+Guido2ImageErrorCodes Guido2Image::writeImage( QGuidoPainter * guidoPainter, const Params& p)
 {
 	int page = p.pageIndex;
 	if (page <= 0) page = 1;
 	else if ( page > guidoPainter->pageCount() ) page = guidoPainter->pageCount();
 
 	QSizeF size = guidoPainter->pageSizeMM( page );
-	size.setWidth( 5 * size.width() );
-	size.setHeight( 5 * size.height() );
+	size.setWidth( 5 * size.width() * p.zoom);
+    size.setHeight( 5 * size.height() * p.zoom);
 	size = size2constrainedsize (size, p.sizeConstraints);
 //qDebug() << "Guido2Image::writeImage size:" << size;
+
+    if (size.width() > 10000 || size.height() > 10000)
+        return GUIDO_2_IMAGE_OUTPUT_FILE_OVERSIZED;
+    else if (size.width() < 2 || size.height() < 2)
+        return GUIDO_2_IMAGE_OUTPUT_FILE_UNDERSIZED;
 
 	QImage image( size.width() , size.height() , QImage::Format_ARGB32);
 	image.fill( QColor(255,255,255,0).rgba() );
@@ -329,22 +358,38 @@ void Guido2Image::writeImage( QGuidoPainter * guidoPainter, const Params& p)
 //	}
 	painter.end();
 	Guido2Image::save (&image, p);
+
+    return GUIDO_2_IMAGE_SUCCESS;
 }
 
 //----------------------------------------------------------------------------
-void Guido2Image::writePianoRollImage( QGuidoPainter * guidoPainter, const Params& p, PianoRoll *pianoRoll, int width, int height)
+Guido2ImageErrorCodes Guido2Image::writePianoRollImage(QGuidoPainter * guidoPainter, const Params& p, PianoRoll *pianoRoll)
 {
-	QImage image(width, height, QImage::Format_ARGB32);
+    QSizeF size = p.sizeConstraints;
+	size.setWidth(size.width() * p.zoom);
+    size.setHeight(size.height() * p.zoom);
+
+    if (size.width() > 10000 || size.height() > 10000)
+        return GUIDO_2_IMAGE_OUTPUT_FILE_OVERSIZED;
+    else if (size.width() < 1 || size.height() < 1)
+        return GUIDO_2_IMAGE_OUTPUT_FILE_UNDERSIZED;
+
+	QImage image(size.width(), size.height(), QImage::Format_ARGB32);
 	image.fill(QColor(255, 255, 255, 0).rgba());
 
 	QPainter painter;
 	painter.begin(&image);
 	painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform, true);
 	
-	guidoPainter->drawPianoRoll(&painter, QRect(0, 0, width, height), pianoRoll);
+	GuidoErrCode result = guidoPainter->drawPianoRoll(&painter, QRect(0, 0, size.width(), size.height()), pianoRoll);
 
 	painter.end();
 	Guido2Image::save(&image, p);
+
+    if (result != guidoNoErr)
+        return GUIDO_2_IMAGE_UNSPECIFIED_ERROR;
+
+    return GUIDO_2_IMAGE_SUCCESS;
 }
 
 //----------------------------------------------------------------------------
@@ -372,77 +417,3 @@ void Guido2Image::save(QPaintDevice * paintDevice, const Params& p)
 	else if (p.device)
 		pic->save( p.device, imageFormatToStr(p.format) );
 }
-	
-//----------------------------------------------------------------------------
-//QRectF Guido2Image::getPictureRect(QGuidoPainter * guidoPainter , int pageIndex, const QSize& outputSizeConstraint , float zoom )
-//{
-//	QRectF pictureRect;
-//
-//
-//qDebug() << "Guido2Image::getPictureRect" << pageIndex;
-//	if ( pageIndex )
-//	{
-//		QSizeF s = guidoPainter->pageSizeMM( pageIndex );
-//		pictureRect = QRectF( 0, 0, s.width(), s.height() );
-//	}
-//	else
-//	{
-//		pictureRect = QRectF(0,0,0,0);
-//		for (int page = 1 ; page <= guidoPainter->pageCount() ; page++ ) 
-//		{
-//			QSizeF pageSize = guidoPainter->pageSizeMM(page);
-////			if ( PAGES_ALIGNMENT == QGuidoMPageItem::Horizontal )
-//			if (true)
-//			{
-//				pictureRect.setWidth( pictureRect.width() + pageSize.width() );
-//				pictureRect.setHeight( ( pictureRect.height() > pageSize.height() ) ? pictureRect.height() : pageSize.height() );
-//			}
-//			else
-//			{
-//				pictureRect.setHeight( pictureRect.height() + pageSize.height() );
-//				pictureRect.setWidth( ( pictureRect.width() > pageSize.width() ) ? pictureRect.width() : pageSize.width() );
-//			}
-//		}
-//	}
-//	
-//	bool widthIsConstraining = false, heightIsConstraining = false;
-//	if ( outputSizeConstraint.width() || outputSizeConstraint.height() ) 
-//	{
-//		if ( outputSizeConstraint.width() && outputSizeConstraint.height() ) 
-//		{
-//			float heightZoom = outputSizeConstraint.height() / pictureRect.height();
-//			float widthZoom = outputSizeConstraint.width() / pictureRect.width();
-//			if ( heightZoom > widthZoom )
-//			{
-//				widthIsConstraining = true;
-//				zoom = widthZoom;
-//			}
-//			else
-//			{
-//				heightIsConstraining = true;
-//				zoom = heightZoom;
-//			}
-//		}
-//		else if ( outputSizeConstraint.width() )
-//		{
-//			widthIsConstraining = true;
-//			zoom = outputSizeConstraint.width() / pictureRect.width();
-//		}
-//		else if ( outputSizeConstraint.height() )
-//		{
-//			heightIsConstraining = true;
-//			zoom = outputSizeConstraint.height() / pictureRect.height();
-//		}
-//	}
-//	assert(zoom);
-//
-//	pictureRect.setWidth( (int)(pictureRect.width() * zoom + 0.5f) );
-//	pictureRect.setHeight( (int)(pictureRect.height() * zoom + 0.5f) );
-//
-//	if ( widthIsConstraining )
-//		pictureRect.setWidth( outputSizeConstraint.width() );
-//	if ( heightIsConstraining )
-//		pictureRect.setHeight( outputSizeConstraint.height() );
-//	
-//	return pictureRect;
-//}

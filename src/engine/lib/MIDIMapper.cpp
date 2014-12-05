@@ -185,7 +185,7 @@ void MidiMapper::Note(const ARMusicalObject * ev)
 			Chan(note)	= fChan;
 			Dur(note)	= AdjustDuration(Ticks (fChord ? fEmptyDur : ev->getDuration()), fParams);
 			Vel(note)	= char(AdjustVelocity (fCurrVelocity, fParams));
-			Pitch(note)	= arn->midiPitch();
+			Pitch(note)	= arn->getMidiPitch();
 			Date(note)  = Ticks (fUPosition);
 			if (fFlags & hasTie) {
 				TiedNote (note);

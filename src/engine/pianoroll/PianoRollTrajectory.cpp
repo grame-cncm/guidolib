@@ -59,7 +59,7 @@ void PianoRollTrajectory::DrawVoice(ARMusicalVoice* v, DrawParams &drawParams)
             std::pair<int, VGColor> pair = fVoicesColors->at(i);
 
             if (pair.first == voiceNum)
-                fColors->push(pair.second);
+                fColors->push(&pair.second);
         }
     }
     
@@ -72,7 +72,7 @@ void PianoRollTrajectory::DrawVoice(ARMusicalVoice* v, DrawParams &drawParams)
 
             HSVtoRGB((float) drawParams.colorHue, 0.5f, 0.9f, r, g, b);
 
-            fColors->push(VGColor(r, g, b, 255));
+            fColors->push(new VGColor(r, g, b, 255));
         }
     }
 
@@ -141,19 +141,19 @@ void PianoRollTrajectory::DrawVoice(ARMusicalVoice* v, DrawParams &drawParams)
 //--------------------------------------------------------------------------
 void PianoRollTrajectory::DrawNote(int pitch, double date, double dur, DrawParams &drawParams)
 {
-    float   x     = date2xpos(date, drawParams.width, drawParams.untimedLeftElementWidth);
-    float   y     = pitch2ypos(pitch, drawParams);
-    VGColor color = (fColors == NULL || fColors->empty()) ? NULL : fColors->top();
+    float    x     = date2xpos(date, drawParams.width, drawParams.untimedLeftElementWidth);
+    float    y     = pitch2ypos(pitch, drawParams);
+    VGColor *color = ((fColors == NULL || fColors->empty()) ? new VGColor(0, 0, 0) : fColors->top());
 
     if (fCurrentDate == date)
-        currentEventInfos->push_back(createNoteInfos(x, y, color));
+        currentEventInfos->push_back(createNoteInfos(x, y, *color));
     else {
         DrawLinks(drawParams);
         
         previousEventInfos = new std::vector<EventInfos>(*currentEventInfos);
 
         currentEventInfos->clear();
-        currentEventInfos->push_back(createNoteInfos(x, y, color));
+        currentEventInfos->push_back(createNoteInfos(x, y, *color));
 
         fCurrentDate = date;
     }
@@ -174,10 +174,10 @@ void PianoRollTrajectory::DrawFinalEvent(double dur, DrawParams &drawParams)
 
         for (unsigned int i = 0; i < currentEventInfos->size(); i++) {
             if (!currentEventInfos->at(i).isRest) {
-                VGColor color = currentEventInfos->at(i).color;
+                VGColor *color = &currentEventInfos->at(i).color;
 
                 if (color != NULL)
-                    drawParams.dev->PushFillColor(color);
+                    drawParams.dev->PushFillColor(*color);
 
                 float xCoords[4] = {
                     roundFloat(currentEventInfos->at(i).x),
@@ -216,10 +216,10 @@ void PianoRollTrajectory::DrawAllLinksBetweenTwoEvents(DrawParams &drawParams) c
 //--------------------------------------------------------------------------
 void PianoRollTrajectory::DrawLinkBetween(PianoRollTrajectory::EventInfos leftEvent, PianoRollTrajectory::EventInfos rightEvent, DrawParams &drawParams) const
 {
-    VGColor color = leftEvent.color;
+    VGColor *color = &leftEvent.color;
 
     if (color != NULL)
-        drawParams.dev->PushFillColor(color);
+        drawParams.dev->PushFillColor(*color);
 
     float xCoords[4] = {
         roundFloat(leftEvent.x),
@@ -257,7 +257,7 @@ void PianoRollTrajectory::handleColor(ARNoteFormat* noteFormat, DrawParams &draw
     unsigned char colref[4];
 
     if (tps && tps->getRGB(colref))
-        fColors->push(VGColor(colref[0], colref[1], colref[2], colref[3]));
+        fColors->push(new VGColor(colref[0], colref[1], colref[2], colref[3]));
     else if ((fVoicesAutoColored && fColors->size() > 1)
         || (!fVoicesAutoColored && !fColors->empty()))
         fColors->pop();

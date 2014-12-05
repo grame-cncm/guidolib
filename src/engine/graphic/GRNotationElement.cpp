@@ -31,8 +31,11 @@
 #include "GRKey.h"
 #include "GRMeter.h"
 
+// - Guido AR
 #include "ARMusicalObject.h"
 #include "ARMusicalTag.h"
+#include "ARNote.h"
+
 #include "secureio.h"
 #include "FontManager.h"
 
@@ -96,6 +99,10 @@ void GRNotationElement::SendMap (const NVRect& map, MapCollector& f, TYPE_TIMEPO
 
 	ARMusicalObject * ar = getAbstractRepresentation();
 	inf.voiceNum = ar ? ar->getVoiceNum() : 0;
+
+    ARNote *arNote = dynamic_cast<ARNote *>(ar);
+    inf.midiPitch = (arNote ? arNote->getMidiPitch() : -1);
+
 	f.Graph2TimeMap (r, dates, inf);
 }
 
