@@ -68,7 +68,7 @@ class_export GuidoEngineAdapter
 			@{
 		*/
 		/*!
-			Initialises the Guido Engine. Must be called before any attempt
+			\brief Initialises the Guido Engine. Must be called before any attempt
 			to read a Guido file or to use the Guido Factory
 			\param desc the graphic environment description.
 			\return a Guido error code.
@@ -87,7 +87,7 @@ class_export GuidoEngineAdapter
 		GuidoErrCode init();
 
 		/*!
-			Guido Engine shutdown
+			\brief Guido Engine shutdown.
 
 			Actually release the font allocated by the engine.
 			Anyway, the fonts are release when the client application exit but
@@ -96,7 +96,7 @@ class_export GuidoEngineAdapter
 		void	 shutdown();
 
 		/*!
-			Transforms a Guido abstract representation into a Guido graphic representation.
+			\brief Transforms a Guido abstract representation into a Guido graphic representation.
 			The engine applies layout algorithms according to the settings given as argument.
 			Default settings are applied.
 			\note You can safely free the AR after the transformation.
@@ -108,7 +108,7 @@ class_export GuidoEngineAdapter
 		GRHandler ar2gr(ARHandler ar);
 
 		/*!
-			Transforms a Guido abstract representation into a Guido graphic representation.
+			\brief Transforms a Guido abstract representation into a Guido graphic representation.
 			The engine applies layout algorithms according to the settings given as argument.
 
 			\note You can safely free the AR after the transformation.
@@ -121,7 +121,7 @@ class_export GuidoEngineAdapter
 		GRHandler ar2gr(ARHandler ar, const GuidoLayoutSettings &settings);
 
 		/*!
-			Applies new layout settings to an existing Guido graphic representation.
+			\brief Applies new layout settings to an existing Guido graphic representation.
 			Default	settings are applied.
 			\param gr the handler to the graphic representation.
 			\return a Guido error code.
@@ -129,7 +129,7 @@ class_export GuidoEngineAdapter
 		GuidoErrCode updateGR(GRHandler gr);
 
 		/*!
-			Applies new layout settings to an existing Guido graphic representation.
+			\brief Applies new layout settings to an existing Guido graphic representation.
 			\param gr the handler to the graphic representation.
 			\param settings the settings for the graphic layout.
 			\return a Guido error code.
@@ -137,19 +137,21 @@ class_export GuidoEngineAdapter
 		GuidoErrCode updateGR(GRHandler gr, const GuidoLayoutSettings &settings);
 
 		/*!
-			Releases a Guido abstract representation.
+			\brief Releases a Guido abstract representation.
+			This method must be called after freeGR.
 			\param ar the handler to the abstract representation.
 		*/
 		void freeAR(ARHandler ar);
 
 		/*!
-			Releases a Guido graphic representation.
+			\brief Releases a Guido graphic representation.
+			Don't release the ARHandler refenrece in the GRHandler before release the GR.
 			\param gr the handler to the graphic representation.
 		*/
 		void freeGR(GRHandler gr);
 
 		/*!
-			Gives a textual description of a Guido error code.
+			\brief Gives a textual description of a Guido error code.
 
 			\param errCode a Guido error code.
 			\return a string describing the error.
@@ -157,7 +159,7 @@ class_export GuidoEngineAdapter
 		std::string getErrorString(GuidoErrCode errCode);
 
 		/*!
-			Gives the default values of the layout settings.
+			\brief Gives the default values of the layout settings.
 
 			\param settings on output, a pointer to the settings to be filled with default values.
 		*/
