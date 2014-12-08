@@ -139,28 +139,47 @@
 		
 		guidoEngine.freeAR(ar3);
 		
-		/*
+		
+		var scoreMap = new Module.GuidoScoreMap;
+
 		guidoGetPageMap_JSON = document.getElementById('guidoGetPageMap_JSON');
-		pagemap_n = GuidoGetPageMap_JSON( gr, 1, 1000.0, 1000.0 )
-		guidoGetPageMap_JSON.innerHTML = "<b>Page map for page 1:</b> "+Pointer_stringify(pagemap_n);
-		GuidoReleaseCString(pagemap_n);
+		pagemap_n = scoreMap.getPageMap( gr, 1, 1000.0, 1000.0 );
+		guidoGetPageMap_JSON.innerHTML = "<b>Page map for page 1:</b> "+ pagemap_n;
 
 		guidoGetStaffMap_JSON = document.getElementById('guidoGetStaffMap_JSON');
-		staffmap_n = GuidoGetStaffMap_JSON( gr, 1, 1000.0, 1000.0, 1 )
-		guidoGetStaffMap_JSON.innerHTML = "<b>Staff map for page 1, staff 1:</b> "+Pointer_stringify(staffmap_n);
-		GuidoReleaseCString(staffmap_n);
-
+		staffmap_n = scoreMap.getStaffMap( gr, 1, 1000.0, 1000.0, 1 );
+		guidoGetStaffMap_JSON.innerHTML = "<b>Staff map for page 1, staff 1:</b> "+ staffmap_n;
+		
 		guidoGetVoiceMap_JSON = document.getElementById('guidoGetVoiceMap_JSON');
-		voicemap_n = GuidoGetVoiceMap_JSON( gr, 1, 1000.0, 1000.0, 1 )
-		guidoGetVoiceMap_JSON.innerHTML = "<b>Voice map for page 1, voice 1:</b> "+Pointer_stringify(voicemap_n);
-		GuidoReleaseCString(voicemap_n);
+		voicemap_n = scoreMap.getVoiceMap( gr, 1, 1000.0, 1000.0, 1 );
+		guidoGetVoiceMap_JSON.innerHTML = "<b>Voice map for page 1, voice 1:</b> "+ voicemap_n;
 
 		guidoGetSystemMap_JSON = document.getElementById('guidoGetSystemMap_JSON');
-		systemmap_n = GuidoGetSystemMap_JSON( gr, 1, 1000.0, 1000.0)
-		//console.log(systemmap_n);
-		guidoGetSystemMap_JSON.innerHTML = "<b>System map for page 1:</b> "+Pointer_stringify(systemmap_n);
-		GuidoReleaseCString(systemmap_n);
-		*/		
+		systemmap_n = scoreMap.getSystemMap( gr, 1, 1000.0, 1000.0);
+		guidoGetSystemMap_JSON.innerHTML = "<b>System map for page 1:</b> "+ systemmap_n;
+		
+		guidoGetTime_JSON = document.getElementById('guidoGetTime_JSON');
+		var guidoDate = {
+			"num" : 2,
+			"denom" : 4
+		};
+		mapTime =  scoreMap.getTime(guidoDate, pagemap_n);
+		guidoGetTime_JSON.innerHTML = "<b>getTime for date 2/4:</b> "+ mapTime;
+	
+		guidoGetPoint_JSON = document.getElementById('guidoGetPoint_JSON');
+		map =  scoreMap.getPoint(10, 10, pagemap_n);
+		guidoGetPoint_JSON.innerHTML = "<b>getPoint:</b> "+ map;
+	
+		guidoGetSVGMap_JSON = document.getElementById('guidoGetSVGMap_JSON');
+		map =  scoreMap.getSVGMap(gr, 1, {"value" : "kGuidoPage"});
+		guidoGetSVGMap_JSON.innerHTML = "<b>getSVGMap:</b> "+ map;
+		
+		guidoGetTimeMap_JSON = document.getElementById('guidoGetTimeMap_JSON');
+		timemap_n = scoreMap.getTimeMap(ar);
+		guidoGetTimeMap_JSON.innerHTML = "<b>Time map :</b> "+ timemap_n;
+		
+		delete scoreMap;
+				
 		guidoEngine.freeGR(gr);
 		guidoEngine.freeAR(ar);
 		
@@ -194,13 +213,15 @@
 		<div id="guidoGetStream2"></div>
 		<div id="parserGetErrorCode"></div>
 
-		<!--
 		<div id="guidoGetPageMap_JSON"></div>
 		<div id="guidoGetStaffMap_JSON"></div>
 		<div id="guidoGetVoiceMap_JSON"></div>
 		<div id="guidoGetSystemMap_JSON"></div>
-		-->
-
+		<div id="guidoGetTime_JSON"></div>
+		<div id="guidoGetPoint_JSON"></div>
+		<div id="guidoGetSVGMap_JSON"></div>
+		<div id="guidoGetTimeMap_JSON"></div>
+		
 		<div id="guido_svg"></div>
 		<div id="guidoUpdateGR"></div>
 		<div id="guido_svg2"></div>
