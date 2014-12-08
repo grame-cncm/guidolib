@@ -22,7 +22,7 @@
 
 ListOfTPLs ARCrescendo::ltpls(1);
 
-ARCrescendo::ARCrescendo() : dx1(0), dx2(0), dy(0), deltaY(75), thickness(4)
+ARCrescendo::ARCrescendo() : dynamicMarking(""), dx1(0), dx2(0), dy(0), deltaY(75), thickness(4)
 {
 	rangesetting = ONLY;
 	setAssociation(ARMusicalTag::RA);

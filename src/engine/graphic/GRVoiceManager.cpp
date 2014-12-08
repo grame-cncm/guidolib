@@ -222,6 +222,7 @@ bool GRVoiceManager::checkRepeatBeginNext()
     GuidoPos pos = curvst->vpos;
     ARMusicalObject *next;
 
+    arVoice->GetNext(pos, vst);
     next = arVoice->GetNext(pos, vst);
 
     if (next) {

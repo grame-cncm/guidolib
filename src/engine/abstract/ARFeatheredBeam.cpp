@@ -57,9 +57,7 @@ void ARFeatheredBeam::setTagParameterList(TagParameterList & tpl)
 		// create a list of string ...
 
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(
-			(
-			"S,durations,,o;S,drawDuration,false,o"));
+		lstrs.AddTail(("S,durations,,o;S,drawDuration,false,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -71,14 +69,12 @@ void ARFeatheredBeam::setTagParameterList(TagParameterList & tpl)
 		// we found a match!
 		if (ret == 0)
 		{
-			TagParameterString * durations = TagParameterString::cast(rtpl->RemoveHead());
+			TagParameterString *durations = TagParameterString::cast(rtpl->RemoveHead());
 			std::string p = durations->getValue();
 			findPoints(p);
 
-			TagParameterString * drawDuration = TagParameterString::cast(rtpl->RemoveHead());
-			std::string draw = drawDuration->getValue();
-			if(draw == "true")
-				drawDur = true;
+			TagParameterString *drawDuration = TagParameterString::cast(rtpl->RemoveHead());
+			drawDuration->getBool(drawDur);
 		}
 		delete rtpl;
 	}

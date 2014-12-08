@@ -29,46 +29,39 @@ class GRSystem;
 
 class GRTuplet : public GRPTagARNotationElement
 {
-	public:
-		// enum bracestate { BRACENONE = 0, BRACELEFT = 1, BRACERIGHT = 2 };
+public:
+    // enum bracestate { BRACENONE = 0, BRACELEFT = 1, BRACERIGHT = 2 };
 
-		class GRTupletSaveStruct : public GRPositionTag::GRSaveStruct
-		{
-			public:
-						GRTupletSaveStruct()  {}
-				virtual ~GRTupletSaveStruct() {}
-				
-				NVPoint p1;
-				NVPoint p2;
-				NVPoint textpos;
-		};
+    class GRTupletSaveStruct : public GRPositionTag::GRSaveStruct
+    {
+    public:
+                 GRTupletSaveStruct()  {}
+        virtual ~GRTupletSaveStruct() {}
 
-						GRTuplet( GRStaff * inStaff, ARTuplet * artuplet );
-		virtual 		~GRTuplet();
+        NVPoint  p1;
+        NVPoint  p2;
+        NVPoint  textpos;
+    };
 
-		virtual void 	OnDraw( VGDevice & hdc ) const;
-		virtual void 	tellPosition( GObject * caller, const NVPoint & inPos );
+                 GRTuplet(GRStaff * inStaff, ARTuplet * artuplet);
+    virtual 	~GRTuplet();
 
-	protected:
+    virtual void OnDraw( VGDevice & hdc ) const;
+    virtual void tellPosition( GObject * caller, const NVPoint & inPos );
 
-		const ARTuplet * getARTuplet() const;
-		virtual GRPositionTag::GRSaveStruct * getNewGRSaveStruct() 
-			{
-				return new GRTupletSaveStruct; 
-			}
+protected:
+    const   ARTuplet * getARTuplet() const;
+    virtual GRPositionTag::GRSaveStruct * getNewGRSaveStruct() { return new GRTupletSaveStruct; }
 
-			GDirection		mDirection;
+    GDirection mDirection;
 
-	private:
+private:
+    void automaticPosition( GObject * caller, const NVPoint & inPos );
+    void manualPosition( GObject * caller, const NVPoint & inPos );
 
-			void	automaticPosition( GObject * caller, const NVPoint & inPos );
-			void	manualPosition( GObject * caller, const NVPoint & inPos );
-			
-	//	bracestate mBraceState;
-			bool	mShowLeftBrace;
-			bool	mShowRightBrace;
-
-
+    //	bracestate mBraceState;
+    bool mShowLeftBrace;
+    bool mShowRightBrace;
 };
 
 #endif

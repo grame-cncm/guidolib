@@ -86,14 +86,9 @@ GRTuplet::tellPosition(GObject * caller, const NVPoint & inPos )
 	const ARTuplet * arTuplet = getARTuplet();
 
 	if( arTuplet->isFormatSet() || arTuplet->isDySet())
-	{
 		manualPosition( caller, inPos );
-	}
-	else
-	{
-		// automaticDirection();
+	else // automaticDirection();
 		automaticPosition( caller, inPos );
-	}
 }
 
 // ----------------------------------------------------------------------------
@@ -430,12 +425,12 @@ void GRTuplet::OnDraw(VGDevice & hdc) const
 	int charCount = 0;
 
     float const thickness = arTuplet->getThickness();
+    float const dxOffset  = (arTuplet->getDX() ? arTuplet->getDX()->getValue() : 0);
 
 	// - Draws the number
 	const int numerator = arTuplet->getNumerator();
 
-	if (numerator > 0)
-	{
+	if (numerator > 0) {
 		std::stringstream bufferNumeratorDenominatorStream;
         
 		const int denominator = arTuplet->getDenominator(); 
@@ -451,7 +446,7 @@ void GRTuplet::OnDraw(VGDevice & hdc) const
         const NVstring fontName("Times New Roman");
         NVstring attrs;
 
-        if (arTuplet->getIsBold())
+        if (arTuplet->isTextBold())
             attrs = "b";
 
         font = FontManager::FindOrCreateFont(int(80 * arTuplet->getTextSize()), &fontName, &attrs);
@@ -466,7 +461,7 @@ void GRTuplet::OnDraw(VGDevice & hdc) const
         /***************************************************************************************************/
 
 		hdc.SetFontAlign(VGDevice::kAlignCenter | VGDevice::kAlignBottom);
-        hdc.DrawString(st->textpos.x, st->textpos.y + offset, bufferNumeratorDenominator.c_str(), charCount);
+        hdc.DrawString(st->textpos.x + dxOffset, st->textpos.y + offset, bufferNumeratorDenominator.c_str(), charCount);
 	}
 
 	// - Draws the braces
@@ -479,17 +474,30 @@ void GRTuplet::OnDraw(VGDevice & hdc) const
 		hdc.PushPenWidth(thickness);
 		
 		if (mShowLeftBrace) { //arTuplet->getLeftBrace()) // (mBraceState & BRACELEFT)
-			if (sse->startflag == GRSystemStartEndStruct::LEFTMOST)
-				hdc.Line(st->p1.x, st->p1.y + 0.5f * LSPACE * mDirection, st->p1.x, st->p1.y);
+            float p1X = st->p1.x + dxOffset;
 
-			hdc.Line( st->p1.x, st->p1.y, middleX - textSpace, middleY - slope * textSpace );
+			if (sse->startflag == GRSystemStartEndStruct::LEFTMOST) {
+                if (arTuplet->isPositionAbove())
+				    hdc.Line(p1X, st->p1.y + 0.5f * LSPACE, p1X, st->p1.y);
+                else
+                    hdc.Line(p1X, st->p1.y - 0.5f * LSPACE, p1X, st->p1.y);
+            }
+
+			hdc.Line(p1X, st->p1.y, middleX - textSpace + dxOffset, middleY - slope * textSpace );
 		}
 
 		if (mShowRightBrace) { //arTuplet->getRightBrace()) // (mBraceState & BRACERIGHT)
-			hdc.Line(middleX + textSpace, middleY + slope * textSpace, st->p2.x, st->p2.y);
+            float p2X = st->p2.x + dxOffset;
 
-			if (sse->endflag == GRSystemStartEndStruct::RIGHTMOST)
-				hdc.Line( st->p2.x, st->p2.y, st->p2.x, st->p2.y + 0.5f * LSPACE * (float)mDirection);
+			hdc.Line(middleX + textSpace + dxOffset, middleY + slope * textSpace, p2X, st->p2.y);
+
+			if (sse->endflag == GRSystemStartEndStruct::RIGHTMOST) {
+
+                if (arTuplet->isPositionAbove())
+				    hdc.Line(p2X, st->p2.y, p2X, st->p2.y + 0.5f * LSPACE);
+                else
+				    hdc.Line(p2X, st->p2.y, p2X, st->p2.y - 0.5f * LSPACE);
+            }
 		}
 
 		hdc.PopPenWidth();
