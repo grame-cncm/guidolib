@@ -372,12 +372,18 @@ int main(int argc, char *argv[])
         if (options.inputFile)
             arh = GuidoFile2AR(parser, options.inputFile);
         else
-            arh = GuidoString2AR(parser, options.inputFile);
+            arh = GuidoString2AR(parser, options.inputString);
         
         PianoRoll *pianoRoll = GuidoAR2PianoRoll(kSimplePianoRoll, arh);
         GuidoPianoRollEnableKeyboard(pianoRoll, true);
 
-        Guido2Image::guidoPianoRoll2Image(p, pianoRoll, 1024, 512);
+        if (p.sizeConstraints.width() <= 0)
+            p.sizeConstraints.setWidth(1024);
+
+        if (p.sizeConstraints.height() <= 0)
+            p.sizeConstraints.setHeight(512);
+
+        error = Guido2Image::guidoPianoRoll2Image(p, pianoRoll);
 
         GuidoDestroyPianoRoll(pianoRoll);
     }

@@ -87,7 +87,7 @@ void PianoRoll::init()
     setLimitDates(defaultStartDate, defaultEndDate);
     setPitchRange(kDefaultLowPitch, kDefaultHighPitch);
 
-    fColors = new std::stack<VGColor>();
+    fColors = new std::stack<VGColor *>();
 }
 
 //--------------------------------------------------------------------------
@@ -550,7 +550,7 @@ void PianoRoll::DrawVoice(ARMusicalVoice* v, PianoRoll::DrawParams &drawParams)
             std::pair<int, VGColor> pair = fVoicesColors->at(i);
 
             if (pair.first == voiceNum)
-                fColors->push(pair.second);
+                fColors->push(&pair.second);
         }
     }
     
@@ -563,10 +563,10 @@ void PianoRoll::DrawVoice(ARMusicalVoice* v, PianoRoll::DrawParams &drawParams)
 
             HSVtoRGB((float) drawParams.colorHue, 0.5f, 0.9f, r, g, b);
 
-            fColors->push(VGColor(r, g, b, 255));
+            fColors->push(new VGColor(r, g, b, 255));
         }
         
-        drawParams.dev->PushFillColor(fColors->top());
+        drawParams.dev->PushFillColor(*fColors->top());
     }
 
     fChord   = false;
@@ -628,7 +628,7 @@ void PianoRoll::DrawMusicalObject(ARMusicalObject *e, TYPE_TIMEPOSITION date, TY
     ARNote *note = static_cast<ARNote *>(e->isARNote());
 
 	if (note) {
-		int pitch = note->midiPitch();
+		int pitch = note->getMidiPitch();
 
         if (pitch < 0)
             fChordDuration = dur; // prepare for potential chord
@@ -696,9 +696,9 @@ void PianoRoll::handleColor(ARNoteFormat* noteFormat, DrawParams &drawParams) co
     unsigned char colref[4];
 
     if (tps && tps->getRGB(colref)) {
-        fColors->push(VGColor(colref[0], colref[1], colref[2], colref[3]));
+        fColors->push(new VGColor(colref[0], colref[1], colref[2], colref[3]));
 
-        drawParams.dev->PushFillColor(fColors->top());
+        drawParams.dev->PushFillColor(*fColors->top());
     }
     else {
         fColors->pop();
@@ -815,7 +815,7 @@ int PianoRoll::detectARExtremePitch(bool detectLowerPitch)
             ARNote *note = static_cast<ARNote *>(musicalObject->isARNote());
 
             if (note) {
-                int pitch = note->midiPitch();
+                int pitch = note->getMidiPitch();
 
                 if (detectLowerPitch) {
                     if (pitch >= 0 && note->getOctave() >= -4 && pitch < extremePitch) {

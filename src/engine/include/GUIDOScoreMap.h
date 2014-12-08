@@ -48,8 +48,9 @@ typedef enum {
 // elements infos struct
 typedef struct {
 	GuidoElementType type;		///< the element type
-	int			staffNum;		///< the element staff number or 0 when na
-	int			voiceNum;		///< the element voice number or 0 when na
+	int			     staffNum;	///< the element staff number or 0 when na
+	int			     voiceNum;	///< the element voice number or 0 when na
+    int              midiPitch; ///< the element midi pitch, or -1 when na
 } GuidoElementInfos;
 
 

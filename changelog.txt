@@ -13,6 +13,7 @@ GUIDO Engine history
 		- line thickness is now taken in account in staff mapping
 	- some SVG export bugs fixed
 	- fix for a mapping bug in some particular cases
+	- fix for a graphic bug which appeared when a non-standard notehead style was set with \noteFormat-tag
 
 
 ----------------------------------------------------------------

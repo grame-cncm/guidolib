@@ -88,14 +88,7 @@ Note for Android:
       ndk-build
 
     And this will build the library for android.
-    To test with a sample project, from the directory
-    android-apps/simple-guido-editor, run:
-
-      ndk-build
-      ant debug
-
-    And then install the application on your device.
-
+    To test with a sample project, read the README file in android-apps/simple-guido-editor directory.
       
 
 Note for Linux platforms:

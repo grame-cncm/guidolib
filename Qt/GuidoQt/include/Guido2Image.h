@@ -55,7 +55,13 @@ enum Guido2ImageErrorCodes
 	//! You forgot to call QGuidoPainter::startGuidoEngine.
 	GUIDO_2_IMAGE_GUIDO_ENGINE_NOT_STARTED = 7,
 	//! The image format is not valid (see Guido2ImageImageFormat).
-	GUIDO_2_IMAGE_INVALID_IMAGE_FORMAT = 8
+	GUIDO_2_IMAGE_INVALID_IMAGE_FORMAT = 8,
+	//! The output image is too big to be created
+	GUIDO_2_IMAGE_OUTPUT_FILE_OVERSIZED = 9,
+	//! The output image is too small to be created
+	GUIDO_2_IMAGE_OUTPUT_FILE_UNDERSIZED = 10,
+	//! All unspecified errors
+	GUIDO_2_IMAGE_UNSPECIFIED_ERROR = 11
 };
 
 /*!
@@ -130,19 +136,19 @@ class Guido2Image
         /*!
 		*	\brief	converts a gmn file to an image
 		*/
-        static Guido2ImageErrorCodes guidoPianoRoll2Image(const Params& p, PianoRoll *pianoRoll, int width, int height);
+        static Guido2ImageErrorCodes guidoPianoRoll2Image(const Params& p, PianoRoll *pianoRoll);
 
 	private :
 
 		static Guido2ImageErrorCodes	check( const Params& p );
 		
 		static Guido2ImageErrorCodes	guidoPainterToImage ( QGuidoPainter * guidoPainter, const Params& p );
-		static void						writeImage			( QGuidoPainter * guidoPainter, const Params& p );
-        static void						writePianoRollImage	( QGuidoPainter * guidoPainter, const Params& p, PianoRoll *pianoRoll, int width, int height );
-		static void						writePDF			( QGuidoPainter * guidoPainter, int pageIndex, const char * fileName );
-		static void						writePianoRollPDF	( QGuidoPainter * guidoPainter, const char * fileName, PianoRoll *pianoRoll, int width, int height );
+		static Guido2ImageErrorCodes	writeImage			( QGuidoPainter * guidoPainter, const Params& p );
+        static Guido2ImageErrorCodes	writePianoRollImage	( QGuidoPainter * guidoPainter, const Params& p, PianoRoll *pianoRoll);
+		static Guido2ImageErrorCodes	writePDF			( QGuidoPainter * guidoPainter, int pageIndex, const char * fileName );
+		static Guido2ImageErrorCodes	writePianoRollPDF	( QGuidoPainter * guidoPainter, const char * fileName, PianoRoll *pianoRoll, int width, int height );
 		
-//		static QRectF			getPictureRect(QGuidoPainter * guidoPainter, int pageIndex, const QSize& outputSizeConstraint, float zoom );
+		static QRectF			getPictureRect(QGuidoPainter * guidoPainter, int pageIndex, const QSize& outputSizeConstraint, float zoom);
 		static void				save(QPaintDevice * paintDevice, const Params& p);
 		static QSizeF			size2constrainedsize(const QSizeF& size, const QSize& constraint);
 };

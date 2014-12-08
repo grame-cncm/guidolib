@@ -38,12 +38,12 @@ static void usage(char* name)
 #else
 	const char* tool = name;
 #endif
-	cerr << "usage: " << tool << "[options] gmnfile" << endl;
+	cerr << "usage: " << tool << " [options] gmnfile" << endl;
 	cerr << "options: -pianoroll       string : set the pianoroll type (default is " << kDefaultPianoRoll << ")" << endl;
 	cerr << "                                        simple" << endl;
     cerr << "                                        trajectory" << endl;
-	cerr << "         -width           value  : set the output width (default is " << kDefaultWidth << ")" << endl;
-	cerr << "         -height          value  : set the output height (default is " << kDefaultHeight << ")" << endl;
+	cerr << "         -width           value  : set the output width (default is " << kDefaultWidth << " -> width is adjusted to 1024)" << endl;   // REM: get default value from PianoRoll
+	cerr << "         -height          value  : set the output height (default is " << kDefaultHeight << " -> height is adjusted to 512)" << endl; // REM: get default value from PianoRoll
 	cerr << "         -start           date   : set time zone start (default is 0/0 -> start time is automatically adjusted)" << endl;
 	cerr << "         -end             date   : set time zone end (default is 0/0 -> end time is automatically adjusted)" << endl;
     cerr << "         -minpitch        value  : set minimum midi pitch (default is " << kDefaultMinPitch << " -> min pitch is automatically adjusted)" << endl;
