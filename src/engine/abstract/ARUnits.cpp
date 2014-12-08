@@ -21,8 +21,9 @@
 ListOfTPLs ARUnits::ltpls(1);
 NVstring ARUnits::sType = "hs";
 
-ARUnits::ARUnits()
+ARUnits::~ARUnits()
 {
+    sType = "hs";
 }
 
 void ARUnits::setTagParameterList(TagParameterList & tpl)

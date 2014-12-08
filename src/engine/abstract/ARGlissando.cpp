@@ -30,44 +30,32 @@ ARGlissando::ARGlissando()
 	rangesetting = ONLY;
 	setAssociation(ARMusicalTag::RA);
 	
-	dx1 = dy1 = dx2 = dy2 = fThickness = 0;
-	fLineStyle = NULL;
-
-	mWavy   = false;
+	fDx1       = 0;
+    fDy1       = 0;
+    fDx2       = 0;
+    fDy2       = 0;
+    fThickness = 0;
+    fFill      = false;
+	//fWavy      = false;
 }
 
 ARGlissando::ARGlissando(const ARGlissando * glissando)	: ARMTParameter(-1, glissando)
 {
 	rangesetting = ONLY;
 	setAssociation(ARMusicalTag::RA);
+	
+    fDx1       = glissando->fDx1;
+    fDy1       = glissando->fDy1;
+    fDx2       = glissando->fDx2;
+    fDy2       = glissando->fDy2;
+    fThickness = glissando->fThickness;
+    fFill      = glissando->fFill;
+	//fWavy      = glissando->fWavy;
 
-	dx1 = dy1 = dx2 = dy2 = fThickness = 0;
-	fLineStyle = NULL;
+    if (glissando->color)
+        color = TagParameterString::cast(glissando->color->getCopy());
 
-	if(glissando->dx1)
-		TagParameterFloat::cast( glissando->dx1->getCopy());
-	if(glissando->dy1)
-		TagParameterFloat::cast( glissando->dy1->getCopy());
-	if(glissando->dx2)
-		TagParameterFloat::cast( glissando->dx2->getCopy());
-	if(glissando->dy2)
-		TagParameterFloat::cast( glissando->dy2->getCopy());
-	if(glissando->fThickness)
-		TagParameterFloat::cast( glissando->fThickness->getCopy());
-	if(glissando->fLineStyle)
-		TagParameterString::cast( glissando->fLineStyle->getCopy());
-	if(glissando->color)
-		TagParameterString::cast( glissando->color->getCopy());
-}
-
-ARGlissando::~ARGlissando(void)
-{
-	delete dx1;
-	delete dy1;
-	delete dx2;
-	delete dy2;
-	delete fThickness;
-	delete fLineStyle;
+    // dx/dy ?
 }
 
 void ARGlissando::setTagParameterList(TagParameterList & tpl)
@@ -78,8 +66,9 @@ void ARGlissando::setTagParameterList(TagParameterList & tpl)
 		
 		lstrs.AddTail( "U,dx1,0,o;U,dy1,0,o;"
 			"U,dx2,0,o;U,dy2,0,o;"
-			"S,fill,false,o;U,thickness,0.3,o;"
-			"S,lineStyle,line,o");
+			"S,fill,false,o;U,thickness,0.3,o"
+			//";S,lineStyle,line,o"
+            );
 		
 		CreateListOfTPLs(ltpls,lstrs);
 	}
@@ -91,29 +80,34 @@ void ARGlissando::setTagParameterList(TagParameterList & tpl)
 		// we found a match!
 		if (ret == 0)
 		{
-			dx1 = TagParameterFloat::cast(rtpl->RemoveHead());
-			assert(dx1);
+			TagParameterFloat *f = TagParameterFloat::cast(rtpl->RemoveHead());
+            fDx1 = f->getValue();
+            delete f;
 
-			dy1 = TagParameterFloat::cast(rtpl->RemoveHead());
-			assert(dy1);
+			f = TagParameterFloat::cast(rtpl->RemoveHead());
+            fDy1 = f->getValue();
+            delete f;
 
-			dx2 = TagParameterFloat::cast(rtpl->RemoveHead());
-			assert(dx2);
+			f = TagParameterFloat::cast(rtpl->RemoveHead());
+            fDx2 = f->getValue();
+            delete f;
 
-			dy2 = TagParameterFloat::cast(rtpl->RemoveHead());
-			assert(dy2);
+			f = TagParameterFloat::cast(rtpl->RemoveHead());
+            fDy2 = f->getValue();
+            delete f;
 
-            fill = TagParameterString::cast(rtpl->RemoveHead());
-			assert(fill);
+            TagParameterString *s = TagParameterString::cast(rtpl->RemoveHead());
+            s->getBool(fFill);
+            delete s;
 
-			fThickness = TagParameterFloat::cast(rtpl->RemoveHead());
-			assert(fThickness);
+			f = TagParameterFloat::cast(rtpl->RemoveHead());
+            fThickness = f->getValue();
+            delete f;
 
-			fLineStyle = TagParameterString::cast(rtpl->RemoveHead());
-			assert(fLineStyle);
-			string wavyLine ("wavy");
-			if (wavyLine == fLineStyle->getValue())
-				mWavy = true;
+			/*s = TagParameterString::cast(rtpl->RemoveHead());
+			string wavyLine("wavy");
+			if (wavyLine == s->getValue())
+				fWavy = true;*/
 		}
 
 		delete rtpl;
@@ -126,48 +120,6 @@ void ARGlissando::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 
 	return;
-}
-
-TagParameterList * ARGlissando::getTagParameterList() const
-{
-	TagParameterList * tpl = new TagParameterList(1);
-
-	if (dx1 && dx1->TagIsSet())
-		tpl->AddTail(dx1->getCopy());
-
-	if (dy1 && dy1->TagIsSet())
-		tpl->AddTail(dy1->getCopy());
-
-	if (dx2 && dx2->TagIsSet())
-		tpl->AddTail(dx2->getCopy());
-
-	if (dy2 && dy2->TagIsSet())
-		tpl->AddTail(dy2->getCopy());
-
-	if (fThickness && fThickness->TagIsSet())
-		tpl->AddTail(fThickness->getCopy());
-
-	if (fLineStyle && fLineStyle->TagIsSet())
-		tpl->AddTail(fLineStyle->getCopy());
-
-	if (color && color->TagIsSet())
-		tpl->AddTail(color->getCopy());
-
-    if (fill && fill->TagIsSet())
-        tpl->AddTail(fill->getCopy());
-
-	return tpl;
-}
-
-bool ARGlissando::isFill() {
-    bool isFill = false;
-    
-    if (fill && fill->TagIsSet()) {
-        if (!strcmp(fill->getValue(), "true"))
-            isFill = true;
-    }
-
-    return isFill;
 }
 
 void ARGlissando::browse(TimeUnwrap& mapper) const
@@ -197,26 +149,12 @@ void ARGlissando::printGMNName(std::ostream& os) const
 
 void ARGlissando::printParameters(std::ostream& os) const
 {
-    if (dx1)
-        os << "dx1: " << dx1->getValue() << "; ";
-
-    if (dy1)
-        os << "dy1: " << dy1->getValue() << "; ";
-
-    if (dx2)
-        os << "dx2: " << dx2->getValue() << "; ";
-
-    if (dy2)
-        os << "dy2: " << dy2->getValue() << "; ";
-
-    if (fill)
-        os << "fill: " << fill->getValue() << "; ";
-
-    if (fThickness)
-        os << "thickness: " << fThickness->getValue() << "; ";
-
-    if (fLineStyle)
-        os << "lineStyle: " << fLineStyle->getValue() << ";";
+    os << "dx1: "       << fDx1       << "; ";
+    os << "dy1: "       << fDy1       << "; ";
+    os << "dx2: "       << fDx2       << "; ";
+    os << "dy2: "       << fDy2       << "; ";
+    os << "fill: "      << fFill      << "; ";
+    os << "thickness: " << fThickness << "; ";
 
     ARMusicalTag::printParameters(os);
 }

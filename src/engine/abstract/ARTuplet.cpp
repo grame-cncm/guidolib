@@ -86,8 +86,7 @@ void ARTuplet::setTagParameterList(TagParameterList & tpl)
             fLineThickness = tpf->getValue() * LSPACE;
 
             tps = TagParameterString::cast(rtpl->GetNext(pos));
-            if (!strcmp(tps->getValue(), "true"))
-                fTextBold = true;
+            tps->getBool(fTextBold);
 
             tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
             fTextSize = tpf->getValue();

@@ -24,8 +24,8 @@
 class ARUnits : public ARMTParameter
 {
 public:
-					ARUnits();
-	virtual 		~ARUnits() {}
+				 ARUnits() {};
+	virtual 	~ARUnits();
 
 	static const NVstring & getUnit()  { return sType; }
 

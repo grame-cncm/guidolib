@@ -28,29 +28,31 @@ class ARBar : // public ARMusicalObject,
 		virtual ~ARBar();
 
 	    virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
+	    virtual void printGMNName(std::ostream& os) const;
 	    virtual void printParameters(std::ostream& os) const;
 
 		virtual void setTagParameterList(TagParameterList & theTagParameterList);
 
-		void                setMeasureNumber(int inMeasureNumber) { measureNumber = inMeasureNumber; }
-		int                 getMeasureNumber()          const     { return measureNumber; }
-        TagParameterString *getMeasureNumberDisplayed() const     { return measureNumberDisplayed; }
-        void                setMeasureNumberDisplayed(bool display);
+		void  setMeasureNumber(int inMeasureNumber)   { measureNumber = inMeasureNumber; }
+		int   getMeasureNumber()          const       { return measureNumber; }
+        bool  getMeasureNumberDisplayed() const       { return measureNumberDisplayed; }
+        void  setMeasureNumberDisplayed(bool display) { measureNumberDisplayed = display; }
+        bool  isMeasureNumberDisplayedSet() const     { return measureNumberDisplayedIsSet; }
 
-		float  getMeasureNumberDxOffset()                         { return numDx; }
-		float  getMeasureNumberDyOffset()                         { return numDy; }
+		float getMeasureNumberDxOffset()                         { return numDx; }
+		float getMeasureNumberDyOffset()                         { return numDy; }
         
         /**** Function to avoid dynamic_cast ****/
         ARMusicalObject *isARBar() { return this; }
         /*****************************************/
 
   protected:
-		int  measureNumber;
-        TagParameterString *measureNumberDisplayed;
-
+		int   measureNumber;
+        bool  measureNumberDisplayed;
 		float numDx;
 		float numDy;
+
+        bool measureNumberDisplayedIsSet;
 
 		static ListOfTPLs ltpls;
 };

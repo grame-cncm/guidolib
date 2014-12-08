@@ -2346,12 +2346,10 @@ void ARMusicalVoice::doAutoMeasuresNumbering()
 
             bool displayMeasureNumber = false;
 
-            if (bar->getMeasureNumberDisplayed() && bar->getMeasureNumberDisplayed()->TagIsSet() && !strcmp(bar->getMeasureNumberDisplayed()->getValue(), "true"))
+            if (bar->isMeasureNumberDisplayedSet() && bar->getMeasureNumberDisplayed())
                 displayMeasureNumber = true;
-            else if (curmeter && curmeter->getAutoMeasuresNum()) {
-                if (!bar->getMeasureNumberDisplayed() || (bar->getMeasureNumberDisplayed() && bar->getMeasureNumberDisplayed()->TagIsNotSet()))
+            else if (curmeter && curmeter->getAutoMeasuresNum() && !bar->isMeasureNumberDisplayedSet())
                     displayMeasureNumber = true;
-            }
 
             bar->setMeasureNumberDisplayed(displayMeasureNumber);
             
@@ -4990,17 +4988,13 @@ void ARMusicalVoice::doAutoGlissando()
 					}
 				}
 				// we create a glissando for each note (not empty, and not tied) within the origin glissando
-				if(note->getName() != ARNoteName::empty && !isTied)
+				if (note->getName() != ARNoteName::empty && !isTied)
 				{
-					ARGlissando * myglissando = new ARGlissando();
+					ARGlissando * myglissando = new ARGlissando(glissStruct->glissando);
 					myglissando->setID(gCurArMusic->mMaxTagId++);
 					myglissando->setIsAuto(true);
 					myglissando->setStartPosition(vst.vpos);
-					// now we copy the parameters 
-					TagParameterList * tpl = glissStruct->glissando->getTagParameterList();
 
-					myglissando->setTagParameterList(*tpl);
-					delete tpl;
 					mPosTagList->AddElementAt(vst.ptagpos,myglissando);
 
 					ARGlissandoStruct * agstruct = new ARGlissandoStruct;

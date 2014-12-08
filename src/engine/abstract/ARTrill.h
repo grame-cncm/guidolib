@@ -66,7 +66,7 @@ class ARTrill : public ARMTParameter, public ARPositionTag
 		bool fDrawOnNoteHead;
 		float adx;
 		float ady;
-		bool			begin;
+		bool  begin;
 
 		static ListOfTPLs ltpls;
 };

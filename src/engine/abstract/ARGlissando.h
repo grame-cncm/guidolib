@@ -22,14 +22,11 @@
 class ARGlissando : public ARMTParameter, public ARPositionTag
 {
 public:
-
 				ARGlissando();
-				ARGlissando(const ARGlissando * glissando);
-	virtual		~ARGlissando();
-
+                ARGlissando(const ARGlissando * glissando);
+	virtual	   ~ARGlissando() {};
 	
 	virtual void setTagParameterList(TagParameterList & tlist);
-	virtual TagParameterList * getTagParameterList() const;
 
 	virtual void printName(std::ostream& os) const;
     virtual void printGMNName(std::ostream& os) const;
@@ -38,25 +35,22 @@ public:
 	virtual void browse(TimeUnwrap& mapper) const;
 	virtual bool MatchEndTag(const char * s);
 
-	const TagParameterFloat  *getDx1() const	    { return dx1; }
-	const TagParameterFloat  *getDy1() const	    { return dy1; }
-	const TagParameterFloat  *getDx2() const	    { return dx2; }
-	const TagParameterFloat  *getDy2() const	    { return dy2; }
-	const TagParameterFloat  *getThickness() const	{ return fThickness; }
-	const TagParameterString *getLineStyle() const	{ return fLineStyle; }
-	bool  isWavy()                                  { return mWavy; }
-    bool  isFill();
+	const float getDx1()       const { return fDx1; }
+	const float getDy1()       const { return fDy1; }
+	const float getDx2()       const { return fDx2; }
+	const float getDy2()       const { return fDy2; }
+	const float getThickness() const { return fThickness; }
+    const bool  isFill()             { return fFill; }
+	//const bool  isWavy()             { return fWavy; }
 	
 protected:
-	const TagParameterFloat  *dx1;
-	const TagParameterFloat  *dy1;
-	const TagParameterFloat  *dx2;
-	const TagParameterFloat  *dy2;
-    const TagParameterString *fill;
-	const TagParameterFloat  *fThickness;
-	const TagParameterString *fLineStyle;
-
-	bool  mWavy;
+	float fDx1;
+	float fDy1;
+	float fDx2;
+	float fDy2;
+	float fThickness;
+    bool  fFill;
+	//bool  fWavy;
 
 	static ListOfTPLs ltpls;
 };
