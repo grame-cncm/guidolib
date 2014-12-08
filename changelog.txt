@@ -3,10 +3,13 @@ GUIDO Engine history
 ----------------------------------------------------------------
 2014-11-19  version 1.5.6
 - Proportional rendering available (enabled with GuidoLayoutSettings parameters)
-- \special-tag :
+- \special-tag:
     - "space" param suppressed (was useless)
     - "scale" param changed for "size"
     - "color" param added
+- \tuplet-tag:
+    - "position" param added
+    - "dx" param added
 - bug fixes:
     - \staffFormat + mapping:
 		- staff mapping height is not null anymore when we set \staffFormat "style" param to "0-line or "1-line"

@@ -3469,7 +3469,7 @@ void ARMusicalVoice::doAutoDisplayCheck()
 					{
 						autotuplet = new ARTuplet();
 						autotuplet->setPosition(pos);
-						autotuplet->setName("-auto-");
+						autotuplet->setAuto();
 					}
 					// now, add the base to the position-tags ...
 					// curbase needs a timeposition!
