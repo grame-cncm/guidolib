@@ -128,10 +128,7 @@ void GRBar::InitGRBar( const TYPE_TIMEPOSITION & inTimePos, const GRStaff * inSt
 	const TagParameterFloat *paramDy = getARBar()->getDY();
 
 	mDx = (paramDx && paramDx->TagIsSet() ? paramDx->getValue() : 0);
-	mDy = (paramDy && paramDy->TagIsSet() ? paramDy->getValue() : 0);
-    
-    // - Get the size
-	const TagParameterFloat *paramSize = getARBar()->getSize();
+	mDy = (paramDy && paramDy->TagIsSet() ? paramDy->getValue() : 0);    
 }
 
 // --------------------------------------------------------------------------

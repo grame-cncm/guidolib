@@ -41,15 +41,15 @@ void svgendl::print(std::ostream& os) const {
 //______________________________________________________________________________
 SVGDevice::SVGDevice(std::ostream& outstream, SVGSystem* system, const char* guidofontfile, const char* guidofontspec) : 
 	fSystem (system), fGuidoFontFile(guidofontfile), fGuidoFontSpec(guidofontspec),
-	fStream(outstream), 
 	fWidth(1000), fHeight(1000),
 	fMusicFont(0), fTextFont(0), fOpMode(kUnknown),
 	fXScale(1), fYScale(1), fXOrigin(0), fYOrigin(0), fXPos(0), fYPos(0),
 	fFontAlign(kAlignBase), fDPI(0),
-	fPushedPen(false), fPushedPenColor(false), fPushedPenWidth(false), fPushedFill(false), fScaled(false), fOffset(false),
-    fCurrFont (kNoFont), //fCurrFontProperties (VGFont::kFontNone),
 	fPendingStrokeColor(0),
-	fBeginDone(false)
+	fBeginDone(false),
+	fStream(outstream),
+	fPushedPen(false), fPushedPenColor(false), fPushedPenWidth(false), fPushedFill(false), fScaled(false), fOffset(false),
+    fCurrFont (kNoFont)
 {
     fTagTypesVector = new std::vector<TagType>();
 }

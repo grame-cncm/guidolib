@@ -259,7 +259,6 @@ void GRStaffManager::createStaves()
 		// ATTENTION: realise the significance of STAFF-Tags at the very start!
 		voiceManager->BeginManageVoice();
 	}
-	TYPE_DURATION ardur (mArMusic->getDuration());
 
 	// now call the start-managing-calls
 	TYPE_TIMEPOSITION timePos (relativeTimePositionOfGR);

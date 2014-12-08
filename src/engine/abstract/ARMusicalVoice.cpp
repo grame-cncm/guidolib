@@ -814,7 +814,7 @@ void ARMusicalVoice::goThroughTagsList(BaseVisitor *visitor, GuidoPos& posTag, G
             ARPositionTag *positionTag = mPosTagList->GetAt(posTag);
             ARTagEnd      *artgend     = ARTagEnd::cast(positionTag);
 
-            if (!addTag && artgend || addTag && !artgend) {
+            if ((!addTag && artgend) || (addTag && !artgend)) {
                 if (positionTag && positionTag->getPosition() == prevPos)
                     positionTag->accept(visitor);
                 else

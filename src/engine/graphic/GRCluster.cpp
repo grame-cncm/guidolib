@@ -29,9 +29,9 @@ GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, GRSingleNote *sngNote, AR
 						GRARCompositeNotationElement(arcls),
 						GRPositionTag(arcls->getEndPosition(), arcls),
                         fDuration(0),
+                        fNoteFormatColor(0),
                         fClusterOrientation(ARTHead::NORMAL),
-                        fStemDir(dirAUTO),
-                        fNoteFormatColor(0)
+                        fStemDir(dirAUTO)
 {
 	assert(stf);
 

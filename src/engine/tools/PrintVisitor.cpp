@@ -53,8 +53,6 @@ void PrintVisitor::visitOut(ARMusicalVoice& voice)
 
 void PrintVisitor::visit(ARMusicalObject &object)
 {
-    ARMusicalVoice *voice = dynamic_cast<ARMusicalVoice *>(&object);
-
     currentStartDate = object.getRelativeTimePosition();
     printMusicalObject(object);
 }

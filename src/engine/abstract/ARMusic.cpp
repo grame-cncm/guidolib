@@ -334,7 +334,6 @@ void ARMusic::doAutoStuff()
 
 	adjustDuration(maxdur);
 
-	int nvoices = GetCount();
 	int counter = 0;
 	pos = GetHeadPosition();
 	//char statusmsg[100];
