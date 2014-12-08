@@ -52,6 +52,6 @@ void json_array::print(json_stream& out) const
 		out << *fValues[n] << out.nl()--;
 	}
 	out << "]";
-};
+}
 
 } // end namespoace

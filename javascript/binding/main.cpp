@@ -15,12 +15,16 @@
 #include <bind.h>
 #include "GUIDOEngine.h"
 #include "GUIDOEngineAdapter.h"
+#include "GUIDOScoreMap.h"
 #include "GUIDOInternal.h"
 #include "GuidoParser.h"
 
+#include "map2json.h"
+
 using namespace emscripten;
 
-/* Structure and enum binding.
+/*
+ * Structure and enum binding.
  * This structures can be created and manipulated in javascript side like json object and passed to C++ method.
  */
 EMSCRIPTEN_BINDINGS(CStruct) {
@@ -71,9 +75,18 @@ EMSCRIPTEN_BINDINGS(CStruct) {
 			.value("guidoErrInvalidHandle", GuidoErrCode::guidoErrInvalidHandle)
 			.value("guidoErrNotInitialized", GuidoErrCode::guidoErrNotInitialized)
 			.value("guidoErrActionFailed", GuidoErrCode::guidoErrActionFailed);
+
+	emscripten::enum_<GuidoeElementSelector>("GuidoeElementSelector")
+			.value("kGuidoPage", GuidoeElementSelector::kGuidoPage)
+			.value("kGuidoSystem", GuidoeElementSelector::kGuidoSystem)
+			.value("kGuidoSystemSlice", GuidoeElementSelector::kGuidoSystemSlice)
+			.value("kGuidoStaff", GuidoeElementSelector::kGuidoStaff)
+			.value("kGuidoBar", GuidoeElementSelector::kGuidoBar)
+			.value("kGuidoEvent", GuidoeElementSelector::kGuidoEvent)
+			.value("kGuidoScoreElementEnd", GuidoeElementSelector::kGuidoScoreElementEnd);
 }
 
-EMSCRIPTEN_BINDINGS(Adapter) {
+EMSCRIPTEN_BINDINGS(EngineAdapter) {
 	// Binding C++ class adapter for guidoEngine
 	emscripten::class_<GuidoEngineAdapter>("GuidoEngineAdapter")
 			//.smart_ptr_constructor("GuidoEngineAdapter",&std::make_shared<GuidoEngineAdapter>)
@@ -124,6 +137,19 @@ EMSCRIPTEN_BINDINGS(Adapter) {
 			.function("closeStream", &GuidoEngineAdapter::closeStream, allow_raw_pointers())
 			.function("writeStream", &GuidoEngineAdapter::writeStream, allow_raw_pointers())
 			.function("resetStream", &GuidoEngineAdapter::resetStream, allow_raw_pointers());
+
+	// Binding C++ class adapter for guidoEngine
+	emscripten::class_<Map2json>("GuidoScoreMap")
+			.constructor<>()
+			.function("getPageMap", &Map2json::getPageMap, allow_raw_pointers())
+			.function("getStaffMap", &Map2json::getStaffMap, allow_raw_pointers())
+			.function("getVoiceMap", &Map2json::getVoiceMap, allow_raw_pointers())
+			.function("getSystemMap", &Map2json::getSystemMap, allow_raw_pointers())
+			.function("getTime", &Map2json::getTime)
+			.function("getPoint", &Map2json::getPoint)
+			.function("getSVGMap", &Map2json::getSVGMap, allow_raw_pointers())
+			.function("getTimeMap", &Map2json::getTimeMap, allow_raw_pointers());
+
 
 	// Black box object, just for passing argument pointer in method
 	emscripten::class_<GuidoParser>("GuidoParser");

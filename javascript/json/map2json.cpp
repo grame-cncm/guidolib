@@ -1,107 +1,89 @@
+/*
+  GUIDO Library
+  Copyright (C) 2014	Grame
+
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
+
+*/
+
 #include "map2json.h"
-#include <sstream>
-#include <iostream>
-#include <cstring>
-#include <cstdlib>
-#include "json_stream.h"
-#include "date_tools.h"
 
-// get time function...
+#include "JSONFriendlyTimeMap.h"
+#include "JSONTime2GraphicMap.h"
+#include "JSONMapElement.h"
 
-using namespace json;
+using namespace std;
 
-json_array * populate_json_array_with_time_map_collector(JSONFriendlyTimeMap &info)
+//----------------------------------------------------------------------
+string Map2json::getPageMap(CGRHandler gr, int pagenum, float w, float h)
 {
-    json_array * arr = new json_array();
-    for (int i = 0; i < (int)(info.segments_.size()); i++) {
-        json_object*  holder = new json_object();
-        json_object*  score = new json_object();
-        json_object*  perf = new json_object();
-        score->add(new json_element("start", new json_string_value(dateToString(info.segments_[i].first.first).c_str())));
-        score->add(new json_element("end", new json_string_value(dateToString(info.segments_[i].first.second).c_str())));
-        perf->add(new json_element("start", new json_string_value(dateToString(info.segments_[i].second.first).c_str())));
-        perf->add(new json_element("end", new json_string_value(dateToString(info.segments_[i].second.second).c_str())));
-        holder->add(new json_element("score", new json_object_value(score)));
-        holder->add(new json_element("perf", new json_object_value(perf)));
-        arr->add(new json_object_value(holder));
-    }
-    return arr;
-}
-
-json_array * populate_json_array_with_time_2_graphic_map(Time2GraphicMap &info)
-{
-    json_array * arr = new json_array();
-    for (int i = 0; i < (int)(info.size()); i++) {
-        json_object*  holder = new json_object();
-        json_object*  graph = new json_object();
-        json_object*  mytime = new json_object();
-        graph->add(new json_element("left", new json_float_value(info[i].second.left)));
-        graph->add(new json_element("top", new json_float_value(info[i].second.top)));
-        graph->add(new json_element("right", new json_float_value(info[i].second.right)));
-        graph->add(new json_element("bottom", new json_float_value(info[i].second.bottom)));
-        mytime->add(new json_element("start", new json_string_value(dateToString(info[i].first.first).c_str())));
-        mytime->add(new json_element("end", new json_string_value(dateToString(info[i].first.second).c_str())));
-        holder->add(new json_element("graph", new json_object_value(graph)));
-        holder->add(new json_element("time", new json_object_value(mytime)));
-        arr->add(new json_object_value(holder));
-    }
-    return arr;
-}
-
-string print_and_free_printable(json_printable *printable)
-{
-  ostringstream mystream;
-  json_stream jstream(mystream);
-  printable->print(jstream);
-  delete printable;
-  return mystream.str();
-}
-
-
-// for javascript
-char * Time2GraphicMap2JSON(Time2GraphicMap &info)
-{
-  json_array * arr = populate_json_array_with_time_2_graphic_map(info);
-  string out_str = print_and_free_printable(arr);
-  char *out = (char *) malloc(strlen(out_str.c_str()) + 1);
-  strcpy(out, out_str.c_str());
-  return out;
+	JSONTime2GraphicMap outmap = scoreMap.getPageMap(gr, pagenum, w, h);
+	return outmap.toString();
 }
 
 //----------------------------------------------------------------------
-char *	GuidoGetPageMap_JSON( CGRHandler gr, int pagenum, float w, float h)
+string Map2json::getStaffMap(CGRHandler gr, int pagenum, float w, float h, int staff)
 {
-	Time2GraphicMap outmap;
-	GuidoErrCode err = GuidoGetPageMap(gr, pagenum, w, h, outmap);
-	if (err != guidoNoErr) return 0;
-	return Time2GraphicMap2JSON(outmap);
+	JSONTime2GraphicMap outmap = scoreMap.getStaffMap(gr, pagenum, w, h, staff);
+	return outmap.toString();
 }
 
 //----------------------------------------------------------------------
-char *	GuidoGetStaffMap_JSON( CGRHandler gr, int pagenum, float w, float h, int staff)
+string Map2json::getVoiceMap(CGRHandler gr, int pagenum, float w, float h, int voice)
 {
-	Time2GraphicMap outmap;
-	GuidoErrCode err = GuidoGetStaffMap(gr, pagenum, w, h, staff, outmap);
-	if (err != guidoNoErr) return 0;
-	return Time2GraphicMap2JSON(outmap);
+	JSONTime2GraphicMap outmap = scoreMap.getVoiceMap(gr, pagenum, w, h, voice);
+	return outmap.toString();
 }
 
 //----------------------------------------------------------------------
-char *	GuidoGetVoiceMap_JSON( CGRHandler gr, int pagenum, float w, float h, int voice)
+string Map2json::getSystemMap(CGRHandler gr, int pagenum, float w, float h)
 {
-	Time2GraphicMap outmap;
-	GuidoErrCode err = GuidoGetVoiceMap(gr, pagenum, w, h, voice, outmap);
-	if (err != guidoNoErr) return 0;
-	return Time2GraphicMap2JSON(outmap);
+	JSONTime2GraphicMap outmap = scoreMap.getSystemMap(gr, pagenum, w, h);
+	return outmap.toString();
+}
+//----------------------------------------------------------------------
+string Map2json::getTime(const GuidoDate& date, std::string jsonTime2GraphicMap)
+{
+	Time2GraphicMap map = JSONTime2GraphicMap(jsonTime2GraphicMap);
+	TimeSegment s;
+	FloatRect r;
+	if(scoreMap.getTime(date, map, s, r)) {
+		JSONTime2GraphicMap map;
+		map.push_back(pair<TimeSegment, FloatRect>(s, r));
+		return map.toString();
+	}
+	return "";
 }
 
 //----------------------------------------------------------------------
-char*	GuidoGetSystemMap_JSON( CGRHandler gr, int pagenum, float w, float h)
+string Map2json::getPoint(float x, float y, std::string jsonTime2GraphicMap)
 {
-	Time2GraphicMap outmap;
-	GuidoErrCode err = GuidoGetSystemMap(gr, pagenum, w, h, outmap);
-	if (err != guidoNoErr) return 0;
-	return Time2GraphicMap2JSON(outmap);
+	Time2GraphicMap map = JSONTime2GraphicMap(jsonTime2GraphicMap);
+	TimeSegment s;
+	FloatRect r;
+	if(scoreMap.getPoint(x, y, map, s, r)) {
+		JSONTime2GraphicMap map;
+		map.push_back(pair<TimeSegment, FloatRect>(s, r));
+		return map.toString();
+	}
+	return "";
+}
+
+std::string Map2json::getSVGMap( GRHandler gr, int pagenum, GuidoeElementSelector sel)
+{
+	std::vector<MapElement> vect = scoreMap.getSVGMap(gr, pagenum, sel);
+	return JSONMapElement::toString(vect);
 }
 
 //----------------------------------------------------------------------
+string Map2json::getTimeMap(CARHandler gr)
+{
+	JSONFriendlyTimeMap timeMap;
+	scoreMap.getTimeMap(gr, timeMap);
+	return timeMap.toString();
+}

@@ -60,7 +60,7 @@ void json_object::print(json_stream& out) const
 		out << *fElements[n] << out.nl()--;
 	}
 	out << "}";
-};
+}
 
 // --------------------------------------------------------------
 #ifndef JSON_ONLY
