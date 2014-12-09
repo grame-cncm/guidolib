@@ -1,12 +1,8 @@
 package fr.grame.simpleguidoeditor.drawcommand;
-import guidoengine.drawcommand.OffsetOriginCommand;
+import drawcommand.OffsetOriginCommand;
 
 import android.graphics.Canvas;
 import fr.grame.simpleguidoeditor.GuidoCanvasView;
-import android.graphics.Point;
-
-import android.util.Log;
-import java.util.*;
    
 public class AndroidCanvasOffsetOriginCommand extends OffsetOriginCommand implements DrawToCanvas {
 

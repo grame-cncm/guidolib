@@ -1,10 +1,8 @@
 package fr.grame.simpleguidoeditor.drawcommand;
-import guidoengine.drawcommand.EndDrawCommand;
+import drawcommand.EndDrawCommand;
 
 import android.graphics.Canvas;
 import fr.grame.simpleguidoeditor.GuidoCanvasView;
-
-import java.util.*;
    
 public class AndroidCanvasEndDrawCommand extends EndDrawCommand implements DrawToCanvas {
 

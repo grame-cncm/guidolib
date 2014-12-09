@@ -1,11 +1,9 @@
  package fr.grame.simpleguidoeditor.drawcommand;
-import guidoengine.drawcommand.SetTextFontCommand;
+import drawcommand.SetTextFontCommand;
 
 import android.graphics.Canvas;
 import fr.grame.simpleguidoeditor.GuidoCanvasView;
 import android.graphics.Typeface;
-
-import java.util.*;
    
 public class AndroidCanvasSetTextFontCommand extends SetTextFontCommand implements DrawToCanvas {
 

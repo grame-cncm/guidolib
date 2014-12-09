@@ -426,7 +426,7 @@ void PianoRoll::DrawKeyboard(PianoRoll::DrawParams &drawParams) const
     NVstring font("Arial");
     const VGFont *hTextFont = 0;
 	if (font.length() > 0)
-		hTextFont = FontManager::FindOrCreateFont((int) floor(drawParams.noteHeight * 0.8), &font, &NVstring(""));
+		hTextFont = FontManager::FindOrCreateFont((int) floor(drawParams.noteHeight * 0.8), &font, new NVstring(""));
 
 	drawParams.dev->SetTextFont(hTextFont);
     /******************************/

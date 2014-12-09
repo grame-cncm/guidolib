@@ -1,9 +1,6 @@
 package fr.grame.simpleguidoeditor;
 
-import fr.grame.simpleguidoeditor.GuidoWebView; 
-import fr.grame.simpleguidoeditor.GuidoCanvasView; 
 import fr.grame.simpleguidoeditor.TabsPagerAdapter;
-import fr.grame.simpleguidoeditor.fragment.*;
 import fr.grame.simpleguidoeditor.R;
 
 import android.app.ActionBar;
@@ -12,14 +9,6 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.view.Menu;
-import android.view.View;
-import android.widget.EditText;
-
-import android.content.Context;
-import android.view.inputmethod.InputMethodManager;
-import android.util.Log;
-
 import guidoengine.*;
 
 public class SimpleGuidoEditor extends FragmentActivity implements

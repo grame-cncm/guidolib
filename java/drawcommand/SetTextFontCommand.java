@@ -1,16 +1,16 @@
-package guidoengine.drawcommand;
+ package drawcommand;
 
 import java.lang.StringBuilder;
 
 import java.util.*;
    
-public class SetMusicFontCommand extends GuidoDrawCommand implements PrintableDrawCommand {
+public class SetTextFontCommand extends GuidoDrawCommand implements PrintableDrawCommand {
 
   public String _name;
   public int _size;
   public int _properties;
 
-  public SetMusicFontCommand(String name, int size, int properties) {
+  public SetTextFontCommand(String name, int size, int properties) {
     super();
     _name = name;
     _size = size;
@@ -20,7 +20,7 @@ public class SetMusicFontCommand extends GuidoDrawCommand implements PrintableDr
   @Override
   public String asString() {
     StringBuilder out = new StringBuilder();
-    out.append("SelectMusicFont");
+    out.append("SetTextFont");
     out.append(" ");
     out.append(_name);
     out.append(" ");

@@ -1,14 +1,15 @@
-package guidoengine.drawcommand;
+package drawcommand;
 
 import java.lang.StringBuilder;
+
 import java.util.*;
    
-public class OffsetOriginCommand extends GuidoDrawCommand implements PrintableDrawCommand {
+public class SetOriginCommand extends GuidoDrawCommand implements PrintableDrawCommand {
 
   public float _x;
   public float _y;
 
-  public OffsetOriginCommand(float x, float y) {
+  public SetOriginCommand(float x, float y) {
     super();
     _x = x;
     _y = y;
@@ -17,7 +18,7 @@ public class OffsetOriginCommand extends GuidoDrawCommand implements PrintableDr
   @Override
   public String asString() {
     StringBuilder out = new StringBuilder();
-    out.append("OffsetOrigin");
+    out.append("SetOrigin");
     out.append(" ");
     out.append(_x);
     out.append(" ");

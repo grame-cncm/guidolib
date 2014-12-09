@@ -110,7 +110,7 @@ protected:
 	
 private:
     void checkTagsOrder(TagType tagToClose);
-    std::vector<TagType> *fTagTypesVector; // Necessary to maintain tags order and to know when to close "font-family" tag
+    std::vector<TagType> fTagTypesVector; // Necessary to maintain tags order and to know when to close "font-family" tag
 
 	public:
 		enum	{ kSVGSizeDivider = 8 };		// used to compute the svg view size GuidoSVGExport and GuidoGetSVGMap

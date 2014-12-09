@@ -1,12 +1,10 @@
 package guidoengine;
 
-import guidoengine.drawcommand.*;
 import java.nio.ByteBuffer;
 
 import java.util.*;
 
 public interface guidocommandbattery {
-
     public void storeBeginDrawCommand();
     public void storeEndDrawCommand();
     public void storeLineCommand(float x1, float y1, float x2, float y2);

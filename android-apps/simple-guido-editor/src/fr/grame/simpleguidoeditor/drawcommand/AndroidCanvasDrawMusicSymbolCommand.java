@@ -1,14 +1,10 @@
 package fr.grame.simpleguidoeditor.drawcommand;
-import guidoengine.drawcommand.DrawMusicSymbolCommand;
+import drawcommand.DrawMusicSymbolCommand;
 
 import android.graphics.Canvas;
 import fr.grame.simpleguidoeditor.GuidoCanvasView;
 
-import java.util.*;
-
-import android.util.Log;
 import android.graphics.Paint;
-import android.graphics.Color;
 
 public class AndroidCanvasDrawMusicSymbolCommand extends DrawMusicSymbolCommand implements DrawToCanvas {
 
@@ -20,7 +16,7 @@ public class AndroidCanvasDrawMusicSymbolCommand extends DrawMusicSymbolCommand 
   public void drawToCanvas(Canvas canvas, GuidoCanvasView view) {
     double x = _x;
     double y = _y;
-    double size = view._MUSIC_FONT_SIZE;
+    //double size = view._MUSIC_FONT_SIZE;
 
     view.correctTransformMatrix(canvas);
 
