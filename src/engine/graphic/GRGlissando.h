@@ -81,8 +81,7 @@ class GRGlissando : public GRPTagARNotationElement
 		virtual void addAssociation(GRNotationElement * el);
 
 		virtual void tellPosition(GObject * caller, const NVPoint & newPosition);
-		virtual void print(int &indent) const;
-		virtual GRNotationElement * getStartElement(GRStaff * grstaff) const;
+				virtual GRNotationElement * getStartElement(GRStaff * grstaff) const;
 		virtual GRNotationElement * getEndElement(GRStaff * grstaff) const;
 		virtual void BreakTag(GRStaff * grstaff, GuidoPos & assocpos);
 		virtual void setPrevGlissando( GRGlissando * prev);
@@ -97,7 +96,7 @@ class GRGlissando : public GRPTagARNotationElement
 		virtual void updateGlissando( GRStaff * grstaff );
 		virtual	void getGlissandoBeginningContext( GRGlissandoContext * ioContext, GRSystemStartEndStruct * sse );
 		virtual void getGlissandoEndingContext( GRGlissandoContext * ioContext, GRSystemStartEndStruct * sse );
-		bool wavy;
+		//bool wavy;
 		bool fill;
 		bool hidden;
 		bool filled;

@@ -33,7 +33,7 @@ template <class T> class KF_IVector;
 class ARSystemFormat;
 class ARMusic;
 class ARBar;
-class ARAccol;
+class ARAccolade;
 
 class GRPage;
 class GRStaff;
@@ -103,9 +103,8 @@ public:
 	void        setMeterOfStaffs( int num, int denom );
 
 	virtual void		OnDraw( VGDevice & hdc ) const;
-	virtual void		GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
+	virtual void		GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 	virtual void		GGSOutput() const;
-	virtual void		print(int &indent) const;
 	virtual void		setPosition( class NVPoint const & );
 	virtual void		updateBoundingBox();
 
@@ -115,7 +114,7 @@ public:
 	void	addStaff( GRStaff * newStaff, int num );
 
 	bool 	IsDistanceSet() const 				{ return mDistanceSet; }
-	void	notifyAccoladeTag( ARAccol * inAccoladeTag );
+	void	notifyAccoladeTag( ARAccolade * inAccoladeTag );
 
 	void 	FinishSystem();
 	void 	FinishSystem( ISpringVector * pvect, IRodList * prods1, IRodList * prods2,

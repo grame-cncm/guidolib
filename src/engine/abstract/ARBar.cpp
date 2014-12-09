@@ -28,50 +28,26 @@ ListOfTPLs ARBar::ltpls(1);
 ARBar::ARBar(const TYPE_TIMEPOSITION &timeposition)
 	: ARMTParameter(timeposition)
 {
-	barnumber = -1; // not specified
-	measureNumber = 0;
-    measureNumberDisplayed = NULL;
+	measureNumber               = 0;
+    measureNumberDisplayed      = false;
+    measureNumberDisplayedIsSet = false;
 
 	numDx = 0;
 	numDy = 0;
 }
-
 
 ARBar::ARBar() : ARMTParameter()
 {
-	barnumber = -1; // not specified
-	measureNumber = 0;
-    measureNumberDisplayed = NULL;
+	measureNumber               = 0;
+    measureNumberDisplayed      = false;
+    measureNumberDisplayedIsSet = false;
 
 	numDx = 0;
 	numDy = 0;
-}
-
-void ARBar::setMeasureNumberDisplayed(bool display) {
-    delete measureNumberDisplayed;
-    measureNumberDisplayed = (display ? new TagParameterString("true") : new TagParameterString("false"));
-    measureNumberDisplayed->pflag = TagParameter::SETBYNAME;
 }
 
 ARBar::~ARBar() // does nothing
 {
-}
-
-void ARBar::print(int &indent) const
-{
-}
-
-void ARBar::PrintName(std::ostream &os) const
-{
-	os << "\\bar";
-}
-
-void ARBar::PrintParameters(std::ostream &os) const
-{
-	if (barnumber!=-1)
-	{
-		os << "<" << barnumber << ">";
-	}
 }
 
 void ARBar::setTagParameterList(TagParameterList& tpl)
@@ -82,7 +58,7 @@ void ARBar::setTagParameterList(TagParameterList& tpl)
 
 		ListOfStrings lstrs; // (1); std::vector test impl
 		lstrs.AddTail(
-			("I,number,-1,o;S,displayMeasNum,false,o;U,numDx,0,o;U,numDy,0,o"));
+			("S,displayMeasNum,false,o;U,numDx,0,o;U,numDy,0,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -97,13 +73,12 @@ void ARBar::setTagParameterList(TagParameterList& tpl)
 			// then, we now the match for
 			// the first ParameterList
 			// w, h, ml, mt, mr, mb
-            TagParameterInt * tpi =  TagParameterInt::cast(rtpl->RemoveHead());
-			assert(tpi);
-			if (tpi->pflag != TagParameter::NOTSET)
-				barnumber = tpi->getValue();
-            delete tpi;
 
-            measureNumberDisplayed = TagParameterString::cast(rtpl->RemoveHead());
+            TagParameterString *s = TagParameterString::cast(rtpl->RemoveHead());
+            s->getBool(measureNumberDisplayed);
+            if (s->TagIsSet())
+                measureNumberDisplayedIsSet = true;
+            delete s;
 
 			// - dx/dy for measure number
 			TagParameterFloat *f = TagParameterFloat::cast(rtpl->RemoveHead());
@@ -123,4 +98,24 @@ void ARBar::setTagParameterList(TagParameterList& tpl)
 	}
 
 	tpl.RemoveAll();
+}
+
+void ARBar::printName(std::ostream& os) const
+{
+    os << "ARBar";
+}
+
+void ARBar::printGMNName(std::ostream& os) const
+{
+    os << "\\bar";
+}
+
+void ARBar::printParameters(std::ostream& os) const
+{
+    os << "measureNumber: " << measureNumber << "; ";
+    os << "measureNumberDisplayed: " << measureNumberDisplayed << "; ";
+    os << "numDx: " << numDx << "; ";
+    os << "numDy: " << numDy << ";";
+
+    ARMusicalTag::printParameters(os);
 }

@@ -22,36 +22,32 @@
 */
 class ARNoteFormat :  public ARMTParameter, public ARPositionTag
 {
-	public:
-		const char* getStyle() const;
+public:
+             ARNoteFormat(ARNoteFormat * p_savenf = NULL, ARNoteFormat * copynf = NULL);
+    virtual ~ARNoteFormat();
 
-		const TagParameterString * getTPStyle() const
-		{
-			return style;
-		}
+    const char* getStyle() const;
 
-				 ARNoteFormat(ARNoteFormat * p_savenf = NULL,
-				 ARNoteFormat * copynf = NULL);
-		virtual ~ARNoteFormat();
+    const TagParameterString * getTPStyle() const { return style; }
 
-		virtual bool IsStateTag() const { return true; }
+    virtual bool IsStateTag() const { return true; }
 
-		virtual void setTagParameterList( TagParameterList & tpl);
-		virtual void print(int &indent) const { }
-		virtual void PrintName(std::ostream & os) const;
-		virtual void PrintParameters(std::ostream &os) const;
+    virtual void setTagParameterList( TagParameterList & tpl);
 
-		virtual ARNoteFormat * getEndTag() const		{ return new ARNoteFormat(NULL,savenf); }
-        
+    virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+    virtual void printParameters(std::ostream& os) const;
 
-        /**** Function to avoid dynamic_cast ****/
-        ARMusicalObject *isARNoteFormat() { return this; }
-        /****************************************/
+    virtual ARNoteFormat * getEndTag() const		{ return new ARNoteFormat(NULL,savenf); }
 
-	protected:
-		ARNoteFormat * savenf;
-		TagParameterString * style;
-		static ListOfTPLs ltpls;
+    /**** Function to avoid dynamic_cast ****/
+    ARMusicalObject *isARNoteFormat() { return this; }
+    /****************************************/
+
+protected:
+    ARNoteFormat * savenf;
+    TagParameterString * style;
+    static ListOfTPLs ltpls;
 };
 
 #endif 

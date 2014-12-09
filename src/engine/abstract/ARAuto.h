@@ -39,10 +39,11 @@ public:
 	state getPageBreakState() const				{ return pageBreakState; } 
 
 	virtual void setTagParameterList(TagParameterList & tpl);
-	virtual void PrintName(std::ostream & os) const;
-	virtual void PrintParameters(std::ostream & os) const;
 
-	virtual void print(int &indent) const {}
+	virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
+
 	virtual bool IsStateTag() const				{ return true; }
 
 protected:

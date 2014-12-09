@@ -1,10 +1,8 @@
 package fr.grame.simpleguidoeditor.drawcommand;
-import guidoengine.drawcommand.NotifySizeCommand;
+import drawcommand.NotifySizeCommand;
 
 import android.graphics.Canvas;
 import fr.grame.simpleguidoeditor.GuidoCanvasView;
-
-import java.util.*;
    
 public class AndroidCanvasNotifySizeCommand extends NotifySizeCommand implements DrawToCanvas {
 

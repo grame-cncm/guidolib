@@ -9,7 +9,7 @@ GuidoScoreMapAdapter::~GuidoScoreMapAdapter()
 {
 }
 
-GuidoErrCode GuidoScoreMapAdapter::getMap(CGRHandler gr, int pagenum, float width, float height, GuidoeElementSelector sel, MapCollector& f)
+GuidoErrCode GuidoScoreMapAdapter::getMap(CGRHandler gr, int pagenum, float width, float height, GuidoElementSelector sel, MapCollector& f)
 {
 	return ::GuidoGetMap(gr, pagenum, width, height, sel, f);
 }
@@ -53,7 +53,7 @@ bool GuidoScoreMapAdapter::getPoint(float x, float y, const Time2GraphicMap map,
 	return ::GuidoGetPoint(x, y, map, t, r);
 }
 
-std::vector<MapElement> GuidoScoreMapAdapter::getSVGMap( GRHandler gr, int pagenum, GuidoeElementSelector sel)
+std::vector<MapElement> GuidoScoreMapAdapter::getSVGMap(GRHandler gr, int pagenum, GuidoElementSelector sel)
 {
 	std::vector<MapElement> outVector;
 	::GuidoGetSVGMap(gr, pagenum, sel, outVector);

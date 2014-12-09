@@ -28,29 +28,28 @@ class ARRepeatBegin : public ARMTParameter	// ,public ARMusicalObject
 //class ARRepeatBegin : public ARBar
 {
 	public:
-
 		friend class ARRepeatEnd;
 		friend class ARFactory;
 
-					 ARRepeatBegin() : numrepeat(0) { dur.setNumerator(-1); }
+					 ARRepeatBegin() { dur.setNumerator(-1); }
 		virtual		~ARRepeatBegin()	{ }
 
 		virtual void	setTagParameterList(TagParameterList & tpl);
 
-		virtual void	print(int &indent) const { }
-		virtual void	browse(TimeUnwrap& mapper) const;
+	    virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+	    virtual void printParameters(std::ostream& os) const;
 
-		virtual std::ostream & operator << ( std::ostream & os ) const;
-		virtual void	setRepeatEnd( const ARRepeatEnd * );
+		virtual void browse(TimeUnwrap& mapper) const;
+
+		virtual void setRepeatEnd( const ARRepeatEnd * );
 
         /**** Function to avoid dynamic_cast ****/
         ARMusicalObject *isARRepeatBegin() { return this; }
         /*****************************************/
 	
 	protected:
-
 		static ListOfTPLs ltpls;
-		int numrepeat;
 		TYPE_DURATION dur;
 };
 

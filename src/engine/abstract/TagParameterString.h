@@ -37,10 +37,11 @@ class TagParameterString : public TagParameter
 		virtual TagParameter * getCopy() const		{ return new TagParameterString(*this); }
 	
 		virtual bool copyValue( const TagParameter * tp ); 	// returns 1 if successful,
-		virtual bool isString() const				{ return true; }	
+        virtual bool isString() const				{ return true; }
 
 		const char* getValue() const				{ return fValue.c_str(); }
 		bool		getRGB( unsigned char colref[4] ) const; 	// returns 1 if successful
+        bool        getBool(bool &result) const;
 		bool operator == (const char * inCString ) const;
 
 		static TagParameterString * cast( TagParameter * inTag ) 

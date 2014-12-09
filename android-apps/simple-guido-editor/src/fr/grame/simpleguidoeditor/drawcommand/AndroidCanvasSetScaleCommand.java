@@ -1,10 +1,8 @@
 package fr.grame.simpleguidoeditor.drawcommand;
-import guidoengine.drawcommand.SetScaleCommand;
+import drawcommand.SetScaleCommand;
 
 import android.graphics.Canvas;
 import fr.grame.simpleguidoeditor.GuidoCanvasView;
-
-import java.util.*;
    
 public class AndroidCanvasSetScaleCommand extends SetScaleCommand implements DrawToCanvas {
 

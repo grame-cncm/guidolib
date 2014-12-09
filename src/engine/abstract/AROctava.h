@@ -25,28 +25,24 @@ class TagParameterInt;
 class AROctava : public ARMTParameter, public ARPositionTag
 {
 	public:
-						AROctava(AROctava * p_saveoct = NULL, 
-										AROctava * copyoct = NULL);
+						AROctava(AROctava * p_saveoct = NULL, AROctava * copyoct = NULL);
 		virtual			~AROctava();
 
 		virtual bool IsStateTag() const { return true; }
 
-		virtual ARMusicalObject * getEndTag() const
-		{
-			return new AROctava(NULL, saveoct);
-		}
+		virtual ARMusicalObject * getEndTag() const { return new AROctava(NULL, saveoct); }
 
-		virtual const TagParameterInt * getTPOctava() const
-		{ return noct; }
+		virtual const TagParameterInt * getTPOctava() const { return noct; }
 
 		virtual int getOctava() const;
-		virtual void print(int &indent) const { };
-		virtual void PrintName(std::ostream & os) const;
-		virtual void PrintParameters(std::ostream & os) const;
+
+	    virtual void printName(std::ostream& os) const;
+	    virtual void printGMNName(std::ostream& os) const;
+	    virtual void printParameters(std::ostream& os) const;
+
 		virtual void setTagParameterList(TagParameterList& tpl);
 
 	protected:
-
 		AROctava * saveoct; // this is required to save
 				// the current octava state ...
 		TagParameterInt  * noct;

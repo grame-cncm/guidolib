@@ -141,9 +141,19 @@ bool ARBeam::isGuidoSpecBeam() const
 	return false;
 }
 
-void ARBeam::PrintName(std::ostream & os) const
+void ARBeam::printName(std::ostream& os) const
 {
-	os << "\\beam";
-	if (!getRange())
-		os << "Begin";
+    os << "ARBeam";
+}
+
+void ARBeam::printGMNName(std::ostream& os) const
+{
+    os << "\\beam";
+}
+
+void ARBeam::printParameters(std::ostream& os) const
+{
+    /* TODO */
+
+    ARMusicalTag::printParameters(os);
 }

@@ -1,0 +1,7 @@
+====================================
+ guido2image - change log
+====================================
+  
+2014-12-08  version 1.0
+	- guido2svg :
+	    - svg with map export available

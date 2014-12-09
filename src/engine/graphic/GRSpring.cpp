@@ -88,7 +88,7 @@ GRSpring::GRSpring(const TYPE_TIMEPOSITION & vtp,
 	hasDurElement         = false;
     isProportionalElement = false;
 
-	sconst = defconst(vdur);
+    sconst = defconst(dur);
 
 	assert(sconst != 0);
 }
@@ -734,7 +734,7 @@ float GRSpring::GetMaxDistance(GRSpring * nextspring)
 */
 void GRSpring::checkLocalCollisions()
 {
-	//checkAccidentalCollisions();
+	checkAccidentalCollisions();
 }
 
 /** \brief Goes through the elements and finds notes and then checkes,

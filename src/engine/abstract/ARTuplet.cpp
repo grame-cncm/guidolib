@@ -13,8 +13,10 @@
 */
 
 #include <iostream>
+
 #include "ARTuplet.h"
 #include "ARBase.h"
+#include "FormatStringParser.h"
 
 #include "TagParameterString.h"
 #include "TagParameterFloat.h"
@@ -23,28 +25,16 @@
 
 ListOfTPLs ARTuplet::ltpls(1);
 
-ARTuplet::ARTuplet()
+ARTuplet::ARTuplet() : fTupletFormat(""), fPosition(""), fDy1(0), fDy2(1), fLineThickness(0.08f * LSPACE),
+    fTextBold(false), fTextSize(1), fFormatSet(false), fDy1TagIsSet(false), fDy2TagIsSet(false)
 {
 	rangesetting = ONLY;
 	setAssociation(ARMusicalTag::RA);
 	
-	fDy1           = float(0.0);
-	fDy2           = float(0.0);
-    fLineThickness = float(0.08) * LSPACE;
-    fTextBold      = false;
-    fTextSize      = float(1.0);
-
 	fBaseNumerator   = 0;	// 0 means: do not display
 	fBaseDenominator = 0;	// 0 means: do not display
 	fLeftBrace       = false;
 	fRightBrace      = false;
-
-	fDy1Set           = false;
-	fDy2Set           = false;
-	fFormatSet        = false;
-    fLineThicknessSet = false;
-    fTextBoldSet      = false;
-    fTextSizeSet      = false;
 }
 
 void ARTuplet::setTagParameterList(TagParameterList & tpl)
@@ -54,7 +44,7 @@ void ARTuplet::setTagParameterList(TagParameterList & tpl)
 		// create a list of string ...
 
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(("S,format,,r;U,dy1,0,o;U,dy2,0,o;F,lineThickness,0.08,o;S,bold,,o;F,textSize,1,o"));
+		lstrs.AddTail(("S,format,,r;S,position,above,o;U,dy1,0,o;U,dy2,0,o;F,lineThickness,0.08,o;S,bold,,o;F,textSize,1,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -74,62 +64,32 @@ void ARTuplet::setTagParameterList(TagParameterList & tpl)
 			TagParameterString *tps = TagParameterString::cast(rtpl->GetNext(pos));
 			assert(tps);
 
-			if (tps->TagIsSet())
-			{
-				setName(tps->getValue());
+			if (tps->TagIsSet()) {
+				fTupletFormat = tps->getValue();
 				parseTupletFormatString();
 			}
 
-			TagParameterFloat *tpf = TagParameterFloat::cast( rtpl->GetNext(pos));
-			assert(tpf);
+            tps = TagParameterString::cast(rtpl->GetNext(pos));
+            fPosition = tps->getValue();
 
+            TagParameterFloat *tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
+            fDy1 = tpf->getValue();
             if (tpf->TagIsSet())
-            {
-                fDy1 = tpf->getValue();
-                fDy1Set = true;
-            }
+                fDy1TagIsSet = true;
 
 			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
-			assert(tpf);
-
-			if (tpf->TagIsSet())
-			{
-				fDy2 = tpf->getValue();
-				fDy2Set = true;
-			}
-			else
-				fDy2 = fDy1;
-
-            tpf =  TagParameterFloat::cast(rtpl->GetNext(pos));
-			assert(tpf);
-
+            fDy2 = tpf->getValue();
             if (tpf->TagIsSet())
-            {
-                fLineThickness = LSPACE * tpf->getValue();
-                fLineThicknessSet = true;
-            }
+                fDy2TagIsSet = true;
+
+            tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
+            fLineThickness = tpf->getValue() * LSPACE;
 
             tps = TagParameterString::cast(rtpl->GetNext(pos));
-			assert(tps);
+            tps->getBool(fTextBold);
 
-            if (tps->TagIsSet())
-            {
-                std::string isBold = tps->getValue();
-                
-                if (!isBold.compare("true"))
-                    fTextBold = true;
-
-                fTextBoldSet = true;
-            }
-
-            tpf =  TagParameterFloat::cast(rtpl->GetNext(pos));
-			assert(tpf);
-
-            if (tpf->TagIsSet())
-            {
-                fTextSize = tpf->getValue();
-                fTextSizeSet = true;
-            }
+            tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
+            fTextSize = tpf->getValue();
 		}
 
 		delete rtpl;
@@ -144,8 +104,7 @@ void ARTuplet::setTagParameterList(TagParameterList & tpl)
 
 /** \brief Called for auto tuplet.
 */
-void
-ARTuplet::setupTuplet( ARBase * inBase )
+void ARTuplet::setupTuplet( ARBase * inBase )
 {
 	// 
 	const TYPE_DURATION & baseDur = inBase->getBase();
@@ -174,29 +133,24 @@ ARTuplet::setupTuplet( ARBase * inBase )
 	Where 'x' and 'y' are the numerator and the denominator.
 	And '-' the presence of left and right tuplet braces.
 */
-void 
-ARTuplet::parseTupletFormatString()
+void ARTuplet::parseTupletFormatString()
 {
-	bool hasLeftBrace = false;
+	bool hasLeftBrace  = false;
 	bool hasRightBrace = false;
-	bool rightPart = false;
-
-	int numerator = 0;
-	int denominator = 0;
+	bool rightPart     = false;
+	int  numerator     = 0;
+	int  denominator   = 0;
 
 	size_t len = fTupletFormat.length();
 
 	if (len > 0)
 		fFormatSet = true;
 
-	for (size_t pos = 0; pos < len; ++ pos)
-	{
-		const char & c = fTupletFormat[ pos ];
+	for (size_t pos = 0; pos < len; ++ pos) {
+		const char & c = fTupletFormat[pos];
 
-		if( c == '-' )
-		{
-			if( hasLeftBrace || rightPart || (numerator != 0)) 
-			{ 
+		if (c == '-') {
+			if (hasLeftBrace || rightPart || (numerator != 0)) { 
 				hasRightBrace = true; 
 				break; 
 			}
@@ -204,30 +158,37 @@ ARTuplet::parseTupletFormatString()
 				hasLeftBrace = true;
 		}
 		else if( c == ':' )
-		{
 			rightPart = true;
+		else if ((c >= '0') && (c <= '9')) {
+			if (rightPart)
+                denominator = (denominator * 10) + (c - '0');
+			else
+                numerator = (numerator * 10) + (c - '0');
 		}
-		else if(( c >= '0' ) && ( c <= '9' ))
-		{
-			if( rightPart )	denominator = (denominator * 10) + (c - '0');
-			else numerator = (numerator * 10) + (c - '0');
-		}
+        else {
+            hasLeftBrace  = true;
+            hasRightBrace = true;
+            numerator     = 0;
+            denominator   = 0;
+            fFormatSet    = false;
+
+            break;
+        }
 	}
 
 	// Store
-	fBaseNumerator = numerator < 100 ? numerator : 0;
+	fBaseNumerator   = numerator < 100 ? numerator : 0;
 	fBaseDenominator = denominator < 100 ? denominator : 0;
-	fLeftBrace = hasLeftBrace;
-	fRightBrace = hasRightBrace;
+	fLeftBrace       = hasLeftBrace;
+	fRightBrace      = hasRightBrace;
 }
 
-void 
-ARTuplet::setName(const char * inName)
+void ARTuplet::setAuto()
 {
-	fTupletFormat = inName;
+	fTupletFormat = "-auto-";
 }
 
-std::ostream & ARTuplet::operator<<(std::ostream & os) const
+/*std::ostream & ARTuplet::operator<<(std::ostream & os) const
 {
 	if (getRange())	os << "\\tuplet";
 	else			os << "\\tupletBegin";
@@ -272,6 +233,23 @@ std::ostream & ARTuplet::operator<<(std::ostream & os) const
 	if (getRange())
 		os << "(";
 	return os << " ";
+}*/
+
+void ARTuplet::printName(std::ostream& os) const
+{
+    os << "ARTuplet";
+}
+
+void ARTuplet::printGMNName(std::ostream& os) const
+{
+    os << "\\tuplet";
+}
+
+void ARTuplet::printParameters(std::ostream& os) const
+{
+    /* TODO (cf. plus haut) */
+
+    ARMusicalTag::printParameters(os);
 }
 
 

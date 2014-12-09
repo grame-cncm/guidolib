@@ -28,15 +28,14 @@ class ARDrRenz :
 	public ARMTParameter
 {
 public:
-	ARDrRenz(int p_inv = 0);
+	         ARDrRenz(int p_inv = 0);
 	virtual ~ARDrRenz();
 
-	virtual void print(int &indent) const { };
+	virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 
-	virtual void PrintName(std::ostream & os) const;
-	virtual void PrintParameters(std::ostream & os) const;
 	virtual void setTagParameterList(TagParameterList & tpl);
-
 
 	int getInverse() const { return inverse; }
 

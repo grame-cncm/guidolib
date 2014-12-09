@@ -328,11 +328,6 @@ void GRMeter::OnDraw(VGDevice & hdc) const
 	}
 }
 
-void GRMeter::print(int &indent) const
-{
-	fprintf(stderr,"(M%.2f,%.2f)",float(getRelativeTimePosition()),float(getDuration()));
-}
-
 ARMeter* GRMeter::getARMeter()
 {
 	return /*dynamic*/static_cast<ARMeter*>(getAbstractRepresentation());

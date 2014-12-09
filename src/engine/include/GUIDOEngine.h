@@ -28,7 +28,6 @@
 #endif
 
 
-class GuidoFeedback;
 class VGDevice;
 
 struct NodeAR;
@@ -173,6 +172,16 @@ enum GuidoErrCode
 	guidoErrActionFailed		= -10
 };
 /*! @} */
+
+
+/** \brief Mapping mode for SVG export
+*/
+enum {
+    kNoMapping     =  0,
+    kVoiceMapping  =  1,
+    kStaffMapping  =  1<<1,
+    kSystemMapping =  1<<2
+};
 
 
 enum { kAutoDistrib = 1, kAlwaysDistrib = 2, kNeverDistrib = 3 };
@@ -477,9 +486,10 @@ units.
 		\param page the page number.
 		\param out the output stream.
 		\param fontfile path of the guido svg font file.
+		\param mappingMode the mapping mode (see mapping mode enum).
 		\return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode) 	GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile );
+	GUIDOAPI(GuidoErrCode) 	GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const int mappingMode = 0 );
 
     /** \brief Exports one page of score to SVG.
 
@@ -490,7 +500,7 @@ units.
         \param fontspec an actual svg font if there is no font file.
         \return a Guido error code
     */
-    GUIDOAPI(GuidoErrCode) 	GuidoSVGExportWithFontSpec( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec );
+    GUIDOAPI(GuidoErrCode) 	GuidoSVGExportWithFontSpec( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec, const int mappingMode = 0 );
 
 	/** \brief Exports an abstract representation of GUIDO draw commands.
 

@@ -1,9 +1,11 @@
 
 
 
-SRC = $(wildcard guidoengine/*.java)
-CLASS = $(patsubst %.java, %.class, $(SRC) )
-JNI   = $(addprefix jni/, $(subst /,_,$(patsubst guidoengine/%.java, guidoengine_%.h, $(SRC) )))
+SRC        = $(wildcard guidoengine/*.java)
+SRCDRAWC   = $(wildcard drawcommand/*.java)
+CLASS      = $(patsubst %.java, %.class, $(SRC) )
+CLASSDRAWC = $(patsubst %.java, %.class, $(SRCDRAWC) )
+JNI        = $(addprefix jni/, $(subst /,_,$(patsubst guidoengine/%.java, guidoengine_%.h, $(SRC) )))
 
 ifeq ($(ARCH), 64)
 	JAVA  = "C:\Program Files\Java\jdk1.6.0_20\bin\java"
@@ -26,10 +28,13 @@ help:
 
 class : $(CLASS)
 
-jar : guidoengine.jar
+jar : guidoengine.jar drawcommand.jar
 
 guidoengine.jar : $(CLASS)
 	jar cvf guidoengine.jar $(CLASS)
+
+drawcommand.jar : $(CLASSDRAWC)
+	jar cvf drawcommand.jar $(CLASSDRAWC)
 
 guidocrash : guidocrash.class
 	$(JAVA) guidocrash 
@@ -58,7 +63,7 @@ print-%:
 headers : $(JNI)
 
 jni/guidoengine_%.h: guidoengine/%.class
-	javah -jni -d jni $(patsubst guidoengine/%.class, guidoengine.%, $<) # temporary
+	javah -jni -d jni $(patsubst guidoengine/%.class, guidoengine.%, $<)
 
 ##################################################################
 # rule for java compiling

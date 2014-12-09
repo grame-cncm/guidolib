@@ -23,24 +23,14 @@
 ListOfTPLs ARRestFormat::ltpls(1);
 
 ARRestFormat::ARRestFormat(ARRestFormat *p_saverf, ARRestFormat *copyrf)
-	: ARMTParameter(-1,copyrf)
+	: ARMTParameter(-1, copyrf)
 {
 	rangesetting = ARMusicalTag::RANGEDC;
-
-	posy = NULL;
-
-	saverf = p_saverf;
-
-	if (copyrf && copyrf->getPosy())
-	{
-		posy = TagParameterFloat::cast(copyrf->getPosy()->getCopy());
-	}
+	saverf       = p_saverf;
 }
-
 
 ARRestFormat::~ARRestFormat()
 {
-	delete posy;
 }
 
 void ARRestFormat::setTagParameterList(TagParameterList &tpl)
@@ -50,24 +40,15 @@ void ARRestFormat::setTagParameterList(TagParameterList &tpl)
 		// create a list of string ...
 
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail( ( "U,posy,0,o"));
+		lstrs.AddTail((""));
 		CreateListOfTPLs(ltpls,lstrs);
-
 	}
 
 	TagParameterList * rtpl = NULL;
 	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
 
-	posy = NULL;
 	if (ret >= 0 && rtpl)
-	{
-		// we found a match!
-		if (ret == 0)
-		{
-			posy = TagParameterFloat::cast(rtpl->RemoveHead()); 
-		}
-
-		delete rtpl;
+    {
 	}
 	else
 	{
@@ -77,17 +58,18 @@ void ARRestFormat::setTagParameterList(TagParameterList &tpl)
 	tpl.RemoveAll();
 }
 
-void ARRestFormat::PrintName(std::ostream & os) const
+void ARRestFormat::printName(std::ostream& os) const
 {
-	os << "\\restFormat";
+    os << "ARRestFormat";
 }
 
-void ARRestFormat::PrintParameters(std::ostream &os) const
+void ARRestFormat::printGMNName(std::ostream& os) const
 {
-	// todo 
-	if (posy)
-		os << "<posy=\"" << posy->getUnitValue() << posy->getUnit() << "> ";
-//		\",size=" 
-//		<< size << ",dx=" << dx << "> ";
+    os << "\\restFormat";
+}
+
+void ARRestFormat::printParameters(std::ostream& os) const
+{
+    ARMusicalTag::printParameters(os);
 }
 

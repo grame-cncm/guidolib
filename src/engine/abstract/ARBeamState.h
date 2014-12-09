@@ -24,45 +24,26 @@
 class ARBeamState : public ARMusicalTag  
 	// ,public ARMusicalObject
 {
-  public: 
-		enum beamstate { AUTO, OFF };
+public: 
+	enum beamstate { AUTO, OFF };
 
-						ARBeamState(beamstate p_state)
-							{ state = p_state; }
-
-		virtual			~ARBeamState() {}
+				 ARBeamState(beamstate p_state) { state = p_state; }
+	virtual		~ARBeamState() {}
 		
-		virtual bool IsStateTag() const { return true; }
+	virtual bool IsStateTag() const { return true; }
 
-		virtual void print(int &indent) const { }
-
-/*		virtual ostream &operator<<(ostream &os) const
-			{
-				os << "\\beams";
-				if (state == AUTO)
-					os << "Auto";
-				else if (state == OFF)
-					os << "Off";
-				if (getRange())
-					os << "(";
-				return os << " ";
-			}
-*/
-		virtual void PrintName(std::ostream & os) const;
-		virtual void PrintParameters(std::ostream &) const { }
+	virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 	
-			beamstate getBeamState() const { return state; }
-        
+	beamstate getBeamState() const { return state; }
 
     /**** Function to avoid dynamic_cast ****/
     ARMusicalObject *isARBeamState() { return this; }
     /****************************************/
 
-  protected:
-
-		beamstate state;
+protected:
+	beamstate state;
 };
 
-
 #endif
-

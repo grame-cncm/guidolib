@@ -55,23 +55,25 @@ void ARFermata::setTagParameterList(TagParameterList & tpl)
 			std::string shortstr ("short");
 			std::string longstr ("long");
 			std::string below ("below");
-			if (str->TagIsSet())
-			{
+
+			if (str->TagIsSet()) {
 				if (shortstr == str->getValue())
 					type = SHORT;
 				else if (longstr == str->getValue())
 					type = LONG;
-				else type = REGULAR;
+				else
+                    type = REGULAR;
 			}
+
 			delete str;
 		
 			str = TagParameterString::cast(rtpl->RemoveHead());
 			assert(str);
+
 			if (str->TagIsSet() && (below == str->getValue()))
-			{
 				position = BELOW;
-			}
-			else  position = ABOVE;
+			else 
+                position = ABOVE;
 			
 			delete str;
 		}
@@ -89,15 +91,43 @@ void ARFermata::browse(TimeUnwrap& mapper) const
 	mapper.AtPos (this, TimeUnwrap::kFermata);
 }
 
-
-void ARFermata::PrintName(std::ostream &os) const
+void ARFermata::printName(std::ostream& os) const
 {
-	os << "\\fermata";
+    os << "ARFermata";
 }
-void ARFermata::PrintParameters(std::ostream &) const
+
+void ARFermata::printGMNName(std::ostream& os) const
 {
-	// is this correct?
-	//if (getRange())
-	//	os << "(";
+    os << "\\fermata";
+}
+
+void ARFermata::printParameters(std::ostream& os) const
+{
+    switch (type) {
+        case SHORT:
+            os << "short";
+            break;
+        case LONG:
+            os << "long";
+            break;
+        case REGULAR:
+            os << "regular";
+            break;
+    }
+
+    os << "; position: ";
+
+    switch (position) {
+        case BELOW:
+            os << "below";
+            break;
+        case ABOVE:
+            os << "above";
+            break;
+    }
+
+    os << ";";
+
+    ARMusicalTag::printParameters(os);
 }
 

@@ -54,10 +54,10 @@
     \hline
     %\textbf{\textbackslash{}auto}&\textbackslash{}set&&&\\ % A COMPLETER
     %\hline
-    \textbf{\textbackslash{}bar}&\textbar&&measure bar&number - displayMeasNum - numDx - numDy - dx/dy -\\
+    \textbf{\textbackslash{}bar}&\textbar&&measure bar&displayMeasNum - numDx - numDy - dx/dy -\\
     &&&&color - size\\
     \hline
-    %\textbf{\textbackslash{}barFormat}&&&bar formatting&\\ % Useless tag for now ?
+    %\textbf{\textbackslash{}barFormat}&&&bar formatting&\\ % Useless tag for now
     %\hline
     \textbf{\textbackslash{}beam}&\textbackslash{}bm&RT - BE&notes beaming&dy - color\\
     &&&&dy1 - dy2 - dy - color\\
@@ -68,7 +68,7 @@
     \hline
     \textbf{\textbackslash{}beamsOff}&&&no auto beaming&\\
     \hline
-    %\textbf{\textbackslash{}bembel}&A COMPLETER&&&\\ % Useless tag for now ?
+    %\textbf{\textbackslash{}bembel}&&&&\\ % Useless tag for now
     %\hline
     \textbf{\textbackslash{}breathMark}&&&breath mark&color\\
     \hline
@@ -78,7 +78,7 @@
     \hline
     \textbf{\textbackslash{}coda}&&&coda sign&dx/dy - color\\
     \hline
-    %\textbf{\textbackslash{}color}&A COMPLETER&&&\\ % Useless tag for now ?
+    %\textbf{\textbackslash{}color}&&&&\\ % Useless tag for now
     %\hline
     \textbf{\textbackslash{}composer}&&&composer indication&\textbf{name} - pageformat - dx/dy - color\\
     \hline
@@ -98,15 +98,17 @@
     \hline
     \textbf{\textbackslash{}decrescendo}&\textbackslash{}decresc \textbackslash{}dim \textbackslash{}diminuendo&RT&decrescendo&dm - dx1 - dx2 - deltaY - thickness - dy - color\\
     \hline
-    %\textbf{\textbackslash{}defineTag}&&&&\\ % Useless tag for now ?
+    %\textbf{\textbackslash{}defineTag}&&&&\\ % Useless tag for now
     %\hline
-    %\textbf{\textbackslash{}dispDur}&&&&\\ % Je ne comprends pas ce qu'il fait ! % A COMPLETER
-    %\hline
-    \textbf{\textbackslash{}dotFormat}&&ORT&dot formatting&dd - dx/dy - color - size\\
+    \textbf{\textbackslash{}displayDuration}&\textbackslash{}dispDur&ORT&duration displayed&\textbf{n} - \textbf{d} - ndots\\
+    \hline
+    \textbf{\textbackslash{}dotFormat}&&ORT&dot formatting&dx/dy - color - size\\
     \hline
     \textbf{\textbackslash{}doubleBar}&&&double measure bar&color\\
     \hline
     \textbf{\textbackslash{}endBar}&&&end bar&color\\
+    \hline
+    \textbf{\textbackslash{}fBeam}&&RT - BE&feathered beaming&durations - drawDuration - color\\
     \hline
     \textbf{\textbackslash{}fermata}&&ORT&fermata sign&type - position - dx/dy - color - size\\
     \hline
@@ -114,17 +116,11 @@
     \hline
     \textbf{\textbackslash{}fingering}&&RT&fingering&\textbf{text} - fsize - dx/dy - color\\
     \hline
-    \textbf{\textbackslash{}glissando}&&RT&glissando&dx1/dy1 - dx2/dy2 - fill - thickness - lineStyle - color\\
+    \textbf{\textbackslash{}glissando}&&RT&glissando&dx1/dy1 - dx2/dy2 - fill - thickness - color\\
     \hline
     \textbf{\textbackslash{}grace}&&RT&grace notes&\\
     \hline
     \textbf{\textbackslash{}harmonic}&&RT&harmonic mark&dx/dy - color - size\\
-    \hline
-    \textbf{\textbackslash{}headsCenter}&&ORT&noteheads centered on stem&\\
-    \hline
-    \textbf{\textbackslash{}headsLeft}&&ORT&noteheads at the left of the stem&\\
-    \hline
-    \textbf{\textbackslash{}headsNormal}&&ORT&auto noteheads placement (default)&\\
     \hline
 \end{tabularx}
 %
@@ -134,13 +130,19 @@
     \hline
     \textbf{Tag}&\textbf{Shortcuts}&\textbf{Form support}&\textbf{Notation element}&\textbf{Parameters}\\
     \hline
+    \textbf{\textbackslash{}headsCenter}&&ORT&noteheads centered on stem&\\
+    \hline
+    \textbf{\textbackslash{}headsLeft}&&ORT&noteheads at the left of the stem&\\
+    \hline
+    \textbf{\textbackslash{}headsNormal}&&ORT&auto noteheads placement (default)&\\
+    \hline
     \textbf{\textbackslash{}headsReverse}&&ORT&reverted placement of noteheads&\\
     \hline
     \textbf{\textbackslash{}headsRight}&&ORT&noteheads at the right of the stem&\\
     \hline
-    \textbf{\textbackslash{}instrument}&\textbackslash{}instr&&instrument specification&\textbf{name} - midiname - transp - dx/dy - color\\
+    \textbf{\textbackslash{}instrument}&\textbackslash{}instr&&instrument specification&\textbf{name} - transp - dx/dy - color\\
     \hline
-    \textbf{\textbackslash{}intensity}&\textbackslash{}i \textbackslash{}intens&&nuance marking&\textbf{type} - value - dx/dy - color - size\\
+    \textbf{\textbackslash{}intensity}&\textbackslash{}i \textbackslash{}intens&&nuance marking&\textbf{type} - dx/dy - color - size\\
     \hline
     \textbf{\textbackslash{}key}&&&key signature&\textbf{key} - color\\
     \hline
@@ -152,18 +154,16 @@
     \hline
     \textbf{\textbackslash{}mark}&&&textual mark&\textbf{text} - dx/dy - color\\
     \hline
-    %\textbf{\textbackslash{}merge}&&&&\\ % Useless tag for now ?
+    %\textbf{\textbackslash{}merge}&&&&\\ % Useless tag for now
     %\hline
     \textbf{\textbackslash{}meter}&&&meter indication&\textbf{type} - autoBarlines - autoMeasuresNum - \\
         &&&&dx/dy - color - size\\
     \hline
     \textbf{\textbackslash{}mordent}&\textbackslash{}mord&RT&mordent sign&mode - adx/ady - dx/dy - color - size\\
     \hline
-    \textbf{\textbackslash{}newLine}&&&force a new line&dy\\ % Does param dy work ?
-    \hline
     \textbf{\textbackslash{}newPage}&&&force a new page&\\
     \hline
-    \textbf{\textbackslash{}newSystem}&&&force a new system&dy\\ % Does param dy work ?
+    \textbf{\textbackslash{}newSystem}&\textbackslash{}newLine&&force a new system&\\
     \hline
     \textbf{\textbackslash{}noteFormat}&&ORT&notes formatting&style - dx/dy - color - size\\
     \hline
@@ -174,11 +174,11 @@
     \hline
     \textbf{\textbackslash{}pizzicato}&\textbackslash{}pizz&RT&pizzicato sign&type - dx/dy - color - size\\
     \hline
-    \textbf{\textbackslash{}repeatBegin}&&&repeat begin bar&num - dx/dy - color\\
+    \textbf{\textbackslash{}repeatBegin}&&&repeat begin &dx/dy - color\\
     \hline
-    \textbf{\textbackslash{}repeatEnd}&&&repeat end bar&num - dx/dy - color\\
+    \textbf{\textbackslash{}repeatEnd}&&&repeat end bar&dx/dy - color\\
     \hline
-    \textbf{\textbackslash{}restFormat}&&ORT&rests formatting&posy - dx/dy - color - size\\
+    \textbf{\textbackslash{}restFormat}&&ORT&rests formatting&dx/dy - color - size\\
     \hline
     \textbf{\textbackslash{}ritardando}&\textbackslash{}rit&RT - BE&ritardando&tempo - abstempo - font - fattrib - fsize - dx/dy - color\\
     \hline
@@ -190,8 +190,8 @@
     \hline
     \textbf{\textbackslash{}space}&&&space insertion&\textbf{dd}\\
     \hline
-    %\textbf{\textbackslash{}special}&&&&\\ % What does it do ? % A COMPLETER
-    %\hline
+    \textbf{\textbackslash{}special}&&&special character insertion&\textbf{char} - dx/dy - color - size\\
+    \hline
     \textbf{\textbackslash{}staccato}&\textbackslash{}stacc&RT - BE&staccato sign&type - dx/dy - color - size\\
     \hline
     \textbf{\textbackslash{}staff}&&&staff assignation&\textbf{id} - dy\\
@@ -210,14 +210,6 @@
     \hline
     \textbf{\textbackslash{}stemsUp}&&ORT&force stems up&length\\
     \hline
-    \textbf{\textbackslash{}symbol}&\textbackslash{}s&ORT&insert an image&\textbf{file} - position - w/h - dx/dy - size\\
-    \hline
-    \textbf{\textbackslash{}systemFormat}&&&system formatting&dx\\ % Does dx work ?
-    \hline
-    \textbf{\textbackslash{}tempo}&&&tempo mark&\textbf{tempo} - bpm - dx/dy - color\\
-    \hline
-    \textbf{\textbackslash{}tenuto}&\textbackslash{}ten&RT&tenuto mark&dx/dy - color - size\\
-    \hline
 \end{tabularx}
 %
 % Because the table can't divide itself...
@@ -225,6 +217,14 @@
 \begin{tabularx}{\linewidth}{p{3cm}p{4.5cm}p{3cm}p{5.5cm}l}
     \hline
     \textbf{Tag}&\textbf{Shortcuts}&\textbf{Form support}&\textbf{Notation element}&\textbf{Parameters}\\
+    \hline
+    \textbf{\textbackslash{}symbol}&\textbackslash{}s&ORT&insert an image&\textbf{file} - position - w/h - dx/dy - size\\
+    \hline
+    \textbf{\textbackslash{}systemFormat}&&&system formatting&dx\\
+    \hline
+    \textbf{\textbackslash{}tempo}&&&tempo mark&\textbf{tempo} - bpm - dx/dy - color\\
+    \hline
+    \textbf{\textbackslash{}tenuto}&\textbackslash{}ten&RT&tenuto mark&dx/dy - color - size\\
     \hline
     \textbf{\textbackslash{}text}&\textbackslash{}t&ORT&text annotation&\textbf{text} - dx/dy - color\\
     \hline
@@ -234,10 +234,10 @@
     \hline
     \textbf{\textbackslash{}tremolo}&\textbackslash{}trem&RT&tremolo sign&style - speed - pitch - thickness - text - dx/dy - color\\
     \hline
-    \textbf{\textbackslash{}trill}&&RT&trill sign&mode - tr - anchor - adx/ady - dx/dy - color - size\\
+    \textbf{\textbackslash{}trill}&&RT&trill sign&mode - adx/ady - tr - anchor - dx/dy - color - size\\
     \hline
-    \textbf{\textbackslash{}tuplet}&&RT&tuplet mark&\textbf{format} - dy1 - dy2 - lineThickness - bold - textSize -\\
-    &&&&color\\
+    \textbf{\textbackslash{}tuplet}&&RT&tuplet mark&\textbf{format} - position - dy1 - dy2 - lineThickness - bold -\\
+    &&&& textSize - dx - color\\
     \hline
     \textbf{\textbackslash{}turn}&&RT&turn sign&mode - adx/ady - dx/dy - color - size\\
     \hline

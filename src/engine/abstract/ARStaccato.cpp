@@ -48,7 +48,8 @@ void ARStaccato::setTagParameterList(TagParameterList& tpl)
 			{
 				if (str->getValue() == std::string("heavy"))
 					type = HEAVY;
-				else type = REGULAR;
+				else
+                    type = REGULAR;
 			}
 			delete str;
 		}
@@ -63,20 +64,6 @@ void ARStaccato::browse(TimeUnwrap& mapper) const
 	mapper.AtPos (this, TimeUnwrap::kStaccato);
 }
 
-void ARStaccato::print(int &indent) const
-{
-}
-
-void ARStaccato::PrintName(std::ostream &os) const
-{
-	os << "\\stacc";
-	if (getRange()) os << "(";
-}
-
-void ARStaccato::PrintParameters(std::ostream &) const
-{
-}
-
 bool ARStaccato::MatchEndTag(const char *s)
 {
 	if (ARMusicalTag::MatchEndTag(s))
@@ -85,4 +72,30 @@ bool ARStaccato::MatchEndTag(const char *s)
 	if (!getRange() && !strcmp("\\staccEnd",s))
 		return 1;
 	return 0;
+}
+
+void ARStaccato::printName(std::ostream& os) const
+{
+    os << "ARStaccato";
+}
+
+void ARStaccato::printGMNName(std::ostream& os) const
+{
+    os << "\\staccato";
+}
+
+void ARStaccato::printParameters(std::ostream& os) const
+{
+    switch (type) {
+    case HEAVY:
+        os << "heavy";
+        break;
+    case REGULAR:
+        os << "regular";
+        break;
+    }
+
+    os << ";";
+
+    ARMusicalTag::printParameters(os);
 }

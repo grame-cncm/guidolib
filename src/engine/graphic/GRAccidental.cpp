@@ -95,11 +95,6 @@ GRAccidental::~GRAccidental()
 //}
 
 //____________________________________________________________________________________
-void GRAccidental::print(int &indent) const
-{
-}
-
-//____________________________________________________________________________________
 unsigned int GRAccidental::quarters2symbol(int quarters) const
 {
 	if (quarters > 4)  quarters = 4;

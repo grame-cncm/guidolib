@@ -37,7 +37,7 @@ static void error (GuidoErrCode err)
 	exit(1);
 }
 
-static GuidoeElementSelector mapname2selector (string name) 
+static GuidoElementSelector mapname2selector (string name) 
 {
 	if (name == "page")		return kGuidoPage;
 	if (name == "system")	return kGuidoSystem;
@@ -54,7 +54,7 @@ int main(int argc, char **argv)
 	const char* filename = argv[1];
 	int page = atoi(argv[2]);
 	if (page <= 0) usage(argv[0]);
-	GuidoeElementSelector sel = mapname2selector (argv[3]);
+	GuidoElementSelector sel = mapname2selector (argv[3]);
 	if (sel == kGuidoScoreElementEnd) usage(argv[0]);
 
 

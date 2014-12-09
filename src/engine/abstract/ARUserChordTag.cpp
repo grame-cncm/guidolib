@@ -26,6 +26,8 @@ ListOfTPLs ARUserChordTag::ltpls(1);
 
 ARUserChordTag::ARUserChordTag(const ARUserChordTag * uct)
 {
+	rangesetting = ONLY;
+
 	labels = NULL;
 	labeli = NULL;
 	labelistr = NULL;
@@ -33,17 +35,13 @@ ARUserChordTag::ARUserChordTag(const ARUserChordTag * uct)
 	if (uct->labels)
 		labels = TagParameterString::cast
 		(uct->labels->getCopy());
-	else if (uct->labeli)
-	{
+	else if (uct->labeli) {
 		labeli = TagParameterInt::cast
 		(uct->labeli->getCopy());
 
 		if (uct->labelistr)
-		{
 			labelistr = new NVstring(*uct->labelistr);
-		}
-		else
-		{
+		else {
 			labelistr = new NVstring("intlabel");
 			char buf[100];			
 			snprintf(buf, 100, "%d", labeli->getValue()); 
@@ -57,13 +55,6 @@ ARUserChordTag::~ARUserChordTag()
 	delete labels;
 	delete labeli;
 	delete labelistr;
-}
-
-void ARUserChordTag::PrintName(std::ostream &os) const
-{
-	os << "\\splitChord";
-	if (!getRange())
-		os << "Begin";
 }
 
 ARMusicalObject * ARUserChordTag::Copy() const
@@ -81,6 +72,7 @@ const char* ARUserChordTag::getLabelValue() const
 
 	return "";
 }
+
 void ARUserChordTag::setTagParameterList(TagParameterList& tpl)
 {
 	if (ltpls.GetCount() == 0)
@@ -119,15 +111,22 @@ void ARUserChordTag::setTagParameterList(TagParameterList& tpl)
 	tpl.RemoveAll();
 }
 
-void ARUserChordTag::PrintParameters(std::ostream & os) const
+void ARUserChordTag::printName(std::ostream& os) const
 {
-	if (labels && labels->TagIsSet())
-	{
-		os << "<label=\"" << labels->getValue() << "\">";
-	}
-	else if (labeli && labeli->TagIsSet())
-	{
-		os << "<label=" << labeli->getValue() << ">";
-	}
+    os << "ARUserChordTag";
 }
 
+void ARUserChordTag::printGMNName(std::ostream& os) const
+{
+    os << "\\userChordTag";
+}
+
+void ARUserChordTag::printParameters(std::ostream& os) const
+{
+    if (labels)
+        os << "label: \"" << labels->getValue() << "\"; ";
+    else if (labeli)
+        os << "label: " << labeli->getValue() << "; ";
+
+    ARMusicalTag::printParameters(os);
+}

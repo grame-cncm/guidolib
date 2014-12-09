@@ -34,13 +34,12 @@ class ListOfTPLs;
 class ARMusicalTag : public ARMusicalObject
 {
 	public:
-
 		enum ASSOCIATION { LA, RA, DC, EL, ER }; // Left, Right, Don't Care, Error Left, Error Right
 		enum RANGE { NO, ONLY, RANGEDC };
 	
 						ARMusicalTag ( const TYPE_TIMEPOSITION & tp, const ARMusicalTag * copy = 0 );
 						ARMusicalTag ( int pid = -1, const ARMusicalTag * copy = 0 );		
-		virtual			~ARMusicalTag();
+		virtual		   ~ARMusicalTag();
 
 		virtual int		MatchListOfTPLsWithTPL( const ListOfTPLs & ltpls, 
 											TagParameterList & tpl, TagParameterList ** rtpl);
@@ -49,10 +48,15 @@ class ARMusicalTag : public ARMusicalObject
 		virtual void	CreateListOfTPLs( ListOfTPLs & ltpl, ListOfStrings & lstrs );
 		virtual bool	MatchEndTag( const char * endstr );
 				void	setAllowRange( int pallow );
-		virtual void    print(int &indent) const = 0;
-		virtual void	PrintParameters( std::ostream & os ) const;
-		virtual void	PrintName( std::ostream & os ) const;
+
+		        void	print          (std::ostream & os) const;
+		virtual void	printName      (std::ostream & os) const { os << "printName() needs to be implemented in subclasses; "; };
+		virtual void	printGMNName   (std::ostream & os) const { os << "printGMNName() needs to be implemented in subclasses; "; };
+		        void	printAttributes(std::ostream & os) const;
+        virtual void	printParameters(std::ostream & os) const;
+
 				void	setIsAuto( bool isauto )	{ isAuto = isauto; }
+
 				bool	getIsAuto() const			{ return isAuto; }
 
 		// the association of a Tag

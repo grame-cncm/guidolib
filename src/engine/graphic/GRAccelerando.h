@@ -27,14 +27,13 @@ class GRStaff;
 class GRAccelerando : public GRPTagARNotationElement
 {
 	public:
-
 						GRAccelerando( GRStaff * stf, ARAccelerando * artrem );
 		virtual			~GRAccelerando();
 
 		virtual unsigned int getTextAlign() const;
 		virtual void	OnDraw( VGDevice & hdc) const;
-		virtual void	print(int &indent) const { };
 
+	    
 		virtual void	tellPosition( GObject * caller,const NVPoint & np );
 
 	private:

@@ -66,8 +66,7 @@ class GRArticulation : public GRTagARNotationElement
 		virtual void GGSOutput() const;
 		virtual void OnDraw( VGDevice & hdc ) const;
 
-		virtual void print(int &indent) const;
-
+		
 		int	 getArticulationType() const { return mArticulationFlag; }
 
 	protected:

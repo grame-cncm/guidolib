@@ -17,7 +17,7 @@ tmpSrc
 DerivedData
 doc/server/build
 doc/server/build/html/*.html
-doc/refcard/latex/*.pdf
+doc/refcard/latex/*.gz
 tools/*.gmn
 tools/*.svg
 tools/*.mid

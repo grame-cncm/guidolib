@@ -1,13 +1,8 @@
 package fr.grame.simpleguidoeditor.drawcommand;
-import guidoengine.drawcommand.SetOriginCommand;
+import drawcommand.SetOriginCommand;
 
 import android.graphics.Canvas;
 import fr.grame.simpleguidoeditor.GuidoCanvasView;
-
-import android.graphics.Point;
-
-import android.util.Log;
-import java.util.*;
    
 public class AndroidCanvasSetOriginCommand extends SetOriginCommand implements DrawToCanvas {
 

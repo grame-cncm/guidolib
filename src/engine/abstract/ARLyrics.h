@@ -31,16 +31,16 @@ public:
 
 	friend class ARText;
 	
-					ARLyrics();
-	virtual		 	~ARLyrics(); 
+				 ARLyrics();
+	virtual		~ARLyrics(); 
 
 	virtual void setTagParameterList(TagParameterList & theTagParameterList);
 	
 	virtual const char* getText() const;
-	
-	virtual void print(int &indent) const;
-	virtual void PrintName(std::ostream & os) const;
-	virtual void PrintParameters(std::ostream & os) const;
+
+	virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 	
 	virtual int MatchListOfTPLsWithTPL(const ListOfTPLs & ltpls,TagParameterList & tpl,
 							TagParameterList ** rtpl);
@@ -54,7 +54,6 @@ public:
 	int getFSize(float curLSPACE = LSPACE) const;
 
 protected:
-
 	TagParameterString * mText; // the corresponding text ...
 	TagParameterString * mTextFormat;
 	TagParameterString * mFont;
@@ -62,7 +61,6 @@ protected:
 	TagParameterString * mFAttrib;
 
 	static ListOfTPLs ltpls;
-
 };
 
 #endif

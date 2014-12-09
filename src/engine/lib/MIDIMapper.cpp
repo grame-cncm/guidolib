@@ -127,20 +127,22 @@ int MidiMapper::AdjustDuration(int dur, const Guido2MidiParams* p) const
 {
 	if (!fFlags)				return int(dur * p->fDFactor);
 
-	if (fFlags & hasStaccato)	dur *= p->fStaccatoFactor;
-	if (fFlags & hasSlur)		dur *= p->fSlurFactor;
-	if (fFlags & hasTenuto)		dur *= p->fTenutoFactor;
-	if (fFlags & hasFermata)	dur *= p->fFermataFactor;
+	if (fFlags & hasStaccato)	dur *= (int) p->fStaccatoFactor;
+	if (fFlags & hasSlur)		dur *= (int) p->fSlurFactor;
+	if (fFlags & hasTenuto)		dur *= (int) p->fTenutoFactor;
+	if (fFlags & hasFermata)	dur *= (int) p->fFermataFactor;
+
 	return dur;
 }
 
 //------------------------------------------------------------------------------
 int MidiMapper::AdjustVelocity(int vel, const Guido2MidiParams* p) const
 {
-	if (!fFlags) return vel * p->fIntensity;
+	if (!fFlags) return vel * (int) p->fIntensity;
 
-	if (fFlags & hasAccent)		vel *= p->fAccentFactor;
-	if (fFlags & hasMarcato)	vel *= p->fMarcatoFactor;
+	if (fFlags & hasAccent)		vel *= (int) p->fAccentFactor;
+	if (fFlags & hasMarcato)	vel *= (int) p->fMarcatoFactor;
+
 	return (vel > 127 ? 127 : vel);
 }
 
@@ -183,7 +185,7 @@ void MidiMapper::Note(const ARMusicalObject * ev)
 			Chan(note)	= fChan;
 			Dur(note)	= AdjustDuration(Ticks (fChord ? fEmptyDur : ev->getDuration()), fParams);
 			Vel(note)	= char(AdjustVelocity (fCurrVelocity, fParams));
-			Pitch(note)	= arn->midiPitch();
+			Pitch(note)	= arn->getMidiPitch();
 			Date(note)  = Ticks (fUPosition);
 			if (fFlags & hasTie) {
 				TiedNote (note);
@@ -210,7 +212,7 @@ void MidiMapper::Note(const ARMusicalObject * ev)
 			}
 		}
 	}
-	if (fFlags & hasFermata) offset *= fParams->fFermataFactor;
+	if (fFlags & hasFermata) offset *= (int) fParams->fFermataFactor;
 	if (offset) MoveTime (offset);
 	TimeUnwrap::Note(ev);
 	fFlags = knoflag;

@@ -1,5 +1,1 @@
 Run ndk-build and you're good to go.
-
-Note to NEVER build this as a shared library - otherwise, passing pointers
-between your Android program and the guido library won't work and you'll get
-all sorts of nasty errors.

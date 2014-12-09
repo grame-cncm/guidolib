@@ -30,37 +30,34 @@ class ARText : public ARMTParameter,
 					public ARPositionTag
 {
 public:
-	
-					ARText(const NVstring & p_txt, float p_offsety);
-					ARText();
-	virtual 		~ARText();
+			            ARText(const NVstring & p_txt, float p_offsety);
+					    ARText();
+	virtual 	       ~ARText();
 
-	virtual void 	setTagParameterList(TagParameterList & theTagParameterList);
+	virtual void 	    setTagParameterList(TagParameterList & theTagParameterList);
 	
 	virtual const char* getText() const					{ return text ? text->getValue() : 0; }
 	virtual void		copyLyricsParams(const ARLyrics * lyrics);
-	
-	virtual void print(int &indent) const;
-	// virtual ostream & operator<<(ostream &os) const;
-	virtual void PrintName(std::ostream & os) const;
-	virtual void PrintParameters(std::ostream & os) const;
-	
-	virtual int MatchListOfTPLsWithTPL(const ListOfTPLs & ltpls, TagParameterList & tpl, TagParameterList ** rtpl);
-	virtual void  CreateListOfTPLs( ListOfTPLs & ltpl, ListOfStrings & lstrs);
 
-	const char* getTextformat() const					{ return textformat ? textformat->getValue() : 0; } 
-	void		setTextformat(const TagParameterString * tf);
-	const char* getFont() const							{ return font ? font->getValue() : 0; }
-	void		setFont(const TagParameterString * ft);
-	const char*	getFAttrib() const						{ return fattrib ? fattrib->getValue() : 0; }
-	void		setFAttrib(const TagParameterString * fa);
-	int			getFSize(float curLSPACE) const;
-	void		setFSize(const TagParameterFloat * fs);
+	virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
+	
+	virtual int  MatchListOfTPLsWithTPL(const ListOfTPLs & ltpls, TagParameterList & tpl, TagParameterList ** rtpl);
+	virtual void CreateListOfTPLs( ListOfTPLs & ltpl, ListOfStrings & lstrs);
+
+	const char*  getTextformat() const					    { return textformat ? textformat->getValue() : 0; } 
+	void		 setTextformat(const TagParameterString * tf);
+	const char*  getFont() const							{ return font ? font->getValue() : 0; }
+	void		 setFont(const TagParameterString * ft);
+	const char*	 getFAttrib() const						    { return fattrib ? fattrib->getValue() : 0; }
+	void		 setFAttrib(const TagParameterString * fa);
+	int			 getFSize(float curLSPACE) const;
+	void		 setFSize(const TagParameterFloat * fs);
 
 	const TagParameterFloat * getYPos() const {	return ypos; }
 
 protected:
-
 	virtual const char * getTagFormat() const;	 // (JB) new
 
 	TagParameterString * text; // der entsprechende Text ...

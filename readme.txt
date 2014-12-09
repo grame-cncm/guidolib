@@ -71,8 +71,9 @@ Note for Android:
       export PATH=$PATH:$PATH_TO_SDK/platform-tools
       export PATH=$PATH:$PATH_TO_STANDALONE_TOOLCHAIN/bin
 
-    The GUIDO android applications use the guidoengine java package
-    called guidoengine.jar.
+    The GUIDO android applications use:
+		- the guidoengine java package called guidoengine.jar
+		- incidentally, the drawcommand java package called drawcommand.jar
 
     To compile this, go to the java directory and do:
 
@@ -80,7 +81,7 @@ Note for Android:
     make class
     make jar
 
-    The jar is simlinked into all the android sample projects that need it
+    The jar needs to be simlinked/copied into all the android sample projects that need it
     under the libs/ directory.
 
     From the directory android-apps/guido-engine-android, run
@@ -88,14 +89,7 @@ Note for Android:
       ndk-build
 
     And this will build the library for android.
-    To test with a sample project, from the directory
-    android-apps/simple-guido-editor, run:
-
-      ndk-build
-      ant debug
-
-    And then install the application on your device.
-
+    To test with a sample project, read the README file in android-apps/simple-guido-editor directory.
       
 
 Note for Linux platforms:

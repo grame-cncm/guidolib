@@ -29,12 +29,10 @@ ListOfTPLs ARSpecial::ltpls(1);
 
 ARSpecial::ARSpecial()
 {
-
 }
 
 ARSpecial::~ARSpecial()
 {
-
 }
 
 void ARSpecial::setTagParameterList(TagParameterList & tpl)
@@ -46,22 +44,18 @@ void ARSpecial::setTagParameterList(TagParameterList & tpl)
 	// space (the space after the symbol)
 	// scale (for smaller or larger symbols)
 
-	if (ltpls.GetCount() == 0)
-	{
+	if (ltpls.GetCount() == 0) {
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(
-			( "S,char,,r;U,dx,0,o;U,dy,0,o;U,space,0,o;F,scale,1.0,o"));
+		lstrs.AddTail("S,char,,r;F,scale,1.0,o");
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
 	TagParameterList * rtpl = 0;
 	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
 
-	if (ret>=0 && rtpl)
-	{
+	if (ret >= 0 && rtpl) {
 		// we found a match!
-		if (ret == 0)
-		{
+		if (ret == 0) {
 			// then, we now the match for
 			// the first ParameterList
 			// w, h, ml, mt, mr, mb
@@ -70,63 +64,33 @@ void ARSpecial::setTagParameterList(TagParameterList & tpl)
 			TagParameterString * tps = TagParameterString::cast(rtpl->GetNext(pos));
 			assert(tps);
 			
-			
 			// now we need to find out, which character
 			// to draw ...
 			
 			const char * p = tps->getValue();
 			int num;
-			if (p[0] == '\\')
-			{ // it is a decimal or octal value
-				if (p[1] == 'x')
-				{
+
+			if (p[0] == '\\') { // it is a decimal or octal value
+				if (p[1] == 'x') {
 					// its a hex number
-					if (sscanf(&(p[2]),"%x",&num) != 1)
-					{
+					if (sscanf(&(p[2]), "%x", &num) != 1)
 						error = 1;
-					}
 				}
-				else if (p[1] == 'o')
-				{  // its an octal number
-					if (sscanf(&(p[2]),"%o",&num)!=1)
-					{
+				else if (p[1] == 'o') {  // its an octal number
+					if (sscanf(&(p[2]), "%o", &num) != 1)
 						error = 1;
-					}
 				}
-				else
-				{
-					if (sscanf(&(p[1]),"%d",&num)!=1)
-					{
+				else {
+					if (sscanf(&(p[1]), "%d", &num) != 1)
 						error = 1;
-					}
 				}
-				if (error == 0 && num >0 && num<=255)
+				if (error == 0 && num > 0 && num <= 255)
 					mDrawChar = (unsigned char) num;	// (JB) was (char)num
 				else
-				{
 					error = 1;
-				}
-				
 			}
 			else
 				mDrawChar = (unsigned char) p[0];
-			
-
-			TagParameterFloat * tpf =TagParameterFloat::cast(rtpl->GetNext(pos));
-			assert(tpf);
-			dx = tpf->getValue();
-
-			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
-			assert(tpf);
-			dy = tpf->getValue();
-
-			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
-			assert(tpf);
-			space = tpf->getValue();
-
-			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
-			assert(tpf);
-			scale = tpf->getValue();
 		}
 
 		delete rtpl;
@@ -139,7 +103,7 @@ void ARSpecial::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-std::ostream & ARSpecial::operator<<(std::ostream &os) const
+/*std::ostream & ARSpecial::operator<<(std::ostream& os) const
 {
 	os << "\\special<";
 	os << "\"\\" << (unsigned int) mDrawChar
@@ -147,4 +111,21 @@ std::ostream & ARSpecial::operator<<(std::ostream &os) const
 		<< dy * kVirtualToCm << "cm,"
 		<< space * kVirtualToCm << "cm," << scale << "> ";
 	return os;
+}*/
+
+void ARSpecial::printName(std::ostream& os) const
+{
+    os << "ARSpecial";
+}
+
+void ARSpecial::printGMNName(std::ostream& os) const
+{
+    os << "\\special";
+}
+
+void ARSpecial::printParameters(std::ostream& os) const
+{
+    /* TODO (cf. plus haut) */
+
+    ARMusicalTag::printParameters(os);
 }

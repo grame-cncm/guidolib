@@ -38,7 +38,7 @@
 #include "ARSystemFormat.h"
 #include "ARMusicalVoice.h"	// for template instanciation
 #include "ARMusic.h"
-#include "ARAccol.h"
+#include "ARAccolade.h"
 #include "TagParameterFloat.h"
 #include "TagParameterString.h"
 #include "TagParameterInt.h"
@@ -520,7 +520,7 @@ void GRSystem::AddSystemSlice( GRSystemSlice * inSlice )
 // ----------------------------------------------------------------------------
 /** \brief Retrieves the mapping
 */
-void GRSystem::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const
+void GRSystem::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const
 {
 	if (sel == kGuidoSystem) {
 		SendMap (f, getRelativeTimePosition(), getDuration(), kSystem, infos);
@@ -660,7 +660,7 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 				const float staffHeight = (theStaff->getNumlines() - 1) * theStaff->getStaffLSPACE();
 				NVPoint endstaffPos = lastStaffPos;
 				endstaffPos.y += staffHeight; // Set to the bottom of last staff
-				ARAccol arAccol;
+				ARAccolade arAccol;
 				GRAccolade onlyAccol(&arAccol);
 				onlyAccol.draw(hdc, firstStaffPos, endstaffPos);
 			}
@@ -779,11 +779,6 @@ void GRSystem::addStaff( GRStaff * newStaff, int num )
 	traceMethod("addStaff");
 	assert(newStaff);
 	mStaffs->Set(num,newStaff);
-}
-
-// ----------------------------------------------------------------------------
-void GRSystem::print(int &indent) const
-{
 }
 
 // ----------------------------------------------------------------------------
@@ -1093,9 +1088,9 @@ GRSystemSlice * GRSystem::getFirstGRSystemSlice()
 //
 // -> (CL) done in 2013 :  several accolades can be displayed, 
 // GRAccolade mAccolade is now replaced by a std::vector<GRAccolade *>, 
-// as well as mCurAccolade Tag in GRStaffManager (std::vector<ARAccol *>)
+// as well as mCurAccolade Tag in GRStaffManager (std::vector<ARAccolade *>)
 
-void GRSystem::notifyAccoladeTag( ARAccol * inAccoladeTag )
+void GRSystem::notifyAccoladeTag( ARAccolade * inAccoladeTag )
 {
 	traceMethod("notifyAccoladeTag");
 	

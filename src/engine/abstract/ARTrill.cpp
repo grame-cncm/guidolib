@@ -26,24 +26,24 @@ ListOfTPLs ARTrill::ltpls(1);
 
 ARTrill::ARTrill(TYPE typ) : ARMTParameter(), mDur(NULL), mTrillType(typ)
 {
-	rangesetting = ONLY;
+	rangesetting               = ONLY;
 	fShowCautionaryAccidentals = false;
-	fShowTR = true;
-	fDrawOnNoteHead = false;
-	begin = true;
+	fShowTR                    = true;
+	fDrawOnNoteHead            = false;
+	begin                      = true;
 }
 
 ARTrill::ARTrill(int pid, const ARTrill* copy) : ARMTParameter(pid, copy), mDur(NULL)
 {
-	mTrillType = copy->getType();
-	chordType = copy->getChordType();
-	chordAccidental = copy->getChordAccidental();
+	mTrillType                 = copy->getType();
+	chordType                  = copy->getChordType();
+	chordAccidental            = copy->getChordAccidental();
 	fShowCautionaryAccidentals = copy->getCautionary();
-	fShowTR = copy->fShowTR;
-	fDrawOnNoteHead = copy->fDrawOnNoteHead;
-	adx = copy->getadx();
-	ady = copy->getady();
-	begin = copy->getStatus();
+	fShowTR                    = copy->fShowTR;
+	fDrawOnNoteHead            = copy->fDrawOnNoteHead;
+	adx                        = copy->getadx();
+	ady                        = copy->getady();
+	begin                      = copy->getStatus();
 	//TODO : copy TagParameterInt* mDur
 }
 
@@ -68,17 +68,16 @@ void ARTrill::setTagParameterList(TagParameterList& tpl)
 		// we found a match!
 		if (ret == 0)
 		{
-			TagParameterString * str = TagParameterString::cast(rtpl->RemoveHead());
-			assert(str);
+			TagParameterString *str = TagParameterString::cast(rtpl->RemoveHead());
 			if (str->TagIsSet() && (str->getValue() == std::string("cautionary")))
 				fShowCautionaryAccidentals = true;
 			else 
 				fShowCautionaryAccidentals = false;
 			delete str;
 
-			TagParameterInt * dur = TagParameterInt::cast(rtpl->RemoveHead());
+			TagParameterInt *i = TagParameterInt::cast(rtpl->RemoveHead());
 			// Todo
-			delete dur;
+			delete i;
 
 			TagParameterFloat* f = TagParameterFloat::cast(rtpl->RemoveHead());
 			adx = f->getValue();
@@ -88,23 +87,21 @@ void ARTrill::setTagParameterList(TagParameterList& tpl)
 			ady = f->getValue();
 			delete f;
 
-			TagParameterString * tr = TagParameterString::cast(rtpl->RemoveHead());
-			assert(tr);
-			if (tr->TagIsSet() && (tr->getValue() == std::string("false") || tr->getValue() == std::string("0")))
-				fShowTR = false;
-			delete tr;
+			str = TagParameterString::cast(rtpl->RemoveHead());
+            str->getBool(fShowTR);
+			delete str;
 
-			TagParameterString * anchor = TagParameterString::cast(rtpl->RemoveHead());
-			assert(anchor);
-			if (anchor->TagIsSet() && (anchor->getValue() == std::string("note")))
+			str = TagParameterString::cast(rtpl->RemoveHead());
+			if (str->TagIsSet() && (str->getValue() == std::string("note")))
 				fDrawOnNoteHead = true;
 			else 
 				fDrawOnNoteHead = false;
-			delete anchor;
-
+			delete str;
 		}
+
 		delete rtpl;
 	}
+
 	tpl.RemoveAll();
 }
 
@@ -118,28 +115,55 @@ float ARTrill::getady() const
 	return ady;
 }
 
-void ARTrill::print(int &indent) const
-{
-}
-
-void ARTrill::PrintName(std::ostream & os) const
-{
-	if		(mTrillType == TRILL)	os << "\\trill";
-	else if (mTrillType == TURN)	os << "\\turn";
-	else if (mTrillType == MORD)	os << "\\mord";
-}
-void ARTrill::PrintParameters(std::ostream & os) const
-{
-	/*if (mDur && mDur->TagIsSet())
-	{
-		os << "<dur=" << mDur->getValue() << ">";
-	}*/
-}
-
 bool ARTrill::getStatus() const{
 	return begin;
 }
 
 void ARTrill::setContinue(){
 	begin = false;
+}
+
+void ARTrill::printName(std::ostream& os) const
+{
+    os << "ARTrill";
+
+    switch (mTrillType) {
+    case TRILL:
+        os << " (trill)";
+        break;
+    case TURN:
+        os << " (turn)";
+        break;
+    case MORD:
+        os << " (mord)";
+        break;
+    }
+}
+
+void ARTrill::printGMNName(std::ostream& os) const
+{
+    os << "\\";
+
+    switch (mTrillType) {
+    case TRILL:
+        os << "trill";
+        break;
+    case TURN:
+        os << "turn";
+        break;
+    case MORD:
+        os << "mord";
+        break;
+    }
+}
+
+void ARTrill::printParameters(std::ostream& os) const
+{
+    os << "mode: "   << (fShowCautionaryAccidentals ? "cautionnary" : "none") << "; ";
+    os << "adx: "    << adx << "; ";
+    os << "ady: "    << ady << "; ";
+    os << "tr: "     << (fShowTR ? "true" : "false") << "; ";
+    os << "anchor: " << (fDrawOnNoteHead ? "note" : "above") << "; ";
+
+    ARMusicalTag::printParameters(os);
 }

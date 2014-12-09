@@ -54,7 +54,7 @@ class GRARCompositeNotationElement : public GRARNotationElement
 				void		RemoveElement(GRNotationElement * el );
 				
 				void		DrawSubElements( VGDevice & hdc ) const;
-				void		GetSubElementsMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
+				void		GetSubElementsMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 
 				void		RemoveAllSubElements();
 

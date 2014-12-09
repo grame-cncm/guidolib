@@ -378,7 +378,7 @@ void QGuidoPainter::draw( QPainter * painter , int page , const QRect& drawRecta
 }
 
 //-------------------------------------------------------------------------
-void QGuidoPainter::drawPianoRoll(QPainter *painter, const QRect& drawRectangle, PianoRoll *pianoRoll)
+GuidoErrCode QGuidoPainter::drawPianoRoll(QPainter *painter, const QRect& drawRectangle, PianoRoll *pianoRoll)
 {
 	painter->save();
 	painter->setClipRect(drawRectangle);
@@ -388,12 +388,14 @@ void QGuidoPainter::drawPianoRoll(QPainter *painter, const QRect& drawRectangle,
 	VGSystem * sys = new GSystemQt(painter);
 	VGDevice * dev = sys->CreateDisplayDevice();
 
-    GuidoPianoRollOnDraw(pianoRoll, drawRectangle.width(), drawRectangle.height(), dev);
+    GuidoErrCode result = GuidoPianoRollOnDraw(pianoRoll, drawRectangle.width(), drawRectangle.height(), dev);
 	
 	delete dev;
 	delete sys;
 	
 	painter->restore();
+
+    return result;
 }
 
 //-------------------------------------------------------------------------

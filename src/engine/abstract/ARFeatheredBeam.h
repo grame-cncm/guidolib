@@ -34,14 +34,17 @@ class ARFeatheredBeam :  public ARBeam
 	virtual 		~ARFeatheredBeam();
 
 	virtual bool MatchEndTag(const char * s);
-	virtual void print(int &indent) const { }
-	virtual void PrintName(std::ostream & os) const;
+
+	virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
+
 	virtual void setTagParameterList(TagParameterList & tpl);
 
 	bool isDurationsSet(){return durationsSet;}
 	bool drawDuration(){return drawDur;}
-	int getFirstBeaming(){return beams.first;}
-	int getLastBeaming(){return beams.second;}
+	int  getFirstBeaming(){return beams.first;}
+	int  getLastBeaming(){return beams.second;}
 	void setBeginDuration( const TYPE_DURATION b){beginDur = b;}
 	void setEndDuration( const TYPE_DURATION e){endDur = e;}
 	void setBeginTimePosition( const TYPE_TIMEPOSITION bp){beginTimePos = bp;}
@@ -55,7 +58,6 @@ class ARFeatheredBeam :  public ARBeam
     /*****************************************/
 
 	protected:
-
 		static ListOfTPLs ltpls;
 
 		bool drawDur;

@@ -31,7 +31,6 @@ class GRTremolo : public GRPTagARNotationElement
         virtual 		~GRTremolo();
 
         virtual void 	OnDraw( VGDevice & hdc ) const;
-        virtual void 	print(int &indent) const {};
 
         virtual void 	tellPosition(GObject * caller, const NVPoint & np );
 

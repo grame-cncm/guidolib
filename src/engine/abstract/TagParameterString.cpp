@@ -53,7 +53,7 @@ bool TagParameterString::copyValue(const TagParameter * tp )
 	returns 1 if successful, 0 if no conversion possible
 */
 
-// (JB) Changed the short[3] rgb table to unigned char [4] rgba
+// (JB) Changed the short[3] rgb table to unsigned char [4] rgba
 // where alpha is the transparency of the element do be drawn.
 // alpha = 0: opaque
 // (YC) corrected to match platforms defs: alpha=255 means opaque
@@ -113,4 +113,20 @@ bool TagParameterString::getRGB( unsigned char colref[4] ) const
 //	else return false;
 
 //	return true;
+}
+
+bool TagParameterString::getBool(bool &result) const
+{
+	std::string value = NVstring::to_lower(fValue.c_str());
+
+    if (!strcmp(value.c_str(), "true")) {
+        result = true;
+        return true;
+    }
+    else if (!strcmp(value.c_str(), "false")) {
+        result = false;
+        return true;
+    }
+    else
+        return false;
 }

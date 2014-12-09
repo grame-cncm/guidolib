@@ -1,12 +1,10 @@
 package fr.grame.simpleguidoeditor.drawcommand;
-import guidoengine.drawcommand.DrawStringCommand;
+import drawcommand.DrawStringCommand;
 
 import android.graphics.Canvas;
 import fr.grame.simpleguidoeditor.GuidoCanvasView;
 
 import android.graphics.Paint;
-
-import java.util.*;
    
 public class AndroidCanvasDrawStringCommand extends DrawStringCommand implements DrawToCanvas {
 
@@ -18,7 +16,7 @@ public class AndroidCanvasDrawStringCommand extends DrawStringCommand implements
   public void drawToCanvas(Canvas canvas, GuidoCanvasView view) {
     double x = _x;
     double y = _y;
-    double size = view._MUSIC_FONT_SIZE;
+    //double size = view._MUSIC_FONT_SIZE;
 
     view.correctTransformMatrix(canvas);
 

@@ -143,7 +143,7 @@ int ARVoiceManager::InsertBreak( const TYPE_TIMEPOSITION & tp, int breaktype, fl
 		else
 		{
 			ARPossibleBreak * arpb = new ARPossibleBreak();
-			arpb->value = value;
+            arpb->setValue(value);
 			mytag = arpb;
 		}
 
@@ -173,7 +173,7 @@ int ARVoiceManager::InsertBreak( const TYPE_TIMEPOSITION & tp, int breaktype, fl
 			else
 			{
 				ARPossibleBreak * arpb = new ARPossibleBreak();
-				arpb->value = value;
+				arpb->setValue(value);
 				mytag = arpb;
 			}
 
@@ -218,7 +218,7 @@ int ARVoiceManager::InsertBreak( const TYPE_TIMEPOSITION & tp, int breaktype, fl
 			else
 			{
 				ARPossibleBreak *arpb = new ARPossibleBreak();
-				arpb->value = value;
+				arpb->setValue(value);
 				mytag = arpb;
 			}
 			mytag->setIsAuto(true);

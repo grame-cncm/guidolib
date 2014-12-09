@@ -41,17 +41,16 @@ void svgendl::print(std::ostream& os) const {
 //______________________________________________________________________________
 SVGDevice::SVGDevice(std::ostream& outstream, SVGSystem* system, const char* guidofontfile, const char* guidofontspec) : 
 	fSystem (system), fGuidoFontFile(guidofontfile), fGuidoFontSpec(guidofontspec),
-	fStream(outstream), 
 	fWidth(1000), fHeight(1000),
 	fMusicFont(0), fTextFont(0), fOpMode(kUnknown),
 	fXScale(1), fYScale(1), fXOrigin(0), fYOrigin(0), fXPos(0), fYPos(0),
 	fFontAlign(kAlignBase), fDPI(0),
-	fPushedPen(false), fPushedPenColor(false), fPushedPenWidth(false), fPushedFill(false), fScaled(false), fOffset(false),
-    fCurrFont (kNoFont), //fCurrFontProperties (VGFont::kFontNone),
 	fPendingStrokeColor(0),
-	fBeginDone(false)
+	fBeginDone(false),
+	fStream(outstream),
+	fPushedPen(false), fPushedPenColor(false), fPushedPenWidth(false), fPushedFill(false), fScaled(false), fOffset(false),
+    fCurrFont (kNoFont)
 {
-    fTagTypesVector = new std::vector<TagType>();
 }
 
 SVGDevice::~SVGDevice() 
@@ -260,7 +259,7 @@ void SVGDevice::PushPen( const VGColor & color, float width )
 	fStream << "; stroke-opacity:" << alpha2float(color) << "; stroke-width:" << width << "\">"; 
 	fEndl++ ;
 
-    fTagTypesVector->push_back(penTag);
+    fTagTypesVector.push_back(penTag);
 }
 void SVGDevice::PushFillColor( const VGColor & color )
 {
@@ -269,7 +268,7 @@ void SVGDevice::PushFillColor( const VGColor & color )
 	fStream << "; fill-opacity:" << alpha2float(color) << ";\">"; 
 	fEndl++ ;
 
-    fTagTypesVector->push_back(fillColorTag);
+    fTagTypesVector.push_back(fillColorTag);
 }
 
 void SVGDevice::PopPen() {
@@ -355,7 +354,7 @@ void SVGDevice::SetScale( float x, float y )
         fStream << fEndl << "<g transform=\"scale(" << x << ", " << y << ")\">";
         fEndl++;
 
-        fTagTypesVector->push_back(scaleTag);
+        fTagTypesVector.push_back(scaleTag);
     }
 }
 
@@ -368,7 +367,7 @@ void SVGDevice::SetOrigin( float x, float y )
 	fEndl++ ;
 	fOffset = true;
 
-    fTagTypesVector->push_back(originTag);
+    fTagTypesVector.push_back(originTag);
 }
 
 void SVGDevice::OffsetOrigin( float x, float y )	
@@ -448,7 +447,7 @@ void SVGDevice::selectfont (int fonttype)
         fEndl++ ;
 		fCurrFont = fonttype;
 
-        fTagTypesVector->push_back(fontTag);
+        fTagTypesVector.push_back(fontTag);
 	}
 }
 
@@ -461,6 +460,7 @@ void SVGDevice::DrawMusicSymbol(float x, float y, unsigned int inSymbolID )
 	print(fStream, fFontColor);
 	fStream << "\" fill=\""; 
 	print(fStream, fFontColor);
+	fStream << "\" opacity=\"" << alpha2float(fFontColor);
 	fStream << "\">&#" << inSymbolID << ";</text>"; 
 }
 
@@ -525,7 +525,7 @@ void SVGDevice::PushPenColor( const VGColor & color)
 	fStream << "; stroke-opacity:" << alpha2float(color) << "\">"; 
 	fEndl++;
 
-    fTagTypesVector->push_back(penColorTag);
+    fTagTypesVector.push_back(penColorTag);
 }
 
 void SVGDevice::PushPenWidth( float width)
@@ -533,7 +533,7 @@ void SVGDevice::PushPenWidth( float width)
 	fStream << fEndl << "<g style=\"stroke-width:" << width << "\">"; 
 	fEndl++ ;
 
-    fTagTypesVector->push_back(penWidthTag);
+    fTagTypesVector.push_back(penWidthTag);
 }
 
 void SVGDevice::PopPenColor() {
@@ -552,21 +552,21 @@ void SVGDevice::PopFillColor() {
 }
 
 void SVGDevice::checkTagsOrder(TagType tagToClose) {
-    if (!fTagTypesVector->empty() && fTagTypesVector->back() == tagToClose) {
+    if (!fTagTypesVector.empty() && fTagTypesVector.back() == tagToClose) {
         if (tagToClose == scaleTag) {
             fXScale = 1;
             fYScale = 1;
         }
 
-        fTagTypesVector->pop_back();
+        fTagTypesVector.pop_back();
     }
-    else if (!fTagTypesVector->empty() && fTagTypesVector->back() == fontTag) {
+    else if (!fTagTypesVector.empty() && fTagTypesVector.back() == fontTag) {
         checkfont();
 
-        fTagTypesVector->pop_back();
+        fTagTypesVector.pop_back();
 
-        if (!fTagTypesVector->empty())
-            fTagTypesVector->pop_back();
+        if (!fTagTypesVector.empty())
+            fTagTypesVector.pop_back();
     }
     else {
         // error ?

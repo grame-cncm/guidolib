@@ -25,6 +25,7 @@
 
 #include "TagParameterFloat.h"
 #include "VGDevice.h"
+#include "SVGDevice.h"
 
 #include "Bitmap.h"
 #include "FontManager.h"
@@ -53,14 +54,10 @@ GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
 	string filepath = findFile( abstractRepresentationOfSymbol->getSymbolPath(), abstractRepresentationOfSymbol->getPath() );
 
 	// when file exists
-	if (filepath.size())
-    {
+	if (filepath.size()) {
 		st->bitmap = new Bitmap(filepath.c_str());
         
-        if (st->bitmap->getIsSVGDevice())
-            haveToDisplayWarningMsg = true;
-        else if (st->bitmap->getDevice())
-        {
+        if (st->bitmap->getDevice()) {
             st->positionString = abstractRepresentationOfSymbol->getPositionString();
 
             int symbolFixedWidth  = abstractRepresentationOfSymbol->getFixedWidth();
@@ -76,6 +73,7 @@ GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
             st->boundingBox.top = sizey * symbolSize * kVirtualToPx;
         }
 	}
+
     st->boundingBox.left = 0;
     st->boundingBox.bottom = 0;
 }
@@ -134,6 +132,7 @@ string	GRSymbol::findFile( const char* file, const std::vector<std::string>& pat
 			if (fs.is_open()) return fullpathname;
 		}
 	}
+
 	return "";
 }
 
@@ -145,65 +144,56 @@ void GRSymbol::OnDraw( VGDevice & hdc ) const
     assert(sse);
     GRSymbolSaveStruct * st = (GRSymbolSaveStruct *) sse->p;
 
-    if (st->bitmap && st->bitmap->getDevice())
-    {
-        if (haveToDisplayWarningMsg)
-        {
-            const VGFont* hmyfont;
-            hmyfont = FontManager::gFontText;
-            hdc.SetTextFont(hmyfont);
+    if (dynamic_cast<SVGDevice *>(&hdc)) {
+        const VGFont* hmyfont;
+        hmyfont = FontManager::gFontText;
+        hdc.SetTextFont(hmyfont);
 
-            string warningMsg("\\symbol not exported, use the GuidoEditor to get inline image data.");
-            hdc.DrawString(20, -70, warningMsg.c_str(), warningMsg.size()); // harcoded
-        }
-        else
-        {
-            const ARSymbol *arSymbol = getARSymbol();
-            const float curLSPACE = gCurStaff ? gCurStaff->getStaffLSPACE(): LSPACE;
-
-            NVPoint drawPos (st->position);
-
-            float dx = 0;
-            float dy = 0;
-
-            if (arSymbol->getDY())
-                dy = -arSymbol->getDY()->getValue( curLSPACE );
-            if (arSymbol->getDX())
-                dx = arSymbol->getDX()->getValue( curLSPACE );
-
-            // - Maybe the user set w/h himself
-            int symbolFixedWidth  = arSymbol->getFixedWidth();
-            int symbolFixedHeight = arSymbol->getFixedHeight();
-
-            float sizex, sizey;
-            symbolFixedWidth  ? sizex = float(symbolFixedWidth)  : sizex = (float)st->bitmap->GetWidth();
-            symbolFixedHeight ? sizey = float(symbolFixedHeight) : sizey = (float)st->bitmap->GetHeight();
-            // --------------------------------
-
-            float currentSize = arSymbol->getSize();
-            float positionStringDy;
-
-            if (!st->positionString.compare("top"))
-                positionStringDy = - sizey * currentSize * kVirtualToPx - curLSPACE;
-            else if (!st->positionString.compare("bot"))
-                positionStringDy = 5 * curLSPACE;
-            else //mid
-                positionStringDy = 2 * curLSPACE - (sizey * currentSize * kVirtualToPx / 2);
-
-            float finaldx = drawPos.x + st->boundingBox.left + dx;
-            float finaldy = dy + positionStringDy;
-
-            // - Print image
-            NVRect rectDraw = NVRect(finaldx, finaldy, finaldx + sizex * currentSize * kVirtualToPx,
-                finaldy + sizey * currentSize * kVirtualToPx);
-
-            st->bitmap->OnDraw(hdc, rectDraw);
-        }
+        string warningMsg("\\symbol not exported, use the GuidoEditor to get inline image data.");
+        hdc.DrawString(20, -70, warningMsg.c_str(), warningMsg.size()); // harcoded
     }
-}
+    else if (st->bitmap && st->bitmap->getDevice()) {
+        const ARSymbol *arSymbol = getARSymbol();
+        const float curLSPACE = gCurStaff ? gCurStaff->getStaffLSPACE(): LSPACE;
 
-void GRSymbol::print(int &indent) const
-{
+        NVPoint drawPos (st->position);
+
+        float dx = 0;
+        float dy = 0;
+
+        if (arSymbol->getDY())
+            dy = -arSymbol->getDY()->getValue( curLSPACE );
+        if (arSymbol->getDX())
+            dx = arSymbol->getDX()->getValue( curLSPACE );
+
+        // - Maybe the user set w/h himself
+        int symbolFixedWidth  = arSymbol->getFixedWidth();
+        int symbolFixedHeight = arSymbol->getFixedHeight();
+
+        float sizex, sizey;
+        symbolFixedWidth  ? sizex = float(symbolFixedWidth)  : sizex = (float)st->bitmap->GetWidth();
+        symbolFixedHeight ? sizey = float(symbolFixedHeight) : sizey = (float)st->bitmap->GetHeight();
+        // --------------------------------
+
+        float currentSize = arSymbol->getSize();
+        float positionStringDy;
+
+        if (!st->positionString.compare("top"))
+            positionStringDy = - sizey * currentSize * kVirtualToPx - curLSPACE;
+        else if (!st->positionString.compare("bot"))
+            positionStringDy = 5 * curLSPACE;
+        else //mid
+            positionStringDy = 2 * curLSPACE - (sizey * currentSize * kVirtualToPx / 2);
+
+        float finaldx = drawPos.x + st->boundingBox.left + dx;
+        float finaldy = dy + positionStringDy;
+
+        // - Print image
+        NVRect rectDraw = NVRect(finaldx, finaldy, finaldx + sizex * currentSize * kVirtualToPx,
+            finaldy + sizey * currentSize * kVirtualToPx);
+
+        st->bitmap->OnDraw(hdc, rectDraw);
+    }
 }
 
 const ARSymbol * GRSymbol::getARSymbol() const

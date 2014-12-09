@@ -26,14 +26,18 @@
 #include "VGDevice.h"
 #include "VGColor.h"
 
-# include "GSystemWin32.h"
-# include "GSystemWin32GDIPlus.h"
+#include "GSystemWin32.h"
+#include "GSystemWin32GDIPlus.h"
+
+#include "GDeviceWin32.h"
+#include "GDeviceWin32GDIPlus.h"
 
 extern VGSystem * gSystem;
+extern bool gAntiAliasing;
 
 namespace device_specific {
+
 	VGDevice * getInitDevice(bool antialiased) {
-		extern bool gAntiAliasing;
 		gAntiAliasing = antialiased;
 		if (antialiased) {
 			GSystemWin32GDIPlus::Start();

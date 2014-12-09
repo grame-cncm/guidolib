@@ -26,10 +26,7 @@
 #include "GRSpacingMatrix.h"
 #include "GRClef.h"
 #include "GRStaff.h"
-#include "GuidoFeedback.h"
 #include "kf_list.h"
-
-#include "GUIDOInternal.h"			// for gGlobalSettings.gFeedback
 
 // ----------------------------------------------------------------------------
 GRVoice::GRVoice(ARMusicalObject * arobj, bool ownsar)
@@ -51,12 +48,6 @@ GRVoice::GRVoice(ARMusicalObject * arobj, bool ownsar)
 
 GRVoice::~GRVoice()
 {
-	if( gGlobalSettings.gFeedback )
-	{
-		const int voicenum = this->getARMusicalVoice()->getVoiceNum();
-		gGlobalSettings.gFeedback->UpdateStatusMessage
-			( str_DeletingVoice, voicenum );
-	}
 	// there is an owns-elements on the list,
 	// so that all the elements get deleted.
 	delete mSysNodeList;
@@ -946,7 +937,6 @@ GuidoPos GRVoice::AddTail(GRNotationElement * el)
 	return pos;
 }
 
-
 GRPage * GRVoice::getPageNum(int num,int denom)
 {
 	// I have to travers the voice and find the element
@@ -1024,5 +1014,3 @@ GRPage * GRVoice::getPageForTimePos( int num, int denom ) const
 	
 	return outPage;
 }
-
-

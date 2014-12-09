@@ -41,7 +41,7 @@ class_export GuidoScoreMapAdapter
 			\param f a MapCollector object that will be called for each selected element or null if error
 			\return a Guido error code
 		*/
-		GuidoErrCode getMap(CGRHandler gr, int pagenum, float width, float height, GuidoeElementSelector sel, MapCollector& f);
+		GuidoErrCode getMap(CGRHandler gr, int pagenum, float width, float height, GuidoElementSelector sel, MapCollector& f);
 
 		/** \brief Retrieves a guido page graphic to time mapping.
 
@@ -113,7 +113,7 @@ class_export GuidoScoreMapAdapter
 			\param sel GuidoeElementSelector to filter undesired objects out.
 			\return outMap on output: a vector containing the map elements or null if error
 		*/
-		std::vector<MapElement> getSVGMap( GRHandler gr, int pagenum, GuidoeElementSelector sel);
+		std::vector<MapElement> getSVGMap( GRHandler gr, int pagenum, GuidoElementSelector sel);
 
 		/** \brief Retrieves the rolled to unrolled time mapping
 

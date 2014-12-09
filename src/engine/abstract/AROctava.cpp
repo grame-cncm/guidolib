@@ -77,15 +77,20 @@ void AROctava::setTagParameterList(TagParameterList & tpl)
 
 }
 
-void AROctava::PrintName(std::ostream & os) const
+void AROctava::printName(std::ostream& os) const
 {
-	os << "\\oct";
+    os << "AROctava";
 }
 
-void AROctava::PrintParameters(std::ostream & os) const
+void AROctava::printGMNName(std::ostream& os) const
 {
-	int value = 0;
-	if (noct)
-		value = noct->getValue();
-	os << "<i=" << value << ">";
+    os << "\\octava";
+}
+
+void AROctava::printParameters(std::ostream& os) const
+{
+    if (noct)
+        os << "i: " << noct->getValue() << "; ";
+
+    ARMusicalTag::printParameters(os);
 }

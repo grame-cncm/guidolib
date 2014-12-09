@@ -107,10 +107,10 @@ ARMusicalTag::~ARMusicalTag()
 // (JB) rewrited with std::ostringstream class instead of deprecated ostrstream.
 std::ostream & ARMusicalTag::operator <<(std::ostream & os) const
 {
-	PrintName(os);
+	printName(os);
 	
 	std::ostringstream mystr;	// was ostrstream (deprecated)	
-	PrintParameters(mystr);
+	printParameters(mystr);
 
 	size_t count = mystr.str().size();	// was mystr.pcount()
 	const char * tmpp = mystr.str().c_str();
@@ -204,15 +204,6 @@ std::ostream & ARMusicalTag::operator <<(std::ostream & os) const
 	if (getRange())
 		os << "(";
 	return os << " ";
-}
-
-void ARMusicalTag::PrintName(std::ostream & ) const
-{	
-}
-
-void ARMusicalTag::PrintParameters(std::ostream & ) const
-{
-
 }
 
 void ARMusicalTag::setRGBColor (unsigned char red, unsigned char green, unsigned char blue)
@@ -415,4 +406,33 @@ int ARMusicalTag::MatchListOfTPLsWithTPL(const ListOfTPLs &ltpls, TagParameterLi
 		return i;
 	}
 	return -1;
+}
+
+void ARMusicalTag::print(std::ostream & os) const
+{
+    printName(os);
+    printAttributes(os);
+    os << ": ";
+    printParameters(os);
+    os << std::endl;
+}
+
+void ARMusicalTag::printAttributes(std::ostream & os) const
+{
+    os << (getRange() || rangesetting == ONLY ? " (ranged)" : "") << (getIsAuto() ? " (auto)" : "");
+}
+
+void ARMusicalTag::printParameters(std::ostream & os) const
+{
+    if (mDx)
+        os << "dx: " << mDx->getValue() << "; ";
+    
+    if (mDy)
+        os << "dy: " << mDy->getValue() << "; ";
+    
+    if (size)
+        os << "size: " << size->getValue() << "; ";
+
+    if (color)
+        os << "color: " << color->getValue() << "; ";
 }

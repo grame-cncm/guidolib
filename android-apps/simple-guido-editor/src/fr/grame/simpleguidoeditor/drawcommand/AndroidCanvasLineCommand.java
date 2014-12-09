@@ -1,13 +1,9 @@
 package fr.grame.simpleguidoeditor.drawcommand;
-import guidoengine.drawcommand.LineCommand;
+import drawcommand.LineCommand;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Color;
 import fr.grame.simpleguidoeditor.GuidoCanvasView;
-
-import java.util.*;
-import android.util.Log;
 
 public class AndroidCanvasLineCommand extends LineCommand implements DrawToCanvas {
 
@@ -23,8 +19,8 @@ public class AndroidCanvasLineCommand extends LineCommand implements DrawToCanva
     float y1 = (float)(_y1);
     float x2 = (float)(_x2);
     float y2 = (float)(_y2);
-    float width = Math.abs(x2 - x1);
-    float height = Math.abs(y2 - y1);
+    /*float width = Math.abs(x2 - x1);
+    float height = Math.abs(y2 - y1);*/
     double pen_width = view._PEN_WIDTHS.get(view._PEN_WIDTHS.size() - 1);
 
     Paint paint = new Paint();

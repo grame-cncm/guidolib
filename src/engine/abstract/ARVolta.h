@@ -27,19 +27,18 @@ public:
 				ARVolta();
 	virtual 	~ARVolta();
 
-	virtual void print(int &indent) const { }
+	virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 
 	virtual void browse (TimeUnwrap& mapper) const;
-	virtual void PrintName( std::ostream & os ) const;
-//	virtual void PrintParameters(std::ostream & os) const;
+
 	virtual void setTagParameterList( TagParameterList & tpl );
 	virtual bool MatchEndTag(const char * s);
    
 	const char* getPass() const   { return pass   ? pass->getValue() : ""; }
 	const char* getMark() const   { return mark   ? mark->getValue() : ""; }
 	const char* getFormat() const { return format ? format->getValue() : ""; }
-
-    virtual std::ostream & operator<<(std::ostream & os) const;
 
 protected:
 	static ListOfTPLs ltpls;

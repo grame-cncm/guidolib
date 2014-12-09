@@ -21,3 +21,18 @@ void ARTagEnd::setTagParameterList(TagParameterList & theTagParameterList)
 	theTagParameterList.RemoveAll();
 
 }
+
+void ARTagEnd::printName(std::ostream& os) const
+{
+    os << "ARTagEnd";
+}
+
+void ARTagEnd::printGMNName(std::ostream& os) const
+{
+    os << "\\tagEnd";
+}
+
+void ARTagEnd::printParameters(std::ostream& os) const
+{
+    ARMusicalTag::printParameters(os);
+}
