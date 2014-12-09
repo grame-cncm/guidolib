@@ -1,3 +1,15 @@
+/*
+  GUIDO Library
+  Copyright (C) 2014	Grame
+
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
+
+*/
 #include <sstream>
 #include "GUIDOPianoRollAdapter.h"
 #include "SVGDevice.h"
@@ -91,8 +103,8 @@ GuidoErrCode GUIDOPianoRollAdapter::onDraw(PianoRoll *pr, int width, int height,
 std::string GUIDOPianoRollAdapter::svgExport(PianoRoll *pr, int width, int height)
 {
 	std::stringstream out;
-	SVGSystem sys(0, 0); // TODO GGX ______src_guido2_svg);
-	SVGDevice dev (out, &sys, 0, 0); // TODO GGX ______src_guido2_svg);
+	SVGSystem sys(0, 0);
+	SVGDevice dev (out, &sys, 0, 0);
 	GuidoPianoRollOnDraw(pr, width, height, &dev);
 	return out.str();
 }
@@ -100,7 +112,7 @@ std::string GUIDOPianoRollAdapter::svgExport(PianoRoll *pr, int width, int heigh
 #ifdef CANVASSYSTEM
 GuidoErrCode GUIDOPianoRollAdapter::javascriptExport(PianoRoll *pr, int width, int height)
 {
-	CanvasSystem sys(0); // ______src_guido2_svg);
+	CanvasSystem sys(0);
 	CanvasDevice dev(&sys);
 	return GuidoPianoRollOnDraw(pr, width, height, &dev);
 }

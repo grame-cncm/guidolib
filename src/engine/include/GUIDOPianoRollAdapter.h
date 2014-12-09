@@ -1,8 +1,24 @@
 #ifndef GUIDOPIANOROLLADAPTER_H
 #define GUIDOPIANOROLLADAPTER_H
+/*
+  GUIDO Library
+  Copyright (C) 2014	Grame
+
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+  Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
+  research@grame.fr
+
+*/
 
 #include "GUIDOPianoRoll.h"
-
+/*!
+ *	\brief A C++ interface to the GUIDOPianoRoll API
+ *
+ *	A C++ class to manupilate Piano roll.
+ */
 class_export GUIDOPianoRollAdapter
 {
 	public:
@@ -134,6 +150,13 @@ class_export GUIDOPianoRollAdapter
 		*/
 		GuidoErrCode onDraw(PianoRoll *pr, int width, int height, VGDevice* dev);
 
+		/*!
+		 * \brief svgExport Draw the piano roll on SVG device and return the xml string.
+		 * \param pr a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll
+		 * \param width the width on which piano roll will be drawn (-1 to set the default width : 1024)
+		 * \param height the height on which piano roll will be drawn (-1 to set the default height : 512)
+		 * \return the xml code of piano roll in svg.
+		 */
 		std::string svgExport(PianoRoll *pr, int width, int height);
 
 #ifdef CANVASSYSTEM

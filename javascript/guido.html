@@ -85,7 +85,6 @@
 		
 		// Free resource. GRHandler must be free before ARHandler
 		guidoEngine.freeGR(gr2);
-		guidoEngine.freeAR(ar2);
 		
 		// Test methods
 		var layoutSettings = guidoEngine.getDefaultLayoutSettings();
@@ -139,7 +138,7 @@
 		
 		guidoEngine.freeAR(ar3);
 		
-		
+		// Score Map test
 		var scoreMap = new Module.GuidoScoreMap;
 
 		guidoGetPageMap_JSON = document.getElementById('guidoGetPageMap_JSON');
@@ -171,7 +170,7 @@
 		guidoGetPoint_JSON.innerHTML = "<b>getPoint:</b> "+ map;
 	
 		guidoGetSVGMap_JSON = document.getElementById('guidoGetSVGMap_JSON');
-		map =  scoreMap.getSVGMap(gr, 1, {"value" : "kGuidoPage"});
+		map =  scoreMap.getSVGMap(gr, 1, Module.GuidoeElementSelector.kGuidoPage);
 		guidoGetSVGMap_JSON.innerHTML = "<b>getSVGMap:</b> "+ map;
 		
 		guidoGetTimeMap_JSON = document.getElementById('guidoGetTimeMap_JSON');
@@ -179,12 +178,23 @@
 		guidoGetTimeMap_JSON.innerHTML = "<b>Time map :</b> "+ timemap_n;
 		
 		delete scoreMap;
-				
+		
+		// Piano Roll test
+		var pianoRoll = new Module.GUIDOPianoRollAdapter;
+		var pr = pianoRoll.ar2PianoRoll(Module.PianoRollType.kSimplePianoRoll, ar2); // or kTrajectoryPianoRoll
+		
+		var pianoRollResult = pianoRoll.svgExport(pr, -1, -1);
+		$("#pianoRollSvgExport").html(pianoRollResult);
+		
+		pianoRoll.destroyPianoRoll(pr);
+		delete pianoRoll;
+		
+		guidoEngine.freeAR(ar2);
+		
 		guidoEngine.freeGR(gr);
 		guidoEngine.freeAR(ar);
 		
 		guidoEngine.closeParser(p);
-		
 	}
 		</script>
 	</head>
@@ -227,6 +237,7 @@
 		<div id="guido_svg2"></div>
 
 		<div id="guidoAbstractExport"></div>
+		<div id="pianoRollSvgExport"></div>
 		
 		<!-- need to insert dummy paragraph to load font -->
 		<p id="myP" style="visibility:hidden;font-family:Guido2;font-size:200px">x</p>

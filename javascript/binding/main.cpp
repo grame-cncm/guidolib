@@ -18,6 +18,8 @@
 #include "GUIDOScoreMap.h"
 #include "GUIDOInternal.h"
 #include "GuidoParser.h"
+#include "GUIDOPianoRollAdapter.h"
+#include "PianoRoll.h"
 
 #include "map2json.h"
 
@@ -63,6 +65,12 @@ EMSCRIPTEN_BINDINGS(CStruct) {
 			.field("sub", &GuidoVersion::sub)
 			.field("str", &GuidoVersion::str);
 
+	emscripten::value_object<LimitParams>("LimitParams")
+			.field("startDate", &LimitParams::startDate)
+			.field("endDate", &LimitParams::endDate)
+			.field("lowPitch", &LimitParams::lowPitch)
+			.field("highPitch", &LimitParams::highPitch);
+
 	emscripten::enum_<GuidoErrCode>("GuidoErrCode")
 			.value("guidoNoErr", GuidoErrCode::guidoNoErr)
 			.value("guidoErrParse", guidoErrParse)
@@ -84,6 +92,10 @@ EMSCRIPTEN_BINDINGS(CStruct) {
 			.value("kGuidoBar", GuidoeElementSelector::kGuidoBar)
 			.value("kGuidoEvent", GuidoeElementSelector::kGuidoEvent)
 			.value("kGuidoScoreElementEnd", GuidoeElementSelector::kGuidoScoreElementEnd);
+
+	emscripten::enum_<PianoRollType>("PianoRollType")
+			.value("kSimplePianoRoll", PianoRollType::kSimplePianoRoll)
+			.value("kTrajectoryPianoRoll", PianoRollType::kTrajectoryPianoRoll);
 }
 
 EMSCRIPTEN_BINDINGS(EngineAdapter) {
@@ -138,7 +150,7 @@ EMSCRIPTEN_BINDINGS(EngineAdapter) {
 			.function("writeStream", &GuidoEngineAdapter::writeStream, allow_raw_pointers())
 			.function("resetStream", &GuidoEngineAdapter::resetStream, allow_raw_pointers());
 
-	// Binding C++ class adapter for guidoEngine
+	// Binding C++ class Map2json to have a javascript implementation of GuidoScoreMap
 	emscripten::class_<Map2json>("GuidoScoreMap")
 			.constructor<>()
 			.function("getPageMap", &Map2json::getPageMap, allow_raw_pointers())
@@ -150,11 +162,30 @@ EMSCRIPTEN_BINDINGS(EngineAdapter) {
 			.function("getSVGMap", &Map2json::getSVGMap, allow_raw_pointers())
 			.function("getTimeMap", &Map2json::getTimeMap, allow_raw_pointers());
 
+	/*!
+		Binding C++ class adapter for GuidoPianoRoll
+	*/
+	emscripten::class_<GUIDOPianoRollAdapter>("GUIDOPianoRollAdapter")
+			.constructor<>()
+			.function("ar2PianoRoll", &GUIDOPianoRollAdapter::ar2PianoRoll, allow_raw_pointers())
+			.function("destroyPianoRoll", &GUIDOPianoRollAdapter::destroyPianoRoll, allow_raw_pointers())
+			.function("setLimits", &GUIDOPianoRollAdapter::setLimits, allow_raw_pointers())
+			.function("enableKeyboard", &GUIDOPianoRollAdapter::enableKeyboard, allow_raw_pointers())
+			.function("getKeyboardWidth", &GUIDOPianoRollAdapter::getKeyboardWidth, allow_raw_pointers())
+			.function("enableAutoVoicesColoration", &GUIDOPianoRollAdapter::enableAutoVoicesColoration, allow_raw_pointers())
+			.function("setRGBColorToVoice", &GUIDOPianoRollAdapter::setRGBColorToVoice, allow_raw_pointers())
+			.function("setHtmlColorToVoice", &GUIDOPianoRollAdapter::setHtmlColorToVoice, allow_raw_pointers())
+			.function("enableMeasureBars", &GUIDOPianoRollAdapter::enableMeasureBars, allow_raw_pointers())
+			.function("setPitchLinesDisplayMode", &GUIDOPianoRollAdapter::setPitchLinesDisplayMode, allow_raw_pointers())
+			.function("getMap", &GUIDOPianoRollAdapter::getMap, allow_raw_pointers())
+			.function("svgExport", &GUIDOPianoRollAdapter::svgExport, allow_raw_pointers())
+			.function("javascriptExport", &GUIDOPianoRollAdapter::javascriptExport, allow_raw_pointers());
 
 	// Black box object, just for passing argument pointer in method
 	emscripten::class_<GuidoParser>("GuidoParser");
 	emscripten::class_<NodeAR>("NodeAR");
 	emscripten::class_<NodeGR>("NodeGR");
 	emscripten::class_<GuidoStream>("GuidoStream");
+	emscripten::class_<PianoRoll>("PianoRoll");
 }
 
