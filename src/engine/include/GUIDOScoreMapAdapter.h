@@ -15,7 +15,11 @@
 
 #include "GUIDOScoreMap.h"
 
+
 /*!
+ * \addtogroup APICplusplus C++ interface
+ * @{
+ * \defgroup ScoreMapAdapter Guido Score Map Adapter
  * \brief A C++ interface to the Guido score map API
  *
  * A C++ class to manipulate score map of GuidoEngine.
@@ -34,7 +38,8 @@ class_export GuidoScoreMapAdapter
 			\param width the page width.
 			\param height the page height.
 			\param sel GuidoeElementSelector to filter undesired objects out.
-			\return a MapCollector object that will be called for each selected element or null if error
+			\param f a MapCollector object that will be called for each selected element or null if error
+			\return a Guido error code
 		*/
 		GuidoErrCode getMap(CGRHandler gr, int pagenum, float width, float height, GuidoeElementSelector sel, MapCollector& f);
 
@@ -113,10 +118,11 @@ class_export GuidoScoreMapAdapter
 		/** \brief Retrieves the rolled to unrolled time mapping
 
 			\param gr a Guido opaque handle to a GR structure.
-			\return a TimeMapCollector object that will be called for each time segment or null if error.
+			\param f a TimeMapCollector object that will be called for each time segment or null if error.
+			\return a Guido error code
 
 		*/
 		GuidoErrCode getTimeMap(CARHandler gr, TimeMapCollector& f);
 };
-
+/*! @} */
 #endif // GUIDOSCOREMAPADAPTER_H

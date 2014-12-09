@@ -14,7 +14,12 @@
 */
 
 #include "GUIDOPianoRoll.h"
+#include <string>
+
 /*!
+ * \addtogroup APICplusplus C++ interface
+ * @{
+ * \defgroup PianoRollAdapter Guido Piano Roll Adapter
  *	\brief A C++ interface to the GUIDOPianoRoll API
  *
  *	A C++ class to manupilate Piano roll.
@@ -28,7 +33,7 @@ class_export GUIDOPianoRollAdapter
 			\brief Creates a new piano roll from AR, corresponding to type :
 								 simplePianoRoll     -> basic piano roll
 								 trajectoryPianoRoll -> every event is graphically linked to the previous one
-			\param PianoRollType the piano roll type
+			\param type the piano roll type
 			\param arh an AR handler
 			\return a guido piano roll.
 		*/
@@ -38,11 +43,11 @@ class_export GUIDOPianoRollAdapter
 			\brief Creates a new piano roll from Midi, corresponding to type :
 								 simplePianoRoll     -> basic piano roll
 								 trajectoryPianoRoll -> every event is graphically linked to the previous one
-			\param PianoRollType the piano roll type
+			\param type the piano roll type
 			\param midiFileName a midi file name
 			\return a guido piano roll.
 		*/
-		PianoRoll * midi2PianoRoll(PianoRollType type, const char *midiFileName);
+		PianoRoll * midi2PianoRoll(PianoRollType type, const std::string &midiFileName);
 
 		/*!
 			\brief Destroys a guido piano roll and releases all the associated ressources
@@ -76,8 +81,7 @@ class_export GUIDOPianoRollAdapter
 			\brief Gets the piano roll keyboard width
 			\param pr a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll
 			\param height the height of the canvas (-1 to set the default height : 512)
-			\param keyboardWidth the pianoroll keyboard width
-			\return a Guido error code
+			\return the pianoroll keyboard width
 		*/
 		float getKeyboardWidth(PianoRoll *pr, int height);
 
@@ -136,7 +140,7 @@ class_export GUIDOPianoRollAdapter
 			\param pr a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll
 			\param width the width of the piano roll (-1 to set the default width : 1024)
 			\param height the height of the canvas (-1 to set the default height : 512)
-			\return a Guido error code (returns guidoErrBadParameter if keyboard width is higher than width param)
+			\return a Time2GraphicMap instance
 		*/
 		Time2GraphicMap getMap(PianoRoll *pr, int width, int height);
 
@@ -162,7 +166,7 @@ class_export GUIDOPianoRollAdapter
 #ifdef CANVASSYSTEM
 		/** \brief Exports one page of score on html canvas.
 
-			\param a pianoRoll.
+			\param pr a pianoRoll.
 			\param width
 			\param height
 			\return a Guido error code
@@ -170,5 +174,5 @@ class_export GUIDOPianoRollAdapter
 		GuidoErrCode javascriptExport(PianoRoll *pr, int width, int height);
 #endif
 };
-
+/*! @} */
 #endif // GUIDOPIANOROLLADAPTER_H

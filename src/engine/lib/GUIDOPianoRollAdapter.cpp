@@ -14,8 +14,6 @@
 #include "GUIDOPianoRollAdapter.h"
 #include "SVGDevice.h"
 #include "SVGSystem.h"
-#include "guido2.h"
-
 #ifdef CANVASSYSTEM
 #include "canvassystem.h"
 #include "canvasdevice.h"
@@ -34,9 +32,9 @@ PianoRoll * GUIDOPianoRollAdapter::ar2PianoRoll(PianoRollType type, ARHandler ar
 	return GuidoAR2PianoRoll(type, arh);
 }
 
-PianoRoll * GUIDOPianoRollAdapter::midi2PianoRoll(PianoRollType type, const char *midiFileName)
+PianoRoll * GUIDOPianoRollAdapter::midi2PianoRoll(PianoRollType type, const std::string &midiFileName)
 {
-	return GuidoMidi2PianoRoll(type, midiFileName);
+	return GuidoMidi2PianoRoll(type, midiFileName.c_str());
 }
 
 GuidoErrCode GUIDOPianoRollAdapter::destroyPianoRoll(PianoRoll *pr)

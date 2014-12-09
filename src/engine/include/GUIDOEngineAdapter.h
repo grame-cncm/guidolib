@@ -46,9 +46,12 @@ typedef struct {
 } GuidoVersion;
 
 /*!
- * \brief A C++ interface to the Guido API
+ * \addtogroup APICplusplus C++ interface
+ * @{
+ * \defgroup EngineAdapter Guido Engine Adapter
+ * \brief A C++ interface to the Guido Engine API
  *
- * A C++ class to manupilate GuidoEngine.
+ * A C++ class to manupilate Guido Engine.
  */
 class_export GuidoEngineAdapter
 {
@@ -64,8 +67,10 @@ class_export GuidoEngineAdapter
 
 
 		/*!
-			\addtogroup Engine Building abstract and graphic representations
+			\addtogroup engine2 Building abstract and graphic representations
 			@{
+			\ingroup EngineAdapter
+
 		*/
 		/*!
 			\brief Initialises the Guido Engine. Must be called before any attempt
@@ -161,13 +166,14 @@ class_export GuidoEngineAdapter
 		/*!
 			\brief Gives the default values of the layout settings.
 
-			\param settings on output, a pointer to the settings to be filled with default values.
+			\return the settings fill with default values.
 		*/
 		GuidoLayoutSettings getDefaultLayoutSettings();
 		/*! @} */
 
 		/*!
-			\addtogroup Pages Browsing music pages
+			\addtogroup Pages2 Browsing music pages
+			\ingroup EngineAdapter
 			The Guido Engine produces pages of music and therefore, the graphic representation
 			consists in a collection of pages.
 			The following functions are intended to access these pages by page number as well
@@ -231,14 +237,14 @@ class_export GuidoEngineAdapter
 
 			\param inHandleGR a Guido opaque handle to a GR structure.
 			\param pageNum a page number (starts at 1).
-			\param date on output: the page date if the page number is valid
-			\return a Guido error code.
+			\return a GuidoDate
 		*/
 		GuidoDate getPageDate(CGRHandler inHandleGR, int pageNum);
 		/*! @} */
 
 		/*!
-			\addtogroup Format Score drawing and pages formating
+			\addtogroup Format2 Score drawing and pages formating
+			\ingroup EngineAdapter
 			The GuidoEngine makes use of internal units for graphic operations.
 			The functions that query or set graphic dimensions always makes use of
 			this internal unit. Conversion functions are provided to convert to standard
@@ -255,7 +261,7 @@ class_export GuidoEngineAdapter
 
 		/** \brief Exports one page of score to SVG.
 
-			\param a graphic representation.
+			\param handle a graphic representation.
 			\param page the page number.
 			\param out the output stream.
 			\param fontfile path of the guido svg font file.
@@ -267,7 +273,7 @@ class_export GuidoEngineAdapter
 		/** \brief Exports one page of score to SVG.
 			Embedded font spec is use for the export.
 
-			\param a graphic representation.
+			\param handle a graphic representation.
 			\param page the page number.
 			\return the export in a string.
 		*/
@@ -275,7 +281,7 @@ class_export GuidoEngineAdapter
 
 		/** \brief Exports an abstract representation of GUIDO draw commands.
 
-			\param a graphic representation.
+			\param handle a graphic representation.
 			\param page the page number.
 			\param out the output stream.
 			\return a Guido error code
@@ -284,7 +290,7 @@ class_export GuidoEngineAdapter
 
 		/** \brief Exports an abstract representation of GUIDO draw commands.
 
-			\param a graphic representation.
+			\param handle a graphic representation.
 			\param page the page number.
 			\return the export in a string
 		*/
@@ -292,7 +298,7 @@ class_export GuidoEngineAdapter
 
 		/** \brief Exports an representation of GUIDO draw commands in a data-reduced dsl
 
-			\param a graphic representation.
+			\param handle a graphic representation.
 			\param page the page number.
 			\param out the output stream.
 			\return a Guido error code
@@ -301,7 +307,7 @@ class_export GuidoEngineAdapter
 
 		/** \brief Exports an representation of GUIDO draw commands in a data-reduced dsl
 
-			\param a graphic representation.
+			\param handle a graphic representation.
 			\param page the page number.
 			\return a Guido error code
 		*/
@@ -310,7 +316,7 @@ class_export GuidoEngineAdapter
 #ifdef CANVASSYSTEM
 		/** \brief Exports one page of score on html canvas.
 
-			\param a graphic representation.
+			\param handle a graphic representation.
 			\param page the page number.
 			\return a Guido error code
 		*/
@@ -395,7 +401,8 @@ class_export GuidoEngineAdapter
 
 
 		/*!
-		\addtogroup Misc Miscellaneous
+		\addtogroup Misc2 Miscellaneous
+		\ingroup EngineAdapter
 		Includes various functions for version management and for conversions.
 		The number of version functions is due to historical reasons.
 		@{
@@ -452,7 +459,7 @@ class_export GuidoEngineAdapter
 		/**	\brief Makes the correspondance between an ARMusic and a path.
 
 			\param inHandleAR the destination ARHandler.
-			\param inPath the path to associate.
+			\param inPaths the path to associate.
 			\return noErr if the association has been made with success
 			\return otherwise guidoErrActionFailed.
 		*/
@@ -462,17 +469,17 @@ class_export GuidoEngineAdapter
 		/**	\brief Returns the path corresponding to an AR.
 
 			\param inHandleAR the handle given to extract its path.
-			\return the returned path.
-			\return noErr if the association has been made with success
-			\return otherwise guidoErrActionFailed.
+			\return the vector of path.
 		*/
-		GuidoErrCode getSymbolPath(const ARHandler inHandleAR, std::vector<std::string> &inPathVector);
+		std::vector<std::string> getSymbolPath(const ARHandler inHandleAR);
 
 		/*! @} */
 
 
 		/*!
-		\addtogroup Guido timer
+		\addtogroup time2 Timing measurements
+		Includes functions to query the time spent by the main Guido Engine operations.
+		\ingroup EngineAdapter
 		@{
 		*/
 		/*!
@@ -498,8 +505,9 @@ class_export GuidoEngineAdapter
 
 		/*! @} */
 		/*!
-		\addtogroup Guido parser
+		\addtogroup parser Parsing GMN files, strings and guido streams
 		@{
+		\ingroup EngineAdapter
 		*/
 		/*!
 			\brief Creates a new parser
@@ -516,15 +524,15 @@ class_export GuidoEngineAdapter
 
 		/*!
 			\brief Parse a file and create the corresponding AR
-			\param p a parser previously opened with openParser
+			\param parser a parser previously opened with openParser
 			\param file the file to parse.
 			\return a ARHandler or 0 in case of error.
 		*/
-		ARHandler file2AR(GuidoParser *p, const std::string &file);
+		ARHandler file2AR(GuidoParser *parser, const std::string &file);
 
 		/*!
 			\brief Parse a string and create the corresponding AR
-			\param p a parser previously opened with openParser
+			\param parser a parser previously opened with openParser
 			\param gmnCode the string to parse.
 			\return a ARHandler or 0 in case of error.
 		*/
@@ -603,5 +611,6 @@ class_export GuidoEngineAdapter
 
 		/*! @} */
 };
+/*! @} */
 
 #endif // GUIDOENGINEADAPTER_H

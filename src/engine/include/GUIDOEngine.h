@@ -473,18 +473,17 @@ units.
 
 	/** \brief Exports one page of score to SVG.
 
-        \param a graphic representation.
+		\param handle a graphic representation.
 		\param page the page number.
 		\param out the output stream.
 		\param fontfile path of the guido svg font file.
-		\param fontspec an actual svg font if there is no font file.
 		\return a Guido error code
 	*/
 	GUIDOAPI(GuidoErrCode) 	GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile );
 
     /** \brief Exports one page of score to SVG.
 
-        \param a graphic representation.
+		\param handle a graphic representation.
         \param page the page number.
         \param out the output stream.
         \param fontfile path of the guido svg font file.
@@ -495,7 +494,8 @@ units.
 
 	/** \brief Exports an abstract representation of GUIDO draw commands.
 
-        \param a graphic representation.
+		\param handle a graphic representation.
+		\param page the page number.
 		\param out the output stream.
 		\return a Guido error code
 	*/
@@ -503,6 +503,8 @@ units.
 
 	/** \brief Exports an representation of GUIDO draw commands in a data-reduced dsl
 
+		\param handle a graphic representation.
+		\param page the page number.
 		\param out the output stream.
 		\return a Guido error code
 	*/
@@ -653,7 +655,7 @@ The number of version functions is due to historical reasons.
     /**	\brief Makes the correspondance between an ARMusic and a path.
 
 		\param inHandleAR the destination ARHandler.
-		\param inPath the path to associate.
+		\param inPaths the path to associate.
 		\return noErr if the association has been made with success
 		\return otherwise guidoErrActionFailed.
 	*/
@@ -663,6 +665,7 @@ The number of version functions is due to historical reasons.
     /**	\brief Returns the path corresponding to an AR.
 
 		\param inHandleAR the handle given to extract its path.
+		\param inPathVector the vector to be filled
 		\return the returned path.
         \return noErr if the association has been made with success
 		\return otherwise guidoErrActionFailed.
