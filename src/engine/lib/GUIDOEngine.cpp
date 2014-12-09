@@ -695,12 +695,9 @@ GUIDOAPI(GuidoErrCode) GuidoSVGExportWithFontSpec(const GRHandler handle, int pa
 {
  	SVGSystem sys(fontfile, fontspec);
     SVGDevice    *dev    = 0;
-    SVGMapDevice *devMap = 0;
 
-    if (mappingMode != kNoMapping) {
-	    devMap = new SVGMapDevice(out, &sys, fontfile, fontspec, mappingMode); // Maps need to be drawn
-        dev    = devMap;
-    }
+    if (mappingMode != kNoMapping)
+	    dev = new SVGMapDevice(out, &sys, fontfile, fontspec, mappingMode); // Maps need to be drawn
     else
         dev = new SVGDevice(out, &sys, fontfile, fontspec);
     
@@ -723,7 +720,6 @@ GUIDOAPI(GuidoErrCode) GuidoSVGExportWithFontSpec(const GRHandler handle, int pa
     GuidoErrCode error = GuidoOnDraw (&desc);
 
     delete dev;
-
     return error;
 }
 
