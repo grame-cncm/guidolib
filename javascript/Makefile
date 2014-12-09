@@ -2,12 +2,15 @@
 # GUIDOEngine Javascript
 # This makefile is intended to compile the GUIDO engine as a javascript library
 # It is based on emscript that must be available from the command line
-# see https://github.com/kripken/emscripten/wiki fro more info
+# see http://kripken.github.io/emscripten-site/ for more info
 #
 # this makefile can run from any location, provide the 'srcdir' variable is correctly set
 #
 # The TOTAL_MEMORY is the maximum memory allocated by emscripten. This value is specific (100663296) to be compliant with the asm.js and prevent warning at execution.
 # It can be increased if error occured.
+# 
+# Compilation option -Oz is discouraged, it provoke undefined results and assertion errors at runtime.
+#
 
 srcdir := ../src/engine
 subprojects :=  $(wildcard $(srcdir)/* json binding device)

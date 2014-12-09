@@ -51,14 +51,14 @@ class_export GUIDOPianoRollAdapter
 
 		/*!
 			\brief Destroys a guido piano roll and releases all the associated ressources
-			\param pr a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll
+			\param pr a pianoroll previously created with ar2PianoRoll or midi2PianoRoll
 			\return a Guido error code
 		*/
 		GuidoErrCode destroyPianoRoll(PianoRoll *pr);
 
 		/*!
 			\brief Sets limits to a piano roll (start/end date, lower/higher pitch)
-			\param pr a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll
+			\param pr a pianoroll previously created with ar2PianoRoll or midi2PianoRoll
 			\param limitParams the structure containing limits :
 						  start date    (GuidoDate)     (0/0 to adjust automatically start date to the score's start date)
 						  end date      (GuidoDate)     (0/0 to adjust automatically end date to the score's end date)
@@ -71,7 +71,7 @@ class_export GUIDOPianoRollAdapter
 
 		/*!
 			\brief Enables keyboard or not (not enabled by default)
-			\param pr a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll
+			\param pr a pianoroll previously created with ar2PianoRoll or midi2PianoRoll
 			\param enabled a boolean corresponding to the keyboard draw state
 			\return a Guido error code
 		*/
@@ -79,7 +79,7 @@ class_export GUIDOPianoRollAdapter
 
 		/*!
 			\brief Gets the piano roll keyboard width
-			\param pr a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll
+			\param pr a pianoroll previously created with ar2PianoRoll or midi2PianoRoll
 			\param height the height of the canvas (-1 to set the default height : 512)
 			\return the pianoroll keyboard width
 		*/
@@ -87,9 +87,9 @@ class_export GUIDOPianoRollAdapter
 
 		/*!
 			\brief Enables or not the automatic voices coloration (not enabled by default) (not for a midi rendering) // REM: � voir
-				   If a color is manually set with GuidoPianoRollSetColorToVoice, automatic
+				   If a color is manually set with setColorToVoice, automatic
 				   color will not be applied for this voice.
-			\param pr a pianoroll previously created with GuidoAR2PianoRoll
+			\param pr a pianoroll previously created with ar2PianoRoll
 			\param enabled a boolean corresponding to the color state
 			\return a Guido error code
 		*/
@@ -97,7 +97,7 @@ class_export GUIDOPianoRollAdapter
 
 		/*!
 			\brief Sets a RGB color to a voice (first voice is number 1) (black by default)
-			\param pr a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll
+			\param pr a pianoroll previously created with ar2PianoRoll or midi2PianoRoll
 			\param voiceNum the voice number (first voice is number 1)
 			\param r the red param of RGB color
 			\param g the green param of RGB color
@@ -109,7 +109,7 @@ class_export GUIDOPianoRollAdapter
 
 		/*!
 			\brief Sets a html color to a voice (first voice is number 1) (black by default)
-			\param pr a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll
+			\param pr a pianoroll previously created with ar2PianoRoll or midi2PianoRoll
 			\param voiceNum the voice number (first voice is number 1)
 			\param color the html color (constants are defined in Colors.h)
 			\return a Guido error code
@@ -118,7 +118,7 @@ class_export GUIDOPianoRollAdapter
 
 		/*!
 			\brief Enables or not measure bars (false by default)
-			\param pr a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll
+			\param pr a pianoroll previously created with ar2PianoRoll or midi2PianoRoll
 			\param enabled a boolean corresponding to the measure bars draw state
 			\return a Guido error code
 		*/
@@ -129,7 +129,7 @@ class_export GUIDOPianoRollAdapter
 				   which will be be displayed.
 				   Example : "kCLine + kGLine" will displayed C and G line. "kNoLine" doesn't display any line. "kAutoLines" adjust line display
 							 according to piano roll pitch range (automatic possibilities : no line, C line, C and G line, chromatic scale, diatonic scale);
-			\param pr a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll
+			\param pr a pianoroll previously created with ar2PianoRoll or midi2PianoRoll
 			\param mode an int corresponding to the pitch lines display mode
 			\return a Guido error code
 		*/
@@ -137,7 +137,7 @@ class_export GUIDOPianoRollAdapter
 
 		/*!
 			\brief Gets the piano roll map
-			\param pr a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll
+			\param pr a pianoroll previously created with ar2PianoRoll or midi2PianoRoll
 			\param width the width of the piano roll (-1 to set the default width : 1024)
 			\param height the height of the canvas (-1 to set the default height : 512)
 			\return a Time2GraphicMap instance
@@ -146,7 +146,7 @@ class_export GUIDOPianoRollAdapter
 
 		/*!
 			\brief Draw the piano roll on a VGDevice
-			\param pr a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll
+			\param pr a pianoroll previously created with ar2PianoRoll or midi2PianoRoll
 			\param width the width on which piano roll will be drawn (-1 to set the default width : 1024)
 			\param height the height on which piano roll will be drawn (-1 to set the default height : 512)
 			\param dev the device on which piano will be drawn
@@ -156,7 +156,7 @@ class_export GUIDOPianoRollAdapter
 
 		/*!
 		 * \brief svgExport Draw the piano roll on SVG device and return the xml string.
-		 * \param pr a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll
+		 * \param pr a pianoroll previously created with ar2PianoRoll or midi2PianoRoll
 		 * \param width the width on which piano roll will be drawn (-1 to set the default width : 1024)
 		 * \param height the height on which piano roll will be drawn (-1 to set the default height : 512)
 		 * \return the xml code of piano roll in svg.

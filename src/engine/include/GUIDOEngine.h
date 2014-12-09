@@ -498,6 +498,7 @@ units.
         \param out the output stream.
         \param fontfile path of the guido svg font file.
         \param fontspec an actual svg font if there is no font file.
+		\param mappingMode the mapping mode (see mapping mode enum).
         \return a Guido error code
     */
     GUIDOAPI(GuidoErrCode) 	GuidoSVGExportWithFontSpec( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec, const int mappingMode = 0 );

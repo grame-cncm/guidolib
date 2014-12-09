@@ -98,6 +98,10 @@ EMSCRIPTEN_BINDINGS(CStruct) {
 			.value("kTrajectoryPianoRoll", PianoRollType::kTrajectoryPianoRoll);
 }
 
+/*
+ * C++ class binding.
+ * This classes can be used in javascript side.
+ */
 EMSCRIPTEN_BINDINGS(EngineAdapter) {
 	// Binding C++ class adapter for guidoEngine
 	emscripten::class_<GuidoEngineAdapter>("GuidoEngineAdapter")
@@ -161,9 +165,7 @@ EMSCRIPTEN_BINDINGS(EngineAdapter) {
 			.function("getPoint", &Map2json::getPoint)
 			.function("getTimeMap", &Map2json::getTimeMap, allow_raw_pointers());
 
-	/*!
-		Binding C++ class adapter for GuidoPianoRoll
-	*/
+	// Binding C++ class adapter for GuidoPianoRoll
 	emscripten::class_<GUIDOPianoRollAdapter>("GUIDOPianoRollAdapter")
 			.constructor<>()
 			.function("ar2PianoRoll", &GUIDOPianoRollAdapter::ar2PianoRoll, allow_raw_pointers())
@@ -180,7 +182,7 @@ EMSCRIPTEN_BINDINGS(EngineAdapter) {
 			.function("svgExport", &GUIDOPianoRollAdapter::svgExport, allow_raw_pointers())
 			.function("javascriptExport", &GUIDOPianoRollAdapter::javascriptExport, allow_raw_pointers());
 
-	// Black box object, just for passing argument pointer in method
+	// Black box object, just for passing argument pointer in method to and from javascript.
 	emscripten::class_<GuidoParser>("GuidoParser");
 	emscripten::class_<NodeAR>("NodeAR");
 	emscripten::class_<NodeGR>("NodeGR");
