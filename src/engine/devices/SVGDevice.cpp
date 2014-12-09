@@ -51,7 +51,6 @@ SVGDevice::SVGDevice(std::ostream& outstream, SVGSystem* system, const char* gui
 	fPendingStrokeColor(0),
 	fBeginDone(false)
 {
-    fTagTypesVector = new std::vector<TagType>();
 }
 
 SVGDevice::~SVGDevice() 
@@ -258,7 +257,7 @@ void SVGDevice::PushPen( const VGColor & color, float width )
 	fStream << "; stroke-opacity:" << alpha2float(color) << "; stroke-width:" << width << "\">"; 
 	fEndl++ ;
 
-    fTagTypesVector->push_back(penTag);
+    fTagTypesVector.push_back(penTag);
 }
 void SVGDevice::PushFillColor( const VGColor & color )
 {
@@ -267,7 +266,7 @@ void SVGDevice::PushFillColor( const VGColor & color )
 	fStream << "; fill-opacity:" << alpha2float(color) << ";\">"; 
 	fEndl++ ;
 
-    fTagTypesVector->push_back(fillColorTag);
+    fTagTypesVector.push_back(fillColorTag);
 }
 
 void SVGDevice::PopPen() {
@@ -353,7 +352,7 @@ void SVGDevice::SetScale( float x, float y )
         fStream << fEndl << "<g transform=\"scale(" << x << ", " << y << ")\">";
         fEndl++;
 
-        fTagTypesVector->push_back(scaleTag);
+        fTagTypesVector.push_back(scaleTag);
     }
 }
 
@@ -366,7 +365,7 @@ void SVGDevice::SetOrigin( float x, float y )
 	fEndl++ ;
 	fOffset = true;
 
-    fTagTypesVector->push_back(originTag);
+    fTagTypesVector.push_back(originTag);
 }
 
 void SVGDevice::OffsetOrigin( float x, float y )	
@@ -446,7 +445,7 @@ void SVGDevice::selectfont (int fonttype)
         fEndl++ ;
 		fCurrFont = fonttype;
 
-        fTagTypesVector->push_back(fontTag);
+        fTagTypesVector.push_back(fontTag);
 	}
 }
 
@@ -524,7 +523,7 @@ void SVGDevice::PushPenColor( const VGColor & color)
 	fStream << "; stroke-opacity:" << alpha2float(color) << "\">"; 
 	fEndl++;
 
-    fTagTypesVector->push_back(penColorTag);
+    fTagTypesVector.push_back(penColorTag);
 }
 
 void SVGDevice::PushPenWidth( float width)
@@ -532,7 +531,7 @@ void SVGDevice::PushPenWidth( float width)
 	fStream << fEndl << "<g style=\"stroke-width:" << width << "\">"; 
 	fEndl++ ;
 
-    fTagTypesVector->push_back(penWidthTag);
+    fTagTypesVector.push_back(penWidthTag);
 }
 
 void SVGDevice::PopPenColor() {
@@ -551,21 +550,21 @@ void SVGDevice::PopFillColor() {
 }
 
 void SVGDevice::checkTagsOrder(TagType tagToClose) {
-    if (!fTagTypesVector->empty() && fTagTypesVector->back() == tagToClose) {
+    if (!fTagTypesVector.empty() && fTagTypesVector.back() == tagToClose) {
         if (tagToClose == scaleTag) {
             fXScale = 1;
             fYScale = 1;
         }
 
-        fTagTypesVector->pop_back();
+        fTagTypesVector.pop_back();
     }
-    else if (!fTagTypesVector->empty() && fTagTypesVector->back() == fontTag) {
+    else if (!fTagTypesVector.empty() && fTagTypesVector.back() == fontTag) {
         checkfont();
 
-        fTagTypesVector->pop_back();
+        fTagTypesVector.pop_back();
 
-        if (!fTagTypesVector->empty())
-            fTagTypesVector->pop_back();
+        if (!fTagTypesVector.empty())
+            fTagTypesVector.pop_back();
     }
     else {
         // error ?
