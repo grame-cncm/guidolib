@@ -1,28 +1,28 @@
-package guidoengine.drawcommand;
+package drawcommand;
 
 import java.lang.StringBuilder;
 
 import java.util.*;
    
-public class SetFontColorCommand extends GuidoDrawCommand implements PrintableDrawCommand {
+public class SelectPenColorCommand extends GuidoDrawCommand implements PrintableDrawCommand {
 
   public char _alpha;
   public char _red;
   public char _green;
   public char _blue;
 
-  public SetFontColorCommand(char alpha, char red, char green, char blue) {
+  public SelectPenColorCommand(char alpha, char red, char green, char blue) {
     super();
     _alpha = alpha;
     _red = red;
     _green = green;
     _blue = blue;
   }
-
+  
   @Override
   public String asString() {
     StringBuilder out = new StringBuilder();
-    out.append("SelectFontColor");
+    out.append("SelectPenColor");
     out.append(" ");
     out.append(_alpha);
     out.append(" ");
@@ -33,5 +33,6 @@ public class SetFontColorCommand extends GuidoDrawCommand implements PrintableDr
     out.append(_blue);
     return out.toString();
   }
+
 
 }

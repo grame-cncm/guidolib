@@ -1,5 +1,5 @@
 package fr.grame.simpleguidoeditor.drawcommand;
-import guidoengine.drawcommand.PolygonCommand;
+import drawcommand.PolygonCommand;
 
 import android.graphics.Canvas;
 import fr.grame.simpleguidoeditor.GuidoCanvasView;

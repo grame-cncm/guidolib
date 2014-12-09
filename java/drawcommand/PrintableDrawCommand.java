@@ -1,4 +1,4 @@
-package guidoengine.drawcommand;
+package drawcommand;
 
 public interface PrintableDrawCommand {
 

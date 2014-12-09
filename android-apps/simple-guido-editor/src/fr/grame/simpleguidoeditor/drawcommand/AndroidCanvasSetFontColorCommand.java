@@ -1,11 +1,9 @@
 package fr.grame.simpleguidoeditor.drawcommand;
-import guidoengine.drawcommand.SetFontColorCommand;
+import drawcommand.SetFontColorCommand;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
 import fr.grame.simpleguidoeditor.GuidoCanvasView;
-
-import java.util.*;
    
 public class AndroidCanvasSetFontColorCommand extends SetFontColorCommand implements DrawToCanvas {
 

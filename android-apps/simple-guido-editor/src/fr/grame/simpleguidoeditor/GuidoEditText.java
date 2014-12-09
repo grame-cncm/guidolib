@@ -2,26 +2,10 @@ package fr.grame.simpleguidoeditor;
 
 import fr.grame.simpleguidoeditor.SimpleGuidoEditor;
 
-import guidoengine.*;
-
 import android.widget.EditText;
 
-import java.util.*;
-import android.util.Log;
-
-import android.graphics.drawable.ShapeDrawable;
-import android.view.View;
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.drawable.shapes.OvalShape;
 import android.util.AttributeSet;
-import android.util.Log;
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.IOException;
-
 import android.text.TextWatcher;
 import android.text.Editable;
 

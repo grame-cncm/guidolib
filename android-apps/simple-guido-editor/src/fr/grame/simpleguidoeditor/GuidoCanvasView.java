@@ -2,11 +2,6 @@ package fr.grame.simpleguidoeditor;
 
 import guidoengine.*;
 
-import android.widget.EditText;
-
-import android.graphics.Paint;
-import android.graphics.Path;
-
 import java.util.*;
 import java.lang.StringBuilder;
 import android.util.Log;
@@ -15,15 +10,10 @@ import android.util.Log;
 //import fr.grame.simpleguidoeditor.drawcommand.GuidoDrawCommand;
 import fr.grame.simpleguidoeditor.GuidoCanvasView;
 
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.PathShape;
 import android.view.View;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.drawable.shapes.OvalShape;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.graphics.Point;
 import android.graphics.Matrix;
 import android.graphics.Color;
 import android.graphics.Typeface;
