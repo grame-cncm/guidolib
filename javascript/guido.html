@@ -168,10 +168,6 @@
 		guidoGetPoint_JSON = document.getElementById('guidoGetPoint_JSON');
 		map =  scoreMap.getPoint(10, 10, pagemap_n);
 		guidoGetPoint_JSON.innerHTML = "<b>getPoint:</b> "+ map;
-	
-		guidoGetSVGMap_JSON = document.getElementById('guidoGetSVGMap_JSON');
-		map =  scoreMap.getSVGMap(gr, 1, Module.GuidoeElementSelector.kGuidoPage);
-		guidoGetSVGMap_JSON.innerHTML = "<b>getSVGMap:</b> "+ map;
 		
 		guidoGetTimeMap_JSON = document.getElementById('guidoGetTimeMap_JSON');
 		timemap_n = scoreMap.getTimeMap(ar);
@@ -229,7 +225,6 @@
 		<div id="guidoGetSystemMap_JSON"></div>
 		<div id="guidoGetTime_JSON"></div>
 		<div id="guidoGetPoint_JSON"></div>
-		<div id="guidoGetSVGMap_JSON"></div>
 		<div id="guidoGetTimeMap_JSON"></div>
 		
 		<div id="guido_svg"></div>
