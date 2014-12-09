@@ -84,14 +84,14 @@ EMSCRIPTEN_BINDINGS(CStruct) {
 			.value("guidoErrNotInitialized", GuidoErrCode::guidoErrNotInitialized)
 			.value("guidoErrActionFailed", GuidoErrCode::guidoErrActionFailed);
 
-	emscripten::enum_<GuidoeElementSelector>("GuidoeElementSelector")
-			.value("kGuidoPage", GuidoeElementSelector::kGuidoPage)
-			.value("kGuidoSystem", GuidoeElementSelector::kGuidoSystem)
-			.value("kGuidoSystemSlice", GuidoeElementSelector::kGuidoSystemSlice)
-			.value("kGuidoStaff", GuidoeElementSelector::kGuidoStaff)
-			.value("kGuidoBar", GuidoeElementSelector::kGuidoBar)
-			.value("kGuidoEvent", GuidoeElementSelector::kGuidoEvent)
-			.value("kGuidoScoreElementEnd", GuidoeElementSelector::kGuidoScoreElementEnd);
+	emscripten::enum_<GuidoElementSelector>("GuidoElementSelector")
+			.value("kGuidoPage", GuidoElementSelector::kGuidoPage)
+			.value("kGuidoSystem", GuidoElementSelector::kGuidoSystem)
+			.value("kGuidoSystemSlice", GuidoElementSelector::kGuidoSystemSlice)
+			.value("kGuidoStaff", GuidoElementSelector::kGuidoStaff)
+			.value("kGuidoBar", GuidoElementSelector::kGuidoBar)
+			.value("kGuidoEvent", GuidoElementSelector::kGuidoEvent)
+			.value("kGuidoScoreElementEnd", GuidoElementSelector::kGuidoScoreElementEnd);
 
 	emscripten::enum_<PianoRollType>("PianoRollType")
 			.value("kSimplePianoRoll", PianoRollType::kSimplePianoRoll)

@@ -74,7 +74,7 @@ string Map2json::getPoint(float x, float y, std::string jsonTime2GraphicMap)
 	return "";
 }
 
-std::string Map2json::getSVGMap( GRHandler gr, int pagenum, GuidoeElementSelector sel)
+std::string Map2json::getSVGMap( GRHandler gr, int pagenum, GuidoElementSelector sel)
 {
 	std::vector<MapElement> vect = scoreMap.getSVGMap(gr, pagenum, sel);
 	return JSONMapElement::toString(vect);

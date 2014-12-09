@@ -89,7 +89,7 @@ class Map2json
 			\param sel GuidoeElementSelector to filter undesired objects out.
 			\return a json string : a vector containing the map elements or empty if error
 		*/
-		std::string getSVGMap( GRHandler gr, int pagenum, GuidoeElementSelector sel);
+		std::string getSVGMap( GRHandler gr, int pagenum, GuidoElementSelector sel);
 
 		/** \brief Retrieves the rolled to unrolled time mapping
 
