@@ -183,7 +183,7 @@ pdfclean:
 
 $(version)/%.pdf: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	$(guido2image) -f $< -o $@
+	$(guido2image) -b  off -f $< -o $@
 
 #########################################################################
 # midi output generation
