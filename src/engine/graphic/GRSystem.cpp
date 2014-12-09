@@ -660,9 +660,9 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 				const float staffHeight = (theStaff->getNumlines() - 1) * theStaff->getStaffLSPACE();
 				NVPoint endstaffPos = lastStaffPos;
 				endstaffPos.y += staffHeight; // Set to the bottom of last staff
-                GRAccolade * onlyAccol = new GRAccolade(new ARAccol());
-				onlyAccol->draw(hdc, firstStaffPos, endstaffPos);
-                delete onlyAccol;
+				ARAccol arAccol;
+				GRAccolade onlyAccol(&arAccol);
+				onlyAccol.draw(hdc, firstStaffPos, endstaffPos);
 			}
 			
 			std::map<int, bool> StavesOn;
