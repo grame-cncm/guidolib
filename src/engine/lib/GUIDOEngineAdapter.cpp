@@ -137,9 +137,9 @@ GuidoErrCode GuidoEngineAdapter::onDraw(GuidoOnDrawDesc * desc)
 	return ::GuidoOnDraw(desc);
 }
 
-GuidoErrCode GuidoEngineAdapter::svgExport(const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec)
+GuidoErrCode GuidoEngineAdapter::svgExport(const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec, const int mappingMode)
 {
-	return ::GuidoSVGExportWithFontSpec(handle, page, out, fontfile, fontspec);
+	return ::GuidoSVGExportWithFontSpec(handle, page, out, fontfile, fontspec, mappingMode);
 }
 
 string GuidoEngineAdapter::svgExport(const GRHandler handle, int page)
