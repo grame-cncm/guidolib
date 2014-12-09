@@ -76,6 +76,8 @@ PianoRoll::PianoRoll(const char *midiFileName) :
 //--------------------------------------------------------------------------
 PianoRoll::~PianoRoll() 
 {
+    delete fVoicesColors;
+    delete fColors;
 }
 
 //--------------------------------------------------------------------------
@@ -421,10 +423,10 @@ void PianoRoll::DrawKeyboard(PianoRoll::DrawParams &drawParams) const
     ostringstream octaveString;
     std::string cNoteString;
     
-    NVstring *font = new NVstring("Arial");
+    NVstring font("Arial");
     const VGFont *hTextFont = 0;
-	if (font && font->length() > 0)
-		hTextFont = FontManager::FindOrCreateFont((int) floor(drawParams.noteHeight * 0.8), font, new NVstring(""));
+	if (font.length() > 0)
+		hTextFont = FontManager::FindOrCreateFont((int) floor(drawParams.noteHeight * 0.8), &font, &NVstring(""));
 
 	drawParams.dev->SetTextFont(hTextFont);
     /******************************/
@@ -618,7 +620,9 @@ void PianoRoll::DrawVoice(ARMusicalVoice* v, PianoRoll::DrawParams &drawParams)
     while (!fColors->empty()) {
 		drawParams.dev->PopFillColor();
 
+        VGColor *topColor = fColors->top();
         fColors->pop();
+        delete topColor;
 	}
 }
 
@@ -701,9 +705,10 @@ void PianoRoll::handleColor(ARNoteFormat* noteFormat, DrawParams &drawParams) co
         drawParams.dev->PushFillColor(*fColors->top());
     }
     else {
+        VGColor *topColor = fColors->top();
         fColors->pop();
-
         drawParams.dev->PopFillColor();
+        delete topColor;
     }
 }
 

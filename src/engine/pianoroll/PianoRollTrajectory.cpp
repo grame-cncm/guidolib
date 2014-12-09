@@ -43,6 +43,13 @@ PianoRollTrajectory::PianoRollTrajectory(const char *midiFileName) :
 }
 
 //--------------------------------------------------------------------------
+PianoRollTrajectory::~PianoRollTrajectory()
+{
+    delete previousEventInfos;
+    delete currentEventInfos;
+}
+
+//--------------------------------------------------------------------------
 void PianoRollTrajectory::init()
 {
     previousEventInfos = new std::vector<EventInfos>;
@@ -130,8 +137,11 @@ void PianoRollTrajectory::DrawVoice(ARMusicalVoice* v, DrawParams &drawParams)
     DrawLinks(drawParams);                // Draws link to final event
     DrawFinalEvent(finalDur, drawParams); // Draws link after final event
 
-    while (!fColors->empty())
+    while (!fColors->empty()) {
+        VGColor *topColor = fColors->top();
         fColors->pop();
+        delete topColor;
+    }
 
     previousEventInfos->clear();
     currentEventInfos->clear();
@@ -150,6 +160,7 @@ void PianoRollTrajectory::DrawNote(int pitch, double date, double dur, DrawParam
     else {
         DrawLinks(drawParams);
         
+        delete previousEventInfos;
         previousEventInfos = new std::vector<EventInfos>(*currentEventInfos);
 
         currentEventInfos->clear();
@@ -259,8 +270,11 @@ void PianoRollTrajectory::handleColor(ARNoteFormat* noteFormat, DrawParams &draw
     if (tps && tps->getRGB(colref))
         fColors->push(new VGColor(colref[0], colref[1], colref[2], colref[3]));
     else if ((fVoicesAutoColored && fColors->size() > 1)
-        || (!fVoicesAutoColored && !fColors->empty()))
+        || (!fVoicesAutoColored && !fColors->empty())) {
+        VGColor *topColor = fColors->top();
         fColors->pop();
+        delete topColor;
+    }
 }
 
 //--------------------------------------------------------------------------
@@ -271,6 +285,7 @@ void PianoRollTrajectory::handleRest(double date, DrawParams &drawParams)
 
         float x = date2xpos(date, drawParams.width, drawParams.untimedLeftElementWidth);
 
+        delete previousEventInfos;
         previousEventInfos = new std::vector<EventInfos>(*currentEventInfos);
 
         currentEventInfos->clear();
