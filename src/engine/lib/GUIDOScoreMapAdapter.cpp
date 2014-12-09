@@ -53,13 +53,6 @@ bool GuidoScoreMapAdapter::getPoint(float x, float y, const Time2GraphicMap map,
 	return ::GuidoGetPoint(x, y, map, t, r);
 }
 
-std::vector<MapElement> GuidoScoreMapAdapter::getSVGMap(GRHandler gr, int pagenum, GuidoElementSelector sel)
-{
-	std::vector<MapElement> outVector;
-	::GuidoGetSVGMap(gr, pagenum, sel, outVector);
-	return outVector;
-}
-
 GuidoErrCode GuidoScoreMapAdapter::getTimeMap(CARHandler gr, TimeMapCollector& outMap)
 {
 	return ::GuidoGetTimeMap(gr, outMap);

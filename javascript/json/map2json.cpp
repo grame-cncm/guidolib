@@ -15,7 +15,6 @@
 
 #include "JSONFriendlyTimeMap.h"
 #include "JSONTime2GraphicMap.h"
-#include "JSONMapElement.h"
 
 using namespace std;
 
@@ -72,12 +71,6 @@ string Map2json::getPoint(float x, float y, std::string jsonTime2GraphicMap)
 		return map.toString();
 	}
 	return "";
-}
-
-std::string Map2json::getSVGMap( GRHandler gr, int pagenum, GuidoElementSelector sel)
-{
-	std::vector<MapElement> vect = scoreMap.getSVGMap(gr, pagenum, sel);
-	return JSONMapElement::toString(vect);
 }
 
 //----------------------------------------------------------------------

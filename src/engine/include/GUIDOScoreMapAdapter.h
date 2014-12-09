@@ -106,15 +106,6 @@ class_export GuidoScoreMapAdapter
 		*/
 		bool getPoint(float x, float y, const Time2GraphicMap map, TimeSegment& t, FloatRect& r);
 
-		/** \brief Retrieves the graphic to time mapping corresponding to the SVG output
-
-			\param gr a Guido opaque handle to a GR structure.
-			\param pagenum a page index, starting from 1.
-			\param sel GuidoeElementSelector to filter undesired objects out.
-			\return outMap on output: a vector containing the map elements or null if error
-		*/
-		std::vector<MapElement> getSVGMap( GRHandler gr, int pagenum, GuidoElementSelector sel);
-
 		/** \brief Retrieves the rolled to unrolled time mapping
 
 			\param gr a Guido opaque handle to a GR structure.

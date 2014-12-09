@@ -159,7 +159,6 @@ EMSCRIPTEN_BINDINGS(EngineAdapter) {
 			.function("getSystemMap", &Map2json::getSystemMap, allow_raw_pointers())
 			.function("getTime", &Map2json::getTime)
 			.function("getPoint", &Map2json::getPoint)
-			.function("getSVGMap", &Map2json::getSVGMap, allow_raw_pointers())
 			.function("getTimeMap", &Map2json::getTimeMap, allow_raw_pointers());
 
 	/*!

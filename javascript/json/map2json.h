@@ -82,15 +82,6 @@ class Map2json
 		 */
 		std::string getPoint(float x, float y, std::string jsonTime2GraphicMap);
 
-		/** \brief Retrieves the graphic to time mapping corresponding to the SVG output
-
-			\param gr a Guido opaque handle to a GR structure.
-			\param pagenum a page index, starting from 1.
-			\param sel GuidoeElementSelector to filter undesired objects out.
-			\return a json string : a vector containing the map elements or empty if error
-		*/
-		std::string getSVGMap( GRHandler gr, int pagenum, GuidoElementSelector sel);
-
 		/** \brief Retrieves the rolled to unrolled time mapping
 
 			\param gr a Guido opaque handle to a GR structure.
