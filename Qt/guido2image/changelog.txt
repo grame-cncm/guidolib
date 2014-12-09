@@ -1,6 +1,10 @@
 ====================================
  guido2image - change log
 ====================================
+  
+2014-12-08  version 1.2
+	- zoom works again
+	- piano roll export added
 
 version 1.1
 	- help message includes version number

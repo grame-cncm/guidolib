@@ -28,8 +28,9 @@ ListOfTPLs ARBar::ltpls(1);
 ARBar::ARBar(const TYPE_TIMEPOSITION &timeposition)
 	: ARMTParameter(timeposition)
 {
-	measureNumber = 0;
-    measureNumberDisplayed = NULL;
+	measureNumber               = 0;
+    measureNumberDisplayed      = false;
+    measureNumberDisplayedIsSet = false;
 
 	numDx = 0;
 	numDy = 0;
@@ -37,17 +38,12 @@ ARBar::ARBar(const TYPE_TIMEPOSITION &timeposition)
 
 ARBar::ARBar() : ARMTParameter()
 {
-	measureNumber = 0;
-    measureNumberDisplayed = NULL;
+	measureNumber               = 0;
+    measureNumberDisplayed      = false;
+    measureNumberDisplayedIsSet = false;
 
 	numDx = 0;
 	numDy = 0;
-}
-
-void ARBar::setMeasureNumberDisplayed(bool display) {
-    delete measureNumberDisplayed;
-    measureNumberDisplayed = (display ? new TagParameterString("true") : new TagParameterString("false"));
-    measureNumberDisplayed->pflag = TagParameter::SETBYNAME;
 }
 
 ARBar::~ARBar() // does nothing
@@ -78,7 +74,11 @@ void ARBar::setTagParameterList(TagParameterList& tpl)
 			// the first ParameterList
 			// w, h, ml, mt, mr, mb
 
-            measureNumberDisplayed = TagParameterString::cast(rtpl->RemoveHead());
+            TagParameterString *s = TagParameterString::cast(rtpl->RemoveHead());
+            s->getBool(measureNumberDisplayed);
+            if (s->TagIsSet())
+                measureNumberDisplayedIsSet = true;
+            delete s;
 
 			// - dx/dy for measure number
 			TagParameterFloat *f = TagParameterFloat::cast(rtpl->RemoveHead());
@@ -113,11 +113,9 @@ void ARBar::printGMNName(std::ostream& os) const
 void ARBar::printParameters(std::ostream& os) const
 {
     os << "measureNumber: " << measureNumber << "; ";
-
-    if (measureNumberDisplayed)
-        os << "measureNumberDisplayed: " << measureNumberDisplayed->getValue() << "; ";
-
-    os << "numDx: " << numDx << "; numDy: " << numDy << ";";
+    os << "measureNumberDisplayed: " << measureNumberDisplayed << "; ";
+    os << "numDx: " << numDx << "; ";
+    os << "numDy: " << numDy << ";";
 
     ARMusicalTag::printParameters(os);
 }

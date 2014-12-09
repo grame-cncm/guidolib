@@ -21,7 +21,7 @@ class PianoRollTrajectory : public PianoRoll
 public:
              PianoRollTrajectory(ARMusic *arMusic);
              PianoRollTrajectory(const char *midiFileName);
-    virtual ~PianoRollTrajectory() {}
+    virtual ~PianoRollTrajectory();
 
 private:
     typedef struct {

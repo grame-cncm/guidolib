@@ -214,7 +214,7 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
 
     ARBar *arBar = getARBar();
 
-    if (!strcmp(arBar->getMeasureNumberDisplayed()->getValue(), "true") && arBar->getMeasureNumber() != 0) {
+    if (arBar->getMeasureNumberDisplayed() && arBar->getMeasureNumber() != 0) {
         const NVstring fontName("Arial");
         string attr("");
         const VGFont* hmyfont = FontManager::FindOrCreateFont((int) (80.0f * mTagSize), &fontName, &attr);

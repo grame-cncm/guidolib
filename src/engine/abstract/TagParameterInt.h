@@ -31,8 +31,8 @@ class TagParameterInt : public TagParameterFloat
 		virtual void 	setValue( int i )				{ fValue = (float) i; }
 		virtual void 	setValue( const char * p )		{ fValue = (float) atoi(p); }
 
-		virtual TagParameter *	getCopy() const			{ return new TagParameterInt( *this ); }
-		virtual bool			isInt() const			{ return true; } // note that is derived from TagParameterFloat
+		virtual TagParameter *	getCopy()  const		{ return new TagParameterInt( *this ); }
+		virtual bool			isInt()    const		{ return true; } // note that is derived from TagParameterFloat
 		const TYPE_INTPARAMETER getValue() const		{ return (TYPE_INTPARAMETER) fValue; }
 
 		virtual bool			copyValue( const TagParameter * tp );

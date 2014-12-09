@@ -26,24 +26,24 @@ ListOfTPLs ARTrill::ltpls(1);
 
 ARTrill::ARTrill(TYPE typ) : ARMTParameter(), mDur(NULL), mTrillType(typ)
 {
-	rangesetting = ONLY;
+	rangesetting               = ONLY;
 	fShowCautionaryAccidentals = false;
-	fShowTR = true;
-	fDrawOnNoteHead = false;
-	begin = true;
+	fShowTR                    = true;
+	fDrawOnNoteHead            = false;
+	begin                      = true;
 }
 
 ARTrill::ARTrill(int pid, const ARTrill* copy) : ARMTParameter(pid, copy), mDur(NULL)
 {
-	mTrillType = copy->getType();
-	chordType = copy->getChordType();
-	chordAccidental = copy->getChordAccidental();
+	mTrillType                 = copy->getType();
+	chordType                  = copy->getChordType();
+	chordAccidental            = copy->getChordAccidental();
 	fShowCautionaryAccidentals = copy->getCautionary();
-	fShowTR = copy->fShowTR;
-	fDrawOnNoteHead = copy->fDrawOnNoteHead;
-	adx = copy->getadx();
-	ady = copy->getady();
-	begin = copy->getStatus();
+	fShowTR                    = copy->fShowTR;
+	fDrawOnNoteHead            = copy->fDrawOnNoteHead;
+	adx                        = copy->getadx();
+	ady                        = copy->getady();
+	begin                      = copy->getStatus();
 	//TODO : copy TagParameterInt* mDur
 }
 
@@ -69,16 +69,15 @@ void ARTrill::setTagParameterList(TagParameterList& tpl)
 		if (ret == 0)
 		{
 			TagParameterString *str = TagParameterString::cast(rtpl->RemoveHead());
-			assert(str);
 			if (str->TagIsSet() && (str->getValue() == std::string("cautionary")))
 				fShowCautionaryAccidentals = true;
 			else 
 				fShowCautionaryAccidentals = false;
 			delete str;
 
-			TagParameterInt * dur = TagParameterInt::cast(rtpl->RemoveHead());
+			TagParameterInt *i = TagParameterInt::cast(rtpl->RemoveHead());
 			// Todo
-			delete dur;
+			delete i;
 
 			TagParameterFloat* f = TagParameterFloat::cast(rtpl->RemoveHead());
 			adx = f->getValue();
@@ -88,20 +87,16 @@ void ARTrill::setTagParameterList(TagParameterList& tpl)
 			ady = f->getValue();
 			delete f;
 
-			TagParameterString * tr = TagParameterString::cast(rtpl->RemoveHead());
-			assert(tr);
-			if (tr->TagIsSet() && (tr->getValue() == std::string("false") || tr->getValue() == std::string("0")))
-				fShowTR = false;
-			delete tr;
+			str = TagParameterString::cast(rtpl->RemoveHead());
+            str->getBool(fShowTR);
+			delete str;
 
-			TagParameterString * anchor = TagParameterString::cast(rtpl->RemoveHead());
-			assert(anchor);
-			if (anchor->TagIsSet() && (anchor->getValue() == std::string("note")))
+			str = TagParameterString::cast(rtpl->RemoveHead());
+			if (str->TagIsSet() && (str->getValue() == std::string("note")))
 				fDrawOnNoteHead = true;
 			else 
 				fDrawOnNoteHead = false;
-			delete anchor;
-
+			delete str;
 		}
 
 		delete rtpl;
