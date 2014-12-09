@@ -40,7 +40,7 @@ class GuidoMapCollector: public MapCollector
 	public :
 		struct Filter { virtual ~Filter() {} virtual bool operator() (const GuidoElementInfos& infos) const { return true; } } ;
 
-				 GuidoMapCollector(CGRHandler gr, GuidoeElementSelector selector, const Filter* filter=0) 
+				 GuidoMapCollector(CGRHandler gr, GuidoElementSelector selector, const Filter* filter=0) 
 					: fGRHandler(gr), fSelector(selector), fFilter(filter), fOutMap(0) {}
 		virtual ~GuidoMapCollector() {}
 
@@ -52,7 +52,7 @@ class GuidoMapCollector: public MapCollector
 
 	protected:
 		CGRHandler				fGRHandler;
-		GuidoeElementSelector	fSelector;
+		GuidoElementSelector	fSelector;
 		const Filter*			fFilter;
 		Time2GraphicMap*		fOutMap;
 };

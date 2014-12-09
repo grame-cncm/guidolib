@@ -65,7 +65,6 @@ using namespace std;
 #include "GRCompositeNote.h"
 #include "GRDoubleBar.h"
 #include "GRDummy.h"
-#include "GRFermata.h"
 #include "GRFinishBar.h"
 #include "GRGlue.h"
 #include "GRInstrument.h"
@@ -165,7 +164,6 @@ MeasureAccidentals & MeasureAccidentals::operator=(const MeasureAccidentals &ma)
 GRStaffState::GRStaffState()
 {
 	meterset = false;	// meter information set?. TRUE, false
-	mnum     = 0;	 	// start at bar 0... (important for upbeat, maybe to be changed!)
 
 	curmeter = NULL;
 	keyset   = false; 			// key signatur set?
@@ -218,7 +216,6 @@ void GRStaffState::reset2key()
 GRStaffState & GRStaffState::operator=(const GRStaffState & tmp)
 {
 	meterset = tmp.meterset; // is meter-signture set?. TRUE, false
-	mnum = tmp.mnum;
 	curmeter = tmp.curmeter;
 
 	// Noteparameter
@@ -790,7 +787,6 @@ staff_debug("newMeasure");
 	// quick-hack-implementation -> encode which accidentals are already set
 	// and which must be deleted in the next measure etc.
 	mStaffState.reset2key ();
-	++ mStaffState.mnum;
 }
 
 // ----------------------------------------------------------------------------
@@ -1023,8 +1019,6 @@ GRBar * GRStaff::AddBar(ARBar * abar, const TYPE_TIMEPOSITION & von)
 {
 staff_debug("AddBar");
 	newMeasure(von); // erhoeht u.a. mnum!
-	if (abar->getBarNumber() != -1)
-		mStaffState.mnum = abar->getBarNumber();
 
 	GRBar * ntakt = new GRBar( abar, this, von);
 	// depending on current bar Format, we have to tell the staffmanager (or the system) 
@@ -1189,8 +1183,6 @@ GRDoubleBar * GRStaff::AddDoubleBar(ARDoubleBar * ardbar, const TYPE_TIMEPOSITIO
 {
 staff_debug("AddDoubleBar");
 	newMeasure(von); // erhoeht u.a. mnum!
-	if (ardbar->getBarNumber() != -1)
-		mStaffState.mnum = ardbar->getBarNumber();
 
 	GRDoubleBar * ntakt = new GRDoubleBar( ardbar, this, von);
 	// depending on current bar Format, we have to tell the staffmanager (or the system) 
@@ -1211,8 +1203,6 @@ GRFinishBar * GRStaff::AddFinishBar(ARFinishBar * arfbar, const TYPE_TIMEPOSITIO
 {
 staff_debug("AddFinishBar");
 	newMeasure(von); // erhoeht u.a. mnum!
-	if (arfbar->getBarNumber() != -1)
-		mStaffState.mnum = arfbar->getBarNumber();
 
 	GRFinishBar * ntakt = new GRFinishBar( arfbar, this, von);
 
@@ -1260,7 +1250,6 @@ staff_debug("CreateBeginElements");
 
 	if (state.curclef != NULL)
 	{
-
 		// now I have to deal with basepitoffs (for transposed instruments)
 
 		ARClef * arclef = new ARClef(*state.curclef);
@@ -1270,7 +1259,7 @@ staff_debug("CreateBeginElements");
 		GRClef * grclef = new GRClef(arclef, this, 1);
 
 		// grclef->setRelativeTimePosition(relativeTimePositionOfGR);
-		assert(grclef->getRelativeTimePosition() == mRelativeTimePositionOfGR );
+		assert(grclef->getRelativeTimePosition() == mRelativeTimePositionOfGR);
 
 		setClefParameters(grclef, GRStaffState::CLEFEXPLICIT);
 		addNotationElement(grclef);
@@ -1663,6 +1652,21 @@ float GRStaff::getDredgeSize() const
 }
 
 // ----------------------------------------------------------------------------
+/** \brief Returns the height covered by the staff lines, only for staff mapping !
+
+    It takes line thickness in account.
+*/
+float GRStaff::getMappingDredgeSize() const
+{
+    const int   lineCount = (getNumlines() > 0 ? getNumlines() : 1);
+	const float lineSpace = getStaffLSPACE();
+
+    float result = (lineCount - 1) * lineSpace + getLineThickness() * 0.5f + 1; // 1 in order to have a non-null height
+
+	return result;
+}
+
+// ----------------------------------------------------------------------------
 int GRStaff::getFontSize() const
 {
 	return (int)(getStaffLSPACE() * 4);
@@ -1781,10 +1785,10 @@ void GRStaff::updateBoundingBox()
         }
     }
 	mBoundingBox.Merge (r);
-	mMapping.top = mMapping.left = 0;
-	mMapping.right = mLength;
-	mMapping.bottom = getDredgeSize();
-	mMapping += mPosition + getOffset();
+	mMapping.top    = mMapping.left = - getLineThickness() / 2;
+	mMapping.right  = mLength + getLineThickness() / 2;;
+	mMapping.bottom = getMappingDredgeSize();
+	mMapping       += mPosition + getOffset();
 }
 
 // ----------------------------------------------------------------------------
@@ -1840,7 +1844,7 @@ GRStaff * GRStaff::getNextStaff() const
 // ----------------------------------------------------------------------------
 /** \brief Retrieves the mapping
 */
-void GRStaff::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const
+void GRStaff::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const
 {
 	if (sel == kGuidoStaff) {
 		SendMap (f, getRelativeTimePosition(), getDuration(), kStaff, infos);
@@ -2061,16 +2065,16 @@ void GRStaff::DrawNotationElements( VGDevice & hdc ) const
 }
 
 // ----------------------------------------------------------------------------
-void GRStaff::print(int &indent) const
+void GRStaff::print(std::ostream& os) const
 {
 	GRNotationElement * e;
-	fprintf(stderr, "GRStaffprint(int &indent): %.2f-%.2f ", 
+	fprintf(stderr, "GRStaffprint(std::ostream& os): %.2f-%.2f ", 
 		(float) mRelativeTimePositionOfGR, (float) getRelativeEndTimePosition());
 	GuidoPos pos = mCompElements.GetHeadPosition();
 	while(pos)
 	{
 		e = mCompElements.GetNext(pos);
-		e->print(indent);
+		e->print(os);
 	}
 	fprintf(stderr, "\n");
 }

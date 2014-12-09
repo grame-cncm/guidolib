@@ -25,23 +25,16 @@ ListOfTPLs ARTitle::ltpls(1);
 
 ARTitle::ARTitle()
 {
-	name = NULL;
-	pageformat = NULL;
+	name         = NULL;
+	pageformat   = NULL;
 	rangesetting = NO;
 }
-
 
 ARTitle::~ARTitle()
 {
 	delete name;
 	delete pageformat;
 }
-
-std::ostream & ARTitle::operator<<(std::ostream &os) const
-{
-	return os << "\\title<\"" << name << "\"> ";
-}
-
 
 const char * ARTitle::getName() 
 { 
@@ -57,10 +50,6 @@ const char * ARTitle::getPageFormat()
 		return NULL;
 	else
 		return pageformat->getValue();
-}
-
-void ARTitle::print(int &indent) const
-{
 }
 
 void ARTitle::setTagParameterList(TagParameterList & tpl)
@@ -111,4 +100,28 @@ void ARTitle::setTagParameterList(TagParameterList & tpl)
 		// failure
 	}
 	tpl.RemoveAll();
+}
+
+void ARTitle::printName(std::ostream& os) const
+{
+    os << "ARTitle";
+}
+
+void ARTitle::printGMNName(std::ostream& os) const
+{
+    os << "\\title";
+}
+
+void ARTitle::printParameters(std::ostream& os) const
+{
+    if (name)
+        os << "name: \"" << name->getValue() << "\"; ";
+
+    if (pageformat)
+        os << "pageformat: " << pageformat->getValue() << "; ";
+
+    if (textformat)
+        os << "textformat" << textformat->getValue() << ";";
+
+    ARMusicalTag::printParameters(os);
 }

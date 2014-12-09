@@ -1,13 +1,10 @@
 package fr.grame.simpleguidoeditor.drawcommand;
-import guidoengine.drawcommand.BeginDrawCommand;
+import drawcommand.BeginDrawCommand;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
 import fr.grame.simpleguidoeditor.GuidoCanvasView;
-import android.graphics.Matrix;
 import android.graphics.Paint;
-
-import java.util.*;
    
 public class AndroidCanvasBeginDrawCommand extends BeginDrawCommand implements DrawToCanvas {
 

@@ -49,10 +49,6 @@ GRInstrument::~GRInstrument()
 {
 }
 
-void GRInstrument::print(int &indent) const
-{
-}
-
 void GRInstrument::OnDraw(VGDevice & hdc) const
 {
 	// Now draw something

@@ -27,8 +27,7 @@ class TagParameterFloat;
 */
 class ARTrill : public ARMTParameter, public ARPositionTag
 {		
-	public:			
-
+	public:
 			enum TYPE { TRILL,TURN,MORD };
 
 						ARTrill(TYPE typ);
@@ -38,10 +37,9 @@ class ARTrill : public ARMTParameter, public ARPositionTag
 
 		virtual void 	setTagParameterList(TagParameterList & tpl);
 
-		virtual void 	print(int &indent) const;
-		
-		virtual void 	PrintName(std::ostream & os) const;
-		virtual void 	PrintParameters(std::ostream & os) const;
+	    virtual void    printName(std::ostream& os) const;
+	    virtual void    printGMNName(std::ostream& os) const;
+	    virtual void    printParameters(std::ostream& os) const;
 
 				TYPE 	getType() const 		{ return mTrillType; }
 				void 	setType(TYPE typ) 		{ mTrillType = typ; }
@@ -59,7 +57,6 @@ class ARTrill : public ARMTParameter, public ARPositionTag
 				bool	getAnchor() {return fDrawOnNoteHead;}
 
 	protected:
-
 		TagParameterInt	  * mDur;
 		TYPE 				mTrillType;
 		ARMusicalVoice::CHORD_TYPE			chordType;
@@ -69,7 +66,7 @@ class ARTrill : public ARMTParameter, public ARPositionTag
 		bool fDrawOnNoteHead;
 		float adx;
 		float ady;
-		bool			begin;
+		bool  begin;
 
 		static ListOfTPLs ltpls;
 };

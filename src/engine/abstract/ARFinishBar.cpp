@@ -22,19 +22,19 @@ ARFinishBar::ARFinishBar()
 
 ARFinishBar::~ARFinishBar()
 {
-
 }
 
-void ARFinishBar::print(int &indent) const
+void ARFinishBar::printName(std::ostream& os) const
 {
-	std::cout << "ARFinishBar" << std::endl;
+    os << "ARFinishBar";
 }
 
-/* ostream & ARDoubleBar::operator<<(ostream &os) const
+void ARFinishBar::printGMNName(std::ostream& os) const
 {
-	return os << "\\doublebar ";
-} */
-void ARFinishBar::PrintName(std::ostream &os) const
+    os << "\\finishBar";
+}
+
+void ARFinishBar::printParameters(std::ostream& os) const
 {
-	os << "\\endBar";
-} 
+    ARMusicalTag::printParameters(os);
+}

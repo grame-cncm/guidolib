@@ -23,15 +23,13 @@ ListOfTPLs ARInstrument::ltpls(1);
 
 ARInstrument::ARInstrument()
 {
-	s1 = 0;
-	s2 = 0;
+	name = 0;
 	transp = 0;
 }
 
 ARInstrument::~ARInstrument()
 {
-	delete s1;
-	delete s2;
+	delete name;
 	delete transp;
 }
 void ARInstrument::setTagParameterList(TagParameterList& tpl)
@@ -41,9 +39,8 @@ void ARInstrument::setTagParameterList(TagParameterList& tpl)
 		// create a list of string ...
 
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail (( "S,name,,r;S,midiname,,o;S,transp,,o"));
+		lstrs.AddTail (( "S,name,,r;S,transp,,o"));
 		CreateListOfTPLs(ltpls,lstrs);
-
 	}
 
 	TagParameterList *rtpl = NULL;
@@ -54,10 +51,7 @@ void ARInstrument::setTagParameterList(TagParameterList& tpl)
 		// we found a match!
 		if (ret == 0)
 		{
-			s1 = TagParameterString::cast(rtpl->RemoveHead());
-
-			s2 = TagParameterString::cast(rtpl->RemoveHead());
-
+			name   = TagParameterString::cast(rtpl->RemoveHead());
 			transp = TagParameterString::cast(rtpl->RemoveHead());
 		}
 
@@ -73,22 +67,29 @@ void ARInstrument::setTagParameterList(TagParameterList& tpl)
 
 const char* ARInstrument::getName() const
 {
-	if (!s1) return NULL;
-	return s1->getValue();
+	if (!name)
+        return NULL;
+
+	return name->getValue();
 }
 
-const char* ARInstrument::getSecondName() const
+void ARInstrument::printName(std::ostream& os) const
 {
-	if (!s2) return NULL;
-	return s2->getValue();
+    os << "ARInstrument";
 }
 
-void ARInstrument::print(int &indent) const
+void ARInstrument::printGMNName(std::ostream& os) const
 {
+    os << "\\instrument";
 }
 
-std::ostream & ARInstrument::operator<<(std::ostream &os) const
+void ARInstrument::printParameters(std::ostream& os) const
 {
-	return os << "\\instr<\"" << getName() << "\">";
-}
+    if (name)
+        os << "name: \"" << name->getValue() << "\"; ";
 
+    if (transp)
+        os << "transp: " << transp->getValue() << "; ";
+
+    ARMusicalTag::printParameters(os);
+}

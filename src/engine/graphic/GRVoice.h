@@ -31,7 +31,6 @@ class GRSpring;
 class GRPage;
 class GRSpaceForceFunction2;
 class GRSpacingMatrix;
-class GuidoFeedback;
 
 #ifdef OLDSPFACTIVE
 class GRSpaceForceFunction;
@@ -89,8 +88,7 @@ class GRVoice : public GRARCompositeNotationElement
 
 	virtual void GGSOutput() const {}
 	virtual void OnDraw( VGDevice & ) const {}
-    virtual void print(int &indent) const {}
-
+    
 	ARMusicalVoice * getARMusicalVoice();
 
 	void startNewSystem(GRSystem * grsystem);

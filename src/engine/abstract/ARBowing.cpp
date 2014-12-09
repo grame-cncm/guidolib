@@ -91,10 +91,6 @@ ARBowing::~ARBowing()
 	delete mCurve;
 }
 
-void ARBowing::print(int &indent) const
-{
-}
-
 void ARBowing::setTagParameterList(TagParameterList & tpl)
 {
 	if (ltpls.GetCount() == 0)
@@ -223,104 +219,36 @@ void ARBowing::setTagParameterList(TagParameterList & tpl)
 //	hascontrol = 0;
 //}
 
-void ARBowing::PrintParameters(std::ostream & os) const
-{
-	int previous = 0;
-	if (mParSet)
-	{
-		os << "<";
-	}
-	if (mCurve && mCurve->TagIsSet())
-	{
-		os << "curve=\"" << mCurve->getValue() << "\"";
-	}
-	else
-	{
-		if (dx1 && dx1->TagIsSet())
-		{
-			os << "dx1=" << dx1->getUnitValue() << dx1->getUnit();
-			previous = 1;
-		}
-		if (dy1 && dy1->TagIsSet())
-		{
-			if (previous)
-				os << ",";
-			os << "dy1=" << dy1->getUnitValue() << dy1->getUnit();
-			previous = 1;
-		}
-		if (dx2 && dx2->TagIsSet())
-		{
-			if (previous)
-				os << ",";
-			os << "dx2=" << dx2->getUnitValue() << dx2->getUnit();
-			previous = 1;
-		}
-		if (dy2 && dy2->TagIsSet())
-		{
-			if (previous)
-				os << ",";
-			os << "dy2=" << dy2->getUnitValue() << dy2->getUnit();
-			previous = 1;
-		}
-		if (r3 && r3->TagIsSet())
-		{
-			if (previous)
-				os << ",";
-			os << "r3=" << r3->getUnitValue();
-			previous = 1;
-		}
-		if (h && h->TagIsSet())
-		{
-			if (previous)
-				os << ",";
-			os << "h=" << h->getUnitValue() << h->getUnit();
-			previous = 1;
-		}
-	}
-	
-	if (mParSet)
-		os << ">";
-}
-
 TagParameterList * ARBowing::getTagParameterList() const
 {
 	TagParameterList * tpl = new TagParameterList(1);
 
 	// now we see, which parameters are set ....
-	if (mCurve && mCurve->TagIsSet())
-	{
+	if (mCurve && mCurve->TagIsSet()) {
 		tpl->AddTail(mCurve->getCopy());
 		return tpl;
 	}
 
 	if (dx1 && dx1->TagIsSet())
-	{
 		tpl->AddTail(dx1->getCopy());
-	}
+
 	if (dy1 && dy1->TagIsSet())
-	{
 		tpl->AddTail(dy1->getCopy());
-	}
+
 	if (dx2 && dx2->TagIsSet())
-	{
 		tpl->AddTail(dx2->getCopy());
-	}
+
 	if (dy2 && dy2->TagIsSet())
-	{
 		tpl->AddTail(dy2->getCopy());
-	}
+
 	if (r3 && r3->TagIsSet())
-	{
 		tpl->AddTail(r3->getCopy());
-	}
+
 	if (h && h->TagIsSet())
-	{
 		tpl->AddTail(h->getCopy());
-	}
+
 	if (color && color->TagIsSet())
-	{
 		tpl->AddTail(color->getCopy());
-	}
 
 	return tpl;
 }
@@ -431,4 +359,21 @@ void ARBowing::setCurve(int ,const NVPoint & p1, const NVPoint & p2)
 		h->setUnit("hs");
 	}
 */
+}
+
+void ARBowing::printName(std::ostream& os) const
+{
+    os << "ARBowing";
+}
+
+void ARBowing::printGMNName(std::ostream& os) const
+{
+    os << "\\bowing";
+}
+
+void ARBowing::printParameters(std::ostream& os) const
+{
+    /* TODO */
+
+    ARMusicalTag::printParameters(os);
 }

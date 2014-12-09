@@ -21,25 +21,18 @@
 
 class ARHarmonic : public ARMTParameter, public ARPositionTag
 {
-
 public :
-			ARHarmonic() : ARMTParameter()
-			{
-				rangesetting = ONLY;
-			}
-			virtual ~ARHarmonic()
-			{
-			};
+			 ARHarmonic() : ARMTParameter() { rangesetting = ONLY; }
+	virtual ~ARHarmonic() {};
 			
-			virtual void setTagParameterList(TagParameterList & tpl);
+	virtual void setTagParameterList(TagParameterList & tpl);
+
+    virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 			
-			virtual void print(int &indent) const;
-			virtual void PrintName(std::ostream & os) const;
-			virtual void PrintParameters(std::ostream & os) const;
-			
-protected :
-			static ListOfTPLs ltpls;
-			
+protected:
+	static ListOfTPLs ltpls;
 };
 
 #endif

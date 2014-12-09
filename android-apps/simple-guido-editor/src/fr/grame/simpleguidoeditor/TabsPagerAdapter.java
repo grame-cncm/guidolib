@@ -7,9 +7,6 @@ import fr.grame.simpleguidoeditor.fragment.GuidoCanvasFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.Log;
-
-import android.content.Context;
  
 public class TabsPagerAdapter extends FragmentPagerAdapter {
 

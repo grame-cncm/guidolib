@@ -17,6 +17,9 @@
 
 #include "defines.h"	// for TYPE_TIMEPOSITION
 
+#include "PrintVisitor.h"
+#include "Visitable.h"
+
 #define MIN_TIMEPOSITION Frac_0
 #define DURATION_7_4  Frac_7_4
 #define DURATION_3_2  Frac_3_2
@@ -53,7 +56,7 @@ class TimeUnwrap;
 /** \brief The base class for all AR objects. 
 	It contains all musical information : duration and time position.
 */
-class ARMusicalObject
+class ARMusicalObject : public Visitable
 {
   public:
 				 ARMusicalObject();
@@ -72,10 +75,9 @@ class ARMusicalObject
 		// must be re-designed!!! Should be put to another place  but is needed here from several alg.
 		virtual TYPE_TIMEPOSITION getRelativeEndTimePosition() const;
 
-		virtual std::ostream & operator<<(std::ostream &os) const;
+		virtual std::ostream & operator<<(std::ostream& os) const;
 
-		virtual void print(int &indent) const;
-
+	    
 		// introduced to get correct tie pos for notes in chords [DF 2012-03-19]
 		// do nothing at this level
 		virtual void setStartTimePosition(const TYPE_TIMEPOSITION  & pos)	{}
@@ -97,10 +99,12 @@ class ARMusicalObject
 		virtual void	setVoiceNum(int num)						{ fVoiceNum = num; }
 		virtual int		getVoiceNum() const							{ return fVoiceNum; }
 
-	static		bool	IsPowerOfTwoDenom(const TYPE_DURATION & dur);
+	static	bool	IsPowerOfTwoDenom(const TYPE_DURATION & dur);
 
 	virtual void	setDrawGR(bool onoff){drawGR = onoff;}
 	virtual bool	getDrawGR(){return drawGR;}
+
+    virtual void print(std::ostream& os) const;
 
     /**** Functions to avoid dynamic_cast ****/
     virtual ARMusicalObject  *isARRepeatBegin()   { return NULL; }
@@ -128,6 +132,9 @@ class ARMusicalObject
     virtual ARMusicalObject  *isARPossibleBreak() { return NULL; }
     /*****************************************/
 
+    /* Visitor design pattern */
+    virtual void accept(BaseVisitor *visitor) { visitor->visit(*this); }
+
   protected:
 		TYPE_TIMEPOSITION	relativeTimePosition;
 		int					fVoiceNum;		// voice number added for mapping info [DF - 10-11-09]
@@ -140,9 +147,6 @@ class ARMusicalObject
 
   private:
 		TYPE_DURATION		fDuration;
-
 };
 
 #endif
-
-

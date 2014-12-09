@@ -79,24 +79,20 @@ const char* ARNoteFormat::getStyle() const
 	return "";		
 }
 
-void ARNoteFormat::PrintParameters(std::ostream & os) const
+void ARNoteFormat::printName(std::ostream& os) const
 {
-	// todo 
-	if (style)
-	{	os << "<style=\"" << style->getValue() << "> "; }
-//		\",size=" 
-//		<< size << ",dx=" << dx << "> ";
+    os << "ARNoteFormat";
 }
 
-void ARNoteFormat::PrintName(std::ostream & os) const
+void ARNoteFormat::printGMNName(std::ostream& os) const
 {
-	os << "\\noteFormat";
-	if (assoc == ARMusicalTag::RA)
-	{
-		if (!getRange())
-			os << "Begin";
-		else
-			os << "(";
-	}
+    os << "\\noteFormat";
 }
 
+void ARNoteFormat::printParameters(std::ostream& os) const
+{
+    if (style)
+        os << "style: " << style->getValue() << ";";
+
+    ARMusicalTag::printParameters(os);
+}

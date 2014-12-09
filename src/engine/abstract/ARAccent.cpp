@@ -66,19 +66,17 @@ void ARAccent::browse(TimeUnwrap& mapper) const
 	mapper.AtPos (this, TimeUnwrap::kAccent);
 }
 
-void ARAccent::print(int &indent) const
+void ARAccent::printName(std::ostream& os) const
 {
+	os << "ARAccent";
 }
 
-void ARAccent::PrintName(std::ostream & os) const
+void ARAccent::printGMNName(std::ostream& os) const
 {
-	os << "\\accent";
-	if (getRange()) os << "(";
-
+    os << "\\accent";
 }
 
-void ARAccent::PrintParameters(std::ostream & ) const
+void ARAccent::printParameters(std::ostream& os) const
 {
+    ARMusicalTag::printParameters(os);
 }
-
-

@@ -170,10 +170,6 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 
 }
 
-void GRBeam::print(int &indent) const
-{
-}
-
 void GRBeam::addAssociation(GRNotationElement * grnot)
 {
 	if (error || !grnot) return ;

@@ -24,33 +24,31 @@
 class ARTHead : public ARMTParameter, public ARPositionTag
 {
 	public:
-
 		enum HEADSTATE { NOTSET, NORMAL, REVERSE, CENTER,  RIGHT, LEFT };
 
-				ARTHead(int st = ARTHead::NOTSET, ARTHead * p_savehead = NULL,
-						ARTHead * p_copyhead = NULL);
+				 ARTHead(int st = ARTHead::NOTSET, ARTHead * p_savehead = NULL, ARTHead * p_copyhead = NULL);
 
-				ARTHead(const ARTHead & arthead);
+				 ARTHead(const ARTHead & arthead);
 		virtual ~ARTHead() { }
 
 		ARMusicalObject * Copy() const; 
 
 		virtual bool IsStateTag() const { return true; }
 
-		virtual void print(int &indent) const { }
-		virtual std::ostream & operator << (std::ostream & os) const;
-		virtual void setTagParameterList(TagParameterList& tpl);
+	    virtual void printName(std::ostream& os) const;
+	    virtual void printGMNName(std::ostream& os) const;
+	    virtual void printParameters(std::ostream& os) const;
+
+        virtual void setTagParameterList(TagParameterList& tpl) {};
 
 		virtual const HEADSTATE getHeadState() const { return  headstate; }
 
 		virtual ARMusicalObject * getEndTag() const	{ return new ARTHead(NOTSET,NULL,savehead);	}
 
 	protected:
-
 		ARTHead * savehead;
 		HEADSTATE headstate;
 		static ListOfTPLs ltpls;
-
 };
 
 #endif

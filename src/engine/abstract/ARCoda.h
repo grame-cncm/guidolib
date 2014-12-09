@@ -20,11 +20,15 @@
 */
 class ARCoda : public ARJump
 {
-    public:	
-				    ARCoda();
-	virtual 	   ~ARCoda();
-	virtual void    PrintName( std::ostream & os ) const;
-	virtual void	browse(TimeUnwrap& mapper) const;
+public:	
+				 ARCoda();
+	virtual 	~ARCoda();
+
+	virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+    virtual void printParameters(std::ostream& os) const {};
+
+	virtual void browse(TimeUnwrap& mapper) const;
 
     /**** Function to avoid dynamic_cast ****/
     ARMusicalObject *isARCoda() { return this; }

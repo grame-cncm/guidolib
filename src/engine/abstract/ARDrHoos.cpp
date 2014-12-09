@@ -28,7 +28,6 @@ ARDrHoos::ARDrHoos(int p_inv)
 
 ARDrHoos::~ARDrHoos()
 {
-
 }
 
 void ARDrHoos::setTagParameterList(TagParameterList & tpl)
@@ -62,10 +61,7 @@ void ARDrHoos::setTagParameterList(TagParameterList & tpl)
 			assert(tpi);
 
 			if (tpi->pflag != TagParameter::NOTSET)
-			{
 				inverse = tpi->getValue();
-			}
-
 		}
 
 		delete rtpl;
@@ -79,13 +75,17 @@ void ARDrHoos::setTagParameterList(TagParameterList & tpl)
 
 }
 
-void ARDrHoos::PrintName(std::ostream & os) const
+void ARDrHoos::printName(std::ostream& os) const
 {
-	os << "\\DrHoos";
+    os << "ARDrHoos";
 }
 
-void ARDrHoos::PrintParameters(std::ostream & os) const
+void ARDrHoos::printGMNName(std::ostream& os) const
 {
-	if (inverse)
-		os << "<-1>";
-} 
+    os << "\\drHoos";
+}
+
+void ARDrHoos::printParameters(std::ostream& os) const
+{
+    ARMusicalTag::printParameters(os);
+}

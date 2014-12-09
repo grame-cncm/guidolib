@@ -46,11 +46,8 @@ void ARBarFormat::setTagParameterList(TagParameterList & tpl)
 		// create a list of string ...
 
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(
-			(
-			"S,style,staff,o"));
+		lstrs.AddTail(("S,style,staff,o"));
 		CreateListOfTPLs(ltpls,lstrs);
-
 	}
 
 	TagParameterList * rtpl = NULL;
@@ -68,13 +65,11 @@ void ARBarFormat::setTagParameterList(TagParameterList & tpl)
 			style = TagParameterString::cast(rtpl->RemoveHead());
 			assert(style);
 
-			if( style->TagIsSet() == false )
+			if (style->TagIsSet() == false )
 			{
 				delete style;
 				style = NULL;
 			}
-
-
 		}
 
 		delete rtpl;
@@ -87,22 +82,19 @@ void ARBarFormat::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARBarFormat::print(int &indent) const 
-{ 
-	PrintName (std::cout); 
-	PrintParameters (std::cout);
+void ARBarFormat::printName(std::ostream& os) const
+{
+    os << "ARBarFormat";
 }
 
-void ARBarFormat::PrintName(std::ostream & os) const
+void ARBarFormat::printGMNName(std::ostream& os) const
 {
-	os << "\\barFormat";
+    os << "\\barFormat";
 }
 
-void ARBarFormat::PrintParameters(std::ostream & os) const
+void ARBarFormat::printParameters(std::ostream& os) const
 {
-	if (style)
-		os << "<style=\"" << style->getValue() << "\"" << ">";
-	
+    ARMusicalTag::printParameters(os);
 }
 
 

@@ -65,15 +65,20 @@ void ARLabel::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARLabel::PrintName(std::ostream &os) const
+void ARLabel::printName(std::ostream& os) const
 {
-	os << "\\Label";
+    os << "ARLabel";
 }
 
-void ARLabel::PrintParameters(std::ostream &os) const
+void ARLabel::printGMNName(std::ostream& os) const
 {
-	if (!text) return;
-		
-	os << "<text=\"" << text->getValue() << "\">";
+    os << "\\label";
 }
 
+void ARLabel::printParameters(std::ostream& os) const
+{
+    if (text)
+        os << "text: \"" << text->getValue() << "\"; ";
+
+    ARMusicalTag::printParameters(os);
+}

@@ -17,6 +17,7 @@
 #include "nanosvg.h"
 #include <map>
 #include <sstream>
+#include <cstring>
 #elif __APPLE__
 #include "GFontOSX.h"
 #include "GSystemOSX.h"
@@ -36,7 +37,14 @@ CairoSystem gSystem (0);
 
 #endif
 
-
+/*
+  This file makes use of a forked version of nanosvg on github
+  (github.com/mikesol/nanosvg). nanosvg is originally intended
+  for parsing SVG files and giving information about the contents
+  in terms of paths.  The fork on github expands this to work on
+  font files.  To see comments indicating when nanosvg is coming
+  into play, grep this file looking for nSVG.
+*/
 
 //______________________________________________________________________________
 SVGFont::SVGFont(const char * name, int size, int properties, const char * guidofontfile, const char * guidofontspec) :
@@ -44,9 +52,15 @@ SVGFont::SVGFont(const char * name, int size, int properties, const char * guido
 {
 #ifdef INDEPENDENTSVG
     struct NSVGimage *fNSVGimage = 0;
-    if (!fGuidoFontFile.empty())
+    if (!fGuidoFontFile.empty()) {
+        // nSVG: parse the guido font file into an SVG "image"
+        // nSVG: note that "image" is a collection of drawn paths and
+        // nSVG: font glyphs. In the SVG we're parsing, we'll only look
+        // nSVG: at the font glyphs
         fNSVGimage = nsvgParseFromFile(fGuidoFontFile.c_str(), "px", size);
-    else if (!fGuidoFontSpec.empty()) {        
+    }
+    else if (!fGuidoFontSpec.empty()) {
+        // nSVG: like above, but reading a C string instead of from a file
         char* fontspec = const_cast<char *>(fGuidoFontSpec.c_str());
         fNSVGimage = nsvgParse(fontspec, "px", size);
     } else
@@ -55,6 +69,10 @@ SVGFont::SVGFont(const char * name, int size, int properties, const char * guido
     if (fNSVGimage) {
       fNSVGfont = 0;
       struct NSVGfont* font;
+      // nSVG: we iterate over all the fonts in the SVG and choose the one
+      // nSVG: whose name matches the name of the font we're looking for
+      // nSVG: in 2014, this is hardcoded as Guido2, but can in theory be
+      // nSVG: others
       for (font = fNSVGimage->fonts; font != NULL; font = font->next) {
         if (strcmp(fName.c_str(), font->fontFamily) == 0) {
           fNSVGfont = font;
@@ -62,6 +80,8 @@ SVGFont::SVGFont(const char * name, int size, int properties, const char * guido
         }
       }
     }
+    fSize = size;
+    fProperties = properties;
 #else
     fDevice = gSystem.CreateMemoryDevice (10,10);
     fFont = gSystem.CreateVGFont (name, size, properties);
@@ -104,15 +124,25 @@ void SVGFont::GetExtent( const char * s, int inCharCount, float * outWidth, floa
     if (fNSVGfont) {
         struct NSVGshape* shape;
         for (int i = 0; i < inCharCount; i++) {
+            // nSVG: we iterate over the font that we set in the constructor
+            // nSVG: of SVGFont, storing each glyph of the font in the
+            // nSVG: variable `shape`
             for (shape = fNSVGfont->shapes; shape != NULL; shape = shape->next) {
                 std::map<std::string, std::string>::const_iterator it;
+                // nSVG: make sure to use hexToCharMap (defined below) to
+                // nSVG: convert unicode to a character
+                // nSVG: TODO: change this to above function mapHexToChar,
+                // nSVG: which currently doesn't work for all char
                 it = hexToCharMap.find(std::string(shape->unicode));
                 std::string ucodeTransform = it == hexToCharMap.end() ? shape->unicode : it->second;
-                //std::string ucodeTransform = mapHexToChar(std::string(shape->unicode));
                 if ((std::string(1, s[i]) == std::string(shape->unicode)) || ucodeTransform == std::string(1, s[i])) {
-                    // use horizontal space unless it is the last character
+                    // nSVG: shape->bounds is a box represented as an
+                    // nSVG: array {left,top,right,bottom}
+                    // nSVG: use horizontal bounds for x length,
+                    // nSVG: if it is the last character, use x advance
                     float x_len = i == inCharCount - 1 ? shape->bounds[2] - shape->bounds[0] : shape->horizAdvX;
                     float x = x_len * fSize / fNSVGfont->unitsPerEm;
+                    // nSVG: use vertical bounds for y length,
                     float y = (shape->bounds[3] - shape->bounds[1]) * fSize / fNSVGfont->unitsPerEm;;
                     *outWidth += x;
                     if (y > *outHeight)
@@ -130,6 +160,8 @@ void SVGFont::GetExtent( const char * s, int inCharCount, float * outWidth, floa
 void SVGFont::GetExtent( unsigned char c, float * outWidth, float * outHeight, VGDevice * context ) const
 {
 #ifdef INDEPENDENTSVG
+    // nSVG: see comments in GetExtent above to see the logic of the
+    // nSVG: for loop below
     *outWidth = 0;
     *outHeight = 0;
     char cs[2] = {0};

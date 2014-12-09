@@ -201,8 +201,8 @@ void GRText::OnDraw( VGDevice & hdc ) const
 	const char * theText = st->text.c_str();
 	const int charCount = (int)st->text.size();
 
-	hdc.DrawString( drawPos.x + st->boundingBox.left + dx,
-				 drawPos.y + dy, theText, charCount );
+    if (charCount > 0)
+	    hdc.DrawString( drawPos.x + st->boundingBox.left + dx, drawPos.y + dy, theText, charCount);
 
 //hdc.SetTextColor( GColor( 0, 0, 0 ));	// DEBUG
 
@@ -211,10 +211,6 @@ void GRText::OnDraw( VGDevice & hdc ) const
 	if( mColRef )
 		hdc.SetFontColor( prevTextColor );
 	// hdc.SetBackgroundMode( nBackmode );
-}
-
-void GRText::print(int &indent) const
-{
 }
 
 const ARText * GRText::getARText() const

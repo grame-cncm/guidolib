@@ -24,20 +24,19 @@
 class ARSecondGlue : public ARMusicalTag
 		// , public ARMusicalObject
 {
-  public:
+public:
+                 ARSecondGlue() {}
+    virtual	    ~ARSecondGlue() {}
 
-						ARSecondGlue() {}
-		virtual			~ARSecondGlue() {}
+    virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+    virtual void printParameters(std::ostream& os) const;
 
-        virtual void	print(int &indent) const { std::cout << "ARSecondGlue" << std::endl; }
+    virtual bool IsStateTag() const { return true; }
 
-		virtual void	PrintName(std::ostream & os) const;
-		virtual bool	IsStateTag() const { return true; }
-        
-
-        /**** Function to avoid dynamic_cast ****/
-        ARMusicalObject *isARSecondGlue() { return this; }
-        /****************************************/
+    /**** Function to avoid dynamic_cast ****/
+    ARMusicalObject *isARSecondGlue() { return this; }
+    /****************************************/
 };
 
 #endif

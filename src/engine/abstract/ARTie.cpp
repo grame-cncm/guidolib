@@ -25,24 +25,10 @@ ARTie::~ARTie()
 {
 }
 
-void ARTie::print(int &indent) const
-{
-}
-
 // --------------------------------------------------------------------------
 void ARTie::browse(TimeUnwrap& mapper) const
 {
 	mapper.AtPos (this, TimeUnwrap::kTie);
-}
-
-void ARTie::PrintName(std::ostream & os) const
-{
-	os << "\\tie";
-
-	if (!getRange())
-	{
-		os <<"Begin";		
-	}
 }
 
 bool ARTie::MatchEndTag(const char * s)
@@ -52,4 +38,19 @@ bool ARTie::MatchEndTag(const char * s)
 	if (!getRange() && !strcmp("\\tieEnd",s))
 		return 1;
 	return 0;
+}
+
+void ARTie::printName(std::ostream& os) const
+{
+    os << "ARTie";
+}
+
+void ARTie::printGMNName(std::ostream& os) const
+{
+    os << "\\tie";
+}
+
+void ARTie::printParameters(std::ostream& os) const
+{
+    ARMusicalTag::printParameters(os);
 }

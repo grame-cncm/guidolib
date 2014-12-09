@@ -107,7 +107,7 @@ class GRSpaceForceFunction2
 
 		static void 	setOptForce(float newoptforce);
 
-		void writeAllExtents(std::ostream &os) const;
+		void writeAllExtents(std::ostream& os) const;
 
 		float EvaluateBreak(float extent);
 		void UnfreezeSpring(GRSpring *spr);

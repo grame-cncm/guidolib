@@ -35,6 +35,10 @@ macx {
 	FONT.files += ../../src/guido2.ttf
 	FONT.path  = Contents/Fonts
 	QMAKE_BUNDLE_DATA += FONT
+	DOC.files  = ../../doc/refcard/latex/RefCardsParams.pdf
+	DOC.files += ../../doc/refcard/latex/RefCardsTags.pdf
+	DOC.path  = Contents/Doc
+	QMAKE_BUNDLE_DATA += DOC
 }
 ios {
 	message("generates project for iOS")

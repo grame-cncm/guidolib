@@ -43,9 +43,11 @@ class ARNote : public ARMusicalEvent
 
     virtual ARMusicalObject * Copy() const;
 
-    virtual void print(int &indent) const;
-    virtual std::ostream & operator<<(std::ostream & os ) const;
-    virtual void	browse(TimeUnwrap& mapper) const;
+	virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
+
+    virtual void browse(TimeUnwrap& mapper) const;
 
     // start time position has been introduced to get correct time position for notes in chords [DF 2012-03-19]
     virtual void						setStartTimePosition(const TYPE_TIMEPOSITION  & pos)	{ fStartPosition = pos; }
@@ -78,12 +80,12 @@ class ARNote : public ARMusicalEvent
     void         setIsLonelyInCluster()                 { fIsLonelyInCluster = true; }
     bool         isLonelyInCluster()                    { return fIsLonelyInCluster; }
     bool         doesClusterHaveToBeDrawn()             { return fClusterHaveToBeDrawn; }
-    void         enableSubElements(bool enabled)                { fSubElementsHaveToBeDrawn = enabled; }
-    bool         haveSubElementsToBeDrawn()  const       { return fSubElementsHaveToBeDrawn; }
-	void 		 setTremolo(ARTremolo* trem)                    { fTremolo = trem; }
-    ARTremolo* getTremolo()                             { return fTremolo; }
+    void         enableSubElements(bool enabled)        { fSubElementsHaveToBeDrawn = enabled; }
+    bool         haveSubElementsToBeDrawn()  const      { return fSubElementsHaveToBeDrawn; }
+	void 		 setTremolo(ARTremolo* trem)            { fTremolo = trem; }
+    ARTremolo*   getTremolo()                           { return fTremolo; }
 
-    int		midiPitch() const;
+    int		     getMidiPitch() const;
 
     static int	detune2Quarters(float detune);
 

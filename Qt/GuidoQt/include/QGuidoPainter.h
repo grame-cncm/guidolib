@@ -161,7 +161,7 @@ class QGuidoPainter
 		*
 		*	\note drawRectangle is in QPainter's QPaintDevice coordinates.
 		*/
-        void drawPianoRoll(QPainter * painter, const QRect& drawRectangle, PianoRoll *pianoRoll);
+        GuidoErrCode drawPianoRoll(QPainter * painter, const QRect& drawRectangle, PianoRoll *pianoRoll);
 		
 		/**
 		*	\brief Returns the height corresponding to the specified width for the

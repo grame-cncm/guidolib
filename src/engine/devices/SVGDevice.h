@@ -75,8 +75,6 @@ class_export SVGDevice : public VGDevice
 	SVGSystem*		fSystem;
 	const char*		fGuidoFontFile;
 	const char*		fGuidoFontSpec;
-	std::ostream&	fStream;
-	svgendl			fEndl;
 	int				fWidth, fHeight;
 	const VGFont *	fMusicFont;
 	const VGFont *	fTextFont;
@@ -86,8 +84,6 @@ class_export SVGDevice : public VGDevice
 	int				fFontAlign;
 	float			fDPI;
 	
-	bool		fPushedPen, fPushedPenColor, fPushedPenWidth, fPushedFill, fScaled, fOffset;
-	int			fCurrFont; //, fCurrFontProperties;
 	VGColor	*	fPendingStrokeColor;
 	bool		fBeginDone;
 	
@@ -99,14 +95,22 @@ class_export SVGDevice : public VGDevice
 	float		alpha2float (const VGColor& color) const;
 	void		selectfont (int font);
 	void		checkfont ();
-	void		closegroup ();
 	const char* align2str (int align) const;
 	const char* baseline2str (int align) const;
 	void		putbase64 (VGDevice* pSrcDC) const;
+
+protected:
+	std::ostream& fStream;
+	svgendl		  fEndl;
+
+	bool		fPushedPen, fPushedPenColor, fPushedPenWidth, fPushedFill, fScaled, fOffset;
+	int			fCurrFont; //, fCurrFontProperties;
+
+	void		closegroup ();
 	
 private:
     void checkTagsOrder(TagType tagToClose);
-    std::vector<TagType> *fTagTypesVector; // Necessary to maintain tags order and to know when to close "font-family" tag
+    std::vector<TagType> fTagTypesVector; // Necessary to maintain tags order and to know when to close "font-family" tag
 
 	public:
 		enum	{ kSVGSizeDivider = 8 };		// used to compute the svg view size GuidoSVGExport and GuidoGetSVGMap
@@ -198,7 +202,7 @@ private:
 
 		virtual void*			GetBitMapPixels()		{ return 0; }
 		virtual void			ReleaseBitMapPixels()	{}
-		virtual const char*		GetImageData(const char* & outDataPtr, int& outLength)	{ return 0; };
+		virtual const char*		GetImageData(const char* & outDataPtr, int& outLength)	{ return 0; }
 		virtual void			ReleaseImageData(const char *) const					{}
 
 		/// temporary hack - must be removed asap

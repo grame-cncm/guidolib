@@ -29,48 +29,39 @@ class GRSystem;
 
 class GRTuplet : public GRPTagARNotationElement
 {
+public:
+    // enum bracestate { BRACENONE = 0, BRACELEFT = 1, BRACERIGHT = 2 };
 
-	public:
-		// enum bracestate { BRACENONE = 0, BRACELEFT = 1, BRACERIGHT = 2 };
+    class GRTupletSaveStruct : public GRPositionTag::GRSaveStruct
+    {
+    public:
+                 GRTupletSaveStruct()  {}
+        virtual ~GRTupletSaveStruct() {}
 
-		class GRTupletSaveStruct : public GRPositionTag::GRSaveStruct
-		{
-			public:
-						GRTupletSaveStruct()  {}
-				virtual ~GRTupletSaveStruct() {}
-				
-				NVPoint p1;
-				NVPoint p2;
-				NVPoint textpos;
-		};
+        NVPoint  p1;
+        NVPoint  p2;
+        NVPoint  textpos;
+    };
 
-						GRTuplet( GRStaff * inStaff, ARTuplet * artuplet );
-		virtual 		~GRTuplet();
+                 GRTuplet(GRStaff * inStaff, ARTuplet * artuplet);
+    virtual 	~GRTuplet();
 
-		virtual void 	OnDraw( VGDevice & hdc ) const;
-		virtual void 	print(int &indent) const;
-		virtual void 	tellPosition( GObject * caller, const NVPoint & inPos );
+    virtual void OnDraw( VGDevice & hdc ) const;
+    virtual void tellPosition( GObject * caller, const NVPoint & inPos );
 
-	protected:
+protected:
+    const   ARTuplet * getARTuplet() const;
+    virtual GRPositionTag::GRSaveStruct * getNewGRSaveStruct() { return new GRTupletSaveStruct; }
 
-		const ARTuplet * getARTuplet() const;
-		virtual GRPositionTag::GRSaveStruct * getNewGRSaveStruct() 
-			{
-				return new GRTupletSaveStruct; 
-			}
+    GDirection mDirection;
 
-			GDirection		mDirection;
+private:
+    void automaticPosition( GObject * caller, const NVPoint & inPos );
+    void manualPosition( GObject * caller, const NVPoint & inPos );
 
-	private:
-
-			void	automaticPosition( GObject * caller, const NVPoint & inPos );
-			void	manualPosition( GObject * caller, const NVPoint & inPos );
-			
-	//	bracestate mBraceState;
-			bool	mShowLeftBrace;
-			bool	mShowRightBrace;
-
-
+    //	bracestate mBraceState;
+    bool mShowLeftBrace;
+    bool mShowRightBrace;
 };
 
 #endif

@@ -23,31 +23,25 @@
 class ARRestFormat : public ARMTParameter, public ARPositionTag
 {
 public:
-
-	const TagParameterFloat *getPosy() { return posy; } 
 	ARRestFormat(ARRestFormat *p_saverf = NULL,
 		ARRestFormat *copyrf = NULL); 
 
 	virtual ~ARRestFormat();
 
 	virtual bool IsStateTag() const { return true; }
-
 	
 	virtual void setTagParameterList( TagParameterList & tpl);
-	virtual void print(int &indent) const { }
-	virtual void PrintName(std::ostream & os) const;
-	virtual void PrintParameters(std::ostream & os) const;
 
-	virtual ARRestFormat * getEndTag() const { return new ARRestFormat(NULL,saverf); }
+	virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
+
+	virtual ARRestFormat *getEndTag() const { return new ARRestFormat(NULL,saverf); }
 
 protected:
-
 	ARRestFormat * saverf;
 	
-	TagParameterFloat * posy;
 	static ListOfTPLs ltpls;
-
-
 };
 
 #endif 

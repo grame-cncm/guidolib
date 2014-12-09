@@ -33,19 +33,23 @@ Note about MIDI export:
 
 Note for emscripten:
 --------------------
-Make an emscripten directory in the build directory and compile using:
-cmake -DCMAKE_TOOLCHAIN_FILE=/path/to/toolchain -DCMAKE_BUILD_TYPE=Debug -DINDEPENDENTSVG=yes -DSTATICLIB=yes -G "Unix Makefiles" ../../cmake
+To build the javascript version of guido engine, you must have emscripten sdk installed on your computer.
+Go in javascript folder and do :
+	make
+libGUIDOEngine.js is generated.
 
-The path to your toolchain probably vaguely resembles something like:
-/Users/mikesolomon/devel/emsdk_portable/emscripten/1.16.0/cmake/Platform/Emscripten.cmake
-The toolchain (a .cmake file) should be in your emscripten distribution.
+You have different samples :
+- canvas.html use binary export of GUIDOEngine, parse the binary and draw in html canvas.
+- classSvg.html use the SVG export and add the SVG in html page.
+- guido.html is a complete test of the javascript GUIDOEngine API.
+- webComponent.html is an sample on how to use html 5 component for create a new html tag. A tag guido-viewer is created and integrated
+in the html page.
+- canvasDevice.html use internal javascript device. This device draw on html canvas. To intialize canvas, use jsCanvasDevice.js like in sample (all variable are use in build-in javascript).
 
-Then, in this directory, run:
-emcc libSGUIDOEngine.a -o libGUIDOEngine.js \
--s EXPORTED_FUNCTIONS="['_GuidoAbstractExport','_GuidoSVGExport','_GuidoInit','_GuidoOpenParser','_GuidoString2AR','_GuidoCloseParser','_GuidoAR2GR']"
+The performance of each method (SVG, parse binary or javascript device) are not the same on all browser. SVG is generally faster but on chrome it's the javascript device.
+Compilation option can make the library inconsistent result. The -O3 option is used and no problem are found with it. The -Oz option causes error at runtime.
 
-(you can export whatever functions you want from the api in the array above -
-make sure to put the leading underscore!)
+The javascript library is based on the C++ API of GUIDOEngine (class GuidoEngineAdapater)
 
 Note for Android:
 -------------------------
@@ -67,8 +71,9 @@ Note for Android:
       export PATH=$PATH:$PATH_TO_SDK/platform-tools
       export PATH=$PATH:$PATH_TO_STANDALONE_TOOLCHAIN/bin
 
-    The GUIDO android applications use the guidoengine java package
-    called guidoengine.jar.
+    The GUIDO android applications use:
+		- the guidoengine java package called guidoengine.jar
+		- incidentally, the drawcommand java package called drawcommand.jar
 
     To compile this, go to the java directory and do:
 
@@ -76,7 +81,7 @@ Note for Android:
     make class
     make jar
 
-    The jar is simlinked into all the android sample projects that need it
+    The jar needs to be simlinked/copied into all the android sample projects that need it
     under the libs/ directory.
 
     From the directory android-apps/guido-engine-android, run
@@ -84,14 +89,7 @@ Note for Android:
       ndk-build
 
     And this will build the library for android.
-    To test with a sample project, from the directory
-    android-apps/simple-guido-editor, run:
-
-      ndk-build
-      ant debug
-
-    And then install the application on your device.
-
+    To test with a sample project, read the README file in android-apps/simple-guido-editor directory.
       
 
 Note for Linux platforms:

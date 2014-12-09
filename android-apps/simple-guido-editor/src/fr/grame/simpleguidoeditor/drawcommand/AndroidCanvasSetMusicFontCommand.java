@@ -1,11 +1,9 @@
 package fr.grame.simpleguidoeditor.drawcommand;
-import guidoengine.drawcommand.SetMusicFontCommand;
+import drawcommand.SetMusicFontCommand;
 
 import android.graphics.Canvas;
 import fr.grame.simpleguidoeditor.GuidoCanvasView;
 import android.graphics.Typeface;
-
-import java.util.*;
    
 public class AndroidCanvasSetMusicFontCommand extends SetMusicFontCommand implements DrawToCanvas {
 

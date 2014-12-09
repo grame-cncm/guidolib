@@ -3,6 +3,7 @@
 macx {
 	message("generates project for MacOS")
 	CONFIG+= i386 x86_64
+	QMAKE_MAC_SDK = macosx10.9
 	QMAKE_CXXFLAGS += -mmacosx-version-min=10.6
 }
 
@@ -38,4 +39,4 @@ win32: {
 
 win32:LIBS += $$GUIDO
 
-INCLUDEPATH += ../../src/engine/include ../../src/engine/json
+INCLUDEPATH += ../../src/engine/include 

@@ -44,11 +44,11 @@ gmnfiles     = $(shell find ../gmn-examples -name "*.gmn") $(shell find ../regre
 pdfout		:= $(patsubst ../%.gmn, $(version)/%.pdf, $(gmnfiles))
 svgout		:= $(patsubst ../%.gmn, $(version)/%.svg, $(gmnfiles))
 
-sysmapout		:= $(patsubst ../%.gmn, $(version)/maps/system/%.map, $(gmnfiles))
-staffmapout		:= $(patsubst ../%.gmn, $(version)/maps/staff/%.map, $(gmnfiles))
-voicemapout		:= $(patsubst ../%.gmn, $(version)/maps/voice/%.map, $(gmnfiles))
-timemapout		:= $(patsubst ../%.gmn, $(version)/maps/time/%.map, $(gmnfiles))
-mapsout		:= $(sysmapout) $(staffmapout) $(voicemapout) $(timemapout)
+sysmapout	:= $(patsubst ../%.gmn, $(version)/maps/system/%.svg, $(gmnfiles))
+staffmapout	:= $(patsubst ../%.gmn, $(version)/maps/staff/%.svg, $(gmnfiles))
+voicemapout	:= $(patsubst ../%.gmn, $(version)/maps/voice/%.svg, $(gmnfiles))
+mapsout		:= $(sysmapout) $(staffmapout) $(voicemapout)
+timemapout	:= $(patsubst ../%.gmn, $(version)/maps/time/%.map, $(gmnfiles))
 
 leaksout 	:= $(patsubst ../%.gmn, $(version)/$(TOOLPATH)/%.leaks.txt, $(gmnfiles))
 midiout     := $(patsubst ../%.gmn, $(version)/%.mid, $(gmnfiles))
@@ -56,13 +56,17 @@ midiout     := $(patsubst ../%.gmn, $(version)/%.mid, $(gmnfiles))
 
 allpdf 		 = $(shell [ -d $(version) ] && find $(version) -name "*.pdf")
 allsvg 		 = $(shell [ -d $(version) ] && find $(version) -name "*.svg")
-allmap 		 = $(shell [ -d $(version) ] && find $(version)/maps -name "*.map")
+allmap 		 = $(shell [ -d $(version) ] && find $(version)/maps -name "*.svg")
+alltimemap 	 = $(shell [ -d $(version) ] && find $(version)/maps/time -name "*.map")
 leaksfiles  := $(patsubst ../%.gmn, $(version)/$(TOOLPATH)/%.leaks.out, $(gmnfiles))
 
-validpdf 	= $(patsubst %.pdf, %.outpdf, $(allpdf))
-validsvg 	= $(patsubst %.svg, %.outsvg, $(allsvg))
-validmap 	= $(patsubst %.map, %.outmap, $(allmap))
-validsvgwin = $(patsubst %.svg, %.outsvgwin, $(allsvg))
+validpdf 	    = $(patsubst %.pdf, %.outpdf, $(allpdf))
+validsvg 	    = $(patsubst %.svg, %.outsvg, $(allsvg))
+validsvgwin     = $(patsubst %.svg, %.outsvgwin, $(allsvg))
+validmap 	    = $(patsubst %.svg, %.outmap, $(allmap))
+validmapwin     = $(patsubst %.svg, %.outmapwin, $(allmap))
+validtimemap    = $(patsubst %.map, %.outtimemap, $(alltimemap))
+validtimemapwin = $(patsubst %.map, %.outtimemapwin, $(alltimemap))
 
 .PHONY: pdf svg
 
@@ -96,14 +100,29 @@ validate: $(validsvg)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
 	@echo Validating version $(version) with $(VERSION) $(tmp)
 	make validmap
+	make validtimemap
 
 validmap: $(validmap)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
 	@echo Validating version maps $(version) with $(VERSION) $(tmp)
+
+validtimemap: $(validtimemap)
+	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
+	@echo Validating version time maps $(version) with $(VERSION) $(tmp)
 	
 validateWin: $(validsvgwin)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
 	@echo Validating version $(version) with $(VERSION) $(tmp)
+	make validmapWin
+	make validtimemapWin
+
+validmapWin: $(validmapwin)
+	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
+	@echo Validating version maps $(version) with $(VERSION) $(tmp)
+
+validtimemapWin: $(validtimemapwin)
+	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
+	@echo Validating version time maps $(version) with $(VERSION) $(tmp)
 
 pdfvalidate: $(validpdf)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
@@ -118,18 +137,36 @@ pdfvalidate: $(validpdf)
 	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
 	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open -t $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
 	
-%.outmap: %.map
+%.outmap: %.svg
 	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
 	@[ -f  $(tmp) ] || echo $< : new file
 	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
 	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open -t $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
-	
+		
+%.outtimemap: %.map
+	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
+	@[ -f  $(tmp) ] || echo $< : new file
+	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
+	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open -t $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
+
 %.outsvgwin: %.svg
 	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
 	@[ -f  $(tmp) ] || echo $< : new file
 	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
 	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && C:/Program\ Files\ \(x86\)/Mozilla\ Firefox/firefox -new-tab $(patsubst $(version)/%, $(VERSION)/%, $<) -new-tab $<; true)
-		
+	
+%.outmapwin: %.svg
+	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
+	@[ -f  $(tmp) ] || echo $< : new file
+	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
+	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && C:/Program\ Files\ \(x86\)/Mozilla\ Firefox/firefox -new-tab $(patsubst $(version)/%, $(VERSION)/%, $<) -new-tab $<; true)
+			
+%.outtimemapwin: %.map
+	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
+	@[ -f  $(tmp) ] || echo $< : new file
+	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
+	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo $< : differences found)
+
 %.outpdf: %.pdf
 	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
 	@[ -f  $(tmp) ] || echo $< : new file
@@ -146,7 +183,7 @@ pdfclean:
 
 $(version)/%.pdf: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	$(guido2image) -f $< -o $@
+	$(guido2image) -b  off -f $< -o $@
 
 #########################################################################
 # midi output generation
@@ -185,8 +222,8 @@ checkcrash: $(LEAKTOOLS)
 
 #########################################################################
 # tools to generate svg files
-svgWin: $(svgout)
-svg: $(svgout) $(mapsout)
+svgWin: $(svgout) $(mapsout) $(timemapout)
+svg: $(svgout) $(mapsout) $(timemapout)
 
 svgclean: 
 	rm -f $(svgout)
@@ -200,21 +237,23 @@ $(version)/%.svg: ../%.gmn
 # tools to generate map files
 map: $(mapsout)
 
-$(version)/maps/system/%.map: ../%.gmn
+$(version)/maps/system/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	-guidogetsystemmap $<  > $@
+	-$(guido2svg) -systemmap true $<  > $@
 
-$(version)/maps/staff/%.map: ../%.gmn
+$(version)/maps/staff/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	-guidogetstaffmap $<  > $@
+	-$(guido2svg) -staffmap true $<  > $@
 
-$(version)/maps/voice/%.map: ../%.gmn
+$(version)/maps/voice/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	-guidogetvoicemap $<  > $@
+	-$(guido2svg) -voicemap true $<  > $@
 
+	
+timemap: $(timemapout)
 $(version)/maps/time/%.map: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	-guidogettimemap $<  > $@
+	-guidogettimemap $< > $@
 
 
 #########################################################################

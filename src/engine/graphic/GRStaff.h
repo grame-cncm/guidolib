@@ -55,7 +55,6 @@ class GRInstrument;
 class GRRepeatEnd;
 class GRRepeatBegin;
 class GRDoubleBar;
-class GRFermata;
 class GRIntens;
 class GRText;
 class GRBar;
@@ -117,7 +116,6 @@ class GRStaffState
 	protected:
 		// Meter-Parameters
 		bool	meterset;		// flag if meter-sig is given . TRUE, FALSE
-		int		mnum;			// MeasureNumber
 
 		ARMeter * curmeter;
 		// Noteparameter
@@ -205,6 +203,7 @@ class GRStaff : public GRCompositeNotationElement
         virtual unsigned char* getStffrmtColRef() const { return mStaffState.colRef; }
         virtual float       getLineThickness() const { return mStaffState.lineThickness; }
 		virtual	float       getDredgeSize() const;
+        virtual float       getMappingDredgeSize() const;
 		virtual float       getKeyPosition(TYPE_PITCH pitch, int numkeys = 1) const;
 		virtual GRNote *    getLastNote() const;
 
@@ -254,9 +253,8 @@ class GRStaff : public GRCompositeNotationElement
 
 		virtual void GGSOutput() const;
 		virtual void OnDraw( VGDevice & hdc ) const;
-		virtual void GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const;
-		virtual void print(int &indent) const;
-		void		setOnOff(bool onoff, TYPE_TIMEPOSITION tp);
+		virtual void GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
+				void		setOnOff(bool onoff, TYPE_TIMEPOSITION tp);
 		void		setOnOff(bool onoff);
 		bool		isStaffBeginOn();
 		bool		isStaffEndOn();
@@ -275,10 +273,10 @@ class GRStaff : public GRCompositeNotationElement
 
 		void	generatePositions();
 		float	currentLineThikness() const;
-
+        
+        void    print(std::ostream& os) const;
 
   protected:
-
 		void	DebugPrintState(const char * info) const;
 
 		void	DrawStaffUsingSymbolScale( VGDevice & hdc ) const;

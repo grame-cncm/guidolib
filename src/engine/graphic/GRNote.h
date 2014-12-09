@@ -52,7 +52,6 @@ class GRNote : public GREvent
 	virtual float 	setStemLength( float inLen )		= 0;
 	
 	virtual	void	getPitchAndOctave( int * outPitch, int * outOctave, int * outAccidentals ) const;
-	virtual void 	print(int &indent) const;
 
 	virtual GDirection	getDefaultThroatDirection() const;
 	virtual GDirection	getThroatDirection() const;

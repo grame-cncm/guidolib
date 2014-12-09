@@ -25,11 +25,10 @@
 class GRMusic;
 class ARMusic;
 class VGDevice;
-class GuidoFeedback;
 
 struct NodeAR
 {
-	int refCount;			// Number of GRMusic using this NodeAR.
+    int refCount;			// Number of GRMusic using this NodeAR.
 	ARMusic * armusic;
 };
 
@@ -59,7 +58,6 @@ struct GuidoGlobalSettings
 
 	// TODO: what are these for?
 	VGDevice * gDevice;
-	GuidoFeedback * gFeedback;
 };
 
 // these are the default global settings

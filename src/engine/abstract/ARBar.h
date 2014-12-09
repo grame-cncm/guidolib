@@ -21,48 +21,40 @@
 */
 class ARBar : // public ARMusicalObject, 
 	public ARMTParameter
-  {
-  public:
-		ARBar(const TYPE_TIMEPOSITION & timeposition);
-		
-		ARBar();
-
+ {
+ public:
+		         ARBar(const TYPE_TIMEPOSITION & timeposition);
+		         ARBar();
 		virtual ~ARBar();
 
-		virtual void print(int &indent) const;
-       // virtual ostream & operator<<(ostream &os) const;
-		virtual void PrintName(std::ostream & os) const;
-		virtual void PrintParameters(std::ostream & os) const;
+	    virtual void printName(std::ostream& os) const;
+	    virtual void printGMNName(std::ostream& os) const;
+	    virtual void printParameters(std::ostream& os) const;
 
 		virtual void setTagParameterList(TagParameterList & theTagParameterList);
 
-		int getBarNumber() const { return barnumber; }
+		void  setMeasureNumber(int inMeasureNumber)   { measureNumber = inMeasureNumber; }
+		int   getMeasureNumber()          const       { return measureNumber; }
+        bool  getMeasureNumberDisplayed() const       { return measureNumberDisplayed; }
+        void  setMeasureNumberDisplayed(bool display) { measureNumberDisplayed = display; }
+        bool  isMeasureNumberDisplayedSet() const     { return measureNumberDisplayedIsSet; }
 
-		void                setMeasureNumber(int inMeasureNumber) { measureNumber = inMeasureNumber; }
-		int                 getMeasureNumber()          const     { return measureNumber; }
-        TagParameterString *getMeasureNumberDisplayed() const     { return measureNumberDisplayed; }
-        void                setMeasureNumberDisplayed(bool display);
-
-		float  getMeasureNumberDxOffset()                         { return numDx; }
-		float  getMeasureNumberDyOffset()                         { return numDy; }
-
-		virtual bool operator==(const ARBar & bar)
-			{ return (barnumber == bar.barnumber); }
+		float getMeasureNumberDxOffset()                         { return numDx; }
+		float getMeasureNumberDyOffset()                         { return numDy; }
         
         /**** Function to avoid dynamic_cast ****/
         ARMusicalObject *isARBar() { return this; }
         /*****************************************/
 
   protected:
-		int  barnumber; // number of bar where barline starts
-		int  measureNumber;
-        TagParameterString *measureNumberDisplayed;
-
+		int   measureNumber;
+        bool  measureNumberDisplayed;
 		float numDx;
 		float numDy;
 
-		static ListOfTPLs ltpls;
-  };
+        bool measureNumberDisplayedIsSet;
 
+		static ListOfTPLs ltpls;
+};
 
 #endif

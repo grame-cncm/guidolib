@@ -24,27 +24,17 @@ class ARMusicalEvent;
 class ARBase :  public ARMusicalTag, public ARPositionTag
 {
 public:
+			 ARBase();
+	virtual	~ARBase() {}
 
-					ARBase();
-	virtual			~ARBase() {}
+    virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+	virtual void printParameters(std::ostream& os) const;
 
-	virtual void print(int &indent) const { }
-
-	virtual void PrintName( std::ostream & os) const;
-	virtual void PrintParameters( std::ostream & os) const;
-
-
-	void setBaseDuration(const TYPE_DURATION & tmp)
-		{ dur = tmp; }
-
-	void setBase(const TYPE_DURATION & tmp)
-		{ base = tmp; }
-
-	const TYPE_DURATION & getBaseDuration() const
-		{ return dur; }
-
-	const TYPE_DURATION & getBase() const
-		{ return base; }
+	void setBaseDuration(const TYPE_DURATION & tmp) { dur = tmp; }
+	void setBase(const TYPE_DURATION & tmp)         { base = tmp; }
+	const TYPE_DURATION & getBaseDuration() const   { return dur; }
+	const TYPE_DURATION & getBase() const           { return base; }
 
 	void addEvent(const ARMusicalEvent * ev);
 
@@ -60,7 +50,6 @@ public:
 		}
 
 protected:
-
 	// the parameters ...
 	TYPE_DURATION dur; // the dur of this tuplet
 	TYPE_DURATION base;   // the base of this tuplet
@@ -68,8 +57,6 @@ protected:
 	// as a note of duration equiv2,
 	// sample: 1/6 == 1/4 means, that a note of duration
 	// 1/6 is displayed as a quarter note.
-
 };
-
 
 #endif

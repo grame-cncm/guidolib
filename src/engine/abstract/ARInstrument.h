@@ -24,27 +24,21 @@ class TagParameterString;
 class ARInstrument : public ARMTParameter
 {
 	public:
-
-						ARInstrument();	
-		virtual 		~ARInstrument();	
+				 ARInstrument();	
+		virtual ~ARInstrument();	
 
 		virtual void setTagParameterList(TagParameterList & theTagParameterList);
 
-		virtual void print(int &indent) const;
+	    virtual void printName(std::ostream& os) const;
+	    virtual void printGMNName(std::ostream& os) const;
+	    virtual void printParameters(std::ostream& os) const;
 
 		const char* getName() const;
-		const char* getSecondName() const;
-		const TagParameterString * getPar1() const	 	{ return s1; }
-		const TagParameterString *getPar2() const	 	{ return s2; }
-		const TagParameterString *getTransp() const	 	{ return transp; }
-		virtual bool IsStateTag() const 				{ return true; }
-	
-		virtual std::ostream &operator<<(std::ostream &os) const;
+		const TagParameterString *getTransp() const { return transp; }
+		virtual bool IsStateTag() const 		    { return true; }
 
 	protected:
-
-		TagParameterString *s1;
-		TagParameterString *s2;
+		TagParameterString *name;
 		TagParameterString *transp;
 
 		static ListOfTPLs ltpls;

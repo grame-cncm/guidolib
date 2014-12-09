@@ -68,16 +68,6 @@ TYPE_TIMEPOSITION ARMusicalObject::getRelativeEndTimePosition() const
 	// da duration==0 !
 }
 
-void ARMusicalObject::print(int &indent) const
-{
-	TYPE_DURATION dur = getDuration();
-	TYPE_TIMEPOSITION tpos = getRelativeTimePosition();
-	std::cout << "ARMusicalObject: duration: " 
-		<<  dur.getNumerator() << '/' << dur.getDenominator()
-		<< " time pos: " 
-        <<  tpos.getNumerator() << '/' << tpos.getDenominator() << std::endl;
-}
-
 // provides a GUIDO/SALIERI-Conform output of the current object
 std::ostream & ARMusicalObject::operator<< (std::ostream & ostream) const
 {
@@ -167,3 +157,7 @@ bool ARMusicalObject::IsPowerOfTwoDenom(const TYPE_DURATION & dur /*, int maxpow
 	return ((x & -x) == x);
 }
 
+void ARMusicalObject::print(std::ostream& os) const
+{
+    os << "print() needs to be implemented in ARMusicalObject subclasses" << std::endl;
+}

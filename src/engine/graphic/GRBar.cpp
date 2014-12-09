@@ -128,10 +128,7 @@ void GRBar::InitGRBar( const TYPE_TIMEPOSITION & inTimePos, const GRStaff * inSt
 	const TagParameterFloat *paramDy = getARBar()->getDY();
 
 	mDx = (paramDx && paramDx->TagIsSet() ? paramDx->getValue() : 0);
-	mDy = (paramDy && paramDy->TagIsSet() ? paramDy->getValue() : 0);
-    
-    // - Get the size
-	const TagParameterFloat *paramSize = getARBar()->getSize();
+	mDy = (paramDy && paramDy->TagIsSet() ? paramDy->getValue() : 0);    
 }
 
 // --------------------------------------------------------------------------
@@ -152,7 +149,7 @@ void GRBar::GGSOutput() const
 // ----------------------------------------------------------------------------
 /** \brief Retrieves the mapping
 */
-void GRBar::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const
+void GRBar::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const
 {
 	if (sel == kGuidoBar)
 		SendMap (f, getRelativeTimePosition(), getDuration(), kBar, infos);
@@ -217,7 +214,7 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
 
     ARBar *arBar = getARBar();
 
-    if (!strcmp(arBar->getMeasureNumberDisplayed()->getValue(), "true") && arBar->getMeasureNumber() != 0) {
+    if (arBar->getMeasureNumberDisplayed() && arBar->getMeasureNumber() != 0) {
         const NVstring fontName("Arial");
         string attr("");
         const VGFont* hmyfont = FontManager::FindOrCreateFont((int) (80.0f * mTagSize), &fontName, &attr);
@@ -284,11 +281,6 @@ void GRBar::OnDraw(VGDevice & hdc ) const
 //	Map (hdc, map);
 	if (gBoundingBoxesMap & kMeasureBB)
 		DrawBoundingBox(hdc, kMeasureBBColor);
-}
-
-// --------------------------------------------------------------------------
-void GRBar::print(int &indent) const
-{
 }
 
 // --------------------------------------------------------------------------

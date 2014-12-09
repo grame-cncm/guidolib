@@ -102,7 +102,7 @@
 #include "ARTenuto.h"
 #include "ARFermata.h"
 #include "ARBreathMark.h"
-#include "ARPizz.h"
+#include "ARPizzicato.h"
 #include "ARHarmonic.h"
 
 #include "GRArticulation.h"
@@ -181,13 +181,13 @@ GRArticulation::GRArticulation(ARMusicalTag * inTag, float curLSPACE, bool ownsa
 	}
 	else if (tinfo == typeid(ARBreathMark))	 	setupBreathMark();
 	else if (tinfo == typeid(ARHarmonic))		setupHarmonic();
-	else if (tinfo == typeid(ARPizz))			
+	else if (tinfo == typeid(ARPizzicato))			
 	{
-		if ( ((ARPizz *) inTag)->getType() == ARPizz::SNAP )
+		if ( ((ARPizzicato *) inTag)->getType() == ARPizzicato::SNAP )
 			setupSnapPizz();
-		else if ( ((ARPizz *) inTag)->getType() == ARPizz::BUZZ)
+		else if ( ((ARPizzicato *) inTag)->getType() == ARPizzicato::BUZZ)
 			setupBuzzPizz();
-		else if ( ((ARPizz *) inTag)->getType() == ARPizz::FINGERNAIL)
+		else if ( ((ARPizzicato *) inTag)->getType() == ARPizzicato::FINGERNAIL)
 			setupFingernailPizz();
 		else setupLeftHPizz();
 	}
@@ -820,8 +820,3 @@ void GRArticulation::OnDraw(VGDevice & hdc) const
 {
 	GRTagARNotationElement::OnDraw(hdc);
 }
-
-void GRArticulation::print(int &indent) const
-{
-}
-

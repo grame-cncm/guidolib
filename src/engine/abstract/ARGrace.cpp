@@ -65,14 +65,17 @@ void ARGrace::setTagParameterList(TagParameterList& tpl)
 	tpl.RemoveAll();
 }
 
-void ARGrace::PrintName(std::ostream & os) const
+void ARGrace::printName(std::ostream& os) const
 {
-	os << "\\grace";
+    os << "ARGrace";
 }
 
-void ARGrace::PrintParameters(std::ostream & os) const
+void ARGrace::printGMNName(std::ostream& os) const
 {
-	if (!num) return;
-	
-	os << "<i=\"" << num->getValue() << "\">";
+    os << "\\grace";
+}
+
+void ARGrace::printParameters(std::ostream& os) const
+{
+    ARMusicalTag::printParameters(os);
 }

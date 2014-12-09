@@ -19,8 +19,8 @@ void FormatStringParser::parse( const char * str, FormatStringParserResult& res)
 	switchTo (kLitteral);
 
 	const char start = getSpecialStart();	// "["
-	const char end = getSpecialEnd();		// "]"
-	const char esc = getEscapeChar();		// "\\"
+	const char end   = getSpecialEnd();		// "]"
+	const char esc   = getEscapeChar();		// "\\"
 	bool escaped = false;
 
 	while (char c = *str++) {	

@@ -36,7 +36,6 @@ ARVolta::ARVolta()
 
 ARVolta::~ARVolta()
 {
-
 }
 
 void ARVolta::browse(TimeUnwrap& mapper) const
@@ -86,17 +85,25 @@ void ARVolta::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARVolta::PrintName( std::ostream & os ) const
+void ARVolta::printName(std::ostream& os) const
 {
-	os << "\\volta";
+    os << "ARVolta";
 }
 
-std::ostream & ARVolta::operator<<(std::ostream & os) const
+void ARVolta::printGMNName(std::ostream& os) const
 {
-	PrintName(os);
-	if (getRange())
-		os << "(";
-	return os << " ";
+    os << "\\volta";
+}
+
+void ARVolta::printParameters(std::ostream& os) const
+{
+    if (mark)
+        os << "mark: " << mark->getValue() << "; ";
+
+    if (format)
+        os << "format: " << format->getValue() << "; ";
+
+    ARMusicalTag::printParameters(os);
 }
 
 

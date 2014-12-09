@@ -21,23 +21,19 @@
 */
 class ARSlur : public ARBowing
 {
-	public:
+public:
+             ARSlur();
+             ARSlur(const ARSlur * slr);
+    virtual ~ARSlur();
 
-	    				ARSlur();
-	  					ARSlur(const ARSlur * slr);
-		virtual 		~ARSlur();
-	
+    virtual ARMusicalObject * Copy() const;
+    virtual bool MatchEndTag(const char *s);
 
-	  	virtual ARMusicalObject * Copy() const;
-	 	virtual bool MatchEndTag(const char *s);
+    virtual void printName(std::ostream& os) const;
+	virtual void printGMNName(std::ostream& os) const;
+    virtual void printParameters(std::ostream& os) const;
 
-		virtual void print(int &indent) const;
-		virtual void PrintName(std::ostream &os) const;
-
-		virtual void	browse(TimeUnwrap& mapper) const;
-
-		// virtual ostream & operator<<(ostream &os) const;
-
+    virtual void browse(TimeUnwrap& mapper) const;
 };
 
 

@@ -14,7 +14,7 @@
 #include <sstream>
 
 #include "VGColor.h"
-#include "ARAccol.h"
+#include "ARAccolade.h"
 #include "GRAccolade.h"
 #include "VGDevice.h"
 #include "GuidoDefs.h"
@@ -26,7 +26,7 @@
 using namespace std;
 
 // --------------------------------------------------------------------------
-GRAccolade::GRAccolade(ARAccol *arAccol)
+GRAccolade::GRAccolade(ARAccolade *arAccol)
 		: GRTagARNotationElement(arAccol, LSPACE)
 {
     int accolType = GRAccolade::kAccoladeCurly;

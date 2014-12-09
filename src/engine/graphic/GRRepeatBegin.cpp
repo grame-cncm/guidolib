@@ -80,7 +80,7 @@ void GRRepeatBegin::updateBoundingBox()
 // ----------------------------------------------------------------------------
 /** \brief Retrieves the mapping
 */
-void GRRepeatBegin::GetMap( GuidoeElementSelector sel, MapCollector& f, MapInfos& infos ) const
+void GRRepeatBegin::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const
 {
 	if (sel == kGuidoBar)
 		SendMap (f, getRelativeTimePosition(), getDuration(), kRepeatBegin, infos);

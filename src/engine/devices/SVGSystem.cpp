@@ -11,13 +11,17 @@
 
 */
 
+#include <string.h>
+
 #include "SVGSystem.h"
 #include "SVGDevice.h"
 #include "SVGFont.h"
+#include "GuidoFont.h"
+#include "TimesFont.h"
 
 using namespace std;
 //______________________________________________________________________________
-SVGSystem::SVGSystem(const char* guidofontfile, const char* guidofontspec) : 
+SVGSystem::SVGSystem(const char* guidofontfile, const char *guidofontspec) :
 	fGuidoFontFile(guidofontfile), fGuidoFontSpec(guidofontspec)
 {
 }
@@ -63,6 +67,16 @@ VGDevice* SVGSystem::CreateAntiAliasedMemoryDevice( int w, int h )
 //______________________________________________________________________________
 const VGFont* SVGSystem::CreateVGFont( const char * faceName, int size, int properties ) const
 {
+#ifdef INDEPENDENTSVG
+	// This system try to use embed font metrics
+	if(strcmp("Guido2", faceName) == 0) {
+		return new GuidoFont(faceName, size, properties);
+	} else {
+		if(strcmp("Times", faceName) == 0) {
+			return new TimesFont(faceName, size, properties);
+		}
+	}
+#endif
 	return new SVGFont (faceName, size, properties, fGuidoFontFile ? fGuidoFontFile : "", fGuidoFontSpec ? fGuidoFontSpec : "");
 }
 

@@ -645,11 +645,6 @@ void GRBowing::setOffset(int n_point,const NVPoint & p)
 }
 
 // -----------------------------------------------------------------------------
-void GRBowing::print(int &indent) const
-{
-}
-
-// -----------------------------------------------------------------------------
 void GRBowing::tellPosition(GObject * caller, const NVPoint & newPosition)
 {
 	GRNotationElement * grel = dynamic_cast<GRNotationElement *>(caller);

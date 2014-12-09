@@ -76,6 +76,8 @@ PianoRoll::PianoRoll(const char *midiFileName) :
 //--------------------------------------------------------------------------
 PianoRoll::~PianoRoll() 
 {
+    delete fVoicesColors;
+    delete fColors;
 }
 
 //--------------------------------------------------------------------------
@@ -87,7 +89,7 @@ void PianoRoll::init()
     setLimitDates(defaultStartDate, defaultEndDate);
     setPitchRange(kDefaultLowPitch, kDefaultHighPitch);
 
-    fColors = new std::stack<VGColor>();
+    fColors = new std::stack<VGColor *>();
 }
 
 //--------------------------------------------------------------------------
@@ -421,10 +423,10 @@ void PianoRoll::DrawKeyboard(PianoRoll::DrawParams &drawParams) const
     ostringstream octaveString;
     std::string cNoteString;
     
-    NVstring *font = new NVstring("Arial");
+    NVstring font("Arial");
     const VGFont *hTextFont = 0;
-	if (font && font->length() > 0)
-		hTextFont = FontManager::FindOrCreateFont((int) floor(drawParams.noteHeight * 0.8), font, new NVstring(""));
+	if (font.length() > 0)
+		hTextFont = FontManager::FindOrCreateFont((int) floor(drawParams.noteHeight * 0.8), &font, new NVstring(""));
 
 	drawParams.dev->SetTextFont(hTextFont);
     /******************************/
@@ -550,7 +552,7 @@ void PianoRoll::DrawVoice(ARMusicalVoice* v, PianoRoll::DrawParams &drawParams)
             std::pair<int, VGColor> pair = fVoicesColors->at(i);
 
             if (pair.first == voiceNum)
-                fColors->push(pair.second);
+                fColors->push(&pair.second);
         }
     }
     
@@ -563,10 +565,10 @@ void PianoRoll::DrawVoice(ARMusicalVoice* v, PianoRoll::DrawParams &drawParams)
 
             HSVtoRGB((float) drawParams.colorHue, 0.5f, 0.9f, r, g, b);
 
-            fColors->push(VGColor(r, g, b, 255));
+            fColors->push(new VGColor(r, g, b, 255));
         }
         
-        drawParams.dev->PushFillColor(fColors->top());
+        drawParams.dev->PushFillColor(*fColors->top());
     }
 
     fChord   = false;
@@ -618,7 +620,9 @@ void PianoRoll::DrawVoice(ARMusicalVoice* v, PianoRoll::DrawParams &drawParams)
     while (!fColors->empty()) {
 		drawParams.dev->PopFillColor();
 
+        VGColor *topColor = fColors->top();
         fColors->pop();
+        delete topColor;
 	}
 }
 
@@ -628,7 +632,7 @@ void PianoRoll::DrawMusicalObject(ARMusicalObject *e, TYPE_TIMEPOSITION date, TY
     ARNote *note = static_cast<ARNote *>(e->isARNote());
 
 	if (note) {
-		int pitch = note->midiPitch();
+		int pitch = note->getMidiPitch();
 
         if (pitch < 0)
             fChordDuration = dur; // prepare for potential chord
@@ -696,14 +700,15 @@ void PianoRoll::handleColor(ARNoteFormat* noteFormat, DrawParams &drawParams) co
     unsigned char colref[4];
 
     if (tps && tps->getRGB(colref)) {
-        fColors->push(VGColor(colref[0], colref[1], colref[2], colref[3]));
+        fColors->push(new VGColor(colref[0], colref[1], colref[2], colref[3]));
 
-        drawParams.dev->PushFillColor(fColors->top());
+        drawParams.dev->PushFillColor(*fColors->top());
     }
     else {
+        VGColor *topColor = fColors->top();
         fColors->pop();
-
         drawParams.dev->PopFillColor();
+        delete topColor;
     }
 }
 
@@ -815,7 +820,7 @@ int PianoRoll::detectARExtremePitch(bool detectLowerPitch)
             ARNote *note = static_cast<ARNote *>(musicalObject->isARNote());
 
             if (note) {
-                int pitch = note->midiPitch();
+                int pitch = note->getMidiPitch();
 
                 if (detectLowerPitch) {
                     if (pitch >= 0 && note->getOctave() >= -4 && pitch < extremePitch) {

@@ -1,0 +1,37 @@
+
+
+state of the art
+----------------------------
+éditeurs en ligne:
+- Noteflight
+- Melodus
+similaires à Finale ou Sibelius
+- Scorio - hybride, mise en page auto + compilation lilypond
+
+partage de partitions:
+Sibelius, MuseScore, Maestro. Capriccio
+
+compilation
+lilybin, weblily, omet
+
+
+problème
+----------------------------
+pas d'api, latence...
+
+
+solution
+----------------------------
+service, api...
+
+
+Guido Engine
+----------------------------
+services, api
+
+REST description
+REST practices
+
+The GUIDO server
+The Web API
+

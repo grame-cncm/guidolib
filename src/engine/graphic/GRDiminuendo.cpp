@@ -232,8 +232,9 @@ void GRDiminuendo::OnDraw( VGDevice & hdc) const
 	if (sse == 0)
 		return;
 
-    if (mColRef)
-    {
+    const VGColor prevTextColor = hdc.GetFontColor();
+
+    if (mColRef) {
         hdc.PushPenColor(VGColor(mColRef));
         hdc.PushFillColor(VGColor(mColRef));
         hdc.SetFontColor(VGColor(mColRef));
@@ -247,21 +248,15 @@ void GRDiminuendo::OnDraw( VGDevice & hdc) const
     const float xMarkingOffset = fDimInfos->points[1].x + 30;
     const float yMarkingOffset = fDimInfos->points[1].y - 277 + (mTagSize - 1) * 25;
 
-    OnDrawSymbol(hdc, fDimInfos->fMarkingSymbol, xMarkingOffset, yMarkingOffset, mTagSize);
+    if (fDimInfos->fMarkingSymbol > 0)
+        OnDrawSymbol(hdc, fDimInfos->fMarkingSymbol, xMarkingOffset, yMarkingOffset, mTagSize);
     
     hdc.PopPenWidth();
 
     if (mColRef)
     {
-        hdc.PopPenColor();
+        hdc.SetFontColor(prevTextColor);
         hdc.PopFillColor();
-        hdc.SetFontColor(VGColor());
+        hdc.PopPenColor();
     }
 }
-
-void GRDiminuendo::print(int &indent) const
-{
-}
-
-
-

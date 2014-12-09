@@ -8,46 +8,17 @@
 #
 
 srcdir := ../src/engine
-subprojects :=  $(wildcard $(srcdir)/* json)
-sources = $(wildcard $(srcdir)/*/*.cpp json/*.cpp)
-objects = $(patsubst json%,obj/json%, $(patsubst ../src/engine%,obj%, $(patsubst %.cpp,%.o,$(sources))))
+subprojects :=  $(wildcard $(srcdir)/* json binding device)
+sources = $(wildcard $(srcdir)/*/*.cpp json/*.cpp binding/*.cpp device/*.cpp)
+objects = $(patsubst device%, obj/device%, $(patsubst binding%, obj/binding%, $(patsubst json%,obj/json%, $(patsubst ../src/engine%,obj%, $(patsubst %.cpp,%.o,$(sources))))))
 
 GCC = emcc
-CXXFLAGS += $(addprefix -I, $(subprojects)) -Ijson -DINDEPENDENTSVG -DJSON_ONLY -O2
-
-EXPORT := "['_GuidoSVGExportWithFontSpec_retCString',\
-			'_GuidoAbstractExport_retCString',\
-			'_GuidoBinaryExport_retSize',\
-			'_GuidoInitWithIndependentSVG',\
-			'_GuidoOpenParser',\
-			'_GuidoString2AR',\
-			'_GuidoCloseParser',\
-			'_GuidoReleaseCString',\
-			'_GuidoCountVoices',\
-			'_GuidoGetPageCount',\
-			'_GuidoGetSystemCount',\
-			'_GuidoMakeDate',\
-			'_GuidoGetDateNum',\
-			'_GuidoGetDateDenom',\
-			'_GuidoFreeDate',\
-			'_GuidoFreeAR',\
-			'_GuidoFreeGR',\
-			'_GuidoDuration_retDate',\
-			'_GuidoFindEventPage_p',\
-			'_GuidoFindPageAt_p',\
-			'_GuidoGetPageDate_retDate',\
-			'_GuidoGetPageMap_JSON',\
-			'_GuidoGetStaffMap_JSON',\
-			'_GuidoGetVoiceMap_JSON',\
-			'_GuidoGetSystemMap_JSON',\
-			'_GuidoARretGR']"
-
+CXXFLAGS += $(addprefix -I, $(subprojects)) -DINDEPENDENTSVG -DJSON_ONLY -DCANVASSYSTEM -O3
+			
 target = libGUIDOEngine.js
 
-# emcc -O0 -g4 -s ASSERTIONS=2 -s SAFE_HEAP=1 -s ALIASING_FUNCTION_POINTERS=0 $(objects) -o $(target) -s ALLOW_MEMORY_GROWTH=1 -s EXPORTED_FUNCTIONS=$(EXPORT)
 $(target) : $(objects)
-	emcc -O2 $(objects) -o $(target) -s ALLOW_MEMORY_GROWTH=0 -s ASM_JS=1 -s EXPORTED_FUNCTIONS=$(EXPORT)
-
+	emcc -O3 --bind --memory-init-file 0 $(objects) -o $(target) -s ALLOW_MEMORY_GROWTH=0 -s ASM_JS=1 -s TOTAL_MEMORY=83886080 -s DISABLE_EXCEPTION_CATCHING=1 -s ASSERTIONS=0
 clean:
 	rm -f $(objects) $(target)
 	
@@ -61,3 +32,11 @@ obj/%.o: $(srcdir)/%.cpp
 obj/json/%.o: json/%.cpp
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	$(GCC) -c $(CXXFLAGS) $< -o $@
+
+obj/binding/%.o: binding/%.cpp
+	@[ -d $(@D) ] || mkdir -p $(@D)
+	$(GCC) -c $(CXXFLAGS) --bind -std=c++11 $< -o $@
+	
+obj/device/%.o: device/%.cpp
+	@[ -d $(@D) ] || mkdir -p $(@D)
+	$(GCC) -c $(CXXFLAGS) $< -o $@	

@@ -28,7 +28,6 @@ ARDrRenz::ARDrRenz(int p_inv)
 
 ARDrRenz::~ARDrRenz()
 {
-
 }
 
 void ARDrRenz::setTagParameterList(TagParameterList & tpl)
@@ -78,13 +77,17 @@ void ARDrRenz::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-void ARDrRenz::PrintName(std::ostream & os) const
+void ARDrRenz::printName(std::ostream& os) const
 {
-		os << "\\DrRenz";
+    os << "ARDrRenz";
 }
 
-void ARDrRenz::PrintParameters(std::ostream & os) const
+void ARDrRenz::printGMNName(std::ostream& os) const
 {
-		if (inverse)
-			os << "<-1>";
-} 
+    os << "\\drRenz";
+}
+
+void ARDrRenz::printParameters(std::ostream& os) const
+{
+    ARMusicalTag::printParameters(os);
+}
