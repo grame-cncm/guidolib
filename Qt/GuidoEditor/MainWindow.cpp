@@ -733,13 +733,31 @@ void MainWindow::about()
 //-------------------------------------------------------------------------
 void MainWindow::docTags()
 {
-    QDesktopServices::openUrl(QUrl(QApplication::applicationDirPath() + "/RefCardsTags.pdf", QUrl::TolerantMode));
+    bool docFound = false;
+    
+#ifdef Q_WS_MAC
+    docFound = QDesktopServices::openUrl(QUrl(QApplication::applicationDirPath() + "/Contents/doc/RefCardsTags.pdf", QUrl::TolerantMode));
+#else
+    docFound = QDesktopServices::openUrl(QUrl(QApplication::applicationDirPath() + "/doc/RefCardsTags.pdf", QUrl::TolerantMode));
+#endif
+    
+    if (!docFound)
+        QMessageBox::critical(this, "Doc not found", "RefCardsTags.pdf has not been found");
 }
 
 //-------------------------------------------------------------------------
 void MainWindow::docParams()
 {
-    QDesktopServices::openUrl(QUrl(QApplication::applicationDirPath() + "/RefCardsParams.pdf", QUrl::TolerantMode));
+    bool docFound = false;
+    
+#ifdef Q_WS_MAC
+    docFound = QDesktopServices::openUrl(QUrl(QApplication::applicationDirPath() + "/Contents/doc/RefCardsParams.pdf", QUrl::TolerantMode));
+#else
+    docFound = QDesktopServices::openUrl(QUrl(QApplication::applicationDirPath() + "/doc/RefCardsParams.pdf", QUrl::TolerantMode));
+#endif
+    
+    if (!docFound)
+        QMessageBox::critical(this, "Doc not found", "RefCardsParams.pdf has not been found");
 }
 
 //-------------------------------------------------------------------------
