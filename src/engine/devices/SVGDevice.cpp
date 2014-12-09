@@ -97,20 +97,22 @@ void SVGDevice::getsvgfont (const char* ptr, string& str) const
 
 void SVGDevice::printFont(std::ostream& out, const char* file, const char* spec) const
 {
-	ifstream is (file);
-	if (is.is_open()) {
-		is.seekg (0, ios::end);
-		int length = int(is.tellg());
-		is.seekg (0, ios::beg);
-		char * buffer = new char [++length];
-		// read data as a block:
-		is.read (buffer,length);
-		buffer[length-1] = 0;
-		string str;
-		getsvgfont (buffer, str);
-		delete [] buffer;
-		if (str.size())
-			out << "<defs>\n" << str << "\n</defs>" << endl;
+	if(file) {
+		ifstream is (file);
+		if (is.is_open()) {
+			is.seekg (0, ios::end);
+			int length = int(is.tellg());
+			is.seekg (0, ios::beg);
+			char * buffer = new char [++length];
+			// read data as a block:
+			is.read (buffer,length);
+			buffer[length-1] = 0;
+			string str;
+			getsvgfont (buffer, str);
+			delete [] buffer;
+			if (str.size())
+				out << "<defs>\n" << str << "\n</defs>" << endl;
+		}
 	} else if (spec) {
 		string str;
 		getsvgfont (spec, str);
