@@ -6,6 +6,8 @@
 #
 # this makefile can run from any location, provide the 'srcdir' variable is correctly set
 #
+# The TOTAL_MEMORY is the maximum memory allocated by emscripten. This value is specific (100663296) to be compliant with the asm.js and prevent warning at execution.
+# It can be increased if error occured.
 
 srcdir := ../src/engine
 subprojects :=  $(wildcard $(srcdir)/* json binding device)
@@ -18,7 +20,7 @@ CXXFLAGS += $(addprefix -I, $(subprojects)) -DINDEPENDENTSVG -DJSON_ONLY -DCANVA
 target = libGUIDOEngine.js
 
 $(target) : $(objects)
-	emcc -O3 --bind --memory-init-file 0 $(objects) -o $(target) -s ALLOW_MEMORY_GROWTH=0 -s ASM_JS=1 -s TOTAL_MEMORY=83886080 -s DISABLE_EXCEPTION_CATCHING=1 -s ASSERTIONS=0
+	emcc -O3 --bind --memory-init-file 0 $(objects) -o $(target) -s ALLOW_MEMORY_GROWTH=0 -s ASM_JS=1 -s TOTAL_MEMORY=100663296 -s DISABLE_EXCEPTION_CATCHING=1 -s ASSERTIONS=0
 clean:
 	rm -f $(objects) $(target)
 	
