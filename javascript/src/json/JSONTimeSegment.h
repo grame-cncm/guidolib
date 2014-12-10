@@ -23,8 +23,9 @@
  */
 
 /*!
- * \brief The JSONTimeSegment class.
- * This class is used to work in json environnement. It convert TimeSegment in json string or json_object.
+ * \brief The JSONTimeSegment class is used to work in json environnement.
+ *
+ * It convert TimeSegment in json string or json_object.
  * It can be construct with json_object.
  * The first GuidoDate must be called "start" and the second "end" in json.
  */

@@ -21,9 +21,8 @@
  * \addtogroup jsonMapping
  *  @{
  */
-
 /*!
- * \brief The JSONFloatRect class
+ * \brief The JSONFloatRect class is used to work in json environnement.
  */
 class JSONFloatRect : public FloatRect
 {
@@ -55,7 +54,7 @@ class JSONFloatRect : public FloatRect
 		/*!
 		 * \brief toJsonObject convert in json_object
 		 * It's user responsability to delete the object.
-		 * \return
+		 * \return a json_object
 		 */
 		json::json_object * toJsonObject();
 };

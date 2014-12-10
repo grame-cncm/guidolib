@@ -17,6 +17,7 @@ The performance of each method (SVG, parse binary or javascript device) are not 
 The javascript library is a mapping of the C++ API of guido engine. Most of methods of C++ classes are available in javascript. You can refers to the C++ documentation.
 Midi is not yet ported in javascript, so all related methods to midi are not available.
 The onDraw methods are not available in javascript, you can use export methods.
+GUIDOPianoRollAdapter.getMap is ported to javascript in GuidoScoreMap.getPianoRollMap to return json string.
 
 A lot of C data structure and enum are available. You can see source file in binding folder and html file in examples folder.
 Embind module of emscripten is used. You can refer to embind emscripten documentation.

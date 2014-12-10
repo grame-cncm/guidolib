@@ -23,8 +23,7 @@
 #include <string>
 
 /*!
- * \brief The JSONTime2GraphicMap class
- * This class is used to work in json environnement.
+ * \brief The JSONTime2GraphicMap class is used to work in json environnement.
  */
 class JSONTime2GraphicMap : public Time2GraphicMap
 {
