@@ -13,9 +13,9 @@
 #
 
 srcdir := ../src/engine
-subprojects :=  $(wildcard $(srcdir)/* json binding device)
-sources = $(wildcard $(srcdir)/*/*.cpp json/*.cpp binding/*.cpp device/*.cpp)
-objects = $(patsubst device%, obj/device%, $(patsubst binding%, obj/binding%, $(patsubst json%,obj/json%, $(patsubst ../src/engine%,obj%, $(patsubst %.cpp,%.o,$(sources))))))
+subprojects :=  $(wildcard $(srcdir)/* src/*)
+sources = $(wildcard $(srcdir)/*/*.cpp src/*/*.cpp)
+objects = $(patsubst src%, obj/src%, $(patsubst ../src/engine%,obj%, $(patsubst %.cpp,%.o,$(sources))))
 
 GCC = emcc
 CXXFLAGS += $(addprefix -I, $(subprojects)) -DINDEPENDENTSVG -DJSON_ONLY -DCANVASSYSTEM -O3
@@ -34,14 +34,14 @@ obj/%.o: $(srcdir)/%.cpp
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	$(GCC) -c $(CXXFLAGS) $< -o $@
 
-obj/json/%.o: json/%.cpp
+obj/src/json/%.o: src/json/%.cpp
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	$(GCC) -c $(CXXFLAGS) $< -o $@
 
-obj/binding/%.o: binding/%.cpp
+obj/src/binding/%.o: src/binding/%.cpp
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	$(GCC) -c $(CXXFLAGS) --bind -std=c++11 $< -o $@
 	
-obj/device/%.o: device/%.cpp
+obj/src/device/%.o: src/device/%.cpp
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	$(GCC) -c $(CXXFLAGS) $< -o $@	
