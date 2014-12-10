@@ -15,11 +15,20 @@
 */
 
 #include "GUIDOScoreMapAdapter.h"
+#include "GUIDOPianoRoll.h"
 #include <string>
 
 /*!
- * \brief The Map2json class.
- * This class is used in web environnement. It's the same API as GuidoScoreMap API but return json string.
+ * \addtogroup jsonMapping GUIDO Score Map to json
+ * \brief This set of classes is used in web environnement to return json string instead of complex C++ structure.
+ *   @{
+ */
+/*! \brief The Map2json class is used in web environnement to have time map in javascript.
+ *
+ * This class is bind to javascript with emscripten with the name GUIDOScoreMap.
+ * The real GUIDOScoreMapAdapter is not ported to javascript, it return complex C++ object.
+ * All the API of GuidoScoreMap is include here but return json string.
+ * The GUIDOPianoRollAdapter.getMap method is called getPianoRollMap in this class.
  */
 class Map2json
 {
@@ -89,8 +98,17 @@ class Map2json
 		*/
 		std::string getTimeMap(CARHandler gr);
 
+		/*!
+			\brief Gets the piano roll map
+			\param pr a pianoroll previously created with ar2PianoRoll or midi2PianoRoll
+			\param width the width of the piano roll (-1 to set the default width : 1024)
+			\param height the height of the canvas (-1 to set the default height : 512)
+			\return a json string which represent a Time2GraphicMap instance
+		*/
+		std::string getPianoRollMap(PianoRoll *pr, int width, int height);
+
 	private:
 		GuidoScoreMapAdapter scoreMap;
 };
-
+/*! @} */
 #endif

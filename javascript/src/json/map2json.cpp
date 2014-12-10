@@ -80,3 +80,11 @@ string Map2json::getTimeMap(CARHandler gr)
 	scoreMap.getTimeMap(gr, timeMap);
 	return timeMap.toString();
 }
+
+//----------------------------------------------------------------------
+string Map2json::getPianoRollMap(PianoRoll *pr, int width, int height)
+{
+	JSONTime2GraphicMap timeMap;
+	GuidoPianoRollGetMap(pr, width, height, timeMap);
+	return timeMap.toString();
+}
