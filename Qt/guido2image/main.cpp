@@ -15,6 +15,8 @@
 */
 
 /* change log:
+	version 1.2
+		- piano roll export added
 	version 1.1
 		- help message includes version number
 	version 1.0 (still not displayed)
@@ -48,7 +50,7 @@
 
 #define ERROR_BUFFER_SIZE 500
 //------------------------------------------------------------------------------------------
-#define kVersion	"1.21"
+#define kVersion	"1.22"
 //------------------------------------------------------------------------------------------
 
 #ifdef WIN32
