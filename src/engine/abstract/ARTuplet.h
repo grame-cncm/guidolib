@@ -19,6 +19,7 @@
 #include "ARPositionTag.h"
 #include "TagParameterFloat.h"
 #include "TagParameterString.h"
+#include <cstring>
 
 class ARBase;
 

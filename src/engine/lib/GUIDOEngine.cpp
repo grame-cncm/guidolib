@@ -573,7 +573,7 @@ GUIDOAPI(GuidoErrCode) GuidoOnDraw( GuidoOnDrawDesc * desc )
     std::cerr << "  --> " << drawingTime << "ms spent for GR drawing" << std::endl;
 #endif
 
-	return result;
+	return result != guidoNoErr ? result : err;
 }
 
 // --------------------------------------------------------------------------

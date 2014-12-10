@@ -6,6 +6,6 @@
 using namespace std;
 
 void stringToDate(string str, GuidoDate &date);
-string dateToString(GuidoDate &date);
+string dateToString(const GuidoDate &date);
 float dateToFloat(const GuidoDate &date);
 #endif

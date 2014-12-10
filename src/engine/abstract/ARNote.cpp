@@ -291,7 +291,7 @@ void ARNote::printGMNName(std::ostream& os) const
 
     durationStream << "/" << getDuration().getDenominator();
     
-    if (!strcmp(getName().c_str(), "empty"))
+	if (getName() != "empty")
         os << getName() << durationStream.str();
     else
         os << getName() << accidentalStr << getOctave() << durationStream.str();

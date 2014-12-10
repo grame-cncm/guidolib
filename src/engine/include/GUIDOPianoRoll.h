@@ -78,7 +78,7 @@ extern "C" {
 		\brief Creates a new piano roll from Midi, corresponding to type :
                              simplePianoRoll     -> basic piano roll
                              trajectoryPianoRoll -> every event is graphically linked to the previous one
-		\param PianoRollType the piano roll type
+		\param type the piano roll type
         \param midiFileName a midi file name
 		\return a guido piano roll.
 	*/
