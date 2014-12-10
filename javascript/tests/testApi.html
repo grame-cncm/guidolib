@@ -66,7 +66,7 @@
 		
 		// Test stream and draw 
 		var stream = guidoEngine.openStream();
-		var code = "{ [f g b/8 d";
+		var code = '{[f g b/8 d f/4 e';
 		guidoEngine.writeStream(stream, code);
 		
 		var ar2 = guidoEngine.stream2AR(p, stream);
@@ -139,7 +139,7 @@
 		guidoEngine.freeAR(ar3);
 		
 		// Score Map test
-		var scoreMap = new Module.GuidoScoreMap;
+		var scoreMap = new Module.GUIDOScoreMap;
 
 		guidoGetPageMap_JSON = document.getElementById('guidoGetPageMap_JSON');
 		pagemap_n = scoreMap.getPageMap( gr, 1, 1000.0, 1000.0 );
@@ -173,8 +173,6 @@
 		timemap_n = scoreMap.getTimeMap(ar);
 		guidoGetTimeMap_JSON.innerHTML = "<b>Time map :</b> "+ timemap_n;
 		
-		delete scoreMap;
-		
 		// Piano Roll test
 		var pianoRoll = new Module.GUIDOPianoRollAdapter;
 		var pr = pianoRoll.ar2PianoRoll(Module.PianoRollType.kSimplePianoRoll, ar2); // or kTrajectoryPianoRoll
@@ -182,7 +180,73 @@
 		var pianoRollResult = pianoRoll.svgExport(pr, -1, -1);
 		$("#pianoRollSvgExport").html(pianoRollResult);
 		
+		limitParams = {
+			startDate : {num : 1, denom : 4},
+			endDate : {num : 3, denom : 4},
+			lowPitch : 1,
+			highPitch : 7
+		};
+		pianoRoll.setLimits(pr, limitParams);
+		pianoRoll.enableKeyboard(pr, true);
+		pianoRoll.enableAutoVoicesColoration(pr, true);
+		pianoRoll.setPitchLinesDisplayMode(pr, Module.kDSharpLine + Module.kGSharpLine);
+		var pianoRollResult2 = pianoRoll.svgExport(pr, -1, -1);
+		$("#pianoRollSvgExport2").html(pianoRollResult2);
+		
+		$("#pianoRollKeyboardWidth").html("<b>piano Roll keyboard width for height 50 : </b>" + pianoRoll.getKeyboardWidth(pr, 50));
+		
+		pianoRollMap = scoreMap.getPianoRollMap(pr, -1, -1);
+		$("#pianoRollMap").html("<b>Piano roll map :</b>" + pianoRollMap);
+		
 		pianoRoll.destroyPianoRoll(pr);
+		
+		// Factory test
+		var factory = new Module.GUIDOFactoryAdapter;
+		factory.openMusic();
+		factory.openVoice();
+		factory.openTag("meter", 1);
+		factory.addTagParameterString("3/4");
+		factory.closeTag();
+		factory.openChord();
+		factory.openEvent("b");
+		factory.addSharp();
+		factory.closeEvent();
+		factory.openEvent("g");
+		factory.addFlat();
+		factory.closeEvent();
+		factory.closeChord();
+		factory.openEvent("c");
+		factory.setEventAccidentals(1);
+		factory.setOctave(2);
+		factory.setDuration(1, 2);
+		factory.closeEvent();
+		factory.openEvent("c");
+		factory.setEventAccidentals(1);
+		factory.setOctave(1);
+		factory.setDuration(1, 2);
+		factory.closeEvent();
+		
+		factory.closeVoice();
+		factory.openVoice();
+		factory.openEvent("e");
+		factory.addSharp();
+		factory.closeEvent();
+		factory.closeVoice();
+		
+		var arFromFactory = factory.closeMusic();
+		
+		pr = pianoRoll.ar2PianoRoll(Module.PianoRollType.kTrajectoryPianoRoll, arFromFactory);
+		//pianoRoll.setHtmlColorToVoice(pr, 1, 0x6495ed);
+		//pianoRoll.setRGBColorToVoice(pr, 2, 255, 0, 0, 0);
+		pianoRoll.enableMeasureBars(pr, true);
+		
+		$("#pianoRollSvgExport3").html(pianoRoll.svgExport(pr, -1, -1));
+		
+		pianoRoll.destroyPianoRoll(pr);
+		delete factory;
+		
+		// Free resource
+		delete scoreMap;
 		delete pianoRoll;
 		
 		guidoEngine.freeAR(ar2);
@@ -226,6 +290,8 @@
 		<div id="guidoGetTime_JSON"></div>
 		<div id="guidoGetPoint_JSON"></div>
 		<div id="guidoGetTimeMap_JSON"></div>
+		<div id="pianoRollMap"></div>
+		<div id="pianoRollKeyboardWidth"></div>
 		
 		<div id="guido_svg"></div>
 		<div id="guidoUpdateGR"></div>
@@ -233,6 +299,9 @@
 
 		<div id="guidoAbstractExport"></div>
 		<div id="pianoRollSvgExport"></div>
+		<div>Piano roll with keyboard :</div>
+		<div id="pianoRollSvgExport2"></div>
+		<div id="pianoRollSvgExport3"></div>
 		
 		<!-- need to insert dummy paragraph to load font -->
 		<p id="myP" style="visibility:hidden;font-family:Guido2;font-size:200px">x</p>
