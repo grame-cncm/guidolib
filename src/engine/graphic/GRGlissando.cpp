@@ -145,7 +145,6 @@ void GRGlissando::OnDraw( VGDevice & hdc ) const
 		//not implemented yet
 		//we have to implement new function of the device, in order to be able to rotate a symbol
 		
-		/*
 		float width = fglissInfos->points[3].x - fglissInfos->points[0].x;
 		float height = fglissInfos->points[3].y - fglissInfos->points[0].y;
 		float pasX = width/10;
@@ -248,7 +247,6 @@ void GRGlissando::updateGlissando( GRStaff * inStaff )
 	getGlissandoEndingContext( &fglissContext, sse );
 
 	ARGlissando * arGliss = static_cast<ARGlissando *>(getAbstractRepresentation());
-	const float staffLSpace = inStaff->getStaffLSPACE();
 	assert(arGliss);
 	
 
