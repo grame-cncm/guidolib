@@ -11,69 +11,134 @@
 
 */
 
-/*
 #include "GUIDOFactoryAdapter.h"
 
 GUIDOFactoryAdapter::GUIDOFactoryAdapter()
 {
+	GuidoFactoryOpen(&factory);
 }
 
 GUIDOFactoryAdapter::~GUIDOFactoryAdapter()
 {
+	GuidoFactoryClose(factory);
 }
 
-ARFactoryHandler GUIDOFactoryAdapter::open()
+GuidoErrCode GUIDOFactoryAdapter::openMusic()
 {
-
+	return GuidoFactoryOpenMusic(factory);
 }
 
-void GUIDOFactoryAdapter::close(ARFactoryHandler inFactory);
+ARHandler GUIDOFactoryAdapter::closeMusic()
+{
+	return GuidoFactoryCloseMusic(factory);
+}
 
-GuidoErrCode GUIDOFactoryAdapter::openMusic(ARFactoryHandler inFactory);
+GuidoErrCode GUIDOFactoryAdapter::openVoice()
+{
+	return GuidoFactoryOpenVoice(factory);
+}
 
-ARHandler GUIDOFactoryAdapter::closeMusic(ARFactoryHandler inFactory);
+GuidoErrCode GUIDOFactoryAdapter::closeVoice()
+{
+	return GuidoFactoryCloseVoice(factory);
+}
 
-GuidoErrCode GUIDOFactoryAdapter::openVoice(ARFactoryHandler inFactory);
+GuidoErrCode GUIDOFactoryAdapter::openChord()
+{
+	return GuidoFactoryOpenChord(factory);
+}
 
-GuidoErrCode GUIDOFactoryAdapter::closeVoice(ARFactoryHandler inFactory);
+GuidoErrCode GUIDOFactoryAdapter::closeChord()
+{
+	return GuidoFactoryCloseChord(factory);
+}
 
-GuidoErrCode GUIDOFactoryAdapter::openChord(ARFactoryHandler inFactory);
+GuidoErrCode GUIDOFactoryAdapter::insertCommata()
+{
+	return GuidoFactoryInsertCommata(factory);
+}
 
-GuidoErrCode GUIDOFactoryAdapter::closeChord(ARFactoryHandler inFactory);
+GuidoErrCode GUIDOFactoryAdapter::openEvent(const std::string &inEventName)
+{
+	return GuidoFactoryOpenEvent(factory, inEventName.c_str());
+}
 
-GuidoErrCode GUIDOFactoryAdapter::insertCommata(ARFactoryHandler inFactory);
+GuidoErrCode GUIDOFactoryAdapter::closeEvent()
+{
+	return GuidoFactoryCloseEvent(factory);
+}
 
-GuidoErrCode GUIDOFactoryAdapter::openEvent(ARFactoryHandler inFactory, const std::string inEventName);
+GuidoErrCode GUIDOFactoryAdapter::addSharp()
+{
+	return GuidoFactoryAddSharp(factory);
+}
 
-GuidoErrCode GUIDOFactoryAdapter::closeEvent(ARFactoryHandler inFactory);
+GuidoErrCode GUIDOFactoryAdapter::addFlat()
+{
+	return GuidoFactoryAddFlat(factory);
+}
 
-GuidoErrCode GUIDOFactoryAdapter::addSharp(ARFactoryHandler inFactory);
+GuidoErrCode GUIDOFactoryAdapter::setEventDots(int dots)
+{
+	return GuidoFactorySetEventDots(factory, dots);
+}
 
-GuidoErrCode GUIDOFactoryAdapter::addFlat(ARFactoryHandler inFactory);
+GuidoErrCode GUIDOFactoryAdapter::setEventAccidentals(int accident)
+{
+	return GuidoFactorySetEventAccidentals(factory, accident);
+}
 
-GuidoErrCode GUIDOFactoryAdapter::setEventDots(ARFactoryHandler inFactory, int dots);
+GuidoErrCode GUIDOFactoryAdapter::setOctave(int octave)
+{
+	return GuidoFactorySetOctave(factory, octave);
+}
 
-GuidoErrCode GUIDOFactoryAdapter::setEventAccidentals(ARFactoryHandler inFactory, int accident);
+GuidoErrCode GUIDOFactoryAdapter::setDuration(int numerator, int denominator)
+{
+	return GuidoFactorySetDuration(factory, numerator, denominator);
+}
 
-GuidoErrCode GUIDOFactoryAdapter::setOctave(ARFactoryHandler inFactory, int octave);
+GuidoErrCode GUIDOFactoryAdapter::openTag(const std::string &name, long tagID)
+{
+	return GuidoFactoryOpenTag(factory, name.c_str(), tagID);
+}
 
-GuidoErrCode GUIDOFactoryAdapter::setDuration(ARFactoryHandler inFactory, int numerator, int denominator);
+GuidoErrCode GUIDOFactoryAdapter::openRangeTag(const std::string &name, long tagID)
+{
+	return GuidoFactoryOpenRangeTag(factory, name.c_str(), tagID);
+}
 
-GuidoErrCode GUIDOFactoryAdapter::openTag(ARFactoryHandler inFactory, const std::string & name, long tagID);
+GuidoErrCode GUIDOFactoryAdapter::endTag()
+{
+	return GuidoFactoryEndTag(factory);
+}
 
-GuidoErrCode GUIDOFactoryAdapter::openRangeTag(ARFactoryHandler inFactory, const std::string& name, long tagID);
+GuidoErrCode GUIDOFactoryAdapter::closeTag()
+{
+	return GuidoFactoryCloseTag(factory);
+}
 
-GuidoErrCode GUIDOFactoryAdapter::endTag(ARFactoryHandler inFactory);
+GuidoErrCode GUIDOFactoryAdapter::addTagParameterString(const std::string &val)
+{
+	return GuidoFactoryAddTagParameterString(factory, val.c_str());
+}
 
-GuidoErrCode GUIDOFactoryAdapter::closeTag(ARFactoryHandler inFactory);
+GuidoErrCode GUIDOFactoryAdapter::addTagParameterInt(int val)
+{
+	return GuidoFactoryAddTagParameterInt(factory, val);
+}
 
-GuidoErrCode GUIDOFactoryAdapter::addTagParameterString(ARFactoryHandler inFactory, const std::string & val);
+GuidoErrCode GUIDOFactoryAdapter::addTagParameterFloat(double val)
+{
+	return GuidoFactoryAddTagParameterFloat(factory, val);
+}
 
-GuidoErrCode GUIDOFactoryAdapter::addTagParameterInt(ARFactoryHandler inFactory, int val);
+GuidoErrCode GUIDOFactoryAdapter::setParameterName(const std::string &name)
+{
+	return GuidoFactorySetParameterName(factory, name.c_str());
+}
 
-GuidoErrCode GUIDOFactoryAdapter::addTagParameterFloat(ARFactoryHandler inFactory, double val);
-
-GuidoErrCode GUIDOFactoryAdapter::setParameterName(ARFactoryHandler inFactory, const std::string& name);
-
-GuidoErrCode GUIDOFactoryAdapter::setParameterUnit(ARFactoryHandler inFactory, const std::string& unit);
-*/
+GuidoErrCode GUIDOFactoryAdapter::setParameterUnit(const std::string &unit)
+{
+	return GuidoFactorySetParameterUnit(factory, unit.c_str());
+}

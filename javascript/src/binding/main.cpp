@@ -20,7 +20,7 @@
 #include "GuidoParser.h"
 #include "GUIDOPianoRollAdapter.h"
 #include "PianoRoll.h"
-
+#include "GUIDOFactoryAdapter.h"
 #include "map2json.h"
 
 using namespace emscripten;
@@ -96,6 +96,22 @@ EMSCRIPTEN_BINDINGS(CStruct) {
 	emscripten::enum_<PianoRollType>("PianoRollType")
 			.value("kSimplePianoRoll", PianoRollType::kSimplePianoRoll)
 			.value("kTrajectoryPianoRoll", PianoRollType::kTrajectoryPianoRoll);
+
+	// Pitch constants
+	emscripten::constant("kCLine", kCLine);
+	emscripten::constant("kCSharpLine", kCSharpLine);
+	emscripten::constant("kDLine", kDLine);
+	emscripten::constant("kDSharpLine", kDSharpLine);
+	emscripten::constant("kELine", kELine);
+	emscripten::constant("kFLine", kFLine);
+	emscripten::constant("kFSharpLine", kFSharpLine);
+	emscripten::constant("kGLine", kGLine);
+	emscripten::constant("kGSharpLine", kGSharpLine);
+	emscripten::constant("kALine", kALine);
+	emscripten::constant("kASharpLine", kASharpLine);
+	emscripten::constant("kBLine", kBLine);
+	emscripten::constant("kAutoLines", kAutoLines);
+	emscripten::constant("kNoLine", kNoLine);
 }
 
 /*
@@ -155,7 +171,7 @@ EMSCRIPTEN_BINDINGS(EngineAdapter) {
 			.function("resetStream", &GuidoEngineAdapter::resetStream, allow_raw_pointers());
 
 	// Binding C++ class Map2json to have a javascript implementation of GuidoScoreMap
-	emscripten::class_<Map2json>("GuidoScoreMap")
+	emscripten::class_<Map2json>("GUIDOScoreMap")
 			.constructor<>()
 			.function("getPageMap", &Map2json::getPageMap, allow_raw_pointers())
 			.function("getStaffMap", &Map2json::getStaffMap, allow_raw_pointers())
@@ -163,7 +179,8 @@ EMSCRIPTEN_BINDINGS(EngineAdapter) {
 			.function("getSystemMap", &Map2json::getSystemMap, allow_raw_pointers())
 			.function("getTime", &Map2json::getTime)
 			.function("getPoint", &Map2json::getPoint)
-			.function("getTimeMap", &Map2json::getTimeMap, allow_raw_pointers());
+			.function("getTimeMap", &Map2json::getTimeMap, allow_raw_pointers())
+			.function("getPianoRollMap", &Map2json::getPianoRollMap, allow_raw_pointers());
 
 	// Binding C++ class adapter for GuidoPianoRoll
 	emscripten::class_<GUIDOPianoRollAdapter>("GUIDOPianoRollAdapter")
@@ -178,9 +195,36 @@ EMSCRIPTEN_BINDINGS(EngineAdapter) {
 			.function("setHtmlColorToVoice", &GUIDOPianoRollAdapter::setHtmlColorToVoice, allow_raw_pointers())
 			.function("enableMeasureBars", &GUIDOPianoRollAdapter::enableMeasureBars, allow_raw_pointers())
 			.function("setPitchLinesDisplayMode", &GUIDOPianoRollAdapter::setPitchLinesDisplayMode, allow_raw_pointers())
-			.function("getMap", &GUIDOPianoRollAdapter::getMap, allow_raw_pointers())
 			.function("svgExport", &GUIDOPianoRollAdapter::svgExport, allow_raw_pointers())
 			.function("javascriptExport", &GUIDOPianoRollAdapter::javascriptExport, allow_raw_pointers());
+
+	// Binding C++ class adapter for GuidoPianoRoll
+	emscripten::class_<GUIDOFactoryAdapter>("GUIDOFactoryAdapter")
+			.constructor<>()
+			.function("openMusic", &GUIDOFactoryAdapter::openMusic)
+			.function("closeMusic", &GUIDOFactoryAdapter::closeMusic, allow_raw_pointers())
+			.function("openVoice", &GUIDOFactoryAdapter::openVoice)
+			.function("closeVoice", &GUIDOFactoryAdapter::closeVoice)
+			.function("openChord", &GUIDOFactoryAdapter::openChord)
+			.function("closeChord", &GUIDOFactoryAdapter::closeChord)
+			.function("insertCommata", &GUIDOFactoryAdapter::insertCommata)
+			.function("openEvent", &GUIDOFactoryAdapter::openEvent)
+			.function("closeEvent", &GUIDOFactoryAdapter::closeEvent)
+			.function("addSharp", &GUIDOFactoryAdapter::addSharp)
+			.function("addFlat", &GUIDOFactoryAdapter::addFlat)
+			.function("setEventDots", &GUIDOFactoryAdapter::setEventDots)
+			.function("setEventAccidentals", &GUIDOFactoryAdapter::setEventAccidentals)
+			.function("setOctave", &GUIDOFactoryAdapter::setOctave)
+			.function("setDuration", &GUIDOFactoryAdapter::setDuration)
+			.function("openTag", &GUIDOFactoryAdapter::openTag)
+			.function("openRangeTag", &GUIDOFactoryAdapter::openRangeTag)
+			.function("endTag", &GUIDOFactoryAdapter::endTag)
+			.function("closeTag", &GUIDOFactoryAdapter::closeTag)
+			.function("addTagParameterString", &GUIDOFactoryAdapter::addTagParameterString)
+			.function("addTagParameterInt", &GUIDOFactoryAdapter::addTagParameterInt)
+			.function("addTagParameterFloat", &GUIDOFactoryAdapter::addTagParameterFloat)
+			.function("setParameterName", &GUIDOFactoryAdapter::setParameterName)
+			.function("setParameterUnit", &GUIDOFactoryAdapter::setParameterUnit);
 
 	// Black box object, just for passing argument pointer in method to and from javascript.
 	emscripten::class_<GuidoParser>("GuidoParser");
