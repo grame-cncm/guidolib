@@ -41,8 +41,8 @@ void GuidoFont::GetExtent( const char * s, int inCharCount, float * outWidth, fl
 	*outHeight = 0;
     for(int i = 0; i < inCharCount; i++)
     {
-		*outWidth += kGuidoFontWidth[s[inCharCount]] * size / kFontSize;
-		*outHeight += kGuidoFontHeight[s[inCharCount]] * size / kFontSize;
+		*outWidth += kGuidoFontWidth[(int)s[inCharCount]] * size / kFontSize;
+		*outHeight += kGuidoFontHeight[(int)s[inCharCount]] * size / kFontSize;
     }
 }
 

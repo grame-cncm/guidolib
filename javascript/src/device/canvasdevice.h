@@ -22,7 +22,7 @@
 #include <ostream>
 
 /*!
-\addtogroup VGSys Virtual Graphic System
+\addtogroup VGSysJavascript Virtual Graphic System
 @{
 */
 

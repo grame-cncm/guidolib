@@ -24,7 +24,8 @@
 
 
 /*!
-\addtogroup VGSys Virtual Graphic System
+\addtogroup VGSysJavascript Virtual Graphic System
+\brief Virtual Graphic System to draw on html5 canvas element.
 @{
 */
 

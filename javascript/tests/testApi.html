@@ -2,10 +2,10 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    	<link rel="stylesheet" href="stylesheets/guidostylesheet.css" type="text/css" charset="UTF-8" />
+    	<link rel="stylesheet" href="../stylesheets/guidostylesheet.css" type="text/css" charset="UTF-8" />
     
-		<script src="libGUIDOEngine.js" type="text/javascript"></script>
-		<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript" src="../libGUIDOEngine.js"></script>
+		<script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
 		<script type="text/javascript">
 	var guidoEngine;
 	$( document ).ready(function() {
@@ -66,7 +66,7 @@
 		
 		// Test stream and draw 
 		var stream = guidoEngine.openStream();
-		var code = "{ [f g b/8 d";
+		var code = '{[f g b/8 d f/4 e';
 		guidoEngine.writeStream(stream, code);
 		
 		var ar2 = guidoEngine.stream2AR(p, stream);
@@ -85,7 +85,6 @@
 		
 		// Free resource. GRHandler must be free before ARHandler
 		guidoEngine.freeGR(gr2);
-		guidoEngine.freeAR(ar2);
 		
 		// Test methods
 		var layoutSettings = guidoEngine.getDefaultLayoutSettings();
@@ -139,33 +138,123 @@
 		
 		guidoEngine.freeAR(ar3);
 		
-		/*
+		// Score Map test
+		var scoreMap = new Module.GUIDOScoreMap;
+
 		guidoGetPageMap_JSON = document.getElementById('guidoGetPageMap_JSON');
-		pagemap_n = GuidoGetPageMap_JSON( gr, 1, 1000.0, 1000.0 )
-		guidoGetPageMap_JSON.innerHTML = "<b>Page map for page 1:</b> "+Pointer_stringify(pagemap_n);
-		GuidoReleaseCString(pagemap_n);
+		pagemap_n = scoreMap.getPageMap( gr, 1, 1000.0, 1000.0 );
+		guidoGetPageMap_JSON.innerHTML = "<b>Page map for page 1:</b> "+ pagemap_n;
 
 		guidoGetStaffMap_JSON = document.getElementById('guidoGetStaffMap_JSON');
-		staffmap_n = GuidoGetStaffMap_JSON( gr, 1, 1000.0, 1000.0, 1 )
-		guidoGetStaffMap_JSON.innerHTML = "<b>Staff map for page 1, staff 1:</b> "+Pointer_stringify(staffmap_n);
-		GuidoReleaseCString(staffmap_n);
-
+		staffmap_n = scoreMap.getStaffMap( gr, 1, 1000.0, 1000.0, 1 );
+		guidoGetStaffMap_JSON.innerHTML = "<b>Staff map for page 1, staff 1:</b> "+ staffmap_n;
+		
 		guidoGetVoiceMap_JSON = document.getElementById('guidoGetVoiceMap_JSON');
-		voicemap_n = GuidoGetVoiceMap_JSON( gr, 1, 1000.0, 1000.0, 1 )
-		guidoGetVoiceMap_JSON.innerHTML = "<b>Voice map for page 1, voice 1:</b> "+Pointer_stringify(voicemap_n);
-		GuidoReleaseCString(voicemap_n);
+		voicemap_n = scoreMap.getVoiceMap( gr, 1, 1000.0, 1000.0, 1 );
+		guidoGetVoiceMap_JSON.innerHTML = "<b>Voice map for page 1, voice 1:</b> "+ voicemap_n;
 
 		guidoGetSystemMap_JSON = document.getElementById('guidoGetSystemMap_JSON');
-		systemmap_n = GuidoGetSystemMap_JSON( gr, 1, 1000.0, 1000.0)
-		//console.log(systemmap_n);
-		guidoGetSystemMap_JSON.innerHTML = "<b>System map for page 1:</b> "+Pointer_stringify(systemmap_n);
-		GuidoReleaseCString(systemmap_n);
-		*/		
+		systemmap_n = scoreMap.getSystemMap( gr, 1, 1000.0, 1000.0);
+		guidoGetSystemMap_JSON.innerHTML = "<b>System map for page 1:</b> "+ systemmap_n;
+		
+		guidoGetTime_JSON = document.getElementById('guidoGetTime_JSON');
+		var guidoDate = {
+			"num" : 2,
+			"denom" : 4
+		};
+		mapTime =  scoreMap.getTime(guidoDate, pagemap_n);
+		guidoGetTime_JSON.innerHTML = "<b>getTime for date 2/4:</b> "+ mapTime;
+	
+		guidoGetPoint_JSON = document.getElementById('guidoGetPoint_JSON');
+		map =  scoreMap.getPoint(10, 10, pagemap_n);
+		guidoGetPoint_JSON.innerHTML = "<b>getPoint:</b> "+ map;
+		
+		guidoGetTimeMap_JSON = document.getElementById('guidoGetTimeMap_JSON');
+		timemap_n = scoreMap.getTimeMap(ar);
+		guidoGetTimeMap_JSON.innerHTML = "<b>Time map :</b> "+ timemap_n;
+		
+		// Piano Roll test
+		var pianoRoll = new Module.GUIDOPianoRollAdapter;
+		var pr = pianoRoll.ar2PianoRoll(Module.PianoRollType.kSimplePianoRoll, ar2); // or kTrajectoryPianoRoll
+		
+		var pianoRollResult = pianoRoll.svgExport(pr, -1, -1);
+		$("#pianoRollSvgExport").html(pianoRollResult);
+		
+		limitParams = {
+			startDate : {num : 1, denom : 4},
+			endDate : {num : 3, denom : 4},
+			lowPitch : 1,
+			highPitch : 7
+		};
+		pianoRoll.setLimits(pr, limitParams);
+		pianoRoll.enableKeyboard(pr, true);
+		pianoRoll.enableAutoVoicesColoration(pr, true);
+		pianoRoll.setPitchLinesDisplayMode(pr, Module.kDSharpLine + Module.kGSharpLine);
+		var pianoRollResult2 = pianoRoll.svgExport(pr, -1, -1);
+		$("#pianoRollSvgExport2").html(pianoRollResult2);
+		
+		$("#pianoRollKeyboardWidth").html("<b>piano Roll keyboard width for height 50 : </b>" + pianoRoll.getKeyboardWidth(pr, 50));
+		
+		pianoRollMap = scoreMap.getPianoRollMap(pr, -1, -1);
+		$("#pianoRollMap").html("<b>Piano roll map :</b>" + pianoRollMap);
+		
+		pianoRoll.destroyPianoRoll(pr);
+		
+		// Factory test
+		var factory = new Module.GUIDOFactoryAdapter;
+		factory.openMusic();
+		factory.openVoice();
+		factory.openTag("meter", 1);
+		factory.addTagParameterString("3/4");
+		factory.closeTag();
+		factory.openChord();
+		factory.openEvent("b");
+		factory.addSharp();
+		factory.closeEvent();
+		factory.openEvent("g");
+		factory.addFlat();
+		factory.closeEvent();
+		factory.closeChord();
+		factory.openEvent("c");
+		factory.setEventAccidentals(1);
+		factory.setOctave(2);
+		factory.setDuration(1, 2);
+		factory.closeEvent();
+		factory.openEvent("c");
+		factory.setEventAccidentals(1);
+		factory.setOctave(1);
+		factory.setDuration(1, 2);
+		factory.closeEvent();
+		
+		factory.closeVoice();
+		factory.openVoice();
+		factory.openEvent("e");
+		factory.addSharp();
+		factory.closeEvent();
+		factory.closeVoice();
+		
+		var arFromFactory = factory.closeMusic();
+		
+		pr = pianoRoll.ar2PianoRoll(Module.PianoRollType.kTrajectoryPianoRoll, arFromFactory);
+		//pianoRoll.setHtmlColorToVoice(pr, 1, 0x6495ed);
+		//pianoRoll.setRGBColorToVoice(pr, 2, 255, 0, 0, 0);
+		pianoRoll.enableMeasureBars(pr, true);
+		
+		$("#pianoRollSvgExport3").html(pianoRoll.svgExport(pr, -1, -1));
+		
+		pianoRoll.destroyPianoRoll(pr);
+		delete factory;
+		
+		// Free resource
+		delete scoreMap;
+		delete pianoRoll;
+		
+		guidoEngine.freeAR(ar2);
+		
 		guidoEngine.freeGR(gr);
 		guidoEngine.freeAR(ar);
 		
 		guidoEngine.closeParser(p);
-		
 	}
 		</script>
 	</head>
@@ -194,18 +283,25 @@
 		<div id="guidoGetStream2"></div>
 		<div id="parserGetErrorCode"></div>
 
-		<!--
 		<div id="guidoGetPageMap_JSON"></div>
 		<div id="guidoGetStaffMap_JSON"></div>
 		<div id="guidoGetVoiceMap_JSON"></div>
 		<div id="guidoGetSystemMap_JSON"></div>
-		-->
-
+		<div id="guidoGetTime_JSON"></div>
+		<div id="guidoGetPoint_JSON"></div>
+		<div id="guidoGetTimeMap_JSON"></div>
+		<div id="pianoRollMap"></div>
+		<div id="pianoRollKeyboardWidth"></div>
+		
 		<div id="guido_svg"></div>
 		<div id="guidoUpdateGR"></div>
 		<div id="guido_svg2"></div>
 
 		<div id="guidoAbstractExport"></div>
+		<div id="pianoRollSvgExport"></div>
+		<div>Piano roll with keyboard :</div>
+		<div id="pianoRollSvgExport2"></div>
+		<div id="pianoRollSvgExport3"></div>
 		
 		<!-- need to insert dummy paragraph to load font -->
 		<p id="myP" style="visibility:hidden;font-family:Guido2;font-size:200px">x</p>

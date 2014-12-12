@@ -31,25 +31,9 @@ Note about MIDI export:
     in binary form in the src/midisharelight folder. Thus there is no additional step.
     On linux, you must get the library source code, compile and install.
 
-Note for emscripten:
+Note for javascript:
 --------------------
-To build the javascript version of guido engine, you must have emscripten sdk installed on your computer.
-Go in javascript folder and do :
-	make
-libGUIDOEngine.js is generated.
-
-You have different samples :
-- canvas.html use binary export of GUIDOEngine, parse the binary and draw in html canvas.
-- classSvg.html use the SVG export and add the SVG in html page.
-- guido.html is a complete test of the javascript GUIDOEngine API.
-- webComponent.html is an sample on how to use html 5 component for create a new html tag. A tag guido-viewer is created and integrated
-in the html page.
-- canvasDevice.html use internal javascript device. This device draw on html canvas. To intialize canvas, use jsCanvasDevice.js like in sample (all variable are use in build-in javascript).
-
-The performance of each method (SVG, parse binary or javascript device) are not the same on all browser. SVG is generally faster but on chrome it's the javascript device.
-Compilation option can make the library inconsistent result. The -O3 option is used and no problem are found with it. The -Oz option causes error at runtime.
-
-The javascript library is based on the C++ API of GUIDOEngine (class GuidoEngineAdapater)
+See readme.txt in javascript folder.
 
 Note for Android:
 -------------------------

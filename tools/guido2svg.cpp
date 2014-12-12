@@ -10,6 +10,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <cstring>
 #include <stdlib.h>
 
 #include "SVGSystem.h"
