@@ -319,12 +319,12 @@ Guido2ImageErrorCodes Guido2Image::writeImage( QGuidoPainter * guidoPainter, con
 	else if ( page > guidoPainter->pageCount() ) page = guidoPainter->pageCount();
 
 	QSizeF size = guidoPainter->pageSizeMM( page );
-	size.setWidth( 5 * size.width() * p.zoom);
-    size.setHeight( 5 * size.height() * p.zoom);
+	size.setWidth(size.width() * p.zoom);
+    size.setHeight(size.height() * p.zoom);
 	size = size2constrainedsize (size, p.sizeConstraints);
 //qDebug() << "Guido2Image::writeImage size:" << size;
 
-    if (size.width() > 10000 || size.height() > 10000)
+    if (size.width() * size.height() >= 300000000) // It seems that QPainter can't handle images with more than 300 millions of pixels
         return GUIDO_2_IMAGE_OUTPUT_FILE_OVERSIZED;
     else if (size.width() < 2 || size.height() < 2)
         return GUIDO_2_IMAGE_OUTPUT_FILE_UNDERSIZED;
@@ -369,7 +369,7 @@ Guido2ImageErrorCodes Guido2Image::writePianoRollImage(QGuidoPainter * guidoPain
 	size.setWidth(size.width() * p.zoom);
     size.setHeight(size.height() * p.zoom);
 
-    if (size.width() > 10000 || size.height() > 10000)
+    if (size.width() * size.height() >= 300000000) // It seems that QPainter can't handle images with more than 300 millions of pixels
         return GUIDO_2_IMAGE_OUTPUT_FILE_OVERSIZED;
     else if (size.width() < 1 || size.height() < 1)
         return GUIDO_2_IMAGE_OUTPUT_FILE_UNDERSIZED;

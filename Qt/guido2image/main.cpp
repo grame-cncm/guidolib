@@ -124,6 +124,7 @@ static void usage(const char * name)
 	cerr << endl;
 	cerr << "notes:        * If you use both -h and -w options, the score will be reduced/enlarged to fit" << endl;
 	cerr << "                inside the height*width rect ; the score's aspect ratio will be preserved." << endl;
+	cerr << "              * The output image can't have a pixel number higher than 300 millions." << endl;
 	cerr << "              * -z option has no effect with -h or -w options." << endl;
 	cerr << "              * -p, -h, -w and -z options are ignored when PDF format is selected." << endl;
 	cerr << "              * To export GIF images, you need the Qt framework to support GIF. (see Qt doc about GIF)" << endl;
