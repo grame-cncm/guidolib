@@ -6,21 +6,10 @@
 	<script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
 	<script type="text/javascript" src="../libGUIDOEngine.js"></script>
 	<script type="text/javascript" src="../js/jsCanvasDevice.js"></script>
-	<style type="text/css">
-		div.column {
-			display: block;
-			width: 50%;
-		}
-		#gmnSandbox {
-			width: 95%;
-		}
-		#guidoResult {
-			/*border: 0px;*/
-		}
-	</style>
 	<script>
 		// Global variable for guido engine
 		var guidoEngine;
+		var page = 1;
 		
 	// Process guido code
 	function processGMN() {
@@ -30,7 +19,20 @@
 		var gr = guidoEngine.ar2gr(ar);
 		
 		// draw score in html canvas
-		var result = guidoEngine.javascriptExport(gr, 1);
+		var result = guidoEngine.javascriptExport(gr, page);
+		
+		// Gestion of page browser
+		var nbpage = guidoEngine.getPageCount(gr);
+		if(page > 1) {
+			$("#previous").show();
+		} else {
+			$("#previous").hide();
+		}
+		if(nbpage > page) {
+			$("#next").show();
+		} else {
+			$("#next").hide();
+		}
 		
 		// Free handler
 		guidoEngine.freeGR(gr);
@@ -46,19 +48,25 @@
 		
 		// Init guido canvas (for drawing with javascript device)
 		gU1D0cANVA$.initGuidoCanvas();
+		
+		// Page browser initialisation
+		$("#previous").hide();
+		$("#next").hide();
 	});
 	</script>
 </head>
 <body>
+	<header><iframe src="../header/header.html"></iframe></header>
 	<div class="column" style="float:left">
 		<p>Type your GMN code here:</p>
 		<textarea id="gmnSandbox" rows="40"></textarea>
 	</div>
 	<div id="canvasContainer" class="column" style="float:right">
 		<canvas></canvas>
+		<a id="previous" href="#" onclick="page--; processGMN(); return false;">Previous page</a>
+		<a id="next" href="#" onclick="page++; processGMN(); return false;">Next page</a>
 	</div>
 	<div style="clear:both;"></div>
-	<div id="warning"></div>
 	<!-- need to insert dummy paragraph to load font -->
 	<p style="visibility:hidden;font-family:Guido2;">x</p>
 </body>
