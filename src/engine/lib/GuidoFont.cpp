@@ -41,13 +41,16 @@ void GuidoFont::GetExtent( const char * s, int inCharCount, float * outWidth, fl
 	*outHeight = 0;
     for(int i = 0; i < inCharCount; i++)
     {
-		*outWidth += kGuidoFontWidth[(int)s[inCharCount]] * size / kFontSize;
-		*outHeight += kGuidoFontHeight[(int)s[inCharCount]] * size / kFontSize;
+		*outWidth += kGuidoFontWidth[(int)s[i]] * size / kGuidoFontSize;
+		float height = kGuidoFontHeight[(int)s[i]] * size / kGuidoFontSize;
+		if(height > *outHeight) {
+			*outHeight = height;
+		}
     }
 }
 
 void GuidoFont::GetExtent( unsigned char c, float * outWidth, float * outHeight, VGDevice * context ) const
 {
-	*outWidth = kGuidoFontWidth[c] * size / kFontSize;
-	*outHeight = kGuidoFontHeight[c] * size / kFontSize;
+	*outWidth = kGuidoFontWidth[c] * size / kGuidoFontSize;
+	*outHeight = kGuidoFontHeight[c] * size / kGuidoFontSize;
 }
