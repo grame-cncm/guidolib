@@ -87,8 +87,9 @@ typedef struct Guido2ImageOptions {
 	Guido2ImageOptions () 
 		: stdInMode(false), hasLayout(false), page(1),
 		  inputFile(0), inputString(0), outputFile(0), imageFormat(0), scoreFormat("classic"),
-		  zoom(-1.f), height(-1), width(-1), 
-          systemsDistance(-1.f), systemsDistribution(0), optimalPageFill(0), proportionalRendering(0), resize2Page("on")  {}
+		  zoom(1), height(-1), width(-1),
+          systemsDistance(-1.f), systemsDistribution(0),
+          optimalPageFill(0), proportionalRendering(0), resize2Page("on")  {}
 } Guido2ImageOptions;
 
 //------------------------------------------------------------------------------------------
@@ -124,6 +125,7 @@ static void usage(const char * name)
 	cerr << endl;
 	cerr << "notes:        * If you use both -h and -w options, the score will be reduced/enlarged to fit" << endl;
 	cerr << "                inside the height*width rect ; the score's aspect ratio will be preserved." << endl;
+	cerr << "              * The output image can't have a pixel number higher than 300 millions." << endl;
 	cerr << "              * -z option has no effect with -h or -w options." << endl;
 	cerr << "              * -p, -h, -w and -z options are ignored when PDF format is selected." << endl;
 	cerr << "              * To export GIF images, you need the Qt framework to support GIF. (see Qt doc about GIF)" << endl;
@@ -203,7 +205,7 @@ static void parseOptions(int argc, char *argv[] , Guido2ImageOptions& opts )
 	if (opts.height == 0) error ("invalid height value.");
 	else if (opts.height < 0) opts.height = 0;
 	if (opts.zoom == 0.f) error ("invalid zoom value.");
-	else if (opts.zoom < 0) opts.zoom = 1.f;
+	else if (opts.zoom < 0) opts.zoom = 1;
 	if (opts.systemsDistance == 0.f) error ("invalid systems distance value.");
 	
 	// try to infer the output format from the output file extension
@@ -335,11 +337,11 @@ int main(int argc, char *argv[])
 	p.output = output.c_str();
 	//----------------------------------------------------
 	p.pageFormat = 0;
-	p.format = strToFormat (options.imageFormat);			// the image output format
-	p.layout = options2layout (options);					// the layout options (if any)
-	p.pageIndex = 0;										// page index starts at 0 (I guess it means all pages - to be checked)
+	p.format = strToFormat (options.imageFormat);			   // the image output format
+	p.layout = options2layout (options);					   // the layout options (if any)
+	p.pageIndex = 0;										   // page index starts at 0 (I guess it means all pages - to be checked)
 	p.sizeConstraints = QSize(options.width , options.height); // size constraints
-	p.zoom = options.zoom;									// zoom value
+	p.zoom = options.zoom / 5.0f;							   // zoom value     // C.D. 12/12/2014 : division by 5 added to avoid factor 5 introduced in Guido2Image
 
 	Guido2ImageErrorCodes error = GUIDO_2_IMAGE_SUCCESS;
 	QGuidoPainter::startGuidoEngine();						// starts the guido engine

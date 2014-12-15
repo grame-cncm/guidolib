@@ -1,5 +1,5 @@
-#ifndef GUIDOMap_H
-#define GUIDOMap_H
+#ifndef GUIDOScoreMap_H
+#define GUIDOScoreMap_H
 
 /*
   GUIDO Library

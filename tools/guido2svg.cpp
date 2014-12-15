@@ -39,8 +39,8 @@ static void usage (char* name)
 	cerr << "usage: " << tool << " [options] <gmn file>" << endl;
 	cerr << "       convert GMN code to svg" << endl;
 	cerr << "       options:" << endl;
-	cerr << "           	-f fontfile       : include the guido font taken from fontfile" << endl;
-	cerr << "           	-p pagenum        : an optional page number (default is 1)" << endl;
+	cerr << "           	-f fontfile        : include the guido font taken from fontfile" << endl;
+	cerr << "           	-p pagenum         : an optional page number (default is 1)" << endl;
 	cerr << "       reads the standard input when gmn file is omitted." << endl;
 	cerr << "           	-voicemap  boolean : enables or not event mapping draw (default is false)" << endl;
     cerr << "           	-staffmap  boolean : enables or not staff mapping draw (default is false)" << endl;

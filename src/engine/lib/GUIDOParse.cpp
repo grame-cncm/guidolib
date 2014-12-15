@@ -94,6 +94,7 @@ GUIDOAPI(ARHandler) GuidoFile2AR (GuidoParser *p, const char *file)
 #ifdef DEBUG
     if (ar) {
         cout << std::endl;
+        //GMNCodePrintVisitor *visitor = new GMNCodePrintVisitor(cout);
         PrintVisitor *visitor = new PrintVisitor(cout);
         ar->armusic->goThrough(visitor);
         cout << std::endl;
@@ -129,8 +130,8 @@ GUIDOAPI(ARHandler)	GuidoString2AR (GuidoParser *p, const char *str)
 #ifdef DEBUG
     if (ar) {
         cout << std::endl;
-        GMNCodePrintVisitor *visitor = new GMNCodePrintVisitor(cout);
-        //PrintVisitor *visitor = new PrintVisitor(cout);
+        //GMNCodePrintVisitor *visitor = new GMNCodePrintVisitor(cout);
+        PrintVisitor *visitor = new PrintVisitor(cout);
         ar->armusic->goThrough(visitor);
         cout << std::endl;
     }
@@ -168,6 +169,7 @@ GUIDOAPI(ARHandler)	GuidoStream2AR (GuidoParser *p, GuidoStream* s)
 #ifdef DEBUG
     if (ar) {
         cout << std::endl;
+        //GMNCodePrintVisitor *visitor = new GMNCodePrintVisitor(cout);
         PrintVisitor *visitor = new PrintVisitor(cout);
         ar->armusic->goThrough(visitor);
         cout << std::endl;

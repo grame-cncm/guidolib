@@ -76,8 +76,8 @@ using namespace std;
 // ==========================================================================
 const int GUIDOENGINE_MAJOR_VERSION = 1;
 const int GUIDOENGINE_MINOR_VERSION = 5;
-const int GUIDOENGINE_SUB_VERSION   = 6;
-const char* GUIDOENGINE_VERSION_STR = "1.5.6";
+const int GUIDOENGINE_SUB_VERSION   = 7;
+const char* GUIDOENGINE_VERSION_STR = "1.5.7";
 
 ARPageFormat * gARPageFormat = 0;
 
@@ -520,8 +520,8 @@ GUIDOAPI(GuidoErrCode) GuidoOnDraw( GuidoOnDrawDesc * desc )
     long startTime = GuidoTiming::getCurrentmsTime();
 
 	const bool drawReady = desc->hdc->BeginDraw();
-	if( drawReady )
-	{
+
+	if(drawReady) {
 		//if (desc->page <= 0)
 		//	desc->page = iter->page;
 
@@ -538,8 +538,6 @@ GUIDOAPI(GuidoErrCode) GuidoOnDraw( GuidoOnDrawDesc * desc )
 	}
 
     /**** MAPS ****/
-		
-    GuidoErrCode err;
 
     if (SVGMapDevice *mapDevice = dynamic_cast<SVGMapDevice *>(desc->hdc)) {
         int voicesNumber = GuidoCountVoices(desc->handle->arHandle);
@@ -548,15 +546,15 @@ GUIDOAPI(GuidoErrCode) GuidoOnDraw( GuidoOnDrawDesc * desc )
             Time2GraphicMap voiceMap;
             Time2GraphicMap staffMap;
             
-            err = GuidoGetVoiceMap(desc->handle, desc->page, (float) desc->sizex, (float) desc->sizey, i, voiceMap);
-            err = GuidoGetStaffMap(desc->handle, desc->page, (float) desc->sizex, (float) desc->sizey, i, staffMap);
+            result = GuidoGetVoiceMap(desc->handle, desc->page, (float) desc->sizex, (float) desc->sizey, i, voiceMap);
+            result = GuidoGetStaffMap(desc->handle, desc->page, (float) desc->sizex, (float) desc->sizey, i, staffMap);
 
             mapDevice->addVoiceMap(voiceMap);
             mapDevice->addStaffMap(staffMap);
         }
 
         Time2GraphicMap systemMap;
-        err = GuidoGetSystemMap(desc->handle, desc->page, (float) desc->sizex, (float) desc->sizey, systemMap);
+        result = GuidoGetSystemMap(desc->handle, desc->page, (float) desc->sizex, (float) desc->sizey, systemMap);
         mapDevice->addSystemMap(systemMap);
     }
 
@@ -573,7 +571,7 @@ GUIDOAPI(GuidoErrCode) GuidoOnDraw( GuidoOnDrawDesc * desc )
     std::cerr << "  --> " << drawingTime << "ms spent for GR drawing" << std::endl;
 #endif
 
-	return result != guidoNoErr ? result : err;
+	return result;
 }
 
 // --------------------------------------------------------------------------
