@@ -89,6 +89,7 @@ common:
 	cp -R ../../package/doc $(PACKAGE_NAME)
 	rm -rf $(PACKAGE_NAME)/doc/guidolib-?.*
 	cp ../../changelog.txt $(PACKAGE_NAME)/guido-changelog.txt
+	cp -R ../../Acknowledgments.txt $(PACKAGE_NAME)
 	cp ../GuidoEditor/changelog.txt $(PACKAGE_NAME)/GuidoEditor-changelog.txt
 	cp ../guido2image/changelog.txt $(PACKAGE_NAME)/guido2image-changelog.txt
 	cp ../GuidoSceneComposer/changelog.txt $(PACKAGE_NAME)/GuidoSceneComposer-changelog.txt
