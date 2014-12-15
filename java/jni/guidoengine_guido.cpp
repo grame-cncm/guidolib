@@ -21,48 +21,20 @@
 
 #include "guidoengine_guido.h"
 #include "GUIDOEngine.h"
+#include "VGSystem.h"
 #include "musicxml.h"
-
-#ifdef WIN32
-# include "GSystemWin32.h"
-# include "GSystemWin32GDIPlus.h"
-#elif __APPLE__
-# include "GSystemOSX.h"
-#elif __linux__
-# include "CairoSystem.h"
-#else
-# error "Unknown native system!"
-#endif
+#include "device_specific_functions.h"
 
 VGSystem * gSystem;
 bool gAntiAliasing = false;
 bool gMusicXML = false;
-
-static VGDevice * getInitDevice(bool antialiased) {
-#ifdef WIN32
-	extern bool gAntiAliasing;
-	gAntiAliasing = antialiased;
-	if (antialiased) {
-		GSystemWin32GDIPlus::Start();
-		gSystem = new GSystemWin32GDIPlus (0, 0);
-	}
-	else {
-		gSystem = new GSystemWin32 (0, 0);
-	}
-#elif __APPLE__
-	gSystem = new GSystemOSX (0, 0);
-#elif __linux__
-	gSystem = new CairoSystem (0);
-#endif
-	return gSystem->CreateMemoryDevice(20,20);
-}
 
 static jint guidoengine_guido_Init (JNIEnv * env, jstring guidofont, jstring textfont, bool antialiasing)
 {
 	static bool done = false;
 	if (!done) {
 		GuidoInitDesc desc;
-		desc.graphicDevice = getInitDevice(antialiasing);
+		desc.graphicDevice = device_specific::getInitDevice(antialiasing);
 		desc.musicFont = env->GetStringUTFChars(guidofont, JNI_FALSE);
 		desc.textFont  = env->GetStringUTFChars(textfont, JNI_FALSE);;
 		GuidoErrCode errcode = GuidoInit (&desc);

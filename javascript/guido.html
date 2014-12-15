@@ -1,0 +1,213 @@
+<!doctype html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    	<link rel="stylesheet" href="stylesheets/guidostylesheet.css" type="text/css" charset="UTF-8" />
+    
+		<script src="libGUIDOEngine.js" type="text/javascript"></script>
+		<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript">
+	var guidoEngine;
+	$( document ).ready(function() {
+		// Guido engine initialisation
+		guidoEngine = new Module.GuidoEngineAdapter;
+		guidoEngine.init();
+		
+		// Test for gmn code
+		doit("{ [f# g#/8 a&/4 b&/8 f#/4 g#], [f g a/8 b f/4 g] } ");
+		
+		// Stop and delete engine.
+		guidoEngine.shutdown();
+		delete guidoEngine;
+	});
+
+	function doit( gmn ) {
+		var p = guidoEngine.openParser();
+		var ar = guidoEngine.string2AR (p, gmn);
+		
+		// Draw in red
+		guidoEngine.markVoice(ar, 2, {num : 1, denom : 4}, {num : 3, denom : 4}, 255, 0, 0);
+		
+		var settings= {
+			systemsDistance : 75,
+			systemsDistribution : 1,
+			systemsDistribLimit : 0.25,
+			force : 750,
+			spring : 1.1,
+			neighborhoodSpacing : 0,
+			optimalPageFill : 1,
+			resizePage2Music : 1,
+			proportionalRenderingForceMultiplicator : 0
+		};
+		var gr = guidoEngine.ar2grSettings(ar, settings);
+		//var gr = guidoEngine.ar2gr(ar);
+		$("#guidoResizePageToMusic").html("<b>guidoResizePageToMusic Error Code : </b>" + guidoEngine.resizePageToMusic(gr).value);
+		
+		var result = guidoEngine.svgExport(gr, 1);
+		
+		// Draw the export svg on page
+		$("#guido_svg").html(result);
+		
+		// Modify settings and re-draw
+		settings= {
+			systemsDistance : 75,
+			systemsDistribution : 1,
+			systemsDistribLimit : 0.25,
+			force : 600,
+			spring : 1.7,
+			neighborhoodSpacing : 0,
+			optimalPageFill : 1,
+			resizePage2Music : 1,
+			proportionalRenderingForceMultiplicator : 0
+		};
+		guidoEngine.updateGRSettings(gr, settings);
+		result = guidoEngine.svgExport(gr, 1);
+		$("#guidoUpdateGR").html(result);
+		
+		// Test stream and draw 
+		var stream = guidoEngine.openStream();
+		var code = "{ [f g b/8 d";
+		guidoEngine.writeStream(stream, code);
+		
+		var ar2 = guidoEngine.stream2AR(p, stream);
+		var gr2 = guidoEngine.ar2gr(ar2);
+		var result2 = guidoEngine.svgExport(gr2, 1);
+		$("#guido_svg2").html(result2);
+		
+		$("#guidoGetStream").html("<b>guidoGetStream </b>" + guidoEngine.getStream(stream));
+		guidoEngine.resetStream(stream);
+		$("#guidoGetStream2").html("<b>guidoGetStream after reset</b>" + guidoEngine.getStream(stream));
+		guidoEngine.closeStream(stream);
+		
+		// Test abstract export
+		var abstractExport = guidoEngine.abstractExport(gr2, 1);
+		$("#guidoAbstractExport").html("<b>Abstract Export</b><br/>" + abstractExport);
+		
+		// Free resource. GRHandler must be free before ARHandler
+		guidoEngine.freeGR(gr2);
+		guidoEngine.freeAR(ar2);
+		
+		// Test methods
+		var layoutSettings = guidoEngine.getDefaultLayoutSettings();
+		$("#guidolayoutsettings").html("<b>Default layout settings</b> systemsDistance = " + layoutSettings.systemsDistance + " / spring = " + layoutSettings.spring);
+		$("#guidoCountVoices").html("<b>Number of voices:</b> " + guidoEngine.countVoices(ar));
+		$("#guidoGetPageCount").html("<b>Number of pages:</b> " + guidoEngine.getPageCount(gr));
+		$("#guidoGetSystemCount").html("<b>Number of systems on page 1:</b> " + guidoEngine.getSystemCount(gr, 1));
+		var date = guidoEngine.duration(gr);
+		$("#guidoDuration").html("<b>Duration :</b> num = " + date.num + " / denom = "+ date.denom);
+		
+		date = { num : 1, denom : 4};
+		var page = guidoEngine.findEventPage(gr, date);
+		$("#guidoFindEventPage").html("<b>Page at event 1/4:</b> " + page);
+		
+		page = guidoEngine.findPageAt(gr, date);
+		$("#guidoFindPageAt").html("<b>Page at 1/4:</b> " + page);
+		
+		date = guidoEngine.getPageDate(gr, 1);
+		$("#guidoGetPageDate").html("<b>Page date for page 1:</b> num = " + date.num + " / denom = "+ date.denom);
+		
+		$("#guidoGetDrawBoundingBoxes").html("<b>guidoGetDrawBoundingBoxes : </b>" + guidoEngine.getDrawBoundingBoxes());
+		guidoEngine.setDrawBoundingBoxes(2);
+		$("#guidoGetDrawBoundingBoxes2").html("<b>guidoGetDrawBoundingBoxes after set 2 : </b>" + guidoEngine.getDrawBoundingBoxes());
+		
+		var pageFormat = guidoEngine.getPageFormat(gr, 1);
+		$("#guidoGetPageFormat").html("<b>guidoGetPageFormat = </b> width = " + pageFormat.width + " / height = " + pageFormat.height);
+		pageFormat.width = 2000.2;
+		pageFormat.height = 3000.1;		
+		guidoEngine.setDefaultPageFormat(pageFormat);
+		pageFormat = guidoEngine.getDefaultPageFormat()
+		$("#guidoGetDefaultPageFormat").html("<b>guidoGetDefaultPageFormat after set = </b> width = " + pageFormat.width + " / height = " + pageFormat.height);
+		$("#guidoUnit2CM").html("<b>guidoUnit2CM 2.3</b> " + guidoEngine.unit2CM(2.3));
+		$("#guidoCM2Unit").html("<b>guidoCM2Unit 2.5</b> " + guidoEngine.cm2Unit(2.5));
+		$("#guidoUnit2Inches").html("<b>guidoUnit2Inches 3.1</b> " + guidoEngine.unit2Inches(3.1));
+		$("#guidoInches2Unit").html("<b>guidoInches2Unit 3.1</b> " + guidoEngine.inches2Unit(1.3));
+		var version = guidoEngine.getVersion();
+		$("#guidoGetVersionNums").html("<b>guidoGetVersionNums </b>" + 
+				version.major + "." +
+				version.minor + "." +
+				version.sub + 
+				" / String version = " + version.str);
+		$("#guidoCheckVersionNums").html("<b>guidoCheckVersionNums 1.5.9 error code </b>" + guidoEngine.checkVersionNums(1, 5, 9).value);
+		$("#guidoGetLineSpace").html("<b>guidoGetLineSpace </b>" + guidoEngine.getLineSpace());
+		
+		// Test parser error
+		var parser = guidoEngine.openParser();
+		var ar3 = guidoEngine.string2AR(parser, "[a b c ( b]");
+		var errorCode = guidoEngine.parserGetErrorCode(parser);
+		guidoEngine.closeParser(parser);
+		$("#parserGetErrorCode").html("<b>parserGetErrorCode with [a b c ( b] = line = </b>" + errorCode.line + " / col = " + errorCode.col + " / message =" + errorCode.msg );
+		
+		guidoEngine.freeAR(ar3);
+		
+		/*
+		guidoGetPageMap_JSON = document.getElementById('guidoGetPageMap_JSON');
+		pagemap_n = GuidoGetPageMap_JSON( gr, 1, 1000.0, 1000.0 )
+		guidoGetPageMap_JSON.innerHTML = "<b>Page map for page 1:</b> "+Pointer_stringify(pagemap_n);
+		GuidoReleaseCString(pagemap_n);
+
+		guidoGetStaffMap_JSON = document.getElementById('guidoGetStaffMap_JSON');
+		staffmap_n = GuidoGetStaffMap_JSON( gr, 1, 1000.0, 1000.0, 1 )
+		guidoGetStaffMap_JSON.innerHTML = "<b>Staff map for page 1, staff 1:</b> "+Pointer_stringify(staffmap_n);
+		GuidoReleaseCString(staffmap_n);
+
+		guidoGetVoiceMap_JSON = document.getElementById('guidoGetVoiceMap_JSON');
+		voicemap_n = GuidoGetVoiceMap_JSON( gr, 1, 1000.0, 1000.0, 1 )
+		guidoGetVoiceMap_JSON.innerHTML = "<b>Voice map for page 1, voice 1:</b> "+Pointer_stringify(voicemap_n);
+		GuidoReleaseCString(voicemap_n);
+
+		guidoGetSystemMap_JSON = document.getElementById('guidoGetSystemMap_JSON');
+		systemmap_n = GuidoGetSystemMap_JSON( gr, 1, 1000.0, 1000.0)
+		//console.log(systemmap_n);
+		guidoGetSystemMap_JSON.innerHTML = "<b>System map for page 1:</b> "+Pointer_stringify(systemmap_n);
+		GuidoReleaseCString(systemmap_n);
+		*/		
+		guidoEngine.freeGR(gr);
+		guidoEngine.freeAR(ar);
+		
+		guidoEngine.closeParser(p);
+		
+	}
+		</script>
+	</head>
+	<body>
+		<div id="guidolayoutsettings"></div>
+		<div id="guidoCountVoices"></div>
+		<div id="guidoGetPageCount"></div>
+		<div id="guidoGetSystemCount"></div>
+		<div id="guidoDuration"></div>
+		<div id="guidoFindEventPage"></div>
+		<div id="guidoFindPageAt"></div>
+		<div id="guidoGetPageDate"></div>
+		<div id="guidoGetDrawBoundingBoxes"></div>
+		<div id="guidoGetDrawBoundingBoxes2"></div>
+		<div id="guidoGetPageFormat"></div>
+		<div id="guidoGetDefaultPageFormat"></div>
+		<div id="guidoUnit2CM"></div>
+		<div id="guidoCM2Unit"></div>
+		<div id="guidoUnit2Inches"></div>
+		<div id="guidoInches2Unit"></div>
+		<div id="guidoResizePageToMusic"></div>
+		<div id="guidoGetVersionNums"></div>
+		<div id="guidoCheckVersionNums"></div>
+		<div id="guidoGetLineSpace"></div>
+		<div id="guidoGetStream"></div>
+		<div id="guidoGetStream2"></div>
+		<div id="parserGetErrorCode"></div>
+
+		<!--
+		<div id="guidoGetPageMap_JSON"></div>
+		<div id="guidoGetStaffMap_JSON"></div>
+		<div id="guidoGetVoiceMap_JSON"></div>
+		<div id="guidoGetSystemMap_JSON"></div>
+		-->
+
+		<div id="guido_svg"></div>
+		<div id="guidoUpdateGR"></div>
+		<div id="guido_svg2"></div>
+
+		<div id="guidoAbstractExport"></div>
+		
+		<!-- need to insert dummy paragraph to load font -->
+		<p id="myP" style="visibility:hidden;font-family:Guido2;font-size:200px">x</p>
+	</body>
+</html>

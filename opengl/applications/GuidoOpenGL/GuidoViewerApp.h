@@ -2,7 +2,6 @@
 #define __GuidoViewerApp__
 
 #include <string>
-//#include <Carbon/Carbon.h>
 #include "GUIDOEngine.h"
 
 class GuidoDoc;

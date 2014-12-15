@@ -20,7 +20,7 @@
 */
 
 #include "javaIDs.h"
-
+#include <stdio.h>
 
 bool getID (JNIEnv * env, jclass cls, jfieldID& field, const char * id, const char * type)
 {

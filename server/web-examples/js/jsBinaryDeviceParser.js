@@ -98,54 +98,55 @@ gU1D0pAR$ER.moveReadPositionByString = function(place, str) {
   return place + str.length + 1; // 1 for the escape char
 }
 
-gU1D0pAR$ER.parseGuidoBinary = function(data, place) {
+gU1D0pAR$ER.parseGuidoBinary = function(data, place, opts) {
+  opts = opts ? opts : {};
   while ((place >= 0) && (place < data.byteLength)) {
     var head = gU1D0pAR$ER.getUnsignedChar(data, place);
     place = gU1D0pAR$ER.moveReadPositionByChar(place);
     if (head == gU1D0pAR$ER.BEGIN_DRAW_CODE) {
-      place = gU1D0pAR$ER.BeginDraw(data, place);
+      place = gU1D0pAR$ER.BeginDraw(data, place, opts);
     } else if (head == gU1D0pAR$ER.END_DRAW_CODE) {
-      place = gU1D0pAR$ER.EndDraw(data, place);
+      place = gU1D0pAR$ER.EndDraw(data, place, opts);
     } else if (head == gU1D0pAR$ER.LINE_CODE) {
-      place = gU1D0pAR$ER.Line(data, place);
+      place = gU1D0pAR$ER.Line(data, place, opts);
     } else if (head == gU1D0pAR$ER.POLYGON_CODE) {
-      place = gU1D0pAR$ER.Polygon(data, place);
+      place = gU1D0pAR$ER.Polygon(data, place, opts);
     } else if (head == gU1D0pAR$ER.RECTANGLE_CODE) {
-      place = gU1D0pAR$ER.Rectangle(data, place);
+      place = gU1D0pAR$ER.Rectangle(data, place, opts);
     } else if (head == gU1D0pAR$ER.SET_MUSIC_FONT_CODE) {
-      place = gU1D0pAR$ER.SetMusicFont(data, place);
+      place = gU1D0pAR$ER.SetMusicFont(data, place, opts);
     } else if (head == gU1D0pAR$ER.GET_MUSIC_FONT_CODE) {
-      place = gU1D0pAR$ER.GetMusicFont(data, place);
+      place = gU1D0pAR$ER.GetMusicFont(data, place, opts);
     } else if (head == gU1D0pAR$ER.SET_TEXT_FONT_CODE) {
-      place = gU1D0pAR$ER.SetTextFont(data, place);
+      place = gU1D0pAR$ER.SetTextFont(data, place, opts);
     } else if (head == gU1D0pAR$ER.GET_TEXT_FONT_CODE) {
-      place = gU1D0pAR$ER.GetTextFont(data, place);
+      place = gU1D0pAR$ER.GetTextFont(data, place, opts);
     } else if (head == gU1D0pAR$ER.SET_SCALE_CODE) {
-      place = gU1D0pAR$ER.SetScale(data, place);
+      place = gU1D0pAR$ER.SetScale(data, place, opts);
     } else if (head == gU1D0pAR$ER.SET_ORIGIN_CODE) {
-      place = gU1D0pAR$ER.SetOrigin(data, place);
+      place = gU1D0pAR$ER.SetOrigin(data, place, opts);
     } else if (head == gU1D0pAR$ER.OFFSET_ORIGIN_CODE) {
-      place = gU1D0pAR$ER.OffsetOrigin(data, place);
+      place = gU1D0pAR$ER.OffsetOrigin(data, place, opts);
     } else if (head == gU1D0pAR$ER.NOTIFY_SIZE_CODE) {
-      place = gU1D0pAR$ER.NotifySize(data, place);
+      place = gU1D0pAR$ER.NotifySize(data, place, opts);
     } else if (head == gU1D0pAR$ER.DRAW_MUSIC_SYMBOL_CODE) {
-      place = gU1D0pAR$ER.DrawMusicSymbol(data, place);
+      place = gU1D0pAR$ER.DrawMusicSymbol(data, place, opts);
     } else if (head == gU1D0pAR$ER.DRAW_STRING_CODE) {
-      place = gU1D0pAR$ER.DrawString(data, place);
+      place = gU1D0pAR$ER.DrawString(data, place, opts);
     } else if (head == gU1D0pAR$ER.SET_FONT_COLOR_CODE) {
-      place = gU1D0pAR$ER.SetFontColor(data, place);
+      place = gU1D0pAR$ER.SetFontColor(data, place, opts);
     } else if (head == gU1D0pAR$ER.GET_FONT_COLOR_CODE) {
-      place = gU1D0pAR$ER.GetFontColor(data, place);
+      place = gU1D0pAR$ER.GetFontColor(data, place, opts);
     } else if (head == gU1D0pAR$ER.SET_FONT_ALIGN_CODE) {
-      place = gU1D0pAR$ER.SetFontAlign(data, place);
+      place = gU1D0pAR$ER.SetFontAlign(data, place, opts);
     } else if (head == gU1D0pAR$ER.SELECT_PEN_COLOR_CODE) {
-      place = gU1D0pAR$ER.SelectPenColor(data, place);
+      place = gU1D0pAR$ER.SelectPenColor(data, place, opts);
     } else if (head == gU1D0pAR$ER.POP_PEN_COLOR_CODE) {
-      place = gU1D0pAR$ER.PopPenColor(data, place);
+      place = gU1D0pAR$ER.PopPenColor(data, place, opts);
     } else if (head == gU1D0pAR$ER.PUSH_PEN_WIDTH_CODE) {
-      place = gU1D0pAR$ER.PushPenWidth(data, place);
+      place = gU1D0pAR$ER.PushPenWidth(data, place, opts);
     } else if (head == gU1D0pAR$ER.POP_PEN_WIDTH_CODE) {
-      place = gU1D0pAR$ER.PopPenWidth(data, place);
+      place = gU1D0pAR$ER.PopPenWidth(data, place, opts);
     } else {
       // panic
       console.log("don't know ", head);
@@ -155,19 +156,27 @@ gU1D0pAR$ER.parseGuidoBinary = function(data, place) {
   console.log("finished drawing");
 }
 
-gU1D0pAR$ER.BeginDraw = function(data, place) {
+gU1D0pAR$ER.BeginDraw = function(data, place, opts) {
+  //////////////////////////
+  if (opts.verbose == true) {
+    console.log("BeginDraw");
+  }
   //////////////////////////
   gU1D0pAR$ER.drawFunctions["BeginDraw"]();
   return place;
 }
 
-gU1D0pAR$ER.EndDraw = function(data, place) {
+gU1D0pAR$ER.EndDraw = function(data, place, opts) {
   ///////////////////////
+  if (opts.verbose == true) {
+    console.log("EndDraw");
+  }
+  //////////////////////////
   gU1D0pAR$ER.drawFunctions["EndDraw"]();
   return place;
 }
 
-gU1D0pAR$ER.Line = function(data, place) {
+gU1D0pAR$ER.Line = function(data, place, opts) {
   var x1 = gU1D0pAR$ER.getFloat(data, place);
   place = gU1D0pAR$ER.moveReadPositionByFloat(place);
   var y1 = gU1D0pAR$ER.getFloat(data, place);
@@ -177,11 +186,15 @@ gU1D0pAR$ER.Line = function(data, place) {
   var y2 = gU1D0pAR$ER.getFloat(data, place);
   place = gU1D0pAR$ER.moveReadPositionByFloat(place);
   ///////////////////////////
+  if (opts.verbose == true) {
+    console.log("Line");
+  }
+  //////////////////////////
   gU1D0pAR$ER.drawFunctions["Line"](x1, y1, x2, y2);
   return place;
 }
 
-gU1D0pAR$ER.Polygon = function(data, place) {
+gU1D0pAR$ER.Polygon = function(data, place, opts) {
   var count = gU1D0pAR$ER.getInt32(data, place);
   place = gU1D0pAR$ER.moveReadPositionByInt32(place);
   xCoords = [];
@@ -197,11 +210,15 @@ gU1D0pAR$ER.Polygon = function(data, place) {
     yCoords.push(y);
   }
   ///////////////////////////
+  if (opts.verbose == true) {
+    console.log("Polygon");
+  }
+  //////////////////////////
   gU1D0pAR$ER.drawFunctions["Polygon"](xCoords, yCoords, count);
   return place;
 }
 
-gU1D0pAR$ER.Rectangle = function(data, place) {
+gU1D0pAR$ER.Rectangle = function(data, place, opts) {
   var left = gU1D0pAR$ER.getFloat(data, place);
   place = gU1D0pAR$ER.moveReadPositionByFloat(place);
   var top = gU1D0pAR$ER.getFloat(data, place);
@@ -211,11 +228,15 @@ gU1D0pAR$ER.Rectangle = function(data, place) {
   var bottom = gU1D0pAR$ER.getFloat(data, place);
   place = gU1D0pAR$ER.moveReadPositionByFloat(place);
   ///////////////////////////
+  if (opts.verbose == true) {
+    console.log("Rectangle");
+  }
+  //////////////////////////
   gU1D0pAR$ER.drawFunctions["Rectangle"](left, top, right, bottom);
   return place;
 }
 
-gU1D0pAR$ER.SetMusicFont = function(data, place) {
+gU1D0pAR$ER.SetMusicFont = function(data, place, opts) {
   var name = gU1D0pAR$ER.getString(data, place);
   place = gU1D0pAR$ER.moveReadPositionByString(place, name);
   var size = gU1D0pAR$ER.getInt32(data, place);
@@ -223,17 +244,25 @@ gU1D0pAR$ER.SetMusicFont = function(data, place) {
   var properties = gU1D0pAR$ER.getInt32(data, place);
   place = gU1D0pAR$ER.moveReadPositionByInt32(place);
   ///////////////////////////
+  if (opts.verbose == true) {
+    console.log("SetMusicFont", name, size, properties);
+  }
+  //////////////////////////
   gU1D0pAR$ER.drawFunctions["SetMusicFont"](name, size, properties);
   return place;
 }
 
-gU1D0pAR$ER.GetMusicFont = function(data, place) {
+gU1D0pAR$ER.GetMusicFont = function(data, place, opts) {
   ///////////////////////////
+  if (opts.verbose == true) {
+    console.log("GetMusicFont");
+  }
+  //////////////////////////
   gU1D0pAR$ER.drawFunctions["GetMusicFont"]();
   return place;
 }
 
-gU1D0pAR$ER.SetTextFont = function(data, place) {
+gU1D0pAR$ER.SetTextFont = function(data, place, opts) {
   var name = gU1D0pAR$ER.getString(data, place);
   place = gU1D0pAR$ER.moveReadPositionByString(place, name);
   var size = gU1D0pAR$ER.getInt32(data, place);
@@ -241,57 +270,81 @@ gU1D0pAR$ER.SetTextFont = function(data, place) {
   var properties = gU1D0pAR$ER.getInt32(data, place);
   place = gU1D0pAR$ER.moveReadPositionByInt32(place);
   ///////////////////////////
+  if (opts.verbose == true) {
+    console.log("SetTextFont");
+  }
+  //////////////////////////
   gU1D0pAR$ER.drawFunctions["SetTextFont"](name, size, properties);
   return place;
 }
 
-gU1D0pAR$ER.GetTextFont = function(data, place) {
+gU1D0pAR$ER.GetTextFont = function(data, place, opts) {
   ///////////////////////////
+  if (opts.verbose == true) {
+    console.log("GetTextFont");
+  }
+  //////////////////////////
   gU1D0pAR$ER.drawFunctions["GetTextFont"]();
   return place;
 }
 
-gU1D0pAR$ER.SetScale = function(data, place) {
+gU1D0pAR$ER.SetScale = function(data, place, opts) {
   var x = gU1D0pAR$ER.getFloat(data, place);
   place = gU1D0pAR$ER.moveReadPositionByFloat(place);
   var y = gU1D0pAR$ER.getFloat(data, place);
   place = gU1D0pAR$ER.moveReadPositionByFloat(place);
   ///////////////////////////
+  if (opts.verbose == true) {
+    console.log("SetScale");
+  }
+  //////////////////////////
   gU1D0pAR$ER.drawFunctions["SetScale"](x, y);
   return place;
 }
 
-gU1D0pAR$ER.SetOrigin = function(data, place) {
+gU1D0pAR$ER.SetOrigin = function(data, place, opts) {
   var x = gU1D0pAR$ER.getFloat(data, place);
   place = gU1D0pAR$ER.moveReadPositionByFloat(place);
   var y = gU1D0pAR$ER.getFloat(data, place);
   place = gU1D0pAR$ER.moveReadPositionByFloat(place);
   ///////////////////////////
+  if (opts.verbose == true) {
+    console.log("SetOrigin");
+  }
+  //////////////////////////
   gU1D0pAR$ER.drawFunctions["SetOrigin"](x, y);
   return place;
 }
 
-gU1D0pAR$ER.OffsetOrigin = function(data, place) {
+gU1D0pAR$ER.OffsetOrigin = function(data, place, opts) {
   var x = gU1D0pAR$ER.getFloat(data, place);
   place = gU1D0pAR$ER.moveReadPositionByFloat(place);
   var y = gU1D0pAR$ER.getFloat(data, place);
   place = gU1D0pAR$ER.moveReadPositionByFloat(place);
   ///////////////////////////
+  if (opts.verbose == true) {
+    console.log("OffsetOrigin");
+  }
+  //////////////////////////
   gU1D0pAR$ER.drawFunctions["OffsetOrigin"](x, y);
   return place;
 }
 
-gU1D0pAR$ER.NotifySize = function(data, place) {
+gU1D0pAR$ER.NotifySize = function(data, place, opts) {
   var width = gU1D0pAR$ER.getInt32(data, place);
   place = gU1D0pAR$ER.moveReadPositionByInt32(place);
   var height = gU1D0pAR$ER.getInt32(data, place);
   place = gU1D0pAR$ER.moveReadPositionByInt32(place);
   ///////////////////////////
+  if (opts.verbose == true) {
+    console.log("NotifySize");
+  }
+  //////////////////////////
   gU1D0pAR$ER.drawFunctions["NotifySize"](width, height);
   return place;
 }
 
-gU1D0pAR$ER.DrawMusicSymbol = function(data, place) {
+gU1D0pAR$ER.DrawMusicSymbol = function(data, place, opts) {
   var x = gU1D0pAR$ER.getFloat(data, place);
   place = gU1D0pAR$ER.moveReadPositionByFloat(place);
   var y = gU1D0pAR$ER.getFloat(data, place);
@@ -299,11 +352,15 @@ gU1D0pAR$ER.DrawMusicSymbol = function(data, place) {
   var inSymbolID = gU1D0pAR$ER.getUnsignedInt32(data, place);
   place = gU1D0pAR$ER.moveReadPositionByUnsignedInt32(place);
   ///////////////////////////
+  if (opts.verbose == true) {
+    console.log("DrawMusicSymbol");
+  }
+  //////////////////////////
   gU1D0pAR$ER.drawFunctions["DrawMusicSymbol"](x, y, inSymbolID);
   return place;
 }
 
-gU1D0pAR$ER.DrawString = function(data, place) {
+gU1D0pAR$ER.DrawString = function(data, place, opts) {
   var x = gU1D0pAR$ER.getFloat(data, place);
   place = gU1D0pAR$ER.moveReadPositionByFloat(place);
   var y = gU1D0pAR$ER.getFloat(data, place);
@@ -315,11 +372,15 @@ gU1D0pAR$ER.DrawString = function(data, place) {
   // because not null terminated...
   place = place - 1;
   ///////////////////////////
+  if (opts.verbose == true) {
+    console.log("DrawString");
+  }
+  //////////////////////////
   gU1D0pAR$ER.drawFunctions["DrawString"](x, y, s, inCharCount);
   return place;
 }
 
-gU1D0pAR$ER.SetFontColor = function(data, place) {
+gU1D0pAR$ER.SetFontColor = function(data, place, opts) {
   var alpha = gU1D0pAR$ER.getUnsignedChar(data, place);
   place = gU1D0pAR$ER.moveReadPositionByChar(place);
   var red = gU1D0pAR$ER.getUnsignedChar(data, place);
@@ -329,25 +390,37 @@ gU1D0pAR$ER.SetFontColor = function(data, place) {
   var blue = gU1D0pAR$ER.getUnsignedChar(data, place);
   place = gU1D0pAR$ER.moveReadPositionByChar(place);
   /////////////////////////////////////////
+  if (opts.verbose == true) {
+    console.log("SetFontColor");
+  }
+  //////////////////////////
   gU1D0pAR$ER.drawFunctions["SetFontColor"](alpha, red, green, blue);
   return place;
 }
 
-gU1D0pAR$ER.GetFontColor = function(data, place) {
+gU1D0pAR$ER.GetFontColor = function(data, place, opts) {
   ///////////////////////////
+  if (opts.verbose == true) {
+    console.log("GetFontColor");
+  }
+  //////////////////////////
   gU1D0pAR$ER.drawFunctions["GetFontColor"]();
   return place;
 }
 
-gU1D0pAR$ER.SetFontAlign = function(data, place) {
+gU1D0pAR$ER.SetFontAlign = function(data, place, opts) {
   var inAlign = gU1D0pAR$ER.getUnsignedInt32(data, place);
   place = gU1D0pAR$ER.moveReadPositionByUnsignedInt32(place);
   /////////////////////////////////////////
+  if (opts.verbose == true) {
+    console.log("SetFontAlign");
+  }
+  //////////////////////////
   gU1D0pAR$ER.drawFunctions["SetFontAlign"](inAlign);
   return place;
 }
 
-gU1D0pAR$ER.SelectPenColor = function(data, place) {
+gU1D0pAR$ER.SelectPenColor = function(data, place, opts) {
   var alpha = gU1D0pAR$ER.getUnsignedChar(data, place);
   place = gU1D0pAR$ER.moveReadPositionByChar(place);
   var red = gU1D0pAR$ER.getUnsignedChar(data, place);
@@ -357,26 +430,42 @@ gU1D0pAR$ER.SelectPenColor = function(data, place) {
   var blue = gU1D0pAR$ER.getUnsignedChar(data, place);
   place = gU1D0pAR$ER.moveReadPositionByChar(place);
   /////////////////////////////////////////
+  if (opts.verbose == true) {
+    console.log("SelectPenColor");
+  }
+  //////////////////////////
   gU1D0pAR$ER.drawFunctions["SelectPenColor"](alpha, red, green, blue);
   return place;
 }
 
-gU1D0pAR$ER.PopPenColor = function(data, place) {
+gU1D0pAR$ER.PopPenColor = function(data, place, opts) {
   /////////////////////////////////////////
+  if (opts.verbose == true) {
+    console.log("PopPenColor");
+  }
+  //////////////////////////
   gU1D0pAR$ER.drawFunctions["PopPenColor"]();
   return place;
 }
 
-gU1D0pAR$ER.PushPenWidth = function(data, place) {
+gU1D0pAR$ER.PushPenWidth = function(data, place, opts) {
   var width = gU1D0pAR$ER.getFloat(data, place);
   place = gU1D0pAR$ER.moveReadPositionByFloat(place);
   ///////////////////////////
+  if (opts.verbose == true) {
+    console.log("PushPenWidth");
+  }
+  //////////////////////////
   gU1D0pAR$ER.drawFunctions["PushPenWidth"](width);
   return place;
 }
 
-gU1D0pAR$ER.PopPenWidth = function(data, place) {
+gU1D0pAR$ER.PopPenWidth = function(data, place, opts) {
   /////////////////////////////////////////
+  if (opts.verbose == true) {
+    console.log("PopPenWidth");
+  }
+  //////////////////////////
   gU1D0pAR$ER.drawFunctions["PopPenWidth"]();
   return place;
 }

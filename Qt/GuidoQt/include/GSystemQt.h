@@ -15,7 +15,6 @@
 #define GSYSTEMQT_H_
 
 #include "VGSystem.h"
-#include "MusicalSymbols.h"	
 
 #include <QPainter>
 

@@ -32,7 +32,7 @@ if(WIN32)
  add_definitions(-DWINVER=0x0400 -DWIN32)
 endif()
 
-include_directories( ${GUIDO}/include ${GUIDO}/devices ${GUIDO}/tools ${DEVICE} )
+include_directories( ${GUIDO}/engine/include ${GUIDO}/engine/devices ${GUIDO}/engine/tools ${DEVICE} )
 
 if(APPLE OR WIN32)
 	if (${CMAKE_CL_64})
@@ -55,7 +55,7 @@ else()
 	string (STRIP ${TMP} CAIRO)
 	set(LINK ${LINK} ${CAIRO})
 
-	find_library (GUIDOLIB GUIDOEngine PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../../build/unix NO_DEFAULT_PATH)
+	find_library (GUIDOLIB GUIDOEngine PATHS ${CMAKE_CURRENT_SOURCE_DIR}/../../build/linux NO_DEFAULT_PATH)
 endif()
 
 #######################################

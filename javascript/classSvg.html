@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="stylesheets/guidostylesheet.css" type="text/css" charset="UTF-8" />
+    <script src="libGUIDOEngine.js" type="text/javascript"></script>
+    <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+    <style type="text/css">
+      div.column {
+        display: block;
+        width: 50%;
+      }
+      #gmnSandbox {
+        width: 95%;
+      }
+      #guidoResult {
+        /*border: 0px;*/
+      }
+    </style>
+    <script>
+		var guidoEngine;
+	function processGMN() {
+		console.log("processGMN");
+		var p = guidoEngine.openParser();
+		var ar = guidoEngine.string2AR(p, $("#gmnSandbox").val());
+		guidoEngine.closeParser(p);
+		var gr = guidoEngine.ar2gr(ar);
+		var result = guidoEngine.svgExport(gr, 1);
+
+		guidoEngine.freeGR(gr);
+		guidoEngine.freeAR(ar);
+		
+		$("#canvasContainer").html(result);
+		$("#canvasContainer2").html("<plaintext>" + result + "</plaintext>");
+	}
+	$( document ).ready(function() {
+		guidoEngine = new Module.GuidoEngineAdapter;
+		guidoEngine.init();
+		$("#gmnSandbox").on('keyup', processGMN);
+	});
+	$(window).unload(function(){
+		guidoEngine.shutdown();
+		delete guidoEngine;
+	});
+    </script>
+  </head>
+  <body>
+    <div class="column" style="float:left">
+      <p>Type your GMN code here :</p>
+      <textarea id="gmnSandbox" rows="40"></textarea>
+    </div>
+    <div id="canvasContainer" class="column" style="float:right">
+    </div>
+
+    <div style="clear:both;"></div>
+    <div id="canvasContainer2" class="column">
+   
+    </div>   <div id="warning"></div>
+    <!-- need to insert dummy paragraph to load font -->
+    <p id="myP" style="visibility:hidden;font-family:Guido2;font-size:200px">x</p>
+  </body>
+</html>

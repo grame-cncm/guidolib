@@ -1,0 +1,257 @@
+\documentclass[a4paper, landscape, 10pt]{article}
+
+\usepackage{tabularx}
+\usepackage{lipsum}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+
+\geometry{hmargin=1.5cm, vmargin=1.5cm}
+
+\pagestyle{fancy}
+
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyfoot[C]{\textbf{\thepage}}
+\fancyfoot[R]{GUIDOLib v1.54}
+
+\makeatletter
+\renewcommand{\maketitle}{
+    \begin{center}
+      \large
+      {\LARGE\@title}
+      \par\vspace{1ex}
+      GUIDOLib v1.54
+    \end{center}
+}
+\makeatother
+
+\begin{document}
+
+\title{GMNF tags}
+\date{\today}
+
+\maketitle
+
+% Disable indentation
+\setlength{\parindent}{0pt}
+
+% To vert.ly center text inside cells
+\renewcommand{\tabularxcolumn}[1]{m{#1}}
+
+\begin{tabularx}{\linewidth}{p{3cm}p{4.5cm}p{3cm}p{5.5cm}l}
+    \hline
+    \textbf{Tag}&\textbf{Shortcuts}&\textbf{Form support}&\textbf{Notation element}&\textbf{Parameters}\\
+    \hline
+    \textbf{\textbackslash{}accelerando}&\textbackslash{}accel&RT - BE&accelerando&tempo - abstempo - font - fattrib - fsize - dx/dy - color\\
+    \hline
+    \textbf{\textbackslash{}accent}&&RT&accent mark&dx/dy - color - size\\
+    \hline
+    \textbf{\textbackslash{}accidental}&\textbackslash{}acc&RT&accidental&style - dx/dy - color - size\\
+    \hline
+    \textbf{\textbackslash{}accolade}&\textbackslash{}accol&&accolade configuration&\textbf{id} - \textbf{range} - type - dx/dy - color - size\\
+    \hline
+    \textbf{\textbackslash{}alter}&&ORT&microtonal accidentals&\textbf{detune}\\
+    \hline
+    %\textbf{\textbackslash{}auto}&\textbackslash{}set&&&\\ % A COMPLETER
+    %\hline
+    \textbf{\textbackslash{}bar}&\textbar&&measure bar&displayMeasNum - numDx - numDy - dx/dy -\\
+    &&&&color - size\\
+    \hline
+    %\textbf{\textbackslash{}barFormat}&&&bar formatting&\\ % Useless tag for now
+    %\hline
+    \textbf{\textbackslash{}beam}&\textbackslash{}bm&RT - BE&notes beaming&dy - color\\
+    &&&&dy1 - dy2 - dy - color\\
+    &&&&dx1/dy1 - dx2/dy2  - dy - color\\
+    &&&&dx3/dy3 - dx4/dy4  - dy - color\\
+    \hline
+    \textbf{\textbackslash{}beamsAuto}&&&auto beaming (default)&\\
+    \hline
+    \textbf{\textbackslash{}beamsOff}&&&no auto beaming&\\
+    \hline
+    %\textbf{\textbackslash{}bembel}&&&&\\ % Useless tag for now
+    %\hline
+    \textbf{\textbackslash{}breathMark}&&&breath mark&color\\
+    \hline
+    \textbf{\textbackslash{}clef}&&&clef indication&\textbf{type} - dx/dy - color - size\\
+    \hline
+    \textbf{\textbackslash{}cluster}&&RT&cluster&hdx/hdy - dx/dy - color - size\\
+    \hline
+    \textbf{\textbackslash{}coda}&&&coda sign&dx/dy - color\\
+    \hline
+    %\textbf{\textbackslash{}color}&&&&\\ % Useless tag for now
+    %\hline
+    \textbf{\textbackslash{}composer}&&&composer indication&\textbf{name} - pageformat - dx/dy - color\\
+    \hline
+    \textbf{\textbackslash{}crescendo}&\textbackslash{}cresc&RT - BE&crescendo&dm - dx1 - dx2 - deltaY - thickness - dy - color\\
+    \hline
+	\textbf{\textbackslash{}cue}&&RT&cue notes&name - dx/dy - color\\
+    \hline
+    \textbf{\textbackslash{}daCapo}&&&da capo sign&dx/dy - color\\
+    \hline
+    \textbf{\textbackslash{}daCapoAlFine}&&&da capo al fine sign&dx/dy - color\\
+    \hline
+    \textbf{\textbackslash{}daCoda}&&&da coda sign&dx/dy - color\\
+    \hline
+    \textbf{\textbackslash{}dalSegno}&&&dal segno sign&dx/dy - color\\
+    \hline
+    \textbf{\textbackslash{}dalSegnoAlFine}&&&dal segno al fine sign&dx/dy - color\\
+    \hline
+    \textbf{\textbackslash{}decrescendo}&\textbackslash{}decresc \textbackslash{}dim \textbackslash{}diminuendo&RT&decrescendo&dm - dx1 - dx2 - deltaY - thickness - dy - color\\
+    \hline
+    %\textbf{\textbackslash{}defineTag}&&&&\\ % Useless tag for now
+    %\hline
+    \textbf{\textbackslash{}displayDuration}&\textbackslash{}dispDur&ORT&duration displayed&\textbf{n} - \textbf{d} - ndots\\
+    \hline
+    \textbf{\textbackslash{}dotFormat}&&ORT&dot formatting&dx/dy - color - size\\
+    \hline
+    \textbf{\textbackslash{}doubleBar}&&&double measure bar&color\\
+    \hline
+    \textbf{\textbackslash{}endBar}&&&end bar&color\\
+    \hline
+    \textbf{\textbackslash{}fBeam}&&RT - BE&feathered beaming&durations - drawDuration - color\\
+    \hline
+    \textbf{\textbackslash{}fermata}&&ORT&fermata sign&type - position - dx/dy - color - size\\
+    \hline
+    \textbf{\textbackslash{}fine}&&&fine sign&dx/dy - color\\
+    \hline
+    \textbf{\textbackslash{}fingering}&&RT&fingering&\textbf{text} - fsize - dx/dy - color\\
+    \hline
+    \textbf{\textbackslash{}glissando}&&RT&glissando&dx1/dy1 - dx2/dy2 - fill - thickness - color\\
+    \hline
+    \textbf{\textbackslash{}grace}&&RT&grace notes&\\
+    \hline
+    \textbf{\textbackslash{}harmonic}&&RT&harmonic mark&dx/dy - color - size\\
+    \hline
+\end{tabularx}
+%
+% Because the table can't divide itself...
+%
+\begin{tabularx}{\linewidth}{p{3cm}p{4.5cm}p{3cm}p{5.5cm}l}
+    \hline
+    \textbf{Tag}&\textbf{Shortcuts}&\textbf{Form support}&\textbf{Notation element}&\textbf{Parameters}\\
+    \hline
+    \textbf{\textbackslash{}headsCenter}&&ORT&noteheads centered on stem&\\
+    \hline
+    \textbf{\textbackslash{}headsLeft}&&ORT&noteheads at the left of the stem&\\
+    \hline
+    \textbf{\textbackslash{}headsNormal}&&ORT&auto noteheads placement (default)&\\
+    \hline
+    \textbf{\textbackslash{}headsReverse}&&ORT&reverted placement of noteheads&\\
+    \hline
+    \textbf{\textbackslash{}headsRight}&&ORT&noteheads at the right of the stem&\\
+    \hline
+    \textbf{\textbackslash{}instrument}&\textbackslash{}instr&&instrument specification&\textbf{name} - transp - dx/dy - color\\
+    \hline
+    \textbf{\textbackslash{}intensity}&\textbackslash{}i \textbackslash{}intens&&nuance marking&\textbf{type} - dx/dy - color - size\\
+    \hline
+    \textbf{\textbackslash{}key}&&&key signature&\textbf{key} - color\\
+    \hline
+    \textbf{\textbackslash{}label}&&ORT&textual label&\textbf{text} - dx/dy - color\\
+    \hline
+    \textbf{\textbackslash{}lyrics}&&RT&lyrics&\textbf{text} - dx/dy - color\\
+    \hline
+    \textbf{\textbackslash{}marcato}&&RT&marcato mark&position - dx/dy - color - size\\
+    \hline
+    \textbf{\textbackslash{}mark}&&&textual mark&\textbf{text} - dx/dy - color\\
+    \hline
+    %\textbf{\textbackslash{}merge}&&&&\\ % Useless tag for now
+    %\hline
+    \textbf{\textbackslash{}meter}&&&meter indication&\textbf{type} - autoBarlines - autoMeasuresNum - \\
+        &&&&dx/dy - color - size\\
+    \hline
+    \textbf{\textbackslash{}mordent}&\textbackslash{}mord&RT&mordent sign&mode - adx/ady - dx/dy - color - size\\
+    \hline
+    \textbf{\textbackslash{}newPage}&&&force a new page&\\
+    \hline
+    \textbf{\textbackslash{}newSystem}&\textbackslash{}newLine&&force a new system&\\
+    \hline
+    \textbf{\textbackslash{}noteFormat}&&ORT&notes formatting&style - dx/dy - color - size\\
+    \hline
+    \textbf{\textbackslash{}octava}&\textbackslash{}oct&ORT&octava sign&\textbf{i} - color\\
+    \hline
+    \textbf{\textbackslash{}pageFormat}&&&page format indication&\textbf{w/h} - lm - tm - rm - bm\\
+    &&&&\textbf{type} - lm - tm - rm - bm\\
+    \hline
+    \textbf{\textbackslash{}pizzicato}&\textbackslash{}pizz&RT&pizzicato sign&type - dx/dy - color - size\\
+    \hline
+    \textbf{\textbackslash{}repeatBegin}&&&repeat begin &dx/dy - color\\
+    \hline
+    \textbf{\textbackslash{}repeatEnd}&&&repeat end bar&dx/dy - color\\
+    \hline
+    \textbf{\textbackslash{}restFormat}&&ORT&rests formatting&dx/dy - color - size\\
+    \hline
+    \textbf{\textbackslash{}ritardando}&\textbackslash{}rit&RT - BE&ritardando&tempo - abstempo - font - fattrib - fsize - dx/dy - color\\
+    \hline
+    \textbf{\textbackslash{}segno}&&&segno sign&dx/dy - color\\
+    \hline
+    \textbf{\textbackslash{}shareLocation}&&RT&put several events in same position&\\
+    \hline
+    \textbf{\textbackslash{}slur}&\textbackslash{}sl&RT - BE&slur&color\\
+    \hline
+    \textbf{\textbackslash{}space}&&&space insertion&\textbf{dd}\\
+    \hline
+    \textbf{\textbackslash{}special}&&&special character insertion&\textbf{char} - dx/dy - color - size\\
+    \hline
+    \textbf{\textbackslash{}staccato}&\textbackslash{}stacc&RT - BE&staccato sign&type - dx/dy - color - size\\
+    \hline
+    \textbf{\textbackslash{}staff}&&&staff assignation&\textbf{id} - dy\\
+    \hline
+    \textbf{\textbackslash{}staffFormat}&&&staff formatting&style - lineThickness - dy - color - size\\
+    \hline
+    \textbf{\textbackslash{}staffOff}&&&disable staff display&\\
+    \hline
+    \textbf{\textbackslash{}staffOn}&&&enable staff display&\\
+    \hline
+    \textbf{\textbackslash{}stemsAuto}&&ORT&auto stem direction (default)&length\\
+    \hline
+    \textbf{\textbackslash{}stemsDown}&&ORT&force stems down&length\\
+	\hline
+    \textbf{\textbackslash{}stemsOff}&&ORT&no stems&\\
+    \hline
+    \textbf{\textbackslash{}stemsUp}&&ORT&force stems up&length\\
+    \hline
+\end{tabularx}
+%
+% Because the table can't divide itself...
+%
+\begin{tabularx}{\linewidth}{p{3cm}p{4.5cm}p{3cm}p{5.5cm}l}
+    \hline
+    \textbf{Tag}&\textbf{Shortcuts}&\textbf{Form support}&\textbf{Notation element}&\textbf{Parameters}\\
+    \hline
+    \textbf{\textbackslash{}symbol}&\textbackslash{}s&ORT&insert an image&\textbf{file} - position - w/h - dx/dy - size\\
+    \hline
+    \textbf{\textbackslash{}systemFormat}&&&system formatting&dx\\
+    \hline
+    \textbf{\textbackslash{}tempo}&&&tempo mark&\textbf{tempo} - bpm - dx/dy - color\\
+    \hline
+    \textbf{\textbackslash{}tenuto}&\textbackslash{}ten&RT&tenuto mark&dx/dy - color - size\\
+    \hline
+    \textbf{\textbackslash{}text}&\textbackslash{}t&ORT&text annotation&\textbf{text} - dx/dy - color\\
+    \hline
+    \textbf{\textbackslash{}tie}&&RT - BE&tie notes&color\\
+    \hline
+    \textbf{\textbackslash{}title}&&&score title&\textbf{name} - pageformat - textformat - dx/dy - color\\
+    \hline
+    \textbf{\textbackslash{}tremolo}&\textbackslash{}trem&RT&tremolo sign&style - speed - pitch - thickness - text - dx/dy - color\\
+    \hline
+    \textbf{\textbackslash{}trill}&&RT&trill sign&mode - adx/ady - tr - anchor - dx/dy - color - size\\
+    \hline
+    \textbf{\textbackslash{}tuplet}&&RT&tuplet mark&\textbf{format} - position - dy1 - dy2 - lineThickness - bold -\\
+    &&&& textSize - dx - color\\
+    \hline
+    \textbf{\textbackslash{}turn}&&RT&turn sign&mode - adx/ady - dx/dy - color - size\\
+    \hline
+    \textbf{\textbackslash{}units}&&&unit specification&\textbf{type}\\
+    \hline
+    \textbf{\textbackslash{}volta}&&RT - BE&volta mark&\textbf{mark} - format - color\\
+    \hline
+\end{tabularx}
+
+\bigskip
+
+\textbf{RT} - range-tag \\
+\textbf{ORT} - optional range-tag \\
+\textbf{BE} - can be under [\textbackslash{}\emph{tagname}Begin ... \textbackslash{}\emph{tagname}End] form instead of [\textbackslash{}\emph{tagname}(...)] form\\
+Required params are in \textbf{bold}
+
+\end{document}

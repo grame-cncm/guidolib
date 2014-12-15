@@ -85,21 +85,12 @@ win32:
 	cp 	$(WIN32QTPLATFORMS) $(WIN32_NAME)/plugins/platforms
 	make common PACKAGE_NAME=$(WIN32_NAME)
 
-doc:
-
 common:
-	[ -d $(PACKAGE_NAME)/doc ] || mkdir -p $(PACKAGE_NAME)/doc
-	cp "../../doc/GUIDO-Music Notation Format.pdf" $(PACKAGE_NAME)/doc
-	cp "../../doc/GUIDO-Format_de_Notation_Musicale.pdf" $(PACKAGE_NAME)/doc
-	cp "../../doc/GUIDO_Additional_Specifications_1.3.8.pdf" $(PACKAGE_NAME)/doc
-	cp "../../doc/refcard/GMNRefCard.pdf" $(PACKAGE_NAME)/doc
+	cp -R ../../package/doc $(PACKAGE_NAME)
+	rm -rf $(PACKAGE_NAME)/doc/guidolib-?.*
 	cp ../../changelog.txt $(PACKAGE_NAME)/guido-changelog.txt
 	cp ../GuidoEditor/changelog.txt $(PACKAGE_NAME)/GuidoEditor-changelog.txt
 	cp ../guido2image/changelog.txt $(PACKAGE_NAME)/guido2image-changelog.txt
 	cp ../GuidoSceneComposer/changelog.txt $(PACKAGE_NAME)/GuidoSceneComposer-changelog.txt
 	cp appPack-readme.txt $(PACKAGE_NAME)/readme.txt
-	make commongit
-
-commongit:
-	cp -R ../../doc/html $(PACKAGE_NAME)/doc/html
 	cp -R ../../gmn-examples $(PACKAGE_NAME)/gmn-examples

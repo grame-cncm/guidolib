@@ -30,7 +30,68 @@ Note about MIDI export:
     MIDI export requires libmidisharelight. For MacOS and Windows, the library is embedded 
     in binary form in the src/midisharelight folder. Thus there is no additional step.
     On linux, you must get the library source code, compile and install.
-	
+
+Note for emscripten:
+--------------------
+To build the javascript version of guido engine, you must have emscripten sdk installed on your computer.
+Go in javascript folder and do :
+	make
+libGUIDOEngine.js is generated.
+
+You have different samples :
+- canvas.html use binary export of GUIDOEngine, parse the binary and draw in html canvas.
+- classSvg.html use the SVG export and add the SVG in html page.
+- guido.html is a complete test of the javascript GUIDOEngine API.
+- webComponent.html is an sample on how to use html 5 component for create a new html tag. A tag guido-viewer is created and integrated
+in the html page.
+- canvasDevice.html use internal javascript device. This device draw on html canvas. To intialize canvas, use jsCanvasDevice.js like in sample (all variable are use in build-in javascript).
+
+The performance of each method (SVG, parse binary or javascript device) are not the same on all browser. SVG is generally faster but on chrome it's the javascript device.
+Compilation option can make the library inconsistent result. The -O3 option is used and no problem are found with it. The -Oz option causes error at runtime.
+
+The javascript library is based on the C++ API of GUIDOEngine (class GuidoEngineAdapater)
+
+Note for Android:
+-------------------------
+    Download the Android SDK and NDK.
+
+    From the build/tools directory of the NDK, invoke make-standalone-toolchain.sh
+    to make a standalone toolchain in the directory of your choice (see NDK)
+    documentation for how.  More precisely, read section 4 in the document
+    STANDALONE-TOOLCHAIN.html that ships with the NDK. Make sure to use a recent
+    platform (at least android-18). I will call the path to your standalone toolchain
+    $PATH_TO_STANDALONE_TOOLCHAIN, the path to the NDK $PATH_TO_NDK and the path to
+    the SDK $PATH_TO_SDK.
+
+    Modify your path to contain the following.  Otherwise, the compiler
+    won't find things like the standard library.
+
+      export PATH=$PATH:$PATH_TO_NDK
+      export PATH=$PATH:$PATH_TO_SDK/tools
+      export PATH=$PATH:$PATH_TO_SDK/platform-tools
+      export PATH=$PATH:$PATH_TO_STANDALONE_TOOLCHAIN/bin
+
+    The GUIDO android applications use:
+		- the guidoengine java package called guidoengine.jar
+		- incidentally, the drawcommand java package called drawcommand.jar
+
+    To compile this, go to the java directory and do:
+
+    make headers
+    make class
+    make jar
+
+    The jar needs to be simlinked/copied into all the android sample projects that need it
+    under the libs/ directory.
+
+    From the directory android-apps/guido-engine-android, run
+
+      ndk-build
+
+    And this will build the library for android.
+    To test with a sample project, read the README file in android-apps/simple-guido-editor directory.
+      
+
 Note for Linux platforms:
 --------------------------
 	You need to have libcairo2-dev installed to compile the GUIDOEngine.

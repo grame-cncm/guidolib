@@ -96,13 +96,31 @@ public class guidoscore
 	*/
     public native final synchronized int  AR2MIDIFile(String filename, guido2midiparams params);
 
+	/** Exports a graphic representation to internal binary format
+	
+		@param pagenum the page to be exported
+		@param fontFile an optional Guido SVG font file (could be empty when there is no SVG font)
+		@return a string containing the corresponding SVG code.
+	*/
+    public native final synchronized byte[]  BinaryExport(int pagenum);
+
 	/** Exports a graphic representation to SVG
 	
 		@param pagenum the page to be exported
 		@param fontFile an optional Guido SVG font file (could be empty when there is no SVG font)
-		@return a string containing th corresponding SVG code.
+		@return a string containing the corresponding SVG code.
 	*/
     public native final synchronized String  SVGExport(int pagenum, String fontFile);
+
+
+	/** Exports a graphic representation to SVG with a font spec
+	
+		@param pagenum the page to be exported
+		@param fontFile an optional Guido SVG font file (could be empty when there is no SVG font)
+		@param fontSpec an optional Guido SVG font spec, meaning a SVG file read into the string...will be big (could be empty when there is no SVG font)
+		@return a string containing the corresponding SVG code.
+	*/
+    public native final synchronized String  SVGExportWithFontSpec(int pagenum, String fontFile, String fontSpec);
 
 
 	/** Updates a GR representation

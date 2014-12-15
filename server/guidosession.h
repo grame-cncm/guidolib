@@ -31,7 +31,8 @@
 #include "utilities.h"
 #include "guido2img.h"
 
-#include "json/json_value.h"
+#include "json_value.h"
+#include "map2json.h"
 
 using namespace std;
 
@@ -77,16 +78,6 @@ struct guidosessionresponse {
     ~guidosessionresponse ();
 };
 
-
-class GuidoServerTimeMap : public TimeMapCollector
-{
-  public:
-    vector<pair<TimeSegment, TimeSegment> > segments_;
-    virtual ~GuidoServerTimeMap() {}
-    virtual void Time2TimeMap( const TimeSegment& from, const TimeSegment& to ) {
-      segments_.push_back (pair<TimeSegment, TimeSegment> (from, to));
-    }
-};
 
 class guidosession
 {
@@ -187,7 +178,7 @@ public :
     // more advanced handling
     guidosessionresponse datePageJson(string, int);
     guidosessionresponse mapJson (string thingToGet, Time2GraphicMap &outmap);
-    guidosessionresponse timeMapJson (GuidoServerTimeMap &outmap);
+    guidosessionresponse timeMapJson (JSONFriendlyTimeMap &outmap);
 
     // queries
     guidoAPIresponse countVoices(int &n);
@@ -196,7 +187,7 @@ public :
     guidoAPIresponse findPageAt(GuidoDate date, int &p);
     guidoAPIresponse getPageDate(int page, GuidoDate &date);
     guidoAPIresponse getMap (GuidoSessionMapType map, int aux, Time2GraphicMap& outmap);
-    guidoAPIresponse getTimeMap (GuidoServerTimeMap& outmap);
+    guidoAPIresponse getTimeMap (JSONFriendlyTimeMap& outmap);
     static string getVersion();
     static string getServerVersion();
     static float getLineSpace();

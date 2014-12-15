@@ -1,0 +1,18 @@
+---- Read root README before (section "Note for Android") ----
+
+After a ndk-build in ../guido-engine-android, copy the content of directory ../guido-engine-android/libs to a new directory ./libs
+
+To compile this project, you need to import:
+    android-support-v4.jar
+	guidoengine.jar
+	drawcommand.jar
+
+Then execute (if you're not using any IDE)
+  android update project -p .
+  ant debug
+  adb install -r bin/SimpleGuidoEditor-debug.apk
+
+Make sure you have the sdk installed, java development tools, an emulator up and running that is recognized by adb.
+
+To learn how to set up emulators and whatnot, check out
+http://developer.android.com/.

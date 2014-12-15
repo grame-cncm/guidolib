@@ -119,6 +119,10 @@ class QGuidoPainter
 		*/
 		QString gmnCode() const;
 		
+        /** \brief Neck to convert AR to GR and get conversion time
+		*/
+		GuidoErrCode convertAR2GR(ARHandler ar, const GuidoLayoutSettings* settings, GRHandler* gr);
+
 		/** \brief Returns the validity of the last GMN code loaded with setGMNCode or setGMNFile
 		*/
 		bool isGMNValid() const;
@@ -157,7 +161,7 @@ class QGuidoPainter
 		*
 		*	\note drawRectangle is in QPainter's QPaintDevice coordinates.
 		*/
-        void drawPianoRoll(QPainter * painter, const QRect& drawRectangle, PianoRoll *pianoRoll);
+        GuidoErrCode drawPianoRoll(QPainter * painter, const QRect& drawRectangle, PianoRoll *pianoRoll);
 		
 		/**
 		*	\brief Returns the height corresponding to the specified width for the
@@ -204,7 +208,7 @@ class QGuidoPainter
 		/// \brief Disable/enable automatic ResizePageToMusic
 		void setResizePageToMusic(bool isOn);
 		/// \brief Returns the state of the automatic ResizePageToMusic mode (enabled or disabled)
-		bool isResizePageToMusic() const { return mResizePageToMusic; }
+        bool isResizePageToMusicOn() const { return mLayoutSettings.resizePage2Music; }
 
 		/// \brief Sets the page format used when no page format is specified by the GMN
 		void setGuidoPageFormat(const GuidoPageFormat& pageFormat);
@@ -248,7 +252,6 @@ class QGuidoPainter
         GuidoStream * mGMNStream;
 		GuidoErrCode mLastErr;
 
-		bool mResizePageToMusic;
 		GuidoLayoutSettings mLayoutSettings;		
 		GuidoPageFormat mPageFormat;
 

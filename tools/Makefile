@@ -1,5 +1,5 @@
 
-INC = -I../src/include -I../src/devices
+INC = -I../src/engine/include -I../src/engine/devices
 
 system	:= $(shell uname -s)
 ifeq ($(system), Darwin)
@@ -24,7 +24,7 @@ all: $(TOOLS) guido2midi
 tools: $(TOOLS)
 
 guidogetversion : guidogetversion.cpp
-	g++ guidogetversion.cpp -I../src/include $(lib) -o guidogetversion
+	g++ guidogetversion.cpp -I../src/engine/include $(lib) -o guidogetversion
 
 midi2rproportional : midi2rproportional.cpp
 	g++ midi2rproportional.cpp $(INC) $(lib) -o midi2rproportional

@@ -8,3 +8,12 @@ GuidoQtFontViewer/Makefile
 GuidoSceneComposer/Makefile
 GuidoServer/guidohttpserver
 guido2image/Makefile
+package/GuidoQtApplsMacOSX*
+.qmake.stash
+Debug-iphone*
+Release-iphone*
+GuidoQtApplsMacOSX-*
+package/GUIDOQt-?.*.deb
+FontMetrics/Makefile
+GuidoFontMetrics/Makefile
+GuidoFontMetrics/guidofontmetrics.pro.user

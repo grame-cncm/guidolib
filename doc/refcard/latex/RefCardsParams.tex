@@ -1,0 +1,341 @@
+\documentclass[a4paper, landscape, 10pt]{article}
+
+\usepackage{tabularx}
+\usepackage{lipsum}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+
+\geometry{hmargin=1.5cm, vmargin=1.5cm}
+
+\pagestyle{fancy}
+
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyfoot[C]{\textbf{\thepage}}
+\fancyfoot[R]{GUIDOLib v1.54}
+
+\makeatletter
+\renewcommand{\maketitle}{
+    \begin{center}
+      \large
+      {\LARGE\@title}
+      \par\vspace{1ex}
+      GUIDOLib v1.54
+    \end{center}
+}
+\makeatother
+
+\begin{document}
+
+\title{GMNF \emph{params} description}
+\date{\today}
+
+\maketitle
+
+% Disable indentation
+\setlength{\parindent}{0pt}
+
+% To vert.ly center text inside cells
+\renewcommand{\tabularxcolumn}[1]{m{#1}}
+
+\begin{tabularx}{\linewidth}{p{3cm}p{3cm}p{6cm}p{2.5cm}p{2.5cm}p{3.5cm}p{3.5cm}}
+    \hline
+    \textbf{Tag}&\textbf{Parameters}&\textbf{Description}&\textbf{Type}&\textbf{Default value}&\textbf{Authorized values}&\textbf{Examples}\\
+    \hline
+    \textbf{\textbackslash{}accelerando}&tempo&tempo for the beginning note&tempo string&`` ''&&``60'' - ``80''\\
+    &abstempo&tempo for the ending note&tempo string&`` ''&&``60'' - ``80''\\
+    &font&font name for the text&font string&``Times new Roman''&&``Arial''\\
+    &fattrib&font attributes&attributes string&`` ''&&``i'' - ``bi''\\
+    &fsize&font size&unit&9pt&&\\
+    &dx/dy - color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}accent}&dx/dy - color - size&&&&&\\
+    \hline
+    \textbf{\textbackslash{}accidental}&style&put brackets or not&string&`` ''&`` '' - ``cautionary''&\\
+    &dx/dy - color - size&&&&&\\
+    \hline
+    \textbf{\textbackslash{}accolade}&\textbf{id}&identification number of the accolade&integer&&&\\
+    &\textbf{range}&beginning and ending staves concerned by the accolade&string&&&``1-2'' - ``2-5''\\
+    &type&accolade graphical style&string&`` ''&`` '' - ``standard'' - ``none'' - ``thinBrace' - ``straightBrace'''&\\
+    &dx/dy - color - size&&&&&\\
+    \hline
+    \textbf{\textbackslash{}alter}&\textbf{detune}&detune value&float&0.0&&\\
+    \hline
+    \textbf{\textbackslash{}auto}&autoEndBar&enable or not automatic end bar&on/off string&``on''&``on'' - ``off''&\\
+    % Other params are not used for now
+    \hline
+    \textbf{\textbackslash{}bar}&displayMeasNum&display measure number or not&boolean string&``false''&``true'' - ``false''&\\
+    &numDx / numDy&measure number horiz./vert. offset&unit&0&&\\
+    &dx/dy - color - size&&&&&\\
+    \hline
+    %\textbf{\textbackslash{}barFormat}&&&&&&\\ % Useless tag for now
+    %\hline
+    \textbf{\textbackslash{}beam}&dy1&vert. offset (left of beam)&unit&7hs&&\\
+    &dy2&vert. offset (right of beam)&unit&7hs&&\\
+    &dx1/dy1&horiz./vert. offset (point 1)&unit&0hs&&\\
+    &dx2/dy2&horiz./vert. offset (point 2)&unit&0hs/1hs&&\\
+    &dx3/dy3&horiz./vert. offset (point 3)&unit&0hs&&\\
+    &dx4/dy4&horiz./vert. offset (point 4)&unit&0hs/1hs&&\\
+    &dy&vert. offset&unit&7hs&&\\
+    &color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}breathMark}&color&&&&&\\
+    \hline
+    %\textbf{\textbackslash{}bembel}&&&&&&\\ % Useless tag for now
+    %\hline
+    \textbf{\textbackslash{}clef}&\textbf{type}&clef type&string&``treble''&&``tenor'' - ``g+8''\\
+    &dx/dy - color - size&&&&&\\
+    \hline
+    \textbf{\textbackslash{}cluster}&hdx/hdy&head cluster horiz./vert. offset&unit&0&&\\
+    &dx/dy - color - size&&&&&\\
+    \hline
+    \textbf{\textbackslash{}coda}&dx/dy - color&&&&&\\
+    \hline
+    %\textbf{\textbackslash{}color}&&&&&&\\ % Useless tag for now
+    %\hline
+\end{tabularx}
+
+
+\begin{tabularx}{\linewidth}{p{3cm}p{3cm}p{5cm}p{3cm}p{2.5cm}p{3.5cm}p{4cm}}
+    \hline
+    \textbf{Tag}&\textbf{Parameters}&\textbf{Description}&\textbf{Type}&\textbf{Default value}&\textbf{Authorized values}&\textbf{Examples}\\
+    \hline
+    \textbf{\textbackslash{}composer}&\textbf{name}&composer's name&string&&&\\
+    &pageformat&page format&string&``53''&&\\ % Which are pageformat values ?
+    &dx/dy - color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}crescendo}&dm&dynamic mark&intensity string&`` ''&&``ff'' - ``mp''\\
+    &dx1&left symbol horiz. offset&unit&0&&\\
+    &dx2&right symbol horiz. offset&unit&0&&\\
+    &deltaY&aperture vert. offset&unit&3&&\\
+    &thickness&lines thickness&unit&0.16&&\\
+	&dy - color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}cue}&name&cue text&string&`` ''&&\\
+    &dx/dy - color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}daCapo}&dx/dy - color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}daCapoAlFine}&dx/dy - color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}daCoda}&dx/dy - color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}dalSegno}&dx/dy - color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}dalSegnoAlFine}&dx/dy - color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}decrescendo}&dm&dynamic mark&intensity string&`` ''&&``ff'' - ``mp''\\
+    &dx1&left symbol horiz. offset&unit&0&&\\
+    &dx2&right symbol horiz. offset&unit&0&&\\
+    &deltaY&aperture vert. offset&unit&3&&\\
+    &thickness&lines thickness&unit&0.16&&\\
+    &dy - color&&&&&\\
+    \hline
+    %\textbf{\textbackslash{}defineTag}&&&&&&\\ % Useless tag for now
+    %\hline
+    \textbf{\textbackslash{}displayDuration}&\textbf{n}&displayed numerator&integer&&&\\
+    &\textbf{d}&displayed denominator&integer&&&\\
+    &ndots&displayed dots number&integer&0&&\\
+    \hline 
+    \textbf{\textbackslash{}dotFormat}&dx/dy - color - size&&&&&\\
+    &&&&&&\\
+    \hline
+    \textbf{\textbackslash{}doubleBar}&color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}endBar}&color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}fBeam}&durations&begin and end durations&durations string&&&``1/32, 1/16'' - ``1/8, 1/32''\\
+    &drawDuration&display or not total duration&boolean string&``false''&``true'' - ``false''&\\
+    &color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}fermata}&type&fermata type&string&``short''&``short'' - ``long''&\\
+    &position&fermata position&string&``above''&``below'' - ``above''&\\
+    &dx/dy - color - size&&&&&\\
+    \hline
+    \textbf{\textbackslash{}fine}&dx/dy - color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}fingering}&\textbf{text}&fingering text&string&&&\\
+    &fsize&text size&unit&1.0&&\\
+    &dx/dy - color&&&&&\\
+    \hline
+\end{tabularx}
+
+
+\begin{tabularx}{\linewidth}{p{3cm}p{3cm}p{5cm}p{3cm}p{2.5cm}p{3.5cm}p{4cm}}
+    \hline
+    \textbf{Tag}&\textbf{Parameters}&\textbf{Description}&\textbf{Type}&\textbf{Default value}&\textbf{Authorized values}&\textbf{Examples}\\
+    \hline
+    \textbf{\textbackslash{}glissando}&dx1/dy1&glissando left horiz./vert. offset&unit&0&&\\
+    &dx2/dy2&glissando left horiz./vert. offset&unit&0&&\\
+    &fill&fill glissando or not&boolean string&``false''&``true'' - ``false''&\\
+    &thickness&glissando line thickness&unit&0.3&&\\
+    %&lineStyle&glissando line style&string&``line''&``line'' - ``wavy''&\\ % Doesn't work yet
+    &color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}harmonic}&dx/dy - color - size&&&&&\\
+    \hline
+    \textbf{\textbackslash{}instrument}&\textbf{name}&instrument name&string&&&\\
+    &transp&transposition value&string&`` ''&&``A'' - ``D\#''\\
+    &dx/dy - color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}intensity}&\textbf{type}&intensity mark&intensity string&`` ''&&``ff'' - ``mp''\\
+    &dx/dy - color - size&&&&&\\
+    \hline
+    \textbf{\textbackslash{}key}&\textbf{key}&key value&key string&&&``G'' - ``F\#''\\
+    &color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}label}&\textbf{text}&label text&string&&&\\
+    &dx/dy - color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}lyrics}&\textbf{text}&lyrics&string&&&\\
+    &dx/dy - color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}marcato}&position&marcato position&string&``notset''&``notset'' - ``above'' - ``below''&\\
+    &dx/dy - color - size&&&&&\\
+    \hline
+    \textbf{\textbackslash{}mark}&\textbf{text}&text mark&string&&&\\
+    &dx/dy - color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}meter}&\textbf{type}&meter value&meter string&&&``C'' - ``2/4'' - ``2+2+3/4''\\
+    &autoBarlines&enable automatic barlines or not&on/off string&``on''&``on'' - ``off''&\\
+    &autoMeasuresNum&enable automatic measures numbering or not&on/off string&``off''&``on'' - ``off''&\\
+    &dx/dy - color - size&&&&&\\
+    \hline
+    \textbf{\textbackslash{}mordent}&mode&mode type&string&``cautionnary''&``cautionnary''&\\
+    &adx/ady&accidental horiz./vert. offset&unit&0&&\\
+    &dx/dy - color - size&&&&&\\
+    \hline
+    \textbf{\textbackslash{}newSystem}&dy&&&&&\\
+    \hline
+    \textbf{\textbackslash{}noteFormat}&style&notehead style&notehead string&``standard''&&``diamond'' - ``square''\\
+	&dx/dy - color - size&&&&&\\
+    \hline
+    \textbf{\textbackslash{}octava}&\textbf{i}&octave value&unit&&&\\
+    &color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}pageFormat}&\textbf{w/h}&weight/height&unit&&&\\
+    &\textbf{type}&page type&string&&&``A4'' - ``A3'' - ``letter''\\
+    &lm/rm&left/right margin&unit&2cm&&\\
+    &tm&top margin&unit&5cm&&\\
+    &bm&bot margin&unit&3cm&&\\
+    \hline
+\end{tabularx}
+
+
+\begin{tabularx}{\linewidth}{p{3cm}p{3cm}p{5cm}p{3cm}p{2.5cm}p{3.5cm}p{4cm}}
+    \hline
+    \textbf{Tag}&\textbf{Parameters}&\textbf{Description}&\textbf{Type}&\textbf{Default value}&\textbf{Authorized values}&\textbf{Examples}\\
+    \hline
+    \textbf{\textbackslash{}pizzicato}&type&pizzicato type&string&``lefthand''&``lefthand'' - ``buzz'' - ``snap'' - ``bartok'' - ``fingernail''&\\
+        &dx/dy - color - size&&&&&\\
+    \hline
+    \textbf{\textbackslash{}repeatBegin}&dx/dy - color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}repeatEnd}&dx/dy - color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}restFormat}&dx/dy - color - size&&&&&\\
+    \hline
+    \textbf{\textbackslash{}ritardando}&tempo&tempo for the beginning note&tempo string&`` ''&&``60'' - ``80''\\
+    &abstempo&tempo for the ending note&tempo string&`` ''&&``60'' - ``80''\\
+    &font&font name for the text&font string&``Times new Roman''&&``Arial''\\
+    &fattrib&font attributes&attributes string&`` ''&&``i'' - ``bi''\\
+    &fsize&font size&unit&9pt&&\\
+    &dx/dy - color&&&&&\\
+    \hline
+	\textbf{\textbackslash{}segno}&dx/dy - color&&&&&\\
+    \hline
+	\textbf{\textbackslash{}slur}&color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}space}&\textbf{dd}&space size&unit&&&\\
+    \hline
+    \textbf{\textbackslash{}special}&\textbf{char}&special char id&Char id string&&``[id]'' - ``\textbackslash{}x[id in hexa]'' - ``\textbackslash{}o[id in octa]''&``\textbackslash{}64'' - ``\textbackslash{}x40'' - ``\textbackslash{}o100''\\
+    &dx/dy - color - size&&&&&\\
+    \hline
+    \textbf{\textbackslash{}staccato}&type&staccato type&string&``regular''&``regular'' - ``heavy''&\\
+    &dx/dy - color - size&&&&&\\
+    \hline
+    \textbf{\textbackslash{}staff}&\textbf{id}&staff id&integer / string&&&\\
+    &dy&&&&&\\
+    \hline
+    \textbf{\textbackslash{}staffFormat}&style&staff style&string&``5-lines''&&``2-lines'' - ``7-lines''\\
+    &lineThickness&staff lines thickness&unit&0.08&&\\
+    &dy&staff vertical offset&unit&0&&\\
+    &color - size&&&&&\\
+    \hline
+    \textbf{\textbackslash{}stemsAuto}&length&stem length&unit&7.0&&\\
+    \hline
+    \textbf{\textbackslash{}stemsDown}&length&stem length&unit&7.0&&\\
+    \hline
+    \textbf{\textbackslash{}stemsUp}&length&stem length&unit&7.0&&\\
+    \hline
+    \textbf{\textbackslash{}symbol}&\textbf{file}&symbol file path&path string&&&\\
+    &position&symbol position&string&``mid''&``mid'' - ``top'' - ``bot''&\\
+    &w/h&symbol weight/height&integer&&&\\
+    &dx/dy - size&&&&&\\
+    \hline
+    \textbf{\textbackslash{}systemFormat}&dx&system horizontal offset&&&&\\
+    \hline
+    \textbf{\textbackslash{}tempo}&\textbf{tempo}&tempo mark&string&&&``Andante [1/4]=60''\\
+    &bpm&midi bpm&string&&&``1/8=80''\\
+    &dx/dy - color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}tenuto}&dx/dy - color - size&&&&&\\
+    \hline
+\end{tabularx}
+
+
+\begin{tabularx}{\linewidth}{p{3cm}p{3cm}p{5cm}p{3cm}p{2.5cm}p{3.5cm}p{4cm}}
+    \hline
+    \textbf{Tag}&\textbf{Parameters}&\textbf{Description}&\textbf{Type}&\textbf{Default value}&\textbf{Authorized values}&\textbf{Examples}\\
+    \hline
+    \textbf{\textbackslash{}text}&\textbf{text}&text&string&&&\\
+    &dx/dy - color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}tie}&color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}title}&\textbf{name}&title text&string&&&\\
+    &pageformat&page format&string&``c2''&&\\ % incomplete
+    &textformat&text format&string&``cc''&&``l'' - ``cl''\\ % incomplete
+    &dx/dy - color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}tremolo}&style&strokes number&string&``///''&``///'' - ``/'' - ``//'' - ``////''&\\
+    &speed&repeated notes duration&integer&32&&\\
+    &pitch&other event with which tremolo is done&string&&&``a'' - ``\{c, e\}''\\
+    &thickness&tremolo strokes thickness&unit&0.75&&\\
+    &text&tremolo text&string&&&\\
+    &dx/dy - color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}trill}&mode&mode type&string&``cautionnary''&``cautionnary''&\\
+    &adx/ady&accidental horiz./vert. offset&unit&0&&\\
+    &tr&``tr'' display&boolean string&``true''&``true'' - ``false''&\\
+    &anchor&anchor place&string&``above''&``note'' - ``above''&\\
+    &dx/dy - color - size&&&&&\\
+    \hline
+    \textbf{\textbackslash{}tuplet}&\textbf{format}&tuplet format&string&``- -''&&``-3-'' - ``2:7-''\\
+    &position&tuplet position style&string&``above''&``below'' - ``above''&\\
+    &dy1&tuplet left vertical offset&unit&0&&\\
+    &dy2&tuplet left vertical offset&unit&0&&\\
+    &lineThickness&tuplet line thickness&unit&0.08&&\\
+    &bold&bold text or not&boolean string&``false''&``true'' - ``false''&\\
+    &textSize&text size&unit&1.0&&\\
+    &dx - color&&&&&\\
+    \hline
+    \textbf{\textbackslash{}turn}&mode&mode type&string&``cautionnary''&``cautionnary''&\\
+    &adx/ady&accidental horiz./vert. offset&unit&0&&\\
+    &dx/dy - color - size&&&&&\\
+    \hline
+    \textbf{\textbackslash{}units}&\textbf{type}&unit type&unit string&``cm''&&``mm'' - ``pt'' - ``hs''\\
+    \hline
+    \textbf{\textbackslash{}volta}&\textbf{mark}&volta mark&string&&&\\
+    &format&volta style&string&``\textbar-\textbar''&``\textbar-\textbar'' - ``\textbar-'' - ``-\textbar'' - ``-''&\\
+    &color&&&&&\\
+    \hline
+\end{tabularx}
+
+\bigskip
+
+\textbf{dx/dy} : horiz./vert. offset | Value type : unit | Default value : 0\\
+\textbf{color} : element color | Value type : string. Default value : ``black'' | Examples : ``red'' - ``0x135618''\\
+\textbf{size} : element size | Value type : unit | Default value : 1.0\\
+    
+\end{document}

@@ -5,6 +5,13 @@
 
 using namespace std;
 
+<<<<<<< HEAD
+#ifdef __APPLE_CC__
+	#include <GLUT/glut.h>
+#else
+//	#include <glut.h>		//use this include for VC++7
+=======
+>>>>>>> origin/dev
 	#include <GL/glut.h>	//use this include for VC++6
 
 
@@ -86,8 +93,21 @@ bool GuidoViewerApp::Initialize()
 
 
 	desc.graphicDevice = fDevice;
+<<<<<<< HEAD
+	//desc.textFont = "Times";
+//#if defined(WIN32) || defined(linux)
+//	desc.musicFont = "guido2.ttf";
+//	desc.textFont = "times.ttf";
+//#else
+	//desc.musicFont = "../Resources/guido2.ttf";
+//	desc.textFont = "Times";
+//#endif
+desc.musicFont = "../../../src/guido2.ttf";
+desc.textFont = "../times.ttf";
+=======
 	desc.textFont = "Times";
 	desc.musicFont = "../../../src/guido2.ttf";
+>>>>>>> origin/dev
 	GuidoErrCode result = GuidoInit( &desc );
 	if( result != guidoNoErr ) {
 		ReportGuidoError( result );
@@ -196,6 +216,14 @@ void GuidoViewerApp::DrawScore()
 	GuidoErrCode err = GuidoOnDraw(&desc);
 }
 
+<<<<<<< HEAD
+// ---------------------------------------------------------------------------
+string GuidoViewerApp::SelectOneFile()
+{
+	return "../../../regression-tests/accidental-oct.gmn";
+}
+=======
+>>>>>>> origin/dev
 
 // ------------------------------ ---------------------------------------------
 void GuidoViewerApp::Reload()
