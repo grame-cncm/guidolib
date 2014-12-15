@@ -20,7 +20,7 @@ deb:
 	cp -r debiansvn/DEBIAN debian
 	@echo setup include files...
 	@[ -d $(incl) ] || mkdir -p $(incl)	
-	cp ../src/include/*.h ../linux/src/Cairo*.h $(incl)
+	cp ../src/engine/include/*.h ../linux/src/Cairo*.h $(incl)
 	@echo setup library...
 	@[ -d debian/usr/lib ] || mkdir debian/usr/lib
 	cp ../cmake/$(lib).$(version) debian/usr/lib
