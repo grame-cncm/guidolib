@@ -15,12 +15,12 @@
 		
 		var gr = guidoEngine.ar2gr(ar);
 		var result = guidoEngine.svgExport(gr, 1);
-
 		guidoEngine.freeGR(gr);
 		guidoEngine.freeAR(ar);
 		
 		$("#canvasContainer").html(result);
-		$("#canvasContainer2").html("<plaintext>" + result + "</plaintext>");
+		// Remove comment to have svg result in text
+		//$("#canvasContainer2").html("<plaintext>" + result + "</plaintext>");
 	}
 	$( document ).ready(function() {
 		guidoEngine = new Module.GuidoEngineAdapter;
