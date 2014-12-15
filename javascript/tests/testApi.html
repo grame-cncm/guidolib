@@ -41,12 +41,12 @@
 		};
 		var gr = guidoEngine.ar2grSettings(ar, settings);
 		//var gr = guidoEngine.ar2gr(ar);
-		$("#guidoResizePageToMusic").html("<b>guidoResizePageToMusic Error Code : </b>" + guidoEngine.resizePageToMusic(gr).value);
+		$("#guidoResizePageToMusic").html("<b>guidoEngine.resizePageToMusic(gr) Error Code : </b>" + guidoEngine.resizePageToMusic(gr).value);
 		
 		var result = guidoEngine.svgExport(gr, 1);
 		
 		// Draw the export svg on page
-		$("#guido_svg").html(result);
+		$("#guido_svg").html("<div><b>Export svg of " + gmn + "</b></div>" + result);
 		
 		// Modify settings and re-draw
 		settings= {
@@ -62,7 +62,7 @@
 		};
 		guidoEngine.updateGRSettings(gr, settings);
 		result = guidoEngine.svgExport(gr, 1);
-		$("#guidoUpdateGR").html(result);
+		$("#guidoUpdateGR").html("<div><b>Update GR with different settings (guidoEngine.updateGRSettings)</b></div>" + result);
 		
 		// Test stream and draw 
 		var stream = guidoEngine.openStream();
@@ -72,113 +72,106 @@
 		var ar2 = guidoEngine.stream2AR(p, stream);
 		var gr2 = guidoEngine.ar2gr(ar2);
 		var result2 = guidoEngine.svgExport(gr2, 1);
-		$("#guido_svg2").html(result2);
+		$("#guido_svg2").html("<div><b>ar construct with a stream (guidoEngine.stream2AR) gmn code : f g b/8 d f/4 e : </b></div>" + result2);
 		
-		$("#guidoGetStream").html("<b>guidoGetStream </b>" + guidoEngine.getStream(stream));
+		$("#guidoGetStream").html("<b>guidoEngine.getStream with gmn code " + code + "</b>" + guidoEngine.getStream(stream));
 		guidoEngine.resetStream(stream);
-		$("#guidoGetStream2").html("<b>guidoGetStream after reset</b>" + guidoEngine.getStream(stream));
+		$("#guidoGetStream2").html("<b>guidoEngine.resetStream after reset (guidoEngine.resetStream) :</b>" + guidoEngine.getStream(stream));
 		guidoEngine.closeStream(stream);
 		
 		// Test abstract export
 		var abstractExport = guidoEngine.abstractExport(gr2, 1);
-		$("#guidoAbstractExport").html("<b>Abstract Export</b><br/>" + abstractExport);
+		$("#guidoAbstractExport").html("<b>Abstract Export of gmn code " + code + " (guidoEngine.abstractExport)</b><br/>" + abstractExport);
 		
 		// Free resource. GRHandler must be free before ARHandler
 		guidoEngine.freeGR(gr2);
 		
 		// Test methods
 		var layoutSettings = guidoEngine.getDefaultLayoutSettings();
-		$("#guidolayoutsettings").html("<b>Default layout settings</b> systemsDistance = " + layoutSettings.systemsDistance + " / spring = " + layoutSettings.spring);
-		$("#guidoCountVoices").html("<b>Number of voices:</b> " + guidoEngine.countVoices(ar));
-		$("#guidoGetPageCount").html("<b>Number of pages:</b> " + guidoEngine.getPageCount(gr));
-		$("#guidoGetSystemCount").html("<b>Number of systems on page 1:</b> " + guidoEngine.getSystemCount(gr, 1));
+		$("#guidolayoutsettings").html("<b>Default layout settings (guidoEngine.getDefaultLayoutSettings)</b> systemsDistance = " + layoutSettings.systemsDistance + " / spring = " + layoutSettings.spring);
+		$("#guidoCountVoices").html("<b>Number of voices (guidoEngine.countVoices) :</b> " + guidoEngine.countVoices(ar));
+		$("#guidoGetPageCount").html("<b>Number of pages (guidoEngine.getPageCount) :</b> " + guidoEngine.getPageCount(gr));
+		$("#guidoGetSystemCount").html("<b>Number of systems on page 1 (guidoEngine.getSystemCount):</b> " + guidoEngine.getSystemCount(gr, 1));
 		var date = guidoEngine.duration(gr);
-		$("#guidoDuration").html("<b>Duration :</b> num = " + date.num + " / denom = "+ date.denom);
+		$("#guidoDuration").html("<b>Duration (guidoEngine.duration) : </b> num = " + date.num + " / denom = "+ date.denom);
 		
 		date = { num : 1, denom : 4};
 		var page = guidoEngine.findEventPage(gr, date);
-		$("#guidoFindEventPage").html("<b>Page at event 1/4:</b> " + page);
+		$("#guidoFindEventPage").html("<b>Page at event 1/4 (guidoEngine.findEventPage) : </b> " + page);
 		
 		page = guidoEngine.findPageAt(gr, date);
-		$("#guidoFindPageAt").html("<b>Page at 1/4:</b> " + page);
+		$("#guidoFindPageAt").html("<b>Page at 1/4 (guidoEngine.findPageAt) : </b> " + page);
 		
 		date = guidoEngine.getPageDate(gr, 1);
-		$("#guidoGetPageDate").html("<b>Page date for page 1:</b> num = " + date.num + " / denom = "+ date.denom);
+		$("#guidoGetPageDate").html("<b>Page date for page 1 (guidoEngine.getPageDate) :</b> num = " + date.num + " / denom = "+ date.denom);
 		
-		$("#guidoGetDrawBoundingBoxes").html("<b>guidoGetDrawBoundingBoxes : </b>" + guidoEngine.getDrawBoundingBoxes());
+		$("#guidoGetDrawBoundingBoxes").html("<b>guidoEngine.getDrawBoundingBoxes() : </b>" + guidoEngine.getDrawBoundingBoxes());
 		guidoEngine.setDrawBoundingBoxes(2);
-		$("#guidoGetDrawBoundingBoxes2").html("<b>guidoGetDrawBoundingBoxes after set 2 : </b>" + guidoEngine.getDrawBoundingBoxes());
+		$("#guidoGetDrawBoundingBoxes2").html("<b>guidoEngine.getDrawBoundingBoxes() after guidoEngine.setDrawBoundingBoxes(2) : </b>" + guidoEngine.getDrawBoundingBoxes());
 		
 		var pageFormat = guidoEngine.getPageFormat(gr, 1);
-		$("#guidoGetPageFormat").html("<b>guidoGetPageFormat = </b> width = " + pageFormat.width + " / height = " + pageFormat.height);
+		$("#guidoGetPageFormat").html("<b>guidoEngine.getPageFormat = </b> width = " + pageFormat.width + " / height = " + pageFormat.height);
 		pageFormat.width = 2000.2;
 		pageFormat.height = 3000.1;		
 		guidoEngine.setDefaultPageFormat(pageFormat);
 		pageFormat = guidoEngine.getDefaultPageFormat()
-		$("#guidoGetDefaultPageFormat").html("<b>guidoGetDefaultPageFormat after set = </b> width = " + pageFormat.width + " / height = " + pageFormat.height);
-		$("#guidoUnit2CM").html("<b>guidoUnit2CM 2.3</b> " + guidoEngine.unit2CM(2.3));
-		$("#guidoCM2Unit").html("<b>guidoCM2Unit 2.5</b> " + guidoEngine.cm2Unit(2.5));
-		$("#guidoUnit2Inches").html("<b>guidoUnit2Inches 3.1</b> " + guidoEngine.unit2Inches(3.1));
-		$("#guidoInches2Unit").html("<b>guidoInches2Unit 3.1</b> " + guidoEngine.inches2Unit(1.3));
+		$("#guidoGetDefaultPageFormat").html("<b>guidoEngine.getDefaultPageFormat() after set = </b> width = " + pageFormat.width + " / height = " + pageFormat.height);
+		$("#guidoUnit2CM").html("<b>guidoEngine.unit2CM 2.3</b> " + guidoEngine.unit2CM(2.3));
+		$("#guidoCM2Unit").html("<b>guidoEngine.cm2Unit 2.5</b> " + guidoEngine.cm2Unit(2.5));
+		$("#guidoUnit2Inches").html("<b>guidoEngine.unit2Inches 3.1</b> " + guidoEngine.unit2Inches(3.1));
+		$("#guidoInches2Unit").html("<b>guidoEngine.inches2Unit 3.1</b> " + guidoEngine.inches2Unit(1.3));
 		var version = guidoEngine.getVersion();
-		$("#guidoGetVersionNums").html("<b>guidoGetVersionNums </b>" + 
+		$("#guidoGetVersionNums").html("<b>guidoEngine.getVersion </b>" + 
 				version.major + "." +
 				version.minor + "." +
 				version.sub + 
 				" / String version = " + version.str);
-		$("#guidoCheckVersionNums").html("<b>guidoCheckVersionNums 1.5.9 error code </b>" + guidoEngine.checkVersionNums(1, 5, 9).value);
-		$("#guidoGetLineSpace").html("<b>guidoGetLineSpace </b>" + guidoEngine.getLineSpace());
+		$("#guidoCheckVersionNums").html("<b>guidoEngine.checkVersionNums 1.5.9 error code </b>" + guidoEngine.checkVersionNums(1, 5, 9).value);
+		$("#guidoGetLineSpace").html("<b>guidoEngine.getLineSpace </b>" + guidoEngine.getLineSpace());
 		
 		// Test parser error
 		var parser = guidoEngine.openParser();
 		var ar3 = guidoEngine.string2AR(parser, "[a b c ( b]");
 		var errorCode = guidoEngine.parserGetErrorCode(parser);
 		guidoEngine.closeParser(parser);
-		$("#parserGetErrorCode").html("<b>parserGetErrorCode with [a b c ( b] = line = </b>" + errorCode.line + " / col = " + errorCode.col + " / message =" + errorCode.msg );
+		$("#parserGetErrorCode").html("<b>guidoEngine.parserGetErrorCode with [a b c ( b] = line = </b>" + errorCode.line + " / col = " + errorCode.col + " / message =" + errorCode.msg );
 		
 		guidoEngine.freeAR(ar3);
 		
 		// Score Map test
 		var scoreMap = new Module.GUIDOScoreMap;
 
-		guidoGetPageMap_JSON = document.getElementById('guidoGetPageMap_JSON');
 		pagemap_n = scoreMap.getPageMap( gr, 1, 1000.0, 1000.0 );
-		guidoGetPageMap_JSON.innerHTML = "<b>Page map for page 1:</b> "+ pagemap_n;
+		$("#guidoGetPageMap_JSON").html("<b>Page map for page 1 (scoreMap.getPageMap( gr, 1, 1000.0, 1000.0 )) :</b> "+ pagemap_n);
 
-		guidoGetStaffMap_JSON = document.getElementById('guidoGetStaffMap_JSON');
 		staffmap_n = scoreMap.getStaffMap( gr, 1, 1000.0, 1000.0, 1 );
-		guidoGetStaffMap_JSON.innerHTML = "<b>Staff map for page 1, staff 1:</b> "+ staffmap_n;
+		$("#guidoGetStaffMap_JSON").html("<b>Staff map for page 1, staff 1 (scoreMap.getStaffMap( gr, 1, 1000.0, 1000.0, 1 )) :</b> "+ staffmap_n);
 		
-		guidoGetVoiceMap_JSON = document.getElementById('guidoGetVoiceMap_JSON');
 		voicemap_n = scoreMap.getVoiceMap( gr, 1, 1000.0, 1000.0, 1 );
-		guidoGetVoiceMap_JSON.innerHTML = "<b>Voice map for page 1, voice 1:</b> "+ voicemap_n;
+		$("#guidoGetVoiceMap_JSON").html("<b>Voice map for page 1, voice 1 (scoreMap.getVoiceMap( gr, 1, 1000.0, 1000.0, 1 )) :</b> "+ voicemap_n);
 
-		guidoGetSystemMap_JSON = document.getElementById('guidoGetSystemMap_JSON');
 		systemmap_n = scoreMap.getSystemMap( gr, 1, 1000.0, 1000.0);
-		guidoGetSystemMap_JSON.innerHTML = "<b>System map for page 1:</b> "+ systemmap_n;
+		$("#guidoGetSystemMap_JSON").html("<b>System map for page 1 (scoreMap.getSystemMap( gr, 1, 1000.0, 1000.0)) :</b> "+ systemmap_n);
 		
-		guidoGetTime_JSON = document.getElementById('guidoGetTime_JSON');
 		var guidoDate = {
 			"num" : 2,
 			"denom" : 4
 		};
 		mapTime =  scoreMap.getTime(guidoDate, pagemap_n);
-		guidoGetTime_JSON.innerHTML = "<b>getTime for date 2/4:</b> "+ mapTime;
+		$("#guidoGetTime_JSON").html("<b>getTime for date 2/4 (scoreMap.getTime) : </b> "+ mapTime);
 	
-		guidoGetPoint_JSON = document.getElementById('guidoGetPoint_JSON');
 		map =  scoreMap.getPoint(10, 10, pagemap_n);
-		guidoGetPoint_JSON.innerHTML = "<b>getPoint:</b> "+ map;
+		$("#guidoGetPoint_JSON").html("<b>getPoint (scoreMap.getPoint) : </b> "+ map);
 		
-		guidoGetTimeMap_JSON = document.getElementById('guidoGetTimeMap_JSON');
 		timemap_n = scoreMap.getTimeMap(ar);
-		guidoGetTimeMap_JSON.innerHTML = "<b>Time map :</b> "+ timemap_n;
+		$("#guidoGetTimeMap_JSON").html("<b>Time map (scoreMap.getTimeMap) : </b> "+ timemap_n);
 		
 		// Piano Roll test
 		var pianoRoll = new Module.GUIDOPianoRollAdapter;
 		var pr = pianoRoll.ar2PianoRoll(Module.PianoRollType.kSimplePianoRoll, ar2); // or kTrajectoryPianoRoll
 		
 		var pianoRollResult = pianoRoll.svgExport(pr, -1, -1);
-		$("#pianoRollSvgExport").html(pianoRollResult);
+		$("#pianoRollSvgExport").html("<div><b>Piano roll with gmn code f g b/8 d f/4 e</b></div>" + pianoRollResult);
 		
 		limitParams = {
 			startDate : {num : 1, denom : 4},
@@ -191,12 +184,12 @@
 		pianoRoll.enableAutoVoicesColoration(pr, true);
 		pianoRoll.setPitchLinesDisplayMode(pr, Module.kDSharpLine + Module.kGSharpLine);
 		var pianoRollResult2 = pianoRoll.svgExport(pr, -1, -1);
-		$("#pianoRollSvgExport2").html(pianoRollResult2);
+		$("#pianoRollSvgExport2").html("<div><b>Piano roll with different settings and keyboard :</b></div>" + pianoRollResult2);
 		
-		$("#pianoRollKeyboardWidth").html("<b>piano Roll keyboard width for height 50 : </b>" + pianoRoll.getKeyboardWidth(pr, 50));
+		$("#pianoRollKeyboardWidth").html("<b>piano Roll keyboard width for height 50 (pianoRoll.getKeyboardWidth(pr, 50)): </b>" + pianoRoll.getKeyboardWidth(pr, 50));
 		
 		pianoRollMap = scoreMap.getPianoRollMap(pr, -1, -1);
-		$("#pianoRollMap").html("<b>Piano roll map :</b>" + pianoRollMap);
+		$("#pianoRollMap").html("<b>Piano roll map (scoreMap.getPianoRollMap) :</b>" + pianoRollMap);
 		
 		pianoRoll.destroyPianoRoll(pr);
 		
@@ -220,11 +213,13 @@
 		factory.setOctave(2);
 		factory.setDuration(1, 2);
 		factory.closeEvent();
+		factory.openRangeTag("tremolo",1);
 		factory.openEvent("c");
 		factory.setEventAccidentals(1);
 		factory.setOctave(1);
 		factory.setDuration(1, 2);
 		factory.closeEvent();
+		factory.endTag();
 		
 		factory.closeVoice();
 		factory.openVoice();
@@ -240,7 +235,7 @@
 		//pianoRoll.setRGBColorToVoice(pr, 2, 255, 0, 0, 0);
 		pianoRoll.enableMeasureBars(pr, true);
 		
-		$("#pianoRollSvgExport3").html(pianoRoll.svgExport(pr, -1, -1));
+		$("#pianoRollSvgExport3").html("<div><b>Piano roll from a ar construct with a fatory (Module.GUIDOFactoryAdapter)</b></div>" + pianoRoll.svgExport(pr, -1, -1));
 		
 		pianoRoll.destroyPianoRoll(pr);
 		delete factory;
@@ -299,11 +294,10 @@
 
 		<div id="guidoAbstractExport"></div>
 		<div id="pianoRollSvgExport"></div>
-		<div>Piano roll with keyboard :</div>
 		<div id="pianoRollSvgExport2"></div>
 		<div id="pianoRollSvgExport3"></div>
 		
 		<!-- need to insert dummy paragraph to load font -->
-		<p id="myP" style="visibility:hidden;font-family:Guido2;font-size:200px">x</p>
+		<p id="myP" style="display:none;font-family:Guido2;font-size:200px">x</p>
 	</body>
 </html>
