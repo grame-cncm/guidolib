@@ -109,29 +109,22 @@ QLanguageItem * QGuidoItemContainerFactory::buildLanguageItem( const QMimeData *
 //------------------------------------------------------------------------------------------
 QLanguageItem * QGuidoItemContainerFactory::buildLanguageItem( const QDomElement * domElement , QGraphicsItem * parent )
 {
-	if ( QGuidoItemContainer::recognizes( domElement ) )
-	{
-		return new QGuidoItemContainer(domElement, parent );
-	}
-	else 
-	{
-		QGraphicsItem * item = 0;
-		QItemAdapter * adapter = 0;
-		if ( QGraphicsPixmapItemAdapter::recognizes(domElement) )
-		{
-			return QPixmapItemContainer::buildPixmapItemContainer( domElement , parent );
-		}
-		else if ( QGraphicsSimpleTextItemAdapter::recognizes(domElement) )
-		{
-			item = new QGraphicsSimpleTextItem();
-			adapter = new QGraphicsSimpleTextItemAdapter((QGraphicsSimpleTextItem*)item);
-		}
-		if ( item && adapter )
-			return new QSimpleItemContainer( item , adapter , domElement , parent );
-			
-		assert(0);
-		return 0;
-	}
+    QGraphicsItem * item = 0;
+    QItemAdapter * adapter = 0;
+    if ( QGraphicsPixmapItemAdapter::recognizes(domElement) )
+    {
+        return QPixmapItemContainer::buildPixmapItemContainer( domElement , parent );
+    }
+    else if ( QGraphicsSimpleTextItemAdapter::recognizes(domElement) )
+    {
+        item = new QGraphicsSimpleTextItem();
+        adapter = new QGraphicsSimpleTextItemAdapter((QGraphicsSimpleTextItem*)item);
+    }
+    if ( item && adapter )
+        return new QSimpleItemContainer( item , adapter , domElement , parent );
+
+    assert(0);
+    return 0;
 }
 
 //------------------------------------------------------------------------------------------

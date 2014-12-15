@@ -15,6 +15,8 @@
 */
 
 /* change log:
+	version 1.22
+		- piano roll export added
 	version 1.1
 		- help message includes version number
 	version 1.0 (still not displayed)
@@ -48,7 +50,7 @@
 
 #define ERROR_BUFFER_SIZE 500
 //------------------------------------------------------------------------------------------
-#define kVersion	"1.21"
+#define kVersion	"1.22"
 //------------------------------------------------------------------------------------------
 
 #ifdef WIN32
@@ -79,13 +81,15 @@ typedef struct Guido2ImageOptions {
 	float			systemsDistance;
 	const char *	systemsDistribution; 
 	const char *	optimalPageFill;
+    float           proportionalRendering;
     const char *    resize2Page;
 
 	Guido2ImageOptions () 
 		: stdInMode(false), hasLayout(false), page(1),
 		  inputFile(0), inputString(0), outputFile(0), imageFormat(0), scoreFormat("classic"),
-		  zoom(-1.f), height(-1), width(-1), 
-		  systemsDistance(-1.f), systemsDistribution(0), optimalPageFill(0), resize2Page(0)  {}
+		  zoom(1), height(-1), width(-1),
+          systemsDistance(-1.f), systemsDistribution(0),
+          optimalPageFill(0), proportionalRendering(0), resize2Page("on")  {}
 } Guido2ImageOptions;
 
 //------------------------------------------------------------------------------------------
@@ -102,23 +106,26 @@ static void usage(const char * name)
 	cerr << "              (2) takes a GMN string as argument and an output file name" << endl;
 	cerr << "              (3) reads the standard input" << endl;
 	cerr << endl;
-	cerr << "options:   -h imageHeight (int)   Output image height in pixels" << endl;
-	cerr << "           -w imageWidth  (int)   Output image width in pixels" << endl;
-	cerr << "           -z imageZoom   (float) Output image zoom (bigger/smaller image)" << endl;
-	cerr << "           -p num (int)           print page number 'num' (default is 1)" << endl;
-	cerr << "           -t format              Image format" << endl; 
-	cerr << "                                  Supported formats: PDF, BMP, GIF, JPG, JPEG, PNG, PGM, PPM, SVG, TIFF, XBM, XPM" << endl;
-	cerr << "           -q format              Score format" << endl; 
-	cerr << "                                  Supported formats: pianoroll, classic (default is classic)" << endl;
-	cerr << "           -v                     print the version number and exit." << endl;
-	cerr << "           -?                     print this help message." << endl;
+	cerr << "options:   -h imageHeight (int)    Output image height in pixels" << endl;
+	cerr << "           -w imageWidth  (int)    Output image width in pixels" << endl;
+	cerr << "           -z imageZoom   (float)  Output image zoom (bigger/smaller image)" << endl;
+	cerr << "           -p num (int)            print page number 'num' (default is 1)" << endl;
+	cerr << "           -t format               Image format" << endl; 
+	cerr << "                                   Supported formats: PDF, BMP, GIF, JPG, JPEG, PNG, PGM, PPM, SVG, TIFF, XBM, XPM" << endl;
+	cerr << "           -q format               Score format" << endl; 
+	cerr << "                                   Supported formats: pianoroll, classic (default is classic)" << endl;
+	cerr << "           -v                      print the version number and exit." << endl;
+	cerr << "           -?                      print this help message." << endl;
 	cerr << "options controlling the Guido Engine layout settings:" << endl;
-	cerr << "           -d distance (int)      control the systems distance (default value is 75)." << endl;
-	cerr << "           -a [auto|always|never] control systems distribution (default value is 'auto')." << endl;
-	cerr << "           -b [on|off]			   control the optimal page fill (default value is 'on')." << endl;
+	cerr << "           -d distance (int)       control the systems distance (default value is 75)." << endl;
+	cerr << "           -a [auto|always|never]  control systems distribution (default value is 'auto')." << endl;
+	cerr << "           -b [on|off]			    control the optimal page fill (default value is 'on')." << endl;
+	cerr << "           -r [on|off]             automatically resize page to music (default value is 'on')." << endl;
+	cerr << "           -c (float)			    sets the proportional force multiplicator (0 is default value and disables proportional rendering)." << endl;
 	cerr << endl;
 	cerr << "notes:        * If you use both -h and -w options, the score will be reduced/enlarged to fit" << endl;
 	cerr << "                inside the height*width rect ; the score's aspect ratio will be preserved." << endl;
+	cerr << "              * The output image can't have a pixel number higher than 300 millions." << endl;
 	cerr << "              * -z option has no effect with -h or -w options." << endl;
 	cerr << "              * -p, -h, -w and -z options are ignored when PDF format is selected." << endl;
 	cerr << "              * To export GIF images, you need the Qt framework to support GIF. (see Qt doc about GIF)" << endl;
@@ -150,7 +157,7 @@ static void parseOptions(int argc, char *argv[] , Guido2ImageOptions& opts )
 {
 	int c;
 	opterr = 0;
-	while ((c = getopt (argc, argv, "f:s:o:pw:h:z:t:q:d:a:b:?:v")) != -1)
+	while ((c = getopt (argc, argv, "f:s:o:pw:h:z:t:q:d:a:b:r:c:?:v")) != -1)
 		switch (c)
 		{
 			case 'f':	opts.inputFile = optarg;		break;
@@ -173,6 +180,12 @@ static void parseOptions(int argc, char *argv[] , Guido2ImageOptions& opts )
 			case 'b':	opts.optimalPageFill = optarg;
 						opts.hasLayout = true;
 						break;
+			case 'r':	opts.resize2Page = optarg;
+						opts.hasLayout = true;
+						break;
+			case 'c':	opts.proportionalRendering = strtod(optarg, 0);
+						opts.hasLayout = true;
+						break;
 			case 'v':	cout << basename(argv[0]) << " version " << kVersion << " using Guido Engine v." << GuidoGetVersionStr() << endl;
 						exit(0);
 
@@ -192,7 +205,7 @@ static void parseOptions(int argc, char *argv[] , Guido2ImageOptions& opts )
 	if (opts.height == 0) error ("invalid height value.");
 	else if (opts.height < 0) opts.height = 0;
 	if (opts.zoom == 0.f) error ("invalid zoom value.");
-	else if (opts.zoom < 0) opts.zoom = 1.f;
+	else if (opts.zoom < 0) opts.zoom = 1;
 	if (opts.systemsDistance == 0.f) error ("invalid systems distance value.");
 	
 	// try to infer the output format from the output file extension
@@ -255,7 +268,9 @@ static GuidoLayoutSettings* options2layout (const Guido2ImageOptions& opts)
 {
 	static GuidoLayoutSettings layout = { 75.f, kAutoDistrib, 0.25f, 750, 1.1f, 0, 1, 1 };
 	if (opts.hasLayout) {
-		if (opts.systemsDistance > 0) layout.systemsDistance = opts.systemsDistance;
+		if (opts.systemsDistance > 0)
+            layout.systemsDistance = opts.systemsDistance;
+
 		if (opts.systemsDistribution) {
 			string str (toLower (opts.systemsDistribution));
 			if (str == "auto")			layout.systemsDistribution = kAutoDistrib;
@@ -263,18 +278,23 @@ static GuidoLayoutSettings* options2layout (const Guido2ImageOptions& opts)
 			else if (str == "never")	layout.systemsDistribution = kNeverDistrib;
 			else error ("invalid system distribution mode");
 		}
+
 		if (opts.optimalPageFill) {
 			string str (toLower (opts.optimalPageFill));
 			if (str == "on")		layout.optimalPageFill = 1;
 			else if (str == "off")	layout.optimalPageFill = 0;
 			else error ("invalid optimal page fill mode");
 		}
+
         if (opts.resize2Page) {
 			string str (toLower (opts.resize2Page));
 			if (str == "on")		layout.resizePage2Music = 1;
 			else if (str == "off")	layout.resizePage2Music = 0;
 			else error ("invalid resize page to music mode");
 		}
+
+        layout.proportionalRenderingForceMultiplicator = opts.proportionalRendering;
+
 		return &layout;
 	}
 	return 0;
@@ -317,11 +337,11 @@ int main(int argc, char *argv[])
 	p.output = output.c_str();
 	//----------------------------------------------------
 	p.pageFormat = 0;
-	p.format = strToFormat (options.imageFormat);			// the image output format
-	p.layout = options2layout (options);					// the layout options (if any)
-	p.pageIndex = 0;										// page index starts at 0 (I guess it means all pages - to be checked)
+	p.format = strToFormat (options.imageFormat);			   // the image output format
+	p.layout = options2layout (options);					   // the layout options (if any)
+	p.pageIndex = 0;										   // page index starts at 0 (I guess it means all pages - to be checked)
 	p.sizeConstraints = QSize(options.width , options.height); // size constraints
-	p.zoom = options.zoom;									// zoom value
+	p.zoom = options.zoom / 5.0f;							   // zoom value     // C.D. 12/12/2014 : division by 5 added to avoid factor 5 introduced in Guido2Image
 
 	Guido2ImageErrorCodes error = GUIDO_2_IMAGE_SUCCESS;
 	QGuidoPainter::startGuidoEngine();						// starts the guido engine
@@ -356,12 +376,18 @@ int main(int argc, char *argv[])
         if (options.inputFile)
             arh = GuidoFile2AR(parser, options.inputFile);
         else
-            arh = GuidoString2AR(parser, options.inputFile);
+            arh = GuidoString2AR(parser, options.inputString);
         
         PianoRoll *pianoRoll = GuidoAR2PianoRoll(kSimplePianoRoll, arh);
         GuidoPianoRollEnableKeyboard(pianoRoll, true);
 
-        Guido2Image::guidoPianoRoll2Image(p, pianoRoll, 1024, 512);
+        if (p.sizeConstraints.width() <= 0)
+            p.sizeConstraints.setWidth(1024);
+
+        if (p.sizeConstraints.height() <= 0)
+            p.sizeConstraints.setHeight(512);
+
+        error = Guido2Image::guidoPianoRoll2Image(p, pianoRoll);
 
         GuidoDestroyPianoRoll(pianoRoll);
     }

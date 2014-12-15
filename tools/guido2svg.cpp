@@ -10,6 +10,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <cstring>
 #include <stdlib.h>
 
 #include "SVGSystem.h"
@@ -18,6 +19,13 @@
 
 #include "GUIDOParse.h"
 #include "GUIDOEngine.h"
+#include "GUIDOScoreMap.h"
+
+#define NANOSVG_IMPLEMENTATION
+
+//------------------------------------------------------------------------------------------
+// Version 1.00 (2014-12-08)
+//------------------------------------------------------------------------------------------
 
 using namespace std;
 
@@ -31,9 +39,12 @@ static void usage (char* name)
 	cerr << "usage: " << tool << " [options] <gmn file>" << endl;
 	cerr << "       convert GMN code to svg" << endl;
 	cerr << "       options:" << endl;
-	cerr << "           	-f fontfile : include the guido font taken from fontfile" << endl;
-	cerr << "           	-p pagenum  : an optional page number (default is 1)" << endl;
+	cerr << "           	-f fontfile        : include the guido font taken from fontfile" << endl;
+	cerr << "           	-p pagenum         : an optional page number (default is 1)" << endl;
 	cerr << "       reads the standard input when gmn file is omitted." << endl;
+	cerr << "           	-voicemap  boolean : enables or not event mapping draw (default is false)" << endl;
+    cerr << "           	-staffmap  boolean : enables or not staff mapping draw (default is false)" << endl;
+    cerr << "           	-systemmap boolean : enables or not system mapping draw (default is false)" << endl;
 	exit(1);
 }
 
@@ -44,116 +55,75 @@ static void error (GuidoErrCode err)
 }
 
 
-
 //--------------------------------------------------------------------------
 // utility for command line arguments 
 //--------------------------------------------------------------------------
 static int getIntOption (int argc, char *argv[], const std::string& option, int defaultValue)
 {
-	for (int i=1; i < argc-1; i++) {
+	for (int i = 1; i < argc - 1; i++) {
 		if (option == argv[i]) {
-			int val = strtol( argv[i+1], 0, 10);
-			if (val) return val;
+			int val = strtol(argv[i + 1], 0, 10);
+			if (val)
+                return val;
 		}
 	}
+
 	return defaultValue;
 }
+
+static int getBoolOption (int argc, char *argv[], const std::string& option, int defaultValue)
+{
+	for (int i = 1; i < argc - 1; i++) {
+		if (option == argv[i]) {
+            if (!strcmp(argv[i + 1], "true"))
+			    return true;
+            else
+                return false;
+		}
+	}
+
+	return defaultValue;
+}
+
 static const char* getOption (int argc, char *argv[], const std::string& option, const char* defaultValue)
 {
-	for (int i=1; i < argc-1; i++) {
+	for (int i = 1; i < argc - 1; i++) {
 		if (option == argv[i])
-			return argv[i+1];
+			return argv[i + 1];
 	}
+
 	return defaultValue;
 }
+
 static const char* getFile (int argc, char *argv[])
 {
 	int i;
-	for (i=1; i < argc-1; i++) {
+	for (i = 1; i < argc - 1; i++)
 		if (*argv[i] == '-') i++;	// skip option value
-	}
+
 	return (i < argc) ? argv[i] : 0;
 }
 
-//static void lopts(int argc, char **argv, int& page, int& file, int& fontfile)
-//{
-//	page = 1;
-//	if (argc < 3) usage(argv[0]);
-//	if (argc == 3) {
-//		page = atoi(argv[2]);
-//		if (page <= 0) usage(argv[0]);
-//		file = 1;
-//		fontfile = 0;
-//	}
-//	else if (argc == 5) {
-//		if (strcmp(argv[1], "-f")) usage(argv[0]);
-//		page = atoi(argv[4]);
-//		if (page <= 0) usage(argv[0]);
-//		file = 3;
-//		fontfile = 2;	 
-//	}
-//}
-
+#ifdef WIN32
+const char pathSep = '\\';
+#else
+const char pathSep = '/';
+#endif
 //--------------------------------------------------------------------------
 // utility for making correspondance between ar and directory path
 //--------------------------------------------------------------------------
-vector<string> fillPathsVector (char *argv[])
+vector<string> fillPathsVector (const char *filename)
 {
     vector<string> pathsVector;
-
-    string fileDirectoryStr(argv[0]);
-    string fileNameStr(argv[1]);
-
-    if (fileNameStr[0] == '.' && fileNameStr[1] == '.')
-    {
-        for (size_t i = 0; i < 2; i++)
-        {
-            size_t posSlash = 0;
-
-            for (size_t j = 0; j < fileDirectoryStr.size(); j++)
-            {
-                if (fileDirectoryStr[j] == '/' || fileDirectoryStr[j] == '\\')
-                    posSlash = j;
-            }
-
-            fileDirectoryStr.erase(posSlash, fileDirectoryStr.size());
-        }
-
-        size_t posSlash = 0;
-
-        for (size_t i = 0; i < fileNameStr.size(); i++)
-        {
-            if (fileNameStr[i] == '/' || fileNameStr[i] == '\\')
-            {
-                fileNameStr[i] = '\\';
-                posSlash = i;
-            }
-        }
-
-        fileNameStr.erase(posSlash + 1, fileNameStr.size());
-
-        fileNameStr.erase(0, 2);
-        fileDirectoryStr.append(fileNameStr);
-
-        pathsVector.push_back(fileDirectoryStr);
-    }
-    else
-    {
-        size_t posSlash = 0;
-
-        for (size_t i = 0; i < fileNameStr.size(); i++)
-        {
-            if (fileNameStr[i] == '/' || fileNameStr[i] == '\\')
-            {
-                fileNameStr[i] = '\\';
-                posSlash = i;
-            }
-        }
-
-        fileNameStr.erase(posSlash + 1, fileNameStr.size());
-
-        pathsVector.push_back(fileNameStr);
-    }
+	pathsVector.push_back(".");			// look first for external rsrc in the current folder
+	if (filename) {
+		string s(filename);
+		size_t n = s.find_last_of (pathSep);
+		if (n != string::npos) {		// add also the gmn file path
+			cerr << "fillPathsVector add " << s.substr(0,n) << endl;
+			pathsVector.push_back(s.substr(0,n));
+		}
+	}
 
 #ifdef WIN32
     // For windows
@@ -163,17 +133,47 @@ vector<string> fillPathsVector (char *argv[])
     // For unix
     string homePath(getenv("HOME"));
 #endif
-    pathsVector.push_back(homePath);
+    pathsVector.push_back(homePath);	// and add the HOME directory
 
     return pathsVector;
 }
 
+//_______________________________________________________________________________
+static void check (int argc, char *argv[]) {
+	if (argc > 12)
+        usage(argv[0]);
+
+	for (int i = 1; i < argc; i++) {
+		const char* ptr = argv[i];
+		if (*ptr++ == '-') {
+			if ((*ptr != 'p') && (*ptr != 'f') && (strcmp(ptr, "staffmap")) && (strcmp(ptr, "voicemap")) && (strcmp(ptr, "systemmap")))
+                usage(argv[0]);
+		}
+	}
+}
+
+//_______________________________________________________________________________
+static bool readfile (FILE * fd, string& content) 
+{
+	if (!fd)
+        return false;
+
+	do {
+		int c = getc(fd);
+		if (feof(fd) || ferror(fd)) break;
+		content += c;
+	} while (true);
+
+	return ferror(fd) == 0;
+}
+
+//_______________________________________________________________________________
 int main(int argc, char **argv)
 {
+	check (argc, argv);
 	int page = getIntOption (argc, argv, "-p", 1);
 
-	if (page < 0)
-    {
+	if (page < 0) {
 		cerr << "page number should be positive" << endl;
 		usage(argv[0]);
 	}
@@ -181,21 +181,12 @@ int main(int argc, char **argv)
 	const char* fontfile = getOption (argc, argv, "-f", 0);
 	const char* filename = getFile (argc, argv);
 
-//	int page, font, file;
-//	lopts (argc, argv, page, file, font);
-//	const char* filename = argv[file];
-//	const char* fontfile = font ? argv[font] : 0;
-
 	string gmn;							// a string to read the standard input
 	if (!filename)						// std in mode
-    {
-		int c;
-		while (read(0, &c, 1) == 1)
-			gmn += char(c);				// read the standard input into a string
-	}
+		readfile (stdin, gmn);
 
-	SVGSystem sys;
-	VGDevice *dev = sys.CreateDisplayDevice(fontfile);
+	SVGSystem sys(fontfile, 0);
+	VGDevice *dev = sys.CreateDisplayDevice();
     GuidoInitDesc gd = { dev, 0, 0, 0 };
     GuidoInit(&gd);                    // Initialise the Guido Engine first
 
@@ -203,18 +194,13 @@ int main(int argc, char **argv)
     ARHandler arh;
 
     /* For symbol-tag */
-    vector<string> pathsVector = fillPathsVector(argv);
-
+    vector<string> pathsVector = fillPathsVector(filename);
     GuidoParser *parser = GuidoOpenParser();
-
 	if (gmn.size())
 		arh = GuidoString2AR(parser, gmn.c_str());
-	else
-    {
+	else {
         std::ifstream ifs(filename, ios::in);
-        if (!ifs)
-            return 0;
-
+        if (!ifs)  return 0;
         std::stringstream streamBuffer;
         streamBuffer << ifs.rdbuf();
         ifs.close();
@@ -228,18 +214,33 @@ int main(int argc, char **argv)
     /* For symbol-tag */
     GuidoSetSymbolPath(arh, pathsVector);
     /******************/
-
-	GRHandler grh;
+	
+    GRHandler grh;
     err = GuidoAR2GR (arh, 0, &grh);
-
-	if (err != guidoNoErr)
+	
+    if (err != guidoNoErr)
         error(err);
 
-	err = GuidoSVGExport( grh, page, cout, fontfile);
+    /**** MAPS ****/
+    
+    int mappingMode = kNoMapping;
 
-	if (err != guidoNoErr)
+    if (getBoolOption(argc, argv, "-voicemap", false))
+        mappingMode += kVoiceMapping;
+
+    if (getBoolOption(argc, argv, "-staffmap", false))
+        mappingMode += kStaffMapping;
+
+    if (getBoolOption(argc, argv, "-systemmap", false))
+        mappingMode += kSystemMapping;
+
+    /*************/
+
+	err = GuidoSVGExport(grh, page, cout, fontfile, mappingMode);
+	
+    if (err != guidoNoErr)
         error(err);
-
+    
     GuidoCloseParser(parser);
 
 	return 0;

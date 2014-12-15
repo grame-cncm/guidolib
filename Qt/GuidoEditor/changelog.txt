@@ -1,5 +1,8 @@
 GuidoEditor Change Log
 
+version 2.6 - december 2014
+- Pdf documentation integrated
+
 version 2.5 - june 2013
 - support of \symbol tag: relative path management
 

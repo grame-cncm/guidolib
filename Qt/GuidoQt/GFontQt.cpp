@@ -16,7 +16,6 @@
 #include <QFontMetrics>
 #include <iostream>
 
-#include "MusicalSymbols.h"
 using namespace std;
 
 //------------------------------------------------------------------------

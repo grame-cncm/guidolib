@@ -48,10 +48,6 @@ static void usage(char* name)
 	cerr << "         -pitchlines string : set pitch lines display mode (default is " << kDefaultPitchLines << ")" << endl;
 	cerr << "                                   automatic" << endl;
     cerr << "                                   noline" << endl;
-    cerr << "                                   oneline" << endl;
-    cerr << "                                   twolines" << endl;
-    cerr << "                                   diatonic" << endl;
-    cerr << "                                   chromatic" << endl;
 
     exit (1);
 }
@@ -219,7 +215,7 @@ static int lPitchLinesopt(int argc, char **argv, const char* opt, int defaultval
 int main(int argc, char **argv)
 {
  	SVGSystem sys;
-    SVGDevice dev(cout, &sys, 0);
+    SVGDevice dev(cout, &sys, 0, 0);
 	
 	checkusage (argc, argv);
 	

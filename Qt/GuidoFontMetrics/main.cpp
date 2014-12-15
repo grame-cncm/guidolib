@@ -25,19 +25,19 @@ using namespace std;
 
 static void fontwidth(QFontMetrics& m, int max)
 {
-	cout << "static const int kGuidoFontWidth = {" << endl;
-	for (int i=0; i < max; i++)
-		cout << "	" << m.width( QChar(i)) << ",	// " << i << endl;
-	cout << "	" << m.width( QChar(max)) << "	// " << max << endl;
+    cout << "static const int kGuidoFontWidth[] = {" << endl;
+    for (int i=0; i <= max; i++) {
+        cout << "	" << m.width(QString(QChar(i))) << ",	// " << i << endl;
+        }
 	cout << "};" << endl;
 }
 
 static void fontheight(QFontMetrics& m, int max)
 {
-	cout << "static const int kGuidoFontHeight = {" << endl;
-	for (int i=0; i < max; i++)
-		cout << "	" << m.height() << ",	// " << i << endl;
-	cout << "	" << m.height() << "	// " << max << endl;
+    cout << "static const int kGuidoFontHeight[] = {" << endl;
+    for (int i=0; i <= max; i++) {
+        cout << "	" << m.height() << ",	// " << i << endl;
+        }
 	cout << "};" << endl;
 }
 
@@ -54,7 +54,8 @@ int main(int argc, char *argv[])
 {
 	QApplication app( argc , argv );	// required by Qt
 	const int SIZE = 200;
-	QFont guidoFont	= QFont("Guido2" , SIZE);
+    QFont guidoFont	= QFont("Guido2" , SIZE); // This size is in point but we'll set a size in pixels anyway
+    guidoFont.setPixelSize( SIZE );
 	QFontMetrics metrics (guidoFont);
 	infos (SIZE);
 	fontwidth (metrics, MAXGLYPH);

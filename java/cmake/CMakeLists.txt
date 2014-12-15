@@ -54,16 +54,24 @@ endif(WIN32)
 #######################################
 # set directories, src and headers.
 set (JNI_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../jni)
-set (GUIDO_SRC ${CMAKE_CURRENT_SOURCE_DIR}/../../src)
+set (GUIDO_SRC ${CMAKE_CURRENT_SOURCE_DIR}/../../src/engine)
 
 set (SRC "${JNI_PATH}/*.cpp")				# add source files
 set (HEADERS "${JNI_PATH}/*.h")				# add header files
 set (INCL ${JNI_INCLUDE_DIRS} ${GUIDO_SRC}/include ${GUIDO_SRC}/tools)
 
-if(APPLE)
+
+if (INDEPENDENTSVG STREQUAL "yes")
+	message (STATUS "Independent SVG will be enforced and all SVG fonts must be elaborated in SVG files - Use -DINDEPENDENTSVG=no to change.")
+	add_definitions(-DINDEPENDENTSVG)
+	set (SRC ${SRC} "${JNI_PATH}/svg/*.cpp")
+	set (INCL ${INCL} "${JNI_PATH}/svg/*.h")
+elseif(APPLE)
 	set (INCL ${INCL} ${GUIDO_SRC}/include ${CMAKE_CURRENT_SOURCE_DIR}/../../macosx/src)
+	set (SRC ${SRC} "${JNI_PATH}/macos/*.cpp")
 elseif(WIN32)
 	set (INCL ${INCL} ${GUIDO_SRC}/include ${CMAKE_CURRENT_SOURCE_DIR}/../../win32/src)
+	set (SRC ${SRC} "${JNI_PATH}/win32/*.cpp")
 elseif(UNIX)
 	set (SRC ${SRC} )
 	set (INCL ${INCL} ${GUIDO_SRC}/include ${CMAKE_CURRENT_SOURCE_DIR}/../../linux/src)
@@ -73,10 +81,15 @@ elseif(UNIX)
         )
 	string (STRIP ${TMP} UINCL)
 	add_definitions(${UINCL})
+	set (SRC ${SRC} "${JNI_PATH}/linux/*.cpp")
 else(UNIX)
 	message (FATAL_ERROR "Unknown target platform")
-endif(APPLE)
-#endif(WIN32)
+endif()
+
+if (INDEPENDENTSVG STREQUAL "yes")
+else()
+	message (STATUS "Independent SVG will not be enforced and SVG fonts will be approximated using system fonts - Use -DINDEPENDENTSVG=yes to change.")
+endif()
 
 #######################################
 # set includes
@@ -93,7 +106,7 @@ if (WIN64)
 elseif(APPLE)
  find_library (GUIDO GUIDOEngine PATHS ${GUIDO_PATH}/MacOS/Release NO_DEFAULT_PATH)
 else()
- find_library (GUIDO GUIDOEngine)
+ find_library (GUIDO GUIDOEngine PATHS ${GUIDO_PATH}/win32/Release NO_DEFAULT_PATH)
 endif()
 
 set (LIBCONTENT ${LIBSRC} ${LIBH})

@@ -20,9 +20,12 @@ win32 {
 	TEMPLATE = vclib
 }
 
-# Universal binary on MAC
-#macx:QMAKE_MAC_SDK=macosx10.7
-macx:CONFIG+=x86 x86_64
+macx {
+	message("generates project for MacOS")
+	CONFIG+= i386 x86_64
+	QMAKE_MAC_SDK = macosx10.9
+	QMAKE_CXXFLAGS += -mmacosx-version-min=10.6
+}
 
 ####### Headers #######
 HEADERS += include/*.h $$SOURCES_DIR/LanguageCommandPalette/*.h

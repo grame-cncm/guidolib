@@ -1,5 +1,42 @@
 GUIDO Engine history
 
+----------------------------------------------------------------
+2014-12-09  version 1.5.6
+- Proportional rendering available (enabled with GuidoLayoutSettings parameters)
+- \special-tag:
+    - "space" param suppressed (was useless)
+    - "scale" param changed for "size"
+    - "color" param added
+- \tuplet-tag:
+    - "position" param added
+    - "dx" param added
+- bug fixes:
+    - \staffFormat-tag + mapping:
+		- staff mapping height is not null anymore when we set \staffFormat-tag "style" param to "0-line or "1-line"
+		- line thickness is now taken in account in staff mapping
+	- some SVG export bugs fixed
+	- fix for a mapping bug in some particular cases
+	- fix for a graphic bug which appeared when a non-standard notehead style was set with \noteFormat-tag
+	- \units-tag: now, unit is properly reset when we remove \units-tag
+
+
+----------------------------------------------------------------
+2014-11-7  version 1.5.5
+- Fraction is now using 'long long' instead 'int' for numerator and denominator (negative dates were found with complex non-quantified scores, due to overflow)
+- new timing API for performance measurements (GuidoGetParsingTime, GuidoGetAR2GRTime, GuidoGetOnDrawTime)
+- performances improvement:
+    - during AR2GR procedure, principally for scores containing lots of chords (time ratio until 3)
+	- during drawing procedure, principally for very big scores (time ratio until 3)
+- color param added for tags: \tremolo, \dotFormat, \accidental, \accolade, \bar, \doubleBar, \endBar, \repeatBegin, \repeatEnd, \daCapo, \daCapoAlFine, \dalSegno, \dalSegnoAlFine, \fine, \breathMark, \key, \octava, \staffFormat, \tempo, \tie, \tuplet, \volta
+- size param added for tags: \accolade, \bar
+- dx param added for tags: \bar
+- dy param added for tags: \accolade, \bar
+- \volta-tag :
+    - display bug fixed
+    - useless param 'pass' removed
+	- 'm' param changed to 'mark'
+- mapping bug fixed on \cluster-tag
+
 
 ----------------------------------------------------------------
 2014-10-22  version 1.5.4
@@ -25,6 +62,11 @@ GUIDO Engine history
     - when a \composer, \fingering, \label, \mark or \title tag was set under range-tag form
 	- when a trill composed of a chord containing several different durations was separated into two tied trills
     - various other crashes avoided
+- new tremolo tag
+- grace notes :
+	- they have slightly bigger spring to avoid being too close to the next note
+	- the beaming is now possible
+
 
 ----------------------------------------------------------------
 version 1.5.3

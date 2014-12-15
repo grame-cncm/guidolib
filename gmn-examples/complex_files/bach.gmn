@@ -36,7 +36,7 @@
     \barFormat<style="system">   
 % measure 1 (voice 1)
      \clef<"treble"> \key<"D"> \meter<"C"> \stemsUp 
-              \restFormat<posy=-1hs> _/8 \beam( \fingering<text="3",
+              _/8 \beam( \fingering<text="3",
                    dy=8hs,dx=-0.1hs,fsize=7pt>(f#2/16) g) 
               \beam( \stemsUp<5hs> a/8 
                    \fingering<text="2",dx=1hs,dy=11.5hs,fsize=7pt>( \stemsUp<8hs> c )
@@ -168,11 +168,11 @@
 
     \staff<1> 
 % measure 1 (voice 2) 
-      \restFormat<posy=-8hs,dx=2.5cm> _/1 
+      \restFormat<dx=2.5cm> _/1 
      % measure 2 (voice 2) 
        _/1
 % measure 3 (voice 2)
-      \restFormat<posy=-2hs> _/2 \restFormat<posy=-5hs> _/8 
+      _/2 _/8 
       \stemsDown \beam( \fingering<text="2",fsize=7pt,dy=6hs>(c#2/16) 
               \stemsDown<7.5hs> d \stemsDown ) 
     \beam( \stemsDown<8hs> e/8 \stemsDown 
@@ -252,7 +252,7 @@
   \staffFormat<"5-line",size=0.9375mm> 
 % measure 1 (voice 3)
      \clef<"bass"> \key<"D"> \meter<"C"> 
-      d1/4  \restFormat<posy=-3hs> _/8 \stemsDown 
+      d1/4 _/8 \stemsDown 
          \fingering<text="3",dy=-7hs,fsize=7pt>( f#0 ) g/4 _/8 e 
 % measure 2 (voice 3)
       f#/4 _/8 d \beam( h \fingering<text="2",fsize=7pt,dy=-8hs>(g)) 
@@ -317,7 +317,6 @@
 	\tieBegin<dx1=0,dy1=-1.25hs,dx2=-2hs,dy2=-1.25hs,h=-1.5hs> e
 % measure 11 (voice 3)
 	e \tieEnd
-	\restFormat<posy=-4.8hs>
 	_/16 \bm(d e f#)
 	\acc( g/4 ) f#
 % measure 12 (voice 3)

@@ -35,19 +35,19 @@
 #include <QDataStream>
 #include <QKeyEvent>
 
-#define GMN_CONTAINER_MIME_PROPORTIONAL_ON		"GMNContainerMimeTypeProportionalOn"
-#define GMN_CONTAINER_MIME_OPTIMAL_PAGE_FILL_ON	"GMNContainerMimeTypeOptimalPageFillOn"
-#define GMN_CONTAINER_MIME_RESIZE_PAGE_ON		"GMNContainerMimeTypeResizePageOn"
-#define GMN_CONTAINER_MIME_DISPLAY_TYPE			"GMNContainerMimeTypeDisplayType"
-#define GMN_CONTAINER_MIME_SCALE				"GMNContainerMimeTypeScale"
+#define GMN_CONTAINER_MIME_OPTIMAL_PAGE_FILL_ON      "GMNContainerMimeTypeOptimalPageFillOn"
+#define GMN_CONTAINER_MIME_RESIZE_PAGE_ON		     "GMNContainerMimeTypeResizePageOn"
+#define GMN_CONTAINER_MIME_PROPORTIONAL_RENDERING_ON "GMNContainerMimeTypeProportionalRenderingOn"
+#define GMN_CONTAINER_MIME_DISPLAY_TYPE			     "GMNContainerMimeTypeDisplayType"
+#define GMN_CONTAINER_MIME_SCALE				     "GMNContainerMimeTypeScale"
 	
-#define DOM_GUIDO_ITEM_PAGE_MODE			"mode"
-#define DOM_GUIDO_ITEM_ORIENTATION			"orientation"
-#define DOM_GUIDO_ITEM_OPTIMAL_PAGE_FILL	"optimalPageFill"
-#define DOM_GUIDO_ITEM_PROPORTIONAL_LAYOUT	"proportionalLayout"
-#define DOM_GUIDO_ITEM_RESIZE_PAGE_ON		"resizePage"
-#define DOM_GUIDO_ITEM_DISPLAY_TYPE			"displayType"
-#define DOM_GUIDO_ITEM_SCALE				"scale"
+#define DOM_GUIDO_ITEM_PAGE_MODE			  "mode"
+#define DOM_GUIDO_ITEM_ORIENTATION			  "orientation"
+#define DOM_GUIDO_ITEM_OPTIMAL_PAGE_FILL	  "optimalPageFill"
+#define DOM_GUIDO_ITEM_PROPORTIONAL_RENDERING "proportionalRendering"
+#define DOM_GUIDO_ITEM_RESIZE_PAGE_ON	      "resizePage"
+#define DOM_GUIDO_ITEM_DISPLAY_TYPE			  "displayType"
+#define DOM_GUIDO_ITEM_SCALE				  "scale"
 
 //#define BASE_RGB					125,200,245
 #define BASE_RGB					197,214,255
@@ -129,7 +129,6 @@ class QGuidoItemContainer : public QLanguageItem
 		*/
 		virtual QDomElement saveToDomElement( QDomDocument * doc);
 		static bool recognizes(const QMimeData * data);
-		static bool recognizes( const QDomElement * e );
 
 		virtual bool	setCode( const QString& code );
 		virtual QString	code() const						{ return guidoItem()->gmnCode(); }
@@ -164,7 +163,7 @@ class QGuidoItemContainer : public QLanguageItem
 		void resized(const QRectF& newRect);
 
 		void switchOptimalPageFill();
-		void switchProportional();
+		void switchProportionalRendering();
 		void switchResizePage();
 
 		void firstPage();
@@ -231,12 +230,12 @@ class QGuidoItemContainer : public QLanguageItem
 		void exportToPdf( QPrinter * printer );
 		
 		/*!
-		*	\brief Updates the layoutSettings of the contained QGuidoItem according to mIsProportionalOn and mIsOptimalPageFillOn.
+		*	\brief Updates the layoutSettings of the contained QGuidoItem according to mIsProportionalRenderingOn and mIsOptimalPageFillOn.
 		*/
 		void updateLayoutSettings();
 		
 		void setOptimalPageFill(bool isOptimalPageFillOn);
-		void setProportional(bool isProportionalOn);
+		void setProportionalRendering(bool isProportionalRenderginOn);
 		void setResizePageToMusic(bool isResizePageOn);
 		
 		/*!
@@ -267,8 +266,8 @@ class QGuidoItemContainer : public QLanguageItem
 
 		QGuidoGraphicsItem * mGuidoItem;
 
-		bool mIsProportionalOn;
 		bool mIsOptimalPageFillOn;
+		bool mIsProportionalRenderingOn;
 
 		float mMinScale, mMaxScale;
 

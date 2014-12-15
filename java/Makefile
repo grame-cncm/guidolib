@@ -1,6 +1,11 @@
-SRC = $(wildcard guidoengine/*.java)
-CLASS = $(patsubst %.java, %.class, $(SRC) )
-JNI   = $(patsubst guidoengine/%.java, jni/guidoengine_%.h, $(SRC) )
+
+
+
+SRC        = $(wildcard guidoengine/*.java)
+SRCDRAWC   = $(wildcard drawcommand/*.java)
+CLASS      = $(patsubst %.java, %.class, $(SRC) )
+CLASSDRAWC = $(patsubst %.java, %.class, $(SRCDRAWC) )
+JNI        = $(addprefix jni/, $(subst /,_,$(patsubst guidoengine/%.java, guidoengine_%.h, $(SRC) )))
 
 ifeq ($(ARCH), 64)
 	JAVA  = "C:\Program Files\Java\jdk1.6.0_20\bin\java"
@@ -10,6 +15,7 @@ endif
 
 
 .PHONY: doc
+
 
 help:
 	@echo  This makefile is intended to manage guido java ressources.
@@ -22,10 +28,13 @@ help:
 
 class : $(CLASS)
 
-jar : guidoengine.jar
+jar : guidoengine.jar drawcommand.jar
 
 guidoengine.jar : $(CLASS)
 	jar cvf guidoengine.jar $(CLASS)
+
+drawcommand.jar : $(CLASSDRAWC)
+	jar cvf drawcommand.jar $(CLASSDRAWC)
 
 guidocrash : guidocrash.class
 	$(JAVA) guidocrash 
@@ -37,18 +46,24 @@ factorysample : factorysample.class
 	$(JAVA) factorysample 
 
 clean :
-	rm -f $(CLASS) *.class
+	rm -f $(CLASS) *.class guidoengine/*.class
 
 doc:
 	[ -d doc ] || mkdir doc
 	javadoc -d doc guidoengine/*.java
+
+print-%:
+	@echo '$*=$($*)'
+	@echo '  origin = $(origin $*)'
+	@echo '  flavor = $(flavor $*)'
+	@echo '   value = $(value  $*)'
 
 ##################################################################
 # rule to make JNI headers
 headers : $(JNI)
 
 jni/guidoengine_%.h: guidoengine/%.class
-	javah -jni -d jni $(patsubst guidoengine/%.class, guidoengine.%, $<) 
+	javah -jni -d jni $(patsubst guidoengine/%.class, guidoengine.%, $<)
 
 ##################################################################
 # rule for java compiling

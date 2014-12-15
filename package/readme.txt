@@ -25,18 +25,3 @@ The source code of the library is available from sourceforge under the Mozilla
 Public License (see the license.txt file)
 See at http://sourceforge.net/projects/guidolib for more information.
 
-
-Acknowledgments
-------------------
-The Guido project originates from Ph.D.s conducted by Holger Hoos, Kai Renz and 
-Jürgen Kilian at the TU Darmstadt.
-The Guido engine has been designed by Kai Renz. It became an open source library in 
-December 2002 at the initiative of the Grame Computer Music Research Lab. Since then,
-many persons have been contributing to the Guido library project.
-I would like to thank them and especially: 
-J. Scott Amort, Jérôme Berthet, Samuel Brochot, Yannick Chapuis, Thomas Coffy, 
-Christophe Daudin, Colas Decron, Torben Hohn, Camille Le Roi, François Levy, 
-Benjamen Ruprechter, Mike Solomon
-and of course, my colleagues and friends Stéphane Letz and Yann Orlarey
-
-Dominique Fober

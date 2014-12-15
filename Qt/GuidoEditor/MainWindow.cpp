@@ -75,6 +75,8 @@ typedef GuidoErrCode (* GuidoAR2MIDIFilePtr)(const struct NodeAR* ar, const char
 #define SYSTEMS_DISTRIBUTION_SETTING	"systemsDistribution"
 #define SYSTEMS_DISTANCE_SETTING		"systemsDistance"
 #define OPTIMAL_PAGE_FILL_SETTING		"optimalPageFill"
+#define PROPORTIONAL_RENDERING_SETTING  "proportionalRendering"
+#define RESIZE_PAGE_2_MUSIC_SETTING     "resizePage2Music"
 #define SCORE_COLOR_SETTING				"scoreColor"
 #define SYNTAX_HIGHLIGHTER_SETTING		"syntaxHighlighter"
 #define FONT_COLOR_SETTING				"fontColor"
@@ -89,7 +91,6 @@ typedef GuidoErrCode (* GuidoAR2MIDIFilePtr)(const struct NodeAR* ar, const char
 #define VERTICAL_BORDER_MARGIN		20
 #define TOOL_BAR_ICON_SIZE			20
 #define TEXT_EDIT_TEMPO 500
-#define TEXT_EDIT_TEMPO_FACTOR 0.1f
 #define MIN_FONT_SIZE 2
 #define MAX_FONT_SIZE 72
 #define DEFAULT_TOOL_BAR_VISIBILITY true
@@ -539,8 +540,8 @@ void MainWindow::reload()
 void MainWindow::documentWasModified()
 {
     setWindowModified( mTextEdit->document()->isModified() );
-	
-	mTextEditTimer->start( TEXT_EDIT_TEMPO + mTextEdit->document()->characterCount() * TEXT_EDIT_TEMPO_FACTOR );
+
+	mTextEditTimer->start( TEXT_EDIT_TEMPO);
 //	mTextEdit->highlightErrorLine( 0 );
 }
 
@@ -729,6 +730,35 @@ void MainWindow::about()
 				"<p>Using the Guido Engine version " + version).toUtf8().data()));
 }
 
+//-------------------------------------------------------------------------
+void MainWindow::docTags()
+{
+    bool docFound = false;
+    
+#ifdef Q_WS_MAC
+    docFound = QDesktopServices::openUrl(QUrl(QApplication::applicationDirPath() + "/Contents/doc/RefCardsTags.pdf", QUrl::TolerantMode));
+#else
+    docFound = QDesktopServices::openUrl(QUrl(QApplication::applicationDirPath() + "/doc/RefCardsTags.pdf", QUrl::TolerantMode));
+#endif
+    
+    if (!docFound)
+        QMessageBox::critical(this, "Doc not found", "RefCardsTags.pdf has not been found");
+}
+
+//-------------------------------------------------------------------------
+void MainWindow::docParams()
+{
+    bool docFound = false;
+    
+#ifdef Q_WS_MAC
+    docFound = QDesktopServices::openUrl(QUrl(QApplication::applicationDirPath() + "/Contents/doc/RefCardsParams.pdf", QUrl::TolerantMode));
+#else
+    docFound = QDesktopServices::openUrl(QUrl(QApplication::applicationDirPath() + "/doc/RefCardsParams.pdf", QUrl::TolerantMode));
+#endif
+    
+    if (!docFound)
+        QMessageBox::critical(this, "Doc not found", "RefCardsParams.pdf has not been found");
+}
 
 //-------------------------------------------------------------------------
 void MainWindow::preferences()
@@ -989,14 +1019,15 @@ void MainWindow::setEngineSettings(const GuidoLayoutSettings& gls,
 					int bbmap , bool showMapping , bool rawMapping , bool showBoxes,
 					int voiceNum, int staffNum)
 {	
-	if ( (gls.systemsDistance != mGuidoEngineParams.systemsDistance)		|
-		(gls.systemsDistribution != mGuidoEngineParams.systemsDistribution)	|
-		(gls.systemsDistribLimit != mGuidoEngineParams.systemsDistribLimit)	|
-		(gls.force != mGuidoEngineParams.force)								|
-		(gls.spring != mGuidoEngineParams.spring)							|
-		(gls.neighborhoodSpacing != mGuidoEngineParams.neighborhoodSpacing)	|
-		(gls.optimalPageFill != mGuidoEngineParams.optimalPageFill)	        |
-        (gls.resizePage2Music != mGuidoEngineParams.resizePage2Music) )
+	if ( (gls.systemsDistance      != mGuidoEngineParams.systemsDistance)		|
+		(gls.systemsDistribution   != mGuidoEngineParams.systemsDistribution)	|
+		(gls.systemsDistribLimit   != mGuidoEngineParams.systemsDistribLimit)	|
+		(gls.force                 != mGuidoEngineParams.force)					|
+		(gls.spring                != mGuidoEngineParams.spring)				|
+		(gls.neighborhoodSpacing   != mGuidoEngineParams.neighborhoodSpacing)	|
+		(gls.optimalPageFill       != mGuidoEngineParams.optimalPageFill)	    |
+        (gls.resizePage2Music      != mGuidoEngineParams.resizePage2Music)	    |
+        (gls.proportionalRenderingForceMultiplicator != mGuidoEngineParams.proportionalRenderingForceMultiplicator) )
 	{
 		mGuidoEngineParams = gls;
 		mGuidoWidget->setGuidoLayoutSettings( mGuidoEngineParams );
@@ -1207,6 +1238,14 @@ void MainWindow::createActions()
     mExitAct->setStatusTip(tr("Exit the application"));
     connect(mExitAct, SIGNAL(triggered()), this, SLOT(close()));
 
+    mDocTagsAct = new QAction(tr("&Guido tags"), this);
+    mDocTagsAct->setStatusTip(tr("Show the guido tags documentation"));
+    connect(mDocTagsAct, SIGNAL(triggered()), this, SLOT(docTags()));
+
+    mDocParamsAct = new QAction(tr("&Guido params"), this);
+    mDocParamsAct->setStatusTip(tr("Show the guido params documentation"));
+    connect(mDocParamsAct, SIGNAL(triggered()), this, SLOT(docParams()));
+
     mAboutAct = new QAction(tr("&About"), this);
     mAboutAct->setStatusTip(tr("Show the application's About box"));
     connect(mAboutAct, SIGNAL(triggered()), this, SLOT(about()));
@@ -1367,6 +1406,9 @@ void MainWindow::createMenus()
 	menuBar()->addMenu( mWindowMenu );
 	
     mHelpMenu = menuBar()->addMenu(tr("&Help"));
+	QMenu * docMenu = mHelpMenu->addMenu(tr("&Guido documentation") );
+	docMenu->addAction(mDocTagsAct);
+	docMenu->addAction(mDocParamsAct);
     mHelpMenu->addAction(mAboutAct);
     mHelpMenu->addAction(mAboutQtAct);
 }
@@ -1469,22 +1511,21 @@ void MainWindow::readSettings()
 	int staffNum = settings.value( STAFF_NUM_SETTING, -1 ).toInt();
 		
 	GuidoLayoutSettings guidoLayoutSettings;
-	if ( settings.childGroups().contains(ENGINE_SETTING) )
-	{
+	if (settings.childGroups().contains(ENGINE_SETTING)) {
 		settings.beginGroup( ENGINE_SETTING );
-		guidoLayoutSettings.neighborhoodSpacing = settings.value( NEIGHBORHOOD_SPACING_SETTING , 0 ).toInt();
-		guidoLayoutSettings.spring = settings.value( SPRING_SETTING , 0 ).toDouble();
-		guidoLayoutSettings.force = settings.value( FORCE_SETTING , 0 ).toDouble();
-		guidoLayoutSettings.systemsDistribLimit = settings.value( SYSTEMS_DISTRIB_LIMIT_SETTING , 0 ).toDouble();
-		guidoLayoutSettings.systemsDistribution = settings.value( SYSTEMS_DISTRIBUTION_SETTING , 0 ).toInt();
-		guidoLayoutSettings.systemsDistance = settings.value( SYSTEMS_DISTANCE_SETTING , 0 ).toDouble();
-		guidoLayoutSettings.optimalPageFill = settings.value( OPTIMAL_PAGE_FILL_SETTING , 0 ).toInt();
+		guidoLayoutSettings.neighborhoodSpacing   = settings.value( NEIGHBORHOOD_SPACING_SETTING,   0 ).toInt();
+		guidoLayoutSettings.spring                = settings.value( SPRING_SETTING,                 0 ).toDouble();
+		guidoLayoutSettings.force                 = settings.value( FORCE_SETTING,                  0 ).toDouble();
+		guidoLayoutSettings.systemsDistribLimit   = settings.value( SYSTEMS_DISTRIB_LIMIT_SETTING,  0 ).toDouble();
+		guidoLayoutSettings.systemsDistribution   = settings.value( SYSTEMS_DISTRIBUTION_SETTING,   0 ).toInt();
+		guidoLayoutSettings.systemsDistance       = settings.value( SYSTEMS_DISTANCE_SETTING,       0 ).toDouble();
+		guidoLayoutSettings.optimalPageFill       = settings.value( OPTIMAL_PAGE_FILL_SETTING,      0 ).toInt();
+		guidoLayoutSettings.resizePage2Music      = settings.value( RESIZE_PAGE_2_MUSIC_SETTING,    0 ).toInt();
+        guidoLayoutSettings.proportionalRenderingForceMultiplicator = settings.value( PROPORTIONAL_RENDERING_SETTING, 0 ).toFloat();
 		settings.endGroup();
 	}
 	else
-	{
 		GuidoGetDefaultLayoutSettings (&guidoLayoutSettings);
-	}
 	
 	settings.beginGroup( SYNTAX_HIGHLIGHTER_SETTING );
 	for ( int i = 0 ; i < GuidoHighlighter::SIZE ; i++ )
@@ -1544,13 +1585,16 @@ void MainWindow::writeSettings()
 	
 	// Guido Engine
 	settings.beginGroup( ENGINE_SETTING );
-	settings.setValue( NEIGHBORHOOD_SPACING_SETTING , mGuidoEngineParams.neighborhoodSpacing );
-	settings.setValue( SPRING_SETTING , mGuidoEngineParams.spring );
-	settings.setValue( FORCE_SETTING , mGuidoEngineParams.force );
-	settings.setValue( SYSTEMS_DISTRIB_LIMIT_SETTING , mGuidoEngineParams.systemsDistribLimit );
-	settings.setValue( SYSTEMS_DISTRIBUTION_SETTING , mGuidoEngineParams.systemsDistribution );
-	settings.setValue( SYSTEMS_DISTANCE_SETTING , mGuidoEngineParams.systemsDistance );
-	settings.setValue( OPTIMAL_PAGE_FILL_SETTING , mGuidoEngineParams.optimalPageFill );
+	settings.setValue( NEIGHBORHOOD_SPACING_SETTING,   mGuidoEngineParams.neighborhoodSpacing );
+	settings.setValue( SPRING_SETTING,                 mGuidoEngineParams.spring );
+	settings.setValue( FORCE_SETTING,                  mGuidoEngineParams.force );
+	settings.setValue( SYSTEMS_DISTRIB_LIMIT_SETTING,  mGuidoEngineParams.systemsDistribLimit );
+	settings.setValue( SYSTEMS_DISTRIBUTION_SETTING,   mGuidoEngineParams.systemsDistribution );
+	settings.setValue( SYSTEMS_DISTANCE_SETTING,       mGuidoEngineParams.systemsDistance );
+	settings.setValue( OPTIMAL_PAGE_FILL_SETTING,      mGuidoEngineParams.optimalPageFill );
+    settings.setValue( RESIZE_PAGE_2_MUSIC_SETTING,    mGuidoEngineParams.resizePage2Music );
+    settings.setValue( PROPORTIONAL_RENDERING_SETTING, mGuidoEngineParams.proportionalRenderingForceMultiplicator );
+
 	settings.endGroup();
 	
 	settings.setValue( SCORE_COLOR_SETTING , mScoreColor );

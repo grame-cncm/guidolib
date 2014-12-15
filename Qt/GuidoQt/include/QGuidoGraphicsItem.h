@@ -127,7 +127,7 @@ class QGuidoGraphicsItem : public QGraphicsObject
 		/// \brief Disable/enable automatic ResizePageToMusic
 		void setResizePageToMusic(bool isOn);
 		/// \brief Returns the state of the automatic ResizePageToMusic mode (enabled or disabled)
-		bool isResizePageToMusic() const;
+		bool isResizePageToMusicOn() const;
 
 		/// \brief Sets the page format used when no page format is specified by the GMN
 		void setGuidoPageFormat(const GuidoPageFormat& pageFormat);

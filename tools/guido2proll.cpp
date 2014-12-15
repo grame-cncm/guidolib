@@ -38,12 +38,12 @@ static void usage(char* name)
 #else
 	const char* tool = name;
 #endif
-	cerr << "usage: " << tool << "[options] gmnfile" << endl;
+	cerr << "usage: " << tool << " [options] gmnfile" << endl;
 	cerr << "options: -pianoroll       string : set the pianoroll type (default is " << kDefaultPianoRoll << ")" << endl;
 	cerr << "                                        simple" << endl;
     cerr << "                                        trajectory" << endl;
-	cerr << "         -width           value  : set the output width (default is " << kDefaultWidth << ")" << endl;
-	cerr << "         -height          value  : set the output height (default is " << kDefaultHeight << ")" << endl;
+	cerr << "         -width           value  : set the output width (default is " << kDefaultWidth << " -> width is adjusted to 1024)" << endl;   // REM: get default value from PianoRoll
+	cerr << "         -height          value  : set the output height (default is " << kDefaultHeight << " -> height is adjusted to 512)" << endl; // REM: get default value from PianoRoll
 	cerr << "         -start           date   : set time zone start (default is 0/0 -> start time is automatically adjusted)" << endl;
 	cerr << "         -end             date   : set time zone end (default is 0/0 -> end time is automatically adjusted)" << endl;
     cerr << "         -minpitch        value  : set minimum midi pitch (default is " << kDefaultMinPitch << " -> min pitch is automatically adjusted)" << endl;
@@ -54,10 +54,6 @@ static void usage(char* name)
 	cerr << "         -pitchlines      string : set pitch lines display mode (default is " << kDefaultPitchLines << ")" << endl;
 	cerr << "                                        automatic" << endl;
     cerr << "                                        noline" << endl;
-    cerr << "                                        oneline" << endl;
-    cerr << "                                        twolines" << endl;
-    cerr << "                                        diatonic" << endl;
-    cerr << "                                        chromatic" << endl;
 
     exit(1);
 }
@@ -225,7 +221,7 @@ static int lPitchLinesopt(int argc, char **argv, const char* opt, int defaultval
 int main(int argc, char **argv)
 {
  	SVGSystem sys;
-    SVGDevice dev(cout, &sys, 0);
+    SVGDevice dev(cout, &sys, 0, 0);
 	
 	checkusage(argc, argv);
 	
@@ -297,7 +293,7 @@ int main(int argc, char **argv)
         /**********************/
 
         /**** PITCH LINES ****/
-        err = GuidoPianoRollSetPitchLinesDisplayMode(pianoRoll, kAutoLines);
+        err = GuidoPianoRollSetPitchLinesDisplayMode(pianoRoll, pitchLines);
         error(err);
         /*********************/
 
@@ -319,7 +315,7 @@ int main(int argc, char **argv)
 	else {
 		int line, col;
 		
-        err = GuidoParserGetErrorCode(parser, line, col, 0); // REM: l'erreur n'est pas r\E9cup\E9r\E9e si l'arh a simplement mal \E9t\E9 instanci\E9
+        err = GuidoParserGetErrorCode(parser, line, col, 0); // REM: l'erreur n'est pas récuperée si l'arh a simplement mal été instancié
 		error(err);
 	}
 
