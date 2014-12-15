@@ -1,4 +1,4 @@
-VERSION=2.52
+VERSION=2.53
 
 system	:= $(shell uname -s)
 ifeq ($(system), Linux)

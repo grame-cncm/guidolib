@@ -21,7 +21,8 @@ WINLIB   := $(DEVKIT)-windows
 QTLIB    := $(DEVKIT)-Qt
 SRC 	 := guidolib-$(VERSION)-src
 
-files   := ../changelog.txt license.txt readme.txt ../src/guido2.ttf ../src/guido2.svg
+files   := ../changelog.txt license.txt readme.txt ../src/guido2.ttf ../src/guido2.svg ../Acknowledgments.txt
+
 modules := guidolib
 
 ######### documentation files 
@@ -42,9 +43,7 @@ win32inc := GDeviceWin32.h GSystemWin32.h GFontWin32.h  GDeviceWin32GDIPlus.h GS
 win32inc := $(patsubst %, ../win32/src/%, $(win32inc))
 
 ######### qt include files 
-qtinc 	:= 	GUIDOEngine.h GUIDOExport.h MusicalSymbols.h VGColor.h VGFont.h VGSystem.h VGDevice.h
-qtinc  := $(patsubst %, ../src/engine/include/%, $(qtinc))
-
+qtinc  := $(wildcard ../src/engine/include/*.h)
 qtfiles =  ../Qt/LICENSE.MPL.txt ../Qt/package/readme.txt
 
 QT_SRC_FILES   = $(shell find $(QTLIB)/src -type f)
@@ -81,6 +80,7 @@ docpack:
 srcpack:
 	cd .. && git archive -o __tmp__.tgz --prefix=package/$(SRC)/ HEAD && tar xzfP __tmp__.tgz && rm __tmp__.tgz
 	cp readme-src_package.txt $(SRC)/readme.txt
+	cp ../Acknowledgments.txt $(SRC)
 	tar czf $(SRC).tgz $(SRC)
 
 macos:
