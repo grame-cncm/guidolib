@@ -1,6 +1,10 @@
 GUIDO Engine history
 
 ----------------------------------------------------------------
+2015-??-??  version 1.5.7
+
+
+----------------------------------------------------------------
 2014-12-09  version 1.5.6
 - Proportional rendering available (enabled with GuidoLayoutSettings parameters)
 - \special-tag:
