@@ -12,6 +12,8 @@
 # Compilation option -Oz is discouraged, it provoke undefined results and assertion errors at runtime.
 #
 
+version := 1.00
+
 srcdir := ../src/engine
 subprojects :=  $(wildcard $(srcdir)/* src/*)
 sources = $(wildcard $(srcdir)/*/*.cpp src/*/*.cpp)
@@ -22,6 +24,9 @@ CXXFLAGS += $(addprefix -I, $(subprojects)) -DINDEPENDENTSVG -DJSON_ONLY -DCANVA
 			
 target = libGUIDOEngine.js
 
+##############################################################
+# building the library
+##############################################################
 $(target) : $(objects)
 	emcc -O3 --bind --memory-init-file 0 $(objects) -o $(target) -s ALLOW_MEMORY_GROWTH=0 -s ASM_JS=1 -s TOTAL_MEMORY=100663296 -s DISABLE_EXCEPTION_CATCHING=1 -s ASSERTIONS=0
 clean:
@@ -30,6 +35,15 @@ clean:
 depend :
 	makedepend -fMakefile -Y -- $(CXXFLAGS) -- $(sources)
 
+##############################################################
+# packaging
+##############################################################
+package:
+
+
+##############################################################
+# rules for building the library
+##############################################################
 obj/%.o: $(srcdir)/%.cpp
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	$(GCC) -c $(CXXFLAGS) $< -o $@
@@ -45,3 +59,4 @@ obj/src/binding/%.o: src/binding/%.cpp
 obj/src/device/%.o: src/device/%.cpp
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	$(GCC) -c $(CXXFLAGS) $< -o $@	
+
