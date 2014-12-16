@@ -1,2 +1,1 @@
-{[ d \noteFormat<color="blue"> (g f f) ],
-[ a b c ]}
+[\noteFormat<dx=2, color="purple">(b \noteFormat<dx=2>(b) c) d]

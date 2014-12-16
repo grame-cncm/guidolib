@@ -63,10 +63,10 @@ void PianoRollTrajectory::DrawVoice(ARMusicalVoice* v, DrawParams &drawParams)
         int voiceNum = v->getVoiceNum();
         
         for (unsigned int i = 0; i < fVoicesColors->size() && fColors->empty(); i++) {
-            std::pair<int, VGColor> pair = fVoicesColors->at(i);
+            std::pair<int, VGColor *> pair = fVoicesColors->at(i);
 
             if (pair.first == voiceNum)
-                fColors->push(&pair.second);
+                fColors->push(pair.second);
         }
     }
     
@@ -81,6 +81,8 @@ void PianoRollTrajectory::DrawVoice(ARMusicalVoice* v, DrawParams &drawParams)
 
             fColors->push(new VGColor(r, g, b, 255));
         }
+        
+        drawParams.dev->PushFillColor(*fColors->top());
     }
 
     fChord              = false;
@@ -137,11 +139,8 @@ void PianoRollTrajectory::DrawVoice(ARMusicalVoice* v, DrawParams &drawParams)
     DrawLinks(drawParams);                // Draws link to final event
     DrawFinalEvent(finalDur, drawParams); // Draws link after final event
 
-    while (!fColors->empty()) {
-        VGColor *topColor = fColors->top();
-        fColors->pop();
-        delete topColor;
-    }
+    while (!fColors->empty())
+        popColor(drawParams);
 
     previousEventInfos->clear();
     currentEventInfos->clear();
@@ -259,22 +258,6 @@ void PianoRollTrajectory::DrawLinkBetween(PianoRollTrajectory::EventInfos leftEv
 
     if (color != NULL)
         drawParams.dev->PopFillColor();
-}
-
-//--------------------------------------------------------------------------
-void PianoRollTrajectory::handleColor(ARNoteFormat* noteFormat, DrawParams &drawParams) const
-{
-    const TagParameterString *tps = noteFormat->getColor();
-    unsigned char colref[4];
-
-    if (tps && tps->getRGB(colref))
-        fColors->push(new VGColor(colref[0], colref[1], colref[2], colref[3]));
-    else if ((fVoicesAutoColored && fColors->size() > 1)
-        || (!fVoicesAutoColored && !fColors->empty())) {
-        VGColor *topColor = fColors->top();
-        fColors->pop();
-        delete topColor;
-    }
 }
 
 //--------------------------------------------------------------------------

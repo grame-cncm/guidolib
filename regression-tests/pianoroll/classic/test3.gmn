@@ -1,2 +1,1 @@
-{[ d \noteFormat<color="blue"> g f \noteFormat<dx=2> f ],
-[ a b c ]}
+[c \noteFormat<color="green"> a \noteFormat<color="red"> a ]
