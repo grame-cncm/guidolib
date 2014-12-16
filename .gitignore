@@ -70,3 +70,6 @@ guido2image.vcxproj.filters
 /validate/guidogetversion.exe
 /validate/guidogetvoicemap.exe
 /validate/guidoparse.exe
+/ALL_BUILD.vcxproj
+/ALL_BUILD.vcxproj.filters
+/environments/Qt/GuidoQtD.lib
