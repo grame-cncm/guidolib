@@ -5,18 +5,6 @@
     <link rel="stylesheet" href="../stylesheets/guidostylesheet.css" type="text/css" charset="UTF-8" />
     <script type="text/javascript" src="../libGUIDOEngine.js"></script>
     <script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
-    <style type="text/css">
-      div.column {
-        display: block;
-        width: 50%;
-      }
-      #gmnSandbox {
-        width: 95%;
-      }
-      #guidoResult {
-        /*border: 0px;*/
-      }
-    </style>
     <script>
 		var guidoEngine;
 	function processGMN() {
@@ -24,14 +12,15 @@
 		var p = guidoEngine.openParser();
 		var ar = guidoEngine.string2AR(p, $("#gmnSandbox").val());
 		guidoEngine.closeParser(p);
+		
 		var gr = guidoEngine.ar2gr(ar);
 		var result = guidoEngine.svgExport(gr, 1);
-
 		guidoEngine.freeGR(gr);
 		guidoEngine.freeAR(ar);
 		
 		$("#canvasContainer").html(result);
-		$("#canvasContainer2").html("<plaintext>" + result + "</plaintext>");
+		// Remove comment to have svg result in text
+		//$("#canvasContainer2").html("<plaintext>" + result + "</plaintext>");
 	}
 	$( document ).ready(function() {
 		guidoEngine = new Module.GuidoEngineAdapter;
@@ -45,6 +34,7 @@
     </script>
   </head>
   <body>
+    <header><iframe src="../header/header.html"></iframe></header>
     <div class="column" style="float:left">
       <p>Type your GMN code here :</p>
       <textarea id="gmnSandbox" rows="40"></textarea>

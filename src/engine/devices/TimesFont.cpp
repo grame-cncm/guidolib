@@ -41,9 +41,12 @@ void TimesFont::GetExtent(const char * s, int inCharCount, float * outWidth, flo
 	*outHeight = 0;
     for(int i = 0; i < inCharCount; i++)
     {
-		*outWidth += kTimesFontWidth[(int)s[inCharCount]] * size / kTimesFontSize;
-		*outHeight += kTimesFontHeight[(int)s[inCharCount]] * size / kTimesFontSize;
-    }
+		*outWidth += kTimesFontWidth[(int)s[i]] * size / kTimesFontSize;
+		float height = kTimesFontHeight[(int)s[i]] * size / kTimesFontSize;
+		if(height > *outHeight) {
+			*outHeight = height;
+		}
+	}
 }
 
 void TimesFont::GetExtent(unsigned char c, float * outWidth, float * outHeight, VGDevice * context) const
