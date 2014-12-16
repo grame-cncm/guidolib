@@ -1,8 +1,5 @@
 package drawcommand;
 
-import java.lang.StringBuilder;
-
-import java.util.*;
    
 public class SetScaleCommand extends GuidoDrawCommand implements PrintableDrawCommand {
 

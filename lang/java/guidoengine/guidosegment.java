@@ -26,7 +26,6 @@
 */
 
 package guidoengine;
-import guidoengine.*;
 
 /**
 	Guido time segments descriptor

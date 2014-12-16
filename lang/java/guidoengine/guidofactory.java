@@ -27,9 +27,6 @@
 
 
 package guidoengine;
-import guidoengine.*;
-import java.awt.Graphics;
-import java.awt.Canvas;
 
 /**
 	The GUIDO Factory provides a set of methods to dynamically create a GUIDO

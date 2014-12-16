@@ -1,7 +1,5 @@
 package drawcommand;
 
-import java.lang.StringBuilder;
-import java.util.*;
    
 public class OffsetOriginCommand extends GuidoDrawCommand implements PrintableDrawCommand {
 

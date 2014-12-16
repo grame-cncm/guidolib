@@ -1,9 +1,5 @@
 package drawcommand;
 
-import java.lang.StringBuilder;
-
-
-import java.util.*;
    
 public class DrawStringCommand extends GuidoDrawCommand implements PrintableDrawCommand {
 
