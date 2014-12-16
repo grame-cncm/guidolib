@@ -44,7 +44,7 @@ win32inc := $(patsubst %, ../win32/src/%, $(win32inc))
 
 ######### qt include files 
 qtinc  := $(wildcard ../src/engine/include/*.h)
-qtfiles =  ../Qt/LICENSE.MPL.txt ../Qt/package/readme.txt
+qtfiles =  ../environments/Qt/LICENSE.MPL.txt ../environments/Qt/package/readme.txt
 
 QT_SRC_FILES   = $(shell find $(QTLIB)/src -type f)
 QT_SRC_FOLDERS = $(shell find $(QTLIB)/src -type d)
@@ -70,7 +70,7 @@ menu:
 
 doc:
 	make -C ../doc/doxygen
-	make -C ../Qt/doc
+	make -C ../environments/Qt/doc
 
 docpack:
 	make commondoc DEST=.
@@ -110,15 +110,15 @@ qt:
 	#### Doc
 	make commondoc DEST=$(QTLIB)
 	mkdir -p $(QTLIB)/doc/Qt/html 
-	cp -Rf ../Qt/doc/html $(QTLIB)/doc/Qt
-	cp "../Qt/doc/Guido Qt-Binding manual.pdf" $(QTLIB)/doc/Qt/
+	cp -Rf ../environments/Qt/doc/html $(QTLIB)/doc/Qt
+	cp "../environments/Qt/doc/Guido Qt-Binding manual.pdf" $(QTLIB)/doc/Qt/
 	#### Export the sources
-	cd ../Qt && git archive -o __tmp__.tgz --prefix=../package/$(QTLIB)/src/ HEAD && tar xzfP __tmp__.tgz && rm __tmp__.tgz
+	cd ../environments/Qt && git archive -o __tmp__.tgz --prefix=../package/$(QTLIB)/src/ HEAD && tar xzfP __tmp__.tgz && rm __tmp__.tgz
 	#### Copy GUIDOEngine includes
 	mkdir -p $(QTLIB)/src/engine/include
 	cp $(qtinc) $(QTLIB)/src/engine/include
 	#### Copy package specific files
-	cp -f ../Qt/package/GUIDOEngineLink.pri $(QTLIB)/src
+	cp -f ../environments/Qt/package/GUIDOEngineLink.pri $(QTLIB)/src
 	cp $(qtfiles) $(QTLIB)
 	#### Remove inappropriate files from the original SVN-Export
 	rm -Rf $(qtKitExcludedFiles)
