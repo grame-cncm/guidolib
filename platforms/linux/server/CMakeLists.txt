@@ -1,21 +1,23 @@
 cmake_minimum_required (VERSION 2.6)
 project (guidohttpserver)
 set (target guidohttpserver)
+
 # LibFindMacros
-include(../../cmake/LibFindMacros.cmake)
+include(LibFindMacros.cmake)
 
-set (GUIDO  ${CMAKE_CURRENT_SOURCE_DIR}/../../src)
+set (ROOT  ${CMAKE_CURRENT_SOURCE_DIR}/../../..)
+set (GUIDO  ${ROOT}/src)
 
-FILE(GLOB SERVER_CPP_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../../server/*.cpp)
-FILE(GLOB SERVER_C_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../../server/*.c)
-FILE(GLOB CAIRO_CPP_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../src/Cairo*.cpp)
-FILE(GLOB LOCAL_CPP_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+FILE(GLOB SERVER_CPP_SOURCES ${ROOT}/server/*.cpp)
+FILE(GLOB SERVER_C_SOURCES   ${ROOT}/server/*.c)
+FILE(GLOB CAIRO_CPP_SOURCES  ${CMAKE_CURRENT_SOURCE_DIR}/../src/Cairo*.cpp)
+FILE(GLOB LOCAL_CPP_SOURCES  ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../server)
+include_directories(${ROOT}/server)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../src)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../src/engine/include)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../src/engine/json)
+include_directories(${ROOT}/src/engine/include)
+include_directories(${ROOT}/src/engine/json)
 
 add_definitions(-DJSON_ONLY)
 
