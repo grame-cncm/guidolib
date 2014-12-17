@@ -8,11 +8,15 @@
 #
 # Checking memory leaks
 #   requires valgrind
-#
-# Precondition for windows : guidogetversion.exe and GUIDOEngine.dll have to be copied in validate folder
 
-version	:= $(shell guidogetversion | cut -d' ' -f 3)
-system	:= $(shell uname -s)
+system	 := $(shell uname -s)
+
+ifeq ($(system), MINGW32_NT-6.1)
+$(shell cp ../build/win32/Release/GUIDOEngine.dll .)
+$(shell cp ../src/tools/build/win32/Release/guidogetversion.exe .)
+endif
+
+version	 := $(shell guidogetversion | cut -d' ' -f 3)
 LEAKTOOLS = guidoparse guidoar2gr guidodraw
 
 
@@ -25,8 +29,8 @@ ifeq ($(system), Darwin)
   lib =  -F../build/MacOS/Release/ -framework GUIDOEngine
 else
 ifeq ($(system), MINGW32_NT-6.1)
-  libbin  := ../build/win32/Release
-  toolbin := ../src/tools/build/win32/Release
+  libbin   := ../build/win32/Release
+  toolbin  := ../src/tools/build/win32/Release
   lib       = $(libbin)/GUIDOEngine.lib
   LEAKTOOLS = GUIDOEngine.dll guidogetversion.exe guido2svg.exe guidoparse.exe guidoar2gr.exe guidodraw.exe guido2image.exe guidogetstaffmap.exe guidogetsystemmap.exe guidogettimemap.exe guidogetvoicemap.exe guido2midi.exe guido2proll.exe
 else
@@ -64,10 +68,10 @@ midiout     := $(patsubst ../%.gmn, $(version)/%.mid, $(gmnfiles))
 
 
 allpdf 		 = $(shell [ -d $(version) ] && find $(version) -name "*.pdf")
-allsvg 		 = $(shell [ -d $(version) ] && find $(version)/standard -name "*.svg")
-allmap 		 = $(shell [ -d $(version) ] && find $(version)/maps -name "*.svg")
-alltimemap 	 = $(shell [ -d $(version) ] && find $(version)/maps/time -name "*.map")
-allproll 	 = $(shell [ -d $(version) ] && find $(version)/proll -name "*.svg")
+allsvg 		 = $(shell [ -d $(version)/standard ] && find $(version)/standard -name "*.svg")
+allmap 		 = $(shell [ -d $(version)/maps ] && find $(version)/maps -name "*.svg")
+alltimemap 	 = $(shell [ -d $(version)/maps/time ] && find $(version)/maps/time -name "*.map")
+allproll 	 = $(shell [ -d $(version)/proll ] && find $(version)/proll -name "*.svg")
 leaksfiles  := $(patsubst ../%.gmn, $(version)/$(TOOLPATH)/%.leaks.out, $(gmnfiles))
 
 validpdf 	    = $(patsubst %.pdf, %.outpdf, $(allpdf))
@@ -163,7 +167,7 @@ endif
 
 #########################################################################
 # pdf output generation
-pdf: forcepdfdate $(pdfout) $(mapsout)
+pdf: forcepdfdate $(pdfout)
 	@./forcepdfdate 20100101120000 $(pdfout)
 
 pdfclean: 
@@ -268,12 +272,6 @@ $(version)/proll/trajectory/voicescolor%.svg: ../%.gmn
 #########################################################################
 # windows specific stuff
 win32: $(LEAKTOOLS)
-
-GUIDOEngine.dll:
-	cp $(libbin)/GUIDOEngine.dll .
-
-guidogetversion.exe:
-	cp $(toolbin)/guidogetversion.exe .
 
 guido2svg.exe:
 	cp $(toolbin)/guido2svg.exe .
