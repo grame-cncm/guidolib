@@ -21,7 +21,7 @@ QT += widgets printsupport
 # GuidoQt library link for each platform
 win32 {
 	DebugBuild{
-		LIBS += ../GuidoQt.lib
+		LIBS += ../GuidoQtD.lib
 	}
 	else {
 		LIBS += ../GuidoQt.lib
