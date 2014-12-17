@@ -1,8 +1,5 @@
 package drawcommand;
 
-import java.lang.StringBuilder;
-
-import java.util.*;
    
 public class NotifySizeCommand extends GuidoDrawCommand implements PrintableDrawCommand {
 

@@ -1,8 +1,5 @@
 package drawcommand;
 
-import java.lang.StringBuilder;
-
-import java.util.*;
 
 
 public class DrawMusicSymbolCommand extends GuidoDrawCommand implements PrintableDrawCommand {

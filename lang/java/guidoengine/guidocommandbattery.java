@@ -1,8 +1,6 @@
 package guidoengine;
 
-import java.nio.ByteBuffer;
-
-import java.util.*;
+import java.util.List;
 
 public interface guidocommandbattery {
     public void storeBeginDrawCommand();
