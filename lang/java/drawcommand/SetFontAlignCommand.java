@@ -1,8 +1,5 @@
 package drawcommand;
 
-import java.lang.StringBuilder;
-
-import java.util.*;
    
 public class SetFontAlignCommand extends GuidoDrawCommand implements PrintableDrawCommand {
 

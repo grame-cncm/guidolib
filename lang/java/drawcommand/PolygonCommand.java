@@ -1,8 +1,6 @@
 package drawcommand;
 
-import java.lang.StringBuilder;
-
-import java.util.*;
+import java.util.List;
    
 public class PolygonCommand extends GuidoDrawCommand implements PrintableDrawCommand {
 

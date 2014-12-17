@@ -26,7 +26,6 @@
 */
 
 package guidoengine;
-import guidoengine.*;
 
 /**
 	an abstract class for time map collection
