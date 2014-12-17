@@ -9,6 +9,7 @@
 # Checking memory leaks
 #   requires valgrind
 #
+# Precondition for windows : guidogetversion.exe and GUIDOEngine.dll have to be copied in validate folder
 
 version	:= $(shell guidogetversion | cut -d' ' -f 3)
 system	:= $(shell uname -s)
@@ -18,15 +19,16 @@ LEAKTOOLS = guidoparse guidoar2gr guidodraw
 guido2image := guido2image
 guido2svg   := guido2svg
 guido2midi  := guido2midi
+guido2proll := guido2proll
 
 ifeq ($(system), Darwin)
   lib =  -F../build/MacOS/Release/ -framework GUIDOEngine
 else
 ifeq ($(system), MINGW32_NT-6.1)
   libbin  := ../build/win32/Release
-  toolbin := ../tools/build/win32/Release
+  toolbin := ../src/tools/build/win32/Release
   lib       = $(libbin)/GUIDOEngine.lib
-  LEAKTOOLS = GUIDOEngine.dll guidogetversion.exe guido2svg.exe guidoparse.exe guidoar2gr.exe guidodraw.exe guido2image.exe guidogetstaffmap.exe guidogetsystemmap.exe guidogettimemap.exe guidogetvoicemap.exe guido2midi.exe
+  LEAKTOOLS = GUIDOEngine.dll guidogetversion.exe guido2svg.exe guidoparse.exe guidoar2gr.exe guidodraw.exe guido2image.exe guidogetstaffmap.exe guidogetsystemmap.exe guidogettimemap.exe guidogetvoicemap.exe guido2midi.exe guido2proll.exe
 else
   lib = -lGUIDOEngine
 endif
@@ -40,9 +42,11 @@ nodlost	= "definitely lost: 0"
 noilost	= "indirectly lost: 0"
 noplost	= "possibly lost: 0"
 
-gmnfiles     = $(shell find ../gmn-examples -name "*.gmn") $(shell find ../regression-tests -name "*.gmn")
+gmnfiles      = $(shell find ../gmn-examples -name "*.gmn") $(shell find ../regression-tests -name "*.gmn")
+gmnfilesproll = $(shell find ../regression-tests/pianoroll -name "*.gmn")
+
 pdfout		:= $(patsubst ../%.gmn, $(version)/%.pdf, $(gmnfiles))
-svgout		:= $(patsubst ../%.gmn, $(version)/%.svg, $(gmnfiles))
+svgout		:= $(patsubst ../%.gmn, $(version)/standard/%.svg, $(gmnfiles))
 
 sysmapout	:= $(patsubst ../%.gmn, $(version)/maps/system/%.svg, $(gmnfiles))
 staffmapout	:= $(patsubst ../%.gmn, $(version)/maps/staff/%.svg, $(gmnfiles))
@@ -50,23 +54,31 @@ voicemapout	:= $(patsubst ../%.gmn, $(version)/maps/voice/%.svg, $(gmnfiles))
 mapsout		:= $(sysmapout) $(staffmapout) $(voicemapout)
 timemapout	:= $(patsubst ../%.gmn, $(version)/maps/time/%.map, $(gmnfiles))
 
+prollout	            := $(patsubst ../%.gmn, $(version)/proll/classic/standard/%.svg, $(gmnfilesproll))
+prollvoicescolorout     := $(patsubst ../%.gmn, $(version)/proll/classic/voicescolor/%.svg, $(gmnfilesproll))
+prolltrajout            := $(patsubst ../%.gmn, $(version)/proll/trajectory/standard/%.svg, $(gmnfilesproll))
+prollvoicescolortrajout := $(patsubst ../%.gmn, $(version)/proll/trajectory/voicescolor/%.svg, $(gmnfilesproll))
+
 leaksout 	:= $(patsubst ../%.gmn, $(version)/$(TOOLPATH)/%.leaks.txt, $(gmnfiles))
 midiout     := $(patsubst ../%.gmn, $(version)/%.mid, $(gmnfiles))
 
 
 allpdf 		 = $(shell [ -d $(version) ] && find $(version) -name "*.pdf")
-allsvg 		 = $(shell [ -d $(version) ] && find $(version) -name "*.svg")
+allsvg 		 = $(shell [ -d $(version) ] && find $(version)/standard -name "*.svg")
 allmap 		 = $(shell [ -d $(version) ] && find $(version)/maps -name "*.svg")
 alltimemap 	 = $(shell [ -d $(version) ] && find $(version)/maps/time -name "*.map")
+allproll 	 = $(shell [ -d $(version) ] && find $(version)/proll -name "*.svg")
 leaksfiles  := $(patsubst ../%.gmn, $(version)/$(TOOLPATH)/%.leaks.out, $(gmnfiles))
 
 validpdf 	    = $(patsubst %.pdf, %.outpdf, $(allpdf))
 validsvg 	    = $(patsubst %.svg, %.outsvg, $(allsvg))
 validsvgwin     = $(patsubst %.svg, %.outsvgwin, $(allsvg))
-validmap 	    = $(patsubst %.svg, %.outmap, $(allmap))
-validmapwin     = $(patsubst %.svg, %.outmapwin, $(allmap))
+validmap 	    = $(patsubst %.svg, %.outsvg, $(allmap))
+validmapwin     = $(patsubst %.svg, %.outsvgwin, $(allmap))
 validtimemap    = $(patsubst %.map, %.outtimemap, $(alltimemap))
 validtimemapwin = $(patsubst %.map, %.outtimemapwin, $(alltimemap))
+validproll      = $(patsubst %.svg, %.outsvg, $(allproll))
+validprollwin   = $(patsubst %.svg, %.outsvgwin, $(allproll))
 
 .PHONY: pdf svg
 
@@ -101,28 +113,38 @@ validate: $(validsvg)
 	@echo Validating version $(version) with $(VERSION) $(tmp)
 	make validmap
 	make validtimemap
+	make validproll
 
 validmap: $(validmap)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
-	@echo Validating version maps $(version) with $(VERSION) $(tmp)
+	@echo Validating maps version $(version) with $(VERSION) $(tmp)
 
 validtimemap: $(validtimemap)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
-	@echo Validating version time maps $(version) with $(VERSION) $(tmp)
+	@echo Validating time maps version $(version) with $(VERSION) $(tmp)
+
+validproll: $(validproll)
+	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
+	@echo Validating proll version $(version) with $(VERSION) $(tmp)
 	
 validateWin: $(validsvgwin)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
 	@echo Validating version $(version) with $(VERSION) $(tmp)
 	make validmapWin
 	make validtimemapWin
+	make validprollWin
 
 validmapWin: $(validmapwin)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
-	@echo Validating version maps $(version) with $(VERSION) $(tmp)
+	@echo Validating maps version $(version) with $(VERSION) $(tmp)
 
 validtimemapWin: $(validtimemapwin)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
-	@echo Validating version time maps $(version) with $(VERSION) $(tmp)
+	@echo Validating time maps version $(version) with $(VERSION) $(tmp)
+
+validprollWin: $(validprollwin)
+	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
+	@echo Validating proll version $(version) with $(VERSION) $(tmp)
 
 pdfvalidate: $(validpdf)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
@@ -136,12 +158,6 @@ pdfvalidate: $(validpdf)
 	@[ -f  $(tmp) ] || echo $< : new file
 	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
 	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open -t $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
-	
-%.outmap: %.svg
-	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
-	@[ -f  $(tmp) ] || echo $< : new file
-	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
-	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open -t $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
 		
 %.outtimemap: %.map
 	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
@@ -150,12 +166,6 @@ pdfvalidate: $(validpdf)
 	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open -t $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
 
 %.outsvgwin: %.svg
-	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
-	@[ -f  $(tmp) ] || echo $< : new file
-	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
-	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && C:/Program\ Files\ \(x86\)/Mozilla\ Firefox/firefox -new-tab $(patsubst $(version)/%, $(VERSION)/%, $<) -new-tab $<; true)
-	
-%.outmapwin: %.svg
 	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
 	@[ -f  $(tmp) ] || echo $< : new file
 	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
@@ -222,13 +232,12 @@ checkcrash: $(LEAKTOOLS)
 
 #########################################################################
 # tools to generate svg files
-svgWin: $(svgout) $(mapsout) $(timemapout)
-svg: $(svgout) $(mapsout) $(timemapout)
+svg: $(svgout) $(mapsout) $(timemapout) $(prollout) $(prollvoicescolorout) $(prolltrajout) $(prollvoicescolortrajout)
 
 svgclean: 
 	rm -f $(svgout)
 
-$(version)/%.svg: ../%.gmn
+$(version)/standard/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	-$(guido2svg) $< | grep -v "SVG file generated using" > __tmp.svg  &&  mv __tmp.svg $@
 
@@ -255,10 +264,30 @@ $(version)/maps/time/%.map: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	-guidogettimemap $< > $@
 
+	
+#########################################################################
+# tools to generate proll files
+proll: $(prollout) $(prollvoicescolorout) $(prolltrajout) $(prollvoicescolortrajout)
+$(version)/proll/classic/standard/%.svg: ../%.gmn
+	@[ -d $(@D) ] || mkdir -p $(@D)
+	-$(guido2proll) $< > $@
+    
+$(version)/proll/classic/voicescolor%.svg: ../%.gmn
+	@[ -d $(@D) ] || mkdir -p $(@D)
+	-$(guido2proll) -voicesautocolor true $< > $@
+    
+$(version)/proll/trajectory/standard/%.svg: ../%.gmn
+	@[ -d $(@D) ] || mkdir -p $(@D)
+	-$(guido2proll) -pianoroll trajectory $< > $@
+    
+$(version)/proll/trajectory/voicescolor%.svg: ../%.gmn
+	@[ -d $(@D) ] || mkdir -p $(@D)
+	-$(guido2proll) -pianoroll trajectory -voicesautocolor true $< > $@
+
 
 #########################################################################
 # windows specific stuff
-win32 : $(LEAKTOOLS)
+win32: $(LEAKTOOLS)
 
 GUIDOEngine.dll:
 	cp $(libbin)/GUIDOEngine.dll .
@@ -293,8 +322,11 @@ guidogettimemap.exe:
 guidogetvoicemap.exe:
 	cp $(toolbin)/guidogetvoicemap.exe .
 
+guido2proll.exe:
+	cp $(toolbin)/guido2proll.exe .
+
 guido2image.exe:
-	cp ../Qt/bin/guido2image.exe .
+	cp ../environments/Qt/bin/guido2image.exe .
 
 #########################################################################
 # tools
