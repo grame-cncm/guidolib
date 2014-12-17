@@ -67,12 +67,12 @@ leaksout 	:= $(patsubst ../%.gmn, $(version)/$(TOOLPATH)/%.leaks.txt, $(gmnfiles
 midiout     := $(patsubst ../%.gmn, $(version)/%.mid, $(gmnfiles))
 
 
-allpdf 		 = $(shell [ -d $(version) ] && find $(version) -name "*.pdf")
-allsvg 		 = $(shell [ -d $(version)/standard ] && find $(version)/standard -name "*.svg")
-allmap 		 = $(shell [ -d $(version)/maps ] && find $(version)/maps -name "*.svg")
-alltimemap 	 = $(shell [ -d $(version)/maps/time ] && find $(version)/maps/time -name "*.map")
-allproll 	 = $(shell [ -d $(version)/proll ] && find $(version)/proll -name "*.svg")
-leaksfiles  := $(patsubst ../%.gmn, $(version)/$(TOOLPATH)/%.leaks.out, $(gmnfiles))
+allpdf 		= $(shell [ -d $(version) ] && find $(version) -name "*.pdf")
+allsvg 		= $(shell [ -d $(version)/standard ] && find $(version)/standard -name "*.svg")
+allmap 		= $(shell [ -d $(version)/maps ] && find $(version)/maps -name "*.svg")
+alltimemap 	= $(shell [ -d $(version)/maps/time ] && find $(version)/maps/time -name "*.map")
+allproll 	= $(shell [ -d $(version)/proll ] && find $(version)/proll -name "*.svg")
+leaksfiles := $(patsubst ../%.gmn, $(version)/$(TOOLPATH)/%.leaks.out, $(gmnfiles))
 
 validpdf 	    = $(patsubst %.pdf, %.outpdf, $(allpdf))
 validsvg 	    = $(patsubst %.svg, %.outsvg, $(allsvg))
@@ -80,7 +80,7 @@ validmap 	    = $(patsubst %.svg, %.outsvg, $(allmap))
 validtimemap    = $(patsubst %.map, %.outtimemap, $(alltimemap))
 validproll      = $(patsubst %.svg, %.outsvg, $(allproll))
 
-.PHONY: pdf svg
+.PHONY: pdf cleantools midiclean pdfclean help
 
 default : svg
 
