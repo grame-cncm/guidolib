@@ -1,5 +1,5 @@
 % simple GUIDO example
 % demonstrating the \dim
-[
+{
 	[\dim (a b) \dim<dm="f">(c d e)]
-]
+}
