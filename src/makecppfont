@@ -1,0 +1,10 @@
+#!/bin/sh
+#
+
+echo "const char* guido2svg = \"\\"
+cat guido2.svg | \
+	sed -e 's/\\/\\\\/g' | \
+	sed -e 's/"/\\"/g' | \
+	sed -e 's/$/\\/'
+echo '";'
+echo
