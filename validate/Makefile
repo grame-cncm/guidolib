@@ -72,13 +72,9 @@ leaksfiles  := $(patsubst ../%.gmn, $(version)/$(TOOLPATH)/%.leaks.out, $(gmnfil
 
 validpdf 	    = $(patsubst %.pdf, %.outpdf, $(allpdf))
 validsvg 	    = $(patsubst %.svg, %.outsvg, $(allsvg))
-validsvgwin     = $(patsubst %.svg, %.outsvgwin, $(allsvg))
 validmap 	    = $(patsubst %.svg, %.outsvg, $(allmap))
-validmapwin     = $(patsubst %.svg, %.outsvgwin, $(allmap))
 validtimemap    = $(patsubst %.map, %.outtimemap, $(alltimemap))
-validtimemapwin = $(patsubst %.map, %.outtimemapwin, $(alltimemap))
 validproll      = $(patsubst %.svg, %.outsvg, $(allproll))
-validprollwin   = $(patsubst %.svg, %.outsvgwin, $(allproll))
 
 .PHONY: pdf svg
 
@@ -86,14 +82,19 @@ default : svg
 
 help:
 	@echo "Makefile for testing the engine output. Available targets are:"
-	@echo "'svg' (default): makes svg files for a set of gmn files"
+	@echo "'svg' (default): makes svg files (standard, maps, timemaps, piano roll) for a set of gmn files"
 	@echo "                 the output folder name is the current guido engine version number."
+	@echo "'map'          : makes svg map files for a set of gmn files"
+	@echo "                 the output folder name is '[current guido engine version number]/maps/'."
+	@echo "'timemap'      : makes time map files for a set of gmn files"
+	@echo "                 the output folder name is '[current guido engine version number]/maps/time/'."
+	@echo "'proll'        : makes svg piano roll files for a set of gmn files"
+	@echo "                 the output folder name is '[current guido engine version number]/proll'."
 	@echo "'pdf'          : makes pdf files for a set of gmn files"
 	@echo "                 the output folder name is the current guido engine version number."
 	@echo "'midi'         : makes MIDI files for a set of gmn files"
 	@echo "                 the output folder name is the current guido engine version number."
-	@echo "'validate    VERSION=another_version': compares the current version svg output with another one"
-	@echo "'validateWin VERSION=another_version': compares on Windows the current version svg output with another one (Firefox has to be installed (and opened) in C:/Program Files (x86)/Mozilla Firefox/firefox, if not change Makefile)"
+	@echo "'validate    VERSION=another_version': compares the current version output (standard, map, timemap and proll files) with another one (for Windows, Firefox has to be installed (and opened) in C:/Program Files (x86)/Mozilla Firefox/firefox, otherwise please change Makefile)"
 	@echo "'pdfvalidate VERSION=another_version': compares the current version pdf output with another one"
 	@echo "'checkleaks TOOL=a_tool': check memory leaks on a set of gmn files using various tools"
 	@echo "                 the basic tool set is included in this folder but any tool arbitrary tool could be used as well"
@@ -126,25 +127,6 @@ validtimemap: $(validtimemap)
 validproll: $(validproll)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
 	@echo Validating proll version $(version) with $(VERSION) $(tmp)
-	
-validateWin: $(validsvgwin)
-	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
-	@echo Validating version $(version) with $(VERSION) $(tmp)
-	make validmapWin
-	make validtimemapWin
-	make validprollWin
-
-validmapWin: $(validmapwin)
-	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
-	@echo Validating maps version $(version) with $(VERSION) $(tmp)
-
-validtimemapWin: $(validtimemapwin)
-	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
-	@echo Validating time maps version $(version) with $(VERSION) $(tmp)
-
-validprollWin: $(validprollwin)
-	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
-	@echo Validating proll version $(version) with $(VERSION) $(tmp)
 
 pdfvalidate: $(validpdf)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
@@ -157,25 +139,21 @@ pdfvalidate: $(validpdf)
 	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
 	@[ -f  $(tmp) ] || echo $< : new file
 	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
+ifeq ($(system), MINGW32_NT-6.1)
+	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && C:/Program\ Files\ \(x86\)/Mozilla\ Firefox/firefox -new-tab $(patsubst $(version)/%, $(VERSION)/%, $<) -new-tab $<; true)
+else
 	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open -t $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
-		
+endif
+
 %.outtimemap: %.map
 	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
 	@[ -f  $(tmp) ] || echo $< : new file
 	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
-	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open -t $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
-
-%.outsvgwin: %.svg
-	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
-	@[ -f  $(tmp) ] || echo $< : new file
-	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
-	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && C:/Program\ Files\ \(x86\)/Mozilla\ Firefox/firefox -new-tab $(patsubst $(version)/%, $(VERSION)/%, $<) -new-tab $<; true)
-			
-%.outtimemapwin: %.map
-	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
-	@[ -f  $(tmp) ] || echo $< : new file
-	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
+ifeq ($(system), MINGW32_NT-6.1)
 	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo $< : differences found)
+else
+	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open -t $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
+endif
 
 %.outpdf: %.pdf
 	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
@@ -235,7 +213,7 @@ checkcrash: $(LEAKTOOLS)
 svg: $(svgout) $(mapsout) $(timemapout) $(prollout) $(prollvoicescolorout) $(prolltrajout) $(prollvoicescolortrajout)
 
 svgclean: 
-	rm -f $(svgout)
+	rm -f $(svgout) $(mapsout) $(timemapout) $(prollout) $(prollvoicescolorout) $(prolltrajout) $(prollvoicescolortrajout)
 
 $(version)/standard/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
@@ -259,6 +237,8 @@ $(version)/maps/voice/%.svg: ../%.gmn
 	-$(guido2svg) -voicemap true $<  > $@
 
 	
+#########################################################################
+# tool to generate time map files
 timemap: $(timemapout)
 $(version)/maps/time/%.map: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
@@ -266,7 +246,7 @@ $(version)/maps/time/%.map: ../%.gmn
 
 	
 #########################################################################
-# tools to generate proll files
+# tool to generate proll files
 proll: $(prollout) $(prollvoicescolorout) $(prolltrajout) $(prollvoicescolortrajout)
 $(version)/proll/classic/standard/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
