@@ -8,6 +8,7 @@ echo "const char ______src_guido2_svg[] = {"
 cat guido2.svg | \
 	sed -e "s/\(.\)/'\1', /g" | \
 	sed -e 's/\\/\\\\/g' | \
+	sed -e "s/$/'\\\n', /" | \
 	sed -e "s/'''/'\\\\''/g"
 echo "' ' };"
 echo
