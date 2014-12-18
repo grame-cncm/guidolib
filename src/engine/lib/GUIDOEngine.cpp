@@ -642,7 +642,7 @@ char * GuidoInternalDeviceExport_retCString( const GRHandler handle, int page, G
 	sstr.clear();
 	GuidoErrCode err;
 	if (dev == guido_svg_with_font_spec) {
-	  err = GuidoSVGExportWithFontSpec (handle, page, sstr, 0, reinterpret_cast<char *>(______src_guido2_svg));
+	  err = GuidoSVGExportWithFontSpec (handle, page, sstr, 0, ______src_guido2_svg);
 	} else if (dev == guido_abstract) {
 	  err = GuidoAbstractExport(handle, page, sstr);
 	} else if (dev == guido_binary) {

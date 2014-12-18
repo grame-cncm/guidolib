@@ -61,7 +61,7 @@ SVGFont::SVGFont(const char * name, int size, int properties, const char * guido
     }
     else if (!fGuidoFontSpec.empty()) {
         // nSVG: like above, but reading a C string instead of from a file
-        char* fontspec = const_cast<char *>(fGuidoFontSpec.c_str());
+		char* fontspec = const_cast<char *>(fGuidoFontSpec.c_str());
         fNSVGimage = nsvgParse(fontspec, "px", size);
     } else
         fNSVGimage = NULL;
@@ -84,7 +84,7 @@ SVGFont::SVGFont(const char * name, int size, int properties, const char * guido
     fProperties = properties;
 #else
     fDevice = gSystem.CreateMemoryDevice (10,10);
-    fFont = gSystem.CreateVGFont (name, size, properties);
+	fFont = gSystem.CreateVGFont (name, size, properties);
 #endif
 }
 
