@@ -1,12 +1,17 @@
 #!/bin/sh
 #
 
-echo "const char guido2svg[] = {"
+echo "#ifndef _guido2_H_"
+echo "#define _guido2_H_"
+echo
+echo "const char ______src_guido2_svg[] = {"
 cat guido2.svg | \
 	sed -e "s/\(.\)/'\1', /g" | \
 	sed -e 's/\\/\\\\/g' | \
 	sed -e "s/'''/'\\\\''/g"
 echo "' ' };"
+echo
+echo "#endif"
 echo
 exit
 

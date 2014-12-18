@@ -57,12 +57,7 @@ win32 {
 
 # GuidoQt library link for each platform
 win32 {
-	DebugBuild{
-		LIBS += ../GuidoQtD.lib
-	}
-	else {
-		LIBS += ../GuidoQt.lib
-	}
+	LIBS += ../GuidoQt.lib
 }
 
 macx:LIBS += -framework CoreFoundation
