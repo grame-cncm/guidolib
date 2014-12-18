@@ -5,7 +5,8 @@ echo "const char guido2svg[] = {"
 cat guido2.svg | \
 	sed -e 's/^[ 	]*//' | \
 	sed -e "s/\(.\)/'\1', /g" | \
-	sed -e 's/\\/\\\\/g'
+	sed -e 's/\\/\\\\/g' | \
+	sed -e "s/'''/'\\\\''/g"
 echo "' ' };"
 echo
 exit
