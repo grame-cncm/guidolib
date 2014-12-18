@@ -1,10 +1,22 @@
 #!/bin/sh
 #
 
-echo "const char* guido2svg = \"\\"
+echo "const char guido2svg[] = {"
 cat guido2.svg | \
-	sed -e 's/\\/\\\\/g' | \
-	sed -e 's/"/\\"/g' | \
-	sed -e 's/$/\\/'
-echo '";'
+	sed -e 's/^[ 	]*//' | \
+	sed -e "s/\(.\)/'\1', /g"
+echo "' ' };"
 echo
+exit
+
+
+#echo "const char* guido2svg = \"\\"
+#cat guido2.svg | \
+#	sed -e 's/\\/\\\\/g' | \
+#	sed -e 's/"/\\"/g' | \
+#	sed -e 's/^[ 	]*//' | \
+#	sed -e 's/$/\\/'
+#echo '";'
+#echo
+
+#	sed -e 's/^\(..*\)$/\"\1\"/'
