@@ -74,7 +74,7 @@ const VGFont* SVGSystem::CreateVGFont( const char * faceName, int size, int prop
 	} else {
 		if(strcmp("Times", faceName) == 0) {
 			return new TimesFont(faceName, size, properties);
-		}
+		} else return NULL;
 	}
 #endif
 	return new SVGFont (faceName, size, properties, fGuidoFontFile ? fGuidoFontFile : "", fGuidoFontSpec ? fGuidoFontSpec : "");
