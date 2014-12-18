@@ -25,6 +25,7 @@
 #include <jni.h>
 
 #include "GUIDOEngine.h"
+#include "GUIDOPianoRoll.h"
 #include "VGSystem.h"
 #include "VGDevice.h"
 #include "VGColor.h"
@@ -34,7 +35,7 @@ extern "C" {
 #endif
 
 int getBitmap (jint* dstBitmap, int w, int h, GuidoOnDrawDesc& desc, const VGColor& color);
-
+int getBitmapPianoRoll (jint* dstBitmap, int w, int h, PianoRoll *pr, const VGColor& color);
 #ifdef __cplusplus
 }
 #endif

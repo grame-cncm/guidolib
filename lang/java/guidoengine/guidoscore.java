@@ -51,16 +51,28 @@ public class guidoscore
 	public static final int kMeasureBB		= 0x10;
 	public static final int kEventsBB		= 0x20;
  
-	public final long fARHandler;
-    public final long fGRHandler;
+	public long fARHandler;
+    public long fGRHandler;
+    
+    private long fGuidoStream;
+	private long fGuidoParser;
 
-
+	/**
+	 * Get the reference to an Abstract Representation.
+	 * @return the current ARHandler
+	 */
+	public long getARHandler() {
+		return fARHandler;
+	}
+	
 	/** Parse a guido file
 
 		On output, {@code fARHandler} contains a handler to the Guido AR representation.
 		@param filename the file name
 		@return an error code.
+		@deprecated replaced by {@link guidoengine.guidoparser#File2AR()}
 	*/
+    @Deprecated
     public native final synchronized int  ParseFile(String filename);
 
 	/** Parse a guido string
@@ -69,7 +81,9 @@ public class guidoscore
 		@param gmn a string containing GMN code
 		@return an error code.
 		@see "The GUIDO Music Notation Format"
+		@deprecated replaced by {@link guidoengine.guidoparser#String2AR()}
 	*/
+    @Deprecated
     public native final synchronized int  ParseString(String gmn);
 
 	/** Converts an AR representation into a GR representation
@@ -230,6 +244,12 @@ public class guidoscore
 	*/
     public native final synchronized int GetPageCount ();
 
+    /**
+     * Give the system count of a page.
+     * @return the system count or an error code when < 0
+     */
+    public native final synchronized int GetSystemCount(int page);
+    
 	/** Give the score count of voices.
 		@return the count of voices an error code when < 0
 	*/
@@ -342,13 +362,17 @@ public class guidoscore
 	}
 	
 	public guidoscore() {
-		fARHandler = 0;
-		fGRHandler = 0;
+		this.fARHandler = 0;
+		this.fGRHandler = 0;
+		this.fGuidoParser = 0;
+		this.fGuidoStream = 0;
 	}
 	
 	public guidoscore(long ar) {
-		fARHandler = ar;
-		fGRHandler = 0;
+		this.fARHandler = ar;
+		this.fGRHandler = 0;
+		this.fGuidoParser = 0;
+		this.fGuidoStream = 0;
 	}
 
 	/** Control bounding boxes drawing.
@@ -366,6 +390,70 @@ public class guidoscore
 	*/
     public native final synchronized int  GetDrawBoundingBoxes();
 	
+    /**
+     * Open a new Parser.
+     */
+	public native final synchronized void OpenParser();
+	
+	/**
+	 * Close the parser.
+	 * @return an error code.
+	 */
+	public native final synchronized int CloseParser ();
+	
+	/**
+	 * Get the content of the guidoStream.
+	 * @return The string int the GuidoStream
+	 */
+	public native final synchronized String GetStream ();
+	
+	/**
+	 * Parse a file and create the corresponding Abstract Representation.
+	 * The ar is stocked internally and have to be freed with FreeAR().
+	 * @param file the name of the file to be parsed.
+	 */
+	public native final synchronized void File2AR (String file);
+	
+	/**
+	 * Parse the gmnCode and create the corresponding Abstract Representation.
+	 * The ar is stocked internally and have to be freed with FreeAR().
+	 * @param gmnCode the code to be parsed.
+	 */
+	public native final synchronized void String2AR (String gmnCode);
+	
+	/**
+	 * Parse the gmnCode in the stream (@see OpenStream()) and create the corresponding Abstract Representation.
+	 * The ar is stocked internally and have to be freed with FreeAR().
+	 */
+	public native final synchronized void Stream2AR ();
+	
+	/**
+	 * TODO GGX
+	 */
+	public native final synchronized void ParserGetErrorCode ();
+	
+	/**
+	 * Open a new stream.
+	 * The stream have to be closed with {@link #CloseStream()}.
+	 */
+	public native final synchronized void OpenStream ();
+	
+	/**
+	 * Close the stream.
+	 */
+	public native final synchronized int CloseStream ();
+	
+	/**
+	 * Write a string in the stream.
+	 * @param gmnCode
+	 */
+	public native final synchronized int WriteStream (String gmnCode);
+	
+	/**
+	 * Reset the content of the stream.
+	 */
+	public native final synchronized int ResetStream ();
+    
 	/** Internal jni initialization method.
 		Automatically called at package init.
 	*/

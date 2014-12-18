@@ -34,8 +34,7 @@ package guidoengine;
 	to the guido engine.
 	@see guidoscore#Draw
 */
-public class guidodrawdesc
-{
+public class guidodrawdesc {
 	/** The page number. Starts from 1.
 	*/
     public int fPage;
@@ -84,10 +83,10 @@ public class guidodrawdesc
        System.out.println("guidodrawdesc page: " + fPage + " scrollx/y: " + fScrollx + "/" + fScrolly 
 			+ " w/h: " + fWidth + "/" + fHeight + " print: " + fIsprint);
 	}
-
+	
 	/** Internal jni initialization method.
 		Automatically called at package init.
 	*/
     protected static native void	Init ();
-};
+}
 

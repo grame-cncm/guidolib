@@ -159,6 +159,14 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetPageCount
 
 /*
  * Class:     guidoengine_guidoscore
+ * Method:    GetSystemCount
+ * Signature: (I)I
+ */
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetSystemCount
+  (JNIEnv *, jobject, jint);
+
+/*
+ * Class:     guidoengine_guidoscore
  * Method:    CountVoices
  * Signature: ()I
  */
@@ -259,6 +267,94 @@ JNIEXPORT void JNICALL Java_guidoengine_guidoscore_DrawBoundingBoxes
  * Signature: ()I
  */
 JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetDrawBoundingBoxes
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     guidoengine_guidoscore
+ * Method:    OpenParser
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_guidoengine_guidoscore_OpenParser
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     guidoengine_guidoscore
+ * Method:    CloseParser
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_CloseParser
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     guidoengine_guidoscore
+ * Method:    GetStream
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_guidoengine_guidoscore_GetStream
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     guidoengine_guidoscore
+ * Method:    File2AR
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_guidoengine_guidoscore_File2AR
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     guidoengine_guidoscore
+ * Method:    String2AR
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_guidoengine_guidoscore_String2AR
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     guidoengine_guidoscore
+ * Method:    Stream2AR
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_guidoengine_guidoscore_Stream2AR
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     guidoengine_guidoscore
+ * Method:    ParserGetErrorCode
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_guidoengine_guidoscore_ParserGetErrorCode
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     guidoengine_guidoscore
+ * Method:    OpenStream
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_guidoengine_guidoscore_OpenStream
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     guidoengine_guidoscore
+ * Method:    CloseStream
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_CloseStream
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     guidoengine_guidoscore
+ * Method:    WriteStream
+ * Signature: (Ljava/lang/String;)I
+ */
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_WriteStream
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     guidoengine_guidoscore
+ * Method:    ResetStream
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_ResetStream
   (JNIEnv *, jobject);
 
 /*

@@ -35,8 +35,7 @@ package guidoengine;
 	Coordinates should be given in internal units.
 	@see guidoscore#Draw
 */
-public class guidopaint
-{
+public class guidopaint {
    /** a flag to ignore the following rect and to redraw everything
    */
     public boolean fErase;

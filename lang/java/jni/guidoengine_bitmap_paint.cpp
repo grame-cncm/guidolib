@@ -47,3 +47,18 @@ int getBitmap (jint* dstBitmap, int w, int h, GuidoOnDrawDesc& desc, const VGCol
 
 }
 
+int getBitmapPianoRoll (jint* dstBitmap, int w, int h, PianoRoll * pr, const VGColor& color)
+{
+	VGDevice * dev = gSystem->CreateMemoryDevice (w, h);
+	device_specific::clear (dev, w, h);
+	dev->SelectFillColor(color);
+	dev->SelectPenColor(color);
+	dev->SetFontColor (color);
+
+	GuidoErrCode err = GuidoPianoRollOnDraw(pr, w, h, dev);
+	if (err == guidoNoErr)
+		device_specific::bimap_copy (dev, dstBitmap, w, h);
+	else fprintf (stderr, "GuidoOnDraw error %d: %s\n", err, GuidoGetErrorString (err));
+	delete dev;
+	return err;
+}
