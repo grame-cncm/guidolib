@@ -61,7 +61,7 @@ SVGFont::SVGFont(const char * name, int size, int properties, const char * guido
     }
     else if (!fGuidoFontSpec.empty()) {
         // nSVG: like above, but reading a C string instead of from a file
-		char* fontspec = fGuidoFontSpec; //const_cast<char *>(fGuidoFontSpec.c_str());
+		char* fontspec = const_cast<char *>(fGuidoFontSpec.c_str());
         fNSVGimage = nsvgParse(fontspec, "px", size);
     } else
         fNSVGimage = NULL;
