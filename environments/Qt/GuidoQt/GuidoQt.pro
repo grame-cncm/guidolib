@@ -12,7 +12,7 @@ MOC_DIR = tmpSrc
 
 win32 {
 	TEMPLATE = vclib
-	TARGET = GuidoQtD
+	TARGET = GuidoQt
 }
 
 
