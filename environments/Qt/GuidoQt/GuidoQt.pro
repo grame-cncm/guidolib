@@ -12,8 +12,7 @@ MOC_DIR = tmpSrc
 
 win32 {
 	TEMPLATE = vclib
-	DebugBuild { TARGET = GuidoQtD }
-	else { TARGET = GuidoQt }
+	TARGET = GuidoQtD
 }
 
 
