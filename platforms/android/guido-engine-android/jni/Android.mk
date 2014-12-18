@@ -7,9 +7,9 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := GUIDOEngine-prebuilt
 
 LOCAL_SRC_FILES 	:= $(addprefix ../, $(wildcard ../../../src/engine/*/*.cpp))
-LOCAL_EXPORT_C_INCLUDES := $(addprefix $(LOCAL_PATH)/../../../../src/engine/, include devices)
-LOCAL_C_INCLUDES 	:= $(wildcard ../../../src/engine/*)
-LOCAL_CPPFLAGS		:= -Dandroid -frtti -DINDEPENDENTSVG -DJSON_ONLY
+LOCAL_EXPORT_C_INCLUDES := $(addprefix $(LOCAL_PATH)/../../../../src/engine/, include devices lib)
+LOCAL_C_INCLUDES 	:= $(wildcard $(LOCAL_PATH)/../../../../src/engine/*)
+LOCAL_CPPFLAGS		:= -Dandroid -frtti -DINDEPENDENTSVG
 
 include $(BUILD_STATIC_LIBRARY)
 
