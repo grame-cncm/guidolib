@@ -23,31 +23,22 @@ using namespace std;
 NVPoint GRFlag::sRefpos;
 
 GRFlag::GRFlag(GRGlobalStem * gstem, const TYPE_DURATION & duration, GDirection stemdir, float stemlength) 
-	: mColRef (NULL)
+    : mColRef (NULL), fStemdir(stemdir), fStemlength(stemlength)
 {
-	const float notebreite = 60;	// Hardcoded 
-	mFlagOn = true;
-	mStraight = false;
-
-	mSize = gstem->getSize();;
- 	mOffset = gstem->getOffset();
-	
-	initialize (duration, stemdir, notebreite);
-
+	fNotebreite = 60;	// Hardcoded
 	mOffset = gstem->getOffset();
-	if (duration == DURATION_32 || duration == DURATION_3_64 || duration == DURATION_7_128)
-		stemlength = gstem->changeStemLength((float)(stemlength + 0.7f * LSPACE));
-	else if (duration == DURATION_64 || duration == DURATION_3_128 || duration == DURATION_7_256)
-		stemlength = gstem->changeStemLength((float)(stemlength + 1.4 * LSPACE));
 
-	// the stemlength is not changed by size
-	// parameter!
-	if (stemdir == dirUP)
-		mOffset.y += (GCoord) (-stemlength);
-	else if (stemdir == dirDOWN)
-		mOffset.y += (GCoord) (stemlength);
+    configureForChord(gstem, duration);
 }
 
+GRFlag::GRFlag( GREvent * sngnot, const TYPE_DURATION & duration, GDirection stemdir, float stemlength, float notebreite) 
+	: mColRef (NULL), fStemdir(stemdir), fStemlength(stemlength), fNotebreite(notebreite)
+{
+	mOffset = sngnot->getOffset();
+	setColRef(sngnot->getColRef());
+
+    configureForSingleNote(sngnot, duration);
+}
 
 GRFlag::GRFlag(const TYPE_DURATION & duration)
 {
@@ -65,35 +56,53 @@ GRFlag::GRFlag(const TYPE_DURATION & duration)
 			mSymbol = H64U;
 }
 
-GRFlag::GRFlag( GREvent * sngnot, const TYPE_DURATION & duration, GDirection stemdir, float stemlength, float notebreite) 
-	: mColRef (NULL)
-{
-	mFlagOn = true;
-	mStraight = 0;
-	
-	setColRef( sngnot->getColRef());
-
-	mSize = sngnot->getSize();
-	mOffset = sngnot->getOffset();
-	initialize (duration, stemdir, notebreite);
-
-	mOffset = sngnot->getOffset();
-	if (duration == DURATION_32 || duration == DURATION_3_64 || duration == DURATION_7_128)
-		stemlength = sngnot->changeStemLength((float)(stemlength + 0.7f * LSPACE));
-	else if (duration == DURATION_64 || duration == DURATION_3_128 || duration == DURATION_7_256)
-		stemlength = sngnot->changeStemLength((float)(stemlength + 1.4 * LSPACE));
-
-	// the stemlength is not changed by size parameter!
-	if (stemdir == dirUP)			mOffset.y -= stemlength;
-	else if (stemdir == dirDOWN)	mOffset.y += stemlength;
-}
-
 GRFlag::~GRFlag() 
 {
 	delete [] mColRef;
     mColRef = 0;
 }
 
+void GRFlag::configureForChord(GRGlobalStem *gstem, const TYPE_DURATION& duration) {
+	mFlagOn   = true;
+	mStraight = false;
+
+	mSize   = gstem->getSize();
+ 	mOffset = gstem->getOffset();
+	
+	initialize (duration, fStemdir, fNotebreite);
+
+	if (duration == DURATION_32 || duration == DURATION_3_64 || duration == DURATION_7_128)
+		fStemlength = gstem->changeStemLength((float)(fStemlength + 0.7f * LSPACE));
+	else if (duration == DURATION_64 || duration == DURATION_3_128 || duration == DURATION_7_256)
+		fStemlength = gstem->changeStemLength((float)(fStemlength + 1.4 * LSPACE));
+
+	// the stemlength is not changed by size parameter!
+	if (fStemdir == dirUP)
+		mOffset.y += (GCoord) (- fStemlength);
+	else if (fStemdir == dirDOWN)
+		mOffset.y += (GCoord) (  fStemlength);
+}
+
+void GRFlag::configureForSingleNote(GREvent *sngnot, const TYPE_DURATION& duration) {
+	mFlagOn   = true;
+	mStraight = false;
+
+	mSize   = sngnot->getSize();
+	mOffset = sngnot->getOffset();
+
+	initialize (duration, fStemdir, fNotebreite);
+
+	if (duration == DURATION_32 || duration == DURATION_3_64 || duration == DURATION_7_128)
+		fStemlength = sngnot->changeStemLength((float)(fStemlength + 0.7f * LSPACE));
+	else if (duration == DURATION_64 || duration == DURATION_3_128 || duration == DURATION_7_256)
+		fStemlength = sngnot->changeStemLength((float)(fStemlength + 1.4 * LSPACE));
+
+	// the stemlength is not changed by size parameter!
+	if (fStemdir == dirUP)
+        mOffset.y -= fStemlength;
+	else if (fStemdir == dirDOWN)
+        mOffset.y += fStemlength;
+}
 
 void GRFlag::initialize(const TYPE_DURATION & duration, GDirection stemdir, float notebreite) 
 {
@@ -103,24 +112,20 @@ void GRFlag::initialize(const TYPE_DURATION & duration, GDirection stemdir, floa
 	// now we have to get the type ...
 	mSymbol = NONE;
 
-    if (duration==DURATION_8 || duration == DURATION_3_16 || duration == DURATION_7_32)
-	{
+    if (duration==DURATION_8 || duration == DURATION_3_16 || duration == DURATION_7_32) {
 		if (stemdir == dirUP)		 mSymbol = H8U;
 		else if (stemdir == dirDOWN) mSymbol = H8D;
 	}
-	else if(duration==DURATION_16 || duration == DURATION_3_32 || duration == DURATION_7_64)
-	{
+	else if(duration==DURATION_16 || duration == DURATION_3_32 || duration == DURATION_7_64) {
 		if (stemdir  == dirUP)		 mSymbol = H16U;
 		else if (stemdir == dirDOWN) mSymbol = H16D;
 	}
-	else if(duration == DURATION_32 || duration == DURATION_3_64 || duration == DURATION_7_128)
-	{
+	else if(duration == DURATION_32 || duration == DURATION_3_64 || duration == DURATION_7_128) {
 		if (stemdir == dirUP)		 mSymbol =  H32U;
 		else if (stemdir == dirDOWN) mSymbol =  H32D;		
 		
 	}
-	else if (duration == DURATION_64 || duration == DURATION_3_128 || duration == DURATION_7_256)
-	{
+	else if (duration == DURATION_64 || duration == DURATION_3_128 || duration == DURATION_7_256) {
 		if (stemdir == dirUP)		 mSymbol = H64U;
 		else if (stemdir == dirDOWN) mSymbol = H64D;
 	}
@@ -137,19 +142,20 @@ void GRFlag::initialize(const TYPE_DURATION & duration, GDirection stemdir, floa
 
 void GRFlag::OnDraw(VGDevice & hdc) const
 {
-	if(!mDraw)	return;
+	if (!mDraw)
+        return;
 
-	if ( mSymbol == NONE ) return;
+	if ( mSymbol == NONE )
+        return;
 
-	if (!mFlagOn) return;
+	if (!mFlagOn)
+        return;
 
-	if (!mStraight)
-	{
+	if (!mStraight) {
 		// this is the regular case ...
 		GRNotationElement::OnDraw(hdc);
 	}
-	else
-	{
+	else {
 		// this is the straight case ..
 		// TODO
 	}
@@ -178,13 +184,12 @@ int GRFlag::getNumFaehnchen() const
 void GRFlag::setFlagOnOff(bool p)
 {
 	mFlagOn = p;
-	if (mFlagOn == false)
-	{
+
+	if (mFlagOn == false) {
 		mLeftSpace = 0;
 		mRightSpace = 0;
 	}
-	else
-	{
+	else {
 		const float notebreite = (-sRefpos.x * 2);
 		calcFlagExtent( notebreite );
 	}
@@ -196,13 +201,9 @@ void GRFlag::changeStemLength(GREvent * sngnot, float inLen,
 	mOffset.y = sngnot->getOffset().y;
 
 	if (stemdir == dirUP)
-	{
 		mOffset.y -= inLen;
-	}
 	else if (stemdir == dirDOWN)
-	{
 		mOffset.y += inLen;
-	}
 }
 
 void	

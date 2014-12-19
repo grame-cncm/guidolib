@@ -121,30 +121,32 @@ class GRSingleNote : public GRNote
 
         ARTHead::HEADSTATE getHeadState() { return mHeadState; }
 
-  protected:
-	  GRStem *			getStem();
-	  const GRStem * 	getStem() const;
-	  GRFlag *			getFlag();
-	  const GRFlag * 	getFlag() const;
+        void forceAppearance();
 
-	  int 			mNumHelpLines;
-	  float 		mNoteBreite; // the width of a note
-	  TYPE_DURATION mDurTemplate; // the template for the display
+protected:
+	GRStem *	  getStem();
+	const GRStem *getStem() const;
+	GRFlag *	  getFlag();
+	const GRFlag *getFlag() const;
 
-  private:
+	int 		  mNumHelpLines;
+	float 		  mNoteBreite; // the width of a note
+	TYPE_DURATION mDurTemplate; // the template for the display
+
+private:
 	void handleAccidental	(const ARAccidental* acc);
 	void createNote(const TYPE_DURATION & p_durtemplate /*= DURATION_0*/ );
 
 	GRStdNoteHead *	mNoteHead; // exists also in element list.
 	GDirection		mStemDir;
-	float		mStemLen;
-	bool 		mStemLengthSet;
-	bool 		mStemDirSet;
+	float		    mStemLen;
+	bool 		    mStemLengthSet;
+	bool 		    mStemDirSet;
 
 	ARTHead::HEADSTATE mHeadState;
+        
+    // Used when dispNote param is set on \tuplet-tag to force note appearance
+    NVstring mNoteAppearance;
 };
 
-
 #endif
-
-

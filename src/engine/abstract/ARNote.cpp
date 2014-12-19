@@ -13,6 +13,7 @@
 */
 
 #include <iostream>
+#include <sstream>
 #include <cassert>
 
 #include "ARNote.h"
@@ -29,14 +30,15 @@ const char * gd_pc2noteName(int fPitch);
 ARNote::ARNote(const TYPE_DURATION & durationOfNote)
 	:	ARMusicalEvent(durationOfNote), fName("empty"), fPitch(UNKNOWN), fOctave(MIN_REGISTER),
     fAccidentals(0), fDetune(0), fIntensity(MIN_INTENSITY), fOrnament(NULL), fCluster(NULL), fIsLonelyInCluster(false),
-    fClusterHaveToBeDrawn(false), fSubElementsHaveToBeDrawn(true), fTremolo(0), fStartPosition(-1,1)
+    fClusterHaveToBeDrawn(false), fSubElementsHaveToBeDrawn(true), fTremolo(0), fStartPosition(-1,1), fNoteAppearance("")
 {
 }
 
 ARNote::ARNote(const TYPE_TIMEPOSITION & relativeTimePositionOfNote, const TYPE_DURATION & durationOfNote)
 	:	ARMusicalEvent( relativeTimePositionOfNote, durationOfNote), fName("noname"), fPitch(UNKNOWN),
 		fOctave(MIN_REGISTER), fAccidentals(0), fDetune(0), fIntensity(MIN_INTENSITY), fOrnament(NULL), fCluster(NULL),
-        fIsLonelyInCluster(false), fClusterHaveToBeDrawn(false), fSubElementsHaveToBeDrawn(true), fTremolo(0), fStartPosition(-1,1)
+        fIsLonelyInCluster(false), fClusterHaveToBeDrawn(false), fSubElementsHaveToBeDrawn(true), fTremolo(0),
+        fStartPosition(-1,1), fNoteAppearance("")
 {
 }
 
@@ -44,7 +46,8 @@ ARNote::ARNote( const std::string & inName, int theAccidentals, int theRegister,
 				int theDenominator, int theIntensity )
 	:	ARMusicalEvent(theNumerator, theDenominator), fName( inName ), fPitch ( UNKNOWN ),
 		fOctave( theRegister ),	fAccidentals( theAccidentals ), fDetune(0), fIntensity( theIntensity ),
-		fOrnament(NULL), fCluster(NULL), fIsLonelyInCluster(false), fClusterHaveToBeDrawn(false), fSubElementsHaveToBeDrawn(true), fTremolo(0), fStartPosition(-1,1)
+		fOrnament(NULL), fCluster(NULL), fIsLonelyInCluster(false), fClusterHaveToBeDrawn(false), fSubElementsHaveToBeDrawn(true),
+        fTremolo(0), fStartPosition(-1,1), fNoteAppearance("")
 {
 	assert(fAccidentals>=MIN_ACCIDENTALS);
 	assert(fAccidentals<=MAX_ACCIDENTALS);
@@ -263,11 +266,15 @@ int ARNote::CompareNameOctavePitch(const ARNote & nt)
 	return 0;
 }
 
+void ARNote::forceNoteAppearance(NVstring noteAppearance) {
+    fNoteAppearance = noteAppearance;
+}
+
 void ARNote::printName(std::ostream& os) const
 {
     os << "ARNote";
 }
-#include <sstream>
+
 void ARNote::printGMNName(std::ostream& os) const
 {
     std::string accidentalStr = "";

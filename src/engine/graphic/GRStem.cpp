@@ -40,89 +40,21 @@ GRStem::GRStem(GRGlobalStem * gstem) : mColRef(NULL), fOffsetStartPosition(0), f
 	sRefpos.x = -30;		// HARDCODED !!!
 }
 
-GRStem::GRStem( GREvent * sngnot,
-	const TYPE_DURATION & durtempl,
+GRStem::GRStem(GREvent * sngnot,
+	const TYPE_DURATION& dur,
 	GDirection dir,
 	float length,
 	float notebreite) :
 	mColRef(NULL),
-	fOffsetStartPosition(0),
-	fDrawActivated(true),
     fNoteHeadType(kFullHeadSymbol),
     fHeadOrientation(ARTHead::NOTSET),
-    fLastHeadOrientation(ARTHead::NOTSET)
-    
+    fLastHeadOrientation(ARTHead::NOTSET),
+    fSngnot(sngnot),
+    fDir(dir),
+    fLength(length),
+    fNotebreite(notebreite)
 {
-	if (durtempl >= DURATION_1)
-	{
-		// mStemLen = 0;
-		mStemDir = dirOFF;
-		return; 
-	}
-	mStemDir = dir;
-
-	mStemLen = length;
-
-	setColRef(sngnot->getColRef());
-
-	mOffset = sngnot->getOffset();
-
-	mSize = sngnot->getSize();
-
-	// dependant on the direction, I have different
-	// types (do I?)
-
-	mLeftSpace = 0;
-	mRightSpace = 0;
-
-	if (dir == dirUP)
-		mBoundingBox.top = (GCoord)(-mStemLen);
-	else if (dir == dirDOWN)
-		mBoundingBox.bottom = (GCoord)(mStemLen);
-	sRefpos.x = (GCoord)(- notebreite * 0.5f);
-
-	GRSingleNote *singleNote = dynamic_cast<GRSingleNote *>(sngnot);
-	if (singleNote)
-	{
-        fHeadOrientation = singleNote->getHeadState();
-
-		GRStdNoteHead *noteHead = singleNote->getNoteHead();
-
-		if (noteHead)
-		{
-			noteHead->setGlobalStemDirection(dir);
-
-			fNoteHeadType = noteHead->getSymbol();
-
-			//ConstMusicalSymbolID noteHeadSymbolTmp = noteHead->getSymbol();
-			// - Adjust stem length if it's a cross notehead
-			if (fNoteHeadType == kFullXHeadSymbol)
-			{
-				setFirstSegmentDrawingState(false);
-
-				if (dir == dirUP)
-					setOffsetStartPosition(4);
-				else if (dir == dirDOWN)
-					setOffsetStartPosition(-4);
-			}
-            // - Adjust stem length if it's a triangle notehead
-			else if (fNoteHeadType == kFullTriangleHeadSymbol || fNoteHeadType == kHalfTriangleHeadSymbol)
-			{
-				if (dir == dirUP)
-					setOffsetStartPosition(47);
-				else if (dir == dirDOWN)
-					setFirstSegmentDrawingState(false);
-			}
-            // - Adjust stem length if it's a reversed triangle notehead
-			else if (fNoteHeadType == kFullReversedTriangleHeadSymbol || fNoteHeadType == kHalfReversedTriangleHeadSymbol)
-			{
-				if (dir == dirUP)
-					setFirstSegmentDrawingState(false);
-				else if (dir == dirDOWN)
-					setOffsetStartPosition(-47);
-			}
-		}
-	}
+    configureStem(dur);
 }
 
 GRStem::~GRStem()
@@ -131,8 +63,79 @@ GRStem::~GRStem()
     mColRef = 0;
 }
 
-void 
-GRStem::setStemLength(float inLen)
+void GRStem::configureStem(const TYPE_DURATION& dur)
+{
+    // Init variables (or reinit if not called from constructor)
+    fOffsetStartPosition = 0;
+    fDrawActivated = true;
+
+    if (dur >= DURATION_1) {
+		mStemDir = dirOFF;
+		return; 
+	}
+
+	mStemDir = fDir;
+	mStemLen = fLength;
+
+	setColRef(fSngnot->getColRef());
+
+	mOffset = fSngnot->getOffset();
+
+	mSize = fSngnot->getSize();
+
+	// dependant on the direction, I have different
+	// types (do I?)
+
+	mLeftSpace = 0;
+	mRightSpace = 0;
+
+	if (fDir == dirUP)
+		mBoundingBox.top = (GCoord)(-mStemLen);
+	else if (fDir == dirDOWN)
+		mBoundingBox.bottom = (GCoord)(mStemLen);
+	sRefpos.x = (GCoord)(- fNotebreite * 0.5f);
+
+	GRSingleNote *singleNote = dynamic_cast<GRSingleNote *>(fSngnot);
+	
+    if (singleNote) {
+        fHeadOrientation = singleNote->getHeadState();
+
+		GRStdNoteHead *noteHead = singleNote->getNoteHead();
+
+		if (noteHead) {
+			noteHead->setGlobalStemDirection(fDir);
+
+			fNoteHeadType = noteHead->getSymbol();
+
+			//ConstMusicalSymbolID noteHeadSymbolTmp = noteHead->getSymbol();
+			// - Adjust stem length if it's a cross notehead
+			if (fNoteHeadType == kFullXHeadSymbol) {
+				setFirstSegmentDrawingState(false);
+
+				if (fDir == dirUP)
+					setOffsetStartPosition(4);
+				else if (fDir == dirDOWN)
+					setOffsetStartPosition(-4);
+			}
+            // - Adjust stem length if it's a triangle notehead
+			else if (fNoteHeadType == kFullTriangleHeadSymbol || fNoteHeadType == kHalfTriangleHeadSymbol) {
+				if (fDir == dirUP)
+					setOffsetStartPosition(47);
+				else if (fDir == dirDOWN)
+					setFirstSegmentDrawingState(false);
+			}
+            // - Adjust stem length if it's a reversed triangle notehead
+			else if (fNoteHeadType == kFullReversedTriangleHeadSymbol || fNoteHeadType == kHalfReversedTriangleHeadSymbol) {
+				if (fDir == dirUP)
+					setFirstSegmentDrawingState(false);
+				else if (fDir == dirDOWN)
+					setOffsetStartPosition(-47);
+			}
+		}
+	}
+}
+
+void GRStem::setStemLength(float inLen)
 {
 	mStemLen = inLen;
 	mBoundingBox.top = 0;

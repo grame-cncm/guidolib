@@ -21,14 +21,16 @@ using namespace std;
 
 #include "GRDefine.h"
 
-GRStdNoteHead::GRStdNoteHead(GREvent * sngnot, const TYPE_DURATION & inDur, GDirection inStemDirection) :
+GRStdNoteHead::GRStdNoteHead(GREvent * inSngNote, const TYPE_DURATION &inDur, GDirection inStemDirection) :
 singleStemDirection(inStemDirection),
 	globalStemDirection(dirAUTO),
 	halfExtent(0),
 	mBracketsType(None),
-	mNoteHeadHaveToBeDrawn(true)
+	mNoteHeadHaveToBeDrawn(true),
+    sngnot(inSngNote)
 {
 	mSize = sngnot->getSize();
+
 	const unsigned char * tmpcolref = sngnot->getColRef();
 	if (tmpcolref) {
 		mColRef = new unsigned char[4];
@@ -37,15 +39,23 @@ singleStemDirection(inStemDirection),
 		mColRef[2] = tmpcolref[2];
 		mColRef[3] = tmpcolref[3];
 	}
-	mOffset = sngnot->getOffset();
-	mStyle = sngnot->getStyle();
+
+	configureNoteHead(inDur);
+}
+
+GRStdNoteHead::~GRStdNoteHead() {}
+
+void GRStdNoteHead::configureNoteHead(const TYPE_DURATION &inDur)
+{
+    mOffset = sngnot->getOffset();
+	mStyle  = sngnot->getStyle();
 
 	// -- Find the symbol that must be used, depending on the style and the duration of the event.
 	mSymbol = kNoneSymbol;
 
 	// - First, look if the kind of the note head has been explicitely specified by the style parameter.
-	if(( mStyle == "" ) || ( mStyle == "standard" ))
-		mSymbol = durationToHeadSymbol( inDur );
+	if (( mStyle == "" ) || ( mStyle == "standard" ))
+		mSymbol = durationToHeadSymbol(inDur);
 	else {
 		const bool full = (inDur < DURATION_2);
 		if( mStyle == "diamond" )
@@ -244,8 +254,6 @@ singleStemDirection(inStemDirection),
 	sRefPosNotehead.y = 0;
 }
 
-GRStdNoteHead::~GRStdNoteHead() {}
-
 unsigned int GRStdNoteHead::durationToHeadSymbol( const TYPE_DURATION & inDur ) const
 {
 	unsigned int outSymbol;
@@ -308,7 +316,7 @@ void GRStdNoteHead::GGSOutput() const
 void GRStdNoteHead::OnDraw( VGDevice & hdc ) const
 {
 	// the note head -> the note
-	if(mDraw && mNoteHeadHaveToBeDrawn && mSymbol != kNoneSymbol)
+	if (mDraw && mNoteHeadHaveToBeDrawn && mSymbol != kNoneSymbol)
 	{
 		GRNoteHead::OnDraw(hdc);
 

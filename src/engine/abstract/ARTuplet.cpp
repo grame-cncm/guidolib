@@ -26,7 +26,7 @@
 ListOfTPLs ARTuplet::ltpls(1);
 
 ARTuplet::ARTuplet() : fTupletFormat(""), fPosition(""), fDy1(0), fDy2(1), fLineThickness(0.08f * LSPACE),
-    fTextBold(false), fTextSize(1), fFormatSet(false), fDy1TagIsSet(false), fDy2TagIsSet(false)
+    fTextBold(false), fTextSize(1), fDispNote(""), fFormatSet(false), fDy1TagIsSet(false), fDy2TagIsSet(false)
 {
 	rangesetting = ONLY;
 	setAssociation(ARMusicalTag::RA);
@@ -44,7 +44,7 @@ void ARTuplet::setTagParameterList(TagParameterList & tpl)
 		// create a list of string ...
 
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(("S,format,,r;S,position,above,o;U,dy1,0,o;U,dy2,0,o;F,lineThickness,0.08,o;S,bold,,o;F,textSize,1,o"));
+		lstrs.AddTail(("S,format,,r;S,position,above,o;U,dy1,0,o;U,dy2,0,o;F,lineThickness,0.08,o;S,bold,,o;F,textSize,1,o;S,dispNote,,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -90,6 +90,9 @@ void ARTuplet::setTagParameterList(TagParameterList & tpl)
 
             tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
             fTextSize = tpf->getValue();
+
+            tps = TagParameterString::cast(rtpl->GetNext(pos));
+            fDispNote = tps->getValue();
 		}
 
 		delete rtpl;

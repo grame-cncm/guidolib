@@ -348,7 +348,7 @@ void ARMusic::doAutoStuff()
 	// now, we do the stuff that needs to be done by ALL voices ...
 	// AutoBreaks inserts possible breaks at the positions, keeping track of explicit newlines ....
 	// the breaks are put in at bar-lines-positions or at positions, where all voices end.
-	timebench("doAutoBreaks", doAutoBreaks());
+    timebench("doAutoBreaks", doAutoBreaks());
 
 	counter = 0;
 	pos = GetHeadPosition();
