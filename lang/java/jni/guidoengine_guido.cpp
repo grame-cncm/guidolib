@@ -50,6 +50,16 @@ static jint guidoengine_guido_Init (JNIEnv * env, jstring guidofont, jstring tex
 
 /*
  * Class:     guidoengine_guido
+ * Method:    shutdown
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_guidoengine_guido_shutdown(JNIEnv *, jclass)
+{
+	GuidoShutdown();
+}
+
+/*
+ * Class:     guidoengine_guido
  * Method:    xml2gmn
  * Signature: ()Z
  */

@@ -12,11 +12,12 @@
 */
 
 #include "guidoengine_limitparams.h"
+#include "javaIDs.h"
 
-static jfieldID gStartDate;
-static jfieldID gEndDate;
-static jfieldID gLowPitch;
-static jfieldID gHighPitch;
+jfieldID gStartDate;
+jfieldID gEndDate;
+jfieldID gLowPitch;
+jfieldID gHighPitch;
 
 /*
  * Class:     guidoengine_limitparams

@@ -63,11 +63,27 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_AR2MIDIFile
 
 /*
  * Class:     guidoengine_guidoscore
+ * Method:    AbstractExport
+ * Signature: (I)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_guidoengine_guidoscore_AbstractExport
+  (JNIEnv *, jobject, jint);
+
+/*
+ * Class:     guidoengine_guidoscore
  * Method:    BinaryExport
  * Signature: (I)[B
  */
 JNIEXPORT jbyteArray JNICALL Java_guidoengine_guidoscore_BinaryExport
   (JNIEnv *, jobject, jint);
+
+/*
+ * Class:     guidoengine_guidoscore
+ * Method:    GR2SVG
+ * Signature: (IZLjava/lang/String;I)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_guidoengine_guidoscore_GR2SVG
+  (JNIEnv *, jobject, jint, jboolean, jstring, jint);
 
 /*
  * Class:     guidoengine_guidoscore
@@ -320,9 +336,9 @@ JNIEXPORT void JNICALL Java_guidoengine_guidoscore_Stream2AR
 /*
  * Class:     guidoengine_guidoscore
  * Method:    ParserGetErrorCode
- * Signature: ()V
+ * Signature: ()Lguidoengine/parserError;
  */
-JNIEXPORT void JNICALL Java_guidoengine_guidoscore_ParserGetErrorCode
+JNIEXPORT jobject JNICALL Java_guidoengine_guidoscore_ParserGetErrorCode
   (JNIEnv *, jobject);
 
 /*

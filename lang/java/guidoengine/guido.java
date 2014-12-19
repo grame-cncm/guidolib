@@ -59,6 +59,7 @@ public final class guido {
         try {
 			guidolayout.Init ();
 			guidopageformat.Init ();
+			parserError.Init();
 			guidoscore.Init ();
 			guidodate.Init ();
 			guidodrawdesc.Init ();
@@ -68,9 +69,9 @@ public final class guido {
 			guidosegment.Init ();
 			guidofactory.Init ();
 			guido2midiparams.Init();
+			limitparams.Init();
 			guidoscoremap.Init();
 			guidopianoroll.Init();
-			limitparams.Init();
 			System.out.println("GUIDOEngine version " + GetVersion() + " - JNI interface version " + GetJNIVersion() + " initialized.");
 		} catch (UnsatisfiedLinkError e) {
 			System.err.println("GUIDOEngine native code library initialization failed.\n" + e);

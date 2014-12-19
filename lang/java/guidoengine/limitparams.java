@@ -2,10 +2,9 @@ package guidoengine;
 
 /**
  * Class of parameter for piano roll.
- * @author guillaume
  * 
  */
-public final class limitparams {
+public class limitparams {
 	private guidodate startDate;
 	private guidodate endDate;
 	private int lowPitch;
