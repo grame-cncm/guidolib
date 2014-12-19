@@ -30,6 +30,8 @@ QGuidoGraphicsItem::QGuidoGraphicsItem(QGraphicsItem * parent)
     
     setResizePageToMusic(true);
 	
+    fPianoRoll = NULL;
+    fIsPianoRoll = false;
 	assert(mGuidoPainter);
 	// QGuidoPainter::createGuidoPainter() returned NULL. 
 	// You forgot to call QGuidoPainter::startGuidoEngine.
@@ -46,14 +48,19 @@ QGuidoGraphicsItem::~QGuidoGraphicsItem()
 
 //-------------------------------------------------------------------------
 void QGuidoGraphicsItem::paint( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * )
-{	
-	for ( int i = mPageManager->firstVisiblePage() ; i <= mPageManager->lastVisiblePage() ; i++ )
-	{
+{
+    for ( int i = mPageManager->firstVisiblePage() ; i <= mPageManager->lastVisiblePage() ; i++ )
+    {
         QRectF pageRect;
 		pageRect.moveTo( mPageManager->pagePos(i) );
 		pageRect.setSize( mPageManager->pageSize(i) );
-		mGuidoPainter->draw( painter , i , pageRect.toRect() , option->exposedRect.toRect() );
-	}
+        if(fIsPianoRoll)
+        {
+            mGuidoPainter->drawPianoRoll(painter, option->exposedRect.toAlignedRect(), fPianoRoll);
+        }
+        else
+            mGuidoPainter->draw( painter , i , pageRect.toRect() , option->exposedRect.toRect() );
+    }
 }
 
 //-------------------------------------------------------------------------
@@ -88,6 +95,13 @@ bool QGuidoGraphicsItem::setGMNStream(GuidoStream * gmnStream)
 		return true;
 	}
 	return false;
+}
+
+//-------------------------------------------------------------------------
+void QGuidoGraphicsItem::setPianoRoll(PianoRoll * pRoll)
+{
+    fIsPianoRoll = true;
+    fPianoRoll = pRoll;
 }
 
 //-------------------------------------------------------------------------
