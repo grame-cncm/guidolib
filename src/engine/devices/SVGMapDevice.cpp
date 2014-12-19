@@ -18,8 +18,8 @@
 //______________________________________________________________________________
 // SVGMapDevice
 //______________________________________________________________________________
-SVGMapDevice::SVGMapDevice(std::ostream& outstream, SVGSystem* system, const char* guidofontfile, const char* guidofontspec, int inMappingMode) :
-    SVGDevice(outstream, system, guidofontfile, guidofontspec)
+SVGMapDevice::SVGMapDevice(std::ostream& outstream, SVGSystem* system, const char* guidofont, int inMappingMode) :
+	SVGDevice(outstream, system, guidofont)
 {
     voicesMapsVector = new std::vector<Time2GraphicMap>();
     stavesMapsVector = new std::vector<Time2GraphicMap>();

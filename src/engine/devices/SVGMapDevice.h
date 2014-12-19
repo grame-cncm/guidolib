@@ -22,7 +22,7 @@
 class_export SVGMapDevice : public SVGDevice
 {
 public :
-    SVGMapDevice(std::ostream& outstream, SVGSystem* system, const char* guidofontfile, const char* guidofontspec, int inMappingMode);
+	SVGMapDevice(std::ostream& outstream, SVGSystem* system, const char* guidofont, int inMappingMode);
 
     void addVoiceMap (Time2GraphicMap inVoiceMap)  { voicesMapsVector->push_back(inVoiceMap); }
     void addStaffMap (Time2GraphicMap inStaffMap)  { stavesMapsVector->push_back(inStaffMap); }

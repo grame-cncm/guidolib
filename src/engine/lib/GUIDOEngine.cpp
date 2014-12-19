@@ -100,7 +100,7 @@ GUIDOAPI(GuidoErrCode) GuidoInitWithIndependentSVG()
 {
 	GuidoInitDesc desc;
 
-	VGSystem * gSystem= new SVGSystem(0, ______src_guido2_svg);
+	VGSystem * gSystem= new SVGSystem(______src_guido2_svg);
 	desc.graphicDevice = gSystem->CreateMemoryDevice(20,20);
 	desc.musicFont = "Guido2";
 	desc.textFont  = "Times";
@@ -615,6 +615,37 @@ GUIDOAPI(GuidoErrCode) 	GuidoBinaryExport( const GRHandler handle, int page, std
 // --------------------------------------------------------------------------
 //		- Score export to svg -
 // --------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoGR2SVG( const GRHandler handle, int page, std::ostream& out, bool embedFont, const char* font, const int mappingMode )
+{
+	const char * fontUsed = font;
+	if(embedFont) {
+		fontUsed = ______src_guido2_svg;
+	}
+
+	SVGSystem sys(fontUsed);
+	VGDevice    *dev    = sys.CreateDisplayDevice(out, mappingMode);
+
+	GuidoOnDrawDesc desc;              // declare a data structure for drawing
+	desc.handle = handle;
+
+	GuidoPageFormat	pf;
+	GuidoResizePageToMusic (handle);
+	GuidoGetPageFormat (handle, page, &pf);
+
+	desc.hdc = dev;                    // we'll draw on the svg device
+	desc.page = page;
+	desc.updateRegion.erase = true;     // and draw everything
+	desc.scrollx = desc.scrolly = 0;    // from the upper left page corner
+	desc.sizex = int(pf.width/SVGDevice::kSVGSizeDivider);
+	desc.sizey = int(pf.height/SVGDevice::kSVGSizeDivider);
+	dev->NotifySize(desc.sizex, desc.sizey);
+	dev->SelectPenColor(VGColor(0,0,0));
+
+	GuidoErrCode error = GuidoOnDraw (&desc);
+
+	delete dev;
+	return error;
+}
 
 GUIDOAPI(GuidoErrCode) GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const int mappingMode )
 {
@@ -623,34 +654,11 @@ GUIDOAPI(GuidoErrCode) GuidoSVGExport( const GRHandler handle, int page, std::os
 
 GUIDOAPI(GuidoErrCode) GuidoSVGExportWithFontSpec(const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec, const int mappingMode )
 {
- 	SVGSystem sys(fontfile, fontspec);
-    SVGDevice    *dev    = 0;
-
-    if (mappingMode != kNoMapping)
-	    dev = new SVGMapDevice(out, &sys, fontfile, fontspec, mappingMode); // Maps need to be drawn
-    else
-        dev = new SVGDevice(out, &sys, fontfile, fontspec);
-    
-    GuidoOnDrawDesc desc;              // declare a data structure for drawing
-	desc.handle = handle;
-
-	GuidoPageFormat	pf;
-	GuidoResizePageToMusic (handle);
-	GuidoGetPageFormat (handle, page, &pf);
- 
-	desc.hdc = dev;                    // we'll draw on the svg device
-    desc.page = page;
-    desc.updateRegion.erase = true;     // and draw everything
-	desc.scrollx = desc.scrolly = 0;    // from the upper left page corner
-    desc.sizex = int(pf.width/SVGDevice::kSVGSizeDivider);
-	desc.sizey = int(pf.height/SVGDevice::kSVGSizeDivider);
-    dev->NotifySize(desc.sizex, desc.sizey);
-    dev->SelectPenColor(VGColor(0,0,0));
-
-    GuidoErrCode error = GuidoOnDraw (&desc);
-
-    delete dev;
-    return error;
+	const char * font = fontspec;
+	unsigned int size;
+	if(fontfile != 0 && (size = strlen(fontfile)) > 0 && size <= 260)
+		font = fontfile;
+	return GuidoGR2SVG( handle, page, out, false, font, mappingMode);
 }
 
 // --------------------------------------------------------------------------

@@ -101,8 +101,8 @@ GuidoErrCode GUIDOPianoRollAdapter::onDraw(PianoRoll *pr, int width, int height,
 std::string GUIDOPianoRollAdapter::svgExport(PianoRoll *pr, int width, int height)
 {
 	std::stringstream out;
-	SVGSystem sys(0, 0);
-	SVGDevice dev (out, &sys, 0, 0);
+	SVGSystem sys(0);
+	SVGDevice dev (out, &sys, 0);
 	GuidoPianoRollOnDraw(pr, width, height, &dev);
 	return out.str();
 }

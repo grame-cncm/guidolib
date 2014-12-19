@@ -26,15 +26,13 @@ class VGDevice;
 */
 class SVGFont : public VGFont
 {
-	std::string	fGuidoFontFile;
-	std::string	fGuidoFontSpec;
 	std::string	fName;
 
 	const VGFont *	fFont;
 	VGDevice *	fDevice;
 
 	public:
-					 SVGFont(const char * name, int size, int properties, const char * guidofontfile, const char * guidofontspec);
+					 SVGFont(const char * name, int size, int properties);
 		virtual		~SVGFont();
 
 		virtual	const char *	GetName() const			{

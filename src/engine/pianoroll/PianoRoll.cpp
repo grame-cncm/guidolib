@@ -694,7 +694,7 @@ void PianoRoll::handleColor(ARNoteFormat* noteFormat, DrawParams &drawParams)
     const TagParameterRGBColor *tpc = noteFormat->getRGBColor();
     unsigned char colref[4];
 
-    if (tps && tps->getRGB(colref) || tpc && tpc->getRGBColor(colref)) {
+	if ((tps && tps->getRGB(colref)) || (tpc && tpc->getRGBColor(colref))) {
         if (!noteFormat->getPosition()) {
             if (noteFormat->getIsAuto()) { // // Means it's a range noteFormat end tag
                 isAfterStateNoteFormatTag = false;
