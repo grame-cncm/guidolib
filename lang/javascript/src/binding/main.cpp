@@ -140,7 +140,7 @@ EMSCRIPTEN_BINDINGS(EngineAdapter) {
 			.function("findEventPage", &GuidoEngineAdapter::findEventPage, allow_raw_pointers())
 			.function("findPageAt", &GuidoEngineAdapter::findPageAt, allow_raw_pointers())
 			.function("getPageDate", &GuidoEngineAdapter::getPageDate, allow_raw_pointers())
-			.function("svgExport", select_overload<string (NodeGR*, int)>(&GuidoEngineAdapter::svgExport), allow_raw_pointers())
+			.function("gr2SVG", select_overload<string (NodeGR*, int, bool, int)>(&GuidoEngineAdapter::gr2SVG), allow_raw_pointers())
 			.function("abstractExport", select_overload<string (NodeGR*, int)>(&GuidoEngineAdapter::abstractExport), allow_raw_pointers())
 			.function("binaryExport", select_overload<string (NodeGR*, int)>(&GuidoEngineAdapter::binaryExport), allow_raw_pointers())
 			.function("javascriptExport", &GuidoEngineAdapter::javascriptExport, allow_raw_pointers())

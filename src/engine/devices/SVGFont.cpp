@@ -15,7 +15,7 @@
 
 #ifdef INDEPENDENTSVG
 #include "SVGSystem.h"
-SVGSystem gSystem (0, 0);
+SVGSystem gSystem (0);
 #elif __APPLE__
 #include "GFontOSX.h"
 #include "GSystemOSX.h"
@@ -45,8 +45,7 @@ CairoSystem gSystem (0);
 */
 
 //______________________________________________________________________________
-SVGFont::SVGFont(const char * name, int size, int properties, const char * guidofontfile, const char * guidofontspec) :
-    fGuidoFontFile(guidofontfile), fGuidoFontSpec(guidofontspec), /*fSize(size),*/ fName(name)/*, fProperties(properties)*/
+SVGFont::SVGFont(const char * name, int size, int properties) : fName(name)
 {
     fDevice = gSystem.CreateMemoryDevice (10,10);
 	fFont = gSystem.CreateVGFont (name, size, properties);
