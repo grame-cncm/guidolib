@@ -39,8 +39,8 @@ void svgendl::print(std::ostream& os) const {
 //______________________________________________________________________________
 // SVGDevice
 //______________________________________________________________________________
-SVGDevice::SVGDevice(std::ostream& outstream, SVGSystem* system, const char* guidofontfile, const char* guidofontspec) : 
-	fSystem (system), fGuidoFontFile(guidofontfile), fGuidoFontSpec(guidofontspec),
+SVGDevice::SVGDevice(std::ostream& outstream, SVGSystem* system, const char* guidofont) :
+	fSystem (system), fGuidoFont(guidofont),
 	fWidth(1000), fHeight(1000),
 	fMusicFont(0), fTextFont(0), fOpMode(kUnknown),
 	fXScale(1), fYScale(1), fXOrigin(0), fYOrigin(0), fXPos(0), fYPos(0),
@@ -94,10 +94,11 @@ void SVGDevice::getsvgfont (const char* ptr, string& str) const
 	}
 }
 
-void SVGDevice::printFont(std::ostream& out, const char* file, const char* spec) const
+void SVGDevice::printFont(std::ostream& out, const char* font) const
 {
-	if(file) {
-		ifstream is (file);
+	// If font has more than 256 characters, it's suppose it's the font in text format else it's a file.
+	if(font && strlen(font) <= 260) {
+		ifstream is(font);
 		if (is.is_open()) {
 			is.seekg (0, ios::end);
 			int length = int(is.tellg());
@@ -111,14 +112,17 @@ void SVGDevice::printFont(std::ostream& out, const char* file, const char* spec)
 			delete [] buffer;
 			if (str.size())
 				out << "<defs>\n" << str << "\n</defs>" << endl;
+			is.close();
+			return;
 		}
-	} else if (spec) {
+	}
+	if (font) {
 		string str;
-		getsvgfont (spec, str);
+		getsvgfont (font, str);
 		if (str.size())
 			out << "<defs>\n" << str << "\n</defs>" << endl;
 	}
-	else cerr << "SVGDevice: can't open svg guido font " << file << endl;
+	else cerr << "SVGDevice: can't open svg guido font " << font << endl;
 }
 
 //______________________________________________________________________________
@@ -130,8 +134,7 @@ bool SVGDevice::BeginDraw()
 	fStream << "<svg viewBox=\"0 0 " << fWidth << " " << fHeight << "\" xmlns=\"http://www.w3.org/2000/svg\"  version=\"1.1\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";
 	fEndl++;
 	fStream << fEndl << "<desc> SVG file generated using the GuidoEngine version " << GuidoGetVersionStr() << "</desc>";
-	if (fGuidoFontFile) printFont (fStream, fGuidoFontFile, 0);
-	else if (fGuidoFontSpec) printFont (fStream, 0, fGuidoFontSpec);
+	if (fGuidoFont) printFont (fStream, fGuidoFont);
 	fBeginDone = true;
 	if (fPendingStrokeColor) {
 		SelectPenColor (*fPendingStrokeColor);
