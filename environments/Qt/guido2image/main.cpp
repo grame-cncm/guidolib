@@ -119,16 +119,16 @@ static void usage(const char * name)
 	cerr << "options controlling the Guido Engine layout settings:" << endl;
 	cerr << "           -d distance (int)       control the systems distance (default value is 75)." << endl;
 	cerr << "           -a [auto|always|never]  control systems distribution (default value is 'auto')." << endl;
-	cerr << "           -b [on|off]			    control the optimal page fill (default value is 'on')." << endl;
+	cerr << "           -b [on|off]             control the optimal page fill (default value is 'on')." << endl;
 	cerr << "           -r [on|off]             automatically resize page to music (default value is 'on')." << endl;
-	cerr << "           -c (float)			    sets the proportional force multiplicator (0 is default value and disables proportional rendering)." << endl;
+	cerr << "           -c (float)              sets the proportional force multiplicator (0 is default value and disables proportional rendering)." << endl;
 	cerr << endl;
 	cerr << "notes:        * If you use both -h and -w options, the score will be reduced/enlarged to fit" << endl;
 	cerr << "                inside the height*width rect ; the score's aspect ratio will be preserved." << endl;
 	cerr << "              * The output image can't have a pixel number higher than 300 millions." << endl;
 	cerr << "              * -z option has no effect with -h or -w options." << endl;
 	cerr << "              * -p, -h, -w and -z options are ignored when PDF format is selected." << endl;
-	cerr << "              * To export GIF images, you need the Qt framework to support GIF. (see Qt doc about GIF)" << endl;
+	cerr << "              * To export GIF images, you need the Qt framework to support GIF (see Qt doc about GIF)" << endl;
 	exit(1);
 }
 

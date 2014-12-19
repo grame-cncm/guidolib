@@ -827,6 +827,7 @@ void ARFactory::createTag( const char * name, int no )
 					ARNoteFormat * tmpnf = new ARNoteFormat;
 					tmpnf->setSize((float) 0.6);
 					tmpnf->setColor("blue");
+                    tmpnf->setIsAuto(true);
 
 					mCurrentVoice->AddTail(tmpnf);
 				}
@@ -1913,6 +1914,7 @@ void ARFactory::endTag()
                     else if ((mynf = dynamic_cast<ARNoteFormat *>(tag)) != 0 )
                     {
                         ARNoteFormat * nnf = dynamic_cast<ARNoteFormat *>(mynf->getEndTag());
+                        nnf->setIsAuto(true);
                         mCurrentNoteFormat = nnf;
                         mCurrentVoice->AddTail(nnf);
                     }

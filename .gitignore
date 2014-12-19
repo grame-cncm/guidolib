@@ -70,3 +70,15 @@ guido2image.vcxproj.filters
 /validate/guidogetversion.exe
 /validate/guidogetvoicemap.exe
 /validate/guidoparse.exe
+/validate/guido2proll.exe
+/environments/Qt/GuidoQtD.lib
+/environments/Qt/guido2image/1.*/bmp/*.bmp
+/environments/Qt/guido2image/1.*/jpeg/*.jpeg
+/environments/Qt/guido2image/1.*/pdf/*.pdf
+/environments/Qt/guido2image/1.*/png/*.png
+/environments/Qt/guido2image/GUIDOEngine.dll
+/environments/Qt/guido2image/forcepdfdate.cpp
+/environments/Qt/guido2image/forcepdfdate.exe
+/environments/Qt/guido2image/guido2image.exe
+/environments/Qt/guido2image/guidogetversion.exe
+/environments/Qt/ipch/guido2image-8ccca13e/*.ipch

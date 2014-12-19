@@ -57,12 +57,7 @@ macx:ICON =  rsc/guido.icns
 
 # GuidoQt library link for each platform
 win32 {
-	DebugBuild{
-		LIBS += ../GuidoQt.lib
-	}
-	else {
-		LIBS += ../GuidoQt.lib
-	}
+	LIBS += ../GuidoQt.lib
 }
 unix:DebugBuild { LIBS += -L../GuidoQt/Debug -lGuidoQt }
 else { LIBS += -L.. -lGuidoQt }

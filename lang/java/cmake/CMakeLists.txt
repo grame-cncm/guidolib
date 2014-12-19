@@ -59,7 +59,7 @@ set (GUIDO_SRC ${ROOT}/src/engine)
 
 set (SRC "${JNI_PATH}/*.cpp")				# add source files
 set (HEADERS "${JNI_PATH}/*.h")				# add header files
-set (INCL ${JNI_INCLUDE_DIRS} ${GUIDO_SRC}/include ${GUIDO_SRC}/tools)
+set (INCL ${JNI_INCLUDE_DIRS} ${GUIDO_SRC}/include ${GUIDO_SRC}/devices ${GUIDO_SRC}/tools)
 
 
 if (INDEPENDENTSVG STREQUAL "yes")
@@ -106,6 +106,8 @@ if (WIN64)
  find_library (GUIDO GUIDOEngine64 PATHS ${GUIDO_PATH}/win64/Release NO_DEFAULT_PATH)
 elseif(APPLE)
  find_library (GUIDO GUIDOEngine PATHS ${GUIDO_PATH}/MacOS/Release NO_DEFAULT_PATH)
+else(UNIX)
+ find_library (GUIDO GUIDOEngine PATHS ${GUIDO_PATH}/linux/Release NO_DEFAULT_PATH)
 else()
  find_library (GUIDO GUIDOEngine PATHS ${GUIDO_PATH}/win32/Release NO_DEFAULT_PATH)
 endif()

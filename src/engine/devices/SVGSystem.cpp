@@ -16,32 +16,36 @@
 #include "SVGSystem.h"
 #include "SVGDevice.h"
 #include "SVGFont.h"
+#include "SVGMapDevice.h"
+#include "GUIDOEngine.h"
 #include "GuidoFont.h"
 #include "TimesFont.h"
 
 using namespace std;
 //______________________________________________________________________________
-SVGSystem::SVGSystem(const char* guidofontfile, const char *guidofontspec) :
-	fGuidoFontFile(guidofontfile), fGuidoFontSpec(guidofontspec)
+SVGSystem::SVGSystem(const char * font) : fGuidoFont(font)
 {
 }
 
 //______________________________________________________________________________
-VGDevice* SVGSystem::CreateDisplayDevice(ostream& outstream)
+VGDevice* SVGSystem::CreateDisplayDevice(ostream& outstream, int mappingMode)
 {
-	return new SVGDevice (outstream, this, fGuidoFontFile, fGuidoFontSpec);
+	if (mappingMode != kNoMapping)
+		return new SVGMapDevice(outstream, this, fGuidoFont, mappingMode); // Maps need to be drawn
+	else
+		return new SVGDevice(outstream, this, fGuidoFont);
 }
 
 //______________________________________________________________________________
 VGDevice* SVGSystem::CreateDisplayDevice()
 {
-	return new SVGDevice (cout, this, fGuidoFontFile, fGuidoFontSpec);
+	return new SVGDevice (cout, this, fGuidoFont);
 }
 
 //______________________________________________________________________________
 VGDevice* SVGSystem::CreateMemoryDevice( int w, int h)
 {
-	SVGDevice* device = new SVGDevice (cout, this, fGuidoFontFile, fGuidoFontSpec);
+	SVGDevice* device = new SVGDevice (cout, this, fGuidoFont);
 	device->NotifySize( w, h );
 	return device;
 }
@@ -49,7 +53,7 @@ VGDevice* SVGSystem::CreateMemoryDevice( int w, int h)
 //______________________________________________________________________________
 VGDevice* SVGSystem::CreateMemoryDevice(const char * inPath)
 {
-    SVGDevice* device = new SVGDevice (cout, this, fGuidoFontFile, fGuidoFontSpec);
+	SVGDevice* device = new SVGDevice (cout, this, fGuidoFont);
 	return device;
 }
 
@@ -59,7 +63,7 @@ VGDevice* SVGSystem::CreatePrinterDevice( )							{ return 0; }
 //______________________________________________________________________________
 VGDevice* SVGSystem::CreateAntiAliasedMemoryDevice( int w, int h )
 {
-	SVGDevice* device = new SVGDevice (cout, this, 0, 0);
+	SVGDevice* device = new SVGDevice (cout, this, 0);
 	device->NotifySize( w, h );
 	return device;
 }
@@ -72,11 +76,12 @@ const VGFont* SVGSystem::CreateVGFont( const char * faceName, int size, int prop
 	if(strcmp("Guido2", faceName) == 0) {
 		return new GuidoFont(faceName, size, properties);
 	} else {
-		if(strcmp("Times", faceName) == 0) {
+		//if(strcmp("Times", faceName) == 0) {
+		// TODO GGX Add Arial font and bold / italic style ?
 			return new TimesFont(faceName, size, properties);
-		}
+		//} else return NULL;
 	}
 #endif
-	return new SVGFont (faceName, size, properties, fGuidoFontFile ? fGuidoFontFile : "", fGuidoFontSpec ? fGuidoFontSpec : "");
+	return new SVGFont (faceName, size, properties);
 }
 

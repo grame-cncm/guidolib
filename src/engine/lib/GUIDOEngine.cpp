@@ -19,10 +19,6 @@
 
 // Last released version: 1.2.2, current version: 1.3.1 (see GuidoInternal.h)
 
-#ifdef INDEPENDENTSVG
-#define NANOSVG_IMPLEMENTATION
-#endif
-
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -104,7 +100,7 @@ GUIDOAPI(GuidoErrCode) GuidoInitWithIndependentSVG()
 {
 	GuidoInitDesc desc;
 
-	VGSystem * gSystem= new SVGSystem(0, ______src_guido2_svg);
+	VGSystem * gSystem= new SVGSystem(______src_guido2_svg);
 	desc.graphicDevice = gSystem->CreateMemoryDevice(20,20);
 	desc.musicFont = "Guido2";
 	desc.textFont  = "Times";
@@ -492,17 +488,6 @@ GUIDOAPI(GuidoErrCode) GuidoGetPageDate( CGRHandler inHandleGR, int pageNum, Gui
 	return result ? guidoNoErr : guidoErrBadParameter;
 }
 
-GuidoDate * GuidoGetPageDate_retDate( CGRHandler inHandleGR, int pageNum)
-{
-  GuidoDate *date = new GuidoDate();
-  GuidoErrCode err = GuidoGetPageDate( inHandleGR, pageNum, date);
-  if (err != guidoNoErr) {
-    delete date;
-    return 0;
-  }
-  return date;
-}
-
 // --------------------------------------------------------------------------
 //		- Score drawing and pages formating -
 // --------------------------------------------------------------------------
@@ -630,95 +615,50 @@ GUIDOAPI(GuidoErrCode) 	GuidoBinaryExport( const GRHandler handle, int page, std
 // --------------------------------------------------------------------------
 //		- Score export to svg -
 // --------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoGR2SVG( const GRHandler handle, int page, std::ostream& out, bool embedFont, const char* font, const int mappingMode )
+{
+	const char * fontUsed = font;
+	if(embedFont) {
+		fontUsed = ______src_guido2_svg;
+	}
+
+	SVGSystem sys(fontUsed);
+	VGDevice    *dev    = sys.CreateDisplayDevice(out, mappingMode);
+
+	GuidoOnDrawDesc desc;              // declare a data structure for drawing
+	desc.handle = handle;
+
+	GuidoPageFormat	pf;
+	GuidoResizePageToMusic (handle);
+	GuidoGetPageFormat (handle, page, &pf);
+
+	desc.hdc = dev;                    // we'll draw on the svg device
+	desc.page = page;
+	desc.updateRegion.erase = true;     // and draw everything
+	desc.scrollx = desc.scrolly = 0;    // from the upper left page corner
+	desc.sizex = int(pf.width/SVGDevice::kSVGSizeDivider);
+	desc.sizey = int(pf.height/SVGDevice::kSVGSizeDivider);
+	dev->NotifySize(desc.sizex, desc.sizey);
+	dev->SelectPenColor(VGColor(0,0,0));
+
+	GuidoErrCode error = GuidoOnDraw (&desc);
+
+	delete dev;
+	return error;
+}
 
 GUIDOAPI(GuidoErrCode) GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const int mappingMode )
 {
     return GuidoSVGExportWithFontSpec( handle, page, out, fontfile, 0, mappingMode);
 }
 
-char * GuidoInternalDeviceExport_retCString( const GRHandler handle, int page, GuidoInternalDevice dev)
-{
-	static stringstream sstr;
-	sstr.clear();
-	GuidoErrCode err;
-	if (dev == guido_svg_with_font_spec) {
-	  err = GuidoSVGExportWithFontSpec (handle, page, sstr, 0, reinterpret_cast<char *>(______src_guido2_svg));
-	} else if (dev == guido_abstract) {
-	  err = GuidoAbstractExport(handle, page, sstr);
-	} else if (dev == guido_binary) {
-	  err = GuidoBinaryExport(handle, page, sstr);
-	} else {
-	  return 0;
-	}
-
-	if (err) {
-	  return 0;
-	}
-	char *out = (char *) malloc(strlen(sstr.str().c_str()) + 1);
-	strcpy(out, sstr.str().c_str());
-	return out;
-}
-
-char * GuidoSVGExportWithFontSpec_retCString( const GRHandler handle, int page)
-{
-  return GuidoInternalDeviceExport_retCString(handle, page, guido_svg_with_font_spec);
-}
-
-char * GuidoAbstractExport_retCString( const GRHandler handle, int page)
-{
-  return GuidoInternalDeviceExport_retCString(handle, page, guido_abstract);
-}
-
-int GuidoBinaryExport_retSize( const GRHandler handle, int page, char * in_arr )
-{
-	static stringstream sstr;
-	sstr.clear();
-	GuidoErrCode err;
-	err = GuidoBinaryExport(handle, page, sstr);
-	if (err) {
-	  return 0;
-	}
-	const char * underlying_string = sstr.str().c_str();
-	for (unsigned int i = 0; i < sstr.str().size(); i++) {
-	  in_arr[i] = underlying_string[i];
-	}
-	return sstr.str().size();
-}
-
-void  GuidoReleaseCString( char *stringToRelease ) {
-    free(stringToRelease);
-}
-
 GUIDOAPI(GuidoErrCode) GuidoSVGExportWithFontSpec(const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec, const int mappingMode )
 {
- 	SVGSystem sys(fontfile, fontspec);
-    SVGDevice    *dev    = 0;
-
-    if (mappingMode != kNoMapping)
-	    dev = new SVGMapDevice(out, &sys, fontfile, fontspec, mappingMode); // Maps need to be drawn
-    else
-        dev = new SVGDevice(out, &sys, fontfile, fontspec);
-    
-    GuidoOnDrawDesc desc;              // declare a data structure for drawing
-	desc.handle = handle;
-
-	GuidoPageFormat	pf;
-	GuidoResizePageToMusic (handle);
-	GuidoGetPageFormat (handle, page, &pf);
- 
-	desc.hdc = dev;                    // we'll draw on the svg device
-    desc.page = page;
-    desc.updateRegion.erase = true;     // and draw everything
-	desc.scrollx = desc.scrolly = 0;    // from the upper left page corner
-    desc.sizex = int(pf.width/SVGDevice::kSVGSizeDivider);
-	desc.sizey = int(pf.height/SVGDevice::kSVGSizeDivider);
-    dev->NotifySize(desc.sizex, desc.sizey);
-    dev->SelectPenColor(VGColor(0,0,0));
-
-    GuidoErrCode error = GuidoOnDraw (&desc);
-
-    delete dev;
-    return error;
+	const char * font = fontspec;
+	unsigned int size;
+	if(fontfile != 0 && (size = strlen(fontfile)) > 0 && size <= 260)
+		font = fontfile;
+	return GuidoGR2SVG( handle, page, out, false, font, mappingMode);
 }
 
 // --------------------------------------------------------------------------

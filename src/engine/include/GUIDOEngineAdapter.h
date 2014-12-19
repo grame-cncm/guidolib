@@ -264,21 +264,23 @@ class_export GuidoEngineAdapter
 			\param handle a graphic representation.
 			\param page the page number.
 			\param out the output stream.
-			\param fontfile path of the guido svg font file.
-			\param fontspec an actual svg font if there is no font file.
+			\param embedFont if true, it use a embbed guido font and add it to the SVG.
+			\param font path of the guido svg font file or an svg font in text representation. Can be use if embedFont is set to false else it is unnecessary.
+			If the library is compiled with INDEPENDENTSVG option, don't use a font file. The library cannot calculate font metric. You have better to use embedded font.
 			\param mappingMode the mapping mode (see mapping mode enum).
 			\return a Guido error code
-		*/
-		GuidoErrCode svgExport(const GRHandler handle, int page, std::ostream& out, const char* fontfile = 0, const char* fontspec = 0, const int mappingMode = 0);
+		 */
+		GuidoErrCode gr2SVG( const GRHandler handle, int page, std::ostream& out, bool embedFont = true, const char* font = 0, const int mappingMode = 0 );
 
 		/** \brief Exports one page of score to SVG.
-			Embedded font spec is use for the export.
 
 			\param handle a graphic representation.
 			\param page the page number.
-			\return the export in a string.
-		*/
-		std::string svgExport(const GRHandler handle, int page);
+			\param embedFont if true, it use a embbed guido font and add it to the SVG.
+			\param mappingMode the mapping mode (see mapping mode enum).
+			\return a Guido error code
+		 */
+		std::string gr2SVG(const GRHandler handle, int page, bool embedFont = true, const int mappingMode = 0);
 
 		/** \brief Exports an abstract representation of GUIDO draw commands.
 

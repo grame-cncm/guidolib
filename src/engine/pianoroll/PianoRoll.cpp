@@ -25,6 +25,7 @@
 #include "ARChordComma.h"
 #include "ARNoteFormat.h"
 #include "TagParameterString.h"
+#include "TagParameterRGBColor.h"
 #include "FontManager.h"
 
 #ifdef MIDIEXPORT
@@ -51,25 +52,23 @@ using namespace std;
 
 //--------------------------------------------------------------------------
 PianoRoll::PianoRoll(ARMusic *arMusic) :
-    fARMusic(NULL),
+    fARMusic(arMusic), fMidiFileName(NULL),
     fVoicesAutoColored(false), fVoicesColors(NULL),
+    isAfterStateNoteFormatTag(false),
     fKeyboardEnabled(false), fMeasureBarsEnabled(false),
     fPitchLinesDisplayMode(kAutoLines)    
 {
-    fARMusic = arMusic;
-
     init();
 }
 
 //--------------------------------------------------------------------------
 PianoRoll::PianoRoll(const char *midiFileName) :
-    fARMusic(NULL),
+    fARMusic(NULL), fMidiFileName(midiFileName),
     fVoicesAutoColored(false), fVoicesColors(NULL),
+    isAfterStateNoteFormatTag(false),
     fKeyboardEnabled(false), fMeasureBarsEnabled(false),
     fPitchLinesDisplayMode(kAutoLines)
 {
-    fMidiFileName = midiFileName;
-
     init();
 }
 
@@ -156,10 +155,10 @@ void PianoRoll::setPitchLinesDisplayMode(int mode)
 void PianoRoll::setColorToVoice(int voiceNum, int r, int g, int b, int a)
 {
     if (!fVoicesColors)
-        fVoicesColors = new std::vector<std::pair<int, VGColor> >();
+        fVoicesColors = new std::vector<std::pair<int, VGColor *> >();
     else {
         for (unsigned int i = 0; i < fVoicesColors->size(); i++) {
-            std::pair<int, VGColor> pair = fVoicesColors->at(i);
+            std::pair<int, VGColor *> pair = fVoicesColors->at(i);
 
             if (pair.first == voiceNum) {
                 fVoicesColors->erase(fVoicesColors->begin() + i);
@@ -168,8 +167,8 @@ void PianoRoll::setColorToVoice(int voiceNum, int r, int g, int b, int a)
         }
     }
 
-    VGColor color(r, g, b, a);
-    std::pair<int, VGColor> newVoiceColor(voiceNum, color);
+    VGColor *color = new VGColor(r, g, b, a);
+    std::pair<int, VGColor *> newVoiceColor(voiceNum, color);
 
     fVoicesColors->push_back(newVoiceColor);
 }
@@ -549,10 +548,10 @@ void PianoRoll::DrawVoice(ARMusicalVoice* v, PianoRoll::DrawParams &drawParams)
         int voiceNum = v->getVoiceNum();
         
         for (unsigned int i = 0; i < fVoicesColors->size() && fColors->empty(); i++) {
-            std::pair<int, VGColor> pair = fVoicesColors->at(i);
+            std::pair<int, VGColor *> pair = fVoicesColors->at(i);
 
             if (pair.first == voiceNum)
-                fColors->push(&pair.second);
+                fColors->push(pair.second);
         }
     }
     
@@ -571,7 +570,7 @@ void PianoRoll::DrawVoice(ARMusicalVoice* v, PianoRoll::DrawParams &drawParams)
         drawParams.dev->PushFillColor(*fColors->top());
     }
 
-    fChord   = false;
+    fChord          = false;
 	ObjectList *ol  = (ObjectList *)v;
 	GuidoPos    pos = ol->GetHeadPosition();
 
@@ -617,13 +616,8 @@ void PianoRoll::DrawVoice(ARMusicalVoice* v, PianoRoll::DrawParams &drawParams)
             DrawMeasureBar(date, drawParams);
 	}
 
-    while (!fColors->empty()) {
-		drawParams.dev->PopFillColor();
-
-        VGColor *topColor = fColors->top();
-        fColors->pop();
-        delete topColor;
-	}
+    while (!fColors->empty())
+		popColor(drawParams);
 }
 
 //--------------------------------------------------------------------------
@@ -694,26 +688,57 @@ void PianoRoll::DrawMeasureBar(double date, PianoRoll::DrawParams &drawParams) c
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::handleColor(ARNoteFormat* noteFormat, DrawParams &drawParams) const
+void PianoRoll::handleColor(ARNoteFormat* noteFormat, DrawParams &drawParams)
 {
-    const TagParameterString *tps = noteFormat->getColor();
+    const TagParameterString   *tps = noteFormat->getColor();
+    const TagParameterRGBColor *tpc = noteFormat->getRGBColor();
     unsigned char colref[4];
 
-    if (tps && tps->getRGB(colref)) {
-        fColors->push(new VGColor(colref[0], colref[1], colref[2], colref[3]));
+	if ((tps && tps->getRGB(colref)) || (tpc && tpc->getRGBColor(colref))) {
+        if (!noteFormat->getPosition()) {
+            if (noteFormat->getIsAuto()) { // // Means it's a range noteFormat end tag
+                isAfterStateNoteFormatTag = false;
+                popColor(drawParams);
+            }
+            else if (!noteFormat->getIsAuto()) { // Means it's a state noteFormat tag
+                if (isAfterStateNoteFormatTag)
+                    popColor(drawParams);
+                else
+                    isAfterStateNoteFormatTag = true;
+            }
+        }
 
+        fColors->push(new VGColor(colref[0], colref[1], colref[2], colref[3]));
         drawParams.dev->PushFillColor(*fColors->top());
     }
-    else {
-        VGColor *topColor = fColors->top();
-        fColors->pop();
-        drawParams.dev->PopFillColor();
-        delete topColor;
+    else if (!noteFormat->getPosition() && noteFormat->getIsAuto()) { // Means it's a range noteFormat end tag
+        if (noteFormat->getDX() == NULL
+            && noteFormat->getDY() == NULL
+            && noteFormat->getSize() == NULL
+            && noteFormat->getTPStyle() == NULL // Means no noteFormat tag exists yet
+            && (fColors->size() > 1 || (!fVoicesAutoColored && fColors->size() > 0)))
+        {
+            if (isAfterStateNoteFormatTag)
+                popColor(drawParams);
+
+            isAfterStateNoteFormatTag = false;
+
+            popColor(drawParams);
+        }
     }
 }
 
 //--------------------------------------------------------------------------
-/*void GuidoPianoRoll::handleEmpty(double date)
+void PianoRoll::popColor(DrawParams &drawParams) {
+    drawParams.dev->PopFillColor();
+
+    VGColor *topColor = fColors->top();
+    fColors->pop();
+    delete topColor;
+}
+
+//--------------------------------------------------------------------------
+/*void PianoRoll::handleEmpty(double date)
 {
     // REM: TODO ?
 }*/

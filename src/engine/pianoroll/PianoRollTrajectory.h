@@ -54,7 +54,6 @@ protected:
     void DrawAllLinksBetweenTwoEvents(DrawParams &drawParams) const;
     void DrawLinkBetween(PianoRollTrajectory::EventInfos leftEvent, PianoRollTrajectory::EventInfos rightEvent, DrawParams &drawParams) const;
 
-	void handleColor(ARNoteFormat *e, DrawParams &drawParams) const;
 	void handleRest (double date, DrawParams &drawParams);
 	//void handleEmpty (double date);
 

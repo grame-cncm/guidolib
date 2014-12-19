@@ -15,10 +15,6 @@
 */
 
 #include "VGFont.h"
-#ifdef INDEPENDENTSVG
-#include "nanosvg.h"
-#include <map>
-#endif
 
 /*!
 \addtogroup VGSys Virtual Graphic System
@@ -30,46 +26,23 @@ class VGDevice;
 */
 class SVGFont : public VGFont
 {
-	std::string	fGuidoFontFile;
-	std::string	fGuidoFontSpec;
 	std::string	fName;
 
-#ifdef INDEPENDENTSVG
-	int fSize;
-	int fProperties;
-
-	struct NSVGfont *	fNSVGfont;
-        static std::map<std::string, std::string> makeHexToCharMap();
-        static const std::map<std::string, std::string> hexToCharMap;
-#else
 	const VGFont *	fFont;
 	VGDevice *	fDevice;
-#endif
 
 	public:
-					 SVGFont(const char * name, int size, int properties, const char * guidofontfile, const char * guidofontspec);
+					 SVGFont(const char * name, int size, int properties);
 		virtual		~SVGFont();
 
 		virtual	const char *	GetName() const			{
-		#ifdef INDEPENDENTSVG
-		  return fName.c_str();
-		#else
 		  return fFont->GetName();
-                #endif
                 }
 		virtual	int 			GetSize() const {
-		#ifdef INDEPENDENTSVG
-		  return fSize;
-                #else
 		  return fFont->GetSize();
-                #endif
                 }
 		virtual	int				GetProperties() const	{
-		#ifdef INDEPENDENTSVG
-		  return fProperties;
-		#else
 		  return fFont->GetProperties();
-                #endif
 		}
 
 		virtual	void	GetExtent( const char * s, int inCharCount, float * outWidth, float * outHeight, VGDevice * context ) const;

@@ -104,6 +104,8 @@ Note for Windows platforms:
 --------------------------
 	The CMake project description is "Visual Studio" oriented. 
 	Using MingW may require some adaptation.
+	/!\ Having .NET Framework v4.5 installed can be problematic during cmake generation
+			AND during Visual Studio compilation. A downgrade to v4.0 will fix this problems.
 
 
 ======================================================================
