@@ -40,7 +40,7 @@ guidocrash : guidocrash.class
 	$(JAVA) guidocrash 
 
 guidoviewer : guidoviewer.class
-	$(JAVA) guidoviewer 
+	$(JAVA) -Djava.library.path=. guidoviewer 
 
 factorysample : factorysample.class
 	$(JAVA) factorysample 
