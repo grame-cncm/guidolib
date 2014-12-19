@@ -116,7 +116,7 @@
 			var gr = guidoEngine.ar2grSettings(ar, settings);
 			*/
 			var gr = guidoEngine.ar2gr(ar);
-			var result = guidoEngine.svgExport(gr, 1);
+			var result = guidoEngine.gr2SVG(gr, 1, true, 0);
 
 			guidoEngine.freeGR(gr);
 			guidoEngine.freeAR(ar);

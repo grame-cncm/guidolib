@@ -43,7 +43,7 @@
 		//var gr = guidoEngine.ar2gr(ar);
 		$("#guidoResizePageToMusic").html("<b>guidoEngine.resizePageToMusic(gr) Error Code : </b>" + guidoEngine.resizePageToMusic(gr).value);
 		
-		var result = guidoEngine.svgExport(gr, 1);
+		var result = guidoEngine.gr2SVG(gr, 1, true, 0);
 		
 		// Draw the export svg on page
 		$("#guido_svg").html("<div><b>Export svg of " + gmn + "</b></div>" + result);
@@ -61,7 +61,7 @@
 			proportionalRenderingForceMultiplicator : 0
 		};
 		guidoEngine.updateGRSettings(gr, settings);
-		result = guidoEngine.svgExport(gr, 1);
+		result = guidoEngine.gr2SVG(gr, 1, true, 0);
 		$("#guidoUpdateGR").html("<div><b>Update GR with different settings (guidoEngine.updateGRSettings)</b></div>" + result);
 		
 		// Test stream and draw 
@@ -71,7 +71,7 @@
 		
 		var ar2 = guidoEngine.stream2AR(p, stream);
 		var gr2 = guidoEngine.ar2gr(ar2);
-		var result2 = guidoEngine.svgExport(gr2, 1);
+		var result2 = guidoEngine.gr2SVG(gr, 1, true, 0);
 		$("#guido_svg2").html("<div><b>ar construct with a stream (guidoEngine.stream2AR) gmn code : f g b/8 d f/4 e : </b></div>" + result2);
 		
 		$("#guidoGetStream").html("<b>guidoEngine.getStream with gmn code " + code + "</b>" + guidoEngine.getStream(stream));
