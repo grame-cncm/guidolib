@@ -117,15 +117,20 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_EnableKeyboard(JNIEnv *en
 /*
  * Class:     guidoengine_guidopianoroll
  * Method:    GetKeyboardWidth
- * Signature: (IF)I
+ * Signature: (I)F
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_GetKeyboardWidth
-	(JNIEnv *env, jobject obj, jint height, jfloat keyboardWidth)
+JNIEXPORT jfloat JNICALL Java_guidoengine_guidopianoroll_GetKeyboardWidth
+  (JNIEnv *env, jobject obj, jint height)
 {
-	return GuidoPianoRollGetKeyboardWidth(
+	float keyboardWidth;
+	GuidoErrCode err = GuidoPianoRollGetKeyboardWidth(
 				(PianoRoll *)env->GetLongField(obj, gPianoRollID),
 				height,
 				keyboardWidth);
+	if(err != guidoNoErr) {
+		keyboardWidth = -1;
+	}
+	return keyboardWidth;
 }
 
 /*

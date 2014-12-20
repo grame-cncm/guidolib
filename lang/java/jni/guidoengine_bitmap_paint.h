@@ -23,12 +23,14 @@
 #define __guidoengine_bitmap_paint__
 
 #include <jni.h>
-
+#include "guidoengine_guido.h"
 #include "GUIDOEngine.h"
 #include "GUIDOPianoRoll.h"
 #include "VGSystem.h"
 #include "VGDevice.h"
 #include "VGColor.h"
+
+extern jmethodID getRGBID;
 
 #ifdef __cplusplus
 extern "C" {
@@ -36,6 +38,7 @@ extern "C" {
 
 int getBitmap (jint* dstBitmap, int w, int h, GuidoOnDrawDesc& desc, const VGColor& color);
 int getBitmapPianoRoll (jint* dstBitmap, int w, int h, PianoRoll *pr, const VGColor& color);
+VGColor jcolor2VGColor (JNIEnv * env, jobject jcolor);
 #ifdef __cplusplus
 }
 #endif

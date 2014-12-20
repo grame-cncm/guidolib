@@ -25,6 +25,8 @@
 #include "musicxml.h"
 #include "device_specific_functions.h"
 
+jmethodID getRGBID;
+
 VGSystem * gSystem;
 bool gAntiAliasing = false;
 bool gMusicXML = false;
@@ -45,6 +47,19 @@ static jint guidoengine_guido_Init (JNIEnv * env, jstring guidofont, jstring tex
 
 		gMusicXML = loadMusicxml();
 	}
+
+# ifndef android
+	jclass 	colorClass = env->FindClass("java/awt/Color");
+	if (colorClass == NULL)
+		fprintf(stderr, "Java_guidoengine_guidoscore_Init got NULL color class\n");
+	else {
+		getRGBID = env->GetMethodID (colorClass, "getRGB", "()I");
+		if (getRGBID == NULL)
+			fprintf(stderr, "JavaTimeMapCollector::Time2TimeMap got NULL jmethodID\n");
+		env->DeleteLocalRef(colorClass);
+	}
+# endif
+
 	return guidoNoErr;
 }
 

@@ -82,10 +82,10 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_EnableKeyboard
 /*
  * Class:     guidoengine_guidopianoroll
  * Method:    GetKeyboardWidth
- * Signature: (IF)I
+ * Signature: (I)F
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_GetKeyboardWidth
-  (JNIEnv *, jobject, jint, jfloat);
+JNIEXPORT jfloat JNICALL Java_guidoengine_guidopianoroll_GetKeyboardWidth
+  (JNIEnv *, jobject, jint);
 
 /*
  * Class:     guidoengine_guidopianoroll

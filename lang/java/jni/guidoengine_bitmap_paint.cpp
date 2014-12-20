@@ -62,3 +62,18 @@ int getBitmapPianoRoll (jint* dstBitmap, int w, int h, PianoRoll * pr, const VGC
 	delete dev;
 	return err;
 }
+
+VGColor jcolor2VGColor (JNIEnv * env, jobject jcolor)
+{
+	int color = env->CallIntMethod (jcolor, getRGBID);
+	unsigned char r, g, b, a;
+	b = (unsigned char)(color & 0xff);
+	g = (unsigned char)((color & 0xff00) >> 8);
+	r = (unsigned char)((color & 0xff0000) >> 16);
+	a = (unsigned char)((color & 0xff000000) >> 24);
+#ifdef WIN32
+	return VGColor (r, g, b, a);
+#else
+	return VGColor (b, g, r, a);
+#endif
+}

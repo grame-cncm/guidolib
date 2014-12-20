@@ -48,12 +48,12 @@ public class guidoscore {
 	public static final int kMeasureBB = 0x10;
 	public static final int kEventsBB = 0x20;
 
-	public long fARHandler;
-	public long fGRHandler;
+	public final long fARHandler;
+	public final long fGRHandler;
 
 	private long fGuidoStream;
 	private long fGuidoParser;
-	
+
 	private parserError fParserError;
 
 	/**
@@ -131,18 +131,21 @@ public class guidoscore {
 
 	/**
 	 * Exports a graphic representation to a abstract representation format.
-	 * @param pagenum  the page to be exported
+	 * 
+	 * @param pagenum
+	 *            the page to be exported
 	 * @return the String with the draw command and their parameters.
 	 */
 	public native final synchronized String AbstractExport(int pagenum);
-	
+
 	/**
 	 * Exports a graphic representation to internal binary format. The byte
 	 * array can be read with guidobinaryparser.
 	 * 
 	 * @param pagenum
 	 *            the page to be exported
-	 * @return a byte array with the draw command and the parameters or a null object if an error occurs.
+	 * @return a byte array with the draw command and the parameters or a null
+	 *         object if an error occurs.
 	 */
 	public native final synchronized byte[] BinaryExport(int pagenum);
 
@@ -298,7 +301,7 @@ public class guidoscore {
 	 * @param w
 	 *            the desired drawing width
 	 * @param h
-	 *            the desired drawing heigth
+	 *            the desired drawing height
 	 * @param desc
 	 *            the score drawing descriptor
 	 * @param area
@@ -309,6 +312,37 @@ public class guidoscore {
 	 * @see guidopaint
 	 */
 	public synchronized int Draw(Graphics g, int w, int h, guidodrawdesc desc, guidopaint area, Color color) {
+		return Draw(g, 0, 0, w, h, desc, area, color);
+	}
+
+	/**
+	 * Draws the score.
+	 * 
+	 * Drawing the score should be typically called from the paint method of a
+	 * Canvas. It use native system of the device, so it's not implemented if a
+	 * the GuidoEngine library is build with INDEPENDENSVG option.
+	 * 
+	 * @param g
+	 *            a Graphics
+	 * @param top
+	 *            the top coordinate to begin to draw the image
+	 * @param left
+	 *            the left coordinate to begin to draw the image
+	 * @param w
+	 *            the desired drawing width
+	 * @param h
+	 *            the desired drawing height
+	 * @param desc
+	 *            the score drawing descriptor
+	 * @param area
+	 *            clipping description
+	 * @param color
+	 *            the color used to draw the score
+	 * @see guidodrawdesc
+	 * @see guidopaint
+	 */
+	public synchronized int Draw(Graphics g, int top, int left, int w, int h, guidodrawdesc desc, guidopaint area,
+			Color color) {
 		class foo implements ImageObserver {
 			public boolean imageUpdate(Image img, int infoflags, int x, int y, int width, int height) {
 				return true;
@@ -318,7 +352,7 @@ public class guidoscore {
 		int[] outPixels = new int[w * h];
 		int result = GetBitmap(outPixels, w, h, desc, new guidopaint(), color);
 		img.setRGB(0, 0, w, h, outPixels, 0, w);
-		g.drawImage(img, 0, 0, new foo());
+		g.drawImage(img, left, top, new foo());
 		return result;
 	}
 
@@ -555,7 +589,7 @@ public class guidoscore {
 	public native final synchronized int GetDrawBoundingBoxes();
 
 	/**
-	 * Open a new Parser.
+	 * Open a new Parser. A parser have to be closed with CloseParser().
 	 */
 	public native final synchronized void OpenParser();
 
@@ -575,31 +609,39 @@ public class guidoscore {
 
 	/**
 	 * Parse a file and create the corresponding Abstract Representation. The ar
-	 * is stocked internally and have to be freed with FreeAR().
+	 * is stocked internally and have to be freed with FreeAR(). <br/>
+	 * To use this method you have to open a parser with OpenParser().
 	 * 
 	 * @param file
 	 *            the name of the file to be parsed.
+	 * @return a error code.
 	 */
-	public native final synchronized void File2AR(String file);
+	public native final synchronized int File2AR(String file);
 
 	/**
 	 * Parse the gmnCode and create the corresponding Abstract Representation.
-	 * The ar is stocked internally and have to be freed with FreeAR().
+	 * The ar is stocked internally and have to be freed with FreeAR(). <br/>
+	 * To use this method you have to open a parser with OpenParser().
 	 * 
 	 * @param gmnCode
 	 *            the code to be parsed.
+	 * @return a error code.
 	 */
-	public native final synchronized void String2AR(String gmnCode);
+	public native final synchronized int String2AR(String gmnCode);
 
 	/**
 	 * Parse the gmnCode in the stream (@see OpenStream()) and create the
 	 * corresponding Abstract Representation. The ar is stocked internally and
-	 * have to be freed with FreeAR().
+	 * have to be freed with FreeAR(). <br/>
+	 * To use this method you have to open a parser with OpenParser().
+	 * 
+	 * @return a error code.
 	 */
-	public native final synchronized void Stream2AR();
+	public native final synchronized int Stream2AR();
 
 	/**
-	 * TODO GGX
+	 * Get a parser error if an error occurs after use File2AR, String2AR or
+	 * Stream2AR.
 	 */
 	public native final synchronized parserError ParserGetErrorCode();
 

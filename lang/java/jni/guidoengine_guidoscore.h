@@ -312,25 +312,25 @@ JNIEXPORT jstring JNICALL Java_guidoengine_guidoscore_GetStream
 /*
  * Class:     guidoengine_guidoscore
  * Method:    File2AR
- * Signature: (Ljava/lang/String;)V
+ * Signature: (Ljava/lang/String;)I
  */
-JNIEXPORT void JNICALL Java_guidoengine_guidoscore_File2AR
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_File2AR
   (JNIEnv *, jobject, jstring);
 
 /*
  * Class:     guidoengine_guidoscore
  * Method:    String2AR
- * Signature: (Ljava/lang/String;)V
+ * Signature: (Ljava/lang/String;)I
  */
-JNIEXPORT void JNICALL Java_guidoengine_guidoscore_String2AR
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_String2AR
   (JNIEnv *, jobject, jstring);
 
 /*
  * Class:     guidoengine_guidoscore
  * Method:    Stream2AR
- * Signature: ()V
+ * Signature: ()I
  */
-JNIEXPORT void JNICALL Java_guidoengine_guidoscore_Stream2AR
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_Stream2AR
   (JNIEnv *, jobject);
 
 /*
