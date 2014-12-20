@@ -30,11 +30,12 @@ class : $(CLASS)
 
 jar : guidoengine.jar drawcommand.jar
 
+# not use $(CLASS) or $(CLASSDRAWC), it not include inner class declaration
 guidoengine.jar : $(CLASS)
-	jar cvf guidoengine.jar $(CLASS)
+	jar cvf guidoengine.jar guidoengine/*.class
 
 drawcommand.jar : $(CLASSDRAWC)
-	jar cvf drawcommand.jar $(CLASSDRAWC)
+	jar cvf drawcommand.jar drawcommand/*.class
 
 guidocrash : guidocrash.class
 	$(JAVA) guidocrash 
