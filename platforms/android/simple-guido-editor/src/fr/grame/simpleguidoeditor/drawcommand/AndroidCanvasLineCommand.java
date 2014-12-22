@@ -15,21 +15,14 @@ public class AndroidCanvasLineCommand extends LineCommand implements DrawToCanva
   public void drawToCanvas(Canvas canvas, GuidoCanvasView view) {
     
     view.correctTransformMatrix(canvas);
-    float x1 = (float)(_x1);
-    float y1 = (float)(_y1);
-    float x2 = (float)(_x2);
-    float y2 = (float)(_y2);
-    /*float width = Math.abs(x2 - x1);
-    float height = Math.abs(y2 - y1);*/
-    double pen_width = view._PEN_WIDTHS.get(view._PEN_WIDTHS.size() - 1);
 
     Paint paint = new Paint();
     
-    paint.setColor(view._PEN_COLORS.get(view._PEN_COLORS.size() - 1));
+    paint.setColor(view.getCurrentPenColor());
     paint.setStyle(Paint.Style.STROKE);
-    paint.setStrokeWidth((float) pen_width);
+    paint.setStrokeWidth(view.getCurrentPenWidth());
 
-    canvas.drawLine(x1, y1, x2, y2, paint);
+    canvas.drawLine(_x1, _y1, _x2, _y2, paint);
     
     view.resetTransformMatrix(canvas);
   }

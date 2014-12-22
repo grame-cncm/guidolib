@@ -1,18 +1,18 @@
 package fr.grame.simpleguidoeditor.drawcommand;
 
-import drawcommand.PopPenColorCommand;
-
 import android.graphics.Canvas;
+import drawcommand.PopFillColorCommand;
 import fr.grame.simpleguidoeditor.GuidoCanvasView;
 
-public class AndroidCanvasPopPenColorCommand extends PopPenColorCommand implements DrawToCanvas {
+public class AndroidCanvasPopFillColorCommand extends PopFillColorCommand implements DrawToCanvas {
 
-	public AndroidCanvasPopPenColorCommand() {
+	public AndroidCanvasPopFillColorCommand() {
 		super();
 	}
 
 	@Override
 	public void drawToCanvas(Canvas canvas, GuidoCanvasView view) {
-		view.popPenColor();
+		view.popFillColor();
 	}
+
 }

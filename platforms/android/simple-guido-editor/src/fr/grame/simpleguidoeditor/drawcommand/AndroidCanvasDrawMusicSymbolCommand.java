@@ -14,20 +14,16 @@ public class AndroidCanvasDrawMusicSymbolCommand extends DrawMusicSymbolCommand 
 
   @Override
   public void drawToCanvas(Canvas canvas, GuidoCanvasView view) {
-    double x = _x;
-    double y = _y;
-    //double size = view._MUSIC_FONT_SIZE;
-
     view.correctTransformMatrix(canvas);
 
     Paint paint = new Paint();
     paint.setTypeface(view._MUSIC_FONT);
     paint.setColor(view._FONT_COLOR);
-    paint.setTextSize((float)(view._MUSIC_FONT_SIZE));
+    paint.setTextSize(view._MUSIC_FONT_SIZE);
 
     StringBuilder mus_glyph_to_string= new StringBuilder(1);
     mus_glyph_to_string.append(Character.toChars(_inSymbolID));
-    canvas.drawText(mus_glyph_to_string.toString(), (float) x, (float) y, paint);
+    canvas.drawText(mus_glyph_to_string.toString(), _x, _y, paint);
     view.resetTransformMatrix(canvas);
   }
 }

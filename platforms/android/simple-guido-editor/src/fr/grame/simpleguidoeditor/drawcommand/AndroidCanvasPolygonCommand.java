@@ -26,7 +26,7 @@ public class AndroidCanvasPolygonCommand extends PolygonCommand implements DrawT
     
     Paint paint = new Paint();
     
-    paint.setColor(view._PEN_COLORS.get(view._PEN_COLORS.size() - 1));
+    paint.setColor(view.getCurrentFillColor());
     paint.setStyle(Paint.Style.FILL);
     
     canvas.drawPath(path, paint);

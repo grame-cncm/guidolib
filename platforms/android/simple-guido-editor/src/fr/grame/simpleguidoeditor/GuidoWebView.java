@@ -1,44 +1,29 @@
 package fr.grame.simpleguidoeditor;
 
-import guidoengine.*;
-
+import guidoengine.guidoscore;
 import android.content.Context;
 import android.util.AttributeSet;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
-
 import android.webkit.WebView;
 
 public class GuidoWebView extends WebView {
 
-  private static String gmntosvg(String gmn, String font) {
+  private static String gmntosvg(String gmn) {
        guidoscore gmnscore = new guidoscore();
-       int err = gmnscore.ParseString(gmn);
+       gmnscore.OpenParser();
+       int err = gmnscore.String2AR(gmn);
+       gmnscore.CloseParser();
        err = gmnscore.AR2GR();
        err = gmnscore.ResizePageToMusic();
-       String out = gmnscore.SVGExportWithFontSpec(1, "", font);
+       String out = null;
+       if(err == 0)
+    	   out = gmnscore.GR2SVG(1, true, "", 0);
        gmnscore.close();
        return out;
    }
 
-   private String getFont() {
-       BufferedReader temp_br = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.guido2)));
-       StringBuilder temp_total = new StringBuilder();
-       String temp_line;
-       try {
-         while ((temp_line = temp_br.readLine()) != null) {
-             temp_total.append(temp_line);
-         }
-       }
-       catch (IOException e) { // do nothing
-       }
-       return temp_total.toString();
-   }
-
   public void do_loading() {
     if (SimpleGuidoEditor._gmn != null) {
-      String svg = gmntosvg(SimpleGuidoEditor._gmn, getFont());
+      String svg = gmntosvg(SimpleGuidoEditor._gmn);
       if (svg != null) {
         loadData(svg, "image/svg+xml", null);
         return;

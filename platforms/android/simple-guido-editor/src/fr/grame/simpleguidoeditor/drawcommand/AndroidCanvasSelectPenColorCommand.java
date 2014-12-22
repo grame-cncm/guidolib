@@ -14,7 +14,6 @@ public class AndroidCanvasSelectPenColorCommand extends SelectPenColorCommand im
   
   @Override
   public void drawToCanvas(Canvas canvas, GuidoCanvasView view) {
-    view._PEN_COLORS.add(Color.argb(_alpha, _red, _green, _blue));
+    view.setCurrentPenColor(Color.argb(_alpha, _red, _green, _blue));
   }
-
 }

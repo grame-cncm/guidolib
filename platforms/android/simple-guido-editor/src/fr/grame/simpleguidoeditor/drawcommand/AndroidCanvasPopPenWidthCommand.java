@@ -12,6 +12,6 @@ public class AndroidCanvasPopPenWidthCommand extends PopPenWidthCommand implemen
 
   @Override
   public void drawToCanvas(Canvas canvas, GuidoCanvasView view) {
-    view._PEN_WIDTHS.remove(view._PEN_WIDTHS.size() - 1);
+		view.popPenWidth();
   }
 }
