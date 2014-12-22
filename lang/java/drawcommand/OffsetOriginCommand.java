@@ -1,7 +1,7 @@
 package drawcommand;
 
    
-public class OffsetOriginCommand extends GuidoDrawCommand implements PrintableDrawCommand {
+public class OffsetOriginCommand implements PrintableDrawCommand {
 
   public float _x;
   public float _y;

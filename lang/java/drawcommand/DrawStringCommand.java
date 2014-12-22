@@ -1,7 +1,7 @@
 package drawcommand;
 
    
-public class DrawStringCommand extends GuidoDrawCommand implements PrintableDrawCommand {
+public class DrawStringCommand implements PrintableDrawCommand {
 
   public float _x;
   public float _y;

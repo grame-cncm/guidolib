@@ -1,7 +1,7 @@
  package drawcommand;
 
    
-public class SetTextFontCommand extends GuidoDrawCommand implements PrintableDrawCommand {
+public class SetTextFontCommand implements PrintableDrawCommand {
 
   public String _name;
   public int _size;

@@ -1,7 +1,7 @@
 package drawcommand;
 
    
-public class GetFontColorCommand extends GuidoDrawCommand implements PrintableDrawCommand {
+public class GetFontColorCommand implements PrintableDrawCommand {
 
   public GetFontColorCommand() {
     super();
