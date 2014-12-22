@@ -104,7 +104,7 @@ void CanvasDevice::Polygon(const float * xCoords, const float * yCoords, int cou
 	}
 	EM_ASM(
 		gU1D0cANVA$.CONTEXT.closePath();
-		gU1D0cANVA$.CANVAS.fillStyle = gU1D0cANVA$.FILL_COLOR;
+		gU1D0cANVA$.CONTEXT.fillStyle = gU1D0cANVA$.FILL_COLOR;
 		gU1D0cANVA$.CONTEXT.fill();
 		gU1D0cANVA$.resetTransformMatrix(gU1D0cANVA$.CONTEXT);
 	);
@@ -116,7 +116,7 @@ void CanvasDevice::Rectangle(float left,  float top, float right, float bottom)
 		gU1D0cANVA$.correctTransformMatrix(gU1D0cANVA$.CONTEXT);
 		gU1D0cANVA$.CONTEXT.beginPath();
 		gU1D0cANVA$.CONTEXT.rect($0, $1, $2 - $0, $3 - $1);
-		gU1D0cANVA$.CANVAS.fillStyle = gU1D0cANVA$.FILL_COLOR;
+		gU1D0cANVA$.CONTEXT.fillStyle = gU1D0cANVA$.FILL_COLOR;
 		gU1D0cANVA$.CONTEXT.fill();
 		gU1D0cANVA$.resetTransformMatrix(gU1D0cANVA$.CONTEXT);
 	}, left, top, right, bottom);
@@ -166,7 +166,7 @@ void CanvasDevice::PushPen(const VGColor & inColor, float inWidth)
 {
 	EM_ASM_ARGS({
 		var strokeStyle = "rgba("+$0+","+$1+","+$2+","+($3/gU1D0cANVA$.CHAR_MAX_AS_FLOAT)+")";
-		gU1D0cANVA$.CANVAS.strokeStyle = strokeStyle;
+		gU1D0cANVA$.CONTEXT.strokeStyle = strokeStyle;
 		gU1D0cANVA$.CONTEXT.lineWidth = $4;
 		gU1D0cANVA$.PEN.push({ "color" : strokeStyle, "width" : $4});
 	}, inColor.mRed, inColor.mGreen, inColor.mBlue, inColor.mAlpha, inWidth);
@@ -178,7 +178,7 @@ void CanvasDevice::PopPen()
 		gU1D0cANVA$.PEN.pop();
 		if (gU1D0cANVA$.PEN.length > 0) {
 			var pen = gU1D0cANVA$.PEN[gU1D0cANVA$.PEN.length - 1];
-			gU1D0cANVA$.CANVAS.strokeStyle = pen.color;
+			gU1D0cANVA$.CONTEXT.strokeStyle = pen.color;
 			gU1D0cANVA$.CONTEXT.lineWidth = pen.width;
 		} else {
 			console.log("Popping pen but the queue is empty");
@@ -418,7 +418,7 @@ void CanvasDevice::SelectPenColor(const VGColor & inColor)
 		var strokeStyle = "rgba("+$0+","+$1+","+$2+","+($3/gU1D0cANVA$.CHAR_MAX_AS_FLOAT)+")";
 		gU1D0cANVA$.PEN_COLORS.length = 0;
 		gU1D0cANVA$.PEN_COLORS.push(strokeStyle);
-		gU1D0cANVA$.CANVAS.strokeStyle = strokeStyle;
+		gU1D0cANVA$.CONTEXT.strokeStyle = strokeStyle;
 	}, inColor.mRed, inColor.mGreen, inColor.mBlue, inColor.mAlpha);
 }
 // 50
@@ -431,7 +431,7 @@ void CanvasDevice::PushPenColor(const VGColor & inColor)
 	EM_ASM_ARGS({
 		var strokeStyle = "rgba("+$0+","+$1+","+$2+","+($3/gU1D0cANVA$.CHAR_MAX_AS_FLOAT)+")";
 		gU1D0cANVA$.PEN_COLORS.push(strokeStyle);
-		gU1D0cANVA$.CANVAS.strokeStyle = strokeStyle;
+		gU1D0cANVA$.CONTEXT.strokeStyle = strokeStyle;
 	}, inColor.mRed, inColor.mGreen, inColor.mBlue, inColor.mAlpha);
 }
 // 52
@@ -440,7 +440,7 @@ void CanvasDevice::PopPenColor()
 	EM_ASM(
 		gU1D0cANVA$.PEN_COLORS.pop();
 		if (gU1D0cANVA$.PEN_COLORS.length > 0) {
-			gU1D0cANVA$.CANVAS.strokeStyle = gU1D0cANVA$.PEN_COLORS[gU1D0cANVA$.PEN_COLORS.length - 1];
+			gU1D0cANVA$.CONTEXT.strokeStyle = gU1D0cANVA$.PEN_COLORS[gU1D0cANVA$.PEN_COLORS.length - 1];
 		} else {
 			console.log("Popping pen color but the queue is empty");
 		}
@@ -460,7 +460,7 @@ void CanvasDevice::PopPenWidth()
 	EM_ASM(
 		gU1D0cANVA$.PEN_WIDTHS.pop();
 		if (gU1D0cANVA$.PEN_WIDTHS.length > 0) {
-			gU1D0cANVA$.CANVAS.lineWidth = gU1D0cANVA$.PEN_WIDTHS[gU1D0cANVA$.PEN_WIDTHS.length - 1];
+			gU1D0cANVA$.CONTEXT.lineWidth = gU1D0cANVA$.PEN_WIDTHS[gU1D0cANVA$.PEN_WIDTHS.length - 1];
 		} else {
 		console.log("Popping pen width but the queue is empty");
 		}
