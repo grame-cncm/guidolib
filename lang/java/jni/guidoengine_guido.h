@@ -53,6 +53,14 @@ JNIEXPORT jint JNICALL Java_guidoengine_guido_Init
 
 /*
  * Class:     guidoengine_guido
+ * Method:    shutdown
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_guidoengine_guido_shutdown
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     guidoengine_guido
  * Method:    xml2gmn
  * Signature: ()Z
  */

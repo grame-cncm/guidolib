@@ -31,8 +31,7 @@ package guidoengine;
 /**
 	Guido to MIDI file settings
 */
-public class guido2midiparams
-{
+public class guido2midiparams {
 	private final int kMaxVoices = 256;
 	public int		fTempo;				///< default tempo in quarter per minute - default value: 120
 	public int		fTicks;				///< ticks per quarternote - default value: 960 (64*3*5)
@@ -80,7 +79,7 @@ public class guido2midiparams
 			+ " duration: " +  fDFactor + " stacc/slur/tenuto: " + fStaccatoFactor + "/" + fSlurFactor + "/" + fTenutoFactor
 			+ " fermata: " + fFermataFactor);
 	}
-
+	
 	/** Internal jni initialization method.
 		Automatically called at package init.
 	*/

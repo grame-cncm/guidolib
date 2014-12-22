@@ -44,8 +44,7 @@ package guidoengine;
     <li> the current tag: modified by {@code OpenTag()} and {@code CloseTag()} </li>
 	</ul>
 */
-public class guidofactory
-{ 
+public class guidofactory { 
 	public final long fFactoryHandler;
 
 	public guidofactory()	{ fFactoryHandler = 0; }
@@ -251,11 +250,21 @@ public class guidofactory
 	*/
 	public native final synchronized int OpenTag(String tagName, long tagID);
 
+	/**
+	 * Add a range tag to the current voice.
+	 * @param tagName
+	 * @param tagID
+	 * @return
+	 */
+	public native final synchronized int  OpenRangeTag(String tagName, long tagID);
+	
 	// ----------------------------------------------------------------------------
 	/** Indicates that the current tag is a range tag.
 	
 			@return an error code.
+		@deprecated use {@link #OpenTag()} or {@link #OpenRangeTag()} 
 	*/	
+	@Deprecated
 	public native final synchronized int IsRangeTag();
 
 	// ----------------------------------------------------------------------------

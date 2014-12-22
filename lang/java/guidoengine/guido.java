@@ -59,6 +59,7 @@ public final class guido {
         try {
 			guidolayout.Init ();
 			guidopageformat.Init ();
+			parserError.Init();
 			guidoscore.Init ();
 			guidodate.Init ();
 			guidodrawdesc.Init ();
@@ -68,7 +69,9 @@ public final class guido {
 			guidosegment.Init ();
 			guidofactory.Init ();
 			guido2midiparams.Init();
+			limitparams.Init();
 			guidoscoremap.Init();
+			guidopianoroll.Init();
 			System.out.println("GUIDOEngine version " + GetVersion() + " - JNI interface version " + GetJNIVersion() + " initialized.");
 		} catch (UnsatisfiedLinkError e) {
 			System.err.println("GUIDOEngine native code library initialization failed.\n" + e);
@@ -85,6 +88,12 @@ public final class guido {
     */
 	public static native final synchronized int Init(String guidoFont, String textFont);
 
+	/**
+	 * Guido shut down.
+	 * Actually release the font allocated by the engine.
+	 */
+	public static native final synchronized void shutdown();
+	
 	/** Check the libMusicXML library availability
 		@return true when available
 	*/
@@ -118,7 +127,9 @@ public final class guido {
 	/**
         Gives the line of a Guido script where the last parse error has occured.
 		@return a line number.
+		@deprecated replaced by {@link guidoengine.guidoparser#GetErrorLine()}
 	*/
+	@Deprecated
 	public static native final int	GetParseErrorLine();
 
 	/** Converts internal Guido units into centimeters.
