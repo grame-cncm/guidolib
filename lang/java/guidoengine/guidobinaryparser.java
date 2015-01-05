@@ -5,6 +5,10 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Parse guido binary export and add draw command into guidocommandbattery object.
+ *
+ */
 public class guidobinaryparser {
 
 	/* codes for parser */
@@ -86,20 +90,21 @@ public class guidobinaryparser {
 	}
 
 	public static String getString(byte[] data, int place, int n) {
-		String str = "";
-		int i = place;
+		StringBuilder str = new StringBuilder();
 		if (n < 0) {
 			n = 1000000;
 		}
-		while ((guidobinaryparser.getUnsignedChar(data, i) != '\0') && (i < n)) {
-			str += new String(data, i, 1);
-			if (i == 100) {
+		int i = 0;
+		while ((guidobinaryparser.getUnsignedChar(data, place) != '\0') && (i < n)) {
+			str.append(new String(data, place, 1));
+			if (place == 100) {
 				// Log.w("SimpleGuidoEditor", "INTRACTABLE string");
 				break;
 			}
-			i = i + 1;
+			place ++;
+			i++;
 		}
-		return str;
+		return str.toString();
 	}
 
 	public static int moveReadPositionByChar(int place) {
