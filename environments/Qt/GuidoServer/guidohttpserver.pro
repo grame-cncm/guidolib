@@ -23,4 +23,4 @@ INCLUDEPATH += ../../../server
 win32:INCLUDEPATH += ../../../server/json
 INCLUDEPATH += /usr/local/include
 
-include( ../GUIDOEngineLink.pri )
+include( GUIDOEngineLink.pri )
