@@ -33,8 +33,7 @@ package guidoengine;
 	Guido dates are rational values indicating fractions of a whole note.
 	They are used for dates as well as for durations.
 */
-public class guidodate
-{
+public class guidodate {
     public int fNum;
 	public int fDenum;
 
@@ -47,7 +46,7 @@ public class guidodate
 		fNum = num;
 		fDenum = denum;
 	}
-
+	
 	/** Internal jni initialization method.
 		Automatically called at package init.
 	*/

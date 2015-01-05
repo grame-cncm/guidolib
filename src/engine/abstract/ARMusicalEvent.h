@@ -56,6 +56,8 @@ public:
     virtual void printGMNName(std::ostream& os) const    { os << "printGMNName() needs to be implemented in subclasses; "; }
     virtual void printParameters(std::ostream& os) const { os << "printParameters() needs to be implemented in subclasses; "; }
 
+    virtual void forceNoteAppearance(NVstring noteAppearance) {};
+
 protected:
     int mPoints;
 };

@@ -48,6 +48,9 @@ public:
 		float notebreite);
 
 	virtual ~GRFlag();
+    
+    virtual void configureForChord(GRGlobalStem *gstem, const TYPE_DURATION& duration);
+    virtual void configureForSingleNote(GREvent *sngnot, const TYPE_DURATION& duration);
 
 	virtual void changeStemLength (GREvent * sngnot, float inLen, GDirection stemdir);
 
@@ -81,6 +84,9 @@ protected:
 	// is set to one, if the flag should be drawn straight...
 	bool 				mStraight;
 
+    GDirection     fStemdir;
+    float          fStemlength;
+    float          fNotebreite;
 };
 
 #endif

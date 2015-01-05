@@ -56,6 +56,7 @@ public:
             float getTextSize()     const { return fTextSize; }
             bool  getLeftBrace()    const { return fLeftBrace; }
             bool  getRightBrace()   const { return fRightBrace; }
+            NVstring getDispNote()  const { return fDispNote; }
 
             bool  isFormatSet()     const { return fFormatSet; } 
             bool  isDySet()         const { return (fDy1TagIsSet || fDy2TagIsSet); }
@@ -68,6 +69,7 @@ protected:
     float    fLineThickness;
     bool     fTextBold;
     float    fTextSize;
+    NVstring fDispNote;
 
     int	  fBaseNumerator;
     int	  fBaseDenominator;

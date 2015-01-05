@@ -28,6 +28,8 @@ public:
 	GRStdNoteHead(GREvent * sngnote, const TYPE_DURATION & inDur, GDirection inStemDirection = dirAUTO);
 	virtual	 	~GRStdNoteHead();
 
+    virtual void configureNoteHead(const TYPE_DURATION &inDur);
+
 	virtual NVPoint getNoteHeadPosition() const;
 	virtual const NVPoint & getPosition() const;
 
@@ -77,6 +79,8 @@ protected:
 	BracketsType mBracketsType;
 
 	bool mNoteHeadHaveToBeDrawn;
+
+    GREvent *sngnot;
 };
 
 #endif

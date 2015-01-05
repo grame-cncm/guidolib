@@ -153,6 +153,14 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidofactory_OpenTag
 
 /*
  * Class:     guidoengine_guidofactory
+ * Method:    OpenRangeTag
+ * Signature: (Ljava/lang/String;J)I
+ */
+JNIEXPORT jint JNICALL Java_guidoengine_guidofactory_OpenRangeTag
+  (JNIEnv *, jobject, jstring, jlong);
+
+/*
+ * Class:     guidoengine_guidofactory
  * Method:    IsRangeTag
  * Signature: ()I
  */

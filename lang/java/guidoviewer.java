@@ -25,17 +25,47 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
-import java.awt.print.*;
-import java.awt.geom.*;
-import java.io.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.imageio.*;
-import com.sun.image.codec.jpeg.ImageFormatException;
-import guidoengine.*;
+import guidoengine.guido;
+import guidoengine.guido2midiparams;
+import guidoengine.guidodrawdesc;
+import guidoengine.guidopageformat;
+import guidoengine.guidopaint;
+import guidoengine.guidoscore;
+import guidoengine.guidoscoremap;
+import guidoengine.guidosegment;
+
+import java.awt.BorderLayout;
+import java.awt.Canvas;
+import java.awt.CheckboxMenuItem;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Menu;
+import java.awt.MenuBar;
+import java.awt.MenuItem;
+import java.awt.MenuShortcut;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 //--------------------------------------------------------------------
 public class guidoviewer {  
@@ -182,7 +212,7 @@ class scorePanel extends Canvas implements Printable {
 	}
 
 
-	public void saveAsPNG(File file) throws ImageFormatException, IOException {
+	public void saveAsPNG(File file) throws IOException {
 
        int screenDpi = Toolkit.getDefaultToolkit().getScreenResolution();
        float w = guido.Inches2Unit(getWidth() / screenDpi);

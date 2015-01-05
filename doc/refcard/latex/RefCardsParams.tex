@@ -1,3 +1,4 @@
+
 \documentclass[a4paper, landscape, 10pt]{article}
 
 \usepackage{tabularx}
@@ -318,6 +319,7 @@
     &lineThickness&tuplet line thickness&unit&0.08&&\\
     &bold&bold text or not&boolean string&``false''&``true'' - ``false''&\\
     &textSize&text size&unit&1.0&&\\
+    &dispNote&forces note display&duration string&[automatic]&``/1'' - ``/2'' - ``/4'' - ``/8'' - ``/16'' - &\\
     &dx - color&&&&&\\
     \hline
     \textbf{\textbackslash{}turn}&mode&mode type&string&``cautionnary''&``cautionnary''&\\
@@ -331,8 +333,6 @@
     &color&&&&&\\
     \hline
 \end{tabularx}
-
-\bigskip
 
 \textbf{dx/dy} : horiz./vert. offset | Value type : unit | Default value : 0\\
 \textbf{color} : element color | Value type : string. Default value : ``black'' | Examples : ``red'' - ``0x135618''\\

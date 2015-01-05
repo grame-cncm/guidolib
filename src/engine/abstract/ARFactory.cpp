@@ -109,6 +109,7 @@
 #include "ARCluster.h"
 #include "ARGlissando.h"
 #include "ARSymbol.h"
+#include "ARTuplet.h"
 #include "ARFeatheredBeam.h"
 #include "NoteAndChordFactory.h"
 #include "NoteAndChordParser.h"
@@ -155,6 +156,7 @@ ARFactory::ARFactory()
 	mCurrentCluster(NULL),
     mCurrentTremolo(NULL),
     mCurrentChordTag(NULL),
+    mCurrentTuplet(NULL),
 	mVoiceNum(1),
 	mCurrentTags(0),
 	mVoiceAdded(false),
@@ -299,6 +301,7 @@ void ARFactory::addVoice()
     mCurrentTrill = NULL;
     mCurrentCluster = NULL;
     mCurrentTremolo = NULL;
+    mCurrentTuplet = NULL;
     mCurrentChordTag = NULL;
     mVoiceAdded = true;
 }
@@ -521,6 +524,10 @@ void ARFactory::addEvent()
                 mCurrentVoice->AddTail( mCurrentEvent );
         }
     }
+    else if (mCurrentTuplet) {
+        mCurrentEvent->forceNoteAppearance(mCurrentTuplet->getDispNote());
+        mCurrentVoice->AddTail( mCurrentEvent );
+    }
     else
         mCurrentVoice->AddTail( mCurrentEvent );
  
@@ -541,10 +548,8 @@ void ARFactory::addEvent()
     mCurrentVoice->AddTail(mToAddList.RemoveHead());
     }*/
 
-    
     mLastEvent = mCurrentEvent;
     mCurrentEvent = 0;
-
 }
 
 // ----------------------------------------------------------------------------
@@ -1574,7 +1579,7 @@ void ARFactory::createTag( const char * name, int no )
 				ARTuplet * tmp = new ARTuplet;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
-				
+                mCurrentTuplet = tmp;
 			}
 			else if (!strcmp(name,"title"))
 			{
@@ -1826,6 +1831,8 @@ void ARFactory::endTag()
             
             mCurrentTremolo = NULL;
         }
+        else if (tag == mCurrentTuplet)
+            mCurrentTuplet = NULL;
 
         ARPositionTag * myptag = dynamic_cast<ARPositionTag *>(tag);
 

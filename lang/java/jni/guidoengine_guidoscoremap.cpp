@@ -91,7 +91,7 @@ JNIEXPORT jboolean JNICALL Java_guidoengine_guidoscoremap_get (JNIEnv * env, job
 	int size = map->size();
 	if (map && (index >= 0) && (index < size)) {
 		Time2GraphicMap::const_iterator i = map->begin();
-		while (index--) i++;
+		while (index--) i++; // TODO GGX On ne peut pas directement acceder à l'index ???
 		TimeSegment t = i->first; 
 		setSegment (env, timeseg, t.first, t.second);
 		setRect (env, rect, i->second);

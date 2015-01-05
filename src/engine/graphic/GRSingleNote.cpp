@@ -66,7 +66,7 @@ using namespace std;
 //____________________________________________________________________________________
 GRSingleNote::GRSingleNote( GRStaff* inStaff, ARNote* arnote, const TYPE_TIMEPOSITION& pos, const TYPE_DURATION& dur)
   : GRNote( inStaff, arnote, pos, dur), mNumHelpLines(0),
-	mStemDir(dirAUTO), mStemDirSet(false), mHeadState(ARTHead::NOTSET)
+  mStemDir(dirAUTO), mStemDirSet(false), mHeadState(ARTHead::NOTSET), mNoteAppearance(arnote->getNoteAppearance())
 {
 	// builds a grafical sub-part of abstractRepresentation
 	assert(arnote);
@@ -337,8 +337,7 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 {
 	// if template-display not wanted select normal length
 	mDurTemplate = p_durtemplate;
-	if (mDurTemplate <= DURATION_0)
-	{
+	if (mDurTemplate <= DURATION_0) {
 		mNumHelpLines = 0;
 		return;		// this just does nothing more
 	}
@@ -350,26 +349,23 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 
 	// the creation of the standard elements ....
 	// creates notehead, depends on length or templateLength
-	mNoteHead =  new GRStdNoteHead( this, mDurTemplate, tmpdir );
-	AddTail( mNoteHead );
+	mNoteHead = new GRStdNoteHead(this, mDurTemplate, tmpdir);
+	AddTail(mNoteHead);
 
 	// this is dependant on size!
 	mNoteBreite = ((mNoteHead->getLeftSpace() + mNoteHead->getRightSpace()) / (float) mSize);
 	float tmplength = mStemLen;
 	// the Stem-Straight-Flag is not used everywhere
 
-	GRStem * tmp = NULL;
+	GRStem *tmp = NULL;
 	GDirection stemTmpDirection = tmpdir;
 
-	if (mGlobalStem == 0)
-	{
-		if (mStemDir == dirAUTO)
-		{
+	if (mGlobalStem == 0) {
+		if (mStemDir == dirAUTO) {
 			tmp =  new GRStem( this, mDurTemplate, stemTmpDirection, tmplength, mNoteBreite); // was 60?);
 			mStemDir = tmp->mStemDir;
 		}
-		else
-		{
+		else {
 			stemTmpDirection = mStemDir;
 			tmp = new GRStem( this, mDurTemplate, stemTmpDirection, tmplength, mNoteBreite ) ; // was 60? );
 			mStemDirSet = true;
@@ -380,16 +376,15 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 
 		// here we have to add the flags ...
 		GRFlag * tmpflag = new GRFlag( this, mDurTemplate, mStemDir, mStemLen, mNoteBreite ); // was 60?);
-		if (mColRef)
-		{
-		}
+
 		AddTail(tmpflag);
+
+        forceAppearance(); // Force note appearance for notes in tuplet where dispNote has been set
 	}
 	 
 	ConstMusicalSymbolID noteHeadSymbolTmp = mNoteHead->getSymbol();
 	// - Adjust stem length if it's a cross notehead
-	if (noteHeadSymbolTmp == kFullXHeadSymbol)
-	{
+	if (noteHeadSymbolTmp == kFullXHeadSymbol) {
 		setFirstSegmentDrawingState(false);
 
 		if (stemTmpDirection == dirUP)
@@ -397,15 +392,13 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 		else if (stemTmpDirection == dirDOWN)
 			setStemOffsetStartPosition(-4);
 	}
-	else if (noteHeadSymbolTmp == kFullTriangleHeadSymbol || noteHeadSymbolTmp == kHalfTriangleHeadSymbol)
-	{
+	else if (noteHeadSymbolTmp == kFullTriangleHeadSymbol || noteHeadSymbolTmp == kHalfTriangleHeadSymbol) {
 		if (stemTmpDirection == dirUP)
 		    setStemOffsetStartPosition(47);
 		else if (stemTmpDirection == dirDOWN)
 			setFirstSegmentDrawingState(false);
 	}
-	else if (noteHeadSymbolTmp == kFullReversedTriangleHeadSymbol || noteHeadSymbolTmp == kHalfReversedTriangleHeadSymbol)
-	{
+	else if (noteHeadSymbolTmp == kFullReversedTriangleHeadSymbol || noteHeadSymbolTmp == kHalfReversedTriangleHeadSymbol) {
 		if (stemTmpDirection == dirUP)
 		    setFirstSegmentDrawingState(false);
 		else if (stemTmpDirection == dirDOWN)
@@ -438,13 +431,10 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 	setPosition(mPosition);
 
 	// now we adjust the stemlength (in certain cases, just when it is not long enough)
-	if (!mStemLengthSet && !mGlobalStem)
-	{
+	if (!mStemLengthSet && !mGlobalStem) {
 		GRStem * stem = getStem();
-		if (stem)
-		{
-			if (stem->mStemDir == dirUP)
-			{
+		if (stem) {
+			if (stem->mStemDir == dirUP) {
 				NVPoint stemendpos (stem->getPosition());
 				stemendpos.y -= stem->mStemLen;
                 float coef = 0;
@@ -456,15 +446,13 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
                 else
                     coef = 0.5f * mGrStaff->getNumlines() - 0.5f; // Stem length is set everytime as far as the middle of the staff.
 
-                if (stemendpos.y > coef * mCurLSPACE)
-                {
+                if (stemendpos.y > coef * mCurLSPACE) {
                     const float newlength = (stem->getPosition().y - coef * mCurLSPACE);
                     changeStemLength(newlength);
                     mStemLen = stem->mStemLen;
                 }
 			}
-			else if (stem->mStemDir == dirDOWN)
-			{
+			else if (stem->mStemDir == dirDOWN) {
 				NVPoint stemendpos (stem->getPosition());
 				stemendpos.y += stem->mStemLen;
                 float coef = 0;
@@ -476,8 +464,7 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
                 else
                     coef = 0.5f * mGrStaff->getNumlines() - 0.5f; // Stem length is set everytime as far as the middle of the staff.
 
-				if (stemendpos.y < coef * mCurLSPACE)
-				{
+				if (stemendpos.y < coef * mCurLSPACE) {
 					const float newlength = (coef * mCurLSPACE - stem->getPosition().y);
 					changeStemLength(newlength) ;
 					mStemLen = stem->mStemLen;
@@ -486,10 +473,43 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 		}
 	}
 
-	mNumHelpLines = mGrStaff->getNumHelplines( pitch, octave );
+	mNumHelpLines = mGrStaff->getNumHelplines(pitch, octave);
+
 	if (!mGlobalStem)
 		adjustHeadPosition();
+
 	updateBoundingBox();
+}
+
+void GRSingleNote::forceAppearance()
+{
+    if (mNoteAppearance.compare("")) {
+        TYPE_DURATION dur = 0;
+        if (!mNoteAppearance.compare("/1"))
+            dur = TYPE_DURATION(1, 1);
+        else if (!mNoteAppearance.compare("/2"))
+            dur = TYPE_DURATION(1, 2);
+        else if (!mNoteAppearance.compare("/4"))
+            dur = TYPE_DURATION(1, 4);
+        else if (!mNoteAppearance.compare("/8"))
+            dur = TYPE_DURATION(1, 8);
+        else if (!mNoteAppearance.compare("/16"))
+            dur = TYPE_DURATION(1, 16);
+        /*else if (!mNoteAppearance.compare("/32")) // REM: /32 pose un problème car quelque chose
+            dur = TYPE_DURATION(1, 32);                     est mal géré dans GRFlag::configureForSingleNote()
+        else if (!mNoteAppearance.compare("/64"))
+            dur = TYPE_DURATION(1, 64);*/
+
+        if ((double) dur != 0) {
+            getNoteHead()->configureNoteHead(dur);
+            getStem()->configureStem(dur);
+
+            if (!mGlobalStem)
+                getFlag()->configureForSingleNote(this, dur);
+            else
+                getFlag()->configureForChord(mGlobalStem, dur);
+        }
+    }
 }
 
 //____________________________________________________________________________________
