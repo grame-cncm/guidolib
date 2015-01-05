@@ -1,0 +1,20 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file>zoomIn.png</file>
+    <file>zoomOut.png</file>
+    <file>fontBigger.png</file>
+    <file>fontSmaller.png</file>
+    <file>add.png</file>
+    <file>addFromFile.png</file>
+    <file>remove.png</file>
+    <file>copy.png</file>
+    <file>paste.png</file>
+    <file>resize.png</file>
+    <file>new.png</file>
+    <file>save.png</file>
+    <file>saveAll.png</file>
+    <file>open.png</file>
+    <file>hAlign.png</file>
+    <file>vAlign.png</file>
+</qresource>
+</RCC>

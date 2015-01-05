@@ -1,0 +1,35 @@
+GuidoEditor Change Log
+
+version 2.6 - december 2014
+- Pdf documentation integrated
+
+version 2.5 - june 2013
+- support of \symbol tag: relative path management
+
+version 2.4
+- extended mappings support
+
+version 2.3
+- export supports svg and midi outputs.
+  Note that the export format is inferred from the output file extension,
+  use .svg for svg export and .mid for midi export.
+
+version 2.2 
+- bug Qt device corrected: incorrect setScale behavior, 
+  the tempo tag was affected with notes marking (e.g. [1/4]) was affected
+
+version 2.1 - march 2011
+- bug with print menu corrected: a new score was not printed unless saved to a file
+- same bug with export corrected
+- mutli formats export. The format is infered from the target file extension.
+  PNG is the default when no extension is specified. PDF output supported.
+
+version 2.0 - sept 2009
+- name changed from GuidoQtViewer to GuidoEditor
+- added code visualization and edition.
+
+version 1.0.1.0 - sept 2008
+ - preferences dialog box added for Guido engine parameters control 
+
+version 1.0.0.0 - june 2008
+ - first public version 
