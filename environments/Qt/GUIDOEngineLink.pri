@@ -3,7 +3,7 @@
 macx {
 	message("generates project for MacOS")
 	CONFIG+= i386 x86_64
-	QMAKE_MAC_SDK = macosx10.9
+#	QMAKE_MAC_SDK = macosx10.9
 	QMAKE_CXXFLAGS += -mmacosx-version-min=10.6
 }
 
@@ -12,7 +12,8 @@ ios {
 	QMAKE_CXXFLAGS += -DIOS
 	CONFIG += c++11
 	CONFIG+= arm64 armv7 armv7s
-	LIBS += -L../../../build/iOS/Release-iphoneos -lGUIDOEngine
+#	LIBS += -L../../../build/iOS/Release-iphoneos -lGUIDOEngine
+	LIBS += -L../../../../../build/iOS/Release-iphoneos -lGUIDOEngine
 }
 
 win32: {
@@ -30,7 +31,8 @@ win32: {
 
 # GUIDOEngine library link for each platform
 !DebugBuild {
-	macx:LIBS += -F../../../build/MacOS/Release -framework GUIDOEngine
+	macx:LIBS += -F../../../../../build/MacOS/Release -framework GUIDOEngine
+#	macx:LIBS += -F../../../build/MacOS/Release -framework GUIDOEngine
 	unix:!macx:LIBS += -L../../../cmake -lGUIDOEngine
 } else {
 	macx:LIBS += -F../../../build/MacOS/Debug -framework GUIDOEngine
