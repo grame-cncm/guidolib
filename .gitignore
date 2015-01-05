@@ -4,6 +4,10 @@ CMakeCache.txt
 CMakeLists.txt.user
 cmake_*
 *.xcodeproj
+build/GUIDOEngine.*
+build/libGUIDOEngine.a
+doc/html
+doc/refcard
 Debug
 Debug-iphoneos
 Release
