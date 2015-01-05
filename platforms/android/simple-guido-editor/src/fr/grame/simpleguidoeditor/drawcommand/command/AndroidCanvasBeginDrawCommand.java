@@ -1,9 +1,10 @@
-package fr.grame.simpleguidoeditor.drawcommand;
+package fr.grame.simpleguidoeditor.drawcommand.command;
 import drawcommand.BeginDrawCommand;
+import fr.grame.simpleguidoeditor.drawcommand.DrawToCanvas;
+import fr.grame.simpleguidoeditor.drawcommand.GuidoCanvasView;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
-import fr.grame.simpleguidoeditor.GuidoCanvasView;
 import android.graphics.Paint;
    
 public class AndroidCanvasBeginDrawCommand extends BeginDrawCommand implements DrawToCanvas {
@@ -19,7 +20,7 @@ public class AndroidCanvasBeginDrawCommand extends BeginDrawCommand implements D
     double top = canvas.getHeight();
     double bottom = 0;
 
-    Paint paint = new Paint();
+    Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     paint.setColor(Color.WHITE);
     paint.setStyle(Paint.Style.FILL);
     canvas.drawRect((float)left, (float)top, (float)right, (float)bottom, paint);

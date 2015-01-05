@@ -1,8 +1,9 @@
-package fr.grame.simpleguidoeditor.drawcommand;
+package fr.grame.simpleguidoeditor.drawcommand.command;
 import drawcommand.SelectPenColorCommand;
+import fr.grame.simpleguidoeditor.drawcommand.DrawToCanvas;
+import fr.grame.simpleguidoeditor.drawcommand.GuidoCanvasView;
 
 import android.graphics.Canvas;
-import fr.grame.simpleguidoeditor.GuidoCanvasView;
 import android.graphics.Color;
    
 public class AndroidCanvasSelectPenColorCommand extends SelectPenColorCommand implements DrawToCanvas {

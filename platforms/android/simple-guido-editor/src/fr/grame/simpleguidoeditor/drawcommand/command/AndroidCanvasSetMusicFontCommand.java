@@ -1,8 +1,9 @@
-package fr.grame.simpleguidoeditor.drawcommand;
+package fr.grame.simpleguidoeditor.drawcommand.command;
 import drawcommand.SetMusicFontCommand;
+import fr.grame.simpleguidoeditor.drawcommand.DrawToCanvas;
+import fr.grame.simpleguidoeditor.drawcommand.GuidoCanvasView;
 
 import android.graphics.Canvas;
-import fr.grame.simpleguidoeditor.GuidoCanvasView;
 import android.graphics.Typeface;
    
 public class AndroidCanvasSetMusicFontCommand extends SetMusicFontCommand implements DrawToCanvas {
@@ -13,7 +14,7 @@ public class AndroidCanvasSetMusicFontCommand extends SetMusicFontCommand implem
 
   @Override
   public void drawToCanvas(Canvas canvas, GuidoCanvasView view) {
-    view._MUSIC_FONT = Typeface.createFromAsset(view.getContext().getAssets(), "fonts/" + _name + ".ttf");
-    view._MUSIC_FONT_SIZE = _size;
+    view.setMusicFont(Typeface.createFromAsset(view.getContext().getAssets(), "fonts/" + _name + ".ttf"));
+    view.setMusicFontSize(_size);
   }
 }

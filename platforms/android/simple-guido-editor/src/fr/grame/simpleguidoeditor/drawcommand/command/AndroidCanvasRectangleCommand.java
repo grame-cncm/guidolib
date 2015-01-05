@@ -1,9 +1,10 @@
-package fr.grame.simpleguidoeditor.drawcommand;
+package fr.grame.simpleguidoeditor.drawcommand.command;
 import drawcommand.RectangleCommand;
+import fr.grame.simpleguidoeditor.drawcommand.DrawToCanvas;
+import fr.grame.simpleguidoeditor.drawcommand.GuidoCanvasView;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import fr.grame.simpleguidoeditor.GuidoCanvasView;
 
 public class AndroidCanvasRectangleCommand extends RectangleCommand implements DrawToCanvas {
 
@@ -23,7 +24,7 @@ public class AndroidCanvasRectangleCommand extends RectangleCommand implements D
     /*double width = Math.abs(right - left);
     double height = Math.abs(top - bottom);*/
 
-    Paint paint = new Paint();
+    Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     paint.setColor(view.getCurrentFillColor());
     paint.setStyle(Paint.Style.FILL);
     canvas.drawRect((float)left, (float)top, (float)right, (float)bottom, paint);

@@ -1,5 +1,9 @@
 package fr.grame.simpleguidoeditor.drawcommand;
 
+/**
+ * A pen is a color and a width.
+ *
+ */
 public class Pen {
 	private int color;
 	private float width;

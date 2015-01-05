@@ -1,8 +1,9 @@
-package fr.grame.simpleguidoeditor.drawcommand;
+package fr.grame.simpleguidoeditor.drawcommand.command;
 import drawcommand.SetOriginCommand;
+import fr.grame.simpleguidoeditor.drawcommand.DrawToCanvas;
+import fr.grame.simpleguidoeditor.drawcommand.GuidoCanvasView;
 
 import android.graphics.Canvas;
-import fr.grame.simpleguidoeditor.GuidoCanvasView;
    
 public class AndroidCanvasSetOriginCommand extends SetOriginCommand implements DrawToCanvas {
 
@@ -12,8 +13,8 @@ public class AndroidCanvasSetOriginCommand extends SetOriginCommand implements D
 
   @Override
   public void drawToCanvas(Canvas canvas, GuidoCanvasView view) {
-    int x = (int)(_x * view._GLOBAL_RESCALE_FACTOR);
-    int y = (int)(_y * view._GLOBAL_RESCALE_FACTOR);
+    int x = (int)(_x * view.getGlobalRescaleFactor());
+    int y = (int)(_y * view.getGlobalRescaleFactor());
 
     canvas.translate(0, 0);
     canvas.translate(x, y);

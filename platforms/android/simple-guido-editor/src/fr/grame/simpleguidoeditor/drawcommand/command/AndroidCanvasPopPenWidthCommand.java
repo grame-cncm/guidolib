@@ -1,8 +1,9 @@
-package fr.grame.simpleguidoeditor.drawcommand;
+package fr.grame.simpleguidoeditor.drawcommand.command;
 import drawcommand.PopPenWidthCommand;
+import fr.grame.simpleguidoeditor.drawcommand.DrawToCanvas;
+import fr.grame.simpleguidoeditor.drawcommand.GuidoCanvasView;
 
 import android.graphics.Canvas;
-import fr.grame.simpleguidoeditor.GuidoCanvasView;
    
 public class AndroidCanvasPopPenWidthCommand extends PopPenWidthCommand implements DrawToCanvas {
 

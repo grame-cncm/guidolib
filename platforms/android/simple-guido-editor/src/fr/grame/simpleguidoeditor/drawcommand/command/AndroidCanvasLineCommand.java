@@ -1,9 +1,10 @@
-package fr.grame.simpleguidoeditor.drawcommand;
+package fr.grame.simpleguidoeditor.drawcommand.command;
 import drawcommand.LineCommand;
+import fr.grame.simpleguidoeditor.drawcommand.DrawToCanvas;
+import fr.grame.simpleguidoeditor.drawcommand.GuidoCanvasView;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import fr.grame.simpleguidoeditor.GuidoCanvasView;
 
 public class AndroidCanvasLineCommand extends LineCommand implements DrawToCanvas {
 
@@ -16,7 +17,7 @@ public class AndroidCanvasLineCommand extends LineCommand implements DrawToCanva
     
     view.correctTransformMatrix(canvas);
 
-    Paint paint = new Paint();
+    Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     
     paint.setColor(view.getCurrentPenColor());
     paint.setStyle(Paint.Style.STROKE);

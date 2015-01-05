@@ -5,6 +5,9 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.webkit.WebView;
 
+/**
+ * View to raw the score in svg format.
+ */
 public class GuidoWebView extends WebView {
 
   private static String gmntosvg(String gmn) {

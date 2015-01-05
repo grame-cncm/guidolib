@@ -1,8 +1,9 @@
-package fr.grame.simpleguidoeditor.drawcommand;
+package fr.grame.simpleguidoeditor.drawcommand.command;
 import drawcommand.PolygonCommand;
+import fr.grame.simpleguidoeditor.drawcommand.DrawToCanvas;
+import fr.grame.simpleguidoeditor.drawcommand.GuidoCanvasView;
 
 import android.graphics.Canvas;
-import fr.grame.simpleguidoeditor.GuidoCanvasView;
 import android.graphics.Path;
 import android.graphics.Paint;
 
@@ -24,7 +25,7 @@ public class AndroidCanvasPolygonCommand extends PolygonCommand implements DrawT
       path.lineTo(_xCoords.get(i), _yCoords.get(i));
     }
     
-    Paint paint = new Paint();
+    Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     
     paint.setColor(view.getCurrentFillColor());
     paint.setStyle(Paint.Style.FILL);

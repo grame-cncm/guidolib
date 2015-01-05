@@ -1,8 +1,9 @@
-package fr.grame.simpleguidoeditor.drawcommand;
+package fr.grame.simpleguidoeditor.drawcommand.command;
 import drawcommand.DrawMusicSymbolCommand;
+import fr.grame.simpleguidoeditor.drawcommand.DrawToCanvas;
+import fr.grame.simpleguidoeditor.drawcommand.GuidoCanvasView;
 
 import android.graphics.Canvas;
-import fr.grame.simpleguidoeditor.GuidoCanvasView;
 
 import android.graphics.Paint;
 
@@ -16,10 +17,10 @@ public class AndroidCanvasDrawMusicSymbolCommand extends DrawMusicSymbolCommand 
   public void drawToCanvas(Canvas canvas, GuidoCanvasView view) {
     view.correctTransformMatrix(canvas);
 
-    Paint paint = new Paint();
-    paint.setTypeface(view._MUSIC_FONT);
-    paint.setColor(view._FONT_COLOR);
-    paint.setTextSize(view._MUSIC_FONT_SIZE);
+    Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    paint.setTypeface(view.getMusicFont());
+    paint.setColor(view.getFontColor());
+    paint.setTextSize(view.getMusicFontSize());
 
     StringBuilder mus_glyph_to_string= new StringBuilder(1);
     mus_glyph_to_string.append(Character.toChars(_inSymbolID));

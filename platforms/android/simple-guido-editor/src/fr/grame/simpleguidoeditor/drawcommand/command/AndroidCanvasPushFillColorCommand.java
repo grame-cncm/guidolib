@@ -1,9 +1,10 @@
-package fr.grame.simpleguidoeditor.drawcommand;
+package fr.grame.simpleguidoeditor.drawcommand.command;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
 import drawcommand.PushFillColorCommand;
-import fr.grame.simpleguidoeditor.GuidoCanvasView;
+import fr.grame.simpleguidoeditor.drawcommand.DrawToCanvas;
+import fr.grame.simpleguidoeditor.drawcommand.GuidoCanvasView;
 
 public class AndroidCanvasPushFillColorCommand extends PushFillColorCommand implements DrawToCanvas {
 

@@ -1,8 +1,9 @@
-package fr.grame.simpleguidoeditor.drawcommand;
+package fr.grame.simpleguidoeditor.drawcommand.command;
 
 import android.graphics.Canvas;
 import drawcommand.PopFillColorCommand;
-import fr.grame.simpleguidoeditor.GuidoCanvasView;
+import fr.grame.simpleguidoeditor.drawcommand.DrawToCanvas;
+import fr.grame.simpleguidoeditor.drawcommand.GuidoCanvasView;
 
 public class AndroidCanvasPopFillColorCommand extends PopFillColorCommand implements DrawToCanvas {
 

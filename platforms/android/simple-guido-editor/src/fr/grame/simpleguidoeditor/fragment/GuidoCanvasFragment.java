@@ -1,11 +1,12 @@
 package fr.grame.simpleguidoeditor.fragment;
  
 import fr.grame.simpleguidoeditor.R;
+import fr.grame.simpleguidoeditor.SimpleGuidoEditor;
 
 import android.view.inputmethod.InputMethodManager;
 import android.content.Context;
 
-import fr.grame.simpleguidoeditor.GuidoCanvasView;
+import fr.grame.simpleguidoeditor.drawcommand.GuidoCanvasView;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -29,7 +30,7 @@ public class GuidoCanvasFragment extends Fragment {
  
         RelativeLayout rootView = (RelativeLayout) inflater.inflate(R.layout.fragment_guido_canvas, container, false);
         GuidoCanvasView cv = (GuidoCanvasView) rootView.getChildAt(0);
-        cv.generateGuidoCanvas();
+        cv.generateGuidoCanvas(SimpleGuidoEditor._gmn);
         cv.invalidate();
         return rootView;
     }

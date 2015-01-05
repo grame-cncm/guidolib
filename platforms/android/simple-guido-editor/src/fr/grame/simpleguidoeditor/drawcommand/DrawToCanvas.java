@@ -1,10 +1,9 @@
 package fr.grame.simpleguidoeditor.drawcommand;
 import android.graphics.Canvas;
-import fr.grame.simpleguidoeditor.GuidoCanvasView;
 
 /**
- * Draw to android canvas 
- *
+ * Interface to draw in android canvas.
+ * The android draw command implements this interface.
  */
 public interface DrawToCanvas {
 

@@ -1,9 +1,12 @@
-package fr.grame.simpleguidoeditor.drawcommand;
-import drawcommand.NotifySizeCommand;
-
+package fr.grame.simpleguidoeditor.drawcommand.command;
 import android.graphics.Canvas;
-import fr.grame.simpleguidoeditor.GuidoCanvasView;
+import drawcommand.NotifySizeCommand;
+import fr.grame.simpleguidoeditor.drawcommand.DrawToCanvas;
+import fr.grame.simpleguidoeditor.drawcommand.GuidoCanvasView;
    
+/**
+ * Android specific notifySizeCommand.
+ */
 public class AndroidCanvasNotifySizeCommand extends NotifySizeCommand implements DrawToCanvas {
 
   public AndroidCanvasNotifySizeCommand(int width, int height) {
@@ -14,6 +17,6 @@ public class AndroidCanvasNotifySizeCommand extends NotifySizeCommand implements
   public void drawToCanvas(Canvas canvas, GuidoCanvasView view) {
     double rescale_x = (view.getWidth() * 1.0) / _width;
     double rescale_y = (view.getHeight() * 1.0) / _height;
-    view._GLOBAL_RESCALE_FACTOR = Math.min(rescale_x, rescale_y);
+    view.setGlobalRescaleFactor(Math.min(rescale_x, rescale_y));
   }
 }
