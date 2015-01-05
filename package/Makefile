@@ -21,7 +21,7 @@ WINLIB   := $(DEVKIT)-windows
 QTLIB    := $(DEVKIT)-Qt
 SRC 	 := guidolib-$(VERSION)-src
 
-files   := ../changelog.txt license.txt readme.txt ../src/guido2.ttf ../src/guido2.svg ../Acknowledgments.txt
+files   := ../changelog.txt license.txt readme.txt ../src/guido2.ttf ../src/guido2.svg ../misc/Acknowledgments.txt
 
 modules := guidolib
 
@@ -33,14 +33,14 @@ DOC		:=  ../doc/GUIDO-Format_de_Notation_Musicale.pdf \
 			../doc/refcard/latex/RefCardsParams.pdf \
 			../doc/refcard/latex/RefCardsTags.pdf
 
-SAMPLES := $(wildcard ../samples/*.cpp ../validate/guido*.cpp ../src/engine/tools/Null*.h)
+SAMPLES := $(wildcard ../src/samples/*.cpp ../validate/guido*.cpp ../src/engine/tools/Null*.h)
 
 ######### common include files 
-cominc  :=  $(wildcard ../src/engine/include/GUIDO*.h ../src/engine/devices/SVG*.h ) ../src/engine/include/TRect.h
+cominc  :=  $(wildcard ../src/engine/include/*.h ../src/engine/devices/SVG*.h )
 
 ######### win32 devices include files 
 win32inc := GDeviceWin32.h GSystemWin32.h GFontWin32.h  GDeviceWin32GDIPlus.h GSystemWin32GDIPlus.h GFontWin32GDIPlus.h
-win32inc := $(patsubst %, ../win32/src/%, $(win32inc))
+win32inc := $(patsubst %, ../platforms/win32/src/%, $(win32inc))
 
 ######### qt include files 
 qtinc  := $(wildcard ../src/engine/include/*.h)
@@ -80,7 +80,7 @@ docpack:
 srcpack:
 	cd .. && git archive -o __tmp__.tgz --prefix=package/$(SRC)/ HEAD && tar xzfP __tmp__.tgz && rm __tmp__.tgz
 	cp readme-src_package.txt $(SRC)/readme.txt
-	cp ../Acknowledgments.txt $(SRC)
+	cp ../misc/Acknowledgments.txt $(SRC)
 	tar czf $(SRC).tgz $(SRC)
 
 macos:
@@ -103,7 +103,7 @@ windows:
 	cp $(bin)/GUIDOEngine*.lib $(WINLIB)
 
 python:
-	tar czf pyGuido.tgz ../python
+	tar czf pyGuido.tgz ../lang/python
 
 qt:
 	rm -Rf $(QTLIB)
