@@ -8,8 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
+import fr.grame.android.drawcommand.GuidoCanvasView;
 import fr.grame.simpleguidoeditor.R;
-import fr.grame.simpleguidoeditor.drawcommand.GuidoCanvasView;
 
 /**
  * Fragment to draw score in a android canvas.

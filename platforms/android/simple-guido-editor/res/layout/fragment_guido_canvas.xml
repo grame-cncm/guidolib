@@ -5,7 +5,7 @@
     android:orientation="vertical" >
     
     <!-- Fragment with canvas view to draw the score -->
-    <fr.grame.simpleguidoeditor.drawcommand.GuidoCanvasView
+    <fr.grame.android.drawcommand.GuidoCanvasView
         android:id="@+id/guido_canvas"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
