@@ -3,14 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-     
-    <fr.grame.simpleguidoeditor.GuidoEditText android:id="@+id/gmn_text"
+    
+    <!-- Fragment with our custom text editor -->
+    <fr.grame.simpleguidoeditor.GuidoEditText
+        android:id="@+id/gmn_text"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:gravity="center"
-        android:text="[\\key&lt;3&gt; \\instr&lt;&quot;clarinet in A&quot;&gt; a \\slur (b \\intens&lt;&quot;p&quot;&gt; f ) g]"
-        android:textSize="20dp"
+        android:text="@string/gmn_code"
+        android:textSize="20sp"
         android:layout_centerInParent="true"/>
-     
  
 </RelativeLayout>

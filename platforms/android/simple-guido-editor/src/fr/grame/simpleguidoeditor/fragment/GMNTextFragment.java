@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
  
+/**
+ * Fragment to type gmn code.
+ */
 public class GMNTextFragment extends Fragment {
 
     @Override
