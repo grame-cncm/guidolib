@@ -1,14 +1,28 @@
 
+system	:= $(shell uname -s)
+ifeq ($(system), Darwin)
+	TARGET = mac
+else
+ifeq ($(system), MINGW32_NT-6.1)
+	TARGET = windows
+	QMAKEWIN ?= $(shell ../../../qt-win32)
+	MSVC 	 ?= $(shell ../../../vs-win32)
+else
+
+endif
+endif
 
 QMAKEIOS ?= $(HOME)/Qt5.4.0/5.4/ios/bin/qmake
 QMAKE    ?= qmake
 PROJECT := GuidoQt
 ROOT    := ..
-SIM     := iphoneos
 
-.PHONY : macos ios
+.PHONY : macos ios 
 
 all:
+	make $(TARGET)
+
+mac:
 	make macos
 	make ios
 
@@ -20,6 +34,11 @@ macos: macos/$(PROJECT).xcodeproj  libGuidoQt.a
 ios: ios/$(PROJECT).xcodeproj  libGuidoQt-iOS.a
 	@echo ===================================
 	@echo Build GuidoQt for ios
+	@echo ===================================
+
+windows: win32/$(PROJECT).vcxproj GuidoQt.lib
+	@echo ===================================
+	@echo Build $(PROJECT) for win32 done
 	@echo ===================================
 
 ###################
@@ -43,7 +62,16 @@ ios/$(PROJECT).xcodeproj : $(ROOT)/$(PROJECT).pro
 
 libGuidoQt-iOS.a:
 	xcodebuild -jobs 8 -project  ios/$(PROJECT)-iOS.xcodeproj -target $(PROJECT)-iOS -configuration Release
-#	cp ios/Release-$(SIM)/libGuidoQt.a libGuidoQt-iOS.a 
+
+###################
+# windows part
+###################
+win32/$(PROJECT).vcxproj : $(ROOT)/$(PROJECT).pro 
+	[ -d win32 ] || mkdir win32
+	cd win32 && $(QMAKEWIN) $(SPEC) $(ROOT)/..
+
+GuidoQt.lib:
+	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild win32/$(PROJECT).vcxproj /maxcpucount:4 /p:Configuration=Release"
 
 clean:
-	rm -rf ../../libGuidoQt*.a ios macos
+	rm -rf ../../libGuidoQt*.* ios macos win32

@@ -17,7 +17,7 @@ ios {
 }
 
 INCLUDEPATH += $$ROOT/src/engine/include 
-INCLUDEPATH += ../include
+INCLUDEPATH += $$PWD/include
 
 
 # Input
