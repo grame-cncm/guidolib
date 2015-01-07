@@ -20,7 +20,7 @@ macos: macos/$(PROJECT).xcodeproj  ../guido2image
 ###################
 # MacOS part
 ###################
-macos/$(PROJECT).xcodeproj : $(ROOT)/$(PROJECT).pro $(ROOT)/../GUIDOEngineLink.pri
+macos/$(PROJECT).xcodeproj : $(ROOT)/$(PROJECT).pro $(ROOT)/../GUIDOEngine.shared
 	[ -d macos ] || mkdir macos
 	cd macos && $(QMAKE) $(SPEC) $(ROOT)/..
 
