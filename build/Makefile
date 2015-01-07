@@ -9,7 +9,7 @@ ifeq ($(system), Darwin)
 	TARGET = mac
 else
 ifeq ($(system), MINGW32_NT-6.1)
-
+	TARGET = windows
 else
 
 endif
@@ -19,6 +19,9 @@ endif
 OUT  := GUIDOEngine.framework GUIDOEngine.tgz libGUIDOEngine.a
 MACX := MacOS
 IOS  := iOS
+WIN32VS := "Visual Studio 10"
+WIN64VS := "Visual Studio 10 Win64"
+MSVC := C:\Program Files (x86)\Microsoft Visual Studio 10.0
 
 all :
 	make $(TARGET)
@@ -27,6 +30,7 @@ all :
 #===============================================================
 # building the library on Mac OS X
 #===============================================================
+.PHONY : $(MACX)/Release/GUIDOEngine.framework $(IOS)/Release-iphoneos/libGUIDOEngine.a
 mac :
 	make macos
 	make ios	
@@ -68,6 +72,51 @@ $(IOS)/guidolib.xcodeproj : CMakeLists.txt
 
 clean :
 	rm -rf $(IOS) $(MACX) $(OUT)
+
+
+#===============================================================
+# building the library on windows
+#===============================================================
+.PHONY : win32/Release/GUIDOEngine.dll win64/Release/GUIDOEngine64.dll
+
+windows :
+	make win32
+	make win64
+
+win32 : win32/guidolib.sln GUIDOEngine.dll GUIDOEngine.lib 
+
+GUIDOEngine.lib : GUIDOEngine.dll
+
+GUIDOEngine.dll : win32/Release/GUIDOEngine.dll
+	cp win32/Release/GUIDOEngine.dll .
+	cp win32/Release/GUIDOEngine.lib .
+
+win32/Release/GUIDOEngine.dll : win32/guidolib.sln
+	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild win32/guidolib.sln /maxcpucount:4 /p:Configuration=Release"
+
+win32/guidolib.sln : CMakeLists.txt
+	[ -d win32 ] || mkdir win32
+	cd win32 && cmake .. -G $(WIN32VS) -DMIDIEXPORT=yes
+
+
+win64 : win64/guidolib.sln GUIDOEngine64.dll GUIDOEngine64.lib 
+
+GUIDOEngine64.lib : GUIDOEngine64.dll
+
+GUIDOEngine64.dll : win64/Release/GUIDOEngine64.dll
+	cp win64/Release/GUIDOEngine64.dll .
+	cp win64/Release/GUIDOEngine64.lib .
+
+win64/Release/GUIDOEngine64.dll : win64/guidolib.sln
+	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild win64/guidolib.sln /maxcpucount:4 /p:Configuration=Release"
+
+win64/guidolib.sln : CMakeLists.txt
+	[ -d win64 ] || mkdir win64
+	cd win64 && cmake .. -G $(WIN64VS) -DMIDIEXPORT=yes
+
+winclean:
+	rm -rf win32 win64 GUIDOEngine*.lib GUIDOEngine.dll
+
 
 #===============================================================
 # building the Qt resources

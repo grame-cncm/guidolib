@@ -1,9 +1,11 @@
 TEMPLATE      = subdirs
 CONFIG 		 += ordered
 SUBDIRS       = \
-                GuidoQt \
-                GraphicsSceneMainWindow \
-                guido2image \
-                GuidoEditor \
-                GuidoSceneComposer \
-                GuidoQtFontViewer 
+                libs/GuidoQt \
+                libs/GraphicsSceneMainWindow \
+                apps/guido2image \
+                apps/GuidoEditor \
+                apps/GuidoSceneComposer \
+                tools/GuidoQtFontViewer 
+                tools/GuidoQtFontMetrics 
+ 

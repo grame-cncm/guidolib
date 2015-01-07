@@ -17,7 +17,6 @@ win32 {
 CONFIG += console
 macx:CONFIG -= app_bundle
 
-DESTDIR = $$PWD
 QT += widgets printsupport
 
 # GuidoQt library link for each platform

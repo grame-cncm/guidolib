@@ -1,71 +1,54 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C++ Express 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GraphicsSceneMainWindow", "GraphicsSceneMainWindow\GraphicsSceneMainWindow.vcxproj", "{5458CFFF-617D-300A-8104-C390313E0097}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GuidoQt", "libs\GuidoQt\build\win32\GuidoQt.vcxproj", "{52E7BD25-466F-3500-BBC4-9EF05CDBA602}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GuidoQt", "GuidoQt\GuidoQt.vcxproj", "{A2709F6B-F764-34B3-890E-74FE55AFC89F}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GuidoQtFontViewer", "GuidoQtFontViewer\GuidoQtFontViewer.vcxproj", "{0BE57B36-B564-3583-B505-37C78E190DDA}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GuidoEditor", "GuidoEditor\GuidoEditor.vcxproj", "{3FB55DA7-977B-310D-B7DB-BBCAA9078FD9}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GraphicsSceneMainWindow", "libs\GraphicsSceneMainWindow\build\win32\GraphicsSceneMainWindow.vcxproj", "{720DE31E-C767-3EE6-9BE7-1AC8432F4C7B}"
 	ProjectSection(ProjectDependencies) = postProject
-		{A2709F6B-F764-34B3-890E-74FE55AFC89F} = {A2709F6B-F764-34B3-890E-74FE55AFC89F}
+		{52E7BD25-466F-3500-BBC4-9EF05CDBA602} = {52E7BD25-466F-3500-BBC4-9EF05CDBA602}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GuidoSceneComposer", "GuidoSceneComposer\GuidoSceneComposer.vcxproj", "{D4E3383F-F426-3346-9285-633C62609D6C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "guido2image", "apps\guido2image\build\win32\guido2image.vcxproj", "{CF7DB95B-CDF9-3868-AD83-588B8ADCAA64}"
 	ProjectSection(ProjectDependencies) = postProject
-		{5458CFFF-617D-300A-8104-C390313E0097} = {5458CFFF-617D-300A-8104-C390313E0097}
-		{A2709F6B-F764-34B3-890E-74FE55AFC89F} = {A2709F6B-F764-34B3-890E-74FE55AFC89F}
+		{52E7BD25-466F-3500-BBC4-9EF05CDBA602} = {52E7BD25-466F-3500-BBC4-9EF05CDBA602}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "guido2Image", "guido2Image\guido2Image.vcxproj", "{A7902FF8-925B-3809-BD12-77345ABF00CD}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GuidoSceneComposer", "apps\GuidoSceneComposer\build\win32\GuidoSceneComposer.vcxproj", "{B49B4651-64BD-39AB-889C-6B105471B887}"
 	ProjectSection(ProjectDependencies) = postProject
-		{A2709F6B-F764-34B3-890E-74FE55AFC89F} = {A2709F6B-F764-34B3-890E-74FE55AFC89F}
+		{720DE31E-C767-3EE6-9BE7-1AC8432F4C7B} = {720DE31E-C767-3EE6-9BE7-1AC8432F4C7B}
+		{52E7BD25-466F-3500-BBC4-9EF05CDBA602} = {52E7BD25-466F-3500-BBC4-9EF05CDBA602}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GuidoEditor", "apps\GuidoEditor\build\win32\GuidoEditor.vcxproj", "{1D433EF3-B5F5-3F22-8B70-9D42A3E45385}"
+	ProjectSection(ProjectDependencies) = postProject
+		{52E7BD25-466F-3500-BBC4-9EF05CDBA602} = {52E7BD25-466F-3500-BBC4-9EF05CDBA602}
 	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
-		Debug|x64 = Debug|x64
 		Release|Win32 = Release|Win32
-		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5458CFFF-617D-300A-8104-C390313E0097}.Debug|Win32.ActiveCfg = Debug|Win32
-		{5458CFFF-617D-300A-8104-C390313E0097}.Debug|Win32.Build.0 = Debug|Win32
-		{5458CFFF-617D-300A-8104-C390313E0097}.Debug|x64.ActiveCfg = Debug|Win32
-		{5458CFFF-617D-300A-8104-C390313E0097}.Release|Win32.ActiveCfg = Release|Win32
-		{5458CFFF-617D-300A-8104-C390313E0097}.Release|Win32.Build.0 = Release|Win32
-		{5458CFFF-617D-300A-8104-C390313E0097}.Release|x64.ActiveCfg = Release|Win32
-		{A2709F6B-F764-34B3-890E-74FE55AFC89F}.Debug|Win32.ActiveCfg = Debug|Win32
-		{A2709F6B-F764-34B3-890E-74FE55AFC89F}.Debug|Win32.Build.0 = Debug|Win32
-		{A2709F6B-F764-34B3-890E-74FE55AFC89F}.Debug|x64.ActiveCfg = Debug|Win32
-		{A2709F6B-F764-34B3-890E-74FE55AFC89F}.Release|Win32.ActiveCfg = Release|Win32
-		{A2709F6B-F764-34B3-890E-74FE55AFC89F}.Release|Win32.Build.0 = Release|Win32
-		{A2709F6B-F764-34B3-890E-74FE55AFC89F}.Release|x64.ActiveCfg = Release|Win32
-		{0BE57B36-B564-3583-B505-37C78E190DDA}.Debug|Win32.ActiveCfg = Debug|Win32
-		{0BE57B36-B564-3583-B505-37C78E190DDA}.Debug|Win32.Build.0 = Debug|Win32
-		{0BE57B36-B564-3583-B505-37C78E190DDA}.Debug|x64.ActiveCfg = Debug|Win32
-		{0BE57B36-B564-3583-B505-37C78E190DDA}.Release|Win32.ActiveCfg = Release|Win32
-		{0BE57B36-B564-3583-B505-37C78E190DDA}.Release|Win32.Build.0 = Release|Win32
-		{0BE57B36-B564-3583-B505-37C78E190DDA}.Release|x64.ActiveCfg = Release|Win32
-		{3FB55DA7-977B-310D-B7DB-BBCAA9078FD9}.Debug|Win32.ActiveCfg = Debug|Win32
-		{3FB55DA7-977B-310D-B7DB-BBCAA9078FD9}.Debug|Win32.Build.0 = Debug|Win32
-		{3FB55DA7-977B-310D-B7DB-BBCAA9078FD9}.Debug|x64.ActiveCfg = Debug|Win32
-		{3FB55DA7-977B-310D-B7DB-BBCAA9078FD9}.Release|Win32.ActiveCfg = Release|Win32
-		{3FB55DA7-977B-310D-B7DB-BBCAA9078FD9}.Release|Win32.Build.0 = Release|Win32
-		{3FB55DA7-977B-310D-B7DB-BBCAA9078FD9}.Release|x64.ActiveCfg = Release|Win32
-		{D4E3383F-F426-3346-9285-633C62609D6C}.Debug|Win32.ActiveCfg = Debug|Win32
-		{D4E3383F-F426-3346-9285-633C62609D6C}.Debug|Win32.Build.0 = Debug|Win32
-		{D4E3383F-F426-3346-9285-633C62609D6C}.Debug|x64.ActiveCfg = Debug|Win32
-		{D4E3383F-F426-3346-9285-633C62609D6C}.Release|Win32.ActiveCfg = Release|Win32
-		{D4E3383F-F426-3346-9285-633C62609D6C}.Release|Win32.Build.0 = Release|Win32
-		{D4E3383F-F426-3346-9285-633C62609D6C}.Release|x64.ActiveCfg = Release|Win32
-		{A7902FF8-925B-3809-BD12-77345ABF00CD}.Debug|Win32.ActiveCfg = Debug|Win32
-		{A7902FF8-925B-3809-BD12-77345ABF00CD}.Debug|Win32.Build.0 = Debug|Win32
-		{A7902FF8-925B-3809-BD12-77345ABF00CD}.Debug|x64.ActiveCfg = Debug|Win32
-		{A7902FF8-925B-3809-BD12-77345ABF00CD}.Release|Win32.ActiveCfg = Release|Win32
-		{A7902FF8-925B-3809-BD12-77345ABF00CD}.Release|Win32.Build.0 = Release|Win32
-		{A7902FF8-925B-3809-BD12-77345ABF00CD}.Release|x64.ActiveCfg = Release|Win32
+		{52E7BD25-466F-3500-BBC4-9EF05CDBA602}.Debug|Win32.ActiveCfg = Debug|Win32
+		{52E7BD25-466F-3500-BBC4-9EF05CDBA602}.Debug|Win32.Build.0 = Debug|Win32
+		{52E7BD25-466F-3500-BBC4-9EF05CDBA602}.Release|Win32.ActiveCfg = Release|Win32
+		{52E7BD25-466F-3500-BBC4-9EF05CDBA602}.Release|Win32.Build.0 = Release|Win32
+		{720DE31E-C767-3EE6-9BE7-1AC8432F4C7B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{720DE31E-C767-3EE6-9BE7-1AC8432F4C7B}.Debug|Win32.Build.0 = Debug|Win32
+		{720DE31E-C767-3EE6-9BE7-1AC8432F4C7B}.Release|Win32.ActiveCfg = Release|Win32
+		{720DE31E-C767-3EE6-9BE7-1AC8432F4C7B}.Release|Win32.Build.0 = Release|Win32
+		{CF7DB95B-CDF9-3868-AD83-588B8ADCAA64}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CF7DB95B-CDF9-3868-AD83-588B8ADCAA64}.Debug|Win32.Build.0 = Debug|Win32
+		{CF7DB95B-CDF9-3868-AD83-588B8ADCAA64}.Release|Win32.ActiveCfg = Release|Win32
+		{CF7DB95B-CDF9-3868-AD83-588B8ADCAA64}.Release|Win32.Build.0 = Release|Win32
+		{B49B4651-64BD-39AB-889C-6B105471B887}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B49B4651-64BD-39AB-889C-6B105471B887}.Debug|Win32.Build.0 = Debug|Win32
+		{B49B4651-64BD-39AB-889C-6B105471B887}.Release|Win32.ActiveCfg = Release|Win32
+		{B49B4651-64BD-39AB-889C-6B105471B887}.Release|Win32.Build.0 = Release|Win32
+		{1D433EF3-B5F5-3F22-8B70-9D42A3E45385}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1D433EF3-B5F5-3F22-8B70-9D42A3E45385}.Debug|Win32.Build.0 = Debug|Win32
+		{1D433EF3-B5F5-3F22-8B70-9D42A3E45385}.Release|Win32.ActiveCfg = Release|Win32
+		{1D433EF3-B5F5-3F22-8B70-9D42A3E45385}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
