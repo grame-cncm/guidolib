@@ -10,8 +10,9 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.widget.Toast;
 
 /**
- * Main activity class. It's a FragmentActivity to manage each fragment (the different tab).  
- * Implements OnGmnCodeChangeListener to have the change on the gmn code.
+ * Main activity class. It's a FragmentActivity to manage each fragment (the
+ * different tab). Implements OnGmnCodeChangeListener to have the change on the
+ * gmn code.
  */
 public class SimpleGuidoEditor extends FragmentActivity implements OnGmnCodeChangeListener {
 
@@ -21,19 +22,22 @@ public class SimpleGuidoEditor extends FragmentActivity implements OnGmnCodeChan
 	private TabsPagerAdapter mAdapter;
 	/** Main action bar of the activity */
 	private ActionBar actionBar;
-	
-	/** Gmn code typed in the application (default gmn code is provided by /SimpleGuidoEditor/res/layout/fragment_gmn_text.xml*/
+
+	/**
+	 * Gmn code typed in the application (default gmn code is provided by
+	 * /SimpleGuidoEditor/res/layout/fragment_gmn_text.xml
+	 */
 	private static String gmnCode;
 
-	
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
+	static {
 		// Load library and init guido Engine
 		System.loadLibrary("GUIDOEngine-android");
 		guido.Init("Guido2", "Times");
+	}
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
 		// The main view
 		setContentView(R.layout.main);
@@ -58,7 +62,7 @@ public class SimpleGuidoEditor extends FragmentActivity implements OnGmnCodeChan
 						Toast.LENGTH_SHORT).show();
 
 				TabsPagerAdapter.Tab tabSelected = TabsPagerAdapter.Tab.getFromInt(position);
-				
+
 				if (tabSelected == TabsPagerAdapter.Tab.SVG || tabSelected == TabsPagerAdapter.Tab.CANVAS) {
 					// This fragment must implement updatable interface
 					Updatable f = (Updatable) mAdapter.getItem(position);
@@ -83,14 +87,8 @@ public class SimpleGuidoEditor extends FragmentActivity implements OnGmnCodeChan
 	}
 
 	@Override
-	protected void onStop() {
-		super.onStop();
-		guido.shutdown();
-	}
-	
-	@Override
 	public void setGmnCode(String gmncode) {
-			gmnCode = gmncode;
+		gmnCode = gmncode;
 	}
 
 	public String getGmnCode() {

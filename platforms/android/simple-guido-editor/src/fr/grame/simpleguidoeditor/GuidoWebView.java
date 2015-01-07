@@ -1,5 +1,6 @@
 package fr.grame.simpleguidoeditor;
 
+import guidoengine.guido;
 import guidoengine.guidoscore;
 import android.content.Context;
 import android.util.AttributeSet;
@@ -9,7 +10,7 @@ import android.webkit.WebView;
  * View to raw the score in svg format.
  */
 public class GuidoWebView extends WebView {
-	
+
 	public GuidoWebView(Context context, AttributeSet attributeSet) {
 		super(context, attributeSet);
 	}
@@ -28,11 +29,12 @@ public class GuidoWebView extends WebView {
 		int err = gmnscore.String2AR(gmn);
 		gmnscore.CloseParser();
 		// Create a graphic representation with Abstract representation
-		err = gmnscore.AR2GR();
-		if (err == 0)
+		if (err == guido.guidoNoErr)
+			err = gmnscore.AR2GR();
+		if (err == guido.guidoNoErr)
 			err = gmnscore.ResizePageToMusic();
 		String out = null;
-		if (err == 0)
+		if (err == guido.guidoNoErr)
 			// Create SVG
 			out = gmnscore.GR2SVG(1, true, "", 0);
 		// Free all resource (abstract and graphic representation)
@@ -42,6 +44,7 @@ public class GuidoWebView extends WebView {
 
 	/**
 	 * Convert gmncode to svg and add error message if the svg is not generated.
+	 * 
 	 * @param gmnCode
 	 */
 	public void loading(String gmnCode) {
