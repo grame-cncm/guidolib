@@ -25,6 +25,7 @@ MSVC := C:\Program Files (x86)\Microsoft Visual Studio 10.0
 
 all :
 	make $(TARGET)
+	make tools
 	make Qt
 
 #===============================================================
@@ -70,9 +71,8 @@ $(IOS)/Release-iphoneos/libGUIDOEngine.a : CMakeLists.txt
 $(IOS)/guidolib.xcodeproj : CMakeLists.txt
 	cd $(IOS) && cmake .. -G Xcode -DMIDIEXPORT=no -DIOS=yes
 
-clean :
+macclean :
 	rm -rf $(IOS) $(MACX) $(OUT)
-
 
 #===============================================================
 # building the library on windows
@@ -117,10 +117,23 @@ win64/guidolib.sln : CMakeLists.txt
 winclean:
 	rm -rf win32 win64 GUIDOEngine*.lib GUIDOEngine.dll
 
+#===============================================================
+# building the Guido tools
+#===============================================================
+clean :
+	make macclean
+	make winclean
+	make -C ../src/tools/build clean
+	make -C ../environments/Qt clean
+
+#===============================================================
+# building the Guido tools
+#===============================================================
+tools :
+	make -C ../src/tools/build
 
 #===============================================================
 # building the Qt resources
 #===============================================================
-
 Qt :
 	make -C ../environments/Qt
