@@ -33,7 +33,7 @@ win32: {
 } else {
 	macx:LIBS += -F$$ROOT/build/MacOS/Debug -framework GUIDOEngine
 }
-unix:!macx:LIBS += -L$$ROOT/cmake -lGUIDOEngine
+unix:!macx:LIBS += -L$$ROOT/build/linux -lGUIDOEngine
 win32:LIBS += $$GUIDO
 
 INCLUDEPATH += $$ROOT/src/engine/include 
