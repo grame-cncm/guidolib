@@ -31,24 +31,23 @@ all :
 #===============================================================
 # building the library on Mac OS X
 #===============================================================
-.PHONY : $(MACX)/Release/GUIDOEngine.framework $(IOS)/Release-iphoneos/libGUIDOEngine.a
+.PHONY : macos ios $(MACX)/Release/GUIDOEngine.framework $(IOS)/Release-iphoneos/libGUIDOEngine.a
+
 mac :
 	make macos
 	make ios	
 
-macos : $(MACX) GUIDOEngine.framework GUIDOEngine.tgz
-
-$(MACX) :
-	mkdir $(MACX)
+macos : $(MACX)/guidolib.xcodeproj GUIDOEngine.framework GUIDOEngine.tgz
 
 GUIDOEngine.framework :  $(MACX)/guidolib.xcodeproj  $(MACX)/Release/GUIDOEngine.framework
 	rm -rf GUIDOEngine.framework
 	cp -R $(MACX)/Release/GUIDOEngine.framework .
 
-$(MACX)/Release/GUIDOEngine.framework : CMakeLists.txt
+$(MACX)/Release/GUIDOEngine.framework :
 	xcodebuild -jobs 8 -project $(MACX)/guidolib.xcodeproj -target ALL_BUILD -configuration Release
 
 $(MACX)/guidolib.xcodeproj : CMakeLists.txt
+	[ -d $(MACX) ] || mkdir $(MACX)
 	cd $(MACX) && cmake .. -G Xcode -DMIDIEXPORT=yes
 
 GUIDOEngine.tgz : GUIDOEngine.framework
@@ -57,18 +56,16 @@ GUIDOEngine.tgz : GUIDOEngine.framework
 #===============================================================
 # building the library for iOS
 #===============================================================
-ios : $(IOS) libGUIDOEngine.a
-
-$(IOS) :
-	mkdir $(IOS)
+ios : $(IOS)/guidolib.xcodeproj libGUIDOEngine.a
 
 libGUIDOEngine.a : $(IOS)/guidolib.xcodeproj $(IOS)/Release-iphoneos/libGUIDOEngine.a
 	cp $(IOS)/Release-iphoneos/libGUIDOEngine.a .
 
-$(IOS)/Release-iphoneos/libGUIDOEngine.a : CMakeLists.txt
+$(IOS)/Release-iphoneos/libGUIDOEngine.a :
 	xcodebuild -jobs 8 -project $(IOS)/guidolib.xcodeproj -target ALL_BUILD -configuration Release
  
 $(IOS)/guidolib.xcodeproj : CMakeLists.txt
+	[ -d $(IOS) ] || mkdir $(IOS)
 	cd $(IOS) && cmake .. -G Xcode -DMIDIEXPORT=no -DIOS=yes
 
 macclean :
@@ -77,7 +74,7 @@ macclean :
 #===============================================================
 # building the library on windows
 #===============================================================
-.PHONY : win32/Release/GUIDOEngine.dll win64/Release/GUIDOEngine64.dll
+.PHONY : win32 win64 win32/Release/GUIDOEngine.dll win64/Release/GUIDOEngine64.dll
 
 windows :
 	make win32
