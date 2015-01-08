@@ -183,7 +183,7 @@ int main(int argc, char **argv)
 	if (!filename)						// std in mode
 		readfile (stdin, gmn);
 
-	SVGSystem sys(fontfile, 0);
+	SVGSystem sys(fontfile);
 	VGDevice *dev = sys.CreateDisplayDevice();
     GuidoInitDesc gd = { dev, 0, 0, 0 };
     GuidoInit(&gd);                    // Initialise the Guido Engine first

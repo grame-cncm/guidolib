@@ -84,7 +84,7 @@ int main(int argc, char **argv)
 	if (outfile.empty()) outfile = defaultOutName (infile);
 
 	GuidoErrCode err;
-	SVGSystem sys(0, 0);
+	SVGSystem sys;
 	VGDevice *dev = sys.CreateDisplayDevice();
 	GuidoInitDesc id = { dev, 0, 0, 0 };
 	err = GuidoInit(&id);

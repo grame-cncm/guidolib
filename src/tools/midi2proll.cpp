@@ -215,7 +215,7 @@ static int lPitchLinesopt(int argc, char **argv, const char* opt, int defaultval
 int main(int argc, char **argv)
 {
  	SVGSystem sys;
-    SVGDevice dev(cout, &sys, 0, 0);
+    SVGDevice dev(cout, &sys, 0);
 	
 	checkusage (argc, argv);
 	
