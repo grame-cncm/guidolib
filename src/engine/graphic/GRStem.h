@@ -46,7 +46,7 @@ public:
 
 	virtual ~GRStem();
 
-    virtual void GRStem::configureStem(const TYPE_DURATION& dur);
+    virtual void configureStem(const TYPE_DURATION& dur);
 
 	virtual void setStemLength( float inLen );
 	virtual void setStemDir(GDirection dir);
