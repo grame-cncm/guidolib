@@ -1,91 +1,97 @@
 package fr.grame.simpleguidoeditor;
 
-import fr.grame.simpleguidoeditor.TabsPagerAdapter;
-import fr.grame.simpleguidoeditor.R;
-
+import fr.grame.simpleguidoeditor.fragment.Updatable;
+import guidoengine.guido;
 import android.app.ActionBar;
-import android.app.ActionBar.Tab;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import guidoengine.*;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.widget.Toast;
 
-public class SimpleGuidoEditor extends FragmentActivity implements
-        ActionBar.TabListener {
- 
-    private ViewPager viewPager;
-    private TabsPagerAdapter mAdapter;
-    private ActionBar actionBar;
-    // Tab titles
-    private String[] tabs = { "GMN", "SVG", "Canvas" };
-    public static String _gmn = null;
- 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        System.loadLibrary("GUIDOEngine-android");
-        guido.Init("Guido2", "Times");
+/**
+ * Main activity class. It's a FragmentActivity to manage each fragment (the
+ * different tab). Implements OnGmnCodeChangeListener to have the change on the
+ * gmn code.
+ */
+public class SimpleGuidoEditor extends FragmentActivity implements OnGmnCodeChangeListener {
 
-        setContentView(R.layout.main);
- 
-        // Initilization
-        viewPager = (ViewPager) findViewById(R.id.pager);
-        actionBar = getActionBar();
-        mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
- 
-        viewPager.setAdapter(mAdapter);
-        actionBar.setHomeButtonEnabled(false);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);        
- 
-        // Adding Tabs
-        for (String tab_name : tabs) {
-            actionBar.addTab(actionBar.newTab().setText(tab_name)
-                    .setTabListener(this));
-        }
- 
-        /**
-         * on swiping the viewpager make respective tab selected
-         * */
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
- 
-            @Override
-            public void onPageSelected(int position) {
-                // on changing the page
-                // make respected tab selected
-                actionBar.setSelectedNavigationItem(position);
-            }
- 
-            @Override
-            public void onPageScrolled(int arg0, float arg1, int arg2) {
-            }
- 
-            @Override
-            public void onPageScrollStateChanged(int arg0) {
-            }
-        });
-    }
- 
-    @Override
-    public void onTabReselected(Tab tab, FragmentTransaction ft) {
-    }
+	/** The viewPager is used to have the name of each tab on top of them. */
+	private ViewPager viewPager;
+	/** Used to manage tab and fragment */
+	private TabsPagerAdapter mAdapter;
+	/** Main action bar of the activity */
+	private ActionBar actionBar;
 
-    @Override
-    public void onTabSelected(Tab tab, FragmentTransaction ft) {
-        // on tab selected
-        // show correct fragment view
-        int tabPosition = tab.getPosition(); 
-        viewPager.setCurrentItem(tabPosition);
-        /*
-        if (tabPosition == 1) {
-          final InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-          imm.hideSoftInputFromWindow(mAdapter.getItem(0).getView().getWindowToken(), 0);
-        }
-        */
-    }
- 
-    @Override
-    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-    }
- 
+	/**
+	 * Gmn code typed in the application (default gmn code is provided by
+	 * /SimpleGuidoEditor/res/layout/fragment_gmn_text.xml
+	 */
+	private static String gmnCode;
+
+	static {
+		// Load library and init guido Engine
+		System.loadLibrary("GUIDOEngine-android");
+		guido.Init("Guido2", "Times");
+	}
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		// The main view
+		setContentView(R.layout.main);
+
+		// Initilization
+		viewPager = (ViewPager) findViewById(R.id.pager);
+		actionBar = getActionBar();
+		mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), this.getApplicationContext());
+
+		viewPager.setAdapter(mAdapter);
+
+		actionBar.setHomeButtonEnabled(false);
+
+		// Attach the page change listener inside the activity
+		viewPager.setOnPageChangeListener(new OnPageChangeListener() {
+
+			// This method will be invoked when a new page becomes selected.
+			@Override
+			public void onPageSelected(int position) {
+				// Popup with the page position.
+				Toast.makeText(SimpleGuidoEditor.this.getApplicationContext(), "Selected page position: " + position,
+						Toast.LENGTH_SHORT).show();
+
+				TabsPagerAdapter.Tab tabSelected = TabsPagerAdapter.Tab.getFromInt(position);
+
+				if (tabSelected == TabsPagerAdapter.Tab.SVG || tabSelected == TabsPagerAdapter.Tab.CANVAS) {
+					// This fragment must implement updatable interface
+					Updatable f = (Updatable) mAdapter.getItem(position);
+					// Update the view with the gmnCode.
+					f.update(getGmnCode());
+				}
+			}
+
+			// This method will be invoked when the current page is scrolled
+			@Override
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+				// Code goes here
+			}
+
+			// Called when the scroll state changes:
+			// SCROLL_STATE_IDLE, SCROLL_STATE_DRAGGING, SCROLL_STATE_SETTLING
+			@Override
+			public void onPageScrollStateChanged(int state) {
+				// Code goes here
+			}
+		});
+	}
+
+	@Override
+	public void setGmnCode(String gmncode) {
+		gmnCode = gmncode;
+	}
+
+	public String getGmnCode() {
+		return gmnCode;
+	}
 }

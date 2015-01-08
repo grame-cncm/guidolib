@@ -1,8 +1,7 @@
 package drawcommand;
 
 
-
-public class DrawMusicSymbolCommand extends GuidoDrawCommand implements PrintableDrawCommand {
+public class DrawMusicSymbolCommand implements PrintableDrawCommand {
 
   public float _x;
   public float _y;

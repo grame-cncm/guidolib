@@ -1,7 +1,7 @@
 package drawcommand;
 
    
-public class PushPenWidthCommand extends GuidoDrawCommand implements PrintableDrawCommand {
+public class PushPenWidthCommand implements PrintableDrawCommand {
 
   public float _width;
 

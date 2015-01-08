@@ -1,7 +1,7 @@
 package drawcommand;
 
    
-public class SetMusicFontCommand extends GuidoDrawCommand implements PrintableDrawCommand {
+public class SetMusicFontCommand implements PrintableDrawCommand {
 
   public String _name;
   public int _size;

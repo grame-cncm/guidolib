@@ -12,6 +12,10 @@ public interface guidocommandbattery {
     public void storeGetMusicFontCommand();
     public void storeSetTextFontCommand(String name, int size, int properties);
     public void storeGetTextFontCommand();
+    public void storePushPenCommand(char alpha, char red, char green, char blue, float width);
+    public void storePopPenCommand();
+    public void storePushFillColorCommand(char alpha, char red, char green, char blue);
+    public void storePopFillColorCommand();
     public void storeSetScaleCommand(float x, float y);
     public void storeSetOriginCommand(float x, float y);
     public void storeOffsetOriginCommand(float x, float y);
@@ -22,6 +26,7 @@ public interface guidocommandbattery {
     public void storeGetFontColorCommand();
     public void storeSetFontAlignCommand(int inAlign);
     public void storeSelectPenColorCommand(char alpha, char red, char green, char blue);
+    public void storePushPenColorCommand(char alpha, char red, char green, char blue);
     public void storePopPenColorCommand();
     public void storePushPenWidthCommand(float width);
     public void storePopPenWidthCommand();

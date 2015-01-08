@@ -12,9 +12,9 @@ endif()
 
 #######################################
 # versions management
-set (VERSION 1.21)
-set (STRVERS "v.1.21")
-set (SSTRVERS "1.21")
+set (VERSION 1.22)
+set (STRVERS "v.1.22")
+set (SSTRVERS "1.22")
 
 FIND_PACKAGE(JNI REQUIRED)
 #FIND_PACKAGE(Java REQUIRED)

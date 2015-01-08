@@ -1,7 +1,7 @@
 package drawcommand;
 
    
-public class PopPenColorCommand extends GuidoDrawCommand implements PrintableDrawCommand {
+public class PopPenColorCommand implements PrintableDrawCommand {
 
   public PopPenColorCommand() {
     super();
@@ -10,6 +10,5 @@ public class PopPenColorCommand extends GuidoDrawCommand implements PrintableDra
   @Override
   public String asString() {
     return "PopPenColor";
-  }
-  
+  }  
 }

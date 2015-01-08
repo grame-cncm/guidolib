@@ -2,7 +2,7 @@ package drawcommand;
 
 import java.util.List;
    
-public class PolygonCommand extends GuidoDrawCommand implements PrintableDrawCommand {
+public class PolygonCommand implements PrintableDrawCommand {
 
   public List<Float> _xCoords;
   public List<Float> _yCoords;

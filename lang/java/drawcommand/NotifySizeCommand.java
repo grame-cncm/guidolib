@@ -1,7 +1,7 @@
 package drawcommand;
 
    
-public class NotifySizeCommand extends GuidoDrawCommand implements PrintableDrawCommand {
+public class NotifySizeCommand implements PrintableDrawCommand {
 
   public int _width;
   public int _height;

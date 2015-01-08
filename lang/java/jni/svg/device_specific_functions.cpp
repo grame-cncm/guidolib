@@ -33,7 +33,7 @@ extern VGSystem * gSystem;
 
 namespace device_specific {
 	VGDevice * getInitDevice(bool antialiased) {
-				gSystem = new SVGSystem(0, ______src_guido2_svg);
+				gSystem = new SVGSystem(0);
 		return gSystem->CreateMemoryDevice(20,20);
 	}
 

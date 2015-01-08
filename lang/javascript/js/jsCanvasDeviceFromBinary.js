@@ -9,7 +9,7 @@ gU1D0cANVA$.GLOBAL_SCALE_TO_DIV_SIZE = 1;
 gU1D0cANVA$.CURRENT_TRANSFORM_MATRIX = [1, 0, 0, 1, 0, 0];
 gU1D0cANVA$.PEN_COLORS = [];
 gU1D0cANVA$.FONT_COLOR = 'rgba(0, 0, 0, 255)';
-gU1D0cANVA$.FILL_COLOR = 'rgba(255, 255, 255, 255)';
+gU1D0cANVA$.FILL_COLOR = 'rgba(0, 0, 0, 255)';
 gU1D0cANVA$.FILL_COLORS = [];
 gU1D0cANVA$.PEN_WIDTH = 1;
 gU1D0cANVA$.PEN_WIDTHS = [];
@@ -97,7 +97,7 @@ gU1D0cANVA$.Polygon = function(xCoords, yCoords, count) {
     gU1D0cANVA$.CONTEXT.lineTo(xCoords[i], yCoords[i]);
   }
   gU1D0cANVA$.CONTEXT.closePath();
-  gU1D0cANVA$.CANVAS.fillStyle = gU1D0cANVA$.FILL_COLOR;
+  gU1D0cANVA$.CONTEXT.fillStyle = gU1D0cANVA$.FILL_COLOR;
   gU1D0cANVA$.CONTEXT.fill();
   gU1D0cANVA$.resetTransformMatrix(gU1D0cANVA$.CONTEXT);
 }
@@ -106,7 +106,7 @@ gU1D0cANVA$.Rectangle = function(left, top, right, bottom) {
   gU1D0cANVA$.correctTransformMatrix(gU1D0cANVA$.CONTEXT);
   gU1D0cANVA$.CONTEXT.beginPath();
   gU1D0cANVA$.CONTEXT.rect(left, top, right - left, bottom - top);
-  gU1D0cANVA$.CANVAS.fillStyle = gU1D0cANVA$.FILL_COLOR;
+  gU1D0cANVA$.CONTEXT.fillStyle = gU1D0cANVA$.FILL_COLOR;
   gU1D0cANVA$.CONTEXT.fill();
   gU1D0cANVA$.resetTransformMatrix(gU1D0cANVA$.CONTEXT);
 }
@@ -133,7 +133,7 @@ gU1D0cANVA$.GetTextFont = function() {
 
 gU1D0cANVA$.PushPen = function(alpha, red, green, blue, width) {
   var strokeStyle = "rgba("+red+","+green+","+blue+","+(alpha/gU1D0cANVA$.CHAR_MAX_AS_FLOAT)+")"
-  gU1D0cANVA$.CANVAS.strokeStyle = strokeStyle;
+  gU1D0cANVA$.CONTEXT.strokeStyle = strokeStyle;
   gU1D0cANVA$.CONTEXT.lineWidth = width;
   gU1D0cANVA$.PEN.push({ "color" : strokeStyle, "width" : width});
 }
@@ -142,7 +142,7 @@ gU1D0cANVA$.PopPen = function() {
   gU1D0cANVA$.PEN.pop();
   if (gU1D0cANVA$.PEN.length > 0) {
 	var pen = gU1D0cANVA$.PEN[gU1D0cANVA$.PEN.length - 1];
-	gU1D0cANVA$.CANVAS.strokeStyle = pen.color;
+	gU1D0cANVA$.CONTEXT.strokeStyle = pen.color;
 	gU1D0cANVA$.CONTEXT.lineWidth = pen.width;
   } else {
     console.log("Popping pen but the queue is empty");
@@ -235,19 +235,19 @@ gU1D0cANVA$.SelectPenColor = function(alpha, red, green, blue) {
   var strokeStyle = "rgba("+red+","+green+","+blue+","+(alpha/gU1D0cANVA$.CHAR_MAX_AS_FLOAT)+")"
   gU1D0cANVA$.PEN_COLORS.length = 0;
   gU1D0cANVA$.PEN_COLORS.push(strokeStyle);
-  gU1D0cANVA$.CANVAS.strokeStyle = strokeStyle;
+  gU1D0cANVA$.CONTEXT.strokeStyle = strokeStyle;
 }
 
 gU1D0cANVA$.PushPenColor = function(alpha, red, green, blue) {
   var strokeStyle = "rgba("+red+","+green+","+blue+","+(alpha/gU1D0cANVA$.CHAR_MAX_AS_FLOAT)+")"
   gU1D0cANVA$.PEN_COLORS.push(strokeStyle);
-  gU1D0cANVA$.CANVAS.strokeStyle = strokeStyle;
+  gU1D0cANVA$.CONTEXT.strokeStyle = strokeStyle;
 }
 
 gU1D0cANVA$.PopPenColor = function() {
   gU1D0cANVA$.PEN_COLORS.pop();
   if (gU1D0cANVA$.PEN_COLORS.length > 0) {
-    gU1D0cANVA$.CANVAS.strokeStyle = gU1D0cANVA$.PEN_COLORS[gU1D0cANVA$.PEN_COLORS.length - 1];
+    gU1D0cANVA$.CONTEXT.strokeStyle = gU1D0cANVA$.PEN_COLORS[gU1D0cANVA$.PEN_COLORS.length - 1];
   } else {
     console.log("Popping pen color but the queue is empty");
   }
@@ -261,7 +261,7 @@ gU1D0cANVA$.PushPenWidth = function(width) {
 gU1D0cANVA$.PopPenWidth = function() {
   gU1D0cANVA$.PEN_WIDTHS.pop();
   if (gU1D0cANVA$.PEN_WIDTHS.length > 0) {
-    gU1D0cANVA$.CANVAS.lineWidth = gU1D0cANVA$.PEN_WIDTHS[gU1D0cANVA$.PEN_WIDTHS.length - 1];
+    gU1D0cANVA$.CONTEXT.lineWidth = gU1D0cANVA$.PEN_WIDTHS[gU1D0cANVA$.PEN_WIDTHS.length - 1];
   } else {
     console.log("Popping pen width but the queue is empty");
   }

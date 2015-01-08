@@ -1,7 +1,7 @@
 package drawcommand;
 
 
-public class RectangleCommand extends GuidoDrawCommand implements PrintableDrawCommand {
+public class RectangleCommand implements PrintableDrawCommand {
 
   public float _left;
   public float _top;

@@ -1,7 +1,7 @@
 package drawcommand;
 
    
-public class EndDrawCommand extends GuidoDrawCommand implements PrintableDrawCommand {
+public class EndDrawCommand implements PrintableDrawCommand {
 
   public EndDrawCommand() {
     super();

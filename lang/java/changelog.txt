@@ -1,6 +1,13 @@
 GUIDO Engine - JNI package history 
 
 ----------------------------------------------------------------
+version 1.2.2 - Jan. 08 2015
+- Add new guido engine API (Guido Score, Guido Piano Roll)
+- Add deprecated marker on old API.
+- Update guidoviewer to use new API.
+- Separation in two java package (guidoengine.jar to drive the engine and drawcommand.jar to parse binary export and draw it)
+
+----------------------------------------------------------------
 version 1.2.1 - 
 - update to GUIDO 1.4.9: corrects missing voice map for chords
 - guidoviewer implements different strategies for page layout
