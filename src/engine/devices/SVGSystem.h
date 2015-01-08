@@ -32,7 +32,7 @@
 class_export SVGSystem : public VGSystem
 {
 	public:
-								SVGSystem(const char *font);
+					 SVGSystem(const char *font=0);
 		virtual		~SVGSystem() {}
 
 		virtual VGDevice*		CreateDisplayDevice(std::ostream& outstream, int mappingMode);
