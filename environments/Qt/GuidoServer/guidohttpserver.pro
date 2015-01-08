@@ -4,9 +4,8 @@ HEADERS += $$files(../../../server/*.h) $$files(*.h) $$files(../../../server/jso
 DEFINES += "JSON_ONLY"
 
 TEMPLATE = app
-win32 {
-	TEMPLATE = vcapp
-}
+win32:TEMPLATE = vcapp
+
 QT += widgets printsupport
 CONFIG += console
 macx:CONFIG -= app_bundle
@@ -24,4 +23,4 @@ INCLUDEPATH += ../../../server
 win32:INCLUDEPATH += ../../../server/json
 INCLUDEPATH += /usr/local/include
 
-include( ../GUIDOEngineLink.pri )
+include( GUIDOEngineLink.pri )
