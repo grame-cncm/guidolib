@@ -60,7 +60,7 @@ endif()
 
 #######################################
 # tools generation
-set(TOOLS guido2midi guido2svg guido2abstract guido2proll midi2proll guido2rproportional midi2rproportional guido2svgmap guidogetversion guidogetpagecount guidogetvoicecount guidogettimemap guidogetpagemap guidogetstaffmap guidogetsystemmap guidogetvoicemap) #guido2dsl temporary removed
+set(TOOLS guido2midi guido2svg guido2abstract guido2proll midi2proll guido2svgmap guidogetversion guidogetpagecount guidogetvoicecount guidogettimemap guidogetpagemap guidogetstaffmap guidogetsystemmap guidogetvoicemap)
 foreach(tool ${TOOLS})
 	add_executable( ${tool} ${TOOLS_PATH}/${tool}.cpp )
 	target_link_libraries( ${tool} ${GUIDOLIB})

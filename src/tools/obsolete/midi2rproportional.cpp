@@ -176,7 +176,7 @@ static bool lboolopt(int argc, char **argv, const char* opt, bool defaultvalue)
 int main(int argc, char **argv)
 {
  	SVGSystem sys;
-    SVGDevice dev(cout, &sys, 0, 0);
+    SVGDevice dev(cout, &sys, 0);
 	
 	checkusage (argc, argv);
 
