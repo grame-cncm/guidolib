@@ -4,12 +4,14 @@ ifeq ($(system), Darwin)
 	TARGET ?= macos
 	QMAKEIOS ?= $(HOME)/Qt5.4.0/5.4/ios/bin/qmake
 	DEST := ..
+	OUT = $(DEST)/$(PROJECT)$(APP)
 else
 ifeq ($(system), MINGW32_NT-6.1)
 	TARGET = windows
 	QMAKEWIN ?= $(shell ../../../qt-win32)
 	MSVC 	 ?= $(shell ../../../vs-win32)
 	DEST := ../..
+	OUT = $(DEST)/$(PROJECT).exe
 else
 
 endif
@@ -79,4 +81,4 @@ $(PROJECT).exe:
 	cp -R win32/Release/$(PROJECT).exe $(DEST)
 
 clean:
-	rm -rf $(DEST)/$(PROJECT) $(DEST)/$(PROJECT).exe $(DEST)/$(PROJECT).app macos win32 ios
+	rm -rf $(OUT) macos win32 ios

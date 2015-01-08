@@ -2,6 +2,9 @@
 PROJECT := GuidoSceneComposer
 
 all:
+	make -f ../../Make.shared PROJECT=$(PROJECT)
+
+mac:
 	make -f ../../Make.shared PROJECT=$(PROJECT) APP=.app TARGET=mac
 
 macos:
