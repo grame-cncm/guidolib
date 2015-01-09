@@ -17,7 +17,9 @@ public class AndroidCanvasDrawMusicSymbolCommand extends DrawMusicSymbolCommand 
   public void drawToCanvas(Canvas canvas, GuidoCanvasView view) {
     view.correctTransformMatrix(canvas);
 
-    Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    Paint paint = new Paint();
+    paint.setAntiAlias(true);
+    
     paint.setTypeface(view.getMusicFont());
     paint.setColor(view.getFontColor());
     paint.setTextSize(view.getMusicFontSize());

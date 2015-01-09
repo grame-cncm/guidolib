@@ -20,7 +20,8 @@ public class AndroidCanvasBeginDrawCommand extends BeginDrawCommand implements D
     double top = canvas.getHeight();
     double bottom = 0;
 
-    Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    Paint paint = new Paint();
+    paint.setAntiAlias(true);
     paint.setColor(Color.WHITE);
     paint.setStyle(Paint.Style.FILL);
     canvas.drawRect((float)left, (float)top, (float)right, (float)bottom, paint);
