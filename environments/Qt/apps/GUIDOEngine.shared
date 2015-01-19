@@ -11,7 +11,7 @@ ios {
 	QMAKE_CXXFLAGS += -DIOS
 	CONFIG += c++11
 	CONFIG+= arm64 armv7 armv7s
-	LIBS += -L$$ROOT/build -lGUIDOEngine
+	
 }
 
 win32: {
@@ -30,10 +30,13 @@ win32: {
 # GUIDOEngine library link for each platform
 !DebugBuild {
 	macx:LIBS += -F$$ROOT/build -framework GUIDOEngine
+	ios:LIBS += -L$$ROOT/build/iOS/Release-iphoneos -lGUIDOEngine
 } else {
 	macx:LIBS += -F$$ROOT/build/MacOS/Debug -framework GUIDOEngine
+	ios:LIBS += -L$$ROOT/build/iOS/Debug-iphoneos -lGUIDOEngine
 }
-unix:!macx:LIBS += -L$$ROOT/build/linux -lGUIDOEngine
+
+unix:!macx:!ios:LIBS += -L$$ROOT/build/linux -lGUIDOEngine
 win32:LIBS += $$GUIDO
 
 INCLUDEPATH += $$ROOT/src/engine/include 

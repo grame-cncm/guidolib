@@ -7,7 +7,7 @@ win32 {
 }
 CONFIG += console
 macx:CONFIG -= app_bundle
-macx:QMAKE_MAC_SDK = macosx10.9
+macx:QMAKE_CXXFLAGS += -mmacosx-version-min=10.6
 
 SOURCES += main.cpp
 
