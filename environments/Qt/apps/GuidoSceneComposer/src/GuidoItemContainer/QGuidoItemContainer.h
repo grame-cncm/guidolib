@@ -26,7 +26,9 @@
 
 #include <QObject>
 #include <QGraphicsRectItem>
+#ifndef IOS
 #include <QPrinter>
+#endif
 #include <QDomElement>
 #include <QDrag>
 #include <QMimeData>
@@ -224,11 +226,12 @@ class QGuidoItemContainer : public QLanguageItem
 		*/
 		QImage* buildDragImage();
 
+#ifndef IOS
 		/*!
 		*	\brief Print the contained QGuidoItem on the QPrinter. Pure virtual.
 		*/
 		void exportToPdf( QPrinter * printer );
-		
+#endif
 		/*!
 		*	\brief Updates the layoutSettings of the contained QGuidoItem according to mIsProportionalRenderingOn and mIsOptimalPageFillOn.
 		*/
