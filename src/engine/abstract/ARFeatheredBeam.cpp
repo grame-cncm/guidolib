@@ -75,6 +75,8 @@ void ARFeatheredBeam::setTagParameterList(TagParameterList & tpl)
 
 			TagParameterString *drawDuration = TagParameterString::cast(rtpl->RemoveHead());
 			drawDuration->getBool(drawDur);
+			delete durations;
+			delete drawDuration;
 		}
 		delete rtpl;
 	}

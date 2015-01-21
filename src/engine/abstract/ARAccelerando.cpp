@@ -40,7 +40,9 @@ ARAccelerando::~ARAccelerando()
 {
 	delete tempo;
 	delete abstempo;
-	// delete TagParameterPointer ...
+	delete font;
+	delete fattrib;
+	delete fsize;
 }
 
 void ARAccelerando::setTagParameterList(TagParameterList& tpl)
