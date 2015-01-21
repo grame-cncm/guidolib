@@ -308,19 +308,21 @@ guido2image.exe:
 
 #########################################################################
 # tools
+SRC := ../src/engine
+
 tools: $(LEAKTOOLS)
 
 cleantools:
 	rm -f $(LEAKTOOLS)
 
 guidodraw : guidodraw.cpp
-	g++ guidodraw.cpp -I../src/include -I../src/tools $(lib) -o guidodraw
+	g++ guidodraw.cpp -I$(SRC)/include -I$(SRC)/tools $(lib) -o guidodraw
 
 guidoar2gr : guidoar2gr.cpp
-	g++ guidoar2gr.cpp -I../src/include -I../src/tools $(lib) -o guidoar2gr
+	g++ guidoar2gr.cpp -I$(SRC)/include -I$(SRC)/tools $(lib) -o guidoar2gr
 
 guidoparse : guidoparse.cpp
-	g++ guidoparse.cpp -I../src/include $(lib) -o guidoparse
+	g++ guidoparse.cpp -I$(SRC)/include $(lib) -o guidoparse
 
 forcepdfdate: forcepdfdate.cpp
 	g++ forcepdfdate.cpp -o forcepdfdate
