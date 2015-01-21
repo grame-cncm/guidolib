@@ -71,6 +71,7 @@ ARNote::ARNote(const ARNote & arnote)
 ARNote::~ARNote()
 {
 	delete fOrnament;		// makes the system crash - to be checked
+	delete fCluster;		// makes the system crash - to be checked
 }
 
 ARMusicalObject * ARNote::Copy() const
