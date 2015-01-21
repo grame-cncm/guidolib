@@ -2,14 +2,17 @@
 system	:= $(shell uname -s)
 ifeq ($(system), Darwin)
 	TARGET = mac
-	QMAKEIOS ?= $(HOME)/Qt5.4.0/5.4/ios/bin/qmake
+	SPEC ?= -spec macx-xcode
+	QMAKEIOS ?= $(HOME)/Qt/5.3/ios/bin/qmake
 else
 ifeq ($(system), MINGW32_NT-6.1)
 	TARGET = windows
 	QMAKEWIN ?= $(shell ../../../qt-win32)
 	MSVC 	 ?= $(shell ../../../vs-win32)
 else
-
+ifeq ($(system), Linux)
+	TARGET = linux
+endif
 endif
 endif
 
@@ -17,7 +20,7 @@ QMAKE    ?= qmake
 PROJECT := GraphicsSceneMainWindow
 ROOT    := ..
 
-.PHONY : macos ios win32
+.PHONY : macos ios win32 linux
 
 all:
 	make  -f ../../Make.shared $(TARGET)
@@ -39,6 +42,11 @@ ios: ios/$(PROJECT)-iOS.xcodeproj lib$(PROJECT)-iOS.a
 windows: win32/$(PROJECT).vcxproj $(PROJECT).lib
 	@echo ===================================
 	@echo Build $(PROJECT) for win32 done
+	@echo ===================================
+
+linux: linux/$(PROJECT).makefile  lib$(PROJECT)-linux.a
+	@echo ===================================
+	@echo Build $(PROJECT) for linux done
 	@echo ===================================
 
 ###################
@@ -72,6 +80,15 @@ win32/$(PROJECT).vcxproj : $(ROOT)/$(PROJECT).pro
 $(PROJECT).lib:
 	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild win32/$(PROJECT).vcxproj /maxcpucount:4 /p:Configuration=Release"
 
+###################
+# Linux part
+###################
+linux/$(PROJECT).makefile : $(ROOT)/$(PROJECT).pro
+	[ -d linux ] || mkdir linux
+	cd linux && $(QMAKE) $(SPEC) $(ROOT)/.. -o $(PROJECT).makefile
+
+lib$(PROJECT)-linux.a:
+	make -C linux -f $(PROJECT).makefile
 	
 clean:
-	rm -rf ../../lib$(PROJECT)*.a ../../$(GraphicsSceneMainWindow).lib ios macos win32
+	rm -rf ../../lib$(PROJECT)*.a ../../$(PROJECT).lib ios macos win32 linux

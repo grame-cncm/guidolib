@@ -18,11 +18,13 @@ public class AndroidCanvasDrawStringCommand extends DrawStringCommand implements
 	public void drawToCanvas(Canvas canvas, GuidoCanvasView view) {
 		view.correctTransformMatrix(canvas);
 
-		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		paint.setTypeface(view.getTextFont());
+		Paint paint = new Paint();
+	    paint.setAntiAlias(true);
+	    
+	    paint.setTypeface(view.getTextFont());
 		paint.setColor(view.getFontColor());
 		paint.setTextSize(view.getTextFontSize());
-
+		
 		canvas.drawText(_s, _x, _y, paint);
 		view.resetTransformMatrix(canvas);
 	}

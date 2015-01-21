@@ -21,8 +21,8 @@
 
 #define GUIDO_FONT_FILE "guido2.ttf"
 
-#ifdef Q_WS_MAC
-#include "/Developer/Headers/FlatCarbon/CFURL.h"
+#ifdef Q_OS_MAC
+#include "CoreFoundation/CFBundle.h"
 static QString getGuidoFontPath()
 {
 	CFURLRef appUrlRef = CFBundleCopyBundleURL(CFBundleGetMainBundle());
@@ -30,9 +30,8 @@ static QString getGuidoFontPath()
 	const char *bundlePath = CFStringGetCStringPtr(macPath, CFStringGetSystemEncoding());
 	CFRelease(appUrlRef);
 	CFRelease(macPath );
-	
-	QString guidoFontPath = QString(bundlePath) + "/Contents/Fonts/" + QString(GUIDO_FONT_FILE);
-	
+	QString guidoFontPath = QString(bundlePath) + "/MyContents/Fonts/" + QString(GUIDO_FONT_FILE);
+
 	if ( QFile::exists(guidoFontPath) )
 		return guidoFontPath ;
 	else

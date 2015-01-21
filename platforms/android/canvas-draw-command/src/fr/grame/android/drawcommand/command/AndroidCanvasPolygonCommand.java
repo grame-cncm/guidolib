@@ -25,11 +25,11 @@ public class AndroidCanvasPolygonCommand extends PolygonCommand implements DrawT
       path.lineTo(_xCoords.get(i), _yCoords.get(i));
     }
     
-    Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    Paint paint = new Paint();
+    paint.setAntiAlias(true);
     
     paint.setColor(view.getCurrentFillColor());
     paint.setStyle(Paint.Style.FILL);
-    
     canvas.drawPath(path, paint);
     view.resetTransformMatrix(canvas);
   }

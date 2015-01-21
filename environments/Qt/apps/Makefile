@@ -1,13 +1,8 @@
 
 
 system	:= $(shell uname -s)
-ifeq ($(system), Darwin)
-else
 ifeq ($(system), MINGW32_NT-6.1)
 	LIB = GUIDOEngine.dll
-else
-
-endif
 endif
 
 

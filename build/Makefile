@@ -11,7 +11,9 @@ else
 ifeq ($(system), MINGW32_NT-6.1)
 	TARGET = windows
 else
-
+ifeq ($(system), Linux)
+	TARGET = linux
+endif
 endif
 endif
 
@@ -22,6 +24,7 @@ IOS  := iOS
 WIN32VS := "Visual Studio 10"
 WIN64VS := "Visual Studio 10 Win64"
 MSVC := C:\Program Files (x86)\Microsoft Visual Studio 10.0
+LINUX := linux
 
 all :
 	make $(TARGET)
@@ -115,17 +118,36 @@ winclean:
 	rm -rf win32 win64 GUIDOEngine*.lib GUIDOEngine.dll
 
 #===============================================================
+# building the library on linux
+#===============================================================
+.PHONY : $(LINUX)/libGUIDOEngine.so
+
+linux : $(LINUX)/Makefile libGUIDOEngine.so
+
+libGUIDOEngine.so :  $(LINUX)/Makefile  $(LINUX)/libGUIDOEngine.so
+	rm -rf GUIDOEngine.so
+	cp -R $(LINUX)/libGUIDOEngine.so .
+
+$(LINUX)/libGUIDOEngine.so : CMakeLists.txt
+	make -C $(LINUX)
+	
+$(LINUX)/Makefile : CMakeLists.txt
+	[ -d $(LINUX) ] || mkdir $(LINUX)
+	cd $(LINUX) && cmake .. -G "Unix Makefiles" -DMIDIEXPORT=yes
+
+linuxclean:
+	rm -rf $(LINUX)
+
+#===============================================================
 # building the Guido tools
 #===============================================================
 clean :
 	make macclean
 	make winclean
+	make linuxclean
 	make -C ../src/tools/build clean
 	make -C ../environments/Qt clean
 
-#===============================================================
-# building the Guido tools
-#===============================================================
 tools :
 	make -C ../src/tools/build
 

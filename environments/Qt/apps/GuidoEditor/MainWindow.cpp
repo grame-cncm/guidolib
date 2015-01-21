@@ -46,6 +46,11 @@ typedef GuidoErrCode (* GuidoAR2MIDIFilePtr)(const struct NodeAR* ar, const char
 #include <QToolBar>
 
 
+#ifdef Q_OS_MAC
+#include "CoreFoundation/CFBundle.h"
+#endif
+
+
 #define APP_NAME QString("GuidoEditor")
 #define COMPANY_NAME QString("GRAME")
 
@@ -735,10 +740,15 @@ void MainWindow::docTags()
 {
     bool docFound = false;
     
-#ifdef Q_WS_MAC
-    docFound = QDesktopServices::openUrl(QUrl(QApplication::applicationDirPath() + "/Contents/doc/RefCardsTags.pdf", QUrl::TolerantMode));
+#ifdef Q_OS_MAC
+    CFURLRef appUrlRef = CFBundleCopyBundleURL(CFBundleGetMainBundle());
+    CFStringRef macPath = CFURLCopyFileSystemPath(appUrlRef, kCFURLPOSIXPathStyle);
+    const char *bundlePath = CFStringGetCStringPtr(macPath, CFStringGetSystemEncoding());
+    CFRelease(appUrlRef);
+    CFRelease(macPath);
+    docFound = QDesktopServices::openUrl(QUrl::fromLocalFile(QString(bundlePath) + "/MyContents/Doc/RefCardsTags.pdf"));
 #else
-    docFound = QDesktopServices::openUrl(QUrl(QApplication::applicationDirPath() + "/doc/RefCardsTags.pdf", QUrl::TolerantMode));
+    docFound = QDesktopServices::openUrl(QUrl::fromLocalFile(QApplication::applicationDirPath() + "/doc/RefCardsTags.pdf");
 #endif
     
     if (!docFound)
@@ -750,10 +760,15 @@ void MainWindow::docParams()
 {
     bool docFound = false;
     
-#ifdef Q_WS_MAC
-    docFound = QDesktopServices::openUrl(QUrl(QApplication::applicationDirPath() + "/Contents/doc/RefCardsParams.pdf", QUrl::TolerantMode));
+#ifdef Q_OS_MAC
+    CFURLRef appUrlRef = CFBundleCopyBundleURL(CFBundleGetMainBundle());
+    CFStringRef macPath = CFURLCopyFileSystemPath(appUrlRef, kCFURLPOSIXPathStyle);
+    const char *bundlePath = CFStringGetCStringPtr(macPath, CFStringGetSystemEncoding());
+    CFRelease(appUrlRef);
+    CFRelease(macPath);
+    docFound = QDesktopServices::openUrl(QUrl::fromLocalFile(QString(bundlePath) + "/MyContents/Doc/RefCardsParams.pdf"));
 #else
-    docFound = QDesktopServices::openUrl(QUrl(QApplication::applicationDirPath() + "/doc/RefCardsParams.pdf", QUrl::TolerantMode));
+    docFound = QDesktopServices::openUrl(QUrl::fromLocalFile(QApplication::applicationDirPath() + "/doc/RefCardsParams.pdf"));
 #endif
     
     if (!docFound)

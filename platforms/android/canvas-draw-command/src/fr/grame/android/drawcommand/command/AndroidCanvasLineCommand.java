@@ -17,7 +17,8 @@ public class AndroidCanvasLineCommand extends LineCommand implements DrawToCanva
     
     view.correctTransformMatrix(canvas);
 
-    Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    Paint paint = new Paint();
+    paint.setAntiAlias(true);
     
     paint.setColor(view.getCurrentPenColor());
     paint.setStyle(Paint.Style.STROKE);

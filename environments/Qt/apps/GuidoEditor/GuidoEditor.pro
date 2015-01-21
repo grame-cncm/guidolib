@@ -15,37 +15,35 @@ MOC_DIR = ./tmpSrc
 RCC_DIR = ./tmpSrc
 UI_DIR = ./tmpSrc
 
-macx {
+macx|ios {
 	RC_FILE+=$$RESOURCES_DIR/English.lproj/InfoPlist.strings 
 	QMAKE_INFO_PLIST = $$PWD/rsc/GuidoEditorInfo.plist
 	RSRC.files =  $$RESOURCES_DIR/guido.icns
-	RSRC.path =  Contents/Resources
+	# In new version of ios, we can't use Contents folder for anything other than code
+	RSRC.path =  MyContents/Resources
 
 	FONT.files  = $$ROOT/src/guido2.svg
 	FONT.files += $$ROOT/src/guido2.ttf
-	FONT.path  = Contents/Fonts
+	FONT.path  = MyContents/Fonts
 
 	DOC.files  = $$ROOT/doc/refcard/latex/RefCardsParams.pdf
 	DOC.files += $$ROOT/doc/refcard/latex/RefCardsTags.pdf
-	DOC.path  = Contents/Doc
+	DOC.path  = MyContents/Doc
 
 	QMAKE_BUNDLE_DATA += FONT
 	QMAKE_BUNDLE_DATA += DOC
 	QMAKE_BUNDLE_DATA += RSRC
 }
 ios {
-	ICON =  rsc/guido.icns
-	FONT.files  = $$ROOT/src/guido2.svg
-	FONT.files += $$ROOT/src/guido2.ttf
-	FONT.path  = Contents/Fonts
-	QMAKE_BUNDLE_DATA += FONT
+	ios_icon.files = $$files($$PWD/rsc/iosIcons/guidoIcon*.png)
+	QMAKE_BUNDLE_DATA += ios_icon
 }
 
 win32 { RC_FILE = $$RESOURCES_DIR/GuidoEditor.rc }
 
 # GuidoQt library link for each platform
 win32:LIBS += $$QTROOT/libs/GuidoQt.lib
-unix:LIBS += -L$$QTROOT/libs -lGuidoQt
+unix:!ios:LIBS += -L$$QTROOT/libs -lGuidoQt
 ios:LIBS += -L$$QTROOT/libs -lGuidoQt-iOS
 macx:LIBS += -L$$QTROOT/libs -lGuidoQt
 

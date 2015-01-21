@@ -5,7 +5,8 @@
 system	:= $(shell uname -s)
 ifeq ($(system), Darwin)
 	TARGET = macos
-	QMAKEIOS ?= $(HOME)/Qt5.4.0/5.4/ios/bin/qmake
+	SPEC ?= -spec macx-xcode
+	QMAKEIOS ?= $(HOME)/Qt/5.3/ios/bin/qmake
 	DEST := ..
 else
 ifeq ($(system), MINGW32_NT-6.1)
@@ -14,14 +15,17 @@ ifeq ($(system), MINGW32_NT-6.1)
 	MSVC 	 ?= $(shell ../../../vs-win32)
 	DEST := ../..
 else
-
+ifeq ($(system), Linux)
+	TARGET = linux
+	DEST := ..
+endif
 endif
 endif
 
 QMAKE    ?= qmake
 ROOT    := ..
 
-.PHONY : macos win32
+.PHONY : macos win32 linux
 
 all:
 	make -f ../../Make.shared $(TARGET)
@@ -34,6 +38,11 @@ macos: macos/$(PROJECT).xcodeproj  $(PROJECT)
 windows: win32/$(PROJECT).vcxproj  $(PROJECT).exe 
 	@echo ===================================
 	@echo Build $(PROJECT) for win32 done
+	@echo ===================================
+
+linux: linux/$(PROJECT).makefile  $(PROJECT)-linux
+	@echo ===================================
+	@echo Build $(PROJECT) for linux done
 	@echo ===================================
 
 ###################
@@ -58,6 +67,17 @@ $(PROJECT).exe:
 	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild win32/$(PROJECT).vcxproj /maxcpucount:4 /p:Configuration=Release"
 	cp  win32/Release/$(PROJECT).exe $(DEST)
 
+###################
+# Linux part
+###################
+linux/$(PROJECT).makefile : $(ROOT)/$(PROJECT).pro
+	[ -d linux ] || mkdir linux
+	cd linux && $(QMAKE) $(SPEC) $(ROOT)/.. -o $(PROJECT).makefile
+
+$(PROJECT)-linux:
+	make -C linux -f $(PROJECT).makefile
+	cp -R linux/$(PROJECT)  $(DEST) 
+
 clean:
-	rm -rf $(DEST)/$(PROJECT) $(DEST)/$(PROJECT).exe $(DEST)/$(PROJECT).app macos win32
+	rm -rf $(DEST)/$(PROJECT) $(DEST)/$(PROJECT).exe $(DEST)/$(PROJECT).app macos win32 linux
 	

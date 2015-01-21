@@ -152,11 +152,13 @@ QGuidoItemContainer::~QGuidoItemContainer()
 //-------------------------------------------------------------------------
 void QGuidoItemContainer::exportToPdf(const QString& fileName)
 {
+#ifndef IOS
 	QPrinter printer;
 	printer.setFullPage(true);
 	printer.setOutputFileName( fileName );
 	printer.setOutputFormat( QPrinter::PdfFormat );
 	exportToPdf( &printer );
+#endif
 }
 
 //-------------------------------------------------------------------------
@@ -626,6 +628,7 @@ QImage* QGuidoItemContainer::buildDragImage()
 }
 
 //-------------------------------------------------------------------------
+#ifndef IOS
 void QGuidoItemContainer::exportToPdf( QPrinter * printer )
 {
 	int originalPage = mGuidoItem->firstVisiblePage();
@@ -660,7 +663,7 @@ void QGuidoItemContainer::exportToPdf( QPrinter * printer )
 
 	mGuidoItem->setPage( originalPage );
 }
-
+#endif
 //-------------------------------------------------------------------------
 void QGuidoItemContainer::updateLayoutSettings()
 {

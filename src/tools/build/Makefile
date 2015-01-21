@@ -11,12 +11,12 @@ else
 ifeq ($(system), MINGW32_NT-6.1)
 	TARGET = windows
 else
-
+ifeq ($(system), Linux)
+	TARGET = linux
 endif
 endif
+endif
 
-
-OUT  := GUIDOEngine.framework GUIDOEngine.tgz libGUIDOEngine.a
 WIN32VS := "Visual Studio 10"
 WIN64VS := "Visual Studio 10 Win64"
 MSVC := C:\Program Files (x86)\Microsoft Visual Studio 10.0
@@ -61,7 +61,19 @@ win64tools : win64/guidotool.sln
 	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild win64/guidotools.sln /maxcpucount:4 /p:Configuration=Release"
 
 #===============================================================
+# building the tools on linux
+#===============================================================
+linux : linux/Makefile linuxtools
+
+linuxtools : linux/Makefile
+	make -C linux
+
+linux/Makefile : CMakeLists.txt
+	[ -d linux ] || mkdir linux
+	cd linux && cmake .. -G "Unix Makefiles"
+
+#===============================================================
 clean :
-	rm -rf macos win32 win64
+	rm -rf macos win32 win64 linux
 
 

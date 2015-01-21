@@ -24,7 +24,8 @@ public class AndroidCanvasRectangleCommand extends RectangleCommand implements D
     /*double width = Math.abs(right - left);
     double height = Math.abs(top - bottom);*/
 
-    Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    Paint paint = new Paint();
+    paint.setAntiAlias(true);
     paint.setColor(view.getCurrentFillColor());
     paint.setStyle(Paint.Style.FILL);
     canvas.drawRect((float)left, (float)top, (float)right, (float)bottom, paint);
