@@ -1823,6 +1823,7 @@ void ARFactory::endTag()
                     std::stringstream pitchStr(pitch);
                     newParser->setStream(&pitchStr);
                     newParser->parseNoteOrChord();
+					delete newParser;
                     
                     ARDummyRangeEnd * dummy = new ARDummyRangeEnd("\\dispDurEnd");
                     mCurrentVoice->setPositionTagEndPos(-1,dummy,tmpdspdur);

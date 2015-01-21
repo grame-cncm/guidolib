@@ -36,6 +36,9 @@ ARVolta::ARVolta()
 
 ARVolta::~ARVolta()
 {
+    delete mark;
+    delete pass;
+    delete format;
 }
 
 void ARVolta::browse(TimeUnwrap& mapper) const

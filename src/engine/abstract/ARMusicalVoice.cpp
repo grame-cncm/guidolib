@@ -2217,6 +2217,7 @@ obsolete: an end repeatbar is now ARBar
                         if (existingTie) {
                             TagParameterList *tpl = existingTie->getTagParameterList();
 					        artie->setTagParameterList(*tpl);
+							delete tpl;
                         }
 
                         ARDummyRangeEnd *arde = new ARDummyRangeEnd(TIEEND);

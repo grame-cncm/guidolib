@@ -49,6 +49,7 @@ void ARRestFormat::setTagParameterList(TagParameterList &tpl)
 
 	if (ret >= 0 && rtpl)
     {
+		delete rtpl;
 	}
 	else
 	{
