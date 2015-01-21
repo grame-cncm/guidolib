@@ -748,7 +748,7 @@ void MainWindow::docTags()
     CFRelease(macPath);
     docFound = QDesktopServices::openUrl(QUrl::fromLocalFile(QString(bundlePath) + "/MyContents/Doc/RefCardsTags.pdf"));
 #else
-    docFound = QDesktopServices::openUrl(QUrl::fromLocalFile(QApplication::applicationDirPath() + "/doc/RefCardsTags.pdf");
+    docFound = QDesktopServices::openUrl(QUrl::fromLocalFile(QApplication::applicationDirPath() + "/doc/RefCardsTags.pdf"));
 #endif
     
     if (!docFound)
