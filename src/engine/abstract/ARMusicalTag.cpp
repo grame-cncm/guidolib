@@ -55,39 +55,28 @@ ARMusicalTag::ARMusicalTag(const TYPE_TIMEPOSITION & tp, const ARMusicalTag * co
 };
 
 ARMusicalTag::ARMusicalTag(int pid, const ARMusicalTag * copy) 
-  : 
-  id(pid),
-  rangesetting(NO) ,
-  error(0),
-  mHasRange(false),
-mIsInHeader(false)
+  : id(pid), isAuto(0), rangesetting(NO), error(0), mHasRange(false), mIsInHeader(false)
 {
 	assoc = DC; // don't care ...
-	isAuto = 0;
 	color = NULL;
     rgbColor = NULL;
 	mDx = mDy = size = 0;
 	if (copy)
 	{
 		if (copy->getColor())
-			color = TagParameterString::cast(
-				copy->getColor()->getCopy());
+			color = TagParameterString::cast(copy->getColor()->getCopy());
         
         if (copy->getRGBColor())
-            rgbColor = TagParameterRGBColor::cast(
-                copy->getRGBColor()->getCopy());
+            rgbColor = TagParameterRGBColor::cast(copy->getRGBColor()->getCopy());
 
 		if (copy->getDX())
-			mDx = TagParameterFloat::cast(
-			copy->getDX()->getCopy());
+			mDx = TagParameterFloat::cast(copy->getDX()->getCopy());
 
 		if (copy->getDY())
-			mDy = TagParameterFloat::cast(
-			copy->getDY()->getCopy());
+			mDy = TagParameterFloat::cast(copy->getDY()->getCopy());
 
 		if (copy->getSize())
-			size = TagParameterFloat::cast(
-			copy->getSize()->getCopy());
+			size = TagParameterFloat::cast(copy->getSize()->getCopy());
 
 		rangesetting = copy->rangesetting;
 		mHasRange = copy->mHasRange;
