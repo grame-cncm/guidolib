@@ -45,10 +45,10 @@ endif
 nodlost	= "definitely lost: 0"
 noilost	= "indirectly lost: 0"
 noplost	= "possibly lost: 0"
-noperr	= "ERROR SUMMARY: [1-9]"
+noerr	= "ERROR SUMMARY: 0"
 
 gmnfiles      = $(shell find ../gmn-examples -name "*.gmn") $(shell find ../regression-tests -name "*.gmn")
-gmnfilesproll = $(shell find ../regression-tests/pianoroll -name "*.gmn")
+gmnfilesproll = $(shell find ../regression-tests/pianoroll -name "*.gmn")[1-9]
 
 pdfout		:= $(patsubst ../%.gmn, $(version)/%.pdf, $(gmnfiles))
 svgout		:= $(patsubst ../%.gmn, $(version)/standard/%.svg, $(gmnfiles))
@@ -205,7 +205,7 @@ $(version)/$(TOOLPATH)/%.leaks.out: $(version)/$(TOOLPATH)/%.leaks.txt
 	@grep $(nodlost) $< > /dev/null || echo "$< : definitely lost bytes"
 	@grep $(noilost) $< > /dev/null || echo "$< : indirectly lost bytes"
 	@grep $(noplost) $< > /dev/null || echo "$< : possibly lost bytes"
-	@grep $(noperr) $< > /dev/null || echo "$< : errors detected"
+	@grep $(noerr)   $< > /dev/null || echo "$< : errors detected"
 
 
 #########################################################################
