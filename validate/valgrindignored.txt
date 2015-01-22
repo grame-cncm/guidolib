@@ -39,3 +39,21 @@
    fun:_Z10guidoparsev
 }
 
+{
+   NVRectMerge
+   Memcheck:Cond
+   fun:_ZN6NVRect5MergeERKS_
+   fun:_ZN17GRNotationElement16addToBoundingBoxEPS_
+   fun:_ZN28GRARCompositeNotationElement17updateBoundingBoxEv
+   fun:_ZN7GREvent17updateBoundingBoxEv
+   fun:_ZN12GRSingleNote17updateBoundingBoxEv
+   fun:_ZN28GRARCompositeNotationElement11setPositionERK7NVPoint
+   fun:_ZN7GREvent11setPositionERK7NVPoint
+   fun:_ZN12GRSingleNote11setPositionERK7NVPoint
+   fun:_ZN12GRSingleNote10createNoteERK8Fraction
+   fun:_ZN12GRSingleNote12doCreateNoteERK8Fraction
+   fun:_ZN14GRVoiceManager16CreateSingleNoteERK8FractionP15ARMusicalObjectfb
+   fun:_ZN14GRVoiceManager10CreateNoteERK8FractionP15ARMusicalObject
+}
+
+
