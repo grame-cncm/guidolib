@@ -31,8 +31,8 @@ int main(int argc, char **argv)
         ifs.close();
 
         arh = GuidoString2AR(parser, streamBuffer.str().c_str());
-		if (arh) 
-			cerr << "error #" << err << ": " << GuidoGetErrorString (err) << endl;
+		if (!arh) 
+			cerr << "parsing error" << endl;
 
 		GuidoFreeAR (arh);
 
