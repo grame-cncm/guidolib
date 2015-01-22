@@ -107,6 +107,7 @@ class ARNote : public ARMusicalEvent
     int 	   fIntensity;
     ARTrill   *fOrnament;
     ARCluster *fCluster;
+    bool       fOwnCluster;
     bool       fIsLonelyInCluster;
     bool       fClusterHaveToBeDrawn;
     bool       fSubElementsHaveToBeDrawn;
