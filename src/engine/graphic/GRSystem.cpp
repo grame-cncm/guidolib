@@ -473,6 +473,8 @@ GRSystem::~GRSystem()
 	delete spf;
 #endif
 	delete mSpaceForceFunc;
+	for (unsigned int i=0; i<mAccolade.size(); i++)
+		delete mAccolade[i];
 }
 
 void GRSystem::GGSOutput() const
