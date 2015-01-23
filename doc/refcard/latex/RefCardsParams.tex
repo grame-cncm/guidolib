@@ -1,3 +1,4 @@
+
 \documentclass[a4paper, landscape, 10pt]{article}
 
 \usepackage{tabularx}
@@ -12,7 +13,7 @@
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
 \fancyfoot[C]{\textbf{\thepage}}
-\fancyfoot[R]{GUIDOLib v1.54}
+\fancyfoot[R]{GUIDOLib v1.56}
 
 \makeatletter
 \renewcommand{\maketitle}{
@@ -20,7 +21,7 @@
       \large
       {\LARGE\@title}
       \par\vspace{1ex}
-      GUIDOLib v1.54
+      GUIDOLib v1.56
     \end{center}
 }
 \makeatother
@@ -148,7 +149,7 @@
     &drawDuration&display or not total duration&boolean string&``false''&``true'' - ``false''&\\
     &color&&&&&\\
     \hline
-    \textbf{\textbackslash{}fermata}&type&fermata type&string&``short''&``short'' - ``long''&\\
+    \textbf{\textbackslash{}fermata}&type&fermata type&string&``regular''&``regular'' - ``short'' - ``long''&\\
     &position&fermata position&string&``above''&``below'' - ``above''&\\
     &dx/dy - color - size&&&&&\\
     \hline
@@ -318,6 +319,7 @@
     &lineThickness&tuplet line thickness&unit&0.08&&\\
     &bold&bold text or not&boolean string&``false''&``true'' - ``false''&\\
     &textSize&text size&unit&1.0&&\\
+    &dispNote&forces note display&duration string&[automatic]&``/1'' - ``/2'' - ``/4'' - ``/8'' - ``/16'' - &\\
     &dx - color&&&&&\\
     \hline
     \textbf{\textbackslash{}turn}&mode&mode type&string&``cautionnary''&``cautionnary''&\\
@@ -331,8 +333,6 @@
     &color&&&&&\\
     \hline
 \end{tabularx}
-
-\bigskip
 
 \textbf{dx/dy} : horiz./vert. offset | Value type : unit | Default value : 0\\
 \textbf{color} : element color | Value type : string. Default value : ``black'' | Examples : ``red'' - ``0x135618''\\

@@ -18,8 +18,8 @@
 //______________________________________________________________________________
 // SVGMapDevice
 //______________________________________________________________________________
-SVGMapDevice::SVGMapDevice(std::ostream& outstream, SVGSystem* system, const char* guidofontfile, const char* guidofontspec, int inMappingMode) :
-    SVGDevice(outstream, system, guidofontfile, guidofontspec)
+SVGMapDevice::SVGMapDevice(std::ostream& outstream, SVGSystem* system, const char* guidofont, int inMappingMode) :
+	SVGDevice(outstream, system, guidofont)
 {
     voicesMapsVector = new std::vector<Time2GraphicMap>();
     stavesMapsVector = new std::vector<Time2GraphicMap>();
@@ -51,7 +51,7 @@ void SVGMapDevice::drawMap(std::vector<Time2GraphicMap> *mapsVector)
 {
     VGColor fillColors[2] = { VGColor(0, 0, 200, 100), VGColor(200, 0, 0, 100) };
 
-    for (int i = 0; i < mapsVector->size(); i++) {
+	for (unsigned int i = 0; i < mapsVector->size(); i++) {
         Time2GraphicMap map = mapsVector->at(i);
 
         for (unsigned int j = 0; j < map.size(); j++) {

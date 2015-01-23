@@ -1,4 +1,4 @@
-VERSION := 1.56
+VERSION := 1.57
 DOCVERS := 1.54
 DEST    := .
 
@@ -21,7 +21,8 @@ WINLIB   := $(DEVKIT)-windows
 QTLIB    := $(DEVKIT)-Qt
 SRC 	 := guidolib-$(VERSION)-src
 
-files   := ../changelog.txt license.txt readme.txt ../src/guido2.ttf ../src/guido2.svg
+files   := ../changelog.txt license.txt readme.txt ../src/guido2.ttf ../src/guido2.svg ../misc/Acknowledgments.txt
+
 modules := guidolib
 
 ######### documentation files 
@@ -32,20 +33,18 @@ DOC		:=  ../doc/GUIDO-Format_de_Notation_Musicale.pdf \
 			../doc/refcard/latex/RefCardsParams.pdf \
 			../doc/refcard/latex/RefCardsTags.pdf
 
-SAMPLES := $(wildcard ../samples/*.cpp ../validate/guido*.cpp ../src/engine/tools/Null*.h)
+SAMPLES := $(wildcard ../src/samples/*.cpp ../validate/guido*.cpp ../src/engine/tools/Null*.h)
 
 ######### common include files 
-cominc  :=  $(wildcard ../src/engine/include/GUIDO*.h ../src/engine/devices/SVG*.h ) ../src/engine/include/TRect.h
+cominc  :=  $(wildcard ../src/engine/include/*.h ../src/engine/devices/SVG*.h )
 
 ######### win32 devices include files 
 win32inc := GDeviceWin32.h GSystemWin32.h GFontWin32.h  GDeviceWin32GDIPlus.h GSystemWin32GDIPlus.h GFontWin32GDIPlus.h
-win32inc := $(patsubst %, ../win32/src/%, $(win32inc))
+win32inc := $(patsubst %, ../platforms/win32/src/%, $(win32inc))
 
 ######### qt include files 
-qtinc 	:= 	GUIDOEngine.h GUIDOExport.h MusicalSymbols.h VGColor.h VGFont.h VGSystem.h VGDevice.h
-qtinc  := $(patsubst %, ../src/engine/include/%, $(qtinc))
-
-qtfiles =  ../Qt/LICENSE.MPL.txt ../Qt/package/readme.txt
+qtinc  := $(wildcard ../src/engine/include/*.h)
+qtfiles =  ../environments/Qt/LICENSE.MPL.txt ../environments/Qt/package/readme.txt
 
 QT_SRC_FILES   = $(shell find $(QTLIB)/src -type f)
 QT_SRC_FOLDERS = $(shell find $(QTLIB)/src -type d)
@@ -71,7 +70,7 @@ menu:
 
 doc:
 	make -C ../doc/doxygen
-	make -C ../Qt/doc
+	make -C ../environments/Qt/doc
 
 docpack:
 	make commondoc DEST=.
@@ -81,6 +80,7 @@ docpack:
 srcpack:
 	cd .. && git archive -o __tmp__.tgz --prefix=package/$(SRC)/ HEAD && tar xzfP __tmp__.tgz && rm __tmp__.tgz
 	cp readme-src_package.txt $(SRC)/readme.txt
+	cp ../misc/Acknowledgments.txt $(SRC)
 	tar czf $(SRC).tgz $(SRC)
 
 macos:
@@ -103,22 +103,22 @@ windows:
 	cp $(bin)/GUIDOEngine*.lib $(WINLIB)
 
 python:
-	tar czf pyGuido.tgz ../python
+	tar czf pyGuido.tgz ../lang/python
 
 qt:
 	rm -Rf $(QTLIB)
 	#### Doc
 	make commondoc DEST=$(QTLIB)
 	mkdir -p $(QTLIB)/doc/Qt/html 
-	cp -Rf ../Qt/doc/html $(QTLIB)/doc/Qt
-	cp "../Qt/doc/Guido Qt-Binding manual.pdf" $(QTLIB)/doc/Qt/
+	cp -Rf ../environments/Qt/doc/html $(QTLIB)/doc/Qt
+	cp "../environments/Qt/doc/Guido Qt-Binding manual.pdf" $(QTLIB)/doc/Qt/
 	#### Export the sources
-	cd ../Qt && git archive -o __tmp__.tgz --prefix=../package/$(QTLIB)/src/ HEAD && tar xzfP __tmp__.tgz && rm __tmp__.tgz
+	cd ../environments/Qt && git archive -o __tmp__.tgz --prefix=../package/$(QTLIB)/src/ HEAD && tar xzfP __tmp__.tgz && rm __tmp__.tgz
 	#### Copy GUIDOEngine includes
 	mkdir -p $(QTLIB)/src/engine/include
 	cp $(qtinc) $(QTLIB)/src/engine/include
 	#### Copy package specific files
-	cp -f ../Qt/package/GUIDOEngineLink.pri $(QTLIB)/src
+	cp -f ../environments/Qt/package/GUIDOEngineLink.pri $(QTLIB)/src
 	cp $(qtfiles) $(QTLIB)
 	#### Remove inappropriate files from the original SVN-Export
 	rm -Rf $(qtKitExcludedFiles)

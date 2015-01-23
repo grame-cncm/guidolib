@@ -1,0 +1,48 @@
+GUIDO Engine - JNI package history 
+
+----------------------------------------------------------------
+version 1.2.2 - Jan. 08 2015
+- Add new guido engine API (Guido Score, Guido Piano Roll)
+- Add deprecated marker on old API.
+- Update guidoviewer to use new API.
+- Separation in two java package (guidoengine.jar to drive the engine and drawcommand.jar to parse binary export and draw it)
+
+----------------------------------------------------------------
+version 1.2.1 - 
+- update to GUIDO 1.4.9: corrects missing voice map for chords
+- guidoviewer implements different strategies for page layout
+
+----------------------------------------------------------------
+version 1.2.0 - Feb. 22 2012
+- update to GUIDO 1.4.7 interface:
+  new guidoscore.CountVoices method
+  guidoscore.SVGExport API change to support embedded Guido fonts 
+  new adjusted mapping methods supported by guidoscore and guidoscoremap
+
+----------------------------------------------------------------
+version 1.1.0 - Dec. 12 2011
+- update to GUIDO 1.4.6 interface:
+  new guidoscore.AR2MIDIFile method
+  new guidoscore.SVGExport method  
+
+----------------------------------------------------------------
+version 1.0.1 - 
+- java init methods declared protected (instead public)
+
+----------------------------------------------------------------
+version 1.0.0 - Nov. 22 2010
+- wrong final declaration removed for various fields in various classes
+- MusicXML format support as file input
+- no more antialiasing parameter in guido.Init method (devices are now always antialiased)
+
+----------------------------------------------------------------
+version 1.0.0b - Sept 1 2010
+- new guidoscore.GetBitmap method
+- no more dependency to Canvas, uses Graphics for drawing via the new native 
+  guidoscore.GetBitmap method and thus supports also printing.
+
+----------------------------------------------------------------
+version 1.0.0a - August 2010
+- first version
+
+----------------------------------------------------------------

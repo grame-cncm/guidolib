@@ -482,30 +482,51 @@ units.
 
 	/** \brief Exports one page of score to SVG.
 
-        \param a graphic representation.
+		\param handle a graphic representation.
+		\param page the page number.
+		\param out the output stream.
+		\param embedFont if true, it use a embbed guido font and add it to the SVG.
+		\param font path of the guido svg font file or an svg font in text representation. Can be use if embedFont is set to false else it is unnecessary.
+		If the library is compiled with INDEPENDENTSVG option, don't use a font file. The library cannot calculate font metric. You have better to use embedded font.
+		\param mappingMode the mapping mode (see mapping mode enum).
+		\return a Guido error code
+	 */
+	GUIDOAPI(GuidoErrCode) GuidoGR2SVG( const GRHandler handle, int page, std::ostream& out, bool embedFont, const char* font, const int mappingMode = 0 );
+
+	/** \brief Exports one page of score to SVG.
+
+		\param handle a graphic representation.
 		\param page the page number.
 		\param out the output stream.
 		\param fontfile path of the guido svg font file.
-		\param fontspec an actual svg font if there is no font file.
 		\param mappingMode the mapping mode (see mapping mode enum).
 		\return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode) 	GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const int mappingMode = 0 );
+	#ifdef WIN32
+		__declspec(deprecated("Deprecated function (will be erased soon) : use GUIDOAPI(GuidoErrCode) Guido2SVG( const GRHandler handle, int page, std::ostream& out, bool embedFont, const char* font, const int mappingMode = 0 ) instead."))
+	#endif
+	GUIDOAPI(GuidoErrCode) 	GuidoSVGExport( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const int mappingMode = 0 ) GUIDOAPI_deprecated;
 
     /** \brief Exports one page of score to SVG.
+	 *  If fontfile or fontspec are set, the font is added to svg. The fontfile has priority over the fontspec.
 
-        \param a graphic representation.
+		\param handle a graphic representation.
         \param page the page number.
         \param out the output stream.
         \param fontfile path of the guido svg font file.
-        \param fontspec an actual svg font if there is no font file.
+		\param fontspec an svg font in text representation.
+		\param mappingMode the mapping mode (see mapping mode enum).
         \return a Guido error code
     */
-    GUIDOAPI(GuidoErrCode) 	GuidoSVGExportWithFontSpec( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec, const int mappingMode = 0 );
+	#ifdef WIN32
+		__declspec(deprecated("Deprecated function (will be erased soon) : use GUIDOAPI(GuidoErrCode) Guido2SVG( const GRHandler handle, int page, std::ostream& out, bool embedFont, const char* font, const int mappingMode = 0 ) instead."))
+	#endif
+	GUIDOAPI(GuidoErrCode) 	GuidoSVGExportWithFontSpec( const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec, const int mappingMode = 0 ) GUIDOAPI_deprecated;
 
 	/** \brief Exports an abstract representation of GUIDO draw commands.
 
-        \param a graphic representation.
+		\param handle a graphic representation.
+		\param page the page number.
 		\param out the output stream.
 		\return a Guido error code
 	*/
@@ -513,6 +534,8 @@ units.
 
 	/** \brief Exports an representation of GUIDO draw commands in a data-reduced dsl
 
+		\param handle a graphic representation.
+		\param page the page number.
 		\param out the output stream.
 		\return a Guido error code
 	*/
@@ -663,7 +686,7 @@ The number of version functions is due to historical reasons.
     /**	\brief Makes the correspondance between an ARMusic and a path.
 
 		\param inHandleAR the destination ARHandler.
-		\param inPath the path to associate.
+		\param inPaths the path to associate.
 		\return noErr if the association has been made with success
 		\return otherwise guidoErrActionFailed.
 	*/
@@ -673,6 +696,7 @@ The number of version functions is due to historical reasons.
     /**	\brief Returns the path corresponding to an AR.
 
 		\param inHandleAR the handle given to extract its path.
+		\param inPathVector the vector to be filled
 		\return the returned path.
         \return noErr if the association has been made with success
 		\return otherwise guidoErrActionFailed.

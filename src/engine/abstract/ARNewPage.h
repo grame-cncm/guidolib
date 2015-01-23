@@ -28,7 +28,7 @@ public:
              ARNewPage() { }
     virtual ~ARNewPage() { }
 
-    virtual void printName(std::ostream& os) const { os << "ARNewPage"; ARMusicalTag::printName(os); }
+    virtual void printName(std::ostream& os) const { os << "ARNewPage"; }
     virtual void printParameters(std::ostream& os) const {}
 
     /**** Function to avoid dynamic_cast ****/

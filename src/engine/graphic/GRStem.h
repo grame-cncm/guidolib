@@ -46,6 +46,7 @@ public:
 
 	virtual ~GRStem();
 
+    virtual void configureStem(const TYPE_DURATION& dur);
 
 	virtual void setStemLength( float inLen );
 	virtual void setStemDir(GDirection dir);
@@ -98,6 +99,11 @@ protected:
 
     ARTHead::HEADSTATE fHeadOrientation;
     ARTHead::HEADSTATE fLastHeadOrientation;
+
+    GREvent   *fSngnot;
+    GDirection fDir;
+	float      fLength;
+	float      fNotebreite;
 };
 
 #endif

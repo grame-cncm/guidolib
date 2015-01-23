@@ -92,7 +92,7 @@ void ARNoteFormat::printGMNName(std::ostream& os) const
 void ARNoteFormat::printParameters(std::ostream& os) const
 {
     if (style)
-        os << "style: " << style->getValue() << ";";
+        os << "style: " << style->getValue() << "; ";
 
     ARMusicalTag::printParameters(os);
 }

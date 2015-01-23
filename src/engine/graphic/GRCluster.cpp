@@ -92,7 +92,7 @@ GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, GRSingleNote *sngNote, AR
     fNoteCount = arcls->getNoteCount();
 }
 
-GRCluster::~GRCluster() {}
+GRCluster::~GRCluster() { delete [] fNoteFormatColor; }
 
 void GRCluster::updateBoundingBox()
 {

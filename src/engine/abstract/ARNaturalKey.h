@@ -26,7 +26,7 @@ public:
 				 ARNaturalKey() {};
 	virtual 	~ARNaturalKey() {};
 
-    virtual void printName(std::ostream& os) const { os << "ARNaturalKey"; ARMusicalTag::printName(os); }
+    virtual void printName(std::ostream& os) const { os << "ARNaturalKey"; }
     virtual void printParameters(std::ostream& os) const {}
 };
 

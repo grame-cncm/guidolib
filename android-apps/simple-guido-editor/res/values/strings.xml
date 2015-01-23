@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <string name="app_name">Simple Guido Editor</string>
-    <string name="tab_1">GMN Code</string>
-    <string name="tab_2">Score</string>
-
-</resources>

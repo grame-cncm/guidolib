@@ -84,10 +84,14 @@ class ARNote : public ARMusicalEvent
     bool         haveSubElementsToBeDrawn()  const      { return fSubElementsHaveToBeDrawn; }
 	void 		 setTremolo(ARTremolo* trem)            { fTremolo = trem; }
     ARTremolo*   getTremolo()                           { return fTremolo; }
+    NVstring     getNoteAppearance()                    { return fNoteAppearance; }
 
     int		     getMidiPitch() const;
 
     static int	detune2Quarters(float detune);
+    
+    // Used when dispNote param is set on \tuplet-tag to force note appearance
+    void forceNoteAppearance(NVstring noteAppearance);
 
     /**** Function to avoid dynamic_cast ****/
     virtual ARMusicalObject *isARNote() { return this; }
@@ -103,12 +107,15 @@ class ARNote : public ARMusicalEvent
     int 	   fIntensity;
     ARTrill   *fOrnament;
     ARCluster *fCluster;
+    bool       fOwnCluster;
     bool       fIsLonelyInCluster;
     bool       fClusterHaveToBeDrawn;
     bool       fSubElementsHaveToBeDrawn;
     ARTremolo *fTremolo;
 
     TYPE_TIMEPOSITION	fStartPosition;
+
+    NVstring   fNoteAppearance;
 };
 
 #endif

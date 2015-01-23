@@ -136,16 +136,15 @@ GuidoErrCode GuidoEngineAdapter::onDraw(GuidoOnDrawDesc * desc)
 {
 	return ::GuidoOnDraw(desc);
 }
-
-GuidoErrCode GuidoEngineAdapter::svgExport(const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec)
+GuidoErrCode GuidoEngineAdapter::gr2SVG( const GRHandler handle, int page, std::ostream& out, bool embedFont, const char* font, const int mappingMode)
 {
-	return ::GuidoSVGExportWithFontSpec(handle, page, out, fontfile, fontspec);
+	return ::GuidoGR2SVG(handle, page, out, embedFont, font, mappingMode);
 }
 
-string GuidoEngineAdapter::svgExport(const GRHandler handle, int page)
+std::string GuidoEngineAdapter::gr2SVG( const GRHandler handle, int page, bool embedFont, const int mappingMode)
 {
 	stringstream sstr;
-	::GuidoSVGExportWithFontSpec(handle, page, sstr, 0, ______src_guido2_svg);
+	::GuidoGR2SVG(handle, page, sstr, true, 0, 0);
 	return sstr.str();
 }
 
@@ -281,9 +280,12 @@ GuidoErrCode GuidoEngineAdapter::setSymbolPath(ARHandler inHandleAR, const std::
 {
 	return ::GuidoSetSymbolPath(inHandleAR, inPaths);
 }
-GuidoErrCode GuidoEngineAdapter::getSymbolPath(const ARHandler inHandleAR, std::vector<std::string> &inPathVector)
+
+std::vector<std::string> GuidoEngineAdapter::getSymbolPath(const ARHandler inHandleAR)
 {
-	return ::GuidoGetSymbolPath(inHandleAR, inPathVector);
+	std::vector<std::string> inPathVector;
+	::GuidoGetSymbolPath(inHandleAR, inPathVector);
+	return inPathVector;
 }
 
 // Parser section
@@ -297,15 +299,15 @@ GuidoErrCode GuidoEngineAdapter::closeParser(GuidoParser * parser)
 	return ::GuidoCloseParser(parser);
 }
 
-ARHandler GuidoEngineAdapter::file2AR(GuidoParser *p, const string &file)
+ARHandler GuidoEngineAdapter::file2AR(GuidoParser *parser, const string &file)
 {
-	return ::GuidoFile2AR(p, file.c_str());
+	return ::GuidoFile2AR(parser, file.c_str());
 }
 
 
-ARHandler GuidoEngineAdapter::string2AR(GuidoParser * p, const string &gmnCode)
+ARHandler GuidoEngineAdapter::string2AR(GuidoParser * parser, const string &gmnCode)
 {
-	return ::GuidoString2AR (p, gmnCode.c_str());
+	return ::GuidoString2AR (parser, gmnCode.c_str());
 }
 
 string GuidoEngineAdapter::getStream(GuidoStream *gStream)

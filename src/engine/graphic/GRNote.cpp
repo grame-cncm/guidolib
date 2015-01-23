@@ -26,7 +26,7 @@ GRNote::GRNote( GRStaff * grstaf,
 	const TYPE_TIMEPOSITION & relativeTimePositionOfGRNote,
 	const TYPE_DURATION & durationOfGRNote)
   : GREvent(grstaf,abstractRepresentationOfNote,relativeTimePositionOfGRNote,durationOfGRNote), 
-  fCluster(NULL), fClusterNote(false), fClusterHaveToBeDrawn(false)
+  fCluster(NULL), fOwnCluster(false), fClusterNote(false), fClusterHaveToBeDrawn(false)
 {
     // builds a graphical "part" of abstractRepresentation
     assert(abstractRepresentationOfNote);
@@ -48,17 +48,22 @@ GRNote::GRNote(GRStaff * grstaf, const TYPE_DURATION & inDuration )
 {
 	// dor "Dummys": not with duration theDuration, matching ARNote will be created
 	// ARNote will be not deleted automatically!!
+	fCluster = 0; 
+	fOwnCluster = fClusterNote = fClusterHaveToBeDrawn = false;
 }
 
 GRNote::GRNote(GRStaff * grstaf, ARNote * abstractRepresentationOfNote)
-  							: GREvent(grstaf,abstractRepresentationOfNote), fIsGraceNote(false)
+	: GREvent(grstaf,abstractRepresentationOfNote), fIsGraceNote(false)
 {
 	assert(abstractRepresentationOfNote);
+	fCluster = 0;
+	fOwnCluster = fClusterNote = fClusterHaveToBeDrawn = false;
 }
 
 GRNote::~GRNote()
 {
 	delete fOrnament;
+	if (fOwnCluster) delete fCluster;
 }
 
 
@@ -156,7 +161,7 @@ GRCluster *GRNote::createCluster(ARNoteFormat *inCurnoteformat)
     ARNote *arNote = getARNote();
 
     fCluster = new GRCluster(mGrStaff, arNote->getARCluster(), singleNote, inCurnoteformat);
-
+	fOwnCluster = true;
     return fCluster;
 }
 

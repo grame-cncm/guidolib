@@ -26,7 +26,7 @@ public:
                  ARPossibleBreak() { }
     virtual     ~ARPossibleBreak() { }
 
-    virtual void printName(std::ostream& os) const { os << "ARPossibleBreak"; ARMusicalTag::printName(os); }
+    virtual void printName(std::ostream& os) const { os << "ARPossibleBreak"; }
     virtual void printParameters(std::ostream& os) const {}
 
     virtual float getValue()                { return value; }

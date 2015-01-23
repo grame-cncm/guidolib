@@ -75,6 +75,7 @@ class GRNote : public GREvent
 protected :
 		GRTrill   *fOrnament;
         GRCluster *fCluster;
+        bool fOwnCluster;
         bool fClusterNote;
         bool fClusterHaveToBeDrawn;
         bool fIsGraceNote;

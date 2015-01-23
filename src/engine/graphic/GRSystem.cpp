@@ -473,6 +473,8 @@ GRSystem::~GRSystem()
 	delete spf;
 #endif
 	delete mSpaceForceFunc;
+	for (unsigned int i=0; i<mAccolade.size(); i++)
+		delete mAccolade[i];
 }
 
 void GRSystem::GGSOutput() const
@@ -660,9 +662,9 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 				const float staffHeight = (theStaff->getNumlines() - 1) * theStaff->getStaffLSPACE();
 				NVPoint endstaffPos = lastStaffPos;
 				endstaffPos.y += staffHeight; // Set to the bottom of last staff
-                GRAccolade * onlyAccol = new GRAccolade(new ARAccolade());
-				onlyAccol->draw(hdc, firstStaffPos, endstaffPos);
-                delete onlyAccol;
+				ARAccolade arAccol;
+				GRAccolade onlyAccol(&arAccol);
+				onlyAccol.draw(hdc, firstStaffPos, endstaffPos);
 			}
 			
 			std::map<int, bool> StavesOn;

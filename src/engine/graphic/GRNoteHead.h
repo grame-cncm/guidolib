@@ -15,48 +15,27 @@
 
 */
 
-
 #include "GRNotationElement.h"
 
 /** \brief not yet documented
 */
 class GRNoteHead : public GRNotationElement  
 {
-  public:
+public:
+			  	           GRNoteHead(); 
+    virtual 			  ~GRNoteHead();
 
-					  	GRNoteHead(); 
-      virtual 			~GRNoteHead();
+    virtual const NVPoint& getOffset() const              { return mOffset; }
+	virtual       void     setOffset(const NVPoint &noff) { mOffset = noff; }
+	virtual       void     addToOffset(const NVPoint &pt) { mOffset += pt; }
+	virtual       float    getSize() const                { return mSize; }
+	virtual const unsigned char *getColRef() const        { return mColRef; }
 
+protected:
+    NVPoint mOffset;
 
-	  virtual const NVPoint & getOffset() const
-	  {
-		  return mOffset;
-	  }
-	  virtual void setOffset(const NVPoint &noff)
-	  {
-		  mOffset = noff;
-	  }
-	  virtual void addToOffset(const NVPoint &pt)
-	  {
-		mOffset += pt;
-	  }
-	  virtual float getSize() const { return mSize; }
-
-	  virtual const  unsigned char * getColRef() const
-	  {
-		  return mColRef;
-	  }
-
-  protected:
-
-	  NVPoint mOffset;
-
-	  float mSize;
-	  unsigned char * mColRef;
-
+	float mSize;
+	unsigned char * mColRef;
 };
 
-
 #endif
-
-

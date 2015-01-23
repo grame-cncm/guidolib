@@ -52,8 +52,8 @@ ARGlissando::ARGlissando(const ARGlissando * glissando)	: ARMTParameter(-1, glis
     fFill      = glissando->fFill;
 	//fWavy      = glissando->fWavy;
 
-    if (glissando->color)
-        color = TagParameterString::cast(glissando->color->getCopy());
+//    if (glissando->color)
+//        color = TagParameterString::cast(glissando->color->getCopy());
 
     // dx/dy ?
 }

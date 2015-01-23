@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="fr.grame.simpleguidoeditor"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <!-- While ViewPager will work on API 4 or above, tabs require an ActionBar. ActionBar is only
+         available in API 11 or above. -->
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="21" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+    <!-- This is a standard Activity invocation for SimpleGuidoEditor. 
+    I have add android:hardwareAccelerated="false" because antialiasing in canvas not working 
+    on my android device if it's true. You can test it on recent android device. -->
+    <activity
+        android:name="fr.grame.simpleguidoeditor.SimpleGuidoEditor"
+        android:label="@string/app_name" 
+        android:hardwareAccelerated="false">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
+</application>
+
+</manifest>

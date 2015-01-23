@@ -1,6 +1,0 @@
-#!/bin/sh
-#
-PATH=/Users/fober/Qt5.3.1/5.3/ios/bin:$PATH
-
-qmake -version
-qmake

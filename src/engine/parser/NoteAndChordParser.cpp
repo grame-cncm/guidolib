@@ -22,19 +22,19 @@
 //--------------------------------------------------------------------------
 NoteAndChordParser::NoteAndChordParser()
 {
-	setlocale(LC_NUMERIC, "C");
-	fFactory = 0;
-    initScanner();
-	fErrorLine = fErrorColumn = 0;
-    fStream = NULL;
+//	setlocale(LC_NUMERIC, "C");
+//	fFactory = 0;
+//    initScanner();
+//	fErrorLine = fErrorColumn = 0;
+//    fStream = NULL;
 }
 
 //--------------------------------------------------------------------------
 NoteAndChordParser::~NoteAndChordParser()
 {
-	setlocale(LC_NUMERIC, 0);
-	destroyScanner();
-	delete fFactory;
+//	setlocale(LC_NUMERIC, 0);
+//	destroyScanner();
+//	delete fFactory;
 }
 //--------------------------------------------------------------------------
 void NoteAndChordParser::parseNoteOrChord()
@@ -54,6 +54,5 @@ void NoteAndChordParser::parseNoteOrChord()
     initScanner();
 
     /***************************/
-
 	_yyparse ();
 }

@@ -109,7 +109,8 @@ protected:
 	virtual void  DrawMeasureBar      (double date, DrawParams &drawParams) const;
 
 	        float pitch2ypos          (int midipitch, DrawParams &drawParams) const;
-	virtual void  handleColor         (ARNoteFormat *e, DrawParams &drawParams) const;
+	virtual void  handleColor         (ARNoteFormat *e, DrawParams &drawParams);
+	virtual void  popColor            (DrawParams &drawParams);
 	//virtual void handleEmpty        (double date);
 
             void HSVtoRGB             (float h, float s, float v, int &r, int &g, int &b) const;
@@ -146,9 +147,10 @@ protected:
 
     bool fVoicesAutoColored; // does the user wants voices to be auto colored ?
 
-    std::vector<std::pair<int, VGColor> > *fVoicesColors; // voices colors that the user set himself
+    std::vector<std::pair<int, VGColor *> > *fVoicesColors; // voices colors that the user set himself
     
     std::stack<VGColor *> *fColors;  // the colors stack (voice color, noteFormat color)
+    bool isAfterStateNoteFormatTag;
 
 	bool fChord;                   // a flag to indicate that next note (or rest) is in a chord
     TYPE_DURATION fChordDuration;  // the chord duration (notes in a chord have a null duration)

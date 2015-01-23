@@ -42,7 +42,7 @@ class GuidoFont : public VGFont
 // Font size is 200
 //---------------------------------------------
 
-const int kFontSize = 200;
+const int kGuidoFontSize = 200;
 
 static const int kGuidoFontWidth[] = {
     100,	// 0

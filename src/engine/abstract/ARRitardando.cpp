@@ -37,6 +37,9 @@ ARRitardando::~ARRitardando()
 {
 	delete tempo;
 	delete abstempo;
+	delete font;
+	delete fattrib;
+	delete fsize;
 };
 
 void ARRitardando::setTagParameterList(TagParameterList& tpl)
