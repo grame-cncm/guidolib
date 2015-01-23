@@ -6,7 +6,6 @@ system	:= $(shell uname -s)
 ifeq ($(system), Darwin)
 	TARGET = macos
 	SPEC ?= -spec macx-xcode
-	QMAKEIOS ?= $(HOME)/Qt/5.3/ios/bin/qmake
 	DEST := ..
 else
 ifeq ($(system), MINGW32_NT-6.1)

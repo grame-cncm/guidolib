@@ -2,7 +2,7 @@
 system	:= $(shell uname -s)
 ifeq ($(system), Darwin)
 	TARGET ?= macos
-	QMAKEIOS ?= $(HOME)/Qt/5.3/ios/bin/qmake
+	QMAKEIOS ?= $(HOME)/Qt5.3.0/5.3/ios/bin/qmake
 	SPEC ?= -spec macx-xcode
 	DEST := ..
 	OUT = $(DEST)/$(PROJECT)$(APP)
