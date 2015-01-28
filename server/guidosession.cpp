@@ -37,6 +37,7 @@
 #include "json_object.h"
 #include "json_array.h"
 #include "json_stream.h"
+#include "JSONTime2GraphicMap.h"
 
 #include "date_tools.h"
 
@@ -674,7 +675,7 @@ guidosessionresponse guidosession::datePageJson(string date, int page)
 guidosessionresponse guidosession::mapJson (string thingToGet, Time2GraphicMap &outmap)
 {
     json_object *obj = new json_object();
-    json_array *arr = populate_json_array_with_time_2_graphic_map(outmap);
+	json_array *arr = JSONTime2GraphicMap(outmap).toJsonArray();
     obj->add(new json_element(thingToGet.c_str(), new json_array_value(arr)));
     return wrapObjectInId(obj);
 }
@@ -682,7 +683,7 @@ guidosessionresponse guidosession::mapJson (string thingToGet, Time2GraphicMap &
 guidosessionresponse guidosession::timeMapJson (JSONFriendlyTimeMap &outmap)
 {
     json_object *obj = new json_object();
-    json_array *arr = populate_json_array_with_time_map_collector(outmap);
+	json_array *arr = outmap.toJsonArray();
     obj->add(new json_element("timemap", new json_array_value(arr)));
     return wrapObjectInId(obj);
 }
@@ -813,7 +814,7 @@ int guidosession::simpleSVGHelper (string svgfontfile, string *output)
       cerr << "No svg font file found." << endl;
     }
 
-    err = GuidoSVGExport(grh_, page_, mystream, fontfile);
+	err = GuidoGR2SVG(grh_, page_, mystream, false, fontfile);
     *output = mystream.str();
     return err;
 }

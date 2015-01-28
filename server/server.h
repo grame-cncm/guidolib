@@ -35,9 +35,9 @@
 #include "guido2img.h"
 
 // json
-#include "json/json_object.h"
-#include "json/json_array.h"
-#include "json/json_parser.h"
+#include "json_object.h"
+#include "json_array.h"
+#include "json_parser.h"
 
 #define IP_VERBOSE 1
 #define HEADER_VERBOSE 2

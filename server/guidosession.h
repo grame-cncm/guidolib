@@ -33,6 +33,7 @@
 
 #include "json_value.h"
 #include "map2json.h"
+#include "JSONFriendlyTimeMap.h"
 
 using namespace std;
 
