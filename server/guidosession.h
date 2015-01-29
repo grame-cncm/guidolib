@@ -66,7 +66,8 @@ class guidoAPIresponse {
     static guidoAPIresponse make_happy_response();
 };
 
-struct guidosessionresponse {
+class guidosessionresponse {
+	public:
     char* data_;
     unsigned int size_;
     string format_;
@@ -75,7 +76,8 @@ struct guidosessionresponse {
     int http_status_;
     guidosessionresponse ();
     guidosessionresponse (const char* data, unsigned int size, string format, int http_status = 200);
-    guidosessionresponse (string, string format, int http_status = 200);
+	guidosessionresponse (string data, string format, int http_status = 200);
+	guidosessionresponse (const guidosessionresponse &copy);
     ~guidosessionresponse ();
 };
 
@@ -140,14 +142,16 @@ private :
     // private function to wrap json in the ID of a current session
     guidosessionresponse wrapObjectInId(json::json_object *obj);
     
+	void initializeUserSettableParameters();
+
 public :
 
     // constructors, destructor, and initialzer
     guidosession(guido2img* g2img, string gmn, string id);
     virtual ~guidosession();
-    void initializeUserSettableParameters();
+
     void initializeARHandGRH();
-    void maybeResize();
+	void maybeResize();
     void updateValuesFromDefaults();
     void updateValuesFromDefaults(const TArgs& args);
     void changeDefaultValues(const TArgs &args);

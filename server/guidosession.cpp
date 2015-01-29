@@ -93,8 +93,8 @@ guidosessionresponse::guidosessionresponse (const char* data, unsigned int size,
 
 guidosessionresponse::guidosessionresponse (string data, string format, int http_status)
 {
-    int size = data.size();
-    const char *cc = data.c_str();
+	int size = data.size();
+	const char *cc = data.c_str();
     data_ = new char[size + 1];
     memcpy (data_, cc, size + 1);
     size_ = size;
@@ -111,9 +111,20 @@ guidosessionresponse::guidosessionresponse ()
     http_status_ = 404;
 }
 
+guidosessionresponse::guidosessionresponse (const guidosessionresponse &copy)
+{
+	size_ = copy.size_;
+	data_ = new char[size_ + 1];
+	memcpy (data_, copy.data_, size_ + 1);
+	format_ = copy.format_;
+	http_status_ = copy.http_status_;
+	errstring_ = copy.errstring_;
+	status_ = copy.status_;
+}
+
 guidosessionresponse::~guidosessionresponse ()
 {
-  delete data_;
+  delete[] data_;
 }
 
 guidosession::guidosession(guido2img* g2svg, string gmn, string id)
@@ -446,7 +457,7 @@ void guidosession::updateValuesFromDefaults(const TArgs &args)
         optimalPageFill_ = atoib(args.find("optimalPageFill")->second.c_str());
     } else {
         optimalPageFill_ = doptimalPageFill_;
-    }    
+	}
 }
 
 // FORMATTING
@@ -799,6 +810,8 @@ guidoAPIresponse guidosession::getMap (GuidoSessionMapType map, int aux, Time2Gr
     }
     return guidoAPIresponse(err);
 }
+
+
 
 // ---- Abstractions
 
