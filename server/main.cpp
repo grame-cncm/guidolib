@@ -147,6 +147,7 @@ static bool launchServer (int port, int verbose, int logmode, string cachedir, s
         log << "Can't start Guido httpd server on the specified port. Try a different port." << logend;
     }
     stopEngine();
+	delete converter;
     return ret;
 }
 
