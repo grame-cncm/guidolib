@@ -82,25 +82,103 @@ class HTTPDServer
 
 public:
 
+	/*!
+	 * \brief HTTPDServer
+	 * \param verbose flags for logging
+	 * \param logmode mode of log (0 for Apache-like log or 1 for XML log file)
+	 * \param cachedir
+	 * \param g2img
+	 * \param allowOrigin if true, Access-Control-Allow-Origin is set to '*' in http response header to allow cross domain request.
+	 */
     HTTPDServer(int verbose, int logmode, string cachedir, guido2img* g2img, bool allowOrigin);
     virtual ~HTTPDServer();
 
     /// \brief starts the httpd server
     bool start (int port);
+	/// \brief stop the httpd server
     void stop ();
-    int answer (struct MHD_Connection *connection, const char *url, const char *method, const char *version,
+
+	/*!
+	 * \brief answer : Main method to respond to a request.
+	 * \param connection
+	 * \param url
+	 * \param method
+	 * \param version
+	 * \param upload_data
+	 * \param upload_data_size
+	 * \param con_cls
+	 * \return #MHD_NO on error (i.e. reply already sent),
+	 *         #MHD_YES on success or if message has been queued
+	 */
+	int answer (struct MHD_Connection *connection, const char *url, const char *method, const char *version,
                 const char *upload_data, size_t *upload_data_size, void **con_cls);
-    int sendGuido (struct MHD_Connection *connection, const char* url, const TArgs& args, int type);
-    int sendGuidoPostRequest (struct MHD_Connection *connection, const TArgs& args);
+
+	void readFromCache(string target = "");
+
+private:
+	/*!
+	 * \brief sendGuido. Perform a request.
+	 * \param connection
+	 * \param url
+	 * \param args
+	 * \param type
+	 * \return #MHD_NO on error (i.e. reply already sent),
+	 *         #MHD_YES on success or if message has been queued
+	 */
+	int sendGuidoGetHead (struct MHD_Connection *connection, const char* url, const TArgs& args, int type, vector<string> &elems);
+
+	/*!
+	 * \brief sendGuidoPostRequest. Perform POST request. Only request with 'data' argument are valid.
+	 * All other generate an error. If the request is correct registerGMN is called and the response is send with int send (struct MHD_Connection *, guidosessionresponse &);
+	 * \param connection
+	 * \param args
+	 * \return #MHD_NO on error (i.e. reply already sent),
+	 *         #MHD_YES on success or if message has been queued
+	 */
+	int sendGuidoPostRequest (struct MHD_Connection *connection, const TArgs& args, vector<string> &elems);
+
+	/*!
+	 * \brief sendGuidoDeleteRequest
+	 * \param connection
+	 * \param args
+	 * \return
+	 */
     int sendGuidoDeleteRequest (struct MHD_Connection *connection, const TArgs& args);
 
+	/**
+	 * @brief registerGMN register gmn code for a session
+	 * @param unique_id id of the session
+	 * @param gmn code guido
+	 * @return a guidosessionresponse
+	 */
     guidosessionresponse registerGMN(string unique_id, string gmn);
-    void readFromCache(string target = "");
 
+	/*!
+	 * \brief send Send reponse with the connection connection.
+	 * Retreive response format and call send (struct MHD_Connection*, const char *, int , const char *, int) to
+	 *  make a low level response with a guidosessionresponse
+	 * \param connection a MHD_Connection to respond to the request
+	 * \param response to send.
+	 * \return #MHD_NO on error (i.e. reply already sent),
+	 *         #MHD_YES on success or if message has been queued
+	 */
     int send (struct MHD_Connection *connection, guidosessionresponse &response);
-    int send (struct MHD_Connection *connection, const char *page, int length, const char *type, int status=MHD_HTTP_OK);
-    int send (struct MHD_Connection *connection, const char *page, const char *type, int status=MHD_HTTP_OK);
 
+	/*!
+	 * \brief send send the response.
+	 * Make a MHD_Response.
+	 *
+	 * \param connection
+	 * \param page data to send
+	 * \param length size of the data to send
+	 * \param type type of the data (or format)
+	 * \param status Http status to send
+	 * \return #MHD_NO on error (i.e. reply already sent),
+	 *         #MHD_YES on success or if message has been queued
+	 */
+    int send (struct MHD_Connection *connection, const char *page, int length, const char *type, int status=MHD_HTTP_OK);
+
+	void logSendGuido(struct MHD_Connection *connection, const char* url, const TArgs& args, const char * type);
 };
 
 } // end namespoace

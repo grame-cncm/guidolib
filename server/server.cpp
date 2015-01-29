@@ -120,7 +120,7 @@ void _request_completed (void *cls, struct MHD_Connection *connection,
         //if (con_info->answerstring) free (con_info->answerstring);
     }
 
-    free (con_info);
+	delete con_info;
     *con_cls = NULL;
 }
 
@@ -253,12 +253,6 @@ int HTTPDServer::send (struct MHD_Connection *connection, const char *page, int 
     int ret = MHD_queue_response (connection, status, response);
     MHD_destroy_response (response);
     return ret;
-}
-
-//--------------------------------------------------------------------------
-int HTTPDServer::send (struct MHD_Connection *connection, const char *page, const char* type, int status)
-{
-    return send (connection, page, strlen (page), type, status);
 }
 
 //--------------------------------------------------------------------------
@@ -418,8 +412,13 @@ guidosessionresponse HTTPDServer::registerGMN(string unique_id, string gmn)
     return fSessions[unique_id]->genericReturnId();
 }
 
-int HTTPDServer::sendGuidoPostRequest(struct MHD_Connection *connection, const TArgs& args)
+int HTTPDServer::sendGuidoPostRequest(struct MHD_Connection *connection, const TArgs& args, vector<string> &elems)
 {
+	if (elems.size()) {
+		guidosessionresponse response = guidosession::genericFailure("POST Requests MUST have no element in URL.", 403);
+		return send (connection, response);
+	}
+
     if (args.size() != 1) {
         guidosessionresponse response = guidosession::genericFailure("Requests without scores MUST only contain one field called `data'.", 403);
         return send (connection, response);
@@ -437,24 +436,144 @@ int HTTPDServer::sendGuidoPostRequest(struct MHD_Connection *connection, const T
 
 int HTTPDServer::sendGuidoDeleteRequest(struct MHD_Connection *connection, const TArgs& args)
 {
-    guidosessionresponse response;
     if (!args.size () || args.size () > 1 || args.begin()->first != "ID") {
-        response = guidosession::genericFailure("There may be one and only one argument called \"ID\" passed to DELETE.", 405);
+		guidosessionresponse response = guidosession::genericFailure("There may be one and only one argument called \"ID\" passed to DELETE.", 405);
         return send(connection, response);
     } else if (fSessions.find (args.begin()->second) == fSessions.end ()) {
-        response = guidosession::genericFailure(("Cannot delete the score with ID "+(args.begin()->second)+" because it does not exist.").c_str(), 404);
-        return send(connection, response);
-    } else {
-        guidosession *toErase = fSessions[args.begin()->second];
-        fSessions.erase (args.begin()->second);
-        delete toErase;
-        response = guidosession::genericFailure(("Successfully removed the score with ID "+(args.begin()->second)+".").c_str(), 200);
-    }
+		guidosessionresponse response = guidosession::genericFailure(("Cannot delete the score with ID "+(args.begin()->second)+" because it does not exist.").c_str(), 404);
+		return send(connection, response);
+	}
+	// else
+	guidosession *toErase = fSessions[args.begin()->second];
+	fSessions.erase (args.begin()->second);
+	delete toErase;
+	guidosessionresponse response = guidosession::handleSimpleStringQuery("OK", ("Successfully removed the score with ID "+(args.begin()->second)+".").c_str());
     return send (connection, response);
 }
-    
+
+void HTTPDServer::logSendGuido(struct MHD_Connection *connection, const char* url, const TArgs& args, const char * type) {
+	// LOGFILE.
+	if (fVerbose > 0) {
+	  if (fLogmode == 0) {
+		const char *sep = " ; ";
+		log << log.date() << sep;
+		if (fVerbose & IP_VERBOSE) {
+		  struct sockaddr *so;
+		  char buf[kInetAddrLen];
+		  so = MHD_get_connection_info (connection,
+										MHD_CONNECTION_INFO_CLIENT_ADDRESS)->client_addr;
+		  log << inet_ntop(so->sa_family,
+						   so->sa_data + 2, buf, kInetAddrLen) << sep;
+		}
+		if (fVerbose & HEADER_VERBOSE) {
+		  TArgs headerArgs;
+		  MHD_get_connection_values (connection, MHD_HEADER_KIND, _get_params, &headerArgs);
+		  if (headerArgs.size()) {
+			bool ampersand = false;
+			for(TArgs::const_iterator it = headerArgs.begin(); it != headerArgs.end(); it++) {
+			  if (!ampersand)
+				ampersand = true;
+			  else
+				log << "&";
+			  log << it->first;
+			  log << "=";
+			  log << it->second;
+			}
+		  }
+		  log << sep;
+		}
+		if (fVerbose & REQUEST_VERBOSE) {
+		  log << type << sep;
+		}
+		if (fVerbose & URL_VERBOSE) {
+		  log << url << sep;
+		}
+		if (fVerbose & QUERY_VERBOSE) {
+		  if (args.size()) {
+			bool ampersand = false;
+			for(TArgs::const_iterator it = args.begin(); it != args.end(); it++) {
+			  if (!ampersand)
+				ampersand = true;
+			  else
+				log << "&";
+			  log << it->first;
+			  log << "=";
+			  log << curl_escape(it->second.c_str (), 0);
+			}
+		  }
+		  log << sep;
+		}
+		// we close the entry when we send
+	  }
+	  else if (fLogmode == 1) {
+		const char *tab = "  ";
+		log << "<entry>" << logend;
+		log << tab << "<date>" << logend;
+		log << tab << tab << log.date() << logend;
+		log << tab << "</date>" << logend;
+		if (fVerbose & IP_VERBOSE) {
+		  struct sockaddr *so;
+		  char buf[kInetAddrLen];
+		  so = MHD_get_connection_info (connection,
+										MHD_CONNECTION_INFO_CLIENT_ADDRESS)->client_addr;
+		  log << tab << "<ip>" << logend;
+		  log << tab << tab << inet_ntop(so->sa_family,
+						   so->sa_data + 2, buf, kInetAddrLen)
+			  << logend;
+		  log << tab << "</ip>" << logend;
+		}
+		if (fVerbose & HEADER_VERBOSE) {
+		  TArgs headerArgs;
+		  MHD_get_connection_values (connection, MHD_HEADER_KIND, _get_params, &headerArgs);
+		  if (headerArgs.size()) {
+			log << tab << "<header>" << logend;
+			for(TArgs::const_iterator it = headerArgs.begin(); it != headerArgs.end(); it++) {
+			  log << tab << tab << "<pair>" << logend;
+			  log << tab << tab << tab << "<name>" << logend;
+			  log << tab << tab << tab << tab << it->first << logend;
+			  log << tab << tab << tab << "</name>" << logend;
+			  log << tab << tab << tab << "<value>" << logend;
+			  log << tab << tab << tab << tab << it->second << logend;
+			  log << tab << tab << tab << "</value>" << logend;
+			  log << tab << tab << "</pair>" << logend;
+			}
+			log << tab << "</header>" << logend;
+		  }
+		}
+		if (fVerbose & REQUEST_VERBOSE) {
+		  log << tab << "<method>" << logend;
+		  log << tab << tab << type << logend;
+		  log << tab << "</method>" << logend;
+		}
+		if (fVerbose & URL_VERBOSE) {
+		  log << tab << "<url>" << logend;
+		  log << tab << tab << url << logend;
+		  log << tab << "</url>" << logend;
+		}
+		if (fVerbose & QUERY_VERBOSE) {
+		  if (args.size()) {
+			log << tab << "<query>" << logend;
+			for(TArgs::const_iterator it = args.begin(); it != args.end(); it++) {
+			  log << tab << tab << "<pair>" << logend;
+			  log << tab << tab << tab << "<name>" << logend;
+			  log << tab << tab << tab << tab << it->first << logend;
+			  log << tab << tab << tab << "</name>" << logend;
+			  log << tab << tab << tab << "<value>" << logend;
+			  log << tab << tab << tab << tab << curl_escape(it->second.c_str (), 0) << logend;
+			  log << tab << tab << tab << "</value>" << logend;
+			  log << tab << tab << "</pair>" << logend;
+			}
+			log << tab << "</query>" << logend;
+		  }
+		}
+		// we close the entry when we send
+		//log << "</entry>" << logend;
+	  }
+	}
+}
+
 //--------------------------------------------------------------------------
-int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, const TArgs& args, int type)
+int HTTPDServer::sendGuidoGetHead (struct MHD_Connection *connection, const char* url, const TArgs& args, int type, vector<string> &elems)
 {
     /*
        there are three possibilities for the URL : 0, 1, and 2 entries
@@ -462,147 +581,6 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
        in the case of 1, we are referencing an existing score and the request must be either GET or DELETE
        in the case of 2, we are referencing an existing score with a precise operation and the request must be GET
     */
-
-    // LOGFILE.
-    if (fVerbose > 0) {
-      if (fLogmode == 0) {
-        const char *sep = " ; ";
-        log << log.date() << sep;
-        if (fVerbose & IP_VERBOSE) {
-          struct sockaddr *so;
-          char buf[kInetAddrLen];
-          so = MHD_get_connection_info (connection,
-                                        MHD_CONNECTION_INFO_CLIENT_ADDRESS)->client_addr;
-          log << inet_ntop(so->sa_family,
-                           so->sa_data + 2, buf, kInetAddrLen) << sep;
-        }
-        if (fVerbose & HEADER_VERBOSE) {
-          TArgs headerArgs;
-          MHD_get_connection_values (connection, MHD_HEADER_KIND, _get_params, &headerArgs);
-          if (headerArgs.size()) {
-            bool ampersand = false;
-            for(TArgs::const_iterator it = headerArgs.begin(); it != headerArgs.end(); it++) {
-              if (!ampersand)
-                ampersand = true;
-              else
-                log << "&";
-              log << it->first;
-              log << "=";
-              log << it->second;
-            }
-          }
-          log << sep;
-        }
-        if (fVerbose & REQUEST_VERBOSE) {
-          const string smethods[4] = {"GET", "POST", "DELETE", "HEAD"};
-          string smethod = smethods[type];
-          log << smethod << sep;
-        }
-        if (fVerbose & URL_VERBOSE) {
-          log << url << sep;
-        }
-        if (fVerbose & QUERY_VERBOSE) {
-          if (args.size()) {
-            bool ampersand = false;
-            for(TArgs::const_iterator it = args.begin(); it != args.end(); it++) {
-              if (!ampersand)
-                ampersand = true;
-              else
-                log << "&";
-              log << it->first;
-              log << "=";
-              log << curl_escape(it->second.c_str (), 0);
-            }
-          }
-          log << sep;
-        }
-        // we close the entry when we send
-      }
-      else if (fLogmode == 1) {
-        const char *tab = "  ";
-        log << "<entry>" << logend;
-        log << tab << "<date>" << logend;
-        log << tab << tab << log.date() << logend;
-        log << tab << "</date>" << logend;
-        if (fVerbose & IP_VERBOSE) {
-          struct sockaddr *so;
-          char buf[kInetAddrLen];
-          so = MHD_get_connection_info (connection,
-                                        MHD_CONNECTION_INFO_CLIENT_ADDRESS)->client_addr;
-          log << tab << "<ip>" << logend;
-          log << tab << tab << inet_ntop(so->sa_family,
-                           so->sa_data + 2, buf, kInetAddrLen)
-              << logend;
-          log << tab << "</ip>" << logend;
-        }
-        if (fVerbose & HEADER_VERBOSE) {
-          TArgs headerArgs;
-          MHD_get_connection_values (connection, MHD_HEADER_KIND, _get_params, &headerArgs);
-          if (headerArgs.size()) {
-            log << tab << "<header>" << logend;
-            for(TArgs::const_iterator it = headerArgs.begin(); it != headerArgs.end(); it++) {
-              log << tab << tab << "<pair>" << logend;
-              log << tab << tab << tab << "<name>" << logend;
-              log << tab << tab << tab << tab << it->first << logend;
-              log << tab << tab << tab << "</name>" << logend;
-              log << tab << tab << tab << "<value>" << logend;
-              log << tab << tab << tab << tab << it->second << logend;
-              log << tab << tab << tab << "</value>" << logend;
-              log << tab << tab << "</pair>" << logend;
-            }
-            log << tab << "</header>" << logend;
-          }
-        }
-        if (fVerbose & REQUEST_VERBOSE) {
-          const string smethods[4] = {"GET", "POST", "DELETE", "HEAD"};
-          string smethod = smethods[type];
-          log << tab << "<method>" << logend;
-          log << tab << tab << smethod << logend;
-          log << tab << "</method>" << logend;
-        }
-        if (fVerbose & URL_VERBOSE) {
-          log << tab << "<url>" << logend;
-          log << tab << tab << url << logend;
-          log << tab << "</url>" << logend;
-        }
-        if (fVerbose & QUERY_VERBOSE) {
-          if (args.size()) {
-            log << tab << "<query>" << logend;
-            for(TArgs::const_iterator it = args.begin(); it != args.end(); it++) {
-              log << tab << tab << "<pair>" << logend;
-              log << tab << tab << tab << "<name>" << logend;
-              log << tab << tab << tab << tab << it->first << logend;
-              log << tab << tab << tab << "</name>" << logend;
-              log << tab << tab << tab << "<value>" << logend;
-              log << tab << tab << tab << tab << curl_escape(it->second.c_str (), 0) << logend;
-              log << tab << tab << tab << "</value>" << logend;
-              log << tab << tab << "</pair>" << logend;
-            }
-            log << tab << "</query>" << logend;
-          }
-        }
-        // we close the entry when we send
-        //log << "</entry>" << logend;
-      }
-    }
-
-    // first, parse the URL
-    std::stringstream ss(url);
-    std::string item;
-    vector<string> elems;
-    while (getline(ss, item, '/')) {
-        if (item != "") {
-            elems.push_back(item);
-        }
-    }
-
-    if (!elems.size()) {
-        if (type != POST) {
-            guidosessionresponse response = guidosession::welcomeMessage();
-            return send (connection, response);
-        }
-        return sendGuidoPostRequest(connection, args);
-    }
 
     if (elems[0] == "version") {
         guidosessionresponse response = guidosession::handleSimpleStringQuery("guidolib", guidosession::getVersion());
@@ -631,122 +609,117 @@ int HTTPDServer::sendGuido (struct MHD_Connection *connection, const char* url, 
     }
     guidosession *currentSession = fSessions[elems[0]];
 
-    if (type == DELETE) {
-        // delete an fSession.
-        sendGuidoDeleteRequest(connection, args);
-    } else if ((type == GET) || (type == HEAD)) {
-        currentSession->updateValuesFromDefaults(args);
-        currentSession->maybeResize();
-        if (elems.size() == 1) {
-            // must be getting the score
-            guidosessionresponse response = currentSession->genericReturnImage();
-            return send (connection, response);
-        }
-        if (elems.size() == 2) {
-            // the second element will always specify something we need in JSON
-            // is there a way to streamline this...a lot of logic dup but not much code dup...
-            // maybe templates...but it is sufficiently different to perhaps warrant writing
-            // all this stuff out
-            if (elems[1] == "countvoices") {
-                int nvoices;
-                guidoAPIresponse gar = currentSession->countVoices(nvoices);
-                guidosessionresponse response = gar.is_happy()
-                    ? currentSession->handleSimpleIDdIntQuery("voicecount", nvoices)
-                    : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
-                return send(connection, response);
-            } else if (elems[1] == "getpagecount") {
-                int npages;
-                guidoAPIresponse gar = currentSession->getPageCount(npages);
-                guidosessionresponse response = gar.is_happy()
-                    ? currentSession->handleSimpleIDdIntQuery("pagecount", npages)
-                    : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
-                return send(connection, response);
-            } else if (elems[1] == "duration") {
-                string duration;
-                guidoAPIresponse gar = currentSession->duration(duration);
-                guidosessionresponse response = gar.is_happy()
-                    ? currentSession->handleSimpleIDdStringQuery("duration", duration)
-                    : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
-                return send(connection, response);
-            } else if (elems[1] == "findpageat") {
-                GuidoDate date;
-                string mydate = "";
-                if (args.find("date") != args.end()) {
-                    mydate = args.find("date")->second;
-                }
-                stringToDate(mydate, date);
-                int page;
-                guidoAPIresponse gar = currentSession->findPageAt(date, page);
-                guidosessionresponse response = gar.is_happy()
-                    ? currentSession->datePageJson(mydate, page)
-                    : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
-                return send(connection, response);
-            } else if (elems[1] == "getpagedate") {
-                GuidoDate date;
-                int mypage = 1;
-                if (args.find("page") != args.end()) {
-                    mypage = atoi(args.find("page")->second.c_str());
-                }
-                guidoAPIresponse gar = currentSession->getPageDate(mypage, date);
-                guidosessionresponse response = gar.is_happy()
-                    ? currentSession->datePageJson(dateToString(date), mypage)
-                    : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
-                return send(connection, response);
-            } else if (elems[1] == "getpagemap") {
-                Time2GraphicMap outmap;
-                guidoAPIresponse gar = currentSession->getMap(PAGE, 0, outmap);
-                guidosessionresponse response = gar.is_happy()
-                    ? currentSession->mapJson("pagemap", outmap)
-                    : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
-                return send(connection, response);
-            } else if (elems[1] == "ar2midifile") {
-                guidosessionresponse response = currentSession->genericReturnMidi();
-                return send(connection, response);
-            } else if (elems[1] == "getsystemmap") {
-                Time2GraphicMap outmap;
-                guidoAPIresponse gar = currentSession->getMap(SYSTEM, 0, outmap);
-                guidosessionresponse response = gar.is_happy()
-                    ? currentSession->mapJson("systemmap", outmap)
-                    : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
-                return send(connection, response);
-            } else if (elems[1] == "getstaffmap") {
-                Time2GraphicMap outmap;
-                int mystaff = 1;
-                if (args.find("staff") != args.end()) {
-                    mystaff = atoi(args.find("staff")->second.c_str());
-                }
-                guidoAPIresponse gar = currentSession->getMap(STAFF, mystaff, outmap);
-                guidosessionresponse response = gar.is_happy()
-                    ? currentSession->mapJson("staffmap", outmap)
-                    : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
-                return send(connection, response);
-            } else if (elems[1] == "getvoicemap") {
-                Time2GraphicMap outmap;
-                int myvoice = 1;
-                if (args.find("voice") != args.end()) {
-                    myvoice = atoi(args.find("voice")->second.c_str());
-                }
-                guidoAPIresponse gar = currentSession->getMap(STAFF, myvoice, outmap);
-                guidosessionresponse response = gar.is_happy()
-                    ? currentSession->mapJson("voicemap", outmap)
-                    : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
-                return send(connection, response);
-            } else if (elems[1] == "gettimemap") {
-                JSONFriendlyTimeMap outmap;
-                guidoAPIresponse gar = currentSession->getTimeMap(outmap);
-                guidosessionresponse response = gar.is_happy()
-                    ? currentSession->timeMapJson(outmap)
-                    : guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
-                return send(connection, response);
-            } else {
-                guidosessionresponse response = guidosession::genericFailure("Unidentified GET request.", 404, elems[0]);
-                return send(connection, response);
-            }
-        }
-    }
-
-    guidosessionresponse reallyBadResponse = guidosession::genericFailure("Only GET and DELETE requests may be sent to an already completed score.", 400);
-    return send (connection, reallyBadResponse);
+	currentSession->updateValuesFromDefaults(args);
+	currentSession->maybeResize();
+	if (elems.size() == 1) {
+		// must be getting the score
+		guidosessionresponse response = currentSession->genericReturnImage();
+		return send (connection, response);
+	}
+	if (elems.size() == 2) {
+		// the second element will always specify something we need in JSON
+		// is there a way to streamline this...a lot of logic dup but not much code dup...
+		// maybe templates...but it is sufficiently different to perhaps warrant writing
+		// all this stuff out
+		if (elems[1] == "countvoices") {
+			int nvoices;
+			guidoAPIresponse gar = currentSession->countVoices(nvoices);
+			guidosessionresponse response = gar.is_happy()
+				? currentSession->handleSimpleIDdIntQuery("voicecount", nvoices)
+				: guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
+			return send(connection, response);
+		} else if (elems[1] == "getpagecount") {
+			int npages;
+			guidoAPIresponse gar = currentSession->getPageCount(npages);
+			guidosessionresponse response = gar.is_happy()
+				? currentSession->handleSimpleIDdIntQuery("pagecount", npages)
+				: guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
+			return send(connection, response);
+		} else if (elems[1] == "duration") {
+			string duration;
+			guidoAPIresponse gar = currentSession->duration(duration);
+			guidosessionresponse response = gar.is_happy()
+				? currentSession->handleSimpleIDdStringQuery("duration", duration)
+				: guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
+			return send(connection, response);
+		} else if (elems[1] == "findpageat") {
+			GuidoDate date;
+			string mydate = "";
+			if (args.find("date") != args.end()) {
+				mydate = args.find("date")->second;
+			}
+			stringToDate(mydate, date);
+			int page;
+			guidoAPIresponse gar = currentSession->findPageAt(date, page);
+			guidosessionresponse response = gar.is_happy()
+				? currentSession->datePageJson(mydate, page)
+				: guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
+			return send(connection, response);
+		} else if (elems[1] == "getpagedate") {
+			GuidoDate date;
+			int mypage = 1;
+			if (args.find("page") != args.end()) {
+				mypage = atoi(args.find("page")->second.c_str());
+			}
+			guidoAPIresponse gar = currentSession->getPageDate(mypage, date);
+			guidosessionresponse response = gar.is_happy()
+				? currentSession->datePageJson(dateToString(date), mypage)
+				: guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
+			return send(connection, response);
+		} else if (elems[1] == "getpagemap") {
+			Time2GraphicMap outmap;
+			guidoAPIresponse gar = currentSession->getMap(PAGE, 0, outmap);
+			guidosessionresponse response = gar.is_happy()
+				? currentSession->mapJson("pagemap", outmap)
+				: guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
+			return send(connection, response);
+		} else if (elems[1] == "ar2midifile") {
+			guidosessionresponse response = currentSession->genericReturnMidi();
+			return send(connection, response);
+		} else if (elems[1] == "getsystemmap") {
+			Time2GraphicMap outmap;
+			guidoAPIresponse gar = currentSession->getMap(SYSTEM, 0, outmap);
+			guidosessionresponse response = gar.is_happy()
+				? currentSession->mapJson("systemmap", outmap)
+				: guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
+			return send(connection, response);
+		} else if (elems[1] == "getstaffmap") {
+			Time2GraphicMap outmap;
+			int mystaff = 1;
+			if (args.find("staff") != args.end()) {
+				mystaff = atoi(args.find("staff")->second.c_str());
+			}
+			guidoAPIresponse gar = currentSession->getMap(STAFF, mystaff, outmap);
+			guidosessionresponse response = gar.is_happy()
+				? currentSession->mapJson("staffmap", outmap)
+				: guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
+			return send(connection, response);
+		} else if (elems[1] == "getvoicemap") {
+			Time2GraphicMap outmap;
+			int myvoice = 1;
+			if (args.find("voice") != args.end()) {
+				myvoice = atoi(args.find("voice")->second.c_str());
+			}
+			guidoAPIresponse gar = currentSession->getMap(STAFF, myvoice, outmap);
+			guidosessionresponse response = gar.is_happy()
+				? currentSession->mapJson("voicemap", outmap)
+				: guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
+			return send(connection, response);
+		} else if (elems[1] == "gettimemap") {
+			JSONFriendlyTimeMap outmap;
+			guidoAPIresponse gar = currentSession->getTimeMap(outmap);
+			guidosessionresponse response = gar.is_happy()
+				? currentSession->timeMapJson(outmap)
+				: guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
+			return send(connection, response);
+		} else if (elems[1] == "gmn") {
+			guidosessionresponse response =  currentSession->handleSimpleIDdStringQuery("gmn", currentSession->getGMN());
+			return send(connection, response);
+		} else {
+			guidosessionresponse response = guidosession::genericFailure("Unidentified GET request.", 404, elems[0]);
+			return send(connection, response);
+		}
+	}
 }
 
 //--------------------------------------------------------------------------
@@ -783,6 +756,17 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
     TArgs myArgs;
     MHD_get_connection_values (connection, MHD_COOKIE_KIND, _get_params, &myArgs);
 
+	// first, parse the URL
+	std::stringstream ss(url);
+	std::string item;
+	vector<string> elems;
+	while (getline(ss, item, '/')) {
+		if (item != "") {
+			elems.push_back(item);
+		}
+	}
+
+	logSendGuido(connection, url, myArgs, method);
     if (0 == strcmp (method, "POST")) {
         struct connection_info_struct *con_info = (connection_info_struct *)*con_cls;
 
@@ -791,25 +775,29 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
                               *upload_data_size);
             *upload_data_size = 0;
             return MHD_YES;
-        } else {
+		} else {
             struct connection_info_struct *con_info = (connection_info_struct *)*con_cls;
-            return sendGuido (connection, url, con_info->args, POST);
+			return sendGuidoPostRequest(connection, con_info->args, elems);
         }
-    }
+	}
+	else if (0 == strcmp (method, "DELETE")) {
+		TArgs args;
+		MHD_get_connection_values (connection, MHD_GET_ARGUMENT_KIND, _get_params, &args);
+		return sendGuidoDeleteRequest(connection, args);
+	}
+	else if (!elems.size()) {
+		guidosessionresponse response = guidosession::welcomeMessage();
+		return send (connection, response);
+	}
     else if (0 == strcmp (method, "GET")) {
         TArgs args;
-        MHD_get_connection_values (connection, MHD_GET_ARGUMENT_KIND, _get_params, &args);
-        return sendGuido (connection, url, args, GET);
+		MHD_get_connection_values (connection, MHD_GET_ARGUMENT_KIND, _get_params, &args);
+		return sendGuidoGetHead (connection, url, args, GET, elems);
     }
     else if (0 == strcmp (method, "HEAD")) {
         TArgs args;
         MHD_get_connection_values (connection, MHD_GET_ARGUMENT_KIND, _get_params, &args);
-        return sendGuido (connection, url, args, HEAD);
-    }
-    else if (0 == strcmp (method, "DELETE")) {
-        TArgs args;
-        MHD_get_connection_values (connection, MHD_GET_ARGUMENT_KIND, _get_params, &args);
-        return sendGuido (connection, url, args, DELETE);
+		return sendGuidoGetHead (connection, url, args, HEAD, elems);
     }
     else {
       stringstream ss;
@@ -819,6 +807,7 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
       guidosessionresponse reallyBadResponse = guidosession::genericFailure(ss.str ().c_str (), 400);
       return send (connection, reallyBadResponse);
     }
+
     // should never get here
     return MHD_NO;
 }
