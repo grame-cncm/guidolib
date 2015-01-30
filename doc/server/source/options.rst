@@ -17,6 +17,11 @@ The following options can be passed to the server on startup:
 		used with upstart to make this run as a daemon.
 
 	- ``--logfile``
+		log file name : use an empty string to write to STDOUT
+		
+		*default value*: guidohttpdserver.log in the directory of the current executable
+
+	- ``--logmode``
 		logfile mode. Use 0 for Apache-like or 1 for XML.
 
 		*default value*: 0 (Apache-like)
@@ -33,6 +38,9 @@ The following options can be passed to the server on startup:
 
 	- ``--version``
 		version of the server and of guido
+
+	- ``--access-control-allow-origin``
+		set 'Access-Control-Allow-Origin' to '*' in http response headers
 
 	- ``--help``
 		display all of these options in a help message
