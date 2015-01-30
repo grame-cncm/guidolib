@@ -6,6 +6,7 @@ Graphic to time mappings
   single: getstaffmap
   single: getvoicemap
   single: getsystemmap
+  single: getmap
 
 Gives the mapping between the graphic and the time time. The mapping is given as a set of pairs of graphic rectangles and time intervals. 
 
@@ -18,6 +19,7 @@ Note that the relations between the graphic and time space depends on :ref:`layo
 	| 	*ScoreID*/``getstaffmap``: gives a staff time to graphic mapping. An optionnal ``staff`` parameter may be used to indicate the staff number (default vaue is 1).
 	| 	*ScoreID*/``getvoicemap`` : gives a voice time to graphic mapping. An optionnal ``voice`` parameter may be used to indicate the voice number (default vaue is 1).
 	| 	*ScoreID*/``getsystemmap`` : gives the time to graphic mapping at system level.
+	|	*ScoreID*/pianoroll/``getmap`` : gives the time to graphic mapping.
 
 **Response body**
 	* in case of success: 

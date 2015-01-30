@@ -13,3 +13,4 @@ API
 
    post
    get
+   delete

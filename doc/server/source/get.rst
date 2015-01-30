@@ -13,6 +13,7 @@ Whenever the request involves a conversion to a graphic instance of the score, o
 
    browsing
    drawing
+   pianoroll
    midi
    mapping
    misc

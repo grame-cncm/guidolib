@@ -3,8 +3,8 @@
 Formatting options
 ------------------------------
 
-
 .. index::
+  single: format
   single: page
   single: width
   single: height
@@ -58,6 +58,8 @@ Score drawing options may be used when a graphic instance of the score is requir
 		- ``png``: to produce a png output
 		- ``jpg``: to produce a jpeg output
 		- ``svg``: to produce a svg output
+		- ``binary``: to produce a binary output which can be parse with a external device to draw the score.
+		- ``gif``: to produce a gif output
  
 		*default value*: "png"
 
