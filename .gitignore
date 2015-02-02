@@ -4,6 +4,7 @@ CMakeCache.txt
 CMakeLists.txt.user
 cmake_*
 *.xcodeproj
+**/build/linux
 build/GUIDOEngine.*
 build/libGUIDOEngine.a
 doc/html
@@ -30,6 +31,7 @@ guidolib-1.??-*
 *.so*
 platforms/android/*/obj
 platforms/android/simple-guido-editor/bin
+platforms/android/canvas-draw-command/bin
 java/jni/guidoengine_*
 platforms/android/simple-guido-editor/.classpath
 platforms/android/simple-guido-editor/.project
