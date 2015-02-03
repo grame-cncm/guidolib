@@ -1,8 +1,0 @@
-#!/bin/sh
-#
-
-# --show-reachable=yes
-gen=--gen-suppressions=yes
-ignore=--suppressions=valgrindignored.txt
-#ignore=
-valgrind --leak-check=full $ignore --show-reachable=no --log-file=check.out.txt $*
