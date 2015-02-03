@@ -9,11 +9,12 @@
 			margin-left : 20px;
 			margin-top : 0px;
 			}
-		img			{ float : right; }
-		div 		{ padding-left : 2em; font: Helvetica,Arial,sans-serif; }
+		div 	{ padding-left : 2em; font-family : Helvetica,Arial,sans-serif; font-size : 11pt }
+		#footnote	{ font-size : 10pt; }
+		#logo		{ float : right; }
 		#title {
 			padding-top : 2em;
-			padding-bottom : 0.5em;
+			padding-bottom : 1.5em;
 			padding-left : 2em;
 			font: 1.25em Helvetica,Arial,sans-serif;
 			text-transform: uppercase;
@@ -25,14 +26,15 @@
 	</head>
 	<body>
 	<div>
-		<a href="http://www.grame.fr/" target="_blank"><img src="logo_grame.png"/></a>
+		<a href="http://www.grame.fr/" target="_blank"><img src="logo_grame.png" id="logo"/></a>
 		<div id="title">Javascript GUIDO Engine</div>
 		<div>
-		The Guido Engine can now be embedded in a web page. It is available as a Javascript library and operates with very good performances. Several technologies as available for the graphic rendering :
+		The Guido Engine can now be embedded in a web page.<br />
+		It is available as a Javascript library and operates with very good performances.<br /> Several technologies are available for the graphic rendering :
 		<ul>
 			<li><a href="svgExport/index.html">SVG export</a> of the music score.</li>
 			<li>Use of <a href="canvasDevice/index.html">HTML Canvas</a></li>
-			<li>Use of the <a href="binaryExport/index.html">binary export</a> device</li>
+			<li>Use of the Guido <a href="binaryExport/index.html">binary export</a> device</li>
 			<li>Use of <a href="webComponent/index.html">WebComponents</a></li>
 		</ul>
 		</div>
@@ -40,7 +42,7 @@
 
 
 <hr/>
-<div style="margin-left : 2em; font-size : 12pt;">
+<div id="footnote">
 The Guido Engine library is an open source library for the layout and the graphic rendering of music scores developped and maintained by the <A HREF="http://www.grame.fr">Grame</a> 
 <A HREF="http://www.grame.fr/projets-et-themes-de-recherche">Computer Music Research Lab</a>.
 </div>
