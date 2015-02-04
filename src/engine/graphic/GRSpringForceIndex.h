@@ -100,12 +100,12 @@ class GRSpaceForceFunction2
 {
 	public:
 
-						 GRSpaceForceFunction2();
+						 GRSpaceForceFunction2(float force);
 		virtual 		~GRSpaceForceFunction2();
 						// Copy ctor, do I copy the springs? not really? do i?
 						 GRSpaceForceFunction2(const GRSpaceForceFunction2 &sff);
 
-		static void 	setOptForce(float newoptforce);
+		void 	setOptForce(float newoptforce);
 
 		void writeAllExtents(std::ostream& os) const;
 
@@ -115,7 +115,7 @@ class GRSpaceForceFunction2
 		void ResetSprings();
 		void addSFF(const GRSpaceForceFunction2 &sff);
 
-		static float getOptForce();
+		float getOptForce();
 
 
 		void addSpring(GRSpring *spr);
@@ -137,7 +137,7 @@ class GRSpaceForceFunction2
 		float xminopt; // This is the xmin-value for the optimum force
 		float copt;  // this is the spring-constant for the optimum force 
 
-		static float optforce;
+		float optforce;
 };
 
 

@@ -199,7 +199,7 @@ addright:
 // (JB) There were lots of double types mixed with float types. This generated 
 // a huge amount of conversions and warnings. I've changed everything to double. 
 // 'Hope I did not hurt the algo.
-void GRSpacingMatrix::CheckNeighbours(ISpringVector *sprvect)
+void GRSpacingMatrix::CheckNeighbours(ISpringVector *sprvect, float spring)
 {
 	if (!mNeighbours) 
 		return;
@@ -443,7 +443,7 @@ void GRSpacingMatrix::CheckNeighbours(ISpringVector *sprvect)
 				TYPE_DURATION myfrac(val);
 				const TYPE_DURATION & dur = spr->getDuration();
 				myfrac.invert();
-				double sconst = GRSpring::defconst(myfrac);
+				double sconst = GRSpring::defconst(myfrac, spring);
 				sconst *= (double)myfrac / (double)dur;
 
 				if (first)
@@ -473,7 +473,7 @@ void GRSpacingMatrix::CheckNeighbours(ISpringVector *sprvect)
 		{
 		TYPE_DURATION myfrac(max);
 		myfrac.invert();
-		float sconst = GRSpring::defconst(myfrac);
+		float sconst = GRSpring::defconst(myfrac, spring);
 		
 		//newmaxconst = 1.0 / (sumsprdur / sconst * max ); // <- (JB) was
 		newmaxconst = sconst / (sumsprdur * max);
@@ -483,7 +483,7 @@ void GRSpacingMatrix::CheckNeighbours(ISpringVector *sprvect)
 		{
 		TYPE_DURATION myfrac(average);
 		myfrac.invert();
-		float sconst = GRSpring::defconst(myfrac);
+		float sconst = GRSpring::defconst(myfrac, spring);
 		
 			// newaverageconst = 1.0 / (sumsprdur / sconst * average ); // <- (JB) was
 			newaverageconst = sconst / (sumsprdur * average);

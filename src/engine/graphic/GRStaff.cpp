@@ -263,8 +263,8 @@ GRStaffState & GRStaffState::operator=(const GRStaffState & tmp)
 //		GRStaff
 // ===========================================================================
 
-GRStaff::GRStaff( GRSystemSlice * systemslice ) 
-						: mGrSystem(NULL), mGrSystemSlice( systemslice ), fLastSystemBarChecked(-1,1)
+GRStaff::GRStaff( GRSystemSlice * systemslice, float propRender )
+						: mGrSystem(NULL), mGrSystemSlice( systemslice ), fLastSystemBarChecked(-1,1), proportionnalRender(propRender)
 {
 	mLength = 0;
 	mRelativeTimePositionOfGR = systemslice->getRelativeTimePosition();
@@ -870,7 +870,7 @@ GRRepeatEnd * GRStaff::AddRepeatEnd( ARRepeatEnd * arre )
 //	if (arre->getNumRepeat() == 0 || !arre->getRange())
 	{
         assert (arre);
-		GRRepeatEnd * tmp = new GRRepeatEnd(arre, this, arre->getRelativeTimePosition());
+		GRRepeatEnd * tmp = new GRRepeatEnd(arre, this, arre->getRelativeTimePosition(), this->proportionnalRender);
 		addNotationElement(tmp);
 		return tmp;
 	}
@@ -1021,7 +1021,7 @@ GRBar * GRStaff::AddBar(ARBar * abar, const TYPE_TIMEPOSITION & von)
 staff_debug("AddBar");
 	newMeasure(von); // erhoeht u.a. mnum!
 
-	GRBar * ntakt = new GRBar( abar, this, von);
+	GRBar * ntakt = new GRBar( abar, this, von, this->proportionnalRender);
 	// depending on current bar Format, we have to tell the staffmanager (or the system) 
 	if (mStaffState.curbarfrmt && mStaffState.curbarfrmt->getStyle()
 		&& mStaffState.curbarfrmt->getStyle()->TagIsSet())
@@ -1185,7 +1185,7 @@ GRDoubleBar * GRStaff::AddDoubleBar(ARDoubleBar * ardbar, const TYPE_TIMEPOSITIO
 staff_debug("AddDoubleBar");
 	newMeasure(von); // erhoeht u.a. mnum!
 
-	GRDoubleBar * ntakt = new GRDoubleBar( ardbar, this, von);
+	GRDoubleBar * ntakt = new GRDoubleBar( ardbar, this, von, this->proportionnalRender);
 	// depending on current bar Format, we have to tell the staffmanager (or the system) 
 	if (mStaffState.curbarfrmt && mStaffState.curbarfrmt->getStyle() && mStaffState.curbarfrmt->getStyle()->TagIsSet())
 	{
@@ -1205,7 +1205,7 @@ GRFinishBar * GRStaff::AddFinishBar(ARFinishBar * arfbar, const TYPE_TIMEPOSITIO
 staff_debug("AddFinishBar");
 	newMeasure(von); // erhoeht u.a. mnum!
 
-	GRFinishBar * ntakt = new GRFinishBar( arfbar, this, von);
+	GRFinishBar * ntakt = new GRFinishBar( arfbar, this, von, this->proportionnalRender);
 
 	// depending on current bar Format, we have to tell the staffmanager (or the system) 
 	if (mStaffState.curbarfrmt && mStaffState.curbarfrmt->getStyle() && mStaffState.curbarfrmt->getStyle()->TagIsSet())
@@ -1305,7 +1305,7 @@ staff_debug("CreateBeginElements");
 /** \brief createNewRods is called to create the rods for a staff.
 	The lastrod is saved internally, so that only rods are created for new neighbors.
 */
-void GRStaff::createNewRods(GRStaffManager * staffmgr, int & startspr, int & endspr)
+void GRStaff::createNewRods(GRStaffManager * staffmgr, int & startspr, int & endspr, float optForce)
 {
 staff_debug("createNewRods");
 	// ATTENTION, needs to be realized.
@@ -1368,7 +1368,7 @@ staff_debug("createNewRods");
 				if (rightspace+leftspace>0)
 				{
 					GRRod * rod = new GRRod(rightspace +
-						leftspace, prevsprid, mylist.GetHead()->getSpringID());
+						leftspace, prevsprid, mylist.GetHead()->getSpringID(), optForce);
 					// no space, add at head
 					staffmgr->addRod(rod, 0, 1);
 					lastrod = rod;
@@ -1400,7 +1400,7 @@ staff_debug("createNewRods");
 		// this is the rod between the previous and the current spring
 		if (leftspace + rightspace > 0)
 		{
-			GRRod * rod = new GRRod(leftspace + rightspace, prevsprid, mysprid);
+			GRRod * rod = new GRRod(leftspace + rightspace, prevsprid, mysprid, optForce);
 			
 			// no space, add at head
 			staffmgr->addRod(rod, 0, 1);
@@ -1409,7 +1409,7 @@ staff_debug("createNewRods");
 		// this is a future rod ....
 		if (newrightspace > 0)
 		{
-			GRRod * rod = new GRRod(newrightspace, mysprid, mysprid + 1);
+			GRRod * rod = new GRRod(newrightspace, mysprid, mysprid + 1, optForce);
 			staffmgr->addRod(rod, 0, 1);
 			lastrod = rod;
 		}

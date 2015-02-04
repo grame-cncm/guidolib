@@ -30,7 +30,7 @@ typedef KF_Vector<float> FloatVect;
 class GRBeginSpaceForceFunction2 : public GRSpaceForceFunction2
 {
 	public:	
-				 GRBeginSpaceForceFunction2() : GRSpaceForceFunction2(), vecttop(0), vectbottom(0) {}
+				 GRBeginSpaceForceFunction2(float force) : GRSpaceForceFunction2(force), vecttop(0), vectbottom(0) {}
 		virtual ~GRBeginSpaceForceFunction2()  {}
 		
 		float getTop(int i) const
