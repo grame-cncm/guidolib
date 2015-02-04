@@ -40,12 +40,12 @@ class GRRod
 public:
 
 			GRRod( const GRRod & rod);
-			GRRod( float inLength, int inSpring1, int inSpring2 );
+			GRRod( float inLength, int inSpring1, int inSpring2 , float aOptForce);
 			GRRod( const GRNotationElement * gr1, const GRNotationElement * gr2, 
-																	int lastspringid);
+																	int lastspringid, float aOptForce);
 
-			GRRod(const GRNotationElement * gr1, const GRNotationElement * gr2, 
-										int lastspringid,float spacedistance);
+			GRRod(const GRNotationElement * gr1, const GRNotationElement * gr2,
+										int lastspringid, float spacedistance, float aOptForce);
 	virtual ~GRRod() { }
 
 	int 	resetForce(const GRRod & rd);
@@ -66,7 +66,7 @@ public:
 	void 	setSpringIDs(int id1, int id2)
 							{ mSpr1 = id1; mSpr2 = id2; }
 protected:
-
+	float	optForce;
 	float 	mForce;
 	bool	mIsSpaceRod;
 	int 	mSpr1;
