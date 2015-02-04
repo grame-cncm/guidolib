@@ -694,9 +694,10 @@ It is called by the StaffManager (BuildSPF)
 we have to make sure that firstrod and
 lastrod is created correctly.
 We do not need to take care of rods with
-starting positions that are smaller than startspr
+starting positions that are smaller than startspr.
+optForce is the guido layout settings
 */
-int GRVoice::createNewRods(GRStaffManager * stfmgr, int & startspr, int & endspr)
+int GRVoice::createNewRods(GRStaffManager * stfmgr, int & startspr, int & endspr, float optForce)
 {
 	if (lastrod)
 	{
@@ -803,7 +804,7 @@ int GRVoice::createNewRods(GRStaffManager * stfmgr, int & startspr, int & endspr
 
 			rod = new GRRod(
 				dist + el->getLeftSpace(),
-				el->getSpringID()-1,el->getSpringID());
+				el->getSpringID()-1,el->getSpringID(), optForce);
 
 			if (spaceactive)
 			{
@@ -858,7 +859,7 @@ int GRVoice::createNewRods(GRStaffManager * stfmgr, int & startspr, int & endspr
 			GRRod * rod = 0;
 			if (spaceactive)
 			{
-				rod = new GRRod( el, next, 0, spacedistance );
+				rod = new GRRod( el, next, 0, spacedistance, optForce);
 				rod->setIsSpaceRod( true );
 				spaceactive = false;
 				spacedistance = 0;
@@ -867,7 +868,7 @@ int GRVoice::createNewRods(GRStaffManager * stfmgr, int & startspr, int & endspr
 			}
 			else
 			{
-				rod = new GRRod( el, next, 0 );
+				rod = new GRRod( el, next, 0, optForce);
 				// no space active
 				stfmgr->addRod(rod,0);
 			}
@@ -899,7 +900,7 @@ int GRVoice::createNewRods(GRStaffManager * stfmgr, int & startspr, int & endspr
 		{
 			// the rod is of the length of 
 			// the following space tag...
-			rod = new GRRod( spacedistance, el->getSpringID(), endspr );
+			rod = new GRRod( spacedistance, el->getSpringID(), endspr, optForce);
 			rod->setIsSpaceRod( true );
 
 			// space active!
@@ -907,7 +908,7 @@ int GRVoice::createNewRods(GRStaffManager * stfmgr, int & startspr, int & endspr
 		}
 		else
 		{
-			rod = new GRRod(el->getRightSpace(), el->getSpringID(),endspr);
+			rod = new GRRod(el->getRightSpace(), el->getSpringID(), endspr, optForce);
 			// no space active
 			stfmgr->addRod(rod,0);
 		}

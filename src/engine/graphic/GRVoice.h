@@ -81,7 +81,7 @@ class GRVoice : public GRARCompositeNotationElement
 						ISpringVector * sprvect,
 						int startspr, int endspr);
 
-	int createNewRods(GRStaffManager * stfmgr,int &startspr,int & endspr);
+	int createNewRods(GRStaffManager * stfmgr, int &startspr, int & endspr, float optForce);
 	virtual void rememberNLinePosition(const TYPE_TIMEPOSITION & tp);
 	virtual void setPossibleNLinePosition(const TYPE_TIMEPOSITION & tp);
 //	void createRods(GRSystem *grsystem,int lastsprid);
