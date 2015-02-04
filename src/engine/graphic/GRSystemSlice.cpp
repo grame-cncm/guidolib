@@ -109,7 +109,7 @@ void GRSystemSlice::addBar(GRBar * mybar,int bartype, GRStaff * grstaff )
 	// when the distance of staffs is being set, these tags must be updated (for length) 
 	ARBar * arbar = mybar->getARBar();
 	assert(arbar);
-	GRBar * newbar = new GRBar(arbar, NULL, grstaff, mybar->getRelativeTimePosition());
+	GRBar * newbar = new GRBar(arbar, NULL, grstaff, mybar->getRelativeTimePosition(), grstaff->getProportionnalRender());
 	mHasSystemBars = true;
 
 	// I must attach the newbar with the other spring (or at least
@@ -129,7 +129,7 @@ void GRSystemSlice::addFinishBar(GRFinishBar * mybar,int bartype, GRStaff * grst
 {
 	ARFinishBar * arbar = mybar->getARFinishBar();
 	assert(arbar);
-	GRFinishBar * newbar = new GRFinishBar(arbar, NULL, grstaff, mybar->getRelativeTimePosition());
+	GRFinishBar * newbar = new GRFinishBar(arbar, NULL, grstaff, mybar->getRelativeTimePosition(), grstaff->getProportionnalRender());
 	mHasSystemBars = true;
 	mybar->addAssociation(newbar);
 	AddTail(newbar);
@@ -139,7 +139,7 @@ void GRSystemSlice::addDoubleBar(GRDoubleBar * mybar,int bartype, GRStaff * grst
 {
 	ARDoubleBar * arbar = mybar->getARDoubleBar();
 	assert(arbar);
-	GRDoubleBar * newbar = new GRDoubleBar(arbar, NULL, grstaff, mybar->getRelativeTimePosition());
+	GRDoubleBar * newbar = new GRDoubleBar(arbar, NULL, grstaff, mybar->getRelativeTimePosition(), grstaff->getProportionnalRender());
 	mHasSystemBars = true;
 	mybar->addAssociation(newbar);
 	AddTail(newbar);

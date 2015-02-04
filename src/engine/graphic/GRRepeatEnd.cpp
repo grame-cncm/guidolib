@@ -35,8 +35,8 @@ GRRepeatEnd::GRRepeatEnd( ARRepeatEnd * ar, bool ownsar )
 				: GRTagARNotationElement( ar, LSPACE, ownsar )
 //				: GRPTagARNotationElement( ar, ownsar )
 */
-GRRepeatEnd::GRRepeatEnd( ARRepeatEnd * arre, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos )
-					: GRBar(arre, inStaff, inTimePos) 
+GRRepeatEnd::GRRepeatEnd( ARRepeatEnd * arre, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float proportionnalRender )
+					: GRBar(arre, inStaff, inTimePos, proportionnalRender)
 {
 	InitRepeatEnd();
 }

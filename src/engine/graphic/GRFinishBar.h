@@ -26,8 +26,8 @@ class GRFinishBar: public GRBar
 {
 public:
 
-    GRFinishBar(ARFinishBar *p_arbar,GRStaff * inStaff, const TYPE_TIMEPOSITION & p_timeposition);
-    GRFinishBar(ARFinishBar *p_arbar,GRSystem *p_grsystem,GRStaff * inStaff, const TYPE_TIMEPOSITION &p_timeposition);
+	GRFinishBar(ARFinishBar *p_arbar,GRStaff * inStaff, const TYPE_TIMEPOSITION & p_timeposition, float proportionnalRender);
+	GRFinishBar(ARFinishBar *p_arbar,GRSystem *p_grsystem,GRStaff * inStaff, const TYPE_TIMEPOSITION &p_timeposition, float proportionnalRender);
 
     virtual ~GRFinishBar();
 

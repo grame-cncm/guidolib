@@ -47,8 +47,8 @@ using namespace std;
 NVPoint GRBar::sRefPos;
 
 // --------------------------------------------------------------------------
-GRBar::GRBar(ARBar * p_arbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos )
-	: GRTagARNotationElement(p_arbar,inStaff->getStaffLSPACE())
+GRBar::GRBar(ARBar * p_arbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float propRender )
+	: GRTagARNotationElement(p_arbar,inStaff->getStaffLSPACE()), proportionalRender(propRender)
 {
 	mGrStaff = inStaff;
 	mSymbol = kBarSymbol;
@@ -63,8 +63,8 @@ GRBar::GRBar(ARBar * p_arbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTim
 
 // --------------------------------------------------------------------------
 // this constructor uses a GRSystem (it is a system (or accolade)-bar)
-GRBar::GRBar(ARBar * p_arbar, GRSystem * , GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos )
-	: GRTagARNotationElement(p_arbar,inStaff->getStaffLSPACE())
+GRBar::GRBar(ARBar * p_arbar, GRSystem * , GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float propRender  )
+	: GRTagARNotationElement(p_arbar,inStaff->getStaffLSPACE()), proportionalRender(propRender)
 {
 	mGrStaff = inStaff;
 //	mGrStaff = NULL; //  inStaff // why is grstaff needed?
@@ -245,7 +245,7 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
     const float offsetX = 3 + (staffSize - 1) * 2;
 
     float proportionalRenderingXOffset = 0;
-    if (GRStaffManager::sPropRender != 0)
+	if (this->proportionalRender != 0)
         proportionalRenderingXOffset = - 90; // REM: 30 hardcoded (1.5 * note extent)
     
     const float x  = mPosition.x + offsetX + mDx + proportionalRenderingXOffset;

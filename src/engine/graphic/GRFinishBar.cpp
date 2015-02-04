@@ -26,8 +26,8 @@ using namespace std;
 
 NVPoint GRFinishBar::refpos;
 
-GRFinishBar::GRFinishBar( ARFinishBar * p_ardbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & p_tp )
-				: GRBar(p_ardbar,inStaff ,p_tp)
+GRFinishBar::GRFinishBar( ARFinishBar * p_ardbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & p_tp, float proportionnalRender)
+				: GRBar(p_ardbar,inStaff ,p_tp, proportionnalRender)
 {
 	mSymbol = kFinishBarSymbol;
 
@@ -47,8 +47,8 @@ GRFinishBar::GRFinishBar( ARFinishBar * p_ardbar, GRStaff * inStaff, const TYPE_
 }
 
 GRFinishBar::GRFinishBar(ARFinishBar * p_arbar, GRSystem * p_grsystem, GRStaff * inStaff,
-														const TYPE_TIMEPOSITION & p_timeposition )
-			: GRBar(p_arbar,p_grsystem,inStaff,p_timeposition)
+														const TYPE_TIMEPOSITION & p_timeposition, float proportionnalRender )
+			: GRBar(p_arbar,p_grsystem,inStaff,p_timeposition, proportionnalRender)
 {
 	mSymbol = kFinishBarSymbol;
 

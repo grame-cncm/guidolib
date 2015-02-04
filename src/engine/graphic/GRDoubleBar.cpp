@@ -26,8 +26,8 @@
 #include <iostream>
 using namespace std;
 
-GRDoubleBar::GRDoubleBar( ARDoubleBar * ardbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos)
-				: GRBar(ardbar, inStaff ,inTimePos)
+GRDoubleBar::GRDoubleBar(ARDoubleBar * ardbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float propRender)
+				: GRBar(ardbar, inStaff ,inTimePos, propRender)
 {
 	mSymbol = kDoubleBarSymbol;
 	const float spacing = inStaff->getStaffLSPACE() * 0.2f;
@@ -41,8 +41,8 @@ GRDoubleBar::GRDoubleBar( ARDoubleBar * ardbar, GRStaff * inStaff, const TYPE_TI
 }
 
 GRDoubleBar::GRDoubleBar(ARDoubleBar * ardbar, GRSystem * p_grsystem, GRStaff * inStaff,
-														const TYPE_TIMEPOSITION & inTimePos )
-			: GRBar(ardbar,p_grsystem,inStaff,inTimePos)
+														const TYPE_TIMEPOSITION & inTimePos, float propRender)
+			: GRBar(ardbar,p_grsystem,inStaff,inTimePos, propRender)
 {
 	mSymbol = kDoubleBarSymbol;
 	const float spacing = inStaff->getStaffLSPACE() * 0.2f;
@@ -79,7 +79,7 @@ void GRDoubleBar::DrawWithLines( VGDevice & hdc ) const
         offsety2 = ((fLineNumber - 5) % 6) * LSPACE;
 
     float proportionalRenderingXOffset = 0;
-    if (GRStaffManager::sPropRender != 0)
+	if (this->proportionalRender != 0)
         proportionalRenderingXOffset = - 90; // REM: 30 hardcoded (1.5 * note extent)
 
     // - Horizontal adjustement according to staff's lines size and staff's size

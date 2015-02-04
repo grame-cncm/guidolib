@@ -26,8 +26,8 @@ class ARDoubleBar;
 class GRDoubleBar : public GRBar  
 {
 public:
-    GRDoubleBar(ARDoubleBar * ardbar, GRStaff * p_grstaff, const TYPE_TIMEPOSITION & p_timeposition);
-    GRDoubleBar(ARDoubleBar * ardbar, GRSystem * p_grsystem, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos );
+	GRDoubleBar(ARDoubleBar * ardbar, GRStaff * p_grstaff, const TYPE_TIMEPOSITION & p_timeposition, float propRender);
+	GRDoubleBar(ARDoubleBar * ardbar, GRSystem * p_grsystem, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float propRender);
     virtual			~GRDoubleBar();
 
     ARDoubleBar * getARDoubleBar();
