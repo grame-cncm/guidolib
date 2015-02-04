@@ -44,7 +44,7 @@ class GRMusic : public GREvent
 	public:
 		using GObject::GetMap;
 		
-				GRMusic( ARMusic * inARMusic, ARPageFormat * inFormat, bool ownsAR ); 
+				GRMusic(ARMusic * inARMusic, ARPageFormat * inFormat, const GuidoLayoutSettings *settings, bool ownsAR );
 		virtual ~GRMusic();
 
 				void 		startNewSystem( GRSystem * grsystem );
@@ -52,7 +52,7 @@ class GRMusic : public GREvent
 	 	 		void 		setName( const char * in )	 { mName = in; }
 	  			const 		NVstring & getName();
 
-	  			void 		createGR(ARPageFormat * inPageFormat = 0 );
+				void 		createGR(ARPageFormat * inPageFormat = 0 , const GuidoLayoutSettings *settings = 0);
 
 				ARMusic * 	getARMusic();
 	     		const ARMusic * getconstARMusic() const;
@@ -102,8 +102,6 @@ class GRMusic : public GREvent
 		virtual void	trace(VGDevice & hdc);
 		virtual void	voicetrace(VGDevice & hdc);
 
-				void 	setOptForce( float newoptforce );
-				float 	getOptForce();
 				int 	getVoiceNum( ARMusicalVoice * arvoice ) const; 
 				void 	addPage( GRPage * newPage );
                 
@@ -123,6 +121,7 @@ class GRMusic : public GREvent
 
 	private:  
 		PageList 	mPages;
+		ARPageFormat * fInFormat;
 };
 
 

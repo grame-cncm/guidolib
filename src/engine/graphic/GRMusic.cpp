@@ -52,17 +52,17 @@ GRMusic * gCurMusic = 0;
 long ggsoffsetx = 0L;
 long ggsoffsety = 0L;
 
-GRMusic::GRMusic(ARMusic * inARMusic, ARPageFormat * inFormat, bool ownsAR ) // ,int ignorepf)
+GRMusic::GRMusic(ARMusic * inARMusic, ARPageFormat * inFormat, const GuidoLayoutSettings *settings, bool ownsAR ) // ,int ignorepf)
   : GREvent( 0, inARMusic, ownsAR ) // owns Elements!
 	 //mPages( new PagePointerList(1)) // mit OWNS-Elements!!!
 {	
 	assert( inARMusic );
-
+	fInFormat = 0;
     mAR2GRTime = -1;
     mDrawTime  = -1;
 
 	gCurMusic = this;
-	createGR( inFormat );
+	createGR( inFormat, settings );
 }
 
 GRMusic::~GRMusic()
@@ -75,6 +75,8 @@ GRMusic::~GRMusic()
 	// deletes all, because voicelist owns it 
 	// elements which are GRVoice-Objects
 	DeleteContent( &mVoiceList );
+
+	delete fInFormat;
 }
 
 /** \brief Guido Graphic Stream.
@@ -448,8 +450,12 @@ void GRMusic::startNewSystem(GRSystem * grsystem)
 	4. Let the StaffManager handle the creation of staves and pages,
 	   	let him call AddSystem or DoPageBreak of this class.
 */
-void GRMusic::createGR(ARPageFormat * inPageFormat)
+void GRMusic::createGR(ARPageFormat * inPageFormat, const GuidoLayoutSettings * settings)
 {
+	if(fInFormat)
+		delete fInFormat;
+	fInFormat = inPageFormat;
+
 	// - Reset the previous GR
 	ARMusic * arm = getARMusic();
 	arm->resetGRRepresentation();	// (JB) this may conflicts with the new 
@@ -481,7 +487,7 @@ void GRMusic::createGR(ARPageFormat * inPageFormat)
 
 	-> */
 	
-	GRStaffManager grsm( this, inPageFormat );
+	GRStaffManager grsm( this, fInFormat, settings);
 	grsm.createStaves();
 
 	// <-
@@ -798,19 +804,5 @@ bool GRMusic::getRTPofPage( int pagenum, int * num, int * denom ) const
 		return true;
 	}
 	return false;
-}
-
-/** \brief Sets the 'opt' force of the space-force algorithm.
-*/
-void GRMusic::setOptForce(float newoptforce)
-{
-	GRSpaceForceFunction2::setOptForce(newoptforce);
-}
-
-/** \brief Returns the 'opt' force of the space-force algorithm.
-*/
-float GRMusic::getOptForce()
-{
-	return GRSpaceForceFunction2::getOptForce();
 }
 
