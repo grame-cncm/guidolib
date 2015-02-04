@@ -66,20 +66,21 @@ public:
 	using GRNotationElement::getStaffNumber;
 
 	enum BARTYPE { SYSTEM, ACCOLADE, STAFF, MENSUR };
-
+/*
 				GRSystem( 	GRPage * inPage, 
-							const TYPE_TIMEPOSITION & relativeTimePositionOfSystem );
+							const TYPE_TIMEPOSITION & relativeTimePositionOfSystem, float force);
+			*/
 							
-							
-				GRSystem( 	GRStaffManager * stfmgr,
+				GRSystem(GRStaffManager * stfmgr,
 							GRPage * inPage,
 							const TYPE_TIMEPOSITION & relativeTimePositionOfSystem,
-							SSliceList ** systemslices, 
+							SSliceList ** systemslices,
 							int count,
-							GRSystemSlice * beginslice, 
+							GRSystemSlice * beginslice,
 							ISpringVector ** pvect,
 							ARSystemFormat * sysform,
-							bool islastsystem = false );
+							float force, float spring, float proportionnalRender,
+							bool islastsystem = false);
 	
 	virtual 			~GRSystem();
 
@@ -98,7 +99,7 @@ public:
 
 	void        setSpringParameter(float nconst);
 	void        setSystemFormat( ARSystemFormat * sysfrm );
-	void        setDistance( float inDistance )  	{ mDistanceSet = true; mDistance = inDistance; };
+	void        setDistance( float inDistance )  	{ mDistanceSet = true; mDistance = inDistance; }
 	void        setGRPage( GRPage * inNewPage )		{ mPage = inNewPage; }
 	void        setMeterOfStaffs( int num, int denom );
 
@@ -135,7 +136,7 @@ protected:
 	void 		DrawSystemForce( VGDevice & hdc ) const;	
 	void		AddSystemSlice( GRSystemSlice * inSlice );
 	void		InitForceFunction (GRStaffManager * staffmgr, SSliceList ** psystemslices, int count);
-	void		AdjustForceFunction (GRSliceHeight &sliceheight, int &startspring, int &endspring);
+	void		AdjustForceFunction (GRSliceHeight &sliceheight, int &startspring, int &endspring, float optForce);
 	GRStaff *	ComputeBoundingBox(GRSliceHeight &sliceheight);
 								
 	float 	mSystemforce; 		// The force used to stretch the system
