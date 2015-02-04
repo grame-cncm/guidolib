@@ -51,9 +51,9 @@ class GRSpring
 public:
 
 			GRSpring(const TYPE_TIMEPOSITION  & vtp,
-						const TYPE_DURATION & vdur);
+						const TYPE_DURATION & vdur, float spring, float propRender);
 			
-			GRSpring( GRNotationElement *, GRVoice * );
+			GRSpring( GRNotationElement *, GRVoice *, float spring, float propRender );
 
 	virtual ~GRSpring();
 
@@ -77,10 +77,7 @@ public:
 	bool hasStaffAndType(const GRStaff * grstaff, const std::type_info & ti);
 
 	float set_const(float dc);
-	static float funcpar;
-	static float getFunctionParameter();
 	float recalcConstant();
-	static void setFunctionParameter(float npar);
 	void addElement(GRNotationElement * el,GRVoice * vce);
 	bool hasType(const std::type_info & ti);
     bool hasGraceNote();
@@ -98,7 +95,6 @@ public:
 	virtual GuidoPos getFirstGROPosition();
 	virtual const GRNotationElement * getNextGRO(GuidoPos & pos) const;
 	virtual float apply_force(float df);
-	virtual void addSameTP(GRNotationElement * el,GRVoice * vce);
 	virtual float change_x(float dx);
 	virtual float change_force(float df);
 	virtual float change_const(float dc);
@@ -117,9 +113,8 @@ public:
 
 	virtual float getConstant() const	{ return sconst; }
 
-	static float onlycalcconst(const GRNotationElement *grn);
-	static float defconst(const TYPE_DURATION &);
-	static float defconst(float );
+	static float defconst(const TYPE_DURATION &, float spring);
+	static float defconst(float dur, float spring );
 
 	int isCommonSpring(int numvoices) const;
 
@@ -151,6 +146,9 @@ protected:
 	GRVList		      grvlst;
 
 	GRSpringCollider *sprcol;
+
+	float funcpar;
+	float proportionalRendering;
 
     bool              isProportionalElement;
 };
