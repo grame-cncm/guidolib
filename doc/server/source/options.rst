@@ -30,6 +30,9 @@ The following options can be passed to the server on startup:
 		name of the cache directory
 		
 		*default value*: A directory named ``cache`` in the directory of the current executable
+
+	- ``--nocache``
+		not use cache directory for writing or reading session.
 	
 	- ``--svgfontfile``
 		name of the svg font file.
@@ -41,6 +44,11 @@ The following options can be passed to the server on startup:
 
 	- ``--access-control-allow-origin``
 		set 'Access-Control-Allow-Origin' to '*' in http response headers
+
+	- ``--maxsession``
+		maximum session hold in server.
+
+		*default value*: 100
 
 	- ``--help``
 		display all of these options in a help message
