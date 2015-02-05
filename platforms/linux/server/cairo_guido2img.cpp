@@ -44,7 +44,7 @@ write_png_stream_to_byte_array (void *in_closure, const unsigned char *data,
 
 //--------------------------------------------------------------------------
 cairo_guido2img::cairo_guido2img (string svgfontfile) : guido2img(svgfontfile) {
-  fBuffer.data_ = new char[1048576];
+  fBuffer.data_ = new char[1048576]; // TODO GGX remove fixed size and use length of write_png_stream_to_byte_array
   fBuffer.start_ = fBuffer.data_;
   fBuffer.size_ = 0;
   fBuffer.pos_ = 0;
@@ -54,21 +54,22 @@ cairo_guido2img::~cairo_guido2img () {
   delete[] fBuffer.start_;
 }
 
-int cairo_guido2img::convert (guidosession* const currentSession)
+int cairo_guido2img::convertScore (guidosession* const currentSession, GuidoSessionScoreParameters &scoreParameters)
 {
-    GuidoWebApiFormat format = currentSession->getFormat();
     fBuffer.reset();
-    if (format == GUIDO_WEB_API_SVG) {
-      string svg;
-      int err = currentSession->simpleSVGHelper(fSvgFontFile, &svg);
-      const char* cc_svg = svg.c_str();
-      fBuffer.size_ = svg.size();
+	if (scoreParameters.format == GUIDO_WEB_API_SVG) {
+		// return Svg format
+	  stringstream svg;
+	  int err = currentSession->svgScoreExport(fSvgFontFile, scoreParameters.page, &svg);
+	  const char* cc_svg = svg.str().c_str();
+	  fBuffer.size_ = svg.str().size();
       strcpy(fBuffer.data_, cc_svg);
       return err;
     }
-    else if (format == GUIDO_WEB_API_BINARY) {
+	else if (scoreParameters.format == GUIDO_WEB_API_BINARY) {
+		// Return a binary export (draw commands in binary format)
       stringstream stream;
-      int err = currentSession->simpleBinaryHelper(&stream);
+	  int err = currentSession->binaryScoreExport(&stream, scoreParameters.page);
       string ss_str = stream.str();
       const char *ss_cstr = ss_str.c_str();
       fBuffer.size_ = ss_str.size();
@@ -76,11 +77,12 @@ int cairo_guido2img::convert (guidosession* const currentSession)
       return err;
     }
 
-    GuidoPageFormat pf;
-    currentSession->fillGuidoPageFormatUsingCurrentSettings(&pf);
-
-    int width = (int) pf.width;
-    int height = (int) pf.height;
+	// Create an image with native system drawing. (Default to png format)
+	// The page format can have change if the option resizepage to music in used.
+	GuidoPageFormat curFormat;
+	GuidoGetPageFormat(currentSession->getGRHandler(), scoreParameters.page, &curFormat);
+	int width = curFormat.width;
+	int height = curFormat.height;
 
     cairo_surface_t *surface;
     cairo_t *cr;
@@ -95,7 +97,7 @@ int cairo_guido2img::convert (guidosession* const currentSession)
     dev->SelectFillColor(VGColor(0,0,0));
     GuidoOnDrawDesc desc;
 
-    desc.handle = currentSession->getGRHandler();
+	desc.handle = currentSession->getGRHandler();
     desc.hdc = dev;
     desc.page = 1;
     desc.updateRegion.erase = true;
@@ -107,13 +109,14 @@ int cairo_guido2img::convert (guidosession* const currentSession)
 
     cairo_surface_write_to_png_stream (surface, write_png_stream_to_byte_array, &fBuffer);
 
-    if ((format == GUIDO_WEB_API_JPEG)
-        || (format == GUIDO_WEB_API_GIF)) {
+	// If format is not png, convert the image with magick++.
+	if ((scoreParameters.format == GUIDO_WEB_API_JPEG)
+		|| (scoreParameters.format == GUIDO_WEB_API_GIF)) {
       // magick++
       Magick::Blob in_blob(fBuffer.start_, fBuffer.size_);
       Magick::Image image(in_blob);
       Magick::Blob out_blob;
-      string new_format = ((format == GUIDO_WEB_API_JPEG) ? "JPEG" : "GIF");
+	  string new_format = ((scoreParameters.format == GUIDO_WEB_API_JPEG) ? "JPEG" : "GIF");
       image.magick(new_format);
       image.write(&out_blob);
       memcpy(fBuffer.start_, out_blob.data(), out_blob.length());
@@ -121,6 +124,11 @@ int cairo_guido2img::convert (guidosession* const currentSession)
     }
 
     return err;
+}
+
+int cairo_guido2img::convertPianoRoll (guidosession* const currentSession)
+{
+	return 0;
 }
 
 } // end namespoace

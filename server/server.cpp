@@ -35,6 +35,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <cstdio>
 #include <stdexcept>
 #include <stdlib.h>
 #include <string.h>
@@ -51,6 +52,7 @@
 #include "json_array.h"
 #include "json_parser.h"
 #include "json_stream.h"
+#include "JSONTime2GraphicMap.h"
 
 #include "date_tools.h"
 
@@ -133,8 +135,7 @@ static int _get_params (void *cls, enum MHD_ValueKind , const char *key, const c
 }
 
 
-static int
-_post_params (void *coninfo_cls, enum MHD_ValueKind , const char *key,
+static int _post_params (void *coninfo_cls, enum MHD_ValueKind , const char *key,
               const char *filename, const char *content_type,
               const char *transfer_encoding, const char *data,
               uint64_t off, size_t size)
@@ -159,18 +160,42 @@ _post_params (void *coninfo_cls, enum MHD_ValueKind , const char *key,
 //--------------------------------------------------------------------------
 // the http server
 //--------------------------------------------------------------------------
-HTTPDServer::HTTPDServer(int verbose, int logmode, string cachedir, guido2img* g2svg, bool alloworigin)
-    : fAccessControlAllowOrigin(alloworigin), fVerbose(verbose), fLogmode(logmode), fCachedir(cachedir), fServer(0), fConverter(g2svg), fMaxSessions(100)
+HTTPDServer::HTTPDServer(string svgfontfile, int verbose, int logmode, string cachedir, bool alloworigin, int maxSession, bool useCache)
+	: fSvgFontFile(svgfontfile), fAccessControlAllowOrigin(alloworigin), fVerbose(verbose), fLogmode(logmode), fCachedir(cachedir), fServer(0),
+	  fMaxSessions(maxSession), fUseCache(useCache)
 {
+	// Initialise default value of guidosession
+	GuidoGetDefaultLayoutSettings(&guidosession::sDefaultParameters.guidoParameters.layoutSettings);
+
+	//GuidoGetDefaultPageFormat(&guidosession::sDefaultParameters.guidoParameters.pageFormat);
+	guidosession::sDefaultParameters.guidoParameters.pageFormat.width = GuidoCM2Unit(15);
+	guidosession::sDefaultParameters.guidoParameters.pageFormat.height = GuidoCM2Unit(5);
+	guidosession::sDefaultParameters.guidoParameters.pageFormat.marginleft = GuidoCM2Unit(1);
+	guidosession::sDefaultParameters.guidoParameters.pageFormat.margintop = GuidoCM2Unit(1);
+	guidosession::sDefaultParameters.guidoParameters.pageFormat.marginright = GuidoCM2Unit(1);
+	guidosession::sDefaultParameters.guidoParameters.pageFormat.marginbottom = GuidoCM2Unit(1);
+
+	guidosession::sDefaultParameters.page = 1;
+	guidosession::sDefaultParameters.format = GUIDO_WEB_API_PNG;
+
+	// Create cache folder if it not already exist
+	if(fUseCache) {
+		tinydir_dir myDir;
+		int success = tinydir_open_sorted(&myDir, fCachedir.c_str());
+		if (success != 0) {
+			// It doesn't exist
+			success = mymkdir(fCachedir);
+		}
+	}
 }
 
 HTTPDServer::~HTTPDServer()
 {
+	// Delete all session.
     for (map<string, guidosession *>::iterator it = fSessions.begin();
             it != fSessions.end(); it++) {
         delete it->second;
     }
-
     stop();
 }
 
@@ -179,7 +204,8 @@ bool HTTPDServer::start(int port)
 {
 	// USE_SELECT_INTERALLY makes the server single threaded
     // this guarantees that operations will be queued, which prevents
-    // issues involving the use of shared resources
+	// issues involving the use of shared resources.
+	// TODO GGX make guido engine multithread complient and change this option.
     fServer = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY, port,
                                 _on_client_connect,
                                 NULL, _answer_to_connection, this,
@@ -201,8 +227,8 @@ void HTTPDServer::stop ()
 //--------------------------------------------------------------------------
 int HTTPDServer::send (struct MHD_Connection *connection, guidosessionresponse &response)
 {
-    const char *format =  response.format_.c_str();
-    return send (connection, response.data_, response.size_, format, response.http_status_);
+	const char *format =  response.fFormat.c_str();
+	return send (connection, response.fData, response.fSize, format, response.fHttpStatus);
 }
 
 //--------------------------------------------------------------------------
@@ -253,38 +279,6 @@ int HTTPDServer::send (struct MHD_Connection *connection, const char *page, int 
     int ret = MHD_queue_response (connection, status, response);
     MHD_destroy_response (response);
     return ret;
-}
-
-//--------------------------------------------------------------------------
-const char* HTTPDServer::getMIMEType (const string& page)
-{
-    size_t n = page.find_last_of ('.');
-    if (n != string::npos) {
-        string ext = page.substr (n+1);
-        if (ext == "css")	{
-            return "text/css";
-        }
-        if (ext == "html")	{
-            return "text/html";
-        }
-        if (ext == "js")	{
-            return "application/javascript";
-        }
-    }
-    return "text/plain";		// default MIME type
-}
-
-static const char alphanum[] =
-"0123456789"
-"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-"abcdefghijklmnopqrstuvwxyz";
-
-int stringLength = sizeof(alphanum) - 1;
-
-char genRandom()
-{
-    
-    return alphanum[rand() % stringLength];
 }
 
 std::string generate_sha1(std::string setter)
@@ -364,7 +358,7 @@ void HTTPDServer::readFromCache(string target)
       
       string all = ss.str();
 
-      (void) registerGMN(unique_id, all);
+	  (void) registerGMN(unique_id, all, false);
       if (target != "") {
         tinydir_close(&myDir);
         tinydir_close(&subDir);
@@ -376,10 +370,10 @@ void HTTPDServer::readFromCache(string target)
   tinydir_close(&myDir);
 }
 
-guidosessionresponse HTTPDServer::registerGMN(string unique_id, string gmn)
+guidosessionresponse HTTPDServer::registerGMN(string unique_id, string gmn, bool useCache)
 {
     if (fSessions.find (unique_id) == fSessions.end ()) {
-      guidosession *maybe = new guidosession(fConverter, gmn, unique_id);
+	  guidosession *maybe = new guidosession(this->getSvgFontFile(), gmn, unique_id);
       if (!maybe->success()) {
         string error = maybe->errorMsg();
         delete maybe;
@@ -389,26 +383,32 @@ guidosessionresponse HTTPDServer::registerGMN(string unique_id, string gmn)
         guidosession *toDelete = fSessions.begin()->second;
         fSessions.erase(fSessions.begin());
         delete toDelete;
+
+		if(useCache) {
+			// delete file in cache
+			std::remove((fCachedir+'/'+unique_id.substr(0,2)+'/'+unique_id+".gmn").c_str());
+		}
       }
       fSessions[unique_id] = maybe;
     }
-    tinydir_dir myDir;
-    int success = tinydir_open_sorted(&myDir, (fCachedir+'/'+unique_id.substr(0,2)).c_str());
-    if (success != 0) {
-      success = mymkdir(fCachedir+'/'+unique_id.substr(0,2));
-      if (success != 0) {
-        // can't do io
-        return fSessions[unique_id]->genericReturnId();
-      }
-    }
+	if(useCache) {
+		tinydir_dir myDir;
+		int success = tinydir_open_sorted(&myDir, (fCachedir+'/'+unique_id.substr(0,2)).c_str());
+		if (success != 0) {
+			success = mymkdir(fCachedir+'/'+unique_id.substr(0,2));
+			if (success != 0) {
+				// can't do io
+				return fSessions[unique_id]->genericReturnId();
+			}
+		}
 
-    tinydir_close(&myDir);
-    ofstream myfile((fCachedir+'/'+unique_id.substr(0,2)+'/'+unique_id+".gmn").c_str());
-    if (myfile.is_open()) {
-      myfile << gmn;
-      myfile.close();
-    }
-
+		tinydir_close(&myDir);
+		ofstream myfile((fCachedir+'/'+unique_id.substr(0,2)+'/'+unique_id+".gmn").c_str());
+		if (myfile.is_open()) {
+			myfile << gmn;
+			myfile.close();
+		}
+	}
     return fSessions[unique_id]->genericReturnId();
 }
 
@@ -430,7 +430,7 @@ int HTTPDServer::sendGuidoPostRequest(struct MHD_Connection *connection, const T
     std::string unique_id;
     unique_id = generate_sha1(args.begin()->second);
     // if the score does not exist already, we put it there
-    guidosessionresponse response = registerGMN(unique_id, args.begin()->second);
+	guidosessionresponse response = registerGMN(unique_id, args.begin()->second, fUseCache);
     return send (connection, response);
 }
 
@@ -444,10 +444,16 @@ int HTTPDServer::sendGuidoDeleteRequest(struct MHD_Connection *connection, const
 		return send(connection, response);
 	}
 	// else
-	guidosession *toErase = fSessions[args.begin()->second];
+	string sessionId = args.begin()->second;
+	guidosession *toErase = fSessions[sessionId];
 	fSessions.erase (args.begin()->second);
 	delete toErase;
-	guidosessionresponse response = guidosession::handleSimpleStringQuery("OK", ("Successfully removed the score with ID "+(args.begin()->second)+".").c_str());
+
+	if(fUseCache) {
+		std::remove((fCachedir+'/'+sessionId.substr(0,2)+'/'+ sessionId +".gmn").c_str());
+	}
+
+	guidosessionresponse response = guidosession::handleSimpleStringQuery("Success", ("Successfully removed the score with ID "+ sessionId +".").c_str());
     return send (connection, response);
 }
 
@@ -599,9 +605,11 @@ int HTTPDServer::sendGuidoGetHead (struct MHD_Connection *connection, const char
     map<string, guidosession *>::iterator it = fSessions.find(elems[0]);
     if (it == fSessions.end ()) {
         // first try to read from cache...
-        readFromCache(elems[0]);
-        // redo
-        it = fSessions.find(elems[0]);
+		if(fUseCache) {
+			readFromCache(elems[0]);
+			// redo
+			it = fSessions.find(elems[0]);
+		}
         if (it == fSessions.end ()) {
           guidosessionresponse response = guidosession::genericFailure("incorrect score ID.", 404, elems[0]);
           return send (connection, response);
@@ -609,11 +617,18 @@ int HTTPDServer::sendGuidoGetHead (struct MHD_Connection *connection, const char
     }
     guidosession *currentSession = fSessions[elems[0]];
 
-	currentSession->updateValuesFromDefaults(args);
-	currentSession->maybeResize();
+	// Fill the settings for pianoroll or for score.
+	GuidoSessionScoreParameters scoreParameters;
+	if (elems.size() >= 2 && elems[1].find("pianoroll")) {
+	// TODO GGX
+	} else {
+		scoreParameters = currentSession->getScoreParameters(args);
+	}
+
 	if (elems.size() == 1) {
 		// must be getting the score
-		guidosessionresponse response = currentSession->genericReturnImage();
+		currentSession->updateGRH(scoreParameters);
+		guidosessionresponse response = currentSession->scoreReturnImage(scoreParameters);
 		return send (connection, response);
 	}
 	if (elems.size() == 2) {
@@ -630,6 +645,7 @@ int HTTPDServer::sendGuidoGetHead (struct MHD_Connection *connection, const char
 			return send(connection, response);
 		} else if (elems[1] == "getpagecount") {
 			int npages;
+			currentSession->updateGRH(scoreParameters);
 			guidoAPIresponse gar = currentSession->getPageCount(npages);
 			guidosessionresponse response = gar.is_happy()
 				? currentSession->handleSimpleIDdIntQuery("pagecount", npages)
@@ -643,12 +659,16 @@ int HTTPDServer::sendGuidoGetHead (struct MHD_Connection *connection, const char
 				: guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
 			return send(connection, response);
 		} else if (elems[1] == "findpageat") {
+			// First, get the date from request parameters.
 			GuidoDate date;
 			string mydate = "";
 			if (args.find("date") != args.end()) {
 				mydate = args.find("date")->second;
 			}
 			stringToDate(mydate, date);
+
+			// Update GR with new page format and layout settings.
+			currentSession->updateGRH(scoreParameters);
 			int page;
 			guidoAPIresponse gar = currentSession->findPageAt(date, page);
 			guidosessionresponse response = gar.is_happy()
@@ -661,14 +681,16 @@ int HTTPDServer::sendGuidoGetHead (struct MHD_Connection *connection, const char
 			if (args.find("page") != args.end()) {
 				mypage = atoi(args.find("page")->second.c_str());
 			}
+			currentSession->updateGRH(scoreParameters);
 			guidoAPIresponse gar = currentSession->getPageDate(mypage, date);
 			guidosessionresponse response = gar.is_happy()
 				? currentSession->datePageJson(dateToString(date), mypage)
 				: guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
 			return send(connection, response);
 		} else if (elems[1] == "getpagemap") {
-			Time2GraphicMap outmap;
-			guidoAPIresponse gar = currentSession->getMap(PAGE, 0, outmap);
+			currentSession->updateGRH(scoreParameters);
+			JSONTime2GraphicMap outmap;
+			guidoAPIresponse gar = currentSession->getMap(PAGE, 0, scoreParameters, outmap);
 			guidosessionresponse response = gar.is_happy()
 				? currentSession->mapJson("pagemap", outmap)
 				: guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
@@ -677,35 +699,39 @@ int HTTPDServer::sendGuidoGetHead (struct MHD_Connection *connection, const char
 			guidosessionresponse response = currentSession->genericReturnMidi();
 			return send(connection, response);
 		} else if (elems[1] == "getsystemmap") {
-			Time2GraphicMap outmap;
-			guidoAPIresponse gar = currentSession->getMap(SYSTEM, 0, outmap);
+			currentSession->updateGRH(scoreParameters);
+			JSONTime2GraphicMap outmap;
+			guidoAPIresponse gar = currentSession->getMap(SYSTEM, 0, scoreParameters, outmap);
 			guidosessionresponse response = gar.is_happy()
 				? currentSession->mapJson("systemmap", outmap)
 				: guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
 			return send(connection, response);
 		} else if (elems[1] == "getstaffmap") {
-			Time2GraphicMap outmap;
+			currentSession->updateGRH(scoreParameters);
+			JSONTime2GraphicMap outmap;
 			int mystaff = 1;
 			if (args.find("staff") != args.end()) {
 				mystaff = atoi(args.find("staff")->second.c_str());
 			}
-			guidoAPIresponse gar = currentSession->getMap(STAFF, mystaff, outmap);
+			guidoAPIresponse gar = currentSession->getMap(STAFF, mystaff, scoreParameters, outmap);
 			guidosessionresponse response = gar.is_happy()
 				? currentSession->mapJson("staffmap", outmap)
 				: guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
 			return send(connection, response);
 		} else if (elems[1] == "getvoicemap") {
-			Time2GraphicMap outmap;
+			currentSession->updateGRH(scoreParameters);
+			JSONTime2GraphicMap outmap;
 			int myvoice = 1;
 			if (args.find("voice") != args.end()) {
 				myvoice = atoi(args.find("voice")->second.c_str());
 			}
-			guidoAPIresponse gar = currentSession->getMap(STAFF, myvoice, outmap);
+			guidoAPIresponse gar = currentSession->getMap(STAFF, myvoice, scoreParameters, outmap);
 			guidosessionresponse response = gar.is_happy()
 				? currentSession->mapJson("voicemap", outmap)
 				: guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
 			return send(connection, response);
 		} else if (elems[1] == "gettimemap") {
+			currentSession->updateGRH(scoreParameters);
 			JSONFriendlyTimeMap outmap;
 			guidoAPIresponse gar = currentSession->getTimeMap(outmap);
 			guidosessionresponse response = gar.is_happy()
@@ -714,6 +740,9 @@ int HTTPDServer::sendGuidoGetHead (struct MHD_Connection *connection, const char
 			return send(connection, response);
 		} else if (elems[1] == "gmn") {
 			guidosessionresponse response =  currentSession->handleSimpleIDdStringQuery("gmn", currentSession->getGMN());
+			return send(connection, response);
+		} else if (elems[1] == "pianoroll") {
+			guidosessionresponse response =  currentSession->pianoRollReturnImage(scoreParameters);
 			return send(connection, response);
 		} else {
 			guidosessionresponse response = guidosession::genericFailure("Unidentified GET request.", 404, elems[0]);
@@ -767,6 +796,7 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
 	}
 
 	logSendGuido(connection, url, myArgs, method);
+
     if (0 == strcmp (method, "POST")) {
         struct connection_info_struct *con_info = (connection_info_struct *)*con_cls;
 

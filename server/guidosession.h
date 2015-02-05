@@ -34,129 +34,125 @@
 #include "json_value.h"
 #include "map2json.h"
 #include "JSONFriendlyTimeMap.h"
-
-using namespace std;
+#include "JSONTime2GraphicMap.h"
 
 namespace guidohttpd
 {
 enum GuidoSessionMapType {PAGE, STAFF, VOICE, SYSTEM, NO_TYPE};
 enum GuidoSessionParsingError { GUIDO_SESSION_PARSING_SUCCESS, GUIDO_SESSION_PARSING_FAILURE };
 enum GuidoWebApiFormat { GUIDO_WEB_API_PNG,
-                         GUIDO_WEB_API_JPEG,
-                         GUIDO_WEB_API_GIF,
-                         GUIDO_WEB_API_SVG,
-                         GUIDO_WEB_API_BINARY,
-                         GUIDO_WEB_API_UNDEFINED
-                       };
+						 GUIDO_WEB_API_JPEG,
+						 GUIDO_WEB_API_GIF,
+						 GUIDO_WEB_API_SVG,
+						 GUIDO_WEB_API_BINARY,
+						 GUIDO_WEB_API_UNDEFINED
+					   };
 //--------------------------------------------------------------------------
 class guido2img;
 
 class guidoAPIresponse {
   private :
-    GuidoErrCode error_;
-    int line_;
-    int column_;
-    string msg_;
+	GuidoErrCode fError;
+	int fLine;
+	int fColumn;
+	std::string fMsg;
+
   public :
-    guidoAPIresponse (GuidoErrCode error, int line, int column, string msg);
-    guidoAPIresponse (GuidoErrCode error);
-    guidoAPIresponse ();
-    bool is_happy();
-    string errorMsg();
-    static guidoAPIresponse make_happy_response();
+	guidoAPIresponse (GuidoErrCode error, int line, int column, std::string msg);
+	guidoAPIresponse (GuidoErrCode error);
+	guidoAPIresponse ();
+	bool is_happy();
+	std::string errorMsg();
+	static guidoAPIresponse make_happy_response();
 };
 
 class guidosessionresponse {
 	public:
-    char* data_;
-    unsigned int size_;
-    string format_;
-    string errstring_;
-    GuidoSessionParsingError status_;
-    int http_status_;
-    guidosessionresponse ();
-    guidosessionresponse (const char* data, unsigned int size, string format, int http_status = 200);
-	guidosessionresponse (string data, string format, int http_status = 200);
+	char* fData;
+	unsigned int fSize;
+	std::string fFormat;
+	std::string fErrorString;
+	GuidoSessionParsingError fStatus;
+	int fHttpStatus;
+	guidosessionresponse ();
+	guidosessionresponse (const char* data, unsigned int size, std::string format, int http_status = 200);
+	guidosessionresponse (std::string data, std::string format, int http_status = 200);
 	guidosessionresponse (const guidosessionresponse &copy);
-    ~guidosessionresponse ();
+	~guidosessionresponse ();
 };
 
+/*!
+ * Structure for all parameters for standard scores (ie not piano roll).
+ */
+typedef struct parameters {
+		GuidoGrParameters guidoParameters;
+		int page;
+		GuidoWebApiFormat format;
+} GuidoSessionScoreParameters;
 
 class guidosession
 {
+	/*!
+	 * \brief fConverter-> Can perform guido to image. One object per session to allow multithreading
+	 * when we have multiple clients
+	 */
     guido2img* fConverter;
 
 private :
-    string id_;
-    ARHandler arh_;
-    GRHandler grh_;
+	std::string fSessionId;
+	ARHandler fArh;
+	GRHandler fGrh;
     guidoAPIresponse *whyIFailed_; // only for very problematic code
-    // these are the current values
-    bool resizeToPage_;
-    GuidoWebApiFormat format_;
-    string gmn_;
-    int page_;
-    float width_;
-    float height_;
-    float zoom_;
-    float marginleft_;
-    float margintop_;
-    float marginbottom_;
-    float marginright_;
-    float systemsDistance_;
-    int systemsDistribution_;
-    float systemsDistribLimit_;
-    float force_;
-    float spring_;
-    int neighborhoodSpacing_;
-    int optimalPageFill_;
-    
-    // and these are the default values
-    bool dresizeToPage_;
-    GuidoWebApiFormat dformat_;
-    string dgmn_;
-    float dpage_;
-    float dwidth_;
-    int dheight_;
-    float dzoom_;
-    float dmarginleft_;
-    float dmargintop_;
-    float dmarginbottom_;
-    float dmarginright_;
-    float dsystemsDistance_;
-    int dsystemsDistribution_;
-    float dsystemsDistribLimit_;
-    float dforce_;
-    float dspring_;
-    int dneighborhoodSpacing_;
-    int doptimalPageFill_;
+
+	std::string fGmnCode;
 
     // format conversion
-    string formatToMIMEType ();
-    string formatToLayType ();
-    static GuidoWebApiFormat formatToWebApiFormat(string format);
-
-    // used for graphical representation building
-    void fillCurrentSettingsUsingGuidoPageFormat(GuidoPageFormat *pf);
+	std::string formatToMIMEType(GuidoWebApiFormat format);
+	static GuidoWebApiFormat formatToWebApiFormat(std::string format);
 
     // private function to wrap json in the ID of a current session
     guidosessionresponse wrapObjectInId(json::json_object *obj);
-    
-	void initializeUserSettableParameters();
 
+	/*!
+	 * \brief getLayoutSettings create a layout settings from request parameters.
+	 * \param args request parameters.
+	 * \return a GuidoLayoutSettings object
+	 */
+	GuidoLayoutSettings getLayoutSettings(const TArgs &args);
+
+	/*!
+	 * \brief getPageFormat create a page format from request parameters.
+	 * The request parameters have to be in CM unit.
+	 * \param args request parameters.
+	 * \return a GuidoPageFormat object
+	 */
+	GuidoPageFormat getPageFormat(const TArgs &args);
+
+	/*!
+	 * \brief initializeARHandGRH. Create a new AR and a new GR.
+	 * The GR is created with default page format and default layout settings.
+	 */
+	void initializeARHandGRH();
+
+	void applyPianoRollSettings();
 public :
+	/*!
+	 * \brief sDefaultLayoutSettings. Default layout settings.
+	 */
+	static GuidoSessionScoreParameters sDefaultParameters;
 
     // constructors, destructor, and initialzer
-    guidosession(guido2img* g2img, string gmn, string id);
+	guidosession(std::string svgfontfile, std::string gmn, std::string id);
     virtual ~guidosession();
 
-    void initializeARHandGRH();
-	void maybeResize();
-    void updateValuesFromDefaults();
-    void updateValuesFromDefaults(const TArgs& args);
-    void changeDefaultValues(const TArgs &args);
+	PianoRoll * createPianoRoll(PianoRollType type);
+
+	GuidoSessionScoreParameters getScoreParameters(const TArgs &args);
+
     bool success();
-    string errorMsg();
+	std::string errorMsg();
+
+	void updateGRH(GuidoSessionScoreParameters &parameters);
 
     // gets GR Handler
     const GRHandler getGRHandler() const;
@@ -166,57 +162,54 @@ public :
     void fillGuidoLayoutSettingsUsingCurrentSettings(GuidoLayoutSettings *ls);
 
     // returns session responses with information for server to send
-    static guidosessionresponse handleSimpleIntQuery(string, int);
-    static guidosessionresponse handleSimpleBoolQuery(string, bool);
-    static guidosessionresponse handleSimpleFloatQuery(string, float);
-    static guidosessionresponse handleSimpleStringQuery(string, string);
+	static guidosessionresponse handleSimpleIntQuery(std::string, int);
+	static guidosessionresponse handleSimpleBoolQuery(std::string, bool);
+	static guidosessionresponse handleSimpleFloatQuery(std::string, float);
+	static guidosessionresponse handleSimpleStringQuery(std::string, std::string);
 
-    // a bit of a kludge for special cases...
-    static guidosessionresponse welcomeMessage();
-    static guidosessionresponse getGuidoAndServerVersions();
-    
-    guidosessionresponse handleSimpleIDdIntQuery(string, int);
-    guidosessionresponse handleSimpleIDdBoolQuery(string, bool);
-    guidosessionresponse handleSimpleIDdFloatQuery(string, float);
-    guidosessionresponse handleSimpleIDdStringQuery(string, string);
+	// a bit of a kludge for special cases...
+	static guidosessionresponse welcomeMessage();
+	static guidosessionresponse getGuidoAndServerVersions();
+
+	guidosessionresponse handleSimpleIDdIntQuery(std::string, int);
+	guidosessionresponse handleSimpleIDdBoolQuery(std::string, bool);
+	guidosessionresponse handleSimpleIDdFloatQuery(std::string, float);
+	guidosessionresponse handleSimpleIDdStringQuery(std::string, std::string);
 
     // more advanced handling
-    guidosessionresponse datePageJson(string, int);
-    guidosessionresponse mapJson (string thingToGet, Time2GraphicMap &outmap);
+	guidosessionresponse datePageJson(std::string, int);
+	guidosessionresponse mapJson (std::string thingToGet, JSONTime2GraphicMap &outmap);
     guidosessionresponse timeMapJson (JSONFriendlyTimeMap &outmap);
 
-    // queries
-    guidoAPIresponse countVoices(int &n);
-    guidoAPIresponse getPageCount(int &p);
-    guidoAPIresponse duration(string &d);
-    guidoAPIresponse findPageAt(GuidoDate date, int &p);
-    guidoAPIresponse getPageDate(int page, GuidoDate &date);
-    guidoAPIresponse getMap (GuidoSessionMapType map, int aux, Time2GraphicMap& outmap);
-    guidoAPIresponse getTimeMap (JSONFriendlyTimeMap& outmap);
-    static string getVersion();
-    static string getServerVersion();
-    static float getLineSpace();
-    static guidoAPIresponse verifyGMN(string gmn);
+	// queries
+	guidoAPIresponse countVoices(int &n);
+	guidoAPIresponse getPageCount(int &p);
+	guidoAPIresponse duration(std::string &d);
+	guidoAPIresponse findPageAt(GuidoDate date, int &p);
+	guidoAPIresponse getPageDate(int page, GuidoDate &date);
+	guidoAPIresponse getMap (GuidoSessionMapType map, int aux, GuidoSessionScoreParameters & scoreParameters, Time2GraphicMap& outmap);
+	guidoAPIresponse getTimeMap (JSONFriendlyTimeMap& outmap);
+	static std::string getVersion();
+	static std::string getServerVersion();
+	static float getLineSpace();
 
     // -----------------------------
-    int simpleSVGHelper(string svgfontfile, string *output);
-    int simpleBinaryHelper(stringstream *output);
-    guidosessionresponse genericReturnImage();
-    guidosessionresponse genericReturnMidi();
-    guidosessionresponse genericReturnId();
-    static guidosessionresponse genericFailure(string errorstring, int http_status = 400, string id = "");
-    guidosessionresponse mapGet (const TArgs& args, unsigned int n, string thingToGet);
-    guidosessionresponse pointGet (const TArgs& args, unsigned int n);
+	int svgScoreExport(std::string svgfontfile, int page, std::stringstream *output);
+	int binaryScoreExport(std::stringstream *output, int page);
+	guidosessionresponse scoreReturnImage(GuidoSessionScoreParameters & scoreParameters);
+	guidosessionresponse pianoRollReturnImage(GuidoSessionScoreParameters &pianoRollParameters);
+	guidosessionresponse genericReturnMidi();
 
-    // getters ---------------------
-    float getWidth() { return width_; }
-    float getHeight() { return height_; }
-    int getPage() { return page_; }
-    float getZoom() { return zoom_; }
-    string getGMN() { return gmn_; }
-    bool getResizeToPage() { return resizeToPage_; }
-    GuidoWebApiFormat getFormat() { return format_; }
+	/*!
+	 * \brief genericReturnId. Return id of a new session created when a new valide gmn is send to the server with a post request.
+	 * \return guidosessionresponse with the unique id of the session.
+	 */
+	guidosessionresponse genericReturnId();
 
+	static guidosessionresponse genericFailure(std::string errorstring, int http_status = 400, std::string id = "");
+
+	// getters ---------------------
+	const std::string getGMN() { return fGmnCode; }
 };
 
 } // end namespoace

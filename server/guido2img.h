@@ -15,11 +15,12 @@
 #ifndef __guido2img__
 #define __guido2img__
 
-#include "guidosession.h"
+#include <string>
 
 namespace guidohttpd
 {
 class guidosession;
+typedef struct parameters GuidoSessionScoreParameters;
 //--------------------------------------------------------------------------
 
 class guido2img
@@ -30,7 +31,8 @@ public:
     guido2img(std::string svgfontfile) : fSvgFontFile(svgfontfile) {}
     virtual ~guido2img() {}
 
-    virtual int convert (guidosession *currentSession) = 0;
+    virtual int convertScore (guidosession *currentSession, GuidoSessionScoreParameters &scoreParameters) = 0;
+    virtual int convertPianoRoll (guidosession *currentSession) = 0;
     virtual const char* data() = 0;
     virtual int	size() = 0;
 };

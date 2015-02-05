@@ -26,7 +26,9 @@
 #include "cairo_guido2img.h"
 #include <Magick++.h>
 
-namespace guidohttpd {
+// System dependent code.
+
+namespace guidohttpd {	
 
 guido2img* makeConverter(std::string svgfontfile) {
   cairo_guido2img *converter = new cairo_guido2img(svgfontfile);

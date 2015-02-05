@@ -42,10 +42,11 @@ class cairo_guido2img : public guido2img
 {
   png_stream_to_byte_array_closure_t  fBuffer;
 public:
-    cairo_guido2img(string svgfontfile);
+	cairo_guido2img(std::string svgfontfile);
     virtual ~cairo_guido2img();
 
-    int convert (guidosession *currentSession);
+	int convertScore (guidosession *currentSession, GuidoSessionScoreParameters &scoreParameters);
+	int convertPianoRoll (guidosession *currentSession);
 
     const char* data()	{
         return fBuffer.start_;
