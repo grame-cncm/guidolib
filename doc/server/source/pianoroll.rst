@@ -1,5 +1,5 @@
-Pianoroll drawing and page formatting
-=================================
+Pianoroll drawing and formatting
+================================
 
 .. index::
   single: pianoroll

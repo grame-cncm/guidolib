@@ -84,11 +84,27 @@ class guidosessionresponse {
 /*!
  * Structure for all parameters for standard scores (ie not piano roll).
  */
-typedef struct parameters {
+typedef struct scoreParameters {
 		GuidoGrParameters guidoParameters;
 		int page;
 		GuidoWebApiFormat format;
 } GuidoSessionScoreParameters;
+
+
+typedef struct pianorollParameters {
+		LimitParams limitParams;
+
+		PianoRollType type;
+
+		GuidoWebApiFormat format;
+
+		int width;
+		int height;
+		bool enableKeyboard;
+		bool enableAutoVoicesColoration;
+		bool enableMeasureBars;
+		int pitchLinesDisplayMode;
+} GuidoSessionPianorollParameters;
 
 class guidosession
 {
@@ -129,17 +145,27 @@ private :
 	GuidoPageFormat getPageFormat(const TArgs &args);
 
 	/*!
+	 * \brief getLimitParams create a LimitParams for pianoroll from request parameters.
+	 * \param args request parameters.
+	 * \return a LimitParams object
+	 */
+	LimitParams getLimitParams(const TArgs &args);
+
+	/*!
 	 * \brief initializeARHandGRH. Create a new AR and a new GR.
 	 * The GR is created with default page format and default layout settings.
 	 */
 	void initializeARHandGRH();
 
-	void applyPianoRollSettings();
+	PianoRoll* createPianoRoll(GuidoSessionPianorollParameters &params);
+
 public :
 	/*!
 	 * \brief sDefaultLayoutSettings. Default layout settings.
 	 */
-	static GuidoSessionScoreParameters sDefaultParameters;
+	static GuidoSessionScoreParameters sDefaultScoreParameters;
+
+	static GuidoSessionPianorollParameters sDefaultPianorollParameters;
 
     // constructors, destructor, and initialzer
 	guidosession(std::string svgfontfile, std::string gmn, std::string id);
@@ -148,8 +174,9 @@ public :
 	PianoRoll * createPianoRoll(PianoRollType type);
 
 	GuidoSessionScoreParameters getScoreParameters(const TArgs &args);
+	GuidoSessionPianorollParameters getPianoRollParameters(const TArgs &args);
 
-    bool success();
+	bool success();
 	std::string errorMsg();
 
 	void updateGRH(GuidoSessionScoreParameters &parameters);
@@ -193,11 +220,18 @@ public :
 	static std::string getServerVersion();
 	static float getLineSpace();
 
+
+	guidoAPIresponse getPianorollKeyboardWidth(GuidoSessionPianorollParameters &params, float &width);
+	guidoAPIresponse getPianorollMap(GuidoSessionPianorollParameters &params, JSONTime2GraphicMap &outmap);
+
     // -----------------------------
 	int svgScoreExport(std::string svgfontfile, int page, std::stringstream *output);
 	int binaryScoreExport(std::stringstream *output, int page);
+
 	guidosessionresponse scoreReturnImage(GuidoSessionScoreParameters & scoreParameters);
-	guidosessionresponse pianoRollReturnImage(GuidoSessionScoreParameters &pianoRollParameters);
+
+	guidosessionresponse pianoRollReturnImage(GuidoSessionPianorollParameters &pianoRollParameters);
+
 	guidosessionresponse genericReturnMidi();
 
 	/*!

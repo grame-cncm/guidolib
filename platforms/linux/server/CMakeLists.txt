@@ -18,6 +18,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/)
 include_directories(${ROOT}/server)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../src)
 include_directories(${ROOT}/src/engine/include)
+include_directories(${ROOT}/src/engine/devices)
 include_directories(${ROOT}/lang/javascript/src/json)
 add_definitions(-DJSON_ONLY)
 

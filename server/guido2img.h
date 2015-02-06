@@ -17,10 +17,14 @@
 
 #include <string>
 
+class PianoRoll;
+
 namespace guidohttpd
 {
 class guidosession;
-typedef struct parameters GuidoSessionScoreParameters;
+typedef struct scoreParameters GuidoSessionScoreParameters;
+typedef struct pianorollParameters GuidoSessionPianorollParameters;
+
 //--------------------------------------------------------------------------
 
 class guido2img
@@ -32,7 +36,7 @@ public:
     virtual ~guido2img() {}
 
     virtual int convertScore (guidosession *currentSession, GuidoSessionScoreParameters &scoreParameters) = 0;
-    virtual int convertPianoRoll (guidosession *currentSession) = 0;
+    virtual int convertPianoRoll (PianoRoll * pr, GuidoSessionPianorollParameters &pianorollParameters) = 0;
     virtual const char* data() = 0;
     virtual int	size() = 0;
 };

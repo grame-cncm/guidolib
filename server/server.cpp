@@ -164,19 +164,35 @@ HTTPDServer::HTTPDServer(string svgfontfile, int verbose, int logmode, string ca
 	: fSvgFontFile(svgfontfile), fAccessControlAllowOrigin(alloworigin), fVerbose(verbose), fLogmode(logmode), fCachedir(cachedir), fServer(0),
 	  fMaxSessions(maxSession), fUseCache(useCache)
 {
-	// Initialise default value of guidosession
-	GuidoGetDefaultLayoutSettings(&guidosession::sDefaultParameters.guidoParameters.layoutSettings);
+	// Initialize default value of guidosession
+	GuidoGetDefaultLayoutSettings(&guidosession::sDefaultScoreParameters.guidoParameters.layoutSettings);
 
 	//GuidoGetDefaultPageFormat(&guidosession::sDefaultParameters.guidoParameters.pageFormat);
-	guidosession::sDefaultParameters.guidoParameters.pageFormat.width = GuidoCM2Unit(15);
-	guidosession::sDefaultParameters.guidoParameters.pageFormat.height = GuidoCM2Unit(5);
-	guidosession::sDefaultParameters.guidoParameters.pageFormat.marginleft = GuidoCM2Unit(1);
-	guidosession::sDefaultParameters.guidoParameters.pageFormat.margintop = GuidoCM2Unit(1);
-	guidosession::sDefaultParameters.guidoParameters.pageFormat.marginright = GuidoCM2Unit(1);
-	guidosession::sDefaultParameters.guidoParameters.pageFormat.marginbottom = GuidoCM2Unit(1);
+	guidosession::sDefaultScoreParameters.guidoParameters.pageFormat.width = GuidoCM2Unit(15);
+	guidosession::sDefaultScoreParameters.guidoParameters.pageFormat.height = GuidoCM2Unit(5);
+	guidosession::sDefaultScoreParameters.guidoParameters.pageFormat.marginleft = GuidoCM2Unit(1);
+	guidosession::sDefaultScoreParameters.guidoParameters.pageFormat.margintop = GuidoCM2Unit(1);
+	guidosession::sDefaultScoreParameters.guidoParameters.pageFormat.marginright = GuidoCM2Unit(1);
+	guidosession::sDefaultScoreParameters.guidoParameters.pageFormat.marginbottom = GuidoCM2Unit(1);
 
-	guidosession::sDefaultParameters.page = 1;
-	guidosession::sDefaultParameters.format = GUIDO_WEB_API_PNG;
+	guidosession::sDefaultScoreParameters.page = 1;
+	guidosession::sDefaultScoreParameters.format = GUIDO_WEB_API_PNG;
+
+	// Initialize piano roll settings
+	guidosession::sDefaultPianorollParameters.limitParams.startDate = {0, 0};
+	guidosession::sDefaultPianorollParameters.limitParams.endDate = {0, 0};
+	guidosession::sDefaultPianorollParameters.limitParams.lowPitch = -1;
+	guidosession::sDefaultPianorollParameters.limitParams.highPitch = -1;
+
+	guidosession::sDefaultPianorollParameters.enableKeyboard = false;
+	guidosession::sDefaultPianorollParameters.enableAutoVoicesColoration = false;
+	guidosession::sDefaultPianorollParameters.enableMeasureBars = false;
+	guidosession::sDefaultPianorollParameters.pitchLinesDisplayMode = kAutoLines;
+
+	guidosession::sDefaultPianorollParameters.width = 1024;
+	guidosession::sDefaultPianorollParameters.height = 512;
+
+	guidosession::sDefaultPianorollParameters.format = GUIDO_WEB_API_PNG;
 
 	// Create cache folder if it not already exist
 	if(fUseCache) {
@@ -582,10 +598,10 @@ void HTTPDServer::logSendGuido(struct MHD_Connection *connection, const char* ur
 int HTTPDServer::sendGuidoGetHead (struct MHD_Connection *connection, const char* url, const TArgs& args, int type, vector<string> &elems)
 {
     /*
-       there are three possibilities for the URL : 0, 1, and 2 entries
+	   there are four possibilities for the URL : 0, 1, 2 or 3 entries
        in the case of 0, we must be making a new score and the request must be POST
        in the case of 1, we are referencing an existing score and the request must be either GET or DELETE
-       in the case of 2, we are referencing an existing score with a precise operation and the request must be GET
+	   in the case of >= 2, we are referencing an existing score with a precise operation and the request must be GET
     */
 
     if (elems[0] == "version") {
@@ -619,8 +635,10 @@ int HTTPDServer::sendGuidoGetHead (struct MHD_Connection *connection, const char
 
 	// Fill the settings for pianoroll or for score.
 	GuidoSessionScoreParameters scoreParameters;
-	if (elems.size() >= 2 && elems[1].find("pianoroll")) {
-	// TODO GGX
+	GuidoSessionPianorollParameters pianoRollParameters;
+
+	if (elems.size() >= 2 && elems[1].find("pianoroll") != string::npos) {
+		pianoRollParameters = currentSession->getPianoRollParameters(args);
 	} else {
 		scoreParameters = currentSession->getScoreParameters(args);
 	}
@@ -742,7 +760,32 @@ int HTTPDServer::sendGuidoGetHead (struct MHD_Connection *connection, const char
 			guidosessionresponse response =  currentSession->handleSimpleIDdStringQuery("gmn", currentSession->getGMN());
 			return send(connection, response);
 		} else if (elems[1] == "pianoroll") {
-			guidosessionresponse response =  currentSession->pianoRollReturnImage(scoreParameters);
+			pianoRollParameters.type = kSimplePianoRoll;
+			guidosessionresponse response =  currentSession->pianoRollReturnImage(pianoRollParameters);
+			return send(connection, response);
+		} else if (elems[1] == "trajectorypianoroll") {
+			pianoRollParameters.type = kTrajectoryPianoRoll;
+			guidosessionresponse response =  currentSession->pianoRollReturnImage(pianoRollParameters);
+			return send(connection, response);
+		} else {
+			guidosessionresponse response = guidosession::genericFailure("Unidentified GET request.", 404, elems[0]);
+			return send(connection, response);
+		}
+	}
+	if (elems.size() == 3) {
+		if (elems[1] == "pianoroll" && elems[1] == "getkeyboardwidth") {
+			float width;
+			guidoAPIresponse gar = currentSession->getPianorollKeyboardWidth(pianoRollParameters, width);
+			guidosessionresponse response = gar.is_happy()
+				? currentSession->handleSimpleIDdFloatQuery("keyboardwidth", width)
+				: guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
+			return send(connection, response);
+		} else if (elems[1] == "pianoroll" && elems[1] == "getmap") {
+			JSONTime2GraphicMap outmap;
+			guidoAPIresponse gar = currentSession->getPianorollMap(pianoRollParameters, outmap);
+			guidosessionresponse response = gar.is_happy()
+				? currentSession->mapJson("pianorollmap", outmap)
+				: guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
 			return send(connection, response);
 		} else {
 			guidosessionresponse response = guidosession::genericFailure("Unidentified GET request.", 404, elems[0]);

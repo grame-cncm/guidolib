@@ -128,7 +128,8 @@ guidosessionresponse::~guidosessionresponse ()
   delete[] fData;
 }
 
-GuidoSessionScoreParameters guidosession::sDefaultParameters;
+GuidoSessionScoreParameters guidosession::sDefaultScoreParameters;
+GuidoSessionPianorollParameters guidosession::sDefaultPianorollParameters;
 
 guidosession::guidosession(string svgfontfile, string gmn, string id)
 	: fSessionId(id), fGmnCode(gmn)
@@ -164,35 +165,26 @@ void guidosession::initializeARHandGRH() {
       const char *msg;
       GuidoParserGetErrorCode (parser, line, col, &msg);
       GuidoCloseParser(parser);
-      whyIFailed_ = new guidoAPIresponse(guidoErrParse, line, col, string(msg));
+	  whyIFailed_ = new guidoAPIresponse(guidoErrParse, line, col, string(msg));
       return;
     }
     GuidoCloseParser(parser);
 
 	// Create Graphic representation
-	fGrh = GuidoAR2GRParameterized(fArh, &sDefaultParameters.guidoParameters);
+	fGrh = GuidoAR2GRParameterized(fArh, &sDefaultScoreParameters.guidoParameters);
 	if (!fGrh) {
 		whyIFailed_ = new guidoAPIresponse(guidoErrActionFailed);
         return;
     }
 
 	// Resize page to music.
-	if (sDefaultParameters.guidoParameters.layoutSettings.resizePage2Music) {
+	if (sDefaultScoreParameters.guidoParameters.layoutSettings.resizePage2Music) {
 		GuidoErrCode err = GuidoResizePageToMusic (fGrh);
 		if (err != guidoNoErr) {
 			whyIFailed_ = new guidoAPIresponse(err);
 			return;
 		}
 	}
-}
-
-PianoRoll* guidosession::createPianoRoll(PianoRollType type) {
-	PianoRoll* pr = 0;
-	if(fArh) {
-		pr = GuidoAR2PianoRoll(type, fArh);
-		applyPianoRollSettings();
-	}
-	return pr;
 }
 
 void guidosession::updateGRH(GuidoSessionScoreParameters &parameters) {
@@ -232,14 +224,14 @@ GuidoSessionScoreParameters guidosession::getScoreParameters(const TArgs &args)
 	if (args.find("format") != args.end()) {
 		params.format = formatToWebApiFormat(args.find("format")->second);
 	} else {
-		params.format = sDefaultParameters.format;
+		params.format = sDefaultScoreParameters.format;
 	}
 
 	// page number
 	if (args.find("page") != args.end()) {
 		params.page = atoi(args.find("page")->second.c_str());
 	} else {
-		params.page = sDefaultParameters.page;
+		params.page = sDefaultScoreParameters.page;
 	}
 	return params;
 }
@@ -252,63 +244,63 @@ GuidoLayoutSettings guidosession::getLayoutSettings(const TArgs &args)
 	if (args.find("systemsDistance") != args.end()) {
 		ls.systemsDistance = atof(args.find("systemsDistance")->second.c_str());
 	} else {
-		ls.systemsDistance = sDefaultParameters.guidoParameters.layoutSettings.systemsDistance;
+		ls.systemsDistance = sDefaultScoreParameters.guidoParameters.layoutSettings.systemsDistance;
 	}
 
 	// systemsDistribution
 	if (args.find("systemsDistribution") != args.end()) {
 		ls.systemsDistribution = systemsDistributionToFloat(args.find("systemsDistribution")->second);
 	} else {
-		ls.systemsDistribution = sDefaultParameters.guidoParameters.layoutSettings.systemsDistribution;
+		ls.systemsDistribution = sDefaultScoreParameters.guidoParameters.layoutSettings.systemsDistribution;
 	}
 
 	// systemsDistribLimit
 	if (args.find("systemsDistribLimit") != args.end()) {
 		ls.systemsDistribLimit = atof(args.find("systemsDistribLimit")->second.c_str());
 	} else {
-		ls.systemsDistribLimit = sDefaultParameters.guidoParameters.layoutSettings.systemsDistribLimit;
+		ls.systemsDistribLimit = sDefaultScoreParameters.guidoParameters.layoutSettings.systemsDistribLimit;
 	}
 
 	// force
 	if (args.find("force") != args.end()) {
 		ls.force = atof(args.find("force")->second.c_str());
 	} else {
-		ls.force = sDefaultParameters.guidoParameters.layoutSettings.force;
+		ls.force = sDefaultScoreParameters.guidoParameters.layoutSettings.force;
 	}
 
 	// spring
 	if (args.find("spring") != args.end()) {
 		ls.spring = atof(args.find("spring")->second.c_str());
 	} else {
-		ls.spring = sDefaultParameters.guidoParameters.layoutSettings.spring;
+		ls.spring = sDefaultScoreParameters.guidoParameters.layoutSettings.spring;
 	}
 
 	// neighborhoodSpacing
 	if (args.find("neighborhoodSpacing") != args.end()) {
 		ls.neighborhoodSpacing= atoib(args.find("neighborhoodSpacing")->second.c_str());
 	} else {
-		ls.neighborhoodSpacing = sDefaultParameters.guidoParameters.layoutSettings.neighborhoodSpacing;
+		ls.neighborhoodSpacing = sDefaultScoreParameters.guidoParameters.layoutSettings.neighborhoodSpacing;
 	}
 
 	// optimalPageFill
 	if (args.find("optimalPageFill") != args.end()) {
 		ls.optimalPageFill = atoib(args.find("optimalPageFill")->second.c_str());
 	} else {
-		ls.optimalPageFill = sDefaultParameters.guidoParameters.layoutSettings.optimalPageFill;
+		ls.optimalPageFill = sDefaultScoreParameters.guidoParameters.layoutSettings.optimalPageFill;
 	}
 
 	// resize
 	if (args.find("resize") != args.end()) {
 		ls.resizePage2Music = atob(args.find("resize")->second);
 	} else {
-		ls.resizePage2Music = sDefaultParameters.guidoParameters.layoutSettings.resizePage2Music;
+		ls.resizePage2Music = sDefaultScoreParameters.guidoParameters.layoutSettings.resizePage2Music;
 	}
 
 	// proportional rendering
 	if (args.find("proportional") != args.end()) {
 		ls.proportionalRenderingForceMultiplicator = atof(args.find("proportional")->second.c_str());
 	} else {
-		ls.proportionalRenderingForceMultiplicator = sDefaultParameters.guidoParameters.layoutSettings.proportionalRenderingForceMultiplicator;
+		ls.proportionalRenderingForceMultiplicator = sDefaultScoreParameters.guidoParameters.layoutSettings.proportionalRenderingForceMultiplicator;
 	}
 	return ls;
 }
@@ -320,44 +312,134 @@ GuidoPageFormat guidosession::getPageFormat(const TArgs &args)
 	if (args.find("width") != args.end()) {
 		pf.width = GuidoCM2Unit(atoi(args.find("width")->second.c_str()));
 	} else {
-		pf.width = sDefaultParameters.guidoParameters.pageFormat.width;
+		pf.width = sDefaultScoreParameters.guidoParameters.pageFormat.width;
 	}
 
 	// height
 	if (args.find("height") != args.end()) {
 		pf.height = GuidoCM2Unit(atoi(args.find("height")->second.c_str()));
 	} else {
-		pf.height = sDefaultParameters.guidoParameters.pageFormat.height;
+		pf.height = sDefaultScoreParameters.guidoParameters.pageFormat.height;
 	}
 	// marginleft
 	if (args.find("marginleft") != args.end()) {
 		pf.marginleft = GuidoCM2Unit(atof(args.find("marginleft")->second.c_str()));
 	} else {
-		pf.marginleft = sDefaultParameters.guidoParameters.pageFormat.marginleft;
+		pf.marginleft = sDefaultScoreParameters.guidoParameters.pageFormat.marginleft;
 	}
 
 	// margintop
 	if (args.find("margintop") != args.end()) {
 		pf.margintop = GuidoCM2Unit(atof(args.find("margintop")->second.c_str()));
 	} else {
-		pf.margintop = sDefaultParameters.guidoParameters.pageFormat.margintop;
+		pf.margintop = sDefaultScoreParameters.guidoParameters.pageFormat.margintop;
 	}
 
 	// marginright
 	if (args.find("marginright") != args.end()) {
 		pf.marginright = GuidoCM2Unit(atof(args.find("marginright")->second.c_str()));
 	} else {
-		pf.marginright = sDefaultParameters.guidoParameters.pageFormat.marginright;
+		pf.marginright = sDefaultScoreParameters.guidoParameters.pageFormat.marginright;
 	}
 
 	// marginbottom
 	if (args.find("marginbottom") != args.end()) {
 		pf.marginbottom = GuidoCM2Unit(atof(args.find("marginbottom")->second.c_str()));
 	} else {
-		pf.marginbottom = sDefaultParameters.guidoParameters.pageFormat.marginbottom;
+		pf.marginbottom = sDefaultScoreParameters.guidoParameters.pageFormat.marginbottom;
 	}
 
 	return pf;
+}
+
+GuidoSessionPianorollParameters guidosession::getPianoRollParameters(const TArgs &args)
+{
+	GuidoSessionPianorollParameters params;
+
+	params.limitParams = getLimitParams(args);
+
+	// Generated image format
+
+	if (args.find("format") != args.end()) {
+		params.format = formatToWebApiFormat(args.find("format")->second);
+	} else {
+		params.format = sDefaultPianorollParameters.format;
+	}
+
+	// width
+	if (args.find("width") != args.end()) {
+		params.width = atoi(args.find("width")->second.c_str());
+	} else {
+		params.width = sDefaultPianorollParameters.width;
+	}
+
+	// height
+	if (args.find("height") != args.end()) {
+		params.height = atoi(args.find("height")->second.c_str());
+	} else {
+		params.height = sDefaultPianorollParameters.height;
+	}
+
+	// keyboard
+	if (args.find("keyboard") != args.end()) {
+		params.enableKeyboard = atob(args.find("keyboard")->second.c_str());
+	} else {
+		params.enableKeyboard = sDefaultPianorollParameters.enableKeyboard;
+	}
+
+	// autoVoicesColoration
+	if (args.find("autoVoicesColoration") != args.end()) {
+		params.enableAutoVoicesColoration = atob(args.find("autoVoicesColoration")->second.c_str());
+	} else {
+		params.enableAutoVoicesColoration = sDefaultPianorollParameters.enableAutoVoicesColoration;
+	}
+
+	// enableMeasureBars
+	if (args.find("enableMeasureBars") != args.end()) {
+		params.enableMeasureBars = atob(args.find("enableMeasureBars")->second.c_str());
+	} else {
+		params.enableMeasureBars = sDefaultPianorollParameters.enableMeasureBars;
+	}
+
+	// pitchLinesDisplayMode
+	if (args.find("pitchLinesDisplayMode") != args.end()) {
+		params.pitchLinesDisplayMode = atoi(args.find("pitchLinesDisplayMode")->second.c_str());
+	} else {
+		params.pitchLinesDisplayMode = sDefaultPianorollParameters.pitchLinesDisplayMode;
+	}
+	return params;
+}
+
+LimitParams guidosession::getLimitParams(const TArgs &args)
+{
+	LimitParams lp;
+	string stringDate;
+	if (args.find("startDate") != args.end()) {
+		stringDate = args.find("startDate")->second;
+		stringToDate(stringDate, lp.startDate);
+	} else {
+		lp.startDate = sDefaultPianorollParameters.limitParams.startDate;
+	}
+
+	if (args.find("endDate") != args.end()) {
+		stringDate = args.find("endDate")->second.c_str();
+		stringToDate(stringDate, lp.endDate);
+	} else {
+		lp.endDate = sDefaultPianorollParameters.limitParams.endDate;
+	}
+
+	if (args.find("lowPitch") != args.end()) {
+		lp.lowPitch = atoi(args.find("lowPitch")->second.c_str());
+	} else {
+		lp.lowPitch = sDefaultPianorollParameters.limitParams.lowPitch;
+	}
+
+	if (args.find("highPitch") != args.end()) {
+		lp.highPitch = atoi(args.find("highPitch")->second.c_str());
+	} else {
+		lp.highPitch = sDefaultPianorollParameters.limitParams.highPitch;
+	}
+	return lp;
 }
 
 // FORMATTING
@@ -375,7 +457,7 @@ string guidosession::formatToMIMEType(GuidoWebApiFormat format)
 	case GUIDO_WEB_API_GIF :
 		return "image/gif";
 	case GUIDO_WEB_API_SVG :
-		return "image/xml+svg";
+		return "image/svg+xml";
 	case GUIDO_WEB_API_UNDEFINED :
 		return "application/undefined";
 	default :
@@ -404,14 +486,21 @@ GuidoWebApiFormat guidosession::formatToWebApiFormat(string format)
     return GUIDO_WEB_API_PNG;
 }
 
-void guidosession::applyPianoRollSettings()
+PianoRoll * guidosession::createPianoRoll(GuidoSessionPianorollParameters &params)
 {
-	/* TODO GGX
-	GuidoPianoRollSetLimits(PianoRoll *pr, LimitParams limitParams);
-	GuidoPianoRollEnableKeyboard(PianoRoll *pr, bool enabled);
-	GuidoPianoRollGetKeyboardWidth(PianoRoll *pr, int height, float &keyboardWidth);
-	GuidoPianoRollEnableAutoVoicesColoration(PianoRoll *pr, bool enabled);
-	*/
+	PianoRoll* pr = 0;
+	if(fArh) {
+		// Create new piano roll
+		pr = GuidoAR2PianoRoll(params.type, this->fArh);
+
+		// Apply settings to pianoRoll
+		GuidoPianoRollSetLimits(pr, params.limitParams);
+		GuidoPianoRollEnableKeyboard(pr, params.enableKeyboard);
+		GuidoPianoRollEnableAutoVoicesColoration(pr, params.enableAutoVoicesColoration);
+		GuidoPianoRollEnableMeasureBars(pr, params.enableMeasureBars);
+		GuidoPianoRollSetPitchLinesDisplayMode(pr, params.pitchLinesDisplayMode);
+	}
+	return pr;
 }
 
 // GUIDO SESSION RESPONSE RETURNERS
@@ -702,7 +791,21 @@ guidoAPIresponse guidosession::getMap (GuidoSessionMapType map, int aux, GuidoSe
     return guidoAPIresponse(err);
 }
 
+guidoAPIresponse guidosession::getPianorollKeyboardWidth(GuidoSessionPianorollParameters &params, float &width)
+{
+	PianoRoll *pr = this->createPianoRoll(params);
+	GuidoErrCode err = GuidoPianoRollGetKeyboardWidth(pr, params.height, width);
+	GuidoDestroyPianoRoll(pr);
+	return guidoAPIresponse(err);
+}
 
+guidoAPIresponse guidosession::getPianorollMap(GuidoSessionPianorollParameters &params, JSONTime2GraphicMap &outmap)
+{
+	PianoRoll *pr = this->createPianoRoll(params);
+	GuidoErrCode err = GuidoPianoRollGetMap(pr, params.width, params.height, outmap);
+	GuidoDestroyPianoRoll(pr);
+	return guidoAPIresponse(err);
+}
 
 // ---- Abstractions
 
@@ -745,13 +848,18 @@ guidosessionresponse guidosession::scoreReturnImage(GuidoSessionScoreParameters 
 						   : "Server could not generate an image of type "+formatToMIMEType(scoreParameters.format)+".", 400, fSessionId);
 }
 
-guidosessionresponse guidosession::pianoRollReturnImage(GuidoSessionScoreParameters &pianoRollParameters)
+guidosessionresponse guidosession::pianoRollReturnImage(GuidoSessionPianorollParameters &pianoRollParameters)
 {
 	if (whyIFailed_) {
 	  return genericFailure(whyIFailed_->errorMsg(), 400, fSessionId);
 	}
 
-	int err = fConverter->convertPianoRoll(this);
+	PianoRoll *pr = createPianoRoll(pianoRollParameters);
+
+	int err = fConverter->convertPianoRoll(pr, pianoRollParameters);
+
+	GuidoDestroyPianoRoll(pr);
+
 	if (err == guidoNoErr) {
 		const char *fcd = fConverter->data();
 		return guidosessionresponse(fcd, fConverter->size(), formatToMIMEType(pianoRollParameters.format), 201);

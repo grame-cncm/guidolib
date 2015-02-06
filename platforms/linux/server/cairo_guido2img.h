@@ -46,7 +46,7 @@ public:
     virtual ~cairo_guido2img();
 
 	int convertScore (guidosession *currentSession, GuidoSessionScoreParameters &scoreParameters);
-	int convertPianoRoll (guidosession *currentSession);
+	int convertPianoRoll (PianoRoll *pr, GuidoSessionPianorollParameters &pianorollParameters);
 
     const char* data()	{
         return fBuffer.start_;

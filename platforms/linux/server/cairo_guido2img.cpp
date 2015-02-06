@@ -15,6 +15,11 @@
 #include "cairo_guido2img.h"
 #include "CairoSystem.h"
 #include "CairoDevice.h"
+#include "SVGSystem.h"
+#include "SVGDevice.h"
+#include "BinarySystem.h"
+#include "BinaryDevice.h"
+
 #include <cairo.h>
 #include <Magick++.h>
 
@@ -44,7 +49,7 @@ write_png_stream_to_byte_array (void *in_closure, const unsigned char *data,
 
 //--------------------------------------------------------------------------
 cairo_guido2img::cairo_guido2img (string svgfontfile) : guido2img(svgfontfile) {
-  fBuffer.data_ = new char[1048576]; // TODO GGX remove fixed size and use length of write_png_stream_to_byte_array
+  fBuffer.data_ = new char[1048576]; // TODO GGX remove fixed size and use a real buffer
   fBuffer.start_ = fBuffer.data_;
   fBuffer.size_ = 0;
   fBuffer.pos_ = 0;
@@ -99,7 +104,7 @@ int cairo_guido2img::convertScore (guidosession* const currentSession, GuidoSess
 
 	desc.handle = currentSession->getGRHandler();
     desc.hdc = dev;
-    desc.page = 1;
+	desc.page = scoreParameters.page;
     desc.updateRegion.erase = true;
     desc.scrollx = desc.scrolly = 0;
     desc.sizex = width;
@@ -126,9 +131,74 @@ int cairo_guido2img::convertScore (guidosession* const currentSession, GuidoSess
     return err;
 }
 
-int cairo_guido2img::convertPianoRoll (guidosession* const currentSession)
+int cairo_guido2img::convertPianoRoll(PianoRoll *pr, GuidoSessionPianorollParameters &pianorollParameters)
 {
-	return 0;
+	fBuffer.reset();
+	stringstream out;
+
+	VGSystem *sys;
+	VGDevice *dev;
+
+	cairo_surface_t *surface;
+
+	int width = pianorollParameters.width;
+	int height = pianorollParameters.height;
+
+	if (pianorollParameters.format == GUIDO_WEB_API_SVG) {
+		// Create a svg device and svg system
+		sys = new SVGSystem(fSvgFontFile.c_str());
+		dev = ((SVGSystem*) sys)->CreateDisplayDevice(out, 0);
+
+		width /= SVGDevice::kSVGSizeDivider;
+		height /= SVGDevice::kSVGSizeDivider;
+	}
+	else if (pianorollParameters.format == GUIDO_WEB_API_BINARY) {
+		// Return a binary export (draw commands in binary format)
+		sys = new BinarySystem;
+		dev = ((BinarySystem*) sys)->CreateDisplayDevice(out);
+	} else {
+		// Use host to draw the score.
+		cairo_t *cr;
+		surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
+		cr = cairo_create (surface);
+
+		sys = new CairoSystem(cr);
+		dev = sys->CreateDisplayDevice();
+		// Init background
+		dev->SelectFillColor(VGColor(255,255,255));
+		dev->Rectangle (0, 0, width, height);
+		dev->SelectFillColor(VGColor(0,0,0));
+	}
+
+	// Draw piano roll
+	GuidoErrCode error = GuidoPianoRollOnDraw (pr, width, height, dev);
+
+	if(pianorollParameters.format == GUIDO_WEB_API_SVG || pianorollParameters.format == GUIDO_WEB_API_BINARY) {
+		string ss_str = out.str();
+		const char *ss_cstr = ss_str.c_str();
+		fBuffer.size_ = ss_str.size();
+		memcpy(fBuffer.data_, ss_cstr, ss_str.size());
+	} else {
+		cairo_surface_write_to_png_stream (surface, write_png_stream_to_byte_array, &fBuffer);
+	}
+	// If format is not png, convert the image with magick++.
+	if ((pianorollParameters.format == GUIDO_WEB_API_JPEG)
+		|| (pianorollParameters.format == GUIDO_WEB_API_GIF)) {
+	  // magick++
+	  Magick::Blob in_blob(fBuffer.start_, fBuffer.size_);
+	  Magick::Image image(in_blob);
+	  Magick::Blob out_blob;
+	  string new_format = ((pianorollParameters.format == GUIDO_WEB_API_JPEG) ? "JPEG" : "GIF");
+	  image.magick(new_format);
+	  image.write(&out_blob);
+	  memcpy(fBuffer.start_, out_blob.data(), out_blob.length());
+	  fBuffer.size_ = out_blob.length();
+	}
+
+	delete sys;
+	delete dev;
+
+	return error;
 }
 
 } // end namespoace
