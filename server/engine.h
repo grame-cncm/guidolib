@@ -31,7 +31,7 @@
 namespace guidohttpd
 {
 
-guido2img* makeConverter(std::string svgfontfile);
+guido2img* makeConverter(const std::string & svgfontfile);
 void makeApplication (int argc, char **argv);
 GuidoErrCode startEngine ();
 void stopEngine ();

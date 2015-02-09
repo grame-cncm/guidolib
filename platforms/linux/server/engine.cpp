@@ -30,7 +30,7 @@
 
 namespace guidohttpd {	
 
-guido2img* makeConverter(std::string svgfontfile) {
+guido2img* makeConverter(const std::string & svgfontfile) {
   cairo_guido2img *converter = new cairo_guido2img(svgfontfile);
   return converter;
 }

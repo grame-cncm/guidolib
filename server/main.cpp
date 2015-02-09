@@ -44,16 +44,16 @@ static const int kDefaultVerbose = IP_VERBOSE | HEADER_VERBOSE
 static const char* kAccessControlAllowOrigin = "--access-control-allow-origin";
 
 static const char* kLogfileOpt = "--logfile";
-static const string kDefaultLogfile = "guidohttpdserver.log";
+static const char* kDefaultLogfile = "guidohttpdserver.log";
 
 static const char* kInitfileOpt = "--initfile";
-static const string kDefaultInitfile = "guidohttpdserver.ini";
+static const char* kDefaultInitfile = "guidohttpdserver.ini";
 
 static const char* kLogmodeOpt = "--logmode";
 static const int kDefaultLogmode = 0;
 
 static const char* kCachedirOpt = "--cachedir";
-static const string kDefaultCachedir = "cache";
+static const char* kDefaultCachedir = "cache";
 
 static const char* kSafeOpt = "--daemon";
 
@@ -61,7 +61,7 @@ static const char* kHelpOpt = "--help";
 static const char* kShortHelpOpt = "-h";
 
 static const char* kSvgFontFileOpt = "--svgfontfile";
-static const string kDefaultSvgFontFile = "guido2.svg";
+static const char* kDefaultSvgFontFile = "guido2.svg";
 
 static const char* kMaxSession = "--maxsession";
 static const int kDefaultMaxSession = 100;
@@ -129,7 +129,7 @@ static void usage (char* name)
 }
 
 //---------------------------------------------------------------------------------
-static bool launchServer (int port, int verbose, int logmode, string cachedir, string svgfontfile, bool daemon, bool alloworigin, int maxSession, bool useCache)
+static bool launchServer (int port, int verbose, int logmode, const string cachedir, const string & svgfontfile, bool daemon, bool alloworigin, int maxSession, bool useCache)
 {
     bool ret = false;
 	startEngine();
@@ -182,24 +182,24 @@ int main(int argc, char **argv)
     string applicationPath(resolved_path);
 
     srand(time(0));
-    int port = get_private_profile_int(portSectionName, portNumberName, lopt (argv, kPortOpt, kDefaultPort), kDefaultInitfile.c_str());
+	int port = get_private_profile_int(portSectionName, portNumberName, lopt (argv, kPortOpt, kDefaultPort), kDefaultInitfile);
 
     (void) kVerboseOpt;
     int verbose = kDefaultVerbose;//lopt (argv, kVerboseOpt, kDefaultVerbose);
 
-    int logmode = get_private_profile_int(logSectionName, logModeName, lopt (argv, kLogmodeOpt, kDefaultLogmode), kDefaultInitfile.c_str());
+	int logmode = get_private_profile_int(logSectionName, logModeName, lopt (argv, kLogmodeOpt, kDefaultLogmode), kDefaultInitfile);
     if (logmode > 1)
       logmode = 1;
     if (logmode < 0)
       logmode = 0;
 
     char buff[512];
-    string logfile = sopt (argv, kLogfileOpt, (applicationPath + "/" + kDefaultLogfile).c_str());
-    get_private_profile_string(logSectionName, logFilenameName, logfile.c_str(), buff, 512, kDefaultInitfile.c_str());
+	string logfile = sopt (argv, kLogfileOpt, (applicationPath + "/" + kDefaultLogfile));
+	get_private_profile_string(logSectionName, logFilenameName, logfile.c_str(), buff, 512, kDefaultInitfile);
     logfile = string(buff);
 
     bool daemon = bopt (argv, kSafeOpt, false);
-    daemon = get_private_profile_int(daemonSectionName, daemonOnName, daemon ? 1 : 0, kDefaultInitfile.c_str()) ? true : false;
+	daemon = get_private_profile_int(daemonSectionName, daemonOnName, daemon ? 1 : 0, kDefaultInitfile) ? true : false;
 
     bool allowOrigin = bopt (argv, kAccessControlAllowOrigin, false);
 
@@ -208,13 +208,13 @@ int main(int argc, char **argv)
            : new logstream();
 
     string cachedir = sopt (argv, kCachedirOpt, (applicationPath + "/" + kDefaultCachedir).c_str());
-    get_private_profile_string(cacheSectionName, cacheDirectoryName, cachedir.c_str(), buff, 512, kDefaultInitfile.c_str());
+	get_private_profile_string(cacheSectionName, cacheDirectoryName, cachedir.c_str(), buff, 512, kDefaultInitfile);
     cachedir = string(buff);
 
 	bool useCache = !bopt(argv, kUseCache, kDefaultUseCache);
 
-    string svgfontfile = sopt (argv, kCachedirOpt, (applicationPath + "/" + kDefaultSvgFontFile).c_str());
-    get_private_profile_string(fontSectionName, fontFilenameName, svgfontfile.c_str(), buff, 512, kDefaultInitfile.c_str());
+	string svgfontfile = sopt (argv, kSvgFontFileOpt, (applicationPath + "/" + kDefaultSvgFontFile).c_str());
+	get_private_profile_string(fontSectionName, fontFilenameName, svgfontfile.c_str(), buff, 512, kDefaultInitfile);
     svgfontfile = string(buff);
 
 	int maxSession = lopt (argv, kMaxSession, kDefaultMaxSession);

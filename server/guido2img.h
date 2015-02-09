@@ -30,9 +30,9 @@ typedef struct pianorollParameters GuidoSessionPianorollParameters;
 class guido2img
 {
 protected:
-    std::string fSvgFontFile;
+    const std::string &fSvgFontFile;
 public:
-    guido2img(std::string svgfontfile) : fSvgFontFile(svgfontfile) {}
+    guido2img(const std::string & svgfontfile) : fSvgFontFile(svgfontfile) {}
     virtual ~guido2img() {}
 
     virtual int convertScore (guidosession *currentSession, GuidoSessionScoreParameters &scoreParameters) = 0;
