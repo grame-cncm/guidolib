@@ -277,6 +277,7 @@ float PianoRoll::computeNoteHeight(int height) const
 //--------------------------------------------------------------------------
 void PianoRoll::initRendering(PianoRoll::DrawParams &drawParams)
 {
+	drawParams.dev->NotifySize(drawParams.width, drawParams.height);
 	drawParams.dev->BeginDraw();
 
     drawParams.dev->PushPenColor(VGColor(100, 100, 100));

@@ -103,7 +103,6 @@ std::string GUIDOPianoRollAdapter::svgExport(PianoRoll *pr, int width, int heigh
 	std::stringstream out;
 	SVGSystem sys(0);
 	SVGDevice dev (out, &sys, 0);
-	dev.NotifySize(width, height);
 	GuidoPianoRollOnDraw(pr, width, height, &dev);
 	return out.str();
 }
@@ -113,7 +112,6 @@ GuidoErrCode GUIDOPianoRollAdapter::javascriptExport(PianoRoll *pr, int width, i
 {
 	CanvasSystem sys(0);
 	CanvasDevice dev(&sys);
-	dev.NotifySize(width, height);
 	return GuidoPianoRollOnDraw(pr, width, height, &dev);
 }
 #endif
