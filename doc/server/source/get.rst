@@ -14,6 +14,7 @@ Whenever the request involves a conversion to a graphic instance of the score, o
    browsing
    drawing
    pianoroll
+   pianorollbrowsing
    midi
    mapping
    misc
