@@ -129,7 +129,7 @@ guidosessionresponse::~guidosessionresponse ()
 GuidoSessionScoreParameters guidosession::sDefaultScoreParameters;
 GuidoSessionPianorollParameters guidosession::sDefaultPianorollParameters;
 
-guidosession::guidosession(string svgfontfile, string gmn, string id)
+guidosession::guidosession(const string & svgfontfile, string gmn, string id)
 	: fSessionId(id), fGmnCode(gmn)
 {
 	fConverter = makeConverter(svgfontfile);
@@ -807,26 +807,22 @@ guidoAPIresponse guidosession::getPianorollMap(GuidoSessionPianorollParameters &
 
 // ---- Abstractions
 
-GuidoErrCode guidosession::svgScoreExport (string svgfontfile, int page, stringstream *output)
+GuidoErrCode guidosession::svgScoreExport (const string & svgfontfile, int page, std::stringstream &output)
 {
-	GuidoErrCode err;
     const char *fontfile = svgfontfile != ""
                            ? svgfontfile.c_str ()
                            : 0;
 
     if (!fontfile) {
-      cerr << "No svg font file found." << endl;
+		return GuidoGR2SVG(fGrh, page, output, true, 0);
     }
 
-	err = GuidoGR2SVG(fGrh, page, *output, true, 0);
-   return err;
+	return GuidoGR2SVG(fGrh, page, output, false, fontfile);
 }
 
-GuidoErrCode guidosession::binaryScoreExport (stringstream *output, int page)
+GuidoErrCode guidosession::binaryScoreExport (int page, stringstream &output)
 {
-    GuidoErrCode err;
-	err = GuidoBinaryExport(fGrh, page, *output);
-    return err;
+	return GuidoBinaryExport(fGrh, page, output);
 }
 
 guidosessionresponse guidosession::scoreReturnImage(GuidoSessionScoreParameters &scoreParameters)

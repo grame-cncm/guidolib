@@ -220,7 +220,7 @@ public :
 	 * \param gmn guido code of the score.
 	 * \param id the unique id of the new session.
 	 */
-	guidosession(std::string svgfontfile, std::string gmn, std::string id);
+	guidosession(const std::string &svgfontfile, std::string gmn, std::string id);
     virtual ~guidosession();
 
 	/*!
@@ -441,7 +441,7 @@ public :
 	 * \param output
 	 * \return
 	 */
-	GuidoErrCode svgScoreExport(std::string svgfontfile, int page, std::stringstream *output);
+	GuidoErrCode svgScoreExport(const std::string &svgfontfile, int page, std::stringstream &output);
 
 	/*!
 	 * \brief binaryScoreExport binary export of the score.
@@ -450,7 +450,7 @@ public :
 	 * \param page
 	 * \return
 	 */
-	GuidoErrCode binaryScoreExport(std::stringstream *output, int page);
+	GuidoErrCode binaryScoreExport(int page, std::stringstream &output);
 
 	/*!
 	 * \brief scoreReturnImage Create a response with the image of the score using the parameters scoreParameters.
