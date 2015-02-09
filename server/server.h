@@ -69,7 +69,7 @@ struct connection_info_struct {
 };
 class HTTPDServer
 {
-	std::string fSvgFontFile;
+	const std::string & fSvgFontFile;
 	bool fAccessControlAllowOrigin;
     int fVerbose;
     int fLogmode;
@@ -91,7 +91,7 @@ public:
 	 * \param maxSession. The maximum session hold in the server. The session are hold in a circular buffer. The session have no
 	 * expiration time but when maxSession is reach, the first session is deleted.
 	 */
-	HTTPDServer(std::string svgfontfile, int verbose, int logmode, std::string cachedir, bool allowOrigin, int maxSession = 100, bool useCache = true);
+	HTTPDServer(const std::string &svgfontfile, int verbose, int logmode, std::string cachedir, bool allowOrigin, int maxSession = 100, bool useCache = true);
     virtual ~HTTPDServer();
 
     /// \brief starts the httpd server

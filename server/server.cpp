@@ -160,7 +160,7 @@ static int _post_params (void *coninfo_cls, enum MHD_ValueKind , const char *key
 //--------------------------------------------------------------------------
 // the http server
 //--------------------------------------------------------------------------
-HTTPDServer::HTTPDServer(string svgfontfile, int verbose, int logmode, string cachedir, bool alloworigin, int maxSession, bool useCache)
+HTTPDServer::HTTPDServer(const string & svgfontfile, int verbose, int logmode, string cachedir, bool alloworigin, int maxSession, bool useCache)
 	: fSvgFontFile(svgfontfile), fAccessControlAllowOrigin(alloworigin), fVerbose(verbose), fLogmode(logmode), fCachedir(cachedir), fServer(0),
 	  fMaxSessions(maxSession), fUseCache(useCache)
 {
@@ -193,6 +193,7 @@ HTTPDServer::HTTPDServer(string svgfontfile, int verbose, int logmode, string ca
 	guidosession::sDefaultPianorollParameters.height = 512;
 
 	guidosession::sDefaultPianorollParameters.format = GUIDO_WEB_API_PNG;
+	guidosession::sDefaultPianorollParameters.type = kSimplePianoRoll;
 
 	// Create cache folder if it not already exist
 	if(fUseCache) {
@@ -202,6 +203,7 @@ HTTPDServer::HTTPDServer(string svgfontfile, int verbose, int logmode, string ca
 			// It doesn't exist
 			success = mymkdir(fCachedir);
 		}
+		tinydir_close(&myDir);
 	}
 }
 
@@ -773,19 +775,27 @@ int HTTPDServer::sendGuidoGetHead (struct MHD_Connection *connection, const char
 		}
 	}
 	if (elems.size() == 3) {
-		if (elems[1] == "pianoroll" && elems[1] == "getkeyboardwidth") {
+		if(elems[1] == "pianoroll") {
+			pianoRollParameters.type = kSimplePianoRoll;
+		} else if(elems[1] == "trajectorypianoroll") {
+			pianoRollParameters.type = kTrajectoryPianoRoll;
+		} else {
+			guidosessionresponse response = guidosession::genericFailure("Unidentified GET request.", 404, elems[0]);
+			return send(connection, response);
+		}
+		if (elems[2] == "getkeyboardwidth") {
 			float width;
 			guidoAPIresponse gar = currentSession->getPianorollKeyboardWidth(pianoRollParameters, width);
 			guidosessionresponse response = gar.is_happy()
-				? currentSession->handleSimpleIDdFloatQuery("keyboardwidth", width)
-				: guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
+					? currentSession->handleSimpleIDdFloatQuery("keyboardwidth", width)
+					: guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
 			return send(connection, response);
-		} else if (elems[1] == "pianoroll" && elems[1] == "getmap") {
+		} else if (elems[2] == "getmap") {
 			JSONTime2GraphicMap outmap;
 			guidoAPIresponse gar = currentSession->getPianorollMap(pianoRollParameters, outmap);
 			guidosessionresponse response = gar.is_happy()
-				? currentSession->mapJson("pianorollmap", outmap)
-				: guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
+					? currentSession->mapJson("pianorollmap", outmap)
+					: guidosession::genericFailure(gar.errorMsg().c_str(), 400, elems[0]);
 			return send(connection, response);
 		} else {
 			guidosessionresponse response = guidosession::genericFailure("Unidentified GET request.", 404, elems[0]);
