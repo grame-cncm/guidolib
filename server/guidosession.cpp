@@ -119,8 +119,6 @@ guidosessionresponse::guidosessionresponse (const guidosessionresponse &copy)
 	memcpy (fData, copy.fData, fSize + 1);
 	fFormat = copy.fFormat;
 	fHttpStatus = copy.fHttpStatus;
-	fErrorString = copy.fErrorString;
-	fStatus = copy.fStatus;
 }
 
 guidosessionresponse::~guidosessionresponse ()
@@ -520,53 +518,53 @@ guidosessionresponse guidosession::wrapObjectInId(json_object *obj)
 
 guidosessionresponse guidosession::handleSimpleIntQuery(string name, int myint)
 {
-    json_object *obj = new json_object();
-    obj->add (new json_element(name.c_str(), new json_int_value(myint)));
-    ostringstream mystream;
-    json_stream jstream(mystream);
-    obj->print(jstream);
-    // important! as everything is pointers, need to delete here
-    delete obj;
-    return guidosessionresponse(mystream.str(), "application/json", 200);
+	json_object *obj = new json_object();
+	obj->add (new json_element(name.c_str(), new json_int_value(myint)));
+	ostringstream mystream;
+	json_stream jstream(mystream);
+	obj->print(jstream);
+	// important! as everything is pointers, need to delete here
+	delete obj;
+	return guidosessionresponse(mystream.str(), "application/json", 200);
 }
 
 guidosessionresponse guidosession::handleSimpleBoolQuery(string name, bool mybool)
 {
-    json_object *obj = new json_object();
-    if (mybool)
-        obj->add (new json_element(name.c_str(), new json_true_value()));
-    else
-        obj->add (new json_element(name.c_str(), new json_false_value()));
-    ostringstream mystream;
-    json_stream jstream(mystream);
-    obj->print(jstream);
-    // important! as everything is pointers, need to delete here
-    delete obj;
-    return guidosessionresponse(mystream.str(), "application/json", 200);
+	json_object *obj = new json_object();
+	if (mybool)
+		obj->add (new json_element(name.c_str(), new json_true_value()));
+	else
+		obj->add (new json_element(name.c_str(), new json_false_value()));
+	ostringstream mystream;
+	json_stream jstream(mystream);
+	obj->print(jstream);
+	// important! as everything is pointers, need to delete here
+	delete obj;
+	return guidosessionresponse(mystream.str(), "application/json", 200);
 }
 
 guidosessionresponse guidosession::handleSimpleFloatQuery(string name, float myfloat)
 {
-    json_object *obj = new json_object();
-    obj->add (new json_element(name.c_str(), new json_float_value(myfloat)));
-    ostringstream mystream;
-    json_stream jstream(mystream);
-    obj->print(jstream);
-    // important! as everything is pointers, need to delete here
-    delete obj;
-    return guidosessionresponse(mystream.str(), "application/json", 200);
+	json_object *obj = new json_object();
+	obj->add (new json_element(name.c_str(), new json_float_value(myfloat)));
+	ostringstream mystream;
+	json_stream jstream(mystream);
+	obj->print(jstream);
+	// important! as everything is pointers, need to delete here
+	delete obj;
+	return guidosessionresponse(mystream.str(), "application/json", 200);
 }
 
 guidosessionresponse guidosession::handleSimpleStringQuery(string name, string mystring)
 {
-    json_object *obj = new json_object();
-    obj->add (new json_element(name.c_str(), new json_string_value(mystring.c_str())));
-    ostringstream mystream;
-    json_stream jstream(mystream);
-    obj->print(jstream);
-    // important! as everything is pointers, need to delete here
-    delete obj;
-    return guidosessionresponse(mystream.str(), "application/json", 200);
+	json_object *obj = new json_object();
+	obj->add (new json_element(name.c_str(), new json_string_value(mystring.c_str())));
+	ostringstream mystream;
+	json_stream jstream(mystream);
+	obj->print(jstream);
+	// important! as everything is pointers, need to delete here
+	delete obj;
+	return guidosessionresponse(mystream.str(), "application/json", 200);
 }
 
 guidosessionresponse guidosession::getGuidoAndServerVersions()
@@ -809,7 +807,7 @@ guidoAPIresponse guidosession::getPianorollMap(GuidoSessionPianorollParameters &
 
 // ---- Abstractions
 
-int guidosession::svgScoreExport (string svgfontfile, int page, stringstream *output)
+GuidoErrCode guidosession::svgScoreExport (string svgfontfile, int page, stringstream *output)
 {
 	GuidoErrCode err;
     const char *fontfile = svgfontfile != ""
@@ -824,7 +822,7 @@ int guidosession::svgScoreExport (string svgfontfile, int page, stringstream *ou
    return err;
 }
 
-int guidosession::binaryScoreExport (stringstream *output, int page)
+GuidoErrCode guidosession::binaryScoreExport (stringstream *output, int page)
 {
     GuidoErrCode err;
 	err = GuidoBinaryExport(fGrh, page, *output);
@@ -853,14 +851,15 @@ guidosessionresponse guidosession::pianoRollReturnImage(GuidoSessionPianorollPar
 	if (whyIFailed_) {
 	  return genericFailure(whyIFailed_->errorMsg(), 400, fSessionId);
 	}
-
+	// Create a pianoroll with the draw parameters.
 	PianoRoll *pr = createPianoRoll(pianoRollParameters);
-
+	// Create the image
 	int err = fConverter->convertPianoRoll(pr, pianoRollParameters);
-
+	// We can destroy the pianoroll object
 	GuidoDestroyPianoRoll(pr);
 
 	if (err == guidoNoErr) {
+		// Get data of image and wrapped it in the response.
 		const char *fcd = fConverter->data();
 		return guidosessionresponse(fcd, fConverter->size(), formatToMIMEType(pianoRollParameters.format), 201);
 	}
