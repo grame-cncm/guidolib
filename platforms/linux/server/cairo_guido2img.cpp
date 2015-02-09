@@ -48,7 +48,7 @@ write_png_stream_to_byte_array (void *in_closure, const unsigned char *data,
 }
 
 //--------------------------------------------------------------------------
-cairo_guido2img::cairo_guido2img (string svgfontfile) : guido2img(svgfontfile) {
+cairo_guido2img::cairo_guido2img (const string & svgfontfile) : guido2img(svgfontfile) {
   fBuffer.data_ = new char[1048576];
   fBuffer.start_ = fBuffer.data_;
   fBuffer.size_ = 0;
@@ -65,20 +65,21 @@ int cairo_guido2img::convertScore (guidosession* const currentSession, GuidoSess
 	if (scoreParameters.format == GUIDO_WEB_API_SVG) {
 		// return Svg format
 	  stringstream svg;
-	  int err = currentSession->svgScoreExport(fSvgFontFile, scoreParameters.page, &svg);
-	  const char* cc_svg = svg.str().c_str();
-	  fBuffer.size_ = svg.str().size();
+	  int err = currentSession->svgScoreExport(fSvgFontFile, scoreParameters.page, svg);
+	  string result = svg.str();
+	  const char* cc_svg = result.c_str();
+	  fBuffer.size_ = result.size();
       strcpy(fBuffer.data_, cc_svg);
-      return err;
+	  return err;
     }
 	else if (scoreParameters.format == GUIDO_WEB_API_BINARY) {
 		// Return a binary export (draw commands in binary format)
       stringstream stream;
-	  int err = currentSession->binaryScoreExport(&stream, scoreParameters.page);
-      string ss_str = stream.str();
-      const char *ss_cstr = ss_str.c_str();
-      fBuffer.size_ = ss_str.size();
-      memcpy(fBuffer.data_, ss_cstr, ss_str.size());
+	  int err = currentSession->binaryScoreExport(scoreParameters.page, stream);
+	  string result = stream.str();
+	  const char *ss_cstr = result.c_str();
+	  fBuffer.size_ = result.size();
+	  memcpy(fBuffer.data_, ss_cstr, result.size());
       return err;
     }
 
@@ -112,6 +113,7 @@ int cairo_guido2img::convertScore (guidosession* const currentSession, GuidoSess
     desc.isprint = false;
     GuidoErrCode err = GuidoOnDraw (&desc);
 
+	surface = ((CairoDevice *)dev)->getSurface();
     cairo_surface_write_to_png_stream (surface, write_png_stream_to_byte_array, &fBuffer);
 
 	// If format is not png, convert the image with magick++.
@@ -139,8 +141,6 @@ int cairo_guido2img::convertPianoRoll(PianoRoll *pr, GuidoSessionPianorollParame
 	VGSystem *sys;
 	VGDevice *dev;
 
-	cairo_surface_t *surface;
-
 	int width = pianorollParameters.width;
 	int height = pianorollParameters.height;
 
@@ -159,7 +159,7 @@ int cairo_guido2img::convertPianoRoll(PianoRoll *pr, GuidoSessionPianorollParame
 	} else {
 		// Use host to draw the score.
 		cairo_t *cr;
-		surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
+		cairo_surface_t * surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
 		cr = cairo_create (surface);
 
 		sys = new CairoSystem(cr);
@@ -175,11 +175,12 @@ int cairo_guido2img::convertPianoRoll(PianoRoll *pr, GuidoSessionPianorollParame
 	GuidoErrCode error = GuidoPianoRollOnDraw (pr, width, height, dev);
 
 	if(pianorollParameters.format == GUIDO_WEB_API_SVG || pianorollParameters.format == GUIDO_WEB_API_BINARY) {
-		string ss_str = out.str();
-		const char *ss_cstr = ss_str.c_str();
-		fBuffer.size_ = ss_str.size();
-		memcpy(fBuffer.data_, ss_cstr, ss_str.size());
+		string result = out.str();
+		const char *ss_cstr = result.c_str();
+		fBuffer.size_ = result.size();
+		memcpy(fBuffer.data_, ss_cstr, result.size());
 	} else {
+		cairo_surface_t * surface = ((CairoDevice *)dev)->getSurface();
 		cairo_surface_write_to_png_stream (surface, write_png_stream_to_byte_array, &fBuffer);
 	}
 	// If format is not png, convert the image with magick++.
