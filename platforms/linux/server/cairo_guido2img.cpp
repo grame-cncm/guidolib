@@ -49,7 +49,7 @@ write_png_stream_to_byte_array (void *in_closure, const unsigned char *data,
 
 //--------------------------------------------------------------------------
 cairo_guido2img::cairo_guido2img (string svgfontfile) : guido2img(svgfontfile) {
-  fBuffer.data_ = new char[1048576]; // TODO GGX remove fixed size and use a real buffer
+  fBuffer.data_ = new char[1048576];
   fBuffer.start_ = fBuffer.data_;
   fBuffer.size_ = 0;
   fBuffer.pos_ = 0;
@@ -149,13 +149,13 @@ int cairo_guido2img::convertPianoRoll(PianoRoll *pr, GuidoSessionPianorollParame
 		sys = new SVGSystem(fSvgFontFile.c_str());
 		dev = ((SVGSystem*) sys)->CreateDisplayDevice(out, 0);
 
-		width /= SVGDevice::kSVGSizeDivider;
-		height /= SVGDevice::kSVGSizeDivider;
+		dev->NotifySize(width, height);
 	}
 	else if (pianorollParameters.format == GUIDO_WEB_API_BINARY) {
 		// Return a binary export (draw commands in binary format)
 		sys = new BinarySystem;
 		dev = ((BinarySystem*) sys)->CreateDisplayDevice(out);
+		dev->NotifySize(width, height);
 	} else {
 		// Use host to draw the score.
 		cairo_t *cr;
@@ -171,6 +171,7 @@ int cairo_guido2img::convertPianoRoll(PianoRoll *pr, GuidoSessionPianorollParame
 	}
 
 	// Draw piano roll
+
 	GuidoErrCode error = GuidoPianoRollOnDraw (pr, width, height, dev);
 
 	if(pianorollParameters.format == GUIDO_WEB_API_SVG || pianorollParameters.format == GUIDO_WEB_API_BINARY) {
