@@ -5,6 +5,9 @@ GUIDO Engine history
 - New param 'dispNote' in \tuplet-tag, allowing to force notes appearance:
 	- possible values : "/1", "/2", "/4", "/8", "/16")
 	- doesn't work for chord in tuplet
+- integration of GuidoLayoutSettings and GuidoPageFormat in classes. Global or static variables for this data structures are removed.
+- bug fixes : 
+    - cairo device : problem on fill color.
 
 ----------------------------------------------------------------
 2014-12-09  version 1.5.6
