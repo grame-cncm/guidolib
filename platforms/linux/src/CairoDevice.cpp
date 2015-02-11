@@ -183,11 +183,11 @@ void CairoDevice::PushFillColor( const VGColor & color )
 	double r, g, b, a;
 	cairo_pattern_get_rgba (cairo_get_source(fNativeDevice), &r, &g, &b, &a);	
 	fFillColorStack.push (VGColor(cc2c(r), cc2c(g), cc2c(b), cc2c(a))); 
-	SelectPenColor (color);
+	SelectFillColor (color);
 }
 void CairoDevice::PopFillColor()
 {
-	SelectPenColor (fFillColorStack.top());
+	SelectFillColor (fFillColorStack.top());
 	fFillColorStack.pop();
 }
 
