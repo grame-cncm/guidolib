@@ -47,4 +47,4 @@ Using jQuery::
 Internals
 ^^^^^^^^^^^
 
-The layout options correspond to the `GuidoLayoutSettings <http://guidolib.sourceforge.net/doc/guidolib/structGuidoLayoutSettings.html>`_ data structure.
+The layout options correspond to the `LimitParams <http://http://guidolib.sourceforge.net/doc/guidolib/structLimitParams.html>`_ data structure.
