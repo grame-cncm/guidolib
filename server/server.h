@@ -158,10 +158,11 @@ private:
 	 * Store gmn on cache if it is activated.
 	 * \param unique_id id of the session
 	 * \param gmn code guido
+	 * \param isStreamSession create a session which use stream api.
 	 * \param useCache write/delete or not in cache on disk
 	 * \return a guidosessionresponse
 	 */
-	guidosessionresponse registerGMN(std::string unique_id, std::string gmn, bool useCache);
+	guidosessionresponse registerGMN(std::string unique_id, std::string gmn, bool isStreamSession, bool useCache);
 
 	/*!
 	 * \brief send Send reponse with the connection connection.
@@ -196,6 +197,13 @@ private:
 	 * \param type
 	 */
 	void logSendGuido(struct MHD_Connection *connection, const char* url, const TArgs& args, const char * type);
+
+	/*!
+	 * \brief findSession find an existing session
+	 * \param sessionId id of the session
+	 * \return a guidosession pointer or null if not found.
+	 */
+	guidosession* findSession(std::string sessionId);
 };
 
 } // end namespoace

@@ -132,7 +132,7 @@ typedef struct pianorollParameters {
 
 class guidosession
 {	
-	private :
+	protected :
 		/*!
 		 * \brief fConverter-> Can perform guido to image. One object per session to allow multithreading
 		 * when we have multiple clients
@@ -145,6 +145,8 @@ class guidosession
     guidoAPIresponse *whyIFailed_; // only for very problematic code
 
 	std::string fGmnCode;
+
+	guidosession(const std::string & svgfontfile, std::string id);
 
 	/*!
 	 * \brief formatToMIMEType Convert a GuidoWebApiFormat to a mime type.
@@ -221,6 +223,10 @@ public :
 	 * \param id the unique id of the new session.
 	 */
 	guidosession(const std::string &svgfontfile, std::string gmn, std::string id);
+
+	/*!
+	 * \brief ~guidosession
+	 */
     virtual ~guidosession();
 
 	/*!
@@ -473,7 +479,9 @@ public :
 	guidosessionresponse genericReturnId();
 
 	// getters ---------------------
-	const std::string getGMN() { return fGmnCode; }
+	std::string getGMN() { return fGmnCode; }
+
+	std::string getId() {return fSessionId; }
 
 	/*!
 	 * \brief getPianorollKeyboardWidth Get the piano roll width

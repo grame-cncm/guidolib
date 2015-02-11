@@ -139,6 +139,15 @@ guidosession::guidosession(const string & svgfontfile, string gmn, string id)
     initializeARHandGRH();
 }
 
+guidosession::guidosession(const string & svgfontfile, string id)
+	: fSessionId(id)
+{
+	fConverter = makeConverter(svgfontfile);
+	fArh = 0;
+	fGrh = 0;
+	whyIFailed_ = 0;
+}
+
 guidosession::~guidosession()
 {
 	// must be done in this order

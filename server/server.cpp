@@ -46,6 +46,7 @@
 #include "server.h"
 #include "guido2img.h"
 #include "guidosession.h"
+#include "guidostreamsession.h"
 
 // json
 #include "json_object.h"
@@ -374,9 +375,13 @@ void HTTPDServer::readFromCache(string target)
       }
       myfile.close();
       
-      string all = ss.str();
-
-	  (void) registerGMN(unique_id, all, false);
+	  string all = ss.str();
+	  // Create a standard session or a stream session.
+	  if(all.substr(0, guidostreamsession::sFileBegin.size()) == guidostreamsession::sFileBegin) {
+		  registerGMN(unique_id, all.substr(guidostreamsession::sFileBegin.size()), true, false);
+	  } else {
+		  registerGMN(unique_id, all, false, false);
+	  }
       if (target != "") {
         tinydir_close(&myDir);
         tinydir_close(&subDir);
@@ -388,27 +393,40 @@ void HTTPDServer::readFromCache(string target)
   tinydir_close(&myDir);
 }
 
-guidosessionresponse HTTPDServer::registerGMN(string unique_id, string gmn, bool useCache)
+guidosessionresponse HTTPDServer::registerGMN(string unique_id, string gmn, bool isStreamSession, bool useCache)
 {
     if (fSessions.find (unique_id) == fSessions.end ()) {
-	  guidosession *maybe = new guidosession(this->getSvgFontFile(), gmn, unique_id);
-      if (!maybe->success()) {
-        string error = maybe->errorMsg();
-        delete maybe;
-        return guidosession::genericFailure(error, 400);
-      }
-      if (fSessions.size() >= fMaxSessions) {
-        guidosession *toDelete = fSessions.begin()->second;
-        fSessions.erase(fSessions.begin());
-        delete toDelete;
-
-		if(useCache) {
-			// delete file in cache
-			std::remove((fCachedir+'/'+unique_id.substr(0,2)+'/'+unique_id+".gmn").c_str());
+		guidosession *newSession;
+		if(isStreamSession) {
+			// Create a stream session and add data to the stream
+			guidostreamsession * streamSession = new guidostreamsession(this->getSvgFontFile(), unique_id);
+			guidoAPIresponse err =  streamSession->addData(gmn);
+			if(!err.is_happy()) {
+				delete streamSession;
+				return guidosession::genericFailure(err.errorMsg(), 400);
+			}
+			newSession = streamSession;
+		} else {
+			// Create a standard session
+			newSession = new guidosession(this->getSvgFontFile(), gmn, unique_id);
+			if (!newSession->success()) {
+				string error = newSession->errorMsg();
+				delete newSession;
+				return guidosession::genericFailure(error, 400);
+			}
 		}
-      }
-      fSessions[unique_id] = maybe;
-    }
+		if (fSessions.size() >= fMaxSessions) {
+			guidosession *toDelete = fSessions.begin()->second;
+			fSessions.erase(fSessions.begin());
+			delete toDelete;
+
+			if(useCache) {
+				// delete file in cache
+				std::remove((fCachedir+'/'+unique_id.substr(0,2)+'/'+unique_id+".gmn").c_str());
+			}
+		}
+		fSessions[unique_id] = newSession;
+	}
 	if(useCache) {
 		tinydir_dir myDir;
 		int success = tinydir_open_sorted(&myDir, (fCachedir+'/'+unique_id.substr(0,2)).c_str());
@@ -421,34 +439,100 @@ guidosessionresponse HTTPDServer::registerGMN(string unique_id, string gmn, bool
 		}
 
 		tinydir_close(&myDir);
-		ofstream myfile((fCachedir+'/'+unique_id.substr(0,2)+'/'+unique_id+".gmn").c_str());
+		string file = fCachedir+'/'+unique_id.substr(0,2)+'/'+unique_id+".gmn";
+		ofstream myfile(file.c_str());
 		if (myfile.is_open()) {
+			if(isStreamSession) {
+				// Specific begining for guidostreamsession.
+				myfile << guidostreamsession::sFileBegin << endl;
+			}
 			myfile << gmn;
 			myfile.close();
 		}
 	}
-    return fSessions[unique_id]->genericReturnId();
+	return fSessions[unique_id]->genericReturnId();
 }
 
 int HTTPDServer::sendGuidoPostRequest(struct MHD_Connection *connection, const TArgs& args, vector<string> &elems)
 {
-	if (elems.size()) {
-		guidosessionresponse response = guidosession::genericFailure("POST Requests MUST have no element in URL.", 403);
+	// Test argument validity
+	if(!(elems.size() == 3 && elems[2] == "reset")) {
+		if (args.size() != 1) {
+			guidosessionresponse response = guidosession::genericFailure("Requests without scores MUST only contain one field called `data'.", 400);
+			return send (connection, response);
+		}
+		if (args.begin()->first != "data") {
+			guidosessionresponse response = guidosession::genericFailure("Requests without scores MUST only contain one field called `data'.", 400);
+			return send (connection, response);
+		}
+	}
+	// Stream session
+	if(elems.size() && elems[0] == "stream") {
+		if(elems.size() == 1) {
+			// Only 1 element : create a new streamsession.
+			std::string unique_id = generate_sha1(args.begin()->second);
+			guidosessionresponse response = registerGMN(unique_id, args.begin()->second, true, fUseCache);
+			return send (connection, response);
+		}
+		// Try to find a existing stream session.
+		guidosession * session = findSession(elems[1]);
+		guidostreamsession * streamSession = 0;
+		if(session) {
+			streamSession = dynamic_cast<guidostreamsession *>(session);
+		}
+		if(!streamSession) {
+			// Session not found
+			guidosessionresponse response = guidosession::genericFailure("incorrect score ID.", 404, elems[1]);
+			return send (connection, response);
+		}
+
+		if(elems.size() == 2) {
+			// Add data and create new ar and gr
+			guidoAPIresponse resp = streamSession->addData(args.begin()->second);
+			if(!resp.is_happy()) {
+				// Error with new data added in stream
+				guidosessionresponse response = guidosession::genericFailure(resp.errorMsg(), 400);
+				return send (connection, response);
+			} else {
+				// Data added
+				string id = streamSession->getId();
+				// Add data at end of file
+				string file = fCachedir+'/'+id.substr(0,2)+'/'+id+".gmn";
+				ofstream myfile(file.c_str(), ios_base::app);
+				if (myfile.is_open()) {
+					myfile << args.begin()->second;
+					myfile.close();
+				}
+				guidosessionresponse response = streamSession->genericReturnId();
+				return send (connection, response);
+			}
+		} else if(elems.size() == 3 && elems[2] == "reset"){
+			streamSession->reset();
+			// Reset file data
+			string id = streamSession->getId();
+			string folder = id.substr(0,2);
+			const string filename = fCachedir + "/" + folder + "/" + id + ".gmn";
+			ofstream myfile(filename.c_str());
+			myfile << guidostreamsession::sFileBegin << endl;
+			myfile.close();
+			guidosessionresponse response = streamSession->genericReturnId();
+			return send (connection, response);
+		} else {
+			// not a POST request  supported
+			guidosessionresponse response = guidosession::genericFailure("POST Requests MUST have no element or start with stream element in URL.", 400);
+			return send (connection, response);
+		}
+	}
+
+	// Create a standard session
+	if (elems.size() != 0) {
+		guidosessionresponse response = guidosession::genericFailure("POST Requests MUST have no element or start with stream element in URL.", 400);
 		return send (connection, response);
 	}
 
-    if (args.size() != 1) {
-        guidosessionresponse response = guidosession::genericFailure("Requests without scores MUST only contain one field called `data'.", 403);
-        return send (connection, response);
-    }
-    if (args.begin()->first != "data") {
-        guidosessionresponse response = guidosession::genericFailure("Requests without scores MUST only contain one field called `data'.", 403);
-        return send (connection, response);
-    }
-    std::string unique_id;
-    unique_id = generate_sha1(args.begin()->second);
+	std::string unique_id = generate_sha1(args.begin()->second);
     // if the score does not exist already, we put it there
-	guidosessionresponse response = registerGMN(unique_id, args.begin()->second, fUseCache);
+	guidosessionresponse response = registerGMN(unique_id, args.begin()->second, false, fUseCache);
     return send (connection, response);
 }
 
@@ -620,20 +704,11 @@ int HTTPDServer::sendGuidoGetHead (struct MHD_Connection *connection, const char
         return send(connection, response);
     }
 
-    map<string, guidosession *>::iterator it = fSessions.find(elems[0]);
-    if (it == fSessions.end ()) {
-        // first try to read from cache...
-		if(fUseCache) {
-			readFromCache(elems[0]);
-			// redo
-			it = fSessions.find(elems[0]);
-		}
-        if (it == fSessions.end ()) {
-          guidosessionresponse response = guidosession::genericFailure("incorrect score ID.", 404, elems[0]);
-          return send (connection, response);
-        }
-    }
-    guidosession *currentSession = fSessions[elems[0]];
+	guidosession *currentSession = findSession(elems[0]);
+	if(!currentSession) {
+		guidosessionresponse response = guidosession::genericFailure("incorrect score ID.", 404, elems[0]);
+		return send (connection, response);
+	}
 
 	// Fill the settings for pianoroll or for score.
 	GuidoSessionScoreParameters scoreParameters;
@@ -802,6 +877,23 @@ int HTTPDServer::sendGuidoGetHead (struct MHD_Connection *connection, const char
 			return send(connection, response);
 		}
 	}
+}
+guidosession* HTTPDServer::findSession(string sessionId) {
+
+	map<string, guidosession *>::iterator it = fSessions.find(sessionId);
+	if (it == fSessions.end ()) {
+		// first try to read from cache...
+		if(fUseCache) {
+			readFromCache(sessionId);
+			// redo
+			it = fSessions.find(sessionId);
+		}
+		if (it == fSessions.end ()) {
+		  return 0;
+		}
+	}
+	return fSessions[sessionId];
+
 }
 
 //--------------------------------------------------------------------------
