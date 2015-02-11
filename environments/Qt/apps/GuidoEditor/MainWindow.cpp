@@ -706,8 +706,8 @@ void MainWindow::exportToImage(QGuidoPainter * guidoPainter, const QString& file
 	painter.setRenderHints ( QPainter::Antialiasing | QPainter::TextAntialiasing, true);
 
 	//With the QPainter, fill background with white.
-	painter.setBrush(QBrush(QColor(255,255,255,0)));
-	painter.setPen(QPen(QColor(255,255,255,0)));
+	painter.setBrush(QBrush(QColor(255,255,255,255)));
+	painter.setPen(QPen(QColor(255,255,255,255)));
 	painter.drawRect(0,0,size.width(), size.height());
 
 	//With the QPainter and the QGuidoPainter, draw the score.
@@ -721,6 +721,7 @@ void MainWindow::exportToImage(QGuidoPainter * guidoPainter, const QString& file
 //-------------------------------------------------------------------------
 void MainWindow::about()
 {
+	QString guidoeditor_version("2.7");
     int major, minor, sub;
 	GuidoGetVersionNums(&major, &minor, &sub);
 	QString mastr, mistr, substr;
@@ -732,7 +733,9 @@ void MainWindow::about()
              tr(QString("<h2>" + APP_NAME + "</h2>" + 
                 "<p>Copyright &copy; 2008-2014 Grame. " 
                 "<p>A Guido score viewer and GMN editor, using Qt. "
-				"<p>Using the Guido Engine version " + version).toUtf8().data()));
+				"<p>Using the Guido Engine version " + version +
+				"<p>" + APP_NAME + " version "
+						+ guidoeditor_version).toUtf8().data()));
 }
 
 //-------------------------------------------------------------------------
