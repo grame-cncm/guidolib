@@ -195,7 +195,7 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_EnableMeasureBars
 JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_SetPitchLinesDisplayMode
   (JNIEnv *env, jobject obj, jint mode)
 {
-	GuidoPianoRollSetPitchLinesDisplayMode(
+	return GuidoPianoRollSetPitchLinesDisplayMode(
 				(PianoRoll *)env->GetLongField(obj, gPianoRollID),
 				mode);
 }
