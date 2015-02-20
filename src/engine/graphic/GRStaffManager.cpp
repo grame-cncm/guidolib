@@ -83,15 +83,6 @@
 
 using namespace std;
 
-// - Static members
-bool  GRStaffManager::sOptPageFill           = kSettingDefaultOptimalPageFill;
-bool  GRStaffManager::sNeedSpecialSpacing    = kSettingDefaultNeighborhood;	// (NeighborhoodSpacing)
-float GRStaffManager::sDefaultSystemDistance = kSettingDefaultSystemDistance;
-float GRStaffManager::sPropRender            = kSettingDefaultProportionalRendering;
-
-int GRStaffManager::sSystemDistribution = kSettingDefaultSystemDistrib; //GRStaffManager::kAuto; // 1 auto, 2 = always, 3 = never
-float GRStaffManager::sSystemDistribLimit = kSettingDefaultDistribLimit;
-
 const bool kIsGiesekingSpacing = true;
 
 /** \brief The StaffManager is responsible for traversing the voice and 
@@ -100,7 +91,7 @@ const bool kIsGiesekingSpacing = true;
 	The systems are created whenever real NewLines are 
 	encountered (or automatic once are introduced).
 */
-GRStaffManager::GRStaffManager(GRMusic * p_grmusic, ARPageFormat * inPageFormat)
+GRStaffManager::GRStaffManager(GRMusic * p_grmusic, ARPageFormat * inPageFormat, const GuidoLayoutSettings * aSettings)
 	: mSystemDistancePrev(-1.0f),
 	  mSystemDistance(-1.0f),
 	  staffposvect(0),
@@ -116,6 +107,29 @@ GRStaffManager::GRStaffManager(GRMusic * p_grmusic, ARPageFormat * inPageFormat)
 	  voiceSpringArr(-1),
 	  evlist(1)					
 {
+	if(aSettings)
+	{
+		// Keep the settings internally
+		this->settings = *aSettings;
+
+		// This code was in old function guido_applySettings. We have to do that to have the same comportement.
+		this->settings.neighborhoodSpacing = (aSettings->neighborhoodSpacing == 1 ? true : false);
+		this->settings.optimalPageFill = (aSettings->optimalPageFill == 1 ? true : false);
+		this->settings.proportionalRenderingForceMultiplicator =
+				(aSettings->proportionalRenderingForceMultiplicator < 0.0001 ? 0 : aSettings->proportionalRenderingForceMultiplicator);
+
+	} else {
+		// Apply default layout settings
+		this->settings.optimalPageFill = kSettingDefaultOptimalPageFill;
+		this->settings.neighborhoodSpacing = kSettingDefaultNeighborhood;	// (NeighborhoodSpacing)
+		this->settings.systemsDistance = kSettingDefaultSystemDistance;
+		this->settings.proportionalRenderingForceMultiplicator = kSettingDefaultProportionalRendering;
+		this->settings.systemsDistribution = kSettingDefaultSystemDistrib; //GRStaffManager::kAuto; // 1 auto, 2 = always, 3 = never
+		this->settings.systemsDistribLimit = kSettingDefaultDistribLimit;
+		this->settings.spring = kSettingDefaultSpring;
+		this->settings.resizePage2Music = kSettingDefaultResizePage2Music;
+		this->settings.force = kSettingDefaultForce;
+	}
 #ifdef SPRINGLOG
 		  springlog.open("springlog.txt",ios::out | ios::app);
 		  springlog << "Creating new GRStaffManager" << endl;
@@ -140,7 +154,7 @@ GRStaffManager::GRStaffManager(GRMusic * p_grmusic, ARPageFormat * inPageFormat)
 	mArMusic = mGrMusic->getARMusic();
 
 	// now we create the very first page and also the very first system
-	mGrPage = new GRPage( mGrMusic, this, DURATION_0, NULL );
+	mGrPage = new GRPage( mGrMusic, this, DURATION_0, settings, NULL );
 	if (inPageFormat)
 		mGrPage->setPageFormat(inPageFormat);
 	mGrMusic->addPage(mGrPage);
@@ -169,14 +183,14 @@ GRStaffManager::GRStaffManager(GRMusic * p_grmusic, ARPageFormat * inPageFormat)
 	// The SpaceForceFunction ...
 	// The sff is used for the systemslices and to later find the optimum system breaks
 #ifdef OLDSPFACTIVE
-	curspf = new GRSpaceForceFunction;
+	curspf = new GRSpaceForceFunction(settings.force);
 	spf = NULL;
 #endif
-	cursff = new GRSpaceForceFunction2;
+	cursff = new GRSpaceForceFunction2(settings.force);
 //	sff = NULL;
 
 	// put one single (beginning) spring in the springvector, with id 0.
-	GRSpring * spr = new GRSpring(relativeTimePositionOfGR,DURATION_0);
+	GRSpring * spr = new GRSpring(relativeTimePositionOfGR, DURATION_0, settings.spring, settings.proportionalRenderingForceMultiplicator);
 	spr->setID(0);
 	spr->change_const(50);
 	mSpringVector->Set(0,spr);
@@ -465,7 +479,7 @@ void GRStaffManager::createStaves()
 					curspf = new GRSpaceForceFunction;
 #endif
 					// put one single (beginning) spring in the springvector, with id 0.
-					GRSpring * spr = new GRSpring(relativeTimePositionOfGR,DURATION_0);
+					GRSpring * spr = new GRSpring(relativeTimePositionOfGR, DURATION_0, settings.spring, settings.proportionalRenderingForceMultiplicator);
 					spr->setID(0);
 					spr->change_const(50);
 					mSpringVector->Set(0,spr);
@@ -482,7 +496,7 @@ void GRStaffManager::createStaves()
 				if (newline == 2)
 				{
 					// a newpage
-					mGrPage = new GRPage( mGrMusic, this, timePos, mGrPage );
+					mGrPage = new GRPage( mGrMusic, this, timePos, settings, mGrPage );
 					mGrMusic->addPage( mGrPage );
 					beginheight = 0;
 				}
@@ -506,7 +520,7 @@ void GRStaffManager::createStaves()
 					// mIsBreak = false;
 
 					// we actually have to create a new systemslice so that we can put something together ....
-					mGrSystemSlice = new GRSystemSlice(this,timePos );
+					mGrSystemSlice = new GRSystemSlice(this, timePos);
 					
 					// This is important: a newline == 3 means, that this is only a potential breakpoint
 					// newline != 3 is a user-imposed real breakpoint
@@ -612,7 +626,7 @@ void GRStaffManager::prepareStaff(int staff)
 
     if (curstaff == NULL)
 	{
-		curstaff = new GRStaff(mGrSystemSlice);
+		curstaff = new GRStaff(mGrSystemSlice, settings.proportionalRenderingForceMultiplicator);
 		if (mStaffStateVect)
 		{
 			// this just copies the stateinformation ...
@@ -1021,7 +1035,7 @@ int GRStaffManager::FinishSyncSlice(const TYPE_TIMEPOSITION & tp)
 			if (syncHash.GetNext(pos,tmphash))
 			{
 				// Now, we construct the Spring to put it in the SpaceForceFunction.
-				GRSpring * spr = new GRSpring(tp, DURATION_0);
+				GRSpring * spr = new GRSpring(tp, DURATION_0, settings.spring, settings.proportionalRenderingForceMultiplicator);
 				spr->setID(mSpringID);
 #ifdef SPRINGLOG
 				springlog << "\tCreating Spring: " << mSpringID << endl;
@@ -1144,7 +1158,7 @@ int GRStaffManager::FinishSyncSlice(const TYPE_TIMEPOSITION & tp)
 		GuidoPos pos = evlist.GetHeadPosition();
 		if (pos)
 		{
-			GRSpring * spr = new GRSpring(tp,DURATION_0);
+			GRSpring * spr = new GRSpring(tp, DURATION_0, settings.spring, settings.proportionalRenderingForceMultiplicator);
 			spr->setID(mSpringID);			
 #ifdef SPRINGLOG
 			springlog << "\tCreating Spring: " << mSpringID << endl;
@@ -1292,9 +1306,9 @@ GRSpaceForceFunction2 * GRStaffManager::BuildSFF()
 #endif
 
 #ifdef OLDSPFACTIVE
-	spf = new GRSpaceForceFunction();
+	spf = new GRSpaceForceFunction(settings.force);
 #endif
-	GRSpaceForceFunction2 * sff = new GRSpaceForceFunction2();
+	GRSpaceForceFunction2 * sff = new GRSpaceForceFunction2(settings.force);
 	GRSpacingMatrix * spm = new GRSpacingMatrix();
 	
 //	int start = mSpringID;
@@ -1379,14 +1393,14 @@ GRSpaceForceFunction2 * GRStaffManager::BuildSFF()
 		// the voiceManager gets the voice and calls createNewRods to create rods ...
 		if (mVoiceMgrList->Get(i) && mVoiceMgrList->Get(i)->getGRVoice())
 		{
-			mVoiceMgrList->Get(i)->getGRVoice()->createNewRods(this, tmpstart, tmpend);
+			mVoiceMgrList->Get(i)->getGRVoice()->createNewRods(this, tmpstart, tmpend, settings.force);
 		}
 	}
 
 	// now we can ask the spacing-matrix to check on the neighbourhood ...
 	// this deals with the equal spacing of neighboring notes.
-	if (sNeedSpecialSpacing)
-		spm->CheckNeighbours(mSpringVector);
+	if (settings.neighborhoodSpacing)
+		spm->CheckNeighbours(mSpringVector, settings.spring);
 
 	// now we additionally build the staff-rods?!
 	// these are needed for collision-detection and prevention.
@@ -1464,7 +1478,7 @@ GRSpaceForceFunction2 * GRStaffManager::BuildSFF()
 				double tmpmatdur2 = spm->getMSCMatrix(i,3);
 				// this is the mean-value!
 				double tmpmatdur3 = spm->getMSCMatrix(i,4);
-				if (sNeedSpecialSpacing)
+				if (settings.neighborhoodSpacing)
 				{
 					max = ((double) dur) * tmpmatdur3;
 					if (max > 0)
@@ -1472,7 +1486,7 @@ GRSpaceForceFunction2 * GRStaffManager::BuildSFF()
 						double sconst;
 						// we try the second possibility ... this should word?
 						double invert = 1.0 / tmpmatdur3;
-						sconst = (double)GRSpring::defconst((float)invert);
+						sconst = (double)GRSpring::defconst((float)invert, settings.spring);
 						sconst *= invert / (double)dur;
 						spr1->change_const((float)sconst);
 						continue;
@@ -1494,7 +1508,7 @@ GRSpaceForceFunction2 * GRStaffManager::BuildSFF()
 						int durdenominator = (int)spm->getMSCMatrix(i,2);
 						TYPE_DURATION eldur(durnumerator,durdenominator);
 						
-						sconst = GRSpring::defconst(eldur);
+						sconst = GRSpring::defconst(eldur, settings.spring);
 						sconst *= (double) eldur / (double) dur;
 						spr1->change_const((float)sconst);
 					}
@@ -1510,7 +1524,7 @@ GRSpaceForceFunction2 * GRStaffManager::BuildSFF()
 							// this sould word?
 							TYPE_DURATION myfrac(tmpmatdur2);
 							myfrac.invert();
-							sconst = GRSpring::defconst(myfrac);
+							sconst = GRSpring::defconst(myfrac, settings.spring);
 							sconst *= (double) myfrac / (double) dur;
 							spr1->change_const((float)sconst);
 						}
@@ -1858,7 +1872,7 @@ void GRStaffManager::EndStaves( const TYPE_TIMEPOSITION & tp, int lastline )
 	// This spring is NOT stretchable and is ignored in the SPF!
 	// this last spring is for the glue only.
 
-	GRSpring * spr = new GRSpring(tp,DURATION_0);
+	GRSpring * spr = new GRSpring(tp, DURATION_0, settings.spring, settings.proportionalRenderingForceMultiplicator);
 	spr->setID(mSpringID);
 	spr->isfrozen = 1;
 	mSpringVector->Set(mSpringID++,spr);
@@ -1948,7 +1962,7 @@ void GRStaffManager::MergeSPFs(GRPossibleBreakState * pbs1, GRPossibleBreakState
 			}
 			
 			// now, the rods are merged
-			GRRod * rod = new GRRod( newlength, lastrod->getSpr1(), firstrod->getSpr2());
+			GRRod * rod = new GRRod( newlength, lastrod->getSpr1(), firstrod->getSpr2(), settings.force);
 			if (spaceactive)
 				rod->setIsSpaceRod( true );
 
@@ -1975,7 +1989,7 @@ void GRStaffManager::MergeSPFs(GRPossibleBreakState * pbs1, GRPossibleBreakState
 		float distance = spr1->GetMaxDistance(spr2);
 		if (distance > 0)
 		{
-			GRRod * newrod = new GRRod(distance,mystart-1,mystart);
+			GRRod * newrod = new GRRod(distance,mystart-1,mystart, settings.force);
 			tmpsimplerods->AddTail(newrod);
 			if (mystart-1 < start)
 				start = mystart-1;
@@ -2174,7 +2188,7 @@ void GRStaffManager::BreakAtPBS(GuidoPos pbpos)
 	
 	// now we add the end-glue-spring
 	// to the mSpringVector (just as the EndStaves-routine)
-	GRSpring * spr = new GRSpring(pbs->tp,DURATION_0);
+	GRSpring * spr = new GRSpring(pbs->tp, DURATION_0, settings.spring, settings.proportionalRenderingForceMultiplicator);
 	spr->setID(mSpringID);
 	spr->isfrozen = 1;
 	mSpringVector->Set(mSpringID++,spr);
@@ -2324,7 +2338,7 @@ void GRStaffManager::BreakAtPBS(GuidoPos pbpos)
 	
 	// now we build a new mGrSystem
 	//mGrSystem = new GRSystem(mGrPage,pbs->tp);
-	mGrSystemSlice = new GRSystemSlice( this, pbs->tp );
+	mGrSystemSlice = new GRSystemSlice( this, pbs->tp);
 
 	if (mysysendpos)
 	{
@@ -2357,7 +2371,7 @@ void GRStaffManager::BreakAtPBS(GuidoPos pbpos)
 			// The Staff-numbers are equal to
 			// the staff-vector at the  breaktime.
 			
-			GRStaff * newstaff = new GRStaff(mGrSystemSlice);
+			GRStaff * newstaff = new GRStaff(mGrSystemSlice, settings.proportionalRenderingForceMultiplicator);
 			mGrSystem->addStaff(newstaff,i);
 			
 			
@@ -2404,7 +2418,7 @@ void GRStaffManager::BreakAtPBS(GuidoPos pbpos)
 	mSpringID = pbs->springID - mycount - 1;
 	
 	// this is the spring for the start-glue
-	spr = new GRSpring(pbs->tp,DURATION_0);
+	spr = new GRSpring(pbs->tp, DURATION_0, settings.spring, settings.proportionalRenderingForceMultiplicator);
 	spr->setID(mSpringID);
 	spr->change_const(50);
 	mSpringVector->Set(mSpringID++,spr);
@@ -2436,7 +2450,7 @@ void GRStaffManager::BreakAtPBS(GuidoPos pbpos)
 			// for the staves. (these are staff-rods)
 			int start = mSpringVector->GetMinimum();
 			int end = mSpringID;
-			staff->createNewRods( this, start, end );
+			staff->createNewRods( this, start, end, settings.force);
 			
 			// remember to
 			// set lastrod of staff to
@@ -2492,7 +2506,7 @@ void GRStaffManager::BreakAtPBS(GuidoPos pbpos)
 #endif
 
 	delete cursff;
-	cursff = new GRSpaceForceFunction2;
+	cursff = new GRSpaceForceFunction2(settings.force);
 	
 	// now, we have to add the start
 	// springs (those, that were just created) 
@@ -2807,7 +2821,7 @@ void GRStaffManager::createNewSystemRods(int startid, int endid)
 			float distance = spr->GetMaxDistance(spr2);
 			if (distance > 0)
 			{
-				GRRod * rod = new GRRod(distance,i,i+1);
+				GRRod * rod = new GRRod(distance,i,i+1, settings.force);
 				if (!firstrod)
 					firstrod = rod;
 				lastrod = rod;
@@ -2928,7 +2942,7 @@ float GRStaffManager::FindOptimumBreaks(int inPageOrSystemBreak, float inBeginHe
 {
 	int numpageareas = 12;
 	if( inPageOrSystemBreak == 1 )	numpageareas = 1;
-	if( sOptPageFill == false )		numpageareas = 1;
+	if( settings.optimalPageFill == false )		numpageareas = 1;
 
 #ifdef _DEBUG
 	edgelist edges(1);
@@ -2949,7 +2963,7 @@ traceslice(cout << "GRStaffManager::FindOptimumBreaks num slices is " << numslic
 	if (inBeginHeight > 0 && mSystemDistancePrev > 0)
 	{
 		usedsystemdistance = mSystemDistancePrev;
-		inBeginHeight -= sDefaultSystemDistance;
+		inBeginHeight -= settings.systemsDistance;
 		inBeginHeight += mSystemDistancePrev;				// the new distance 
 		if (inBeginHeight < 0 ) 	inBeginHeight = 0;
 	}
@@ -3085,9 +3099,9 @@ traceslice(cout << "GRStaffManager::FindOptimumBreaks num slices is " << numslic
 				// if reqforce is in the range of optforce then we have found an optimum break ....
 
 				//int dobreak = 0;
-				float val = reqforce - GRSpaceForceFunction2::getOptForce();
-				if ((val >0 && val <  1.3f * GRSpaceForceFunction2::getOptForce()) 
-					|| (val < 0 && val > -0.5f * GRSpaceForceFunction2::getOptForce())) 
+				float val = reqforce - settings.force;
+				if ((val >0 && val <  1.3f * settings.force)
+					|| (val < 0 && val > -0.5f * settings.force))
 				{
 //					predecessor_found = true;
 //					predecessor_value = val;
@@ -3185,7 +3199,7 @@ traceslice(cout << "GRStaffManager::FindOptimumBreaks num slices is " << numslic
 							//	float alterheight = sliceheight.getHeight();
 								float myheight =  sliceheight.getHeight() +
 									//curheight + 
-									ent->curheight + sDefaultSystemDistance;
+									ent->curheight + settings.systemsDistance;
 								int slot = -1;
 								int ispagebreak = 0;
 								if (myheight > pageheight)
@@ -3450,7 +3464,7 @@ traceslice(cout << ">>>> GRStaffManager::FindOptimumBreaks  =>  start pos loop" 
 
 		if (breakent->followedbypagebreak && mGrSystem)
 		{
-			GRPage * newpage = new GRPage( mGrMusic, this, mGrSystem->getRelativeEndTimePosition(), mGrPage );
+			GRPage * newpage = new GRPage( mGrMusic, this, mGrSystem->getRelativeEndTimePosition(), settings, mGrPage );
 			mGrPage->finishPage();
 			mGrPage = newpage;
 			mGrMusic->addPage( mGrPage );
@@ -3474,7 +3488,8 @@ traceslice(cout << "GRStaffManager::FindOptimumBreaks  =>  CreateBeginSlice" << 
 		}
 
 		mGrSystem = new GRSystem(this, mGrPage, tp, &mSystemSlices, breakent->numslices, beginslice, &mSpringVector, mCurSysFormat,
-				pos == NULL && inPageOrSystemBreak == 0);
+								 settings.force, settings.spring, settings.proportionalRenderingForceMultiplicator,
+								pos == NULL && inPageOrSystemBreak == 0);
 		
 		if( ! mCurAccoladeTag.empty() )	
 		{
@@ -3507,6 +3522,7 @@ traceslice(cout << ">>>> GRStaffManager::FindOptimumBreaks  =>  end pos loop" <<
 
 		mGrSystem = new GRSystem(this, mGrPage, tp, &mSystemSlices, mSystemSlices->GetCount(),
 					NULL, &mSpringVector, mCurSysFormat,
+					settings.force, settings.spring, settings.proportionalRenderingForceMultiplicator,
 					// is last system
 					inPageOrSystemBreak == 0);
 		
@@ -3523,7 +3539,7 @@ traceslice(cout << ">>>> GRStaffManager::FindOptimumBreaks  =>  end pos loop" <<
 		{
 			assert(false);
 			// build a new page and put the system in the new page
-			GRPage * newpage = new GRPage(mGrMusic, this, mGrSystem->getRelativeTimePosition(), mGrPage);
+			GRPage * newpage = new GRPage(mGrMusic, this, mGrSystem->getRelativeTimePosition(), settings, mGrPage);
 			mGrPage->finishPage();
 			mGrPage = newpage;
 			mGrMusic->addPage(mGrPage);
@@ -3657,7 +3673,7 @@ void GRStaffManager::UpdateBeginningSFF(int staffnum)
 	// now i use maxclef and mMaxKey to create the current sff .....
 	if (needsupdate && mMaxClef && mMaxKey)
 	{
-		GRBeginSpaceForceFunction2 * bsff = new GRBeginSpaceForceFunction2();
+		GRBeginSpaceForceFunction2 * bsff = new GRBeginSpaceForceFunction2(settings.force);
 		// then I need a new sff ....
 		// we need to save these bounding boxes (the heights as well ...)
 		const NVRect & maxrectclef = mMaxClef->getBoundingBox();
@@ -3666,25 +3682,25 @@ void GRStaffManager::UpdateBeginningSFF(int staffnum)
 		const float lengthkey = maxrectkey.Width();
 
 		GRSpring * spr;
-		spr = new GRSpring(DURATION_0, DURATION_0);
+		spr = new GRSpring(DURATION_0, DURATION_0, settings.spring, settings.proportionalRenderingForceMultiplicator);
 		spr->set_const(SCONST_GLUESTART);
 		spr->setlength(lengthclef * 0.5f );
 		beg_spr_list->AddTail(spr);
 		bsff->addSpring(spr);
 
-		spr = new GRSpring(DURATION_0,DURATION_0);
+		spr = new GRSpring(DURATION_0, DURATION_0, settings.spring, settings.proportionalRenderingForceMultiplicator);
 		spr->set_const(mMaxClef->getSConst());
 		spr->setlength(lengthclef * 0.5f + lengthkey * 0.5f );
 		beg_spr_list->AddTail(spr);
 		bsff->addSpring(spr);
 
-		spr = new GRSpring(DURATION_0,DURATION_0);
+		spr = new GRSpring(DURATION_0, DURATION_0, settings.spring, settings.proportionalRenderingForceMultiplicator);
 		spr->set_const(mMaxKey->getSConst());
 		spr->setlength(lengthkey * 0.5f);
 		beg_spr_list->AddTail(spr);
 		bsff->addSpring(spr);
 
-		spr = new GRSpring(DURATION_0,DURATION_0);
+		spr = new GRSpring(DURATION_0, DURATION_0, settings.spring, settings.proportionalRenderingForceMultiplicator);
 		spr->set_const(SCONST_GLUENOSTART);
 		beg_spr_list->AddTail(spr);
 		bsff->addSpring(spr);
@@ -3730,14 +3746,14 @@ GRSystemSlice * GRStaffManager::CreateBeginSlice(GRSystemSlice * lastslice)
 	GRPossibleBreakState * pbs = lastslice->mPossibleBreakState;
 	int mini = pbs->ssvect->GetMinimum();
 	int maxi = pbs->ssvect->GetMaximum();
-	GRSystemSlice * beginslice = new GRSystemSlice(this, pbs->tp);	
+	GRSystemSlice * beginslice = new GRSystemSlice(this, pbs->tp);
 	for(int i = mini; i <= maxi; ++i )
 	{
 		GRPossibleBreakState::GRStaffAndState * sas = pbs->ssvect->Get(i);
 		if (sas)
 		{
 			// The Staff-numbers are equal to the staff-vector at the breaktime.			
-			GRStaff * newstaff = new GRStaff(beginslice);
+			GRStaff * newstaff = new GRStaff(beginslice, settings.proportionalRenderingForceMultiplicator);
 			beginslice->addStaff(newstaff,i);
 			
 			// add the staffstate stuff ... the call to BeginStaff is done later, when we have
@@ -3754,7 +3770,7 @@ GRSystemSlice * GRStaffManager::CreateBeginSlice(GRSystemSlice * lastslice)
 	beginslice->mStartSpringID = mSpringID;
 	
 	// this is the spring for the start-glue
-	GRSpring * spr = new GRSpring(pbs->tp,DURATION_0);
+	GRSpring * spr = new GRSpring(pbs->tp, DURATION_0, settings.spring, settings.proportionalRenderingForceMultiplicator);
 	spr->setID(mSpringID);
 	spr->change_const(50);
 	mSpringVector->Set(mSpringID++, spr);
@@ -3790,7 +3806,7 @@ GRSystemSlice * GRStaffManager::CreateBeginSlice(GRSystemSlice * lastslice)
 			// now, we need to build the rods for the newly added elements for the staves. (these are staff-rods)
 			int start = mSpringVector->GetMinimum();
 			int end = mSpringID;
-			staff->createNewRods(this,start,end);
+			staff->createNewRods(this,start,end, settings.force);
 			
 			// remember to set lastrod of staff to previous lastrod a little bit unsure of this ...
 			// staff->lastrod = mMyStaffs->Get(i)->lastrod;
@@ -3805,7 +3821,7 @@ GRSystemSlice * GRStaffManager::CreateBeginSlice(GRSystemSlice * lastslice)
 #endif
 		);
 	
-	GRSpaceForceFunction2 * newForceFunc = new GRSpaceForceFunction2;
+	GRSpaceForceFunction2 * newForceFunc = new GRSpaceForceFunction2(settings.force);
 	beginslice->mForceFunction = newForceFunc;
 	
 	// now, we have to add the start springs (those, that were just created) to the curspf ...

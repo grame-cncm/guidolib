@@ -176,17 +176,8 @@ class GRStaffManager
 
 	public:
 
-				GRStaffManager(GRMusic * p_grmusic, ARPageFormat * inPageFormat = 0 );
+				GRStaffManager(GRMusic * p_grmusic, ARPageFormat * inPageFormat = 0, const GuidoLayoutSettings * settings = 0);
         virtual ~GRStaffManager();
-
-
-
-	static bool  sOptPageFill;
-	static float sPropRender;
-	static bool  sNeedSpecialSpacing;
-	static float sDefaultSystemDistance;
-	static int   sSystemDistribution;	// kAuto, kAlways, kNever
-	static float sSystemDistribLimit; 
 
 		// this routine is used to get the current beginning_sff
 		// This is used by the constructor of GRSystemSlice to
@@ -405,6 +396,8 @@ class GRStaffManager
 
 		ARAuto * mArAuto;
 		std::vector<ARAccolade	*> mCurAccoladeTag;
+
+		GuidoLayoutSettings settings;
 };
 
 #endif

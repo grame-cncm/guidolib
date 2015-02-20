@@ -78,34 +78,6 @@ GRStaff * gCurStaff;
 
 int GRSystem::sSystemID = 0;
 
-/** \brief Used by GRStaffManager to create Systems on the fly as needed.
-*/
-GRSystem::GRSystem( GRPage * inPage, const TYPE_TIMEPOSITION & relativeTimePositionOfSystem )
-  :  GREvent(NULL, inPage->getARMusic(), relativeTimePositionOfSystem, DURATION_0),
-	 mStaffs( new StaffVector(true)) // (1) == staff owns elements!
-	 // spacelist and zerospacelist are handled automatically (do not own elements!)
-{
-	assert(false);
-	mMarginLeft = 0;
-	mDistanceSet = false;
-	mDistance = 0;
-	mNewLinePage = 0;
-	mPage = inPage;
-	mNextStaffPosition.x = 0; // 5*LSPACE;
-	mNextStaffPosition.y = 0; // 5*LSPACE;
-
-	mSpringVector = NULL;
-	simplerods = NULL;
-	complexrods = NULL;
-#ifdef OLDSPFACTIVE
-	spf = NULL;
-#endif
-	mSpaceForceFunc = NULL;
-	mIsLastLine = false;
-	float tmpf = -1.0f;
-	inPage->addSystem( this, &tmpf );
-}
-
 //--------------------------------------------------------------------------------------------------------
 /*
 	DF - sept. 10 2009 - new internal function from GRSystem constructor structuration
@@ -165,11 +137,11 @@ void GRSystem::InitForceFunction (GRStaffManager * staffmgr, SSliceList ** psyst
 /*
 	DF - sept. 10 2009 - new internal function from GRSystem constructor structuration
 */
-void GRSystem::AdjustForceFunction (GRSliceHeight &sliceheight, int &startspring, int &endspring)
+void GRSystem::AdjustForceFunction (GRSliceHeight &sliceheight, int &startspring, int &endspring, float optForce)
 {
 	// then we need to Merge the mForceFunction's of the slices and stretch the springs accordingly ....
 	// ATTENTION, we have to take care of the boundary-rods! Maybe we need to restretch some of those springs !!!
-	mSpaceForceFunc = new GRSpaceForceFunction2();
+	mSpaceForceFunc = new GRSpaceForceFunction2(optForce);
 
 	// We also have to take care of the distance between staff-elements
 	// and set all staff-distances equally to get the correct continuation.
@@ -283,11 +255,12 @@ GRStaff * GRSystem::ComputeBoundingBox (GRSliceHeight &sliceheight)
 
    Then the global space force function (ssf) is build, so that the whole system can actually be stretched.
 */
-GRSystem::GRSystem(	GRStaffManager * staffmgr, GRPage * inPage,
+GRSystem::GRSystem(GRStaffManager * staffmgr, GRPage * inPage,
 					const TYPE_TIMEPOSITION & relativeTimePositionOfSystem,
 					SSliceList ** psystemslices, int count,
-					GRSystemSlice * beginslice, ISpringVector ** pvect, ARSystemFormat * sysform,
-					bool islastsystem )
+					GRSystemSlice * beginslice, ISpringVector ** pvect, ARSystemFormat * sysform, float optForce,
+					float spring, float proportionnalRender,
+					bool islastsystem)
 
 			: GREvent( 0, inPage->getARMusic(), relativeTimePositionOfSystem, DURATION_0 ),
 				mSystemSlices(1), mStaffs( 0 )
@@ -326,7 +299,7 @@ GRSystem::GRSystem(	GRStaffManager * staffmgr, GRPage * inPage,
 	// I just do not know ....
 	mSpringVector = *pvect;
 	int startspring, endspring;
-	AdjustForceFunction (sliceheight, startspring, endspring);
+	AdjustForceFunction (sliceheight, startspring, endspring, optForce);
 
 	// now we freeze the endspring ....
 	GRSpring * spr = mSpringVector->Get(endspring);
@@ -350,7 +323,7 @@ GRSystem::GRSystem(	GRStaffManager * staffmgr, GRPage * inPage,
 	TYPE_TIMEPOSITION mytp;
     if (endslice->mPossibleBreakState)
         mytp = TYPE_TIMEPOSITION(endslice->mPossibleBreakState->tp);
-	spr = new GRSpring(mytp, DURATION_0);
+	spr = new GRSpring(mytp, DURATION_0, spring, proportionnalRender);
 	spr->setID(++endspring);
 	spr->isfrozen = 1;
 	mSpringVector->Set(endspring,spr);
@@ -384,7 +357,7 @@ GRSystem::GRSystem(	GRStaffManager * staffmgr, GRPage * inPage,
 		&& (*psystemslices)->empty()
 		&& islastsystem)
 	{
-			float alternate_force = GRSpaceForceFunction2::getOptForce();
+			float alternate_force = mSpaceForceFunc->getOptForce();
 			if (mSystemforce > alternate_force)
 				mSystemforce = alternate_force;
 	}
@@ -1042,7 +1015,7 @@ void GRSystem::addBar(GRBar * mybar, GRSystem::BARTYPE btype, GRStaff * inStaff 
 	// when the distance of staffs is being set, these tags must be updated (for length)
 	ARBar * arbar = mybar->getARBar();
 	assert(arbar);
-	GRBar * newbar = new GRBar( arbar, this, inStaff, mybar->getRelativeTimePosition());
+	GRBar * newbar = new GRBar( arbar, this, inStaff, mybar->getRelativeTimePosition(), inStaff->getProportionnalRender());
 
 	// I must attach the newbar with the other spring (or at least be told when something happens ...)
 	mybar->addAssociation(newbar);

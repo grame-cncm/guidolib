@@ -33,7 +33,7 @@ using namespace std;
 
 // The code for the GRSpaceForceFunction2
 
-GRSpaceForceFunction2::GRSpaceForceFunction2()	: sortedlist(1)
+GRSpaceForceFunction2::GRSpaceForceFunction2(float force)	: sortedlist(1), optforce(force)
 {
 	xminopt = 0;
 	copt = -1;
@@ -675,8 +675,6 @@ GRSpaceForceFunction2::GRSpaceForceFunction2( const GRSpaceForceFunction2 & sff 
 
 	addSFF(sff);
 }
-
-float GRSpaceForceFunction2::optforce = kSettingDefaultForce;
 
 float GRSpaceForceFunction2::getOptForce()
 {

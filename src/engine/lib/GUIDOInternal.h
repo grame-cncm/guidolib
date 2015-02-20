@@ -78,6 +78,4 @@ void 			guido_cleanup();
 ARHandler		guido_RegisterARMusic( ARMusic * inMusic );
 GRHandler		guido_RegisterGRMusic( GRMusic * inMusic, ARHandler inHandleAR );
 
-void			guido_applySettings( const GuidoLayoutSettings * settings );
-
 #endif

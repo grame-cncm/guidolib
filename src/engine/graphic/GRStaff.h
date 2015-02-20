@@ -174,7 +174,7 @@ class GRStaff : public GRCompositeNotationElement
 	friend class GRVoiceManager;
 
 	public:
-						GRStaff(GRSystemSlice * systemslice);
+						GRStaff(GRSystemSlice * systemslice, float propRender);
 		virtual 		~GRStaff();
 
 		float           getDistance() const;
@@ -242,7 +242,7 @@ class GRStaff : public GRCompositeNotationElement
 
 		void        UpdateStaffState(GuidoPos pos);
 		void        TellNewStaff(GuidoPos pos);
-		void        createNewRods(GRStaffManager * staffmgr, int & startspr, int & endspr);
+		void        createNewRods(GRStaffManager * staffmgr, int & startspr, int & endspr, float optForce);
 		void        CreateBeginElements(GRStaffManager * staffmgr,GRStaffState & state, int staffnum);
 		GuidoPos    EndStaff(const TYPE_TIMEPOSITION & tp, GRStaffManager * staffmgr,
 							GuidoPos endpos = 0, int lastline = 0);
@@ -275,6 +275,7 @@ class GRStaff : public GRCompositeNotationElement
 		float	currentLineThikness() const;
         
         void    print(std::ostream& os) const;
+		float	getProportionnalRender() { return this->proportionnalRender; }
 
   protected:
 		void	DebugPrintState(const char * info) const;
@@ -312,6 +313,7 @@ class GRStaff : public GRCompositeNotationElement
 		bool			isNextOn;
 		bool			firstOnOffSetting;
 
+		float			proportionnalRender;
 };
 
 #endif

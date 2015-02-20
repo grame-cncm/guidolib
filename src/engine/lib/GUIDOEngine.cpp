@@ -133,6 +133,8 @@ GUIDOAPI(GuidoErrCode) GuidoInit( GuidoInitDesc * desc )
 
 		gInited = true;
 	}
+	// Create default page format
+	gARPageFormat = new ARPageFormat();
 	return guidoNoErr;
 }
 
@@ -283,10 +285,9 @@ GUIDOAPI(GuidoErrCode) GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * set
 		return guidoErrInvalidHandle;
 
 	// - Now create the GRMusic object from  the abstract representation.
-	guido_applySettings(settings);
-    
     long startTime = GuidoTiming::getCurrentmsTime();
-	GRMusic *grMusic = new GRMusic(arMusic, gARPageFormat, false);
+	// Create new gr music object with a copy of default pageFormat.
+	GRMusic *grMusic = new GRMusic(arMusic, new ARPageFormat(*gARPageFormat), settings, false);
     long endTime = GuidoTiming::getCurrentmsTime();
 
 	if (grMusic == 0)
@@ -314,14 +315,94 @@ GUIDOAPI(GuidoErrCode) GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * set
 	return guidoNoErr;
 }
 
+GUIDOAPI(GRHandler) GuidoAR2GRParameterized(ARHandler ar, const GuidoGrParameters* gp)
+{
+	if( ar == 0 )	return 0;
+	if( !gInited )	return 0;
+
+#ifdef TESTTIMEMAP
+	TestTimeMap timeCollector;
+	GuidoGetTimeMap (ar, timeCollector);
+#endif
+
+	// - Find the AR object corresponding to inHandleAR.
+	ARMusic * arMusic = ar->armusic; // (JB) was guido_PopARMusic()
+
+	if (arMusic == 0)
+		return 0;
+
+	ARPageFormat * pf;
+	const GuidoLayoutSettings * settings = 0;
+	// Apply settings
+	if(gp) {
+		settings = &gp->layoutSettings;
+		// A new page format is created.
+		pf = new ARPageFormat(gp->pageFormat.width, gp->pageFormat.height,
+							  gp->pageFormat.marginleft, gp->pageFormat.margintop,
+							  gp->pageFormat.marginright, gp->pageFormat.marginbottom);
+	} else {
+		// Copy of the default page format.
+		pf = new ARPageFormat(*gARPageFormat);
+	}
+
+	// - Now create the GRMusic object from  the abstract representation.
+	long startTime = GuidoTiming::getCurrentmsTime();
+
+	GRMusic *grMusic = new GRMusic(arMusic, pf, settings, false);
+	long endTime = GuidoTiming::getCurrentmsTime();
+
+	if (grMusic == 0)
+		return 0;
+	else {
+		grMusic->setAR2GRTime(endTime - startTime);
+
+#ifdef TIMING
+		long AR2GRTime = grMusic->getAR2GRTime();
+		std::cerr << "  --> " << AR2GRTime << "ms spent during AR to GR procedure" << std::endl;
+#endif
+	}
+
+	// - The GR structure needs its AR equivalent during all its lifetime.
+	ar->refCount++;
+
+	// - Propagate the music name
+	grMusic->setName(arMusic->getName().c_str());
+
+	//  - Add the GRMusic object to the global list
+	return guido_RegisterGRMusic(grMusic, ar);
+}
+
 // --------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoUpdateGR( GRHandler gr, const GuidoLayoutSettings * settings)
 {
 	if ( !gr )			return guidoErrInvalidHandle;
 	if ( !gr->grmusic )	return guidoErrInvalidHandle;
 
-	guido_applySettings( settings );
-	gr->grmusic->createGR( gARPageFormat );
+	gr->grmusic->createGR(new ARPageFormat(*gARPageFormat), settings);
+	return guidoNoErr;
+}
+
+
+GUIDOAPI(GuidoErrCode)	GuidoUpdateGRParameterized( GRHandler gr, const GuidoGrParameters* gp)
+{
+	if ( !gr )			return guidoErrInvalidHandle;
+	if ( !gr->grmusic )	return guidoErrInvalidHandle;
+
+	ARPageFormat * pf;
+	const GuidoLayoutSettings * settings = 0;
+	// Apply settings
+	if(gp) {
+		// A new page format is created.
+		pf = new ARPageFormat(gp->pageFormat.width, gp->pageFormat.height,
+							  gp->pageFormat.marginleft, gp->pageFormat.margintop,
+							  gp->pageFormat.marginright, gp->pageFormat.marginbottom);
+		settings = &gp->layoutSettings;
+	} else {
+		// Copy of the default page format.
+		pf = new ARPageFormat(*gARPageFormat);
+	}
+
+	gr->grmusic->createGR(pf, settings);
 	return guidoNoErr;
 }
 

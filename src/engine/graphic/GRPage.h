@@ -40,7 +40,7 @@ class GRPage : public GREvent
 {
 	public:
 				GRPage( GRMusic * grmusic, GRStaffManager * grstafmgr,
-						const TYPE_TIMEPOSITION  & inDate, GRPage * prevpage = 0 );
+						const TYPE_TIMEPOSITION  & inDate, GuidoLayoutSettings &aSettings, GRPage * prevpage = 0 );
 	virtual 	~GRPage();
 
 	bool		addSystem( GRSystem * inSystem, float * ioUsedSystemDistance );
@@ -119,6 +119,8 @@ class GRPage : public GREvent
 		void	setHorizontalSpacing();
 
 		SystemPointerList  mSystems;
+
+		GuidoLayoutSettings settings;
 };
 
 #endif

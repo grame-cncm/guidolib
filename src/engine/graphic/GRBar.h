@@ -26,10 +26,10 @@ class GRBar : public GRTagARNotationElement
 {
 	public:
 		
-		GRBar( ARBar * p_arbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos );
+		GRBar( ARBar * p_arbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float propRender);
 
 		GRBar( ARBar * p_arbar, GRSystem * p_grsystem, GRStaff * inStaff,
-									const TYPE_TIMEPOSITION &  inTimePos);
+									const TYPE_TIMEPOSITION &  inTimePos, float propRender);
 
 		virtual ~GRBar();
 
@@ -62,6 +62,7 @@ class GRBar : public GRTagARNotationElement
         float mDx;
         float mDy;
         float mStaffRatio;
+		float proportionalRender;
 
 	private:
 		void InitGRBar( const TYPE_TIMEPOSITION & inTimePos, const GRStaff * inStaff );		

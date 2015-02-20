@@ -11,7 +11,7 @@ Score layout options
   single: neighborhoodSpacing
   single: optimalPageFill
 
-Score layout options may be used whenever a conversion from the abstract representation to the graphic representation is required  (see the C/C++ library `documentation <http://guidolib.sourceforge.net/doc/guidolib/group__Engine.html>`_ 
+Score layout options may be used whenever a conversion from the abstract representation to the graphic representation is required  (see the C/C++ library `documentation <http://guidolib.sourceforge.net/doc/guidolib/group__Engine.html>`_)
 
 **Options**
 

@@ -48,7 +48,7 @@ noplost	= "possibly lost: 0"
 noerr	= "ERROR SUMMARY: 0"
 
 gmnfiles      = $(shell find ../gmn-examples -name "*.gmn") $(shell find ../regression-tests -name "*.gmn")
-gmnfilesproll = $(shell find ../regression-tests/pianoroll -name "*.gmn")[1-9]
+gmnfilesproll = $(shell find ../regression-tests/pianoroll -name "*.gmn")
 
 pdfout		:= $(patsubst ../%.gmn, $(version)/%.pdf, $(gmnfiles))
 svgout		:= $(patsubst ../%.gmn, $(version)/standard/%.svg, $(gmnfiles))
@@ -147,7 +147,7 @@ pdfvalidate: $(validpdf)
 ifeq ($(system), MINGW32_NT-6.1)
 	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && C:/Program\ Files\ \(x86\)/Mozilla\ Firefox/firefox -new-tab $(patsubst $(version)/%, $(VERSION)/%, $<) -new-tab $<; true)
 else
-	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open -t $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
+	@[ -f  $(ignored) ] || ./diffcmd $<  $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open -t $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
 endif
 
 %.outtimemap: %.map

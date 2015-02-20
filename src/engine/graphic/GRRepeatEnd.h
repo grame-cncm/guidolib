@@ -32,7 +32,7 @@ class GRRepeatEnd : public GRBar
 {
 	public:
 
-				 GRRepeatEnd( ARRepeatEnd * ar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos );
+				 GRRepeatEnd(ARRepeatEnd * ar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos , float proportionnalRender);
 		virtual	~GRRepeatEnd();
 	
 		virtual unsigned int getTextAlign() const;

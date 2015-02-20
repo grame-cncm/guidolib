@@ -49,36 +49,6 @@ void GuidoTrace( const char * inMessage )
 }
 
 // --------------------------------------------------------------------------
-void guido_applySettings( const GuidoLayoutSettings * settings )
-{
-	if( settings == 0 ) return;
-
-	// - System distance
-	GRStaffManager::sDefaultSystemDistance = settings->systemsDistance;
-	
-	// - System distribution on/off
-	GRStaffManager::sSystemDistribution = settings->systemsDistribution;
-
-	// - System distribution maximum distance
-	GRStaffManager::sSystemDistribLimit = settings->systemsDistribLimit;
-	
-	// - Space opt force
-	GRSpaceForceFunction2::setOptForce( settings->force );
-	
-	// - Spring parameter
-	GRSpring::funcpar = settings->spring;
-
-	// - NeighborhoodSpacing on/off
-	GRStaffManager::sNeedSpecialSpacing = (settings->neighborhoodSpacing == 1 ? true : false);
-
-	// - Optimal page fill on/off
-	GRStaffManager::sOptPageFill = (settings->optimalPageFill == 1 ? true : false);
-
-	// - Optimal page fill on/off
-	GRStaffManager::sPropRender = (settings->proportionalRenderingForceMultiplicator < 0.0001 ? 0 : settings->proportionalRenderingForceMultiplicator);
-}
-
-// --------------------------------------------------------------------------
 void guido_deinit()
 {
 	FontManager::ReleaseAllFonts();

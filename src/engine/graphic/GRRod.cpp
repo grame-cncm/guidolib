@@ -17,9 +17,9 @@
 #include "GRVoice.h"
 #include "kf_ivect.h"
 
-GRRod::GRRod( const GRNotationElement * gr1,
+GRRod::GRRod(const GRNotationElement * gr1,
 			 const GRNotationElement * gr2,
-			 int lastsprid, float spacedistance)
+			 int lastsprid, float spacedistance, float aOptForce) : optForce(aOptForce)
 {
 	// this calculates the space needed for the right
 	// part of gr1 and for the left part of gr2
@@ -40,7 +40,8 @@ GRRod::GRRod( const GRNotationElement * gr1,
 
 GRRod::GRRod( const GRNotationElement * gr1,
 				const GRNotationElement * gr2,
-				int lastspringid)
+				int lastspringid,
+			  float aOptForce) : optForce(aOptForce)
 {
 	const float r1 = gr1->getRightSpace();
 	const float r2 = gr2->getLeftSpace();
@@ -70,9 +71,10 @@ GRRod::GRRod( const GRRod & rod )
 	
 	mIsSpaceRod = rod.mIsSpaceRod;
 	mForce = -1;
+	optForce = rod.optForce;
 }
 
-GRRod::GRRod( float inLength, int inSpring1, int inSpring2 )
+GRRod::GRRod( float inLength, int inSpring1, int inSpring2, float aOptForce) : optForce(aOptForce)
 {
 	setSpringIDs( inSpring1, inSpring2 );
 	mLength = inLength;
@@ -108,7 +110,7 @@ float GRRod::calcforce(SpringVector * sprvect)
 		return mForce;
 
 	// now we work with a GRSpaceForceFunction  (partial)
-	GRSpaceForceFunction2 sff;	// was: = new GRSpaceForceFunction2();
+	GRSpaceForceFunction2 sff(optForce);	// was: = new GRSpaceForceFunction2();
 
 	for (int i = mSpr1; i < mSpr2; ++i )
 	{

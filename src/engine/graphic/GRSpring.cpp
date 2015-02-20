@@ -40,17 +40,14 @@
 #include "GRRepeatEnd.h"
 
 // - Guido misc
-#include "GuidoDefs.h"		 // For kLayoutSettingDefaultSpring
 #include "kf_vect.h"
 #include "VGDevice.h"
 #include "GUIDOInternal.h"
 
 using namespace std;
 
-float GRSpring::funcpar = kSettingDefaultSpring;
-
-GRSpring::GRSpring(GRNotationElement *grn, GRVoice *vce) :
-	grolst(0),grvlst(0),sprcol(NULL)
+GRSpring::GRSpring(GRNotationElement *grn, GRVoice *vce, float spring, float propRender) :
+	grolst(0),grvlst(0),sprcol(NULL), funcpar(spring), proportionalRendering(propRender)
 {
 	isfrozen = 0;
 	id = -1;
@@ -74,8 +71,8 @@ GRSpring::GRSpring(GRNotationElement *grn, GRVoice *vce) :
 }
 
 GRSpring::GRSpring(const TYPE_TIMEPOSITION & vtp,
-				   const TYPE_DURATION  &vdur) :
-	grolst(0),grvlst(0),sprcol(NULL)
+				   const TYPE_DURATION  &vdur, float spring, float propRender) :
+	grolst(0),grvlst(0),sprcol(NULL), funcpar(spring), proportionalRendering(propRender)
 {
 	isfrozen = 0;
 	id = -1;
@@ -88,7 +85,7 @@ GRSpring::GRSpring(const TYPE_TIMEPOSITION & vtp,
 	hasDurElement         = false;
     isProportionalElement = false;
 
-    sconst = defconst(dur);
+	sconst = defconst(dur, funcpar);
 
 	assert(sconst != 0);
 }
@@ -100,7 +97,7 @@ GRSpring::~GRSpring()
 
 /** \brief Calculates the default spring-constant
 */ 
-float GRSpring::defconst(const TYPE_DURATION &dur) // REM: merger avec la fonction de dessous
+float GRSpring::defconst(const TYPE_DURATION &dur, float spring) // REM: merger avec la fonction de dessous
 {
     float retval;
 
@@ -108,14 +105,14 @@ float GRSpring::defconst(const TYPE_DURATION &dur) // REM: merger avec la foncti
         return 20.0f;
     else {
         // This needs to be externally controlled!
-        retval = (float)(1.0 / log( funcpar *( (double)dur + 1.0 ))); 
+		retval = (float)(1.0 / log( spring *( (double)dur + 1.0 )));
         long l = (long)floor( retval * 1000.0 + 0.5 );
         retval = (float)l  / 1000.0f;
         return retval;
     }
 }
 
-float GRSpring::defconst(float dur) 
+float GRSpring::defconst(float dur, float spring)
 {
 	float retval;
 
@@ -123,7 +120,7 @@ float GRSpring::defconst(float dur)
 		return 20.0f;
 	else {
 		// This needs to be externally controlled!
-		retval = (float)(1.0/log( funcpar *( dur + 1.0 ))); 
+		retval = (float)(1.0/log( spring *( dur + 1.0 )));
 		long l = (long)floor( retval * 1000.0 + 0.5 );
 		retval = (float)l / 1000.0f;
 		return retval;
@@ -241,23 +238,6 @@ float GRSpring::setlength(float dx)
 		return change_x(dx);
 	else
 		return force;
-}
-
-/** \brief Adds a new graphical-element at to the spring. First, it is checked, wether
-	the duration is shorter; if this is so, the spring-constant is changed. 
-*/
-void GRSpring::addSameTP( GRNotationElement * el, GRVoice * vce )
-{
-	if (el->getDuration()<dur)
-	{
-		hasDurElement = true;
-		change_const(defconst(dur));
-	}
-	
-	dur = el->getDuration();
-
-	addElement(el,vce);
-
 }
 
 /** \brief the spring-comparison-function for putting the
@@ -440,12 +420,12 @@ bool GRSpring::containsBar() const
 
 float GRSpring::setProportionalForce()
 {
-    return change_force((float) ((double)dur * GRStaffManager::sPropRender * 3));
+	return change_force((float) ((double)dur * proportionalRendering * 3));
 }
 
 void GRSpring::addElement(GRNotationElement * el, GRVoice * vce)
 {
-    if (GRStaffManager::sPropRender != 0) {
+	if (proportionalRendering != 0) {
         if (!el->isInHeader()) {
             isProportionalElement = true;
 
@@ -473,11 +453,6 @@ void GRSpring::addElement(GRNotationElement * el, GRVoice * vce)
 	sprcol->AddElement(el,tmppos);
 }
 
-void GRSpring::setFunctionParameter(float npar)
-{
-	funcpar = npar;
-}
-
 /** \brief Called when the spring-constant needs to be recalculated.
 */
 float GRSpring::recalcConstant()
@@ -502,61 +477,6 @@ float GRSpring::recalcConstant()
 	}
 
 	return sconst;
-}
-
-float GRSpring::onlycalcconst(const GRNotationElement * grn)
-{
-	float mysconst;
-	const TYPE_DURATION & dur = grn->getDuration();
-	if (grn && (dynamic_cast<const GRGlue *>(grn)) != 0)
-	{
-		const GRGlue * glue = dynamic_cast<const GRGlue *>(grn);
-		mysconst = glue->getSConst();
-	}
-	else if (grn && (dynamic_cast<const GRTag *>(grn)) != 0)
-	{
-		const GRTag * tmp = dynamic_cast<const GRTag *>(grn);
-		mysconst = tmp->getSConst();
-	}
-	/*else if (grn && dynamic cast<GRBar *>(grn))
-	{
-		sconst = 7.0;
-	}
-	else if (grn && dynamic cast<GRClef *>(grn))
-	{
-		sconst = 100.0;
-	}
-	else if (grn && dynamic cast<GRIntens *>(grn))
-	{
-		sconst = 100.0;
-	} */
-	else if (dur == DURATION_0)
-	{
-		if (dynamic_cast<const GREmpty *>(grn))
-			mysconst = 200;
-		else
-			mysconst = 20.0f;
-	}
-	else if (grn && (dynamic_cast<const GRRest *>(grn)))
-	{
-		// rests are treated as if they were
-		// 8 times shorter -> this results
-		// in a nicer spacing when rests occur ...
-		// this must be adjusted for optimal output!
-		TYPE_DURATION mydur;
-		if ((float) dur> float(0.125))
-			mydur.set( dur.getNumerator(), dur.getDenominator() * 2);
-		else
-			mydur = dur;
-
-		mysconst = defconst(mydur);
-	}
-	else
-		mysconst = defconst(dur);
-
-	assert(mysconst != 0);
-
-	return mysconst;
 }
 
 float GRSpring::calcconst(GRNotationElement * grn)
@@ -586,19 +506,14 @@ float GRSpring::calcconst(GRNotationElement * grn)
 		else
 			mydur = dur;
 
-        sconst = (isProportionalElement ? 1 : defconst(mydur));
+		sconst = (isProportionalElement ? 1 : defconst(mydur, funcpar));
 	}
 	else
-		sconst = (isProportionalElement ? 1 : defconst(dur));
+		sconst = (isProportionalElement ? 1 : defconst(dur, funcpar));
 
 	assert(sconst != 0);
 
 	return sconst;
-}
-
-float GRSpring::getFunctionParameter()
-{
-	return funcpar;
 }
 
 bool GRSpring::hasStaffAndType(const GRStaff * grstaff,const std::type_info & ti)

@@ -18,7 +18,6 @@ set (SOVERS 1)
 if(UNIX)
 	add_definitions(-Wall -DGCC)
 endif(UNIX)
-add_definitions(-DJSON_ONLY)
 
 #######################################
 # Options disabled by default
@@ -89,7 +88,7 @@ set (GUIDO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/..)
 set (PLATFORMS ${GUIDO_PATH}/platforms)
 set (SRC_PATH	${GUIDO_PATH}/src/engine)
 #set (SRCFOLDERS  lib graphic abstract parser tools misc json include devices maps)
-set (HEADERS_PATH ${SRC_PATH}/include ${SRC_PATH}/json)
+set (HEADERS_PATH ${SRC_PATH}/include)
 if (GL STREQUAL "yes")
 	set(VGDEV_PATH ${PLATFORMS}/opengl/device)
 elseif(WIN32)

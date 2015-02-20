@@ -1,5 +1,8 @@
 GuidoEditor Change Log
 
+version 2.7 - ???
+- bug fixes : initialize background of export to image.
+
 version 2.6 - december 2014
 - Pdf documentation integrated
 

@@ -45,7 +45,7 @@ class GRSpacingMatrix
 
 		void		AddNeighbourList(KF_List<int> * nl);
 
-		void		CheckNeighbours(ISpringVector *sprvect);
+		void		CheckNeighbours(ISpringVector *sprvect, float spring);
  
 	protected:
 

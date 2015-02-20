@@ -1,7 +1,7 @@
 GUIDO mappings
 ====================
 
-| For a given score and a given graphic instance of this score, the GUIDO engine provides a description of the relationship between the graphic and the time space. 
+| For a given score or pianoroll and a given graphic instance of this score or pianoroll, the GUIDO engine provides a description of the relationship between the graphic and the time space. 
 | It provides similar relations between the score time and the performance time (i.e. rolled to unrolled map).
 
 .. toctree::

@@ -12,13 +12,14 @@ FILE(GLOB SERVER_CPP_SOURCES ${ROOT}/server/*.cpp)
 FILE(GLOB SERVER_C_SOURCES   ${ROOT}/server/*.c)
 FILE(GLOB CAIRO_CPP_SOURCES  ${CMAKE_CURRENT_SOURCE_DIR}/../src/Cairo*.cpp)
 FILE(GLOB LOCAL_CPP_SOURCES  ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+FILE(GLOB JSON_CPP_SOURCES   ${ROOT}/lang/javascript/src/json/*.cpp)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/)
 include_directories(${ROOT}/server)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../src)
 include_directories(${ROOT}/src/engine/include)
-include_directories(${ROOT}/src/engine/json)
-
+include_directories(${ROOT}/src/engine/devices)
+include_directories(${ROOT}/lang/javascript/src/json)
 add_definitions(-DJSON_ONLY)
 
 # cairo
@@ -34,7 +35,9 @@ find_library(cairo_LIBRARY
 set(cairo_PROCESS_INCLUDES cairo_INCLUDE_DIR)
 set(cairo_PROCESS_LIBS cairo_LIBRARY)
 libfind_process(cairo)
-add_definitions("-I" ${cairo_INCLUDE_DIRS})
+if(cairo_INCLUDE_DIRS)
+  add_definitions("-I" ${cairo_INCLUDE_DIRS})
+endif()
 set(LINK ${LINK} ${cairo_LIBRARIES})
 
 # microhttpd
@@ -50,7 +53,9 @@ find_library(microhttpd_LIBRARY
 set(microhttpd_PROCESS_INCLUDES microhttpd_INCLUDE_DIR)
 set(microhttpd_PROCESS_LIBS microhttpd_LIBRARY)
 libfind_process(microhttpd)
-add_definitions("-I" ${microhttpd_INCLUDE_DIRS})
+if(microhttpd_INCLUDE_DIRS)
+  add_definitions("-I" ${microhttpd_INCLUDE_DIRS})
+endif()
 set(LINK ${LINK} ${microhttpd_LIBRARIES})
 
 # crypto
@@ -66,7 +71,9 @@ find_library(crypto_LIBRARY
 set(crypto_PROCESS_INCLUDES crypto_INCLUDE_DIR)
 set(crypto_PROCESS_LIBS crypto_LIBRARY)
 libfind_process(crypto)
-add_definitions("-I" ${crypto_INCLUDE_DIRS})
+if(crypto_INCLUDE_DIRS)
+  add_definitions("-I" ${crypto_INCLUDE_DIRS})
+endif()
 set(LINK ${LINK} ${crypto_LIBRARIES})
 
 # curl
@@ -82,22 +89,23 @@ find_library(curl_LIBRARY
 set(curl_PROCESS_INCLUDES curl_INCLUDE_DIR)
 set(curl_PROCESS_LIBS curl_LIBRARY)
 libfind_process(curl)
-add_definitions("-I" ${curl_INCLUDE_DIRS})
+if(curl_INCLUDE_DIRS)
+  add_definitions("-I" ${curl_INCLUDE_DIRS})
+endif()
 set(LINK ${LINK} ${curl_LIBRARIES})
 
 # Magick++
 libfind_pkg_check_modules(Magick++_PKGCONF ImageMagick++)
 add_definitions(${Magick++_PKGCONF_CFLAGS})
 set(LINK ${LINK} ${Magick++_PKGCONF_LDFLAGS})
-message(STATUS "Magick++ link flags: " ${Magick++_PKGCONF_LDFLAGS})
 
 if(APPLE)
   set(LINK ${LINK}  "-framework GUIDOEngine  -F../../build/MacOS/Release")
   #set(LINK ${LINK}  "-l SGUIDOEngine  -L../../build/MacOS/Release")
 else()
-  set(LINK ${LINK}  "-l GUIDOEngine  -L../../build/unix/")
+  set(LINK ${LINK}  "-l GUIDOEngine")
+  LINK_DIRECTORIES(${ROOT}/build/linux/)
 endif(APPLE)
 
-add_executable(${target} ${LOCAL_CPP_SOURCES} ${SERVER_CPP_SOURCES} ${SERVER_C_SOURCES} ${CAIRO_CPP_SOURCES})
+add_executable(${target} ${LOCAL_CPP_SOURCES} ${SERVER_CPP_SOURCES} ${SERVER_C_SOURCES} ${CAIRO_CPP_SOURCES} ${JSON_CPP_SOURCES})
 target_link_libraries(${target} ${LINK})
-target_link_libraries(${target} ${GUIDOLIB})

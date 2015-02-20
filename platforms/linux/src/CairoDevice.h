@@ -56,6 +56,8 @@ class CairoDevice : public VGDevice
 					 CairoDevice (int width, int height, VGSystem *sys=0);
 		virtual		~CairoDevice();
 
+		cairo_surface_t * getSurface() { return cairo_get_target(fNativeDevice); }
+
 		/// Returns the ability of the current VGdevice to be drawn into.
 		virtual bool			IsValid() const		{ return fNativeDevice != 0; }
 

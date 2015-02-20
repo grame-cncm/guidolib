@@ -46,10 +46,10 @@ GRSystem * gCurSystem;
 /** \brief Used by the GRStaffManager to create Pages, to which
 	Systems are added.
 */
-GRPage::GRPage( GRMusic * grmusic, GRStaffManager * grstafmgr, 
-					const TYPE_TIMEPOSITION & inDate, GRPage * prevpage )
+GRPage::GRPage(GRMusic * grmusic, GRStaffManager * grstafmgr,
+					const TYPE_TIMEPOSITION & inDate, GuidoLayoutSettings &aSettings, GRPage * prevpage )
 		   :  GREvent( NULL, grmusic->getARMusic(), inDate, DURATION_0 ),
-		 	  	m_totalsystemheight( 0 )
+				m_totalsystemheight( 0 ), settings(aSettings)
 {
 	// m_unit = UNIT_CM;
 
@@ -104,7 +104,7 @@ bool GRPage::addSystem( GRSystem * inSystem, float * ioUsedSystemDistance )
 			newPos.y -= newSystemBox.top;
 			// the default distance ...
 			// it is later distributed evenly between mSystems ...
-			newPos.y += GRStaffManager::sDefaultSystemDistance;
+			newPos.y += settings.systemsDistance;
 		}
 		m_totalsystemheight += newSystemBox.Height();
 	}
@@ -506,7 +506,7 @@ ARMusic * GRPage::getARMusic() const
 */
 void GRPage::finishPage( bool islastpage )
 {
-	if (GRStaffManager::sSystemDistribution == kNeverDistrib) {
+	if (settings.systemsDistribution == kNeverDistrib) {
 		SystemPointerList::iterator ptr;
 		for( ptr = mSystems.begin(); ptr != mSystems.end(); ++ ptr )
 			(*ptr)->FinishSystem();
@@ -520,13 +520,13 @@ void GRPage::finishPage( bool islastpage )
 		dist = dist / (float(systemCount - 1));
 
 	if (dist > 0) {
-		if ((GRStaffManager::sSystemDistribution == kAlwaysDistrib) 
-			|| (GRStaffManager::sSystemDistribution == kAutoDistrib) // DF added on Feb 13 2011 to force correct mapping
-			|| GRStaffManager::sOptPageFill
+		if ((settings.systemsDistribution == kAlwaysDistrib)
+			|| (settings.systemsDistribution == kAutoDistrib) // DF added on Feb 13 2011 to force correct mapping
+			|| settings.optimalPageFill
 			|| (!islastpage) || (dist <= (0.1f * pagesizey)))
 		{
-			const float distribLimit = GRStaffManager::sSystemDistribLimit * pagesizey;
-			if(( GRStaffManager::sSystemDistribution == kAutoDistrib ) && ( dist > distribLimit ))
+			const float distribLimit =settings.systemsDistribLimit * pagesizey;
+			if(( settings.systemsDistribution == kAutoDistrib ) && ( dist > distribLimit ))
 			{
 				// We are here because the distance between systems is too large
 				if( false ) // islastpage )
@@ -723,7 +723,7 @@ void GRPage::systemFinished(GRSystem * inSystem)
 
 		// then we have to build a new page ....
 		GRPage * newpage = new GRPage( mCurMusic, m_staffmgr,
-						inSystem->getRelativeTimePosition(), this);
+						inSystem->getRelativeTimePosition(), settings, this);
 		inSystem->setGRPage(newpage);
 		float tmpf = 0; //(JB) this one was not initialized !
 		newpage->addSystem(inSystem, &tmpf);
