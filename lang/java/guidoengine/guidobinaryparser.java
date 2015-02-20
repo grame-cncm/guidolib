@@ -225,8 +225,8 @@ public class guidobinaryparser {
 	public static int Polygon(byte[] data, int place, guidocommandbattery commandBattery) {
 		int count = guidobinaryparser.getInt32(data, place);
 		place = guidobinaryparser.moveReadPositionByInt32(place);
-		List<Float> xCoords = new ArrayList<>();
-		List<Float> yCoords = new ArrayList<>();
+		List<Float> xCoords = new ArrayList<Float>();
+		List<Float> yCoords = new ArrayList<Float>();
 		for (int i = 0; i < count; i++) {
 			float x = guidobinaryparser.getFloat(data, place);
 			place = guidobinaryparser.moveReadPositionByFloat(place);
