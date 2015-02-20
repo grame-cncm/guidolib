@@ -32,7 +32,7 @@
 
 #include "GUIDOExport.h"
 #include "VGSystem.h"
-#include "MusicalSymbols.h"	// kMaxMusicalSymbolID and other constants definitions
+//#include "MusicalSymbols.h"	// kMaxMusicalSymbolID and other constants definitions
 
 
 // --------------------------------------------------------------
@@ -110,7 +110,7 @@ class_export GSystemWin32GDIPlus : public VGSystem
 	protected:
 				//charset setup
 				void			SetupCharEncodingTable();
-		unsigned int			fSymbolTable [kMaxMusicalSymbolID];
+//		unsigned int			fSymbolTable [kMaxMusicalSymbolID];
 
 				// GDIPlus init
 		static  ULONG_PTR		mGdiplusToken;

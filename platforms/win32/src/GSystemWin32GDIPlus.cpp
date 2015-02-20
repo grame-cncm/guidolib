@@ -145,6 +145,7 @@ void GSystemWin32GDIPlus::SetPrinterDC(HDC printDC)
 // ----------------------------------------------------------------------------
 void GSystemWin32GDIPlus::SetupCharEncodingTable()
 {
+/*
 	// setup basic UNICODE characters
 	for(unsigned int i = 0; i <= 255; i++ )	
 		fSymbolTable[i] = i;
@@ -157,4 +158,5 @@ void GSystemWin32GDIPlus::SetupCharEncodingTable()
 	fSymbolTable[ 138 ]						= 104;	
 	fSymbolTable[ 145 ]						= 104;	
 	fSymbolTable[ 133 ]						= 180;	//double sharp
+*/
 }
