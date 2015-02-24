@@ -8,6 +8,7 @@ GUIDO Engine history
 - integration of GuidoLayoutSettings and GuidoPageFormat in classes. Global or static variables for this data structures are removed.
 - bug fixes : 
     - cairo device : problem on fill color.
+    - GDI device : remove unused character array mapping in GDI font class.
 
 ----------------------------------------------------------------
 2014-12-09  version 1.5.6
