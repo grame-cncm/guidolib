@@ -32,8 +32,6 @@ ULONG_PTR GSystemWin32GDIPlus::mGdiplusToken = 0;
 GSystemWin32GDIPlus::GSystemWin32GDIPlus( HDC dispDC, HDC printDC ) 
 					: mDispDC(dispDC), mPrintDC(printDC)													
 {
-	// set up the charset
-	SetupCharEncodingTable();  
 }
 
 // --------------------------------------------------------------
@@ -131,7 +129,7 @@ const VGFont* GSystemWin32GDIPlus::CreateVGFont( const char * faceName, int size
 
 //	Font* gdiFont = new Font(wFamily, (REAL)size, (FontStyle)style, UnitPixel);
 	Font* gdiFont = new Font(wFamily, (REAL)size, (FontStyle)style, UnitWorld);
-	GFontWin32GDIPlus * outFont = new GFontWin32GDIPlus( gdiFont, faceName, size, properties, /*fSymbolTable*/ 0 );	
+	GFontWin32GDIPlus * outFont = new GFontWin32GDIPlus( gdiFont, faceName, size, properties);	
 	free (wFamily);
 	return outFont;
 }
@@ -140,23 +138,4 @@ const VGFont* GSystemWin32GDIPlus::CreateVGFont( const char * faceName, int size
 void GSystemWin32GDIPlus::SetPrinterDC(HDC printDC)
 {
 	mPrintDC = printDC;	
-}
-
-// ----------------------------------------------------------------------------
-void GSystemWin32GDIPlus::SetupCharEncodingTable()
-{
-/*
-	// setup basic UNICODE characters
-	for(unsigned int i = 0; i <= 255; i++ )	
-		fSymbolTable[i] = i;
-
-	// specific symbols (not matching previous assignation)
-	fSymbolTable[ kDFlatSymbol ]			= 72;	//134
-	fSymbolTable[ kStemUp2Symbol ]			= 120;	//151
-	fSymbolTable[ kStemDown2Symbol ]		= 104;	//150
-	fSymbolTable[ kBarSymbol ]				= 101;	//139
-	fSymbolTable[ 138 ]						= 104;	
-	fSymbolTable[ 145 ]						= 104;	
-	fSymbolTable[ 133 ]						= 180;	//double sharp
-*/
 }

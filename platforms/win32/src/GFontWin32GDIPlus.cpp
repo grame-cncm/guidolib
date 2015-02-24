@@ -25,10 +25,9 @@
 
 // --------------------------------------------------------------
 GFontWin32GDIPlus::GFontWin32GDIPlus( Font* nativeFont, const char * faceName, 
-									  int size, int properties, 
-									  const unsigned int * charSet ) 
+									  int size, int properties) 
 						: mNativeFont(nativeFont), mName(faceName),
-						  mSize(size), mFontProp(properties), fSymbolTable(charSet)
+						  mSize(size), mFontProp(properties)
 {
 	DWORD count = (DWORD)mbstowcs(NULL, faceName, strlen(faceName));
 	WCHAR * wstr = (WCHAR*) malloc ((count + 1) * sizeof(WCHAR));

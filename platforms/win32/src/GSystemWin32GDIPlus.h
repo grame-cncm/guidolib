@@ -108,10 +108,6 @@ class_export GSystemWin32GDIPlus : public VGSystem
 		static void			ShutDown();
 
 	protected:
-				//charset setup
-				void			SetupCharEncodingTable();
-//		unsigned int			fSymbolTable [kMaxMusicalSymbolID];
-
 				// GDIPlus init
 		static  ULONG_PTR		mGdiplusToken;
 				HDC				mDispDC;
