@@ -30,6 +30,7 @@ all :
 	make $(TARGET)
 	make tools
 	make Qt
+	make jni
 
 #===============================================================
 # building the library on Mac OS X
@@ -154,6 +155,7 @@ clean :
 	make linuxclean
 	make -C ../src/tools/build clean
 	make -C ../environments/Qt clean
+	make -C ../lang/java/build clean
 
 tools :
 	make -C ../src/tools/build
@@ -163,3 +165,9 @@ tools :
 #===============================================================
 Qt :
 	make -C ../environments/Qt
+
+#===============================================================
+# building the jni library
+#===============================================================
+jni :
+	make -C ../lang/java/build

@@ -65,8 +65,8 @@ class_export GFontWin32GDIPlus : public VGFont
 		virtual	int				GetProperties() const	{ return mFontProp; }
 
 				Font*			GetNativeFont() const	{ return mNativeFont; } 
-		unsigned int			GetSymbol( unsigned int inSymbolID ) const
-									{ return fSymbolTable[ inSymbolID ] ; }
+		inline unsigned int			GetSymbol( unsigned int inSymbolID ) const
+									{ return inSymbolID; }
 
 		// - Musical symbol services -------------------------------------------
 		/// Computes the width and height of the input string using the current font

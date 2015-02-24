@@ -131,7 +131,7 @@ const VGFont* GSystemWin32GDIPlus::CreateVGFont( const char * faceName, int size
 
 //	Font* gdiFont = new Font(wFamily, (REAL)size, (FontStyle)style, UnitPixel);
 	Font* gdiFont = new Font(wFamily, (REAL)size, (FontStyle)style, UnitWorld);
-	GFontWin32GDIPlus * outFont = new GFontWin32GDIPlus( gdiFont, faceName, size, properties, fSymbolTable );	
+	GFontWin32GDIPlus * outFont = new GFontWin32GDIPlus( gdiFont, faceName, size, properties, /*fSymbolTable*/ 0 );	
 	free (wFamily);
 	return outFont;
 }
