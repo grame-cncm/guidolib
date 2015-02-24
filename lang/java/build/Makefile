@@ -172,3 +172,22 @@ jniGUIDOEngine64 : win64/guidojni.sln
 
 windowsclean :
 	rm -rf win32 win64
+	
+#===============================================================
+# building the tools on Mac OS X
+#===============================================================
+macos : macos/guidojni.xcodeproj guidojni.xcodeproj
+
+jniGUIDOEngine : macos/guidojni.xcodeproj
+	xcodebuild -jobs 8 -project macos/guidojni.xcodeproj -target ALL_BUILD -configuration Release
+
+macos/guidojni.xcodeproj : CMakeLists.txt
+	[ -d macos ] || mkdir macos
+	cd macos && cmake .. -G Xcode
+
+guidojni.xcodeproj : macos/guidojni.xcodeproj jniGUIDOEngine
+	rm -rf libjniGUIDOEngine*.dylib
+	cp macos/Release/libjniGUIDOEngine*.dylib .
+	
+macosclean :
+	rm -rf macos

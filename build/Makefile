@@ -126,8 +126,8 @@ winclean:
 linux : $(LINUX)/Makefile libGUIDOEngine.so
 
 libGUIDOEngine.so :  $(LINUX)/Makefile  $(LINUX)/libGUIDOEngine.so
-	rm -rf GUIDOEngine.so
-	cp -R $(LINUX)/libGUIDOEngine.so .
+	rm -rf GUIDOEngine*.so*
+	cp -R $(LINUX)/libGUIDOEngine*.so* .
 
 $(LINUX)/libGUIDOEngine.so : CMakeLists.txt
 	make -C $(LINUX)
