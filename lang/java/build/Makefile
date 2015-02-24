@@ -95,28 +95,6 @@ headers : $(JNI)
 %.class: %.java
 	cd .. && javac $(subst ../,,$<)
 
-##################################################################
-# platform specific utilities
-#win32 : GUIDOEngine.dll jniGUIDOEngine.dll
-#win64 : GUIDOEngine64.dll jniGUIDOEngine64.dll
-
-#GUIDOEngine.dll : ../cmake/release/GUIDOEngine.dll
-#	cp ../cmake/release/GUIDOEngine.dll .
-
-#jniGUIDOEngine.dll : cmake/release/jniGUIDOEngine.dll
-#	cp cmake/release/jniGUIDOEngine.dll .
-
-#GUIDOEngine64.dll : ../win64/release/GUIDOEngine64.dll
-#	cp ../win64/release/GUIDOEngine64.dll .
-
-#jniGUIDOEngine64.dll : win64/release/jniGUIDOEngine64.dll
-#	cp win64/release/jniGUIDOEngine64.dll .
-
-#macos: libjniGUIDOEngine.dylib
-
-#libjniGUIDOEngine.dylib : cmake/Release/libjniGUIDOEngine.dylib
-#	cp -f cmake/Release/libjniGUIDOEngine.dylib .
-
 #===============================================================
 # building the jni library on linux
 #===============================================================
