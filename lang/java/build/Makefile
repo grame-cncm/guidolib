@@ -4,6 +4,8 @@
 SRC        = $(wildcard ../guidoengine/*.java)
 SRCDRAWC   = $(wildcard ../drawcommand/*.java)
 CLASS      = $(patsubst %.java, %.class, $(SRC) )
+REMOVELIST = ../guidoengine/guidoscore.class ../guidoengine/guidopianoroll.class
+CLASSANDROID = $(filter-out $(REMOVELIST),$(CLASS))
 CLASSDRAWC = $(patsubst %.java, %.class, $(SRCDRAWC) )
 JNI        = $(addprefix ../jni/, $(subst /,_,$(patsubst ../guidoengine/%.java, guidoengine_%.h, $(SRC) )))
 
@@ -36,6 +38,7 @@ MSVC := C:\Program Files (x86)\Microsoft Visual Studio 10.0
 all :
 	make jar
 	make $(TARGET)
+	make jar-engine-android
 #	make headers
 
 help:
@@ -43,6 +46,7 @@ help:
 	@echo  Available targets are:
 	@echo "  class : to compile the jni java code"
 	@echo "  jar   : to build a jni jar file"
+	@echo "  jar-engine-android : to build guidoengine jar for android (without use of awt class)"
 	@echo "  doc   : to build the java documentation"
 	@echo "  headers : to make the native headers"
 	@echo "  guidoviewer : to compile and execute guido viewer"
@@ -53,9 +57,14 @@ class : $(CLASS) $(CLASSDRAWC)
 
 jar : guidoengine.jar drawcommand.jar
 
+jar-engine-android : guidoengine-android.jar
+	cd .. && jar cvf guidoengine-android.jar $(patsubst ../%, %, $(CLASSANDROID))
+
 # not use $(CLASS) or $(CLASSDRAWC), it not include inner class declaration
 guidoengine.jar : $(CLASS)
 	cd .. && jar cvf guidoengine.jar guidoengine/*.class
+
+guidoengine-android.jar : $(CLASSANDROID)
 
 drawcommand.jar : $(CLASSDRAWC)
 	cd .. && jar cvf drawcommand.jar drawcommand/*.class
@@ -70,7 +79,7 @@ factorysample : ../factorysample.class
 	cd .. && $(JAVA) -Djava.library.path=build factorysample 
 
 clean :
-	rm -f $(CLASS) ../*.class ../guidoengine/*.class ../drawcommand/*.class ../drawcommand.jar ../guidoengine.jar
+	rm -f $(CLASS) ../*.class ../guidoengine/*.class ../drawcommand/*.class ../drawcommand.jar ../guidoengine.jar ../guidoengine-android.jar
 	make $(TARGET)clean
 
 doc:

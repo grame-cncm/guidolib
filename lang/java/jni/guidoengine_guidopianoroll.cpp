@@ -12,6 +12,7 @@
 */
 
 #include "guidoengine_guidopianoroll.h"
+#include "guidoengine_guidopianorollbase.h"
 #include "guidoengine_bitmap_paint.h"
 
 #include "GUIDOPianoRoll.h"
@@ -49,11 +50,11 @@ LimitParams getLimitParams(JNIEnv * env, jobject limitParams) {
 }
 
 /*
- * Class:     guidoengine_guidopianoroll
+ * Class:     guidoengine_guidopianorollbase
  * Method:    AR2PianoRoll
  * Signature: (I)V
  */
-JNIEXPORT void JNICALL Java_guidoengine_guidopianoroll_AR2PianoRoll(JNIEnv *env, jobject obj, jint type)
+JNIEXPORT void JNICALL Java_guidoengine_guidopianorollbase_AR2PianoRoll(JNIEnv *env, jobject obj, jint type)
 {
 	ARHandler ar = (ARHandler)env->GetLongField (obj, gARHandlerPianoRollID);
 	PianoRollType enumtype = kSimplePianoRoll;
@@ -65,11 +66,11 @@ JNIEXPORT void JNICALL Java_guidoengine_guidopianoroll_AR2PianoRoll(JNIEnv *env,
 }
 
 /*
- * Class:     guidoengine_guidopianoroll
+ * Class:     guidoengine_guidopianorollbase
  * Method:    Midi2PianoRoll
  * Signature: (ILjava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_guidoengine_guidopianoroll_Midi2PianoRoll(JNIEnv *env, jobject obj, jint type, jstring filename)
+JNIEXPORT void JNICALL Java_guidoengine_guidopianorollbase_Midi2PianoRoll(JNIEnv *env, jobject obj, jint type, jstring filename)
 {
 	PianoRollType enumtype = kSimplePianoRoll;
 	if(type != 0) {
@@ -81,21 +82,21 @@ JNIEXPORT void JNICALL Java_guidoengine_guidopianoroll_Midi2PianoRoll(JNIEnv *en
 }
 
 /*
- * Class:     guidoengine_guidopianoroll
+ * Class:     guidoengine_guidopianorollbase
  * Method:    DestroyPianoRoll
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_DestroyPianoRoll(JNIEnv * env, jobject obj)
+JNIEXPORT jint JNICALL Java_guidoengine_guidopianorollbase_DestroyPianoRoll(JNIEnv * env, jobject obj)
 {
 	return GuidoDestroyPianoRoll((PianoRoll *)env->GetLongField(obj, gPianoRollID));
 }
 
 /*
- * Class:     guidoengine_guidopianoroll
+ * Class:     guidoengine_guidopianorollbase
  * Method:    SetLimits
  * Signature: (Lguidoengine/limitparams;)I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_SetLimits(JNIEnv *env, jobject obj, jobject limitparams)
+JNIEXPORT jint JNICALL Java_guidoengine_guidopianorollbase_SetLimits(JNIEnv *env, jobject obj, jobject limitparams)
 {
 	return GuidoPianoRollSetLimits(
 				(PianoRoll *)env->GetLongField(obj, gPianoRollID),
@@ -103,11 +104,11 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_SetLimits(JNIEnv *env, jo
 }
 
 /*
- * Class:     guidoengine_guidopianoroll
+ * Class:     guidoengine_guidopianorollbase
  * Method:    EnableKeyboard
  * Signature: (Z)I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_EnableKeyboard(JNIEnv *env, jobject obj, jboolean enabled)
+JNIEXPORT jint JNICALL Java_guidoengine_guidopianorollbase_EnableKeyboard(JNIEnv *env, jobject obj, jboolean enabled)
 {
 	return GuidoPianoRollEnableKeyboard(
 				(PianoRoll *)env->GetLongField(obj, gPianoRollID),
@@ -115,11 +116,11 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_EnableKeyboard(JNIEnv *en
 }
 
 /*
- * Class:     guidoengine_guidopianoroll
+ * Class:     guidoengine_guidopianorollbase
  * Method:    GetKeyboardWidth
  * Signature: (I)F
  */
-JNIEXPORT jfloat JNICALL Java_guidoengine_guidopianoroll_GetKeyboardWidth
+JNIEXPORT jfloat JNICALL Java_guidoengine_guidopianorollbase_GetKeyboardWidth
   (JNIEnv *env, jobject obj, jint height)
 {
 	float keyboardWidth;
@@ -134,11 +135,11 @@ JNIEXPORT jfloat JNICALL Java_guidoengine_guidopianoroll_GetKeyboardWidth
 }
 
 /*
- * Class:     guidoengine_guidopianoroll
+ * Class:     guidoengine_guidopianorollbase
  * Method:    EnableAutoVoicesColoration
  * Signature: (Z)I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_EnableAutoVoicesColoration
+JNIEXPORT jint JNICALL Java_guidoengine_guidopianorollbase_EnableAutoVoicesColoration
 	(JNIEnv *env, jobject obj, jboolean enabled)
 {
 	return GuidoPianoRollEnableAutoVoicesColoration(
@@ -147,11 +148,11 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_EnableAutoVoicesColoratio
 }
 
 /*
- * Class:     guidoengine_guidopianoroll
+ * Class:     guidoengine_guidopianorollbase
  * Method:    SetRGBColorToVoice
  * Signature: (IIIII)I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_SetRGBColorToVoice
+JNIEXPORT jint JNICALL Java_guidoengine_guidopianorollbase_SetRGBColorToVoice
 	(JNIEnv *env, jobject obj, jint voiceNum, jint r, jint g, jint b, jint a)
 {
 	return GuidoPianoRollSetRGBColorToVoice(
@@ -161,11 +162,11 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_SetRGBColorToVoice
 }
 
 /*
- * Class:     guidoengine_guidopianoroll
+ * Class:     guidoengine_guidopianorollbase
  * Method:    SetHtmlColorToVoice
  * Signature: (IJ)I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_SetHtmlColorToVoice
+JNIEXPORT jint JNICALL Java_guidoengine_guidopianorollbase_SetHtmlColorToVoice
 	(JNIEnv *env, jobject obj, jint voiceNum, jlong htmlColor)
 {
 	return GuidoPianoRollSetHtmlColorToVoice(
@@ -175,11 +176,11 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_SetHtmlColorToVoice
 }
 
 /*
- * Class:     guidoengine_guidopianoroll
+ * Class:     guidoengine_guidopianorollbase
  * Method:    EnableMeasureBars
  * Signature: (Z)I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_EnableMeasureBars
+JNIEXPORT jint JNICALL Java_guidoengine_guidopianorollbase_EnableMeasureBars
   (JNIEnv *env, jobject obj, jboolean enabled)
 {
 	return GuidoPianoRollEnableMeasureBars(
@@ -188,11 +189,11 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_EnableMeasureBars
 }
 
 /*
- * Class:     guidoengine_guidopianoroll
+ * Class:     guidoengine_guidopianorollbase
  * Method:    SetPitchLinesDisplayMode
  * Signature: (I)I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_SetPitchLinesDisplayMode
+JNIEXPORT jint JNICALL Java_guidoengine_guidopianorollbase_SetPitchLinesDisplayMode
   (JNIEnv *env, jobject obj, jint mode)
 {
 	return GuidoPianoRollSetPitchLinesDisplayMode(
@@ -201,11 +202,11 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_SetPitchLinesDisplayMode
 }
 
 /*
- * Class:     guidoengine_guidopianoroll
+ * Class:     guidoengine_guidopianorollbase
  * Method:    GetMap
  * Signature: (IILguidoengine/guidoscoremap;)I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_GetMap
+JNIEXPORT jint JNICALL Java_guidoengine_guidopianorollbase_GetMap
   (JNIEnv *env, jobject obj, jint width, jint height, jobject timemap)
 {
 	Time2GraphicMap * mapPtr = getMap(env, timemap);
@@ -234,11 +235,11 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_GetBitmap
 }
 
 /*
- * Class:     guidoengine_guidopianoroll
+ * Class:     guidoengine_guidopianorollbase
  * Method:    Init
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_guidoengine_guidopianoroll_Init(JNIEnv *env , jclass cls)
+JNIEXPORT void JNICALL Java_guidoengine_guidopianorollbase_Init(JNIEnv *env , jclass cls)
 {
 	if (!getID (env, cls, gPianoRollID, "fPianoRoll", "J")) return;
 	if (!getID (env, cls, gARHandlerPianoRollID, "fARHandler", "J")) return;
