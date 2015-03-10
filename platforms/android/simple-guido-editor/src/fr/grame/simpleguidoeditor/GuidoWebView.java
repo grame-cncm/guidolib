@@ -1,7 +1,7 @@
 package fr.grame.simpleguidoeditor;
 
 import guidoengine.guido;
-import guidoengine.guidoscore;
+import guidoengine.guidoscorebase;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.webkit.WebView;
@@ -23,7 +23,7 @@ public class GuidoWebView extends WebView {
 	 * @return the svg code.
 	 */
 	private static String gmnToSvg(String gmn) {
-		guidoscore gmnscore = new guidoscore();
+		guidoscorebase gmnscore = new guidoscorebase();
 		// Create an Abstract representation with gmn code
 		gmnscore.OpenParser();
 		int err = gmnscore.String2AR(gmn);
