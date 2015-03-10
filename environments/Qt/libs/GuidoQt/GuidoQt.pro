@@ -16,6 +16,11 @@ ios {
 	CONFIG+= arm64 armv7 armv7s
 }
 
+android {
+        TARGET = GuidoQt-android
+        LIBS += -L$$PWD/$$ROOT/platforms/android/guido-engine-android/libs/armeabi -lGUIDOEngine
+}
+
 INCLUDEPATH += $$ROOT/src/engine/include 
 INCLUDEPATH += $$PWD/include
 
@@ -26,7 +31,7 @@ SOURCES += *.cpp
 
 # Library setting
 TEMPLATE = lib
-CONFIG += staticlib
+!android:CONFIG += staticlib
 
 DESTDIR = $$PWD/..
 MOC_DIR = tmpSrc
