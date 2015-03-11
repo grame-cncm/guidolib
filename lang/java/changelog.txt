@@ -5,8 +5,8 @@ version 1.2.2 - Jan. 08 2015
 - Add new guido engine API (Guido Score, Guido Piano Roll)
 - Add deprecated marker on old API.
 - Update guidoviewer to use new API.
-- Separation in two java package: guidoengine.jar to drive the engine 
-  and drawcommand.jar to parse binary export and draw it
+- Separation in two java package (guidoengine.jar to drive the engine and drawcommand.jar to parse binary export and draw it)
+- Add jni library to global make strategy.
 
 ----------------------------------------------------------------
 version 1.2.1 - 

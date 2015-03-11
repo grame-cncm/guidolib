@@ -56,8 +56,7 @@ class_export GFontWin32GDIPlus : public VGFont
 {
 	public:
 								GFontWin32GDIPlus(	Font* nativeFont, const char* faceName, 
-													int size, int properties,
-													const unsigned int * charSet );
+													int size, int properties );
 								virtual	~GFontWin32GDIPlus();
 
 		virtual	const char*		GetName() const			{ return mName.c_str(); }
@@ -65,8 +64,8 @@ class_export GFontWin32GDIPlus : public VGFont
 		virtual	int				GetProperties() const	{ return mFontProp; }
 
 				Font*			GetNativeFont() const	{ return mNativeFont; } 
-		unsigned int			GetSymbol( unsigned int inSymbolID ) const
-									{ return fSymbolTable[ inSymbolID ] ; }
+		inline unsigned int			GetSymbol( unsigned int inSymbolID ) const
+									{ return inSymbolID; }
 
 		// - Musical symbol services -------------------------------------------
 		/// Computes the width and height of the input string using the current font
@@ -86,8 +85,6 @@ class_export GFontWin32GDIPlus : public VGFont
 				std::string		mName;
 				int				mSize;
 				int				mFontProp;
-
-		const unsigned int *	fSymbolTable;
 };
 
 

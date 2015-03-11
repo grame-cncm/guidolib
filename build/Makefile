@@ -30,6 +30,7 @@ all :
 	make $(TARGET)
 	make tools
 	make Qt
+	make jni
 
 #===============================================================
 # building the library on Mac OS X
@@ -125,8 +126,8 @@ winclean:
 linux : $(LINUX)/Makefile libGUIDOEngine.so
 
 libGUIDOEngine.so :  $(LINUX)/Makefile  $(LINUX)/libGUIDOEngine.so
-	rm -rf GUIDOEngine.so
-	cp -R $(LINUX)/libGUIDOEngine.so .
+	rm -rf GUIDOEngine*.so*
+	cp -R $(LINUX)/libGUIDOEngine*.so* .
 
 $(LINUX)/libGUIDOEngine.so : CMakeLists.txt
 	make -C $(LINUX)
@@ -154,6 +155,7 @@ clean :
 	make linuxclean
 	make -C ../src/tools/build clean
 	make -C ../environments/Qt clean
+	make -C ../lang/java/build clean
 
 tools :
 	make -C ../src/tools/build
@@ -163,3 +165,9 @@ tools :
 #===============================================================
 Qt :
 	make -C ../environments/Qt
+
+#===============================================================
+# building the jni library
+#===============================================================
+jni :
+	make -C ../lang/java/build
