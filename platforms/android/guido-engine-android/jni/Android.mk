@@ -1,31 +1,18 @@
-#### Prebuilt static library ####
+#### Shared library for Guido engine ####
 
 LOCAL_PATH := $(call my-dir)
+SRC := $(LOCAL_PATH)/../../../../src/engine
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := GUIDOEngine-prebuilt
+LOCAL_MODULE := GUIDOEngine
 
-LOCAL_SRC_FILES 	:= $(addprefix ../, $(wildcard ../../../src/engine/*/*.cpp))
-LOCAL_EXPORT_C_INCLUDES := $(addprefix $(LOCAL_PATH)/../../../../src/engine/, include devices lib)
-LOCAL_C_INCLUDES 	:= $(wildcard $(LOCAL_PATH)/../../../../src/engine/*)
-LOCAL_CPPFLAGS		:= -Dandroid -frtti -DINDEPENDENTSVG
-
-include $(BUILD_STATIC_LIBRARY)
-
-
-
-#### Shared library ####
-
-include $(CLEAR_VARS)
-LOCAL_MODULE := GUIDOEngine-android
-
-LOCAL_SRC_FILES 	:= $(addprefix ../, $(wildcard ../../../lang/java/jni/*.cpp))
-LOCAL_SRC_FILES 	+= $(addprefix ../, $(wildcard ../../../lang/java/jni/svg/*.cpp))
-LOCAL_C_INCLUDES 	:= $(wildcard ../../../lang/java/jni/*)
-LOCAL_C_INCLUDES 	+= $(wildcard ../../../lang/java/jni/svg/*)
-LOCAL_CPPFLAGS 		:= -Dandroid
-
-LOCAL_STATIC_LIBRARIES = GUIDOEngine-prebuilt
+# SRC var is a trick to use wildcard in android.mk
+# if no wildcard, you have better to use relative path, conforming to android doc 
+LOCAL_SRC_FILES         := $(subst $(LOCAL_PATH)/,,$(wildcard $(SRC)/*/*.cpp))
+LOCAL_EXPORT_C_INCLUDES := $(addprefix $(SRC)/, include devices lib))
+LOCAL_C_INCLUDES        := $(subst $(LOCAL_PATH)/../,,$(wildcard $(SRC)/*/))
+LOCAL_CPPFLAGS          := -Dandroid -frtti -DINDEPENDENTSVG
 
 include $(BUILD_SHARED_LIBRARY)
+

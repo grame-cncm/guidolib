@@ -18,8 +18,8 @@
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-
 #include "guidoengine_guidoscore.h"
+#include "guidoengine_guidoscorebase.h"
 #include "guidoengine_bitmap_paint.h"
 
 #define MIDIEXPORT
@@ -66,7 +66,7 @@ extern jfieldID gDFactorID, gStaccatoFactorID, gSlurFactorID, gTenutoFactorID, g
 extern jfieldID gVoice2ChanID;
 
 // --------------------------------------------------------------------------------------------
-// methods imported from guidoengine_guidoscoremap.cpp
+// methods imported from guidoengine_guidoscorebasemap.cpp
 Time2GraphicMap* getMap (JNIEnv * env, jobject obj);
 
 
@@ -131,11 +131,11 @@ static GPaintStruct getPaintStruct (JNIEnv * env, jobject jpaint)
 // --------------------------------------------------------------------------------------------
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    Init
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_guidoengine_guidoscore_Init (JNIEnv * env, jclass cls)
+JNIEXPORT void JNICALL Java_guidoengine_guidoscorebase_Init (JNIEnv * env, jclass cls)
 {
 	if (!getID (env, cls, gARHandlerID, "fARHandler", "J")) return;
 	if (!getID (env, cls, gGRHandlerID, "fGRHandler", "J")) return;
@@ -144,11 +144,11 @@ JNIEXPORT void JNICALL Java_guidoengine_guidoscore_Init (JNIEnv * env, jclass cl
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    ParseFile
  * Signature: (Ljava/lang/String;)I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_ParseFile (JNIEnv *env, jobject obj, jstring file)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_ParseFile (JNIEnv *env, jobject obj, jstring file)
 {
 	ARHandler ar;
 	const char *str  = env->GetStringUTFChars(file, JNI_FALSE);
@@ -163,11 +163,11 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_ParseFile (JNIEnv *env, jobje
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    ParseString
  * Signature: (Ljava/lang/String;)I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_ParseString (JNIEnv * env, jobject obj, jstring gmn)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_ParseString (JNIEnv * env, jobject obj, jstring gmn)
 {
 	ARHandler ar;
 	const char *str  = env->GetStringUTFChars(gmn, JNI_FALSE);
@@ -182,11 +182,11 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_ParseString (JNIEnv * env, jo
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    AR2GR
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_AR2GR__  (JNIEnv * env, jobject obj)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_AR2GR__  (JNIEnv * env, jobject obj)
 {
 	ARHandler ar = (ARHandler)env->GetLongField (obj, gARHandlerID);
 	GRHandler gr;
@@ -198,11 +198,11 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_AR2GR__  (JNIEnv * env, jobje
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    AR2GR
  * Signature: (Lguidoengine/guidolayout;)I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_AR2GR__Lguidoengine_guidolayout_2 (JNIEnv * env, jobject obj, jobject jlayout)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_AR2GR__Lguidoengine_guidolayout_2 (JNIEnv * env, jobject obj, jobject jlayout)
 {
 	ARHandler ar = (ARHandler)env->GetLongField (obj, gARHandlerID);
 	GRHandler gr;
@@ -215,11 +215,11 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_AR2GR__Lguidoengine_guidolayo
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    AR2MIDIFile
  * Signature: (Ljava/lang/String;Lguidoengine/guido2midiparams;)I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_AR2MIDIFile (JNIEnv * env, jobject obj, jstring file, jobject jparams)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_AR2MIDIFile (JNIEnv * env, jobject obj, jstring file, jobject jparams)
 {
 	ARHandler ar = (ARHandler)env->GetLongField (obj, gARHandlerID);
 	GuidoErrCode err = guidoErrInvalidHandle;
@@ -253,11 +253,11 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_AR2MIDIFile (JNIEnv * env, jo
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    AbstractExport
  * Signature: (I)Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_guidoengine_guidoscore_AbstractExport
+JNIEXPORT jstring JNICALL Java_guidoengine_guidoscorebase_AbstractExport
   (JNIEnv *env, jobject obj, jint page)
 {
 	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
@@ -274,11 +274,11 @@ JNIEXPORT jstring JNICALL Java_guidoengine_guidoscore_AbstractExport
 
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    BinaryExport
  * Signature: (ILjava/lang/String;)Ljava/lang/String;
  */
-JNIEXPORT jbyteArray JNICALL Java_guidoengine_guidoscore_BinaryExport (JNIEnv * env, jobject obj, jint page)
+JNIEXPORT jbyteArray JNICALL Java_guidoengine_guidoscorebase_BinaryExport (JNIEnv * env, jobject obj, jint page)
 {
 	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
 	std::stringstream sstr;
@@ -299,11 +299,11 @@ JNIEXPORT jbyteArray JNICALL Java_guidoengine_guidoscore_BinaryExport (JNIEnv * 
 	return env->NewByteArray(0);
 }
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    GR2SVG
  * Signature: (IZLjava/lang/String;I)Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_guidoengine_guidoscore_GR2SVG
+JNIEXPORT jstring JNICALL Java_guidoengine_guidoscorebase_GR2SVG
   (JNIEnv *env, jobject obj, jint page, jboolean embedFont, jstring font, jint mappingMode)
 {
 	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
@@ -324,11 +324,11 @@ JNIEXPORT jstring JNICALL Java_guidoengine_guidoscore_GR2SVG
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    SVGExport
  * Signature: (ILjava/lang/String;)Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_guidoengine_guidoscore_SVGExport (JNIEnv * env, jobject obj, jint page, jstring font)
+JNIEXPORT jstring JNICALL Java_guidoengine_guidoscorebase_SVGExport (JNIEnv * env, jobject obj, jint page, jstring font)
 {
 	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
 	std::stringstream sstr;
@@ -345,11 +345,11 @@ JNIEXPORT jstring JNICALL Java_guidoengine_guidoscore_SVGExport (JNIEnv * env, j
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    SVGExportWithFontSpec
  * Signature: (ILjava/lang/String;)Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_guidoengine_guidoscore_SVGExportWithFontSpec (JNIEnv * env, jobject obj, jint page, jstring font, jstring fontspec)
+JNIEXPORT jstring JNICALL Java_guidoengine_guidoscorebase_SVGExportWithFontSpec (JNIEnv * env, jobject obj, jint page, jstring font, jstring fontspec)
 {
 	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
 	std::stringstream sstr;
@@ -366,22 +366,22 @@ JNIEXPORT jstring JNICALL Java_guidoengine_guidoscore_SVGExportWithFontSpec (JNI
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    UpdateGR
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_UpdateGR__ (JNIEnv * env, jobject obj)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_UpdateGR__ (JNIEnv * env, jobject obj)
 {
 	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
 	return GuidoUpdateGR (gr, 0);
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    UpdateGR
  * Signature: (Lguidoengine/guidolayout;)I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_UpdateGR__Lguidoengine_guidolayout_2 (JNIEnv *env, jobject obj, jobject jlayout)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_UpdateGR__Lguidoengine_guidolayout_2 (JNIEnv *env, jobject obj, jobject jlayout)
 {
 	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
 	GuidoLayoutSettings settings = getLayout (env, jlayout);
@@ -389,22 +389,22 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_UpdateGR__Lguidoengine_guidol
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    ResizePageToMusic
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_ResizePageToMusic (JNIEnv * env, jobject obj)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_ResizePageToMusic (JNIEnv * env, jobject obj)
 {
 	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
 	return GuidoResizePageToMusic (gr);
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    FreeAR
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_guidoengine_guidoscore_FreeAR (JNIEnv * env, jobject obj)
+JNIEXPORT void JNICALL Java_guidoengine_guidoscorebase_FreeAR (JNIEnv * env, jobject obj)
 {
 	ARHandler ar = (ARHandler)env->GetLongField (obj, gARHandlerID);
 	if (ar) {
@@ -414,11 +414,11 @@ JNIEXPORT void JNICALL Java_guidoengine_guidoscore_FreeAR (JNIEnv * env, jobject
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    FreeGR
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_guidoengine_guidoscore_FreeGR (JNIEnv * env, jobject obj)
+JNIEXPORT void JNICALL Java_guidoengine_guidoscorebase_FreeGR (JNIEnv * env, jobject obj)
 {
 	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
 	if (gr) {
@@ -428,56 +428,31 @@ JNIEXPORT void JNICALL Java_guidoengine_guidoscore_FreeGR (JNIEnv * env, jobject
 }
 
 /*
- * Class:     guidoengine_guidoscore
- * Method:    getBitmap
- * Signature: ([ILguidoengine/guidodrawdesc;Lguidoengine/guidopaint;)I
- */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetBitmap (JNIEnv * env, jobject obj, jintArray bitmapArray, jint w, jint h, jobject jdesc, jobject jpaint, jobject jcolor)
-{
-	GuidoOnDrawDesc desc;
-	desc.handle		= (GRHandler)env->GetLongField (obj, gGRHandlerID);
-	desc.page		= env->GetIntField (jdesc, gPageID);
-	desc.scrollx	= env->GetIntField (jdesc, gscrollxID);
-	desc.scrolly	= env->GetIntField (jdesc, gscrollyID);
-	desc.sizex		= env->GetIntField (jdesc, gsizexID);
-	desc.sizey		= env->GetIntField (jdesc, gsizeyID);
-	desc.isprint	= env->GetBooleanField (jdesc, gisprintID);
-	desc.updateRegion = getPaintStruct (env, jpaint);
-
-	jint *dstBitmap = env->GetIntArrayElements(bitmapArray, 0);
-	if (dstBitmap == 0) return guidoErrInvalidHandle;
-
-	int result = getBitmap (dstBitmap, w, h, desc, jcolor2VGColor(env,jcolor));
-	env->ReleaseIntArrayElements(bitmapArray, dstBitmap, 0);
-	return result;
-}
-
-/*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    DrawBoundingBoxes
  * Signature: (I)V
  */
-JNIEXPORT void JNICALL Java_guidoengine_guidoscore_DrawBoundingBoxes (JNIEnv *, jobject, jint bbmap)
+JNIEXPORT void JNICALL Java_guidoengine_guidoscorebase_DrawBoundingBoxes (JNIEnv *, jobject, jint bbmap)
 {
 	GuidoDrawBoundingBoxes (bbmap);
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    GetDrawBoundingBoxes
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetDrawBoundingBoxes (JNIEnv *, jobject)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_GetDrawBoundingBoxes (JNIEnv *, jobject)
 {
 	return GuidoGetDrawBoundingBoxes();
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    GetPageFormat
  * Signature: (ILguidoengine/guidopageformat;)V
  */
-JNIEXPORT void JNICALL Java_guidoengine_guidoscore_GetPageFormat (JNIEnv * env, jobject obj, jint pagenum, jobject jformat)
+JNIEXPORT void JNICALL Java_guidoengine_guidoscorebase_GetPageFormat (JNIEnv * env, jobject obj, jint pagenum, jobject jformat)
 {
 	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
 	GuidoPageFormat format;
@@ -486,11 +461,11 @@ JNIEXPORT void JNICALL Java_guidoengine_guidoscore_GetPageFormat (JNIEnv * env, 
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    MarkVoice
  * Signature: (ILguidoengine/guidodate;Lguidoengine/guidodate;III)I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_MarkVoice (JNIEnv * env, jobject obj, jint voicenum, 
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_MarkVoice (JNIEnv * env, jobject obj, jint voicenum, 
 	jobject jdate, jobject jduration, jint red, jint green, jint blue)
 {
 	ARHandler ar = (ARHandler)env->GetLongField (obj, gARHandlerID);
@@ -501,22 +476,22 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_MarkVoice (JNIEnv * env, jobj
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    GetPageCount
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetPageCount (JNIEnv * env, jobject obj)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_GetPageCount (JNIEnv * env, jobject obj)
 {
 	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
 	return GuidoGetPageCount( gr );
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    GetSystemCount
  * Signature: (I)I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetSystemCount(JNIEnv * env, jobject obj, jint page)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_GetSystemCount(JNIEnv * env, jobject obj, jint page)
 {
 	return GuidoGetSystemCount(
 				(GRHandler)env->GetLongField(obj, gGRHandlerID),
@@ -524,22 +499,22 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetSystemCount(JNIEnv * env, 
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    CountVoices
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_CountVoices (JNIEnv * env, jobject obj)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_CountVoices (JNIEnv * env, jobject obj)
 {
 	ARHandler ar = (ARHandler)env->GetLongField (obj, gARHandlerID);
 	return GuidoCountVoices (ar);
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    GetDuration
  * Signature: (Lguidoengine/guidodate;)I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetDuration (JNIEnv * env, jobject obj, jobject jduration)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_GetDuration (JNIEnv * env, jobject obj, jobject jduration)
 {
 	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
 	GuidoDate date;
@@ -550,11 +525,11 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetDuration (JNIEnv * env, jo
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    GetPageDate
  * Signature: (ILguidoengine/guidodate;)I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetPageDate (JNIEnv * env, jobject obj, jint pagenum, jobject jdate)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_GetPageDate (JNIEnv * env, jobject obj, jint pagenum, jobject jdate)
 {
 	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
 	GuidoDate date;
@@ -565,11 +540,11 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetPageDate (JNIEnv * env, jo
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    FindEventPage
  * Signature: (Lguidoengine/guidodate;)I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_FindEventPage (JNIEnv * env, jobject obj, jobject jdate)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_FindEventPage (JNIEnv * env, jobject obj, jobject jdate)
 {
 	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
 	GuidoDate date = getDate (env, jdate);
@@ -577,11 +552,11 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_FindEventPage (JNIEnv * env, 
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    FindPageAt
  * Signature: (Lguidoengine/guidodate;)I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_FindPageAt (JNIEnv * env, jobject obj, jobject jdate)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_FindPageAt (JNIEnv * env, jobject obj, jobject jdate)
 {
 	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
 	GuidoDate date = getDate (env, jdate);
@@ -589,11 +564,11 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_FindPageAt (JNIEnv * env, job
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    GetMap
  * Signature: (IFFLguidoengine/guidoscoremap/selector;Lguidoengine/mapcollector;)I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetMap (JNIEnv * env, jobject obj, jint pagenum, 
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_GetMap (JNIEnv * env, jobject obj, jint pagenum, 
 		jfloat width, jfloat height, jint jsel, jobject jcollector)
 {
 	JavaMapCollector collector (env, jcollector);
@@ -603,11 +578,11 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetMap (JNIEnv * env, jobject
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    GetTimeMap
  * Signature: (Lguidoengine/timemapcollector;)I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetTimeMap (JNIEnv * env, jobject obj, jobject jcollector)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_GetTimeMap (JNIEnv * env, jobject obj, jobject jcollector)
 {
 	JavaTimeMapCollector collector (env, jcollector);
 	ARHandler ar = (ARHandler)env->GetLongField (obj, gARHandlerID);
@@ -619,11 +594,11 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetTimeMap (JNIEnv * env, job
 // adjusted mappings methods - new in guido lib 1.47 and in guido java 1.20
 // -------------------------------------------------------------------------
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    GetPageMap
  * Signature: (IFFLguidoengine/guidoscoremap;)I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetPageMap (JNIEnv * env, jobject obj, jint page, jfloat w, jfloat h, jobject map)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_GetPageMap (JNIEnv * env, jobject obj, jint page, jfloat w, jfloat h, jobject map)
 {
 	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
 	Time2GraphicMap * mapPtr = getMap(env, map);
@@ -631,11 +606,11 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetPageMap (JNIEnv * env, job
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    GetStaffMap
  * Signature: (IFFILguidoengine/guidoscoremap;)I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetStaffMap (JNIEnv * env, jobject obj, jint page, jfloat w, jfloat h, jint staff, jobject map)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_GetStaffMap (JNIEnv * env, jobject obj, jint page, jfloat w, jfloat h, jint staff, jobject map)
 {
 	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
 	Time2GraphicMap * mapPtr = getMap(env, map);
@@ -643,11 +618,11 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetStaffMap (JNIEnv * env, jo
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    GetVoiceMap
  * Signature: (IFFILguidoengine/guidoscoremap;)I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetVoiceMap (JNIEnv * env, jobject obj, jint page, jfloat w, jfloat h, jint voice, jobject map)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_GetVoiceMap (JNIEnv * env, jobject obj, jint page, jfloat w, jfloat h, jint voice, jobject map)
 {
 	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
 	Time2GraphicMap * mapPtr = getMap(env, map);
@@ -655,11 +630,11 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetVoiceMap (JNIEnv * env, jo
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    GetSystemMap
  * Signature: (IFFLguidoengine/guidoscoremap;)I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetSystemMap (JNIEnv * env, jobject obj, jint page, jfloat w, jfloat h, jobject map)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_GetSystemMap (JNIEnv * env, jobject obj, jint page, jfloat w, jfloat h, jobject map)
 {
 	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
 	Time2GraphicMap * mapPtr = getMap(env, map);
@@ -667,22 +642,22 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetSystemMap (JNIEnv * env, j
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    OpenParser
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_guidoengine_guidoscore_OpenParser(JNIEnv *env, jobject obj)
+JNIEXPORT void JNICALL Java_guidoengine_guidoscorebase_OpenParser(JNIEnv *env, jobject obj)
 {
 	GuidoParser * p = GuidoOpenParser();
 	env->SetLongField (obj, gGuidoParserID, (long)p);
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    CloseParser
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_CloseParser(JNIEnv *env, jobject obj)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_CloseParser(JNIEnv *env, jobject obj)
 {
 	GuidoParser * gr = (GuidoParser*)env->GetLongField (obj, gGuidoParserID);
 	GuidoErrCode err = GuidoCloseParser(gr);
@@ -691,11 +666,11 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_CloseParser(JNIEnv *env, jobj
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    GetStream
  * Signature: ()Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_guidoengine_guidoscore_GetStream(JNIEnv *env, jobject obj)
+JNIEXPORT jstring JNICALL Java_guidoengine_guidoscorebase_GetStream(JNIEnv *env, jobject obj)
 {
 	GuidoStream* stream = (GuidoStream*)env->GetLongField (obj, gGuidoStreamID);
 	const char * content = GuidoGetStream(stream);
@@ -703,11 +678,11 @@ JNIEXPORT jstring JNICALL Java_guidoengine_guidoscore_GetStream(JNIEnv *env, job
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    File2AR
  * Signature: (Ljava/lang/String;)V
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_File2AR(JNIEnv *env, jobject obj, jstring file)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_File2AR(JNIEnv *env, jobject obj, jstring file)
 {
 	ARHandler ar = GuidoFile2AR(
 			(GuidoParser *)env->GetLongField (obj, gGuidoParserID),
@@ -720,11 +695,11 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_File2AR(JNIEnv *env, jobject 
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    String2AR
  * Signature: (Ljava/lang/String;)V
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_String2AR(JNIEnv *env, jobject obj, jstring gnmCode)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_String2AR(JNIEnv *env, jobject obj, jstring gnmCode)
 {
 	ARHandler ar = GuidoString2AR(
 			(GuidoParser *)env->GetLongField (obj, gGuidoParserID),
@@ -737,11 +712,11 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_String2AR(JNIEnv *env, jobjec
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    Stream2AR
  * Signature: ()V
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_Stream2AR(JNIEnv *env, jobject obj)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_Stream2AR(JNIEnv *env, jobject obj)
 {
 	ARHandler ar = GuidoStream2AR(
 			(GuidoParser *)env->GetLongField (obj, gGuidoParserID),
@@ -754,11 +729,11 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_Stream2AR(JNIEnv *env, jobjec
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    ParserGetErrorCode
  * Signature: ()Lguidoengine/parserError;
  */
-JNIEXPORT jobject JNICALL Java_guidoengine_guidoscore_ParserGetErrorCode(JNIEnv *env, jobject obj)
+JNIEXPORT jobject JNICALL Java_guidoengine_guidoscorebase_ParserGetErrorCode(JNIEnv *env, jobject obj)
 {
 	int line;
 	int col;
@@ -778,22 +753,22 @@ JNIEXPORT jobject JNICALL Java_guidoengine_guidoscore_ParserGetErrorCode(JNIEnv 
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    OpenStream
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_guidoengine_guidoscore_OpenStream(JNIEnv *env, jobject obj)
+JNIEXPORT void JNICALL Java_guidoengine_guidoscorebase_OpenStream(JNIEnv *env, jobject obj)
 {
 	GuidoStream *stream = GuidoOpenStream();
 	env->SetLongField(obj, gGuidoStreamID, (long)stream);
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    CloseStream
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_CloseStream(JNIEnv *env, jobject obj)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_CloseStream(JNIEnv *env, jobject obj)
 {
 	GuidoStream *stream = (GuidoStream *)env->GetLongField (obj, gGuidoStreamID);
 	GuidoErrCode err = GuidoCloseStream(stream);
@@ -802,11 +777,11 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_CloseStream(JNIEnv *env, jobj
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    WriteStream
  * Signature: (Ljava/lang/String;)V
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_WriteStream(JNIEnv *env, jobject obj, jstring gnmCode)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_WriteStream(JNIEnv *env, jobject obj, jstring gnmCode)
 {
 	return GuidoWriteStream(
 			(GuidoStream *)env->GetLongField (obj, gGuidoStreamID),
@@ -814,11 +789,36 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_WriteStream(JNIEnv *env, jobj
 }
 
 /*
- * Class:     guidoengine_guidoscore
+ * Class:     guidoengine_guidoscorebase
  * Method:    ResetStream
  * Signature: ()V
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_ResetStream(JNIEnv *env, jobject obj)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_ResetStream(JNIEnv *env, jobject obj)
 {
 	return GuidoResetStream((GuidoStream *) env->GetLongField (obj, gGuidoStreamID));
+}
+
+/*
+ * Class:     guidoengine_guidoscore
+ * Method:    GetBitmap
+ * Signature: ([IIILguidoengine/guidodrawdesc;Lguidoengine/guidopaint;Ljava/awt/Color;)I
+ */
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscore_GetBitmap (JNIEnv * env, jobject obj, jintArray bitmapArray, jint w, jint h, jobject jdesc, jobject jpaint, jobject jcolor)
+{
+	GuidoOnDrawDesc desc;
+	desc.handle		= (GRHandler)env->GetLongField (obj, gGRHandlerID);
+	desc.page		= env->GetIntField (jdesc, gPageID);
+	desc.scrollx	= env->GetIntField (jdesc, gscrollxID);
+	desc.scrolly	= env->GetIntField (jdesc, gscrollyID);
+	desc.sizex		= env->GetIntField (jdesc, gsizexID);
+	desc.sizey		= env->GetIntField (jdesc, gsizeyID);
+	desc.isprint	= env->GetBooleanField (jdesc, gisprintID);
+	desc.updateRegion = getPaintStruct (env, jpaint);
+
+	jint *dstBitmap = env->GetIntArrayElements(bitmapArray, 0);
+	if (dstBitmap == 0) return guidoErrInvalidHandle;
+
+	int result = getBitmap (dstBitmap, w, h, desc, jcolor2VGColor(env,jcolor));
+	env->ReleaseIntArrayElements(bitmapArray, dstBitmap, 0);
+	return result;
 }

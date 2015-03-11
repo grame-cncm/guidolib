@@ -2,7 +2,7 @@ package fr.grame.android.drawcommand;
 
 import guidoengine.guido;
 import guidoengine.guidobinaryparser;
-import guidoengine.guidoscore;
+import guidoengine.guidoscorebase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,7 +122,7 @@ public class GuidoCanvasView extends View {
 	 * @return binary export
 	 */
 	private static byte[] gmnToBinary(String gmn) {
-		guidoscore gmnscore = new guidoscore();
+		guidoscorebase gmnscore = new guidoscorebase();
 		gmnscore.OpenParser();
 		int err = gmnscore.String2AR(gmn);
 		gmnscore.CloseParser();

@@ -41,115 +41,11 @@ extern "C" {
 #define guidoengine_guidopianoroll_kTrajectoryPianoRoll 1L
 /*
  * Class:     guidoengine_guidopianoroll
- * Method:    AR2PianoRoll
- * Signature: (I)V
- */
-JNIEXPORT void JNICALL Java_guidoengine_guidopianoroll_AR2PianoRoll
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     guidoengine_guidopianoroll
- * Method:    Midi2PianoRoll
- * Signature: (ILjava/lang/String;)V
- */
-JNIEXPORT void JNICALL Java_guidoengine_guidopianoroll_Midi2PianoRoll
-  (JNIEnv *, jobject, jint, jstring);
-
-/*
- * Class:     guidoengine_guidopianoroll
- * Method:    DestroyPianoRoll
- * Signature: ()I
- */
-JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_DestroyPianoRoll
-  (JNIEnv *, jobject);
-
-/*
- * Class:     guidoengine_guidopianoroll
- * Method:    SetLimits
- * Signature: (Lguidoengine/limitparams;)I
- */
-JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_SetLimits
-  (JNIEnv *, jobject, jobject);
-
-/*
- * Class:     guidoengine_guidopianoroll
- * Method:    EnableKeyboard
- * Signature: (Z)I
- */
-JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_EnableKeyboard
-  (JNIEnv *, jobject, jboolean);
-
-/*
- * Class:     guidoengine_guidopianoroll
- * Method:    GetKeyboardWidth
- * Signature: (I)F
- */
-JNIEXPORT jfloat JNICALL Java_guidoengine_guidopianoroll_GetKeyboardWidth
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     guidoengine_guidopianoroll
- * Method:    EnableAutoVoicesColoration
- * Signature: (Z)I
- */
-JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_EnableAutoVoicesColoration
-  (JNIEnv *, jobject, jboolean);
-
-/*
- * Class:     guidoengine_guidopianoroll
- * Method:    SetRGBColorToVoice
- * Signature: (IIIII)I
- */
-JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_SetRGBColorToVoice
-  (JNIEnv *, jobject, jint, jint, jint, jint, jint);
-
-/*
- * Class:     guidoengine_guidopianoroll
- * Method:    SetHtmlColorToVoice
- * Signature: (IJ)I
- */
-JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_SetHtmlColorToVoice
-  (JNIEnv *, jobject, jint, jlong);
-
-/*
- * Class:     guidoengine_guidopianoroll
- * Method:    EnableMeasureBars
- * Signature: (Z)I
- */
-JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_EnableMeasureBars
-  (JNIEnv *, jobject, jboolean);
-
-/*
- * Class:     guidoengine_guidopianoroll
- * Method:    SetPitchLinesDisplayMode
- * Signature: (I)I
- */
-JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_SetPitchLinesDisplayMode
-  (JNIEnv *, jobject, jint);
-
-/*
- * Class:     guidoengine_guidopianoroll
- * Method:    GetMap
- * Signature: (IILguidoengine/guidoscoremap;)I
- */
-JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_GetMap
-  (JNIEnv *, jobject, jint, jint, jobject);
-
-/*
- * Class:     guidoengine_guidopianoroll
  * Method:    GetBitmap
  * Signature: ([IIILguidoengine/guidopaint;Ljava/awt/Color;)I
  */
 JNIEXPORT jint JNICALL Java_guidoengine_guidopianoroll_GetBitmap
   (JNIEnv *, jobject, jintArray, jint, jint, jobject, jobject);
-
-/*
- * Class:     guidoengine_guidopianoroll
- * Method:    Init
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_guidoengine_guidopianoroll_Init
-  (JNIEnv *, jclass);
 
 #ifdef __cplusplus
 }

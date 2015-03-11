@@ -50,6 +50,7 @@ public final class guidoscoremap {
 	public static final int kGuidoEvent			= 5;
 	
 	public				guidoscoremap()		{ fMap = 0; }
+	@Override
 	protected	void	finalize()			{ dispose(); }
 	public		void	dispose()			{ disposeNative(); }
 
