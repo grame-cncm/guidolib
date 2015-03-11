@@ -1,4 +1,4 @@
-VERSION := 1.22
+VERSION := 1.23
 PACK := GuidoJava-v.$(VERSION)
 SAMPLES := ../factorysample.java ../guidoviewer.java
 JAR := ../guidoengine.jar
