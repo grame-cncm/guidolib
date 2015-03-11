@@ -1,8 +1,8 @@
-Guido engine for android : 
+Guido engine and JNI for android : 
 
 Run ndk-build and you're good to go.
 
 This makefile build guido engine for android and build the native part for jni bridge.
 The two of them are in the generated target GUIDOEngine-android.so.
 
-After that you can use this library in your android application, and use jni with the guidoengine.jar.
+After that you can use this library in your android application, and use jni with the guidoengine-android.jar.

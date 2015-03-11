@@ -6,10 +6,10 @@ This sample application is composed of three tabs :
 
 To build and run this sample application you have to :
 
-1- run ndk-build in ../guido-engine-android, copy the content of directory ../guido-engine-android/libs to a new directory ./libs of this project
+1- run ndk-build in ../guido-engine-jni-android, copy the content of directory ../guido-engine-jni-android/libs to a new directory ./libs of this project
 
 2- Compile jni package. Go to guidolib-code/lang/java and follow instruction. 
-	Copy the generated jar (guidoengine.jar and drawcommand.jar) in the ./libs directory of this project.
+	Copy the generated jar (guidoengine-android.jar and drawcommand.jar) in the ./libs directory of this project.
 
 3- Go to ../canvas-draw-command/ and follow instruction to compile canvas-draw-command.jar 
 	Add this jar in in the ./libs directory of this project.
