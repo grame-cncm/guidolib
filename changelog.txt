@@ -9,6 +9,7 @@ GUIDO Engine history
 - bug fixes : 
     - cairo device : problem on fill color.
     - GDI device : remove unused character array mapping in GDI font class.
+    - Tuplets : correction on automatic brackets direction
 
 ----------------------------------------------------------------
 2014-12-09  version 1.5.6

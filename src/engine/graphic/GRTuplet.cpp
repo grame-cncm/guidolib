@@ -477,10 +477,11 @@ void GRTuplet::OnDraw(VGDevice & hdc) const
             float p1X = st->p1.x + dxOffset;
 
 			if (sse->startflag == GRSystemStartEndStruct::LEFTMOST) {
-                if (arTuplet->isPositionAbove())
-				    hdc.Line(p1X, st->p1.y + 0.5f * LSPACE, p1X, st->p1.y);
-                else
-                    hdc.Line(p1X, st->p1.y - 0.5f * LSPACE, p1X, st->p1.y);
+				GDirection d = mDirection;
+				// If a position is explicitely set, we use it.
+				if (arTuplet->isPositionAbove() == 1) d = dirUP;
+				else if (arTuplet->isPositionAbove() == -1) d = dirDOWN;
+				hdc.Line(p1X, st->p1.y + 0.5f * LSPACE * (float)d, p1X, st->p1.y);
             }
 
 			hdc.Line(p1X, st->p1.y, middleX - textSpace + dxOffset, middleY - slope * textSpace );
@@ -492,11 +493,11 @@ void GRTuplet::OnDraw(VGDevice & hdc) const
 			hdc.Line(middleX + textSpace + dxOffset, middleY + slope * textSpace, p2X, st->p2.y);
 
 			if (sse->endflag == GRSystemStartEndStruct::RIGHTMOST) {
-
-                if (arTuplet->isPositionAbove())
-				    hdc.Line(p2X, st->p2.y, p2X, st->p2.y + 0.5f * LSPACE);
-                else
-				    hdc.Line(p2X, st->p2.y, p2X, st->p2.y - 0.5f * LSPACE);
+				GDirection d = mDirection;
+				// If a position is explicitely set, we use it.
+				if (arTuplet->isPositionAbove() == 1) d = dirUP;
+				else if (arTuplet->isPositionAbove() == -1) d = dirDOWN;
+				hdc.Line(p2X, st->p2.y, p2X, st->p2.y + 0.5f * LSPACE * (float)d);
             }
 		}
 

@@ -25,7 +25,7 @@
 
 ListOfTPLs ARTuplet::ltpls(1);
 
-ARTuplet::ARTuplet() : fTupletFormat(""), fPosition(""), fDy1(0), fDy2(1), fLineThickness(0.08f * LSPACE),
+ARTuplet::ARTuplet() : fTupletFormat(""), fPosition(""), fDy1(0), fDy2(0), fLineThickness(0.08f * LSPACE),
     fTextBold(false), fTextSize(1), fDispNote(""), fFormatSet(false), fDy1TagIsSet(false), fDy2TagIsSet(false)
 {
 	rangesetting = ONLY;
@@ -35,6 +35,7 @@ ARTuplet::ARTuplet() : fTupletFormat(""), fPosition(""), fDy1(0), fDy2(1), fLine
 	fBaseDenominator = 0;	// 0 means: do not display
 	fLeftBrace       = false;
 	fRightBrace      = false;
+	fPositionIsSet	 = false;
 }
 
 void ARTuplet::setTagParameterList(TagParameterList & tpl)
@@ -71,6 +72,7 @@ void ARTuplet::setTagParameterList(TagParameterList & tpl)
 
             tps = TagParameterString::cast(rtpl->GetNext(pos));
             fPosition = tps->getValue();
+			fPositionIsSet = true;
 
             TagParameterFloat *tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
             fDy1 = tpf->getValue();
@@ -255,4 +257,9 @@ void ARTuplet::printParameters(std::ostream& os) const
     ARMusicalTag::printParameters(os);
 }
 
-
+int ARTuplet::isPositionAbove() const
+{
+	if(fPositionIsSet)
+		return (fPosition == "below" ? -1 : 1);
+	return 0;
+}

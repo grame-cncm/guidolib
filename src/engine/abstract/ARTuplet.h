@@ -48,7 +48,12 @@ public:
 
             int	  getNumerator()    const { return fBaseNumerator; }
             int   getDenominator()  const { return fBaseDenominator; }
-            bool  isPositionAbove() const { return (!strcmp(fPosition.c_str(), "below") ? false : true); }
+
+			/*!
+			 * \brief isPositionAbove
+			 * \return 0 if position is not explicitely set in the tag or -1 if set below or 1 if set above.
+			 */
+			int  isPositionAbove() const;
             float getDy1()          const { return fDy1; }
             float getDy2()          const { return (fDy2TagIsSet ? fDy2 : fDy1); }		
             float getThickness()    const { return fLineThickness; }
@@ -64,6 +69,7 @@ public:
 protected:
     NVstring fTupletFormat;	// format string <"-x:y-">
     NVstring fPosition;
+	bool	 fPositionIsSet;
     float    fDy1;
     float    fDy2;
     float    fLineThickness;
