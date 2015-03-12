@@ -12,7 +12,8 @@ ifeq ($(system), MINGW32_NT-6.1)
 	TARGET = windows
 	QMAKEWIN ?= $(shell ../../../qt-win32)
 	MSVC 	 ?= $(shell ../../../vs-win32)
-	DEST := ../..
+	DEST := ..
+	COPY := ../..
 else
 ifeq ($(system), Linux)
 	TARGET = linux
@@ -64,7 +65,7 @@ win32/$(PROJECT).vcxproj : $(ROOT)/$(PROJECT).pro
 
 $(PROJECT).exe:
 	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild win32/$(PROJECT).vcxproj /maxcpucount:4 /p:Configuration=Release"
-	cp  win32/Release/$(PROJECT).exe $(DEST)
+	cp  win32/Release/$(PROJECT).exe $(COPY)
 
 ###################
 # Linux part
