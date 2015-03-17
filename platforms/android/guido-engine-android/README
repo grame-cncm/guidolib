@@ -1,3 +1,6 @@
 Build guidoengine shared library : 
 
+You can change android ndk version to match your minSdk device target else ndk-build take the minimum ndk version install on your computer.
+Default to android-16 (android version 4.1)
+
 Run ndk-build and you're good to go.
