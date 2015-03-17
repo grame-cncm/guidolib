@@ -10,6 +10,7 @@ GUIDO Engine history
     - cairo device : problem on fill color.
     - GDI device : remove unused character array mapping in GDI font class.
     - Tuplets : correction on automatic brackets direction
+    - Compilation with visual studio 2010 and cmake > 2.8. The name of visual studio in cmake has changed, adding new condition in cmakelist.
 
 ----------------------------------------------------------------
 2014-12-09  version 1.5.6
