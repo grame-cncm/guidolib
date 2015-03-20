@@ -14,7 +14,7 @@ h1, h2, h3, h4, h5, h6
   padding: 0 0 5px 0;}
 
 h1, h2, h3
-{ font: normal 170% 'lucida sans', arial;
+{ font: bold 180% 'lucida sans', arial;
   margin: 0 0 15px 0;
   padding: 0 0 5px 0;
   color: #000;}
@@ -45,6 +45,20 @@ a:hover
 .code {
 	font-family: courier, monaco;
 }
+.opaque {
+	float:right;
+	padding-right: 20px;
+	color: #888;
+  font-size: 100%;
+}
+
+pre {
+  background: #fffffe;
+  font-family: courier, monaco;
+  padding: 5px 0 5px 20px;
+  font-size: 90%;
+}
+
 
 #intro {
   padding: 10px 10px 10px 10px;
@@ -73,6 +87,8 @@ a:hover
 }
 
 #footnote {
+  padding: 0 50px 0 50px;
+  text-align: center;
   font-size: 85%;
   color: #777;
 }

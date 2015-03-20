@@ -1,59 +1,60 @@
-BEGIN { 
-print "Detail of mapping C/C++ to javascript."
-print "You can refer to C/C++ documentation for each mapped object.";
-print "All mapped classes without method are just mapped to be able to pass argument pointer of this class.";
-print "";
-print "You can create a class object with :"
-print "	var myObject = new Module.Myclass;"
-print "You have to delete it with "
-print "	delete myObject;"
-print ""
-print "C structure are json object and can be access and construct like it."
-print "Example to create GuidoLayoutSettings :"
-print ""
-print "	var settings= {"
-print "		systemsDistance : 75,"
-print "		systemsDistribution : 1,"
-print "		systemsDistribLimit : 0.25,"
-print "		force : 600,"
-print "		spring : 1.7,"
-print "		neighborhoodSpacing : 0,"
-print "		optimalPageFill : 1,"
-print "		resizePage2Music : 1,"
-print "		proportionalRenderingForceMultiplicator : 0"
-print "	};"
-print ""
-print "Enum can be access with Module.enumName.enumValue;"
-print "Constants can be access with Module.constantName;"
-print "";
-print "You can find more details in embind module of emscripten documentation";
-print "";
+function checkclass() {
+	if (inclass == 1)
+		print "</div>";	
+	inclass = 0;
+	waitfunc = 0;
 }
 
-/emscripten::value_object<.*>/ { 
-	match($0, /<(.*)>\("(.*)"\)/, a); 
-	print "The C/C++ structure " a[1] " is map to javascript with the name : " a[2];
-	previous = "valueobject";
- }
-/emscripten::enum_<.*>/ { 
-	match($0, /<(.*)>\("(.*)"\)/, a); 
-	if (previous != "enum") print "";
-	print "The C/C++ enum " a[1] " is map to javascript with the name : " a[2];
-	previous = "enum";	
- }
-/emscripten::constant/ { 
-	match($0, /.*\("(.*)",\s*(.*)\)/, a); 
-	if (previous != "constant") print "";
-	print "The C/C++ constant " a[2] " is map to javascript with the name : " a[1];
-	previous = "constant";
+function checkwait() {
+	if (waitfunc == 1) {
+		print "<div id='functions'>Functions: </div>";
+		print "<div id='list'>";
+	}
+	waitfunc = 0;
 }
-/emscripten::class/ { 
-	match($0, /<(.*)>\("(.*)"\)/, a); 
-	print "";
-	print "The C/C++ class " a[1] " is map to javascript with the name : " a[2];
- }
-/\.function/ {
-	match($0, /"(.*)".*::(.*)/, a);
-	print "	The method a[2] is map to javascript with the name : " a[1];
+
+function getClass(name) {
+	if (name == "GUIDOScoreMap")
+		return doc"/classGuidoScoreMapAdapter.html";
+	return doc"/class"name".html";
 }
-END { print ""; }
+
+function opaque(name) {
+	if (name == "GuidoParser") return 1;
+	if (name == "NodeAR") return 1;
+	if (name == "NodeGR") return 1;
+	if (name == "GuidoStream") return 1;
+	if (name == "PianoRoll") return 1;
+	return 0;
+}
+
+###################################
+BEGIN { 
+	FS = "\"";
+	inclass=0;
+	doc="api";
+	system("cat rsrc/header.html");
+}
+
+END { 
+	checkclass();
+	system("cat rsrc/footer.html");
+}
+
+
+###################################
+/^	emscripten::class_/ { 
+	checkclass();
+	print "<br />";
+	if (opaque($2))
+		print "<div id='module'>" $2 "<span class='opaque'> Opaque pointer</span></div>";
+	else
+		print "<div id='module'>Module: <a href='"getClass($2)"'>" $2 "</a></div>";
+	inclass=1;
+	waitfunc=1;
+}
+
+/^			.function/ {
+	checkwait();
+	print "<span class='fname'>" $2 "</span><br />";
+}

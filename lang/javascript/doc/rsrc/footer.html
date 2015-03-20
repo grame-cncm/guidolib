@@ -1,4 +1,35 @@
 <br />
+<div id='module'>Sample code</div>
+<div id='functions'>Taken from examples/svgExport and making use of <a href="http://jquery.com/">jQuery</a> </div>
+<pre>
+&lt;script type="text/javascript" src="libGUIDOEngine.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+	var guidoEngine;
+	function processGMN() {
+		var p = guidoEngine.openParser();
+		var ar = guidoEngine.string2AR(p, $("#gmnSandbox").val());
+		guidoEngine.closeParser(p);
+	
+		var gr = guidoEngine.ar2gr(ar);
+		var result = guidoEngine.gr2SVG(gr, 1, true, 0);
+		guidoEngine.freeGR(gr);
+		guidoEngine.freeAR(ar);
+	
+		$("#canvasContainer").html(result);
+	}
+	$( document ).ready(function() {
+		guidoEngine = new Module.GuidoEngineAdapter;
+		guidoEngine.init();
+		$("#gmnSandbox").on('keyup', processGMN);
+	});
+	$(window).unload(function(){
+		guidoEngine.shutdown();
+		delete guidoEngine;
+	});
+&lt;/script&gt;
+</pre>
+
+<br />
 <hr/>
 <div id="footnote">
 The Guido Engine library is an open source library for the layout and the graphic rendering of music scores developped and maintained by the <A HREF="http://www.grame.fr">Grame</a> 
