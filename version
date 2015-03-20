@@ -33,5 +33,10 @@ echo " updating $PKG"
 sed "s/\(VERSION := \)[0-9]*\.[0-9]*/\1$VERSION/" $PKG > TMP$$
 mv -f TMP$$ $PKG
 
+PKG=$ROOT/lang/javascript/Makefile
+echo " updating $PKG"
+sed "s/\(VERSION := \)[0-9]*\.[0-9]*/\1$VERSION/" $PKG > TMP$$
+mv -f TMP$$ $PKG
+
 echo "==> change manually GUIDOEngine.cpp and rc files in win32 folder"
 open -t platforms/win32/GUIDOEngine.rc src/engine/lib/GUIDOEngine.cpp
