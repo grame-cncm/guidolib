@@ -136,6 +136,8 @@ class TimeMapCollector
 		virtual void Time2TimeMap( const TimeSegment& from, const TimeSegment& to ) = 0;
 };
 
+typedef std::pair<TimeSegment, TimeSegment> TimeMapElement;
+
 #ifdef __cplusplus
 extern "C" {
 #endif

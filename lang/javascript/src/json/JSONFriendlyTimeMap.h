@@ -29,6 +29,19 @@
 /*!
  * \brief The JSONFriendlyTimeMap class is a implementation of TimeMapCollector.
  * This class is used to work in json environnement.
+ *
+ * This class has capabilities to be convert in json_array or in JSON string.
+ * The JSON representation of the TimeMapCollector is constituted of pairs of time segment,
+ * a time segment for the score and a time segment for the performance respectively called "score" and "perf".<br/>
+ * Example of JSON representation of an array of 4 elements :<br/>
+ * <code>
+ * [<br/>
+ * &nbsp;{"score": {"start": "0/1", "end": "1/1"}, "perf":  {"start": "0/1", "end": "1/1"} },<br/>
+ * &nbsp;{"score": {"start": "1/1", "end": "2/1"}, "perf": {"start": "1/1", "end": "2/1"} },<br/>
+ * &nbsp;{"score": {"start": "2/1", "end": "3/1"}, "perf":  {"start": "0/1", "end": "1/1"} },<br/>
+ * &nbsp;{"score": {"start": "3/1", "end": "4/1"}, "perf": {"start": "1/1", "end": "2/1"} }<br/>
+ * ]
+ * </code>
  */
 class JSONFriendlyTimeMap : public TimeMapCollector
 {
@@ -52,7 +65,7 @@ class JSONFriendlyTimeMap : public TimeMapCollector
 		std::string toString();
 
 	private :
-		std::vector<std::pair<TimeSegment, TimeSegment> > segments;
+		std::vector<TimeMapElement> fSegments;
 };
 /*! @} */
 #endif // JSONFRIENDLYTIMEMAP_H

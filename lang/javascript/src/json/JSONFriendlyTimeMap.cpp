@@ -30,21 +30,21 @@ JSONFriendlyTimeMap::~JSONFriendlyTimeMap()
 }
 
 void JSONFriendlyTimeMap::Time2TimeMap( const TimeSegment& from, const TimeSegment& to ) {
-	segments.push_back (std::pair<TimeSegment, TimeSegment> (from, to));
+	fSegments.push_back (TimeMapElement(from, to));
 }
 
 json_array * JSONFriendlyTimeMap::toJsonArray()
 {
 	// Create a new json array
 	json_array * arr = new json_array();
-	for (int i = 0; i < (int)(segments.size()); i++) {
+	for (int i = 0; i < (int)(fSegments.size()); i++) {
 		json_object*  holder = new json_object();
 		json_object*  score = new json_object();
 		json_object*  perf = new json_object();
-		score->add(new json_element("start", new json_string_value(dateToString(segments[i].first.first).c_str())));
-		score->add(new json_element("end", new json_string_value(dateToString(segments[i].first.second).c_str())));
-		perf->add(new json_element("start", new json_string_value(dateToString(segments[i].second.first).c_str())));
-		perf->add(new json_element("end", new json_string_value(dateToString(segments[i].second.second).c_str())));
+		score->add(new json_element("start", new json_string_value(dateToString(fSegments[i].first.first).c_str())));
+		score->add(new json_element("end", new json_string_value(dateToString(fSegments[i].first.second).c_str())));
+		perf->add(new json_element("start", new json_string_value(dateToString(fSegments[i].second.first).c_str())));
+		perf->add(new json_element("end", new json_string_value(dateToString(fSegments[i].second.second).c_str())));
 		holder->add(new json_element("score", new json_object_value(score)));
 		holder->add(new json_element("perf", new json_object_value(perf)));
 		arr->add(new json_object_value(holder));
