@@ -1,11 +1,20 @@
 #
-# This makefile is intended to create the specific documentation for GUIDO engine javascript library
+# This makefile is intended to create the specific documentation for the GUIDO engine javascript library
 #
 
-target = html
+.PHONY: jsbinding.html
 
-$(target) : readme.md
-	doxygen
+target = jsbinding.html
+doc := ../../../doc/doxygen/html/
+
+$(target): ../src/binding/main.cpp api
+	awk -f adapters.awk ../src/binding/main.cpp > $(target)
+
+api:
+	cp -R $(doc) api
+	
+#$(target) : readme.md
+#	doxygen
 
 readme.md :
 	awk -f binding.awk ../src/binding/main.cpp > readme.md
