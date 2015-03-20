@@ -23,8 +23,16 @@
  */
 
 /*!
- * \brief The JSONMapElement class.
- * This class is used to work in json environnement.
+ * \brief The JSONMapElement class add JSON capabilities to MapElement class. This class is used to work in json environnement.
+ *
+ * The JSON representation of a MapElement is a JSONFloatRect called "rect" and a JSONRectInfos called "rectInfos".<br/>
+ * Example of JSON representation :<br/>
+ * <code>
+ * {<br/>
+ * "rect": {"left": 80, "top": 0, "right": 122, "bottom": 451 }<br/>
+ * "rectInfos": {"staffNum": 1, "voiceNum": 2, "type": 5 }<br/>
+ * }
+ * </code>
  */
 class JSONMapElement : public MapElement
 {

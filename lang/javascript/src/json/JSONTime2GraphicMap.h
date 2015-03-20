@@ -23,7 +23,23 @@
 #include <string>
 
 /*!
- * \brief The JSONTime2GraphicMap class is used to work in json environnement.
+ * \brief The JSONTime2GraphicMap class add JSON capabilities to Time2GraphicMap. This class is used to work in json environnement.
+ *
+ * This object can be convert in json_object or in JSON string. It can be construct from a JSON string.
+ * The JSON representation of a MapElement is an array of pair of JSONTimeSegment and JSONFloatRect called respectively "graph" and "time".<br>
+ * Example of JSON representation :<br/>
+ * <code>
+ * [<br/>
+ * &nbsp;{<br/>
+ * &nbsp;&nbsp;"graph": {"left": 80, "top": 0, "right": 122, "bottom": 451 },<br/>
+ * &nbsp;&nbsp;"time": {"start": "0/1", "end": "4/1"}<br/>
+ * &nbsp;},<br/>
+ * &nbsp;{<br/>
+ * &nbsp;&nbsp;"graph": {"left": 80, "top": 0, "right": 122, "bottom": 451 },<br/>
+ * &nbsp;&nbsp;"time": {"start": "0/1", "end": "4/1"}<br/>
+ * &nbsp;}<br/>
+ * ]
+ * </code>
  */
 class JSONTime2GraphicMap : public Time2GraphicMap
 {

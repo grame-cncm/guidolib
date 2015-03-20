@@ -23,38 +23,53 @@
 #include "json_object.h"
 
 /*!
- * \brief The JSONGuidoElementInfos class
+ * \brief The JSONGuidoElementInfos class add JSON capabilities to GuidoElementInfos. This class is used to work in json environnement.
+ *
+ * This object can be convert in json_object or in JSON string.
+ * The JSON representation of a JSONGuidoElementInfos object has three elements refering to the GuidoElementInfos C data structure.<br/>
+ * Example of JSON representation : <br/>
+ * {"staffNum": 1, "voiceNum": 2, "type": 5 }
  */
 class JSONGuidoElementInfos : public GuidoElementInfos
 {
 	public:
 		/*!
-		 * \brief JSONGuidoElementInfos
+		 * \brief JSONGuidoElementInfos Create a JSONGuidoElementInfos from a standard GuidoElementInfos.
 		 * \param elementInfos
 		 */
 		JSONGuidoElementInfos(const GuidoElementInfos &elementInfos);
 		/*!
 		 * \brief toString convert in json string
-		 * \return
+		 * \return The JSON string repsentation of the object.
 		 */
 		std::string toString();
 
 		/*!
 		 * \brief toJsonObject convert to json object.
-		 * It's user responsability to delete the json_object
-		 * \return a jsonObject
+		 * It's user responsability to delete the json_object.
+		 * \return A pointer on new json_object.
 		 */
 		json::json_object * toJsonObject();
 };
 
 /*!
- * \brief The JSONRectInfos class
+ * \brief The JSONRectInfos class add JSON capabilities to RectInfos. This class is used to work in json environnement.
+ *
+ * A RectInfos embed a TimeSegment and a GuidoElementInfos. The Json representation of this object is a json time segment object called "time"
+ * and a json GuidoElementInfos object called "infos".<br/>
+ * Example of JSON representation :<br>
+ * <code>
+ * {<br/>
+ * "time": {"start": "0/1", "end": "1/1"},<br/>
+ * "infos": {"staffNum": 1, "voiceNum": 2, "type": 5 }<br/>
+ * }
+ * </code>
  */
 class JSONRectInfos : public RectInfos
 {
 	public:
 		/*!
-		 * \brief JSONRectInfos
+		 * \brief JSONRectInfos Create JSONRectInfos from a standard RectInfos.
 		 * \param infos
 		 */
 		JSONRectInfos(const RectInfos &infos);

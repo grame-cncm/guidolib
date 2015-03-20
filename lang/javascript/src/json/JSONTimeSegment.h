@@ -23,11 +23,12 @@
  */
 
 /*!
- * \brief The JSONTimeSegment class is used to work in json environnement.
+ * \brief The JSONTimeSegment class add JSON capabilities to TimeSegment class. This class is used to work in json environnement.
  *
- * It convert TimeSegment in json string or json_object.
- * It can be construct with json_object.
- * The first GuidoDate must be called "start" and the second "end" in json.
+ * This class can convert TimeSegment in json string or json_object and can be construct from a json_object.
+ * The JSON representation of a TimeSegment is an object of two values " start" and "end".<br/>
+ * Example of JSON representation :<br/>
+ * <code>{"start": "0/1", "end": "1/1"}</code>
  */
 class JSONTimeSegment : public TimeSegment
 {
