@@ -15,7 +15,7 @@ macosx :
 	cp ../libjniGUIDOEngine.dylib $(PACK)
 	cd  $(PACK) && ../localize libjniGUIDOEngine.dylib
 	rm -rf $(PACK)/GUIDOEngine.framework
-	cp -R ../../cmake/Release/GUIDOEngine.framework $(PACK)
+	cp -R ../../../build/GUIDOEngine.framework $(PACK)
 
 win32 :
 	make common
@@ -35,13 +35,13 @@ common:
 	cp -f $(JAR) $(PACK)
 	cp readme.txt $(PACK)
 	cp ../changelog.txt $(PACK)
-	cp ../../src/guido2.ttf $(PACK)
+	cp ../../../src/guido2.ttf $(PACK)
 
 clean :
 	rm -rf $(PACK)
 
 update :
-	make -C .. doc
-	make -C .. jar
+	make -C ../build doc
+	make -C ../build jar
 
 

@@ -37,37 +37,6 @@ depend :
 	makedepend -fMakefile -Y -- $(CXXFLAGS) -- $(sources)
 
 ##############################################################
-# packaging
-##############################################################
-examples = $(patsubst %.html,%, $(wildcard examples/*.html))
-
-package: structure $(examples)
-	cp libGUIDOEngine.js package/$(library)$(version)/
-	cp readme.txt package/$(library)$(version)/
-	cp changelog.txt package/$(library)$(version)/
-	cp -R doc/ package/$(library)$(version)
-	cp examples/readme.txt package/$(library)$(version)/examples/readme.txt
-	cp js/jsBinaryDeviceParser.js package/$(library)$(version)/examples/binaryExport/js/
-	cp js/jsCanvasDeviceFromBinary.js package/$(library)$(version)/examples/binaryExport/js/
-	cp js/jsCanvasDevice.js package/$(library)$(version)/examples/canvasDevice/js/
-	
-structure:
-	mkdir package
-	mkdir package/$(library)$(version)
-	cd package/$(library)$(version)
-	mkdir package/$(library)$(version)/examples
-
-examples/% :
-	mkdir package/$(library)$(version)/$@
-	mkdir package/$(library)$(version)/$@/html
-	mkdir package/$(library)$(version)/$@/js/
-	cp -R fonts/ package/$(library)$(version)/$@/
-	cp -R header/ package/$(library)$(version)/$@/
-	cp -R stylesheets/ package/$(library)$(version)/$@/
-	cp $@.html package/$(library)$(version)/$@/html/
-	cp js/jquery-2.1.1.min.js package/$(library)$(version)/$@/js/
-
-##############################################################
 # rules for building the library
 ##############################################################
 obj/%.o: $(srcdir)/%.cpp
