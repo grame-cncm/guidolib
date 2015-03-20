@@ -108,7 +108,7 @@ class Map2json
 		std::string getPianoRollMap(PianoRoll *pr, int width, int height);
 
 	private:
-		GuidoScoreMapAdapter scoreMap;
+		GuidoScoreMapAdapter fScoreMap;
 };
 /*! @} */
 #endif

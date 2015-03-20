@@ -21,28 +21,28 @@ using namespace std;
 //----------------------------------------------------------------------
 string Map2json::getPageMap(CGRHandler gr, int pagenum, float w, float h)
 {
-	JSONTime2GraphicMap outmap = scoreMap.getPageMap(gr, pagenum, w, h);
+	JSONTime2GraphicMap outmap = fScoreMap.getPageMap(gr, pagenum, w, h);
 	return outmap.toString();
 }
 
 //----------------------------------------------------------------------
 string Map2json::getStaffMap(CGRHandler gr, int pagenum, float w, float h, int staff)
 {
-	JSONTime2GraphicMap outmap = scoreMap.getStaffMap(gr, pagenum, w, h, staff);
+	JSONTime2GraphicMap outmap = fScoreMap.getStaffMap(gr, pagenum, w, h, staff);
 	return outmap.toString();
 }
 
 //----------------------------------------------------------------------
 string Map2json::getVoiceMap(CGRHandler gr, int pagenum, float w, float h, int voice)
 {
-	JSONTime2GraphicMap outmap = scoreMap.getVoiceMap(gr, pagenum, w, h, voice);
+	JSONTime2GraphicMap outmap = fScoreMap.getVoiceMap(gr, pagenum, w, h, voice);
 	return outmap.toString();
 }
 
 //----------------------------------------------------------------------
 string Map2json::getSystemMap(CGRHandler gr, int pagenum, float w, float h)
 {
-	JSONTime2GraphicMap outmap = scoreMap.getSystemMap(gr, pagenum, w, h);
+	JSONTime2GraphicMap outmap = fScoreMap.getSystemMap(gr, pagenum, w, h);
 	return outmap.toString();
 }
 //----------------------------------------------------------------------
@@ -51,7 +51,7 @@ string Map2json::getTime(const GuidoDate& date, std::string jsonTime2GraphicMap)
 	Time2GraphicMap map = JSONTime2GraphicMap(jsonTime2GraphicMap);
 	TimeSegment s;
 	FloatRect r;
-	if(scoreMap.getTime(date, map, s, r)) {
+	if(fScoreMap.getTime(date, map, s, r)) {
 		JSONTime2GraphicMap map;
 		map.push_back(pair<TimeSegment, FloatRect>(s, r));
 		return map.toString();
@@ -65,7 +65,7 @@ string Map2json::getPoint(float x, float y, std::string jsonTime2GraphicMap)
 	Time2GraphicMap map = JSONTime2GraphicMap(jsonTime2GraphicMap);
 	TimeSegment s;
 	FloatRect r;
-	if(scoreMap.getPoint(x, y, map, s, r)) {
+	if(fScoreMap.getPoint(x, y, map, s, r)) {
 		JSONTime2GraphicMap map;
 		map.push_back(pair<TimeSegment, FloatRect>(s, r));
 		return map.toString();
@@ -77,7 +77,7 @@ string Map2json::getPoint(float x, float y, std::string jsonTime2GraphicMap)
 string Map2json::getTimeMap(CARHandler gr)
 {
 	JSONFriendlyTimeMap timeMap;
-	scoreMap.getTimeMap(gr, timeMap);
+	fScoreMap.getTimeMap(gr, timeMap);
 	return timeMap.toString();
 }
 
