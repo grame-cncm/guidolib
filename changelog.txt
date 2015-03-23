@@ -1,6 +1,9 @@
 GUIDO Engine history
 
 ----------------------------------------------------------------
+  version 1.5.8
+
+----------------------------------------------------------------
 2015-03-23  version 1.5.7
 - New param 'dispNote' in \tuplet-tag, allowing to force notes appearance:
 	- possible values : "/1", "/2", "/4", "/8", "/16")
