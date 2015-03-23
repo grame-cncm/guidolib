@@ -9,6 +9,7 @@ win32 { TEMPLATE = vcapp }
 else  { TEMPLATE = app }
 win32:DebugBuild { CONFIG += console }
 
+unix:TARGET = guidoeditor
 macx:TARGET = GuidoEditor
 
 MOC_DIR = ./tmpSrc

@@ -54,8 +54,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,2,1,0
- PRODUCTVERSION 1,2,1,0
+ FILEVERSION 1,2,3,0
+ PRODUCTVERSION 1,2,3,0
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -71,12 +71,12 @@ BEGIN
         BLOCK "040c04b0"
         BEGIN
             VALUE "FileDescription", "Bibliothèque de liens dynamiques jniGUIDO"
-            VALUE "FileVersion", "1, 2, 1, 0"
+            VALUE "FileVersion", "1, 2, 3, 0"
             VALUE "InternalName", "jniGUIDO"
             VALUE "LegalCopyright", "Copyright (C) Sony CSL 2011, Grame 2012"
             VALUE "OriginalFilename", "jniGUIDO.dll"
             VALUE "ProductName", " Bibliothèque de liens dynamiques jniGUIDO"
-            VALUE "ProductVersion", "1, 2, 1, 0"
+            VALUE "ProductVersion", "1, 2, 3, 0"
         END
     END
     BLOCK "VarFileInfo"

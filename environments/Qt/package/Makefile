@@ -1,4 +1,4 @@
-VERSION=2.53b
+VERSION=2.54
 
 system	:= $(shell uname -s)
 ifeq ($(system), Linux)
@@ -19,11 +19,11 @@ WIN32_NAME	= GuidoQtApplsWin32-$(VERSION)
 
 MACTOOLS  := $(patsubst %, $(ROOT)/src/tools/cmake/release/%, $(TOOLS))
 
-QT5 := /c/Qt/Qt5.1.0
-WIN32QTPATH := $(QT5)/5.1.0/msvc2010/
-WIN32QT		:= QT5PRINTSUPPORT.DLL QT5WIDGETS.DLL QT5GUI.DLL QT5CORE.DLL QT5XML.DLL LIBGLESV2.DLL LIBEGL.DLL ICUIN51.DLL ICUUC51.DLL ICUDT51.DLL
+QT5 := /c/Qt/Qt5.4.0
+WIN32QTPATH := $(QT5)/5.4/msvc2010_opengl/
+WIN32QT		:= QT5PRINTSUPPORT.DLL QT5WIDGETS.DLL QT5GUI.DLL QT5CORE.DLL QT5XML.DLL ICUIN53.DLL ICUUC53.DLL ICUDT53.DLL
 WIN32QT		:= $(patsubst %, $(WIN32QTPATH)/bin/%, $(WIN32QT))
-WIN32APPS	:= $(patsubst %, ../bin/%.exe, $(APPLS))
+WIN32APPS	:= $(patsubst %, ../apps/%.exe, $(APPLS))
 WIN32TOOLS  := $(patsubst %, $(ROOT)/src/tools/build/win32/release/%.exe, $(TOOLS))
 WIN32QTPLUGS := qgif.dll qtiff.dll qjpeg.dll
 WIN32QTPLATFORMS := qminimal.dll qoffscreen.dll qwindows.dll
@@ -77,10 +77,10 @@ win32:
 	[ -d $(WIN32_NAME)/plugins/platforms ] || mkdir -p $(WIN32_NAME)/plugins/platforms
 	cp $(WIN32APPS) $(WIN32_NAME)
 	cp $(WIN32TOOLS) $(WIN32_NAME)
-	cp -f ../../build/win32/release/GUIDOEngine.dll $(WIN32_NAME)
+	cp -f $(ROOT)/build/GUIDOEngine.dll $(WIN32_NAME)
 	cp -f $(ROOT)/src/guido2.ttf $(WIN32_NAME)
 	cp $(WIN32QT) $(WIN32_NAME)
-	cp $(QT5)/vcredist/vcredist_sp1_x86.exe $(WIN32_NAME)
+	cp $(QT5)/vcredist/vcredist_x86.exe $(WIN32_NAME)
 	cp qt.conf $(WIN32_NAME)
 	cp 	$(WIN32QTPLUGS) $(WIN32_NAME)/plugins/imageformats
 	cp 	$(WIN32QTPLATFORMS) $(WIN32_NAME)/plugins/platforms
@@ -91,8 +91,8 @@ common:
 	rm -rf $(PACKAGE_NAME)/doc/guidolib-?.*
 	cp $(ROOT)/changelog.txt $(PACKAGE_NAME)/guido-changelog.txt
 	cp -R $(ROOT)/misc/Acknowledgments.txt $(PACKAGE_NAME)
-	cp ../GuidoEditor/changelog.txt $(PACKAGE_NAME)/GuidoEditor-changelog.txt
-	cp ../guido2image/changelog.txt $(PACKAGE_NAME)/guido2image-changelog.txt
-	cp ../GuidoSceneComposer/changelog.txt $(PACKAGE_NAME)/GuidoSceneComposer-changelog.txt
+	cp ../apps/GuidoEditor/changelog.txt $(PACKAGE_NAME)/GuidoEditor-changelog.txt
+	cp ../apps/guido2image/changelog.txt $(PACKAGE_NAME)/guido2image-changelog.txt
+	cp ../apps/GuidoSceneComposer/changelog.txt $(PACKAGE_NAME)/GuidoSceneComposer-changelog.txt
 	cp appPack-readme.txt $(PACKAGE_NAME)/readme.txt
 	cp -R $(ROOT)/gmn-examples $(PACKAGE_NAME)/gmn-examples

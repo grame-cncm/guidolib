@@ -19,10 +19,10 @@ macosx :
 
 win32 :
 	make common
-	cp ../cmake/release/jniGUIDOEngine.dll $(PACK)
-	cp ../../cmake/release/GUIDOEngine.dll $(PACK)
-	cp ../jniGUIDOEngine64.dll $(PACK)
-	cp ../../win64/release/GUIDOEngine64.dll $(PACK)
+	cp ../build/jniGUIDOEngine.dll $(PACK)
+	cp ../../../build/GUIDOEngine.dll $(PACK)
+	cp ../build/jniGUIDOEngine64.dll $(PACK)
+	cp ../../../build/GUIDOEngine64.dll $(PACK)
 #	cp msvcr80.dll $(PACK)
 
 common: 
