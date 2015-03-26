@@ -24,6 +24,13 @@
 #include "engine.h"
 #include "profport.h"
 
+#ifdef WIN32
+# define wait(n)	Sleep(n)
+#else
+# define wait(n)	usleep(n * 1000);
+#endif // win32
+
+
 using namespace std;
 using namespace guidohttpd;
 
@@ -150,6 +157,7 @@ static bool launchServer (int port, int verbose, int logmode, const string cache
                 if (c == 'q') {
                     break;
                 }
+				wait(10);
             } while (true);
         }
         server.stop();
