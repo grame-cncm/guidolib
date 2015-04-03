@@ -126,7 +126,7 @@ GRTuplet::manualPosition(GObject * caller, const NVPoint & inPos )
 		st->p1.x -= halfNoteWidth; // to enclose all the element width
 		st->p1.y -= dy1;
 	}
-	else if (event == endElement)
+	if (event == endElement)
 	{
 		st->p2 = endElement->getPosition();
 		st->p2.x += halfNoteWidth; // to enclose all the element width
