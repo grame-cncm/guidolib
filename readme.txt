@@ -59,7 +59,7 @@ Note for Android:
 		- the guidoengine java package called guidoengine.jar
 		- incidentally, the drawcommand java package called drawcommand.jar
 
-    To compile this, go to the java directory and do:
+    To compile this, go to the lang/java/build directory and do:
 
     make headers
     make class
