@@ -26,7 +26,6 @@
 */
 
 package guidoengine;
-import java.awt.Rectangle;
 
 /**
 	A Guido score map.
@@ -69,7 +68,7 @@ public final class guidoscoremap {
 		@param r on output, contains the corresponding graphic rectangle.
 		@return false in case of incorrect index
 	*/
-    public native final synchronized boolean  get(int index, guidosegment time, Rectangle r);
+    public native final synchronized boolean  get(int index, guidosegment time, rectangle r);
 
 	/** Give a relation by date
 
@@ -78,7 +77,7 @@ public final class guidoscoremap {
 		@param r on output, contains the corresponding graphic rectangle.
 		@return true when the date is found in a time segment
 	*/
-    public native final synchronized boolean  getTime(guidodate date, guidosegment time, Rectangle r);
+    public native final synchronized boolean  getTime(guidodate date, guidosegment time, rectangle r);
 
 	/** Give a relation by point
 
@@ -88,7 +87,7 @@ public final class guidoscoremap {
 		@param r on output, contains the corresponding graphic rectangle.
 		@return true when the point is found in a graphic segment
 	*/
-    public native final synchronized boolean  getPoint(float x, float y, guidosegment time, Rectangle r);
+    public native final synchronized boolean  getPoint(float x, float y, guidosegment time, rectangle r);
 	
 	/** Internal jni initialization method.
 		Automatically called at package init.
