@@ -4,12 +4,12 @@
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions are met:
 
-       * Redistributions of source code must retain the above copyright
+ * Redistributions of source code must retain the above copyright
          notice, this list of conditions and the following disclaimer.
-       * Redistributions in binary form must reproduce the above copyright
+ * Redistributions in binary form must reproduce the above copyright
          notice, this list of conditions and the following disclaimer in the
          documentation and/or other materials provided with the distribution.
-       * Neither the name of Sony CSL Paris nor the names of its contributors 
+ * Neither the name of Sony CSL Paris nor the names of its contributors 
          may be used to endorse or promote products derived from this software 
          without specific prior written permission.
 
@@ -23,74 +23,82 @@
    ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ */
 
 package guidoengine;
 
+import java.awt.Rectangle;
+
 /**
-	A Guido score map.
-	<br>
-	A guido score map describes the relations between the time and graphic space.
-	It is typically used as argument of the guidscore extended mappings methods.
-	@see guidoengine.guidoscore#GetVoiceMap guidoscore.GetVoiceMap
-	@see guidoengine.guidoscore#GetStaffMap guidoscore.GetStaffMap
-	@see guidoengine.guidoscore#GetSystemMap guidoscore.GetSystemMap
-*/
-public final class guidoscoremap {
-	
-	private long fMap;
+ * A Guido score map. <br>
+ * It an extension on guidoscoremapbase which use java.awt.Rectangle instead of guidorect.
+ * This class is maintain for backward compatibility.
+ */
+public final class guidoscoremap extends guidoscoremapbase {
 
+	public guidoscoremap() {
+		super();
+	}
 
-	public static final int kGuidoPage			= 0;
-	public static final int kGuidoSystem		= 1;
-	public static final int kGuidoSystemSlice	= 2;
-	public static final int kGuidoStaff			= 3;
-	public static final int kGuidoBar			= 4;
-	public static final int kGuidoEvent			= 5;
-	
-	public				guidoscoremap()		{ fMap = 0; }
-	@Override
-	protected	void	finalize()			{ dispose(); }
-	public		void	dispose()			{ disposeNative(); }
+	/**
+	 * Give a relation by index
+	 * 
+	 * @param index
+	 *            the map index
+	 * @param time
+	 *            on output, contains the corresponding time segment.
+	 * @param r
+	 *            on output, contains the corresponding graphic Rectangle.
+	 * @return false in case of incorrect index
+	 */
+	public boolean get(int index, guidosegment time, Rectangle r) {
+		guidorect guidorect = new guidorect();
+		boolean returnValue = super.get(index, time, guidorect);
 
-	private native void disposeNative();
+		r.setRect(guidorect.getLeft(), guidorect.getTop(), guidorect.getRight() - guidorect.getLeft(),
+				guidorect.getBottom() - guidorect.getTop());
+		return returnValue;
+	}
 
+	/**
+	 * Give a relation by date
+	 * 
+	 * @param date
+	 *            a guido date
+	 * @param time
+	 *            on output, contains the corresponding time segment.
+	 * @param r
+	 *            on output, contains the corresponding graphic Rectangle.
+	 * @return true when the date is found in a time segment
+	 */
+	public boolean getTime(guidodate date, guidosegment time, Rectangle r) {
+		guidorect guidorect = new guidorect();
+		boolean returnValue = super.getTime(date, time, guidorect);
+		
+		r.setRect(guidorect.getLeft(), guidorect.getTop(), guidorect.getRight() - guidorect.getLeft(),
+				guidorect.getBottom() - guidorect.getTop());
+		return returnValue;
+	}
 
-	/** Give the map size
-		@return the map size
-	*/
-    public native final synchronized int  size();
-
-	/** Give a relation by index
-
-		@param index the map index
-		@param time on output, contains the corresponding time segment.
-		@param r on output, contains the corresponding graphic rectangle.
-		@return false in case of incorrect index
-	*/
-    public native final synchronized boolean  get(int index, guidosegment time, rectangle r);
-
-	/** Give a relation by date
-
-		@param date a guido date
-		@param time on output, contains the corresponding time segment.
-		@param r on output, contains the corresponding graphic rectangle.
-		@return true when the date is found in a time segment
-	*/
-    public native final synchronized boolean  getTime(guidodate date, guidosegment time, rectangle r);
-
-	/** Give a relation by point
-
-		@param x the point x coordinate
-		@param y the point y coordinate
-		@param time on output, contains the corresponding time segment.
-		@param r on output, contains the corresponding graphic rectangle.
-		@return true when the point is found in a graphic segment
-	*/
-    public native final synchronized boolean  getPoint(float x, float y, guidosegment time, rectangle r);
-	
-	/** Internal jni initialization method.
-		Automatically called at package init.
-	*/
-    protected static native void	Init ();
+	/**
+	 * Give a relation by point
+	 * 
+	 * @param x
+	 *            the point x coordinate
+	 * @param y
+	 *            the point y coordinate
+	 * @param time
+	 *            on output, contains the corresponding time segment.
+	 * @param r
+	 *            on output, contains the corresponding graphic Rectangle.
+	 * @return true when the point is found in a graphic segment
+	 */
+	public boolean getPoint(float x, float y, guidosegment time, Rectangle r) {
+		guidorect guidorect = new guidorect();
+		boolean returnValue = super.getPoint(x, y, time, guidorect);
+		
+		r.setRect(guidorect.getLeft(), guidorect.getTop(), guidorect.getRight() - guidorect.getLeft(),
+				guidorect.getBottom() - guidorect.getTop());
+		return returnValue;
+	}
 }

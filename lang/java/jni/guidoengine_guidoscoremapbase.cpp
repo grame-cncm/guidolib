@@ -20,7 +20,7 @@
 */
 
 
-#include "guidoengine_guidoscoremap.h"
+#include "guidoengine_guidoscoremapbase.h"
 #include "javaIDs.h"
 #include "GUIDOScoreMap.h"
 
@@ -58,22 +58,22 @@ static void setRect (JNIEnv * env, jobject rect, const FloatRect& r)
 }
 
 /*
- * Class:     guidoengine_guidoscoremap
+ * Class:     guidoengine_guidoscoremapbase
  * Method:    disposeNative
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_guidoengine_guidoscoremap_disposeNative (JNIEnv * env, jobject obj)
+JNIEXPORT void JNICALL Java_guidoengine_guidoscoremapbase_disposeNative (JNIEnv * env, jobject obj)
 {
 	Time2GraphicMap* map = (Time2GraphicMap*)env->GetLongField (obj, gMapID);
 	delete map;
 }
 
 /*
- * Class:     guidoengine_guidoscoremap
+ * Class:     guidoengine_guidoscoremapbase
  * Method:    size
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_guidoengine_guidoscoremap_size (JNIEnv * env, jobject obj)
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscoremapbase_size (JNIEnv * env, jobject obj)
 {
 	Time2GraphicMap* map = (Time2GraphicMap*)env->GetLongField (obj, gMapID);
 	return map ? map->size() : 0;
@@ -81,17 +81,17 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscoremap_size (JNIEnv * env, jobjec
 
 
 /*
- * Class:     guidoengine_guidoscoremap
+ * Class:     guidoengine_guidoscoremapbase
  * Method:    get
- * Signature: (ILguidoengine/guidosegment;Ljava/awt/Rectangle;)Z
+ * Signature: (ILguidoengine/guidosegment;Lguidoengine/guidorectangle;)Z
  */
-JNIEXPORT jboolean JNICALL Java_guidoengine_guidoscoremap_get (JNIEnv * env, jobject obj, jint index, jobject timeseg, jobject rect)
+JNIEXPORT jboolean JNICALL Java_guidoengine_guidoscoremapbase_get (JNIEnv * env, jobject obj, jint index, jobject timeseg, jobject rect)
 {
 	Time2GraphicMap* map = (Time2GraphicMap*)env->GetLongField (obj, gMapID);
 	int size = map->size();
 	if (map && (index >= 0) && (index < size)) {
 		Time2GraphicMap::const_iterator i = map->begin();
-		while (index--) i++; // TODO GGX On ne peut pas directement acceder à l'index ???
+		while (index--) i++;
 		TimeSegment t = i->first; 
 		setSegment (env, timeseg, t.first, t.second);
 		setRect (env, rect, i->second);
@@ -101,11 +101,11 @@ JNIEXPORT jboolean JNICALL Java_guidoengine_guidoscoremap_get (JNIEnv * env, job
 }
 
 /*
- * Class:     guidoengine_guidoscoremap
+ * Class:     guidoengine_guidoscoremapbase
  * Method:    getTime
- * Signature: (Lguidoengine/guidodate;Lguidoengine/guidosegment;Ljava/awt/Rectangle;)Z
+ * Signature: (Lguidoengine/guidodate;Lguidoengine/guidosegment;Lguidoengine/guidorectangle;)Z
  */
-JNIEXPORT jboolean JNICALL Java_guidoengine_guidoscoremap_getTime (JNIEnv * env, jobject obj, jobject date, jobject timeseg, jobject rect)
+JNIEXPORT jboolean JNICALL Java_guidoengine_guidoscoremapbase_getTime (JNIEnv * env, jobject obj, jobject date, jobject timeseg, jobject rect)
 {
 	Time2GraphicMap* map = (Time2GraphicMap*)env->GetLongField (obj, gMapID);
 	if (map) {
@@ -120,11 +120,11 @@ JNIEXPORT jboolean JNICALL Java_guidoengine_guidoscoremap_getTime (JNIEnv * env,
 }
 
 /*
- * Class:     guidoengine_guidoscoremap
+ * Class:     guidoengine_guidoscoremapbase
  * Method:    getPoint
- * Signature: (FFLguidoengine/guidosegment;Ljava/awt/Rectangle;)Z
+ * Signature: (FFLguidoengine/guidosegment;Lguidoengine/guidorectangle;)Z
  */
-JNIEXPORT jboolean JNICALL Java_guidoengine_guidoscoremap_getPoint (JNIEnv * env, jobject obj, jfloat x, jfloat y, jobject timeseg, jobject rect)
+JNIEXPORT jboolean JNICALL Java_guidoengine_guidoscoremapbase_getPoint (JNIEnv * env, jobject obj, jfloat x, jfloat y, jobject timeseg, jobject rect)
 {
 	Time2GraphicMap* map = (Time2GraphicMap*)env->GetLongField (obj, gMapID);
 	if (map) {
@@ -139,11 +139,11 @@ JNIEXPORT jboolean JNICALL Java_guidoengine_guidoscoremap_getPoint (JNIEnv * env
 }
 
 /*
- * Class:     guidoengine_guidoscoremap
+ * Class:     guidoengine_guidoscoremapbase
  * Method:    Init
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_guidoengine_guidoscoremap_Init (JNIEnv * env, jclass cls)
+JNIEXPORT void JNICALL Java_guidoengine_guidoscoremapbase_Init (JNIEnv * env, jclass cls)
 {
 	getID (env, cls, gMapID, "fMap", "J");
 }
