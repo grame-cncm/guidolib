@@ -4,7 +4,7 @@
 SRC        = $(wildcard ../guidoengine/*.java)
 SRCDRAWC   = $(wildcard ../drawcommand/*.java)
 CLASS      = $(patsubst %.java, %.class, $(SRC) )
-REMOVELIST = ../guidoengine/guidoscore.class ../guidoengine/guidopianoroll.class
+REMOVELIST = ../guidoengine/guidoscore.class ../guidoengine/guidopianoroll.class ../guidoengine/guidoscoremap.class
 CLASSANDROID = $(filter-out $(REMOVELIST),$(CLASS))
 CLASSDRAWC = $(patsubst %.java, %.class, $(SRCDRAWC) )
 JNI        = $(addprefix ../jni/, $(subst /,_,$(patsubst ../guidoengine/%.java, guidoengine_%.h, $(SRC) )))
