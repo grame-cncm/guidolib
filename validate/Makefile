@@ -51,7 +51,7 @@ gmnfiles      = $(shell find ../gmn-examples -name "*.gmn") $(shell find ../regr
 gmnfilesproll = $(shell find ../regression-tests/pianoroll -name "*.gmn")
 
 pdfout		:= $(patsubst ../%.gmn, $(version)/%.pdf, $(gmnfiles))
-svgout		:= $(patsubst ../%.gmn, $(version)/standard/%.svg, $(gmnfiles))
+svgout		:= $(patsubst ../%.gmn, $(version)/%.svg, $(gmnfiles))
 
 sysmapout	:= $(patsubst ../%.gmn, $(version)/maps/system/%.svg, $(gmnfiles))
 staffmapout	:= $(patsubst ../%.gmn, $(version)/maps/staff/%.svg, $(gmnfiles))
@@ -59,9 +59,9 @@ voicemapout	:= $(patsubst ../%.gmn, $(version)/maps/voice/%.svg, $(gmnfiles))
 mapsout		:= $(sysmapout) $(staffmapout) $(voicemapout)
 timemapout	:= $(patsubst ../%.gmn, $(version)/maps/time/%.map, $(gmnfiles))
 
-prollout	            := $(patsubst ../%.gmn, $(version)/proll/classic/standard/%.svg, $(gmnfilesproll))
+prollout	            := $(patsubst ../%.gmn, $(version)/proll/classic/%.svg, $(gmnfilesproll))
 prollvoicescolorout     := $(patsubst ../%.gmn, $(version)/proll/classic/voicescolor/%.svg, $(gmnfilesproll))
-prolltrajout            := $(patsubst ../%.gmn, $(version)/proll/trajectory/standard/%.svg, $(gmnfilesproll))
+prolltrajout            := $(patsubst ../%.gmn, $(version)/proll/trajectory/%.svg, $(gmnfilesproll))
 prollvoicescolortrajout := $(patsubst ../%.gmn, $(version)/proll/trajectory/voicescolor/%.svg, $(gmnfilesproll))
 
 leaksout 	:= $(patsubst ../%.gmn, $(version)/$(TOOLPATH)/%.leaks.txt, $(gmnfiles))
@@ -69,7 +69,7 @@ midiout     := $(patsubst ../%.gmn, $(version)/%.mid, $(gmnfiles))
 
 
 allpdf 		= $(shell [ -d $(version) ] && find $(version) -name "*.pdf")
-allsvg 		= $(shell [ -d $(version)/standard ] && find $(version)/standard -name "*.svg")
+allsvg 		= $(shell [ -d $(version) ] && find $(version) -name "*.svg")
 allmap 		= $(shell [ -d $(version)/maps ] && find $(version)/maps -name "*.svg")
 alltimemap 	= $(shell [ -d $(version)/maps/time ] && find $(version)/maps/time -name "*.map")
 allproll 	= $(shell [ -d $(version)/proll ] && find $(version)/proll -name "*.svg")
@@ -87,7 +87,7 @@ default : svg
 
 help:
 	@echo "Makefile for testing the engine output. Available targets are:"
-	@echo "'svg' (default): makes svg files (standard, maps, timemaps, piano roll) for a set of gmn files"
+	@echo "'svg' (default): makes svg files (scores, maps, timemaps, piano roll) for a set of gmn files"
 	@echo "                 the output folder name is the current guido engine version number."
 	@echo "'map'          : makes svg map files for a set of gmn files"
 	@echo "                 the output folder name is '[current guido engine version number]/maps/'."
@@ -99,7 +99,7 @@ help:
 	@echo "                 the output folder name is the current guido engine version number."
 	@echo "'midi'         : makes MIDI files for a set of gmn files"
 	@echo "                 the output folder name is the current guido engine version number."
-	@echo "'validate    VERSION=another_version': compares the current version output (standard, map, timemap and proll files) with another one (for Windows, Firefox has to be installed (and opened) in C:/Program Files (x86)/Mozilla Firefox/firefox, otherwise please change Makefile)"
+	@echo "'validate    VERSION=another_version': compares the current version output (scores, map, timemap and proll files) with another one (for Windows, Firefox has to be installed (and opened) in C:/Program Files (x86)/Mozilla Firefox/firefox, otherwise please change Makefile)"
 	@echo "'pdfvalidate VERSION=another_version': compares the current version pdf output with another one"
 	@echo "'checkleaks TOOL=a_tool': check memory leaks on a set of gmn files using various tools"
 	@echo "                 the basic tool set is included in this folder but any tool arbitrary tool could be used as well"
@@ -221,7 +221,7 @@ svg: $(svgout) $(mapsout) $(timemapout) $(prollout) $(prollvoicescolorout) $(pro
 svgclean: 
 	rm -f $(svgout) $(mapsout) $(timemapout) $(prollout) $(prollvoicescolorout) $(prolltrajout) $(prollvoicescolortrajout)
 
-$(version)/standard/%.svg: ../%.gmn
+$(version)/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	-$(guido2svg) $< | grep -v "SVG file generated using" > __tmp.svg  &&  mv __tmp.svg $@
 
@@ -254,7 +254,7 @@ $(version)/maps/time/%.map: ../%.gmn
 #########################################################################
 # tool to generate proll files
 proll: $(prollout) $(prollvoicescolorout) $(prolltrajout) $(prollvoicescolortrajout)
-$(version)/proll/classic/standard/%.svg: ../%.gmn
+$(version)/proll/classic/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	-$(guido2proll) $< > $@
     
@@ -262,7 +262,7 @@ $(version)/proll/classic/voicescolor%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	-$(guido2proll) -voicesautocolor true $< > $@
     
-$(version)/proll/trajectory/standard/%.svg: ../%.gmn
+$(version)/proll/trajectory/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	-$(guido2proll) -pianoroll trajectory $< > $@
     

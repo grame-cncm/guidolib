@@ -17,7 +17,7 @@ MACOSX_NAME = GuidoQtApplsMacOSX-$(VERSION)
 WIN32_NAME	= GuidoQtApplsWin32-$(VERSION)
 
 
-MACTOOLS  := $(patsubst %, $(ROOT)/src/tools/cmake/release/%, $(TOOLS))
+MACTOOLS  := $(patsubst %, $(ROOT)/src/tools/build/macos/release/%, $(TOOLS))
 
 QT5 := /c/Qt/Qt5.4.0
 WIN32QTPATH := $(QT5)/5.4/msvc2010_opengl/
@@ -37,21 +37,22 @@ nothing:
 	@ echo " 'linux' :  deployed binaries package for Ubuntu."
 
 macapp:
-	cp -r ../bin/$(APPL).app $(MACOSX_NAME)
+	cp -r ../apps/$(APPL)/$(APPL).app $(MACOSX_NAME)
 	macdeployqt $(MACOSX_NAME)/$(APPL).app
 	cd $(MACOSX_NAME) && ../localise $(APPL)
-	cp ../$(APPL)/rsc/guido.icns $(MACOSX_NAME)/$(APPL).app/Contents/Resources/
+	cp ../apps/$(APPL)/rsc/guido.icns $(MACOSX_NAME)/$(APPL).app/Contents/Resources/
 	cp $(ROOT)/src/guido2.ttf $(MACOSX_NAME)/$(APPL).app/Contents/Resources/
 
 macos:
 	[ -d $(MACOSX_NAME) ] || mkdir $(MACOSX_NAME) && rm -rf $(MACOSX_NAME)/*
+	[ -h $(ROOT)/build/MacOS/lib ] || ( cd $(ROOT)/build/MacOS && ln -s Release lib )
 	make common PACKAGE_NAME=$(MACOSX_NAME)
 	make macapp APPL=GuidoEditor
 	make macapp APPL=GuidoSceneComposer
 	cp $(MACTOOLS) $(MACOSX_NAME)
 	cp -r $(ROOT)/build/MacOS/Release/GUIDOEngine.framework $(MACOSX_NAME)
 	cp $(ROOT)/src/guido2.ttf $(MACOSX_NAME)
-	cp ../bin/guido2image $(MACOSX_NAME)
+	cp ../apps/guido2image/guido2image $(MACOSX_NAME)
 	cd $(MACOSX_NAME) && ../localise-tool $(TOOLS) guido2image
 	hdiutil create -srcfolder $(MACOSX_NAME) -ov $(MACOSX_NAME).dmg
 
