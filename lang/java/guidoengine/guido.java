@@ -70,7 +70,7 @@ public final class guido {
 			guidofactory.Init ();
 			guido2midiparams.Init();
 			limitparams.Init();
-			guidoscoremap.Init();
+			guidoscoremapbase.Init();
 			guidopianorollbase.Init();
 			System.out.println("GUIDOEngine version " + GetVersion() + " - JNI interface version " + GetJNIVersion() + " initialized.");
 		} catch (UnsatisfiedLinkError e) {
