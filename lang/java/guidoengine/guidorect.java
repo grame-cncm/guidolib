@@ -45,6 +45,29 @@ public final class guidorect {
 	public guidorect()		{ top = left = right = bottom = 0; }
 	public guidorect(int l, int t, int r, int b) { top = t; left = l; right = r; bottom = b; }
 
+	public int getLeft() {
+		return left;
+	}
+
+	public int getTop() {
+		return top;
+	}
+
+	public int getRight() {
+		return right;
+	}
+
+	public int getBottom() {
+		return bottom;
+	}
+    
+    public void setRect(double x, double y, double width, double height) {
+        left = (int) x;
+        top = (int) y;
+        right = (int) (x + width);
+        bottom = (int) (y + height);
+    }
+	
 	/** Internal jni initialization method.
 		Automatically called at package init.
 	*/
