@@ -232,7 +232,7 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_GetTimeMap
 /*
  * Class:     guidoengine_guidoscorebase
  * Method:    GetPageMap
- * Signature: (IFFLguidoengine/guidoscoremap;)I
+ * Signature: (IFFLguidoengine/guidoscoremapbase;)I
  */
 JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_GetPageMap
   (JNIEnv *, jobject, jint, jfloat, jfloat, jobject);
@@ -240,7 +240,7 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_GetPageMap
 /*
  * Class:     guidoengine_guidoscorebase
  * Method:    GetStaffMap
- * Signature: (IFFILguidoengine/guidoscoremap;)I
+ * Signature: (IFFILguidoengine/guidoscoremapbase;)I
  */
 JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_GetStaffMap
   (JNIEnv *, jobject, jint, jfloat, jfloat, jint, jobject);
@@ -248,7 +248,7 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_GetStaffMap
 /*
  * Class:     guidoengine_guidoscorebase
  * Method:    GetVoiceMap
- * Signature: (IFFILguidoengine/guidoscoremap;)I
+ * Signature: (IFFILguidoengine/guidoscoremapbase;)I
  */
 JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_GetVoiceMap
   (JNIEnv *, jobject, jint, jfloat, jfloat, jint, jobject);
@@ -256,7 +256,7 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_GetVoiceMap
 /*
  * Class:     guidoengine_guidoscorebase
  * Method:    GetSystemMap
- * Signature: (IFFLguidoengine/guidoscoremap;)I
+ * Signature: (IFFLguidoengine/guidoscoremapbase;)I
  */
 JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_GetSystemMap
   (JNIEnv *, jobject, jint, jfloat, jfloat, jobject);

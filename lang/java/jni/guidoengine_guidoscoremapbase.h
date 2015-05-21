@@ -38,7 +38,7 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscoremapbase_size
 /*
  * Class:     guidoengine_guidoscoremapbase
  * Method:    get
- * Signature: (ILguidoengine/guidosegment;Lguidoengine/guidorectangle;)Z
+ * Signature: (ILguidoengine/guidosegment;Lguidoengine/guidorect;)Z
  */
 JNIEXPORT jboolean JNICALL Java_guidoengine_guidoscoremapbase_get
   (JNIEnv *, jobject, jint, jobject, jobject);
@@ -46,7 +46,7 @@ JNIEXPORT jboolean JNICALL Java_guidoengine_guidoscoremapbase_get
 /*
  * Class:     guidoengine_guidoscoremapbase
  * Method:    getTime
- * Signature: (Lguidoengine/guidodate;Lguidoengine/guidosegment;Lguidoengine/guidorectangle;)Z
+ * Signature: (Lguidoengine/guidodate;Lguidoengine/guidosegment;Lguidoengine/guidorect;)Z
  */
 JNIEXPORT jboolean JNICALL Java_guidoengine_guidoscoremapbase_getTime
   (JNIEnv *, jobject, jobject, jobject, jobject);
@@ -54,7 +54,7 @@ JNIEXPORT jboolean JNICALL Java_guidoengine_guidoscoremapbase_getTime
 /*
  * Class:     guidoengine_guidoscoremapbase
  * Method:    getPoint
- * Signature: (FFLguidoengine/guidosegment;Lguidoengine/guidorectangle;)Z
+ * Signature: (FFLguidoengine/guidosegment;Lguidoengine/guidorect;)Z
  */
 JNIEXPORT jboolean JNICALL Java_guidoengine_guidoscoremapbase_getPoint
   (JNIEnv *, jobject, jfloat, jfloat, jobject, jobject);
