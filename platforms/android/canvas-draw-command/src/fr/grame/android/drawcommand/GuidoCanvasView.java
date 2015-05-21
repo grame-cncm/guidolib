@@ -207,7 +207,6 @@ public class GuidoCanvasView extends View {
 	// GETTERS AND SETTERS
 	
 	public float getCurrentPenWidth() {
-		Log.i(VIEW_LOG_TAG, "CurrentPenWidth = " + currentPenWidth);
 		return currentPenWidth;
 	}
 
