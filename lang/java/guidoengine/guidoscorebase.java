@@ -365,7 +365,7 @@ public class guidoscorebase {
 	 * @return an error code.
 	 * @see mapcollector
 	 */
-	public native final synchronized int GetPageMap(int page, float width, float height, guidoscoremap map);
+	public native final synchronized int GetPageMap(int page, float width, float height, guidoscoremapbase map);
 
 	/**
 	 * Gives the adjusted staff mapping
@@ -383,7 +383,7 @@ public class guidoscorebase {
 	 * @return an error code.
 	 * @see mapcollector
 	 */
-	public native final synchronized int GetStaffMap(int page, float width, float height, int staff, guidoscoremap map);
+	public native final synchronized int GetStaffMap(int page, float width, float height, int staff, guidoscoremapbase map);
 
 	/**
 	 * Gives the adjusted voice mapping
@@ -401,7 +401,7 @@ public class guidoscorebase {
 	 * @return an error code.
 	 * @see mapcollector
 	 */
-	public native final synchronized int GetVoiceMap(int page, float width, float height, int voice, guidoscoremap map);
+	public native final synchronized int GetVoiceMap(int page, float width, float height, int voice, guidoscoremapbase map);
 
 	/**
 	 * Gives the adjusted system mapping
@@ -417,7 +417,7 @@ public class guidoscorebase {
 	 * @return an error code.
 	 * @see mapcollector
 	 */
-	public native final synchronized int GetSystemMap(int page, float width, float height, guidoscoremap map);
+	public native final synchronized int GetSystemMap(int page, float width, float height, guidoscoremapbase map);
 
 	/**
 	 * close a score
