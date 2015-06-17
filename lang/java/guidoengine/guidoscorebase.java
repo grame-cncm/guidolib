@@ -34,14 +34,13 @@ package guidoengine;
  * and provices the method to convert an AR representation to GR representation.
  */
 public class guidoscorebase {
-	//public static final int kNoBB = 0; // Doesn't exist in GUIDOScoreMap.h
-	public static final int kPageBB = 0;
-	public static final int kSystemsBB = 1;
-	public static final int kSystemsSliceBB = 2;
-	public static final int kStavesBB = 3;
-	public static final int kBarlinesBB = 4;
-	//public static final int kMeasureBB = 4; // Commented in GUIDOScoreMap.h
-	public static final int kEventsBB = 5;
+	public static final int kNoBB = 0;
+	public static final int kPageBB = 1;
+	public static final int kSystemsBB = 2;
+	public static final int kSystemsSliceBB = 4;
+	public static final int kStavesBB = 8;
+	public static final int kMeasureBB = 0x10;
+	public static final int kEventsBB = 0x20;
 
 	public final long fARHandler;
 	public final long fGRHandler;
