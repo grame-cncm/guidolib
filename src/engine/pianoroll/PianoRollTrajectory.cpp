@@ -66,7 +66,7 @@ void PianoRollTrajectory::DrawVoice(ARMusicalVoice* v, DrawParams &drawParams)
             std::pair<int, VGColor *> pair = fVoicesColors->at(i);
 
             if (pair.first == voiceNum)
-                fColors->push(pair.second);
+				fColors->push(new VGColor(*pair.second));
         }
     }
     

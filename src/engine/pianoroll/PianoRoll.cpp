@@ -161,6 +161,7 @@ void PianoRoll::setColorToVoice(int voiceNum, int r, int g, int b, int a)
             std::pair<int, VGColor *> pair = fVoicesColors->at(i);
 
             if (pair.first == voiceNum) {
+				delete pair.second;
                 fVoicesColors->erase(fVoicesColors->begin() + i);
                 break;
             }
@@ -551,7 +552,7 @@ void PianoRoll::DrawVoice(ARMusicalVoice* v, PianoRoll::DrawParams &drawParams)
             std::pair<int, VGColor *> pair = fVoicesColors->at(i);
 
             if (pair.first == voiceNum)
-                fColors->push(pair.second);
+				fColors->push(new VGColor(*pair.second));
         }
     }
     
