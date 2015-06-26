@@ -2,6 +2,9 @@
  guido2image - change log
 ====================================
   
+version 1.23
+	- new options -j and -k to control space force function and springs
+
 2014-12-10 version 1.22
 	- zoom works again
 		- output image max pixel number is 300 millions

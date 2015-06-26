@@ -15,6 +15,8 @@
 */
 
 /* change log:
+	version 1.23
+		- space force and spring control (options -j and -k)
 	version 1.22
 		- piano roll export added
 	version 1.1
@@ -50,7 +52,7 @@
 
 #define ERROR_BUFFER_SIZE 500
 //------------------------------------------------------------------------------------------
-#define kVersion	"1.22"
+#define kVersion	"1.23"
 //------------------------------------------------------------------------------------------
 
 #ifdef WIN32
@@ -83,13 +85,15 @@ typedef struct Guido2ImageOptions {
 	const char *	optimalPageFill;
     float           proportionalRendering;
     const char *    resize2Page;
+	float			spring;
+	float			force;
 
 	Guido2ImageOptions () 
 		: stdInMode(false), hasLayout(false), page(1),
 		  inputFile(0), inputString(0), outputFile(0), imageFormat(0), scoreFormat("classic"),
 		  zoom(1), height(-1), width(-1),
           systemsDistance(-1.f), systemsDistribution(0),
-          optimalPageFill(0), proportionalRendering(0), resize2Page("on")  {}
+          optimalPageFill(0), proportionalRendering(0), resize2Page("on"), spring(0), force(0)  {}
 } Guido2ImageOptions;
 
 //------------------------------------------------------------------------------------------
@@ -122,6 +126,8 @@ static void usage(const char * name)
 	cerr << "           -b [on|off]             control the optimal page fill (default value is 'on')." << endl;
 	cerr << "           -r [on|off]             automatically resize page to music (default value is 'on')." << endl;
 	cerr << "           -c (float)              sets the proportional force multiplicator (0 is default value and disables proportional rendering)." << endl;
+	cerr << "           -j (int)                space force function (default value is 750)." << endl;
+	cerr << "           -k (float)              spring parameter float value (default value is 1.1)." << endl;
 	cerr << endl;
 	cerr << "notes:        * If you use both -h and -w options, the score will be reduced/enlarged to fit" << endl;
 	cerr << "                inside the height*width rect ; the score's aspect ratio will be preserved." << endl;
@@ -157,7 +163,7 @@ static void parseOptions(int argc, char *argv[] , Guido2ImageOptions& opts )
 {
 	int c;
 	opterr = 0;
-	while ((c = getopt (argc, argv, "f:s:o:pw:h:z:t:q:d:a:b:r:c:?:v")) != -1)
+	while ((c = getopt (argc, argv, "v?f:s:o:p:w:h:z:t:q:d:a:b:r:c:v:k:j:")) != -1) {
 		switch (c)
 		{
 			case 'f':	opts.inputFile = optarg;		break;
@@ -186,13 +192,21 @@ static void parseOptions(int argc, char *argv[] , Guido2ImageOptions& opts )
 			case 'c':	opts.proportionalRendering = strtod(optarg, 0);
 						opts.hasLayout = true;
 						break;
+			case 'j':	opts.force = strtod(optarg, 0);
+						opts.hasLayout = true;
+						break;
+			case 'k':	opts.spring = strtod(optarg, 0);
+						opts.hasLayout = true;
+						break;
 			case 'v':	cout << basename(argv[0]) << " version " << kVersion << " using Guido Engine v." << GuidoGetVersionStr() << endl;
 						exit(0);
 
 			default:
+			cout << "default " << endl;
 				usage( basename(argv[0]) );
 				abort();
 		}
+	}
      
 	int remain = argc - optind;
 	if (remain) error ("too many arguments.");
@@ -266,10 +280,15 @@ static string toLower (const char* str)
 //------------------------------------------------------------------------------------------
 static GuidoLayoutSettings* options2layout (const Guido2ImageOptions& opts)
 {
-	static GuidoLayoutSettings layout = { 75.f, kAutoDistrib, 0.25f, 750, 1.1f, 0, 1, 1 };
+	static GuidoLayoutSettings layout = { 75.f, kAutoDistrib, 0.25f, 750, 1.1f, 0, 1, 1, 0 };
 	if (opts.hasLayout) {
 		if (opts.systemsDistance > 0)
             layout.systemsDistance = opts.systemsDistance;
+
+		if (opts.spring > 0)
+            layout.spring = opts.spring;
+		if (opts.force > 0)
+            layout.force = opts.force;
 
 		if (opts.systemsDistribution) {
 			string str (toLower (opts.systemsDistribution));
