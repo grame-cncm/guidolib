@@ -47,7 +47,7 @@ class PianoRoll {
 public:
              PianoRoll(ARMusic *arMusic);
              PianoRoll(const char *midiFileName);
-    virtual ~PianoRoll();
+	virtual ~PianoRoll() {}
 
     virtual void  setLimitDates(GuidoDate start, GuidoDate end);
     virtual void  setPitchRange(int minPitch, int maxPitch);
@@ -84,7 +84,7 @@ protected:
         VGDevice *dev;
     };
 
-    virtual void  init();
+	void  init();
     
     DrawParams    createDrawParamsStructure(int width, int height, VGDevice *dev) const;
 
@@ -111,7 +111,6 @@ protected:
 	        float pitch2ypos          (int midipitch, DrawParams &drawParams) const;
 	virtual void  handleColor         (ARNoteFormat *e, DrawParams &drawParams);
 	virtual void  popColor            (DrawParams &drawParams);
-	//virtual void handleEmpty        (double date);
 
             void HSVtoRGB             (float h, float s, float v, int &r, int &g, int &b) const;
             
@@ -147,9 +146,9 @@ protected:
 
     bool fVoicesAutoColored; // does the user wants voices to be auto colored ?
 
-    std::vector<std::pair<int, VGColor *> > *fVoicesColors; // voices colors that the user set himself
+	std::vector<std::pair<int, VGColor *> > fVoicesColors; // voices colors that the user set himself
     
-    std::stack<VGColor *> *fColors;  // the colors stack (voice color, noteFormat color)
+	std::stack<VGColor *> fColors;  // the colors stack (voice color, noteFormat color)
     bool isAfterStateNoteFormatTag;
 
 	bool fChord;                   // a flag to indicate that next note (or rest) is in a chord

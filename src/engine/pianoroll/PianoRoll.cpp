@@ -52,43 +52,34 @@ using namespace std;
 
 //--------------------------------------------------------------------------
 PianoRoll::PianoRoll(ARMusic *arMusic) :
-    fARMusic(arMusic), fMidiFileName(NULL),
-    fVoicesAutoColored(false), fVoicesColors(NULL),
-    isAfterStateNoteFormatTag(false),
-    fKeyboardEnabled(false), fMeasureBarsEnabled(false),
-    fPitchLinesDisplayMode(kAutoLines)    
+	fARMusic(arMusic), fMidiFileName(NULL),
+	fVoicesAutoColored(false),
+	isAfterStateNoteFormatTag(false),
+	fKeyboardEnabled(false), fMeasureBarsEnabled(false),
+	fPitchLinesDisplayMode(kAutoLines)
 {
-    init();
+	init();
 }
 
 //--------------------------------------------------------------------------
 PianoRoll::PianoRoll(const char *midiFileName) :
-    fARMusic(NULL), fMidiFileName(midiFileName),
-    fVoicesAutoColored(false), fVoicesColors(NULL),
-    isAfterStateNoteFormatTag(false),
-    fKeyboardEnabled(false), fMeasureBarsEnabled(false),
-    fPitchLinesDisplayMode(kAutoLines)
+	fARMusic(NULL), fMidiFileName(midiFileName),
+	fVoicesAutoColored(false),
+	isAfterStateNoteFormatTag(false),
+	fKeyboardEnabled(false), fMeasureBarsEnabled(false),
+	fPitchLinesDisplayMode(kAutoLines)
 {
-    init();
+	init();
 }
 
 //--------------------------------------------------------------------------
-PianoRoll::~PianoRoll() 
+void PianoRoll::init()
 {
-    delete fVoicesColors;
-    delete fColors;
-}
+	GuidoDate defaultStartDate = {kDefaultStartDateNum, kDefaultStartDateDenom};
+	GuidoDate defaultEndDate   = {kDefaultEndDateNum, kDefaultEndDateDenom};
 
-//--------------------------------------------------------------------------
-void PianoRoll::init() 
-{
-    GuidoDate defaultStartDate = {kDefaultStartDateNum, kDefaultStartDateDenom};
-    GuidoDate defaultEndDate   = {kDefaultEndDateNum, kDefaultEndDateDenom};
-
-    setLimitDates(defaultStartDate, defaultEndDate);
-    setPitchRange(kDefaultLowPitch, kDefaultHighPitch);
-
-    fColors = new std::stack<VGColor *>();
+	setLimitDates(defaultStartDate, defaultEndDate);
+	setPitchRange(kDefaultLowPitch, kDefaultHighPitch);
 }
 
 //--------------------------------------------------------------------------
@@ -154,24 +145,20 @@ void PianoRoll::setPitchLinesDisplayMode(int mode)
 //--------------------------------------------------------------------------
 void PianoRoll::setColorToVoice(int voiceNum, int r, int g, int b, int a)
 {
-    if (!fVoicesColors)
-        fVoicesColors = new std::vector<std::pair<int, VGColor *> >();
-    else {
-        for (unsigned int i = 0; i < fVoicesColors->size(); i++) {
-            std::pair<int, VGColor *> pair = fVoicesColors->at(i);
+	for (unsigned int i = 0; i < fVoicesColors.size(); i++) {
+		std::pair<int, VGColor *> pair = fVoicesColors.at(i);
 
-            if (pair.first == voiceNum) {
-				delete pair.second;
-                fVoicesColors->erase(fVoicesColors->begin() + i);
-                break;
-            }
-        }
-    }
+		if (pair.first == voiceNum) {
+			delete pair.second;
+			fVoicesColors.erase(fVoicesColors.begin() + i);
+			break;
+		}
+	}
 
     VGColor *color = new VGColor(r, g, b, a);
     std::pair<int, VGColor *> newVoiceColor(voiceNum, color);
 
-    fVoicesColors->push_back(newVoiceColor);
+	fVoicesColors.push_back(newVoiceColor);
 }
 
 //--------------------------------------------------------------------------
@@ -280,24 +267,17 @@ void PianoRoll::initRendering(PianoRoll::DrawParams &drawParams)
 {
 	drawParams.dev->NotifySize(drawParams.width, drawParams.height);
 	drawParams.dev->BeginDraw();
-
-    drawParams.dev->PushPenColor(VGColor(100, 100, 100));
-    drawParams.dev->PushFillColor(VGColor(0, 0, 0));
 }
 
 //--------------------------------------------------------------------------
 void PianoRoll::endRendering(PianoRoll::DrawParams &drawParams)
 {
-    drawParams.dev->PopFillColor();
-    drawParams.dev->PopPenColor();
     drawParams.dev->EndDraw();
 }
 
 //--------------------------------------------------------------------------
 void PianoRoll::DrawGrid(PianoRoll::DrawParams &drawParams) const
 {
-    drawParams.dev->PushPenColor(VGColor(0, 0, 0));
-
     if (fPitchLinesDisplayMode == kAutoLines) {
         /*if (drawParams.noteHeight < kLimitDist34Mode)
             DrawOctavesGrid(drawParams);
@@ -310,8 +290,6 @@ void PianoRoll::DrawGrid(PianoRoll::DrawParams &drawParams) const
     }
     else
         DrawChromaticGrid(drawParams, true);
-
-    drawParams.dev->PopPenColor();
 }
 
 //--------------------------------------------------------------------------
@@ -440,35 +418,8 @@ void PianoRoll::DrawKeyboard(PianoRoll::DrawParams &drawParams) const
         switch (step) {
         case 0:
             if (i != fHighPitch + 1) {
-                if (i == 60) { // Tint C4 note in grey
-                    drawParams.dev->PushPenColor(VGColor(0, 0, 0));
-                    drawParams.dev->PushFillColor(VGColor(200, 200, 200));
-
-                    float xCoords[6] = {
-                        0,
-                        roundFloat(keyboardBlackNotesWidth),
-                        roundFloat(keyboardBlackNotesWidth),
-                        roundFloat(drawParams.untimedLeftElementWidth),
-                        roundFloat(drawParams.untimedLeftElementWidth),
-                        0
-                    };
-
-                    float yCoords[6] = {
-                        roundFloat(y - drawParams.noteHeight),
-                        roundFloat(y - drawParams.noteHeight),
-                        roundFloat(y - 1.5f * drawParams.noteHeight),
-                        roundFloat(y - 1.5f * drawParams.noteHeight),
-                        roundFloat(y),
-                        roundFloat(y)
-                    };
-
-                    drawParams.dev->Polygon(xCoords, yCoords, 6);
-
-                    drawParams.dev->PopFillColor();
-                    drawParams.dev->PopPenColor();
-                }
-
-                oct = (i - 12) / 12;
+				// Octave with guido octave number
+				oct = (i - 12 * 4) / 12;
                 octaveString.str("");
                 octaveString << oct;
                 cNoteString = "C" + octaveString.str();
@@ -545,19 +496,17 @@ void PianoRoll::DrawKeyboard(PianoRoll::DrawParams &drawParams) const
 //--------------------------------------------------------------------------
 void PianoRoll::DrawVoice(ARMusicalVoice* v, PianoRoll::DrawParams &drawParams)
 {
-    if (fVoicesColors != NULL) {
-        int voiceNum = v->getVoiceNum();
-        
-        for (unsigned int i = 0; i < fVoicesColors->size() && fColors->empty(); i++) {
-            std::pair<int, VGColor *> pair = fVoicesColors->at(i);
+	int voiceNum = v->getVoiceNum();
 
-            if (pair.first == voiceNum)
-				fColors->push(new VGColor(*pair.second));
-        }
-    }
+	for (unsigned int i = 0; i < fVoicesColors.size() && fColors.empty(); i++) {
+		std::pair<int, VGColor *> pair = fVoicesColors.at(i);
+
+		if (pair.first == voiceNum)
+			fColors.push(new VGColor(*pair.second));
+	}
     
-    if (!fColors->empty() || fVoicesAutoColored) {
-        if (fColors->empty()) {
+	if (!fColors.empty() || fVoicesAutoColored) {
+		if (fColors.empty()) {
             int r, g, b;
 
             drawParams.colorHue += kGoldenRatio;
@@ -565,10 +514,10 @@ void PianoRoll::DrawVoice(ARMusicalVoice* v, PianoRoll::DrawParams &drawParams)
 
             HSVtoRGB((float) drawParams.colorHue, 0.5f, 0.9f, r, g, b);
 
-            fColors->push(new VGColor(r, g, b, 255));
+			fColors.push(new VGColor(r, g, b, 255));
         }
         
-        drawParams.dev->PushFillColor(*fColors->top());
+		drawParams.dev->PushFillColor(*fColors.top());
     }
 
     fChord          = false;
@@ -617,7 +566,7 @@ void PianoRoll::DrawVoice(ARMusicalVoice* v, PianoRoll::DrawParams &drawParams)
             DrawMeasureBar(date, drawParams);
 	}
 
-    while (!fColors->empty())
+	while (!fColors.empty())
 		popColor(drawParams);
 }
 
@@ -673,9 +622,6 @@ void PianoRoll::DrawMeasureBar(double date, PianoRoll::DrawParams &drawParams) c
 	float yMin = pitch2ypos(fLowPitch, drawParams)  + 0.5f * drawParams.noteHeight;
 	float yMax = pitch2ypos(fHighPitch, drawParams) - 0.5f * drawParams.noteHeight;
     
-    drawParams.dev->PushPenColor(VGColor(0, 0, 0));
-    drawParams.dev->PushFillColor(VGColor(0, 0, 0));
-
     drawParams.dev->PushPenWidth(0.3f);
     drawParams.dev->Line(
         roundFloat(x),
@@ -683,9 +629,6 @@ void PianoRoll::DrawMeasureBar(double date, PianoRoll::DrawParams &drawParams) c
         roundFloat(x),
         roundFloat(yMax));
     drawParams.dev->PopPenWidth();
-
-    drawParams.dev->PopFillColor();
-    drawParams.dev->PopPenColor();
 }
 
 //--------------------------------------------------------------------------
@@ -709,15 +652,15 @@ void PianoRoll::handleColor(ARNoteFormat* noteFormat, DrawParams &drawParams)
             }
         }
 
-        fColors->push(new VGColor(colref[0], colref[1], colref[2], colref[3]));
-        drawParams.dev->PushFillColor(*fColors->top());
+		fColors.push(new VGColor(colref[0], colref[1], colref[2], colref[3]));
+		drawParams.dev->PushFillColor(*fColors.top());
     }
     else if (!noteFormat->getPosition() && noteFormat->getIsAuto()) { // Means it's a range noteFormat end tag
         if (noteFormat->getDX() == NULL
             && noteFormat->getDY() == NULL
             && noteFormat->getSize() == NULL
             && noteFormat->getTPStyle() == NULL // Means no noteFormat tag exists yet
-            && (fColors->size() > 1 || (!fVoicesAutoColored && fColors->size() > 0)))
+			&& (fColors.size() > 1 || (!fVoicesAutoColored && fColors.size() > 0)))
         {
             if (isAfterStateNoteFormatTag)
                 popColor(drawParams);
@@ -733,16 +676,10 @@ void PianoRoll::handleColor(ARNoteFormat* noteFormat, DrawParams &drawParams)
 void PianoRoll::popColor(DrawParams &drawParams) {
     drawParams.dev->PopFillColor();
 
-    VGColor *topColor = fColors->top();
-    fColors->pop();
+	VGColor *topColor = fColors.top();
+	fColors.pop();
     delete topColor;
 }
-
-//--------------------------------------------------------------------------
-/*void PianoRoll::handleEmpty(double date)
-{
-    // REM: TODO ?
-}*/
 
 //--------------------------------------------------------------------------
 float PianoRoll::pitch2ypos(int midipitch, DrawParams &drawParams) const
