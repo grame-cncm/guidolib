@@ -30,7 +30,21 @@ all :
 	make $(TARGET)
 	make tools
 	make Qt
-	make jni
+
+help :
+	@echo GUIDOEngine makefile - Targets are :
+	@echo "   all (default): build the GUIDOEngine library,"	
+	@echo "                        the guido tools,"	
+	@echo "                        the Guido Qt library, applications and tools"	
+	@echo "   java         : build the jni and java libraries"	
+	@echo "   js           : build the javascript library (requires emscripten)"	
+	@echo 
+	@echo "Platform targets to build the GUIDOEngine library are:"	
+	@echo "   mac     (build also ios library)"	
+	@echo "   windows (build 32 and 64 bits library)"	
+	@echo "   linux"	
+	@echo "the platform targets is automatically evaluated by the default target."	
+	@echo "NOTE: windows targets are based on $(WIN32VS)"	
 
 #===============================================================
 # building the library on Mac OS X
@@ -167,7 +181,7 @@ Qt :
 	make -C ../environments/Qt
 
 #===============================================================
-# building the jni library
+# building the jni and java library
 #===============================================================
-jni :
+java :
 	make -C ../lang/java/build
