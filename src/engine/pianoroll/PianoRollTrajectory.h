@@ -19,9 +19,9 @@
 class PianoRollTrajectory : public PianoRoll
 {
 public:
-             PianoRollTrajectory(ARMusic *arMusic);
-             PianoRollTrajectory(const char *midiFileName);
-    virtual ~PianoRollTrajectory();
+			 PianoRollTrajectory(ARMusic *arMusic) :  PianoRoll(arMusic), fCurrentDate(0) {}
+			 PianoRollTrajectory(const char *midiFileName) : PianoRoll(midiFileName), fCurrentDate(0) {}
+	virtual ~PianoRollTrajectory() {}
 
 private:
     typedef struct {
@@ -41,11 +41,11 @@ private:
     std::vector<EventInfos> *sortList(std::vector<EventInfos> *listToSort);
     /****************/
 
-    std::vector<EventInfos> *previousEventInfos;
-    std::vector<EventInfos> *currentEventInfos;
+	std::vector<EventInfos> fPreviousEventInfos;
+	std::vector<EventInfos> fCurrentEventInfos;
 
 protected:
-    void init();
+	void init();
 
 	void DrawVoice(ARMusicalVoice* v, DrawParams &drawParams);
     void DrawNote (int pitch, double date, double dur, DrawParams &drawParams);
@@ -55,7 +55,6 @@ protected:
     void DrawLinkBetween(PianoRollTrajectory::EventInfos leftEvent, PianoRollTrajectory::EventInfos rightEvent, DrawParams &drawParams) const;
 
 	void handleRest (double date, DrawParams &drawParams);
-	//void handleEmpty (double date);
 
 #ifdef MIDIEXPORT
     void DrawMidiSeq(MidiSeqPtr seq, int tpqn, DrawParams &drawParams);
