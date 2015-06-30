@@ -171,7 +171,8 @@ int cairo_guido2img::convertPianoRoll(PianoRoll *pr, GuidoSessionPianorollParame
 	}
 
 	// Draw piano roll
-
+	dev->SelectPenColor(VGColor(100, 100, 100));
+	dev->SelectFillColor(VGColor(0, 0, 0));
 	GuidoErrCode error = GuidoPianoRollOnDraw (pr, width, height, dev);
 
 	if(pianorollParameters.format == GUIDO_WEB_API_SVG || pianorollParameters.format == GUIDO_WEB_API_BINARY) {
