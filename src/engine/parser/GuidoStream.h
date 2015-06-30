@@ -17,34 +17,33 @@
 #include <istream>
 #include <sstream>
 #include <stack>
+
 #include "ARFactory.h"
 
-using namespace std;
 
-
-class GuidoStream : public stringstream
+class GuidoStream
 {
 public:
-             GuidoStream();
-    virtual ~GuidoStream();
+             GuidoStream() {}
+    virtual ~GuidoStream() {}
 
     void     WriteToStream(const char* str);
-    
 
-    /* Clears this' state flags */
-    void     Prepare();
     void     ReinitStream();
-    stringstream * getGlobalStringStream() {return fTheGlobalStringStream;}
+
+		  std::string  getStreamStr() const;
+    const std::string  getGuidoCode() const		{ return fGMNCode;}
 
 protected:
-    stringstream *fTheGlobalStringStream; // The stringstream which contains the real string
-                                          // written by the user since the beginning
+    std::stringstream	fInputStream;	// The stringstream which contains the real string
+										// written by the user since the beginning
+    std::string			fGMNCode;		// The completed input stream (syntactically correct gmn code)
 
     /* Builds the tags ( "{", "[", "(", "<" ) stack from inStr */
-    stack<char> *AnalyzeString(stringstream *inStr);
+    void	AnalyzeString(const std::stringstream& inStr, std::stack<char>& stack);
 
     /* Complete stringToComplete with appropriate tags contained in inStack */
-    void         WriteNewString(stack<char> *inStack, string *stringToComplete);
+    void    WriteNewString(std::stack<char>& inStack, std::string& stringToComplete);
 };
 
 

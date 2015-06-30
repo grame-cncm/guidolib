@@ -22,43 +22,30 @@ using namespace std;
 
 
 //--------------------------------------------------------------------------
-GuidoStream::GuidoStream() : stringstream()
-{
-    fTheGlobalStringStream = new stringstream();
-}
-
-//--------------------------------------------------------------------------
-GuidoStream::~GuidoStream() 
-{
-    delete fTheGlobalStringStream;
-}
-
-//--------------------------------------------------------------------------
 void GuidoStream::WriteToStream(const char* inStr) 
 {
     /* Append inStr (written by user) to global string */
-    *fTheGlobalStringStream << inStr;
+    fInputStream << inStr;
 
-    /* Create a temporary string from the global string */
-    string *tmpString = new string(fTheGlobalStringStream->str());
+   fGMNCode = fInputStream.str();
 
     /* Build tags stack from the global string */
-    stack<char> *charStack = AnalyzeString(fTheGlobalStringStream);
+    stack<char> charStack;
+	AnalyzeString(fInputStream, charStack);
 
-    /* Complete temporary string with appropriate tags from tags stack */
-    WriteNewString(charStack, tmpString);
-
-    /* Set the final stringstream (this) from the temporary string */
-    this->str(*tmpString);
-    delete tmpString;
+    /* Complete gmn string with appropriate tags from tags stack */
+    WriteNewString(charStack, fGMNCode);
 }
 
 //--------------------------------------------------------------------------
-stack<char> *GuidoStream::AnalyzeString(stringstream *inStr)
-{
-    stack<char> *charStack = new stack<char>();
+std::string GuidoStream::getStreamStr() const	{
+	return fInputStream.str();
+}
 
-    string stringToAnalyze(inStr->str());
+//--------------------------------------------------------------------------
+void GuidoStream::AnalyzeString(const stringstream& inStr, stack<char>& charStack)
+{
+    string stringToAnalyze(inStr.str());
     bool errorFound = false;
 
     /* Get current char, and push its opposite in the stack if it's a tag ("{," "[," "(," "<") */
@@ -67,22 +54,22 @@ stack<char> *GuidoStream::AnalyzeString(stringstream *inStr)
         switch (stringToAnalyze[i])
         {
         case '{':
-            charStack->push('}');
+            charStack.push('}');
             break;
         case '[':
-            charStack->push(']');
+            charStack.push(']');
             break;
         case '(':
-            charStack->push(')');
+            charStack.push(')');
             break;
         case '<':
-            charStack->push('>');
+            charStack.push('>');
             break;
         /* If current char is a closing tag and corresponds to the top of the stack, stack's first element is popped.
            Else, there is a syntax error and we leave. */
         case '}':
-            if (charStack->size() && charStack->top() == '}')
-                charStack->pop();
+            if (charStack.size() && charStack.top() == '}')
+                charStack.pop();
             else
             {
                 /* Syntax error */
@@ -90,8 +77,8 @@ stack<char> *GuidoStream::AnalyzeString(stringstream *inStr)
             }
             break;
         case ']':
-            if (charStack->size() && charStack->top() == ']')
-                charStack->pop();
+            if (charStack.size() && charStack.top() == ']')
+                charStack.pop();
             else
             {
                 /* Syntax error */
@@ -99,8 +86,8 @@ stack<char> *GuidoStream::AnalyzeString(stringstream *inStr)
             }
             break;
         case ')':
-            if (charStack->size() && charStack->top() == ')')
-                charStack->pop();
+            if (charStack.size() && charStack.top() == ')')
+                charStack.pop();
             else
             {
                 /* Syntax error */
@@ -108,8 +95,8 @@ stack<char> *GuidoStream::AnalyzeString(stringstream *inStr)
             }
             break;
         case '>':
-            if (charStack->size() && charStack->top() == '>')
-                charStack->pop();
+            if (charStack.size() && charStack.top() == '>')
+                charStack.pop();
             else
             {
                 /* Syntax error */
@@ -120,35 +107,23 @@ stack<char> *GuidoStream::AnalyzeString(stringstream *inStr)
             break;
         }
     }
-    
-    
-    return charStack;
 }
 
 //--------------------------------------------------------------------------
-void GuidoStream::WriteNewString(stack<char> *inStack, string *stringToComplete)
+void GuidoStream::WriteNewString(stack<char>& inStack, string& stringToComplete)
 {
     /* Append all stack's tags to the stringToComplete */
-    while (inStack->size())
+    while (inStack.size())
     {
-        stringToComplete->push_back(inStack->top());
-        inStack->pop();
+        stringToComplete.push_back(inStack.top());
+        inStack.pop();
     }
-}
-
-//--------------------------------------------------------------------------
-void GuidoStream::Prepare()
-{
-    this->clear();
-    this->str(this->str()); // Needed !
 }
 
 //--------------------------------------------------------------------------
 void GuidoStream::ReinitStream()
 {
-    this->clear();
-    this->str("");
-
-    fTheGlobalStringStream->clear();
-    fTheGlobalStringStream->str("");
+    fGMNCode.clear();
+    fInputStream.str("");
+    fInputStream.clear();
 }

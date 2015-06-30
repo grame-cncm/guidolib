@@ -310,12 +310,12 @@ ARHandler GuidoEngineAdapter::string2AR(GuidoParser * parser, const string &gmnC
 	return ::GuidoString2AR (parser, gmnCode.c_str());
 }
 
-string GuidoEngineAdapter::getStream(GuidoStream *gStream)
+string GuidoEngineAdapter::getStream(const GuidoStream *gStream) const
 {
 	// Don't use GuidoGetStream because there is a problem with char * pointer in emscripten
 	// return ::GuidoGetStream(gStream);
 
-	return gStream->getGlobalStringStream()->str();
+	return gStream->getStreamStr();
 }
 
 ARHandler GuidoEngineAdapter::stream2AR(GuidoParser *p, GuidoStream* stream)

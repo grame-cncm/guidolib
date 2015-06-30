@@ -147,10 +147,13 @@ GUIDOAPI(ARHandler)	GuidoStream2AR (GuidoParser *p, GuidoStream* s)
         return NULL;
 
     /* Prepare stream (principally, clear eof flag) */
-    s->Prepare();
+//    s->Prepare();
 
     /* Set the GuidoStream into the GuidoParser */
-    p->setStream(s);
+
+	stringstream gmn; // (s->getGuidoCode());
+	gmn << s->getGuidoCode();
+	p->setStream(&gmn);
 
     /* Parse ! */
     long startTime = GuidoTiming::getCurrentmsTime();
@@ -202,9 +205,19 @@ GUIDOAPI(GuidoStream *) GuidoOpenStream ()
 }
 
 // --------------------------------------------------------------------------
-GUIDOAPI(const char *) GuidoGetStream (GuidoStream * guidoStream)
+GUIDOAPI(const char *) GuidoGetStream (const GuidoStream * guidoStream)
 {
-    return guidoStream->getGlobalStringStream()->str().c_str();
+	const string s (guidoStream->getStreamStr());
+	char *str = new char[s.size()+1];
+	strcpy(str, s.c_str());
+	return str;
+}
+
+
+// --------------------------------------------------------------------------
+GUIDOAPI(void) GuidoFreeStreamString (const char * str)
+{
+	delete[] str;
 }
 
 // --------------------------------------------------------------------------

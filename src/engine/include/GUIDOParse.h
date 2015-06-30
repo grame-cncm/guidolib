@@ -49,9 +49,15 @@ extern "C" {
 	/*!
 		\brief returns the string of the GuidoStream
 		\param gStream a GuidoStream
-        \return a std::string.
+        \return a pointer to a char * (must be freed by GuidoFreeStreamString
 	*/
-    GUIDOAPI(const char *)      GuidoGetStream (GuidoStream * gStream);
+    GUIDOAPI(const char *)      GuidoGetStream (const GuidoStream * gStream);
+
+	/*!
+		\brief free a string previously returned by GuidoGetStream
+		\param str a pointer to the string
+ 	*/
+    GUIDOAPI(void)				GuidoFreeStreamString(const char * str);
 
 	/*!
 		\brief Parse a file and create the corresponding AR

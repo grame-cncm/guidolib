@@ -546,7 +546,7 @@ class_export GuidoEngineAdapter
 			\param gStream a stream
 			\return a std::string.
 		*/
-		std::string getStream(GuidoStream *gStream);
+		std::string getStream(const GuidoStream *gStream) const;
 
 		/*!
 			\brief Parse a stream and create the corresponding AR
