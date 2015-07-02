@@ -69,6 +69,8 @@ public class tests extends Canvas implements timemapcollector, mapcollector {
 		testStream.Stream2AR();
 		testStream.CloseParser();
 		testStream.AR2GR();
+		String stream = testStream.GetStream();
+		System.out.println("stream = " + stream);
 		testStream.CloseStream();
 	}
 

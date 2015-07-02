@@ -674,7 +674,9 @@ JNIEXPORT jstring JNICALL Java_guidoengine_guidoscorebase_GetStream(JNIEnv *env,
 {
 	GuidoStream* stream = (GuidoStream*)env->GetLongField (obj, gGuidoStreamID);
 	const char * content = GuidoGetStream(stream);
-	return env->NewStringUTF(content);
+	jstring str = env->NewStringUTF(content);
+	GuidoFreeStreamString(content);
+	return str;
 }
 
 /*

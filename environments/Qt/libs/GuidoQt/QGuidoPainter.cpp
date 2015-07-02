@@ -388,6 +388,11 @@ GuidoErrCode QGuidoPainter::drawPianoRoll(QPainter *painter, const QRect& drawRe
 	VGSystem * sys = new GSystemQt(painter);
 	VGDevice * dev = sys->CreateDisplayDevice();
 
+	//Actual draw of the Guido Score.
+	VGColor color(fCurrentColor.red(), fCurrentColor.green(), fCurrentColor.blue(), fCurrentColor.alpha());
+	dev->SelectPenColor (color);
+	dev->SelectFillColor(color);
+	dev->SetFontColor	(color);
     GuidoErrCode result = GuidoPianoRollOnDraw(pianoRoll, drawRectangle.width(), drawRectangle.height(), dev);
 	
 	delete dev;

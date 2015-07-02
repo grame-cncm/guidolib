@@ -15,6 +15,7 @@
 #define __GuidoPianoRoll__
 
 #include <stack>
+#include <map>
 
 #include "ARMusicalVoice.h"
 #include "ARNoteFormat.h"
@@ -47,7 +48,7 @@ class PianoRoll {
 public:
              PianoRoll(ARMusic *arMusic);
              PianoRoll(const char *midiFileName);
-    virtual ~PianoRoll();
+	virtual ~PianoRoll() {}
 
     virtual void  setLimitDates(GuidoDate start, GuidoDate end);
     virtual void  setPitchRange(int minPitch, int maxPitch);
@@ -55,7 +56,8 @@ public:
     virtual void  enableKeyboard(bool enabled) { fKeyboardEnabled = enabled; }
             float getKeyboardWidth(int height) const;
     virtual void  enableRandomVoicesColor(bool enabled) { fVoicesAutoColored = enabled; }
-    virtual void  setColorToVoice(int voiceNum, int r, int g, int b, int a);
+	virtual void  setColorToVoice(int voiceNum, int r, int g, int b, int a);
+	virtual bool  removeColorToVoice(int voiceNum);
     virtual void  enableMeasureBars(bool enabled) { fMeasureBarsEnabled = enabled; }
     virtual void  setPitchLinesDisplayMode(int mode);
     virtual void  getMap(int w, int h, Time2GraphicMap &outmap) const;
@@ -84,7 +86,7 @@ protected:
         VGDevice *dev;
     };
 
-    virtual void  init();
+	void  init();
     
     DrawParams    createDrawParamsStructure(int width, int height, VGDevice *dev) const;
 
@@ -111,7 +113,6 @@ protected:
 	        float pitch2ypos          (int midipitch, DrawParams &drawParams) const;
 	virtual void  handleColor         (ARNoteFormat *e, DrawParams &drawParams);
 	virtual void  popColor            (DrawParams &drawParams);
-	//virtual void handleEmpty        (double date);
 
             void HSVtoRGB             (float h, float s, float v, int &r, int &g, int &b) const;
             
@@ -147,9 +148,9 @@ protected:
 
     bool fVoicesAutoColored; // does the user wants voices to be auto colored ?
 
-    std::vector<std::pair<int, VGColor *> > *fVoicesColors; // voices colors that the user set himself
+	std::map<int, VGColor> fVoicesColors; // voices colors that the user set himself
     
-    std::stack<VGColor *> *fColors;  // the colors stack (voice color, noteFormat color)
+	std::stack<VGColor> fColors;  // the colors stack (voice color, noteFormat color)
     bool isAfterStateNoteFormatTag;
 
 	bool fChord;                   // a flag to indicate that next note (or rest) is in a chord

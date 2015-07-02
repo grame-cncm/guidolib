@@ -29,49 +29,16 @@
 using namespace std;
 
 //--------------------------------------------------------------------------
-PianoRollTrajectory::PianoRollTrajectory(ARMusic *arMusic) :
-    PianoRoll(arMusic), fCurrentDate(0)
-{
-    init();
-}
-
-//--------------------------------------------------------------------------
-PianoRollTrajectory::PianoRollTrajectory(const char *midiFileName) :
-    PianoRoll(midiFileName), fCurrentDate(0)
-{
-    init();
-}
-
-//--------------------------------------------------------------------------
-PianoRollTrajectory::~PianoRollTrajectory()
-{
-    delete previousEventInfos;
-    delete currentEventInfos;
-}
-
-//--------------------------------------------------------------------------
-void PianoRollTrajectory::init()
-{
-    previousEventInfos = new std::vector<EventInfos>;
-    currentEventInfos  = new std::vector<EventInfos>;
-}
-
-//--------------------------------------------------------------------------
 void PianoRollTrajectory::DrawVoice(ARMusicalVoice* v, DrawParams &drawParams)
 {
-    if (fVoicesColors != NULL) {
-        int voiceNum = v->getVoiceNum();
-        
-        for (unsigned int i = 0; i < fVoicesColors->size() && fColors->empty(); i++) {
-            std::pair<int, VGColor *> pair = fVoicesColors->at(i);
+	int voiceNum = v->getVoiceNum();
+	std::map<int , VGColor>::iterator it = fVoicesColors.find(voiceNum);
+	if(fVoicesColors.end() != it) {
+		fColors.push(it->second);
+	}
 
-            if (pair.first == voiceNum)
-				fColors->push(new VGColor(*pair.second));
-        }
-    }
-    
-    if (!fColors->empty() || fVoicesAutoColored) {
-        if (fColors->empty()) {
+	if (!fColors.empty() || fVoicesAutoColored) {
+		if (fColors.empty()) {
             int r, g, b;
 
             drawParams.colorHue += kGoldenRatio;
@@ -79,10 +46,10 @@ void PianoRollTrajectory::DrawVoice(ARMusicalVoice* v, DrawParams &drawParams)
 
             HSVtoRGB((float) drawParams.colorHue, 0.5f, 0.9f, r, g, b);
 
-            fColors->push(new VGColor(r, g, b, 255));
+			fColors.push(VGColor(r, g, b, 255));
         }
         
-        drawParams.dev->PushFillColor(*fColors->top());
+		drawParams.dev->PushFillColor(fColors.top());
     }
 
     fChord              = false;
@@ -139,11 +106,11 @@ void PianoRollTrajectory::DrawVoice(ARMusicalVoice* v, DrawParams &drawParams)
     DrawLinks(drawParams);                // Draws link to final event
     DrawFinalEvent(finalDur, drawParams); // Draws link after final event
 
-    while (!fColors->empty())
+	while (!fColors.empty())
         popColor(drawParams);
 
-    previousEventInfos->clear();
-    currentEventInfos->clear();
+	fPreviousEventInfos.clear();
+	fCurrentEventInfos.clear();
     fCurrentDate = 0;
 }
 
@@ -152,18 +119,17 @@ void PianoRollTrajectory::DrawNote(int pitch, double date, double dur, DrawParam
 {
     float    x     = date2xpos(date, drawParams.width, drawParams.untimedLeftElementWidth);
     float    y     = pitch2ypos(pitch, drawParams);
-    VGColor *color = ((fColors == NULL || fColors->empty()) ? new VGColor(0, 0, 0) : fColors->top());
+	VGColor color = fColors.empty() ? VGColor(0, 0, 0) : fColors.top();
 
     if (fCurrentDate == date)
-        currentEventInfos->push_back(createNoteInfos(x, y, *color));
+		fCurrentEventInfos.push_back(createNoteInfos(x, y, color));
     else {
         DrawLinks(drawParams);
-        
-        delete previousEventInfos;
-        previousEventInfos = new std::vector<EventInfos>(*currentEventInfos);
 
-        currentEventInfos->clear();
-        currentEventInfos->push_back(createNoteInfos(x, y, *color));
+		fPreviousEventInfos = fCurrentEventInfos;
+
+		fCurrentEventInfos.clear();
+		fCurrentEventInfos.push_back(createNoteInfos(x, y, color));
 
         fCurrentDate = date;
     }
@@ -172,35 +138,35 @@ void PianoRollTrajectory::DrawNote(int pitch, double date, double dur, DrawParam
 //--------------------------------------------------------------------------
 void PianoRollTrajectory::DrawLinks(DrawParams &drawParams) const
 {
-    if (!previousEventInfos->empty() && !currentEventInfos->empty())
+	if (!fPreviousEventInfos.empty() && !fCurrentEventInfos.empty())
         DrawAllLinksBetweenTwoEvents(drawParams);
 }
 
 //--------------------------------------------------------------------------
 void PianoRollTrajectory::DrawFinalEvent(double dur, DrawParams &drawParams)
 {
-    if (!currentEventInfos->empty()) {
+	if (!fCurrentEventInfos.empty()) {
         float w = duration2width(dur, drawParams.width, drawParams.untimedLeftElementWidth);
 
-        for (unsigned int i = 0; i < currentEventInfos->size(); i++) {
-            if (!currentEventInfos->at(i).isRest) {
-                VGColor *color = &currentEventInfos->at(i).color;
+		for (unsigned int i = 0; i < fCurrentEventInfos.size(); i++) {
+			if (!fCurrentEventInfos.at(i).isRest) {
+				VGColor *color = &fCurrentEventInfos.at(i).color;
 
                 if (color != NULL)
                     drawParams.dev->PushFillColor(*color);
 
                 float xCoords[4] = {
-                    roundFloat(currentEventInfos->at(i).x),
-                    roundFloat(currentEventInfos->at(i).x + w),
-                    roundFloat(currentEventInfos->at(i).x + w),
-                    roundFloat(currentEventInfos->at(i).x)
+					roundFloat(fCurrentEventInfos.at(i).x),
+					roundFloat(fCurrentEventInfos.at(i).x + w),
+					roundFloat(fCurrentEventInfos.at(i).x + w),
+					roundFloat(fCurrentEventInfos.at(i).x)
                 };
 
                 float yCoords[4] = {
-                    roundFloat(currentEventInfos->at(i).y - 0.5f * drawParams.noteHeight),
-                    roundFloat(currentEventInfos->at(i).y - 0.5f * drawParams.noteHeight),
-                    roundFloat(currentEventInfos->at(i).y + 0.5f * drawParams.noteHeight),
-                    roundFloat(currentEventInfos->at(i).y + 0.5f * drawParams.noteHeight)
+					roundFloat(fCurrentEventInfos.at(i).y - 0.5f * drawParams.noteHeight),
+					roundFloat(fCurrentEventInfos.at(i).y - 0.5f * drawParams.noteHeight),
+					roundFloat(fCurrentEventInfos.at(i).y + 0.5f * drawParams.noteHeight),
+					roundFloat(fCurrentEventInfos.at(i).y + 0.5f * drawParams.noteHeight)
                 };
 
                 drawParams.dev->Polygon(xCoords, yCoords, 4);
@@ -215,10 +181,10 @@ void PianoRollTrajectory::DrawFinalEvent(double dur, DrawParams &drawParams)
 //--------------------------------------------------------------------------
 void PianoRollTrajectory::DrawAllLinksBetweenTwoEvents(DrawParams &drawParams) const
 {
-    for (unsigned int i = 0; i < previousEventInfos->size(); i++) {
-        for (unsigned int j = 0; j < currentEventInfos->size(); j++) {
-            if (!previousEventInfos->at(i).isRest)
-                DrawLinkBetween(previousEventInfos->at(i), currentEventInfos->at(j), drawParams);
+	for (unsigned int i = 0; i < fPreviousEventInfos.size(); i++) {
+		for (unsigned int j = 0; j < fCurrentEventInfos.size(); j++) {
+			if (!fPreviousEventInfos.at(i).isRest)
+				DrawLinkBetween(fPreviousEventInfos.at(i), fCurrentEventInfos.at(j), drawParams);
         }
     }
 }
@@ -268,22 +234,15 @@ void PianoRollTrajectory::handleRest(double date, DrawParams &drawParams)
 
         float x = date2xpos(date, drawParams.width, drawParams.untimedLeftElementWidth);
 
-        delete previousEventInfos;
-        previousEventInfos = new std::vector<EventInfos>(*currentEventInfos);
+		fPreviousEventInfos = fCurrentEventInfos;
 
-        currentEventInfos->clear();
-        currentEventInfos->push_back(createRestInfos(x)); 
+		fCurrentEventInfos.clear();
+		fCurrentEventInfos.push_back(createRestInfos(x));
     }
 }
 
 //--------------------------------------------------------------------------
-/*void PianoRollTrajectory::handleEmpty(double date)
-{
-    handleRest(date);
-}*/
-
-//--------------------------------------------------------------------------
-PianoRollTrajectory::EventInfos PianoRollTrajectory::createNoteInfos(float x, float y, VGColor color) const
+PianoRollTrajectory::EventInfos PianoRollTrajectory::createNoteInfos(float x, float y, VGColor &color) const
 {
     EventInfos newNoteInfos;
 
@@ -344,8 +303,8 @@ void PianoRollTrajectory::DrawMidiSeq(MidiSeqPtr seq, int tpqn, DrawParams &draw
     DrawLinks(drawParams);                // Draws link to final event
     DrawFinalEvent(finalDur, drawParams); // Draws link after final event
 
-    previousEventInfos->clear();
-    currentEventInfos->clear();
+	fPreviousEventInfos.clear();
+	fCurrentEventInfos.clear();
     fCurrentDate = 0;
 }
 

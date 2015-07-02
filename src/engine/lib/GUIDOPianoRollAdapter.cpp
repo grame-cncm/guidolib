@@ -76,6 +76,11 @@ GuidoErrCode GUIDOPianoRollAdapter::setHtmlColorToVoice(PianoRoll *pr, int voice
 	return GuidoPianoRollSetHtmlColorToVoice(pr, voiceNum, color);
 }
 
+GuidoErrCode removeColorToVoice(PianoRoll *pr, int voiceNum)
+{
+	return GuidoPianoRollRemoveColorToVoice(pr, voiceNum);
+}
+
 GuidoErrCode GUIDOPianoRollAdapter::enableMeasureBars(PianoRoll *pr, bool enabled)
 {
 	return GuidoPianoRollEnableMeasureBars(pr, enabled);
@@ -103,6 +108,8 @@ std::string GUIDOPianoRollAdapter::svgExport(PianoRoll *pr, int width, int heigh
 	std::stringstream out;
 	SVGSystem sys(0);
 	SVGDevice dev (out, &sys, 0);
+	dev.SelectPenColor(VGColor(100, 100, 100));
+	dev.SelectFillColor(VGColor(0, 0, 0));
 	GuidoPianoRollOnDraw(pr, width, height, &dev);
 	return out.str();
 }
