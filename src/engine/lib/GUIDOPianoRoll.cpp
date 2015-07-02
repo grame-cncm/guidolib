@@ -189,6 +189,14 @@ GUIDOAPI(GuidoErrCode) GuidoPianoRollSetRGBColorToVoice(PianoRoll *pr, int voice
 }
 
 // ------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoPianoRollRemoveColorToVoice(PianoRoll *pr, int voiceNum)
+{
+	if(pr->removeColorToVoice(voiceNum))
+		return guidoNoErr;
+	return guidoErrBadParameter;
+}
+
+// ------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoPianoRollSetHtmlColorToVoice(PianoRoll *pr, int voiceNum, long color)
 {
     if (!pr || voiceNum < 1)

@@ -117,6 +117,14 @@ class_export GUIDOPianoRollAdapter
 		GuidoErrCode setHtmlColorToVoice(PianoRoll *pr, int voiceNum, long color);
 
 		/*!
+			\brief remove a color to a voice (first voice is number 1) (black by default)
+			\param pr a pianoroll previously created with GuidoAR2PianoRoll or GuidoMidi2PianoRoll
+			\param voiceNum the voice number (first voice is number 1)
+			\return a Guido error code
+		*/
+		GuidoErrCode removeColorToVoice(PianoRoll *pr, int voiceNum);
+
+		/*!
 			\brief Enables or not measure bars (false by default)
 			\param pr a pianoroll previously created with ar2PianoRoll or midi2PianoRoll
 			\param enabled a boolean corresponding to the measure bars draw state
