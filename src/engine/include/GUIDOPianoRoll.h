@@ -178,7 +178,7 @@ extern "C" {
         \param height the height of the canvas (-1 to set the default height : 512)
         \return a Guido error code (returns guidoErrBadParameter if keyboard width is higher than width param)
 	*/
-    GUIDOAPI(GuidoErrCode)      GuidoPianoRollGetMap(PianoRoll *pr, int width, int height, Time2GraphicMap &outmap);
+    GUIDOAPI(GuidoErrCode)      GuidoPianoRollGetMap(const PianoRoll *pr, int width, int height, Time2GraphicMap &outmap);
 
 	/*!
 		\brief Draw the piano roll on a VGDevice

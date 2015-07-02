@@ -226,7 +226,7 @@ GUIDOAPI(GuidoErrCode) GuidoPianoRollSetPitchLinesDisplayMode(PianoRoll *pr, int
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoPianoRollGetMap(PianoRoll *pr, int width, int height, Time2GraphicMap &outmap)
+GUIDOAPI(GuidoErrCode) GuidoPianoRollGetMap(const PianoRoll *pr, int width, int height, Time2GraphicMap &outmap)
 {
     if (!pr || width < -1 || height < -1 || width == 0 || height == 0)
         return guidoErrBadParameter;
