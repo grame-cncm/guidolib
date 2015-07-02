@@ -145,20 +145,18 @@ void PianoRoll::setPitchLinesDisplayMode(int mode)
 //--------------------------------------------------------------------------
 void PianoRoll::setColorToVoice(int voiceNum, int r, int g, int b, int a)
 {
-	for (unsigned int i = 0; i < fVoicesColors.size(); i++) {
-		std::pair<int, VGColor *> pair = fVoicesColors.at(i);
+	fVoicesColors[voiceNum] = VGColor(r, g, b, a);
+}
 
-		if (pair.first == voiceNum) {
-			delete pair.second;
-			fVoicesColors.erase(fVoicesColors.begin() + i);
-			break;
-		}
+//--------------------------------------------------------------------------
+bool PianoRoll::removeColorToVoice(int voiceNum)
+{
+	map<int, VGColor>::iterator it = fVoicesColors.find(voiceNum);
+	if(it != fVoicesColors.end()) {
+		fVoicesColors.erase(it);
+		return true;
 	}
-
-    VGColor *color = new VGColor(r, g, b, a);
-    std::pair<int, VGColor *> newVoiceColor(voiceNum, color);
-
-	fVoicesColors.push_back(newVoiceColor);
+	return false;
 }
 
 //--------------------------------------------------------------------------
@@ -497,14 +495,11 @@ void PianoRoll::DrawKeyboard(PianoRoll::DrawParams &drawParams) const
 void PianoRoll::DrawVoice(ARMusicalVoice* v, PianoRoll::DrawParams &drawParams)
 {
 	int voiceNum = v->getVoiceNum();
-
-	for (unsigned int i = 0; i < fVoicesColors.size() && fColors.empty(); i++) {
-		std::pair<int, VGColor *> pair = fVoicesColors.at(i);
-
-		if (pair.first == voiceNum)
-			fColors.push(new VGColor(*pair.second));
+	std::map<int , VGColor>::iterator it = fVoicesColors.find(voiceNum);
+	if(fVoicesColors.end() != it) {
+		fColors.push(it->second);
 	}
-    
+
 	if (!fColors.empty() || fVoicesAutoColored) {
 		if (fColors.empty()) {
             int r, g, b;
@@ -514,10 +509,10 @@ void PianoRoll::DrawVoice(ARMusicalVoice* v, PianoRoll::DrawParams &drawParams)
 
             HSVtoRGB((float) drawParams.colorHue, 0.5f, 0.9f, r, g, b);
 
-			fColors.push(new VGColor(r, g, b, 255));
+			fColors.push(VGColor(r, g, b, 255));
         }
         
-		drawParams.dev->PushFillColor(*fColors.top());
+		drawParams.dev->PushFillColor(fColors.top());
     }
 
     fChord          = false;
@@ -652,8 +647,8 @@ void PianoRoll::handleColor(ARNoteFormat* noteFormat, DrawParams &drawParams)
             }
         }
 
-		fColors.push(new VGColor(colref[0], colref[1], colref[2], colref[3]));
-		drawParams.dev->PushFillColor(*fColors.top());
+		fColors.push(VGColor(colref[0], colref[1], colref[2], colref[3]));
+		drawParams.dev->PushFillColor(fColors.top());
     }
     else if (!noteFormat->getPosition() && noteFormat->getIsAuto()) { // Means it's a range noteFormat end tag
         if (noteFormat->getDX() == NULL
@@ -676,9 +671,7 @@ void PianoRoll::handleColor(ARNoteFormat* noteFormat, DrawParams &drawParams)
 void PianoRoll::popColor(DrawParams &drawParams) {
     drawParams.dev->PopFillColor();
 
-	VGColor *topColor = fColors.top();
 	fColors.pop();
-    delete topColor;
 }
 
 //--------------------------------------------------------------------------

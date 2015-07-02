@@ -15,6 +15,7 @@
 #define __GuidoPianoRoll__
 
 #include <stack>
+#include <map>
 
 #include "ARMusicalVoice.h"
 #include "ARNoteFormat.h"
@@ -55,7 +56,8 @@ public:
     virtual void  enableKeyboard(bool enabled) { fKeyboardEnabled = enabled; }
             float getKeyboardWidth(int height);
     virtual void  enableRandomVoicesColor(bool enabled) { fVoicesAutoColored = enabled; }
-    virtual void  setColorToVoice(int voiceNum, int r, int g, int b, int a);
+	virtual void  setColorToVoice(int voiceNum, int r, int g, int b, int a);
+	virtual bool  removeColorToVoice(int voiceNum);
     virtual void  enableMeasureBars(bool enabled) { fMeasureBarsEnabled = enabled; }
     virtual void  setPitchLinesDisplayMode(int mode);
     virtual void  getMap(int w, int h, Time2GraphicMap &outmap);
@@ -146,9 +148,9 @@ protected:
 
     bool fVoicesAutoColored; // does the user wants voices to be auto colored ?
 
-	std::vector<std::pair<int, VGColor *> > fVoicesColors; // voices colors that the user set himself
+	std::map<int, VGColor> fVoicesColors; // voices colors that the user set himself
     
-	std::stack<VGColor *> fColors;  // the colors stack (voice color, noteFormat color)
+	std::stack<VGColor> fColors;  // the colors stack (voice color, noteFormat color)
     bool isAfterStateNoteFormatTag;
 
 	bool fChord;                   // a flag to indicate that next note (or rest) is in a chord

@@ -32,12 +32,9 @@ using namespace std;
 void PianoRollTrajectory::DrawVoice(ARMusicalVoice* v, DrawParams &drawParams)
 {
 	int voiceNum = v->getVoiceNum();
-
-	for (unsigned int i = 0; i < fVoicesColors.size() && fColors.empty(); i++) {
-		std::pair<int, VGColor *> pair = fVoicesColors.at(i);
-
-		if (pair.first == voiceNum)
-			fColors.push(new VGColor(*pair.second));
+	std::map<int , VGColor>::iterator it = fVoicesColors.find(voiceNum);
+	if(fVoicesColors.end() != it) {
+		fColors.push(it->second);
 	}
 
 	if (!fColors.empty() || fVoicesAutoColored) {
@@ -49,10 +46,10 @@ void PianoRollTrajectory::DrawVoice(ARMusicalVoice* v, DrawParams &drawParams)
 
             HSVtoRGB((float) drawParams.colorHue, 0.5f, 0.9f, r, g, b);
 
-			fColors.push(new VGColor(r, g, b, 255));
+			fColors.push(VGColor(r, g, b, 255));
         }
         
-		drawParams.dev->PushFillColor(*fColors.top());
+		drawParams.dev->PushFillColor(fColors.top());
     }
 
     fChord              = false;
@@ -122,17 +119,17 @@ void PianoRollTrajectory::DrawNote(int pitch, double date, double dur, DrawParam
 {
     float    x     = date2xpos(date, drawParams.width, drawParams.untimedLeftElementWidth);
     float    y     = pitch2ypos(pitch, drawParams);
-	VGColor *color = fColors.empty() ? new VGColor(0, 0, 0) : fColors.top();
+	VGColor color = fColors.empty() ? VGColor(0, 0, 0) : fColors.top();
 
     if (fCurrentDate == date)
-		fCurrentEventInfos.push_back(createNoteInfos(x, y, *color));
+		fCurrentEventInfos.push_back(createNoteInfos(x, y, color));
     else {
         DrawLinks(drawParams);
 
 		fPreviousEventInfos = fCurrentEventInfos;
 
 		fCurrentEventInfos.clear();
-		fCurrentEventInfos.push_back(createNoteInfos(x, y, *color));
+		fCurrentEventInfos.push_back(createNoteInfos(x, y, color));
 
         fCurrentDate = date;
     }
@@ -245,7 +242,7 @@ void PianoRollTrajectory::handleRest(double date, DrawParams &drawParams)
 }
 
 //--------------------------------------------------------------------------
-PianoRollTrajectory::EventInfos PianoRollTrajectory::createNoteInfos(float x, float y, VGColor color) const
+PianoRollTrajectory::EventInfos PianoRollTrajectory::createNoteInfos(float x, float y, VGColor &color) const
 {
     EventInfos newNoteInfos;
 

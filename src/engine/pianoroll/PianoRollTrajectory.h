@@ -31,15 +31,17 @@ private:
         bool isRest;
     } EventInfos;
 
-    EventInfos createNoteInfos(float x, float y, VGColor color) const;
+	EventInfos createNoteInfos(float x, float y, VGColor &color) const;
     EventInfos createRestInfos(float x) const;
 
     /**** Chords ****/
     /* Computes if some rights chords points have several links towards them */
-    bool isTherePointOverlap(int x, int y);
-    void sortPoints();
-    std::vector<EventInfos> *sortList(std::vector<EventInfos> *listToSort);
-    /****************/
+	/*
+	bool isTherePointOverlap(int x, int y);
+	void sortPoints();
+	std::vector<EventInfos> *sortList(std::vector<EventInfos> *listToSort);
+	*/
+	/****************/
 
 	std::vector<EventInfos> fPreviousEventInfos;
 	std::vector<EventInfos> fCurrentEventInfos;
