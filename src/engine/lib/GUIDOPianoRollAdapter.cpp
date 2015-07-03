@@ -76,7 +76,7 @@ GuidoErrCode GUIDOPianoRollAdapter::setHtmlColorToVoice(PianoRoll *pr, int voice
 	return GuidoPianoRollSetHtmlColorToVoice(pr, voiceNum, color);
 }
 
-GuidoErrCode removeColorToVoice(PianoRoll *pr, int voiceNum)
+GuidoErrCode GUIDOPianoRollAdapter::removeColorToVoice(PianoRoll *pr, int voiceNum)
 {
 	return GuidoPianoRollRemoveColorToVoice(pr, voiceNum);
 }
