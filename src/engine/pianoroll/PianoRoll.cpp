@@ -116,7 +116,7 @@ void PianoRoll::setPitchRange(int minPitch, int maxPitch)
 }
 
 //--------------------------------------------------------------------------
-float PianoRoll::getKeyboardWidth(int height)
+float PianoRoll::getKeyboardWidth(int height) const
 {
     int currentHeight = (height == -1 ? kDefaultHeight : height);
 
@@ -160,7 +160,7 @@ bool PianoRoll::removeColorToVoice(int voiceNum)
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::getMap(int width, int height, Time2GraphicMap &outmap)
+void PianoRoll::getMap(int width, int height, Time2GraphicMap &outmap) const
 {
     int currentWidth  = (width  == -1 ? kDefaultWidth  : width);
     int currentHeight = (height == -1 ? kDefaultHeight : height);
@@ -178,7 +178,7 @@ void PianoRoll::getMap(int width, int height, Time2GraphicMap &outmap)
 }
 
 //--------------------------------------------------------------------------
-bool PianoRoll::ownsARMusic() {
+bool PianoRoll::ownsARMusic() const {
     if (fARMusic)
         return true;
     else
@@ -186,7 +186,7 @@ bool PianoRoll::ownsARMusic() {
 }
 
 //--------------------------------------------------------------------------
-bool PianoRoll::ownsMidi() {
+bool PianoRoll::ownsMidi() const {
     if (fMidiFileName)
         return true;
     else
@@ -261,14 +261,14 @@ float PianoRoll::computeNoteHeight(int height) const
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::initRendering(PianoRoll::DrawParams &drawParams)
+void PianoRoll::initRendering(PianoRoll::DrawParams &drawParams) const
 {
 	drawParams.dev->NotifySize(drawParams.width, drawParams.height);
 	drawParams.dev->BeginDraw();
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::endRendering(PianoRoll::DrawParams &drawParams)
+void PianoRoll::endRendering(PianoRoll::DrawParams &drawParams) const
 {
     drawParams.dev->EndDraw();
 }
@@ -587,7 +587,7 @@ void PianoRoll::DrawMusicalObject(ARMusicalObject *e, TYPE_TIMEPOSITION date, TY
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::DrawNote(int pitch, double date, double dur, PianoRoll::DrawParams &drawParams)
+void PianoRoll::DrawNote(int pitch, double date, double dur, PianoRoll::DrawParams &drawParams) const
 {
 	float x = date2xpos (date, drawParams.width, drawParams.untimedLeftElementWidth);
 	float y = pitch2ypos(pitch, drawParams);
@@ -896,7 +896,7 @@ TYPE_TIMEPOSITION PianoRoll::getMidiEndDate() const
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::DrawMidiSeq(MidiSeqPtr seq, int tpqn, PianoRoll::DrawParams &drawParams)
+void PianoRoll::DrawMidiSeq(MidiSeqPtr seq, int tpqn, PianoRoll::DrawParams &drawParams) const
 {
 	MidiEvPtr ev = FirstEv(seq);
 	int tpwn     = tpqn * 4;
@@ -926,7 +926,7 @@ void PianoRoll::DrawMidiSeq(MidiSeqPtr seq, int tpqn, PianoRoll::DrawParams &dra
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::DrawFromMidi(PianoRoll::DrawParams &drawParams)
+void PianoRoll::DrawFromMidi(PianoRoll::DrawParams &drawParams) const
 {
     MIDIFile mf;
 
