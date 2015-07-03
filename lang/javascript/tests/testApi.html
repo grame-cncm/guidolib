@@ -228,14 +228,22 @@
 		factory.closeEvent();
 		factory.closeVoice();
 		
+		factory.openVoice();
+		factory.openEvent("g");
+		factory.closeEvent();
+		factory.openEvent("f");
+		factory.closeEvent();
+		factory.closeVoice();
 		var arFromFactory = factory.closeMusic();
 		
 		pr = pianoRoll.ar2PianoRoll(Module.PianoRollType.kTrajectoryPianoRoll, arFromFactory);
-		//pianoRoll.setHtmlColorToVoice(pr, 1, 0x6495ed);
-		//pianoRoll.setRGBColorToVoice(pr, 2, 255, 0, 0, 0);
+		pianoRoll.setHtmlColorToVoice(pr, 1, 0x6495ed);
+		pianoRoll.setRGBColorToVoice(pr, 2, 255, 0, 0, 255);
+		pianoRoll.setRGBColorToVoice(pr, 3, 0, 255, 0, 255);
+		pianoRoll.removeColorToVoice(pr, 3);
 		pianoRoll.enableMeasureBars(pr, true);
 		
-		$("#pianoRollSvgExport3").html("<div><b>Piano roll from a ar construct with a fatory (Module.GUIDOFactoryAdapter)</b></div>" + pianoRoll.svgExport(pr, -1, -1));
+		$("#pianoRollSvgExport3").html("<div><b>Piano roll from a ar construct with a fatory (Module.GUIDOFactoryAdapter). Voice 1 in blue, voice 2 in red and voice 3 in default color (black).</b></div>" + pianoRoll.svgExport(pr, -1, -1));
 		
 		pianoRoll.destroyPianoRoll(pr);
 		delete factory;
