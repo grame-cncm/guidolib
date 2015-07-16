@@ -10,8 +10,8 @@ set (target GUIDOEngine)
 set (statictarget SGUIDOEngine)
 #######################################
 # versions management
-set (VERSION 1.57)
-set (STRVERS "v.1.57")
+set (VERSION 1.59)
+set (STRVERS "v.1.59")
 set (GUIDOFWKVERS C)
 set (SOVERS 1)
 
