@@ -1,8 +1,12 @@
 GUIDO Engine history
 
 ----------------------------------------------------------------
+  version 1.5.9
+- crash bug corrected with piano roll colors management
+
+----------------------------------------------------------------
   version 1.5.8
-- new function in API for piano roll to remove color to voice (it return to black but it's not like setting a black color. If you set a black color, auto voice coloration doesn't color this voice).
+- new function GuidoPianoRollRemoveColorToVoice for piano roll to remove color to voice.
 
 ----------------------------------------------------------------
 2015-03-23  version 1.5.7
