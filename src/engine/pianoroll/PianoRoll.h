@@ -43,7 +43,7 @@
 /* \brief a class to create and configure a piano roll
 */
 class PianoRoll {
-    #define kGoldenRatio 0.618033988749895 // To generate only different colors
+	void initAutoVoiceColors ();
 
 public:
              PianoRoll(ARMusic *arMusic);
@@ -61,9 +61,6 @@ public:
     virtual void  enableMeasureBars(bool enabled) { fMeasureBarsEnabled = enabled; }
     virtual void  setPitchLinesDisplayMode(int mode);
     virtual void  getMap(int w, int h, Time2GraphicMap &outmap) const;
-
-    bool ownsARMusic() const;
-    bool ownsMidi() const;
 
     virtual void onDraw(int width, int height, VGDevice *dev);
 
@@ -90,7 +87,7 @@ protected:
     
     DrawParams    createDrawParamsStructure(int width, int height, VGDevice *dev) const;
 
-    virtual void  DrawFromAR(DrawParams &drawParams);
+    virtual void  DrawFromAR(const DrawParams& drawParams);
 
             float computeKeyboardWidth(float noteHeight) const;
     virtual float computeNoteHeight   (int height) const;
@@ -104,24 +101,21 @@ protected:
 	        void  DrawChromaticGrid   (DrawParams &drawParams, bool isUserDefined = false) const;
 
 	virtual void  DrawKeyboard        (DrawParams &drawParams) const;
-	virtual void  DrawVoice           (ARMusicalVoice* v, DrawParams &drawParams);
-	virtual void  DrawMusicalObject   (ARMusicalObject *e, TYPE_TIMEPOSITION date, TYPE_DURATION dur, DrawParams &drawParams);
-	virtual void  DrawNote            (int pitch, double date, double dur, DrawParams &drawParams) const;
-	virtual void  DrawRect            (float x, float y, double dur, DrawParams &drawParams) const;
-	virtual void  DrawMeasureBar      (double date, DrawParams &drawParams) const;
+	virtual void  DrawVoice           (ARMusicalVoice* v, const DrawParams& drawParams);
+	virtual void  DrawMusicalObject   (ARMusicalObject *e, TYPE_TIMEPOSITION date, TYPE_DURATION dur, const DrawParams& drawParams);
+	virtual void  DrawNote            (int pitch, double date, double dur, const DrawParams& drawParams) const;
+	virtual void  DrawRect            (float x, float y, double dur, const DrawParams& drawParams) const;
+	virtual void  DrawMeasureBar      (double date, const DrawParams& drawParams) const;
 
-	        float pitch2ypos          (int midipitch, DrawParams &drawParams) const;
-	virtual void  handleColor         (ARNoteFormat *e, DrawParams &drawParams);
-	virtual void  popColor            (DrawParams &drawParams);
-
-            void HSVtoRGB             (float h, float s, float v, int &r, int &g, int &b) const;
-            
+	        float pitch2ypos          (int midipitch, const DrawParams& drawParams) const;
+	virtual void  handleColor         (ARNoteFormat *e, const DrawParams& drawParams);
+	
             int  detectARExtremePitch (bool detectLowerPitch);
             void autoAdjustPitchRange (int &lowerPitch, int &higherPitch); // in the case of pitch range lower than 12
 
 #ifdef MIDIEXPORT
-    virtual void  DrawFromMidi          (DrawParams &drawParams) const;
-    virtual void  DrawMidiSeq           (MidiSeqPtr seq, int tpqn, DrawParams &drawParams) const;
+    virtual void  DrawFromMidi          (const DrawParams& drawParams) const;
+    virtual void  DrawMidiSeq           (MidiSeqPtr seq, int tpqn, const DrawParams& drawParams) const;
 			TYPE_TIMEPOSITION	getMidiEndDate        () const;
             int					detectMidiExtremePitch(bool detectLowerPitch);
 #else
@@ -133,6 +127,8 @@ protected:
     virtual float duration2width (double dur, int width, float untimedLeftElementWidth) const;
     virtual int   pitchRange     ()             const  { return fHighPitch - fLowPitch + 1; }
 	virtual float stepheight     (int height) const  { return (float) height / (float) pitchRange(); }
+	bool		  getVoiceColor  (unsigned int index, VGColor& color) const;
+
 
     float roundFloat(float numberToRound) const { return floor(numberToRound + 0.5f); }
 
@@ -146,20 +142,18 @@ protected:
     int  fLowPitch;               // the lower score pitch
     int  fHighPitch;              // the higher score pitch
 
-    bool fVoicesAutoColored; // does the user wants voices to be auto colored ?
+    bool fVoicesAutoColored;				// does the user wants voices to be auto colored ?
 
-	std::map<int, VGColor> fVoicesColors; // voices colors that the user set himself
-    
-	std::stack<VGColor> fColors;  // the colors stack (voice color, noteFormat color)
-    bool isAfterStateNoteFormatTag;
+	std::map<int, VGColor>	fVoicesColors;		// voices colors that the user set himself
+	std::vector<VGColor>	fAutoVoicesColors;	// auto voices colors
 
-	bool fChord;                   // a flag to indicate that next note (or rest) is in a chord
-    TYPE_DURATION fChordDuration;  // the chord duration (notes in a chord have a null duration)
+	int fNoteColor;						// a flag to count the number of colors set by noteFormat tags
 
-    bool  fKeyboardEnabled;         // does the keyboard will be displayed ?
+	bool fChord;						// a flag to indicate that next note (or rest) is in a chord
+    TYPE_DURATION fChordDuration;		// the chord duration (notes in a chord have a null duration)
 
+    bool fKeyboardEnabled;				// does the keyboard will be displayed ?
     bool fMeasureBarsEnabled;
-
     int  fPitchLinesDisplayMode;
     bool fBytes[12];
 };

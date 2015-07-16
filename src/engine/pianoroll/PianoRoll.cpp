@@ -17,16 +17,17 @@
 #include <sstream>
 
 #include "ARMusic.h"
-#include "VGDevice.h"
 #include "ARNoteName.h"
 #include "ARRest.h"
 #include "ARNote.h"
 #include "ARBar.h"
 #include "ARChordComma.h"
 #include "ARNoteFormat.h"
+#include "FontManager.h"
+#include "HtmlColors.h"
 #include "TagParameterString.h"
 #include "TagParameterRGBColor.h"
-#include "FontManager.h"
+#include "VGDevice.h"
 
 #ifdef MIDIEXPORT
     #include "midifile.h"
@@ -41,8 +42,6 @@ using namespace std;
 #define kSubMainLineWidth 1.1f
 #define kNormalLineWidth  0.6f
 
-#define kColorSeed        0.5f
-
 #define kLimitDist34Mode  6                       // the minimum distance between lines of the grid
                                                   //     (to switch between mode 4 and mode 3 of pitch line display)
 #define kLimitDist23Mode  10                      // the medium distance between lines of the grid
@@ -54,7 +53,6 @@ using namespace std;
 PianoRoll::PianoRoll(ARMusic *arMusic) :
 	fARMusic(arMusic), fMidiFileName(NULL),
 	fVoicesAutoColored(false),
-	isAfterStateNoteFormatTag(false),
 	fKeyboardEnabled(false), fMeasureBarsEnabled(false),
 	fPitchLinesDisplayMode(kAutoLines)
 {
@@ -65,11 +63,37 @@ PianoRoll::PianoRoll(ARMusic *arMusic) :
 PianoRoll::PianoRoll(const char *midiFileName) :
 	fARMusic(NULL), fMidiFileName(midiFileName),
 	fVoicesAutoColored(false),
-	isAfterStateNoteFormatTag(false),
 	fKeyboardEnabled(false), fMeasureBarsEnabled(false),
 	fPitchLinesDisplayMode(kAutoLines)
 {
 	init();
+}
+
+//--------------------------------------------------------------------------
+void PianoRoll::initAutoVoiceColors()
+{
+	const int alpha = 255;
+	unsigned char c[4];
+	if (HtmlColor::get("Gray", c))			fAutoVoicesColors.push_back (VGColor(c[0], c[1], c[2], alpha));
+	if (HtmlColor::get("Blue", c))			fAutoVoicesColors.push_back (VGColor(c[0], c[1], c[2], alpha));
+	if (HtmlColor::get("Crimson", c))		fAutoVoicesColors.push_back (VGColor(c[0], c[1], c[2], alpha));
+	if (HtmlColor::get("ForestGreen", c))	fAutoVoicesColors.push_back (VGColor(c[0], c[1], c[2], alpha));
+	if (HtmlColor::get("DarkMagenta", c))	fAutoVoicesColors.push_back (VGColor(c[0], c[1], c[2], alpha));
+	if (HtmlColor::get("GoldenRod", c))		fAutoVoicesColors.push_back (VGColor(c[0], c[1], c[2], alpha));
+	if (HtmlColor::get("Brown", c))			fAutoVoicesColors.push_back (VGColor(c[0], c[1], c[2], alpha));
+	if (HtmlColor::get("Orange", c))		fAutoVoicesColors.push_back (VGColor(c[0], c[1], c[2], alpha));
+	if (HtmlColor::get("Black", c))			fAutoVoicesColors.push_back (VGColor(c[0], c[1], c[2], alpha));
+	if (HtmlColor::get("LimeGreen", c))		fAutoVoicesColors.push_back (VGColor(c[0], c[1], c[2], alpha));
+	if (HtmlColor::get("Magenta", c))		fAutoVoicesColors.push_back (VGColor(c[0], c[1], c[2], alpha));
+	if (HtmlColor::get("BurlyWood", c))		fAutoVoicesColors.push_back (VGColor(c[0], c[1], c[2], alpha));
+	if (HtmlColor::get("DarkCyan", c))		fAutoVoicesColors.push_back (VGColor(c[0], c[1], c[2], alpha));
+	if (HtmlColor::get("DeepSkyBlue", c))	fAutoVoicesColors.push_back (VGColor(c[0], c[1], c[2], alpha));
+	if (HtmlColor::get("Gold", c))			fAutoVoicesColors.push_back (VGColor(c[0], c[1], c[2], alpha));
+	if (HtmlColor::get("MediumSlateBlue",c)) fAutoVoicesColors.push_back (VGColor(c[0], c[1], c[2], alpha));
+	if (HtmlColor::get("GreenYellow", c))	fAutoVoicesColors.push_back (VGColor(c[0], c[1], c[2], alpha));
+	if (HtmlColor::get("Silver", c))		fAutoVoicesColors.push_back (VGColor(c[0], c[1], c[2], alpha));
+	if (HtmlColor::get("Salmon", c))		fAutoVoicesColors.push_back (VGColor(c[0], c[1], c[2], alpha));
+	if (HtmlColor::get("MediumAquaMarine",c)) fAutoVoicesColors.push_back (VGColor(c[0], c[1], c[2], alpha));
 }
 
 //--------------------------------------------------------------------------
@@ -80,6 +104,8 @@ void PianoRoll::init()
 
 	setLimitDates(defaultStartDate, defaultEndDate);
 	setPitchRange(kDefaultLowPitch, kDefaultHighPitch);
+	fNoteColor = 0;
+	initAutoVoiceColors ();
 }
 
 //--------------------------------------------------------------------------
@@ -91,7 +117,7 @@ void PianoRoll::setLimitDates(GuidoDate start, GuidoDate end)
 	    fStartDate = TYPE_TIMEPOSITION(start.num, start.denom);
 
     if (end.num == 0 && end.denom == 0)
-        fEndDate = (ownsARMusic() ? fARMusic->getDuration() : getMidiEndDate());
+        fEndDate = (fARMusic ? fARMusic->getDuration() : getMidiEndDate());
     else
 	    fEndDate = TYPE_TIMEPOSITION(end.num, end.denom);
 
@@ -102,12 +128,12 @@ void PianoRoll::setLimitDates(GuidoDate start, GuidoDate end)
 void PianoRoll::setPitchRange(int minPitch, int maxPitch)
 {
     if (minPitch == -1)
-        fLowPitch = (ownsARMusic() ? detectARExtremePitch(true) : detectMidiExtremePitch(true));
+        fLowPitch = (fARMusic ? detectARExtremePitch(true) : detectMidiExtremePitch(true));
     else
         fLowPitch = minPitch;
 
     if (maxPitch == -1)
-        fHighPitch = (ownsARMusic() ? detectARExtremePitch(false) : maxPitch = detectMidiExtremePitch(false));
+        fHighPitch = (fARMusic ? detectARExtremePitch(false) : maxPitch = detectMidiExtremePitch(false));
     else
         fHighPitch = maxPitch;
 
@@ -178,22 +204,6 @@ void PianoRoll::getMap(int width, int height, Time2GraphicMap &outmap) const
 }
 
 //--------------------------------------------------------------------------
-bool PianoRoll::ownsARMusic() const {
-    if (fARMusic)
-        return true;
-    else
-        return false;
-}
-
-//--------------------------------------------------------------------------
-bool PianoRoll::ownsMidi() const {
-    if (fMidiFileName)
-        return true;
-    else
-        return false;
-}
-
-//--------------------------------------------------------------------------
 PianoRoll::DrawParams PianoRoll::createDrawParamsStructure(int width, int height, VGDevice *dev) const
 {
     int currentWidth  = (width  == -1 ? kDefaultWidth  : width);
@@ -217,10 +227,10 @@ void PianoRoll::onDraw(int width, int height, VGDevice *dev)
     if (fKeyboardEnabled)
         DrawKeyboard(drawParams);
 
-    if (ownsARMusic())
+    if (fARMusic)
         DrawFromAR(drawParams);
 #ifdef MIDIEXPORT
-	else if (ownsMidi())
+	else if (fMidiFileName)
         DrawFromMidi(drawParams);
 #endif
     
@@ -228,13 +238,18 @@ void PianoRoll::onDraw(int width, int height, VGDevice *dev)
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::DrawFromAR(PianoRoll::DrawParams &drawParams)
+void PianoRoll::DrawFromAR(const DrawParams& drawParams)
 {
     GuidoPos pos = fARMusic->GetHeadPosition();
+	unsigned int i = 0;
 
     while(pos) {
         ARMusicalVoice *e = fARMusic->GetNext(pos);
-        DrawVoice(e, drawParams);
+  		VGColor color;
+		bool colored = getVoiceColor (i++, color);
+		if (colored) drawParams.dev->PushFillColor(color);
+		DrawVoice(e, drawParams);
+		if (colored) drawParams.dev->PopFillColor();
     }
 }
 
@@ -405,8 +420,6 @@ void PianoRoll::DrawKeyboard(PianoRoll::DrawParams &drawParams) const
 		hTextFont = FontManager::FindOrCreateFont((int) floor(drawParams.noteHeight * 0.8), &font, new NVstring(""));
 
 	drawParams.dev->SetTextFont(hTextFont);
-    /******************************/
-
 	drawParams.dev->PushPenWidth(0.8f);
 
     for (int i = fHighPitch + 1; i >= fLowPitch; i--) {
@@ -427,16 +440,14 @@ void PianoRoll::DrawKeyboard(PianoRoll::DrawParams &drawParams) const
                     y - drawParams.noteHeight * 0.25f, cNoteString.c_str(), 2);
             }
 
-            drawParams.dev->Line(
-                0,
+            drawParams.dev->Line( 0,
                 roundFloat(y),
                 roundFloat(drawParams.untimedLeftElementWidth),
                 roundFloat(y));
 
             break;
         case 5:
-            drawParams.dev->Line(
-                0,
+            drawParams.dev->Line( 0,
                 roundFloat(y),
                 roundFloat(drawParams.untimedLeftElementWidth),
                 roundFloat(y));
@@ -447,10 +458,8 @@ void PianoRoll::DrawKeyboard(PianoRoll::DrawParams &drawParams) const
         case 9:
         case 11:
             if (i != fLowPitch)
-                drawParams.dev->Line(
-                    roundFloat(keyboardBlackNotesWidth),
-                    roundFloat(y + 0.5f * drawParams.noteHeight),
-                    roundFloat(drawParams.untimedLeftElementWidth),
+                drawParams.dev->Line(roundFloat(keyboardBlackNotesWidth), roundFloat(y + 0.5f * drawParams.noteHeight),
+					roundFloat(drawParams.untimedLeftElementWidth),
                     roundFloat(y + 0.5f * drawParams.noteHeight));
             
             break;
@@ -460,8 +469,7 @@ void PianoRoll::DrawKeyboard(PianoRoll::DrawParams &drawParams) const
         case 8:
         case 10:
             if (i != fHighPitch + 1)
-                drawParams.dev->Rectangle(
-                    0,
+                drawParams.dev->Rectangle( 0,
                     roundFloat(y - drawParams.noteHeight),
                     roundFloat(keyboardBlackNotesWidth),
                     roundFloat(y));
@@ -471,50 +479,17 @@ void PianoRoll::DrawKeyboard(PianoRoll::DrawParams &drawParams) const
     }
     
     /**** Right and left vertical lines ***/
-
     float yMin = pitch2ypos(fLowPitch, drawParams)  + 0.5f * drawParams.noteHeight;
     float yMax = pitch2ypos(fHighPitch, drawParams) - 0.5f * drawParams.noteHeight;
-    drawParams.dev->Line(
-        0,
-        roundFloat(yMin),
-        0,
-        roundFloat(yMax));
-
-    drawParams.dev->Line(
-        roundFloat(drawParams.untimedLeftElementWidth),
-        roundFloat(yMin),
-        roundFloat(drawParams.untimedLeftElementWidth),
-        roundFloat(yMax));
-    
-    /**************************************/
+    drawParams.dev->Line( 0, roundFloat(yMin), 0, roundFloat(yMax));
+    drawParams.dev->Line( roundFloat(drawParams.untimedLeftElementWidth), roundFloat(yMin), roundFloat(drawParams.untimedLeftElementWidth), roundFloat(yMax));
 
 	drawParams.dev->PopPenWidth();
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::DrawVoice(ARMusicalVoice* v, PianoRoll::DrawParams &drawParams)
+void PianoRoll::DrawVoice(ARMusicalVoice* v, const DrawParams& drawParams)
 {
-	int voiceNum = v->getVoiceNum();
-	std::map<int , VGColor>::iterator it = fVoicesColors.find(voiceNum);
-	if(fVoicesColors.end() != it) {
-		fColors.push(it->second);
-	}
-
-	if (!fColors.empty() || fVoicesAutoColored) {
-		if (fColors.empty()) {
-            int r, g, b;
-
-            drawParams.colorHue += kGoldenRatio;
-            drawParams.colorHue  = fmod(drawParams.colorHue, 1);
-
-            HSVtoRGB((float) drawParams.colorHue, 0.5f, 0.9f, r, g, b);
-
-			fColors.push(VGColor(r, g, b, 255));
-        }
-        
-		drawParams.dev->PushFillColor(fColors.top());
-    }
-
     fChord          = false;
 	ObjectList *ol  = (ObjectList *)v;
 	GuidoPos    pos = ol->GetHeadPosition();
@@ -541,32 +516,30 @@ void PianoRoll::DrawVoice(ARMusicalVoice* v, PianoRoll::DrawParams &drawParams)
             }
 		}
 		else if (end > fStartDate) { // to make the note end appear
-			date = fStartDate;	
-			
-            if (end > fEndDate)
-                dur = fEndDate - date;
-			else
-                dur = end - date;
-			
+			date = fStartDate;
+            if (end > fEndDate)		dur = fEndDate - date;
+			else					dur = end - date;
             DrawMusicalObject(e, date, dur, drawParams);
 		}
 
-        if (static_cast<ARRest *>(e->isARRest()))
+        if (dynamic_cast<ARRest *>(e->isARRest()))
 			fChord = false;
-        else if (static_cast<ARChordComma *>(e->isARChordComma()))
+        else if (dynamic_cast<ARChordComma *>(e->isARChordComma()))
 			fChord = true;
-        else if (static_cast<ARNoteFormat *>(e->isARNoteFormat()))
-            handleColor(static_cast<ARNoteFormat *>(e->isARNoteFormat()), drawParams);
-        else if (static_cast<ARBar *>(e->isARBar()) && fMeasureBarsEnabled)
+        else if (dynamic_cast<ARNoteFormat *>(e->isARNoteFormat()))
+            handleColor(dynamic_cast<ARNoteFormat *>(e->isARNoteFormat()), drawParams);
+        else if (dynamic_cast<ARBar *>(e->isARBar()) && fMeasureBarsEnabled)
             DrawMeasureBar(date, drawParams);
 	}
 
-	while (!fColors.empty())
-		popColor(drawParams);
+	while (fNoteColor) {		// check for possible color from noteFormat tag
+		drawParams.dev->PopFillColor();
+		fNoteColor--;
+	}
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::DrawMusicalObject(ARMusicalObject *e, TYPE_TIMEPOSITION date, TYPE_DURATION dur, PianoRoll::DrawParams &drawParams)
+void PianoRoll::DrawMusicalObject(ARMusicalObject *e, TYPE_TIMEPOSITION date, TYPE_DURATION dur, const DrawParams& drawParams)
 {
     ARNote *note = static_cast<ARNote *>(e->isARNote());
 
@@ -587,7 +560,7 @@ void PianoRoll::DrawMusicalObject(ARMusicalObject *e, TYPE_TIMEPOSITION date, TY
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::DrawNote(int pitch, double date, double dur, PianoRoll::DrawParams &drawParams) const
+void PianoRoll::DrawNote(int pitch, double date, double dur, const DrawParams& drawParams) const
 {
 	float x = date2xpos (date, drawParams.width, drawParams.untimedLeftElementWidth);
 	float y = pitch2ypos(pitch, drawParams);
@@ -595,87 +568,53 @@ void PianoRoll::DrawNote(int pitch, double date, double dur, PianoRoll::DrawPara
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::DrawRect(float x, float y, double dur, PianoRoll::DrawParams &drawParams) const
+void PianoRoll::DrawRect(float x, float y, double dur, const DrawParams& drawParams) const
 {
 	float w        = duration2width(dur, drawParams.width, drawParams.untimedLeftElementWidth);
 	float halfstep = stepheight(drawParams.height) / 2.0f;
+	if (!halfstep) halfstep = 1;
 
-	if (!halfstep)
-        halfstep = 1;
-
-    drawParams.dev->Rectangle(
-        roundFloat(x),
-        roundFloat(y - halfstep),
-        roundFloat(x + (w ? w : 1)),
-        roundFloat(y + halfstep));
+    drawParams.dev->Rectangle(roundFloat(x), roundFloat(y - halfstep), roundFloat(x + (w ? w : 1)), roundFloat(y + halfstep));
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::DrawMeasureBar(double date, PianoRoll::DrawParams &drawParams) const
+void PianoRoll::DrawMeasureBar(double date,  const DrawParams& drawParams) const
 {
     float x    = date2xpos(date, drawParams.width, drawParams.untimedLeftElementWidth);
 	float yMin = pitch2ypos(fLowPitch, drawParams)  + 0.5f * drawParams.noteHeight;
 	float yMax = pitch2ypos(fHighPitch, drawParams) - 0.5f * drawParams.noteHeight;
     
     drawParams.dev->PushPenWidth(0.3f);
-    drawParams.dev->Line(
-        roundFloat(x),
-        roundFloat(yMin),
-        roundFloat(x),
-        roundFloat(yMax));
+    drawParams.dev->Line (roundFloat(x), roundFloat(yMin), roundFloat(x), roundFloat(yMax));
     drawParams.dev->PopPenWidth();
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::handleColor(ARNoteFormat* noteFormat, DrawParams &drawParams)
+void PianoRoll::handleColor(ARNoteFormat* noteFormat, const DrawParams& drawParams)
 {
     const TagParameterString   *tps = noteFormat->getColor();
     const TagParameterRGBColor *tpc = noteFormat->getRGBColor();
     unsigned char colref[4];
+	bool endRange = !noteFormat->getPosition() && noteFormat->getIsAuto();
+
 
 	if ((tps && tps->getRGB(colref)) || (tpc && tpc->getRGBColor(colref))) {
-        if (!noteFormat->getPosition()) {
-            if (noteFormat->getIsAuto()) { // // Means it's a range noteFormat end tag
-                isAfterStateNoteFormatTag = false;
-                popColor(drawParams);
-            }
-            else if (!noteFormat->getIsAuto()) { // Means it's a state noteFormat tag
-                if (isAfterStateNoteFormatTag)
-                    popColor(drawParams);
-                else
-                    isAfterStateNoteFormatTag = true;
-            }
-        }
-
-		fColors.push(VGColor(colref[0], colref[1], colref[2], colref[3]));
-		drawParams.dev->PushFillColor(fColors.top());
+        if (endRange && fNoteColor ) {				// Means it's a range noteFormat end tag and a color is already set
+			drawParams.dev->PopFillColor();
+			fNoteColor--;
+		}
+		VGColor color(colref[0], colref[1], colref[2], colref[3]);
+		drawParams.dev->PushFillColor(color);
+		fNoteColor++;
     }
-    else if (!noteFormat->getPosition() && noteFormat->getIsAuto()) { // Means it's a range noteFormat end tag
-        if (noteFormat->getDX() == NULL
-            && noteFormat->getDY() == NULL
-            && noteFormat->getSize() == NULL
-            && noteFormat->getTPStyle() == NULL // Means no noteFormat tag exists yet
-			&& (fColors.size() > 1 || (!fVoicesAutoColored && fColors.size() > 0)))
-        {
-            if (isAfterStateNoteFormatTag)
-                popColor(drawParams);
-
-            isAfterStateNoteFormatTag = false;
-
-            popColor(drawParams);
-        }
-    }
+    else if (endRange && fNoteColor) {			// noteFormat end tag and a color is already set
+		drawParams.dev->PopFillColor();
+		fNoteColor--;
+	}
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::popColor(DrawParams &drawParams) {
-    drawParams.dev->PopFillColor();
-
-	fColors.pop();
-}
-
-//--------------------------------------------------------------------------
-float PianoRoll::pitch2ypos(int midipitch, DrawParams &drawParams) const
+float PianoRoll::pitch2ypos(int midipitch, const DrawParams& drawParams) const
 {
 	int   p = midipitch - fLowPitch;
     float h = ((float) (drawParams.height * p) / (float) pitchRange());
@@ -698,56 +637,6 @@ float PianoRoll::duration2width(double dur, int width, float untimedLeftElementW
     float  fTimedWidth = width - untimedLeftElementWidth;
 
     return (float) (fTimedWidth * dur / fDuration);
-}
-
-//--------------------------------------------------------------------------
-void PianoRoll::HSVtoRGB(float h, float s, float v, int &r, int &g, int &b) const
-{
-    int   i = (int) floor((float) h * 6);
-    float f = h * 6 - i;
-    float p = v * (1 - s);
-    float q = v * (1 - f * s);
-    float t = v * (1 - (1 - f) * s);
-
-    float rTmp, gTmp, bTmp;
-
-    switch (i % 6)
-    {
-        case 0:
-            rTmp = v;
-            gTmp = t;
-            bTmp = p;
-            break;
-        case 1:
-            rTmp = q;
-            gTmp = v;
-            bTmp = p;
-            break;
-        case 2:
-            rTmp = p;
-            gTmp = v;
-            bTmp = t;
-            break;
-        case 3:
-            rTmp = p;
-            gTmp = q;
-            bTmp = v;
-            break;
-        case 4:
-            rTmp = t;
-            gTmp = p;
-            bTmp = v;
-            break;
-        case 5:
-            rTmp = v;
-            gTmp = p;
-            bTmp = q;
-            break;
-    }
-
-    r = (int) roundFloat((float) rTmp * 256);
-    g = (int) roundFloat((float) gTmp * 256);
-    b = (int) roundFloat((float) bTmp * 256);
 }
 
 //--------------------------------------------------------------------------
@@ -896,7 +785,7 @@ TYPE_TIMEPOSITION PianoRoll::getMidiEndDate() const
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::DrawMidiSeq(MidiSeqPtr seq, int tpqn, PianoRoll::DrawParams &drawParams) const
+void PianoRoll::DrawMidiSeq(MidiSeqPtr seq, int tpqn, const DrawParams& drawParams) const
 {
 	MidiEvPtr ev = FirstEv(seq);
 	int tpwn     = tpqn * 4;
@@ -926,12 +815,34 @@ void PianoRoll::DrawMidiSeq(MidiSeqPtr seq, int tpqn, PianoRoll::DrawParams &dra
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::DrawFromMidi(PianoRoll::DrawParams &drawParams) const
+// gives the color of a voice identifioed by index
+//
+bool PianoRoll::getVoiceColor  (unsigned int index, VGColor& color) const
+{
+	if (fVoicesAutoColored) {
+		// when the auto colored flag is on, returns the predefined colors
+		// and ignores the user settings
+		color = fAutoVoicesColors[index % fAutoVoicesColors.size()];
+		return true;
+	}
+	
+	// look for user colors settings
+	map<int, VGColor>::const_iterator i = fVoicesColors.find(index);
+	if (i != fVoicesColors.end()) {
+		color = i->second;
+		return true;
+	}
+
+	// at this step, no color is indicated for the current voice
+	return false;
+}
+
+//--------------------------------------------------------------------------
+void PianoRoll::DrawFromMidi(const DrawParams& drawParams) const
 {
     MIDIFile mf;
 
     mf.Open(fMidiFileName, MidiFileRead);
-    
     int n    = mf.infos().ntrks; /* get the number of tracks */
     vector<MidiSeqPtr> vseq;
     int tpqn = mf.infos().time;
@@ -950,7 +861,11 @@ void PianoRoll::DrawFromMidi(PianoRoll::DrawParams &drawParams) const
     }
 
     for (unsigned int i = 0; i < vseq.size(); i++) {
+		VGColor color;
+		bool colored = getVoiceColor (i, color);
+		if (colored) drawParams.dev->PushFillColor(color);
         DrawMidiSeq(vseq[i], tpqn, drawParams);
+		if (colored) drawParams.dev->PopFillColor();
         mf.midi()->FreeSeq(vseq[i]);
     }
 
