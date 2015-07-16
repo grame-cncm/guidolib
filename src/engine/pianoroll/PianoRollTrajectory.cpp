@@ -31,26 +31,26 @@ using namespace std;
 //--------------------------------------------------------------------------
 void PianoRollTrajectory::DrawVoice(ARMusicalVoice* v, DrawParams &drawParams)
 {
-	int voiceNum = v->getVoiceNum();
-	std::map<int , VGColor>::iterator it = fVoicesColors.find(voiceNum);
-	if(fVoicesColors.end() != it) {
-		fColors.push(it->second);
-	}
-
-	if (!fColors.empty() || fVoicesAutoColored) {
-		if (fColors.empty()) {
-            int r, g, b;
-
-            drawParams.colorHue += kGoldenRatio;
-            drawParams.colorHue  = fmod(drawParams.colorHue, 1);
-
-            HSVtoRGB((float) drawParams.colorHue, 0.5f, 0.9f, r, g, b);
-
-			fColors.push(VGColor(r, g, b, 255));
-        }
-        
-		drawParams.dev->PushFillColor(fColors.top());
-    }
+//	int voiceNum = v->getVoiceNum();
+//	std::map<int , VGColor>::iterator it = fVoicesColors.find(voiceNum);
+//	if(fVoicesColors.end() != it) {
+//		fColors.push(it->second);
+//	}
+//
+//	if (!fColors.empty() || fVoicesAutoColored) {
+//		if (fColors.empty()) {
+//            int r, g, b;
+//
+//            drawParams.colorHue += kGoldenRatio;
+//            drawParams.colorHue  = fmod(drawParams.colorHue, 1);
+//
+//            HSVtoRGB((float) drawParams.colorHue, 0.5f, 0.9f, r, g, b);
+//
+//			fColors.push(VGColor(r, g, b, 255));
+//        }
+//        
+//		drawParams.dev->PushFillColor(fColors.top());
+//    }
 
     fChord              = false;
 	ObjectList   *ol    = (ObjectList *) v;
@@ -106,8 +106,13 @@ void PianoRollTrajectory::DrawVoice(ARMusicalVoice* v, DrawParams &drawParams)
     DrawLinks(drawParams);                // Draws link to final event
     DrawFinalEvent(finalDur, drawParams); // Draws link after final event
 
-	while (!fColors.empty())
-        popColor(drawParams);
+//	while (!fColors.empty())
+//        popColor(drawParams);
+
+	if (fNoteColor) {		// check for possible color from noteFormat tag
+		drawParams.dev->PopFillColor();
+		fNoteColor = false;
+	}
 
 	fPreviousEventInfos.clear();
 	fCurrentEventInfos.clear();
@@ -119,7 +124,8 @@ void PianoRollTrajectory::DrawNote(int pitch, double date, double dur, DrawParam
 {
     float    x     = date2xpos(date, drawParams.width, drawParams.untimedLeftElementWidth);
     float    y     = pitch2ypos(pitch, drawParams);
-	VGColor color = fColors.empty() ? VGColor(0, 0, 0) : fColors.top();
+//	VGColor color = fColors.empty() ? VGColor(0, 0, 0) : fColors.top();
+	VGColor color(0, 0, 0);
 
     if (fCurrentDate == date)
 		fCurrentEventInfos.push_back(createNoteInfos(x, y, color));
