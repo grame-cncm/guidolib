@@ -1,6 +1,6 @@
 /*
  GUIDO Library
- Copyright (C) 2013 Grame
+ Copyright (C) 2015 Grame
  
  This Source Code Form is subject to the terms of the Mozilla Public
  License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -235,6 +235,29 @@ void PianoRoll::onDraw(int width, int height, VGDevice *dev)
 #endif
     
 	endRendering(drawParams);
+}
+
+//--------------------------------------------------------------------------
+// gives the color of a voice identifioed by index
+//
+bool PianoRoll::getVoiceColor  (unsigned int index, VGColor& color) const
+{
+	if (fVoicesAutoColored) {
+		// when the auto colored flag is on, returns the predefined colors
+		// and ignores the user settings
+		color = fAutoVoicesColors[index % fAutoVoicesColors.size()];
+		return true;
+	}
+	
+	// look for user colors settings
+	map<int, VGColor>::const_iterator i = fVoicesColors.find(index);
+	if (i != fVoicesColors.end()) {
+		color = i->second;
+		return true;
+	}
+
+	// at this step, no color is indicated for the current voice
+	return false;
 }
 
 //--------------------------------------------------------------------------
@@ -812,29 +835,6 @@ void PianoRoll::DrawMidiSeq(MidiSeqPtr seq, int tpqn, const DrawParams& drawPara
 
 		ev = Link(ev);
 	}
-}
-
-//--------------------------------------------------------------------------
-// gives the color of a voice identifioed by index
-//
-bool PianoRoll::getVoiceColor  (unsigned int index, VGColor& color) const
-{
-	if (fVoicesAutoColored) {
-		// when the auto colored flag is on, returns the predefined colors
-		// and ignores the user settings
-		color = fAutoVoicesColors[index % fAutoVoicesColors.size()];
-		return true;
-	}
-	
-	// look for user colors settings
-	map<int, VGColor>::const_iterator i = fVoicesColors.find(index);
-	if (i != fVoicesColors.end()) {
-		color = i->second;
-		return true;
-	}
-
-	// at this step, no color is indicated for the current voice
-	return false;
 }
 
 //--------------------------------------------------------------------------
