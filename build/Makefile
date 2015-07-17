@@ -38,6 +38,7 @@ help :
 	@echo "                        the Guido Qt library, applications and tools"	
 	@echo "   java         : build the jni and java libraries"	
 	@echo "   js           : build the javascript library (requires emscripten)"	
+	@echo "   android      : build the GUIDOEngine static library for Android"	
 	@echo 
 	@echo "Platform targets to build the GUIDOEngine library are:"	
 	@echo "   mac     (build also ios library)"	
@@ -185,3 +186,9 @@ Qt :
 #===============================================================
 java :
 	make -C ../lang/java/build
+
+#===============================================================
+# building the library for Android
+#===============================================================
+android :
+	ndk-build -C ../platforms/android/guido-engine-android -j
