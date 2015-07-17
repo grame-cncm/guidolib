@@ -453,7 +453,7 @@ guidosessionresponse HTTPDServer::registerGMN(string unique_id, string gmn, bool
 	return fSessions[unique_id]->genericReturnId();
 }
 
-int HTTPDServer::sendGuidoPostRequest(struct MHD_Connection *connection, const TArgs& args, vector<string> &elems)
+int HTTPDServer::sendGuidoPostRequest(struct MHD_Connection *connection, const TArgs& args, const vector<string> &elems)
 {
 	// Test argument validity
 	if(!(elems.size() == 3 && elems[2] == "reset")) {
@@ -536,19 +536,21 @@ int HTTPDServer::sendGuidoPostRequest(struct MHD_Connection *connection, const T
     return send (connection, response);
 }
 
-int HTTPDServer::sendGuidoDeleteRequest(struct MHD_Connection *connection, const TArgs& args)
+int HTTPDServer::sendGuidoDeleteRequest(struct MHD_Connection *connection, const TArgs& args, const vector<string> &elems)
 {
-    if (!args.size () || args.size () > 1 || args.begin()->first != "ID") {
-		guidosessionresponse response = guidosession::genericFailure("There may be one and only one argument called \"ID\" passed to DELETE.", 405);
-        return send(connection, response);
-    } else if (fSessions.find (args.begin()->second) == fSessions.end ()) {
-		guidosessionresponse response = guidosession::genericFailure(("Cannot delete the score with ID "+(args.begin()->second)+" because it does not exist.").c_str(), 404);
+	if (elems.size() != 1 || args.size() != 0) {
+		guidosessionresponse response = guidosession::genericFailure("DELETE Requests MUST have one score identification and no argument in URL.", 400);
 		return send(connection, response);
+	} else {
+		if (fSessions.find (elems[0]) == fSessions.end ()) {
+			guidosessionresponse response = guidosession::genericFailure(("Cannot delete the score with ID "+ elems[0] +" because it does not exist.").c_str(), 404);
+			return send(connection, response);
+		}
 	}
 	// else
-	string sessionId = args.begin()->second;
+	string sessionId = elems[0];
 	guidosession *toErase = fSessions[sessionId];
-	fSessions.erase (args.begin()->second);
+	fSessions.erase (sessionId);
 	delete toErase;
 
 	if(fUseCache) {
@@ -681,7 +683,7 @@ void HTTPDServer::logSendGuido(struct MHD_Connection *connection, const char* ur
 }
 
 //--------------------------------------------------------------------------
-int HTTPDServer::sendGuidoGetHead (struct MHD_Connection *connection, const char* url, const TArgs& args, int type, vector<string> &elems)
+int HTTPDServer::sendGuidoGetHead (struct MHD_Connection *connection, const char* url, const TArgs& args, int type, const vector<string> &elems)
 {
     /*
 	   there are four possibilities for the URL : 0, 1, 2 or 3 entries
@@ -958,7 +960,7 @@ int HTTPDServer::answer (struct MHD_Connection *connection, const char *url, con
 	else if (0 == strcmp (method, "DELETE")) {
 		TArgs args;
 		MHD_get_connection_values (connection, MHD_GET_ARGUMENT_KIND, _get_params, &args);
-		return sendGuidoDeleteRequest(connection, args);
+		return sendGuidoDeleteRequest(connection, args, elems);
 	}
 	else if (!elems.size()) {
 		guidosessionresponse response = guidosession::welcomeMessage();

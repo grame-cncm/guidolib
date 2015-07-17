@@ -132,7 +132,7 @@ private:
 	 * \return #MHD_NO on error (i.e. reply already sent),
 	 *         #MHD_YES on success or if message has been queued
 	 */
-	int sendGuidoGetHead (struct MHD_Connection *connection, const char* url, const TArgs& args, int type, std::vector<std::string> &elems);
+	int sendGuidoGetHead (struct MHD_Connection *connection, const char* url, const TArgs& args, int type, const std::vector<std::string> &elems);
 
 	/*!
 	 * \brief sendGuidoPostRequest. Perform POST request to register guido code. Only request with 'data' argument are valid.
@@ -142,7 +142,7 @@ private:
 	 * \return #MHD_NO on error (i.e. reply already sent),
 	 *         #MHD_YES on success or if message has been queued
 	 */
-	int sendGuidoPostRequest (struct MHD_Connection *connection, const TArgs& args, std::vector<std::string> &elems);
+	int sendGuidoPostRequest (struct MHD_Connection *connection, const TArgs& args, const std::vector<std::string> &elems);
 
 	/*!
 	 * \brief sendGuidoDeleteRequest. Delete a session on server.
@@ -151,7 +151,7 @@ private:
 	 * \param args
 	 * \return
 	 */
-    int sendGuidoDeleteRequest (struct MHD_Connection *connection, const TArgs& args);
+	int sendGuidoDeleteRequest (struct MHD_Connection *connection, const TArgs& args, const std::vector<std::string> &elems);
 
 	/*!
 	 * \brief registerGMN register gmn code for a session. Create a new object guidosession.

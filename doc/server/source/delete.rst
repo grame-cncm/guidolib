@@ -8,7 +8,7 @@ The DELETE method
 | Replies to the DELETE query are formatted as JSON.
 
 **Path**
-	*?ID=ScoreID*
+	*ScoreID*
 
 **Response body**
 	* in case of success: 
@@ -28,7 +28,7 @@ Example
 Using XMLHttpRequest::
 
 	var xhr = new XMLHttpRequest();
-	xhr.open('DELETE','http://localhost:8000?ID=da8e1434e155e8a20f328de7d7ea5874d149f5ee', true);
+	xhr.open('DELETE','http://localhost:8000/da8e1434e155e8a20f328de7d7ea5874d149f5ee', true);
 	xhr.onload = function(e) {
 		console.log(this.status);
 		console.log(this.response);
