@@ -192,3 +192,4 @@ java :
 #===============================================================
 android :
 	ndk-build -C ../platforms/android/guido-engine-android -j
+	cp ../platforms/android/guido-engine-android/libs/armeabi/libGUIDOEngine.so ../platforms/android
