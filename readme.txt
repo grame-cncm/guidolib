@@ -89,7 +89,7 @@ Note for Linux platforms:
    Supporting MIDI export on linux:
    -------------------------------
    you must get the midishare source code that includes the midisharelight library:
-	   git://midishare.git.sourceforge.net/gitroot/midishare/midishare 
+	    git://git.code.sf.net/p/midishare/code 
    You don't need to compile midishare but only the midisharelight library.
    midisharelight is a recent addition to the project and for the moment, it is only
    available from the 'dev' branch. It is located at the project root folder.
