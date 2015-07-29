@@ -56,7 +56,7 @@ extern "C" {
 #endif
 
 /*!
-\addtogroup PianoRoll Create a piano roll
+\addtogroup PianoRoll Piano API
 @{
 */
 
