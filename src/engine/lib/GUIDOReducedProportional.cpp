@@ -165,13 +165,14 @@ GUIDOAPI(GuidoErrCode) GuidoRProportionalRemoveColorToVoice(RProportional *pr, i
 }
 
 // ------------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode) GuidoRProportionalSetHtmlColorToVoice(RProportional *pr, int voiceNum, long color)
+GUIDOAPI(GuidoErrCode) GuidoRProportionalSetHtmlColorToVoice(RProportional *pr, int voiceNum, const char* color)
 {
     if (!pr || voiceNum < 1)
         return guidoErrBadParameter;
 
     unsigned char colref[4] = {0, 0, 0, 255};
-	HtmlColor::get(color, colref);
+	if (!HtmlColor::get(color, colref))
+        return guidoErrBadParameter;
     pr->setColorToVoice(voiceNum, colref[0], colref[1], colref[2], colref[3]);
 	return guidoNoErr;
 }

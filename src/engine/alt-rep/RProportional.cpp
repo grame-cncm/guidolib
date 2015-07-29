@@ -56,7 +56,11 @@ RProportional::RProportional(ARMusic *arMusic) : PianoRoll (arMusic)
 	fNumStaves = 4;			// 4 staves - hard coded for the moment
 	fDrawDurationLine = true;
 }
-RProportional::RProportional(const char *midiFileName) : PianoRoll (midiFileName) {}
+RProportional::RProportional(const char *midiFileName) : PianoRoll (midiFileName)
+{
+	fNumStaves = 4;			// 4 staves - hard coded for the moment
+	fDrawDurationLine = true;
+}
 
 
 //--------------------------------------------------------------------------
@@ -165,7 +169,7 @@ void RProportional::DrawLedgerLines(float x, float y, int count, VGDevice* dev) 
 	int n = (count > 0 ? count : -count);
 	float step = (count > 0 ? fLineHeight : -fLineHeight);
 	float w = noteWidth();
-	x -= (w - fLineHeight) / 1.8;
+	x -= w/5;
 	for (int i=0; i<n; i++) {
 		y += step;
 		dev->Line( x, y, x+w, y);
@@ -186,22 +190,22 @@ void RProportional::DrawNote(int pitch, double date, double dur, const DrawParam
 	if (ll) {
 		DrawLedgerLines(x, (ll > 0 ? staffBottomPos(staff) : staffTopPos(staff)), ll, dev);
 	}
-	if (fDrawDurationLine) DrawRect(x, y, dur, drawParams);
+	if (fDrawDurationLine) DrawRect(x+1, y, dur-0.005, drawParams);
 	DrawHead(x, y, alter, dev);
 }
 
 //--------------------------------------------------------------------------
 void RProportional::setColor (VGDevice* dev, const VGColor& color)
 {
-	dev->PushPenColor(color);
 	fFontColors.push (dev->GetFontColor());
 	dev->SetFontColor(color);
 	PianoRoll::setColor( dev, color);
 }
+
+//--------------------------------------------------------------------------
 void RProportional::popColor (VGDevice* dev)
 {
 	PianoRoll::popColor(dev);
-	dev->PopPenColor();
 	if (fFontColors.size()) {
 		VGColor color = fFontColors.top();
 		dev->SetFontColor(color);
@@ -228,9 +232,6 @@ void RProportional::DrawMeasureBar(double date,  const DrawParams& drawParams) c
     float x  = date2xpos(date, drawParams.width, drawParams.untimedLeftElementWidth);
 	float y1 = staffTopPos (0);
 	float y2 = staffBottomPos (3);
-
-cerr << "RProportional::DrawMeasureBar " << y1 << " - " << y2 << endl;
-	
     drawParams.dev->PushPenWidth(0.3f);
     drawParams.dev->Line (roundFloat(x), roundFloat(y1), roundFloat(x), roundFloat(y2));
     drawParams.dev->PopPenWidth();

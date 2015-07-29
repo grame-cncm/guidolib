@@ -101,7 +101,7 @@ extern "C" {
         \param color the html color (constants are defined in Colors.h)
         \return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoRProportionalSetHtmlColorToVoice(RProportional *pr, int voiceNum, long color);
+	GUIDOAPI(GuidoErrCode)      GuidoRProportionalSetHtmlColorToVoice(RProportional *pr, int voiceNum, const char* color);
 
 	/*!
 		\brief remove a color to a voice (first voice is number 1) (black by default)

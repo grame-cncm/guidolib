@@ -36,7 +36,7 @@ class RProportional : public PianoRoll {
 	int		diatonic (int midipitch, int& octave, int& alter) const;		// gives the diatonic pitch of a midi pitch + octave and alter
 	float	halfspaces2ypos (int halfspaces, int staff) const;
 	int		halfSpaces2LedgerLines (int halfspaces) const;
-	float	noteWidth () const						{ return fLineHeight * 1.8;	}
+	float	noteWidth () const							{ return fLineHeight * 1.8;	}
 
 	void	DrawHead(float x, float y, int alter, VGDevice* dev) const;			// draw note head
 	void	DrawLedgerLines(float x, float y, int count, VGDevice* dev) const;	// draw ledger lines
@@ -57,7 +57,7 @@ class RProportional : public PianoRoll {
 		virtual void  DrawMeasureBar(double date, const DrawParams& drawParams) const;
 		virtual void  DrawStaff		(int n, int width, VGDevice* dev) const;
 		virtual float pitch2ypos	(int midipitch, const DrawParams& drawParams) const;
-		virtual float stepheight    (int height) const  { return fLineHeight / 4; }
+		virtual float stepheight    (int height) const  { return fLineHeight / 3; }
 		virtual void  setColor		(VGDevice* dev, const VGColor& color);
 		virtual void  popColor		(VGDevice* dev);
 };
