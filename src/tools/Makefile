@@ -15,7 +15,7 @@ else
 endif
 endif
 
-TOOLS = guidogetversion guidogetpagecount guidogetvoicecount guidogettimemap guidogetpagemap guidogetsystemmap guidogetstaffmap guidogetvoicemap guido2svg guido2svgmap guido2abstract guido2proll midi2proll guido2midi
+TOOLS = guidogetversion guidogetpagecount guidogetvoicecount guidogettimemap guidogetpagemap guidogetsystemmap guidogetstaffmap guidogetvoicemap guido2svg guido2svgmap guido2abstract guido2proll guido2rproportional midi2proll midi2rproportional guido2midi
 
 .PHONY: checkall
 
@@ -29,6 +29,12 @@ midi2proll : midi2proll.cpp
 
 guido2proll : guido2proll.cpp
 	g++ guido2proll.cpp $(INC) $(lib) -o guido2proll
+
+midi2rproportional : midi2rproportional.cpp
+	g++ midi2rproportional.cpp $(INC) $(lib) -o midi2rproportional
+
+guido2rproportional : guido2rproportional.cpp
+	g++ guido2rproportional.cpp $(INC) $(lib) -o guido2rproportional
 
 guido2midi : guido2midi.cpp
 	g++ guido2midi.cpp $(INC) $(lib) -o guido2midi
