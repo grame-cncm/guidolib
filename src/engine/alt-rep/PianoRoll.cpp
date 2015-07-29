@@ -171,7 +171,7 @@ void PianoRoll::setPitchLinesDisplayMode(int mode)
 //--------------------------------------------------------------------------
 void PianoRoll::setColorToVoice(int voiceNum, int r, int g, int b, int a)
 {
-	fVoicesColors[voiceNum] = VGColor(r, g, b, a);
+	fVoicesColors[voiceNum-1] = VGColor(r, g, b, a);
 }
 
 //--------------------------------------------------------------------------
@@ -221,7 +221,7 @@ PianoRoll::DrawParams PianoRoll::createDrawParamsStructure(int width, int height
 void PianoRoll::onDraw(int width, int height, VGDevice *dev)
 {
     DrawParams drawParams = createDrawParamsStructure(width, height, dev);
-    initRendering(drawParams);
+//    initRendering(drawParams);
     DrawGrid(drawParams);
 
     if (fKeyboardEnabled)
@@ -234,7 +234,7 @@ void PianoRoll::onDraw(int width, int height, VGDevice *dev)
         DrawFromMidi(drawParams);
 #endif
     
-	endRendering(drawParams);
+//	endRendering(drawParams);
 }
 
 //--------------------------------------------------------------------------
@@ -270,9 +270,9 @@ void PianoRoll::DrawFromAR(const DrawParams& drawParams)
         ARMusicalVoice *e = fARMusic->GetNext(pos);
   		VGColor color;
 		bool colored = getVoiceColor (i++, color);
-		if (colored) drawParams.dev->PushFillColor(color);
+		if (colored) setColor(drawParams.dev, color);
 		DrawVoice(e, drawParams);
-		if (colored) drawParams.dev->PopFillColor();
+		if (colored) popColor(drawParams.dev);
     }
 }
 
@@ -301,29 +301,21 @@ float PianoRoll::computeNoteHeight(int height) const
 //--------------------------------------------------------------------------
 void PianoRoll::initRendering(PianoRoll::DrawParams &drawParams) const
 {
-	drawParams.dev->NotifySize(drawParams.width, drawParams.height);
-	drawParams.dev->BeginDraw();
+//	drawParams.dev->NotifySize(drawParams.width, drawParams.height);
+//	drawParams.dev->BeginDraw();
 }
 
 //--------------------------------------------------------------------------
 void PianoRoll::endRendering(PianoRoll::DrawParams &drawParams) const
 {
-    drawParams.dev->EndDraw();
+//    drawParams.dev->EndDraw();
 }
 
 //--------------------------------------------------------------------------
 void PianoRoll::DrawGrid(PianoRoll::DrawParams &drawParams) const
 {
-    if (fPitchLinesDisplayMode == kAutoLines) {
-        /*if (drawParams.noteHeight < kLimitDist34Mode)
-            DrawOctavesGrid(drawParams);
-        else if (drawParams.noteHeight < kLimitDist23Mode)
-            DrawTwoLinesGrid(drawParams);
-        else if (drawParams.noteHeight < kLimitDist12)
-            DrawDiatonicGrid(drawParams);
-        else*/
-            DrawChromaticGrid(drawParams);
-    }
+    if (fPitchLinesDisplayMode == kAutoLines)
+		DrawChromaticGrid(drawParams, false);
     else
         DrawChromaticGrid(drawParams, true);
 }
@@ -408,7 +400,7 @@ void PianoRoll::DrawChromaticGrid(PianoRoll::DrawParams &drawParams, bool isUser
         float y = pitch2ypos(i, drawParams) + 0.5f * drawParams.noteHeight;
 		int step = i % 12; // the note in chromatic step
         
-        if (!isUserDefined ||fBytes[step] == true) {
+        if (!isUserDefined || fBytes[step] == true) {
             float width = kNormalLineWidth;
 
             if (i == 60)
@@ -597,7 +589,10 @@ void PianoRoll::DrawRect(float x, float y, double dur, const DrawParams& drawPar
 	float halfstep = stepheight(drawParams.height) / 2.0f;
 	if (!halfstep) halfstep = 1;
 
-    drawParams.dev->Rectangle(roundFloat(x), roundFloat(y - halfstep), roundFloat(x + (w ? w : 1)), roundFloat(y + halfstep));
+	VGDevice * dev = drawParams.dev;
+	dev->PushPenWidth(0);
+    dev->Rectangle(roundFloat(x), roundFloat(y - halfstep), roundFloat(x + (w ? w : 1)), roundFloat(y + halfstep));
+	dev->PopPenWidth();
 }
 
 //--------------------------------------------------------------------------
@@ -613,6 +608,10 @@ void PianoRoll::DrawMeasureBar(double date,  const DrawParams& drawParams) const
 }
 
 //--------------------------------------------------------------------------
+void PianoRoll::setColor			  (VGDevice* dev, const VGColor& color)	{ dev->PushFillColor(color); }
+void PianoRoll::popColor			  (VGDevice* dev)						{ dev->PopFillColor(); }
+
+//--------------------------------------------------------------------------
 void PianoRoll::handleColor(ARNoteFormat* noteFormat, const DrawParams& drawParams)
 {
     const TagParameterString   *tps = noteFormat->getColor();
@@ -623,15 +622,15 @@ void PianoRoll::handleColor(ARNoteFormat* noteFormat, const DrawParams& drawPara
 
 	if ((tps && tps->getRGB(colref)) || (tpc && tpc->getRGBColor(colref))) {
         if (endRange && fNoteColor ) {				// Means it's a range noteFormat end tag and a color is already set
-			drawParams.dev->PopFillColor();
+			popColor(drawParams.dev);
 			fNoteColor--;
 		}
 		VGColor color(colref[0], colref[1], colref[2], colref[3]);
-		drawParams.dev->PushFillColor(color);
+		setColor(drawParams.dev, color);
 		fNoteColor++;
     }
     else if (endRange && fNoteColor) {			// noteFormat end tag and a color is already set
-		drawParams.dev->PopFillColor();
+		popColor(drawParams.dev);
 		fNoteColor--;
 	}
 }
@@ -838,7 +837,7 @@ void PianoRoll::DrawMidiSeq(MidiSeqPtr seq, int tpqn, const DrawParams& drawPara
 }
 
 //--------------------------------------------------------------------------
-void PianoRoll::DrawFromMidi(const DrawParams& drawParams) const
+void PianoRoll::DrawFromMidi(const DrawParams& drawParams)
 {
     MIDIFile mf;
 
@@ -863,9 +862,9 @@ void PianoRoll::DrawFromMidi(const DrawParams& drawParams) const
     for (unsigned int i = 0; i < vseq.size(); i++) {
 		VGColor color;
 		bool colored = getVoiceColor (i, color);
-		if (colored) drawParams.dev->PushFillColor(color);
+		if (colored) setColor(drawParams.dev, color);
         DrawMidiSeq(vseq[i], tpqn, drawParams);
-		if (colored) drawParams.dev->PopFillColor();
+		if (colored) popColor(drawParams.dev);
         mf.midi()->FreeSeq(vseq[i]);
     }
 

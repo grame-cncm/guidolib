@@ -52,7 +52,6 @@ public:
 
     virtual void  setLimitDates(GuidoDate start, GuidoDate end);
     virtual void  setPitchRange(int minPitch, int maxPitch);
-    virtual void  enableDurationLines(bool enabled) { }
     virtual void  enableKeyboard(bool enabled) { fKeyboardEnabled = enabled; }
             float getKeyboardWidth(int height) const;
     virtual void  enableRandomVoicesColor(bool enabled) { fVoicesAutoColored = enabled; }
@@ -94,7 +93,7 @@ protected:
     virtual void  initRendering       (DrawParams &drawParams) const;
     virtual void  endRendering        (DrawParams &drawParams) const;
 
-	        void  DrawGrid            (DrawParams &drawParams) const;
+	virtual void  DrawGrid            (DrawParams &drawParams) const;
 	        void  DrawOctavesGrid     (DrawParams &drawParams) const;
 	        void  DrawTwoLinesGrid    (DrawParams &drawParams) const;
 	        void  DrawDiatonicGrid    (DrawParams &drawParams) const;
@@ -107,14 +106,16 @@ protected:
 	virtual void  DrawRect            (float x, float y, double dur, const DrawParams& drawParams) const;
 	virtual void  DrawMeasureBar      (double date, const DrawParams& drawParams) const;
 
-	        float pitch2ypos          (int midipitch, const DrawParams& drawParams) const;
+	virtual float pitch2ypos          (int midipitch, const DrawParams& drawParams) const;
 	virtual void  handleColor         (ARNoteFormat *e, const DrawParams& drawParams);
+	virtual void  setColor			  (VGDevice* dev, const VGColor& color);
+	virtual void  popColor			  (VGDevice* dev);
 	
             int  detectARExtremePitch (bool detectLowerPitch);
             void autoAdjustPitchRange (int &lowerPitch, int &higherPitch); // in the case of pitch range lower than 12
 
 #ifdef MIDIEXPORT
-    virtual void  DrawFromMidi          (const DrawParams& drawParams) const;
+    virtual void  DrawFromMidi          (const DrawParams& drawParams);
     virtual void  DrawMidiSeq           (MidiSeqPtr seq, int tpqn, const DrawParams& drawParams) const;
 			TYPE_TIMEPOSITION	getMidiEndDate        () const;
             int					detectMidiExtremePitch(bool detectLowerPitch);
