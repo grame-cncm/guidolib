@@ -1,9 +1,12 @@
 GUIDO Engine history
 
 ----------------------------------------------------------------
+  version 1.6.0
+- new reduced simplified proportional representation
+
+----------------------------------------------------------------
   version 1.5.9
 - crash bug corrected with piano roll colors management
-- new reduced simplified proportional representation
 
 ----------------------------------------------------------------
   version 1.5.8
