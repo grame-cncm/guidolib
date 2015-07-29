@@ -304,10 +304,13 @@ int main(int argc, char **argv)
         /*************/
 
         /**** DRAW ****/
-	dev.SelectPenColor(VGColor(100, 100, 100));
-	dev.SelectFillColor(VGColor(0, 0, 0));
+		dev.NotifySize(w, h);
+		dev.BeginDraw();
+		dev.SelectPenColor(VGColor(100, 100, 100));
+		dev.SelectFillColor(VGColor(0, 0, 0));
         err = GuidoPianoRollOnDraw(pianoRoll, w, h, &dev);
-        error(err);
+ 		dev.EndDraw();
+		error(err);
         /**************/
 
         GuidoDestroyPianoRoll(pianoRoll);
