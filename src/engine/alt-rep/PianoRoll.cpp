@@ -813,10 +813,19 @@ void PianoRoll::DrawMidiSeq(MidiSeqPtr seq, int tpqn, const DrawParams& drawPara
 	int tpwn     = tpqn * 4;
 	double start = double(fStartDate);
 	double end   = double(fEndDate);
+	double nextbar = -1;
+	float bar = 0;
+	double date = 0;
 
 	while (ev) {
+		date = double(Date(ev)) / tpwn;
+		if (bar && fMeasureBarsEnabled) {
+			while (date >= nextbar) {
+				DrawMeasureBar (nextbar, drawParams);
+				nextbar += bar;
+			}
+		}
 		if (EvType(ev) == typeNote) {
-			double date = double(Date(ev)) / tpwn;
 			double dur  = double(Dur(ev))  / tpwn;
 
 			if (date >= start) {
@@ -831,7 +840,15 @@ void PianoRoll::DrawMidiSeq(MidiSeqPtr seq, int tpqn, const DrawParams& drawPara
 				DrawNote(Pitch(ev), start, (dur > remain ? remain : dur), drawParams);
 			}
 		}
-
+		else if (EvType(ev) == typeTimeSign) {
+			double num = TSNum(ev);
+			double denum = pow(2, TSDenom(ev));
+			if (denum) {
+				bar = num / denum;
+				DrawMeasureBar (date, drawParams);
+				nextbar = date + bar;
+			}
+		}
 		ev = Link(ev);
 	}
 }
