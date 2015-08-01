@@ -274,9 +274,12 @@ int main(int argc, char **argv)
         /*************/
 
         /**** DRAW ****/
-	dev.SelectPenColor(VGColor(100, 100, 100));
-	dev.SelectFillColor(VGColor(0, 0, 0));
-	err = GuidoPianoRollOnDraw(pianoRoll, w, h, &dev);
+		dev.NotifySize(w, h);
+		dev.BeginDraw();
+		dev.SelectPenColor(VGColor(0, 0, 0));
+		dev.SelectFillColor(VGColor(0, 0, 0));
+		err = GuidoPianoRollOnDraw(pianoRoll, w, h, &dev);
+		dev.EndDraw();
         error(err);
         /**************/    
 
