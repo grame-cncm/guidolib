@@ -92,7 +92,7 @@ extern "C" {
         \param a the alpha param of RGB color
         \return a Guido error code
 	*/
-	GUIDOAPI(GuidoErrCode)      GuidoRProportionalSetRGBColorToVoice(RProportional *pr, int voiceNum, int r, int g, int b, int a);
+	GUIDOAPI(GuidoErrCode)      GuidoRProportionalSetRGBColorToVoice(RProportional *pr, int voiceNum, int r, int g, int b, int a=255);
 
     /*!
 		\brief Sets a html color to a voice (first voice is number 1) (black by default)
@@ -118,6 +118,15 @@ extern "C" {
         \return a Guido error code
 	*/
 	GUIDOAPI(GuidoErrCode)      GuidoRProportionalEnableMeasureBars(RProportional *pr, bool enabled);
+
+    /*!
+		\brief Gets a reduced proportional representation map
+		\param pr a reduced proportional representation previously created with GuidoAR2RProportional or GuidoMidi2RProportional
+        \param width the width of the piano roll (-1 to set the default width : 1024)
+        \param height the height of the canvas (-1 to set the default height : 512)
+        \return a Guido error code (returns guidoErrBadParameter if keyboard width is higher than width param)
+	*/
+    GUIDOAPI(GuidoErrCode)      GuidoRProportionalGetMap(const RProportional *pr, int width, int height, Time2GraphicMap &outmap);
 
 	/*!
 		\brief Draw the reduced proportional representation on a VGDevice

@@ -188,6 +188,19 @@ GUIDOAPI(GuidoErrCode) GuidoRProportionalEnableMeasureBars(RProportional *pr, bo
 }
 
 // ------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoRProportionalGetMap(const RProportional *pr, int width, int height, Time2GraphicMap &outmap)
+{
+    if (!pr || width < -1 || height < -1 || width == 0 || height == 0)
+        return guidoErrBadParameter;
+
+    int autoWidth  = (width  == -1 ? kDefaultWidth  : width);
+    int autoHeight = (height == -1 ? kDefaultHeight : height);
+	pr->getMap(autoWidth, autoHeight, outmap);
+
+	return guidoNoErr;
+}
+
+// ------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoRProportionalOnDraw(RProportional *pr, int width, int height, VGDevice *dev)
 {
     if (!pr || !dev || width < -1 || height < -1 || width == 0 || height == 0)
