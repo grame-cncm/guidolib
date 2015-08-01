@@ -108,9 +108,11 @@ std::string GUIDOPianoRollAdapter::svgExport(PianoRoll *pr, int width, int heigh
 	std::stringstream out;
 	SVGSystem sys(0);
 	SVGDevice dev (out, &sys, 0);
+	dev.BeginDraw();
 	dev.SelectPenColor(VGColor(100, 100, 100));
 	dev.SelectFillColor(VGColor(0, 0, 0));
 	GuidoPianoRollOnDraw(pr, width, height, &dev);
+	dev.EndDraw();
 	return out.str();
 }
 
