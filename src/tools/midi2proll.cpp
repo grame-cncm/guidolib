@@ -44,7 +44,7 @@ static void usage(char* name)
 	cerr << "         -end        date   : set time zone end (default is 0/0 -> end time is automatically adjusted)" << endl;
     cerr << "         -minpitch   value  : set minimum midi pitch (default is " << kDefaultMinPitch << " -> min pitch is automatically adjusted)" << endl;
 	cerr << "         -maxpitch   value  : set maximum midi pitch (default is " << kDefaultMaxPitch << " -> max pitch is automatically adjusted)" << endl;
-	cerr << "         -keyboard   bool   : set if keyboard will be displayed (default is " << kDefaultKeyboard << ")" << endl;
+	cerr << "         -keyboard          : enable keyboard" << endl;
 	cerr << "         -pitchlines string : set pitch lines display mode (default is " << kDefaultPitchLines << ")" << endl;
 	cerr << "                                   automatic" << endl;
     cerr << "                                   noline" << endl;
@@ -61,6 +61,7 @@ static void error(GuidoErrCode err)
     }
 }
 
+//---------------------------------------------------------------------------------------------
 static void checkusage(int argc, char **argv)
 {
     if (argc == 1)
@@ -70,39 +71,23 @@ static void checkusage(int argc, char **argv)
         if (!strcmp(argv[i], kOptions[kHelp]))
             usage(argv[0]);
         else if (*argv[i] == '-') {
-            bool unknownOpt = true;
 
+            bool unknownOpt = true;
             for (int n = 1; (n < kMaxOpt) && unknownOpt; n++) {
                 if (!strcmp (argv[i], kOptions[n]))
                     unknownOpt = false;
             }
 
-            if (unknownOpt || i + 1 >= argc || *(argv[i + 1]) == '-')
-                usage(argv[0]);
-            else {
-                i++;
-
-                if (i >= argc - 1)
-                    usage(argv[0]);
-            }
-        }
-        else {
-            if (i != argc - 2)
-                usage(argv[0]);
-        }
+            if (unknownOpt) usage(argv[0]);
+		}
     }
 }
 
 static const char* getInputFile(int argc, char *argv[])
 {
-	int i;
-
-	for (i = 1; i < argc - 1; i++) {
-		if (*argv[i] == '-')
-            i++;	// skip option value
-	}
-
-	return (i < argc) ? argv[i] : 0;
+	const char * file = argv[argc-1];		// input file is the last arg
+	if (*file == '-') usage(argv[0]);
+	return file;
 }
 
 static GuidoDate ldateopt(int argc, char **argv, const char* opt, GuidoDate defaultvalue)
@@ -149,24 +134,14 @@ static int lintopt(int argc, char **argv, const char* opt, int defaultvalue)
 	return defaultvalue;
 }
 
-static bool lboolopt(int argc, char **argv, const char* opt, bool defaultvalue)
+//---------------------------------------------------------------------------------------------
+static bool lnoargopt(int argc, char **argv, const char* opt)
 {
 	for (int i = 1; i < argc; i++) {
-		if (!strcmp(argv[i], opt)) {
-			i++;
-
-			if (i >= argc)
-                usage(argv[0]);
-			else {
-                if (!strcmp(argv[i], "true"))
-                    return true;
-                else
-                    return false;
-            }
-		}
+		if (!strcmp(argv[i], opt))
+			return true;
 	}
-
-	return defaultvalue;
+	return false;
 }
 
 static PianoRollType lPianoRollTypeopt(int argc, char **argv, const char* opt, PianoRollType defaultvalue)
@@ -228,7 +203,7 @@ int main(int argc, char **argv)
 	int  h          = lintopt       (argc, argv, kOptions[kHeight],     kDefaultHeight);
     int  minPitch   = lintopt       (argc, argv, kOptions[kMinPitch],   kDefaultMinPitch);
     int  maxPitch   = lintopt       (argc, argv, kOptions[kMaxPitch],   kDefaultMaxPitch);
-    bool keyboard   = lboolopt      (argc, argv, kOptions[kKeyboard],   kDefaultKeyboard);
+    bool keyboard   = lnoargopt     (argc, argv, kOptions[kKeyboard]);
     int  pitchLines = lPitchLinesopt(argc, argv, kOptions[kPitchLines], kDefaultPitchLines);
     
     PianoRollType         pianoRollType = lPianoRollTypeopt(argc, argv, kOptions[kPianoRoll],  kDefaultPianoRoll);
