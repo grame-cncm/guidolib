@@ -44,11 +44,12 @@ all :
 help:
 	@echo  This makefile is intended to manage guido java ressources.
 	@echo  Available targets are:
-	@echo "  class : to compile the jni java code"
-	@echo "  jar   : to build a jni jar file"
+	@echo "  class : to compile the library java code"
+	@echo "  jar   : to build a jar file"
 	@echo "  jar-engine-android : to build guidoengine jar for android (without use of awt class)"
 	@echo "  doc   : to build the java documentation"
 	@echo "  headers : to make the native headers"
+	@echo "  $(TARGET) : to make the native library"
 	@echo "  guidoviewer : to compile and execute guido viewer"
 	@echo "  factorysample : to compile and execute an example of factory"
 	@echo "  tests : to compile and execute a test API"
@@ -74,6 +75,12 @@ tests : ../tests.class
 
 guidoviewer : ../guidoviewer.class
 	cd .. && $(JAVA) -Djava.library.path=build guidoviewer 
+
+guidoviewerSVG : ../guidoviewerSVG.class
+	cd .. && $(JAVA) -cp "svgSalamander.jar:guidoengine.jar:." -Djava.library.path=build guidoviewerSVG 
+
+../guidoviewerSVG.class : ../guidoviewerSVG.java
+	cd .. && javac -classpath "svgSalamander.jar:guidoengine.jar" guidoviewerSVG.java
 
 factorysample : ../factorysample.class
 	cd .. && $(JAVA) -Djava.library.path=build factorysample 
@@ -163,7 +170,7 @@ windowsclean :
 #===============================================================
 # building the tools on Mac OS X
 #===============================================================
-macos : macos/guidojni.xcodeproj guidojni.xcodeproj
+macos : macos/guidojni.xcodeproj libjniGUIDOEngine.dylib
 
 jniGUIDOEngine : macos/guidojni.xcodeproj
 	xcodebuild -jobs 8 -project macos/guidojni.xcodeproj -target ALL_BUILD -configuration Release
@@ -171,10 +178,10 @@ jniGUIDOEngine : macos/guidojni.xcodeproj
 macos/guidojni.xcodeproj : CMakeLists.txt
 	[ -d macos ] || mkdir macos
 	cd macos && cmake .. -G Xcode
-
-guidojni.xcodeproj : macos/guidojni.xcodeproj jniGUIDOEngine
-	rm -rf libjniGUIDOEngine*.dylib
-	cp macos/Release/libjniGUIDOEngine*.dylib .
 	
+libjniGUIDOEngine.dylib :  jniGUIDOEngine macos/Release/libjniGUIDOEngine.dylib
+	cp macos/Release/libjniGUIDOEngine*.dylib .
+	cp macos/Release/libjniGUIDOEngine*.dylib ..
+
 macosclean :
 	rm -rf macos
