@@ -1996,7 +1996,7 @@ void ARMusicalVoice::doAutoBarlines()
 	GuidoPos pos = GetHeadPosition(vst);
     TYPE_TIMEPOSITION closestRepeatBar(-1,1);
     /// a cache for this last seen key tag
-    GuidoPos previousKey;
+    GuidoPos previousKey = NULL;
     ARKey *key = NULL;
 	while (pos)
 	{
@@ -2090,8 +2090,7 @@ obsolete: an end repeatbar is now ARBar
                          this is tricky, the barline has to go before a potential key tag at this time position!
                          */
                         
-                        if( key &&
-                            previousKey &&
+                        if( previousKey &&
                             GetAt(previousKey)->getRelativeTimePosition() == o->getRelativeTimePosition() ){
                             newSystemOrPagepos = previousKey;
                         }
