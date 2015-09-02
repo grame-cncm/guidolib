@@ -1996,7 +1996,7 @@ void ARMusicalVoice::doAutoBarlines()
 	GuidoPos pos = GetHeadPosition(vst);
     TYPE_TIMEPOSITION closestRepeatBar(-1,1);
     /// a cache for this last seen key tag
-    GuidoPos previousKey;
+    GuidoPos previous	Key;
     ARKey *key = NULL;
 	while (pos)
 	{
