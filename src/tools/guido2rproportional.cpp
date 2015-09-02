@@ -87,7 +87,9 @@ static void checkusage(int argc, char **argv)
 //---------------------------------------------------------------------------------------------
 static const char* getInputFile(int argc, char *argv[])
 {
-	return argv[argc-1];		// input file is the last arg
+	const char * file = argv[argc-1];		// input file is the last arg
+	if (*file == '-') usage(argv[0]);
+	return file;
 }
 
 //---------------------------------------------------------------------------------------------
