@@ -1039,8 +1039,6 @@ void ARMusicalVoice::doAutoStuff1()
 {
 	timebench("doAutoDispatchLyrics", doAutoDispatchLyrics());
 
-	// introduce naturalkeys ...
-	timebench("doAutoKeys", doAutoKeys());
 
 
 	// introduce barlines ...
@@ -1052,6 +1050,11 @@ void ARMusicalVoice::doAutoStuff1()
 	
 	timebench("doAutoBarlines", doAutoBarlines());
 
+    // (jfk) moved 
+    // introduce naturalkeys ...
+    timebench("doAutoKeys", doAutoKeys());
+
+    
 
 	// introduce mesures numbering	
 	timebench("doAutoMeasuresNumbering", doAutoMeasuresNumbering());
@@ -1992,7 +1995,9 @@ void ARMusicalVoice::doAutoBarlines()
 	// this operation eats all but the first non-state events or tags.
 	GuidoPos pos = GetHeadPosition(vst);
     TYPE_TIMEPOSITION closestRepeatBar(-1,1);
-
+    /// a cache for this last seen key tag
+    GuidoPos previousKey;
+    ARKey *key = NULL;
 	while (pos)
 	{
 		// track tie- and merge-tags
@@ -2022,6 +2027,11 @@ void ARMusicalVoice::doAutoBarlines()
         ARBar   *bar   = static_cast<ARBar *>(o->isARBar());
 		ARCoda  *coda  = static_cast<ARCoda *>(o->isARCoda());
 		ARSegno *segno = static_cast<ARSegno *>(o->isARSegno());
+        key = static_cast<ARKey *>(o->isARKey());
+        if( key ){
+            // put into cache
+            previousKey = pos;
+        }
 
 		// (DF) tests to inhibit auto barlines when a repeat bar is present
 		bool isRepeatBar = false;
@@ -2076,6 +2086,15 @@ obsolete: an end repeatbar is now ARBar
 						if (newSystemOrPagepos == NULL) {
 							newSystemOrPagepos = pos;
 						}
+                        /*
+                         this is tricky, the barline has to go before a potential key tag at this time position!
+                         */
+                        
+                        if( key &&
+                            previousKey &&
+                            GetAt(previousKey)->getRelativeTimePosition() == o->getRelativeTimePosition() ){
+                            newSystemOrPagepos = previousKey;
+                        }
 						AddElementAt(newSystemOrPagepos,arbar);
 					}
 

@@ -61,12 +61,12 @@ GuidoErrCode GUIDOReducedProportionalAdapter::setRGBColorToVoice(RProportional *
 
 GuidoErrCode GUIDOReducedProportionalAdapter::setHtmlColorToVoice(RProportional *pr, int voiceNum, const char* color)
 {
-	GuidoRProportionalSetHtmlColorToVoice (pr, voiceNum, color);
+	return GuidoRProportionalSetHtmlColorToVoice (pr, voiceNum, color);
 }
 
 GuidoErrCode GUIDOReducedProportionalAdapter::removeColorToVoice(RProportional *pr, int voiceNum)
 {
-	GuidoRProportionalRemoveColorToVoice (pr, voiceNum);
+	return GuidoRProportionalRemoveColorToVoice (pr, voiceNum);
 }
 
 GuidoErrCode GUIDOReducedProportionalAdapter::enableMeasureBars(RProportional *pr, bool enabled)
