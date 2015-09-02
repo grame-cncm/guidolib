@@ -264,10 +264,21 @@ class_export GuidoEngineAdapter
 			\param handle a graphic representation.
 			\param page the page number.
 			\param out the output stream.
-			\param embedFont if true, it use a embbed guido font and add it to the SVG.
-			\param font path of the guido svg font file or an svg font in text representation. Can be use if embedFont is set to false else it is unnecessary.
-			If the library is compiled with INDEPENDENTSVG option, don't use a font file. The library cannot calculate font metric. You have better to use embedded font.
-			\param mappingMode the mapping mode (see mapping mode enum).
+			\param w the drawing area width.
+			\param h the drawing area height.
+			\param embedFont a boolean value. When true, the default svg guido font is embedded to the SVG.
+			\return SVG code
+		 */
+		std::string gr2SVG( const GRHandler handle, int page, std::ostream& out, int w, int h, bool embedFont = true );
+
+		/** \brief Exports one page of score to SVG.
+
+			\param handle a graphic representation.
+			\param page the page number.
+			\param out the output stream.
+			\param embedFont a boolean value. When true, the default svg guido font is embedded to the SVG.
+			\param font path of the guido svg font file (ignored when \c embedFont is \c true)
+			\param mappingMode a constant to embed a mapping \see GuidoMapping.
 			\return a Guido error code
 		 */
 		GuidoErrCode gr2SVG( const GRHandler handle, int page, std::ostream& out, bool embedFont = true, const char* font = 0, const int mappingMode = 0 );
@@ -276,9 +287,10 @@ class_export GuidoEngineAdapter
 
 			\param handle a graphic representation.
 			\param page the page number.
-			\param embedFont if true, it use a embbed guido font and add it to the SVG.
-			\param mappingMode the mapping mode (see mapping mode enum).
-			\return a Guido error code
+			\param out the output stream.
+			\param embedFont a boolean value. When true, the default svg guido font is embedded to the SVG.
+			\param mappingMode a constant to embed a mapping \see GuidoMapping.
+			\return SVG code
 		 */
 		std::string gr2SVG(const GRHandler handle, int page, bool embedFont = true, const int mappingMode = 0);
 

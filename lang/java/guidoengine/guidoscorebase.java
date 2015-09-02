@@ -149,19 +149,27 @@ public class guidoscorebase {
 	 * @param page
 	 *            the page number.
 	 * @param embedFont
-	 *            if true, it use a embbed guido font and add it to the SVG.
+	 *            a boolean value. When true, the default svg guido font is embedded to the SVG.
 	 * @param font
-	 *            path of the guido svg font file or an svg font in text
-	 *            representation. Can be use if embedFont is set to false else
-	 *            it is unnecessary. If the library is compiled with
-	 *            INDEPENDENTSVG option, don't use a font file. The library
-	 *            cannot calculate font metric. You have better to use embedded
-	 *            font.
+	 *            font path of the guido svg font file (ignored when embedFont is true)
 	 * @param mappingMode
-	 *            the mapping mode (see mapping mode enum).
+	 *            the mapping mode (see GuidoMapping).
 	 * @return a String with the svg code or a null object if an error occurs.
 	 */
 	public native final synchronized String GR2SVG(int page, boolean embedFont, String font, int mappingMode);
+
+	/**
+	 * Exports one page of score to SVG.
+	 * 
+	 * @param page
+	 *            the page number.
+	 * @param w	the drawing area width
+	 * @param h the drawing area height
+	 * @param embedFont
+	 *            a boolean value. When true, the default svg guido font is embedded to the SVG.
+	 * @return a String with the svg code or a null object if an error occurs.
+	 */
+	public native final synchronized String GR2SVG(int page, int w, int h, boolean embedFont);
 
 	/**
 	 * Exports a graphic representation to SVG

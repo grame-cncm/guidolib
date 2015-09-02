@@ -23,29 +23,13 @@
 #include "canvasdevice.h"
 #endif
 
-GuidoEngineAdapter::GuidoEngineAdapter()
-{
-}
-
-GuidoEngineAdapter::~GuidoEngineAdapter()
-{
-}
+GuidoEngineAdapter::GuidoEngineAdapter()	{}
+GuidoEngineAdapter::~GuidoEngineAdapter()	{}
 
 
-GuidoErrCode GuidoEngineAdapter::init(GuidoInitDesc * desc)
-{
-	return ::GuidoInit(desc);
-}
-
-GuidoErrCode GuidoEngineAdapter::init()
-{
-	return ::GuidoInitWithIndependentSVG();
-}
-
-void GuidoEngineAdapter::shutdown()
-{
-	::GuidoShutdown();
-}
+GuidoErrCode GuidoEngineAdapter::init(GuidoInitDesc * desc)		{	return ::GuidoInit(desc); }
+GuidoErrCode GuidoEngineAdapter::init()							{	return ::GuidoInitWithIndependentSVG(); }
+void GuidoEngineAdapter::shutdown()								{	::GuidoShutdown(); }
 
 GRHandler GuidoEngineAdapter::ar2gr(ARHandler ar)
 {
@@ -61,30 +45,11 @@ GRHandler GuidoEngineAdapter::ar2gr(ARHandler ar, const GuidoLayoutSettings &set
 	return err ? 0 : gr;
 }
 
-GuidoErrCode GuidoEngineAdapter::updateGR(GRHandler gr)
-{
-	return ::GuidoUpdateGR(gr, 0);
-}
-
-GuidoErrCode GuidoEngineAdapter::updateGR(GRHandler gr, const GuidoLayoutSettings &settings)
-{
-	return ::GuidoUpdateGR(gr, &settings);
-}
-
-void GuidoEngineAdapter::freeAR(ARHandler ar)
-{
-	::GuidoFreeAR(ar);
-}
-
-void GuidoEngineAdapter::freeGR(GRHandler gr)
-{
-	::GuidoFreeGR(gr);
-}
-
-string GuidoEngineAdapter::getErrorString(GuidoErrCode errCode)
-{
-	return ::GuidoGetErrorString(errCode);
-}
+GuidoErrCode GuidoEngineAdapter::updateGR(GRHandler gr)			{	return ::GuidoUpdateGR(gr, 0); }
+GuidoErrCode GuidoEngineAdapter::updateGR(GRHandler gr, const GuidoLayoutSettings &settings) {	return ::GuidoUpdateGR(gr, &settings); }
+void GuidoEngineAdapter::freeAR(ARHandler ar)					{	::GuidoFreeAR(ar); }
+void GuidoEngineAdapter::freeGR(GRHandler gr)					{	::GuidoFreeGR(gr); }
+string GuidoEngineAdapter::getErrorString(GuidoErrCode errCode)	{	return ::GuidoGetErrorString(errCode); }
 
 GuidoLayoutSettings GuidoEngineAdapter::getDefaultLayoutSettings()
 {
@@ -93,20 +58,9 @@ GuidoLayoutSettings GuidoEngineAdapter::getDefaultLayoutSettings()
 	return settings;
 }
 
-int GuidoEngineAdapter::countVoices(CARHandler inHandleAR)
-{
-	return ::GuidoCountVoices(inHandleAR);
-}
-
-int GuidoEngineAdapter::getPageCount(CGRHandler inHandleGR)
-{
-	return ::GuidoGetPageCount(inHandleGR);
-}
-
-int GuidoEngineAdapter::getSystemCount(CGRHandler inHandleGR, int page)
-{
-	return ::GuidoGetSystemCount(inHandleGR, page);
-}
+int GuidoEngineAdapter::countVoices(CARHandler inHandleAR)		{	return ::GuidoCountVoices(inHandleAR); }
+int GuidoEngineAdapter::getPageCount(CGRHandler inHandleGR)		{	return ::GuidoGetPageCount(inHandleGR); }
+int GuidoEngineAdapter::getSystemCount(CGRHandler inHandleGR, int page)	{	return ::GuidoGetSystemCount(inHandleGR, page); }
 
 GuidoDate GuidoEngineAdapter::duration(CGRHandler inHandleGR)
 {
@@ -115,15 +69,8 @@ GuidoDate GuidoEngineAdapter::duration(CGRHandler inHandleGR)
 	return date;
 }
 
-int GuidoEngineAdapter::findEventPage(CGRHandler inHandleGR, const GuidoDate& date)
-{
-	return ::GuidoFindEventPage(inHandleGR, date);
-}
-
-int GuidoEngineAdapter::findPageAt(CGRHandler inHandleGR, const GuidoDate& date)
-{
-	return ::GuidoFindPageAt(inHandleGR, date);
-}
+int GuidoEngineAdapter::findEventPage(CGRHandler inHandleGR, const GuidoDate& date)		{	return ::GuidoFindEventPage(inHandleGR, date); }
+int GuidoEngineAdapter::findPageAt(CGRHandler inHandleGR, const GuidoDate& date)		{	return ::GuidoFindPageAt(inHandleGR, date); }
 
 GuidoDate GuidoEngineAdapter::getPageDate( CGRHandler inHandleGR, int pageNum)
 {
@@ -132,10 +79,15 @@ GuidoDate GuidoEngineAdapter::getPageDate( CGRHandler inHandleGR, int pageNum)
 	return date;
 }
 
-GuidoErrCode GuidoEngineAdapter::onDraw(GuidoOnDrawDesc * desc)
+GuidoErrCode GuidoEngineAdapter::onDraw(GuidoOnDrawDesc * desc)		{	return ::GuidoOnDraw(desc); }
+
+std::string gr2SVG( const GRHandler handle, int page, std::ostream& out, int w, int h, bool embedFont)
 {
-	return ::GuidoOnDraw(desc);
+	stringstream sstr;
+	::GuidoGR2SVG1(handle, page, sstr, embedFont, w, h);
+	return sstr.str();
 }
+
 GuidoErrCode GuidoEngineAdapter::gr2SVG( const GRHandler handle, int page, std::ostream& out, bool embedFont, const char* font, const int mappingMode)
 {
 	return ::GuidoGR2SVG(handle, page, out, embedFont, font, mappingMode);
@@ -144,7 +96,7 @@ GuidoErrCode GuidoEngineAdapter::gr2SVG( const GRHandler handle, int page, std::
 std::string GuidoEngineAdapter::gr2SVG( const GRHandler handle, int page, bool embedFont, const int mappingMode)
 {
 	stringstream sstr;
-	::GuidoGR2SVG(handle, page, sstr, true, 0, 0);
+	::GuidoGR2SVG(handle, page, sstr, true, 0, mappingMode);
 	return sstr.str();
 }
 
@@ -226,25 +178,10 @@ GuidoPageFormat GuidoEngineAdapter::getDefaultPageFormat()
 	return pf;
 }
 
-float GuidoEngineAdapter::unit2CM(float val)
-{
-	return ::GuidoUnit2CM(val);
-}
-
-float GuidoEngineAdapter::cm2Unit(float val)
-{
-	return ::GuidoCM2Unit(val);
-}
-
-float GuidoEngineAdapter::unit2Inches(float val)
-{
-	return ::GuidoUnit2Inches(val);
-}
-
-float GuidoEngineAdapter::inches2Unit(float val)
-{
-	return ::GuidoInches2Unit(val);
-}
+float GuidoEngineAdapter::unit2CM(float val)		{	return ::GuidoUnit2CM(val);}
+float GuidoEngineAdapter::cm2Unit(float val)		{	return ::GuidoCM2Unit(val);}
+float GuidoEngineAdapter::unit2Inches(float val)	{	return ::GuidoUnit2Inches(val);}
+float GuidoEngineAdapter::inches2Unit(float val)	{	return ::GuidoInches2Unit(val); }
 
 GuidoErrCode GuidoEngineAdapter::resizePageToMusic(GRHandler inHandleGR)
 {
@@ -289,26 +226,10 @@ std::vector<std::string> GuidoEngineAdapter::getSymbolPath(const ARHandler inHan
 }
 
 // Parser section
-GuidoParser * GuidoEngineAdapter::openParser()
-{
-	return ::GuidoOpenParser();
-}
-
-GuidoErrCode GuidoEngineAdapter::closeParser(GuidoParser * parser)
-{
-	return ::GuidoCloseParser(parser);
-}
-
-ARHandler GuidoEngineAdapter::file2AR(GuidoParser *parser, const string &file)
-{
-	return ::GuidoFile2AR(parser, file.c_str());
-}
-
-
-ARHandler GuidoEngineAdapter::string2AR(GuidoParser * parser, const string &gmnCode)
-{
-	return ::GuidoString2AR (parser, gmnCode.c_str());
-}
+GuidoParser * GuidoEngineAdapter::openParser()								{	return ::GuidoOpenParser(); }
+GuidoErrCode GuidoEngineAdapter::closeParser(GuidoParser * p)				{	return ::GuidoCloseParser(p); }
+ARHandler GuidoEngineAdapter::file2AR(GuidoParser *p, const string &file)	{	return ::GuidoFile2AR(p, file.c_str()); }
+ARHandler GuidoEngineAdapter::string2AR(GuidoParser * p, const string &gmn)	{	return ::GuidoString2AR (p, gmn.c_str()); }
 
 string GuidoEngineAdapter::getStream(const GuidoStream *gStream) const
 {
@@ -334,22 +255,8 @@ ParserError GuidoEngineAdapter::parserGetErrorCode(GuidoParser *p)
 	return parseErr;
 }
 
-GuidoStream * GuidoEngineAdapter::openStream()
-{
-	return ::GuidoOpenStream();
-}
+GuidoStream * GuidoEngineAdapter::openStream()						{	return ::GuidoOpenStream(); }
+GuidoErrCode GuidoEngineAdapter::closeStream(GuidoStream *s)		{	return ::GuidoCloseStream(s); }
+GuidoErrCode GuidoEngineAdapter::writeStream(GuidoStream *s, const string &str) {	return ::GuidoWriteStream(s, str.c_str()); }
+GuidoErrCode GuidoEngineAdapter::resetStream(GuidoStream *s)		{	return ::GuidoResetStream(s); }
 
-GuidoErrCode GuidoEngineAdapter::closeStream(GuidoStream *s)
-{
-	return ::GuidoCloseStream(s);
-}
-
-GuidoErrCode GuidoEngineAdapter::writeStream(GuidoStream *s, const string &str)
-{
-	return ::GuidoWriteStream(s, str.c_str());
-}
-
-GuidoErrCode GuidoEngineAdapter::resetStream(GuidoStream *s)
-{
-	return ::GuidoResetStream(s);
-}

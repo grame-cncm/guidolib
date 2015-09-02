@@ -572,7 +572,6 @@ GUIDOAPI(GuidoErrCode) GuidoGetPageDate( CGRHandler inHandleGR, int pageNum, Gui
 // --------------------------------------------------------------------------
 //		- Score drawing and pages formating -
 // --------------------------------------------------------------------------
-
 GUIDOAPI(GuidoErrCode) GuidoOnDraw( GuidoOnDrawDesc * desc )
 {
 	if( desc == 0 ) return guidoErrBadParameter;
@@ -604,7 +603,6 @@ GUIDOAPI(GuidoErrCode) GuidoOnDraw( GuidoOnDrawDesc * desc )
 	}
 
     /**** MAPS ****/
-
     if (SVGMapDevice *mapDevice = dynamic_cast<SVGMapDevice *>(desc->hdc)) {
         int voicesNumber = GuidoCountVoices(desc->handle->arHandle);
 
@@ -618,18 +616,15 @@ GUIDOAPI(GuidoErrCode) GuidoOnDraw( GuidoOnDrawDesc * desc )
             mapDevice->addVoiceMap(voiceMap);
             mapDevice->addStaffMap(staffMap);
         }
-
         Time2GraphicMap systemMap;
         result = GuidoGetSystemMap(desc->handle, desc->page, (float) desc->sizex, (float) desc->sizey, systemMap);
         mapDevice->addSystemMap(systemMap);
     }
 
     /**************/
-		
 	desc->hdc->EndDraw(); // must be called even if BeginDraw has failed.
     
     long endTime = GuidoTiming::getCurrentmsTime();
-
     desc->handle->grmusic->setDrawTime(endTime - startTime);
 
 #ifdef TIMING
@@ -696,6 +691,31 @@ GUIDOAPI(GuidoErrCode) 	GuidoBinaryExport( const GRHandler handle, int page, std
 // --------------------------------------------------------------------------
 //		- Score export to svg -
 // --------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode) GuidoGR2SVG1( const GRHandler handle, int page, std::ostream& out, int width, int height, bool embedFont )
+{
+	SVGSystem sys(embedFont ? ______src_guido2_svg : 0);
+	VGDevice    *dev  = sys.CreateDisplayDevice(out, 0);
+
+	GuidoResizePageToMusic (handle);
+
+	GuidoOnDrawDesc desc;              // declare a data structure for drawing
+	desc.handle = handle;
+	desc.hdc = dev;                    // we'll draw on the svg device
+	desc.page = page;
+	desc.updateRegion.erase = true;     // and draw everything
+	desc.scrollx = desc.scrolly = 0;    // from the upper left page corner
+	desc.sizex = width;
+	desc.sizey = height;
+	dev->NotifySize(width, height);
+	dev->SelectPenColor(VGColor(0,0,0));
+
+	GuidoErrCode error = GuidoOnDraw (&desc);
+
+	delete dev;
+	return error;
+
+}
+
 GUIDOAPI(GuidoErrCode) GuidoGR2SVG( const GRHandler handle, int page, std::ostream& out, bool embedFont, const char* font, const int mappingMode )
 {
 	const char * fontUsed = font;
