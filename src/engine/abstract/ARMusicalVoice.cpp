@@ -5238,10 +5238,12 @@ void ARMusicalVoice::doAutoKeys()
             if (key) {
                 if (numkeys != 0 && key->getKeyNumber() != numkeys) {
                     // then we insert a key at this position
-                    ARNaturalKey * natkey = new ARNaturalKey();
-                    natkey->setIsAuto(true);
-                    natkey->setRelativeTimePosition(key->getRelativeTimePosition());
-                    AddElementAt(pos,natkey);
+                    if( !key->hideAutoNaturals() ) {
+                        ARNaturalKey * natkey = new ARNaturalKey();
+                        natkey->setIsAuto(true);
+                        natkey->setRelativeTimePosition(key->getRelativeTimePosition());
+                        AddElementAt(pos,natkey);
+                    }
                 }
 
                 numkeys = key->getKeyNumber();

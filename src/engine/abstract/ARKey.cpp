@@ -40,12 +40,14 @@ ARKey::ARKey(const TYPE_TIMEPOSITION & timeposition)
 ARKey::ARKey(int p_keynumber) : mIsFree(false)
 {
 	fKeyNumber = p_keynumber;
+    fHideAutoNaturals = false;
 	memset(fOctarray,0,NUMNOTES*(sizeof(int))); // octarray auf 0 setzen;
 }
 
 ARKey::ARKey() : mIsFree(false)
 {
 	fKeyNumber = 0; // no accidentals
+    fHideAutoNaturals = false;
 	memset(fOctarray,0,NUMNOTES*(sizeof(int))); // octarray auf 0 setzen;
 }
 
@@ -53,6 +55,7 @@ ARKey::ARKey(const ARKey & key)
 {
 	mIsFree = key.mIsFree;
 	fKeyNumber = key.fKeyNumber;
+    fHideAutoNaturals = key.fHideAutoNaturals;
 
 	key.getOctArray((int *) &fOctarray);
 	key.getFreeKeyArray (fAccarray);
@@ -82,8 +85,8 @@ void ARKey::setTagParameterList(TagParameterList & tpl)
 		ListOfStrings lstrs; // (1); std::vector test impl
 
 		// either a key-string ("G") or a key-number key=3
-		lstrs.AddTail(( "S,key,,r"));
-		lstrs.AddTail(( "I,key,,r"));
+		lstrs.AddTail(( "S,key,,r;S,hideNaturals,false,o"));
+		lstrs.AddTail(( "I,key,,r;S,hideNaturals,false,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -92,12 +95,12 @@ void ARKey::setTagParameterList(TagParameterList & tpl)
 
 	if( ret >= 0 && rtpl )
 	{
+        GuidoPos pos = rtpl->GetHeadPosition();
 		// we found a match!
 		if (ret == 0)
 		{
 			// then, we now the match for the first ParameterList
 			// w, h, ml, mt, mr, mb
-			GuidoPos pos = rtpl->GetHeadPosition();
 
 			TagParameterString * tps = TagParameterString::cast(rtpl->GetNext(pos));
 			assert(tps);
@@ -142,16 +145,27 @@ void ARKey::setTagParameterList(TagParameterList & tpl)
 					else if (t == '&')	fKeyNumber -= 7;
 				}
 			}
+            // FIXME: should tps be deleted?
+
+          
 		}
 		else if (ret == 1)
 		{
 			// then, we now the match for the first ParameterList
 			// w, h, ml, mt, mr, mb
-			GuidoPos pos = rtpl->GetHeadPosition();
 			TagParameterInt * tpi = TagParameterInt::cast(rtpl->GetNext(pos));
 			assert(tpi);
+            // FIXME: should tpi be deleted?
 			fKeyNumber = tpi->getValue();
 		}
+        if( pos ){
+            TagParameterString *tps = TagParameterString::cast(rtpl->GetNext(pos));
+            if( tps ){
+                tps->getBool(fHideAutoNaturals);
+              // FIXME: should tps be deleted?   
+            }
+        }
+        
 		delete rtpl;
 	}
 	else

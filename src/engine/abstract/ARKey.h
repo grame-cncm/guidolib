@@ -47,6 +47,7 @@ public:
 
 				int	 getKeyNumber() const		 { return fKeyNumber; }
 				void setKeyNumber(int newnumber) { fKeyNumber = newnumber; }
+                bool hideAutoNaturals() const {return fHideAutoNaturals; }
 
 		bool mIsFree; // True if accidental free specified
 
@@ -61,7 +62,8 @@ public:
   protected:
 	
 	static ListOfTPLs ltpls;
-
+        ///  if true -> don't show auto generated naturals at key signature changes
+        bool    fHideAutoNaturals;
 		int		fKeyNumber; // >0 = nr of #, < 0 = nr of &
 		float	fAccarray [NUMNOTES];
 		int		fOctarray [NUMNOTES];
