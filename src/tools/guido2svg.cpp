@@ -205,22 +205,17 @@ int main(int argc, char **argv)
 
 		arh = GuidoString2AR(parser, streamBuffer.str().c_str());
     }
-
-	if (!arh)
-        error(err);
+	if (!arh) error(err);
 
     /* For symbol-tag */
     GuidoSetSymbolPath(arh, pathsVector);
     /******************/
-	
     GRHandler grh;
     err = GuidoAR2GR (arh, 0, &grh);
-	
     if (err != guidoNoErr)
         error(err);
 
     /**** MAPS ****/
-    
     int mappingMode = kNoMapping;
 
     if (getBoolOption(argc, argv, "-voicemap", false))
@@ -234,13 +229,15 @@ int main(int argc, char **argv)
 
     /*************/
 
+#if 1
+	err = GuidoGR2SVG (grh, page, cout, false, fontfile, mappingMode);
+#else
 	err = GuidoSVGExport(grh, page, cout, fontfile, mappingMode);
-	
+#endif
     if (err != guidoNoErr)
         error(err);
-    
+	
     GuidoCloseParser(parser);
-
 	return 0;
 }
 
