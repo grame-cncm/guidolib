@@ -96,8 +96,9 @@ void SVGDevice::getsvgfont (const char* ptr, string& str) const
 
 void SVGDevice::printFont(std::ostream& out, const char* font) const
 {
-	// If font has more than 256 characters, it's suppose it's the font in text format else it's a file.
-	if(font && strlen(font) <= 260) {
+	// If font has more than 4000 characters, assume it's the font svg code, else assume it's a file name.
+	// note that it's not enough since modern operating systems allow veru long path names (over 4000)
+	if(font && strlen(font) <= 4000) {
 		ifstream is(font);
 		if (is.is_open()) {
 			is.seekg (0, ios::end);

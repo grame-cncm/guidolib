@@ -82,8 +82,16 @@ JNIEXPORT jbyteArray JNICALL Java_guidoengine_guidoscorebase_BinaryExport
  * Method:    GR2SVG
  * Signature: (IZLjava/lang/String;I)Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_guidoengine_guidoscorebase_GR2SVG
+JNIEXPORT jstring JNICALL Java_guidoengine_guidoscorebase_GR2SVG__IZLjava_lang_String_2I
   (JNIEnv *, jobject, jint, jboolean, jstring, jint);
+
+/*
+ * Class:     guidoengine_guidoscorebase
+ * Method:    GR2SVG
+ * Signature: (IIIZ)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_guidoengine_guidoscorebase_GR2SVG__IIIZ
+  (JNIEnv *, jobject, jint, jint, jint, jboolean);
 
 /*
  * Class:     guidoengine_guidoscorebase

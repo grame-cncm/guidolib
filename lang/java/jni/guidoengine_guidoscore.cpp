@@ -303,7 +303,7 @@ JNIEXPORT jbyteArray JNICALL Java_guidoengine_guidoscorebase_BinaryExport (JNIEn
  * Method:    GR2SVG
  * Signature: (IZLjava/lang/String;I)Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_guidoengine_guidoscorebase_GR2SVG
+JNIEXPORT jstring JNICALL Java_guidoengine_guidoscorebase_GR2SVG__IZLjava_lang_String_2I
   (JNIEnv *env, jobject obj, jint page, jboolean embedFont, jstring font, jint mappingMode)
 {
 	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
@@ -322,6 +322,27 @@ JNIEXPORT jstring JNICALL Java_guidoengine_guidoscorebase_GR2SVG
 	}
 	return 0;
 }
+
+/*
+ * Class:     guidoengine_guidoscorebase
+ * Method:    GR2SVG
+ * Signature: (IIIZ)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_guidoengine_guidoscorebase_GR2SVG__IIIZ
+  (JNIEnv *env, jobject obj, jint page, jint w, jint h, jboolean embedFont)
+{
+	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
+	std::stringstream sstr;
+	GuidoErrCode err = guidoErrInvalidHandle;
+	if (gr) {
+		err = GuidoGR2SVG1(gr, page, sstr, w, h, embedFont);
+		if (err == guidoNoErr) {
+			return env->NewStringUTF(sstr.str().c_str());
+		}
+	}
+	return 0;
+}
+
 
 /*
  * Class:     guidoengine_guidoscorebase

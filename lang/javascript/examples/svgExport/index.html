@@ -26,6 +26,7 @@
 		guidoEngine = new Module.GuidoEngineAdapter;
 		guidoEngine.init();
 		$("#gmnSandbox").on('keyup', processGMN);
+		processGMN();
 	});
 	$(window).unload(function(){
 		guidoEngine.shutdown();
@@ -38,7 +39,7 @@
     <div>This page use the SVG export and add the SVG xml code in html page.</div>
     <div class="column" style="float:left">
       <p>Type your GMN code here :</p>
-      <textarea id="gmnSandbox" rows="40"></textarea>
+      <textarea id="gmnSandbox" rows="40">[ a f g e ]</textarea>
     </div>
     <div id="canvasContainer" class="column" style="float:right">
     </div>
