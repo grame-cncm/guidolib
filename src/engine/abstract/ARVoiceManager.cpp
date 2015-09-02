@@ -223,6 +223,10 @@ int ARVoiceManager::InsertBreak( const TYPE_TIMEPOSITION & tp, int breaktype, fl
 			}
 			mytag->setIsAuto(true);
 			mytag->setRelativeTimePosition(mCurrVoiceState.curtp);
+            /*
+             (jfk)
+             TODO fix issue, if \bar immediately followed by a \key => insert break AFTER \key
+             */
 			if (mCurrVoiceState.curtp == mCurrVoiceState.curlastbartp)
 				mVoice->AddElementAfter(mCurrVoiceState.curlastbarpos,mytag);
 			else
