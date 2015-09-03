@@ -117,6 +117,7 @@ class ARMusicalObject : public Visitable
     virtual ARMusicalObject  *isARNewSystem()     { return NULL; }
     virtual ARMusicalObject  *isARStaff()         { return NULL; }
     virtual ARMusicalObject  *isARKey()           { return NULL; }
+    virtual ARMusicalObject  *isARNaturalKey()    { return NULL; }
     virtual ARMusicalObject  *isARBeamState()     { return NULL; }
     virtual ARMusicalObject  *isARChordComma()    { return NULL; }
     virtual ARMusicalObject  *isARClef()          { return NULL; }

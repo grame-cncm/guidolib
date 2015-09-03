@@ -191,6 +191,7 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		int              voicenum;
         
 		void doAutoKeys();
+        void checkKeys(); // jfk
 		void doAutoDispatchLyrics();
 		void doAutoFermatas();
 		void doAutoTies();

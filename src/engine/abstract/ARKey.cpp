@@ -162,7 +162,7 @@ void ARKey::setTagParameterList(TagParameterList & tpl)
             TagParameterString *tps = TagParameterString::cast(rtpl->GetNext(pos));
             if( tps ){
                 tps->getBool(fHideAutoNaturals);
-              // FIXME: should tps be deleted?   
+              // FIXME: should tps be deleted?
             }
         }
         

@@ -79,6 +79,8 @@ using namespace std;
 #include "ARFeatheredBeam.h"
 #include "ARTremolo.h"
 
+#include "ARPossibleBreak.h"
+
 #include "BaseVisitor.h"
 
 #include "ARRepeatBegin.h"
@@ -1083,6 +1085,9 @@ void ARMusicalVoice::doAutoStuff1()
 void ARMusicalVoice::doAutoStuff2()
 {
 	
+    // jfk, new, prototypical, correct the order of ARPossibleBreak and ARKey
+    timebench("checkKeys", checkKeys());
+    
 	// this needs to be done just after the global voice-check has been done ...
 	// now we can check whether newSystem and newPage are followed by correct clef/key information ...
 	timebench("doAutoCheckStaffStateTags", doAutoCheckStaffStateTags());
@@ -5253,6 +5258,63 @@ void ARMusicalVoice::doAutoKeys()
         ObjectList::GetNext(pos);
 	}
 }
+
+
+//____________________________________________________________________________________
+/** \brief Goes through the music and checks order of key changes and possible breaks
+ */
+void ARMusicalVoice::checkKeys()
+{
+    GuidoPos pos = ObjectList::GetHeadPosition();
+    while (pos) {
+        ARMusicalObject *obj = GetAt(pos);
+        
+        if (obj) {
+            ARPossibleBreak *possibleBreak = static_cast<ARPossibleBreak *>(obj->isARPossibleBreak());
+            
+            if (possibleBreak)
+            {
+                mynode *breakPos = (mynode *) pos;
+                // jfk, this is a bit hacky!
+                // if ARPossibleBreak is followed by one or more ARKey, we change the order
+                GuidoPos nextPos = breakPos->fNext;
+                if( nextPos ){
+                    
+                    ARMusicalObject *key;
+                    do{
+                        ARMusicalObject *follower = GetAt(nextPos);
+                        key = static_cast<ARKey *>(follower->isARKey());
+                        if( !key ){
+                            key = static_cast<ARNaturalKey *>(follower->isARNaturalKey());
+                        }
+                        if( key &&
+                           possibleBreak->getRelativeTimePosition() == key->getRelativeTimePosition() ){
+                            /** jfk
+                             swap possibleBreak and key
+                             **/
+                            breakPos->fPrev->fNext = (mynode *) nextPos;
+                            
+                            ((mynode *)nextPos)->fPrev = breakPos->fPrev;
+                            
+                            breakPos->fPrev = (mynode *) nextPos;
+                            breakPos->fNext =  ((mynode *)nextPos)->fNext;
+                            
+                            ((mynode *)nextPos)->fNext = breakPos;
+                            nextPos = breakPos->fNext;
+
+                        }
+                        else{
+                            // stop the loop
+                            key = NULL;
+                        }
+                    }while( key );
+                }
+            }
+        }
+        ObjectList::GetNext(pos);
+    }
+}
+
 
 //____________________________________________________________________________________
 int ARMusicalVoice::removeTag(ARMusicalObject * obj)
