@@ -367,7 +367,7 @@ void KF_Vector<TYPE>::RemoveAll()
 	count = 0;
 }
 
-/** \briefCuts a vector in two.
+/** \brief Cuts a vector in two.
 
 	The old vector reaches from minimum to index, the new vector
 	(which is constructed within the function)
