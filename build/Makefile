@@ -11,8 +11,12 @@ else
 ifeq ($(system), MINGW32_NT-6.1)
 	TARGET = windows
 else
+ifeq ($(system), MINGW32_NT-6.2)
+	TARGET = windows
+else
 ifeq ($(system), Linux)
 	TARGET = linux
+endif
 endif
 endif
 endif
@@ -21,9 +25,9 @@ endif
 OUT  := GUIDOEngine.framework GUIDOEngine.tgz libGUIDOEngine.a
 MACX := MacOS
 IOS  := iOS
-WIN32VS := "Visual Studio 10"
-WIN64VS := "Visual Studio 10 Win64"
-MSVC := C:\Program Files (x86)\Microsoft Visual Studio 10.0
+WIN32VS := $(shell ./vs-cmake)
+WIN64VS := "$(WIN32VS) Win64"
+MSVC    := $(shell ./vs-path)
 LINUX := linux
 
 all :
@@ -112,7 +116,7 @@ win32/Release/GUIDOEngine.dll : win32/guidolib.sln
 
 win32/guidolib.sln : CMakeLists.txt
 	[ -d win32 ] || mkdir win32
-	cd win32 && cmake .. -G $(WIN32VS) -DMIDIEXPORT=yes
+	cd win32 && cmake .. -G "$(WIN32VS)" -DMIDIEXPORT=yes
 
 
 win64 : win64/guidolib.sln GUIDOEngine64.dll GUIDOEngine64.lib 
@@ -128,7 +132,7 @@ win64/Release/GUIDOEngine64.dll : win64/guidolib.sln
 
 win64/guidolib.sln : CMakeLists.txt
 	[ -d win64 ] || mkdir win64
-	cd win64 && cmake .. -G $(WIN64VS) -DMIDIEXPORT=yes
+	cd win64 && cmake .. -G "$(WIN64VS)" -DMIDIEXPORT=yes
 
 winclean:
 	rm -rf win32 win64 GUIDOEngine*.lib GUIDOEngine.dll
