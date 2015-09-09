@@ -12,6 +12,8 @@
 
 */
 
+#include <algorithm>
+
 #include "ARRitardando.h"
 #include "GRStaff.h"
 #include "GRRitardando.h"
