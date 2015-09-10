@@ -26,8 +26,7 @@ ifeq ($(TARGET), windows)
 	PLATFORM ?= $(shell ../../../qt-arch)
 	QMAKEWIN ?= $(shell ../../../qt-win32)
 	MSVC 	 ?= $(shell ../../../vs-win32)
-	DEST := ../..
-	OUT = $(DEST)/$(PROJECT).exe
+	OUT = ../../$(PROJECT).exe
 	ifeq ($(PLATFORM), x64)
 		DEST = win64
 	else 
