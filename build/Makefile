@@ -132,7 +132,7 @@ win64/Release/GUIDOEngine64.dll : win64/guidolib.sln
 
 win64/guidolib.sln : CMakeLists.txt
 	[ -d win64 ] || mkdir win64
-	cd win64 && cmake .. -G "$(WIN64VS)" -DMIDIEXPORT=yes
+	cd win64 && cmake .. -G $(WIN64VS) -DMIDIEXPORT=yes
 
 winclean:
 	rm -rf win32 win64 GUIDOEngine*.lib GUIDOEngine.dll
