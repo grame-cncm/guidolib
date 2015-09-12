@@ -36,6 +36,7 @@
 // #include "NEPointerList.h"	// for template instanciation
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 using namespace std;
 
 GRBeamSaveStruct::~GRBeamSaveStruct()

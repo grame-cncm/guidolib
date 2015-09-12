@@ -7,20 +7,35 @@ ifeq ($(system), Darwin)
 else
 ifeq ($(system), MINGW32_NT-6.1)
 	TARGET = windows
-	QMAKEWIN ?= $(shell ../../../qt-win32)
-	MSVC 	 ?= $(shell ../../../vs-win32)
+else
+ifeq ($(system), MINGW32_NT-6.2)
+	TARGET = windows
 else
 ifeq ($(system), Linux)
 	TARGET = linux
 endif
 endif
 endif
+endif
+
+ifeq ($(TARGET), windows)
+	PLATFORM ?= $(shell ../../../qt-arch)
+	QMAKEWIN ?= $(shell ../../../qt-win32)
+	MSVC 	 ?= $(shell ../../../vs-win32)
+	DEST := ../..
+	OUT = $(DEST)/$(PROJECT).exe
+	ifeq ($(PLATFORM), x64)
+		DEST = win64
+	else 
+		DEST = win32
+	endif
+endif
 
 QMAKE    ?= qmake
 PROJECT := GraphicsSceneMainWindow
 ROOT    := ..
 
-.PHONY : macos ios win32 linux
+.PHONY : macos ios $(DEST) linux
 
 all:
 	make  -f ../../Make.shared $(TARGET)
@@ -39,9 +54,9 @@ ios: ios/$(PROJECT)-iOS.xcodeproj lib$(PROJECT)-iOS.a
 	@echo Build $(PROJECT) for ios done
 	@echo ===================================
 
-windows: win32/$(PROJECT).vcxproj $(PROJECT).lib
+windows: $(DEST)/$(PROJECT).vcxproj $(PROJECT).lib
 	@echo ===================================
-	@echo Build $(PROJECT) for win32 done
+	@echo Build $(PROJECT) for $(DEST) done
 	@echo ===================================
 
 linux: linux/$(PROJECT).makefile  lib$(PROJECT)-linux.a
@@ -73,12 +88,12 @@ lib$(PROJECT)-iOS.a:
 ###################
 # windows part
 ###################
-win32/$(PROJECT).vcxproj : $(ROOT)/$(PROJECT).pro 
-	[ -d win32 ] || mkdir win32
-	cd win32 && $(QMAKEWIN) $(SPEC) $(ROOT)/..
+$(DEST)/$(PROJECT).vcxproj : $(ROOT)/$(PROJECT).pro 
+	[ -d $(DEST) ] || mkdir $(DEST)
+	cd $(DEST) && $(QMAKEWIN) $(SPEC) $(ROOT)/..
 
 $(PROJECT).lib:
-	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild win32/$(PROJECT).vcxproj /maxcpucount:4 /p:Configuration=Release"
+	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild $(DEST)/$(PROJECT).vcxproj /maxcpucount:4 /p:Configuration=Release /p:Platform=$(PLATFORM)"
 
 ###################
 # Linux part
@@ -91,4 +106,4 @@ lib$(PROJECT)-linux.a:
 	make -C linux -f $(PROJECT).makefile
 	
 clean:
-	rm -rf ../../lib$(PROJECT)*.a ../../$(PROJECT).lib ios macos win32 linux
+	rm -rf ../../lib$(PROJECT)*.a ../../$(PROJECT).lib ios macos $(DEST) linux

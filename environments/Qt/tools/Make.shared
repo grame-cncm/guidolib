@@ -10,10 +10,10 @@ ifeq ($(system), Darwin)
 else
 ifeq ($(system), MINGW32_NT-6.1)
 	TARGET = windows
-	QMAKEWIN ?= $(shell ../../../qt-win32)
-	MSVC 	 ?= $(shell ../../../vs-win32)
 	DEST := ..
-	COPY := ../..
+else
+ifeq ($(system), MINGW32_NT-6.2)
+	TARGET = windows
 else
 ifeq ($(system), Linux)
 	TARGET = linux
@@ -21,11 +21,25 @@ ifeq ($(system), Linux)
 endif
 endif
 endif
+endif
+
+ifeq ($(TARGET), windows)
+	PLATFORM ?= $(shell ../../../qt-arch)
+	QMAKEWIN ?= $(shell ../../../qt-win32)
+	MSVC 	 ?= $(shell ../../../vs-win32)
+	COPY := ../..
+	OUT = ../../$(PROJECT).exe
+	ifeq ($(PLATFORM), x64)
+		DEST = win64
+	else 
+		DEST = win32
+	endif
+endif
 
 QMAKE    ?= qmake
 ROOT    := ..
 
-.PHONY : macos win32 linux
+.PHONY : macos $(DEST) linux
 
 all:
 	make -f ../../Make.shared $(TARGET)
@@ -35,9 +49,9 @@ macos: macos/$(PROJECT).xcodeproj  $(PROJECT)
 	@echo Build $(PROJECT) for mac os done
 	@echo ===================================
 
-windows: win32/$(PROJECT).vcxproj  $(PROJECT).exe 
+windows: $(DEST)/$(PROJECT).vcxproj  $(PROJECT).exe 
 	@echo ===================================
-	@echo Build $(PROJECT) for win32 done
+	@echo Build $(PROJECT) for $(DEST) done
 	@echo ===================================
 
 linux: linux/$(PROJECT).makefile  $(PROJECT)-linux
@@ -59,13 +73,13 @@ $(PROJECT):
 ###################
 # windows part
 ###################
-win32/$(PROJECT).vcxproj : $(ROOT)/$(PROJECT).pro
-	[ -d win32 ] || mkdir win32
-	cd win32 && $(QMAKEWIN) $(SPEC) $(ROOT)/..
+$(DEST)/$(PROJECT).vcxproj : $(ROOT)/$(PROJECT).pro
+	[ -d $(DEST) ] || mkdir $(DEST)
+	cd $(DEST) && $(QMAKEWIN) $(SPEC) $(ROOT)/..
 
 $(PROJECT).exe:
-	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild win32/$(PROJECT).vcxproj /maxcpucount:4 /p:Configuration=Release"
-	cp  win32/Release/$(PROJECT).exe $(COPY)
+	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild $(DEST)/$(PROJECT).vcxproj /maxcpucount:4 /p:Configuration=Release /p:Platform=$(PLATFORM)"
+	cp  $(DEST)/Release/$(PROJECT).exe $(COPY)
 
 ###################
 # Linux part
@@ -79,5 +93,5 @@ $(PROJECT)-linux:
 	cp -R linux/$(PROJECT)  $(DEST) 
 
 clean:
-	rm -rf $(DEST)/$(PROJECT) $(DEST)/$(PROJECT).exe $(DEST)/$(PROJECT).app macos win32 linux
+	rm -rf $(DEST)/$(PROJECT) $(DEST)/$(PROJECT).exe $(DEST)/$(PROJECT).app macos $(DEST) linux
 	

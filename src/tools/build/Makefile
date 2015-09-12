@@ -11,15 +11,19 @@ else
 ifeq ($(system), MINGW32_NT-6.1)
 	TARGET = windows
 else
+ifeq ($(system), MINGW32_NT-6.2)
+	TARGET = windows
+else
 ifeq ($(system), Linux)
 	TARGET = linux
 endif
 endif
 endif
+endif
 
-WIN32VS := "Visual Studio 10"
-WIN64VS := "Visual Studio 10 Win64"
-MSVC := C:\Program Files (x86)\Microsoft Visual Studio 10.0
+WIN32VS := $(shell ../../../build/vs-cmake)
+WIN64VS := "$(WIN32VS) Win64"
+MSVC    := $(shell ../../../build/vs-path)
 
 all :
 	make $(TARGET)
@@ -51,7 +55,7 @@ win32tools : win32/guidotool.sln
 
 win32/guidotool.sln : CMakeLists.txt
 	[ -d win32 ] || mkdir win32
-	cd win32 && cmake .. -G $(WIN32VS)
+	cd win32 && cmake .. -G "$(WIN32VS)"
 
 win64/guidotool.sln : CMakeLists.txt
 	[ -d win64 ] || mkdir win64

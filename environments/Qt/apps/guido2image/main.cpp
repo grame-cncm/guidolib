@@ -163,7 +163,7 @@ static void parseOptions(int argc, char *argv[] , Guido2ImageOptions& opts )
 {
 	int c;
 	opterr = 0;
-	while ((c = getopt (argc, argv, "v?f:s:o:p:w:h:z:t:q:d:a:b:r:c:v:k:j:")) != -1) {
+	while ((c = getopt (argc, argv, (char*)"v?f:s:o:p:w:h:z:t:q:d:a:b:r:c:v:k:j:")) != -1) {
 		switch (c)
 		{
 			case 'f':	opts.inputFile = optarg;		break;

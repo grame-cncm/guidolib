@@ -842,7 +842,7 @@ void PianoRoll::DrawMidiSeq(MidiSeqPtr seq, int tpqn, const DrawParams& drawPara
 		}
 		else if (EvType(ev) == typeTimeSign) {
 			double num = TSNum(ev);
-			double denum = pow(2, TSDenom(ev));
+			double denum = pow(2.f, TSDenom(ev));
 			if (denum) {
 				bar = num / denum;
 				DrawMeasureBar (date, drawParams);
