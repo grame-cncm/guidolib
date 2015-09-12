@@ -525,11 +525,11 @@ GDeviceOSX::SetScale( float x, float y )
 {
 	const float prevX = mScaleX;
 	const float prevY = mScaleY;
-	mScaleX = x;
-	mScaleY = y;
+	mScaleX *= x;
+	mScaleY *= y;
 	
 	// - GDeviceOSX specific ------------------
-	::CGContextScaleCTM(mContext, (x / prevX), (y / prevY)); 
+	::CGContextScaleCTM(mContext, (x ), (y ));
 }
 
 // --------------------------------------------------------------
