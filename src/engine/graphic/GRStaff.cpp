@@ -859,6 +859,8 @@ GRRepeatBegin * GRStaff::AddRepeatBegin(ARRepeatBegin *arrb)
 	addNotationElement(tmp);
 	tmp->setGRStaff(this);
 	tmp->updateBoundingBox();
+    // repeatBegin must reset the keyState, jfk, 9/2015
+    mStaffState.reset2key ();
 	return tmp;
 }
 
@@ -872,6 +874,8 @@ GRRepeatEnd * GRStaff::AddRepeatEnd( ARRepeatEnd * arre )
         assert (arre);
 		GRRepeatEnd * tmp = new GRRepeatEnd(arre, this, arre->getRelativeTimePosition(), this->proportionnalRender);
 		addNotationElement(tmp);
+         // repeatBegin must reset the keyState, jfk, 9/2015
+        mStaffState.reset2key ();
 		return tmp;
 	}
 	return NULL;
