@@ -127,7 +127,7 @@ public final class guido {
 	/**
         Gives the line of a Guido script where the last parse error has occured.
 		@return a line number.
-		@deprecated replaced by {@link guidoengine.guidoparser#GetErrorLine()}
+		@deprecated replaced by {@link guidoengine.guidoscorebase#ParserGetErrorCode()}
 	*/
 	@Deprecated
 	public static native final int	GetParseErrorLine();

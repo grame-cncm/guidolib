@@ -68,7 +68,7 @@ public class guidoscorebase {
 	 * @param filename
 	 *            the file name
 	 * @return an error code.
-	 * @deprecated replaced by {@link guidoengine.guidoparser#File2AR()}
+	 * @deprecated replaced by {@link guidoengine.guidoscorebase#File2AR(String)}
 	 */
 	@Deprecated
 	public native final synchronized int ParseFile(String filename);
@@ -83,7 +83,7 @@ public class guidoscorebase {
 	 *            a string containing GMN code
 	 * @return an error code.
 	 * @see "The GUIDO Music Notation Format"
-	 * @deprecated replaced by {@link guidoengine.guidoparser#String2AR()}
+	 * @deprecated replaced by {@link guidoengine.guidoscorebase#String2AR(String)}
 	 */
 	@Deprecated
 	public native final synchronized int ParseString(String gmn);
@@ -180,7 +180,7 @@ public class guidoscorebase {
 	 *            an optional Guido SVG font file (could be empty when there is
 	 *            no SVG font)
 	 * @return a string containing the corresponding SVG code.
-	 * @deprecated replaced by {@link #GR2SVG()}
+	 * @deprecated replaced by {@link guidoengine.guidoscorebase#GR2SVG(int, boolean, String, int)}
 	 */
 	@Deprecated
 	public native final synchronized String SVGExport(int pagenum, String fontFile);
@@ -198,7 +198,7 @@ public class guidoscorebase {
 	 *            the string...will be big (could be empty when there is no SVG
 	 *            font)
 	 * @return a string containing the corresponding SVG code.
-	 * @deprecated replaced by {@link #GR2SVG()}
+	 * @deprecated replaced by {@link guidoengine.guidoscorebase#GR2SVG(int, boolean, String, int)}
 	 */
 	@Deprecated
 	public native final synchronized String SVGExportWithFontSpec(int pagenum, String fontFile, String fontSpec);
