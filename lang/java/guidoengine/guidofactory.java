@@ -252,8 +252,8 @@ public class guidofactory {
 
 	/**
 	 * Add a range tag to the current voice.
-	 *  @param tagName
-	 *  @param tagID
+	 *  @param tagName 	the tag name
+	 *  @param tagID	a tag identifier
 		@return an error code.
 	 */
 	public native final synchronized int  OpenRangeTag(String tagName, long tagID);
@@ -261,7 +261,7 @@ public class guidofactory {
 	// ----------------------------------------------------------------------------
 	/** Indicates that the current tag is a range tag.
 	
-			@return an error code.
+		@return an error code.
 		@deprecated use  {@link guidoengine.guidofactory#OpenTag(String, long)}  {@link guidoengine.guidofactory#OpenRangeTag(String, long)}
 	*/	
 	@Deprecated

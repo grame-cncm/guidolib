@@ -37,10 +37,10 @@ public class guidopianorollbase {
 	}
 
 	/**
-	 * Create a pino roll and add a arHandler. The ar handler is not freed be
+	 * Create a piano roll and add a arHandler. The ar handler is not freed be
 	 * this class.
 	 * 
-	 * @param arHandler
+	 * @param arHandler a Guido AR identifier
 	 */
 	public guidopianorollbase(long arHandler) {
 		this.fARHandler = arHandler;
@@ -49,7 +49,7 @@ public class guidopianorollbase {
 	/**
 	 * Set a new ArHandler.
 	 * 
-	 * @param arRef
+	 * @param arRef a reference to a Guido AR representation
 	 */
 	public void setARHandler(long arRef) {
 		this.fARHandler = arRef;
@@ -80,6 +80,7 @@ public class guidopianorollbase {
 
 	/**
 	 * Destroy a piano roll created with AR2PianoRoll or Midi2PianoRoll
+	 * @return a Guido error code.
 	 */
 	public native final synchronized int DestroyPianoRoll();
 
@@ -176,7 +177,7 @@ public class guidopianorollbase {
 	 * Gets the piano roll map
 	 * @param width the width of the piano roll (-1 to set the default width : 1024)
 	 * @param height the height of the canvas (-1 to set the default height : 512)
-	 * @param scoremap
+	 * @param scoremap on output, contains the pianoroll map.
 	 * @return a Guido error code
 	 */
 	public native final synchronized int GetMap(int width, int height, guidoscoremap scoremap);

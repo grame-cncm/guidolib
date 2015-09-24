@@ -40,6 +40,7 @@ public class guidoscore extends guidoscorebase {
 	 *            clipping description
 	 * @param color
 	 *            the color used to draw the score
+	 * @return a Guido error code.
 	 * @see guidodrawdesc
 	 * @see guidopaint
 	 */
@@ -63,6 +64,7 @@ public class guidoscore extends guidoscorebase {
 	 *            the score drawing descriptor
 	 * @param area
 	 *            clipping description
+	 * @return a Guido error code.
 	 * @see guidodrawdesc
 	 * @see guidopaint
 	 */
@@ -89,6 +91,7 @@ public class guidoscore extends guidoscorebase {
 	 *            clipping description
 	 * @param color
 	 *            the color used to draw the score
+	 * @return a Guido error code.
 	 * @see guidodrawdesc
 	 * @see guidopaint
 	 */
@@ -119,6 +122,7 @@ public class guidoscore extends guidoscorebase {
 	 *            clipping description
 	 * @param color
 	 *            the color used to draw the score
+	 * @return a Guido error code.
 	 * @see guidodrawdesc
 	 * @see guidopaint
 	 */

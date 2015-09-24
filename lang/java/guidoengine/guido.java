@@ -160,15 +160,17 @@ public final class guido {
 	*/
     public static native final float Inches2Unit(float val);
 
-	/**	Gives the library version number as a string
+	/**	Gives the Guido engine version number
 
         Version number format is  MAJOR.MINOR.SUB
+		@return the Guido engine version number as a string
 	*/
 	public static native final String GetVersion();
 
-	/**	Gives the JNI library version number as a string
+	/**	Gives the JNI library version number
 
         Version number format is  MAJOR.MINOR.SUB
+		@return the JNI library version number as a string
 	*/
 	public static native final String GetJNIVersion();
 

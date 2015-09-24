@@ -274,21 +274,22 @@ public class guidoscorebase {
 	/**
 	 * Give the score pages count.
 	 * 
-	 * @return the score pages count or an error code when < 0
+	 * @return the score pages count or an error code when &lt; 0
 	 */
 	public native final synchronized int GetPageCount();
 
 	/**
 	 * Give the system count of a page.
 	 * 
-	 * @return the system count or an error code when < 0
+	 * @param page a page number
+	 * @return the system count or an error code when &lt; 0
 	 */
 	public native final synchronized int GetSystemCount(int page);
 
 	/**
 	 * Give the score count of voices.
 	 * 
-	 * @return the count of voices an error code when < 0
+	 * @return the count of voices an error code when &lt; 0
 	 */
 	public native final synchronized int CountVoices();
 
@@ -494,7 +495,7 @@ public class guidoscorebase {
 
 	/**
 	 * Parse a file and create the corresponding Abstract Representation. The ar
-	 * is stocked internally and have to be freed with FreeAR(). <br/>
+	 * is stocked internally and have to be freed with FreeAR(). <br>
 	 * To use this method you have to open a parser with OpenParser().
 	 * 
 	 * @param file
@@ -505,7 +506,7 @@ public class guidoscorebase {
 
 	/**
 	 * Parse the gmnCode and create the corresponding Abstract Representation.
-	 * The ar is stocked internally and have to be freed with FreeAR(). <br/>
+	 * The ar is stocked internally and have to be freed with FreeAR(). <br>
 	 * To use this method you have to open a parser with OpenParser().
 	 * 
 	 * @param gmnCode
@@ -517,17 +518,18 @@ public class guidoscorebase {
 	/**
 	 * Parse the gmnCode in the stream (@see OpenStream()) and create the
 	 * corresponding Abstract Representation. The ar is stocked internally and
-	 * have to be freed with FreeAR(). <br/>
+0	 * have to be freed with FreeAR(). <br>
 	 * To use this method you have to open a parser with OpenParser().
 	 * 
-	 * @return a error code.
+	 * @return an error code.
 	 */
 	public native final synchronized int Stream2AR();
 
 	/**
 	 * Get a parser error if an error occurs after use File2AR, String2AR or
 	 * Stream2AR.
-	 */
+	 * @return a parser error code.
+	*/
 	public native final synchronized parserError ParserGetErrorCode();
 
 	/**
@@ -538,18 +540,21 @@ public class guidoscorebase {
 
 	/**
 	 * Close the stream.
-	 */
+	 * @return an error code.
+	*/
 	public native final synchronized int CloseStream();
 
 	/**
 	 * Write a string in the stream.
 	 * 
-	 * @param gmnCode
+	 * @param gmnCode a partial gmn code
+	 * @return an error code.
 	 */
 	public native final synchronized int WriteStream(String gmnCode);
 
 	/**
 	 * Reset the content of the stream.
+	 * @return an error code.
 	 */
 	public native final synchronized int ResetStream();
 

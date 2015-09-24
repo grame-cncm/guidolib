@@ -24,16 +24,12 @@ public final class guidopianoroll extends guidopianorollbase {
 	 * Actually, draws the score to an offscreen that is next copied to the
 	 * destination bitmap.
 	 * 
-	 * @param dst
-	 *            the destination bitmap ARGB array
-	 * @param w
-	 *            the bitmap width
-	 * @param h
-	 *            the bitmap height
-	 * @param area
-	 *            clipping description
-	 * @param color
-	 *            the color used to draw the score
+	 * @param dst	the destination bitmap ARGB array
+	 * @param w  	the bitmap width
+	 * @param h  	the bitmap height
+	 * @param area  clipping description
+	 * @param color	the color used to draw the score
+	 * @return a Guido error code.
 	 * @see guidodrawdesc
 	 * @see guidopaint
 	 */
@@ -53,6 +49,7 @@ public final class guidopianoroll extends guidopianorollbase {
 	 *            the desired drawing heigth
 	 * @param area
 	 *            clipping description
+	 * @return a Guido error code.
 	 * @see guidodrawdesc
 	 * @see guidopaint
 	 */
@@ -66,16 +63,12 @@ public final class guidopianoroll extends guidopianorollbase {
 	 * Drawing the score should be typically called from the paint method of a
 	 * Canvas.
 	 * 
-	 * @param g
-	 *            a Graphics
-	 * @param w
-	 *            the desired drawing width
-	 * @param h
-	 *            the desired drawing heigth
-	 * @param area
-	 *            clipping description
-	 * @param color
-	 *            the color used to draw the score
+	 * @param g a Graphics
+	 * @param w the desired drawing width
+	 * @param h the desired drawing heigth
+	 * @param area clipping description
+	 * @param color the color used to draw the score
+	 * @return a Guido error code.
 	 * @see guidodrawdesc
 	 * @see guidopaint
 	 */
@@ -89,21 +82,14 @@ public final class guidopianoroll extends guidopianorollbase {
 	 * Drawing the score should be typically called from the paint method of a
 	 * Canvas.
 	 * 
-	 * @param g
-	 *            a Graphics
-	 * @param top
-	 *            the top coordinate to begin to draw the image
-	 * 
-	 * @param left
-	 *            the left coordinate to begin to draw the image
-	 * @param w
-	 *            the desired drawing width
-	 * @param h
-	 *            the desired drawing height
-	 * @param area
-	 *            clipping description
-	 * @param color
-	 *            the color used to draw the score
+	 * @param g  a Graphics
+	 * @param top the top coordinate to begin to draw the image
+	 * @param left the left coordinate to begin to draw the image
+	 * @param w the desired drawing width
+	 * @param h the desired drawing height
+	 * @param area clipping description
+	 * @param color the color used to draw the score
+	 * @return a Guido error code.
 	 * @see guidodrawdesc
 	 * @see guidopaint
 	 */
