@@ -50,7 +50,7 @@ void ARRitardando::setTagParameterList(TagParameterList& tpl)
 
 		ListOfStrings lstrs; // (1); std::vector test impl
 		lstrs.AddTail(
-			( "S,tempo,,o;S,abstempo,,o;S,font,Times new roman,o;S,fattrib,,o;U,fsize,9pt,o" ));
+			( "S,tempo,,o;S,abstempo,,o;S,font,Times New Roman,o;S,fattrib,,o;U,fsize,9pt,o" ));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
