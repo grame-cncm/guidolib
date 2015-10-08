@@ -183,6 +183,14 @@ GUIDOAPI(ARHandler)	GuidoStream2AR (GuidoParser *p, GuidoStream* s)
 	return ar;
 }
 
+
+// --------------------------------------------------------------------------
+GUIDOAPI(const char*)	GuidoStream2GuidoString ( GuidoStream* s)
+{
+    return s->getGuidoCode().c_str();
+}
+
+
 // --------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoParserGetErrorCode (GuidoParser *p, int &line, int &col, const char** msg)
 {

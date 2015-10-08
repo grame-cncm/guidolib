@@ -85,6 +85,14 @@ extern "C" {
 	GUIDOAPI(ARHandler)			GuidoStream2AR (GuidoParser *p, GuidoStream* stream);
 
 	/*!
+		\brief Finalize a GuidoStream and create the corresponding clean GuidoString
+
+		\param streal the GuidoStream to clean
+		\return the Guido string.
+	*/
+	GUIDOAPI(const char*)		GuidoStream2GuidoString(GuidoStream* stream);
+
+	/*!
 		\brief Get the error syntax line/column
 		\param p a parser previously opened with GuidoOpenParser
 		\param line a reference that will contain a line number in case of syntax error
