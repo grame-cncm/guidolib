@@ -123,7 +123,7 @@ void GuidoStream::WriteNewString(stack<char>& inStack, string& stringToComplete)
 //--------------------------------------------------------------------------
 void GuidoStream::ReinitStream()
 {
-    fGMNCode.clear();
+    fGMNCode = "[]";
     fInputStream.str("");
     fInputStream.clear();
 }
