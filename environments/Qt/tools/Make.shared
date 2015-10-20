@@ -93,5 +93,5 @@ $(PROJECT)-linux:
 	cp -R linux/$(PROJECT)  $(DEST) 
 
 clean:
-	rm -rf $(DEST)/$(PROJECT) $(DEST)/$(PROJECT).exe $(DEST)/$(PROJECT).app macos $(DEST) linux
+	rm -rf $(DEST)/$(PROJECT) $(DEST)/$(PROJECT).exe $(DEST)/$(PROJECT).app macos linux
 	

@@ -3,7 +3,8 @@ system	:= $(shell uname -s)
 ifeq ($(system), Darwin)
 	TARGET = mac
 	SPEC ?= -spec macx-xcode
-	QMAKEIOS ?= $(HOME)/Qt5.4.1/5.4/ios/bin/qmake
+	QTPATH ?= $(shell ../../../qt-path)
+	QMAKEIOS ?= $(QTPATH)/ios/bin/qmake
 else
 ifeq ($(system), MINGW32_NT-6.1)
 	TARGET = windows
