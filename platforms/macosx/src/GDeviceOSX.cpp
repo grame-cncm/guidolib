@@ -523,8 +523,6 @@ GDeviceOSX::CopyPixels( int xDest, int yDest,
 void			
 GDeviceOSX::SetScale( float x, float y )
 {
-	const float prevX = mScaleX;
-	const float prevY = mScaleY;
 	mScaleX *= x;
 	mScaleY *= y;
 	
