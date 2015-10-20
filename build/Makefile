@@ -25,9 +25,11 @@ endif
 OUT  := GUIDOEngine.framework GUIDOEngine.tgz libGUIDOEngine.a
 MACX := MacOS
 IOS  := iOS
-WIN32VS := $(shell ./vs-cmake)
-WIN64VS := "$(WIN32VS) Win64"
-MSVC    := $(shell ./vs-path)
+ifeq ($(TARGET), window)
+ WIN32VS := $(shell ./vs-cmake)
+ WIN64VS := "$(WIN32VS) Win64"
+ MSVC    := $(shell ./vs-path)
+endif
 LINUX := linux
 
 all :
@@ -45,6 +47,7 @@ help :
 	@echo "   android      : build the GUIDOEngine static library for Android"	
 	@echo 
 	@echo "Platform targets to build the GUIDOEngine library are:"	
+	@echo "   macos "	
 	@echo "   mac     (build also ios library)"	
 	@echo "   windows (build 32 and 64 bits library)"	
 	@echo "   linux"	
@@ -54,11 +57,11 @@ help :
 #===============================================================
 # building the library on Mac OS X
 #===============================================================
-.PHONY : macos ios $(MACX)/Release/GUIDOEngine.framework $(IOS)/Release-iphoneos/libGUIDOEngine.a
+.PHONY : macos $(IOS) $(MACX)/Release/GUIDOEngine.framework $(IOS)/Release-iphoneos/libGUIDOEngine.a
 
 mac :
 	make macos
-	make ios	
+	make $(IOS)	
 
 macos : $(MACX)/guidolib.xcodeproj GUIDOEngine.framework GUIDOEngine.tgz
 
@@ -79,7 +82,7 @@ GUIDOEngine.tgz : GUIDOEngine.framework
 #===============================================================
 # building the library for iOS
 #===============================================================
-ios : $(IOS)/guidolib.xcodeproj libGUIDOEngine.a
+$(IOS) : $(IOS)/guidolib.xcodeproj libGUIDOEngine.a
 
 libGUIDOEngine.a : $(IOS)/guidolib.xcodeproj $(IOS)/Release-iphoneos/libGUIDOEngine.a
 	cp $(IOS)/Release-iphoneos/libGUIDOEngine.a .
