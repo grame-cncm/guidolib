@@ -18,7 +18,6 @@ set (SOVERS 1)
 if(UNIX)
 	add_definitions(-Wall -DGCC)
 endif(UNIX)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
 
 #######################################
 # Options disabled by default
@@ -30,7 +29,7 @@ option ( STATICLIB  "Generates a static library (default for iOS)" off)
 option ( GL "Links to opengl device" off)
 
 if(APPLE)
-
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
 #######################################
 #   iOS support
 	if ( IOS )
