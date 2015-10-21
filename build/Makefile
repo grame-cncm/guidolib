@@ -143,7 +143,7 @@ winclean:
 #===============================================================
 # building the library on linux
 #===============================================================
-.PHONY : $(LINUX)/libGUIDOEngine.so
+.PHONY : $(LINUX) libGUIDOEngine.so
 
 linux : $(LINUX)/Makefile libGUIDOEngine.so
 
@@ -151,7 +151,7 @@ libGUIDOEngine.so :  $(LINUX)/Makefile  $(LINUX)/libGUIDOEngine.so
 	rm -rf GUIDOEngine*.so*
 	cp -R $(LINUX)/libGUIDOEngine*.so* .
 
-$(LINUX)/libGUIDOEngine.so : CMakeLists.txt
+$(LINUX)/libGUIDOEngine.so : 
 	make -C $(LINUX)
 	
 $(LINUX)/Makefile : CMakeLists.txt
