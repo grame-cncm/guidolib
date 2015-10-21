@@ -29,7 +29,7 @@ option ( STATICLIB  "Generates a static library (default for iOS)" off)
 option ( GL "Links to opengl device" off)
 
 if(APPLE)
-
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
 #######################################
 #   iOS support
 	if ( IOS )
@@ -38,7 +38,6 @@ if(APPLE)
 		set (CMAKE_OSX_ARCHITECTURES "arm64 armv7 armv7s")
 		set (CMAKE_OSX_SYSROOT "iphoneos")
 		set (libtype STATIC)
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 	else ()
 		message (STATUS "Generates Mac OS project- Use -DIOS=yes to change.")
 	 	#######################################
@@ -50,10 +49,10 @@ if(APPLE)
 		endif ()
 #	add_definitions(-D_USE_QD_COORDINATES_ -compatibility_version 1.0.0)
 	add_definitions(-D_USE_QD_COORDINATES_ )
-	set (CMAKE_C++_FLAGS -mmacosx-version-min=10.6)
-	set (CMAKE_LDFLAGS -mmacosx-version-min=10.6)
-	set (CMAKE_OSX_DEPLOYMENT_TARGET 10.6)
-	set (MACOSX_DEPLOYMENT_TARGET 10.6)
+	set (CMAKE_C++_FLAGS -mmacosx-version-min=10.7)
+	set (CMAKE_LDFLAGS -mmacosx-version-min=10.7)
+	set (CMAKE_OSX_DEPLOYMENT_TARGET 10.7)
+	set (MACOSX_DEPLOYMENT_TARGET 10.7)
 	endif ()
 endif(APPLE)
 
@@ -229,7 +228,7 @@ else(WIN32)
 endif(WIN32)
 
 if(APPLE)
-	set(LINK ${LINK} "-framework Carbon -compatibility_version 1.0.0")
+	set(LINK ${LINK} "-framework Carbon -compatibility_version 1.0.0 -lc++")
 elseif (UNIX)
       EXECUTE_PROCESS ( COMMAND "pkg-config"  "--libs" "cairo"
                 OUTPUT_VARIABLE TMP
