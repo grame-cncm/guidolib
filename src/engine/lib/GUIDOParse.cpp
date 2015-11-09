@@ -185,9 +185,12 @@ GUIDOAPI(ARHandler)	GuidoStream2AR (GuidoParser *p, GuidoStream* s)
 
 
 // --------------------------------------------------------------------------
-GUIDOAPI(const char*)	GuidoStream2GuidoString ( GuidoStream* s)
+GUIDOAPI(const char*)	GuidoStream2GuidoString ( GuidoStream* stream)
 {
-    return s->getGuidoCode().c_str();
+	const string s (stream->getGuidoCode());
+	char *str = new char[s.size()+1];
+	strcpy(str, s.c_str());
+	return str;
 }
 
 
