@@ -18,16 +18,21 @@ set (SOVERS 1)
 if(UNIX)
 	add_definitions(-Wall -DGCC)
 endif(UNIX)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
 
 #######################################
 # Options disabled by default
+option ( C++11 	"C++11 support" off )
 option ( IOS 	"Generates project for iOS" off )
 option ( DIST 	"Compiles universal binaries (x86_64 i386) on MacOSX" off )
 option ( MIDIEXPORT "MIDI export support (requires MidiShareLight)" off)
 option ( INDEPENDENTSVG "Independent SVG support (gets all font information from provided SVG files)" off)
 option ( STATICLIB  "Generates a static library (default for iOS)" off)
 option ( GL "Links to opengl device" off)
+
+if ( C++11 )
+	message (STATUS "Generates project using C++11 - Use -DC++11=no to change.")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+endif()
 
 if(APPLE)
 

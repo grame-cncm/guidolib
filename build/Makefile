@@ -31,6 +31,11 @@ ifeq ($(TARGET), window)
  MSVC    := $(shell ./vs-path)
 endif
 LINUX := linux
+C++11 ?= no
+CMAKEOPT ?= -DMIDIEXPORT=yes -DC++11=$(C++11)
+
+test:
+	echo $(CMAKEOPT)
 
 all :
 	make $(TARGET)
@@ -72,9 +77,10 @@ GUIDOEngine.framework :  $(MACX)/guidolib.xcodeproj  $(MACX)/Release/GUIDOEngine
 $(MACX)/Release/GUIDOEngine.framework :
 	xcodebuild -jobs 8 -project $(MACX)/guidolib.xcodeproj -target ALL_BUILD -configuration Release
 
+maccmake:
 $(MACX)/guidolib.xcodeproj : CMakeLists.txt
 	[ -d $(MACX) ] || mkdir $(MACX)
-	cd $(MACX) && cmake .. -G Xcode -DMIDIEXPORT=yes
+	cd $(MACX) && cmake .. -G Xcode $(CMAKEOPT)
 
 GUIDOEngine.tgz : GUIDOEngine.framework
 	tar czf GUIDOEngine.tgz GUIDOEngine.framework
@@ -90,9 +96,10 @@ libGUIDOEngine.a : $(IOS)/guidolib.xcodeproj $(IOS)/Release-iphoneos/libGUIDOEng
 $(IOS)/Release-iphoneos/libGUIDOEngine.a :
 	xcodebuild -jobs 8 -project $(IOS)/guidolib.xcodeproj -target ALL_BUILD -configuration Release
  
+ioscmake:
 $(IOS)/guidolib.xcodeproj : CMakeLists.txt
 	[ -d $(IOS) ] || mkdir $(IOS)
-	cd $(IOS) && cmake .. -G Xcode -DMIDIEXPORT=no -DIOS=yes
+	cd $(IOS) && cmake .. -G Xcode $(CMAKEOPT) -DIOS=yes
 
 macclean :
 	rm -rf $(IOS) $(MACX) $(OUT)
@@ -117,9 +124,10 @@ GUIDOEngine.dll : win32/Release/GUIDOEngine.dll
 win32/Release/GUIDOEngine.dll : win32/guidolib.sln
 	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild win32/guidolib.sln /maxcpucount:4 /p:Configuration=Release"
 
+win32cmake:
 win32/guidolib.sln : CMakeLists.txt
 	[ -d win32 ] || mkdir win32
-	cd win32 && cmake .. -G "$(WIN32VS)" -DMIDIEXPORT=yes
+	cd win32 && cmake .. -G "$(WIN32VS)" $(CMAKEOPT)
 
 
 win64 : win64/guidolib.sln GUIDOEngine64.dll GUIDOEngine64.lib 
@@ -133,9 +141,10 @@ GUIDOEngine64.dll : win64/Release/GUIDOEngine64.dll
 win64/Release/GUIDOEngine64.dll : win64/guidolib.sln
 	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild win64/guidolib.sln /maxcpucount:4 /p:Configuration=Release"
 
+win64cmake:
 win64/guidolib.sln : CMakeLists.txt
 	[ -d win64 ] || mkdir win64
-	cd win64 && cmake .. -G $(WIN64VS) -DMIDIEXPORT=yes
+	cd win64 && cmake .. -G $(WIN64VS) $(CMAKEOPT)
 
 winclean:
 	rm -rf win32 win64 GUIDOEngine*.lib GUIDOEngine.dll
@@ -154,6 +163,7 @@ libGUIDOEngine.so :  $(LINUX)/Makefile  $(LINUX)/libGUIDOEngine.so
 $(LINUX)/libGUIDOEngine.so : CMakeLists.txt
 	make -C $(LINUX)
 	
+linuxcmake:
 $(LINUX)/Makefile : CMakeLists.txt
 	[ -d $(LINUX) ] || mkdir $(LINUX)
 	cd $(LINUX) && cmake .. -G "Unix Makefiles" -DMIDIEXPORT=yes
