@@ -25,17 +25,25 @@ endif
 OUT  := GUIDOEngine.framework GUIDOEngine.tgz libGUIDOEngine.a
 MACX := MacOS
 IOS  := iOS
-ifeq ($(TARGET), window)
- WIN32VS := $(shell ./vs-cmake)
- WIN64VS := "$(WIN32VS) Win64"
- MSVC    := $(shell ./vs-path)
+
+# try to detect Visual Studio version used
+ifeq ($(TARGET), windows)
+ MSVC ?= C:\Program Files (x86)\Microsoft Visual Studio 12.0
+ ifneq ($(wildcard "$(MSVC)"), "") 
+  WIN32VS ?= Visual Studio 12 2013
+  WIN64VS ?= $(WIN32VS) Win64
+  endif
+ else
+ MSVC := C:\Program Files (x86)\Microsoft Visual Studio 10.0
+ ifneq ($(wildcard "$(MSVC)"), "") 
+  WIN32VS ?= Visual Studio 10
+  WIN64VS ?= $(WIN32VS) Win64
+ endif
 endif
+
 LINUX := linux
 C++11 ?= no
 CMAKEOPT ?= -DMIDIEXPORT=yes -DC++11=$(C++11)
-
-test:
-	echo $(CMAKEOPT)
 
 all :
 	make $(TARGET)
@@ -144,7 +152,7 @@ win64/Release/GUIDOEngine64.dll : win64/guidolib.sln
 win64cmake:
 win64/guidolib.sln : CMakeLists.txt
 	[ -d win64 ] || mkdir win64
-	cd win64 && cmake .. -G $(WIN64VS) $(CMAKEOPT)
+	cd win64 && cmake .. -G $(WIN64VS) $(CMAKEOPT) -DMIDIEXPORT=yes
 
 winclean:
 	rm -rf win32 win64 GUIDOEngine*.lib GUIDOEngine.dll
@@ -152,7 +160,7 @@ winclean:
 #===============================================================
 # building the library on linux
 #===============================================================
-.PHONY : $(LINUX)/libGUIDOEngine.so
+.PHONY : $(LINUX) libGUIDOEngine.so
 
 linux : $(LINUX)/Makefile libGUIDOEngine.so
 
@@ -160,7 +168,7 @@ libGUIDOEngine.so :  $(LINUX)/Makefile  $(LINUX)/libGUIDOEngine.so
 	rm -rf GUIDOEngine*.so*
 	cp -R $(LINUX)/libGUIDOEngine*.so* .
 
-$(LINUX)/libGUIDOEngine.so : CMakeLists.txt
+$(LINUX)/libGUIDOEngine.so : 
 	make -C $(LINUX)
 	
 linuxcmake:
