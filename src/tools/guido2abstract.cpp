@@ -58,14 +58,14 @@ static int getIntOption (int argc, char *argv[], const std::string& option, int 
 	}
 	return defaultValue;
 }
-static const char* getOption (int argc, char *argv[], const std::string& option, const char* defaultValue)
-{
-	for (int i=1; i < argc-1; i++) {
-		if (option == argv[i])
-			return argv[i+1];
-	}
-	return defaultValue;
-}
+//static const char* getOption (int argc, char *argv[], const std::string& option, const char* defaultValue)
+//{
+//	for (int i=1; i < argc-1; i++) {
+//		if (option == argv[i])
+//			return argv[i+1];
+//	}
+//	return defaultValue;
+//}
 static const char* getFile (int argc, char *argv[])
 {
 	int i;
@@ -178,7 +178,7 @@ int main(int argc, char **argv)
 		usage(argv[0]);
 	}
 
-	const char* fontfile = getOption (argc, argv, "-f", 0);
+//	const char* fontfile = getOption (argc, argv, "-f", 0);
 	const char* filename = getFile (argc, argv);
 
 //	int page, font, file;

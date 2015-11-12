@@ -17,7 +17,7 @@ int main(int argc, char **argv)
 {
 	for (int i = 1; i < argc; i++) {
 		cout << "======== parsing " << argv[i] << endl;
-		GuidoErrCode err;
+//		GuidoErrCode err;
 		ARHandler arh;
 
         GuidoParser *parser = GuidoOpenParser();
