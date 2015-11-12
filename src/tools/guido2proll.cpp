@@ -21,9 +21,9 @@ const int  kDefaultWidth           = -1;
 const int  kDefaultHeight          = -1;
 const int  kDefaultMinPitch        = -1;
 const int  kDefaultMaxPitch        = -1;
-const bool kDefaultKeyboard        = false;
-const bool kDefaultVoicesAutoColor = false;
-const bool kDefaultMeasureBars     = false;
+//const bool kDefaultKeyboard        = false;
+//const bool kDefaultVoicesAutoColor = false;
+//const bool kDefaultMeasureBars     = false;
 const int  kDefaultPitchLines      = kAutoLines;
 
 const PianoRollType kDefaultPianoRoll = kSimplePianoRoll;
@@ -198,11 +198,12 @@ static int lPitchLinesopt(int argc, char **argv, const char* opt, int defaultval
 int main(int argc, char **argv)
 {
  	SVGSystem sys;
-    SVGDevice dev(cout, &sys, 0);
+//    SVGDevice dev(cout, &sys, 0);
+	VGDevice *dev = sys.CreateDisplayDevice();
 	
 	checkusage(argc, argv);
 	
-	GuidoInitDesc gd = { &dev, 0, 0, 0 };
+	GuidoInitDesc gd = { dev, 0, 0, 0 };
     GuidoInit(&gd);
 
     const char* fileName = getInputFile(argc, argv);
@@ -271,12 +272,12 @@ int main(int argc, char **argv)
         /*************/
 
         /**** DRAW ****/
-		dev.NotifySize(w, h);
-		dev.BeginDraw();
-		dev.SelectPenColor(VGColor(100, 100, 100));
-		dev.SelectFillColor(VGColor(0, 0, 0));
-        err = GuidoPianoRollOnDraw(pianoRoll, w, h, &dev);
- 		dev.EndDraw();
+		dev->NotifySize(w, h);
+		dev->BeginDraw();
+		dev->SelectPenColor(VGColor(100, 100, 100));
+		dev->SelectFillColor(VGColor(0, 0, 0));
+        err = GuidoPianoRollOnDraw(pianoRoll, w, h, dev);
+ 		dev->EndDraw();
 		error(err);
         /**************/
 
@@ -291,6 +292,5 @@ int main(int argc, char **argv)
 	}
 
 	GuidoCloseParser(parser);
-
     return 0;
 }
