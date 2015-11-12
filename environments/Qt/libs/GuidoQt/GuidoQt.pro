@@ -6,7 +6,7 @@ TARGET = GuidoQt
 
 macx {
 	CONFIG+= i386 x86_64
-	QMAKE_CXXFLAGS += -mmacosx-version-min=10.6
+	QMAKE_CXXFLAGS += -mmacosx-version-min=10.7
 }
 
 ios {
