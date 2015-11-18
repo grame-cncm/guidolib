@@ -101,6 +101,9 @@ QLanguageItem * QGuidoItemContainerFactory::buildLanguageItem( const QMimeData *
 		}
 		if ( item && adapter )
 			return new QSimpleItemContainer( item , adapter , mimeData , parent );
+
+		else return new QGuidoItemContainer (mimeData, parent);
+
 		assert(0);
 		return 0;
 	}
@@ -122,6 +125,8 @@ QLanguageItem * QGuidoItemContainerFactory::buildLanguageItem( const QDomElement
     }
     if ( item && adapter )
         return new QSimpleItemContainer( item , adapter , domElement , parent );
+
+	else return new QGuidoItemContainer (domElement, parent);
 
     assert(0);
     return 0;
