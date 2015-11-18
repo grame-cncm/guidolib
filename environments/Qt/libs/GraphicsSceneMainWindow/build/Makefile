@@ -1,14 +1,15 @@
 
 PROJECT := GraphicsSceneMainWindow
+OPTIONS := -f ../../Make.shared PROJECT=$(PROJECT)
 
 all:
-	make -f ../../Make.shared PROJECT=$(PROJECT)
+	make $(OPTIONS)
 
 macos:
-	make -f ../../Make.shared PROJECT=$(PROJECT) macos
+	make $(OPTIONS) macos
 
 ios:
-	make -f ../../Make.shared PROJECT=$(PROJECT) ios
+	make $(OPTIONS) ios
 
 clean:
-	make -f ../../Make.shared PROJECT=$(PROJECT) clean
+	make $(OPTIONS) clean
