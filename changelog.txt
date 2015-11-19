@@ -4,7 +4,7 @@ GUIDO Engine history
   version 1.6.0
 - new reduced simplified proportional representation
 - added GuidoStream2GuidoString in GUIDOParse which return clean Gmn code from a guido stream
--empty guidostream are now translated in guido code as an empty score: "[]"
+- empty guidostream are now translated in guido code as an empty score: "[]"
 
 ----------------------------------------------------------------
   version 1.5.9
