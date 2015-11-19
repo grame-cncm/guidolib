@@ -22,9 +22,9 @@ DerivedData
 doc/server/build
 doc/server/build/html/*.html
 doc/refcard/latex/*.gz
-tools/*.gmn
-tools/*.svg
-tools/*.mid
+src/tools/*.gmn
+src/tools/*.svg
+src/tools/*.mid
 .qmake.stash
 guidolib-1.??-*
 *.deb
@@ -47,3 +47,4 @@ GuidoQt.suo
 *.vcxproj.user
 validate/GUIDOEngine.dll
 validate/*.exe
+doc/doxygen/guidolib-*
