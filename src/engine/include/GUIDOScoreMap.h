@@ -142,19 +142,53 @@ typedef std::pair<TimeSegment, TimeSegment> TimeMapElement;
 extern "C" {
 #endif
 
-/** \brief Retrieves the graphic to time mapping
+/** \brief Retrieves the graphic to time mapping, without any processing (RAW)
 
 	\param gr a Guido opaque handle to a GR structure.
 	\param pagenum a page index, starting from 1.
 	\param width the page width.
 	\param height the page height.
-	\param sel GuidoElementSelector to filter undesired objects out.
+	\param sel a GuidoElementSelector to filter undesired objects out.
 	\param f a MapCollector object that will be called for each selected element.
 	\return an error code.
 */
 GUIDOAPI(GuidoErrCode)	GuidoGetMap( CGRHandler gr, int pagenum, float width, float height, 
 									 GuidoElementSelector sel, MapCollector& f);
 
+/** \brief Retrieves a guido staff graphic to time mapping, without any processing (RAW).
+
+	\param gr a Guido opaque handle to a GR structure.
+	\param pagenum a page index, starting from 1.
+	\param w the page width.
+	\param h the page height.
+	\param staff the staff index (starting from 1).
+	\param outmap contains the mapping on output.
+	\return an error code.
+*/
+GUIDOAPI(GuidoErrCode)	GuidoGetRAWStaffMap( CGRHandler gr, int pagenum, float w, float h, int staff, Time2GraphicMap& outmap);
+
+/** \brief Retrieves a guido voice graphic to time mapping, without any processing (RAW).
+
+	\param gr a Guido opaque handle to a GR structure.
+	\param pagenum a page index, starting from 1.
+	\param w the page width.
+	\param h the page height.
+	\param voice the voice index (starting from 1).
+	\param outmap contains the mapping on output.
+	\return an error code.
+*/
+GUIDOAPI(GuidoErrCode)	GuidoGetRAWVoiceMap( CGRHandler gr, int pagenum, float w, float h, int voice, Time2GraphicMap& outmap);
+
+/** \brief Retrieves a guido system graphic to time mapping, without any processing (RAW). 
+
+	\param gr a Guido opaque handle to a GR structure.
+	\param pagenum a page index, starting from 1.
+	\param w the page width.
+	\param h the page height.
+	\param outmap contains the mapping on output.
+	\return an error code.
+*/
+GUIDOAPI(GuidoErrCode)	GuidoGetRAWSystemMap( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap);
 
 /** \brief Retrieves a guido page graphic to time mapping. 
 

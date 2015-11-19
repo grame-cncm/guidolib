@@ -70,15 +70,21 @@ void GuidoMapCollector::Graph2TimeMap( const FloatRect& box, const TimeSegment& 
 {
 	// Guido mapping filtering: the Guido map doesn't fit the Interlude mapping constraints and should be reworked.
 	if (fFilter && !(*fFilter)(infos))	return;		// element is filtered out 
-	if ( dates.empty() )	return;					// empty time segments are filtered out
-	if ( !box.IsValid() )	return;					// empty graphic segments are filtered out
 
-	for (Time2GraphicMap::const_iterator i = fOutMap->begin(); i != fOutMap->end(); i++) {
-		if ( i->first.intersect( dates ) )
-			return;									// intersecting segments are filtered out
-		if ( intersect( i->second, box ) )
-			return;
+	// We see if we have to process data or not (RAW)
+	if (!fFilter || !(*fFilter).fGetRAWdata)
+	{
+		if ( dates.empty() )	return;					// empty time segments are filtered out
+		if ( !box.IsValid() )	return;					// empty graphic segments are filtered out
+
+		for (Time2GraphicMap::const_iterator i = fOutMap->begin(); i != fOutMap->end(); i++) {
+			if ( i->first.intersect( dates ) )
+				return;									// intersecting segments are filtered out
+			if ( intersect( i->second, box ) )
+				return;
+		}
 	}
+
 	add (dates, box);
 }
 
@@ -87,13 +93,19 @@ void GuidoVoiceCollector::Graph2TimeMap( const FloatRect& box, const TimeSegment
 {
 	// Guido mapping filtering: the Guido map doesn't fit the Interlude mapping constraints and should be reworked.
 	if (fFilter && !(*fFilter)(infos))	return;		// element is filtered out 
-	if ( dates.empty() )	return;					// empty time segments are filtered out
-	if ( !box.IsValid() )	return;					// empty graphic segments are filtered out
 
-	for (Time2GraphicMap::const_iterator i = fOutMap->begin(); i != fOutMap->end(); i++) {
-		if ( intersect( i->second, box ) )
-			return;
+	// We see if we have to process data or not (RAW)
+	if (!fFilter || !(*fFilter).fGetRAWdata)
+	{
+		if ( dates.empty() )	return;					// empty time segments are filtered out
+		if ( !box.IsValid() )	return;					// empty graphic segments are filtered out
+
+		for (Time2GraphicMap::const_iterator i = fOutMap->begin(); i != fOutMap->end(); i++) {
+			if ( intersect( i->second, box ) )
+				return;
+		}
 	}
+
 	add (dates, box);
 }
 
@@ -106,7 +118,7 @@ void GuidoMapCollector::process (int page, float w, float h, Time2GraphicMap* ou
 }
 
 //----------------------------------------------------------------------
-// merge all the semgents from one graphic line in a single segment
+// merge all the segments from one graphic line in a single segment
 //----------------------------------------------------------------------
 void GuidoStaffCollector::mergelines (const std::vector<TMapElt>& elts, Time2GraphicMap& outmap) const
 {
@@ -158,9 +170,14 @@ static void reduce (const std::vector<std::pair<TimeSegment, FloatRect> >& elts,
 //----------------------------------------------------------------------
 void GuidoStaffCollector::Graph2TimeMap( const FloatRect& box, const TimeSegment& dates, const GuidoElementInfos& infos )
 {
-	if ( fNoEmpty && dates.empty() )	return;				// empty time segments are filtered out
-	if ( !box.IsValid() )				return;				// empty graphic segments are filtered out
-	if ( infos.type == kEmpty)			return;
+	// We see if we have to process data or not (RAW)
+	if (!fGetRAWdata)
+	{
+		if ( fNoEmpty && dates.empty() )	return;				// empty time segments are filtered out
+		if ( !box.IsValid() )				return;				// empty graphic segments are filtered out
+		if ( infos.type == kEmpty)			return;
+	}
+
 	if (infos.staffNum == fStaffNum)
 		fMap.push_back (make_pair(dates, box));
 }
@@ -224,26 +241,36 @@ static bool scompare( const pair<TimeSegment, FloatRect>& a, const pair<TimeSegm
 }
 
 //----------------------------------------------------------------------
-// staff map is made using a cmbination of basic staff map and events map
+// staff map is made using a combination of basic staff map and events map
 // actually, it splits the basic staff map in vertical slices using the
 // events x coordinate
 void GuidoStaffCollector::process (int page, float w, float h, Time2GraphicMap* outmap)
 {
-	GuidoMapCollector staffCollector(fGRHandler, kGuidoStaff, fFilter);
-	Time2GraphicMap staffMap, map, evmap;
-	outmap->clear();
+	// We see if we have to process data or not (RAW)
+	if (fGetRAWdata)
+	{
+		if (!outmap) return;
+		GuidoGetMap( fGRHandler, page, w, h, kGuidoStaff, *this );	// collect the staves map
+		*outmap = fMap;
+	}
+	else
+	{
+		GuidoMapCollector staffCollector(fGRHandler, kGuidoStaff, fFilter);
+		Time2GraphicMap staffMap, map, evmap;
+		outmap->clear();
 	
-	fNoEmpty = false;
-	GuidoGetMap( fGRHandler, page, w, h, kGuidoStaff, *this );	// collect the events map
-	sort (fMap.begin(), fMap.end(), scompare);					// sort by lines, smaller date first
-	mergelines (fMap, map);										// merge the graphic segments on a single line basis
+		fNoEmpty = false;
+		GuidoGetMap( fGRHandler, page, w, h, kGuidoStaff, *this );	// collect the staves map
+		sort (fMap.begin(), fMap.end(), scompare);					// sort by lines, smaller date first
+		mergelines (fMap, map);										// merge the graphic segments on a single line basis
 
-	fNoEmpty = true;
-	fMap.clear();
-	GuidoGetMap( fGRHandler, page, w, h, kGuidoEvent, *this );	// collect the events map
-	sort (fMap.begin(), fMap.end(), mcompare);					// sort first date, smaller duration first
-	reduce (fMap, evmap);										// retains only one segment per starting date
-	staffmerge (map, evmap, *outmap);							// and split the staff lines using the events segments
+		fNoEmpty = true;
+		fMap.clear();
+		GuidoGetMap( fGRHandler, page, w, h, kGuidoEvent, *this );	// collect the events map
+		sort (fMap.begin(), fMap.end(), mcompare);					// sort first date, smaller duration first
+		reduce (fMap, evmap);										// retains only one segment per starting date
+		staffmerge (map, evmap, *outmap);							// and split the staff lines using the events segments
+	}
 }
 
 //----------------------------------------------------------------------

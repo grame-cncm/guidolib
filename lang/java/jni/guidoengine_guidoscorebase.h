@@ -231,6 +231,30 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_GetMap
 
 /*
  * Class:     guidoengine_guidoscorebase
+ * Method:    GetRAWStaffMap
+ * Signature: (IFFILguidoengine/guidoscoremapbase;)I
+ */
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_GetRAWStaffMap
+  (JNIEnv *, jobject, jint, jfloat, jfloat, jint, jobject);
+
+/*
+ * Class:     guidoengine_guidoscorebase
+ * Method:    GetRAWVoiceMap
+ * Signature: (IFFILguidoengine/guidoscoremapbase;)I
+ */
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_GetRAWVoiceMap
+  (JNIEnv *, jobject, jint, jfloat, jfloat, jint, jobject);
+
+/*
+ * Class:     guidoengine_guidoscorebase
+ * Method:    GetRAWSystemMap
+ * Signature: (IFFLguidoengine/guidoscoremapbase;)I
+ */
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_GetRAWSystemMap
+  (JNIEnv *, jobject, jint, jfloat, jfloat, jobject);
+
+/*
+ * Class:     guidoengine_guidoscorebase
  * Method:    GetTimeMap
  * Signature: (Lguidoengine/timemapcollector;)I
  */

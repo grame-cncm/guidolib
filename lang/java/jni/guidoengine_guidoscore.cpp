@@ -600,6 +600,42 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_GetMap (JNIEnv * env, job
 
 /*
  * Class:     guidoengine_guidoscorebase
+ * Method:    GetRAWStaffMap
+ * Signature: (IFFILguidoengine/guidoscoremapbase;)I
+ */
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_GetRAWStaffMap (JNIEnv * env, jobject obj, jint page, jfloat w, jfloat h, jint staff, jobject map)
+{
+	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
+	Time2GraphicMap * mapPtr = getMap(env, map);
+	return mapPtr ? GuidoGetRAWStaffMap( gr, page, w, h, staff, *mapPtr) : guidoErrActionFailed;
+}
+
+/*
+ * Class:     guidoengine_guidoscorebase
+ * Method:    GetRAWVoiceMap
+ * Signature: (IFFILguidoengine/guidoscoremapbase;)I
+ */
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_GetRAWVoiceMap (JNIEnv * env, jobject obj, jint page, jfloat w, jfloat h, jint voice, jobject map)
+{
+	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
+	Time2GraphicMap * mapPtr = getMap(env, map);
+	return mapPtr ? GuidoGetRAWVoiceMap( gr, page, w, h, voice, *mapPtr) : guidoErrActionFailed;
+}
+
+/*
+ * Class:     guidoengine_guidoscorebase
+ * Method:    GetRAWSystemMap
+ * Signature: (IFFLguidoengine/guidoscoremapbase;)I
+ */
+JNIEXPORT jint JNICALL Java_guidoengine_guidoscorebase_GetRAWSystemMap (JNIEnv * env, jobject obj, jint page, jfloat w, jfloat h, jobject map)
+{
+	GRHandler gr = (GRHandler)env->GetLongField (obj, gGRHandlerID);
+	Time2GraphicMap * mapPtr = getMap(env, map);
+	return mapPtr ? GuidoGetRAWSystemMap( gr, page, w, h, *mapPtr) : guidoErrActionFailed;
+}
+
+/*
+ * Class:     guidoengine_guidoscorebase
  * Method:    GetTimeMap
  * Signature: (Lguidoengine/timemapcollector;)I
  */

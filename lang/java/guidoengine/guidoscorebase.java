@@ -328,7 +328,7 @@ public class guidoscorebase {
 	public native final synchronized int FindPageAt(guidodate date);
 
 	/**
-	 * Retrieves the graphic to time mapping
+	 * Retrieves the graphic to time RAW mapping
 	 * 
 	 * @param page
 	 *            a page index, starting from 1.
@@ -345,6 +345,58 @@ public class guidoscorebase {
 	 * @see mapcollector
 	 */
 	public native final synchronized int GetMap(int page, float width, float height, int selector, mapcollector f);
+    
+    /**
+	 * Retrieves the graphic to time RAW mapping of a defined staff
+	 * 
+	 * @param page
+	 *            a page index, starting from 1.
+	 * @param width
+	 *            an area width (typically the current drawing zone width).
+	 * @param height
+	 *            an area height (typically the current drawing zone height).
+	 * @param staff
+	 *            the staff index (starting from 1).
+	 * @param map
+	 *            on output, contains the staff map.
+	 * @return an error code.
+	 * @see mapcollector
+	 */
+	public native final synchronized int GetRAWStaffMap(int page, float width, float height, int staff, guidoscoremapbase map);
+
+	/**
+	 * Retrieves the graphic to time RAW mapping of a defined voice
+	 * 
+	 * @param page
+	 *            a page index, starting from 1.
+	 * @param width
+	 *            an area width (typically the current drawing zone width).
+	 * @param height
+	 *            an area height (typically the current drawing zone height).
+	 * @param voice
+	 *            the voice index (starting from 1).
+	 * @param map
+	 *            on output, contains the staff map.
+	 * @return an error code.
+	 * @see mapcollector
+	 */
+	public native final synchronized int GetRAWVoiceMap(int page, float width, float height, int voice, guidoscoremapbase map);
+
+	/**
+	 * Retrieves the graphic to time RAW mapping of the systems
+	 * 
+	 * @param page
+	 *            a page index, starting from 1.
+	 * @param width
+	 *            an area width (typically the current drawing zone width).
+	 * @param height
+	 *            an area height (typically the current drawing zone height).
+	 * @param map
+	 *            on output, contains the staff map.
+	 * @return an error code.
+	 * @see mapcollector
+	 */
+	public native final synchronized int GetRAWSystemMap(int page, float width, float height, guidoscoremapbase map);
 
 	/**
 	 * Retrieves the wrapped to unwrapped time mapping

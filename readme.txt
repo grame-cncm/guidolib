@@ -19,7 +19,7 @@ MacOS, iOS, win32 and win64.
 
 To compile for a given platform:
 	change to build/your_target_arch directory
-	type:  cmake ../../cmake -G "your target generator" OPTIONS
+	type:  cmake ../ -G "your target generator" OPTIONS
 	run your project/makefile and compile
 
 OPTIONS indicates optional components and is between:
@@ -105,7 +105,7 @@ Note for Windows platforms:
 	The CMake project description is "Visual Studio" oriented. 
 	Using MingW may require some adaptation.
 	/!\ Having .NET Framework v4.5 installed can be problematic during cmake generation
-			AND during Visual Studio compilation. A downgrade to v4.0 will fix this problems.
+			AND during Visual Studio compilation. A downgrade to v4.0 will fix this problem.
 
 
 ======================================================================

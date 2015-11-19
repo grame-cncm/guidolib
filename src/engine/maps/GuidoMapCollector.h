@@ -38,7 +38,12 @@ namespace guido
 class GuidoMapCollector: public MapCollector
 {
 	public :
-		struct Filter { virtual ~Filter() {} virtual bool operator() (const GuidoElementInfos& infos) const { return true; } } ;
+		struct Filter {
+			virtual ~Filter() {}
+			virtual bool operator() (const GuidoElementInfos& infos) const { return true; }
+			public:
+				bool fGetRAWdata;
+		};
 
 				 GuidoMapCollector(CGRHandler gr, GuidoElementSelector selector, const Filter* filter=0) 
 					: fGRHandler(gr), fSelector(selector), fFilter(filter), fOutMap(0) {}
@@ -66,13 +71,13 @@ class GuidoVoiceCollector: public GuidoMapCollector
 	private:
 		struct AcceptVoicePredicat : public Filter { 
 			int fNum;
-			virtual bool operator() (const GuidoElementInfos& infos) const { return (infos.voiceNum == fNum) && (infos.type != kEmpty); }
+			virtual bool operator() (const GuidoElementInfos& infos) const { return (infos.voiceNum == fNum) && (fGetRAWdata || infos.type != kEmpty); }
 		} fVoiceFilter;
-		void	setFilter(int num)			{ fVoiceFilter.fNum = num; fFilter = &fVoiceFilter; }
+		void	setFilter(int num, bool getRAWdata)			{ fVoiceFilter.fNum = num; fVoiceFilter.fGetRAWdata = getRAWdata; fFilter = &fVoiceFilter; }
 		virtual void Graph2TimeMap( const FloatRect& box, const TimeSegment& dates,  const GuidoElementInfos& infos );
 
 	public :
-				 GuidoVoiceCollector(CGRHandler gr, int num) : GuidoMapCollector(gr, kGuidoEvent) { if (num) setFilter(num); }
+				 GuidoVoiceCollector(CGRHandler gr, int num, bool getRAWdata = false) : GuidoMapCollector(gr, kGuidoEvent) { if (num) setFilter(num, getRAWdata); }
 		virtual ~GuidoVoiceCollector() {}
 };
 
@@ -88,11 +93,12 @@ class GuidoStaffCollector: public GuidoMapCollector
 		std::vector<TMapElt>	fMap;
 		int		fStaffNum;
 		bool	fNoEmpty;
+		bool    fGetRAWdata;
 
 	void mergelines (const std::vector<TMapElt>& elts, Time2GraphicMap& outmap) const;
 
 	public :
-				 GuidoStaffCollector (CGRHandler gr, int num) : GuidoMapCollector(gr, kGuidoStaff), fStaffNum(num), fNoEmpty(true) {}
+				 GuidoStaffCollector (CGRHandler gr, int num, bool getRAWdata = false) : GuidoMapCollector(gr, kGuidoStaff), fStaffNum(num), fNoEmpty(true), fGetRAWdata(getRAWdata) { }
 		virtual ~GuidoStaffCollector()	{}
 
 		///< overrides the method called by guido for each graphic segment

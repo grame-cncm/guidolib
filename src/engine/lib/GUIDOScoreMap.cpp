@@ -172,6 +172,37 @@ GUIDOAPI(GuidoErrCode)	GuidoGetSystemMap( CGRHandler gr, int pagenum, float w, f
 }
 
 //----------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode)	GuidoGetRAWStaffMap( CGRHandler gr, int pagenum, float w, float h, int staff, Time2GraphicMap& outmap)
+{
+	GuidoErrCode err = checkParams (gr, pagenum);
+	if (err != guidoNoErr) return err;
+	GuidoStaffCollector getmap (gr, staff, true);
+	getmap.process(pagenum, w, h, &outmap);
+	return guidoNoErr;
+}
+
+//----------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode)	GuidoGetRAWVoiceMap( CGRHandler gr, int pagenum, float w, float h, int voice, Time2GraphicMap& outmap)
+{
+	GuidoErrCode err = checkParams (gr, pagenum);
+	if (err != guidoNoErr) return err;
+	if (voice < 1) return guidoErrBadParameter; 
+	GuidoVoiceCollector getmap (gr, voice, true);
+	getmap.process (pagenum, w, h, &outmap);
+	return guidoNoErr;
+}
+
+//----------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode)	GuidoGetRAWSystemMap( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap)
+{
+	GuidoErrCode err = checkParams (gr, pagenum);
+	if (err != guidoNoErr) return err;
+	GuidoMapCollector getmap (gr, kGuidoSystem);
+	getmap.process(pagenum, w, h, &outmap);
+	return guidoNoErr;
+}
+
+//----------------------------------------------------------------------
 GUIDOAPI(bool)	GuidoGetTime( const GuidoDate& date, const Time2GraphicMap map, TimeSegment& t, FloatRect& r)
 {
 	for (Time2GraphicMap::const_iterator i = map.begin(); i != map.end(); i++) {
