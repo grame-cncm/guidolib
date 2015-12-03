@@ -14,13 +14,13 @@ ios {
 	
 }
 
-win32: {
-	contains(QMAKE_HOST.arch, x86): {
+win32 {
+	contains(QMAKE_HOST.arch, x86) {
 	QMAKE_LFLAGS *= /MACHINE:X86
 	!DebugBuild { GUIDO = $$ROOT/build/win32/release/GUIDOEngine.lib }
 	else		{ GUIDO = $$ROOT/build/win32/debug/GUIDOEngineD.lib } 
 	}
-	contains(QMAKE_HOST.arch, x86_64): {
+	contains(QMAKE_HOST.arch, x86_64) {
 	QMAKE_LFLAGS *= /MACHINE:X64
 	!DebugBuild { GUIDO = $$ROOT/build/win64/release/GUIDOEngine64.lib }
 	else		{ GUIDO = $$ROOT/build/win64/debug/GUIDOEngine64D.lib }
