@@ -16,12 +16,14 @@ MOC_DIR = ./tmpSrc
 RCC_DIR = ./tmpSrc
 UI_DIR = ./tmpSrc
 
+macx {
+	# In new version of ios, we can't use Contents folder for anything other than code
+	RSRC.path =  Contents/Resources
+}
 macx|ios {
 	RC_FILE+=$$RESOURCES_DIR/English.lproj/InfoPlist.strings 
 	QMAKE_INFO_PLIST = $$PWD/rsc/GuidoEditorInfo.plist
 	RSRC.files =  $$RESOURCES_DIR/guido.icns
-	# In new version of ios, we can't use Contents folder for anything other than code
-	RSRC.path =  MyContents/Resources
 
 	FONT.files  = $$ROOT/src/guido2.svg
 	FONT.files += $$ROOT/src/guido2.ttf
@@ -38,6 +40,8 @@ macx|ios {
 ios {
 	ios_icon.files = $$files($$PWD/rsc/iosIcons/guidoIcon*.png)
 	QMAKE_BUNDLE_DATA += ios_icon
+	# In new version of ios, we can't use Contents folder for anything other than code
+	RSRC.path =  MyContents/Resources
 }
 
 win32 { RC_FILE = $$RESOURCES_DIR/GuidoEditor.rc }
