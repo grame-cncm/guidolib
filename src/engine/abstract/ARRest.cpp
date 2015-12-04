@@ -35,6 +35,7 @@ ARRest::ARRest(int theNumerator, int theDenominator)
 ARRest::ARRest(const ARRest &arrest)
 : ARMusicalEvent( (const ARMusicalEvent &) arrest)
 {
+    fVoiceNum = arrest.getVoiceNum(); // Added to fix a bug during rest copy (in doAutoBarlines)
 }
 
 ARRest::~ARRest()
