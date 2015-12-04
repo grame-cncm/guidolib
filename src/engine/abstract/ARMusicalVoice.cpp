@@ -3909,7 +3909,7 @@ void ARMusicalVoice::doAutoDisplayCheck()
 			autotuplet->setCorrespondence(ardetpl);
 
 		arde->setCorrespondence(curbase);
-		if (autotuplet)
+		if (ardetpl)
 			ardetpl->setCorrespondence(autotuplet);
 
 		// this adds the Element ....
@@ -4097,7 +4097,7 @@ void ARMusicalVoice::CloseBase(ARBase * curbase, ARTuplet * autotuplet, GuidoPos
 	if (autotuplet)		autotuplet->setCorrespondence(ardetpl);
 
 	arde->setCorrespondence(curbase);
-	if (autotuplet)		ardetpl->setCorrespondence(autotuplet);
+	if (ardetpl)		ardetpl->setCorrespondence(autotuplet);
 
 	// this adds the Element ....
 	if (FLA!=NULL)
@@ -5686,6 +5686,7 @@ void ARMusicalVoice::FinishChord(bool trill)
 	dummy->setCorrespondence(currentChord);
 	dummy->setAssociation(ARMusicalTag::LA);
 	currentChord->setCorrespondence(dummy);
+	dummy->setCorrespondence(currentChord);
 
 	mPosTagList->AddTail(dummy);
 

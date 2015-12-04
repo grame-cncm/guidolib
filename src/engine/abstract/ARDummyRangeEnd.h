@@ -22,8 +22,9 @@
 class ARDummyRangeEnd : public ARTagEnd
 {
 public:
-			ARDummyRangeEnd(const ARDummyRangeEnd * copy);
-			ARDummyRangeEnd(const char * txt = 0);
+			 ARDummyRangeEnd(const ARDummyRangeEnd * copy);
+			 ARDummyRangeEnd(const char * txt = 0);
+	virtual ~ARDummyRangeEnd() {}
 
 	virtual ARMusicalObject * Copy() const;
         
