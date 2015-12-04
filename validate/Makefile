@@ -147,7 +147,7 @@ pdfvalidate: $(validpdf)
 ifeq ($(system), MINGW32_NT-6.1)
 	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && C:/Program\ Files\ \(x86\)/Mozilla\ Firefox/firefox -new-tab $(patsubst $(version)/%, $(VERSION)/%, $<) -new-tab $<; true)
 else
-	@[ -f  $(ignored) ] || ./diffcmd $<  $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open -t $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
+	@[ -f  $(ignored) ] || ./diffcmd $<  $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
 endif
 
 %.outtimemap: %.map
