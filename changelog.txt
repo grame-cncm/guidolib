@@ -6,6 +6,7 @@ GUIDO Engine history
 - added GuidoStream2GuidoString in GUIDOParse which return clean Gmn code from a guido stream
 - empty guidostream are now translated in guido code as an empty score: "[]"
 - new GUIDOScoreMap API : GuidoGetRAWStaffMap, GuidoGetRAWVoiceMap and GuidoGetRAWSystemMap which return mapping without any treatment (RAW)
+- crash bug corrected (with regression-tests/ActorPreludeSample.gmn)
 
 ----------------------------------------------------------------
   version 1.5.9
