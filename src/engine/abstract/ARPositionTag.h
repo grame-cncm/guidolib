@@ -19,7 +19,7 @@
 #include "Visitable.h"
 #include "GUIDOTypes.h"	// For GuidoPos
 
-#define oldv 1 
+#define oldv 0
 
 class ARMusicalObject;
 
@@ -82,6 +82,7 @@ class ARPositionTag : public Visitable
 		virtual void setCorrespondence(ARPositionTag *p_cor)
 		{
 			mPositionTag = p_cor;
+//			p_cor->mPositionTag = this;
 #if !oldv
 			if(mPositionTag) {
 				mPositionTag->setParentCorrespondence(this);
