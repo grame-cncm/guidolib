@@ -102,6 +102,7 @@ void GRBeam::GGSOutput() const
 
 void GRBeam::OnDraw( VGDevice & hdc) const
 {
+
 	if (error) return;
 
 	if(!mDraw)
@@ -173,6 +174,7 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 
 void GRBeam::addAssociation(GRNotationElement * grnot)
 {
+
 	if (error || !grnot) return ;
 
 	const GRStaff * grstf = grnot->getGRStaff();
@@ -189,7 +191,6 @@ void GRBeam::addAssociation(GRNotationElement * grnot)
 	}
 
 	// if we are an autobeam we do not beam rests ....
-
 	const bool isautobeam = isAutoBeam(); // (dynamic cast<GRAutoBeam *>(this) != 0);
 
 	GREvent * grn = GREvent::cast(grnot);
@@ -238,7 +239,9 @@ void GRBeam::addAssociation(GRNotationElement * grnot)
 		return;
 	}
 
-	if (grn->getNumFaehnchen() == 0)
+	ARMusicalObject* o = grn->getAbstractRepresentation();
+	bool allowBeam = isautobeam ? false : o && o->isARNote() && (o->getDuration() == DURATION_2);
+	if ((grn->getNumFaehnchen() == 0) && !allowBeam)
 	{
 		setError(grstf,1);
 		return ;
