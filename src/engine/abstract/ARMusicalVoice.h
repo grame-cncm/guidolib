@@ -232,6 +232,11 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		GuidoPos	CopyChord( ARMusicalVoiceState & vst, TYPE_TIMEPOSITION tp, const TYPE_DURATION & newdur);
 		ARClef*		newAutoClef(ARClef* oldclef, const TYPE_TIMEPOSITION& tp);
 		ARKey *		newAutoKey(ARKey * oldkey, const TYPE_TIMEPOSITION& tp);
+	
+		TYPE_DURATION	beamMeterChange(const ARMeter * curmeter, const TYPE_DURATION beat) const;
+		int				beamTrackBeam(const ARMusicalVoiceState& vs) const;
+		bool			beamStartPos(const TYPE_TIMEPOSITION pos, const TYPE_DURATION beat) const;
+		bool			beamStartEv(const ARMusicalEvent* ev, const ARMusicalVoiceState& vs, const TYPE_DURATION beat, const TYPE_TIMEPOSITION lastbartp) const;
 
         std::vector<ARRepeatBegin *> *repeatBeginList;
 };

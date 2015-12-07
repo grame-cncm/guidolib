@@ -1435,6 +1435,97 @@ if (mPosTagList)
 }
 
 //____________________________________________________________________________________
+//
+// AUTO BEAMING
+//____________________________________________________________________________________
+// track existing beaming
+// return the count of opened (>0) or closed (<0) beams
+int	ARMusicalVoice::beamTrackBeam(const ARMusicalVoiceState& vst) const
+{
+	int beamcount = 0;
+	if (vst.removedpositiontags)
+	{
+		GuidoPos tmppos = vst.removedpositiontags->GetHeadPosition();
+		while (tmppos)
+		{
+			ARBeam * bm = dynamic_cast<ARBeam *>(vst.removedpositiontags->GetNext(tmppos));
+			if (bm) --beamcount;
+		}
+	}
+
+	// the beams that are added
+	if (vst.addedpositiontags)
+	{
+		GuidoPos tmppos = vst.addedpositiontags->GetHeadPosition();
+		while (tmppos)
+		{
+			ARBeam * bm = dynamic_cast<ARBeam *>(vst.addedpositiontags->GetNext(tmppos));
+			if (bm) ++beamcount;
+		}
+	}
+	return beamcount;
+}
+
+//____________________________________________________________________________________
+// auto beaming: compute the new beat unit in case of meter change
+TYPE_DURATION ARMusicalVoice::beamMeterChange(const ARMeter * curmeter, const TYPE_DURATION curbeat) const
+{
+	TYPE_DURATION beat(curbeat);
+	if (curmeter->getDenominator() == 2 || curmeter->getDenominator() == 4)
+	{
+		beat.setNumerator(1);
+		beat.setDenominator(4);
+	}
+	else if (curmeter->getDenominator() == 8)
+	{
+		beat.setNumerator(3);
+		beat.setDenominator(8);
+	}
+	else
+	{
+		beat.setNumerator(1);
+		beat.setDenominator (curmeter->getDenominator());
+	}
+
+	TYPE_DURATION tmp(curmeter->getNumerator(),curmeter->getDenominator());
+	if (beat > tmp)
+		beat = tmp;
+	return beat;
+}
+
+//____________________________________________________________________________________
+// check, wether the current position can be divided by the beat-structure.
+// the current position must be an offset to the last (explicit) barline
+bool ARMusicalVoice::beamStartPos(const TYPE_TIMEPOSITION pos, const TYPE_DURATION beat) const
+{
+	if (pos == DURATION_0) {
+		// then the position is valid according to lastbartp ...
+		return true;
+	}
+	else if (beat != DURATION_0)
+	{
+		TYPE_DURATION subsubbeat(1,beat.getDenominator()*4);
+		int denom = pos.getDenominator() * subsubbeat.getNumerator();
+		TYPE_TIMEPOSITION divider(pos.getNumerator() * subsubbeat.getDenominator(), denom);
+		divider.normalize();
+		if (divider.getDenominator() == 1) return true;
+	}
+	return false;
+}
+
+//____________________________________________________________________________________
+// check, wether the current event can be a beaming start position.
+bool ARMusicalVoice::beamStartEv(const ARMusicalEvent* ev, const ARMusicalVoiceState& vst, const TYPE_DURATION beat, const TYPE_TIMEPOSITION lastbartp) const
+{
+	// check, wheter the displayduration is zero
+	if (vst.fCurdispdur && (vst.fCurdispdur->getDisplayDuration() == DURATION_0))
+		return false;
+
+	// check, wether the ev position can be divided by the beat-structure.
+	return beamStartPos(ev->getRelativeTimePosition() - lastbartp, beat);
+}
+
+//____________________________________________________________________________________
 /** \brief Perform autobeaming.
 
 	Works as follows:
@@ -1460,22 +1551,19 @@ void ARMusicalVoice::doAutoBeaming()
 	ARBeamState * curbeamstate = NULL;
 	// counts the explicit beams.
 	int beamcount = 0;
-	// the number of beams (dependant on longest duration of notes within the beam)
-	int numbeams = 0;
 
 	// the default beat-length. this depends on the curmeter ...
 	TYPE_DURATION beat(1L,4L);
 	ARMeter * curmeter = NULL;
 
 	// for the mPosTagList ...
-	// this is the Last RightAssociate plus 1 (that
-	// is the next....)
+	// this is the Last RightAssociate plus 1 (that is the next....)
 	GuidoPos LRA_plus = NULL;
 	GuidoPos FLA = NULL;
 
 	// for the voice ...
-	GuidoPos posev1 = NULL;
-	GuidoPos posevn = NULL;
+	GuidoPos posev1 = NULL;			// start beam position
+	GuidoPos posevn = NULL;			// end beam position
 
 	TYPE_TIMEPOSITION tpev1;
 
@@ -1502,11 +1590,8 @@ void ARMusicalVoice::doAutoBeaming()
 					bmauto = 0;
 				else if (curbeamstate->getBeamState() == ARBeamState::AUTO)
 					bmauto = 1;
-				else
-				{
-					assert(false);
+				else				// we shouldn't get there: default is beam auto
 					bmauto = 1;
-				}
 			}
 			else bmauto = 1; // no beamstate equivalent to auto
 
@@ -1514,66 +1599,19 @@ void ARMusicalVoice::doAutoBeaming()
 				posev1 = posevn = NULL;
 		}
 
-		// track the meter
+		// track the meter change to compute the new beat
 		if (curmeter != vst.curmeter) {
 			// is not needed because a meter change ALWAYS creates a break
 			// of the Auto-Beaming. TYPE_DURATION oldbeat = beat;
 			curmeter = vst.curmeter;
-
-			if (curmeter->getDenominator() == 2 || curmeter->getDenominator() == 4)
-			{
-				beat.setNumerator(1);
-				beat.setDenominator(4);
-			}
-			else if (curmeter->getDenominator() == 8)
-			{
-				beat.setNumerator(3);
-				beat.setDenominator(8);
-			}
-			else
-			{
-				beat.setNumerator(1);
-				beat.setDenominator (curmeter->getDenominator());
-			}
-
-			TYPE_DURATION tmp(curmeter->getNumerator(),curmeter->getDenominator());
-			if (beat > tmp)
-				beat = tmp;
+			beat = beamMeterChange (curmeter, beat);
 			// a measure change is always the end of  autobeam (even if equal meter-sig!)
 			posev1 = posevn = NULL;
 		}
 
-		// track the explicit beams: those that are removed
-		if (vst.removedpositiontags)
-		{
-			GuidoPos tmppos = vst.removedpositiontags->GetHeadPosition();
-			while (tmppos)
-			{
-				ARBeam * bm = dynamic_cast<ARBeam *>(
-									vst.removedpositiontags->GetNext(tmppos));
-				if (bm)
-				{
-					-- beamcount;
-				}
-			}
-		}
-
-		// the beams that are added
-		if (vst.addedpositiontags)
-		{
-			GuidoPos tmppos = vst.addedpositiontags->GetHeadPosition();
-			while (tmppos)
-			{
-				ARBeam * bm = dynamic_cast<ARBeam *>
-					(vst.addedpositiontags->GetNext(tmppos));
-				if (bm)
-				{
-					++ beamcount;
-				}
-			}
-		}
-
-		// then we have explicit beams ....
+		// track the explicit beams: those that are added or removed
+		beamcount += beamTrackBeam(vst);
+		// if beamcount, then we have explicit beams ....
 		if (beamcount>0)
 			posev1 = posevn = NULL;
 
@@ -1584,60 +1622,29 @@ void ARMusicalVoice::doAutoBeaming()
 		// is it an event? and there are NO explicit beams and the beamstate is auto?
 		if (beamcount == 0 && bmauto && ev && !vst.curgracetag)
 		{
-			// distinguish between possible start and possible end-positions ...
-			if (posev1 == NULL)
+			if (posev1 == NULL)				// check for possible Start-Position ...
 			{
-				// possible Start-Position
-				int durok = 1;
-				if (vst.fCurdispdur != NULL)
-				{
-					// check, wheter the displayduration is zero
-					if (vst.fCurdispdur->getDisplayDuration() == DURATION_0)
-						durok = 0;
-				}
-				if (durok)
-				{
+				if (beamStartEv(ev, vst, beat, lastbartp)) {
 					tpev1 = ev->getRelativeTimePosition();
-
-					// check, wether the tpev1 can be divided by the beat-structure.
-					// this is, of course, dependant on any offset provided by (explicit) barlines
-					TYPE_TIMEPOSITION tmptp ( tpev1 - lastbartp );
-					if (tmptp != DURATION_0 && beat != DURATION_0)
-					{
-						TYPE_TIMEPOSITION divider(tmptp.getNumerator() * beat.getDenominator(),
-							tmptp.getDenominator() * beat.getNumerator());
-
-						divider.normalize();
-						if (divider.getDenominator() == 1)
-						{
-							// it can be devided ... we have a valid position!
-							posev1 = pos;
-							LRA_plus = vst.ptagpos;
-							numbeams = 1;
-						}
-					}
-					else if (tmptp == DURATION_0) {
-						// then the position is valid according to lastbartp ...
-						posev1 = pos;
-						LRA_plus = vst.ptagpos;
-						numbeams = 1;
-					}
-
-					if (numbeams == 1)
-					{
-					  // then we need to check the duration ...
-					  // we should do this with displayduration really ?
-					  // const TYPE_DURATION &evdur = ev->getDuration();
-					  // ...
-					}
+					posev1 = pos;
+					LRA_plus = vst.ptagpos;
 				}
 			}
-			if (posevn == NULL && posev1 != NULL) {
-				// possible End-Position
-				TYPE_TIMEPOSITION tmptp (ev->getRelativeTimePosition());
-				tmptp = tmptp + ev->getDuration();
-				if ((tmptp - tpev1) == beat) {
-					// we have a match
+			else if (posevn == NULL) {		// check for possible End-Position ...
+				TYPE_DURATION d = ev->getDuration();
+				TYPE_TIMEPOSITION tmptp (ev->getRelativeTimePosition() + d);
+				TYPE_TIMEPOSITION beamdur = tmptp - tpev1;
+				TYPE_TIMEPOSITION beamend = tmptp - lastbartp;
+				// we have a matching pos a beat end
+				bool match = beamdur == beat;
+				if (curmeter) {
+					TYPE_TIMEPOSITION tmp (curmeter->getNumerator(), curmeter->getDenominator());
+					while (!match && (tmp.getNumerator() > 0)) {
+						match = (beamend == tmp);
+						tmp -= beat;
+					}
+				}
+				if (match)  {					// we have a match
 					posevn = pos;
 					FLA = vst.ptagpos;
 				}
@@ -1645,44 +1652,8 @@ void ARMusicalVoice::doAutoBeaming()
 				{
 					// then no autobeam is possible, but perhaps the
 					// current event is a candiate for a beginning?
-					posev1 = NULL;
-				}
-			}
-
-			if (posev1 == NULL)
-			{
-				// possible Start-Position
-				int durok = 1;
-				if (vst.fCurdispdur != NULL)
-				{
-					// check, wehter the displayduration
-					if (vst.fCurdispdur->getDisplayDuration() == DURATION_0)
-						durok = 0;
-				}
-				if (durok)
-				{
-					tpev1 = ev->getRelativeTimePosition();
-					// check, wether the tpev1 can be divided by the beat-structure.
-					// this is, of course, dependant on any
-					// offset provided by (explicit) barlines
-					TYPE_TIMEPOSITION tmptp (tpev1 - lastbartp);
-
-					if (tmptp != DURATION_0 && beat != DURATION_0)
-					{
-						TYPE_TIMEPOSITION divider(tmptp.getNumerator() * beat.getDenominator(),
-							tmptp.getDenominator() * beat.getNumerator());
-						divider.normalize();
-
-						if (divider.getDenominator() == 1)
-						{
-							// it can be devided ... we habe a valid position!
-							posev1 = pos;
-							LRA_plus = vst.ptagpos;
-						}
-					}
-					else if (tmptp == DURATION_0)
-					{
-						// then the position is valid according to lastbartp ...
+					if (beamStartEv(ev, vst, beat, lastbartp)) {
+						tpev1 = ev->getRelativeTimePosition();
 						posev1 = pos;
 						LRA_plus = vst.ptagpos;
 					}
@@ -1714,10 +1685,7 @@ void ARMusicalVoice::doAutoBeaming()
 			else
 			{
 				// this assertion does not work,
-				// if there is no mPosTagList, or
-				// if the mPosTagList is just
-				// created in this function ...
-
+				// if there is no mPosTagList, or if the mPosTagList is just created in this function ...
 				if (vst.ptagpos != NULL)
 				{
 					assert(FLA != NULL);
