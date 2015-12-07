@@ -22,6 +22,7 @@ DerivedData
 doc/server/build
 doc/server/build/html/*.html
 doc/refcard/latex/*.gz
+doc/doxygen/guidolib-*
 src/tools/*.gmn
 src/tools/*.svg
 src/tools/*.mid
@@ -47,4 +48,6 @@ GuidoQt.suo
 *.vcxproj.user
 validate/GUIDOEngine.dll
 validate/*.exe
-doc/doxygen/guidolib-*
+lang/javascript/doc/api
+lang/java/svgSalamander.jar
+environments/Qt/package
