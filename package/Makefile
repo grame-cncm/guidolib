@@ -60,7 +60,7 @@ qtKitExcludedFiles := doc package Makefile GuidoQt.dsw GuidoQt.sln GuidoQtFontVi
 qtKitExcludedFiles := $(patsubst %, $(QTLIB)/src/%, $(qtKitExcludedFiles))
 
 
-menu:
+help:
 	@ echo this is a packaging makefile, available targets are:
 	@ echo "  'srcpack': builds an archive with doc, source code and dtds"
 	@ echo "  'macos'  : builds an archive with doc, dtds and binary framework"
