@@ -82,6 +82,7 @@ using namespace std;
 #include "ARPossibleBreak.h"
 
 #include "BaseVisitor.h"
+#include "GMNCodePrintVisitor.h"
 
 #include "ARRepeatBegin.h"
 #include "ARCoda.h"
@@ -1478,8 +1479,14 @@ TYPE_DURATION ARMusicalVoice::beamMeterChange(const ARMeter * curmeter, const TY
 	}
 	else if (curmeter->getDenominator() == 8)
 	{
-		beat.setNumerator(3);
-		beat.setDenominator(8);
+		if (! (curmeter->getNumerator() % 3) ) {
+			beat.setNumerator(3);
+			beat.setDenominator(8);
+		}
+		else {
+			beat.setNumerator(2);
+			beat.setDenominator(8);
+		}
 	}
 	else
 	{
@@ -1499,12 +1506,12 @@ TYPE_DURATION ARMusicalVoice::beamMeterChange(const ARMeter * curmeter, const TY
 bool ARMusicalVoice::beamStartPos(const TYPE_TIMEPOSITION pos, const TYPE_DURATION beat) const
 {
 	if (pos == DURATION_0) {
-		// then the position is valid according to lastbartp ...
+		// start of a measure: the position is valid according to lastbartp ...
 		return true;
 	}
 	else if (beat != DURATION_0)
 	{
-		TYPE_DURATION subsubbeat(1,beat.getDenominator()*4);
+		TYPE_DURATION subsubbeat(1, beat.getDenominator()*4);
 		int denom = pos.getDenominator() * subsubbeat.getNumerator();
 		TYPE_TIMEPOSITION divider(pos.getNumerator() * subsubbeat.getDenominator(), denom);
 		divider.normalize();
@@ -1520,11 +1527,124 @@ bool ARMusicalVoice::beamStartEv(const ARMusicalEvent* ev, const ARMusicalVoiceS
 	// check, wheter the displayduration is zero
 	if (vst.fCurdispdur && (vst.fCurdispdur->getDisplayDuration() == DURATION_0))
 		return false;
-
+	if (ev->getDuration() >= DURATION_4)
+		return false;
 	// check, wether the ev position can be divided by the beat-structure.
 	return beamStartPos(ev->getRelativeTimePosition() - lastbartp, beat);
 }
 
+//____________________________________________________________________________________
+// create the actual beam
+void ARMusicalVoice::beamCreate(ARMusicalVoiceState& vst, const GuidoPos posev1, const GuidoPos posevn, const GuidoPos FLA, const GuidoPos LRA_plus, const TYPE_TIMEPOSITION tpev1)
+{
+	// add the beam only, if the two positions are truly different, that is, posev1 != posevn.
+	// otherwise, we get autobeams over one single event, which does not make much sense.
+	if (posev1 != posevn) {
+		// we could determine number of beams here ...
+		// (go through voice from start to end keep track of displayduration ....)
+		ARAutoBeam *arabeam = new ARAutoBeam();
+		// this is obsolete, autobeam sets isauto anyways
+		// arabeam->setIsAuto(true);
+		arabeam->setStartPosition(posev1);
+		arabeam->setRelativeTimePosition(tpev1);
+		ARAutoBeamEnd * arabmend = new ARAutoBeamEnd();
+		arabmend->setPosition(posevn);
+		arabeam->setCorrespondence(arabmend);
+		arabmend->setCorrespondence(arabeam);
+
+		// Now add the generated position tags
+		// to the mPosTagList at the correct positions ...
+		// both need to be added before the  LRA_plus and FRA respectivly
+
+		// if LRA_plus is NULL, then there has been no mPosTagList before ...
+		if (LRA_plus == NULL)
+			mPosTagList->AddTail(arabeam);
+		else
+			mPosTagList->AddElementAt(LRA_plus,arabeam);
+
+		// if FLA is NULL, there has been no mPosTagList before.
+		if (FLA == NULL)
+			mPosTagList->AddTail(arabmend);
+		else
+			mPosTagList->AddElementAt(FLA,arabmend);
+	}
+}
+
+//____________________________________________________________________________________
+// check if a time position is  on a beat
+// the time position should be relative to the last bar
+bool ARMusicalVoice::beamOnBeat(const TYPE_TIMEPOSITION t, const TYPE_DURATION meter, const std::vector<int>& numvec) const
+{
+	bool onbeat = false;
+	int beat;
+	switch (meter.getDenominator()) {
+		case 8:
+		case 16:
+		case 32:
+			beat = meter.getNumerator()%3 ? 2 : 3;
+			break;
+		default:
+			beat = 1;
+			break;
+	}
+	TYPE_DURATION tmp (0, meter.getDenominator());
+	if (numvec.size() > 1) {
+		std::vector<int>::const_iterator i = numvec.begin();
+		while (!onbeat && (tmp.getNumerator() < meter.getNumerator())) {
+			onbeat = (t == tmp);
+			if (i != numvec.end()) {
+				beat = *i++;
+			}
+			tmp.setNumerator(tmp.getNumerator() + beat);
+		}
+	}
+	else {
+		while (!onbeat && (tmp.getNumerator() < meter.getNumerator())) {
+			onbeat = (t == tmp);
+			tmp.setNumerator(tmp.getNumerator() + beat);
+		}
+	}
+	return onbeat;
+}
+
+//____________________________________________________________________________________
+// gives the next event from the current position
+ARMusicalEvent* ARMusicalVoice::beamNextEv (const GuidoPos pos, const ARMusicalVoiceState vst) const
+{
+	GuidoPos tmpPos = pos;
+	ARMusicalVoiceState tmpvst = vst;
+	ARMusicalEvent * nextev = 0;
+	GetNext(tmpPos, tmpvst);						// get the next event
+	if (tmpPos) {
+		ARMusicalObject* o = GetAt(tmpPos);
+		if (o) nextev = ARMusicalEvent::cast(o);
+	}
+	return nextev;
+}
+
+//____________________________________________________________________________________
+// gives the beat at a given time position
+// time position should be relative to the last bar
+TYPE_DURATION ARMusicalVoice::beamGetBeat(const ARMeter * curmeter, const TYPE_TIMEPOSITION& pos, TYPE_DURATION curbeat) const
+{
+	const vector<int>& beats = curmeter->getNumeratorsVector();
+	size_t n = beats.size();
+	if (n > 1) {
+		int nextbeat = beats[0];
+		int d = curmeter->getDenominator();
+		for (int i=1; i<n ; i++) {
+			int b = beats[i];
+			if (pos >= TYPE_TIMEPOSITION(nextbeat, d)) {
+				nextbeat += b;
+			}
+			else return TYPE_DURATION(beats[i-1], d);
+		}
+		return TYPE_DURATION(beats[n-1], d);
+	}
+	else return curbeat;
+}
+
+#define TRACKBEAM 0
 //____________________________________________________________________________________
 /** \brief Perform autobeaming.
 
@@ -1553,9 +1673,12 @@ void ARMusicalVoice::doAutoBeaming()
 	int beamcount = 0;
 
 	// the default beat-length. this depends on the curmeter ...
-	TYPE_DURATION beat(1L,4L);
-	ARMeter * curmeter = NULL;
-
+	TYPE_DURATION	beat(1L,4L);		// the current beat length
+	ARMeter *		curmeter = NULL;	// the current meter
+	TYPE_DURATION	meter (1, 4);		// the current meter duration
+	vector<int>		meterDivision;		// the meter division
+	meterDivision.push_back(1);
+	
 	// for the mPosTagList ...
 	// this is the Last RightAssociate plus 1 (that is the next....)
 	GuidoPos LRA_plus = NULL;
@@ -1565,7 +1688,8 @@ void ARMusicalVoice::doAutoBeaming()
 	GuidoPos posev1 = NULL;			// start beam position
 	GuidoPos posevn = NULL;			// end beam position
 
-	TYPE_TIMEPOSITION tpev1;
+	TYPE_TIMEPOSITION	beamStart = 0;
+	bool				beamStartOnbeat;
 
 	// the timeposition of the last explicit barline...
 	// this needs to be inserted, so that the beat-structure can be matched according to this.
@@ -1605,8 +1729,11 @@ void ARMusicalVoice::doAutoBeaming()
 			// of the Auto-Beaming. TYPE_DURATION oldbeat = beat;
 			curmeter = vst.curmeter;
 			beat = beamMeterChange (curmeter, beat);
+			meter = TYPE_DURATION(curmeter->getNumerator(), curmeter->getDenominator());
+			meterDivision = curmeter->getNumeratorsVector();
 			// a measure change is always the end of  autobeam (even if equal meter-sig!)
 			posev1 = posevn = NULL;
+
 		}
 
 		// track the explicit beams: those that are added or removed
@@ -1620,42 +1747,74 @@ void ARMusicalVoice::doAutoBeaming()
         ARBar * arbar = static_cast<ARBar *>(o->isARBar());
 		
 		// is it an event? and there are NO explicit beams and the beamstate is auto?
-		if (beamcount == 0 && bmauto && ev && !vst.curgracetag)
+		if (!beamcount && bmauto && ev && !vst.curgracetag)
 		{
-			if (posev1 == NULL)				// check for possible Start-Position ...
+			// collect first the necessary information regarding the current event
+			TYPE_TIMEPOSITION evDate	= ev->getRelativeTimePosition();		// get the event date
+			TYPE_TIMEPOSITION evEnd		= evDate + ev->getDuration();			// get the event end date
+			TYPE_TIMEPOSITION evBarDate	= evDate - lastbartp;					// the event date relative to the last bar
+			// next determine the current beat value (used for specific measure divisions eg. 3+2+2/8)
+			if (curmeter) beat = beamGetBeat (curmeter, evBarDate, beat);
+			bool evOnbeat = beamOnBeat(evBarDate, meter, meterDivision);		// check if the note is on a beat
+
+#if TRACKBEAM
+cerr << "ARMusicalVoice::doAutoBeaming "; ev->print(cerr);
+#endif
+			if (posev1 == NULL)										// check for possible Start-Position ...
 			{
-				if (beamStartEv(ev, vst, beat, lastbartp)) {
-					tpev1 = ev->getRelativeTimePosition();
+				if (beamStartEv(ev, vst, beat, lastbartp)) { // && !endOnbeat) {		// we have one
+					beamStart = evDate;								// store the start date and check for on beat position
+					beamStartOnbeat = evOnbeat;
+#if TRACKBEAM
+cerr << "ARMusicalVoice::doAutoBeaming beamStartEv 1 " << beamStart << endl;
+#endif
 					posev1 = pos;
 					LRA_plus = vst.ptagpos;
 				}
 			}
-			else if (posevn == NULL) {		// check for possible End-Position ...
-				TYPE_DURATION d = ev->getDuration();
-				TYPE_TIMEPOSITION tmptp (ev->getRelativeTimePosition() + d);
-				TYPE_TIMEPOSITION beamdur = tmptp - tpev1;
-				TYPE_TIMEPOSITION beamend = tmptp - lastbartp;
-				// we have a matching pos a beat end
-				bool match = beamdur == beat;
-				if (curmeter) {
-					TYPE_TIMEPOSITION tmp (curmeter->getNumerator(), curmeter->getDenominator());
-					while (!match && (tmp.getNumerator() > 0)) {
-						match = (beamend == tmp);
-						tmp -= beat;
-					}
-				}
-				if (match)  {					// we have a match
+			else if (posevn == NULL) {								// check for possible End-Position ...
+				TYPE_TIMEPOSITION beamdur = evEnd - beamStart;		// get the beam duration
+				TYPE_TIMEPOSITION beamend = evEnd - lastbartp;		// get the beam end position, relative to the last bar
+
+				// we have a match when the end correspond to the meter, or when the beam duration is a beat, or when the end is on a beat
+				if ((beamend == meter) || (beamdur == beat) || (beamOnBeat(beamend, meter, meterDivision)))  {
+#if TRACKBEAM
+cerr << "ARMusicalVoice::doAutoBeaming beam end 1 beamend / meter " << beamend << " " << meter << endl;
+#endif
 					posevn = pos;
 					FLA = vst.ptagpos;
 				}
-				else if ((tmptp-tpev1)>beat)
-				{
-					// then no autobeam is possible, but perhaps the
-					// current event is a candiate for a beginning?
-					if (beamStartEv(ev, vst, beat, lastbartp)) {
-						tpev1 = ev->getRelativeTimePosition();
-						posev1 = pos;
-						LRA_plus = vst.ptagpos;
+				else {		// otherwise we look at the next event
+					ARMusicalEvent * nextev = beamNextEv(pos, vst);
+					// in case we have one and beam duration is still smaller than the current beat
+					if ((beamdur < beat) && nextev) {
+						TYPE_TIMEPOSITION nextDate	= nextev->getRelativeTimePosition();
+						TYPE_TIMEPOSITION nextEnd (nextDate + nextev->getDuration());
+						bool nextOnbeat = beamOnBeat(nextDate - lastbartp, meter, meterDivision);
+
+						// we have a match when the next end is greater than the beat, or when the next is on a beat
+						// a rest triggers the closing of the current beam
+						if (((nextEnd - beamStart) > beat) || nextOnbeat || nextev->isARRest()) {
+							posevn = pos;
+							FLA = vst.ptagpos;
+#if TRACKBEAM
+cerr << "ARMusicalVoice::doAutoBeaming beam end 2" << endl;
+#endif
+						}
+					}
+					// when no autobeam is possible, try to see if current event is a candiate for a new beginning?
+					if (!posevn && (evOnbeat || ((beamdur > beat) && beamStartOnbeat)))
+					{
+						if (beamStartEv(ev, vst, beat, lastbartp)) {
+#if TRACKBEAM
+cerr << "ARMusicalVoice::doAutoBeaming beamStartEv 2 beat:" << beat << endl;
+#endif
+							beamStart = ev->getRelativeTimePosition();
+							beamStartOnbeat = curmeter ? beamOnBeat(evBarDate, meter, meterDivision) : false;
+							posev1 = pos;
+							LRA_plus = vst.ptagpos;
+						}
+						else if (beamdur > beat) posev1 = 0;
 					}
 				}
 			}
@@ -1682,55 +1841,16 @@ void ARMusicalVoice::doAutoBeaming()
 				LRA_plus = FLA = mPosTagList->GetHeadPosition();
 				vst.ptagpos = NULL;
 			}
-			else
-			{
-				// this assertion does not work,
-				// if there is no mPosTagList, or if the mPosTagList is just created in this function ...
-				if (vst.ptagpos != NULL)
-				{
-					assert(FLA != NULL);
-					assert(LRA_plus != NULL);
-				}
-			}
-
-			// add the beam only, if the two positions are truly different, that
-			// is, posev1 != posevn.
-			// otherwise, we get autobeams over one single event, which does not
-			// make much sense.
-			if (posev1 != posevn) {
-				// we could determine number of beams here ...
-				// (go through voice from start to end keep track of displayduration ....)
-				ARAutoBeam *arabeam = new ARAutoBeam();
-				// this is obsolete, autobeam sets isauto anyways
-				// arabeam->setIsAuto(true);
-				arabeam->setStartPosition(posev1);
-				arabeam->setRelativeTimePosition(tpev1);
-				ARAutoBeamEnd * arabmend = new ARAutoBeamEnd();
-				arabmend->setPosition(posevn);
-				arabeam->setCorrespondence(arabmend);
-				arabmend->setCorrespondence(arabeam);
-
-				// Now add the generated position tags
-				// to the mPosTagList at the correct positions ...
-				// both need to be added before the  LRA_plus and FRA respectivly
-
-				// if LRA_plus is NULL, then there has been no mPosTagList before ...
-				if (LRA_plus == NULL)
-					mPosTagList->AddTail(arabeam);
-				else
-					mPosTagList->AddElementAt(LRA_plus,arabeam);
-
-				// if FLA is NULL, there has been no mPosTagList before.
-				if (FLA == NULL)
-					mPosTagList->AddTail(arabmend);
-				else
-					mPosTagList->AddElementAt(FLA,arabmend);
-			}
-			// make room for more autobeams ...
+			beamCreate (vst, posev1, posevn, FLA, LRA_plus, beamStart);
 			posev1 = posevn = NULL;
 		}
 		GetNext(pos,vst);
 	}
+#if TRACKBEAM
+	GMNCodePrintVisitor visitor(cerr);
+	goThrough(&visitor);
+	cerr << std::endl;
+#endif
 }
 
 // ============================================================================

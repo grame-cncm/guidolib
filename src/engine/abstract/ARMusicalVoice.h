@@ -233,10 +233,15 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		ARClef*		newAutoClef(ARClef* oldclef, const TYPE_TIMEPOSITION& tp);
 		ARKey *		newAutoKey(ARKey * oldkey, const TYPE_TIMEPOSITION& tp);
 	
+		// the methods below are all used by the doAutoBeaming method
 		TYPE_DURATION	beamMeterChange(const ARMeter * curmeter, const TYPE_DURATION beat) const;
+		TYPE_DURATION	beamGetBeat(const ARMeter * curmeter, const TYPE_TIMEPOSITION& pos, TYPE_DURATION curbeat) const;
 		int				beamTrackBeam(const ARMusicalVoiceState& vs) const;
 		bool			beamStartPos(const TYPE_TIMEPOSITION pos, const TYPE_DURATION beat) const;
 		bool			beamStartEv(const ARMusicalEvent* ev, const ARMusicalVoiceState& vs, const TYPE_DURATION beat, const TYPE_TIMEPOSITION lastbartp) const;
+		void			beamCreate(ARMusicalVoiceState& vst, const GuidoPos posev1, const GuidoPos posevn, const GuidoPos FLA, const GuidoPos LRA_plus, const TYPE_TIMEPOSITION tpev1);
+		bool			beamOnBeat(const TYPE_TIMEPOSITION t, const TYPE_DURATION meter, const std::vector<int>& numvec) const;
+		ARMusicalEvent* beamNextEv (const GuidoPos pos, const ARMusicalVoiceState) const;
 
         std::vector<ARRepeatBegin *> *repeatBeginList;
 };
