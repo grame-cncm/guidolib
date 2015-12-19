@@ -18,9 +18,9 @@ message (STATUS "target = ${target}")
 
 #######################################
 # versions management
-set (VERSION 1.23)
-set (STRVERS "v.1.23")
-set (SSTRVERS "1.23")
+set (VERSION 1.24)
+set (STRVERS "v.1.24")
+set (SSTRVERS "1.24")
 
 FIND_PACKAGE(JNI REQUIRED)
 #FIND_PACKAGE(Java REQUIRED)
