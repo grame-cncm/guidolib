@@ -39,14 +39,14 @@ endif
 ifeq ($(TARGET), windows)
  MSVC ?= C:\Program Files (x86)\Microsoft Visual Studio 12.0
  ifneq ($(wildcard "$(MSVC)"), "") 
-  WIN32VS ?= "Visual Studio 12 2013"
-  WIN64VS ?= "$(WIN32VS) Win64"
+  WIN32VS ?= Visual Studio 12 2013
+  WIN64VS ?= $(WIN32VS) Win64
   endif
  else
  MSVC := C:\Program Files (x86)\Microsoft Visual Studio 10.0
  ifneq ($(wildcard "$(MSVC)"), "") 
-  WIN32VS ?= "Visual Studio 10"
-  WIN64VS ?= "$(WIN32VS) Win64"
+  WIN32VS ?= Visual Studio 10
+  WIN64VS ?= $(WIN32VS) Win64
  endif
 endif
 
@@ -167,11 +167,11 @@ jniGUIDOEngine32 : win32/guidojni.sln
 
 win32/guidojni.sln : CMakeLists.txt
 	[ -d win32 ] || mkdir win32
-	cd win32 && cmake .. -G $(WIN32VS)
+	cd win32 && cmake .. -G "$(WIN32VS)"
 
 win64/guidojni.sln : CMakeLists.txt
 	[ -d win64 ] || mkdir win64
-	cd win64 && cmake .. -G $(WIN64VS)
+	cd win64 && cmake .. -G "$(WIN64VS)"
 
 jniGUIDOEngine64 : win64/guidojni.sln
 	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild win64/guidojni.sln /maxcpucount:4 /p:Configuration=Release"

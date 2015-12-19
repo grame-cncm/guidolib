@@ -21,9 +21,21 @@ endif
 endif
 endif
 
-WIN32VS := $(shell ../../../build/vs-cmake)
-WIN64VS := "$(WIN32VS) Win64"
-MSVC    := $(shell ../../../build/vs-path)
+
+# try to detect Visual Studio version used
+ifeq ($(TARGET), windows)
+ MSVC ?= C:\Program Files (x86)\Microsoft Visual Studio 12.0
+ ifneq ($(wildcard "$(MSVC)"), "") 
+  WIN32VS ?= Visual Studio 12 2013
+  WIN64VS ?= $(WIN32VS) Win64
+  endif
+ else
+ MSVC := C:\Program Files (x86)\Microsoft Visual Studio 10.0
+ ifneq ($(wildcard "$(MSVC)"), "") 
+  WIN32VS ?= Visual Studio 10
+  WIN64VS ?= $(WIN32VS) Win64
+ endif
+endif
 
 all :
 	make $(TARGET)
@@ -59,7 +71,7 @@ win32/guidotool.sln : CMakeLists.txt
 
 win64/guidotool.sln : CMakeLists.txt
 	[ -d win64 ] || mkdir win64
-	cd win64 && cmake .. -G $(WIN64VS)
+	cd win64 && cmake .. -G "$(WIN64VS)"
 
 win64tools : win64/guidotool.sln
 	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild win64/guidotools.sln /maxcpucount:4 /p:Configuration=Release"

@@ -19,9 +19,10 @@ WIN32_NAME	= GuidoQtApplsWin32-$(VERSION)
 
 MACTOOLS  := $(patsubst %, $(ROOT)/src/tools/build/macos/release/%, $(TOOLS))
 
-QT5 := /c/Qt/Qt5.4.0
-WIN32QTPATH := $(QT5)/5.4/msvc2010_opengl/
-WIN32QT		:= QT5PRINTSUPPORT.DLL QT5WIDGETS.DLL QT5GUI.DLL QT5CORE.DLL QT5XML.DLL ICUIN53.DLL ICUUC53.DLL ICUDT53.DLL
+QT5 := /c/Qt/Qt5.5.0
+WIN32QTPATH := $(QT5)/5.5/msvc2013_64/
+#WIN32QT		:= QT5PRINTSUPPORT.DLL QT5WIDGETS.DLL QT5GUI.DLL QT5CORE.DLL QT5XML.DLL ICUIN53.DLL ICUUC53.DLL ICUDT53.DLL
+WIN32QT		:= QT5PRINTSUPPORT.DLL QT5WIDGETS.DLL QT5GUI.DLL QT5CORE.DLL QT5XML.DLL
 WIN32QT		:= $(patsubst %, $(WIN32QTPATH)/bin/%, $(WIN32QT))
 WIN32APPS	:= $(patsubst %, ../apps/%.exe, $(APPLS))
 WIN32TOOLS  := $(patsubst %, $(ROOT)/src/tools/build/win32/release/%.exe, $(TOOLS))
@@ -79,9 +80,10 @@ win32:
 	cp $(WIN32APPS) $(WIN32_NAME)
 	cp $(WIN32TOOLS) $(WIN32_NAME)
 	cp -f $(ROOT)/build/GUIDOEngine.dll $(WIN32_NAME)
+	cp -f $(ROOT)/build/GUIDOEngine64.dll $(WIN32_NAME)
 	cp -f $(ROOT)/src/guido2.ttf $(WIN32_NAME)
 	cp $(WIN32QT) $(WIN32_NAME)
-	cp $(QT5)/vcredist/vcredist_x86.exe $(WIN32_NAME)
+	cp $(QT5)/vcredist/vcredist_msvc2013_x86.exe $(WIN32_NAME)
 	cp qt.conf $(WIN32_NAME)
 	cp 	$(WIN32QTPLUGS) $(WIN32_NAME)/plugins/imageformats
 	cp 	$(WIN32QTPLATFORMS) $(WIN32_NAME)/plugins/platforms
