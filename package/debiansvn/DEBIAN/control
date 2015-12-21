@@ -1,9 +1,9 @@
 Package: guidoengine-devel
-Version: 1.5.6
+Version: 1.6.0
 Section: devel
 Priority: optional
 Architecture: amd64
-Depends: libcairo2 (>=  1.13.0~20140204-0ubuntu1), libstdc++6 (>=  4.8.2-19ubuntu1), libc6 (>=  2.19-0ubuntu6), libgcc1 (>=  1:4.9-20140406-0ubuntu1), libc6 (>=  2.19-0ubuntu6)
+Depends: libcairo2 (>=  1.13.0~20140204-0ubuntu1.1), libstdc++6 (>=  4.8.4-2ubuntu1~14.04), libc6 (>=  2.19-0ubuntu6.6), libgcc1 (>=  1:4.9.1-0ubuntu1), libc6 (>=  2.19-0ubuntu6.6)
 Installed-Size: 6723
 Maintainer: D. Fober <fober@grame.fr>
 Description: The Guido Engine Library. Provides music score layout based on the Guido music notation format.

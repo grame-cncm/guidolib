@@ -20,10 +20,10 @@ deb:
 	cp -r debiansvn/DEBIAN debian
 	@echo setup include files...
 	@[ -d $(incl) ] || mkdir -p $(incl)	
-	cp ../src/engine/include/*.h ../linux/src/Cairo*.h $(incl)
+	cp ../src/engine/include/*.h ../platforms/linux/src/Cairo*.h $(incl)
 	@echo setup library...
 	@[ -d debian/usr/lib ] || mkdir debian/usr/lib
-	cp ../cmake/$(lib).$(version) debian/usr/lib
+	cp ../build/linux/$(lib).$(version) debian/usr/lib
 	chmod 644 debian/usr/lib/$(lib).$(version)
 	cd debian/usr/lib && ln -s $(lib).$(version) $(lib).$(sovers) && ln -s $(lib).$(sovers) $(lib)
 	@echo setup guido font...
