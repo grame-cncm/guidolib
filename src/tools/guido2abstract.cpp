@@ -199,7 +199,7 @@ int main(int argc, char **argv)
     GuidoInitDesc gd = { dev, 0, 0, 0 };
     GuidoInit(&gd);                    // Initialise the Guido Engine first
 
-	GuidoErrCode err;
+	GuidoErrCode err = guidoNoErr;
     ARHandler arh;
 
     /* For symbol-tag */
