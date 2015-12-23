@@ -107,10 +107,13 @@ $(IOS)/Release-iphoneos/libGUIDOEngine.a :
 ioscmake:
 $(IOS)/guidolib.xcodeproj : CMakeLists.txt
 	[ -d $(IOS) ] || mkdir $(IOS)
-	cd $(IOS) && cmake .. -G Xcode $(CMAKEOPT) -DIOS=yes
+	cd $(IOS) && cmake .. -G Xcode -DMIDIEXPORT=no -DC++11=yes -DIOS=yes
 
 macclean :
 	rm -rf $(IOS) $(MACX) $(OUT)
+
+iosclean :
+	rm -rf $(IOS) libGUIDOEngine.a
 
 #===============================================================
 # building the library on windows
