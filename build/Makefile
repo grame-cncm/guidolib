@@ -60,7 +60,7 @@ help :
 	@echo "   android      : build the GUIDOEngine static library for Android"	
 	@echo 
 	@echo "Platform targets to build the GUIDOEngine library are:"	
-	@echo "   macos "	
+	@echo "   macos [C++11=yes/no (default to no)]"	
 	@echo "   mac     (build also ios library)"	
 	@echo "   windows (build 32 and 64 bits library)"	
 	@echo "   linux"	
