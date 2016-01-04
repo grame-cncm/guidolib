@@ -240,7 +240,7 @@ void GRBeam::addAssociation(GRNotationElement * grnot)
 	}
 
 	ARMusicalObject* o = grn->getAbstractRepresentation();
-	bool allowBeam = isautobeam ? false : o && o->isARNote() && (o->getDuration() == DURATION_2);
+	bool allowBeam = isautobeam ? false : o && o->isARNote() && ((o->getDuration() == DURATION_2) || o->isEmptyNote());
 	if ((grn->getNumFaehnchen() == 0) && !allowBeam)
 	{
 		setError(grstf,1);

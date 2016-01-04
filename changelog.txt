@@ -1,6 +1,10 @@
 GUIDO Engine history
 
 ----------------------------------------------------------------
+  version 1.6.1
+- beamed half notes support arbitrary 'empty' durations
+
+----------------------------------------------------------------
   version 1.6.0
 - beanming half notes is allowed
 - auto beaming strategy improved

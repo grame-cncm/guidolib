@@ -132,6 +132,8 @@ class ARMusicalObject : public Visitable
     virtual ARMusicalObject  *isARJump()          { return NULL; }
     virtual ARMusicalObject  *isARPossibleBreak() { return NULL; }
     /*****************************************/
+	// introduced to detect empty notes
+	virtual bool			 isEmptyNote() const  { return false; }
 
     /* Visitor design pattern */
     virtual void accept(BaseVisitor *visitor) { visitor->visit(*this); }
