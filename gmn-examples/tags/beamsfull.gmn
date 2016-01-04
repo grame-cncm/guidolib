@@ -1,0 +1,11 @@
+[
+	\meter<"4/4"> 
+	\beamsFull 
+	f/8 _/16 a e/4 
+	\beamsAuto 
+	f/8 _/16 a e/4 
+	\b(f/8 _/16 a) e/4
+	f/8 g/16 a
+	\beamsOff 
+	f/8 g/16 a
+]
