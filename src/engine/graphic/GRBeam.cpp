@@ -207,7 +207,7 @@ void GRBeam::addAssociation(GRNotationElement * grnot)
 			mHasRestInMiddle = true;
 	}
 
-	if (mHasRestInMiddle && !isRest)
+	if (mHasRestInMiddle && !isRest  && !getARBeam()->isFullBeaming())
 	{
 		// then we have a real Error
 		setError(grstf,1);

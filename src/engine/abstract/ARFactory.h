@@ -137,7 +137,7 @@ class ARFactory
 
 protected:
 
-	bmstate				mBeamState;
+//	bmstate				mBeamState;
 	AROctava *			mCurrentOctava;
 	ARGrace *			mCurrentGrace;
 	ARCue *				mCurrentCue;

@@ -151,7 +151,7 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		virtual const	ARMusicalVoiceState * getVoiceState() const		{ return mCurVoiceState; }
 
 		// for automatic-beaming ...
-		enum bmstate { BEAMSAUTO, BEAMSOFF, BEAMSEXPLICIT };
+		enum bmstate { BEAMSAUTO, BEAMSOFF, BEAMSEXPLICIT, BEAMSFULL };
 
 		// this enumeration deals with the readmode.
 		// CHORDMODE means that when getting the next (or previous) event, we check whether we are
@@ -239,7 +239,7 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		int				beamTrackBeam(const ARMusicalVoiceState& vs) const;
 		bool			beamStartPos(const TYPE_TIMEPOSITION pos, const TYPE_DURATION beat) const;
 		bool			beamStartEv(const ARMusicalEvent* ev, const ARMusicalVoiceState& vs, const TYPE_DURATION beat, const TYPE_TIMEPOSITION lastbartp) const;
-		void			beamCreate(ARMusicalVoiceState& vst, const GuidoPos posev1, const GuidoPos posevn, const GuidoPos FLA, const GuidoPos LRA_plus, const TYPE_TIMEPOSITION tpev1);
+		void			beamCreate(ARMusicalVoiceState& vst, const GuidoPos posev1, const GuidoPos posevn, const GuidoPos FLA, const GuidoPos LRA_plus, const TYPE_TIMEPOSITION tpev1, bool full);
 		bool			beamOnBeat(const TYPE_TIMEPOSITION t, const TYPE_DURATION meter, const std::vector<int>& numvec) const;
 		ARMusicalEvent* beamNextEv (const GuidoPos pos, const ARMusicalVoiceState) const;
 

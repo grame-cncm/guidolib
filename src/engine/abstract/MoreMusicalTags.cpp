@@ -94,10 +94,11 @@ void ARRepeatEndRangeEnd::printParameters(std::ostream& os) const
 
 // ==================== ARAutoBeam ====================
 
-ARAutoBeam::ARAutoBeam()
+ARAutoBeam::ARAutoBeam(bool full)
 {
 	setAssociation(ARMusicalTag::RA);
 	isAuto = true;
+	fFullBeaming = full;
 }
 
 void ARAutoBeam::printName(std::ostream& os) const
@@ -264,7 +265,21 @@ void ARBeamState::printGMNName(std::ostream& os) const
 
 void ARBeamState::printParameters(std::ostream& os) const
 {
-    os << "state:" << (state == AUTO ? "Auto" : "off");
+	os << "state:";
+	switch (state) {
+		case OFF:
+			os << "off";
+			break;
+		case FULL:
+			os << "full";
+			break;
+		case AUTO:
+			os << "Auto";
+			break;
+		default:
+			os << "unknown";
+	}
+//	os << "state:" << (state == AUTO ? "Auto" : "off");
     os << ";";
 
     ARMusicalTag::printParameters(os);

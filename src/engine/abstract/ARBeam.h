@@ -33,6 +33,7 @@ public:
 
 	bool isGuidoSpecBeam() const;
 	bool isFeatheredBeam() const {return feathered;}
+	virtual bool isFullBeaming() const { return true;}
 
 	virtual bool MatchEndTag(const char * s);
 

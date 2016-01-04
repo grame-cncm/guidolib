@@ -22,8 +22,9 @@
 class ARAutoBeam : public ARBeam
   // , public ARPositionTag
 {
+	bool fFullBeaming;		// introduced to cover rests in auto beaming
 public:
-    ARAutoBeam();
+    ARAutoBeam(bool full=false);
 
     /* ARAutoBeam(POSITION psp, POSITION pep)
     {
@@ -33,6 +34,7 @@ public:
 
     virtual ~ARAutoBeam() {}
 
+	virtual bool isFullBeaming() const { return fFullBeaming;}
     virtual void printName(std::ostream& os) const;
 	virtual void printGMNName(std::ostream& os) const;
     virtual void printParameters(std::ostream& os) const;

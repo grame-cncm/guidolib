@@ -909,6 +909,8 @@ int ARMusicalVoice::beamLookAhead(GuidoPos & pos,TYPE_DURATION & unit)
 				}
 				else if (mystate->getBeamState() == ARBeamState::AUTO)
 					beamstate = BEAMSAUTO;
+				else if (mystate->getBeamState() == ARBeamState::FULL)
+					beamstate = BEAMSFULL;
 			}
 
 			evpos = pos;
@@ -987,6 +989,8 @@ int ARMusicalVoice::beamLookAhead(GuidoPos & pos,TYPE_DURATION & unit)
 				}
 				else if (mystate->getBeamState() == ARBeamState::AUTO)
 					beamstate = BEAMSAUTO;
+				else if (mystate->getBeamState() == ARBeamState::FULL)
+					beamstate = BEAMSFULL;
 			}
 
 			e = GetAt(pos);
@@ -1535,14 +1539,14 @@ bool ARMusicalVoice::beamStartEv(const ARMusicalEvent* ev, const ARMusicalVoiceS
 
 //____________________________________________________________________________________
 // create the actual beam
-void ARMusicalVoice::beamCreate(ARMusicalVoiceState& vst, const GuidoPos posev1, const GuidoPos posevn, const GuidoPos FLA, const GuidoPos LRA_plus, const TYPE_TIMEPOSITION tpev1)
+void ARMusicalVoice::beamCreate(ARMusicalVoiceState& vst, const GuidoPos posev1, const GuidoPos posevn, const GuidoPos FLA, const GuidoPos LRA_plus, const TYPE_TIMEPOSITION tpev1, bool full)
 {
 	// add the beam only, if the two positions are truly different, that is, posev1 != posevn.
 	// otherwise, we get autobeams over one single event, which does not make much sense.
 	if (posev1 != posevn) {
 		// we could determine number of beams here ...
 		// (go through voice from start to end keep track of displayduration ....)
-		ARAutoBeam *arabeam = new ARAutoBeam();
+		ARAutoBeam *arabeam = new ARAutoBeam(full);
 		// this is obsolete, autobeam sets isauto anyways
 		// arabeam->setIsAuto(true);
 		arabeam->setStartPosition(posev1);
@@ -1657,7 +1661,7 @@ TYPE_DURATION ARMusicalVoice::beamGetBeat(const ARMeter * curmeter, const TYPE_T
 	position within the mPosTagList is remembered.
 	for the ending event, the FRA (First RightAssociated) is found out.
 
-	an auotbeam is introduced, iff
+	an autobeam is introduced, iff
 	   1. no explicit beam is active (beamcount == 0)
 	   2. beamstate is auto
 	   3. duration/displayDuration of
@@ -1714,6 +1718,8 @@ void ARMusicalVoice::doAutoBeaming()
 					bmauto = 0;
 				else if (curbeamstate->getBeamState() == ARBeamState::AUTO)
 					bmauto = 1;
+				else if (curbeamstate->getBeamState() == ARBeamState::FULL)
+					bmauto = 2;
 				else				// we shouldn't get there: default is beam auto
 					bmauto = 1;
 			}
@@ -1841,7 +1847,7 @@ cerr << "ARMusicalVoice::doAutoBeaming beamStartEv 2 beat:" << beat << endl;
 				LRA_plus = FLA = mPosTagList->GetHeadPosition();
 				vst.ptagpos = NULL;
 			}
-			beamCreate (vst, posev1, posevn, FLA, LRA_plus, beamStart);
+			beamCreate (vst, posev1, posevn, FLA, LRA_plus, beamStart, bmauto==2);
 			posev1 = posevn = NULL;
 		}
 		GetNext(pos,vst);

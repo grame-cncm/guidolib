@@ -25,7 +25,7 @@ class ARBeamState : public ARMusicalTag
 	// ,public ARMusicalObject
 {
 public: 
-	enum beamstate { AUTO, OFF };
+	enum beamstate { AUTO, OFF, FULL };
 
 				 ARBeamState(beamstate p_state) { state = p_state; }
 	virtual		~ARBeamState() {}

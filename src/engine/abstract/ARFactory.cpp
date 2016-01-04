@@ -140,7 +140,7 @@ ARFactory::ARFactory()
 	mCurrentNumerator(DEFAULT_NUMERATOR),
 	mCurrentDenominator(DEFAULT_DENOMINATOR),
 	mCurrentIntensity(DEFAULT_INTENSITY),
-	mBeamState(BEAMSAUTO),
+//	mBeamState(BEAMSAUTO),
 	mCurrentOctava(NULL),
 	mCurrentGrace(NULL),
 	mCurrentCue(NULL),
@@ -741,7 +741,14 @@ void ARFactory::createTag( const char * name, int no )
 			{
 				ARBeamState * tmp = new ARBeamState(ARBeamState::AUTO);
 				mTags.AddHead(tmp);
-				mBeamState = BEAMSAUTO;
+//				mBeamState = BEAMSAUTO;
+				mCurrentVoice->AddTail(tmp);
+				
+			}
+			else if (!strcmp(name,"beamsFull"))
+			{
+				ARBeamState * tmp = new ARBeamState(ARBeamState::FULL);
+				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 				
 			}
@@ -749,7 +756,7 @@ void ARFactory::createTag( const char * name, int no )
 			{
 				ARBeamState * tmp = new ARBeamState(ARBeamState::OFF);
 				mTags.AddHead(tmp);
-				mBeamState = BEAMSOFF;
+//				mBeamState = BEAMSOFF;
 				mCurrentVoice->AddTail(tmp);				
 			}
 			else if(!strcmp(name,"bar"))
