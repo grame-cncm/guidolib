@@ -1,7 +1,7 @@
 
 .PHONY : doc
 
-VERSION := 1.60
+VERSION := 1.61
 DOCVERS := 1.54
 DEST    := .
 
