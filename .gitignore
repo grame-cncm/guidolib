@@ -4,9 +4,10 @@ CMakeCache.txt
 CMakeLists.txt.user
 cmake_*
 *.xcodeproj
-**/build/linux
+*/build/linux
 build/GUIDOEngine.*
 build/libGUIDOEngine.a
+build/MacOS
 doc/html
 doc/refcard
 Debug
@@ -51,3 +52,4 @@ validate/*.exe
 lang/javascript/doc/api
 lang/java/svgSalamander.jar
 environments/Qt/package
+environments/package
