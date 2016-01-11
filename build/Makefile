@@ -169,6 +169,7 @@ linux : $(LINUX)/Makefile libGUIDOEngine.so
 
 libGUIDOEngine.so :  $(LINUX)/Makefile  $(LINUX)/libGUIDOEngine.so
 	rm -rf GUIDOEngine*.so*
+	make -C $(LINUX)
 	cp -R $(LINUX)/libGUIDOEngine*.so* .
 
 $(LINUX)/libGUIDOEngine.so : 
