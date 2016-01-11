@@ -7,23 +7,15 @@ Compiling the Guidolib project
 ----------------------------------------------------------------------
 The GUIDOEngine relies on CMake, a cross-platform, open-source build 
 system ( see http://www.cmake.org/).
-The cmake folder contains the project description and is used to generate 
+The build folder contains the project description and is used to generate 
 native projects. 
 	
-Note about the project organization:
------------------------------------
-On MacOS and Windows, in order to support different architectures (win32, win64 
-on windows, MacOS, iOS on mac), the library is expected to be compiled in a 'build'
-folder located at the root of the project that should contain 4 sub-folders: 
-MacOS, iOS, win32 and win64.
+You should run 'make' from the 'build' folder.
+Your target platform is inferred from the Makefile.
 
-To compile for a given platform:
-	change to build/your_target_arch directory
-	type:  cmake ../ -G "your target generator" OPTIONS
-	run your project/makefile and compile
-
-OPTIONS indicates optional components and is between:
-	-DMIDIEXPORT='yes | no' to support MIDI export
+OPTIONS
+To embed Midi file export in the library, you should call 'make' with MIDIEXPORT='yes | no'
+as argument.
 	
 Note about MIDI export:
 --------------------------
@@ -81,8 +73,7 @@ Note for Linux platforms:
 	You need to have libcairo2-dev installed to compile the GUIDOEngine.
 	The procedure to compile is close to the usual 'configure' 'make' 'make install'
 	steps. Actually, you can simply do the following:
-	> cd /your_path_to_the_project/cmake
-	> cmake -G "Unix Makefiles"
+	> cd /your_path_to_the_project/build
 	> make
 	> sudo make install
 
