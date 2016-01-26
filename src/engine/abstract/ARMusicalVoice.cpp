@@ -1800,11 +1800,11 @@ cerr << "ARMusicalVoice::doAutoBeaming beam end 1 beamend / meter " << beamend <
 
 						// we have a match when the next end is greater than the beat, or when the next is on a beat
 						// a rest triggers the closing of the current beam
-						if (((nextEnd - beamStart) > beat) || nextOnbeat || nextev->isARRest()) {
+						if ( !evOnbeat &&((nextEnd - beamStart) > beat) || nextOnbeat || nextev->isARRest()) {
 							posevn = pos;
 							FLA = vst.ptagpos;
 #if TRACKBEAM
-cerr << "ARMusicalVoice::doAutoBeaming beam end 2" << endl;
+cerr << "ARMusicalVoice::doAutoBeaming beam end 2 " <<  endl;
 #endif
 						}
 					}

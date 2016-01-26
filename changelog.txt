@@ -1,6 +1,10 @@
 GUIDO Engine history
 
 ----------------------------------------------------------------
+  version 1.6.2
+- incorrect beaming corrected: a beam could sometimes cross a beat
+
+----------------------------------------------------------------
   version 1.6.1
 - beamed half notes support arbitrary 'empty' durations
 - new \beamsFull tag introduced to allow rests in auto beaming
