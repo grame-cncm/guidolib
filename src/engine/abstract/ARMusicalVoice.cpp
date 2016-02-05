@@ -1473,17 +1473,18 @@ int	ARMusicalVoice::beamTrackBeam(const ARMusicalVoiceState& vst) const
 
 //____________________________________________________________________________________
 // auto beaming: compute the new beat unit in case of meter change
-TYPE_DURATION ARMusicalVoice::beamMeterChange(const ARMeter * curmeter, const TYPE_DURATION curbeat) const
+TYPE_DURATION ARMusicalVoice::beamBeatUnit(const TYPE_DURATION curmeter) const //, const TYPE_DURATION curbeat) const
+//TYPE_DURATION ARMusicalVoice::beamMeterChange(const ARMeter * curmeter, const TYPE_DURATION curbeat) const
 {
-	TYPE_DURATION beat(curbeat);
-	if (curmeter->getDenominator() == 2 || curmeter->getDenominator() == 4)
+	TYPE_DURATION beat(1, curmeter.getDenominator());  // default value for the beat
+	if (curmeter.getDenominator() == 2 || curmeter.getDenominator() == 4)
 	{
 		beat.setNumerator(1);
 		beat.setDenominator(4);
 	}
-	else if (curmeter->getDenominator() == 8)
+	else if (curmeter.getDenominator() == 8)
 	{
-		if (! (curmeter->getNumerator() % 3) ) {
+		if (! (curmeter.getNumerator() % 3) ) {
 			beat.setNumerator(3);
 			beat.setDenominator(8);
 		}
@@ -1492,13 +1493,13 @@ TYPE_DURATION ARMusicalVoice::beamMeterChange(const ARMeter * curmeter, const TY
 			beat.setDenominator(8);
 		}
 	}
-	else
-	{
-		beat.setNumerator(1);
-		beat.setDenominator (curmeter->getDenominator());
-	}
+//	else
+//	{
+//		beat.setNumerator(1);
+//		beat.setDenominator (curmeter.getDenominator());
+//	}
 
-	TYPE_DURATION tmp(curmeter->getNumerator(),curmeter->getDenominator());
+	TYPE_DURATION tmp(curmeter.getNumerator(),curmeter.getDenominator());
 	if (beat > tmp)
 		beat = tmp;
 	return beat;
@@ -1572,6 +1573,35 @@ void ARMusicalVoice::beamCreate(ARMusicalVoiceState& vst, const GuidoPos posev1,
 		else
 			mPosTagList->AddElementAt(FLA,arabmend);
 	}
+}
+
+//____________________________________________________________________________________
+// check if a beam cross a beat
+// the time position must be relative to the last bar
+bool ARMusicalVoice::beamCrossBeat(const TYPE_TIMEPOSITION beamstart, const TYPE_DURATION beamdur, const TYPE_DURATION meter, const std::vector<int>& numvec) const
+{
+	TYPE_TIMEPOSITION beamend = beamstart + beamdur;		// the beam end date
+	TYPE_TIMEPOSITION currentBeatPos (0, 4);				// the current beat position
+	bool cross = false;
+	if (numvec.size() == 1) {								// simple meter spec: get the beat duration
+		TYPE_DURATION beatdur = beamBeatUnit(TYPE_DURATION(numvec[0], meter.getDenominator()));
+		while (currentBeatPos <= beamstart) {				// and find the beat following the beam start date
+			currentBeatPos += beatdur;
+		}
+		cross = beamend > currentBeatPos;					// cross is true when the beam end date is greater than the next beat
+	}
+	else {													// compound meter spec (e.g. 3+2+2/9)
+		for (std::vector<int>::const_iterator i = numvec.begin(); i != numvec.end(); i++) {
+			// get the beat duration for each part of meter spec
+			TYPE_DURATION beatdur = beamBeatUnit(TYPE_DURATION(*i, meter.getDenominator()));
+			if (currentBeatPos > beamstart) {				// and find the beat following the beam start date
+				break;
+			}
+			currentBeatPos += beatdur;
+		}
+		cross = beamend > currentBeatPos;					// cross is true when the beam end date is greater than the next beat
+	}
+	return cross;
 }
 
 //____________________________________________________________________________________
@@ -1708,6 +1738,7 @@ void ARMusicalVoice::doAutoBeaming()
 
 	while (pos)
 	{
+		bool tied = false;
 		// track the beamstate ....
 		if (curbeamstate != vst.curbeamstate)
 		{
@@ -1728,13 +1759,28 @@ void ARMusicalVoice::doAutoBeaming()
 			if (oldbmauto != bmauto)
 				posev1 = posevn = NULL;
 		}
+		const PositionTagList * postags = vst.getCurPositionTags();
+		if (postags) {
+			GuidoPos ptags = postags->GetHeadPosition();
+			while (ptags) {
+				ARPositionTag * ptag = postags->GetNext(ptags);
+				if (dynamic_cast<ARTie*>(ptag)) {
+					tied = true;
+#if TRACKBEAM
+cerr << "==> ARMusicalVoice::doAutoBeaming TIE is true" << endl;
+#endif
+				}
+			}
+		}
+
 
 		// track the meter change to compute the new beat
 		if (curmeter != vst.curmeter) {
 			// is not needed because a meter change ALWAYS creates a break
 			// of the Auto-Beaming. TYPE_DURATION oldbeat = beat;
 			curmeter = vst.curmeter;
-			beat = beamMeterChange (curmeter, beat);
+			beat = beamBeatUnit (TYPE_DURATION(curmeter->getNumerator(), curmeter->getDenominator()));
+//			beat = beamMeterChange (curmeter, beat);
 			meter = TYPE_DURATION(curmeter->getNumerator(), curmeter->getDenominator());
 			meterDivision = curmeter->getNumeratorsVector();
 			// a measure change is always the end of  autobeam (even if equal meter-sig!)
@@ -1766,9 +1812,11 @@ void ARMusicalVoice::doAutoBeaming()
 #if TRACKBEAM
 cerr << "ARMusicalVoice::doAutoBeaming "; ev->print(cerr);
 #endif
-			if (posev1 == NULL)										// check for possible Start-Position ...
+			// check for possible Start-Position ...
+			// do not start a beam for tied notes when they don't start on a beat
+			if (posev1 == NULL && (!tied || evOnbeat))
 			{
-				if (beamStartEv(ev, vst, beat, lastbartp)) { // && !endOnbeat) {		// we have one
+				if (beamStartEv(ev, vst, beat, lastbartp)) {
 					beamStart = evDate;								// store the start date and check for on beat position
 					beamStartOnbeat = evOnbeat;
 #if TRACKBEAM
@@ -1781,9 +1829,11 @@ cerr << "ARMusicalVoice::doAutoBeaming beamStartEv 1 " << beamStart << endl;
 			else if (posevn == NULL) {								// check for possible End-Position ...
 				TYPE_TIMEPOSITION beamdur = evEnd - beamStart;		// get the beam duration
 				TYPE_TIMEPOSITION beamend = evEnd - lastbartp;		// get the beam end position, relative to the last bar
+				bool crossBeat = beamCrossBeat(beamStart - lastbartp, beamdur, meter, meterDivision);
 
 				// we have a match when the end correspond to the meter, or when the beam duration is a beat, or when the end is on a beat
-				if ((beamend == meter) || (beamdur == beat) || (beamOnBeat(beamend, meter, meterDivision)))  {
+				// we don't have a matching position when the beam cross a beat
+				if (!crossBeat && ((beamend == meter) || (beamdur == beat) || (beamOnBeat(beamend, meter, meterDivision))))  {
 #if TRACKBEAM
 cerr << "ARMusicalVoice::doAutoBeaming beam end 1 beamend / meter " << beamend << " " << meter << endl;
 #endif
@@ -1809,7 +1859,9 @@ cerr << "ARMusicalVoice::doAutoBeaming beam end 2 " <<  endl;
 						}
 					}
 					// when no autobeam is possible, try to see if current event is a candiate for a new beginning?
-					if (!posevn && (evOnbeat || ((beamdur > beat) && beamStartOnbeat)))
+					// start a new beam when the event is on a beat or when the beat duration is greater than the beat
+					// do not start a beam for tied notes when they don't start on a beat
+					if (!posevn && (evOnbeat || ((beamdur > beat) && beamStartOnbeat)) && (!tied || evOnbeat))
 					{
 						if (beamStartEv(ev, vst, beat, lastbartp)) {
 #if TRACKBEAM

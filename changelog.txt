@@ -2,7 +2,9 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.2
-- incorrect beaming corrected: a beam could sometimes cross a beat
+- incorrect beaming corrected: 
+  a beam could sometimes cross a beat,
+  incorrect beam start corrected for tied notes starting off beat
 
 ----------------------------------------------------------------
   version 1.6.1
