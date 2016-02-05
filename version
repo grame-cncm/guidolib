@@ -17,7 +17,7 @@ VERSION=$1
 
 echo "moving version number to $VERSION"
 
-CMAKE=$ROOT/cmake/CMakeLists.txt
+CMAKE=$ROOT/build/CMakeLists.txt
 echo " updating $CMAKE"
 open -t $CMAKE
 
