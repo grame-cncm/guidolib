@@ -117,7 +117,6 @@ help:
 validate: $(validsvg)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
 	@echo Validating version $(version) with $(VERSION) $(tmp)
-	make validmap
 	make validtimemap
 	make validproll
 
