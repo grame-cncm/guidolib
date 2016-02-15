@@ -23,7 +23,7 @@ endif
 
 
 OUT  := GUIDOEngine.framework GUIDOEngine.tgz libGUIDOEngine.a
-MACX := MacOS
+MAC  ?= MacOS
 IOS  := iOS
 
 # try to detect Visual Studio version used
@@ -70,28 +70,32 @@ help :
 #===============================================================
 # building the library on Mac OS X
 #===============================================================
-.PHONY : macos $(IOS) $(MACX)/Release/GUIDOEngine.framework $(IOS)/Release-iphoneos/libGUIDOEngine.a
+.PHONY : macos mac11 $(IOS) $(MAC)/Release/GUIDOEngine.framework $(IOS)/Release-iphoneos/libGUIDOEngine.a
 
-mac :
+mac : GUIDOEngine.tgz
 	make macos
 	make $(IOS)	
 
-macos : $(MACX)/guidolib.xcodeproj GUIDOEngine.framework GUIDOEngine.tgz
+macos : $(MAC)/guidolib.xcodeproj $(MAC)/Release/GUIDOEngine.framework
 
-GUIDOEngine.framework :  $(MACX)/guidolib.xcodeproj  $(MACX)/Release/GUIDOEngine.framework
+GUIDOEngine.framework :  macos/Release/GUIDOEngine.framework
 	rm -rf GUIDOEngine.framework
-	cp -R $(MACX)/Release/GUIDOEngine.framework .
+	cp -R $(MAC)/Release/GUIDOEngine.framework .
 
-$(MACX)/Release/GUIDOEngine.framework :
-	xcodebuild -jobs 8 -project $(MACX)/guidolib.xcodeproj -target ALL_BUILD -configuration Release
+$(MAC)/Release/GUIDOEngine.framework :
+	xcodebuild -jobs 8 -project $(MAC)/guidolib.xcodeproj -target ALL_BUILD -configuration Release
 
-maccmake:
-$(MACX)/guidolib.xcodeproj : CMakeLists.txt
-	[ -d $(MACX) ] || mkdir $(MACX)
-	cd $(MACX) && cmake .. -G Xcode $(CMAKEOPT)
+$(MAC)/guidolib.xcodeproj : CMakeLists.txt
+	[ -d $(MAC) ] || mkdir $(MAC)
+	cd $(MAC) && cmake .. -G Xcode $(CMAKEOPT)
 
 GUIDOEngine.tgz : GUIDOEngine.framework
 	tar czf GUIDOEngine.tgz GUIDOEngine.framework
+
+mac11:
+	make macos MAC=mac11 C++11=yes
+	cp -R $(MAC)/Release/GUIDOEngine.framework mac11
+	cd mac11 && tar czf GUIDOEngine.tgz GUIDOEngine.framework
 
 #===============================================================
 # building the library for iOS
@@ -110,7 +114,7 @@ $(IOS)/guidolib.xcodeproj : CMakeLists.txt
 	cd $(IOS) && cmake .. -G Xcode -DMIDIEXPORT=no -DC++11=yes -DIOS=yes
 
 macclean :
-	rm -rf $(IOS) $(MACX) $(OUT)
+	rm -rf $(IOS) $(MAC) $(OUT)
 
 iosclean :
 	rm -rf $(IOS) libGUIDOEngine.a
