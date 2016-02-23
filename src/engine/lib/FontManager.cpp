@@ -117,7 +117,14 @@ const VGFont* FontManager::FindOrCreateFont( int size, const string * name, cons
 	VGSystem * sys = 0;
 	if( gGlobalSettings.gDevice)
 		sys = gGlobalSettings.gDevice->getVGSystem();
-	return FindOrCreateFont (sys, size, name, attributesStr);
+	const VGFont* font = FindOrCreateFont (sys, size, name, attributesStr);
+	if (!font) {											// font not found
+		if ((*name != "Guido2") && (*name != "guido2")) {	// if not the guido font
+			string deffont(kDefaultTextFont);				// try to use the default text font
+			font = FindOrCreateFont (sys, size, &deffont, attributesStr);
+		}
+	}
+	return font;
 }
 
 // --------------------------------------------------------------------------
