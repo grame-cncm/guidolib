@@ -14,7 +14,7 @@ class GuidoViewerApp
 							GuidoViewerApp();
 		virtual				~GuidoViewerApp();
 
-				bool 		Initialize();
+				bool 		Initialize(const char* guidofont, const char* textfont, bool perspective);
 		virtual void 		Reload();
 		virtual void 		OpenFile(const char * file);
 		virtual void		DrawScore();
@@ -22,7 +22,17 @@ class GuidoViewerApp
 		virtual void		SetDevice(VGDevice * inDevice);
 		virtual void		FullScreen(bool on);
 		const char *		FontType() const;
-		
+
+				bool        firstPage();
+				bool        nextPage();
+				bool        previousPage();
+				bool        lastPage();
+				int         get_fWidth() 	{ return fWidth; }
+				int         get_fHeight() 	{return fHeight; }
+				void        zoomOut() 		{ zoomFactor += 0.1; }
+				void        zoomIn() 		{ if(zoomFactor>0) zoomFactor -= 0.1;}
+				void        setPerspective(bool state) 		{  fPerspective = state;}
+	
 	protected:
 				GuidoDoc *	OpenGuidoFile( const char * file );
 				GuidoDoc *	OpenXMLFile( const char * file);
@@ -37,6 +47,9 @@ class GuidoViewerApp
 				int			fWidth, fHeight;
 				int			fWinX, fWinY, fWinW, fWinH;
 				bool		fPerspective;
+
+				int         pageNum;
+				float       zoomFactor;
 };
 
 

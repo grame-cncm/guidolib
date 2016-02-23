@@ -41,6 +41,7 @@ class GuidoDoc
 		
 		GuidoLayoutSettings		fGuidoSettings;
 		GRHandler				fGR;
+//        ARHandler               aRH;
 		float					fZoom;
 		float					fZoomFactor;
 		int						fPageNum;

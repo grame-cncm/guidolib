@@ -35,7 +35,7 @@ GuidoDoc::GuidoDoc()
 // ---------------------------------------------------------------------------
 GuidoDoc::~GuidoDoc()
 {
-	if (fGR) GuidoFreeGR( fGR );
+//	if (fGR) GuidoFreeGR( fGR );
 	fGR = 0;
 }
 

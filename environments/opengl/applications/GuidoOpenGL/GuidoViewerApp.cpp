@@ -2,18 +2,11 @@
 #include <iostream> 
 #include <string.h>
 #include <sstream>
+#include <stdlib.h>
 
 using namespace std;
 
-<<<<<<< HEAD
-#ifdef __APPLE_CC__
-	#include <GLUT/glut.h>
-#else
-//	#include <glut.h>		//use this include for VC++7
-=======
->>>>>>> origin/dev
-	#include <GL/glut.h>	//use this include for VC++6
-
+#include <GLUT/glut.h>
 
 // - App
 #include "GuidoViewerApp.h"
@@ -22,7 +15,6 @@ using namespace std;
 #include "GUIDOEngine.h"
 
 //#include "DebugDevice.h"
-//#include "OGLDevice.h"
 #include "GDeviceGL.h"
 #include "GSystemGL.h"
 
@@ -39,20 +31,20 @@ using namespace std;
 # define DevDebug(dev)	new dev
 #endif
 
-//#define kFontType		OGLDevice::kPolygonFont
 #define kFontType		GSystemGL::kPolygonFont
-//	OGLDevice::kPixmapFont
-//	OGLDevice::kBitmapFont
-//	OGLDevice::kOutlineFont
-//	OGLDevice::kPolygonFont
-//	OGLDevice::kExtrudeFont
+//	GSystemGL::kPixmapFont
+//	GSystemGL::kBitmapFont
+//	GSystemGL::kOutlineFont
+//	GSystemGL::kPolygonFont
+//	GSystemGL::kExtrudeFont
 
 // ----------------------------------------------------------------------------
-GuidoViewerApp::GuidoViewerApp()
+GuidoViewerApp::GuidoViewerApp() : zoomFactor(1)
 {
 	fDocument = 0;
 	fDevice = 0;
 	fPerspective = false;
+    pageNum = 1;
 }
 
 // ----------------------------------------------------------------------------
@@ -72,6 +64,8 @@ const char * GuidoViewerApp::FontType() const
 		case GSystemGL::kOutlineFont:	return "OutlineFont";
 		case GSystemGL::kPolygonFont:	return "PolygonFont";
 		case GSystemGL::kExtrudeFont:	return "ExtrudeFont";
+        case GSystemGL::kTextureFont:   return "TextureFont";
+        case GSystemGL::kBFont:         return "BufferFont";
 		default: return "unknown";
 	}
 }
@@ -83,31 +77,43 @@ void GuidoViewerApp::SetDevice(VGDevice * inDevice)
 	fDevice = inDevice;
 }
 
+#ifdef APPLE
 // ----------------------------------------------------------------------------
-bool GuidoViewerApp::Initialize()
+static const char* defaultTextFont()  { return "/Library/Fonts/Times New Roman.ttf"; }
+static const char* defaultGuidoFont() {
+	static char buffer[512];
+	const char* path =  getenv("HOME");
+	snprintf(buffer, 512, "%s/Library/Fonts/guido2.ttf", path ? path : "");
+	return buffer;
+}
+#endif
+
+#ifdef WIN32
+// ----------------------------------------------------------------------------
+static const char* defaultTextFont()	{ return "C:\\windows\fonts\times.ttf"; }
+static const char* defaultGuidoFont()	{ return "guido2.ttf";} // the guido font is expected in the current folder
+#endif
+
+#ifdef LINUX
+// ----------------------------------------------------------------------------
+static const char* defaultTextFont()	{ return "/usr/X11R6/lib/X11/fonts/TTF/Times.ttf"; }
+static const char* defaultGuidoFont()	{ return "guido2.ttf"; } // the guido font is expected in the current folder
+#endif
+
+// ----------------------------------------------------------------------------
+bool GuidoViewerApp::Initialize(const char* guidofont, const char* textfont, bool perspective)
 {	
+	fPerspective = perspective;
 	GuidoInitDesc desc;
-//	fDevice = DevDebug(OGLDevice(kFontType));
 	fSystem = new GSystemGL(kFontType);
 	fDevice = fSystem->CreateDisplayDevice();
-
+	
+	const char* gf = guidofont ? guidofont : defaultGuidoFont();
+	const char* tf = textfont  ? textfont  : defaultTextFont();
 
 	desc.graphicDevice = fDevice;
-<<<<<<< HEAD
-	//desc.textFont = "Times";
-//#if defined(WIN32) || defined(linux)
-//	desc.musicFont = "guido2.ttf";
-//	desc.textFont = "times.ttf";
-//#else
-	//desc.musicFont = "../Resources/guido2.ttf";
-//	desc.textFont = "Times";
-//#endif
-desc.musicFont = "../../../src/guido2.ttf";
-desc.textFont = "../times.ttf";
-=======
-	desc.textFont = "Times";
-	desc.musicFont = "../../../src/guido2.ttf";
->>>>>>> origin/dev
+	desc.textFont  = tf;
+	desc.musicFont = gf;
 	GuidoErrCode result = GuidoInit( &desc );
 	if( result != guidoNoErr ) {
 		ReportGuidoError( result );
@@ -144,6 +150,8 @@ void GuidoViewerApp::SetSize(int w, int h)
 	glLoadIdentity();
 	glOrtho(0, w, 0, h, -1, 1);
  	glMatrixMode(GL_MODELVIEW);
+    glEnable (GL_BLEND);
+	glEnable(GL_MULTISAMPLE);
 	glLoadIdentity();
 }
 
@@ -156,14 +164,20 @@ void GuidoViewerApp::SetCamera(int w, int h, bool perspective)
 		glLoadIdentity ();
 		gluPerspective( 90, 1, 1, 5000);
 		glMatrixMode(GL_MODELVIEW);
+        glEnable (GL_BLEND);
+		glEnable(GL_MULTISAMPLE);
 		glLoadIdentity();
 		gluLookAt( eyex, eyey, eyez, w/2, h/2, 0.0, 0.0, 1.0, 0.0);
 	}
 	else {
+        double h_temp = (h*zoomFactor) - h;
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(0, w, 0, h, -1, 1);
+		glOrtho(0, w*zoomFactor, 0, h*zoomFactor, -1, 1);
+        glTranslatef(0, h_temp, 0);
 		glMatrixMode(GL_MODELVIEW);
+        glEnable (GL_BLEND);
+		glEnable(GL_MULTISAMPLE);
 		glLoadIdentity();
 	}
 }
@@ -174,7 +188,7 @@ void GuidoViewerApp::DrawScore()
 	if (!fDocument || !fDevice) return;
 
 	GuidoOnDrawDesc desc;
-	int pageNum = 1;
+	//int pageNum = 1;
 
 	GuidoPageFormat pf;
 	GuidoGetPageFormat(	fDocument->GetGR(), pageNum, &pf );
@@ -211,27 +225,19 @@ void GuidoViewerApp::DrawScore()
 	glLoadIdentity();
 	glOrtho(0, right, 0, top, -1, 1);
 	glTranslatef(0, top, 0 );
+	glEnable(GL_MULTISAMPLE);
 	SetCamera(right, top, fPerspective);
 #endif
 	GuidoErrCode err = GuidoOnDraw(&desc);
 }
-
-<<<<<<< HEAD
-// ---------------------------------------------------------------------------
-string GuidoViewerApp::SelectOneFile()
-{
-	return "../../../regression-tests/accidental-oct.gmn";
-}
-=======
->>>>>>> origin/dev
 
 // ------------------------------ ---------------------------------------------
 void GuidoViewerApp::Reload()
 {
 	if (fDocument) {
 		string file = fDocument->Path();
-		cout << "reloading file " << file << endl;
 		OpenFile (file.c_str());
+        fDocument->SetPageNum(pageNum);
 	}
 }
 
@@ -310,3 +316,58 @@ void GuidoViewerApp::ReportError( const char * inMessage, const char * inDetail 
 		cerr << ", " << inDetail;
 	cerr << endl;
 }
+
+bool GuidoViewerApp::firstPage() {
+    if (!fDocument || !fDevice) {
+        return false;
+    }
+    else {
+        pageNum = 1;
+        fDocument->SetPageNum(pageNum);
+    }
+    return true;
+}
+
+bool GuidoViewerApp::nextPage() {
+    if (!fDocument || !fDevice) {
+        return false;
+    }
+    if(fDocument->PageCount()==1 || pageNum>=fDocument->PageCount()) {
+        //pageNum--;
+        return false;
+    }
+    else {
+        pageNum++;
+        fDocument->SetPageNum(pageNum);
+        return true;
+    }
+}
+
+bool GuidoViewerApp::previousPage() {
+    if (!fDocument || !fDevice)
+        return false;
+    if(pageNum==1)
+        return false;
+    else {
+        pageNum--;
+        fDocument->SetPageNum(pageNum);
+        return true;
+    }
+    
+}
+
+bool GuidoViewerApp::lastPage() {
+    if (!fDocument || !fDevice) {
+        return false;
+    }
+    else if (fDocument->PageCount()==1) {
+        return false;
+    }
+    else {
+        pageNum = fDocument->PageCount();
+        fDocument->SetPageNum(pageNum);
+        return true;
+    }
+    
+}
+
