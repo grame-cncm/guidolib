@@ -76,11 +76,11 @@ mac : GUIDOEngine.tgz
 	make macos
 	make $(IOS)	
 
-macos : $(MAC)/guidolib.xcodeproj $(MAC)/Release/GUIDOEngine.framework
+macos : $(MAC)/guidolib.xcodeproj GUIDOEngine.framework
 
 GUIDOEngine.framework :  macos/Release/GUIDOEngine.framework
 	rm -rf GUIDOEngine.framework
-	cp -R $(MAC)/Release/GUIDOEngine.framework .
+	cp -R macos/Release/GUIDOEngine.framework .
 
 $(MAC)/Release/GUIDOEngine.framework :
 	xcodebuild -jobs 8 -project $(MAC)/guidolib.xcodeproj -target ALL_BUILD -configuration Release
