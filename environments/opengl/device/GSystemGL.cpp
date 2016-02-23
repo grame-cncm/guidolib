@@ -100,11 +100,8 @@ GSystemGL::CreateMemoryDevice( const char * inPath )
 VGDevice*
 GSystemGL::CreatePrinterDevice( )
 {
-
 	GDeviceGL * printDevice = new GDeviceGL(this);
-
 	return NULL;
-
 }
 
 // --------------------------------------------------------------
@@ -137,7 +134,7 @@ GSystemGL::SetupFont( const char * inPath, int inFontSize ) const
 {
 	FTFont * font = 0;
 
-	char faceName2[40];
+	char faceName2[512];
 	strcpy(faceName2, inPath);
 
 #ifdef WIN32 
@@ -147,7 +144,6 @@ GSystemGL::SetupFont( const char * inPath, int inFontSize ) const
 
 	switch (fFontType) {
 		case kPixmapFont:
-//			font = new FTGLPixmapFont(inPath);
 			font = new FTGLPixmapFont((const char*)faceName2);
 			break;
 		case kBitmapFont:
@@ -159,7 +155,7 @@ GSystemGL::SetupFont( const char * inPath, int inFontSize ) const
 		case kPolygonFont:
 			font = new FTGLPolygonFont((const char*)faceName2);
             glEnable( GL_TEXTURE_2D);
-//            glBindTexture(GL_TEXTURE_2D, textureID);
+//          glBindTexture(GL_TEXTURE_2D, textureID);
 			glDisable( GL_BLEND);
 			break;
 		case kExtrudeFont:
@@ -180,15 +176,16 @@ GSystemGL::SetupFont( const char * inPath, int inFontSize ) const
 	else {
 //		font->Depth(20);   // extrusion distance for the font. Only for FTGLExtrdFont
 		int cmc = font->CharMapCount();
-		FT_Encoding encoding = ft_encoding_none;
+		FT_Encoding encoding = ft_encoding_unicode;
 		FT_Encoding* cml = font->CharMapList();
 		for (int i=0; i<cmc; i++) {
 			if (i==0) encoding = cml[i];
-			if (cml[i] == ft_encoding_apple_roman) {
-				encoding = ft_encoding_apple_roman;
+			if (cml[i] == ft_encoding_latin_1) {
+				encoding = ft_encoding_latin_1;
 				break;
 			}
 		}
+//cout << "GSystemGL::SetupFont " <<  faceName2 << ": " << (encoding == ft_encoding_latin_1 ? "ft_encoding_latin_1" : (encoding == ft_encoding_unicode ? "ft_encoding_unicode" : "unknown")) << endl;
 		font->CharMap(encoding);
 		font->FaceSize(inFontSize);
 	}

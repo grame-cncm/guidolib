@@ -22,7 +22,7 @@
 */
 
 #include "VGSystem.h"
-#include "MusicalSymbols.h"	// kMaxMusicalSymbolID def. only
+//#include "MusicalSymbols.h"	// kMaxMusicalSymbolID def. only
 
 class FTFont;
 
@@ -35,6 +35,7 @@ class FTFont;
 // --------------------------------------------------------------
 /** \brief OpenGL implementation of the virtual graphic system.
 */				
+#define kMaxMusicalSymbolID 256
 
 class GSystemGL : public VGSystem		
 {					
@@ -42,10 +43,10 @@ class GSystemGL : public VGSystem
 
 				enum {	kPixmapFont,  kBitmapFont, 
 						kOutlineFont, kPolygonFont, 
-						kExtrudeFont, kTextureFont 
+						kExtrudeFont, kTextureFont, kBFont
 				};
 		
-								GSystemGL( int fontType = kPixmapFont );
+								 GSystemGL( int fontType = kPixmapFont );
 		virtual					~GSystemGL();
 
 		// - VGDevice services -------------------------------------------
@@ -55,17 +56,15 @@ class GSystemGL : public VGSystem
 		virtual VGDevice*		CreatePrinterDevice( );
 		virtual VGDevice*		CreateAntiAliasedMemoryDevice( int inWidth, int inHeight );
 
-
 		// - Font services -----------------------------------------------
 		virtual const VGFont*	CreateVGFont( const char * faceName, int size, int properties ) const;
 
 		// - OpenGL specific ---------------------------------------------
 				FTFont*			SetupFont( const char * inPath, int inFontSize ) const;
-				int				GetFontType()
-									{return fFontType;}
+				int				GetFontType() 			{return fFontType;}
 	protected:
 
-				int				fFontType;			
+				int				fFontType;
 				void			SetupCharEncodingTable();
 		unsigned int			fSymbolTable [kMaxMusicalSymbolID];
 

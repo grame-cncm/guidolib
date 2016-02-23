@@ -339,8 +339,8 @@ void GDeviceGL::SetTextFont( const VGFont * inObj )
 }
 // --------------------------------------------------------------
 const VGFont *	
-GDeviceGL::GetTextFont() const				  
-{ 
+GDeviceGL::GetTextFont() const
+{
 	return mCurrTextFont; 
 }
 
@@ -351,7 +351,7 @@ GDeviceGL::GetTextFont() const
 //void GDeviceGL::DoSelectPen( const GColor & c, float width )
 void GDeviceGL::SelectPen( const VGColor & c, float width )
 {
-	mPen.Set( c, width ); 
+    mPen.Set( c, width );
 	
 	// GL specific - was DoEndDraw
 #ifndef useglOrtho
@@ -413,8 +413,8 @@ GDeviceGL::PopFillColor()
 
 // --------------------------------------------------------------
 void			
-GDeviceGL::SetRasterOpMode( VRasterOpMode ROpMode )  
-{ 
+GDeviceGL::SetRasterOpMode( VRasterOpMode ROpMode )
+{
 	mRasterMode = ROpMode; 
 } 
 
@@ -589,34 +589,34 @@ GDeviceGL::GetHeight() const
 //void GDeviceGL::DrawSymbol( float x, float y, unsigned int symbol )
 void GDeviceGL::DrawMusicSymbol( float x, float y, unsigned int symbol )
 {
-	GFontGL * glFont = (GFontGL *)mCurrMusicFont;
-
-//	FTFont * font = (FTFont *)mCurrFont->mNativeFont;
-	FTFont * font = glFont->GetNativeFont();
-
-	if (!font) return;
-	symbol = glFont->Symbol(symbol);
-	switch (symbol) {
-		case 96:
-		case 92:
-		case 88:
-		case 38:
-		case 46:
-		case 104:
-		case 120:
-			break;
-		default:
-			; //cout << "GDeviceGL::DrawSymbol " << symbol << endl;
-	}
-
-	glPushMatrix();
-	glPushAttrib (GL_COLOR_BUFFER_BIT);
-		glColor4ub (mTextColor.mRed, mTextColor.mGreen, mTextColor.mBlue, mTextColor.mAlpha);
-
-		GSystemGL * glSys = (GSystemGL *)mSys;	
-//		if ((fFontType == kPixmapFont) || (fFontType == kBitmapFont)) {
-		if ((glSys->GetFontType() == GSystemGL::kPixmapFont) || (glSys->GetFontType() == GSystemGL::kBitmapFont)) 
-		{
+    GFontGL * glFont = (GFontGL *)mCurrMusicFont;
+    
+    //	FTFont * font = (FTFont *)mCurrFont->mNativeFont;
+    FTFont * font = glFont->GetNativeFont();
+    
+    if (!font) return;
+    /*unsigned int symbol_a = glFont->Symbol(symbol);
+    switch (symbol_a) {
+        case 96:
+        case 92:
+        case 88:
+        case 38:
+        case 46:
+        case 104:
+        case 120:
+            break;
+        default:
+            ;
+    }*/
+    glPushMatrix();
+    glEnable(GL_MULTISAMPLE);
+    glPushAttrib (GL_COLOR_BUFFER_BIT);
+    glColor4ub (mTextColor.mRed, mTextColor.mGreen, mTextColor.mBlue, mTextColor.mAlpha);
+    
+    GSystemGL * glSys = (GSystemGL *)mSys;
+    //		if ((fFontType == kPixmapFont) || (fFontType == kBitmapFont)) {
+    if ((glSys->GetFontType() == GSystemGL::kPixmapFont) || (glSys->GetFontType() == GSystemGL::kBitmapFont))
+    {
 #ifndef useglOrtho
 //			font->FaceSize( (unsigned int)(mCurrFont->mHeight*mScaleY));
 			font->FaceSize( (unsigned int)(mCurrMusicFont->GetSize()*mScaleY));
@@ -638,31 +638,31 @@ void GDeviceGL::DrawMusicSymbol( float x, float y, unsigned int symbol )
 //void GDeviceGL::PrintAt( float x, float y, const char * s, int inCharCount )
 void GDeviceGL::DrawString( float x, float y, const char * s, int inCharCount )
 {
-	if (!s) return;
-	GFontGL * glFont = (GFontGL *)mCurrTextFont;
-
-//	FTFont * font = (FTFont *)mCurrFont->mNativeFont;
-	FTFont * font = glFont->GetNativeFont();
-	if (!font) { cout << "===> GDeviceGL::PrintAt exit" << endl;  return; }
-
-	glPushMatrix();
-	glPushAttrib (GL_COLOR_BUFFER_BIT);
-		glColor4ub (mTextColor.mRed, mTextColor.mGreen, mTextColor.mBlue, mTextColor.mAlpha);
-
-		GSystemGL * glSys = (GSystemGL *)mSys;
-//		if ((fFontType == kPixmapFont) || (fFontType == kBitmapFont)) {
-		if ((glSys->GetFontType() == GSystemGL::kPixmapFont) || (glSys->GetFontType() == GSystemGL::kBitmapFont))
-		{
+    if (!s) return;
+    GFontGL * glFont = (GFontGL *)mCurrTextFont;
+    
+    //	FTFont * font = (FTFont *)mCurrFont->mNativeFont;
+    FTFont * font = glFont->GetNativeFont();
+    if (!font) { cout << "===> GDeviceGL::PrintAt exit" << endl;  return; }
+    
+    glPushMatrix();
+    glPushAttrib (GL_COLOR_BUFFER_BIT);
+    glColor4ub (mTextColor.mRed, mTextColor.mGreen, mTextColor.mBlue, mTextColor.mAlpha);
+    
+    GSystemGL * glSys = (GSystemGL *)mSys;
+    //		if ((fFontType == kPixmapFont) || (fFontType == kBitmapFont)) {
+    if ((glSys->GetFontType() == GSystemGL::kPixmapFont) || (glSys->GetFontType() == GSystemGL::kBitmapFont))
+    {
 #ifndef useglOrtho
 //			font->FaceSize( (unsigned int)(mCurrFont->mHeight*mScaleY));
 			font->FaceSize( (unsigned int)(mCurrTextFont->GetSize()*mScaleY));
 #endif
-			glRasterPos2f(x, -y);
-		}
-		else glTranslatef(x, getY(y), 0.0);
-		font->Render( s);
-	glPopAttrib ();
-	glPopMatrix();
+        glRasterPos2f(x, -y);
+    }
+    else glTranslatef(x, getY(y), 0.0);
+    font->Render( s);
+    glPopAttrib ();
+    glPopMatrix();
 }
 
 // ----------------------------------------------------------------------------
