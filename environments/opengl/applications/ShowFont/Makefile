@@ -1,8 +1,8 @@
-INC = -I../../../src/include -I../../../src/devices -I../../device -I../../ftgl/src/ -I../../freetype/include
+INC = -I../../../src/include -I../../../src/devices -I../../device -I/usr/local/include/freetype2
 
 system	:= $(shell uname -s)
 ifeq ($(system), Darwin)
-  lib =  -mmacosx-version-min=10.6 -F../../../build/MacOS/Release/ -framework GUIDOEngine -l freetype -L ../../freetype/objs/.libs/ -l ftgl -L ../../ftgl/src/.libs/ -framework GLUT -framework OpenGL 
+  lib =  -mmacosx-version-min=10.9 -F../../../../build -framework GUIDOEngine -l freetype -l ftgl -framework GLUT -framework OpenGL 
   INC := $(INC)  -I../../../macosx/src
 else
 ifeq ($(system), MINGW32_NT-6.1)
@@ -14,4 +14,4 @@ endif
 endif
 
 fonttest : main.cpp
-	g++ -o gltest main.cpp $(INC) $(lib)
+	g++ -o fonttest main.cpp $(INC) $(lib)

@@ -1,6 +1,6 @@
 //
 //  main.c
-//  0OpenGLFontViewer
+//  OpenGLFontViewer
 //
 //  Created by Dominique Fober on 15/09/05.
 //  Copyright Grame 2005. All rights reserved.
@@ -21,7 +21,7 @@ FTFont * infoFont, * guidoFont;
 enum { kBaseW=840, kBaseH=600 };
 GLint w_win = kBaseW, h_win = kBaseH;
 #define kLines	20
-#define kLimit	340
+#define kLimit	250
 int lineH	= kBaseH/(kLines+1);
 int colW	= kBaseW*kLines/(kLimit+kLines) + 1;
 int top		= kBaseH - lineH - 5;
@@ -41,8 +41,12 @@ void display(void)
 		infoFont->Render(buff);
 		infoFont->BBox( buff, x1, y1, z1, x2, y2, z2);
 
-		glRasterPos2i(x+(int)(x2-x1)+10,y);
-		guidoFont->Render(buff); 
+		if (i >32 && i < 224) {
+			glRasterPos2i(x+(int)(x2-x1)+10,y);
+			buff[0]=i;
+			buff[1]=0;
+			guidoFont->Render(buff, 1);
+		}
 		if (++line > kLines) {
 			x += colW; y = top; line=1;
 		}
@@ -82,17 +86,16 @@ static void myinit()
 		infoFont->FaceSize(12);
 		infoFont->CharMap(ft_encoding_unicode);
 	}
-//#ifdef WIN32
-	guidoFont = new FTGLPixmapFont("../../../src/guido2.ttf");
-//#else
-//	guidoFont = new FTGLPixmapFont("../Resources/guido2.ttf");
-//#endif
+
+	guidoFont = new FTGLBitmapFont("../../../../src/guido2.ttf");
+//	guidoFont = new FTGLPixmapFont("../../../../src/guido2.ttf");
+//	guidoFont = new FTGLPolygonFont("../../../../src/guido2.ttf");
 	if (!guidoFont || guidoFont->Error()) {
 		cout << "erreur : guidoFont creation failed!" << endl;
 		exit(1);
 	}
 	guidoFont->FaceSize(24);
-/*
+
 	int cmc = guidoFont->CharMapCount();
 	FT_Encoding* encoding = guidoFont->CharMapList();
 	while (cmc--) {
@@ -116,9 +119,10 @@ static void myinit()
 			default:	cout << "ft_encoding unknown" << endl; break;
 		}
 	}
-*/
-	guidoFont->CharMap(ft_encoding_apple_roman);
-//	guidoFont->CharMap(ft_encoding_unicode);
+
+//	guidoFont->CharMap(ft_encoding_apple_roman);
+	if (!guidoFont->CharMap(ft_encoding_unicode))
+		cerr << "cannot set guido font encoding to ft_encoding_unicode" << endl;
 }
 
 #ifdef WIN32
