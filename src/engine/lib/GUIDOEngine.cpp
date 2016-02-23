@@ -116,6 +116,9 @@ GUIDOAPI(GuidoErrCode) GuidoInit( GuidoInitDesc * desc )
 	const char * musicFont = desc->musicFont ? desc->musicFont : FontManager::kDefaultMusicFont;
 	// - Text Font
 	const char * textFont = desc->textFont ? desc->textFont : FontManager::kDefaultTextFont;
+	
+	if (musicFont) FontManager::kDefaultMusicFont = musicFont;
+	if (textFont) FontManager::kDefaultTextFont = textFont;
 
 	if( desc->graphicDevice )
 		gGlobalSettings.gDevice = desc->graphicDevice;
@@ -125,9 +128,10 @@ GUIDOAPI(GuidoErrCode) GuidoInit( GuidoInitDesc * desc )
     {
 		// gets the standard-scriabin font at 4 times LSPACE (4*2*HSPACE)
 		NVstring musicFontStr ( musicFont );
+
 		FontManager::gFontScriab = FontManager::FindOrCreateFont((int)(4 * LSPACE), &musicFontStr );
 
-	        // gets the standard Text-Font..
+	    // gets the standard Text-Font..
 		NVstring textFontStr ( textFont );
 		FontManager::gFontText = FontManager::FindOrCreateFont((int)(1.5f * LSPACE), &textFontStr );
 
