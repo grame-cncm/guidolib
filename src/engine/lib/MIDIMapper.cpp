@@ -125,25 +125,27 @@ void MidiMapper::Event(const ARMusicalObject * ev, EventType type)
 //------------------------------------------------------------------------------
 int MidiMapper::AdjustDuration(int dur, const Guido2MidiParams* p) const
 {
+	float f = dur;
 	if (!fFlags)				return int(dur * p->fDFactor);
 
-	if (fFlags & hasStaccato)	dur *= (int) p->fStaccatoFactor;
-	if (fFlags & hasSlur)		dur *= (int) p->fSlurFactor;
-	if (fFlags & hasTenuto)		dur *= (int) p->fTenutoFactor;
-	if (fFlags & hasFermata)	dur *= (int) p->fFermataFactor;
+	if (fFlags & hasStaccato)	f *= p->fStaccatoFactor;
+	if (fFlags & hasSlur)		f *= p->fSlurFactor;
+	if (fFlags & hasTenuto)		f *= p->fTenutoFactor;
+	if (fFlags & hasFermata)	f *= p->fFermataFactor;
 
-	return dur;
+	return int(f);
 }
 
 //------------------------------------------------------------------------------
 int MidiMapper::AdjustVelocity(int vel, const Guido2MidiParams* p) const
 {
-	if (!fFlags) return vel * (int) p->fIntensity;
+	float f = vel;
+	if (!fFlags) return int(vel * p->fIntensity);
 
-	if (fFlags & hasAccent)		vel *= (int) p->fAccentFactor;
-	if (fFlags & hasMarcato)	vel *= (int) p->fMarcatoFactor;
+	if (fFlags & hasAccent)		f *= (int) p->fAccentFactor;
+	if (fFlags & hasMarcato)	f *= (int) p->fMarcatoFactor;
 
-	return (vel > 127 ? 127 : vel);
+	return int(f > 127 ? 127 : f);
 }
 
 //------------------------------------------------------------------------------
