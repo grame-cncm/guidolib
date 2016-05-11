@@ -25,42 +25,24 @@ if (OPENGL_FOUND)
   message(STATUS "opengl found")
   include_directories(${OPENGL_INCLUDE_DIR})
   set(LINK ${LINK} ${OPENGL_LIBRARY})
-endif (OPENGL_FOUND)
-
-#find_package(GLU REQUIRED)
-#if (GLU_FOUND)
-#  message(STATUS "glu found")
-#  include_directories(${GLU_INCLUDE_DIR})
-#  set(LINK ${LINK} ${GLU_LIBRARY})
-#endif (GLU_FOUND)
+endif ()
 
 find_package(GLUT REQUIRED)
 if (GLUT_FOUND)
   message(STATUS "glut found")
   include_directories(${GLUT_INCLUDE_DIR})
   set(LINK ${LINK} ${GLUT_LIBRARY})
-endif (GLUT_FOUND)
+endif ()
 
 # freetype and ftgl
 include_directories(/usr/local/include/freetype2 /usr/local/include)
 set(LINK ${LINK} -L/usr/local/lib -lfreetype -lftgl)
 
-#libfind_pkg_check_modules(freetype2_PKGCONF freetype2)
-#add_definitions(${freetype2_PKGCONF_CFLAGS})
-#set(LINK ${LINK} ${freetype2_PKGCONF_LDFLAGS})
-#message(STATUS "freetype2 link flags: " ${freetype2_PKGCONF_LDFLAGS})
-
-# ftgl
-#libfind_pkg_check_modules(ftgl_PKGCONF ftgl)
-#add_definitions(${ftgl_PKGCONF_CFLAGS})
-#set(LINK ${LINK} ${ftgl_PKGCONF_LDFLAGS})
-#message(STATUS "ftgl link flags: " ${ftgl_PKGCONF_LDFLAGS})
-
 if(APPLE)
   set(LINK ${LINK}  "-F${ROOT}/build -framework GUIDOEngine")
 else()
   set(LINK ${LINK}  "-L${ROOT}/build/unix/ -l GUIDOEngine")
-endif(APPLE)
+endif()
 
 add_executable(${target} ${DEVICE_CPP_SOURCES} ${APPLICATION_CPP_SOURCES} ${SERVER_C_SOURCES} ${CAIRO_CPP_SOURCES} ${JSON_CPP_SOURCES})
 target_link_libraries(${target} ${LINK})
