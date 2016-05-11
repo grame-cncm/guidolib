@@ -78,7 +78,7 @@ mac : GUIDOEngine.tgz
 
 macos : $(MAC)/guidolib.xcodeproj GUIDOEngine.framework
 
-GUIDOEngine.framework :  macos/Release/GUIDOEngine.framework
+GUIDOEngine.framework :  MacOS/Release/GUIDOEngine.framework
 	rm -rf GUIDOEngine.framework
 	cp -R macos/Release/GUIDOEngine.framework .
 
