@@ -71,8 +71,6 @@ interface GPaintStruct {
 //------------------------------
 interface ARHandler     {}
 interface GRHandler     {}
-interface CARHandler    {}
-interface CGRHandler    {}
 
 // Classes
 //------------------------------
@@ -132,17 +130,17 @@ interface GuidoEngineAdapter {
     getErrorString              (errCode: GuidoErrCode): string;	
 	getDefaultLayoutSettings    (): GuidoLayoutSettings; 
     	
-    countVoices     (inHandleAR: CARHandler): number;
+    countVoices     (inHandleAR: ARHandler): number;
 	
-    getPageCount    (inHandleGR: CGRHandler): number;	
-    getSystemCount  (inHandleGR: CGRHandler, page: number): number;
+    getPageCount    (inHandleGR: GRHandler): number;	
+    getSystemCount  (inHandleGR: GRHandler, page: number): number;
 
-    duration        (inHandleGR: CGRHandler): GuidoDate;
+    duration        (inHandleGR: GRHandler): GuidoDate;
 
-	findEventPage   (inHandleGR: CGRHandler , date: GuidoDate): number;
-	findPageAt      (inHandleGR: CGRHandler, date: GuidoDate): number;
+	findEventPage   (inHandleGR: GRHandler , date: GuidoDate): number;
+	findPageAt      (inHandleGR: GRHandler, date: GuidoDate): number;
 
-    getPageDate     (inHandleGR: CGRHandler, pageNum: number): GuidoDate;
+    getPageDate     (inHandleGR: GRHandler, pageNum: number): GuidoDate;
 		
 	onDraw          (desc: GuidoOnDrawDesc): GuidoErrCode;
 
@@ -157,7 +155,7 @@ interface GuidoEngineAdapter {
 	setDrawBoundingBoxes    (bbMap: number): void;
 	getDrawBoundingBoxes    (): number;
 
-    getPageFormat           (inHandleGR: CGRHandler, pageNum: number): GuidoPageFormat;
+    getPageFormat           (inHandleGR: GRHandler, pageNum: number): GuidoPageFormat;
     setDefaultPageFormat    (format: GuidoPageFormat): void;
 	getDefaultPageFormat    (): GuidoPageFormat; 
 
