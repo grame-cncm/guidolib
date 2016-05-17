@@ -112,7 +112,7 @@ declare enum GuidoErrCode {
 	//! required initialisation has not been performed
 	guidoErrNotInitialized		= -9,
 	//! the action failed
-	guidoErrActionFailed		= -10
+	guidoErrActionFailed		= -10,
 }
 
 // GUIDOENGINE
