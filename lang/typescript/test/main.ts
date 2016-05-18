@@ -17,7 +17,7 @@ function main() {
 
 function readfileJS(): string {
         let fs = require('fs');
-	    return fs.readFileSync('libGUIDOEngine.js');
+	    return fs.readFileSync('../../javascript/libGUIDOEngine.js');
 }
 
 

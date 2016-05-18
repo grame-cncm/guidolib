@@ -1,3 +1,5 @@
+declare var Module: any;
+
 // INTERFACE REQUIERE BY GUIDOENGINE
 //--------------------------------------------------------------
 interface GuidoInitDesc {
@@ -78,6 +80,11 @@ interface GuidoParser   {}
 interface GuidoStream   {}
 interface VGDevice      {}
 
+interface GuidoErrCode {
+    value: number;
+}
+
+
 
 // ENUMS
 //--------------------------------------------------------------
@@ -87,7 +94,7 @@ declare enum GuidoMapping {
     kStaffMapping  =  1<<1,
     kSystemMapping =  1<<2
 }
-
+/*
 declare enum GuidoErrCode {
 	//! null is used to denote no error
     guidoNoErr					= 0,
@@ -112,7 +119,7 @@ declare enum GuidoErrCode {
 	//! the action failed
 	guidoErrActionFailed		= -10
 }
-
+*/
 // GUIDOENGINE
 //--------------------------------------------------------------
 interface GuidoEngineAdapter {

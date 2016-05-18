@@ -1,4 +1,4 @@
-///<reference path="libGUIDOEngine.d.ts"/>
+///<reference path="../libGUIDOEngine.d.ts"/>
 
 class guidoLoader {
 
