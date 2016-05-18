@@ -90,6 +90,10 @@ declare enum GuidoMapping {
     kSystemMapping =  1<<2
 }
 
+interface GuidoErrCode {
+    value:  number;
+}
+/*
 declare enum GuidoErrCode {
 	//! null is used to denote no error
     guidoNoErr					= 0,
@@ -114,12 +118,12 @@ declare enum GuidoErrCode {
 	//! the action failed
 	guidoErrActionFailed		= -10,
 }
-
+*/
 // GUIDOENGINE
 //--------------------------------------------------------------
 interface GuidoEngineAdapter {
     constructor: GuidoEngineAdapter;
-        
+         
     init        (desc?: GuidoInitDesc): GuidoErrCode;
     shutdown    (): void;
     
