@@ -22,7 +22,7 @@ function readfileJS(): string {
 
 
 function fullTest(i: string): void {
-	var guidoFullTest = new guidoTest(i);
+	var guidoFullTest = new guidoTest();
 	guidoFullTest.processTest();	
 }
 

@@ -1,6 +1,4 @@
 
-// ENUMS
-//--------------------------------------------------------------
 enum GuidoMapping {
     kNoMapping     =  0,
     kVoiceMapping  =  1,

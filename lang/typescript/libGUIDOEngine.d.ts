@@ -80,48 +80,11 @@ interface GuidoParser   {}
 interface GuidoStream   {}
 interface VGDevice      {}
 
-//interface GuidoErrCode { value: number; }
-
-
 // ENUMS
 //--------------------------------------------------------------
 declare enum GuidoMapping {}
-/*
- {
-    kNoMapping     =  0,
-    kVoiceMapping  =  1,
-    kStaffMapping  =  1<<1,
-    kSystemMapping =  1<<2
-}
-*/
-
 declare enum GuidoErrCode {}
-/*
-declare enum GuidoErrCode {
-	//! null is used to denote no error
-    guidoNoErr					= 0,
-	//! error while parsing the Guido format
-	guidoErrParse				= -1,
-	//! memory allocation error
-	guidoErrMemory				= -2,
-	//! error while reading or writing a file
-	guidoErrFileAccess			= -3,
-	//! the user cancelled the action
-	guidoErrUserCancel			= -4,
-	//! the music font is not available
-	guidoErrNoMusicFont			= -5,
-	//! the text font is not available
-	guidoErrNoTextFont			= -6,
-	//! bad parameter used as argument
-	guidoErrBadParameter		= -7,
-	//! invalid handler used
-	guidoErrInvalidHandle		= -8,
-	//! required initialisation has not been performed
-	guidoErrNotInitialized		= -9,
-	//! the action failed
-	guidoErrActionFailed		= -10
-}
-*/
+
 // GUIDOENGINE
 //--------------------------------------------------------------
 interface GuidoEngineAdapter {

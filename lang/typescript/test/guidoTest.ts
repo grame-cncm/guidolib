@@ -1,30 +1,45 @@
 ///<reference path="../libGUIDOEngine.d.ts"/>
+///<reference path="../libGUIDOEngine.ts"/>
 
 interface checkfunction             { (n: any): boolean; } 
 
+var gmnString = '[a e m]';
+var gmnStream = '[a e m';
+
+var bbMap: number     = 1;
+var valTest: number   = 8;
+var page:number      = 1;
+
+var guidoEngine         : GuidoEngineAdapter;
+var parseur             : GuidoParser;
+var ar                  : ARHandler;
+var gr                  : GRHandler;       
+var date                : GuidoDate;
+var guidoPageFormat     : GuidoPageFormat;
+var guidoStream         : GuidoStream;
+var guidoLayoutSettings : GuidoLayoutSettings;
+
+function initGlobalVar() {
+    let content = readfileJS();
+    eval(content.toString());    
+    guidoEngine         = new Module.GuidoEngineAdapter;
+    guidoEngine.init();
+    parseur             = guidoEngine.openParser();
+    ar                  = guidoEngine.string2AR(parseur, gmnString);
+    gr                  = guidoEngine.ar2gr(ar);       
+    date                = guidoEngine.getPageDate(gr, page);
+    guidoPageFormat     = guidoEngine.getDefaultPageFormat();
+    guidoStream         = guidoEngine.openStream();
+    guidoLayoutSettings = guidoEngine.getDefaultLayoutSettings();   
+}
+
+
 class guidoTest {
     
-    protected fGMN              : string;
-    protected fGuidoEngine      : GuidoEngineAdapter;
-    protected fGuidoVersion     : GuidoVersion; 
-    protected fP                : GuidoParser;
-    protected fAr               : ARHandler;   
-    protected fGr               : GRHandler;
-    protected fGuidoLayoutSettings: GuidoLayoutSettings; 
-    protected fDate             : GuidoDate;  
-    protected fPage             : number;
-    protected fbbMap            : number;
-    protected fGuidoPageFormat  : GuidoPageFormat;
-    protected fValTest          : number;
-    protected fGuidoStream      : GuidoStream;
- 
-    constructor (inputString: string) {
-        this.fGMN = inputString;
-    }
-
 // CLOSURES
 //------------------------------------
-    
+
+    _checkRun       ()                  : checkfunction { return (m) => true }          
     _checkVoid      ()                  : checkfunction { return (m) => (typeof m == 'undefined'); }      
     _checkBool      (b: boolean)        : checkfunction { return (m) => (b === m); }   
     _checkStr       (i: string)         : checkfunction { return (m) => (i === m); }
@@ -44,8 +59,6 @@ class guidoTest {
                                                                 typeof m.marginleft == 'number'     && typeof m.margintop == 'number'   &&
                                                                 typeof m.marginright == 'number'    && typeof m.marginbottom == 'number'
                                                                 ); }
-    _checkIsParser  ()         : checkfunction { return (m) => (typeof m == typeof this.fP); }
-    _checkIsStream  ()         : checkfunction { return (m) => (typeof m == typeof this.fGuidoStream); }
     
     _checkIsVersion ()         : checkfunction { return (m) => (typeof m.major == 'number'  && typeof m.minor == 'number'   &&
                                                                 typeof m.sub == 'number'    && typeof m.str == 'string'
@@ -58,42 +71,12 @@ class guidoTest {
                                                                     ); }
     _checkIsParserErr ()       : checkfunction { return (m) => (typeof m.line == 'number' && typeof m.col == 'number' && typeof m.msg == 'string'); }
 
-// init
-//------------------------------------
-    init(): void {
-
-        let content = this.readfileJS();
-        eval(content.toString());
-                        
-        this.fGuidoEngine   = new Module.GuidoEngineAdapter;
-        this.fGuidoEngine.init();
-        
-        this.fP     = this.fGuidoEngine.openParser();
-        this.fAr    = this.fGuidoEngine.string2AR(this.fP, this.fGMN);
-        this.fGr    = this.fGuidoEngine.ar2gr(this.fAr);
-        
-        this.fbbMap     = 1;
-        this.fValTest   = 8;
-        this.fPage      = 1;
-
-        this.fGuidoPageFormat       = this.fGuidoEngine.getDefaultPageFormat();
-        this.fGuidoStream           = this.fGuidoEngine.openStream();
-        this.fGuidoLayoutSettings   = this.fGuidoEngine.getDefaultLayoutSettings(); 
-        this.fDate                  = this.fGuidoEngine.getPageDate(this.fGr, this.fPage);
-    }
-    
-    readfileJS(): string {
-            let fs = require('fs');
-            return fs.readFileSync('../../javascript/libGUIDOEngine.js');
-    }
-
 // test process
 //------------------------------------
     processTest(): void {
         console.log('************************* New test *************************');
         
-        this.init();
-        this.testMisc(); 
+        this.testMisc();
         this.testBuild(); 
         this.testBrows(); 
         this.testPages();
@@ -106,18 +89,7 @@ class guidoTest {
         let result = eval(f);
         let expected = check(result);
         if (expected) {
-            console.log ("OK        "  + f + " => " + result);
-        }
-        else {
-            console.log ("ERROR     "  + f + " => " + result);
-            console.log(result);
-        }
-    } 
-    
-    testRun(f: string): void {
-        let result = eval(f);
-        if (result) {
-            console.log ("OK        "  + f + " => " + result);
+            console.log ("OK        "  + f);
         }
         else {
             console.log ("ERROR     "  + f + " => " + result);
@@ -129,80 +101,84 @@ class guidoTest {
 //------------------------------------    
     
     testMisc(): void {
+        initGlobalVar();
         console.log("----Miscellaneous----");
-        this.testExpect("this.fGuidoEngine.getVersion()",                 this._checkIsVersion());        
-        this.testExpect("this.fGuidoEngine.checkVersionNums(1, 0, 2)",    this._checkErrCode(0));
-        this.testExpect("this.fGuidoEngine.getLineSpace()",               this._checkNum(50));
-        //this.testExpect("this.fGuidoEngine.markVoice(this.fAr, 3, ?, ?, ?, ?, ?)", this._check?(6));
+        this.testExpect("guidoEngine.getVersion()",                 this._checkIsVersion());        
+        this.testExpect("guidoEngine.checkVersionNums(1, 0, 2)",    this._checkErrCode(GuidoErrCode.guidoNoErr));
+        this.testExpect("guidoEngine.getLineSpace()",               this._checkIsNum());
+        //this.testExpect("guidoEngine.markVoice(this.fAr, 3, ?, ?, ?, ?, ?)", this._check?(6));
         console.log("\n");
     }   
  
     testBuild(): void {
+        initGlobalVar();
         console.log("----Building abstract and graphic representations----");
-        this.testExpect("this.fGuidoEngine.init()",                                         this._checkErrCode(0));
-        this.testRun("this.fGuidoEngine.ar2gr(this.fAr)");        
-        //this.testExpect("this.fGuidoEngine.ar2gr(this.fAr, this.GuidoLayoutSettings)",      this._checkGRHandler(this.fGr));        
-        this.testExpect("this.fGuidoEngine.updateGR(this.fGr)",                             this._checkErrCode(0));        
-        //this.testExpect("this.fGuidoEngine.updateGR(this.fGr, this.GuidoLayoutSettings)",   this._checkErrCode(0));        
-        this.testExpect("this.fGuidoEngine.freeAR(this.fAr)",                               this._checkVoid());        
-        this.testExpect("this.fGuidoEngine.freeGR(this.fGr)",                               this._checkVoid());
-        //this.testExpect("this.fGuidoEngine.getErrorString(GuidoErrCode.guidoNoErr)",        this._checkStr("null is used to denote no error"));
-        this.testExpect("this.fGuidoEngine.getDefaultLayoutSettings()",                     this._checkIsGuidoLayoutSettings());
+        this.testExpect("guidoEngine.init()",                                     this._checkErrCode(GuidoErrCode.guidoNoErr));
+        this.testExpect("guidoEngine.ar2gr(ar)",                                  this._checkRun());        
+        //this.testRun("guidoEngine.ar2gr(ar, guidoLayoutSettings)");        
+        this.testExpect("guidoEngine.updateGR(gr)",                               this._checkErrCode(GuidoErrCode.guidoNoErr));        
+        //this.testExpect("guidoEngine.updateGR(gr, this.guidoLayoutSettings)",   this._checkErrCode(GuidoErrCode.guidoNoErr));        
+        this.testExpect("guidoEngine.freeAR(ar)",                                 this._checkVoid());        
+        this.testExpect("guidoEngine.freeGR(gr)",                                 this._checkVoid());
+        this.testExpect("guidoEngine.getErrorString(GuidoErrCode.guidoNoErr)",    this._checkStr("No error"));
+        this.testExpect("guidoEngine.getDefaultLayoutSettings()",                 this._checkIsGuidoLayoutSettings());
         console.log("\n"); 
     }    
  
     testBrows(): void {
+        initGlobalVar();
         console.log("----Browsing music pages----");
-        this.testExpect("this.fGuidoEngine.countVoices(this.fAr)",                this._checkIsNum());
-        //this.testExpect("this.fGuidoEngine.getPageCount(this.fGr)",               this._checkIsNum());
-        //this.testExpect("this.fGuidoEngine.getSystemCount(this.fGr, this.fPage)", this._checkIsNum());
-        this.testExpect("this.fGuidoEngine.duration(this.fGr)",                   this._checkIsDate());
-        //this.testExpect("this.fGuidoEngine.findEventPage(this.fGr, this.fDate)",  this._checkIsNum());
-        //this.testExpect("this.fGuidoEngine.findPageAt(this.fGr, this.fDate)",     this._checkIsNum());
-        //this.testExpect("this.fGuidoEngine.getPageDate(this.fGr, this.fPageNum)", this._checkIsDate());
+        this.testExpect("guidoEngine.countVoices(ar)",          this._checkIsNum());
+        this.testExpect("guidoEngine.getPageCount(gr)",         this._checkIsNum());
+        this.testExpect("guidoEngine.getSystemCount(gr, page)", this._checkIsNum());
+        this.testExpect("guidoEngine.duration(gr)",             this._checkIsDate());
+        this.testExpect("guidoEngine.findEventPage(gr, date)",  this._checkIsNum());
+        this.testExpect("guidoEngine.findPageAt(gr, date)",     this._checkIsNum());
+        this.testExpect("guidoEngine.getPageDate(gr, page)",    this._checkIsDate());
         console.log("\n");  
     } 
     
     testPages(): void {
+        initGlobalVar();
         console.log("----Score drawing and pages formating----");
-        //this.testExpect("this.fGuidoEngine.onDraw(?)",                                      this._checkErrCode(GuidoErrCode.guidoNoErr));
-        //this.testExpect("this.fGuidoEngine.gr2SVG(this.fGr, this.fPage, true, 0)",          this._checkIsStr());
-        //this.testExpect("this.fGuidoEngine.abstractExport(this.fGr, this.fPage)",           this._checkIsStr());
-        //this.testExpect("this.fGuidoEngine.binaryExport(this.fGr, this.fPage)",             this._checkIsStr());
-        this.testExpect("this.fGuidoEngine.setDrawBoundingBoxes(this.fbbMap)",              this._checkVoid());
-        this.testExpect("this.fGuidoEngine.getDrawBoundingBoxes()",                         this._checkIsNum());
-        //this.testExpect("this.fGuidoEngine.getPageFormat(this.fGr, this.fPage)",            this._checkIsPageFormat());
-        this.testExpect("this.fGuidoEngine.getDefaultPageFormat()",                         this._checkIsPageFormat());
-        this.testExpect("this.fGuidoEngine.setDefaultPageFormat(this.fGuidoPageFormat)",    this._checkVoid());
-        this.testExpect("this.fGuidoEngine.unit2CM(this.fValTest)",                         this._checkIsNum());
-        this.testExpect("this.fGuidoEngine.cm2Unit(this.fValTest)",                         this._checkIsNum());
-        this.testExpect("this.fGuidoEngine.unit2Inches(this.fValTest)",                     this._checkIsNum());
-        this.testExpect("this.fGuidoEngine.inches2Unit(this.fValTest)",                     this._checkIsNum());
-        this.testExpect("this.fGuidoEngine.resizePageToMusic(this.fGr)",                    this._checkErrCode(0));
+        //this.testExpect("guidoEngine.onDraw(?)",                            this._checkErrCode(GuidoErrCode.guidoNoErr));
+        this.testExpect("guidoEngine.gr2SVG(gr, page, true, 0)",              this._checkIsStr());
+        this.testExpect("guidoEngine.abstractExport(gr, page)",               this._checkIsStr());
+        this.testExpect("guidoEngine.binaryExport(gr, page)",                 this._checkIsStr());
+        this.testExpect("guidoEngine.setDrawBoundingBoxes(bbMap)",            this._checkVoid());
+        this.testExpect("guidoEngine.getDrawBoundingBoxes()",                 this._checkIsNum());
+        this.testExpect("guidoEngine.getPageFormat(gr, page)",                this._checkIsPageFormat());
+        this.testExpect("guidoEngine.getDefaultPageFormat()",                 this._checkIsPageFormat());
+        this.testExpect("guidoEngine.setDefaultPageFormat(guidoPageFormat)",  this._checkVoid());
+        this.testExpect("guidoEngine.unit2CM(valTest)",                       this._checkIsNum());
+        this.testExpect("guidoEngine.cm2Unit(valTest)",                       this._checkIsNum());
+        this.testExpect("guidoEngine.unit2Inches(valTest)",                   this._checkIsNum());
+        this.testExpect("guidoEngine.inches2Unit(valTest)",                   this._checkIsNum());
+        this.testExpect("guidoEngine.resizePageToMusic(gr)",                  this._checkErrCode(GuidoErrCode.guidoNoErr));
         console.log("\n");  
     } 
     
     testParse(): void {
+        initGlobalVar();
         console.log("----Parsing GMN files, strings and guido streams----");
-        this.testRun("this.fGuidoEngine.openParser()");
-        this.testRun("this.fGuidoEngine.openStream()");
-        this.testExpect("this.fGuidoEngine.getStream(this.fGuidoStream)",                   this._checkIsStr());
-        //this.testExpect("this.fGuidoEngine.GuidoFreeStreamString(?)",                        this._checkVoid());
-        this.testRun("this.fGuidoEngine.file2AR(this.fP, this.fGMN)");
-        this.testRun("this.fGuidoEngine.string2AR(this.fP, this.fGMN)");
-        this.testRun("this.fGuidoEngine.stream2AR(this.fP, this.fGuidoStream)");
-        //this.testExpect("this.fGuidoEngine.GuidoStream2GuidoString(this.fGuidoStream)",      this._checkIsStr());
-        this.testExpect("this.fGuidoEngine.parserGetErrorCode(this.fP)",                    this._checkIsParserErr());
-        this.testExpect("this.fGuidoEngine.closeStream(this.fGuidoStream)",                 this._checkErrCode(0));
-        this.testExpect("this.fGuidoEngine.writeStream(this.fGuidoStream, this.fGMN)",      this._checkErrCode(0));
-        this.testExpect("this.fGuidoEngine.resetStream(this.fGuidoStream)",                 this._checkErrCode(0));   
-        this.testExpect("this.fGuidoEngine.closeParser(this.fP)",                           this._checkErrCode(0));
+        this.testExpect("guidoEngine.openParser()",                           this._checkRun());
+        this.testExpect("guidoEngine.openStream()",                           this._checkRun());
+        this.testExpect("guidoEngine.getStream(guidoStream)",                 this._checkIsStr());
+        this.testExpect("guidoEngine.file2AR(parseur, gmnString)",            this._checkRun());
+        this.testExpect("guidoEngine.string2AR(parseur, gmnString)",          this._checkRun());
+        //this.testExpect("guidoEngine.stream2AR(parseur, gmnString)",          this._checkRun());
+        this.testExpect("guidoEngine.parserGetErrorCode(parseur)",            this._checkIsParserErr());
+        this.testExpect("guidoEngine.closeStream(guidoStream)",               this._checkErrCode(GuidoErrCode.guidoNoErr));
+        this.testExpect("guidoEngine.writeStream(guidoStream, gmnString)",    this._checkErrCode(GuidoErrCode.guidoNoErr));
+        this.testExpect("guidoEngine.resetStream(guidoStream)",               this._checkErrCode(GuidoErrCode.guidoNoErr));   
+        this.testExpect("guidoEngine.closeParser(parseur)",                   this._checkErrCode(GuidoErrCode.guidoNoErr));
         console.log("\n");
     }    
     
     testEnd(): void {
+        initGlobalVar();
         console.log("----End of methods tests----");
-        this.testExpect("this.fGuidoEngine.shutdown()",   this._checkVoid());
+        this.testExpect("guidoEngine.shutdown()",   this._checkVoid());
         console.log("\n");  
     }                      
     
@@ -213,7 +189,10 @@ class guidoTest {
                     "=> guidoEngine.getAR2GRTime"           + "\n" + 
                     "=> guidoEngine.getOnDrawTime"          + "\n" +
                     "=> guidoEngine.setSymbolPath"          + "\n" +
-                    "=> guidoEngine.getSymbolPath"          + "\n"     
+                    "=> guidoEngine.getSymbolPath"          + "\n" +
+                    "Missing declarations in .cpp file : Parsing GMN files, strings and guido streams"  + "\n" +
+                    "=> guidoEngine.GuidoStream2GuidoString"    + "\n" +
+                    "=> guidoEngine.GuidoFreeStreamString"      + "\n"     
                     );     
     }
 }    
