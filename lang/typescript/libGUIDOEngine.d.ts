@@ -80,20 +80,22 @@ interface GuidoParser   {}
 interface GuidoStream   {}
 interface VGDevice      {}
 
-interface GuidoErrCode {
-    value: number;
-}
-
+//interface GuidoErrCode { value: number; }
 
 
 // ENUMS
 //--------------------------------------------------------------
-declare enum GuidoMapping {
+declare enum GuidoMapping {}
+/*
+ {
     kNoMapping     =  0,
     kVoiceMapping  =  1,
     kStaffMapping  =  1<<1,
     kSystemMapping =  1<<2
 }
+*/
+
+declare enum GuidoErrCode {}
 /*
 declare enum GuidoErrCode {
 	//! null is used to denote no error
