@@ -30,3 +30,18 @@ enum GuidoErrCode {
 	//! the action failed
 	guidoErrActionFailed		= -10
 }
+
+enum GuidoElementSelector {
+	kGuidoPage, 
+	kGuidoSystem, 
+	kGuidoSystemSlice, 
+	kGuidoStaff, 
+	/*kGuidoMeasure,*/ 
+	kGuidoBar, 
+	kGuidoEvent, 
+	kGuidoScoreElementEnd
+}
+
+enum GuidoElementType { kNote = 1, kRest, kEmpty, kBar, kRepeatBegin, kRepeatEnd, kStaff, kSystemSlice, kSystem, kPage } 
+
+enum PianoRollType { kSimplePianoRoll, kTrajectoryPianoRoll }
