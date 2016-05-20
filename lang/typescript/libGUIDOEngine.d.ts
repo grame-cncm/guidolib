@@ -170,48 +170,44 @@ interface GuidoEngineAdapter {
 declare enum GuidoElementSelector   {}
 declare enum GuidoElementType       {}
 
-interface FloatRect                 {}
-
 //declare var MapElement      : [FloatRect, RectInfos];
 //declare var TimeMapElement  : [TimeSegment, TimeSegment];
 //declare var Time2GraphicMap : [TimeSegment, FloatRect];
 //declare var pairDate        : [GuidoDate, GuidoDate]; 
-
-interface MapElement {
-    FloatRect: FloatRect,
-    RectInfos: RectInfos
-}
-/*
-interface TimeMapElement {
-    TimeSegment: TimeSegment,
-    TimeSegment: TimeSegment,
-}
-*/
-/*
 interface TimeSegment {
-    start: GuidoDate,
-    end: GuidoDate,
+    start   : GuidoDate,
+    end     : GuidoDate,
 }
 
 interface Rect {
-	left: number;
-	top: number;
-	right: number;
-	bottom: number;
+	left    : number;
+	top     : number;
+	right   : number;
+	bottom  : number;
+}
+
+interface Element {
+    rect        : Rect;
+    rectInfos   : RectInfos;
+}
+interface MapElement {
+    map: Array<Element>;
+}
+
+interface TimeMapElement {
+    map: Array<TimeSegment>;
 }
 
 interface Time2GraphicElt {
     time: TimeSegment;
     rect: Rect;
 }
-
 interface Time2GraphicMap {
 	map: Array<Time2GraphicElt>;
 }
 
-*/
 interface MapCollector {
-    Graph2TimeMap   (box: FloatRect, dates: TimeSegment, infos: GuidoElementInfos): void;
+    Graph2TimeMap   (box: Rect, dates: TimeSegment, infos: GuidoElementInfos): void;
 }
 
 interface RectInfos {
@@ -240,8 +236,8 @@ interface GuidoScoreMapAdapter {
     getStaffMap     (gr: GRHandler, pagenum: number, w: number, h: number, staff: number)       : Time2GraphicMap;
     getVoiceMap     (gr: GRHandler, pagenum: number, w: number, h: number, voice: number)       : Time2GraphicMap;
     getSystemMap    (gr: GRHandler, pagenum: number, w: number, h: number)                      : Time2GraphicMap;
-    getTime         (date: GuidoDate, map: Time2GraphicMap, t: TimeSegment, r: FloatRect)       : boolean;
-    getPoint        (x: number, y: number, map: Time2GraphicMap, t: TimeSegment, r: FloatRect)  : boolean;
+    getTime         (date: GuidoDate, map: Time2GraphicMap, t: TimeSegment, r: Rect)            : boolean;
+    getPoint        (x: number, y: number, map: Time2GraphicMap, t: TimeSegment, r: Rect)       : boolean;
     getTimeMap      (gr: ARHandler, f: TimeMapCollector)                                        : GuidoErrCode;
 }
 
