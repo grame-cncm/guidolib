@@ -33,7 +33,6 @@ function initGlobalVar() {
     guidoLayoutSettings = guidoEngine.getDefaultLayoutSettings();   
 }
 
-
 class guidoTest {
     
 // CLOSURES
@@ -104,7 +103,7 @@ class guidoTest {
         initGlobalVar();
         console.log("----Miscellaneous----");
         this.testExpect("guidoEngine.getVersion()",                 this._checkIsVersion());        
-        this.testExpect("guidoEngine.checkVersionNums(1, 0, 2)",    this._checkErrCode(GuidoErrCode.guidoNoErr));
+        this.testExpect("guidoEngine.checkVersionNums(1, 0, 4)",    this._checkErrCode(GuidoErrCode.guidoNoErr));
         this.testExpect("guidoEngine.getLineSpace()",               this._checkIsNum());
         //this.testExpect("guidoEngine.markVoice(this.fAr, 3, ?, ?, ?, ?, ?)", this._check?(6));
         console.log("\n");
@@ -113,15 +112,15 @@ class guidoTest {
     testBuild(): void {
         initGlobalVar();
         console.log("----Building abstract and graphic representations----");
-        this.testExpect("guidoEngine.init()",                                     this._checkErrCode(GuidoErrCode.guidoNoErr));
-        this.testExpect("guidoEngine.ar2gr(ar)",                                  this._checkRun());        
-        //this.testRun("guidoEngine.ar2gr(ar, guidoLayoutSettings)");        
-        this.testExpect("guidoEngine.updateGR(gr)",                               this._checkErrCode(GuidoErrCode.guidoNoErr));        
-        //this.testExpect("guidoEngine.updateGR(gr, this.guidoLayoutSettings)",   this._checkErrCode(GuidoErrCode.guidoNoErr));        
-        this.testExpect("guidoEngine.freeAR(ar)",                                 this._checkVoid());        
-        this.testExpect("guidoEngine.freeGR(gr)",                                 this._checkVoid());
-        this.testExpect("guidoEngine.getErrorString(GuidoErrCode.guidoNoErr)",    this._checkStr("No error"));
-        this.testExpect("guidoEngine.getDefaultLayoutSettings()",                 this._checkIsGuidoLayoutSettings());
+        this.testExpect("guidoEngine.init()",                                   this._checkErrCode(GuidoErrCode.guidoNoErr));
+        this.testExpect("guidoEngine.ar2gr(ar)",                                this._checkRun());        
+        this.testExpect("guidoEngine.ar2grSettings(ar, guidoLayoutSettings)",   this._checkRun());        
+        this.testExpect("guidoEngine.updateGR(gr)",                             this._checkErrCode(GuidoErrCode.guidoNoErr));        
+        this.testExpect("guidoEngine.updateGRSettings(gr, guidoLayoutSettings)",this._checkErrCode(GuidoErrCode.guidoNoErr));        
+        this.testExpect("guidoEngine.freeAR(ar)",                               this._checkVoid());        
+        this.testExpect("guidoEngine.freeGR(gr)",                               this._checkVoid());
+        this.testExpect("guidoEngine.getErrorString(GuidoErrCode.guidoNoErr)",  this._checkStr("No error"));
+        this.testExpect("guidoEngine.getDefaultLayoutSettings()",               this._checkIsGuidoLayoutSettings());
         console.log("\n"); 
     }    
  
