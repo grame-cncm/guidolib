@@ -187,15 +187,28 @@ interface TimeMapElement {
     TimeSegment: TimeSegment,
 }
 */
-interface Time2GraphicMap {
-    TimeSegment : TimeSegment,
-    FloatRect   : FloatRect,
-}
 /*
-interface TimeMapElement {
-    GuidoDate: GuidoDate,
-    GuidoDate: GuidoDate,
+interface TimeSegment {
+    start: GuidoDate,
+    end: GuidoDate,
 }
+
+interface Rect {
+	left: number;
+	top: number;
+	right: number;
+	bottom: number;
+}
+
+interface Time2GraphicElt {
+    time: TimeSegment;
+    rect: Rect;
+}
+
+interface Time2GraphicMap {
+	map: Array<Time2GraphicElt>;
+}
+
 */
 interface MapCollector {
     Graph2TimeMap   (box: FloatRect, dates: TimeSegment, infos: GuidoElementInfos): void;
@@ -222,7 +235,7 @@ interface GuidoElementInfos {
 interface GuidoScoreMapAdapter {
     constructor: GuidoScoreMapAdapter;
 
-    getMap          (gr: GRHandler, pagenum: number, width: number, height: number, sel: GuidoElementSelector, f: MapCollector): GuidoErrCode;
+//    getMap          (gr: GRHandler, pagenum: number, width: number, height: number, sel: GuidoElementSelector, f: MapCollector): GuidoErrCode;
     getPageMap      (gr: GRHandler, pagenum: number, w: number, h: number)                      : Time2GraphicMap;
     getStaffMap     (gr: GRHandler, pagenum: number, w: number, h: number, staff: number)       : Time2GraphicMap;
     getVoiceMap     (gr: GRHandler, pagenum: number, w: number, h: number, voice: number)       : Time2GraphicMap;
