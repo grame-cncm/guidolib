@@ -1,7 +1,17 @@
 declare var Module: any;
 
-// INTERFACE REQUIERE BY GUIDOENGINE
+// GUIDOEngine
 //--------------------------------------------------------------
+declare enum GuidoMapping {}
+declare enum GuidoErrCode {}
+
+interface ARHandler     {}
+interface GRHandler     {}
+
+interface GuidoParser   {}
+interface GuidoStream   {}
+interface VGDevice      {}
+
 interface GuidoInitDesc {
     graphicDevice:  VGDevice;
     reserved:       void;
@@ -69,32 +79,16 @@ interface GPaintStruct {
 	bottom: number;
 }
 
-// Handlers
-//------------------------------
-interface ARHandler     {}
-interface GRHandler     {}
-
-// Classes
-//------------------------------
-interface GuidoParser   {}
-interface GuidoStream   {}
-interface VGDevice      {}
-
-// ENUMS
-//--------------------------------------------------------------
-declare enum GuidoMapping {}
-declare enum GuidoErrCode {}
-
-// GUIDOENGINE
-//--------------------------------------------------------------
 interface GuidoEngineAdapter {
     constructor: GuidoEngineAdapter;
         
     init        (desc?: GuidoInitDesc): GuidoErrCode;
     shutdown    (): void;
     
-	ar2gr       (ar: ARHandler, settings?: GuidoLayoutSettings): GRHandler;	
-    updateGR    (gr: GRHandler, settings?: GuidoLayoutSettings): GuidoErrCode;
+	ar2gr               (ar: ARHandler): GRHandler;
+	ar2grSettings       (ar: ARHandler, settings: GuidoLayoutSettings): GRHandler;	    	
+    updateGR            (gr: GRHandler): GuidoErrCode;
+    updateGRSettings    (gr: GRHandler, settings: GuidoLayoutSettings): GuidoErrCode;
 
 	freeAR      (ar: ARHandler): void;
 	freeGR      (gr: GRHandler): void;
@@ -169,4 +163,166 @@ interface GuidoEngineAdapter {
     closeStream     (s: GuidoStream): GuidoErrCode;
     writeStream     (s: GuidoStream, str: string): GuidoErrCode;
 	resetStream     (s: GuidoStream): GuidoErrCode;
+}
+
+// GUIDOMap
+//--------------------------------------------------------------
+declare enum GuidoElementSelector   {}
+declare enum GuidoElementType       {}
+
+interface FloatRect                 {}
+
+//declare var MapElement      : [FloatRect, RectInfos];
+//declare var TimeMapElement  : [TimeSegment, TimeSegment];
+//declare var Time2GraphicMap : [TimeSegment, FloatRect];
+//declare var pairDate        : [GuidoDate, GuidoDate]; 
+
+interface MapElement {
+    FloatRect: FloatRect,
+    RectInfos: RectInfos
+}
+/*
+interface TimeMapElement {
+    TimeSegment: TimeSegment,
+    TimeSegment: TimeSegment,
+}
+*/
+interface Time2GraphicMap {
+    TimeSegment : TimeSegment,
+    FloatRect   : FloatRect,
+}
+/*
+interface TimeMapElement {
+    GuidoDate: GuidoDate,
+    GuidoDate: GuidoDate,
+}
+*/
+interface MapCollector {
+    Graph2TimeMap   (box: FloatRect, dates: TimeSegment, infos: GuidoElementInfos): void;
+}
+
+interface RectInfos {
+    ftime   : TimeSegment;	
+    fInfos  : GuidoElementInfos;
+    time()  : TimeSegment;
+	infos() : GuidoElementInfos;	
+}
+
+interface TimeMapCollector {
+    Time2TimeMap    (from: TimeSegment, to: TimeSegment): void ;
+}
+
+interface GuidoElementInfos {
+	type        : GuidoElementType;		
+	staffNum    : number;	
+	voiceNum    : number;	
+    midiPitch   : number; 
+}
+
+interface GuidoScoreMapAdapter {
+    constructor: GuidoScoreMapAdapter;
+
+    getMap          (gr: GRHandler, pagenum: number, width: number, height: number, sel: GuidoElementSelector, f: MapCollector): GuidoErrCode;
+    getPageMap      (gr: GRHandler, pagenum: number, w: number, h: number)                      : Time2GraphicMap;
+    getStaffMap     (gr: GRHandler, pagenum: number, w: number, h: number, staff: number)       : Time2GraphicMap;
+    getVoiceMap     (gr: GRHandler, pagenum: number, w: number, h: number, voice: number)       : Time2GraphicMap;
+    getSystemMap    (gr: GRHandler, pagenum: number, w: number, h: number)                      : Time2GraphicMap;
+    getTime         (date: GuidoDate, map: Time2GraphicMap, t: TimeSegment, r: FloatRect)       : boolean;
+    getPoint        (x: number, y: number, map: Time2GraphicMap, t: TimeSegment, r: FloatRect)  : boolean;
+    getTimeMap      (gr: ARHandler, f: TimeMapCollector)                                        : GuidoErrCode;
+}
+
+interface TimeSegment /*implements pairDate*/ {
+    constructor: TimeSegment;
+	empty       () : boolean;
+	intersect   (ts: TimeSegment): boolean;
+	include     (date: GuidoDate): boolean;
+	include     (ts: TimeSegment): boolean;
+}
+
+// GUIDOFactory
+//--------------------------------------------------------------
+interface ARFactoryHandler {} 
+
+interface GUIDOFactoryAdapter {
+	factory: ARFactoryHandler;
+    constructor: GUIDOFactoryAdapter;
+	
+	openMusic   () : GuidoErrCode;
+	closeMusic  () : ARHandler;
+
+    openVoice   () : GuidoErrCode;
+    closeVoice  () : GuidoErrCode;
+
+    openChord   () : GuidoErrCode;
+    closeChord  () : GuidoErrCode;
+
+    insertCommata(): GuidoErrCode;
+	
+    openEvent   (inEventName: string): GuidoErrCode;
+    closeEvent  (): GuidoErrCode;
+
+    addSharp    (): GuidoErrCode ;
+    addFlat     (): GuidoErrCode;
+
+    setEventDots        (dots: number): GuidoErrCode;
+    setEventAccidentals (accident: number): GuidoErrCode;
+
+    setOctave   (octave: number): GuidoErrCode;
+    setDuration (numerator: number, denominator: number): GuidoErrCode;
+
+    openTag                 (name: string, tagID: number): GuidoErrCode;
+    openRangeTag            (name: string, tagID: number): GuidoErrCode;
+    endTag                  (): GuidoErrCode;
+    closeTag                (): GuidoErrCode;
+    addTagParameterString   (val: string): GuidoErrCode;
+    addTagParameterInt      (val: number): GuidoErrCode;
+    addTagParameterFloat    (val: number): GuidoErrCode;
+
+    setParameterName(name: string): GuidoErrCode;
+    setParameterUnit(unit: string): GuidoErrCode;
+}
+
+// GUIDOPianoRoll
+//--------------------------------------------------------------
+declare enum PianoRollType  {}
+
+interface LimitParams {
+    startDate   : GuidoDate;
+    endDate     : GuidoDate;
+    lowPitch    : number;
+    highPitch   : number;    
+}
+
+interface PianoRoll {}
+
+interface GUIDOPianoRollAdapter {
+	constructor: GUIDOPianoRollAdapter;
+		
+    ar2PianoRoll    (type: PianoRollType, arh: ARHandler): PianoRoll;
+    midi2PianoRoll  (type: PianoRollType, midiFileName: string): PianoRoll;
+
+    destroyPianoRoll(pr: PianoRoll): GuidoErrCode;
+    
+    setLimits       (pr: PianoRoll, limitParams: LimitParams): GuidoErrCode;
+
+    enableKeyboard  (pr: PianoRoll, enabled: boolean): GuidoErrCode;
+    getKeyboardWidth(pr: PianoRoll, height: number): number;
+
+    enableAutoVoicesColoration  (pr: PianoRoll, enabled: boolean): GuidoErrCode;
+    setRGBColorToVoice          (pr: PianoRoll, voiceNum: number, r: number, g: number, b: number, a: number): GuidoErrCode;
+    setHtmlColorToVoice         (pr: PianoRoll, voiceNum: number, color: number): GuidoErrCode;
+    removeColorToVoice          (pr: PianoRoll, voiceNum: number): GuidoErrCode;
+
+    enableMeasureBars           (pr: PianoRoll, enabled: boolean): GuidoErrCode;
+
+    setPitchLinesDisplayMode    (pr: PianoRoll, mode: number): GuidoErrCode;
+
+    getMap          (pr: PianoRoll, width: number, height: number): Time2GraphicMap;
+
+    onDraw          (pr: PianoRoll, width: number, height: number, dev: VGDevice): GuidoErrCode;
+
+	svgExport       (pr: PianoRoll, width: number, height: number): string;
+
+    javascriptExport(pr: PianoRoll, width: number, height: number): GuidoErrCode;
 }
