@@ -3,8 +3,8 @@
 
 interface checkfunction             { (n: any): boolean; } 
 
-var gmnString = '[a e m]';
-var gmnStream = '[a e m';
+var gmnString = '[a e f g c]';
+var gmnStream = '[a e f g c';
 
 var bbMap: number     = 1;
 var valTest: number   = 8;
@@ -14,7 +14,7 @@ var guidoEngine         : GuidoEngineAdapter;
 var parseur             : GuidoParser;
 var ar                  : ARHandler;
 var gr                  : GRHandler;       
-var date                : GuidoDate;
+var date                : GuidoDate = {num: 1, denom: 1};
 var guidoPageFormat     : GuidoPageFormat;
 var guidoStream         : GuidoStream;
 var guidoLayoutSettings : GuidoLayoutSettings;
@@ -24,6 +24,7 @@ function initGlobalVar() {
     eval(content.toString());    
     guidoEngine         = new Module.GuidoEngineAdapter;
     guidoEngine.init();
+/*
     parseur             = guidoEngine.openParser();
     ar                  = guidoEngine.string2AR(parseur, gmnString);
     gr                  = guidoEngine.ar2gr(ar);       
@@ -31,6 +32,7 @@ function initGlobalVar() {
     guidoPageFormat     = guidoEngine.getDefaultPageFormat();
     guidoStream         = guidoEngine.openStream();
     guidoLayoutSettings = guidoEngine.getDefaultLayoutSettings();   
+*/
 }
 
 class guidoTest {
@@ -73,18 +75,21 @@ class guidoTest {
 // test process
 //------------------------------------
     processTest(): void {
+		initGlobalVar();
+
         console.log('************************* New test *************************');
+        console.log('   GuidoEngine Version ' + guidoEngine.getVersion().str + '\n');
         
         this.testMisc();
         this.testBuild(); 
         this.testBrows(); 
         this.testPages();
-        this.testParse(); 
+        this.testParse();
         this.testEnd();       
         this.todo();    
     }  
     
-    testExpect(f: string, check : checkfunction): void {
+    testExpect(f: string, check : checkfunction): any {
         let result = eval(f);
         let expected = check(result);
         if (expected) {
@@ -94,14 +99,15 @@ class guidoTest {
             console.log ("ERROR     "  + f + " => " + result);
             console.log(result);
         }
+        return result;
     } 
     
 // different tests
 //------------------------------------    
     
     testMisc(): void {
-        initGlobalVar();
         console.log("----Miscellaneous----");
+        this.testExpect("guidoEngine.init()",                                   this._checkErrCode(GuidoErrCode.guidoNoErr));
         this.testExpect("guidoEngine.getVersion()",                 this._checkIsVersion());        
         this.testExpect("guidoEngine.checkVersionNums(1, 0, 4)",    this._checkErrCode(GuidoErrCode.guidoNoErr));
         this.testExpect("guidoEngine.getLineSpace()",               this._checkIsNum());
@@ -110,23 +116,27 @@ class guidoTest {
     }   
  
     testBuild(): void {
-        initGlobalVar();
         console.log("----Building abstract and graphic representations----");
-        this.testExpect("guidoEngine.init()",                                   this._checkErrCode(GuidoErrCode.guidoNoErr));
-        this.testExpect("guidoEngine.ar2gr(ar)",                                this._checkRun());        
+        parseur = this.testExpect("guidoEngine.openParser()", 				this._checkRun());
+        ar = this.testExpect("guidoEngine.string2AR(parseur, gmnString)", 	this._checkRun());
+        gr = this.testExpect("guidoEngine.ar2gr(ar)",                       this._checkRun());        
+        guidoLayoutSettings = this.testExpect("guidoEngine.getDefaultLayoutSettings()", this._checkRun());
         this.testExpect("guidoEngine.ar2grSettings(ar, guidoLayoutSettings)",   this._checkRun());        
         this.testExpect("guidoEngine.updateGR(gr)",                             this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoEngine.updateGRSettings(gr, guidoLayoutSettings)",this._checkErrCode(GuidoErrCode.guidoNoErr));        
-        this.testExpect("guidoEngine.freeAR(ar)",                               this._checkVoid());        
         this.testExpect("guidoEngine.freeGR(gr)",                               this._checkVoid());
+        this.testExpect("guidoEngine.freeAR(ar)",                               this._checkVoid());        
+        this.testExpect("guidoEngine.closeParser(parseur)",                     this._checkErrCode(GuidoErrCode.guidoNoErr));
         this.testExpect("guidoEngine.getErrorString(GuidoErrCode.guidoNoErr)",  this._checkStr("No error"));
         this.testExpect("guidoEngine.getDefaultLayoutSettings()",               this._checkIsGuidoLayoutSettings());
         console.log("\n"); 
     }    
  
     testBrows(): void {
-        initGlobalVar();
         console.log("----Browsing music pages----");
+        parseur = this.testExpect("guidoEngine.openParser()", 				this._checkRun());
+        ar = this.testExpect("guidoEngine.string2AR(parseur, gmnString)", 	this._checkRun());
+        gr = this.testExpect("guidoEngine.ar2gr(ar)",                       this._checkRun());        
         this.testExpect("guidoEngine.countVoices(ar)",          this._checkIsNum());
         this.testExpect("guidoEngine.getPageCount(gr)",         this._checkIsNum());
         this.testExpect("guidoEngine.getSystemCount(gr, page)", this._checkIsNum());
@@ -134,48 +144,58 @@ class guidoTest {
         this.testExpect("guidoEngine.findEventPage(gr, date)",  this._checkIsNum());
         this.testExpect("guidoEngine.findPageAt(gr, date)",     this._checkIsNum());
         this.testExpect("guidoEngine.getPageDate(gr, page)",    this._checkIsDate());
+        this.testExpect("guidoEngine.freeGR(gr)",                               this._checkVoid());
+        this.testExpect("guidoEngine.freeAR(ar)",                               this._checkVoid());        
+        this.testExpect("guidoEngine.closeParser(parseur)",                     this._checkErrCode(GuidoErrCode.guidoNoErr));
         console.log("\n");  
     } 
     
     testPages(): void {
-        initGlobalVar();
         console.log("----Score drawing and pages formating----");
         //this.testExpect("guidoEngine.onDraw(?)",                            this._checkErrCode(GuidoErrCode.guidoNoErr));
+        parseur = this.testExpect("guidoEngine.openParser()", 				this._checkRun());
+        ar = this.testExpect("guidoEngine.string2AR(parseur, gmnString)", 	this._checkRun());
+        gr = this.testExpect("guidoEngine.ar2gr(ar)",                       this._checkRun());        
         this.testExpect("guidoEngine.gr2SVG(gr, page, true, 0)",              this._checkIsStr());
         this.testExpect("guidoEngine.abstractExport(gr, page)",               this._checkIsStr());
         this.testExpect("guidoEngine.binaryExport(gr, page)",                 this._checkIsStr());
         this.testExpect("guidoEngine.setDrawBoundingBoxes(bbMap)",            this._checkVoid());
         this.testExpect("guidoEngine.getDrawBoundingBoxes()",                 this._checkIsNum());
         this.testExpect("guidoEngine.getPageFormat(gr, page)",                this._checkIsPageFormat());
-        this.testExpect("guidoEngine.getDefaultPageFormat()",                 this._checkIsPageFormat());
+        guidoPageFormat = this.testExpect("guidoEngine.getDefaultPageFormat()", this._checkIsPageFormat());
         this.testExpect("guidoEngine.setDefaultPageFormat(guidoPageFormat)",  this._checkVoid());
         this.testExpect("guidoEngine.unit2CM(valTest)",                       this._checkIsNum());
         this.testExpect("guidoEngine.cm2Unit(valTest)",                       this._checkIsNum());
         this.testExpect("guidoEngine.unit2Inches(valTest)",                   this._checkIsNum());
         this.testExpect("guidoEngine.inches2Unit(valTest)",                   this._checkIsNum());
         this.testExpect("guidoEngine.resizePageToMusic(gr)",                  this._checkErrCode(GuidoErrCode.guidoNoErr));
+        this.testExpect("guidoEngine.freeGR(gr)",                               this._checkVoid());
+        this.testExpect("guidoEngine.freeAR(ar)",                               this._checkVoid());        
+        this.testExpect("guidoEngine.closeParser(parseur)",                     this._checkErrCode(GuidoErrCode.guidoNoErr));
         console.log("\n");  
     } 
     
     testParse(): void {
-        initGlobalVar();
         console.log("----Parsing GMN files, strings and guido streams----");
-        this.testExpect("guidoEngine.openParser()",                           this._checkRun());
-        this.testExpect("guidoEngine.openStream()",                           this._checkRun());
-        this.testExpect("guidoEngine.getStream(guidoStream)",                 this._checkIsStr());
-        this.testExpect("guidoEngine.file2AR(parseur, gmnString)",            this._checkRun());
+        parseur = this.testExpect("guidoEngine.openParser()",                           this._checkRun());
+
+        this.testExpect("guidoEngine.file2AR(parseur, 'test.gmn')",            this._checkRun());
         this.testExpect("guidoEngine.string2AR(parseur, gmnString)",          this._checkRun());
-        //this.testExpect("guidoEngine.stream2AR(parseur, gmnString)",          this._checkRun());
+
+        guidoStream = this.testExpect("guidoEngine.openStream()",                       this._checkRun());
+        this.testExpect("guidoEngine.writeStream(guidoStream, gmnStream)",    this._checkErrCode(GuidoErrCode.guidoNoErr));
+        this.testExpect("guidoEngine.writeStream(guidoStream, 'a')",    this._checkErrCode(GuidoErrCode.guidoNoErr));
+        this.testExpect("guidoEngine.stream2AR(parseur, guidoStream)",          this._checkRun());
+        this.testExpect("guidoEngine.getStream(guidoStream)",                 this._checkIsStr());
+
         this.testExpect("guidoEngine.parserGetErrorCode(parseur)",            this._checkIsParserErr());
-        this.testExpect("guidoEngine.closeStream(guidoStream)",               this._checkErrCode(GuidoErrCode.guidoNoErr));
-        this.testExpect("guidoEngine.writeStream(guidoStream, gmnString)",    this._checkErrCode(GuidoErrCode.guidoNoErr));
         this.testExpect("guidoEngine.resetStream(guidoStream)",               this._checkErrCode(GuidoErrCode.guidoNoErr));   
+        this.testExpect("guidoEngine.closeStream(guidoStream)",               this._checkErrCode(GuidoErrCode.guidoNoErr));
         this.testExpect("guidoEngine.closeParser(parseur)",                   this._checkErrCode(GuidoErrCode.guidoNoErr));
         console.log("\n");
     }    
     
     testEnd(): void {
-        initGlobalVar();
         console.log("----End of methods tests----");
         this.testExpect("guidoEngine.shutdown()",   this._checkVoid());
         console.log("\n");  
