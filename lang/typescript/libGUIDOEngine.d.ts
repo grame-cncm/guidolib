@@ -309,7 +309,7 @@ interface GUIDOPianoRollAdapter {
 	constructor: GUIDOPianoRollAdapter;
 		
     ar2PianoRoll    (type: PianoRollType, arh: ARHandler): PianoRoll;
-    midi2PianoRoll  (type: PianoRollType, midiFileName: string): PianoRoll;
+    //midi2PianoRoll  (type: PianoRollType, midiFileName: string): PianoRoll;
 
     destroyPianoRoll(pr: PianoRoll): GuidoErrCode;
     
