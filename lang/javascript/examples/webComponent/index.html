@@ -18,14 +18,13 @@
 	<header><iframe src="../header.html"></iframe></header>
 	<div>
 		<p>	 
-	This document is a simple example of web component to have a easy integration of guido in html page. A tag guido-viewer is created and integrated in the html page. The draw method used in export svg.
+	This document is a simple example of web component provided for aa easy integration of guido in html pages. A &lt;guido-viewer&gt; tag is embedded in the html page. The template "template/guidoTemplate.html" provides the code to interpret the &lt;guido-viewer&gt; tag. The draw method uses the svg export.
 		</p>
 		<p>
-	You have to run it with a http server because template is in an external file and
-	most of browser doesn't allow cross browsing domain.
+	You have to run it from an http server because most of browsers will reject the template import directive due to "Cross-Origin Resourec Sharing policy".
 		</p>
 		<p>
-	You can use the python SimpleHttpServer on linux. (type "python -m SimpleHTTPServer 8000" in a console). The server have to be lunch in parent directory of html file (to have the libGUIDOEngine.js file).
+	You can use the python SimpleHttpServer: run "python -m SimpleHTTPServer 8000" from a shell. The server must be launched from the directory where libGUIDOEngine.js is. Next, direct your browser to http://localhost:8000
 		</p>
 		<p>
 			Your browser must support import files.
