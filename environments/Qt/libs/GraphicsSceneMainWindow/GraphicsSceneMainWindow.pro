@@ -28,7 +28,7 @@ ios {
 	CONFIG+= arm64 armv7 armv7s
 }
 
-
+CONFIG += c++11
 DESTDIR = $$PWD/..
 
 ####### Headers #######

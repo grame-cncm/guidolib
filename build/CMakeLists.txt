@@ -21,7 +21,7 @@ endif(UNIX)
 
 #######################################
 # Options disabled by default
-option ( C++11 	"C++11 support" off )
+option ( C++11 	"C++11 support" on )
 option ( IOS 	"Generates project for iOS" off )
 option ( DIST 	"Compiles universal binaries (x86_64 i386) on MacOSX" off )
 option ( MIDIEXPORT "MIDI export support (requires MidiShareLight)" off)

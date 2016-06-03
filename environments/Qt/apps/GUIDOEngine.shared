@@ -3,6 +3,7 @@
 ROOT = $$PWD/../../..
 
 macx {
+CONFIG += c++11
 	CONFIG+= i386 x86_64
 	QMAKE_CXXFLAGS += -mmacosx-version-min=10.7
 }
@@ -10,8 +11,7 @@ macx {
 ios {
 	QMAKE_CXXFLAGS += -DIOS
 	CONFIG += c++11
-	CONFIG+= arm64 armv7 armv7s
-	
+	CONFIG+= arm64 armv7 armv7s	
 }
 
 win32 {
