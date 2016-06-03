@@ -5,6 +5,7 @@ GUIDO Engine history
 - incorrect beaming corrected: 
   a beam could sometimes cross a beat,
   incorrect beam start corrected for tied notes starting off beat
+- crash bug corrected with meter<"0">, was due to new beaming strategy
 
 ----------------------------------------------------------------
   version 1.6.1

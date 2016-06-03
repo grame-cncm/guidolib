@@ -1585,6 +1585,7 @@ bool ARMusicalVoice::beamCrossBeat(const TYPE_TIMEPOSITION beamstart, const TYPE
 	bool cross = false;
 	if (numvec.size() == 1) {								// simple meter spec: get the beat duration
 		TYPE_DURATION beatdur = beamBeatUnit(TYPE_DURATION(numvec[0], meter.getDenominator()));
+		if (beatdur.getNumerator() == 0) return true;
 		while (currentBeatPos <= beamstart) {				// and find the beat following the beam start date
 			currentBeatPos += beatdur;
 		}
@@ -1594,6 +1595,7 @@ bool ARMusicalVoice::beamCrossBeat(const TYPE_TIMEPOSITION beamstart, const TYPE
 		for (std::vector<int>::const_iterator i = numvec.begin(); i != numvec.end(); i++) {
 			// get the beat duration for each part of meter spec
 			TYPE_DURATION beatdur = beamBeatUnit(TYPE_DURATION(*i, meter.getDenominator()));
+		if (beatdur.getNumerator() == 0) return true;
 			if (currentBeatPos > beamstart) {				// and find the beat following the beam start date
 				break;
 			}
