@@ -42,7 +42,7 @@ ifeq ($(TARGET), windows)
 endif
 
 LINUX := linux
-C++11 ?= no
+C++11 ?= yes
 CMAKEOPT ?= -DMIDIEXPORT=yes -DC++11=$(C++11)
 
 all :

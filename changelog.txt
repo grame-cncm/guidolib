@@ -9,6 +9,7 @@ GUIDO Engine history
   a beam could sometimes cross a beat,
   incorrect beam start corrected for tied notes starting off beat
 - bug in Midi export corrected (velocity was always 0)
+- crash bug corrected with meter<"0">, was due to new beaming strategy
 
 ----------------------------------------------------------------
   version 1.6.1

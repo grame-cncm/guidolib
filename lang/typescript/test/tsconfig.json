@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "target": "es3",
+        "module": "system",
+        "outDir": "build",
+        "out": "mainNode.js",
+        "declaration": false,
+        "sourceMap": false,
+        "noImplicitAny": true
+    }
+}
