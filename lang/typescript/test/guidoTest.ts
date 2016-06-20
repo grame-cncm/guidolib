@@ -17,6 +17,7 @@ var parseur             : GuidoParser;
 var ar                  : ARHandler;
 var gr                  : GRHandler;       
 var date                : GuidoDate = {num: 1, denom: 1};
+var duration            : GuidoDate = {num: 1, denom: 1};
 var guidoPageFormat     : GuidoPageFormat;
 var guidoStream         : GuidoStream;
 var guidoLayoutSettings : GuidoLayoutSettings;
@@ -80,7 +81,7 @@ function init() {
     eval(content.toString());    
     guidoEngine     = new Module.GuidoEngineAdapter;
     guidoEngine.init();
-    //guidoScoreMap   = new Module.GuidoScoreMapAdapter;
+    //guidoScoreMap   = new Module.GuidoScoreMapAdapter();
     guidoFactory    = new Module.GUIDOFactoryAdapter(); 
     guidoPianoRoll  = new Module.GUIDOPianoRollAdapter;    
 }
@@ -136,7 +137,7 @@ class guidoTest {
         //this.processMap();
         this.processFactory();
         this.processPianoRoll();
-        this.todoEngine();
+        this.todo();
         
         console.log('************************* Test End *************************');             
     }
@@ -179,35 +180,35 @@ class guidoTest {
         this.testExpect("guidoFactory.openChord()",                         this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoFactory.insertCommata()",                     this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoFactory.openEvent(inEventName)",              this._checkErrCode(GuidoErrCode.guidoNoErr));        
+        //this.testExpect("guidoFactory.openRangeTag(name, tagID)",           this._checkErrCode(GuidoErrCode.guidoNoErr));        
+        //this.testExpect("guidoFactory.openTag(name, tagID)",                this._checkErrCode(GuidoErrCode.guidoNoErr));               
         //this.testExpect("guidoFactory.addSharp()",                          this._checkErrCode(GuidoErrCode.guidoNoErr));        
-        //this.testExpect("guidoFactory.addFlat()",                           this._checkErrCode(GuidoErrCode.guidoNoErr));        
-        //this.testExpect("guidoFactory.setEventDots(dots)",                  this._checkErrCode(GuidoErrCode.guidoNoErr));        
-        //this.testExpect("guidoFactory.setEventAccidentals(accident)",       this._checkErrCode(GuidoErrCode.guidoNoErr));        
+        //this.testExpect("guidoFactory.addFlat()",                           this._checkErrCode(GuidoErrCode.guidoNoErr));      
+        //this.testExpect("guidoFactory.setEventAccidentals(accident)",       this._checkErrCode(GuidoErrCode.guidoNoErr));          
+        this.testExpect("guidoFactory.setEventDots(dots)",                  this._checkErrCode(GuidoErrCode.guidoNoErr));                
         this.testExpect("guidoFactory.setOctave(octave)",                   this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoFactory.setDuration(numerator, denominator)", this._checkErrCode(GuidoErrCode.guidoNoErr));        
-        //this.testExpect("guidoFactory.openTag(name, tagID)",                this._checkErrCode(GuidoErrCode.guidoNoErr));        
-        //this.testExpect("guidoFactory.openRangeTag(name, tagID)",           this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoFactory.endTag()",                            this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoFactory.addTagParameterString(valStr)",       this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoFactory.addTagParameterInt(valNum)",          this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoFactory.setParameterName(name)",              this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoFactory.setParameterUnit(unit)",              this._checkErrCode(GuidoErrCode.guidoNoErr));        
-        //this.testExpect("guidoFactory.closeMusic()",                        this._checkRun());        
-        //this.testExpect("guidoFactory.closeVoice()",                        this._checkErrCode(GuidoErrCode.guidoNoErr));        
-        this.testExpect("guidoFactory.closeChord()",                        this._checkErrCode(GuidoErrCode.guidoNoErr));        
-        this.testExpect("guidoFactory.closeEvent()",                        this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoFactory.closeTag()",                          this._checkErrCode(GuidoErrCode.guidoNoErr));
+        this.testExpect("guidoFactory.closeEvent()",                        this._checkErrCode(GuidoErrCode.guidoNoErr));        
+        this.testExpect("guidoFactory.closeChord()",                        this._checkErrCode(GuidoErrCode.guidoNoErr));        
+        this.testExpect("guidoFactory.closeVoice()",                        this._checkErrCode(GuidoErrCode.guidoNoErr));                
+        this.testExpect("guidoFactory.closeMusic()",                        this._checkRun());        
         console.log('\n');                    
     }
     
     processPianoRoll(): void {
         console.log('   ** Test GuidoPianoRoll **' + '\n');
         parseur = this.testExpect("guidoEngine.openParser()", 			                this._checkRun());
-        ar = this.testExpect("guidoEngine.string2AR(parseur, gmnString)", 	            this._checkRun());  
-                      
+        ar = this.testExpect("guidoEngine.string2AR(parseur, gmnString)", 	            this._checkRun());               
         pr = this.testExpect("guidoPianoRoll.ar2PianoRoll(type, ar)",                   this._checkRun());        
-        //this.testExpect("guidoPianoRoll.midi2PianoRoll(type, midiFileName)",            this._checkRun());        
-        this.testExpect("guidoPianoRoll.destroyPianoRoll(pr)",                          this._checkErrCode(GuidoErrCode.guidoNoErr));        
+        this.testExpect("guidoPianoRoll.svgExport(pr, width, height)",                  this._checkIsStr());        
+        // use canvas
+        //this.testExpect("guidoPianoRoll.javascriptExport(pr, width, height)",         this._checkErrCode(GuidoErrCode.guidoNoErr));                
         this.testExpect("guidoPianoRoll.setLimits(pr, limitParams)",                    this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoPianoRoll.enableKeyboard(pr, enabled)",                   this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoPianoRoll.getKeyboardWidth(pr, height)",                  this._checkIsNum());        
@@ -216,12 +217,8 @@ class guidoTest {
         this.testExpect("guidoPianoRoll.setHtmlColorToVoice(pr, voiceNum, color)",      this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoPianoRoll.removeColorToVoice(pr, voiceNum)",              this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoPianoRoll.enableMeasureBars(pr, enabled)",                this._checkErrCode(GuidoErrCode.guidoNoErr));        
-        this.testExpect("guidoPianoRoll.setPitchLinesDisplayMode(pr, mode)",            this._checkErrCode(GuidoErrCode.guidoNoErr));        
-        //this.testExpect("guidoPianoRoll.getMap(pr, width, height)",                     this._checkRun());        
-        //this.testExpect("guidoPianoRoll.onDraw(pr, width, height, dev))",               this._checkErrCode(GuidoErrCode.guidoNoErr));        
-        //this.testExpect("guidoPianoRoll.svgExport(pr, width, height)",                  this._checkIsStr());        
-        //this.testExpect("guidoPianoRoll.javascriptExport(pr, width, height)",           this._checkErrCode(GuidoErrCode.guidoNoErr));                
-    
+        this.testExpect("guidoPianoRoll.setPitchLinesDisplayMode(pr, mode)",            this._checkErrCode(GuidoErrCode.guidoNoErr));          
+        this.testExpect("guidoPianoRoll.destroyPianoRoll(pr)",                          this._checkErrCode(GuidoErrCode.guidoNoErr));                
         this.testExpect("guidoEngine.freeAR(ar)",                                       this._checkVoid());        
         this.testExpect("guidoEngine.closeParser(parseur)",                             this._checkErrCode(GuidoErrCode.guidoNoErr));              
         console.log('\n');
@@ -245,11 +242,17 @@ class guidoTest {
     
     testMisc(): void {
         console.log("----Miscellaneous----");
-        this.testExpect("guidoEngine.init()",                       this._checkErrCode(GuidoErrCode.guidoNoErr));
-        this.testExpect("guidoEngine.getVersion()",                 this._checkIsVersion());        
-        this.testExpect("guidoEngine.checkVersionNums(1, 0, 4)",    this._checkErrCode(GuidoErrCode.guidoNoErr));
-        this.testExpect("guidoEngine.getLineSpace()",               this._checkIsNum());
-        //this.testExpect("guidoEngine.markVoice(this.fAr, 3, ?, ?, ?, ?, ?)", this._check?(6));
+        parseur = this.testExpect("guidoEngine.openParser()", 				        this._checkRun());
+        ar = this.testExpect("guidoEngine.string2AR(parseur, gmnString)",           this._checkRun());
+        
+        this.testExpect("guidoEngine.init()",                                       this._checkErrCode(GuidoErrCode.guidoNoErr));
+        this.testExpect("guidoEngine.getVersion()",                                 this._checkIsVersion());        
+        this.testExpect("guidoEngine.checkVersionNums(1, 0, 4)",                    this._checkErrCode(GuidoErrCode.guidoNoErr));
+        this.testExpect("guidoEngine.getLineSpace()",                               this._checkIsNum());
+        this.testExpect("guidoEngine.markVoice(ar, voiceNum, date, duration, 10, 10, 10)", this._checkErrCode(GuidoErrCode.guidoNoErr));
+        
+        this.testExpect("guidoEngine.freeAR(ar)",                                   this._checkVoid());        
+        this.testExpect("guidoEngine.closeParser(parseur)",                         this._checkErrCode(GuidoErrCode.guidoNoErr));
         console.log("\n");
     }   
  
@@ -297,7 +300,6 @@ class guidoTest {
         ar = this.testExpect("guidoEngine.string2AR(parseur, gmnString)", 	    this._checkRun());
         gr = this.testExpect("guidoEngine.ar2gr(ar)",                           this._checkRun());  
 
-        //this.testExpect("guidoEngine.onDraw(?)",                              this._checkErrCode(GuidoErrCode.guidoNoErr));              
         this.testExpect("guidoEngine.gr2SVG(gr, page, true, 0)",                this._checkIsStr());
         this.testExpect("guidoEngine.abstractExport(gr, page)",                 this._checkIsStr());
         this.testExpect("guidoEngine.binaryExport(gr, page)",                   this._checkIsStr());
@@ -344,17 +346,30 @@ class guidoTest {
         console.log("\n");  
     }                      
     
-    todoEngine(): void {
+    todo(): void {
         console.log("------------- TODO -------------"      + "\n" +
-                    "Missing declarations in .cpp file : Timing measurements"  + "\n" +
-                    "=> guidoEngine.getParsingTime"         + "\n" +
-                    "=> guidoEngine.getAR2GRTime"           + "\n" + 
-                    "=> guidoEngine.getOnDrawTime"          + "\n" +
-                    "=> guidoEngine.setSymbolPath"          + "\n" +
-                    "=> guidoEngine.getSymbolPath"          + "\n" +
-                    "Missing declarations in .cpp file : Parsing GMN files, strings and guido streams"  + "\n" +
+            "Missing declarations in main.cpp interface : guidoEngine"  + "\n" +
+                    "=> guidoEngine.getParsingTime"             + "\n" +
+                    "=> guidoEngine.getAR2GRTime"               + "\n" + 
+                    "=> guidoEngine.getOnDrawTime"              + "\n" +
+                    "=> guidoEngine.setSymbolPath"              + "\n" +
+                    "=> guidoEngine.getSymbolPath"              + "\n" +
                     "=> guidoEngine.GuidoStream2GuidoString"    + "\n" +
-                    "=> guidoEngine.GuidoFreeStreamString"      + "\n"     
+                    "=> guidoEngine.GuidoFreeStreamString"      + "\n" +  
+                    "=> guidoEngine.onDraw"                     + "\n" +  
+            "Missing declarations in main.cpp interface : PianoRoll"    + "\n" +
+                    "=> guidoPianoRoll.midi2PianoRoll"          + "\n" +
+                    "=> guidoPianoRoll.getMap"                  + "\n" + 
+                    "=> guidoPianoRoll.onDraw"                  + "\n" +
+            "Others"    + "\n" +
+                    "=> Module.GuidoScoreMapAdapter is undefined"   + "\n" +
+                    "=> Some error to fix in guidoFactory"          + "\n"                     
                     );     
     }
 }    
+
+        //this.testExpect("guidoEngine.onDraw(?)",                              this._checkErrCode(GuidoErrCode.guidoNoErr));              
+
+        //this.testExpect("guidoPianoRoll.midi2PianoRoll(type, midiFileName)",            this._checkRun());        
+        //this.testExpect("guidoPianoRoll.getMap(pr, width, height)",                     this._checkRun());        
+        //this.testExpect("guidoPianoRoll.onDraw(pr, width, height, dev))",               this._checkErrCode(GuidoErrCode.guidoNoErr)); 
