@@ -5,8 +5,8 @@ interface checkfunction     { (n: any): boolean; }
 
 // guidoEngine var
 //------------------------------------
-var gmnString = '[a]';
-var gmnStream = '[a';
+var gmnString = '[ f g b/8 d f/4 e]';
+var gmnStream = '[ f g b/8 d f/4 e';
 
 var bbMap   : number = 1;
 var valTest : number = 8;
@@ -207,7 +207,7 @@ class guidoTest {
         ar = this.testExpect("guidoEngine.string2AR(parseur, gmnString)", 	            this._checkRun());               
         pr = this.testExpect("guidoPianoRoll.ar2PianoRoll(type, ar)",                   this._checkRun());        
         this.testExpect("guidoPianoRoll.svgExport(pr, width, height)",                  this._checkIsStr()); 
-        console.log(guidoPianoRoll.svgExport(pr, width, height));       
+        console.log(guidoPianoRoll.svgExport(pr, -1, -1));       
         // use canvas
         //this.testExpect("guidoPianoRoll.javascriptExport(pr, width, height)",         this._checkErrCode(GuidoErrCode.guidoNoErr));                
         this.testExpect("guidoPianoRoll.setLimits(pr, limitParams)",                    this._checkErrCode(GuidoErrCode.guidoNoErr));        
