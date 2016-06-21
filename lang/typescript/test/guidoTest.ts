@@ -5,8 +5,8 @@ interface checkfunction     { (n: any): boolean; }
 
 // guidoEngine var
 //------------------------------------
-var gmnString = '[a e f g c]';
-var gmnStream = '[a e f g c';
+var gmnString = '[a]';
+var gmnStream = '[a';
 
 var bbMap   : number = 1;
 var valTest : number = 8;
@@ -81,7 +81,7 @@ function init() {
     eval(content.toString());    
     guidoEngine     = new Module.GuidoEngineAdapter;
     guidoEngine.init();
-    //guidoScoreMap   = new Module.GuidoScoreMapAdapter();
+    guidoScoreMap   = new Module.GUIDOScoreMap;
     guidoFactory    = new Module.GUIDOFactoryAdapter(); 
     guidoPianoRoll  = new Module.GUIDOPianoRollAdapter;    
 }
@@ -134,7 +134,7 @@ class guidoTest {
         console.log('************************************************************' + '\n');  
         
         this.processMoteur();
-        //this.processMap();
+        this.processMap();
         this.processFactory();
         this.processPianoRoll();
         this.todo();
@@ -161,11 +161,11 @@ class guidoTest {
 
         this.testExpect("guidoScoreMap.getPageMap(gr, pageNum, w, h)",          this._checkRun());        
         this.testExpect("guidoScoreMap.getStaffMap(gr, pageNum, w, h, staff)",  this._checkRun());        
-        this.testExpect("guidoScoreMap.getVoiceMap(gr, pageNum, w, h; voice)",  this._checkRun());        
+        this.testExpect("guidoScoreMap.getVoiceMap(gr, pageNum, w, h, voice)",  this._checkRun());        
         this.testExpect("guidoScoreMap.getSystemMap(gr, pageNum, w, h)",        this._checkRun());        
-        this.testExpect("guidoScoreMap.getTime(date, map, t, rect)",            this._checkIsBool());        
-        this.testExpect("guidoScoreMap.getPoint(x, y, map, t, rect)",           this._checkIsBool());        
-        this.testExpect("guidoScoreMap.getTimeMap(gr, f)",                      this._checkErrCode(GuidoErrCode.guidoNoErr));        
+        //this.testExpect("guidoScoreMap.getTime(date, map, t, rect)",            this._checkIsBool());        
+        //this.testExpect("guidoScoreMap.getPoint(x, y, map, t, rect)",           this._checkIsBool());        
+        //this.testExpect("guidoScoreMap.getTimeMap(gr, f)",                      this._checkErrCode(GuidoErrCode.guidoNoErr));        
    
         this.testExpect("guidoEngine.freeGR(gr)",                               this._checkVoid());
         this.testExpect("guidoEngine.freeAR(ar)",                               this._checkVoid());        
@@ -206,7 +206,8 @@ class guidoTest {
         parseur = this.testExpect("guidoEngine.openParser()", 			                this._checkRun());
         ar = this.testExpect("guidoEngine.string2AR(parseur, gmnString)", 	            this._checkRun());               
         pr = this.testExpect("guidoPianoRoll.ar2PianoRoll(type, ar)",                   this._checkRun());        
-        this.testExpect("guidoPianoRoll.svgExport(pr, width, height)",                  this._checkIsStr());        
+        this.testExpect("guidoPianoRoll.svgExport(pr, width, height)",                  this._checkIsStr()); 
+        console.log(guidoPianoRoll.svgExport(pr, width, height));       
         // use canvas
         //this.testExpect("guidoPianoRoll.javascriptExport(pr, width, height)",         this._checkErrCode(GuidoErrCode.guidoNoErr));                
         this.testExpect("guidoPianoRoll.setLimits(pr, limitParams)",                    this._checkErrCode(GuidoErrCode.guidoNoErr));        
@@ -363,7 +364,8 @@ class guidoTest {
                     "=> guidoPianoRoll.onDraw"                  + "\n" +
             "Others"    + "\n" +
                     "=> Module.GuidoScoreMapAdapter is undefined"   + "\n" +
-                    "=> Some error to fix in guidoFactory"          + "\n"                     
+                    "=> Some error to fix in guidoFactory"          + "\n" +
+                    "=> More arguments in GuidoMap than expected"   + "\n"                                         
                     );     
     }
 }    

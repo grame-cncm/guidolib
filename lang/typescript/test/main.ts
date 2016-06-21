@@ -5,7 +5,7 @@
 var guidoEngine: GuidoEngineAdapter;
 	
 function main() {
-	var test = "[a g d]";
+	var test = "[a]";
 	let content = readfileJS();
     eval(content.toString());
 	// string parsing test
