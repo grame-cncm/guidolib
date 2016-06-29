@@ -1,5 +1,6 @@
 ///<reference path="../libGUIDOEngine.d.ts"/>
 ///<reference path="../libGUIDOEngine.ts"/>
+///<reference path="node.d.ts"/>
 
 interface checkfunction     { (n: any): boolean; } 
 
@@ -77,13 +78,12 @@ var guidoPianoRoll  : GUIDOPianoRollAdapter;
 // init
 //------------------------------------
 function init() {
-    let content     = readfileJS();
-    eval(content.toString());    
-    guidoEngine     = new Module.GuidoEngineAdapter;
+	var guido = require('../../javascript/libGUIDOEngine.js');
+    guidoEngine     = new guido.GuidoEngineAdapter;
     guidoEngine.init();
-    guidoScoreMap   = new Module.GUIDOScoreMap;
-    guidoFactory    = new Module.GUIDOFactoryAdapter(); 
-    guidoPianoRoll  = new Module.GUIDOPianoRollAdapter;    
+    guidoScoreMap   = new guido.GUIDOScoreMap;
+    guidoFactory    = new guido.GUIDOFactoryAdapter(); 
+    guidoPianoRoll  = new guido.GUIDOPianoRollAdapter;    
 }
 
 
@@ -207,7 +207,7 @@ class guidoTest {
         ar = this.testExpect("guidoEngine.string2AR(parseur, gmnString)", 	            this._checkRun());               
         pr = this.testExpect("guidoPianoRoll.ar2PianoRoll(type, ar)",                   this._checkRun());        
         this.testExpect("guidoPianoRoll.svgExport(pr, width, height)",                  this._checkIsStr()); 
-        console.log(guidoPianoRoll.svgExport(pr, -1, -1));       
+//        console.log(guidoPianoRoll.svgExport(pr, -1, -1));       
         // use canvas
         //this.testExpect("guidoPianoRoll.javascriptExport(pr, width, height)",         this._checkErrCode(GuidoErrCode.guidoNoErr));                
         this.testExpect("guidoPianoRoll.setLimits(pr, limitParams)",                    this._checkErrCode(GuidoErrCode.guidoNoErr));        
