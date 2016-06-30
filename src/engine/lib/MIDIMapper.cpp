@@ -127,12 +127,12 @@ int MidiMapper::AdjustDuration(int dur, const Guido2MidiParams* p) const
 {
 	if (!fFlags)				return int(dur * p->fDFactor);
 
-	if (fFlags & hasStaccato)	f *= p->fStaccatoFactor;
-	if (fFlags & hasSlur)		f *= p->fSlurFactor;
-	if (fFlags & hasTenuto)		f *= p->fTenutoFactor;
-	if (fFlags & hasFermata)	f *= p->fFermataFactor;
+	if (fFlags & hasStaccato)	dur *= p->fStaccatoFactor;
+	if (fFlags & hasSlur)		dur *= p->fSlurFactor;
+	if (fFlags & hasTenuto)		dur *= p->fTenutoFactor;
+	if (fFlags & hasFermata)	dur *= p->fFermataFactor;
 
-	return int(f);
+	return int(dur);
 }
 
 //------------------------------------------------------------------------------
@@ -143,7 +143,7 @@ int MidiMapper::AdjustVelocity(int vel, const Guido2MidiParams* p) const
 	if (fFlags & hasAccent)		vel *= p->fAccentFactor;
 	if (fFlags & hasMarcato)	vel *= p->fMarcatoFactor;
 
-	return int(f > 127 ? 127 : f);
+	return int(vel > 127 ? 127 : vel);
 }
 
 //------------------------------------------------------------------------------
