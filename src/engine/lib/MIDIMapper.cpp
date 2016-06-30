@@ -138,10 +138,10 @@ int MidiMapper::AdjustDuration(int dur, const Guido2MidiParams* p) const
 //------------------------------------------------------------------------------
 int MidiMapper::AdjustVelocity(int vel, const Guido2MidiParams* p) const
 {
-	if (!fFlags) return vel * (int) p->fIntensity;
+	if (!fFlags) return vel * p->fIntensity;
 
-	if (fFlags & hasAccent)		vel *= (int) p->fAccentFactor;
-	if (fFlags & hasMarcato)	vel *= (int) p->fMarcatoFactor;
+	if (fFlags & hasAccent)		vel *= p->fAccentFactor;
+	if (fFlags & hasMarcato)	vel *= p->fMarcatoFactor;
 
 	return (vel > 127 ? 127 : vel);
 }
