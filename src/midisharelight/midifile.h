@@ -1,6 +1,6 @@
 /*
-  GUIDO Library
-  Copyright (C) 2004 Grame
+  MidiShare Project
+  Copyright (C) Grame 2004
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -9,7 +9,8 @@
   Grame Research Laboratory, 11, cours de Verdun Gensoul 69002 Lyon - France
   research@grame.fr
 
-*/ 
+*/
+ 
  
 #ifndef __MIDIFILE_H__
 #define __MIDIFILE_H__
@@ -21,7 +22,7 @@
 
 #if defined(linux) || defined(__MACH__)
 # define MFAPI
-# define errno  /* a revoir */
+//# define errno  /* a revoir */
 
 #elif defined(WIN32)
 # ifdef __BuildDLL__
