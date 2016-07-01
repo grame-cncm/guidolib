@@ -83,6 +83,7 @@ elseif(${CMAKE_GENERATOR} STREQUAL "Visual Studio 12 2013")
 
  if (${CMAKE_GENERATOR} MATCHES ".*Win64")
   add_definitions(-DVC2005)
+  add_definitions(-DWIN64)
   set (WIN64 1)
   set (target GUIDOEngine64)
   set (statictarget SGUIDOEngine64)
