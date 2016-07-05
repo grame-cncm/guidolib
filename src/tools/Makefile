@@ -3,8 +3,8 @@ INC = -I../engine/include -I../engine/devices
 
 system	:= $(shell uname -s)
 ifeq ($(system), Darwin)
-  lib =  -mmacosx-version-min=10.6 -F../../build/MacOS/Release/ -framework GUIDOEngine
-  debuglib =  -mmacosx-version-min=10.6 -F../../build/MacOS/Debug/ -framework GUIDOEngine
+  lib =  -mmacosx-version-min=10.7 -F../../build/MacOS/Release/ -framework GUIDOEngine
+  debuglib =  -mmacosx-version-min=10.7 -F../../build/MacOS/Debug/ -framework GUIDOEngine
   INC := $(INC)  -I../../platforms/macosx/src
 else
 ifeq ($(system), MINGW32_NT-6.1)
@@ -15,7 +15,7 @@ else
 endif
 endif
 
-TOOLS = guidogetversion guidogetpagecount guidogetvoicecount guidogettimemap guidogetpagemap guidogetsystemmap guidogetstaffmap guidogetvoicemap guido2svg guido2svgmap guido2abstract guido2proll guido2rproportional midi2proll midi2rproportional guido2midi
+TOOLS = guidogetversion guidogetpagecount guidogetvoicecount guidogettimemap guidogetpagemap guidogetsystemmap guidogetstaffmap guidogetvoicemap guido2svg guido2svgmap guido2abstract guido2proll guido2rproportional midi2proll midi2rproportional guido2midi guidogetmeter
 
 .PHONY: checkall
 
@@ -56,6 +56,9 @@ guidogetpagecount : guidogetpagecount.cpp
 
 guidogetvoicecount : guidogetvoicecount.cpp
 	g++ guidogetvoicecount.cpp $(INC) $(lib) -o guidogetvoicecount
+
+guidogetmeter : guidogetmeter.cpp
+	g++ guidogetmeter.cpp $(INC) $(lib) -o guidogetmeter
 
 guidogettimemap : guidogettimemap.cpp
 	g++ guidogettimemap.cpp $(INC) $(lib) -o guidogettimemap

@@ -83,6 +83,27 @@ typedef struct
 
 } GuidoDate;
 
+/**
+    A Guido meter is expressed as a list of beats counts and a beat unit.
+	It similar to the way a time signature is expressed: the numerator(s) 
+	are stored in the beats count and the denominator in the unit. 
+	E.g. the "3+3+2/8" time signature will be stored as { [3,3,2], 8 }
+	The \c count values ends with the first null value.
+	Absence of meter is denoted with count[0] == 0.
+	
+	\note for convenience, the \c count field has a fixed and limited size
+	that should however cope with any realistic notation case. In case it
+	doesn't,
+*/
+#define kMaxGuidoMeterCounts	3
+typedef struct
+{
+	//! the beats count
+    int count[kMaxGuidoMeterCounts];
+	//! the meter unit
+    int unit;
+} GuidoMeter;
+
 /** \brief Contains all graphic-related information required by GuidoOnDraw()
 
 	Used to render a page of score into a device context.
@@ -491,6 +512,20 @@ as by date. Page numbers start at 1.
 		\return a Guido error code.
 	*/
 	GUIDOAPI(GuidoErrCode) GuidoGetPageDate( CGRHandler inHandleGR, int pageNum, GuidoDate* date);
+
+
+	/** \brief Gives the current meter on a given date and voice.
+
+		\param inHandleAR a Guido opaque handle to a AR structure.
+		\param voicenum a voice number (starts at 1).
+		\param date the target date.
+		\param meter on output: the current meter
+		\return a Guido error code.
+
+		\see the GuidoMeter structure for the meter coding conventions
+	*/
+	GUIDOAPI(GuidoErrCode) GuidoGetMeterAt (CARHandler inHandleAR, int voicenum, const GuidoDate &date, GuidoMeter& meter);
+
 /*! @} */
 
 

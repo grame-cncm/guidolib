@@ -2,7 +2,8 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.3
-  
+- new GuidoGetMeter API
+
 ----------------------------------------------------------------
   version 1.6.2
 - incorrect beaming corrected: 

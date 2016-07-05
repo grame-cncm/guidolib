@@ -18,6 +18,7 @@
 #include "ARVoiceManager.h"
 #include "ARAuto.h"
 #include "ARMusicalVoice.h"
+#include "MeterVisitor.h"
 #include "TimeMapper.h"
 
 #include "benchtools.h"
@@ -74,6 +75,24 @@ int ARMusic::countVoices () const
 		GetNext(pos);
 	}
 	return count;
+}
+
+bool ARMusic::getMeterAt (int voicenum, const GuidoDate &date, GuidoMeter& meter)
+{
+	if (voicenum <= 0) return false;
+
+	GuidoPos pos = GetHeadPosition();
+	ARMusicalVoice * voice = 0;
+	while (pos && !voice) {
+		if (!--voicenum) voice = GetNext(pos);
+		else GetNext(pos);
+	}
+	if (!voice) return false;		// no such voice
+	TYPE_TIMEPOSITION tp (date.num, date.denom);
+	MeterVisitor mv (tp);
+	voice->goThrough(&mv);
+	meter = mv.getMeter();
+	return true;
 }
 
 void ARMusic::getTimeMap (TimeMapCollector& f) const

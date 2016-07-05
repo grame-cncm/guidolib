@@ -574,6 +574,19 @@ GUIDOAPI(GuidoErrCode) GuidoGetPageDate( CGRHandler inHandleGR, int pageNum, Gui
 }
 
 // --------------------------------------------------------------------------
+// introduced in guido 1.63 [DF July 1 2016]
+GUIDOAPI(GuidoErrCode) GuidoGetMeterAt (CARHandler inHandleAR, int voicenum, const GuidoDate &date, GuidoMeter& meter)
+{
+	if ((!inHandleAR) || ( inHandleAR->armusic == 0 ))
+		return guidoErrInvalidHandle;
+
+	meter.count[0] = 0;
+	meter.unit = 4;			// a default unit
+	bool result = inHandleAR->armusic->getMeterAt( voicenum, date, meter );
+	return result ? guidoNoErr : guidoErrBadParameter;
+}
+
+// --------------------------------------------------------------------------
 //		- Score drawing and pages formating -
 // --------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoOnDraw( GuidoOnDrawDesc * desc )
