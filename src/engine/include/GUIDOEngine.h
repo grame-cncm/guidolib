@@ -95,7 +95,7 @@ typedef struct
 	that should however cope with any realistic notation case. In case it
 	doesn't,
 */
-#define kMaxGuidoMeterCounts	3
+#define kMaxGuidoMeterCounts	15
 typedef struct
 {
 	//! the beats count
