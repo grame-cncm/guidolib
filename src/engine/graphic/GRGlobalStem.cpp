@@ -34,6 +34,7 @@
 #include "GRVoice.h"
 #include "GRSystemSlice.h"
 #include "GRNoteDot.h"
+#include "GRAccidental.h"
 
 
 GRGlobalStem::GRGlobalStem( GRStaff * inStaff,
@@ -621,6 +622,7 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
 	if (stemdir == dirDOWN)
 	{
 		sugHeadState = ARTHead::RIGHT;
+        float minXHeadOffset = 0;
 		GuidoPos pos = mAssociated->GetHeadPosition();
 		while (pos)
 		{
@@ -657,6 +659,10 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
                 {
                     /* ...horizontally */
                     currentNoteHeadOffset = note->getNoteHead()->getOffset();
+
+                    // Keeping track of the minimum offset
+                    if(currentNoteHeadOffset.x<minXHeadOffset)
+                        minXHeadOffset = currentNoteHeadOffset.x;
 
                     if (offsetMax < currentNoteHeadOffset.x)
                         offsetMax = currentNoteHeadOffset.x;
@@ -762,6 +768,28 @@ void GRGlobalStem::updateGlobalStem(const GRStaff * inStaff)
         // - Set notehead orientation for extreme chord note
         if (lowerNote)
             theStem->setLastHeadOrientation(lowerNote->getHeadState());
+
+        // - Adjust accidentals offset the minimal X head offset is less than 0
+        if(minXHeadOffset){
+            NVPoint offsetToAdd( minXHeadOffset,0);
+
+            GuidoPos pos = mAssociated->GetHeadPosition();
+            while (pos)
+            {
+                note = dynamic_cast<GRSingleNote *>(mAssociated->GetNext(pos));
+                if (note){
+                    GRAccidentalList accidentalList;
+                    note->extractAccidentals(&accidentalList);
+                    GuidoPos accPos = accidentalList.GetHeadPosition();
+                    while(accPos){
+                        GRAccidental* accidental = accidentalList.GetNext(accPos);
+                        accidental->addToOffset(offsetToAdd);
+                    }
+                    note->updateBoundingBox();
+                }
+            }
+        }
+
 	}
 	else if (stemdir == dirUP || stemdir == dirOFF)
 	{
