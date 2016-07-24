@@ -13,7 +13,7 @@
 % todo: support color-param for cue notes?
 %	check guido spec for semantics of \cue (spacing, timing, ...)
 
-[ \cue<"oboe",dy=4hs>( \stemsDown c1 d e )
+[ \cue<"oboe">( \stemsDown c1 d e )
   \stemsAuto _*3/4 a1*1/4 h c2 ]
 
 
