@@ -16,7 +16,7 @@
 */
 
 #include "BaseVisitor.h"
-#include "GuidoEngine.h"
+#include "GUIDOEngine.h"
 #include "defines.h"
 
 //------------------------------------------------------------------------------
