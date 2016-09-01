@@ -1,32 +1,37 @@
 <html>
   <head>
-    <script type="text/javascript" src="jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="../../../lang/javascript/js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="server.js"></script>
     <script>
       var current = 0;
       function processGMN() {
         var internalCurrent = current;
         current = current + 1;
-        $.post("http://guidoservice.grame.fr",
-        "data="+encodeURIComponent($("#gmnSandbox").val()), function(data) {
-          var xhr = new XMLHttpRequest();
-          xhr.open('GET',"http://guidoservice.grame.fr/"+data.ID, true);
-          xhr.responseType = 'arraybuffer';
-          xhr.onload = function(e) {
-            console.log(this.status);
-            if (this.status == 201) {
-              success = true;
-              var blob = new Blob([this.response], {type:"image/png"});
-              if (current - 1 == internalCurrent) {
-                $("#warning").text("")
-                URL.revokeObjectURL(document.getElementById("guidoResult").src);
-                document.getElementById("guidoResult").src = window.URL.createObjectURL(blob);
-              }
-            }
-          };
-          if (current - 1 == internalCurrent) {
-            xhr.send();
-          }
-        }).fail(function() {
+        $.post(guidoservice, 
+			"data="+encodeURIComponent($("#gmnSandbox").val()),
+			function(data) {
+				// The first ajax request is done, we receive the id of session. 
+				// At this point gmnCode is parsed and an Abstract and a Graphic representation are created.
+			  // Jquery is not able to deal with arraybuffer, so we use XMLHttpRequest to receive the score in png format (default format).
+			  var xhr = new XMLHttpRequest();
+			  xhr.open('GET',guidoservice+data.ID, true);
+			  xhr.responseType = 'arraybuffer';
+			  xhr.onload = function(e) {
+				console.log(this.status);
+				if (this.status == 201) {
+				  success = true;
+				  var blob = new Blob([this.response], {type:"image/png"});
+				  if (current - 1 == internalCurrent) {
+					$("#warning").text("")
+					URL.revokeObjectURL(document.getElementById("guidoResult").src);
+					document.getElementById("guidoResult").src = window.URL.createObjectURL(blob);
+				  }
+				}
+			  };
+			  if (current - 1 == internalCurrent) {
+				xhr.send();
+			  }
+		}).fail(function() {
           $("#warning").text("The GMN code above contains a syntax error.");
         });
         $("#warning").text("Processing . . .");

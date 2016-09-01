@@ -1,0 +1,1101 @@
+(*
+  gmn code converted from 'ActorPreludeSample.xml'
+  using libmusicxml v.2.1.0
+  and the embedded xml2guido converter v.2.0.0
+*)
+{ [ \staff<1> \title<"Prelude to a Tragedy"> \composer<"Lee Actor", dy=4hs> \instr<"Piccolo", dx=-14hs, dy=-5hs> \systemFormat<"", dx=14hs> 
+   (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"g2"> \tempo<tempo="[1/4] = 85"> _*3/4 \bar 
+   (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 3 *)  _ \bar 
+   (* meas. 4 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 5 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 6 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 7 *)  \meter<"3/4", autoBarlines="off"> \intens<"p"> \stemsDown \tieBegin b2/2. \bar 
+   (* meas. 8 *)  \meter<"2/4", autoBarlines="off"> \tieBegin b/2 \tieEnd \bar 
+   (* meas. 9 *)  \meter<"4/4", autoBarlines="off"> \stemsAuto \tieBegin b/1 \tieEnd \bar 
+   (* meas. 10 *)  \meter<"3/4", autoBarlines="off"> \stemsDown \tieBegin b/2. \tieEnd \bar 
+   (* meas. 11 *)  \tieBegin b. \tieEnd \bar 
+   (* meas. 12 *)  \meter<"2/4", autoBarlines="off"> \tieBegin b/2 \tieEnd \bar 
+   (* meas. 13 *)  \meter<"4/4", autoBarlines="off"> \stemsAuto b/1 \tieEnd \bar 
+   (* meas. 14 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 15 *)  _ \bar 
+   (* meas. 16 *)  \intens<"f"> _/4 _ \stemsDown \slurBegin:1 \beam( b/16 \crescBegin c3 d e&) \slurEnd:1 \crescEnd \bar 
+   (* meas. 17 *)  \intens<"ff"> f _ _/8 _/4 _ \bar 
+   (* meas. 18 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 19 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 20 *)  _ \bar 
+   (* meas. 21 *)  _ \bar 
+   (* meas. 22 *)  _ \bar 
+   (* meas. 23 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 24 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 25 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 26 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 27 *)  _ \bar 
+   (* meas. 28 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 29 *)  _ \bar 
+   (* meas. 30 *)  _ \bar 
+   (* meas. 31 *)  _ \bar 
+   (* meas. 32 *)  _ \bar 
+   (* meas. 33 *)  _ \bar 
+   (* meas. 34 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 35 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 36 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 37 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 38 *)  \intens<"f"> \slurBegin:1 \beam( d#2/16 \crescBegin e f# g) \slurEnd:1 \slurBegin:1 \beam( a b& c3 c#) \slurEnd:1 \slurBegin:1 \beam( d d# e f) \slurEnd:1 \crescEnd \bar 
+   (* meas. 39 *)  \intens<"ff"> \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \bar 
+   (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> \intens<"ff"> \slurBegin:1 \beam( f#/16 g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 _/4 ]
+, [ \staff<2> \instr<"Flutes", dx=-12hs, dy=-5hs> \systemFormat<"", dx=12hs> 
+   (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"g2"> _*3/4 \bar 
+   (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 3 *)  _ \bar 
+   (* meas. 4 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 5 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 6 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 7 *)  \meter<"3/4", autoBarlines="off"> \intens<"p"> \stemsDown { \tieBegin b2/2. \tieBegin, f#3. } \crescBegin \bar 
+   (* meas. 8 *)  \meter<"2/4", autoBarlines="off"> { b2/2 \tieEnd, f#3 \tieEnd } \crescEnd \bar 
+   (* meas. 9 *)  \meter<"4/4", autoBarlines="off"> \intens<"f"> \stemsAuto { a#2/1, e#3 } \dimBegin \dimEnd \bar 
+   (* meas. 10 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 11 *)  _ \bar 
+   (* meas. 12 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 13 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 14 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 15 *)  _ \bar 
+   (* meas. 16 *)  \intens<"f"> _/4 _ \stemsDown \slurBegin:1 \beam( b2/16 \crescBegin c3 d e&) \slurEnd:1 \crescEnd \bar 
+   (* meas. 17 *)  \intens<"ff"> f _ _/8 _/4 _ \bar 
+   (* meas. 18 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 19 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 20 *)  _ \bar 
+   (* meas. 21 *)  _ \bar 
+   (* meas. 22 *)  _ \bar 
+   (* meas. 23 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 24 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 25 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 26 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 27 *)  \intens<"p"> \stemsAuto { g2, c3 } \crescBegin \crescEnd \bar 
+   (* meas. 28 *)  \meter<"3/4", autoBarlines="off"> \intens<"f"> \stemsDown { f#2/2., b. } \dimBegin \dimEnd \bar 
+   (* meas. 29 *)  _*3/4 \bar 
+   (* meas. 30 *)  _ \bar 
+   (* meas. 31 *)  _ \bar 
+   (* meas. 32 *)  _ \bar 
+   (* meas. 33 *)  \intens<"p"> \slurBegin:1 \beam( f#/16 g a b&) \slurEnd:1 \slurBegin:1 \beam( f# g a b&) \slurEnd:1 \slurBegin:1 \beam( c3 d& e& e) \slurEnd:1 \bar 
+   (* meas. 34 *)  \meter<"2/4", autoBarlines="off"> \slurBegin:1 \beam( f g& f e&) \slurEnd:1 \slurBegin:1 \beam( d c b2 a) \slurEnd:1 \bar 
+   (* meas. 35 *)  \meter<"3/4", autoBarlines="off"> \intens<"mp"> \slurBegin:1 \beam( { a1, a2 } { b&1, b&2 } { c, c3 } { d&2, d&3 }) \slurEnd:1 \slurBegin:1 \beam( { a1, a2 } { b&1, b&2 } { c, c3 } { c#2, c#3 }) \slurEnd:1 \slurBegin:1 \beam( { d#2, d#3 } { e2, e3 } { f#2, f#3 } { g2, g3 }) \slurEnd:1 \bar 
+   (* meas. 36 *)  \meter<"2/4", autoBarlines="off"> \slurBegin:1 \beam( { g#2, g#3 } { a2, a3 } { g#2, g#3 } { f#2, f#3 }) \slurEnd:1 \slurBegin:1 \beam( { f2, f3 } { e&2, e&3 } { d2, d3 } { c2, c3 }) \slurEnd:1 \bar 
+   (* meas. 37 *)  \meter<"3/4", autoBarlines="off"> \intens<"mf"> \slurBegin:1 \beam( { c2, c3 } { c#2, c#3 } { d#2, d#3 } { e2, e3 }) \slurEnd:1 \slurBegin:1 \beam( { f#2, f#3 } { g2, g3 } { a2, a3 } { b&2, b&3 }) \slurEnd:1 \slurBegin:1 \beam( { a2, a3 } { g2, g3 } { f#2, f#3 } { e2, e3 }) \slurEnd:1 \bar 
+   (* meas. 38 *)  \intens<"f"> \slurBegin:1 \beam( d#2 \crescBegin e f# g) \slurEnd:1 \slurBegin:1 \beam( a b& c3 c#) \slurEnd:1 \slurBegin:1 \beam( d d# e f) \slurEnd:1 \crescEnd \bar 
+   (* meas. 39 *)  \intens<"ff"> \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \bar 
+   (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> \intens<"ff"> \slurBegin:1 \beam( f#/16 g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 _/4 ]
+, [ \staff<3> \instr<"Oboes", dx=-10hs, dy=-5hs> \systemFormat<"", dx=10hs> 
+   (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"g2"> _*3/4 \bar 
+   (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 3 *)  _ \bar 
+   (* meas. 4 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 5 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 6 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 7 *)  \meter<"3/4", autoBarlines="off"> \intens<"p"> \stemsDown { \tieBegin b2/2. \tieBegin, d3. } \crescBegin \bar 
+   (* meas. 8 *)  \meter<"2/4", autoBarlines="off"> { b2/2 \tieEnd, d3 \tieEnd } \crescEnd \bar 
+   (* meas. 9 *)  \meter<"4/4", autoBarlines="off"> \intens<"f"> \stemsAuto { a#2/1, c#3 } \dimBegin \dimEnd \bar 
+   (* meas. 10 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 11 *)  _ \bar 
+   (* meas. 12 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 13 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 14 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 15 *)  _ \bar 
+   (* meas. 16 *)  \intens<"f"> _/4 _ \stemsDown \slurBegin:1 \beam( b1/16 \crescBegin c2 d \crescEnd e&) \slurEnd:1 \bar 
+   (* meas. 17 *)  \intens<"ff"> f _ _/8 _/4 _ \bar 
+   (* meas. 18 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 19 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 20 *)  _ \bar 
+   (* meas. 21 *)  _ \bar 
+   (* meas. 22 *)  _ \bar 
+   (* meas. 23 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 24 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 25 *)  \meter<"3/4", autoBarlines="off"> \intens<"f"> \slurBegin:1 \beam( b&1/16 \dimBegin c&2 b&1 c&2) \slurEnd:1 \slurBegin:1 \beam( b&1 c&2 b&1 a&) \slurEnd:1 \stemsUp \slurBegin:1<curve="down"> \beam( g a& g f) \slurEnd:1 \dimEnd \bar 
+   (* meas. 26 *)  \meter<"4/4", autoBarlines="off"> \intens<"p"> e _ _/8 _/4 _/2 \bar 
+   (* meas. 27 *)  \intens<"p"> \stemsAuto { e2/1, b } \crescBegin \crescEnd \bar 
+   (* meas. 28 *)  \meter<"3/4", autoBarlines="off"> \intens<"f"> \stemsDown { d#/2., a#. } \dimBegin \dimEnd \bar 
+   (* meas. 29 *)  _*3/4 \bar 
+   (* meas. 30 *)  _ \bar 
+   (* meas. 31 *)  _ \bar 
+   (* meas. 32 *)  _ \bar 
+   (* meas. 33 *)  _ \bar 
+   (* meas. 34 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 35 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 36 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 37 *)  \meter<"3/4", autoBarlines="off"> \intens<"mf"> \slurBegin:1 \beam( c/16 c# d# e) \slurEnd:1 \slurBegin:1 \beam( f# g a b&) \slurEnd:1 \slurBegin:1 \beam( a g f# e) \slurEnd:1 \bar 
+   (* meas. 38 *)  \intens<"f"> \slurBegin:1 \beam( { d#1, d#2 } \crescBegin { e1, e2 } { f#1, f#2 } { g1, g2 }) \slurEnd:1 \slurBegin:1 \beam( { a1, a2 } { b&1, b&2 } { c, c3 } { c#2, c#3 }) \slurEnd:1 \slurBegin:1 \beam( { d2, d3 } { d#2, d#3 } { e2, e3 } { f2, f3 }) \slurEnd:1 \crescEnd \bar 
+   (* meas. 39 *)  \intens<"ff"> \slurBegin:1 \beam( { f#2, f#3 } { g2, g3 } { f#2, f#3 } { g2, g3 }) \slurEnd:1 \slurBegin:1 \beam( { f#2, f#3 } { g2, g3 } { f#2, f#3 } { g2, g3 }) \slurEnd:1 \slurBegin:1 \beam( { f#2, f#3 } { g2, g3 } { f#2, f#3 } { g2, g3 }) \slurEnd:1 \bar 
+   (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> \intens<"ff"> \slurBegin:1 \beam( { f#2/16, f#3 } { g2, g3 } { f#2, f#3 } { g2, g3 }) \slurEnd:1 \slurBegin:1 \beam( { f#2, f#3 } { g2, g3 } { f#2, f#3 } { g2, g3 }) \slurEnd:1 _/4 ]
+, [ \staff<4> \instr<"English Horn", dx=-24hs, dy=-5hs> \systemFormat<"", dx=24hs> 
+   (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"g2"> _*3/4 \bar 
+   (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 3 *)  _ \bar 
+   (* meas. 4 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 5 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 6 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 7 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 8 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 9 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 10 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 11 *)  \intens<"p"> \stemsUp \tieBegin d&/2. \crescBegin \bar 
+   (* meas. 12 *)  \meter<"2/4", autoBarlines="off"> d&/2 \tieEnd \crescEnd \bar 
+   (* meas. 13 *)  \meter<"4/4", autoBarlines="off"> \intens<"f"> \stemsAuto c/1 \dimBegin \dimEnd \bar 
+   (* meas. 14 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 15 *)  _ \bar 
+   (* meas. 16 *)  _ \bar 
+   (* meas. 17 *)  _ \bar 
+   (* meas. 18 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 19 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 20 *)  _ \bar 
+   (* meas. 21 *)  _ \bar 
+   (* meas. 22 *)  _ \bar 
+   (* meas. 23 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 24 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 25 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 26 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 27 *)  \intens<"p"> d2 \crescBegin \crescEnd \bar 
+   (* meas. 28 *)  \meter<"3/4", autoBarlines="off"> \intens<"f"> \stemsDown c#/2. \dimBegin \dimEnd \bar 
+   (* meas. 29 *)  _*3/4 \bar 
+   (* meas. 30 *)  _ \bar 
+   (* meas. 31 *)  _ \bar 
+   (* meas. 32 *)  _ \bar 
+   (* meas. 33 *)  _ \bar 
+   (* meas. 34 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 35 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 36 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 37 *)  \meter<"3/4", autoBarlines="off"> \intens<"mf"> \stemsUp \slurBegin:1<curve="down"> \beam( g1/16 g# a# b) \slurEnd:1 \stemsDown \slurBegin:1 \beam( c#2 d e f) \slurEnd:1 \slurBegin:1 \beam( e d c# b1) \slurEnd:1 \bar 
+   (* meas. 38 *)  \intens<"f"> \slurBegin:1 \beam( a# \crescBegin b c#2 d) \slurEnd:1 \slurBegin:1 \beam( e f g g#) \slurEnd:1 \slurBegin:1 \beam( a a# b c3) \slurEnd:1 \crescEnd \bar 
+   (* meas. 39 *)  \intens<"ff"> \slurBegin:1 \beam( c# d c# d) \slurEnd:1 \slurBegin:1 \beam( c# d c# d) \slurEnd:1 \slurBegin:1 \beam( c# d c# d) \slurEnd:1 \bar 
+   (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> \intens<"ff"> \slurBegin:1 \beam( c#/16 d c# d) \slurEnd:1 \slurBegin:1 \beam( c# d c# d) \slurEnd:1 _/4 ]
+, [ \staff<5> \instr<"Clarinets in Bb", dx=-30hs, dy=-5hs> \systemFormat<"", dx=30hs> 
+   (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"g2"> _*3/4 \bar 
+   (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 3 *)  _ \bar 
+   (* meas. 4 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 5 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 6 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 7 *)  \meter<"3/4", autoBarlines="off"> \intens<"p"> \stemsDown { \tieBegin c#3/2. \tieBegin, e. } \crescBegin \bar 
+   (* meas. 8 *)  \meter<"2/4", autoBarlines="off"> { c#/2 \tieEnd, e \tieEnd } \crescEnd \bar 
+   (* meas. 9 *)  \meter<"4/4", autoBarlines="off"> \intens<"f"> \stemsAuto { c/1, e& } \dimBegin \dimEnd \bar 
+   (* meas. 10 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 11 *)  \intens<"p"> \stemsUp \tieBegin a&0/2. \crescBegin \bar 
+   (* meas. 12 *)  \meter<"2/4", autoBarlines="off"> a&/2 \tieEnd \crescEnd \bar 
+   (* meas. 13 *)  \meter<"4/4", autoBarlines="off"> \intens<"f"> \stemsAuto g/1 \dimBegin \dimEnd \bar 
+   (* meas. 14 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 15 *)  _ \bar 
+   (* meas. 16 *)  _ \bar 
+   (* meas. 17 *)  _ \bar 
+   (* meas. 18 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 19 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 20 *)  \intens<"mp"> _/4 \stemsUp \slurBegin:1<curve="down"> \beam( f#/16 g f# g) \slurEnd:1 _/4 \bar 
+   (* meas. 21 *)  \slurBegin:1<curve="down"> \beam( f#/16 g f# g) \slurEnd:1 \slurBegin:1<curve="down"> \beam( f# g f# g) \slurEnd:1 \slurBegin:1<curve="down"> \beam( f# g a b&) \slurEnd:1 \bar 
+   (* meas. 22 *)  \slurBegin:1<curve="down"> \beam( f# g f# g) \slurEnd:1 \slurBegin:1<curve="down"> \beam( f# g a b&) \slurEnd:1 \slurBegin:1<curve="down"> \beam( f# g a b&) \slurEnd:1 \bar 
+   (* meas. 23 *)  \meter<"2/4", autoBarlines="off"> \slurBegin:1<curve="down"> \beam( f# g f# g) \slurEnd:1 \slurBegin:1<curve="down"> \beam( f# g f# g) \slurEnd:1 \bar 
+   (* meas. 24 *)  \meter<"4/4", autoBarlines="off"> \intens<"mp"> \slurBegin:1<curve="down"> \beam( { f#, f#1 } \crescBegin { g0, g1 } { f#0, f#1 } { g0, g1 }) \slurEnd:1 \slurBegin:1<curve="down"> \beam( { f#0, f#1 } { g0, g1 } { a0, a1 } { b&0, b&1 }) \slurEnd:1 \slurBegin:1<curve="down"> \beam( { f#0, f#1 } { g0, g1 } { f#0, f#1 } { g0, g1 }) \slurEnd:1 \slurBegin:1<curve="down"> \beam( { f#0, f#1 } { g0, g1 } { a0, a1 } { b&0, b&1 }) \slurEnd:1 \crescEnd \bar 
+   (* meas. 25 *)  \meter<"3/4", autoBarlines="off"> \intens<"f"> \slurBegin:1<curve="down"> \beam( { c, c2 } \dimBegin { d&1, d&2 } { c1, c2 } { d&1, d&2 }) \slurEnd:1 \slurBegin:1<curve="down"> \beam( { c1, c2 } { d&1, d&2 } { c1, c2 } { b&0, b&1 }) \slurEnd:1 \slurBegin:1<curve="down"> \beam( { a0, a1 } { b&0, b&1 } { a0, a1 } { g0, g1 }) \slurEnd:1 \dimEnd \bar 
+   (* meas. 26 *)  \meter<"4/4", autoBarlines="off"> \intens<"p"> { f#0, f#1 } _ _/8 _/4 _/2 \bar 
+   (* meas. 27 *)  \intens<"p"> \stemsAuto { c#2/1, d } \crescBegin \crescEnd \bar 
+   (* meas. 28 *)  \meter<"3/4", autoBarlines="off"> \intens<"f"> \stemsDown { c/2., d&. } \dimBegin \dimEnd \bar 
+   (* meas. 29 *)  _*3/4 \bar 
+   (* meas. 30 *)  _ \bar 
+   (* meas. 31 *)  _ \bar 
+   (* meas. 32 *)  _ \bar 
+   (* meas. 33 *)  \intens<"p"> \stemsUp \slurBegin:1<curve="down"> \beam( g#1/16 a b c2) \slurEnd:1 \slurBegin:1<curve="down"> \beam( g#1 a b c2) \slurEnd:1 \stemsDown \slurBegin:1 \beam( d e& f f#) \slurEnd:1 \bar 
+   (* meas. 34 *)  \meter<"2/4", autoBarlines="off"> \slurBegin:1 \beam( g a& g f) \slurEnd:1 \slurBegin:1 \beam( e d c# b1) \slurEnd:1 \bar 
+   (* meas. 35 *)  \meter<"3/4", autoBarlines="off"> \intens<"mp"> \stemsUp \slurBegin:1<curve="down"> \beam( { b0, b1 } { c, c2 } { d1, d2 } { e&1, e&2 }) \slurEnd:1 \slurBegin:1<curve="down"> \beam( { b0, b1 } { c, c2 } { d1, d2 } { e&1, e&2 }) \slurEnd:1 \stemsDown \slurBegin:1 \beam( { f1, f2 } { f#1, f#2 } { g#1, g#2 } { a1, a2 }) \slurEnd:1 \bar 
+   (* meas. 36 *)  \meter<"2/4", autoBarlines="off"> \slurBegin:1 \beam( { a#1, a#2 } { b1, b2 } { a#1, a#2 } { g#1, g#2 }) \slurEnd:1 \slurBegin:1 \beam( { g1, g2 } { f1, f2 } { e1, e2 } { d1, d2 }) \slurEnd:1 \bar 
+   (* meas. 37 *)  \meter<"3/4", autoBarlines="off"> \intens<"mf"> \stemsUp \slurBegin:1<curve="down"> \beam( { d1, d2 } { e&1, e&2 } { f1, f2 } { f#1, f#2 }) \slurEnd:1 \stemsDown \slurBegin:1 \beam( { g#1, g#2 } { a1, a2 } { b1, b2 } { c, c3 }) \slurEnd:1 \slurBegin:1 \beam( { b1, b2 } { a1, a2 } { g#1, g#2 } { f#1, f#2 }) \slurEnd:1 \bar 
+   (* meas. 38 *)  \intens<"f"> \slurBegin:1 \beam( { f1, f2 } \crescBegin { f#1, f#2 } { g#1, g#2 } { a1, a2 }) \slurEnd:1 \slurBegin:1 \beam( { b1, b2 } { c, c3 } { d2, d3 } { d#2, d#3 }) \slurEnd:1 \slurBegin:1 \beam( { e2, e3 } { e#2, e#3 } { f#2, f#3 } { g2, g3 }) \slurEnd:1 \crescEnd \bar 
+   (* meas. 39 *)  \intens<"ff"> \slurBegin:1 \beam( { g#2, g#3 } { a2, a3 } { g#2, g#3 } { a2, a3 }) \slurEnd:1 \slurBegin:1 \beam( { g#2, g#3 } { a2, a3 } { g#2, g#3 } { a2, a3 }) \slurEnd:1 \slurBegin:1 \beam( { g#2, g#3 } { a2, a3 } { g#2, g#3 } { a2, a3 }) \slurEnd:1 \bar 
+   (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> \intens<"ff"> \slurBegin:1 \beam( { g#2/16, g#3 } { a2, a3 } { g#2, g#3 } { a2, a3 }) \slurEnd:1 \slurBegin:1 \beam( { g#2, g#3 } { a2, a3 } { g#2, g#3 } { a2, a3 }) \slurEnd:1 _/4 ]
+, [ \staff<6> \instr<"Bass Clarinet in Bb", dx=-38hs, dy=-5hs> \systemFormat<"", dx=38hs> 
+   (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"g2"> _*3/4 \bar 
+   (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 3 *)  _ \bar 
+   (* meas. 4 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 5 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 6 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 7 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 8 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 9 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 10 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 11 *)  \intens<"p"> \stemsUp \tieBegin a&0/2. \crescBegin \bar 
+   (* meas. 12 *)  \meter<"2/4", autoBarlines="off"> a&/2 \tieEnd \crescEnd \bar 
+   (* meas. 13 *)  \meter<"4/4", autoBarlines="off"> \intens<"f"> \stemsAuto g/1 \dimBegin \dimEnd \bar 
+   (* meas. 14 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 15 *)  _ \bar 
+   (* meas. 16 *)  _ \bar 
+   (* meas. 17 *)  _ \bar 
+   (* meas. 18 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 19 *)  \meter<"3/4", autoBarlines="off"> \intens<"mp"> _/4 \stemsUp \slurBegin:1<curve="down"> \beam( f#/16 g f# g) \slurEnd:1 _/4 \bar 
+   (* meas. 20 *)  _ \slurBegin:1<curve="down"> \beam( f#/16 g f# g) \slurEnd:1 _/4 \bar 
+   (* meas. 21 *)  \slurBegin:1<curve="down"> \beam( f#/16 g f# g) \slurEnd:1 \slurBegin:1<curve="down"> \beam( f# g f# g) \slurEnd:1 \slurBegin:1<curve="down"> \beam( f# g a b&) \slurEnd:1 \bar 
+   (* meas. 22 *)  \slurBegin:1<curve="down"> \beam( f# g f# g) \slurEnd:1 \slurBegin:1<curve="down"> \beam( f# g a b&) \slurEnd:1 \slurBegin:1<curve="down"> \beam( f# g a b&) \slurEnd:1 \bar 
+   (* meas. 23 *)  \meter<"2/4", autoBarlines="off"> \slurBegin:1<curve="down"> \beam( f# g f# g) \slurEnd:1 \slurBegin:1<curve="down"> \beam( f# g f# g) \slurEnd:1 \bar 
+   (* meas. 24 *)  \meter<"4/4", autoBarlines="off"> \crescBegin \slurBegin:1<curve="down"> \beam( f# g f# g) \slurEnd:1 \slurBegin:1<curve="down"> \beam( f# g a b&) \slurEnd:1 \slurBegin:1<curve="down"> \beam( f# g f# g) \slurEnd:1 \slurBegin:1<curve="down"> \beam( f# g a b&) \slurEnd:1 \crescEnd \bar 
+   (* meas. 25 *)  \meter<"3/4", autoBarlines="off"> \intens<"f"> \slurBegin:1<curve="down"> \beam( c1 \dimBegin d& c d&) \slurEnd:1 \slurBegin:1<curve="down"> \beam( c d& c b&0) \slurEnd:1 \slurBegin:1<curve="down"> \beam( a b& a \dimEnd g) \slurEnd:1 \bar 
+   (* meas. 26 *)  \meter<"4/4", autoBarlines="off"> \intens<"p"> f# _ _/8 _/4 _/2 \bar 
+   (* meas. 27 *)  \intens<"p"> \stemsAuto f#2/1 \crescBegin \crescEnd \bar 
+   (* meas. 28 *)  \meter<"3/4", autoBarlines="off"> \intens<"f"> \stemsDown e#/2. \dimBegin \dimEnd \bar 
+   (* meas. 29 *)  _*3/4 \bar 
+   (* meas. 30 *)  _ \bar 
+   (* meas. 31 *)  _ \bar 
+   (* meas. 32 *)  _ \bar 
+   (* meas. 33 *)  _ \bar 
+   (* meas. 34 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 35 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 36 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 37 *)  \meter<"3/4", autoBarlines="off"> \intens<"mf"> \stemsUp \slurBegin:1<curve="down"> \beam( d1/16 e& f f#) \slurEnd:1 \slurBegin:1<curve="down"> \beam( g# a b c2) \slurEnd:1 \slurBegin:1<curve="down"> \beam( b1 a g# f#) \slurEnd:1 \bar 
+   (* meas. 38 *)  \intens<"f"> \slurBegin:1<curve="down"> \beam( f \crescBegin f# g# a) \slurEnd:1 \stemsDown \slurBegin:1 \beam( b c2 d d#) \slurEnd:1 \slurBegin:1 \beam( e f f# g) \slurEnd:1 \crescEnd \bar 
+   (* meas. 39 *)  \intens<"ff"> \slurBegin:1 \beam( g# a g# a) \slurEnd:1 \slurBegin:1 \beam( g# a g# a) \slurEnd:1 \slurBegin:1 \beam( g# a g# a) \slurEnd:1 \bar 
+   (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> \intens<"ff"> \slurBegin:1 \beam( g#/16 a g# a) \slurEnd:1 \slurBegin:1 \beam( g# a g# a) \slurEnd:1 _/4 ]
+, [ \staff<7> \instr<"Bassoons", dx=-16hs, dy=-5hs> \systemFormat<"", dx=16hs> 
+   (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"f4"> _*3/4 \bar 
+   (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 3 *)  _ \bar 
+   (* meas. 4 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 5 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 6 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 7 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 8 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 9 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 10 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 11 *)  \intens<"p"> \stemsUp { \tieBegin b-1/2. \tieBegin, d0. } \crescBegin \bar 
+   (* meas. 12 *)  \meter<"2/4", autoBarlines="off"> { b-1/2 \tieEnd, d0 \tieEnd } \crescEnd \bar 
+   (* meas. 13 *)  \meter<"4/4", autoBarlines="off"> \intens<"f"> \stemsAuto { a#-1/1, c#0 } \dimBegin \dimEnd \bar 
+   (* meas. 14 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 15 *)  _ \bar 
+   (* meas. 16 *)  \intens<"f"> _/4 \stemsUp \slurBegin:1<curve="down"> \beam( { b-2/16, b-1 } \crescBegin { c, c0 } { d-1, d0 } { e&-1, e&0 }) \slurEnd:1 \slurBegin:1<curve="down"> \beam( { b-2, b-1 } { c, c0 } { d-1, d0 } { e&-1, e&0 }) \slurEnd:1 \crescEnd \bar 
+   (* meas. 17 *)  \intens<"ff"> \accent( { f-1/2., f0. }) \bar 
+   (* meas. 18 *)  \meter<"4/4", autoBarlines="off"> \dimBegin \stemsAuto \accent( e-1/1) \dimEnd \bar 
+   (* meas. 19 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 20 *)  _ \bar 
+   (* meas. 21 *)  _ \bar 
+   (* meas. 22 *)  _ \bar 
+   (* meas. 23 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 24 *)  \meter<"4/4", autoBarlines="off"> \intens<"p"> e0/1 \crescBegin \crescEnd \bar 
+   (* meas. 25 *)  \meter<"3/4", autoBarlines="off"> \intens<"f"> \stemsUp e-1/2. \dimBegin \dimEnd \bar 
+   (* meas. 26 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 27 *)  \intens<"p"> \stemsAuto { b0, c1 } \crescBegin \crescEnd \bar 
+   (* meas. 28 *)  \meter<"3/4", autoBarlines="off"> \intens<"f"> \stemsDown { a#0/2., b. } \dimBegin \dimEnd \bar 
+   (* meas. 29 *)  _*3/4 \bar 
+   (* meas. 30 *)  _ \bar 
+   (* meas. 31 *)  _ \bar 
+   (* meas. 32 *)  _ \bar 
+   (* meas. 33 *)  _ \bar 
+   (* meas. 34 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 35 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 36 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 37 *)  \meter<"3/4", autoBarlines="off"> \intens<"mf"> \stemsUp \slurBegin:1<curve="down"> { c-1, c0 } { b-2/4, b-1 } \slurEnd:1 \bar 
+   (* meas. 38 *)  \intens<"f"> \slurBegin:1<curve="down"> { e&/2, e&0 } \crescBegin { d-1/4, d0 } \slurEnd:1 \crescEnd \bar 
+   (* meas. 39 *)  \intens<"ff"> { \tieBegin f#-1/2. \tieBegin, f#0. } \bar 
+   (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> { \tieBegin f#-1/2 \tieEnd \tieBegin, f#0 \tieEnd } \bar 
+   (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> { f#-1/2. \tieEnd, f#0. \tieEnd } ]
+, [ \staff<8> \instr<"1
+2", dx=-8hs, dy=-5hs> \systemFormat<"", dx=8hs> 
+   (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"g2"> _*3/4 \bar 
+   (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 3 *)  _ \bar 
+   (* meas. 4 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 5 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 6 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 7 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 8 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 9 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 10 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 11 *)  \intens<"p"> \stemsUp { \tieBegin f#0/2. \tieBegin, a. } \crescBegin \bar 
+   (* meas. 12 *)  \meter<"2/4", autoBarlines="off"> { f#/2 \tieEnd, a \tieEnd } \crescEnd \bar 
+   (* meas. 13 *)  \meter<"4/4", autoBarlines="off"> \intens<"f"> \stemsAuto { f/1, a& } \dimBegin \dimEnd \bar 
+   (* meas. 14 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 15 *)  _ \bar 
+   (* meas. 16 *)  _ \bar 
+   (* meas. 17 *)  _ \bar 
+   (* meas. 18 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 19 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 20 *)  _ \bar 
+   (* meas. 21 *)  _ \bar 
+   (* meas. 22 *)  _ \bar 
+   (* meas. 23 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 24 *)  \meter<"4/4", autoBarlines="off"> \intens<"p"> { d2/1, g } \crescBegin \crescEnd \bar 
+   (* meas. 25 *)  \meter<"3/4", autoBarlines="off"> \intens<"f"> \stemsDown { c#/2., f#. } \dimBegin \dimEnd \bar 
+   (* meas. 26 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 27 *)  _ \bar 
+   (* meas. 28 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 29 *)  _ \bar 
+   (* meas. 30 *)  _ \bar 
+   (* meas. 31 *)  _ \bar 
+   (* meas. 32 *)  _ \bar 
+   (* meas. 33 *)  _ \bar 
+   (* meas. 34 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 35 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 36 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 37 *)  \meter<"3/4", autoBarlines="off"> \intens<"mf"> \slurBegin:1 { c, g } { b1/4, f#2 } \slurEnd:1 \bar 
+   (* meas. 38 *)  \intens<"f"> \slurBegin:1 { b&1/2, e&2 } \crescBegin { a1/4, d2 } \slurEnd:1 \crescEnd \bar 
+   (* meas. 39 *)  \intens<"ff"> { \tieBegin a1/2. \tieBegin, f#2. } \bar 
+   (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> { \tieBegin a1/2 \tieEnd \tieBegin, f#2 \tieEnd } \bar 
+   (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> { a1/2. \tieEnd, f#2. \tieEnd } ]
+, [ \staff<9> \instr<"3
+4", dx=-8hs, dy=-5hs> \systemFormat<"", dx=8hs> 
+   (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"g2"> _*3/4 \bar 
+   (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 3 *)  _ \bar 
+   (* meas. 4 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 5 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 6 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 7 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 8 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 9 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 10 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 11 *)  _ \bar 
+   (* meas. 12 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 13 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 14 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 15 *)  _ \bar 
+   (* meas. 16 *)  _ \bar 
+   (* meas. 17 *)  _ \bar 
+   (* meas. 18 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 19 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 20 *)  _ \bar 
+   (* meas. 21 *)  _ \bar 
+   (* meas. 22 *)  _ \bar 
+   (* meas. 23 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 24 *)  \meter<"4/4", autoBarlines="off"> \intens<"p"> { b/1, f#2 } \crescBegin \crescEnd \bar 
+   (* meas. 25 *)  \meter<"3/4", autoBarlines="off"> \intens<"f"> \stemsDown { b&1/2., f2. } \dimBegin \dimEnd \bar 
+   (* meas. 26 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 27 *)  _ \bar 
+   (* meas. 28 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 29 *)  _ \bar 
+   (* meas. 30 *)  _ \bar 
+   (* meas. 31 *)  _ \bar 
+   (* meas. 32 *)  _ \bar 
+   (* meas. 33 *)  _ \bar 
+   (* meas. 34 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 35 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 36 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 37 *)  \meter<"3/4", autoBarlines="off"> \intens<"mf"> \slurBegin:1 { g1, e&2 } \stemsUp { f#1/4, d2 } \slurEnd:1 \bar 
+   (* meas. 38 *)  \intens<"f"> \slurBegin:1<curve="down"> { f#1/2, b } \crescBegin { f/4, b& } \slurEnd:1 \crescEnd \bar 
+   (* meas. 39 *)  \intens<"ff"> { \tieBegin d/2. \tieBegin, d2. } \bar 
+   (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> { \tieBegin d1/2 \tieEnd \tieBegin, d2 \tieEnd } \bar 
+   (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> { d1/2. \tieEnd, d2. \tieEnd } ]
+, [ \staff<10> \instr<"Trumpets in C", dx=-26hs, dy=-5hs> \systemFormat<"", dx=26hs> 
+   (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"g2"> _*3/4 \bar 
+   (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 3 *)  _ \bar 
+   (* meas. 4 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 5 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 6 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 7 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 8 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 9 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 10 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 11 *)  _ \bar 
+   (* meas. 12 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 13 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 14 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 15 *)  _ \bar 
+   (* meas. 16 *)  _ \bar 
+   (* meas. 17 *)  _ \bar 
+   (* meas. 18 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 19 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 20 *)  _ \bar 
+   (* meas. 21 *)  _ \bar 
+   (* meas. 22 *)  _ \bar 
+   (* meas. 23 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 24 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 25 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 26 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 27 *)  _ \bar 
+   (* meas. 28 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 29 *)  _ \bar 
+   (* meas. 30 *)  _ \bar 
+   (* meas. 31 *)  _ \bar 
+   (* meas. 32 *)  _ \bar 
+   (* meas. 33 *)  _ \bar 
+   (* meas. 34 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 35 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 36 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 37 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 38 *)  \intens<"f"> \stemsDown \slurBegin:1 { b/2, e2 } \crescBegin { b&1/4, e&2 } \slurEnd:1 \crescEnd \bar 
+   (* meas. 39 *)  \intens<"ff"> { \tieBegin d/2. \tieBegin, g. } \bar 
+   (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> { \tieBegin d/2 \tieEnd \tieBegin, g \tieEnd } \bar 
+   (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> { d/2. \tieEnd, g. \tieEnd } ]
+, [ \staff<11> \instr<"1
+2", dx=-8hs, dy=-5hs> \systemFormat<"", dx=8hs> 
+   (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"f4"> _*3/4 \bar 
+   (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 3 *)  _ \bar 
+   (* meas. 4 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 5 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 6 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 7 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 8 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 9 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 10 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 11 *)  _ \bar 
+   (* meas. 12 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 13 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 14 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 15 *)  _ \bar 
+   (* meas. 16 *)  _ \bar 
+   (* meas. 17 *)  _ \bar 
+   (* meas. 18 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 19 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 20 *)  _ \bar 
+   (* meas. 21 *)  _ \bar 
+   (* meas. 22 *)  _ \bar 
+   (* meas. 23 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 24 *)  \meter<"4/4", autoBarlines="off"> \intens<"p"> { b0/1, c1 } \crescBegin \crescEnd \bar 
+   (* meas. 25 *)  \meter<"3/4", autoBarlines="off"> \intens<"f"> \stemsDown { a#0/2., b. } \dimBegin \dimEnd \bar 
+   (* meas. 26 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 27 *)  _ \bar 
+   (* meas. 28 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 29 *)  _ \bar 
+   (* meas. 30 *)  _ \bar 
+   (* meas. 31 *)  _ \bar 
+   (* meas. 32 *)  _ \bar 
+   (* meas. 33 *)  \intens<"p"> \slurBegin:1 { d/2., g. } \bar 
+   (* meas. 34 *)  \meter<"2/4", autoBarlines="off"> { c#/2, f# } \slurEnd:1 \bar 
+   (* meas. 35 *)  \meter<"3/4", autoBarlines="off"> \intens<"mp"> \slurBegin:1 { f/2., b&. } \bar 
+   (* meas. 36 *)  \meter<"2/4", autoBarlines="off"> { e/2, a } \slurEnd:1 \bar 
+   (* meas. 37 *)  \meter<"3/4", autoBarlines="off"> \intens<"mf"> \slurBegin:1 { a&, d&1 } { g0/4, c1 } \slurEnd:1 \bar 
+   (* meas. 38 *)  \clef<"c4"> \intens<"f"> \slurBegin:1 { b0/2, e1 } \crescBegin { b&0/4, e&1 } \slurEnd:1 \crescEnd \bar 
+   (* meas. 39 *)  \intens<"ff"> { \tieBegin d/2. \tieBegin, g. } \bar 
+   (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> { \tieBegin d/2 \tieEnd \tieBegin, g \tieEnd } \bar 
+   (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> { d/2. \tieEnd, g. \tieEnd } ]
+, [ \staff<12> \instr<"3", dx=-2hs, dy=-5hs> \systemFormat<"", dx=2hs> 
+   (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"f4"> _*3/4 \bar 
+   (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 3 *)  _ \bar 
+   (* meas. 4 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 5 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 6 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 7 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 8 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 9 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 10 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 11 *)  _ \bar 
+   (* meas. 12 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 13 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 14 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 15 *)  _ \bar 
+   (* meas. 16 *)  _ \bar 
+   (* meas. 17 *)  _ \bar 
+   (* meas. 18 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 19 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 20 *)  _ \bar 
+   (* meas. 21 *)  _ \bar 
+   (* meas. 22 *)  _ \bar 
+   (* meas. 23 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 24 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 25 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 26 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 27 *)  _ \bar 
+   (* meas. 28 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 29 *)  _ \bar 
+   (* meas. 30 *)  _ \bar 
+   (* meas. 31 *)  _ \bar 
+   (* meas. 32 *)  _ \bar 
+   (* meas. 33 *)  \intens<"p"> \stemsUp \slurBegin:1<curve="down"> b-1/2. \bar 
+   (* meas. 34 *)  \meter<"2/4", autoBarlines="off"> b&/2 \slurEnd:1 \bar 
+   (* meas. 35 *)  \meter<"3/4", autoBarlines="off"> \intens<"mp"> \stemsDown \slurBegin:1 d0/2. \bar 
+   (* meas. 36 *)  \meter<"2/4", autoBarlines="off"> \stemsUp c#/2 \slurEnd:1 \bar 
+   (* meas. 37 *)  \meter<"3/4", autoBarlines="off"> \intens<"mf"> \stemsDown \slurBegin:1 f e/4 \slurEnd:1 \bar 
+   (* meas. 38 *)  \intens<"f"> \slurBegin:1 a&/2 \crescBegin g/4 \slurEnd:1 \crescEnd \bar 
+   (* meas. 39 *)  \intens<"ff"> \tieBegin f#/2. \bar 
+   (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> \tieBegin f#/2 \tieEnd \bar 
+   (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> f#/2. \tieEnd ]
+, [ \staff<13> \instr<"Tuba", dx=-8hs, dy=-5hs> \systemFormat<"", dx=8hs> 
+   (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"f4"> _*3/4 \bar 
+   (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 3 *)  _ \bar 
+   (* meas. 4 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 5 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 6 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 7 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 8 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 9 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 10 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 11 *)  _ \bar 
+   (* meas. 12 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 13 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 14 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 15 *)  _ \bar 
+   (* meas. 16 *)  _ \bar 
+   (* meas. 17 *)  _ \bar 
+   (* meas. 18 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 19 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 20 *)  _ \bar 
+   (* meas. 21 *)  _ \bar 
+   (* meas. 22 *)  _ \bar 
+   (* meas. 23 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 24 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 25 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 26 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 27 *)  _ \bar 
+   (* meas. 28 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 29 *)  _ \bar 
+   (* meas. 30 *)  _ \bar 
+   (* meas. 31 *)  _ \bar 
+   (* meas. 32 *)  _ \bar 
+   (* meas. 33 *)  \intens<"p"> \stemsUp \slurBegin:1<curve="down"> f#-1/2. \bar 
+   (* meas. 34 *)  \meter<"2/4", autoBarlines="off"> f/2 \slurEnd:1 \bar 
+   (* meas. 35 *)  \meter<"3/4", autoBarlines="off"> \intens<"mp"> \slurBegin:1<curve="down"> a/2. \bar 
+   (* meas. 36 *)  \meter<"2/4", autoBarlines="off"> g#/2 \slurEnd:1 \bar 
+   (* meas. 37 *)  \meter<"3/4", autoBarlines="off"> \intens<"mf"> \slurBegin:1<curve="down"> c b-2/4 \slurEnd:1 \bar 
+   (* meas. 38 *)  \intens<"f"> \slurBegin:1<curve="down"> e&-1/2 \crescBegin d/4 \slurEnd:1 \crescEnd \bar 
+   (* meas. 39 *)  \intens<"ff"> \tieBegin f#/2. \bar 
+   (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> \tieBegin f#/2 \tieEnd \bar 
+   (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> f#/2. \tieEnd ]
+, [ \staff<14> \instr<"Timpani", dx=-14hs, dy=-5hs> \systemFormat<"", dx=14hs> 
+   (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"f4"> _*3/4 \bar 
+   (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 3 *)  _ \bar 
+   (* meas. 4 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 5 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 6 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 7 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 8 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 9 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 10 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 11 *)  _ \bar 
+   (* meas. 12 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 13 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 14 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 15 *)  _ \bar 
+   (* meas. 16 *)  _ \bar 
+   (* meas. 17 *)  _ \bar 
+   (* meas. 18 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 19 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 20 *)  _ \bar 
+   (* meas. 21 *)  \intens<"mp"> _/4 _ \stemsUp \beam( b&-1/16 b& b&/8) \bar 
+   (* meas. 22 *)  _/4 \beam( b&/16 b& b&/8) \beam( b&/16 b& b&/8) \bar 
+   (* meas. 23 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 24 *)  \meter<"4/4", autoBarlines="off"> \intens<"mp"> \intens<"mf"> _/4 \beam( b&/16 b& b&/8) _/4 \beam( b&/16 b& b&/8) \bar 
+   (* meas. 25 *)  \meter<"3/4", autoBarlines="off"> \intens<"f"> \intens<"mf"> \intens<"mp"> \beam( b&/16 b& b&/8) \beam( b&/16 b& b&/8) \beam( b&/16 b& b&/8) \bar 
+   (* meas. 26 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 27 *)  \intens<"p"> \stemsAuto e0 \crescBegin \crescEnd \bar 
+   (* meas. 28 *)  \meter<"3/4", autoBarlines="off"> \intens<"f"> \stemsDown e/2. \dimBegin \dimEnd \bar 
+   (* meas. 29 *)  _*3/4 \bar 
+   (* meas. 30 *)  _ \bar 
+   (* meas. 31 *)  _ \bar 
+   (* meas. 32 *)  _ \bar 
+   (* meas. 33 *)  _ \bar 
+   (* meas. 34 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 35 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 36 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 37 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 38 *)  _ \bar 
+   (* meas. 39 *)  \intens<"ff"> \stemsUp f#-1/4 f# f# \bar 
+   (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> \intens<"ff"> f#/4 f# _ ]
+, [ \staff<14> 
+   (* meas. 1 *)  empty*3/4 \bar 
+   (* meas. 2 *)  empty/1 \bar 
+   (* meas. 3 *)  empty \bar 
+   (* meas. 4 *)  empty*3/4 \bar 
+   (* meas. 5 *)  empty/2 \bar 
+   (* meas. 6 *)  empty/1 \bar 
+   (* meas. 7 *)  empty*3/4 \bar 
+   (* meas. 8 *)  empty/2 \bar 
+   (* meas. 9 *)  empty/1 \bar 
+   (* meas. 10 *)  empty*3/4 \bar 
+   (* meas. 11 *)  empty \bar 
+   (* meas. 12 *)  empty/2 \bar 
+   (* meas. 13 *)  empty/1 \bar 
+   (* meas. 14 *)  empty*3/4 \bar 
+   (* meas. 15 *)  empty \bar 
+   (* meas. 16 *)  empty \bar 
+   (* meas. 17 *)  empty \bar 
+   (* meas. 18 *)  empty/1 \bar 
+   (* meas. 19 *)  empty*3/4 \bar 
+   (* meas. 20 *)  empty \bar 
+   (* meas. 21 *)  empty \bar 
+   (* meas. 22 *)  empty \bar 
+   (* meas. 23 *)  empty/2 \bar 
+   (* meas. 24 *)  empty/1 \bar 
+   (* meas. 25 *)  empty*3/4 \bar 
+   (* meas. 26 *)  empty/1 \bar 
+   (* meas. 27 *)  \stemsDown e0 e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e empty/256 \bar 
+   (* meas. 28 *)  e/2 e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e empty*3/1024 \bar 
+   (* meas. 29 *)  empty*3/4 \bar 
+   (* meas. 30 *)  empty \bar 
+   (* meas. 31 *)  empty \bar 
+   (* meas. 32 *)  empty \bar 
+   (* meas. 33 *)  empty \bar 
+   (* meas. 34 *)  empty/2 \bar 
+   (* meas. 35 *)  empty*3/4 \bar 
+   (* meas. 36 *)  empty/2 \bar 
+   (* meas. 37 *)  empty*3/4 \bar 
+   (* meas. 38 *)  empty \bar 
+   (* meas. 39 *)  empty \bar 
+   (* meas. 40 *)  empty/2 \bar 
+   (* meas. 41 *)  empty*3/4 ]
+, [ \staff<15> \instr<"1", dx=-2hs, dy=-5hs> \systemFormat<"", dx=2hs> 
+   (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"perc"> _*3/4 \bar 
+   (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 3 *)  _ \bar 
+   (* meas. 4 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 5 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 6 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 7 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 8 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 9 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 10 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 11 *)  _ \bar 
+   (* meas. 12 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 13 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 14 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 15 *)  _ \bar 
+   (* meas. 16 *)  _ \bar 
+   (* meas. 17 *)  _ \bar 
+   (* meas. 18 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 19 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 20 *)  _ \bar 
+   (* meas. 21 *)  _ \bar 
+   (* meas. 22 *)  _ \bar 
+   (* meas. 23 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 24 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 25 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 26 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 27 *)  _ \bar 
+   (* meas. 28 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 29 *)  _ \bar 
+   (* meas. 30 *)  _ \bar 
+   (* meas. 31 *)  _ \bar 
+   (* meas. 32 *)  _ \bar 
+   (* meas. 33 *)  \intens<"p"> \stemsDown \tieBegin e2/2. \bar 
+   (* meas. 34 *)  \meter<"2/4", autoBarlines="off"> \tieBegin e/2 \tieEnd \bar 
+   (* meas. 35 *)  \meter<"3/4", autoBarlines="off"> \crescBegin \tieBegin e/2. \tieEnd \bar 
+   (* meas. 36 *)  \meter<"2/4", autoBarlines="off"> \tieBegin e/2 \tieEnd \bar 
+   (* meas. 37 *)  \meter<"3/4", autoBarlines="off"> \tieBegin e/2. \tieEnd \bar 
+   (* meas. 38 *)  e. \tieEnd \crescEnd \bar 
+   (* meas. 39 *)  \intens<"ff"> e. \bar 
+   (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> _*3/4 ]
+, [ \staff<15> 
+   (* meas. 1 *)  empty*3/4 \bar 
+   (* meas. 2 *)  empty/1 \bar 
+   (* meas. 3 *)  empty \bar 
+   (* meas. 4 *)  empty*3/4 \bar 
+   (* meas. 5 *)  empty/2 \bar 
+   (* meas. 6 *)  empty/1 \bar 
+   (* meas. 7 *)  empty*3/4 \bar 
+   (* meas. 8 *)  empty/2 \bar 
+   (* meas. 9 *)  empty/1 \bar 
+   (* meas. 10 *)  empty*3/4 \bar 
+   (* meas. 11 *)  empty \bar 
+   (* meas. 12 *)  empty/2 \bar 
+   (* meas. 13 *)  empty/1 \bar 
+   (* meas. 14 *)  empty*3/4 \bar 
+   (* meas. 15 *)  empty \bar 
+   (* meas. 16 *)  empty \bar 
+   (* meas. 17 *)  empty \bar 
+   (* meas. 18 *)  empty/1 \bar 
+   (* meas. 19 *)  empty*3/4 \bar 
+   (* meas. 20 *)  empty \bar 
+   (* meas. 21 *)  empty \bar 
+   (* meas. 22 *)  empty \bar 
+   (* meas. 23 *)  empty/2 \bar 
+   (* meas. 24 *)  empty/1 \bar 
+   (* meas. 25 *)  empty*3/4 \bar 
+   (* meas. 26 *)  empty/1 \bar 
+   (* meas. 27 *)  empty \bar 
+   (* meas. 28 *)  empty*3/4 \bar 
+   (* meas. 29 *)  empty \bar 
+   (* meas. 30 *)  empty \bar 
+   (* meas. 31 *)  empty \bar 
+   (* meas. 32 *)  empty \bar 
+   (* meas. 33 *)  \stemsDown \beam( e2/16 e e e e e e e e e e e) \bar 
+   (* meas. 34 *)  \beam( e e e e e e e e) \bar 
+   (* meas. 35 *)  \beam( e e e e e e e e e e e e) \bar 
+   (* meas. 36 *)  \beam( e e e e e e e e) \bar 
+   (* meas. 37 *)  \beam( e e e e e e e e e e e e) \bar 
+   (* meas. 38 *)  \beam( e e e e) \beam( e e) e/4. \bar 
+   (* meas. 39 *)  empty*3/4 \bar 
+   (* meas. 40 *)  empty/2 \bar 
+   (* meas. 41 *)  empty*3/4 ]
+, [ \staff<16> \instr<"2", dx=-2hs, dy=-5hs> \systemFormat<"", dx=2hs> 
+   (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"perc"> _*3/4 \bar 
+   (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 3 *)  _ \bar 
+   (* meas. 4 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 5 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 6 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 7 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 8 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 9 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 10 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 11 *)  _ \bar 
+   (* meas. 12 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 13 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 14 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 15 *)  _ \bar 
+   (* meas. 16 *)  _ \bar 
+   (* meas. 17 *)  _ \bar 
+   (* meas. 18 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 19 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 20 *)  _ \bar 
+   (* meas. 21 *)  _ \bar 
+   (* meas. 22 *)  _ \bar 
+   (* meas. 23 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 24 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 25 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 26 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 27 *)  _ \bar 
+   (* meas. 28 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 29 *)  _ \bar 
+   (* meas. 30 *)  _ \bar 
+   (* meas. 31 *)  _ \bar 
+   (* meas. 32 *)  _ \bar 
+   (* meas. 33 *)  \intens<"p"> \stemsUp \tieBegin f/2. \bar 
+   (* meas. 34 *)  \meter<"2/4", autoBarlines="off"> \tieBegin f/2 \tieEnd \bar 
+   (* meas. 35 *)  \meter<"3/4", autoBarlines="off"> \crescBegin \tieBegin f/2. \tieEnd \bar 
+   (* meas. 36 *)  \meter<"2/4", autoBarlines="off"> \tieBegin f/2 \tieEnd \bar 
+   (* meas. 37 *)  \meter<"3/4", autoBarlines="off"> \tieBegin f/2. \tieEnd \bar 
+   (* meas. 38 *)  f. \tieEnd \crescEnd \bar 
+   (* meas. 39 *)  \intens<"ff"> f/4 f f \bar 
+   (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> \intens<"ff"> f/4 f _ ]
+, [ \staff<16> 
+   (* meas. 1 *)  empty*3/4 \bar 
+   (* meas. 2 *)  empty/1 \bar 
+   (* meas. 3 *)  empty \bar 
+   (* meas. 4 *)  empty*3/4 \bar 
+   (* meas. 5 *)  empty/2 \bar 
+   (* meas. 6 *)  empty/1 \bar 
+   (* meas. 7 *)  empty*3/4 \bar 
+   (* meas. 8 *)  empty/2 \bar 
+   (* meas. 9 *)  empty/1 \bar 
+   (* meas. 10 *)  empty*3/4 \bar 
+   (* meas. 11 *)  empty \bar 
+   (* meas. 12 *)  empty/2 \bar 
+   (* meas. 13 *)  empty/1 \bar 
+   (* meas. 14 *)  empty*3/4 \bar 
+   (* meas. 15 *)  empty \bar 
+   (* meas. 16 *)  empty \bar 
+   (* meas. 17 *)  empty \bar 
+   (* meas. 18 *)  empty/1 \bar 
+   (* meas. 19 *)  empty*3/4 \bar 
+   (* meas. 20 *)  empty \bar 
+   (* meas. 21 *)  empty \bar 
+   (* meas. 22 *)  empty \bar 
+   (* meas. 23 *)  empty/2 \bar 
+   (* meas. 24 *)  empty/1 \bar 
+   (* meas. 25 *)  empty*3/4 \bar 
+   (* meas. 26 *)  empty/1 \bar 
+   (* meas. 27 *)  empty \bar 
+   (* meas. 28 *)  empty*3/4 \bar 
+   (* meas. 29 *)  empty \bar 
+   (* meas. 30 *)  empty \bar 
+   (* meas. 31 *)  empty \bar 
+   (* meas. 32 *)  empty \bar 
+   (* meas. 33 *)  \stemsUp f/2 f f f f f f f f f f f f f f f f f f f f f f f f f f f f f empty*3/1024 \bar 
+   (* meas. 34 *)  f/2 f f f f f f f f f f f f f f f f f f f empty/512 \bar 
+   (* meas. 35 *)  f/2 f f f f f f f f f f f f f f f f f f f f f f f f f f f f f empty*3/1024 \bar 
+   (* meas. 36 *)  f/2 f f f f f f f f f f f f f f f f f f f empty/512 \bar 
+   (* meas. 37 *)  f/2 f f f f f f f f f f f f f f f f f f f f f f f f f f f f f empty*3/1024 \bar 
+   (* meas. 38 *)  f/2 f f f f f f f f f f f f f f f f f f f f f f f f f f f f f empty*3/1024 \bar 
+   (* meas. 39 *)  empty*3/4 \bar 
+   (* meas. 40 *)  empty/2 \bar 
+   (* meas. 41 *)  empty*3/4 ]
+, [ \staff<17> \instr<"Harp", dx=-8hs, dy=-5hs> \systemFormat<"", dx=8hs> 
+   (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"g2"> \intens<"mf"> \stemsDown { b2, b3 } _ _ \bar 
+   (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 3 *)  _ \bar 
+   (* meas. 4 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 5 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 6 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 7 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 8 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 9 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 10 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 11 *)  _ \bar 
+   (* meas. 12 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 13 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 14 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 15 *)  _ \bar 
+   (* meas. 16 *)  _ \bar 
+   (* meas. 17 *)  _ \bar 
+   (* meas. 18 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 19 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 20 *)  _ \bar 
+   (* meas. 21 *)  _ \bar 
+   (* meas. 22 *)  _ \bar 
+   (* meas. 23 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 24 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 25 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 26 *)  \meter<"4/4", autoBarlines="off"> \intens<"mf"> { e2/4, e3 } { e2, e3 } { e2, e3 } { e2, e3 } \bar 
+   (* meas. 27 *)  \crescBegin { e2, e3 } { e2, e3 } { e2, e3 } { e2, e3 } \crescEnd \bar 
+   (* meas. 28 *)  \meter<"3/4", autoBarlines="off"> \intens<"ff"> { e2, e3 } \dimBegin { e2, e3 } { e2, e3 } \dimEnd \bar 
+   (* meas. 29 *)  \intens<"mf"> \stemsUp \beam( e2/16 c# a1 e) _/4 \beam( e2/16 c# a1 e) \bar 
+   (* meas. 30 *)  _/4 _ \beam( e2/16 c# a1 e) \bar 
+   (* meas. 31 *)  _/4 _ \beam( e2/16 c# a1 e) \bar 
+   (* meas. 32 *)  _/4 \beam( e2/16 c# a1 e) \beam( e2 c# a1 e) \bar 
+   (* meas. 33 *)  _*3/4 \bar 
+   (* meas. 34 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 35 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 36 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 37 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 38 *)  _ \bar 
+   (* meas. 39 *)  _ \bar 
+   (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> _*3/4 ]
+, [ \staff<18> 
+   (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"f4"> _*3/4 \bar 
+   (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 3 *)  _ \bar 
+   (* meas. 4 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 5 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 6 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 7 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 8 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 9 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 10 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 11 *)  _ \bar 
+   (* meas. 12 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 13 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 14 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 15 *)  _ \bar 
+   (* meas. 16 *)  _ \bar 
+   (* meas. 17 *)  _ \bar 
+   (* meas. 18 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 19 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 20 *)  _ \bar 
+   (* meas. 21 *)  _ \bar 
+   (* meas. 22 *)  _ \bar 
+   (* meas. 23 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 24 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 25 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 26 *)  \meter<"4/4", autoBarlines="off"> \clef<"g2"> _/16 \stemsUp \beam( c#2 a1 e) f/4 _/16 \beam( c#2 a1 e) f/4 \bar 
+   (* meas. 27 *)  _/16 \beam( c#2 a1 e) f/4 _/16 \beam( c#2 a1 e) f/4 \bar 
+   (* meas. 28 *)  \meter<"3/4", autoBarlines="off"> _/16 \beam( c#2 a1 e) f/4 _/16 \beam( c#2 a1 e) \bar 
+   (* meas. 29 *)  { f0/4, f1 } { f0, f1 } { f0, f1 } \bar 
+   (* meas. 30 *)  _ _ { f0, f1 } \bar 
+   (* meas. 31 *)  { f0, f1 } _ { f0, f1 } \bar 
+   (* meas. 32 *)  _ { f0, f1 } { f0, f1 } \bar 
+   (* meas. 33 *)  _*3/4 \bar 
+   (* meas. 34 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 35 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 36 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 37 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 38 *)  _ \bar 
+   (* meas. 39 *)  _ \bar 
+   (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> _*3/4 ]
+, [ \staff<19> \instr<"Violin I", dx=-16hs, dy=-5hs> \systemFormat<"", dx=16hs> 
+   (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"g2"> \tempo<tempo="[1/4] = 85"> \intens<"p"> \stemsDown { \tieBegin e2/2. \tieBegin, b. } \bar 
+   (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> \stemsAuto { \tieBegin e/1 \tieEnd \tieBegin, b \tieEnd } \bar 
+   (* meas. 3 *)  { \tieBegin e \tieEnd \tieBegin, b \tieEnd } \bar 
+   (* meas. 4 *)  \meter<"3/4", autoBarlines="off"> \stemsDown { \tieBegin e/2. \tieEnd \tieBegin, b. \tieEnd } \bar 
+   (* meas. 5 *)  \meter<"2/4", autoBarlines="off"> { \tieBegin e/2 \tieEnd \tieBegin, b \tieEnd } \bar 
+   (* meas. 6 *)  \meter<"4/4", autoBarlines="off"> \stemsAuto { \tieBegin e/1 \tieEnd \tieBegin, b \tieEnd } \bar 
+   (* meas. 7 *)  \meter<"3/4", autoBarlines="off"> \stemsDown { \tieBegin e/2. \tieEnd \tieBegin, b. \tieEnd } \bar 
+   (* meas. 8 *)  \meter<"2/4", autoBarlines="off"> { \tieBegin e/2 \tieEnd \tieBegin, b \tieEnd } \bar 
+   (* meas. 9 *)  \meter<"4/4", autoBarlines="off"> \stemsAuto { \tieBegin e/1 \tieEnd \tieBegin, b \tieEnd } \bar 
+   (* meas. 10 *)  \meter<"3/4", autoBarlines="off"> \stemsDown { \tieBegin e/2. \tieEnd \tieBegin, b. \tieEnd } \bar 
+   (* meas. 11 *)  { \tieBegin e. \tieEnd \tieBegin, b. \tieEnd } \bar 
+   (* meas. 12 *)  \meter<"2/4", autoBarlines="off"> { \tieBegin e/2 \tieEnd \tieBegin, b \tieEnd } \bar 
+   (* meas. 13 *)  \meter<"4/4", autoBarlines="off"> \stemsAuto { e/1 \tieEnd, b \tieEnd } \bar 
+   (* meas. 14 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 15 *)  \intens<"mp"> \intens<"mf"> _/4 \stemsDown \slurBegin:1 \beam( b/16 c3 d e&) \slurEnd:1 \slurBegin:1 \beam( b2 c3 d e&) \slurEnd:1 \bar 
+   (* meas. 16 *)  \intens<"f"> \slurBegin:1 \beam( b2 \crescBegin c3 d e&) \slurEnd:1 \slurBegin:1 \beam( b2 c3 d e&) \slurEnd:1 \slurBegin:1 \beam( b2 c3 d e&) \slurEnd:1 \crescEnd \bar 
+   (* meas. 17 *)  \intens<"ff"> f _ _/8 _/4 _ \bar 
+   (* meas. 18 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 19 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 20 *)  _ \bar 
+   (* meas. 21 *)  _ \bar 
+   (* meas. 22 *)  _ \bar 
+   (* meas. 23 *)  \meter<"2/4", autoBarlines="off"> \intens<"mf"> e2/4 e \bar 
+   (* meas. 24 *)  \meter<"4/4", autoBarlines="off"> \intens<"f"> e b&1 e2 b&1 \bar 
+   (* meas. 25 *)  \meter<"3/4", autoBarlines="off"> \intens<"ff"> \intens<"f"> \intens<"mf"> b& b& b& \bar 
+   (* meas. 26 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 27 *)  \intens<"p"> \slurBegin:1 \beam( e2/16 \crescBegin f e f) \beam( e f g a&) \slurEnd:1 \slurBegin:1 \beam( e f e f) \beam( e f g a&) \slurEnd:1 \crescEnd \bar 
+   (* meas. 28 *)  \meter<"3/4", autoBarlines="off"> \intens<"f"> \slurBegin:1 \beam( b& \dimBegin c&3 b&2 c&3) \slurEnd:1 \slurBegin:1 \beam( b&2 c&3 b&2 a&) \slurEnd:1 \slurBegin:1 \beam( g a& g \dimEnd f) \slurEnd:1 \bar 
+   (* meas. 29 *)  \intens<"p"> e _ _/8 _/4 _ \bar 
+   (* meas. 30 *)  \intens<"p"> \stemsUp \slurBegin:1<curve="down"> \beam( e/16 c# a1 e) \slurEnd:1 \slurBegin:1<curve="down"> \beam( e2 c# a1 e) \slurEnd:1 _/4 \bar 
+   (* meas. 31 *)  _ \slurBegin:1<curve="down"> \beam( e2/16 c# a1 e) \slurEnd:1 _/4 \bar 
+   (* meas. 32 *)  \slurBegin:1<curve="down"> \beam( e2/16 c# a1 e) \slurEnd:1 _/4 \slurBegin:1<curve="down"> \beam( e2/16 c# a1 e) \slurEnd:1 \bar 
+   (* meas. 33 *)  \intens<"p"> \slurBegin:1<curve="down"> \beam( f# g a b&) \slurEnd:1 \slurBegin:1<curve="down"> \beam( f# g a b&) \slurEnd:1 \stemsDown \slurBegin:1 \beam( c2 d& e& e) \slurEnd:1 \bar 
+   (* meas. 34 *)  \meter<"2/4", autoBarlines="off"> \slurBegin:1 \beam( f g& f e&) \slurEnd:1 \slurBegin:1 \beam( d c b1 a) \slurEnd:1 \bar 
+   (* meas. 35 *)  \meter<"3/4", autoBarlines="off"> \intens<"mp"> \slurBegin:1 \beam( a b& c2 d&) \slurEnd:1 \slurBegin:1 \beam( a1 b& c2 c#) \slurEnd:1 \slurBegin:1 \beam( d# e f# g) \slurEnd:1 \bar 
+   (* meas. 36 *)  \meter<"2/4", autoBarlines="off"> \slurBegin:1 \beam( g# a g# f#) \slurEnd:1 \slurBegin:1 \beam( f e& d c) \slurEnd:1 \bar 
+   (* meas. 37 *)  \meter<"3/4", autoBarlines="off"> \intens<"mf"> \slurBegin:1 \beam( c c# d# e) \slurEnd:1 \slurBegin:1 \beam( f# g a b&) \slurEnd:1 \slurBegin:1 \beam( a g f# e) \slurEnd:1 \bar 
+   (* meas. 38 *)  \intens<"f"> \slurBegin:1 \beam( d# \crescBegin e f# g) \slurEnd:1 \slurBegin:1 \beam( a b& c3 c#) \slurEnd:1 \slurBegin:1 \beam( d d# e f) \slurEnd:1 \crescEnd \bar 
+   (* meas. 39 *)  \intens<"ff"> \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \bar 
+   (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> \intens<"ff"> \slurBegin:1 \beam( f#/16 g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 _/4 ]
+, [ \staff<20> \instr<"Violin II", dx=-18hs, dy=-5hs> \systemFormat<"", dx=18hs> 
+   (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"g2"> \intens<"mf"> \stemsDown b2 _ _ \bar 
+   (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 3 *)  _ \bar 
+   (* meas. 4 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 5 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 6 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 7 *)  \meter<"3/4", autoBarlines="off"> \intens<"p"> \slurBegin:1 \beam( b1/16 c2 b1 c2) \beam( b1 c2 d e&) \beam( b1 c2 b1 c2) \slurEnd:1 \bar 
+   (* meas. 8 *)  \meter<"2/4", autoBarlines="off"> \crescBegin \slurBegin:1 \beam( b1 c2 b1 c2) \beam( b1 c2 d \crescEnd e&) \slurEnd:1 \bar 
+   (* meas. 9 *)  \meter<"4/4", autoBarlines="off"> \intens<"f"> \slurBegin:1 \beam( f \dimBegin g& f g&) \beam( f g& f g&) \slurEnd:1 \slurBegin:1 \beam( f g& f e&) \beam( d e& d c) \slurEnd:1 \dimEnd \bar 
+   (* meas. 10 *)  \meter<"3/4", autoBarlines="off"> \intens<"pp"> b1 _ _/8 _/4 _ \bar 
+   (* meas. 11 *)  \intens<"p"> \slurBegin:1 \beam( b/16 c2 d e&) \beam( b1 c2 d e&) \beam( b1 c2 b1 c2) \slurEnd:1 \bar 
+   (* meas. 12 *)  \meter<"2/4", autoBarlines="off"> \crescBegin \slurBegin:1 \beam( b1 c2 b1 c2) \beam( b1 c2 d e&) \slurEnd:1 \crescEnd \bar 
+   (* meas. 13 *)  \meter<"4/4", autoBarlines="off"> \intens<"f"> \slurBegin:1 \beam( f \dimBegin g& f g&) \beam( f g& f g&) \slurEnd:1 \slurBegin:1 \beam( f g& f e&) \beam( d e& d c) \slurEnd:1 \dimEnd \bar 
+   (* meas. 14 *)  \meter<"3/4", autoBarlines="off"> \intens<"pp"> \intens<"p"> b1 _ _/8 _/4 \slurBegin:1 \beam( b/16 c2 b1 c2) \slurEnd:1 \bar 
+   (* meas. 15 *)  \intens<"mp"> \intens<"mf"> \slurBegin:1 \beam( b1 c2 d e&) \slurEnd:1 \slurBegin:1 \beam( b1 c2 d e&) \slurEnd:1 \slurBegin:1 \beam( b1 c2 d e&) \slurEnd:1 \bar 
+   (* meas. 16 *)  \intens<"f"> \slurBegin:1 \beam( b1 \crescBegin c2 d e&) \slurEnd:1 \slurBegin:1 \beam( b1 c2 d e&) \slurEnd:1 \slurBegin:1 \beam( b1 c2 d e&) \slurEnd:1 \crescEnd \bar 
+   (* meas. 17 *)  \intens<"ff"> f _ _/8 _/4 _ \bar 
+   (* meas. 18 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 19 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 20 *)  _ \bar 
+   (* meas. 21 *)  \intens<"mf"> _/4 _ \stemsUp b&0 \bar 
+   (* meas. 22 *)  _ b& b& \bar 
+   (* meas. 23 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 24 *)  \meter<"4/4", autoBarlines="off"> \intens<"mf"> \intens<"f"> _/4 b& _ b& \bar 
+   (* meas. 25 *)  \meter<"3/4", autoBarlines="off"> \intens<"ff"> \intens<"f"> \intens<"mf"> b& b& b& \bar 
+   (* meas. 26 *)  \meter<"4/4", autoBarlines="off"> \intens<"p"> _/2 \slurBegin:1<curve="down"> \beam( e1/16 f e f) \beam( e f g a&) \slurEnd:1 \bar 
+   (* meas. 27 *)  \crescBegin \slurBegin:1<curve="down"> \beam( e f e f) \beam( e f g a&) \slurEnd:1 \slurBegin:1<curve="down"> \beam( e f e f) \beam( e f g a&) \slurEnd:1 \crescEnd \bar 
+   (* meas. 28 *)  \meter<"3/4", autoBarlines="off"> \intens<"f"> \stemsDown \slurBegin:1 \beam( b& \dimBegin c&2 b&1 c&2) \slurEnd:1 \slurBegin:1 \beam( b&1 c&2 b&1 a&) \slurEnd:1 \stemsUp \slurBegin:1<curve="down"> \beam( g a& g \dimEnd f) \slurEnd:1 \bar 
+   (* meas. 29 *)  \intens<"p"> e _ _/8 _/4 _ \bar 
+   (* meas. 30 *)  _*3/4 \bar 
+   (* meas. 31 *)  _ \bar 
+   (* meas. 32 *)  _ \bar 
+   (* meas. 33 *)  \intens<"p"> \slurBegin:1<curve="down"> \beam( f#/16 g a b&) \slurEnd:1 \slurBegin:1<curve="down"> \beam( f# g a b&) \slurEnd:1 \stemsDown \slurBegin:1 \beam( c2 d& e& e) \slurEnd:1 \bar 
+   (* meas. 34 *)  \meter<"2/4", autoBarlines="off"> \slurBegin:1 \beam( f g& f e&) \slurEnd:1 \slurBegin:1 \beam( d c b1 a) \slurEnd:1 \bar 
+   (* meas. 35 *)  \meter<"3/4", autoBarlines="off"> \intens<"mp"> \slurBegin:1 \beam( a b& c2 d&) \slurEnd:1 \slurBegin:1 \beam( a1 b& c2 c#) \slurEnd:1 \slurBegin:1 \beam( d# e f# g) \slurEnd:1 \bar 
+   (* meas. 36 *)  \meter<"2/4", autoBarlines="off"> \slurBegin:1 \beam( g# a g# f#) \slurEnd:1 \slurBegin:1 \beam( f e& d c) \slurEnd:1 \bar 
+   (* meas. 37 *)  \meter<"3/4", autoBarlines="off"> \intens<"mf"> \slurBegin:1 \beam( c c# d# e) \slurEnd:1 \slurBegin:1 \beam( f# g a b&) \slurEnd:1 \slurBegin:1 \beam( a g f# e) \slurEnd:1 \bar 
+   (* meas. 38 *)  \intens<"f"> \slurBegin:1 \beam( d# \crescBegin e f# g) \slurEnd:1 \slurBegin:1 \beam( a b& c3 c#) \slurEnd:1 \slurBegin:1 \beam( d d# e f) \slurEnd:1 \crescEnd \bar 
+   (* meas. 39 *)  \intens<"ff"> \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \bar 
+   (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> \intens<"ff"> \slurBegin:1 \beam( f#/16 g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 _/4 ]
+, [ \staff<21> \instr<"Viola", dx=-10hs, dy=-5hs> \systemFormat<"", dx=10hs> 
+   (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"c3"> \intens<"p"> \stemsUp \slurBegin:1<curve="down"> \beam( b0/16 c1 b0 c1) \beam( b0 c1 b0 c1) \beam( b0 c1 b0 c1) \slurEnd:1 \bar 
+   (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> \slurBegin:1 \beam( b0 c1 b0 c1) \stemsDown \beam( b0 c1 d e&) \slurEnd:1 \stemsUp \slurBegin:1 \beam( b0 c1 b0 c1) \stemsDown \beam( b0 c1 d e&) \slurEnd:1 \bar 
+   (* meas. 3 *)  \slurBegin:1 \beam( f g& f g&) \beam( f g& f g&) \slurEnd:1 \slurBegin:1 \beam( f g& f e&) \beam( d e& d c) \slurEnd:1 \bar 
+   (* meas. 4 *)  \meter<"3/4", autoBarlines="off"> \stemsUp \slurBegin:1<curve="down"> \beam( b0 c1 b0 c1) \beam( b0 c1 b0 c1) \beam( b0 c1 b0 c1) \slurEnd:1 \bar 
+   (* meas. 5 *)  \meter<"2/4", autoBarlines="off"> \slurBegin:1 \beam( b0 c1 b0 c1) \stemsDown \beam( b0 c1 d e&) \slurEnd:1 \bar 
+   (* meas. 6 *)  \meter<"4/4", autoBarlines="off"> \slurBegin:1 \beam( f g& f g&) \beam( f g& f g&) \slurEnd:1 \slurBegin:1 \beam( f g& f e&) \beam( d e& d c) \slurEnd:1 \bar 
+   (* meas. 7 *)  \meter<"3/4", autoBarlines="off"> \stemsUp \slurBegin:1 \beam( b0 c1 b0 c1) \stemsDown \beam( b0 c1 d e&) \stemsUp \beam( b0 c1 b0 c1) \slurEnd:1 \bar 
+   (* meas. 8 *)  \meter<"2/4", autoBarlines="off"> \crescBegin \slurBegin:1 \beam( b0 c1 b0 c1) \stemsDown \beam( b0 c1 d e&) \slurEnd:1 \crescEnd \bar 
+   (* meas. 9 *)  \meter<"4/4", autoBarlines="off"> \intens<"f"> \slurBegin:1 \beam( f \dimBegin g& f g&) \beam( f g& f g&) \slurEnd:1 \slurBegin:1 \beam( f g& f e&) \beam( d e& d c) \slurEnd:1 \dimEnd \bar 
+   (* meas. 10 *)  \meter<"3/4", autoBarlines="off"> \intens<"p"> \stemsUp \slurBegin:1 \beam( b0 c1 b0 c1) \stemsDown \beam( b0 c1 d e&) \slurEnd:1 \stemsUp \slurBegin:1<curve="down"> \beam( b0 c1 b0 c1) \slurEnd:1 \bar 
+   (* meas. 11 *)  \stemsDown \slurBegin:1 \beam( b0 c1 d e&) \beam( b0 c1 d e&) \stemsUp \beam( b0 c1 b0 c1) \slurEnd:1 \bar 
+   (* meas. 12 *)  \meter<"2/4", autoBarlines="off"> \crescBegin \slurBegin:1 \beam( b0 c1 b0 c1) \stemsDown \beam( b0 c1 d e&) \slurEnd:1 \crescEnd \bar 
+   (* meas. 13 *)  \meter<"4/4", autoBarlines="off"> \intens<"f"> \slurBegin:1 \beam( f \dimBegin g& f g&) \beam( f g& f g&) \slurEnd:1 \slurBegin:1 \beam( f g& f e&) \beam( d e& d \dimEnd c) \slurEnd:1 \bar 
+   (* meas. 14 *)  \meter<"3/4", autoBarlines="off"> \intens<"pp"> \intens<"p"> \slurBegin:1 \beam( b0 c1 d e&) \stemsUp \beam( b0 c1 b0 c1) \slurEnd:1 \slurBegin:1<curve="down"> \beam( b0 c1 b0 c1) \slurEnd:1 \bar 
+   (* meas. 15 *)  \intens<"mp"> \intens<"mf"> \stemsDown \slurBegin:1 \beam( b0 c1 d e&) \slurEnd:1 \slurBegin:1 \beam( b0 c1 d e&) \slurEnd:1 \slurBegin:1 \beam( b0 c1 d e&) \slurEnd:1 \bar 
+   (* meas. 16 *)  \intens<"f"> \slurBegin:1 \beam( b0 \crescBegin c1 d e&) \slurEnd:1 \slurBegin:1 \beam( b0 c1 d e&) \slurEnd:1 \slurBegin:1 \beam( b0 c1 d e&) \slurEnd:1 \crescEnd \bar 
+   (* meas. 17 *)  \intens<"ff"> f _ _/8 _/4 _ \bar 
+   (* meas. 18 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 19 *)  \meter<"3/4", autoBarlines="off"> \intens<"mf"> _/4 \stemsUp e0 _ \bar 
+   (* meas. 20 *)  _ e _ \bar 
+   (* meas. 21 *)  e e _ \bar 
+   (* meas. 22 *)  e _ _ \bar 
+   (* meas. 23 *)  \meter<"2/4", autoBarlines="off"> \intens<"mf"> e e \bar 
+   (* meas. 24 *)  \meter<"4/4", autoBarlines="off"> \intens<"f"> e _ e _ \bar 
+   (* meas. 25 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 26 *)  \meter<"4/4", autoBarlines="off"> \intens<"p"> \slurBegin:1<curve="down"> \beam( e/16 f e f) \beam( e f g a&) \slurEnd:1 \slurBegin:1<curve="down"> \beam( e f e f) \beam( e f g a&) \slurEnd:1 \bar 
+   (* meas. 27 *)  \crescBegin \slurBegin:1<curve="down"> \beam( e f e f) \beam( e f g a&) \slurEnd:1 \slurBegin:1<curve="down"> \beam( e f e f) \beam( e f g a&) \slurEnd:1 \crescEnd \bar 
+   (* meas. 28 *)  \meter<"3/4", autoBarlines="off"> \intens<"f"> \slurBegin:1<curve="down"> \beam( b& \dimBegin c&1 b&0 c&1) \slurEnd:1 \slurBegin:1<curve="down"> \beam( b&0 c&1 b&0 a&) \slurEnd:1 \slurBegin:1<curve="down"> \beam( g a& g \dimEnd f) \slurEnd:1 \bar 
+   (* meas. 29 *)  \intens<"p"> e _ _/8 _/4 _ \bar 
+   (* meas. 30 *)  \intens<"mp"> f f _ \bar 
+   (* meas. 31 *)  _ f _ \bar 
+   (* meas. 32 *)  f _ f \bar 
+   (* meas. 33 *)  f# _ _ \bar 
+   (* meas. 34 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 35 *)  \meter<"3/4", autoBarlines="off"> \intens<"mp"> \slurBegin:1<curve="down"> \beam( a/16 b& c1 d&) \slurEnd:1 \slurBegin:1<curve="down"> \beam( a0 b& c1 c#) \slurEnd:1 \stemsDown \slurBegin:1 \beam( d# e f# g) \slurEnd:1 \bar 
+   (* meas. 36 *)  \meter<"2/4", autoBarlines="off"> \slurBegin:1 \beam( g# a g# f#) \slurEnd:1 \slurBegin:1 \beam( f e& d c) \slurEnd:1 \bar 
+   (* meas. 37 *)  \meter<"3/4", autoBarlines="off"> \intens<"mf"> \slurBegin:1 \beam( c c# d# e) \slurEnd:1 \slurBegin:1 \beam( f# g a b&) \slurEnd:1 \slurBegin:1 \beam( a g f# e) \slurEnd:1 \bar 
+   (* meas. 38 *)  \intens<"f"> \slurBegin:1 \beam( d# \crescBegin e f# g) \slurEnd:1 \slurBegin:1 \beam( a b& c2 c#) \slurEnd:1 \slurBegin:1 \beam( d d# e f) \slurEnd:1 \crescEnd \bar 
+   (* meas. 39 *)  \intens<"ff"> \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \bar 
+   (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> \intens<"ff"> \slurBegin:1 \beam( f#/16 g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 _/4 ]
+, [ \staff<22> \instr<"Violoncello", dx=-22hs, dy=-5hs> \systemFormat<"", dx=22hs> 
+   (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"f4"> _*3/4 \bar 
+   (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 3 *)  _ \bar 
+   (* meas. 4 *)  \meter<"3/4", autoBarlines="off"> \intens<"mp"> _/4 \stemsUp \tieBegin f-1/2 \bar 
+   (* meas. 5 *)  \meter<"2/4", autoBarlines="off"> f \tieEnd \bar 
+   (* meas. 6 *)  \meter<"4/4", autoBarlines="off"> _/4 e/2. \bar 
+   (* meas. 7 *)  \meter<"3/4", autoBarlines="off"> _/4 \tieBegin f/2 \bar 
+   (* meas. 8 *)  \meter<"2/4", autoBarlines="off"> f \tieEnd \bar 
+   (* meas. 9 *)  \meter<"4/4", autoBarlines="off"> _/4 e/2. \bar 
+   (* meas. 10 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 11 *)  \intens<"f"> _/4 \accent( f) _ \bar 
+   (* meas. 12 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 13 *)  \meter<"4/4", autoBarlines="off"> _/4 \accent( e) _/2 \bar 
+   (* meas. 14 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 15 *)  \intens<"mf"> _/4 _ \slurBegin:1<curve="down"> \beam( b/16 c0 d e&) \slurEnd:1 \bar 
+   (* meas. 16 *)  \intens<"f"> \slurBegin:1<curve="down"> \beam( b-1 \crescBegin c0 d e&) \slurEnd:1 \slurBegin:1<curve="down"> \beam( b-1 c0 d e&) \slurEnd:1 \slurBegin:1<curve="down"> \beam( b-1 c0 d e&) \slurEnd:1 \crescEnd \bar 
+   (* meas. 17 *)  \intens<"ff"> \stemsDown \accent( f/2.) \bar 
+   (* meas. 18 *)  \meter<"4/4", autoBarlines="off"> \dimBegin \stemsAuto \accent( \tieBegin e-1/1) \bar 
+   (* meas. 19 *)  \meter<"3/4", autoBarlines="off"> \intens<"p"> \dimEnd \stemsUp \tieBegin e/2. \tieEnd \bar 
+   (* meas. 20 *)  \tieBegin e. \tieEnd \bar 
+   (* meas. 21 *)  \tieBegin e. \tieEnd \bar 
+   (* meas. 22 *)  \tieBegin e. \tieEnd \bar 
+   (* meas. 23 *)  \meter<"2/4", autoBarlines="off"> e/2 \tieEnd \bar 
+   (* meas. 24 *)  \meter<"4/4", autoBarlines="off"> \intens<"p"> \stemsAuto e/1 \crescBegin \crescEnd \bar 
+   (* meas. 25 *)  \meter<"3/4", autoBarlines="off"> \intens<"f"> \stemsUp \tieBegin e/2. \dimBegin \dimEnd \bar 
+   (* meas. 26 *)  \meter<"4/4", autoBarlines="off"> \intens<"p"> \stemsAuto e/1 \tieEnd \bar 
+   (* meas. 27 *)  \intens<"p"> e \crescBegin \crescEnd \bar 
+   (* meas. 28 *)  \meter<"3/4", autoBarlines="off"> \intens<"f"> \stemsUp e/2. \dimBegin \dimEnd \bar 
+   (* meas. 29 *)  _*3/4 \bar 
+   (* meas. 30 *)  \intens<"mp"> f/4 f _ \bar 
+   (* meas. 31 *)  _ f _ \bar 
+   (* meas. 32 *)  f _ f \bar 
+   (* meas. 33 *)  f# _ _ \bar 
+   (* meas. 34 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 35 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 36 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 37 *)  \meter<"3/4", autoBarlines="off"> \intens<"mf"> \slurBegin:1<curve="down"> \beam( c0/16 c# d# e) \slurEnd:1 \stemsDown \slurBegin:1 \beam( f# g a b&) \slurEnd:1 \slurBegin:1 \beam( a g f# e) \slurEnd:1 \bar 
+   (* meas. 38 *)  \intens<"f"> \slurBegin:1 \beam( d# \crescBegin e f# g) \slurEnd:1 \slurBegin:1 \beam( a b& c1 c#) \slurEnd:1 \slurBegin:1 \beam( d d# e f) \slurEnd:1 \crescEnd \bar 
+   (* meas. 39 *)  \intens<"ff"> \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \bar 
+   (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> \intens<"ff"> \slurBegin:1 \beam( f#/16 g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 _/4 ]
+, [ \staff<23> \instr<"Contrabass", dx=-20hs, dy=-5hs> \systemFormat<"", dx=20hs> 
+   (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"f4"> _*3/4 \bar 
+   (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
+   (* meas. 3 *)  _ \bar 
+   (* meas. 4 *)  \meter<"3/4", autoBarlines="off"> \intens<"mp"> _/4 \stemsUp \tieBegin f-1/2 \bar 
+   (* meas. 5 *)  \meter<"2/4", autoBarlines="off"> f \tieEnd \bar 
+   (* meas. 6 *)  \meter<"4/4", autoBarlines="off"> _/4 e/2. \bar 
+   (* meas. 7 *)  \meter<"3/4", autoBarlines="off"> _/4 \tieBegin f/2 \bar 
+   (* meas. 8 *)  \meter<"2/4", autoBarlines="off"> f \tieEnd \bar 
+   (* meas. 9 *)  \meter<"4/4", autoBarlines="off"> _/4 e/2. \bar 
+   (* meas. 10 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 11 *)  \intens<"f"> _/4 \accent( f) _ \bar 
+   (* meas. 12 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 13 *)  \meter<"4/4", autoBarlines="off"> _/4 \accent( e) _/2 \bar 
+   (* meas. 14 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 15 *)  _ \bar 
+   (* meas. 16 *)  \intens<"f"> \slurBegin:1<curve="down"> \beam( b/16 \crescBegin c0 d e&) \slurEnd:1 \slurBegin:1<curve="down"> \beam( b-1 c0 d e&) \slurEnd:1 \slurBegin:1<curve="down"> \beam( b-1 c0 d e&) \slurEnd:1 \crescEnd \bar 
+   (* meas. 17 *)  \intens<"ff"> \stemsDown \accent( f/2.) \bar 
+   (* meas. 18 *)  \meter<"4/4", autoBarlines="off"> \dimBegin \stemsAuto \accent( \tieBegin e-1/1) \bar 
+   (* meas. 19 *)  \meter<"3/4", autoBarlines="off"> \intens<"p"> \dimEnd \stemsUp \tieBegin e/2. \tieEnd \bar 
+   (* meas. 20 *)  \tieBegin e. \tieEnd \bar 
+   (* meas. 21 *)  \tieBegin e. \tieEnd \bar 
+   (* meas. 22 *)  \tieBegin e. \tieEnd \bar 
+   (* meas. 23 *)  \meter<"2/4", autoBarlines="off"> e/2 \tieEnd \bar 
+   (* meas. 24 *)  \meter<"4/4", autoBarlines="off"> \intens<"p"> \stemsAuto e/1 \crescBegin \crescEnd \bar 
+   (* meas. 25 *)  \meter<"3/4", autoBarlines="off"> \intens<"f"> \stemsUp \tieBegin e/2. \dimBegin \dimEnd \bar 
+   (* meas. 26 *)  \meter<"4/4", autoBarlines="off"> \intens<"p"> \stemsAuto e/1 \tieEnd \bar 
+   (* meas. 27 *)  \intens<"p"> e \crescBegin \crescEnd \bar 
+   (* meas. 28 *)  \meter<"3/4", autoBarlines="off"> \intens<"f"> \stemsUp e/2. \dimBegin \dimEnd \bar 
+   (* meas. 29 *)  _*3/4 \bar 
+   (* meas. 30 *)  \intens<"mp"> f/4 f _ \bar 
+   (* meas. 31 *)  _ f _ \bar 
+   (* meas. 32 *)  f _ f \bar 
+   (* meas. 33 *)  f# _ _ \bar 
+   (* meas. 34 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 35 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 36 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 37 *)  \meter<"3/4", autoBarlines="off"> _*3/4 \bar 
+   (* meas. 38 *)  \intens<"f"> \stemsDown \slurBegin:1 \beam( d#0/16 \crescBegin e f# g) \slurEnd:1 \slurBegin:1 \beam( a b& c1 c#) \slurEnd:1 \slurBegin:1 \beam( d d# e f) \slurEnd:1 \crescEnd \bar 
+   (* meas. 39 *)  \intens<"ff"> \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \bar 
+   (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
+   (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> \intens<"ff"> \slurBegin:1 \beam( f#/16 g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 _/4 ]
+ }

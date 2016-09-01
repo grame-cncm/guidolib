@@ -1,0 +1,7 @@
+{
+    [\acc<color="red">(a)],
+    [\acc<color="red">(a#)],
+    [\noteFormat<color="blue"> a#],
+    [\noteFormat<color="blue"> \acc<color="red">(a)],
+    [\noteFormat<color="blue"> \acc<color="red">(a#)]
+}

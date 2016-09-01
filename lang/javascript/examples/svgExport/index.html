@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="../guidostylesheet.css" type="text/css" charset="UTF-8" />
+    <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="../../libGUIDOEngine.js"></script>
+    <script>
+		var guidoEngine;
+	function processGMN() {
+		console.log("processGMN");
+		var p = guidoEngine.openParser();
+		var ar = guidoEngine.string2AR(p, $("#gmnSandbox").val());
+		guidoEngine.closeParser(p);
+		
+		var gr = guidoEngine.ar2gr(ar);
+		var result = guidoEngine.gr2SVG(gr, 1, true, 0);
+		guidoEngine.freeGR(gr);
+		guidoEngine.freeAR(ar);
+		
+		$("#canvasContainer").html(result);
+		// Remove comment to have svg result in text
+		//$("#canvasContainer2").html("<plaintext>" + result + "</plaintext>");
+	}
+	$( document ).ready(function() {
+		guidoEngine = new Module.GuidoEngineAdapter;
+		guidoEngine.init();
+		$("#gmnSandbox").on('keyup', processGMN);
+		processGMN();
+	});
+	$(window).unload(function(){
+		guidoEngine.shutdown();
+		delete guidoEngine;
+	});
+    </script>
+  </head>
+  <body>
+    <header><iframe src="../header.html"></iframe></header>
+    <div>This page use the SVG export and add the SVG xml code in html page.</div>
+    <div class="column" style="float:left">
+      <p>Type your GMN code here :</p>
+      <textarea id="gmnSandbox" rows="40">[ a f g e ]</textarea>
+    </div>
+    <div id="canvasContainer" class="column" style="float:right">
+    </div>
+
+    <div style="clear:both;"></div>
+    <div id="canvasContainer2" class="column">
+   
+    </div>   <div id="warning"></div>
+    <!-- need to insert dummy paragraph to load font -->
+    <p id="myP" style="visibility:hidden;font-family:Guido2;font-size:200px">x</p>
+  </body>
+</html>

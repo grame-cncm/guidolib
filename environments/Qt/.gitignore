@@ -1,0 +1,9 @@
+*.app
+*.a
+ios
+macos
+win32
+guido2image
+guidofontmetrics
+fontmetrics
+package/GuidoQtApplsMacOSX-*

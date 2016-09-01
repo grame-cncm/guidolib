@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="custom_rules">
+    <target name="-post-compile">
+    <echo level="info">Renaming jar filename</echo>
+    <move file="${out.library.jar.file}" tofile="${out.absolute.dir}/${ant.project.name}.jar"/>
+    </target>
+</project>
+

@@ -1,7 +1,7 @@
 % this example how slurs can be specified exactly
 %
 % a new parameter has been introduces (curve), which
-% describes, wether the curve should be downward or upward
+% describes, whether the curve should be downward or upward
 %
 %
 

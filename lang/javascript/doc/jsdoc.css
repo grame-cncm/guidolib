@@ -1,0 +1,94 @@
+
+body
+{ font-family: "trebuchet ms", arial, sans-serif;
+  font-size: .84em;
+  color: #222;
+  line-height: 1.4em;
+  background: #F1F1F1;
+  width: 900px;
+  margin: 20px auto 10px auto;}
+  
+h1, h2, h3, h4, h5, h6 
+{ color: #FFA509;
+  letter-spacing: 0em;
+  padding: 0 0 5px 0;}
+
+h1, h2, h3
+{ font: bold 180% 'lucida sans', arial;
+  margin: 0 0 15px 0;
+  padding: 0 0 5px 0;
+  color: #000;}
+
+h2
+{ font-size: 140%;
+  padding: 9px 0 5px 20px;
+  color: #000;}
+
+h3
+{ font-size: 140%;
+  padding: 5px 0 0 0;}
+
+h4
+{ color: #009FBC;
+  padding: 0 0 5px 0;
+  font: normal 110% arial;
+  text-transform: uppercase;}
+
+a
+{ outline: none;
+  text-decoration: none;
+  color:  #009FBC;}
+
+a:hover
+{ color:  #C00;}
+
+.code {
+	font-family: courier, monaco;
+}
+.opaque {
+	float:right;
+	padding-right: 20px;
+	color: #888;
+  font-size: 100%;
+}
+
+pre {
+  background: #fffffe;
+  font-family: courier, monaco;
+  padding: 5px 0 5px 20px;
+  font-size: 90%;
+}
+
+
+#intro {
+  padding: 10px 10px 10px 10px;
+}
+
+#module {
+  background: #ccc;
+  color: #009FBC;
+  padding: 10px 10px 10px 10px;
+  font-size: 130%;
+}
+
+#functions {
+  background: #fff;
+  padding-top: 5px;
+  padding-left: 10px;
+}
+
+#list {
+  background: #fff;
+  padding: 5px 0 5px 20px;
+  -webkit-column-count: 4; /* Chrome, Safari, Opera */
+  -moz-column-count: 4; /* Firefox */
+  column-count: 4;
+  font-size: 90%;
+}
+
+#footnote {
+  padding: 0 50px 0 50px;
+  text-align: center;
+  font-size: 85%;
+  color: #777;
+}

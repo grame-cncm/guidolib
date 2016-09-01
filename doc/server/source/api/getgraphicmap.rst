@@ -6,6 +6,7 @@ Graphic to time mappings
   single: getstaffmap
   single: getvoicemap
   single: getsystemmap
+  single: getmap
 
 Gives the mapping between the graphic and the time time. The mapping is given as a set of pairs of graphic rectangles and time intervals. 
 
@@ -14,16 +15,17 @@ Note that the relations between the graphic and time space depends on :ref:`layo
 
 **Path**
 
-	| 	*ScoreID*/``getpagemap``	: gives the time to graphic mapping at page level.
-	| 	*ScoreID*/``getstaffmap``: gives a staff time to graphic mapping. An optionnal ``staff`` parameter may be used to indicate the staff number (default vaue is 1).
-	| 	*ScoreID*/``getvoicemap`` : gives a voice time to graphic mapping. An optionnal ``voice`` parameter may be used to indicate the voice number (default vaue is 1).
-	| 	*ScoreID*/``getsystemmap`` : gives the time to graphic mapping at system level.
+	| 	*ScoreID*/``getpagemap``	: gives the time to graphic mapping at page level. The array of mapping is called *pagemap*.
+	| 	*ScoreID*/``getstaffmap``: gives a staff time to graphic mapping. An optionnal ``staff`` parameter may be used to indicate the staff number (default vaue is 1). The array of mapping is called *staffmap*.
+	| 	*ScoreID*/``getvoicemap`` : gives a voice time to graphic mapping. An optionnal ``voice`` parameter may be used to indicate the voice number (default vaue is 1). The array of mapping is called *voicemap*.
+	| 	*ScoreID*/``getsystemmap`` : gives the time to graphic mapping at system level. The array of mapping is called *systemmap*.
+	|	*ScoreID*/pianoroll/``getmap`` : gives the time to graphic mapping for a piano roll. The array of mapping is called *pianorollmap*.
 
 **Response body**
 	* in case of success: 
 		| a set of pairs indicating the relation between the graphic and the time space, formatted as JSON with the path as key.
 	  	
-	  	Example::
+	  	Example with getstaffmap for the score *ScoreID*::
 
 	  		{ "ScoreID" : {
 	  			"staffmap" : [

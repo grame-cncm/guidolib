@@ -1,0 +1,110 @@
+
+system	:= $(shell uname -s)
+ifeq ($(system), Darwin)
+	TARGET = mac
+	SPEC ?= -spec macx-xcode
+	QTPATH ?= $(shell ../../../qt-path)
+	QMAKEIOS ?= $(QTPATH)/ios/bin/qmake
+else
+ifeq ($(system), MINGW32_NT-6.1)
+	TARGET = windows
+else
+ifeq ($(system), MINGW32_NT-6.2)
+	TARGET = windows
+else
+ifeq ($(system), Linux)
+	TARGET = linux
+endif
+endif
+endif
+endif
+
+ifeq ($(TARGET), windows)
+	PLATFORM ?= $(shell ../../../qt-arch)
+	QMAKEWIN ?= $(shell ../../../qt-win32)
+	MSVC 	 ?= $(shell ../../../vs-win32)
+	DEST := ../..
+	OUT = $(DEST)/$(PROJECT).exe
+	ifeq ($(PLATFORM), x64)
+		DEST = win64
+	else 
+		DEST = win32
+	endif
+endif
+
+QMAKE    ?= qmake
+PROJECT := GraphicsSceneMainWindow
+ROOT    := ..
+
+.PHONY : macos ios $(DEST) linux
+
+all:
+	make  -f ../../Make.shared $(TARGET)
+
+mac:
+	make  -f ../../Make.shared macos
+	make  -f ../../Make.shared ios
+
+macos: macos/$(PROJECT).xcodeproj  lib$(PROJECT).a 
+	@echo ===================================
+	@echo Build $(PROJECT) for mac os done
+	@echo ===================================
+
+ios: ios/$(PROJECT)-iOS.xcodeproj lib$(PROJECT)-iOS.a
+	@echo ===================================
+	@echo Build $(PROJECT) for ios done
+	@echo ===================================
+
+windows: $(DEST)/$(PROJECT).vcxproj $(PROJECT).lib
+	@echo ===================================
+	@echo Build $(PROJECT) for $(DEST) done
+	@echo ===================================
+
+linux: linux/$(PROJECT).makefile  lib$(PROJECT)-linux.a
+	@echo ===================================
+	@echo Build $(PROJECT) for linux done
+	@echo ===================================
+
+###################
+# MacOS part
+###################
+macos/$(PROJECT).xcodeproj : $(ROOT)/$(PROJECT).pro 
+	[ -d macos ] || mkdir macos
+	cd macos && $(QMAKE) $(SPEC) $(ROOT)/..
+
+lib$(PROJECT).a:
+	xcodebuild -jobs 8 -project  macos/$(PROJECT).xcodeproj -target $(PROJECT) -configuration Release
+
+###################
+# iOS part
+###################
+ios/$(PROJECT)-iOS.xcodeproj : $(ROOT)/$(PROJECT).pro 
+	[ -d ios ] || mkdir ios
+	cd ios && $(QMAKEIOS) $(SPEC) $(ROOT)/..
+
+lib$(PROJECT)-iOS.a:
+	xcodebuild -jobs 8 -project  ios/$(PROJECT)-iOS.xcodeproj -target $(PROJECT)-iOS -configuration Release
+
+
+###################
+# windows part
+###################
+$(DEST)/$(PROJECT).vcxproj : $(ROOT)/$(PROJECT).pro 
+	[ -d $(DEST) ] || mkdir $(DEST)
+	cd $(DEST) && $(QMAKEWIN) $(SPEC) $(ROOT)/..
+
+$(PROJECT).lib:
+	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild $(DEST)/$(PROJECT).vcxproj /maxcpucount:4 /p:Configuration=Release /p:Platform=$(PLATFORM)"
+
+###################
+# Linux part
+###################
+linux/$(PROJECT).makefile : $(ROOT)/$(PROJECT).pro
+	[ -d linux ] || mkdir linux
+	cd linux && $(QMAKE) $(SPEC) $(ROOT)/.. -o $(PROJECT).makefile
+
+lib$(PROJECT)-linux.a:
+	make -C linux -f $(PROJECT).makefile
+	
+clean:
+	rm -rf ../../lib$(PROJECT)*.a ../../$(PROJECT).lib ios macos $(DEST) linux

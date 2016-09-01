@@ -17,11 +17,9 @@ VERSION=$1
 
 echo "moving version number to $VERSION"
 
-CMAKE=$ROOT/cmake/CMakeLists.txt
+CMAKE=$ROOT/build/CMakeLists.txt
 echo " updating $CMAKE"
-sed "s/\(set ([A-Z]*VERS[^0-9]*\)[0-9]*\.[0-9]*/\1$VERSION/" $CMAKE > TMP$$
-mv -f TMP$$ $CMAKE
-cmake $ROOT/cmake
+open -t $CMAKE
 
 DOC=$ROOT/doc/doxygen/Makefile
 echo " updating $DOC"
@@ -33,5 +31,10 @@ echo " updating $PKG"
 sed "s/\(VERSION := \)[0-9]*\.[0-9]*/\1$VERSION/" $PKG > TMP$$
 mv -f TMP$$ $PKG
 
+PKG=$ROOT/lang/javascript/Makefile
+echo " updating $PKG"
+sed "s/\(VERSION := \)[0-9]*\.[0-9]*/\1$VERSION/" $PKG > TMP$$
+mv -f TMP$$ $PKG
+
 echo "==> change manually GUIDOEngine.cpp and rc files in win32 folder"
-open -t win32/GUIDOEngine.rc src/lib/GUIDOEngine.cpp
+open -t platforms/win32/GUIDOEngine.rc src/engine/lib/GUIDOEngine.cpp

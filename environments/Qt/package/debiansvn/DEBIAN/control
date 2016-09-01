@@ -1,0 +1,19 @@
+Package: guidoqt
+Version: 2.5.5
+Section: sound
+Priority: optional
+Architecture: amd64
+Depends: libqt5printsupport5 (>=  5.2.1+dfsg-1ubuntu14.3), libqt5widgets5 (>=  5.2.1+dfsg-1ubuntu14.3), libqt5gui5 (>=  5.2.1+dfsg-1ubuntu14.3), libqt5core5a (>=  5.2.1+dfsg-1ubuntu14.3), libstdc++6 (>=  4.8.4-2ubuntu1~14.04), libc6 (>=  2.19-0ubuntu6.6), libgcc1 (>=  1:4.9.1-0ubuntu1), libc6 (>=  2.19-0ubuntu6.6)
+Installed-Size: 2342
+Maintainer: D. Fober <fober@grame.fr>
+Description: Guido Music Notation applications based on Qt.
+
+
+
+
+
+
+
+
+
+

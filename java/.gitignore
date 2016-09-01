@@ -1,6 +1,0 @@
-*.class
-*.dylib
-*.dll
-guidoengine.jar
-doc
-tests

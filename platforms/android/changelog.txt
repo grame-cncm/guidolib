@@ -1,0 +1,13 @@
+GUIDO Engine 
+Android platform history
+
+version 1.x
+Rename project to compile guido engine and jni to guido-engine-jni-android
+Create a new project guido-engine-android to compile guido engine in a shared library
+Bug correction : 
+	* canvas-draw-command use default text font if specified text font is not present.
+	* Use new Jni and guidoengine-android.jar to avoid class with awt.
+
+----------------------------------------------------------------
+2015-01-08  version 1.0
+

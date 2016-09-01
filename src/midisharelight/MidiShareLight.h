@@ -39,6 +39,10 @@
 #	define	MIDISHAREAPI
 #endif
 
+#ifdef WIN64
+#define __x86_64__
+#endif
+
 typedef unsigned char Byte;
 typedef char * Ptr;
 typedef unsigned long ulong;

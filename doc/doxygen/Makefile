@@ -1,5 +1,5 @@
 
-VERSION := 1.53
+VERSION := 1.63
 DOC = guidolib-$(VERSION)
 
 doc:

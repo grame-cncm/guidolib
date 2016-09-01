@@ -1,0 +1,11 @@
+GuidoSceneComposer Change Log
+
+version 2.3 
+- crash bug corrected when loading a previously saved scene 
+
+version 2.2 
+- bug Qt device corrected: incorrect setScale behavior, 
+  the tempo tag was affected with notes marking (e.g. [1/4]) was affected
+
+................................................
+previous change list has been lost :-( sorry !

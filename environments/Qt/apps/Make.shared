@@ -1,0 +1,118 @@
+
+system	:= $(shell uname -s)
+ifeq ($(system), Darwin)
+	TARGET ?= macos
+	QTPATH ?= $(shell ../../../qt-path)
+	QMAKEIOS ?= $(QTPATH)/ios/bin/qmake
+	SPEC ?= -spec macx-xcode
+	DEST := ..
+	OUT = $(DEST)/$(PROJECT)$(APP)
+else
+ifeq ($(system), MINGW32_NT-6.1)
+	TARGET = windows
+else
+ifeq ($(system), MINGW32_NT-6.2)
+	TARGET = windows
+else
+ifeq ($(system), Linux)
+	TARGET = linux
+	DEST := ..
+	OUT = $(DEST)/$(PROJECT)
+endif
+endif
+endif
+endif
+
+ifeq ($(TARGET), windows)
+	PLATFORM ?= $(shell ../../../qt-arch)
+	QMAKEWIN ?= $(shell ../../../qt-win32)
+	MSVC 	 ?= $(shell ../../../vs-win32)
+	OUT = ../../$(PROJECT).exe
+	ifeq ($(PLATFORM), x64)
+		DEST = win64
+	else 
+		DEST = win32
+	endif
+endif
+
+QMAKE    ?= qmake
+ROOT    := ..
+
+.PHONY : macos ios $(DEST) linux
+
+all:
+	make -f ../../Make.shared $(TARGET)
+
+mac:
+	make -f ../../Make.shared macos
+	make -f ../../Make.shared ios
+
+
+windows: $(DEST)/$(PROJECT).vcxproj  $(PROJECT).exe 
+	@echo ===================================
+	@echo Build $(PROJECT) for $(DEST)
+	@echo ===================================
+
+
+macos: macos/$(PROJECT).xcodeproj  $(PROJECT) 
+	@echo ===================================
+	@echo Build $(PROJECT) for mac os done
+	@echo ===================================
+
+ios: ios/$(PROJECT).xcodeproj  ios/$(PROJECT) 
+	@echo ===================================
+	@echo Build $(PROJECT) for ios done
+	@echo ===================================
+
+linux: linux/$(PROJECT).makefile  linux/$(PROJECT) 
+	@echo ===================================
+	@echo Build $(PROJECT) for linux done
+	@echo ===================================
+
+###################
+# MacOS part
+###################
+macos/$(PROJECT).xcodeproj : $(ROOT)/$(PROJECT).pro $(ROOT)/../GUIDOEngine.shared
+	[ -d macos ] || mkdir macos
+	cd macos && $(QMAKE) $(SPEC) $(ROOT)/..
+
+$(PROJECT):
+	xcodebuild -jobs 8 -project  macos/$(PROJECT).xcodeproj -target $(PROJECT) -configuration Release
+	cp -R macos/Release//$(PROJECT)$(APP) $(DEST)
+
+
+###################
+# iOS part
+###################
+ios/$(PROJECT).xcodeproj : $(ROOT)/$(PROJECT).pro $(ROOT)/../GUIDOEngine.shared
+	[ -d ios ] || mkdir ios
+	cd ios && $(QMAKEIOS) $(SPEC) $(ROOT)/..
+
+ios/$(PROJECT):
+	xcodebuild -jobs 8 -project  ios/$(PROJECT).xcodeproj -target $(PROJECT) -configuration Release
+
+###################
+# windows part
+###################
+$(DEST)/$(PROJECT).vcxproj : $(ROOT)/$(PROJECT).pro $(ROOT)/../GUIDOEngine.shared
+	[ -d $(DEST) ] || mkdir $(DEST)
+	cd $(DEST) && $(QMAKEWIN) $(SPEC) $(ROOT)/..
+
+$(PROJECT).exe:
+	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild $(DEST)/$(PROJECT).vcxproj /maxcpucount:4 /p:Configuration=Release /p:Platform=$(PLATFORM)"
+	cp -R $(DEST)/Release/$(PROJECT).exe $(DEST)
+
+###################
+# Linux part
+###################
+linux/$(PROJECT).makefile : $(ROOT)/$(PROJECT).pro $(ROOT)/../GUIDOEngine.shared
+	[ -d linux ] || mkdir linux
+	cd linux && $(QMAKE) $(SPEC) $(ROOT)/.. -o $(PROJECT).makefile
+
+linux/$(PROJECT):
+	make -C linux -f $(PROJECT).makefile
+	cp -R linux/$(PROJECT) $(DEST)
+
+
+clean:
+	rm -rf $(OUT) macos ios linux

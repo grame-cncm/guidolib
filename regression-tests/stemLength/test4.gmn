@@ -1,0 +1,12 @@
+% Stem length adjusted (cf. Elaine Gould's book, page 16)
+%
+{
+    [ \staffFormat<"1-line"> e2/64 _ f _ g _ a _ b _ c3  _ d _ e _ f _ g],
+    [ \staffFormat<"1-line"> e2/32 _ f _ g _ a _ b _ c3  _ d _ e _ f _ g],
+    [ \staffFormat<"1-line"> e2/16 _ f _ g _ a _ b _ c3  _ d _ e _ f _ g],
+    [ \staffFormat<"1-line"> e2/8 _ f _ g _ a _ b _ c3  _ d _ e _ f _ g],
+    [ \staffFormat<"1-line"> e0/64 _ f _ g _ a _ b _ c1  _ d _ e _ f _ g],
+    [ \staffFormat<"1-line"> e0/32 _ f _ g _ a _ b _ c1  _ d _ e _ f _ g],
+    [ \staffFormat<"1-line"> e0/16 _ f _ g _ a _ b _ c1  _ d _ e _ f _ g],
+    [ \staffFormat<"1-line"> e0/8 _ f _ g _ a _ b _ c1  _ d _ e _ f _ g]
+}

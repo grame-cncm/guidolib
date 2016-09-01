@@ -1,0 +1,47 @@
+
+arch	:= $(shell arch)
+debarch := $(shell dpkg --print-architecture)
+dist	:= ubuntu-14.04
+package := GUIDOQt-$(version)-$(dist)-$(arch).deb
+appls	:= guido2image/guido2image GuidoEditor/GuidoEditor GuidoSceneComposer/GuidoSceneComposer
+tools	:= guido2midi guido2svg guidogetversion
+toolsdir := ../../../src/tools/build/linux
+doc	:= debian/usr/share/guido
+control := debian/DEBIAN/control
+tmp	:= __tmp__
+
+files = $(shell cd debian && find usr -type f -ls | sed -e 's/^..*usr/usr/')
+size  = $(shell du -s debian/usr | cut -f 1)
+
+
+deb: 
+	-[ -d debian ] && rm -rf debian
+	mkdir debian
+	cp -r debiansvn/* debian
+	@echo make gmn samples
+	@[ -d $(doc) ] || mkdir -p $(doc)
+	#### Export the samples
+	cd ../../../gmn-examples && git archive -o __tmp__.tar --prefix=../Qt/package/$(doc)/gmn-examples/ HEAD && tar xfP __tmp__.tar && rm __tmp__.tar
+	@echo make applications...
+	@[ -d debian/usr/bin ] || mkdir -p debian/usr/bin
+	cd ../apps && cp $(appls) ../package/debian/usr/bin
+	cd $(toolsdir) && cp $(tools) ../../../../environments/Qt/package/debian/usr/bin
+	make -f makedeb finalize
+
+finalize:
+	@echo compute md5sums
+	@cd debian && md5sum $(files) > DEBIAN/md5sums
+	@chmod 644 debian/DEBIAN/md5sums
+	@echo set architecture to $(debarch)
+	sed -e 's/^Architecture..*/Architecture: $(debarch)/' $(control) > $(tmp)
+	mv $(tmp) $(control)
+	@echo set installed size to $(size)
+	sed -e 's/^Installed-Size..*/Installed-Size: $(size)/' $(control) > $(tmp)
+	mv $(tmp) $(control)
+	fakeroot dpkg-deb --build debian
+	mv debian.deb $(package)
+
+
+clean:
+	rm -rf debian
+

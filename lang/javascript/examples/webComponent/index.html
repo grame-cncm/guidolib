@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Use of template</title>
+  <link rel="stylesheet" href="../guidostylesheet.css" type="text/css" charset="UTF-8" />
+  <link rel="import" href="template/guidoTemplate.html" />
+  <style>
+	section {
+		margin : 1em;
+		padding : 1em;
+		border: 0.1em solid;
+		border-radius: 3em;
+	}
+  </style>
+</head>
+<body>
+	<header><iframe src="../header.html"></iframe></header>
+	<div>
+		<p>	 
+	This document is a simple example of web component provided for aa easy integration of guido in html pages. A &lt;guido-viewer&gt; tag is embedded in the html page. The template "template/guidoTemplate.html" provides the code to interpret the &lt;guido-viewer&gt; tag. The draw method uses the svg export.
+		</p>
+		<p>
+	You have to run it from an http server because most of browsers will reject the template import directive due to "Cross-Origin Resource Sharing policy".
+		</p>
+		<p>
+	You can use the python SimpleHttpServer: run "python -m SimpleHTTPServer 8000" from a shell. The server must be launched from the directory where libGUIDOEngine.js is. Next, direct your browser to http://localhost:8000
+		</p>
+		<p>
+			Your browser must support import files.
+		</p>
+	</div>
+	<section>
+		<h1>Guido component without editor</h1>
+		<guido-viewer gmnCode="false">[d e f/8 a d b c h a1/4 b/8 c2 d e f g b2 c3/4]</guido-viewer>
+	</section>
+	<section>
+		<h1>Editable guido component</h1>
+		<guido-viewer gmnCode="true"></guido-viewer>
+	</section>
+</body>
+</html>

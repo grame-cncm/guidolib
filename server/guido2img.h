@@ -15,22 +15,28 @@
 #ifndef __guido2img__
 #define __guido2img__
 
-#include "guidosession.h"
+#include <string>
+
+class PianoRoll;
 
 namespace guidohttpd
 {
 class guidosession;
+typedef struct scoreParameters GuidoSessionScoreParameters;
+typedef struct pianorollParameters GuidoSessionPianorollParameters;
+
 //--------------------------------------------------------------------------
 
 class guido2img
 {
 protected:
-    std::string fSvgFontFile;
+    const std::string &fSvgFontFile;
 public:
-    guido2img(std::string svgfontfile) : fSvgFontFile(svgfontfile) {}
+    guido2img(const std::string & svgfontfile) : fSvgFontFile(svgfontfile) {}
     virtual ~guido2img() {}
 
-    virtual int convert (guidosession *currentSession) = 0;
+    virtual int convertScore (guidosession *currentSession, GuidoSessionScoreParameters &scoreParameters) = 0;
+    virtual int convertPianoRoll (PianoRoll * pr, GuidoSessionPianorollParameters &pianorollParameters) = 0;
     virtual const char* data() = 0;
     virtual int	size() = 0;
 };

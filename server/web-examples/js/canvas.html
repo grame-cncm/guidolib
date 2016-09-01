@@ -1,20 +1,22 @@
 <html>
   <head>
     <link rel="stylesheet" href="guidostylesheet.css" type="text/css" charset="utf-8" />
-    <script type="text/javascript" src="jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="jsBinaryDeviceParser.js"></script>
-    <script type="text/javascript" src="jsCanvasDeviceFromBinary.js"></script>
+    <script type="text/javascript" src="../../../lang/javascript/js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="../../../lang/javascript/js/jsBinaryDeviceParser.js"></script>
+    <script type="text/javascript" src="../../../lang/javascript/js/jsCanvasDeviceFromBinary.js"></script>
+    <script type="text/javascript" src="server.js"></script>
     <script>
       function processGMN() {
-        $.post("http://guidoservice.grame.fr/",  "data="+encodeURIComponent($("#gmnSandbox").val()), function(data) {
+        $.post(guidoservice,  "data="+encodeURIComponent($("#gmnSandbox").val()), function(data) {
           var xhr = new XMLHttpRequest();
-          xhr.open('GET',"http://guidoservice.grame.fr/"+data.ID+"/?format=binary", true);
+          xhr.open('GET',guidoservice+data.ID+"/?format=binary", true);
           xhr.responseType = 'arraybuffer';
           xhr.onload = function(e) {
             console.log(this.status);
             if (this.status == 201) {
               success = true;
-              gU1D0pAR$ER.parseGuidoBinary(this.response, 0);
+              console.log(new Uint8Array(this.response));
+              gU1D0pAR$ER.parseGuidoBinary(this.response, 0, {verbose:true});
               $("#warning").text("");
             }
           }

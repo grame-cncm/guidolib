@@ -1,0 +1,4 @@
+[
+  \meter<"4/4", autoMeasuresNum="on"> a b c d
+  \bar<numDx=10, numDy=-5> e f g a b c d e f
+]

@@ -1,0 +1,8 @@
+GUIDO Engine 
+Javascript lib history
+
+----------------------------------------------------------------
+2015-12-19  version 1.60 - update to guido engine 1.60
+
+2015-03-23  version 1.57 - first public version
+

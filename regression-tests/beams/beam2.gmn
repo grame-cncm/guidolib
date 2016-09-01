@@ -1,0 +1,10 @@
+{ [
+\staff<"1">
+\meter<"4/4">
+_/16 c2/4. c/16 c c/4.. c/32 c _/32 ccccc ccccccccc _
+]
+,
+[ \meter<"4/4">
+f2/8 a a a a a a a a a a a a 
+]
+}

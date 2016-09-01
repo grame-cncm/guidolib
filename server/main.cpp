@@ -24,6 +24,13 @@
 #include "engine.h"
 #include "profport.h"
 
+#ifdef WIN32
+# define wait(n)	Sleep(n)
+#else
+# define wait(n)	usleep(n * 1000);
+#endif // win32
+
+
 using namespace std;
 using namespace guidohttpd;
 
@@ -40,17 +47,20 @@ static const int kDefaultVerbose = IP_VERBOSE | HEADER_VERBOSE
   | REQUEST_VERBOSE | URL_VERBOSE | QUERY_VERBOSE
   | CODE_VERBOSE | MIME_VERBOSE | LENGTH_VERBOSE;
 
+
+static const char* kAccessControlAllowOrigin = "--access-control-allow-origin";
+
 static const char* kLogfileOpt = "--logfile";
-static const string kDefaultLogfile = "guidohttpdserver.log";
+static const char* kDefaultLogfile = "guidohttpdserver.log";
 
 static const char* kInitfileOpt = "--initfile";
-static const string kDefaultInitfile = "guidohttpdserver.ini";
+static const char* kDefaultInitfile = "guidohttpdserver.ini";
 
 static const char* kLogmodeOpt = "--logmode";
 static const int kDefaultLogmode = 0;
 
 static const char* kCachedirOpt = "--cachedir";
-static const string kDefaultCachedir = "cache";
+static const char* kDefaultCachedir = "cache";
 
 static const char* kSafeOpt = "--daemon";
 
@@ -58,7 +68,13 @@ static const char* kHelpOpt = "--help";
 static const char* kShortHelpOpt = "-h";
 
 static const char* kSvgFontFileOpt = "--svgfontfile";
-static const string kDefaultSvgFontFile = "guido2.svg";
+static const char* kDefaultSvgFontFile = "guido2.svg";
+
+static const char* kMaxSession = "--maxsession";
+static const int kDefaultMaxSession = 100;
+
+static const char* kUseCache = "--nocache";
+static const bool kDefaultUseCache = false;
 
 //---------------------------------------------------------------------------------
 // for the initfile
@@ -95,8 +111,12 @@ static void usage (char* name)
     cout << tab << tab << "0 = Apache-like log" << endl;
     cout << tab << tab << "1 = XML logfile" << endl;
     cout << tab << kCachedirOpt << " cache dir name : (defaults to a directory cache in the directory of the current executable)" << endl;
-    cout << tab << kSvgFontFileOpt << " name of the svg font file - defaults to a file called " << kDefaultSvgFontFile << " in the executable's directory" << endl;
+	cout << tab << kUseCache << " not use cache on disk" << endl;
+	cout << tab << kSvgFontFileOpt << " name of the svg font file - defaults to a file called " << kDefaultSvgFontFile << " in the executable's directory" << endl;
     cout << tab << kVersionOpt << " version of the server and GUIDO" << endl;
+    cout << tab << kAccessControlAllowOrigin << " set 'Access-Control-Allow-Origin' to '*' in headers" << endl;
+	cout << tab << kMaxSession << " set a maximum session hold in server (default to 100)" << endl;
+
 /*
     cout << tab << kVerboseOpt << " verbosity. an integer bitmap that can combine:" << endl;
     cout << tab << tab << "1 (print ip to log)" << endl;
@@ -116,17 +136,19 @@ static void usage (char* name)
 }
 
 //---------------------------------------------------------------------------------
-static bool launchServer (int port, int verbose, int logmode, string cachedir, string svgfontfile, bool daemon)
+static bool launchServer (int port, int verbose, int logmode, const string cachedir, const string & svgfontfile, bool daemon, bool alloworigin, int maxSession, bool useCache)
 {
     bool ret = false;
-    guido2img *converter = makeConverter(svgfontfile);
-    startEngine();
-    HTTPDServer server(verbose, logmode, cachedir, converter);
-    server.readFromCache();
+	startEngine();
+	HTTPDServer server(svgfontfile, verbose, logmode, cachedir, alloworigin, maxSession, useCache);
+	if(useCache) {
+		// Read all session on disk
+		server.readFromCache();
+	}
     if (server.start(port)) {
         if (daemon) {
             log << "Guido server v." << kVersionStr << " with Guido v." << GuidoGetVersionStr() << " is running on port " << port << logend;
-            while (true) { }
+            while (true) { sleep(1); }
         } else {
             cout << "Guido server v." << kVersionStr << " with Guido v." << GuidoGetVersionStr() << " is running on port " << port << endl;
             cout << "Type 'q' to quit" << endl;
@@ -135,6 +157,7 @@ static bool launchServer (int port, int verbose, int logmode, string cachedir, s
                 if (c == 'q') {
                     break;
                 }
+				wait(10);
             } while (true);
         }
         server.stop();
@@ -142,7 +165,7 @@ static bool launchServer (int port, int verbose, int logmode, string cachedir, s
     } else {
         log << "Can't start Guido httpd server on the specified port. Try a different port." << logend;
     }
-    stopEngine();
+	stopEngine();
     return ret;
 }
 
@@ -167,35 +190,42 @@ int main(int argc, char **argv)
     string applicationPath(resolved_path);
 
     srand(time(0));
-    int port = get_private_profile_int(portSectionName, portNumberName, lopt (argv, kPortOpt, kDefaultPort), kDefaultInitfile.c_str());
+	int port = get_private_profile_int(portSectionName, portNumberName, lopt (argv, kPortOpt, kDefaultPort), kDefaultInitfile);
 
     (void) kVerboseOpt;
     int verbose = kDefaultVerbose;//lopt (argv, kVerboseOpt, kDefaultVerbose);
 
-    int logmode = get_private_profile_int(logSectionName, logModeName, lopt (argv, kLogmodeOpt, kDefaultLogmode), kDefaultInitfile.c_str());
+	int logmode = get_private_profile_int(logSectionName, logModeName, lopt (argv, kLogmodeOpt, kDefaultLogmode), kDefaultInitfile);
     if (logmode > 1)
       logmode = 1;
     if (logmode < 0)
       logmode = 0;
 
     char buff[512];
-    string logfile = sopt (argv, kLogfileOpt, (applicationPath + "/" + kDefaultLogfile).c_str());
-    get_private_profile_string(logSectionName, logFilenameName, logfile.c_str(), buff, 512, kDefaultInitfile.c_str());
+	string logfile = sopt (argv, kLogfileOpt, (applicationPath + "/" + kDefaultLogfile));
+	get_private_profile_string(logSectionName, logFilenameName, logfile.c_str(), buff, 512, kDefaultInitfile);
     logfile = string(buff);
 
     bool daemon = bopt (argv, kSafeOpt, false);
-    daemon = get_private_profile_int(daemonSectionName, daemonOnName, daemon ? 1 : 0, kDefaultInitfile.c_str()) ? true : false;
+	daemon = get_private_profile_int(daemonSectionName, daemonOnName, daemon ? 1 : 0, kDefaultInitfile) ? true : false;
+
+    bool allowOrigin = bopt (argv, kAccessControlAllowOrigin, false);
+
     gLog = logfile != ""
            ? new logstream (logfile.c_str())
            : new logstream();
 
     string cachedir = sopt (argv, kCachedirOpt, (applicationPath + "/" + kDefaultCachedir).c_str());
-    get_private_profile_string(cacheSectionName, cacheDirectoryName, cachedir.c_str(), buff, 512, kDefaultInitfile.c_str());
+	get_private_profile_string(cacheSectionName, cacheDirectoryName, cachedir.c_str(), buff, 512, kDefaultInitfile);
     cachedir = string(buff);
 
-    string svgfontfile = sopt (argv, kCachedirOpt, (applicationPath + "/" + kDefaultSvgFontFile).c_str());
-    get_private_profile_string(fontSectionName, fontFilenameName, svgfontfile.c_str(), buff, 512, kDefaultInitfile.c_str());
+	bool useCache = !bopt(argv, kUseCache, kDefaultUseCache);
+
+	string svgfontfile = sopt (argv, kSvgFontFileOpt, (applicationPath + "/" + kDefaultSvgFontFile).c_str());
+	get_private_profile_string(fontSectionName, fontFilenameName, svgfontfile.c_str(), buff, 512, kDefaultInitfile);
     svgfontfile = string(buff);
+
+	int maxSession = lopt (argv, kMaxSession, kDefaultMaxSession);
 
     // check to see if svgfontfile exists
 
@@ -239,5 +269,5 @@ int main(int argc, char **argv)
         close(STDOUT_FILENO);
         close(STDERR_FILENO);
     }
-    return launchServer (port, verbose, logmode, cachedir, svgfontfile, daemon) ? 0 : 1;
+	return launchServer (port, verbose, logmode, cachedir, svgfontfile, daemon, allowOrigin, maxSession, useCache) ? 0 : 1;
 }
