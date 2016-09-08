@@ -16,19 +16,8 @@
 
 #include "GRMark.h"
 #include "ARMark.h"
-
-#include "GRDefine.h"
-#include "FontManager.h"
-#include "GRPage.h"
-#include "GRRod.h"
 #include "GRStaff.h"
-#include "GRText.h"
-#include "GUIDOInternal.h"	// for gGlobalSettings.gDevice
-
-#include "TagParameterFloat.h"
 #include "VGDevice.h"
-#include "VGFont.h"
-#include "FontManager.h"
 
 
 extern GRStaff * gCurStaff;
