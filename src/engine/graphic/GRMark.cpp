@@ -46,18 +46,7 @@ GRMark::~GRMark()
 //----------------------------------------------------------------
 void GRMark::toEllipse (const FloatRect& r, VGDevice & hdc) const
 {
-	FloatRect e = r;
-	e.Expand(r.Width()/4);
-	float w = e.Width()/2;
-	FloatRect left = r;
-	left.SetWidth(w);
-	FloatRect right = left;
-	right.ShiftX(w);
-cout << "GRMark::toEllipse " << left << " - " << right << endl;
-	hdc.Arc(left.left, left.top, left.right, left.bottom, left.right, left.top-w*8, left.right, left.bottom+w*8);
-	hdc.Arc(right.left, right.top, right.right, right.bottom, right.left, right.bottom+w*8, right.left, right.top-w*8);
-	hdc.Frame(left.right-2, right.top-2, left.right+2, left.top+2);
-	hdc.Frame(left.right-2, right.bottom-2, left.right+2, left.bottom+2);
+	cerr << "\\mark tag: ellipse is not yet supported" << endl;
 }
 
 //----------------------------------------------------------------
@@ -134,6 +123,7 @@ void GRMark::OnDraw( VGDevice & hdc ) const
 			case ARMark::kSquare:
 				r = toSquare(r);
 			case ARMark::kRectangle:
+				r.ShiftY(-2);
 				hdc.Frame(r.left, r.top, r.right, r.bottom);
 				break;
 			case ARMark::kCircle:
