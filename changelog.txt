@@ -3,6 +3,7 @@ GUIDO Engine history
 ----------------------------------------------------------------
   version 1.6.3
 - new GuidoGetMeter API
+- new 'enclosure' parameter for \mark tag (see sample gmn files)
 
 ----------------------------------------------------------------
   version 1.6.2
