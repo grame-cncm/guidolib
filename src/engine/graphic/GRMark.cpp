@@ -84,6 +84,16 @@ void GRMark::toDiamond (const FloatRect& r, VGDevice & hdc) const
 
 
 //----------------------------------------------------------------
+void GRMark::toBracket (const FloatRect& r, VGDevice & hdc) const
+{
+	float h = r.Height() / 5;
+	hdc.MoveTo (r.left, r.top+h);
+	hdc.LineTo (r.left, r.top);
+	hdc.LineTo (r.right, r.top);
+	hdc.LineTo (r.right, r.top+h);
+}
+
+//----------------------------------------------------------------
 FloatRect GRMark::toSquare (const FloatRect& r) const
 {
 	FloatRect out (r);
@@ -132,6 +142,7 @@ void GRMark::OnDraw( VGDevice & hdc ) const
 				toEllipse(r, hdc);
 				break;
 			case ARMark::kBracket:
+				toBracket (r, hdc);
 				break;
 			case ARMark::kTriangle:
 				toTriangle (r, hdc);
@@ -159,95 +170,5 @@ FloatRect GRMark::getTextMetrics(VGDevice & hdc) const
 const ARMark * GRMark::getARMark() const
 {
 	return /*dynamic*/static_cast<const ARMark*>(getAbstractRepresentation());
-}
-
-
-/** \brief Called directly by a spring. Then we know that we
-	do not have a position tag.
-*/
-//void GRMark::setPosition(const NVPoint & inPosition)
-//{
-//	GRPTagARNotationElement::setPosition(inPosition);
-//
-//	// how do I get the current sse?
-//
-//	// there can be only one sse! -> no overlap
-//	assert(mStartEndList.size() == 1);
-//	GRSystemStartEndStruct * sse = mStartEndList.GetHead();
-//
-//	GRTextSaveStruct * st = (GRTextSaveStruct *) sse->p;
-//	assert(st);
-//
-//	st->position = inPosition;
-//}
-//
-//void GRMark::setHPosition( GCoord nx )
-//{
-//	GRPTagARNotationElement::setHPosition(nx);
-//	// there can be only one sse! -> no overlap
-//	assert(mStartEndList.size() == 1);
-//	GRSystemStartEndStruct * sse = mStartEndList.GetHead();
-//
-//	GRTextSaveStruct * st = (GRTextSaveStruct *) sse->p;
-//	assert(st);
-//
-//	st->position.x = nx;
-//}
-
-void GRMark::tellPosition(GObject * caller, const NVPoint & inPosition)
-{
-	GRText::tellPosition (caller, inPosition);
-	GRNotationElement * grel =  dynamic_cast<GRNotationElement *>(caller);
-	if( grel == 0 ) return;
-	GRStaff * staff = grel->getGRStaff();
-	const NVPoint & staffPos = staff->getPosition();
-
-	GRSystemStartEndStruct * sse = getSystemStartEndStruct(staff->getGRSystem());
-	assert(sse);
-	GRTextSaveStruct * st = (GRTextSaveStruct *)sse->p;
-	NVPoint newPos( st->position );
-	newPos.y = staffPos.y - staff->getStaffLSPACE(); // Space between two lines
-	st->position = newPos;
-
-cout << "GRMark::tellPosition " << newPos.y << endl;
-	
-//	// this can be only called by an event, that is there ..
-//	GRNotationElement * grel =  dynamic_cast<GRNotationElement *>(caller);
-//	if( grel == 0 ) return;
-//
-//	GRStaff * staff = grel->getGRStaff();
-//	if( staff == 0 ) return;
-//
-//	GRSystemStartEndStruct * sse = getSystemStartEndStruct(staff->getGRSystem());
-//	assert(sse);
-//
-//	GRTextSaveStruct * st = (GRTextSaveStruct *)sse->p;
-//	GRNotationElement * startElement = sse->startElement;
-//	NVPoint newPos( inPosition );
-//
-//	// - Check if we're left-opened
-//	if (sse->startflag == GRSystemStartEndStruct::OPENLEFT)
-//	{
-//		if (grel != startElement)
-//		{
-//			if (st->position.x == 0)
-//			{
-//				newPos.x -= LSPACE * 0.5f; // this is actually notebreite!
-//				st->position = newPos;
-//				st->text = "-";
-//			}
-//		}
-//	}
-//
-//	// - Follows the y-position of the first element of the range (if any)
-//	else if (grel == startElement)
-//	{
-//		newPos.y = grel->getPosition().y;
-//		st->position = newPos;
-//
-//		const ARText * arText = getARText();
-//		const char* text = arText ? arText->getText() : 0;
-//		if (text) st->text = text;
-//	}
 }
 

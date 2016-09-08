@@ -32,12 +32,12 @@ class GRMark : public GRText
 	void		toDiamond (const FloatRect& r, VGDevice & hdc) const;
 	void		toTriangle (const FloatRect& r, VGDevice & hdc) const;
 	void		toEllipse (const FloatRect& r, VGDevice & hdc) const;
+	void		toBracket (const FloatRect& r, VGDevice & hdc) const;
 
 	public:
 						 GRMark( GRStaff *, ARMark * abstractRepresentationOfText );
 		virtual 		~GRMark();
 
-		virtual void		tellPosition( GObject * caller, const NVPoint & inPosition );
 		virtual void		OnDraw( VGDevice & hdc ) const;
 		virtual FloatRect	getTextMetrics(VGDevice & hdc) const;
 
