@@ -2,6 +2,7 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.3
+- autoMeasuresNum attribute of the \meter tag supports "page" value
 - new GuidoGetMeter API
 - new 'enclosure' parameter for \mark tag (see sample gmn files)
 
