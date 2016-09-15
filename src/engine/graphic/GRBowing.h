@@ -43,7 +43,7 @@ public:
 	class GRBowingSaveStruct : public GRPositionTag::GRSaveStruct
 	{
 		public:
-			GRBowingSaveStruct() : numoffsets(3), inflexion(6) { }
+            GRBowingSaveStruct() : numoffsets(3), inflexion(4) { }  // Previous default inflexion: 6
 			
 			virtual ~GRBowingSaveStruct() { }
 			int numoffsets;

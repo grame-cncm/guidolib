@@ -257,12 +257,21 @@ GRSlur::automaticControlPoints( GRBowingContext * bowContext, ARBowing * arBow,
 	const float endX = bowInfos->position.x + bowInfos->offsets[2].x;
 	const float endY = bowInfos->position.y + bowInfos->offsets[2].y;
 
+    const float minSlopeAngle = 3.f * 2.f*M_PI/360.f;
+
+    // Slope of the base segment of the triangle
+    float baseSlope = (endY-startY) / (endX-startX);
+    const float baseAngle = atan(baseSlope);
+
 	// Initial slopes of the left and right segments of the triangle.
 	// (segment equation: y = Ax + B )
 
-	const float minSlope = float(0.03);	// force slurs to start with an angle.
-	float startA = upward ? -minSlope : minSlope;
-	float endA = upward ? minSlope : -minSlope;		
+    //const float minSlope = float(0.03);	// force slurs to start with an angle.
+//    float startA = (upward ? -minSlope : minSlope)+baseSlope;
+//    float endA = (upward ? minSlope : -minSlope)+baseSlope;
+
+    float startA = upward ? tan(-minSlopeAngle + baseAngle) : tan(minSlopeAngle + baseAngle);
+    float endA =   upward ? tan( minSlopeAngle + M_PI + baseAngle) : tan( - minSlopeAngle + M_PI + baseAngle);
 	
 	float x1, x2, y, a;	
 	float extremeY;
@@ -313,6 +322,16 @@ GRSlur::automaticControlPoints( GRBowingContext * bowContext, ARBowing * arBow,
 			}
 		}
 	}
+
+    // -- Tune the slope so the triangle is isocele
+    float startAngle = atan(startA) - baseAngle;
+    float endAngle   = atan(endA)   - baseAngle;
+
+    if(abs(startAngle) < abs(endAngle))     startAngle = -endAngle  ;
+    else                                    endAngle   = -startAngle;
+
+    startA = tan(startAngle + baseAngle);
+    endA   = tan(endAngle   + baseAngle);
 	
 	// -- Now, find the intersection point of the left and right 
 	//	segments of the bounding triangle.
@@ -322,6 +341,8 @@ GRSlur::automaticControlPoints( GRBowingContext * bowContext, ARBowing * arBow,
 	
 	const float b1 = startY - (startA * startX); // calculate b from: y = ax + b
 	const float b2 = endY - (endA * endX);		 // <=> b = y - (ax)
+
+
 
 	// -- Force lines to intersect within the [startX, endX] range.
 	// This is done by recalculating slopes that are too small.
@@ -357,11 +378,12 @@ GRSlur::automaticControlPoints( GRBowingContext * bowContext, ARBowing * arBow,
 		crossY = extremeY;
 	}
 
+
 	// -- Now, we have an intersection point. We're going to tune 
 	//	it to get a nice curve.
-	const float minDelta = 40;			// arbitrary value.
+    const float minDelta = 40;			// arbitrary value.
 	const float maxDelta = 160;			
-	const float factor = float(0.35);	// arbitrary value.
+    const float factor = float(0.35);	// arbitrary value. old
 	
 	const float deltaY = abs(crossY - extremeY);
 	float newDeltaY = factor * deltaY;	
@@ -369,7 +391,8 @@ GRSlur::automaticControlPoints( GRBowingContext * bowContext, ARBowing * arBow,
 	if( newDeltaY < minDelta ) newDeltaY = minDelta;
 	else if( newDeltaY > maxDelta ) newDeltaY = maxDelta;	// avoid too high curves.
 
-	crossY = upward ? (extremeY - newDeltaY ) : (extremeY + newDeltaY);
+    crossY = upward ? (crossY - newDeltaY ) : (crossY + newDeltaY);
+    //crossY = upward ? (extremeY - newDeltaY ) : (extremeY + newDeltaY);
 	
 	// -- Here we change the sharpness of the curve inflexion. 
 	if( newDeltaY < deltaY )
@@ -384,7 +407,7 @@ GRSlur::automaticControlPoints( GRBowingContext * bowContext, ARBowing * arBow,
 	// -- Apply the new control point.
 	
 	bowInfos->offsets[1].y = crossY - bowInfos->position.y;
-	bowInfos->offsets[1].x = crossX - bowInfos->position.x;
+    bowInfos->offsets[1].x = crossX - bowInfos->position.x;
 }
 
 
