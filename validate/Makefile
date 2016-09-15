@@ -16,7 +16,7 @@ $(shell cp ../build/win32/Release/GUIDOEngine.dll .)
 $(shell cp ../src/tools/build/win32/Release/guidogetversion.exe .)
 endif
 
-version	 ?= $(shell guidogetversion | cut -d' ' -f 3)
+version	 ?= $(shell cat guidoversion.txt)
 LEAKTOOLS = guidoparse guidoar2gr guidodraw
 
 
