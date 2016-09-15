@@ -23,6 +23,7 @@ class ARBar : // public ARMusicalObject,
 	public ARMTParameter
  {
  public:
+		enum { kNoNum, kNumAll, kNumPage };
 		         ARBar(const TYPE_TIMEPOSITION & timeposition);
 		         ARBar();
 		virtual ~ARBar();
@@ -35,8 +36,8 @@ class ARBar : // public ARMusicalObject,
 
 		void  setMeasureNumber(int inMeasureNumber)   { measureNumber = inMeasureNumber; }
 		int   getMeasureNumber()          const       { return measureNumber; }
-        bool  getMeasureNumberDisplayed() const       { return measureNumberDisplayed; }
-        void  setMeasureNumberDisplayed(bool display) { measureNumberDisplayed = display; }
+        int   getMeasureNumberDisplayed() const       { return measureNumberDisplayed; }
+        void  setMeasureNumberDisplayed(int mode)	  { measureNumberDisplayed = mode; }
         bool  isMeasureNumberDisplayedSet() const     { return measureNumberDisplayedIsSet; }
 
 		float getMeasureNumberDxOffset()                         { return numDx; }
@@ -48,7 +49,7 @@ class ARBar : // public ARMusicalObject,
 
   protected:
 		int   measureNumber;
-        bool  measureNumberDisplayed;
+        int   measureNumberDisplayed;
 		float numDx;
 		float numDy;
 

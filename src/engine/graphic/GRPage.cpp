@@ -52,7 +52,6 @@ GRPage::GRPage(GRMusic * grmusic, GRStaffManager * grstafmgr,
 				m_totalsystemheight( 0 ), settings(aSettings)
 {
 	// m_unit = UNIT_CM;
-
 	if (prevpage == 0)
 	{
 		mWidth =		DF_SX * kCmToVirtual;
@@ -508,8 +507,10 @@ void GRPage::finishPage( bool islastpage )
 {
 	if (settings.systemsDistribution == kNeverDistrib) {
 		SystemPointerList::iterator ptr;
-		for( ptr = mSystems.begin(); ptr != mSystems.end(); ++ ptr )
+		for( ptr = mSystems.begin(); ptr != mSystems.end(); ++ ptr ) {
 			(*ptr)->FinishSystem();
+			(*ptr)->setGRPage(this);
+		}
 		return;
 	}
 
@@ -555,13 +556,16 @@ void GRPage::finishPage( bool islastpage )
 				}				
 				cury += dist;
                 system->FinishSystem();
+				system->setGRPage(this);
 			}
 		}
 	}
 	else {
 		SystemPointerList::iterator ptr;
-		for( ptr = mSystems.begin(); ptr != mSystems.end(); ++ ptr )
+		for( ptr = mSystems.begin(); ptr != mSystems.end(); ++ ptr ) {
 			(*ptr)->FinishSystem();
+			(*ptr)->setGRPage(this);
+		}
 	}
 	// hack to get correct time position for the page [DF - May 26 2010]
 	setRelativeTimePosition ( (*mSystems.begin())->getRelativeTimePosition() );

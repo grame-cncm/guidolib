@@ -170,7 +170,6 @@ protected:
 	float 			mOldPosX;
 	int 			mNewLinePage;
 	float 			mCurPosX;
-	GRPage * 		mPage;
 	NEPointerList 	mZeroSpaceList;
 	NEPointerList 	mSpaceList;
 
@@ -179,7 +178,8 @@ protected:
 
 private:  
 
-	StaffVector * mStaffs;
+	GRPage*			mPage;
+	StaffVector*	mStaffs;
 	NVPoint mNextStaffPosition;
 };
 
