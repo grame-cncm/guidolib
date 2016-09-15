@@ -15,7 +15,7 @@
 %				     - the first page is not numbered
 %				     - only the first staff of a system is numbered
 {
-    [ \pageFormat<w=10cm,h=10cm,tm=2.0cm,bm=1.0cm,lm=1cm,rm=1cm>
+    [ \pageFormat<w=10cm,h=10cm,tm=2.0cm,bm=1.0cm,lm=0.3cm,rm=1cm>
 		%\barFormat<style="system">
         \meter<"2/4", autoMeasuresNum="page">
         a/2 b \bar

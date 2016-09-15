@@ -85,11 +85,11 @@ void ARBar::setTagParameterList(TagParameterList& tpl)
 
 			// - dx/dy for measure number
 			TagParameterFloat *f = TagParameterFloat::cast(rtpl->RemoveHead());
-			numDx = f->getValue();
+			numDx = f->TagIsSet() ? f->getValue() : 0;
             delete f;
 
 			f = TagParameterFloat::cast(rtpl->RemoveHead());
-			numDy = f->getValue();
+			numDy = f->TagIsSet() ? f->getValue() : 0;
             delete f;
 		}
 

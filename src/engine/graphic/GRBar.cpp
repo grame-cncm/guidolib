@@ -237,8 +237,11 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
 		int num = arBar->getMeasureNumber();
 		string barNumberString;
 		if (pageNumbering) {
-			float x = gCurStaff->getBoundingBox().left - ( 20 * mTagSize) ;
-			float y = mPosition.y - 40 - 110 * (mTagSize - 1) - mDy;
+			const ARBar *lastbar = arBar->previousBar();
+			float measureNumDxOffset = lastbar ? lastbar->getMeasureNumberDxOffset() : 0;
+			float measureNumDyOffset = lastbar ? -lastbar->getMeasureNumberDyOffset() : 0;
+			float x = gCurStaff->getBoundingBox().left + ( 10 * mTagSize) + measureNumDxOffset;
+			float y = mPosition.y - 40 - 110 * (mTagSize - 1) - mDy + measureNumDyOffset;
 			ostringstream barNumberStream;
 			barNumberStream << num - 1;
 			barNumberString = barNumberStream.str();

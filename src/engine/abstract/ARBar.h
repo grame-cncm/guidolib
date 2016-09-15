@@ -40,9 +40,12 @@ class ARBar : // public ARMusicalObject,
         void  setMeasureNumberDisplayed(int mode)	  { measureNumberDisplayed = mode; }
         bool  isMeasureNumberDisplayedSet() const     { return measureNumberDisplayedIsSet; }
 
-		float getMeasureNumberDxOffset()                         { return numDx; }
-		float getMeasureNumberDyOffset()                         { return numDy; }
-        
+		float getMeasureNumberDxOffset() const        { return numDx; }
+		float getMeasureNumberDyOffset() const        { return numDy; }
+		
+		const ARBar* previousBar () const				{ return fLastBar; }
+		void		 setPreviousBar (const ARBar* bar)	{ fLastBar = bar; }
+	 
         /**** Function to avoid dynamic_cast ****/
         ARMusicalObject *isARBar() { return this; }
         /*****************************************/
@@ -52,6 +55,7 @@ class ARBar : // public ARMusicalObject,
         int   measureNumberDisplayed;
 		float numDx;
 		float numDy;
+		const ARBar*	fLastBar;
 
         bool measureNumberDisplayedIsSet;
 

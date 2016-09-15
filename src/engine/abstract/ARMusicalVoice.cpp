@@ -2496,6 +2496,7 @@ void ARMusicalVoice::doAutoMeasuresNumbering()
 
 	ARMusicalVoiceState vst;
 	GuidoPos pos = GetHeadPosition(vst);
+	ARBar * previous = 0;
 	while (pos)
 	{
 		if (curmeter != vst.curmeter)
@@ -2514,6 +2515,7 @@ void ARMusicalVoice::doAutoMeasuresNumbering()
 		if (bar)
 		{
 			bar->setMeasureNumber(measureNumber);
+			bar->setPreviousBar (previous);
 
 			if (!bar->isMeasureNumberDisplayedSet()) {
 				switch (currAutoMeasureNum) {
@@ -2530,6 +2532,7 @@ void ARMusicalVoice::doAutoMeasuresNumbering()
 			else if (currAutoMeasureNum == ARMeter::kAutoMeasureNumPage)
 				bar->setMeasureNumberDisplayed(ARBar::kNumPage);
             measureNumber++;
+			previous = bar;
 		}
 		GetNext(pos,vst);
 	}
