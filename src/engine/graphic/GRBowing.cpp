@@ -824,9 +824,8 @@ const int NSEGS = 25;
 void drawSlur(VGDevice & hdc, float x1, float y1, float x2, float y2,
 								float x3, float y3, float inflexion )
 {
-	float delx1, delx2, ratio;
-	float addY2, addX, addY, x2a, y2a, x2b, y2b;
-	float maxD;//, h1, h2;
+    float ratio;
+    float x2a, y2a, x2b, y2b;
 
 	// if start and endpoint is the same, just don't do anything.
 	// this is a hack, whatsoever, because this should not really happen!
@@ -834,7 +833,6 @@ void drawSlur(VGDevice & hdc, float x1, float y1, float x2, float y2,
 
 	const float oneOverDeltaX = (1.0f / (x3 - x1));
 
-	maxD = (SLUR_THICKNESS * 1.25f);
 	ratio = (y3 - y1) * oneOverDeltaX;
     const float phi = atan(ratio);
     const float sinPhi = sin(phi);
@@ -842,50 +840,40 @@ void drawSlur(VGDevice & hdc, float x1, float y1, float x2, float y2,
 
     const bool upward = (y1 + x2*ratio)>y2;
 
-//	addY2 = (y2 - y1) / 3;
-//	addX = (x3 - x1) / (2 + inflexion);	// defines the attack of the curve.
-//	addY = addX * ratio;
-//    x2a = x2 - (addX * cosPhi);// - (sinPhi * (addY2+addY));
-//    y2a = y2 - (addX * sinPhi);// + (cosPhi * (addY2+addY));
-//    x2b = x2 + (addX * cosPhi);// - (sinPhi * (addY2-addY));
-//    y2b = y2 + (addX * sinPhi);// + (cosPhi * (addY2-addY));        // previous: y2b = y2 - addY + addY2;
+    const float arcHalfWidth = sqrt(pow(x1-x3,2)+pow(y1-y3,2))/2;
+    const float arcHeight = (y2-y1)*cosPhi - (x2-x1)*sinPhi;
+    const float inflexionCurveControl = 4; // Arbitrary, control the minimum inflexion under which the curve flattens
+    const float inflexionH = arcHalfWidth * exp(-inflexion/8 ) * 4/5;
+    const float inflexionV = arcHeight * (1 - 5* exp(-inflexion*inflexionCurveControl/8) ) / 4; //The bezier curve smooth out 1/4 of the arc's heigth
 
-    x2a = x2 + ((x1-x2)/inflexion);
-    y2a = y2 + ((y1-y2)/inflexion);
-    x2b = x2 + ((x3-x2)/inflexion);
-    y2b = y2 + ((y3-y2)/inflexion);
+    // CALCULATE THE FIRST CURVE1
+    x2a = x2 - inflexionH*cosPhi - inflexionV*sinPhi;
+    y2a = y2 - inflexionH*sinPhi + inflexionV*cosPhi;
+    x2b = x2 + inflexionH*cosPhi - inflexionV*sinPhi;
+    y2b = y2 + inflexionH*sinPhi + inflexionV*cosPhi;
 
-
-//	h1 = (y2a > y1) ? (y2a - y1) : (y1 - y2a);
-//	h2 = (y2b > y3) ? (y2b - y3) : (y3 - y2b);
-//	if (x2a - x1 > h1) x2a = x1 + h1;
-//	if (x3 - x2b > h2) x2b = x3 - h2;
-
-    delx1 =  SLUR_THICKNESS * ratio;
-    delx2 =  SLUR_THICKNESS * ratio;
-	if (delx1 > maxD) delx1 = maxD;
-	if (delx2 > maxD) delx2 = maxD;
-	if (delx1 < -maxD) delx1 = -maxD;
-	if (delx2 < -maxD) delx2 = -maxD;
-
-	const int ptCount = (2 * ( NSEGS + 3 ));
-
+    // PROBABLY YOU WANT TO START A POLYGON NOW
+    const int ptCount = (2 * ( NSEGS + 3 ));
 	NVPoint thePoints[ ptCount ]; //ptCount ];
-
-	// CALCULATE THE FIRST CURVE
-	// PROBABLY YOU WANT TO START A POLYGON NOW
 	int index = 0;
 	makeCurve( x1, y1, x2a, y2a, x2b, y2b, x3, y3, NSEGS, thePoints, &index );
 
-    y2a += ( (upward ? -1: 1) * SLUR_THICKNESS * cosPhi); //- (delx1*sinPhi);
-    x2a += (-(upward ? -1: 1) * SLUR_THICKNESS * sinPhi); //- (delx1*cosPhi);
-    y2b += ( (upward ? -1: 1) * SLUR_THICKNESS * cosPhi); //+ (delx1*sinPhi);
-    x2b += (-(upward ? -1: 1) * SLUR_THICKNESS * sinPhi); //+ (delx1*cosPhi);
+    // CALCULATE THE SECOND CURVE
+    x2a -= (upward ? -1: 1) * SLUR_THICKNESS * sinPhi;
+    y2a += (upward ? -1: 1) * SLUR_THICKNESS * cosPhi;
+    x2b -= (upward ? -1: 1) * SLUR_THICKNESS * sinPhi;
+    y2b += (upward ? -1: 1) * SLUR_THICKNESS * cosPhi;
 
-	// CALCULATE THE SECOND CURVE
+    const float smoothHCorrection = inflexionH*(-inflexionV/arcHeight) / 4;
+    x2a += smoothHCorrection * cosPhi;
+    y2a += smoothHCorrection * sinPhi;
+    x2b -= smoothHCorrection * cosPhi;
+    y2b -= smoothHCorrection * sinPhi;
+
 	makeCurve( x3, y3, x2b, y2b, x2a, y2a, x1, y1, NSEGS, thePoints, &index );
 
 	//PROBABLY YOU WANT TO CLOSE THE POLYGON NOW AND FILL IT
+
 	float xPoints [ ptCount ];
 	float yPoints [ ptCount ];
 	for( int currPt = 0; currPt < index; ++ currPt )

@@ -257,7 +257,11 @@ GRSlur::automaticControlPoints( GRBowingContext * bowContext, ARBowing * arBow,
 	const float endX = bowInfos->position.x + bowInfos->offsets[2].x;
 	const float endY = bowInfos->position.y + bowInfos->offsets[2].y;
 
-    const float minSlopeAngle = 3.f * 2.f*M_PI/360.f;
+
+    // Minimum angles
+    const float minBaseAngle = 12.f * M_PI/180.f;
+    const float minHorizontalAngle = -8.f * M_PI/180.f;
+
 
     // Slope of the base segment of the triangle
     float baseSlope = (endY-startY) / (endX-startX);
@@ -270,9 +274,17 @@ GRSlur::automaticControlPoints( GRBowingContext * bowContext, ARBowing * arBow,
 //    float startA = (upward ? -minSlope : minSlope)+baseSlope;
 //    float endA = (upward ? minSlope : -minSlope)+baseSlope;
 
-    float startA = upward ? tan(-minSlopeAngle + baseAngle) : tan(minSlopeAngle + baseAngle);
-    float endA =   upward ? tan( minSlopeAngle + M_PI + baseAngle) : tan( - minSlopeAngle + M_PI + baseAngle);
+    float startA = upward ? tan(-minBaseAngle + baseAngle) : tan(minBaseAngle + baseAngle);
+    float endA =   upward ? tan( minBaseAngle + M_PI + baseAngle) : tan( - minBaseAngle + M_PI + baseAngle);
 	
+    if(upward){
+        startA = min(startA, -tan(minHorizontalAngle));
+        endA =   max(endA,   +tan(minHorizontalAngle));
+    }else{
+        startA = max(startA, +tan(minHorizontalAngle));
+        endA =   min(endA,   -tan(minHorizontalAngle));
+    }
+
 	float x1, x2, y, a;	
 	float extremeY;
 
@@ -323,7 +335,7 @@ GRSlur::automaticControlPoints( GRBowingContext * bowContext, ARBowing * arBow,
 		}
 	}
 
-    // -- Tune the slope so the triangle is isocele
+    // -- Tune the slopes so the triangle is isocele
     float startAngle = atan(startA) - baseAngle;
     float endAngle   = atan(endA)   - baseAngle;
 
@@ -381,7 +393,7 @@ GRSlur::automaticControlPoints( GRBowingContext * bowContext, ARBowing * arBow,
 
 	// -- Now, we have an intersection point. We're going to tune 
 	//	it to get a nice curve.
-    const float minDelta = 40;			// arbitrary value.
+    const float minDelta = 10;			// arbitrary value.
 	const float maxDelta = 160;			
     const float factor = float(0.35);	// arbitrary value. old
 	
@@ -392,20 +404,15 @@ GRSlur::automaticControlPoints( GRBowingContext * bowContext, ARBowing * arBow,
 	else if( newDeltaY > maxDelta ) newDeltaY = maxDelta;	// avoid too high curves.
 
     crossY = upward ? (crossY - newDeltaY ) : (crossY + newDeltaY);
-    //crossY = upward ? (extremeY - newDeltaY ) : (extremeY + newDeltaY);
+
 	
 	// -- Here we change the sharpness of the curve inflexion. 
-	if( newDeltaY < deltaY )
-	{
-		const float flex = bowInfos->inflexion;		// get the default inflexion factor.
-		const float dy  = deltaY - newDeltaY;	// the amount of y-correction previously introduced.
-		const float power = float(0.0028);		// the amount of curve correction
-
-		bowInfos->inflexion = 1 / ( power * dy + ( 1 / flex ));
-	}
+    const float maxInflexion = 7;  // Max inflexion (for small arc)
+    const float power = 600;        // Arbitrary, scale the arc size
+    const float arcWidth = sqrt(pow(startX-endX,2)+ pow(startY-endY,2));
+    bowInfos->inflexion = (maxInflexion-2) * exp( - arcWidth/power) + 2;
 
 	// -- Apply the new control point.
-	
 	bowInfos->offsets[1].y = crossY - bowInfos->position.y;
     bowInfos->offsets[1].x = crossX - bowInfos->position.x;
 }
