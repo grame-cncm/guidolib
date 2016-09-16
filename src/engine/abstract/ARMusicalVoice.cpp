@@ -1668,7 +1668,7 @@ TYPE_DURATION ARMusicalVoice::beamGetBeat(const ARMeter * curmeter, const TYPE_T
 	if (n > 1) {
 		int nextbeat = beats[0];
 		int d = curmeter->getDenominator();
-		for (int i=1; i<n ; i++) {
+        for (size_t i=1; i<n ; i++) {
 			int b = beats[i];
 			if (pos >= TYPE_TIMEPOSITION(nextbeat, d)) {
 				nextbeat += b;
