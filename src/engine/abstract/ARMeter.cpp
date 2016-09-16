@@ -84,7 +84,6 @@ void ARMeter::setTagParameterList(TagParameterList& tpl)
 
 			TagParameterFloat * tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
 			assert(tpf);
-
 			size = tpf->getValue();
 
 			tps = TagParameterString::cast(rtpl->GetNext(pos));
@@ -100,10 +99,14 @@ void ARMeter::setTagParameterList(TagParameterList& tpl)
 			assert(tps);
 
 			std::string on("on");
-			if (on == tps->getValue())
-				autoMeasuresNum = true;
+			std::string page("page");
+			const char* automeasures = tps->getValue();
+			if (on == automeasures)
+				autoMeasuresNum = kAutoMeasureNum;
+			else if (page == automeasures)
+				autoMeasuresNum = kAutoMeasureNumPage;
 			else
-				autoMeasuresNum = false;
+				autoMeasuresNum = kNoAutoMeasureNum;
 
 
             /**** Meter type analysis ****/

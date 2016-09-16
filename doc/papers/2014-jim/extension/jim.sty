@@ -1,0 +1,173 @@
+% Template for icmc
+% By Eloi Batlle (eloi@iua.upf.es), changes for ICMC by Bram de Jong (bdejong@iua.upf.es)
+% Please send any comments and bugs
+
+\renewcommand{\sfdefault}{phv}
+\renewcommand{\rmdefault}{ptm}
+\renewcommand{\ttdefault}{pcr}
+
+% set dimensions of columns, gap between columns, and paragraph indent
+\setlength{\paperheight}{297mm}
+\setlength{\paperwidth}{210mm}
+
+\setlength{\textheight}{247mm}
+\setlength{\textwidth}{170mm}
+\setlength{\columnsep}{8mm}
+\setlength{\headheight}{0mm}
+\setlength{\voffset}{-15mm}
+\setlength{\hoffset}{0mm}
+\setlength{\topmargin}{0mm}
+\setlength{\marginparwidth}{0mm}
+%\setlength{\headsep}{0mm}
+\setlength{\parindent}{1pc}
+\setlength{\oddsidemargin}{-5mm}
+\setlength{\evensidemargin}{-5mm}
+
+\twocolumn
+\pagestyle{empty}
+
+
+\def\maketitle{\par
+    \begingroup
+        \def\thefootnote{}
+        \def\@makefnmark{
+            \hbox
+            {$^{\@thefnmark}$\hss}
+        }
+        \twocolumn[\@maketitle]
+        %\permission
+        \@thanks
+    \endgroup
+    \setcounter{footnote}{0}
+    \let\maketitle\relax
+    \let\@maketitle\relax
+    \gdef\thefootnote{
+        \arabic{footnote}
+    }
+    \gdef\@@savethanks{}
+    \gdef\@thanks{}
+    \gdef\@author{}
+    \gdef\@title{}
+    \let\thanks\relax
+}
+
+\def\@maketitle{
+    \newpage
+    \null
+    \vskip 2em 
+    \begin{center} {
+            \Large \bf \@title \par
+        }
+        \vskip 1.5em {
+            \large \lineskip .5em
+            \begin{tabular}[t]{c}
+                \@author \\ 
+            \end{tabular}
+            \par
+        }
+    \end{center}
+    \par
+    \vskip 1.5em
+}
+
+\def\title#1{\gdef\@title{\uppercase{#1}}}
+
+%\newcommand{\permission}{
+%\begin{figure}[b]
+%  \fbox{\parbox[t]{79mm}
+%    {\footnotesize{Permission to make digital or hard copies of all or 
+%part of this work for personal or classroom use is granted without fee
+%provided that copies are not made or distributed for profit or commercial
+%advantage and that copies bear this notice and the full citation on the first page.
+%\newline \copyright~2005~Universitat Pompeu Fabra.}}}
+%\end{figure}}
+
+
+%\let\@@savethanks\thanks
+%\def\thanks#1{\gdef\thefootnote{}\@@savethanks{#1}}
+
+
+% define the format for the author's names
+\def\oneauthor#1#2{
+    \gdef\@author{
+        \begin{tabular}{@{}c@{}}
+            {\em #1} \\
+            #2\relax
+       \end{tabular}\hskip 1in
+    }
+}
+\def\twoauthors#1#2#3#4{
+    \gdef\@author{
+        \begin{tabular}{@{}c@{}}
+            {\em #1} \\
+            #2
+        \end{tabular}\hskip 1in
+        \begin{tabular}{@{}c@{}}
+            {\em #3} \\
+            #4\relax
+        \end{tabular}
+    }
+}
+\def\threeauthors#1#2#3#4#5#6{
+    \gdef\@author{
+        \begin{tabular}{@{}c@{}}
+            {\em #1} \\
+            #2
+        \end{tabular}\hskip 1in
+        \begin{tabular}{@{}c@{}}
+            {\em #3} \\
+            #4
+        \end{tabular}\hskip 1in
+        \begin{tabular}{@{}c@{}}
+            {\em #5} \\
+            #6\relax
+        \end{tabular}
+    }
+}
+
+% Abstract section
+\def\abstract{
+    \begin{center}{
+        \bf \textsc{Résumé}
+    }
+    \end{center}
+}
+\def\endabstract{\par}
+
+
+\def\@sect#1#2#3#4#5#6[#7]#8{
+   \refstepcounter{#1}\edef\@svsec{\csname the#1\endcsname.\hskip 0.6em}
+       \begingroup \ifnum #2=1\bf\centering
+          {\interlinepenalty \@M
+             \@svsec\uppercase{#8}\par}\else\ifnum #2=2\bf
+          \noindent{\interlinepenalty \@M \@svsec #8\par}\else\it
+          \noindent{\interlinepenalty \@M
+             \@svsec #8\par}\fi\fi\endgroup
+       \csname #1mark\endcsname{#7}\addcontentsline
+         {toc}{#1}{\protect\numberline{\csname the#1\endcsname} #7}
+     \@tempskipa #5\relax
+     \@xsect{\@tempskipa}}
+
+
+\def\thebibliography#1{\section{References}\list
+ {[\arabic{enumi}]}{\settowidth\labelwidth{[#1]}\leftmargin\labelwidth
+ \advance\leftmargin\labelsep
+ \usecounter{enumi}}
+ \def\newblock{\hskip .11em plus .33em minus .07em}
+ \sloppy\clubpenalty4000\widowpenalty4000
+ \sfcode`\.=1000\relax}
+\let\endthebibliography=\endlist
+
+\long\def\@makecaption#1#2{
+\vskip 10pt
+\setbox\@tempboxa\hbox{#1. #2}
+\ifdim \wd\@tempboxa >\hsize #1. #2\par \else \hbox
+to\hsize{\hfil\box\@tempboxa\hfil}
+\fi}
+
+\def\fnum@figure{{\bf Figure\ \thefigure}}
+\def\fnum@table{{\bf Table \thetable}}
+
+\flushbottom
+
+%%%% EOF

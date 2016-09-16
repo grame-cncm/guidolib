@@ -9,9 +9,9 @@
         a b c
     ],
     [
-        \staffFormat<dy=15> a b c
+        \staffFormat<dy=3.5> a b c
     ],
     [
-        \staffFormat<dy=-5> a b c
+        \staffFormat<dy=-4> a b c
     ]
 }

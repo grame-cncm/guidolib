@@ -1,0 +1,14 @@
+{
+    [
+        \meter<"4/4">
+        c f
+        \symbol<file="silence.png", dx=-5, dy=-10> 
+        c d f
+    ],
+    [
+        \meter<"4/4">
+        a d
+        \symbol<file="ronds.png", position="bot"> (f g)
+        g
+    ]
+}

@@ -27,6 +27,7 @@ class ARMeter : public ARMTParameter
   public:
 
 		enum metertype { NONE, NUMERIC, C, C2  };
+		enum { kNoAutoMeasureNum, kAutoMeasureNum, kAutoMeasureNumPage  };
 
 				ARMeter();
 				ARMeter(int p_numerator, int p_denominator);
@@ -44,7 +45,7 @@ class ARMeter : public ARMTParameter
 		TYPE_TIMEPOSITION getMeterTime() const;
 
 		int  getAutoBarlines()                  const { return autoBarlines; }
-		bool getAutoMeasuresNum()               const { return autoMeasuresNum; }
+		int	 getAutoMeasuresNum()               const { return autoMeasuresNum; }
 		std::vector<int> getNumeratorsVector()  const { return numeratorsVector; }
         int getNumerator()                      const { return numerator; }
 		int getDenominator()                    const { return denominator; }
@@ -73,8 +74,8 @@ class ARMeter : public ARMTParameter
 
   protected:
 	  float  size;
-	  bool   autoBarlines;
-	  bool   autoMeasuresNum;
+	  bool  autoBarlines;
+	  int	autoMeasuresNum;
 	  static ListOfTPLs ltpls;
  
   private:

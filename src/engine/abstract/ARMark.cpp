@@ -20,11 +20,31 @@
 #include "ListOfStrings.h"
 #include "TagParameterList.h"
 
-ListOfTPLs ARMark::ltpls(1);
+static const char* kNoneStr		= "none";
+static const char* kSquareStr	= "square";
+static const char* kRectangleStr= "rectangle";
+static const char* kOvalStr		= "oval";
+static const char* kCircleStr	= "circle";
+static const char* kBracketStr	= "bracket";
+static const char* kTriangleStr	= "triangle";
+static const char* kDiamondStr	= "diamond";
 
-ARMark::ARMark()
+ListOfTPLs				ARMark::ltpls(1);
+map<std::string, int>	ARMark::fEnclosureShapes;
+
+ARMark::ARMark() : fEnclosure(kNoEnclosure)
 {
 	rangesetting = NO;
+	if (!fEnclosureShapes.size()) {
+		fEnclosureShapes[kNoneStr]		= kNoEnclosure;
+		fEnclosureShapes[kSquareStr]	= kSquare;
+		fEnclosureShapes[kRectangleStr] = kRectangle;
+		fEnclosureShapes[kOvalStr]		= kOval;
+		fEnclosureShapes[kCircleStr]	= kCircle;
+		fEnclosureShapes[kBracketStr]	= kBracket;
+		fEnclosureShapes[kTriangleStr]	= kTriangle;
+		fEnclosureShapes[kDiamondStr]	= kDiamond;
+	}
 }
 
 ARMark::~ARMark()
@@ -38,9 +58,7 @@ void ARMark::setTagParameterList(TagParameterList & tpl)
 		// create a list of string ...
 
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(
-			(
-			"S,text,,r"));
+		lstrs.AddTail(("S,text,,r;S,enclosure,none,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -49,21 +67,24 @@ void ARMark::setTagParameterList(TagParameterList & tpl)
 
 	if (ret>=0 && rtpl)
 	{
-		// we found a match!
-		if (ret == 0)
-		{
+		if (ret==0) {
 			text = TagParameterString::cast(rtpl->RemoveHead());
 			assert(text);
 
+            TagParameterString *s = TagParameterString::cast(rtpl->RemoveHead());
+			assert(s);
+			if (s->TagIsSet()) {
+				string value = s->getValue();
+				fEnclosure = fEnclosureShapes[value];
+			}
+            delete s;
 		}
-
 		delete rtpl;
 	}
 	else
 	{
 		// failure
 	}
-
 	tpl.RemoveAll();
 }
 

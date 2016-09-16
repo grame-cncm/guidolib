@@ -15,16 +15,24 @@
 
 */
 
+#include <map>
+#include <string>
+
 #include "ARText.h"
 
 /** \brief not yet documented
 */
 class ARMark : public ARText// public ARMusicalObject,
 {
+	int fEnclosure;
+	
 	public:
+		enum { kNoEnclosure, kSquare, kRectangle, kOval, kCircle, kBracket, kTriangle, kDiamond };
+	
 		ARMark();
 		virtual ~ARMark();
 
+				int getEnclosure() const		{ return fEnclosure; }
 	    virtual void printName(std::ostream& os) const;
 	    virtual void printGMNName(std::ostream& os) const;
 	    virtual void printParameters(std::ostream& os) const;
@@ -34,6 +42,7 @@ class ARMark : public ARText// public ARMusicalObject,
 	protected:
 		
 		static ListOfTPLs ltpls;
+		static map<std::string, int>	fEnclosureShapes;
 };
 
 #endif

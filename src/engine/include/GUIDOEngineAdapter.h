@@ -14,6 +14,7 @@
 */
 
 #include <string>
+#include <ostream>
 #include "GUIDOEngine.h"
 
 class GuidoParser;
@@ -99,6 +100,14 @@ class_export GuidoEngineAdapter
 			the function provides control over the time of the release.
 		*/
 		void	 shutdown();
+
+		/*!
+			\brief Print a Guido abstract representation to a stream formatted as gmn code
+
+			\param ar the handler to the abstract representation.
+			\param to the output stream.
+		*/
+		GuidoErrCode ar2gmn(ARHandler ar, std::ostream& to);
 
 		/*!
 			\brief Transforms a Guido abstract representation into a Guido graphic representation.

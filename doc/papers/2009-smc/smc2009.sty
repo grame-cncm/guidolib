@@ -1,0 +1,171 @@
+% -----------------------------------------------
+% Template for SMC 2009
+%     smc2009.sty is the style file for Latex 
+%
+% Freely adapted from the ISMIR template
+% Last modified by Fabien Gouyon (smc2009 _at_ inescporto _dot_ pt)
+% Modified by Juan P. Bello for ISMIR 2008 (ismir2008-papers@ismir.net)
+% By Rainer Typke for ISMIR 2007 (ismir07.rainer@safersignup.com)
+% Based on the 2004 template by Eloi Batlle.
+% -----------------------------------------------
+% Please send any comments and bugs
+
+\renewcommand{\sfdefault}{phv}
+\renewcommand{\rmdefault}{ptm}
+\renewcommand{\ttdefault}{pcr}
+
+% set dimensions of columns, gap between columns, and paragraph indent
+\setlength{\paperheight}{11in}
+\setlength{\paperwidth}{8.5in}
+\setlength{\textheight}{9in}
+\setlength{\textwidth}{7in}
+\setlength{\columnsep}{.4in}
+\setlength{\headheight}{0mm}
+\setlength{\voffset}{-8.5mm}
+\setlength{\hoffset}{0mm}
+\setlength{\topmargin}{0mm}
+\setlength{\marginparwidth}{0mm}
+\setlength{\parindent}{1pc}
+\setlength{\oddsidemargin}{-6mm}
+\setlength{\evensidemargin}{-6mm}
+
+\twocolumn
+\pagestyle{empty}
+
+
+\def\maketitle{\par
+    \begingroup
+        \def\thefootnote{}
+        \def\@makefnmark{
+            \hbox
+            {$^{\@thefnmark}$\hss}
+        }
+        \twocolumn[\@maketitle]
+%        \permission
+        \@thanks
+    \endgroup
+    \setcounter{footnote}{0}
+    \let\maketitle\relax
+    \let\@maketitle\relax
+    \gdef\thefootnote{
+        \arabic{footnote}
+    }
+    \gdef\@@savethanks{}
+    \gdef\@thanks{}
+    \gdef\@author{}
+    \gdef\@title{}
+    \let\thanks\relax
+}
+
+\def\@maketitle{
+    \newpage
+    \null
+    \vskip 0em 
+    \begin{center} {
+            \Large \bf \@title \par
+        }
+        \vskip 1.5em {
+            \large \lineskip .5em
+            \begin{tabular}[t]{c}
+                \@author \\ 
+            \end{tabular}
+            \par
+        }
+    \end{center}
+    \par
+    \vskip 1.5em
+}
+
+\def\title#1{\gdef\@title{\uppercase{#1}}}
+
+\newcommand{\permission}{
+\begin{figure}[b]
+{{\it SMC 2009, July 23-25, Porto, Portugal} \\Copyrights remain with the authors}
+%{\copyright~Copyright notice here}
+\end{figure}}
+
+
+% define the format for the author's names
+\def\oneauthor#1#2{
+    \gdef\@author{
+        \begin{tabular}{@{}c@{}}
+            {\bf #1} \\
+            #2\relax
+       \end{tabular}\hskip 1in
+    }
+}
+\def\twoauthors#1#2#3#4{
+    \gdef\@author{
+        \begin{tabular}{@{}c@{}}
+            {\bf #1} \\
+            #2
+        \end{tabular}\hskip 1in
+        \begin{tabular}{@{}c@{}}
+            {\bf #3} \\
+            #4\relax
+        \end{tabular}
+    }
+}
+\def\threeauthors#1#2#3#4#5#6{
+    \gdef\@author{
+        \begin{tabular}{@{}c@{}}
+            {\bf #1} \\
+            #2
+        \end{tabular}\hskip 1in
+        \begin{tabular}{@{}c@{}}
+            {\bf #3} \\
+            #4
+        \end{tabular}\hskip 1in
+        \begin{tabular}{@{}c@{}}
+            {\bf #5} \\
+            #6\relax
+        \end{tabular}
+    }
+}
+
+% Abstract section
+\def\abstract{
+    \begin{center}{
+        \bf ABSTRACT
+    }
+    \end{center}
+}
+\def\endabstract{\par}
+
+
+\def\@sect#1#2#3#4#5#6[#7]#8{
+   \refstepcounter{#1}\edef\@svsec{\csname the#1\endcsname\hskip 0.6em}
+       \begingroup \ifnum #2=1\bf\centering
+          {\interlinepenalty \@M
+             \@svsec\uppercase{#8}\par}\else\ifnum #2=2\bf
+          \noindent{\interlinepenalty \@M \@svsec #8\par}\else\it
+          \noindent{\interlinepenalty \@M
+             \@svsec #8\par}\fi\fi\endgroup
+       \csname #1mark\endcsname{#7}\addcontentsline
+         {toc}{#1}{\protect\numberline{\csname the#1\endcsname} #7}
+     \@tempskipa #5\relax
+     \@xsect{\@tempskipa}}
+
+
+\def\thebibliography#1{\section{References}\list
+ {[\arabic{enumi}]}{\settowidth\labelwidth{[#1]}\leftmargin 1em
+ \advance\leftmargin\labelsep
+ \usecounter{enumi}}
+ \def\newblock{\hskip .01em plus .01em minus .01em}
+ \sloppy\clubpenalty4000\widowpenalty4000
+ \sfcode`\.=1000\relax}
+\let\endthebibliography=\endlist
+
+\long\def\@makecaption#1#2{
+\vskip 10pt
+\setbox\@tempboxa\hbox{#1. #2}
+\ifdim \wd\@tempboxa >\hsize #1. #2\par \else \hbox
+to\hsize{\hfil\box\@tempboxa\hfil}
+\fi}
+
+\def\fnum@figure{{\bf Figure\ \thefigure}}
+\def\fnum@table{{\bf Table \thetable}}
+
+\flushbottom
+
+%%%% EOF

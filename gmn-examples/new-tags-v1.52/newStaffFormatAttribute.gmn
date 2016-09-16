@@ -1,4 +1,4 @@
-% New \staffFormat-Tag attribute :
+% New \staffFormat-tag attribute :
 %
 % lineThickness defines the staff lines thickness. Unit is the half space.
 %					 default value is 0.08

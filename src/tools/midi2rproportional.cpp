@@ -222,11 +222,12 @@ static void processvoicecolors (RProportional* rp, const vector<pair<int,string>
 int main(int argc, char **argv)
 {
  	SVGSystem sys;
-    SVGDevice dev(cout, &sys, 0);
+	VGDevice *dev = sys.CreateDisplayDevice();
+//    SVGDevice dev(cout, &sys, 0);
 	
 	checkusage (argc, argv);
 	
-	GuidoInitDesc gd = { &dev, 0, 0, 0 };
+	GuidoInitDesc gd = { dev, 0, 0, 0 };
     GuidoInit(&gd);
 
     const char* fileName = getInputFile(argc, argv);
@@ -268,12 +269,12 @@ int main(int argc, char **argv)
         error(err);
 
         /**** DRAW ****/
-		dev.NotifySize(w, h);
-		dev.BeginDraw();
-		dev.SelectPenColor(VGColor(0, 0, 0));
-		dev.SelectFillColor(VGColor(0, 0, 0));
-		err = GuidoRProportionalOnDraw (rprop, w, h, &dev);
-		dev.EndDraw();
+		dev->NotifySize(w, h);
+		dev->BeginDraw();
+		dev->SelectPenColor(VGColor(0, 0, 0));
+		dev->SelectFillColor(VGColor(0, 0, 0));
+		err = GuidoRProportionalOnDraw (rprop, w, h, dev);
+		dev->EndDraw();
         error(err);
         /**************/    
 

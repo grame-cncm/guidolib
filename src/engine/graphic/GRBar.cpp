@@ -22,6 +22,8 @@
 #include "ARBar.h"
 
 #include "GRStaffManager.h"
+#include "GRSystem.h"
+#include "GRPage.h"
 #include "ARMeter.h"
 #include "GRBar.h"
 #include "GRStaff.h"
@@ -45,6 +47,7 @@ using namespace std;
 #define trace1Method(method)	std::cout << (void*)this << " GRBar::" << method << std::endl
 
 NVPoint GRBar::sRefPos;
+GRPage*	GRBar::fCurrentPage = 0;
 
 // --------------------------------------------------------------------------
 GRBar::GRBar(ARBar * p_arbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float propRender )
@@ -213,26 +216,51 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
         return;
 
     ARBar *arBar = getARBar();
-
+	bool pageNumbering = false;
+	if (gCurStaff) {
+		//check for new page
+		GRSystem* system = gCurStaff->getGRSystem();
+		if (system) {
+			GRPage* page = system->getGRPage();
+			bool newPage = !fCurrentPage || (page != fCurrentPage);
+			fCurrentPage = page;
+			pageNumbering = newPage  && (arBar->getMeasureNumberDisplayed() == ARBar::kNumPage) && (arBar->getMeasureNumber() != 2);
+		}
+	}
+	
     if (arBar->getMeasureNumberDisplayed() && arBar->getMeasureNumber() != 0) {
         const NVstring fontName("Arial");
         string attr("");
         const VGFont* hmyfont = FontManager::FindOrCreateFont((int) (80.0f * mTagSize), &fontName, &attr);
 		hdc.SetTextFont(hmyfont);
 
+		int num = arBar->getMeasureNumber();
 		string barNumberString;
-		ostringstream barNumberStream;
-		barNumberStream << arBar->getMeasureNumber();
-		barNumberString = barNumberStream.str();
-		// Prendre en compte la staffSize ?
+		if (pageNumbering) {
+			const ARBar *lastbar = arBar->previousBar();
+			float measureNumDxOffset = lastbar ? lastbar->getMeasureNumberDxOffset() : 0;
+			float measureNumDyOffset = lastbar ? -lastbar->getMeasureNumberDyOffset() : 0;
+			float x = gCurStaff->getBoundingBox().left + ( 10 * mTagSize) + measureNumDxOffset;
+			float y = mPosition.y - 40 - 110 * (mTagSize - 1) - mDy + measureNumDyOffset;
+			ostringstream barNumberStream;
+			barNumberStream << num - 1;
+			barNumberString = barNumberStream.str();
+			hdc.DrawString(x, y, barNumberString.c_str(), barNumberString.size());
+		}
 
+		ostringstream barNumberStream;
+		barNumberStream << num;
+		barNumberString = barNumberStream.str();
+
+		// Prendre en compte la staffSize ?
 		float measureNumDxOffset =   arBar->getMeasureNumberDxOffset();
 		float measureNumDyOffset = - arBar->getMeasureNumberDyOffset();
 
         float totalXOffset = mPosition.x - 18  - 20 * (mTagSize - 1) + measureNumDxOffset + mDx;
         float totalYOffset = mPosition.y - 40 - 110 * (mTagSize - 1) + measureNumDyOffset - mDy;
 
-        hdc.DrawString(totalXOffset, totalYOffset, barNumberString.c_str(), barNumberString.size());
+		if (arBar->getMeasureNumberDisplayed() != ARBar::kNumPage)
+			hdc.DrawString(totalXOffset, totalYOffset, barNumberString.c_str(), barNumberString.size());
 	}
 
     // - Vertical adjustement according to staff's line number

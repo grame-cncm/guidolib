@@ -18,6 +18,7 @@
 #include <string>
 
 #include "GRPTagARNotationElement.h"
+#include "TRect.h"
 
 class ARText;
 class GRStaff;
@@ -30,6 +31,8 @@ class GRRod;
 */
 class GRText : public GRPTagARNotationElement
 {	
+	FloatRect fTextRect;
+
 	public:
 		class GRTextSaveStruct : public GRPositionTag::GRSaveStruct
 		{
@@ -51,8 +54,9 @@ class GRText : public GRPTagARNotationElement
 		
 		virtual void 	OnDraw( VGDevice & hdc ) const;
 		
+		virtual FloatRect getTextMetrics(VGDevice & hdc) const;
 		const ARText * 	getARText() const;
-		
+	
 		virtual unsigned int getTextAlign() const { return mTextAlign; }
 
 		virtual float 	getLeftSpace() const;

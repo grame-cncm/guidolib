@@ -2324,6 +2324,7 @@ void GRStaffManager::BreakAtPBS(GuidoPos pbpos)
 	// first, the current mSpringVector 
 	// and rods are set to the 
 	// remainder 
+	mGrSystem->setGRPage(mGrPage);
 	mSpringVector = newvect;
 	mSimpleRods = newsimplerods;
 	mComplexRods = newcomplexrods;
@@ -3468,7 +3469,7 @@ traceslice(cout << ">>>> GRStaffManager::FindOptimumBreaks  =>  start pos loop" 
 			mGrPage->finishPage();
 			mGrPage = newpage;
 			mGrMusic->addPage( mGrPage );
-			mGrSystem->setGRPage( mGrPage ); // "Last system points to new page" bug!?
+//			mGrSystem->setGRPage( mGrPage ); // "Last system points to new page" bug!?
 		}
 
 		TYPE_TIMEPOSITION tp; 

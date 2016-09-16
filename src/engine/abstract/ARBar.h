@@ -23,6 +23,7 @@ class ARBar : // public ARMusicalObject,
 	public ARMTParameter
  {
  public:
+		enum { kNoNum, kNumAll, kNumPage };
 		         ARBar(const TYPE_TIMEPOSITION & timeposition);
 		         ARBar();
 		virtual ~ARBar();
@@ -35,22 +36,26 @@ class ARBar : // public ARMusicalObject,
 
 		void  setMeasureNumber(int inMeasureNumber)   { measureNumber = inMeasureNumber; }
 		int   getMeasureNumber()          const       { return measureNumber; }
-        bool  getMeasureNumberDisplayed() const       { return measureNumberDisplayed; }
-        void  setMeasureNumberDisplayed(bool display) { measureNumberDisplayed = display; }
+        int   getMeasureNumberDisplayed() const       { return measureNumberDisplayed; }
+        void  setMeasureNumberDisplayed(int mode)	  { measureNumberDisplayed = mode; }
         bool  isMeasureNumberDisplayedSet() const     { return measureNumberDisplayedIsSet; }
 
-		float getMeasureNumberDxOffset()                         { return numDx; }
-		float getMeasureNumberDyOffset()                         { return numDy; }
-        
+		float getMeasureNumberDxOffset() const        { return numDx; }
+		float getMeasureNumberDyOffset() const        { return numDy; }
+		
+		const ARBar* previousBar () const				{ return fLastBar; }
+		void		 setPreviousBar (const ARBar* bar)	{ fLastBar = bar; }
+	 
         /**** Function to avoid dynamic_cast ****/
         ARMusicalObject *isARBar() { return this; }
         /*****************************************/
 
   protected:
 		int   measureNumber;
-        bool  measureNumberDisplayed;
+        int   measureNumberDisplayed;
 		float numDx;
 		float numDy;
+		const ARBar*	fLastBar;
 
         bool measureNumberDisplayedIsSet;
 

@@ -14,23 +14,41 @@
 #include <sstream>
 
 #include "GUIDOEngineAdapter.h"
+#include "GMNCodePrintVisitor.h"
+#include "GUIDOInternal.h"
 #include "GUIDOParse.h"
 #include "guido2.h"
 #include "GuidoStream.h"
+#include "ARMusic.h"
 
 #ifdef CANVASSYSTEM
 #include "canvassystem.h"
 #include "canvasdevice.h"
 #endif
 
+//--------------------------------------------------------------
 GuidoEngineAdapter::GuidoEngineAdapter()	{}
 GuidoEngineAdapter::~GuidoEngineAdapter()	{}
 
 
+//--------------------------------------------------------------
 GuidoErrCode GuidoEngineAdapter::init(GuidoInitDesc * desc)		{	return ::GuidoInit(desc); }
 GuidoErrCode GuidoEngineAdapter::init()							{	return ::GuidoInitWithIndependentSVG(); }
 void GuidoEngineAdapter::shutdown()								{	::GuidoShutdown(); }
 
+//--------------------------------------------------------------
+GuidoErrCode GuidoEngineAdapter::ar2gmn(ARHandler ar, ostream& to)
+{
+	if ((!ar) || ( ar->armusic == 0 ))
+		return guidoErrInvalidHandle;
+		
+	ARMusic* score = ar->armusic;
+	GMNCodePrintVisitor v(to);
+	score->goThrough(&v);
+	return guidoNoErr;
+}
+
+//--------------------------------------------------------------
 GRHandler GuidoEngineAdapter::ar2gr(ARHandler ar)
 {
 	GRHandler gr;
@@ -38,6 +56,7 @@ GRHandler GuidoEngineAdapter::ar2gr(ARHandler ar)
 	return err ? 0 : gr;
 }
 
+//--------------------------------------------------------------
 GRHandler GuidoEngineAdapter::ar2gr(ARHandler ar, const GuidoLayoutSettings &settings)
 {
 	GRHandler gr;
@@ -45,6 +64,7 @@ GRHandler GuidoEngineAdapter::ar2gr(ARHandler ar, const GuidoLayoutSettings &set
 	return err ? 0 : gr;
 }
 
+//--------------------------------------------------------------
 GuidoErrCode GuidoEngineAdapter::updateGR(GRHandler gr)			{	return ::GuidoUpdateGR(gr, 0); }
 GuidoErrCode GuidoEngineAdapter::updateGR(GRHandler gr, const GuidoLayoutSettings &settings) {	return ::GuidoUpdateGR(gr, &settings); }
 void GuidoEngineAdapter::freeAR(ARHandler ar)					{	::GuidoFreeAR(ar); }

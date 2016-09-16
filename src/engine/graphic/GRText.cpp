@@ -133,27 +133,19 @@ GRText::~GRText()
 	mAssociated = 0;
 }
 
-/**
-	Here, we must handle two different cases:
-		(1) The text position must be relative to the last staff-line. (i.e: Lyrics)
-		(2) The text position must follow the y-position of the note. (i.e: Fingering)
-*/
-void GRText::OnDraw( VGDevice & hdc ) const
+
+FloatRect GRText::getTextMetrics(VGDevice & hdc) const
 {
-	if(!mDraw)
-		return;
+	FloatRect r;
+
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );
 	assert(sse);
 	GRTextSaveStruct * st = (GRTextSaveStruct *) sse->p;
-//	if (st->text == 0) return;
-
 	const ARText * arText = getARText();
 	const float curLSPACE = gCurStaff ? gCurStaff->getStaffLSPACE(): LSPACE;
-
 	// - Setup position.
 	// y-reference position if the lowest line of the staff.
 	NVPoint drawPos (st->position);
-
 	// - Force the position to be relative to the bottom line of the staff
 	if( mMustFollowPitch == false )
 	{
@@ -165,13 +157,72 @@ void GRText::OnDraw( VGDevice & hdc ) const
 
 	float dx = 0;
 	float dy = 0;
-
-	if( arText->getYPos()) // && arText->getYPos()->TagIsSet())
+	if( arText->getYPos())
 		drawPos.y -= (arText->getYPos()->getValue(curLSPACE));
 	if (arText->getDY())
 		dy = -arText->getDY()->getValue( curLSPACE );
 	if (arText->getDX())
 		dx = arText->getDX()->getValue( curLSPACE );
+
+	const char * theText = st->text.c_str();
+	const int charCount = (int)st->text.size();
+	float x = drawPos.x + st->boundingBox.left + dx;
+	float y = drawPos.y + dy;
+	float w = 0;
+	float h = 0;
+
+	const VGFont* hmyfont;
+	if (font && font->length() > 0)
+		hmyfont = FontManager::FindOrCreateFont( mFontSize, font, fontAttrib );
+	else
+		hmyfont = FontManager::gFontText;
+
+	const VGFont* savedFont = hdc.GetTextFont();
+	hdc.SetTextFont( hmyfont );
+	hmyfont->GetExtent(theText, charCount, &w, &h, &hdc);
+	hdc.SetTextFont( savedFont );
+	r.Set(x, y, x+w, y+h);
+	return r;
+}
+
+/**
+	Here, we must handle two different cases:
+		(1) The text position must be relative to the last staff-line. (i.e: Lyrics)
+		(2) The text position must follow the y-position of the note. (i.e: Fingering)
+*/
+void GRText::OnDraw( VGDevice & hdc ) const
+{
+	if(!mDraw)
+		return;
+	
+	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );
+	assert(sse);
+	GRTextSaveStruct * st = (GRTextSaveStruct *) sse->p;
+//
+//	const ARText * arText = getARText();
+//	const float curLSPACE = gCurStaff ? gCurStaff->getStaffLSPACE(): LSPACE;
+//
+//	// - Setup position.
+//	// y-reference position if the lowest line of the staff.
+//	NVPoint drawPos (st->position);
+//
+//	// - Force the position to be relative to the bottom line of the staff
+//	if( mMustFollowPitch == false )
+//	{
+//		if (gCurStaff) // else ?
+//			drawPos.y = gCurStaff->getDredgeSize();
+//		else
+//			drawPos.y = 0;
+//	}
+//
+//	float dx = 0;
+//	float dy = 0;
+//	if( arText->getYPos())
+//		drawPos.y -= (arText->getYPos()->getValue(curLSPACE));
+//	if (arText->getDY())
+//		dy = -arText->getDY()->getValue( curLSPACE );
+//	if (arText->getDX())
+//		dx = arText->getDX()->getValue( curLSPACE );
 
 	// - Setup font ....
 	const VGFont* hmyfont;
@@ -181,36 +232,27 @@ void GRText::OnDraw( VGDevice & hdc ) const
 		hmyfont = FontManager::gFontText;
 
 	hdc.SetTextFont( hmyfont );
-
-	//	int nBackmode = hdc.GetBackgroundMode();
-	//	hdc.SetBackgroundMode( VGDevice::kModeTransparent );
-
-//	const unsigned int ta = hdc.GetTextAlign();
 	const VGColor prevTextColor = hdc.GetFontColor();
 
 	if( mColRef )
 		hdc.SetFontColor( VGColor( mColRef ));
-
-// DEBUG
-//	if( arText->getRange())
-//		hdc.SetTextColor( GColor( 0, 200, 0 ));	// green if tag has a range
 
 	hdc.SetFontAlign( mTextAlign );
 
 	// - Print text
 	const char * theText = st->text.c_str();
 	const int charCount = (int)st->text.size();
+//	float x = drawPos.x + st->boundingBox.left + dx;
+//	float y = drawPos.y + dy;
+//	float w = 0;
+//	float h = 0;
+	FloatRect r = getTextMetrics (hdc);
 
     if (charCount > 0)
-	    hdc.DrawString( drawPos.x + st->boundingBox.left + dx, drawPos.y + dy, theText, charCount);
+	    hdc.DrawString( r.left, r.top, theText, charCount);
 
-//hdc.SetTextColor( GColor( 0, 0, 0 ));	// DEBUG
-
-	// - Restore context
-	// hdc.SetTextAlign( ta );
 	if( mColRef )
 		hdc.SetFontColor( prevTextColor );
-	// hdc.SetBackgroundMode( nBackmode );
 }
 
 const ARText * GRText::getARText() const

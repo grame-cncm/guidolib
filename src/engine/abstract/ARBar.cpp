@@ -39,7 +39,7 @@ ARBar::ARBar(const TYPE_TIMEPOSITION &timeposition)
 ARBar::ARBar() : ARMTParameter()
 {
 	measureNumber               = 0;
-    measureNumberDisplayed      = false;
+    measureNumberDisplayed      = kNoNum;
     measureNumberDisplayedIsSet = false;
 
 	numDx = 0;
@@ -75,18 +75,21 @@ void ARBar::setTagParameterList(TagParameterList& tpl)
 			// w, h, ml, mt, mr, mb
 
             TagParameterString *s = TagParameterString::cast(rtpl->RemoveHead());
-            s->getBool(measureNumberDisplayed);
-            if (s->TagIsSet())
+			bool display = false;
+			s->getBool(display);
+            if (s->TagIsSet()) {
+				measureNumberDisplayed = display ? kNumAll : kNoNum;
                 measureNumberDisplayedIsSet = true;
+			}
             delete s;
 
 			// - dx/dy for measure number
 			TagParameterFloat *f = TagParameterFloat::cast(rtpl->RemoveHead());
-			numDx = f->getValue();
+			numDx = f->TagIsSet() ? f->getValue() : 0;
             delete f;
 
 			f = TagParameterFloat::cast(rtpl->RemoveHead());
-			numDy = f->getValue();
+			numDy = f->TagIsSet() ? f->getValue() : 0;
             delete f;
 		}
 

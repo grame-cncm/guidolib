@@ -1,0 +1,40 @@
+% New \meter-tag attribute :
+% "autoMeasuresNum" defines if measures number will be displayed.
+%            Values : "on", "page" or "off".
+%            Default value : "off".
+%
+% New \bar-tag attribute :
+% "displayMeasNum" defines if measure number will be displayed at this precise bar
+%            Values : "true" or "false".
+%            Default value is "true" if meter is set and "autoMeasuresNum" meter param is "on", false otherwise
+% "numDx"/"numDy" defines the measure number horiz./vert. offset on this bar
+%            Values : unit.
+%
+%				Note for autoMeasuresNum set to page:
+%				     - displayMeasNum is ignored and only the first measure of a page will be numbered.
+%				     - the first page is not numbered
+%				     - only the first staff of a system is numbered
+{
+    [ \pageFormat<w=10cm,h=10cm,tm=2.0cm,bm=1.0cm,lm=0.3cm,rm=1cm>
+		%\barFormat<style="system">
+        \meter<"2/4", autoMeasuresNum="page">
+        a/2 b \bar
+        c d \bar<displayMeasNum="true", numDy=0>
+        e f c3 d1 e c ccc
+    ],
+    [
+        \meter<"2/4", autoMeasuresNum="on">
+        a/2 b
+        c d \bar<displayMeasNum="false">
+        e f 
+        g \bar a b
+    ],
+    [
+        \meter<"2/4">
+        a/2 b
+        c d \bar<displayMeasNum="true", numDx=-1>
+        e f
+        g 
+        a b
+    ]
+}

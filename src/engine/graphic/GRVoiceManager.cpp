@@ -151,6 +151,7 @@
 #include "GRRitardando.h"
 #include "GRInstrument.h"
 #include "GRStem.h"
+#include "GRMark.h"
 #include "GRFinishBar.h"
 #include "GRDummy.h"
 #include "GRSimpleBeam.h"	// for ilist template instanciation
@@ -1249,13 +1250,13 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 	else if (tinf == typeid(ARMark))
 	{
 		// then we introduce a text...
-		GRText * grtxt = new GRText(mCurGrStaff, static_cast<ARMark *>(arOfCompleteObject));
+		GRMark * grmark = new GRMark(mCurGrStaff, static_cast<ARMark *>(arOfCompleteObject));
 
-		grtxt->setNeedsSpring(1);
-		mCurGrStaff->AddTag(grtxt);
-		gCurMusic->addVoiceElement(arVoice,grtxt);
+		grmark->setNeedsSpring(1);
+		mCurGrStaff->AddTag(grmark);
+		gCurMusic->addVoiceElement(arVoice,grmark);
 
-		grne = grtxt;
+		grne = grmark;
 	}
 	else if (tinf == typeid(ARSpecial))
 	{

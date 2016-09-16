@@ -2491,13 +2491,12 @@ void ARMusicalVoice::doAutoMeasuresNumbering()
 {
 	ARMeter * curmeter = NULL;
 	TYPE_DURATION curmetertime;
-
 	int measureNumber = 2;
+	int currAutoMeasureNum = ARMeter::kNoAutoMeasureNum;
 
 	ARMusicalVoiceState vst;
-
 	GuidoPos pos = GetHeadPosition(vst);
-
+	ARBar * previous = 0;
 	while (pos)
 	{
 		if (curmeter != vst.curmeter)
@@ -2507,6 +2506,7 @@ void ARMusicalVoice::doAutoMeasuresNumbering()
 			curmetertime.setNumerator(curmeter->getNumerator());
 			curmetertime.setDenominator(curmeter->getDenominator());
 			curmetertime.normalize();
+			currAutoMeasureNum = curmeter->getAutoMeasuresNum();
 		}
 
 		ARMusicalObject * o = GetAt(pos);
@@ -2515,19 +2515,25 @@ void ARMusicalVoice::doAutoMeasuresNumbering()
 		if (bar)
 		{
 			bar->setMeasureNumber(measureNumber);
+			bar->setPreviousBar (previous);
 
-            bool displayMeasureNumber = false;
-
-            if (bar->isMeasureNumberDisplayedSet() && bar->getMeasureNumberDisplayed())
-                displayMeasureNumber = true;
-            else if (curmeter && curmeter->getAutoMeasuresNum() && !bar->isMeasureNumberDisplayedSet())
-                    displayMeasureNumber = true;
-
-            bar->setMeasureNumberDisplayed(displayMeasureNumber);
-            
+			if (!bar->isMeasureNumberDisplayedSet()) {
+				switch (currAutoMeasureNum) {
+					case ARMeter::kAutoMeasureNum:
+						bar->setMeasureNumberDisplayed(ARBar::kNumAll);
+						break;
+					case ARMeter::kAutoMeasureNumPage:
+						bar->setMeasureNumberDisplayed(ARBar::kNumPage);
+						break;
+					default:
+						bar->setMeasureNumberDisplayed(ARBar::kNoNum);
+				}
+			}
+			else if (currAutoMeasureNum == ARMeter::kAutoMeasureNumPage)
+				bar->setMeasureNumberDisplayed(ARBar::kNumPage);
             measureNumber++;
+			previous = bar;
 		}
-		
 		GetNext(pos,vst);
 	}
 }

@@ -19,6 +19,7 @@
 
 class ARBar;
 class GRStaff;
+class GRPage;
 
 /** \brief Measure bar.
 */
@@ -52,7 +53,9 @@ class GRBar : public GRTagARNotationElement
 		virtual const NVPoint & getReferencePosition() const { return sRefPos; }
 		
 		ARBar * getARBar() const;
-		
+
+		static void reset() { fCurrentPage = 0; }		// required for a new score
+	
 	protected:
 				bool	isSystemSlice() const;
 
@@ -65,7 +68,8 @@ class GRBar : public GRTagARNotationElement
 		float proportionalRender;
 
 	private:
-		void InitGRBar( const TYPE_TIMEPOSITION & inTimePos, const GRStaff * inStaff );		
+		static GRPage*	fCurrentPage;
+		void InitGRBar( const TYPE_TIMEPOSITION & inTimePos, const GRStaff * inStaff );
 };
 
 #endif

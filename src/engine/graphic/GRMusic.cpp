@@ -31,6 +31,7 @@ using namespace std;
 #include "GRStaffManager.h"
 #include "GRSingleNote.h"
 #include "GRPage.h"
+#include "GRBar.h"
 #include "GRDefine.h"
 
 // - Guido Misc
@@ -119,6 +120,7 @@ void GRMusic::OnDraw( VGDevice & hdc, const GuidoOnDrawDesc & inDrawInfos )
 {
 	const GRPage * drawpage = getPage(inDrawInfos.page);
 
+	GRBar::reset();
 	if (drawpage)
 		drawpage->OnDraw(hdc, inDrawInfos);
 }
