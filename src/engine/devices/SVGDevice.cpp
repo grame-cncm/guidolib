@@ -174,7 +174,7 @@ void SVGDevice::checkfont()
 // - Standard graphic primitives
 //______________________________________________________________________________
 void SVGDevice::MoveTo( float x, float y )	{ fXPos = x; fYPos = y; }
-void SVGDevice::LineTo( float x, float y )	{ Line(fXPos, fYPos, x, y); }
+void SVGDevice::LineTo( float x, float y )	{ Line(fXPos, fYPos, x, y); MoveTo(x, y); }
 void SVGDevice::Line( float x1, float y1, float x2, float y2 )
 {
 	fStream << fEndl << "<line x1=\"" << x1 << "\" y1=\"" << y1 << "\" x2=\"" << x2 <<	"\" y2=\"" << y2 << "\" />";
