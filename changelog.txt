@@ -2,6 +2,10 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.3
+- articulations support a position parameter with "above" or "below" values
+- default placement of marcato change to above
+- chords: better support of articulations tags 
+- slurs redesigned
 - autoMeasuresNum attribute of the \meter tag supports "page" value
 - new GuidoGetMeter API
 - new 'enclosure' parameter for \mark tag (see sample gmn files)
