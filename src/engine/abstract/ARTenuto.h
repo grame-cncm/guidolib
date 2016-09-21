@@ -15,42 +15,22 @@
 
 */
 
-#include "ARMTParameter.h"
-#include "ARPositionTag.h"
-
-// for TagParameters
-//#include "TagParameterString.h"
-//#include "TagParameterFloat.h"
-//#include "TagParameterInt.h"
+#include "ARArticulation.h"
 
 
 /** \brief the Tenuto articulation tag
 */
-class ARTenuto : public ARMTParameter, public ARPositionTag
+class ARTenuto : public ARArticulation
 {		
 public:		
-	ARTenuto() : ARMTParameter() { rangesetting = ONLY; }
-
+			 ARTenuto()  {}
     virtual ~ARTenuto() {};
-
-	virtual void setTagParameterList(TagParameterList& tpl);
 
 	virtual void printName(std::ostream& os) const;
 	virtual void printGMNName(std::ostream& os) const;
 	virtual void printParameters(std::ostream& os) const;
 
 	virtual void browse(TimeUnwrap& mapper) const;
-
-protected:
-	// TagParameters ..
-	// TagParameterString *textformat;
-	// TagParameterFloat  *fsize;
-	// TagParameterInt	  *fnumber;
-
-
-	// this is important for allowed
-	// TagParameters ....
-	static ListOfTPLs ltpls;
 };
 
 #endif

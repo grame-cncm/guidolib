@@ -17,6 +17,10 @@
 #include "TagParameterString.h"
 #include "ListOfStrings.h"
 
+extern const char* kAboveStr;
+extern const char* kBelowStr;
+
+
 ListOfTPLs ARPizzicato::ltpls(1);
 
 void ARPizzicato::setTagParameterList(TagParameterList & tpl)
@@ -24,7 +28,7 @@ void ARPizzicato::setTagParameterList(TagParameterList & tpl)
 	if (ltpls.GetCount() == 0)
 	{
 		ListOfStrings lstrs;
-		lstrs.AddTail("S,type,lefthand,o");
+		lstrs.AddTail("S,type,lefthand,o;S,position,,o");
 		CreateListOfTPLs(ltpls, lstrs);
 	}
 	
@@ -42,23 +46,31 @@ void ARPizzicato::setTagParameterList(TagParameterList & tpl)
 			{
 				std::string val(str->getValue());
 				if (val == "buzz")
-					type = BUZZ;
+					fType = BUZZ;
 				else if (val == "snap" || val == "bartok")
-					type = SNAP;
+					fType = SNAP;
 				else if (val == "fingernail")
-					type = FINGERNAIL;
+					fType = FINGERNAIL;
 				else
-                    type = LEFTHAND;
+                    fType = LEFTHAND;
 			}
-			else
-                type = LEFTHAND;
-			
+			else fType = LEFTHAND;
 			delete str;
+
+			TagParameterString * ppos = TagParameterString::cast(rtpl->RemoveHead());
+			assert(ppos);
+			if (ppos->TagIsSet()) {
+				string posStr = ppos->getValue();
+				if (posStr == kAboveStr)
+					fPosition = kAbove;
+				else if (posStr == kBelowStr)
+					fPosition = kBelow;
+				else cerr << posStr << ": incorrect articulation position" << endl;
+			}
+			delete ppos;
 		}
-		
 		delete rtpl;
 	}
-
 	tpl.RemoveAll();
 }
 
@@ -74,7 +86,7 @@ void ARPizzicato::printGMNName(std::ostream& os) const
 
 void ARPizzicato::printParameters(std::ostream& os) const
 {
-    switch (type) {
+    switch (fType) {
     case BUZZ:
         os << "buzz";
         break;

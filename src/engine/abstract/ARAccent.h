@@ -15,35 +15,23 @@
 
 */
 
-#include "ARMTParameter.h"
-#include "ARPositionTag.h"
+#include "ARArticulation.h"
 
 /** \brief not yet documented
 */
-class ARAccent : public ARMTParameter,  public ARPositionTag
+class ARAccent : public ARArticulation
 {		
 public:			
 
-			 ARAccent() : ARMTParameter() { rangesetting = ONLY; }
+//			 ARAccent() : ARMTParameter() { rangesetting = ONLY; }
+			 ARAccent()  {}
 	virtual ~ARAccent()  { /*delete TagParameterPointer ...*/ };
-
-	virtual void setTagParameterList(TagParameterList & tpl);
 
 	virtual void printName(std::ostream& os) const;
 	virtual void printGMNName(std::ostream& os) const;
 	virtual void printParameters(std::ostream& os) const;
 
 	virtual void	browse(TimeUnwrap& mapper) const;
-
-protected:
-	// TagParameters ..
-	// TagParameterString *textformat;
-	// TagParameterFloat  *fsize;
-	// TagParameterInt	  *fnumber;
-
-	// this is important for allowed
-	// TagParameters ....
-	static ListOfTPLs ltpls;
 };
 
 #endif

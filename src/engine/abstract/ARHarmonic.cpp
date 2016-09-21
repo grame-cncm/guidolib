@@ -17,36 +17,6 @@
 #include "TagParameterList.h"
 #include "ListOfStrings.h"
 
-ListOfTPLs ARHarmonic::ltpls(1);
-
-void ARHarmonic::setTagParameterList(TagParameterList& tpl)
-{
-	if (ltpls.GetCount() == 0)
-	{
-		//creates a list of strings
-		ListOfStrings lstrs;
-		lstrs.AddTail((""));
-		CreateListOfTPLs(ltpls, lstrs);
-	}
-	
-	TagParameterList * rtpl = NULL;
-	int ret = MatchListOfTPLsWithTPL(ltpls, tpl, &rtpl);
-	
-	if (ret>=0 && rtpl) // we found a match =
-	{
-		if (ret == 0)
-		{
-			//...
-		}
-
-		delete rtpl;
-	}
-	else
-	{
-		//failure
-	}
-	tpl.RemoveAll();
-}
 
 void ARHarmonic::printName(std::ostream& os) const
 {

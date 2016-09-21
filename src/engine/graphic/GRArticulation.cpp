@@ -91,11 +91,18 @@
 
 	-----
 
+	implementation revised on Sept. 2016 DF
+	there is room for improvements:
+		check refpos for all symbols
+		possibly check also for the font implementation
+		with homogeneous refpos, the code could be more factorized
+		there also possible useless functions and settings
 */
 
 #include <typeinfo>
 #include <cassert>
 
+#include "ARArticulation.h"
 #include "ARStaccato.h"
 #include "ARMarcato.h"
 #include "ARAccent.h"
@@ -134,6 +141,8 @@ NVPoint GRArticulation::sRefposLongFermataDown;
 NVPoint GRArticulation::sRefposHarmonic;
 NVPoint GRArticulation::sRefposBreathMark;
 
+map<int,int> GRArticulation::sOrdering;
+
 GRArticulation::GRArticulation(ARMusicalTag * inTag, float curLSPACE, bool ownsar)
 				: GRTagARNotationElement(inTag, curLSPACE, ownsar)	// , tinfo(typeid(*mtag))
 {
@@ -149,20 +158,16 @@ GRArticulation::GRArticulation(ARMusicalTag * inTag, float curLSPACE, bool ownsa
 	else if (tinfo == typeid(ARMarcato))
     {
         if ( ((ARMarcato *) inTag)->getPositionMarcato() == ARMarcato::BELOW )
-		{
-			setupMarcatoDown();
-		}
+			setupMarcatoBelow();
 		else if ( ((ARMarcato *) inTag)->getPositionMarcato() == ARMarcato::ABOVE )
-		{
-			setupMarcatoUp();
-		}
+			setupMarcatoAbove();
         else
             setupMarcato();
     }
 	else if (tinfo == typeid(ARTenuto))			setupTenuto();
 	else if (tinfo == typeid(ARFermata))		
 	{
-		if ( ((ARFermata *) inTag)->getPositionFermata() == ARFermata::BELOW )
+		if ( ((ARFermata *) inTag)->getArticulationPosition() == ARFermata::kBelow )
 		{
 			if ( ((ARFermata *) inTag)->getType() == ARFermata::REGULAR )
 				setupFermataDown();
@@ -200,8 +205,30 @@ GRArticulation::~GRArticulation()
 	// of GRNotationElement
 }
 
-/*----------------Setup fonctions-------------------------------------------------*/
+void GRArticulation::print(ostream& os) const
+{
+	os << "articulation " << mArticulationFlag << endl;
+}
 
+/*----------------initialize ordering map ----------------------------------------*/
+void GRArticulation::initOrder()
+{
+	int i = 1;
+	sOrdering[kFlagStaccato]	= i++;
+	sOrdering[kFlagTenuto]		= i++;
+	sOrdering[kFlagStaccmo]		= i++;
+	sOrdering[kFlagHarmonic]	= i++;
+	sOrdering[kFlagPizz]		= i++;
+	sOrdering[kFlagAccent]		= i++;
+	sOrdering[kFlagMarcato]		= i;
+	sOrdering[kFlagMarcatoUp]	= i;
+	sOrdering[kFlagMarcatoDown]	= i++;
+	sOrdering[kFlagFermataUp]	= i;
+	sOrdering[kFlagFermataDown]	= i++;
+//  kFlagBreathMark ???
+}
+
+/*----------------Setup fonctions-------------------------------------------------*/
 void GRArticulation::setupStaccato()
 {
 	setArticulationSymbol( kStaccatoSymbol );
@@ -215,8 +242,6 @@ void GRArticulation::setupStaccmo()
 {
 	setArticulationSymbol( kStaccmoUpSymbol);
 	mArticulationFlag = kFlagStaccmo;
-	
-	//setStaccmoDirection(true); // useful ?
 }
 
 void GRArticulation::setupLeftHPizz()
@@ -272,7 +297,7 @@ void GRArticulation::setupMarcato()
 	setMarcatoDirection( true );
 }
 
-void GRArticulation::setupMarcatoUp()
+void GRArticulation::setupMarcatoAbove()
 {
     mArticulationFlag = kFlagMarcatoUp;
 	setArticulationSymbol( kMarcatoUpSymbol );
@@ -280,7 +305,7 @@ void GRArticulation::setupMarcatoUp()
 	setMarcatoDirection( true );
 }
 
-void GRArticulation::setupMarcatoDown()
+void GRArticulation::setupMarcatoBelow()
 {
 	mArticulationFlag = kFlagMarcatoDown;
 	setArticulationSymbol( kMarcatoDownSymbol );
@@ -382,10 +407,10 @@ void GRArticulation::setPosition(const NVPoint & point)
 	GRARNotationElement::setPosition(point);
 }
 
-void GRArticulation::setMarcatoDirection( bool upward )
+void GRArticulation::setMarcatoDirection( bool above )
 {
 	const float height = LSPACE * float(1.66);
-	if( upward )
+	if( above )
 	{
 		mSymbol = kMarcatoUpSymbol;
 		sRefposMarcatoUp = NVPoint(-mLeftSpace, height * float(0.33));	// up		
@@ -399,10 +424,10 @@ void GRArticulation::setMarcatoDirection( bool upward )
 	}
 }
 
-void GRArticulation::setStaccmoDirection( bool upward )
+void GRArticulation::setStaccmoDirection( bool above )
 {
 	const float height = LSPACE * float(0.64);
-	if( upward )
+	if( above )
 	{
 		mSymbol = kStaccmoUpSymbol;
 		sRefposStaccmoUp = NVPoint(-mLeftSpace, -LSPACE*0.5f);	// up		
@@ -411,7 +436,7 @@ void GRArticulation::setStaccmoDirection( bool upward )
 	else
 	{
 		mSymbol = kStaccmoDownSymbol;
-		sRefposStaccmoDown = NVPoint(-mLeftSpace, 0);	// down
+		sRefposStaccmoDown = NVPoint(-mLeftSpace, -LSPACE*0.25f);	// down
 		mBoundingBox.Set( -mLeftSpace, 0, mRightSpace, height); // down
 	}
 }
@@ -423,31 +448,24 @@ void GRArticulation::tellPosition(GObject * caller, const NVPoint & inPos)	// Ca
 	if( ev == 0 )
 		return;
 
-//	GRStaff * staff = ev->getGRStaff();
-//	const float currLSpace = staff->getStaffLSPACE();
-//	const float halfSpace = float(0.5) * currLSpace;
-//	const float linesCount = staff->getNumlines();
-
 	NVPoint newPoint (inPos);
-
 	switch( mArticulationFlag )
 	{
 		case kFlagStaccato:		placeStaccato( ev, newPoint );		break;
 		case kFlagStaccmo:		placeStaccmo( ev, newPoint);		break;
 		case kFlagAccent:		placeAccent( ev, newPoint );		break;
 		case kFlagMarcato:		placeMarcato( ev, newPoint );		break;
-        case kFlagMarcatoUp:	placeMarcatoUp( ev, newPoint );		break;
-        case kFlagMarcatoDown:	placeMarcatoDown( ev, newPoint );	break;
+        case kFlagMarcatoUp:	placeMarcatoAbove( ev, newPoint );	break;
+        case kFlagMarcatoDown:	placeMarcatoBelow( ev, newPoint );	break;
 		case kFlagTenuto:		placeTenuto( ev, newPoint );		break;
-		case kFlagFermataUp:	placeFermataUp( ev, newPoint );		break;
-		case kFlagFermataDown:	placeFermataDown(ev, newPoint );	break;
+		case kFlagFermataUp:	placeFermataAbove( ev, newPoint );	break;
+		case kFlagFermataDown:	placeFermataBelow(ev, newPoint );	break;
 		case kFlagBreathMark:	placeBreathMark( ev, newPoint );	break;
 		case kFlagPizz :		placePizz (ev, newPoint);			break;
 		case kFlagHarmonic :	placeHarmonic(ev, newPoint);		break;
 	}
 
 	setPosition( newPoint );
-
 	// - TEST, Update bounding box, but only if we're not a breath-mark
 	if( mArticulationFlag != kFlagBreathMark )
 	{
@@ -460,158 +478,286 @@ void GRArticulation::tellPosition(GObject * caller, const NVPoint & inPos)	// Ca
 // The staccato has the highest priority. It is placed first, close to the note.
 void GRArticulation::placeStaccato( GREvent * inParent, NVPoint & ioPos )
 {
-	const int dir = chooseDirection( inParent );
-	const bool upward = (dir == dirUP);
+	GRStaff * staff = inParent->getGRStaff();
+	float space = staff->getStaffLSPACE();
+	const float hspace = space * 0.5;
 
-	placeAfterNote( inParent, ioPos, upward );
-}
-
-void GRArticulation::placeStaccmo( GREvent * inParent, NVPoint & ioPos )
-{
-	const int dir = chooseDirection( inParent );
-	const bool upward = (dir == dirUP);
-
-	setStaccmoDirection( upward );
-	placeAfterNote( inParent, ioPos, upward );
+	if (getPlacement( inParent ) == ARArticulation::kAbove) {
+		double topMax = min(inParent->getStemEndPos().y, inParent->getPosition().y) - space;
+		ioPos.y = onStaffLine (staff, topMax) ? topMax - hspace : topMax;
+	}
+	else {
+		double bottomMin = max(inParent->getStemEndPos().y, inParent->getPosition().y) + space;
+		ioPos.y = onStaffLine (staff, bottomMin) ? bottomMin + hspace : bottomMin;
+	}
 }
 
 // ----------------------------------------------------------------------------
-// 
-void GRArticulation::placePizz(GREvent * inParent, NVPoint & ioPos)
+// to be checked !!
+void GRArticulation::placeStaccmo( GREvent * inParent, NVPoint & ioPos )
 {
-	const int dir = chooseDirection (inParent);
-	const bool upward = (dir == dirUP);
+	setStaccmoDirection( getPlacement( inParent ) == ARArticulation::kAbove );
 
 	GRStaff * staff = inParent->getGRStaff();
-	const float currLSpace = staff->getStaffLSPACE();
-	//const float halfSpace = float(0.5) * currLSpace;
+	float space = staff->getStaffLSPACE();
+	const float hspace = space * 0.5;
 
-	if( upward )	// if stemsDown
-	{
-		placeAfterNote( inParent, ioPos, true );
+	if (getPlacement( inParent ) == ARArticulation::kAbove) {
+		double topMax = min(inParent->getStemEndPos().y, inParent->getPosition().y) - hspace;
+		// ensure the position is outside the staff
+		if (topMax > -space) topMax = -space;
+		ioPos.y = onStaffLine (staff, topMax) ? topMax - hspace : topMax;
 	}
-	else	// if stemsUp
-	{
-		ioPos.y = (ioPos.y >= inParent->getStemLength()) ? -currLSpace : ioPos.y - (inParent->getStemLength()+currLSpace);
+	else {
+		const float bottom = staffBottom(staff) + space*0.65;
+		double bottomMin = max(inParent->getStemEndPos().y, inParent->getPosition().y) + space;
+		// ensure the position is outside the staff
+		if (bottomMin <= bottom) bottomMin = bottom;
+		ioPos.y = onStaffLine (staff, bottomMin) ? bottomMin + hspace : bottomMin;
+	}
+}
+
+// ----------------------------------------------------------------------------
+void GRArticulation::placePizz(GREvent * inParent, NVPoint & ioPos)
+{
+	GRStaff * staff = inParent->getGRStaff();
+	float space = staff->getStaffLSPACE();
+	const float minSpace = space * 1.5;
+
+	if (getPlacement( inParent ) == ARArticulation::kAbove) {
+		double topMax = min(-space, inParent->getStemEndPos().y - space);
+		topMax = min(topMax, double(inParent->getPosition().y - minSpace));
+		if (topMax > -space) topMax = -space;
+		topMax = resolveCollisionAbove(inParent, topMax, space*1.2, kFlagMarcato | kFlagMarcatoUp | kFlagAccent | kFlagFermataUp);
+		ioPos.y = topMax;
+	}
+	else {
+		const float bottom = staffBottom(staff) + space*1.1;
+		double bottomMin = max(inParent->getStemEndPos().y, inParent->getPosition().y) + minSpace;
+		// ensure the position is outside the staff
+		if (bottomMin <= bottom) bottomMin = bottom;
+		bottomMin = resolveCollisionBelow(inParent, bottomMin, space*1.1, kFlagMarcato | kFlagMarcatoDown | kFlagAccent | kFlagFermataDown);
+		ioPos.y = bottomMin;
 	}
 }
 
 //-----------------------------------------------------------------------------
-// outside the staff prefered
+// avoid collisions with other articulations when above the staff
+double GRArticulation::resolveCollisionAbove (GREvent * inParent, double currentpos, float minSpace, int skiptypes) const
+{
+	const GRNEList& articulations = inParent->getArticulations();
+	for (GRNEList::const_iterator i = articulations.begin(); i != articulations.end(); i++) {
+		if (*i == this) continue;
+
+		GRArticulation* grart = dynamic_cast<GRArticulation*>(*i);
+		int type = grart ? grart->getArticulationType() : 0;
+		if (type & skiptypes) continue;
+
+		double y = (*i)->getPosition().y;
+		if (y <= (currentpos + minSpace)) currentpos = y - minSpace;
+	}
+	return currentpos;
+}
+
+//-----------------------------------------------------------------------------
+// avoid collisions with other articulations when above the staff
+double GRArticulation::resolveCollisionBelow (GREvent * inParent, double currentpos, float minSpace, int skiptypes) const
+{
+	const GRNEList& articulations = inParent->getArticulations();
+	for (GRNEList::const_iterator i = articulations.begin(); i != articulations.end(); i++) {
+		if (*i == this) continue;
+
+		GRArticulation* grart = dynamic_cast<GRArticulation*>(*i);
+		int type = grart ? grart->getArticulationType() : 0;
+		if (type & skiptypes) continue;
+
+		double y = (*i)->getPosition().y;
+		if (y >= (currentpos - minSpace)) currentpos = y + minSpace;
+	}
+	return currentpos;
+}
+
+//-----------------------------------------------------------------------------
+bool GRArticulation::onStaffLine (const GRStaff * staff, double pos) const
+{
+	if (pos <  0) return false;
+	int linesCount = staff->getNumlines();
+	float lspace = staff->getStaffLSPACE();
+	if (pos > (linesCount - 1) * lspace) return false;
+	
+	double curpos = 0;
+	for (int i=0; i < linesCount; i++, curpos+=lspace ) {
+		if (pos == curpos) return true;
+	}
+	return false;
+}
+
+//-----------------------------------------------------------------------------
+double GRArticulation::staffBottom (const GRStaff * staff) const
+{
+	int linesCount = staff->getNumlines();
+	float lspace = staff->getStaffLSPACE();
+	return (linesCount - 1) * lspace;
+}
+
+//-----------------------------------------------------------------------------
 void GRArticulation::placeAccent( GREvent * inParent, NVPoint & ioPos )
 {
-//	placeOutsideStaff( inParent, ioPos );
-	const int dir = chooseDirection( inParent );
-	const bool upward = (dir == dirUP);
+	const int placement = getPlacement( inParent );
+	if (placement == ARArticulation::kAbove)
+		placeAccentAbove(inParent, ioPos);
+	else
+		placeAccentBelow(inParent, ioPos);
+}
 
-	placeAfterNote( inParent, ioPos, upward );
+// ----------------------------------------------------------------------------
+void GRArticulation::placeAccentAbove( GREvent * inParent, NVPoint & ioPos )
+{
+	GRStaff * staff = inParent->getGRStaff();
+	const float space = staff->getStaffLSPACE();
+	const float topspace = space;
+	const float minSpace = space * 1.5;
+
+	// check the minimum y position regarding note position and stems
+	double topMax = min(inParent->getStemEndPos().y, inParent->getPosition().y) - minSpace;
+	// ensure the position is outside the staff
+	if (topMax > -topspace) topMax = -topspace;
+	// avoid collisions with other articulations
+	ioPos.y = resolveCollisionAbove(inParent, topMax, minSpace, kFlagFermataUp | kFlagMarcato | kFlagMarcatoUp);
+}
+
+// ----------------------------------------------------------------------------
+void GRArticulation::placeAccentBelow( GREvent * inParent, NVPoint & ioPos )
+{
+	GRStaff * staff = inParent->getGRStaff();
+	float space = staff->getStaffLSPACE();
+	const float minSpace = space * 1.5;
+	const float bottom = staffBottom(staff) + space;
+
+	// check the minimum y position regarding note position and stems
+	double bottomMin = max(inParent->getStemEndPos().y, inParent->getPosition().y) + minSpace;
+	// ensure the position is outside the staff
+	if (bottomMin <= bottom) bottomMin = bottom;
+	ioPos.y = resolveCollisionBelow(inParent, bottomMin, minSpace, kFlagFermataDown | kFlagMarcato | kFlagMarcatoDown);
 }
 
 // ----------------------------------------------------------------------------
 // outside the staff prefered
 void GRArticulation::placeMarcato( GREvent * inParent, NVPoint & ioPos )
 {
-//	placeOutsideStaff( inParent, ioPos );
-	const int dir = chooseDirection( inParent );
-	const bool upward = (dir == dirUP);
+	// default position for strong accent is above the stave, regardless of stems direction
+	// see Gould - Behind bars - p.117
+	placeMarcatoAbove (inParent, ioPos);
+}
 
-	setMarcatoDirection( upward );
-	placeAfterNote( inParent, ioPos, upward );
+// ----------------------------------------------------------------------------
+void GRArticulation::placeMarcatoAbove( GREvent * inParent, NVPoint & ioPos )
+{
+	GRStaff * staff = inParent->getGRStaff();
+	const float space = staff->getStaffLSPACE();
+	const bool above = true;
+	const float minSpace = space * 1.5;
+
+	setMarcatoDirection( above );
+	// check the minimum y position regarding note position and stems
+	double topMax = min(-space, inParent->getStemEndPos().y - space);
+	topMax = min(topMax, double(inParent->getPosition().y - minSpace));
+
+	ioPos.y = resolveCollisionAbove(inParent, topMax, minSpace, kFlagFermataUp | kFlagMarcato | kFlagMarcatoUp);
 }
 
 // ----------------------------------------------------------------------------
 // outside the staff prefered
-void GRArticulation::placeMarcatoUp( GREvent * inParent, NVPoint & ioPos )
+void GRArticulation::placeMarcatoBelow( GREvent * inParent, NVPoint & ioPos )
 {
-	const bool upward = true;
+	GRStaff * staff = inParent->getGRStaff();
+	float space = staff->getStaffLSPACE();
+	const float minSpace = space * 1.5;
+	const float bottom = staffBottom(staff) + space;
+	const bool above = false;
 
-	setMarcatoDirection( upward );
-	placeAfterNote( inParent, ioPos, upward );
-}
+	setMarcatoDirection( above );
+	// check the minimum y position regarding note position and stems
+	double bottomMin = max(bottom, inParent->getStemEndPos().y + space);
+	bottomMin = max(bottomMin, double(inParent->getPosition().y + minSpace));
 
-// ----------------------------------------------------------------------------
-// outside the staff prefered
-void GRArticulation::placeMarcatoDown( GREvent * inParent, NVPoint & ioPos )
-{
-	const bool upward = false;
-
-	setMarcatoDirection( upward );
-	placeAfterNote( inParent, ioPos, upward );
+	ioPos.y = resolveCollisionBelow(inParent, bottomMin, minSpace, kFlagFermataDown | kFlagMarcato | kFlagMarcatoDown);
 }
 
 // ----------------------------------------------------------------------------
 // The tenuto is placed just after the staccato, if any
 void GRArticulation::placeTenuto( GREvent * inParent, NVPoint & ioPos )
 {
-//	placeCloseToNote( inParent, ioPos );
-	const int dir = chooseDirection( inParent );
-	const bool upward = (dir == dirUP);
+	GRStaff * staff = inParent->getGRStaff();
+	float space = staff->getStaffLSPACE();
+	const float hspace = space * 0.5;
 
-	placeAfterNote( inParent, ioPos, upward );
+	if (getPlacement( inParent ) == ARArticulation::kAbove) {
+		double topMax = min(inParent->getStemEndPos().y, inParent->getPosition().y) - space;
+		topMax = resolveCollisionAbove(inParent, topMax, hspace, ~kFlagStaccato);
+		if (onStaffLine (staff, topMax))	topMax -= hspace;
+		ioPos.y = topMax;
+	}
+	else {
+		double bottomMin = max(inParent->getStemEndPos().y, inParent->getPosition().y) + space;
+		bottomMin = resolveCollisionBelow(inParent, bottomMin, hspace, ~kFlagStaccato);
+		if (onStaffLine (staff, bottomMin)) bottomMin += hspace;
+		ioPos.y = bottomMin;
+	}
 }
 
 // ----------------------------------------------------------------------------
 // harmonic
 void GRArticulation::placeHarmonic(GREvent * inParent, NVPoint & ioPos)
 {
-	const int dir = chooseDirection (inParent);
-	const bool othersAreUpward = (dir == dirUP);
+	GRStaff * staff = inParent->getGRStaff();
+	double space = staff->getStaffLSPACE();
+	const double minSpace = space * 1.5;
+	const double hspace = space * 0.5;
+	const double hhspace = hspace * 0.5;
 
-	/*GRStaff * staff = inParent->getGRStaff();
-	const float currLSpace = staff->getStaffLSPACE();
-	const float halfSpace = float(0.5)*currLSpace;*/
+	if (getPlacement( inParent ) == ARArticulation::kAbove) {
+		double topMax = min(-space*0.15, inParent->getStemEndPos().y - hhspace);
+		topMax = min(topMax, double(inParent->getPosition().y - space * 0.7));
+		topMax = resolveCollisionAbove(inParent, topMax, hspace, kFlagPizz | kFlagMarcato | kFlagMarcatoUp | kFlagAccent | kFlagFermataUp);
+		ioPos.y = topMax;
+	}
+	else {
+		const double bottom = staffBottom(staff) + minSpace;
+		double bottomMin = max(bottom, inParent->getStemEndPos().y + space*1.2);
+		bottomMin = max(bottomMin, inParent->getPosition().y + space * 1.6);
+		bottomMin = resolveCollisionBelow(inParent, bottomMin, minSpace, kFlagPizz | kFlagMarcato | kFlagMarcatoDown | kFlagAccent | kFlagFermataDown);
+		ioPos.y = bottomMin;
+	}
 
-	if (othersAreUpward) // if stemsDown
-	{
-		placeAfterNote(inParent, ioPos, true);
-	}
-	else // if stemsDown
-	{
-		ioPos.y = (ioPos.y >= inParent->getStemLength()) ? 0 : ioPos.y - (inParent->getStemLength());
-	}
 }
 
 // ----------------------------------------------------------------------------
-void GRArticulation::placeFermataUp( GREvent * inParent, NVPoint & ioPos )
+void GRArticulation::placeFermataAbove( GREvent * inParent, NVPoint & ioPos )
 {
-	// - Check if the fermata (which is always upward) is on the
-	// same side as other articulations (if any)
-	const int dir = chooseDirection( inParent );	
-	const bool othersAreUpward = (dir == dirUP);
-
 	GRStaff * staff = inParent->getGRStaff();
-	const float currLSpace = staff->getStaffLSPACE();
-	/*const float halfSpace = float(0.5) * currLSpace;*/
+	const float space = staff->getStaffLSPACE();
+	const float hspace = space * 0.5;
 
-	if( othersAreUpward )	// if stemsDown
-	{
-		placeAfterNote( inParent, ioPos, true );
-	}
-	else	// if stemsUp
-	{
-		ioPos.y = (ioPos.y >= inParent->getStemLength()) ? 0 : ioPos.y - (inParent->getStemLength());
-		if (inParent->hasArticulation(kFlagPizz))
-			ioPos.y -= (1.5f*currLSpace);
-	}
+	// check the minimum y position regarding note position and stems
+	double topMax = min(0.f, inParent->getStemEndPos().y);
+	topMax = min(topMax, double(inParent->getPosition().y - hspace));
+	// avoid collisions with other articulations
+	ioPos.y = resolveCollisionAbove(inParent, topMax, space, kFlagFermataUp);
 }
 
-void GRArticulation::placeFermataDown(GREvent * inParent, NVPoint & ioPos)
+void GRArticulation::placeFermataBelow(GREvent * inParent, NVPoint & ioPos)
 {
-	const int dir = chooseDirection(inParent);
-	const bool othersAreUpward = (dir == dirUP);
-	
 	GRStaff * staff = inParent->getGRStaff();
-	const float currLSpace = staff->getStaffLSPACE();
-	
-	if (othersAreUpward)	//stemsDown
-	{
-		ioPos.y = (ioPos.y + inParent->getStemLength() <= float(4)*currLSpace) ? 
-			float(4.5f)*currLSpace : ioPos.y + (inParent->getStemLength()) + 0.5f*currLSpace; //test placement
-	}
-	else
-	{
-		placeAfterNote(inParent, ioPos, false);
-	}
+	float space = staff->getStaffLSPACE();
+	const float bottom = staffBottom(staff) + space * 0.5;
+
+	// check the minimum y position regarding note position and stems
+	double bottomMin = max(inParent->getStemEndPos().y, inParent->getPosition().y) + space;
+	// ensure the position is outside the staff
+	if (bottomMin <= bottom) bottomMin = bottom;
+	// avoid collisions with other articulations
+	ioPos.y = resolveCollisionBelow(inParent, bottomMin, space*1.5, kFlagFermataDown);
 }
 
 // ----------------------------------------------------------------------------
@@ -628,13 +774,24 @@ void GRArticulation::placeBreathMark( GREvent * inParent, NVPoint & ioPos )
 }
 
 // ----------------------------------------------------------------------------
-GDirection GRArticulation::chooseDirection( GREvent * inParent ) const
+// gives the ARArticulation setting
+int GRArticulation::getARPlacement() const {
+	ARArticulation* art = dynamic_cast<ARArticulation*>(getAbstractRepresentation());
+	return art ? art->getArticulationPosition() : ARArticulation::kDefaultPosition;
+}
+
+// ----------------------------------------------------------------------------
+// gives an ARArticulation placement
+int GRArticulation::getPlacement( GREvent * inParent ) const
 {
+	int arplacement = getARPlacement();
+	if (arplacement) return arplacement;
+
 	const GRSingleNote * sng = dynamic_cast<GRSingleNote *>(inParent);
 	if( sng && sng->getDirection() == dirUP )
-		return dirDOWN;
+		return ARArticulation::kBelow;
 	else 
-		return dirUP;
+		return ARArticulation::kAbove;
 }
 
 // ----------------------------------------------------------------------------
@@ -652,136 +809,136 @@ GDirection GRArticulation::chooseDirection( GREvent * inParent ) const
 	The Fermata has the priority 4. These articulations must be outside the staff.
 */
 
-void GRArticulation::placeAfterNote( GREvent * inParent, NVPoint & ioPos, bool upward )
-{
-	GRStaff * staff = inParent->getGRStaff();
-	const float space = staff->getStaffLSPACE();
-	const float halfSpace = float(0.5) * space;
-
-	const int externalFlags = (kFlagAccent | kFlagMarcato | kFlagFermataUp);
-	const bool hasExternal = inParent->hasArticulation( externalFlags );
-
-	if( upward )
-	{
-		// -- Walk from the note through the possible attribute positions 
-		// Stop when we've reached our attribute position.
-
-		// - Starts at one space from the note.
-		ioPos.y -= space;	
-		if(( ioPos.y >= 0 ) && positionIsOnStaffLine( ioPos.y, space ))
-			ioPos.y -= halfSpace;
-	
-		// - If we have internal mixed with externals, don't start deeper
-		// than one linespace 
-		if( hasExternal && ( ioPos.y > halfSpace ))
-			ioPos.y = halfSpace;
-	
-		// - If we're a staccato or a staccatissimo, we have finished.
-		if(( mArticulationFlag & ( kFlagStaccato )) != 0 )
-			return;	
-
-		// - Move by one position if we passed an existing staccato or staccatissimo
-		if( inParent->hasArticulation( kFlagStaccato ))
-			ioPos.y += (ioPos.y > 0) ? -space : -halfSpace;
-		
-		// - If we're a tenuto, then we have finished.
-		if( mArticulationFlag == kFlagTenuto )
-			return;	
-
-		// - Move by one position if we passed an existing tenuto
-		if( inParent->hasArticulation( kFlagTenuto ))
-			ioPos.y += (ioPos.y > 0) ? -space : -halfSpace;
-
-		// - So, we're an outside-staff symbol, force being outside-staff.	
-		/*if( ioPos.y > -space )
-			ioPos.y = -space;
-		else
-			ioPos.y -= halfSpace;*/
-		if (ioPos.y > -halfSpace)
-			ioPos.y = -halfSpace;
-		else
-			/*ioPos.y -= halfSpace*/; // only if...
-
-		// - If we're a pizzicato then we have finished
-		if((mArticulationFlag & (kFlagPizz)) != 0)
-			{
-				ioPos.y -= halfSpace;
-				return;
-			}
-			
-		// - Move by one linespace and a half if we passed an existing pizzicato
-		if (inParent->hasArticulation(kFlagPizz))
-			ioPos.y -= (1.5f*space);
-
-		// - If we're an Accent or a Marcato, then we have finished.
-		if(( mArticulationFlag & (kFlagAccent | kFlagMarcato)) != 0 )
-			{
-			ioPos.y -= halfSpace;
-			return;	
-			}
-
-		// - Move by one position if we passed an existing Accent,
-		// or by 1.5 positions if we passed an existing Marcato
-		if( inParent->hasArticulation( kFlagAccent ))
-			ioPos.y -= space; 
-		else 
-		{
-			if( inParent->hasArticulation( kFlagMarcato ))
-			ioPos.y -= (space + halfSpace);
-			else
-			ioPos.y += halfSpace; // it's a fermata : we need one less halfspace
-		}
-	}
-	else
-	{
-		int linesCount = staff->getNumlines();
-		const float bottom = (linesCount - 1) * space;
-		
-		ioPos.y += space;	
-		if(( ioPos.y <= bottom ) && positionIsOnStaffLine( ioPos.y, space ))
-			ioPos.y += halfSpace;
-	
-		// - If we have internal mixed with externals, don't start deeper
-		// than one linespace 
-		if( hasExternal && ( ioPos.y < ( bottom - halfSpace )))
-			ioPos.y = (bottom - halfSpace);
-	
-		// - If we're a staccato or a staccatissimo, we have finished.
-		if(( mArticulationFlag & (kFlagStaccato)) != 0 )
-			return;	
-
-		// - Move by one position if we passed an existing staccato or staccatissimo
-		if( inParent->hasArticulation( kFlagStaccato ))
-			ioPos.y += (ioPos.y < bottom) ? space : halfSpace;
-		
-		// - If we're a tenuto, then we have finished.
-		if( mArticulationFlag == kFlagTenuto )
-			return;	
-
-		// - Move by one position if we passed an existing tenuto
-		if( inParent->hasArticulation( kFlagTenuto ))
-			ioPos.y += (ioPos.y < bottom) ? space : halfSpace;
-
-		// - So, we're an outside-staff symbol, force being outside-staff.	
-		if( ioPos.y < ( bottom + halfSpace ))
-			ioPos.y = ( bottom + halfSpace );
-		else
-			/*ioPos.y += space*/; // ?
-
-		// - If we're an Accent or a Marcato, then we have finished.
-		if(( mArticulationFlag & (kFlagAccent | kFlagMarcato)) != 0 )
-		{
-			ioPos.y += halfSpace;
-			return;	
-		}
-		// - Move by one position if we passed an existing Accent,
-		// or by 1.5 positions if we passed an existing Marcato
-		if( inParent->hasArticulation( kFlagAccent ))
-			ioPos.y += (space + halfSpace); 
-		else if( inParent->hasArticulation( kFlagMarcato ))
-			ioPos.y += 2 * space;
-	}
-}
+//void GRArticulation::placeAfterNote( GREvent * inParent, NVPoint & ioPos, bool above )
+//{
+//	GRStaff * staff = inParent->getGRStaff();
+//	const float space = staff->getStaffLSPACE();
+//	const float halfSpace = float(0.5) * space;
+//
+//	const int externalFlags = (kFlagAccent | kFlagMarcato | kFlagFermataUp);
+//	const bool hasExternal = inParent->hasArticulation( externalFlags );
+//
+//	if( above )
+//	{
+//		// -- Walk from the note through the possible attribute positions 
+//		// Stop when we've reached our attribute position.
+//
+//		// - Starts at one space from the note.
+//		ioPos.y -= space;	
+//		if(( ioPos.y >= 0 ) && positionIsOnStaffLine( ioPos.y, space ))
+//			ioPos.y -= halfSpace;
+//	
+//		// - If we have internal mixed with externals, don't start deeper
+//		// than one linespace 
+//		if( hasExternal && ( ioPos.y > halfSpace ))
+//			ioPos.y = halfSpace;
+//	
+//		// - If we're a staccato or a staccatissimo, we have finished.
+//		if(( mArticulationFlag & ( kFlagStaccato )) != 0 )
+//			return;	
+//
+//		// - Move by one position if we passed an existing staccato or staccatissimo
+//		if( inParent->hasArticulation( kFlagStaccato ))
+//			ioPos.y += (ioPos.y > 0) ? -space : -halfSpace;
+//		
+//		// - If we're a tenuto, then we have finished.
+//		if( mArticulationFlag == kFlagTenuto )
+//			return;	
+//
+//		// - Move by one position if we passed an existing tenuto
+//		if( inParent->hasArticulation( kFlagTenuto ))
+//			ioPos.y += (ioPos.y > 0) ? -space : -halfSpace;
+//
+//		// - So, we're an outside-staff symbol, force being outside-staff.	
+//		/*if( ioPos.y > -space )
+//			ioPos.y = -space;
+//		else
+//			ioPos.y -= halfSpace;*/
+//		if (ioPos.y > -halfSpace)
+//			ioPos.y = -halfSpace;
+//		else
+//			/*ioPos.y -= halfSpace*/; // only if...
+//
+//		// - If we're a pizzicato then we have finished
+//		if (mArticulationFlag & (kFlagPizz))
+//			{
+//				ioPos.y -= halfSpace;
+//				return;
+//			}
+//			
+//		// - Move by one linespace and a half if we passed an existing pizzicato
+//		if (inParent->hasArticulation(kFlagPizz))
+//			ioPos.y -= (1.5f*space);
+//
+//		// - If we're an Accent or a Marcato, then we have finished.
+//		if ( mArticulationFlag & (kFlagAccent + kFlagMarcato + kFlagMarcatoUp))
+//			{
+//			ioPos.y -= halfSpace;
+//			return;	
+//			}
+//
+//		// - Move by one position if we passed an existing Accent,
+//		// or by 1.5 positions if we passed an existing Marcato
+//		if ( inParent->hasArticulation( kFlagAccent ))
+//			ioPos.y -= space; 
+//		else 
+//		{
+//			if( inParent->hasArticulation( kFlagMarcato ))
+//			ioPos.y -= (space + halfSpace);
+//			else
+//			ioPos.y += halfSpace; // it's a fermata : we need one less halfspace
+//		}
+//	}
+//	else
+//	{
+//		int linesCount = staff->getNumlines();
+//		const float bottom = (linesCount - 1) * space;
+//		
+//		ioPos.y += space;	
+//		if(( ioPos.y <= bottom ) && positionIsOnStaffLine( ioPos.y, space ))
+//			ioPos.y += halfSpace;
+//	
+//		// - If we have internal mixed with externals, don't start deeper
+//		// than one linespace 
+//		if( hasExternal && ( ioPos.y < ( bottom - halfSpace )))
+//			ioPos.y = (bottom - halfSpace);
+//	
+//		// - If we're a staccato or a staccatissimo, we have finished.
+//		if(( mArticulationFlag & (kFlagStaccato)) != 0 )
+//			return;	
+//
+//		// - Move by one position if we passed an existing staccato or staccatissimo
+//		if( inParent->hasArticulation( kFlagStaccato ))
+//			ioPos.y += (ioPos.y < bottom) ? space : halfSpace;
+//		
+//		// - If we're a tenuto, then we have finished.
+//		if( mArticulationFlag == kFlagTenuto )
+//			return;	
+//
+//		// - Move by one position if we passed an existing tenuto
+//		if( inParent->hasArticulation( kFlagTenuto ))
+//			ioPos.y += (ioPos.y < bottom) ? space : halfSpace;
+//
+//		// - So, we're an outside-staff symbol, force being outside-staff.	
+//		if( ioPos.y < ( bottom + halfSpace ))
+//			ioPos.y = ( bottom + halfSpace );
+//		else
+//			/*ioPos.y += space*/; // ?
+//
+//		// - If we're an Accent or a Marcato, then we have finished.
+//		if ( mArticulationFlag & (kFlagAccent + kFlagMarcato + kFlagMarcatoDown))
+//		{
+//			ioPos.y += halfSpace;
+//			return;	
+//		}
+//		// - Move by one position if we passed an existing Accent,
+//		// or by 1.5 positions if we passed an existing Marcato
+//		if( inParent->hasArticulation( kFlagAccent ))
+//			ioPos.y += (space + halfSpace); 
+//		else if( inParent->hasArticulation( kFlagMarcato ))
+//			ioPos.y += 2 * space;
+//	}
+//}
 
 
 const NVPoint & GRArticulation::getReferencePosition() const
@@ -818,5 +975,6 @@ void GRArticulation::GGSOutput() const
 
 void GRArticulation::OnDraw(VGDevice & hdc) const
 {
+//cout << "GRArticulation::OnDraw" << endl;
 	GRTagARNotationElement::OnDraw(hdc);
 }

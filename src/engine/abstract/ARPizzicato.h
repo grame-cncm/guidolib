@@ -14,19 +14,19 @@
 
 */
 
-#include "ARMTParameter.h"
-#include "ARPositionTag.h"
+#include "ARArticulation.h"
 
 /*brief	The pizzicato articulation tag */
 
-class ARPizzicato : public ARMTParameter, public ARPositionTag
+class ARPizzicato : public ARArticulation
 {
 public :
-	enum			tTypePizz {SNAP, BUZZ, FINGERNAIL, LEFTHAND};
+	enum	tTypePizz {SNAP, BUZZ, FINGERNAIL, LEFTHAND};
 
-	ARPizzicato() : ARMTParameter() {
+	ARPizzicato() {
 		rangesetting = ONLY;
-		type = LEFTHAND;
+		fType = LEFTHAND;
+		fPosition = kAbove;
 	}
 
 	virtual		~ARPizzicato() { };
@@ -37,13 +37,12 @@ public :
 	virtual void printGMNName(std::ostream& os) const;
 	virtual void printParameters(std::ostream& os) const;
 	
-	tTypePizz	 getType() const {return type;}
+	tTypePizz	 getType() const {return fType;}
 	
 protected:
 
 	static ListOfTPLs ltpls;
-	tTypePizz type;
-	
+	tTypePizz fType;	
 };
 
 #endif

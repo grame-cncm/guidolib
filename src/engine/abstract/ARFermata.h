@@ -15,8 +15,7 @@
 
 */
 
-#include "ARMTParameter.h"
-#include "ARPositionTag.h"
+#include "ARArticulation.h"
 
 /* \brief Class ARFermata : abstract representation of a fermata. 
 
@@ -24,11 +23,10 @@
 	between two objects and has no duration.
 */
 
-class ARFermata : public ARMTParameter, public ARPositionTag
+class ARFermata : public ARArticulation
 {
 public:
 	enum			 tTypeFermata {SHORT, REGULAR, LONG};
-	enum			 tPositionFermata {ABOVE, BELOW};
 
 					 ARFermata();
 	virtual 		 ~ARFermata();
@@ -40,14 +38,12 @@ public:
 
 	virtual void	 browse(TimeUnwrap& mapper) const;
 
-	tTypeFermata	 getType() const {return type;};
-	tPositionFermata getPositionFermata() const {return position;};
+	tTypeFermata	 getType() const {return fType;};
 
 protected:
 
 	static ListOfTPLs ltpls;
-	tTypeFermata type;
-	tPositionFermata position;
+	tTypeFermata fType;
 };
 
 #endif

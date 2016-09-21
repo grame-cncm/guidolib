@@ -14,25 +14,19 @@
 
 */
 
-#include "ARMTParameter.h"
-#include "ARPositionTag.h"
+#include "ARArticulation.h"
 
 /*brief		The harmonic tag */
-
-class ARHarmonic : public ARMTParameter, public ARPositionTag
+class ARHarmonic : public ARArticulation
 {
 public :
-			 ARHarmonic() : ARMTParameter() { rangesetting = ONLY; }
+//			 ARHarmonic() : ARMTParameter() { rangesetting = ONLY; }
+			 ARHarmonic() { fPosition = kAbove; }
 	virtual ~ARHarmonic() {};
 			
-	virtual void setTagParameterList(TagParameterList & tpl);
-
     virtual void printName(std::ostream& os) const;
 	virtual void printGMNName(std::ostream& os) const;
 	virtual void printParameters(std::ostream& os) const;
-			
-protected:
-	static ListOfTPLs ltpls;
 };
 
 #endif

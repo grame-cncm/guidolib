@@ -21,6 +21,10 @@
 
 #include "TimeUnwrap.h"
 
+extern const char* kAboveStr;
+extern const char* kBelowStr;
+
+
 ListOfTPLs ARStaccato::ltpls(1);
 
 void ARStaccato::setTagParameterList(TagParameterList& tpl)
@@ -28,30 +32,39 @@ void ARStaccato::setTagParameterList(TagParameterList& tpl)
 	if (ltpls.GetCount() == 0)
 	{
 		// create a list of string ...
-
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(("S,type,,o"));
+		lstrs.AddTail(("S,type,,o;S,position,,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
 	TagParameterList *rtpl = NULL;
 	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
 
-	if (ret>=0 && rtpl)
+	if (ret==0 && rtpl)
 	{
 		// we found a match!
-		if (ret == 0)
+		TagParameterString * str = TagParameterString::cast(rtpl->RemoveHead());
+		assert(str);
+		if (str->TagIsSet())
 		{
-			TagParameterString * str = TagParameterString::cast(rtpl->RemoveHead());
-			assert(str);
-			if (str->TagIsSet())
-			{
-				if (str->getValue() == std::string("heavy"))
-					type = HEAVY;
-				else
-                    type = REGULAR;
+			if (str->getValue() == std::string("heavy"))
+				type = HEAVY;
+			else
+				type = REGULAR;
+		}
+		delete str;
+		
+		TagParameterString * ppos = TagParameterString::cast(rtpl->RemoveHead());
+		assert(ppos);
+		if (ppos->TagIsSet()) {
+			string posStr = ppos->getValue();
+			if (posStr == kAboveStr) {
+				fPosition = ARStaccato::kAbove;
 			}
-			delete str;
+			else if (posStr == kBelowStr) {
+				fPosition = ARStaccato::kBelow;
+			}
+			else cerr << posStr << ": incorrect staccato position" << endl;
 		}
 		delete rtpl;
 	}

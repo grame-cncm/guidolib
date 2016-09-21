@@ -15,26 +15,19 @@
 
 */
 
-#include "ARMTParameter.h"
-#include "ARPositionTag.h"
+#include "ARArticulation.h"
 
 /** \brief Staccato Tag
 */
-
-
-class ARStaccato : public ARMTParameter,  public ARPositionTag
+class ARStaccato : public ARArticulation
 {		
 public:			
 	enum		tTypeStacc {REGULAR, HEAVY};
 
 	virtual bool MatchEndTag(const char * s);
-	ARStaccato() : ARMTParameter()
-	{
-		rangesetting = ONLY;
-		type = REGULAR;
-	}
 
-	virtual ~ARStaccato() { /* delete TagParameterPointer ...*/	};
+			 ARStaccato() { type = REGULAR; }
+	virtual ~ARStaccato() {};
 
 	virtual void setTagParameterList(TagParameterList& tpl);
 
@@ -47,13 +40,6 @@ public:
 	tTypeStacc getType() const {return type;};
 
 protected:
-	// TagParameters ..
-	// TagParameterString *textformat;
-	// TagParameterFloat  *fsize;
-	// TagParameterInt	  *fnumber;
-
-	// this is important for allowed
-	// TagParameters ....
 	static ListOfTPLs ltpls;
 	tTypeStacc	type;
 };

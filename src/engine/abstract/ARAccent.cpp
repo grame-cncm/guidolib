@@ -20,46 +20,6 @@
 #include "TimeUnwrap.h"
 
 
-ListOfTPLs ARAccent::ltpls(1);
-
-void ARAccent::setTagParameterList(TagParameterList & tpl)
-{
-	if (ltpls.empty())
-	{
-		// create a list of string ...
-
-		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail((""
-			// "S,text,,r;U,dy,-1,o"
-			));
-		CreateListOfTPLs(ltpls,lstrs);
-	}
-
-	TagParameterList * rtpl = NULL;
-	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,& rtpl);
-
-	if (ret>=0 && rtpl)
-	{
-		// we found a match!
-		if (ret == 0)
-		{
-			// Get The TagParameters ...
-			// text = 
-			//	TagParameterString::cast(rtpl->RemoveHead());
-			//assert(text);
-
-		}
-
-		delete rtpl;
-	}
-	else
-	{
-		// failure
-	}
-
-	tpl.RemoveAll();
-}
-
 // --------------------------------------------------------------------------
 void ARAccent::browse(TimeUnwrap& mapper) const
 {

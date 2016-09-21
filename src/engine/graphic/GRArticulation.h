@@ -15,6 +15,8 @@
 
 */
 
+#include <map>
+
 #include "GRTagARNotationElement.h"
 #include "NVPoint.h"
 
@@ -23,17 +25,8 @@ class GRStaff;
 class ARMusicalTag;
 class GREvent;
 
-/*
-class GRArticulationContext
-{
-	public:
-	
-		GREvent * event;
-		GRStaff * staff;
-			
-};
-*/
-/** \brief Articulations: staccato, accent, marcato, 
+
+/** \brief Articulations: staccato, accent, marcato,
 			tenuto, fermata, breath-mark, harmonics
 */
 
@@ -67,7 +60,10 @@ class GRArticulation : public GRTagARNotationElement
 		virtual void OnDraw( VGDevice & hdc ) const;
 
 		
-		int	 getArticulationType() const { return mArticulationFlag; }
+		int	 getArticulationType() const	{ return mArticulationFlag; }
+		int	 getArticulationOrder() const	{ return sOrdering[mArticulationFlag]; }
+		int	 getARPlacement() const;		// gives the ARArticulation position
+		void print(ostream& os) const;
 
 	protected:
 	
@@ -79,8 +75,8 @@ class GRArticulation : public GRTagARNotationElement
 		void	setupFingernailPizz();
 		void	setupAccent();
 		void	setupMarcato();
-        void	setupMarcatoDown();
-        void	setupMarcatoUp();
+        void	setupMarcatoBelow();
+        void	setupMarcatoAbove();
 		void	setupTenuto();
 		void	setupFermataUp();
 		void	setupFermataDown();
@@ -95,31 +91,27 @@ class GRArticulation : public GRTagARNotationElement
 		void	placeStaccato( GREvent * inParent, NVPoint & ioPos );
 		void	placeStaccmo (GREvent * inParent, NVPoint & ioPos);
 		void	placePizz(GREvent * inParent, NVPoint & ioPos);
+
 		void	placeAccent( GREvent * inParent, NVPoint & ioPos );
+		void	placeAccentAbove( GREvent * inParent, NVPoint & ioPos );
+		void	placeAccentBelow( GREvent * inParent, NVPoint & ioPos );
+
 		void	placeMarcato( GREvent * inParent, NVPoint & ioPos );
-        void	placeMarcatoUp( GREvent * inParent, NVPoint & ioPos );
-        void	placeMarcatoDown( GREvent * inParent, NVPoint & ioPos );
+        void	placeMarcatoAbove( GREvent * inParent, NVPoint & ioPos );
+        void	placeMarcatoBelow( GREvent * inParent, NVPoint & ioPos );
+
 		void	placeTenuto( GREvent * inParent, NVPoint & ioPos );
-		void	placeFermataUp( GREvent * inParent, NVPoint & ioPos );
-		void	placeFermataDown( GREvent * inParent, NVPoint & ioPos );
+		void	placeFermataAbove( GREvent * inParent, NVPoint & ioPos );
+		void	placeFermataBelow( GREvent * inParent, NVPoint & ioPos );
 		void	placeHarmonic (GREvent * inParent, NVPoint & ioPos);
 		void	placeBreathMark( GREvent * inParent, NVPoint & ioPos );
 
 
-	//	void	placeCloseToNote( GREvent * inParent, NVPoint & ioPos );
-	//	void	placeOutsideStaff( GREvent * inParent, NVPoint & ioPos );
-
-		GDirection	chooseDirection( GREvent * inParent ) const;
-
-		void	placeAfterNote( GREvent * inParent, NVPoint & ioPos, 
-													bool upward );
+		int		getPlacement( GREvent * inParent ) const;		// gives an ARArticulation placement
 
 		void	setMarcatoDirection( bool upward );
 		void	setStaccmoDirection( bool upward);
 
-	//	bool	mOutsideStaffOnly;
-		
-	//	const type_info &tinfo; // could be replaced by the symbol constant ?
 		int		mArticulationFlag;
 
 		static NVPoint sRefposStacc;
@@ -141,8 +133,16 @@ class GRArticulation : public GRTagARNotationElement
 		static NVPoint sRefposLongFermataDown;
 		static NVPoint sRefposBreathMark;
 		static NVPoint sRefposHarmonic;
+
+		static std::map<int,int> sOrdering;
+
+	private:
+		double	resolveCollisionAbove (GREvent * inParent, double currentpos, float minspace, int skiptypes) const;
+		double	resolveCollisionBelow (GREvent * inParent, double currentpos, float minspace, int skiptypes) const;
+		double	staffBottom (const GRStaff * staff) const;
+		bool	onStaffLine (const GRStaff * staff, double pos) const;
+
+		void	initOrder ();
 };
 
 #endif
-
-

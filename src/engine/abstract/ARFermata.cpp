@@ -23,10 +23,13 @@
 
 ListOfTPLs ARFermata::ltpls(1);
 
+extern const char* kBelowStr;
+
 ARFermata::ARFermata()
 {
 	rangesetting = RANGEDC;
-	type = REGULAR;
+	fType = REGULAR;
+	fPosition = ARArticulation::kAbove;
 }
 
 ARFermata::~ARFermata()
@@ -58,31 +61,35 @@ void ARFermata::setTagParameterList(TagParameterList & tpl)
 
 			if (str->TagIsSet()) {
 				if (shortstr == str->getValue())
-					type = SHORT;
+					fType = SHORT;
 				else if (longstr == str->getValue())
-					type = LONG;
+					fType = LONG;
 				else
-                    type = REGULAR;
+                    fType = REGULAR;
 			}
 
 			delete str;
 		
 			str = TagParameterString::cast(rtpl->RemoveHead());
 			assert(str);
+			if (str->TagIsSet()) {
+				string posStr = str->getValue();
+				if (posStr == kBelowStr) {
+					fPosition = ARArticulation::kBelow;
+				}
+				else cerr << posStr << ": incorrect staccato position" << endl;
+			}
 
-			if (str->TagIsSet() && (below == str->getValue()))
-				position = BELOW;
-			else 
-                position = ABOVE;
+//			if (str->TagIsSet() && (below == str->getValue()))
+//				fPosition = BELOW;
+//			else 
+//                fPosition = ABOVE;
 			
 			delete str;
 		}
-
 		delete rtpl;
 	}
-
 	tpl.RemoveAll();
-
 }
 
 // --------------------------------------------------------------------------
@@ -103,7 +110,7 @@ void ARFermata::printGMNName(std::ostream& os) const
 
 void ARFermata::printParameters(std::ostream& os) const
 {
-    switch (type) {
+    switch (fType) {
         case SHORT:
             os << "short";
             break;
@@ -117,11 +124,11 @@ void ARFermata::printParameters(std::ostream& os) const
 
     os << "; position: ";
 
-    switch (position) {
-        case BELOW:
+    switch (fPosition) {
+        case kBelow:
             os << "below";
             break;
-        case ABOVE:
+        case kAbove:
             os << "above";
             break;
     }
