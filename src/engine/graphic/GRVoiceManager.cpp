@@ -1798,7 +1798,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 		gCurMusic->addVoiceElement(arVoice,grgloc);
 
 	}
-	else if (tinf == typeid(ARChordTag)) // "{"
+	else if (tinf == typeid(ARChordTag))
 	{
 	}
 	else if (tinf == typeid(ARUserChordTag)) // "\chord"
@@ -1872,7 +1872,6 @@ void GRVoiceManager::checkEndPTags(GuidoPos tstpos)
 				else if (dynamic_cast<GRGlobalStem *>(g))
 				{
 					// the global-Stems ends...
-
 					if (g != curglobalstem && curglobalstem)
 					{
 						// then we have another stem...
@@ -1885,6 +1884,8 @@ void GRVoiceManager::checkEndPTags(GuidoPos tstpos)
 				{
 					// the global-Stems ends...
 					curgloballocation = NULL;
+					handleSharedArticulations (fSharedArticulations);
+					fSharedArticulations.clear();
 				}
 				else if (dynamic_cast<GRChordTag *>(g))
 				{
@@ -2057,7 +2058,13 @@ GRSingleNote * GRVoiceManager::CreateSingleNote( const TYPE_TIMEPOSITION & tp, A
 	while (pos)
 	{
 		GRNotationElement * el = dynamic_cast<GRNotationElement *>(grtags->GetNext(pos));
-		if (el)		el->addAssociation(grnote);
+		if (el)	{
+			GRRange * r = dynamic_cast<GRRange *>(el);
+			if (r && curgloballocation)
+				fSharedArticulations.push_back(make_pair(r, grnote));
+			else
+				el->addAssociation(grnote);
+		}
 	}
 	mCurGrStaff->addNotationElement(grnote);
 	gCurMusic->addVoiceElement(arVoice,grnote);
@@ -2412,3 +2419,58 @@ void GRVoiceManager::organizeBeaming(GRTag * grb)
 		}
 	}
 }
+
+//----------------------------------------------------------------------------------
+// shared articulations are articulations that are placed on shored locations like chord.
+// to avoid duplicate articulations, they are handled at the end of the shared location
+//----------------------------------------------------------------------------------
+void GRVoiceManager::handleSharedArticulations(const TSharedArticulationsList& list)
+{
+	size_t n = list.size();
+	if (!n) return;				// list is empty
+
+//cout << "GRVoiceManager::handleSharedArticulations size " << n << endl;
+	GRSingleNote* high = list[0].second;		// start to find the highest and lowest notes
+	GRSingleNote* low = high;
+	for ( size_t i = 1; i <n; i++) {
+		int pitch = list[i].second->getARNote()->getMidiPitch();
+		if (pitch > high->getARNote()->getMidiPitch()) {
+			high = list[i].second;
+		}
+		else if (pitch < low->getARNote()->getMidiPitch()) {
+			low = list[i].second;
+		}
+	}
+
+	int placement = ARArticulation::kDefaultPosition;
+
+	GRRange* r = list[0].first;
+	GDirection stemdir = high->getStemDirection();
+	low->setStemDirection(stemdir);			// required for a correct placement of the articulation
+	high->setStemDirection(stemdir);			// required for a correct placement of the articulation
+
+	ARArticulation* art = dynamic_cast<ARArticulation*>(r->getAbstractRepresentation());
+	if (art)  placement = art->getArticulationPosition();
+
+	if (placement == ARArticulation::kAbove)
+		r->addAssociation (high);
+	else if (placement == ARArticulation::kBelow)
+		r->addAssociation (low);
+	else {
+		switch (stemdir) {
+		case dirOFF:
+			r->addAssociation (high);
+			break;
+		case dirUP:
+			r->addAssociation (low);
+			break;
+		case dirDOWN:
+			r->addAssociation (high);
+			break;
+		case dirAUTO:
+			r->addAssociation (high);
+			break;
+		}
+	}
+}
+

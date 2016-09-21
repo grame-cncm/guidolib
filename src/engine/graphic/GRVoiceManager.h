@@ -47,6 +47,7 @@ class GRChordTag;
 class GRStaffManager;
 class GRTag;
 class GRSingleNote;
+class GRRange;
 class GRGlissando;
 
 typedef KF_IPointerList<GRTag> GRTagPointerList;
@@ -169,9 +170,12 @@ private:
 	GRSingleNote *	CreateSingleNote	(const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject, float size=0, bool isGrace=false);
 	void			AddRegularEvent		(GREvent * ev);
 	void			organizeGlissando(GRTag * g);
-	std::vector<GRBeam *> curbeam;
 	void			organizeBeaming(GRTag * grb);
 
+	std::vector<GRBeam *> curbeam;
+	typedef std::vector<std::pair<GRRange*, GRSingleNote*> >	TSharedArticulationsList;
+	TSharedArticulationsList fSharedArticulations;
+	void			handleSharedArticulations(const TSharedArticulationsList& list);
 };
 
 #endif
