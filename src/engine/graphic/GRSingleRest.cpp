@@ -28,6 +28,7 @@
 #include "GRSystemSlice.h"
 #include "GRGlue.h"
 #include "GRNoteDot.h"
+#include "GRArticulation.h"
 #include "VGDevice.h"
 
 //#define TRACE
@@ -173,13 +174,11 @@ void GRSingleRest::OnDraw( VGDevice & hdc ) const
 	DrawSubElements( hdc );		// - Draw elements (dots...)
 
 	// Draw articulations (fermata...)
-	const GRNEList * articulations = getArticulations();
-	if( articulations ) {
-		for( GRNEList::const_iterator ptr = articulations->begin(); ptr != articulations->end(); ++ptr )
-		{
-			GRNotationElement * el = *ptr;
-			el->OnDraw(hdc);
-		}
+	const GRNEList& articulations = getArticulations();
+	for( GRNEList::const_iterator ptr = articulations.begin(); ptr != articulations.end(); ++ptr )
+	{
+		GRArticulation * el = *ptr;
+		el->OnDraw(hdc);
 	}
 
 	if (gBoundingBoxesMap & kEventsBB)

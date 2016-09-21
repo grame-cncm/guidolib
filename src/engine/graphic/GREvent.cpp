@@ -30,6 +30,7 @@ using namespace std;
 #include "GRGlobalLocation.h"
 #include "GRNoteDot.h"
 #include "GRSingleRest.h"
+#include "GRArticulation.h"
 
 #include "GuidoDefs.h" // for LSPACE
 
@@ -37,7 +38,7 @@ using namespace std;
 GREvent::GREvent(GRStaff * inStaff,
 				 ARMusicalEvent * abstractRepresentationOfEvent, bool p_ownsAR)
   : GRARCompositeNotationElement(abstractRepresentationOfEvent,p_ownsAR),
-  mGlobalStem(NULL), mArtilist(0)
+  mGlobalStem(NULL)
 {
 	mFillsBar = false;
 	mBeamCount = 0;
@@ -63,7 +64,7 @@ GREvent::GREvent( GRStaff * inStaff,
 	const TYPE_TIMEPOSITION & theRelativeTimePositionOfGR,
 	const TYPE_DURATION & theDurationOfGR)
   : GRARCompositeNotationElement(abstractRepresentationOfEvent),
-  mGlobalStem(NULL), mArtilist(0)
+  mGlobalStem(NULL)
 {
 	assert(abstractRepresentationOfEvent);
 	assert(theRelativeTimePositionOfGR>=abstractRepresentationOfEvent->getRelativeTimePosition());
@@ -106,8 +107,10 @@ GREvent::GREvent( GRStaff * inStaff,
 
 GREvent::~GREvent()
 {
-	DeleteContent( mArtilist );
-	delete mArtilist; mArtilist = 0;
+	GRNEList::iterator i;
+    for( i = mArtilist.begin(); i != mArtilist.end(); i++ )
+		delete *i;
+	mArtilist.clear();
 	delete [] mColRef;
     mColRef = 0;
 }
@@ -243,25 +246,26 @@ int GREvent::adjustLength( const TYPE_DURATION & ndur )
 	return -1;
 }
 
+
+
+bool compareArticulations (GRArticulation* i,GRArticulation* j) {
+	return (i->getArticulationOrder() < j->getArticulationOrder());
+}
+
 // ----------------------------------------------------------------------------
-void 
-GREvent::setPosition( const NVPoint & inPos )
+void GREvent::setPosition( const NVPoint & inPos )
 {
 	// - Call inherited
 	GRARCompositeNotationElement::setPosition( inPos );
 	
-	// - Notify articulation using 'tell'
-	if (mArtilist)
-	{
-		GRNEList::iterator ptr;
-		for( ptr = mArtilist->begin(); ptr != mArtilist->end(); ++ptr )
-		{
-			GRNotationElement * el = *ptr;
-			el->tellPosition( this, getPosition());
-		}
-	}
+	GRNEList::iterator ptr;
 
-	// - 
+	sort (mArtilist.begin(), mArtilist.end(), compareArticulations);
+	for( ptr = mArtilist.begin(); ptr != mArtilist.end(); ++ptr )
+	{
+		GRNotationElement * el = *ptr;
+		el->tellPosition( this, getPosition());
+	}
 	updateBoundingBox();
 }
 
@@ -272,16 +276,12 @@ void GREvent::setHPosition( float nx )
 	GRARCompositeNotationElement::setHPosition(nx);
 	
 	// - Notify articulation using 'tell'
-	if (mArtilist)
+	GRNEList::iterator ptr;
+	for( ptr = mArtilist.begin(); ptr != mArtilist.end(); ++ptr )
 	{
-		GRNEList::iterator ptr;
-		for( ptr = mArtilist->begin(); ptr != mArtilist->end(); ++ptr )
-		{
-			GRNotationElement * el = *ptr;
-			el->tellPosition( this, getPosition());
-		}
+		GRNotationElement * el = *ptr;
+		el->tellPosition( this, getPosition());
 	}
-
 	updateBoundingBox();
 }
 
@@ -294,12 +294,9 @@ void GREvent::setHPosition( float nx )
 void 
 GREvent::addArticulation( ARMusicalTag * inTag )
 {
-	if( mArtilist == 0 )
-		mArtilist = new GRNEList; // owns elements.
-
 	const float space = mCurLSPACE; // (JB) was LSPACE
 	GRArticulation * newArticulation = new GRArticulation( inTag, space );
-	mArtilist->push_back( newArticulation );
+	mArtilist.push_back( newArticulation );
 	
 	// At this point, the articulation is not yet positionned, 
 	// it is just attached to the event.
@@ -307,8 +304,7 @@ GREvent::addArticulation( ARMusicalTag * inTag )
 	// DEBUG, try to place the articulation correctly. (OK, this fixes bugs)
 	newArticulation->tellPosition( this, getPosition());
 
-	mArticulationFlags |= newArticulation->getArticulationType(); // Avoids the use of 2 identical articulations 
-
+	mArticulationFlags |= newArticulation->getArticulationType(); // Avoids the use of 2 identical articulations
 	updateBoundingBox(); // ok ?
 }
 
@@ -320,18 +316,11 @@ void GREvent::updateBoundingBox()
 	return;
 
 	// - (JB) new: add articulations
-	const GRNEList * articulations = getArticulations();
-	if( articulations )
+	const GRNEList& articulations = getArticulations();
+	for( GRNEList::const_iterator ptr = articulations.begin(); ptr != articulations.end(); ++ptr )
 	{
-		for( GRNEList::const_iterator ptr = articulations->begin(); ptr != articulations->end(); ++ptr )
-		{
-			GRArticulation * el = static_cast<GRArticulation *>(*ptr);
-//			if( el->getArticulationType() != GRArticulation::kFlagBreathMark )
-//			{
-				addToBoundingBox( el ); // ok
-				// mBoundingBox.Merge( el->getBoundingBox());
-//			}
-		}
+		GRArticulation * el = static_cast<GRArticulation *>(*ptr);
+			addToBoundingBox( el ); // ok
 	}
 }
 

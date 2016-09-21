@@ -32,6 +32,7 @@ class GRGlobalLocation;
 class GRBar;
 class GRNotationElement;
 class GRNoteDot;
+class GRArticulation;
 
 
 template <typename TYPE>
@@ -49,7 +50,7 @@ void DeleteContent( TYPE * inContainer )
 // template <class T> class KF_IPointerList;
 // typedef KF_IPointerList<GRNotationElement> GRNEList;
 
-typedef std::vector<GRNotationElement *> GRNEList;
+typedef std::vector<GRArticulation *> GRNEList;
 
 /** \brief Graphical representation for an event (= has duration). 
   
@@ -145,7 +146,7 @@ class GREvent : public GRARCompositeNotationElement
 		static GREvent * cast( GObject * inObj )
 				{ return ( inObj->isGREventClass() ? static_cast<GREvent *>(inObj) : 0 ); }
 
-		const GRNEList * getArticulations() const { return mArtilist; }
+		const GRNEList& getArticulations() const { return mArtilist; }
 
 		virtual bool	stemHasBeenChanged(){return stemChanged;}
 		virtual void	setStemChanged(){stemChanged = true;}
@@ -175,9 +176,7 @@ class GREvent : public GRARCompositeNotationElement
 	  bool		stemChanged;
 
 	private:
-			GRNEList *		mArtilist;	// our list of articulations.
-			
-
+		GRNEList	mArtilist;	// our list of articulations.
 };
 
 #endif

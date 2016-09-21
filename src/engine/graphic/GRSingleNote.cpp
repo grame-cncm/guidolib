@@ -35,8 +35,8 @@
 // - Guido GR
 #include "GRSingleNote.h"
 #include "GRNote.h"
-#include "GRArticulation.h"
 #include "GRAccidental.h"
+#include "GRArticulation.h"
 #include "GRStdNoteHead.h"
 #include "GRNoteDot.h"
 #include "GRStem.h"
@@ -169,15 +169,12 @@ void GRSingleNote::GGSOutput() const
 		el->GGSOutput();
 	}
 
-	const GRNEList * articulations = getArticulations();
-	if( articulations )
+	const GRNEList& articulations = getArticulations();
+	for( GRNEList::const_iterator ptr = articulations.begin(); ptr != articulations.end(); ++ptr )
 	{
-		for( GRNEList::const_iterator ptr = articulations->begin(); ptr != articulations->end(); ++ptr )
-		{
-			GRNotationElement * el = *ptr;
-			el->setID((long int) this);
-			el->GGSOutput();
-		}
+		GRArticulation * el = *ptr;
+		el->setID((long int) this);
+		el->GGSOutput();
 	}
 }
 
@@ -254,13 +251,10 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
 	    DrawSubElements(hdc);
 
 	// - draw articulations & ornament
-	const GRNEList *articulations = getArticulations();
-
-	if (articulations) {
-		for (GRNEList::const_iterator ptr = articulations->begin(); ptr != articulations->end(); ++ptr) {
-			GRNotationElement *el = *ptr;
-			el->OnDraw(hdc);
-		}
+	const GRNEList& articulations = getArticulations();
+	for (GRNEList::const_iterator ptr = articulations.begin(); ptr != articulations.end(); ++ptr) {
+		GRNotationElement *el = *ptr;
+		el->OnDraw(hdc);
 	}
 
 	if (fOrnament) {
@@ -1212,7 +1206,7 @@ void GRSingleNote::addArticulation(ARMusicalTag * mtag)
 {
 	ARAccidental * acc =  dynamic_cast<ARAccidental *>(mtag);
 	if( acc )		{ handleAccidental (acc); return; }
-	GRNote::addArticulation(mtag); // => GREvent::addArticulation(mtag);
+	GRNote::addArticulation(mtag);
 }
 
 
