@@ -1,0 +1,34 @@
+[
+	\meter<"3 /4">
+
+    \accent(c1 e g a b c2 e f g)
+    \accent(a2 c b1 a f d c b0a)
+    \accent<position="above">(c1 e g a)
+    \accent<position="below">(a2 c b1 a f d c b0a)
+
+    \accent(\pizz(a1))
+    \accent(\pizz(c2))
+    \pizz<position="below">(\accent<position="below">(a1))
+    \pizz(\accent<position="below">(a1))
+    \accent(a1)
+
+    \accent(\ten(a1))
+    \accent(\ten(c2))
+    \accent(\ten(g2))
+    \ten(\accent<position="below">(a1))
+
+    \accent(\stacc(a1))
+    \accent(\stacc(c2))
+    \accent(\stacc(a2))
+    \stacc(\accent<position="below">(a1))
+
+    \accent(\pizz(a1))
+    \accent(\pizz(c2))
+    \accent(\pizz(a2))
+    \pizz(\accent<position="below">(a1))
+
+	\accent<position="above", dx=0,dy=0>(a1/8 c e f g a b e2)
+	\accent<position="below", dx=0,dy=0>(a1/8 c e f g a b e2)
+	\accent<position="below",dy=-1>(a2/4)
+	\accent(a2)
+]

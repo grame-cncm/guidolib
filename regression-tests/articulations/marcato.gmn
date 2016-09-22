@@ -1,0 +1,45 @@
+% \marcato-Tag
+%
+% The \marcato-Tag can be used to place a marcato on a note.
+% Parameters:
+%     - position  		 defines the marcato position. Can be "above" or "below".
+%                                By default, marcato places itself automatically.
+%     - dx / dy  			 defines the horizontal / vertical marcato's offset
+%
+[
+	\meter<"2/4">
+
+    \marcato(\accent(c2))
+    \marcato(\accent(a2))
+
+    \marcato(b c2 g d)
+    \marcato(a1)
+    \stemsDown(\marcato<position="above">(a))
+    \marcato(b/8 c2 g d)
+    \stemsUp(\marcato(b/8 c2 g d))
+
+
+    \marcato<"below", dx=0, dy=0>(b/4 c2 e f g a0)
+    \marcato({c2, e, g })
+
+    \marcato(\pizz(a1))
+    \marcato(\pizz(c2))
+    \pizz<position="below">(\marcato<position="below">(a1))
+    \pizz(\marcato<position="below">(a1))
+    \marcato(a1)
+
+    \marcato(\ten(a1))
+    \marcato(\ten(c2))
+    \marcato(\ten(g2))
+    \ten(\marcato<position="below">(a1))
+
+    \marcato(\accent(a1))
+    \marcato(\accent(c2))
+    \marcato(\accent(a2))
+    \accent(\marcato<position="below">(a1))
+
+    \marcato(\stacc(a1))
+    \marcato(\stacc(c2))
+    \marcato(\stacc(a2))
+    \stacc(\marcato<position="below">(a1))
+]

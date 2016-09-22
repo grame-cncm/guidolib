@@ -1,0 +1,26 @@
+% Release 1.3.8
+% harmonic.gmn
+
+[
+	\meter<"4/4">
+
+	\pizz(\harmonic(f e2 a))
+
+	\harmonic(f e2 a)
+	\harmonic(f e2 c a1 f e )
+	\harmonic<position="below">(f e2 c a1 f e d c)
+	\harmonic<position="above">(f e2 c a1 f e d)
+
+	\accent(\harmonic(f e2 a))
+	\accent(\harmonic(f e2 c a1 f e ))
+
+	\marcato(\harmonic(f e2 a))
+	\marcato<position="below">(\harmonic(f e2 c a1 f e ))
+
+	\pizz(\harmonic(f e2 a))
+	\pizz(\harmonic(f e2 c a1 f e ))
+
+	\ten(\harmonic(f e2 a))
+	\ten(\harmonic(f e2 c a1 f e ))
+
+]

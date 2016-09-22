@@ -1,0 +1,39 @@
+[
+	\meter<"4/4">
+
+	\stacc(a g)
+	\stacc<type="heavy">(a g)
+	\stacc<type="heavy", position="above">(a g)
+	\stacc<type="heavy">(a2 g)
+	\stacc<type="heavy", position="below">(a g)
+	\stacc(a2 g f e d)
+	\stacc<position="below">(a2 g f e d)
+	\stacc(a1 g f e d)
+	\stacc<position="above">(a g f e d) 
+
+	\accent(\stacc(a/4 g))
+	\accent(\stacc(a2 g f e d))
+	\accent(\stacc<position="below">(a2 g f e d))
+	\accent(\stacc(a1 g f e d))
+	\accent(\stacc<position="above">(a g f e d))
+
+	\tenuto(\stacc(a/4 g))
+	\tenuto(\stacc(a2 g f e d))
+	\tenuto(\stacc<position="below">(a2 g f e d))
+	\tenuto(\stacc(a1 g f e d))
+	\tenuto(\stacc<position="above">(a g f e d))
+
+	\pizz(\stacc(a/4 g))
+	\pizz(\stacc(a2 g f e d))
+	\pizz(\stacc<position="below">(a2 g f e d))
+	\pizz(\stacc(a1 g f e d))
+	\pizz(\stacc<position="above">(a g f e d))
+
+	\stacc(\pizz(a/4 g))
+	\stacc(\pizz(a2 g f e d))
+	\stacc(\pizz<position="below">(a2 g f e d))
+	\stacc(\pizz(a1 g f e d))
+	\stacc(\pizz<position="below">(a g f e d))
+
+	\marcato(\fermata(\accent(\tenuto(\stacc(\pizz<position="below">(c))))))
+]
