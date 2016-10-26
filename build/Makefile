@@ -72,11 +72,11 @@ help :
 #===============================================================
 .PHONY : macos mac11 $(IOS) $(MAC)/Release/GUIDOEngine.framework $(IOS)/Release-iphoneos/libGUIDOEngine.a
 
-mac : GUIDOEngine.tgz
+mac : 
 	make macos
 	make $(IOS)	
 
-macos : $(MAC)/guidolib.xcodeproj GUIDOEngine.framework
+macos : $(MAC)/guidolib.xcodeproj GUIDOEngine.framework GUIDOEngine.tgz
 
 GUIDOEngine.framework :  MacOS/Release/GUIDOEngine.framework
 	rm -rf GUIDOEngine.framework
