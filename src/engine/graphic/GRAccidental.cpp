@@ -82,11 +82,15 @@ GRAccidental::~GRAccidental()
 //}
 
 //____________________________________________________________________________________
-//void GRAccidental::OnDraw(VGDevice & hdc) const
-//{
+void GRAccidental::setStyleNone()	{ mAccidentalSize = 0; }
+
+//____________________________________________________________________________________
+void GRAccidental::OnDraw(VGDevice & hdc) const
+{
 //cout << "GRAccidental::OnDraw refpos: " << getReferencePosition().x << " offset: " << offset.x << endl;
-//	GRNotationElement::OnDraw(hdc);
-//}
+	if (mAccidentalSize)
+		GRNotationElement::OnDraw(hdc);
+}
 
 //____________________________________________________________________________________
 //void GRAccidental::GGSOutput() const

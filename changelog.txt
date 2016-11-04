@@ -2,6 +2,7 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.3
+- new style "none" for \acc tag, intended to avoid the second accidental in case of tied notes  
 - articulations support a position parameter with "above" or "below" values
 - default placement of marcato change to above
 - chords: better support of articulations tags 

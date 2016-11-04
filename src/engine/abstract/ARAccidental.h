@@ -24,7 +24,7 @@
 class ARAccidental : public ARMTParameter, public ARPositionTag
 {
 public:
-	enum Style { kNone, kCautionary };
+	enum Style { kUnknown, kNone, kCautionary };
 	
 			 ARAccidental(const ARAccidental & acc);
 			 ARAccidental();

@@ -58,11 +58,12 @@ class GRAccidental : public GRNotationElement
 	 virtual	~GRAccidental();
 
 //	 virtual void GGSOutput() const;
-//	 virtual void OnDraw(VGDevice & hdc) const;
+	 virtual void OnDraw(VGDevice & hdc) const;
 //	 virtual void setPosition( const NVPoint & position );
 	 virtual void setAccidental		 ( float inAccidentalID, float notebreite, float curLSPACE );
 	 virtual void setAccidentalByQuarter( int quarterTones, int offset, float notebreite, float curLSPACE = 50.0f );
 	 virtual void setCautionary(int offset, float notebreite, float curLSPACE = 50.0f );
+	 virtual void setStyleNone();
 	 virtual void setColor(const TagParameterString *tps);
      virtual void setColRef(unsigned char *colRef);
 	 virtual void setAccidentalLayout( float notebreite, float curLSPACE );

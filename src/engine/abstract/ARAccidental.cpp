@@ -43,10 +43,17 @@ ARAccidental::~ARAccidental()
 
 ARAccidental::Style ARAccidental::getStyle() const	
 { 
-	std::string str("cautionary");
-	if (mStyle && (str == mStyle->getValue())) 
-		return kCautionary;
-	return kNone;
+	if (mStyle) {
+		string style = mStyle->getValue();
+		if (style == "cautionary")
+			return kCautionary;
+		if (style == "none")
+			return kNone;
+	}
+//	std::string str("cautionary");
+//	if (mStyle && (str == mStyle->getValue())) 
+//		return kCautionary;
+	return kUnknown;
 }
 
 void ARAccidental::setTagParameterList(TagParameterList & tpl)

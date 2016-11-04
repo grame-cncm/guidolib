@@ -1172,6 +1172,8 @@ void GRSingleNote::handleAccidental (const ARAccidental* acc)
 	while (pos)
 	{
 		GRAccidental * el = dynamic_cast<GRAccidental *>( accList.GetNext(pos));
+		if (!el) continue;
+
 		// this element is an accidental...
 		// now we have to set the parameters (offset and all that...)
 		NVPoint pt ( el->getOffset());
@@ -1187,14 +1189,13 @@ void GRSingleNote::handleAccidental (const ARAccidental* acc)
 		if (acc->getSize() && acc->getSize()->TagIsSet())
 			el->setSize(acc->getSize()->getValue());
 
-		if (acc->getStyle() == ARAccidental::kCautionary) {
-			if (el)
-                el->setCautionary((int)getOffset().x, mNoteBreite);
-        }
+		if (acc->getStyle() == ARAccidental::kCautionary)
+			el->setCautionary((int)getOffset().x, mNoteBreite);
+		else if (acc->getStyle() == ARAccidental::kNone)
+			el->setStyleNone();
 
         if (acc->getColor() && acc->getColor()->TagIsSet()) {
-            if (el)
-                el->setColor(acc->getColor());
+			el->setColor(acc->getColor());
         }
 	}
 
