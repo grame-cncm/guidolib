@@ -198,23 +198,8 @@ bool GRBar::isSystemSlice() const
 }
 
 // --------------------------------------------------------------------------
-void GRBar::DrawWithLines( VGDevice & hdc ) const
+void GRBar::DisplayMeasureNum( VGDevice & hdc ) const
 {
-	if ((getTagType() != GRTag::SYSTEMTAG) && isSystemSlice())
-		return;			// don't draw staff bars on system slices
-    
-    VGColor prevFontColor = hdc.GetFontColor();
-
-    if (mColRef) {
-        hdc.SetFontColor(VGColor(mColRef));
-        hdc.PushPenColor(VGColor(mColRef));
-    }
-
-    const float staffSize = mGrStaff->getSizeRatio();
-
-    if (staffSize < kMinNoteSize) // Too small, don't draw
-        return;
-
     ARBar *arBar = getARBar();
 	bool pageNumbering = false;
 	if (gCurStaff) {
@@ -227,7 +212,7 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
 			pageNumbering = newPage  && (arBar->getMeasureNumberDisplayed() == ARBar::kNumPage) && (arBar->getMeasureNumber() != 2);
 		}
 	}
-	
+
     if (arBar->getMeasureNumberDisplayed() && arBar->getMeasureNumber() != 0) {
         const NVstring fontName("Arial");
         string attr("");
@@ -262,7 +247,26 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
 		if (arBar->getMeasureNumberDisplayed() != ARBar::kNumPage)
 			hdc.DrawString(totalXOffset, totalYOffset, barNumberString.c_str(), barNumberString.size());
 	}
+}
 
+// --------------------------------------------------------------------------
+void GRBar::DrawWithLines( VGDevice & hdc ) const
+{
+	if ((getTagType() != GRTag::SYSTEMTAG) && isSystemSlice())
+		return;			// don't draw staff bars on system slices
+
+    const float staffSize = mGrStaff->getSizeRatio();
+    if (staffSize < kMinNoteSize) // Too small, don't draw
+        return;
+	
+    VGColor prevFontColor = hdc.GetFontColor();
+    if (mColRef) {
+        hdc.SetFontColor(VGColor(mColRef));
+        hdc.PushPenColor(VGColor(mColRef));
+    }
+
+	DisplayMeasureNum (hdc);
+	
     // - Vertical adjustement according to staff's line number
     float offsety1 = (fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;
     float offsety2 = 0;

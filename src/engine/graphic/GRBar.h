@@ -70,6 +70,7 @@ class GRBar : public GRTagARNotationElement
 	private:
 		static GRPage*	fCurrentPage;
 		void InitGRBar( const TYPE_TIMEPOSITION & inTimePos, const GRStaff * inStaff );
+		void DisplayMeasureNum( VGDevice & hdc ) const;
 };
 
 #endif
