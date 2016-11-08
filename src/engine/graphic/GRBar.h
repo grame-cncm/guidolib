@@ -15,6 +15,8 @@
 
 */
 
+#include <vector>
+
 #include "GRTagARNotationElement.h"
 
 class ARBar;
@@ -57,7 +59,11 @@ class GRBar : public GRTagARNotationElement
 		static void reset() { fCurrentPage = 0; }		// required for a new score
 	
 	protected:
-				bool	isSystemSlice() const;
+		void	DisplayMeasureNum( VGDevice & hdc ) const;
+		bool	isSystemSlice() const;
+		float	getXPos(float staffSize) const;
+		float	getY1	(float top) const;
+		float	getY2	(float y1, float bottom) const;
 
 		static NVPoint sRefPos;
         int    fLineNumber;
@@ -65,12 +71,11 @@ class GRBar : public GRTagARNotationElement
         float mDx;
         float mDy;
         float mStaffRatio;
-		float proportionalRender;
+		float mProportionalRender;
 
 	private:
 		static GRPage*	fCurrentPage;
 		void InitGRBar( const TYPE_TIMEPOSITION & inTimePos, const GRStaff * inStaff );
-		void DisplayMeasureNum( VGDevice & hdc ) const;
 };
 
 #endif

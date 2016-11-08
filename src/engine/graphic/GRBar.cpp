@@ -51,7 +51,7 @@ GRPage*	GRBar::fCurrentPage = 0;
 
 // --------------------------------------------------------------------------
 GRBar::GRBar(ARBar * p_arbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float propRender )
-	: GRTagARNotationElement(p_arbar,inStaff->getStaffLSPACE()), proportionalRender(propRender)
+	: GRTagARNotationElement(p_arbar,inStaff->getStaffLSPACE()), mProportionalRender(propRender)
 {
 	mGrStaff = inStaff;
 	mSymbol = kBarSymbol;
@@ -67,7 +67,7 @@ GRBar::GRBar(ARBar * p_arbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTim
 // --------------------------------------------------------------------------
 // this constructor uses a GRSystem (it is a system (or accolade)-bar)
 GRBar::GRBar(ARBar * p_arbar, GRSystem * , GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float propRender  )
-	: GRTagARNotationElement(p_arbar,inStaff->getStaffLSPACE()), proportionalRender(propRender)
+	: GRTagARNotationElement(p_arbar,inStaff->getStaffLSPACE()), mProportionalRender(propRender)
 {
 	mGrStaff = inStaff;
 //	mGrStaff = NULL; //  inStaff // why is grstaff needed?
@@ -250,6 +250,32 @@ void GRBar::DisplayMeasureNum( VGDevice & hdc ) const
 }
 
 // --------------------------------------------------------------------------
+float GRBar::getXPos(float staffSize) const
+{
+    const float offsetX = 3 + (staffSize - 1) * 2;
+    float proportionalRenderingOffset = mProportionalRender ? -90 : 0; // REM: 30 hardcoded (1.5 * note extent)
+    return mPosition.x + offsetX + mDx + proportionalRenderingOffset;
+}
+
+// --------------------------------------------------------------------------
+float GRBar::getY1	(float top) const
+{
+    // - Vertical adjustement according to staff's line number
+	float offsety1 = (fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;
+	return mPosition.y + top + offsety1 * mGrStaff->getSizeRatio() - mDy;
+}
+
+// --------------------------------------------------------------------------
+float GRBar::getY2	(float y1, float bottom) const
+{
+    // - Vertical adjustement according to staff's line number
+   float offsety2 = 0;
+    if (fLineNumber != 0 && fLineNumber != 1)
+        offsety2 = ((fLineNumber - 5) % 6) * LSPACE;
+	return y1 + bottom + offsety2 * mGrStaff->getSizeRatio();
+}
+
+// --------------------------------------------------------------------------
 void GRBar::DrawWithLines( VGDevice & hdc ) const
 {
 	if ((getTagType() != GRTag::SYSTEMTAG) && isSystemSlice())
@@ -267,30 +293,14 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
 
 	DisplayMeasureNum (hdc);
 	
-    // - Vertical adjustement according to staff's line number
-    float offsety1 = (fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;
-    float offsety2 = 0;
+	const float lineThickness = (mGrStaff ? mGrStaff->currentLineThikness() : kLineThick) * staffSize * mTagSize;
+	hdc.PushPenWidth(lineThickness);
 
-    if (fLineNumber != 0 && fLineNumber != 1)
-        offsety2 = ((fLineNumber - 5) % 6) * LSPACE;
-
-    const float offsetX = 3 + (staffSize - 1) * 2;
-
-    float proportionalRenderingXOffset = 0;
-	if (this->proportionalRender != 0)
-        proportionalRenderingXOffset = - 90; // REM: 30 hardcoded (1.5 * note extent)
-    
-    const float x  = mPosition.x + offsetX + mDx + proportionalRenderingXOffset;
-	float y1 = mPosition.y + mBoundingBox.top + offsety1 * staffSize - mDy;
-	float y2 = y1 + mBoundingBox.bottom + offsety2 * staffSize;
-    float barLength = y2 - y1;
-    y1 -= barLength / 2 * (mTagSize - 1);
-    y2 += barLength / 2 * (mTagSize - 1);
-
-    hdc.PushPenWidth(mGrStaff ? mGrStaff->currentLineThikness() * staffSize * mTagSize : kLineThick * staffSize * mTagSize);
+    const float x  = getXPos(staffSize);
+	float y1 = getY1 (mBoundingBox.top) + lineThickness / 2;
+	float y2 = getY2 (y1, mBoundingBox.bottom) - lineThickness / 2;
     hdc.Line(x, y1, x, y2);
     hdc.PopPenWidth();
-
     if (mColRef) {
         hdc.SetFontColor(prevFontColor);
         hdc.PopPenColor();

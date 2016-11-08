@@ -37,7 +37,6 @@ GRDoubleBar::GRDoubleBar(ARDoubleBar * ardbar, GRStaff * inStaff, const TYPE_TIM
 
     fLineNumber = inStaff->getNumlines();
     fStaffThickness = inStaff->getLineThickness();
-    fSize = inStaff->getSizeRatio();
 }
 
 GRDoubleBar::GRDoubleBar(ARDoubleBar * ardbar, GRSystem * p_grsystem, GRStaff * inStaff,
@@ -52,7 +51,6 @@ GRDoubleBar::GRDoubleBar(ARDoubleBar * ardbar, GRSystem * p_grsystem, GRStaff * 
 
     fLineNumber = inStaff->getNumlines();
     fStaffThickness = inStaff->getLineThickness();
-    fSize = inStaff->getSizeRatio();
 }
 
 GRDoubleBar::~GRDoubleBar()
@@ -65,37 +63,26 @@ void GRDoubleBar::DrawWithLines( VGDevice & hdc ) const
 	if ((getTagType() != GRTag::SYSTEMTAG) && isSystemSlice())
 		return;			// don't draw staff bars on system slices
     
-    if (fSize < kMinNoteSize) // Too small, don't draw
+    const float staffSize = mGrStaff->getSizeRatio();
+    if (staffSize < kMinNoteSize) // Too small, don't draw
         return;
 
     if (mColRef)
         hdc.PushPenColor(VGColor(mColRef));
 
-    // - Vertical adjustement according to staff's line number
-    float offsety1 = (fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;
-    float offsety2 = 0;
+	DisplayMeasureNum (hdc);
 
-    if (fLineNumber != 0 && fLineNumber != 1)
-        offsety2 = ((fLineNumber - 5) % 6) * LSPACE;
+    const float spacing = LSPACE * 0.7f * staffSize;
+	const float x2 = getXPos (mGrStaff->getSizeRatio());
+	const float x1 = x2 - spacing;
+	const float y1 = getY1 (mBoundingBox.top);
+	const float y2 = getY2 (y1, mBoundingBox.bottom);
 
-    float proportionalRenderingXOffset = 0;
-	if (this->proportionalRender != 0)
-        proportionalRenderingXOffset = - 90; // REM: 30 hardcoded (1.5 * note extent)
-
-    // - Horizontal adjustement according to staff's lines size and staff's size
-    const float offsetX = (fStaffThickness - 4) * 0.5f - 24 + proportionalRenderingXOffset;
-
-    const float spacing = LSPACE * 0.7f * fSize;
-	const float x1 = mPosition.x + offsetX;
-	const float x2 = x1 + spacing;
-	const float y1 = mPosition.y + mBoundingBox.top + offsety1 * fSize;
-	const float y2 = y1 + mBoundingBox.bottom + offsety2 * fSize;
-
-    float lineThickness = kLineThick * 1.5f * fSize;
+    float lineThickness = kLineThick * 1.5f * staffSize;
 
     hdc.PushPenWidth(lineThickness);
-    hdc.Line(x1, y1 + lineThickness / 2, x1, y2 - lineThickness / 2);
-    hdc.Line(x2, y1 + lineThickness / 2, x2, y2 - lineThickness / 2);
+    hdc.Line(x1, y1, x1, y2);
+    hdc.Line(x2, y1, x2, y2);
     hdc.PopPenWidth();
 
     if (mColRef)
