@@ -45,23 +45,23 @@
 #include "ARStaff.h"
 
 // Guido GR
+#include "GRAccolade.h"
+#include "GRBar.h"
+#include "GRBeam.h"
+#include "GRGlue.h"
+#include "GRKey.h"
+#include "GRMusic.h"
+#include "GRPage.h"
+#include "GRPossibleBreakState.h"
+#include "GRRepeatBegin.h"
+#include "GRRepeatEnd.h"
+#include "GRSliceHeight.h"
+#include "GRSpecial.h"
+#include "GRStaffManager.h"
 #include "GRSystem.h"
 #include "GRSystemTag.h"
-#include "GRBeam.h"
-#include "GRBar.h"
-#include "GRPage.h"
-#include "GRMusic.h"
-#include "GRStaffManager.h"
-#include "GRText.h"
-#include "GRAccolade.h"
-
-#include "GRBar.h"
-#include "GRGlue.h"
-#include "GRSpecial.h"
-#include "GRKey.h"
 #include "GRSystemTag.h"
-#include "GRSliceHeight.h"
-#include "GRPossibleBreakState.h"
+#include "GRText.h"
 
 using namespace std;
 
@@ -419,15 +419,24 @@ GRSystem::GRSystem(GRStaffManager * staffmgr, GRPage * inPage,
 	{
 		GRNotationElement * el = GetNext(pos);
 		GRBar * bar = dynamic_cast<GRBar *>(el);
+		GRRepeatBegin * rbeg = dynamic_cast<GRRepeatBegin *>(el);
+		GRRepeatEnd *	rend = dynamic_cast<GRRepeatEnd *>(el);
 		GRSystemTag * systag;
-		if (bar)
-		{
-			float linesOffset = 0;
+		float linesOffset = lastStaff ?  LSPACE / 2 * (lastStaff->getNumlines() - 5) : 0;
+		if (bar) {
 			bar->setPosFrom(0);
-			if (lastStaff) {
-				linesOffset += LSPACE / 2 * (lastStaff->getNumlines() - 5);
+			if (lastStaff)
 				bar->setPosTo( lastStaff->getPosition().y + lastStaff->getDredgeSize() - linesOffset);
-			}
+		}
+		else if (rbeg) {
+			rbeg->setPosFrom(0);
+			if (lastStaff)
+				rbeg->setPosTo( lastStaff->getPosition().y + lastStaff->getDredgeSize() - linesOffset);
+		}
+		else if (rend) {
+			rend->setPosFrom(0);
+			if (lastStaff)
+				rbeg->setPosTo( lastStaff->getPosition().y + lastStaff->getDredgeSize() - linesOffset);
 		}
 		else if ((systag = dynamic_cast<GRSystemTag *>(el)) != 0 )
 			systag->checkPosition(this);

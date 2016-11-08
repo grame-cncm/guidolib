@@ -18,6 +18,7 @@
 #include "ARRepeatBegin.h"
 
 #include "GRRepeatBegin.h"
+#include "GRSystemSlice.h"
 #include "GRStaff.h"
 #include "VGDevice.h"
 
@@ -41,11 +42,20 @@ GRRepeatBegin::GRRepeatBegin(ARRepeatBegin *arrb, bool p_ownsar)
     fStaffThickness = 4;
     fSize = 1;
     fBaseThickness = LSPACE * 0.6f;
+	updateBoundingBox();
 }
 
 // --------------------------------------------------------------------------
 GRRepeatBegin::~GRRepeatBegin()
 {
+}
+
+// --------------------------------------------------------------------------
+void GRRepeatBegin::setPosFrom(GCoord posy)		{ mBoundingBox.top = posy; }
+void GRRepeatBegin::setPosTo(GCoord posy)		{ mBoundingBox.bottom = posy; }
+
+ARRepeatBegin* GRRepeatBegin::getARRepeatBegin() {
+	return dynamic_cast<ARRepeatBegin*>(getAbstractRepresentation());
 }
 
 // --------------------------------------------------------------------------
@@ -97,45 +107,22 @@ void GRRepeatBegin::setHPosition( float nx )
 // --------------------------------------------------------------------------
 void GRRepeatBegin::tellPosition(GObject * caller, const NVPoint & newPosition)
 {
+	setPosition (newPosition);
 	GRTagARNotationElement::tellPosition(caller, newPosition);
 	mMapping = mBoundingBox;
 	mMapping += mPosition + getOffset();
 }
 
 // --------------------------------------------------------------------------
-void GRRepeatBegin::OnDraw(VGDevice & hdc ) const
+bool GRRepeatBegin::isSystemSlice() const
 {
-    if (!mDraw || fSize < kMinNoteSize)
-		return;
+	GRSystemSlice * systemslice = mGrStaff ? mGrStaff->getGRSystemSlice() : 0;
+	return systemslice ? systemslice->hasSystemBars() : true;
+}
 
-    VGColor prevColor = hdc.GetFontColor();
-    if (mColRef) {
-        hdc.PushFillColor(VGColor(mColRef));
-        hdc.SetFontColor(VGColor(mColRef));
-    }
-
-    // - Vertical adjustement according to staff's line number
-    float offsety1 = (fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;
-    float offsety2 = 0;
-
-    if (fLineNumber != 0 && fLineNumber != 1)
-        offsety2 = ((fLineNumber - 5) % 6) * LSPACE;
-
-    float rightLineThickness = 1.8f * kLineThick * fSize;
-
-    // - Horizontal adjustement according to staff's lines size and staff's size
-    const float offsetX = 0.5f * (fStaffThickness - 4) - 30 * (fSize - 1) + (fSize - 1) * (fStaffThickness - 4) * 0.5f + 40;
-
-    const float spacing = fBaseThickness + LSPACE * 0.4f * fSize - rightLineThickness;
-	const float x1 = mPosition.x - mBoundingBox.Width() + offsetX;
-	const float x2 = x1 + spacing;
-    const float y1 = mPosition.y + offsety1 * fSize;
-	const float y2 = y1 + (mBoundingBox.bottom + offsety2) * fSize;
-
-    hdc.Rectangle(x1, y1, x1 + fBaseThickness, y2);
-	hdc.Rectangle(x2, y1, x2 + rightLineThickness, y2);
-
-    /* Two points drawing */
+// --------------------------------------------------------------------------
+void GRRepeatBegin::DrawDots( VGDevice & hdc ) const
+{
     float offsety1AccordingToLineNumber = 0;
     float offsety2AccordingToLineNumber = 0;
 
@@ -157,8 +144,44 @@ void GRRepeatBegin::OnDraw(VGDevice & hdc ) const
 
     DrawSymbol(hdc, pointSymbol, pointOffsetx, pointOffsety1, pointSize);
     DrawSymbol(hdc, pointSymbol, pointOffsetx, pointOffsety2, pointSize);
-    /**********************/
+}
 
+// --------------------------------------------------------------------------
+void GRRepeatBegin::OnDraw(VGDevice & hdc ) const
+{
+    if (!mDraw || fSize < kMinNoteSize)
+		return;
+
+    VGColor prevColor = hdc.GetFontColor();
+    if (mColRef) {
+        hdc.PushFillColor(VGColor(mColRef));
+        hdc.SetFontColor(VGColor(mColRef));
+    }
+
+	if ((getTagType() == GRTag::SYSTEMTAG) || !isSystemSlice()) {
+		// - Vertical adjustement according to staff's line number
+		float offsety1 = (fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;
+		float offsety2 = 0;
+
+		if (fLineNumber != 0 && fLineNumber != 1)
+			offsety2 = ((fLineNumber - 5) % 6) * LSPACE;
+
+		float rightLineThickness = 1.8f * kLineThick * fSize;
+
+		// - Horizontal adjustement according to staff's lines size and staff's size
+		const float offsetX = 0.5f * (fStaffThickness - 4) - 30 * (fSize - 1) + (fSize - 1) * (fStaffThickness - 4) * 0.5f + 40;
+
+		const float spacing = fBaseThickness + LSPACE * 0.4f * fSize - rightLineThickness;
+		const float x1 = mPosition.x - mBoundingBox.Width() + offsetX;
+		const float x2 = x1 + spacing;
+		const float y1 = mPosition.y + offsety1 * fSize;
+		const float y2 = y1 + (mBoundingBox.bottom + offsety2) * fSize;
+
+		hdc.Rectangle(x1, y1, x1 + fBaseThickness, y2);
+		hdc.Rectangle(x2, y1, x2 + rightLineThickness, y2);
+	}
+
+	DrawDots( hdc);
     if (mColRef) {
         hdc.SetFontColor(prevColor);
         hdc.PopFillColor();

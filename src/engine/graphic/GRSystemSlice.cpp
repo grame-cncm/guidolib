@@ -21,15 +21,17 @@ using namespace std;
 #include "ARMusic.h"
 #include "ARMusicalVoice.h"
 
-#include "GRSystemSlice.h"
-#include "GRStaffManager.h"
-#include "GRMusic.h"
 #include "GRBar.h"
 #include "GRDoubleBar.h"
 #include "GRFinishBar.h"
-#include "GRPossibleBreakState.h"
 #include "GRGlue.h"
+#include "GRMusic.h"
+#include "GRPossibleBreakState.h"
+#include "GRRepeatBegin.h"
+#include "GRRepeatEnd.h"
+#include "GRStaffManager.h"
 #include "GRSystem.h"
+#include "GRSystemSlice.h"
 
 #include "VGDevice.h"
 #include "kf_ivect.h"
@@ -102,7 +104,29 @@ GRBar * GRSystemSlice::getBarAt (const TYPE_TIMEPOSITION& t) const
 	return bar;
 }
 
-void GRSystemSlice::addBar(GRBar * mybar,int bartype, GRStaff * grstaff )
+void GRSystemSlice::addRepeatBegin( GRRepeatBegin * mybar,int btype, GRStaff * grstaff)
+{
+	ARRepeatBegin * ar = mybar->getARRepeatBegin();
+	assert(ar);
+	GRRepeatBegin * newrepeat = new GRRepeatBegin(ar);
+	newrepeat->setTagType(GRTag::SYSTEMTAG);
+	mHasSystemBars = true;
+	mybar->addAssociation(newrepeat);
+	AddTail(newrepeat);
+}
+
+void GRSystemSlice::addRepeatEnd ( GRRepeatEnd * mybar,int btype, GRStaff * grstaff)
+{
+	ARRepeatEnd * ar = mybar->getARRepeatEnd();
+	assert(ar);
+	GRRepeatEnd * newrepeat = new GRRepeatEnd(ar, grstaff, mybar->getRelativeTimePosition(), grstaff->getProportionnalRender() );
+	newrepeat->setTagType(GRTag::SYSTEMTAG);
+	mHasSystemBars = true;
+	mybar->addAssociation(newrepeat);
+	AddTail(newrepeat);
+}
+
+void GRSystemSlice::addBar(GRBar * mybar, const std::vector<pair<int, int> >& ranges, GRStaff * grstaff )
 {
 	// We have to build a new Barline ...
 	// the barline needs to know that it belongs to a system. 
@@ -114,14 +138,12 @@ void GRSystemSlice::addBar(GRBar * mybar,int bartype, GRStaff * grstaff )
 
 	// I must attach the newbar with the other spring (or at least
 	// be told when something happens ...)
-	
 	mybar->addAssociation(newbar);
 
 	// this needs to be rethought later .
 	// Just for testing :
 	// newbar->setPosFrom(2.5*grstaff->getStaffLSPACE());
 	// newbar->setPosTo(20*grstaff->getStaffLSPACE());
-
 	AddTail(newbar);
 }
 

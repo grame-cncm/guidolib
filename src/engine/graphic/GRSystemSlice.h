@@ -16,6 +16,8 @@
 */
 
 
+#include <vector>
+
 #include "GREvent.h"
 
 template <class T> class KF_IVector;
@@ -30,6 +32,8 @@ class GRGlue;
 class GRSliceHeight;
 class GRFinishBar;
 class GRDoubleBar;
+class GRRepeatBegin;
+class GRRepeatEnd;
 
 /** \brief Form the basis for the optimum system-break-algorithm.
 
@@ -77,9 +81,11 @@ public:
 
 	void		addSystemTag( GRNotationElement * tg );
 	void		addStaff( GRStaff * newStaff, int num);
-	void		addBar( GRBar * mybar, int btype, GRStaff * grstaff);
+	void		addBar( GRBar * mybar, const std::vector<std::pair<int, int> >& ranges, GRStaff * grstaff);
 	void		addDoubleBar(GRDoubleBar * mybar,int bartype, GRStaff * grstaff);
 	void		addFinishBar( GRFinishBar * mybar,int btype, GRStaff * grstaff);
+	void		addRepeatBegin( GRRepeatBegin * mybar,int btype, GRStaff * grstaff);
+	void		addRepeatEnd ( GRRepeatEnd * mybar,int btype, GRStaff * grstaff);
 	void		addPossibleBreakState( GRPossibleBreakState * in );
 
 	void		setNumber(int num )	{ mNumber = num; }

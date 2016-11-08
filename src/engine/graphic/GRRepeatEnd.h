@@ -34,7 +34,11 @@ class GRRepeatEnd : public GRBar
 
 				 GRRepeatEnd(ARRepeatEnd * ar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos , float proportionnalRender);
 		virtual	~GRRepeatEnd();
+
+		void setPosFrom( float posy );
+		void setPosTo( float posy );
 	
+		ARRepeatEnd*		 getARRepeatEnd();
 		virtual unsigned int getTextAlign() const;
 		virtual void	updateBoundingBox();
 		virtual void	setHPosition( float nx);
@@ -51,6 +55,7 @@ class GRRepeatEnd : public GRBar
         float  fStaffThickness;
 
 	private:
+				void	DrawDots( VGDevice & hdc ) const;
 				void	InitRepeatEnd();
 };
 

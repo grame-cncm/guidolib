@@ -31,7 +31,11 @@ public:
                  GRRepeatBegin(ARRepeatBegin * arrb, bool p_ownsar = false);
     virtual 	~GRRepeatBegin();
 
-    virtual unsigned int    getTextAlign() const;
+	void setPosFrom( float posy );
+	void setPosTo( float posy );
+
+	ARRepeatBegin*			getARRepeatBegin();
+	virtual unsigned int    getTextAlign() const;
     virtual const NVPoint & getReferencePosition() const { return refpos; }
     virtual void            OnDraw(VGDevice & hdc ) const;
     virtual void            GetMap(GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
@@ -40,6 +44,9 @@ public:
     virtual void            setHPosition( float nx);
 
 protected:
+	bool	isSystemSlice() const;
+	void	DrawDots( VGDevice & hdc ) const;
+
     static NVPoint refpos;
            float   fBaseThickness;
            int     fLineNumber;

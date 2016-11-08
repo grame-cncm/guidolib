@@ -56,6 +56,10 @@ GRRepeatEnd::~GRRepeatEnd()
 {
 }
 
+ARRepeatEnd* GRRepeatEnd::getARRepeatEnd() {
+	return dynamic_cast<ARRepeatEnd*>(getAbstractRepresentation());
+}
+
 // --------------------------------------------------------------------------
 void GRRepeatEnd::InitRepeatEnd()
 {
@@ -77,9 +81,12 @@ void GRRepeatEnd::InitRepeatEnd()
         fSize = staff->getSizeRatio();
         fBaseThickness = LSPACE * 0.6f * fSize;
     }
-
-    mBoundingBox.bottom = 4 * LSPACE;
+	updateBoundingBox();
 }
+
+// --------------------------------------------------------------------------
+void GRRepeatEnd::setPosFrom(GCoord posy)	{ mBoundingBox.top = posy; }
+void GRRepeatEnd::setPosTo(GCoord posy)		{ mBoundingBox.bottom = posy; }
 
 // --------------------------------------------------------------------------
 void GRRepeatEnd::setHPosition(float nx)
@@ -111,40 +118,9 @@ void GRRepeatEnd::updateBoundingBox()
 }
 
 // --------------------------------------------------------------------------
-void GRRepeatEnd::OnDraw( VGDevice & hdc ) const
+void GRRepeatEnd::DrawDots( VGDevice & hdc ) const
 {
-    if (!mDraw || fSize < kMinNoteSize)
-        return;
-
-    VGColor prevColor = hdc.GetFontColor();
-    if (mColRef) {
-        hdc.PushFillColor(VGColor(mColRef));
-        hdc.SetFontColor(VGColor(mColRef));
-    }
-
-    // - Vertical adjustement according to staff's line number
-    float offsety1 = (fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;
-    float offsety2 = 0;
-
-    if (fLineNumber != 0 && fLineNumber != 1)
-        offsety2 = ((fLineNumber - 5) % 6) * LSPACE;
-
-    // - Horizontal adjustement according to staff's lines size and staff's size
-    const float offsetX = (fStaffThickness - 4) * 0.5f - 48 * (fSize - 1) + (fStaffThickness - 4) * (fSize - 1) * 0.5f + 49;
-
-    const float spacing = LSPACE * 0.4f * fSize;
-	const float x1 = mPosition.x - mBoundingBox.Width() + offsetX;
-	const float x2 = x1 + spacing;
-    const float y1 = mPosition.y + offsety1 * fSize;
-	const float y2 = y1 + (mBoundingBox.bottom + offsety2) * fSize;
-
-    float leftLineThickness = 1.8f * kLineThick * fSize;
-
-    hdc.Rectangle(x1, y1, x1 + leftLineThickness, y2);
-	hdc.Rectangle(x2, y1, x2 + fBaseThickness, y2);
-
-    /* Two points drawing */
-    float offsety1AccordingToLineNumber = 0;
+   float offsety1AccordingToLineNumber = 0;
     float offsety2AccordingToLineNumber = 0;
 
     if (fLineNumber == 0)
@@ -165,8 +141,45 @@ void GRRepeatEnd::OnDraw( VGDevice & hdc ) const
 
     DrawSymbol(hdc, pointSymbol, pointOffsetx, pointOffsety1, pointSize);
     DrawSymbol(hdc, pointSymbol, pointOffsetx, pointOffsety2, pointSize);
-    /**********************/
+}
 
+// --------------------------------------------------------------------------
+void GRRepeatEnd::OnDraw( VGDevice & hdc ) const
+{
+
+    if (!mDraw || fSize < kMinNoteSize)
+        return;
+
+    VGColor prevColor = hdc.GetFontColor();
+    if (mColRef) {
+        hdc.PushFillColor(VGColor(mColRef));
+        hdc.SetFontColor(VGColor(mColRef));
+    }
+
+	if ((getTagType() == GRTag::SYSTEMTAG) || !isSystemSlice()) {
+		// - Vertical adjustement according to staff's line number
+		float offsety1 = (fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;
+		float offsety2 = 0;
+
+		if (fLineNumber != 0 && fLineNumber != 1)
+			offsety2 = ((fLineNumber - 5) % 6) * LSPACE;
+
+		// - Horizontal adjustement according to staff's lines size and staff's size
+		const float offsetX = (fStaffThickness - 4) * 0.5f - 48 * (fSize - 1) + (fStaffThickness - 4) * (fSize - 1) * 0.5f + 49;
+
+		const float spacing = LSPACE * 0.4f * fSize;
+		const float x1 = mPosition.x - mBoundingBox.Width() + offsetX;
+		const float x2 = x1 + spacing;
+		const float y1 = mPosition.y + offsety1 * fSize;
+		const float y2 = y1 + (mBoundingBox.bottom + offsety2) * fSize;
+
+		float leftLineThickness = 1.8f * kLineThick * fSize;
+
+		hdc.Rectangle(x1, y1, x1 + leftLineThickness, y2);
+		hdc.Rectangle(x2, y1, x2 + fBaseThickness, y2);
+	}
+
+	DrawDots( hdc);
     if (mColRef) {
         hdc.SetFontColor(prevColor);
         hdc.PopFillColor();
