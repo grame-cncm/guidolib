@@ -13,6 +13,8 @@
 */
 
 #include <iostream>
+#include <sstream>
+
 #include "ARBarFormat.h"
 #include "TagParameterString.h"
 #include "TagParameterFloat.h"
@@ -24,19 +26,44 @@ ListOfTPLs ARBarFormat::ltpls(1);
 
 ARBarFormat::ARBarFormat(const ARBarFormat & barfrmt)
 {
-	style = NULL;
-	if (barfrmt.style!= NULL)
-		style = TagParameterString::cast(barfrmt.style->getCopy());
+	fStyle = barfrmt.getStyle();
+	fRanges = barfrmt.getRanges();
 }
 
-ARBarFormat::~ARBarFormat()
-{
-	delete style;
-}
+ARBarFormat::~ARBarFormat()	{}
+ARBarFormat::ARBarFormat()	{ fStyle = kStyleStaff; }
 
-ARBarFormat::ARBarFormat()
+
+ARBarFormat::TRanges ARBarFormat::getRanges (const NVstring &str)
 {
-	style = NULL;
+	TRanges ranges;
+	size_t pos = -1;
+	do {
+		pos += 1;
+		size_t sep = str.find(":", pos);
+		string range = str.substr(pos, sep);
+
+		size_t dashPos = range.find("-", 0);
+		int start=0, end=0;
+		if (dashPos == string::npos) {
+			stringstream s(range);
+			s >> start;
+			end = start;
+		}
+		else {
+			string startStr = range.substr(0, dashPos);
+			stringstream s1(startStr);
+			s1 >> start;
+
+			std::string endStr = range.substr(dashPos+1);
+			std::stringstream s2(endStr);
+			s2 >> end;
+		}
+		if (start && end) ranges.push_back(make_pair(start, end));
+		else break;
+		pos = sep;
+	} while (pos != string::npos);
+	return ranges;
 }
 
 void ARBarFormat::setTagParameterList(TagParameterList & tpl)
@@ -44,9 +71,8 @@ void ARBarFormat::setTagParameterList(TagParameterList & tpl)
 	if (ltpls.GetCount() == 0)
 	{
 		// create a list of string ...
-
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(("S,style,staff,o"));
+		lstrs.AddTail(("S,style,staff,o;S,range,,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -58,18 +84,23 @@ void ARBarFormat::setTagParameterList(TagParameterList & tpl)
 		// we found a match!
 		if (ret == 0)
 		{
-			// then, we now the match for
-			// the first ParameterList
-			// w, h, ml, mt, mr, mb
-
-			style = TagParameterString::cast(rtpl->RemoveHead());
+			TagParameterString * style = TagParameterString::cast(rtpl->RemoveHead());
 			assert(style);
+			TagParameterString * range = TagParameterString::cast(rtpl->RemoveHead());
+			assert(range);
 
-			if (style->TagIsSet() == false )
-			{
-				delete style;
-				style = NULL;
+			if ( style->TagIsSet() ) {
+				const NVstring & str = style->getValue();
+				if (str == "system" )
+					fStyle = kStyleSystem;
+				else if (str == "staff" )
+					fStyle = kStyleStaff;
+				else cerr << "\\barFormat: unknown style " << str << endl;
 			}
+			if ( range->TagIsSet() )
+				fRanges = getRanges(range->getValue());
+			delete style;
+			delete range;
 		}
 
 		delete rtpl;
@@ -78,7 +109,6 @@ void ARBarFormat::setTagParameterList(TagParameterList & tpl)
 	{
 		// failure
 	}
-
 	tpl.RemoveAll();
 }
 

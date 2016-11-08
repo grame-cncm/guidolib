@@ -15,6 +15,9 @@
 
 */
 
+#include <vector>
+
+
 #include "ARMTParameter.h"
 class TagParameterString;
 
@@ -22,7 +25,11 @@ class TagParameterString;
 */
 class ARBarFormat : public ARMTParameter
 {
+	
 public:
+	typedef std::vector<pair<int, int> >	TRanges;
+	enum style { kStyleStaff, kStyleSystem, kStyleRange };
+
 	ARBarFormat();
 	ARBarFormat(const ARBarFormat&);
 	virtual ~ARBarFormat();
@@ -35,12 +42,19 @@ public:
 	virtual void printGMNName(std::ostream& os) const;
 	virtual void printParameters(std::ostream& os) const;
 
-	const TagParameterString *getStyle() const { return style; }
+	style			getStyle() const	{ return fStyle; }
+	const TRanges&	getRanges() const	{ return fRanges; }
+
+//	const TagParameterString *getStyle() const { return style; }
 
 protected:
-	TagParameterString *	style;
-	static ListOfTPLs 		ltpls;
+	TRanges getRanges (const NVstring &str);
 
+	style	fStyle;
+	TRanges	fRanges;
+	
+//	TagParameterString *	style;
+	static ListOfTPLs 		ltpls;
 };
 
 #endif 

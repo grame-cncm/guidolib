@@ -214,48 +214,48 @@ void GRStaffState::reset2key()
 }
 
 // ----------------------------------------------------------------------------
-GRStaffState & GRStaffState::operator=(const GRStaffState & tmp)
+GRStaffState & GRStaffState::operator=(const GRStaffState & state)
 {
-	meterset = tmp.meterset; // is meter-signture set?. TRUE, false
-	curmeter = tmp.curmeter;
+	meterset = state.meterset; // is meter-signture set?. TRUE, false
+	curmeter = state.curmeter;
 
 	// Noteparameter
-	keyset = tmp.keyset; // key-signature set?
-	numkeys = tmp.numkeys;
-	curkey = tmp.curkey;
+	keyset	= state.keyset; // key-signature set?
+	numkeys = state.numkeys;
+	curkey	= state.curkey;
 	for (int i=0; i < NUMNOTES; ++i)
 	{
-		instrKeyArray[i] = tmp.instrKeyArray[i];
-		KeyArray[i] = tmp.KeyArray[i];
-//		MeasureAccidentals[i] = tmp.MeasureAccidentals[i];
+		instrKeyArray[i] = state.instrKeyArray[i];
+		KeyArray[i] = state.KeyArray[i];
+//		MeasureAccidentals[i] = state.MeasureAccidentals[i];
 	}
 	
-	fMeasureAccidentals = tmp.fMeasureAccidentals;
+	fMeasureAccidentals = state.fMeasureAccidentals;
 
 	// clef-Parameter
-	clefset = tmp.clefset; // CLEFINTERN, CLEFEXPLICIT, CLEFAUTO, [ CLEFOFF ]
-	clefname  = tmp.clefname;
-	basepit = tmp.basepit;
-	basepitoffs = tmp.basepitoffs;
-	instrNumKeys = tmp.instrNumKeys;
-	baseoct = tmp.baseoct;
-	octava = tmp.octava;
-	baseline = tmp.baseline;
-	curclef = tmp.curclef;
+	clefset		= state.clefset; // CLEFINTERN, CLEFEXPLICIT, CLEFAUTO, [ CLEFOFF ]
+	clefname	= state.clefname;
+	basepit		= state.basepit;
+	basepitoffs = state.basepitoffs;
+	instrNumKeys = state.instrNumKeys;
+	baseoct		= state.baseoct;
+	octava		= state.octava;
+	baseline	= state.baseline;
+	curclef		= state.curclef;
 
-	curstaffrmt = tmp.curstaffrmt;
+	curstaffrmt = state.curstaffrmt;
 	staffLSPACE = LSPACE;
 	if (curstaffrmt && curstaffrmt->getSize() && curstaffrmt->getSize()->TagIsSet())
 	{
 		staffLSPACE = curstaffrmt->getSize()->getValue() * 2;
 	}
-	numlines = tmp.numlines; // Standard ...
-    lineThickness = tmp.lineThickness;
+	numlines		= state.numlines; // Standard ...
+    lineThickness	= state.lineThickness;
 
-	distanceset = tmp.distanceset;
-	distance = tmp.distance;
+	distanceset = state.distanceset;
+	distance	= state.distance;
 
-	curbarfrmt = tmp.curbarfrmt;
+	curbarfrmt	= state.curbarfrmt;
 	return (*this);
 }
 
@@ -856,6 +856,9 @@ GRRepeatBegin * GRStaff::AddRepeatBegin(ARRepeatBegin *arrb)
     assert(arrb);
 //	GRRepeatBegin * tmp = new GRRepeatBegin(arrb, this, arrb->getRelativeTimePosition());
 	GRRepeatBegin * tmp = new GRRepeatBegin(arrb);
+	if (mStaffState.curbarfrmt && (mStaffState.curbarfrmt->getStyle() == ARBarFormat::kStyleSystem))
+		mGrSystemSlice->addRepeatBegin(tmp, GRSystem::SYSTEM, this);
+
 	addNotationElement(tmp);
 	tmp->setGRStaff(this);
 	tmp->updateBoundingBox();
@@ -873,6 +876,8 @@ GRRepeatEnd * GRStaff::AddRepeatEnd( ARRepeatEnd * arre )
 	{
         assert (arre);
 		GRRepeatEnd * tmp = new GRRepeatEnd(arre, this, arre->getRelativeTimePosition(), this->proportionnalRender);
+		if (mStaffState.curbarfrmt && (mStaffState.curbarfrmt->getStyle() == ARBarFormat::kStyleSystem))
+			mGrSystemSlice->addRepeatEnd(tmp, GRSystem::SYSTEM, this);
 		addNotationElement(tmp);
          // repeatBegin must reset the keyState, jfk, 9/2015
         mStaffState.reset2key ();
@@ -1020,28 +1025,19 @@ GRInstrument * GRStaff::AddInstrument(ARInstrument * arinstr)
 }
 
 // ----------------------------------------------------------------------------
-GRBar * GRStaff::AddBar(ARBar * abar, const TYPE_TIMEPOSITION & von)
+GRBar * GRStaff::AddBar(ARBar * abar, const TYPE_TIMEPOSITION & date)
 {
 staff_debug("AddBar");
-	newMeasure(von); // erhoeht u.a. mnum!
+	newMeasure(date); // erhoeht u.a. mnum!
 
-	GRBar * ntakt = new GRBar( abar, this, von, this->proportionnalRender);
+	GRBar * bar = new GRBar( abar, this, date, this->proportionnalRender);
 	// depending on current bar Format, we have to tell the staffmanager (or the system) 
-	if (mStaffState.curbarfrmt && mStaffState.curbarfrmt->getStyle()
-		&& mStaffState.curbarfrmt->getStyle()->TagIsSet())
-	{
-		const NVstring & style = mStaffState.curbarfrmt->getStyle()->getValue();
-		// NVstring str_system("system");
-		if (style == "system" ) // ((const NVstring &) str_system))
-		{
-			mGrSystemSlice->addBar(ntakt, GRSystem::SYSTEM, this);
-		}
-	}
-
+	if (mStaffState.curbarfrmt && (mStaffState.curbarfrmt->getStyle() == ARBarFormat::kStyleSystem))
+		mGrSystemSlice->addBar(bar, mStaffState.curbarfrmt->getRanges(), this);
 	// change of  Measuretime ...
 	mStaffState.reset2key ();
-	addNotationElement(ntakt); 
-	return ntakt;
+	addNotationElement(bar);
+	return bar;
 }
 
 // ----------------------------------------------------------------------------
@@ -1184,42 +1180,50 @@ staff_debug("EndStaff 2");
 
 
 // ----------------------------------------------------------------------------
-GRDoubleBar * GRStaff::AddDoubleBar(ARDoubleBar * ardbar, const TYPE_TIMEPOSITION & von)
+GRDoubleBar * GRStaff::AddDoubleBar(ARDoubleBar * ardbar, const TYPE_TIMEPOSITION & date)
 {
 staff_debug("AddDoubleBar");
-	newMeasure(von); // erhoeht u.a. mnum!
+	newMeasure(date); // erhoeht u.a. mnum!
 
-	GRDoubleBar * ntakt = new GRDoubleBar( ardbar, this, von, this->proportionnalRender);
+	GRDoubleBar * ntakt = new GRDoubleBar( ardbar, this, date, this->proportionnalRender);
 	// depending on current bar Format, we have to tell the staffmanager (or the system) 
-	if (mStaffState.curbarfrmt && mStaffState.curbarfrmt->getStyle() && mStaffState.curbarfrmt->getStyle()->TagIsSet())
-	{
-		const NVstring & style = mStaffState.curbarfrmt->getStyle()->getValue();
-		if (style == "system" )
-		{
+	if (mStaffState.curbarfrmt) {
+		if (mStaffState.curbarfrmt->getStyle() == ARBarFormat::kStyleSystem)
 			mGrSystemSlice->addDoubleBar(ntakt, GRSystem::SYSTEM, this);
-		}
 	}
+
+//	if (mStaffState.curbarfrmt && mStaffState.curbarfrmt->getStyle() && mStaffState.curbarfrmt->getStyle()->TagIsSet())
+//	{
+//		const NVstring & style = mStaffState.curbarfrmt->getStyle()->getValue();
+//		if (style == "system" )
+//		{
+//			mGrSystemSlice->addDoubleBar(ntakt, GRSystem::SYSTEM, this);
+//		}
+//	}
 	addNotationElement(ntakt); // change of Measuretime ...
 	return ntakt;
 }
 
 // ----------------------------------------------------------------------------
-GRFinishBar * GRStaff::AddFinishBar(ARFinishBar * arfbar, const TYPE_TIMEPOSITION & von)
+GRFinishBar * GRStaff::AddFinishBar(ARFinishBar * arfbar, const TYPE_TIMEPOSITION & date)
 {
 staff_debug("AddFinishBar");
-	newMeasure(von); // erhoeht u.a. mnum!
+	newMeasure(date); // erhoeht u.a. mnum!
 
-	GRFinishBar * ntakt = new GRFinishBar( arfbar, this, von, this->proportionnalRender);
+	GRFinishBar * ntakt = new GRFinishBar( arfbar, this, date, this->proportionnalRender);
 
 	// depending on current bar Format, we have to tell the staffmanager (or the system) 
-	if (mStaffState.curbarfrmt && mStaffState.curbarfrmt->getStyle() && mStaffState.curbarfrmt->getStyle()->TagIsSet())
-	{
-		const NVstring & style = mStaffState.curbarfrmt->getStyle()->getValue();
-		if (style == "system" )
-		{
-			mGrSystemSlice->addFinishBar(ntakt, GRSystem::SYSTEM, this);
-		}
-	}
+	if (mStaffState.curbarfrmt && (mStaffState.curbarfrmt->getStyle() == ARBarFormat::kStyleSystem))
+		mGrSystemSlice->addFinishBar(ntakt, GRSystem::SYSTEM, this);
+
+//	if (mStaffState.curbarfrmt && mStaffState.curbarfrmt->getStyle() && mStaffState.curbarfrmt->getStyle()->TagIsSet())
+//	{
+//		const NVstring & style = mStaffState.curbarfrmt->getStyle()->getValue();
+//		if (style == "system" )
+//		{
+//			mGrSystemSlice->addFinishBar(ntakt, GRSystem::SYSTEM, this);
+//		}
+//	}
 	addNotationElement(ntakt); // change of Measuretime ...
 	return ntakt;
 }
@@ -1242,19 +1246,12 @@ staff_debug("CreateBeginElements");
 
 	// we have to look, what kind of state-settings are set.
 	if (state.curbarfrmt != NULL)
-	{
-		// why do we need a copy?
 		setBarFormat(state.curbarfrmt);
-	}
 
 	if (state.curstaffrmt != NULL)
-	{
 		setStaffFormat(state.curstaffrmt);
-		// we have a staffrmt ...
-	}
 
-	if (state.curclef != NULL)
-	{
+	if (state.curclef != NULL) {
 		// now I have to deal with basepitoffs (for transposed instruments)
 
 		ARClef * arclef = new ARClef(*state.curclef);
