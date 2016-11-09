@@ -180,8 +180,8 @@ void GRRepeatBegin::OnDraw(VGDevice & hdc ) const
 		hdc.Rectangle(x1, y1, x1 + fBaseThickness, y2);
 		hdc.Rectangle(x2, y1, x2 + rightLineThickness, y2);
 	}
+	else DrawDots( hdc);
 
-	DrawDots( hdc);
     if (mColRef) {
         hdc.SetFontColor(prevColor);
         hdc.PopFillColor();

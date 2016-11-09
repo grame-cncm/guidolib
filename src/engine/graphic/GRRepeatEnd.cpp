@@ -146,7 +146,6 @@ void GRRepeatEnd::DrawDots( VGDevice & hdc ) const
 // --------------------------------------------------------------------------
 void GRRepeatEnd::OnDraw( VGDevice & hdc ) const
 {
-
     if (!mDraw || fSize < kMinNoteSize)
         return;
 
@@ -178,8 +177,7 @@ void GRRepeatEnd::OnDraw( VGDevice & hdc ) const
 		hdc.Rectangle(x1, y1, x1 + leftLineThickness, y2);
 		hdc.Rectangle(x2, y1, x2 + fBaseThickness, y2);
 	}
-
-	DrawDots( hdc);
+	else DrawDots( hdc);
     if (mColRef) {
         hdc.SetFontColor(prevColor);
         hdc.PopFillColor();
