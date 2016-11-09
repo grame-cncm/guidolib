@@ -47,8 +47,11 @@ class ARRepeatBegin : public ARMTParameter	// ,public ARMusicalObject
         /**** Function to avoid dynamic_cast ****/
         ARMusicalObject *isARRepeatBegin() { return this; }
         /*****************************************/
+		const ARBar::TRanges&	getRanges () const					{ return fRanges; }
+		void					setRanges (const ARBar::TRanges& r)	{ fRanges = r; }
 	
 	protected:
+		ARBar::TRanges	fRanges;
 		static ListOfTPLs ltpls;
 		TYPE_DURATION dur;
 };

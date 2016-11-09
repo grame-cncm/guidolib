@@ -34,9 +34,9 @@ ARBarFormat::~ARBarFormat()	{}
 ARBarFormat::ARBarFormat()	{ fStyle = kStyleStaff; }
 
 
-ARBarFormat::TRanges ARBarFormat::getRanges (const NVstring &str)
+ARBar::TRanges ARBarFormat::getRanges (const NVstring &str)
 {
-	TRanges ranges;
+	ARBar::TRanges ranges;
 	size_t pos = -1;
 	do {
 		pos += 1;

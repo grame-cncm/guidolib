@@ -51,10 +51,13 @@ GRRepeatBegin::~GRRepeatBegin()
 }
 
 // --------------------------------------------------------------------------
+const ARBar::TRanges GRRepeatBegin::getRanges() const	{ return getARRepeatBegin()->getRanges(); }
+
+// --------------------------------------------------------------------------
 void GRRepeatBegin::setPosFrom(GCoord posy)		{ mBoundingBox.top = posy; }
 void GRRepeatBegin::setPosTo(GCoord posy)		{ mBoundingBox.bottom = posy; }
 
-ARRepeatBegin* GRRepeatBegin::getARRepeatBegin() {
+ARRepeatBegin* GRRepeatBegin::getARRepeatBegin() const {
 	return dynamic_cast<ARRepeatBegin*>(getAbstractRepresentation());
 }
 
@@ -174,13 +177,22 @@ void GRRepeatBegin::OnDraw(VGDevice & hdc ) const
 		const float spacing = fBaseThickness + LSPACE * 0.4f * fSize - rightLineThickness;
 		const float x1 = mPosition.x - mBoundingBox.Width() + offsetX;
 		const float x2 = x1 + spacing;
-		const float y1 = mPosition.y + offsety1 * fSize;
-		const float y2 = y1 + (mBoundingBox.bottom + offsety2) * fSize;
 
-		hdc.Rectangle(x1, y1, x1 + fBaseThickness, y2);
-		hdc.Rectangle(x2, y1, x2 + rightLineThickness, y2);
+		if (fRanges.empty()) {
+			const float y1 = mPosition.y + offsety1 * fSize;
+			const float y2 = y1 + (mBoundingBox.bottom + offsety2) * fSize;
+			hdc.Rectangle(x1, y1, x1 + fBaseThickness, y2);
+			hdc.Rectangle(x2, y1, x2 + rightLineThickness, y2);
+		}
+		else
+		for (size_t i=0; i< fRanges.size(); i++) {
+			float y1 = fRanges[i].first + offsety1 * fSize;
+			float y2 = fRanges[i].second + offsety2 * fSize;
+			hdc.Rectangle(x1, y1, x1 + fBaseThickness, y2);
+			hdc.Rectangle(x2, y1, x2 + rightLineThickness, y2);
+		}
 	}
-	else DrawDots( hdc);
+	DrawDots( hdc);
 
     if (mColRef) {
         hdc.SetFontColor(prevColor);

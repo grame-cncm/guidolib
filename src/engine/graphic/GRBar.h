@@ -17,9 +17,9 @@
 
 #include <vector>
 
+#include "ARBar.h"
 #include "GRTagARNotationElement.h"
 
-class ARBar;
 class GRStaff;
 class GRPage;
 
@@ -28,11 +28,10 @@ class GRPage;
 class GRBar : public GRTagARNotationElement
 {
 	public:
-		
+		typedef std::vector<pair<float, float> >	TRanges;
+	
 		GRBar( ARBar * p_arbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float propRender);
-
-		GRBar( ARBar * p_arbar, GRSystem * p_grsystem, GRStaff * inStaff,
-									const TYPE_TIMEPOSITION &  inTimePos, float propRender);
+		GRBar( ARBar * p_arbar, GRSystem * p_grsystem, GRStaff * inStaff, const TYPE_TIMEPOSITION &  inTimePos, float propRender);
 
 		virtual ~GRBar();
 
@@ -55,6 +54,8 @@ class GRBar : public GRTagARNotationElement
 		virtual const NVPoint & getReferencePosition() const { return sRefPos; }
 		
 		ARBar * getARBar() const;
+		const ARBar::TRanges getRanges() const				{ return getARBar()->getRanges(); }
+		void				 setRanges(const TRanges& r)	{ fRanges = r; }
 
 		static void reset() { fCurrentPage = 0; }		// required for a new score
 	
@@ -72,6 +73,7 @@ class GRBar : public GRTagARNotationElement
         float mDy;
         float mStaffRatio;
 		float mProportionalRender;
+		TRanges	fRanges;
 
 	private:
 		static GRPage*	fCurrentPage;

@@ -15,6 +15,7 @@
 
 */
 
+#include "ARBar.h"
 #include "GRBar.h"
 #include "GRDefine.h"
 
@@ -34,7 +35,7 @@ public:
 	void setPosFrom( float posy );
 	void setPosTo( float posy );
 
-	ARRepeatBegin*			getARRepeatBegin();
+	ARRepeatBegin*			getARRepeatBegin() const;
 	virtual unsigned int    getTextAlign() const;
     virtual const NVPoint & getReferencePosition() const { return refpos; }
     virtual void            OnDraw(VGDevice & hdc ) const;
@@ -42,6 +43,9 @@ public:
     virtual void            updateBoundingBox();
     virtual void            tellPosition(GObject * caller, const NVPoint & newPosition);
     virtual void            setHPosition( float nx);
+
+	const ARBar::TRanges	getRanges() const;
+	void					setRanges(const GRBar::TRanges& r)	{ fRanges = r; }
 
 protected:
 	bool	isSystemSlice() const;
@@ -52,6 +56,8 @@ protected:
            int     fLineNumber;
            float   fSize;
            float   fStaffThickness;
+private:
+	GRBar::TRanges	fRanges;
 };
 
 #endif

@@ -35,14 +35,15 @@
 
 
 // Guido AR
+#include "ARAccolade.h"
+#include "ARBar.h"
 #include "ARSystemFormat.h"
 #include "ARMusicalVoice.h"	// for template instanciation
 #include "ARMusic.h"
-#include "ARAccolade.h"
+#include "ARStaff.h"
 #include "TagParameterFloat.h"
 #include "TagParameterString.h"
 #include "TagParameterInt.h"
-#include "ARStaff.h"
 
 // Guido GR
 #include "GRAccolade.h"
@@ -71,7 +72,7 @@ using namespace std;
 #else
 #define traceMethod(method)	
 #endif
-#define trace1Method(method)		cout << (void*)this << " GRSystem::" << method << endl
+#define trace1Method(method)	cout << (void*)this << " GRSystem::" << method << endl
 
 
 GRStaff * gCurStaff;
@@ -420,29 +421,49 @@ GRSystem::GRSystem(GRStaffManager * staffmgr, GRPage * inPage,
 		GRNotationElement * el = GetNext(pos);
 		GRBar * bar = dynamic_cast<GRBar *>(el);
 		GRRepeatBegin * rbeg = dynamic_cast<GRRepeatBegin *>(el);
-		GRRepeatEnd *	rend = dynamic_cast<GRRepeatEnd *>(el);
 		GRSystemTag * systag;
 		float linesOffset = lastStaff ?  LSPACE / 2 * (lastStaff->getNumlines() - 5) : 0;
 		if (bar) {
+			const GRBar::TRanges r = barRange2ypos(bar->getRanges());
+			bar->setRanges(r);
 			bar->setPosFrom(0);
-			if (lastStaff)
-				bar->setPosTo( lastStaff->getPosition().y + lastStaff->getDredgeSize() - linesOffset);
+			if (lastStaff) bar->setPosTo( lastStaff->getPosition().y + lastStaff->getDredgeSize() - linesOffset);
 		}
 		else if (rbeg) {
+			const GRBar::TRanges r = barRange2ypos(rbeg->getRanges());
+			rbeg->setRanges(r);
 			rbeg->setPosFrom(0);
-			if (lastStaff)
-				rbeg->setPosTo( lastStaff->getPosition().y + lastStaff->getDredgeSize() - linesOffset);
-		}
-		else if (rend) {
-			rend->setPosFrom(0);
-			if (lastStaff)
-				rbeg->setPosTo( lastStaff->getPosition().y + lastStaff->getDredgeSize() - linesOffset);
+			if (lastStaff) rbeg->setPosTo( lastStaff->getPosition().y + lastStaff->getDredgeSize() - linesOffset);
 		}
 		else if ((systag = dynamic_cast<GRSystemTag *>(el)) != 0 )
 			systag->checkPosition(this);
 	}
 }
 
+//----------------------------------------------------------------------------------------------------
+const GRStaff*	GRSystem::getStaff (int index) const
+{
+	StaffVector * sv = getStaves();
+	return sv ? sv->Get(index) : 0;
+}
+
+//----------------------------------------------------------------------------------------------------
+GRBar::TRanges GRSystem::barRange2ypos (const ARBar::TRanges& r) const
+{
+	GRBar::TRanges outpos;
+	for (size_t i=0; i < r.size(); i++) {
+		const GRStaff* staff1 = getStaff(r[i].first);
+		const GRStaff* staff2 = getStaff(r[i].second);
+		if (staff1 && staff2) {
+			float y1 = staff1->getPosition().y;
+			float y2 = staff2->getPosition().y + staff2->getDredgeSize();
+			outpos.push_back (make_pair(y1, y2));
+		}
+	}
+	return outpos;
+}
+
+//----------------------------------------------------------------------------------------------------
 GRSystem::~GRSystem()
 {
 	mSystemSlices.RemoveAll();
@@ -459,6 +480,20 @@ GRSystem::~GRSystem()
 		delete mAccolade[i];
 }
 
+//----------------------------------------------------------------------------------------------------
+StaffVector * GRSystem::getStaves() const
+{
+	if( mSystemSlices.empty())	return 0;
+
+	GuidoPos pos = mSystemSlices.GetHeadPosition();
+	if (pos) {
+		GRSystemSlice * slice = mSystemSlices.GetNext(pos);
+		return slice ? slice->getStaves() : 0;
+	}
+	return 0;
+}
+
+//----------------------------------------------------------------------------------------------------
 void GRSystem::GGSOutput() const
 {
 	ggsoffsetx += (long)mPosition.x;

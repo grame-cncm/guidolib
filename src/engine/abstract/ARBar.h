@@ -15,6 +15,8 @@
 
 */
 
+#include <vector>
+
 #include "ARMTParameter.h"
 
 /** \brief Bar tag
@@ -23,6 +25,7 @@ class ARBar : // public ARMusicalObject,
 	public ARMTParameter
  {
  public:
+		typedef std::vector<pair<int, int> >	TRanges;
 		enum { kNoNum, kNumAll, kNumPage };
 		         ARBar(const TYPE_TIMEPOSITION & timeposition);
 		         ARBar();
@@ -47,10 +50,14 @@ class ARBar : // public ARMusicalObject,
 		void		 setPreviousBar (const ARBar* bar)	{ fLastBar = bar; }
 	 
         /**** Function to avoid dynamic_cast ****/
-        ARMusicalObject *isARBar() { return this; }
+        ARMusicalObject *isARBar()			{ return this; }
         /*****************************************/
+		const TRanges&	getRanges () const				{ return fRanges; }
+		void			setRanges (const TRanges& r)	{ fRanges = r; }
 
   protected:
+		TRanges	fRanges;
+
 		int   measureNumber;
         int   measureNumberDisplayed;
 		float numDx;

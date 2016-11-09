@@ -72,19 +72,28 @@ void GRDoubleBar::DrawWithLines( VGDevice & hdc ) const
 
 	DisplayMeasureNum (hdc);
 
+    float lineThickness = kLineThick * 1.5f * staffSize;
+    hdc.PushPenWidth(lineThickness);
+
     const float spacing = LSPACE * 0.7f * staffSize;
 	const float x2 = getXPos (mGrStaff->getSizeRatio());
 	const float x1 = x2 - spacing;
-	const float y1 = getY1 (mBoundingBox.top);
-	const float y2 = getY2 (y1, mBoundingBox.bottom);
 
-    float lineThickness = kLineThick * 1.5f * staffSize;
+	if (fRanges.empty()) {
+		const float y1 = getY1 (mBoundingBox.top);
+		const float y2 = getY2 (y1, mBoundingBox.bottom);
+		hdc.Line(x1, y1, x1, y2);
+		hdc.Line(x2, y1, x2, y2);
+	}
+	else
+	for (size_t i=0; i< fRanges.size(); i++) {
+		float y1 = getY1 (fRanges[i].first) + lineThickness / 2;
+		float y2 = getY2 (-mDy, fRanges[i].second) - lineThickness / 2;
+		hdc.Line(x1, y1, x1, y2);
+		hdc.Line(x2, y1, x2, y2);
+	}
 
-    hdc.PushPenWidth(lineThickness);
-    hdc.Line(x1, y1, x1, y2);
-    hdc.Line(x2, y1, x2, y2);
     hdc.PopPenWidth();
-
     if (mColRef)
         hdc.PopPenColor();
 }

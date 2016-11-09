@@ -297,9 +297,17 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
 	hdc.PushPenWidth(lineThickness);
 
     const float x  = getXPos(staffSize);
-	float y1 = getY1 (mBoundingBox.top) + lineThickness / 2;
-	float y2 = getY2 (y1, mBoundingBox.bottom) - lineThickness / 2;
-    hdc.Line(x, y1, x, y2);
+	if (fRanges.empty()) {
+		float y1 = getY1 (mBoundingBox.top) + lineThickness / 2;
+		float y2 = getY2 (y1, mBoundingBox.bottom) - lineThickness / 2;
+		hdc.Line(x, y1, x, y2);
+	}
+	else
+	for (size_t i=0; i< fRanges.size(); i++) {
+		float y1 = getY1 (fRanges[i].first) + lineThickness / 2;
+		float y2 = getY2 (-mDy, fRanges[i].second) - lineThickness / 2;
+		hdc.Line(x, y1, x, y2);
+	}
     hdc.PopPenWidth();
     if (mColRef) {
         hdc.SetFontColor(prevFontColor);

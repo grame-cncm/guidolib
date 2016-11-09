@@ -17,11 +17,11 @@
 
 template <class T> class KF_IVector;
 
-// #include <vector>
-
 #include "kf_ilist.h"	// required
 
 #include "NEPointerList.h"
+#include "ARBar.h"
+#include "GRBar.h"
 #include "GRRod.h"
 #include "GRSystemSlice.h"
 #include "GREvent.h"
@@ -32,7 +32,6 @@ template <class T> class KF_IVector;
 
 class ARSystemFormat;
 class ARMusic;
-class ARBar;
 class ARAccolade;
 
 class GRPage;
@@ -94,7 +93,7 @@ public:
 	ARMusic *           getARMusic() const;
 	GRSpring *          getSpring( int id ) const;
 	const GRSpring *    getGRSpring( int id ) const;
-    StaffVector *       getStaves() const   { return mStaffs; }
+    StaffVector *       getStaves() const;
 	SSliceList *        getSlices()         { return &mSystemSlices; }
 
 	void        setSpringParameter(float nconst);
@@ -129,7 +128,6 @@ public:
 
 
 protected:
-
 	void 		dospacing();
 //	void		DrawAccolade(  VGDevice & hdc, const NVPoint & leftTop, const NVPoint & leftBottom, int id ) const;
 	void 		DrawSystemSprings( VGDevice & hdc ) const;
@@ -138,6 +136,8 @@ protected:
 	void		InitForceFunction (GRStaffManager * staffmgr, SSliceList ** psystemslices, int count);
 	void		AdjustForceFunction (GRSliceHeight &sliceheight, int &startspring, int &endspring, float optForce);
 	GRStaff *	ComputeBoundingBox(GRSliceHeight &sliceheight);
+	
+	GRBar::TRanges	barRange2ypos (const ARBar::TRanges& r) const;
 								
 	float 	mSystemforce; 		// The force used to stretch the system
 	float 	mMarginLeft;		 // Margin to the Left (=indent)
@@ -176,7 +176,8 @@ protected:
 	// GRAccoladeList	mAccolades; // TODO
 	std::vector<GRAccolade *>	mAccolade;		// TEMP
 
-private:  
+private:
+	const GRStaff*	getStaff (int index) const;
 
 	GRPage*			mPage;
 	StaffVector*	mStaffs;

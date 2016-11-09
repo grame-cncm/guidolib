@@ -19,6 +19,7 @@
 
 
 #include "ARMTParameter.h"
+#include "ARBar.h"
 class TagParameterString;
 
 /** \brief the bar format tag parameter.
@@ -42,16 +43,16 @@ public:
 	virtual void printGMNName(std::ostream& os) const;
 	virtual void printParameters(std::ostream& os) const;
 
-	style			getStyle() const	{ return fStyle; }
-	const TRanges&	getRanges() const	{ return fRanges; }
+	style					getStyle() const	{ return fStyle; }
+	const ARBar::TRanges&	getRanges() const	{ return fRanges; }
 
 //	const TagParameterString *getStyle() const { return style; }
 
 protected:
-	TRanges getRanges (const NVstring &str);
+	ARBar::TRanges getRanges (const NVstring &str);
 
-	style	fStyle;
-	TRanges	fRanges;
+	style			fStyle;
+	ARBar::TRanges	fRanges;
 	
 //	TagParameterString *	style;
 	static ListOfTPLs 		ltpls;

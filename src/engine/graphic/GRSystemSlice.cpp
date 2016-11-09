@@ -18,8 +18,12 @@ using namespace std;
 #include "GUIDOEngine.h"
 #include "GUIDOInternal.h"
 
+#include "ARDoubleBar.h"
+#include "ARFinishBar.h"
 #include "ARMusic.h"
 #include "ARMusicalVoice.h"
+#include "ARRepeatBegin.h"
+#include "ARRepeatEnd.h"
 
 #include "GRBar.h"
 #include "GRDoubleBar.h"
@@ -104,10 +108,11 @@ GRBar * GRSystemSlice::getBarAt (const TYPE_TIMEPOSITION& t) const
 	return bar;
 }
 
-void GRSystemSlice::addRepeatBegin( GRRepeatBegin * mybar,int btype, GRStaff * grstaff)
+void GRSystemSlice::addRepeatBegin( GRRepeatBegin * mybar,const ARBar::TRanges& ranges, GRStaff * grstaff)
 {
 	ARRepeatBegin * ar = mybar->getARRepeatBegin();
 	assert(ar);
+	ar->setRanges(ranges);
 	GRRepeatBegin * newrepeat = new GRRepeatBegin(ar);
 	newrepeat->setTagType(GRTag::SYSTEMTAG);
 	mHasSystemBars = true;
@@ -115,10 +120,11 @@ void GRSystemSlice::addRepeatBegin( GRRepeatBegin * mybar,int btype, GRStaff * g
 	AddTail(newrepeat);
 }
 
-void GRSystemSlice::addRepeatEnd ( GRRepeatEnd * mybar,int btype, GRStaff * grstaff)
+void GRSystemSlice::addRepeatEnd ( GRRepeatEnd * mybar,const ARBar::TRanges& ranges, GRStaff * grstaff)
 {
 	ARRepeatEnd * ar = mybar->getARRepeatEnd();
 	assert(ar);
+	ar->setRanges(ranges);
 	GRRepeatEnd * newrepeat = new GRRepeatEnd(ar, grstaff, mybar->getRelativeTimePosition(), grstaff->getProportionnalRender() );
 	newrepeat->setTagType(GRTag::SYSTEMTAG);
 	mHasSystemBars = true;
@@ -126,13 +132,14 @@ void GRSystemSlice::addRepeatEnd ( GRRepeatEnd * mybar,int btype, GRStaff * grst
 	AddTail(newrepeat);
 }
 
-void GRSystemSlice::addBar(GRBar * mybar, const std::vector<pair<int, int> >& ranges, GRStaff * grstaff )
+void GRSystemSlice::addBar(GRBar * mybar, const ARBar::TRanges& ranges, GRStaff * grstaff )
 {
 	// We have to build a new Barline ...
 	// the barline needs to know that it belongs to a system. 
 	// when the distance of staffs is being set, these tags must be updated (for length) 
 	ARBar * arbar = mybar->getARBar();
 	assert(arbar);
+	arbar->setRanges(ranges);
 	GRBar * newbar = new GRBar(arbar, NULL, grstaff, mybar->getRelativeTimePosition(), grstaff->getProportionnalRender());
 	mHasSystemBars = true;
 
@@ -147,20 +154,22 @@ void GRSystemSlice::addBar(GRBar * mybar, const std::vector<pair<int, int> >& ra
 	AddTail(newbar);
 }
 
-void GRSystemSlice::addFinishBar(GRFinishBar * mybar,int bartype, GRStaff * grstaff)
+void GRSystemSlice::addFinishBar(GRFinishBar * mybar,const ARBar::TRanges& ranges, GRStaff * grstaff)
 {
 	ARFinishBar * arbar = mybar->getARFinishBar();
 	assert(arbar);
+	arbar->setRanges(ranges);
 	GRFinishBar * newbar = new GRFinishBar(arbar, NULL, grstaff, mybar->getRelativeTimePosition(), grstaff->getProportionnalRender());
 	mHasSystemBars = true;
 	mybar->addAssociation(newbar);
 	AddTail(newbar);
 }
 
-void GRSystemSlice::addDoubleBar(GRDoubleBar * mybar,int bartype, GRStaff * grstaff)
+void GRSystemSlice::addDoubleBar(GRDoubleBar * mybar,const ARBar::TRanges& ranges, GRStaff * grstaff)
 {
 	ARDoubleBar * arbar = mybar->getARDoubleBar();
 	assert(arbar);
+	arbar->setRanges(ranges);
 	GRDoubleBar * newbar = new GRDoubleBar(arbar, NULL, grstaff, mybar->getRelativeTimePosition(), grstaff->getProportionnalRender());
 	mHasSystemBars = true;
 	mybar->addAssociation(newbar);

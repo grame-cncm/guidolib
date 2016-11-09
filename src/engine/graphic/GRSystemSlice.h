@@ -18,6 +18,7 @@
 
 #include <vector>
 
+#include "ARBar.h"
 #include "GREvent.h"
 
 template <class T> class KF_IVector;
@@ -81,11 +82,11 @@ public:
 
 	void		addSystemTag( GRNotationElement * tg );
 	void		addStaff( GRStaff * newStaff, int num);
-	void		addBar( GRBar * mybar, const std::vector<std::pair<int, int> >& ranges, GRStaff * grstaff);
-	void		addDoubleBar(GRDoubleBar * mybar,int bartype, GRStaff * grstaff);
-	void		addFinishBar( GRFinishBar * mybar,int btype, GRStaff * grstaff);
-	void		addRepeatBegin( GRRepeatBegin * mybar,int btype, GRStaff * grstaff);
-	void		addRepeatEnd ( GRRepeatEnd * mybar,int btype, GRStaff * grstaff);
+	void		addBar			( GRBar * mybar, const ARBar::TRanges& ranges, GRStaff * grstaff);
+	void		addDoubleBar	( GRDoubleBar * mybar,const ARBar::TRanges& ranges, GRStaff * grstaff);
+	void		addFinishBar	( GRFinishBar * mybar,const ARBar::TRanges& ranges, GRStaff * grstaff);
+	void		addRepeatBegin	( GRRepeatBegin * mybar,const ARBar::TRanges& ranges, GRStaff * grstaff);
+	void		addRepeatEnd	( GRRepeatEnd * mybar,const ARBar::TRanges& ranges, GRStaff * grstaff);
 	void		addPossibleBreakState( GRPossibleBreakState * in );
 
 	void		setNumber(int num )	{ mNumber = num; }

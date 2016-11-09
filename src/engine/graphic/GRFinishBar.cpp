@@ -102,16 +102,24 @@ void GRFinishBar::DrawWithLines( VGDevice & hdc ) const
 
     const float offsetX = (fSize - 1) * 1.8f + (fStaffThickness - 4) * 0.5f + 2.8f + (fSize - 1) * (fStaffThickness - 4) * 0.5f;
 
+    float leftLineThickness = 1.8f * kLineThick * fSize;
     const float spacing = LSPACE * 0.4f * fSize;
     const float x1 = mPosition.x - mBoundingBox.Width() + offsetX;
 	const float x2 = x1 + spacing;
-    const float y1 = mPosition.y + (offsety1 - 2) * fSize;
-	const float y2 = y1 + mBoundingBox.bottom + (offsety2 + 4) * fSize;
 
-    float leftLineThickness = 1.8f * kLineThick * fSize;
-
-	hdc.Rectangle(x1, y1, x1 + leftLineThickness, y2);
-	hdc.Rectangle(x2, y1, x2 + fBaseThickness, y2);
+	if (fRanges.empty()) {
+		const float y1 = mPosition.y + (offsety1 - 2) * fSize;
+		const float y2 = y1 + mBoundingBox.bottom + (offsety2 + 4) * fSize;
+		hdc.Rectangle(x1, y1, x1 + leftLineThickness, y2);
+		hdc.Rectangle(x2, y1, x2 + fBaseThickness, y2);
+	}
+	else
+	for (size_t i=0; i< fRanges.size(); i++) {
+		const float y1 = fRanges[i].first + (offsety1 - 2) * fSize;
+		const float y2 = fRanges[i].second + (offsety2 + 4) * fSize;
+		hdc.Rectangle(x1, y1, x1 + leftLineThickness, y2);
+		hdc.Rectangle(x2, y1, x2 + fBaseThickness, y2);
+	}
 
     if (mColRef)
         hdc.PopFillColor();

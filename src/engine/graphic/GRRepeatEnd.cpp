@@ -139,6 +139,7 @@ void GRRepeatEnd::DrawDots( VGDevice & hdc ) const
     float pointOffsetx  = (fStaffThickness - 4) * 0.5f - 62 * (fSize - 1) + (fStaffThickness - 4) * (fSize - 1) * 0.5f - 57;
     float pointSize = 0.4f * fSize;
 
+cout << "GRRepeatEnd::DrawDots " << pointOffsetx << " " << pointOffsety1 << endl;
     DrawSymbol(hdc, pointSymbol, pointOffsetx, pointOffsety1, pointSize);
     DrawSymbol(hdc, pointSymbol, pointOffsetx, pointOffsety2, pointSize);
 }
@@ -166,18 +167,26 @@ void GRRepeatEnd::OnDraw( VGDevice & hdc ) const
 		// - Horizontal adjustement according to staff's lines size and staff's size
 		const float offsetX = (fStaffThickness - 4) * 0.5f - 48 * (fSize - 1) + (fStaffThickness - 4) * (fSize - 1) * 0.5f + 49;
 
+		float leftLineThickness = 1.8f * kLineThick * fSize;
 		const float spacing = LSPACE * 0.4f * fSize;
 		const float x1 = mPosition.x - mBoundingBox.Width() + offsetX;
 		const float x2 = x1 + spacing;
-		const float y1 = mPosition.y + offsety1 * fSize;
-		const float y2 = y1 + (mBoundingBox.bottom + offsety2) * fSize;
 
-		float leftLineThickness = 1.8f * kLineThick * fSize;
-
-		hdc.Rectangle(x1, y1, x1 + leftLineThickness, y2);
-		hdc.Rectangle(x2, y1, x2 + fBaseThickness, y2);
+		if (fRanges.empty()) {
+			const float y1 = mPosition.y + offsety1 * fSize;
+			const float y2 = y1 + (mBoundingBox.bottom + offsety2) * fSize;
+			hdc.Rectangle(x1, y1, x1 + leftLineThickness, y2);
+			hdc.Rectangle(x2, y1, x2 + fBaseThickness, y2);
+		}
+		else
+		for (size_t i=0; i< fRanges.size(); i++) {
+			const float y1 = fRanges[i].first + offsety1 * fSize;
+			const float y2 = fRanges[i].second + offsety2 * fSize;
+			hdc.Rectangle(x1, y1, x1 + leftLineThickness, y2);
+			hdc.Rectangle(x2, y1, x2 + fBaseThickness, y2);
+		}
 	}
-	else DrawDots( hdc);
+	DrawDots( hdc);
     if (mColRef) {
         hdc.SetFontColor(prevColor);
         hdc.PopFillColor();

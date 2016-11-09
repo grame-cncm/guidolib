@@ -857,7 +857,7 @@ GRRepeatBegin * GRStaff::AddRepeatBegin(ARRepeatBegin *arrb)
 //	GRRepeatBegin * tmp = new GRRepeatBegin(arrb, this, arrb->getRelativeTimePosition());
 	GRRepeatBegin * tmp = new GRRepeatBegin(arrb);
 	if (mStaffState.curbarfrmt && (mStaffState.curbarfrmt->getStyle() == ARBarFormat::kStyleSystem))
-		mGrSystemSlice->addRepeatBegin(tmp, GRSystem::SYSTEM, this);
+		mGrSystemSlice->addRepeatBegin(tmp, mStaffState.curbarfrmt->getRanges(), this);
 
 	addNotationElement(tmp);
 	tmp->setGRStaff(this);
@@ -877,7 +877,7 @@ GRRepeatEnd * GRStaff::AddRepeatEnd( ARRepeatEnd * arre )
         assert (arre);
 		GRRepeatEnd * tmp = new GRRepeatEnd(arre, this, arre->getRelativeTimePosition(), this->proportionnalRender);
 		if (mStaffState.curbarfrmt && (mStaffState.curbarfrmt->getStyle() == ARBarFormat::kStyleSystem))
-			mGrSystemSlice->addRepeatEnd(tmp, GRSystem::SYSTEM, this);
+			mGrSystemSlice->addRepeatEnd(tmp, mStaffState.curbarfrmt->getRanges(), this);
 		addNotationElement(tmp);
          // repeatBegin must reset the keyState, jfk, 9/2015
         mStaffState.reset2key ();
@@ -1189,17 +1189,8 @@ staff_debug("AddDoubleBar");
 	// depending on current bar Format, we have to tell the staffmanager (or the system) 
 	if (mStaffState.curbarfrmt) {
 		if (mStaffState.curbarfrmt->getStyle() == ARBarFormat::kStyleSystem)
-			mGrSystemSlice->addDoubleBar(ntakt, GRSystem::SYSTEM, this);
+			mGrSystemSlice->addDoubleBar(ntakt, mStaffState.curbarfrmt->getRanges(), this);
 	}
-
-//	if (mStaffState.curbarfrmt && mStaffState.curbarfrmt->getStyle() && mStaffState.curbarfrmt->getStyle()->TagIsSet())
-//	{
-//		const NVstring & style = mStaffState.curbarfrmt->getStyle()->getValue();
-//		if (style == "system" )
-//		{
-//			mGrSystemSlice->addDoubleBar(ntakt, GRSystem::SYSTEM, this);
-//		}
-//	}
 	addNotationElement(ntakt); // change of Measuretime ...
 	return ntakt;
 }
@@ -1214,16 +1205,7 @@ staff_debug("AddFinishBar");
 
 	// depending on current bar Format, we have to tell the staffmanager (or the system) 
 	if (mStaffState.curbarfrmt && (mStaffState.curbarfrmt->getStyle() == ARBarFormat::kStyleSystem))
-		mGrSystemSlice->addFinishBar(ntakt, GRSystem::SYSTEM, this);
-
-//	if (mStaffState.curbarfrmt && mStaffState.curbarfrmt->getStyle() && mStaffState.curbarfrmt->getStyle()->TagIsSet())
-//	{
-//		const NVstring & style = mStaffState.curbarfrmt->getStyle()->getValue();
-//		if (style == "system" )
-//		{
-//			mGrSystemSlice->addFinishBar(ntakt, GRSystem::SYSTEM, this);
-//		}
-//	}
+		mGrSystemSlice->addFinishBar(ntakt, mStaffState.curbarfrmt->getRanges(), this);
 	addNotationElement(ntakt); // change of Measuretime ...
 	return ntakt;
 }
