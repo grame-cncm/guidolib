@@ -52,9 +52,9 @@ public:
     static ARMusicalEvent * cast( ARMusicalObject * inObj ) { return (inObj->isEventClass() ? static_cast<ARMusicalEvent *>(inObj) : 0 ); }
 
             void print(std::ostream& os) const;
-    virtual void printName(std::ostream& os) const       { os << "printName() needs to be implemented in subclasses; "; }
-    virtual void printGMNName(std::ostream& os) const    { os << "printGMNName() needs to be implemented in subclasses; "; }
-    virtual void printParameters(std::ostream& os) const { os << "printParameters() needs to be implemented in subclasses; "; }
+    virtual void printName(std::ostream& os) const       { os << "ARMusicalEvent "; }
+    virtual void printGMNName(std::ostream& os) const    { os << "\\musicalEvent "; }
+    virtual void printParameters(std::ostream& os) const { os << "params "; }
 
     virtual void forceNoteAppearance(NVstring noteAppearance) {};
 
