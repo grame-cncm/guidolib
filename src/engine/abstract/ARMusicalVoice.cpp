@@ -95,6 +95,7 @@ using namespace std;
 #define DISPDUREND "\\dispDurEnd"
 #define SHARESTEMEND "\\shareStemEnd"
 
+
 //____________________________________________________________________________________
 ARMusicalVoice::ARMusicalVoice()	: ObjectList(1), // owns elements ...
   currentChord(NULL), currentShareLocation(NULL), chordgrouplist(NULL),
@@ -4336,7 +4337,7 @@ void ARMusicalVoice::doAutoCheckStaffStateTags()
 	TYPE_TIMEPOSITION tp;
 
 	// we are at the beginning.
-	int issearch = 1;
+	bool waitFirstEv = true;
 	// at the beginning, we just need a clef.
 	int needsclef = 1;
 	int needskey  = 1;
@@ -4359,21 +4360,17 @@ void ARMusicalVoice::doAutoCheckStaffStateTags()
 		ARMeter     *meter = static_cast<ARMeter *>    (o->isARMeter());
         ARNewSystem *sys   = static_cast<ARNewSystem *>(o->isARNewSystem());
 		ARNewPage   *page  = static_cast<ARNewPage *>  (o->isARNewPage());
-		
+
 		if (!clef && !key && !meter && !sys && !page)
 		{
             ARMusicalTag *armt = NULL;
-                
-            if (o)
-                armt = static_cast<ARMusicalTag *>(o->isARMusicalTag());
-
-			if (armt && armt->IsStateTag())
-				continue;
+            if (o) armt = static_cast<ARMusicalTag *>(o->isARMusicalTag());
+			if (armt && armt->IsStateTag()) continue;
 		}
 
 		ARMusicalEvent * ev = ARMusicalEvent::cast(o);
 		// then we have an event->that means the initial phase is over ...
-		if (issearch)
+		if (waitFirstEv)
 		{
 			if (ev)
 			{
@@ -4434,13 +4431,38 @@ void ARMusicalVoice::doAutoCheckStaffStateTags()
 						ARMusicalObject *o2 = GetAt(firstpos);
 						if (ARMusicalEvent::cast(o2))
 							break;
-
+#if 1
+						ARMusicalTag *t1 = dynamic_cast<ARMusicalTag*>(o1);
+						ARMusicalTag *t2 = dynamic_cast<ARMusicalTag*>(o2);
+						if (t1 && t2) {
+							int pos1 = t1->getOrder(), pos2 = t2->getOrder();
+							if ((pos1 < 0) || (pos2 < 0))		// don't move
+								continue;
+							else if (pos1 > pos2) {
+								SetAt(savepos,o2);
+								SetAt(firstpos,o1);
+								firstpos = savefirstpos;
+								continue;
+							}
+						}
+#else
+#if 0
+						bool o2isMKC = o2->isARMeter() || o2->isARKey() || o2->isARClef();
+						bool o1isMKC = o1->isARMeter() || o1->isARKey() || o1->isARClef();
+						bool o1isOtherTag = o1->isARSecondGlue();
+//						bool o1isOtherTag = !o1isMKC && dynamic_cast<ARMusicalTag*>(o1) ;
+						if (   (o1isOtherTag && o2isMKC)
+							|| (o1->isARMeter() && o2->isARClef())
+							|| (o1->isARMeter() && o2->isARKey())
+							|| (o1->isARKey()	&& o2->isARClef()))
+#else
 						if (   (static_cast<ARSecondGlue *>(o1->isARSecondGlue()) && static_cast<ARMeter *>(o2->isARMeter()))
                             || (static_cast<ARSecondGlue *>(o1->isARSecondGlue()) && static_cast<ARKey *>(o2->isARKey()))
                             || (static_cast<ARSecondGlue *>(o1->isARSecondGlue()) && static_cast<ARClef *>(o2->isARClef()))
 							|| (static_cast<ARMeter *>(o1->isARMeter()) && static_cast<ARClef *>(o2->isARClef()))
 							|| (static_cast<ARMeter *>(o1->isARMeter()) && static_cast<ARKey *>(o2->isARKey()))
 							|| (static_cast<ARKey *>(o1->isARKey()) && static_cast<ARClef *>(o2->isARClef())))
+#endif
 						{
 							// then we need to switch ...
 							SetAt(savepos,o2);
@@ -4448,9 +4470,10 @@ void ARMusicalVoice::doAutoCheckStaffStateTags()
 							firstpos = savefirstpos;
 							continue;
 						}
+#endif
 					}
 				}
-				issearch = 0;
+				waitFirstEv = false;
 				needsclef = 1;
 				needskey = 1;
 			}
@@ -4478,7 +4501,7 @@ void ARMusicalVoice::doAutoCheckStaffStateTags()
 
 		if (sys || page)
 		{
-			issearch = 1;
+			waitFirstEv = true;
 			evpos = NULL;
 			meterpos = NULL;
 			keypos = NULL;

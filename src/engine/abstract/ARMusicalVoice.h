@@ -116,7 +116,7 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		// does Auto-Beaming ...
 		virtual void	doAutoStuff1();
 		virtual void	doAutoStuff2();
-		
+	
 		virtual void doAutoTrill();
         virtual void doAutoCluster();
 
