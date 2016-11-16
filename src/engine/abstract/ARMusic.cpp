@@ -20,6 +20,7 @@
 #include "ARMusicalVoice.h"
 #include "MeterVisitor.h"
 #include "TimeMapper.h"
+#include "GMNCodePrintVisitor.h"
 
 #include "benchtools.h"
 
@@ -360,7 +361,6 @@ void ARMusic::doAutoStuff()
 	while (pos) {
 		++counter;
 		ARMusicalVoice * arvc = GetNext(pos);
-
 		timebench("doAutoStuff1", arvc->doAutoStuff1());
 	}
 
@@ -377,9 +377,12 @@ void ARMusic::doAutoStuff()
 		// now we can check, wether newSystem and newPage are followed by correct clef/key information ...
 		// also do AutoDisplayCheck and autoBeaming.
 		ARMusicalVoice * arvc = GetNext(pos);
-
 		timebench("doAutoStuff2", arvc->doAutoStuff2());
 	}
+
+//	GMNCodePrintVisitor v(cout);
+//	this->goThrough(&v);
+
 }
 
 /** \brief Removes tags that were added automatically
