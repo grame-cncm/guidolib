@@ -32,6 +32,7 @@ public:
 				 ARStaffOff() { }
 	virtual	    ~ARStaffOff() { }
 
+	virtual int	 getOrder() const		{ return kDontMove; }
 	virtual void setTagParameterList(TagParameterList & pl);
 
 	virtual void printName(std::ostream& os) const;
