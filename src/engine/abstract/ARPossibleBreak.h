@@ -27,6 +27,7 @@ public:
     virtual     ~ARPossibleBreak() { }
 
     virtual void printName(std::ostream& os) const { os << "ARPossibleBreak"; }
+    virtual void printGMNName(std::ostream& os) const { os << "\\pbreak"; }
     virtual void printParameters(std::ostream& os) const {}
 
     virtual float getValue()                { return value; }
