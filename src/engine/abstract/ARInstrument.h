@@ -29,6 +29,7 @@ class ARInstrument : public ARMTParameter
 
 		virtual void setTagParameterList(TagParameterList & theTagParameterList);
 
+		virtual int	 getOrder() const		{ return kInstrumentOrder; }
 	    virtual void printName(std::ostream& os) const;
 	    virtual void printGMNName(std::ostream& os) const;
 	    virtual void printParameters(std::ostream& os) const;

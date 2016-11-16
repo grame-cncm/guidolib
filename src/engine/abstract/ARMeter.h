@@ -36,8 +36,9 @@ class ARMeter : public ARMTParameter
 
 		virtual bool IsStateTag() const;
 
+		virtual int	 getOrder() const		{ return kMeterOrder; }
 	    virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
+		virtual void printGMNName(std::ostream& os) const;
 	    virtual void printParameters(std::ostream& os) const;
 
 		virtual void setTagParameterList(TagParameterList & tpl);

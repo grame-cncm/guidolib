@@ -25,6 +25,7 @@ public:
                  ARTitle();
     virtual     ~ARTitle();
 
+	virtual int	 getOrder() const			{ return kTitleOrder; }
     virtual void printName(std::ostream& os) const;
 	virtual void printGMNName(std::ostream& os) const;
     virtual void printParameters(std::ostream& os) const;

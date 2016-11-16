@@ -39,6 +39,7 @@ public:
 	  	virtual bool operator==(const ARKey & k) const;
 	  	virtual bool IsStateTag() const;
 
+		virtual int	 getOrder() const		{ return kKeyOrder; }
 	    virtual void printName(std::ostream& os) const;
 	    virtual void printGMNName(std::ostream& os) const;
 	    virtual void printParameters(std::ostream& os) const;

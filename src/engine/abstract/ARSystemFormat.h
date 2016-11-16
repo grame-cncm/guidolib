@@ -24,6 +24,7 @@ public:
 					ARSystemFormat();
 	virtual 		~ARSystemFormat();
 
+	virtual int	 getOrder() const		{ return kSystemFormatOrder; }
 	virtual bool IsStateTag() const { return true; }
 	
 	virtual void setTagParameterList( TagParameterList & tpl);

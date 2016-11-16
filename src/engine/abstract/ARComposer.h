@@ -28,6 +28,7 @@ public:
     const char*  getName() const;
     const char*  getPageFormat() const;
 
+	virtual int	 getOrder() const		{ return kComposerOrder; }
     virtual void printName(std::ostream& os) const;
 	virtual void printGMNName(std::ostream& os) const;
     virtual void printParameters(std::ostream& os) const;
