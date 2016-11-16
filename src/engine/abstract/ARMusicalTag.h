@@ -34,6 +34,9 @@ class ListOfTPLs;
 class ARMusicalTag : public ARMusicalObject
 {
 	public:
+		// the tags order at the beginning of a voice
+		enum ORDER { kStaffOrder= 1, kTitleOrder, kComposerOrder, kInstrumentOrder, kSystemFormatOrder, kAccoladeOrder, kClefOrder, kKeyOrder, kMeterOrder, kDefaultOrder };
+
 		enum ASSOCIATION { LA, RA, DC, EL, ER }; // Left, Right, Don't Care, Error Left, Error Right
 		enum RANGE { NO, ONLY, RANGEDC };
 	
@@ -41,7 +44,12 @@ class ARMusicalTag : public ARMusicalObject
 						ARMusicalTag ( int pid = -1, const ARMusicalTag * copy = 0 );		
 		virtual		   ~ARMusicalTag();
 
-		virtual int		MatchListOfTPLsWithTPL( const ListOfTPLs & ltpls, 
+
+		// give the tag precedence, used to sort the elements at the beginning of a voice
+		// and notably to get a correct clef, key meter order
+		virtual int		getOrder() const				{ return kDefaultOrder; }
+
+		virtual int		MatchListOfTPLsWithTPL( const ListOfTPLs & ltpls,
 											TagParameterList & tpl, TagParameterList ** rtpl);
 
 		virtual void	AddTagParametersList ( ListOfTPLs & ltpl, std::string& str) const;
@@ -50,8 +58,8 @@ class ARMusicalTag : public ARMusicalObject
 				void	setAllowRange( int pallow );
 
 		        void	print          (std::ostream & os) const;
-		virtual void	printName      (std::ostream & os) const { os << "printName() needs to be implemented in subclasses; "; };
-		virtual void	printGMNName   (std::ostream & os) const { os << "printGMNName() needs to be implemented in subclasses; "; };
+		virtual void	printName      (std::ostream & os) const { os << "ARMusicalTag "; };
+		virtual void	printGMNName   (std::ostream & os) const { os << "\\musicalTag "; };
 		        void	printAttributes(std::ostream & os) const;
         virtual void	printParameters(std::ostream & os) const;
 
