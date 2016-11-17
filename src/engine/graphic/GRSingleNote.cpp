@@ -959,7 +959,6 @@ GRStem * GRSingleNote::getStem()
 	the beam is to close to the note!
 */
 
-
 //____________________________________________________________________________________
 /** \brief Called when a newline at the end of staff is introduced and the
 	shown note-length does no longer match!
@@ -1034,7 +1033,6 @@ void GRSingleNote::setNoteFormat(const ARNoteFormat * frmt)
         }
     }
 
-
 	// - Get the offsets and size
 	const TagParameterFloat * tpf1 = frmt->getDX();
 	if (tpf1)
@@ -1058,42 +1056,6 @@ void GRSingleNote::setNoteFormat(const ARNoteFormat * frmt)
 	// this can only be done ONCE!
 	mSize *= mGrStaff->getSizeRatio();
 }
-
-/* (JB)  moved to GREvent
-void GRSingleNote::setDotFormat(const ARDotFormat * frmt)
-{
-	GRNoteDot * mydot = getDot();
-	if (mydot && frmt)
-	{
-		if (frmt->getDX())
-		{
-			mydot->mOffset.x += (GCoord)(frmt->getDX()->getValue(mCurLSPACE));
-		}
-		if (frmt->getDY() && frmt->getDY()->TagIsSet())
-		{
-			mydot->mOffset.y -= (GCoord)(frmt->getDY()->getValue(mCurLSPACE));
-		}
-		else if (frmt->getDY())
-		{
-			// here we have a DY, that has not been set ...
-			// determine, wether the note is on a line or not ...
-		    const int n = (int)( mPosition.y / (mCurLSPACE * 0.5f ));
-			//if ( (n / 2) * 2 == n ) // if even ? Could be tested better !
-
-			if(( n | 1 ) != n ) // if even
-			{
-				// gerade ... wir sind auf einer linie ... why 0.8 ?
-				mydot->mOffset.y -= (GCoord)TagParameterFloat::convertValue(0.8f,"hs",mCurLSPACE);
-			}
-		}
-		if (frmt->getSize())
-		{
-			mydot->size *= frmt->getSize()->getValue();
-		}
-		// what about dd
-	}
-}
-*/
 
 //____________________________________________________________________________________
 GRFlag * GRSingleNote::getFlag()
