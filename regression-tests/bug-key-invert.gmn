@@ -1,0 +1,13 @@
+%
+% this is to illustrate the key and clef inversion problem:
+% it seems to be related to the \stemOff tag and
+% appears only when this tag follows the \key tag
+
+{ [
+   \key<1> 
+	\stemsOff 
+	\meter<"C"> \clef<"g2"> d g f# g 
+%  the version below works correctly
+%   \key<1> \meter<"C"> \clef<"g2"> d g f# g 
+ ]
+ }

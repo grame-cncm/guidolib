@@ -1,0 +1,56 @@
+(*
+  gmn code converted from 'Ibert-First10Measures.xml'
+  using libmusicxml v.3.1.1
+  and the embedded xml2guido converter v.2.1.1
+*)
+{ [ \staff<1> \title<"CONCERTO"> \composer<"JACQUES IBERT", dy=4hs> \instr<"Flute", dx=-10hs, dy=-5hs> \systemFormat<"", dx=10hs> 
+   (* meas. 1 *)  \key<0> \meter<"2/4", autoBarlines="off", autoMeasuresNum="page"> \clef<"g2"> _/2 \bar 
+   (* meas. 2 *)  _ \bar 
+   (* meas. 3 *)  _ \bar 
+   (* meas. 4 *)  _ \bar 
+   (* meas. 5 *)  \intens<"ff", dy=-3hs> \mark<"1", enclosure="rectangle", fsize=11.9pt, dx=-9hs, dy=6hs> \space<0> _/16 \stemsDown \beam( c3 f f2) \beam( d&3 b&2 e c3) \bar 
+   (* meas. 6 *)  \beam( a&2 c d& b&1) \beam( g&2 b1 g2 d) \bar 
+   (* meas. 7 *)  empty/2 \bar 
+   (* meas. 8 *)  \slurBegin:1 \beam( g3/16 e& \slurEnd:1 \tieBegin f/8) \beam( f/16 \tieEnd d& \tieBegin e&/8) \bar 
+   (* meas. 9 *)  empty/2 ]
+, [ \staff<1> 
+   (* meas. 1 *)  empty/2 \bar 
+   (* meas. 2 *)  empty \bar 
+   (* meas. 3 *)  empty \bar 
+   (* meas. 4 *)  empty \bar 
+   (* meas. 5 *)  empty \bar 
+   (* meas. 6 *)  empty \bar 
+   (* meas. 7 *)  \stemsDown \beam( e2/16 c c3 b&2) \beam( g a& d&3 f2) \bar 
+   (* meas. 8 *)  empty/2 \bar 
+   (* meas. 9 *)  \beam( e&3/16 c d& b&2) \beam( c&3 a&2 \tieBegin b&/8) ]
+, [ \staff<2> \instr<"Piano", dx=-10hs, dy=-5hs> \systemFormat<"", dx=10hs> 
+   (* meas. 1 *)  \key<0> \meter<"2/4", autoBarlines="off", autoMeasuresNum="page"> \accol<id=1, range="2-3"> \clef<"g2"> \text<"Allegro", dy=14hs> \space<0> _ \stemsDown { \tieBegin c2 \tieBegin, e \tieBegin, a \tieBegin, c3 } \bar 
+   (* meas. 2 *)  { c2/2 \tieEnd, e \tieEnd, a \tieEnd, c3 \tieEnd } \bar 
+   (* meas. 3 *)  _/8 \intens<"p", dy=-3hs> \beam( c2/16 \crescBegin<dy=4hs> d&) \beam( e& e f f#) \bar 
+   (* meas. 4 *)  \beam( g a& b& b) \beam( c3 d& d \crescEnd \slurBegin:1 e) \bar 
+   (* meas. 5 *)  f/8 \slurEnd:1 \dimBegin<dy=5hs> \stemsUp \slurBegin:1<curve="down"> a&1/4 \intens<"p", dy=-3hs> \dimEnd \stacc<position="below">( g/8) \slurEnd:1 \bar 
+   (* meas. 6 *)  \stemsDown \beam( \stacc<position="below">( f) b&0 \stacc<position="above">( e&1) \stacc<position="above">( b0)) \bar 
+   (* meas. 7 *)  \stemsUp \beam( \stacc<position="below">( c1) \stacc<position="below">( e) \stacc<position="below">( a&) \stacc<position="below">( f)) \bar 
+   (* meas. 8 *)  _ { b&/4, d&2 } { \tieBegin a&1/8 \tieBegin, c2 } \bar 
+   (* meas. 9 *)  \dimBegin<dy=4.8hs> { a&1 \tieEnd, c2 \tieEnd } { g&1/4, b& } \dimEnd { f/8, a& } ]
+, [ \staff<3> 
+   (* meas. 1 *)  \key<0> \meter<"2/4", autoBarlines="off", autoMeasuresNum="page"> \accol<id=1, range="3-4"> \clef<"f4"> _ \intens<"ff", dy=15hs> _/8 \clef<"g2"> \stemsUp \slurBegin:1 \ten<position="above">( { \tieBegin g& \tieBegin, b& \tieBegin, d&2 }) \bar 
+   (* meas. 2 *)  \ten<position="above">( { g&1/2 \tieEnd, b& \tieEnd, d&2 \tieEnd }) \slurEnd:1 \bar 
+   (* meas. 3 *)  _/8 \ten<position="below">( { \tieBegin c1/4. \tieBegin, b&. }) \bar 
+   (* meas. 4 *)  { c/8 \tieEnd, b& \tieEnd } \clef<"f4"> \ten<position="below">( { b-2/4, b-1 }) \stacc<position="below">( { c/8, c0 }) \bar 
+   (* meas. 5 *)  \stacc<position="below">( { f-2, f-1 }) _ _/4 \bar 
+   (* meas. 6 *)  _/8 _ _/4 \bar 
+   (* meas. 7 *)  _/8 \clef<"g2"> _ _/4 \bar 
+   (* meas. 8 *)  \intens<"mf", dy=15hs> d&1 g& \bar 
+   (* meas. 9 *)  f e& ]
+, [ \staff<3> 
+   (* meas. 1 *)  \accol<id=1, range="3-4"> _/8 \stemsDown \ten<position="below">( { b-2/4., b-1. }) \bar 
+   (* meas. 2 *)  empty/2 \bar 
+   (* meas. 3 *)  empty \bar 
+   (* meas. 4 *)  empty \bar 
+   (* meas. 5 *)  empty \bar 
+   (* meas. 6 *)  empty \bar 
+   (* meas. 7 *)  empty \bar 
+   (* meas. 8 *)  empty \bar 
+   (* meas. 9 *)  empty ]
+ }
