@@ -35,11 +35,16 @@ public:
 	virtual void printParameters(std::ostream& os) const;
 
 	virtual void browse(TimeUnwrap& mapper) const;
+    virtual void forceNoteAppearance(NVstring appearance) { fAppearance = appearance; };
+    virtual NVstring getAppearance() const				  { return fAppearance; }
 
     /**** Function to avoid dynamic_cast ****/
     ARMusicalObject *isARRest() { return this; }
     /****************************************/
-};
+
+private:
+	NVstring fAppearance;
+};;
 
 #endif
 

@@ -69,19 +69,21 @@ class GRSingleRest : public GRRest
 
 		void setRestFormat(ARRestFormat * restfrmt);
 	
+		virtual void forceNoteAppearance(NVstring appearance)	{ mRestAppearance = appearance; };
+		TYPE_DURATION appearance2duration (const NVstring& str) const;
+	
 	protected:
 	
 	void createRest(const TYPE_DURATION & duration);
 	TYPES mType;
 	TYPE_DURATION durtemplate;
-
-//	GDirection mStemDir;
-//	float  mStemLen;
-
 	static NVPoint sRefpos;
 
 	GRNotationElement  * firstbar;
 	GRNotationElement  * secondbar;
+
+	private:
+	NVstring mRestAppearance;
 };
 
 #endif

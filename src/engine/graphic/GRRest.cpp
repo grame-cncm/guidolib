@@ -27,16 +27,14 @@ GRRest::GRRest(GRStaff * grstf,const TYPE_DURATION & theDuration)
 	mWholeMeasure = 0;
 }
 
-GRRest::GRRest(GRStaff * grstf,ARRest * abstractRepresentationOfRest, bool p_ownsAR)
-  : GREvent(grstf,abstractRepresentationOfRest,p_ownsAR)
+GRRest::GRRest(GRStaff * grstf,ARRest * arrest, bool p_ownsAR)
+  : GREvent(grstf,arrest,p_ownsAR)
 {
 	mWholeMeasure = 0;
 }
 
-GRRest::GRRest(GRStaff *grstf,ARRest* abstractRepresentationOfRest,
-	const TYPE_TIMEPOSITION & relativeTimePositionOfGRRest,
-	const TYPE_DURATION & durationOfGRRest)
-  : GREvent(grstf,abstractRepresentationOfRest,relativeTimePositionOfGRRest,durationOfGRRest)
+GRRest::GRRest(GRStaff *grstf,ARRest* arrest, const TYPE_TIMEPOSITION & date, const TYPE_DURATION & duration)
+  : GREvent(grstf, arrest, date, duration)
 {
 	mWholeMeasure = 0;
 }

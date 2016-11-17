@@ -44,39 +44,47 @@ NVPoint GRSingleRest::sRefpos;
 GRSingleRest::GRSingleRest(GRStaff * grstf,const TYPE_DURATION & theDuration )
 							: GRRest(grstf,new ARRest(theDuration), true) // ownsAR
 {
-	//mStemLen = 0;
-	//mStemDir = dirUP;
-
 	firstbar = secondbar = 0;
 	createRest(theDuration);
-	// spacing = getSpacing();
-	
 	mCurLSPACE = grstf->getStaffLSPACE();
 }
 
-GRSingleRest::GRSingleRest(GRStaff *grstf,
-						   ARRest* abstractRepresentationOfRest)
-						   : GRRest(grstf,abstractRepresentationOfRest)
+GRSingleRest::GRSingleRest(GRStaff *grstf, ARRest* arrest) : GRRest(grstf,arrest)
 {
-	assert(abstractRepresentationOfRest);
+	assert(arrest);
 	firstbar = secondbar = 0;
 	createRest(DURATION_1);
 }
 
-GRSingleRest::GRSingleRest(GRStaff * grstf, ARRest * abstractRepresentationOfRest,
-						   const TYPE_TIMEPOSITION & relativeTimePositionOfGRRest,
-						   const TYPE_DURATION & durationOfGRRest,
-						   const TYPE_DURATION p_durtemplate)
-						   : GRRest(grstf,abstractRepresentationOfRest,relativeTimePositionOfGRRest,
-						   durationOfGRRest)
+GRSingleRest::GRSingleRest(GRStaff * grstf, ARRest * arrest, const TYPE_TIMEPOSITION & date,
+			const TYPE_DURATION & duration, const TYPE_DURATION p_durtemplate)
+			: GRRest(grstf, arrest, date, duration), mRestAppearance(arrest->getAppearance())
+
 {
-	assert(abstractRepresentationOfRest);
+	assert(arrest);
 	firstbar = secondbar = NULL;
 
-	if (p_durtemplate>DURATION_0)
-		createRest(p_durtemplate);
-	else
-		createRest(durationOfGRRest);
+	TYPE_DURATION d = p_durtemplate ? p_durtemplate : duration;
+	if (mRestAppearance.size()) {
+		TYPE_DURATION tmp = appearance2duration(mRestAppearance);
+		if (tmp) d = tmp;
+	}
+	createRest(d);
+	
+	
+//	if (p_durtemplate>DURATION_0) {
+//cout << "GRSingleRest::GRSingleRest p_durtemplate " << p_durtemplate << endl;
+//		createRest(p_durtemplate);
+//	}
+//	else {
+//		TYPE_DURATION d = duration;
+//		if (mRestAppearance.size()) {
+//			TYPE_DURATION tmp = appearance2duration(mRestAppearance);
+//cout << "GRSingleRest::GRSingleRest appearance2duration " << tmp << endl;
+//			if (tmp) d = tmp;
+//		}
+//		createRest(d);
+//	}
 
 	if (mDurationOfGR == DURATION_0)
 		mNeedsSpring = 0;
@@ -85,6 +93,18 @@ GRSingleRest::GRSingleRest(GRStaff * grstf, ARRest * abstractRepresentationOfRes
 
 GRSingleRest::~GRSingleRest()
 {
+}
+
+TYPE_DURATION GRSingleRest::appearance2duration (const NVstring& str) const
+{
+	if (str == "/4")	return TYPE_DURATION(1, 4);
+	if (str == "/8")	return TYPE_DURATION(1, 8);
+	if (str == "/2")	return TYPE_DURATION(1, 2);
+	if (str == "/1")	return TYPE_DURATION(1, 1);
+	if (str == "/16")	return TYPE_DURATION(1, 16);
+//	if (str == "/32")	return TYPE_DURATION(1, 32);
+//	if (str == "/64")	return TYPE_DURATION(1, 64);
+	return TYPE_DURATION(0, 1);
 }
 
 void GRSingleRest::createRest(const TYPE_DURATION & duration)
@@ -342,7 +362,8 @@ void GRSingleRest::setRestFormat( ARRestFormat * restfrmt )
 		default:
 			dotPos.Set( 0, 2 * mCurLSPACE);
 	}
-	createDots( getDuration(), 0, dotPos );
+	if (mRestAppearance.empty())
+		createDots( getDuration(), 0, dotPos );
 }
 
 void GRSingleRest::setFillsBar(bool value, GRNotationElement * bar1,

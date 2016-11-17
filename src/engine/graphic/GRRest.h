@@ -47,8 +47,7 @@ class GRRest : public GREvent
 
 		
 	private:
-
-		int mWholeMeasure;
+		int		 mWholeMeasure;
 };
 
 

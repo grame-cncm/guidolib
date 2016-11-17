@@ -415,14 +415,9 @@ void ARFactory::createEvent( const char * name )
 	assert(!mCurrentEvent);
 	assert(name);
 	if(!strcmp(name,"_") || !strcmp(name,"rest"))
-	{
 		mCurrentEvent = new ARRest(mCurrentNumerator,mCurrentDenominator );
-	}
 	else
-	{
-		mCurrentEvent = new ARNote(name, 0, mCurrentRegister,
-				mCurrentNumerator,mCurrentDenominator,mCurrentIntensity);
-	}
+		mCurrentEvent = new ARNote(name, 0, mCurrentRegister, mCurrentNumerator,mCurrentDenominator,mCurrentIntensity);
 	assert(mCurrentEvent);
 	mLastEvent = NULL;
 }

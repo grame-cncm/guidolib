@@ -66,7 +66,7 @@ using namespace std;
 //____________________________________________________________________________________
 GRSingleNote::GRSingleNote( GRStaff* inStaff, ARNote* arnote, const TYPE_TIMEPOSITION& pos, const TYPE_DURATION& dur)
   : GRNote( inStaff, arnote, pos, dur), mNumHelpLines(0),
-  mStemDir(dirAUTO), mStemDirSet(false), mHeadState(ARTHead::NOTSET), mNoteAppearance(arnote->getNoteAppearance())
+  mStemDir(dirAUTO), mStemDirSet(false), mHeadState(ARTHead::NOTSET), mNoteAppearance(arnote->getAppearance())
 {
 	// builds a grafical sub-part of abstractRepresentation
 	assert(arnote);
@@ -400,7 +400,8 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 	}
 
 	// - dots
-	createDots( mDurTemplate, mNoteBreite, NVPoint( 0, 0 ));
+	if (mNoteAppearance.empty())
+		createDots( mDurTemplate, mNoteBreite, NVPoint( 0, 0 ));
 
 	// - Build the accidental list
 	int accidentals = arNote->getAccidentals();
@@ -479,20 +480,16 @@ void GRSingleNote::forceAppearance()
 {
     if (mNoteAppearance.compare("")) {
         TYPE_DURATION dur = 0;
-        if (!mNoteAppearance.compare("/1"))
-            dur = TYPE_DURATION(1, 1);
-        else if (!mNoteAppearance.compare("/2"))
-            dur = TYPE_DURATION(1, 2);
-        else if (!mNoteAppearance.compare("/4"))
-            dur = TYPE_DURATION(1, 4);
-        else if (!mNoteAppearance.compare("/8"))
-            dur = TYPE_DURATION(1, 8);
-        else if (!mNoteAppearance.compare("/16"))
-            dur = TYPE_DURATION(1, 16);
-        /*else if (!mNoteAppearance.compare("/32")) // REM: /32 pose un problème car quelque chose
-            dur = TYPE_DURATION(1, 32);                     est mal géré dans GRFlag::configureForSingleNote()
-        else if (!mNoteAppearance.compare("/64"))
-            dur = TYPE_DURATION(1, 64);*/
+        if (mNoteAppearance == "/1")		dur = TYPE_DURATION(1, 1);
+        else if (mNoteAppearance == "/2")	dur = TYPE_DURATION(1, 2);
+        else if (mNoteAppearance == "/4")	dur = TYPE_DURATION(1, 4);
+        else if (mNoteAppearance == "/8")	dur = TYPE_DURATION(1, 8);
+        else if (mNoteAppearance == "/16")	dur = TYPE_DURATION(1, 16);
+#ifndef WIN32
+#warning ("TODO: force appearance for /32 and /64");
+#endif
+//        else if (mNoteAppearance == "/32")	dur = TYPE_DURATION(1, 32);		// commented due to incorrect flags rendering
+//        else if (mNoteAppearance == "/64")	dur = TYPE_DURATION(1, 64);
 
         if ((double) dur != 0) {
             getNoteHead()->configureNoteHead(dur);

@@ -56,7 +56,8 @@ public:
     virtual void printGMNName(std::ostream& os) const    { os << "\\musicalEvent "; }
     virtual void printParameters(std::ostream& os) const { os << "params "; }
 
-    virtual void forceNoteAppearance(NVstring noteAppearance) {};
+    virtual void forceNoteAppearance(NVstring noteAppearance)	{};
+    virtual NVstring getAppearance() const						{ return ""; };
 
 protected:
     int mPoints;

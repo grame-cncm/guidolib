@@ -84,7 +84,7 @@ class ARNote : public ARMusicalEvent
     bool         haveSubElementsToBeDrawn()  const      { return fSubElementsHaveToBeDrawn; }
 	void 		 setTremolo(ARTremolo* trem)            { fTremolo = trem; }
     ARTremolo*   getTremolo()                           { return fTremolo; }
-    NVstring     getNoteAppearance()                    { return fNoteAppearance; }
+    NVstring     getAppearance() const                  { return fNoteAppearance; }
 
     int		     getMidiPitch() const;
 
