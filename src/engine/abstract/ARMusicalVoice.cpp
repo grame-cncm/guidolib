@@ -3298,62 +3298,40 @@ bool ARMusicalVoice::DurationIsDisplayable(TYPE_DURATION & dur, int & outDotCoun
 }
 
 //____________________________________________________________________________________
-/** \brief Checks whether theevents in the voice can be
-displayed as single graphical objects (with and without dots)
+/** \brief Checks whether the events in the voice can be displayed as single graphical objects (with and without dots)
 
-it also determines realTuplets (that is
-a change in base) and groups them together;
+it also determines realTuplets (that is a change in base) and groups them together;
 
-This is helpful, because the NoteFactory
-becomes unemployed that way and the
-structure of the NoteViewer becomes clearer.
+This is helpful, because the NoteFactory becomes unemployed that way and the structure of the NoteViewer becomes clearer.
 The algorithm works as follows:
 
-Go through the events sequentially.
-if a merge-Tag is encountered, all events
-within the merge-Tag-Range are collected
+Go through the events sequentially. 
+if a merge-Tag is encountered, all events within the merge-Tag-Range are collected
 (because it should be displayable as a single note!)
 note that mergelookahead is then active.
 ATTENTION: this is not yet implemented
 
-Check, whether the duration fits the current base
-(base is initially 1) using the function
-DurationFitsBase.
-if not: close the current base (if it is not 1)
-and open a new base as returned by DurationFitsBase.
+Check, whether the duration fits the current base (base is initially 1) using the function DurationFitsBase.
+if not: close the current base (if it is not 1) and open a new base as returned by DurationFitsBase.
 continue in yes-case.
-if yes: check, whether the event is displayable
-as a single graphical element. This check is done
-in DurationIsDisplayable. If the event is a rest,
-or if the current base is not one, no dots are
-allowed (no dots within tuplets!).
-(ATTENTION, what happens, if dots are
-explicitly given in the case of tuplets?)
+if yes: check, whether the event is displayable as a single graphical element. This check is done in DurationIsDisplayable.
+If the event is a rest or if the current base is not one, no dots are allowed (no dots within tuplets!).
+(ATTENTION, what happens, if dots are explicitly given in the case of tuplets?)
 (ATTENTION also: what happens, if rests have dots?)
 (ATTENTION, what is the case with whole-measure-rests?)
-if the event is displayable then set the
-displayDuration (as returned by DurationIsDisplayable)
+if the event is displayable then set the displayDuration (as returned by DurationIsDisplayable)
 iff the base is not one (==we are in a tuplet)
 
-if the event is NOT displayable, the event
-has to be broken (the duration of the first
-displayable part is returned by
-DurationIsDisplayable); a copy of the event
-is made, and the respective durations are set.
-if this case is encountered
-during a merge-operation (mergelookahead),
-then rewind, flag the
-merge-Tag is "invalid" and continue as if the
-merge-tag was not there.
+if the event is NOT displayable, the event has to be broken (the duration of the first displayable part is returned by
+DurationIsDisplayable); a copy of the event is made, and the respective durations are set.
+if this case is encountered during a merge-operation (mergelookahead),
+then rewind, flag the merge-Tag is "invalid" and continue as if the merge-tag was not there.
 
-continue: add the current duration to the length
-of the current tuplet-base (if base != 1)
+continue: add the current duration to the length of the current tuplet-base (if base != 1)
 check, if tuplet is full (base != 1), that is,
-check, wether the tuplet-duration is a real power
-of two (n/1 (n>=1), 1/2, 1/4, 1/8 ...)
+check, wether the tuplet-duration is a real power of two (n/1 (n>=1), 1/2, 1/4, 1/8 ...)
 if it is full, close it und return to base 1.
-this makes sure, that the smallest tuplets are
-found.
+this makes sure, that the smallest tuplets are found.
 
 continue with the next event.
 */
@@ -3373,18 +3351,14 @@ void ARMusicalVoice::doAutoDisplayCheck()
 //	}
 
 	// an id for the introduced ties ...
-	// needs to be elaborated so that collisions with
-	// local ids are vermieden
+	// needs to be elaborated so that collisions with local ids are vermieden
 	// int autotie = 100;
-	// counts the tie-tags
-	// needs to be remembered,
+	// counts the tie-tags needs to be remembered,
 	// if we break events...
 	int tiecount = 0;
 
-	// this remebers, if we are in a
-	// merge-lookahead-situation.
-	// if merge is encountered, all events
-	// in the range are added (durationwise)
+	// this remebers, if we are in a merge-lookahead-situation.
+	// if merge is encountered, all events in the range are added (durationwise)
 	int mergelookahead = 0;
 	ARMusicalVoiceState armergestate;
 	ARMerge * curmerge = NULL;
@@ -3396,8 +3370,7 @@ void ARMusicalVoice::doAutoDisplayCheck()
 	// the base-tag that encapsulates real tuplets.
 	ARBase * curbase = NULL;
 
-	// this is an automatic tuplet (
-	// (it is included if a base-change is done
+	// this is an automatic tuplet (it is included if a base-change is done
 	// and no other tuplet-tag is active ...)
 	ARTuplet * autotuplet = NULL;
 	// the lasteventposition
@@ -3411,13 +3384,10 @@ void ARMusicalVoice::doAutoDisplayCheck()
 
 	// holds the current meter information for a voice.
 	// if curmeter is NULL, no meter has been set.
-	// this is important for whole-measure-rests
-	// which can be displayed just as a whole-note-rest.
+	// this is important for whole-measure-rests which can be displayed just as a whole-note-rest.
 	// ATTENTION can a meter be turned off?
 	ARMeter * curmeter = NULL;
 	TYPE_DURATION curmetertime;
-//	int isvalidmeter = 0;
-
 	ARMusicalVoiceState vst;
 
 	// this operation eats all but the first non-state
@@ -3583,18 +3553,15 @@ void ARMusicalVoice::doAutoDisplayCheck()
 		if (curmeter != vst.curmeter)
 		{
 			curmeter = vst.curmeter;
-
 			curmetertime.setNumerator(curmeter->getNumerator());
 			curmetertime.setDenominator(curmeter->getDenominator());
 			curmetertime.normalize();
-//			if (curmetertime.getNumerator() == 0)
-//				isvalidmeter = 0;
-//			else
-//				isvalidmeter = 1;
 		}
 
 		ARMusicalObject * o = GetAt(pos);
 		ARMusicalEvent * ev = ARMusicalEvent::cast(o);
+		bool dontsplit = false;
+		if (ev && !ev->getAppearance().empty()) dontsplit = true;
 
 		if (!mergelookahead && ev)
 			dur = ev->getDuration();
@@ -3716,50 +3683,33 @@ void ARMusicalVoice::doAutoDisplayCheck()
 
 				if (mergelookahead)
 				{
-					// now set displayDuration for the other events
-					// in the merge-range to 0
-
+					// now set displayDuration for the other events in the merge-range to 0
 					GuidoPos tmppos = pos;
 					armergestate = vst;
 					GetNext(tmppos,armergestate);
 					for( ; ; )
 					{
 						ARMusicalEvent * tmpev = ARMusicalEvent::cast(GetAt(tmppos));
-						if (tmpev)
-						{
-							// the the displayduration
-
-							// the current tagposition is
-							// is in armergestate.ptagpos ...
-
-							InsertDisplayDurationTag(DURATION_0,
-								0,tmpev->getRelativeTimePosition(),
-								tmppos,armergestate);
-
+						if (tmpev) {
+							// the displayduration
+							// the current tagposition is in armergestate.ptagpos ...
+							InsertDisplayDurationTag(DURATION_0, 0,tmpev->getRelativeTimePosition(), tmppos,armergestate);
 						}
-
 						if (tmppos == curmerge->getEndPosition())
 							break;
-                        
 						GetNext(tmppos,armergestate);
 					}
 				}
 			}
-			else
-			{
-				// not Displayable ... this means, we have to
-				// adjust the event ...
+			else if (!dontsplit) {
+				// not Displayable ... this means, we have to adjust the event ...
 
 
-				// if we are in mergelookahead,
-				// the merge-tag has to be flaged invalid and
-				// we have to continue at the same location, as if the
-				// merge-tag had not been there.
+				// if we are in mergelookahead, the merge-tag has to be flaged invalid and
+				// we have to continue at the same location, as if the merge-tag had not been there.
 				if (mergelookahead)
 				{
-					// now, we need to change the
-					// merge-tag into a Tie-Tag ...
-
+					// now, we need to change the merge-tag into a Tie-Tag ...
 					ARTie * artie = new ARTie();
 					artie->setID(gCurArMusic->mMaxTagId++);
 					artie->setIsAuto(true);
@@ -3771,32 +3721,24 @@ void ARMusicalVoice::doAutoDisplayCheck()
 					mergelookahead = 0;
 					tiecount = mergesavetiecount + 1;
 
-					// this ensures, that position-
-					// tags are not parsed twice
-					// (the tie and merge-tags
-					// have been looked at already ...)
+					// this ensures, that position-tags are not parsed twice
+					// (the tie and merge-tags have been looked at already ...)
 					vst.DeleteAddedAndRemovedPTags();
 					continue;
 				}
 
-				// undo the transformation, so that we can handle the
-				// duration correctly ...
-
+				// undo the transformation, so that we can handle the duration correctly ...
 				dur = dispdur;
 				if (base.getNumerator() != 1)
 					DispdurToTupletdur(dur,base);
 
 					/* old, FLA is not needed here ...
-					// this is the position within
-					// the positiontags where
-					// a tie/merge-tag can be inserted.
-					// it lies just after the current event
-					// or is NULL (no mPosTagList, end of mPosTagList)
+					// this is the position within the positiontags where a tie/merge-tag can be inserted.
+					// it lies just after the current event or is NULL (no mPosTagList, end of mPosTagList)
 					GuidoPos FLA = vst.ptagpos;
 				*/
 
 				// now calculate the durations ...
-
 				const TYPE_DURATION olddur (ev->getDuration());
 				TYPE_DURATION newdur = dur;
 
@@ -3914,23 +3856,16 @@ void ARMusicalVoice::doAutoDisplayCheck()
 						else
 						{
 							mPosTagList->AddTail(artie);
-
 							// remember this position!
 							newptagpos = mPosTagList->AddTail(arde);
 						}
 
-						// add the tag to the currentposition-
-						// tags, but don't add it to the
-						// addedtaglist ... this would
-						// otherwise confuse the beginning
-						// of this function.
+						// add the tag to the currentposition-tags, but don't add it to the
+						// addedtaglist ... this would otherwise confuse the beginning of this function.
 						vst.AddPositionTag(artie,0);
 
-						// we set this explicitly, because
-						// the tag is not added to the
-						// addedtaglist. Otherwise, multiple
-						// extensions of the same note
-						// would lead to multiple tie or
+						// we set this explicitly, because the tag is not added to the addedtaglist.
+						// Otherwise, multiple extensions of the same note would lead to multiple tie or
 						// mergtag-increments.
 						++ tiecount;
 					}
@@ -3938,16 +3873,13 @@ void ARMusicalVoice::doAutoDisplayCheck()
 					// now we need to "repointer" the position tags that formerly
 					// were attached to ev -> they now need to be attached to ev2
 					// (which is at newpos)
-
 					GuidoPos tmppos = vst.ptagpos;
 					while (tmppos)
 					{
 						ARPositionTag * arpt = mPosTagList->GetNext(tmppos);
 						ARTagEnd * arte = ARTagEnd::cast(arpt);
-						if (arte)
-						{
-							if (arte->getPosition() == pos)
-							{
+						if (arte) {
+							if (arte->getPosition() == pos) {
 								arte->setPosition(newpos);
 								continue;
 							}
@@ -3955,34 +3887,23 @@ void ARMusicalVoice::doAutoDisplayCheck()
 						break;
 					}
 
-					// the positiontagpointer now points
-					// on the FLA of ev_2 ...
+					// the positiontagpointer now points on the FLA of ev_2 ...
 					// (which is the added tie or merge)
 					if (newptagpos != NULL)
 						vst.ptagpos = newptagpos;
 
-					// now we have to set a displayDuration
-					// tag for the first event ....
-					// this determines, wether the
-					// event gets a displayDuration-Tag ...
+					// now we have to set a displayDuration tag for the first event ....
+					// this determines, wether the event gets a displayDuration-Tag ...
 					if (base.getNumerator() != 1)
-					{
-						InsertDisplayDurationTag(dispdur,b_punkt,
-							ev->getRelativeTimePosition(),pos,
-							vst,0);
-					}
+						InsertDisplayDurationTag(dispdur,b_punkt, ev->getRelativeTimePosition(), pos, vst,0);
 
-					// the added and removedpositiontags
-					// have to be removed ... otherwise
-					// the removedpositiontags can
-					// make problems ...
+					// the added and removedpositiontags have to be removed ... otherwise
+					// the removedpositiontags can make problems ...
 					vst.DeleteAddedAndRemovedPTags();
 					pos = newpos;
 				}
 				if (curbase)
-				{
 					curbase->addEvent(ev);
-				}
 
 				lastevpos = pos;
 				FLA = vst.ptagpos;
@@ -3998,11 +3919,8 @@ void ARMusicalVoice::doAutoDisplayCheck()
 		}
 
 
-		// now, we check, wether the length
-		// of the curbase is full ....
-		// it is only closed, if there are no active
-		// tuplet-tags in the area.
-
+		// now, we check, wether the length of the curbase is full ....
+		// it is only closed, if there are no active tuplet-tags in the area.
 		if (curbase != NULL && tupletcount<1)
 		{
 			const TYPE_DURATION tmp = curbase->getBaseDuration();
@@ -4085,20 +4003,7 @@ void ARMusicalVoice::doAutoDisplayCheck()
 		// set the parameter of the curbase?
 		curbase->finish();
 		if (autotuplet)
-		{
-			/* was :
-			char buffer[60];
-			sprintf(buffer,"-%ld:%ld",
-				curbase->getBase().getNumerator(),
-				curbase->getBase().getDenominator());
-
-			if (IsPowerOfTwo(curbase->getBaseDuration(),4))
-				strcat(buffer,"-");
-
-			autotuplet->setName(buffer);
-			*/
 			autotuplet->setupTuplet( curbase );
-		}
 
 		// this removes them from the voice-state ...
 		// but they are still there ...
