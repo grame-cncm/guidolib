@@ -161,7 +161,8 @@ void GRRepeatBegin::OnDraw(VGDevice & hdc ) const
         hdc.SetFontColor(VGColor(mColRef));
     }
 
-	if ((getTagType() == GRTag::SYSTEMTAG) || !isSystemSlice()) {
+	bool systembar = getTagType() == GRTag::SYSTEMTAG;
+	if (systembar || !isSystemSlice()) {
 		// - Vertical adjustement according to staff's line number
 		float offsety1 = (fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;
 		float offsety2 = 0;
@@ -192,8 +193,8 @@ void GRRepeatBegin::OnDraw(VGDevice & hdc ) const
 			hdc.Rectangle(x2, y1, x2 + rightLineThickness, y2);
 		}
 	}
-	DrawDots( hdc);
 
+	if (!systembar) DrawDots( hdc);
     if (mColRef) {
         hdc.SetFontColor(prevColor);
         hdc.PopFillColor();

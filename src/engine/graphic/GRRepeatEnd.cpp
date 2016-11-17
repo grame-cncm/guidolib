@@ -139,7 +139,6 @@ void GRRepeatEnd::DrawDots( VGDevice & hdc ) const
     float pointOffsetx  = (fStaffThickness - 4) * 0.5f - 62 * (fSize - 1) + (fStaffThickness - 4) * (fSize - 1) * 0.5f - 57;
     float pointSize = 0.4f * fSize;
 
-cout << "GRRepeatEnd::DrawDots " << pointOffsetx << " " << pointOffsety1 << endl;
     DrawSymbol(hdc, pointSymbol, pointOffsetx, pointOffsety1, pointSize);
     DrawSymbol(hdc, pointSymbol, pointOffsetx, pointOffsety2, pointSize);
 }
@@ -156,7 +155,9 @@ void GRRepeatEnd::OnDraw( VGDevice & hdc ) const
         hdc.SetFontColor(VGColor(mColRef));
     }
 
-	if ((getTagType() == GRTag::SYSTEMTAG) || !isSystemSlice()) {
+	bool systembar = getTagType() == GRTag::SYSTEMTAG;
+	// for system tags, draw the bars only once
+	if (systembar || !isSystemSlice()) {
 		// - Vertical adjustement according to staff's line number
 		float offsety1 = (fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;
 		float offsety2 = 0;
@@ -186,7 +187,7 @@ void GRRepeatEnd::OnDraw( VGDevice & hdc ) const
 			hdc.Rectangle(x2, y1, x2 + fBaseThickness, y2);
 		}
 	}
-	DrawDots( hdc);
+	if (!systembar) DrawDots( hdc);
     if (mColRef) {
         hdc.SetFontColor(prevColor);
         hdc.PopFillColor();
