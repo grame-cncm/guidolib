@@ -76,8 +76,8 @@ void GRDoubleBar::DrawWithLines( VGDevice & hdc ) const
     hdc.PushPenWidth(lineThickness);
 
     const float spacing = LSPACE * 0.7f * staffSize;
-	const float x2 = getXPos (mGrStaff->getSizeRatio());
-	const float x1 = x2 - spacing;
+	const float x2 = getXPos (mGrStaff->getSizeRatio()) + (spacing / 3);
+	const float x1 = x2 - (spacing * 2 / 3);
 
 	if (fRanges.empty()) {
 		const float y1 = getY1 (mBoundingBox.top);
