@@ -2060,8 +2060,10 @@ GRSingleNote * GRVoiceManager::CreateSingleNote( const TYPE_TIMEPOSITION & tp, A
 		GRNotationElement * el = dynamic_cast<GRNotationElement *>(grtags->GetNext(pos));
 		if (el)	{
 			GRRange * r = dynamic_cast<GRRange *>(el);
-			if (r && curgloballocation)
+			ARAccidental* acc = r ? dynamic_cast<ARAccidental*>(r->getAbstractRepresentation()) : 0;
+			if (r && !acc && curgloballocation) {
 				fSharedArticulations.push_back(make_pair(r, grnote));
+			}
 			else
 				el->addAssociation(grnote);
 		}
