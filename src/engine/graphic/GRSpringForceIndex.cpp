@@ -51,11 +51,11 @@ GRSpaceForceFunction2::~GRSpaceForceFunction2()
 */
 void GRSpaceForceFunction2::addSpring(GRSpring *spr)
 {
-	float force  = spr->force;
-	float sconst = spr->sconst;
+	float force  = spr->fForce;
+	float sconst = spr->fSconst;
 
 	// this increases the minimum extent of the SFF
-	xmin += spr->x;
+	xmin += spr->fX;
 
 	// the number of elements/springs in the SFF
 	int count = sortedlist.GetCount();
@@ -80,11 +80,11 @@ void GRSpaceForceFunction2::addSpring(GRSpring *spr)
 	}
 	else {
 		// force is bigger ....
-		xminopt += spr->x;
+		xminopt += spr->fX;
 	}
 
 	// now we have to sort the force into the list of stored forces ...
-	GRSpringForceIndex *sfi = new GRSpringForceIndex(spr, spr->force, count+1);
+	GRSpringForceIndex *sfi = new GRSpringForceIndex(spr, spr->fForce, count+1);
 	GuidoPos pos = sortedlist.GetHeadPosition();
 	while (pos)
 	{
@@ -124,13 +124,13 @@ void GRSpaceForceFunction2::deleteSpring(GRSpring *spr)
 		}
 	}
 
-	float force = spr->force;
-	float sconst = spr->sconst;
+	float force = spr->fForce;
+	float sconst = spr->fSconst;
 
 	int count = sortedlist.GetCount();
 	if (npos <= ( count + 1 ))
 	{
-		xmin -= spr->x;
+		xmin -= spr->fX;
 	}
 
 	if (sortedlist.GetCount() == 0)
@@ -162,7 +162,7 @@ void GRSpaceForceFunction2::deleteSpring(GRSpring *spr)
 	}
 	else
 	{
-		xminopt -= spr->x;
+		xminopt -= spr->fX;
 	}
 	
 	// I have to go through the springlist and adjust the indeces:
@@ -208,7 +208,7 @@ float GRSpaceForceFunction2::getExtent(float force) const
 	// we just return xmin ....
 
 	tmpsfi = sortedlist.GetHead();
-	if (tmpsfi->spr->force > force)
+	if (tmpsfi->spr->fForce > force)
 	{
 		return xmin;
 	}
@@ -241,18 +241,18 @@ float GRSpaceForceFunction2::getExtent(float force) const
 		if (firstFlag)
 		{
 			// the first spring-constant
-			myc = tmpsfi->spr->sconst;
+			myc = tmpsfi->spr->fSconst;
 			firstFlag = false;
 		}
 		else
 		{
 			// the spring-constant is adjusted accordingly.
 			//myc = 1.0 / ( (1.0/myc) + (1.0/tmpsfi->spr->sconst) );	// <- was
-			myc = CalcSpringConstant( myc, tmpsfi->spr->sconst );
+			myc = CalcSpringConstant( myc, tmpsfi->spr->fSconst );
 		}
 		// we remove the prestretch from the springs that
 		// will now be stretched aswell.
-		mymin -= tmpsfi->spr->x;
+		mymin -= tmpsfi->spr->fX;
 	}
 	assert(false);
 	return 0;
@@ -279,24 +279,24 @@ void GRSpaceForceFunction2::writeAllExtents(ostream &os) const
 		if (first)
 		{
 			// the first spring-constant
-			myc = tmpsfi->spr->sconst;
+			myc = tmpsfi->spr->fSconst;
 			first = 0;
 		}
 		else
 		{
 			// the spring-constant is adjusted accordingly.
 			//myc = 1.0 / ( (1.0/myc) + (1.0/tmpsfi->spr->sconst) );
-			myc = CalcSpringConstant( myc, tmpsfi->spr->sconst );
+			myc = CalcSpringConstant( myc, tmpsfi->spr->fSconst );
 		}
 
 		// we remove the prestretch from the springs that
 		// will now be stretched aswell.
-		mymin -= tmpsfi->spr->x;
+		mymin -= tmpsfi->spr->fX;
 
 		float extent = mymin + tmpsfi->force / myc;
 		os << tmpsfi->force << "\t" << extent << "\t";
-		os << tmpsfi->spr->id << "\t" << tmpsfi->spr->sconst <<
-			"\t" << tmpsfi->spr->x << "\t" << tmpsfi->spr->force << 
+		os << tmpsfi->spr->fId << "\t" << tmpsfi->spr->fSconst <<
+			"\t" << tmpsfi->spr->fX << "\t" << tmpsfi->spr->fForce <<
 			"\t" << myc << "\t" << mymin <<  endl;
 	}
 }
@@ -321,12 +321,12 @@ float GRSpaceForceFunction2::getForce(float extent)
 
 		if (first)
 		{
-			myc = tmpsfi->spr->sconst;
+			myc = tmpsfi->spr->fSconst;
 			first = 0;
 		}
 
 		// we take the prestretch away from mymin....
-		mymin -= tmpsfi->spr->x;
+		mymin -= tmpsfi->spr->fX;
 
 		float fx = (extent - mymin) * myc;
 
@@ -341,7 +341,7 @@ float GRSpaceForceFunction2::getForce(float extent)
 			// the next spring will be stretched as well ....
 			// myc = 1.0 / ( (1.0/myc)+(1.0/next->spr->sconst)); 
 			
-			myc = CalcSpringConstant( myc, next->spr->sconst );
+			myc = CalcSpringConstant( myc, next->spr->fSconst );
 
 		}
 	}
@@ -477,7 +477,7 @@ void GRSpaceForceFunction2::ResetSprings()
 	{
 		GRSpringForceIndex * tmpsfi = sortedlist.GetNext(tmppos);
 		// only, if the spring is not frozen ....
-		if (!tmpsfi->spr->isfrozen)
+		if (!tmpsfi->spr->fIsfrozen)
 			tmpsfi->spr->change_force(tmpsfi->force);
 	}
 
@@ -518,12 +518,12 @@ void GRSpaceForceFunction2::FreezeSpring(GRSpring *spr)
 	if (!sfi) return;
 
 
-	if (spr->force <= optforce)
+	if (spr->fForce <= optforce)
 	{
 		// then we have to remove the spring-constant
 		// form the average constant ....
 		// and add the xmin-value 
-		if (spr->sconst == copt)
+		if (spr->fSconst == copt)
 		{
 			copt = -1;
 		}
@@ -531,18 +531,18 @@ void GRSpaceForceFunction2::FreezeSpring(GRSpring *spr)
 		{
 			float calt = copt;
 			//float cneu = 1.0 / ( (1.0/calt) - (1.0/spr->sconst) );
-			float cneu = CalcSpringConstant( -calt, spr->sconst );
+			float cneu = CalcSpringConstant( -calt, spr->fSconst );
 			copt = cneu;
 		}
 
-		xminopt += spr->x;
+		xminopt += spr->fX;
 	}
 	else
 	{
 		// then we have to do nothing. 
 	}
 
-	spr->isfrozen = 1;
+	spr->fIsfrozen = 1;
 }
 
 /** \brief Called to unfreeze a spring in the spaceforcefunction.
@@ -562,7 +562,7 @@ void GRSpaceForceFunction2::UnfreezeSpring(GRSpring * spr)
 		if (sfi->spr == spr)
 		{
 			// this puts the force back.
-			sfi->force = spr->force;
+			sfi->force = spr->fForce;
 
 			sortedlist.setOwnership(0);
 			sortedlist.RemoveElementAt(savepos);
@@ -594,31 +594,31 @@ void GRSpaceForceFunction2::UnfreezeSpring(GRSpring * spr)
 	if (sfi)
 		sortedlist.AddTail(sfi);
 
-	if (spr->force <= optforce)
+	if (spr->fForce <= optforce)
 	{
 		// then we have to add the spring-constant
 		// form the average constant ....
 		// and remove the xmin-value 
 		if (copt == -1)
 		{
-			copt = spr->sconst;
+			copt = spr->fSconst;
 		}
 		else
 		{
 			float calt = copt;
 			//float cneu = 1.0 / ( (1.0/calt) + (1.0/spr->sconst) );
-			float cneu = CalcSpringConstant( calt, spr->sconst );
+			float cneu = CalcSpringConstant( calt, spr->fSconst );
 			copt = cneu;
 		}
 
-		xminopt -= spr->x;
+		xminopt -= spr->fX;
 	}
 	else
 	{
 		// then we have to do nothing. 
 	}
 
-	spr->isfrozen = 0;
+	spr->fIsfrozen = 0;
 
 }
 

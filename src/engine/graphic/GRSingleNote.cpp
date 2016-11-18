@@ -101,11 +101,11 @@ char * GRSingleNote::getGGSInfo( int infotype ) const
 
 	const GRSpring * myspring   = mGrStaff->getGRSystem()->getGRSpring(mSpringID);
 
-	int left = (int)myspring->posx;
-	int right = (int)myspring->posx;
+	int left = (int)myspring->fPosx;
+	int right = (int)myspring->fPosx;
 
-	if (prevspring)	left = (int)prevspring->posx;
-	if (nextspring)	right = (int)nextspring->posx;
+	if (prevspring)	left = (int)prevspring->fPosx;
+	if (nextspring)	right = (int)nextspring->fPosx;
 
 	char * buf = new char[100];
 
@@ -116,7 +116,7 @@ char * GRSingleNote::getGGSInfo( int infotype ) const
 		(int)cursystem->getGRPage()->getMarginLeft(),
 		(int)cursystem->getPosition().x,
 		(int)mPosition.x,
-		(int)myspring->posx,
+		(int)myspring->fPosx,
 		(long int)prevspring,
 		(int)left,
 		(long int)nextspring,	// <- !!! pointer to int !!!
@@ -126,7 +126,7 @@ char * GRSingleNote::getGGSInfo( int infotype ) const
 		(int)cursystem->getGRPage()->getMarginLeft(),
 		(int)cursystem->getPosition().x,
 		(int)mPosition.x,
-		(int)myspring->posx,
+		(int)myspring->fPosx,
 		(long int)prevspring,
 		(int)left,
 		(long int)nextspring,	// <- !!! pointer to int !!!

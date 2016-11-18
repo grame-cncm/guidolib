@@ -87,7 +87,7 @@ public:
 	void setGRSpringID();
 
 
-	float getExtent() const 	{ return x; } 
+	float getExtent() const 	{ return fX; }
 
 	void setID(int _id);
 	int getID();
@@ -101,17 +101,17 @@ public:
 	virtual float change_dur(const TYPE_DURATION & ndur );
 	virtual float setlength(float dx);
 
-			float getForce() const { return force; }
+			float getForce() const { return fForce; }
 
 	virtual const TYPE_DURATION & getTimePosition() const
-	{ return tp; }
+	{ return fTp; }
 
 	virtual const TYPE_DURATION & getDuration() const
-	{ return dur; }
+	{ return fDur; }
 
 	int operator<(const GRSpring & spr) const;
 
-	virtual float getConstant() const	{ return sconst; }
+	virtual float getConstant() const	{ return fSconst; }
 
 	static float defconst(const TYPE_DURATION &, float spring);
 	static float defconst(float dur, float spring );
@@ -126,29 +126,29 @@ public:
 	//  the neighbourhoodcheck is made easier)
 	bool hasDurElement;
 
-	int isfrozen;
-	float posx;	// (JB) was int
+	int		fIsfrozen;
+	float	fPosx;	// (JB) was int
 
     float setProportionalForce();
 
 protected:
 	float calcconst(GRNotationElement * grn);
-	TYPE_TIMEPOSITION tp;
-	TYPE_DURATION     dur;
-	int				  id;      // a definite ID
+	TYPE_TIMEPOSITION fTp;
+	TYPE_DURATION     fDur;
+	int				  fId;      // a definite ID
 
 	// A list of GObjects, that this spring includes
-	float			  force;
-	float			  x;
-	float			  sconst;  // spring-constants
+	float			  fForce;
+	float			  fX;
+	float			  fSconst;  // spring-constants
 
-	GROList			  grolst;  //
-	GRVList		      grvlst;
+	GROList			  fGrolst;  //
+	GRVList		      fGrvlst;
 
-	GRSpringCollider *sprcol;
+	GRSpringCollider *fSprcol;
 
-	float funcpar;
-	float proportionalRendering;
+	float fFuncpar;
+	float fProportionalRendering;
 
     bool              isProportionalElement;
 };

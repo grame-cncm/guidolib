@@ -118,7 +118,7 @@ float GRRod::calcforce(SpringVector * sprvect)
 		if (spr)
 		{
 			sff.addSpring(spr);
-			if (spr->isfrozen)
+			if (spr->fIsfrozen)
 			{
 				sff.FreezeSpring(spr);
 			}
@@ -160,10 +160,10 @@ float GRRod::calclength( float inForce, SpringVector * sprvect ) // doh! force i
 	for (int i = s1; i < s2; ++i )
 	{
 		GRSpring * spr = sprvect->Get(i);
-		if (!spr->isfrozen && inForce >= spr->getForce())
+		if (!spr->fIsfrozen && inForce >= spr->getForce())
 			result += spr->apply_force(inForce);
 		else
-			result += spr->x;
+			result += spr->fX;
 	}
 	return result;
 
@@ -181,28 +181,28 @@ float GRRod::stretchsprings(float inForce, SpringVector * sprvect) // doh! force
 	for (int i = s1; i < s2; ++i )
 	{
 		GRSpring * spr = sprvect->Get(i);
-		if (!spr->isfrozen)
+		if (!spr->fIsfrozen)
 		{
 			allfrozen = 0;
 		}
-		if (!spr->isfrozen && inForce > spr->getForce())
+		if (!spr->fIsfrozen && inForce > spr->getForce())
 		{
 			nlength += spr->change_force(inForce);
 		}
-		else if (spr->isfrozen)
+		else if (spr->fIsfrozen)
 		{
 			if (i == (mSpr2 - 1) && allfrozen)
 			{
 				// temporarily unfreeze the
 				// LAST spring, if all are
 				// froezn
-				assert(spr->isfrozen);
-				spr->isfrozen = 0;
+				assert(spr->fIsfrozen);
+				spr->fIsfrozen = 0;
 				nlength += spr->change_force(inForce);
-				spr->isfrozen = 1;
+				spr->fIsfrozen = 1;
 			}
 			else
-				nlength += spr->x;
+				nlength += spr->fX;
 		}
 	}
 	return nlength;

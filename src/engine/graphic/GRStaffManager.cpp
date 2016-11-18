@@ -1595,7 +1595,7 @@ int GRStaffManager::addRod( GRRod * rod, bool spaceactive, bool atHead, int voic
 		const int s1 = rod->getSpr1();
 		const int s2 = rod->getSpr2();
 		for (int i = s1; i < s2; ++i )
-			mSpringVector->Get(i)->isfrozen = 1;
+			mSpringVector->Get(i)->fIsfrozen = 1;
 	}
 
 	if (rod->spansOne())
@@ -1874,7 +1874,7 @@ void GRStaffManager::EndStaves( const TYPE_TIMEPOSITION & tp, int lastline )
 
 	GRSpring * spr = new GRSpring(tp, DURATION_0, settings.spring, settings.proportionalRenderingForceMultiplicator);
 	spr->setID(mSpringID);
-	spr->isfrozen = 1;
+	spr->fIsfrozen = 1;
 	mSpringVector->Set(mSpringID++,spr);
 
 	int i;
@@ -2050,7 +2050,7 @@ void GRStaffManager::MergeSPFs(GRPossibleBreakState * pbs1, GRPossibleBreakState
 		curspf->UnfreezeSpring(mSpringVector->Get(mLastSpringID-1));
 #endif
 		cursff->UnfreezeSpring(mSpringVector->Get(mLastSpringID-1));
-		mSpringVector->Get(mLastSpringID-1)->isfrozen=0;
+		mSpringVector->Get(mLastSpringID-1)->fIsfrozen=0;
 	}
 	
 	// mLastSpringID!
@@ -2084,7 +2084,7 @@ void GRStaffManager::MergeSPFs(GRPossibleBreakState * pbs1, GRPossibleBreakState
 		curspf->addSpring(mSpringVector->Get(i));
 #endif
 		cursff->addSpring(mSpringVector->Get(i));
-		if (mSpringVector->Get(i)->isfrozen)
+		if (mSpringVector->Get(i)->fIsfrozen)
 		{
 #ifdef OLDSPFACTIVE
 			curspf->FreezeSpring(mSpringVector->Get(i));
@@ -2190,7 +2190,7 @@ void GRStaffManager::BreakAtPBS(GuidoPos pbpos)
 	// to the mSpringVector (just as the EndStaves-routine)
 	GRSpring * spr = new GRSpring(pbs->tp, DURATION_0, settings.spring, settings.proportionalRenderingForceMultiplicator);
 	spr->setID(mSpringID);
-	spr->isfrozen = 1;
+	spr->fIsfrozen = 1;
 	mSpringVector->Set(mSpringID++,spr);
 	
 	// restretch the springs that are concerned by the lastrod

@@ -326,7 +326,7 @@ GRSystem::GRSystem(GRStaffManager * staffmgr, GRPage * inPage,
         mytp = TYPE_TIMEPOSITION(endslice->mPossibleBreakState->tp);
 	spr = new GRSpring(mytp, DURATION_0, spring, proportionnalRender);
 	spr->setID(++endspring);
-	spr->isfrozen = 1;
+	spr->fIsfrozen = 1;
 	mSpringVector->Set(endspring,spr);
 
 	int i;
@@ -404,8 +404,8 @@ GRSystem::GRSystem(GRStaffManager * staffmgr, GRPage * inPage,
 				spr->stretchWithForce(mSystemforce);
                 spr->setGRPositionX(curx);
                 if(spr->hasGraceNote()) // if we have a grace note, we don't want the next note to be too close to it...
-                    spr->setlength(spr->x + 5);
-				curx += spr->x;
+                    spr->setlength(spr->fX + 5);
+				curx += spr->fX;
 			}
 		}
 	}
@@ -890,7 +890,7 @@ void GRSystem::dospacing()
 		{
 			GRSpring * spr = mSpringVector->Get(i);
 			spr->setGRPositionX( posx );
-			posx += spr->x;
+			posx += spr->fX;
 		}
 
 		// don't think we need this: the last element is just a spring where the
