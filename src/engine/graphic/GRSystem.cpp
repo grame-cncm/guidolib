@@ -353,7 +353,7 @@ GRSystem::GRSystem(GRStaffManager * staffmgr, GRPage * inPage,
 	// there are no more systemslices left, then this is the very first line ...
 	// we have to find out, if the required force is greater than the optimum force, in which case the force
 	// is set to the optimum, the
-	if (mRelativeTimePositionOfGR == DURATION_0
+	if (getRelativeTimePosition() == DURATION_0
 		&& !beginslice
 		&& (*psystemslices)->empty()
 		&& islastsystem)

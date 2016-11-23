@@ -98,7 +98,7 @@ GRBar::GRBar(ARBar * p_arbar, GRSystem * , GRStaff * inStaff, const TYPE_TIMEPOS
 void GRBar::InitGRBar( const TYPE_TIMEPOSITION & inTimePos, const GRStaff * inStaff )
 {
 	traceMethod("InitGRBar");
-	mRelativeTimePositionOfGR = inTimePos;
+	setRelativeTimePosition (inTimePos);
 
 	const float halfExtent = GetSymbolExtent( mSymbol ) * 0.5f; 
 	const float curLSPACE = inStaff->getStaffLSPACE();
@@ -398,7 +398,7 @@ void GRBar::tellPosition(GObject * caller, const NVPoint & newPosition)
 */
 bool GRBar::operator==(const GRBar & bar) const
 {
-	return (bar.mRelativeTimePositionOfGR == mRelativeTimePositionOfGR);
+	return (bar.getRelativeTimePosition() == getRelativeTimePosition());
 }
 
 bool GRBar::operator==(const GRTag & tag) const

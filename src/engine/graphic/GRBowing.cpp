@@ -81,11 +81,11 @@ GRBowing::GRBowing(GRStaff * grstaff, GRNotationElement * startEl,
 	GRNotationElement * startElement;
 	if(( endElement = getEndElement(grstaff)) != 0 )
 	{
-		mRelativeTimePositionOfGR = endElement->getRelativeTimePosition();
+		setRelativeTimePosition (endElement->getRelativeTimePosition());
 	}
 	else if((startElement = getStartElement(grstaff)) != 0 )
 	{
-		mRelativeTimePositionOfGR = startElement->getRelativeTimePosition();
+		setRelativeTimePosition (startElement->getRelativeTimePosition());
 	}
 
 

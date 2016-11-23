@@ -52,7 +52,7 @@ GRKey::GRKey( GRStaff * inStaff, ARKey * key, int p_natural, bool ownsAR )
 	// spacing = LSPACE; // analogue to GRMeter, GRClef. Spacing wird von
 		// GRNotationElement "verwaltet".
 
-	mRelativeTimePositionOfGR = key->getRelativeTimePosition();
+	setRelativeTimePosition (key->getRelativeTimePosition());
 
     mIsInHeader = key->isInHeader();
 }

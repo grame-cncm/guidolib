@@ -88,7 +88,7 @@ GREvent::GREvent( GRStaff * inStaff,
 		mSize = float(1.0);
 	}
 
-	mRelativeTimePositionOfGR = theRelativeTimePositionOfGR;
+	setRelativeTimePosition (theRelativeTimePositionOfGR);
 	mDurationOfGR = theDurationOfGR;
 
 	mNeedsSpring = 1;
@@ -417,8 +417,7 @@ GREvent::isSyncopated() const
 { 
 	Fraction duration ( mDurationOfGR );
 	duration.normalize();
-	return  ( mRelativeTimePositionOfGR.getDenominator() < 
-										duration.getDenominator());
+	return  ( getRelativeTimePosition().getDenominator() < duration.getDenominator());
 }
 
 bool GREvent::hasArticulation( int inArticulationFlag ) const

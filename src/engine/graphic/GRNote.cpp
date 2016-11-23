@@ -93,7 +93,7 @@ const ARNote * GRNote::getARNote() const
 
 bool GRNote::isSplit()
 {
-	return (getARNote()->getRelativeTimePosition() != mRelativeTimePositionOfGR);
+	return (getARNote()->getRelativeTimePosition() != getRelativeTimePosition());
 }
 
 void GRNote::setNoteFormat(const ARNoteFormat * frmt)

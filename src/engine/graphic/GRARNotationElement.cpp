@@ -26,7 +26,7 @@ GRARNotationElement::GRARNotationElement(ARMusicalObject * arNotationElement, bo
 	// "Duration" of display must be equal to abstract duration
 	mDurationOfGR = mAbstractRepresentation->getDuration(); 
 
-	mRelativeTimePositionOfGR = mAbstractRepresentation->getRelativeTimePosition();
+	setRelativeTimePosition(mAbstractRepresentation->getRelativeTimePosition());
 
 	mDraw = arNotationElement->getDrawGR();
 }
