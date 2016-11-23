@@ -309,10 +309,10 @@ void ARNote::printGMNName(std::ostream& os) const
 
 void ARNote::printParameters(std::ostream& os) const
 {
-    os << "name: \"" << getName() << "\"; ";
-    os << "pitch: " << getPitch() << "; ";
-    os << "oct: " << getOctave() << "; ";
-    os << "accidental: " << getAccidentals() << "; ";
-    os << "detune: " << getDetune() << "; ";
-    os << "duration: " << getDuration().getNumerator() << "/" << getDuration().getDenominator() << "; ";
+    os << "name: \"" << getName() << "\" ";
+    os << "pitch: " << getPitch() << " ";
+    os << "oct: " << getOctave() << " ";
+    os << "accidental: " << getAccidentals() << " ";
+    os << "detune: " << getDetune() << " ";
+    os << "duration: " << getDuration() ;
 }

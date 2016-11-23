@@ -81,9 +81,8 @@ ARMusicalEvent::~ARMusicalEvent()
 void ARMusicalEvent::print(std::ostream& os) const
 {
     printName(os);
-    os << ": ";
+    os << ": " << "date: " << getRelativeTimePosition() << " ";
     printParameters(os);
-    os << std::endl;
 }
 
 void ARMusicalEvent::setDenominator(int newDenominator)
