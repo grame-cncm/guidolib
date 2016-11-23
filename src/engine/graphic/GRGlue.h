@@ -35,6 +35,7 @@ class GRGlue : public GRNotationElement
 				float	getSConst() const	{ return mSConst; }
 		
 		virtual void 	setHPosition( float nx )	{ GRNotationElement::setHPosition(nx); }
+		virtual void	print(std::ostream& os) const;
 
 		GRGlue * mPartner;
 		int		 mIsStart;	// (JB) sometimes = -1 should be a bool...

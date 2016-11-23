@@ -65,6 +65,11 @@ GRGlue::~GRGlue()
 		mPartner->removeAssociation(this);
 }
 
+void GRGlue::print(std::ostream& os) const
+{
+	os << "GRGlue";
+}
+
 void GRGlue::tellPosition(GObject * caller, const NVPoint & point)
 {
 	setPosition(point);
