@@ -134,10 +134,12 @@ protected:
     bool        mIsInHeader; // For proportional rendering
 
 	TYPE_DURATION mDurationOfGR;
-	TYPE_TIMEPOSITION mRelativeTimePositionOfGR;
+//	TYPE_TIMEPOSITION mRelativeTimePositionOfGR;
 
 	NEPointerList * mAssociated;
 
+private:
+	TYPE_TIMEPOSITION mRelativeTimePositionOfGR;
 };
 
 std::ostream& operator<< (std::ostream& os, const GRNotationElement& e);
