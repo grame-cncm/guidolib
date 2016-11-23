@@ -77,8 +77,17 @@ const char* GUIDOENGINE_VERSION_STR = "1.6.3";
 
 ARPageFormat * gARPageFormat = 0;
 
+//#define SHOW_SPRINGS_RODS
+
+#ifdef SHOW_SPRINGS_RODS
+# define SHOW_SPRINGS	1
+# define SHOW_RODS		1
+#else
+# define SHOW_SPRINGS	0
+# define SHOW_RODS		0
+#endif
 // - Misc globals
-GuidoGlobalSettings gGlobalSettings = { /*1 to draw the springs*/0, 0, 1, 0 };
+GuidoGlobalSettings gGlobalSettings = { SHOW_SPRINGS, SHOW_RODS, 1, 0 };
 
 bool gInited = false;		// GuidoInit() Flag
 int gARHandlerRefCount = 0;
