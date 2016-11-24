@@ -50,50 +50,45 @@ class GRSpring
 	friend class GRSystem;
 public:
 
-			GRSpring(const TYPE_TIMEPOSITION  & vtp,
-						const TYPE_DURATION & vdur, float spring, float propRender);
-			
+			GRSpring(const TYPE_TIMEPOSITION  & vtp, const TYPE_DURATION & vdur, float spring, float propRender);
 			GRSpring( GRNotationElement *, GRVoice *, float spring, float propRender );
 
 	virtual ~GRSpring();
 
 	void OnDraw( VGDevice & hdc ) const;
-
 	bool containsBar() const;
 
 	// A routine to check local collisions
 	virtual void checkLocalCollisions();
-
 	// a routine to check the accidental-collisions ...
 	virtual void checkAccidentalCollisions();
 	
-	// this routine looks at the GRSpringCollider
-	// of this instance of GRSpring and
+	// this routine looks at the GRSpringCollider of this instance of GRSpring and
 	// at the GRSpringCollider of nextspring.
-	// It finds matching poslists and
-	// returns the maximum needed distance ...
-	float GetMaxDistance(GRSpring * nextspring);
-	float stretchWithForce(float newforce);
-	bool hasStaffAndType(const GRStaff * grstaff, const std::type_info & ti);
+	// It finds matching poslists and returns the maximum needed distance ...
+	float	GetMaxDistance(GRSpring * nextspring);
 
-	float set_const(float dc);
-	float recalcConstant();
-	void addElement(GRNotationElement * el,GRVoice * vce);
-	bool hasType(const std::type_info & ti);
-    bool hasGraceNote();
-	void setNoExtent();
-	int removeElement(GRNotationElement * el);
-	int setGRPositionX(float p_posx);
-	void setGRSpringID();
+	float	stretchWithForce(float newforce);
+	bool	hasStaffAndType(const GRStaff * grstaff, const std::type_info & ti);
+	float	set_const(float dc);
+	float	recalcConstant();
+	void	addElement(GRNotationElement * el,GRVoice * vce);
+	bool	hasType(const std::type_info & ti);
+    bool	hasGraceNote();
+	void	setNoExtent();
+	int		removeElement(GRNotationElement * el);
+	int		setGRPositionX(float p_posx);
+	void	setGRSpringID();
 
+	float	getExtent() const			{ return fX; }
+	void	setID(int _id);
+	int		getID() const;
+	float	getForce() const			{ return fForce; }
+	float	getConstant() const			{ return fSconst; }
 
-	float getExtent() const 	{ return fX; }
-
-	void setID(int _id);
-	int getID();
-	virtual const GRNotationElement * getFirstGRO() const;
-	virtual GuidoPos getFirstGROPosition();
-	virtual const GRNotationElement * getNextGRO(GuidoPos & pos) const;
+	virtual const GRNotationElement *	getFirstGRO() const;
+	virtual GuidoPos					getFirstGROPosition();
+	virtual const GRNotationElement *	getNextGRO(GuidoPos & pos) const;
 	virtual float apply_force(float df);
 	virtual float change_x(float dx);
 	virtual float change_force(float df);
@@ -101,30 +96,22 @@ public:
 	virtual float change_dur(const TYPE_DURATION & ndur );
 	virtual float setlength(float dx);
 
-			float getForce() const { return fForce; }
 
-	virtual const TYPE_DURATION & getTimePosition() const
-	{ return fTp; }
-
-	virtual const TYPE_DURATION & getDuration() const
-	{ return fDur; }
+	virtual const TYPE_DURATION & getTimePosition() const	{ return fTp; }
+	virtual const TYPE_DURATION & getDuration() const		{ return fDur; }
 
 	int operator<(const GRSpring & spr) const;
 
-	virtual float getConstant() const	{ return fSconst; }
 
 	static float defconst(const TYPE_DURATION &, float spring);
 	static float defconst(float dur, float spring );
 
 	int isCommonSpring(int numvoices) const;
 
-	// this flag is set to true, if the spring
-	// really has an element of its duration
+	// this flag is set to true, if the spring really has an element of its duration
 	// this helps in spacing-issues.
-	// (if the spring has no element of this type
-	//  the average building process during
-	//  the neighbourhoodcheck is made easier)
-	bool hasDurElement;
+	// (if the spring has no element of this type the average building process during the neighbourhoodcheck is made easier)
+	bool	fHasDurElement;
 
 	int		fIsfrozen;
 	float	fPosx;	// (JB) was int
@@ -137,20 +124,19 @@ protected:
 	TYPE_DURATION     fDur;
 	int				  fId;      // a definite ID
 
-	// A list of GObjects, that this spring includes
-	float			  fForce;
-	float			  fX;
-	float			  fSconst;  // spring-constants
-
-	GROList			  fGrolst;  //
-	GRVList		      fGrvlst;
-
 	GRSpringCollider *fSprcol;
-
 	float fFuncpar;
 	float fProportionalRendering;
 
-    bool              isProportionalElement;
+private:
+	float		fForce;
+	float		fX;
+	float		fSconst;  // spring-constants
+    bool		fIsProportionalElement;
+
+	// A list of GObjects, that this spring includes
+	GROList			  fGrolst;  //
+	GRVList		      fGrvlst;
 };
 
 int sprcomp(const GRSpring &gr1,const GRSpring &gr2);

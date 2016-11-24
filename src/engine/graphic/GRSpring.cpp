@@ -47,7 +47,7 @@
 using namespace std;
 
 GRSpring::GRSpring(GRNotationElement *grn, GRVoice *vce, float spring, float propRender) :
-	fGrolst(0),fGrvlst(0),fSprcol(NULL), fFuncpar(spring), fProportionalRendering(propRender)
+	fSprcol(NULL), fFuncpar(spring), fProportionalRendering(propRender), fGrolst(0),fGrvlst(0)
 {
 	fIsfrozen = 0;
 	fId = -1;
@@ -57,7 +57,7 @@ GRSpring::GRSpring(GRNotationElement *grn, GRVoice *vce, float spring, float pro
 	fDur = grn->getDuration();
 	fTp  = grn->getRelativeTimePosition();
 
-	hasDurElement = true;
+	fHasDurElement = true;
 
 	// add the grn to the List
 	fGrolst.AddTail(grn);
@@ -65,14 +65,14 @@ GRSpring::GRSpring(GRNotationElement *grn, GRVoice *vce, float spring, float pro
 
 	fSconst = calcconst(grn);
 
-    isProportionalElement = false;
+    fIsProportionalElement = false;
 
 	assert(fSconst != 0);
 }
 
 GRSpring::GRSpring(const TYPE_TIMEPOSITION & vtp,
 				   const TYPE_DURATION  &vdur, float spring, float propRender) :
-	fGrolst(0),fGrvlst(0),fSprcol(NULL), fFuncpar(spring), fProportionalRendering(propRender)
+	fSprcol(NULL), fFuncpar(spring), fProportionalRendering(propRender), fGrolst(0),fGrvlst(0)
 {
 	fIsfrozen = 0;
 	fId = -1;
@@ -82,11 +82,9 @@ GRSpring::GRSpring(const TYPE_TIMEPOSITION & vtp,
 	fDur = vdur;
 	fTp  = vtp;
 
-	hasDurElement         = false;
-    isProportionalElement = false;
-
+	fHasDurElement         = false;
+    fIsProportionalElement = false;
 	fSconst = defconst(fDur, fFuncpar);
-
 	assert(fSconst != 0);
 }
 
@@ -156,7 +154,7 @@ float GRSpring::change_dur(const TYPE_DURATION & ndur)
 	{
 		fDur = ndur;
 
-		hasDurElement = false;
+		fHasDurElement = false;
 		// we have to check the hasDurElement-flag
 		GuidoPos pos = fGrolst.GetHeadPosition();
 		while (pos)
@@ -164,7 +162,7 @@ float GRSpring::change_dur(const TYPE_DURATION & ndur)
 			GRNotationElement * el = fGrolst.GetNext(pos);
 			if (el->getDuration() == fDur)
 			{
-				hasDurElement = true;
+				fHasDurElement = true;
 				break;
 			}
 		}
@@ -199,7 +197,7 @@ float GRSpring::change_force(float df)
 */
 float GRSpring::set_const(float dc)
 {
-    if (isProportionalElement)
+    if (fIsProportionalElement)
         dc = 1;
 
     assert(dc>0);
@@ -213,9 +211,9 @@ float GRSpring::set_const(float dc)
 */
 float GRSpring::change_const(float dc)
 {
-    if (isProportionalElement)
+   if (fIsProportionalElement)
         dc = 1;
-
+	
     assert(dc > 0);
     long l = long(floor(dc * 100000.0+0.5));
     dc = l/100000.0f;
@@ -289,8 +287,8 @@ const GRNotationElement * GRSpring::getNextGRO(GuidoPos &pos) const
 	return fGrolst.GetNext(pos);
 }
 
-int GRSpring::getID()				{ return fId; }
-void GRSpring::setID(int _id)		{ fId = _id; }
+int GRSpring::getID() const			{ return fId; }
+void GRSpring::setID(int id)		{ fId = id; }
 
 void GRSpring::setGRSpringID()
 {
@@ -419,7 +417,7 @@ void GRSpring::addElement(GRNotationElement * el, GRVoice * vce)
 {
 	if (fProportionalRendering != 0) {
         if (!el->isInHeader()) {
-            isProportionalElement = true;
+            fIsProportionalElement = true;
 
             change_const(1);
             setProportionalForce();
@@ -427,8 +425,9 @@ void GRSpring::addElement(GRNotationElement * el, GRVoice * vce)
     }
 
 	if (el->getRelativeTimePosition() != fTp) {
-		if (el->getNeedsSpring() == 1)
+		if (el->getNeedsSpring() == 1) {
 			fTp = el->getRelativeTimePosition();
+		}
 	}
 
 	GuidoPos tmppos = fGrolst.AddTail(el);
@@ -437,7 +436,7 @@ void GRSpring::addElement(GRNotationElement * el, GRVoice * vce)
 	const TYPE_DURATION & durel = el->getDuration();
 
 	if (durel == fDur)
-		hasDurElement = true;
+		fHasDurElement = true;
 
 	if (fSprcol == 0)
 		fSprcol = new GRSpringCollider();
@@ -456,7 +455,7 @@ float GRSpring::recalcConstant()
 
 	GRNotationElement * grn = fGrolst.GetHead();
 
-	fSconst = (isProportionalElement ? 1 : calcconst(grn));
+	fSconst = (fIsProportionalElement ? 1 : calcconst(grn));
 
 	if (oldconst != fSconst && (fX != 0 || fForce != 0)) {
 		// then we have to recaluate the
@@ -483,9 +482,9 @@ float GRSpring::calcconst(GRNotationElement * grn)
 		fSconst = tmp->getSConst();
 	else if (fDur == DURATION_0) {
 		if (dynamic_cast<GREmpty *>(grn))
-            fSconst = (isProportionalElement ? 1 : 200.0f);
+            fSconst = (fIsProportionalElement ? 1 : 200.0f);
 		else
-			fSconst = (isProportionalElement ? 1 : 20.0f);
+			fSconst = (fIsProportionalElement ? 1 : 20.0f);
 	}
 	else if (grn && (dynamic_cast<GRRest *>(grn))) {
 		// rests are treated as if they were
@@ -498,10 +497,10 @@ float GRSpring::calcconst(GRNotationElement * grn)
 		else
 			mydur = fDur;
 
-		fSconst = (isProportionalElement ? 1 : defconst(mydur, fFuncpar));
+		fSconst = (fIsProportionalElement ? 1 : defconst(mydur, fFuncpar));
 	}
 	else
-		fSconst = (isProportionalElement ? 1 : defconst(fDur, fFuncpar));
+		fSconst = (fIsProportionalElement ? 1 : defconst(fDur, fFuncpar));
 
 	assert(fSconst != 0);
 
@@ -538,7 +537,7 @@ bool GRSpring::hasStaffAndType(const GRStaff * grstaff,const std::type_info & ti
 */
 float GRSpring::stretchWithForce(float newforce)
 {
-    if (!isProportionalElement) {
+    if (!fIsProportionalElement) {
         if (fForce >= newforce || fIsfrozen)
             return fX;
 
