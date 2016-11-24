@@ -19,6 +19,7 @@
 */
 
 #include <iostream>
+#include <algorithm>
 
 #include "GUIDOScoreMap.h"
 #include "GUIDOInternal.h"
@@ -151,6 +152,16 @@ GUIDOAPI(GuidoErrCode)	GuidoGetStaffMap( CGRHandler gr, int pagenum, float w, fl
 }
 
 //----------------------------------------------------------------------
+static bool sortMap(TMapSegments s1, TMapSegments s2)
+{
+	GuidoDate d1 = s1.first.first;
+	GuidoDate d2 = s2.first.first;
+	float f1 = d1.num / float(d1.denom);
+	float f2 = d2.num / float(d2.denom);
+	return f1 < f2;
+}
+
+//----------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode)	GuidoGetVoiceMap( CGRHandler gr, int pagenum, float w, float h, int voice, Time2GraphicMap& outmap)
 {
 	GuidoErrCode err = checkParams (gr, pagenum);
@@ -158,6 +169,7 @@ GUIDOAPI(GuidoErrCode)	GuidoGetVoiceMap( CGRHandler gr, int pagenum, float w, fl
 	if (voice < 1) return guidoErrBadParameter; 
 	GuidoVoiceCollector getmap (gr, voice);
 	getmap.process (pagenum, w, h, &outmap);
+	std::sort(outmap.begin(), outmap.end(), sortMap);
 	return guidoNoErr;
 }
 
@@ -178,6 +190,7 @@ GUIDOAPI(GuidoErrCode)	GuidoGetRAWStaffMap( CGRHandler gr, int pagenum, float w,
 	if (err != guidoNoErr) return err;
 	GuidoStaffCollector getmap (gr, staff, true);
 	getmap.process(pagenum, w, h, &outmap);
+	std::sort(outmap.begin(), outmap.end(), sortMap);
 	return guidoNoErr;
 }
 

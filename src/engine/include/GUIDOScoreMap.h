@@ -76,7 +76,9 @@ class_export TimeSegment: public std::pair<GuidoDate, GuidoDate>
 		TimeSegment operator & (const TimeSegment& ts) const;	///< intersection operation (may return an arbitrary empty segment)
 };
 
-typedef std::vector<std::pair<TimeSegment, FloatRect> >	Time2GraphicMap;
+typedef std::pair<TimeSegment, FloatRect>	TMapSegments;
+typedef std::vector<TMapSegments>			Time2GraphicMap;
+typedef Time2GraphicMap::const_iterator		Time2GraphicMapIterator;
 
 inline std::ostream& operator << (std::ostream& out, const GuidoDate& d) {
 	out << d.num << "/" << d.denom;
