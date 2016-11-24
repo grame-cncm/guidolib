@@ -938,16 +938,7 @@ void GRVoiceManager::EndManageVoice(const TYPE_TIMEPOSITION & tp)
 GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObject)
 {
 	const TYPE_TIMEPOSITION & von = arOfCompleteObject->getRelativeTimePosition();
-//	TYPE_DURATION     bis = arOfCompleteObject->getDuration();
-	
 	GRNotationElement * grne = 0;
-//	int atEnd = 0;
-//	int atBegin = 0;
-//	if (von == mStaffMgr->getRelativeEndTimePosition())
-//		atEnd = 1;
-//	if (von == mStaffMgr->getRelativeTimePositionOfGR())
-//		atBegin = 1;
-	
 
 	const std::type_info & tinf = typeid(*arOfCompleteObject);
 	ARMusicalTag * mytag = static_cast<ARMusicalTag *>(arOfCompleteObject->isARMusicalTag());
