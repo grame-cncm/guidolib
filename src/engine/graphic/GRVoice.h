@@ -32,10 +32,6 @@ class GRPage;
 class GRSpaceForceFunction2;
 class GRSpacingMatrix;
 
-#ifdef OLDSPFACTIVE
-class GRSpaceForceFunction;
-#endif
-
 class SystemNode
 {
 		friend class GRVoice;

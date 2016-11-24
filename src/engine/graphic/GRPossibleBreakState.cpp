@@ -78,10 +78,6 @@ GRPossibleBreakState::GRPossibleBreakState()
 	// owns elements!
 	ssvect = new KF_IVector<GRStaffAndState>(1);
 	vtsvect = new KF_IVector<GRVoiceTagsAndStaff>(1);
-#ifdef OLDSPFACTIVE
-	spf = NULL;
-	copyofcompletespf = NULL;
-#endif
 	sff = NULL;
 	copyofcompletesff = NULL;
 	lastrod = NULL;
@@ -92,12 +88,6 @@ GRPossibleBreakState::~GRPossibleBreakState()
 {
 	delete ssvect;
 	delete vtsvect;
-
-#ifdef OLDSPFACTIVE
-	delete spf;
-	delete copyofcompletespf;
-#endif
-
 	delete sff;
 	delete copyofcompletesff;
 }
@@ -120,7 +110,7 @@ void GRPossibleBreakState::SaveState(KF_IVector<GRStaff> * vstaffs,
 			sas->pstaff = staff;
 			sas->setLastRod(staff->lastrod);
 			sas->setFirstRod(staff->firstrod);
-			sas->tpos = staff->mCompElements.GetTailPosition();
+			sas->tpos = staff->getElements()->GetTailPosition();
 			sas->staffstate = staff->getGRStaffState();
 			ssvect->Set(i,sas);
 		}
@@ -265,7 +255,7 @@ void GRPossibleBreakState::ChangeStaffPointers(KF_IVector<GRStaff> * newstaves,
 			{
 				if( oldsas->tpos == 0 )
 				{
-					sas->tpos = sas->pstaff->mCompElements.GetTailPosition();
+					sas->tpos = sas->pstaff->getElements()->GetTailPosition();
 				}
 			}
 		}

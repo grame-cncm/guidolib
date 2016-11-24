@@ -28,9 +28,6 @@ typedef KF_IPointerList<GRVoice> GRVList;// TODO: replace by std::vector (easy)
 class GRRod;
 class GRSystem;
 class GRStaff;
-#ifdef OLDSPFACTIVE
-class GRSpaceForceFunction;
-#endif
 
 class GRSpaceForceFunction2;
 class GRSpringCollider;
@@ -42,9 +39,6 @@ class GRSpringCollider;
 
 class GRSpring  
 {
-#ifdef OLDSPFACTIVE
-	friend class GRSpaceForceFunction;
-#endif
 	friend class GRSpaceForceFunction2;
 	friend class GRRod;
 	friend class GRSystem;

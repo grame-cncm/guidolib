@@ -26,9 +26,6 @@ class GRVoiceManager;
 class GRVoice;
 class GRStaffManager;
 class GRTag;
-#ifdef OLDSPFACTIVE
-class GRSpaceForceFunction;
-#endif
 class GRSpaceForceFunction2;
 
 /** \brief GRPossibleBreakState saves the states of all structures that are 
@@ -117,11 +114,6 @@ public:
 	float pbreakval;
 
 	// this variable hold the SpaceForceFunction for the current breakstate.
-#ifdef OLDSPFACTIVE
-	GRSpaceForceFunction * spf;
-	GRSpaceForceFunction * copyofcompletespf;
-#endif
-
 	GRSpaceForceFunction2 * sff;
 	GRSpaceForceFunction2 * copyofcompletesff;
 
