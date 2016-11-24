@@ -267,7 +267,7 @@ GRStaff::GRStaff( GRSystemSlice * systemslice, float propRender )
 						: mGrSystem(NULL), mGrSystemSlice( systemslice ), fLastSystemBarChecked(-1,1), proportionnalRender(propRender)
 {
 	mLength = 0;
-	mRelativeTimePositionOfGR = systemslice->getRelativeTimePosition();
+	setRelativeTimePosition(systemslice->getRelativeTimePosition());
 	
 //	mDurationOfGR = DURATION_0; // (JB) TEST: removed !
 	setClefParameters(0);
@@ -292,11 +292,11 @@ GRStaff::~GRStaff()
 	// this routine has been done in this fashion, 
 	// because that way, the associations are done correctly ....
 	// but who deletes the Events? and the Glue ?
-	GuidoPos pos = mCompElements.GetHeadPosition();
+	GuidoPos pos = getElements()->GetHeadPosition();
 	while (pos)
 	{
 		GuidoPos curpos = pos;
-		GRNotationElement * el = mCompElements.GetNext(pos);
+		GRNotationElement * el = getElements()->GetNext(pos);
 
 		if (!GREvent::cast(el) && !dynamic_cast<GRGlue *>(el))
 		{
@@ -359,8 +359,9 @@ staff_debug("addNotationElement");
 	// this time, the time-check is disabled, if
 	// we have a positiontag (because those are
 	// added some more times than just once!)
-	if ((dynamic_cast<GRPositionTag *>(notationElement)) == NULL) {		
-		if (mCompElements.GetTail()) { 
+	bool added = false;
+	if ((dynamic_cast<GRPositionTag *>(notationElement)) == NULL) {
+		if (getElements()->GetTail()) {
 			const TYPE_TIMEPOSITION tp1 (notationElement->getRelativeTimePosition());
 
 			// no notation element may be added to the staff, that
@@ -368,25 +369,44 @@ staff_debug("addNotationElement");
 #ifdef DEBUG
 			assert(tp1>=getRelativeTimePosition());
 #endif
-			const TYPE_TIMEPOSITION tp2 (mCompElements.GetTail()->getRelativeTimePosition());
+			const TYPE_TIMEPOSITION tp2 (getElements()->GetTail()->getRelativeTimePosition());
 			if( tp1 < tp2 )
 			{
 				// DF - 24/08/2009 - assert commented to avoid spurious exit
 				// due to dynamic score coding or multiple fermata in a chord with variable length notes
 				// assert(false);
 				mCompElements.AddAtCorrectTimePosition(notationElement);
+				added = true;
 			}
-			else
-				mCompElements.AddTail(notationElement);
 		}
-		else
-			mCompElements.AddTail(notationElement);
 	}
-	else
+	if (!added) {
+#if 1
+	// this part fix a bug with incorrect placement of position tags in multi voices scores using \staff tags
+	// the last mCompElements note duration could be greater than previous one
+	// the result was an incorrect date of the position tag in between
+	// the section below makes sure that the tail of mCompElements is always the smallest note
+	// tags with no duration are ignored
+		GuidoPos pos = mCompElements.GetTailPosition();
+		if (!pos) mCompElements.AddTail(notationElement);
+		else {
+			GRNotationElement * el = mCompElements.GetAt(pos);
+			TYPE_DURATION d1 = notationElement->getDuration();
+			TYPE_DURATION d2 = el->getDuration();
+			if (d1 && d2 && (d2 < d1)) {
+				if (mCompElements.GetPrev(pos))
+					mCompElements.AddElementAfter(pos, notationElement);
+				else mCompElements.AddTail(notationElement);
+			}
+			else mCompElements.AddTail(notationElement);
+		}
+#else
 		mCompElements.AddTail(notationElement);
+#endif
+	}
 
 	// this should sort the elements ... it is no longer needed; sorting is done
-	// on the abstract representation, and allelements are added/sorted there.
+	// on the abstract representation, and all elements are added/sorted there.
 	//if (sortElements)
 	//	mCompElements.sort( & GRNotationElement::comp);
 
@@ -408,11 +428,10 @@ GRClef * GRStaff::AddClef(ARClef * arclef)
 	// To do: look, whether the clef really is a clef-
 	// change. If not, do nothing!!!!
 	GRClef * grclef = new GRClef(arclef, this);
-	TYPE_TIMEPOSITION tmp (mRelativeTimePositionOfGR);
+	TYPE_TIMEPOSITION tmp = getRelativeTimePosition();
 	GRNotationElement * el = mCompElements.GetTail();
-	if (el) 
+	if (el)
 		tmp = el->getRelativeEndTimePosition();
-
 	grclef->setRelativeTimePosition(tmp);
 
 	setClefParameters(grclef, GRStaffState::CLEFEXPLICIT);
@@ -813,7 +832,7 @@ GRMeter * GRStaff::AddMeter(ARMeter * armeter)
 	// First check, whether this really means
 	// a Change in Meter? If not, do not display anything!
 	GRMeter * nmeter = new GRMeter(armeter, this);
-	TYPE_TIMEPOSITION tmp ( mRelativeTimePositionOfGR );
+	TYPE_TIMEPOSITION tmp ( getRelativeTimePosition() );
 	GRNotationElement * el = mCompElements.GetTail();
 	if (el) 
 		tmp = el->getRelativeEndTimePosition();
@@ -1055,7 +1074,7 @@ GRKey * GRStaff::AddKey(ARKey * arkey)
 
 		// the new natkey MUST get a Spring / and a Rod
 		// otherwise, we have a Problem!
-		TYPE_TIMEPOSITION tmp (mRelativeTimePositionOfGR);
+		TYPE_TIMEPOSITION tmp = getRelativeTimePosition();
 		GRNotationElement * el = mCompElements.GetTail();
 		if (el) 
 			tmp = el->getRelativeEndTimePosition();
@@ -1073,7 +1092,7 @@ GRKey * GRStaff::AddKey(ARKey * arkey)
 	}
 
 	GRKey * key = new GRKey(this, arkey, 0, 0);
-	TYPE_TIMEPOSITION tmp (mRelativeTimePositionOfGR);
+	TYPE_TIMEPOSITION tmp = getRelativeTimePosition();
 	GRNotationElement * el = mCompElements.GetTail();
 	if (el) 
 		tmp = el->getRelativeEndTimePosition();
@@ -1108,7 +1127,7 @@ staff_debug("BeginStaff");
 	if (startglue == 0)
 	{
 		startglue = new GRGlue(this);
-		startglue->setRelativeTimePosition(mRelativeTimePositionOfGR);
+		startglue->setRelativeTimePosition(getRelativeTimePosition());
 		// always at the beginning!
 		mCompElements.AddHead(startglue);
 	}
@@ -1116,7 +1135,7 @@ staff_debug("BeginStaff");
 	if (secglue == 0)
 	{
 		secglue = new GRGlue(this, -1);
-		secglue->setRelativeTimePosition( mRelativeTimePositionOfGR);
+		secglue->setRelativeTimePosition( getRelativeTimePosition());
 		addNotationElement(secglue);
 	}
 
@@ -1237,13 +1256,13 @@ staff_debug("CreateBeginElements");
 		// now I have to deal with basepitoffs (for transposed instruments)
 
 		ARClef * arclef = new ARClef(*state.curclef);
-		arclef->setRelativeTimePosition( mRelativeTimePositionOfGR );
+		arclef->setRelativeTimePosition( getRelativeTimePosition() );
         arclef->setIsInHeader(true);
 		// owns abstract ....!
 		GRClef * grclef = new GRClef(arclef, this, 1);
 
 		// grclef->setRelativeTimePosition(relativeTimePositionOfGR);
-		assert(grclef->getRelativeTimePosition() == mRelativeTimePositionOfGR);
+		assert(grclef->getRelativeTimePosition() == getRelativeTimePosition());
 
 		setClefParameters(grclef, GRStaffState::CLEFEXPLICIT);
 		addNotationElement(grclef);
@@ -1256,13 +1275,13 @@ staff_debug("CreateBeginElements");
 		// I have to think about keynumber (transposed instruments)
 
 		ARKey * arkey = new ARKey(*state.curkey);
-		arkey->setRelativeTimePosition(mRelativeTimePositionOfGR);
+		arkey->setRelativeTimePosition(getRelativeTimePosition());
         arkey->setIsInHeader(true);
 
 		GRKey * grkey = new GRKey(this, arkey, 0, 1);
 
 		// grkey->setRelativeTimePosition(relativeTimePositionOfGR);
-		assert(grkey->getRelativeTimePosition() == mRelativeTimePositionOfGR );
+		assert(grkey->getRelativeTimePosition() == getRelativeTimePosition() );
 		setKeyParameters(grkey);		
 		addNotationElement(grkey);
 
@@ -1279,7 +1298,7 @@ staff_debug("CreateBeginElements");
 	// now we add the secondglue
 	assert(!secglue);
 	secglue = new GRGlue(this, -1);
-	secglue->setRelativeTimePosition( mRelativeTimePositionOfGR );
+	secglue->setRelativeTimePosition( getRelativeTimePosition() );
 	addNotationElement(secglue);
 	staffmgr->AddGRSyncElement(secglue, this, staffnum, NULL);
 }
@@ -2053,7 +2072,7 @@ void GRStaff::print(std::ostream& os) const
 {
 	GRNotationElement * e;
 	fprintf(stderr, "GRStaffprint(std::ostream& os): %.2f-%.2f ", 
-		(float) mRelativeTimePositionOfGR, (float) getRelativeEndTimePosition());
+		(float) getRelativeTimePosition(), (float) getRelativeEndTimePosition());
 	GuidoPos pos = mCompElements.GetHeadPosition();
 	while(pos)
 	{
@@ -2140,7 +2159,7 @@ void GRStaff::setOnOff(bool onoff, TYPE_TIMEPOSITION tp)
 
 void GRStaff::setOnOff(bool onoff)
 {
-	setOnOff(onoff, mRelativeTimePositionOfGR);
+	setOnOff(onoff, getRelativeTimePosition());
 }
 
 bool GRStaff::isStaffEndOn()
