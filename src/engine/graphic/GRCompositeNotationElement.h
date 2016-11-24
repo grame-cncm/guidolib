@@ -34,10 +34,10 @@ class GRCompositeNotationElement : virtual public GRNotationElement
 
 		virtual GuidoPos 	AddTail( GRNotationElement * );
 
-      NEPointerList * getElements() { return &mCompElements; }
+      NEPointerList *		getElements()			{ return &mCompElements; }
+      const NEPointerList&	getElements() const		{ return mCompElements; }
 
   protected:
-
       NEPointerList 	mCompElements;
 };
 
