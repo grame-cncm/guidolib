@@ -23,16 +23,9 @@ template <class T> class KF_IVector;
 
 #include "defines.h"	// For TYPE_TIMEPOSITION
 
-//#include "GRStaff.h"
-//#include "GRVoiceManager.h"
 #include "GRBeginSpaceForceFunction2.h"
 #include "GRSpring.h"
 #include "GRRod.h"
-
-#ifdef OLDSPFACTIVE
-class GRSpaceForceFunction;
-#endif
-// #include "GRSpringForceIndex.h"
 
 class ARMusicalTag;
 class ARMusic;
@@ -135,25 +128,20 @@ typedef KF_Vector<float> FloatVector;
 
 	class GRForceRodEntry
 	{
-		// this class represents the
-		// entries in a list for
-		// determining, which springs
+		// this class represents the entries in a list for determining, which springs
 		// are stretched by InitialSpringStretch.
-		// The Entries are later sorted
-		// by space-rods (and start-springIDs)
+		// The Entries are later sorted by space-rods (and start-springIDs)
 		// and further by force ...
 		public:
 
 			GRForceRodEntry() : force( 0 ), rod( 0 ) { }
 	
-			// the routine to compare the 
-			// entries against each other ..
+			// the routine to compare the  entries against each other ..
 			// returns:
 			// -1: e1<e2
 			//  0: e1 == e2
 			//  1: e1 > e2
-			static int comp( const GRForceRodEntry * e1,
-									const GRForceRodEntry * e2 );
+			static int comp( const GRForceRodEntry * e1, const GRForceRodEntry * e2 );
 			float force;
 			GRRod * rod;
 	};
@@ -180,8 +168,7 @@ class GRStaffManager
         virtual ~GRStaffManager();
 
 		// this routine is used to get the current beginning_sff
-		// This is used by the constructor of GRSystemSlice to
-		// save a pointer to the value, which is then used later
+		// This is used by the constructor of GRSystemSlice to save a pointer to the value, which is then used later
 		// to calculate the actual optimum linebreaks ....
 		GRBeginSpaceForceFunction2 * getCurrentBegSFF();
 
@@ -195,52 +182,37 @@ class GRStaffManager
 
 
 		void addElementToSpring(GRNotationElement *grne,int springid);
-		static float InitialSpringStretch(int start, int end,
-			IRodList * tmpsimplerods,
-			IRodList * tmpcomplerods,
-			ISpringVector *tmpsprvect,
-			std::ofstream *springlog = 0);
+		static float InitialSpringStretch(int start, int end, IRodList * simplerods, IRodList * complerods, ISpringVector *sprvect, std::ofstream *springlog = 0);
 		int deleteRod(GRRod *rod);
 		int addRod(GRRod *rod,bool spaceactive, bool atHead = false, int voiceID = -1);
 		int FinishSyncSlice(const TYPE_TIMEPOSITION &tp);
-		int AddGRSyncElement(GRNotationElement *grel, 
-			GRStaff *grstaff,int voiceid,
-			GRVoice *vce, GRNotationElement * sameel = 0);
+		int AddGRSyncElement(GRNotationElement *grel, GRStaff *grstaff,int voiceid, GRVoice *vce, GRNotationElement * sameel = 0);
 		int AddSystemTag(GRNotationElement * grel, GRStaff * grstaff,int voiceid);
 		int AddPageTag(GRNotationElement * grel, GRStaff * grstaff,int voiceid);
-// 		void removeAssociations(GRNotationElement *el);
-		virtual bool setStaffStateTag(ARMusicalTag * tag, int staffnum);
 		int getNewLinePage() const;
-		virtual float getSystemWidthCm();
-		virtual void EndPage(ARMusicalVoice * voice, GuidoPos pos);
-		virtual void EndSystem(ARMusicalVoice * arVoice, GuidoPos pos);
-		virtual void setRelativeEndTimePosition(const TYPE_TIMEPOSITION & tp);
-		virtual TYPE_TIMEPOSITION getRelativeTimePositionOfGR() const
-			{ return relativeTimePositionOfGR; }
-	
-		virtual GRStaff * getStaff(int staff);
-		virtual void prepareStaff(int staff);
 
-		TYPE_TIMEPOSITION getRelativeEndTimePosition() const
-	      	{ return relativeTimePositionOfGR + mDurationOfGR; }
+		virtual bool	setStaffStateTag(ARMusicalTag * tag, int staffnum);
+		virtual float	getSystemWidthCm();
+		virtual void	EndPage(ARMusicalVoice * voice, GuidoPos pos);
+		virtual void	EndSystem(ARMusicalVoice * arVoice, GuidoPos pos);
+		virtual void	setRelativeEndTimePosition(const TYPE_TIMEPOSITION & tp);
+		virtual TYPE_TIMEPOSITION getRelativeTimePositionOfGR() const		{ return relativeTimePositionOfGR; }
+		virtual GRStaff *	getStaff(int staff);
+		virtual void		prepareStaff(int staff);
 
-
-		GRGlobalStem * getOtherGlobalStem(GRSystemSlice * psys,
-			GRVoiceManager * curvcmgr, const NVstring & label);
+		TYPE_TIMEPOSITION	getRelativeEndTimePosition() const				{ return relativeTimePositionOfGR + mDurationOfGR; }
+		GRGlobalStem *		getOtherGlobalStem(GRSystemSlice * psys, GRVoiceManager * curvcmgr, const NVstring & label);
 
 		void createStaves();
 
-		GRMusic * getGRMusic() { return mGrMusic; }
+		GRMusic * getGRMusic()												{ return mGrMusic; }
 		int getNumVoices() const;
 
 		void	notifyAccoladeTag( ARAccolade * inAccoladeTag );
 
-		// this routine takes care of breaking the positiontags of
-		// a new system.
-		// The routine first retrieves the lastslice of the (new, to be 
-		// created) system and then manages the still open tags of the
-		// system. It saves the open tags in a list, which will then be
-		// used to resume the tags in the next line.
+		// this routine takes care of breaking the positiontags of a new system.
+		// The routine first retrieves the lastslice of the (new, to be created) system and then manages the still open tags of the
+		// system. It saves the open tags in a list, which will then be used to resume the tags in the next line.
 		void TakeCareOfBreakAt(GRSystem * newsys);
 
 	protected:
@@ -249,15 +221,12 @@ class GRStaffManager
 		ofstream springlog;
 #endif 
 		// this variable remembers, wether we are currently breaking.
-		// this is set before calling GRVoiceManager->Dobreak
-		// so that the prepare-staff-Function of GRStaffManager
-		// nows that it should copy state-information that
-		// was previously available.
-		bool mIsBreak;
-		int mSystemSize;
+		// this is set before calling GRVoiceManager->Dobreak so that the prepare-staff-Function of GRStaffManager
+		// nows that it should copy state-information that was previously available.
+		bool	mIsBreak;
+		int		mSystemSize;
 
 		void UpdateBeginningSFF(int staffnum);
-
 		void ResumeOpenTags(GRSystemSlice * lastslice, GRSystemSlice * beginslice);
 
 		// remember the system-distance (if it is explicitly set ....)
@@ -267,44 +236,34 @@ class GRStaffManager
 		GRClef * mMaxClef;
 		GRKey  * mMaxKey;
 	
-		// this routine takes the current system-slice
-		// list and finds the optimum break for it.
-		// it then also creates the systems with the
-		// respective systemslices.
-		float		FindOptimumBreaks(int pageorsystembreak, float beginheight = 0 );
-		
-
+		// this routine takes the current system-slice list and finds the optimum break for it.
+		// it then also creates the systems with the respective systemslices.
+		float			FindOptimumBreaks(int pageorsystembreak, float beginheight = 0 );
 		GRSystemSlice * CreateBeginSlice(GRSystemSlice * lastslice);
-
 		void		createNewSystemRods(int startid,int endid);
 		void		BreakAtPBS(GuidoPos pbpos);
 		int			CheckForBarSpring(int sprid);
 		void		MergeSPFs(GRPossibleBreakState * pbs1, GRPossibleBreakState * pbs2 = 0);
-		// void BuildSPF();
 		GRSpaceForceFunction2 * BuildSFF();
 		void		EndStaves(const TYPE_TIMEPOSITION & tp, int lastline = 0);
 		void		handleDeletedElements();
 	
 	
 		NEPointerList * deletedElements;
-		int mNewLinePage;
-		VStaff * mMyStaffs;
-		PositionVector staffposvect;
+		int				mNewLinePage;
+		VStaff *		mMyStaffs;
+		PositionVector	staffposvect;
 		VoiceManagerList * mVoiceMgrList;
 		GRSystemSlice * mGrSystemSlice;
-		GRSystem * mGrSystem;
-		GRMusic * mGrMusic;
-		GRPage * mGrPage;
-
+		GRSystem *		mGrSystem;
+		GRMusic *		mGrMusic;
+		GRPage *		mGrPage;
 
 		ARSystemFormat * mCurSysFormat;
+		sysslicelist *	 mSystemSlices;
 
-		sysslicelist * mSystemSlices;
-
-		// this variable holds in a list the sffs for the
-		// beginning of a line given the current state information.
-		// Whenever a clef or key changes, the sff is updated and
-		// added to the list. These values can then be used to evaluate
+		// this variable holds in a list the sffs for the beginning of a line given the current state information.
+		// Whenever a clef or key changes, the sff is updated and added to the list. These values can then be used to evaluate
 		// the potential lines. 
 		bsfflist * beg_sff_list;
 		sprlist * beg_spr_list;
@@ -312,92 +271,74 @@ class GRStaffManager
 		FloatVector staffTopVector;
 		FloatVector staffBottomVector;
 
-		// these rods are build during BuildSPF and
-		// then saved by GRPossibleBreakPosition
+		// these rods are build during BuildSPF and then saved by GRPossibleBreakPosition
 		// to be merged later through MergeSPFs 
 		GRRod * lastrod;
 		GRRod * firstrod;
 
-		TYPE_TIMEPOSITION relativeTimePositionOfGR;
-		TYPE_DURATION mDurationOfGR;
-		ARMusic * mArMusic;
+		TYPE_TIMEPOSITION	relativeTimePositionOfGR;
+		TYPE_DURATION		mDurationOfGR;
+		ARMusic *			mArMusic;
 
-
-		// a hash for system-tags
-		SystemHash systemHash;
-
-		// a hash-table for page-tags
-		PageHash pageHash;
-
-		// this hash has all the 
-		// synchronization work ...
-		SyncHash syncHash;
+	
+		SystemHash	systemHash;		// a hash for system-tags
+		PageHash	pageHash;		// a hash-table for page-tags
+		SyncHash	syncHash;		// this hash has all the synchronization work ...
 		VoiceSpringIDArray voiceSpringArr;
-		// The temporary SpringID for each
-		// Slice (especially for Tags)
-		int mTempSpringID;
+		int mTempSpringID;			// The temporary SpringID for each Slice (especially for Tags)
 
 		// The real SpringID ...
-		// This is incremented for the whole
-		// System that this stafmanager handles ...
-		int mSpringID; 
-
-		// this remembers the
-		// mLastSpringID for the
-		// BuildSPF function.
+		// This is incremented for the whole System that this stafmanager handles ...
+		int mSpringID;
+		// this remembers the mLastSpringID for the BuildSPF function.
 		int mLastSpringID;
 
-
-		// The mSimpleRods are the ones,
-		// that cover just a single spring
+		// The mSimpleRods are the ones, that cover just a single spring
 		IRodList * mSimpleRods;
 
-		// mComplexRods cover more than one
-		// spring (they need to be handled
-		// differently during stretching).
+		// mComplexRods cover more than one spring (they need to be handled differently during stretching).
 		IRodList * mComplexRods;
 
-		// This vector holds the springs
-		// that are handled by this staffManager
+		// This vector holds the springs that are handled by this staffManager
 		// They are later passed to the system(slice) ...
 		ISpringVector * mSpringVector;
 
-
-		// The staff-State as a vector
-		// analogous to the StaffVector
+		// The staff-State as a vector analogous to the StaffVector
 		IStaffStateVector * mStaffStateVect;
 
 		// The SpaceForceFunction
-		// This is build a new, when a call
-		// to BuildSPF is done.
-		// It is then added to the break-state
-		// if needed ...
-		// At the end, the new spf is added to
-		// the curspf.
-#ifdef OLDSPFACTIVE
-		GRSpaceForceFunction * spf;
-#endif
+		// This is build a new, when a call to BuildSPF is done.
+		// It is then added to the break-state if needed ...
+		// At the end, the new spf is added to the curspf.
 
-		// this is the SPF for the 
-		// FIRST-FIT-Algorithm.
-		// Later on, the optimum-fit will
-		// be realized by having SPFs 
-		// for each part between pbreaks.
-#ifdef OLDSPFACTIVE
-		GRSpaceForceFunction * curspf;
-#endif
+		// this is the SPF for the FIRST-FIT-Algorithm.
+		// Later on, the optimum-fit will be realized by having SPFs for each part between pbreaks.
 		GRSpaceForceFunction2 * cursff;
 
-		// The EventList for events
-		// that are added for synchronisation
+		// The EventList for events that are added for synchronisation
 		vce_ev_list evlist;
 
-		GRPBList * pblist;
-
-		ARAuto * mArAuto;
+		GRPBList *	pblist;
+		ARAuto *	mArAuto;
 		std::vector<ARAccolade	*> mCurAccoladeTag;
-
 		GuidoLayoutSettings settings;
+	
+	private:
+		// the methods below are used by createStaves
+		// they have been added to structure the structure the method
+		enum	{ kNormalState, kNewSystem, kNewPage, kPBreak };
+		typedef struct {
+			TYPE_TIMEPOSITION timePos;		// the current time position
+			TYPE_TIMEPOSITION mintp;		// the smallest timeposition for the next event in any of the voices
+			// This position is maintained for forward switching ...
+			// It remembers the smallest timeposition where the is a need for a filltagmode=1
+			TYPE_TIMEPOSITION minswitchtp;
+			bool	conttagmode;
+			int		newline;				// this is set if at least one voice has a newSystem/newPage
+			float	pbreakval;
+		} TCreateStavesState;
+		bool	nextTimePosition (int nvoices, bool filltagMode, TCreateStavesState& state);
+		float	systemBreak (int newlineMode, float beginheight);
 };
 
 #endif

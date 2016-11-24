@@ -41,9 +41,6 @@
 #include "GRClef.h"
 #include "GRKey.h"
 #include "GRSpring.h"
-#ifdef OLDSPFACTIVE
-#include "GRSpaceForceFunction.h"
-#endif
 #include "GRSpringForceIndex.h"
 #include "GRVoice.h"
 #include "GRMusic.h"
@@ -130,10 +127,6 @@ GRStaffManager::GRStaffManager(GRMusic * p_grmusic, ARPageFormat * inPageFormat,
 		this->settings.resizePage2Music = kSettingDefaultResizePage2Music;
 		this->settings.force = kSettingDefaultForce;
 	}
-#ifdef SPRINGLOG
-		  springlog.open("springlog.txt",ios::out | ios::app);
-		  springlog << "Creating new GRStaffManager" << endl;
-#endif
 
 	mIsBreak = false;
 	mArAuto  = NULL;
@@ -182,10 +175,6 @@ GRStaffManager::GRStaffManager(GRMusic * p_grmusic, ARPageFormat * inPageFormat,
 
 	// The SpaceForceFunction ...
 	// The sff is used for the systemslices and to later find the optimum system breaks
-#ifdef OLDSPFACTIVE
-	curspf = new GRSpaceForceFunction(settings.force);
-	spf = NULL;
-#endif
 	cursff = new GRSpaceForceFunction2(settings.force);
 //	sff = NULL;
 
@@ -195,10 +184,6 @@ GRStaffManager::GRStaffManager(GRMusic * p_grmusic, ARPageFormat * inPageFormat,
 	spr->change_const(50);
 	mSpringVector->Set(0,spr);
 
-#ifdef SPRINGLOG
-	springlog << "Spring 0, 50" << endl;
-#endif
-
 	// PossibleBreakState List this will be reviewd shortly!
 	pblist = new GRPBList(1);
 }
@@ -206,11 +191,6 @@ GRStaffManager::GRStaffManager(GRMusic * p_grmusic, ARPageFormat * inPageFormat,
 // ----------------------------------------------------------------------------
 GRStaffManager::~GRStaffManager()
 {
-#ifdef SPRINGLOG
-	springlog << "Closing GRStaffManager" << endl;
-	springlog.close();
-#endif
-
 	if (mSystemSlices)
 	{
 		// This is important for ABORT issues ...
@@ -238,15 +218,126 @@ GRStaffManager::~GRStaffManager()
 	delete mSimpleRods;
 	delete mComplexRods;
 	delete mSpringVector;
-#if OLDSPFACTIVE
-	delete curspf;
-	delete spf;
-#endif
 	delete cursff;
 	delete pblist;
 	delete mGrSystemSlice;
 }
 
+// ----------------------------------------------------------------------------
+// this method has been created to structure the createStaves method
+// D.F. Nov. 2016
+// this method computes time positions as well as new line information,
+// possible break value and a flag for tags management (conttagmode)
+// returns a boolean value to indicate the end of all voices
+bool GRStaffManager::nextTimePosition (int nvoices, bool filltagmode, TCreateStavesState& state)
+{
+	TYPE_TIMEPOSITION tp;
+	bool end = true;
+	for (int i = 0; i < nvoices; i++)
+	{
+		GRVoiceManager *voiceManager = mVoiceMgrList->Get(i);
+		tp = state.timePos;
+
+		// this does the next timeposition ... 
+		// behavior:
+		// 1. independant of filltagmode:
+		//	  if curtp > tmptp then tmptp is set to curtp and -1 is returned.
+		//    if we are at the very end of a voice -5 is returned.
+		// 2. dependant on the filltagmode
+		//    different behaviour occurs:
+		// filltagmode = 1:
+		//    if there are tags or events with dur==0 at the current VoicePosition, then the
+		//    respective NotationElements are created (tags that do not have a graphical representation 
+		//    are also parsed one after another anyways -> one could introduce an internal loop here...) and 0 is returned;
+		//    if the tag is newSystem or newPage -3 and -4 are returned respectivly.
+		//    if there is an event with dur>0 than -2 is returned.
+		// filltagmode = 0:
+		//    if there is an event at tmptp then the GRNotationElement is created, the curtp is incremented; 
+		//    0 is returned.
+		//    if there is no event here, than -2 is returned -> switch to filltagmode!
+		//    ret = tmp->Next(tmptp, filltagmode);
+		// see Iterate-description for documentation
+
+		int ret = voiceManager->Iterate(tp, filltagmode);
+
+		// there is still a voice active ...
+		if (ret != GRVoiceManager::ENDOFVOICE)
+			end = false;
+
+		// minswitchtp remembers the next timeposition for an event. If the 
+		// filltagmode is 0 after this loop, this value is taken for incrementing the curTP.
+		// This value is also important for potential Breakpoint determination.
+		if (ret == GRVoiceManager::CURTPBIGGER_ZEROFOLLOWS || ret == GRVoiceManager::DONE_ZEROFOLLOWS)
+		{
+			if (tp < state.minswitchtp)
+				state.minswitchtp = tp;
+		}
+
+		if (ret != GRVoiceManager::MODEERROR) {
+			if (filltagmode)
+			{
+				if (!state.conttagmode && ret == GRVoiceManager::DONE_ZEROFOLLOWS)
+					state.conttagmode = 1;	// there has been at last one tag -> continue with filltagmode
+			
+				if (ret == GRVoiceManager::NEWSYSTEM) {		// newSystem.
+					if (state.newline == 0 || state.newline == 3)
+						state.newline = kNewSystem;
+				}
+				else if (ret == GRVoiceManager::NEWPAGE)	// a newPage ...
+					state.newline = kNewPage;							// this overides any other newline setting
+
+				else if (ret == GRVoiceManager::PBREAK)		// a potential Break ...
+				{
+					if (state.newline == 0) {
+						state.newline = kPBreak;
+						state.pbreakval = voiceManager->pbreakval;
+					}
+				}
+			}
+			else { // no filltagmode (that is eventmode)
+				if (ret == GRVoiceManager::DONE_ZEROFOLLOWS || ret == GRVoiceManager::DONE_EVFOLLOWS ||
+					ret == GRVoiceManager::DONE || ret == GRVoiceManager::CURTPBIGGER_EVFOLLOWS ||
+					ret == GRVoiceManager::CURTPBIGGER_ZEROFOLLOWS )
+				{
+					// set the increment of timeposition
+					if (tp < state.mintp) state.mintp = tp;
+				}
+			}
+		}
+	}
+	return end;
+}
+
+// ----------------------------------------------------------------------------
+float GRStaffManager::systemBreak (int newlineMode, float beginheight)
+{
+	beginheight = FindOptimumBreaks( newlineMode, beginheight );
+
+	// we need to call the "break-algorithm" with the systemslice-list and  just force 
+	// the correct break at the given position....
+	// this means, we are dealing with a line or page-break at this point.
+
+	// Right now I just delete the rods ...
+	delete mSimpleRods;					// TODO: optimise
+	mSimpleRods = new IRodList(1); 
+	delete mComplexRods;				// TODO: optimise
+	mComplexRods = new IRodList(1);
+	// the springs should be part of the whatever
+	delete mSpringVector;
+
+	// We need a new spring-vector .... we just start completely anew ....
+	mSpringVector = new ISpringVector(1);
+	// put one single (beginning) spring in the springvector, with id 0.
+	GRSpring * spr = new GRSpring(relativeTimePositionOfGR, DURATION_0, settings.spring, settings.proportionalRenderingForceMultiplicator);
+	spr->setID(0);
+	spr->change_const(50);
+	mSpringVector->Set(0,spr);
+
+	mTempSpringID = 1;
+	mSpringID = 1;
+	mLastSpringID = 0;
+	return beginheight;
+}
 
 // ----------------------------------------------------------------------------
 /** \brief Creates and fills the staves.
@@ -274,22 +365,10 @@ void GRStaffManager::createStaves()
 		voiceManager->BeginManageVoice();
 	}
 
-	// now call the start-managing-calls
-	TYPE_TIMEPOSITION timePos (relativeTimePositionOfGR);
-//	for( int i=0; i < cnt; ++i )
-//	{
-//		GRVoiceManager * voiceManager = mVoiceMgrList->Get(i);
-//		// This call initializes the GRVoiceManager
-//		// ATTENTION: realise the significance of STAFF-Tags at the very start!
-//		voiceManager->BeginManageVoice();
-//	}
-
-	// here, the actual traversal through the voices begins....	
-	TYPE_TIMEPOSITION tmptp;			// the temporary timeposition
-	TYPE_TIMEPOSITION mintp;			// the smallest timeposition for the next event in any of the voices 
-	// This position is maintained for forward switching ...
-	// It remembers the smallest timeposition where the is a need for a filltagmode=1
-	TYPE_TIMEPOSITION minswitchtp;
+	TCreateStavesState state;
+	state.timePos = relativeTimePositionOfGR;
+	state.newline = kNormalState;
+	state.pbreakval = 0;
 
 	// this parameter is used to capture explicit \newSystem tags. The height
 	// of the page is returned by FindOptimum in the case of a newSystem-call 
@@ -297,149 +376,49 @@ void GRStaffManager::createStaves()
 
 	// This setting controls if the VoiceManagers go to the next event.
 	int filltagmode = 1;
-	int conttagmode = 0;
-	
 	bool ender = false;				// this is set if all voices end ....
-	int newline = 0;				// this is set if at least one voice has a newSystem/newPage
-	float pbreakval = 0;
 
 	// this remembers the current mSystemSize (very crude indeed!)
 	mSystemSize = 0;
 
 	do 
 	{ 
-		conttagmode = 0;    // this determines whether the filltagmode should be maintained, so that all tags can be read in ...
+		state.conttagmode = 0;    // this determines whether the filltagmode should be maintained, so that all tags can be read in ...
 		ender = true;		// this is set to one and unset, if there is at least one voice still active
-		newline = 0;		// newline is reset.
+		state.newline = kNormalState;		// newline is reset.
 
 		// the time is incremented by the minimum amount of time...
-		mintp = MAX_DURATION;
-		minswitchtp = MAX_DURATION;
+		state.mintp = MAX_DURATION;
+		state.minswitchtp = MAX_DURATION;
 
-		pbreakval = 0;		// the pbreakval ...
+		state.pbreakval = 0;		// the pbreakval ...
 
 		// now, we go through all the voices sequentially
-		for (int i = 0; i < cnt; i++)
-		{
-			GRVoiceManager *voiceManager = mVoiceMgrList->Get(i);
-			tmptp = timePos;
-
-			// this does the next timeposition ... 
-			// behavior:
-			// 1. independant of filltagmode:
-			//	  if curtp > tmptp then tmptp is set to curtp and -1 is returned.
-			//    if we are at the very end of a voice -5 is returned.
-			// 2. dependant on the filltagmode
-			//    different behaviour occurs:
-			// filltagmode = 1:
-			//    if there are tags or events with dur==0 at the current VoicePosition, then the
-			//    respective NotationElements are created (tags that do not have a graphical representation 
-			//    are also parsed one after another anyways -> one could introduce an internal 
-			//    loop here...) and 0 is returned; 
-			//    if the tag is newSystem or newPage -3 and -4 are returned respectivly.
-			//    if there is an event with dur>0 than -2 is returned.
-			// filltagmode = 0:
-			//    if there is an event at tmptp then the GRNotationElement is created, the curtp is incremented; 
-			//    0 is returned.
-			//    if there is no event here, than -2 is returned -> switch to filltagmode!
-			//    ret = tmp->Next(tmptp, filltagmode);
-			
-			// see Iterate-description for documentation
-
-			int ret = voiceManager->Iterate(tmptp, filltagmode);
-
-			// there is still a voice active ...
-			if (ret != GRVoiceManager::ENDOFVOICE)
-				ender = false;
-
-			// minswitchtp remembers the next timeposition for an event. If the 
-			// filltagmode is 0 after this loop, this value is taken for incrementing the curTP.
-			// This value is also important for potential Breakpoint determination.
-			if (ret == GRVoiceManager::CURTPBIGGER_ZEROFOLLOWS || ret == GRVoiceManager::DONE_ZEROFOLLOWS)
-			{
-				if (tmptp < minswitchtp)
-					minswitchtp = tmptp;
-			}
-
-			if (ret == GRVoiceManager::MODEERROR)
-			{
-				// this can only happen in filltagmode = 1;
-				// means, we do not want to continue unless somewhere there are more tags to process. 
-				// do nothing.
-			}
-			else if (filltagmode)
-			{
-				if (!conttagmode && ret == GRVoiceManager::DONE_ZEROFOLLOWS)
-				{
-					// there has been at last one tag -> continue with filltagmode
-					conttagmode = 1;
-				}
-				
-				if (ret == GRVoiceManager::NEWSYSTEM)
-				{
-					// newSystem.
-					if (newline == 0 || newline == 3)
-						newline = 1;
-				}
-				else if (ret == GRVoiceManager::NEWPAGE)
-				{
-					// a newPage ...
-					// this overides any other newline setting
-					newline = 2;
-				}
-				else if (ret == GRVoiceManager::PBREAK)
-				{
-					// a potential Break ...
-					if (newline == 0)
-					{
-						newline = 3;
-						pbreakval = voiceManager->pbreakval;
-					}
-				}
-			}
-			else if (!filltagmode)
-			{ // no filltagmode (that is eventmode)
-				if (ret == GRVoiceManager::DONE_ZEROFOLLOWS ||
-					ret == GRVoiceManager::DONE_EVFOLLOWS ||
-					ret == GRVoiceManager::DONE ||
-					ret == GRVoiceManager::CURTPBIGGER_EVFOLLOWS ||
-					ret == GRVoiceManager::CURTPBIGGER_ZEROFOLLOWS
-					)
-				{
-					// set the increment of timeposition
-					if (tmptp < mintp)
-						mintp = tmptp;
-				}
-			}
-		} // for all voicemanagers
+		ender = nextTimePosition (cnt, filltagmode, state);
 
 		// now we need to check whether we need to switch to no-filltagmode
 		if (filltagmode)
 		{
 			// we had tags; now we check, whether tags follow
-			if (conttagmode == 0)
+			if (state.conttagmode == 0)
 			{
-				// no tags follow, so now we finish
-				// the Synchronization-Slice at the current tp.
+				// no tags follow, so now we finish the Synchronization-Slice at the current tp.
 				// This handles spring-stuff...
-				FinishSyncSlice(timePos);
+				FinishSyncSlice(state.timePos);
 
 				filltagmode = 0;
-
 				GRSpaceForceFunction2 * sff = 0;
-
-				if (newline == 1 || newline == 2 || newline == 3)
+				if (state.newline != kNormalState)
 				{
 					// this builds the current Spring-Force-Function (that is, rods and springs and stuff is created).
                     sff = BuildSFF();
 
                     // I must create a new possiblebreakstate and add that to the syncslice
                     GRPossibleBreakState * pbs = new GRPossibleBreakState();
-
                     pbs->sff = sff;
                     pbs->copyofcompletesff = NULL;					
                     float force = 0;
-                    pbs->SaveState( mMyStaffs, mVoiceMgrList, this, timePos, force, pbreakval);
+                    pbs->SaveState( mMyStaffs, mVoiceMgrList, this, state.timePos, force, state.pbreakval);
 
                     mGrSystemSlice->addPossibleBreakState(pbs);
 
@@ -455,78 +434,30 @@ void GRStaffManager::createStaves()
 					mLastSpringID = mSpringID;
 				}
 
-				if (newline == 1 || newline == 2)
-				{
-					// newline == 2 : newPage ....
-					// newline == 1 : newSystem ....
-					beginheight = FindOptimumBreaks( newline, beginheight );
+				if (state.newline == kNewSystem || state.newline == kNewPage)
+					beginheight = systemBreak( state.newline, beginheight );
 
-					// we need to call the "break-algorithm" with the systemslice-list and  just force 
-					// the correct break at the given position....
-					// this means, we are dealing with a line or page-break at this point.
-
-					// Right now I just delete the rods ...
-					delete mSimpleRods;					// TODO: optimise
-					mSimpleRods = new IRodList(1); 
-					delete mComplexRods;				// TODO: optimise
-					mComplexRods = new IRodList(1);
-					// the springs should be part of the whatever
-					delete mSpringVector;
-
-					// We need a new spring-vector .... we just start completely anew ....
-					mSpringVector = new ISpringVector(1);
-#ifdef OLDSPFACTIVE
-					curspf = new GRSpaceForceFunction;
-#endif
-					// put one single (beginning) spring in the springvector, with id 0.
-					GRSpring * spr = new GRSpring(relativeTimePositionOfGR, DURATION_0, settings.spring, settings.proportionalRenderingForceMultiplicator);
-					spr->setID(0);
-					spr->change_const(50);
-					mSpringVector->Set(0,spr);
-
-					mTempSpringID = 1;
-					mSpringID = 1;
-					mLastSpringID = 0;
-
-					// this  is done right now, will be improved later
-					// (when breaks inbetween pbreaks  will become possible) ...
-					// pblist->RemoveAll();
-				}
-
-				if (newline == 2)
+				if (state.newline == kNewPage)
 				{
 					// a newpage
-					mGrPage = new GRPage( mGrMusic, this, timePos, settings, mGrPage );
+					mGrPage = new GRPage( mGrMusic, this, state.timePos, settings, mGrPage );
 					mGrMusic->addPage( mGrPage );
 					beginheight = 0;
 				}
-
-				if (newline == 3) {
-					// we just do not do anything besides what we had before ...
-				}
-
-				if (newline == 1 || newline == 2) {
-					// mGrSystem = new GRSystem(mGrPage,timePos);
-					// what about the staffs?
-				}
 				
-				if (newline == 1 || newline == 2 || newline == 3)
+				if (state.newline != kNormalState)
 				{
 					// not sure of this ....
-
 					// now we tell each voice, that we have handled the break-condition
 					// remember that we are breaking righ now mIsBreak = true;
-
-					// mIsBreak = false;
-
 					// we actually have to create a new systemslice so that we can put something together ....
-					mGrSystemSlice = new GRSystemSlice(this, timePos);
+					mGrSystemSlice = new GRSystemSlice(this, state.timePos);
 					
 					// This is important: a newline == 3 means, that this is only a potential breakpoint
 					// newline != 3 is a user-imposed real breakpoint
 					// In this case, the begin elements of all staves are already there and will not be 
 					// added manually therefore, the first spring is the glue spring and will be present.
-					if (newline == 3)
+					if (state.newline == kPBreak)
 						mGrSystemSlice->mStartSpringID = mSpringID;
 					else
 						mGrSystemSlice->mStartSpringID = 0;
@@ -536,33 +467,31 @@ void GRStaffManager::createStaves()
 					for (int i = 0; i < cnt; i++)
 					{
 						GRVoiceManager * voiceManager = mVoiceMgrList->Get(i);
-						voiceManager->DoBreak( timePos,newline);
+						voiceManager->DoBreak( state.timePos, state.newline);
 					}					
 					mSystemSize = 0;
 					filltagmode = 1;
-//					newline = 0;
 				}
 			}
 		}
 		else // no filltagmode...
         {
-			if (mintp != MAX_DURATION)
-				timePos = mintp;		// we increment the timeposition ...
+			if (state.mintp != MAX_DURATION)
+				state.timePos = state.mintp;		// we increment the timeposition ...
 			else if (!ender)
 				assert(false);			// there must have been a timeposition
 
 			// if we need to switch, then we switch
-			if (minswitchtp == timePos)
+			if (state.minswitchtp == state.timePos)
 				filltagmode = 1;
-			FinishSyncSlice(timePos);
+			FinishSyncSlice(state.timePos);
 		}
 
-		// new: we do a very crude test, if the current space runs low ... This
-		// is in no ways accurate ( but it needn't be). It works as follows: 
+		// new: we do a very crude test, if the current space runs low ... This is in no ways accurate ( but it needn't be).
+		// It works as follows:
 		// Each time, an element is added to a staff we add the left- and right-space and compare
-		// it to a maximum value. All this is summed up for the whole system (the maximum
-		// for each slice). If we reach a value of twice the page-size, we issue a warning
-		// and FORCE A NEW SYSTEM! -> otherwise the algorithms run too long.
+		// it to a maximum value. All this is summed up for the whole system (the maximum for each slice).
+		// If we reach a value of twice the page-size, we issue a warning and FORCE A NEW SYSTEM! -> otherwise the algorithms run too long.
 
 		// is there an optimum force?
 		// if the force is alright
@@ -582,13 +511,11 @@ void GRStaffManager::createStaves()
 
             // add the thing to the slice-list 
             GRPossibleBreakState * pbs = new GRPossibleBreakState();
-
             pbs->sff = sff;
             pbs->copyofcompletesff = NULL;
 
             float force = 0;
-            pbs->SaveState(mMyStaffs, mVoiceMgrList, this, timePos, force, pbreakval);
-
+            pbs->SaveState(mMyStaffs, mVoiceMgrList, this, state.timePos, force, state.pbreakval);
             mGrSystemSlice->addPossibleBreakState(pbs);
 
             // now we need to add the systemslice to the list of available system-slices ....
@@ -599,21 +526,7 @@ void GRStaffManager::createStaves()
 			mGrSystemSlice = NULL;
 		}
 	}
-
 	FindOptimumBreaks( 0, beginheight );
-	if (ender)
-	{
-		// Now we end the game ... put endlines at the end of the voices ...
-		// This does not add space!
-		
-		// OLD:
-		// checkBarsInStaves(timePos);
-
-		// do not add space to position ...
-		// mGrSystem->SpaceTime(timePos,0);
-
-		// mNewLinePage = 3;
-	}
 }
 
 /** \brief Called from the voice-managers. 
@@ -806,23 +719,7 @@ int GRStaffManager::AddGRSyncElement (GRNotationElement * grel, GRStaff * grstaf
 		// spr->checkLocalCollisions();
 		return -1;
 	}
-
 	if (!grel->getNeedsSpring()) return -1;
-	
-#ifdef SPRINGLOG
-	const type_info &myti = typeid(*grel);
-	const TYPE_TIMEPOSITION & tp = grel->getRelativeTimePosition(); 
-	const TYPE_DURATION & dur = grel->getDuration();
-	springlog << "AddGRSyncElement: " 
-		<< myti.name() << ", " 
-		<< tp.getNumerator() << "/" 
-		<< tp.getDenominator() 
-		<< ", "
-		<< dur.getNumerator() << "/"
-		<< dur.getDenominator() 
-		<< ", "
-		<< voiceID << endl;
-#endif
 	
 	// assert(grel->getDuration() == DURATION_0);
 	
@@ -1014,12 +911,6 @@ int GRStaffManager::AddPageTag(GRNotationElement * grel, GRStaff * grstaff,int v
 */
 int GRStaffManager::FinishSyncSlice(const TYPE_TIMEPOSITION & tp)
 {
-#ifdef SPRINGLOG
-	springlog << "Begin FinishSyncSlice: "
-		<< tp.getNumerator() << "/" <<
-		tp.getDenominator() << endl;
-#endif
-
 	// first, we sort the tmphash for the springIDs...
 	int startspringID = mSpringID;	
 	// syncHash is the Hash of Elements ...
@@ -1037,13 +928,8 @@ int GRStaffManager::FinishSyncSlice(const TYPE_TIMEPOSITION & tp)
 				// Now, we construct the Spring to put it in the SpaceForceFunction.
 				GRSpring * spr = new GRSpring(tp, DURATION_0, settings.spring, settings.proportionalRenderingForceMultiplicator);
 				spr->setID(mSpringID);
-#ifdef SPRINGLOG
-				springlog << "\tCreating Spring: " << mSpringID << endl;
-#endif
-				// now we need to check whether there are elements in the SAME staff that would be added to
-				// the same spring.
-				// If there are auto-Tags, then these are ignored. If not, only the first
-				// one is really used, the others are REMOVED!
+				// now we need to check whether there are elements in the SAME staff that would be added to the same spring.
+				// If there are auto-Tags, then these are ignored. If not, only the first one is really used, the others are REMOVED!
 				GuidoPos tmppos = tmphash.data->GetHeadPosition();
 				while (tmppos)
 				{
@@ -1110,20 +996,10 @@ int GRStaffManager::FinishSyncSlice(const TYPE_TIMEPOSITION & tp)
 					// now, we check, wether adds the elements to the spring.
 					spr->addElement(sh->grel,sh->voice);
 					sh->grel->tellSpringID(mSpringID);
-#ifdef SPRINGLOG
-					const type_info &myti = typeid(*sh->grel);
-					springlog << "\t\tAddElementToSpring ("
-						<< spr->getID() << "), "
-						<< spr->getConstant() << ": "
-						<< myti.name() << endl;
-#endif
 				}
 
 				// this is done, so that the correct spring-constants are used (for example for Startglues ...)
 				spr->recalcConstant();
-#ifdef SPRINGLOG
-				springlog << "\t\tSpringConstant: " << spr->getConstant() << endl;
-#endif
 				// this releases the memory ...
 				delete tmphash.data;
 				mSpringVector->Set(mSpringID,spr);
@@ -1160,9 +1036,6 @@ int GRStaffManager::FinishSyncSlice(const TYPE_TIMEPOSITION & tp)
 		{
 			GRSpring * spr = new GRSpring(tp, DURATION_0, settings.spring, settings.proportionalRenderingForceMultiplicator);
 			spr->setID(mSpringID);			
-#ifdef SPRINGLOG
-			springlog << "\tCreating Spring: " << mSpringID << endl;
-#endif
 			TYPE_DURATION dur (Frac_Max);
 			while (pos)
 			{
@@ -1173,18 +1046,8 @@ int GRStaffManager::FinishSyncSlice(const TYPE_TIMEPOSITION & tp)
 					dur = arev->getDuration();
 				spr->addElement(grev,ve->vce);
 				grev->tellSpringID(mSpringID);
-#ifdef SPRINGLOG
-				const type_info & myti = typeid(*grev);
-				springlog << "\t\tAddElementToSpring("
-					<< spr->getID() << "), "
-					<< spr->getConstant() << ": "
-					<< myti.name() << endl;
-#endif
 			}
 			spr->change_dur(dur);
-#ifdef SPRINGLOG
-			springlog << "\t\tSpringConstant: " << spr->getConstant() << endl;
-#endif
 			mSpringVector->Set(mSpringID,spr);
 			// spr->checkLocalCollisions();
 			++ mSpringID;
@@ -1218,12 +1081,6 @@ int GRStaffManager::FinishSyncSlice(const TYPE_TIMEPOSITION & tp)
 					{
 						found = true;
 						tmpspr->addElement(mytag,NULL);
-#ifdef SPRINGLOG
-						const type_info & myti = typeid(mytag);
-						springlog << "\t\tAddElementToSpring: "
-							<< tmpspr->getID() << ", "
-							<< myti.name() << endl;
-#endif
 						break;
 					}
 				}
@@ -1232,15 +1089,6 @@ int GRStaffManager::FinishSyncSlice(const TYPE_TIMEPOSITION & tp)
 				{
 					mSpringVector->Get(mSpringID-1)->addElement( mytag,NULL);
 					// added to last spring ...
-					
-#ifdef SPRINGLOG
-					GRSpring * spr = mSpringVector->Get(mSpringID-1);
-					const type_info &myti = typeid(mytag);
-					springlog << "\t\tAddElementToSpring: "
-						<< spr->getID() << ", "
-						<< myti.name() << endl;
-
-#endif
 				}
 				mGrSystemSlice->AddTail(mytag);
 			}
@@ -1269,16 +1117,9 @@ int GRStaffManager::FinishSyncSlice(const TYPE_TIMEPOSITION & tp)
 	for (int i = theMin; i <= theMax; ++i )
 	{
 		GRStaff * staff = mMyStaffs->Get(i);
-		
         if (staff)
             staffposvect.Set(i, staff->mCompElements.GetTailPosition());
 	}
-
-#ifdef SPRINGLOG
-	springlog << "End FinishSyncSlice: "
-		<< tp.getNumerator() << "/" <<
-		tp.getDenominator() << endl;
-#endif
 	return 0;
 }
 
@@ -1301,100 +1142,45 @@ GRSpaceForceFunction2 * GRStaffManager::BuildSFF()
 	// foreach voice voice->createRods()
 	// foreach staff staff->createRods()
 
-#ifdef SPRINGLOG
-	springlog << "Begin BuildSPF" << endl;
-#endif
-
-#ifdef OLDSPFACTIVE
-	spf = new GRSpaceForceFunction(settings.force);
-#endif
 	GRSpaceForceFunction2 * sff = new GRSpaceForceFunction2(settings.force);
-	GRSpacingMatrix * spm = new GRSpacingMatrix();
-	
-//	int start = mSpringID;
-//	int end = mSpringID;
+	GRSpacingMatrix *		spm = new GRSpacingMatrix();
 
-#ifdef SPRINGLOG
-#ifdef OLDSPFACTIVE
-	if (spf->getMatrixRealSize() < mSpringID)
-		spf->resizeMatrix(mSpringID);
-	if (spf->getMatrixRealSize() < mLastSpringID)
-		spf->resizeMatrix(mLastSpringID);
-#endif
-#endif
-
-	if (kIsGiesekingSpacing)
-	{
-#ifdef OLDSPFACTIVE
-		if (spf->getMSCMatrixRealSize() < mSpringID)
-			spf->resizeMSCMatrix(mSpringID);
-		if (spf->getMSCMatrixRealSize() < mLastSpringID)
-			spf->resizeMSCMatrix(mLastSpringID);
-#endif		
+	if (kIsGiesekingSpacing) {
 		if (spm->getMSCMatrixRealSize() < mSpringID)
 			spm->resizeMSCMatrix(mSpringID);
 		if (spm->getMSCMatrixRealSize() < mLastSpringID)
 			spm->resizeMSCMatrix(mLastSpringID);
-
 	}
-	
 
 	// This is important, so that the springs have correct durations for the QP-Matrix...
-	// and it is also important, to test, wether we need SPECIAL Spacing, or just regular 
-	// Gourlay-Spacing ....
+	// and it is also important, to test, wether we need SPECIAL Spacing, or just regular Gourlay-Spacing ....
 
 	// this just adjust the spring-duration to the correct value. This is important, because
 	// we need this value for later determining the correct spring-constant.
-//#ifdef OLDSPFACTIVE
-//#ifdef SPRINGLOG
-	int myi;
-//	int sNeedSpecialSpacing = 0;
-
-//#ifdef OLDSPFACTIVE
-//#ifdef SPRINGLOG
-	for( myi = mLastSpringID; myi < mSpringID; ++ myi )
-	{
+	for(int myi = mLastSpringID; myi < mSpringID; ++ myi ) {
 		GRSpring * spr1 = mSpringVector->Get(myi);
 		GRSpring * spr2 = mSpringVector->Get(myi+1);
-		if (spr1 && spr2)
-		{
+		if (spr1 && spr2) {
 			const TYPE_DURATION dur (spr2->getTimePosition() - spr1->getTimePosition());
 			spr1->change_dur(dur);
 		}	
 	}
 
 	// for each voice, the rods are created.
-	int i;
 	const int mini = mVoiceMgrList->GetMinimum();
 	const int maxi = mVoiceMgrList->GetMaximum();
-
-	for( i = mini; i <= maxi; ++i )
+	for(int i = mini; i <= maxi; ++i )
 	{
 		int tmpstart = mLastSpringID;
 		int tmpend = mSpringID;
-		
-#ifdef SPRINGLOG
-#ifdef OLDSPFACTIVE
-		mVoiceMgrList->Get(i)->getGRVoice()->updateQPMatrix( spf,mSpringVector, tmpstart,tmpend);
-#endif
-#endif
-		if (kIsGiesekingSpacing)
-		{
-#if OLDSPFACTIVE
-			mVoiceMgrList->Get(i)->getGRVoice()->updateMSCMatrix(spf,tmpstart,tmpend);
-#endif
-			if (mVoiceMgrList->Get(i) && mVoiceMgrList->Get(i)->getGRVoice())
-			{
-			mVoiceMgrList->Get(i)->getGRVoice()->updateMSCMatrix(
-				sff,spm,this,mSpringVector,tmpstart,tmpend);
+		if (kIsGiesekingSpacing) {
+			if (mVoiceMgrList->Get(i) && mVoiceMgrList->Get(i)->getGRVoice()) {
+				mVoiceMgrList->Get(i)->getGRVoice()->updateMSCMatrix( sff, spm, this, mSpringVector, tmpstart, tmpend);
 			}
 		}
-
 		// the voiceManager gets the voice and calls createNewRods to create rods ...
 		if (mVoiceMgrList->Get(i) && mVoiceMgrList->Get(i)->getGRVoice())
-		{
 			mVoiceMgrList->Get(i)->getGRVoice()->createNewRods(this, tmpstart, tmpend, settings.force);
-		}
 	}
 
 	// now we can ask the spacing-matrix to check on the neighbourhood ...
@@ -1402,87 +1188,53 @@ GRSpaceForceFunction2 * GRStaffManager::BuildSFF()
 	if (settings.neighborhoodSpacing)
 		spm->CheckNeighbours(mSpringVector, settings.spring);
 
-	// now we additionally build the staff-rods?!
-	// these are needed for collision-detection and prevention.
-	// Idea: The staff is traversed. For each element in the staff, that shares the same mSpringID it
-	// is determined, if there is a collision. If this is the case, the elements are MOVED (how?) and a rod
-	// is created for the spring .... somewhat similar to GRVoice->createNewRods ....
-	// another idea is to traverse the springs and find elements that share the spring. Then
-	// assure, that I have at least enough space left and right. Add collision prevention later ...
+	// now we additionally build the staff-rods?! these are needed for collision-detection and prevention.
+	// Idea: The staff is traversed. For each element in the staff, that shares the same mSpringID it is determined, if there is a collision.
+	// If this is the case, the elements are MOVED (how?) and a rod is created for the spring .... somewhat similar to GRVoice->createNewRods ....
+	// another idea is to traverse the springs and find elements that share the spring. Then assure, that I have at least enough space left and right.
+	// Add collision prevention later ...
 	createNewSystemRods(mLastSpringID,mSpringID);
 
-#ifdef SPRINGLOG
-#ifdef OLDSPFACTIVE
-	springlog << "Matrix nach createNewRods: ";
-	int j;
-	double *matrix = spf->getMatrix();
-	int realsize = spf->getMatrixRealSize();
-	int memsize = spf->getMatrixMemSize();
-	for (i=0;i<realsize;i++)
-	{
-		springlog << endl;
-		for (j=0;j<realsize;j++)
-			springlog << *(matrix+i+memsize*j) << " ";
-	}
-	springlog << endl;
-#endif
-#endif
-
 	// actually, the strechting starts at mLastSpringID ...
-	
 	// now we do the stretching, starting from to springIDs returned by
 	// createRods. (these springs loose their initial-Stretch-entry)
-	
 	// we need to check the constans one more time ...
 	// the durations inbetween the springs are importnat, not at the springs themselves ....
-
 	// this the old spacing implied by lippold haken
 	if (!kIsGiesekingSpacing)
 	{
-		for (i=mLastSpringID;i<mSpringID;i++)
-		{
+		for (int i=mLastSpringID; i<mSpringID; i++) {
 			GRSpring * spr1 = mSpringVector->Get(i);
 			GRSpring * spr2 = mSpringVector->Get(i+1);
-			if (spr1 && spr2)
-			{
+			if (spr1 && spr2) {
 				const TYPE_DURATION dur ( spr2->getTimePosition() - spr1->getTimePosition());
+//cout << "GRStaffManager::BuildSFF change_dur B: " << dur << endl;
 				spr1->change_dur(dur);
 			}
 		}
 	}
-	else
-	{
+	else {
 		// this can be used to turn on and off lilypond spacing. 
 		int lilypondspacing = 0;
 
 		// this is the Gieseking model
-		for (i=mLastSpringID;i<mSpringID;i++)
-		{
+		for (int i=mLastSpringID; i<mSpringID; i++) {
 			double max = 0;
-			//double max2= 0;
 			GRSpring * spr1 = mSpringVector->Get(i);
 			GRSpring * spr2 = mSpringVector->Get(i+1);
-			if (spr1 && spr2)
-			{
+			if (spr1 && spr2) {
 				TYPE_DURATION dur (spr2->getTimePosition() - spr1->getTimePosition());
-				// instead of just taking the durations, we build the maximum of all
-				// values that are part of the first spring ...
+				// instead of just taking the durations, we build the maximum of all values that are part of the first spring ...
 				if (dur <= DURATION_0)
 					continue;
 
-#ifdef OLDSPFACTIVE
-				double maxold  = ((double )dur) * spf->getMSCMatrix(i,0);
-#endif
-
-				double tmpmatdur = spm->getMSCMatrix(i,0);
-				double tmpmatdur2 = spm->getMSCMatrix(i,3);
+				double tmpmatdur	= spm->getMSCMatrix(i,0);
+				double tmpmatdur2	= spm->getMSCMatrix(i,3);
 				// this is the mean-value!
 				double tmpmatdur3 = spm->getMSCMatrix(i,4);
-				if (settings.neighborhoodSpacing)
-				{
+				if (settings.neighborhoodSpacing) {
 					max = ((double) dur) * tmpmatdur3;
-					if (max > 0)
-					{
+					if (max > 0) {
 						double sconst;
 						// we try the second possibility ... this should word?
 						double invert = 1.0 / tmpmatdur3;
@@ -1496,31 +1248,22 @@ GRSpaceForceFunction2 * GRStaffManager::BuildSFF()
 				// then we have the gieseking-model (gourlay)
 				{
 					max = ((double )dur) * tmpmatdur;
-					if (max>0 && !lilypondspacing)
-					{
-						
+					if (max>0 && !lilypondspacing) {
 						double sconst;
-#ifdef OLDSPFACTIVE
-						int durnumeratorold = (int)spf->getMSCMatrix(i,1);
-						int durdenominatorold = (int)spf->getMSCMatrix(i,2);
-#endif
-						int durnumerator = (int)spm->getMSCMatrix(i,1);
-						int durdenominator = (int)spm->getMSCMatrix(i,2);
+						int durnumerator	= (int)spm->getMSCMatrix(i,1);
+						int durdenominator	= (int)spm->getMSCMatrix(i,2);
 						TYPE_DURATION eldur(durnumerator,durdenominator);
 						
 						sconst = GRSpring::defconst(eldur, settings.spring);
 						sconst *= (double) eldur / (double) dur;
 						spr1->change_const((float)sconst);
 					}
-					else
-					{
+					else {
 						// then, this is lilypond-spacing ...
 						double sconst;
 						// we try the second possibility ...
 						max = ((double) dur) * tmpmatdur2;
-						
-						if (max>0)
-						{
+						if (max>0) {
 							// this sould word?
 							TYPE_DURATION myfrac(tmpmatdur2);
 							myfrac.invert();
@@ -1533,49 +1276,23 @@ GRSpaceForceFunction2 * GRStaffManager::BuildSFF()
 			}
 		}
 	}
-	
 
 	// then we can delete the spacing-matrix ...
 	delete spm;
 	
-	// this determines, wether the last spring of the current slice is frozen 
-	// (which means, it is a spring for a bar-line. 
+	// this determines, wether the last spring of the current slice is frozen (which means, it is a spring for a bar-line).
 	int isfrozen = CheckForBarSpring(mSpringID-1);
-
 	// this is the function, that actually stretches the strings according to the rods.
-	InitialSpringStretch(mLastSpringID,mSpringID, mSimpleRods,mComplexRods,mSpringVector
-#ifdef SPRINGLOG
-		,&springlog
-#endif
-		);
+	InitialSpringStretch( mLastSpringID, mSpringID, mSimpleRods, mComplexRods, mSpringVector);
 	
 	// Last spring (previous end-spring) needs to be restreched ... only
-	// The new springs are really added ...
-	// now we can add the springs to the SpaceForce function
-	//for (i=start;i<=mSpringVector->GetMaximum();i++)
-	for (i = mLastSpringID; i < mSpringID; ++i )
-	{
+	// The new springs are really added ... now we can add the springs to the SpaceForce function
+	for (int i = mLastSpringID; i < mSpringID; ++i ) {
 		// this fills the space-force-function
-#ifdef OLDSPFACTIVE
-		spf->addSpring(mSpringVector->Get(i));
-#endif
 		sff->addSpring(mSpringVector->Get(i));
-	}
-	
-	// the last spring is a bar-line?
-	// Freezing a spring has the effect, that the overall minimum distance is
-	// increased. A frozen spring can NEVER be stretched.
-	if (isfrozen)
-	{
-#ifdef OLDSPFACTIVE
-		spf->FreezeSpring(mSpringVector->Get(mSpringID-1));
-#endif
 	}
 
 	// now we can experiment with the spf ...
-#ifdef SPRINGLOG
-	springlog << "End BuildSPF()" << endl;
-#endif
 	return sff;
 }
 
@@ -1669,17 +1386,6 @@ float GRStaffManager::InitialSpringStretch(int start, int end,
 	assert(tmpcomplexrods);
 	assert(tmpsprvect);
 
-#ifdef SPRINGLOG
-	ofstream & springlog = *pspringlog;
-	springlog << "Inside InitialSpringStretch: " << start << ", " << end << endl;
-#endif
-
-	/* if (!tmpsimplerods)
-		tmpsimplerods = mSimpleRods;
-	if (!tmpcomplexrods)
-		tmpcomplexrods = mComplexRods;
-	*/
-
 	// First, stretch the springs with the simple-Rods ...
 	GuidoPos pos = tmpsimplerods->GetTailPosition();
 	while (pos)
@@ -1688,13 +1394,7 @@ float GRStaffManager::InitialSpringStretch(int start, int end,
 		if (rod->getSpr1() >=start && rod->getSpr2() <= end)
 		{
 			GRSpring *spr = tmpsprvect->Get(rod->getSpr1());
-			if (spr)
-			{
-					spr->setlength(rod->getLength());
-#ifdef SPRINGLOG
-					springlog << "\tSpring " << spr->getID() << " setlength " << rod->length << endl;
-#endif
-			}
+			if (spr) spr->setlength(rod->getLength());
 		}
 		else if (rod->getSpr1() < start)
 			break;
@@ -1769,9 +1469,6 @@ float GRStaffManager::InitialSpringStretch(int start, int end,
 		if (fre->rod->getSpr1() >= start && fre->rod->getSpr2() <= end)
 			fre->rod->stretchsprings(fre->force,tmpsprvect);
 
-#ifdef SPRINGLOG
-		springlog << "\tStretchsprings with force: " << fre->force << endl;
-#endif
 		// now, we "know", which springs are streteched ....
 		GuidoPos tmppos = forceList.GetHeadPosition();
 		int changed = 0;
@@ -1818,9 +1515,6 @@ float GRStaffManager::InitialSpringStretch(int start, int end,
 	delete rodlst;
 
 	// now we are done (the springs are stretched) hopefully ...
-#ifdef SPRINGLOG
-	springlog << "End of InitialSpringStretch: " << start << ", " << end << endl;
-#endif
 	return 0;
 }
 
@@ -1832,10 +1526,6 @@ float GRStaffManager::InitialSpringStretch(int start, int end,
 */
 void GRStaffManager::addElementToSpring(GRNotationElement * grne, int springid)
 {
-#ifdef SPRINGLOG
-	springlog << "Inside addElementToSpring\n";
-#endif
-
 	int dorecalc = 0;
 	assert(springid == 0 || springid == -1);
 	if (springid == 0)
@@ -1852,12 +1542,6 @@ void GRStaffManager::addElementToSpring(GRNotationElement * grne, int springid)
 
 	if (dorecalc)
 		spr->recalcConstant();
-
-#ifdef SPRINGLOG
-	springlog << "spr (" << spr->getID() << "), "
-		<< spr->getConstant() << endl;
-	springlog << "End of addElementToSpring" << endl;
-#endif
 }
 
 
@@ -2046,9 +1730,6 @@ void GRStaffManager::MergeSPFs(GRPossibleBreakState * pbs1, GRPossibleBreakState
 	int isfrozen = CheckForBarSpring(mLastSpringID-1);
 	if (isfrozen)
 	{
-#ifdef OLDSPFACTIVE
-		curspf->UnfreezeSpring(mSpringVector->Get(mLastSpringID-1));
-#endif
 		cursff->UnfreezeSpring(mSpringVector->Get(mLastSpringID-1));
 		mSpringVector->Get(mLastSpringID-1)->fIsfrozen=0;
 	}
@@ -2056,10 +1737,6 @@ void GRStaffManager::MergeSPFs(GRPossibleBreakState * pbs1, GRPossibleBreakState
 	// mLastSpringID!
 	for (i = start;i<mLastSpringID;i++)
 	{
-		// curspf!
-#ifdef OLDSPFACTIVE
-		curspf->deleteSpring(mSpringVector->Get(i));
-#endif
 		cursff->deleteSpring(mSpringVector->Get(i));
 
 		// sprvect!?
@@ -2071,24 +1748,15 @@ void GRStaffManager::MergeSPFs(GRPossibleBreakState * pbs1, GRPossibleBreakState
 	
 	// works on the springs!
 	InitialSpringStretch(start,mLastSpringID, tmpsimplerods,tmpcomplexrods, mSpringVector
-#ifdef SPRINGLOG
-		,&springlog
-#endif
 		);
 	
 	// mLastSpringID!
 	for (i=start;i<mLastSpringID;i++)
 	{
 		// curspf
-#ifdef OLDSPFACTIVE
-		curspf->addSpring(mSpringVector->Get(i));
-#endif
 		cursff->addSpring(mSpringVector->Get(i));
 		if (mSpringVector->Get(i)->fIsfrozen)
 		{
-#ifdef OLDSPFACTIVE
-			curspf->FreezeSpring(mSpringVector->Get(i));
-#endif
 			cursff->FreezeSpring(mSpringVector->Get(i));
 		}
 	}	
@@ -2273,12 +1941,7 @@ void GRStaffManager::BreakAtPBS(GuidoPos pbpos)
 	
 	// takes the original rods for
 	// initial stretch
-	InitialSpringStretch(start,end,
-		mSimpleRods,mComplexRods,mSpringVector
-#ifdef SPRINGLOG
-		,&springlog
-#endif
-		);
+	InitialSpringStretch (start, end, mSimpleRods, mComplexRods, mSpringVector);
 
 	
 	// now check, whether we have a different systemendpos ...
@@ -2305,13 +1968,7 @@ void GRStaffManager::BreakAtPBS(GuidoPos pbpos)
 	// now, we can really finish the 
 	// system ...
 	mGrSystem->FinishSystem( mSpringVector,mSimpleRods, mComplexRods,
-#ifdef OLDSPFACTIVE
-		pbs->copyofcompletespf,
-#endif
 		pbs->copyofcompletesff,pbs->tp);
-#ifdef OLDSPFACTIVE
-	pbs->copyofcompletespf = NULL;
-#endif
 	pbs->copyofcompletesff = NULL;
 	
 	// the system is now finished and
@@ -2461,21 +2118,10 @@ void GRStaffManager::BreakAtPBS(GuidoPos pbpos)
 		}
 	}
 	
-	// now we need to stretch the
-	// initialsprings including the
-	// one at the remainder
-	// note, that all the springs
-	// have just been created, so 
-	// they do not need to be
+	// now we need to stretch the initialsprings including the one at the remainder
+	// note, that all the springs have just been created, so they do not need to be
 	// reset to length 0.0;
-	
-	InitialSpringStretch(mSpringVector->GetMinimum(),
-		mSpringID,
-		mSimpleRods,mComplexRods,mSpringVector
-#ifdef SPRINGLOG
-		,&springlog
-#endif
-		);
+	InitialSpringStretch (mSpringVector->GetMinimum(), mSpringID, mSimpleRods, mComplexRods, mSpringVector);
 	
 	
 	// now we can handle the open tags 
@@ -2493,19 +2139,11 @@ void GRStaffManager::BreakAtPBS(GuidoPos pbpos)
 				pbs->ssvect->Get(newstaffnum)->tpos);
 		}
 	}
-	
 	// now the open tags have been handled.
 	
 	// now we must set the curspf etc...
-	// the curspf is made up of
-	// all following pbs->spf's
-	// (just if we were parsing again,
-	//  but much simpler!)
-#ifdef OLDSPFACTIVE
-	delete curspf;
-	curspf = new GRSpaceForceFunction;
-#endif
-
+	// the curspf is made up of all following pbs->spf's
+	// (just if we were parsing again, but much simpler!)
 	delete cursff;
 	cursff = new GRSpaceForceFunction2(settings.force);
 	
@@ -2515,9 +2153,6 @@ void GRStaffManager::BreakAtPBS(GuidoPos pbpos)
 	mini = mSpringVector->GetMinimum();
 	for( i= mini; i < mSpringID; ++i )
 	{
-#ifdef OLDSPFACTIVE
-		curspf->addSpring(mSpringVector->Get(i));
-#endif
 		cursff->addSpring(mSpringVector->Get(i));
 	}
 	
@@ -2560,9 +2195,6 @@ void GRStaffManager::BreakAtPBS(GuidoPos pbpos)
 			//  this is very important!)
 			// The springs, that need to be frozen
 			// are still "frozen" in this spf!
-#ifdef OLDSPFACTIVE
-			mypbs->spf->ResetSprings();
-#endif
 			mypbs->sff->ResetSprings();
 
 			// now, we have to stretch the first spring
@@ -2572,31 +2204,12 @@ void GRStaffManager::BreakAtPBS(GuidoPos pbpos)
 			{
 				GRSpring *spr = mSpringVector->Get(mSpringID-1);
 				assert(spr);
-#ifdef OLDSPFACTIVE
-				curspf->deleteSpring(spr);
-#endif
 				cursff->deleteSpring(spr);
 				spr->change_x(0);
-				InitialSpringStretch(mSpringID-1,
-					mSpringID,
-					mSimpleRods,mComplexRods,
-					mSpringVector
-#ifdef SPRINGLOG
-					,
-					&springlog
-#endif
-					);
-
-#ifdef OLDSPFACTIVE
-				curspf->addSpring(spr);
-#endif
+				InitialSpringStretch(mSpringID-1, mSpringID, mSimpleRods, mComplexRods, mSpringVector);
 				cursff->addSpring(spr);
 				first = 0;
 			}
-			
-#ifdef OLDSPFACTIVE
-			curspf->addSPF(*mypbs->spf);
-#endif
 			cursff->addSFF(*mypbs->sff);
 			
 			if (prevpbs)
@@ -2608,19 +2221,7 @@ void GRStaffManager::BreakAtPBS(GuidoPos pbpos)
 				// in the curspf, if needed.
 				MergeSPFs(prevpbs,mypbs);
 			}
-			
-#ifdef OLDSPFACTIVE
-			delete mypbs->copyofcompletespf;
-#endif
 			delete mypbs->copyofcompletesff;
-			
-#ifdef OLDSPFACTIVE
-			GRSpaceForceFunction * tmp =
-				new GRSpaceForceFunction(*curspf);
-			// tmp->CopySPFWithoutSprings(*curspf);
-
-			mypbs->copyofcompletespf = tmp;
-#endif
 
 			GRSpaceForceFunction2 * tmp2 =
 				new GRSpaceForceFunction2(*cursff);
@@ -2628,12 +2229,6 @@ void GRStaffManager::BreakAtPBS(GuidoPos pbpos)
 			// the copy, so that force-calculation works
 			// correctly.
 			mypbs->copyofcompletesff = tmp2;
-			
-		
-#ifdef OLDSPFACTIVE
-		// the force for mypbs is changed aswell ...
-			mypbs->force = curspf->getForce( getSystemWidthCm() * kCmToVirtual );
-#endif
 			mypbs->force = cursff->getForce( getSystemWidthCm() * kCmToVirtual );
 			
 			// this sets the new staff-pointers to all
@@ -3816,11 +3411,7 @@ GRSystemSlice * GRStaffManager::CreateBeginSlice(GRSystemSlice * lastslice)
 	
 	// now we need to stretch the initialsprings including the one at the remainder note, that all the springs
 	// have just been created, so they do not need to be reset to length 0.0;
-	InitialSpringStretch (mSpringVector->GetMinimum(), mSpringID, mSimpleRods, mComplexRods, mSpringVector
-#ifdef SPRINGLOG
-		,&springlog
-#endif
-		);
+	InitialSpringStretch (mSpringVector->GetMinimum(), mSpringID, mSimpleRods, mComplexRods, mSpringVector);
 	
 	GRSpaceForceFunction2 * newForceFunc = new GRSpaceForceFunction2(settings.force);
 	beginslice->mForceFunction = newForceFunc;
