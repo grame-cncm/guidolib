@@ -229,11 +229,8 @@ GRClef::~GRClef()
 
 void GRClef::OnDraw(VGDevice & hdc) const
 {
-// DrawBoundingBox( hdc, GColor( 255, 200, 0, 150)); // DEBUG
-	if (error)
-        return;
-	if (!mDraw)
-		return;
+	if (error)  return;
+	if (!mDraw) return;
 
 	GRTagARNotationElement::OnDraw(hdc);
 	if (mDoubleTreble)
@@ -250,9 +247,7 @@ void GRClef::OnDraw(VGDevice & hdc) const
 		const float octX = mPosition.x + mOctaveOffset.x;
 		const float octY = mPosition.y +  mOctaveOffset.y;
 
-//		hdc.SelectFont( fontRef );		
-		hdc.SetTextFont( fontRef );		
-//		hdc.SetMusicFont( fontRef );		
+		hdc.SetTextFont( fontRef );
 		hdc.SetFontAlign( VGDevice::kAlignBottom | VGDevice::kAlignCenter ); 
 		hdc.DrawString( octX, octY, mOctaveStr, (int)strlen(mOctaveStr) );
 	}
@@ -260,8 +255,6 @@ void GRClef::OnDraw(VGDevice & hdc) const
 
 void GRClef::GGSOutput() const
 {
-  // old:
-  // GRTagARNotationElement::GGSOutput();
 	char buffer[200];
 	const char * cleftype;
 	switch ( mSymbol )
