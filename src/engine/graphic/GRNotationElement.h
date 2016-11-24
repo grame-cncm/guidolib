@@ -130,12 +130,9 @@ protected:
 	float 		mLeftSpace;		// Can't we deal only with bounding boxes ?
 	float 		mRightSpace;
 	bool		mDraw;
-
     bool        mIsInHeader; // For proportional rendering
 
 	TYPE_DURATION mDurationOfGR;
-//	TYPE_TIMEPOSITION mRelativeTimePositionOfGR;
-
 	NEPointerList * mAssociated;
 
 private:

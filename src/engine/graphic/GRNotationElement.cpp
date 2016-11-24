@@ -118,17 +118,21 @@ void GRNotationElement::print(ostream& os) const
 //	NVRect r(getBoundingBox());
 //	r += getPosition();
 	ARMusicalObject * ar = getAbstractRepresentation();
-	os << "notation element at " << getPosition() << " - " << getBoundingBox() << endl;
+//	os << "notation element at " << getPosition() << " - " << getBoundingBox() << " - ";
+	os << "notation element at " << getRelativeTimePosition() << " - ";
 	if (ar) {
         ARMusicalTag * tag = static_cast<ARMusicalTag *>(ar->isARMusicalTag());
-        if (tag)
-            *ar << os; os << endl;
-        /*else
-            ar->print(0);*/
+        if (tag) {
+            tag->printGMNName (os);
+            tag->printParameters (os);
+//            *ar << os;
+        }
+		else ar->print(os);
 	}
 	else
-        os << "=> no ARMusicalObject" << endl;
+        os << "=> no ARMusicalObject";
 }
+std::ostream& operator<< (std::ostream& os, const GRNotationElement& e)		{ e.print(os); return os; }
 
 // -------------------------------------------------------------------------
 void 
@@ -252,6 +256,7 @@ GRNotationElement::OnDrawSymbol( VGDevice & hdc, unsigned int inSymbol,
 	// - Setup colors
 	if(!mDraw)
 		return;
+
 	const unsigned char * colref = getColRef();
 	const VGColor prevFontColor = hdc.GetFontColor();
   	if (colref)
@@ -432,6 +437,7 @@ void GRNotationElement::removeAssociation( const NEPointerList & nl )
 	while (pos)
 		removeAssociation( nl.GetNext(pos));
 }
+
 
 // Static method.
 // -1: g1 < g2
