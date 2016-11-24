@@ -471,10 +471,6 @@ GRSystem::~GRSystem()
 	delete mSpringVector;	mSpringVector = 0;
 	delete simplerods;
 	delete complexrods;
-
-#ifdef OLDSPFACTIVE
-	delete spf;
-#endif
 	delete mSpaceForceFunc;
 	for (unsigned int i=0; i<mAccolade.size(); i++)
 		delete mAccolade[i];
@@ -977,9 +973,6 @@ void GRSystem::FinishSystem()
 	updateBoundingBox should also be called ...
 */
 void GRSystem::FinishSystem( ISpringVector * pvect, IRodList * prods1,  IRodList * prods2,
-#ifdef OLDSPFACTIVE
-		GRSpaceForceFunction * pspf,
-#endif
 		GRSpaceForceFunction2 * psff, const TYPE_TIMEPOSITION &tp, int lastline)
 {
 	traceMethod("FinishSystem");

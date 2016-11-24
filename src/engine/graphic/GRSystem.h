@@ -26,10 +26,6 @@ template <class T> class KF_IVector;
 #include "GRSystemSlice.h"
 #include "GREvent.h"
 
-#ifdef OLDSPFACTIVE
-	class GRSpaceForceFunction;
-#endif
-
 class ARSystemFormat;
 class ARMusic;
 class ARAccolade;
@@ -118,9 +114,6 @@ public:
 
 	void 	FinishSystem();
 	void 	FinishSystem( ISpringVector * pvect, IRodList * prods1, IRodList * prods2,
-#ifdef OLDSPFACTIVE
-        GRSpaceForceFunction * pspf,
-#endif
         GRSpaceForceFunction2 * psff, const TYPE_TIMEPOSITION & tp, int lastline = 0);
 
 	TYPE_TIMEPOSITION mDebugSystemDate;
@@ -157,12 +150,7 @@ protected:
 	// more than one spring). These both are returned
 	// by the StaffManager:
 	IRodList * simplerods;
-	IRodList * complexrods;
-	
-#ifdef OLDSPFACTIVE
-	GRSpaceForceFunction * spf;
-#endif
-
+	IRodList * complexrods;	
 	GRSpaceForceFunction2 * mSpaceForceFunc;
 
 	SSliceList 		mSystemSlices;
