@@ -2,6 +2,8 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.3
+- new autopos attribute for lyrics: when 'on', the lyrics are placed below the bottom of
+  the bounding box that includes all the notes of the staff.
 - fix a bug with incorrect placement of position tags in multi-voices scores with \staff tags 
 - fix appearance issue with tuplets (dispNote attribute) and durations that normally 
   required to be splitted. Support of dispNote for rests.
