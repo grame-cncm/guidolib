@@ -220,6 +220,7 @@ checkcrash: $(LEAKTOOLS)
 #########################################################################
 # tools to generate svg files
 svg: $(svgout) $(mapsout) $(timemapout) $(prollout) $(prollvoicescolorout) $(prolltrajout) $(prollvoicescolortrajout)
+svgshort: $(svgout)
 
 svgclean: 
 	rm -f $(svgout) $(mapsout) $(timemapout) $(prollout) $(prollvoicescolorout) $(prolltrajout) $(prollvoicescolortrajout)
