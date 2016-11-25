@@ -19,8 +19,6 @@
 #include "GRSystem.h"
 #include "GRRod.h"
 #include "GRSpace.h"
-// #include "GRSText.h"
-#include "GRText.h"
 #include "GRStaffManager.h"
 #include "GRSpringForceIndex.h"
 #include "GRSpacingMatrix.h"
