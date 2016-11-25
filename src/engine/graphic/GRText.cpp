@@ -114,6 +114,7 @@ GRText::GRText(GRStaff * p_staff, ARText * abstractRepresentationOfText)
 //	}
 
 	st->boundingBox.bottom = 4 * LSPACE;
+	mStaffBottom = 0;
 }
 
 
@@ -121,14 +122,10 @@ GRText::~GRText()
 {
 	assert(mStartEndList.empty());
 	// this is important ...
-	// All associaions that have been made
-	// are dealt with in GRPositionTag ...
+	// All associaions that have been made are dealt with in GRPositionTag ...
 
-	// this makes sure, that we don't remove
-	// associations, that are no longer there
-	// after the Tag has been delete
-	// (especially, if more than one system
-	//  is handled.)
+	// this makes sure, that we don't remove associations, that are no longer there
+	// after the Tag has been delete (especially, if more than one system is handled.)
 	delete mAssociated;
 	mAssociated = 0;
 }
@@ -146,9 +143,12 @@ FloatRect GRText::getTextMetrics(VGDevice & hdc) const
 	// - Setup position.
 	// y-reference position if the lowest line of the staff.
 	NVPoint drawPos (st->position);
-	// - Force the position to be relative to the bottom line of the staff
-	if( mMustFollowPitch == false )
+	if( arText->isAutoPos() && gCurStaff) {
+		drawPos.y = mStaffBottom;
+	}
+	else if( mMustFollowPitch == false )
 	{
+		// - Force the position to be relative to the bottom line of the staff
 		if (gCurStaff) // else ?
 			drawPos.y = gCurStaff->getDredgeSize();
 		else
@@ -181,7 +181,12 @@ FloatRect GRText::getTextMetrics(VGDevice & hdc) const
 	hdc.SetTextFont( hmyfont );
 	hmyfont->GetExtent(theText, charCount, &w, &h, &hdc);
 	hdc.SetTextFont( savedFont );
-	r.Set(x, y, x+w, y+h);
+	if( arText->isLyric() && arText->isAutoPos() ) {
+		y += curLSPACE * 0.75;
+		r.Set(x, y-h, x+w, y);
+	}
+	else
+		r.Set(x, y, x+w, y+h);
 	return r;
 }
 
@@ -198,31 +203,6 @@ void GRText::OnDraw( VGDevice & hdc ) const
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );
 	assert(sse);
 	GRTextSaveStruct * st = (GRTextSaveStruct *) sse->p;
-//
-//	const ARText * arText = getARText();
-//	const float curLSPACE = gCurStaff ? gCurStaff->getStaffLSPACE(): LSPACE;
-//
-//	// - Setup position.
-//	// y-reference position if the lowest line of the staff.
-//	NVPoint drawPos (st->position);
-//
-//	// - Force the position to be relative to the bottom line of the staff
-//	if( mMustFollowPitch == false )
-//	{
-//		if (gCurStaff) // else ?
-//			drawPos.y = gCurStaff->getDredgeSize();
-//		else
-//			drawPos.y = 0;
-//	}
-//
-//	float dx = 0;
-//	float dy = 0;
-//	if( arText->getYPos())
-//		drawPos.y -= (arText->getYPos()->getValue(curLSPACE));
-//	if (arText->getDY())
-//		dy = -arText->getDY()->getValue( curLSPACE );
-//	if (arText->getDX())
-//		dx = arText->getDX()->getValue( curLSPACE );
 
 	// - Setup font ....
 	const VGFont* hmyfont;
@@ -242,10 +222,6 @@ void GRText::OnDraw( VGDevice & hdc ) const
 	// - Print text
 	const char * theText = st->text.c_str();
 	const int charCount = (int)st->text.size();
-//	float x = drawPos.x + st->boundingBox.left + dx;
-//	float y = drawPos.y + dy;
-//	float w = 0;
-//	float h = 0;
 	FloatRect r = getTextMetrics (hdc);
 
     if (charCount > 0)
@@ -280,7 +256,6 @@ void GRText::setPosition(const NVPoint & inPosition)
 
 	GRTextSaveStruct * st = (GRTextSaveStruct *) sse->p;
 	assert(st);
-
 	st->position = inPosition;
 }
 
@@ -306,6 +281,7 @@ void GRText::tellPosition(GObject * caller, const NVPoint & inPosition)
 	GRStaff * staff = grel->getGRStaff();
 	if( staff == 0 ) return;
 
+	mStaffBottom = staff->getBoundingBox().bottom;
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct(staff->getGRSystem());
 	assert(sse);
 
@@ -314,10 +290,8 @@ void GRText::tellPosition(GObject * caller, const NVPoint & inPosition)
 	NVPoint newPos( inPosition );
 
 	// - Check if we're left-opened
-	if (sse->startflag == GRSystemStartEndStruct::OPENLEFT)
-	{
-		if (grel != startElement)
-		{
+	if (sse->startflag == GRSystemStartEndStruct::OPENLEFT) {
+		if (grel != startElement) {
 			if (st->position.x == 0)
 			{
 				newPos.x -= LSPACE * 0.5f; // this is actually notebreite!

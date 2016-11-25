@@ -73,6 +73,7 @@ class GRText : public GRPTagARNotationElement
 
 		unsigned int mTextAlign;
 		bool	mMustFollowPitch; // (when the text tag has a range)
+		float	mStaffBottom;
 };
 
 #endif
