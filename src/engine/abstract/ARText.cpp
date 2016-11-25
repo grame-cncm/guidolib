@@ -25,7 +25,8 @@
 
 ListOfTPLs ARText::ltpls(1);
 
-ARText::ARText(const NVstring & p_txt, float)
+ARText::ARText(const NVstring & p_txt, float, bool isLyric)
+	: fIsLyric(isLyric)
 {
 	ypos         = NULL;
 	text         = new TagParameterString(p_txt.c_str());
@@ -34,6 +35,7 @@ ARText::ARText(const NVstring & p_txt, float)
 	fsize        = NULL;
 	fattrib      = NULL;
 	rangesetting = RANGEDC;
+	fIsAutoPos	 = false;
 }
 
 ARText::ARText() : ARMTParameter()	
@@ -47,6 +49,7 @@ ARText::ARText() : ARMTParameter()
 	fsize                = NULL;
 	fattrib              = NULL;
 	rangesetting         = RANGEDC;
+	fIsAutoPos	 = false;
 }
 
 ARText::~ARText() 
@@ -59,15 +62,13 @@ ARText::~ARText()
 	delete ypos;
 };
 
-const char * 
-ARText::getTagFormat() const	 // (JB) new
+const char * ARText::getTagFormat() const	 // (JB) new
 {
 	const char * const outFormat = "S,text,,r;U,dy,-1,o";
 	return outFormat;
 }
 
-void 
-ARText::setTagParameterList(TagParameterList & tpl)
+void  ARText::setTagParameterList(TagParameterList & tpl)
 {
 	if (ltpls.GetCount() == 0)
 	{

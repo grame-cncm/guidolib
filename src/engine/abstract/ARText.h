@@ -26,11 +26,10 @@ class TagParameterFloat;
 
 /** \brief The text tag
 */
-class ARText : public ARMTParameter, 
-					public ARPositionTag
+class ARText : public ARMTParameter, public ARPositionTag
 {
 public:
-			            ARText(const NVstring & p_txt, float p_offsety);
+			            ARText(const NVstring & p_txt, float p_offsety, bool isLyric=false);
 					    ARText();
 	virtual 	       ~ARText();
 
@@ -54,6 +53,9 @@ public:
 	void		 setFAttrib(const TagParameterString * fa);
 	int			 getFSize(float curLSPACE) const;
 	void		 setFSize(const TagParameterFloat * fs);
+	void		 setAutoPos(bool state)						{ fIsAutoPos = state; }
+	bool		 isLyric() const							{ return fIsLyric; }
+	bool		 isAutoPos() const							{ return fIsAutoPos; }
 
 	const TagParameterFloat * getYPos() const {	return ypos; }
 
@@ -65,8 +67,10 @@ protected:
 	TagParameterString * font;
 	TagParameterFloat  * fsize;
 	TagParameterString * fattrib;
+	TagParameterFloat *  ypos;
 
-	TagParameterFloat * ypos;
+	bool	fIsLyric;
+	bool	fIsAutoPos;
 
 	static ListOfTPLs ltpls;
 };
