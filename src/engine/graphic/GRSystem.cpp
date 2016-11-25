@@ -62,7 +62,6 @@
 #include "GRSystem.h"
 #include "GRSystemTag.h"
 #include "GRSystemTag.h"
-#include "GRText.h"
 
 using namespace std;
 
