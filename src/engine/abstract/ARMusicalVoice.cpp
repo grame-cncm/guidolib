@@ -1989,27 +1989,21 @@ void ARMusicalVoice::doAutoDispatchLyrics()
 	GuidoPos pos = GetHeadPosition(vst);
 
 	dlclist mydlclist(1);
-
 	while (pos)
 	{
 		// track lyrics-tags
-
 	 	if (vst.addedpositiontags)
 		{
 			GuidoPos tmppos = vst.addedpositiontags->GetHeadPosition();
-			while (tmppos)
-			{
+			while (tmppos) {
 				ARPositionTag * arpt = vst.addedpositiontags->GetNext(tmppos);
-
 				ARLyrics * arlyrics = dynamic_cast<ARLyrics *>(arpt);
-				if (arlyrics)
-				{
+				if (arlyrics) {
 					// then we have a new lyrics-tag opening ....
 					ARDispatchLyricsClass * dlc = new ARDispatchLyricsClass;
 					dlc->lyrics = arlyrics;
 					dlc->text = new NVstring(arlyrics->getText());
 					dlc->position = 0;
-
 					mydlclist.AddTail(dlc);
 				}
 			}
@@ -2023,28 +2017,23 @@ void ARMusicalVoice::doAutoDispatchLyrics()
 			{
 				ARPositionTag * arpt = vst.removedpositiontags->GetNext(tmppos);
 				ARLyrics * arlyrics = dynamic_cast<ARLyrics *>(arpt);
-				if (arlyrics)
-				{
+				if (arlyrics) {
 					ARDispatchLyricsClass * dlc = NULL;
 					GuidoPos mytmppos = mydlclist.GetHeadPosition();
-					while (mytmppos)
-					{
+					while (mytmppos) {
 						ARDispatchLyricsClass * tmpdlc = mydlclist.GetNext(mytmppos);
-						if (tmpdlc && tmpdlc->lyrics == arlyrics)
-						{
+						if (tmpdlc && tmpdlc->lyrics == arlyrics) {
 							dlc = tmpdlc;
 							break;
 						}
 					}
-					if (dlc)
-						mydlclist.RemoveElement(dlc);
+					if (dlc) mydlclist.RemoveElement(dlc);
 				}
 			}
 		}
 
 		ARMusicalObject * o = GetAt(pos);
 		ARMusicalEvent * ev = ARMusicalEvent::cast(o);
-
 		if (ev && mydlclist.GetCount()>0)
 		{
 			// then we have to dispatch the lyrics to the event ....
@@ -2060,9 +2049,9 @@ void ARMusicalVoice::doAutoDispatchLyrics()
 					// (the curpositiontags and all that)
 					if (mysubstr.length()>0)
 					{
-						// then we actually have something to
-						// out under an event ....
-						ARText * artext = new ARText(mysubstr,0);
+						// then we actually have something to out under an event ....
+						ARText * artext = new ARText(mysubstr,0, true);
+						artext->setAutoPos (dlc->lyrics->autoPos());
 						artext->setRange(1);
 						artext->setPosition(vst.vpos);
 
