@@ -51,7 +51,8 @@ public:
 	const char* getTextformat() const;
 	const char* getFont() const;
 	const char* getFAttrib() const;
-	int getFSize(float curLSPACE = LSPACE) const;
+	int			getFSize(float curLSPACE = LSPACE) const;
+	bool		autoPos() const		{ return fAutoPos; }
 
 protected:
 	TagParameterString * mText; // the corresponding text ...
@@ -59,6 +60,8 @@ protected:
 	TagParameterString * mFont;
 	TagParameterFloat  * mFSize;
 	TagParameterString * mFAttrib;
+
+	bool fAutoPos;
 
 	static ListOfTPLs ltpls;
 };

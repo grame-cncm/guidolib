@@ -33,6 +33,7 @@ ARLyrics::ARLyrics() : ARMTParameter()
 	mFSize = NULL;
 	mFAttrib = NULL;
 	rangesetting = ONLY;
+	fAutoPos = false;
 }
 
 ARLyrics::~ARLyrics() 
@@ -55,7 +56,7 @@ void ARLyrics::setTagParameterList(TagParameterList & tpl)
 		ListOfStrings lstrs; // (1); std::vector test impl
 		lstrs.AddTail(
 			(
-			"S,text,,r;U,dy,-3,o"));
+			"S,text,,r;U,dy,-3,o;S,autopos,off,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -78,6 +79,12 @@ void ARLyrics::setTagParameterList(TagParameterList & tpl)
 			delete mDy;
 			mDy = TagParameterFloat::cast(rtpl->RemoveHead());
 			assert(mDy); 
+
+			TagParameterString* autopos = TagParameterString::cast(rtpl->RemoveHead());
+			assert(autopos);
+			string autoStr = autopos->getValue();
+			if (autoStr == "on") fAutoPos = true;
+			delete autopos;
 		}
 
 		delete rtpl;
@@ -130,20 +137,6 @@ int ARLyrics::MatchListOfTPLsWithTPL(const ListOfTPLs &ltpls,TagParameterList & 
 */
 void ARLyrics::CreateListOfTPLs( ListOfTPLs & ltpl, ListOfStrings & lstrs)
 {
-/*	GuidoPos pos = lstrs.GetHeadPosition();
-	while (pos)
-	{
-		NVstring * mystr = lstrs.GetNext(pos);
-
-		if (mystr)
-		{
-			mystr->append(";S,textformat,ct,o;"
-			"S,font,Times,o;U,fsize,12pt,o;"
-			"S,fattrib,,o");	// TODO: replace "Times"
-								// by the current text font.
-		}
-	}
-*/
 	// for each string, we create a tpl ...
 	ListOfStrings::iterator ptr;
 	for( ptr = lstrs.begin(); ptr != lstrs.end(); ++ptr )
@@ -158,41 +151,14 @@ void ARLyrics::CreateListOfTPLs( ListOfTPLs & ltpl, ListOfStrings & lstrs)
 	ARMusicalTag::CreateListOfTPLs(ltpl,lstrs);
 }
 
-const char* ARLyrics::getText() const
-{ 
-	return mText ? mText->getValue() : NULL;
-}
+const char* ARLyrics::getText() const			{ return mText ? mText->getValue() : NULL;	}
+const char* ARLyrics::getTextformat() const		{ return mTextFormat ? mTextFormat->getValue() : 0; }
+const char* ARLyrics::getFont() const			{ return mFont ? mFont->getValue() : 0; }
+const char* ARLyrics::getFAttrib() const		{ return mFAttrib ? mFAttrib->getValue() : 0; }
+int ARLyrics::getFSize(float curLSPACE) const	{ return mFSize ? (int) mFSize->getValue(curLSPACE) : 0; }
 
-const char* ARLyrics::getTextformat() const
-{
-	return mTextFormat ? mTextFormat->getValue() : 0;
-}
-
-const char* ARLyrics::getFont() const
-{
-	return mFont ? mFont->getValue() : 0;
-}
-
-const char* ARLyrics::getFAttrib() const
-{
-	return mFAttrib ? mFAttrib->getValue() : 0;
-}
-
-int ARLyrics::getFSize(float curLSPACE) const
-{
-	return mFSize ? (int) mFSize->getValue(curLSPACE) : 0;
-}
-
-void ARLyrics::printName(std::ostream& os) const
-{
-    os << "ARLyrics";
-}
-
-void ARLyrics::printGMNName(std::ostream& os) const
-{
-    os << "\\lyrics";
-}
-
+void ARLyrics::printName(std::ostream& os) const	{ os << "ARLyrics"; }
+void ARLyrics::printGMNName(std::ostream& os) const	{ os << "\\lyrics";	}
 void ARLyrics::printParameters(std::ostream& os) const
 {
     if (mText)
