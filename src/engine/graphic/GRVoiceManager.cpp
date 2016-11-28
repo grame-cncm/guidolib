@@ -2015,7 +2015,8 @@ GRSingleNote * GRVoiceManager::CreateSingleNote( const TYPE_TIMEPOSITION & tp, A
 	// we need to take care of dots !
     ARNote * tmpNote = static_cast<ARNote *>(curev->isARNote());
 	AROctava * aroct = dynamic_cast<AROctava *>( curvst->getCurStateTag(typeid(AROctava)));
-	if (aroct && tmpNote)			tmpNote->setRegister( tmpNote->getOctave() + aroct->getOctava());
+	if (aroct && tmpNote)
+		tmpNote->setRegister( tmpNote->getOctave() - aroct->getOctava());
 	dtempl.normalize();
 
 	GRSingleNote * grnote = new GRSingleNote(mCurGrStaff, tmpNote, tp, arObject->getDuration());

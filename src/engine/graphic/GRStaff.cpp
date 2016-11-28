@@ -634,7 +634,8 @@ float GRStaff::getKeyPosition(TYPE_PITCH pit, int numkeys) const
 */
 float GRStaff::getNotePosition(TYPE_PITCH pit, TYPE_REGISTER oct) const
 {
-	oct -= mStaffState.octava;	//  depends on current clef.
+// redundant correction of octave: already shifted when the GRNote is created
+//	oct -= mStaffState.octava;	//  depends on current clef.
 
 	const float myHalfSpace = getStaffLSPACE() * 0.5f;
 	float calc = 0;
