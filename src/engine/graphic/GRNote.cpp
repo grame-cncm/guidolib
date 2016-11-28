@@ -22,23 +22,23 @@
 
 
 GRNote::GRNote( GRStaff * grstaf,
-	ARNote * abstractRepresentationOfNote,
+	ARNote * note,
 	const TYPE_TIMEPOSITION & relativeTimePositionOfGRNote,
 	const TYPE_DURATION & durationOfGRNote)
-  : GREvent(grstaf,abstractRepresentationOfNote,relativeTimePositionOfGRNote,durationOfGRNote), 
+  : GREvent(grstaf,note,relativeTimePositionOfGRNote,durationOfGRNote),
   fCluster(NULL), fOwnCluster(false), fClusterNote(false), fClusterHaveToBeDrawn(false)
 {
     // builds a graphical "part" of abstractRepresentation
-    assert(abstractRepresentationOfNote);
-    if (abstractRepresentationOfNote->getOrnament())
-        fOrnament = new GRTrill( mGrStaff, abstractRepresentationOfNote->getOrnament());
+    assert(note);
+    if (note->getOrnament())
+        fOrnament = new GRTrill( mGrStaff, note->getOrnament());
     else
         fOrnament = NULL;
 
-    if (abstractRepresentationOfNote->getARCluster())
+    if (note->getARCluster())
     {
         fClusterNote = true;
-        fClusterHaveToBeDrawn = abstractRepresentationOfNote->doesClusterHaveToBeDrawn();
+        fClusterHaveToBeDrawn = note->doesClusterHaveToBeDrawn();
     }
     fIsGraceNote = false;
 }

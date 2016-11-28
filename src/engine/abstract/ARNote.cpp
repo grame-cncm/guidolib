@@ -42,10 +42,9 @@ ARNote::ARNote(const TYPE_TIMEPOSITION & relativeTimePositionOfNote, const TYPE_
 {
 }
 
-ARNote::ARNote( const std::string & inName, int theAccidentals, int theRegister, int theNumerator, 
-				int theDenominator, int theIntensity )
-	:	ARMusicalEvent(theNumerator, theDenominator), fName( inName ), fPitch ( UNKNOWN ),
-		fOctave( theRegister ),	fAccidentals( theAccidentals ), fDetune(0), fIntensity( theIntensity ),
+ARNote::ARNote( const std::string & name, int accidentals, int octave, int numerator, int denominator, int intensity )
+	:	ARMusicalEvent(numerator, denominator), fName( name ), fPitch ( UNKNOWN ),
+		fOctave( octave ),	fAccidentals( accidentals ), fDetune(0), fIntensity( intensity ),
 		fOrnament(NULL), fCluster(NULL), fOwnCluster(false), fIsLonelyInCluster(false), fClusterHaveToBeDrawn(false), 
 		fSubElementsHaveToBeDrawn(true), fTremolo(0), fStartPosition(-1,1), fNoteAppearance("")
 {

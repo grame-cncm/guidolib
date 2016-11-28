@@ -32,8 +32,7 @@ class ARNote : public ARMusicalEvent
   public:
     ARNote( const TYPE_DURATION & durationOfNote );
     ARNote( const TYPE_TIMEPOSITION & relativeTimePositionOfNote, const TYPE_DURATION & durationOfNote );
-    ARNote( const std::string& inName, int theAccidentals, int theRegister, int theNumerator, 
-        int theDenominator, int theIntensity );
+    ARNote( const std::string& name, int accidentals, int octave, int numerator, int denominator, int intensity );
     ARNote( const ARNote & arnote );
     virtual ~ARNote();
 
