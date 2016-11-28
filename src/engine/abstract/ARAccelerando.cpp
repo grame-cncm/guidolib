@@ -126,14 +126,14 @@ void ARAccelerando::printParameters(std::ostream& os) const
     if (abstempo)
         os << "abstempo: " << abstempo->getValue() << "; ";
 
-    if (font)
-        os << "font: " << font->getValue() << "; ";
+//    if (font)
+//        os << "font: " << font->getValue() << "; ";
 
     if (fattrib)
         os << "fattrib: " << fattrib->getValue() << "; ";
 
-    if (fsize)
-        os << "fsize: " << fsize->getValue() << "; ";
+//    if (fsize)
+//        os << "fsize: " << fsize->getValue() << "; ";
 
     ARMusicalTag::printParameters(os);
 }
