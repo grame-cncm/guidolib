@@ -68,16 +68,29 @@ TYPE_TIMEPOSITION ARMusicalObject::getRelativeEndTimePosition() const
 	// da duration==0 !
 }
 
-// provides a GUIDO/SALIERI-Conform output of the current object
-std::ostream & ARMusicalObject::operator<< (std::ostream & ostream) const
+void ARMusicalObject::print(std::ostream & os) const
 {
 	const ARMusicalTag * mt = dynamic_cast<const ARMusicalTag *>(this);
-	if (mt)
-	{
-		return mt->operator <<(ostream);
-	}
-	return ostream;
+	if (mt) os << mt;
 }
+
+std::ostream & operator<<(std::ostream& os, const ARMusicalObject* o)
+{
+	const ARMusicalTag * mt = dynamic_cast<const ARMusicalTag *>(o);
+	if (mt) mt->print(os);
+	return os;
+}
+
+// provides a GUIDO/SALIERI-Conform output of the current object
+//std::ostream & ARMusicalObject::operator<< (std::ostream & ostream) const
+//{
+//	const ARMusicalTag * mt = dynamic_cast<const ARMusicalTag *>(this);
+//	if (mt)
+//	{
+//		return mt->operator <<(ostream);
+//	}
+//	return ostream;
+//}
 
 void ARMusicalObject::setRelativeTimePosition(const TYPE_TIMEPOSITION & newRelativeTimePosition)
 {
@@ -155,9 +168,4 @@ bool ARMusicalObject::IsPowerOfTwoDenom(const TYPE_DURATION & dur /*, int maxpow
 	const int x = dur.getDenominator();
 	// if( x == 0 ) return false; // because the denominator can't be 0
 	return ((x & -x) == x);
-}
-
-void ARMusicalObject::print(std::ostream& os) const
-{
-    os << "print() needs to be implemented in ARMusicalObject subclasses" << std::endl;
 }

@@ -63,4 +63,6 @@ protected:
     int mPoints;
 };
 
+std::ostream & operator << ( std::ostream & os, const ARMusicalEvent* tag );
+
 #endif

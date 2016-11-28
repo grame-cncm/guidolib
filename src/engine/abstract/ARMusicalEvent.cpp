@@ -78,6 +78,12 @@ ARMusicalEvent::~ARMusicalEvent()
 {
 }
 
+std::ostream & operator << ( std::ostream & os, const ARMusicalEvent* ev )
+{
+	ev->print(os);
+	return os;
+}
+
 void ARMusicalEvent::print(std::ostream& os) const
 {
     printName(os);

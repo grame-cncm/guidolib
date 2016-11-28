@@ -75,7 +75,6 @@ class ARMusicalObject : public Visitable
 		// must be re-designed!!! Should be put to another place  but is needed here from several alg.
 		virtual TYPE_TIMEPOSITION getRelativeEndTimePosition() const;
 
-		virtual std::ostream & operator<<(std::ostream& os) const;
 
 	    
 		// introduced to get correct tie pos for notes in chords [DF 2012-03-19]
@@ -103,8 +102,6 @@ class ARMusicalObject : public Visitable
 
 	virtual void	setDrawGR(bool onoff){drawGR = onoff;}
 	virtual bool	getDrawGR(){return drawGR;}
-
-    virtual void print(std::ostream& os) const;
 
     /**** Functions to avoid dynamic_cast ****/
     virtual ARMusicalObject  *isARRepeatBegin()   { return NULL; }
@@ -137,6 +134,7 @@ class ARMusicalObject : public Visitable
 
     /* Visitor design pattern */
     virtual void accept(BaseVisitor *visitor) { visitor->visit(*this); }
+	virtual void print(std::ostream & os) const;
 
   protected:
 		TYPE_TIMEPOSITION	relativeTimePosition;
@@ -151,5 +149,7 @@ class ARMusicalObject : public Visitable
   private:
 		TYPE_DURATION		fDuration;
 };
+
+std::ostream & operator<<(std::ostream& os, const ARMusicalObject* o);
 
 #endif
