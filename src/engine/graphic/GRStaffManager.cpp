@@ -2375,11 +2375,11 @@ GRGlobalStem * GRStaffManager::getOtherGlobalStem(GRSystemSlice * psys,
 			{
 				if (vcmgr->curchordtag->getLabel() == label)
 				{
-					if (vcmgr->curvst->fCurdispdur &&
-						curvcmgr->curvst->fCurdispdur)
+					const ARMusicalVoiceState * vstate = vcmgr->getVoiceState();
+					const ARMusicalVoiceState * cvstate = curvcmgr->getVoiceState();
+					if (vstate->fCurdispdur && cvstate->fCurdispdur)
 					{
-						if (vcmgr->curvst->fCurdispdur->getDisplayDuration() ==
-							curvcmgr->curvst->fCurdispdur->getDisplayDuration())
+						if (vstate->fCurdispdur->getDisplayDuration() == cvstate->fCurdispdur->getDisplayDuration())
 							return vcmgr->curglobalstem;
 					}
 					else
