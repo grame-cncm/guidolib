@@ -94,106 +94,113 @@ ARMusicalTag::~ARMusicalTag()
 }
 
 // (JB) rewrited with std::ostringstream class instead of deprecated ostrstream.
-std::ostream & ARMusicalTag::operator <<(std::ostream & os) const
+std::ostream & operator << ( std::ostream & os, const ARMusicalTag* tag )
 {
-	printName(os);
-	
-	std::ostringstream mystr;	// was ostrstream (deprecated)	
-	printParameters(mystr);
-
-	size_t count = mystr.str().size();	// was mystr.pcount()
-	const char * tmpp = mystr.str().c_str();
-
-	char * cp = NULL;
-	if (tmpp)
-	{
-		cp = new char[count+1];
-		if (count) strncpy(cp,tmpp,count);
-		cp[count] = 0;
-	}
-
-// (JB)	mystr.rdbuf()->freeze(0);
-
-	bool hasmoreparams = false;
-	if (cp && count > 0 )
-	{		
-		cp[count] = 0;
-
-		// now we get rid of the  closing bracket.
-		for( ; cp[count] != '>' ; count--) { }
-
-		if (count > 0)
-		{
-			cp[count] = 0;
-			hasmoreparams = true;
-		}
-// 		os << "<" << &(cp[1]) << "> ";
-	}
-
-	std::ostringstream mystr2;
-	bool isfirst = true;
-	// now we have to look at the "default"-tag-parameters ...
-	if (mDx && mDx->TagIsSet())
-	{
-		if (!isfirst)
-			mystr2 << ",";
-		else
-			isfirst = false;
-
-		mystr2 << "dx=" << mDx->getUnitValue() << mDx->getUnit();
-	}
-
-	if (mDy && mDy->TagIsSet())
-	{
-		if (!isfirst)
-			mystr2 << ",";
-		else
-			isfirst = false;
-
-		mystr2 << "dy=" << mDy->getUnitValue() << mDy->getUnit();
-	}
-
-	if (color && color->TagIsSet())
-	{	
-		if (!isfirst)
-			mystr2 << ",";
-		else
-			isfirst = false;
-
-		mystr2 << "color=\"" << color->getValue() << "\"";
-
-	}
-	if (size && size->TagIsSet())
-	{		
-		if (!isfirst)
-			mystr2 << ",";
-		else
-			isfirst = false;
-
-		mystr2 << "size=" << size->getValue(); 
-	}
-
-	if (!isfirst)
-	{
-		const char * tmpp = mystr2.str().c_str();	// now we use ostringstream.
-		if (hasmoreparams)
-			os << "<" << &(cp[1]) <<  "," << tmpp << ">";
-		else
-			os << "<" << tmpp << ">";
-	}
-	else if (hasmoreparams)
-	{
-		os << "<" << &(cp[1]) << ">";
-	}
-	
-	delete [] cp;
-
-	if (id != -1)
-		os << ":" << id;
-	if (getRange())
-		os << "(";
-	return os << " ";
+	tag->print (os);
+	return os;
 }
+
+
+//void ARMusicalTag::print(std::ostream & os) const
+//{
+//	printName(os);
+//	
+//	std::ostringstream mystr;	// was ostrstream (deprecated)	
+//	printParameters(mystr);
+//
+//	size_t count = mystr.str().size();	// was mystr.pcount()
+//	const char * tmpp = mystr.str().c_str();
+//
+//	char * cp = NULL;
+//	if (tmpp)
+//	{
+//		cp = new char[count+1];
+//		if (count) strncpy(cp,tmpp,count);
+//		cp[count] = 0;
+//	}
+//
+//// (JB)	mystr.rdbuf()->freeze(0);
+//
+//	bool hasmoreparams = false;
+//	if (cp && count > 0 )
+//	{		
+//		cp[count] = 0;
+//
+//		// now we get rid of the  closing bracket.
+//		for( ; cp[count] != '>' ; count--) { }
+//
+//		if (count > 0)
+//		{
+//			cp[count] = 0;
+//			hasmoreparams = true;
+//		}
+//// 		os << "<" << &(cp[1]) << "> ";
+//	}
+//
+//	std::ostringstream mystr2;
+//	bool isfirst = true;
+//	// now we have to look at the "default"-tag-parameters ...
+//	if (mDx && mDx->TagIsSet())
+//	{
+//		if (!isfirst)
+//			mystr2 << ",";
+//		else
+//			isfirst = false;
+//
+//		mystr2 << "dx=" << mDx->getUnitValue() << mDx->getUnit();
+//	}
+//
+//	if (mDy && mDy->TagIsSet())
+//	{
+//		if (!isfirst)
+//			mystr2 << ",";
+//		else
+//			isfirst = false;
+//
+//		mystr2 << "dy=" << mDy->getUnitValue() << mDy->getUnit();
+//	}
+//
+//	if (color && color->TagIsSet())
+//	{	
+//		if (!isfirst)
+//			mystr2 << ",";
+//		else
+//			isfirst = false;
+//
+//		mystr2 << "color=\"" << color->getValue() << "\"";
+//
+//	}
+//	if (size && size->TagIsSet())
+//	{		
+//		if (!isfirst)
+//			mystr2 << ",";
+//		else
+//			isfirst = false;
+//
+//		mystr2 << "size=" << size->getValue(); 
+//	}
+//
+//	if (!isfirst)
+//	{
+//		const char * tmpp = mystr2.str().c_str();	// now we use ostringstream.
+//		if (hasmoreparams)
+//			os << "<" << &(cp[1]) <<  "," << tmpp << ">";
+//		else
+//			os << "<" << tmpp << ">";
+//	}
+//	else if (hasmoreparams)
+//	{
+//		os << "<" << &(cp[1]) << ">";
+//	}
+//	
+//	delete [] cp;
+//
+//	if (id != -1)
+//		os << ":" << id;
+//	if (getRange())
+//		os << "(";
+//	return os << " ";
+//}
 
 void ARMusicalTag::setRGBColor (unsigned char red, unsigned char green, unsigned char blue)
 {
@@ -403,7 +410,6 @@ void ARMusicalTag::print(std::ostream & os) const
     printAttributes(os);
     os << ": ";
     printParameters(os);
-    os << std::endl;
 }
 
 void ARMusicalTag::printAttributes(std::ostream & os) const

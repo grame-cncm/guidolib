@@ -97,8 +97,6 @@ class ARMusicalTag : public ARMusicalObject
 				void	setAssociation(ASSOCIATION p_assoc)		{ assoc = p_assoc; }
 				ASSOCIATION getAssociation()					{ return assoc; }
 
-		virtual std::ostream & operator << ( std::ostream & os ) const;
-
 		const TagParameterString * getColor() const				{ return color; }
         const TagParameterRGBColor * getRGBColor() const        { return rgbColor; }
 
@@ -117,8 +115,8 @@ class ARMusicalTag : public ARMusicalObject
     ARMusicalObject *isARMusicalTag() { return this; }
     /*****************************************/
 
-    virtual void setIsInHeader(bool state) { mIsInHeader = state; }
-    virtual bool isInHeader() const        { return mIsInHeader; }
+    virtual void	setIsInHeader(bool state) { mIsInHeader = state; }
+    virtual bool	isInHeader() const        { return mIsInHeader; }
 
   protected: //  id(-1), isAuto(0), rangesetting(NO), error(0), hasRange(0)
 
@@ -145,6 +143,8 @@ class ARMusicalTag : public ARMusicalObject
 
       bool mIsInHeader; // For proportional rendering
 };
+
+std::ostream & operator << ( std::ostream & os, const ARMusicalTag* tag );
 
 #endif
 
