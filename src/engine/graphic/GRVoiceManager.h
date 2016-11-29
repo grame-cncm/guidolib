@@ -98,6 +98,7 @@ public:
 			int		Iterate		(TYPE_TIMEPOSITION & tp, int filltagmode);
 			int		DoBreak		(const TYPE_TIMEPOSITION & tp, int system_or_page);
 			int		getStaffNum () const	{ return staffnum; }
+			const ARMusicalVoiceState * getVoiceState() const	{ return fVoiceState; }
 
 
 protected:
@@ -117,10 +118,8 @@ protected:
 	GRGlobalStem *		curglobalstem;
 	GRGlobalLocation *	curgloballocation;
 
-	virtual void addStartPTags();
+//	virtual void addStartPTags();
 		
-	
-	ARMusicalVoiceState * curvst;
 	
 	ARMusicalEvent* curev;
 	GRStaff *		mCurGrStaff;
@@ -158,14 +157,17 @@ protected:
 
 	GRTagPointerList * toadd;
 
-	// this is needed for determining the elements that are centered in a bar like whole-note-rests
-	GREvent * lastnonzeroevent;
-	GRBar * lastbar;
-    
+	
     // - for clusters
     int mCurrentClusterNoteNumber;
 
 private:
+	// this is needed for determining the elements that are centered in a bar like whole-note-rests
+	GREvent *				fLastnonzeroevent;
+	GRBar *					fLastbar;
+//	ARMusicalVoiceState *	curvst;
+	ARMusicalVoiceState *	fVoiceState;
+	
 
 	GRSingleNote *	CreateSingleNote	(const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject, float size=0, bool isGrace=false);
 	void			AddRegularEvent		(GREvent * ev);

@@ -30,9 +30,9 @@ class AROctava : public ARMTParameter, public ARPositionTag
 
 		virtual bool IsStateTag() const { return true; }
 
-		virtual ARMusicalObject * getEndTag() const { return new AROctava(NULL, saveoct); }
+		virtual ARMusicalObject * getEndTag() const { return new AROctava(NULL, fSaveoct); }
 
-		virtual const TagParameterInt * getTPOctava() const { return noct; }
+		virtual const TagParameterInt * getTPOctava() const { return fOctave; }
 
 		virtual int getOctava() const;
 
@@ -43,9 +43,8 @@ class AROctava : public ARMTParameter, public ARPositionTag
 		virtual void setTagParameterList(TagParameterList& tpl);
 
 	protected:
-		AROctava * saveoct; // this is required to save
-				// the current octava state ...
-		TagParameterInt  * noct;
+		AROctava *			fSaveoct; // this is required to save the current octava state ...
+		TagParameterInt  *	fOctave;
 		static ListOfTPLs ltpls;
 };
 

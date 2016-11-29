@@ -22,24 +22,24 @@
 ListOfTPLs AROctava::ltpls(1);
 
 AROctava::AROctava(AROctava * p_saveoct, AROctava * copyoct)
-				: ARMTParameter(-1, copyoct), saveoct(p_saveoct)
+				: ARMTParameter(-1, copyoct), fSaveoct(p_saveoct)
 {
 	rangesetting = RANGEDC;
-	noct = NULL;
+	fOctave = NULL;
 	if (copyoct && copyoct->getTPOctava())
 	{
-		noct = TagParameterInt::cast(copyoct->getTPOctava()->getCopy());
+		fOctave = TagParameterInt::cast(copyoct->getTPOctava()->getCopy());
 	}
 }
 
 AROctava::~AROctava()
 {
-	delete noct;
+	delete fOctave;
 }
 
 int AROctava::getOctava() const
 {
-	return noct ? noct->getValue() : 0;
+	return fOctave ? fOctave->getValue() : 0;
 }
 
 void AROctava::setTagParameterList(TagParameterList & tpl)
@@ -47,7 +47,6 @@ void AROctava::setTagParameterList(TagParameterList & tpl)
 	if (ltpls.GetCount() == 0)
 	{
 		// create a list of string ...
-
 		ListOfStrings lstrs; // (1); std::vector test impl
 		lstrs.AddTail( ( "I,i,,r"));
 		CreateListOfTPLs(ltpls,lstrs);
@@ -61,20 +60,16 @@ void AROctava::setTagParameterList(TagParameterList & tpl)
 		// we found a match!
 		if (ret == 0)
 		{
-			noct = TagParameterInt::cast(rtpl->RemoveHead());
-			assert(noct);
-
+			fOctave = TagParameterInt::cast(rtpl->RemoveHead());
+			assert(fOctave);
 		}
-
 		delete rtpl;
 	}
 	else
 	{
 		// failure
 	}
-
 	tpl.RemoveAll();
-
 }
 
 void AROctava::printName(std::ostream& os) const
@@ -89,8 +84,8 @@ void AROctava::printGMNName(std::ostream& os) const
 
 void AROctava::printParameters(std::ostream& os) const
 {
-    if (noct)
-        os << "i: " << noct->getValue() << "; ";
+    if (fOctave)
+        os << "i: " << fOctave->getValue() << "; ";
 
     ARMusicalTag::printParameters(os);
 }
