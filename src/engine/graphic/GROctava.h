@@ -1,5 +1,5 @@
-#ifndef GRSText_H
-#define GRSText_H
+#ifndef GROctava_H
+#define GROctava_H
 
 /*
   GUIDO Library
@@ -16,23 +16,24 @@
 */
 
 #include "TagParameterString.h"
-#include "GRNotationElement.h"
-#include "GRTag.h"
-// #include "GRDefine.h"
+#include "GRPTagARNotationElement.h"
+//#include "GRNotationElement.h"
+//#include "GRTag.h"
 
 class NVstring;
 class GRStaff;
 class NVPoint;
 class VGDevice;
+class AROctava;
 
 /** \brief not yet documented
 */
-class GRSText : public GRNotationElement, public GRTag
+class GROctava : public GRPTagARNotationElement //GRNotationElement, public GRTag
 {
-
   public:
-					 GRSText( GRStaff *, const NVstring & txt, int p_offsety );
-		virtual 	~GRSText();
+					 GROctava( GRStaff *, const NVstring & txt, AROctava* aroct );
+//					 GROctava( GRStaff *, const NVstring & txt, bool bassa );
+		virtual 	~GROctava();
 
 	 	virtual void tellPosition(GObject *caller, const NVPoint & );
 	  	virtual void addAssociation(GRNotationElement *el);
@@ -43,10 +44,10 @@ class GRSText : public GRNotationElement, public GRTag
 		
   protected:
   	
-  	GRStaff * grstaff;
-    NVstring * txt;
-	GRNotationElement * velement;
-	int  offsety;
+  	GRStaff *	fStaff;
+    NVstring 	fText;
+	bool		fBassa;
+	GRNotationElement * fElement;
 };
 
 #endif
