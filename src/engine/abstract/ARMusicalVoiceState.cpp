@@ -273,24 +273,18 @@ void ARMusicalVoiceState::RemovePositionTag(ARPositionTag * ntag, int addtoremov
 		assert(false);
 		return; 
 	}
-	
-    if (!ntag)
-        return;
+    if (!ntag) return;
 
-	// this either deletes the matching begin-Tag or 
-	// just the position-tag that was given!
+	// this either deletes the matching begin-Tag or just the position-tag that was given!
 	ARTagEnd * artgend = ARTagEnd::cast(ntag);
-	
 	ARPositionTag * start;
 	if (artgend)
 	{
 		start = artgend->getCorrespondence();
 		if (start == NULL)
-		{ // no correspondence
-			
+		{	// no correspondence
 			// not sure, whether this should happen at all.
 			assert(false);
-			
 			start = /*dynamic cast<ARPositionTag *>*/(artgend);
 		}
 	}
@@ -298,7 +292,6 @@ void ARMusicalVoiceState::RemovePositionTag(ARPositionTag * ntag, int addtoremov
 		start = ntag;
 	
 	int checkforcurtags = 0;
-
     if (ntag->isARDisplayDuration() != NULL) {
 		fCurdispdur = NULL;
 		checkforcurtags = 1;
@@ -318,15 +311,12 @@ void ARMusicalVoiceState::RemovePositionTag(ARPositionTag * ntag, int addtoremov
 			found = true;
 			break;
 		}
-
 		curpositiontags->GetNext(pos);
 	}
 
 	if (found == false) {
-		// Attention; think about what happens
-		// here; we have a closing tag without
-		// a matching beginning tag.
-		// this should not happen!
+		// Attention; think about what happens here; we have a closing tag without
+		// a matching beginning tag. this should not happen!
 		// assert(false);
 		return;
 	}
@@ -334,25 +324,20 @@ void ARMusicalVoiceState::RemovePositionTag(ARPositionTag * ntag, int addtoremov
 	if (addtoremovedlist) {
 		if (!removedpositiontags)
 			removedpositiontags = new PositionTagList(0);
-		
 		removedpositiontags->AddTail(ntag);
 	}
 	
-	// it may be, that a tag that is removed has been
-	// added during the same call!
+	// it may be, that a tag that is removed has been added during the same call!
 	// (this may happen during GetPrevEvent)
-	// this may also happen in Chord-Overread-mode
-	// tags within chords are not interessting!
+	// this may also happen in Chord-Overread-mode tags within chords are not interessting!
 	if (addedpositiontags)
 		addedpositiontags->RemoveElement(ntag);
 	
 	if (artgend) {
 		if (artgend->getCorrespondence() == fCurdispdur)
 			fCurdispdur = NULL;
-
 		if (artgend->getCorrespondence() == curchordtag)
 			curchordtag = NULL;
-
 		if (artgend->getCorrespondence() == curgracetag)
 			curgracetag = NULL;
 	}
@@ -363,7 +348,6 @@ void ARMusicalVoiceState::RemovePositionTag(ARPositionTag * ntag, int addtoremov
 		GuidoPos pos = curpositiontags->GetTailPosition();
         while (pos) {
             ARDisplayDuration *tag = dynamic_cast<ARDisplayDuration *>(curpositiontags->GetPrev(pos));
-
             if (tag) {
                 fCurdispdur = tag;
                 break;

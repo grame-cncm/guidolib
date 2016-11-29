@@ -72,17 +72,18 @@ class ARMusicalVoiceState
 		void RemovePositionTag(ARPositionTag * ntag, int addtoremovedlist = 1);
 
 		void DeleteAll();
+	
+		const PositionTagList * addedPTags() const		{ return addedpositiontags; }
+		const PositionTagList * removedPTags() const	{ return removedpositiontags; }
+		const PositionTagList * currentPTags() const	{ return curpositiontags; }
 
 	protected:
-
 		// The timeposition of the last barline.
 		TYPE_TIMEPOSITION curlastbartp;
 
 		GuidoPos curlastbarpos;
-
 		// ptagpos indicates the current position within the ptaglist.
 		GuidoPos ptagpos;
-
 
 		TYPE_TIMEPOSITION curtp;
 		// Distinguish between Tags, that allow a range and those, who don't 
@@ -94,17 +95,6 @@ class ARMusicalVoiceState
 		// the tags that are just tags in the musical voice, like e.g. ARText 
 		// or ARFermata ... (the ones without ranges)
 		TagList * curtags;
-
-		// these describe those position tags that have been Added in the last
-		// operation on the Voice with the given state.
-		PositionTagList * addedpositiontags;
-
-		// this list holds all the position tags that have been removed in the last
-		// operation on the Voice with the state.
-		PositionTagList * removedpositiontags;
-
-		// this list holds all the position tags that are currently active.
-		PositionTagList * curpositiontags;
 
 		GuidoPos vpos; // Position within the voice
 
@@ -125,6 +115,19 @@ class ARMusicalVoiceState
 
 		ARMusicalVoiceState * chordState;
 		ARMusicalVoiceState * prevchordState;
+
+	private:
+		// these describe those position tags that have been Added in the last
+		// operation on the Voice with the given state.
+		PositionTagList * addedpositiontags;
+
+		// this list holds all the position tags that have been removed in the last
+		// operation on the Voice with the state.
+		PositionTagList * removedpositiontags;
+
+		// this list holds all the position tags that are currently active.
+		PositionTagList * curpositiontags;
+	
 };
 
 #endif
