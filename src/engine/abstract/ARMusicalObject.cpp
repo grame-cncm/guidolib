@@ -76,8 +76,7 @@ void ARMusicalObject::print(std::ostream & os) const
 
 std::ostream & operator<<(std::ostream& os, const ARMusicalObject* o)
 {
-	const ARMusicalTag * mt = dynamic_cast<const ARMusicalTag *>(o);
-	if (mt) mt->print(os);
+	if (o) o->print(os);
 	return os;
 }
 
