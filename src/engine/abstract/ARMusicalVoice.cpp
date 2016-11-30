@@ -78,6 +78,7 @@ using namespace std;
 #include "ARSymbol.h"
 #include "ARFeatheredBeam.h"
 #include "ARTremolo.h"
+#include "AROctava.h"
 
 #include "ARPossibleBreak.h"
 
@@ -1047,29 +1048,17 @@ void ARMusicalVoice::doAutoStuff1()
 {
 	timebench("doAutoDispatchLyrics", doAutoDispatchLyrics());
 
-
-
 	// introduce barlines ...
 	// this breaks notes if needed the new barlines are put right before
 	// newSystem or newPage-Tags (if present) otherwise right before the event.
-	
-	//cout<<"avant autoBarLines"<<endl;
-	//this->operator<< (cout);
-	
 	timebench("doAutoBarlines", doAutoBarlines());
 
     // (jfk) moved 
     // introduce naturalkeys ...
     timebench("doAutoKeys", doAutoKeys());
 
-    
-
 	// introduce mesures numbering	
 	timebench("doAutoMeasuresNumbering", doAutoMeasuresNumbering());
-
-	
-	//cout<<endl<<"après"<<endl;
-	//this->operator<< (cout);
 
 	// this needs to be done just after the global voice-check has been done ...
 	// now we can check, whether newSystem and newPage are followed by correct clef/key
@@ -1113,8 +1102,8 @@ void ARMusicalVoice::doAutoStuff2()
 	timebench("doAutoTies", doAutoTies());
 	timebench("doAutoFeatheredBeam", doAutoFeatheredBeam());
 	timebench("doAutoEndBar", doAutoEndBar());
-	//this->operator<< (cout);
 	timebench("doAutoGlissando", doAutoGlissando());
+	timebench("checkpbreak", checkpbreak());
 }
 
 //____________________________________________________________________________________
@@ -1284,6 +1273,41 @@ GuidoPos ARMusicalVoice::getLastEventPosition()
 }
 
 //____________________________________________________________________________________
+void ARMusicalVoice::checkpbreak()
+{
+//cerr << "ARMusicalVoice::checkpbreak " << endl;
+//	GuidoPos ptagpos = mPosTagList->GetHeadPosition();
+//	if (ptagpos) {
+//		while (ptagpos) {
+//			ARPositionTag* ptag = mPosTagList->GetNext(ptagpos);
+//
+//		}
+//	}
+
+	ownselements = 0;
+	GuidoPos pos = ObjectList::GetHeadPosition();
+	AROctava* octava = 0;
+	while (pos) {
+		ARMusicalObject* obj = ObjectList::GetNext(pos);
+		if (obj->isAROctava())
+			octava = obj->isAROctava();
+		if (octava) {		// there is  pending octava
+			if (!octava->getOctava()) octava = 0;
+			else {
+				if (obj->isARNote() || obj->isARRest())
+					octava = 0;			// there is a note before the possible break, nothing to reorder
+				else if (obj->isARPossibleBreak()) {
+					// here we need to reorder put the octava after the break;
+					ObjectList::RemoveElement(octava);
+					ObjectList::AddElementAt(pos, octava);
+				}
+			}
+		}
+	}
+	ownselements = 1;
+}
+
+//____________________________________________________________________________________
 /** \brief Converts the voice into Normal-Form
 
 OK: Attention: What about Tags within Chords (I have not thought about this yet)
@@ -1328,115 +1352,83 @@ stop traversing the mPosTagList, when either LA_ev2 or RA_ev? (that is RA != RA_
 */
 void ARMusicalVoice::ConvertToNormalForm()
 {
-//	ofstream myfstr("voice0.out");
-//	this->operator<<(myfstr);
-//	myfstr.close();
-
-	// now we do the "REAL" algorithm for the
-	// current working set of the mPosTagList....
-
+	// now we do the "REAL" algorithm for the current working set of the mPosTagList....
 	// this temporarily removes the ownership
+	_readmode oldreadmode = readmode;
+	readmode = EVENTMODE;
 
-_readmode oldreadmode = readmode;
-readmode = EVENTMODE;
+	if (mPosTagList) {
+		mPosTagList->setOwnership(0);
+		GuidoPos ptagpos = mPosTagList->GetHeadPosition();
+		if (ptagpos) {
+			GuidoPos pos = ObjectList::GetHeadPosition();
+			GuidoPos prevpos = NULL;
+			while (pos) {
+				ARMusicalEvent * armev = ARMusicalEvent::cast(ObjectList::GetAt(pos));
+				if (armev) {
+					// now we have two eventpositions that is prevpos and pos
+					// FRA stores the First Right Association
+					GuidoPos FRA = NULL;
+					GuidoPos ptagprevpos = NULL;
 
-if (mPosTagList)
-{
-	mPosTagList->setOwnership(0);
-
-	GuidoPos ptagpos = mPosTagList->GetHeadPosition();
-
-	if (ptagpos)
-	{
-		GuidoPos pos = ObjectList::GetHeadPosition();
-		GuidoPos prevpos = NULL;
-		while (pos)
-		{
-			ARMusicalEvent * armev = ARMusicalEvent::cast(
-													ObjectList::GetAt(pos));
-			if (armev)
-			{
-				// now we have two eventpositions
-				// that is prevpos and pos
-
-				// FRA stores the First Right Association
-				//
-
-				GuidoPos FRA = NULL;
-				GuidoPos ptagprevpos = NULL;
-
-				while (ptagpos)
-				{
-					ARPositionTag *ptag = mPosTagList->GetAt(ptagpos);
-                    ARMusicalTag  *armt = dynamic_cast<ARMusicalTag *>(ptag);
-					if (armt)
-					{
-						if ( (armt->getAssociation() != ARMusicalTag::LA &&
-							armt->getAssociation() != ARMusicalTag::RA)
-							|| ptag->getCorrespondence() == NULL)
+					while (ptagpos)	{
+						ARPositionTag *ptag = mPosTagList->GetAt(ptagpos);
+						ARMusicalTag  *armt = dynamic_cast<ARMusicalTag *>(ptag);
+						if (armt)
 						{
-							// these position tags are removed ....
-							// maybe they should be saved somewhere ?
-							// BUT: NormalForm is a
-							// SEMANTIC operation anyways!
-
-							mPosTagList->setOwnership(1);
-							mPosTagList->RemoveElementAt(ptagpos);
-							mPosTagList->setOwnership(0);
-							if (ptagprevpos == NULL)
-								ptagpos = mPosTagList->GetHeadPosition();
-							else
+							if ( (armt->getAssociation() != ARMusicalTag::LA && armt->getAssociation() != ARMusicalTag::RA)
+								|| ptag->getCorrespondence() == NULL)
 							{
-								ptagpos = ptagprevpos;
-								mPosTagList->GetNext(ptagpos);
+								// these position tags are removed .... maybe they should be saved somewhere ?
+								// BUT: NormalForm is a SEMANTIC operation anyways!
+
+								mPosTagList->setOwnership(1);
+								mPosTagList->RemoveElementAt(ptagpos);
+								mPosTagList->setOwnership(0);
+								if (ptagprevpos == NULL)
+									ptagpos = mPosTagList->GetHeadPosition();
+								else
+								{
+									ptagpos = ptagprevpos;
+									mPosTagList->GetNext(ptagpos);
+								}
+								continue;
 							}
-							continue;
 						}
-					}
-					ARTagEnd * artgend = ARTagEnd::cast(ptag);
-					if ((artgend == 0) && ptag->getPosition() != pos)
-					{
-						// we have a continuation ....
-						break;
-					}
-					if (artgend && artgend->getPosition() != prevpos)
-					{
-						// continuation
-						break;
-					}
+						ARTagEnd * artgend = ARTagEnd::cast(ptag);
+						if ((artgend == 0) && ptag->getPosition() != pos)
+						{
+							// we have a continuation ....
+							break;
+						}
+						if (artgend && artgend->getPosition() != prevpos)
+						{
+							// continuation
+							break;
+						}
 
-					if (artgend && FRA != NULL)
-					{
-						// shift the LeftAssociated ...
-						assert(ptagprevpos != NULL);
+						if (artgend && FRA != NULL)
+						{
+							// shift the LeftAssociated ...
+							assert(ptagprevpos != NULL);
+							mPosTagList->RemoveElementAt(ptagpos);
+							mPosTagList->AddElementAt(FRA,ptag);
 
-						mPosTagList->RemoveElementAt(ptagpos);
-						mPosTagList->AddElementAt(FRA,ptag);
+							ptagpos = ptagprevpos;
 
-						ptagpos = ptagprevpos;
-
-					}
-					if (!artgend && FRA == NULL)
-					{
-						FRA = ptagpos;
-					}
-
-					ptagprevpos = ptagpos;
-					mPosTagList->GetNext(ptagpos);
-
-				} // while ptagpos
-
-				prevpos = pos;
+						}
+						if (!artgend && FRA == NULL)
+							FRA = ptagpos;
+						ptagprevpos = ptagpos;
+						mPosTagList->GetNext(ptagpos);
+					} // while ptagpos
+					prevpos = pos;
+				}
+				ObjectList::GetNext(pos);
 			}
-
-
-			ObjectList::GetNext(pos);
-		}
-	} // if (ptagpos)
-
-	mPosTagList->setOwnership(1);
+		} // if (ptagpos)
+		mPosTagList->setOwnership(1);
 	}
-
 	readmode = oldreadmode;
 }
 
@@ -3326,19 +3318,6 @@ continue with the next event.
 */
 void ARMusicalVoice::doAutoDisplayCheck()
 {
- 	//static int counter = 0;
-
-//	if (voicenum==2 && counter == 16)
-//	{
-//	char name[120];
-//	sprintf(name,"voice%d_before.out",counter+1);
-//	ofstream myfstr(name);
-//	myfstr << "doautodisplaycheck " << endl;
-
-//	this->operator<<(myfstr);
-//	myfstr.close();
-//	}
-
 	// an id for the introduced ties ...
 	// needs to be elaborated so that collisions with local ids are vermieden
 	// int autotie = 100;
@@ -4003,16 +3982,6 @@ void ARMusicalVoice::doAutoDisplayCheck()
 		curbase = NULL;
 		autotuplet = NULL;
 	}
-
-//	{
-//	counter++;
-//	char name[120];
-//	sprintf(name,"voice%d.out",counter);
-//	ofstream myfstr(name);
-//	myfstr << "doautodisplaycheck" << endl;
-//	this->operator<<(myfstr);
-//	myfstr.close();
-//	}
 }
 
 //____________________________________________________________________________________
@@ -4413,20 +4382,6 @@ void ARMusicalVoice::doAutoCheckStaffStateTags()
 */
 void ARMusicalVoice::SplitEventAtPos( ARMusicalVoiceState & vst, const TYPE_TIMEPOSITION & tp, int /*tieormerge*/)
 {
-/* 	static int counter = 0;
-
-	if (voicenum==2 && counter == 16)
-	{
-	char name[120];
-	sprintf(name,"voice%d_before.out",counter+1);
-	ofstream myfstr(name);
-	myfstr << "splitevent, tp " << tp.getNumerator() << "\"
-		<< tp.getDenominator() << endl;
-	this->operator<<(myfstr);
-	myfstr.close();
-	}
-	*/
-
 	// a number for the automatic ties ...
 	// int autotie = 38001;
 

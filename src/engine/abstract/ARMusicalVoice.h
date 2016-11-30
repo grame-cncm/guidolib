@@ -243,7 +243,10 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		bool			beamOnBeat(const TYPE_TIMEPOSITION t, const TYPE_DURATION meter, const std::vector<int>& numvec) const;
 		bool			beamCrossBeat(const TYPE_TIMEPOSITION beamstart, const TYPE_DURATION beamdur, const TYPE_DURATION meter, const std::vector<int>& numvec) const;
 		ARMusicalEvent* beamNextEv (const GuidoPos pos, const ARMusicalVoiceState) const;
-
+	
+		// reorder tags before a possible break to put them after the break:
+		// tags handled are: octava
+		void			checkpbreak();
         std::vector<ARRepeatBegin *> *repeatBeginList;
 };
 
