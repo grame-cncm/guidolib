@@ -16,9 +16,8 @@
 */
 
 #include "TagParameterString.h"
-#include "GRPTagARNotationElement.h"
-//#include "GRNotationElement.h"
-//#include "GRTag.h"
+#include "GRNotationElement.h"
+#include "GRPositionTag.h"
 
 class NVstring;
 class GRStaff;
@@ -28,26 +27,27 @@ class AROctava;
 
 /** \brief not yet documented
 */
-class GROctava : public GRPTagARNotationElement //GRNotationElement, public GRTag
+class GROctava : public GRNotationElement, public GRPositionTag
 {
-  public:
-					 GROctava( GRStaff *, const NVstring & txt, AROctava* aroct );
-//					 GROctava( GRStaff *, const NVstring & txt, bool bassa );
+	public:
+					 GROctava( GRStaff *, const NVstring & txt, bool bassa );
 		virtual 	~GROctava();
 
-	 	virtual void tellPosition(GObject *caller, const NVPoint & );
-	  	virtual void addAssociation(GRNotationElement *el);
+		virtual void tellPosition(GObject *caller, const NVPoint & );
+//		virtual void addAssociation(GRNotationElement *el);
 		virtual void GGSOutput() const;
 		virtual void OnDraw( VGDevice & hdc ) const;
-        virtual void setColRef(const TagParameterString *tps);
-			
-		
-  protected:
-  	
-  	GRStaff *	fStaff;
-    NVstring 	fText;
-	bool		fBassa;
-	GRNotationElement * fElement;
+		virtual void setColRef(const TagParameterString *tps);
+	
+	private:
+		int		countSegments();
+		NVRect	getExtensionLine (const NEPointerList * assoc, int num) const;
+
+		GRStaff *	fStaff;
+		NVstring 	fText;
+		bool		fBassa;
+		float		fTextHeight;
+		int			fSegmentsCount;
 };
 
 #endif
