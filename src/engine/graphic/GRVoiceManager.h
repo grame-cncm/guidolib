@@ -106,21 +106,18 @@ protected:
 
 	GRVoice * grvoice;
 	// this remembers the current stemstate in the current voice.
-	// ARTStem::STEMSTATE stemstate;
 	ARTStem * curstemstate;
 	ARTHead * curheadstate;
 
 	int voicenum;
 	GREvent * lastev;
-//	GColor mColor;
 
 	GRChordTag *		curchordtag;
 	GRGlobalStem *		curglobalstem;
 	GRGlobalLocation *	curgloballocation;
 
 //	virtual void addStartPTags();
-		
-	
+
 	ARMusicalEvent* curev;
 	GRStaff *		mCurGrStaff;
 	ARMusicalVoice* arVoice;
@@ -145,18 +142,15 @@ protected:
 	virtual void checkStartPTags(GuidoPos tstpos);
 	virtual void checkEndPTags(GuidoPos tstpos);
 
-	GRTagPointerList * grtags;
-	GRTagPointerList * nlinegrtags; // remembered for
-	// the nline-state ...
+	GRTagPointerList * getGRTags()	{ return fGRTags; }
+	GRTagPointerList * nlinegrtags; // remembered for the nline-state ...
 
 	GRNotationElement * parseTag(ARMusicalObject * arOfCompleteObject);
 	void parsePositionTag(ARPositionTag * apt);
 	bool parseStateTag(ARMusicalTag * mtag);
 	bool checkRepeatBeginNext();
 
-
 	GRTagPointerList * toadd;
-
 	
     // - for clusters
     int mCurrentClusterNoteNumber;
@@ -165,8 +159,9 @@ private:
 	// this is needed for determining the elements that are centered in a bar like whole-note-rests
 	GREvent *				fLastnonzeroevent;
 	GRBar *					fLastbar;
-//	ARMusicalVoiceState *	curvst;
+	GROctava*				fLastOctava;
 	ARMusicalVoiceState *	fVoiceState;
+	GRTagPointerList *		fGRTags;
 	
 
 	GRSingleNote *	CreateSingleNote	(const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject, float size=0, bool isGrace=false);

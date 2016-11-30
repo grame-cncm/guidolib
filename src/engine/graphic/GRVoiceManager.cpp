@@ -195,8 +195,8 @@ GRVoiceManager::GRVoiceManager(GRStaffManager * p_staffmgr,
 	mCurGrStaff = NULL;
 	grvoice = gCurMusic->getVoice(arVoice);
 
-
-	grtags = NULL;
+	fLastOctava = NULL;
+	fGRTags = NULL;
 
 	lastev = NULL;
 
@@ -213,7 +213,7 @@ GRVoiceManager::GRVoiceManager(GRStaffManager * p_staffmgr,
 GRVoiceManager::~GRVoiceManager()
 {
 	delete toadd;	toadd = 0;
-	delete grtags;	grtags = 0;
+	delete fGRTags;	fGRTags = 0;
 	delete fVoiceState;	fVoiceState = 0;
 }
 
@@ -353,7 +353,7 @@ void GRVoiceManager::BeginManageVoice()
 	// that the graphical representation "knows", which tags belong
 	// to it.
 
-	grtags = new GRTagPointerList();
+	fGRTags = new GRTagPointerList();
 	
 	
 	// the currently active tags can 
@@ -387,7 +387,7 @@ void GRVoiceManager::BeginManageVoice()
 	// no longer needed 
 	// grnotefactory->setGRStaff(mCurGrStaff);
 
-	// mCurGrStaff->setTagList(grtags);
+	// mCurGrStaff->setTagList(fGRTags);
 
 	// these are the positiontags that are open now 
 
@@ -875,7 +875,7 @@ void GRVoiceManager::EndManageVoice(const TYPE_TIMEPOSITION & tp)
 				// These Ranges are now in the ptaglist, that
 				// have an end-position, that matches the
 				// current-position. -> now put them in the
-				// grtags, so that stafffinished is called for
+				// fGRTags, so that stafffinished is called for
 				// them.
 				
 				NEPointerList * mylst = g->getAssociations();
@@ -915,10 +915,10 @@ void GRVoiceManager::EndManageVoice(const TYPE_TIMEPOSITION & tp)
   // handle tags, that have not been closed yet...
   // open ranges must be saved for the next system, so that closing ranges
   // are not hurt...
-  pos = grtags->GetHeadPosition();
+  pos = fGRTags->GetHeadPosition();
   while (pos)
   {
-	grtags->GetNext(pos);
+	fGRTags->GetNext(pos);
   }
 
   // Now freeze the VoiceState...
@@ -1233,8 +1233,10 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 	else if (tinf == typeid(AROctava))
 	{
 		AROctava * tmp = static_cast<AROctava *>(arOfCompleteObject);
-cerr << "GRVoiceManager::parseTag AROctava" << endl;
-		grne = mCurGrStaff->AddOctava(tmp);
+		if (fLastOctava) fGRTags->RemoveElement(fLastOctava);
+		fLastOctava = mCurGrStaff->AddOctava(tmp);
+		addGRTag (fLastOctava);
+		grne = fLastOctava;
 		gCurMusic->addVoiceElement(arVoice,grne);
 	}
 	else if (tinf == typeid(ARChordComma))
@@ -1761,14 +1763,14 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 void GRVoiceManager::checkEndPTags(GuidoPos tstpos)
 {
 	// the following deletes the Tags which have matching end-Positions
-	GuidoPos mpos = grtags->GetHeadPosition();
+	GuidoPos mpos = fGRTags->GetHeadPosition();
 	GRTag * g;
 
 	while (mpos)
 	{
 		GuidoPos curpos = mpos;
 
-		g = grtags->GetNext(mpos);
+		g = fGRTags->GetNext(mpos);
 
 		GRPositionTag * gpt = dynamic_cast<GRPositionTag *>(g);
 		if( gpt )
@@ -1791,7 +1793,7 @@ void GRVoiceManager::checkEndPTags(GuidoPos tstpos)
 					{
 						// then we have another stem...
 						curglobalstem->RangeEnd(mCurGrStaff);
-						grtags->RemoveElement(curglobalstem);
+						fGRTags->RemoveElement(curglobalstem);
 					}
 					curglobalstem = NULL;
 				}
@@ -1815,11 +1817,11 @@ void GRVoiceManager::checkEndPTags(GuidoPos tstpos)
 					organizeBeaming(g);
 				}
 				g->RangeEnd(mCurGrStaff);
-				grtags->RemoveElementAt(curpos);
+				fGRTags->RemoveElementAt(curpos);
 				// now remove the special nlinestuff
 				// removeNLineTag(g);
 				
-				mpos = grtags->GetHeadPosition();
+				mpos = fGRTags->GetHeadPosition();
 			}
 		}
 	}
@@ -1846,12 +1848,12 @@ void GRVoiceManager::rememberLastNLinePosition( const TYPE_TIMEPOSITION & tp)
 */
 void GRVoiceManager::addGRTag(GRTag * grtag,int head)
 {
-	if (grtags)
+	if (fGRTags)
 	{
 		if (head)
-			grtags->AddHead(grtag);
+			fGRTags->AddHead(grtag);
 		else
-			grtags->AddTail(grtag);
+			fGRTags->AddTail(grtag);
 	}
 }
 
@@ -1860,16 +1862,16 @@ GRStaff * GRVoiceManager::getCurStaff() const
 	return mCurGrStaff;
 }
 
-/** \brief This routine removes the associations from the 
-	grtags that have been added.
+/** \brief This routine removes the associations from the
+	fGRTags that have been added.
 */
 void GRVoiceManager::removeAssociations(const NEPointerList & nl)
 {
 	// Associate the note with the current tags...
-	GuidoPos pos = grtags->GetHeadPosition();
+	GuidoPos pos = fGRTags->GetHeadPosition();
 	while (pos)
 	{
-		GRNotationElement * el =  dynamic_cast<GRNotationElement *>(grtags->GetNext(pos));
+		GRNotationElement * el =  dynamic_cast<GRNotationElement *>(fGRTags->GetNext(pos));
 		if (el)
 			el->removeAssociation(nl);
 	}
@@ -1970,10 +1972,10 @@ GRSingleNote * GRVoiceManager::CreateSingleNote( const TYPE_TIMEPOSITION & tp, A
 
 
 	// Associate the note with the current tags...
-	GuidoPos pos = grtags->GetHeadPosition();
+	GuidoPos pos = fGRTags->GetHeadPosition();
 	while (pos)
 	{
-		GRNotationElement * el = dynamic_cast<GRNotationElement *>(grtags->GetNext(pos));
+		GRNotationElement * el = dynamic_cast<GRNotationElement *>(fGRTags->GetNext(pos));
 		if (el)	{
 			GRRange * r = dynamic_cast<GRRange *>(el);
 			ARAccidental* acc = r ? dynamic_cast<ARAccidental*>(r->getAbstractRepresentation()) : 0;
@@ -2063,10 +2065,10 @@ GREvent * GRVoiceManager::CreateRest( const TYPE_TIMEPOSITION & tp, ARMusicalObj
 		
 
 		// Associate the rest with the current tags...
-		GuidoPos pos = grtags->GetHeadPosition();
+		GuidoPos pos = fGRTags->GetHeadPosition();
 		while (pos)
 		{
-			GRNotationElement * el = dynamic_cast<GRNotationElement *>(grtags->GetNext(pos));
+			GRNotationElement * el = dynamic_cast<GRNotationElement *>(fGRTags->GetNext(pos));
 			if (el)
 				el->addAssociation(grrest);
 		}
@@ -2085,10 +2087,10 @@ GREvent * GRVoiceManager::CreateEmpty( const TYPE_TIMEPOSITION & tp, ARMusicalOb
 
 	GREmpty * grempty = new GREmpty(mCurGrStaff, ev, tp, arObject->getDuration());
 	// the associations have to be handled just the same...
-	GuidoPos pos = grtags->GetHeadPosition();
+	GuidoPos pos = fGRTags->GetHeadPosition();
 	while (pos) 
 	{
-		GRNotationElement * el = dynamic_cast<GRNotationElement *>(grtags->GetNext(pos));
+		GRNotationElement * el = dynamic_cast<GRNotationElement *>(fGRTags->GetNext(pos));
 		if (el)		el->addAssociation(grempty);
 	}
 	mCurGrStaff->addNotationElement(grempty);
@@ -2125,10 +2127,10 @@ float GRVoiceManager::GetBreakScore(const TYPE_TIMEPOSITION & tp)
 
 void GRVoiceManager::closeOpenTags()
 {
-  GuidoPos pos = grtags->GetHeadPosition();
+  GuidoPos pos = fGRTags->GetHeadPosition();
   while (pos)
   {
-	GRTag * el = grtags->GetNext(pos);
+	GRTag * el = fGRTags->GetNext(pos);
 	el->StaffFinished(mCurGrStaff);
   }
 
@@ -2137,7 +2139,7 @@ void GRVoiceManager::closeOpenTags()
   // them again...
 
   // this removes all the tags...
-  // grtags->RemoveAll();
+  // fGRTags->RemoveAll();
 
 }
 
@@ -2147,13 +2149,13 @@ void GRVoiceManager::closeOpenTags()
 */
 void GRVoiceManager::beginOpenTags()
 {
-	// just look at the grtags...
-	if (grtags == 0) return;
+	// just look at the fGRTags...
+	if (fGRTags == 0) return;
 
-	GuidoPos pos = grtags->GetHeadPosition();
+	GuidoPos pos = fGRTags->GetHeadPosition();
 	while (pos)
 	{
-		GRTag * tag = grtags->GetNext(pos);
+		GRTag * tag = fGRTags->GetNext(pos);
 		if (tag)
 		{
 			tag->StaffBegin(mCurGrStaff);
@@ -2173,10 +2175,10 @@ void GRVoiceManager::setGRStaff(GRStaff * newstaff)
 	// this must be reflected in the OPEN Tags as-well
 	// otherwise the SSE-Lookup will not work !
 	assert(false);
-	GuidoPos mypos = grtags->GetHeadPosition();
+	GuidoPos mypos = fGRTags->GetHeadPosition();
 	while (mypos)
 	{
-		GRTag * tag = grtags->GetNext(mypos);
+		GRTag * tag = fGRTags->GetNext(mypos);
 		GRPositionTag * grpt = dynamic_cast<GRPositionTag *>(tag);
 		if (grpt)
 			grpt->changeCurrentSystem(newstaff->getGRSystem());
@@ -2301,10 +2303,10 @@ void GRVoiceManager::organizeBeaming(GRTag * grb)
 	GRBeam * caller = dynamic_cast<GRBeam *>(grb);
 	if(!caller)
 		return;
-	GuidoPos pos = grtags->GetHeadPosition();
+	GuidoPos pos = fGRTags->GetHeadPosition();
 	while(pos)
 	{
-		GRTag * tag = grtags->GetNext(pos);
+		GRTag * tag = fGRTags->GetNext(pos);
 		GRBeam * beam = dynamic_cast<GRBeam *>(tag);
 		bool same = false;
 		if(beam)
