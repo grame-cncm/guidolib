@@ -51,7 +51,7 @@ public:
 
     static ARMusicalEvent * cast( ARMusicalObject * inObj ) { return (inObj->isEventClass() ? static_cast<ARMusicalEvent *>(inObj) : 0 ); }
 
-            void print(std::ostream& os) const;
+    virtual void print(std::ostream& os) const;
     virtual void printName(std::ostream& os) const       { os << "ARMusicalEvent "; }
     virtual void printGMNName(std::ostream& os) const    { os << "\\musicalEvent "; }
     virtual void printParameters(std::ostream& os) const { os << "params "; }
