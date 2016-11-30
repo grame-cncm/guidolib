@@ -597,14 +597,26 @@ NVRect GRSingleNote::getEnclosingBox() const
 		r += el->getPosition();
 		outrect.Merge (r);
 	}
+
 	if (fOrnament) {
 		NVRect r = fOrnament->getEnclosingBox();
 		outrect.Merge (r);
 	}
+	// not all the ornaments are stored in the fOrnament field 
+	const NEPointerList * assoc = getAssociations();
+	GuidoPos pos = assoc ? assoc->GetHeadPosition() : 0;
+	while (pos) {
+		const GRNotationElement* el = getAssociations()->GetNext(pos);
+		const GRTrill * trill = dynamic_cast<const GRTrill *>(el);
+		if (trill) {
+			NVRect r = trill->getEnclosingBox();
+			outrect.Merge (r);
+		}
+	}
 
 	GRAccidentalList accList;
 	extractAccidentals( &accList );
-	GuidoPos pos = accList.GetHeadPosition();
+	pos = accList.GetHeadPosition();
 	while (pos) {
 		GRNotationElement * e = accList.GetNext(pos);
 		NVRect r = e->getBoundingBox();
@@ -619,8 +631,8 @@ void GRSingleNote::setHPosition( GCoord nx )
 {
 	GRNote::setHPosition(nx);
 	// - Notify ornament
-//	if (fOrnament)
-//		fOrnament->tellPosition(this, getPosition());
+	if (fOrnament)
+		fOrnament->tellPosition(this, getPosition());
     // - Notify cluster
     if (fCluster)
 		fCluster->tellPosition(this, getPosition());
@@ -634,8 +646,8 @@ void GRSingleNote::setPosition( const NVPoint & inPos )
 	GRNote::setPosition( inPos );
 
 	// - Notify Ornament
-//	if (fOrnament)
-//		fOrnament->tellPosition(this, getPosition());
+	if (fOrnament)
+		fOrnament->tellPosition(this, getPosition());
     // - Notify cluster
     if (fCluster)
         fCluster->tellPosition(this, getPosition());
@@ -1197,14 +1209,6 @@ void GRSingleNote::addArticulation(ARMusicalTag * mtag)
 */
 void GRSingleNote::tellPosition( GObject * caller, const NVPoint & inPos )
 {
-	NEPointerList * assoc = getAssociations();
-	GuidoPos pos = assoc ? assoc->GetHeadPosition() : 0;
-	while (pos) {
-		const GRNotationElement* el = getAssociations()->GetNext(pos);
-		const GRTrill * trill = dynamic_cast<const GRTrill *>(el);
-		if (trill) fOrnament = trill;
-	}
-	
 	// this is a security-measure, otherwise, we could get recursive calling loops (because setHPosition
 	// calls associated elements, which could themselves again call tellPosition ...)
 	if ((mNeedsSpring == 0) && (mSpringID == -1))
