@@ -49,7 +49,7 @@ public:
 
             int			getIsAuto() const;
             TAGTYPE		getTagType() const      { return tagtype; }
-            int			getError();
+            int			getError() const;
             bool		IsStateTag() const;
 	virtual const NVPoint& getOffset() const    { return mTagOffset; }
 	virtual float       getSize() const         { return mTagSize; }
@@ -62,6 +62,7 @@ public:
 	virtual int                     getFontSize() const     { return mFontSize; }
 	virtual const unsigned char *   getColRef() const       { return mColRef; }
 
+	virtual void        print(std::ostream& os) const       {}
 	virtual void        setSConst(float val)                { sconst = val; }
             void		setTagType(TAGTYPE ntyp)            { tagtype = ntyp; }
             void		setError(int p_error);
@@ -90,5 +91,7 @@ protected:
 	//int openRightRange;
 	//int openLeftRange;
 };
+
+std::ostream& operator<< (std::ostream& os, const GRTag* tag);
 
 #endif

@@ -73,47 +73,22 @@ GRTag::~GRTag()
 	delete fontAttrib;
 }
 
-void GRTag::RangeEnd(GRStaff * grstaff)
+std::ostream& operator<< (std::ostream& os, const GRTag* tag)
 {
+	tag->print(os);
+	return os;
 }
 
-void GRTag::StaffFinished(GRStaff * grstaff)
-{
-}
-
-void GRTag::StaffBegin(GRStaff * grstaff)
-{
-} 
-
-
-int GRTag::getError()
-{
-	return error;
-}
+void GRTag::RangeEnd(GRStaff * grstaff)			{}
+void GRTag::StaffFinished(GRStaff * grstaff)	{}
+void GRTag::StaffBegin(GRStaff * grstaff)		{}
+int GRTag::getError() const						{ return error; }
 
 // changed: the abstract representation
 // is no longer notified ....
 // errors are not brought back from graphics ...
-void GRTag::setError(int p_error)
-{
-	error = p_error;
-	/* if (artag && error != 0)
-	{
-		artag->setError();
-	} */
-}
+void GRTag::setError(int p_error)		{ error = p_error; }
+bool GRTag::IsStateTag() const			{ return (tagtype == STAFFTAG); }
+int  GRTag::getIsAuto() const			{ return isautotag; }
+bool GRTag::operator==(const GRTag & tag) const	{ return false; }
 
-bool GRTag::IsStateTag() const
-{
-	return (tagtype == STAFFTAG);
-}
-
-int GRTag::getIsAuto() const
-{
-	return isautotag;
-}
-
-bool GRTag::operator==(const GRTag & tag) const
-{
-	return false;
-} 
