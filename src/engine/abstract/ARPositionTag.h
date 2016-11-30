@@ -51,16 +51,13 @@ class ARPositionTag : public Visitable
 			}
 		}
 #endif
-		virtual ARMusicalObject * Copy() const { return 0; }
+		virtual ARMusicalObject * Copy() const			{ return 0; }
 
-		virtual void setPosition(GuidoPos p_pos)	{ pos = p_pos ;  }
-		virtual GuidoPos getPosition() const		{ return pos; }
-		virtual GuidoPos getStartPosition() const	{ return pos; }
+		virtual void setPosition(GuidoPos p_pos)		{ pos = p_pos ;  }
+		virtual GuidoPos getPosition() const			{ return pos; }
+		virtual GuidoPos getStartPosition() const		{ return pos; }
 
-		virtual void setStartPosition(GuidoPos p_pos) 
-		{
-			pos = p_pos;
-		}
+		virtual void setStartPosition(GuidoPos p_pos)	{ pos = p_pos; }
 
 		virtual GuidoPos getEndPosition() const
 		{
@@ -90,20 +87,15 @@ class ARPositionTag : public Visitable
 #endif
 		}
 
-		virtual ARPositionTag * getCorrespondence()
-		{
-			return mPositionTag;
-		}
+		virtual ARPositionTag * getCorrespondence()					{ return mPositionTag; }
 
 #if !oldv
-		virtual void setParentCorrespondence(ARPositionTag *parent)
-		{
-			mParentCorrespondence = parent;
-		}
+		virtual void setParentCorrespondence(ARPositionTag *parent)	{ mParentCorrespondence = parent; }
 #endif
-		virtual bool	isEndTagClass() const { return false; }
+		virtual bool	isEndTagClass() const						{ return false; }
 
-                void	print(std::ostream & os) const { printName(os); os << ": "; printParameters(os); os << std::endl; }
+        virtual void	print(std::ostream & os) const
+						{ printName(os); os << ": "; printParameters(os); }
 		virtual void	printGMNName(std::ostream & os)    const = 0;
 		virtual void	printName(std::ostream & os)       const = 0;
 		virtual void	printParameters(std::ostream & os) const = 0;
@@ -127,6 +119,9 @@ protected:
 		ARPositionTag * mParentCorrespondence;
 #endif
 };
+
+inline std::ostream& operator<< (std::ostream& os, const ARPositionTag* e)		{ e->print(os); return os; }
+
 
 #endif
 
