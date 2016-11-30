@@ -162,10 +162,22 @@ GRTrill::~GRTrill()
 	delete fAccidental;
 }
 
+NVRect GRTrill::getEnclosingBox() const		// gives a rect that enclose the ornament including accidentals
+{
+	NVRect outrect = getBoundingBox();
+	outrect += getPosition();
+	if (fAccidental) {
+		NVRect r = fAccidental->getBoundingBox();
+		r *= fAccidental->getSize();
+		r += fAccidental->getPosition();
+		outrect.Merge(r);
+	}
+	return outrect;
+}
 
 /** \brief Manage the drawing of trill line
 */
-void GRTrill::OnDraw(VGDevice & hdc , float right, float noteY, int nVoice)
+void GRTrill::OnDraw(VGDevice & hdc , float right, float noteY, int nVoice) const
 {
 	VGColor oldColor = hdc.GetFontColor();
 	

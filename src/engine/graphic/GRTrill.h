@@ -34,8 +34,9 @@ class GRTrill : public GRPTagARNotationElement
 		virtual		~GRTrill();
 
 		virtual void OnDraw( VGDevice & hdc) const;
-		virtual void OnDraw( VGDevice & hdc, float pos, float noteY, int numVoice);
+		virtual void OnDraw( VGDevice & hdc, float pos, float noteY, int numVoice) const;
         virtual void tellPosition( GObject * caller, const NVPoint & np );
+	  	NVRect		 getEnclosingBox() const;		// gives a rect that enclose the ornament including accidentals
 
 		virtual unsigned int getTextAlign() const;
 		virtual const NVPoint & getReferencePosition() const;
