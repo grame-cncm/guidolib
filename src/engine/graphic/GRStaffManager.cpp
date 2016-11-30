@@ -1281,7 +1281,7 @@ GRSpaceForceFunction2 * GRStaffManager::BuildSFF()
 	delete spm;
 	
 	// this determines, wether the last spring of the current slice is frozen (which means, it is a spring for a bar-line).
-	int isfrozen = CheckForBarSpring(mSpringID-1);
+	/*int isfrozen =*/ CheckForBarSpring(mSpringID-1);
 	// this is the function, that actually stretches the strings according to the rods.
 	InitialSpringStretch( mLastSpringID, mSpringID, mSimpleRods, mComplexRods, mSpringVector);
 	
