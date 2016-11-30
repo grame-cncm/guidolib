@@ -52,6 +52,7 @@
 
 class GObject;
 class TimeUnwrap;
+class AROctava;
 
 /** \brief The base class for all AR objects. 
 	It contains all musical information : duration and time position.
@@ -128,6 +129,7 @@ class ARMusicalObject : public Visitable
     virtual ARMusicalObject  *isARUserChordTag()  { return NULL; }
     virtual ARMusicalObject  *isARJump()          { return NULL; }
     virtual ARMusicalObject  *isARPossibleBreak() { return NULL; }
+    virtual AROctava		 *isAROctava()		  { return NULL; }
     /*****************************************/
 	// introduced to detect empty notes
 	virtual bool			 isEmptyNote() const  { return false; }
