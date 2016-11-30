@@ -73,7 +73,7 @@ class GRNote : public GREvent
     /*****************************************/
 	
 protected :
-		const GRTrill *fOrnament;
+		GRTrill *fOrnament;
         GRCluster *fCluster;
         bool fOwnCluster;
         bool fClusterNote;
