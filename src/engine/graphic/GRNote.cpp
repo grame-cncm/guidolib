@@ -62,7 +62,7 @@ GRNote::GRNote(GRStaff * grstaf, ARNote * abstractRepresentationOfNote)
 
 GRNote::~GRNote()
 {
-	delete fOrnament;
+//	delete fOrnament;
 	if (fOwnCluster) delete fCluster;
 }
 
