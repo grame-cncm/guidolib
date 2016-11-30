@@ -69,6 +69,15 @@ NVRect::Merge( const NVRect & in )
 
 }
 
+NVRect & NVRect::operator *= (float v)
+{
+	left	*= v;
+	right	*= v;
+	top		*= v;
+	bottom	*= v;
+	return *this;
+}
+
 NVRect & NVRect::operator += (const NVPoint & in)
 {
 	left += in.x;

@@ -30,7 +30,8 @@ class NVRect
 	
 				NVRect & operator +=( const NVPoint & in );
 				NVRect & operator -=( const NVPoint & in );
-				
+				NVRect & operator *=( float v );
+	
 				
 				NVRect operator +( const NVPoint & in );
 
