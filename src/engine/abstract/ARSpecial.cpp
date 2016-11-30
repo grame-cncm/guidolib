@@ -103,16 +103,6 @@ void ARSpecial::setTagParameterList(TagParameterList & tpl)
 	tpl.RemoveAll();
 }
 
-/*std::ostream & ARSpecial::operator<<(std::ostream& os) const
-{
-	os << "\\special<";
-	os << "\"\\" << (unsigned int) mDrawChar
-		<< "\"," << dx * kVirtualToCm << "cm," 
-		<< dy * kVirtualToCm << "cm,"
-		<< space * kVirtualToCm << "cm," << scale << "> ";
-	return os;
-}*/
-
 void ARSpecial::printName(std::ostream& os) const
 {
     os << "ARSpecial";
