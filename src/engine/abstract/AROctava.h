@@ -41,6 +41,7 @@ class AROctava : public ARMTParameter, public ARPositionTag
 	    virtual void printParameters(std::ostream& os) const;
 
 		virtual void setTagParameterList(TagParameterList& tpl);
+		virtual AROctava*	isAROctava()		  { return this; }
 
 	protected:
 		AROctava *			fSaveoct; // this is required to save the current octava state ...
