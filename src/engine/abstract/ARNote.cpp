@@ -272,6 +272,12 @@ void ARNote::forceNoteAppearance(NVstring noteAppearance) {
     fNoteAppearance = noteAppearance;
 }
 
+void ARNote::print(std::ostream& os) const
+{
+    printName(os);
+    printParameters(os);
+}
+
 void ARNote::printName(std::ostream& os) const
 {
     os << "ARNote";
