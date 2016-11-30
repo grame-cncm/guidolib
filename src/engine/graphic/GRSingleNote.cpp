@@ -201,11 +201,9 @@ void GRSingleNote::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& 
 //____________________________________________________________________________________
 void GRSingleNote::OnDraw( VGDevice & hdc) const
 {
-	if (!mDraw)
-		return;
+	if (!mDraw) return;
 
     int numVoice = getAbstractRepresentation()->getVoiceNum();
-
     float incy = 1;
     float posy = 0;
     int sum = mNumHelpLines;
@@ -223,26 +221,20 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
     }
 
 	const VGColor prevFontColor = hdc.GetFontColor();
-
     if (mGrStaff->getStffrmtColRef())
         hdc.SetFontColor(VGColor(mGrStaff->getStffrmtColRef()));
 
     // draw ledger lines
     const float ledXPos = - 60 * 0.85f * mSize;
-    //NVPoint noteheadOffset(getNoteHead()->getOffset()); //REM: fonctionne pour les \headsReverse et [{a2,b}] mais pas s'il y a
-                                                          //décalage \noteFormat<dx=X> : [\noteFormat<dx=-2> c] par exemple
     for (int i = 0; i < sum; ++i, posy += incy)
-        GRNote::DrawSymbol(hdc, kLedgerLineSymbol, ledXPos/* + noteheadOffset.x*/, (posy - mPosition.y)); // REM: the ledger line width can't change with staffFormat width
-                                                                                                          //      because it's drawn with the font, not with a line
-
+        GRNote::DrawSymbol(hdc, kLedgerLineSymbol, ledXPos, (posy - mPosition.y)); // REM: the ledger line width can't change with staffFormat width
+                                                                                   //      because it's drawn with the font, not with a line
     if (mGrStaff->getStffrmtColRef())
         hdc.SetFontColor(prevFontColor);
-
 	if (fCluster)
 		getNoteHead()->setHaveToBeDrawn(false);
 
 	const VGColor oldcolor = hdc.GetFontColor();
-
 	if (mColRef)
         hdc.SetFontColor(VGColor(mColRef));
 
@@ -594,6 +586,36 @@ ARTHead::HEADSTATE GRSingleNote::adjustHeadPosition(ARTHead::HEADSTATE sugHeadSt
 }
 
 //____________________________________________________________________________________
+NVRect GRSingleNote::getEnclosingBox() const
+{
+	NVRect outrect = getBoundingBox();
+	outrect += getPosition();
+	const GRNEList& articulations = getArticulations();
+	for (GRNEList::const_iterator ptr = articulations.begin(); ptr != articulations.end(); ++ptr) {
+		GRNotationElement *el = *ptr;
+		NVRect r = el->getBoundingBox();
+		r += el->getPosition();
+		outrect.Merge (r);
+	}
+	if (fOrnament) {
+		NVRect r = fOrnament->getBoundingBox();
+		r += fOrnament->getPosition();
+		outrect.Merge (r);
+	}
+
+	GRAccidentalList accList;
+	extractAccidentals( &accList );
+	GuidoPos pos = accList.GetHeadPosition();
+	while (pos) {
+		GRNotationElement * e = accList.GetNext(pos);
+		NVRect r = e->getBoundingBox();
+		r += e->getPosition();
+		outrect.Merge (r);
+	}
+	return outrect;
+}
+
+//____________________________________________________________________________________
 void GRSingleNote::setHPosition( GCoord nx )
 {
 	GRNote::setHPosition(nx);
@@ -668,7 +690,7 @@ GRStdNoteHead * GRSingleNote::getNoteHead() const
 }
 
 //____________________________________________________________________________________
-void GRSingleNote::extractAccidentals( GRAccidentalList * outList )
+void GRSingleNote::extractAccidentals( GRAccidentalList * outList ) const
 {
 	GuidoPos pos = First();
 	while (pos)

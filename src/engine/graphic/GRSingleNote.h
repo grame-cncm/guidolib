@@ -46,7 +46,7 @@ class GRSingleNote : public GRNote
 
 		virtual ~GRSingleNote();
 
-		virtual void addToOffset( const NVPoint & pt);
+		virtual void	addToOffset( const NVPoint & pt);
 		virtual ARTHead::HEADSTATE adjustHeadPosition(ARTHead::HEADSTATE sugHeadState = ARTHead::NORMAL);
 
 		virtual void	setHeadState(const ARTHead * headstate);
@@ -117,7 +117,8 @@ class GRSingleNote : public GRNote
 		virtual void	tellPosition( GObject * caller, const NVPoint & newPosition ); 
 
 	  	GRStdNoteHead *	getNoteHead() const;
-	  	void			extractAccidentals( GRAccidentalList * outList );
+	  	void			extractAccidentals( GRAccidentalList * outList ) const;
+	  	NVRect			getEnclosingBox() const;		// gives a rect that enclose the note, accidentals and articulations
 
         ARTHead::HEADSTATE getHeadState() { return mHeadState; }
 
