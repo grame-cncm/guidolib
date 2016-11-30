@@ -59,11 +59,8 @@ GRNotationElement::GRNotationElement()
 
 GRNotationElement::~GRNotationElement()
 {
-	// here, we need to tell "a" spring, that
-	// the element no longer belongs ...
-	// this is important for newlines that happen
-	// after the graphic-elements have been created ...
-
+	// here, we need to tell "a" spring, that the element no longer belongs ...
+	// this is important for newlines that happen after the graphic-elements have been created ...
 	if (mAssociated)
 	{
 		GuidoPos pos = mAssociated->GetHeadPosition();
@@ -73,8 +70,7 @@ GRNotationElement::~GRNotationElement()
 			el = mAssociated->GetNext(pos);
 			if (el)
 				el->removeAssociation(this);
-
-		}  
+		}
 		delete mAssociated;
 		mAssociated = 0;
   } 
@@ -133,6 +129,7 @@ void GRNotationElement::print(ostream& os) const
         os << "=> no ARMusicalObject";
 }
 std::ostream& operator<< (std::ostream& os, const GRNotationElement& e)		{ e.print(os); return os; }
+std::ostream& operator<< (std::ostream& os, const GRNotationElement* e)		{ e->print(os); return os; }
 
 // -------------------------------------------------------------------------
 void 
@@ -195,44 +192,36 @@ void GRNotationElement::GGSOutputAt( unsigned int tmptype,
 }
 
 // -------------------------------------------------------------------------
-void GRNotationElement::OnDrawText( VGDevice & hdc,  const char * cp, int inCharCount ) const
+void GRNotationElement::OnDrawText( VGDevice & hdc, NVPoint pos, const char * text, int inCharCount ) const
 {
-	// first we have to get a font ....
-	if(!mDraw)
-		return;
+	if(!mDraw) return;
 	
 	const VGFont* hmyfont = FontManager::gFontText;
-	
 	const int size = getFontSize();
 	const NVstring * font = getFont();
 	const unsigned char * colref = getColRef();
 	
 	if (font && font->length() > 0)
-	{
-		// handle font-attributes ...
 		hmyfont = FontManager::FindOrCreateFont( size, font, getFontAttrib());
-	}
 	
 	hdc.SetTextFont( hmyfont );
 	const VGColor prevTextColor = hdc.GetFontColor();
 	if (colref) hdc.SetFontColor( VGColor( colref ));
-	
-//	const unsigned int ta = hdc.GetTextAlign();
-
-//	GColor backColor = hdc.GetTextBackgroundColor();
-//	hdc.SetTextBackgroundColor( 255, 255, 255, 255 );
 
 	const NVPoint & refpos = getReferencePosition();
 	const NVPoint & offset = getOffset();
 
 	hdc.SetFontAlign(getTextAlign());
-	hdc.DrawString(	(float)(mPosition.x + offset.x + (refpos.x * size)), 
-					(float)(mPosition.y + offset.y + (refpos.y * size)), 
-					cp, inCharCount );
-
-//	hdc.SetTextAlign( ta );
-//	hdc.SetTextBackgroundColor( backColor );
+	hdc.DrawString(	(float)(pos.x + offset.x + (refpos.x * size)),
+					(float)(pos.y + offset.y + (refpos.y * size)),
+					text, inCharCount );
 	if (colref) hdc.SetFontColor( prevTextColor );
+}
+
+// -------------------------------------------------------------------------
+void GRNotationElement::OnDrawText( VGDevice & hdc,  const char * text, int inCharCount ) const
+{
+	OnDrawText (hdc, mPosition, text, inCharCount);
 }
 
 // -------------------------------------------------------------------------

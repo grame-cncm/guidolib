@@ -81,6 +81,7 @@ public:
 	virtual void OnDraw( VGDevice & hdc ) const;
 			void OnDrawSymbol(VGDevice & hdc, unsigned int inSymbol, float inOffsetX = 0,
 								float inOffsetY = 0, float inFontSize = 0) const; // , float inScaleX = 0) const;
+			void OnDrawText( VGDevice & hdc, NVPoint pos, const char * cp, int inCharCount = -1 ) const;
 			void OnDrawText( VGDevice & hdc, const char * cp, int inCharCount = -1 ) const;
 			void DrawSymbol( VGDevice & hdc, unsigned int inSymbol, float inOffsetX = 0, float inOffsetY = 0,
 								   float inFontSize = 0) const;
@@ -140,6 +141,7 @@ private:
 };
 
 std::ostream& operator<< (std::ostream& os, const GRNotationElement& e);
+std::ostream& operator<< (std::ostream& os, const GRNotationElement* e);
 
 
 /** \brief This comparison routine compares to notationelements
