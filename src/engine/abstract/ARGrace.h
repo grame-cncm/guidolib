@@ -37,7 +37,7 @@ public:
 	virtual void setTagParameterList(TagParameterList& tpl);
     
     /**** Function to avoid dynamic_cast ****/
-    ARMusicalObject *isARGrace() { return this; }
+    virtual ARGrace *isARGrace() { return this; }
     /*****************************************/
 
 protected:
