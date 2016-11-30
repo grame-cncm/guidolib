@@ -125,7 +125,7 @@ void GRPossibleBreakState::SaveState(KF_IVector<GRStaff> * vstaffs,
 		{
 			GRVoiceTagsAndStaff * vts = new GRVoiceTagsAndStaff(vcmgr);
 			GRVoice * v = vcmgr->getGRVoice();
-			vts->SaveGRTags(vcmgr->grtags);
+			vts->SaveGRTags(vcmgr->getGRTags());
 			vts->setLastRod(v ? v->getLastRod() : 0);
 			vts->setFirstRod(v ? v->getFirstRod() : 0);
 			vts->pstaff = vcmgr->mCurGrStaff;
