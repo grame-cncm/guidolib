@@ -59,6 +59,7 @@ class GRIntens;
 class GRText;
 class GRBar;
 class GRPossibleBreakState;
+class GROctava;
 
 
 template <class T> class KF_List;
@@ -217,7 +218,7 @@ class GRStaff : public GRCompositeNotationElement
 		void    setEndPosition( float newendpos)    { mLength = newendpos - mPosition.x; }
 		void    setLength( float newlength)         { mLength = newlength; }
 
-		GRNotationElement * AddOctava(AROctava * aroct);
+		GROctava *			AddOctava(AROctava * aroct);
 		void                AddSecondGlue(GRGlue * myglue);
 		void                AddElementAt(GuidoPos pos,GRNotationElement * el);
 		GRRepeatBegin *     AddRepeatBegin(ARRepeatBegin *);

@@ -82,7 +82,7 @@ using namespace std;
 
 #include "GRGlobalStem.h"
 #include "GRStem.h"
-#include "GRSText.h"
+#include "GROctava.h"
 #include "GRSingleNote.h"
 #include "GRStaffManager.h"
 #include "GRSystem.h"
@@ -845,21 +845,30 @@ GRMeter * GRStaff::AddMeter(ARMeter * armeter)
 }
 
 // ----------------------------------------------------------------------------
-GRNotationElement * GRStaff::AddOctava(AROctava * aroct)
+GROctava * GRStaff::AddOctava(AROctava * aroct)
 {
 	const char * s = "";
-	if (aroct->getOctava() == 1)		s = "8";
-	else if (aroct->getOctava() == 0)	s = "";
-	else if (aroct->getOctava() == -1)	s = "8ba";
+	switch (aroct->getOctava()) {
+		case 3 : s = "22"; break;
+		case 2 : s = "15"; break;
+		case 1 : s = "8"; break;
+		case 0 : s = ""; break;
+		case -1 : s = "8"; break;
+		case -2 : s = "15"; break;
+		case -3 : s = "22"; break;
+	}
+//	if (aroct->getOctava() == 1)		s = "8";
+//	else if (aroct->getOctava() == 0)	s = "";
+//	else if (aroct->getOctava() == -1)	s = "8ba";
 	
-	GRSText * grstxt = new GRSText(this, s, -1);
-	grstxt->setRelativeTimePosition( aroct->getRelativeTimePosition());
+	GROctava * groctava = new GROctava(this, s, (aroct->getOctava() < 0));
+	groctava->setRelativeTimePosition( aroct->getRelativeTimePosition());
     if (aroct->getColor() && aroct->getColor()->getValue())
-        grstxt->setColRef(aroct->getColor());
-	AddTag(grstxt);
+        groctava->setColRef(aroct->getColor());
+	AddTag(groctava);
 
 	mStaffState.octava  = aroct->getOctava();	
-	return grstxt;
+	return groctava;
 }
 
 // ----------------------------------------------------------------------------
