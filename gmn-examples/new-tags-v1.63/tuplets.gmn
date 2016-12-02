@@ -4,6 +4,6 @@
 ]
 ,
 [
-    \tuplet<"-3-", dy1=10, dy2=10> (a a a)
+    \tuplet<"-3-", dy1=3, dy2=3> (a a a)
 ]
 }
