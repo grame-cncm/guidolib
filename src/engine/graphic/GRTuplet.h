@@ -22,6 +22,7 @@ class ARTuplet;
 
 class GRStaff;
 class GRSystem;
+class GREvent;
 
 
 /** \brief Graphical representation of a tuplet.
@@ -53,11 +54,16 @@ protected:
     const   ARTuplet * getARTuplet() const;
     virtual GRPositionTag::GRSaveStruct * getNewGRSaveStruct() { return new GRTupletSaveStruct; }
 
-    GDirection mDirection;
+	NVstring	fText;
+    GDirection	mDirection;
 
 private:
-    void automaticPosition( GObject * caller, const NVPoint & inPos );
-    void manualPosition( GObject * caller, const NVPoint & inPos );
+	// computes the automatic tuplet position, returns true when done
+	bool automaticPosition( GREvent * caller, const NVPoint & inPos, const GRStaff * staff, GRSystemStartEndStruct * sse );
+    void manualPosition( GREvent * caller, const NVPoint & inPos, const GRStaff * staff, GRSystemStartEndStruct * sse);
+	// gives the bounding box of the notes,
+	// returns the preferred position (true for above) according to stems directions
+	bool getNotesBoundingBox (NVRect& outRect) const;
 
     //	bracestate mBraceState;
     bool mShowLeftBrace;
