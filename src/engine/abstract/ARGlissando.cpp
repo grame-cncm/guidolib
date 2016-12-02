@@ -97,7 +97,7 @@ void ARGlissando::setTagParameterList(TagParameterList & tpl)
             delete f;
 
             TagParameterString *s = TagParameterString::cast(rtpl->RemoveHead());
-            s->getBool(fFill);
+            fFill = s->getBool();
             delete s;
 
 			f = TagParameterFloat::cast(rtpl->RemoveHead());

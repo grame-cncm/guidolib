@@ -75,8 +75,7 @@ void ARBar::setTagParameterList(TagParameterList& tpl)
 			// w, h, ml, mt, mr, mb
 
             TagParameterString *s = TagParameterString::cast(rtpl->RemoveHead());
-			bool display = false;
-			s->getBool(display);
+			bool display =  s->getBool();
             if (s->TagIsSet()) {
 				measureNumberDisplayed = display ? kNumAll : kNoNum;
                 measureNumberDisplayedIsSet = true;

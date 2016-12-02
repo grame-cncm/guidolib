@@ -88,7 +88,7 @@ void ARTrill::setTagParameterList(TagParameterList& tpl)
 			delete f;
 
 			str = TagParameterString::cast(rtpl->RemoveHead());
-            str->getBool(fShowTR);
+            fShowTR = str->getBool();
 			delete str;
 
 			str = TagParameterString::cast(rtpl->RemoveHead());
