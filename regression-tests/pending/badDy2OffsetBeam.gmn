@@ -9,6 +9,6 @@
         \meter<"3+2/8"> _ _/8 \stemsUp \beam<dy1=10>(g/20 e g b g/40 e)
     ],
     [
-a*4/3
+		a*4/3
     ]
 }

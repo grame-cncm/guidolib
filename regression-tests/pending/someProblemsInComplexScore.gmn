@@ -25,12 +25,13 @@
         )
 
         \stemsDown
-        \tuplet<"-6:5-", dy1=6,dy2=10>(
+        \tuplet<"-6:5-", position="above", dy1=2, dy2=2>(
             \beam<dy2=4>(
                 b*5/40 \grace(
                     \stemsUp(g*5/80 b) % => problem 3
                 )
-                \accent<dy=-3>(e*5/40) _ \tuplet<"-3-", dy1=3, dy2=5>(b*5/240 e g) \accent(b*5/40) \grace(\stemsUp(g*5/80 g)) \accent<dy=-3>(e*5/80)
+                \accent<dy=-3>(e*5/40) _ \tuplet<"-3-", dy1=3, dy2=3>(b*5/240 e g) \accent(b*5/40) 
+					\grace(\stemsUp(g*5/80 g)) \accent<dy=-3>(e*5/80)
             )
         )
     ],

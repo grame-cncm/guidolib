@@ -5,5 +5,5 @@
 %            Default value: automatic
 %
 [
-    \tuplet<format="-3-", dy1=12, dispNote="/16">(a b c)
+    \tuplet<format="-3-", dy1=4, dispNote="/16">(a b c)
 ]
