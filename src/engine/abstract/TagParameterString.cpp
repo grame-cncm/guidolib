@@ -92,41 +92,10 @@ bool TagParameterString::getRGB( unsigned char colref[4] ) const
 		return true;
 	}
 	return HtmlColor::get (value.c_str(), colref);
-
-//	else if (value == "red")
-//		colref[0] = 200;
-//
-//	else if (value == "green")
-//		colref[1] = 200;
-//
-//	else if (value == "blue")
-//		colref[2] = 200;
-//
-//	else if (value == "black")
-//		;
-//
-//	else if (value == "white")
-//		colref[0] = colref[1] = colref[2] = 255;
-//
-//	else if (value == "yellow")
-//		colref[0] = colref[1] = 200;
-//	else return false;
-
-//	return true;
 }
 
-bool TagParameterString::getBool(bool &result) const
+bool TagParameterString::getBool() const
 {
 	std::string value = NVstring::to_lower(fValue.c_str());
-
-    if (!strcmp(value.c_str(), "true")) {
-        result = true;
-        return true;
-    }
-    else if (!strcmp(value.c_str(), "false")) {
-        result = false;
-        return true;
-    }
-    else
-        return false;
+	return (value == "true") || (value == "yes") || (value == "1");
 }

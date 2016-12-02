@@ -41,7 +41,7 @@ class TagParameterString : public TagParameter
 
 		const char* getValue() const				{ return fValue.c_str(); }
 		bool		getRGB( unsigned char colref[4] ) const; 	// returns 1 if successful
-        bool        getBool(bool &result) const;
+        bool        getBool() const;
 		bool operator == (const char * inCString ) const;
 
 		static TagParameterString * cast( TagParameter * inTag ) 
