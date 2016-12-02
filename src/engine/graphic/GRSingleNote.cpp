@@ -586,15 +586,26 @@ ARTHead::HEADSTATE GRSingleNote::adjustHeadPosition(ARTHead::HEADSTATE sugHeadSt
 }
 
 //____________________________________________________________________________________
-NVRect GRSingleNote::getEnclosingBox() const
+NVRect GRSingleNote::getEnclosingBox(bool includeAccidentals) const
 {
 	NVRect outrect = getBoundingBox();
 	outrect += getPosition();
+	if (!getDuration()) {
+		// we're in a chord, needs to add the stem
+		const GRStem * stem = getStem();
+		NVRect r = stem->getBoundingBox();
+		r += stem->getPosition();
+		outrect.Merge (r);
+	}
+	if (!includeAccidentals) {
+		outrect.left = mPosition.x - mNoteBreite / 2 * getSize();
+	}
 	const GRNEList& articulations = getArticulations();
 	for (GRNEList::const_iterator ptr = articulations.begin(); ptr != articulations.end(); ++ptr) {
 		GRNotationElement *el = *ptr;
 		NVRect r = el->getBoundingBox();
 		r += el->getPosition();
+		r.left = outrect.left;		// force left to the note left for articulations
 		outrect.Merge (r);
 	}
 
@@ -602,26 +613,15 @@ NVRect GRSingleNote::getEnclosingBox() const
 		NVRect r = fOrnament->getEnclosingBox();
 		outrect.Merge (r);
 	}
-	// not all the ornaments are stored in the fOrnament field 
+	// not all the ornaments are stored in the fOrnament field
 	const NEPointerList * assoc = getAssociations();
 	GuidoPos pos = assoc ? assoc->GetHeadPosition() : 0;
 	while (pos) {
-		const GRNotationElement* el = getAssociations()->GetNext(pos);
-		const GRTrill * trill = dynamic_cast<const GRTrill *>(el);
+		const GRTrill * trill = dynamic_cast<const GRTrill *>(getAssociations()->GetNext(pos));
 		if (trill) {
 			NVRect r = trill->getEnclosingBox();
 			outrect.Merge (r);
 		}
-	}
-
-	GRAccidentalList accList;
-	extractAccidentals( &accList );
-	pos = accList.GetHeadPosition();
-	while (pos) {
-		GRNotationElement * e = accList.GetNext(pos);
-		NVRect r = e->getBoundingBox();
-		r += e->getPosition();
-		outrect.Merge (r);
 	}
 	return outrect;
 }
