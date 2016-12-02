@@ -23,12 +23,10 @@
 
 class ARBase;
 
+#define kDefaultThickness	4.f
 /** \brief Abstract representation of a tuplet.
 */
-class ARTuplet : 
-	// public ARMusicalObject,
-	public ARMTParameter,
-	public ARPositionTag
+class ARTuplet :  public ARMTParameter, public ARPositionTag
 {
 public:
                     ARTuplet(); 
@@ -55,8 +53,9 @@ public:
 			 */
 			int  isPositionAbove() const;
             float getDy1()          const { return fDy1; }
-            float getDy2()          const { return (fDy2TagIsSet ? fDy2 : fDy1); }		
+            float getDy2()          const { return fDy2; }
             float getThickness()    const { return fLineThickness; }
+            float defaultThickness()const { return kDefaultThickness; }
             bool  isTextBold()      const { return fTextBold; }
             float getTextSize()     const { return fTextSize; }
             bool  getLeftBrace()    const { return fLeftBrace; }

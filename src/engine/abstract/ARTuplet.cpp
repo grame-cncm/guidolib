@@ -25,7 +25,7 @@
 
 ListOfTPLs ARTuplet::ltpls(1);
 
-ARTuplet::ARTuplet() : fTupletFormat(""), fPosition(""), fDy1(0), fDy2(0), fLineThickness(0.08f * LSPACE),
+ARTuplet::ARTuplet() : fTupletFormat(""), fPosition(""), fDy1(0), fDy2(0), fLineThickness(kDefaultThickness),
     fTextBold(false), fTextSize(1), fDispNote(""), fFormatSet(false), fDy1TagIsSet(false), fDy2TagIsSet(false)
 {
 	rangesetting = ONLY;
@@ -33,8 +33,8 @@ ARTuplet::ARTuplet() : fTupletFormat(""), fPosition(""), fDy1(0), fDy2(0), fLine
 	
 	fBaseNumerator   = 0;	// 0 means: do not display
 	fBaseDenominator = 0;	// 0 means: do not display
-	fLeftBrace       = false;
-	fRightBrace      = false;
+	fLeftBrace       = true;
+	fRightBrace      = true;
 	fPositionIsSet	 = false;
 }
 
@@ -57,8 +57,7 @@ void ARTuplet::setTagParameterList(TagParameterList & tpl)
 		// we found a match!
 		if (ret == 0)
 		{
-			// then, we now the match for
-			// the first ParameterList
+			// then, we now the match for  the first ParameterList
 			// w, h, ml, mt, mr, mb
 			GuidoPos pos = rtpl->GetHeadPosition();
 
@@ -71,30 +70,36 @@ void ARTuplet::setTagParameterList(TagParameterList & tpl)
 			}
 
             tps = TagParameterString::cast(rtpl->GetNext(pos));
-            fPosition = tps->getValue();
-			fPositionIsSet = true;
+			fPosition = tps->getValue();
+			fPositionIsSet = tps->TagIsSet();
 
             TagParameterFloat *tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
-            fDy1 = tpf->getValue();
-            if (tpf->TagIsSet())
+            if (tpf->TagIsSet()) {
+				fDy1 = tpf->getValue();
                 fDy1TagIsSet = true;
+			}
 
 			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
-            fDy2 = tpf->getValue();
-            if (tpf->TagIsSet())
+            if (tpf->TagIsSet()) {
+				fDy2 = tpf->getValue();
                 fDy2TagIsSet = true;
+			}
 
             tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
-            fLineThickness = tpf->getValue() * LSPACE;
+            if (tpf->TagIsSet())
+				fLineThickness = tpf->getValue();
 
             tps = TagParameterString::cast(rtpl->GetNext(pos));
-            tps->getBool(fTextBold);
+            if (tps->TagIsSet())
+	            fTextBold = tps->getBool();
 
             tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
-            fTextSize = tpf->getValue();
+            if (tpf->TagIsSet())
+				fTextSize = tpf->getValue();
 
             tps = TagParameterString::cast(rtpl->GetNext(pos));
-            fDispNote = tps->getValue();
+            if (tps->TagIsSet())
+				fDispNote = tps->getValue();
 		}
 
 		delete rtpl;
@@ -188,57 +193,7 @@ void ARTuplet::parseTupletFormatString()
 	fRightBrace      = hasRightBrace;
 }
 
-void ARTuplet::setAuto()
-{
-	fTupletFormat = "-auto-";
-}
-
-/*std::ostream & ARTuplet::operator<<(std::ostream & os) const
-{
-	if (getRange())	os << "\\tuplet";
-	else			os << "\\tupletBegin";
-
-	int parset = 0;
-	if (fTupletFormat.length()>0)
-	{
-		parset = 1;
-		os << "<\"" << fTupletFormat << "\"";
-		if (fDy1Set)
-			os << ",";
-	}
-	if (fDy1Set)
-	{
-		if (!parset)
-			os << "<";
-		parset = 1;
-		os << fDy1;
-		if (fDy2Set)
-			os << ",";
-	}
-	if (fDy2Set) 
-	{
-		if (!parset)
-			os << "<";
-		parset = 1;
-		os << fDy2;
-        if (fLineThicknessSet)
-            os << ",";
-	}
-    if (fLineThicknessSet)
-    {
-        if (!parset)
-			os << "<";
-		parset = 1;
-        os << fLineThickness;
-    }
-	if (parset)
-	{
-		os << ">";
-	}
-	if (getRange())
-		os << "(";
-	return os << " ";
-}*/
+void ARTuplet::setAuto()		{ fTupletFormat = "-auto-"; }
 
 void ARTuplet::printName(std::ostream& os) const
 {
@@ -252,8 +207,6 @@ void ARTuplet::printGMNName(std::ostream& os) const
 
 void ARTuplet::printParameters(std::ostream& os) const
 {
-    /* TODO (cf. plus haut) */
-
     ARMusicalTag::printParameters(os);
 }
 
