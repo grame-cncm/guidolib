@@ -30,7 +30,7 @@ class AROctava;
 class GROctava : public GRNotationElement, public GRPositionTag
 {
 	public:
-					 GROctava( GRStaff *, const NVstring & txt, bool bassa );
+					 GROctava( GRStaff *, const NVstring & txt, AROctava* ar, bool bassa );
 		virtual 	~GROctava();
 
 		virtual void tellPosition(GObject *caller, const NVPoint & );
@@ -38,6 +38,7 @@ class GROctava : public GRNotationElement, public GRPositionTag
 		virtual void GGSOutput() const;
 		virtual void OnDraw( VGDevice & hdc ) const;
 		virtual void setColRef(const TagParameterString *tps);
+		virtual bool DeleteStaff(GRStaff * grstaff);
 	
 	private:
 		int		countSegments();

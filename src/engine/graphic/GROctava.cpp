@@ -13,6 +13,7 @@
 */
 
 #include "AROctava.h"
+#include "ARNote.h"
 
 #include "GROctava.h"
 #include "GRStaff.h"
@@ -30,8 +31,9 @@ using namespace std;
 
 extern GRSystem * gCurSystem;
 
-GROctava::GROctava( GRStaff * staff, const NVstring & text, bool bassa)
-	: fStaff(staff), fText (text), fBassa(bassa), fSegmentsCount(0) //, fElement(0)
+GROctava::GROctava( GRStaff * staff, const NVstring & text, AROctava* ar, bool bassa)
+	: GRARNotationElement(ar),
+	fStaff(staff), fText (text), fBassa(bassa), fSegmentsCount(0) //, fElement(0)
 {
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
 	sse->grsystem = staff->getGRSystem();
@@ -54,7 +56,13 @@ GROctava::GROctava( GRStaff * staff, const NVstring & text, bool bassa)
 
 GROctava::~GROctava()
 {
+}
+
+bool GROctava::DeleteStaff(GRStaff * grstaff)
+{
+	delete mAssociated;		// makes sure that associated notes are deleted before the GROctava
 	mAssociated = 0;
+	return GRPositionTag::DeleteStaff(grstaff);
 }
 
 void GROctava::GGSOutput() const
