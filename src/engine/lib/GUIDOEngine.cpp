@@ -77,6 +77,16 @@ const char* GUIDOENGINE_VERSION_STR = "1.6.3";
 
 ARPageFormat * gARPageFormat = 0;
 
+class TGlobalFree {		// intended free memory at library exit
+	public:
+		TGlobalFree () {}
+		virtual ~TGlobalFree () {
+			if (gARPageFormat) delete gARPageFormat;
+		}
+};
+
+static TGlobalFree gFree;
+
 //#define SHOW_SPRINGS_RODS
 
 #ifdef SHOW_SPRINGS_RODS
@@ -147,6 +157,7 @@ GUIDOAPI(GuidoErrCode) GuidoInit( GuidoInitDesc * desc )
 		gInited = true;
 	}
 	// Create default page format
+	
 	gARPageFormat = new ARPageFormat();
 	return guidoNoErr;
 }

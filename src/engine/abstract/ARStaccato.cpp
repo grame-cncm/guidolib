@@ -64,8 +64,9 @@ void ARStaccato::setTagParameterList(TagParameterList& tpl)
 			else if (posStr == kBelowStr) {
 				fPosition = ARStaccato::kBelow;
 			}
-			else cerr << posStr << ": incorrect staccato position" << endl;
+			else cerr << "Guido Warning: " << posStr << ": incorrect staccato position" << endl;
 		}
+		delete ppos;
 		delete rtpl;
 	}
 	tpl.RemoveAll();
