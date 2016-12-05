@@ -1,0 +1,25 @@
+{
+[ \clef<"g2"> \meter<"C">
+ f g a b 
+ \oct<1> 
+	\stemsDown
+	f3 g a \marcato(b) 
+%	f3 g a \marcato(b) 
+ \oct<-1> 
+	\stemsAuto
+	f0 g a b 
+	f1 g a b 
+	f1 g a b 
+ \oct<0> 
+	f1 g a b 
+ \oct<1> (
+%	\stemsUp
+	a3 g a b
+	a3 g a b
+	a2 g a b
+	a3 g a b
+	)
+ f1 g a b 
+
+]
+}

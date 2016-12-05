@@ -1,0 +1,32 @@
+{ [ \staff<1> \systemFormat<"", dx=26hs>  
+   (* meas. 1 *)  \clef<"g2"> \key<4> \meter<"2/4", autoBarlines="off", autoMeasuresNum="page">  _/2 \bar 
+   (* meas. 2 *)  _/2 \bar 
+   (* meas. 3 *)  _/8 \oct<1> \beamsOff g3 \beamsOff \accent<position="above">( \tieBegin b/4) \bar 
+   (* meas. 4 *)  \text<"Rall",fattrib="i", dx=2.2hs, dy=18hs> \space<0> \intens<"f", dy=-2.6hs> \beamsOff b/8 \tieEnd \beam( f# \slurBegin:1 { f#, b } { e, a }) \slurEnd:1 \bar 
+   (* meas. 5 *)  \dimBegin<dy=3.8hs> \beam( { d#, g# } { c#, f# } { a2, d#3 } \dimEnd { a2, b }) \bar 
+   (* meas. 6 *)  \key<4> \text<"a tempo",fattrib="i", dx=1.2hs, dy=17.6hs> \space<0> _/16 \intens<"pp", dy=-5hs> \slurBegin:1 \beam( b e3 c#) \beamsOff d#/4 \slurEnd:1 \bar 
+   (* meas. 7 *)  _/16 \slurBegin:1 \beam( b2 e3 c#) \beamsOff d#/4 \slurEnd:1 \bar 
+   (* meas. 8 *)  _/16 \slurBegin:1 \beam( b2 e3 c#) \beamsOff d#/4 \slurEnd:1 \bar 
+   (* meas. 9 *)  _/16 \slurBegin:1 \beam( b2 e3 c#) \beamsOff d#/4 \slurEnd:1 \bar 
+   (* meas. 10 *)  _/16 \slurBegin:1 \beam( b2 e3 c#) \beamsOff d#/4 \slurEnd:1 \bar 
+   (* meas. 11 *)  _/16 \slurBegin:1 \beam( b2 e3 c#) \beamsOff d#/4 \slurEnd:1 \bar 
+   (* meas. 12 *)  _/16 \slurBegin:1 \beam( b2 e3 c#) \beamsOff d#/4 \slurEnd:1 \bar 
+   (* meas. 13 *)  _/16 \slurBegin:1 \beam( b2 e3 c#) \beamsOff e/4 \slurEnd:1 \bar 
+   (* meas. 14 *)  _/16 \slurBegin:1 \beam( e a f#) \beamsOff g#/4 \slurEnd:1 \bar 
+   (* meas. 15 *)  _/16 \slurBegin:1 \beam( e a f#) \beamsOff g#/4 \slurEnd:1 \bar 
+   (* meas. 16 *)  _/16 \slurBegin:1 \beam( e a f#) \beamsOff g#/4 \slurEnd:1 \bar 
+   (* meas. 17 *)  _/16 \slurBegin:1 \beam( e a f#) \beamsOff { e/4, g } \slurEnd:1 \oct<0> \bar 
+   (* meas. 18 *)  _/16 \slurBegin:1 \beam( g#2 b g#) \beamsOff { g#/4, c#3 } \slurEnd:1 \bar 
+   (* meas. 19 *)  _/16 \slurBegin:1 \beam( a2 d3 a2) \beamsOff { a/4, d#3 } \slurEnd:1 \bar 
+   (* meas. 20 *)  \beamsOff { b2/8, e3 } _ \intens<"p", dy=-3.8hs> \beamsOff \tieBegin b2/4 \bar 
+   (* meas. 21 *)  \beam( b/8 \tieEnd \slurBegin:1 g# a b) \bar 
+   (* meas. 22 *)  \beam( g# e f# g#) \bar 
+   (* meas. 23 *)  \beamsOff e/4 \beamsOff b1/8 \slurEnd:1 _ \bar 
+   (* meas. 24 *)  _/16 \intens<"pp", dy=-5hs> \oct<1> \slurBegin:1 \beam( b2 e3 c#) \beamsOff d#/4 \slurEnd:1 \bar 
+   (* meas. 25 *)  _/16 \slurBegin:1 \beam( b2 e3 c#) \beamsOff d#/4 \slurEnd:1 \bar 
+   (* meas. 26 *)  _/16 \slurBegin:1 \beam( b2 e3 c#) \beamsOff d#/4 \slurEnd:1 \bar 
+   (* meas. 27 *)  _/16 \slurBegin:1 \beam( b2 e3 c#) \beamsOff d#/4 \slurEnd:1 \bar 
+   (* meas. 28 *)  _/16 \slurBegin:1 \beam( b2 e3 c#) \beamsOff d#/4 \slurEnd:1 \bar 
+   (* meas. 29 *)  _/16 \slurBegin:1 \beam( b2 e3 c#) \beamsOff d#/4 \slurEnd:1 \bar 
+   (* meas. 30 *)  \beamsOff { b2, e3 } \oct<0> _ ]
+ }
