@@ -16,7 +16,7 @@
 */
 
 #include "TagParameterString.h"
-#include "GRNotationElement.h"
+#include "GRARNotationElement.h"
 #include "GRPositionTag.h"
 
 class NVstring;
@@ -27,7 +27,7 @@ class AROctava;
 
 /** \brief not yet documented
 */
-class GROctava : public GRNotationElement, public GRPositionTag
+class GROctava : public GRARNotationElement, public GRPositionTag
 {
 	public:
 					 GROctava( GRStaff *, const NVstring & txt, AROctava* ar, bool bassa );
