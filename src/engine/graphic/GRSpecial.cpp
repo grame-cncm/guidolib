@@ -55,17 +55,12 @@ void GRSpecial::OnDraw(VGDevice & hdc) const
     const TagParameterString *tps = ar->getColor();
 
     const VGColor prevTextColor = hdc.GetFontColor();
-    unsigned char *colRef = 0;
     if (tps) {
-        colRef = new unsigned char[4];
+		unsigned char colRef[4];
         tps->getRGB(colRef);
-    }
-
-    if (colRef)
         hdc.SetFontColor(VGColor(colRef));
-
-    hdc.DrawMusicSymbol((mPosition.x + specialXOffset), (mPosition.y + specialYOffset), theSymbol);
-
-    if (colRef)
-        hdc.SetFontColor(prevTextColor);
+    }
+	hdc.DrawMusicSymbol((mPosition.x + specialXOffset), (mPosition.y + specialYOffset), theSymbol);
+    if (tps) hdc.SetFontColor(prevTextColor);
 }
+
