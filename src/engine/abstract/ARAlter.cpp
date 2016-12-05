@@ -13,6 +13,7 @@
 */
 
 #include <iostream>
+#include <sstream>
 
 #include "ARAlter.h"
 #include "TagParameterString.h"
@@ -80,9 +81,9 @@ void ARAlter::setTagParameterList(TagParameterList & tpl)
 	
 			if (alterstring->TagIsNotSet()) {
 				// then we can set it to the value ...
-				char tmp[10];
-				snprintf(tmp, 10, "%.2f", altervalue->getValue());
-				alterstring->setValue(tmp);
+				stringstream sstr;
+				sstr << altervalue->getValue() << ".2f";
+				alterstring->setValue(sstr.str().c_str());
 			}
 		}
 
