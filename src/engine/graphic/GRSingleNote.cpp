@@ -51,6 +51,7 @@
 #include "GRTuplet.h"
 #include "GRSpring.h"
 #include "GRPage.h"
+#include "GRSlur.h"
 #include "secureio.h"
 
 using namespace std;
@@ -617,10 +618,18 @@ NVRect GRSingleNote::getEnclosingBox(bool includeAccidentals) const
 	const NEPointerList * assoc = getAssociations();
 	GuidoPos pos = assoc ? assoc->GetHeadPosition() : 0;
 	while (pos) {
-		const GRTrill * trill = dynamic_cast<const GRTrill *>(getAssociations()->GetNext(pos));
+		const GRNotationElement* el = getAssociations()->GetNext(pos);
+		const GRTrill * trill = dynamic_cast<const GRTrill *>(el);
 		if (trill) {
 			NVRect r = trill->getEnclosingBox();
 			outrect.Merge (r);
+		}
+		else {
+			const GRSlur * slur = dynamic_cast<const GRSlur *>(el);
+			if (slur) {
+				NVRect r = slur->getBoundingBox();
+				outrect.Merge (r);
+			}
 		}
 	}
 	return outrect;
