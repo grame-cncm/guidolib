@@ -380,7 +380,7 @@ void ARMusic::doAutoStuff()
 		timebench("doAutoStuff2", arvc->doAutoStuff2());
 	}
 
-//	GMNCodePrintVisitor v(cout);
+//	GMNCodePrintVisitor v(cerr);
 //	this->goThrough(&v);
 
 }
