@@ -85,7 +85,7 @@ void AROctava::printGMNName(std::ostream& os) const
 void AROctava::printParameters(std::ostream& os) const
 {
     if (fOctave)
-        os << "i: " << fOctave->getValue() << "; ";
+        os << " i: " << fOctave->getValue() << "; ";
 
     ARMusicalTag::printParameters(os);
 }
