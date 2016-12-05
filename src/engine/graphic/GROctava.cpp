@@ -26,6 +26,7 @@
 #include "VGFont.h"
 #include "GRSpecial.h"
 #include "GRSingleNote.h"
+#include "GRSingleRest.h"
 
 using namespace std;
 
@@ -77,6 +78,22 @@ void GROctava::setColRef(const TagParameterString *tps) {
 }
 
 //---------------------------------------------------------------------------------
+NVRect GROctava::getEltBox (const GRNotationElement* el) const
+{
+	NVRect outRect;
+	const GRSingleNote * note = dynamic_cast<const GRSingleNote *>(el);
+	if (note)
+		return note->getEnclosingBox();
+
+	const GRSingleRest * rest = dynamic_cast<const GRSingleRest *>(el);
+	if (rest) {
+		outRect = rest->getBoundingBox();
+		outRect += rest->getPosition();
+	}
+	return outRect;
+}
+
+//---------------------------------------------------------------------------------
 NVRect GROctava::getExtensionLine (const NEPointerList * assoc, int num) const
 {
 	NVRect outRect;
@@ -87,11 +104,9 @@ NVRect GROctava::getExtensionLine (const NEPointerList * assoc, int num) const
 	float currentXPos = 0;
 	while (pos) {
 		const GRNotationElement* el = assoc->GetNext(pos);
-		const GRSingleNote * note = dynamic_cast<const GRSingleNote *>(el);
-		if (note) {
-
-			NVRect bb = note->getEnclosingBox();
-			if (bb.left < currentXPos) {		// there is a line break
+		NVRect bb = getEltBox(el);
+		if (bb.Height()) {
+			if (bb.right < currentXPos) {		// there is a line break
 				if (!num) {						// and it is the required segment
 					outRect.right = gCurSystem->getPosition().x + gCurSystem->getBoundingBox().Width();
 					return outRect;
@@ -113,7 +128,7 @@ NVRect GROctava::getExtensionLine (const NEPointerList * assoc, int num) const
 					if (top < outRect.top) outRect.top = outRect.bottom = top - fTextHeight;
 				}
 			}
-			currentXPos = bb.right;
+			currentXPos = bb.left;
 		}
 	}
 	return outRect;
@@ -152,6 +167,11 @@ void GROctava::OnDraw( VGDevice & hdc) const
 	
 	bool endSegment =   (sse->endflag == GRSystemStartEndStruct::NOTKNOWN) || (nsegments == 1);
 	float space = fStaff->getStaffLSPACE() / 2;
+
+//cerr << "GROctava::OnDraw seg: " << drawingstate << "/" << nsegments << endl;
+//if (drawingstate == 1)
+//cerr << "GROctava::OnDraw seg 1" << endl;
+//	NVRect r = getExtensionLine (getAssociations(), sse);
 	NVRect r = getExtensionLine (getAssociations(), drawingstate);
 	VGColor savedColor = hdc.GetFontColor();
 	VGColor color;	// custom or black

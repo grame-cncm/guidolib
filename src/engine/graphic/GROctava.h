@@ -42,7 +42,9 @@ class GROctava : public GRARNotationElement, public GRPositionTag
 	
 	private:
 		int		countSegments();
+//		NVRect	getExtensionLine (const NEPointerList * assoc, const GRSystemStartEndStruct * sse) const;
 		NVRect	getExtensionLine (const NEPointerList * assoc, int num) const;
+		NVRect	getEltBox (const GRNotationElement* el) const;
 
 		GRStaff *	fStaff;
 		NVstring 	fText;
