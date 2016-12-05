@@ -35,7 +35,6 @@ void ARArticulation::setTagParameterList(TagParameterList & tpl)
 		// create a list of string ...
 
 		ListOfStrings lstrs; // (1); std::vector test impl
-//		lstrs.AddTail((""));
 		lstrs.AddTail("S,position,,o");
 		CreateListOfTPLs(ltpls,lstrs);
 
@@ -53,20 +52,14 @@ void ARArticulation::setTagParameterList(TagParameterList & tpl)
 			string posStr = ppos->getValue();
 			if (posStr == kAboveStr) {
 				fPosition = kAbove;
-//				cerr << "ARArticulation::setTagParameterList: pos above" << endl;
 			}
 			else if (posStr == kBelowStr) {
 				fPosition = kBelow;
-//				cerr << "ARArticulation::setTagParameterList: pos below" << endl;
 			}
-			else cerr << posStr << ": incorrect articulation position" << endl;
+			else cerr << "Guido Warning: '" << posStr << "': incorrect articulation position" << endl;
 		}
 		delete ppos;
 		delete rtpl;
-	}
-	else
-	{
-		// failure
 	}
 	tpl.RemoveAll();
 }
