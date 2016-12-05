@@ -296,8 +296,7 @@ GRStaff::~GRStaff()
 	while (pos)
 	{
 		GuidoPos curpos = pos;
-		GRNotationElement * el = getElements()->GetNext(pos);
-
+		GRNotationElement * el = getElements()->GetNext(pos);	
 		if (!GREvent::cast(el) && !dynamic_cast<GRGlue *>(el))
 		{
 			GRDummy * grdum = dynamic_cast<GRDummy *>(el);
@@ -861,7 +860,7 @@ GROctava * GRStaff::AddOctava(AROctava * aroct)
 //	else if (aroct->getOctava() == 0)	s = "";
 //	else if (aroct->getOctava() == -1)	s = "8ba";
 	
-	GROctava * groctava = new GROctava(this, s, (aroct->getOctava() < 0));
+	GROctava * groctava = new GROctava(this, s, aroct, (aroct->getOctava() < 0));
 	groctava->setRelativeTimePosition( aroct->getRelativeTimePosition());
     if (aroct->getColor() && aroct->getColor()->getValue())
         groctava->setColRef(aroct->getColor());
