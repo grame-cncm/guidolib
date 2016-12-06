@@ -118,7 +118,7 @@ class GRSingleNote : public GRNote
 
 	  	GRStdNoteHead *	getNoteHead() const;
 	  	void			extractAccidentals( GRAccidentalList * outList ) const;
-	  	NVRect			getEnclosingBox(bool includeAccidentals=true) const;		// gives a rect that enclose the note, accidentals and articulations
+	  	NVRect			getEnclosingBox(bool includeAccidentals=true, bool includeSlurs = true) const;		// gives a rect that enclose the note, accidentals and articulations
 
         ARTHead::HEADSTATE getHeadState() { return mHeadState; }
 

@@ -589,7 +589,7 @@ ARTHead::HEADSTATE GRSingleNote::adjustHeadPosition(ARTHead::HEADSTATE sugHeadSt
 }
 
 //____________________________________________________________________________________
-NVRect GRSingleNote::getEnclosingBox(bool includeAccidentals) const
+NVRect GRSingleNote::getEnclosingBox(bool includeAccidentals, bool includeSlurs) const
 {
 	NVRect outrect = getBoundingBox();
 	outrect += getPosition();
@@ -626,11 +626,13 @@ NVRect GRSingleNote::getEnclosingBox(bool includeAccidentals) const
 			NVRect r = trill->getEnclosingBox();
 			outrect.Merge (r);
 		}
-		else {
+		else if (includeSlurs) {
 			const GRSlur * slur = dynamic_cast<const GRSlur *>(el);
 			if (slur) {
 				NVRect r = slur->getBoundingBox();
-				outrect.Merge (r);
+				if (r.top < outrect.top) outrect.top = r.top;
+				if (r.bottom > outrect.bottom) outrect.bottom = r.bottom;
+//				outrect.Merge (r);
 			}
 		}
 	}
