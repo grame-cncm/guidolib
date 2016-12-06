@@ -5248,39 +5248,39 @@ void ARMusicalVoice::doAutoFermatas()
 //____________________________________________________________________________________
 /** \brief Goes through the music and looks at key-changes.
 
-	whenever a key-change (change!) occurs, the
-	previous key needs to be naturalized
-	which is done, by putting a /natkey
-	infront of the key. This naturalizes
+	whenever a key-change (change!) occurs, the previous key needs to be naturalized
+	which is done, by putting a /natkey infront of the key. This naturalizes
 	any key that is present.
 */
 void ARMusicalVoice::doAutoKeys()
 {
-	int numkeys = 0;
-
+	int currentKey = 0;
 	GuidoPos pos = ObjectList::GetHeadPosition();
-
 	while (pos) {
         ARMusicalObject *obj = GetAt(pos);
 
         if (obj) {
-            ARKey * key = static_cast<ARKey *>(obj->isARKey());
-
-            if (key) {
-                if (numkeys != 0 && key->getKeyNumber() != numkeys) {
+		   ARKey * key = static_cast<ARKey *>(obj->isARKey());
+           if (key) {
+				int keyn = key->getKeyNumber();
+				bool showNaturals = currentKey;
+				if (key->isHideAutoNaturalsSet()) showNaturals = !key->hideAutoNaturals();
+				else {
+					showNaturals = currentKey &&		// don't show naturals if there was none
+								// don't show naturals when key increases in the same direction
+								!(((currentKey > 0) && (keyn > 0) && (currentKey <= keyn))
+								|| ((currentKey < 0) && (keyn < 0) && (currentKey >= keyn)));
+				}
+                if (showNaturals) {
                     // then we insert a key at this position
-                    if( !key->hideAutoNaturals() ) {
-                        ARNaturalKey * natkey = new ARNaturalKey();
-                        natkey->setIsAuto(true);
-                        natkey->setRelativeTimePosition(key->getRelativeTimePosition());
-                        AddElementAt(pos,natkey);
-                    }
+					ARNaturalKey * natkey = new ARNaturalKey();
+					natkey->setIsAuto(true);
+					natkey->setRelativeTimePosition(key->getRelativeTimePosition());
+					AddElementAt(pos,natkey);
                 }
-
-                numkeys = key->getKeyNumber();
+                currentKey = key->getKeyNumber();
             }
         }
-
         ObjectList::GetNext(pos);
 	}
 }
