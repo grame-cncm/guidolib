@@ -1,0 +1,67 @@
+
+{ 
+[
+   \tuplet<"-3-", position="above"> (a \accent(a2) a) 
+   \tuplet<"-3-", position="below"> (a1 \accent(a) a) g
+\stemsUp(   \tuplet<"-3-", position="below"> (c b b) )
+	\tuplet<"-3-", dy1=5, dy2=5> (a a a)
+]
+,
+[
+	\clef<"g">
+   \tuplet<"-3-", position="below"> (a1 \accent(a) a) 
+
+%	\stemsUp 
+	\tuplet<"-5:1-", dispNote="/16", position="below">
+	( \beam( { c0/24, e } e-1 { c0, e } e { c1, e } e0)) 
+	\tuplet<"-6:1-", dispNote="/16", position="above",dy1=1,dy2=1>
+	( \beam( { c0/24, e } e-1 { c0, e } e { c1, e } e0)) 
+	\tuplet<"-7:1-", dispNote="/16">
+	( \beam( { c1/24, e } e { c1, e } e { c1, e } e0)) 
+	\tuplet<"-6-", dispNote="/16">
+	( \beam( c2 c c c c)) _/4 \beam(\tuplet(c2/12 c c))
+]
+,
+[
+	\clef<"g">
+   \tuplet<"-3-", position="below"> (a1 \turn(a) a) 
+	\tuplet<"-5:2-", dispNote="/16", position="below">
+	( \beam( { c0/24, e } e-1 { c0, e } e { c1, e } e0)) 
+	\tuplet<"-6:2-", dispNote="/16", position="above">
+	( \beam( { c0/24, e } e-1 { c0, e } e { c1, e } e0)) 
+	\tuplet<"-7:2-", dispNote="/16">
+	( \beam( { c1/24, e } e { c1, e } e { c1, e } e0)) 
+	\tuplet<"-6-", dispNote="/16">
+	( \beam( c2 c c c c)) 
+]
+,
+[
+	\clef<"g">
+   \tuplet<"-3-"> (a1 \mord(a) a) 
+
+%	\stemsUp 
+	\tuplet<"-5:3-", dispNote="/16", position="below">
+	( \beam( { c0/24, e } e-1 { c0, e } e { c1, e } e0)) 
+	\tuplet<"-6:3-", dispNote="/16", position="above",dy1=1,dy2=1>
+	( \beam( { c0/24, e } e-1 { c0, e } e { c1, e } e0)) 
+	\tuplet<"-7:3-", dispNote="/16">
+	( \beam( { c1/24, e } e { c1, e } e { c1, e } e0)) 
+	\tuplet<"-6-", dispNote="/16">
+	( \beam( c2 c c c c)) 
+]
+,
+[
+	\clef<"g">
+   \tuplet<"-3-"> (a1 \trill(a) a) 
+
+%	\stemsUp 
+	\tuplet<"-5:4-", dispNote="/16", position="below">
+	( \beam( { c0/24, e } e-1 { c0, e } e { c1, e } e0)) 
+	\tuplet<"-6:4-", dispNote="/16",position="below", dy1=-2,dy2=-2>
+	( \beam( { c0/24, e } e-1 { c0, e } e { c1, e } e0)) 
+	\tuplet<"-7:4-", dispNote="/16">
+	( \beam( { c1/24, e } e { c1, e } e { c1, e } e0)) 
+	\tuplet<"-6-", dispNote="/16">
+	( \beam( c2 c c c c)) 
+]
+}

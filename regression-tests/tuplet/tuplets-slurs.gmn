@@ -1,0 +1,12 @@
+{ [
+	\systemFormat<"", dx=26hs> \barFormat<style= "system", range="1"> 
+   \clef<"g2"> \key<-3> \meter<"2/2"> \stemsDown 
+	\slurBegin:1 \beamsOff e&2/2 
+	\tuplet<"-3-", dispNote="/8", position="below">( \beam( b&1/12 c2 d)) 
+	\tuplet<"-3-", dispNote="/8", position="below">( \beam( e& f g)) 
+	\slurEnd:1 \bar 
+	\slurBegin:1 \beamsOff g/2 
+	\tuplet<"-3-", dispNote="/8", position="below">( \beam( c/12 \slurEnd:1 \slurBegin:1 a& g)) 
+	\tuplet<"-3-", dispNote="/8", position="below">( \beam( f \slurEnd:1 \slurBegin:1 f e&)) 
+	\slurEnd:1 ]
+ }
