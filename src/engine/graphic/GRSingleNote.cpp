@@ -478,8 +478,10 @@ void GRSingleNote::forceAppearance()
         else if (mNoteAppearance == "/4")	dur = TYPE_DURATION(1, 4);
         else if (mNoteAppearance == "/8")	dur = TYPE_DURATION(1, 8);
         else if (mNoteAppearance == "/16")	dur = TYPE_DURATION(1, 16);
+        else if (mNoteAppearance == "/32")	dur = TYPE_DURATION(1, 32);
+        else if (mNoteAppearance == "/64")	dur = TYPE_DURATION(1, 64);
 #ifndef WIN32
-#warning ("TODO: force appearance for /32 and /64");
+#warning ("TODO: check flags position for /32 and /64");
 #endif
 //        else if (mNoteAppearance == "/32")	dur = TYPE_DURATION(1, 32);		// commented due to incorrect flags rendering
 //        else if (mNoteAppearance == "/64")	dur = TYPE_DURATION(1, 64);
