@@ -41,32 +41,26 @@ class GRKey : public GRARCompositeNotationElement, public GRTag
 				void 	getOctArray(int * ctArray);
 
 		virtual void 	updateBoundingBox();
-
 		virtual void 	setHPosition( GCoord nx);
 		virtual void 	setPosition(const NVPoint & point);
 
 		virtual void 	GGSOutput() const;
 		virtual void 	OnDraw(VGDevice & dev ) const;
-
       	virtual void 	recalcVerticalPosition();
 
   protected:
-
 		int		mNatural;
 		int		mNumKeys;
 		float	mkarray[NUMNOTES];
 		int		mOctarray[NUMNOTES]; // octave of accidentlas
 
 		// GRStaff *grstaff;
-
 		virtual void createAccidentals();
-
 		float mCurLSPACE; // this parameter remembers the LSPACE that is
 				// valid at the time of creation. We can later recalc
 				// positions better (when a clef-change occurs for example)
 				// if this parameter is known.
 };
-
 
 #endif
 

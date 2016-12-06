@@ -27,10 +27,8 @@ static const int quint[] = { NOTE_F, NOTE_C, NOTE_G, NOTE_D, NOTE_A, NOTE_E, NOT
 GRKey::GRKey( GRStaff * inStaff, ARKey * key, int p_natural, bool ownsAR )
 		: GRARCompositeNotationElement(key, ownsAR), GRTag(key)
 {
-	// natural is set, it the key needs
-	// to be naturlized, that is, this
+	// natural is set, it the key needs to be naturlized, that is, this
 	// is the time, when another key is specified.
-
 	mNatural = p_natural;
 	mGrStaff = inStaff;
 	mNumKeys = key->getKeyNumber();
@@ -47,13 +45,7 @@ GRKey::GRKey( GRStaff * inStaff, ARKey * key, int p_natural, bool ownsAR )
 	sconst = SCONST_KEY;
 
 	// rod-spring-modell
-	// obsolete
-	// spacing = 0;
-	// spacing = LSPACE; // analogue to GRMeter, GRClef. Spacing wird von
-		// GRNotationElement "verwaltet".
-
 	setRelativeTimePosition (key->getRelativeTimePosition());
-
     mIsInHeader = key->isInHeader();
 }
 
@@ -181,7 +173,6 @@ void GRKey::createAccidentals()
 	    // moves along the position, where sharps are set (fis,cis,gis etc.)
 	    // if numkeys is negative we need flats beginning at quint[6-j]=B
 	    // (B,Es,As,Des,Ges)
-
 		if( keyarr[ quint[j] - NOTE_C ] != 0)
 		{
 			GRAccidental * acc;
@@ -260,14 +251,16 @@ void GRKey::updateBoundingBox()
 			mBoundingBox.bottom = p.y + b.bottom - mPosition.y;
 	 }
 
-  if (mBoundingBox.right > 0)
-  {
-	  mBoundingBox.left -= GCoord(mCurLSPACE / 5);
-	  mBoundingBox.right += GCoord(mCurLSPACE * 0.5f);
-  }
-  if (mRightSpace > 0)
-	  mRightSpace += GCoord(mCurLSPACE * 0.5f);
-
+	if (mBoundingBox.right > 0)
+	{
+		mBoundingBox.left -= GCoord(mCurLSPACE / 5);
+		mBoundingBox.right += GCoord(mCurLSPACE * 0.5f);
+	}
+	if (mNatural)
+		mRightSpace -= mCurLSPACE * 0.5f;
+	else if (mRightSpace > 0)
+		mRightSpace += mCurLSPACE * 0.5f;
+	
 }
 
 void GRKey::GGSOutput() const
