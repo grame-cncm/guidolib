@@ -131,7 +131,7 @@ bool GRTuplet::getNotesBoundingBox (NVRect& outRect) const
 		if( stemDir == dirUP ) stemsUp++;
 		else if( stemDir == dirDOWN ) stemsDown++;
 		
-		NVRect nbb = note->getEnclosingBox(false);
+		NVRect nbb = note->getEnclosingBox(false, false);
 		r.Merge(nbb);
 	}
 	outRect = r;
