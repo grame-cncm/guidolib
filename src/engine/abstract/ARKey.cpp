@@ -30,21 +30,21 @@ int gd_noteName2pc(const char *name);
 ListOfTPLs ARKey::ltpls(1);
 
 ARKey::ARKey(const TYPE_TIMEPOSITION & timeposition)
-	: ARMTParameter(timeposition), mIsFree(false)
+	: ARMTParameter(timeposition), mIsFree(false), fHideAutoNaturalsSet(false)
 {
 	fKeyNumber = 0;
 	memset(fOctarray,0,NUMNOTES*(sizeof(int))); // octarray auf 0 setzen;
 }
 
 
-ARKey::ARKey(int p_keynumber) : mIsFree(false)
+ARKey::ARKey(int p_keynumber) : mIsFree(false), fHideAutoNaturalsSet(false)
 {
 	fKeyNumber = p_keynumber;
     fHideAutoNaturals = false;
 	memset(fOctarray,0,NUMNOTES*(sizeof(int))); // octarray auf 0 setzen;
 }
 
-ARKey::ARKey() : mIsFree(false)
+ARKey::ARKey() : mIsFree(false), fHideAutoNaturalsSet(false)
 {
 	fKeyNumber = 0; // no accidentals
     fHideAutoNaturals = false;
@@ -56,6 +56,7 @@ ARKey::ARKey(const ARKey & key)
 	mIsFree = key.mIsFree;
 	fKeyNumber = key.fKeyNumber;
     fHideAutoNaturals = key.fHideAutoNaturals;
+	fHideAutoNaturalsSet = key.fHideAutoNaturalsSet;
 
 	key.getOctArray((int *) &fOctarray);
 	key.getFreeKeyArray (fAccarray);
@@ -100,17 +101,13 @@ void ARKey::setTagParameterList(TagParameterList & tpl)
 		if (ret == 0)
 		{
 			// then, we now the match for the first ParameterList
-			// w, h, ml, mt, mr, mb
-
 			TagParameterString * tps = TagParameterString::cast(rtpl->GetNext(pos));
 			assert(tps);
 
 			NVstring name = tps->getValue();
-
 			// ist free-Tag gesetzt?
 			if (name.substr(0, 5) == "free=" ) {
 				mIsFree = true;
-//				getKeyArray(name.substr(5, name.length()-5));
 				newgetKeyArray (name.substr(5, name.length()-5));
 			}
 			else {
@@ -146,8 +143,6 @@ void ARKey::setTagParameterList(TagParameterList & tpl)
 				}
 			}
             // FIXME: should tps be deleted?
-
-          
 		}
 		else if (ret == 1)
 		{
@@ -155,22 +150,16 @@ void ARKey::setTagParameterList(TagParameterList & tpl)
 			// w, h, ml, mt, mr, mb
 			TagParameterInt * tpi = TagParameterInt::cast(rtpl->GetNext(pos));
 			assert(tpi);
-            // FIXME: should tpi be deleted?
 			fKeyNumber = tpi->getValue();
 		}
         if( pos ){
             TagParameterString *tps = TagParameterString::cast(rtpl->GetNext(pos));
-            if( tps ){
+            if( tps && tps->TagIsSet()){
+				fHideAutoNaturalsSet = true;
                 fHideAutoNaturals = tps->getBool();
-              // FIXME: should tps be deleted?
             }
         }
-        
 		delete rtpl;
-	}
-	else
-	{
-		// failure
 	}
 	tpl.RemoveAll();
 }
@@ -256,8 +245,6 @@ void ARKey::newgetKeyArray(const std::string& inString)
 				fAccarray[index] = currentAccidental;
 			int oct;
 			if (getOctave (ptr, oct)) fOctarray[index] = oct;
-
-//			cout << "at index " << index << " acc: " << fAccarray[index] << endl;
 		}
 		else break; // unknown notename
 	}
@@ -303,7 +290,6 @@ void ARKey::getKeyArray(std::string inString)
 			case NOTE_H: index=6; fAccarray[6]=(float)acc; break;
 			default: return; // if neede, do error handling here
 		}
-
 
 		// In which octave should accidental be put
 		if (j < inString.length()) 
@@ -357,24 +343,12 @@ void ARKey::getOctArray(int * OctArray) const
 	for (int i=0;i<NUMNOTES;i++) OctArray[i]=fOctarray[i];
 }
 
-bool ARKey::IsStateTag() const
-{
-	return true;
-}
-
-void ARKey::printName(std::ostream& os) const
-{
-    os << "ARKey";
-}
-
-void ARKey::printGMNName(std::ostream& os) const
-{
-    os << "\\key";
-}
+bool ARKey::IsStateTag() const						{ return true; }
+void ARKey::printName(std::ostream& os) const		{ os << "ARKey"; }
+void ARKey::printGMNName(std::ostream& os) const	{ os << "\\key"; }
 
 void ARKey::printParameters(std::ostream& os) const
 {
 	os << "key: " << fKeyNumber << "; ";
-
     ARMusicalTag::printParameters(os);
 }
