@@ -1072,25 +1072,22 @@ staff_debug("AddBar");
 GRKey * GRStaff::AddKey(ARKey * arkey)
 {
 	ARNaturalKey * natkey = dynamic_cast<ARNaturalKey *>(arkey);
-
 	// it may happen, that the natkey is not needed because a newsystem has occured!
 	if (natkey && mStaffState.curkey)
 	{
 		// else we have to naturalize ...
 		// First, we copy the current key
 		ARKey * arnatkey = new ARKey(*mStaffState.curkey);
-		GRKey * natkey = new GRKey(this, arnatkey, 1, 1);
+		GRKey * grkey = new GRKey(this, arnatkey, 1, 1);
 
-		// the new natkey MUST get a Spring / and a Rod
-		// otherwise, we have a Problem!
+		// the new grkey MUST get a Spring / and a Rod otherwise, we have a Problem!
 		TYPE_TIMEPOSITION tmp = getRelativeTimePosition();
 		GRNotationElement * el = mCompElements.GetTail();
 		if (el) 
 			tmp = el->getRelativeEndTimePosition();
-		natkey->setRelativeTimePosition(tmp);	
-		
-		addNotationElement(natkey);
-		return natkey;
+		grkey->setRelativeTimePosition(tmp);
+		addNotationElement(grkey);
+		return grkey;
 	}
 
 	if (arkey->getIsAuto())
