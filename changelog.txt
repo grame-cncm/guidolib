@@ -2,6 +2,9 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.3
+- strategy improved for creating natural keys: when the key signature increases the current key
+  no natural key is created unless the 'hideNaturals' tag parameter is set.
+- key layout improved : decreases right space after a natural key
 - fix dispNote issue in tuplets when value is /32 or /64
 - octava tag: draw extensions lines
 - new autopos attribute for lyrics: when 'on', the lyrics are placed below the bottom of
