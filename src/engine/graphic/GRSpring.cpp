@@ -660,7 +660,6 @@ static bool sortbystaff (const GRAccidental* a1, const GRAccidental* a2)
 */
 void GRSpring::checkAccidentalCollisions()
 {
-//	GRAccidentalList myacclist;
 	vector<GRAccidental *> accidents;
 	GuidoPos pos = fGrolst.GetHeadPosition();
 	while (pos)
@@ -671,7 +670,6 @@ void GRSpring::checkAccidentalCollisions()
 		{
 			GRAccidentalList noteacclist;
 			note->extractAccidentals( &noteacclist );
-//			myacclist.DumpListAtTail( &noteacclist );
 			GuidoPos tmppos = noteacclist.GetHeadPosition();
 			while (tmppos)
 				accidents.push_back (noteacclist.GetNext(tmppos));
@@ -722,7 +720,9 @@ void GRSpring::checkAccidentalCollisions()
 
 		for (size_t i=0; i < n; i++) {				// finally report the offsets to the notes
 			GRAccidental * acc = accidents[i];
-			if (!acc->getOffsetSet()) acc->addToOffset(NVPoint(-accoffsets[i],0));
+//			if (!acc->getOffsetSet()) {
+				acc->addToOffset(NVPoint(-accoffsets[i],0));
+//			}
 		}
 		
 // this was the previous version
