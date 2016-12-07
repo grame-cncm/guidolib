@@ -53,9 +53,7 @@ public:
 	bool containsBar() const;
 
 	// A routine to check local collisions
-	virtual void checkLocalCollisions();
-	// a routine to check the accidental-collisions ...
-	virtual void checkAccidentalCollisions();
+	void checkLocalCollisions ();
 	
 	// this routine looks at the GRSpringCollider of this instance of GRSpring and
 	// at the GRSpringCollider of nextspring.
@@ -127,6 +125,9 @@ private:
 	float		fX;
 	float		fSconst;  // spring-constants
     bool		fIsProportionalElement;
+
+	// a routine to check the accidental-collisions ...
+	void		checkAccidentalCollisions();
 
 	// A list of GObjects, that this spring includes
 	GROList			  fGrolst;  //

@@ -643,12 +643,25 @@ void GRSpring::checkLocalCollisions()
 	checkAccidentalCollisions();
 }
 
+//--------------------------------------------------------------------
+// static comparison functions, used to sort accidentals lists
+static bool sortbyypos (const GRAccidental* a1, const GRAccidental* a2)
+{
+	return a1->getPosition().y < a2->getPosition().y;
+}
+static bool sortbystaff (const GRAccidental* a1, const GRAccidental* a2)
+{
+	return a1->getGRStaff() < a2->getGRStaff();
+}
+
+//------------------------------------------------------------
 /** \brief Goes through the elements and finds notes and then checkes,
 	 wether the accidentals collide.
 */
 void GRSpring::checkAccidentalCollisions()
 {
-	GRAccidentalList * myacclist = 0;
+//	GRAccidentalList myacclist;
+	vector<GRAccidental *> accidents;
 	GuidoPos pos = fGrolst.GetHeadPosition();
 	while (pos)
 	{
@@ -658,51 +671,87 @@ void GRSpring::checkAccidentalCollisions()
 		{
 			GRAccidentalList noteacclist;
 			note->extractAccidentals( &noteacclist );
-			if (myacclist == 0)
-				myacclist = new GRAccidentalList(0);
-			
-			myacclist->DumpListAtTail( &noteacclist );
+//			myacclist.DumpListAtTail( &noteacclist );
+			GuidoPos tmppos = noteacclist.GetHeadPosition();
+			while (tmppos)
+				accidents.push_back (noteacclist.GetNext(tmppos));
 		}
 	}
 
-	if (myacclist && myacclist->GetCount() > 1)
-	{
-	// now I have the accidentals at this Spring-location ....
-	
-		myacclist->sort( &compaccposy ); 
-
-		GuidoPos pos = myacclist->GetHeadPosition();
-		NVPoint pt;
-		GRAccidental * prevacc = 0;
-		while (pos)
-		{
-			GRAccidental * acc = myacclist->GetNext(pos);
-			GCoord cury = acc->getPosition().y;
-			if (prevacc)
-			{
-				if (acc->getGRStaff() != prevacc->getGRStaff() 
-					|| (cury - prevacc->getPosition().y) > (3 * LSPACE))
-					
-					pt.x = 0;
-			}
-			prevacc = acc;
-			if (!acc->getOffsetSet())
-				acc->addToOffset(pt);
-			
-			pt.x -= 2 * (acc->getRightSpace());
+	vector<NVRect> accbbs;
+	size_t n = accidents.size();
+	if (n) {
+		sort (accidents.begin(), accidents.end(), sortbyypos);
+		sort (accidents.begin(), accidents.end(), sortbystaff);
+		GRStaff * previousStaff = 0;
+		NVPoint ystaffOffset;
+		for (size_t i=0; i < n; i++) {				// start to collect the bonding boxes
+			GRAccidental * acc = accidents[i];
+			GRStaff * staff = acc->getGRStaff();	// check if we're on the smae staff
+			ystaffOffset.y += (staff != previousStaff) ? LSPACE * 36 : 0;
+			NVRect bb = acc->getBoundingBox();
+			bb += acc->getPosition();
+			bb += ystaffOffset;						// on next staff, add a y offset
+			accbbs.push_back(bb);
+			previousStaff = staff;
 		}
+		
+		vector<float> accoffsets;					// next computes the offsets
+		accoffsets.push_back(0);					// no offset for the first accidental
+		for (size_t i=1; i<accbbs.size(); i++) {
+			NVPoint offset (0,0);
+			bool collides = accbbs[i].Collides(accbbs[i-1]);		// look for collision with the preceding accidental first
+			int collindex = 0;
+			for (int j=1; j<accbbs.size() && !collides; j++) {		// and then check the next accidentals
+				if ((i > j) && accoffsets[i-j]) {
+					collides = accbbs[i].Collides(accbbs[i-j-1]);
+					if (collides) {
+						collindex = i-j-1;
+						break;
+					}
+				}
+			}
+			if (collides) {							// collision detected
+				float offset = accoffsets[i-1] + accbbs[collindex].Width() + LSPACE/7;
+				accoffsets.push_back(offset);		// put an offset to the left of the preceding accidental
+				accbbs[i] += NVPoint(-offset,0);	// and update the accidental bounding box
+			}
+			else
+				accoffsets.push_back(0);
+		}
+
+		for (size_t i=0; i < n; i++) {				// finally report the offsets to the notes
+			GRAccidental * acc = accidents[i];
+			if (!acc->getOffsetSet()) acc->addToOffset(NVPoint(-accoffsets[i],0));
+		}
+		
+// this was the previous version
+//		GuidoPos pos = myacclist->GetHeadPosition();
+//		NVPoint pt;
+//		GRAccidental * prevacc = 0;
+//		while (pos)
+//		{
+//			GRAccidental * acc = myacclist->GetNext(pos);
+//			GCoord cury = acc->getPosition().y;
+//			if (prevacc)
+//			{
+//				if (acc->getGRStaff() != prevacc->getGRStaff()  || (cury - prevacc->getPosition().y) > (3 * LSPACE))
+//					pt.x = 0;
+//			}
+//			if (!acc->getOffsetSet()) acc->addToOffset(pt);
+//			pt.x -= 2 * (acc->getRightSpace());
+//			prevacc = acc;
+//		}
 
 		// now I have to update bounding boxes of notes...
 		pos = fGrolst.GetHeadPosition();
 		while (pos)
 		{
 			GRSingleNote *sngnot = dynamic_cast<GRSingleNote *>(fGrolst.GetNext(pos));
-
 			if (sngnot)
 				sngnot->updateBoundingBox();
 		}
 	}
-	delete myacclist;
 }
 
 int GRSpring::isCommonSpring(int numvoices) const
