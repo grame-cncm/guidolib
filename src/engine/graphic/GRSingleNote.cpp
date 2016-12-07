@@ -1183,13 +1183,19 @@ void GRSingleNote::handleAccidental (const ARAccidental* acc)
 		// now we have to set the parameters (offset and all that...)
 		NVPoint pt ( el->getOffset());
 
-		if (acc->getDX() && acc->getDX()->TagIsSet())
+		bool setOffset = false;
+		if (acc->getDX() && acc->getDX()->TagIsSet()) {
+			setOffset =true;
 			pt.x += (acc->getDX()->getValue());
+		}
 
-		if (acc->getDY() && acc->getDY()->TagIsSet())
+		if (acc->getDY() && acc->getDY()->TagIsSet()) {
+			setOffset =true;
 			pt.y -= (acc->getDY()->getValue());
+		}
 
-		el->setOffset(pt);
+		if (setOffset)
+			el->setOffset(pt);
 
 		if (acc->getSize() && acc->getSize()->TagIsSet())
 			el->setSize(acc->getSize()->getValue());
