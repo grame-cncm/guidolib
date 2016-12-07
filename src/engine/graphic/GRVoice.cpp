@@ -697,58 +697,29 @@ optForce is the guido layout settings
 */
 int GRVoice::createNewRods(GRStaffManager * stfmgr, int & startspr, int & endspr, float optForce)
 {
-	if (lastrod)
-	{
-		// so the calling function knows,
-		// where the restretching must start.
-
+	if (lastrod) {
+		// so the calling function knows where the restretching must start.
 		assert(lastrod->mSpr2 == startspr);
-
-		// startspr = lastrod->spr1;
-
 		// this removes the rod from the rod-list.
-		// it is done, because the lastrod was 
-		// a connection to the end, which is now
-		// moved further....
-		// no, no longer removal
-		// stfmgr->deleteRod(lastrod);
-
-		// this sets the startspr, so the staffmgr
-		// knows, which offset needs to be restrechted.
-
-		// will be really deleted by owner
-		// (stfmgr or grsystem).
+		// it is done, because the lastrod was a connection to the end, which is now moved further....
 		lastrod = NULL;
 	}
-
-	if (firstrod)
-	{
-		// old firstrod ...
-		// will be deleted by real owner ...
-		// (which is stfmgr or grsystem)
-		
-		firstrod = NULL;
-	}
+	firstrod = NULL;
 
 	// this setting just remembers, if it is the first run ....
-	// for the first run, there must be a special handling (remembering
-	// the first rod position)
+	// for the first run, there must be a special handling (remembering the first rod position)
 	GuidoPos pos;
-	if (lastsprpos == NULL)
-	{
-		// there has been no previous rod, that
-		// is there has been no element in this
+	if (lastsprpos == NULL) {
+		// there has been no previous rod, that is there has been no element in this
 		// voice yet, that is attached to a string.
 		if (mIsNewLine)
 		{
-			// then, there has been no element 
-			// added yet!
+			// then, there has been no element added yet!
 			return -1;
 		}
 		pos = firstPositionInLine;
 	}
-	else
-	{
+	else {
 		// iterate to the next element....
 		pos = lastsprpos;
 		GetNext(pos);
@@ -757,7 +728,6 @@ int GRVoice::createNewRods(GRStaffManager * stfmgr, int & startspr, int & endspr
 	GRNotationElement * el = 0; 
 	float spacedistance = 0;
 	bool spaceactive = false;
-
 	while (pos)
 	{
 		lastsprpos = pos;
@@ -765,8 +735,7 @@ int GRVoice::createNewRods(GRStaffManager * stfmgr, int & startspr, int & endspr
 
 		// is this element a Space-Tag?
 		GRSpace * spc = dynamic_cast<GRSpace *>(el);
-		if (spc)
-		{
+		if (spc) {
 			// this can only happen, if we are at the very start ..
 			assert(!firstrod);
 			spacedistance += spc->getARSpace()->getValue();
@@ -774,148 +743,90 @@ int GRVoice::createNewRods(GRStaffManager * stfmgr, int & startspr, int & endspr
 		}
 
 		// does this element have a spring;
-		// if not, than there can't be a rod
-		// attached to it.
-		if (!el->getNeedsSpring())
-		{
-			continue;
-		}
+		// if not, than there can't be a rod attached to it.
+		if (!el->getNeedsSpring()) continue;
 
-		// if (beginsAtHead)
-		// {
-
-		if (!firstrod)
-		{
+		if (!firstrod) {
 			GRRod * rod;
-			// this may need to change, so that
-			// glue- elements get a chance as  well ...
+			// this may need to change, so that glue- elements get a chance as  well ...
 			// maybe we have to create another rod somewhere ?
-			// not only the glue, but this MUST
-			// be the distance of the last element ....
+			// not only the glue, but this MUST be the distance of the last element ....
 			// otherwise, we do not get enough space ...
 			float dist = (LSPACE * 0.5f);
 			if (dynamic_cast<GRClef*>(el))
-			{
-				dist = 50; // the same as the begin glue
-							// this is a wild hack ...
-			}
+				dist = 50; // the same as the begin glue, this is a wild hack ...
 
-			rod = new GRRod(
-				dist + el->getLeftSpace(),
-				el->getSpringID()-1,el->getSpringID(), optForce);
-
-			if (spaceactive)
-			{
-				// the space at the beginning is ignored completely. 
-				// in the case of merging, the firstrod is removed,
-				// otherwise, it is just  the regular space needed
-				// in the case of no space-tag  at all.
-
-				// old:
-				// the space has been taken care of before (hopefully)
-				// (if this is called in reaction to pbreak ...)
+			rod = new GRRod (dist + el->getLeftSpace(), el->getSpringID()-1, el->getSpringID(), optForce);
+			if (spaceactive) {
+				rod->setLength (spacedistance);
+				rod->setIsSpaceRod( true );		// space-active....
 				spaceactive = 0;
-				spacedistance = 0;				
-
-				// space-active....
-				rod->setIsSpaceRod( true );
+				spacedistance = 0;
 				stfmgr->addRod(rod,1);
 			}
-			else
-			{
-				stfmgr->addRod(rod,0);
-			}
+			else stfmgr->addRod(rod,0);
 
-			if (rod->getSpr1() < startspr)
-				startspr = rod->getSpr1();
+			if (rod->getSpr1() < startspr) startspr = rod->getSpr1();
 
 			// the very first rod is a copy of the one added to the stfmgr.
 			firstrod = rod;
 		}
 
 
-		// this is done, as long as the NEXT
-		// element needs a spring ...
-		while (pos)
-		{
+		// this is done, as long as the NEXT element needs a spring ...
+		while (pos) {
 			GRNotationElement * next = GetCompositeElements().GetAt(pos);
-
 			GRSpace * spc = dynamic_cast<GRSpace *>(next);
-			if (spc)
-			{
-				// then this element is a space-tag ...
-				// all between is added ...
+			if (spc) {
+				// then this element is a space-tag ... all between is added ...
 				spacedistance += spc->getARSpace()->getValue();
 				spaceactive = true;
 			}
-			if (!next->getNeedsSpring())
-			{
+			if (!next->getNeedsSpring()) {
 				GetNext(pos);
 				continue;
 			}
 			// it needs a spring. Now we add a Rod ...
 			GRRod * rod = 0;
-			if (spaceactive)
-			{
+			if (spaceactive) {
 				rod = new GRRod( el, next, 0, spacedistance, optForce);
 				rod->setIsSpaceRod( true );
 				spaceactive = false;
 				spacedistance = 0;
-				// spaceactive!
-				stfmgr->addRod( rod,1 );
+				stfmgr->addRod( rod,1 );	// spaceactive!
 			}
-			else
-			{
+			else {
 				rod = new GRRod( el, next, 0, optForce);
-				// no space active
-				stfmgr->addRod(rod,0);
+				stfmgr->addRod(rod,0); 		// no space active
 			}
 
 			if( rod->getSpr1() < startspr )
 				startspr = rod->getSpr1();
 
 			lastrod = rod;
-
 			// finish the inner cycle
 			break;
-
-
 		} // while (pos);
-
-		// if we are moved out 
-
-
 	} // while (pos);
 
 	// there is an element ...
-	// then we need to add a Rod from this 
-	// to the end. This rod is going to
-	// be the lastrod ...
-	if (el && el->getNeedsSpring())
-	{
+	// then we need to add a Rod from this to the end. This rod is going to be the lastrod ...
+	if (el && el->getNeedsSpring()) {
 		GRRod * rod;
-		if (spaceactive)
-		{
-			// the rod is of the length of 
-			// the following space tag...
+		if (spaceactive) {
+			// the rod is of the length of the following space tag...
 			rod = new GRRod( spacedistance, el->getSpringID(), endspr, optForce);
 			rod->setIsSpaceRod( true );
-
-			// space active!
-			stfmgr->addRod(rod,1);
+			stfmgr->addRod(rod,1);		// space active!
 		}
-		else
-		{
+		else {
 			rod = new GRRod(el->getRightSpace(), el->getSpringID(), endspr, optForce);
-			// no space active
-			stfmgr->addRod(rod,0);
+			stfmgr->addRod(rod,0);		// no space active
 		}
-
 		if (rod->getSpr1() < startspr)
 			startspr = rod->getSpr1();
 		lastrod = rod;
 	}
-
 	return 0;
 }
 
