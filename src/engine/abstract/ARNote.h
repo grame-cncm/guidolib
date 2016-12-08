@@ -97,6 +97,9 @@ class ARNote : public ARMusicalEvent
     virtual ARNote* isARNote()				{ return this; }
     virtual bool	isEmptyNote() const		{ return getName() == "empty"; }
     /*****************************************/
+	
+	bool		isAuto() const		{ return fAuto; }
+
 
   private:
     ARNoteName fName;
@@ -112,6 +115,7 @@ class ARNote : public ARMusicalEvent
     bool       fIsLonelyInCluster;
     bool       fClusterHaveToBeDrawn;
     bool       fSubElementsHaveToBeDrawn;
+	bool	   fAuto;			// a flag to discriminate notes created by the auto stuff (e.g. due to barlines)
     ARTremolo *fTremolo;
 
     TYPE_TIMEPOSITION	fStartPosition;

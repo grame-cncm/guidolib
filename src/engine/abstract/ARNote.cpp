@@ -30,14 +30,14 @@ const char * gd_pc2noteName(int fPitch);
 ARNote::ARNote(const TYPE_DURATION & durationOfNote)
 	:	ARMusicalEvent(durationOfNote), fName("empty"), fPitch(UNKNOWN), fOctave(MIN_REGISTER),
     fAccidentals(0), fDetune(0), fIntensity(MIN_INTENSITY), fOrnament(NULL), fCluster(NULL), fOwnCluster(false), fIsLonelyInCluster(false),
-    fClusterHaveToBeDrawn(false), fSubElementsHaveToBeDrawn(true), fTremolo(0), fStartPosition(-1,1), fNoteAppearance("")
+    fClusterHaveToBeDrawn(false), fSubElementsHaveToBeDrawn(true), fAuto(false), fTremolo(0), fStartPosition(-1,1), fNoteAppearance("")
 {
 }
 
 ARNote::ARNote(const TYPE_TIMEPOSITION & relativeTimePositionOfNote, const TYPE_DURATION & durationOfNote)
 	:	ARMusicalEvent( relativeTimePositionOfNote, durationOfNote), fName("noname"), fPitch(UNKNOWN),
 		fOctave(MIN_REGISTER), fAccidentals(0), fDetune(0), fIntensity(MIN_INTENSITY), fOrnament(NULL), fCluster(NULL),
-        fOwnCluster(false), fIsLonelyInCluster(false), fClusterHaveToBeDrawn(false), fSubElementsHaveToBeDrawn(true), fTremolo(0),
+        fOwnCluster(false), fIsLonelyInCluster(false), fClusterHaveToBeDrawn(false), fSubElementsHaveToBeDrawn(true), fAuto(false), fTremolo(0),
         fStartPosition(-1,1), fNoteAppearance("")
 {
 }
@@ -46,7 +46,7 @@ ARNote::ARNote( const std::string & name, int accidentals, int octave, int numer
 	:	ARMusicalEvent(numerator, denominator), fName( name ), fPitch ( UNKNOWN ),
 		fOctave( octave ),	fAccidentals( accidentals ), fDetune(0), fIntensity( intensity ),
 		fOrnament(NULL), fCluster(NULL), fOwnCluster(false), fIsLonelyInCluster(false), fClusterHaveToBeDrawn(false), 
-		fSubElementsHaveToBeDrawn(true), fTremolo(0), fStartPosition(-1,1), fNoteAppearance("")
+		fSubElementsHaveToBeDrawn(true), fAuto(false), fTremolo(0), fStartPosition(-1,1), fNoteAppearance("")
 {
 	assert(fAccidentals>=MIN_ACCIDENTALS);
 	assert(fAccidentals<=MAX_ACCIDENTALS);
@@ -57,7 +57,7 @@ ARNote::ARNote( const std::string & name, int accidentals, int octave, int numer
 ARNote::ARNote(const ARNote & arnote) 
 	:	ARMusicalEvent( (const ARMusicalEvent &) arnote),
 		fName(arnote.fName), fOrnament(NULL),  fCluster(NULL), fOwnCluster(false), fIsLonelyInCluster(false),
-        fClusterHaveToBeDrawn(false), fSubElementsHaveToBeDrawn(true), fTremolo(0), fStartPosition(-1,1)
+        fClusterHaveToBeDrawn(false), fSubElementsHaveToBeDrawn(true), fAuto(true), fTremolo(0), fStartPosition(-1,1)
 {
 	fPitch = arnote.fPitch;
 	fOctave = arnote.fOctave;
@@ -137,27 +137,10 @@ void ARNote::addSharp()
 	assert(fAccidentals<=MAX_ACCIDENTALS);
 }
 
-void ARNote::setRegister( int newRegister)
-{
-//	assert(newRegister>=MIN_REGISTER);
-//	assert(newRegister<=MAX_REGISTER);
-	fOctave=newRegister;
-}
-
-const ARNoteName & ARNote::getName() const
-{
-	return fName;
-}
-
-TYPE_REGISTER ARNote::getOctave() const
-{
-	return fOctave;
-}
-
-TYPE_PITCH ARNote::getPitch() const
-{
-	return fPitch;
-}
+void				ARNote::setRegister (int newRegister)	{ fOctave=newRegister; }
+const ARNoteName &	ARNote::getName() const					{ return fName; }
+TYPE_REGISTER		ARNote::getOctave() const				{ return fOctave; }
+TYPE_PITCH			ARNote::getPitch() const				{ return fPitch; }
 
 void ARNote::offsetpitch(int steps)
 {
@@ -275,6 +258,7 @@ void ARNote::forceNoteAppearance(NVstring noteAppearance) {
 void ARNote::print(std::ostream& os) const
 {
     printName(os);
+	os << " ";
     printParameters(os);
 }
 
@@ -314,10 +298,11 @@ void ARNote::printGMNName(std::ostream& os) const
 
 void ARNote::printParameters(std::ostream& os) const
 {
-    os << "name: \"" << getName() << "\" ";
+    os << "\"" << getName() << "\" ";
     os << "pitch: " << getPitch() << " ";
     os << "oct: " << getOctave() << " ";
     os << "accidental: " << getAccidentals() << " ";
     os << "detune: " << getDetune() << " ";
     os << "duration: " << getDuration() ;
+	if (fAuto) os << " (auto)";
 }
