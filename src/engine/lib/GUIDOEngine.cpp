@@ -289,12 +289,33 @@ class TestTimeMap : public TimeMapCollector
 #endif
 
 // --------------------------------------------------------------------------
+static GRHandler CreateGr(ARHandler ar, ARPageFormat* format, const GuidoLayoutSettings * settings)
+{
+	ARMusic * arMusic = ar->armusic;
+
+	long startTime = GuidoTiming::getCurrentmsTime();
+
+	// Create new gr music object with a copy of default pageFormat.
+	GRMusic *grMusic = new GRMusic(arMusic, format, settings, false);
+	if (grMusic == 0) return 0;
+
+	long endTime = GuidoTiming::getCurrentmsTime();
+	grMusic->setAR2GRTime(endTime - startTime);
+
+	// - The GR structure needs its AR equivalent during all its lifetime.
+	ar->refCount++;
+	// - Propagate the music name
+	grMusic->setName(arMusic->getName().c_str());
+	//  - Add the GRMusic object to the global list
+	return guido_RegisterGRMusic(grMusic, ar);
+}
+
+// --------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * settings, GRHandler * gr)
 {
 	if( gr == 0 ) 	return guidoErrBadParameter;
 	if( ar == 0 )	return guidoErrInvalidHandle;
 	if( !gInited )	return guidoErrNotInitialized;
-
 	*gr = 0;
 
 #ifdef TESTTIMEMAP
@@ -304,40 +325,14 @@ GUIDOAPI(GuidoErrCode) GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * set
 
 	// - Find the AR object corresponding to inHandleAR.
 	ARMusic * arMusic = ar->armusic; // (JB) was guido_PopARMusic()
+	if (arMusic == 0) return guidoErrInvalidHandle;
 
-	if (arMusic == 0)
-		return guidoErrInvalidHandle;
-
-	// - Now create the GRMusic object from  the abstract representation.
-    long startTime = GuidoTiming::getCurrentmsTime();
-	// Create new gr music object with a copy of default pageFormat.
-	GRMusic *grMusic = new GRMusic(arMusic, new ARPageFormat(*gARPageFormat), settings, false);
-    long endTime = GuidoTiming::getCurrentmsTime();
-
-	if (grMusic == 0)
-        return guidoErrMemory;
-    else {
-        grMusic->setAR2GRTime(endTime - startTime);
-
-#ifdef TIMING
-        long AR2GRTime = grMusic->getAR2GRTime();
-        std::cerr << "  --> " << AR2GRTime << "ms spent during AR to GR procedure" << std::endl;
-#endif
-    }
-
-	// - The GR structure needs its AR equivalent during all its lifetime.
-	ar->refCount++;
-
-	// - Propagate the music name
-	grMusic->setName(arMusic->getName().c_str());
-
-	//  - Add the GRMusic object to the global list
-	GRHandler outHandleGR = guido_RegisterGRMusic(grMusic, ar);
-
-	*gr = outHandleGR;
-
+	GRHandler grh = CreateGr (ar, new ARPageFormat(*gARPageFormat), settings);
+	if (!gr) return guidoErrMemory;
+	*gr = grh;
 	return guidoNoErr;
 }
+
 
 GUIDOAPI(GRHandler) GuidoAR2GRParameterized(ARHandler ar, const GuidoGrParameters* gp)
 {
@@ -370,30 +365,7 @@ GUIDOAPI(GRHandler) GuidoAR2GRParameterized(ARHandler ar, const GuidoGrParameter
 	}
 
 	// - Now create the GRMusic object from  the abstract representation.
-	long startTime = GuidoTiming::getCurrentmsTime();
-
-	GRMusic *grMusic = new GRMusic(arMusic, pf, settings, false);
-	long endTime = GuidoTiming::getCurrentmsTime();
-
-	if (grMusic == 0)
-		return 0;
-	else {
-		grMusic->setAR2GRTime(endTime - startTime);
-
-#ifdef TIMING
-		long AR2GRTime = grMusic->getAR2GRTime();
-		std::cerr << "  --> " << AR2GRTime << "ms spent during AR to GR procedure" << std::endl;
-#endif
-	}
-
-	// - The GR structure needs its AR equivalent during all its lifetime.
-	ar->refCount++;
-
-	// - Propagate the music name
-	grMusic->setName(arMusic->getName().c_str());
-
-	//  - Add the GRMusic object to the global list
-	return guido_RegisterGRMusic(grMusic, ar);
+	return CreateGr (ar, pf, settings);
 }
 
 // --------------------------------------------------------------------------
