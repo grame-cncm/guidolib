@@ -18,7 +18,6 @@
 #include "TagParameterFloat.h"
 #include "TagParameterList.h"
 #include "ListOfStrings.h"
-//#include "../parser/gmntools.h"
 #include "GuidoDefs.h"
 
 ListOfTPLs ARSpace::ltpls(1);
@@ -41,25 +40,15 @@ void ARSpace::setTagParameterList(TagParameterList & tpl)
 		// we found a match!
 		if (ret == 0)
 		{
-			// then, we now the match for
-			// the first ParameterList
-			// w, h, ml, mt, mr, mb
 			GuidoPos pos = rtpl->GetHeadPosition();
-
 			TagParameterFloat * tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
 			assert(tpf);
-
 			val = tpf->getValue();
 		}
 		delete rtpl;
 
 	}
-	else
-	{
-		// failure.
-	}
 	tpl.RemoveAll();
-	
 }
 
 void ARSpace::printName(std::ostream& os) const
@@ -75,6 +64,5 @@ void ARSpace::printGMNName(std::ostream  &os) const
 void ARSpace::printParameters(std::ostream& os) const
 {
 	os << " dist: " << val << "; ";
-
     ARMusicalTag::printParameters(os);
 }
