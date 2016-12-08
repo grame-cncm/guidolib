@@ -397,7 +397,7 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 		createDots( mDurTemplate, mNoteBreite, NVPoint( 0, 0 ));
 
 	// - Build the accidental list
-	int accidentals = arNote->getAccidentals();
+	int accidentals = arNote->isAuto() ? 0 : arNote->getAccidentals();
 	if (accidentals > 2) accidentals = 2;
 	else if (accidentals < -2) accidentals = -2;
 
