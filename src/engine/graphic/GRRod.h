@@ -35,17 +35,12 @@ class GRRod
 	friend class GRSystem;
 	friend class GRStaff;
 	friend class GRVoice;
-	friend class GRStaffManager;
 
 public:
-
 			GRRod( const GRRod & rod);
 			GRRod( float inLength, int inSpring1, int inSpring2 , float aOptForce);
-			GRRod( const GRNotationElement * gr1, const GRNotationElement * gr2, 
-																	int lastspringid, float aOptForce);
-
-			GRRod(const GRNotationElement * gr1, const GRNotationElement * gr2,
-										int lastspringid, float spacedistance, float aOptForce);
+			GRRod( const GRNotationElement * gr1, const GRNotationElement * gr2, int lastspringid, float aOptForce);
+			GRRod(const GRNotationElement * gr1, const GRNotationElement * gr2, int lastspringid, float spacedistance, float aOptForce);
 	virtual ~GRRod() { }
 
 	int 	resetForce(const GRRod & rd);
@@ -55,35 +50,27 @@ public:
 	void 	setIsSpaceRod(bool flag)	{ mIsSpaceRod = flag; }
 	float 	getLength() const  			{ return mLength; }
 	void	setLength( float in )		{ mLength = in; }
-
-	GRStaff * mGrStaff;
-
-	int 	operator < (const GRRod & r2) const;
 	float 	stretchsprings(float inForce, SpringVector * sprvect);
 	float 	calclength(float inForce ,SpringVector * sprvect);
 	float 	calcforce(SpringVector * sprvect);
 	int 	spansOne() const;
-	void 	setSpringIDs(int id1, int id2)
-							{ mSpr1 = id1; mSpr2 = id2; }
+	void 	setSpringIDs(int id1, int id2)					{ mSpr1 = id1; mSpr2 = id2; }
+
+	int 	operator < (const GRRod & r2) const;
+
 protected:
+	GRStaff * mGrStaff;
 	float	optForce;
 	float 	mForce;
-	bool	mIsSpaceRod;
 	int 	mSpr1;
 	int 	mSpr2;
+
+private:
+	bool	mIsSpaceRod;
 	float 	mLength;
 };
 
-inline int rodpcomp(const GRRod * r1, const GRRod * r2)
-{
-	return *r1 < *r2;
-}
-
-inline int GRRod::spansOne() const
-{
-	if (mSpr1 == mSpr2 - 1)
-		return 1;
-	return 0;
-}
+inline int rodpcomp(const GRRod * r1, const GRRod * r2)		{ return *r1 < *r2; }
+inline int GRRod::spansOne() const							{ return (mSpr1 == mSpr2 - 1) ? 1 : 0; }
 
 #endif

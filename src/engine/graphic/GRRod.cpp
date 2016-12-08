@@ -17,47 +17,36 @@
 #include "GRVoice.h"
 #include "kf_ivect.h"
 
-GRRod::GRRod(const GRNotationElement * gr1,
-			 const GRNotationElement * gr2,
+GRRod::GRRod(const GRNotationElement * gr1, const GRNotationElement * gr2,
 			 int lastsprid, float spacedistance, float aOptForce) : optForce(aOptForce)
 {
-	// this calculates the space needed for the right
-	// part of gr1 and for the left part of gr2
+	// this calculates the space needed for the right part of gr1 and for the left part of gr2
 	mLength = spacedistance;
 
-	
 	// - Get springs ID
 	int spr1 = gr1->getSpringID();
 	int spr2 = gr2->getSpringID();
-	if( spr2 < 0 )
-		spr2 = lastsprid;
+	if( spr2 < 0 ) spr2 = lastsprid;
 
 	setSpringIDs( spr1, spr2 );
-
 	mIsSpaceRod = false;
 	mForce = -1;
 }
 
-GRRod::GRRod( const GRNotationElement * gr1,
-				const GRNotationElement * gr2,
-				int lastspringid,
-			  float aOptForce) : optForce(aOptForce)
+GRRod::GRRod( const GRNotationElement * gr1, const GRNotationElement * gr2, int lastspringid, float aOptForce)
+	: optForce(aOptForce)
 {
 	const float r1 = gr1->getRightSpace();
 	const float r2 = gr2->getLeftSpace();
 
-	// this calculates the space needed for the right
-	// part of gr1 and for the left part of gr2
+	// this calculates the space needed for the right part of gr1 and for the left part of gr2
 	mLength = r1 + r2;
-
 	// - Get springs ID
 	int spr1 = gr1->getSpringID();
 	int spr2 = gr2->getSpringID();
-	if( spr2 < 0)
-		spr2 = lastspringid;
+	if( spr2 < 0) spr2 = lastspringid;
 
 	setSpringIDs( spr1, spr2 );
-
 	mIsSpaceRod = false;
 	mForce = -1;
 }
@@ -66,15 +55,14 @@ GRRod::GRRod( const GRRod & rod )
 {
 	mGrStaff = rod.mGrStaff;
 	mLength  = rod.mLength;
-	
 	setSpringIDs( rod.mSpr1,  rod.mSpr2 );
-	
 	mIsSpaceRod = rod.mIsSpaceRod;
 	mForce = -1;
 	optForce = rod.optForce;
 }
 
-GRRod::GRRod( float inLength, int inSpring1, int inSpring2, float aOptForce) : optForce(aOptForce)
+GRRod::GRRod( float inLength, int inSpring1, int inSpring2, float aOptForce)
+	: optForce(aOptForce)
 {
 	setSpringIDs( inSpring1, inSpring2 );
 	mLength = inLength;
@@ -106,44 +94,32 @@ invent15,gmn
 */
 float GRRod::calcforce(SpringVector * sprvect)
 {
-	if( mForce >= 0 )
-		return mForce;
+	if( mForce >= 0 ) return mForce;
 
 	// now we work with a GRSpaceForceFunction  (partial)
-	GRSpaceForceFunction2 sff(optForce);	// was: = new GRSpaceForceFunction2();
-
-	for (int i = mSpr1; i < mSpr2; ++i )
-	{
+	GRSpaceForceFunction2 sff(optForce);
+	for (int i = mSpr1; i < mSpr2; ++i ) {
 		GRSpring * spr = sprvect->Get(i);
-		if (spr)
-		{
+		if (spr) {
 			sff.addSpring(spr);
 			if (spr->fIsfrozen)
-			{
 				sff.FreezeSpring(spr);
-			}
 		}
 	}
 
-	if (sff.getExtent(0) >= mLength)
-	{
+	if (sff.getExtent(0) >= mLength) {
 		// no stretching necessary ... 
-		//delete sff;
 		mForce = 0;
 		return 0;
 	}
 
 	mForce = sff.getForce(mLength);
-	if (mForce < 0 )
-	{
-		// then, probably all springs are frozen .. , then unfreeze
-		// the LAST spring
+	if (mForce < 0 ) {
+		// then, probably all springs are frozen .. , then unfreeze the LAST spring
 		sff.UnfreezeSpring(sprvect->Get(mSpr2-1));
 		mForce = sff.getForce(mLength);
 	}
-
 	assert( mForce >= 0 );	
-	// delete sff;
 	return mForce;
 }
 
@@ -182,27 +158,20 @@ float GRRod::stretchsprings(float inForce, SpringVector * sprvect) // doh! force
 	{
 		GRSpring * spr = sprvect->Get(i);
 		if (!spr->fIsfrozen)
-		{
 			allfrozen = 0;
-		}
+
 		if (!spr->fIsfrozen && inForce > spr->getForce())
-		{
 			nlength += spr->change_force(inForce);
-		}
-		else if (spr->fIsfrozen)
-		{
-			if (i == (mSpr2 - 1) && allfrozen)
-			{
-				// temporarily unfreeze the
-				// LAST spring, if all are
-				// froezn
+
+		else if (spr->fIsfrozen) {
+			if (i == (mSpr2 - 1) && allfrozen) {
+				// temporarily unfreeze the LAST spring, if all are frozen
 				assert(spr->fIsfrozen);
 				spr->fIsfrozen = 0;
 				nlength += spr->change_force(inForce);
 				spr->fIsfrozen = 1;
 			}
-			else
-				nlength += spr->fX;
+			else nlength += spr->fX;
 		}
 	}
 	return nlength;
@@ -214,12 +183,9 @@ float GRRod::stretchsprings(float inForce, SpringVector * sprvect) // doh! force
 int GRRod::resetForce(const GRRod & rd)
 {
 	if (mForce < 0) return 0;
-	if ( (rd.mSpr2 > mSpr1 &&
-		  rd.mSpr2 <= mSpr2) ||
-		 (rd.mSpr1 >= mSpr1 &&
-		  rd.mSpr1 < mSpr2) ||
-	     (rd.mSpr2 >= mSpr2 &&
-		  rd.mSpr1 <= mSpr1) )
+	if ( (rd.mSpr2 > mSpr1 && rd.mSpr2 <= mSpr2)
+		|| (rd.mSpr1 >= mSpr1 && rd.mSpr1 < mSpr2)
+		|| (rd.mSpr2 >= mSpr2 && rd.mSpr1 <= mSpr1) )
 	{
 		  mForce = -1;
 		  return 1;
@@ -231,29 +197,12 @@ int GRRod::operator<(const GRRod & r2) const
 {
 	const int s1 = spansOne();
 	const int s2 = r2.spansOne();
-	if (s1 && s2)
-	{
-		if (mSpr1 < r2.mSpr1)
-			return -1;
-		else if (mSpr1 == r2.mSpr1)
-			return 0;
-		else 
-			return 1;
-	}
-	else if (!s1 && !s2)
-	{
-		if (mSpr1 < r2.mSpr1)
-			return -1;
-		else if (mSpr1 == r2.mSpr1)
-			return 0;
-		else 
-			return 1;
-	}
+	if (s1 && !s2) return -1;
+	if (s2 && !s1) return 1;
 
-	if (s1)
-		return -1;
-	if (s2)
-		return 1;
+	if (mSpr1 < r2.mSpr1)		return -1;
+	else if (mSpr1 == r2.mSpr1)	return 0;
+	else						return 1;
 	return 0;
 }
 
