@@ -39,32 +39,23 @@ class KF_Vector
 	  				KF_Vector(TYPE p_noelement, TYPE * newdata, int newmemsize, int newindexoffset,
 		  						int newminimum, int newmaximum, int newcount);
 	  
-		virtual		~KF_Vector()
-		{
-			free(data);
-			  //delete mydatalist;
-			  //delete myindexlist;
-		}
+		virtual		~KF_Vector()	{ free(data); }
 	  
 		// - STL-like interface
-	 
-		int		size() const { return GetCount(); }
-		bool	empty() const { return size() == 0; }
+		int		size() const	{ return GetCount(); }
+		bool	empty() const	{ return size() == 0; }
 
 	  //void SetMaximum(int index);
 	  //void SetMinimum(int index);
 	  
 				void 	RemoveAll();
-
 	  			int 	GetNextIndex(int index) const;
-	  
 	  			void 	Set(int index, TYPE mydata);
-	  
+
 		virtual void 	Cut(int index,KF_Vector<TYPE> **pnew);
 		virtual void 	Delete(int index);
 	  
 	  TYPE Get(int index) const;	// replaced by at()
-	  
 	  int GetMaximum() const
 	  {
 		  assert(maximum - indexoffset + 1 <= memsize );
@@ -84,9 +75,7 @@ class KF_Vector
 	  }
 	  
   protected:
-
-	  // this routine is needed to resize the memory area 
-	  // index is the new index that is needed .....
+	  // this routine is needed to resize the memory area index is the new index that is needed .....
 	  void Resize(int index);
 
 	  TYPE noelement;
