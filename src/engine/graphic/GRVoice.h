@@ -51,31 +51,17 @@ class GRVoice : public GRARCompositeNotationElement
 	friend class GRVoiceManager;
 
 	public:
-				GRVoice( ARMusicalObject * arobj, bool ownsar );
+				 GRVoice( ARMusicalObject * arobj, bool ownsar );
 		virtual ~GRVoice();
-
 
 				GRPage * getPageNum(int num,int denom);		// must match an existing element date.
 				GRPage * getPageForTimePos( int num, int denom ) const;
 				GRRod * getLastRod() const	{ return lastrod; }
 				GRRod * getFirstRod() const	{ return firstrod; }
 
-
 		virtual GuidoPos AddTail(GRNotationElement * el);
 
-#ifdef OLDSPFACTIVE
-	int updateQPMatrix(GRSpaceForceFunction * spf,
-		ISpringVector * sprvect,
-		int startspr, int endspr);
-
-	int updateMSCMatrix(GRSpaceForceFunction * spf,
-		int startspr, int endspr);
-#endif
-	int updateMSCMatrix(GRSpaceForceFunction2 * sff,
-						GRSpacingMatrix * spm,	
-						GRStaffManager * stfmgr,
-						ISpringVector * sprvect,
-						int startspr, int endspr);
+	int updateMSCMatrix(GRSpaceForceFunction2 * sff, GRSpacingMatrix * spm, GRStaffManager * stfmgr, ISpringVector * sprvect, int startspr, int endspr);
 
 	int createNewRods(GRStaffManager * stfmgr, int &startspr, int & endspr, float optForce);
 	virtual void rememberNLinePosition(const TYPE_TIMEPOSITION & tp);
@@ -84,13 +70,10 @@ class GRVoice : public GRARCompositeNotationElement
 
 	virtual void GGSOutput() const {}
 	virtual void OnDraw( VGDevice & ) const {}
-    
 	ARMusicalVoice * getARMusicalVoice();
-
 	void startNewSystem(GRSystem * grsystem);
 
 	protected:
-
 		GuidoPos getSystemStartPos(GRSystem * grsystem);
 
 		GuidoPos 	firstPositionInLine;
