@@ -149,7 +149,7 @@ _ |
 (* meas. 10 *) _*1/2 _*1/8) \beamBegin g-1 a b \beamEnd |
 (* meas. 11 *) \beamBegin c0*1/8. d*1/32 c \beamEnd \beamBegin b-1*1/8 e0 \beamEnd \beamBegin a-1 \tieBegin:43<curve="down"> d0 \beamEnd \beamBegin d*1/16 \tieEnd:43 e d c \beamEnd |
 (* meas. 12 *) b-1*1/8 e0*1/4 d*1/8 c f*1/4 \tieBegin:44<curve="down"> e*1/8 |
-(* meas. 13 *) \noteFormat<dx=1hs>(e) \tieEnd:44 d*1/4 e*1/8 \beamBegin \acc<dx=-3.7hs>(f) e*1/16 d \beamEnd e*1/4 |
+(* meas. 13 *) \noteFormat<dx=1hs>(e) \tieEnd:44 d*1/4 e*1/8 \beamBegin \acc<dx=-1.8hs>(f) e*1/16 d \beamEnd e*1/4 |
 (* meas. 14 *) a-1 \restFormat<dy=4hs>(_ _*1/2 |
 (* meas. 15 *) _*1/8 ) \beamBegin g a b \beamEnd \beamBegin c0*1/8. d*1/32 c \beamEnd \beamBegin b-1*1/8 e0 \beamEnd |
 (* meas. 16 *) \beamBegin a-1 \tieBegin:45<curve="down"> d0 \beamEnd \beamBegin d*1/16 \tieEnd:45 e d c \beamEnd \beamBegin b-1*1/8 b& a g \beamEnd |
