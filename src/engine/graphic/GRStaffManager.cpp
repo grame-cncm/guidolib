@@ -1630,7 +1630,7 @@ void GRStaffManager::MergeSPFs(GRPossibleBreakState * pbs1, GRPossibleBreakState
 			float newlength = lastrod->getLength() + firstrod->getLength();
 			bool spaceactive = false;
 			
-			if (lastrod->mIsSpaceRod && firstrod->mIsSpaceRod &&
+			if (lastrod->getIsSpaceRod() && firstrod->getIsSpaceRod() &&
 				// lastrod->spr1 == firstrod->spr1 &&
 				lastrod->getSpr2() == firstrod->getSpr2())
 			{
@@ -2302,18 +2302,13 @@ int GRForceRodEntry::comp(const GRForceRodEntry * e1, const GRForceRodEntry * e2
 	
 	if (e1->rod->getIsSpaceRod())
 	{
-		assert(e2->rod->getIsSpaceRod());
 		if (e1->rod->getSpr1() < e2->rod->getSpr1()) return 1;
 		if (e1->rod->getSpr1() == e2->rod->getSpr1()) return 0;
 	
 		return -1;
 	}
-	assert(!e1->rod->getIsSpaceRod());
-	assert(!e2->rod->getIsSpaceRod());
-	
 	if (e1->force<e2->force) 		return -1;
 	if (e1->force == e2->force)		return 0;
-
 	return 1;
 }
 
