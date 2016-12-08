@@ -48,8 +48,6 @@ using namespace std;
 using namespace std;
 
 // - Globals
-GRMusic * gCurMusic = 0;
-
 long ggsoffsetx = 0L;
 long ggsoffsety = 0L;
 
@@ -61,22 +59,14 @@ GRMusic::GRMusic(ARMusic * inARMusic, ARPageFormat * inFormat, const GuidoLayout
 	fInFormat = 0;
     mAR2GRTime = -1;
     mDrawTime  = -1;
-
-	gCurMusic = this;
 	createGR( inFormat, settings );
 }
 
 GRMusic::~GRMusic()
 {
-	if( gCurMusic == this )
-		gCurMusic = 0;
-
 	DeleteContent( &mPages );
-
-	// deletes all, because voicelist owns it 
-	// elements which are GRVoice-Objects
+	// deletes all, because voicelist owns it elements which are GRVoice-Objects
 	DeleteContent( &mVoiceList );
-
 	delete fInFormat;
 }
 
@@ -104,9 +94,15 @@ void GRMusic::GGSOutputPage( int inPageNum ) const
 	curpage->GGSOutput();	
 }
 
-void GRMusic::OnDraw( VGDevice & hdc) const
+
+bool GRMusic::checkCollisions()
 {
-  	// OnDraw( hdc,0);
+	bool collides = false;
+	for (size_t i= 0; i < getNumPages(); i++) {
+		GRPage * page = mPages[i];
+		if (page->checkCollisions()) collides = true;
+	}
+	return collides;
 }
 
 /** \brief Draws a page of music according to input drawing parameters.
@@ -116,7 +112,7 @@ void GRMusic::OnDraw( VGDevice & hdc) const
 
 	Do nothing if required page can't be found.
 */
-void GRMusic::OnDraw( VGDevice & hdc, const GuidoOnDrawDesc & inDrawInfos ) 
+void GRMusic::OnDraw( VGDevice & hdc, const GuidoOnDrawDesc & inDrawInfos )
 {
 	const GRPage * drawpage = getPage(inDrawInfos.page);
 
@@ -454,8 +450,7 @@ void GRMusic::startNewSystem(GRSystem * grsystem)
 */
 void GRMusic::createGR(ARPageFormat * inPageFormat, const GuidoLayoutSettings * settings)
 {
-	if(fInFormat)
-		delete fInFormat;
+	if(fInFormat) delete fInFormat;
 	fInFormat = inPageFormat;
 
 	// - Reset the previous GR
@@ -465,10 +460,7 @@ void GRMusic::createGR(ARPageFormat * inPageFormat, const GuidoLayoutSettings * 
 	DeleteContent( &mPages );
 	DeleteContent( &mVoiceList );
 
-	gCurMusic = this;
-
 	// - Creates new voices
-
 	GuidoPos pos = arm->GetHeadPosition();
 	while (pos)
 	{
@@ -476,23 +468,8 @@ void GRMusic::createGR(ARPageFormat * inPageFormat, const GuidoLayoutSettings * 
 		GRVoice * grv = new GRVoice(arv, false);
 		mVoiceList.push_back(grv);
 	}
-
-	// - Creates new staves and pages, using a staff manager.
-
-	/* was ->
-	GRStaffManager * grsm = new GRStaffManager(this, inPageFormat);
-	if( grsm )
-	{
-		grsm->createStaves();
-		delete grsm;
-	}
-
-	-> */
-	
 	GRStaffManager grsm( this, fInFormat, settings);
 	grsm.createStaves();
-
-	// <-
 }
 
 /** \brief Finds the index of a given voice (zero based)

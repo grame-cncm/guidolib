@@ -33,8 +33,8 @@ class ARMusicalTag;
 class ARMusicalEvent;
 
 class NEPointerList;
-// class GRNoteFactory;
 class GRStaff;
+class GRMusic;
 class GREvent;
 class GRVoice;
 class GRNotationElement;
@@ -60,7 +60,7 @@ class GRVoiceManager
 	friend class GRPossibleBreakState;
 
 public:
-			 GRVoiceManager(GRStaffManager * p_staffmgr, ARMusicalVoice * p_voice, int p_voicenum);
+			 GRVoiceManager(GRMusic* music, GRStaffManager * p_staffmgr, ARMusicalVoice * p_voice, int p_voicenum);
 	virtual ~GRVoiceManager();
 
 	float pbreakval;
@@ -157,6 +157,7 @@ protected:
 
 private:
 	// this is needed for determining the elements that are centered in a bar like whole-note-rests
+	GRMusic*				fMusic;
 	GREvent *				fLastnonzeroevent;
 	GRBar *					fLastbar;
 	GROctava*				fLastOctava;

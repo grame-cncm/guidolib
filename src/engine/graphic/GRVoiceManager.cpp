@@ -177,9 +177,9 @@
 
 using namespace std;
 
-GRVoiceManager::GRVoiceManager(GRStaffManager * p_staffmgr,
-							   ARMusicalVoice * p_voice,  int p_voicenum)
+GRVoiceManager::GRVoiceManager(GRMusic* music, GRStaffManager * p_staffmgr, ARMusicalVoice * p_voice,  int p_voicenum)
 {
+	fMusic	= music;
 	toadd = NULL;
 	mCurGrace = NULL;
     mCurCluster = NULL;
@@ -193,7 +193,7 @@ GRVoiceManager::GRVoiceManager(GRStaffManager * p_staffmgr,
 	arVoice = p_voice;
 	voicenum = p_voicenum;
 	mCurGrStaff = NULL;
-	grvoice = gCurMusic->getVoice(arVoice);
+	grvoice = fMusic->getVoice(arVoice);
 
 	fLastOctava = NULL;
 	fGRTags = NULL;
@@ -805,127 +805,6 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION &timepos, int filltagmode)
 }
 
 
-//____________________________________________________________________________________
-/*
-void GRVoiceManager::EndManageVoice(const TYPE_TIMEPOSITION & tp)
-{
-	assert(false);
-
-	GuidoPos pos = fVoiceState->vpos;
-
-	ARMusicalObject * arObject;
-//	TYPE_DURATION cutDuration;
-	// Cut at Staff-Ende
-	// check if we could go ahead at the end or not
-	
-	bool iscut = false;
-	if (pos)
-	{
-		arObject = arVoice->GetAt(pos);
-		if (arObject->getRelativeTimePosition()>tp)
-			iscut = true;
-	}
-	else
-	{
-		arObject = arVoice->GetTail();
-		if (arObject && arObject->getRelativeEndTimePosition()>tp)
-			iscut = true;
-	}
-
-	if (iscut)
-	{		
-		// now, we have back up one position
-		// and ADJUST GuidoPos-Tags !
-		// Lucky that we know, that the given 
-		// Object can only be an Event and not
-		// a tag!
-		
-		arVoice->GetPrevEvent(fVoiceState->vpos,*fVoiceState);		
-		
-		// adjust graphical elements...
-		// add ties...
-		
-		ARMusicalObject * ar = arVoice->GetAt(fVoiceState->vpos);
-		if (ar)
-		{
-			GObject * o = ar->getLastGRRepresentation();
-			if (o)
-			{
-				GREvent * g = GREvent::cast(o);
-				
-				// must be a notation element !
-				assert(g);
-				
-				// Now tell the Event, that its length 
-				// needs to be changed...
-				TYPE_DURATION tmpdur (tp - g->getRelativeTimePosition());
-				const int ret = g->adjustLength(tmpdur);
-				
-				if (ret != 1)
-				{ // Deal with it !
-					// an error occured ?
-					// no complete match !
-				}
-				
-				// OK -> the tags, that were previously ended
-				// and are now open-ranged need to know,
-				// that there previos ending-element is no longer
-				// right now, I believe that all this works
-				// (as follows) :
-				// These Ranges are now in the ptaglist, that
-				// have an end-position, that matches the
-				// current-position. -> now put them in the
-				// fGRTags, so that stafffinished is called for
-				// them.
-				
-				NEPointerList * mylst = g->getAssociations();
-				if (mylst)
-				{
-					// now, what do we have...
-					GuidoPos pos = mylst->GetHeadPosition();
-					while (pos)
-					{
-						GRTag * thetag = dynamic_cast<GRTag *>(mylst->GetNext(pos));
-						GRPositionTag * mytag = dynamic_cast<GRPositionTag *>(thetag);
-						if (mytag && mytag->getEndPos() == fVoiceState->vpos)
-						{
-							addGRTag(thetag,0);
-						}
-					}
-				}
-				
-				// if it is not a rest, a tie is added
-				// (with open right range)
-				if( dynamic_cast<GRRest *>(g) == 0 )
-				{
-					GRTie * grtie = new GRTie(mCurGrStaff,g,NULL);
-					grtie->setRelativeTimePosition(tp);
-					mCurGrStaff->addNotationElement(grtie);
-					gCurMusic->addVoiceElement(arVoice,grtie);
-				}
-				
-				// now, if the Event was the End of 
-				// a Position Tag, we need to tell those
-				// tags, that they have now openRightRanges !
-			}
-		}
-	}
-
-
-  // handle tags, that have not been closed yet...
-  // open ranges must be saved for the next system, so that closing ranges
-  // are not hurt...
-  pos = fGRTags->GetHeadPosition();
-  while (pos)
-  {
-	fGRTags->GetNext(pos);
-  }
-
-  // Now freeze the VoiceState...
-  arVoice->FreezeState(fVoiceState);
-}
-*/
-
 /** \brief Creates the graphical Objects from the given Tag.
 
 	Part of the AR to GR process.
@@ -961,13 +840,13 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 		grne = mCurGrStaff->AddClef(static_cast<ARClef *>(arOfCompleteObject));
 		
 		// here the baseline etc. will be changed
-		if (grne) gCurMusic->addVoiceElement(arVoice,grne);
+		if (grne) fMusic->addVoiceElement(arVoice,grne);
 		
 	}
 	else if (tinf == typeid(ARMeter))
 	{		
 		grne = mCurGrStaff->AddMeter( static_cast<ARMeter*>(arOfCompleteObject));
-		gCurMusic->addVoiceElement(arVoice,grne);		
+		fMusic->addVoiceElement(arVoice,grne);		
 	}
 	else if (tinf == typeid(ARNaturalKey))
 	{
@@ -976,7 +855,7 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 		GRKey * grkey = mCurGrStaff->AddKey( static_cast<ARKey *>( arOfCompleteObject));		
 		if (grkey)
 		{
-			gCurMusic->addVoiceElement( arVoice,grkey);
+			fMusic->addVoiceElement( arVoice,grkey);
 			grne = grkey;
 		}
 	}
@@ -986,7 +865,7 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 		GRKey * grkey = mCurGrStaff->AddKey( static_cast<ARKey *>(arOfCompleteObject));	
 		if (grkey)
 		{
-			gCurMusic->addVoiceElement( arVoice,grkey );
+			fMusic->addVoiceElement( arVoice,grkey );
 			grne = grkey;
 		}	
 	}
@@ -996,14 +875,14 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 		GRGlue * glue = new GRGlue(mCurGrStaff,-1);
 		glue->setRelativeTimePosition(arOfCompleteObject->getRelativeTimePosition());
 		mCurGrStaff->AddSecondGlue(glue);
-		gCurMusic->addVoiceElement(arVoice,glue);
+		fMusic->addVoiceElement(arVoice,glue);
 		grne = glue;
 	}
 	else if (tinf == typeid(ARBar))
 	{
 		GRBar * grbar = mCurGrStaff->AddBar( static_cast<ARBar*>(arOfCompleteObject), von );	
 		grne = grbar;
-		gCurMusic->addVoiceElement(arVoice,grne);
+		fMusic->addVoiceElement(arVoice,grne);
 
 		if (fLastnonzeroevent)
 		{
@@ -1037,17 +916,17 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 	else if (tinf == typeid(ARDoubleBar))
 	{
 		grne = mCurGrStaff->AddDoubleBar(static_cast<ARDoubleBar *>( arOfCompleteObject),von);
-		gCurMusic->addVoiceElement(arVoice,	grne);
+		fMusic->addVoiceElement(arVoice,	grne);
 	}
 	else if (tinf == typeid(ARFinishBar))
 	{
 		grne = mCurGrStaff->AddFinishBar(static_cast<ARFinishBar *>( arOfCompleteObject),von);
-		gCurMusic->addVoiceElement(arVoice,	grne);
+		fMusic->addVoiceElement(arVoice,	grne);
 	}
 	else if (tinf == typeid(ARRepeatBegin))
 	{
 		grne = mCurGrStaff->AddRepeatBegin (static_cast<ARRepeatBegin *>(arOfCompleteObject));
-		gCurMusic->addVoiceElement(arVoice,	grne);
+		fMusic->addVoiceElement(arVoice,	grne);
 	}
     else if (tinf == typeid(ARRepeatEnd)) 
     {
@@ -1056,7 +935,7 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 			if (checkRepeatBeginNext())
 				rend->setSConst (100.0f);
 			grne = rend;
-			gCurMusic->addVoiceElement(arVoice,	grne);
+			fMusic->addVoiceElement(arVoice,	grne);
 			rend->updateBoundingBox();
 		}
 	}
@@ -1065,7 +944,7 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 	{	
 		grne = (mCurGrStaff->AddRepeatEndRangeEnd(
 			static_cast<ARRepeatEndRangeEnd *>( arOfCompleteObject)));
-		gCurMusic->addVoiceElement(arVoice,	grne);
+		fMusic->addVoiceElement(arVoice,	grne);
 	}
 */
 	else if (tinf == typeid(ARText))
@@ -1074,7 +953,7 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 		GRText * grtxt = new GRText(mCurGrStaff, static_cast<ARText *>(arOfCompleteObject));
 		grtxt->setNeedsSpring(1);	// needs a Spring
 		mCurGrStaff->AddTag(grtxt);
-		gCurMusic->addVoiceElement(arVoice,grtxt);
+		fMusic->addVoiceElement(arVoice,grtxt);
 		grne = grtxt;
 	}
 	else if (tinf == typeid(ARLabel))
@@ -1083,7 +962,7 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 		GRText * grtxt = new GRText(mCurGrStaff, static_cast<ARLabel *>(arOfCompleteObject));
 		grtxt->setNeedsSpring(1);
 		mCurGrStaff->AddTag(grtxt);
-		gCurMusic->addVoiceElement(arVoice,grtxt);
+		fMusic->addVoiceElement(arVoice,grtxt);
 		grne = grtxt;
 	}
 	else if (tinf == typeid(ARTempo))
@@ -1091,14 +970,14 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 		GRTempo * grtempo = new GRTempo(mCurGrStaff, static_cast<ARTempo *>(arOfCompleteObject));
 		// not even added to the music, because this is used for RODS. System-Tags do
 		// not get rods (not really)
-		// gCurMusic->addVoiceElement(arVoice,grtempo);
+		// fMusic->addVoiceElement(arVoice,grtempo);
 		grne = grtempo;
 	}
 	else if (tinf == typeid(ARIntens))
 	{
 		grne = /* dynamic cast<GRNotationElement *>*/(
 		mCurGrStaff->AddIntens(static_cast<ARIntens *>( arOfCompleteObject)));
-		gCurMusic->addVoiceElement(arVoice,	grne);
+		fMusic->addVoiceElement(arVoice,	grne);
 	}
 	else if (tinf == typeid(ARFermata))
 	{
@@ -1107,7 +986,7 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 		GRArticulation * grarti = new GRArticulation(mytag, LSPACE);
 		grarti->setNeedsSpring(1);
 		mCurGrStaff->addNotationElement(grarti);
-		gCurMusic->addVoiceElement(arVoice,grarti);
+		fMusic->addVoiceElement(arVoice,grarti);
 		grne = grarti;		
 	}
 	// Space-Tag
@@ -1121,68 +1000,68 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 		tmp->setNeedsSpring(0);	
 		
 		mCurGrStaff->AddTag(tmp);
-		gCurMusic->addVoiceElement(arVoice,tmp);
+		fMusic->addVoiceElement(arVoice,tmp);
 		grne = tmp;
 	}
 	else if (tinf == typeid(ARBembel))
 	{
 		GRBembel * tmp = new GRBembel(static_cast<ARBembel *>(arOfCompleteObject));
 		mCurGrStaff->AddTag(tmp);
-		gCurMusic->addVoiceElement(arVoice,tmp);
+		fMusic->addVoiceElement(arVoice,tmp);
 		grne = tmp;
 	}
 	else if (tinf == typeid(ARBreathMark)) {
 		GRBreathMark * tmp = new GRBreathMark(static_cast<ARBreathMark *>(arOfCompleteObject));
 		mCurGrStaff->AddTag(tmp);
-		gCurMusic->addVoiceElement(arVoice,tmp);
+		fMusic->addVoiceElement(arVoice,tmp);
 		grne = tmp;
 	}
 	else if (tinf == typeid(ARCoda)) {
 		GRCoda * tmp = new GRCoda(static_cast<ARCoda *>(arOfCompleteObject));
 		mCurGrStaff->AddTag(tmp);
-		gCurMusic->addVoiceElement(arVoice,tmp);
+		fMusic->addVoiceElement(arVoice,tmp);
 		grne = tmp;
 	}
 	else if (tinf == typeid(ARDaCapo)) {
 		GRJump * tmp = new GRJump(static_cast<ARDaCapo *>(arOfCompleteObject));
 		mCurGrStaff->AddTag(tmp);
-		gCurMusic->addVoiceElement(arVoice,tmp);
+		fMusic->addVoiceElement(arVoice,tmp);
 		grne = tmp;
 	}
 	else if (tinf == typeid(ARDaCapoAlFine)) {
 		GRJump * tmp = new GRJump(static_cast<ARDaCapoAlFine *>(arOfCompleteObject));
 		mCurGrStaff->AddTag(tmp);
-		gCurMusic->addVoiceElement(arVoice,tmp);
+		fMusic->addVoiceElement(arVoice,tmp);
 		grne = tmp;
 	}
 	else if (tinf == typeid(ARDaCoda)) {
 		GRJump * tmp = new GRJump(static_cast<ARDaCoda *>(arOfCompleteObject));
 		mCurGrStaff->AddTag(tmp);
-		gCurMusic->addVoiceElement(arVoice,tmp);
+		fMusic->addVoiceElement(arVoice,tmp);
 		grne = tmp;
 	}
 	else if (tinf == typeid(ARDalSegno)) {
 		GRJump * tmp = new GRJump(static_cast<ARDalSegno *>(arOfCompleteObject));
 		mCurGrStaff->AddTag(tmp);
-		gCurMusic->addVoiceElement(arVoice,tmp);
+		fMusic->addVoiceElement(arVoice,tmp);
 		grne = tmp;
 	}
 	else if (tinf == typeid(ARDalSegnoAlFine)) {
 		GRJump * tmp = new GRJump(static_cast<ARDalSegnoAlFine *>(arOfCompleteObject));
 		mCurGrStaff->AddTag(tmp);
-		gCurMusic->addVoiceElement(arVoice,tmp);
+		fMusic->addVoiceElement(arVoice,tmp);
 		grne = tmp;
 	}
 	else if (tinf == typeid(ARFine)) {
 		GRJump * tmp = new GRJump(static_cast<ARFine *>(arOfCompleteObject));
 		mCurGrStaff->AddTag(tmp);
-		gCurMusic->addVoiceElement(arVoice,tmp);
+		fMusic->addVoiceElement(arVoice,tmp);
 		grne = tmp;
 	}
 	else if (tinf == typeid(ARSegno)) {
 		GRSegno * tmp = new GRSegno(static_cast<ARSegno *>(arOfCompleteObject));
 		mCurGrStaff->AddTag(tmp);
-		gCurMusic->addVoiceElement(arVoice,tmp);
+		fMusic->addVoiceElement(arVoice,tmp);
 		grne = tmp;
 	}
 	else if (tinf == typeid(ARInstrument))
@@ -1190,7 +1069,7 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 		grne = /*dynamic cast<GRNotationElement *>*/(
 			mCurGrStaff->AddInstrument(
 			static_cast<ARInstrument *>( arOfCompleteObject)));
-		gCurMusic->addVoiceElement(arVoice,	grne);
+		fMusic->addVoiceElement(arVoice,	grne);
 	}
 	else if (tinf == typeid(ARMark))
 	{
@@ -1198,7 +1077,7 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 		GRMark * grmark = new GRMark(mCurGrStaff, static_cast<ARMark *>(arOfCompleteObject));
 		grmark->setNeedsSpring(1);
 		mCurGrStaff->AddTag(grmark);
-		gCurMusic->addVoiceElement(arVoice,grmark);
+		fMusic->addVoiceElement(arVoice,grmark);
 
 		grne = grmark;
 	}
@@ -1206,7 +1085,7 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 	{
 		GRSpecial * tmp = new GRSpecial (static_cast<ARSpecial *>(arOfCompleteObject));
 		mCurGrStaff->AddTag(tmp);
-		gCurMusic->addVoiceElement(arVoice,tmp);
+		fMusic->addVoiceElement(arVoice,tmp);
 		grne = tmp;
 	}
 	else if (tinf == typeid(ARTitle))
@@ -1237,14 +1116,14 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 		fLastOctava = mCurGrStaff->AddOctava(tmp);
 		addGRTag (fLastOctava);
 		grne = fLastOctava;
-		gCurMusic->addVoiceElement(arVoice,grne);
+		fMusic->addVoiceElement(arVoice,grne);
 	}
 	else if (tinf == typeid(ARChordComma))
 	{
 		ARChordComma * tmp = static_cast<ARChordComma *>(arOfCompleteObject);
 		grne = new GRTagARNotationElement(tmp, LSPACE );
 		mCurGrStaff->AddTag(grne);
-		gCurMusic->addVoiceElement(arVoice,grne);
+		fMusic->addVoiceElement(arVoice,grne);
 
 	}
 //---------------------------------------------------
@@ -1262,14 +1141,14 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 	{
 		GRDrHoos * tmp = new GRDrHoos(static_cast<ARDrHoos *>(arOfCompleteObject));
 		mCurGrStaff->AddTag(tmp);
-		gCurMusic->addVoiceElement(arVoice,tmp);
+		fMusic->addVoiceElement(arVoice,tmp);
 		grne = tmp;
 	}
 	else if (tinf == typeid(ARDrRenz))
 	{
 		GRDrRenz * tmp = new GRDrRenz(static_cast<ARDrRenz *>(arOfCompleteObject));
 		mCurGrStaff->AddTag(tmp);
-		gCurMusic->addVoiceElement(arVoice,tmp);
+		fMusic->addVoiceElement(arVoice,tmp);
 		grne = tmp;
 	}
 	else if (tinf == typeid(ARMusicalTag))
@@ -1291,7 +1170,7 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 
 		grsymb->setNeedsSpring(1);	// needs a Spring
 		mCurGrStaff->AddTag(grsymb);
-		gCurMusic->addVoiceElement(arVoice,grsymb);
+		fMusic->addVoiceElement(arVoice,grsymb);
 
 		grne = grsymb;
 	}
@@ -1382,7 +1261,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 		GRTrill * grtrill = new GRTrill(mCurGrStaff, static_cast<ARTrill *>(apt));
 		addGRTag(grtrill);
 		mCurGrStaff->AddTag(grtrill);
-		gCurMusic->addVoiceElement(arVoice,grtrill);
+		fMusic->addVoiceElement(arVoice,grtrill);
 		
 	}
 	else if (tinf == typeid(ARVolta)) 
@@ -1390,7 +1269,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 		GRVolta * tmp = new GRVolta(mCurGrStaff, static_cast<ARVolta *>(apt));
 		addGRTag(tmp,0);
 		mCurGrStaff->AddTag(tmp);
-		gCurMusic->addVoiceElement(arVoice,tmp);
+		fMusic->addVoiceElement(arVoice,tmp);
 //		grne = tmp;
 	}
 	else if (tinf == typeid(ARGrace))
@@ -1400,7 +1279,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 		mCurGrace = grgrace;
 		addGRTag(grgrace);
 		mCurGrStaff->AddTag(grgrace);
-		gCurMusic->addVoiceElement(arVoice,grgrace);
+		fMusic->addVoiceElement(arVoice,grgrace);
 	}
 	else if (tinf == typeid(ARAutoBeam))
 	{
@@ -1420,7 +1299,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 			// ATTENTION... AddTail!!!!
 			addGRTag(grbeam,0);
 			mCurGrStaff->AddTag(grbeam);
-			gCurMusic->addVoiceElement(arVoice,grbeam);
+			fMusic->addVoiceElement(arVoice,grbeam);
 		}
 		else delete grbeam;
 	}
@@ -1429,14 +1308,14 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 		GRCrescendo * grcresc = new GRCrescendo(mCurGrStaff, static_cast<ARCrescendo *>(apt));
 		addGRTag(grcresc,0);
 		mCurGrStaff->AddTag(grcresc);
-		gCurMusic->addVoiceElement(arVoice,grcresc);
+		fMusic->addVoiceElement(arVoice,grcresc);
 	}
 	else if (tinf == typeid(ARDiminuendo))
 	{
 		GRDiminuendo * grdim = new GRDiminuendo(mCurGrStaff, static_cast<ARDiminuendo *>(apt));
 		addGRTag(grdim,0);
 		mCurGrStaff->AddTag(grdim);
-		gCurMusic->addVoiceElement(arVoice,grdim);
+		fMusic->addVoiceElement(arVoice,grdim);
 	}
 	else if (tinf == typeid(ARSlur))
 	{
@@ -1447,7 +1326,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 		// the slur is added to the Tag-Stack...
 		addGRTag(grslur,0);
 		mCurGrStaff->AddTag(grslur);
-		gCurMusic->addVoiceElement(arVoice,grslur);
+		fMusic->addVoiceElement(arVoice,grslur);
 	}
 	else if (tinf == typeid(ARTie))
 	{
@@ -1455,7 +1334,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 		GRTie * grtie = new GRTie(mCurGrStaff, static_cast<ARTie *>(apt));
 		addGRTag(grtie,0);
 		mCurGrStaff->AddTag(grtie);
-		gCurMusic->addVoiceElement(arVoice,grtie);
+		fMusic->addVoiceElement(arVoice,grtie);
 
 	} 
 	else if (tinf == typeid(ARBeam))
@@ -1465,14 +1344,14 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 		GRBeam * grbeam = new GRBeam(mCurGrStaff, static_cast<ARBeam *>(apt));
 		addGRTag(grbeam,0);
 		mCurGrStaff->AddTag(grbeam);
-		gCurMusic->addVoiceElement(arVoice,grbeam);
+		fMusic->addVoiceElement(arVoice,grbeam);
 	}
 	else if (tinf == typeid(ARFeatheredBeam))
 	{
 		GRBeam * grbeam = new GRBeam(mCurGrStaff, static_cast<ARFeatheredBeam *>(apt));
 		addGRTag(grbeam,0);
 		mCurGrStaff->AddTag(grbeam);
-		gCurMusic->addVoiceElement(arVoice,grbeam);
+		fMusic->addVoiceElement(arVoice,grbeam);
 	}
 	else if (tinf == typeid(ARText))
 	{
@@ -1483,7 +1362,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 		// adds the tag at the end...
 		addGRTag(gtext,0);
 		mCurGrStaff->AddTag(gtext);
-		gCurMusic->addVoiceElement(arVoice,gtext);
+		fMusic->addVoiceElement(arVoice,gtext);
 	}
 	else if (tinf == typeid(ARLabel))
 	{
@@ -1492,7 +1371,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 		// adds the tag at the end...
 		addGRTag( gtext, 0 );
 		mCurGrStaff->AddTag(gtext);
-		gCurMusic->addVoiceElement(arVoice,gtext);
+		fMusic->addVoiceElement(arVoice,gtext);
 	}
 /* ARRepeatEnd is not any more a range tag. DF August 30 2004
 	else if (tinf == typeid(ARRepeatEnd))
@@ -1508,7 +1387,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
             // We have a problem here!...
             // ATTENTION, this is wrong!
             
-            gCurMusic->addVoiceElement( arVoice, grRepeat );
+            fMusic->addVoiceElement( arVoice, grRepeat );
         }
 	}
 */
@@ -1521,7 +1400,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 		addGRTag(gtext,0);
 
 		mCurGrStaff->AddTag(gtext);
-		gCurMusic->addVoiceElement(arVoice,gtext);
+		fMusic->addVoiceElement(arVoice,gtext);
 	}
 	else if (tinf == typeid(ARAccidental))
 	{
@@ -1530,7 +1409,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 
 		addGRTag(range);
 		mCurGrStaff->AddTag(range);
-		gCurMusic->addVoiceElement(arVoice,range);		
+		fMusic->addVoiceElement(arVoice,range);		
 	}
 	else if (tinf == typeid(ARFermata))
 	{
@@ -1538,7 +1417,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 		GRRange * range = new GRRange(mCurGrStaff, static_cast<ARFermata *>(apt));
 		addGRTag(range);
 		mCurGrStaff->AddTag(range);
-		gCurMusic->addVoiceElement(arVoice,range);
+		fMusic->addVoiceElement(arVoice,range);
 	}
 	/*else if (tinf == typeid(ARShortFermata))
 	{
@@ -1546,28 +1425,28 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 		GRRange * range = new GRRange(mCurGrStaff, static_cast<ARShortFermata *>(apt));
 		addGRTag(range);
 		mCurGrStaff->AddTag(range);
-		gCurMusic->addVoiceElement(arVoice,range);
+		fMusic->addVoiceElement(arVoice,range);
 	}*/
 	else if (tinf == typeid(ARTremolo))
 	{
 		GRTremolo * tmp = new GRTremolo(mCurGrStaff, static_cast<ARTremolo *>(apt));
 		addGRTag(tmp);
 		mCurGrStaff->AddTag(tmp);
-		gCurMusic->addVoiceElement(arVoice,tmp);
+		fMusic->addVoiceElement(arVoice,tmp);
 	}
 	else if (tinf == typeid(ARRitardando))
 	{
 		GRRitardando * tmp = new GRRitardando(mCurGrStaff, static_cast<ARRitardando *>(apt));
 		addGRTag(tmp);
 		mCurGrStaff->AddTag(tmp);
-		gCurMusic->addVoiceElement(arVoice,tmp);
+		fMusic->addVoiceElement(arVoice,tmp);
 	}
 	else if (tinf == typeid(ARAccelerando))
 	{
 		GRAccelerando * tmp = new GRAccelerando(mCurGrStaff, static_cast<ARAccelerando *>(apt));
 		addGRTag(tmp);
 		mCurGrStaff->AddTag(tmp);
-		gCurMusic->addVoiceElement(arVoice,tmp);
+		fMusic->addVoiceElement(arVoice,tmp);
 	}
 	else if (tinf == typeid(ARStaccato))
 	{
@@ -1575,7 +1454,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 
 		addGRTag(range);
 		mCurGrStaff->AddTag(range);
-		gCurMusic->addVoiceElement(arVoice,range);
+		fMusic->addVoiceElement(arVoice,range);
 	}
 	else if (tinf == typeid(ARPizzicato))
 	{
@@ -1583,7 +1462,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 		
 		addGRTag(range);
 		mCurGrStaff->AddTag(range);
-		gCurMusic->addVoiceElement(arVoice, range);
+		fMusic->addVoiceElement(arVoice, range);
 	}
 	else if (tinf == typeid(ARAccent))
 	{
@@ -1591,7 +1470,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 
 		addGRTag(range);
 		mCurGrStaff->AddTag(range);
-		gCurMusic->addVoiceElement(arVoice,range);
+		fMusic->addVoiceElement(arVoice,range);
 	}
 	// ARAlter is implementated as a position tag
 	// DF Apr. 20 2011
@@ -1601,7 +1480,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 
 		addGRTag(range);
 		mCurGrStaff->AddTag(range);
-		gCurMusic->addVoiceElement(arVoice,range);
+		fMusic->addVoiceElement(arVoice,range);
 	}
 	else if (tinf == typeid(ARMarcato))
 	{
@@ -1609,7 +1488,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 
 		addGRTag(range);
 		mCurGrStaff->AddTag(range);
-		gCurMusic->addVoiceElement(arVoice,range);
+		fMusic->addVoiceElement(arVoice,range);
 	}
 	else if (tinf == typeid(ARTenuto))
 	{
@@ -1617,7 +1496,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 
 		addGRTag(range);
 		mCurGrStaff->AddTag(range);
-		gCurMusic->addVoiceElement(arVoice,range);
+		fMusic->addVoiceElement(arVoice,range);
 	}
 	else if (tinf == typeid(ARHarmonic))
 	{
@@ -1625,7 +1504,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 		
 		addGRTag(range);
 		mCurGrStaff->AddTag(range);
-		gCurMusic->addVoiceElement(arVoice, range);
+		fMusic->addVoiceElement(arVoice, range);
 	}
 	else if (tinf == typeid(ARBase))
 	{
@@ -1643,7 +1522,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 
 		addGRTag(grtupl, 0);
 		mCurGrStaff->AddTag(grtupl);
-		gCurMusic->addVoiceElement(arVoice,grtupl);
+		fMusic->addVoiceElement(arVoice,grtupl);
 	}
 	else if (tinf == typeid(ARShareStem))
 	{
@@ -1681,7 +1560,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 			addGRTag(grgstem);
 			
 			mCurGrStaff->AddTag(grgstem);
-			gCurMusic->addVoiceElement(arVoice,grgstem);
+			fMusic->addVoiceElement(arVoice,grgstem);
 		}
 		else
 		{
@@ -1700,7 +1579,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 			curglobalstem = grgstem;
 			
 			mCurGrStaff->AddTag(grgstem);
-			gCurMusic->addVoiceElement(arVoice,grgstem);
+			fMusic->addVoiceElement(arVoice,grgstem);
 		}
 	}
 	else if (tinf == typeid(ARShareLocation))
@@ -1712,7 +1591,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 		curgloballocation = grgloc;
 
 		mCurGrStaff->AddTag(grgloc);
-		gCurMusic->addVoiceElement(arVoice,grgloc);
+		fMusic->addVoiceElement(arVoice,grgloc);
 
 	}
 	else if (tinf == typeid(ARChordTag))
@@ -1730,7 +1609,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 		grsystemslice->addSystemTag(new GRSystemTag(tmp));
 		
 		mCurGrStaff->AddTag(tmp);
-		gCurMusic->addVoiceElement(arVoice,tmp);
+		fMusic->addVoiceElement(arVoice,tmp);
 	}
 	else if (tinf == typeid(ARCluster))
 	{
@@ -1741,7 +1620,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 		GRGlissando * grglissando = new GRGlissando(mCurGrStaff, static_cast<ARGlissando *>(apt));
 		addGRTag(grglissando,0);
 		mCurGrStaff->AddTag(grglissando);
-		gCurMusic->addVoiceElement(arVoice,grglissando);
+		fMusic->addVoiceElement(arVoice,grglissando);
 	}
     else if (tinf == typeid(ARSymbol))
 	{
@@ -1752,7 +1631,7 @@ void GRVoiceManager::parsePositionTag(ARPositionTag *apt)
 		// adds the tag at the end...
         addGRTag(grSymb,0);
         mCurGrStaff->AddTag(grSymb);
-        gCurMusic->addVoiceElement(arVoice,grSymb);
+        fMusic->addVoiceElement(arVoice,grSymb);
 	}
 	else
 		GuidoTrace("Warning, PositionTag not handled");
@@ -1837,9 +1716,9 @@ void GRVoiceManager::setPossibleNLinePosition( const TYPE_TIMEPOSITION &)
 
 void GRVoiceManager::rememberLastNLinePosition( const TYPE_TIMEPOSITION & tp)
 {
-	if (gCurMusic)
+	if (fMusic)
 	{
-		gCurMusic->rememberVoiceNLinePosition(arVoice,tp);
+		fMusic->rememberVoiceNLinePosition(arVoice,tp);
 	}
 }
 
@@ -1987,7 +1866,7 @@ GRSingleNote * GRVoiceManager::CreateSingleNote( const TYPE_TIMEPOSITION & tp, A
 		}
 	}
 	mCurGrStaff->addNotationElement(grnote);
-	gCurMusic->addVoiceElement(arVoice,grnote);
+	fMusic->addVoiceElement(arVoice,grnote);
 	lastev = grnote;
 	return grnote;
 }
@@ -2073,7 +1952,7 @@ GREvent * GRVoiceManager::CreateRest( const TYPE_TIMEPOSITION & tp, ARMusicalObj
 				el->addAssociation(grrest);
 		}
 		mCurGrStaff->addNotationElement(grrest);
-		gCurMusic->addVoiceElement(arVoice,grrest);
+		fMusic->addVoiceElement(arVoice,grrest);
 		lastev = grrest;
 		return grrest;
 	}
@@ -2094,7 +1973,7 @@ GREvent * GRVoiceManager::CreateEmpty( const TYPE_TIMEPOSITION & tp, ARMusicalOb
 		if (el)		el->addAssociation(grempty);
 	}
 	mCurGrStaff->addNotationElement(grempty);
-	gCurMusic->addVoiceElement(arVoice,grempty);		
+	fMusic->addVoiceElement(arVoice,grempty);		
 	lastev = grempty;
 	return grempty;
 }

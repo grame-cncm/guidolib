@@ -32,7 +32,6 @@ class GRMusic;
 typedef std::vector<GRPage *> PageList;
 typedef std::vector<GRVoice *> VoiceList;
 
-extern GRMusic * gCurMusic;
 extern long ggsoffsetx;
 extern long ggsoffsety;
 
@@ -90,7 +89,6 @@ class GRMusic : public GREvent
 		virtual float	getPageWidth( int inPageNum ) const;
 		virtual float	getPageHeight( int inPageNum ) const;
 
-		virtual void	OnDraw( VGDevice & hdc ) const;
 		virtual void	OnDraw( VGDevice & hdc, const GuidoOnDrawDesc & inDrawInfos );
 		virtual void	GetMap( int inPage, float w, float h, GuidoElementSelector sel, MapCollector& f ) const;
 
@@ -109,6 +107,8 @@ class GRMusic : public GREvent
                 long    getAR2GRTime()          { return mAR2GRTime; }
                 void    setDrawTime(long time)  { mDrawTime = time; }
                 long    getDrawTime()           { return mDrawTime; }
+
+				bool	checkCollisions();
 
 	protected:
 				void 	addVoiceElement( GRVoice * voice, GRNotationElement * el );
