@@ -63,6 +63,6 @@ void ARSpace::printGMNName(std::ostream  &os) const
 
 void ARSpace::printParameters(std::ostream& os) const
 {
-	os << " dist: " << val << "; ";
+	os << "dist: " << val << "; ";
     ARMusicalTag::printParameters(os);
 }
