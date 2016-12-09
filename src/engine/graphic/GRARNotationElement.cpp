@@ -45,15 +45,9 @@ GRARNotationElement::~GRARNotationElement()
 	}
 }
 
-ARMusicalObject * GRARNotationElement::getAbstractRepresentation()
-{
-	return mAbstractRepresentation;
-}
-
-ARMusicalObject * GRARNotationElement::getAbstractRepresentation() const
-{
-	return mAbstractRepresentation;
-}
+bool GRARNotationElement::isChordComma() const						{ return getAbstractRepresentation()->isARChordComma(); }
+ARMusicalObject * GRARNotationElement::getAbstractRepresentation()	{ return mAbstractRepresentation; }
+ARMusicalObject * GRARNotationElement::getAbstractRepresentation() const	{ return mAbstractRepresentation; }
 
 
 

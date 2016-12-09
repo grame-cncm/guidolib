@@ -32,7 +32,8 @@ class GRARNotationElement : public GRNotationElement
 		virtual ARMusicalObject * getAbstractRepresentation() const;
 
 		// sets the ownership between abstract and grafical object
-		virtual void setOwnership(bool ownsAR)      { mOwnsAR = ownsAR; }
+		virtual void setOwnership(bool ownsAR)  { mOwnsAR = ownsAR; }
+		virtual bool isChordComma() const;
 
   protected:
 		ARMusicalObject * mAbstractRepresentation;
