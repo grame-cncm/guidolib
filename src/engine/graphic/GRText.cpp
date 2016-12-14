@@ -130,6 +130,7 @@ GRText::~GRText()
 	mAssociated = 0;
 }
 
+bool GRText::isLyrics() const			{ return getARText()->isLyric(); }
 
 FloatRect GRText::getTextMetrics(VGDevice & hdc) const
 {

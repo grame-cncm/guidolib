@@ -18,7 +18,6 @@
 #include <string>
 
 #include "GRPTagARNotationElement.h"
-#include "TRect.h"
 
 class ARText;
 class GRStaff;
@@ -65,6 +64,9 @@ class GRText : public GRPTagARNotationElement
 		virtual void 	setPosition(const NVPoint & inPosition );
 		virtual void 	setHPosition( float nx );
 				void	mustFollowPitch( bool flag ) { mMustFollowPitch = flag; }
+
+		virtual bool	checkCollisionWith() const	{ return false; }
+		virtual bool	isLyrics() const;
 
 	protected:
 
