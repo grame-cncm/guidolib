@@ -43,7 +43,7 @@ void ARSpace::setTagParameterList(TagParameterList & tpl)
 			GuidoPos pos = rtpl->GetHeadPosition();
 			TagParameterFloat * tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
 			assert(tpf);
-			val = tpf->getValue();
+			fVal = tpf->getValue();
 		}
 		delete rtpl;
 
@@ -63,6 +63,6 @@ void ARSpace::printGMNName(std::ostream  &os) const
 
 void ARSpace::printParameters(std::ostream& os) const
 {
-	os << "dist: " << val << "; ";
+	os << "dist: " << fVal << "; ";
     ARMusicalTag::printParameters(os);
 }

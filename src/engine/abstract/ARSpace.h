@@ -22,9 +22,10 @@
 class ARSpace :  public ARMTParameter 
 {
 public:
-    virtual float getValue() const { return val; }
+    virtual float getValue() const { return fVal; }
 
-    ARSpace() : val(0.0f) { }
+			 ARSpace() : fVal(0.0f) { }
+			 ARSpace(float val) : fVal(val) { }
 
     virtual ~ARSpace() {};
 
@@ -35,9 +36,8 @@ public:
 
     virtual void setTagParameterList(TagParameterList & tpl);
 
-protected:
-    float val;
-
+private:
+    float fVal;
     static ListOfTPLs ltpls;
 };
 
