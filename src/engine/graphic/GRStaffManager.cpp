@@ -339,6 +339,28 @@ float GRStaffManager::systemBreak (int newlineMode, float beginheight)
 	return beginheight;
 }
 
+
+// ----------------------------------------------------------------------------
+int GRStaffManager::initVoices(int cnt)
+{
+	ARMusicalVoice * voice;
+	GuidoPos pos = mArMusic->GetHeadPosition();
+	while (pos) {
+		voice = mArMusic->GetNext(pos);
+		// this is important, so that chords are not overread but the explicit events are read.
+		voice->setReadMode(ARMusicalVoice::EVENTMODE);
+		GRVoiceManager * voiceManager = new GRVoiceManager(mGrMusic, this, voice, cnt );
+		// this is the array of VoiceManagers ...
+		mVoiceMgrList->Set( cnt++, voiceManager );
+
+		// This call initializes the GRVoiceManager
+		// ATTENTION: realise the significance of STAFF-Tags at the very start!
+		voiceManager->BeginManageVoice();
+	}
+	return cnt;
+}
+
+
 // ----------------------------------------------------------------------------
 /** \brief Creates and fills the staves.
 
@@ -349,14 +371,17 @@ void GRStaffManager::createStaves()
 	// We have a ARmusic (armusic) and start from the beginning ...
 	// now we go through all voices and create graphical representations. We also
 	// add these to the respective staves (standard or handled by staff-tag)
+#if 1
+	int cnt = initVoices(0);
+#else
+	int cnt = 0;
 	ARMusicalVoice * voice;
 	GuidoPos pos = mArMusic->GetHeadPosition();
-	int cnt = 0;
 	while (pos) {
 		voice = mArMusic->GetNext(pos);
 		// this is important, so that chords are not overread but the explicit events are read.
 		voice->setReadMode(ARMusicalVoice::EVENTMODE);
-		GRVoiceManager * voiceManager = new GRVoiceManager(this, voice, cnt );
+		GRVoiceManager * voiceManager = new GRVoiceManager(mGrMusic, this, voice, cnt );
 		// this is the array of VoiceManagers ...
 		mVoiceMgrList->Set( cnt++, voiceManager );
 
@@ -364,6 +389,7 @@ void GRStaffManager::createStaves()
 		// ATTENTION: realise the significance of STAFF-Tags at the very start!
 		voiceManager->BeginManageVoice();
 	}
+#endif
 
 	TCreateStavesState state;
 	state.timePos = relativeTimePositionOfGR;

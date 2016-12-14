@@ -339,6 +339,7 @@ class GRStaffManager
 		} TCreateStavesState;
 		bool	nextTimePosition (int nvoices, bool filltagMode, TCreateStavesState& state);
 		float	systemBreak (int newlineMode, float beginheight);
+		int		initVoices(int cnt);
 };
 
 #endif
