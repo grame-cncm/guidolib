@@ -66,6 +66,8 @@ using namespace std;
 #include "BinaryFont.h"
 
 #include "guido2.h"
+#include "GMNCodePrintVisitor.h"
+
 
 // ==========================================================================
 // - Guido Global variables
@@ -75,17 +77,8 @@ const int GUIDOENGINE_MINOR_VERSION = 6;
 const int GUIDOENGINE_SUB_VERSION   = 3;
 const char* GUIDOENGINE_VERSION_STR = "1.6.3";
 
-ARPageFormat * gARPageFormat = 0;
+ARPageFormat gARPageFormat;
 
-class TGlobalFree {		// intended free memory at library exit
-	public:
-		TGlobalFree () {}
-		virtual ~TGlobalFree () {
-			if (gARPageFormat) delete gARPageFormat;
-		}
-};
-
-static TGlobalFree gFree;
 
 //#define SHOW_SPRINGS_RODS
 
@@ -157,8 +150,6 @@ GUIDOAPI(GuidoErrCode) GuidoInit( GuidoInitDesc * desc )
 		gInited = true;
 	}
 	// Create default page format
-	
-	gARPageFormat = new ARPageFormat();
 	return guidoNoErr;
 }
 
@@ -298,6 +289,15 @@ static GRHandler CreateGr(ARHandler ar, ARPageFormat* format, const GuidoLayoutS
 	// Create new gr music object with a copy of default pageFormat.
 	GRMusic *grMusic = new GRMusic(arMusic, format, settings, false);
 	if (grMusic == 0) return 0;
+	
+//	bool collides = grMusic->checkCollisions();
+//	int n = 2;
+//	while (collides && n--) {
+//		grMusic->resolveCollisions();
+//		collides = grMusic->checkCollisions();
+//	}
+//	GMNCodePrintVisitor v(cerr);
+//	arMusic->goThrough(&v);
 
 	long endTime = GuidoTiming::getCurrentmsTime();
 	grMusic->setAR2GRTime(endTime - startTime);
@@ -309,6 +309,28 @@ static GRHandler CreateGr(ARHandler ar, ARPageFormat* format, const GuidoLayoutS
 	//  - Add the GRMusic object to the global list
 	return guido_RegisterGRMusic(grMusic, ar);
 }
+
+
+// --------------------------------------------------------------------------
+// the above is an attempt to solve collisions
+// it operates at AR level by inserting space tags at appropriate locations
+// yet extensive tests have not been performed but it works really poorly for:
+//  - multi voices affected to a single staff
+//  - very crowed scores
+// --------------------------------------------------------------------------
+//GUIDOAPI(bool) GuidoCheckCollisions( GRHandler gr)
+//{
+//	if ( !gr || !gr->grmusic )	return false;
+//	return gr->grmusic->checkCollisions();
+//}
+//
+//// --------------------------------------------------------------------------
+//GUIDOAPI(void) GuidoResolveCollisions( GRHandler gr)
+//{
+//	if ( !gr || !gr->grmusic )	return;
+//	gr->grmusic->resolveCollisions();
+//	gr->grmusic->createGR();
+//}
 
 // --------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * settings, GRHandler * gr)
@@ -327,7 +349,7 @@ GUIDOAPI(GuidoErrCode) GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * set
 	ARMusic * arMusic = ar->armusic; // (JB) was guido_PopARMusic()
 	if (arMusic == 0) return guidoErrInvalidHandle;
 
-	GRHandler grh = CreateGr (ar, new ARPageFormat(*gARPageFormat), settings);
+	GRHandler grh = CreateGr (ar, &gARPageFormat, settings);
 	if (!gr) return guidoErrMemory;
 	*gr = grh;
 	return guidoNoErr;
@@ -350,22 +372,22 @@ GUIDOAPI(GRHandler) GuidoAR2GRParameterized(ARHandler ar, const GuidoGrParameter
 	if (arMusic == 0)
 		return 0;
 
-	ARPageFormat * pf;
+	ARPageFormat pf;
 	const GuidoLayoutSettings * settings = 0;
 	// Apply settings
 	if(gp) {
 		settings = &gp->layoutSettings;
 		// A new page format is created.
-		pf = new ARPageFormat(gp->pageFormat.width, gp->pageFormat.height,
+		pf.setPageFormat(gp->pageFormat.width, gp->pageFormat.height,
 							  gp->pageFormat.marginleft, gp->pageFormat.margintop,
 							  gp->pageFormat.marginright, gp->pageFormat.marginbottom);
 	} else {
 		// Copy of the default page format.
-		pf = new ARPageFormat(*gARPageFormat);
+		pf = gARPageFormat;
 	}
 
 	// - Now create the GRMusic object from  the abstract representation.
-	return CreateGr (ar, pf, settings);
+	return CreateGr (ar, &pf, settings);
 }
 
 // --------------------------------------------------------------------------
@@ -374,7 +396,7 @@ GUIDOAPI(GuidoErrCode) GuidoUpdateGR( GRHandler gr, const GuidoLayoutSettings * 
 	if ( !gr )			return guidoErrInvalidHandle;
 	if ( !gr->grmusic )	return guidoErrInvalidHandle;
 
-	gr->grmusic->createGR(new ARPageFormat(*gARPageFormat), settings);
+	gr->grmusic->createGR(&gARPageFormat, settings);
 	return guidoNoErr;
 }
 
@@ -384,21 +406,21 @@ GUIDOAPI(GuidoErrCode)	GuidoUpdateGRParameterized( GRHandler gr, const GuidoGrPa
 	if ( !gr )			return guidoErrInvalidHandle;
 	if ( !gr->grmusic )	return guidoErrInvalidHandle;
 
-	ARPageFormat * pf;
+	ARPageFormat pf;
 	const GuidoLayoutSettings * settings = 0;
 	// Apply settings
 	if(gp) {
 		// A new page format is created.
-		pf = new ARPageFormat(gp->pageFormat.width, gp->pageFormat.height,
+		pf.setPageFormat(gp->pageFormat.width, gp->pageFormat.height,
 							  gp->pageFormat.marginleft, gp->pageFormat.margintop,
 							  gp->pageFormat.marginright, gp->pageFormat.marginbottom);
 		settings = &gp->layoutSettings;
 	} else {
 		// Copy of the default page format.
-		pf = new ARPageFormat(*gARPageFormat);
+		pf = gARPageFormat;
 	}
 
-	gr->grmusic->createGR(pf, settings);
+	gr->grmusic->createGR(&pf, settings);
 	return guidoNoErr;
 }
 
@@ -778,16 +800,9 @@ GUIDOAPI(int) 	GuidoGetDrawBoundingBoxes()			{ return gBoundingBoxesMap; }
 // --------------------------------------------------------------------------
 GUIDOAPI(void) 	GuidoSetDefaultPageFormat( const GuidoPageFormat * inFormat)
 {
-	delete gARPageFormat;
-	gARPageFormat = 0;
-
-	if( inFormat )
-	{
+	if( inFormat ) {
 		const GuidoPageFormat & pf = *inFormat;
-		gARPageFormat = new ARPageFormat( pf.width, pf.height,
-											pf.marginleft, pf.margintop,
-											pf.marginright, pf.marginbottom );
-
+		gARPageFormat.setPageFormat( pf.width, pf.height, pf.marginleft, pf.margintop, pf.marginright, pf.marginbottom );
 	}
 }
 
@@ -799,19 +814,7 @@ GUIDOAPI(void) 	GuidoGetDefaultPageFormat( GuidoPageFormat * outFormat )
 	if( outFormat == 0 ) return;
 
 	float osx, osy, oml, omt, omr, omb;
-	if (gARPageFormat)
-	{
-		gARPageFormat->getPageFormat( &osx, &osy, &oml, &omt, &omr, &omb );
-	}
-	else
-	{
-		osx = DF_SX * kCmToVirtual;
-		osy = DF_SY * kCmToVirtual;
-		oml = DF_ML * kCmToVirtual;
-		omr = DF_MR * kCmToVirtual;
-		omt = DF_MT * kCmToVirtual;
-		omb = DF_MB * kCmToVirtual;
-	}
+	gARPageFormat.getPageFormat( &osx, &osy, &oml, &omt, &omr, &omb );
 
 	outFormat->width = osx;
 	outFormat->height = osy;
