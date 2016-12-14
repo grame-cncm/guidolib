@@ -115,6 +115,7 @@ class GRSingleNote : public GRNote
 				void	removeElements();
 
 		virtual void	tellPosition( GObject * caller, const NVPoint & newPosition ); 
+		virtual const	GRSingleNote* isSingleNote() const		{ return this; }
 
 	  	GRStdNoteHead *	getNoteHead() const;
 	  	void			extractAccidentals( GRAccidentalList * outList ) const;
