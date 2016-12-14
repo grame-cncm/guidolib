@@ -31,9 +31,11 @@ class NVRect
 				NVRect & operator +=( const NVPoint & in );
 				NVRect & operator -=( const NVPoint & in );
 				NVRect & operator *=( float v );
+				bool	 operator ==( const NVRect& r ) const { return (left==r.left) && (top==r.top) && (right==r.right) && (bottom==r.bottom); }
+				NVRect   operator +( const NVPoint & in ) const;
 	
 				
-				NVRect operator +( const NVPoint & in );
+//				NVRect operator +( const NVPoint & in );
 
 		void	Print( std::ostream& os ) const { os << "[" << left << "," << top << "," << right << "," << bottom << "]"; }
 		void	Set( const NVRect & in )

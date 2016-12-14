@@ -14,7 +14,6 @@
 
 #include "NVRect.h"
 #include "NVPoint.h"
-// #include <algorithm>	// for min() and max()
 
 std::ostream& operator<< (std::ostream& os, const NVRect& r) { r.Print (os); return os;}
 	
@@ -30,33 +29,23 @@ void NVRect::Set( float inL, float inT, float inR, float inB )
 */
 bool NVRect::Contains( const NVPoint & p ) const
 {
-	return (p.x >= left && p.x <= right 
-				&& p.y >= top && p.y <= bottom );
+	return (p.x >= left && p.x <= right && p.y >= top && p.y <= bottom );
 }
 
 /** \brief Checks if a rectangle collides us.
 */
 bool NVRect::Collides( const NVRect & r ) const
 {
-	return (( r.left <= right ) && ( r.right >= left )
-		&& ( r.top <= bottom ) && ( r.bottom >= top ));
-	
-/*	return ( IsIn( NVPoint(r.left, r.top))
-		|| IsIn ( NVPoint(r.right,r.top))
-		|| IsIn ( NVPoint(r.left,r.bottom))
-		|| IsIn ( NVPoint(r.right,r.bottom)) )*/
+	return (( r.left < right ) && ( r.right > left )
+		&& ( r.top < bottom ) && ( r.bottom > top ));
+//	return (( r.left <= right ) && ( r.right >= left )
+//		&& ( r.top <= bottom ) && ( r.bottom >= top ));
 }
 
 /** \brief Grow ourself to include input rectangle.
 */
-void
-NVRect::Merge( const NVRect & in )
+void NVRect::Merge( const NVRect & in )
 {
-	/* left = ( left < in.left ) ? left : in.left;
-	top = ( top < in.top ) ? top : in.top;
-	right = ( right > in.right ) ? right : in.right;
-	bottom = ( bottom > in.bottom ) ? bottom : in.bottom;*/
-
 	if( in.Width() <= 0 && in.Height() <= 0 ) return;
 	else if( Width() <= 0 || Height() <= 0 ) Set( in );
 	else 
@@ -87,6 +76,11 @@ NVRect & NVRect::operator += (const NVPoint & in)
 	return *this;
 }
 
+NVRect NVRect::operator + (const NVPoint & in) const
+{
+	return NVRect (left + in.x, top + in.y, right + in.x, bottom + in.y);
+}
+
 NVRect & NVRect::operator -= (const NVPoint & in)
 {
 	left -= in.x;
@@ -94,14 +88,4 @@ NVRect & NVRect::operator -= (const NVPoint & in)
 	top -= in.y;
 	bottom -= in.y;
 	return *this;
-}
-
-NVRect NVRect::operator + (const NVPoint & in)
-{
-	NVRect tmp = *this;
-	tmp.left += in.x;
-	tmp.right += in.x;
-	tmp.top += in.y;
-	tmp.bottom += in.y;
-	return tmp;
 }
