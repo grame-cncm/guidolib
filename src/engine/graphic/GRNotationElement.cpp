@@ -120,6 +120,7 @@ void GRNotationElement::print(ostream& os) const
         ARMusicalTag * tag = static_cast<ARMusicalTag *>(ar->isARMusicalTag());
         if (tag) {
             tag->printGMNName (os);
+			os << " ";
             tag->printParameters (os);
 //            *ar << os;
         }
