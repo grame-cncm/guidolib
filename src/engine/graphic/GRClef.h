@@ -47,8 +47,9 @@ public:
 	virtual void GGSOutput() const;
 
 	virtual const NVPoint & getReferencePosition() const;
-	virtual unsigned int getTextAlign() const { return sClefTextAlign; }
-		
+	virtual unsigned int	getTextAlign() const		{ return sClefTextAlign; }
+    virtual bool			checkCollisionWith() const	{ return true; }
+	
 	const ARClef * getARClef() const;
 	
 	

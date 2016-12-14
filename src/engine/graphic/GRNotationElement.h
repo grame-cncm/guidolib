@@ -26,6 +26,7 @@ class GRStaff;
 class GRSystemSlice;
 class ARMusicalObject;
 class GRAccidental;
+class GRSingleNote;
 
 
 
@@ -117,8 +118,14 @@ public:
     virtual GRNotationElement *isGRNote() { return NULL; }
     /*****************************************/
     
-    virtual void setIsInHeader(bool state) { mIsInHeader = state; }
-    virtual bool isInHeader() const        { return mIsInHeader; }
+    virtual void setIsInHeader(bool state)	{ mIsInHeader = state; }
+    virtual bool isInHeader() const			{ return false; }
+    virtual bool isEmpty() const			{ return false; }
+    virtual bool isLyrics() const			{ return false; }
+    virtual bool isChordComma() const		{ return false; }
+    virtual bool checkCollisionWith() const	{ return false; }
+
+    virtual const GRSingleNote* isSingleNote() const		{ return 0; }
 
 protected:
 	

@@ -40,6 +40,7 @@ class GRMeter : public GRTagARNotationElement
 
 		virtual void GGSOutput() const;
 		virtual void OnDraw(VGDevice & hdc ) const;
+		virtual bool checkCollisionWith() const	{ return true; }
 
 		
 		ARMeter* getARMeter();
