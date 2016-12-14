@@ -33,7 +33,7 @@
 using namespace std;
 
 extern bool gInited;			// GuidoInit() Flag
-extern ARPageFormat * gARPageFormat;
+extern ARPageFormat gARPageFormat;
 
 // --------------------------------------------------------------------------
 // Prototypes are in "defines.h"
@@ -58,8 +58,6 @@ void guido_deinit()
 // --------------------------------------------------------------------------
 void guido_cleanup()
 {
-	delete gARPageFormat;
-	gARPageFormat = 0;
 }
 
 // --------------------------------------------------------------------------
