@@ -60,11 +60,9 @@ ARPageFormat::ARPageFormat(char * px, char * py,
 						   char * mr, char * mb)
 {
 	// (JB) Shouldn't input values be in cm, then converted into virtual units ?
-
 	mFormat = ""; // added by jk
 
 	// this uses features of TagPArameterFloat to set the parameter ...
-
 	TagParameterFloat tpf(0);
 	tpf.setValue(px);
 	mSizeX = tpf.getValue();
@@ -90,7 +88,13 @@ ARPageFormat::ARPageFormat(char * px, char * py,
 
 ARPageFormat::ARPageFormat(const ARPageFormat & arp)
 {
-	// parcount = arp.parcount;
+	(*this) = arp;
+	ClipSize();
+	AdjustMargins();
+}
+
+void ARPageFormat::operator=(const ARPageFormat& arp)
+{
 	mFormat = arp.mFormat;
 	mSizeX = arp.mSizeX;
 	mSizeY = arp.mSizeY;
@@ -98,9 +102,6 @@ ARPageFormat::ARPageFormat(const ARPageFormat & arp)
 	mTop = arp.mTop;
 	mRight = arp.mRight;
 	mBottom = arp.mBottom;
-
-	ClipSize();
-	AdjustMargins();
 }
 
 /** \brief Creates a page format with default parameters.
@@ -260,8 +261,17 @@ void ARPageFormat::getPageFormat( float * sx, float * sy, float * ml, float * mt
 	*mb = (float)(mBottom);
 }
 
-void	
-ARPageFormat::ClipSize()
+void ARPageFormat::setPageFormat(float sx, float sy, float ml, float mt, float mr, float mb )
+{
+	mSizeX = sx;
+	mSizeY = sy;
+	mLeft = ml;
+	mTop = mt;
+	mRight = mr;
+	mBottom = mb;
+}
+
+void ARPageFormat::ClipSize()
 {
 	if (mSizeX < MINSIZEX)		mSizeX = MINSIZEX;
 	else if (mSizeX > MAXSIZEX)	mSizeX = MAXSIZEX;
@@ -270,8 +280,7 @@ ARPageFormat::ClipSize()
 	else if (mSizeY > MAXSIZEY)	mSizeY = MAXSIZEY;
 }
 
-void	
-ARPageFormat::AdjustMargins()
+void ARPageFormat::AdjustMargins()
 {
 	if ( mSizeX - mLeft - mRight <= 0.1 ) // If horizontal margins sum if higher or equal than width,
 		mLeft = mRight = 0;             // we set both left and right margin to 0.
