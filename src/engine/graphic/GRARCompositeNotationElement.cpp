@@ -31,20 +31,16 @@ GRARCompositeNotationElement::~GRARCompositeNotationElement()
 }
 
 // ----------------------------------------------------------------------------
-void 
-GRARCompositeNotationElement::setGRStaff( GRStaff * inStaff )
+void GRARCompositeNotationElement::setGRStaff( GRStaff * inStaff )
 {
 	GRNotationElement::setGRStaff( inStaff );
-
 	GuidoPos pos = First();
 	while (pos)
 		GetNext(pos)->setGRStaff( inStaff );
-
 }
 
 // ----------------------------------------------------------------------------
-void 
-GRARCompositeNotationElement::setPosition( const NVPoint & inPos )
+void GRARCompositeNotationElement::setPosition( const NVPoint & inPos )
 {
 	// - Call inherited
 	GRARNotationElement::setPosition( inPos );
@@ -53,13 +49,11 @@ GRARCompositeNotationElement::setPosition( const NVPoint & inPos )
 	GuidoPos pos = mCompositeElements.GetHeadPosition();
 	while (pos)
 		GetNext(pos)->setPosition( inPos );
-
 	updateBoundingBox();
 }
 
 // ----------------------------------------------------------------------------
-void 
-GRARCompositeNotationElement::setHPosition( float inX )
+void GRARCompositeNotationElement::setHPosition( float inX )
 {
 	// - Propagate
 	// First we set the position of the sub elements ...
@@ -69,20 +63,15 @@ GRARCompositeNotationElement::setHPosition( float inX )
 
 	// - Call inherited
 	GRARNotationElement::setHPosition( inX );
-
 	// first we set the position for the elements ...
-	
-
 	updateBoundingBox();
 }
 
 // ----------------------------------------------------------------------------
-void 
-GRARCompositeNotationElement::updateBoundingBox()
+void GRARCompositeNotationElement::updateBoundingBox()
 {
 	mLeftSpace = 0;	// should probably not be done here
 	mRightSpace = 0;
-
 	mBoundingBox.Set( 0, 0, 0, 0 );
 
 	// - Check note sub parts
@@ -94,8 +83,6 @@ GRARCompositeNotationElement::updateBoundingBox()
 		GRNotationElement * e = GetNext(pos);
 		if (e->getRightSpace() > mRightSpace)	mRightSpace = e->getRightSpace();
 		if (e->getLeftSpace() > mLeftSpace)		mLeftSpace = e->getLeftSpace();
-
-		// 
 		
 		addToBoundingBox( e );
 		
@@ -111,31 +98,27 @@ GRARCompositeNotationElement::updateBoundingBox()
 
 // ----------------------------------------------------------------------------
 // was GetHeadPosition
-GuidoPos 
-GRARCompositeNotationElement::First() const
+GuidoPos GRARCompositeNotationElement::First() const
 {
 	return mCompositeElements.GetHeadPosition();
 }
 
 // ----------------------------------------------------------------------------
 // was GetTailPosition
-GuidoPos 
-GRARCompositeNotationElement::Last() const
+GuidoPos GRARCompositeNotationElement::Last() const
 {
 	return mCompositeElements.GetTailPosition();
 }
 
 // ----------------------------------------------------------------------------
-GRNotationElement * 
-GRARCompositeNotationElement::GetNext( GuidoPos & ioPos ) const
+GRNotationElement * GRARCompositeNotationElement::GetNext( GuidoPos & ioPos ) const
 {
 	return mCompositeElements.GetNext( ioPos );
 }
 
 
 // ----------------------------------------------------------------------------
-void 
-GRARCompositeNotationElement::addToOffset( const NVPoint & point )
+void GRARCompositeNotationElement::addToOffset( const NVPoint & point )
 {
 	// first we set the position for the elements ...
 	GuidoPos pos = mCompositeElements.GetHeadPosition();
@@ -152,8 +135,7 @@ GRNotationElement * GRARCompositeNotationElement::GetTail() const
 }
 
 // ----------------------------------------------------------------------------
-GuidoPos 
-GRARCompositeNotationElement::AddTail( GRNotationElement * el )
+GuidoPos GRARCompositeNotationElement::AddTail( GRNotationElement * el )
 {
 	return mCompositeElements.AddTail(el);
 }
