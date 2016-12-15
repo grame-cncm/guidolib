@@ -28,7 +28,7 @@ class ARBarFormat : public ARMTParameter
 {
 	
 public:
-	typedef std::vector<pair<int, int> >	TRanges;
+	typedef std::vector<std::pair<int, int> >	TRanges;
 	enum style { kStyleStaff, kStyleSystem, kStyleRange };
 
 	ARBarFormat();

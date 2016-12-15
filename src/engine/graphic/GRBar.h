@@ -28,7 +28,7 @@ class GRPage;
 class GRBar : public GRTagARNotationElement
 {
 	public:
-		typedef std::vector<pair<float, float> >	TRanges;
+		typedef std::vector<std::pair<float, float> >	TRanges;
 	
 		GRBar( ARBar * p_arbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float propRender);
 		GRBar( ARBar * p_arbar, GRSystem * p_grsystem, GRStaff * inStaff, const TYPE_TIMEPOSITION &  inTimePos, float propRender);

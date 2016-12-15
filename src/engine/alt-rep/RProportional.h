@@ -27,7 +27,7 @@ class RProportional : public PianoRoll {
 	int	  fNumStaves;			// the number of staves
 	float fLineHeight;			// a staff line height
 	bool  fDrawDurationLine;	// duration lines control
-	stack<VGColor> fFontColors;	// the saved font colors stack
+	std::stack<VGColor> fFontColors;	// the saved font colors stack
 
 	float	staffTopPos (int i) const;							// gives a staff top y position
 	float	staffBottomPos (int i) const;							// gives a staff bottom y position

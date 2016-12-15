@@ -42,7 +42,7 @@ class ARMark : public ARText// public ARMusicalObject,
 	protected:
 		
 		static ListOfTPLs ltpls;
-		static map<std::string, int>	fEnclosureShapes;
+		static std::map<std::string, int>	fEnclosureShapes;
 };
 
 #endif

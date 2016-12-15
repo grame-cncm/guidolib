@@ -63,7 +63,7 @@ class GRArticulation : public GRTagARNotationElement
 		int	 getArticulationType() const	{ return mArticulationFlag; }
 		int	 getArticulationOrder() const	{ return sOrdering[mArticulationFlag]; }
 		int	 getARPlacement() const;		// gives the ARArticulation position
-		void print(ostream& os) const;
+		void print(std::ostream& os) const;
 
 	protected:
 	
