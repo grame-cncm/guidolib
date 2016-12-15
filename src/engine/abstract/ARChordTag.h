@@ -23,38 +23,33 @@ class TagParameterInt;
 
 /** \brief not yet documented
 */
-class ARChordTag : 
-	// public ARMusicalObject,
-	public ARMTParameter,
-	public ARPositionTag
+class ARChordTag : public ARMTParameter, public ARPositionTag
 {
-public:
-	ARChordTag(const ARChordTag * chrd);
-	ARChordTag() 
-	{
-		rangesetting = ONLY;
-		labels = NULL;
-		labeli = NULL;
-	}
-	virtual ~ARChordTag();
+	public:
+				ARChordTag(const ARChordTag * chrd);
+				ARChordTag() {
+					rangesetting = ONLY;
+					labels = NULL;
+					labeli = NULL;
+				}
+		virtual ~ARChordTag();
 
-	virtual ARMusicalObject * Copy() const;
+		virtual ARMusicalObject * Copy() const;
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual void printName(std::ostream& os) const;
+		virtual void printGMNName(std::ostream& os) const;
+		virtual void printParameters(std::ostream& os) const;
 
-	virtual void setTagParameterList(TagParameterList & tpl);
-    
-    /**** Function to avoid dynamic_cast ****/
-    ARMusicalObject *isARChordTag() { return this; }
-    /*****************************************/
+		virtual void setTagParameterList(TagParameterList & tpl);
+		
+		/**** Function to avoid dynamic_cast ****/
+		ARMusicalObject *isARChordTag() { return this; }
+		/*****************************************/
 
-protected:
-	static ListOfTPLs ltpls;
-
-	TagParameterString *labels;
-	TagParameterInt    *labeli;
+	protected:
+		static ListOfTPLs ltpls;
+		TagParameterString *labels;
+		TagParameterInt    *labeli;
 };
 
 
