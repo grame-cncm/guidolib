@@ -18,10 +18,7 @@
 #include <string>
 
 #include "BaseVisitor.h"
-
 #include "defines.h"
-
-using namespace std;
 
 class ARMusicalObject;
 class ARPositionTag;

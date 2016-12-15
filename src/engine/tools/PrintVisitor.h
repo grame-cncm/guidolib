@@ -20,7 +20,6 @@
 
 #include "defines.h"
 
-using namespace std;
 
 class ARMusicalObject;
 class ARPositionTag;
