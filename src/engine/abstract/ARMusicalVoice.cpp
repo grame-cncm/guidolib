@@ -385,7 +385,6 @@ void ARMusicalVoice::GetPrevEvent(GuidoPos & pos, ARMusicalVoiceState & vst) con
 ARMusicalObject * ARMusicalVoice::GetNext(GuidoPos &pos, ARMusicalVoiceState &vst) const
 {
 	vst.DeleteAddedAndRemovedPTags();
-
 	int         overreadchord = 0;
 	ARChordTag *savedchordtag = NULL;
 
@@ -396,29 +395,24 @@ ARMusicalObject * ARMusicalVoice::GetNext(GuidoPos &pos, ARMusicalVoiceState &vs
 
 	ARMusicalObject *first = 0;
 	ARMusicalObject *obj   = 0;
-    
 	do {
 		if (mPosTagList) {
 			while (vst.ptagpos) {
 				ARPositionTag *ptag    = mPosTagList->GetAt(vst.ptagpos);
 				ARTagEnd      *artgend = ARTagEnd::cast(ptag);
-
 				if (artgend && ptag->getPosition() == pos)
 					vst.RemovePositionTag(ptag->getCorrespondence());
 				else
 					break;
-
 				mPosTagList->GetNext(vst.ptagpos);
 			}
 		}
 
 		GuidoPos prevpos = pos;
-		if (!pos)
-            break;
+		if (!pos) break;
 
 		obj = ObjectList::GetNext(pos);
-		if (first == 0)
-            first = obj;
+		if (first == 0) first = obj;
 
         if (obj) {
             ARMusicalTag *mytag = static_cast<ARMusicalTag *>(obj->isARMusicalTag());
@@ -428,13 +422,11 @@ ARMusicalObject * ARMusicalVoice::GetNext(GuidoPos &pos, ARMusicalVoiceState &vs
                     ARStaff *mynewstf = static_cast<ARStaff *>(mytag->isARStaff());
                     if ((mynewstf) != NULL) {
                         ARStaff *tmp = (ARStaff *)(vst.getCurStateTag(typeid(ARStaff)));
-
                         if (tmp && tmp->getStaffNumber() != mynewstf->getStaffNumber()) {
                             vst.RemoveCurStateTag(typeid(ARClef));
                             vst.RemoveCurStateTag(typeid(ARKey));
                         }
                     }
-
                     vst.AddStateTag(mytag);
                 }
 
@@ -449,12 +441,10 @@ ARMusicalObject * ARMusicalVoice::GetNext(GuidoPos &pos, ARMusicalVoiceState &vs
 			while (vst.ptagpos) {
 				ARPositionTag *ptag    = mPosTagList->GetAt(vst.ptagpos);
 				ARTagEnd      *artgend = ARTagEnd::cast(ptag);
-
 				if (!artgend && ptag->getPosition() == pos)
 					vst.AddPositionTag(ptag);
 				else
                     break;
-
 				mPosTagList->GetNext(vst.ptagpos);
 			}
 		}
@@ -462,7 +452,6 @@ ARMusicalObject * ARMusicalVoice::GetNext(GuidoPos &pos, ARMusicalVoiceState &vs
 	while (overreadchord && savedchordtag == vst.curchordtag);
 
 	vst.vpos = pos;
-
 	if (first)
 		vst.curtp = first->getRelativeEndTimePosition();
 	else
@@ -482,7 +471,6 @@ ARMusicalObject * ARMusicalVoice::GetNext(GuidoPos &pos, ARMusicalVoiceState &vs
 			vst.prevchordState = tempsave;
 		}
 	}
-
 	return first;
 }
 
@@ -786,15 +774,12 @@ void ARMusicalVoice::goThrough(BaseVisitor *visitor)
 	GuidoPos posInVoice = ObjectList::GetHeadPosition();
     GuidoPos prevPos    = 0;
     GuidoPos pTagPos    = 0;
-
     if (mPosTagList)
 		pTagPos = mPosTagList->GetHeadPosition();
 
 	while (posInVoice) {
         prevPos = posInVoice;
-
 		ARMusicalObject *object = ObjectList::GetNext(posInVoice);
-        
         goThroughTagsList(visitor, pTagPos, prevPos, true);
         object->accept(visitor);
         goThroughTagsList(visitor, pTagPos, prevPos, false);
@@ -803,12 +788,9 @@ void ARMusicalVoice::goThrough(BaseVisitor *visitor)
     if (mPosTagList) {
         while (pTagPos) {
             ARMusicalObject *object = dynamic_cast<ARMusicalObject *> (mPosTagList->GetNext(pTagPos));
-
-            if (object)
-                object->accept(visitor);
+            if (object) object->accept(visitor);
         }
     }
-
     acceptOut(visitor);
 }
 
