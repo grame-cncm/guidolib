@@ -16,11 +16,12 @@
 
 
 #include "ARAccidental.h"
-//#include "ARFactory.h"
 #include "TagParameterInt.h"
 #include "TagParameterString.h"
 #include "ListOfStrings.h"
 #include "TagParameterList.h"
+
+using namespace std;
 
 ListOfTPLs ARAccidental::ltpls(1);
 

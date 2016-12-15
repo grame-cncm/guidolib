@@ -19,6 +19,7 @@
 #include "GRStaff.h"
 #include "VGDevice.h"
 
+using namespace std;
 
 extern GRStaff * gCurStaff;
 

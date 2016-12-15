@@ -20,6 +20,8 @@
 #include "TagParameterFloat.h"
 #include "ListOfStrings.h"
 
+using namespace std;
+
 ListOfTPLs ARLyrics::ltpls(1);
 
 ARLyrics::ARLyrics() : ARMTParameter()

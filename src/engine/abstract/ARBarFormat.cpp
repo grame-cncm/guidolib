@@ -22,6 +22,9 @@
 #include "TagParameterList.h"
 #include "ListOfStrings.h"
 
+using namespace std;
+
+
 ListOfTPLs ARBarFormat::ltpls(1);
 
 ARBarFormat::ARBarFormat(const ARBarFormat & barfrmt)

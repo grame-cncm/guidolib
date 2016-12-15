@@ -13,13 +13,14 @@
 */
 
 #include <iostream>
+
 #include "ARFermata.h"
 #include "ListOfStrings.h"
 #include "TagParameterList.h"
 #include "TagParameterString.h"
-
 #include "TimeUnwrap.h"
 
+using namespace std;
 
 ListOfTPLs ARFermata::ltpls(1);
 

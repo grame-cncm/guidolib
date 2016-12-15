@@ -15,6 +15,8 @@
 #include "MeterVisitor.h"
 #include "ARMeter.h"
 
+using namespace std;
+
 //------------------------------------------------------------------------------
 void MeterVisitor::reset() {
 	for (int i=0; i<kMaxGuidoMeterCounts; i++)

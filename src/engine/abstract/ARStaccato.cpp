@@ -14,12 +14,14 @@
 
 #include <iostream>
 #include <string.h>
+
 #include "ARStaccato.h"
 #include "TagParameterString.h"
 #include "TagParameterList.h"
 #include "ListOfStrings.h"
-
 #include "TimeUnwrap.h"
+
+using namespace std;
 
 extern const char* kAboveStr;
 extern const char* kBelowStr;

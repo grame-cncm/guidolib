@@ -12,10 +12,13 @@
 */
 
 #include <iostream>
+
 #include "ARPizzicato.h"
 #include "TagParameterList.h"
 #include "TagParameterString.h"
 #include "ListOfStrings.h"
+
+using namespace std;
 
 extern const char* kAboveStr;
 extern const char* kBelowStr;

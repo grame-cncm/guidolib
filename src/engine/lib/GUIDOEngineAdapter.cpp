@@ -26,6 +26,8 @@
 #include "canvasdevice.h"
 #endif
 
+using namespace std;
+
 //--------------------------------------------------------------
 GuidoEngineAdapter::GuidoEngineAdapter()	{}
 GuidoEngineAdapter::~GuidoEngineAdapter()	{}

@@ -13,12 +13,14 @@
 */
 
 #include <iostream>
+
 #include "ARMark.h"
-// #include "ARFactory.h"
 #include "TagParameterInt.h"
 #include "TagParameterString.h"
 #include "ListOfStrings.h"
 #include "TagParameterList.h"
+
+using namespace std;
 
 static const char* kNoneStr		= "none";
 static const char* kSquareStr	= "square";
