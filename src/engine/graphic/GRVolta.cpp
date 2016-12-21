@@ -71,7 +71,7 @@ GRVolta::GRVolta( GRStaff * inStaff, ARVolta * ar )
     }
 
     mString = ar->getMark();
-    mStringSize = strlen(mString);
+    mStringSize = (int)strlen(mString);
 }
 
 GRVolta::~GRVolta()

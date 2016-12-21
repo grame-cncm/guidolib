@@ -95,7 +95,7 @@ void GRTremolo::OnDraw( VGDevice & hdc ) const
     const VGFont *theFont = FontManager::gFontText;
 	hdc.SetTextFont(theFont);
 
-    hdc.DrawString(getPosition().x, getPosition().y, fText.c_str(), fText.length());
+    hdc.DrawString(getPosition().x, getPosition().y, fText.c_str(), (int)fText.length());
 
     if (mColRef) {
         hdc.SetFontColor(prevTextColor);

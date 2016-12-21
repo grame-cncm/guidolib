@@ -12,7 +12,11 @@
 
 */
 
+#ifdef WIN32
+#define _USE_MATH_DEFINES
+#endif
 #include <cmath> // for abs
+#include <algorithm>
 
 #include "GRSlur.h"
 #include "GRStaff.h"
@@ -259,8 +263,8 @@ GRSlur::automaticControlPoints( GRBowingContext * bowContext, ARBowing * arBow,
 
 
     // Minimum angles
-    const float minBaseAngle = 12.f * M_PI/180.f;
-    const float minHorizontalAngle = -8.f * M_PI/180.f;
+    const float minBaseAngle = float(12.f * M_PI/180.f);
+	const float minHorizontalAngle = float(-8.f * M_PI / 180.f);
 
 
     // Slope of the base segment of the triangle

@@ -14,6 +14,10 @@
 
 #ifdef MIDIEXPORT
 
+#ifdef WIN32
+# pragma warning (disable : 4244)
+#endif
+
 #include <iostream>
 
 #include "ARMusicalObject.h"
@@ -132,7 +136,7 @@ int MidiMapper::AdjustDuration(int dur, const Guido2MidiParams* p) const
 	if (fFlags & hasTenuto)		dur *= p->fTenutoFactor;
 	if (fFlags & hasFermata)	dur *= p->fFermataFactor;
 
-	return int(dur);
+	return int(dur); 
 }
 
 //------------------------------------------------------------------------------

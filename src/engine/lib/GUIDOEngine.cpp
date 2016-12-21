@@ -787,7 +787,7 @@ GUIDOAPI(GuidoErrCode) GuidoSVGExport( const GRHandler handle, int page, std::os
 GUIDOAPI(GuidoErrCode) GuidoSVGExportWithFontSpec(const GRHandler handle, int page, std::ostream& out, const char* fontfile, const char* fontspec, const int mappingMode )
 {
 	const char * font = fontspec;
-	unsigned int size;
+	size_t size;
 	if(fontfile != 0 && (size = strlen(fontfile)) > 0 && size <= 260)
 		font = fontfile;
 	return GuidoGR2SVG( handle, page, out, false, font, mappingMode);

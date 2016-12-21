@@ -631,13 +631,6 @@ int GRMusic::GGSInputPage(int page, const char * str)
 			// this creates the new elements ...
 			// a new stem, a new stemdirection and all that ...
 			nt->doCreateNote(nt->getDuration());
-
-#ifdef _DEBUG
-			ofstream os("music.sal");
-			getARMusic()->operator<<(os);
-			// os << (*music);
-			os.close();
-#endif
 		}
 		else if (ev)
 		{
@@ -679,13 +672,6 @@ int GRMusic::GGSInputPage(int page, const char * str)
 	ARNote * nt = new ARNote(ARNoteName("c"),0,1,1,4,80);
 	vc->AddTail(nt);
 	arm->doAutoStuff();
-
-#ifdef _DEBUG
-	ofstream os("music.sal");
-	arm->operator<<(os);
-	// os << (*music);
-	os.close();
-#endif
 	createGR( 0 );
 	return guidoNoErr;	// (JB) was: return 1;
 }

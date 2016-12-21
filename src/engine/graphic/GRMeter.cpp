@@ -87,7 +87,7 @@ GRMeter::GRMeter( ARMeter * abstractRepresentationOfMeter, GRStaff * curstaff, b
 
                 bufferNumeratorTmpSStream << numeratorsVector[i];
                 std::string bufferNumeratorTmp = bufferNumeratorTmpSStream.str();
-                FontManager::gFontScriab->GetExtent(bufferNumeratorTmp.c_str(), bufferNumeratorTmp.size(), &x, &y, gGlobalSettings.gDevice);
+                FontManager::gFontScriab->GetExtent(bufferNumeratorTmp.c_str(), (int)bufferNumeratorTmp.size(), &x, &y, gGlobalSettings.gDevice);
                 x *= mTagSize;
                 y *= mTagSize;
 
@@ -96,7 +96,7 @@ GRMeter::GRMeter( ARMeter * abstractRepresentationOfMeter, GRStaff * curstaff, b
                 extentsNumeratorsVector.push_back(x);
             }
 		
-            FontManager::gFontScriab->GetExtent(bufferDenominator.c_str(), bufferDenominator.size(), &x, &y, gGlobalSettings.gDevice);
+            FontManager::gFontScriab->GetExtent(bufferDenominator.c_str(), (int)bufferDenominator.size(), &x, &y, gGlobalSettings.gDevice);
             x *= mTagSize;
             y *= mTagSize;
 			extentDenominator = x;
@@ -236,7 +236,7 @@ void GRMeter::OnDraw(VGDevice & hdc) const
 
             float extentBufferx;
             float extentBuffery;
-            FontManager::gFontScriab->GetExtent(buffer.c_str(), buffer.size(), &extentBufferx, &extentBuffery, gGlobalSettings.gDevice);
+            FontManager::gFontScriab->GetExtent(buffer.c_str(), (int)buffer.size(), &extentBufferx, &extentBuffery, gGlobalSettings.gDevice);
             extentBufferx *= mTagSize;
             extentBuffery *= mTagSize;
 
@@ -275,7 +275,7 @@ void GRMeter::OnDraw(VGDevice & hdc) const
 
         float extentBufferx;
         float extentBuffery;
-        FontManager::gFontScriab->GetExtent(buffer.c_str(), buffer.size(), &extentBufferx, &extentBuffery, gGlobalSettings.gDevice);
+        FontManager::gFontScriab->GetExtent(buffer.c_str(), (int)buffer.size(), &extentBufferx, &extentBuffery, gGlobalSettings.gDevice);
         extentBufferx *= mTagSize;
         extentBuffery *= mTagSize;
 

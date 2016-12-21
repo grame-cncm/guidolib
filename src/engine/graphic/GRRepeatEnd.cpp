@@ -159,7 +159,7 @@ void GRRepeatEnd::OnDraw( VGDevice & hdc ) const
 	// for system tags, draw the bars only once
 	if (systembar || !isSystemSlice()) {
 		// - Vertical adjustement according to staff's line number
-		float offsety1 = (fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;
+		float offsety1 = (float)(fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;
 		float offsety2 = 0;
 
 		if (fLineNumber != 0 && fLineNumber != 1)

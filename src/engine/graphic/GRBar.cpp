@@ -230,7 +230,7 @@ void GRBar::DisplayMeasureNum( VGDevice & hdc ) const
 			ostringstream barNumberStream;
 			barNumberStream << num - 1;
 			barNumberString = barNumberStream.str();
-			hdc.DrawString(x, y, barNumberString.c_str(), barNumberString.size());
+			hdc.DrawString(x, y, barNumberString.c_str(), int(barNumberString.size()));
 		}
 
 		ostringstream barNumberStream;
@@ -245,7 +245,7 @@ void GRBar::DisplayMeasureNum( VGDevice & hdc ) const
         float totalYOffset = mPosition.y - 40 - 110 * (mTagSize - 1) + measureNumDyOffset - mDy;
 
 		if (arBar->getMeasureNumberDisplayed() != ARBar::kNumPage)
-			hdc.DrawString(totalXOffset, totalYOffset, barNumberString.c_str(), barNumberString.size());
+			hdc.DrawString(totalXOffset, totalYOffset, barNumberString.c_str(), (int)barNumberString.size());
 	}
 }
 
@@ -253,7 +253,7 @@ void GRBar::DisplayMeasureNum( VGDevice & hdc ) const
 float GRBar::getXPos(float staffSize) const
 {
     const float offsetX = 3 + (staffSize - 1) * 2;
-    float proportionalRenderingOffset = mProportionalRender ? -90 : 0; // REM: 30 hardcoded (1.5 * note extent)
+    float proportionalRenderingOffset = mProportionalRender ? -90.f : 0.f; // REM: 30 hardcoded (1.5 * note extent)
     return mPosition.x + offsetX + mDx + proportionalRenderingOffset;
 }
 
@@ -261,7 +261,7 @@ float GRBar::getXPos(float staffSize) const
 float GRBar::getY1	(float top) const
 {
     // - Vertical adjustement according to staff's line number
-	float offsety1 = (fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;
+	float offsety1 = (float)(fmod(- 0.5f * fLineNumber - 2, 3) + 1.5f) * LSPACE;
 	return mPosition.y + top + offsety1 * mGrStaff->getSizeRatio() - mDy;
 }
 

@@ -36,14 +36,14 @@ class Fraction
 		void normalize();
 
 		// greatest common denominator
-		static int gcd(int i1, int i2);
+		static long long gcd(long long i1, long long i2);
 		
 		// smallest common multiple
-		static int scm(int i1, int i2);
+		static long long scm(long long i1, long long i2);
 
-		void set( int num, int denom = 1 );
-		void setDenominator(int newDenominator);
-		void setNumerator(int newNumerator);
+		void set(long long num, long long denom = 1);
+		void setDenominator(long long newDenominator);
+		void setNumerator(long long newNumerator);
 
 		void invert(); 
 

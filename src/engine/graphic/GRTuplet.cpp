@@ -200,7 +200,7 @@ void GRTuplet::OnDraw(VGDevice & hdc) const
 	GRTupletSaveStruct * st = (GRTupletSaveStruct *)sse->p;
 	if (st->p1.x == st->p2.x)	return;		// nothing to draw: the metrics is an empty box
 
-	int charCount = 0;
+	size_t charCount = 0;
     float thickness = arTuplet->getThickness();
     float dxOffset  = (arTuplet->getDX() ? arTuplet->getDX()->getValue() : 0);
 
@@ -220,18 +220,18 @@ void GRTuplet::OnDraw(VGDevice & hdc) const
 
         /* In order that numerator/denominator stays at the same vertical position even if size is changed */
         float xextent, yextent;
-        FontManager::gFontScriab->GetExtent(fText.c_str(), charCount, &xextent, &yextent, &hdc);
+        FontManager::gFontScriab->GetExtent(fText.c_str(), (int)charCount, &xextent, &yextent, &hdc);
         int offset = int(yextent / 11.2 * arTuplet->getTextSize() - 40);
         /***************************************************************************************************/
 		hdc.SetFontAlign(VGDevice::kAlignCenter | VGDevice::kAlignBottom);
-        hdc.DrawString(st->textpos.x + dxOffset, st->textpos.y + offset, fText.c_str(), charCount);
+		hdc.DrawString(st->textpos.x + dxOffset, st->textpos.y + offset, fText.c_str(), (int)charCount);
 	}
 
 	// - Draws the braces
 	const float middleX = (st->p1.x + st->p2.x) * 0.5f;
 	const float middleY = (st->p1.y + st->p2.y) * 0.5f;
 	const float slope	= (st->p2.y - st->p1.y) / (st->p2.x - st->p1.x); //<- could be stored
-    const float textSpace = (charCount + 0.5) * LSPACE * float(0.5) * arTuplet->getTextSize();
+    const float textSpace = (charCount + 0.5f) * LSPACE * 0.5f * arTuplet->getTextSize();
 
 	hdc.PushPenWidth(thickness);
     if (mColRef) hdc.PushPenColor(VGColor(mColRef));

@@ -101,6 +101,7 @@
 
 #include <typeinfo>
 #include <cassert>
+#include <algorithm>
 
 #include "ARArticulation.h"
 #include "ARStaccato.h"
@@ -480,14 +481,14 @@ void GRArticulation::placeStaccato( GREvent * inParent, NVPoint & ioPos )
 {
 	GRStaff * staff = inParent->getGRStaff();
 	float space = staff->getStaffLSPACE();
-	const float hspace = space * 0.5;
+	float hspace = space * 0.5f;
 
 	if (getPlacement( inParent ) == ARArticulation::kAbove) {
-		double topMax = min(inParent->getStemEndPos().y, inParent->getPosition().y) - space;
+		float topMax = min(inParent->getStemEndPos().y, inParent->getPosition().y) - space;
 		ioPos.y = onStaffLine (staff, topMax) ? topMax - hspace : topMax;
 	}
 	else {
-		double bottomMin = max(inParent->getStemEndPos().y, inParent->getPosition().y) + space;
+		float bottomMin = max(inParent->getStemEndPos().y, inParent->getPosition().y) + space;
 		ioPos.y = onStaffLine (staff, bottomMin) ? bottomMin + hspace : bottomMin;
 	}
 }
@@ -500,17 +501,17 @@ void GRArticulation::placeStaccmo( GREvent * inParent, NVPoint & ioPos )
 
 	GRStaff * staff = inParent->getGRStaff();
 	float space = staff->getStaffLSPACE();
-	const float hspace = space * 0.5;
+	const float hspace = space * 0.5f;
 
 	if (getPlacement( inParent ) == ARArticulation::kAbove) {
-		double topMax = min(inParent->getStemEndPos().y, inParent->getPosition().y) - hspace;
+		float topMax = min(inParent->getStemEndPos().y, inParent->getPosition().y) - hspace;
 		// ensure the position is outside the staff
 		if (topMax > -space) topMax = -space;
 		ioPos.y = onStaffLine (staff, topMax) ? topMax - hspace : topMax;
 	}
 	else {
-		const float bottom = staffBottom(staff) + space*0.65;
-		double bottomMin = max(inParent->getStemEndPos().y, inParent->getPosition().y) + space;
+		const float bottom = (float)staffBottom(staff) + space*0.65f;
+		float bottomMin = max(inParent->getStemEndPos().y, inParent->getPosition().y) + space;
 		// ensure the position is outside the staff
 		if (bottomMin <= bottom) bottomMin = bottom;
 		ioPos.y = onStaffLine (staff, bottomMin) ? bottomMin + hspace : bottomMin;
@@ -522,22 +523,22 @@ void GRArticulation::placePizz(GREvent * inParent, NVPoint & ioPos)
 {
 	GRStaff * staff = inParent->getGRStaff();
 	float space = staff->getStaffLSPACE();
-	const float minSpace = space * 1.5;
+	const float minSpace = space * 1.5f;
 
 	if (getPlacement( inParent ) == ARArticulation::kAbove) {
 		double topMax = min(-space, inParent->getStemEndPos().y - space);
 		topMax = min(topMax, double(inParent->getPosition().y - minSpace));
 		if (topMax > -space) topMax = -space;
-		topMax = resolveCollisionAbove(inParent, topMax, space*1.2, kFlagMarcato | kFlagMarcatoUp | kFlagAccent | kFlagFermataUp);
-		ioPos.y = topMax;
+		topMax = resolveCollisionAbove(inParent, topMax, space*1.2f, kFlagMarcato | kFlagMarcatoUp | kFlagAccent | kFlagFermataUp);
+		ioPos.y = (float)topMax;
 	}
 	else {
-		const float bottom = staffBottom(staff) + space*1.1;
+		const double bottom = staffBottom(staff) + space * 1.1f;
 		double bottomMin = max(inParent->getStemEndPos().y, inParent->getPosition().y) + minSpace;
 		// ensure the position is outside the staff
 		if (bottomMin <= bottom) bottomMin = bottom;
-		bottomMin = resolveCollisionBelow(inParent, bottomMin, space*1.1, kFlagMarcato | kFlagMarcatoDown | kFlagAccent | kFlagFermataDown);
-		ioPos.y = bottomMin;
+		bottomMin = resolveCollisionBelow(inParent, bottomMin, space*1.1f, kFlagMarcato | kFlagMarcatoDown | kFlagAccent | kFlagFermataDown);
+		ioPos.y = (float)bottomMin;
 	}
 }
 
@@ -616,14 +617,14 @@ void GRArticulation::placeAccentAbove( GREvent * inParent, NVPoint & ioPos )
 	GRStaff * staff = inParent->getGRStaff();
 	const float space = staff->getStaffLSPACE();
 	const float topspace = space;
-	const float minSpace = space * 1.5;
+	const float minSpace = space * 1.5f;
 
 	// check the minimum y position regarding note position and stems
 	double topMax = min(inParent->getStemEndPos().y, inParent->getPosition().y) - minSpace;
 	// ensure the position is outside the staff
 	if (topMax > -topspace) topMax = -topspace;
 	// avoid collisions with other articulations
-	ioPos.y = resolveCollisionAbove(inParent, topMax, minSpace, kFlagFermataUp | kFlagMarcato | kFlagMarcatoUp);
+	ioPos.y = (float)resolveCollisionAbove(inParent, topMax, minSpace, kFlagFermataUp | kFlagMarcato | kFlagMarcatoUp);
 }
 
 // ----------------------------------------------------------------------------
@@ -631,14 +632,14 @@ void GRArticulation::placeAccentBelow( GREvent * inParent, NVPoint & ioPos )
 {
 	GRStaff * staff = inParent->getGRStaff();
 	float space = staff->getStaffLSPACE();
-	const float minSpace = space * 1.5;
-	const float bottom = staffBottom(staff) + space;
+	const float minSpace = space * 1.5f;
+	const double bottom = staffBottom(staff) + space;
 
 	// check the minimum y position regarding note position and stems
 	double bottomMin = max(inParent->getStemEndPos().y, inParent->getPosition().y) + minSpace;
 	// ensure the position is outside the staff
 	if (bottomMin <= bottom) bottomMin = bottom;
-	ioPos.y = resolveCollisionBelow(inParent, bottomMin, minSpace, kFlagFermataDown | kFlagMarcato | kFlagMarcatoDown);
+	ioPos.y = (float)resolveCollisionBelow(inParent, bottomMin, minSpace, kFlagFermataDown | kFlagMarcato | kFlagMarcatoDown);
 }
 
 // ----------------------------------------------------------------------------
@@ -656,14 +657,14 @@ void GRArticulation::placeMarcatoAbove( GREvent * inParent, NVPoint & ioPos )
 	GRStaff * staff = inParent->getGRStaff();
 	const float space = staff->getStaffLSPACE();
 	const bool above = true;
-	const float minSpace = space * 1.5;
+	const float minSpace = space * 1.5f;
 
 	setMarcatoDirection( above );
 	// check the minimum y position regarding note position and stems
 	double topMax = min(-space, inParent->getStemEndPos().y - space);
 	topMax = min(topMax, double(inParent->getPosition().y - minSpace));
 
-	ioPos.y = resolveCollisionAbove(inParent, topMax, minSpace, kFlagFermataUp | kFlagMarcato | kFlagMarcatoUp);
+	ioPos.y = (float)resolveCollisionAbove(inParent, topMax, minSpace, kFlagFermataUp | kFlagMarcato | kFlagMarcatoUp);
 }
 
 // ----------------------------------------------------------------------------
@@ -672,16 +673,16 @@ void GRArticulation::placeMarcatoBelow( GREvent * inParent, NVPoint & ioPos )
 {
 	GRStaff * staff = inParent->getGRStaff();
 	float space = staff->getStaffLSPACE();
-	const float minSpace = space * 1.5;
-	const float bottom = staffBottom(staff) + space;
+	const float minSpace = space * 1.5f;
+	const double bottom = staffBottom(staff) + space;
 	const bool above = false;
 
 	setMarcatoDirection( above );
 	// check the minimum y position regarding note position and stems
-	double bottomMin = max(bottom, inParent->getStemEndPos().y + space);
+	double bottomMin = max((float)bottom, inParent->getStemEndPos().y + space);
 	bottomMin = max(bottomMin, double(inParent->getPosition().y + minSpace));
 
-	ioPos.y = resolveCollisionBelow(inParent, bottomMin, minSpace, kFlagFermataDown | kFlagMarcato | kFlagMarcatoDown);
+	ioPos.y = (float)resolveCollisionBelow(inParent, bottomMin, minSpace, kFlagFermataDown | kFlagMarcato | kFlagMarcatoDown);
 }
 
 // ----------------------------------------------------------------------------
@@ -690,19 +691,19 @@ void GRArticulation::placeTenuto( GREvent * inParent, NVPoint & ioPos )
 {
 	GRStaff * staff = inParent->getGRStaff();
 	float space = staff->getStaffLSPACE();
-	const float hspace = space * 0.5;
+	const float hspace = space * 0.5f;
 
 	if (getPlacement( inParent ) == ARArticulation::kAbove) {
 		double topMax = min(inParent->getStemEndPos().y, inParent->getPosition().y) - space;
 		topMax = resolveCollisionAbove(inParent, topMax, hspace, ~kFlagStaccato);
 		if (onStaffLine (staff, topMax))	topMax -= hspace;
-		ioPos.y = topMax;
+		ioPos.y = (float)topMax;
 	}
 	else {
 		double bottomMin = max(inParent->getStemEndPos().y, inParent->getPosition().y) + space;
 		bottomMin = resolveCollisionBelow(inParent, bottomMin, hspace, ~kFlagStaccato);
 		if (onStaffLine (staff, bottomMin)) bottomMin += hspace;
-		ioPos.y = bottomMin;
+		ioPos.y = (float)bottomMin;
 	}
 }
 
@@ -712,22 +713,22 @@ void GRArticulation::placeHarmonic(GREvent * inParent, NVPoint & ioPos)
 {
 	GRStaff * staff = inParent->getGRStaff();
 	double space = staff->getStaffLSPACE();
-	const double minSpace = space * 1.5;
-	const double hspace = space * 0.5;
-	const double hhspace = hspace * 0.5;
+	const double minSpace = space * 1.5f;
+	const double hspace = space * 0.5f;
+	const double hhspace = hspace * 0.5f;
 
 	if (getPlacement( inParent ) == ARArticulation::kAbove) {
 		double topMax = min(-space*0.15, inParent->getStemEndPos().y - hhspace);
-		topMax = min(topMax, double(inParent->getPosition().y - space * 0.7));
-		topMax = resolveCollisionAbove(inParent, topMax, hspace, kFlagPizz | kFlagMarcato | kFlagMarcatoUp | kFlagAccent | kFlagFermataUp);
-		ioPos.y = topMax;
+		topMax = min(topMax, inParent->getPosition().y - space * 0.7f);
+		topMax = resolveCollisionAbove(inParent, topMax, (float)hspace, kFlagPizz | kFlagMarcato | kFlagMarcatoUp | kFlagAccent | kFlagFermataUp);
+		ioPos.y = (float)topMax;
 	}
 	else {
 		const double bottom = staffBottom(staff) + minSpace;
-		double bottomMin = max(bottom, inParent->getStemEndPos().y + space*1.2);
-		bottomMin = max(bottomMin, inParent->getPosition().y + space * 1.6);
-		bottomMin = resolveCollisionBelow(inParent, bottomMin, minSpace, kFlagPizz | kFlagMarcato | kFlagMarcatoDown | kFlagAccent | kFlagFermataDown);
-		ioPos.y = bottomMin;
+		double bottomMin = max(bottom, inParent->getStemEndPos().y + space * 1.2f);
+		bottomMin = max(bottomMin, inParent->getPosition().y + space * 1.6f);
+		bottomMin = resolveCollisionBelow(inParent, bottomMin, (float)minSpace, kFlagPizz | kFlagMarcato | kFlagMarcatoDown | kFlagAccent | kFlagFermataDown);
+		ioPos.y = (float)bottomMin;
 	}
 
 }
@@ -737,27 +738,27 @@ void GRArticulation::placeFermataAbove( GREvent * inParent, NVPoint & ioPos )
 {
 	GRStaff * staff = inParent->getGRStaff();
 	const float space = staff->getStaffLSPACE();
-	const float hspace = space * 0.5;
+	const float hspace = space * 0.5f;
 
 	// check the minimum y position regarding note position and stems
 	double topMax = min(0.f, inParent->getStemEndPos().y);
 	topMax = min(topMax, double(inParent->getPosition().y - hspace));
 	// avoid collisions with other articulations
-	ioPos.y = resolveCollisionAbove(inParent, topMax, space, kFlagFermataUp);
+	ioPos.y = (float)resolveCollisionAbove(inParent, topMax, space, kFlagFermataUp);
 }
 
 void GRArticulation::placeFermataBelow(GREvent * inParent, NVPoint & ioPos)
 {
 	GRStaff * staff = inParent->getGRStaff();
 	float space = staff->getStaffLSPACE();
-	const float bottom = staffBottom(staff) + space * 0.5;
+	const float bottom = (float)staffBottom(staff) + space * 0.5f;
 
 	// check the minimum y position regarding note position and stems
-	double bottomMin = max(inParent->getStemEndPos().y, inParent->getPosition().y) + space;
+	float bottomMin = max(inParent->getStemEndPos().y, inParent->getPosition().y) + space;
 	// ensure the position is outside the staff
 	if (bottomMin <= bottom) bottomMin = bottom;
 	// avoid collisions with other articulations
-	ioPos.y = resolveCollisionBelow(inParent, bottomMin, space*1.5, kFlagFermataDown);
+	ioPos.y = (float)resolveCollisionBelow(inParent, bottomMin, space*1.5f, kFlagFermataDown);
 }
 
 // ----------------------------------------------------------------------------

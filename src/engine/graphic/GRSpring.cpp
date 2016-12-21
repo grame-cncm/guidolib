@@ -15,6 +15,7 @@
 // - Std c++
 #include <cmath>
 #include <typeinfo>
+#include <algorithm>
 
 // - Guido GR
 #include "GRAccidental.h"
@@ -704,7 +705,7 @@ void GRSpring::checkAccidentalCollisions()
 				if ((i > j) && accoffsets[i-j]) {
 					collides = accbbs[i].Collides(accbbs[i-j-1]);
 					if (collides) {
-						collindex = i-j-1;
+						collindex = int(i-j-1);
 						break;
 					}
 				}

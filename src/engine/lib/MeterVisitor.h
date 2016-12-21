@@ -22,7 +22,7 @@
 //------------------------------------------------------------------------------
 class MeterVisitor : public BaseVisitor
 {
-	enum { kNoLimit = 0xfffffffff };
+	enum { kNoLimit = 0xffffffff };
 	TYPE_TIMEPOSITION	fLimit;
 	GuidoMeter			fLastMeter;
 	

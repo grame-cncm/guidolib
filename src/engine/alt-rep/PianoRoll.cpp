@@ -814,7 +814,7 @@ void PianoRoll::DrawMidiSeq(MidiSeqPtr seq, int tpqn, const DrawParams& drawPara
 	double start = double(fStartDate);
 	double end   = double(fEndDate);
 	double nextbar = -1;
-	float bar = 0;
+	double bar = 0;
 	double date = 0;
 
 	while (ev) {

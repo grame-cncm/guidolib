@@ -36,7 +36,7 @@ class RProportional : public PianoRoll {
 	int		diatonic (int midipitch, int& octave, int& alter) const;		// gives the diatonic pitch of a midi pitch + octave and alter
 	float	halfspaces2ypos (int halfspaces, int staff) const;
 	int		halfSpaces2LedgerLines (int halfspaces) const;
-	float	noteWidth () const							{ return fLineHeight * 1.8;	}
+	float	noteWidth () const							{ return fLineHeight * 1.8f;	}
 
 	void	DrawHead(float x, float y, int alter, VGDevice* dev) const;			// draw note head
 	void	DrawLedgerLines(float x, float y, int count, VGDevice* dev) const;	// draw ledger lines

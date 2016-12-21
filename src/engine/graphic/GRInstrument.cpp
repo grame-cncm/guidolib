@@ -59,6 +59,6 @@ void GRInstrument::OnDraw(VGDevice & hdc) const
 	if (nv == 0) return;
 	if(!mDraw)
 		return;
-	GRTagARNotationElement::OnDrawText(hdc, nv, strlen(nv));
+	GRTagARNotationElement::OnDrawText(hdc, nv, (int)strlen(nv));
 }
 

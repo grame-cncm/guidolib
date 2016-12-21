@@ -187,7 +187,7 @@ void BinaryDevice::writeColor (const VGColor& color) const
 //______________________________________________________________________________
 
 void BinaryDevice::writeString(const char *str) const {
-  int len = strlen(str);
+  size_t len = strlen(str);
   char null = '\0';
   fStream.write(str, sizeof(char) * len);
   fStream.write(&null, sizeof(char));

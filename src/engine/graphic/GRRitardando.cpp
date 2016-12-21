@@ -130,7 +130,7 @@ void GRRitardando::OnDraw(VGDevice & hdc) const
 		toPrint += tempo1;
 		toPrint += " rit.";
 		const char * t1 = toPrint.c_str();
-		int n = toPrint.length();
+		size_t n = toPrint.length();
 		
 		//to draw the little note
         float scaleFactor = 0.5f;
@@ -149,7 +149,7 @@ void GRRitardando::OnDraw(VGDevice & hdc) const
 		hdc.SetScale(1 / scaleFactor, 1 / scaleFactor);
 
         hdc.SetTextFont(hTextFont);
-		hdc.DrawString(getPosition().x + LSPACE, getPosition().y, t1, n);
+		hdc.DrawString(getPosition().x + LSPACE, getPosition().y, t1, int(n));
 
 		xStart += n * LSPACE / 2;
 	}
@@ -164,7 +164,7 @@ void GRRitardando::OnDraw(VGDevice & hdc) const
 		std::string toPrint2 ("= ");
 		toPrint2 += tempo2;
 		const char * t2 = toPrint2.c_str();
-		int n = toPrint2.length();
+		size_t n = toPrint2.length();
 		
 		// to draw the little note
         float scaleFactor = 0.5f;
@@ -183,7 +183,7 @@ void GRRitardando::OnDraw(VGDevice & hdc) const
 		hdc.SetScale(1 / scaleFactor, 1 / scaleFactor);
 
         hdc.SetTextFont(hTextFont);
-		hdc.DrawString(endPos.x - (n - 1) * LSPACE, endPos.y, t2, n);
+		hdc.DrawString(endPos.x - (n - 1) * LSPACE, endPos.y, t2, int(n));
 
 		xEnd -= (n + 1) * LSPACE;
 	}

@@ -46,7 +46,7 @@ GROctava::GROctava( GRStaff * staff, const NVstring & text, AROctava* ar, bool b
 	float x = 0;
 	float y = 0;
 	if( gGlobalSettings.gDevice )
-		FontManager::gFontText->GetExtent( fText.c_str(), fText.length(), &x, &y, gGlobalSettings.gDevice );
+		FontManager::gFontText->GetExtent( fText.c_str(), (int)fText.length(), &x, &y, gGlobalSettings.gDevice );
 
 	mBoundingBox.right = (GCoord)(x);
 	mBoundingBox.top = (GCoord)(y - staff->getStaffLSPACE());
@@ -98,8 +98,8 @@ NVRect GROctava::getExtensionLine (const NEPointerList * assoc, int num) const
 {
 	NVRect outRect;
 	float space = fStaff->getStaffLSPACE();
-	float staffTop		= fStaff->getPosition().y - space * 0.5;
-	float staffBottom	= staffTop + fStaff->getDredgeSize() + space * 2.5;
+	float staffTop		= fStaff->getPosition().y - space * 0.5f;
+	float staffBottom	= staffTop + fStaff->getDredgeSize() + space * 2.5f;
 	GuidoPos pos = assoc->GetHeadPosition();
 	float currentXPos = 0;
 	while (pos) {
@@ -118,12 +118,12 @@ NVRect GROctava::getExtensionLine (const NEPointerList * assoc, int num) const
 					outRect.left = bb.left + space;
 				outRect.right = bb.right + space /3;	// and adjust the right border
 				if (fBassa) {
-					float y = bb.bottom + space * 1.7;
+					float y = bb.bottom + space * 1.7f;
 					float bottom = (y > staffBottom) ? y : staffBottom;
 					if (bottom > outRect.bottom) outRect.top = outRect.bottom = bottom;
 				}
 				else {
-					float y = bb.top - space * 0.2;
+					float y = bb.top - space * 0.2f;
 					float top = (y < staffTop) ? y : staffTop;
 					if (top < outRect.top) outRect.top = outRect.bottom = top - fTextHeight;
 				}
@@ -195,7 +195,7 @@ void GROctava::OnDraw( VGDevice & hdc) const
 		if ((xEnd == r.right) && endSegment)		// is it the last extension line ?
 			hdc.Line(xEnd, r.top, xEnd, fBassa ? r.top - space : r.top + space);
 		hdc.Line(xEnd - space, r.top, xEnd, r.top);
-		xEnd -= 2.5 * space;
+		xEnd -= 2.5f * space;
 	}
 	hdc.PopPenWidth();
     if (mColRef) {

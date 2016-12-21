@@ -150,7 +150,7 @@ void GRSymbol::OnDraw( VGDevice & hdc ) const
         hdc.SetTextFont(hmyfont);
 
         string warningMsg("\\symbol not exported, use the GuidoEditor to get inline image data.");
-        hdc.DrawString(20, -70, warningMsg.c_str(), warningMsg.size()); // harcoded
+        hdc.DrawString(20, -70, warningMsg.c_str(), (int)warningMsg.size()); // harcoded
     }
     else if (st->bitmap && st->bitmap->getDevice()) {
         const ARSymbol *arSymbol = getARSymbol();

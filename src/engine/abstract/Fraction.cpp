@@ -84,7 +84,7 @@ Fraction::Fraction( int theNumerator, int theDenominator )
 	dval = (double)theNumerator / (double)theDenominator;
 }
 
-void Fraction::set( int num, int denom )
+void Fraction::set(long long num, long long denom)
 {
 	assert( denom != 0 ); // denominator must not be 0
 	numerator = num;
@@ -121,7 +121,7 @@ void Fraction::normalize()
 		return;
 	}
 	
-	const int ggt = gcd(numerator, denominator);
+	const long long ggt = gcd(numerator, denominator);
 //	if (ggt != 1)
 //	{
 	  numerator /= ggt;
@@ -137,12 +137,12 @@ void Fraction::normalize()
 }
 
 // static function
-int Fraction::gcd(int i1, int i2)
+long long Fraction::gcd(long long i1, long long i2)
 {
 // gcd -- calculate the GCD for two integer values
 // Input: Two int numbers
 // Output: Greatest common denominator
-	  int temp;
+	  long long temp;
 	  while (i2) {					// While non-zero value
 		temp = i2;					// Save current value
 		i2 = i1 % i2;				// Assign remainder of division
@@ -152,22 +152,22 @@ int Fraction::gcd(int i1, int i2)
 }
 
 // smallest common multiple
-int Fraction::scm(int i1, int i2)
+long long Fraction::scm(long long i1, long long i2)
 {	
 	if (i1 == i2) return i1;
 
-	const int tmp1 = gcd( i1, i2 );
+	const long long tmp1 = gcd(i1, i2);
 	return (( i1 / tmp1 ) * i2 );
 }
 
-void Fraction::setDenominator(int newDenominator)
+void Fraction::setDenominator(long long newDenominator)
 {
 	assert(newDenominator!=0);
 	denominator = newDenominator;
 	dval = (double)numerator / (double)newDenominator;
 }
 
-void Fraction::setNumerator(int newNumerator)
+void Fraction::setNumerator(long long newNumerator)
 {
 	numerator = newNumerator;
 	dval = (double)newNumerator / (double)denominator;
@@ -255,9 +255,9 @@ bool Fraction::operator <=(const Fraction &tmp) const
 Fraction & Fraction::operator +=(const Fraction & inValue)
 {
 	// smallest common multiple 
-	const int scmv = scm( inValue.denominator, denominator );
-	const int mul1 = scmv / denominator;
-	const int mul2 = scmv / inValue.denominator;
+	const long long scmv = scm( inValue.denominator, denominator );
+	const long long mul1 = scmv / denominator;
+	const long long mul2 = scmv / inValue.denominator;
 
 	numerator = numerator * mul1 + inValue.numerator * mul2;
 	denominator = scmv;
@@ -269,9 +269,9 @@ Fraction & Fraction::operator +=(const Fraction & inValue)
 Fraction & Fraction::operator -=(const Fraction & inValue)
 {
 	// smallest common multiple 
-	const int scmv = scm( inValue.denominator, denominator );
-	const int mul1 = scmv / denominator;
-	const int mul2 = scmv / inValue.denominator;
+	const long long scmv = scm(inValue.denominator, denominator);
+	const long long mul1 = scmv / denominator;
+	const long long mul2 = scmv / inValue.denominator;
 
 	numerator = numerator * mul1 - inValue.numerator * mul2;
 	denominator = scmv;
@@ -285,9 +285,9 @@ Fraction & Fraction::operator -=(const Fraction & inValue)
 Fraction & Fraction::operator %=(const Fraction & inValue)
 {
 	// smallest common multiple 
-	const int scmv = scm( inValue.denominator, denominator );
-	const int mul1 = scmv / denominator;
-	const int mul2 = scmv / inValue.denominator;
+	const long long scmv = scm(inValue.denominator, denominator);
+	const long long mul1 = scmv / denominator;
+	const long long mul2 = scmv / inValue.denominator;
 
 	numerator = (numerator * mul1) % (inValue.numerator * mul2);
 	denominator = scmv;
@@ -299,7 +299,7 @@ Fraction & Fraction::operator %=(const Fraction & inValue)
 // Multiply
 Fraction & Fraction::operator *=(const Fraction & inValue)
 {
-	const int saveDenominator = denominator;
+	const long long saveDenominator = denominator;
 
 	denominator = inValue.denominator;
 	normalize();
@@ -467,7 +467,7 @@ Fraction Fraction::getReallySmallerNote(int exp) const
 
 void Fraction::invert() 
 {
-	const int oldnumerator = numerator;
+	const long long oldnumerator = numerator;
 	numerator = denominator;
 	denominator = oldnumerator;
 	if (denominator == 0)

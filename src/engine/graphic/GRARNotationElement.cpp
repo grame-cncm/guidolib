@@ -11,6 +11,9 @@
   research@grame.fr
 
 */
+#ifdef WIN32
+# pragma warning (disable : 4800)
+#endif
 
 #include <cassert>
 

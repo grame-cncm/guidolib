@@ -99,7 +99,7 @@ void GRPage::checkCollisions (TCollisions& state)
 	size_t n = mSystems.size();
 	state.reset(true);
 	for (size_t i = 0; i < n; i++) {
-		state.setSystem(i);
+		state.setSystem ((int)i);
 		mSystems[i]->checkCollisions (state);
 	}
 }
