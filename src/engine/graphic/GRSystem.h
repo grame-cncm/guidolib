@@ -61,23 +61,12 @@ public:
 	using GRNotationElement::getStaffNumber;
 
 	enum BARTYPE { SYSTEM, ACCOLADE, STAFF, MENSUR };
-/*
-				GRSystem( 	GRPage * inPage, 
-							const TYPE_TIMEPOSITION & relativeTimePositionOfSystem, float force);
-			*/
-							
-				GRSystem(GRStaffManager * stfmgr,
-							GRPage * inPage,
-							const TYPE_TIMEPOSITION & relativeTimePositionOfSystem,
-							SSliceList ** systemslices,
-							int count,
-							GRSystemSlice * beginslice,
-							ISpringVector ** pvect,
-							ARSystemFormat * sysform,
-							float force, float spring, float proportionnalRender,
-							bool islastsystem = false);
 	
-	virtual 			~GRSystem();
+				 GRSystem(GRStaffManager * stfmgr, GRPage * inPage, const TYPE_TIMEPOSITION & relativeTimePositionOfSystem,
+							SSliceList ** systemslices, int count, GRSystemSlice * beginslice, ISpringVector ** pvect,
+							ARSystemFormat * sysform, float force, float spring, float proportionnalRender,
+							bool islastsystem = false);
+	virtual 	~GRSystem();
 
 	virtual	float		getSystemWidthCm();
 	virtual GRPage *	getGRPage()                             { return mPage; }
@@ -90,12 +79,12 @@ public:
 	GRSpring *          getSpring( int id ) const;
 	const GRSpring *    getGRSpring( int id ) const;
     StaffVector *       getStaves() const;
-	SSliceList *        getSlices()         { return &mSystemSlices; }
+	SSliceList *        getSlices()								{ return &mSystemSlices; }
 
 	void        setSpringParameter(float nconst);
 	void        setSystemFormat( ARSystemFormat * sysfrm );
-	void        setDistance( float inDistance )  	{ mDistanceSet = true; mDistance = inDistance; }
-	void        setGRPage( GRPage * inNewPage )		{ mPage = inNewPage; }
+	void        setDistance( float inDistance )					{ mDistanceSet = true; mDistance = inDistance; }
+	void        setGRPage( GRPage * inNewPage )					{ mPage = inNewPage; }
 	void        setMeterOfStaffs( int num, int denom );
 
 	virtual void		OnDraw( VGDevice & hdc ) const;
@@ -103,22 +92,23 @@ public:
 	virtual void		GGSOutput() const;
 	virtual void		setPosition( class NVPoint const & );
 	virtual void		updateBoundingBox();
+	virtual void		print(std::ostream& os) const;
 
 	void	addSystemTag( GRNotationElement * mytag );
 	void 	addBar( GRBar * mybar, enum GRSystem::BARTYPE btype, GRStaff * inStaff );
 	void 	addToSpring(GRNotationElement * el, int id );
 	void	addStaff( GRStaff * newStaff, int num );
 
-	bool 	IsDistanceSet() const 				{ return mDistanceSet; }
+	bool 	IsDistanceSet() const								{ return mDistanceSet; }
 	void	notifyAccoladeTag( ARAccolade * inAccoladeTag );
 
 	void 	FinishSystem();
 	void 	FinishSystem( ISpringVector * pvect, IRodList * prods1, IRodList * prods2,
-        GRSpaceForceFunction2 * psff, const TYPE_TIMEPOSITION & tp, int lastline = 0);
+						  GRSpaceForceFunction2 * psff, const TYPE_TIMEPOSITION & tp, int lastline = 0);
+	void	checkCollisions (TCollisions& state);
 
 	TYPE_TIMEPOSITION mDebugSystemDate;
     static int sSystemID;
-
 
 protected:
 	void 		dospacing();
@@ -137,8 +127,6 @@ protected:
 	float 	mDistance;
 	bool 	mDistanceSet;
 	bool 	mIsLastLine;		// was int
-	
-//	int		mAccoladeType;	// (JB) new. Should be replaced by a list of accolades.
 
 	// this is returned by GRStaffManager.
 	ISpringVector * mSpringVector;

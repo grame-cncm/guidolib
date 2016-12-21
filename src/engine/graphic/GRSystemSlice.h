@@ -35,6 +35,7 @@ class GRFinishBar;
 class GRDoubleBar;
 class GRRepeatBegin;
 class GRRepeatEnd;
+class TCollisions;
 
 /** \brief Form the basis for the optimum system-break-algorithm.
 
@@ -68,7 +69,9 @@ public:
 	virtual void 	OnDraw( VGDevice & hdc ) const;
 	virtual void	GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 	virtual void 	updateBoundingBox();
+	virtual void	print(std::ostream& os) const;
 
+	void			checkCollisions (TCollisions& state);
 
 	void		Finish();
 	void		FinishSlice();
@@ -79,6 +82,7 @@ public:
 	int			getNumber() const			{ return mNumber; }
     StaffVector * getStaves()   { return mStaffs; }
 	GRBar*		getBarAt (const TYPE_TIMEPOSITION& pos) const;
+	const GRBar* getBar () const;
 
 	void		addSystemTag( GRNotationElement * tg );
 	void		addStaff( GRStaff * newStaff, int num);

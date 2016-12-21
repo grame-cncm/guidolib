@@ -111,18 +111,14 @@ void GRNotationElement::SendMap (MapCollector& f, TYPE_TIMEPOSITION date, TYPE_D
 // -------------------------------------------------------------------------
 void GRNotationElement::print(ostream& os) const
 {
-//	NVRect r(getBoundingBox());
-//	r += getPosition();
 	ARMusicalObject * ar = getAbstractRepresentation();
-//	os << "notation element at " << getPosition() << " - " << getBoundingBox() << " - ";
-	os << "notation element at " << getRelativeTimePosition() << " - ";
+	os << "GRNotationElement at " << getRelativeTimePosition() << " - ";
 	if (ar) {
         ARMusicalTag * tag = static_cast<ARMusicalTag *>(ar->isARMusicalTag());
         if (tag) {
             tag->printGMNName (os);
 			os << " ";
             tag->printParameters (os);
-//            *ar << os;
         }
 		else ar->print(os);
 	}

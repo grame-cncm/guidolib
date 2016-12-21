@@ -32,6 +32,7 @@
 
 #include "GUIDOEngine.h"
 #include "GUIDOInternal.h"
+#include "TCollisions.h"
 
 
 // Guido AR
@@ -576,6 +577,32 @@ void GRSystem::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& info
 	infos.fPos.y -= mPosition.y;
 }
 
+
+// ----------------------------------------------------------------------------
+void GRSystem::print(std::ostream& os) const
+{
+	GuidoPos pos = mSystemSlices.GetHeadPosition();
+	int i=0;
+	while (pos) {
+		os << "Slice " << i++ << endl;
+		GRSystemSlice * slice = mSystemSlices.GetNext(pos);
+		slice->print(os);
+	}
+}
+
+// --------------------------------------------------------------------------
+void GRSystem::checkCollisions (TCollisions& state)
+{
+	state.reset(false);
+	GuidoPos pos = mSystemSlices.GetHeadPosition();
+	while (pos) {
+		GRSystemSlice * slice = mSystemSlices.GetNext(pos);
+		NVRect r = slice->getBoundingBox();
+		state.check (r, true);
+		slice->checkCollisions(state);
+		state.update (slice, r);
+	}
+}
 
 // --------------------------------------------------------------------------
 /** \brief Draws system-slices, accolade, borders, and springs.

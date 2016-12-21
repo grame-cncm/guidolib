@@ -56,6 +56,7 @@ using namespace std;
 #include "ARRepeatEndRangeEnd.h"
 #include "ARStaffFormat.h"
 #include "ARNote.h"
+#include "ARSpace.h"
 
 // - Guido GR
 #include "GRStaff.h"
@@ -91,6 +92,7 @@ using namespace std;
 #include "GRVoice.h"
 
 #include "kf_ivect.h"
+#include "TCollisions.h"
 
 
 #if 0
@@ -419,6 +421,66 @@ staff_debug("addNotationElement");
 	// count the notes, evaluates the accidentals.
     GRNote * mynote = static_cast<GRNote *>(notationElement->isGRNote());
 	setNoteParameters(mynote);
+}
+
+
+// ----------------------------------------------------------------------------
+void GRStaff::print(std::ostream& os) const
+{
+	const NEPointerList& elts = getElements();
+	GuidoPos pos = elts.GetHeadPosition();
+	while (pos) {
+		os << elts.GetNext(pos) << endl;
+	}
+}
+
+// ----------------------------------------------------------------------------
+void GRStaff::checkCollisions (TCollisions& state)
+{
+//if (state.lastElement())
+//cerr << "GRStaff::checkCollisions " << state.getSystem() << "/" << state.getStaff() << " last: " << state.lastElement() << endl;
+//else
+//cerr << "GRStaff::checkCollisions " << state.getSystem() << "/" << state.getStaff() << endl;
+	
+	NVRect chordbb;									// the last chord bounding box
+	bool inChord = false, pendingChord = false;		// used for chords detection
+	NEPointerList* elts = getElements();
+	if (!elts) return;
+
+	GuidoPos pos = elts->GetHeadPosition();
+	while (pos) {
+		GRNotationElement * e = elts->GetNext(pos);
+		if (e->isEmpty()) {
+			if (inChord) {							// at this point this is a chord end
+				inChord = pendingChord = false;		// set the chord flags off
+				state.check(chordbb);				// and check for collision
+				state.update (e, chordbb);			// update the collision tracking state
+			}
+			else pendingChord = true;				// at this point, we possibly enter a chord
+		}
+		else if (e->isChordComma() && pendingChord) {
+			inChord = true;							// at this point we're entering a chord
+			chordbb.Set(0,0,0,0);
+		}
+		else {										// here we deal with non empty events
+			pendingChord = false;					// we can safely assume that there is no pending chord (but can be inside a chord)
+			NVRect r = e->getBoundingBox();			// collect the event bounding box
+			r += e->getPosition();					// adjust the position
+		
+			const GRSingleNote* note = e->isSingleNote();
+			if (note) {
+				if (inChord) chordbb.Merge (r);		// inside a chord, we accumulate the notes bounding boxes
+				else {								// outside the chord:
+					state.check(r);					// check for collision
+					state.update (e, r);			// update the collision tracking state
+				}
+			}
+			else if (e->checkCollisionWith()) {		// this is not a note and if collision checking is required
+				state.check(r);						// check for collision
+				state.update (e, r);				// update the collision tracking state
+			}
+		}
+	}
 }
 
 // ----------------------------------------------------------------------------
@@ -820,6 +882,20 @@ GRNote * GRStaff::getLastNote() const
 		GRNote * grNote = dynamic_cast<GRNote *>(e);
 		if( grNote )
 			return grNote;
+	}
+	return 0;
+}
+
+// ----------------------------------------------------------------------------
+GRBar * GRStaff::getLastBar() const
+{
+	GuidoPos pos = mCompElements.GetTailPosition();
+	GRNotationElement * e = 0;
+	while (pos)
+	{
+		e = mCompElements.GetPrev(pos);
+		GRBar * bar = dynamic_cast<GRBar *>(e);
+		if( bar ) return bar;
 	}
 	return 0;
 }
@@ -2073,20 +2149,6 @@ void GRStaff::DrawNotationElements( VGDevice & hdc ) const
 	hdc.OffsetOrigin( -xOffset, -yOffset ); // restore origin
 }
 
-// ----------------------------------------------------------------------------
-void GRStaff::print(std::ostream& os) const
-{
-	GRNotationElement * e;
-	fprintf(stderr, "GRStaffprint(std::ostream& os): %.2f-%.2f ", 
-		(float) getRelativeTimePosition(), (float) getRelativeEndTimePosition());
-	GuidoPos pos = mCompElements.GetHeadPosition();
-	while(pos)
-	{
-		e = mCompElements.GetNext(pos);
-		e->print(os);
-	}
-	fprintf(stderr, "\n");
-}
 
 // ----------------------------------------------------------------------------
 void GRStaff::GGSOutput() const

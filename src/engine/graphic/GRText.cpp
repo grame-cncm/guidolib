@@ -30,6 +30,7 @@
 #include "VGFont.h"
 #include "FontManager.h"
 
+using namespace std;
 
 extern GRStaff * gCurStaff;
 
@@ -198,9 +199,9 @@ FloatRect GRText::getTextMetrics(VGDevice & hdc) const
 */
 void GRText::OnDraw( VGDevice & hdc ) const
 {
-	if(!mDraw)
-		return;
-	
+	if(!mDraw) return;
+
+//cerr << "GRText::OnDraw pos: " << getPosition() << " bb: " << getBoundingBox() << endl;
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );
 	assert(sse);
 	GRTextSaveStruct * st = (GRTextSaveStruct *) sse->p;

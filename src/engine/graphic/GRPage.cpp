@@ -37,6 +37,7 @@ using namespace std;
 #include "GRSystemSlice.h"
 #include "GRStaff.h"
 #include "kf_ivect.h"
+#include "TCollisions.h"
 
 NVRect gClipRect;
 
@@ -80,6 +81,27 @@ GRPage::GRPage(GRMusic * grmusic, GRStaffManager * grstafmgr,
 GRPage::~GRPage()
 {
 	DeleteContent( &mSystems );
+}
+
+// ----------------------------------------------------------------------------
+void GRPage::print(std::ostream& os) const
+{
+	size_t n = mSystems.size();
+	for (size_t i = 0; i < n; i++) {
+		os << "System " << i << endl;
+		mSystems[i]->print (os);
+	}
+}
+
+// ----------------------------------------------------------------------------
+void GRPage::checkCollisions (TCollisions& state)
+{
+	size_t n = mSystems.size();
+	state.reset(true);
+	for (size_t i = 0; i < n; i++) {
+		state.setSystem(i);
+		mSystems[i]->checkCollisions (state);
+	}
 }
 
 // ----------------------------------------------------------------------------

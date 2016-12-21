@@ -39,6 +39,7 @@ using namespace std;
 
 #include "VGDevice.h"
 #include "kf_ivect.h"
+#include "TCollisions.h"
 
 //#define TRACE
 #ifdef TRACE
@@ -80,6 +81,48 @@ GRSystemSlice::~GRSystemSlice()
 	delete mPossibleBreakState; mPossibleBreakState = 0;
 }
 
+
+// ----------------------------------------------------------------------------
+void GRSystemSlice::print(std::ostream& os) const
+{
+	for( int i = mStaffs->GetMinimum(); i <= mStaffs->GetMaximum(); ++i )
+	{
+		GRStaff * staff = mStaffs->Get(i);
+		if (staff) {
+			os << "Staff " << i << endl;
+			staff->print (os);
+		}
+	}
+}
+
+// --------------------------------------------------------------------------
+void GRSystemSlice::checkCollisions (TCollisions& state)
+{
+	state.clearElements();
+	for( int i = mStaffs->GetMinimum(); i <= mStaffs->GetMaximum(); ++i )
+	{
+		GRStaff * staff = mStaffs->Get(i);
+		// staff could be null (probably due to voices with \staff tags that redirect the content to anothers staff
+		if (staff) {
+			state.setStaff (i);
+			staff->checkCollisions (state);
+		}
+	}
+}
+
+// --------------------------------------------------------------------------
+const GRBar* GRSystemSlice::getBar () const
+{
+	GRBar* bar = 0;
+	for( int i = mStaffs->GetMinimum(); (i <= mStaffs->GetMaximum()) && !bar; ++i )
+	{
+		GRStaff * staff = mStaffs->Get(i);
+		if (staff)
+			bar = staff->getLastBar();
+	}
+	return bar;
+}
+
 void GRSystemSlice::addSystemTag(GRNotationElement * mytag)
 {
 	AddTail(mytag);
@@ -88,10 +131,6 @@ void GRSystemSlice::addSystemTag(GRNotationElement * mytag)
 void GRSystemSlice::addStaff( GRStaff * newStaff, int num)
 {
 	assert(newStaff);
-
-//	if( newStaff)
-// date...
-
 	mStaffs->Set(num, newStaff);
 }
 

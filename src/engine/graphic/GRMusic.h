@@ -19,6 +19,7 @@
 
 #include "GREvent.h"
 #include "GUIDOEngine.h"		// for GuidoOnDrawDesc
+#include "TCollisions.h"
 
 class ARMusic;
 class ARPageFormat;
@@ -28,6 +29,7 @@ class GRVoice;
 class GRSystem;
 class GRPage;
 class GRMusic;
+class TCollisions;
 
 typedef std::vector<GRPage *> PageList;
 typedef std::vector<GRVoice *> VoiceList;
@@ -51,7 +53,7 @@ class GRMusic : public GREvent
 	 	 		void 		setName( const char * in )	 { mName = in; }
 	  			const 		NVstring & getName();
 
-				void 		createGR(ARPageFormat * inPageFormat = 0 , const GuidoLayoutSettings *settings = 0);
+				void 		createGR (const ARPageFormat * inPageFormat = 0 , const GuidoLayoutSettings *settings = 0);
 
 				ARMusic * 	getARMusic();
 	     		const ARMusic * getconstARMusic() const;
@@ -108,7 +110,10 @@ class GRMusic : public GREvent
                 void    setDrawTime(long time)  { mDrawTime = time; }
                 long    getDrawTime()           { return mDrawTime; }
 
-				bool	checkCollisions();
+				bool	collides () const		{ return !fCollisions.list().empty(); }
+				bool	checkCollisions ();
+				void	resolveCollisions ();
+				void	printVoices (std::ostream& os) const;
 
 	protected:
 				void 	addVoiceElement( GRVoice * voice, GRNotationElement * el );
@@ -119,9 +124,13 @@ class GRMusic : public GREvent
         long        mAR2GRTime;
         long        mDrawTime;
 
-	private:  
+	private:
+		ARMusicalVoice* getARVoice (int n);
+
 		PageList 	mPages;
-		ARPageFormat * fInFormat;
+		ARPageFormat *  fInFormat;
+		GuidoLayoutSettings fSettings;
+		TCollisions		fCollisions;
 };
 
 

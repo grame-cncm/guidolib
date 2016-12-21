@@ -17,7 +17,7 @@
 #include <fstream>
 #include <iostream>
 #include "secureio.h"
-using namespace std;
+//using namespace std;
 
 // - Guido AR
 #include "ARMusic.h"
@@ -25,6 +25,7 @@ using namespace std;
 #include "ARMeter.h"
 #include "ARPageFormat.h"
 #include "ARMusicalVoice.h"
+#include "ARSpace.h"
 
 // - Guido GR
 #include "GRMusic.h"
@@ -45,6 +46,8 @@ using namespace std;
 #include "GRStaff.h"
 #include "kf_ivect.h"
 
+#include "TCollisions.h"
+
 using namespace std;
 
 // - Globals
@@ -59,7 +62,8 @@ GRMusic::GRMusic(ARMusic * inARMusic, ARPageFormat * inFormat, const GuidoLayout
 	fInFormat = 0;
     mAR2GRTime = -1;
     mDrawTime  = -1;
-	createGR( inFormat, settings );
+	GuidoGetDefaultLayoutSettings (&fSettings);
+	createGR(inFormat, settings );
 }
 
 GRMusic::~GRMusic()
@@ -97,12 +101,12 @@ void GRMusic::GGSOutputPage( int inPageNum ) const
 
 bool GRMusic::checkCollisions()
 {
-	bool collides = false;
+	fCollisions.clear();
 	for (size_t i= 0; i < getNumPages(); i++) {
 		GRPage * page = mPages[i];
-		if (page->checkCollisions()) collides = true;
+		page->checkCollisions(fCollisions);
 	}
-	return collides;
+	return fCollisions.collides();
 }
 
 /** \brief Draws a page of music according to input drawing parameters.
@@ -159,17 +163,6 @@ void GRMusic::addPage(GRPage * newPage)
 {
 	assert(newPage);
 	mPages.push_back(newPage);
-}
-
-/** \brief Prints all pages of music.
-*/
-void GRMusic::print(std::ostream& os) const
-{
-	for( PageList::const_iterator ptr = mPages.begin(); ptr != mPages.end(); ++ptr )
-	{
-		const GRPage * page = *ptr;
-		page->print(os);
-	}
 }
 
 ARMusic * GRMusic::getARMusic()
@@ -448,10 +441,14 @@ void GRMusic::startNewSystem(GRSystem * grsystem)
 	4. Let the StaffManager handle the creation of staves and pages,
 	   	let him call AddSystem or DoPageBreak of this class.
 */
-void GRMusic::createGR(ARPageFormat * inPageFormat, const GuidoLayoutSettings * settings)
+void GRMusic::createGR (const ARPageFormat * inPageFormat, const GuidoLayoutSettings * settings)
 {
-	if(fInFormat) delete fInFormat;
-	fInFormat = inPageFormat;
+	if (inPageFormat) {
+		if(fInFormat) delete fInFormat;
+		fInFormat = new ARPageFormat(*inPageFormat);
+	}
+	if (settings)
+		fSettings = *settings;
 
 	// - Reset the previous GR
 	ARMusic * arm = getARMusic();
@@ -468,9 +465,78 @@ void GRMusic::createGR(ARPageFormat * inPageFormat, const GuidoLayoutSettings * 
 		GRVoice * grv = new GRVoice(arv, false);
 		mVoiceList.push_back(grv);
 	}
-	GRStaffManager grsm( this, fInFormat, settings);
+	GRStaffManager grsm( this, fInFormat, &fSettings);
 	grsm.createStaves();
+
+//cerr << "---------- voices ---------" << endl;
+//printVoices(cerr);
+//cerr << "\n---------- pages ----------" << endl;
+//print(cerr);
 }
+
+//-------------------------------------------------------------------------------
+/** \brief Prints all pages of music.
+*/
+void GRMusic::print(std::ostream& os) const
+{
+	for( size_t i = 0; i < mPages.size(); i++ ) {
+		os << "Page " << i << endl;
+		mPages[i]->print(os);
+	}
+}
+
+//-------------------------------------------------------------------------------
+void GRMusic::printVoices (std::ostream& os) const
+{
+	for (size_t i = 0; i<mVoiceList.size(); i++) {
+		GRVoice* voice = mVoiceList[i];
+		if (voice) {
+	cerr << "Voice " << i << endl;
+			GuidoPos first = voice->First();
+			GuidoPos last = voice->Last();
+			while (first != last) {
+				GRNotationElement * e = GetNext(first);
+				cerr << "     " << e << endl;
+			}
+		}
+	}
+}
+
+//-------------------------------------------------------------------------------
+void GRMusic::resolveCollisions ()
+{
+	const vector<TCollisionInfo>& list = fCollisions.list();
+	for (size_t i=0; i< list.size(); i++) {
+cerr << " => " << list[i]<< endl;
+		TCollisionInfo ci = list[i];
+		ARMusicalVoice * voice = getARVoice (ci.fVoice);
+		if (voice) {
+			GuidoPos pos = voice->GetElementPos(ci.fARObject);
+			if (pos) {
+				ARMusicalObject* ar = voice->GetAt(pos);
+				if (ar->isARBar()) {
+					voice->GetNextObject(pos);
+					if (pos) voice->AddElementAfter (pos, ci.fSpace);
+				}
+				else voice->AddElementAfter (pos, ci.fSpace);
+			}
+		}
+	}
+	if (list.size()) createGR();
+}
+
+//-------------------------------------------------------------------------------
+ARMusicalVoice* GRMusic::getARVoice (int n)
+{
+	ARMusicalVoice * voice = 0;
+	ARMusic * arm = getARMusic();
+	GuidoPos pos = arm->GetHeadPosition();
+	while (pos && n--)
+		voice = arm->GetNext(pos);
+	return (!pos && n) ? 0 : voice;
+}
+
+
 
 /** \brief Finds the index of a given voice (zero based)
 

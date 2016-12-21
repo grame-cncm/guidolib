@@ -26,6 +26,7 @@ class ARMusic;
 class GRSystem;
 class GRMusic;
 class GRStaffManager;
+class TCollisions;
 
 extern GRSystem * gCurSystem;
 extern NVRect gClipRect;
@@ -46,10 +47,10 @@ class GRPage : public GREvent
 	bool		addSystem( GRSystem * inSystem, float * ioUsedSystemDistance );
 	void		systemFinished(GRSystem * inSystem);
 	void		finishPage( bool islastpage = false ); // system distribution
-
 	void		setSpringParameter(float npar);
 	void		setPageFormat(ARPageFormat * inFormat);
 	void 		adjustPageSize();
+	void		checkCollisions(TCollisions& state);
 
 	//	virtual	SystemPointerList * getSystems();
 	ARMusic *		getARMusic() const;
@@ -60,12 +61,10 @@ class GRPage : public GREvent
 	virtual void	OnDraw( VGDevice & hdc, const GuidoOnDrawDesc & inDrawInfos ) const;
 	virtual void	GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 	
+	virtual void	print(std::ostream& os) const;
 	virtual void	GGSOutput() const;
 	
-	// - Page format: size and margins
-
 			void	getMarginsCm( float * ml, float * mt, float * mr, float * mb );
-
 			void	getPageFormat( GuidoPageFormat * outFormat ) const;
 
 			float	getMarginLeft() const;
@@ -85,41 +84,30 @@ class GRPage : public GREvent
 	
 			void	getScaling( float& vsizex, float& vsizey ) const;
 
-	//	void convertToPixelSize( VGDevice & hdc, float zoom, float * pi1, float * pi2);
-	//	void convertToVirtualSize( VGDevice & hdc, float zoom, float * pi1, float * pi2);
-	//	float 	getZoom() const;
-	//	virtual void setZoom(float p_zoom);
+		const SystemPointerList *  getSystems() const { return &mSystems; }
 
 		TYPE_TIMEPOSITION mDebugPageDate;
-
-		const SystemPointerList *  getSystems() const { return &mSystems; }
 
 	protected:
 				void	setScaling( VGDevice & hdc, float vsizex, float vsizey ) const;
 
 		GRStaffManager * m_staffmgr;
-
 		GRMusic * mCurMusic;
 
 		float mLeftMargin;	// now in internal units
 		float mTopMargin;
 		float mRightMargin;
 		float mBottomMargin;
-
 		float mWidth;		// now in internal units
 		float mHeight;
-
 		float m_totalsystemheight;
 
-		bool DPtoLPRect( VGDevice & hdc, float left, float top, 
-							float right, float bottom, NVRect * outRect ) const;
+		bool DPtoLPRect( VGDevice & hdc, float left, float top, float right, float bottom, NVRect * outRect ) const;
 		virtual void	updateBoundingBox();
-		
 		// old...
 		void	setHorizontalSpacing();
 
 		SystemPointerList  mSystems;
-
 		GuidoLayoutSettings settings;
 };
 

@@ -60,7 +60,7 @@ class GRText;
 class GRBar;
 class GRPossibleBreakState;
 class GROctava;
-
+class TCollisions;
 
 template <class T> class KF_List;
 
@@ -207,6 +207,8 @@ class GRStaff : public GRCompositeNotationElement
         virtual float       getMappingDredgeSize() const;
 		virtual float       getKeyPosition(TYPE_PITCH pitch, int numkeys = 1) const;
 		virtual GRNote *    getLastNote() const;
+		virtual GRBar *     getLastBar() const;
+		virtual void		print(std::ostream& os) const;
 
 		virtual void setStaffFormat(ARStaffFormat * staffrmt);
 		void    setStaffState(GRStaffState * state);
@@ -275,8 +277,8 @@ class GRStaff : public GRCompositeNotationElement
 		void	generatePositions();
 		float	currentLineThikness() const;
         
-        void    print(std::ostream& os) const;
 		float	getProportionnalRender() { return this->proportionnalRender; }
+		void	checkCollisions (TCollisions& state);
 
   protected:
 		void	DebugPrintState(const char * info) const;
