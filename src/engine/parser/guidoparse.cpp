@@ -77,7 +77,7 @@
      NUMBER = 258,
      PNUMBER = 259,
      NNUMBER = 260,
-     FFLOAT = 261,
+     FLOAT = 261,
      STARTCHORD = 262,
      ENDCHORD = 263,
      STARTSEQ = 264,
@@ -115,7 +115,7 @@
 #define NUMBER 258
 #define PNUMBER 259
 #define NNUMBER 260
-#define FFLOAT 261
+#define FLOAT 261
 #define STARTCHORD 262
 #define ENDCHORD 263
 #define STARTSEQ 264
@@ -563,7 +563,7 @@ static const yytype_uint8 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "NUMBER", "PNUMBER", "NNUMBER", "FFLOAT",
+  "$end", "error", "$undefined", "NUMBER", "PNUMBER", "NNUMBER", "FLOAT",
   "STARTCHORD", "ENDCHORD", "STARTSEQ", "ENDSEQ", "STARTPARAM", "ENDPARAM",
   "STARTRANGE", "ENDRANGE", "SEP", "IDSEP", "BAR", "TAGNAME", "IDT",
   "DIATONIC", "CHROMATIC", "SOLFEGE", "EMPTYT", "RESTT", "DOT", "DDOT",

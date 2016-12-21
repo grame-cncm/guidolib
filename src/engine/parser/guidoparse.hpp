@@ -42,7 +42,7 @@
      NUMBER = 258,
      PNUMBER = 259,
      NNUMBER = 260,
-     FFLOAT = 261,
+     FLOAT = 261,
      STARTCHORD = 262,
      ENDCHORD = 263,
      STARTSEQ = 264,
@@ -80,7 +80,7 @@
 #define NUMBER 258
 #define PNUMBER 259
 #define NNUMBER 260
-#define FFLOAT 261
+#define FLOAT 261
 #define STARTCHORD 262
 #define ENDCHORD 263
 #define STARTSEQ 264
