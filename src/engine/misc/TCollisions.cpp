@@ -18,7 +18,7 @@
 #include "GRNotationElement.h"
 #include "GRARNotationElement.h"
 #include "GRSystemSlice.h"
-#include "GRBAr.h"
+#include "GRBar.h"
 
 using namespace std;
 
