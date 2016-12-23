@@ -18,6 +18,11 @@
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
+
+#ifdef WIN32
+#pragma warning (disable: 4800)
+#endif
+
 #include "guidoengine_guidoscore.h"
 #include "guidoengine_guidoscorebase.h"
 #include "guidoengine_bitmap_paint.h"
@@ -290,8 +295,8 @@ JNIEXPORT jbyteArray JNICALL Java_guidoengine_guidoscorebase_BinaryExport (JNIEn
 			const char* result = output.c_str();
 			jbyte* buf = new jbyte[output.size()];
 			memcpy(buf, result, output.size());
-			jbyteArray arr = env->NewByteArray(output.size());
-			env->SetByteArrayRegion (arr, 0, output.size(), buf);
+			jbyteArray arr = env->NewByteArray((int)output.size());
+			env->SetByteArrayRegion (arr, 0, (int)output.size(), buf);
 			delete[] buf;
 			return arr;
 		}
