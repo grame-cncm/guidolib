@@ -11,6 +11,10 @@
 
 */
 
+#ifdef WIN32
+#pragma warning (disable: 4800)
+#endif
+
 #include "guidoengine_guidopianoroll.h"
 #include "guidoengine_guidopianorollbase.h"
 #include "guidoengine_bitmap_paint.h"
@@ -169,10 +173,7 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidopianorollbase_SetRGBColorToVoice
 JNIEXPORT jint JNICALL Java_guidoengine_guidopianorollbase_SetHtmlColorToVoice
 	(JNIEnv *env, jobject obj, jint voiceNum, jlong htmlColor)
 {
-	return GuidoPianoRollSetHtmlColorToVoice(
-				(PianoRoll *)env->GetLongField(obj, gPianoRollID),
-				voiceNum,
-				htmlColor);
+	return GuidoPianoRollSetHtmlColorToVoice( (PianoRoll *)env->GetLongField(obj, gPianoRollID), voiceNum, long(htmlColor));
 }
 
 /*
@@ -183,9 +184,7 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidopianorollbase_SetHtmlColorToVoice
 JNIEXPORT jint JNICALL Java_guidoengine_guidopianorollbase_EnableMeasureBars
   (JNIEnv *env, jobject obj, jboolean enabled)
 {
-	return GuidoPianoRollEnableMeasureBars(
-				(PianoRoll *)env->GetLongField(obj, gPianoRollID),
-				enabled);
+	return GuidoPianoRollEnableMeasureBars( (PianoRoll *)env->GetLongField(obj, gPianoRollID), enabled);
 }
 
 /*

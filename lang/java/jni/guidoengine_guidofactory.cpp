@@ -259,7 +259,7 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidofactory_OpenTag (JNIEnv * env, jobj
 {
 	ARFactoryHandler fh = (ARFactoryHandler)env->GetLongField (obj, gFactoryHandlerID);
 	const char *str  = env->GetStringUTFChars(jstr, JNI_FALSE);
-	jint result = GuidoFactoryOpenTag (fh, str, id);
+	jint result = GuidoFactoryOpenTag (fh, str, long(id));
 	env->ReleaseStringUTFChars(jstr, str);
 	return result;
 }
@@ -274,7 +274,7 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidofactory_OpenRangeTag
 {
 	ARFactoryHandler fh = (ARFactoryHandler)env->GetLongField (obj, gFactoryHandlerID);
 	const char *str  = env->GetStringUTFChars(jstr, JNI_FALSE);
-	jint result = GuidoFactoryOpenRangeTag (fh, str, id);
+	jint result = GuidoFactoryOpenRangeTag (fh, str, long(id));
 	env->ReleaseStringUTFChars(jstr, str);
 	return result;
 }

@@ -76,7 +76,7 @@ JNIEXPORT void JNICALL Java_guidoengine_guidoscoremapbase_disposeNative (JNIEnv 
 JNIEXPORT jint JNICALL Java_guidoengine_guidoscoremapbase_size (JNIEnv * env, jobject obj)
 {
 	Time2GraphicMap* map = (Time2GraphicMap*)env->GetLongField (obj, gMapID);
-	return map ? map->size() : 0;
+	return map ? (jint)map->size() : 0;
 }
 
 
@@ -88,7 +88,7 @@ JNIEXPORT jint JNICALL Java_guidoengine_guidoscoremapbase_size (JNIEnv * env, jo
 JNIEXPORT jboolean JNICALL Java_guidoengine_guidoscoremapbase_get (JNIEnv * env, jobject obj, jint index, jobject timeseg, jobject rect)
 {
 	Time2GraphicMap* map = (Time2GraphicMap*)env->GetLongField (obj, gMapID);
-	int size = map->size();
+	int size = (int)map->size();
 	if (map && (index >= 0) && (index < size)) {
 		Time2GraphicMap::const_iterator i = map->begin();
 		while (index--) i++;
