@@ -191,7 +191,7 @@ linuxclean:
 # building the javascript engine
 #===============================================================
 js:
-	make -C ../lang/javascript
+	make -C ../lang/javascript -j 4
 
 
 #===============================================================
