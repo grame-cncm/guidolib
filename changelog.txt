@@ -1,7 +1,7 @@
 GUIDO Engine history
 
 ----------------------------------------------------------------
-  version 1.6.3
+2017-01-03  version 1.6.3
 - accidentals collision detection improved, 
   it comes with a change in handling dx in \acc tag: it is now applied to the solved collision
 - fix a bug with \space tag at the beginning of a slice (e.g. after a bar): space was ignored
