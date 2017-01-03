@@ -1,7 +1,7 @@
 
 arch	:= $(shell arch)
 debarch := $(shell dpkg --print-architecture)
-dist	:= ubuntu-14.04
+dist	:= debian-8.6
 package := GUIDOQt-$(version)-$(dist)-$(arch).deb
 appls	:= guido2image/guido2image GuidoEditor/GuidoEditor GuidoSceneComposer/GuidoSceneComposer
 tools	:= guido2midi guido2svg guidogetversion
