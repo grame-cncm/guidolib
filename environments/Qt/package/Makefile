@@ -14,7 +14,7 @@ TOOLS = guido2midi guido2svg guidogetversion guidogetpagecount guidogetvoicecoun
 
 MAKEFILES 	= makeBundleGSC makeBundleGQV
 MACOSX_NAME = GuidoQtApplsMacOSX-$(VERSION)
-WIN32_NAME	= GuidoQtApplsWin32-$(VERSION)
+WIN32_NAME	= GuidoQtApplsWin64-$(VERSION)
 
 
 MACTOOLS  := $(patsubst %, $(ROOT)/src/tools/build/macos/release/%, $(TOOLS))
