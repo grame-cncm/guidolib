@@ -19,8 +19,8 @@ WIN32_NAME	= GuidoQtApplsWin32-$(VERSION)
 
 MACTOOLS  := $(patsubst %, $(ROOT)/src/tools/build/macos/release/%, $(TOOLS))
 
-QT5 := /c/Qt/Qt5.5.0
-WIN32QTPATH := $(QT5)/5.5/msvc2013_64/
+QT5 := /c/Qt/Qt5.7.0
+WIN32QTPATH := $(QT5)/5.7/msvc2013_64/
 #WIN32QT		:= QT5PRINTSUPPORT.DLL QT5WIDGETS.DLL QT5GUI.DLL QT5CORE.DLL QT5XML.DLL ICUIN53.DLL ICUUC53.DLL ICUDT53.DLL
 WIN32QT		:= QT5PRINTSUPPORT.DLL QT5WIDGETS.DLL QT5GUI.DLL QT5CORE.DLL QT5XML.DLL
 WIN32QT		:= $(patsubst %, $(WIN32QTPATH)/bin/%, $(WIN32QT))
@@ -28,13 +28,15 @@ WIN32APPS	:= $(patsubst %, ../apps/%.exe, $(APPLS))
 WIN32TOOLS  := $(patsubst %, $(ROOT)/src/tools/build/win32/release/%.exe, $(TOOLS))
 WIN32QTPLUGS := qgif.dll qtiff.dll qjpeg.dll
 WIN32QTPLATFORMS := qminimal.dll qoffscreen.dll qwindows.dll
+WIN32QTPRINT := windowsprintersupport.dll
 WIN32QTPLUGS := $(patsubst %, $(WIN32QTPATH)/plugins/imageformats/%, $(WIN32QTPLUGS))
 WIN32QTPLATFORMS := $(patsubst %, $(WIN32QTPATH)/plugins/platforms/%, $(WIN32QTPLATFORMS))
+WIN32QTPRINT := $(patsubst %, $(WIN32QTPATH)/plugins/printsupport/%, $(WIN32QTPRINT))
 
 nothing:
 	@ echo " Make guidolib Qt packages:"
 	@ echo " 'macos' :  deployed binaries package for macosx"
-	@ echo " 'win32' :  deployed binaries package for win32. Works with MSys."
+	@ echo " 'win64' :  deployed binaries package for win32. Works with MSys."
 	@ echo " 'linux' :  deployed binaries package for Ubuntu."
 
 macapp:
@@ -73,10 +75,11 @@ samples:
 linux:
 	make version=$(VERSION) -f makedeb
 
-win32: 
+win64: 
 	@make -s check
 	[ -d $(WIN32_NAME)/plugins/imageformats ] || mkdir -p $(WIN32_NAME)/plugins/imageformats
 	[ -d $(WIN32_NAME)/plugins/platforms ] || mkdir -p $(WIN32_NAME)/plugins/platforms
+	[ -d $(WIN32_NAME)/plugins/printsupport ] || mkdir -p $(WIN32_NAME)/plugins/printsupport
 	cp $(WIN32APPS) $(WIN32_NAME)
 	cp $(WIN32TOOLS) $(WIN32_NAME)
 	cp -f $(ROOT)/build/GUIDOEngine.dll $(WIN32_NAME)
@@ -84,9 +87,11 @@ win32:
 	cp -f $(ROOT)/src/guido2.ttf $(WIN32_NAME)
 	cp $(WIN32QT) $(WIN32_NAME)
 	cp $(QT5)/vcredist/vcredist_msvc2013_x86.exe $(WIN32_NAME)
+	cp msvc?120.dll $(WIN32_NAME)
 	cp qt.conf $(WIN32_NAME)
 	cp 	$(WIN32QTPLUGS) $(WIN32_NAME)/plugins/imageformats
 	cp 	$(WIN32QTPLATFORMS) $(WIN32_NAME)/plugins/platforms
+	cp 	$(WIN32QTPRINT) $(WIN32_NAME)/plugins/printsupport
 	make common PACKAGE_NAME=$(WIN32_NAME)
 
 common:
