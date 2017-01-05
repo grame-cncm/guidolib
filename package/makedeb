@@ -1,7 +1,7 @@
 
 arch	:= $(shell arch)
 debarch := $(shell dpkg --print-architecture)
-dist	:= ubuntu-14.04
+dist	:= debian-8.6
 package := GUIDOEngine-devel-$(version)-$(dist)-$(arch).deb
 lib		:= libGUIDOEngine.so
 control := debian/DEBIAN/control
