@@ -38,8 +38,7 @@ extern GRSystem * gCurSystem;
 using namespace std;
 
 // -----------------------------------------------------------------------------
-GRBowing::GRBowing(GRStaff * grstaff, GRNotationElement * startEl,
-					GRNotationElement * endEl)
+GRBowing::GRBowing(GRStaff * grstaff, GRNotationElement * startEl, GRNotationElement * endEl)
 			: GRPTagARNotationElement(new ARBowing, 1)
 {
 	GRSystemStartEndStruct * sse = initGRBowing( grstaff );
@@ -118,8 +117,7 @@ GRBowing::GRBowing( const GRBowing & inCopy ) : GRPTagARNotationElement( inCopy 
 }*/
 
 // -----------------------------------------------------------------------------
-GRSystemStartEndStruct *
-GRBowing::initGRBowing( GRStaff * grstaff )
+GRSystemStartEndStruct * GRBowing::initGRBowing( GRStaff * grstaff )
 {
 	assert(grstaff);
 
@@ -159,8 +157,7 @@ GRPositionTag::GRSaveStruct * GRBowing::getNewGRSaveStruct()
 // -----------------------------------------------------------------------------
 /**
 */
-GRSystemStartEndStruct *
-GRBowing::prepareSSEStructForBow( const GRStaff * inStaff )
+GRSystemStartEndStruct * GRBowing::prepareSSEStructForBow( const GRStaff * inStaff )
 {
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( inStaff->getGRSystem());
 	if( sse == 0 ) return 0;
@@ -193,8 +190,7 @@ GRBowing::prepareSSEStructForBow( const GRStaff * inStaff )
 // Figure out if the first element is a part of a chord.
 // Find the highest and lowest note heads.
 // Get the stem directions (or the possible stem directions)
-void
-GRBowing::getBowBeginingContext( GRBowingContext * ioContext, GRSystemStartEndStruct * sse )
+void GRBowing::getBowBeginingContext( GRBowingContext * ioContext, GRSystemStartEndStruct * sse )
 {
 	GRNotationElement * startElement = sse->startElement;
 
@@ -222,8 +218,7 @@ GRBowing::getBowBeginingContext( GRBowingContext * ioContext, GRSystemStartEndSt
 // (JB) It is similar to the beginning one, but has some additionnal code to
 // try to get the right stem direction from a global location. Why not
 // for the beginning context ?
-void
-GRBowing::getBowEndingContext( GRBowingContext * ioContext, GRSystemStartEndStruct * sse )
+void GRBowing::getBowEndingContext( GRBowingContext * ioContext, GRSystemStartEndStruct * sse )
 {
 	GRNotationElement * endElement = sse->endElement;
 
@@ -263,8 +258,7 @@ GRBowing::getBowEndingContext( GRBowingContext * ioContext, GRSystemStartEndStru
 }
 
 // -----------------------------------------------------------------------------
-GRGlobalStem *
-GRBowing::findGlobalStem( GRSystemStartEndStruct * sse, GRNotationElement * stemOwner )
+GRGlobalStem * GRBowing::findGlobalStem( GRSystemStartEndStruct * sse, GRNotationElement * stemOwner )
 {
 	// - It was an optimisation, but is now already tested before the call ->
 	//	if ( dynamic cast<GRSingleNote *>(stemOwner) != 0 ) return 0;
@@ -285,8 +279,7 @@ GRBowing::findGlobalStem( GRSystemStartEndStruct * sse, GRNotationElement * stem
 }
 
 // -----------------------------------------------------------------------------
-void
-GRBowing::updateBoundingBox()
+void GRBowing::updateBoundingBox()
 {
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( getGRStaff()->getGRSystem());
 	if ( sse == 0 ) return;

@@ -21,29 +21,23 @@
 #include <iostream>
 using namespace std;
 
-GREmpty::GREmpty(GRStaff * inStaff,
-					ARMusicalEvent * abstractRepresentationOfEmpty, bool p_ownsAR )
-				: GREvent( inStaff, abstractRepresentationOfEmpty,p_ownsAR )
+GREmpty::GREmpty(GRStaff * inStaff, ARMusicalEvent * ar, bool p_ownsAR )
+				: GREvent( inStaff, ar,p_ownsAR )
 {
 	mNeedsSpring = 1;
 	mLeftSpace = 0;
 	mRightSpace = 0;
 }
 
-GREmpty::GREmpty( GRStaff * inStaff, ARMusicalEvent * abstractRepresentationOfEmpty,
-				const TYPE_TIMEPOSITION theRelativeTimePositionOfGR, const TYPE_DURATION theDurationOfGR )
-				: 
-	GREvent( inStaff, abstractRepresentationOfEmpty, theRelativeTimePositionOfGR, theDurationOfGR)
+GREmpty::GREmpty( GRStaff * inStaff, ARMusicalEvent * ar, const TYPE_TIMEPOSITION timePos, const TYPE_DURATION dur )
+				: GREvent( inStaff, ar, timePos, dur)
 {
 	mNeedsSpring = 1;
 	mLeftSpace = 0;
 	mRightSpace = 0;
 }
 
-GREmpty::~GREmpty()
-{
-
-}
+GREmpty::~GREmpty()	{}
 
 void GREmpty::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const
 {

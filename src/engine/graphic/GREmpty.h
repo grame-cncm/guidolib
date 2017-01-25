@@ -39,7 +39,7 @@ class GREmpty : public GREvent
 		virtual void tellPosition( GObject * caller, const NVPoint & newPosition );
 		virtual bool isEmpty() const			{ return true; }
 
-				virtual void updateBoundingBox();
+		virtual void updateBoundingBox();
 	
 	protected: 
 };
