@@ -20,14 +20,10 @@
 #include "GRStdNoteHead.h"
 #include "GRGlobalStem.h"
 #include "GRVoice.h"
-// #include "NEPointerList.h"
-
 
 GRGlobalLocation::GRGlobalLocation( GRStaff * grstaff, ARShareLocation * pshare )
 : GRPTagARNotationElement(pshare)
 {
-
-
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
 
 	sse->grsystem = grstaff->getGRSystem();
@@ -37,27 +33,21 @@ GRGlobalLocation::GRGlobalLocation( GRStaff * grstaff, ARShareLocation * pshare 
 	sse->p = NULL;
 
 	mStartEndList.AddTail(sse);
-
 	mFirstEl = NULL;
-
 }
 
 GRGlobalLocation::~GRGlobalLocation()
 {
 	// we just remove any association manually
-	if (mAssociated)
-	{
+	if (mAssociated) {
 		GuidoPos pos = mAssociated->GetHeadPosition();
-		while(pos)
-		{
+		while(pos) {
 			GRNotationElement * el = mAssociated->GetNext(pos);
 			if( el ) el->removeAssociation(this);
 		}
 	}
 	if (mFirstEl)
-	{
 		mFirstEl->removeAssociation(this);
-	}
 }
 
 void GRGlobalLocation::removeAssociation(GRNotationElement * grnot)
@@ -92,22 +82,18 @@ void GRGlobalLocation::addAssociation(GRNotationElement * grnot)
 	// This sets the first element in the range ...
 	if (!mFirstEl)
 	{
-		// this associates the first element with
-		// this tag .... 
+		// this associates the first element with this tag ....
 		mFirstEl = grnot;
 		mFirstEl->addAssociation(this);
-
 		return;
 
-		// the firstElement is not added to the associated
-		// ones -> it does not have to told anything!?
+		// the firstElement is not added to the associated ones -> it does not have to told anything!?
 	}
 
 	
 	GRNotationElement::addAssociation(grnot);
 	GRPositionTag::addAssociation(grnot);
 
-	
 	// this is needed, because the share location can
 	// be used in different staves. Elements that need
 	// be told of the location can be deleted before this
@@ -144,48 +130,36 @@ void GRGlobalLocation::tellPosition( GObject * obj, const NVPoint &pt)
 	}
 }
 
-int GRGlobalLocation::getHighestAndLowestNoteHead(GRStdNoteHead ** highest,
-												  GRStdNoteHead ** lowest) const
+int GRGlobalLocation::getHighestAndLowestNoteHead (GRStdNoteHead ** highest, GRStdNoteHead ** lowest) const
 {
 	*highest = *lowest = 0;
-	if (mFirstEl)
-	{
+	if (mFirstEl) {
 		// find the GRGlobalStem
 		const NEPointerList * plist = mFirstEl->getAssociations();
-		if (plist)
-		{
+		if (plist) {
 			GuidoPos pos = plist->GetHeadPosition();
-			while (pos)
-			{
+			while (pos) {
 				GRGlobalStem * gstem = dynamic_cast<GRGlobalStem *>(plist->GetNext(pos));
-				if (gstem)
-				{
+				if (gstem) {
 					gstem->getHighestAndLowestNoteHead(highest,lowest);
 					return gstem->getStemDir();
 				}
 			}
-				
 		}
 	}
 
 	// then we have not found it yet ....
 	// check my own associations ....
 	const NEPointerList * plist = mAssociated;
-	if (plist)
-	{
+	if (plist) {
 		GuidoPos pos = plist->GetHeadPosition();
-		while (pos)
-		{
+		while (pos) {
 			GRGlobalStem * gstem = dynamic_cast<GRGlobalStem *>(plist->GetNext(pos));
-			if (gstem)
-			{
+			if (gstem) {
 				gstem->getHighestAndLowestNoteHead(highest,lowest);
 				return gstem->getStemDir();
 			}
 		}
-		
 	}
-
 	return 0;
-
 }
