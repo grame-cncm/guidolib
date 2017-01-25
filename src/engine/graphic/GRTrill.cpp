@@ -17,22 +17,47 @@
 
 */
 
+#include <iostream>
+#include <map>
+
 #include "ARTrill.h"
 #include "GRAccidental.h"
 #include "GRStaff.h"
 #include "GRTrill.h"
 #include "GRSingleNote.h"
 
-// #include "NEPointerList.h"
 #include "VGDevice.h"
 #include "VGFont.h"
-#include <iostream>
-#include <map>
 
 
 using namespace std;
 
-GRTrill::GRTrill(GRStaff * inStaff, ARTrill * artrem ) : GRPTagARNotationElement(artrem)
+//-------------------------------------------------------------------------------
+GRAccidental * GRTrill::createAccidental (ARMusicalVoice::CHORD_ACCIDENTAL acc, bool cautionary) const
+{
+	float accID = 0.f;
+	switch (acc)
+	{
+		case ARMusicalVoice::NATURAL :		accID = -10;
+			break;
+		case ARMusicalVoice::FLAT :			accID = -1;
+			break;
+		case ARMusicalVoice::SHARP :		accID = 1;
+			break;
+		case ARMusicalVoice::CAU_NATURAL :	accID = cautionary ? 10 : 0;
+			break;
+		case ARMusicalVoice::CAU_FLAT :		accID = cautionary ? -3 : 0;
+			break;
+		case ARMusicalVoice::CAU_SHARP :	accID = cautionary ? 3 : 0;
+			break;
+		default :							accID = 0;
+	}
+	return new GRAccidental(0, 0, accID, 0.5f);
+}
+
+
+//-------------------------------------------------------------------------------
+GRTrill::GRTrill(GRStaff * inStaff, ARTrill * artrem ) : GRPTagARNotationElement(artrem) //, fEmptyMarker(0)
 {
 	assert(inStaff);
 	GRSystemStartEndStruct * sse= new GRSystemStartEndStruct;
@@ -43,125 +68,64 @@ GRTrill::GRTrill(GRStaff * inStaff, ARTrill * artrem ) : GRPTagARNotationElement
 	mStartEndList.AddTail(sse);
 
 	ARTrill::TYPE mytype = artrem->getType();
-	bool ShowCautionaryAccidentals = artrem->getCautionary();
 	ARMusicalVoice::CHORD_TYPE chordType = artrem->getChordType();
-	ARMusicalVoice::CHORD_ACCIDENTAL chordAccidental = artrem->getChordAccidental();
 	begin = artrem->getStatus();
 	fShowTR = artrem->getShowTR();
 	fDrawOnNoteHead = artrem->getAnchor();
 	widthOfTilde = GObject::GetSymbolExtent(kTilde)*mTagSize;
 	
-	// - Creation of the accidental symbol -	
-	switch (chordAccidental)
-	{
-		case ARMusicalVoice::NATURAL :
-			fAccidental = new GRAccidental(0, 0, -10, 0.5f);
-			break;
-			
-		case ARMusicalVoice::FLAT :
-			fAccidental = new GRAccidental(0, 0, -1, 0.5f);
-			break;
-			
-		case ARMusicalVoice::SHARP :
-			fAccidental = new GRAccidental(0, 0, 1, 0.5f);
-			break;
-			
-		case ARMusicalVoice::CAU_NATURAL :
-			if (ShowCautionaryAccidentals)
-				fAccidental = new GRAccidental(0, 0, 10, 0.5f);
-			else
-				fAccidental = new GRAccidental(0, 0, 0, 0.5f);
-			break;
-			
-		case ARMusicalVoice::CAU_FLAT :
-			if (ShowCautionaryAccidentals)
-				fAccidental = new GRAccidental(0, 0, -3, 0.5f);
-			else
-				fAccidental = new GRAccidental(0, 0, 0, 0.5f);
-			break;
-		case ARMusicalVoice::CAU_SHARP :
-			if (ShowCautionaryAccidentals)
-				fAccidental = new GRAccidental(0, 0, 3, 0.5f);
-			else
-				fAccidental = new GRAccidental(0, 0, 0, 0.5f);
-			break;
-			
-		default :
-			fAccidental = new GRAccidental(0, 0, 0, 0.5f);
-	}
+	// - Creation of the accidental symbol -
+	fAccidental = createAccidental (artrem->getChordAccidental(), artrem->getCautionary());
 	fAccidental->setOffsetX(this->getOffset().x + artrem->getadx());
 	fAccidental->setOffsetY(this->getOffset().y - artrem->getady()); // this offset affects each type of ornament
 	
 	switch ( mytype )
 	{
 		case ARTrill::TRILL:
-			switch (chordType)
-			{
-				case ARMusicalVoice::CHORDERROR:
-					setTrillSymbol( kNoneSymbol );
+			switch (chordType) {
+				case ARMusicalVoice::CHORDERROR:	setTrillSymbol( kNoneSymbol );
 					break;
-					
-				default :
-					setupTrill();
+				default :							setupTrill();
 			}
 			break;
 
 		case ARTrill::TURN:
-			switch (chordType)
-			{
-				case ARMusicalVoice::DOWN:
-					setupInvertedTurn();
+			switch (chordType) {
+				case ARMusicalVoice::DOWN:			setupInvertedTurn();
 					break;
-					
-				case ARMusicalVoice::DOWN_COMPLEX:
-					setupInvertedTurnComplex();
+				case ARMusicalVoice::DOWN_COMPLEX:	setupInvertedTurnComplex();
 					break;
-					
-				case ARMusicalVoice::UP_COMPLEX:
-					setupTurnComplex();
+				case ARMusicalVoice::UP_COMPLEX:	setupTurnComplex();
 					break;
-					
-				case ARMusicalVoice::CHORDERROR:
-					setTrillSymbol( kNoneSymbol );
+				case ARMusicalVoice::CHORDERROR:	setTrillSymbol( kNoneSymbol );
 					break;
-					
-				default :
-					setupTurn();
+				default :							setupTurn();
 			}
 			break;
 
 		case ARTrill::MORD:
-			switch (chordType)
-			{
-				case ARMusicalVoice::DOWN_SIMPLE:
-					setupInvertedMord();
+			switch (chordType) {
+				case ARMusicalVoice::DOWN_SIMPLE:	setupInvertedMord();
 					break;
-					
-				case ARMusicalVoice::DOWN:
-					setupPrallMordent();
+				case ARMusicalVoice::DOWN:			setupPrallMordent();
 					break;
-					
-				case ARMusicalVoice::UP:
-					setupPrallPrall();
+				case ARMusicalVoice::UP:			setupPrallPrall();
 					break;
-					
-				case ARMusicalVoice::CHORDERROR:
-					setTrillSymbol( kNoneSymbol );
+				case ARMusicalVoice::CHORDERROR:	setTrillSymbol( kNoneSymbol );
 					break;
-					
-				default :
-					setupMord();
+				default :							setupMord();
 			}
 			break;
 	}
-	
 }
 
+//-------------------------------------------------------------------------------
 GRTrill::~GRTrill()
 {
 	delete fAccidental;
 }
 
+//-------------------------------------------------------------------------------
 NVRect GRTrill::getEnclosingBox() const		// gives a rect that enclose the ornament including accidentals
 {
 	NVRect outrect = getBoundingBox();
@@ -175,8 +139,10 @@ NVRect GRTrill::getEnclosingBox() const		// gives a rect that enclose the orname
 	return outrect;
 }
 
+//-------------------------------------------------------------------------------
 /** \brief Manage the drawing of trill line
 */
+//-------------------------------------------------------------------------------
 void GRTrill::OnDraw(VGDevice & hdc , float right, float noteY, int nVoice) const
 {
 	VGColor oldColor = hdc.GetFontColor();
@@ -248,17 +214,20 @@ void GRTrill::OnDraw(VGDevice & hdc , float right, float noteY, int nVoice) cons
 }
 
 
+//-------------------------------------------------------------------------------
 void GRTrill::OnDraw( VGDevice & hdc) const
 {
 	GRNotationElement::OnDraw( hdc );
 	fAccidental->OnDraw(hdc);
 }
 
+//-------------------------------------------------------------------------------
 const NVPoint & GRTrill::getReferencePosition() const
 {
 	return sRefPos;
 }
 
+//-------------------------------------------------------------------------------
 void GRTrill::setupTrill()
 {
 	const float hs = LSPACE * 0.5f;
@@ -424,24 +393,14 @@ void GRTrill::placeMord (GREvent * inParent, NVPoint & newPoint)
 	if( dir == dirUP )
 	{
 		if (newPoint.y >= inParent->getStemLength())
-		{
 			newPoint.y = -halfSpace;
-		}
 		else
-		{
 			newPoint.y -= (halfSpace + inParent->getStemLength());
-		}
 	}
 	else	// stemDown
 	{
-		if ( newPoint.y > 0)
-		{
-			newPoint.y = -halfSpace;
-		}
-		else
-		{
-			newPoint.y -= halfSpace;
-		}
+		if ( newPoint.y > 0)	newPoint.y = -halfSpace;
+		else					newPoint.y -= halfSpace;
 	}
 }
 
@@ -449,9 +408,8 @@ void GRTrill::placeMord (GREvent * inParent, NVPoint & newPoint)
 GDirection GRTrill::chooseDirection (GREvent * inParent ) const
 {
 	const GRSingleNote * sng = dynamic_cast<GRSingleNote *>(inParent);
-		GDirection direction;
-		direction = sng->getStemDirection(); // was getDirection()
-		return direction;
+	GDirection direction = sng->getStemDirection(); // was getDirection()
+	return direction;
 }
 
 //-------------------------------------------------------------------

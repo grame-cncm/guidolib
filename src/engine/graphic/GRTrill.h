@@ -16,19 +16,19 @@
 
 #include "GRPTagARNotationElement.h"
 #include "ARTrill.h"
-class ARTrill;
+
 class GRStaff;
 class GREvent;
 class GRAccidental;
 
 
-
 /** \brief GRTrill tag
 */
-
-
 class GRTrill : public GRPTagARNotationElement
 {
+	private:
+		GRAccidental * createAccidental (ARMusicalVoice::CHORD_ACCIDENTAL acc, bool cautionary) const;
+
 	public:
 					 GRTrill( GRStaff * stf, ARTrill * arTrill );
 		virtual		~GRTrill();
@@ -58,9 +58,8 @@ class GRTrill : public GRPTagARNotationElement
 		
 		void setTrillSymbol( unsigned int inSymbolID);
 
-		
 		GDirection chooseDirection (GREvent * inParent ) const;
-		
+
 		GRAccidental *	fAccidental;		
 		ARTrill::TYPE	fType;
 		NVPoint			sRefPos;
