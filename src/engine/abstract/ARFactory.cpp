@@ -376,8 +376,20 @@ void ARFactory::addChord()
         mCurrentTrill->setChordAccidental(chord_accidental);
 
         FirstNote->setOrnament(mCurrentTrill);
-    
-        mCurrentVoice->FinishChord(true);
+
+		bool trill = true;
+		if (mCurrentTags) { // looks for beaming
+			GuidoPos pos = mTags.GetHeadPosition();
+			while (pos) {
+				ARMusicalTag* tag = mTags.GetNext(pos);
+				ARBeam* b = dynamic_cast<ARBeam*>(tag);
+				if (b) {
+					trill = false;
+					break;
+				}
+			}
+		}
+		mCurrentVoice->FinishChord (trill);
     }
     else
     {
@@ -710,8 +722,7 @@ void ARFactory::createTag( const char * name, int no )
 			break;
 
 		case 'b':
-			if(!strcmp(name,"beam") || !strcmp(name,"bm") 
-				|| !strcmp(name,"b")) // ATTENTION needs to be removed later
+			if(!strcmp(name,"beam") || !strcmp(name,"bm") || !strcmp(name,"b")) // ATTENTION needs to be removed later
 			{
 				ARBeam * tmp = new ARBeam();
 				mTags.AddHead(tmp); // push();
