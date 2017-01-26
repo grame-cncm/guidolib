@@ -147,14 +147,13 @@ void GRTrill::OnDraw(VGDevice & hdc , float right, float noteY, int nVoice) cons
 {
 	VGColor oldColor = hdc.GetFontColor();
 	
-	if (fType == 0) { //TRILL=0
+	if (fType == 0) {
 		NVRect r = mBoundingBox;
 		r += getPosition();
 		float left;
 		float lastPos = GRTrill::getLastPosX(nVoice);
 
 		// we check if the trill line is begining or continuing another
-
 		if (begin) {
 			// the 'tr' is drawn only at the begining of the trill, if the parameter 'tr' isn't set as false
 			if (fShowTR)
@@ -177,19 +176,14 @@ void GRTrill::OnDraw(VGDevice & hdc , float right, float noteY, int nVoice) cons
 				left = leftR;
 		}
 		else {	// continue the line from the last position (or at the begining of a new system)
-			if (lastPos < right)
-				left = lastPos;
-			else
-				left = r.left - LSPACE;
+			if (lastPos < right)	left = lastPos;
+			else					left = r.left - LSPACE;
 		}
 
 		// now we iterates the symbol kTilde as many times as posible from "left" to "right"
 		float x = (left - r.left);
-
-		if (!begin)
-			x -= mTagOffset.x;
-		else
-			left += mTagOffset.x;
+		if (!begin) x -= mTagOffset.x;
+		else		left += mTagOffset.x;
 
 		while (left + widthOfTilde <= right) {
 			if (fDrawOnNoteHead)
@@ -200,16 +194,12 @@ void GRTrill::OnDraw(VGDevice & hdc , float right, float noteY, int nVoice) cons
 			x    += widthOfTilde;
 			left += widthOfTilde;
 		}
-
 		GRTrill::getLastPosX(nVoice) = left;		
 	}
     else {	
-		if (fShowTR)
-			GRNotationElement::OnDraw(hdc);
-
+		if (fShowTR) GRNotationElement::OnDraw(hdc);
 		fAccidental->OnDraw(hdc);
 	}
-	
 	hdc.SetFontColor(oldColor);
 }
 
