@@ -677,12 +677,7 @@ void ARMusicalVoice::adjustDuration(const TYPE_DURATION & newDuration)
 	const TYPE_DURATION fill (newDuration - d);
 	if (fill != DURATION_0)
 	{
-		// this is for cue-voices...
-		if (voicenum <= 0)
-			AddTail(new ARNote(fill));
-		else
-			// this adds an Empty-event instead of visible rests!
-			AddTail(new ARNote(fill));
+		AddTail(new ARNote(fill));
 
 		// We have to look for the PositionTags here!
 		if (mPosTagList)
@@ -5417,7 +5412,7 @@ ARChordTag *ARMusicalVoice::BeginChord()
 /** \brief this method is called when the chord is an ornament parameter (SB)
 */
 // C.D. optimized 22/10/2014
-ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE &chord_type, CHORD_ACCIDENTAL &chord_accidental)
+ARNote * ARMusicalVoice::setTrillChord (CHORD_TYPE &chord_type, CHORD_ACCIDENTAL &chord_accidental)
 {	
 	const int nbNotes        = 3;
 	int pitches[nbNotes];         // we only need 3 pitches for analysis
@@ -5447,15 +5442,15 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE &chord_type, CHORD_ACCIDENTAL 
 		if (noteTmp && noteTmp->getPitch() != 0) {
 			if (comptTemp == 1)
 				accidentals = noteTmp->getAccidentals();
-
-			if (comptTemp == 2)
+			else if (comptTemp == 2)
 				accidentalsTemp = noteTmp->getAccidentals();
 
 			pitches[comptTemp] = noteTmp->getPitch();
             // we now directly set a flag to tell to the note not to draw itself, rather than hide it behind the first one...
-			noteTmp -> setPitch(EMPTY);
+//			noteTmp->setPitch(EMPTY);
+			noteTmp->setPitch(pitches[0]);
+			noteTmp->setAccidentals(firstNote->getAccidentals());
 			noteTmp->setDrawGR(false);
-            
 			comptTemp++;
 		}
 	}
@@ -5467,14 +5462,15 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE &chord_type, CHORD_ACCIDENTAL 
 
 		if (noteTmp && noteTmp->getPitch() != 0) {
 			// we now directly set a flag to tell to the note not to draw itself, rather than hide it behind the first one...
-			noteTmp->setPitch(EMPTY);
+//			noteTmp->setPitch(EMPTY);
+			noteTmp->setPitch(pitches[0]);
+			noteTmp->setAccidentals(firstNote->getAccidentals());
             noteTmp->setDrawGR(false);
 		}
 	}
 
 	// Analysis ; the second note of the chord must be either the note right above the first one,
-				// or the note right below or the same note.
-
+	// or the note right below or the same note.
 	if (pitches[1] - 2 == (pitches[0] - 2 + 1 ) % 7) { // e.g. "c, d"
 		if (pitches[2] == pitches[0])
 			chord_type = UP;
@@ -5502,23 +5498,15 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE &chord_type, CHORD_ACCIDENTAL 
 	else
 		chord_type = CHORDERROR;
 
-
 	// Recupération de l'armure...
-
 	int keyNumber;
 	GuidoPos pos = mCurVoiceState->vpos;
 	ARKey   *key = NULL;
-
 	while (pos && !key) {
         ARMusicalObject *obj = ObjectList::GetPrev(pos);
-
 		key = obj ? static_cast<ARKey *>(obj->isARKey()) : NULL;
     }
-
-	if (key)
-		keyNumber = key->getKeyNumber();
-	else
-		keyNumber = 0;
+	keyNumber = key ? key->getKeyNumber() : 0;
 
 
 	// Determination de l'altération sur l'ornementation
@@ -5659,12 +5647,9 @@ void ARMusicalVoice::FinishChord(bool trill)
             finishChordWithOneChordGroup(chorddur, trill);
         else {
             GuidoPos vposBackup = mCurVoiceState->vpos;
-            
             finishChordWithSeveralChordGroups(chorddur, trill);
-            
             mCurVoiceState->vpos = vposBackup;
         }
-
         mCurVoiceState->ptagpos = ptagposBackup;
     }
 
@@ -5673,12 +5658,9 @@ void ARMusicalVoice::FinishChord(bool trill)
 
 	// now I insert one more empty event...
 	ARNote *tmpnote = new ARNote("empty", 0, 1, 0, 1, 80);
-
 	if (chordgrouplist) {
 		ARChordGroup *tmp = chordgrouplist->GetTail();
-
-		if (tmp)
-            tmpnote->setDuration(tmp->dur);
+		if (tmp) tmpnote->setDuration(tmp->dur);
 	}
 
 	AddTail(tmpnote);
@@ -5731,15 +5713,11 @@ void ARMusicalVoice::FinishChord(bool trill)
 				mytp = starttp;
 
 			GuidoPos mypos = mCurVoiceState->addedpositiontags->GetHeadPosition();
-
 			while (mypos) {
 				ARPositionTag * ptag = mCurVoiceState->addedpositiontags->GetNext(mypos);
-
 				if (ptag) {
 					ARMusicalObject * po = dynamic_cast<ARMusicalObject *>(ptag);
-
-					if (po)
-						po->setRelativeTimePosition(mytp);
+					if (po) po->setRelativeTimePosition(mytp);
 				}
 			}
 		}
