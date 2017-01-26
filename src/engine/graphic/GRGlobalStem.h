@@ -42,24 +42,17 @@ class GRGlobalStem : // public GRStem,
 {
 
 	public:
-
-        GRGlobalStem(GRStaff * inStaff,
-            ARShareStem * pshare,
-            ARTStem * curstemstate,
-            ARDisplayDuration * curdispdur,
-            ARNoteFormat * curnoteformat );
-
+				 GRGlobalStem (GRStaff * inStaff,	ARShareStem * pshare,  ARTStem * stem,  ARDisplayDuration * dur,  ARNoteFormat * format );
         virtual ~GRGlobalStem();
 
-		int		getHighestAndLowestNoteHead( GRStdNoteHead ** highest, 
-											 GRStdNoteHead ** lowest) const;
+		int		getHighestAndLowestNoteHead( GRStdNoteHead ** highest, GRStdNoteHead ** lowest) const;
 
 		virtual void setSize(float newsize);
         virtual void setMultiplicatedSize(float newMultiplicatedSize);
         virtual void setOffsetXY(float inOffsetX, float inOffsetY);
 		virtual void setNoteStemLength( GREvent * ev, float inLen );
-		virtual GRFlag * getGRFlag() const	{ return theFlag; }
-		virtual GRStem * getGRStem() const	{ return theStem; }
+		virtual GRFlag * getGRFlag() const	{ return fFlag; }
+		virtual GRStem * getGRStem() const	{ return fStem; }
 		virtual int getNumFaehnchen() const;
 		virtual void removeAssociation(GRNotationElement * grnot);
 
@@ -74,18 +67,17 @@ class GRGlobalStem : // public GRStem,
 
         virtual void RangeEnd(GRStaff * inStaff);
 
-        virtual GRNotationElement *  getFirstEl() 		{ return mFirstEl; }
+        virtual GRNotationElement *  getFirstEl() 		{ return fFirstEl; }
         virtual void tellPosition(GObject *, const NVPoint &);
 
-        virtual void setFlagOnOff(bool i);
-
-        virtual void setStemDirection(GDirection dir);
+        virtual void	setFlagOnOff(bool i);
+        virtual void	setStemDirection(GDirection dir);
 
         virtual NVPoint getStemStartPos() const;
         virtual NVPoint getStemEndPos() const;
 
-        virtual bool getStemDirSet() const 		{ return stemdirset; }
-        virtual bool getStemLengthSet() const 	{ return stemlengthset; }
+        virtual bool	getStemDirSet() const 		{ return fStemdirSet; }
+        virtual bool	getStemLengthSet() const 	{ return fStemlengthSet; }
 
         virtual const unsigned char * getColRef() const { return mColRef; }
 
@@ -95,29 +87,26 @@ class GRGlobalStem : // public GRStem,
 
 		void updateGlobalStem(const GRStaff * inStaff); 
 
-		bool mFlagOnOff;
-		bool stemdirset;
-		bool stemlengthset;
-		GDirection stemdir;
+		bool		fFlagOnOff;
+		bool		fStemdirSet;
+		bool		fStemlengthSet;
+		GDirection	fStemdir;
 
-		GRStem * theStem;
-		GRFlag * theFlag;
-		ARTStem * stemstate;
-		TYPE_DURATION dispdur;
+		GRStem *	fStem;
+		GRFlag *	fFlag;
+		ARTStem *	fStemState;
+		TYPE_DURATION fDispdur;
 
-		// mFirstEl is the first element in 
-		// the \shareStem-Range. Only the
+		// fFirstEl is the first element in  the \shareStem-Range. Only the
 		// first event in the range gets a spring on its own ....
-		GRNotationElement * mFirstEl;
+		GRNotationElement * fFirstEl;
 
-		float mLowestY;
-		float mHighestY;
-
-//		unsigned char * colref;
+		float fLowestY;
+		float fHighestY;
 
 		// - Lower note on the staff (to adjust stem length if it's a cross headnote)
-		GRSingleNote *lowerNote;
-		GRSingleNote *higherNote;
+		GRSingleNote *	fLowerNote;
+		GRSingleNote *	fHigherNote;
 
         float fStaffSize;
 };
