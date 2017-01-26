@@ -324,22 +324,18 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 			}
 
 			GuidoPos pos = associated->GetHeadPosition();
-			while (pos && pos != associated->GetTailPosition())
-			{
+			while (pos && pos != associated->GetTailPosition()) {
 				GRNotationElement * el = associated->GetNext(pos);
-				if (el && !dynamic_cast<GREmpty *>(el))
-				{
+				if (el && !dynamic_cast<GREmpty *>(el)) {
 					GCoord ypos = el->getPosition().y;
 					if (el->getGRStaff() && tagtype == GRTag::SYSTEMTAG)
 						ypos += el->getGRStaff()->getPosition().y;
 
-					if (fLowestY > ypos)
-					{
+					if (fLowestY > ypos) {
 						fLowestY = ypos;
 						fLowerNote = (GRSingleNote *)el;
 					}
-					if (fHighestY < ypos)
-					{
+					if (fHighestY < ypos) {
 						fHighestY = ypos;
 						fHigherNote = (GRSingleNote *)el;
 					}
@@ -398,18 +394,16 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 	else {
 		// length was not set ....
         float length = fHighestY - fLowestY + inStaff->getStaffLSPACE() * 3.5f * mTagSize / fStaffSize;
-//		bool hastrill = false;
-//		GuidoPos pos = associated->GetHeadPosition();
-//		while (pos) {
-//			GRNotationElement * el = associated->GetNext(pos);
-//			const GRSingleNote* note = el->isSingleNote();
-//			if (note && note->hasTrill()) {
-//				length = (note->getDirection() != dirDOWN) ? 0 : length;
-//				break;
-//			}
-//		}
-//        float length = fHighestY - fLowestY + inStaff->getStaffLSPACE() * 3.5f * mTagSize / fStaffSize;
-//        float length = hastrill ? 0 : (float)(fHighestY - fLowestY + inStaff->getStaffLSPACE() * 3.5f * mTagSize / fStaffSize);
+		GuidoPos pos = associated->GetHeadPosition();
+		while (pos) {
+			GRNotationElement * el = associated->GetNext(pos);
+			const GRSingleNote* note = el->isSingleNote();
+			if (note && note->hasTrill()) {
+				length = 0; // (note->getDirection() != dirDOWN) ? 0 : length;
+				break;
+			}
+		}
+//      float length = fHighestY - fLowestY + inStaff->getStaffLSPACE() * 3.5f * mTagSize / fStaffSize;
 		fStem->setStemLength( length );
 	}
 	delete fFlag;
