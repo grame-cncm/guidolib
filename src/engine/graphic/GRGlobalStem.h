@@ -72,6 +72,7 @@ class GRGlobalStem : // public GRStem,
 
         virtual void	setFlagOnOff(bool i);
         virtual void	setStemDirection(GDirection dir);
+        virtual GDirection	getStemDirection() const { return fStemdir; }
 
         virtual NVPoint getStemStartPos() const;
         virtual NVPoint getStemEndPos() const;
@@ -90,6 +91,7 @@ class GRGlobalStem : // public GRStem,
 		bool		fFlagOnOff;
 		bool		fStemdirSet;
 		bool		fStemlengthSet;
+		bool		fTrillStem;
 		GDirection	fStemdir;
 
 		GRStem *	fStem;

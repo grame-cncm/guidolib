@@ -39,7 +39,7 @@
 
 GRGlobalStem::GRGlobalStem( GRStaff * inStaff, ARShareStem * pshare, ARTStem * stemstate, ARDisplayDuration * dispdur, ARNoteFormat * noteformat )
 	: GRPTagARNotationElement(pshare), fFlagOnOff(true), fStemdirSet(false), fStemlengthSet(false),
-	fStemdir(dirOFF), fFirstEl(NULL), fLowerNote(NULL), fHigherNote(NULL)
+	fTrillStem(false), fStemdir(dirOFF), fFirstEl(NULL), fLowerNote(NULL), fHigherNote(NULL)
 {
 	if (dispdur && dispdur->getDisplayDuration() > DURATION_0)
 		fDispdur = dispdur->getDisplayDuration();
@@ -113,8 +113,10 @@ void GRGlobalStem::addAssociation(GRNotationElement * grnot)
 		TYPE_DURATION evdur (ev->getDuration());
 		TYPE_DURATION durtempl;
 		GRSingleNote * sngnot = dynamic_cast<GRSingleNote *>(ev);
-		if (sngnot)
+		if (sngnot) {
 			durtempl       = sngnot->getDurTemplate();
+			if (sngnot->hasTrill()) fTrillStem = true;
+		}
 		
 		// this changes the display-duration (nested display-duration-tags!)
 		if (durtempl>evdur && durtempl> fDispdur)
@@ -393,17 +395,8 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 	}
 	else {
 		// length was not set ....
-        float length = fHighestY - fLowestY + inStaff->getStaffLSPACE() * 3.5f * mTagSize / fStaffSize;
-		GuidoPos pos = associated->GetHeadPosition();
-		while (pos) {
-			GRNotationElement * el = associated->GetNext(pos);
-			const GRSingleNote* note = el->isSingleNote();
-			if (note && note->hasTrill()) {
-				length = 0; // (note->getDirection() != dirDOWN) ? 0 : length;
-				break;
-			}
-		}
-//      float length = fHighestY - fLowestY + inStaff->getStaffLSPACE() * 3.5f * mTagSize / fStaffSize;
+        float length = fTrillStem ? 0 : fHighestY - fLowestY + inStaff->getStaffLSPACE() * 3.5f * mTagSize / fStaffSize;
+//        float length = fHighestY - fLowestY + inStaff->getStaffLSPACE() * 3.5f * mTagSize / fStaffSize;
 		fStem->setStemLength( length );
 	}
 	delete fFlag;
