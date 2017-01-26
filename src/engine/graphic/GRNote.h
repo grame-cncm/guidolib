@@ -56,13 +56,14 @@ class GRNote : public GREvent
 	virtual GDirection	getDefaultThroatDirection() const;
 	virtual GDirection	getThroatDirection() const;
 
-    GRCluster *getGRCluster() const {return fCluster;}
+    GRCluster *getGRCluster() const			{return fCluster;}
     void       setGRCluster(GRCluster *inCluster, bool inSignificativeNote = true);
     bool       getClusterNoteBoolean() const {return fClusterNote;}
-    bool       isGraceNote() {return fIsGraceNote;}
-    void       setGraceNote(bool isGrace) {fIsGraceNote = isGrace;}
+    bool       isGraceNote() const			{return fIsGraceNote;}
+    void       setGraceNote(bool isGrace)	{fIsGraceNote = isGrace;}
 
     GRCluster *createCluster(ARNoteFormat *inCurnoteformat);
+    bool       hasTrill () const			{ return fOrnament != 0;}
 
 	// Tell me: is a note splitted over several systems? 
 	// should only occur for CompositeNotes.
