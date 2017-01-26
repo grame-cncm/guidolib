@@ -75,24 +75,22 @@ public:
     /* Only for GlobalStem */
     void setLastHeadOrientation(ARTHead::HEADSTATE inLastHeadOrientation) { fLastHeadOrientation = inLastHeadOrientation; }
 
-    float getOffsetStartPosition() { return fOffsetStartPosition; }
-
-protected:
-	virtual void DrawWithGlyph( VGDevice & hdc ) const;
-	virtual void DrawWithLine ( VGDevice & hdc ) const;
+private:
+	void DrawWithGlyph		( VGDevice & hdc ) const;
+	void DrawWithLine		( VGDevice & hdc ) const;
+	void DrawStem			( VGDevice & hdc, unsigned int symbol1, unsigned int symbol2, float starty, float length ) const;
+	float GetStartYOffset	( bool up, float lineSpace) const;
 
 	float 		mStemLen;
 	GDirection 	mStemDir;
 
-	float 		mSize;		// (JB) is it related to the height of the 
-							// 'stem' glyph in the musical font ? 
-							//	stem height = 0.5 * LSPACE * mSize
+	float 		mSize;		// (JB) is it related to the height of the  'stem' glyph in the musical font ?
 	unsigned char * mColRef;
 	NVPoint 	mOffset;
 
 	static NVPoint sRefpos;
 
-	float  fOffsetStartPosition;
+	float  fOffsetStartPosition;	// depends on the notehead
 	bool   fDrawActivated;
 
     int fNoteHeadType;
