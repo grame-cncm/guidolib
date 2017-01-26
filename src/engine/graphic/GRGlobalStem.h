@@ -40,58 +40,54 @@ class GRGlobalStem : // public GRStem,
 	public GRPTagARNotationElement,
 	public GRSystemTagInterface
 {
-
 	public:
 				 GRGlobalStem (GRStaff * inStaff,	ARShareStem * pshare,  ARTStem * stem,  ARDisplayDuration * dur,  ARNoteFormat * format );
         virtual ~GRGlobalStem();
 
 		int		getHighestAndLowestNoteHead( GRStdNoteHead ** highest, GRStdNoteHead ** lowest) const;
 
-		virtual void setSize(float newsize);
-        virtual void setMultiplicatedSize(float newMultiplicatedSize);
-        virtual void setOffsetXY(float inOffsetX, float inOffsetY);
-		virtual void setNoteStemLength( GREvent * ev, float inLen );
+		virtual void	setSize(float newsize);
+        virtual void	setMultiplicatedSize(float newMultiplicatedSize);
+        virtual void	setOffsetXY(float inOffsetX, float inOffsetY);
+		virtual void	setNoteStemLength( GREvent * ev, float inLen );
 		virtual GRFlag * getGRFlag() const	{ return fFlag; }
 		virtual GRStem * getGRStem() const	{ return fStem; }
-		virtual int getNumFaehnchen() const;
-		virtual void removeAssociation(GRNotationElement * grnot);
 
-		virtual void checkPosition(const GRSystem * grsys);
-		virtual GDirection getStemDir() const;
+	    virtual void	addAssociation(GRNotationElement * grnot);
+		virtual void	removeAssociation(GRNotationElement * grnot);
 
-		virtual float changeStemLength( float inLen );
-	    virtual void addAssociation(GRNotationElement * grnot);
-        virtual void setHPosition( GCoord nx);
+		virtual void		checkPosition(const GRSystem * grsys);
+		virtual GDirection	getStemDir() const;
+		virtual int			getNumFaehnchen() const;
 
-        virtual void OnDraw(VGDevice & hdc ) const;
+		virtual float		changeStemLength( float inLen );
+        virtual void		setHPosition( GCoord nx);
 
-        virtual void RangeEnd(GRStaff * inStaff);
-
+        virtual void		RangeEnd(GRStaff * inStaff);
         virtual GRNotationElement *  getFirstEl() 		{ return fFirstEl; }
-        virtual void tellPosition(GObject *, const NVPoint &);
 
-        virtual void	setFlagOnOff(bool i);
-        virtual void	setStemDirection(GDirection dir);
+        virtual void	OnDraw(VGDevice & hdc ) const;
+        virtual void	tellPosition(GObject *, const NVPoint &);
+
+        virtual void		setFlagOnOff(bool i);
+        virtual void		setStemDirection(GDirection dir);
         virtual GDirection	getStemDirection() const { return fStemdir; }
 
-        virtual NVPoint getStemStartPos() const;
-        virtual NVPoint getStemEndPos() const;
+        virtual NVPoint		getStemStartPos() const;
+        virtual NVPoint		getStemEndPos() const;
 
-        virtual bool	getStemDirSet() const 		{ return fStemdirSet; }
-        virtual bool	getStemLengthSet() const 	{ return fStemlengthSet; }
+        virtual bool		getStemDirSet() const 		{ return fStemdirSet; }
+        virtual bool		getStemLengthSet() const 	{ return fStemlengthSet; }
+        virtual float		getStemLength() const;
 
         virtual const unsigned char * getColRef() const { return mColRef; }
 
-        virtual float getStemLength() const;
-
 	protected:
-
 		void updateGlobalStem(const GRStaff * inStaff); 
 
 		bool		fFlagOnOff;
 		bool		fStemdirSet;
 		bool		fStemlengthSet;
-		bool		fTrillStem;
 		GDirection	fStemdir;
 
 		GRStem *	fStem;

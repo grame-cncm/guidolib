@@ -36,10 +36,11 @@
 #include "GRNoteDot.h"
 #include "GRAccidental.h"
 
+using namespace std;
 
 GRGlobalStem::GRGlobalStem( GRStaff * inStaff, ARShareStem * pshare, ARTStem * stemstate, ARDisplayDuration * dispdur, ARNoteFormat * noteformat )
 	: GRPTagARNotationElement(pshare), fFlagOnOff(true), fStemdirSet(false), fStemlengthSet(false),
-	fTrillStem(false), fStemdir(dirOFF), fFirstEl(NULL), fLowerNote(NULL), fHigherNote(NULL)
+	fStemdir(dirOFF), fFirstEl(NULL), fLowerNote(NULL), fHigherNote(NULL)
 {
 	if (dispdur && dispdur->getDisplayDuration() > DURATION_0)
 		fDispdur = dispdur->getDisplayDuration();
@@ -113,10 +114,7 @@ void GRGlobalStem::addAssociation(GRNotationElement * grnot)
 		TYPE_DURATION evdur (ev->getDuration());
 		TYPE_DURATION durtempl;
 		GRSingleNote * sngnot = dynamic_cast<GRSingleNote *>(ev);
-		if (sngnot) {
-			durtempl       = sngnot->getDurTemplate();
-			if (sngnot->hasTrill()) fTrillStem = true;
-		}
+		if (sngnot) durtempl       = sngnot->getDurTemplate();
 		
 		// this changes the display-duration (nested display-duration-tags!)
 		if (durtempl>evdur && durtempl> fDispdur)
@@ -148,11 +146,9 @@ void GRGlobalStem::addAssociation(GRNotationElement * grnot)
 		fFirstEl = grnot;
 		fFirstEl->addAssociation(this);
 		return;
-
 		// the firstElement is not added to the associated
 		// ones -> it does not have to told anything!?
 	}
-
 	GRPTagARNotationElement::addAssociation(grnot);
 
 	// this is needed, because the share location can be used in different staves.
@@ -272,7 +268,7 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 			GuidoPos pos = associated->GetHeadPosition();
 			while (pos && pos != associated->GetTailPosition()) {
 				GRNotationElement * el = associated->GetNext(pos);
-				if (el && !dynamic_cast<GREmpty *>(el)) {
+				if (el && !el->isEmpty()) {
 					GCoord ypos = el->getPosition().y;
 					if (el->getGRStaff() && tagtype == GRTag::SYSTEMTAG)
 						ypos += el->getGRStaff()->getPosition().y;
@@ -328,7 +324,7 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 			GuidoPos pos = associated->GetHeadPosition();
 			while (pos && pos != associated->GetTailPosition()) {
 				GRNotationElement * el = associated->GetNext(pos);
-				if (el && !dynamic_cast<GREmpty *>(el)) {
+				if (el && !el->isEmpty()) {
 					GCoord ypos = el->getPosition().y;
 					if (el->getGRStaff() && tagtype == GRTag::SYSTEMTAG)
 						ypos += el->getGRStaff()->getPosition().y;
@@ -366,7 +362,7 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 		GuidoPos pos = associated->GetHeadPosition();
 		while (pos) {
 			GRNotationElement * el = associated->GetNext(pos);
-			if (el && !dynamic_cast<GREmpty *>(el)) {
+			if (el && !el->isEmpty()) {
 				NVPoint elpos (el->getPosition());
 				if (tagtype == GRTag::SYSTEMTAG && el->getGRStaff())
 					elpos += el->getGRStaff()->getPosition();
@@ -395,8 +391,8 @@ void GRGlobalStem::RangeEnd( GRStaff * inStaff)
 	}
 	else {
 		// length was not set ....
-        float length = fTrillStem ? 0 : fHighestY - fLowestY + inStaff->getStaffLSPACE() * 3.5f * mTagSize / fStaffSize;
-//        float length = fHighestY - fLowestY + inStaff->getStaffLSPACE() * 3.5f * mTagSize / fStaffSize;
+//        float length = fTrillStem ? 0 : fHighestY - fLowestY + inStaff->getStaffLSPACE() * 3.5f * mTagSize / fStaffSize;
+        float length = fHighestY - fLowestY + inStaff->getStaffLSPACE() * 3.5f * mTagSize / fStaffSize;
 		fStem->setStemLength( length );
 	}
 	delete fFlag;
@@ -877,7 +873,7 @@ void GRGlobalStem::tellPosition(GObject * obj, const NVPoint & pt)
 			while (pos)
 			{
 				GRNotationElement * el = mAssociated->GetNext(pos);
-				if (el && !dynamic_cast<GREmpty *>(el)) {
+				if (el && !el->isEmpty()) {
 					offset = el->getGRStaff()->getPosition();
 					float ey = el->getPosition().y + offset.y;
 					if (fLowestY > ey)	fLowestY = ey;
