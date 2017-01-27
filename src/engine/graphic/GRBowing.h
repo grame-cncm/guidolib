@@ -27,15 +27,13 @@ class GRSystemStartEndStruct;
 
 
 // - Graphic functions
-void drawSlur( VGDevice & hdc, float x1, float y1, float x2, float y2, 
-								float x3, float y3, float inflexion = 6 ); // was = 5
+void drawSlur( VGDevice & hdc, float x1, float y1, float x2, float y2, float x3, float y3, float inflexion = 6 ); // was = 5
 
 /** \brief Base class for ties and slurs.
 */
 class GRBowing : public GRPTagARNotationElement
 {
-	
-public:
+	public:
 	
 	/** \brief Save informations needed to draw the bow 
 			when different staves are needed, see GRPositionTag for comment.
@@ -77,16 +75,14 @@ public:
 			int				curveDir;	// -1: downward, 0: unspecified, 1: upward.
 	};
 	
-	
 	public:
-					GRBowing( GRStaff * grstaff, GRNotationElement * startEl, GRNotationElement * endEl );
-					GRBowing( GRStaff * grstaff = 0); // constructor without REAL abstract Element
-					GRBowing( GRStaff * grstaff, ARBowing * abstractRepresentationOfBowing );
-					// GRBowing( const GRBowing & inCopy );
-
+					 GRBowing( GRStaff * grstaff, GRNotationElement * startEl, GRNotationElement * endEl );
+					 GRBowing( GRStaff * grstaff = 0); // constructor without REAL abstract Element
+					 GRBowing( GRStaff * grstaff, ARBowing * abstractRepresentationOfBowing );
 
 		virtual 	~GRBowing();
 
+		GRPositionTag::GRSaveStruct * getNewGRSaveStruct();
 		virtual void OnDraw( VGDevice & hdc ) const;
 		virtual void updateBoundingBox();
 										
@@ -94,9 +90,9 @@ public:
 		virtual void removeAssociation(GRNotationElement * el );
 		virtual void addAssociation(GRNotationElement * );
 
-		virtual void tellPosition(GObject * caller, const NVPoint & newPosition);
-				virtual GRNotationElement * getStartElement(GRStaff * grstaff) const;
-		virtual GRNotationElement * getEndElement(GRStaff * grstaff) const;
+		virtual void					tellPosition(GObject * caller, const NVPoint & newPosition);
+		virtual GRNotationElement *		getStartElement(GRStaff * grstaff) const;
+		virtual GRNotationElement *		getEndElement(GRStaff * grstaff) const;
 		
 		
 	protected:
@@ -104,45 +100,23 @@ public:
 		virtual void drawSlur( VGDevice & hdc, NVPoint pstart, NVPoint pmid, NVPoint pend ) const;
 		virtual void updateBow( GRStaff * grstaff );
 
-		virtual GRPositionTag::GRSaveStruct * getNewGRSaveStruct();
+		virtual GRSystemStartEndStruct *		prepareSSEStructForBow( const GRStaff * inStaff );
 
-		virtual GRSystemStartEndStruct * prepareSSEStructForBow( const GRStaff * inStaff );
+		virtual	void getBowBeginingContext	( GRBowingContext * ioContext, GRSystemStartEndStruct * sse );
+		virtual void getBowEndingContext	( GRBowingContext * ioContext, GRSystemStartEndStruct * sse );
 
-		virtual	void getBowBeginingContext( GRBowingContext * ioContext, GRSystemStartEndStruct * sse );
-		virtual void getBowEndingContext( GRBowingContext * ioContext, GRSystemStartEndStruct * sse );
-
-		virtual	GRGlobalStem * findGlobalStem( GRSystemStartEndStruct * sse, 
-												GRNotationElement * stemOwner );
+		virtual	GRGlobalStem * findGlobalStem( GRSystemStartEndStruct * sse, GRNotationElement * stemOwner );
 		
 		// - Positionning of the curve. 
-		virtual void manualAnchorPoints( GRBowingContext * bowContext, 
-										ARBowing * arBow, 
-										GRSystemStartEndStruct * sse );
-
-		virtual void automaticAnchorPoints( GRBowingContext * bowContext, 
-										ARBowing * arBow, 
-										GRSystemStartEndStruct * sse );
-
-		virtual void automaticCurveDirection( GRBowingContext * bowContext, 
-											  ARBowing * arBow, 
-											  GRSystemStartEndStruct * sse );
-
-		virtual void manualControlPoints( GRBowingContext * bowContext, 
-										 ARBowing * arBow, 
-										 GRSystemStartEndStruct * sse );
-
-
-		virtual void automaticControlPoints( GRBowingContext * bowContext, 
-										ARBowing * arBow, 
-										GRSystemStartEndStruct * sse );
-
-		virtual void applyAnchorPointsOffsets( GRBowingContext * bowContext, 
-												ARBowing * arBow, 
-												GRSystemStartEndStruct * sse );
+		virtual void manualAnchorPoints			( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse );
+		virtual void automaticAnchorPoints		( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse );
+		virtual void automaticCurveDirection	( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse );
+		virtual void manualControlPoints		( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse );
+		virtual void automaticControlPoints		( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse );
+		virtual void applyAnchorPointsOffsets	( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse );
 
 	private:
-		
-			GRSystemStartEndStruct * initGRBowing( GRStaff * grstaff );
+		GRSystemStartEndStruct * initGRBowing( GRStaff * grstaff );
 };
 
 #endif
