@@ -66,7 +66,7 @@ class GRNote : public GREvent
 	virtual bool isSplit(); // const;
 
     /**** Function to avoid dynamic_cast ****/
-    GRNotationElement *isGRNote() { return this; }
+    const GRNote * isGRNote() const { return this; }
     /*****************************************/
 	
 protected :

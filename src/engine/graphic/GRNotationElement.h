@@ -27,6 +27,8 @@ class GRSystemSlice;
 class ARMusicalObject;
 class GRAccidental;
 class GRSingleNote;
+class GRNote;
+class GRRest;
 
 
 
@@ -115,7 +117,6 @@ public:
 	inline const NEPointerList* associated() const { return mAssociated; }
 
     /**** Functions to avoid dynamic_cast ****/
-    virtual GRNotationElement *isGRNote() { return NULL; }
     /*****************************************/
     
     virtual void setIsInHeader(bool state)	{ mIsInHeader = state; }
@@ -125,7 +126,9 @@ public:
     virtual bool isChordComma() const		{ return false; }
     virtual bool checkCollisionWith() const	{ return false; }
 
-    virtual const GRSingleNote* isSingleNote() const		{ return 0; }
+    virtual const GRSingleNote* isSingleNote() const	{ return 0; }
+    virtual const GRNote *		isGRNote() const		{ return 0; }
+    virtual const GRRest *		isRest() const			{ return 0; }
 
 protected:
 	
