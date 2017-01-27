@@ -61,23 +61,15 @@ typedef std::vector<GRArticulation *> GRNEList;
 class GREvent : public GRARCompositeNotationElement
 {
 	public:
-				GREvent( GRStaff * inStaff,
-						ARMusicalEvent * abstractRepresentationOfEvent,
-						bool p_ownsAR = false );
+				 GREvent( GRStaff * inStaff, ARMusicalEvent * ar, bool p_ownsAR = false );
+				 GREvent(GRStaff * inStaff, ARMusicalEvent * ar, const TYPE_TIMEPOSITION & date, const TYPE_DURATION & dur);
 
-				GREvent(GRStaff * inStaff,
-						ARMusicalEvent * abstractRepresentationOfEvent,
-						const TYPE_TIMEPOSITION & theRelativeTimePositionOfGR,
-						const TYPE_DURATION & theDurationOfGR);
-
-		virtual 		~GREvent();
-
+		virtual ~GREvent();
 
 		virtual void addToOffset(const NVPoint & offs);
 
-
-			// this can be used by the derived classes
-			// to find out about size. Will be set by noteFormat  
+		// this can be used by the derived classes
+		// to find out about size. Will be set by noteFormat  
 		virtual float getSize() const				{ return mSize; }
 
 		// the offset is a global offset (defined with noteFormat ...)
@@ -127,27 +119,21 @@ class GREvent : public GRARCompositeNotationElement
 		virtual int 	getBeamCount() const	{ return mBeamCount; }
 		virtual void 	incBeamCount()			{ ++ mBeamCount; }
 		virtual void 	decBeamCount()			{ -- mBeamCount; }
-		virtual void 	setFillsBar(bool value, GRNotationElement *,
-							GRNotationElement *)  	{ mFillsBar = value; }
+		virtual void 	setFillsBar(bool value, GRNotationElement *, GRNotationElement *)  	{ mFillsBar = value; }
 
-		virtual bool	getFillsBar() const { return mFillsBar; }
+		virtual bool	getFillsBar() const		{ return mFillsBar; }
 			
 				bool	isSyncopated() const; 
 	
 		// - Duration dot
-		virtual void	createDots( const TYPE_DURATION & inDuration,
-									float inNoteBreite, const NVPoint & inPos );
-
+		virtual void	createDots( const TYPE_DURATION & duration, float notewidth, const NVPoint & inPos );
 		virtual void	setDotFormat( const ARDotFormat * inFormat );
 		virtual void	setDotFormat( GRNoteDot * inDot, const ARDotFormat * inFormat );
 
-		virtual	bool	isGREventClass() const { return true; }
-		
-		static GREvent * cast( GObject * inObj )
-				{ return ( inObj->isGREventClass() ? static_cast<GREvent *>(inObj) : 0 ); }
+		virtual	bool	isGREventClass() const		{ return true; }
+		static GREvent * cast( GObject * inObj )	{ return ( inObj->isGREventClass() ? static_cast<GREvent *>(inObj) : 0 ); }
 
 		const GRNEList& getArticulations() const		{ return mArtilist; }
-
 		virtual bool	stemHasBeenChanged() const		{return stemChanged;}
 		virtual void	setStemChanged()				{stemChanged = true;}
 		virtual const GREvent *	isGREvent() const		{ return this; }
@@ -155,22 +141,16 @@ class GREvent : public GRARCompositeNotationElement
 		GRNoteDot *		getDot();
 
   protected:
-
-		int				mArticulationFlags;	
-
+		int		mArticulationFlags;
 	  NVstring	mStyle;
 	  NVPoint	mOffset;
 	  float		mSize;
 	  unsigned char * mColRef;
-
 	  int		mBeamCount;
 
-	  // this just remembers the LSPACE that is
-	  // valid at time of creation (staffFormat-Tag and consorts)
+	  // this just remembers the LSPACE that is valid at time of creation (staffFormat-Tag and consorts)
 	  float		mCurLSPACE;
-	
-	  // pointer to a global stem, if present.
-	  // This means, that this note shares a stem with other events...
+	  // pointer to a global stem, if present. This means, that this note shares a stem with other events...
 	  GRGlobalStem * mGlobalStem;
 	  
 	  bool		mFillsBar;
