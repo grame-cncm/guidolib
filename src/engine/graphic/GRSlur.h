@@ -31,6 +31,9 @@ class GRSlur : public GRBowing
 		virtual void automaticCurveDirection( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse );
 		virtual void automaticAnchorPoints	( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse );
 		virtual void automaticControlPoints	( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse );
+
+	private:
+		float	getEltOffset (const GRNotationElement* el ) const;
 };
 
 #endif

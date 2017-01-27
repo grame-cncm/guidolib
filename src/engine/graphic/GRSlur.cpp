@@ -70,6 +70,15 @@ void GRSlur::automaticCurveDirection( GRBowingContext * context, ARBowing * arBo
 }
 
 // -----------------------------------------------------------------------------
+float GRSlur::getEltOffset (const GRNotationElement* el ) const
+{
+	const GRSingleNote* note = el->isSingleNote();
+	if (note)
+		return note->getNoteHead()->getOffset().x;
+	return 0;
+}
+
+// -----------------------------------------------------------------------------
 void GRSlur::automaticAnchorPoints( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
 	const bool upward = (context->curveDir == 1);
@@ -81,44 +90,27 @@ void GRSlur::automaticAnchorPoints( GRBowingContext * context, ARBowing * arBow,
 	GRNotationElement * startElement = sse->startElement;
 	GRNotationElement * endElement = sse->endElement;
 	GRBowingSaveStruct * bowInfos = (GRBowingSaveStruct *)sse->p;
-
-	// We try to fix the following problem here: with chord, the start and end 
+	
+	// We try to fix the following problem here: with chord, the start and end
 	// elements are GREmpty objects, with a zero bounding box. So we substitute
 	// them by adequate noteheads.
 	if( context->topLeftHead != context->bottomLeftHead ) // test if chord
-	{
 		startElement = upward ? context->topLeftHead : context->bottomLeftHead;
-	}
 
 	if( context->topRightHead != context->bottomRightHead ) // test if chord
-	{
 		endElement = upward ? context->topRightHead : context->bottomRightHead;
-	}
 
 	// -- Get the bounding box of the left and right elements.
-	NVRect leftBox ( startElement->getBoundingBox());
-	NVRect rightBox ( endElement->getBoundingBox());
-			
-	leftBox += startElement->getPosition();		
-	rightBox += endElement->getPosition();		
-			
-	const float yMargin = float(0.75) * LSPACE;
-
-	// -- Calculates the start and end coordinates of the slur.
-	if( upward )
-	{
-		// Left x-pos
-		if( context->stemDirLeft == 1 )
-			posLeft.x = leftBox.right;
-		else
-			posLeft.x = (leftBox.left + leftBox.right) * float(0.5);
+	const NVRect leftBox ( startElement->getBoundingBox() + startElement->getPosition());
+	const NVRect rightBox ( endElement->getBoundingBox()  + endElement->getPosition());
 	
+	const float yMargin = float(0.75) * LSPACE;
+	// -- Calculates the start and end coordinates of the slur.
+	if( upward ) {
+		// Left x-pos
+		posLeft.x = context->stemDirLeft == 1 ? leftBox.right : (leftBox.left + leftBox.right) * float(0.5);
 		// Right x-pos
-		if( context->stemDirRight == 1 )
-			posRight.x = rightBox.right;
-		else
-			posRight.x = (rightBox.left + rightBox.right) * float(0.5);
-
+		posRight.x = context->stemDirRight == 1 ? rightBox.right : (rightBox.left + rightBox.right) * float(0.5);
 		// y-pos
 		posLeft.y = leftBox.top - yMargin;
 		posRight.y = rightBox.top - yMargin;
@@ -126,17 +118,9 @@ void GRSlur::automaticAnchorPoints( GRBowingContext * context, ARBowing * arBow,
 	else // downward
 	{
 		// Left x-pos
-		if( context->stemDirLeft == 1 )
-			posLeft.x = (leftBox.left + leftBox.right) * float(0.5);
-		else
-			posLeft.x = leftBox.left;
-	
+		posLeft.x = context->stemDirLeft == 1 ? (leftBox.left + leftBox.right) * float(0.5) : leftBox.left;
 		// Right x-pos
-		if( context->stemDirRight == 1 )
-			posRight.x = (rightBox.left + rightBox.right) * float(0.5);
-		else
-			posRight.x = rightBox.left;
-
+		posRight.x = context->stemDirRight == 1 ? (rightBox.left + rightBox.right) * float(0.5) : rightBox.left;
 		// y-pos
 		posLeft.y = leftBox.bottom + yMargin;
 		posRight.y = rightBox.bottom + yMargin;
@@ -146,35 +130,25 @@ void GRSlur::automaticAnchorPoints( GRBowingContext * context, ARBowing * arBow,
 	const float minWidth = float(1.5) * LSPACE; // arbitrary miminal width of a tie
 	const float openYOffset = upward ? - LSPACE : LSPACE;
 
-	if (context->openLeft)
-	{
+	if (context->openLeft) {
 		posLeft.y = posRight.y + openYOffset;
 		if( posLeft.x > (posRight.x - minWidth))
 			posLeft.x = (posRight.x - minWidth);
 	}
 
-	if (context->openRight)
-	{
+	if (context->openRight) {
 		posRight.y = posLeft.y + openYOffset;
 		if( posRight.x < (posLeft.x + minWidth))
 			posRight.x = (posLeft.x + minWidth);
 	}
 
-	// - Offset tags are always applied to the anchor points. In the future, 
-	// those offsets should have a values equal to 0. 
-	// For now, we have to compensate them with harcoded values...
-/*
-	posLeft.x -=  (leftBox.right - leftBox.left ) * float(0.8);	
-	posRight.x +=  (rightBox.right - rightBox.left ) * float(0.8);
-	posLeft.y += 25;
-	posRight.y += 25;
-*/
+	posLeft.x += getEltOffset(startElement);
+	posRight.x += getEltOffset(endElement);
 	// - Store results.
 	bowInfos->position = posLeft;
 	bowInfos->offsets[2] = posRight - posLeft; // control points are stored as offsets to the position.
 
 	arBow->setCurve( context->curveDir, posLeft, posRight ); // (JB) useless ?
-
 }
 
 // -----------------------------------------------------------------------------
