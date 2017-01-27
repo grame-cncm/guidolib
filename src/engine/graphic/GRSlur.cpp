@@ -19,50 +19,14 @@
 #include <algorithm>
 
 #include "GRSlur.h"
-#include "GRStaff.h"
 #include "GRStdNoteHead.h"
 #include "GRSingleNote.h"
-#include "GRGlobalStem.h"
-// #include "NEPointerList.h"
 
 
 using namespace std;
-// -----------------------------------------------------------------------------
-GRSlur::GRSlur(GRStaff * grstaff) : GRBowing(grstaff)
-{
-}
 
 // -----------------------------------------------------------------------------
-GRSlur::GRSlur(GRStaff * grstaff, ARSlur * inAR )
-			: GRBowing(grstaff, inAR )
-{
-}
-
-// -----------------------------------------------------------------------------
-GRSlur::~GRSlur()
-{
-}
-
-// -----------------------------------------------------------------------------
-/** \brief Calculate the placement of the bow.
-
-	Changes the parameter-names and just handle positions correctly.
-
-	calculation the position of y for dy3:
-	(eposy-sposy)*dx3 + sposy + dy3 * hspace;
-	-> (endElement->getTieEnd().y - 
-	-> startElement->getTieEnd().y ) * dx3 +  ...
-
-*/
-void GRSlur::updateBow( GRStaff * inStaff )
-{
-	GRBowing::updateBow( inStaff );
-}
-
-// -----------------------------------------------------------------------------
-void
-GRSlur::automaticCurveDirection( GRBowingContext * bowContext, ARBowing * arBow, 
-														GRSystemStartEndStruct * sse )
+void GRSlur::automaticCurveDirection( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
 	// -- Long phrase positionning rule: choose upward if there is a lot of notes.
 	// in the range.
@@ -73,14 +37,13 @@ GRSlur::automaticCurveDirection( GRBowingContext * bowContext, ARBowing * arBow,
 	const int evCount = mAssociated->GetCount();
 	if( evCount > aLotOfEvents )
 	{
-		bowContext->curveDir = 1;	// upward
+		context->curveDir = 1;	// upward
 		return;	
 	}
 
 	// -- Equal pitch for start and end: place on the stems. 
 	// this rule avoids confusion with ties.
 	// TODO: take care of accidentals.
-	
 	GRNote * firstNote = dynamic_cast<GRNote *>(sse->startElement);
 	GRNote * lastNote = dynamic_cast<GRNote *>(sse->endElement);
 	if( firstNote && lastNote )
@@ -93,7 +56,7 @@ GRSlur::automaticCurveDirection( GRBowingContext * bowContext, ARBowing * arBow,
 		lastNote->getPitchAndOctave( &pitch2, &octave2, &acc2 );
 		if(( pitch1 == pitch2 ) && (octave1 == octave2 ) && (acc1 == acc2))
 		{
-			bowContext->curveDir = firstNote->getThroatDirection();
+			context->curveDir = firstNote->getThroatDirection();
 			return;
 		}
 	}
@@ -103,16 +66,13 @@ GRSlur::automaticCurveDirection( GRBowingContext * bowContext, ARBowing * arBow,
 	// - Todo: "opposite to the tie" rule.
 	
 	// -- Call inherited rules.
-
-	GRBowing::automaticCurveDirection( bowContext, arBow, sse );
+	GRBowing::automaticCurveDirection( context, arBow, sse );
 }
 
 // -----------------------------------------------------------------------------
-void
-GRSlur::automaticAnchorPoints( GRBowingContext * bowContext, ARBowing * arBow, 
-													GRSystemStartEndStruct * sse )
+void GRSlur::automaticAnchorPoints( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
-	const bool upward = (bowContext->curveDir == 1);
+	const bool upward = (context->curveDir == 1);
 
 	// Careful, we have to deal with chords! what about getStemStartPosition()?
 	NVPoint posLeft;
@@ -125,14 +85,14 @@ GRSlur::automaticAnchorPoints( GRBowingContext * bowContext, ARBowing * arBow,
 	// We try to fix the following problem here: with chord, the start and end 
 	// elements are GREmpty objects, with a zero bounding box. So we substitute
 	// them by adequate noteheads.
-	if( bowContext->topLeftHead != bowContext->bottomLeftHead ) // test if chord
+	if( context->topLeftHead != context->bottomLeftHead ) // test if chord
 	{
-		startElement = upward ? bowContext->topLeftHead : bowContext->bottomLeftHead;
+		startElement = upward ? context->topLeftHead : context->bottomLeftHead;
 	}
 
-	if( bowContext->topRightHead != bowContext->bottomRightHead ) // test if chord
+	if( context->topRightHead != context->bottomRightHead ) // test if chord
 	{
-		endElement = upward ? bowContext->topRightHead : bowContext->bottomRightHead;
+		endElement = upward ? context->topRightHead : context->bottomRightHead;
 	}
 
 	// -- Get the bounding box of the left and right elements.
@@ -148,13 +108,13 @@ GRSlur::automaticAnchorPoints( GRBowingContext * bowContext, ARBowing * arBow,
 	if( upward )
 	{
 		// Left x-pos
-		if( bowContext->stemDirLeft == 1 )	
+		if( context->stemDirLeft == 1 )
 			posLeft.x = leftBox.right;
 		else
 			posLeft.x = (leftBox.left + leftBox.right) * float(0.5);
 	
 		// Right x-pos
-		if( bowContext->stemDirRight == 1 )
+		if( context->stemDirRight == 1 )
 			posRight.x = rightBox.right;
 		else
 			posRight.x = (rightBox.left + rightBox.right) * float(0.5);
@@ -166,13 +126,13 @@ GRSlur::automaticAnchorPoints( GRBowingContext * bowContext, ARBowing * arBow,
 	else // downward
 	{
 		// Left x-pos
-		if( bowContext->stemDirLeft == 1 )
+		if( context->stemDirLeft == 1 )
 			posLeft.x = (leftBox.left + leftBox.right) * float(0.5);
 		else
 			posLeft.x = leftBox.left;
 	
 		// Right x-pos
-		if( bowContext->stemDirRight == 1 )
+		if( context->stemDirRight == 1 )
 			posRight.x = (rightBox.left + rightBox.right) * float(0.5);
 		else
 			posRight.x = rightBox.left;
@@ -186,14 +146,14 @@ GRSlur::automaticAnchorPoints( GRBowingContext * bowContext, ARBowing * arBow,
 	const float minWidth = float(1.5) * LSPACE; // arbitrary miminal width of a tie
 	const float openYOffset = upward ? - LSPACE : LSPACE;
 
-	if (bowContext->openLeft)	
+	if (context->openLeft)
 	{
 		posLeft.y = posRight.y + openYOffset;
 		if( posLeft.x > (posRight.x - minWidth))
 			posLeft.x = (posRight.x - minWidth);
 	}
 
-	if (bowContext->openRight)	
+	if (context->openRight)
 	{
 		posRight.y = posLeft.y + openYOffset;
 		if( posRight.x < (posLeft.x + minWidth))
@@ -213,7 +173,7 @@ GRSlur::automaticAnchorPoints( GRBowingContext * bowContext, ARBowing * arBow,
 	bowInfos->position = posLeft;
 	bowInfos->offsets[2] = posRight - posLeft; // control points are stored as offsets to the position.
 
-	arBow->setCurve( bowContext->curveDir, posLeft, posRight ); // (JB) useless ?
+	arBow->setCurve( context->curveDir, posLeft, posRight ); // (JB) useless ?
 
 }
 
@@ -228,26 +188,18 @@ GRSlur::automaticAnchorPoints( GRBowingContext * bowContext, ARBowing * arBow,
 	  notation rules) 
 	  
 */
-void
-GRSlur::automaticControlPoints( GRBowingContext * bowContext, ARBowing * arBow, 
-												GRSystemStartEndStruct * sse )
+void GRSlur::automaticControlPoints( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
 	if (mAssociated == 0 ) return;
-
-	// (JB) new algorithm to calculate the slur shape...
 
 	GRNotationElement * startElement = sse->startElement;
 	GRNotationElement * endElement = sse->endElement;
 	GRBowingSaveStruct * bowInfos = (GRBowingSaveStruct *)sse->p;
 
-	const bool upward = (bowContext->curveDir == 1);	
+	const bool upward = (context->curveDir == 1);
 
 	// We don't need to adjust the curve if there is only two elements
 	// (That is: only the first and the last event).
-
-//	const int eltCount = mAssociated->GetCount();
-//	if( eltCount <= 2 )
-//		return;
 	
 	// -- Calculates a bounding triangle that contains all objects between the
 	// futur bow and the line joining the first and the last element.
