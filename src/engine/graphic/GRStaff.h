@@ -211,14 +211,14 @@ class GRStaff : public GRCompositeNotationElement
 		virtual void		print(std::ostream& os) const;
 
 		virtual void setStaffFormat(ARStaffFormat * staffrmt);
-		void    setStaffState(GRStaffState * state);
-		void    setInstrumentFormat(const GRStaffState & state);
-		void    setBarFormat(ARBarFormat * barfrmt);
-		void    setNoteParameters(GRNote * inNote );
-		void    setKeyParameters(GRKey * inKey);
-		void    setDistance(float distance)         { mStaffState.distanceset = true; mStaffState.distance = distance; }
-		void    setEndPosition( float newendpos)    { mLength = newendpos - mPosition.x; }
-		void    setLength( float newlength)         { mLength = newlength; }
+		void    setStaffState		(GRStaffState * state);
+		void    setInstrumentFormat	(const GRStaffState & state);
+		void    setBarFormat		(ARBarFormat * barfrmt);
+		void    setNoteParameters	(const GRNote * inNote );
+		void    setKeyParameters	(GRKey * inKey);
+		void    setDistance			(float distance)	{ mStaffState.distanceset = true; mStaffState.distance = distance; }
+		void    setEndPosition		(float newendpos)	{ mLength = newendpos - mPosition.x; }
+		void    setLength			(float newlength)	{ mLength = newlength; }
 
 		GROctava *			AddOctava(AROctava * aroct);
 		void                AddSecondGlue(GRGlue * myglue);

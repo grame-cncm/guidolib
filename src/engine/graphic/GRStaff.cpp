@@ -419,7 +419,7 @@ staff_debug("addNotationElement");
 	// OLD: mGrSystem->AddToSpace(notationElement);
 
 	// count the notes, evaluates the accidentals.
-    GRNote * mynote = static_cast<GRNote *>(notationElement->isGRNote());
+    const GRNote * mynote = notationElement->isGRNote();
 	setNoteParameters(mynote);
 }
 
@@ -571,7 +571,7 @@ void GRStaff::setKeyParameters(GRKey * inKey)
 }
 
 // ----------------------------------------------------------------------------
-void GRStaff::setNoteParameters(GRNote * inNote)
+void GRStaff::setNoteParameters(const GRNote * inNote)
 {
 	if (inNote == 0)	return;
 
@@ -584,7 +584,7 @@ void GRStaff::setNoteParameters(GRNote * inNote)
 	}
 
 	// Reset of accidentals
-	ARNote * arnote = inNote->getARNote();
+	const ARNote * arnote = inNote->getARNote();
 	const int tmppitch = arnote->getPitch() - NOTE_C;
 	const int acc = arnote->getAccidentals() - (int)mStaffState.instrKeyArray[tmppitch];
 //	mStaffState.MeasureAccidentals[tmppitch] = acc + arnote->getDetune();
