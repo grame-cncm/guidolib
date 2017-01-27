@@ -477,7 +477,7 @@ void GRArticulation::tellPosition(GObject * caller, const NVPoint & inPos)	// Ca
 
 // ----------------------------------------------------------------------------
 // The staccato has the highest priority. It is placed first, close to the note.
-void GRArticulation::placeStaccato( GREvent * inParent, NVPoint & ioPos )
+void GRArticulation::placeStaccato( const GREvent * inParent, NVPoint & ioPos )
 {
 	GRStaff * staff = inParent->getGRStaff();
 	float space = staff->getStaffLSPACE();
@@ -495,7 +495,7 @@ void GRArticulation::placeStaccato( GREvent * inParent, NVPoint & ioPos )
 
 // ----------------------------------------------------------------------------
 // to be checked !!
-void GRArticulation::placeStaccmo( GREvent * inParent, NVPoint & ioPos )
+void GRArticulation::placeStaccmo( const GREvent * inParent, NVPoint & ioPos )
 {
 	setStaccmoDirection( getPlacement( inParent ) == ARArticulation::kAbove );
 
@@ -519,7 +519,7 @@ void GRArticulation::placeStaccmo( GREvent * inParent, NVPoint & ioPos )
 }
 
 // ----------------------------------------------------------------------------
-void GRArticulation::placePizz(GREvent * inParent, NVPoint & ioPos)
+void GRArticulation::placePizz( const GREvent * inParent, NVPoint & ioPos)
 {
 	GRStaff * staff = inParent->getGRStaff();
 	float space = staff->getStaffLSPACE();
@@ -544,7 +544,7 @@ void GRArticulation::placePizz(GREvent * inParent, NVPoint & ioPos)
 
 //-----------------------------------------------------------------------------
 // avoid collisions with other articulations when above the staff
-double GRArticulation::resolveCollisionAbove (GREvent * inParent, double currentpos, float minSpace, int skiptypes) const
+double GRArticulation::resolveCollisionAbove ( const GREvent * inParent, double currentpos, float minSpace, int skiptypes) const
 {
 	const GRNEList& articulations = inParent->getArticulations();
 	for (GRNEList::const_iterator i = articulations.begin(); i != articulations.end(); i++) {
@@ -562,7 +562,7 @@ double GRArticulation::resolveCollisionAbove (GREvent * inParent, double current
 
 //-----------------------------------------------------------------------------
 // avoid collisions with other articulations when above the staff
-double GRArticulation::resolveCollisionBelow (GREvent * inParent, double currentpos, float minSpace, int skiptypes) const
+double GRArticulation::resolveCollisionBelow ( const GREvent * inParent, double currentpos, float minSpace, int skiptypes) const
 {
 	const GRNEList& articulations = inParent->getArticulations();
 	for (GRNEList::const_iterator i = articulations.begin(); i != articulations.end(); i++) {
@@ -602,7 +602,7 @@ double GRArticulation::staffBottom (const GRStaff * staff) const
 }
 
 //-----------------------------------------------------------------------------
-void GRArticulation::placeAccent( GREvent * inParent, NVPoint & ioPos )
+void GRArticulation::placeAccent( const GREvent * inParent, NVPoint & ioPos )
 {
 	const int placement = getPlacement( inParent );
 	if (placement == ARArticulation::kAbove)
@@ -612,7 +612,7 @@ void GRArticulation::placeAccent( GREvent * inParent, NVPoint & ioPos )
 }
 
 // ----------------------------------------------------------------------------
-void GRArticulation::placeAccentAbove( GREvent * inParent, NVPoint & ioPos )
+void GRArticulation::placeAccentAbove( const GREvent * inParent, NVPoint & ioPos )
 {
 	GRStaff * staff = inParent->getGRStaff();
 	const float space = staff->getStaffLSPACE();
@@ -628,7 +628,7 @@ void GRArticulation::placeAccentAbove( GREvent * inParent, NVPoint & ioPos )
 }
 
 // ----------------------------------------------------------------------------
-void GRArticulation::placeAccentBelow( GREvent * inParent, NVPoint & ioPos )
+void GRArticulation::placeAccentBelow( const GREvent * inParent, NVPoint & ioPos )
 {
 	GRStaff * staff = inParent->getGRStaff();
 	float space = staff->getStaffLSPACE();
@@ -644,7 +644,7 @@ void GRArticulation::placeAccentBelow( GREvent * inParent, NVPoint & ioPos )
 
 // ----------------------------------------------------------------------------
 // outside the staff prefered
-void GRArticulation::placeMarcato( GREvent * inParent, NVPoint & ioPos )
+void GRArticulation::placeMarcato( const GREvent * inParent, NVPoint & ioPos )
 {
 	// default position for strong accent is above the stave, regardless of stems direction
 	// see Gould - Behind bars - p.117
@@ -652,7 +652,7 @@ void GRArticulation::placeMarcato( GREvent * inParent, NVPoint & ioPos )
 }
 
 // ----------------------------------------------------------------------------
-void GRArticulation::placeMarcatoAbove( GREvent * inParent, NVPoint & ioPos )
+void GRArticulation::placeMarcatoAbove( const GREvent * inParent, NVPoint & ioPos )
 {
 	GRStaff * staff = inParent->getGRStaff();
 	const float space = staff->getStaffLSPACE();
@@ -669,7 +669,7 @@ void GRArticulation::placeMarcatoAbove( GREvent * inParent, NVPoint & ioPos )
 
 // ----------------------------------------------------------------------------
 // outside the staff prefered
-void GRArticulation::placeMarcatoBelow( GREvent * inParent, NVPoint & ioPos )
+void GRArticulation::placeMarcatoBelow( const GREvent * inParent, NVPoint & ioPos )
 {
 	GRStaff * staff = inParent->getGRStaff();
 	float space = staff->getStaffLSPACE();
@@ -687,7 +687,7 @@ void GRArticulation::placeMarcatoBelow( GREvent * inParent, NVPoint & ioPos )
 
 // ----------------------------------------------------------------------------
 // The tenuto is placed just after the staccato, if any
-void GRArticulation::placeTenuto( GREvent * inParent, NVPoint & ioPos )
+void GRArticulation::placeTenuto( const GREvent * inParent, NVPoint & ioPos )
 {
 	GRStaff * staff = inParent->getGRStaff();
 	float space = staff->getStaffLSPACE();
@@ -709,7 +709,7 @@ void GRArticulation::placeTenuto( GREvent * inParent, NVPoint & ioPos )
 
 // ----------------------------------------------------------------------------
 // harmonic
-void GRArticulation::placeHarmonic(GREvent * inParent, NVPoint & ioPos)
+void GRArticulation::placeHarmonic( const GREvent * inParent, NVPoint & ioPos)
 {
 	GRStaff * staff = inParent->getGRStaff();
 	double space = staff->getStaffLSPACE();
@@ -734,7 +734,7 @@ void GRArticulation::placeHarmonic(GREvent * inParent, NVPoint & ioPos)
 }
 
 // ----------------------------------------------------------------------------
-void GRArticulation::placeFermataAbove( GREvent * inParent, NVPoint & ioPos )
+void GRArticulation::placeFermataAbove( const GREvent * inParent, NVPoint & ioPos )
 {
 	GRStaff * staff = inParent->getGRStaff();
 	const float space = staff->getStaffLSPACE();
@@ -747,7 +747,7 @@ void GRArticulation::placeFermataAbove( GREvent * inParent, NVPoint & ioPos )
 	ioPos.y = (float)resolveCollisionAbove(inParent, topMax, space, kFlagFermataUp);
 }
 
-void GRArticulation::placeFermataBelow(GREvent * inParent, NVPoint & ioPos)
+void GRArticulation::placeFermataBelow( const GREvent * inParent, NVPoint & ioPos)
 {
 	GRStaff * staff = inParent->getGRStaff();
 	float space = staff->getStaffLSPACE();
@@ -763,7 +763,7 @@ void GRArticulation::placeFermataBelow(GREvent * inParent, NVPoint & ioPos)
 
 // ----------------------------------------------------------------------------
 // - Obsolete, breath-mark is no longer attached to any note.
-void GRArticulation::placeBreathMark( GREvent * inParent, NVPoint & ioPos )
+void GRArticulation::placeBreathMark( const GREvent * inParent, NVPoint & ioPos )
 {
 	const GRStaff * staff = inParent->getGRStaff();
 	const float currLSpace = staff->getStaffLSPACE();
@@ -783,12 +783,12 @@ int GRArticulation::getARPlacement() const {
 
 // ----------------------------------------------------------------------------
 // gives an ARArticulation placement
-int GRArticulation::getPlacement( GREvent * inParent ) const
+int GRArticulation::getPlacement( const GREvent * inParent ) const
 {
 	int arplacement = getARPlacement();
 	if (arplacement) return arplacement;
 
-	const GRSingleNote * sng = dynamic_cast<GRSingleNote *>(inParent);
+	const GRSingleNote * sng = inParent->isSingleNote();
 	if( sng && sng->getDirection() == dirUP )
 		return ARArticulation::kBelow;
 	else 

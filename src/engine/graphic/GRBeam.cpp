@@ -185,7 +185,7 @@ void GRBeam::addAssociation(GRNotationElement * grnot)
     
 	if (grnot->getDuration() == DURATION_0 && !isGrace)
 	{
-		GREvent * grn = GREvent::cast(grnot);
+		const GREvent * grn = grnot->isGREvent();
 		if (!grn || grn->getGlobalStem() == NULL)
 			return;
 	}
@@ -194,21 +194,18 @@ void GRBeam::addAssociation(GRNotationElement * grnot)
 	const bool isautobeam = isAutoBeam(); // (dynamic cast<GRAutoBeam *>(this) != 0);
 
 	GREvent * grn = GREvent::cast(grnot);
-	if (grn == 0) 
-	{
+	if (grn == 0) {
 		setError(grstf,1);
 		return ;
 	}
 
-	const bool isRest = (dynamic_cast<GRRest *>(grnot) != 0);
-	if (isautobeam && isRest)
-	{
+	const bool isRest = (grnot->isRest() != 0);
+	if (isautobeam && isRest) {
 		if (mAssociated && mAssociated->GetCount() > 0)
 			mHasRestInMiddle = true;
 	}
 
-	if (mHasRestInMiddle && !isRest  && !getARBeam()->isFullBeaming())
-	{
+	if (mHasRestInMiddle && !isRest  && !getARBeam()->isFullBeaming()) {
 		// then we have a real Error
 		setError(grstf,1);
 		return;
@@ -218,13 +215,10 @@ void GRBeam::addAssociation(GRNotationElement * grnot)
 	// but only, if I already have the stem
 	if (grnot->getDuration() == DURATION_0 && !isGrace)
 	{
-		if (mAssociated)
-		{
+		if (mAssociated) {
 			GRNotationElement * el = mAssociated->GetTail();
-			if (el)
-			{
-				GREvent * ev = GREvent::cast(el);
-				
+			if (el) {
+				const GREvent * ev = el->isGREvent();
 				if (ev->getGlobalStem() == NULL ||
 					ev->getGlobalStem() == grn->getGlobalStem())
 					return;
@@ -232,7 +226,7 @@ void GRBeam::addAssociation(GRNotationElement * grnot)
 		}
 	}
 
-	if (dynamic_cast<GRSingleRest *>(grn))
+	if (dynamic_cast<const GRSingleRest *>(grn))
 	{
 		// ignoriere Pausen !
 		// setError(grstf,1);
@@ -546,9 +540,7 @@ NVPoint GRBeam::initp2 (GRSystemStartEndStruct * sse, const GREvent * endEl, Pos
 	GRStaff * refStaff;
 	NVPoint offset;
 	if (endEl) {
-//cerr << "GRBeam::initp2 " << (void*)endEl << " " << endEl << " stemEndPos: " << endEl->getStemEndPos() << endl;
 		st->p[2] = endEl->getStemEndPos();
-//cerr << "GRBeam::initp2 1   " << st->p[0] << " : " << st->p[1] << " : " << st->p[2] << " : " << st->p[3] << endl;
 		// beam length adjustment - DF sept 15 2009
 		st->p[2].x += infos.currentLSPACE/10;
 		if (arBeam && arBeam->isGuidoSpecBeam())
@@ -559,7 +551,6 @@ NVPoint GRBeam::initp2 (GRSystemStartEndStruct * sse, const GREvent * endEl, Pos
 		st->p[2] = sse->endElement->getPosition();
 		refStaff = sse->startElement->getGRStaff();
 	}	
-//cerr << "GRBeam::initp2 2   " << st->p[0] << " : " << st->p[1] << " : " << st->p[2] << " : " << st->p[3] << endl;
 
 	offset = refStaff->getPosition();
 	if (tagtype == SYSTEMTAG)
@@ -899,7 +890,7 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFac
 float GRBeam::setStemEndPos (GRSystemStartEndStruct * sse, PosInfos& infos, bool needsadjust, float offsetbeam)
 {
 	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
-	GREvent * startEl = GREvent::cast(sse->startElement);
+	const GREvent * startEl = sse->startElement->isGREvent();
 
 	GuidoPos pos = sse->startpos;
 	while (pos)
@@ -934,7 +925,7 @@ float GRBeam::setStemEndPos (GRSystemStartEndStruct * sse, PosInfos& infos, bool
 			if (tagtype == SYSTEMTAG) ly -= (float)sn->getGRStaff()->getPosition().y;
 			
 			// if we have a beam between grace notes, we don't want an offbase that whould make the stems too long
-			GRNote * gnote = dynamic_cast<GRNote*>(startEl);
+			const GRNote * gnote = startEl ? startEl->isGRNote() : 0;
 			bool isGrace = gnote ? gnote->isGraceNote() : false;
 			
 			float offbase = isGrace ? 0 : 3.5f * infos.currentLSPACE;			
@@ -1009,7 +1000,7 @@ void GRBeam::adjustFeathered (float yFact1, float yFact2, PosInfos& infos, GRSys
 	ARFeatheredBeam * ar = static_cast<ARFeatheredBeam *>(getARBeam()->isARFeatheredBeam());
 	int begin = 0;
 	int end = 0;
-	GREvent * stemNoteBegin = GREvent::cast(mAssociated->GetHead());
+	const GREvent * stemNoteBegin = mAssociated->GetHead()->isGREvent();
 	
 	GDirection localDir = stemNoteBegin->getStemDirection();
 	float yLocalFact1 = yFact1 * localDir * infos.currentSize;
@@ -1164,8 +1155,8 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
 	GuidoPos pos;
 	
-	GREvent * startEl = GREvent::cast(sse->startElement);
-	GREvent * endEl   = GREvent::cast(sse->endElement);
+	const GREvent * startEl = sse->startElement->isGREvent();
+	const GREvent * endEl   = sse->endElement->isGREvent();
 	
 	// this is the staff to which the beam belongs and who draws it.
 	const GRStaff * beamstaff = sse->startElement->getGRStaff();	
@@ -1178,10 +1169,8 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	else if(endEl)	infos.stemdir = endEl->getStemDirection();
 
 	NVPoint offset = initp0 (sse, startEl, infos);
-//cerr << "GRBeam::tellPosition 1   " << st->p[0] << " : " << st->p[1] << " : " << st->p[2] << " : " << st->p[3] << endl;
 	initp1 (sse, infos);
 	offset = initp2 (sse, endEl, infos);
-//cerr << "GRBeam::tellPosition 2   " << st->p[0] << " : " << st->p[1] << " : " << st->p[2] << " : " << st->p[3] << endl;
 	initp3 (sse, infos);
 
 	// -----------------------------------------------------------
@@ -1202,8 +1191,6 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 			slope = (st->p[2].y - st->p[0].y) / stemWidth;
 		}
 	}
-	
-//cerr << "GRBeam::tellPosition 3   " << st->p[0] << " : " << st->p[1] << " : " << st->p[2] << " : " << st->p[3] << endl;
 
 	bool needsadjust = true;
 	// we have to adjust the slope ONLY if the stemlength
@@ -1243,7 +1230,6 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	
 	if(( startEl && startEl->getStemLengthSet()) || ( endEl && endEl->getStemLengthSet()))
 		  nobeamoffset = true;
-//cerr << "GRBeam::tellPosition 4   " << st->p[0] << " : " << st->p[1] << " : " << st->p[2] << " : " << st->p[3] << endl;
 
 	for (int counter = 0; counter < 2; ++counter )
 	{
@@ -1256,8 +1242,6 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 		}
 		offsetbeam = setStemEndPos(sse, infos, needsadjust, offsetbeam);
 	}
-
-//cerr << "GRBeam::tellPosition 5   " << st->p[0] << " : " << st->p[1] << " : " << st->p[2] << " : " << st->p[3] << endl;
 	
 	if(!smallerBeams.empty())
 	{
@@ -1273,7 +1257,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	int dir = st->direction;
 	if (st->dirset) {
 		// then the direction was set explicitly by the user ...
-		GREvent * sn = GREvent::cast(mAssociated->GetHead());
+		const GREvent * sn = mAssociated->GetHead()->isGREvent();
 		if (sn) dir = sn->getStemDirection();
 	}
 	else dir = infos.stemdir;
@@ -1287,8 +1271,6 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	// and the other simple beams will only depend on the begining and ending 
 	// points, regardless of the durations of the inner notes.
 	if (isFeathered) adjustFeathered (yFact1, yFact2, infos, sse);
-
-//cerr << "GRBeam::tellPosition end " << st->p[0] << " : " << st->p[1] << " : " << st->p[2] << " : " << st->p[3] << endl << endl;
 
 	// for beam length adjustment - DF sept 15 2009
 	setBeams(sse, infos, yFact1, yFact2, dir);
@@ -1346,13 +1328,10 @@ void GRBeam::setError(const GRStaff * grstaff, int p_error)
 	if (error && mAssociated)
 	{
 		GuidoPos pos = mAssociated->GetHeadPosition();
-		while (pos)
-		{
+		while (pos) {
 			GREvent * grnot = GREvent::cast (mAssociated->GetNext(pos));
 			if (grnot)
-			{
 				grnot->setFlagOnOff(1);
-			}
 		}
 	}
 
@@ -1371,22 +1350,17 @@ void GRBeam::checkNotes( GRStaff * grstaff )
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct(grstaff->getGRSystem());
 	if (!sse) return;
 
-//	GRBeamSaveStruct *st = (GRBeamSaveStruct *) sse->p;
-	if (mAssociated)
-	{
+	if (mAssociated) {
 		GuidoPos pos = sse->startpos;
 		bool last = false;
-		while (pos)
-		{
-			GREvent * grnot = GREvent::cast(mAssociated->GetNext(pos));
-			if (!grnot) 
-			{
+		while (pos) {
+			const GREvent * grnot = mAssociated->GetNext(pos)->isGREvent();
+			if (!grnot)  {
 				setError( grstaff, 1 );
 				break;
 			}
 
-			if (last)
-				break;
+			if (last) break;
 
 			if (pos == sse->endpos)
 				last = true;
