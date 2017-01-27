@@ -94,13 +94,6 @@ GRBowing::GRBowing(GRStaff * grstaff, ARBowing * ar)
 	initGRBowing( grstaff );
 }
 
-/*
-// -----------------------------------------------------------------------------
-GRBowing::GRBowing( const GRBowing & inCopy ) : GRPTagARNotationElement( inCopy )
-{
-	initGRBowing( inCopy.getGRStaff());	// TEST
-}*/
-
 // -----------------------------------------------------------------------------
 GRSystemStartEndStruct * GRBowing::initGRBowing( GRStaff * grstaff )
 {
@@ -162,11 +155,10 @@ GRSystemStartEndStruct * GRBowing::prepareSSEStructForBow( const GRStaff * inSta
 // Figure out if the first element is a part of a chord.
 // Find the highest and lowest note heads.
 // Get the stem directions (or the possible stem directions)
-void GRBowing::getBowBeginingContext( GRBowingContext * ioContext, GRSystemStartEndStruct * sse )
+void GRBowing::getBowBeginingContext( GRBowingContext * ioContext, GRSystemStartEndStruct * sse ) const
 {
-	GRNotationElement * startElement = sse->startElement;
-
-	GRSingleNote * note = dynamic_cast<GRSingleNote *>(startElement);
+	const GRNotationElement * startElement = sse->startElement;
+	const GRSingleNote * note = startElement->isSingleNote();
 	if( note ) {
 		ioContext->bottomLeftHead = note->getNoteHead();
 		ioContext->topLeftHead = ioContext->bottomLeftHead;	// the same as bottom head.
@@ -186,11 +178,9 @@ void GRBowing::getBowBeginingContext( GRBowingContext * ioContext, GRSystemStart
 // (JB) It is similar to the beginning one, but has some additionnal code to
 // try to get the right stem direction from a global location. Why not
 // for the beginning context ?
-void GRBowing::getBowEndingContext( GRBowingContext * ioContext, GRSystemStartEndStruct * sse )
+void GRBowing::getBowEndingContext( GRBowingContext * ioContext, GRSystemStartEndStruct * sse ) const
 {
-	GRNotationElement * endElement = sse->endElement;
-
-//	GRSingleNote * note = dynamic_cast<GRSingleNote *>(endElement);
+	const GRNotationElement * endElement = sse->endElement;
 	const GRSingleNote * note = endElement->isSingleNote();
 	if( note ) {
 		ioContext->bottomRightHead = note->getNoteHead();
@@ -220,7 +210,7 @@ void GRBowing::getBowEndingContext( GRBowingContext * ioContext, GRSystemStartEn
 }
 
 // -----------------------------------------------------------------------------
-GRGlobalStem * GRBowing::findGlobalStem( GRSystemStartEndStruct * sse, GRNotationElement * stemOwner )
+GRGlobalStem * GRBowing::findGlobalStem( const GRSystemStartEndStruct * sse, const GRNotationElement * stemOwner ) const
 {
 	const NEPointerList * ptlist1 = stemOwner->getAssociations();
 	if (ptlist1) {
@@ -280,10 +270,10 @@ void GRBowing::updateBow( GRStaff * inStaff )
 
 	// --- Collects informations about the context ---
 
-	GRBowingContext bowContext;
-	bowContext.staff = inStaff;
-	getBowBeginingContext( &bowContext, sse );
-	getBowEndingContext( &bowContext, sse );
+	GRBowingContext context;
+	context.staff = inStaff;
+	getBowBeginingContext( &context, sse );
+	getBowEndingContext( &context, sse );
 
 	// --- Handles the cases where the bow is opened to the left or to the right ---
 	// find out, if the elements contain shareStem associations!?
@@ -292,87 +282,56 @@ void GRBowing::updateBow( GRStaff * inStaff )
 	GRNotationElement * startElement = sse->startElement;
 	GRNotationElement * endElement = sse->endElement;
 	GRBowingSaveStruct * bowInfos = (GRBowingSaveStruct *)sse->p;
-
+	
 	if (sse->startflag == GRSystemStartEndStruct::OPENLEFT || !startElement)
 	{
-		bowContext.openLeft = true;
-		if (!startElement && inStaff)
-		{
-			setStartElement( inStaff, /*dynamic cast<GRNotationElement *>*/(inStaff->getSecondGlue()));
-
+		context.openLeft = true;
+		if (!startElement && inStaff) {
+			setStartElement( inStaff, inStaff->getSecondGlue());
 			sse->startflag = GRSystemStartEndStruct::OPENLEFT;
-
-			sse = getSystemStartEndStruct( inStaff->getGRSystem()); //(JB) useless ?
-			bowInfos = (GRBowingSaveStruct *) sse->p; // useless ? already set to sse->p
 			startElement = sse->startElement;
-		}
-
-		if (!startElement)
-		{
-			assert(false);
-			bowInfos->position.x = 0;
-			bowInfos->position.y = (float(6.5) * LSPACE);
 		}
 	}
 
 	if (sse->endflag == GRSystemStartEndStruct::OPENRIGHT || !endElement)
 	{
-		bowContext.openRight = true;
-		if (!endElement && inStaff)
-		{
-			setEndElement(inStaff, /*dynamic cast<GRNotationElement *>*/(inStaff->getEndGlue()));
-
+		context.openRight = true;
+		if (!endElement && inStaff) {
+			setEndElement(inStaff, inStaff->getEndGlue());
 			sse->endflag = GRSystemStartEndStruct::OPENRIGHT;
-
-			sse = getSystemStartEndStruct( inStaff->getGRSystem());	// (JB) useless ?
-			bowInfos = (GRBowingSaveStruct *) sse->p; // useless ?
 			endElement = sse->endElement;
 		}
-
-		if (!endElement)
-		{
-			assert(false);
-			bowInfos->offsets[bowInfos->numoffsets-1].x = LSPACE;
-		}
-
 		bowInfos->offsets[bowInfos->numoffsets-1].y = 0;
 	}
 
 	// --- Chooses the best curve direction ---
-
-	ARBowing * arBow = /*dynamic*/static_cast<ARBowing *>(getAbstractRepresentation());
+	ARBowing * arBow = static_cast<ARBowing *>(getAbstractRepresentation());
 	assert(arBow);
 
 	// - Here, we look if the curve direction has been explicitly
 	// (with the tag "curve") or implicitly (with the tag "h") specified.
 	const TagParameterFloat * paramH = arBow->getH();
 	const TagParameterString * curveParam = arBow->getCurve();
-	if (curveParam && curveParam->TagIsSet())
-	{
+	if (curveParam && curveParam->TagIsSet()) {
 		if( string(curveParam->getValue()) == "down" )
-			bowContext.curveDir = -1;
+			context.curveDir = -1;
 		else
-			bowContext.curveDir = 1;
+			context.curveDir = 1;
 	}
-	else if( paramH && paramH->TagIsSet())
-	{
-		bowContext.curveDir = (paramH->getValue() > 0) ? 1 : -1;
+	else if( paramH && paramH->TagIsSet()) {
+		context.curveDir = (paramH->getValue() > 0) ? 1 : -1;
 	}
-	else
-		automaticCurveDirection( &bowContext, arBow, sse );
+	else automaticCurveDirection( &context, arBow, sse );
 
 	// --- Calculate the start and end anchor points positions --
 	// NOTE: in the futur, offsets could also be applied after automatic
 	// positionning. (tag parameter list for 'curve' would be completed)
-
 	if( (curveParam && curveParam->TagIsSet()) || arBow->getParSet() == false )
-	{
-		automaticAnchorPoints( &bowContext, arBow, sse );
-	}
+		automaticAnchorPoints( &context, arBow, sse );
 	else
 	{
-		manualAnchorPoints( &bowContext, arBow, sse );
-		applyAnchorPointsOffsets( &bowContext, arBow, sse );
+		manualAnchorPoints( &context, arBow, sse );
+		applyAnchorPointsOffsets( &context, arBow, sse );
 	}
 
 	// WARNING: THE PRECEDING CODE MODIFIED THE VALUE OF paramH WHILE
@@ -385,24 +344,18 @@ void GRBowing::updateBow( GRStaff * inStaff )
 	if(( paramH && paramH->TagIsSet()) || (paramR3 && paramR3->TagIsSet()))
 	{
 		// A tag for control points has been specified in the guido script.
-		manualControlPoints( &bowContext, arBow, sse );
+		manualControlPoints( &context, arBow, sse );
 	}
-	else
-	{
-		// Automatic placement of control points, it will try to
-		// avoid collisions.
-		automaticControlPoints( &bowContext, arBow, sse );
-	}
+	else // Automatic placement of control points, it will try to avoid collisions.
+		automaticControlPoints( &context, arBow, sse );
 
 	updateBoundingBox();
 }
 
 // -----------------------------------------------------------------------------
-void
-GRBowing::automaticAnchorPoints( GRBowingContext * bowContext, ARBowing * arBow,
-														GRSystemStartEndStruct * sse )
+void GRBowing::automaticAnchorPoints( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
-	manualAnchorPoints( bowContext, arBow, sse );
+	manualAnchorPoints( context, arBow, sse );
 }
 
 // -----------------------------------------------------------------------------
@@ -413,9 +366,7 @@ GRBowing::automaticAnchorPoints( GRBowingContext * bowContext, ARBowing * arBow,
 	Following the guido specification of tie ans slur tags, those reference
 	points are the center of the noteheads.
 */
-void
-GRBowing::manualAnchorPoints( GRBowingContext * bowContext, ARBowing * arBow,
-														GRSystemStartEndStruct * sse )
+void GRBowing::manualAnchorPoints( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
 	// Careful, we have to deal with chords! what about getStemStartPosition()?
 	NVPoint posLeft;
@@ -427,52 +378,39 @@ GRBowing::manualAnchorPoints( GRBowingContext * bowContext, ARBowing * arBow,
 
 	GRStdNoteHead * head;
 
-	const bool upward = bowContext->curveDir == 1;
+	const bool upward = context->curveDir == 1;
 
 	// - Find left position
-	if (bowContext->bottomLeftHead && bowContext->topLeftHead) // && !noteleft // useless additional test ? don't exists for rightPos !
+	if (context->bottomLeftHead && context->topLeftHead) // && !noteleft // useless additional test ? don't exists for rightPos !
 	{
-		if( upward )
-			head = bowContext->topLeftHead;
-		else
-			head = bowContext->bottomLeftHead;		// down ... we take the lowest notehead
-
+		head = upward ? context->topLeftHead : context->bottomLeftHead;
 		posLeft = head->getNoteHeadPosition();
 	}
-	else
-		posLeft = startElement->getPosition();
+	else posLeft = startElement->getPosition();
 
 	// - Find right position
-	if (bowContext->bottomRightHead && bowContext->topRightHead)
+	if (context->bottomRightHead && context->topRightHead)
 	{
-		if( upward )
-			head = bowContext->topRightHead;
-		else
-			head = bowContext->bottomRightHead;		// down ... we take the lowest notehead
-
+		head = upward ? context->topRightHead : context->bottomRightHead;
 		posRight = head->getNoteHeadPosition();
 	}
-	else
-		posRight = endElement->getPosition();
+	else posRight = endElement->getPosition();
 
-	if (bowContext->openLeft)	posLeft.y = posRight.y;
-	if (bowContext->openRight)	posRight.y = posLeft.y;
+	if (context->openLeft)	posLeft.y = posRight.y;
+	if (context->openRight)	posRight.y = posLeft.y;
 
 	bowInfos->position = posLeft;
 	bowInfos->offsets[2] = posRight - posLeft; // control points are stored as offsets to the position.
 
 	//	if( manualSettings == false )
-	arBow->setCurve( bowContext->curveDir, posLeft, posRight ); // (JB) useless ?
-
+	arBow->setCurve( context->curveDir, posLeft, posRight ); // (JB) useless ?
 }
 
 // -----------------------------------------------------------------------------
-void
-GRBowing::applyAnchorPointsOffsets( GRBowingContext * bowContext, ARBowing * arBow,
-														GRSystemStartEndStruct * sse )
+void GRBowing::applyAnchorPointsOffsets( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
 	GRBowingSaveStruct * bowInfos = (GRBowingSaveStruct *)sse->p;
-	GRStaff * staff = bowContext->staff;
+	GRStaff * staff = context->staff;
 
 	// -- Applies the offset settings to the start anchor point --
 	const float staffLSpace = staff->getStaffLSPACE();
@@ -493,16 +431,14 @@ GRBowing::applyAnchorPointsOffsets( GRBowingContext * bowContext, ARBowing * arB
 // -----------------------------------------------------------------------------
 /** \brief Use tag parameters to calculate the control points position.
 */
-void
-GRBowing::manualControlPoints( GRBowingContext * bowContext, ARBowing * arBow,
-														GRSystemStartEndStruct * sse )
+void GRBowing::manualControlPoints( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
 	GRBowingSaveStruct * bowInfos = (GRBowingSaveStruct *)sse->p;
-	GRStaff * staff = bowContext->staff;
+	GRStaff * staff = context->staff;
 
 	const float distx = bowInfos->offsets[2].x - bowInfos->offsets[0].x;
 	const float disty = bowInfos->offsets[2].y - bowInfos->offsets[0].y;
-	const int dir = bowContext->curveDir;
+	const int dir = context->curveDir;
 
 	// -- Get the initial middle control point position.
 	// If the R3 factor is near zero, the control point will be near the first anchor point
@@ -592,10 +528,10 @@ void GRBowing::setOffset(int n_point,const NVPoint & p)
 // -----------------------------------------------------------------------------
 void GRBowing::tellPosition(GObject * caller, const NVPoint & newPosition)
 {
-	GRNotationElement * grel = dynamic_cast<GRNotationElement *>(caller);
-	if (grel == 0 ) return;
+	GRNotationElement * el = dynamic_cast<GRNotationElement *>(caller);
+	if (el == 0 ) return;
 
-	GRStaff * staff = grel->getGRStaff();
+	GRStaff * staff = el->getGRStaff();
 	if (staff == 0 ) return;
 
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( staff->getGRSystem());
@@ -604,13 +540,8 @@ void GRBowing::tellPosition(GObject * caller, const NVPoint & newPosition)
 	const GRNotationElement * const startElement = sse->startElement;
 	const GRNotationElement * const endElement = sse->endElement;
 
-	// if ( openLeftRange && openRightRange ) return;
-		// updateBow();
-
-	if( grel == endElement || ( endElement == 0 && grel == startElement))
-	{
+	if( el == endElement || ( endElement == 0 && el == startElement))
 		updateBow( staff );
-	}
 }
 
 // -----------------------------------------------------------------------------
@@ -620,18 +551,8 @@ void GRBowing::addAssociation(GRNotationElement * grnot)
 {
 	if (error) return;
 
-	// here, we need to test, whether Staff-Numbers
-	// have changed ... than this tag goes inbetween
-	// staves on the same system.
-
-	if ( GREvent::cast( grnot )  && 	// stop immediately if it's not an event.
-		(grnot->isGRNote()) || grnot->isRest() || grnot->isEmpty())
-//		(dynamic_cast<GRNote *>(grnot) ||
-//		 dynamic_cast<GRRest *>(grnot) ||
-//		 dynamic_cast<GREmpty *>(grnot)))
-	{
+	if ( grnot->isGRNote() || grnot->isRest() || grnot->isEmpty() )
 	  	GRARNotationElement::addAssociation(grnot);
-	}
 	else setError(1);
 
 	if (!error)
