@@ -191,7 +191,7 @@ class TRect
 		}
 
 		// ----------------------------------------------------------------------------
-		void print( std::ostream& os ) const { os << "[" << left << "," << top << "," << right << "," << bottom << "]"; }
+		void print( std::ostream& os ) const { os << "[" << left << ", " << top << ", " << right << ", " << bottom << "]"; }
 };
 
 template<typename T> std::ostream& operator<< (std::ostream& os, const TRect<T>& r) { r.print(os); return os; }
