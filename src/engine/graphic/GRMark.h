@@ -39,7 +39,7 @@ class GRMark : public GRText
 		virtual 		~GRMark();
 
 		virtual void		OnDraw( VGDevice & hdc ) const;
-		virtual FloatRect	getTextMetrics(VGDevice & hdc) const;
+		virtual FloatRect	getTextMetrics(VGDevice & hdc, const GRStaff* staff) const;
 
 		const ARMark *	getARMark() const;
 };

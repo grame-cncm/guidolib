@@ -113,7 +113,7 @@ void GRMark::OnDraw( VGDevice & hdc ) const
 	const ARMark* mark = getARMark();
 	int enclosure = mark->getEnclosure();
 	if (enclosure) {
-		FloatRect r = getTextMetrics(hdc);
+		FloatRect r = getTextMetrics(hdc, gCurStaff);
 		r.Expand (3.f);
 		r.left -= 2;
 		r.right += 2;
@@ -145,9 +145,9 @@ void GRMark::OnDraw( VGDevice & hdc ) const
 	}
 }
 
-FloatRect GRMark::getTextMetrics(VGDevice & hdc) const
+FloatRect GRMark::getTextMetrics(VGDevice & hdc, const GRStaff* staff) const
 {
-	FloatRect r = GRText::getTextMetrics(hdc);
+	FloatRect r = GRText::getTextMetrics(hdc, staff);
 	if (gCurStaff) {
 		const float curLSPACE = gCurStaff->getStaffLSPACE();
 		int n = gCurStaff->getNumlines() + 2;

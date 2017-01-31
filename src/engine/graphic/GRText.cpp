@@ -133,7 +133,7 @@ GRText::~GRText()
 
 bool GRText::isLyrics() const			{ return getARText()->isLyric(); }
 
-FloatRect GRText::getTextMetrics(VGDevice & hdc) const
+FloatRect GRText::getTextMetrics(VGDevice & hdc, const GRStaff* staff ) const
 {
 	FloatRect r;
 
@@ -141,18 +141,18 @@ FloatRect GRText::getTextMetrics(VGDevice & hdc) const
 	assert(sse);
 	GRTextSaveStruct * st = (GRTextSaveStruct *) sse->p;
 	const ARText * arText = getARText();
-	const float curLSPACE = gCurStaff ? gCurStaff->getStaffLSPACE(): LSPACE;
+	const float curLSPACE = staff ? staff->getStaffLSPACE(): LSPACE;
 	// - Setup position.
 	// y-reference position if the lowest line of the staff.
 	NVPoint drawPos (st->position);
-	if( arText->isAutoPos() && gCurStaff) {
+	if( arText->isAutoPos() && staff) {
 		drawPos.y = mStaffBottom;
 	}
 	else if( mMustFollowPitch == false )
 	{
 		// - Force the position to be relative to the bottom line of the staff
-		if (gCurStaff) // else ?
-			drawPos.y = gCurStaff->getDredgeSize();
+		if (staff) // else ?
+			drawPos.y = staff->getDredgeSize();
 		else
 			drawPos.y = 0;
 	}
@@ -224,7 +224,7 @@ void GRText::OnDraw( VGDevice & hdc ) const
 	// - Print text
 	const char * theText = st->text.c_str();
 	const int charCount = (int)st->text.size();
-	FloatRect r = getTextMetrics (hdc);
+	FloatRect r = getTextMetrics (hdc, gCurStaff);
 
     if (charCount > 0)
 	    hdc.DrawString( r.left, r.top, theText, charCount);

@@ -53,7 +53,7 @@ class GRText : public GRPTagARNotationElement
 		
 		virtual void 	OnDraw( VGDevice & hdc ) const;
 		
-		virtual FloatRect getTextMetrics(VGDevice & hdc) const;
+		virtual FloatRect getTextMetrics(VGDevice & hdc, const GRStaff* staff) const;
 		const ARText * 	getARText() const;
 	
 		virtual unsigned int getTextAlign() const { return mTextAlign; }
