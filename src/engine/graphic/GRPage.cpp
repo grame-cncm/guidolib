@@ -268,7 +268,7 @@ void GRPage::trace(VGDevice & hdc) const
         r = system->getBoundingBox();
         r += system->getPosition();
         cout << "    system " << r << endl;
-        SSliceList * slices = system->getSlices();
+        const SSliceList * slices = system->getSlices();
 
         if (slices) {
             GuidoPos pos = slices->GetHeadPosition();
@@ -278,7 +278,7 @@ void GRPage::trace(VGDevice & hdc) const
                 r += ss->getPosition();
                 cout << "    slice " << r << endl;
 
-                StaffVector * sv = ss->getStaves();           // get the staves list
+                const StaffVector * sv = ss->getStaves();           // get the staves list
                 if (sv) {
                     for( int i = sv->GetMinimum(); i <= sv->GetMaximum(); ++i) {
                         GRStaff * staff = sv->Get(i);

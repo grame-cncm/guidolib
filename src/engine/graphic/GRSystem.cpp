@@ -443,7 +443,7 @@ GRSystem::GRSystem(GRStaffManager * staffmgr, GRPage * inPage,
 //----------------------------------------------------------------------------------------------------
 const GRStaff*	GRSystem::getStaff (int index) const
 {
-	StaffVector * sv = getStaves();
+	const StaffVector * sv = getStaves();
 	return sv ? sv->Get(index) : 0;
 }
 
@@ -477,7 +477,7 @@ GRSystem::~GRSystem()
 }
 
 //----------------------------------------------------------------------------------------------------
-StaffVector * GRSystem::getStaves() const
+const StaffVector * GRSystem::getStaves() const
 {
 	if( mSystemSlices.empty())	return 0;
 

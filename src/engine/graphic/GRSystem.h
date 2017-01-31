@@ -78,8 +78,8 @@ public:
 	ARMusic *           getARMusic() const;
 	GRSpring *          getSpring( int id ) const;
 	const GRSpring *    getGRSpring( int id ) const;
-    StaffVector *       getStaves() const;
-	SSliceList *        getSlices()								{ return &mSystemSlices; }
+    const StaffVector * getStaves() const;
+	const SSliceList *  getSlices() const						{ return &mSystemSlices; }
 
 	void        setSpringParameter(float nconst);
 	void        setSystemFormat( ARSystemFormat * sysfrm );
