@@ -1885,7 +1885,7 @@ GRStaff * GRStaff::getPreviousStaff() const
     GRSystemSlice * curslice = getGRSystemSlice();
     if (!system || !curslice) return 0;
 
-    SSliceList * sl = system->getSlices();          // get the list of system slices
+    const SSliceList * sl = system->getSlices();          // get the list of system slices
     if (!sl) return 0;
     
     GuidoPos pos = sl->GetElementPos(curslice);                 // looks for the current slice
@@ -1895,7 +1895,7 @@ GRStaff * GRStaff::getPreviousStaff() const
 
 	int	num = curslice->getStaffNumber(this);
 
-    StaffVector * sv = previousSlice->getStaves();  // get the staves list
+    const StaffVector * sv = previousSlice->getStaves();  // get the staves list
     if (!sv) return 0;
 
     GRStaff * pstaff = sv->Get(num);                // get the staff carrying the same number
@@ -1908,7 +1908,7 @@ GRStaff * GRStaff::getNextStaff() const
     GRSystemSlice * curslice = getGRSystemSlice();
     if (!system || !curslice) return 0;
 
-    SSliceList * sl = system->getSlices();          // get the list of system slices
+    const SSliceList * sl = system->getSlices();          // get the list of system slices
     if (!sl) return 0;
     
     GuidoPos pos = sl->GetElementPos(curslice);                 // looks for the current slice
@@ -1918,13 +1918,42 @@ GRStaff * GRStaff::getNextStaff() const
 
 	int	num = curslice->getStaffNumber(this);
 
-    StaffVector * sv = nextSlice->getStaves();  // get the staves list
+    const StaffVector * sv = nextSlice->getStaves();  // get the staves list
     if (!sv) return 0;
 
     GRStaff * pstaff = sv->Get(num);                // get the staff carrying the same number
     return pstaff;
 }
 
+
+// ----------------------------------------------------------------------------
+/** \brief Gives the bottom of a staff
+
+	For single staff scores, the staff bounding box is similar to the system slice
+	and changes at every bar. The method returns the staff bottom for multi-staves scores
+	(which is then correct) and retrieves the max of the slices bottom for single staff scores.
+*/
+float GRStaff::getStaffBottom() const
+{
+	float bottom = mBoundingBox.bottom;
+    const GRSystem * system = getGRSystem();
+    const GRSystemSlice * slice = getGRSystemSlice();
+    if (!system || !slice) return bottom;		// no system, no slice: returns staff bottom
+	
+	// for multi-staves scores the staff bounding box is correct
+	if (slice->getStaves()->size() > 1) return bottom;
+
+    const SSliceList * sl = system->getSlices();    // get the list of system slices
+    if (!sl) return bottom;
+	
+	GuidoPos pos = sl->GetHeadPosition();
+	while (pos) {
+		const GRSystemSlice* s = sl->GetNext (pos);
+		if (s->getBoundingBox().bottom > bottom)
+			bottom = s->getBoundingBox().bottom;
+	}
+	return bottom;
+}
 
 // ----------------------------------------------------------------------------
 /** \brief Retrieves the mapping

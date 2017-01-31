@@ -277,7 +277,8 @@ class GRStaff : public GRCompositeNotationElement
 		void	generatePositions();
 		float	currentLineThikness() const;
         
-		float	getProportionnalRender() { return this->proportionnalRender; }
+		float	getProportionnalRender() const { return this->proportionnalRender; }
+		float	getStaffBottom () const;
 		void	checkCollisions (TCollisions& state);
 
   protected:
