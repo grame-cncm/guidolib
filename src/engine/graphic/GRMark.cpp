@@ -23,9 +23,9 @@ using namespace std;
 
 extern GRStaff * gCurStaff;
 
-GRMark::GRMark(GRStaff * p_staff, ARMark * abstractRepresentationOfText)
-  : GRText(p_staff, abstractRepresentationOfText)
+GRMark::GRMark(GRStaff * staff, ARMark * ar) : GRText(staff, ar)
 {
+	mPosition.y -= yoffset(staff);
 }
 
 
@@ -145,20 +145,22 @@ void GRMark::OnDraw( VGDevice & hdc ) const
 	}
 }
 
+float GRMark::yoffset (const GRStaff* staff) const
+{
+	const float curLSPACE = staff->getStaffLSPACE();
+	int n = staff->getNumlines() + 2;
+	return n * curLSPACE;
+}
+
 FloatRect GRMark::getTextMetrics(VGDevice & hdc, const GRStaff* staff) const
 {
-	FloatRect r = GRText::getTextMetrics(hdc, staff);
-	if (gCurStaff) {
-		const float curLSPACE = gCurStaff->getStaffLSPACE();
-		int n = gCurStaff->getNumlines() + 2;
-		float offset = n * curLSPACE;
-		r.ShiftY(-offset);
-	}
+	FloatRect  r = GRText::getTextMetrics(hdc, staff);
+	if (staff) r.ShiftY (-yoffset (staff));
 	return r;
 }
 
 const ARMark * GRMark::getARMark() const
 {
-	return /*dynamic*/static_cast<const ARMark*>(getAbstractRepresentation());
+	return static_cast<const ARMark*>(getAbstractRepresentation());
 }
 

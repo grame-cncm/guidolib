@@ -42,6 +42,9 @@ class GRMark : public GRText
 		virtual FloatRect	getTextMetrics(VGDevice & hdc, const GRStaff* staff) const;
 
 		const ARMark *	getARMark() const;
+
+	private:
+		float yoffset (const GRStaff* staff) const;
 };
 
 #endif
