@@ -30,6 +30,7 @@ class GRSingleNote;
 class GRNote;
 class GRRest;
 class GREvent;
+class GRText;
 
 
 
@@ -127,6 +128,7 @@ public:
     virtual bool isChordComma() const		{ return false; }
     virtual bool checkCollisionWith() const	{ return false; }
 
+    virtual const GRText*		isText() const			{ return 0; }
     virtual const GRSingleNote* isSingleNote() const	{ return 0; }
     virtual const GRNote *		isGRNote() const		{ return 0; }
     virtual const GRRest *		isRest() const			{ return 0; }

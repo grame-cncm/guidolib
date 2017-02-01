@@ -65,8 +65,9 @@ class GRText : public GRPTagARNotationElement
 		virtual void 	setHPosition( float nx );
 				void	mustFollowPitch( bool flag ) { mMustFollowPitch = flag; }
 
-		virtual bool	checkCollisionWith() const	{ return false; }
+		virtual bool	checkCollisionWith() const	{ return true; }
 		virtual bool	isLyrics() const;
+		virtual const GRText*	isText() const			{ return this; }
 
 	protected:
 
