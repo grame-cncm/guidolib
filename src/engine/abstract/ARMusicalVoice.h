@@ -112,6 +112,7 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		virtual void	RemovePositionTag( ARPositionTag * ptag);
 		virtual void	AddPositionTag(ARPositionTag *);
 		virtual	PositionTagList * createPositionTagList();
+		virtual GuidoPos getPositionTagPos (ARPositionTag *) const;
 
 		// does Auto-Beaming ...
 		virtual void	doAutoStuff1();
@@ -143,11 +144,11 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		virtual void	resetGRRepresentation();
 
 		// functions for the voicestate...
-		virtual			GuidoPos GetHeadPosition(ARMusicalVoiceState & vst) const;
-		virtual			GuidoPos GetHeadPosition() const;
-		virtual void	GetPrevEvent(GuidoPos & pos, ARMusicalVoiceState & vst) const;
-		virtual			ARMusicalObject * GetNext(GuidoPos & pos, ARMusicalVoiceState & vst) const;
-		virtual			ARMusicalObject * GetNextObject(GuidoPos & pos) const;
+		virtual			GuidoPos			GetHeadPosition(ARMusicalVoiceState & vst) const;
+		virtual			GuidoPos			GetHeadPosition() const;
+		virtual			void				GetPrevEvent(GuidoPos & pos, ARMusicalVoiceState & vst) const;
+		virtual			ARMusicalObject *	GetNext(GuidoPos & pos, ARMusicalVoiceState & vst) const;
+		virtual			ARMusicalObject *	GetNextObject(GuidoPos & pos) const;
 		virtual const	ARMusicalVoiceState * getVoiceState() const		{ return mCurVoiceState; }
 
 		// for automatic-beaming ...
@@ -165,8 +166,8 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		_readmode getReadMode() const						{ return readmode; }
 
         // C.D. 22/10/2014 Perf improvement : prevent CheckBreakPosition from searching a RepeatBegin tag in all voice list
-        void addRepeatBegin(ARRepeatBegin *repeatBegin) { repeatBeginList->push_back(repeatBegin); }
-        std::vector<ARRepeatBegin *> *getRepeatBeginList() { return repeatBeginList; }
+        void addRepeatBegin(ARRepeatBegin *repeatBegin)		{ repeatBeginList->push_back(repeatBegin); }
+        std::vector<ARRepeatBegin *> * getRepeatBeginList()	{ return repeatBeginList; }
 
         void printName(std::ostream& os) const;
         void printParameters(std::ostream& os) const;
