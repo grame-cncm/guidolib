@@ -3075,7 +3075,7 @@ traceslice(cout << "GRStaffManager::FindOptimumBreaks num slices is " << numslic
 	float retval = 0;
 	pos = mybreaklist->GetHeadPosition();
 	GRSystemSlice * beginslice = 0;
-	GRSystemSlice * lastslice = 0;
+	const GRSystemSlice * lastslice = 0;
 traceslice(cout << ">>>> GRStaffManager::FindOptimumBreaks  =>  start pos loop" << endl);
 	while (pos)
 	{
@@ -3121,7 +3121,7 @@ traceslice(cout << "GRStaffManager::FindOptimumBreaks  =>  CreateBeginSlice" << 
 
 		mCurSysFormat = 0;
 		beginslice = 0;
-		lastslice = mGrSystem->mSystemSlices.GetTail();
+		lastslice = mGrSystem->lastSlice();
 traceslice(cout << "GRStaffManager::FindOptimumBreaks  =>  get lastslice: " << lastslice << endl);
 
 		// we can only add the system on the page, if it would still fit ... 
@@ -3353,7 +3353,7 @@ GRBeginSpaceForceFunction2 * GRStaffManager::getCurrentBegSFF()
 
 /** \brief Creates the begin-slice for a given last slice of a previous line.
 */
-GRSystemSlice * GRStaffManager::CreateBeginSlice(GRSystemSlice * lastslice)
+GRSystemSlice * GRStaffManager::CreateBeginSlice(const GRSystemSlice * lastslice)
 {
 	// now I have to create the begin - slice given the lastslice of the previous line 
 	// (which includes the staff-states for my current line ....
@@ -3455,17 +3455,13 @@ GRSystemSlice * GRStaffManager::CreateBeginSlice(GRSystemSlice * lastslice)
 */
 void GRStaffManager::TakeCareOfBreakAt( GRSystem * newsys )
 {
-	GRSystemSlice * mylastslice = newsys->mSystemSlices.GetTail();
-
+	const GRSystemSlice* mylastslice = newsys->lastSlice();
 	// now we retrieve the open grtags ....
 	GRPossibleBreakState * pbs = mylastslice->mPossibleBreakState;
-
-	if (pbs)
-	{
+	if (pbs) {
 		const int mini = pbs->vtsvect->GetMinimum();
 		const int maxi = pbs->vtsvect->GetMaximum();
-		for( int i = mini; i <= maxi; ++i )
-		{
+		for( int i = mini; i <= maxi; ++i ) {
 			// These are the GRVoiceTagsAndStaff
 			GRPossibleBreakState::GRVoiceTagsAndStaff * vts = pbs->vtsvect->Get(i);
 			if (vts && vts->grtags)
@@ -3473,8 +3469,7 @@ void GRStaffManager::TakeCareOfBreakAt( GRSystem * newsys )
 				// this closes the currently open grtags ...
 				// it assumes, that there isan EndGlue() ....
 				// (but that is OK, we have one ...)
-				// someone should tell the lastslice, that the
-				// staffs should have a valid endglue ....
+				// someone should tell the lastslice, that the staffs should have a valid endglue ....
 				vts->EndAtBreak();
 			}
 		}	
@@ -3484,8 +3479,7 @@ void GRStaffManager::TakeCareOfBreakAt( GRSystem * newsys )
 /** \brief Called to take care of resuming the open tags
 	from the previous system.
 */
-void GRStaffManager::ResumeOpenTags( GRSystemSlice * lastslice,
-									GRSystemSlice * beginslice )
+void GRStaffManager::ResumeOpenTags( const GRSystemSlice * lastslice, GRSystemSlice * beginslice )
 {
 	// now we retrieve the open grtags ....
 	GRPossibleBreakState * pbs = lastslice->mPossibleBreakState;

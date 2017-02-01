@@ -227,7 +227,7 @@ class GRStaffManager
 		int		mSystemSize;
 
 		void UpdateBeginningSFF(int staffnum);
-		void ResumeOpenTags(GRSystemSlice * lastslice, GRSystemSlice * beginslice);
+		void ResumeOpenTags (const GRSystemSlice * lastslice, GRSystemSlice * beginslice);
 
 		// remember the system-distance (if it is explicitly set ....)
 		float mSystemDistancePrev;
@@ -239,7 +239,7 @@ class GRStaffManager
 		// this routine takes the current system-slice list and finds the optimum break for it.
 		// it then also creates the systems with the respective systemslices.
 		float			FindOptimumBreaks(int pageorsystembreak, float beginheight = 0 );
-		GRSystemSlice * CreateBeginSlice(GRSystemSlice * lastslice);
+		GRSystemSlice * CreateBeginSlice (const GRSystemSlice * lastslice);
 		void		createNewSystemRods(int startid,int endid);
 		void		BreakAtPBS(GuidoPos pbpos);
 		int			CheckForBarSpring(int sprid);
