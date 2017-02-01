@@ -279,7 +279,8 @@ class GRStaff : public GRCompositeNotationElement
         
 		float	getProportionnalRender() const { return this->proportionnalRender; }
 		float	getStaffBottom () const;
-		void	checkCollisions (TCollisions& state);
+		void	checkCollisions (TCollisions& state) const;
+		void	checkLyricsCollisions (TCollisions& state) const;
 
   protected:
 		void	DebugPrintState(const char * info) const;

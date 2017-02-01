@@ -435,8 +435,11 @@ void GRStaff::print(std::ostream& os) const
 }
 
 // ----------------------------------------------------------------------------
-void GRStaff::checkCollisions (TCollisions& state)
+void GRStaff::checkCollisions (TCollisions& state) const
 {
+	checkLyricsCollisions(state);
+	return;
+
 //if (state.lastElement())
 //cerr << "GRStaff::checkCollisions " << state.getSystem() << "/" << state.getStaff() << " last: " << state.lastElement() << endl;
 //else
@@ -444,12 +447,11 @@ void GRStaff::checkCollisions (TCollisions& state)
 	
 	NVRect chordbb;									// the last chord bounding box
 	bool inChord = false, pendingChord = false;		// used for chords detection
-	NEPointerList* elts = getElements();
-	if (!elts) return;
+	const NEPointerList& elts = getElements();
 
-	GuidoPos pos = elts->GetHeadPosition();
+	GuidoPos pos = elts.GetHeadPosition();
 	while (pos) {
-		GRNotationElement * e = elts->GetNext(pos);
+		const GRNotationElement * e = elts.GetNext(pos);
 		if (e->isEmpty()) {
 			if (inChord) {							// at this point this is a chord end
 				inChord = pendingChord = false;		// set the chord flags off
@@ -475,7 +477,26 @@ void GRStaff::checkCollisions (TCollisions& state)
 					state.update (e, r);			// update the collision tracking state
 				}
 			}
-			else if (e->checkCollisionWith()) {		// this is not a note and if collision checking is required
+			else if (e->checkCollisionWith() && r.Width()) {	// this is not a note and if collision checking is required
+				state.check(r);						// check for collision
+				state.update (e, r);				// update the collision tracking state
+			}
+		}
+	}
+}
+
+// ----------------------------------------------------------------------------
+void GRStaff::checkLyricsCollisions (TCollisions& state) const
+{
+	const NEPointerList& elts = getElements();
+	GuidoPos pos = elts.GetHeadPosition();
+	while (pos) {
+		GRNotationElement * e = elts.GetNext(pos);
+		const GRText* text = e->isText();
+		if (text && text->isLyrics()) {
+			NVRect r = e->getBoundingBox();			// collect the lyric bounding box
+			r += e->getPosition();					// adjust the position
+			if (r.Width()) {						// ignore empty bounding boxes
 				state.check(r);						// check for collision
 				state.update (e, r);				// update the collision tracking state
 			}
@@ -1929,28 +1950,24 @@ GRStaff * GRStaff::getNextStaff() const
 // ----------------------------------------------------------------------------
 /** \brief Gives the bottom of a staff
 
-	For single staff scores, the staff bounding box is similar to the system slice
-	and changes at every bar. The method returns the staff bottom for multi-staves scores
-	(which is then correct) and retrieves the max of the slices bottom for single staff scores.
+	Browse the previous and next staves and returns the max of the bounding boxes bottom
 */
 float GRStaff::getStaffBottom() const
 {
 	float bottom = mBoundingBox.bottom;
-    const GRSystem * system = getGRSystem();
-    const GRSystemSlice * slice = getGRSystemSlice();
-    if (!system || !slice) return bottom;		// no system, no slice: returns staff bottom
-	
-	// for multi-staves scores the staff bounding box is correct
-	if (slice->getStaves()->size() > 1) return bottom;
 
-    const SSliceList * sl = system->getSlices();    // get the list of system slices
-    if (!sl) return bottom;
-	
-	GuidoPos pos = sl->GetHeadPosition();
-	while (pos) {
-		const GRSystemSlice* s = sl->GetNext (pos);
-		if (s->getBoundingBox().bottom > bottom)
-			bottom = s->getBoundingBox().bottom;
+	const GRStaff* prev = getPreviousStaff();
+	while (prev) {
+		if (prev->getBoundingBox().bottom > bottom)
+			bottom = prev->getBoundingBox().bottom;
+		prev = prev->getPreviousStaff();
+	}
+
+	const GRStaff* next = getNextStaff();
+	while (next) {
+		if (next->getBoundingBox().bottom > bottom)
+			bottom = next->getBoundingBox().bottom;
+		next = next->getNextStaff();
 	}
 	return bottom;
 }
