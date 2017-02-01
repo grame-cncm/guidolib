@@ -37,12 +37,9 @@ class GRAccolade;
 class GRSpaceForceFunction2;
 
 typedef KF_IVector<GRStaff> StaffVector;
-// typedef KF_IPointerList<GRSpring> SpringList;
 typedef KF_IVector<GRSpring> ISpringVector;
 typedef KF_IPointerList<GRRod> IRodList;
 typedef KF_IPointerList<GRSystemSlice> SSliceList;
-
-// typedef std::vector<GRAccolade *> GRAccoladeList;
 
 extern GRStaff * gCurStaff;
 
@@ -54,9 +51,6 @@ extern GRStaff * gCurStaff;
 */
 class GRSystem : public GREvent
 {
-	// this is for curPosX and oldposx
-	friend class GRStaffManager;
-	
 public:
 	using GRNotationElement::getStaffNumber;
 
@@ -106,6 +100,7 @@ public:
 	void 	FinishSystem( ISpringVector * pvect, IRodList * prods1, IRodList * prods2,
 						  GRSpaceForceFunction2 * psff, const TYPE_TIMEPOSITION & tp, int lastline = 0);
 	void	checkCollisions (TCollisions& state);
+	const GRSystemSlice* lastSlice() const		{ return mSystemSlices.GetTail(); }
 
 	TYPE_TIMEPOSITION mDebugSystemDate;
     static int sSystemID;
@@ -132,11 +127,9 @@ protected:
 	ISpringVector * mSpringVector;
 	
 	
-	// we have two rodlists, one simple one
-	// with simple rods (spanning exactly one spring)
-	// and another one with complex rods (spanning
-	// more than one spring). These both are returned
-	// by the StaffManager:
+	// we have two rodlists, one simple one with simple rods (spanning exactly one spring)
+	// and another one with complex rods (spanning more than one spring).
+	// These both are returned by the StaffManager:
 	IRodList * simplerods;
 	IRodList * complexrods;	
 	GRSpaceForceFunction2 * mSpaceForceFunc;
