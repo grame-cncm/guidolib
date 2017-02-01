@@ -69,6 +69,7 @@ class  TCollisions {
 		void	reset (bool resetSystem);
 		void	clearElements ();
 		void	clear ();
+		void	print (std::ostream& out) const;
 
 	private:
 		bool	checkElement (const NVRect& r);
@@ -83,5 +84,8 @@ class  TCollisions {
 		int						fSystem;		// the current system number
 		std::vector<TCollisionInfo>		fCollisions;	// a list of space elements intended to resolve the collisions
 };
+
+std::ostream& operator<< (std::ostream& os, const TCollisions& c);
+
 
 #endif

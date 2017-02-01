@@ -23,6 +23,18 @@
 using namespace std;
 
 // ----------------------------------------------------------------------------
+std::ostream& operator<< (std::ostream& os, const TCollisions& c)	{ c.print(os); return os; }
+
+// ----------------------------------------------------------------------------
+void TCollisions::print(ostream& os) const
+{
+	size_t n = fCollisions.size();
+	for (size_t i=0; i<n; i++) {
+		os << fCollisions[i] << endl;
+	}
+}
+
+// ----------------------------------------------------------------------------
 void TCollisionInfo::print(ostream& os) const
 {
 	if (fARObject) os << "voice " << fVoice << ": " << fARObject->getRelativeTimePosition() << " " << fARObject << " -> " <<  fSpace;
