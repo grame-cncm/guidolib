@@ -94,8 +94,9 @@ class ARNote : public ARMusicalEvent
     void forceNoteAppearance(NVstring noteAppearance);
 
     /**** Function to avoid dynamic_cast ****/
-    virtual ARNote* isARNote()				{ return this; }
-    virtual bool	isEmptyNote() const		{ return getName() == "empty"; }
+    virtual ARNote*			isARNote()				{ return this; }
+    virtual const ARNote*	isARNote() const	{ return this; }
+    virtual bool			isEmptyNote() const		{ return getName() == "empty"; }
     /*****************************************/
 	
 	bool		isAuto() const		{ return fAuto; }
