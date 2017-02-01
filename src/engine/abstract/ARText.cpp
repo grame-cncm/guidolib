@@ -238,8 +238,9 @@ void ARText::printGMNName(std::ostream& os) const
 
 void ARText::printParameters(std::ostream& os) const
 {
+	const char* type = fIsLyric ? "lyric" : "text";
     if (text)
-        os << "text: \"" << text->getValue() << "\"; ";
+        os << type << ": \"" << text->getValue() << "\"; ";
 
     if (textformat)
         os << "textformat: " << textformat->getValue() << "; ";
