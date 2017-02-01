@@ -106,6 +106,9 @@ bool GRMusic::checkCollisions()
 		GRPage * page = mPages[i];
 		page->checkCollisions(fCollisions);
 	}
+//	if (fCollisions.collides()) {
+//		cerr << "GRMusic::checkCollisions collisions: " << endl << fCollisions << endl;
+//	}	
 	return fCollisions.collides();
 }
 
@@ -491,7 +494,7 @@ void GRMusic::printVoices (std::ostream& os) const
 	for (size_t i = 0; i<mVoiceList.size(); i++) {
 		GRVoice* voice = mVoiceList[i];
 		if (voice) {
-	cerr << "Voice " << i << endl;
+			cerr << "Voice " << i << endl;
 			GuidoPos first = voice->First();
 			GuidoPos last = voice->Last();
 			while (first != last) {
@@ -507,7 +510,6 @@ void GRMusic::resolveCollisions ()
 {
 	const vector<TCollisionInfo>& list = fCollisions.list();
 	for (size_t i=0; i< list.size(); i++) {
-cerr << " => " << list[i]<< endl;
 		TCollisionInfo ci = list[i];
 		ARMusicalVoice * voice = getARVoice (ci.fVoice);
 		if (voice) {
@@ -520,6 +522,22 @@ cerr << " => " << list[i]<< endl;
 				}
 				else voice->AddElementAfter (pos, ci.fSpace);
 			}
+			else {
+				pos = voice->getPositionTagPos(dynamic_cast<ARPositionTag*>(ci.fARObject));
+				if (pos) {
+					TYPE_TIMEPOSITION d = ci.fARObject->getRelativeTimePosition();
+					pos = voice->GetHeadPosition();
+					GuidoPos prev = pos;
+					while (pos) {
+						const ARMusicalObject* obj = voice->GetNextObject(pos);
+						if (obj->isARNote() && (obj->getRelativeTimePosition() > d)) {
+							voice->AddElementAt(prev,  ci.fSpace);
+							break;
+						}
+						prev = pos;
+					}
+				}
+			}
 		}
 	}
 	if (list.size()) createGR();
@@ -528,12 +546,13 @@ cerr << " => " << list[i]<< endl;
 //-------------------------------------------------------------------------------
 ARMusicalVoice* GRMusic::getARVoice (int n)
 {
-	ARMusicalVoice * voice = 0;
 	ARMusic * arm = getARMusic();
 	GuidoPos pos = arm->GetHeadPosition();
-	while (pos && n--)
-		voice = arm->GetNext(pos);
-	return (!pos && n) ? 0 : voice;
+	while (pos) {
+		ARMusicalVoice * voice = arm->GetNext(pos);
+		if (!n--) return voice;
+	}
+	return 0;
 }
 
 
@@ -683,13 +702,7 @@ void GRMusic::getGuido() const
 	ostringstream os;		// was ostrstream os; (deprecated)
 
   // no AUTO-tags !
-
     arm->print(os);
-  
-//#ifdef LINUX	
-//  os.freeze();	// Deprecated: it was here because of old ostrstream.
-//#endif
-
 	size_t charCount = os.str().size(); // was: os.pcount();
 	char * s = new char[ charCount +  2];
 
@@ -701,14 +714,12 @@ void GRMusic::getGuido() const
 	s[ charCount ] = 0;
 
   AddGuidoOutput( s );
-
   delete [] s;
 }
 
 /** \brief Not yet implemented.
 */
-void GRMusic::MarkVoice(int voicenum, int numfrom, int denomfrom, 
-			int numlength, int denomlength,unsigned char red, unsigned char green, unsigned char blue)
+void GRMusic::MarkVoice(int voicenum, int numfrom, int denomfrom, int numlength, int denomlength, unsigned char red, unsigned char green, unsigned char blue)
 {
 }
 
@@ -741,9 +752,6 @@ int GRMusic::getPageNum(int num, int denom) const
 int GRMusic::getPageNumForTimePos( int num, int denom ) const
 {
 	const TYPE_TIMEPOSITION inDate ( num, denom );
-
-// - version B: uses custom "debug" dates
-	
 	if( inDate > getDuration()) return 0; // check if in the music duration range
 
 	const int pageCount = getNumPages();
@@ -758,46 +766,6 @@ int GRMusic::getPageNumForTimePos( int num, int denom ) const
 
 	}
 	return pageCount;
-
-// - version A: uses durations. bug: system durations are WRONG
-/*	
-	TYPE_TIMEPOSITION startDate = 0;
-	TYPE_TIMEPOSITION endDate = 0;
-	TYPE_TIMEPOSITION duration = 0;
-
-	const int pageCount = getNumPages();
-	for( int index = 1; index <= pageCount; ++index )
-	{
-		GRPage * page = getPage( index );
-		if( page == 0 ) return 0;	
-
-		duration = page->getDuration();
-		endDate = startDate + duration;
-
-		if(( inDate >= startDate ) && ( inDate < endDate )) // end date is exclusive
-		{
-			return index;
-		}
-
-		startDate += duration;
-	}
-	
-	return 0;
-*/
-/*	uses voices events: bug: last system points to the next page bug.
-	for( VoiceList::iterator ptr = mVoiceList.begin(); ptr != mVoiceList.end(); ++ptr )
-	{
-		GRVoice * voice = *ptr;
-		if (voice)
-		{
-			GRPage * page = voice->getPageForTimePos( num, denom );
-			if( page == 0 )
-				return guidoErrActionFailed;
-			
-			return getPageIndex( page );
-		}
-	}
-	return guidoErrActionFailed;*/	
 }
 
 // --------------------------------------------------------------------------
