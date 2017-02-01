@@ -2027,6 +2027,7 @@ void ARMusicalVoice::doAutoDispatchLyrics()
 						artext->setAutoPos (dlc->lyrics->autoPos());
 						artext->setRange(1);
 						artext->setPosition(vst.vpos);
+						artext->setRelativeTimePosition (ev->getRelativeTimePosition());
 
 						artext->copyLyricsParams(dlc->lyrics);
 						mPosTagList->AddElementAt(vst.ptagpos,artext);
@@ -5990,6 +5991,13 @@ void ARMusicalVoice::initChordNote()
 	numchordvoice = oldnumchordvoice;
 }
 
+//____________________________________________________________________________________
+GuidoPos ARMusicalVoice::getPositionTagPos (ARPositionTag *tag) const
+{
+	return mPosTagList->GetElementPos(tag);
+}
+
+//____________________________________________________________________________________
 void ARMusicalVoice::MarkVoice(float from, float length, unsigned char red, unsigned char green, unsigned char blue)
 {
 	TYPE_TIMEPOSITION tpos(from);
@@ -5998,6 +6006,7 @@ void ARMusicalVoice::MarkVoice(float from, float length, unsigned char red, unsi
 	MarkVoice( tpos.getNumerator(), tpos.getDenominator(), duration.getNumerator(), duration.getDenominator(), red, green, blue);
 }
 
+//____________________________________________________________________________________
 void ARMusicalVoice::MarkVoice( int fromnum, int fromdenom, int lengthnum, int lengthdenom, unsigned char red, unsigned char green, unsigned char blue)
 {
 	TYPE_TIMEPOSITION tpos(fromnum,fromdenom);
@@ -6048,6 +6057,8 @@ void ARMusicalVoice::MarkVoice( int fromnum, int fromdenom, int lengthnum, int l
 		AddElementAfter(endpos,ntformat);
 	}
 }
+
+//____________________________________________________________________________________
 /** \brief Manage the trills in order to give the information of the trill to tied notes
 */
 void ARMusicalVoice::doAutoTrill()
@@ -6104,6 +6115,7 @@ void ARMusicalVoice::doAutoTrill()
 	}
 }
 
+//____________________________________________________________________________________
 void ARMusicalVoice::doAutoCluster()
 {
 	// We first look for each note and check if it has a cluster
@@ -6218,8 +6230,9 @@ void ARMusicalVoice::doAutoCluster()
 	}
 }
 
-// set the begin- and end- durations for each feathered beam.
 
+//____________________________________________________________________________________
+// set the begin- and end- durations for each feathered beam.
 void ARMusicalVoice::doAutoFeatheredBeam()
 {
 	ARMusicalVoiceState armvs;
