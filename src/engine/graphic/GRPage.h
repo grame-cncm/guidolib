@@ -67,13 +67,13 @@ class GRPage : public GREvent
 			void	getMarginsCm( float * ml, float * mt, float * mr, float * mb );
 			void	getPageFormat( GuidoPageFormat * outFormat ) const;
 
-			float	getMarginLeft() const;
-			float	getMarginTop() const;
-			float	getMarginRight() const;
-			float	getMarginBottom() const;
+			float	getMarginLeft() const			{ return mLeftMargin; }
+			float	getMarginTop() const			{ return mTopMargin; }
+			float	getMarginRight() const			{ return mRightMargin; }
+			float	getMarginBottom() const			{ return mBottomMargin; }
 	
-			float	getPageWidth() const;	// internal units
-			float	getPageHeight() const;
+			float	getPageWidth() const			{ return mWidth; }
+			float	getPageHeight() const			{ return mHeight; }
 			float	getInnerWidth() const;
 			float	getInnerHeight() const;
 
