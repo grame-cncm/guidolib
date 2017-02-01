@@ -110,6 +110,7 @@ class ARMusicalObject : public Visitable
     virtual ARMusicalObject  *isARRepeatBegin()   { return NULL; }
     virtual ARMusicalObject  *isARMusicalTag()    { return NULL; }
     virtual ARNote			 *isARNote()          { return NULL; }
+    virtual const ARNote	 *isARNote() const    { return NULL; }
     virtual ARMusicalObject  *isARBar()           { return NULL; }
     virtual ARMusicalObject  *isARCoda()          { return NULL; }
     virtual ARMusicalObject  *isARSegno()         { return NULL; }
