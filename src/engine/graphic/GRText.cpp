@@ -135,7 +135,7 @@ FloatRect GRText::getTextMetrics(VGDevice & hdc, const GRStaff* staff ) const
 {
 	FloatRect r;
 
-	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );
+	GRSystemStartEndStruct * sse = getSystemStartEndStruct( staff->getGRSystem() );
 	assert(sse);
 	GRTextSaveStruct * st = (GRTextSaveStruct *) sse->p;
 	const ARText * arText = getARText();
