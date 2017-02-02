@@ -6074,7 +6074,7 @@ void ARMusicalVoice::doAutoTrill()
 		if (note) {
 			ARTrill *trill = note->getOrnament();
 			//type = 0 -> is a trill (and not a mord or turn)
-			if(trill && trill->getType() == 0) {
+			if(trill && trill->getType() == ARTrill::TRILL) {
 				// if it has, we can check if the note is tied to another
 				// if it is tied, we will let its status as "begin" (default)
 				// and we'll affect an ARtrill to the next note, whose boolean "begin" will be set as false with setContinue()
@@ -6082,29 +6082,27 @@ void ARMusicalVoice::doAutoTrill()
 
 				if (ptags) {
 					GuidoPos pos = ptags->GetHeadPosition();
-
-                    ARPositionTag *arpt = NULL;
-
 					while(pos) {
-						arpt = ptags->GetNext(pos);
-
+						ARPositionTag * arpt = ptags->GetNext(pos);
 						if(arpt) {
 							ARTie * tie = dynamic_cast<ARTie *>(arpt);
-							if(tie && tie->getIsAuto()) {
+
+							int repeat = trill->getRepeat();
+							if (tie && (tie->getIsAuto() || repeat == ARTrill::kOff)) {
 								GuidoPos posNote = posObj;
 								ARNote * nextNote;
 								do {
 								    ARMusicalObject * nextObject = ObjectList::GetNext(posNote);
-									if (!nextObject)
-                                        break;
+									if (!nextObject) break;
 									nextNote = static_cast<ARNote *>(nextObject->isARNote());
 								}
-                                while(posNote && !nextNote);
+                                while (posNote && !nextNote);
 
 								if (nextNote) {
 									nextNote->setVoiceNum(note->getVoiceNum());
 									nextNote->setOrnament(note->getOrnament());
-									nextNote->getOrnament()->setContinue();
+									if (repeat != ARTrill::kOn)
+										nextNote->getOrnament()->setContinue();
 								}
 							}
 						}	
