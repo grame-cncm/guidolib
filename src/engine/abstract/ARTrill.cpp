@@ -30,6 +30,7 @@ ARTrill::ARTrill(TYPE typ) : ARMTParameter(), mDur(NULL), mTrillType(typ)
 	fShowCautionaryAccidentals = false;
 	fShowTR                    = true;
 	fDrawOnNoteHead            = false;
+	fRepeat                    = kUndefined;
 	begin                      = true;
 }
 
@@ -41,6 +42,7 @@ ARTrill::ARTrill(int pid, const ARTrill* copy) : ARMTParameter(pid, copy), mDur(
 	fShowCautionaryAccidentals = copy->getCautionary();
 	fShowTR                    = copy->fShowTR;
 	fDrawOnNoteHead            = copy->fDrawOnNoteHead;
+	fRepeat                    = copy->fRepeat;
 	adx                        = copy->getadx();
 	ady                        = copy->getady();
 	begin                      = copy->getStatus();
@@ -57,7 +59,7 @@ void ARTrill::setTagParameterList(TagParameterList& tpl)
 	if (ltpls.GetCount() == 0)
 	{
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail("S,mode,,o;I,dur,32,o;U,adx,0hs,o;U,ady,0hs,o;S,tr,true,o;S,anchor,above,o");
+		lstrs.AddTail("S,mode,,o;I,dur,32,o;U,adx,0hs,o;U,ady,0hs,o;S,tr,true,o;S,anchor,above,o;S,repeat,true,o");
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -97,6 +99,11 @@ void ARTrill::setTagParameterList(TagParameterList& tpl)
 			else 
 				fDrawOnNoteHead = false;
 			delete str;
+
+			str = TagParameterString::cast(rtpl->RemoveHead());
+			if (str->TagIsSet())
+				fRepeat = str->getBool() ? kOn : kOff;
+			delete str;
 		}
 
 		delete rtpl;
@@ -105,37 +112,16 @@ void ARTrill::setTagParameterList(TagParameterList& tpl)
 	tpl.RemoveAll();
 }
 
-float ARTrill::getadx() const	
-{
-	return adx;
-}
-
-float ARTrill::getady() const
-{
-	return ady;
-}
-
-bool ARTrill::getStatus() const{
-	return begin;
-}
-
-void ARTrill::setContinue(){
-	begin = false;
-}
-
 void ARTrill::printName(std::ostream& os) const
 {
     os << "ARTrill";
 
     switch (mTrillType) {
-    case TRILL:
-        os << " (trill)";
+    case TRILL:	os << " (trill)";
         break;
-    case TURN:
-        os << " (turn)";
+    case TURN:	os << " (turn)";
         break;
-    case MORD:
-        os << " (mord)";
+    case MORD:	os << " (mord)";
         break;
     }
 }
@@ -145,14 +131,11 @@ void ARTrill::printGMNName(std::ostream& os) const
     os << "\\";
 
     switch (mTrillType) {
-    case TRILL:
-        os << "trill";
+    case TRILL:	os << "trill";
         break;
-    case TURN:
-        os << "turn";
+    case TURN:	os << "turn";
         break;
-    case MORD:
-        os << "mord";
+    case MORD:	os << "mord";
         break;
     }
 }
