@@ -24,7 +24,7 @@ using namespace std;
 
 ListOfTPLs ARLyrics::ltpls(1);
 
-ARLyrics::ARLyrics() : ARMTParameter()
+ARLyrics::ARLyrics(bool autopos) : ARMTParameter()
 {
 	relativeTimePosition.set(-1,1);
 	setDuration ( DURATION_0 );
@@ -35,7 +35,7 @@ ARLyrics::ARLyrics() : ARMTParameter()
 	mFSize = NULL;
 	mFAttrib = NULL;
 	rangesetting = ONLY;
-	fAutoPos = false;
+	fAutoPos = autopos;
 }
 
 ARLyrics::~ARLyrics() 

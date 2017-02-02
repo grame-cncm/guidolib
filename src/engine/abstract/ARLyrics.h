@@ -31,7 +31,7 @@ public:
 
 	friend class ARText;
 	
-				 ARLyrics();
+				 ARLyrics(bool autopos=false);
 	virtual		~ARLyrics(); 
 
 	virtual void setTagParameterList(TagParameterList & theTagParameterList);
