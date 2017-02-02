@@ -48,6 +48,7 @@ class ARDiminuendo;
 class ARTremolo;
 class ARChordTag;
 class ARTuplet;
+class ARAuto;
 
 
 // typedef KF_IPointerList<ARMusicalObject> ARMusicalObjectList;
@@ -62,10 +63,7 @@ typedef KF_IPointerList<ARMusicalTag> TagPointerList; // todo: replace by stl co
 class ARFactory
 {
  	public:
-
-		enum		bmstate { BEAMSAUTO, BEAMSOFF, BEAMSEXPLICIT };
-		
-					ARFactory();
+					 ARFactory();
      virtual 		~ARFactory();
 
 		virtual void 		createMusic();
@@ -136,8 +134,6 @@ class ARFactory
 		static long sMaxTagId;
 
 protected:
-
-//	bmstate				mBeamState;
 	AROctava *			mCurrentOctava;
 	ARGrace *			mCurrentGrace;
 	ARCue *				mCurrentCue;
@@ -158,6 +154,7 @@ protected:
 	int					mCurrentTags;
 	bool				mTagRanged;
 	bool				mVoiceAdded;
+	bool				mAutoLyricsPos;
 
     NVstring mFilePath;
 };

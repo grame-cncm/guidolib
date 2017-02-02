@@ -160,6 +160,7 @@ ARFactory::ARFactory()
 	mVoiceNum(1),
 	mCurrentTags(0),
 	mVoiceAdded(false),
+	mAutoLyricsPos(false),
     mFilePath()
 {
 		sMaxTagId = -1;
@@ -254,6 +255,7 @@ void ARFactory::createVoice()
 	mCurrentVoice= new ARMusicalVoice;
 	mCurrentVoice->setVoiceNum(mVoiceNum++);
 	mVoiceAdded = false;
+	mAutoLyricsPos = false;
 }
 
 // ----------------------------------------------------------------------------
@@ -1150,7 +1152,7 @@ void ARFactory::createTag( const char * name, int no )
 			{
 				assert(mCurrentVoice);
 				assert(!mCurrentEvent);
-				ARLyrics * tmp = new ARLyrics;
+				ARLyrics * tmp = new ARLyrics (mAutoLyricsPos);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
@@ -2045,29 +2047,13 @@ void ARFactory::addTag()
 #endif
 	// end of parameter list reached
 	// set the tag parameter
+	ARMTParameter * tag = dynamic_cast<ARMTParameter *>(mTags.GetHead());
+	if (tag)
+		tag->setTagParameterList( mTagParameterList );
 
-	ARMTParameter * theTag = dynamic_cast<ARMTParameter *>(mTags.GetHead());
-	if (theTag)
-		theTag->setTagParameterList( mTagParameterList );
-	// the remaining will just be stored
+	const ARAuto * autoTag = dynamic_cast<const ARAuto *>(tag);
+	if (autoTag) mAutoLyricsPos = autoTag->getAutoLyricsPos() == ARAuto::state::ON;
 
-	// ATTENTION, if the tag is a repeatEnd
-	// tag, the voice-time needs to be adjusted
-/*	ARRepeatEnd * arre = dynamic_cast<ARRepeatEnd *>(theTag);
-	if (arre)
-	{
-		const int i = arre->numrepeat;
-		if (i>1)
-		{
-			if (arre->repbeg)
-			{
-				//mCurrentVoice->setDuration(
-				//	arre->repbeg->getRelativeTimePosition() +
-				//	arre->repbeg->dur * i);
-			}
-		}
-	}
-*/
 	mTagParameterList.RemoveAll();
 	assert(mTagParameterList.empty());
 }
