@@ -1,0 +1,28 @@
+(*
+	trill has a repeat attribut to control appearance with tied notes
+	when true, the tr is repeated on each tied note
+	for notes automatically tied by the system (due to a bar insertion) default value is false
+	otherwise default value is true
+*)
+
+{ 
+	[ 
+	\clef<"g2"> \key<-2> \meter<"2/4", autoBarlines="off"> 
+	\tie(\trill( { d2/2 } \bar { d }) ) 
+	]
+,
+	[ 
+	\clef<"g2"> \key<-2> \meter<"2/4", autoBarlines="off"> 
+	\tie(\trill<repeat="false">( { d2/2 } \bar { d }) ) 
+	]
+,
+	[ 
+	\clef<"g2"> \key<-2> \meter<"2/4"> 
+	\tie(\trill( { d2/1 } )) 
+	]
+,
+	[ 
+	\clef<"g2"> \key<-2> \meter<"2/4"> 
+	\tie(\trill<repeat="true">( { d2/1 } )) 
+	]
+}
