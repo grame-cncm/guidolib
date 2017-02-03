@@ -402,7 +402,7 @@ representations.
 		Gives the notes density.
 		
 		The notes density is computed on the x axis only. It represents the ratio between the space occupied 
-		by the notes over each measure of each stave.
+		by the notes over each measure of each staff. The maximum density is retained over a single line.
 		\param gr the handler to the graphic representation.
 		\return a floating point value that expresses the density as a percentage of the staves space.
     */

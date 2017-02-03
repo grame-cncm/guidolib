@@ -2,6 +2,9 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.4
+- new GuidoGetNotesDensity API. The notes density is computed on the x axis only. 
+  It represents the ratio between the space occupied by the notes over each measure of each staff.
+  The maximum density is retained over a single line.
 - new feature to check and solve lyrics collisions, available using an extension of GuidoLayoutSettings.
   Note that solving collisions modifies the internal AR representation but changes are reverted when
   no check is required. 
