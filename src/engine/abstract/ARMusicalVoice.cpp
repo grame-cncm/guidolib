@@ -2028,6 +2028,7 @@ void ARMusicalVoice::doAutoDispatchLyrics()
 						artext->setRange(1);
 						artext->setPosition(vst.vpos);
 						artext->setRelativeTimePosition (ev->getRelativeTimePosition());
+						artext->setVoiceNum(ev->getVoiceNum());
 
 						artext->copyLyricsParams(dlc->lyrics);
 						mPosTagList->AddElementAt(vst.ptagpos,artext);
