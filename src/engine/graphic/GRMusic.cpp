@@ -62,6 +62,7 @@ GRMusic::GRMusic(ARMusic * ar, ARPageFormat * inFormat, const GuidoLayoutSetting
 	fInFormat = 0;
     mAR2GRTime = -1;
     mDrawTime  = -1;
+	fLyricsChecked = false;
 	GuidoGetDefaultLayoutSettings (&fSettings);
 	createGR(inFormat, settings );
 }
@@ -106,7 +107,10 @@ void GRMusic::GGSOutputPage( int inPageNum ) const
 void GRMusic::checkLyricsCollisions()
 {
 	size_t n = checkCollisions(true);
-	if (n) 	resolveCollisions (getCollisions());
+	if (n) {
+		resolveCollisions (getCollisions());
+		fLyricsChecked = true;
+	}
 }
 
 // --------------------------------------------------------------------------
@@ -171,25 +175,26 @@ void GRMusic::resolveCollisions (vector<TCollisionInfo> list)
 	
 	for (size_t i=0; i< list.size(); i++) {
 		TCollisionInfo ci = list[i];
-		ARMusicalVoice * voice = getARVoice (ci.fVoice - 1);
+		ARMusicalVoice * voice = getARVoice (ci.fVoice - 1);		// look for the collision voice
 		if (voice) {
-			GuidoPos pos = voice->GetElementPos(ci.fARObject);
+			GuidoPos pos = voice->GetElementPos(ci.fARObject);		// get the colliding position
 			if (pos) {
-				ARMusicalObject* ar = voice->GetAt(pos);
-				if (ar->isARBar()) {
+				ARMusicalObject* ar = voice->GetAt(pos);			// and the corresponding ar objet
+				if (ar->isARBar()) {								// skip barlines (to put the space after)
 					voice->GetNextObject(pos);
-					if (pos) voice->AddElementAfter (pos, ci.fSpace);
+					if (pos) voice->AddElementAfter (pos, ci.fSpace);	// and add the space tag
 				}
-				else voice->AddElementAfter (pos, ci.fSpace);
+				else voice->AddElementAfter (pos, ci.fSpace);		// add the space tag
 			}
-			else {
+			else {		// colliding position not found, maybe in the position tags list
 				pos = voice->getPositionTagPos(dynamic_cast<ARPositionTag*>(ci.fARObject));
 				if (pos) {
 					TYPE_TIMEPOSITION d = ci.fARObject->getRelativeTimePosition();
 					pos = voice->GetHeadPosition();
 					GuidoPos prev = pos;
-					while (pos) {
+					while (pos) {		// browse the voice up to the corresponding date
 						const ARMusicalObject* obj = voice->GetNextObject(pos);
+						// place the space tag before the next note
 						if (obj->isARNote() && (obj->getRelativeTimePosition() > d)) {
 							voice->AddElementAt(prev,  ci. fSpace);
 							break;
@@ -201,6 +206,24 @@ void GRMusic::resolveCollisions (vector<TCollisionInfo> list)
 		}
 	}
 	if (list.size()) createGR();
+}
+
+//-------------------------------------------------------------------------------
+void GRMusic::removeAutoSpace(ARMusic * arm)
+{
+	GuidoPos pos = arm->GetHeadPosition();
+	while (pos) {
+		ARMusicalVoice * voice = arm->GetNext(pos);
+		if (voice) {
+			GuidoPos vpos = voice->GetHeadPosition();
+			while (vpos) {
+				ARMusicalObject* obj = voice->GetNextObject(vpos);
+				ARSpace* space = obj ? obj->isARSpace() : 0;
+				if (space && space->getIsAuto())
+					voice->RemoveElement (obj);
+			}
+		}
+	}
 }
 
 // --------------------------------------------------------------------------
@@ -571,6 +594,9 @@ void GRMusic::createGR (const ARPageFormat * inPageFormat, const GuidoLayoutSett
 	DeleteContent( &mPages );
 	DeleteContent( &mVoiceList );
 
+	if (fLyricsChecked && (!settings || !settings->checkLyricsCollisions))
+		removeAutoSpace(arm);
+
 	// - Creates new voices
 	GuidoPos pos = arm->GetHeadPosition();
 	while (pos)
@@ -581,6 +607,7 @@ void GRMusic::createGR (const ARPageFormat * inPageFormat, const GuidoLayoutSett
 	}
 	GRStaffManager grsm( this, fInFormat, &fSettings);
 	grsm.createStaves();
+	fLyricsChecked = false;
 
 //cerr << "---------- voices ---------" << endl;
 //printVoices(cerr);
