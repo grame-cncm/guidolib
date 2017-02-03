@@ -1049,14 +1049,9 @@ void MainWindow::setEngineSettings(const GuidoLayoutSettings& gls, int bbmap , b
         (gls.checkLyricsCollisions != mGuidoEngineParams.checkLyricsCollisions)	    |
         (gls.proportionalRenderingForceMultiplicator != mGuidoEngineParams.proportionalRenderingForceMultiplicator) )
 	{
-		bool refreshCode = (mGuidoEngineParams.checkLyricsCollisions && !gls.checkLyricsCollisions);
 		mGuidoEngineParams = gls;
 		mGuidoWidget->setGuidoLayoutSettings( mGuidoEngineParams );
-		if (refreshCode) {
-			// leaving the check collisions mode requires to refresh the AR
-			updateCode(true);
-		}
-		else updateWidgetSize();
+		updateWidgetSize();
 	}
 	if ( (bbmap != mBBMap) || (showBoxes != mShowBoxes) )
 	{
