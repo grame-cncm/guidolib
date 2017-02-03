@@ -103,6 +103,7 @@ void TCollisions::resolve (ARMusicalObject* ar, int gap)
 {
 	ARSpace * arspace = new ARSpace (gap);
 	arspace->setRelativeTimePosition (ar->getRelativeTimePosition());
+	arspace->setIsAuto (true);
 	TCollisionInfo ci (ar, ar->getVoiceNum(), arspace);
 	fCollisions.push_back (ci);
 }
