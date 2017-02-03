@@ -43,6 +43,7 @@ static void usage (char* name)
 	cerr << "           	-voicemap  boolean : enables or not event mapping draw (default is false)" << endl;
     cerr << "           	-staffmap  boolean : enables or not staff mapping draw (default is false)" << endl;
     cerr << "           	-systemmap boolean : enables or not system mapping draw (default is false)" << endl;
+    cerr << "           	-checkLyrics	   : enables lyrics collisions detection" << endl;
 	exit(1);
 }
 
@@ -83,6 +84,14 @@ static int getBoolOption (int argc, char *argv[], const std::string& option, int
 	return defaultValue;
 }
 
+static int getBoolOption (int argc, char *argv[], const std::string& option)
+{
+	for (int i = 1; i < argc - 1; i++) {
+		if (option == argv[i]) return true;
+	}
+	return false;
+}
+
 static const char* getOption (int argc, char *argv[], const std::string& option, const char* defaultValue)
 {
 	for (int i = 1; i < argc - 1; i++) {
@@ -95,11 +104,7 @@ static const char* getOption (int argc, char *argv[], const std::string& option,
 
 static const char* getFile (int argc, char *argv[])
 {
-	int i;
-	for (i = 1; i < argc - 1; i++)
-		if (*argv[i] == '-') i++;	// skip option value
-
-	return (i < argc) ? argv[i] : 0;
+	return argv[argc-1];
 }
 
 #ifdef WIN32
@@ -137,14 +142,13 @@ vector<string> fillPathsVector (const char *filename)
 }
 
 //_______________________________________________________________________________
-static void check (int argc, char *argv[]) {
-	if (argc > 12)
-        usage(argv[0]);
-
+static void check (int argc, char *argv[])
+{
 	for (int i = 1; i < argc; i++) {
 		const char* ptr = argv[i];
 		if (*ptr++ == '-') {
-			if ((*ptr != 'p') && (*ptr != 'f') && (strcmp(ptr, "staffmap")) && (strcmp(ptr, "voicemap")) && (strcmp(ptr, "systemmap")))
+			if ((*ptr != 'p') && (*ptr != 'f') &&
+				(strcmp(ptr, "staffmap")) && (strcmp(ptr, "voicemap")) && (strcmp(ptr, "systemmap") && (strcmp(ptr, "checkLyrics"))))
                 usage(argv[0]);
 		}
 	}
@@ -211,7 +215,14 @@ int main(int argc, char **argv)
     GuidoSetSymbolPath(arh, pathsVector);
     /******************/
     GRHandler grh;
-    err = GuidoAR2GR (arh, 0, &grh);
+	GuidoLayoutSettings settings;
+	GuidoGetDefaultLayoutSettings (&settings);
+cerr << "check checkLyrics?" << endl;
+	if (getBoolOption(argc, argv, "-checkLyrics")) {
+		settings.checkLyricsCollisions = true;
+cerr << "checkLyricsCollisions" << endl;
+	}
+	err = GuidoAR2GR (arh, &settings, &grh);
     if (err != guidoNoErr)
         error(err);
 
