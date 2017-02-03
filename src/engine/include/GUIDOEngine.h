@@ -399,6 +399,16 @@ representations.
     GUIDOAPI(GuidoErrCode)	GuidoUpdateGR( GRHandler gr, const GuidoLayoutSettings* settings);
 
 	/*!
+		Gives the notes density.
+		
+		The notes density is computed on the x axis only. It represents the ratio between the space occupied 
+		by the notes over each measure of each stave.
+		\param gr the handler to the graphic representation.
+		\return a floating point value that expresses the density as a percentage of the staves space.
+    */
+    GUIDOAPI(float)	GuidoGetNotesDensity( GRHandler gr);
+
+	/*!
 		Applies new layout settings and page format to an existing Guido graphic representation.
 		\param gr the handler to the graphic representation.
 		\param settings a pointer to the settings for the graphic representation. If null, default

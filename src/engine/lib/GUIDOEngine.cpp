@@ -374,6 +374,14 @@ GUIDOAPI(GuidoErrCode) GuidoUpdateGR( GRHandler gr, const GuidoLayoutSettings * 
 	return guidoNoErr;
 }
 
+
+// --------------------------------------------------------------------------
+GUIDOAPI(float) GuidoGetNotesDensity( GRHandler gr)
+{
+	if ( !gr || !gr->grmusic )	return 0;
+	return gr->grmusic->getNotesDensity();
+}
+
 // --------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode)	GuidoUpdateGRParameterized( GRHandler gr, const GuidoGrParameters* gp)
 {
