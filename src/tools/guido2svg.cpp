@@ -217,10 +217,8 @@ int main(int argc, char **argv)
     GRHandler grh;
 	GuidoLayoutSettings settings;
 	GuidoGetDefaultLayoutSettings (&settings);
-cerr << "check checkLyrics?" << endl;
 	if (getBoolOption(argc, argv, "-checkLyrics")) {
 		settings.checkLyricsCollisions = true;
-cerr << "checkLyricsCollisions" << endl;
 	}
 	err = GuidoAR2GR (arh, &settings, &grh);
     if (err != guidoNoErr)
