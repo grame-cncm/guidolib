@@ -85,15 +85,15 @@ public:
 	
 	const GuidoLayoutSettings&	getEngineSettings() const		{ return mGuidoEngineParams; }
 	void				setEngineSettings(const GuidoLayoutSettings& gls, int bbmap, bool showMapping, bool rawMapping, bool showBoxes, int voiceNum, int staffNum);
-	bool				getShowMapping() const { return mShowMapping; }
-	bool				getRawMapping() const { return mRawMapping; }
-	bool				getShowBoxes() const { return mShowBoxes; }
-	int					getBBMap() const { return mBBMap; }
-	int					getVoiceNum() const { return mVoiceNum; }
-	int					getStaffNum() const { return mStaffNum; }
+	bool				getShowMapping() const	{ return mShowMapping; }
+	bool				getRawMapping() const	{ return mRawMapping; }
+	bool				getShowBoxes() const	{ return mShowBoxes; }
+	int					getBBMap() const		{ return mBBMap; }
+	int					getVoiceNum() const		{ return mVoiceNum; }
+	int					getStaffNum() const		{ return mStaffNum; }
 	void				setScoreColor(const QColor& c);
-	const QColor&		getScoreColor() { return mScoreColor; }
-	GuidoHighlighter*	getHighlighter() { return mGuidoHighlighter; }
+	const QColor&		getScoreColor()			{ return mScoreColor; }
+	GuidoHighlighter*	getHighlighter()		{ return mGuidoHighlighter; }
 	void				setHighlighter( int syntaxElementId, const QColor& color , int weight );
 	void				setHighlighter( GuidoHighlighter * highlighter );
     void                addFileDirectoryPathToARHandler(const std::string filePath, const std::string exFilePath);
@@ -109,7 +109,7 @@ private slots:
 	void openRecentFile();
 	void reload();
     void documentWasModified();
-	void updateCode();
+	void updateCode(bool force=false);
 	void lineWrapSwitch();
 	void doexport();
 	void docTags();
@@ -175,7 +175,7 @@ private:
 	void	updatePageLabel(int currentPage, int pageCount);
 	void	setCurrentPage(int pageIndex);
 	// Score zoom & adjust-mode methods.
-	void setZoom(int percent);
+	void	setZoom(int percent);
 	void	changeAdjustMode( AdjustMode mode );
 	static float	getRatio(QScrollBar *scrollBar);
 	static void		setRatio(QScrollBar *scrollBar, float ratio);

@@ -67,6 +67,7 @@ typedef GuidoErrCode (* GuidoAR2MIDIFilePtr)(const struct NodeAR* ar, const char
 #define ADJUST_MODE_SETTING				"adjustMode"
 #define FONT_SIZE_SETTING				"fontSize"
 #define BBMAP_SETTING					"BBMap"
+#define CHECK_LYRICS_SETTING			"checkLyrics"
 #define SHOW_BOXES_SETTING				"showBoxes"
 #define SHOW_MAPPING_SETTING			"showMapping"
 #define RAW_MAPPING_SETTING				"rawMapping"
@@ -551,7 +552,7 @@ void MainWindow::documentWasModified()
 }
 
 //-------------------------------------------------------------------------
-void MainWindow::updateCode()
+void MainWindow::updateCode (bool force)
 {
 	mTextEditTimer->stop();
 
@@ -560,7 +561,7 @@ void MainWindow::updateCode()
 		return;
 
 
-	if ( newGMNCode == mGuidoWidget->gmnCode() )
+	if ( !force && newGMNCode == mGuidoWidget->gmnCode() )
 		return;
 
 	if ( mGuidoWidget->setGMNCode( newGMNCode, filePath() ) )
@@ -671,7 +672,9 @@ void MainWindow::exportToSVG(QGuidoPainter * guidoPainter, const QString& filena
 
 	fstream out(filename.toStdString().c_str(), fstream::out | fstream::trunc);
 	int page = mGuidoWidget->firstVisiblePage();	
-	GuidoErrCode err = GuidoSVGExport (guidoPainter->getGRHandler(), page, out, guidofont.toStdString().c_str());
+
+//	GuidoErrCode err = GuidoSVGExport (guidoPainter->getGRHandler(), page, out, guidofont.toStdString().c_str());
+	GuidoErrCode err = GuidoGR2SVG( guidoPainter->getGRHandler(), page, out, true, guidofont.toStdString().c_str() );
 	if (err != guidoNoErr)
 		statusBar()->showMessage("Export failed: "+ QString(GuidoGetErrorString (err)));
 }
@@ -1033,9 +1036,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 //-------------------------------------------------------------------------
 
 //-------------------------------------------------------------------------
-void MainWindow::setEngineSettings(const GuidoLayoutSettings& gls, 
-					int bbmap , bool showMapping , bool rawMapping , bool showBoxes,
-					int voiceNum, int staffNum)
+void MainWindow::setEngineSettings(const GuidoLayoutSettings& gls, int bbmap , bool showMapping , bool rawMapping , bool showBoxes, int voiceNum, int staffNum)
 {	
 	if ( (gls.systemsDistance      != mGuidoEngineParams.systemsDistance)		|
 		(gls.systemsDistribution   != mGuidoEngineParams.systemsDistribution)	|
@@ -1045,11 +1046,17 @@ void MainWindow::setEngineSettings(const GuidoLayoutSettings& gls,
 		(gls.neighborhoodSpacing   != mGuidoEngineParams.neighborhoodSpacing)	|
 		(gls.optimalPageFill       != mGuidoEngineParams.optimalPageFill)	    |
         (gls.resizePage2Music      != mGuidoEngineParams.resizePage2Music)	    |
+        (gls.checkLyricsCollisions != mGuidoEngineParams.checkLyricsCollisions)	    |
         (gls.proportionalRenderingForceMultiplicator != mGuidoEngineParams.proportionalRenderingForceMultiplicator) )
 	{
+		bool refreshCode = (mGuidoEngineParams.checkLyricsCollisions && !gls.checkLyricsCollisions);
 		mGuidoEngineParams = gls;
 		mGuidoWidget->setGuidoLayoutSettings( mGuidoEngineParams );
-		updateWidgetSize();
+		if (refreshCode) {
+			// leaving the check collisions mode requires to refresh the AR
+			updateCode(true);
+		}
+		else updateWidgetSize();
 	}
 	if ( (bbmap != mBBMap) || (showBoxes != mShowBoxes) )
 	{
@@ -1539,6 +1546,7 @@ void MainWindow::readSettings()
 		guidoLayoutSettings.systemsDistance       = settings.value( SYSTEMS_DISTANCE_SETTING,       0 ).toDouble();
 		guidoLayoutSettings.optimalPageFill       = settings.value( OPTIMAL_PAGE_FILL_SETTING,      0 ).toInt();
 		guidoLayoutSettings.resizePage2Music      = settings.value( RESIZE_PAGE_2_MUSIC_SETTING,    0 ).toInt();
+		guidoLayoutSettings.checkLyricsCollisions = settings.value( CHECK_LYRICS_SETTING,			0 ).toBool();
         guidoLayoutSettings.proportionalRenderingForceMultiplicator = settings.value( PROPORTIONAL_RENDERING_SETTING, 0 ).toFloat();
 		settings.endGroup();
 	}
@@ -1612,6 +1620,7 @@ void MainWindow::writeSettings()
 	settings.setValue( OPTIMAL_PAGE_FILL_SETTING,      mGuidoEngineParams.optimalPageFill );
     settings.setValue( RESIZE_PAGE_2_MUSIC_SETTING,    mGuidoEngineParams.resizePage2Music );
     settings.setValue( PROPORTIONAL_RENDERING_SETTING, mGuidoEngineParams.proportionalRenderingForceMultiplicator );
+	settings.setValue( CHECK_LYRICS_SETTING ,		   mGuidoEngineParams.checkLyricsCollisions);
 
 	settings.endGroup();
 	

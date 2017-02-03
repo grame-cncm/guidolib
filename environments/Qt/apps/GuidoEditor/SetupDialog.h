@@ -45,8 +45,8 @@ private slots:
 	void voiceStaffSetup(int index);
 
 private:
-	void get (GuidoLayoutSettings& gls, int& bbmap, bool& showMapping, bool& rawMapping, bool& showBoxes, int&voiceNum, int&staffNum);
-	void set(const GuidoLayoutSettings& gls, int bbmap , bool showMapping, bool rawMapping, bool showBoxes , int voiceNum , int staffNum );
+	void getState (GuidoLayoutSettings& gls, int& bbmap, bool& showMapping, bool& rawMapping, bool& showBoxes, int&voiceNum, int&staffNum);
+	void setState (const GuidoLayoutSettings& gls, int bbmap , bool showMapping, bool rawMapping, bool showBoxes , int voiceNum , int staffNum );
 	
 	int voiceNum() const;
 	int staffNum() const;
