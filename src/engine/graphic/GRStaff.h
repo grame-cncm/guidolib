@@ -280,6 +280,7 @@ class GRStaff : public GRCompositeNotationElement
 		float	getProportionnalRender() const { return this->fProportionnalRendering; }
 		float	getStaffBottom () const;
 		void	checkCollisions (TCollisions& state) const;
+		float	getNotesDensity () const;
 		size_t	getLyrics (std::vector<const GRNotationElement*>& list) const;
 
   protected:

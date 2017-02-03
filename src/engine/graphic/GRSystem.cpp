@@ -591,6 +591,28 @@ void GRSystem::print(std::ostream& os) const
 }
 
 // --------------------------------------------------------------------------
+float GRSystem::getNotesDensity () const
+{
+	float density = 0;
+	const StaffVector * staves = getStaves();
+	int n = staves->size();
+	for (int i= 1; i <= n; i++) {
+		vector<const GRNotationElement*> elts;
+		const GRStaff* staff = staves->Get (i);
+		float staffdensity = 0;
+//		int s=1;
+		while (staff) {
+			staffdensity = max(staffdensity, staff->getNotesDensity());
+			staff = staff->getNextStaff();
+//cerr << "GRSystem::getNotesDensity staff " << s++ << " : " << staffdensity << endl;
+		}
+		density = max (density, staffdensity);
+//cerr << "GRSystem::getNotesDensity system " << i << ": " << density << endl;
+	}
+	return density;
+}
+
+// --------------------------------------------------------------------------
 void GRSystem::checkCollisions (TCollisions& state, std::vector<const GRNotationElement*>& elts) const
 {
 	size_t n = elts.size();

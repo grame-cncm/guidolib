@@ -102,6 +102,16 @@ void GRMusic::GGSOutputPage( int inPageNum ) const
 	curpage->GGSOutput();	
 }
 
+// --------------------------------------------------------------------------
+float GRMusic::getNotesDensity () const
+{
+	float density = 0;
+	for (size_t i= 0; i < getNumPages(); i++) {
+		GRPage * page = mPages[i];
+		density += page->getNotesDensity();
+	}
+	return density / getNumPages();
+}
 
 // --------------------------------------------------------------------------
 void GRMusic::checkLyricsCollisions()
@@ -608,6 +618,9 @@ void GRMusic::createGR (const ARPageFormat * inPageFormat, const GuidoLayoutSett
 	GRStaffManager grsm( this, fInFormat, &fSettings);
 	grsm.createStaves();
 	fLyricsChecked = false;
+
+//	float d = getNotesDensity();
+//cerr << "GRMusic::createGR density: " << d << endl;
 
 //cerr << "---------- voices ---------" << endl;
 //printVoices(cerr);

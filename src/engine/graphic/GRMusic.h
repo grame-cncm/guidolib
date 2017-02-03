@@ -110,6 +110,7 @@ class GRMusic : public GREvent
                 void    setDrawTime(long time)  { mDrawTime = time; }
                 long    getDrawTime()           { return mDrawTime; }
 
+				float	getNotesDensity () const;
 				void	checkLyricsCollisions ();		// checks lyrics collisions and resolves the collisions if any
 				bool	collides () const		{ return !fCollisions.list().empty(); }
 				bool	lyricsChecked () const	{ return fLyricsChecked; }

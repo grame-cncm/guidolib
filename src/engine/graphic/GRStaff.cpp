@@ -434,6 +434,76 @@ void GRStaff::print(std::ostream& os) const
 	}
 }
 
+class TXInterval : public std::pair<float, float>
+{
+	public:
+		TXInterval () : std::pair<float, float>(0,0) {}
+		TXInterval (float a, float b) : std::pair<float, float>(a, b) {}
+		void	clear ()					{ second = first = 0; }
+		bool	empty () const				{ return (second - first) <= 0; }
+		float	width () const				{ return second - first; }
+		bool	collides (const TXInterval& i) const	{
+			return ((first >= i.first) && ((first < i.second))) ||
+					((second <= i.second) && ((second > i.first)));
+		}
+};
+
+//-------------------------------------------------------------------------------
+static bool sortbypos (const TXInterval& i, const TXInterval& j) {
+	return (i.first < j.first);
+}
+
+//-------------------------------------------------------------------------------
+static vector<TXInterval> stripintervals (const vector<TXInterval>& list) {
+	vector<TXInterval> outlist;
+	size_t n = list.size();
+	TXInterval lastcollide;
+	for (size_t i=1; i<n ; i++) {
+		if (list[i-1].empty()) continue;		// empty ignore empty intervals
+
+		if (lastcollide.width()) {				// check if the is already a pending extension
+			if (list[i].collides(lastcollide))
+				lastcollide.second = list[i].second;	// extend the pending interval
+			else {
+				outlist.push_back(lastcollide);			// otherwise store
+				lastcollide.clear();					// and clear the pending interval
+			}
+		}
+		else if (list[i].collides(list[i-1])) {
+			float first		= min(list[i].first, list[i-1].first);
+			float second	= max(list[i].second, list[i-1].second);
+			lastcollide = TXInterval(first, second);
+		}
+		else outlist.push_back(list[i-1]);
+	}
+	if (lastcollide.width()) outlist.push_back(lastcollide);
+	else if (n) outlist.push_back(list[n-1]);
+	return outlist;
+}
+
+// ----------------------------------------------------------------------------
+float GRStaff::getNotesDensity () const
+{
+	vector<TXInterval> xintervals;
+	const NEPointerList& elts = getElements();
+	GuidoPos pos = elts.GetHeadPosition();
+	while (pos) {
+		const GRNotationElement * e = elts.GetNext(pos);
+		if (e  && (e->isSingleNote() || e->isRest()) && !e->isEmpty()) {
+			NVRect bb = e->getBoundingBox();
+			bb += e->getPosition();
+			xintervals.push_back (TXInterval (bb.left, bb.right));
+		}
+	}
+	sort (xintervals.begin(), xintervals.end(), sortbypos);
+	xintervals = stripintervals (xintervals);
+	size_t n = xintervals.size();
+	float occupied = 0;
+	for (size_t i=0; i<n ; i++)
+		occupied += xintervals[i].width();
+	return occupied / getBoundingBox().Width();
+}
+
 // ----------------------------------------------------------------------------
 void GRStaff::checkCollisions (TCollisions& state) const
 {

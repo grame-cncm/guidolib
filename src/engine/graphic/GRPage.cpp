@@ -94,6 +94,17 @@ void GRPage::print(std::ostream& os) const
 }
 
 // ----------------------------------------------------------------------------
+float GRPage::getNotesDensity() const
+{
+	float density = 0;
+	size_t n = mSystems.size();
+	for (size_t i = 0; i < n; i++) {
+		density += mSystems[i]->getNotesDensity ();
+	}
+	return density/n;
+}
+
+// ----------------------------------------------------------------------------
 void GRPage::checkCollisions (TCollisions& state, bool lyrics) const
 {
 	size_t n = mSystems.size();

@@ -100,6 +100,7 @@ public:
 	void 	FinishSystem( ISpringVector * pvect, IRodList * prods1, IRodList * prods2,
 						  GRSpaceForceFunction2 * psff, const TYPE_TIMEPOSITION & tp, int lastline = 0);
 	void	checkCollisions (TCollisions& state, bool lyrics) const;
+	float	getNotesDensity () const;
 	const GRSystemSlice* lastSlice() const		{ return mSystemSlices.GetTail(); }
 
 	TYPE_TIMEPOSITION mDebugSystemDate;
