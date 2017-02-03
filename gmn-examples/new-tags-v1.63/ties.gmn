@@ -1,0 +1,4 @@
+{
+[ \meter<"4/4"> c d# e \tie(f# f#) g/4 a ],
+[ \meter<"4/4"> c d# e \tie(f# \acc<style="none">(f#)) g/4 a ]
+}
