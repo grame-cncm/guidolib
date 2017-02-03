@@ -101,9 +101,7 @@ bool TCollisions::checkSlice (const NVRect& r)
 // ----------------------------------------------------------------------------
 void TCollisions::resolve (ARMusicalObject* ar, int gap)
 {
-//cerr << "TCollisions::resolve " << gap << " (" << lastElement() << ")" << endl;
-//	ARSpace * arspace = new ARSpace (gap * kVirtualToPx / 2);
-	ARSpace * arspace = new ARSpace (gap * 3.4f);
+	ARSpace * arspace = new ARSpace (gap);
 	arspace->setRelativeTimePosition (ar->getRelativeTimePosition());
 	TCollisionInfo ci (ar, ar->getVoiceNum(), arspace);
 	fCollisions.push_back (ci);
@@ -122,7 +120,7 @@ bool TCollisions::checkElement (const NVRect& r)
 		if (gap > 0) {
 			const GRARNotationElement* el = dynamic_cast<const GRARNotationElement*>(last);
 			if (el) {
-				resolve (el->getAbstractRepresentation(), gap);
+				resolve (el->getAbstractRepresentation(), lastrect.Width());
 				return true;
 			}
 			else cerr << "TCollisionsState::checkElement: NOT a GRARNotationElement: " << last << endl;

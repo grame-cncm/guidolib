@@ -20,10 +20,11 @@
 
 #include "NVRect.h"
 #include "NVPoint.h"
+#include "ARSpace.h"
 #include "GUIDOTypes.h"
+#include "defines.h"
 
 class ARMusicalObject;
-class ARSpace;
 class GRNotationElement;
 class GRStaff;
 class GRSystemSlice;
@@ -36,6 +37,9 @@ class  TCollisionInfo {
 			: fSpace(space), fARObject(ar), fVoice(voice) {}
 	
 		void print(std::ostream& os) const;
+
+		TYPE_TIMEPOSITION	date() const	{ return fARObject->getRelativeTimePosition(); }
+		float				space() const	{ return fSpace->getValue(); }
 
 		ARSpace*		 fSpace;		// a space element intended to solve the collision
 		ARMusicalObject* fARObject;		// the ar object after which the space should be inserted
@@ -57,6 +61,7 @@ class  TCollisions {
 		void	setSystem (int num);
 		int		getSystem() const							{ return fSystem; }
 		bool	collides () const							{ return !fCollisions.empty(); }
+		size_t	count () const								{ return fCollisions.size(); }
 		const std::vector<TCollisionInfo>& list () const	{ return fCollisions; }
 
 		const GRNotationElement * lastElement()				{ return fLastElements[fStaff]; }
@@ -71,10 +76,11 @@ class  TCollisions {
 		void	clear ();
 		void	print (std::ostream& out) const;
 
+		void	resolve (ARMusicalObject* ar, int gap);
+
 	private:
 		bool	checkElement (const NVRect& r);
 		bool	checkSlice (const NVRect& r);
-		void	resolve (ARMusicalObject* ar, int gap);
 
 		std::map<int, const GRNotationElement*> fLastElements;	// the previous element associated to a staff
 		std::map<int, NVRect> 	fLastBB;		// the previous elements bounding box
