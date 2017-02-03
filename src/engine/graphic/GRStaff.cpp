@@ -266,7 +266,7 @@ GRStaffState & GRStaffState::operator=(const GRStaffState & state)
 // ===========================================================================
 
 GRStaff::GRStaff( GRSystemSlice * systemslice, float propRender )
-						: mGrSystem(NULL), mGrSystemSlice( systemslice ), fLastSystemBarChecked(-1,1), proportionnalRender(propRender)
+						: mGrSystem(NULL), mGrSystemSlice( systemslice ), fLastSystemBarChecked(-1,1), fProportionnalRendering(propRender)
 {
 	mLength = 0;
 	setRelativeTimePosition(systemslice->getRelativeTimePosition());
@@ -437,9 +437,6 @@ void GRStaff::print(std::ostream& os) const
 // ----------------------------------------------------------------------------
 void GRStaff::checkCollisions (TCollisions& state) const
 {
-	checkLyricsCollisions(state);
-	return;
-
 //if (state.lastElement())
 //cerr << "GRStaff::checkCollisions " << state.getSystem() << "/" << state.getStaff() << " last: " << state.lastElement() << endl;
 //else
@@ -486,22 +483,18 @@ void GRStaff::checkCollisions (TCollisions& state) const
 }
 
 // ----------------------------------------------------------------------------
-void GRStaff::checkLyricsCollisions (TCollisions& state) const
+size_t GRStaff::getLyrics (vector<const GRNotationElement*>& list) const
 {
 	const NEPointerList& elts = getElements();
 	GuidoPos pos = elts.GetHeadPosition();
 	while (pos) {
-		GRNotationElement * e = elts.GetNext(pos);
+		const GRNotationElement * e = elts.GetNext(pos);
 		const GRText* text = e->isText();
 		if (text && text->isLyrics()) {
-			NVRect r = e->getBoundingBox();			// collect the lyric bounding box
-			r += e->getPosition();					// adjust the position
-			if (r.Width()) {						// ignore empty bounding boxes
-				state.check(r);						// check for collision
-				state.update (e, r);				// update the collision tracking state
-			}
+			list.push_back (e);
 		}
 	}
+	return list.size();
 }
 
 // ----------------------------------------------------------------------------
@@ -1000,7 +993,7 @@ GRRepeatEnd * GRStaff::AddRepeatEnd( ARRepeatEnd * arre )
 //	if (arre->getNumRepeat() == 0 || !arre->getRange())
 	{
         assert (arre);
-		GRRepeatEnd * tmp = new GRRepeatEnd(arre, this, arre->getRelativeTimePosition(), this->proportionnalRender);
+		GRRepeatEnd * tmp = new GRRepeatEnd(arre, this, arre->getRelativeTimePosition(), fProportionnalRendering);
 		if (mStaffState.curbarfrmt && (mStaffState.curbarfrmt->getStyle() == ARBarFormat::kStyleSystem))
 			mGrSystemSlice->addRepeatEnd(tmp, mStaffState.curbarfrmt->getRanges(), this);
 		addNotationElement(tmp);
@@ -1155,7 +1148,7 @@ GRBar * GRStaff::AddBar(ARBar * abar, const TYPE_TIMEPOSITION & date)
 staff_debug("AddBar");
 	newMeasure(date); // erhoeht u.a. mnum!
 
-	GRBar * bar = new GRBar( abar, this, date, this->proportionnalRender);
+	GRBar * bar = new GRBar( abar, this, date, fProportionnalRendering);
 	// depending on current bar Format, we have to tell the staffmanager (or the system) 
 	if (mStaffState.curbarfrmt && (mStaffState.curbarfrmt->getStyle() == ARBarFormat::kStyleSystem))
 		mGrSystemSlice->addBar(bar, mStaffState.curbarfrmt->getRanges(), this);
@@ -1307,7 +1300,7 @@ GRDoubleBar * GRStaff::AddDoubleBar(ARDoubleBar * ardbar, const TYPE_TIMEPOSITIO
 staff_debug("AddDoubleBar");
 	newMeasure(date); // erhoeht u.a. mnum!
 
-	GRDoubleBar * ntakt = new GRDoubleBar( ardbar, this, date, this->proportionnalRender);
+	GRDoubleBar * ntakt = new GRDoubleBar( ardbar, this, date, fProportionnalRendering);
 	// depending on current bar Format, we have to tell the staffmanager (or the system) 
 	if (mStaffState.curbarfrmt) {
 		if (mStaffState.curbarfrmt->getStyle() == ARBarFormat::kStyleSystem)
@@ -1323,7 +1316,7 @@ GRFinishBar * GRStaff::AddFinishBar(ARFinishBar * arfbar, const TYPE_TIMEPOSITIO
 staff_debug("AddFinishBar");
 	newMeasure(date); // erhoeht u.a. mnum!
 
-	GRFinishBar * ntakt = new GRFinishBar( arfbar, this, date, this->proportionnalRender);
+	GRFinishBar * ntakt = new GRFinishBar( arfbar, this, date, fProportionnalRendering);
 
 	// depending on current bar Format, we have to tell the staffmanager (or the system) 
 	if (mStaffState.curbarfrmt && (mStaffState.curbarfrmt->getStyle() == ARBarFormat::kStyleSystem))

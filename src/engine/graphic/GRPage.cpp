@@ -94,13 +94,13 @@ void GRPage::print(std::ostream& os) const
 }
 
 // ----------------------------------------------------------------------------
-void GRPage::checkCollisions (TCollisions& state)
+void GRPage::checkCollisions (TCollisions& state, bool lyrics) const
 {
 	size_t n = mSystems.size();
 	state.reset(true);
 	for (size_t i = 0; i < n; i++) {
 		state.setSystem ((int)i);
-		mSystems[i]->checkCollisions (state);
+		mSystems[i]->checkCollisions (state, lyrics);
 	}
 }
 

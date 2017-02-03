@@ -277,10 +277,10 @@ class GRStaff : public GRCompositeNotationElement
 		void	generatePositions();
 		float	currentLineThikness() const;
         
-		float	getProportionnalRender() const { return this->proportionnalRender; }
+		float	getProportionnalRender() const { return this->fProportionnalRendering; }
 		float	getStaffBottom () const;
 		void	checkCollisions (TCollisions& state) const;
-		void	checkLyricsCollisions (TCollisions& state) const;
+		size_t	getLyrics (std::vector<const GRNotationElement*>& list) const;
 
   protected:
 		void	DebugPrintState(const char * info) const;
@@ -318,7 +318,7 @@ class GRStaff : public GRCompositeNotationElement
 		bool			isNextOn;
 		bool			firstOnOffSetting;
 
-		float			proportionnalRender;
+		float			fProportionnalRendering;
 };
 
 #endif

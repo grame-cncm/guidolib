@@ -99,7 +99,7 @@ public:
 	void 	FinishSystem();
 	void 	FinishSystem( ISpringVector * pvect, IRodList * prods1, IRodList * prods2,
 						  GRSpaceForceFunction2 * psff, const TYPE_TIMEPOSITION & tp, int lastline = 0);
-	void	checkCollisions (TCollisions& state);
+	void	checkCollisions (TCollisions& state, bool lyrics) const;
 	const GRSystemSlice* lastSlice() const		{ return mSystemSlices.GetTail(); }
 
 	TYPE_TIMEPOSITION mDebugSystemDate;
@@ -147,6 +147,7 @@ protected:
 
 private:
 	const GRStaff*	getStaff (int index) const;
+	void	checkCollisions (TCollisions& state, std::vector<const GRNotationElement*>& elts) const;
 
 	GRPage*			mPage;
 	StaffVector*	mStaffs;

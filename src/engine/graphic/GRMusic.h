@@ -111,9 +111,10 @@ class GRMusic : public GREvent
                 long    getDrawTime()           { return mDrawTime; }
 
 				bool	collides () const		{ return !fCollisions.list().empty(); }
-				bool	checkCollisions ();
-				void	resolveCollisions ();
+				void	checkLyricsCollisions ();
 				void	printVoices (std::ostream& os) const;
+
+		std::vector<TCollisionInfo> getCollisions() const	{ return fCollisions.list(); }
 
 	protected:
 				void 	addVoiceElement( GRVoice * voice, GRNotationElement * el );
@@ -125,7 +126,11 @@ class GRMusic : public GREvent
         long        mDrawTime;
 
 	private:
-		ARMusicalVoice* getARVoice (int n);
+				size_t		checkCollisions (bool lyrics);
+				void		resolveCollisions (std::vector<TCollisionInfo> list);
+
+		ARMusicalVoice*		getARVoice (int n);
+		std::vector<TCollisionInfo> strip (const std::vector<TCollisionInfo>& list) const;
 
 		PageList 	mPages;
 		ARPageFormat *  fInFormat;

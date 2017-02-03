@@ -591,16 +591,48 @@ void GRSystem::print(std::ostream& os) const
 }
 
 // --------------------------------------------------------------------------
-void GRSystem::checkCollisions (TCollisions& state)
+void GRSystem::checkCollisions (TCollisions& state, std::vector<const GRNotationElement*>& elts) const
+{
+	size_t n = elts.size();
+	for (size_t i=1; i < n; i++) {
+		NVRect bb1 = elts[i-1]->getBoundingBox();
+		bb1 += elts[i-1]->getPosition();
+		NVRect bb2 = elts[i]->getBoundingBox();
+		bb2 += elts[i]->getPosition();
+		float gap = bb1.right - bb2.left;
+		if (gap > 0) {
+			gap = (bb1.Width() + bb2.Width() + LSPACE) / 2;
+			state.resolve(elts[i-1]->getAbstractRepresentation(), gap);
+		}
+	}
+}
+
+// --------------------------------------------------------------------------
+void GRSystem::checkCollisions (TCollisions& state, bool lyrics) const
 {
 	state.reset(false);
-	GuidoPos pos = mSystemSlices.GetHeadPosition();
-	while (pos) {
-		GRSystemSlice * slice = mSystemSlices.GetNext(pos);
-		NVRect r = slice->getBoundingBox();
-		state.check (r, true);
-		slice->checkCollisions(state);
-		state.update (slice, r);
+	if (lyrics) {
+		const StaffVector * staves = getStaves();
+		int n = staves->size();
+		for (int i= 1; i <= n; i++) {
+			vector<const GRNotationElement*> elts;
+			const GRStaff* staff = staves->Get (i);
+			while (staff) {
+				staff->getLyrics (elts);
+				staff = staff->getNextStaff();
+			}
+			checkCollisions (state, elts);
+		}
+	}
+	else {
+		GuidoPos pos = mSystemSlices.GetHeadPosition();
+		while (pos) {
+			GRSystemSlice * slice = mSystemSlices.GetNext(pos);
+			NVRect r = slice->getBoundingBox();
+			state.check (r, true);
+			slice->checkCollisions(state);
+			state.update (slice, r);
+		}
 	}
 }
 

@@ -50,7 +50,7 @@ class GRPage : public GREvent
 	void		setSpringParameter(float npar);
 	void		setPageFormat(ARPageFormat * inFormat);
 	void 		adjustPageSize();
-	void		checkCollisions(TCollisions& state);
+	void		checkCollisions(TCollisions& state, bool lyrics) const;
 
 	//	virtual	SystemPointerList * getSystems();
 	ARMusic *		getARMusic() const;
