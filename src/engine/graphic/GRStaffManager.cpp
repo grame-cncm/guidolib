@@ -120,15 +120,7 @@ GRStaffManager::GRStaffManager(GRMusic * p_grmusic, ARPageFormat * inPageFormat,
 
 	} else {
 		// Apply default layout settings
-		this->settings.optimalPageFill = kSettingDefaultOptimalPageFill;
-		this->settings.neighborhoodSpacing = kSettingDefaultNeighborhood;	// (NeighborhoodSpacing)
-		this->settings.systemsDistance = kSettingDefaultSystemDistance;
-		this->settings.proportionalRenderingForceMultiplicator = kSettingDefaultProportionalRendering;
-		this->settings.systemsDistribution = kSettingDefaultSystemDistrib; //GRStaffManager::kAuto; // 1 auto, 2 = always, 3 = never
-		this->settings.systemsDistribLimit = kSettingDefaultDistribLimit;
-		this->settings.spring = kSettingDefaultSpring;
-		this->settings.resizePage2Music = kSettingDefaultResizePage2Music;
-		this->settings.force = kSettingDefaultForce;
+		GuidoGetDefaultLayoutSettings (&this->settings);
 	}
 
 	mIsBreak = false;
