@@ -1,0 +1,8 @@
+{ [ \staff<1> \instr<"Vocals", dx=-12hs, dy=-5hs> \systemFormat<"", dx=12hs> \barFormat<style= "system", range="1"> 
+   (* meas. 1 *)  \clef<"g2"> \key<0> \meter<"4/4"> \stemsUp \lyrics<"Hey", -8>( c) \bar 
+   (* meas. 2 *)  \lyrics<"Jude,", -8>( \tieBegin a0/2) \beam( a/8 \tieEnd \lyrics<"don't", -8>( a) \lyrics<"make", -8>( c1) \lyrics<"it", -8>( d)) \bar 
+   (* meas. 3 *)  \lyrics<"bad", -8>( g0/2) _/4 \beam( \lyrics<"Take", -8>( g/8) \lyrics<"a", -8>( a)) \bar 
+   (* meas. 4 *)  \lyrics<"sad", -8>( b&/4) \lyrics<"song", -8>( \tieBegin f1) \beam( f/8 \tieEnd \lyrics<"and", -8>( f) \lyrics<"make", -8>( e)  \lyrics<"it", -8>( c)) \bar 
+   (* meas. 5 *)  \beam( \lyrics<"be-", -8>( d) \lyrics<"tte-", -8>( c/16)  b&0) \lyrics<"r", -8>( a/2) _/8 \lyrics<"Re-", -8>( c1) \bar 
+]
+ }
