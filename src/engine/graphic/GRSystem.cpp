@@ -597,11 +597,12 @@ void GRSystem::checkCollisions (TCollisions& state, std::vector<const GRNotation
 	for (size_t i=1; i < n; i++) {
 		NVRect bb1 = elts[i-1]->getBoundingBox();
 		bb1 += elts[i-1]->getPosition();
+		bb1.right += LSPACE / 2;				// this is to ensure a minimum space between lyrics
 		NVRect bb2 = elts[i]->getBoundingBox();
 		bb2 += elts[i]->getPosition();
 		float gap = bb1.right - bb2.left;
 		if (gap > 0) {
-			gap = (bb1.Width() + bb2.Width() + LSPACE) / 2;
+			gap = (bb1.Width() + bb2.Width() + LSPACE/2) / 2;
 			state.resolve(elts[i-1]->getAbstractRepresentation(), gap);
 		}
 	}
