@@ -3,9 +3,8 @@ GUIDO Engine history
 ----------------------------------------------------------------
   version 1.6.4
 - new feature to check and solve lyrics collisions, available using an extension of GuidoLayoutSettings.
-  Note that solving collisions modifies the internal AR representation. Reverting to a non-checked 
-  version (e.g. using GuidoUpdateGR) won't revert the AR and thus wil result in the same 
-  'solved' version. It's the application responsibility to restore the initial AR representation.
+  Note that solving collisions modifies the internal AR representation but changes are reverted when
+  no check is required. 
 - new repeat attribute for trills
 - new autoLyricsPos attribute for the \set tag
 - fix automatic y position for lyrics
