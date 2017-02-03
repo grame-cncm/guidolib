@@ -258,6 +258,10 @@ typedef struct GuidoLayoutSettings
 		(default value: 0)
 	*/
 	float proportionalRenderingForceMultiplicator;
+
+    /** used to check lyrics and resolve collisions (default value is false)
+	*/
+	bool checkLyricsCollisions;
 	
 } GuidoLayoutSettings;
 
