@@ -24,7 +24,7 @@ endif
 
 OUT  := GUIDOEngine.framework GUIDOEngine.tgz libGUIDOEngine.a
 MAC  ?= MacOS
-IOS  := iOS
+IOS  := ios
 
 # try to detect Visual Studio version used
 ifeq ($(TARGET), windows)
