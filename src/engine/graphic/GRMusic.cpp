@@ -16,8 +16,8 @@
 #include <sstream>		// Deprecated ?
 #include <fstream>
 #include <iostream>
+#include <algorithm>
 #include "secureio.h"
-//using namespace std;
 
 // - Guido AR
 #include "ARMusic.h"

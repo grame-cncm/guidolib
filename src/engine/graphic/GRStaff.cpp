@@ -22,8 +22,8 @@
 #include <vector>
 #include <map>
 #include <cstdlib>
+#include <algorithm>
 #include <iostream> // for debug only
-#include <fstream>// for debug only
 #ifdef android
 #include <ctype.h>
 #endif
