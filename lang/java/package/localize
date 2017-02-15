@@ -3,7 +3,7 @@
 
 TARGET=$1
 CURR=$(otool -L $TARGET | grep GUIDOEngine.framework | grep compatibility | cut -d ' ' -f 1 | sed 's/^[ 	]*//')
-NEW=/Library/Frameworks/GUIDOEngine.framework/Versions/B/GUIDOEngine
+NEW=/Library/Frameworks/GUIDOEngine.framework/Versions/C/GUIDOEngine
 install_name_tool -change $CURR $NEW $TARGET
 
 NEWJNI=libjniGUIDOEngine.dylib
