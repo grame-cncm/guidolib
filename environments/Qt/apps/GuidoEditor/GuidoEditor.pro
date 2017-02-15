@@ -21,6 +21,7 @@ macx {
 	RSRC.path =  Contents/Resources
 }
 macx|ios {
+	CONFIG += c++11
 	RC_FILE+=$$RESOURCES_DIR/English.lproj/InfoPlist.strings 
 	QMAKE_INFO_PLIST = $$PWD/rsc/GuidoEditorInfo.plist
 	RSRC.files =  $$RESOURCES_DIR/guido.icns

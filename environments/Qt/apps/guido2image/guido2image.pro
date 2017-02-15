@@ -8,6 +8,7 @@ win32 {
 }
 else {
 	DEFINES += USE_UNISTD
+	CONFIG += c++11
 }
 
 TEMPLATE = app
