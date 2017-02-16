@@ -1,0 +1,14 @@
+(*
+	incorrect rendering of tuplets including rests
+	introduced between v.1.60 and v.1.63
+*)
+[ 
+   \clef<"g2">  
+	\tuplet<"-3-">( e2/6 e/12) 
+	\tuplet<"-3-">( _  d/6)
+	_ e/6 |
+	\tuplet<"-3-">( c c/12) 
+	\tuplet<"-3-">( \b(c _ c/12)) 
+	\tuplet<"-3-">( _ _ _) 
+%	a1/4
+]
