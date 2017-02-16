@@ -63,7 +63,7 @@ private:
     void manualPosition( GREvent * caller, const NVPoint & inPos, const GRStaff * staff, GRSystemStartEndStruct * sse);
 	// gives the bounding box of the notes,
 	// returns the preferred position (true for above) according to stems directions
-	bool getNotesBoundingBox (NVRect& outRect) const;
+	bool getElementsBoundingBox (NVRect& outRect) const;
 
     //	bracestate mBraceState;
     bool mShowLeftBrace;
