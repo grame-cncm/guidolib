@@ -142,8 +142,7 @@ void GDeviceOSX::EndDraw()
 }
 
 // --------------------------------------------------------------
-void 
-GDeviceOSX::SetRasterOpMode( VRasterOpMode ROpMode)
+void GDeviceOSX::SetRasterOpMode( VRasterOpMode ROpMode)
 { 
 	mRasterMode = ROpMode; 
 	CGBlendMode mode;
@@ -165,23 +164,20 @@ GDeviceOSX::SetRasterOpMode( VRasterOpMode ROpMode)
 }
 
 // --------------------------------------------------------------
-void 
-GDeviceOSX::MoveTo( float x, float y )
+void GDeviceOSX::MoveTo( float x, float y )
 {
 	mCurrPenPos.x = x;
 	mCurrPenPos.y = y;
 }
 
 // --------------------------------------------------------------
-void 
-GDeviceOSX::LineTo( float x, float y )
+void GDeviceOSX::LineTo( float x, float y )
 {
 	Line(mCurrPenPos.x, mCurrPenPos.y, x, y);
 }
 
 // --------------------------------------------------------------
-void 
-GDeviceOSX::Line( float x1, float y1, float x2, float y2 )
+void GDeviceOSX::Line( float x1, float y1, float x2, float y2 )
 {
 	::CGContextBeginPath(mContext);
 	::CGContextMoveToPoint(mContext, x1, y1); 
@@ -194,8 +190,7 @@ GDeviceOSX::Line( float x1, float y1, float x2, float y2 )
 }
 
 // --------------------------------------------------------------
-void 
-GDeviceOSX::Frame( float left, float top, float right, float bottom )
+void GDeviceOSX::Frame( float left, float top, float right, float bottom )
 {
 	::CGContextBeginPath(mContext);
 	::CGContextMoveToPoint(mContext, left, top); 
@@ -209,9 +204,7 @@ GDeviceOSX::Frame( float left, float top, float right, float bottom )
 }
 
 // --------------------------------------------------------------
-void		
-GDeviceOSX::Arc( float left, float top, float right, float bottom, 
-					float startX, float startY, float endX, float endY )
+void GDeviceOSX::Arc( float left, float top, float right, float bottom, float startX, float startY, float endX, float endY )
 {
 	// - Save current state
 	::CGContextSaveGState(mContext);
@@ -241,8 +234,7 @@ GDeviceOSX::Arc( float left, float top, float right, float bottom,
 }
 
 // --------------------------------------------------------------
-void			
-GDeviceOSX::Triangle( float x1, float y1, float x2, float y2, float x3, float y3 )
+void GDeviceOSX::Triangle( float x1, float y1, float x2, float y2, float x3, float y3 )
 {
 	const float xCoords [] = { x1, x2, x3 };
 	const float yCoords [] = { y1, y2, y3 };
@@ -251,8 +243,7 @@ GDeviceOSX::Triangle( float x1, float y1, float x2, float y2, float x3, float y3
 }
 
 // --------------------------------------------------------------
-void 
-GDeviceOSX::Polygon( const float * xCoords, const float * yCoords, int count )
+void GDeviceOSX::Polygon( const float * xCoords, const float * yCoords, int count )
 {
 	::CGContextBeginPath(mContext );
 	::CGContextMoveToPoint(mContext, xCoords[ count - 1 ], yCoords[ count - 1 ] ); 
@@ -265,8 +256,7 @@ GDeviceOSX::Polygon( const float * xCoords, const float * yCoords, int count )
 	::CGContextDrawPath(mContext, kCGPathFill);
 }
 // --------------------------------------------------------------
-void 
-GDeviceOSX::Rectangle( float left, float top, float right, float bottom )
+void GDeviceOSX::Rectangle( float left, float top, float right, float bottom )
 {
 	CGRect myRect = ::CGRectMake( left, top, right - left, bottom - top );
 
@@ -280,9 +270,7 @@ GDeviceOSX::Rectangle( float left, float top, float right, float bottom )
 // - Font services ----------------------------------------------
 /////////////////////////////////////////////////////////////////
 // --------------------------------------------------------------
-//GFontRef
-void 
-GDeviceOSX::SetMusicFont( const VGFont * inObj )
+void GDeviceOSX::SetMusicFont( const VGFont * inObj )
 {
 	// CGContextSelectFont does not return an error code, so we first select
 	// a well-known font. If we did not, musical symbols may be displayed instead of 
@@ -296,17 +284,17 @@ GDeviceOSX::SetMusicFont( const VGFont * inObj )
 }
 
 // --------------------------------------------------------------
-//GFontRef
-void 
-GDeviceOSX::SetTextFont( const VGFont* inObj )
+void GDeviceOSX::SetTextFont( const VGFont* inObj )
 {
 	// CGContextSelectFont does not return an error code, so we first select
 	// a well-known font. If we did not, musical symbols may be displayed instead of 
 	// plain-text.
 
 //	::CGContextSelectFont(mContext, "Helvetica", inObj->GetSize(), kCGEncodingMacRoman);	// ok
-	::CGContextSelectFont(mContext, inObj->GetName(), inObj->GetSize(), kCGEncodingMacRoman);// ok
-	mCurrTextFont = inObj;
+	if (inObj) {
+		::CGContextSelectFont(mContext, inObj->GetName(), inObj->GetSize(), kCGEncodingMacRoman);// ok
+		mCurrTextFont = inObj;
+	}
 }
 
 /////////////////////////////////////////////////////////////////
