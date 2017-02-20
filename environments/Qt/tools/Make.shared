@@ -2,23 +2,22 @@
 # shared makefile designed to be called from $(PROJECT)/build dir
 #
 
+TARGET := undefined
+
 system	:= $(shell uname -s)
+# normalizes MINGW versions
+system := $(shell echo $(system) | grep MINGW > /dev/null && echo MINGW || echo $(system))
 ifeq ($(system), Darwin)
 	TARGET = macos
 	SPEC ?= -spec macx-xcode
 	DEST := ..
 else
-ifeq ($(system), MINGW32_NT-6.1)
-	TARGET = windows
-	DEST := ..
-else
-ifeq ($(system), MINGW32_NT-6.2)
+ifeq ($(system), MINGW)
 	TARGET = windows
 else
 ifeq ($(system), Linux)
 	TARGET = linux
 	DEST := ..
-endif
 endif
 endif
 endif
@@ -43,6 +42,9 @@ ROOT    := ..
 
 all:
 	make -f ../../Make.shared $(TARGET)
+
+undefined:
+	$(error System is undefined, not target available)
 
 macos: macos/$(PROJECT).xcodeproj  $(PROJECT)
 	@echo ===================================

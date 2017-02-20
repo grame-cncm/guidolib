@@ -18,19 +18,18 @@ endif
 
 .PHONY : doc macos windows linux
 
+TARGET := undefined
 system	:= $(shell uname -s)
+# normalizes MINGW versions
+system := $(shell echo $(system) | grep MINGW > /dev/null && echo MINGW || echo $(system))
 ifeq ($(system), Darwin)
 	TARGET = macos
 else
-ifeq ($(system), MINGW32_NT-6.1)
-	TARGET = windows
-else
-ifeq ($(system), MINGW32_NT-6.2)
+ifeq ($(system), MINGW)
 	TARGET = windows
 else
 ifeq ($(system), Linux)
 	TARGET = linux
-endif
 endif
 endif
 endif
@@ -56,6 +55,9 @@ all :
 	make $(TARGET)
 	make jar-engine-android
 #	make headers
+
+undefined:
+	$(error System is undefined, not target available)
 
 help:
 	@echo  This makefile is intended to manage guido java ressources.
