@@ -134,6 +134,7 @@ ConstMusicalSymbolID kIntensPPPPSymbol		 = 195;
 ConstMusicalSymbolID kIntensPPPSymbol		 = 200;
 ConstMusicalSymbolID kFlag64UpSymbol		 = 202;
 ConstMusicalSymbolID kFlag64DownSymbol		 = 203;
+ConstMusicalSymbolID kDotSymbol				 = 220;
 ConstMusicalSymbolID kFlag32UpSymbol		 = 221;
 ConstMusicalSymbolID kFlag32DownSymbol		 = 222;
 ConstMusicalSymbolID kStaccmoDownSymbol		 = 224;
