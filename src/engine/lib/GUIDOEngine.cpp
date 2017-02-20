@@ -125,9 +125,9 @@ GUIDOAPI(GuidoErrCode) GuidoInit( GuidoInitDesc * desc )
 	if( desc == 0 ) return guidoErrBadParameter;
 
 	// - Music Font (keep previous settings if desc = 0 ? )
-	const char * musicFont = desc->musicFont ? desc->musicFont : FontManager::kDefaultMusicFont;
+	const char * musicFont = desc->musicFont ? desc->musicFont : FontManager::kDefaultMusicFont.c_str();
 	// - Text Font
-	const char * textFont = desc->textFont ? desc->textFont : FontManager::kDefaultTextFont;
+	const char * textFont = desc->textFont ? desc->textFont : FontManager::kDefaultTextFont.c_str();
 	
 	if (musicFont) FontManager::kDefaultMusicFont = musicFont;
 	if (textFont) FontManager::kDefaultTextFont = textFont;
