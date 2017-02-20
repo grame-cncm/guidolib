@@ -108,7 +108,7 @@ VGDevice* GSystemOSX::CreatePrinterDevice( )
 // --------------------------------------------------------------
 const VGFont* GSystemOSX::CreateVGFont( const char * faceName, int size, int properties ) const
 {
-	return new GFontOSX (faceName, size, properties);;
+	return faceName ? new GFontOSX (faceName, size, properties) : 0;
 }
 
 
