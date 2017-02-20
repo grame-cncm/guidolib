@@ -56,8 +56,8 @@ class FontManager
 
 	static const VGFont * gFontScriab;
 	static const VGFont * gFontText;
-	static const char * kDefaultMusicFont;
-	static const char * kDefaultTextFont;
+	static std::string kDefaultMusicFont;
+	static std::string kDefaultTextFont;
 };
 
 #endif

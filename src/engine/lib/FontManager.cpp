@@ -13,18 +13,18 @@
 */
 
 #include <iostream>
-using namespace std;
 
 #include "GUIDOInternal.h"	// for gGlobalSettings.gDevice
-
 #include "VGFont.h"
 #include "FontManager.h"
+
+using namespace std;
 
 FontInfoList FontManager::sFontList;
 const VGFont *	FontManager::gFontScriab = 0;
 const VGFont *	FontManager::gFontText   = 0;
-const char*		FontManager::kDefaultMusicFont = "Guido2";
-const char*		FontManager::kDefaultTextFont  = "Times";
+string	FontManager::kDefaultMusicFont = "Guido2";
+string	FontManager::kDefaultTextFont  = "Times";
 
 // ===========================================================================
 // 		FontInfo
@@ -73,7 +73,7 @@ FontManager::~FontManager()	{ ReleaseAllFonts(); }
 const VGFont* FontManager::FindOrCreateFont(VGSystem* sys, int size, const string * name, const string * attributesStr )
 {
 	// - First, we look if a similar font is already in our font list.
-	const char * fontNameCStr = name ? name->c_str() : kDefaultMusicFont;
+	const char * fontNameCStr = name ? name->c_str() : kDefaultMusicFont.c_str();
 	const char * fontAttribCStr = attributesStr ? attributesStr->c_str() : "";
 	
 	// - First, we look if a similar font is already in our font list.
