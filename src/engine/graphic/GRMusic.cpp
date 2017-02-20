@@ -16,8 +16,8 @@
 #include <sstream>		// Deprecated ?
 #include <fstream>
 #include <iostream>
+#include <algorithm>
 #include "secureio.h"
-//using namespace std;
 
 // - Guido AR
 #include "ARMusic.h"
@@ -54,18 +54,20 @@ using namespace std;
 long ggsoffsetx = 0L;
 long ggsoffsety = 0L;
 
-GRMusic::GRMusic(ARMusic * inARMusic, ARPageFormat * inFormat, const GuidoLayoutSettings *settings, bool ownsAR ) // ,int ignorepf)
-  : GREvent( 0, inARMusic, ownsAR ) // owns Elements!
-	 //mPages( new PagePointerList(1)) // mit OWNS-Elements!!!
+// --------------------------------------------------------------------------
+GRMusic::GRMusic(ARMusic * ar, ARPageFormat * inFormat, const GuidoLayoutSettings *settings, bool ownsAR )
+  : GREvent( 0, ar, ownsAR )
 {	
-	assert( inARMusic );
+	assert( ar );
 	fInFormat = 0;
     mAR2GRTime = -1;
     mDrawTime  = -1;
+	fLyricsChecked = false;
 	GuidoGetDefaultLayoutSettings (&fSettings);
 	createGR(inFormat, settings );
 }
 
+// --------------------------------------------------------------------------
 GRMusic::~GRMusic()
 {
 	DeleteContent( &mPages );
@@ -74,6 +76,7 @@ GRMusic::~GRMusic()
 	delete fInFormat;
 }
 
+// --------------------------------------------------------------------------
 /** \brief Guido Graphic Stream.
 */
 char * GRMusic::getGGSInfo(int infotype) const
@@ -83,6 +86,7 @@ char * GRMusic::getGGSInfo(int infotype) const
 	return buf;
 }
 
+// --------------------------------------------------------------------------
 void GRMusic::GGSOutputPage( int inPageNum ) const
 {
 	const GRPage * curpage = getPage(inPageNum);
@@ -98,17 +102,141 @@ void GRMusic::GGSOutputPage( int inPageNum ) const
 	curpage->GGSOutput();	
 }
 
+// --------------------------------------------------------------------------
+float GRMusic::getNotesDensity () const
+{
+	float density = 0;
+	for (size_t i= 0; i < getNumPages(); i++) {
+		GRPage * page = mPages[i];
+		density += page->getNotesDensity();
+	}
+	return density / getNumPages();
+}
 
-bool GRMusic::checkCollisions()
+// --------------------------------------------------------------------------
+void GRMusic::checkLyricsCollisions()
+{
+	size_t n = checkCollisions(true);
+	if (n) {
+		resolveCollisions (getCollisions());
+		fLyricsChecked = true;
+	}
+}
+
+// --------------------------------------------------------------------------
+size_t GRMusic::checkCollisions(bool lyrics)
 {
 	fCollisions.clear();
 	for (size_t i= 0; i < getNumPages(); i++) {
 		GRPage * page = mPages[i];
-		page->checkCollisions(fCollisions);
+		page->checkCollisions(fCollisions, lyrics);
 	}
-	return fCollisions.collides();
+	return fCollisions.count();
 }
 
+//-------------------------------------------------------------------------------
+static bool sortByDate (const TCollisionInfo& i, const TCollisionInfo& j) {
+	return (i.date() < j.date());
+}
+
+//-------------------------------------------------------------------------------
+vector<TCollisionInfo> GRMusic::strip (const vector<TCollisionInfo>& list) const {
+	vector<TCollisionInfo> outlist;
+	const TCollisionInfo* max = 0;
+	size_t n = list.size();
+	for (size_t i = 1; i < n; i++) {
+		if (list[i-1].date() == list[i].date()) {
+			// same date: keep the largest gap
+			if (max) {
+				if (list[i].space() > max->space())
+					max = &list[i];
+			}
+			else max = (list[i-1].space() > list[i].space()) ? &list[i-1] : &list[i];
+		}
+		else {
+			if (max) {
+				outlist.push_back(*max);
+				max = 0;
+			}
+			else outlist.push_back(list[i-1]);
+		}
+	}
+	if (max) outlist.push_back(*max);
+	else outlist.push_back(list[n-1]);
+	return outlist;
+}
+
+//static void print (ostream& out, const vector<TCollisionInfo>& list) {
+//	for (size_t i = 0; i < list.size(); i++)
+//		out << list[i] << endl;
+//}
+
+//-------------------------------------------------------------------------------
+void GRMusic::resolveCollisions (vector<TCollisionInfo> list)
+{
+//	cerr << "before sort: \n---------------------------" << endl;
+//	::print (cerr, list);
+	sort (list.begin(), list.end(), sortByDate);
+//	cerr << "after sort : \n---------------------------" << endl;
+//	::print (cerr, list);
+	list = strip (list);
+//	cerr << "after strip : \n---------------------------" << endl;
+//	::print (cerr, list);
+	
+	for (size_t i=0; i< list.size(); i++) {
+		TCollisionInfo ci = list[i];
+		ARMusicalVoice * voice = getARVoice (ci.fVoice - 1);		// look for the collision voice
+		if (voice) {
+			GuidoPos pos = voice->GetElementPos(ci.fARObject);		// get the colliding position
+			if (pos) {
+				ARMusicalObject* ar = voice->GetAt(pos);			// and the corresponding ar objet
+				if (ar->isARBar()) {								// skip barlines (to put the space after)
+					voice->GetNextObject(pos);
+					if (pos) voice->AddElementAfter (pos, ci.fSpace);	// and add the space tag
+				}
+				else voice->AddElementAfter (pos, ci.fSpace);		// add the space tag
+			}
+			else {		// colliding position not found, maybe in the position tags list
+				pos = voice->getPositionTagPos(dynamic_cast<ARPositionTag*>(ci.fARObject));
+				if (pos) {
+					TYPE_TIMEPOSITION d = ci.fARObject->getRelativeTimePosition();
+					pos = voice->GetHeadPosition();
+					GuidoPos prev = pos;
+					while (pos) {		// browse the voice up to the corresponding date
+						const ARMusicalObject* obj = voice->GetNextObject(pos);
+						// place the space tag before the next note
+						if (obj->isARNote() && (obj->getRelativeTimePosition() > d)) {
+							voice->AddElementAt(prev,  ci. fSpace);
+							break;
+						}
+						prev = pos;
+					}
+				}
+			}
+		}
+	}
+	if (list.size()) createGR();
+}
+
+//-------------------------------------------------------------------------------
+void GRMusic::removeAutoSpace(ARMusic * arm)
+{
+	GuidoPos pos = arm->GetHeadPosition();
+	while (pos) {
+		ARMusicalVoice * voice = arm->GetNext(pos);
+		if (voice) {
+			GuidoPos vpos = voice->GetHeadPosition();
+			while (vpos) {
+				ARMusicalObject* obj = voice->GetNextObject(vpos);
+				ARSpace* space = obj ? obj->isARSpace() : 0;
+				if (space && space->getIsAuto())
+					voice->RemoveElement (obj);
+			}
+		}
+	}
+}
+
+// --------------------------------------------------------------------------
 /** \brief Draws a page of music according to input drawing parameters.
 
 	\param hdc a graphic device context object.
@@ -125,7 +253,8 @@ void GRMusic::OnDraw( VGDevice & hdc, const GuidoOnDrawDesc & inDrawInfos )
 		drawpage->OnDraw(hdc, inDrawInfos);
 }
 	
-void GRMusic::GetMap( int inPage, float w, float h, GuidoElementSelector sel, MapCollector& f ) const 
+// --------------------------------------------------------------------------
+void GRMusic::GetMap( int inPage, float w, float h, GuidoElementSelector sel, MapCollector& f ) const
 {
 	const GRPage * page = getPage( inPage );
 	if( page ) {
@@ -157,6 +286,7 @@ void GRMusic::trace(VGDevice & hdc)
     voicetrace(hdc);
 }
 
+// --------------------------------------------------------------------------
 /** \brief Adds a page to the page list.
 */
 void GRMusic::addPage(GRPage * newPage)
@@ -165,16 +295,19 @@ void GRMusic::addPage(GRPage * newPage)
 	mPages.push_back(newPage);
 }
 
+// --------------------------------------------------------------------------
 ARMusic * GRMusic::getARMusic()
 {
 	return /*dynamic*/static_cast<ARMusic*>(getAbstractRepresentation());
 }
 
+// --------------------------------------------------------------------------
 const ARMusic * GRMusic::getconstARMusic() const
 {
 	return /*dynamic*/static_cast<const ARMusic*>(getAbstractRepresentation());
 }
 
+// --------------------------------------------------------------------------
 void GRMusic::updateBoundingBox()
 {
 	if (mPages.empty()) return;
@@ -271,6 +404,7 @@ int GRMusic::getNumSystems(int pagenum) const
 	return guidoErrBadParameter;
 }
 
+// --------------------------------------------------------------------------
 /** \brief Adjusts the pagesizes so that they fit the music on them ...
 	this is done with the bounding_rectangle.
 	
@@ -311,12 +445,14 @@ void GRMusic::convertToPixelSize( VGDevice & hdc, int page, float zoom,
 }
 */
 
+// --------------------------------------------------------------------------
 /** \brief Not yet implemented.
 */
 void GRMusic::setSpringParameter(float npar)
 {
 }
 
+// --------------------------------------------------------------------------
 const NVstring & GRMusic::getName()
 {
 	if (mName.length() == 0)
@@ -324,6 +460,7 @@ const NVstring & GRMusic::getName()
 	return mName;
 }
 
+// --------------------------------------------------------------------------
 /** \brief Returns the nth GRVoice of our voice list.
 
 	zero based
@@ -336,6 +473,7 @@ GRVoice * GRMusic::getVoice(int num)
 	return mVoiceList[ (size_t)num ];
 }
 
+// --------------------------------------------------------------------------
 /** \brief Returns the GRVoice corresponding to input musical voice.
 */
 GRVoice * GRMusic::getVoice(ARMusicalVoice * arv)
@@ -349,6 +487,7 @@ GRVoice * GRMusic::getVoice(ARMusicalVoice * arv)
 	return 0;
 }
 
+// --------------------------------------------------------------------------
 /** \brief Adds a notation-element to a GRVoice
 */
 void GRMusic::addVoiceElement( int num, GRNotationElement * el )
@@ -356,6 +495,7 @@ void GRMusic::addVoiceElement( int num, GRNotationElement * el )
 	addVoiceElement( getVoice( num ), el );
 }
 
+// --------------------------------------------------------------------------
 /** \brief Adds a notation element to a voice of music.
 */
 void GRMusic::addVoiceElement(ARMusicalVoice * arv, GRNotationElement * el )
@@ -363,6 +503,7 @@ void GRMusic::addVoiceElement(ARMusicalVoice * arv, GRNotationElement * el )
 	addVoiceElement( getVoice( arv ), el );
 }
 
+// --------------------------------------------------------------------------
 /** \brief Adds a notation element to a voice of music.
 */
 void GRMusic::addVoiceElement( GRVoice * voice, GRNotationElement * el )
@@ -377,6 +518,7 @@ void GRMusic::addVoiceElement( GRVoice * voice, GRNotationElement * el )
 		voice->AddTail(el);
 }
 
+// --------------------------------------------------------------------------
 /** \brief Remove a notation element from a voice of music.
 */
 void GRMusic::removeVoiceElement(ARMusicalVoice * arv, GRNotationElement * el)
@@ -386,6 +528,7 @@ void GRMusic::removeVoiceElement(ARMusicalVoice * arv, GRNotationElement * el)
 		voice->RemoveElement(el);
 }
 
+// --------------------------------------------------------------------------
 /** \brief Returns the number of voices of the music.
 */
 int GRMusic::getNumVoices() const
@@ -393,6 +536,7 @@ int GRMusic::getNumVoices() const
 	return (int)mVoiceList.size();
 }
 
+// --------------------------------------------------------------------------
 /** \brief Called from the GRVoiceManager to tell
 	a voice to prepare itself for the possibility of
 	 a newline at the current position.
@@ -404,6 +548,7 @@ void GRMusic::setPossibleVoiceNLinePosition(ARMusicalVoice * arv, const TYPE_TIM
 		voice->setPossibleNLinePosition(tp);
 }
 
+// --------------------------------------------------------------------------
 /** \brief Called to remember a previously saved NLine-Position.
 */
 void GRMusic::rememberVoiceNLinePosition(ARMusicalVoice * arv, const TYPE_TIMEPOSITION & tp)
@@ -415,6 +560,7 @@ void GRMusic::rememberVoiceNLinePosition(ARMusicalVoice * arv, const TYPE_TIMEPO
 	}
 }
 
+// --------------------------------------------------------------------------
 /** \brief Called from GRPage whenever a new system is created.
 	This needs to be done, so that the GRVoice(s) know, where it starts.
 
@@ -429,6 +575,7 @@ void GRMusic::startNewSystem(GRSystem * grsystem)
 	}
 }
 
+// --------------------------------------------------------------------------
 /** \brief Creates the Graphical Representation from the Abstract Representation.
 	
 	Part of the AR to GR process.
@@ -457,6 +604,9 @@ void GRMusic::createGR (const ARPageFormat * inPageFormat, const GuidoLayoutSett
 	DeleteContent( &mPages );
 	DeleteContent( &mVoiceList );
 
+	if (fLyricsChecked && (!settings || !settings->checkLyricsCollisions))
+		removeAutoSpace(arm);
+
 	// - Creates new voices
 	GuidoPos pos = arm->GetHeadPosition();
 	while (pos)
@@ -467,6 +617,10 @@ void GRMusic::createGR (const ARPageFormat * inPageFormat, const GuidoLayoutSett
 	}
 	GRStaffManager grsm( this, fInFormat, &fSettings);
 	grsm.createStaves();
+	fLyricsChecked = false;
+
+//	float d = getNotesDensity();
+//cerr << "GRMusic::createGR density: " << d << endl;
 
 //cerr << "---------- voices ---------" << endl;
 //printVoices(cerr);
@@ -491,7 +645,7 @@ void GRMusic::printVoices (std::ostream& os) const
 	for (size_t i = 0; i<mVoiceList.size(); i++) {
 		GRVoice* voice = mVoiceList[i];
 		if (voice) {
-	cerr << "Voice " << i << endl;
+			cerr << "Voice " << i << endl;
 			GuidoPos first = voice->First();
 			GuidoPos last = voice->Last();
 			while (first != last) {
@@ -503,41 +657,20 @@ void GRMusic::printVoices (std::ostream& os) const
 }
 
 //-------------------------------------------------------------------------------
-void GRMusic::resolveCollisions ()
-{
-	const vector<TCollisionInfo>& list = fCollisions.list();
-	for (size_t i=0; i< list.size(); i++) {
-cerr << " => " << list[i]<< endl;
-		TCollisionInfo ci = list[i];
-		ARMusicalVoice * voice = getARVoice (ci.fVoice);
-		if (voice) {
-			GuidoPos pos = voice->GetElementPos(ci.fARObject);
-			if (pos) {
-				ARMusicalObject* ar = voice->GetAt(pos);
-				if (ar->isARBar()) {
-					voice->GetNextObject(pos);
-					if (pos) voice->AddElementAfter (pos, ci.fSpace);
-				}
-				else voice->AddElementAfter (pos, ci.fSpace);
-			}
-		}
-	}
-	if (list.size()) createGR();
-}
-
-//-------------------------------------------------------------------------------
 ARMusicalVoice* GRMusic::getARVoice (int n)
 {
-	ARMusicalVoice * voice = 0;
 	ARMusic * arm = getARMusic();
 	GuidoPos pos = arm->GetHeadPosition();
-	while (pos && n--)
-		voice = arm->GetNext(pos);
-	return (!pos && n) ? 0 : voice;
+	while (pos) {
+		ARMusicalVoice * voice = arm->GetNext(pos);
+		if (!n--) return voice;
+	}
+	return 0;
 }
 
 
 
+// --------------------------------------------------------------------------
 /** \brief Finds the index of a given voice (zero based)
 
 	\return a voice index, or -1 if no voice found.
@@ -557,7 +690,8 @@ int GRMusic::getVoiceNum(ARMusicalVoice * arv) const
 	return -1;
 }
 
-/** \brief Returns some code whether the operation was successful or not. 
+// --------------------------------------------------------------------------
+/** \brief Returns some code whether the operation was successful or not.
 
 	This is something completely new! Input to the Renderer ...
 */
@@ -676,6 +810,7 @@ int GRMusic::GGSInputPage(int page, const char * str)
 	return guidoNoErr;	// (JB) was: return 1;
 }
 
+// --------------------------------------------------------------------------
 void GRMusic::getGuido() const
 {
 	const ARMusic * arm = getconstARMusic();
@@ -683,13 +818,7 @@ void GRMusic::getGuido() const
 	ostringstream os;		// was ostrstream os; (deprecated)
 
   // no AUTO-tags !
-
     arm->print(os);
-  
-//#ifdef LINUX	
-//  os.freeze();	// Deprecated: it was here because of old ostrstream.
-//#endif
-
 	size_t charCount = os.str().size(); // was: os.pcount();
 	char * s = new char[ charCount +  2];
 
@@ -701,17 +830,17 @@ void GRMusic::getGuido() const
 	s[ charCount ] = 0;
 
   AddGuidoOutput( s );
-
   delete [] s;
 }
 
+// --------------------------------------------------------------------------
 /** \brief Not yet implemented.
 */
-void GRMusic::MarkVoice(int voicenum, int numfrom, int denomfrom, 
-			int numlength, int denomlength,unsigned char red, unsigned char green, unsigned char blue)
+void GRMusic::MarkVoice(int voicenum, int numfrom, int denomfrom, int numlength, int denomlength, unsigned char red, unsigned char green, unsigned char blue)
 {
 }
 
+// --------------------------------------------------------------------------
 /** \brief Finds the page of the element which date matches the input time pos.
 
 	Input time pos must match an existing element.
@@ -734,6 +863,7 @@ int GRMusic::getPageNum(int num, int denom) const
 	return guidoErrActionFailed;	
 }
 
+// --------------------------------------------------------------------------
 /** \brief Finds the page which contains input time pos.
 
 	\return a page index, or 0 if no page found.
@@ -741,9 +871,6 @@ int GRMusic::getPageNum(int num, int denom) const
 int GRMusic::getPageNumForTimePos( int num, int denom ) const
 {
 	const TYPE_TIMEPOSITION inDate ( num, denom );
-
-// - version B: uses custom "debug" dates
-	
 	if( inDate > getDuration()) return 0; // check if in the music duration range
 
 	const int pageCount = getNumPages();
@@ -758,46 +885,6 @@ int GRMusic::getPageNumForTimePos( int num, int denom ) const
 
 	}
 	return pageCount;
-
-// - version A: uses durations. bug: system durations are WRONG
-/*	
-	TYPE_TIMEPOSITION startDate = 0;
-	TYPE_TIMEPOSITION endDate = 0;
-	TYPE_TIMEPOSITION duration = 0;
-
-	const int pageCount = getNumPages();
-	for( int index = 1; index <= pageCount; ++index )
-	{
-		GRPage * page = getPage( index );
-		if( page == 0 ) return 0;	
-
-		duration = page->getDuration();
-		endDate = startDate + duration;
-
-		if(( inDate >= startDate ) && ( inDate < endDate )) // end date is exclusive
-		{
-			return index;
-		}
-
-		startDate += duration;
-	}
-	
-	return 0;
-*/
-/*	uses voices events: bug: last system points to the next page bug.
-	for( VoiceList::iterator ptr = mVoiceList.begin(); ptr != mVoiceList.end(); ++ptr )
-	{
-		GRVoice * voice = *ptr;
-		if (voice)
-		{
-			GRPage * page = voice->getPageForTimePos( num, denom );
-			if( page == 0 )
-				return guidoErrActionFailed;
-			
-			return getPageIndex( page );
-		}
-	}
-	return guidoErrActionFailed;*/	
 }
 
 // --------------------------------------------------------------------------
@@ -820,6 +907,7 @@ int	GRMusic::getPageIndex( const GRPage * inPage ) const
 	return 0;
 }
 
+// --------------------------------------------------------------------------
 /** \brief Returns the relative time position of given page.
 
 	return false if input page was not found.

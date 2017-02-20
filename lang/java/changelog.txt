@@ -1,6 +1,10 @@
 GUIDO Engine - JNI package history 
 
 ----------------------------------------------------------------
+version 1.2.5 - 
+- update to guidoengine v.1.63
+
+----------------------------------------------------------------
 version 1.2.4 - 
 - update to guidoengine v.1.60
 - Update guidoengine-android.jar to remove guidoscoremap and include new class guidoscoremapbase.

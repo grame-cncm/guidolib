@@ -94,13 +94,24 @@ void GRPage::print(std::ostream& os) const
 }
 
 // ----------------------------------------------------------------------------
-void GRPage::checkCollisions (TCollisions& state)
+float GRPage::getNotesDensity() const
+{
+	float density = 0;
+	size_t n = mSystems.size();
+	for (size_t i = 0; i < n; i++) {
+		density += mSystems[i]->getNotesDensity ();
+	}
+	return density/n;
+}
+
+// ----------------------------------------------------------------------------
+void GRPage::checkCollisions (TCollisions& state, bool lyrics) const
 {
 	size_t n = mSystems.size();
 	state.reset(true);
 	for (size_t i = 0; i < n; i++) {
 		state.setSystem ((int)i);
-		mSystems[i]->checkCollisions (state);
+		mSystems[i]->checkCollisions (state, lyrics);
 	}
 }
 
@@ -268,7 +279,7 @@ void GRPage::trace(VGDevice & hdc) const
         r = system->getBoundingBox();
         r += system->getPosition();
         cout << "    system " << r << endl;
-        SSliceList * slices = system->getSlices();
+        const SSliceList * slices = system->getSlices();
 
         if (slices) {
             GuidoPos pos = slices->GetHeadPosition();
@@ -278,7 +289,7 @@ void GRPage::trace(VGDevice & hdc) const
                 r += ss->getPosition();
                 cout << "    slice " << r << endl;
 
-                StaffVector * sv = ss->getStaves();           // get the staves list
+                const StaffVector * sv = ss->getStaves();           // get the staves list
                 if (sv) {
                     for( int i = sv->GetMinimum(); i <= sv->GetMaximum(); ++i) {
                         GRStaff * staff = sv->Get(i);
@@ -316,17 +327,14 @@ void GRPage::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos 
 {
 	GuidoPos pagepos = First();
 	while (pagepos)
-	{
 		GetNext(pagepos)->GetMap( sel, f, infos );
-	}
 
 	infos.fPos.x += mLeftMargin;
 	infos.fPos.y += mTopMargin;
 	if (sel == kGuidoPage)
 		SendMap (f, getRelativeTimePosition(), getDuration(), kPage, infos);
 	else {
-		for( SystemPointerList::const_iterator i = mSystems.begin(); i != mSystems.end(); i++ )
-		{
+		for( SystemPointerList::const_iterator i = mSystems.begin(); i != mSystems.end(); i++ ) {
 			(*i)->GetMap(sel, f, infos);
 		}
 	}
@@ -392,7 +400,8 @@ void GRPage::OnDraw( VGDevice & hdc ) const
 	hdc.OffsetOrigin( -tstx, -tsty ); 
 }
 
-/** \brief Sets the scaling of input graphic device context, according to 
+// ----------------------------------------------------------------------------
+/** \brief Sets the scaling of input graphic device context, according to
 		input sizes.
 	(was setMapping)
 */
@@ -403,26 +412,9 @@ void GRPage::setScaling( VGDevice & hdc, float vsizex, float vsizey ) const
 	
 	getScaling (newScaleX, newScaleY);
 	hdc.SetScale( newScaleX, newScaleY ); // ok
-	
-//	const float sizex = getPageWidth();	// Get the logical (virtual) size
-//	const float sizey = getPageHeight(); //	used internaly by Guido.
-//
-//	if( sizex <= 0 ) return;
-//	if( sizey <= 0 ) return;
-//
-//	// - Calculate the new device context scaling factors.
-//	float newScaleX = vsizex / sizex;
-//	float newScaleY = vsizey / sizey;
-//	
-//	// - Force the page to be proportional. 
-//	// (This could be a setting for GuidoSetSetting(): proportionnal or non-proportionnal)
-//	if( newScaleX > newScaleY )		newScaleX = newScaleY;
-//	if( newScaleY > newScaleX )		newScaleY = newScaleX;
-//
-//	// - Scale the device context to match desired size & zoom.
-//	hdc.SetScale( newScaleX, newScaleY ); // ok
 }
 
+// ----------------------------------------------------------------------------
 void GRPage::getScaling( float& vsizex, float& vsizey ) const
 {
 	const float sizex = getPageWidth();	// Get the logical (virtual) size
@@ -610,10 +602,7 @@ void GRPage::setPageFormat( ARPageFormat * arp )
 /** \brief Gives the page format (size and margins) in Guido internal units.
 	
 */
-void 
-GRPage::getPageFormat( GuidoPageFormat * outFormat ) const
-						//float * width, float * height, 
-						//	float * ml, float * mt, float * mr, float * mb )
+void GRPage::getPageFormat( GuidoPageFormat * outFormat ) const
 {
 	if( outFormat == 0 ) return;
 	outFormat->width = mWidth;
@@ -638,83 +627,31 @@ void GRPage::getMarginsCm(float * ml, float * mt, float * mr, float * mb)
 	*mb = mBottomMargin * kVirtualToCm;
 }
 
-/** \brief Width, internal units
-*/
-float GRPage::getPageWidth() const
-{
-	return mWidth;
-}
-
-/** \brief Height, internal units
-*/
-float GRPage::getPageHeight() const
-{
-	return mHeight;
-}
 
 /** \brief Inner width (without margins), internal units
 */
-float GRPage::getInnerWidth() const
-{
-	return (mWidth - mLeftMargin - mRightMargin);
-}
+float GRPage::getInnerWidth() const		{ return (mWidth - mLeftMargin - mRightMargin); }
 
 /** \brief Inner height (without margins), internal units
 */
-float GRPage::getInnerHeight() const
-{
-	return (mHeight - mTopMargin - mBottomMargin);
-}
+float GRPage::getInnerHeight() const	{ return (mHeight - mTopMargin - mBottomMargin); }
 
 /** \brief Width of the page, centimeters.
 */
-float GRPage::getPageWidthCm() const
-{
-	return mWidth * kVirtualToCm;
-}
+float GRPage::getPageWidthCm() const	{ return mWidth * kVirtualToCm; }
 
 /** \brief Height of the page, centimeters.
 */
-float GRPage::getPageHeightCm() const
-{
-	return mHeight * kVirtualToCm;
-}
+float GRPage::getPageHeightCm() const	{ return mHeight * kVirtualToCm; }
 
 /** \brief Inner width (without margins), centimeters.
 */
-float GRPage::getInnerWidthCm() const
-{
-	return getInnerWidth() * kVirtualToCm;
-}
+float GRPage::getInnerWidthCm() const	{ return getInnerWidth() * kVirtualToCm; }
 
 /** \brief Inner height (without margins), centimeters.
 */
-float GRPage::getInnerHeightCm() const
-{
-	return getInnerHeight() * kVirtualToCm;
-}
+float GRPage::getInnerHeightCm() const	{ return getInnerHeight() * kVirtualToCm; }
 
-/** \brief Gives the page margins
-*/
-float GRPage::getMarginLeft() const
-{ 
-	return mLeftMargin; 
-}
-	
-float GRPage::getMarginTop() const
-{ 
-	return mTopMargin; 
-}
-		
-float GRPage::getMarginRight() const
-{ 
-	return mRightMargin; 
-}
-
-float GRPage::getMarginBottom() const
-{ 
-	return mBottomMargin;	
-}
 
 // ==========================================================================
 //		Attic

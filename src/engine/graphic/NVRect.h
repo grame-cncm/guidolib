@@ -37,7 +37,7 @@ class NVRect
 				
 //				NVRect operator +( const NVPoint & in );
 
-		void	Print( std::ostream& os ) const { os << "[" << left << "," << top << "," << right << "," << bottom << "]"; }
+		void	Print( std::ostream& os ) const { os << "[" << left << ", " << top << ", " << right << ", " << bottom << "]"; }
 		void	Set( const NVRect & in )
 					{ Set( in.left, in.top, in.right, in.bottom ); }
 

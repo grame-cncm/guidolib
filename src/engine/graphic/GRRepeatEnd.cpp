@@ -133,14 +133,12 @@ void GRRepeatEnd::DrawDots( VGDevice & hdc ) const
         offsety2AccordingToLineNumber = - 2 * offsety1AccordingToLineNumber;
     }
 
-    int   pointSymbol = 220;
     float pointOffsety1 = - 5 * fSize + offsety1AccordingToLineNumber;
     float pointOffsety2 = pointOffsety1 + LSPACE * fSize + offsety2AccordingToLineNumber;
     float pointOffsetx  = (fStaffThickness - 4) * 0.5f - 62 * (fSize - 1) + (fStaffThickness - 4) * (fSize - 1) * 0.5f - 57;
     float pointSize = 0.4f * fSize;
-
-    DrawSymbol(hdc, pointSymbol, pointOffsetx, pointOffsety1, pointSize);
-    DrawSymbol(hdc, pointSymbol, pointOffsetx, pointOffsety2, pointSize);
+    DrawSymbol(hdc, kDotSymbol, pointOffsetx, pointOffsety1, pointSize);
+    DrawSymbol(hdc, kDotSymbol, pointOffsetx, pointOffsety2, pointSize);
 }
 
 // --------------------------------------------------------------------------

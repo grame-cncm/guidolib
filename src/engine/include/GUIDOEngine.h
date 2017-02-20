@@ -258,6 +258,10 @@ typedef struct GuidoLayoutSettings
 		(default value: 0)
 	*/
 	float proportionalRenderingForceMultiplicator;
+
+    /** used to check lyrics and resolve collisions (default value is false)
+	*/
+	bool checkLyricsCollisions;
 	
 } GuidoLayoutSettings;
 
@@ -393,6 +397,16 @@ representations.
 		\return a Guido error code.
     */
     GUIDOAPI(GuidoErrCode)	GuidoUpdateGR( GRHandler gr, const GuidoLayoutSettings* settings);
+
+	/*!
+		Gives the notes density.
+		
+		The notes density is computed on the x axis only. It represents the ratio between the space occupied 
+		by the notes over each measure of each staff. The maximum density is retained over a single line.
+		\param gr the handler to the graphic representation.
+		\return a floating point value that expresses the density as a percentage of the staves space.
+    */
+    GUIDOAPI(float)	GuidoGetNotesDensity( GRHandler gr);
 
 	/*!
 		Applies new layout settings and page format to an existing Guido graphic representation.

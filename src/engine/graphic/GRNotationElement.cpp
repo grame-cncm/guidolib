@@ -268,21 +268,16 @@ GRNotationElement::OnDrawSymbol( VGDevice & hdc, unsigned int inSymbol,
 // -------------------------------------------------------------------------
 /** \brief Low-level symbol drawing.
 */
-void 
-GRNotationElement::DrawSymbol( VGDevice & hdc, unsigned int inSymbol,
-								   float inOffsetX, float inOffsetY,
-								   float inFontSize ) const
+void GRNotationElement::DrawSymbol( VGDevice & hdc, unsigned int inSymbol, float inOffsetX, float inOffsetY, float inFontSize ) const
 {
-	if(!mDraw)
-		return;
-	// - Setup font
+	if(!mDraw) return;
 
+	// - Setup font
 	const VGFont* myfont = FontManager::gFontScriab;
 	const float theSize = (inFontSize != 0) ? inFontSize : getSize();
 	if (theSize < kMinNoteSize) return;		// element is too small, don't draw it
 
-	if (theSize != float(1.0))
-	{
+	if (theSize != float(1.0)) {
 		const int newFontSize = (int)(theSize * 4 * LSPACE + 0.5f ); // +0.5 to round from float to int.
 		myfont = FontManager::FindOrCreateFont( newFontSize );
 	}

@@ -22,8 +22,8 @@
 #include <vector>
 #include <map>
 #include <cstdlib>
+#include <algorithm>
 #include <iostream> // for debug only
-#include <fstream>// for debug only
 #ifdef android
 #include <ctype.h>
 #endif
@@ -266,7 +266,7 @@ GRStaffState & GRStaffState::operator=(const GRStaffState & state)
 // ===========================================================================
 
 GRStaff::GRStaff( GRSystemSlice * systemslice, float propRender )
-						: mGrSystem(NULL), mGrSystemSlice( systemslice ), fLastSystemBarChecked(-1,1), proportionnalRender(propRender)
+						: mGrSystem(NULL), mGrSystemSlice( systemslice ), fLastSystemBarChecked(-1,1), fProportionnalRendering(propRender)
 {
 	mLength = 0;
 	setRelativeTimePosition(systemslice->getRelativeTimePosition());
@@ -419,7 +419,7 @@ staff_debug("addNotationElement");
 	// OLD: mGrSystem->AddToSpace(notationElement);
 
 	// count the notes, evaluates the accidentals.
-    GRNote * mynote = static_cast<GRNote *>(notationElement->isGRNote());
+    const GRNote * mynote = notationElement->isGRNote();
 	setNoteParameters(mynote);
 }
 
@@ -434,8 +434,78 @@ void GRStaff::print(std::ostream& os) const
 	}
 }
 
+class TXInterval : public std::pair<float, float>
+{
+	public:
+		TXInterval () : std::pair<float, float>(0,0) {}
+		TXInterval (float a, float b) : std::pair<float, float>(a, b) {}
+		void	clear ()					{ second = first = 0; }
+		bool	empty () const				{ return (second - first) <= 0; }
+		float	width () const				{ return second - first; }
+		bool	collides (const TXInterval& i) const	{
+			return ((first >= i.first) && ((first < i.second))) ||
+					((second <= i.second) && ((second > i.first)));
+		}
+};
+
+//-------------------------------------------------------------------------------
+static bool sortbypos (const TXInterval& i, const TXInterval& j) {
+	return (i.first < j.first);
+}
+
+//-------------------------------------------------------------------------------
+static vector<TXInterval> stripintervals (const vector<TXInterval>& list) {
+	vector<TXInterval> outlist;
+	size_t n = list.size();
+	TXInterval lastcollide;
+	for (size_t i=1; i<n ; i++) {
+		if (list[i-1].empty()) continue;		// empty ignore empty intervals
+
+		if (lastcollide.width()) {				// check if the is already a pending extension
+			if (list[i].collides(lastcollide))
+				lastcollide.second = list[i].second;	// extend the pending interval
+			else {
+				outlist.push_back(lastcollide);			// otherwise store
+				lastcollide.clear();					// and clear the pending interval
+			}
+		}
+		else if (list[i].collides(list[i-1])) {
+			float first		= min(list[i].first, list[i-1].first);
+			float second	= max(list[i].second, list[i-1].second);
+			lastcollide = TXInterval(first, second);
+		}
+		else outlist.push_back(list[i-1]);
+	}
+	if (lastcollide.width()) outlist.push_back(lastcollide);
+	else if (n) outlist.push_back(list[n-1]);
+	return outlist;
+}
+
 // ----------------------------------------------------------------------------
-void GRStaff::checkCollisions (TCollisions& state)
+float GRStaff::getNotesDensity () const
+{
+	vector<TXInterval> xintervals;
+	const NEPointerList& elts = getElements();
+	GuidoPos pos = elts.GetHeadPosition();
+	while (pos) {
+		const GRNotationElement * e = elts.GetNext(pos);
+		if (e  && (e->isSingleNote() || e->isRest()) && !e->isEmpty()) {
+			NVRect bb = e->getBoundingBox();
+			bb += e->getPosition();
+			xintervals.push_back (TXInterval (bb.left, bb.right));
+		}
+	}
+	sort (xintervals.begin(), xintervals.end(), sortbypos);
+	xintervals = stripintervals (xintervals);
+	size_t n = xintervals.size();
+	float occupied = 0;
+	for (size_t i=0; i<n ; i++)
+		occupied += xintervals[i].width();
+	return occupied / getBoundingBox().Width();
+}
+
+// ----------------------------------------------------------------------------
+void GRStaff::checkCollisions (TCollisions& state) const
 {
 //if (state.lastElement())
 //cerr << "GRStaff::checkCollisions " << state.getSystem() << "/" << state.getStaff() << " last: " << state.lastElement() << endl;
@@ -444,12 +514,11 @@ void GRStaff::checkCollisions (TCollisions& state)
 	
 	NVRect chordbb;									// the last chord bounding box
 	bool inChord = false, pendingChord = false;		// used for chords detection
-	NEPointerList* elts = getElements();
-	if (!elts) return;
+	const NEPointerList& elts = getElements();
 
-	GuidoPos pos = elts->GetHeadPosition();
+	GuidoPos pos = elts.GetHeadPosition();
 	while (pos) {
-		GRNotationElement * e = elts->GetNext(pos);
+		const GRNotationElement * e = elts.GetNext(pos);
 		if (e->isEmpty()) {
 			if (inChord) {							// at this point this is a chord end
 				inChord = pendingChord = false;		// set the chord flags off
@@ -475,12 +544,27 @@ void GRStaff::checkCollisions (TCollisions& state)
 					state.update (e, r);			// update the collision tracking state
 				}
 			}
-			else if (e->checkCollisionWith()) {		// this is not a note and if collision checking is required
+			else if (e->checkCollisionWith() && r.Width()) {	// this is not a note and if collision checking is required
 				state.check(r);						// check for collision
 				state.update (e, r);				// update the collision tracking state
 			}
 		}
 	}
+}
+
+// ----------------------------------------------------------------------------
+size_t GRStaff::getLyrics (vector<const GRNotationElement*>& list) const
+{
+	const NEPointerList& elts = getElements();
+	GuidoPos pos = elts.GetHeadPosition();
+	while (pos) {
+		const GRNotationElement * e = elts.GetNext(pos);
+		const GRText* text = e->isText();
+		if (text && text->isLyrics()) {
+			list.push_back (e);
+		}
+	}
+	return list.size();
 }
 
 // ----------------------------------------------------------------------------
@@ -571,7 +655,7 @@ void GRStaff::setKeyParameters(GRKey * inKey)
 }
 
 // ----------------------------------------------------------------------------
-void GRStaff::setNoteParameters(GRNote * inNote)
+void GRStaff::setNoteParameters(const GRNote * inNote)
 {
 	if (inNote == 0)	return;
 
@@ -584,7 +668,7 @@ void GRStaff::setNoteParameters(GRNote * inNote)
 	}
 
 	// Reset of accidentals
-	ARNote * arnote = inNote->getARNote();
+	const ARNote * arnote = inNote->getARNote();
 	const int tmppitch = arnote->getPitch() - NOTE_C;
 	const int acc = arnote->getAccidentals() - (int)mStaffState.instrKeyArray[tmppitch];
 //	mStaffState.MeasureAccidentals[tmppitch] = acc + arnote->getDetune();
@@ -979,7 +1063,7 @@ GRRepeatEnd * GRStaff::AddRepeatEnd( ARRepeatEnd * arre )
 //	if (arre->getNumRepeat() == 0 || !arre->getRange())
 	{
         assert (arre);
-		GRRepeatEnd * tmp = new GRRepeatEnd(arre, this, arre->getRelativeTimePosition(), this->proportionnalRender);
+		GRRepeatEnd * tmp = new GRRepeatEnd(arre, this, arre->getRelativeTimePosition(), fProportionnalRendering);
 		if (mStaffState.curbarfrmt && (mStaffState.curbarfrmt->getStyle() == ARBarFormat::kStyleSystem))
 			mGrSystemSlice->addRepeatEnd(tmp, mStaffState.curbarfrmt->getRanges(), this);
 		addNotationElement(tmp);
@@ -1134,7 +1218,7 @@ GRBar * GRStaff::AddBar(ARBar * abar, const TYPE_TIMEPOSITION & date)
 staff_debug("AddBar");
 	newMeasure(date); // erhoeht u.a. mnum!
 
-	GRBar * bar = new GRBar( abar, this, date, this->proportionnalRender);
+	GRBar * bar = new GRBar( abar, this, date, fProportionnalRendering);
 	// depending on current bar Format, we have to tell the staffmanager (or the system) 
 	if (mStaffState.curbarfrmt && (mStaffState.curbarfrmt->getStyle() == ARBarFormat::kStyleSystem))
 		mGrSystemSlice->addBar(bar, mStaffState.curbarfrmt->getRanges(), this);
@@ -1286,7 +1370,7 @@ GRDoubleBar * GRStaff::AddDoubleBar(ARDoubleBar * ardbar, const TYPE_TIMEPOSITIO
 staff_debug("AddDoubleBar");
 	newMeasure(date); // erhoeht u.a. mnum!
 
-	GRDoubleBar * ntakt = new GRDoubleBar( ardbar, this, date, this->proportionnalRender);
+	GRDoubleBar * ntakt = new GRDoubleBar( ardbar, this, date, fProportionnalRendering);
 	// depending on current bar Format, we have to tell the staffmanager (or the system) 
 	if (mStaffState.curbarfrmt) {
 		if (mStaffState.curbarfrmt->getStyle() == ARBarFormat::kStyleSystem)
@@ -1302,7 +1386,7 @@ GRFinishBar * GRStaff::AddFinishBar(ARFinishBar * arfbar, const TYPE_TIMEPOSITIO
 staff_debug("AddFinishBar");
 	newMeasure(date); // erhoeht u.a. mnum!
 
-	GRFinishBar * ntakt = new GRFinishBar( arfbar, this, date, this->proportionnalRender);
+	GRFinishBar * ntakt = new GRFinishBar( arfbar, this, date, fProportionnalRendering);
 
 	// depending on current bar Format, we have to tell the staffmanager (or the system) 
 	if (mStaffState.curbarfrmt && (mStaffState.curbarfrmt->getStyle() == ARBarFormat::kStyleSystem))
@@ -1885,7 +1969,7 @@ GRStaff * GRStaff::getPreviousStaff() const
     GRSystemSlice * curslice = getGRSystemSlice();
     if (!system || !curslice) return 0;
 
-    SSliceList * sl = system->getSlices();          // get the list of system slices
+    const SSliceList * sl = system->getSlices();          // get the list of system slices
     if (!sl) return 0;
     
     GuidoPos pos = sl->GetElementPos(curslice);                 // looks for the current slice
@@ -1895,7 +1979,7 @@ GRStaff * GRStaff::getPreviousStaff() const
 
 	int	num = curslice->getStaffNumber(this);
 
-    StaffVector * sv = previousSlice->getStaves();  // get the staves list
+    const StaffVector * sv = previousSlice->getStaves();  // get the staves list
     if (!sv) return 0;
 
     GRStaff * pstaff = sv->Get(num);                // get the staff carrying the same number
@@ -1908,7 +1992,7 @@ GRStaff * GRStaff::getNextStaff() const
     GRSystemSlice * curslice = getGRSystemSlice();
     if (!system || !curslice) return 0;
 
-    SSliceList * sl = system->getSlices();          // get the list of system slices
+    const SSliceList * sl = system->getSlices();          // get the list of system slices
     if (!sl) return 0;
     
     GuidoPos pos = sl->GetElementPos(curslice);                 // looks for the current slice
@@ -1918,13 +2002,38 @@ GRStaff * GRStaff::getNextStaff() const
 
 	int	num = curslice->getStaffNumber(this);
 
-    StaffVector * sv = nextSlice->getStaves();  // get the staves list
+    const StaffVector * sv = nextSlice->getStaves();  // get the staves list
     if (!sv) return 0;
 
     GRStaff * pstaff = sv->Get(num);                // get the staff carrying the same number
     return pstaff;
 }
 
+
+// ----------------------------------------------------------------------------
+/** \brief Gives the bottom of a staff
+
+	Browse the previous and next staves and returns the max of the bounding boxes bottom
+*/
+float GRStaff::getStaffBottom() const
+{
+	float bottom = mBoundingBox.bottom;
+
+	const GRStaff* prev = getPreviousStaff();
+	while (prev) {
+		if (prev->getBoundingBox().bottom > bottom)
+			bottom = prev->getBoundingBox().bottom;
+		prev = prev->getPreviousStaff();
+	}
+
+	const GRStaff* next = getNextStaff();
+	while (next) {
+		if (next->getBoundingBox().bottom > bottom)
+			bottom = next->getBoundingBox().bottom;
+		next = next->getNextStaff();
+	}
+	return bottom;
+}
 
 // ----------------------------------------------------------------------------
 /** \brief Retrieves the mapping

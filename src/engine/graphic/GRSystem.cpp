@@ -443,7 +443,7 @@ GRSystem::GRSystem(GRStaffManager * staffmgr, GRPage * inPage,
 //----------------------------------------------------------------------------------------------------
 const GRStaff*	GRSystem::getStaff (int index) const
 {
-	StaffVector * sv = getStaves();
+	const StaffVector * sv = getStaves();
 	return sv ? sv->Get(index) : 0;
 }
 
@@ -477,7 +477,7 @@ GRSystem::~GRSystem()
 }
 
 //----------------------------------------------------------------------------------------------------
-StaffVector * GRSystem::getStaves() const
+const StaffVector * GRSystem::getStaves() const
 {
 	if( mSystemSlices.empty())	return 0;
 
@@ -591,16 +591,73 @@ void GRSystem::print(std::ostream& os) const
 }
 
 // --------------------------------------------------------------------------
-void GRSystem::checkCollisions (TCollisions& state)
+float GRSystem::getNotesDensity () const
+{
+	float density = 0;
+	const StaffVector * staves = getStaves();
+	int n = staves->size();
+	for (int i= 1; i <= n; i++) {
+		vector<const GRNotationElement*> elts;
+		const GRStaff* staff = staves->Get (i);
+		float staffdensity = 0;
+//		int s=1;
+		while (staff) {
+			staffdensity = max(staffdensity, staff->getNotesDensity());
+			staff = staff->getNextStaff();
+//cerr << "GRSystem::getNotesDensity staff " << s++ << " : " << staffdensity << endl;
+		}
+		density = max (density, staffdensity);
+//cerr << "GRSystem::getNotesDensity system " << i << ": " << density << endl;
+	}
+	return density;
+}
+
+// --------------------------------------------------------------------------
+void GRSystem::checkCollisions (TCollisions& state, std::vector<const GRNotationElement*>& elts) const
+{
+	size_t n = elts.size();
+	for (size_t i=1; i < n; i++) {
+		NVRect bb1 = elts[i-1]->getBoundingBox();
+		bb1 += elts[i-1]->getPosition();
+		bb1.right += LSPACE / 2;				// this is to ensure a minimum space between lyrics
+		NVRect bb2 = elts[i]->getBoundingBox();
+		bb2 += elts[i]->getPosition();
+		if (bb1.Collides(bb2)) {
+			float gap = bb1.right - bb2.left;
+			if (gap > 0) {
+				gap = (bb1.Width() + bb2.Width() + LSPACE/2) / 2;
+				state.resolve(elts[i-1]->getAbstractRepresentation(), gap);
+			}
+		}
+	}
+}
+
+// --------------------------------------------------------------------------
+void GRSystem::checkCollisions (TCollisions& state, bool lyrics) const
 {
 	state.reset(false);
-	GuidoPos pos = mSystemSlices.GetHeadPosition();
-	while (pos) {
-		GRSystemSlice * slice = mSystemSlices.GetNext(pos);
-		NVRect r = slice->getBoundingBox();
-		state.check (r, true);
-		slice->checkCollisions(state);
-		state.update (slice, r);
+	if (lyrics) {
+		const StaffVector * staves = getStaves();
+		int n = staves->size();
+		for (int i= 1; i <= n; i++) {
+			vector<const GRNotationElement*> elts;
+			const GRStaff* staff = staves->Get (i);
+			while (staff) {
+				staff->getLyrics (elts);
+				staff = staff->getNextStaff();
+			}
+			checkCollisions (state, elts);
+		}
+	}
+	else {
+		GuidoPos pos = mSystemSlices.GetHeadPosition();
+		while (pos) {
+			GRSystemSlice * slice = mSystemSlices.GetNext(pos);
+			NVRect r = slice->getBoundingBox();
+			state.check (r, true);
+			slice->checkCollisions(state);
+			state.update (slice, r);
+		}
 	}
 }
 

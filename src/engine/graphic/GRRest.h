@@ -26,44 +26,29 @@ class ARRestFormat;
 class GRRest : public GREvent
 { 
 	public:
-					GRRest( GRStaff * grstf, const TYPE_DURATION & theDuration );
-					GRRest( GRStaff * grstf, ARRest * abstractRepresentationOfRest,
-															 	bool p_ownsAR = false );
-
-					GRRest( GRStaff * grstf,ARRest * abstractRepresentationOfRest,
-							const TYPE_TIMEPOSITION & relativeTimePositionOfGRRest,
-							const TYPE_DURATION & durationOfGRRest );
+					 GRRest( GRStaff * grstf, const TYPE_DURATION & theDuration );
+					 GRRest( GRStaff * grstf, ARRest * ar, bool p_ownsAR = false );
+					 GRRest( GRStaff * grstf,ARRest * ar, const TYPE_TIMEPOSITION & timepos, const TYPE_DURATION & duration );
 
 		virtual 	~GRRest();
 
-		virtual void setRestFormat(ARRestFormat *restfrmt);
-	  	
-		virtual int getWholeMeasure() const;
-	  	virtual void setWholeMeasure(int p);	// ! unused !
+		virtual void	setRestFormat(ARRestFormat *restfrmt);
+		virtual int		getWholeMeasure() const;
+	  	virtual void	setWholeMeasure(int p);	// ! unused !
+		virtual void	OnDraw( VGDevice & hdc ) const = 0;
 
-		virtual void OnDraw( VGDevice & hdc ) const = 0;
+		virtual const GRRest *	isRest() const			{ return this; }
 
 		ARRest * getARRest() const;
-
-		
+	
 	private:
 		int		 mWholeMeasure;
 };
 
 
-inline void GRRest::setRestFormat(ARRestFormat *)
-{
-}
-
-inline void GRRest::setWholeMeasure(int p)
-{
-	mWholeMeasure = p;
-}
-
-inline int GRRest::getWholeMeasure() const
-{
-	return mWholeMeasure;
-}
+inline void GRRest::setRestFormat(ARRestFormat *)	{}
+inline void GRRest::setWholeMeasure(int p)	{ mWholeMeasure = p; }
+inline int  GRRest::getWholeMeasure() const	{ return mWholeMeasure; }
 
 
 #endif

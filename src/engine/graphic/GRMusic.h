@@ -110,10 +110,15 @@ class GRMusic : public GREvent
                 void    setDrawTime(long time)  { mDrawTime = time; }
                 long    getDrawTime()           { return mDrawTime; }
 
+				float	getNotesDensity () const;
+				void	checkLyricsCollisions ();		// checks lyrics collisions and resolves the collisions if any
 				bool	collides () const		{ return !fCollisions.list().empty(); }
-				bool	checkCollisions ();
-				void	resolveCollisions ();
+				bool	lyricsChecked () const	{ return fLyricsChecked; }
+				void	removeAutoSpace (ARMusic * arm);// removes space tags inserted by checkLyricsCollisions()
+
 				void	printVoices (std::ostream& os) const;
+
+		std::vector<TCollisionInfo> getCollisions() const	{ return fCollisions.list(); }
 
 	protected:
 				void 	addVoiceElement( GRVoice * voice, GRNotationElement * el );
@@ -125,12 +130,17 @@ class GRMusic : public GREvent
         long        mDrawTime;
 
 	private:
-		ARMusicalVoice* getARVoice (int n);
+				size_t		checkCollisions (bool lyrics);
+				void		resolveCollisions (std::vector<TCollisionInfo> list);
 
-		PageList 	mPages;
-		ARPageFormat *  fInFormat;
+		ARMusicalVoice*		getARVoice (int n);
+		std::vector<TCollisionInfo> strip (const std::vector<TCollisionInfo>& list) const;
+
+		PageList			mPages;
+		ARPageFormat *		fInFormat;
 		GuidoLayoutSettings fSettings;
-		TCollisions		fCollisions;
+		TCollisions			fCollisions;
+		bool				fLyricsChecked;		// true when lyrics collisions have been solved
 };
 
 

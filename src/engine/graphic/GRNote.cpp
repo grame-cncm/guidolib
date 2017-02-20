@@ -20,20 +20,16 @@
 #include "GRCluster.h"
 #include "GRGlobalStem.h"
 
+using namespace std;
 
-GRNote::GRNote( GRStaff * grstaf,
-	ARNote * note,
-	const TYPE_TIMEPOSITION & relativeTimePositionOfGRNote,
-	const TYPE_DURATION & durationOfGRNote)
-  : GREvent(grstaf,note,relativeTimePositionOfGRNote,durationOfGRNote),
-  fCluster(NULL), fOwnCluster(false), fClusterNote(false), fClusterHaveToBeDrawn(false)
+GRNote::GRNote( GRStaff * grstaf, ARNote * note, const TYPE_TIMEPOSITION & date, const TYPE_DURATION & duration)
+  : GREvent (grstaf,note,date,duration),
+    fOrnament(0), fCluster(NULL), fOwnCluster(false), fClusterNote(false), fClusterHaveToBeDrawn(false)
 {
     // builds a graphical "part" of abstractRepresentation
     assert(note);
     if (note->getOrnament())
         fOrnament = new GRTrill( mGrStaff, note->getOrnament());
-    else
-        fOrnament = NULL;
 
     if (note->getARCluster())
     {
@@ -52,10 +48,10 @@ GRNote::GRNote(GRStaff * grstaf, const TYPE_DURATION & inDuration )
 	fOwnCluster = fClusterNote = fClusterHaveToBeDrawn = false;
 }
 
-GRNote::GRNote(GRStaff * grstaf, ARNote * abstractRepresentationOfNote)
-	: GREvent(grstaf,abstractRepresentationOfNote), fIsGraceNote(false)
+GRNote::GRNote(GRStaff * grstaf, ARNote * note)
+	: GREvent(grstaf,note), fIsGraceNote(false)
 {
-	assert(abstractRepresentationOfNote);
+	assert (note);
 	fCluster = 0;
 	fOwnCluster = fClusterNote = fClusterHaveToBeDrawn = false;
 }

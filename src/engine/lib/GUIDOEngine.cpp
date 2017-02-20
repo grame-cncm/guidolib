@@ -125,9 +125,9 @@ GUIDOAPI(GuidoErrCode) GuidoInit( GuidoInitDesc * desc )
 	if( desc == 0 ) return guidoErrBadParameter;
 
 	// - Music Font (keep previous settings if desc = 0 ? )
-	const char * musicFont = desc->musicFont ? desc->musicFont : FontManager::kDefaultMusicFont;
+	const char * musicFont = desc->musicFont ? desc->musicFont : FontManager::kDefaultMusicFont.c_str();
 	// - Text Font
-	const char * textFont = desc->textFont ? desc->textFont : FontManager::kDefaultTextFont;
+	const char * textFont = desc->textFont ? desc->textFont : FontManager::kDefaultTextFont.c_str();
 	
 	if (musicFont) FontManager::kDefaultMusicFont = musicFont;
 	if (textFont) FontManager::kDefaultTextFont = textFont;
@@ -289,15 +289,9 @@ static GRHandler CreateGr(ARHandler ar, ARPageFormat* format, const GuidoLayoutS
 	// Create new gr music object with a copy of default pageFormat.
 	GRMusic *grMusic = new GRMusic(arMusic, format, settings, false);
 	if (grMusic == 0) return 0;
-	
-//	bool collides = grMusic->checkCollisions();
-//	int n = 2;
-//	while (collides && n--) {
-//		grMusic->resolveCollisions();
-//		collides = grMusic->checkCollisions();
-//	}
-//	GMNCodePrintVisitor v(cerr);
-//	arMusic->goThrough(&v);
+
+	if (settings  && settings->checkLyricsCollisions)
+		grMusic->checkLyricsCollisions();
 
 	long endTime = GuidoTiming::getCurrentmsTime();
 	grMusic->setAR2GRTime(endTime - startTime);
@@ -309,28 +303,6 @@ static GRHandler CreateGr(ARHandler ar, ARPageFormat* format, const GuidoLayoutS
 	//  - Add the GRMusic object to the global list
 	return guido_RegisterGRMusic(grMusic, ar);
 }
-
-
-// --------------------------------------------------------------------------
-// the above is an attempt to solve collisions
-// it operates at AR level by inserting space tags at appropriate locations
-// yet extensive tests have not been performed but it works really poorly for:
-//  - multi voices affected to a single staff
-//  - very crowed scores
-// --------------------------------------------------------------------------
-//GUIDOAPI(bool) GuidoCheckCollisions( GRHandler gr)
-//{
-//	if ( !gr || !gr->grmusic )	return false;
-//	return gr->grmusic->checkCollisions();
-//}
-//
-//// --------------------------------------------------------------------------
-//GUIDOAPI(void) GuidoResolveCollisions( GRHandler gr)
-//{
-//	if ( !gr || !gr->grmusic )	return;
-//	gr->grmusic->resolveCollisions();
-//	gr->grmusic->createGR();
-//}
 
 // --------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode) GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * settings, GRHandler * gr)
@@ -397,10 +369,20 @@ GUIDOAPI(GuidoErrCode) GuidoUpdateGR( GRHandler gr, const GuidoLayoutSettings * 
 	if ( !gr->grmusic )	return guidoErrInvalidHandle;
 
 	gr->grmusic->createGR(&gARPageFormat, settings);
+	if (settings && settings->checkLyricsCollisions)
+		gr->grmusic->checkLyricsCollisions();
 	return guidoNoErr;
 }
 
 
+// --------------------------------------------------------------------------
+GUIDOAPI(float) GuidoGetNotesDensity( GRHandler gr)
+{
+	if ( !gr || !gr->grmusic )	return 0;
+	return gr->grmusic->getNotesDensity();
+}
+
+// --------------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode)	GuidoUpdateGRParameterized( GRHandler gr, const GuidoGrParameters* gp)
 {
 	if ( !gr )			return guidoErrInvalidHandle;
@@ -501,6 +483,7 @@ GuidoGetDefaultLayoutSettings (GuidoLayoutSettings *settings)
 	settings->optimalPageFill       = kSettingDefaultOptimalPageFill;
     settings->resizePage2Music      = kSettingDefaultResizePage2Music;
     settings->proportionalRenderingForceMultiplicator = kSettingDefaultProportionalRendering;
+    settings->checkLyricsCollisions = kSettingDefaultCheckLyricsCollisions;
 }
 
 // --------------------------------------------------------------------------

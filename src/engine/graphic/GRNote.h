@@ -31,13 +31,10 @@ class GRCluster;
 class GRNote : public GREvent
 {
 	public:
-	  			 GRNote(GRStaff *, ARNote * abstractRepresentationOfNote,
-						const TYPE_TIMEPOSITION & relativeTimePositionOfGRNote,
-						const TYPE_DURATION & durationOfGRNote );
-
-				 GRNote(GRStaff * inStaff, const TYPE_DURATION & inDuration );
-				 GRNote(GRStaff * inStaff, ARNote * abstractRepresentationOfNote );
-	virtual 	~GRNote();
+	  			 GRNote (GRStaff * inStaff, ARNote * note, const TYPE_TIMEPOSITION & date, const TYPE_DURATION & duration );
+				 GRNote (GRStaff * inStaff, const TYPE_DURATION & duration );
+				 GRNote (GRStaff * inStaff, ARNote * note );
+	virtual 	~GRNote ();
 
 	virtual void setNoteFormat( const ARNoteFormat * frmt );
 
@@ -56,20 +53,20 @@ class GRNote : public GREvent
 	virtual GDirection	getDefaultThroatDirection() const;
 	virtual GDirection	getThroatDirection() const;
 
-    GRCluster *getGRCluster() const {return fCluster;}
+    GRCluster *getGRCluster() const			{return fCluster;}
     void       setGRCluster(GRCluster *inCluster, bool inSignificativeNote = true);
     bool       getClusterNoteBoolean() const {return fClusterNote;}
-    bool       isGraceNote() {return fIsGraceNote;}
-    void       setGraceNote(bool isGrace) {fIsGraceNote = isGrace;}
+    bool       isGraceNote() const			{return fIsGraceNote;}
+    void       setGraceNote(bool isGrace)	{fIsGraceNote = isGrace;}
 
     GRCluster *createCluster(ARNoteFormat *inCurnoteformat);
 
-	// Tell me: is a note splitted over several systems? 
+	// Tell me: is a note splitted over several systems?
 	// should only occur for CompositeNotes.
 	virtual bool isSplit(); // const;
 
     /**** Function to avoid dynamic_cast ****/
-    GRNotationElement *isGRNote() { return this; }
+    const GRNote * isGRNote() const { return this; }
     /*****************************************/
 	
 protected :

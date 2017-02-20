@@ -29,6 +29,7 @@ class ARTrill : public ARMTParameter, public ARPositionTag
 {		
 	public:
 			enum TYPE { TRILL,TURN,MORD };
+			enum	{ kUndefined, kOn, kOff };
 
 						ARTrill(TYPE typ);
 						ARTrill(int pid, const ARTrill * copy);
@@ -49,12 +50,15 @@ class ARTrill : public ARMTParameter, public ARPositionTag
 				ARMusicalVoice::CHORD_ACCIDENTAL	getChordAccidental() const	{return chordAccidental;}
 				bool	getCautionary()	const				{ return fShowCautionaryAccidentals;}
 				void	setCautionary(bool showAcc)			{ fShowCautionaryAccidentals = showAcc;}
-				float	getadx() const;
-				float	getady() const;
-				bool	getStatus() const;
-				void	setContinue();
-				bool	getShowTR() {return fShowTR;}
-				bool	getAnchor() {return fDrawOnNoteHead;}
+
+				float	getadx() const				{ return adx; }
+				float	getady() const				{ return ady;}
+				bool	getStatus() const			{ return begin; }
+				bool	getShowTR() const			{ return fShowTR;}
+				bool	getAnchor()	const			{ return fDrawOnNoteHead;}
+				int		getRepeat()	const			{ return fRepeat;}
+
+				void	setContinue()				{ begin = false; }
 
 	protected:
 		TagParameterInt	  * mDur;
@@ -64,6 +68,7 @@ class ARTrill : public ARMTParameter, public ARPositionTag
 		bool fShowCautionaryAccidentals;
 		bool fShowTR;
 		bool fDrawOnNoteHead;
+		int  fRepeat;
 		float adx;
 		float ady;
 		bool  begin;

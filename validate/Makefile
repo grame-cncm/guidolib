@@ -49,6 +49,9 @@ noerr	= "ERROR SUMMARY: 0"
 
 gmnfiles      = $(shell find ../gmn-examples -name "*.gmn") $(shell find ../regression-tests -name "*.gmn")
 gmnfilesproll = $(shell find ../regression-tests/pianoroll -name "*.gmn")
+gmnfiles      = $(shell find ../gmn-examples -name "*.gmn") $(shell find ../regression-tests -name "*.gmn")
+lyricsfiles   = $(shell grep -r -l "\\lyrics" ../gmn-examples ../regression-tests)
+
 
 pdfout		:= $(patsubst ../%.gmn, $(version)/%.pdf, $(gmnfiles))
 svgout		:= $(patsubst ../%.gmn, $(version)/%.svg, $(gmnfiles))
@@ -58,6 +61,7 @@ staffmapout	:= $(patsubst ../%.gmn, $(version)/maps/staff/%.svg, $(gmnfiles))
 voicemapout	:= $(patsubst ../%.gmn, $(version)/maps/voice/%.svg, $(gmnfiles))
 mapsout		:= $(sysmapout) $(staffmapout) $(voicemapout)
 timemapout	:= $(patsubst ../%.gmn, $(version)/maps/time/%.map, $(gmnfiles))
+lyricsout	:= $(patsubst ../%.gmn, $(version)/lyrics/%.svg, $(lyricsfiles))
 
 prollout	            := $(patsubst ../%.gmn, $(version)/proll/classic/%.svg, $(gmnfilesproll))
 prollvoicescolorout     := $(patsubst ../%.gmn, $(version)/proll/classic/voicescolor/%.svg, $(gmnfilesproll))
@@ -84,6 +88,9 @@ validproll      = $(patsubst %.svg, %.outsvg, $(allproll))
 .PHONY: pdf cleantools midiclean pdfclean help
 
 default : svg
+
+test:
+	echo $(lyricsout)
 
 help:
 	@echo "Makefile for testing the engine output. Available targets are:"
@@ -220,8 +227,8 @@ checkcrash: $(LEAKTOOLS)
 
 #########################################################################
 # tools to generate svg files
-svg: $(svgout) $(mapsout) $(timemapout) $(prollout) $(prollvoicescolorout) $(prolltrajout) $(prollvoicescolortrajout)
-svgshort: $(svgout)
+svg: $(svgout) $(lyricsout) $(mapsout) $(timemapout) $(prollout) $(prollvoicescolorout) $(prolltrajout) $(prollvoicescolortrajout)
+svgshort: $(svgout)  $(lyricsout)
 
 svgclean: 
 	rm -f $(svgout) $(mapsout) $(timemapout) $(prollout) $(prollvoicescolorout) $(prolltrajout) $(prollvoicescolortrajout)
@@ -229,6 +236,10 @@ svgclean:
 $(version)/%.svg: ../%.gmn
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	-$(guido2svg) $< | grep -v "SVG file generated using" > __tmp.svg  &&  mv __tmp.svg $@
+
+$(version)/lyrics/%.svg: ../%.gmn
+	@[ -d $(@D) ] || mkdir -p $(@D)
+	-$(guido2svg) -checkLyrics $<  > $@
 
 
 #########################################################################

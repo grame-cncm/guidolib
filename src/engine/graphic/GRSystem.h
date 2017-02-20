@@ -37,12 +37,9 @@ class GRAccolade;
 class GRSpaceForceFunction2;
 
 typedef KF_IVector<GRStaff> StaffVector;
-// typedef KF_IPointerList<GRSpring> SpringList;
 typedef KF_IVector<GRSpring> ISpringVector;
 typedef KF_IPointerList<GRRod> IRodList;
 typedef KF_IPointerList<GRSystemSlice> SSliceList;
-
-// typedef std::vector<GRAccolade *> GRAccoladeList;
 
 extern GRStaff * gCurStaff;
 
@@ -54,9 +51,6 @@ extern GRStaff * gCurStaff;
 */
 class GRSystem : public GREvent
 {
-	// this is for curPosX and oldposx
-	friend class GRStaffManager;
-	
 public:
 	using GRNotationElement::getStaffNumber;
 
@@ -78,8 +72,8 @@ public:
 	ARMusic *           getARMusic() const;
 	GRSpring *          getSpring( int id ) const;
 	const GRSpring *    getGRSpring( int id ) const;
-    StaffVector *       getStaves() const;
-	SSliceList *        getSlices()								{ return &mSystemSlices; }
+    const StaffVector * getStaves() const;
+	const SSliceList *  getSlices() const						{ return &mSystemSlices; }
 
 	void        setSpringParameter(float nconst);
 	void        setSystemFormat( ARSystemFormat * sysfrm );
@@ -105,7 +99,9 @@ public:
 	void 	FinishSystem();
 	void 	FinishSystem( ISpringVector * pvect, IRodList * prods1, IRodList * prods2,
 						  GRSpaceForceFunction2 * psff, const TYPE_TIMEPOSITION & tp, int lastline = 0);
-	void	checkCollisions (TCollisions& state);
+	void	checkCollisions (TCollisions& state, bool lyrics) const;
+	float	getNotesDensity () const;
+	const GRSystemSlice* lastSlice() const		{ return mSystemSlices.GetTail(); }
 
 	TYPE_TIMEPOSITION mDebugSystemDate;
     static int sSystemID;
@@ -132,11 +128,9 @@ protected:
 	ISpringVector * mSpringVector;
 	
 	
-	// we have two rodlists, one simple one
-	// with simple rods (spanning exactly one spring)
-	// and another one with complex rods (spanning
-	// more than one spring). These both are returned
-	// by the StaffManager:
+	// we have two rodlists, one simple one with simple rods (spanning exactly one spring)
+	// and another one with complex rods (spanning more than one spring).
+	// These both are returned by the StaffManager:
 	IRodList * simplerods;
 	IRodList * complexrods;	
 	GRSpaceForceFunction2 * mSpaceForceFunc;
@@ -154,6 +148,7 @@ protected:
 
 private:
 	const GRStaff*	getStaff (int index) const;
+	void	checkCollisions (TCollisions& state, std::vector<const GRNotationElement*>& elts) const;
 
 	GRPage*			mPage;
 	StaffVector*	mStaffs;

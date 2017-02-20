@@ -677,12 +677,7 @@ void ARMusicalVoice::adjustDuration(const TYPE_DURATION & newDuration)
 	const TYPE_DURATION fill (newDuration - d);
 	if (fill != DURATION_0)
 	{
-		// this is for cue-voices...
-		if (voicenum <= 0)
-			AddTail(new ARNote(fill));
-		else
-			// this adds an Empty-event instead of visible rests!
-			AddTail(new ARNote(fill));
+		AddTail(new ARNote(fill));
 
 		// We have to look for the PositionTags here!
 		if (mPosTagList)
@@ -2032,6 +2027,8 @@ void ARMusicalVoice::doAutoDispatchLyrics()
 						artext->setAutoPos (dlc->lyrics->autoPos());
 						artext->setRange(1);
 						artext->setPosition(vst.vpos);
+						artext->setRelativeTimePosition (ev->getRelativeTimePosition());
+						artext->setVoiceNum(ev->getVoiceNum());
 
 						artext->copyLyricsParams(dlc->lyrics);
 						mPosTagList->AddElementAt(vst.ptagpos,artext);
@@ -5417,7 +5414,7 @@ ARChordTag *ARMusicalVoice::BeginChord()
 /** \brief this method is called when the chord is an ornament parameter (SB)
 */
 // C.D. optimized 22/10/2014
-ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE &chord_type, CHORD_ACCIDENTAL &chord_accidental)
+ARNote * ARMusicalVoice::setTrillChord (CHORD_TYPE &chord_type, CHORD_ACCIDENTAL &chord_accidental)
 {	
 	const int nbNotes        = 3;
 	int pitches[nbNotes];         // we only need 3 pitches for analysis
@@ -5447,15 +5444,15 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE &chord_type, CHORD_ACCIDENTAL 
 		if (noteTmp && noteTmp->getPitch() != 0) {
 			if (comptTemp == 1)
 				accidentals = noteTmp->getAccidentals();
-
-			if (comptTemp == 2)
+			else if (comptTemp == 2)
 				accidentalsTemp = noteTmp->getAccidentals();
 
 			pitches[comptTemp] = noteTmp->getPitch();
             // we now directly set a flag to tell to the note not to draw itself, rather than hide it behind the first one...
-			noteTmp -> setPitch(EMPTY);
+//			noteTmp->setPitch(EMPTY);
+			noteTmp->setPitch(pitches[0]);
+			noteTmp->setAccidentals(firstNote->getAccidentals());
 			noteTmp->setDrawGR(false);
-            
 			comptTemp++;
 		}
 	}
@@ -5467,14 +5464,15 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE &chord_type, CHORD_ACCIDENTAL 
 
 		if (noteTmp && noteTmp->getPitch() != 0) {
 			// we now directly set a flag to tell to the note not to draw itself, rather than hide it behind the first one...
-			noteTmp->setPitch(EMPTY);
+//			noteTmp->setPitch(EMPTY);
+			noteTmp->setPitch(pitches[0]);
+			noteTmp->setAccidentals(firstNote->getAccidentals());
             noteTmp->setDrawGR(false);
 		}
 	}
 
 	// Analysis ; the second note of the chord must be either the note right above the first one,
-				// or the note right below or the same note.
-
+	// or the note right below or the same note.
 	if (pitches[1] - 2 == (pitches[0] - 2 + 1 ) % 7) { // e.g. "c, d"
 		if (pitches[2] == pitches[0])
 			chord_type = UP;
@@ -5502,23 +5500,15 @@ ARNote * ARMusicalVoice::setTrillChord(CHORD_TYPE &chord_type, CHORD_ACCIDENTAL 
 	else
 		chord_type = CHORDERROR;
 
-
 	// Recupération de l'armure...
-
 	int keyNumber;
 	GuidoPos pos = mCurVoiceState->vpos;
 	ARKey   *key = NULL;
-
 	while (pos && !key) {
         ARMusicalObject *obj = ObjectList::GetPrev(pos);
-
 		key = obj ? static_cast<ARKey *>(obj->isARKey()) : NULL;
     }
-
-	if (key)
-		keyNumber = key->getKeyNumber();
-	else
-		keyNumber = 0;
+	keyNumber = key ? key->getKeyNumber() : 0;
 
 
 	// Determination de l'altération sur l'ornementation
@@ -5659,12 +5649,9 @@ void ARMusicalVoice::FinishChord(bool trill)
             finishChordWithOneChordGroup(chorddur, trill);
         else {
             GuidoPos vposBackup = mCurVoiceState->vpos;
-            
             finishChordWithSeveralChordGroups(chorddur, trill);
-            
             mCurVoiceState->vpos = vposBackup;
         }
-
         mCurVoiceState->ptagpos = ptagposBackup;
     }
 
@@ -5673,12 +5660,9 @@ void ARMusicalVoice::FinishChord(bool trill)
 
 	// now I insert one more empty event...
 	ARNote *tmpnote = new ARNote("empty", 0, 1, 0, 1, 80);
-
 	if (chordgrouplist) {
 		ARChordGroup *tmp = chordgrouplist->GetTail();
-
-		if (tmp)
-            tmpnote->setDuration(tmp->dur);
+		if (tmp) tmpnote->setDuration(tmp->dur);
 	}
 
 	AddTail(tmpnote);
@@ -5731,15 +5715,11 @@ void ARMusicalVoice::FinishChord(bool trill)
 				mytp = starttp;
 
 			GuidoPos mypos = mCurVoiceState->addedpositiontags->GetHeadPosition();
-
 			while (mypos) {
 				ARPositionTag * ptag = mCurVoiceState->addedpositiontags->GetNext(mypos);
-
 				if (ptag) {
 					ARMusicalObject * po = dynamic_cast<ARMusicalObject *>(ptag);
-
-					if (po)
-						po->setRelativeTimePosition(mytp);
+					if (po) po->setRelativeTimePosition(mytp);
 				}
 			}
 		}
@@ -6012,6 +5992,13 @@ void ARMusicalVoice::initChordNote()
 	numchordvoice = oldnumchordvoice;
 }
 
+//____________________________________________________________________________________
+GuidoPos ARMusicalVoice::getPositionTagPos (ARPositionTag *tag) const
+{
+	return mPosTagList->GetElementPos(tag);
+}
+
+//____________________________________________________________________________________
 void ARMusicalVoice::MarkVoice(float from, float length, unsigned char red, unsigned char green, unsigned char blue)
 {
 	TYPE_TIMEPOSITION tpos(from);
@@ -6020,6 +6007,7 @@ void ARMusicalVoice::MarkVoice(float from, float length, unsigned char red, unsi
 	MarkVoice( tpos.getNumerator(), tpos.getDenominator(), duration.getNumerator(), duration.getDenominator(), red, green, blue);
 }
 
+//____________________________________________________________________________________
 void ARMusicalVoice::MarkVoice( int fromnum, int fromdenom, int lengthnum, int lengthdenom, unsigned char red, unsigned char green, unsigned char blue)
 {
 	TYPE_TIMEPOSITION tpos(fromnum,fromdenom);
@@ -6070,6 +6058,8 @@ void ARMusicalVoice::MarkVoice( int fromnum, int fromdenom, int lengthnum, int l
 		AddElementAfter(endpos,ntformat);
 	}
 }
+
+//____________________________________________________________________________________
 /** \brief Manage the trills in order to give the information of the trill to tied notes
 */
 void ARMusicalVoice::doAutoTrill()
@@ -6085,7 +6075,7 @@ void ARMusicalVoice::doAutoTrill()
 		if (note) {
 			ARTrill *trill = note->getOrnament();
 			//type = 0 -> is a trill (and not a mord or turn)
-			if(trill && trill->getType() == 0) {
+			if(trill && trill->getType() == ARTrill::TRILL) {
 				// if it has, we can check if the note is tied to another
 				// if it is tied, we will let its status as "begin" (default)
 				// and we'll affect an ARtrill to the next note, whose boolean "begin" will be set as false with setContinue()
@@ -6093,29 +6083,27 @@ void ARMusicalVoice::doAutoTrill()
 
 				if (ptags) {
 					GuidoPos pos = ptags->GetHeadPosition();
-
-                    ARPositionTag *arpt = NULL;
-
 					while(pos) {
-						arpt = ptags->GetNext(pos);
-
+						ARPositionTag * arpt = ptags->GetNext(pos);
 						if(arpt) {
 							ARTie * tie = dynamic_cast<ARTie *>(arpt);
-							if(tie && tie->getIsAuto()) {
+
+							int repeat = trill->getRepeat();
+							if (tie && (tie->getIsAuto() || repeat == ARTrill::kOff)) {
 								GuidoPos posNote = posObj;
 								ARNote * nextNote;
 								do {
 								    ARMusicalObject * nextObject = ObjectList::GetNext(posNote);
-									if (!nextObject)
-                                        break;
+									if (!nextObject) break;
 									nextNote = static_cast<ARNote *>(nextObject->isARNote());
 								}
-                                while(posNote && !nextNote);
+                                while (posNote && !nextNote);
 
 								if (nextNote) {
 									nextNote->setVoiceNum(note->getVoiceNum());
 									nextNote->setOrnament(note->getOrnament());
-									nextNote->getOrnament()->setContinue();
+									if (repeat != ARTrill::kOn)
+										nextNote->getOrnament()->setContinue();
 								}
 							}
 						}	
@@ -6126,6 +6114,7 @@ void ARMusicalVoice::doAutoTrill()
 	}
 }
 
+//____________________________________________________________________________________
 void ARMusicalVoice::doAutoCluster()
 {
 	// We first look for each note and check if it has a cluster
@@ -6240,8 +6229,9 @@ void ARMusicalVoice::doAutoCluster()
 	}
 }
 
-// set the begin- and end- durations for each feathered beam.
 
+//____________________________________________________________________________________
+// set the begin- and end- durations for each feathered beam.
 void ARMusicalVoice::doAutoFeatheredBeam()
 {
 	ARMusicalVoiceState armvs;

@@ -40,6 +40,7 @@ if(APPLE)
 		set (CMAKE_OSX_SYSROOT "iphoneos")
 		set (libtype STATIC)
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+		set(IOS_DEPLOYMENT_TARGET 8.0) 
 	else ()
 		message (STATUS "Generates Mac OS project- Use -DIOS=yes to change.")
 	 	#######################################
@@ -251,6 +252,8 @@ endif(APPLE)
 # library generation
 if (IOS STREQUAL "yes")
 	add_library(${target} STATIC ${LIBCONTENT})
+	set_target_properties ( ${target} PROPERTIES 
+				XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET ${IOS_DEPLOYMENT_TARGET} )
 
 else()
 

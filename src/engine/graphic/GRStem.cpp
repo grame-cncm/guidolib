@@ -12,8 +12,8 @@
 
 */
 
-#include "ARMusicalObject.h" // for DURATIONs
-#include "ARNote.h" // To get noteFormat parameters
+#include "ARMusicalObject.h"	// for DURATIONs
+#include "ARNote.h"				// To get noteFormat parameters
 #include "GRStem.h"
 #include "GRGlobalStem.h"
 #include "GREvent.h"
@@ -23,7 +23,9 @@
 #include "GRSingleNote.h"
 #include "GRStdNoteHead.h"
 
-#include "GUIDOEngine.h"	// for AddGGSOutput
+#include "GUIDOEngine.h"		// for AddGGSOutput
+
+using namespace std;
 
 NVPoint GRStem::sRefpos;
 
@@ -31,28 +33,15 @@ GRStem::GRStem(GRGlobalStem * gstem) : mColRef(NULL), fOffsetStartPosition(0), f
     fNoteHeadType(kFullHeadSymbol), fHeadOrientation(ARTHead::NOTSET), fLastHeadOrientation(ARTHead::NOTSET)
 {
 	mStemDir = dirOFF;
-	
 	setColRef(gstem->getColRef());
-	
     mOffset = gstem->getOffset();
 	mSize   = gstem->getSize();
-
 	sRefpos.x = -30;		// HARDCODED !!!
 }
 
-GRStem::GRStem(GREvent * sngnot,
-	const TYPE_DURATION& dur,
-	GDirection dir,
-	float length,
-	float notebreite) :
-	mColRef(NULL),
-    fNoteHeadType(kFullHeadSymbol),
-    fHeadOrientation(ARTHead::NOTSET),
-    fLastHeadOrientation(ARTHead::NOTSET),
-    fSngnot(sngnot),
-    fDir(dir),
-    fLength(length),
-    fNotebreite(notebreite)
+GRStem::GRStem(GREvent * sngnot, const TYPE_DURATION& dur, GDirection dir, float length, float notebreite)
+	: mColRef(NULL), fNoteHeadType(kFullHeadSymbol), fHeadOrientation(ARTHead::NOTSET),
+      fLastHeadOrientation(ARTHead::NOTSET), fSngnot(sngnot), fDir(dir), fLength(length), fNotebreite(notebreite)
 {
     configureStem(dur);
 }
@@ -78,58 +67,41 @@ void GRStem::configureStem(const TYPE_DURATION& dur)
 	mStemLen = fLength;
 
 	setColRef(fSngnot->getColRef());
-
 	mOffset = fSngnot->getOffset();
-
 	mSize = fSngnot->getSize();
 
-	// dependant on the direction, I have different
-	// types (do I?)
-
+	// dependant on the direction, I have different types (do I?)
 	mLeftSpace = 0;
 	mRightSpace = 0;
 
-	if (fDir == dirUP)
-		mBoundingBox.top = (GCoord)(-mStemLen);
-	else if (fDir == dirDOWN)
-		mBoundingBox.bottom = (GCoord)(mStemLen);
+	if (fDir == dirUP)			mBoundingBox.top = (GCoord)(-mStemLen);
+	else if (fDir == dirDOWN)	mBoundingBox.bottom = (GCoord)(mStemLen);
 	sRefpos.x = (GCoord)(- fNotebreite * 0.5f);
 
 	GRSingleNote *singleNote = dynamic_cast<GRSingleNote *>(fSngnot);
-	
     if (singleNote) {
         fHeadOrientation = singleNote->getHeadState();
-
 		GRStdNoteHead *noteHead = singleNote->getNoteHead();
-
 		if (noteHead) {
 			noteHead->setGlobalStemDirection(fDir);
-
 			fNoteHeadType = noteHead->getSymbol();
 
-			//ConstMusicalSymbolID noteHeadSymbolTmp = noteHead->getSymbol();
 			// - Adjust stem length if it's a cross notehead
 			if (fNoteHeadType == kFullXHeadSymbol) {
 				setFirstSegmentDrawingState(false);
 
-				if (fDir == dirUP)
-					setOffsetStartPosition(4);
-				else if (fDir == dirDOWN)
-					setOffsetStartPosition(-4);
+				if (fDir == dirUP)			setOffsetStartPosition(4);
+				else if (fDir == dirDOWN)	setOffsetStartPosition(-4);
 			}
             // - Adjust stem length if it's a triangle notehead
 			else if (fNoteHeadType == kFullTriangleHeadSymbol || fNoteHeadType == kHalfTriangleHeadSymbol) {
-				if (fDir == dirUP)
-					setOffsetStartPosition(47);
-				else if (fDir == dirDOWN)
-					setFirstSegmentDrawingState(false);
+				if (fDir == dirUP)			setOffsetStartPosition(47);
+				else if (fDir == dirDOWN)	setFirstSegmentDrawingState(false);
 			}
             // - Adjust stem length if it's a reversed triangle notehead
 			else if (fNoteHeadType == kFullReversedTriangleHeadSymbol || fNoteHeadType == kHalfReversedTriangleHeadSymbol) {
-				if (fDir == dirUP)
-					setFirstSegmentDrawingState(false);
-				else if (fDir == dirDOWN)
-					setOffsetStartPosition(-47);
+				if (fDir == dirUP)			setFirstSegmentDrawingState(false);
+				else if (fDir == dirDOWN)	setOffsetStartPosition(-47);
 			}
 		}
 	}
@@ -146,8 +118,7 @@ void GRStem::setStemLength(float inLen)
 		mBoundingBox.bottom = (GCoord)(mStemLen);
 }
 	
-void 
-GRStem::setStemDir(GDirection dir)
+void GRStem::setStemDir(GDirection dir)
 {
 	mStemDir = dir;
 	mBoundingBox.top = 0;
@@ -165,14 +136,69 @@ void GRStem::OnDraw( VGDevice & hdc ) const
     //DrawWithLine(hdc);
 }
 
+//-------------------------------------------------------------------
+// computes the start y position offset
+// it depends on the beam direction and on the note head orientation
+//-------------------------------------------------------------------
+float GRStem::GetStartYOffset (bool up, float lineSpace) const
+{
+	float yoffset = 0;
+	bool notset = (fHeadOrientation == ARTHead::NOTSET && fLastHeadOrientation == ARTHead::NOTSET) || fHeadOrientation != ARTHead::NOTSET;
+	bool reverse 		= fHeadOrientation == ARTHead::REVERSE;
+	bool lastreverse 	= fLastHeadOrientation == ARTHead::REVERSE;
+	ARTHead::HEADSTATE headside = up ? ARTHead::RIGHT : ARTHead::LEFT;
+
+	if (fDrawActivated && (fNoteHeadType == kFullHeadSymbol || fNoteHeadType == kHalfNoteHeadSymbol)) {
+		if (notset) {
+		   if (reverse || fHeadOrientation == headside)
+				yoffset = lineSpace / 6;
+			else     
+				yoffset = - lineSpace / 6;
+		}
+		else {
+			if (lastreverse || fLastHeadOrientation == headside)
+				yoffset = lineSpace / 6;
+			else     
+				yoffset = - lineSpace / 6;
+		}
+    }
+    return up ? yoffset : -yoffset;
+}
+
+//-----------------------------------------------------------------
+// effective stem drawing
+// the starty position must be the note head position
+//-----------------------------------------------------------------
+void GRStem::DrawStem( VGDevice & hdc, unsigned int symbol1, unsigned int symbol2, float starty, float length ) const
+{
+	const float spaceBySize = LSPACE * mSize;
+	const float halfSpaceBySize = 0.5f * spaceBySize;
+	if (fDrawActivated) GRNotationElement::DrawSymbol(hdc, symbol1, 0, starty);
+	
+	int steps = length / halfSpaceBySize;
+	float offset = -halfSpaceBySize;
+	if (length < 0) {
+		steps = -steps;
+		offset = -halfSpaceBySize;
+	}
+	starty = fOffsetStartPosition + offset;
+	for (int i=1; i < steps; i++) {
+		GRNotationElement::DrawSymbol( hdc, symbol2, 0, starty );
+		starty += offset;
+		length -= offset;
+	}
+//	if (length) {
+//		starty -= length;
+//		GRNotationElement::DrawSymbol( hdc, symbol2, 0, starty );
+//	}
+}
+
+//-------------------------------------------------------------------
 void GRStem::DrawWithGlyph( VGDevice & hdc ) const
 {
-    if(!mDraw)
-		return;
-	if (mStemDir == dirOFF)
-        return;
-	if (mSize < kMinNoteSize)
-        return;			// size is too small, don't draw
+    if(!mDraw)					return;
+	if (mStemDir == dirOFF)		return;
+	if (mSize < kMinNoteSize)	return;			// size is too small, don't draw
 
 	// - Setup colors
 	const unsigned char * colref = getColRef();
@@ -182,52 +208,22 @@ void GRStem::DrawWithGlyph( VGDevice & hdc ) const
 	// - Setup text align 
 	hdc.SetFontAlign(getTextAlign());
 
-	// - Draw
 	// dependant on the direction, we do different things ...
-
-	unsigned int tmpSymbol;
-	
 	const float spaceBySize = LSPACE * mSize;
 	const float halfSpaceBySize = 0.5f * spaceBySize;
 
-	if (mStemDir == dirUP)
-	{
-		tmpSymbol =  kStemUp1Symbol;
+	float stemOffsetY = GetStartYOffset (mStemDir == dirUP, spaceBySize);
+	if (mStemDir == dirUP) {
 
-        float stemOffsetY = 0;
-
-		if (fDrawActivated && (fNoteHeadType == kFullHeadSymbol || fNoteHeadType == kHalfNoteHeadSymbol))
-        {
-            if ((fHeadOrientation == ARTHead::NOTSET && fLastHeadOrientation == ARTHead::NOTSET) || fHeadOrientation != ARTHead::NOTSET)
-            {
-                if (fHeadOrientation == ARTHead::REVERSE || fHeadOrientation == ARTHead::RIGHT)
-                    stemOffsetY = spaceBySize / 6;
-                else     
-                    stemOffsetY = - spaceBySize / 6;
-            }
-            else
-            {
-                if (fLastHeadOrientation == ARTHead::REVERSE || fLastHeadOrientation == ARTHead::RIGHT)
-                    stemOffsetY = spaceBySize / 6;
-                else     
-                    stemOffsetY = - spaceBySize / 6;
-            }
-        }
-
-        if (fDrawActivated)
-            GRNotationElement::DrawSymbol(hdc, tmpSymbol, 0, stemOffsetY);
+		unsigned int tmpSymbol =  kStemUp1Symbol;
+        if (fDrawActivated) GRNotationElement::DrawSymbol(hdc, tmpSymbol, 0, stemOffsetY);
 		
 		tmpSymbol = kStemUp2Symbol;  // wrong in EPS font...
-
 		// Draws until the length has been completed ...
 		float offsy = - halfSpaceBySize + fOffsetStartPosition;
-
-		while (- offsy < mStemLen) // * mSize)
-		{
-			if ((spaceBySize - offsy ) > mStemLen) // * mSize)
-			{
+		while (- offsy < mStemLen) {
+			if ((spaceBySize - offsy ) > mStemLen) {
 				offsy = - mStemLen /* * mSize)*/ + spaceBySize;
-			
 				GRNotationElement::DrawSymbol( hdc, tmpSymbol, 0, offsy);
 				break;
 			}
@@ -235,42 +231,15 @@ void GRStem::DrawWithGlyph( VGDevice & hdc ) const
 			offsy -= halfSpaceBySize;
 		}
 	}
-	else if (mStemDir == dirDOWN)
-	{
-		tmpSymbol = kStemDown1Symbol;
-
-        float stemOffsetY = 0;
-
-		if (fDrawActivated && (fNoteHeadType == kFullHeadSymbol || fNoteHeadType == kHalfNoteHeadSymbol))
-        {
-            if ((fHeadOrientation == ARTHead::NOTSET && fLastHeadOrientation == ARTHead::NOTSET) || fHeadOrientation != ARTHead::NOTSET)
-            {
-                if (fHeadOrientation == ARTHead::REVERSE || fHeadOrientation == ARTHead::LEFT)
-                    stemOffsetY = - spaceBySize / 6;
-                else     
-                    stemOffsetY = spaceBySize / 6;
-            }
-            else
-            {
-                if (fLastHeadOrientation == ARTHead::REVERSE || fLastHeadOrientation == ARTHead::LEFT)
-                    stemOffsetY = - spaceBySize / 6;
-                else     
-                    stemOffsetY = spaceBySize / 6;
-            }
-        }
-
-        if (fDrawActivated)
-            GRNotationElement::DrawSymbol(hdc, tmpSymbol, 0, stemOffsetY);
+	else if (mStemDir == dirDOWN) {
+		unsigned int tmpSymbol = kStemDown1Symbol;
+        if (fDrawActivated) GRNotationElement::DrawSymbol(hdc, tmpSymbol, 0, stemOffsetY);
 		
 		tmpSymbol = kStemDown2Symbol;
-		
 		// Draws until the length has been completed ...		
 		float offsy = halfSpaceBySize + fOffsetStartPosition;
-
-		while( offsy < mStemLen ) // * mSize)
-		{
-			if(( offsy + spaceBySize ) > mStemLen ) 
-			{
+		while( offsy < mStemLen ) {
+			if(( offsy + spaceBySize ) > mStemLen ) {
 				offsy = mStemLen - spaceBySize;
 				GRNotationElement::DrawSymbol( hdc, tmpSymbol, 0, offsy );
 				break;
@@ -279,7 +248,6 @@ void GRStem::DrawWithGlyph( VGDevice & hdc ) const
 			offsy += halfSpaceBySize;
 		}
 	}
-
 	// - Restore context
 	if (colref) hdc.SetFontColor( prevTextColor );  //(TODO: in a parent method)
 }

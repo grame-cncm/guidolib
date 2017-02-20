@@ -23,27 +23,17 @@
 class GRSlur : public GRBowing
 {
 	public:
-	 		GRSlur(GRStaff * grstaff); // constructor without REAL abstract element
-	 		GRSlur(GRStaff * grstaff, ARSlur * inAR );
-	 
-	 virtual ~GRSlur();
+	 		  GRSlur (GRStaff * grstaff)					: GRBowing(grstaff) {}
+	 		  GRSlur (GRStaff * grstaff, ARSlur * inAR )	: GRBowing(grstaff, inAR ) {}
+	 virtual ~GRSlur() {}
 
 	protected:
+		virtual void automaticCurveDirection( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse );
+		virtual void automaticAnchorPoints	( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse );
+		virtual void automaticControlPoints	( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse );
 
-		virtual void updateBow( GRStaff * grstaff );
-
-		virtual void automaticCurveDirection( GRBowingContext * bowContext, 
-											  ARBowing * arBow, 
-											  GRSystemStartEndStruct * sse );
-
-		virtual void automaticAnchorPoints( GRBowingContext * bowContext, 
-										ARBowing * arBow, 
-										GRSystemStartEndStruct * sse );
-
-		virtual void automaticControlPoints( GRBowingContext * bowContext, 
-										ARBowing * arBow, 
-										GRSystemStartEndStruct * sse );
-	
+	private:
+		float	getEltOffset (const GRNotationElement* el ) const;
 };
 
 #endif

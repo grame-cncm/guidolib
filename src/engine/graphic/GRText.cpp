@@ -22,6 +22,7 @@
 #include "GRPage.h"
 #include "GRRod.h"
 #include "GRStaff.h"
+#include "GRSystem.h"
 #include "GRText.h"
 #include "GUIDOInternal.h"	// for gGlobalSettings.gDevice
 
@@ -34,30 +35,30 @@ using namespace std;
 
 extern GRStaff * gCurStaff;
 
-GRText::GRText(GRStaff * p_staff, ARText * abstractRepresentationOfText)
-  : GRPTagARNotationElement(abstractRepresentationOfText)
+GRText::GRText(GRStaff * staff, ARText * ar) : GRPTagARNotationElement(ar)
 {
-	assert(abstractRepresentationOfText);
+	assert(ar);
+	assert(staff);
 
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
 	GRTextSaveStruct * st = new GRTextSaveStruct;
 	sse->p = (void *) st;
-	sse->grsystem = p_staff->getGRSystem();
+	sse->grsystem = staff->getGRSystem();
 	sse->startflag = GRSystemStartEndStruct::LEFTMOST;
 
 	mMustFollowPitch = false;
 	mStartEndList.AddTail(sse);
 
-	float curLSPACE = LSPACE;
-	if (p_staff)
-	{
-		curLSPACE = p_staff->getStaffLSPACE();
-	}
+	float curLSPACE = staff->getStaffLSPACE();
+	mPosition.y = staff->getDredgeSize();
+	if( ar->getYPos())
+		mPosition.y -= (ar->getYPos()->getValue(curLSPACE));
+	if (ar->getDY())
+		mPosition.y -= ar->getDY()->getValue( curLSPACE );
 
 	const VGFont* hmyfont = FontManager::gFontText;
 	const ARText * myar = getARText();
-	if (myar)
-	{
+	if (myar) {
 		mFontSize = myar->getFSize(curLSPACE);
 		if (mFontSize == 0)
 			mFontSize = (int)(1.5f * LSPACE);
@@ -66,14 +67,12 @@ GRText::GRText(GRStaff * p_staff, ARText * abstractRepresentationOfText)
 		fontAttrib = new NVstring(myar->getFAttrib());
 	}
 
-	if (font && font->length() > 0)
-	{
+	if (font && font->length() > 0) {
 		// handle font-attributes ...
 		hmyfont = FontManager::FindOrCreateFont( mFontSize, font, fontAttrib );
 	}
 
 	// depending on the textformat ...
-
 	unsigned int xdir = VGDevice::kAlignLeft;
 	unsigned int ydir = VGDevice::kAlignTop;
 	const char* tf = myar->getTextformat();
@@ -91,7 +90,6 @@ GRText::GRText(GRStaff * p_staff, ARText * abstractRepresentationOfText)
 			case 'b':	ydir = VGDevice::kAlignBottom; break;
 		}
 	}
-
 	mTextAlign = xdir | ydir;
 
 	st->boundingBox.left = 0;
@@ -133,26 +131,26 @@ GRText::~GRText()
 
 bool GRText::isLyrics() const			{ return getARText()->isLyric(); }
 
-FloatRect GRText::getTextMetrics(VGDevice & hdc) const
+FloatRect GRText::getTextMetrics(VGDevice & hdc, const GRStaff* staff ) const
 {
 	FloatRect r;
 
-	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );
+	GRSystemStartEndStruct * sse = getSystemStartEndStruct( staff->getGRSystem() );
 	assert(sse);
 	GRTextSaveStruct * st = (GRTextSaveStruct *) sse->p;
 	const ARText * arText = getARText();
-	const float curLSPACE = gCurStaff ? gCurStaff->getStaffLSPACE(): LSPACE;
+	const float curLSPACE = staff ? staff->getStaffLSPACE(): LSPACE;
 	// - Setup position.
 	// y-reference position if the lowest line of the staff.
 	NVPoint drawPos (st->position);
-	if( arText->isAutoPos() && gCurStaff) {
+	if( arText->isAutoPos() && staff) {
 		drawPos.y = mStaffBottom;
 	}
 	else if( mMustFollowPitch == false )
 	{
 		// - Force the position to be relative to the bottom line of the staff
-		if (gCurStaff) // else ?
-			drawPos.y = gCurStaff->getDredgeSize();
+		if (staff) // else ?
+			drawPos.y = staff->getDredgeSize();
 		else
 			drawPos.y = 0;
 	}
@@ -201,17 +199,14 @@ void GRText::OnDraw( VGDevice & hdc ) const
 {
 	if(!mDraw) return;
 
-//cerr << "GRText::OnDraw pos: " << getPosition() << " bb: " << getBoundingBox() << endl;
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );
 	assert(sse);
 	GRTextSaveStruct * st = (GRTextSaveStruct *) sse->p;
 
 	// - Setup font ....
 	const VGFont* hmyfont;
-	if (font && font->length() > 0)
-		hmyfont = FontManager::FindOrCreateFont( mFontSize, font, fontAttrib );
-	else
-		hmyfont = FontManager::gFontText;
+	if (font && font->length() > 0)	hmyfont = FontManager::FindOrCreateFont( mFontSize, font, fontAttrib );
+	else							hmyfont = FontManager::gFontText;
 
 	hdc.SetTextFont( hmyfont );
 	const VGColor prevTextColor = hdc.GetFontColor();
@@ -224,18 +219,25 @@ void GRText::OnDraw( VGDevice & hdc ) const
 	// - Print text
 	const char * theText = st->text.c_str();
 	const int charCount = (int)st->text.size();
-	FloatRect r = getTextMetrics (hdc);
-
-    if (charCount > 0)
+    if (charCount > 0) {
+#if 0
+		FloatRect r = getTextMetrics (hdc, gCurStaff);
 	    hdc.DrawString( r.left, r.top, theText, charCount);
+#else
+	    hdc.DrawString( mPosition.x, mPosition.y, theText, charCount);
+#endif
+	}
 
 	if( mColRef )
 		hdc.SetFontColor( prevTextColor );
+
+	if (gBoundingBoxesMap & kStavesBB)
+		DrawBoundingBox(hdc, kStaffBBColor);
 }
 
 const ARText * GRText::getARText() const
 {
-	return /*dynamic*/static_cast<const ARText*>(getAbstractRepresentation());
+	return static_cast<const ARText*>(getAbstractRepresentation());
 }
 
 void GRText::addAssociation(GRNotationElement * el)
@@ -271,6 +273,13 @@ void GRText::setHPosition( GCoord nx )
 	GRTextSaveStruct * st = (GRTextSaveStruct *) sse->p;
 	assert(st);
 
+	const ARText * arText = getARText();
+	const float curLSPACE = gCurStaff ? gCurStaff->getStaffLSPACE(): LSPACE;
+	float dx = 0;
+	if (arText->getDX())
+		dx = arText->getDX()->getValue( curLSPACE );
+	mPosition.x += dx;
+
 	st->position.x = nx;
 }
 
@@ -280,10 +289,10 @@ void GRText::tellPosition(GObject * caller, const NVPoint & inPosition)
 	GRNotationElement * grel =  dynamic_cast<GRNotationElement *>(caller);
 	if( grel == 0 ) return;
 
-	GRStaff * staff = grel->getGRStaff();
+	const GRStaff * staff = grel->getGRStaff();
 	if( staff == 0 ) return;
 
-	mStaffBottom = staff->getBoundingBox().bottom;
+	mStaffBottom = staff->getStaffBottom();
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct(staff->getGRSystem());
 	assert(sse);
 
@@ -312,6 +321,17 @@ void GRText::tellPosition(GObject * caller, const NVPoint & inPosition)
 		const ARText * arText = getARText();
 		const char* text = arText ? arText->getText() : 0;
 		if (text) st->text = text;
+
+		FloatRect r = getTextMetrics (*gGlobalSettings.gDevice, staff);
+		setPosition (NVPoint(r.left, r.top));
+		NVRect bb (0, 0, r.Width(), r.Height());
+		mBoundingBox = bb;
+		float xoffset = 0;
+		if (mTextAlign & VGDevice::kAlignCenter)
+			xoffset = mBoundingBox.Width()/2;
+		if (mTextAlign & VGDevice::kAlignRight)
+			xoffset = mBoundingBox.Width();
+		mBoundingBox -= NVPoint(xoffset, 0);
 	}
 }
 

@@ -88,26 +88,26 @@ class GRArticulation : public GRTagARNotationElement
 		void	setupHarmonic();
 		void	setArticulationSymbol( unsigned int inSymbolID );
 
-		void	placeStaccato( GREvent * inParent, NVPoint & ioPos );
-		void	placeStaccmo (GREvent * inParent, NVPoint & ioPos);
-		void	placePizz(GREvent * inParent, NVPoint & ioPos);
+		void	placeStaccato( const GREvent * inParent, NVPoint & ioPos );
+		void	placeStaccmo ( const GREvent * inParent, NVPoint & ioPos);
+		void	placePizz	 ( const GREvent * inParent, NVPoint & ioPos);
 
-		void	placeAccent( GREvent * inParent, NVPoint & ioPos );
-		void	placeAccentAbove( GREvent * inParent, NVPoint & ioPos );
-		void	placeAccentBelow( GREvent * inParent, NVPoint & ioPos );
+		void	placeAccent		( const GREvent * inParent, NVPoint & ioPos );
+		void	placeAccentAbove( const GREvent * inParent, NVPoint & ioPos );
+		void	placeAccentBelow( const GREvent * inParent, NVPoint & ioPos );
 
-		void	placeMarcato( GREvent * inParent, NVPoint & ioPos );
-        void	placeMarcatoAbove( GREvent * inParent, NVPoint & ioPos );
-        void	placeMarcatoBelow( GREvent * inParent, NVPoint & ioPos );
+		void	placeMarcato	 ( const GREvent * inParent, NVPoint & ioPos );
+        void	placeMarcatoAbove( const GREvent * inParent, NVPoint & ioPos );
+        void	placeMarcatoBelow( const GREvent * inParent, NVPoint & ioPos );
 
-		void	placeTenuto( GREvent * inParent, NVPoint & ioPos );
-		void	placeFermataAbove( GREvent * inParent, NVPoint & ioPos );
-		void	placeFermataBelow( GREvent * inParent, NVPoint & ioPos );
-		void	placeHarmonic (GREvent * inParent, NVPoint & ioPos);
-		void	placeBreathMark( GREvent * inParent, NVPoint & ioPos );
+		void	placeTenuto		 ( const GREvent * inParent, NVPoint & ioPos );
+		void	placeFermataAbove( const GREvent * inParent, NVPoint & ioPos );
+		void	placeFermataBelow( const GREvent * inParent, NVPoint & ioPos );
+		void	placeHarmonic	 ( const GREvent * inParent, NVPoint & ioPos);
+		void	placeBreathMark	 ( const GREvent * inParent, NVPoint & ioPos );
 
 
-		int		getPlacement( GREvent * inParent ) const;		// gives an ARArticulation placement
+		int		getPlacement( const GREvent * inParent ) const;		// gives an ARArticulation placement
 
 		void	setMarcatoDirection( bool upward );
 		void	setStaccmoDirection( bool upward);
@@ -137,8 +137,8 @@ class GRArticulation : public GRTagARNotationElement
 		static std::map<int,int> sOrdering;
 
 	private:
-		double	resolveCollisionAbove (GREvent * inParent, double currentpos, float minspace, int skiptypes) const;
-		double	resolveCollisionBelow (GREvent * inParent, double currentpos, float minspace, int skiptypes) const;
+		double	resolveCollisionAbove ( const GREvent * inParent, double currentpos, float minspace, int skiptypes) const;
+		double	resolveCollisionBelow ( const GREvent * inParent, double currentpos, float minspace, int skiptypes) const;
 		double	staffBottom (const GRStaff * staff) const;
 		bool	onStaffLine (const GRStaff * staff, double pos) const;
 

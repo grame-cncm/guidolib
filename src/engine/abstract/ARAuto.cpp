@@ -19,17 +19,20 @@
 #include "TagParameterList.h"
 #include "ListOfStrings.h"
 
+using namespace std;
+
 ListOfTPLs ARAuto::ltpls(1);
 
 ARAuto::ARAuto()
 {
-	numparset              = 0;
-	endBarState            = ON;
-	pageBreakState         = ON;
-	systemBreakState       = ON;
-	clefKeyMeterOrderState = ON;
-	stretchLastLineState   = OFF;
-	stretchFirstLineState  = OFF;
+//	fNumparset              = 0;
+	fEndBarState            = ON;
+	fPageBreakState         = ON;
+	fSystemBreakState       = ON;
+	fClefKeyMeterOrderState = ON;
+	fStretchLastLineState   = OFF;
+	fStretchFirstLineState  = OFF;
+	fLyricsAutoPos		    = OFF;
 }
 
 ARAuto::~ARAuto()
@@ -45,13 +48,15 @@ void ARAuto::setTagParameterList(TagParameterList& tpl)
 			"S,systemBreak,on,o;"
 			"S,clefKeyMeterOrder,on,o;"
 			"S,stretchLastLine,off,o;"
-			"S,stretchFirstLine,off,o"));
+			"S,stretchFirstLine,off,o;"
+			"S,lyricsAutoPos,off,o"));
 		lstrs.AddTail(("S,autoEndBar,on,o;"
 			"S,autoPageBreak,on,o;"
 			"S,autoSystemBreak,on,o;"
 			"S,autoClefKeyMeterOrder,on,o;"
 			"S,autoStretchLastLine,off,o;"
-			"S,autoStretchFirstLine,off,o"));
+			"S,autoStretchFirstLine,off,o;"
+			"S,autoLyricsPos,off,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -61,71 +66,45 @@ void ARAuto::setTagParameterList(TagParameterList& tpl)
 	if (ret>=0 && rtpl)
 	{
 		// we found a match!
-		if (ret == 0 || ret == 1)
-		{
+		if (ret == 0 || ret == 1) {
+			const string off("off");
+			const string on("on");
+
 			TagParameterString * str = TagParameterString::cast(rtpl->RemoveHead());
-			assert(str);
-			std::string off("off");
-			std::string on("on");
 			if (str->TagIsSet())
-			{
-				++numparset;
-				if (off == str->getValue())
-					endBarState = OFF;
-			}
+				fEndBarState =  (off == str->getValue()) ? OFF : ON;
 			delete str;
 
 			str =  TagParameterString::cast(rtpl->RemoveHead());
-			assert(str);
 			if (str->TagIsSet())
-			{
-				++numparset;
-				if (off == str->getValue())
-					pageBreakState = OFF;
-			}
+				fPageBreakState = (off == str->getValue()) ? OFF : ON;
 			delete str;
 
 			str =  TagParameterString::cast(rtpl->RemoveHead());
-			assert(str);
 			if (str->TagIsSet())
-			{
-				++numparset;
-				if (off == str->getValue())
-					systemBreakState = OFF;
-			}
+				fSystemBreakState = (off == str->getValue()) ? OFF : ON;
 			delete str;
 
 			str =  TagParameterString::cast(rtpl->RemoveHead());
-			assert(str);
 			if (str->TagIsSet())
-			{
-				++numparset;
-				if (off == str->getValue())
-					clefKeyMeterOrderState = OFF;
-			}
+				fClefKeyMeterOrderState = (off == str->getValue()) ? OFF : ON;
 			delete str;
 
 			str =  TagParameterString::cast(rtpl->RemoveHead());
-			assert(str);
 			if (str->TagIsSet())
-			{
-				++numparset;
-				if (on == str->getValue())
-					stretchLastLineState = ON;
-			}
+				fStretchLastLineState = (on == str->getValue()) ? ON : OFF;
 			delete str;
 
 			str =  TagParameterString::cast(rtpl->RemoveHead());
-			assert(str);
 			if (str->TagIsSet())
-			{
-				++numparset;
-				if (on == str->getValue())
-					stretchFirstLineState = ON;
-			}
+				fStretchFirstLineState = (on == str->getValue()) ? ON : OFF;
+			delete str;
+
+			str =  TagParameterString::cast(rtpl->RemoveHead());
+			if (str->TagIsSet())
+				fLyricsAutoPos = (on == str->getValue()) ? ON : OFF;
 			delete str;
 		}
-
 		delete rtpl;
 	}
 	// all Parameters are ignored ...
@@ -134,19 +113,11 @@ void ARAuto::setTagParameterList(TagParameterList& tpl)
 	return;
 }
 
-void ARAuto::printName(std::ostream& os) const
-{
-    os << "ARAuto";
-}
-
-void ARAuto::printGMNName(std::ostream& os) const
-{
-    os << "\\auto";
-}
+void ARAuto::printName(std::ostream& os) const		{ os << "ARAuto"; }
+void ARAuto::printGMNName(std::ostream& os) const	{ os << "\\auto"; }
 
 void ARAuto::printParameters(std::ostream& os) const
 {
-    os << "autoEndBar: " << (endBarState == ON ? "on" : "off") << "; ";
-
+    os << "autoEndBar: " << (fEndBarState == ON ? "on" : "off") << "; ";
     ARMusicalTag::printParameters(os);
 }

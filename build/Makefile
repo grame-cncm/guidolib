@@ -23,7 +23,7 @@ endif
 
 OUT  := GUIDOEngine.framework GUIDOEngine.tgz libGUIDOEngine.a
 MAC  ?= MacOS
-IOS  := iOS
+IOS  := ios
 
 # try to detect Visual Studio version used
 ifeq ($(TARGET), windows)
@@ -57,6 +57,7 @@ help :
 	@echo "   all (default): build the GUIDOEngine library,"	
 	@echo "                        the guido tools,"	
 	@echo "                        the Guido Qt library, applications and tools"	
+	@echo "   Qt           : build the Guido Qt library, applications and tools"	
 	@echo "   java         : build the jni and java libraries"	
 	@echo "   js           : build the javascript library (requires emscripten)"	
 	@echo "   android      : build the GUIDOEngine static library for Android"	

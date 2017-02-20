@@ -35,6 +35,7 @@ public:
 	virtual void printParameters(std::ostream& os) const;
 
     virtual void setTagParameterList(TagParameterList & tpl);
+    virtual ARSpace		*isARSpace()		  { return this; }
 
 private:
     float fVal;

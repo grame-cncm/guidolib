@@ -31,12 +31,13 @@ public:
 			 ARAuto();
 	virtual ~ARAuto();
 
-	state getStretchLastLineState() const		{ return stretchLastLineState; }
-	state getStretchFirstLineState() const		{ return stretchFirstLineState; }
-	state getClefKeyMeterOrderState() const		{ return clefKeyMeterOrderState; }
-	state getEndBarState() const				{ return endBarState; }
-	state getSystemBreakState() const			{ return systemBreakState; }
-	state getPageBreakState() const				{ return pageBreakState; } 
+	state getStretchLastLineState() const		{ return fStretchLastLineState; }
+	state getStretchFirstLineState() const		{ return fStretchFirstLineState; }
+	state getClefKeyMeterOrderState() const		{ return fClefKeyMeterOrderState; }
+	state getEndBarState() const				{ return fEndBarState; }
+	state getSystemBreakState() const			{ return fSystemBreakState; }
+	state getPageBreakState() const				{ return fPageBreakState; }
+	state getAutoLyricsPos() const				{ return fLyricsAutoPos; }
 
 	virtual void setTagParameterList(TagParameterList & tpl);
 
@@ -47,14 +48,14 @@ public:
 	virtual bool IsStateTag() const				{ return true; }
 
 protected:
-	state endBarState;
-	state pageBreakState;
-	state systemBreakState;
-	state clefKeyMeterOrderState;
-	state stretchLastLineState;
-	state stretchFirstLineState;
+	state fEndBarState;
+	state fPageBreakState;
+	state fSystemBreakState;
+	state fClefKeyMeterOrderState;
+	state fStretchLastLineState;
+	state fStretchFirstLineState;
+	state fLyricsAutoPos;
 
-	int numparset;
 	static ListOfTPLs ltpls;
 };
 

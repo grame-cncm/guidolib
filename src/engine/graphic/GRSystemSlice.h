@@ -80,7 +80,7 @@ public:
 	GRGlue *	getEndGlue() const			{ return mEndGlue; }
 	int			getStaffNumber( const GRStaff * staff ) const;
 	int			getNumber() const			{ return mNumber; }
-    StaffVector * getStaves()   { return mStaffs; }
+    const StaffVector * getStaves() const   { return mStaffs; }
 	GRBar*		getBarAt (const TYPE_TIMEPOSITION& pos) const;
 	const GRBar* getBar () const;
 

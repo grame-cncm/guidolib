@@ -1,0 +1,12 @@
+{ 
+	[ 
+	\meter<"2/4">
+  	\stemsDown  
+	\beam( 
+	g/8 
+	\trill( { d, e& })
+	)
+
+	{a1/8, f} { c, e }
+	]
+}

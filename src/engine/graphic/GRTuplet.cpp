@@ -116,7 +116,7 @@ void GRTuplet::manualPosition(GREvent * event, const NVPoint & inPos, const GRSt
 }
 
 // ----------------------------------------------------------------------------
-bool GRTuplet::getNotesBoundingBox (NVRect& outRect) const
+bool GRTuplet::getElementsBoundingBox (NVRect& outRect) const
 {
 	NVRect r;
 	int stemsUp		= 0;
@@ -124,15 +124,22 @@ bool GRTuplet::getNotesBoundingBox (NVRect& outRect) const
 	GuidoPos pos = mAssociated->GetHeadPosition();
 	while( pos )
 	{
-		const GRSingleNote * note = dynamic_cast<const GRSingleNote*>(mAssociated->GetNext(pos));
-		if (!note) continue;
-
-		GDirection stemDir = note->getStemDirection();
-		if( stemDir == dirUP ) stemsUp++;
-		else if( stemDir == dirDOWN ) stemsDown++;
+		GRNotationElement* elt = mAssociated->GetNext(pos);
+		const GRSingleNote * note = elt->isSingleNote();
+		if (note) {
+			GDirection stemDir = note->getStemDirection();
+			if( stemDir == dirUP ) stemsUp++;
+			else if( stemDir == dirDOWN ) stemsDown++;
 		
-		NVRect nbb = note->getEnclosingBox(false, false);
-		r.Merge(nbb);
+			NVRect nbb = note->getEnclosingBox(false, false);
+			r.Merge(nbb);
+		}
+		else if (elt->isRest()) {
+			NVRect nbb = elt->getBoundingBox();
+			nbb += elt->getPosition();
+			if (!nbb.Height()) nbb.bottom = nbb.top +1;		// hack to catch strange Merge behaviour
+			r.Merge(nbb);
+		}
 	}
 	outRect = r;
 	return (stemsUp >= stemsDown);
@@ -159,7 +166,7 @@ bool GRTuplet::automaticPosition(GREvent * callerEv, const NVPoint & inPos, cons
 	const ARTuplet* ar = getARTuplet();
 	int dir = ar->isPositionAbove();
 	NVRect notesBB;
-	bool above = getNotesBoundingBox(notesBB);
+	bool above = getElementsBoundingBox(notesBB);
 	if (dir) above = (dir == dirUP);
 
 	float lspace = staff->getStaffLSPACE();
@@ -198,6 +205,7 @@ void GRTuplet::OnDraw(VGDevice & hdc) const
     if (mColRef) hdc.SetFontColor(VGColor(mColRef));
 	const ARTuplet * arTuplet = getARTuplet();
 	GRTupletSaveStruct * st = (GRTupletSaveStruct *)sse->p;
+
 	if (st->p1.x == st->p2.x)	return;		// nothing to draw: the metrics is an empty box
 
 	size_t charCount = 0;

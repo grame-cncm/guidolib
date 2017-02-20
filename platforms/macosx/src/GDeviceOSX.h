@@ -62,11 +62,9 @@ class_export GDeviceOSX : public VGDevice
 
 		// - Font services ---------------------------------------------------
 		virtual	void			SetMusicFont( const VGFont * font ); 
-		virtual	const VGFont *	GetMusicFont() const 				  
-									{ return mCurrMusicFont; }
+		virtual	const VGFont *	GetMusicFont() const				{ return mCurrMusicFont; }
 		virtual	void			SetTextFont( const VGFont * font ); 			
-		virtual	const VGFont *	GetTextFont() const				  
-									{ return mCurrTextFont; }
+		virtual	const VGFont *	GetTextFont() const					{ return mCurrTextFont; }
 
 		// - Pen & brush services --------------------------------------------
 		virtual	void			SelectPen( const VGColor & inColor, 
@@ -77,8 +75,7 @@ class_export GDeviceOSX : public VGDevice
 		virtual	void			PushFillColor( const VGColor & inColor ); 
 		virtual	void			PopFillColor(); 
 		virtual	void			SetRasterOpMode( VRasterOpMode ROpMode);
-		virtual	VRasterOpMode	GetRasterOpMode() const 
-									{ return mRasterMode; }
+		virtual	VRasterOpMode	GetRasterOpMode() const				{ return mRasterMode; }
 
 
 		// - Bitmap services (bit-block copy methods) --------------------------
@@ -93,58 +90,37 @@ class_export GDeviceOSX : public VGDevice
 		virtual	void			OffsetOrigin( float x, float y );
 		virtual	void			LogicalToDevice( float * x, float * y ) const;
 		virtual	void			DeviceToLogical( float * x, float * y ) const;	
-		virtual float			GetXScale() const
-									{ return mScaleX; }
-		virtual	float			GetYScale() const
-									{ return mScaleY; }
-		virtual	float			GetXOrigin() const
-									{ return mOriginX; }
-		virtual	float			GetYOrigin() const
-									{ return mOriginY; }
-		virtual	void			NotifySize( int inWidth, int inHeight )
-									{}
-		virtual	int				GetWidth() const
-									{ return mPhysicalWidth; }
-		virtual	int				GetHeight() const
-									{ return mPhysicalHeight; }
+		virtual float			GetXScale() const			{ return mScaleX; }
+		virtual	float			GetYScale() const			{ return mScaleY; }
+		virtual	float			GetXOrigin() const			{ return mOriginX; }
+		virtual	float			GetYOrigin() const			{ return mOriginY; }
+		virtual	void			NotifySize( int inWidth, int inHeight ) {}
+		virtual	int				GetWidth() const			{ return mPhysicalWidth; }
+		virtual	int				GetHeight() const			{ return mPhysicalHeight; }
 
 		// - Text and music symbols services -------------------------------------
-		virtual void			DrawMusicSymbol(float x, float y, unsigned int inSymbolID );	//was DrawSymbol
-		virtual	void			DrawString( float x, float y, const char * s, int inCharCount );//was PrintAt
-		virtual	void			SetFontColor( const VGColor & inColor )		//was DoSetTextColor {}
-									{ mTextColor = inColor; }
-		virtual	VGColor			GetFontColor() const 
-									{ return mTextColor; }
-		virtual	void			SetFontBackgroundColor( const VGColor & inColor ) //was DoSetTextBackgroundColor {}
-									{ mTextBackColor = inColor; }
-		virtual	VGColor			GetFontBackgroundColor() const
-									{ return mTextBackColor; }
-		virtual	void			SetFontAlign( unsigned int inAlign ) 
-									{ mTextAlign = inAlign; }
-		virtual	unsigned int	GetFontAlign() const
-									{ return mTextAlign; }
+		virtual void			DrawMusicSymbol(float x, float y, unsigned int inSymbolID );
+		virtual	void			DrawString( float x, float y, const char * s, int inCharCount );
+		virtual	void			SetFontColor( const VGColor & inColor )			{ mTextColor = inColor; }
+		virtual	VGColor			GetFontColor() const							{ return mTextColor; }
+		virtual	void			SetFontBackgroundColor(const VGColor & inColor)	{ mTextBackColor = inColor; }
+		virtual	VGColor			GetFontBackgroundColor() const					{ return mTextBackColor; }
+		virtual	void			SetFontAlign( unsigned int inAlign )			{ mTextAlign = inAlign; }
+		virtual	unsigned int	GetFontAlign() const							{ return mTextAlign; }
 
 		// - Printer informations services ----------------------------------------
-		virtual	void			SetDPITag( float inDPI ) 
-									{ mDPITag = inDPI; }
-		virtual	float			GetDPITag() const 
-									{ return 72.0f; }
-		virtual void*			GetBitMapPixels()  
-									{ return NULL; }
-		virtual void			ReleaseBitMapPixels()  
-									{};
-		virtual const char*		GetImageData(const char* &, int& )
-									{ return NULL; }
-		virtual void			ReleaseImageData(const char *) const
-									{};
-		virtual	VGSystem *		getVGSystem() const 
-									{ return mSys; }
+		virtual	void			SetDPITag( float inDPI )				{ mDPITag = inDPI; }
+		virtual	float			GetDPITag() const						{ return 72.0f; }
+		virtual void*			GetBitMapPixels()						{ return NULL; }
+		virtual void			ReleaseBitMapPixels()					{};
+		virtual const char*		GetImageData(const char* &, int& )		{ return NULL; }
+		virtual void			ReleaseImageData(const char *) const	{};
+		virtual	VGSystem *		getVGSystem() const						{ return mSys; }
 
 		// - Data export services ----------------------------------------
-/*		virtual	void			ExportToFile( const char * inFilePath ) 
-									{}
-*/		
-				void *			GetNativeContext() const;	 
+//		virtual	void			ExportToFile( const char * inFilePath ) {}
+
+				void *			GetNativeContext() const;
 
 		/// Creates a Carbon color from the input VGColor
 		static void				MakeCGColor( const VGColor & inColor, CGFloat outColor[ 4 ] ); 
