@@ -37,9 +37,10 @@ GDeviceWin32GDIPlus::GDeviceWin32GDIPlus( HDC hdc, VGSystem* sys )
 					mScaleX(1), mScaleY(1),
 					mOriginX(0), mOriginY(0), mDPITag(72.0f) 
 { 
+	mCurrPenPosX = mCurrPenPosY = 0;
+
 	// guido hack - must be removed asap
 	mSys = sys; 
-
 	mBitmap						= 0;
 	mGraphics					= new Graphics(hdc);
 	mPen1						= new Pen(Color::Black, 1);
