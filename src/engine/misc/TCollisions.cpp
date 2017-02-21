@@ -99,7 +99,7 @@ bool TCollisions::checkSlice (const NVRect& r)
 }
 
 // ----------------------------------------------------------------------------
-void TCollisions::resolve (ARMusicalObject* ar, int gap)
+void TCollisions::resolve (ARMusicalObject* ar, float gap)
 {
 	ARSpace * arspace = new ARSpace (gap);
 	arspace->setRelativeTimePosition (ar->getRelativeTimePosition());

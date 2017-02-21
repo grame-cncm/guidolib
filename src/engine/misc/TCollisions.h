@@ -76,7 +76,7 @@ class  TCollisions {
 		void	clear ();
 		void	print (std::ostream& out) const;
 
-		void	resolve (ARMusicalObject* ar, int gap);
+		void	resolve (ARMusicalObject* ar, float gap);
 
 	private:
 		bool	checkElement (const NVRect& r);

@@ -44,13 +44,13 @@ GRAccidental * GRTrill::createAccidental (ARMusicalVoice::CHORD_ACCIDENTAL acc, 
 			break;
 		case ARMusicalVoice::SHARP :		accID = 1;
 			break;
-		case ARMusicalVoice::CAU_NATURAL :	accID = cautionary ? 10 : 0;
+		case ARMusicalVoice::CAU_NATURAL :	accID = cautionary ? 10.f : 0.f;
 			break;
-		case ARMusicalVoice::CAU_FLAT :		accID = cautionary ? -3 : 0;
+		case ARMusicalVoice::CAU_FLAT :		accID = cautionary ? -3.f : 0.f;
 			break;
-		case ARMusicalVoice::CAU_SHARP :	accID = cautionary ? 3 : 0;
+		case ARMusicalVoice::CAU_SHARP:		accID = cautionary ? 3.f : 0.f;
 			break;
-		default :							accID = 0;
+		default :							accID = 0.f;
 	}
 	return new GRAccidental(0, 0, accID, 0.5f);
 }

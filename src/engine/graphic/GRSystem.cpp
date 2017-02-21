@@ -22,6 +22,7 @@
 #include <climits>
 #include <typeinfo>
 #include <iostream>
+#include <algorithm>
 
 // Guido Misc
 #include "secureio.h"

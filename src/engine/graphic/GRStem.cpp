@@ -175,7 +175,7 @@ void GRStem::DrawStem( VGDevice & hdc, unsigned int symbol1, unsigned int symbol
 	const float halfSpaceBySize = 0.5f * spaceBySize;
 	if (fDrawActivated) GRNotationElement::DrawSymbol(hdc, symbol1, 0, starty);
 	
-	int steps = length / halfSpaceBySize;
+	int steps = int(length / halfSpaceBySize);
 	float offset = -halfSpaceBySize;
 	if (length < 0) {
 		steps = -steps;
