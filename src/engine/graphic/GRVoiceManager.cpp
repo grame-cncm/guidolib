@@ -2188,21 +2188,20 @@ void GRVoiceManager::organizeBeaming(GRTag * grb)
 		GRTag * tag = fGRTags->GetNext(pos);
 		GRBeam * beam = dynamic_cast<GRBeam *>(tag);
 		bool same = false;
-		if(beam)
-		{
+		if(beam) {
 			std::vector<GRBeam *>::iterator it = curbeam.begin();
 			while(it != curbeam.end())
 			{
-				if(*it == beam)
-					same = true;
-				if(same && beam == caller)
-				{
+				if(*it == beam) same = true;
+				if(same && beam == caller) {
 					curbeam.erase(it);
 					break;
 				}	
 				// to be added as "smaller beam", it has to be on its end position, 
 				// and to have begun after the other(s) current(s) beam(s)
-				if(beam == caller && !same && (*it)->getRelativeTimePosition() <= beam->getRelativeTimePosition())
+				if ( (beam == caller) && !same
+					 && (*it)->getRelativeTimePosition() <= beam->getRelativeTimePosition()
+					 && (beam->isGraceBeaming() == (*it)->isGraceBeaming()))
 					(*it)->addSmallerBeam(beam);
 				it++;
 			}
