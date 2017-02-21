@@ -28,7 +28,7 @@ class GRAutoBeam : public GRBeam
 				}
 
 		virtual ~GRAutoBeam() { }
-		virtual bool isAutoBeam() { return true; } 
+		virtual bool isAutoBeam() const { return true; }
 };
 
 #endif
