@@ -223,15 +223,19 @@ void GRBar::DisplayMeasureNum( VGDevice & hdc ) const
 		string barNumberString;
 		if (pageNumbering) {
 			const ARBar *lastbar = arBar->previousBar();
-			float measureNumDxOffset = lastbar ? lastbar->getMeasureNumberDxOffset() : 0;
+//			float measureNumDxOffset = lastbar ? lastbar->getMeasureNumberDxOffset() : 0;
 			float measureNumDyOffset = lastbar ? -lastbar->getMeasureNumberDyOffset() : 0;
 //			float x = gCurStaff->getBoundingBox().left + ( 10 * mTagSize) + measureNumDxOffset;
-			float x = mLeftSpace + measureNumDxOffset;
+//			float x = mLeftSpace + measureNumDxOffset;
+			float x = 0; //measureNumDxOffset;
 			float y = mPosition.y - 40 - 110 * (mTagSize - 1) - mDy + measureNumDyOffset;
 			ostringstream barNumberStream;
 			barNumberStream << num - 1;
 			barNumberString = barNumberStream.str();
+			int fontalign = hdc.GetFontAlign();
+			hdc.SetFontAlign (VGDevice::kAlignCenter + VGDevice::kAlignBase);
 			hdc.DrawString(x, y, barNumberString.c_str(), int(barNumberString.size()));
+			hdc.SetFontAlign (fontalign);
 		}
 
 		ostringstream barNumberStream;
