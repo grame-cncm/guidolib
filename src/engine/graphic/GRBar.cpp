@@ -225,7 +225,8 @@ void GRBar::DisplayMeasureNum( VGDevice & hdc ) const
 			const ARBar *lastbar = arBar->previousBar();
 			float measureNumDxOffset = lastbar ? lastbar->getMeasureNumberDxOffset() : 0;
 			float measureNumDyOffset = lastbar ? -lastbar->getMeasureNumberDyOffset() : 0;
-			float x = gCurStaff->getBoundingBox().left + ( 10 * mTagSize) + measureNumDxOffset;
+//			float x = gCurStaff->getBoundingBox().left + ( 10 * mTagSize) + measureNumDxOffset;
+			float x = mLeftSpace + measureNumDxOffset;
 			float y = mPosition.y - 40 - 110 * (mTagSize - 1) - mDy + measureNumDyOffset;
 			ostringstream barNumberStream;
 			barNumberStream << num - 1;
@@ -244,8 +245,12 @@ void GRBar::DisplayMeasureNum( VGDevice & hdc ) const
         float totalXOffset = mPosition.x - 18  - 20 * (mTagSize - 1) + measureNumDxOffset + mDx;
         float totalYOffset = mPosition.y - 40 - 110 * (mTagSize - 1) + measureNumDyOffset - mDy;
 
-		if (arBar->getMeasureNumberDisplayed() != ARBar::kNumPage)
-			hdc.DrawString(totalXOffset, totalYOffset, barNumberString.c_str(), (int)barNumberString.size());
+		if (arBar->getMeasureNumberDisplayed() != ARBar::kNumPage) {
+			int fontalign = hdc.GetFontAlign();
+			hdc.SetFontAlign (0);
+			hdc.DrawString	 (totalXOffset, totalYOffset, barNumberString.c_str(), (int)barNumberString.size());
+			hdc.SetFontAlign (fontalign);
+		}
 	}
 }
 
