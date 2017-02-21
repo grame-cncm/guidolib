@@ -3,7 +3,7 @@
 ----------------------------------------------------------------------------
  JNI Interface
 ============================================================================
- Copyright Sony-CSL Paris (c) 2010
+ Copyright Sony-CSL Paris (c) 2010, Grame (c) 2011-2017
 ============================================================================
 
 The GUIDO Engine library provides music score layout to client applications.
