@@ -1,20 +1,10 @@
-% Problems :
-%
-%     1. Bad vertical position of first \clef<"perc">
-%     2. Too much space before the meter, in the four staves
-%     3. Beaming doesn't work well here
-%     4. Staff 2, notes shoulg be "g" but are on the "e" line
-%     5. Staff 3, sharps are hidden by some chord notes
-%
-%
 {
     [
         \staffFormat<style="3-line">
         \accol<id=1, range="1-2", type="straightBrace">
         \staff<id=1, dy=2.5cm>
-        % \staff<dy=2.5cm>        
         \barFormat<style="staff">
-        \clef<"perc"> % => problem 1
+        \clef<"perc2">
         \meter<"3+2/8"> _ _/8
         \intens<"p", dx=-1>
         \stemsUp \cresc<dm="ff", dx1=3, dx2=-5, dy=-1, deltaY=4> (
@@ -25,13 +15,11 @@
         )
 
         \stemsDown
-        \tuplet<"-6:5-", position="above", dy1=2, dy2=2>(
-            \beam<dy2=4>(
-                b*5/40 \grace(
-                    \stemsUp(g*5/80 b) % => problem 3
-                )
-                \accent<dy=-3>(e*5/40) _ \tuplet<"-3-", dy1=3, dy2=3>(b*5/240 e g) \accent(b*5/40) 
-					\grace(\stemsUp(g*5/80 g)) \accent<dy=-3>(e*5/80)
+        \tuplet<"-6:5-", position="above", dy1=2, dy2=2> (
+            \beam<dy2=4>(b*5/40 \beam(\grace(\stemsUp(g*5/80 b)))
+            \accent<dy=-3>(e*5/40) _ 
+				\tuplet<"-3-">(b*5/240 e g) \accent(b*5/40) 
+				\beam(\grace(\stemsUp(g*5/80 g))) \accent<dy=-3>(e*5/80)
             )
         )
     ],

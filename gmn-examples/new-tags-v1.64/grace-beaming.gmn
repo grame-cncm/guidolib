@@ -1,0 +1,10 @@
+(*
+	regular beaming ignores grace notes
+	grace notes may be beamed using a dedicated \beam tag 
+*)
+[
+	\beam( \stemsDown c2/8. \stemsUp 
+	\beam(\grace( d/32 e f e))
+	\stemsDown d/16 )
+	e/4  
+] 
