@@ -12,9 +12,11 @@
 
 */
 
-#include "GUIDOEngine.h"	// for AddGGSOutput
+#include <iostream>
+#include <sstream>
+#include <algorithm>
 
-#include "TagParameterFloat.h"
+#include "GUIDOEngine.h"	// for AddGGSOutput
 
 #include "GRBeam.h"
 #include "GRSingleNote.h"
@@ -33,10 +35,8 @@
 #include "FontManager.h"
 #include "GRTremolo.h"
 
-// #include "NEPointerList.h"	// for template instanciation
-#include <iostream>
-#include <sstream>
-#include <algorithm>
+#include "TagParameterFloat.h"
+
 using namespace std;
 
 GRBeamSaveStruct::~GRBeamSaveStruct()
@@ -44,21 +44,21 @@ GRBeamSaveStruct::~GRBeamSaveStruct()
 	delete simpleBeams;
 }
 
+pair<float, float> GRBeam::fLastPositionOfBarDuration = make_pair(0, 0);
 
 GRBeam::GRBeam(GRStaff * grstaf,ARBeam * arbeam) : GRPTagARNotationElement(arbeam)
 {
 	mHasRestInMiddle = false;
-	isFeathered = arbeam->isFeatheredBeam();
-	if(isFeathered)
-	{
+	fIsGraceBeaming = false;
+	fIsFeathered = arbeam->isFeatheredBeam();
+	if(fIsFeathered) {
         ARFeatheredBeam * ar = static_cast<ARFeatheredBeam *>(arbeam->isARFeatheredBeam());
-		drawDur = ar->drawDuration();
+		fDrawDur = ar->drawDuration();
 	}
-	else
-		drawDur = false;
+	else fDrawDur = false;
 
-	getLastPositionOfBarDuration().first = 0;
-	getLastPositionOfBarDuration().second = 0;
+	fLastPositionOfBarDuration.first = 0;
+	fLastPositionOfBarDuration.second = 0;
 
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct();
 	
@@ -68,8 +68,7 @@ GRBeam::GRBeam(GRStaff * grstaf,ARBeam * arbeam) : GRPTagARNotationElement(arbea
 	sse->p = (void *) st;
 
 	mStartEndList.AddTail(sse);
-
-	level = 0;
+	fLevel = 0;
 }
 
 GRBeam::~GRBeam()
@@ -102,11 +101,8 @@ void GRBeam::GGSOutput() const
 
 void GRBeam::OnDraw( VGDevice & hdc) const
 {
-
 	if (error) return;
-
-	if(!mDraw)
-		return;
+	if(!mDraw) return;
 
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );
 	if (sse == 0) return;
@@ -136,7 +132,7 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 		}
 	}
 
-	if(drawDur)
+	if(fDrawDur)
 	{
 		const char * fraction = st->duration.c_str();
 		size_t n = st->duration.length();
@@ -174,17 +170,21 @@ void GRBeam::OnDraw( VGDevice & hdc) const
 
 void GRBeam::addAssociation(GRNotationElement * grnot)
 {
-
 	if (error || !grnot) return ;
 
-	const GRStaff * grstf = grnot->getGRStaff();
-	if (grstf == 0) return;
+	const GRStaff * staff = grnot->getGRStaff();
+	if (staff == 0) return;
 
     GRNote * grnote = dynamic_cast<GRNote*>(grnot);
     bool isGrace = grnote ? grnote->isGraceNote() : false;
-    
-	if (grnot->getDuration() == DURATION_0 && !isGrace)
-	{
+	if (isGrace) {
+		if (!mAssociated || (mAssociated->size() == 0))
+			fIsGraceBeaming = true;		// beam start on a grace note
+		if (!fIsGraceBeaming) return;	// otherwise skip grace notes
+	}
+	else if (fIsGraceBeaming) return;	// skip regular notes when the beaming starts on grace notes
+ 
+	if (grnot->getDuration() == DURATION_0  && !isGrace) {
 		const GREvent * grn = grnot->isGREvent();
 		if (!grn || grn->getGlobalStem() == NULL)
 			return;
@@ -195,7 +195,7 @@ void GRBeam::addAssociation(GRNotationElement * grnot)
 
 	GREvent * grn = GREvent::cast(grnot);
 	if (grn == 0) {
-		setError(grstf,1);
+		setError(staff,1);
 		return ;
 	}
 
@@ -207,13 +207,12 @@ void GRBeam::addAssociation(GRNotationElement * grnot)
 
 	if (mHasRestInMiddle && !isRest  && !getARBeam()->isFullBeaming()) {
 		// then we have a real Error
-		setError(grstf,1);
+		setError(staff,1);
 		return;
 	}
 
-	// ignore all elements with duration 0
-	// but only, if I already have the stem
-	if (grnot->getDuration() == DURATION_0 && !isGrace)
+	// ignore all elements with duration 0 but only, if I already have the stem
+	if ((grnot->getDuration() == DURATION_0) && !isGrace)
 	{
 		if (mAssociated) {
 			GRNotationElement * el = mAssociated->GetTail();
@@ -227,45 +226,30 @@ void GRBeam::addAssociation(GRNotationElement * grnot)
 	}
 
 	if (dynamic_cast<const GRSingleRest *>(grn))
-	{
-		// ignoriere Pausen !
-		// setError(grstf,1);
 		return;
-	}
 
 	ARMusicalObject* o = grn->getAbstractRepresentation();
 	bool allowBeam = isautobeam ? false : o && o->isARNote() && ((o->getDuration() == DURATION_2) || o->isEmptyNote());
-	if ((grn->getNumFaehnchen() == 0) && !allowBeam)
-	{
-		setError(grstf,1);
+	if ((grn->getNumFaehnchen() == 0) && !allowBeam) {
+		setError(staff,1);
 		return ;
 	} 
 
-	GRSystemStartEndStruct * sse = getSystemStartEndStruct(grstf->getGRSystem());
+	GRSystemStartEndStruct * sse = getSystemStartEndStruct(staff->getGRSystem());
 	if (!sse) return ;
 
 	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
-	
 	if (grn->getStemDirSet())
-	{
 		st->dirset = 1;
+	else {
+		if (grn->getStemDirection() == dirUP)			st->direction++;
+		else if (grn->getStemDirection() == dirDOWN)	st->direction--;
 	}
-	else
-	{
-		if (grn->getStemDirection() == dirUP)
-			st->direction++;
-		else if (grn->getStemDirection() == dirDOWN)
-			st->direction--;
-	}
-
 	GRPTagARNotationElement::addAssociation(grnot);
 		
-	// this is a test ...
-	// and cannot be done that way.
+	// this is a test ... and cannot be done that way.
 	// otherwise we do not get the flags on again ...
 	grn->setFlagOnOff(false);
-	//if we increment the beamCount, we can't allow several beams to be superposed
-//	grn->incBeamCount();
 }
 
 void GRBeam::RangeEnd(GRStaff * grstaff)
@@ -358,31 +342,22 @@ void GRBeam::StaffFinished(GRStaff * grstaff)
 
 	// first, all the BASIC stuff is handled ...
 	GRPositionTag::StaffFinished(grstaff);
-
 	if (error) return;
 
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct(grstaff->getGRSystem());
-
 	assert(sse);
 
 	GuidoPos syststpos = sse->startpos;
-	if (syststpos)
-	{
-		// this is all done so that I really get a correct first staff to
-		// test my stuff ...
-		while (syststpos && 
-			!/*ynamic_cast<GRNotationElement *>*/(mAssociated->GetAt(syststpos)))
-		{
+	if (syststpos) {
+		// this is all done so that I really get a correct first staff to test my stuff ...
+		while (syststpos && !(mAssociated->GetAt(syststpos)))
 			mAssociated->GetNext(syststpos);
-		}
+
 		const GRStaff *tststaff = mAssociated->GetNext(syststpos)->getGRStaff();
-		while (syststpos)
-		{
+		while (syststpos) {
 			GRNotationElement * el = mAssociated->GetNext(syststpos);
-			if (el)
-			{
-				if (el->getGRStaff() != tststaff)
-				{
+			if (el) {
+				if (el->getGRStaff() != tststaff) {
 					tagtype = GRTag::SYSTEMTAG;
 					GRSystemTag * mysystag = new GRSystemTag(this);
 					el->getGRSystemSlice()->addSystemTag(mysystag);
@@ -393,23 +368,16 @@ void GRBeam::StaffFinished(GRStaff * grstaff)
 	}
 
 	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
-	GREvent * grn;
-	checkNotes(grstaff);
-
-	if (error) return;
+	if (!checkNotes(grstaff)) return;
+//	if (error) return;
 
 	GuidoPos pos = sse->startpos;
-	while (pos)
-	{
-		grn = GREvent::cast(mAssociated->GetNext(pos));
-		if (grn)
-		{
-			if (!st->dirset)
-			{
-				if (st->direction > 0)
-					grn->setStemDirection(dirUP);
-				else
-					grn->setStemDirection(dirDOWN);
+	while (pos) {
+		GREvent * grn = GREvent::cast(mAssociated->GetNext(pos));
+		if (grn) {
+			if (!st->dirset) {
+				if (st->direction > 0)	grn->setStemDirection(dirUP);
+				else					grn->setStemDirection(dirDOWN);
 			}
 			grn->setFlagOnOff(false);
 		}
@@ -666,7 +634,7 @@ void GRBeam::slopeAdjust (GRSystemStartEndStruct * sse, const GREvent * startEl,
 //--------------------------------------------------------------------
 void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFact1, float yFact2, int dir)
 {
-	if (isFeathered) return;
+	if (fIsFeathered) return;
 
 	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
 	// for beam length adjustment - DF sept 15 2009
@@ -718,7 +686,8 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFac
 				while (tmppos)
 				{
 					GuidoPos oldpos2 = tmppos;
-					GREvent * tmpsn = GREvent::cast(mAssociated->GetNext(tmppos));
+					GRNotationElement * elt = mAssociated->GetNext(tmppos);
+					GREvent * tmpsn = GREvent::cast(elt);
 					if (tmpsn) {
 						if (tmpsn->getBeamCount() < tmpsn->getNumFaehnchen()) {
 							sn2 = tmpsn;
@@ -1056,7 +1025,7 @@ void GRBeam::adjustFeathered (float yFact1, float yFact2, PosInfos& infos, GRSys
 	
 
 	// in order to draw the total duration of the beam
-	if(drawDur)
+	if(fDrawDur)
 	{
 		TYPE_TIMEPOSITION begin = ar->getBeginTimePosition();
 		TYPE_TIMEPOSITION end = ar->getEndTimePosition();
@@ -1082,20 +1051,20 @@ void GRBeam::adjustFeathered (float yFact1, float yFact2, PosInfos& infos, GRSys
 		if(dir>0)
 		{
 			Y1 = min(p1.y, p2.y) - LSPACE;
-			if(Y1>=getLastPositionOfBarDuration().first && Y1<getLastPositionOfBarDuration().second+LSPACE/2)
+			if(Y1>=fLastPositionOfBarDuration.first && Y1<fLastPositionOfBarDuration.second+LSPACE/2)
 				Y1 -= LSPACE;
 			Y2 = Y1 - LSPACE/2;
-			getLastPositionOfBarDuration().first = Y2;
-			getLastPositionOfBarDuration().second = Y1;
+			fLastPositionOfBarDuration.first = Y2;
+			fLastPositionOfBarDuration.second = Y1;
 		}
 		else
 		{
 			Y1 = max(p1.y, p2.y) + LSPACE;
-			if(Y1>=getLastPositionOfBarDuration().first-LSPACE/2 && Y1<getLastPositionOfBarDuration().second)
+			if(Y1>=fLastPositionOfBarDuration.first-LSPACE/2 && Y1<fLastPositionOfBarDuration.second)
 				Y1 += LSPACE;
 			Y2 = Y1 + LSPACE/2;
-			getLastPositionOfBarDuration().first = Y1;
-			getLastPositionOfBarDuration().second = Y2;
+			fLastPositionOfBarDuration.first = Y1;
+			fLastPositionOfBarDuration.second = Y2;
 		}
 		if (xBegin > xEnd)
 		{
@@ -1150,7 +1119,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	assert(sse);
 	if (el != sse->endElement) return;
 
-	if(level != 0) return;
+	if(fLevel != 0) return;
 	
 	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
 	GuidoPos pos;
@@ -1197,7 +1166,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	// of the first and last element has not been set automatically!
 	// and if we are note in the case of a chained feather beam
 	if ( (startEl && startEl->getStemLengthSet() && endEl && endEl->getStemLengthSet())
-		|| tagtype == SYSTEMTAG || (arBeam && isSpecBeam) || (isFeathered && startEl && startEl->stemHasBeenChanged()))
+		|| tagtype == SYSTEMTAG || (arBeam && isSpecBeam) || (fIsFeathered && startEl && startEl->stemHasBeenChanged()))
 	{
 		needsadjust = false;
 	}
@@ -1243,9 +1212,9 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 		offsetbeam = setStemEndPos(sse, infos, needsadjust, offsetbeam);
 	}
 	
-	if(!smallerBeams.empty())
+	if(!fSmallerBeams.empty())
 	{
-		for(std::vector<GRBeam *>::iterator it = smallerBeams.begin(); it < smallerBeams.end(); it++)
+		for(std::vector<GRBeam *>::iterator it = fSmallerBeams.begin(); it < fSmallerBeams.end(); it++)
 		{
 			(*it)->decLevel();
 			(*it)->tellPosition((*it)->getEndElement(), (*it)->getEndElement()->getPosition());
@@ -1270,7 +1239,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	// if we have a feathered beam, we just have to draw the main beam (already done) 
 	// and the other simple beams will only depend on the begining and ending 
 	// points, regardless of the durations of the inner notes.
-	if (isFeathered) adjustFeathered (yFact1, yFact2, infos, sse);
+	if (fIsFeathered) adjustFeathered (yFact1, yFact2, infos, sse);
 
 	// for beam length adjustment - DF sept 15 2009
 	setBeams(sse, infos, yFact1, yFact2, dir);
@@ -1312,15 +1281,15 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 /** \brief Gets an X-Value and gives back the needed y-Value.
 	Right now, I need to restrict slopes to certain values. (min and max)
 */
-int GRBeam::slope(GRBeamSaveStruct * st, int posx)
-{
-	return 0;
-}
-
-double GRBeam::getSlope(GRStaff * grstaff)						
-{
-	return 0.0;
-}
+//int GRBeam::slope(GRBeamSaveStruct * st, int posx)
+//{
+//	return 0;
+//}
+//
+//double GRBeam::getSlope(GRStaff * grstaff)						
+//{
+//	return 0.0;
+//}
 
 void GRBeam::setError(const GRStaff * grstaff, int p_error)
 {
@@ -1335,20 +1304,18 @@ void GRBeam::setError(const GRStaff * grstaff, int p_error)
 		}
 	}
 
-	// this just removes the associations from
-	// all active SSE's. The SSE's themselves
-	// stay, where they are, so that they are
-	// delete properly later ....
+	// this just removes the associations from all active SSE's. The SSE's themselves
+	// stay, where they are, so that they are delete properly later ....
 	DeleteAllSSEs();
 
 	delete mAssociated;
 	mAssociated = NULL;
 }
 
-void GRBeam::checkNotes( GRStaff * grstaff )
+bool GRBeam::checkNotes( GRStaff * grstaff )
 {
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct(grstaff->getGRSystem());
-	if (!sse) return;
+	if (!sse) return false;
 
 	if (mAssociated) {
 		GuidoPos pos = sse->startpos;
@@ -1357,22 +1324,20 @@ void GRBeam::checkNotes( GRStaff * grstaff )
 			const GREvent * grnot = mAssociated->GetNext(pos)->isGREvent();
 			if (!grnot)  {
 				setError( grstaff, 1 );
-				break;
+				return false;
 			}
 
 			if (last) break;
-
-			if (pos == sse->endpos)
-				last = true;
+			if (pos == sse->endpos) last = true;
 		}
 	}
+	return true;
 }
 
-/** \brief Called after the new Staff has been created by the
-	Staffmanager after a pbreak-Break.
+/** \brief Called after the new Staff has been created by the Staffmanager after a pbreak-Break.
+
 	(It is ALWAYS called after a call to BreakTag)
-	It is somewhat analogous to StaffBegin
-	but uses the assocpos ...
+	It is somewhat analogous to StaffBegin but uses the assocpos ...
 */
 void GRBeam::ResumeTag(GRStaff *grstaff,GuidoPos assocpos)
 {
@@ -1383,11 +1348,9 @@ void GRBeam::ResumeTag(GRStaff *grstaff,GuidoPos assocpos)
 /** \brief Break a tag at a previously saved PBreak-Location.
 
 	It sets the sse-Positions ...
-	(It is somewhat equivalent to StaffFinished
-	with the difference, that assocpos is
-	used). assocpos is the tail-position of the
-	mAssociated list at the time of the pbreak-
-	situation.
+	It is somewhat equivalent to StaffFinished with the difference, that assocpos is
+	used). assocpos is the tail-position of the mAssociated list at the time of the 
+	pbreak situation.
 */
 void GRBeam::BreakTag( GRStaff * grstaff, GuidoPos & assocpos)
 {
@@ -1400,11 +1363,10 @@ void GRBeam::BreakTag( GRStaff * grstaff, GuidoPos & assocpos)
 
 	GRSystemStartEndStruct *sse = getSystemStartEndStruct(grstaff->getGRSystem());
 	assert(sse);
-//	GRBeamSaveStruct *st = (GRBeamSaveStruct *) sse->p;
 	GREvent * grn;
 
-	checkNotes(grstaff);
-	if (error) return;
+	if (!checkNotes(grstaff)) return;
+//	if (error) return;
 
 	GuidoPos pos = sse->startpos;
 	while (pos)
@@ -1430,12 +1392,6 @@ void GRBeam::checkPosition( const GRSystem * grsys)
 	mIsSystemCall = false;
 }
 
-std::pair<float,float> & GRBeam::getLastPositionOfBarDuration()
-{
-	static std::pair<float, float> lastPositionOfBarDuration;
-	return lastPositionOfBarDuration;
-}
-
 GRNotationElement * GRBeam::getEndElement()
 {
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );
@@ -1444,6 +1400,6 @@ GRNotationElement * GRBeam::getEndElement()
 
 void GRBeam::addSmallerBeam(GRBeam * beam)
 {
-	beam->setLevel(level+1);
-	smallerBeams.push_back(beam);
+	beam->setLevel(fLevel+1);
+	fSmallerBeams.push_back(beam);
 }
