@@ -38,6 +38,7 @@
 #define traceMethod(method)	
 #endif
 
+using namespace std;
 
 NVPoint GRSingleRest::sRefpos;
 
@@ -107,17 +108,8 @@ TYPE_DURATION GRSingleRest::appearance2duration (const NVstring& str) const
 	return TYPE_DURATION(0, 1);
 }
 
-void GRSingleRest::createRest(const TYPE_DURATION & duration)
+void GRSingleRest::setTypeAndPos(TYPE_DURATION duration)
 {
-	traceMethod("createRest");
-
-	durtemplate = duration;
-	mType = P0;
-	mBoundingBox.Set( 0, 0, 0, 0 );
-	mLeftSpace = 0;
-	mRightSpace = 0;
-	sRefpos.x = 0;
-
 	// (JB) changed equal comparaisons (duration == DURATION_xxx) to
 	// greater or equal: (duration >= DURATION_xxx), to catch dotted durations.
 	if (duration >= DURATION_1)
@@ -166,6 +158,69 @@ void GRSingleRest::createRest(const TYPE_DURATION & duration)
 		mType = P0;
 		return;
 	}
+}
+
+
+void GRSingleRest::createRest(const TYPE_DURATION & duration)
+{
+	traceMethod("createRest");
+
+	durtemplate = duration;
+	mType = P0;
+	mBoundingBox.Set( 0, 0, 0, 0 );
+	mLeftSpace = 0;
+	mRightSpace = 0;
+	sRefpos.x = 0;
+	setTypeAndPos (duration);
+
+	// (JB) changed equal comparaisons (duration == DURATION_xxx) to
+	// greater or equal: (duration >= DURATION_xxx), to catch dotted durations.
+//	if (duration >= DURATION_1)
+//	{
+//		mType = P1;
+//		mPosition.y = mCurLSPACE;
+//	}
+//	else if (duration >= DURATION_2)
+//	{
+//		mType = P2;
+//		mPosition.y = mCurLSPACE * 2;
+//	}
+//	else if (duration >= DURATION_4)
+//	{
+//		mType = P4;
+//		mPosition.y = (float)(2 * mCurLSPACE);
+//	}
+//	else if (duration >= DURATION_8)
+//	{
+//		mType = P8;
+//		mPosition.y = (float)(1.25f * mCurLSPACE);
+//
+//	}
+//	else if (duration >= DURATION_16)
+//	{
+//		mType = P16;
+//		mPosition.y = (float)(2.25f * mCurLSPACE);
+//	}
+//	else if (duration >= DURATION_32)
+//	{
+//		mType = P32;
+//		mPosition.y = (float)(2.25f * mCurLSPACE);
+//	}
+//	else if (duration >= DURATION_64)
+//	{
+//		mType = P64;
+//		mPosition.y = (float)(3.25f * mCurLSPACE);
+//	}
+//	else  if (duration >= DURATION_128)
+//	{
+//		mType = P128;
+//		mPosition.y = (float)(4.25f * mCurLSPACE);
+//	}
+//	else
+//	{ // Unknown Duration ... what do we do know
+//		mType = P0;
+//		return;
+//	}
 	
 	const float extent = GetSymbolExtent(mType);
 	mLeftSpace = (float)(extent * 0.5f * mSize);
@@ -366,14 +421,17 @@ void GRSingleRest::setRestFormat( ARRestFormat * restfrmt )
 		createDots( getDuration(), 0, dotPos );
 }
 
-void GRSingleRest::setFillsBar(bool value, GRNotationElement * bar1,
-							   GRNotationElement * bar2)
+void GRSingleRest::setFillsBar(bool value, GRNotationElement * bar1, GRNotationElement * bar2, bool filled)
 {
 	mFillsBar = value;
 	if (mFillsBar)
 	{
 		firstbar = bar1;
 		secondbar = bar2;
+		if (filled) {
+			setTypeAndPos(DURATION_1);
+			RemoveAllSubElements();
+		}
 	}
 }
 

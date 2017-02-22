@@ -49,6 +49,7 @@ class GRTag;
 class GRSingleNote;
 class GRRange;
 class GRGlissando;
+class GRTagARNotationElement;
 
 typedef KF_IPointerList<GRTag> GRTagPointerList;
 
@@ -159,7 +160,7 @@ private:
 	// this is needed for determining the elements that are centered in a bar like whole-note-rests
 	GRMusic*				fMusic;
 	GREvent *				fLastnonzeroevent;
-	GRBar *					fLastbar;
+	GRTagARNotationElement* fLastbar;
 	GROctava*				fLastOctava;
 	ARMusicalVoiceState *	fVoiceState;
 	GRTagPointerList *		fGRTags;
@@ -169,6 +170,7 @@ private:
 	void			AddRegularEvent		(GREvent * ev);
 	void			organizeGlissando(GRTag * g);
 	void			organizeBeaming(GRTag * grb);
+	void			checkFillBar (GRTagARNotationElement* bar);
 
 	std::vector<GRBeam *> curbeam;
 	typedef std::vector<std::pair<GRRange*, GRSingleNote*> >	TSharedArticulationsList;

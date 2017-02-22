@@ -804,6 +804,37 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION &timepos, int filltagmode)
 	return MODEERROR;
 }
 
+void GRVoiceManager::checkFillBar (GRTagARNotationElement* bar)
+{
+	GREvent * lastEv = fLastnonzeroevent;
+	if (lastEv) // && (lastEv->getAbstractRepresentation()->getDuration() > DURATION_4))
+	{
+		const ARMeter* meter = fVoiceState ? fVoiceState->curMeter() : 0;
+		bool filled = meter ? meter->getMeterDuration() == lastEv->getDuration() : false;
+
+		if (meter && (fLastbar || mCurGrStaff->secglue || lastEv->getRelativeTimePosition() == DURATION_0))
+		{
+			GRNotationElement * lastel = 0;
+			if (fLastbar)
+				lastel = fLastbar;
+			else if (mCurGrStaff->secglue)
+				lastel = mCurGrStaff->secglue;
+
+			const TYPE_TIMEPOSITION tp1 ( lastEv->getRelativeTimePosition());
+			if (tp1 == DURATION_0 || (lastel && tp1 == lastel->getRelativeTimePosition())) {
+				if (lastEv->getRelativeEndTimePosition() == bar->getRelativeTimePosition()
+					&& lastEv->getGRStaff() == bar->getGRStaff())
+				{
+					// then we have to make this event the ultimate barfiller !
+					lastEv->setFillsBar(true, lastel, bar, filled);
+					bar->addAssociation(lastEv);
+				}
+			}
+		}
+	}
+	fLastnonzeroevent = NULL;
+	fLastbar = bar;
+}
 
 /** \brief Creates the graphical Objects from the given Tag.
 
@@ -880,63 +911,42 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 	}
 	else if (tinf == typeid(ARBar))
 	{
-		GRBar * grbar = mCurGrStaff->AddBar( static_cast<ARBar*>(arOfCompleteObject), von );	
+		GRBar * grbar = mCurGrStaff->AddBar( static_cast<ARBar*>(arOfCompleteObject), von );
 		grne = grbar;
-		fMusic->addVoiceElement(arVoice,grne);
-
-		if (fLastnonzeroevent)
-		{
-			if (fLastbar || mCurGrStaff->secglue || fLastnonzeroevent->getRelativeTimePosition() == DURATION_0)
-			{
-				GRNotationElement * lastel;
-
-				if (fLastbar)
-					lastel = fLastbar;
-				else if (mCurGrStaff->secglue)
-					lastel = mCurGrStaff->secglue;
-				else
-					lastel = NULL;
-
-				const TYPE_TIMEPOSITION tp1 ( fLastnonzeroevent->getRelativeTimePosition());
-				if (tp1 == DURATION_0 || (lastel && tp1 == lastel->getRelativeTimePosition()))
-				{
-					if (fLastnonzeroevent->getRelativeEndTimePosition() == grbar->getRelativeTimePosition()
-						&& fLastnonzeroevent->getGRStaff() == grbar->getGRStaff())
-					{
-						// then we have to make this event the ultimate barfiller !
-						fLastnonzeroevent->setFillsBar(true,lastel,grbar);
-						grbar->addAssociation(fLastnonzeroevent);
-					}
-				}
-			}
-		}
-		fLastnonzeroevent = NULL;
-		fLastbar = grbar;
+		fMusic->addVoiceElement(arVoice, grne);
+		checkFillBar (grbar);
 	}
 	else if (tinf == typeid(ARDoubleBar))
 	{
-		grne = mCurGrStaff->AddDoubleBar(static_cast<ARDoubleBar *>( arOfCompleteObject),von);
-		fMusic->addVoiceElement(arVoice,	grne);
+		GRBar * grbar = mCurGrStaff->AddDoubleBar(static_cast<ARDoubleBar *>( arOfCompleteObject),von);
+		grne = grbar;
+		fMusic->addVoiceElement(arVoice, grne);
+		checkFillBar (grbar);
 	}
 	else if (tinf == typeid(ARFinishBar))
 	{
-		grne = mCurGrStaff->AddFinishBar(static_cast<ARFinishBar *>( arOfCompleteObject),von);
-		fMusic->addVoiceElement(arVoice,	grne);
+		GRBar * grbar = mCurGrStaff->AddFinishBar(static_cast<ARFinishBar *>( arOfCompleteObject),von);
+		grne = grbar;
+		fMusic->addVoiceElement(arVoice, grne);
+		checkFillBar (grbar);
 	}
 	else if (tinf == typeid(ARRepeatBegin))
 	{
-		grne = mCurGrStaff->AddRepeatBegin (static_cast<ARRepeatBegin *>(arOfCompleteObject));
-		fMusic->addVoiceElement(arVoice,	grne);
+		GRTagARNotationElement * grbar = mCurGrStaff->AddRepeatBegin (static_cast<ARRepeatBegin *>(arOfCompleteObject));
+		grne = grbar;
+		fMusic->addVoiceElement(arVoice, grne);
+		checkFillBar (grbar);
 	}
     else if (tinf == typeid(ARRepeatEnd)) 
     {
-		GRRepeatEnd * rend = mCurGrStaff->AddRepeatEnd(static_cast<ARRepeatEnd *>( arOfCompleteObject));
-		if (rend) {
+		GRRepeatEnd * grbar = mCurGrStaff->AddRepeatEnd(static_cast<ARRepeatEnd *>( arOfCompleteObject));
+		if (grbar) {
 			if (checkRepeatBeginNext())
-				rend->setSConst (100.0f);
-			grne = rend;
-			fMusic->addVoiceElement(arVoice,	grne);
-			rend->updateBoundingBox();
+				grbar->setSConst (100.0f);
+			grne = grbar;
+			fMusic->addVoiceElement(arVoice, grne);
+			checkFillBar (grbar);
+			grbar->updateBoundingBox();
 		}
 	}
 /* range not any more supported - DF sept 1 2004

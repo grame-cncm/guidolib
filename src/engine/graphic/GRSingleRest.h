@@ -47,8 +47,7 @@ class GRSingleRest : public GRRest
 	
 		virtual ~GRSingleRest();
 
-		virtual void setFillsBar(bool value,GRNotationElement * bar1, 
-											GRNotationElement * bar2);
+		virtual void setFillsBar(bool value,GRNotationElement * bar1, GRNotationElement * bar2, bool filled);
 		
 		virtual void GGSOutput() const;
 		virtual void OnDraw( VGDevice & hdc ) const;
@@ -84,6 +83,9 @@ class GRSingleRest : public GRRest
 
 	private:
 	NVstring mRestAppearance;
+	
+	private:
+	void setTypeAndPos(TYPE_DURATION dur);
 };
 
 #endif

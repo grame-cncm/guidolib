@@ -119,7 +119,7 @@ class GREvent : public GRARCompositeNotationElement
 		virtual int 	getBeamCount() const	{ return mBeamCount; }
 		virtual void 	incBeamCount()			{ ++ mBeamCount; }
 		virtual void 	decBeamCount()			{ -- mBeamCount; }
-		virtual void 	setFillsBar(bool value, GRNotationElement *, GRNotationElement *)  	{ mFillsBar = value; }
+		virtual void 	setFillsBar(bool value, GRNotationElement *, GRNotationElement *, bool)  	{ mFillsBar = value; }
 
 		virtual bool	getFillsBar() const		{ return mFillsBar; }
 			
