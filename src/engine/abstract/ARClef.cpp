@@ -128,6 +128,11 @@ void ARClef::setName(const string& theName)
 		mClef = VIOLIN;
 		mStaffLine = 2;
 	}
+	else if ((clef == "c0"))
+    {
+        mClef = BRATSCHE;
+        mStaffLine = 0;
+    }
 	else if ((clef == "none") || (clef == "off") || (clef == ""))
 	{
 		mClef = OFF;
