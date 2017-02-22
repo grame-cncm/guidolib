@@ -2,6 +2,7 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.4
+- support for \clef<"c0">
 - fix grace notes beaming issue: regular beaming ignores graces notes
   they may be beamed using a dedicated \beam tag
 - fix native graphic device issues
