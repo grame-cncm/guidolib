@@ -39,7 +39,6 @@ ARMeter::ARMeter(int p_numerator, int p_denominator)
 {
 	numerator   = p_numerator;
 	denominator = p_denominator;
-
     std::stringstream bufferSStream;
     bufferSStream << numerator << "/" << denominator;
 

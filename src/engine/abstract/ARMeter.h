@@ -50,6 +50,7 @@ class ARMeter : public ARMTParameter
 		std::vector<int> getNumeratorsVector()  const { return numeratorsVector; }
         int getNumerator()                      const { return numerator; }
 		int getDenominator()                    const { return denominator; }
+		TYPE_DURATION getMeterDuration()        const { return TYPE_DURATION(numerator,denominator); }
 
 		metertype	getMeterType() const	         { return mtype; }
 		const char* getName() const			         { return mMeterName.c_str(); } 
