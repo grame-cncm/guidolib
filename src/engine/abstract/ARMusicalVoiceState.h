@@ -76,6 +76,8 @@ class ARMusicalVoiceState
 		const PositionTagList * addedPTags() const		{ return addedpositiontags; }
 		const PositionTagList * removedPTags() const	{ return removedpositiontags; }
 		const PositionTagList * currentPTags() const	{ return curpositiontags; }
+	
+		const ARMeter *	curMeter() const				{ return curmeter; }
 
 	protected:
 		// The timeposition of the last barline.
