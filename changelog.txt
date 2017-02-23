@@ -2,6 +2,7 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.4
+- fix beaming issue with trills
 - whole measure rests management (ignored when the meter is not set):
   rest appearance is forced to semibreve
   fix rest centering with end bar, double bar and repeat bars  
