@@ -1161,7 +1161,7 @@ void ARMusicalVoice::setPositionTagEndPos(int id, ARMusicalTag * end, ARMusicalT
 	ARTagEnd * artgend	= dynamic_cast<ARTagEnd *>(end);
 	assert(artgend);
 
-	ARPositionTag * tg;							// tg is the start-Position-Tag!
+	ARPositionTag * startTag;					// startTag is the start-Position-Tag!
 	end->setAssociation(ARMusicalTag::LA);		// an End-Tag is alway Left-Associated...
 
 	// the End-Tag has a Position (this is set to the current voice position)
@@ -1175,16 +1175,16 @@ void ARMusicalVoice::setPositionTagEndPos(int id, ARMusicalTag * end, ARMusicalT
 	int foundmatch = 0;
 	while (pos)
 	{
-		tg = mPosTagList->GetPrev(pos);
-		if (tg)
+		startTag = mPosTagList->GetPrev(pos);
+		if (startTag)
 		{
 			// new tags have to be added here.
-			ARMusicalTag * mtag = dynamic_cast<ARMusicalTag *>(tg);
+			ARMusicalTag * mtag = dynamic_cast<ARMusicalTag *>(startTag);
 			int tid = -1;
 			if (mtag) tid = mtag->getID();
 
 			ARDummyRangeEnd * dre = dynamic_cast<ARDummyRangeEnd *>(end);
-			if (tg->getCorrespondence() == NULL && tid == id && ((tg == dynamic_cast<ARPositionTag *>(start)) || dre) )
+			if (startTag->getCorrespondence() == NULL && tid == id && ((startTag == dynamic_cast<ARPositionTag *>(start)) || dre) )
 			{
 				int match = 1;
 				if (dre)
@@ -1195,16 +1195,15 @@ void ARMusicalVoice::setPositionTagEndPos(int id, ARMusicalTag * end, ARMusicalT
 				}
 				if (match)
 				{
-					if (tg->getStartPosition() == NULL)
+					if (startTag->getStartPosition() == NULL)
 					{
 						// this means: start position for the beginTag has not been set:
 						// Setting an error -> Positions may overlap
-						// tg->setError(1);
-						tg->setStartPosition(GetTailPosition());
+						startTag->setStartPosition(GetTailPosition());
 
 						// Error Left-association ...
 						// Meaning, that now the Association is changed toward ER (error-right)
-						ARMusicalTag * armtg = dynamic_cast<ARMusicalTag *>(tg);
+						ARMusicalTag * armtg = dynamic_cast<ARMusicalTag *>(startTag);
 						if (armtg)
 						{
 							armtg->setAssociation(ARMusicalTag::ER);
@@ -1215,9 +1214,9 @@ void ARMusicalVoice::setPositionTagEndPos(int id, ARMusicalTag * end, ARMusicalT
 					}
 
 					// this makes the correspondence between the begin and end  double-linked list  (is this necessary?)
-					tg->setCorrespondence(artgend);
+					startTag->setCorrespondence(artgend);
 					mtag->setAssociation(ARMusicalTag::RA);
-					artgend->setCorrespondence(tg);
+					artgend->setCorrespondence(startTag);
 					foundmatch = 1;
 					break;
 				}
@@ -5787,13 +5786,12 @@ void ARMusicalVoice::FinishChord(bool trill)
 /** \brief Called by FinishChord(), to finish chords which have only one chord group. This function
            has been implemented for optimization.
 */
-void ARMusicalVoice::finishChordWithOneChordGroup(TYPE_DURATION &chorddur, bool trill) {
+void ARMusicalVoice::finishChordWithOneChordGroup(TYPE_DURATION &chorddur, bool trill)
+{
     mPosTagList->GetNext(mCurVoiceState->ptagpos);
-
     ARChordGroup *group = chordgrouplist->GetAt(chordgrouplist->GetHeadPosition());
 
-    if (group->dur > chorddur)
-        chorddur = group->dur;
+    if (group->dur > chorddur) chorddur = group->dur;
 
     // then we have to delete the one empty-event that is not needed any longer...
     RemoveElementAt(group->startpos);
