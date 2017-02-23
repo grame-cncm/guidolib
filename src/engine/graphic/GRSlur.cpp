@@ -87,8 +87,8 @@ void GRSlur::automaticAnchorPoints( GRBowingContext * context, ARBowing * arBow,
 	NVPoint posLeft;
 	NVPoint posRight;
 
-	GRNotationElement * startElement = sse->startElement;
-	GRNotationElement * endElement = sse->endElement;
+	const GRNotationElement * startElement = sse->startElement;
+	const GRNotationElement * endElement = sse->endElement;
 	GRBowingSaveStruct * bowInfos = (GRBowingSaveStruct *)sse->p;
 	
 	// We try to fix the following problem here: with chord, the start and end
@@ -96,8 +96,7 @@ void GRSlur::automaticAnchorPoints( GRBowingContext * context, ARBowing * arBow,
 	// them by adequate noteheads.
 	if( context->topLeftHead != context->bottomLeftHead ) // test if chord
 		startElement = upward ? context->topLeftHead : context->bottomLeftHead;
-
-	if( context->topRightHead != context->bottomRightHead ) // test if chord
+	if( (context->topRightHead != context->bottomRightHead) || endElement->isEmpty()) // test if chord
 		endElement = upward ? context->topRightHead : context->bottomRightHead;
 
 	// -- Get the bounding box of the left and right elements.
@@ -114,7 +113,7 @@ void GRSlur::automaticAnchorPoints( GRBowingContext * context, ARBowing * arBow,
 		// y-pos
 		posLeft.y = leftBox.top - yMargin;
 		posRight.y = rightBox.top - yMargin;
-	}	
+	}
 	else // downward
 	{
 		// Left x-pos
@@ -147,7 +146,6 @@ void GRSlur::automaticAnchorPoints( GRBowingContext * context, ARBowing * arBow,
 	// - Store results.
 	bowInfos->position = posLeft;
 	bowInfos->offsets[2] = posRight - posLeft; // control points are stored as offsets to the position.
-
 	arBow->setCurve( context->curveDir, posLeft, posRight ); // (JB) useless ?
 }
 
@@ -186,7 +184,6 @@ void GRSlur::automaticControlPoints( GRBowingContext * context, ARBowing * arBow
 	const float startY = bowInfos->position.y + bowInfos->offsets[0].y;
 	const float endX = bowInfos->position.x + bowInfos->offsets[2].x;
 	const float endY = bowInfos->position.y + bowInfos->offsets[2].y;
-
 
     // Minimum angles
     const float minBaseAngle = float(12.f * M_PI/180.f);
