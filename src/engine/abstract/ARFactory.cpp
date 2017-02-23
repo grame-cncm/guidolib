@@ -354,6 +354,7 @@ void ARFactory::createChord()
 */
 void ARFactory::addChord()
 {
+
 #if ARFTrace
  	cout << "ARFactory::addChord " << endl;
 #endif
@@ -380,14 +381,20 @@ void ARFactory::addChord()
         FirstNote->setOrnament(mCurrentTrill);
 
 		bool trill = true;
-		if (mCurrentTags) { // looks for beaming
-			GuidoPos pos = mTags.GetHeadPosition();
-			while (pos) {
-				ARMusicalTag* tag = mTags.GetNext(pos);
-				ARBeam* b = dynamic_cast<ARBeam*>(tag);
-				if (b) {
-					trill = false;
-					break;
+		if (mCurrentTags) {				// looks for beaming
+			ARMusicalVoiceState vst;
+			GuidoPos pos = mCurrentVoice->GetHeadPosition(vst);
+			while (pos && trill) {
+				mCurrentVoice->GetNext(pos, vst);
+				const PositionTagList * ptags = vst.currentPTags();
+				GuidoPos ppos = ptags ? ptags->GetHeadPosition() : 0;
+				while (ppos) {
+					const ARPositionTag * tag = ptags->GetNext(ppos);
+					const ARBeam* b = dynamic_cast<const ARBeam*>(tag);
+					if (b) {
+						trill = false;
+						break;
+					}
 				}
 			}
 		}
