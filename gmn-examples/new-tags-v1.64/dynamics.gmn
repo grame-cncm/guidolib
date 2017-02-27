@@ -1,0 +1,40 @@
+(*
+	new autopos attribute for crescendo and diminuendo
+*)
+{ 
+	[
+   \clef<"g2"> \meter<"2/4"> 
+	g g
+   a/8 
+	\crescBegin <dx1=6hs, autopos="on">
+	c c c
+	c/8 a0 c1 c c d
+ 	c/8 c c c c a0 
+	\crescEnd
+	g1/4 g      
+   ]
+,
+	[
+   \clef<"g2"> \meter<"2/4"> 
+	g g
+   a/8 
+	\cresc<dx1=-6hs, dx2=6hs, autopos="on">( 
+	c c c
+	c/8 c c c c d
+ 	c/8 c c c c d 
+	)
+	g/4 g      
+   ]
+,
+	[
+   \clef<"g2"> \meter<"2/4"> 
+	g g
+   a/8 
+	\dim<autopos="on", dx1=6hs, dx2=-6hs> ( 
+	c c c
+ 	c/8 c c c c c 
+ 	c/8 c c c c d 
+	)
+	g/4 g      
+   ]
+}
