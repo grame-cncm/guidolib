@@ -15,68 +15,19 @@
 
 */
 
-#include "GRPTagARNotationElement.h"
+#include "ARCrescendo.h"
+#include "GRDynamics.h"
 
-class ARCrescendo;
 class GRStaff;
-class GRStdNoteHead;
 
 
-class GRCrescendo : public GRPTagARNotationElement
+class GRCrescendo : public GRDynamics
 {
 public:
-
-    class GRCrescendoSaveStruct : public GRPositionTag::GRSaveStruct
-    {
-    public:
-        GRCrescendoSaveStruct() : numPoints(3), thickness(4) { }
-
-        virtual ~GRCrescendoSaveStruct() { }
-        int numPoints;
-
-        /* Params here */
-        NVPoint points[3];
-        float thickness;
-        unsigned int fMarkingSymbol;
-    };
-
-    class GRCrescendoContext
-	{
-		public:
-				GRCrescendoContext() : staff(0), leftHead(0), rightHead(0), leftNoteDX(0), 
-									rightNoteDX(0) { }
-
-			GRStaff * staff;
-			bool openRight;
-			bool openLeft;
-			GRStdNoteHead *leftHead;
-			GRStdNoteHead *rightHead;
-			float leftNoteDX;
-			float rightNoteDX;
-	};
-
-    GRCrescendo(GRStaff * grstaff = 0);
-    GRCrescendo(GRStaff * grstaff, ARCrescendo * abstractRepresentationOfCrescendo);
-    virtual			~GRCrescendo();
+				 GRCrescendo(GRStaff * staff, ARCrescendo * ar) : GRDynamics (staff, ar) {}
+    virtual		~GRCrescendo() {}
 
     virtual void	OnDraw(VGDevice & hdc) const;
-
-	virtual void    addAssociation(GRNotationElement * el);
-
-    virtual void    tellPosition(GObject * caller, const NVPoint & newPosition);
-
-protected:
-    virtual void updateCrescendo(GRStaff *grstaff);
-    virtual	void getCrescendoBeginingContext(GRCrescendoContext *ioContext, GRSystemStartEndStruct * sse);
-	virtual void getCrescendoEndingContext(GRCrescendoContext *ioContext, GRSystemStartEndStruct * sse);
-
-    GRNotationElement * flaststartElement;
-
-private:
-    GRSystemStartEndStruct *initGRCrescendo(GRStaff *grstaff);
-
-    GRCrescendoSaveStruct * fCrescInfos;
-    GRCrescendoContext fCrescContext;
 };
 
 #endif

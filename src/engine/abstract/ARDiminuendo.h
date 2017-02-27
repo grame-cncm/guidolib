@@ -15,43 +15,22 @@
 
 */
 
-#include "ARMTParameter.h"
-#include "ARPositionTag.h"
+#include "ARDynamic.h"
 
 
 /** \brief not yet documented
 */
-class ARDiminuendo : public ARMTParameter, public ARPositionTag
+class ARDiminuendo : public ARDynamic
 {
 public:
 
-                 ARDiminuendo();
-                 ARDiminuendo(const ARDiminuendo* crescendo);
-    virtual		~ARDiminuendo();
+                 ARDiminuendo()	{}
+                 ARDiminuendo(const ARDiminuendo* dim) : ARDynamic(dim) {}
+    virtual		~ARDiminuendo() {}
 
-    virtual void setTagParameterList(TagParameterList & tlist);
     virtual bool MatchEndTag(const char * s);
-
 	virtual void printName(std::ostream& os) const;
 	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
-
-    const NVstring &getDynamicMarking() const { return dynamicMarking; }
-    const float     getDx1()                const { return dx1; }
-	const float     getDx2()                const { return dx2; }
-    const float     getDy()                 const { return dy; }
-	const float     getDeltaY()             const { return deltaY; }
-    const float     getThickness()          const { return thickness; }
-
-protected:
-    NVstring dynamicMarking;
-    float dx1;
-	float dx2;
-    float dy;
-	float deltaY;
-    float thickness;
-
-    static ListOfTPLs ltpls;
 };
 
 #endif
