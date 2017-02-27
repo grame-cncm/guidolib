@@ -2,6 +2,8 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.4
+- new autopos attribute for dynamics (\cresc and \dim)
+- fix newline issue with crescendo and diminuendo
 - fix beaming issue with trills
 - whole measure rests management (ignored when the meter is not set):
   rest appearance is forced to semibreve
