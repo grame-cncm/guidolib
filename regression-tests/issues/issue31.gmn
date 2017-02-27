@@ -1,0 +1,30 @@
+(*
+	misplaced crescendo
+*)
+{ 
+	[
+   \clef<"g2"> \key<1> \meter<"2/4"> 
+% a single \beamsOff per voice is enough
+%	\beamsOff
+%   \trill<repeat="false">( { a/4. } \slurBegin:1<curve="up"> { g#/8 }) \bar 
+%   a/4. \slurBegin:1<curve="up"> g#/8 \bar 
+   
+%  \tempo<"ritard.", dy=-16hs> 
+%	\text<"ritard.",font="Plantin MT Std", dx=-1.2hs, dy=-3hs> \space<0> 
+   
+%	a/8 c2 a1 f2 \bar 
+ %  d _ \stemsUp  c# d/4 \bar 
+   d/8  _  d/4 \bar 
+%\newLine
+   d/8 \crescBegin c# c# c# \bar 
+\newLine
+ 	c#/12 c# c# c# c# c# \crescEnd \bar 
+   
+%   \key<-2> 
+%	dx doesn't work on \cresc
+	\crescBegin d/8 d1 d2/4 \crescEnd \bar 
+   
+   \dimBegin \stemsUp \beam( d/8 b&1) \dimEnd 
+	\beam( a d) \bar 
+   ]
+}
