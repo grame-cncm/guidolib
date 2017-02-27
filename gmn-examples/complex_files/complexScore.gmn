@@ -7,7 +7,7 @@
         \clef<"perc2">
         \meter<"3+2/8"> _ _/8
         \intens<"p", dx=-1>
-        \stemsUp \cresc<dm="ff", dx1=3, dx2=-5, dy=-1, deltaY=4> (
+        \stemsUp \cresc<dm="ff", dx1=3, dx2=-5, dy=3, deltaY=4> (
             \beam<dy2=0.6> (
                 g/20 e g b
                 g/40 e
