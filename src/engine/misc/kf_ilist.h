@@ -29,7 +29,7 @@ class KF_IPointerList : public KF_List<TYPE *>
 				 KF_IPointerList(const KF_IPointerList<TYPE> &lst, int p_ownselements = 0);
 		virtual ~KF_IPointerList()							{ RemoveAll(); }
 
-		virtual GuidoPos GetElementPos(TYPE * data) const;
+		virtual GuidoPos GetElementPos(const TYPE * data) const;
 
 		virtual void	RemoveAll();
 		virtual void	RemoveElementAt(GuidoPos pos);
@@ -101,7 +101,7 @@ void KF_IPointerList<TYPE>::RemoveAll()
 }
 
 template <class TYPE>
-GuidoPos KF_IPointerList<TYPE>::GetElementPos(TYPE *data) const
+GuidoPos KF_IPointerList<TYPE>::GetElementPos(const TYPE *data) const
 {
 	GuidoPos pos = this->GetHeadPosition();
 	while (pos)
