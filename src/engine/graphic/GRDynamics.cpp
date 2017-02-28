@@ -18,13 +18,9 @@
 #include "ARDynamic.h"
 #include "VGDevice.h"
 #include "VGFont.h"
+#include "GRRepeatBegin.h"
 #include "GRStaff.h"
-//#include "TagParameterFloat.h"
-//#include "GRStdNoteHead.h"
-//#include "GRSingleNote.h"
 #include "GRSystem.h"
-//#include "GRRest.h"
-//#include "GREmpty.h"
 #include "MusicalSymbols.h"
 
 #include "GRDynamics.h"
@@ -52,6 +48,7 @@ GRDynamics::GRDynamics(GRStaff * grstaff, ARDynamic* ar) : GRPTagARNotationEleme
 		
 	fThickness = 1.f;
 	fMarkingSymbol = 0;
+	fNext = 0;
 }
 
 GRDynamics::~GRDynamics()	{}
@@ -70,6 +67,21 @@ void GRDynamics::initDynamicsMap()
 	fDynamic2Symbol["pp"]	= kIntensPPSymbol;
 	fDynamic2Symbol["ppp"]	= kIntensPPPSymbol;
 	fDynamic2Symbol["pppp"]	= kIntensPPPPSymbol;
+}
+
+//---------------------------------------------------------------------------------
+const GRNotationElement * GRDynamics::getNextEvent (const GRStaff* staff, const GRNotationElement * elt) const
+{
+	const NEPointerList& elts = staff->getElements();
+	GuidoPos pos = elts.GetElementPos (elt);
+	if (pos) elts.GetNext(pos);
+	while (pos) {
+		const GRNotationElement* next = elts.GetNext(pos);
+		if (next->isGREvent()) return next;
+		if (dynamic_cast<const GRBar*>(next) || dynamic_cast<const GRRepeatBegin*>(next))
+			return next;
+	}
+	return 0;
 }
 
 //---------------------------------------------------------------------------------
@@ -93,7 +105,11 @@ void GRDynamics::tellPosition(GObject *caller, const NVPoint & newPosition)
 		fCurrentSegment.fx1 = newPosition.x + (sse->startflag == GRSystemStartEndStruct::LEFTMOST ? dx1 : 0);
 	else {
 		fCurrentSegment.fx2 = newPosition.x;
-		if (sse->endflag == GRSystemStartEndStruct::RIGHTMOST)	fCurrentSegment.fx2 += dx2 ;
+		if (sse->endflag == GRSystemStartEndStruct::RIGHTMOST) {
+			if (sse->startElement == sse->endElement)	// this is a single note dynamic
+				fNext = getNextEvent (staff, sse->endElement);
+			fCurrentSegment.fx2 += dx2 ;
+		}
 		fCurrentSegment.fx2 = newPosition.x + (sse->endflag == GRSystemStartEndStruct::RIGHTMOST ? dx2 : 0);
 		const float staffLSpace = staff->getStaffLSPACE();
 		const float y = autopos ? staff->getStaffBottom() + staffLSpace : staff->getDredgeSize() + 2 * staffLSpace;
@@ -169,9 +185,8 @@ void GRDynamics::DrawDynamic( VGDevice & hdc, bool cresc) const
 		float y2 = segment->fy - w2/2;
 		float x2 = segment->fx2;
 		if (segment->fx1 == x2)	{
-			// this is to catch end staff crescendo on a single note
-			// system bounding box is not available at tellPosition time
-			x2 = gCurSystem->getBoundingBox().right - LSPACE;
+			// this is to catch single note dynamics - next event pos is not available at tellPosition time
+			if (fNext) x2 = (fNext->getBoundingBox()+fNext->getPosition()).left;
 		}
 		hdc.Line ( segment->fx1, y1, x2, y2);
 		hdc.Line ( segment->fx1, y1+w1, x2, y2+w2);

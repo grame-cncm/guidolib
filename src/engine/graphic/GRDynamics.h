@@ -50,6 +50,10 @@ class GRDynamics : public GRPTagARNotationElement
 		void				clear(TXSegment& seg) const			{ seg.fx1 = seg.fx2 = 0.f; }
 		void				initDynamicsMap();
 
+	private:
+		const GRNotationElement * getNextEvent (const GRStaff* staff, const GRNotationElement * elt) const;
+		const GRNotationElement * fNext;		// next event or bar, used in case of single note dynamic
+
 	static std::map<const std::string, unsigned int>	fDynamic2Symbol;
 };
 
