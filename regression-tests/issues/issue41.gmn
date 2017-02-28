@@ -1,0 +1,15 @@
+{ 
+[
+	\clef<"g2"> \key<1> \meter<"2/4"> 
+	\crescBegin \stemsUp 
+	d/8 \crescEnd 
+	\dimBegin f#/8 d/8
+	\grace( \beamsOff b/8) \dimEnd \beamsOff  \cresc(a/8)
+] 
+,
+[
+	\clef<"g2"> \key<1> \meter<"2/4"> 
+	\cresc(d/8 )
+	\dim(f#/8 d/8 \grace( \beamsOff b/8)) \beamsOff  a/8  
+] 
+}
