@@ -225,7 +225,7 @@ void GRSlur::automaticControlPoints( GRBowingContext * context, ARBowing * arBow
 	while( pos )
 	{
 		GRNotationElement * el = mAssociated->GetNext(pos);
-		if( el )
+		if( el && !el->isEmpty())
 		{
 			const TYPE_TIMEPOSITION & elDate = el->getRelativeTimePosition();
 			if(( elDate > startDate ) && (elDate < endDate ))
@@ -286,8 +286,10 @@ void GRSlur::automaticControlPoints( GRBowingContext * context, ARBowing * arBow
 	// -- Force lines to intersect within the [startX, endX] range.
 	// This is done by recalculating slopes that are too small.
 	const float yForEndX = startA * endX + b1;
-	if( upward && ( yForEndX > ( endY - 20 ))) startA = ((endY - 20) - b1) / endX;
-	else if( !upward && ( yForEndX < ( endY + 20 ))) startA = ((endY + 20) - b1) / endX;
+	if( upward && ( yForEndX > ( endY - 20 )))
+		startA = ((endY - 20) - b1) / endX;
+	else if( !upward && ( yForEndX < ( endY + 20 )))
+		startA = ((endY + 20) - b1) / endX;
 
 	const float yForStartX = endA * startX + b2;
 	if( upward && ( yForStartX > ( startY - 20 ))) endA = ((startY - 20) - b2) / startX;
