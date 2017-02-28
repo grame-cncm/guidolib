@@ -12,45 +12,8 @@
 
 */
 
-//#include <iostream>
-//#include <string.h>
-//
-//#include "ARCrescendo.h"
-//#include "VGDevice.h"
-//#include "VGFont.h"
-//#include "GRStaff.h"
-//#include "TagParameterFloat.h"
-//#include "GRStdNoteHead.h"
-//#include "GRSingleNote.h"
-//#include "GRRest.h"
-//#include "GREmpty.h"
-//#include "MusicalSymbols.h"
-//#include "GRSystem.h"
-
-
 #include "GRCrescendo.h"
 
-//using namespace std;
-
-//extern GRSystem *gCurSystem;
-
-//---------------------------------------------------------------------------------
-//void GRCrescendo::addAssociation(GRNotationElement * grnot)
-//{
-//	if (error) return;
-//
-//	if ( GREvent::cast(grnot)  && 	// stop immediately if it's not an event.
-//		(dynamic_cast<GRNote *>(grnot) ||
-//		 dynamic_cast<GRRest *>(grnot) ||
-//		 dynamic_cast<GREmpty *>(grnot)))
-//	{
-//	  	GRARNotationElement::addAssociation(grnot);
-//	}
-//	else setError(1);
-//
-//	if (!error)
-//		GRPositionTag::addAssociation(grnot);
-//}
 
 //---------------------------------------------------------------------------------
 void GRCrescendo::OnDraw( VGDevice & hdc) const		{ DrawDynamic (hdc, true); }
