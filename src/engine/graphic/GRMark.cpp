@@ -117,8 +117,11 @@ void GRMark::OnDraw( VGDevice & hdc ) const
 		r.Expand (3.f);
 		r.left -= 2;
 		r.right += 2;
-		const VGColor color = mColRef ? VGColor( mColRef ) : hdc.GetFontColor();
-		hdc.PushPen( color, 5);
+		if (mColRef) {
+			const VGColor color = VGColor( mColRef );
+			hdc.PushPenColor( color );
+		}
+		hdc.PushPenWidth (5);
 		switch (enclosure) {
 			case ARMark::kSquare:
 				r = toSquare(r);
@@ -141,7 +144,8 @@ void GRMark::OnDraw( VGDevice & hdc ) const
 				toDiamond (r, hdc);
 				break;
 		}
-		hdc.PopPen();
+		if (mColRef) hdc.PopPenColor();
+		hdc.PopPenWidth ();
 	}
 }
 
