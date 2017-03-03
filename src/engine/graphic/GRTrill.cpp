@@ -146,6 +146,8 @@ NVRect GRTrill::getEnclosingBox() const		// gives a rect that enclose the orname
 void GRTrill::OnDraw(VGDevice & hdc , float right, float noteY, int nVoice) const
 {
 	VGColor oldColor = hdc.GetFontColor();
+	if (mColRef)
+		hdc.SetFontColor(VGColor(mColRef));
 	
 	if (fType == 0) {
 		NVRect r = mBoundingBox;
@@ -200,7 +202,7 @@ void GRTrill::OnDraw(VGDevice & hdc , float right, float noteY, int nVoice) cons
 		if (fShowTR) GRNotationElement::OnDraw(hdc);
 		fAccidental->OnDraw(hdc);
 	}
-	hdc.SetFontColor(oldColor);
+	if (mColRef) hdc.SetFontColor(oldColor);
 }
 
 
