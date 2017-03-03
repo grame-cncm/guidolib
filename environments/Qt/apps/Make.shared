@@ -1,11 +1,11 @@
 
-TARGET := undefined
+TARGET ?= undefined
 
 system	:= $(shell uname -s)
 # normalizes MINGW versions
 system := $(shell echo $(system) | grep MINGW > /dev/null && echo MINGW || echo $(system))
 ifeq ($(system), Darwin)
-	TARGET ?= macos
+	TARGET = macos
 	QTPATH ?= $(shell ../../../qt-path)
 	QMAKEIOS ?= $(QTPATH)/ios/bin/qmake
 	SPEC ?= -spec macx-xcode
@@ -44,7 +44,7 @@ all:
 	make -f ../../Make.shared $(TARGET)
 
 undefined:
-	$(error System is undefined, not target available)
+	$(error System is undefined, not target available: $(system))
 
 mac:
 	make -f ../../Make.shared macos
