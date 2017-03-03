@@ -605,7 +605,7 @@ void GDeviceOSX::DrawMusicSymbol( float x, float y, unsigned int inSymbolID )
 	PopFillColor();
 }
 // --------------------------------------------------------------
-#if 0
+#ifndef IOS
 void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
 {
 	// this is for macos 10.4 : select a dummy font first 
@@ -662,7 +662,46 @@ void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
 //	Line( debugX - 20, debugY - 20, debugX + 20, debugY + 20 );	
 //	PopPen(); 
 }
-#else
+#else		// defined IOS
+static std::string fontName2iOSName(const string name, int properties)
+{
+	string iosname = "TimesNewRomanPSMT";
+    if (name == "Times New Roman") {
+        switch (properties) {
+            case 1:		iosname = "TimesNewRomanPS-BoldMT"; break;
+            case 2:		iosname = "TimesNewRomanPS-ItalicMT"; break;
+        }
+    }
+	else if (name == "Arial") {
+        switch (properties) {
+            case 1:		iosname = "Arial-BoldMT"; break;
+            case 2:		iosname = "Arial-ItalicMT"; break;
+            default:	iosname = "ArialMT";
+        }
+    }
+	else if (name == "Palatino") {
+        switch (properties) {
+            case 1:		iosname = "Palatino-Bold"; break;
+            case 2:		iosname = "Palatino-Italic"; break;
+            default:	iosname = "Palatino";
+        }
+    }
+	else if (name == "Baskerville") {
+        switch (properties) {
+            case 1:		iosname = "Baskerville-Bold"; break;
+            case 2:		iosname = "Baskerville-Italic"; break;
+            default:	iosname = "Baskerville";
+        }
+    }
+	else {
+        // default to Times New Roman
+        switch (properties) {
+            case 1:		iosname = "TimesNewRomanPS-BoldMT"; break;
+            case 2:		iosname = "TimesNewRomanPS-ItalicMT";break;
+        }
+    }
+}
+
 void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
 {
     // - Manage character encoding
@@ -679,20 +718,10 @@ void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
         CFAttributedStringReplaceString(attributedOverlayText, CFRangeMake(0, 0), CFStringCreateWithCString(kCFAllocatorDefault, convStr, kCFStringEncodingUTF8));
     }
     
-    // Set text color
-    /// NAda
-    
-    //// Set text font
-    /*
-     enum {
-     kFontNone		= 0,
-     kFontBold		= 1,
-     kFontItalic		= 2,
-     kFontUnderline	= 4
-     };
-     */
-    std::string iosConvertedFontName = "TimesNewRomanPSMT";
-    if (mCurrTextFont->GetName()=="Times New Roman")
+    std::string iosConvertedFontName = fontName2iOSName(mCurrTextFont->GetName(), mCurrTextFont->GetProperties());
+/*
+    std::string fontName = mCurrTextFont->GetName();
+    if (fontName == "Times New Roman")
     {
         switch (mCurrTextFont->GetProperties()) {
             case 1:  // bold
@@ -705,7 +734,7 @@ void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
             default:
                 break;
         }
-    }else if (mCurrTextFont->GetName()=="Arial")
+    }else if (fontName == "Arial")
     {
         switch (mCurrTextFont->GetProperties()) {
             case 1:  // bold
@@ -719,7 +748,7 @@ void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
                 iosConvertedFontName = "ArialMT";
                 break;
         }
-    }else if (mCurrTextFont->GetName()=="Palatino")
+    }else if (fontName == "Palatino")
     {
         switch (mCurrTextFont->GetProperties()) {
             case 1:  // bold
@@ -733,7 +762,7 @@ void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
                 iosConvertedFontName = "Palatino";
                 break;
         }
-    }else if (mCurrTextFont->GetName()=="Baskerville")
+    }else if (fontName == "Baskerville")
     {
         switch (mCurrTextFont->GetProperties()) {
             case 1:  // bold
@@ -761,7 +790,7 @@ void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
                 break;
         }
     }
-    
+ */
     
     CTFontRef ctFont = CTFontCreateWithName( CFStringCreateWithCString(kCFAllocatorDefault, iosConvertedFontName.c_str(), kCFStringEncodingUTF8) , mCurrTextFont->GetSize(), NULL);
     CFAttributedStringSetAttribute(attributedOverlayText,
