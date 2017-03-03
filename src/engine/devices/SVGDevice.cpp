@@ -462,7 +462,6 @@ void SVGDevice::DrawMusicSymbol(float x, float y, unsigned int inSymbolID )
 	fStream << fEndl << "<text x=\"" << x << "\" y=\"" << y  << "\" " << align2str(fFontAlign) 
 	<< baseline2str(fFontAlign) << " font-size=\"" << fMusicFont->GetSize();
 	if (fFontColor.mRed >= 0) {
-//cerr << "SVGDevice::DrawMusicSymbol font color: " << fFontColor << endl;
 		fStream << "\" stroke=\"";
 		print(fStream, fFontColor);
 		fStream << "\" fill=\"";
@@ -478,7 +477,6 @@ void SVGDevice::DrawString( float x, float y, const char * s, int inCharCount )
 	fStream << fEndl << "<text x=\"" << x << "\" y=\"" << y << "\" " << align2str(fFontAlign) 
 	<< baseline2str(fFontAlign) << " font-size=\"" << fTextFont->GetSize();
 	if (fFontColor.mRed >= 0) {
-//cerr << "SVGDevice::DrawMusicSymbol font color: " << fFontColor << endl;
 		fStream << "\" stroke=\"";
 		print(fStream, fFontColor);
 		fStream << "\" fill=\"";
@@ -497,10 +495,7 @@ void SVGDevice::DrawString( float x, float y, const char * s, int inCharCount )
 	fStream << fEndl << "</text>"; 
 }
 
-void	SVGDevice::SetFontColor( const VGColor & color )	{
-cerr << "SVGDevice::SetFontColor : " << color << endl;
-	fFontColor = color;
-}
+void	SVGDevice::SetFontColor( const VGColor & color )	{ fFontColor = color; }
 VGColor SVGDevice::GetFontColor() const						{ return fFontColor; }
 void	SVGDevice::SetFontBackgroundColor( const VGColor & inColor )	{fFontBackgroundColor = inColor; }
 VGColor SVGDevice::GetFontBackgroundColor() const						{ return fFontBackgroundColor; }
