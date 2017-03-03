@@ -2,6 +2,9 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.4
+- svg device font colors management changed in order to avoid setting the color when no color is specified on gmn side.
+- fix svg export viewBox size with piano roll
+- fix slope issue with slurs
 - new autopos attribute for dynamics (\cresc and \dim)
 - fix newline issue with crescendo and diminuendo
 - fix beaming issue with trills
