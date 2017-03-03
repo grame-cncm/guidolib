@@ -34,19 +34,17 @@
 class VGColor
 {
 	public:		
-					VGColor( unsigned char gray  = 0 ) 
+					VGColor( int gray  = 0 )
 						: mRed( gray ), mGreen( gray ), mBlue( gray ), mAlpha( ALPHA_OPAQUE ) { }
 					VGColor( const VGColor & in ) 
 						{ Set( in ); }
-					VGColor( unsigned char r, unsigned char g, 
-							 unsigned char b, unsigned char a = ALPHA_OPAQUE ) 
+					VGColor( int r, int g, int b, int a = ALPHA_OPAQUE )
 						: mRed( r ), mGreen( g ), mBlue ( b ), mAlpha( a ) { }
 
-		explicit	VGColor( const unsigned char col [4] ) 
+		explicit	VGColor( const unsigned char col [4] )
 						{ if( col ) Set( col[0], col[1], col[2], col[3] ); else Set( 0 ); }
 
-		void		Set( unsigned char r, unsigned char g, 
-						 unsigned char b, unsigned char a = ALPHA_OPAQUE )
+		void		Set( int r, int g, int b, int a = ALPHA_OPAQUE )
 						{ mRed = r; mGreen = g; mBlue = b, mAlpha = a; }
 		void		Set( const VGColor & in )
 						{ mRed = in.mRed; mGreen = in.mGreen; mBlue = in.mBlue, mAlpha = in.mAlpha; }
@@ -79,10 +77,10 @@ class VGColor
             return out;
         }
 			
-		unsigned char mRed;
-		unsigned char mGreen;
-		unsigned char mBlue;
-		unsigned char mAlpha; // 0 = invisible, 255 = opaque. 
+		int mRed;
+		int mGreen;
+		int mBlue;
+		int mAlpha; // 0 = invisible, 255 = opaque.
 };
 
 				
