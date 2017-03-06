@@ -226,7 +226,7 @@ void SVGDevice::Rectangle( float left,  float top, float right, float bottom )
 void SVGDevice::print (std::ostream& out, const VGColor& color) const
 {
 	char buff[10];
-	sprintf (buff, "#%02x%02x%02x",  int(color.mRed), int(color.mGreen), int(color.mBlue));
+	sprintf (buff, "#%02x%02x%02x",  color.mRed & 0xff, color.mGreen & 0xff, color.mBlue & 0xff);
 	out << buff;
 }
 
