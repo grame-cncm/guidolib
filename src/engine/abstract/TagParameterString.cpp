@@ -97,5 +97,5 @@ bool TagParameterString::getRGB( unsigned char colref[4] ) const
 bool TagParameterString::getBool() const
 {
 	std::string value = NVstring::to_lower(fValue.c_str());
-	return (value == "true") || (value == "yes") || (value == "1");
+	return (value == "true") || (value == "yes") || (value == "on") || (value == "1");
 }
