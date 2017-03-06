@@ -5249,9 +5249,11 @@ void ARMusicalVoice::doAutoKeys()
 				if (key->isHideAutoNaturalsSet()) showNaturals = !key->hideAutoNaturals();
 				else {
 					showNaturals = currentKey &&		// don't show naturals if there was none
+								// don't show naturals when key increases or decreases in the same direction
+								!((currentKey > 0) && (keyn > 0) || ((currentKey < 0) && (keyn < 0)));
 								// don't show naturals when key increases in the same direction
-								!(((currentKey > 0) && (keyn > 0) && (currentKey <= keyn))
-								|| ((currentKey < 0) && (keyn < 0) && (currentKey >= keyn)));
+//								!(((currentKey > 0) && (keyn > 0) && (currentKey <= keyn))
+//								|| ((currentKey < 0) && (keyn < 0) && (currentKey >= keyn)));
 				}
                 if (showNaturals) {
                     // then we insert a key at this position
