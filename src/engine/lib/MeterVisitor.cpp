@@ -35,19 +35,34 @@ void MeterVisitor::visit (ARMusicalObject &obj)
 				fLastMeter.count[i] = 0;
 			fLastMeter.unit = meter->getDenominator();
 
-			vector<int> counts = meter->getNumeratorsVector();
-			size_t n = counts.size();
+			const vector<Fraction>& mlist = meter->getMeters();
+			size_t n = mlist.size();
 
 			if (n > kMaxGuidoMeterCounts) {		// meter division is bigger than the limit
 				int sum = 0;
 				for (size_t i = kMaxGuidoMeterCounts-1; i < n; i++)	// computes the sum of the last divs
-					sum += counts[i];
+					sum += mlist[i].getNumerator();
 				fLastMeter.count[kMaxGuidoMeterCounts-1] = sum;	// and stores the sum to the last position
 				n = kMaxGuidoMeterCounts-1;
 			}
 
 			for (size_t i=0; i < n; i++)
-				fLastMeter.count[i] = counts[i];
+				fLastMeter.count[i] = mlist[i];
+
+//			vector<int> counts = meter->getNumeratorsVector();
+//			size_t n = counts.size();
+//
+//			if (n > kMaxGuidoMeterCounts) {		// meter division is bigger than the limit
+//				int sum = 0;
+//				for (size_t i = kMaxGuidoMeterCounts-1; i < n; i++)	// computes the sum of the last divs
+//					sum += counts[i];
+//				fLastMeter.count[kMaxGuidoMeterCounts-1] = sum;	// and stores the sum to the last position
+//				n = kMaxGuidoMeterCounts-1;
+//			}
+//
+//			for (size_t i=0; i < n; i++)
+//				fLastMeter.count[i] = counts[i];
+
 		}
 	}
 }
