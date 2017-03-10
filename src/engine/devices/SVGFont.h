@@ -35,15 +35,9 @@ class SVGFont : public VGFont
 					 SVGFont(const char * name, int size, int properties);
 		virtual		~SVGFont();
 
-		virtual	const char *	GetName() const			{
-		  return fFont->GetName();
-                }
-		virtual	int 			GetSize() const {
-		  return fFont->GetSize();
-                }
-		virtual	int				GetProperties() const	{
-		  return fFont->GetProperties();
-		}
+		virtual	const char *	GetName() const			{ return fFont->GetName(); }
+		virtual	int 			GetSize() const			{ return fFont->GetSize(); }
+		virtual	int				GetProperties() const	{ return fFont->GetProperties(); }
 
 		virtual	void	GetExtent( const char * s, int inCharCount, float * outWidth, float * outHeight, VGDevice * context ) const;
 		virtual	void	GetExtent( unsigned char c, float * outWidth, float * outHeight, VGDevice * context ) const;
