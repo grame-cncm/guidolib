@@ -15,16 +15,3 @@
 #include "NVPoint.h"
 
 std::ostream& operator<< (std::ostream& os, const NVPoint& p)	{ p.Print (os); return os;}
-
-/*
-NVPoint operator-( const NVPoint & p1, const NVPoint & p2 )
-{
-	return (NVPoint( p1.x - p2.x, p1.y - p2.y ));
-}
-
-NVPoint operator+( const NVPoint & p1, const NVPoint & p2 )
-{
-	return (NVPoint( p1.x + p2.x, p1.y + p2.y ));
-}
-
-*/
