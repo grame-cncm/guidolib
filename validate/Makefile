@@ -96,6 +96,7 @@ help:
 	@echo "Makefile for testing the engine output. Available targets are:"
 	@echo "'svg' (default): makes svg files (scores, maps, timemaps, piano roll) for a set of gmn files"
 	@echo "                 the output folder name is the current guido engine version number."
+	@echo "'svgshort'     : similar to 'svg' target but build the standard output only (no maps)"
 	@echo "'map'          : makes svg map files for a set of gmn files"
 	@echo "                 the output folder name is '[current guido engine version number]/maps/'."
 	@echo "'timemap'      : makes time map files for a set of gmn files"
