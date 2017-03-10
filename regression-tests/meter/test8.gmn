@@ -5,13 +5,13 @@
   \meter<"", size=1> a b c
 ],
 [
-  \meter<"C/2", size=1> a b c
+  \meter<"c", size=1> a b c
 ],
 [
-  \meter<"C+2", size=1> a b c
+  \meter<"c/", size=3> a b c
 ],
 [
-  \meter<"2+C", size=1> a b c
+  \meter<"2+C", size=2> a b c
 ],
 [
   \meter<"C/", size=1> a b c
