@@ -18,6 +18,7 @@
 #include <string>
 
 #include "ARMTParameter.h"
+#include "Fraction.h"
 
 /** \brief not yet documented
 */
@@ -32,7 +33,7 @@ class ARMeter : public ARMTParameter
 				ARMeter();
 				ARMeter(int p_numerator, int p_denominator);
 
-		virtual ~ARMeter();
+		virtual ~ARMeter() {}
 
 		virtual bool IsStateTag() const;
 
@@ -43,16 +44,17 @@ class ARMeter : public ARMTParameter
 
 		virtual void setTagParameterList(TagParameterList & tpl);
 
-		TYPE_TIMEPOSITION getMeterTime() const;
-
 		int  getAutoBarlines()                  const { return autoBarlines; }
 		int	 getAutoMeasuresNum()               const { return autoMeasuresNum; }
-		std::vector<int> getNumeratorsVector()  const { return numeratorsVector; }
-        int getNumerator()                      const { return numerator; }
-		int getDenominator()                    const { return denominator; }
-		TYPE_DURATION getMeterDuration()        const { return TYPE_DURATION(numerator,denominator); }
+		bool isSingleUnit()						const { return fSingleUnit; }
+		bool groupComplex()						const { return fGroupComplex; }
 
-		metertype	getMeterType() const	         { return mtype; }
+		const std::vector<Fraction>& getMeters()const { return fMetersVector; }
+        int getNumerator()                      const { return fMeterDuration.getNumerator(); }
+		int getDenominator()                    const { return fMeterDuration.getDenominator(); }
+		TYPE_DURATION getMeterDuration()        const { return fMeterDuration; }
+
+		metertype	getMeterType() const	         { return fType; }
 		const char* getName() const			         { return mMeterName.c_str(); } 
 
 		int		getMeasureNum() const                { return mnum; }
@@ -66,6 +68,7 @@ class ARMeter : public ARMTParameter
         /**** Function to avoid dynamic_cast ****/
         ARMusicalObject *isARMeter() { return this; }
         /****************************************/
+		const std::vector<Fraction>& getMetersVector()  const { return fMetersVector; }
 
   protected:
 	  // timeoffset describes the offset from the current meter-position within a staff. 
@@ -81,11 +84,19 @@ class ARMeter : public ARMTParameter
 	  static ListOfTPLs ltpls;
  
   private:
-		std::string mMeterName;
-        std::vector<int> numeratorsVector;
-        int numerator;
-		int denominator;
-		metertype mtype;
+		bool						isNumeric		(const std::string& meter)  const;
+		bool						singleUnit		(const std::vector<Fraction>& m)  const;
+		Fraction					str2meter		(std::string str)  const;
+		Fraction					metersDuration	(const std::vector<Fraction>& m)  const;
+		const std::vector<Fraction> finalizeMeters	(const std::vector<Fraction>& m)  const;
+		const std::vector<Fraction> parseMeters		(std::string str)  const;
+
+		std::string				mMeterName;
+        std::vector<Fraction>	fMetersVector;
+		Fraction				fMeterDuration;
+		bool					fSingleUnit;		// a flag that indicates if one or several units are used
+		bool					fGroupComplex;		// a flag that indicates if complex meters must be grouped by common denominator
+		metertype				fType;
 };
 
 #endif

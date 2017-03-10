@@ -14,6 +14,9 @@
 
 #include <iostream>
 #include <sstream>
+#include <regex>
+#include <cctype>
+
 #include "secureio.h"
 
 #include "ARMeter.h"
@@ -22,44 +25,130 @@
 #include "TagParameterList.h"
 #include "ListOfStrings.h"
 
+using namespace std;
 
 ListOfTPLs ARMeter::ltpls(1);
 
-ARMeter::ARMeter()
+//--------------------------------------------------------------------------------------
+ARMeter::ARMeter() : fMeterDuration(0,1), fSingleUnit(true), fGroupComplex(false)
 {
-	mtype = NONE;
+	fType = NONE;
 	autoBarlines    = true;
 	autoMeasuresNum = false;
-
-    numerator = 0;
-    denominator = 0;
 }
 
-ARMeter::ARMeter(int p_numerator, int p_denominator)
+//--------------------------------------------------------------------------------------
+ARMeter::ARMeter(int num, int dnum) : fMeterDuration(num, dnum), fSingleUnit(true)
 {
-	numerator   = p_numerator;
-	denominator = p_denominator;
     std::stringstream bufferSStream;
-    bufferSStream << numerator << "/" << denominator;
-
+    bufferSStream << fMeterDuration;
 	mMeterName = bufferSStream.str().c_str();
-	mtype = NUMERIC;
+	fType = NUMERIC;
 	autoBarlines    = true;
 	autoMeasuresNum = false;
 }
 
-
-ARMeter::~ARMeter()
+//--------------------------------------------------------------------------------------
+// converts a meter string in the form "n[/d]" to a fraction
+// warning: the [/d] part is optional are when not present, the denominator is set to 0
+Fraction ARMeter::str2meter(string str)  const
 {
+	size_t n = str.find("/");
+	int num = 0;
+	int dnum = 0;
+	if (n == string::npos)
+		num = std::stoi(str);
+	else {
+		num = std::stoi(str.substr(0,n));
+		dnum = std::stoi(str.substr(n+1));
+	}
+	return Fraction (num, dnum);
 }
 
+//--------------------------------------------------------------------------------------
+// check if the meters set has a single unit (denominator)
+bool ARMeter::singleUnit (const std::vector<Fraction>& meters)  const
+{
+	int unit = 0;
+	for (size_t i=0; i < meters.size(); i++) {
+		int d = meters[i].getDenominator();
+		if (!d) continue;		// unit is implicit
+		if (!unit) unit = d;
+		else if (d != unit) return false;
+	}
+	return true;
+}
+
+//--------------------------------------------------------------------------------------
+// parse a meters string in the form "n[/d] [+] n[/d] [+] ... [+] n[/d]"
+// where parts in brackets [] are optionnal
+// note that the method is relaxed regarding extra characters that are actually ignored
+const vector<Fraction> ARMeter::finalizeMeters(const std::vector<Fraction>& meters)  const
+{
+	vector<Fraction> out;
+	int n = meters.size() - 1;
+	int lastdnum = 4;		// default denominator
+	while (n >= 0) {
+		Fraction m = meters[n--];
+		int d = m.getDenominator();
+		if (!d) m.setDenominator(lastdnum);
+		else lastdnum = d;
+		out.insert (out.begin(), m);
+	}
+	return out;
+}
+
+//--------------------------------------------------------------------------------------
+// parse a meters string in the form "n[/d] [+] n[/d] [+] ... [+] n[/d]"
+// where parts in brackets [] are optionnal
+// note that the method is relaxed regarding extra characters that are actually ignored
+const vector<Fraction> ARMeter::parseMeters(std::string str)  const
+{
+	vector<Fraction> meters;
+	string exp = "([1-9][0-9]*([ 	]*/[1-9][0-9]*){0,1})+";
+	std::regex e (exp);
+	smatch m;
+	while (regex_search (str, m, e, regex_constants::match_any)) {
+		string match = *m.begin();
+		meters.push_back(str2meter (match));
+		str = m.suffix().str();
+	}
+	meters = finalizeMeters (meters);
+//cerr << "ARMeter::parseMeters" << endl;
+//for (size_t i=0; i<meters.size(); i++) {
+//cerr << " -> " << meters[i] << endl;
+//}
+	return meters;
+}
+
+//--------------------------------------------------------------------------------------
+Fraction ARMeter::metersDuration (const std::vector<Fraction>& meters)  const
+{
+	Fraction out (0,1);
+	if (fSingleUnit) {		// intended to avoid fraction normalization
+		int n = 0, d = 1;
+		for (size_t i=0; i < meters.size(); i++) {
+			n += meters[i].getNumerator();
+			d = meters[i].getDenominator();
+		}
+		out.set (n, d);
+	}
+	else {
+		for (size_t i=0; i<meters.size(); i++)
+			out += meters[i];
+		out.normalize();
+	}
+	return out;
+}
+
+//--------------------------------------------------------------------------------------
 void ARMeter::setTagParameterList(TagParameterList& tpl)
 {
 	if (ltpls.GetCount() == 0)
 	{
 		// create a list of string ...
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail("S,type,4/4,r;F,size,1.0,o;S,autoBarlines,on,o;S,autoMeasuresNum,off,o");
+		lstrs.AddTail("S,type,4/4,r;F,size,1.0,o;S,autoBarlines,on,o;S,autoMeasuresNum,off,o;S,group,off,o");
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -71,14 +160,11 @@ void ARMeter::setTagParameterList(TagParameterList& tpl)
 		// we found a match!
 		if (ret == 0)
 		{
-			// then, we now the match for
-			// the first ParameterList
-			// w, h, ml, mt, mr, mb
+			// then, we now the match for the first ParameterList
 			GuidoPos pos = rtpl->GetHeadPosition();
 
 			TagParameterString * tps = TagParameterString::cast(rtpl->GetNext(pos));
 			assert(tps);
-
 			mMeterName = tps->getValue();
 
 			TagParameterFloat * tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
@@ -87,16 +173,10 @@ void ARMeter::setTagParameterList(TagParameterList& tpl)
 
 			tps = TagParameterString::cast(rtpl->GetNext(pos));
 			assert(tps);
-
-			std::string off("off");
-			if (off == tps->getValue())
-				autoBarlines = false;
-			else
-				autoBarlines = true;
+			autoBarlines = tps->getBool();
 
 			tps = TagParameterString::cast(rtpl->GetNext(pos));
 			assert(tps);
-
 			std::string on("on");
 			std::string page("page");
 			const char* automeasures = tps->getValue();
@@ -107,138 +187,57 @@ void ARMeter::setTagParameterList(TagParameterList& tpl)
 			else
 				autoMeasuresNum = kNoAutoMeasureNum;
 
+			tps = TagParameterString::cast(rtpl->GetNext(pos));
+			assert(tps);
+			fGroupComplex =  tps->getBool();
 
             /**** Meter type analysis ****/
-
-            if (mMeterName == "")
-            {
-                mtype = NONE;
-                numeratorsVector.push_back(4);
-                denominator = 4;
+            if ((mMeterName == "C") || (mMeterName == "c")) {
+                fType = C;
+				fMetersVector.push_back(Fraction(4,4));
             }
-            else if (mMeterName == "C")
-            {
-                mtype = C;
-                numeratorsVector.push_back(4);
-                denominator = 4;
+            else if ((mMeterName == "C/") || (mMeterName == "c/")) {
+                fType = C2;
+				fMetersVector.push_back(Fraction(2,2));
             }
-            else if (mMeterName == "C/")
-            {
-                mtype = C2;
-                numeratorsVector.push_back(2);
-                denominator = 2;
+            else if ((mMeterName == "") || !isNumeric(mMeterName)) {
+                fType = NONE;
+				fMetersVector.push_back(Fraction(4,4));
             }
-            else
-            {
-                mtype       = NUMERIC;
-                denominator = 1;
-
-                //Meter string analysis to set numerator/denominator
-                std::string meterStr(mMeterName);
-                std::string delimiterSlash = "/";
-
-                size_t posSlash = 0;
-                std::string completeNumeratorStr;
-                std::string denominatorStr = "";
-
-                posSlash = meterStr.find(delimiterSlash);
-
-                if (posSlash == std::string::npos)
-                    completeNumeratorStr = meterStr;
-                else {
-                    completeNumeratorStr = meterStr.substr(0, posSlash);
-                    denominatorStr       = meterStr;
-                    denominatorStr.erase(0, posSlash + 1);
-                }
-
-
-                /* Numerator check */
-
-                int tmpNumeratorX = 0;
-                std::string delimiterPlus = "+";
-                size_t posPlus = 0;
-                size_t endStr;
-                std::string tpmNumeratorXStr;
-
-                do {
-                    posPlus = completeNumeratorStr.find(delimiterPlus);
-                    
-                    if (posPlus == std::string::npos)
-                        endStr = completeNumeratorStr.size();
-                    else
-                        endStr = posPlus;
-
-                    tpmNumeratorXStr = completeNumeratorStr.substr(0, endStr);
-
-                    if (sscanf(tpmNumeratorXStr.c_str(), "%d", &tmpNumeratorX) == 1)
-                    {
-                        /* We keep only the first 2 figures */
-                        while(tmpNumeratorX > 99)
-                            tmpNumeratorX = (int)(tmpNumeratorX / 10);
-
-                        numeratorsVector.push_back(tmpNumeratorX);
-
-                        completeNumeratorStr.erase(0, endStr + delimiterPlus.length());
-                    }
-                    else {
-                        numeratorsVector.clear();
-                        posPlus = std::string::npos;
-                    }
-                }
-                while (posPlus != std::string::npos);
-
-                if (!numeratorsVector.empty()) {
-                    if (denominatorStr.size() > 0 && sscanf(denominatorStr.c_str(), "%d", &denominator) == 1)
-                    {
-                        while(denominator > 99)
-                            denominator = (int)(denominator / 10);
-                    }
-                }
-                else { // default
-                    mtype = C;
-                    numeratorsVector.push_back(4);
-                    denominator = 4;
-                }
+            else {
+                fType       = NUMERIC;
+				fMetersVector	= parseMeters(mMeterName);
+				fSingleUnit		= singleUnit (fMetersVector);
+				fMeterDuration	= metersDuration(fMetersVector);
             }
 		}
-
 		delete rtpl;
 	}
-	else
-	{
-		numeratorsVector.push_back(0);
-		denominator = 1;
-		mtype = NONE;
+	else {
+		fType = NONE;
+		fMetersVector.push_back(Fraction(4,4));
 	}
 
-    if (!numeratorsVector.empty())
-    {
-        for(size_t i = 0; i < numeratorsVector.size(); i++)
-            numerator += numeratorsVector[i];
-    }
-
+	fMeterDuration = metersDuration(fMetersVector);
     tpl.RemoveAll();
 }
 
-bool ARMeter::IsStateTag() const
+//--------------------------------------------------------------------------------------
+bool ARMeter::isNumeric	(const std::string& meter)  const
 {
+	const char* ptr = meter.c_str();
+	while (*ptr) {
+		int c = *ptr++;
+		if (!isdigit(c) && !isblank(c) && (c != '+') && (c != '/')) return false;
+	}
 	return true;
 }
 
-TYPE_TIMEPOSITION ARMeter::getMeterTime() const
-{
-	return TYPE_TIMEPOSITION(numerator,denominator);
-}
+//--------------------------------------------------------------------------------------
+bool ARMeter::IsStateTag() const					{ return true; }
 
-void ARMeter::printName(std::ostream& os) const
-{
-    os << "ARMeter";
-}
-
-void ARMeter::printGMNName(std::ostream& os) const
-{
-    os << "\\meter";
-}
+void ARMeter::printName(std::ostream& os) const		{ os << "ARMeter"; }
+void ARMeter::printGMNName(std::ostream& os) const	{ os << "\\meter"; }
 
 void ARMeter::printParameters(std::ostream& os) const
 {
