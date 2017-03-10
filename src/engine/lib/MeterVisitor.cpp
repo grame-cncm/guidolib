@@ -17,6 +17,10 @@
 
 using namespace std;
 
+#ifndef WIN32
+#warning ("TODO: adapat to complex meters with several units");
+#endif
+
 //------------------------------------------------------------------------------
 void MeterVisitor::reset() {
 	for (int i=0; i<kMaxGuidoMeterCounts; i++)
