@@ -80,7 +80,7 @@ Fraction::Fraction(double x)
 Fraction::Fraction( int theNumerator, int theDenominator )
 				: numerator(theNumerator), denominator(theDenominator)
 {
-	assert( denominator != 0 ); // denominator must not be 0
+//	assert( denominator != 0 ); // denominator must not be 0
 	dval = (double)theNumerator / (double)theDenominator;
 }
 
