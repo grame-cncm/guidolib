@@ -30,327 +30,309 @@
 
 using namespace std;
 
-GRMeter::GRMeter( ARMeter * abstractRepresentationOfMeter, GRStaff * curstaff, bool p_ownsAR )
-  : GRTagARNotationElement(abstractRepresentationOfMeter, curstaff->getStaffLSPACE(), p_ownsAR),
-	numerator(0), denominator(1)
+#define GROUPSEVERAL	1		// control several time sign grouping
+
+//-------------------------------------------------------------------------------------
+GRMeter::GRMeter( ARMeter * ar, GRStaff * curstaff, bool p_ownsAR )
+  : GRTagARNotationElement(ar, curstaff->getStaffLSPACE(), p_ownsAR),
+	fMeters(ar->getMeters()), fGroupComplex(false)
 {
-	assert(abstractRepresentationOfMeter);
+	assert(ar);
 	assert(curstaff);
-
-	curLSPACE = curstaff->getStaffLSPACE();
-    mTagSize *= curstaff->getSizeRatio() * abstractRepresentationOfMeter->getSize();
-
-	mtype = getARMeter()->getMeterType();
-	if (mtype == ARMeter::NUMERIC)
-	{
-	  numeratorsVector = getARMeter()->getNumeratorsVector();
-	  denominator      = getARMeter()->getDenominator();
-    }
-
-    numerator = getARMeter()->getNumerator();
 
 	mNeedsSpring = 1;
 	sconst = SCONST_METER;
+	fCurLSPACE = curstaff->getStaffLSPACE();
+	fNumericHeight	= fCurLSPACE * 0.85;		// adjust numeric glyph height
+    mTagSize	   *= curstaff->getSizeRatio() * ar->getSize();
+    mIsInHeader		= ar->isInHeader();
+	fGroupComplex	= ar->groupComplex();
+	fType			= getARMeter()->getMeterType();
 
-	mBoundingBox.left = 0;
-	mBoundingBox.top  = 0;
+	mBoundingBox = computeBoundingBox (gGlobalSettings.gDevice);
 
-	float extent = 0;
-	if (mtype == ARMeter::NUMERIC)
-	{
-        std::stringstream bufferDenominatorSStream;
-        bufferDenominatorSStream << denominator;
-        std::string bufferDenominator = bufferDenominatorSStream.str();
-		
-        std::vector<float> extentsNumeratorsVector;
-		float extentDenominator = 0;
-		float x = 0, y = 0;
-        float extentPlus = 0;
-
-        if (numeratorsVector.size() > 1)
-        {
-            char bufferPlus = '+';
-            FontManager::gFontScriab->GetExtent(bufferPlus, &x, &y, gGlobalSettings.gDevice);
-            x *= mTagSize;
-            y *= mTagSize;
-            extentPlus  = x;
-        }
-
-		if( gGlobalSettings.gDevice )
-        {
-            for(size_t i = 0; i < numeratorsVector.size(); i++)
-            {
-                if (i)
-                    extentsNumeratorsVector.push_back(extentPlus);
-
-                std::stringstream bufferNumeratorTmpSStream;
-
-                bufferNumeratorTmpSStream << numeratorsVector[i];
-                std::string bufferNumeratorTmp = bufferNumeratorTmpSStream.str();
-                FontManager::gFontScriab->GetExtent(bufferNumeratorTmp.c_str(), (int)bufferNumeratorTmp.size(), &x, &y, gGlobalSettings.gDevice);
-                x *= mTagSize;
-                y *= mTagSize;
-
-                bufferNumeratorTmpSStream.clear();
-
-                extentsNumeratorsVector.push_back(x);
-            }
-		
-            FontManager::gFontScriab->GetExtent(bufferDenominator.c_str(), (int)bufferDenominator.size(), &x, &y, gGlobalSettings.gDevice);
-            x *= mTagSize;
-            y *= mTagSize;
-			extentDenominator = x;
-		}
-
-        totalNumeratorExtent = 0;
-
-        for (size_t i = 0; i < extentsNumeratorsVector.size(); i++)
-            totalNumeratorExtent += extentsNumeratorsVector[i];
-
-		extent = totalNumeratorExtent > extentDenominator ? totalNumeratorExtent : extentDenominator;
-		
-		mBoundingBox.left  = (GCoord)(- extent * 0.5f);
-		mBoundingBox.right = (GCoord)(  extent * 0.5f);
-	}
-	else if (mtype == ARMeter::C || mtype == ARMeter::C2)
-	{
-        extent = GetSymbolExtent(kCSymbol) * mTagSize;
-		mBoundingBox.left  = (GCoord)(- extent * 0.5f);
-		mBoundingBox.right = (GCoord)(  extent * 0.5f);
-	}
-
-	mBoundingBox.bottom = (GCoord)(5 * curLSPACE);
-
-	// set leftSpace, rightSpace 
-    mLeftSpace  = curLSPACE * 0.5f + (mTagSize - 1) * 2 * curLSPACE + (extent - (68 * mTagSize)) * 1.0f;
-	mRightSpace = 2 * curLSPACE;
+	// set leftSpace, rightSpace
+	float halfWidth = mBoundingBox.Width() / 2;
+	mLeftSpace  = halfWidth;
+	mRightSpace = halfWidth + fCurLSPACE;
 
 	// y position correction according to staff lines count - DF sept. 23 2009
 	if (curstaff) {
-		const float curLSPACE = curstaff->getStaffLSPACE();
 		int linesOffset = curstaff->getNumlines() - 5;
-
 		if (linesOffset)
-			mPosition.y += curLSPACE * linesOffset / 2;
+			mPosition.y += fCurLSPACE * linesOffset / 2;
 	}
-
-	// what about reference-position?
-
-    mIsInHeader = abstractRepresentationOfMeter->isInHeader();
 }
 
-GRMeter::~GRMeter()
+//-------------------------------------------------------------------------------------
+// converts a list of meters to a list of string pairs
+// each pair represents the textual value of a meter in num denum order e.g.
+//		3+2/4 =>  ["3+2","4"]
+//		3+2/4 + 5/8 =>  ["3","4"], ["2","4"], ["5","8"]
+// when fGroupComplex is set, meters that share a common denominator are grouped e.g.
+//		3+2/4 + 5/8 =>  ["3+2","4"], ["5","8"]
+vector<GRMeter::TSingleMeter> GRMeter::meters2metersStr(const std::vector<Fraction>& meters) const
 {
+	vector<GRMeter::TSingleMeter> out;
+	stringstream strStream;
+	size_t n = meters.size();
+	if (n == 0) return out;
+
+	if (fGroupComplex) {
+		const char * sep = "";
+		int previousdnum = 0;
+		for (size_t i = 0; i < n; i++) {
+			int dnum = meters[i].getDenominator();
+			if (previousdnum) {
+				if ((previousdnum != dnum)) {
+					string numstr = strStream.str();
+					strStream.str(string());
+					strStream << previousdnum;
+					out.push_back(make_pair(numstr, strStream.str()));
+					strStream.str(string());
+					sep = "";
+				}
+			}
+			previousdnum = meters[i].getDenominator();
+			strStream << sep << meters[i].getNumerator();
+			sep = "+";
+		}
+		string numstr = strStream.str();
+		strStream.str(string());
+		strStream << previousdnum;
+		out.push_back(make_pair(numstr, strStream.str()));
+		strStream.str(string());
+	}
+	else {
+		for (size_t i = 0; i < n; i++) {
+			strStream << meters[i].getNumerator();
+			string numstr = strStream.str();
+			strStream.str(string());
+			strStream << meters[i].getDenominator();
+			out.push_back(make_pair(numstr, strStream.str()));
+			strStream.str(string());
+		}
+	}
+	return out;
 }
 
+//-------------------------------------------------------------------------------------
+string GRMeter::makeNumeratorString (const std::vector<Fraction>& meters) const
+{
+	stringstream strStream;
+	const char * sep = "";
+	for (size_t i = 0; i < meters.size(); i++) {
+		strStream << sep << meters[i].getNumerator();
+		sep = "+";
+	}
+	return strStream.str();
+}
+
+//-------------------------------------------------------------------------------------
+string GRMeter::makeDenominatorString (const std::vector<Fraction>& meters) const
+{
+	size_t n = meters.size();
+	if (!n) return "";
+
+	stringstream strStream;
+	const char * sep = "";
+	if (getARMeter()->isSingleUnit())
+		strStream << meters[0].getDenominator();
+	else if (fGroupComplex) {
+		int previous = 0;
+		for (size_t i = 0; i < n; i++) {
+			int d = meters[i].getDenominator();
+
+			if (previous && (d != previous)) {
+				strStream << sep << d;
+				sep = "+";
+			}
+			previous = n;
+		}
+	}
+	else {
+		for (size_t i = 0; i < n; i++) {
+			strStream << sep << meters[i].getDenominator();
+			sep = "+";
+		}
+	}
+	return strStream.str();
+}
+
+//-------------------------------------------------------------------------------------
+// computes the bounding box of a meter strings
+NVRect GRMeter::computeBoundingBox (VGDevice* hdc, const string& str) const
+{
+	NVRect bb;
+	if (!hdc)	return bb;
+	
+	float w, h;
+	FontManager::gFontScriab->GetExtent (str.c_str(),  int(str.size()), &w, &h, hdc);
+	bb.left  = (GCoord)(- w * 0.5f * mTagSize);
+	bb.right = -bb.left;
+	// default top position (staff first line) is adjusted to the glyph size
+	bb.top = -(mTagSize-1) * fNumericHeight * 2;
+	// default bottom position (staff last line) is adjusted to the glyph size
+	bb.bottom = 4 * fCurLSPACE + (mTagSize-1) * fNumericHeight * 2;
+	return bb;
+}
+
+//-------------------------------------------------------------------------------------
+// computes the bounding box of two meter strings and returns the largest one
+NVRect GRMeter::computeBoundingBox (VGDevice* hdc, const std::string& numStr, const std::string& dnumStr) const
+{
+	NVRect nbb  = computeBoundingBox (hdc, numStr);
+	NVRect dbb  = computeBoundingBox (hdc, dnumStr);
+	return (nbb.Width() > dbb.Width()) ? nbb : dbb;
+}
+
+//-------------------------------------------------------------------------------------
+// computes the overall bounding box of a meter
+NVRect GRMeter::computeBoundingBox (VGDevice* hdc) const
+{
+	NVRect bb;
+	if (!hdc)	return bb;
+	
+	if (fType == ARMeter::NUMERIC) {
+		bb  = computeBoundingBox (hdc, makeNumeratorString (fMeters), makeDenominatorString (fMeters));
+	}
+	else if (fType == ARMeter::C || fType == ARMeter::C2) {
+		float w = GetSymbolExtent(kCSymbol) * mTagSize;
+		bb.left  = (GCoord)(- w * 0.5f);
+		bb.right = -bb.left;
+		bb.top = -(mTagSize-1) * fNumericHeight;
+		bb.bottom = 4 * fCurLSPACE + (mTagSize-1) * fNumericHeight;
+	}
+	return bb;
+}
+
+
+//-------------------------------------------------------------------------------------
 void GRMeter::GGSOutput() const
 {
-	char buffer[20];
-	char buf[100];
-	if (error) return;
-	if (mtype == ARMeter::NUMERIC)
-	  {
-		
-	  snprintf(buf,100,"\\draw_image<\"%d\",%ld,%d,%d>\n",
-		  numerator,
-		  getID(),
-		  (int)(mPosition.x + ggsoffsetx),
-		  (int)(LSPACE + ggsoffsety));
-		  
-	  AddGGSOutput(buf);
-		   
-	  
-	  snprintf(buf,100,"\\draw_image<\"%d\",%ld,%d,%d>\n",
-		denominator,
-		  getID(),
-		  (int)(mPosition.x + ggsoffsetx),
-		  (int)(3*LSPACE + ggsoffsety));
-	  AddGGSOutput(buf);
-	  }
-	 else if (mtype == ARMeter::C)
-	  {
-	  snprintf(buffer,20,"c" /*SCR_ALLABREVE*/ );
-	  snprintf(buf,100,"\\draw_image<\"%s\",%ld,%d,%d>\n",
-		buffer,
-		  getID(),
-		  (int)(mPosition.x + ggsoffsetx),
-		  (int)(mPosition.y + 2 * LSPACE + ggsoffsety));
-
-	  AddGGSOutput(buf);
-	  }
-	 else if (mtype == ARMeter::C2)
-	  {
-	  snprintf(buffer,20,"C" /* SCR_ALLABREVE2 */ );
-	  snprintf(buf,100,"\\draw_image<\"%s\",%ld,%d,%d>\n",
-		  buffer,
-		  getID(),
-		  (int)(mPosition.x + ggsoffsetx),
-		  (int)(mPosition.y + 2 * LSPACE + ggsoffsety));
-	  AddGGSOutput(buf);
-	 }
+//this code is obsolete, it makes use of numerator and denominator values that are not any more
+//maintained due to complex meter support
+//
+//	char buffer[20]; char buf[100];
+//	if (error) return;
+//	if (fType == ARMeter::NUMERIC) {
+//		
+//	  snprintf(buf,100,"\\draw_image<\"%d\",%ld,%d,%d>\n",
+//			fNumerator, getID(), (int)(mPosition.x + ggsoffsetx), (int)(LSPACE + ggsoffsety));
+//	  AddGGSOutput(buf);
+//		  
+//	  snprintf(buf,100,"\\draw_image<\"%d\",%ld,%d,%d>\n",
+//			fDenominator, getID(), (int)(mPosition.x + ggsoffsetx), (int)(3*LSPACE + ggsoffsety));
+//	  AddGGSOutput(buf);
+//	}
+//	else if (fType == ARMeter::C) {
+//	  snprintf(buffer,20,"c" /*SCR_ALLABREVE*/ );
+//	  snprintf(buf,100,"\\draw_image<\"%s\",%ld,%d,%d>\n",
+//			buffer, getID(), (int)(mPosition.x + ggsoffsetx), (int)(mPosition.y + 2 * LSPACE + ggsoffsety));
+//	  AddGGSOutput(buf);
+//	}
+//	else if (fType == ARMeter::C2) {
+//	  snprintf(buffer,20,"C" /* SCR_ALLABREVE2 */ );
+//	  snprintf(buf,100,"\\draw_image<\"%s\",%ld,%d,%d>\n",
+//			buffer, getID(), (int)(mPosition.x + ggsoffsetx), (int)(mPosition.y + 2 * LSPACE + ggsoffsety));
+//	  AddGGSOutput(buf);
+//	}
 }
 
+//-------------------------------------------------------------------------------------
+// depending on the relative numerator and denominator size, an offset
+// must be applied to the smallest part
+// this offset is computed as half of difference between the bounding doxes
+std::pair<float,float> GRMeter::GetXOffsets(VGDevice & hdc, const std::string& num, const std::string& dnum) const
+{
+	NVRect nbb = computeBoundingBox (&hdc, num);
+	NVRect dbb = computeBoundingBox (&hdc, dnum);
+	pair<float, float> offsets = make_pair(0,0);
+	float diff = (nbb.Width() - dbb.Width()) / 2;
+	if (diff > 0)	offsets.second = diff;
+	else			offsets.first = -diff;
+	return offsets;
+}
+
+//-------------------------------------------------------------------------------------
+// draw a complex meter part (numerator or denominator
+void GRMeter::DrawSymbolStr(const char* str, float x, float y, VGDevice & hdc ) const
+{
+	while (*str) {
+		DrawSymbol(hdc, *str, x, y, mTagSize);
+		float w, h;
+		FontManager::gFontScriab->GetExtent(*str, &w, &h, &hdc);
+		x += w * mTagSize;
+		str++;
+	}
+}
+
+//-------------------------------------------------------------------------------------
+// draw a meter with a single denominator
+float GRMeter::DrawNumericSingle(VGDevice & hdc, const string& num, const string& dnum, float x ) const
+{
+	NVRect bb  = computeBoundingBox (&hdc, num, dnum);
+	pair<float, float> offsets = GetXOffsets(hdc, num, dnum);
+	
+	float xpos = x + offsets.first;
+	// meter ref pos is on staff first line, numeric glyph refpos is on vertical center
+	float y = fCurLSPACE - (mTagSize - 1) * fNumericHeight;
+	DrawSymbolStr (num.c_str(), xpos, y, hdc);
+
+	xpos = x + offsets.second;
+    y += (2 * fCurLSPACE + 1.7 * fCurLSPACE * (mTagSize - 1) );
+	DrawSymbolStr (dnum.c_str(), xpos, y, hdc);
+	return bb.Width();
+}
+
+//-------------------------------------------------------------------------------------
+void GRMeter::DrawNumericSeveral(VGDevice & hdc ) const
+{
+	float wsep, h;
+	FontManager::gFontScriab->GetExtent('+', &wsep, &h, &hdc);
+	wsep *= mTagSize;
+	vector<GRMeter::TSingleMeter> m = meters2metersStr(fMeters);
+	float x = -mBoundingBox.Width()/2;
+	for (size_t i=0; i < m.size(); i++) {
+		if (i) {
+			// '+' y position is on the middle line
+			DrawSymbol(hdc, '+', x, 2*fCurLSPACE, mTagSize);
+			x += wsep;
+		}
+		x += DrawNumericSingle (hdc, m[i].first, m[i].second, x);
+	}
+}
+
+//-------------------------------------------------------------------------------------
 void GRMeter::OnDraw(VGDevice & hdc) const
 {
-	if (error)
-		return;
-	if(!mDraw)
-		return;
+	if (error || !mDraw)	return;
 
-	if (mtype == ARMeter::NUMERIC)
-	{
-        /**** Numerator ****/
+	const unsigned char * colref = getColRef();
+	const VGColor prevFontColor = hdc.GetFontColor();
+  	if (colref)
+		hdc.SetFontColor( VGColor( colref ));
 
-        float currentDx = 0;
-        float totalExtent = mBoundingBox.right - mBoundingBox.left;
-        float emptyNumeratorSpace;
-
-        const char charPlus = '+';
-        float extentCharPlusx;
-        float extentCharPlusy;
-        FontManager::gFontScriab->GetExtent(charPlus, &extentCharPlusx, &extentCharPlusy, gGlobalSettings.gDevice);
-        extentCharPlusx *= mTagSize;
-        extentCharPlusy *= mTagSize;
-
-        float dx2 = 0;
-
-        for (size_t i = 0; i < numeratorsVector.size(); i++)
-        {
-            if (i == 0)
-            {
-                emptyNumeratorSpace = totalExtent - totalNumeratorExtent;
-                currentDx = mBoundingBox.left + emptyNumeratorSpace / 2;
-            }
-            else
-            {
-                float dxOffsetPlus = (extentCharPlusx - extentCharPlusx * 0.9f) * 0.5f; // Offset to center the "+" between to numbers
-                float dxOffsetNum  = (mTagSize - 1) * (- curLSPACE * 0.8f) - (totalExtent - (68 * mTagSize)) * 0.5f;
-                float dyOffsetPlus = curLSPACE - (mTagSize - 1) * (curLSPACE * 0.9f);
-                OnDrawSymbol(hdc, charPlus, currentDx + dxOffsetNum + dxOffsetPlus, dyOffsetPlus, mTagSize * 0.9f);
-                currentDx += extentCharPlusx;
-            }
-
-            std::stringstream bufferSStream;
-            bufferSStream << numeratorsVector[i];
-            std::string buffer = bufferSStream.str();
-
-            float extentBufferx;
-            float extentBuffery;
-            FontManager::gFontScriab->GetExtent(buffer.c_str(), (int)buffer.size(), &extentBufferx, &extentBuffery, gGlobalSettings.gDevice);
-            extentBufferx *= mTagSize;
-            extentBuffery *= mTagSize;
-
-            if (numerator > 9)
-            {
-                float extentFirstCharx;
-                float extentFirstChary;
-                FontManager::gFontScriab->GetExtent(buffer.c_str()[0], &extentFirstCharx, &extentFirstChary, gGlobalSettings.gDevice);
-                extentFirstCharx *= mTagSize;
-                extentFirstChary *= mTagSize;
-
-                dx2 = currentDx + extentFirstCharx;
-            }
-            
-            float dxOffsetNum = (mTagSize - 1) * (- curLSPACE * 0.8f) - (totalExtent - (68 * mTagSize)) * 0.5f;
-            float dyOffsetNum = curLSPACE - (mTagSize - 1) * (curLSPACE * 0.9f);
-
-            OnDrawSymbol(hdc, buffer.c_str()[0], currentDx + dxOffsetNum, dyOffsetNum , mTagSize);
-            
-            if (buffer.c_str()[1])
-                OnDrawSymbol(hdc, buffer.c_str()[1], dx2 + dxOffsetNum, dyOffsetNum, mTagSize);
-
-            currentDx += extentBufferx;
-        }
-
-        /*******************/
-
-
-        /**** Denominator ****/
-
-        std::stringstream bufferSStream;
-        bufferSStream << denominator;
-        std::string buffer = bufferSStream.str();
-        
-        dx2 = 0;
-
-        float extentBufferx;
-        float extentBuffery;
-        FontManager::gFontScriab->GetExtent(buffer.c_str(), (int)buffer.size(), &extentBufferx, &extentBuffery, gGlobalSettings.gDevice);
-        extentBufferx *= mTagSize;
-        extentBuffery *= mTagSize;
-
-        float emptyDenominatorSpace = totalExtent - extentBufferx;
-        currentDx = mBoundingBox.left + emptyDenominatorSpace / 2;
-
-		if (denominator > 9)
-        {
-            float extentFirstCharx;
-            float extentFirstChary;
-            FontManager::gFontScriab->GetExtent(buffer.c_str()[0], &extentFirstCharx, &extentFirstChary, gGlobalSettings.gDevice);
-            extentFirstCharx *= mTagSize;
-            extentFirstChary *= mTagSize;
-
-			dx2 = currentDx + extentFirstCharx;
-		}
-        
-        float dxOffsetNum   = (mTagSize - 1) * (- curLSPACE * 0.8f) - (totalExtent - (68 * mTagSize)) * 0.5f;
-        float dyOffsetDenom = (3 * curLSPACE) + (mTagSize - 1) * (curLSPACE * 0.9f);
-		OnDrawSymbol(hdc, buffer.c_str()[0], currentDx + dxOffsetNum, dyOffsetDenom, mTagSize);
-
-		if (buffer.c_str()[1])
-			OnDrawSymbol(hdc, buffer.c_str()[1], dx2 + dxOffsetNum, dyOffsetDenom, mTagSize);
-
-        /*********************/
+	if (fType == ARMeter::NUMERIC) {
+		if (getARMeter()->isSingleUnit())	DrawNumericSingle  (hdc, makeNumeratorString (fMeters), makeDenominatorString(fMeters), mBoundingBox.left);
+		else								DrawNumericSeveral (hdc);
 	}
-	else if (mtype == ARMeter::C)
-	{
-        float extentBufferx;
-        float extentBuffery;
-        FontManager::gFontScriab->GetExtent(kCSymbol, &extentBufferx, &extentBuffery, gGlobalSettings.gDevice);
-        extentBufferx *= mTagSize;
-        extentBuffery *= mTagSize;
-        
-        float dxOffsetNum   = - curLSPACE + (mTagSize - 1) * (- curLSPACE * 2.0f);
-        float dyOffsetDenom = 2 * curLSPACE;
-		OnDrawSymbol(hdc, kCSymbol, dxOffsetNum, dyOffsetDenom, mTagSize);
+	else {
+		float y = 2 * fCurLSPACE;		// ref pos is on the staff first line, glyph starts on second line
+		if (fType == ARMeter::C)
+			DrawSymbol(hdc, kCSymbol, mBoundingBox.left, y, mTagSize);
+		else if (fType == ARMeter::C2)
+			DrawSymbol(hdc, kC2Symbol, mBoundingBox.left, y, mTagSize);
 	}
-	else if (mtype == ARMeter::C2)
-	{
-        float extentBufferx;
-        float extentBuffery;
-        FontManager::gFontScriab->GetExtent(kC2Symbol, &extentBufferx, &extentBuffery, gGlobalSettings.gDevice);
-        extentBufferx *= mTagSize;
-        extentBuffery *= mTagSize;
-        
-        float dxOffsetNum   = - curLSPACE + (mTagSize - 1) * (- curLSPACE * 2.0f);
-        float dyOffsetDenom = 2 * curLSPACE;
-		OnDrawSymbol(hdc, kC2Symbol, dxOffsetNum, dyOffsetDenom, mTagSize);
-	}
+
+//	NVRect r = mBoundingBox + mPosition;
+//	hdc.Frame(r.left, r.top, r.right, r.bottom);
+
+	if (colref)
+		hdc.SetFontColor( prevFontColor );  //(TODO: in a parent method)
 }
 
-ARMeter* GRMeter::getARMeter()
-{
-	return /*dynamic*/static_cast<ARMeter*>(getAbstractRepresentation());
-}
-
-const ARMeter* GRMeter::getARMeter() const 
-{
-	return /*dynamic*/static_cast<const ARMeter*>(getAbstractRepresentation());
- }
-
-bool GRMeter::operator==(const GRMeter & meter) const
-{
-	return (mtype == meter.mtype
-		&& numerator == meter.numerator
-		&& denominator == meter.denominator);
-}
-
-bool GRMeter::operator==(const GRTag  &tag) const
-{
-	const GRMeter * meter = dynamic_cast<const GRMeter *>(&tag);
-	if (meter)
-		return this->operator ==(*meter);
-
-	return false;
-}
+//-------------------------------------------------------------------------------------
+ARMeter*		GRMeter::getARMeter()			{ return static_cast<ARMeter*>(getAbstractRepresentation()); }
+const ARMeter*	GRMeter::getARMeter() const		{ return static_cast<const ARMeter*>(getAbstractRepresentation()); }
 

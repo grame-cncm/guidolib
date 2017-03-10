@@ -15,6 +15,8 @@
 
 */
 
+#include <utility>
+
 #include "ARMeter.h"
 #include "GRTagARNotationElement.h"
 #include "GRDefine.h"
@@ -28,35 +30,38 @@ class GRMeter : public GRTagARNotationElement
 {
 
   public:
+				 GRMeter(ARMeter * ar, GRStaff * curstaff, bool p_ownsAR = false);
+		virtual ~GRMeter() {}
 
-	  virtual bool operator==(const GRMeter &meter) const;
-	  virtual bool operator==(const GRTag &mtag) const;
+		virtual void			GGSOutput() const;
+		virtual void			OnDraw(VGDevice & hdc ) const;
+		virtual bool			checkCollisionWith() const	{ return true; }
+	
+		ARMeter*		getARMeter();
+		const ARMeter*	getARMeter() const;
 
-		GRMeter(ARMeter * abstractRepresentationOfMeter,
-			GRStaff * curstaff, bool p_ownsAR = false);
 
-		virtual ~GRMeter();
+  private:
+		ARMeter::metertype				fType;
+		const std::vector<Fraction>&	fMeters;
+		float	fCurLSPACE;
+		float	fNumericHeight;		// height of a numeric glyph
+		bool	fGroupComplex;		// complex meter grouping flag
 
+		typedef std::pair<std::string,std::string> TSingleMeter;
 
-		virtual void GGSOutput() const;
-		virtual void OnDraw(VGDevice & hdc ) const;
-		virtual bool checkCollisionWith() const	{ return true; }
+		const std::vector<Fraction>&	getMeters()	const { return fMeters; }
+		std::pair<float,float>			GetXOffsets(VGDevice & hdc, const std::string& num, const std::string& dnum) const;
+		std::vector<TSingleMeter>		meters2metersStr(const std::vector<Fraction>& meters) const;
 
-		
-		ARMeter* getARMeter();
-		const ARMeter* getARMeter() const;
-
-		std::vector<int> getNumeratorsVector() const { return numeratorsVector; }
-		            int  getDenominator()      const { return denominator; }
-
-  protected:
-		ARMeter::metertype mtype;
-        float totalNumeratorExtent;
-		std::vector<int> numeratorsVector;
-        int numerator;
-		int denominator;
-
-		float curLSPACE;
+		void		DrawSymbolStr(const char* str, float x, float y, VGDevice & hdc ) const;
+		float		DrawNumericSingle(VGDevice & hdc, const std::string& num, const std::string& dnum, float x ) const;
+		void		DrawNumericSeveral(VGDevice & hdc ) const;
+		std::string	makeNumeratorString (const std::vector<Fraction>& meters) const;
+		std::string	makeDenominatorString (const std::vector<Fraction>& meters) const;
+		NVRect		computeBoundingBox (VGDevice* hdc) const;
+		NVRect		computeBoundingBox (VGDevice* hdc, const std::string& numStr) const;
+		NVRect		computeBoundingBox (VGDevice* hdc, const std::string& numStr, const std::string& dnumStr) const;
 };
 
 
