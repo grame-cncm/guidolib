@@ -306,7 +306,7 @@ float ARVoiceManager::CheckBreakPosition(const TYPE_TIMEPOSITION &tp) const
 	if (mCurrVoiceState.curlastbartp == tp)	// it is a barline-position
 		return 1.5f;
     else if (mCurrVoiceState.curmeter) {
-        if (mCurrVoiceState.curtp - (mCurrVoiceState.curmeter->getMeterTime() * DURATION_2) == mCurrVoiceState.curlastbartp)
+        if (mCurrVoiceState.curtp - (mCurrVoiceState.curmeter->getMeterDuration() * DURATION_2) == mCurrVoiceState.curlastbartp)
             return -1.0f;
         else {
             TYPE_TIMEPOSITION tmptp(tp - mCurrVoiceState.curlastbartp);
