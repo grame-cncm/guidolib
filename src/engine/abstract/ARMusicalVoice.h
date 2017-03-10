@@ -241,8 +241,8 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		bool			beamStartPos(const TYPE_TIMEPOSITION pos, const TYPE_DURATION beat) const;
 		bool			beamStartEv(const ARMusicalEvent* ev, const ARMusicalVoiceState& vs, const TYPE_DURATION beat, const TYPE_TIMEPOSITION lastbartp) const;
 		void			beamCreate(ARMusicalVoiceState& vst, const GuidoPos posev1, const GuidoPos posevn, const GuidoPos FLA, const GuidoPos LRA_plus, const TYPE_TIMEPOSITION tpev1, bool full);
-		bool			beamOnBeat(const TYPE_TIMEPOSITION t, const TYPE_DURATION meter, const std::vector<int>& numvec) const;
-		bool			beamCrossBeat(const TYPE_TIMEPOSITION beamstart, const TYPE_DURATION beamdur, const TYPE_DURATION meter, const std::vector<int>& numvec) const;
+		bool			beamOnBeat(const TYPE_TIMEPOSITION t, const TYPE_DURATION meter, const std::vector<Fraction>& numvec) const;
+		bool			beamCrossBeat(const TYPE_TIMEPOSITION beamstart, const TYPE_DURATION beamdur, const TYPE_DURATION meter, const std::vector<Fraction>& numvec) const;
 		ARMusicalEvent* beamNextEv (const GuidoPos pos, const ARMusicalVoiceState) const;
 	
 		// reorder tags before a possible break to put them after the break:
