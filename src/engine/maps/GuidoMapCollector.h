@@ -117,9 +117,10 @@ class GuidoSystemCollector: public GuidoMapCollector
 {
 	typedef std::pair<TimeSegment, FloatRect>	TMapElt;
 	std::vector<TMapElt>	fMap;
+	bool fExcludeGraceNotes;
 	
 	public :
-				 GuidoSystemCollector(CGRHandler gr) : GuidoMapCollector(gr, kGuidoSystem) { }
+				 GuidoSystemCollector(CGRHandler gr, bool excludeGraceNotes) : GuidoMapCollector(gr, kGuidoSystem), fExcludeGraceNotes(excludeGraceNotes) { }
 		virtual ~GuidoSystemCollector() {}
 
 		///< overrides the method called by guido for each graphic segment

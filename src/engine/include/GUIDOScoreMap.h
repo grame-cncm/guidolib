@@ -51,6 +51,7 @@ typedef struct {
 	int			     staffNum;	///< the element staff number or 0 when na
 	int			     voiceNum;	///< the element voice number or 0 when na
     int              midiPitch; ///< the element midi pitch, or -1 when na
+    bool             isGraceNote; ///< is the element a grace note or not
 } GuidoElementInfos;
 
 
@@ -226,6 +227,18 @@ GUIDOAPI(GuidoErrCode)	GuidoGetStaffMap( CGRHandler gr, int pagenum, float w, fl
 	\return an error code.
 */
 GUIDOAPI(GuidoErrCode)	GuidoGetVoiceMap( CGRHandler gr, int pagenum, float w, float h, int voice, Time2GraphicMap& outmap);
+
+/** \brief Retrieves a guido system graphic to time mapping with the possibility of filtering grace notes. 
+
+	\param gr a Guido opaque handle to a GR structure.
+	\param pagenum a page index, starting from 1.
+	\param w the page width.
+	\param h the page height.
+	\param outmap contains the mapping on output.
+	\param excludeGraceNote allows to exclude grace notes from mapping result
+	\return an error code.
+*/
+GUIDOAPI(GuidoErrCode)	GuidoGetFilteredSystemMap( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap, bool excludeGraceNote);
 
 /** \brief Retrieves a guido system graphic to time mapping. 
 
