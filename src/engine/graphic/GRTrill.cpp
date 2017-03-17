@@ -187,16 +187,18 @@ void GRTrill::OnDraw(VGDevice & hdc , float right, float noteY, int nVoice) cons
 		if (!begin) x -= mTagOffset.x;
 		else		left += mTagOffset.x;
 
-		while (left + widthOfTilde <= right) {
-			if (fDrawOnNoteHead)
-				GRNotationElement::OnDrawSymbol(hdc, kTilde, x, noteY - getPosition().y, mTagSize);
-			else
-				GRNotationElement::OnDrawSymbol(hdc, kTilde, x, 0, mTagSize);
-
-			x    += widthOfTilde;
-			left += widthOfTilde;
-		}
-		GRTrill::getLastPosX(nVoice) = left;		
+        if (widthOfTilde != 0) { // widthOfTilde may be 0 if font is not installed for example
+            while (left + widthOfTilde <= right) {
+                if (fDrawOnNoteHead)
+                    GRNotationElement::OnDrawSymbol(hdc, kTilde, x, noteY - getPosition().y, mTagSize);
+                else
+                    GRNotationElement::OnDrawSymbol(hdc, kTilde, x, 0, mTagSize);
+                
+                x    += widthOfTilde;
+                left += widthOfTilde;
+            }
+        }
+		GRTrill::getLastPosX(nVoice) = left;
 	}
     else {	
 		if (fShowTR) GRNotationElement::OnDraw(hdc);
