@@ -289,6 +289,7 @@ void GuidoSystemCollector::Graph2TimeMap( const FloatRect& box, const TimeSegmen
 {
 	if ( dates.empty() )				return;				// empty time segments are filtered out
 	if ( !box.IsValid() )				return;				// empty graphic segments are filtered out
+	if ( infos.isGraceNote && fExcludeGraceNotes)	return; // grace notes are filtered out if needed
 	if ( infos.type == kEmpty)			return;
 	fMap.push_back (make_pair(dates, box));
 }

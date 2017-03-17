@@ -91,6 +91,7 @@ void GRNotationElement::SendMap (const NVRect& map, MapCollector& f, TYPE_TIMEPO
 	GuidoElementInfos inf;
 	inf.type = type;
 	inf.staffNum = getStaffNumber();
+	inf.isGraceNote = isGraceNote();
 	if (inf.staffNum < 0) inf.staffNum = 0;
 
 	ARMusicalObject * ar = getAbstractRepresentation();
@@ -498,6 +499,13 @@ int GRNotationElement::getStaffNumber() const
 			return slc->getStaffNumber( mGrStaff );
 	}
 	return -1;
+}
+
+/** \brief Return false by default. Is implemented in GRSingleNote.
+ */
+bool GRNotationElement::isGraceNote() const
+{
+    return false;
 }
 
 // -------------------------------------------------------------------------
