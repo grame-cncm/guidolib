@@ -51,7 +51,6 @@ public:
 
 			GRSystemSlice * getGRSystemSlice() const;
 	virtual int		getStaffNumber() const;
-	virtual bool		isGraceNote() const;
 
 	virtual void	tellPosition( GObject * caller, const NVPoint & point);
 		

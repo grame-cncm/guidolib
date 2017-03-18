@@ -174,19 +174,13 @@ GUIDOAPI(GuidoErrCode)	GuidoGetVoiceMap( CGRHandler gr, int pagenum, float w, fl
 }
 
 //----------------------------------------------------------------------
-GUIDOAPI(GuidoErrCode)	GuidoGetFilteredSystemMap( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap, bool excludeGraceNote)
-{
-	GuidoErrCode err = checkParams (gr, pagenum);
-	if (err != guidoNoErr) return err;
-	GuidoSystemCollector getmap (gr, excludeGraceNote);
-	getmap.process (pagenum, w, h, &outmap);
-	return guidoNoErr;
-}
-
-//----------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode)	GuidoGetSystemMap( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap)
 {
-    return GuidoGetFilteredSystemMap(gr, pagenum, w, h, outmap, false);
+    GuidoErrCode err = checkParams (gr, pagenum);
+    if (err != guidoNoErr) return err;
+    GuidoSystemCollector getmap (gr);
+    getmap.process (pagenum, w, h, &outmap);
+    return guidoNoErr;
 }
 
 //----------------------------------------------------------------------
