@@ -175,7 +175,8 @@ void GuidoStaffCollector::Graph2TimeMap( const FloatRect& box, const TimeSegment
 	{
 		if ( fNoEmpty && dates.empty() )	return;				// empty time segments are filtered out
 		if ( !box.IsValid() )				return;				// empty graphic segments are filtered out
-		if ( infos.type == kEmpty)			return;
+        if ( infos.type == kGraceNote)      return;             // grace notes are filtered out
+		if ( infos.type == kEmpty)			return;             // empty events are filtered out
 	}
 
 	if (infos.staffNum == fStaffNum)
@@ -289,8 +290,8 @@ void GuidoSystemCollector::Graph2TimeMap( const FloatRect& box, const TimeSegmen
 {
 	if ( dates.empty() )				return;				// empty time segments are filtered out
 	if ( !box.IsValid() )				return;				// empty graphic segments are filtered out
-	if ( infos.isGraceNote && fExcludeGraceNotes)	return; // grace notes are filtered out if needed
-	if ( infos.type == kEmpty)			return;
+	if ( infos.type == kGraceNote)      return;             // grace notes are filtered out
+	if ( infos.type == kEmpty)			return;             // empty events are filtered out
 	fMap.push_back (make_pair(dates, box));
 }
 
