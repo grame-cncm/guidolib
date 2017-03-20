@@ -26,13 +26,13 @@ ListOfTPLs ARAuto::ltpls(1);
 ARAuto::ARAuto()
 {
 //	fNumparset              = 0;
-	fEndBarState            = ON;
-	fPageBreakState         = ON;
-	fSystemBreakState       = ON;
-	fClefKeyMeterOrderState = ON;
-	fStretchLastLineState   = OFF;
-	fStretchFirstLineState  = OFF;
-	fLyricsAutoPos		    = OFF;
+	fEndBarState            = kOn;
+	fPageBreakState         = kOn;
+	fSystemBreakState       = kOn;
+	fClefKeyMeterOrderState = kOn;
+	fStretchLastLineState   = kOff;
+	fStretchFirstLineState  = kOff;
+	fLyricsAutoPos		    = kOff;
 }
 
 ARAuto::~ARAuto()
@@ -72,37 +72,37 @@ void ARAuto::setTagParameterList(TagParameterList& tpl)
 
 			TagParameterString * str = TagParameterString::cast(rtpl->RemoveHead());
 			if (str->TagIsSet())
-				fEndBarState =  (off == str->getValue()) ? OFF : ON;
+				fEndBarState =  (off == str->getValue()) ? kOff : kOn;
 			delete str;
 
 			str =  TagParameterString::cast(rtpl->RemoveHead());
 			if (str->TagIsSet())
-				fPageBreakState = (off == str->getValue()) ? OFF : ON;
+				fPageBreakState = (off == str->getValue()) ? kOff : kOn;
 			delete str;
 
 			str =  TagParameterString::cast(rtpl->RemoveHead());
 			if (str->TagIsSet())
-				fSystemBreakState = (off == str->getValue()) ? OFF : ON;
+				fSystemBreakState = (off == str->getValue()) ? kOff : kOn;
 			delete str;
 
 			str =  TagParameterString::cast(rtpl->RemoveHead());
 			if (str->TagIsSet())
-				fClefKeyMeterOrderState = (off == str->getValue()) ? OFF : ON;
+				fClefKeyMeterOrderState = (off == str->getValue()) ? kOff : kOn;
 			delete str;
 
 			str =  TagParameterString::cast(rtpl->RemoveHead());
 			if (str->TagIsSet())
-				fStretchLastLineState = (on == str->getValue()) ? ON : OFF;
+				fStretchLastLineState = (on == str->getValue()) ? kOn : kOff;
 			delete str;
 
 			str =  TagParameterString::cast(rtpl->RemoveHead());
 			if (str->TagIsSet())
-				fStretchFirstLineState = (on == str->getValue()) ? ON : OFF;
+				fStretchFirstLineState = (on == str->getValue()) ? kOn : kOff;
 			delete str;
 
 			str =  TagParameterString::cast(rtpl->RemoveHead());
 			if (str->TagIsSet())
-				fLyricsAutoPos = (on == str->getValue()) ? ON : OFF;
+				fLyricsAutoPos = (on == str->getValue()) ? kOn : kOff;
 			delete str;
 		}
 		delete rtpl;
@@ -118,6 +118,6 @@ void ARAuto::printGMNName(std::ostream& os) const	{ os << "\\auto"; }
 
 void ARAuto::printParameters(std::ostream& os) const
 {
-    os << "autoEndBar: " << (fEndBarState == ON ? "on" : "off") << "; ";
+    os << "autoEndBar: " << (fEndBarState == kOn ? "on" : "off") << "; ";
     ARMusicalTag::printParameters(os);
 }

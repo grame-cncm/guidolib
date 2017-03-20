@@ -2365,7 +2365,7 @@ void GRStaffManager::setAutoTag(ARAuto * p_arauto)
 int GRStaffManager::IsAutoPageBreak() const
 {
 	if (mArAuto)
-		return (mArAuto->getPageBreakState() == ARAuto::ON);
+		return (mArAuto->getPageBreakState() == ARAuto::kOn);
 
 	return 1;
 }

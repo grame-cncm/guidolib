@@ -26,7 +26,7 @@ class ARAuto : public ARMTParameter
 public:
 	friend class ARMusicalVoiceState;
 
-	enum state { ON,OFF };
+	enum state { kOff,kOn };
 
 			 ARAuto();
 	virtual ~ARAuto();

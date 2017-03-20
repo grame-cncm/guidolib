@@ -197,7 +197,7 @@ void ARMusic::doAutoBreaks()
 			int ret = vcemgr->Iterate(tmptp,filltagmode);
 
 			if (vcemgr->mCurrVoiceState.curautostate &&
-				vcemgr->mCurrVoiceState.curautostate->getSystemBreakState() == ARAuto::OFF)
+				vcemgr->mCurrVoiceState.curautostate->getSystemBreakState() == ARAuto::kOff)
 				abreak = false;
 
 			if (ret != ARVoiceManager::MODEERROR)

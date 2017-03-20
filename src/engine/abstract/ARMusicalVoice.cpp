@@ -3077,7 +3077,7 @@ void ARMusicalVoice::doAutoEndBar()
 			ARMusicalTag * mtag = endState->getCurStateTag( typeid(ARAuto) );
 			if (mtag) {
 				ARAuto * autotag = dynamic_cast<ARAuto *>(mtag);
-				if (autotag && autotag->getEndBarState() == ARAuto::OFF)
+				if (autotag && autotag->getEndBarState() == ARAuto::kOff)
 					finishbar = false;
 			}
 			// now check whether there is a bar tag at the end ...
@@ -4260,7 +4260,7 @@ void ARMusicalVoice::doAutoCheckStaffStateTags()
 				if (mytmptag)
 				{
 					ARAuto *autotag = dynamic_cast<ARAuto *>(mytmptag);
-					if (autotag && autotag->getClefKeyMeterOrderState() == ARAuto::OFF)
+					if (autotag && autotag->getClefKeyMeterOrderState() == ARAuto::kOff)
 						doclefkeymeterexchange = 0;
 				}
 

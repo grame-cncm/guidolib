@@ -2059,7 +2059,7 @@ void ARFactory::addTag()
 		tag->setTagParameterList( mTagParameterList );
 
 	const ARAuto * autoTag = dynamic_cast<const ARAuto *>(tag);
-	if (autoTag) mAutoLyricsPos = autoTag->getAutoLyricsPos() == ARAuto::state::ON;
+	if (autoTag) mAutoLyricsPos = (autoTag->getAutoLyricsPos() == ARAuto::kOn);
 
 	mTagParameterList.RemoveAll();
 	assert(mTagParameterList.empty());
