@@ -16,6 +16,7 @@ ifeq ($(system), MINGW)
 else
 ifeq ($(system), Linux)
 	TARGET = linux
+	LINUXMIDI ?= yes
 endif
 endif
 endif
@@ -185,7 +186,7 @@ $(LINUX)/libGUIDOEngine.so :
 linuxcmake:
 $(LINUX)/Makefile : CMakeLists.txt
 	[ -d $(LINUX) ] || mkdir $(LINUX)
-	cd $(LINUX) && cmake .. -G "Unix Makefiles" -DMIDIEXPORT=yes
+	cd $(LINUX) && cmake .. -G "Unix Makefiles" -DMIDIEXPORT=$(LINUXMIDI)
 
 linuxclean:
 	rm -rf $(LINUX)

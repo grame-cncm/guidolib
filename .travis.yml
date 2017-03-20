@@ -11,4 +11,4 @@ branches:
   - dev
   - master
 
-script: make -C build
+script: make -C build LINUXMIDI=no
