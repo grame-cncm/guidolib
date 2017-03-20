@@ -178,14 +178,14 @@ void SVGDevice::MoveTo( float x, float y )	{ fXPos = x; fYPos = y; }
 void SVGDevice::LineTo( float x, float y )	{ Line(fXPos, fYPos, x, y); MoveTo(x, y); }
 void SVGDevice::Line( float x1, float y1, float x2, float y2 )
 {
-	fStream << fEndl << "<line x1=\"" << x1 << "\" y1=\"" << y1 << "\" x2=\"" << x2 <<	"\" y2=\"" << y2 << "\" />";
+	fStream << fEndl << "<line x1=\"" << x1 << "\" y1=\"" << y1 << "\" x2=\"" << x2 <<	"\" y2=\"" << y2 << "\"></line>";
 }
 
 void SVGDevice::Frame( float left, float top, float right, float bottom )
 {
 	fStream << fEndl << "<rect x=\"" << left << "\" y=\"" << top 
 			<< "\" width=\"" << (right - left) <<	"\" height=\"" << (bottom - top) 
-			<< "\" fill=\"none\" />";
+			<< "\" fill=\"none\"></rect>";
 }
 
 void SVGDevice::Arc( float left, float top, float right, float bottom, float startX, float startY, float endX, float endY )
@@ -212,14 +212,14 @@ void SVGDevice::Polygon( const float * xCoords, const float * yCoords, int count
 	fStream << fEndl << "<polygon points=\"";
 	for (int i=0; i < count; i++) 
 		fStream << xCoords[i] << " " << yCoords[i] << "  ";
-	fStream << "\" />";
+	fStream << "\"></polygon>";
 }
 
 void SVGDevice::Rectangle( float left,  float top, float right, float bottom )
 {
 	fStream << fEndl << "<rect x=\"" << left << "\" y=\"" << top 
 			<< "\" width=\"" << (right - left) <<	"\" height=\"" << (bottom - top) 
-			<< "\" />";
+			<< "\"></rect>";
 }
 
 //______________________________________________________________________________
