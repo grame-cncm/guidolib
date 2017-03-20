@@ -8,6 +8,7 @@ cmake_*
 build/GUIDOEngine.*
 build/libGUIDOEngine.a
 build/MacOS
+build/ios
 doc/html
 doc/refcard
 Debug
