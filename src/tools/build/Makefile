@@ -53,7 +53,7 @@ mactools : macos/guidotools.xcodeproj
 
 macos/guidotools.xcodeproj : CMakeLists.txt
 	[ -d macos ] || mkdir macos
-	cd macos && cmake .. -G Xcode
+	cd macos && cmake .. -G Xcode -Wno-dev
 
 #===============================================================
 # building the tools on windows
@@ -70,11 +70,11 @@ win32tools : win32/guidotool.sln
 
 win32/guidotool.sln : CMakeLists.txt
 	[ -d win32 ] || mkdir win32
-	cd win32 && cmake .. -G "$(WIN32VS)"
+	cd win32 && cmake .. -G "$(WIN32VS)" -Wno-dev
 
 win64/guidotool.sln : CMakeLists.txt
 	[ -d win64 ] || mkdir win64
-	cd win64 && cmake .. -G "$(WIN64VS)"
+	cd win64 && cmake .. -G "$(WIN64VS)" -Wno-dev
 
 win64tools : win64/guidotool.sln
 	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild win64/guidotools.sln /maxcpucount:4 /p:Configuration=Release"
@@ -89,7 +89,7 @@ linuxtools : linux/Makefile
 
 linux/Makefile : CMakeLists.txt
 	[ -d linux ] || mkdir linux
-	cd linux && cmake .. -G "Unix Makefiles"
+	cd linux && cmake .. -G "Unix Makefiles" -Wno-dev
 
 #===============================================================
 clean :
