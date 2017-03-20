@@ -701,7 +701,7 @@ void GRSpring::checkAccidentalCollisions()
 			NVPoint offset (0,0);
 			bool collides = accbbs[i].Collides(accbbs[i-1]);		// look for collision with the preceding accidental first
 			int collindex = 0;
-			for (int j=1; j<accbbs.size() && !collides; j++) {		// and then check the next accidentals
+			for (size_t j=1; j<accbbs.size() && !collides; j++) {		// and then check the next accidentals
 				if ((i > j) && accoffsets[i-j]) {
 					collides = accbbs[i].Collides(accbbs[i-j-1]);
 					if (collides) {

@@ -106,7 +106,7 @@ void GRMusic::GGSOutputPage( int inPageNum ) const
 float GRMusic::getNotesDensity () const
 {
 	float density = 0;
-	for (size_t i= 0; i < getNumPages(); i++) {
+	for (int i= 0; i < getNumPages(); i++) {
 		GRPage * page = mPages[i];
 		density += page->getNotesDensity();
 	}

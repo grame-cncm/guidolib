@@ -642,7 +642,7 @@ void GRBeam::setBeams (GRSystemStartEndStruct * sse, PosInfos& infos, float yFac
 	GDirection lastLocalDir = dirOFF;
 	int previousBeamsCount = 0;
 	
-	GuidoPos pos = 	pos = sse->startpos;
+	GuidoPos pos = sse->startpos;
 	while (pos) {
 
 		GuidoPos oldpos = pos;
@@ -1122,8 +1122,6 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	if(fLevel != 0) return;
 	
 	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
-	GuidoPos pos;
-	
 	const GREvent * startEl = sse->startElement->isGREvent();
 	const GREvent * endEl   = sse->endElement->isGREvent();
 	
@@ -1195,10 +1193,10 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	float offsetbeam = 0;
 	// nobeamoffset describes, if no beamoffset is valid: if notes ask for different beam-offsets
 	// then, there is just no offset .... things must be changed manually then ....
-	bool nobeamoffset = false;
-	
-	if(( startEl && startEl->getStemLengthSet()) || ( endEl && endEl->getStemLengthSet()))
-		  nobeamoffset = true;
+//	bool nobeamoffset = false;
+//	
+//	if(( startEl && startEl->getStemLengthSet()) || ( endEl && endEl->getStemLengthSet()))
+//		  nobeamoffset = true;
 
 	for (int counter = 0; counter < 2; ++counter )
 	{
@@ -1230,7 +1228,6 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 		if (sn) dir = sn->getStemDirection();
 	}
 	else dir = infos.stemdir;
-	pos = sse->startpos;
 
 	// - These constants define the space and the thickness of additionnal beams.
 	const float yFact1 = 0.75f * infos.currentLSPACE;	// was 0.7f
