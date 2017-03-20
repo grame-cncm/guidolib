@@ -13,6 +13,7 @@
 */
 
 #include <iostream>
+#include <string>
 
 #include "ARDiminuendo.h"
 
@@ -23,7 +24,8 @@ bool ARDiminuendo::MatchEndTag(const char * s)
 	if (ARMusicalTag::MatchEndTag(s))
 		return true;
 
-	if ((getRange() == false ) && !strcmp("\\dimEnd",s))
+	const string end("\\dimEnd");
+	if ((getRange() == false ) && (end == s))
 		return true;
 	return false;
 }
