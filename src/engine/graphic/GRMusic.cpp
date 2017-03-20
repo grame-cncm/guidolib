@@ -127,7 +127,7 @@ void GRMusic::checkLyricsCollisions()
 size_t GRMusic::checkCollisions(bool lyrics)
 {
 	fCollisions.clear();
-	for (size_t i= 0; i < getNumPages(); i++) {
+	for (int i= 0; i < getNumPages(); i++) {
 		GRPage * page = mPages[i];
 		page->checkCollisions(fCollisions, lyrics);
 	}
