@@ -2,6 +2,7 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.4
+- SVG output change: tags are not using the short form anymore (e.g. <line ... /> is now  <line ...></line>)
 - supports complex meters with different units
 - strategy changed for key change: naturals are hidden by default when the key increases or decreases in the same direction (flats or sharps). This behavior can always be overridden using the 'hideNaturals' tag parameter.
 - svg device font colors management changed in order to avoid setting the color when no color is specified on gmn side.
