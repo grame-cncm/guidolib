@@ -58,6 +58,7 @@ help :
 	@echo "   all (default): build the GUIDOEngine library,"	
 	@echo "                        the guido tools,"	
 	@echo "                        the Guido Qt library, applications and tools"	
+	@echo "   tools        : build guido tools"	
 	@echo "   Qt           : build the Guido Qt library, applications and tools"	
 	@echo "   java         : build the jni and java libraries"	
 	@echo "   js           : build the javascript library (requires emscripten)"	
