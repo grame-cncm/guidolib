@@ -122,7 +122,7 @@ GuidoErrCode GuidoEngineAdapter::gr2SVG( const GRHandler handle, int page, std::
 std::string GuidoEngineAdapter::gr2SVG( const GRHandler handle, int page, bool embedFont, const int mappingMode)
 {
 	stringstream sstr;
-	::GuidoGR2SVG(handle, page, sstr, true, 0, mappingMode);
+	::GuidoGR2SVG(handle, page, sstr, embedFont, 0, mappingMode);
 	return sstr.str();
 }
 
