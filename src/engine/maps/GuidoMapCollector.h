@@ -117,7 +117,6 @@ class GuidoSystemCollector: public GuidoMapCollector
 {
 	typedef std::pair<TimeSegment, FloatRect>	TMapElt;
 	std::vector<TMapElt>	fMap;
-	
 	public :
 				 GuidoSystemCollector(CGRHandler gr) : GuidoMapCollector(gr, kGuidoSystem) { }
 		virtual ~GuidoSystemCollector() {}

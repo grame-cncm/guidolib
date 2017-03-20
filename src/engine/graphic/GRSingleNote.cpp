@@ -196,7 +196,7 @@ void GRSingleNote::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& 
 //		ar->print(std::ostream& os);
 		// ARNote and GRNote don't have the same time position in chords
 		// actually chord notes have a wrong time position, it has been corrected in ARMusicalVoice::FinishChord
-		SendMap (f, getARNote()->getStartTimePosition(), dur, kNote, infos);
+        SendMap (f, getARNote()->getStartTimePosition(), dur, (isGraceNote() ? kGraceNote : kNote), infos);
 	}
 }
 //____________________________________________________________________________________

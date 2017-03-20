@@ -176,11 +176,11 @@ GUIDOAPI(GuidoErrCode)	GuidoGetVoiceMap( CGRHandler gr, int pagenum, float w, fl
 //----------------------------------------------------------------------
 GUIDOAPI(GuidoErrCode)	GuidoGetSystemMap( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap)
 {
-	GuidoErrCode err = checkParams (gr, pagenum);
-	if (err != guidoNoErr) return err;
-	GuidoSystemCollector getmap (gr);
-	getmap.process (pagenum, w, h, &outmap);
-	return guidoNoErr;
+    GuidoErrCode err = checkParams (gr, pagenum);
+    if (err != guidoNoErr) return err;
+    GuidoSystemCollector getmap (gr);
+    getmap.process (pagenum, w, h, &outmap);
+    return guidoNoErr;
 }
 
 //----------------------------------------------------------------------
