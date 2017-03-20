@@ -47,7 +47,8 @@ std::string ARNoteName::empty("empty");
 
 std::string ARNoteName::unknown("unknown");
 
-ARNoteName::ARNoteName(std::string name) : std::string(name)	{}
+ARNoteName::ARNoteName(std::string name) : std::string(name)		{}
+ARNoteName::ARNoteName(const ARNoteName& name) : std::string(name)	{}
 ARNoteName::~ARNoteName()	{}
 
 std::string ARNoteName::getName(std::string name) const

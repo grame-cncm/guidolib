@@ -32,6 +32,7 @@ class ARNoteName : public std::string
 {
   public:
 					 ARNoteName(std::string name);
+					 ARNoteName(const ARNoteName& name);
 		virtual 	~ARNoteName();
 
 		// returns a copy of the stringobject that aquivalent to "name"
