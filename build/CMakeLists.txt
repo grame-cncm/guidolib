@@ -30,6 +30,10 @@ option ( STATICLIB  "Generates a static library (default for iOS)" off)
 option ( GL "Links to opengl device" off)
 
 
+
+#########################################
+# mac os specific part
+#########################################
 if(APPLE)
 #######################################
 #   iOS support
@@ -63,9 +67,11 @@ if(APPLE)
 	set (CMAKE_OSX_DEPLOYMENT_TARGET 10.7)
 	set (MACOSX_DEPLOYMENT_TARGET 10.7)
 	endif ()
-endif(APPLE)
 
-if(WIN32)
+#########################################
+# windows specific part
+#########################################
+elseif(WIN32)
  add_definitions(-DWINVER=0x0400 -DWIN32)
  if(${CMAKE_GENERATOR} STREQUAL "Visual Studio 6")
   add_definitions(-DVC6)
@@ -75,7 +81,7 @@ if(WIN32)
   add_definitions(-DVC2005)
  elseif(${CMAKE_GENERATOR} STREQUAL "Visual Studio 10" OR ${CMAKE_GENERATOR} STREQUAL "Visual Studio 10 2010")
   add_definitions(-DVC2005)
-elseif(${CMAKE_GENERATOR} STREQUAL "Visual Studio 12 2013")
+ elseif(${CMAKE_GENERATOR} STREQUAL "Visual Studio 12 2013")
   add_definitions(-DVC2005)
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
  elseif(${CMAKE_GENERATOR} STREQUAL "MSYS Makefiles")
@@ -90,7 +96,13 @@ elseif(${CMAKE_GENERATOR} STREQUAL "Visual Studio 12 2013")
   set (statictarget SGUIDOEngine64)
  endif ()
 
-endif(WIN32)
+#########################################
+# assume linux host
+#########################################
+else()
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+endif()
+
 add_definitions(-DGUIDOExport)
 
 #######################################
