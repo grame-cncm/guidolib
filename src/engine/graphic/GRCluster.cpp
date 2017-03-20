@@ -239,6 +239,6 @@ ARCluster *GRCluster::getARCluster() const
 
 void GRCluster::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const
 {
-	if (sel == kGuidoEvent)
+	if (sel == kGuidoEvent || sel == kGuidoBarAndEvent)
         SendMap(f, firstNote->getARNote()->getStartTimePosition(), fDuration, kNote, infos);
 }

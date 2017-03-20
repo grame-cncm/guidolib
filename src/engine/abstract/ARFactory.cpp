@@ -41,6 +41,7 @@
 #include "ARFine.h"
 #include "ARSegno.h"
 
+#include "ARTextHarmony.h"
 #include "ARIntens.h"
 #include "ARBeam.h"
 #include "ARBeamState.h"
@@ -1093,6 +1094,12 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
+            if (!strcmp(name, "harmony"))
+            {
+                ARTextHarmony * tmp = new ARTextHarmony;
+                mTags.AddHead(tmp);
+                mCurrentVoice->AddPositionTag(tmp);
+            }
 			else if (!strcmp(name,"headsNormal"))
 			{
 				ARTHead * tmp = new ARTHead(ARTHead::NORMAL,mCurrentHead);

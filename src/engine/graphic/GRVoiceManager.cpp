@@ -27,6 +27,7 @@
 #include "ARTStem.h"
 #include "ARMeter.h"
 #include "ARBeam.h"
+#include "ARTextHarmony.h"
 #include "ARDoubleBar.h"
 #include "ARFermata.h"
 #include "ARTie.h"
@@ -117,6 +118,7 @@
 #include "GRMeter.h"
 #include "GRCrescendo.h"
 #include "GRDiminuendo.h"
+#include "GRTextHarmony.h"
 #include "GRBeam.h"
 #include "GRAutoBeam.h"
 #include "GRSpace.h"
@@ -966,6 +968,18 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 		fMusic->addVoiceElement(arVoice,grtxt);
 		grne = grtxt;
 	}
+    else if (tinf == typeid(ARTextHarmony))
+    {
+        // this is a No-Range Text-Tag...
+        GRTextHarmony * grtxt = new GRTextHarmony(mCurGrStaff, static_cast<ARTextHarmony *>(arOfCompleteObject));
+
+        grtxt->setNeedsSpring(1);	// needs a Spring
+        mCurGrStaff->AddTag(grtxt);
+        fMusic->addVoiceElement(arVoice,grtxt);
+        
+        grne = grtxt;
+        
+    }
 	else if (tinf == typeid(ARLabel))
 	{
 		// this is a No-Range Text-Tag...
