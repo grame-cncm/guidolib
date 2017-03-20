@@ -20,7 +20,7 @@
 
 #define nil 0
 
-#if defined(linux) || defined(__MACH__)
+#if defined(linux) || defined(__MACH__) || defined(__linux)
 # define MFAPI
 //# define errno  /* a revoir */
 
