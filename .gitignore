@@ -9,6 +9,7 @@ build/GUIDOEngine.*
 build/libGUIDOEngine.a
 build/MacOS
 build/ios
+build/linux
 doc/html
 doc/refcard
 Debug
