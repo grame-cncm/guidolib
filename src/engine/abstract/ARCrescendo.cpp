@@ -13,6 +13,7 @@
 */
 
 #include <iostream>
+#include <string>
 
 #include "ARCrescendo.h"
 
@@ -23,7 +24,9 @@ bool ARCrescendo::MatchEndTag(const char * s)
 {
 	if (ARMusicalTag::MatchEndTag(s))
 		return true;
-	if ((getRange() == false ) && !strcmp("\\crescEnd",s))
+
+	string end("\\crescEnd");
+	if ((getRange() == false ) && (end == s))
 		return true;
 	return false;
 }
