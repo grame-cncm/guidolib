@@ -180,6 +180,7 @@ libGUIDOEngine.so :  $(LINUX)/Makefile  $(LINUX)/libGUIDOEngine.so
 	cp -R $(LINUX)/libGUIDOEngine*.so* .
 
 $(LINUX)/libGUIDOEngine.so : 
+	sh ./preprocess
 	make -C $(LINUX)
 	
 linuxcmake:

@@ -1,0 +1,4 @@
+#!/bin/sh
+cpp -dM << !
+!
+exit 1
