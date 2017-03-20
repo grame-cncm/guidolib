@@ -209,7 +209,13 @@ int main(int argc, char **argv)
 
 		arh = GuidoString2AR(parser, streamBuffer.str().c_str());
     }
-	if (!arh) error(err);
+	if (!arh) {
+		int line, col;
+		const char* msg;
+		err = GuidoParserGetErrorCode (parser, line, col, &msg);
+		cerr << "line " << line << " column " << col << ": " << msg << endl;
+		exit(1);
+	}
 
     /* For symbol-tag */
     GuidoSetSymbolPath(arh, pathsVector);
