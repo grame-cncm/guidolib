@@ -27,7 +27,7 @@ GSystemOSX gAbstractSystem (0, 0);
 #include "GSystemWin32.h"
 GSystemWin32 gAbstractSystem (0, 0);
 
-#elif linux
+#elif linux || __linux
 #include "CairoSystem.h"
 CairoSystem gAbstractSystem (0);
 

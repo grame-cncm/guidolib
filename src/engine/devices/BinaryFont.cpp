@@ -27,7 +27,7 @@ GSystemOSX gBinarySystem (0, 0);
 #include "GSystemWin32.h"
 GSystemWin32 gBinarySystem (0, 0);
 
-#elif linux
+#elif linux || __linux
 #include "CairoSystem.h"
 CairoSystem gBinarySystem (0);
 
