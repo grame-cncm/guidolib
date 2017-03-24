@@ -186,7 +186,7 @@ void GRSingleNote::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& 
         if (this == fCluster->getFirstNote())
             fCluster->GetMap(sel, f, infos);
     }
-    else if (sel == kGuidoEvent) {
+    else if (sel == kGuidoEvent || sel == kGuidoBarAndEvent) {
 		TYPE_DURATION dur = getDuration();
 		if (dur.getNumerator() == 0) {		// notes in chords have a null duration
 			dur = getDurTemplate();

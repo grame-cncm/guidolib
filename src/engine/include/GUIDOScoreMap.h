@@ -36,7 +36,7 @@
 //------------------------------------------------------------------------------
 // graphic elements selector definitions
 typedef enum { 
-	kGuidoPage, kGuidoSystem, kGuidoSystemSlice, kGuidoStaff, /*kGuidoMeasure,*/ kGuidoBar, kGuidoEvent, 
+	kGuidoPage, kGuidoSystem, kGuidoSystemSlice, kGuidoStaff, /*kGuidoMeasure,*/ kGuidoBar, kGuidoBarAndEvent, kGuidoEvent,
 	kGuidoScoreElementEnd
 } GuidoElementSelector;
 

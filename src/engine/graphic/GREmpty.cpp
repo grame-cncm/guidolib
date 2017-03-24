@@ -41,7 +41,7 @@ GREmpty::~GREmpty()	{}
 
 void GREmpty::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const
 {
-	if (sel == kGuidoEvent) {
+	if (sel == kGuidoEvent || sel == kGuidoBarAndEvent) {
 		SendMap (f, getRelativeTimePosition(), getDuration(), kEmpty, infos);
 	}
 }
