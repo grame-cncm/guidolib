@@ -122,23 +122,23 @@ void GuidoVoiceAndBarCollector::Graph2TimeMap( const FloatRect& box, const TimeS
     if ( infos.type == kGraceNote)      return; // grace notes are filtered out
     
     // If current element is a rest, and previous one on the same staff is a bar, we adjust its bounding box
-    if (infos.type == kRest && prevBarX[infos.staffNum] != 0) {
+    if (infos.type == kRest && fPrevBarX[infos.staffNum] != 0) {
         // We check if we're after a line break
-        if (box.left < prevBarX[infos.staffNum]) {
+        if (box.left < fPrevBarX[infos.staffNum]) {
             // TODO: After a line break, we have to set the correct left rect value
-            prevBarX[infos.staffNum] = box.left; // For now, we don't change the olf rect left value
+            fPrevBarX[infos.staffNum] = box.left; // For now, we don't change the olf rect left value
         }
         
-        // We adjust new rect according to stored prevBarX and add new element
-        FloatRect newRect (prevBarX[infos.staffNum], box.top, box.right, box.bottom);
+        // We adjust new rect according to stored fPrevBarX and add new element
+        FloatRect newRect (fPrevBarX[infos.staffNum], box.top, box.right, box.bottom);
         add (dates, newRect);
     }
     // Otherwise, if element is not a bar, we directly add current dates/box to the list
     else if (!isBar)
         add (dates, box);
     
-    // We set prevBarX if current element is a bar, otherwise we reset it
-    prevBarX[infos.staffNum] = (isBar ? box.right : 0);
+    // We set fPrevBarX if current element is a bar, otherwise we reset it
+    fPrevBarX[infos.staffNum] = (isBar ? box.right : 0);
 }
 
 //----------------------------------------------------------------------
