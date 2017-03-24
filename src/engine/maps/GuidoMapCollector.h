@@ -111,7 +111,7 @@ inline std::ostream& operator<< (std::ostream& os, const std::vector<std::pair<T
 
 //----------------------------------------------------------------------
 /*!
-	\brief a guido map collector adjusting system to to slices start
+	\brief a guido map collector adjusting system to slices start
 */
 class GuidoSystemCollector: public GuidoMapCollector
 {
@@ -125,6 +125,27 @@ class GuidoSystemCollector: public GuidoMapCollector
 		virtual void Graph2TimeMap( const FloatRect& box, const TimeSegment& dates,  const GuidoElementInfos& infos );
 		virtual void processNoDiv (int page, float w, float h, Time2GraphicMap* outmap);
 		virtual void process (int page, float w, float h, Time2GraphicMap* outmap);
+};
+
+//----------------------------------------------------------------------
+/*!
+ \brief a guido map collector retrieving the list of kNote/kRest events. For each
+        kRest starting a measure, its box left is aligned on the measure left barline.
+ */
+class GuidoVoiceAndBarCollector: public GuidoMapCollector
+{
+    typedef std::pair<TimeSegment, FloatRect>	TMapElt;
+    std::vector<TMapElt>	fMap;
+    
+    public :
+                 GuidoVoiceAndBarCollector(CGRHandler gr) : GuidoMapCollector(gr, kGuidoBarAndEvent) { }
+        virtual ~GuidoVoiceAndBarCollector() {}
+    
+        ///< overrides the method called by guido for each graphic segment
+        virtual void Graph2TimeMap( const FloatRect& box, const TimeSegment& dates,  const GuidoElementInfos& infos );
+    
+    private:
+        std::map<int,int> prevBarX; // Associates for each staffnum the x position of the previous bar, and 0 if previous element is not a bar
 };
 
 /*!@} */
