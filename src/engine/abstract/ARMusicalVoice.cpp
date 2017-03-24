@@ -6046,17 +6046,18 @@ void ARMusicalVoice::MarkVoice( int fromnum, int fromdenom, int lengthnum, int l
 	}
 	// now we have the startpos and the endpos
 	// to introduce a noteFormat-tag...
-
-	if (startpos && endpos)
+	if (startpos)
 	{
 		ARNoteFormat * ntformat = new ARNoteFormat;
 		ntformat->setRelativeTimePosition(tpos);
 		ntformat->setRGBColor(red, green, blue);
 		AddElementAt(startpos,ntformat);
 
-		ntformat = new ARNoteFormat;
-		ntformat->setRelativeTimePosition(endtpos);
-		AddElementAfter(endpos,ntformat);
+		if (endpos) {
+			ntformat = new ARNoteFormat;
+			ntformat->setRelativeTimePosition(endtpos);
+			AddElementAfter(endpos,ntformat);
+		}
 	}
 }
 
