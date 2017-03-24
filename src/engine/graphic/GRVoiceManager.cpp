@@ -975,7 +975,7 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 
         grtxt->setNeedsSpring(1);	// needs a Spring
         mCurGrStaff->AddTag(grtxt);
-        gCurMusic->addVoiceElement(arVoice,grtxt);
+        fMusic->addVoiceElement(arVoice,grtxt);
         
         grne = grtxt;
         
