@@ -233,7 +233,7 @@ void GRSingleRest::GGSOutput() const
 
 void GRSingleRest::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const
 {
-	if (sel == kGuidoEvent || kGuidoBarAndEvent) {
+	if (sel == kGuidoEvent || sel == kGuidoBarAndEvent) {
 		SendMap (f, getRelativeTimePosition(), getDuration(), kRest, infos);
 	}
 }

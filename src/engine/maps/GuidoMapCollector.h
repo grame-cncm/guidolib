@@ -145,7 +145,7 @@ class GuidoVoiceAndBarCollector: public GuidoMapCollector
         virtual void Graph2TimeMap( const FloatRect& box, const TimeSegment& dates,  const GuidoElementInfos& infos );
     
     private:
-        std::map<int,int> prevBarX; // Associates for each staffnum the x position of the previous bar, and 0 if previous element is not a bar
+        std::map<int,int> fPrevBarX; // Associates for each staffnum the x position of the previous bar, and 0 if previous element is not a bar
 };
 
 /*!@} */
