@@ -101,7 +101,7 @@ void GRRepeatEnd::setHPosition(float nx)
 */
 void GRRepeatEnd::GetMap(GuidoElementSelector sel, MapCollector& f, MapInfos& infos) const
 {
-	if (sel == kGuidoBar)
+	if (sel == kGuidoBar || sel == kGuidoBarAndEvent)
 		SendMap (f, getRelativeTimePosition(), getDuration(), kRepeatEnd, infos);
 }
 
