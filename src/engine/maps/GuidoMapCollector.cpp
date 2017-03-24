@@ -300,31 +300,12 @@ void GuidoStaffCollector::process (int page, float w, float h, Time2GraphicMap* 
 		GuidoGetMap( fGRHandler, page, w, h, kGuidoStaff, *this );	// collect the staves map
 		sort (fMap.begin(), fMap.end(), scompare);					// sort by lines, smaller date first
 		mergelines (fMap, map);										// merge the graphic segments on a single line basis
-
-
-        // OLD BEHAVIOUR //
         
 		fNoEmpty = true;
 		fMap.clear();
 		GuidoGetMap( fGRHandler, page, w, h, kGuidoEvent, *this );	// collect the events map
 		sort (fMap.begin(), fMap.end(), mcompare);					// sort first date, smaller duration first
 		reduce (fMap, evmap);										// retains only one segment per starting date
-
-        /*****************/
-
-        
-        // NEW BEHAVIOUR - TODO //
-        ///> A rest between two bars has its segment box left value at its left barline x position
-        
-        //Time2GraphicMap tmpEvMap;
-        //GuidoVoiceAndBarCollector voiceAndBarCollector(fGRHandler/* VIRER */ /*, fStaffNum, fFilter*/);
-        //voiceAndBarCollector.process(page, w, h, &tmpEvMap);
-        //sort(tmpEvMap.begin(), tmpEvMap.end(), mcompare);
-        //reduce (tmpEvMap, evmap);
-        
-        /*****************/
-        
-        
         staffmerge (map, evmap, *outmap);							// and split the staff lines using the events segments
 	}
 }
