@@ -55,7 +55,9 @@ class GuidoMapCollector: public MapCollector
 		
 		void add (const TimeSegment& ts, const FloatRect& r)	{ fOutMap->push_back(make_pair(ts, r)); }
 
-	protected:
+    protected:
+        void getEvents (int page, float w, float h, bool keepLeftmost, Time2GraphicMap& outmap, int staffNum = 0);
+    
 		CGRHandler				fGRHandler;
 		GuidoElementSelector	fSelector;
 		const Filter*			fFilter;
@@ -136,16 +138,17 @@ class GuidoVoiceAndBarCollector: public GuidoMapCollector
 {
     typedef std::pair<TimeSegment, FloatRect>	TMapElt;
     std::vector<TMapElt>	fMap;
+    int		fStaffNum;
     
     public :
-                 GuidoVoiceAndBarCollector(CGRHandler gr) : GuidoMapCollector(gr, kGuidoBarAndEvent) { }
+                 GuidoVoiceAndBarCollector(CGRHandler gr, int staffNum = 0) : GuidoMapCollector(gr, kGuidoBarAndEvent), fStaffNum(staffNum) { }
         virtual ~GuidoVoiceAndBarCollector() {}
     
         ///< overrides the method called by guido for each graphic segment
         virtual void Graph2TimeMap( const FloatRect& box, const TimeSegment& dates,  const GuidoElementInfos& infos );
     
     private:
-        std::map<int,int> fPrevBarX; // Associates for each staffnum the x position of the previous bar, and 0 if previous element is not a bar
+        std::map<int, int> fPrevBarX; // Associates for each staffnum the x position of the previous bar, and 0 if previous element is not a bar
 };
 
 /*!@} */
