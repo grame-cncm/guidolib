@@ -36,7 +36,7 @@
 //------------------------------------------------------------------------------
 // graphic elements selector definitions
 typedef enum { 
-	kGuidoPage, kGuidoSystem, kGuidoSystemSlice, kGuidoStaff, /*kGuidoMeasure,*/ kGuidoBar, kGuidoEvent, 
+	kGuidoPage, kGuidoSystem, kGuidoSystemSlice, kGuidoStaff, /*kGuidoMeasure,*/ kGuidoBar, kGuidoBarAndEvent, kGuidoEvent,
 	kGuidoScoreElementEnd
 } GuidoElementSelector;
 
@@ -71,6 +71,7 @@ class_export TimeSegment: public std::pair<GuidoDate, GuidoDate>
 		bool intersect(const TimeSegment& ts) const;			///< check for segments intersection
 		bool include(const GuidoDate& date) const;				///< check for date inclusion
 		bool include(const TimeSegment& ts) const;				///< check for segment inclusion
+		bool startEqual(const TimeSegment& ts) const;			///< check if start date is the same
 		bool operator < (const TimeSegment& ts) const;			///< order relationship: the smaller is the smaller first date
 		bool operator == (const TimeSegment& ts) const;
 		TimeSegment operator & (const TimeSegment& ts) const;	///< intersection operation (may return an arbitrary empty segment)

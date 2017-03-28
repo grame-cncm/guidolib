@@ -55,7 +55,9 @@ class GuidoMapCollector: public MapCollector
 		
 		void add (const TimeSegment& ts, const FloatRect& r)	{ fOutMap->push_back(make_pair(ts, r)); }
 
-	protected:
+    protected:
+        void getEvents (int page, float w, float h, bool keepLeftmost, Time2GraphicMap& outmap, int staffNum = 0);
+    
 		CGRHandler				fGRHandler;
 		GuidoElementSelector	fSelector;
 		const Filter*			fFilter;
@@ -111,7 +113,7 @@ inline std::ostream& operator<< (std::ostream& os, const std::vector<std::pair<T
 
 //----------------------------------------------------------------------
 /*!
-	\brief a guido map collector adjusting system to to slices start
+	\brief a guido map collector adjusting system to slices start
 */
 class GuidoSystemCollector: public GuidoMapCollector
 {
@@ -125,6 +127,28 @@ class GuidoSystemCollector: public GuidoMapCollector
 		virtual void Graph2TimeMap( const FloatRect& box, const TimeSegment& dates,  const GuidoElementInfos& infos );
 		virtual void processNoDiv (int page, float w, float h, Time2GraphicMap* outmap);
 		virtual void process (int page, float w, float h, Time2GraphicMap* outmap);
+};
+
+//----------------------------------------------------------------------
+/*!
+ \brief a guido map collector retrieving the list of kNote/kRest events. For each
+        kRest starting a measure, its box left is aligned on the measure left barline.
+ */
+class GuidoVoiceAndBarCollector: public GuidoMapCollector
+{
+    typedef std::pair<TimeSegment, FloatRect>	TMapElt;
+    std::vector<TMapElt>	fMap;
+    int		fStaffNum;
+    
+    public :
+                 GuidoVoiceAndBarCollector(CGRHandler gr, int staffNum = 0) : GuidoMapCollector(gr, kGuidoBarAndEvent), fStaffNum(staffNum) { }
+        virtual ~GuidoVoiceAndBarCollector() {}
+    
+        ///< overrides the method called by guido for each graphic segment
+        virtual void Graph2TimeMap( const FloatRect& box, const TimeSegment& dates,  const GuidoElementInfos& infos );
+    
+    private:
+        std::map<int, int> fPrevBarX; // Associates for each staffnum the x position of the previous bar, and 0 if previous element is not a bar
 };
 
 /*!@} */
