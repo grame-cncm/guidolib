@@ -88,8 +88,7 @@ bool TimeSegment::include(const TimeSegment& ts) const
 
 bool TimeSegment::startEqual(const TimeSegment& ts) const
 {
-    return this->first.num == ts.first.num \
-    && this->first.denom == ts.first.denom;
+    return fdate(this->first) == fdate(ts.first);
 }
 
 bool TimeSegment::operator < (const TimeSegment& ts) const

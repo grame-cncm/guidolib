@@ -117,7 +117,7 @@ void GuidoVoiceAndBarCollector::Graph2TimeMap( const FloatRect& box, const TimeS
 {
     bool isBar = (infos.type == kBar || infos.type == kRepeatBegin || infos.type == kRepeatEnd);
     
-    if ( fStaffNum != 0 && fStaffNum != infos.staffNum)   return; // other staves are filtered out if fStaffNum is defined
+    if ( fStaffNum != 0 && (fStaffNum != infos.staffNum))   return; // other staves are filtered out if fStaffNum is defined
     if ( !box.IsValid() )	return;				// empty graphic segments are filtered out
     if ( infos.type == kEmpty) return;          // empty events are filtered out
     if ( infos.type == kGraceNote)      return; // grace notes are filtered out
