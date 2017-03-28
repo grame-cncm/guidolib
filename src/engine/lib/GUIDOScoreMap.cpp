@@ -86,6 +86,11 @@ bool TimeSegment::include(const TimeSegment& ts) const
 	return (s1a <= s2a) && (s1b >= s2b);
 }
 
+bool TimeSegment::startEqual(const TimeSegment& ts) const
+{
+    return fdate(this->first) == fdate(ts.first);
+}
+
 bool TimeSegment::operator < (const TimeSegment& ts) const
 {
 	if (fdate(this->first) < fdate(ts.first)) return true;
