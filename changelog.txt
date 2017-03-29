@@ -2,6 +2,7 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.4
+- new \harmony tag
 - SVG output change: tags are not using the short form anymore (e.g. <line ... /> is now  <line ...></line>)
 - grace notes are included in the previous event mapping area
 - supports complex meters with different units
