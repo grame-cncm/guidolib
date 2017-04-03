@@ -819,6 +819,17 @@ GUIDOAPI(void) 	GuidoGetPageFormat(	CGRHandler inHandleGR, int pageNum, GuidoPag
 	if( thePage )
 		thePage->getPageFormat( format );
 }
+    
+// --------------------------------------------------------------------------
+GUIDOAPI(void) 	GuidoSetDefaultStaffFormat( CGRHandler inHandleGR, int staffNum, int sizeFactor)
+{
+    if ( inHandleGR == 0 ) return;
+    if ( inHandleGR->grmusic == 0 ) return;
+    if ( staffNum == 0 ) return;
+    if ( sizeFactor == 0 ) return;
+        
+    inHandleGR->grmusic->setStaffScale(staffNum, sizeFactor);
+}
 
 // --------------------------------------------------------------------------
 GUIDOAPI(float) GuidoUnit2CM(float val)

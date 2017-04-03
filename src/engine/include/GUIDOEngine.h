@@ -670,6 +670,10 @@ units.
 	*/
 	GUIDOAPI(void) 	GuidoGetDefaultPageFormat( GuidoPageFormat* format );
 
+    /** \brief Gives the default score staves format (one staff at a time).
+     */
+    GUIDOAPI(void) 	GuidoSetDefaultStaffFormat( CGRHandler inHandleGR, int staffNum, int sizeFactor);
+
 	/** \brief Converts internal Guido units into centimeters.
 
 		\param val the value to be converted
