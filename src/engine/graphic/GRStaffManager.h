@@ -164,7 +164,7 @@ class GRStaffManager
 
 	public:
 
-				GRStaffManager(GRMusic * p_grmusic, ARPageFormat * inPageFormat = 0, const GuidoLayoutSettings * settings = 0);
+				GRStaffManager(GRMusic * p_grmusic, ARPageFormat * inPageFormat = 0, const GuidoLayoutSettings * settings = 0, const std::map<int, float> * staffSizeScales = 0);
         virtual ~GRStaffManager();
 
 		// this routine is used to get the current beginning_sff
@@ -322,6 +322,7 @@ class GRStaffManager
 		ARAuto *	mArAuto;
 		std::vector<ARAccolade	*> mCurAccoladeTag;
 		GuidoLayoutSettings settings;
+        std::map<int, float> fStaffSizeScales;
 	
 	private:
 		// the methods below are used by createStaves
@@ -340,6 +341,7 @@ class GRStaffManager
 		bool	nextTimePosition (int nvoices, bool filltagMode, TCreateStavesState& state);
 		float	systemBreak (int newlineMode, float beginheight);
 		int		initVoices(int cnt);
+        void    applyStaffScale(GRStaff *staff, int staffNum);
 };
 
 #endif

@@ -117,6 +117,8 @@ class GRMusic : public GREvent
 				void	removeAutoSpace (ARMusic * arm);// removes space tags inserted by checkLyricsCollisions()
 
 				void	printVoices (std::ostream& os) const;
+    
+                void    setStaffScale(int staffNum, float sizeScale);
 
 		std::vector<TCollisionInfo> getCollisions() const	{ return fCollisions.list(); }
 
@@ -138,6 +140,7 @@ class GRMusic : public GREvent
 
 		PageList			mPages;
 		ARPageFormat *		fInFormat;
+        std::map<int,float> fStaffSizeScales;
 		GuidoLayoutSettings fSettings;
 		TCollisions			fCollisions;
 		bool				fLyricsChecked;		// true when lyrics collisions have been solved
