@@ -615,7 +615,7 @@ void GRMusic::createGR (const ARPageFormat * inPageFormat, const GuidoLayoutSett
 		GRVoice * grv = new GRVoice(arv, false);
 		mVoiceList.push_back(grv);
 	}
-	GRStaffManager grsm( this, fInFormat, &fSettings, &fStaffSizeScales);
+	GRStaffManager grsm( this, fInFormat, &fSettings);
 	grsm.createStaves();
 	fLyricsChecked = false;
 
@@ -654,12 +654,6 @@ void GRMusic::printVoices (std::ostream& os) const
 			}
 		}
 	}
-}
-
-//-------------------------------------------------------------------------------
-void GRMusic::setStaffScale (int staffNum, float sizeScale)
-{
-    fStaffSizeScales[staffNum] = sizeScale;
 }
 
 //-------------------------------------------------------------------------------

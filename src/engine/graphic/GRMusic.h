@@ -118,7 +118,8 @@ class GRMusic : public GREvent
 
 				void	printVoices (std::ostream& os) const;
     
-                void    setStaffScale(int staffNum, float sizeScale);
+                void    setStaffSizeScale(int staffNum, float sizeScale)    { fStaffSizeScales[staffNum] = sizeScale; }
+                float   getStaffSizeScale(int staffNum)                     { return fStaffSizeScales[staffNum]; }
 
 		std::vector<TCollisionInfo> getCollisions() const	{ return fCollisions.list(); }
 
