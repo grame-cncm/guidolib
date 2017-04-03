@@ -91,7 +91,7 @@ const bool kIsGiesekingSpacing = true;
 	The systems are created whenever real NewLines are 
 	encountered (or automatic once are introduced).
 */
-GRStaffManager::GRStaffManager(GRMusic * p_grmusic, ARPageFormat * inPageFormat, const GuidoLayoutSettings * aSettings, const std::map<int, float> * staffSizeScales)
+GRStaffManager::GRStaffManager(GRMusic * p_grmusic, ARPageFormat * inPageFormat, const GuidoLayoutSettings * aSettings)
 	: mSystemDistancePrev(-1.0f),
 	  mSystemDistance(-1.0f),
 	  staffposvect(0),
@@ -122,9 +122,6 @@ GRStaffManager::GRStaffManager(GRMusic * p_grmusic, ARPageFormat * inPageFormat,
 		// Apply default layout settings
 		GuidoGetDefaultLayoutSettings (&this->settings);
 	}
-    
-    if (staffSizeScales)
-        this->fStaffSizeScales = *staffSizeScales;
 
 	mIsBreak = false;
 	mArAuto  = NULL;
@@ -581,7 +578,7 @@ void GRStaffManager::prepareStaff(int staff)
 		}
 		mGrSystemSlice->addStaff(curstaff,staff);
         
-        // We apply potential staff scale defined with GuidoSetDefaultStaffFormat API call
+        // We apply potential staff scale defined with GuidoSetStaffSizeScale API call
         applyStaffScale(curstaff, staff);
 	}
 	// set the staff in  Vector mMyStaffs.
@@ -3374,7 +3371,7 @@ GRSystemSlice * GRStaffManager::CreateBeginSlice(const GRSystemSlice * lastslice
 			GRStaff * newstaff = new GRStaff(beginslice, settings.proportionalRenderingForceMultiplicator);
 			beginslice->addStaff(newstaff,i);
             
-            // We apply potential staff scale defined with GuidoSetDefaultStaffFormat API call
+            // We apply potential staff scale defined with GuidoSetStaffSizeScale API call
             applyStaffScale(newstaff, i);
 			
 			// add the staffstate stuff ... the call to BeginStaff is done later, when we have
@@ -3450,12 +3447,14 @@ GRSystemSlice * GRStaffManager::CreateBeginSlice(const GRSystemSlice * lastslice
 	return beginslice;
 }
 
-/** \brief Apply potential staff scale defined with GuidoSetDefaultStaffFormat API call
+/** \brief Apply potential staff scale defined with GuidoSetStaffSizeScale API call
     to given staff with given staff number.
  */
 void GRStaffManager::applyStaffScale(GRStaff *staff, int staffNum) {
-    if (fStaffSizeScales[staffNum] != 0)
-        staff->getGRStaffState().staffLSPACE = LSPACE * fStaffSizeScales[staffNum];
+    float staffSizeScale = mGrMusic->getStaffSizeScale(staffNum);
+    
+    if (staffSizeScale != 0)
+        staff->setStaffSizeScale(staffSizeScale);
 }
 
 /** Take care of breaking at cnt (number of slices for the new system). 

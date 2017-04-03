@@ -670,9 +670,21 @@ units.
 	*/
 	GUIDOAPI(void) 	GuidoGetDefaultPageFormat( GuidoPageFormat* format );
 
-    /** \brief Gives the default score staves format (one staff at a time).
+    /** \brief Gives the staves size scale (one staff at a time).
+        Staff will have given size scale until a \staffFormat tag
+        with "size" param is defined.
+     
+        \param inHandleGR a Guido opaque handle to a GR structure.
+        \param staffNum the staff number on which will be applied new size scale
+        \param sizeScale the size scale between 0 and inifinite. A value of 1 will reset the staff size.
      */
-    GUIDOAPI(void) 	GuidoSetDefaultStaffFormat( CGRHandler inHandleGR, int staffNum, int sizeFactor);
+    GUIDOAPI(void) 	GuidoSetStaffSizeScale( CGRHandler inHandleGR, int staffNum, float sizeScale );
+    
+    /** \brief Get the staff size scale of given staff number.
+     
+        \return the staff size scale, (0 if not defined).
+     */
+    GUIDOAPI(float) 	GuidoGetStaffSizeScale( CGRHandler inHandleGR, int staffNum );
 
 	/** \brief Converts internal Guido units into centimeters.
 

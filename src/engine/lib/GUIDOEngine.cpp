@@ -821,14 +821,24 @@ GUIDOAPI(void) 	GuidoGetPageFormat(	CGRHandler inHandleGR, int pageNum, GuidoPag
 }
     
 // --------------------------------------------------------------------------
-GUIDOAPI(void) 	GuidoSetDefaultStaffFormat( CGRHandler inHandleGR, int staffNum, int sizeFactor)
+GUIDOAPI(void) 	GuidoSetStaffSizeScale( CGRHandler inHandleGR, int staffNum, float sizeFactor )
 {
     if ( inHandleGR == 0 ) return;
     if ( inHandleGR->grmusic == 0 ) return;
     if ( staffNum == 0 ) return;
     if ( sizeFactor == 0 ) return;
         
-    inHandleGR->grmusic->setStaffScale(staffNum, sizeFactor);
+    inHandleGR->grmusic->setStaffSizeScale(staffNum, sizeFactor);
+}
+    
+// --------------------------------------------------------------------------
+GUIDOAPI(float) GuidoGetStaffSizeScale( CGRHandler inHandleGR, int staffNum )
+{
+    if ( inHandleGR == 0 ) return 0;
+    if ( inHandleGR->grmusic == 0 ) return 0;
+    if ( staffNum == 0 ) return 0;
+        
+    return inHandleGR->grmusic->getStaffSizeScale(staffNum);
 }
 
 // --------------------------------------------------------------------------
