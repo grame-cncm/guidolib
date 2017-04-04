@@ -201,7 +201,7 @@ EMSCRIPTEN_BINDINGS(EngineAdapter) {
 			.function("svgExport", &GUIDOPianoRollAdapter::svgExport, allow_raw_pointers())
 			.function("javascriptExport", &GUIDOPianoRollAdapter::javascriptExport, allow_raw_pointers());
 
-	// Binding C++ class adapter for GuidoPianoRoll
+	// Binding C++ class adapter for GuidoFactory
 	emscripten::class_<GUIDOFactoryAdapter>("GUIDOFactoryAdapter")
 			.constructor<>()
 			.function("openMusic", &GUIDOFactoryAdapter::openMusic)

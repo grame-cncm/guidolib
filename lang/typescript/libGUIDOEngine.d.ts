@@ -170,13 +170,9 @@ interface GuidoEngineAdapter {
 declare enum GuidoElementSelector   {}
 declare enum GuidoElementType       {}
 
-//declare var MapElement      : [FloatRect, RectInfos];
-//declare var TimeMapElement  : [TimeSegment, TimeSegment];
-//declare var Time2GraphicMap : [TimeSegment, FloatRect];
-//declare var pairDate        : [GuidoDate, GuidoDate]; 
 interface TimeSegment {
-    start   : GuidoDate,
-    end     : GuidoDate,
+    start   : string,
+    end     : string,
 }
 
 interface Rect {
@@ -186,25 +182,11 @@ interface Rect {
 	bottom  : number;
 }
 
-interface Element {
-    rect        : Rect;
-    rectInfos   : RectInfos;
-}
-interface MapElement {
-    map: Array<Element>;
-}
-
-interface TimeMapElement {
-    map: Array<TimeSegment>;
-}
-
 interface Time2GraphicElt {
+    graph: Rect;
     time: TimeSegment;
-    rect: Rect;
 }
-interface Time2GraphicMap {
-	map: Array<Time2GraphicElt>;
-}
+type Time2GraphicMap = Array<Time2GraphicElt>;
 
 interface MapCollector {
     Graph2TimeMap   (box: Rect, dates: TimeSegment, infos: GuidoElementInfos): void;
@@ -231,17 +213,17 @@ interface GuidoElementInfos {
 interface GuidoScoreMapAdapter {
     constructor: GuidoScoreMapAdapter;
 
-//    getMap          (gr: GRHandler, pagenum: number, width: number, height: number, sel: GuidoElementSelector, f: MapCollector): GuidoErrCode;
-    getPageMap      (gr: GRHandler, pagenum: number, w: number, h: number)                      : Time2GraphicMap;
-    getStaffMap     (gr: GRHandler, pagenum: number, w: number, h: number, staff: number)       : Time2GraphicMap;
-    getVoiceMap     (gr: GRHandler, pagenum: number, w: number, h: number, voice: number)       : Time2GraphicMap;
-    getSystemMap    (gr: GRHandler, pagenum: number, w: number, h: number)                      : Time2GraphicMap;
+    getPageMap      (gr: GRHandler, pagenum: number, w: number, h: number)                      : string;
+    getStaffMap     (gr: GRHandler, pagenum: number, w: number, h: number, staff: number)       : string;
+    getVoiceMap     (gr: GRHandler, pagenum: number, w: number, h: number, voice: number)       : string;
+    getSystemMap    (gr: GRHandler, pagenum: number, w: number, h: number)                      : string;
     getTime         (date: GuidoDate, map: Time2GraphicMap, t: TimeSegment, r: Rect)            : boolean;
     getPoint        (x: number, y: number, map: Time2GraphicMap, t: TimeSegment, r: Rect)       : boolean;
     getTimeMap      (gr: ARHandler, f: TimeMapCollector)                                        : GuidoErrCode;
+    getPianoRollMap (pr: PianoRoll, width: number, height: number)								: string;
 }
 
-interface TimeSegment /*implements pairDate*/ {
+interface TimeSegment {
     constructor: TimeSegment;
 	empty       () : boolean;
 	intersect   (ts: TimeSegment): boolean;
@@ -314,7 +296,6 @@ interface GUIDOPianoRollAdapter {
     destroyPianoRoll(pr: PianoRoll): GuidoErrCode;
     
     setLimits       (pr: PianoRoll, limitParams: LimitParams): GuidoErrCode;
-
     enableKeyboard  (pr: PianoRoll, enabled: boolean): GuidoErrCode;
     getKeyboardWidth(pr: PianoRoll, height: number): number;
 
@@ -322,16 +303,12 @@ interface GUIDOPianoRollAdapter {
     setRGBColorToVoice          (pr: PianoRoll, voiceNum: number, r: number, g: number, b: number, a: number): GuidoErrCode;
     setHtmlColorToVoice         (pr: PianoRoll, voiceNum: number, color: number): GuidoErrCode;
     removeColorToVoice          (pr: PianoRoll, voiceNum: number): GuidoErrCode;
-
     enableMeasureBars           (pr: PianoRoll, enabled: boolean): GuidoErrCode;
 
     setPitchLinesDisplayMode    (pr: PianoRoll, mode: number): GuidoErrCode;
-
-    getMap          (pr: PianoRoll, width: number, height: number): Time2GraphicMap;
+    getMap          (pr: PianoRoll, width: number, height: number): string;
 
     onDraw          (pr: PianoRoll, width: number, height: number, dev: VGDevice): GuidoErrCode;
-
 	svgExport       (pr: PianoRoll, width: number, height: number): string;
-
     javascriptExport(pr: PianoRoll, width: number, height: number): GuidoErrCode;
 }
