@@ -6,3 +6,6 @@ run : test.js
 
 test.js : $(TS)
 	tsc --out test.js $(TS)
+
+clean:
+	rm -f test.js

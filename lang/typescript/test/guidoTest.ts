@@ -1,6 +1,7 @@
 ///<reference path="../libGUIDOEngine.d.ts"/>
 ///<reference path="../libGUIDOEngine.ts"/>
-///<reference path="node.d.ts"/>
+
+declare var require: any;
 
 interface checkfunction     { (n: any): boolean; } 
 
@@ -48,7 +49,7 @@ var accident    : number = 1;
 var octave      : number = 2;
 var numerator   : number = 1;
 var denominator : number = 1; 
-var name        : string = 'Name';
+var aname       : string = 'Name';
 var tagID       : number = 1;
 var valStr      : string = 'toto';
 var valNum      : number = 1;
@@ -180,18 +181,18 @@ class guidoTest {
         this.testExpect("guidoFactory.openChord()",                         this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoFactory.insertCommata()",                     this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoFactory.openEvent(inEventName)",              this._checkErrCode(GuidoErrCode.guidoNoErr));        
-        //this.testExpect("guidoFactory.openRangeTag(name, tagID)",           this._checkErrCode(GuidoErrCode.guidoNoErr));        
-        //this.testExpect("guidoFactory.openTag(name, tagID)",                this._checkErrCode(GuidoErrCode.guidoNoErr));               
-        //this.testExpect("guidoFactory.addSharp()",                          this._checkErrCode(GuidoErrCode.guidoNoErr));        
-        //this.testExpect("guidoFactory.addFlat()",                           this._checkErrCode(GuidoErrCode.guidoNoErr));      
-        //this.testExpect("guidoFactory.setEventAccidentals(accident)",       this._checkErrCode(GuidoErrCode.guidoNoErr));          
+        //this.testExpect("guidoFactory.openRangeTag(aname, tagID)",        this._checkErrCode(GuidoErrCode.guidoNoErr));        
+        //this.testExpect("guidoFactory.openTag(aname, tagID)",             this._checkErrCode(GuidoErrCode.guidoNoErr));               
+        //this.testExpect("guidoFactory.addSharp()",                        this._checkErrCode(GuidoErrCode.guidoNoErr));        
+        //this.testExpect("guidoFactory.addFlat()",                         this._checkErrCode(GuidoErrCode.guidoNoErr));      
+        //this.testExpect("guidoFactory.setEventAccidentals(accident)",     this._checkErrCode(GuidoErrCode.guidoNoErr));          
         this.testExpect("guidoFactory.setEventDots(dots)",                  this._checkErrCode(GuidoErrCode.guidoNoErr));                
         this.testExpect("guidoFactory.setOctave(octave)",                   this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoFactory.setDuration(numerator, denominator)", this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoFactory.endTag()",                            this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoFactory.addTagParameterString(valStr)",       this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoFactory.addTagParameterInt(valNum)",          this._checkErrCode(GuidoErrCode.guidoNoErr));        
-        this.testExpect("guidoFactory.setParameterName(name)",              this._checkErrCode(GuidoErrCode.guidoNoErr));        
+        this.testExpect("guidoFactory.setParameterName(aname)",             this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoFactory.setParameterUnit(unit)",              this._checkErrCode(GuidoErrCode.guidoNoErr));        
         this.testExpect("guidoFactory.closeTag()",                          this._checkErrCode(GuidoErrCode.guidoNoErr));
         this.testExpect("guidoFactory.closeEvent()",                        this._checkErrCode(GuidoErrCode.guidoNoErr));        
