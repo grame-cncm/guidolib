@@ -229,5 +229,4 @@ java :
 # building the library for Android
 #===============================================================
 android :
-	ndk-build -C ../platforms/android/guido-engine-android -j 4
-	cp ../platforms/android/guido-engine-android/libs/armeabi/libGUIDOEngine.so ../platforms/android
+	make -C ../platforms/android/
