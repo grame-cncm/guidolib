@@ -340,7 +340,7 @@ class GRStaffManager
 		bool	nextTimePosition (int nvoices, bool filltagMode, TCreateStavesState& state);
 		float	systemBreak (int newlineMode, float beginheight);
 		int		initVoices(int cnt);
-        void    applyStaffScale(GRStaff *staff, int staffNum);
+        void    applyStaffSize(GRStaff *staff, int staffNum);
 };
 
 #endif

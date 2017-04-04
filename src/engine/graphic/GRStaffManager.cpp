@@ -578,8 +578,8 @@ void GRStaffManager::prepareStaff(int staff)
 		}
 		mGrSystemSlice->addStaff(curstaff,staff);
         
-        // We apply potential staff scale defined with GuidoSetStaffSizeScale API call
-        applyStaffScale(curstaff, staff);
+        // We apply potential staff size defined with GuidoSetStaffSize API call
+        applyStaffSize(curstaff, staff);
 	}
 	// set the staff in  Vector mMyStaffs.
 	mMyStaffs->Set(staff, curstaff);
@@ -3371,8 +3371,8 @@ GRSystemSlice * GRStaffManager::CreateBeginSlice(const GRSystemSlice * lastslice
 			GRStaff * newstaff = new GRStaff(beginslice, settings.proportionalRenderingForceMultiplicator);
 			beginslice->addStaff(newstaff,i);
             
-            // We apply potential staff scale defined with GuidoSetStaffSizeScale API call
-            applyStaffScale(newstaff, i);
+            // We apply potential staff size defined with GuidoSetStaffSize API call
+            applyStaffSize(newstaff, i);
 			
 			// add the staffstate stuff ... the call to BeginStaff is done later, when we have
 			// determined the number of springs that are needed by the New-Elements!
@@ -3447,14 +3447,14 @@ GRSystemSlice * GRStaffManager::CreateBeginSlice(const GRSystemSlice * lastslice
 	return beginslice;
 }
 
-/** \brief Apply potential staff scale defined with GuidoSetStaffSizeScale API call
+/** \brief Apply potential staff size defined with GuidoSetStaffSize API call
     to given staff with given staff number.
  */
-void GRStaffManager::applyStaffScale(GRStaff *staff, int staffNum) {
-    float staffSizeScale = mGrMusic->getStaffSizeScale(staffNum);
+void GRStaffManager::applyStaffSize(GRStaff *staff, int staffNum) {
+    float staffSize = mGrMusic->getStaffSize(staffNum);
     
-    if (staffSizeScale != 0)
-        staff->setStaffSizeScale(staffSizeScale);
+    if (staffSize >= 0)
+        staff->setStaffSize(staffSize);
 }
 
 /** Take care of breaking at cnt (number of slices for the new system). 

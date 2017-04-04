@@ -656,6 +656,24 @@ void GRMusic::printVoices (std::ostream& os) const
 	}
 }
 
+/** \brief If given size is negative, we remove corresponding staff size in map
+ */
+void GRMusic::setStaffSize(int staffNum, float size) {
+    if (size < 0)
+        fStaffSizes.erase(staffNum);
+    else
+        fStaffSizes[staffNum] = size;
+}
+
+/** \brief If size of given staff is not set, we return -1.
+ */
+float GRMusic::getStaffSize(int staffNum) {
+    if (fStaffSizes.find(staffNum) == fStaffSizes.end())
+        return -1;
+    else
+        return fStaffSizes[staffNum];
+}
+
 //-------------------------------------------------------------------------------
 ARMusicalVoice* GRMusic::getARVoice (int n)
 {

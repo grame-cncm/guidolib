@@ -118,9 +118,9 @@ class GRMusic : public GREvent
 
 				void	printVoices (std::ostream& os) const;
     
-                void    setStaffSizeScale(int staffNum, float sizeScale)    { fStaffSizeScales[staffNum] = sizeScale; }
-                float   getStaffSizeScale(int staffNum)                     { return fStaffSizeScales[staffNum]; }
-
+                void    setStaffSize(int staffNum, float size);
+                float   getStaffSize(int staffNum);
+    
 		std::vector<TCollisionInfo> getCollisions() const	{ return fCollisions.list(); }
 
 	protected:
@@ -141,7 +141,7 @@ class GRMusic : public GREvent
 
 		PageList			mPages;
 		ARPageFormat *		fInFormat;
-        std::map<int,float> fStaffSizeScales;
+        std::map<int,float> fStaffSizes;
 		GuidoLayoutSettings fSettings;
 		TCollisions			fCollisions;
 		bool				fLyricsChecked;		// true when lyrics collisions have been solved

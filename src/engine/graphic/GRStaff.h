@@ -114,7 +114,7 @@ class GRStaffState
 
         float getYOffset() const                                { return yOffset; }
     
-        void setSizeScale(float sizeScale)                      { staffLSPACE = LSPACE * sizeScale; }
+        void setStaffLSPACE(float value)                        { staffLSPACE = value * 2; } // Factor 2 to be consistent with GRStaff::setStaffFormat(ARStaffFormat * staffrmt)
 
 	protected:
 		// Meter-Parameters
@@ -296,7 +296,7 @@ class GRStaff : public GRCompositeNotationElement
 		void	setClefParameters(	GRClef * grclef, GRStaffState::clefstate cstate = GRStaffState::CLEFAUTO );
 		void	setMeterParameters( GRMeter * grmeter );
     
-        void    setStaffSizeScale( float sizeScale )  { mStaffState.setSizeScale(sizeScale); }
+        void    setStaffSize( float size )  { mStaffState.setStaffLSPACE(size); }
 
 		GuidoPos 		lastrodpos;
 		GRRod * 		lastrod;
