@@ -262,6 +262,11 @@ static void staffmerge (const Time2GraphicMap& staffMap, const Time2GraphicMap& 
 	outmap = map;
 }
     
+static bool mCompare( const pair<TimeSegment, FloatRect>& a, const pair<TimeSegment, FloatRect>& b)
+{
+    return a.first < b.first;
+}
+    
 static bool mTimeAndBoxLeftmostCompare( const pair<TimeSegment, FloatRect>& a, const pair<TimeSegment, FloatRect>& b)
 {
     return a.first < b.first || (a.first.startEqual(b.first) && a.second.left < b.second.left);
@@ -282,7 +287,8 @@ static bool scompare( const pair<TimeSegment, FloatRect>& a, const pair<TimeSegm
 //----------------------------------------------------------------------
 // staff map is made using a combination of basic staff map and events map
 // actually, it splits the basic staff map in vertical slices using the
-// events x coordinate
+// events x coordinate. New behaviour: if a rest is at a bar start, mapping
+// is extended toward left barline. For old behaviour, use GuidoStaffCollector::processV1.
 void GuidoStaffCollector::process (int page, float w, float h, Time2GraphicMap* outmap)
 {
 	// We see if we have to process data or not (RAW)
@@ -301,29 +307,44 @@ void GuidoStaffCollector::process (int page, float w, float h, Time2GraphicMap* 
 		GuidoGetMap( fGRHandler, page, w, h, kGuidoStaff, *this );	// collect the staves map
 		sort (fMap.begin(), fMap.end(), scompare);					// sort by lines, smaller date first
 		mergelines (fMap, map);										// merge the graphic segments on a single line basis
-        
-        
-        // OLD BEHAVIOUR //
-        
-		//fNoEmpty = true;
-		//fMap.clear();
-		//GuidoGetMap( fGRHandler, page, w, h, kGuidoEvent, *this );	// collect the events map
-		//sort (fMap.begin(), fMap.end(), mcompare);					// sort first date, smaller duration first
-        //reduce (fMap, evmap);										// retains only one segment per starting date
-        
-        /*****************/
-        
-        
-        // NEW BEHAVIOUR //
+    
         ///> A rest at a measure beginning has its segment box left value adjusted to the measure left.
-        
         getEvents (page, w, h, true, evmap, fStaffNum);
-        
-        /*****************/
-        
         
         staffmerge (map, evmap, *outmap); // and split the staff lines using the events segments
 	}
+}
+    
+//----------------------------------------------------------------------
+// staff map is made using a combination of basic staff map and events map
+// actually, it splits the basic staff map in vertical slices using the
+// events x coordinate. To use new behaviour, see GuidoStaffCollector::process.
+void GuidoStaffCollector::processV1 (int page, float w, float h, Time2GraphicMap* outmap)
+{
+    // We see if we have to process data or not (RAW)
+    if (fGetRAWdata)
+    {
+        if (!outmap) return;
+        GuidoGetMap( fGRHandler, page, w, h, kGuidoStaff, *this );	// collect the staves map
+        *outmap = fMap;
+    }
+    else
+    {
+        Time2GraphicMap map, evmap;
+        outmap->clear();
+            
+        fNoEmpty = false;
+        GuidoGetMap( fGRHandler, page, w, h, kGuidoStaff, *this );	// collect the staves map
+        sort (fMap.begin(), fMap.end(), scompare);					// sort by lines, smaller date first
+        mergelines (fMap, map);										// merge the graphic segments on a single line basis
+            
+        fNoEmpty = true;
+        fMap.clear();
+        GuidoGetMap( fGRHandler, page, w, h, kGuidoEvent, *this );	// collect the events map
+        sort (fMap.begin(), fMap.end(), mCompare);					// sort first date, smaller duration first
+        reduce (fMap, evmap);										// retains only one segment per starting date
+        staffmerge (map, evmap, *outmap); // and split the staff lines using the events segments
+    }
 }
 
 //----------------------------------------------------------------------
@@ -343,31 +364,31 @@ void GuidoMapCollector::getEvents (int page, float w, float h, bool keepLeftmost
 }
 
 //----------------------------------------------------------------------
+// New behaviour: if all staves have a rest at a same bar start, mapping is extended toward left
+// barline. For old behaviour, use GuidoSystemCollector::processV1.
 void GuidoSystemCollector::process (int page, float w, float h, Time2GraphicMap* outmap)
 {
 	Time2GraphicMap map, evmap, merged;
 	processNoDiv (page, w, h, &map);
     
-    
-    // OLD BEHAVIOUR //
-    
-    //GuidoGetMap( fGRHandler, page, w, h, kGuidoEvent, *this );	// collect the events map
-    //sort (fMap.begin(), fMap.end(), mcompare);					// sort first date, smaller duration first
-    //reduce (fMap, evmap);										// retains only one segment per starting date
-    
-    /*****************/
-    
-    
-    // NEW BEHAVIOUR //
     ///> A rest at a measure beginning has its segment box left value adjusted to the measure left.
     ///> All concurrent event at the same date have their mapping aligned to the measure left too, to keep consistency over staves.
-    
     getEvents (page, w, h, false, evmap);
     
-    /*****************/
-    
-    
     staffmerge (map, evmap, *outmap); // we split the staff lines using the events segments
+}
+    
+//----------------------------------------------------------------------
+// To use the new behaviour, see GuidoSystemCollector::process.
+void GuidoSystemCollector::processV1 (int page, float w, float h, Time2GraphicMap* outmap)
+{
+    Time2GraphicMap map, evmap, merged;
+    processNoDiv (page, w, h, &map);
+        
+    GuidoGetMap( fGRHandler, page, w, h, kGuidoEvent, *this );	// collect the events map
+    sort (fMap.begin(), fMap.end(), mCompare);					// sort first date, smaller duration first
+    reduce (fMap, evmap);										// retains only one segment per starting date
+    staffmerge (map, evmap, *outmap);                           // we split the staff lines using the events segments
 }
 
 //----------------------------------------------------------------------

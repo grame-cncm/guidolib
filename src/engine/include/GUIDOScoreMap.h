@@ -204,7 +204,8 @@ GUIDOAPI(GuidoErrCode)	GuidoGetRAWSystemMap( CGRHandler gr, int pagenum, float w
 */
 GUIDOAPI(GuidoErrCode)	GuidoGetPageMap( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap);
 
-/** \brief Retrieves a guido staff graphic to time mapping. 
+/** \brief Retrieves a guido staff graphic to time mapping. New behaviour: if a rest is at
+    a bar start, mapping is extended toward left barline. For old behaviour, use GuidoGetStaffMapV1.
 
 	\param gr a Guido opaque handle to a GR structure.
 	\param pagenum a page index, starting from 1.
@@ -215,6 +216,18 @@ GUIDOAPI(GuidoErrCode)	GuidoGetPageMap( CGRHandler gr, int pagenum, float w, flo
 	\return an error code.
 */
 GUIDOAPI(GuidoErrCode)	GuidoGetStaffMap( CGRHandler gr, int pagenum, float w, float h, int staff, Time2GraphicMap& outmap);
+    
+/** \brief Retrieves a guido staff graphic to time mapping. To use the new behaviour, see GuidoGetStaffMap.
+     
+    \param gr a Guido opaque handle to a GR structure.
+    \param pagenum a page index, starting from 1.
+    \param w the page width.
+    \param h the page height.
+    \param staff the staff index (starting from 1).
+    \param outmap contains the mapping on output.
+    \return an error code.
+*/
+GUIDOAPI(GuidoErrCode)	GuidoGetStaffMapV1( CGRHandler gr, int pagenum, float w, float h, int staff, Time2GraphicMap& outmap);
 
 /** \brief Retrieves a guido voice graphic to time mapping. 
 
@@ -228,7 +241,8 @@ GUIDOAPI(GuidoErrCode)	GuidoGetStaffMap( CGRHandler gr, int pagenum, float w, fl
 */
 GUIDOAPI(GuidoErrCode)	GuidoGetVoiceMap( CGRHandler gr, int pagenum, float w, float h, int voice, Time2GraphicMap& outmap);
 
-/** \brief Retrieves a guido system graphic to time mapping. 
+/** \brief Retrieves a guido system graphic to time mapping. New behaviour: if all staves have a rest
+    at a same bar start, mapping is extended toward left barline. For old behaviour, use GuidoGetSystemMapV1.
 
 	\param gr a Guido opaque handle to a GR structure.
 	\param pagenum a page index, starting from 1.
@@ -239,6 +253,17 @@ GUIDOAPI(GuidoErrCode)	GuidoGetVoiceMap( CGRHandler gr, int pagenum, float w, fl
 */
 GUIDOAPI(GuidoErrCode)	GuidoGetSystemMap( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap);
 
+/** \brief Retrieves a guido system graphic to time mapping. To use the new behaviour, see GuidoGetSystemMap.
+     
+    \param gr a Guido opaque handle to a GR structure.
+    \param pagenum a page index, starting from 1.
+    \param w the page width.
+    \param h the page height.
+    \param outmap contains the mapping on output.
+    \return an error code.
+*/
+GUIDOAPI(GuidoErrCode)	GuidoGetSystemMapV1( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap);
+ 
 /** \brief Retrieves a time segment and the associated graphic segment in a mapping.
 
 	\param date a date used to select the container time segment
