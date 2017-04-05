@@ -106,6 +106,7 @@ class GuidoStaffCollector: public GuidoMapCollector
 		///< overrides the method called by guido for each graphic segment
 		virtual void Graph2TimeMap( const FloatRect& box, const TimeSegment& dates,  const GuidoElementInfos& infos );
 		virtual void process (int page, float w, float h, Time2GraphicMap* outmap);
+        virtual void processV1 (int page, float w, float h, Time2GraphicMap* outmap);
 };
 inline std::ostream& operator<< (std::ostream& os, const std::vector<std::pair<TimeSegment, FloatRect> >& v) {
 	for (unsigned int i=0; i<v.size(); i++) os << v[i].first << " -> " << v[i].second << std::endl;
@@ -127,6 +128,7 @@ class GuidoSystemCollector: public GuidoMapCollector
 		virtual void Graph2TimeMap( const FloatRect& box, const TimeSegment& dates,  const GuidoElementInfos& infos );
 		virtual void processNoDiv (int page, float w, float h, Time2GraphicMap* outmap);
 		virtual void process (int page, float w, float h, Time2GraphicMap* outmap);
+        virtual void processV1 (int page, float w, float h, Time2GraphicMap* outmap);
 };
 
 //----------------------------------------------------------------------

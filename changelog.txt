@@ -2,6 +2,9 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.4
+- new mapping behaviour:
+	- if a rest starts a bar, GuidoGetStaffMap extends its mapping box to the left barline (to keep old behaviour, use GuidoGetStaffMapV1)
+	- if all bars at a given date, over all staves, start with a rest, GuidoGetSystemMap extends the first mapping box of the measure to the left barline (to keep old behaviour, use GuidoGetSystemMapV1)
 - new \harmony tag
 - SVG output change: tags are not using the short form anymore (e.g. <line ... /> is now  <line ...></line>)
 - grace notes are included in the previous event mapping area
