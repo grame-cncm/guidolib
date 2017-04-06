@@ -819,6 +819,26 @@ GUIDOAPI(void) 	GuidoGetPageFormat(	CGRHandler inHandleGR, int pageNum, GuidoPag
 	if( thePage )
 		thePage->getPageFormat( format );
 }
+    
+// --------------------------------------------------------------------------
+GUIDOAPI(void) 	GuidoSetStaffSize( CGRHandler inHandleGR, int staffNum, float size )
+{
+    if ( inHandleGR == 0 ) return;
+    if ( inHandleGR->grmusic == 0 ) return;
+    if ( staffNum <= 0 ) return;
+    
+    inHandleGR->grmusic->setStaffSize(staffNum, size);
+}
+    
+// --------------------------------------------------------------------------
+GUIDOAPI(float) GuidoGetStaffSize( CGRHandler inHandleGR, int staffNum )
+{
+    if ( inHandleGR == 0 ) return -1;
+    if ( inHandleGR->grmusic == 0 ) return -1;
+    if ( staffNum == 0 ) return -1;
+        
+    return inHandleGR->grmusic->getStaffSize(staffNum);
+}
 
 // --------------------------------------------------------------------------
 GUIDOAPI(float) GuidoUnit2CM(float val)

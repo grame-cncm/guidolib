@@ -157,6 +157,17 @@ GUIDOAPI(GuidoErrCode)	GuidoGetStaffMap( CGRHandler gr, int pagenum, float w, fl
 }
 
 //----------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode)	GuidoGetStaffMapV1( CGRHandler gr, int pagenum, float w, float h, int staff, Time2GraphicMap& outmap)
+{
+    GuidoErrCode err = checkParams (gr, pagenum);
+    if (err != guidoNoErr) return err;
+    if (staff < 1) return guidoErrBadParameter;
+    GuidoStaffCollector getmap (gr, staff);
+    getmap.processV1 (pagenum, w, h, &outmap);
+    return guidoNoErr;
+}
+
+//----------------------------------------------------------------------
 static bool sortMap(TMapSegments s1, TMapSegments s2)
 {
 	GuidoDate d1 = s1.first.first;
@@ -185,6 +196,16 @@ GUIDOAPI(GuidoErrCode)	GuidoGetSystemMap( CGRHandler gr, int pagenum, float w, f
     if (err != guidoNoErr) return err;
     GuidoSystemCollector getmap (gr);
     getmap.process (pagenum, w, h, &outmap);
+    return guidoNoErr;
+}
+
+//----------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode)	GuidoGetSystemMapV1( CGRHandler gr, int pagenum, float w, float h, Time2GraphicMap& outmap)
+{
+    GuidoErrCode err = checkParams (gr, pagenum);
+    if (err != guidoNoErr) return err;
+    GuidoSystemCollector getmap (gr);
+    getmap.processV1 (pagenum, w, h, &outmap);
     return guidoNoErr;
 }
 

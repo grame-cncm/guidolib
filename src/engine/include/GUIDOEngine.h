@@ -670,6 +670,24 @@ units.
 	*/
 	GUIDOAPI(void) 	GuidoGetDefaultPageFormat( GuidoPageFormat* format );
 
+    /** \brief Gives the staves size (one staff at a time).
+        Staff will have given size until a \staffFormat tag
+        with "size" param is defined.
+        Size should be given in internal units. To convert from cm or inches
+        you should use \c GuidoCM2Unit or \c GuidoInches2Unit
+     
+        \param inHandleGR a Guido opaque handle to a GR structure.
+        \param staffNum the staff number on which will be applied new size scale
+        \param size the staff size in internal units. A negative value resets the staff size.
+     */
+    GUIDOAPI(void) 	GuidoSetStaffSize( CGRHandler inHandleGR, int staffNum, float size );
+    
+    /** \brief Get the staff size of given staff number.
+     
+        \return the staff size in internal units (-1 if not defined).
+     */
+    GUIDOAPI(float) 	GuidoGetStaffSize( CGRHandler inHandleGR, int staffNum );
+
 	/** \brief Converts internal Guido units into centimeters.
 
 		\param val the value to be converted
