@@ -9,7 +9,7 @@
 % accidental spec.
 %
 {
-[
+[	\barFormat<"system">
 \key<"free=c[1.5]g#b&a[-1.5]"> a g# f  \alter<detune=0.5> c  \alter<detune=1.5> c 
 ]
 ,
