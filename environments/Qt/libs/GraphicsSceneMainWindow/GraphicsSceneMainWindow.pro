@@ -19,6 +19,7 @@ win32 { TEMPLATE = vclib }
 
 macx {
 	CONFIG+= i386 x86_64
+	CONFIG += c++11
 	QMAKE_CXXFLAGS += -mmacosx-version-min=10.7
 }
 

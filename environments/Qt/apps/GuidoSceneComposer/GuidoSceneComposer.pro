@@ -24,6 +24,7 @@ RCC_DIR = tmpSrc
 UI_DIR  = tmpSrc
 
 macx {
+	CONFIG += c++11
 	RC_FILE += $$RESOURCES_DIR/English.lproj/InfoPlist.strings 
 	QMAKE_INFO_PLIST = $$RESOURCES_DIR/$${APP_NAME}Info.plist
 }
