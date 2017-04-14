@@ -1,0 +1,10 @@
+%
+% this is to illustrate the grace notes problem:
+% a barline may separate a grace note from its note
+% as seen for the F note at the beginning of the measure 2
+{
+	[ \clef<"g2"> \meter<"2/4"> 
+	  g a \text<"a barline shouldn't separate a grace note from its note",dy=14hs,dx=-3cm>
+	  (\grace(g/8) f/4 \grace(g/8) e/4 d f )
+	]
+}

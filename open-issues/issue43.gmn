@@ -1,0 +1,9 @@
+{ 
+[  
+	\clef<"g2"> \key<-1> \meter<"4/4">  _/4 \stemsUp \beamsOff \noteFormat<dx=-0.0>(g/2) 
+]
+, 
+[ 	\staff<1> 
+	empty/4 \stemsDown \beamsOff \noteFormat<dx=0.85>(f/4) \beamsOff e/4 
+]
+}

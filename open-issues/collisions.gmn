@@ -1,0 +1,12 @@
+{
+[
+   \key<0> \meter<"2/4">  \clef<"f4"> _ _/8 \clef<"g2"> \stemsUp \slurBegin:1  
+	{ \tieBegin g& \tieBegin, b& \tieBegin, d&2 } \bar 
+   \acc<style="none">({ g&1/2 \tieEnd, b& \tieEnd, d&2 \tieEnd }) \slurEnd:1 \bar 
+
+	\tie ( { g&1/8, b&, d&2 } \bar 
+    \acc<style="none">( { g&1/2, b&, d&2 } )) \bar 
+
+%   \acc<style="none">({ g&1/2 \tieEnd, b& \tieEnd, d&2 \tieEnd }) \slurEnd:1 \bar 
+]
+}

@@ -1,0 +1,17 @@
+(*
+	dx affects the y position (staff 2)
+	the curve attribute seems to cancel the dx settings
+*)
+{
+[
+	a \slur(g f e) d
+]
+,
+[
+	a \slur<dx1=-6, dx2=4>(g f e) d
+]
+,
+[
+	a \slur<curve="", dx1=-6, dx2=4>(g f e) d
+]
+}
