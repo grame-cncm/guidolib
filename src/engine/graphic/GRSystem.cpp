@@ -614,22 +614,37 @@ float GRSystem::getNotesDensity () const
 }
 
 // --------------------------------------------------------------------------
+float GRSystem::checkCollision (const GRNotationElement* e1, const GRNotationElement* e2) const
+{
+	NVRect bb1 = e1->getBoundingBox();
+	bb1 += e1->getPosition();
+	bb1.right += LSPACE / 2;				// this is to ensure a minimum space between lyrics
+	NVRect bb2 = e2->getBoundingBox();
+	bb2 += e2->getPosition();
+	if (bb1.Collides(bb2)) {
+		float gap =  bb1.right - bb2.left;
+		if (gap > 0) return (bb1.Width() + bb2.Width() + LSPACE/2) / 2;
+	}
+	return 0;
+}
+
+// --------------------------------------------------------------------------
 void GRSystem::checkCollisions (TCollisions& state, std::vector<const GRNotationElement*>& elts) const
 {
 	size_t n = elts.size();
 	for (size_t i=1; i < n; i++) {
-		NVRect bb1 = elts[i-1]->getBoundingBox();
-		bb1 += elts[i-1]->getPosition();
-		bb1.right += LSPACE / 2;				// this is to ensure a minimum space between lyrics
-		NVRect bb2 = elts[i]->getBoundingBox();
-		bb2 += elts[i]->getPosition();
-		if (bb1.Collides(bb2)) {
-			float gap = bb1.right - bb2.left;
-			if (gap > 0) {
-				gap = (bb1.Width() + bb2.Width() + LSPACE/2) / 2;
-				state.resolve(elts[i-1]->getAbstractRepresentation(), gap);
-			}
-		}
+		const GRNotationElement* e1 = elts[i-1];
+		size_t next = i;
+		float gap = 0;
+		do {
+			const GRNotationElement* e2 = elts[next];
+			float v = checkCollision (e1, e2);
+			if (v > gap) gap = v;
+			if (e1->getRelativeTimePosition() != e2->getRelativeTimePosition()) break;
+			next++;
+		} while (next < n);
+		if (gap > 0)
+			state.resolve(elts[i-1]->getAbstractRepresentation(), gap);
 	}
 }
 

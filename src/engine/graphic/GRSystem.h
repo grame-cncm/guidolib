@@ -149,6 +149,7 @@ protected:
 private:
 	const GRStaff*	getStaff (int index) const;
 	void	checkCollisions (TCollisions& state, std::vector<const GRNotationElement*>& elts) const;
+	float	checkCollision (const GRNotationElement* e1, const GRNotationElement* e2) const;
 
 	GRPage*			mPage;
 	StaffVector*	mStaffs;
