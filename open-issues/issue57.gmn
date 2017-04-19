@@ -1,0 +1,16 @@
+{
+[
+\barFormat<style="system">
+\clef<"g"> \meter<"2/4"> c empty*3/4 empty*1 empty
+]
+,
+[
+\clef<"g"> \meter<"2/4"> c
+empty*3/4 \tie ( { c1*1, g1,  \staff<3> f2*1}  
+%\newLine \clef<"g"> 
+\newLine
+{ f2*1, \staff<2> c1, g1})
+]
+,
+[ \clef<"g"> \meter<"2/4"> ]
+}

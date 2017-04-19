@@ -1,0 +1,18 @@
+{
+[
+\title<"Lyrics collision">
+\unit<"mm">\tempo<"tempo [1/4] = 90", dy=15>\pageFormat<"215.9, 279.4, 10, 20, 10, 20">
+\barFormat<style="system">
+]
+,
+[
+\staff<1> \clef<"g"> \meter<"4/4", autoMeasuresNum="on">
+\lyrics<"These Dummy Text1 text2 are some lyrics Ha ha ha ", dy=17>
+(c*1/8 d*1/8 e*1/8 f*1/8 g*3/8 a*6/8 g*7/8 f*4/8 e*6/8 d*4/8 c*1/8)
+]
+,
+[
+\staff<1>\lyrics<"C G F G C ", dy=22>(empty*8/8 empty*8/8 empty*8/8 empty*8/8 empty*1/8)
+]
+}
+
