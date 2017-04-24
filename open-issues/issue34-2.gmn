@@ -1,4 +1,4 @@
-[ 
+[ \title<"Incorrect page bounding box"> 
 	\staff<1> \instr<"Violin", dx=-12hs, dy=-5hs> 
 	\systemFormat<"", dx=12hs> \barFormat<style= "system", range="1"> 
    \clef<"c4"> \key<2> \meter<"4/4", autoBarlines="off", autoMeasuresNum="page"> 

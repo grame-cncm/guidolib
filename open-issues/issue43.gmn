@@ -4,6 +4,7 @@
 ]
 , 
 [ 	\staff<1> 
-	empty/4 \stemsDown \beamsOff \noteFormat<dx=0.85>(f/4) \beamsOff e/4 
+	\text<"Collision between notes on different voices", dx=-3.2cm, dy=16>
+	(empty/4 \stemsDown \beamsOff \noteFormat<dx=0.0>(f/4) \beamsOff e/4 )
 ]
 }

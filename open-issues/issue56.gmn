@@ -1,0 +1,12 @@
+{
+[
+	\barFormat<style="system">	
+	\text<"fixed distance between staves", dx=-1.7cm, dy=16>
+	(\clef<"g"> c1 e g) 
+%	a0
+],
+[
+	\staffFormat<dy=6.4>
+	\clef<"f"> c g0 e 
+]
+}

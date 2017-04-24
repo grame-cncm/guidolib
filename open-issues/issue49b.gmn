@@ -1,3 +1,5 @@
 [
-	\clef<""> \meter<"1/8"> \beam ({c2*96/1536} {a1})
+	\clef<""> \meter<"1/8"> 
+	\text<"bad stem position on 'a'", dx=-1.9cm, dy=14>
+	(\beam ({c2/16} {a1}))
 ]
