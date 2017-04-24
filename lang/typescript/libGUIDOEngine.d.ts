@@ -1,4 +1,4 @@
-declare var Module: any;
+declare var GuidoModule : any;
 
 // GUIDOEngine
 //--------------------------------------------------------------
