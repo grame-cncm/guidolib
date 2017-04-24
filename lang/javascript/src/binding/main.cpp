@@ -13,7 +13,7 @@
 
 #include <string>
 #include <emscripten.h>
-#include <bind.h>
+#include <emscripten/bind.h>
 
 #include "GUIDOEngine.h"
 #include "GUIDOEngineAdapter.h"
@@ -120,7 +120,7 @@ EMSCRIPTEN_BINDINGS(CStruct) {
  * C++ class binding.
  * This classes can be used in javascript side.
  */
-EMSCRIPTEN_BINDINGS(EngineAdapter) {
+EMSCRIPTEN_BINDINGS(EngineAdapter) { 
 	// Binding C++ class adapter for guidoEngine
 	emscripten::class_<GuidoEngineAdapter>("GuidoEngineAdapter")
 			//.smart_ptr_constructor("GuidoEngineAdapter",&std::make_shared<GuidoEngineAdapter>)
@@ -170,7 +170,13 @@ EMSCRIPTEN_BINDINGS(EngineAdapter) {
 			.function("openStream", &GuidoEngineAdapter::openStream, allow_raw_pointers())
 			.function("closeStream", &GuidoEngineAdapter::closeStream, allow_raw_pointers())
 			.function("writeStream", &GuidoEngineAdapter::writeStream, allow_raw_pointers())
-			.function("resetStream", &GuidoEngineAdapter::resetStream, allow_raw_pointers());
+			.function("resetStream", &GuidoEngineAdapter::resetStream, allow_raw_pointers())
+
+			.function("getParsingTime", &GuidoEngineAdapter::getParsingTime, allow_raw_pointers())
+			.function("getAR2GRTime", &GuidoEngineAdapter::getAR2GRTime, allow_raw_pointers())
+			.function("getOnDrawTime", &GuidoEngineAdapter::getOnDrawTime, allow_raw_pointers());
+
+
 
 	// Binding C++ class Map2json to have a javascript implementation of GuidoScoreMap
 	emscripten::class_<Map2json>("GUIDOScoreMap")
