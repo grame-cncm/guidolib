@@ -105,7 +105,12 @@ GuidoDate GuidoEngineAdapter::getPageDate( CGRHandler inHandleGR, int pageNum)
 	return date;
 }
 
-GuidoErrCode GuidoEngineAdapter::onDraw(GuidoOnDrawDesc * desc)		{	return ::GuidoOnDraw(desc); }
+long GuidoEngineAdapter::getParsingTime (const ARHandler ar)		{ return ::GuidoGetParsingTime(ar); }
+long GuidoEngineAdapter::getAR2GRTime(const GRHandler gr)			{ return ::GuidoGetAR2GRTime(gr); }
+long GuidoEngineAdapter::getOnDrawTime(const GRHandler gr)			{ return ::GuidoGetOnDrawTime(gr); }
+
+
+GuidoErrCode GuidoEngineAdapter::onDraw(GuidoOnDrawDesc * desc)		{ return ::GuidoOnDraw(desc); }
 
 std::string gr2SVG( const GRHandler handle, int page, std::ostream& out, int w, int h, bool embedFont)
 {
