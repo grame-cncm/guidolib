@@ -2079,9 +2079,6 @@ with looking at ev_2.
 */
 void ARMusicalVoice::doAutoBarlines()
 {
-	// a number for the auto-ties ....
-	// int autotie = 39001;
-
 	// does the user want autobarlines (the default)?
 	if (!gGlobalSettings.gAutoBarlines) return;
 
@@ -2094,9 +2091,9 @@ void ARMusicalVoice::doAutoBarlines()
 	// holds the current meter information for a voice. if curmeter is NULL, no meter has been set.
 	// ATTENTION can a meter be turned off?
 	ARMeter * curmeter = NULL;
-	TYPE_DURATION curmetertime;
+	TYPE_DURATION curmeterlen;
 
-	bool isvalidmeter = false;
+	bool disableAutoBar = true;
 	bool lookahead    = false;
 	bool foundbarline = false;
 
@@ -2107,133 +2104,90 @@ void ARMusicalVoice::doAutoBarlines()
 	TYPE_DURATION measuretime;
 	TYPE_DURATION lastmeasuretime;
 	TYPE_TIMEPOSITION lastbartp;
+	TYPE_TIMEPOSITION lastnewsyspagep;
+	TYPE_TIMEPOSITION lastkeyp;
 
 	ARMusicalVoiceState vst;
 
 	// this operation eats all but the first non-state events or tags.
 	GuidoPos pos = GetHeadPosition(vst);
-    TYPE_TIMEPOSITION closestRepeatBar(-1,1);
-    /// a cache for this last seen key tag
     GuidoPos previousKey = NULL;
-    ARKey *key = NULL;
 	while (pos)
 	{
-		// track tie- and merge-tags
-		// first the added ones ... track the meter
-		if (curmeter != vst.curmeter)
+		if (curmeter != vst.curmeter)		// track the meter
 		{
 			curmeter = vst.curmeter;
-
-			curmetertime.setNumerator(curmeter->getNumerator());
-			curmetertime.setDenominator(curmeter->getDenominator());
-			curmetertime.normalize();
-			if (curmetertime.getNumerator() == 0)
-				isvalidmeter = false;
-			else
-				isvalidmeter = true;
-
-			if (curmeter->getAutoBarlines() == 0)
-				isvalidmeter = false;
-			// reset the measuretime ...
-
+			curmeterlen = curmeter->getMeterDuration();
+			disableAutoBar = (curmeterlen.getNumerator() == 0) || (curmeter->getAutoBarlines() == 0);
 			measuretime = DURATION_0;
-			lookahead = false; // even lookahead-mode is discarded ...
+//			lookahead = false; // even lookahead-mode is discarded ...
 		}
 
 		ARMusicalObject * o = GetAt(pos);
-		ARMusicalEvent * ev = ARMusicalEvent::cast(o); // REM c'est quoi ça ?
+		ARMusicalEvent * ev = ARMusicalEvent::cast(o);
         ARBar   *bar   = static_cast<ARBar *>(o->isARBar());
 		ARCoda  *coda  = static_cast<ARCoda *>(o->isARCoda());
 		ARSegno *segno = static_cast<ARSegno *>(o->isARSegno());
-        key = static_cast<ARKey *>(o->isARKey());
-        if( key ){
-            // put into cache
-            previousKey = pos;
-        }
 
 		// (DF) tests to inhibit auto barlines when a repeat bar is present
 		bool isRepeatBar = false;
-        TYPE_TIMEPOSITION posdate;
+        TYPE_TIMEPOSITION currentDate;
         if (o) {
-            posdate = o->getRelativeTimePosition();
-/*
-obsolete: an end repeatbar is now ARBar
-            const PositionTagList * ptl = vst.getCurPositionTags();
-            if (ptl) {
-                GuidoPos ptlPos = ptl->GetHeadPosition();
-                while (ptlPos) {
-                    ARPositionTag *tag = ptl->GetNext(ptlPos);
-                    if (dynamic_cast<ARRepeatEnd *>(tag)) {
-                        ARMusicalObject * tobj = GetAt(tag->getEndPosition());
-                        if (tobj) closestRepeatBar = tobj->getRelativeTimePosition() + tobj->getDuration();
-                        break;
-                    }
-                }
-            }
-*/
+			currentDate = o->getRelativeTimePosition();
+			if (o->isARRepeatBegin())
+				foundbarline = isRepeatBar = true;
 		}
-        if ((closestRepeatBar == posdate) || (o && o->isARRepeatBegin()))
-            foundbarline = isRepeatBar = true;
+        ARKey *key = static_cast<ARKey *>(o->isARKey());
+        if( key ) {
+			previousKey = pos;
+			lastkeyp = currentDate;
+		}
 
 		if (lookahead) {
-			// we are in lookahead-mode, that
-			// is, we have found a measureend already ...
-
-			// we need to track explicit bars until
-			// we have an event with duration>0
-
+			// we are in lookahead-mode, that is, we have found a measureend already ...
+			// we need to track explicit bars until we have an event with duration>0
             ARNewPage   *page = static_cast<ARNewPage *>(o->isARNewPage());
 			ARNewSystem *sys  = static_cast<ARNewSystem *>(o->isARNewSystem());
 
 			if (bar || isRepeatBar)
 				foundbarline = true;
 			else if (page || sys) {
-				if (newSystemOrPagepos == NULL)
+				if (newSystemOrPagepos == NULL) {
 					newSystemOrPagepos = pos;
-			}
-			else if (ev || coda || segno) {
-				if (coda || segno || (ev->getDuration() > DURATION_0)) {
-//				if( ( ev->getDuration() > DURATION_0 ) ) {
-					// now, we are at the end of the lookahead ...
-					if (!foundbarline) {
-						// insert a barline right before the current event
-						lastbartp = o->getRelativeTimePosition();
-						ARBar *arbar = new ARBar(lastbartp);
-						arbar->setIsAuto( true );
-
-						if (newSystemOrPagepos == NULL) {
-							newSystemOrPagepos = pos;
-						}
-                        /*
-                         this is tricky, the barline has to go before a potential key tag at this time position!
-                         */
-                        
-                        if( previousKey &&
-                            GetAt(previousKey)->getRelativeTimePosition() == o->getRelativeTimePosition() ){
-                            newSystemOrPagepos = previousKey;
-                        }
-						AddElementAt(newSystemOrPagepos,arbar);
-					}
-
-					foundbarline = false;
-					lookahead = false;
-					newSystemOrPagepos = NULL;
-					measuretime = DURATION_0;
+					lastnewsyspagep = currentDate;
 				}
+			}
+			else if (coda || segno || (ev && (ev->getDuration() > DURATION_0))) {
+				// now, we are at the end of the lookahead ...
+				if (!foundbarline) {
+					// insert a barline right before the current event
+					lastbartp = currentDate;
+					ARBar *arbar = new ARBar(lastbartp);
+					arbar->setIsAuto( true );
+
+					GuidoPos barPos = pos;
+					if (newSystemOrPagepos && (lastnewsyspagep == currentDate))
+						barPos = newSystemOrPagepos;
+					// the barline has to go before a potential key tag at this time position!
+					else if( previousKey && (lastkeyp == currentDate ))
+						barPos = previousKey;
+					AddElementAt(barPos,arbar);
+				}
+				foundbarline = false;
+				lookahead = false;
+				newSystemOrPagepos = NULL;
+				measuretime = DURATION_0;
 			}
 		}
 
 		lastmeasuretime = measuretime;
-		if (!lookahead && ev)
+		if (!disableAutoBar && !lookahead && ev)
 		{
 			measuretime += ev->getDuration();
+			if (measuretime == curmeterlen)
+				lookahead = true;		// this is case 1: we need to switch to look-ahead mode.
 
-			if (isvalidmeter && measuretime == curmetertime)
-			{
-				// this is case 1: we need to switch to look-ahead mode.
-				lookahead = true;
-			}
-			else if (isvalidmeter && measuretime > curmetertime)
+			else if (measuretime > curmeterlen)
 			{
 				// now we are in case 2: the event spans over the "new" barline ...
 
@@ -2243,7 +2197,7 @@ obsolete: an end repeatbar is now ARBar
 				// now calculate the durations ...
 				// we are in CHORDMODE ....
 				TYPE_DURATION olddur = ev->getDuration();
-				TYPE_DURATION newdur = curmetertime - lastmeasuretime;
+				TYPE_DURATION newdur = curmeterlen - lastmeasuretime;
 
 				// this sets the duration to the shorter length ...
 				if (vst.curchordtag)
@@ -2265,9 +2219,7 @@ obsolete: an end repeatbar is now ARBar
 						ARMusicalObject * obj = ObjectList::GetNext(startpos);
 
 						if (obj && obj->getDuration() == DURATION_0)
-						{
 							obj->setRelativeTimePosition(mytp);
-						}
 						if (tmppos == vst.curchordtag->getEndPosition())
 							break;
 					}
@@ -2282,16 +2234,11 @@ obsolete: an end repeatbar is now ARBar
 
 				// this adds the element after the event.
 				GuidoPos newpos;
-
 				if (vst.curchordtag)
 				{
-					// if we have a chord(tag), we
-					// need to copy the whole chord
-					// (including tags ....)
+					// if we have a chord(tag), we need to copy the whole chord (including tags ....)
 					// how do we do that?
-					// copychord returns the position
-					// of the first event in the new
-					// (copied) chord.
+					// copychord returns the position of the first event in the new (copied) chord.
 					newpos = CopyChord(vst, lastbartp, olddur - newdur);
 
 					AddElementAt(newpos,arbar);
@@ -2300,67 +2247,52 @@ obsolete: an end repeatbar is now ARBar
 					// after the bar, which is the chord ....
 					GetNext(vst.vpos,vst);
 					GetNext(vst.vpos,vst);
-
 					pos = vst.vpos;
 				}
 				else
 				{
-					// this adds the new bar right after
-					// the current event.
+					// this adds the new bar right after the current event.
 					newpos = AddElementAfter(pos,arbar);
 
-					// now we create a new event, that
-					// is a copy of ev and has a
-					// new duration ...
+					// now we create a new event, that is a copy of ev and has a new duration ...
 					ARMusicalEvent *ev2 = static_cast<ARMusicalEvent *>(ev->Copy());
 					if (ev2) {
 						ev2->setRelativeTimePosition( lastbartp );
 						ev2->setDuration( olddur - newdur );
 						newpos = AddElementAfter( newpos, ev2 );
 					}
-					else
-						assert(false);
-
+					else assert(false);
 
 					// this position remembers the location of the MergeEnd or
 					// tieEnd that could be introduced. This is important, so that
 					// tie repositioning works ...
-
 					GuidoPos newptagpos = NULL;
-
-                    ARNote *nt = static_cast<ARNote *>(ev2->isARNote());
-
+					ARNote *nt = static_cast<ARNote *>(ev2->isARNote());
 					if (!nt || nt->getName() != ARNoteName::empty) {
-						// old: // now look, if there are any ties
-						//      // and merge-tags ..
-						//				// if (tiemergecount==0)
-
 						// new: just insert a tie anyways ....
 						if (mPosTagList == NULL) {
 							mPosTagList = createPositionTagList();
 							vst.ptagpos = mPosTagList->GetHeadPosition();
 						}
 
-                        // so we add our tie ...
-                        ARTie *artie = new ARTie();
-                        ARTie *existingTie = dynamic_cast<ARTie *>(mPosTagList->GetHead());
-                        artie->setID(gCurArMusic->mMaxTagId ++);
-                        artie->setIsAuto(true);
-                        artie->setRelativeTimePosition(ev->getRelativeTimePosition());
-                        // the tie has a range!
-                        // artie->setRange(1);
-                        artie->setPosition(pos);
-                        if (existingTie) {
-                            TagParameterList *tpl = existingTie->getTagParameterList();
-					        artie->setTagParameterList(*tpl);
+						// so we add our tie ...
+						ARTie *artie = new ARTie();
+						ARTie *existingTie = dynamic_cast<ARTie *>(mPosTagList->GetHead());
+						artie->setID(gCurArMusic->mMaxTagId ++);
+						artie->setIsAuto(true);
+						artie->setRelativeTimePosition(ev->getRelativeTimePosition());
+						artie->setPosition(pos);
+						if (existingTie) {
+							TagParameterList *tpl = existingTie->getTagParameterList();
+							artie->setTagParameterList(*tpl);
 							delete tpl;
-                        }
+						}
 
-                        ARDummyRangeEnd *arde = new ARDummyRangeEnd(TIEEND);
-                        arde->setID(artie->getID());
-                        arde->setPosition(newpos);
-                        artie->setCorrespondence(arde);
-                        arde->setCorrespondence(artie);
+						ARDummyRangeEnd *arde = new ARDummyRangeEnd(TIEEND);
+						arde->setID(artie->getID());
+						arde->setPosition(newpos);
+						artie->setCorrespondence(arde);
+						arde->setCorrespondence(artie);
 
 						if (vst.ptagpos != NULL) {
 							// this is OK ....
@@ -2376,40 +2308,20 @@ obsolete: an end repeatbar is now ARBar
 							newptagpos = mPosTagList->AddTail(arde);
 						}
 
-
-						// add the tag to the currentposition-
-						// tags, but don't add it to the
-						// addedtaglist ... this would
-						// otherwise confuse the beginning
-						// of this function.
+						// add the tag to the currentposition-tags, but don't add it to the
+						// addedtaglist ... this would otherwise confuse the beginning of this function.
 						vst.AddPositionTag(artie,0);
 					}
 
-					// not needed ...
-
-					// we set this explicitly, because
-					// the tag is not added to the
-					// addedtaglist. Otherwise, multiple
-					// extensions of the same note
-					// would lead to multiple tie or
-					// mergtag-increments.
-					// tiemergecount++;
-
-					// now we need to "repointer" the
-					// position tags that formerly
+					// now we need to "repointer" the position tags that formerly
 					// were attached to ev -> they
-					// now need to be attached to ev2
-					// (which is at newpos)
-
+					// now need to be attached to ev2 (which is at newpos)
 					GuidoPos tmppos = vst.ptagpos;
-					while (tmppos)
-					{
+					while (tmppos) {
 						ARPositionTag * arpt = mPosTagList->GetNext(tmppos);
 						ARTagEnd * arte = ARTagEnd::cast(arpt);
-						if (arte)
-						{
-							if (arte->getPosition() == pos)
-							{
+						if (arte) {
+							if (arte->getPosition() == pos) {
 								arte->setPosition(newpos);
 								continue;
 							}
@@ -2417,32 +2329,25 @@ obsolete: an end repeatbar is now ARBar
 						break;
 					}
 
-					// the positiontagpointer now points
-					// on the FLA of ev_2 ...
+					// the positiontagpointer now points on the FLA of ev_2 ...
 					// (which is the added tie or merge)
 					if (newptagpos != NULL)
 						vst.ptagpos = newptagpos;
 
-
-					// now, the added and removedposition
-					// tags are removed ... cannot
-					// be of interest ....
+					// now, the added and removedposition tags are removed ...
+					// cannot be of interest ....
 					vst.DeleteAddedAndRemovedPTags();
-
 					pos = newpos;
 				}
 				measuretime = DURATION_0;
-
 				continue;
 			}
 		}
 
-		if (!lookahead && bar)
-		{
+		if (!lookahead && bar) {
 			measuretime = DURATION_0;
 			lastbartp = bar->getRelativeTimePosition();
 		}
-        
 		GetNext(pos,vst);
 	}
 }
