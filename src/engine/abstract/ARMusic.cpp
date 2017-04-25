@@ -206,31 +206,26 @@ void ARMusic::doAutoBreaks()
 			if (ret != ARVoiceManager::ENDOFVOICE) {
 				ender = false;
 
-				if (ret == ARVoiceManager::CURTPBIGGER_ZEROFOLLOWS ||
-					ret == ARVoiceManager::DONE_ZEROFOLLOWS)
+				if (ret == ARVoiceManager::CURTPBIGGER_ZEROFOLLOWS || ret == ARVoiceManager::DONE_ZEROFOLLOWS)
 				{
 					if (tmptp < minswitchtp)
 						minswitchtp = tmptp;
 
 				}
 
-				if (filltagmode)
-				{
-					if (ret == ARVoiceManager::NEWSYSTEM)
-					{
+				if (filltagmode) {
+					if (ret == ARVoiceManager::NEWSYSTEM) {
 						if (!newline)
 							newline = 1;
 					}
-					else if (ret == ARVoiceManager::NEWPAGE)
-					{
+					else if (ret == ARVoiceManager::NEWPAGE) {
 						if (!newline || newline == 1)
 							newline = 2;
 					}
 					else if (ret == ARVoiceManager::DONE_ZEROFOLLOWS)
 						conttagmode = true;
 				}
-				else
-				{
+				else {
 					// filltagmode == 0;
 					if (ret == ARVoiceManager::DONE ||
 						ret == ARVoiceManager::DONE_EVFOLLOWS ||
@@ -259,7 +254,8 @@ void ARMusic::doAutoBreaks()
 						// now, we need to tell ALL VoiceManagers to insert the equivalent break ...
 						GuidoPos pos = mgrlst.GetHeadPosition();
 						while ( pos) {
-							mgrlst.GetNext(pos)->InsertBreak(tp,newline);
+							ARVoiceManager * vm = mgrlst.GetNext(pos);
+							vm->InsertBreak(tp,newline);
 						}
 						conttagmode = true;
 					}
