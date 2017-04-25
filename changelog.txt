@@ -3,13 +3,16 @@ GUIDO Engine history
 ----------------------------------------------------------------
   version 1.6.4
 - new mapping behaviour:
-	- if a rest starts a bar, GuidoGetStaffMap extends its mapping box to the left barline (to keep old behaviour, use GuidoGetStaffMapV1)
-	- if all bars at a given date, over all staves, start with a rest, GuidoGetSystemMap extends the first mapping box of the measure to the left barline (to keep old behaviour, use GuidoGetSystemMapV1)
+	- if a rest starts a bar, GuidoGetStaffMap extends its mapping box to the left barline (to keep 
+	  old behaviour, use GuidoGetStaffMapV1)
+	- if all bars at a given date, over all staves, start with a rest, GuidoGetSystemMap extends the 
+	  first mapping box of the measure to the left barline (to keep old behaviour, use GuidoGetSystemMapV1)
 - new \harmony tag
 - SVG output change: tags are not using the short form anymore (e.g. <line ... /> is now  <line ...></line>)
 - grace notes are included in the previous event mapping area
 - supports complex meters with different units
-- strategy changed for key change: naturals are hidden by default when the key increases or decreases in the same direction (flats or sharps). This behavior can always be overridden using the 'hideNaturals' tag parameter.
+- strategy changed for key change: naturals are hidden by default when the key increases or decreases 
+  in the same direction (flats or sharps). This behavior can always be overridden using the 'hideNaturals' tag parameter.
 - svg device font colors management changed in order to avoid setting the color when no color is specified on gmn side.
 - fix svg export viewBox size with piano roll
 - fix slope issue with slurs
