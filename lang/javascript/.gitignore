@@ -1,4 +1,6 @@
 libGUIDOEngine.js
+libGUIDOEngine.wasm.js
+libGUIDOEngine.wasm.wasm
 package
 doc/html
 doc/readme.md
