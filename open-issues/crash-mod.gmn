@@ -1,10 +1,7 @@
 
-{
-    [ \meter<"4/4"> \text<"modify the score: the engine crash", dy=14, dx=-3.4cm> (c/1) \newLine \meter<"4/4"> c/1 c]
-}
-(*
-{
-    [ \meter<"4/4"> c/1 \meter<"4/4"> c/1 c]
-    [ \meter<"4/4"> c/1 \newLine c/1 c]
-}
-*)
+[ 
+	\meter<"4/4"> \text<"modify the score: the engine crashes", dy=14, dx=-2cm> (c/1) 
+	|
+	\newLine 
+	\meter<"4/4"> d/1 e 
+]
