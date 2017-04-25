@@ -1,0 +1,4 @@
+% crash due to nested range tags with incorrect syntax
+[
+	\text<"some text">(\noteFormat<color="red">(c#1)
+]
