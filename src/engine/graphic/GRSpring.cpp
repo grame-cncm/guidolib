@@ -503,8 +503,8 @@ float GRSpring::calcconst(GRNotationElement * grn)
 	else
 		fSconst = (fIsProportionalElement ? 1 : defconst(fDur, fFuncpar));
 
-	assert(fSconst != 0);
-
+//	assert(fSconst != 0);
+	if (!fSconst) fSconst = 1;
 	return fSconst;
 }
 
