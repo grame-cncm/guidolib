@@ -45,8 +45,8 @@ class KF_List
 		GuidoPos	insert( GuidoPos pos, TYPE data ) 
 											{ return AddElementAt( pos, data ); }
 
-		TYPE		back()	{ return GetTail(); }  // warning: currently return a copy
-		TYPE		front() { return GetHead(); }  // idem
+		TYPE		back()	const { return GetTail(); }  // warning: currently return a copy
+		TYPE		front() const { return GetHead(); }  // idem
 
 		// - Original interface
 		virtual void ResetListNoDelete();
