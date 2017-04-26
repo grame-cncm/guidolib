@@ -20,7 +20,6 @@
 #include "TagParameterString.h"
 #include "TagParameterFloat.h"
 #include "GRStaff.h"
-#include "GRGlue.h"
 #include "GRSingleNote.h"
 #include "GRAccidental.h"
 #include "GRGlobalStem.h"
@@ -28,6 +27,7 @@
 #include "GREmpty.h"
 #include "GRStdNoteHead.h"
 #include "GraphTools.h"
+#include "GRGlue.h"
 
 #include "GRGlissando.h"
 

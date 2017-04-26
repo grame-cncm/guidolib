@@ -14,7 +14,6 @@
 
 #include "ARTie.h"
 #include "GRTie.h"
-#include "GRGlue.h"
 #include "GRRest.h"
 #include "GREmpty.h"
 #include "GRDefine.h"

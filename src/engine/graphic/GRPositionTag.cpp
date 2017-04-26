@@ -19,9 +19,8 @@
 
 #include "GRPositionTag.h"
 #include "GRStaff.h"
-#include "GRGlue.h"
 #include "GRSystemSlice.h"
-// #include "NEPointerList.h"
+#include "GRGlue.h"
 
 GRPositionTag::GRPositionTag(ARMusicalTag * armt) : GRTag(armt), mStartEndList(1)
 {

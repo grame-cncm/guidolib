@@ -22,7 +22,6 @@
 #include "GRSingleNote.h"
 #include "GRSingleRest.h"
 #include "GRStaff.h"
-#include "GRGlue.h"
 #include "GRPage.h"
 #include "GRMusic.h"
 #include "GRSystemTag.h"

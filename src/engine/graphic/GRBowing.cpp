@@ -22,11 +22,11 @@
 #include "TagParameterString.h"
 #include "TagParameterFloat.h"
 
+#include "GRGlue.h"
 #include "GRBowing.h"
 #include "GREmpty.h"
 #include "GRStaff.h"
 #include "GRRest.h"
-#include "GRGlue.h"
 #include "GRSingleNote.h"
 #include "GRStdNoteHead.h"
 #include "GRGlobalStem.h"
@@ -36,6 +36,7 @@
 extern GRSystem * gCurSystem;
 
 using namespace std;
+
 
 // -----------------------------------------------------------------------------
 GRBowing::GRBowing(GRStaff * grstaff, GRNotationElement * startEl, GRNotationElement * endEl)
