@@ -88,6 +88,7 @@ public:
     float getQpmValue() const;	
 
     virtual void browse(TimeUnwrap& mapper) const;
+    virtual ARTempo	*isARTempo()		  { return this; }
 
 protected:
     static ListOfTPLs ltpls;
