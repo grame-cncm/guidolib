@@ -40,6 +40,8 @@ class GRGlue : public GRNotationElement
 		GRGlue * mPartner;
 		int		 mIsStart;	// (JB) sometimes = -1 should be a bool...
 
+    virtual const GRGlue *		isGRGlue() const		{ return this; }
+
 	protected:
 
 		float mSConst;

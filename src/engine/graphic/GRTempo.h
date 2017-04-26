@@ -33,8 +33,9 @@ class GRTempo : public GRTagARNotationElement
 					GRTempo(GRStaff *, ARTempo * );
 		virtual 	~GRTempo();
 		
-		virtual void OnDraw( VGDevice & dev ) const;
-				virtual unsigned int getTextAlign() const;
+		virtual void			OnDraw( VGDevice & dev ) const;
+		virtual unsigned int	getTextAlign() const;
+		virtual const GRTempo *	isGRTempo() const		{ return this; }
 
 	protected:
 		TYPE_DURATION getDuration (const char * str) const;

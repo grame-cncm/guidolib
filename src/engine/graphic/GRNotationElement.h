@@ -31,7 +31,8 @@ class GRNote;
 class GRRest;
 class GREvent;
 class GRText;
-
+class GRGlue;
+class GRTempo;
 
 
 const float kMinNoteSize = 0.001f;	// minimum size of an element, the element is not drawn when the size is smaller
@@ -133,6 +134,8 @@ public:
     virtual const GRNote *		isGRNote() const		{ return 0; }
     virtual const GRRest *		isRest() const			{ return 0; }
     virtual const GREvent *		isGREvent() const		{ return 0; }
+    virtual const GRGlue *		isGRGlue() const		{ return 0; }
+    virtual const GRTempo *		isGRTempo() const		{ return 0; }
 
 protected:
 	
