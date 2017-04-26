@@ -590,7 +590,6 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION &timepos, int filltagmode)
 
 		if (o->getDuration() == DURATION_0) {
 			// now we have a tag (no position tag!) or an event with duration 0, handle it...
-			GRNotationElement *grne = NULL;
 			if (ARMusicalEvent::cast(o)) {
 				// Then we create an EMPTY-Event handling all the startPTags and endPTags...
 				checkStartPTags(fVoiceState->vpos);
@@ -679,40 +678,42 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION &timepos, int filltagmode)
 
 				return DONE;
 			}
-			else if ((grne = parseTag(o)) != NULL) {
-				// tag was handled... here, we distinguish the different graphical TAG-Types
-				GRTag *tag = dynamic_cast<GRTag *>(grne);
-				
-				if (tag && (tag->getTagType() == GRTag::SYSTEMTAG))
-					mStaffMgr->AddSystemTag(grne,mCurGrStaff,voicenum);
-				else if (tag && (tag->getTagType() == GRTag::PAGETAG))
-					mStaffMgr->AddPageTag(grne,mCurGrStaff,voicenum);
-				else if (grne->getNeedsSpring()) {
-					if (curglobalstem || curgloballocation) {
-						GuidoTrace("Tag with spring in a globalstem or global location!");
-						// The tag is no longer added but gets associated with
-						// the curglobalthing that is active at that point...
-						GRNotationElement *firstEl = NULL;
+			else {
+				GRNotationElement *grne = parseTag(o);
+				if (grne) {
+					// tag was handled... here, we distinguish the different graphical TAG-Types
+					GRTag *tag = dynamic_cast<GRTag *>(grne);
+					
+					if (tag && (tag->getTagType() == GRTag::SYSTEMTAG))
+						mStaffMgr->AddSystemTag(grne,mCurGrStaff,voicenum);
+					else if (tag && (tag->getTagType() == GRTag::PAGETAG))
+						mStaffMgr->AddPageTag(grne,mCurGrStaff,voicenum);
+					else if (grne->getNeedsSpring()) {
+						if (curglobalstem || curgloballocation) {
+							GuidoTrace("Tag with spring in a globalstem or global location!");
+							// The tag is no longer added but gets associated with
+							// the curglobalthing that is active at that point...
+							GRNotationElement *firstEl = NULL;
 
-						if (curgloballocation)
-                            firstEl = curgloballocation->getFirstEl();
-						else if (curglobalstem)
-                            firstEl = curglobalstem->getFirstEl();
+							if (curgloballocation)
+								firstEl = curgloballocation->getFirstEl();
+							else if (curglobalstem)
+								firstEl = curglobalstem->getFirstEl();
 
-						grne->setNeedsSpring(-1);
-						mStaffMgr->AddGRSyncElement(grne, mCurGrStaff, firstEl->getSpringID(), grvoice, firstEl);
+							grne->setNeedsSpring(-1);
+							mStaffMgr->AddGRSyncElement(grne, mCurGrStaff, firstEl->getSpringID(), grvoice, firstEl);
+						}
+						else
+							mStaffMgr->AddGRSyncElement(grne, mCurGrStaff,voicenum,grvoice);
 					}
-					else
-                        mStaffMgr->AddGRSyncElement(grne, mCurGrStaff,voicenum,grvoice);
+				}
+				else {
+					// not handled !?
+					ARMusicalTag *armt = static_cast<ARMusicalTag *>(o->isARMusicalTag());
+					if (!armt || !armt->IsStateTag())
+						GuidoTrace("Warning, Tag not handled");
 				}
 			}
-            else {
-                // not handled !?
-                ARMusicalTag *armt = static_cast<ARMusicalTag *>(o->isARMusicalTag());
-
-                if (!armt || !armt->IsStateTag())
-                    GuidoTrace("Warning, Tag not handled");
-            }
 
 			// increment the position...
 			arVoice->GetNext(fVoiceState->vpos, *fVoiceState);
