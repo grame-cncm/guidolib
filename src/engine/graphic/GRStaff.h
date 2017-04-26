@@ -15,7 +15,8 @@
 
 */
 
-// #include "GRDefine.h"
+#include <iostream>
+
 #include "GRCompositeNotationElement.h"
 #include "GuidoDefs.h"
 
@@ -209,6 +210,7 @@ class GRStaff : public GRCompositeNotationElement
         virtual float       getMappingDredgeSize() const;
 		virtual float       getKeyPosition(TYPE_PITCH pitch, int numkeys = 1) const;
 		virtual GRNote *    getLastNote() const;
+		const GRNote *		getFirstNote() const;
 		virtual GRBar *     getLastBar() const;
 		virtual void		print(std::ostream& os) const;
 
@@ -284,6 +286,7 @@ class GRStaff : public GRCompositeNotationElement
 		void	checkCollisions (TCollisions& state) const;
 		float	getNotesDensity () const;
 		size_t	getLyrics (std::vector<const GRNotationElement*>& list) const;
+	
 
   protected:
 		void	DebugPrintState(const char * info) const;
@@ -325,6 +328,9 @@ class GRStaff : public GRCompositeNotationElement
 
 		float			fProportionnalRendering;
 };
+
+std::ostream& operator<< (std::ostream& os, const GRStaff& staff);
+std::ostream& operator<< (std::ostream& os, const GRStaff* staff);
 
 #endif
 

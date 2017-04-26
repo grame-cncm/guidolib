@@ -433,6 +433,8 @@ void GRStaff::print(std::ostream& os) const
 		os << elts.GetNext(pos) << endl;
 	}
 }
+std::ostream& operator<< (std::ostream& os, const GRStaff& staff)			{ staff.print(os); return os; }
+std::ostream& operator<< (std::ostream& os, const GRStaff* staff)			{ staff->print(os); return os; }
 
 class TXInterval : public std::pair<float, float>
 {
@@ -956,6 +958,20 @@ staff_debug("newMeasure");
 }
 
 // ----------------------------------------------------------------------------
+const GRNote * GRStaff::getFirstNote() const
+{
+	const NEPointerList& elts = getElements();
+	GuidoPos pos = elts.GetHeadPosition();
+	while (pos) {
+		const GRNotationElement* e = elts.GetNext(pos);
+		const GRNote * grNote = e->isGRNote();
+		if( grNote )
+			return grNote;
+	}
+	return 0;
+}
+
+// ----------------------------------------------------------------------------
 GRNote * GRStaff::getLastNote() const
 {
 	GuidoPos pos = mCompElements.GetTailPosition();
@@ -1331,10 +1347,7 @@ staff_debug("EndStaff 1");
 /** \brief Ends the staff. Returns the position of the element after endpos
 	(only if endpos != NULL) else returns NULL.
 */
-GuidoPos GRStaff::EndStaff(const TYPE_TIMEPOSITION & tp, 
-					   GRStaffManager * staffmgr, 
-					   GuidoPos endpos, 
-					   int lastline)
+GuidoPos GRStaff::EndStaff(const TYPE_TIMEPOSITION & tp, GRStaffManager * staffmgr, GuidoPos endpos, int lastline)
 {
 staff_debug("EndStaff 2");
 	assert(!endglue);
@@ -1405,12 +1418,6 @@ staff_debug("CreateBeginElements");
 	mStaffState.basepitoffs = state.basepitoffs;
 	mStaffState.instrNumKeys = state.instrNumKeys;
 	
-	// this is not possible, because staffmgr chokes on TWO Glues after another ...
-	//startglue = new GRGlue(this, 1);
-	//startglue->setRelativeTimePosition(relativeTimePositionOfGR);
-	//addNotationElement(startglue);
-	//staffmgr->AddGRSyncElement(startglue, this, staffnum);
-
 	// we have to look, what kind of state-settings are set.
 	if (state.curbarfrmt != NULL)
 		setBarFormat(state.curbarfrmt);
@@ -2244,11 +2251,9 @@ void GRStaff::DrawNotationElements( VGDevice & hdc ) const
 
 	hdc.OffsetOrigin( xOffset, yOffset );  		// Set the origin at beginning of staff
 	GuidoPos pos = mCompElements.GetHeadPosition();
-
 	while (pos) {
 		GRNotationElement * e = mCompElements.GetNext(pos);
-
-        e->OnDraw(hdc);
+		e->OnDraw(hdc);
 		
 #ifdef _DEBUG
 		//draw element's bounding box
