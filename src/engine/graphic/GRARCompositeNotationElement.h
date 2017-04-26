@@ -20,17 +20,12 @@
 
 #include "NEPointerList.h"
 
-// class GRCompositeNotationElement;
-// class NEPointerList;
-
 /** \brief not yet documented
 */
 class GRARCompositeNotationElement : public GRARNotationElement
 {
 	public:
-						GRARCompositeNotationElement( ARMusicalObject * ar,
-														bool ownsAR = false );
-
+						 GRARCompositeNotationElement( ARMusicalObject * ar, bool ownsAR = false );
 		virtual			~GRARCompositeNotationElement();
 
 
@@ -41,24 +36,21 @@ class GRARCompositeNotationElement : public GRARNotationElement
 		virtual void	addToOffset( const NVPoint & inOfset ); 
 		virtual void	updateBoundingBox();
 
-		// - Sub elements 
+		// - Sub elements
+			GuidoPos First() const;
+			GuidoPos Last() const;
+			
+			GRNotationElement * GetNext( GuidoPos & ioPos ) const;
+			GRNotationElement * GetTail() const;
 
-				GuidoPos First() const; // was GetHeadPosition() 
-				GuidoPos Last() const; // was GetTailPosition
-				
-				GRNotationElement * GetNext( GuidoPos & ioPos ) const;
+			GuidoPos	AddTail( GRNotationElement * el );
+			void		RemoveElement(GRNotationElement * el );
+			
+			void		DrawSubElements( VGDevice & hdc ) const;
+			void		GetSubElementsMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 
-				GRNotationElement * GetTail() const;
-
-				GuidoPos	AddTail( GRNotationElement * el );
-				void		RemoveElement(GRNotationElement * el );
-				
-				void		DrawSubElements( VGDevice & hdc ) const;
-				void		GetSubElementsMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
-
-				void		RemoveAllSubElements();
-
-				GuidoPos	SetTailPosition(GuidoPos pos);
+			void		RemoveAllSubElements();
+			GuidoPos	SetTailPosition(GuidoPos pos);
 
 			NEPointerList & GetCompositeElements() { return mCompositeElements; }	
 			const NEPointerList & GetCompositeElements() const  { return mCompositeElements; }	
