@@ -100,6 +100,7 @@ class GRMusic : public GREvent
 
 		virtual void	print(std::ostream& os) const;
 		virtual void	trace(VGDevice & hdc);
+		virtual void	pagetrace(VGDevice & hdc);
 		virtual void	voicetrace(VGDevice & hdc);
 
 				int 	getVoiceNum( ARMusicalVoice * arvoice ) const; 

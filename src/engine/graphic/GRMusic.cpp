@@ -251,6 +251,8 @@ void GRMusic::OnDraw( VGDevice & hdc, const GuidoOnDrawDesc & inDrawInfos )
 	GRBar::reset();
 	if (drawpage)
 		drawpage->OnDraw(hdc, inDrawInfos);
+
+//	trace(hdc);
 }
 	
 // --------------------------------------------------------------------------
@@ -266,23 +268,71 @@ void GRMusic::GetMap( int inPage, float w, float h, GuidoElementSelector sel, Ma
 	}
 }
 	
+void GRMusic::pagetrace(VGDevice & hdc)
+{
+	size_t n = mPages.size();
+	for (size_t i=0; i < n; i++) {
+		cerr << "page " << i << endl;
+		const SystemPointerList * sysl = mPages[i]->getSystems();
+		if (sysl) {
+			size_t m = sysl->size();
+			for (size_t j=0; j < m; j++) {
+				cerr << "system --- " << j << endl;
+				const GRSystem* sys = (*sysl)[j];
+				const StaffVector * staves = sys->getStaves();
+				if (staves) {
+					for (int i = staves->GetMinimum(); i <= staves->GetMaximum(); i++) {
+						const GRStaff * staff = staves->Get(i);
+						if (staff) {
+							cerr << "staff --- " << i << endl;
+							const NEPointerList& elts = staff->getElements();
+							GuidoPos pos = elts.GetHeadPosition();
+							while (pos) {
+								const GRNotationElement* ne = elts.GetNext(pos);
+								cerr << ne << endl;
+							}
+						}
+						else cerr << "?? staff " << i << " NULL" << endl;
+					}
+				}
+			}
+		}
+		else cerr << "?? page " << i << " systems NULL" << endl;
+	}
+}
+
 void GRMusic::voicetrace(VGDevice & hdc)
 {
-    if (!getNumVoices()) return;
-    GRVoice * voice = getVoice(0);
-    if (voice) {
-        NVRect r (voice->getBoundingBox());
-        r += voice->getPosition();
-        cout << "Voice trace - voice " << r << endl;
-    }
-    else cout << "==> voice is NULL" << endl;
+    int n = getNumVoices();
+    for (int i = 0; i < n; i++){
+		GRVoice * voice = getVoice(i);
+		if (voice) {
+			cerr << "voice " << i << endl;
+			const NEPointerList & elts = voice->GetCompositeElements();
+			GuidoPos pos = elts.GetHeadPosition();
+			while (pos) {
+				const GRNotationElement* ne = elts.GetNext(pos);
+				cerr << ne << endl;
+			}
+		}
+		else cerr << "?? voice " << i << " is NULL" << endl;
+	}
+
+//    GRVoice * voice = getVoice(0);
+//    if (voice) {
+//        NVRect r (voice->getBoundingBox());
+//        r += voice->getPosition();
+//        cerr << "Voice trace - voice " << r << endl;
+//    }
+//    else cerr << "==> voice is NULL" << endl;
 }
 	
 void GRMusic::trace(VGDevice & hdc)
 {
-    cout << "==> GRMusic content" << endl;
-    cout << "    num pages  : " << getNumPages() << endl;
-    cout << "    num voices : " << getNumVoices() << endl;
+    cerr << "==> GRMusic content" << endl;
+    cerr << "    num pages  : " << getNumPages() << endl;
+    pagetrace(hdc);
+    cerr << "\n    num voices : " << getNumVoices() << endl;
     voicetrace(hdc);
 }
 
