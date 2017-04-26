@@ -101,8 +101,6 @@ GRAccolade::GRAccolade(ARAccolade *arAccol)
     id = accolID;
 	rangeBegin = arAccolBeginRange;
 	rangeEnd   = arAccolEndRange;
-
-    fHasBeenDrawn = false;
 }
 
 // --------------------------------------------------------------------------

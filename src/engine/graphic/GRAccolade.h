@@ -35,19 +35,15 @@ public:
     virtual			~GRAccolade();
 
     virtual void	setAccoladeType( int in ) { mAccoladeType = in; }
-    virtual void	setDx( float in ) { mDx = in; }
-    virtual void	setAccoladeID( int i) {id = i;}
-    virtual int 	getAccoladeID() {return id;}
+    virtual void	setDx( float in )		{ mDx = in; }
+    virtual void	setAccoladeID( int i)	{id = i;}
+    virtual int 	getAccoladeID() const	{return id;}
     virtual void	setBeginRange(int begin){rangeBegin = begin;}
-    virtual int		getBeginRange(){return rangeBegin;}
-    virtual void	setEndRange(int end){rangeEnd = end;}
-    virtual int 	getEndRange(){return rangeEnd;}
+    virtual int		getBeginRange() const	{return rangeBegin;}
+    virtual void	setEndRange(int end)	{rangeEnd = end;}
+    virtual int 	getEndRange() const		{return rangeEnd;}
 
-    virtual void    HasBeenDrawn(bool inHasBeenDrawn) { fHasBeenDrawn = inHasBeenDrawn; }
-    virtual bool    getHasBeenDrawn() { return fHasBeenDrawn; } 
-
-    virtual void	draw(VGDevice & hdc, const NVPoint & leftTop, 
-        const NVPoint & leftBottom ) const;
+    virtual void	draw(VGDevice & hdc, const NVPoint & leftTop, const NVPoint & leftBottom ) const;
 
     virtual void	OnDraw( VGDevice &) const { }
 
@@ -63,7 +59,6 @@ protected:
     int			id;
     int			rangeBegin;
     int			rangeEnd;
-    bool        fHasBeenDrawn;
 };
 
 #endif
