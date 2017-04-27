@@ -70,11 +70,6 @@
 //#undef _DEBUGSFF
 // #define _DEBUGSFF
 
-#ifdef _DEBUGSFF
-#include <fstream>
-#include <strstream>
-#endif
-
 #if 0
 #define traceslice(a)	a
 #else
@@ -107,8 +102,7 @@ GRStaffManager::GRStaffManager(GRMusic * p_grmusic, ARPageFormat * inPageFormat,
 	  voiceSpringArr(-1),
 	  evlist(1)					
 {
-	if(aSettings)
-	{
+	if(aSettings) {
 		// Keep the settings internally
 		this->settings = *aSettings;
 
@@ -118,26 +112,24 @@ GRStaffManager::GRStaffManager(GRMusic * p_grmusic, ARPageFormat * inPageFormat,
 		this->settings.proportionalRenderingForceMultiplicator =
 				(aSettings->proportionalRenderingForceMultiplicator < 0.0001 ? 0 : aSettings->proportionalRenderingForceMultiplicator);
 
-	} else {
+	}
+	else {
 		// Apply default layout settings
 		GuidoGetDefaultLayoutSettings (&this->settings);
 	}
 
 	mIsBreak = false;
 	mArAuto  = NULL;
-
 	mStaffStateVect = NULL;
 	mTempSpringID = 1;
 	mSpringID = 1;
 	mLastSpringID = 0;
-
 	mNewLinePage = 0;
 	
 	// These are pointers to the maximum width clef and the maximum width key. These are saved so that
 	// the beginning sff can be updated easily .....
 	mMaxClef = NULL;
 	mMaxKey = NULL;
-	
 	mGrMusic = p_grmusic;
 	mArMusic = mGrMusic->getARMusic();
 
@@ -154,7 +146,6 @@ GRStaffManager::GRStaffManager(GRMusic * p_grmusic, ARPageFormat * inPageFormat,
 	mGrSystemSlice = new GRSystemSlice(this,DURATION_0);
 	// this is arguable: the 0 is the first glue, this is only for the very first start ....
 	mGrSystemSlice->mStartSpringID = 0;
-
 	mMyStaffs = new VStaff(0); // the Staves are not owned by the Manager
 
 	// An Array of Voice-Managers
@@ -171,7 +162,6 @@ GRStaffManager::GRStaffManager(GRMusic * p_grmusic, ARPageFormat * inPageFormat,
 	// The SpaceForceFunction ...
 	// The sff is used for the systemslices and to later find the optimum system breaks
 	cursff = new GRSpaceForceFunction2(settings.force);
-//	sff = NULL;
 
 	// put one single (beginning) spring in the springvector, with id 0.
 	GRSpring * spr = new GRSpring(relativeTimePositionOfGR, DURATION_0, settings.spring, settings.proportionalRenderingForceMultiplicator);
@@ -366,25 +356,7 @@ void GRStaffManager::createStaves()
 	// We have a ARmusic (armusic) and start from the beginning ...
 	// now we go through all voices and create graphical representations. We also
 	// add these to the respective staves (standard or handled by staff-tag)
-#if 1
 	int cnt = initVoices(0);
-#else
-	int cnt = 0;
-	ARMusicalVoice * voice;
-	GuidoPos pos = mArMusic->GetHeadPosition();
-	while (pos) {
-		voice = mArMusic->GetNext(pos);
-		// this is important, so that chords are not overread but the explicit events are read.
-		voice->setReadMode(ARMusicalVoice::EVENTMODE);
-		GRVoiceManager * voiceManager = new GRVoiceManager(mGrMusic, this, voice, cnt );
-		// this is the array of VoiceManagers ...
-		mVoiceMgrList->Set( cnt++, voiceManager );
-
-		// This call initializes the GRVoiceManager
-		// ATTENTION: realise the significance of STAFF-Tags at the very start!
-		voiceManager->BeginManageVoice();
-	}
-#endif
 
 	TCreateStavesState state;
 	state.timePos = relativeTimePositionOfGR;
@@ -557,23 +529,16 @@ void GRStaffManager::createStaves()
 void GRStaffManager::prepareStaff(int staff)
 {
 	GRStaff * curstaff = mMyStaffs->Get(staff);
-
-    if (curstaff == NULL)
-	{
+    if (curstaff == NULL) {
 		curstaff = new GRStaff(mGrSystemSlice, settings.proportionalRenderingForceMultiplicator);
-		if (mStaffStateVect)
-		{
+		if (mStaffStateVect) {
 			// this just copies the stateinformation ...
 			GRStaffState * myss = mStaffStateVect->Get(staff);
-			if (myss)
-			{
+			if (myss) {
 				// this sets the information explicitly that would otherwise be automatically
 				// copied with CreateBeginElements if an automatic Break instead of a 
 				// forces break would occur.
 				curstaff->setStaffState(myss);
-				//curstaff->setInstrumentFormat(*myss);
-				//curstaff->setStaffFormat(myss->curstaffrmt);
-				//curstaff->setBarFormat(myss->curbarfrmt);
 			}
 		}
 		mGrSystemSlice->addStaff(curstaff,staff);
@@ -584,6 +549,7 @@ void GRStaffManager::prepareStaff(int staff)
 	// set the staff in  Vector mMyStaffs.
 	mMyStaffs->Set(staff, curstaff);
 }
+
 
 GRStaff * GRStaffManager::getStaff(int staff)
 {
@@ -891,7 +857,6 @@ int GRStaffManager::AddSystemTag(GRNotationElement * grel, GRStaff * grstaff, in
 	{
 		// there is an entry of this type already
 		GuidoWarn("Another SystemTag of the same type is already used");
-//		GuidoTrace("SYSTEM-Tag collision");
 		delete grel;
 	}
 	else
@@ -2614,10 +2579,6 @@ traceslice(cout << "GRStaffManager::FindOptimumBreaks num slices is " << numslic
 			continue;
 		}
 		
-#ifdef _DEBUGSFF
-		GRSpaceForceFunction2 * testsff = new GRSpaceForceFunction2();
-#endif
-
 		GRSystemSlice * begslice = mSystemSlices->GetAt(pos);	// this is the beginning slice of the potential line.
 		GRBeginSpaceForceFunction2 * begsff = 0;
 		// this gets the SpaceForceFunction of the beginning-elemnts 
@@ -2632,11 +2593,7 @@ traceslice(cout << "GRStaffManager::FindOptimumBreaks num slices is " << numslic
 				curxmin = begsff->getXminOpt();
 				// this adds the beginning slice using the bounding-retangle of the staffs ...
 				sliceheight.AddSystemSlice(begslice,1);
-				//float alterheight = sliceheight.getHeight();	
-				
-#ifdef _DEBUGSFF
-				testsff->addSFF(*begsff);
-#endif
+				//float alterheight = sliceheight.getHeight();
 			}
 		}
 
@@ -2649,21 +2606,6 @@ traceslice(cout << "GRStaffManager::FindOptimumBreaks num slices is " << numslic
 			GRSystemSlice * slc = mSystemSlices->GetNext(tmppos);	
 			if (slc)
 			{
-#ifdef _DEBUGSFF
-				{
-						char mybuffer[200];
-						ostrstream myfname(mybuffer,200);
-						myfname << "tmpsff" << count  << "_" 
-							<< tmpcount << ".txt";
-						char *cname = myfname.str();
-						cname[myfname.pcount()] = 0;
-						ofstream myout(cname);
-						myout << "optconst:  " << slc->pbs->sff->getOptConstant() << endl;
-						myout << "optxmin: " << slc->pbs->sff->getXminOpt() << endl;
-						float myval = slc->pbs->sff->getExtent(1700);
-						slc->pbs->sff->writeAllExtents(myout);
-				}
-#endif
                 float optconst = 0;
 
                 if (slc->mPossibleBreakState)
@@ -2688,10 +2630,6 @@ traceslice(cout << "GRStaffManager::FindOptimumBreaks num slices is " << numslic
 				if (slcheight > curheight)
 					curheight = slcheight;
 				//float alterheight = sliceheight.getHeight(); // no top
-
-#ifdef _DEBUGSFF
-				testsff->addSFF(*slc->pbs->sff);
-#endif
 			}
 
 			// then we check, if we are in the range for the system ....
@@ -2850,15 +2788,6 @@ traceslice(cout << "GRStaffManager::FindOptimumBreaks num slices is " << numslic
 									myent->curheight = myheight;
 									myent->pagebreaktoprev = ispagebreak;
 								}
-#ifdef _DEBUG
-								{
-									edge * edg = new edge;
-									edg->source = tmpcount * numpageareas + slot;
-									edg->target = count * numpageareas + k;
-									edg->penalty = val;
-									edges.AddTail(edg);
-								}
-#endif
 							}
 						}
 					}
@@ -2871,9 +2800,6 @@ traceslice(cout << "GRStaffManager::FindOptimumBreaks num slices is " << numslic
 		}
 		inBeginHeight = 0;
 		mSystemSlices->GetNext(pos);
-#ifdef _DEBUGSFF
-		delete testsff;
-#endif
 	}
 
 	// myoutfile.close();
@@ -3350,7 +3276,7 @@ GRBeginSpaceForceFunction2 * GRStaffManager::getCurrentBegSFF()
 */
 GRSystemSlice * GRStaffManager::CreateBeginSlice(const GRSystemSlice * lastslice)
 {
-	// now I have to create the begin - slice given the lastslice of the previous line 
+	// now I have to create the begin - slice given the lastslice of the previous line
 	// (which includes the staff-states for my current line ....
 	// I start with basically nothing ... only the state information.
 	// I need to synchronize everything .... This is somewhat connected
