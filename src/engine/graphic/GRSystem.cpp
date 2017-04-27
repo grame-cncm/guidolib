@@ -330,9 +330,7 @@ GRSystem::GRSystem(GRStaffManager * staffmgr, GRPage * inPage,
 	spr->fIsfrozen = 1;
 	mSpringVector->Set(endspring,spr);
 
-	int i;
-	for (i=endslice->mStaffs->GetMinimum();
-	         i<=endslice->mStaffs->GetMaximum(); i++)
+	for (int i = endslice->mStaffs->GetMinimum(); i <= endslice->mStaffs->GetMaximum(); i++)
 	{
 		GRStaff * staff = endslice->mStaffs->Get(i);
 		if (staff)
@@ -354,11 +352,7 @@ GRSystem::GRSystem(GRStaffManager * staffmgr, GRPage * inPage,
 	// there are no more systemslices left, then this is the very first line ...
 	// we have to find out, if the required force is greater than the optimum force, in which case the force
 	// is set to the optimum, the
-	if (getRelativeTimePosition() == DURATION_0
-		&& !beginslice
-		&& (*psystemslices)->empty()
-		&& islastsystem)
-	{
+	if (getRelativeTimePosition() == DURATION_0 && !beginslice && (*psystemslices)->empty() && islastsystem) {
 			float alternate_force = mSpaceForceFunc->getOptForce();
 			if (mSystemforce > alternate_force)
 				mSystemforce = alternate_force;
@@ -397,7 +391,7 @@ GRSystem::GRSystem(GRStaffManager * staffmgr, GRPage * inPage,
 	float curx = 0;
 	if (startspring >= 0 && endspring < INT_MAX )
 	{
-		for( i = startspring; i <= endspring; ++i)
+		for(int i = startspring; i <= endspring; ++i)
 		{
 			GRSpring * spr = mSpringVector->Get(i);
 			if (spr)
@@ -438,6 +432,32 @@ GRSystem::GRSystem(GRStaffManager * staffmgr, GRPage * inPage,
 		}
 		else if ((systag = dynamic_cast<GRSystemTag *>(el)) != 0 )
 			systag->checkPosition(this);
+	}
+}
+
+//----------------------------------------------------------------------------------------------------
+// this is the only solution found up to now to solve a tempo tag issue:
+// a tempo tag position is incorrrect when the tag is after a pbreak
+// this is likely due to wrong new slice creation that don't know about the tempo tag
+void GRSystem::patchTempoIssue()
+{
+	const NEPointerList & sub = GetCompositeElements();
+	GuidoPos pos = sub.GetHeadPosition();
+	while (pos) {
+		GRNotationElement* elt = sub.GetNext(pos);
+		if (elt->isGRTempo()) {
+			float x = elt->getPosition().x;
+			const GRStaff* staff = getStaff(1);
+			if (staff) {
+				float space = staff->getStaffLSPACE();
+				NVRect r = staff->getBoundingBox() + staff->getPosition();
+				if (x + space > r.right) {
+					const GRNotationElement* note = (const GRNotationElement*)staff->getFirstNote();
+					float nx = note ? note->getPosition().x : r.right;
+					elt->setHPosition (nx);
+				}
+			}
+		}
 	}
 }
 
@@ -678,6 +698,63 @@ void GRSystem::checkCollisions (TCollisions& state, bool lyrics) const
 }
 
 // --------------------------------------------------------------------------
+void GRSystem::HandleStaffOnOff(GuidoPos pos, const GRSystemSlice * slice) const
+{
+	std::map<int, bool> statemap;
+	if(pos) {
+		GRSystemSlice * nextSlice = mSystemSlices.GetAt(pos);
+		if (nextSlice) {
+			for(int i = nextSlice->mStaffs->GetMinimum(); i <= nextSlice->mStaffs->GetMaximum(); i++) {
+				GRStaff * st = nextSlice->mStaffs->Get(i);
+				if (st) statemap[i] = st->isStaffBeginOn();
+			}
+		}
+		for (int i = slice->mStaffs->GetMinimum(); i <= slice->mStaffs->GetMaximum(); i++) {
+			if(nextSlice->mStaffs->Get(i)) {
+				GRStaff * st = slice->mStaffs->Get(i);
+				if (st) st->setNextOnOff(statemap[i]);
+			}
+			else {
+				GRStaff * st = slice->mStaffs->Get(i);
+				if (st) st->setNextOnOff(true);
+			}
+		}
+	}
+	else {
+		for(int i = slice->mStaffs->GetMinimum(); i <= slice->mStaffs->GetMaximum(); i++) {
+			GRStaff* staff = slice->mStaffs->Get(i);
+			if (staff) staff->setNextOnOff(staff->isStaffEndOn());
+		}
+	}
+}
+
+// --------------------------------------------------------------------------
+void GRSystem::DrawAccolade( VGDevice & hdc, const GRSystemSlice * slice, const GRStaff * staff) const
+{
+	size_t n = mAccolade.size();
+	for(size_t i=0; i < n; i++) {
+		const GRAccolade* accol = mAccolade[i];
+		int begin = accol->getBeginRange();
+		int end = accol->getEndRange();
+		if (begin == 0 || end < begin) {
+			NVPoint top = slice->mStaffs->Get(slice->mStaffs->GetMinimum())->getPosition();
+			NVPoint bottom = slice->mStaffs->Get(slice->mStaffs->GetMaximum())->getPosition();
+			float staffHeight = (staff->getNumlines() - 1) * staff->getStaffLSPACE();
+			bottom.y += staffHeight;
+			accol->draw(hdc, top, bottom);
+		}
+		for (int i = slice->mStaffs->GetMinimum(); i <= slice->mStaffs->GetMaximum(); i++) {
+			if (i == begin && slice->mStaffs->Get(end)) {
+				NVPoint endpos = NVPoint(slice->mStaffs->Get(end)->getPosition().x, slice->mStaffs->Get(end)->getPosition().y);
+				float staffHeight = (staff->getNumlines() - 1) * staff->getStaffLSPACE();
+				endpos.y += staffHeight;
+				accol->draw(hdc, slice->mStaffs->Get(begin)->getPosition(), endpos);
+			}
+		}
+	}
+}
+
+// --------------------------------------------------------------------------
 /** \brief Draws system-slices, accolade, borders, and springs.
 */
 void GRSystem::OnDraw( VGDevice & hdc ) const
@@ -692,13 +769,9 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 	NVPoint lastStaffPos;
 	int staffCount = 0;
 
-	if (mStaffs)
-	{
-		for (int i = mStaffs->GetMinimum(); i <= mStaffs->GetMaximum(); i++)
-		{
-			if ((theStaff = mStaffs->Get(i)) == NULL)
-				continue;
-
+	if (mStaffs) {
+		for (int i = mStaffs->GetMinimum(); i <= mStaffs->GetMaximum(); i++) {
+			if ((theStaff = mStaffs->Get(i)) == NULL) continue;
 			if (firstStaffPos.x == -1)
 				firstStaffPos = theStaff->getPosition();
 
@@ -708,69 +781,32 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 			theStaff->OnDraw(hdc);
 			++ staffCount;
 		}
-
-	}		
+	}
 
 	else if (mSystemSlices.size() > 0)
 	{
 		// then we have to draw the systemslices ....
 		GuidoPos pos = mSystemSlices.GetHeadPosition();
 		bool firstFlag = true;
-		
-        for(std::vector<GRAccolade *>::const_iterator it = mAccolade.begin(); it < mAccolade.end(); it++)
-            (*it)->HasBeenDrawn(false);
+		bool firstSlice = true;
+		while (pos) {
 
-		while (pos)
-		{
 			GRSystemSlice * slice = mSystemSlices.GetNext(pos);
-		//	if (mycount < 3 )
-			if (firstFlag && slice)
-			{
+			if (firstFlag && slice) {
 				firstFlag = false;
 				firstStaffPos = slice->getPosition();
 				int tmpmaxind = slice->mStaffs->GetMaximum();
 				theStaff = slice->mStaffs->Get(tmpmaxind);
-				if (theStaff)
-				{
+				if (theStaff) {
 					lastStaffPos = theStaff->getPosition();
 					staffCount = tmpmaxind;
 				}
 			}
 			
-			if (!mAccolade.empty())
-			{
-				for(std::vector<GRAccolade *>::const_iterator it = mAccolade.begin(); it < mAccolade.end(); it++)
-                {
-                    if (!(*it)->getHasBeenDrawn())
-                    {
-                        int begin = (*it)->getBeginRange();
-                        int end = (*it)->getEndRange();
-                        if(begin == 0 || end < begin)
-                        {
-                            NVPoint top = slice->mStaffs->Get(slice->mStaffs->GetMinimum())->getPosition();
-                            NVPoint bottom = slice->mStaffs->Get(slice->mStaffs->GetMaximum())->getPosition();
-                            float staffHeight = (theStaff->getNumlines() - 1) * theStaff->getStaffLSPACE();
-                            bottom.y += staffHeight;
-                            (*it)->draw(hdc, top, bottom);
-                        }
-                        for(int i = slice->mStaffs->GetMinimum(); i <= slice->mStaffs->GetMaximum(); i++)
-                        {
-                            if (i == begin && slice->mStaffs->Get(end))
-                            {
-                                NVPoint endpos = NVPoint(slice->mStaffs->Get(end)->getPosition().x, slice->mStaffs->Get(end)->getPosition().y);
-                                float staffHeight = (theStaff->getNumlines() - 1) * theStaff->getStaffLSPACE();
-                                endpos.y += staffHeight;
-
-                                (*it)->draw(hdc, slice->mStaffs->Get(begin)->getPosition(), endpos);
-                            }
-                        }
-
-                        (*it)->HasBeenDrawn(true);
-                    }
-				}
+			if (!mAccolade.empty()) {
+				if (firstSlice) DrawAccolade (hdc, slice, theStaff);
 			}
-			else if (staffCount > 1)
-			{
+			else if (staffCount > 1) {
 				const float staffHeight = (theStaff->getNumlines() - 1) * theStaff->getStaffLSPACE();
 				NVPoint endstaffPos = lastStaffPos;
 				endstaffPos.y += staffHeight; // Set to the bottom of last staff
@@ -779,61 +815,17 @@ void GRSystem::OnDraw( VGDevice & hdc ) const
 				onlyAccol.draw(hdc, firstStaffPos, endstaffPos);
 			}
 			
-			std::map<int, bool> StavesOn;
-
-			if(pos)
-			{
-				GRSystemSlice * nextSlice = mSystemSlices.GetAt(pos);
-				if(nextSlice)
-				{
-					for(int i = nextSlice->mStaffs->GetMinimum(); i <= nextSlice->mStaffs->GetMaximum(); i++)
-					{
-						GRStaff * st = nextSlice->mStaffs->Get(i);
-
-                        if (st)
-						    StavesOn[i] = st->isStaffBeginOn();
-					}
-				}
-				for(int i = slice->mStaffs->GetMinimum(); i <= slice->mStaffs->GetMaximum(); i++)
-				{
-					if(nextSlice->mStaffs->Get(i))
-                    {
-						GRStaff * st = slice->mStaffs->Get(i);
-                        
-                        if (st)
-                            st->setNextOnOff(StavesOn[i]);
-                    }
-					else
-					{
-						GRStaff * st = slice->mStaffs->Get(i);
-                        
-                        if (st)
-                            st->setNextOnOff(true);
-					}
-				}
-			}
-			else
-			{
-				for(int i = slice->mStaffs->GetMinimum(); i <= slice->mStaffs->GetMaximum(); i++)
-				{
-					GRStaff* staff = slice->mStaffs->Get(i);
-					if (staff) staff->setNextOnOff(staff->isStaffEndOn());
-				}
-			}
-
+			HandleStaffOnOff (pos, slice);
 			slice->OnDraw(hdc);
+			firstSlice = false;
 		}
 	}
 
     // - Draws the vertical left border line.
-
-    if (theStaff && (staffCount > 1 ))
-    {
+    if (theStaff && (staffCount > 1 )) {
         const float staffHeight = (theStaff->getNumlines() - 1) * theStaff->getStaffLSPACE();
         lastStaffPos.y += staffHeight; // Set to the bottom of last staff
-
-        if (firstStaffPos.x != lastStaffPos.x || firstStaffPos.y != lastStaffPos.y)
-        {
+        if (firstStaffPos.x != lastStaffPos.x || firstStaffPos.y != lastStaffPos.y) {
             hdc.PushPenWidth(kLineThick);
             hdc.Line(firstStaffPos.x, firstStaffPos.y, lastStaffPos.x, lastStaffPos.y);
             hdc.PopPenWidth();
@@ -1062,7 +1054,8 @@ void GRSystem::FinishSystem()
 	mBoundingBox.Merge (r);
 	// bounding box and position should now be ready
 	mMapping = mBoundingBox;				// set the mapping box
-	mMapping += mPosition + getOffset()	;	// and adjust position	
+	mMapping += mPosition + getOffset()	;	// and adjust position
+	patchTempoIssue ();
 }
 
 // ----------------------------------------------------------------------------
@@ -1180,7 +1173,7 @@ GRSpring * GRSystem::getSpring(int id) const
 }
 
 // ----------------------------------------------------------------------------
-GRSystemSlice * GRSystem::getFirstGRSystemSlice()
+GRSystemSlice * GRSystem::getFirstGRSystemSlice() const
 {
 	if (mSystemSlices.size() > 0)
 		return mSystemSlices.front(); // GetHead()

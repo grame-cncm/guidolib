@@ -64,7 +64,7 @@ public:
 
 	virtual	float		getSystemWidthCm();
 	virtual GRPage *	getGRPage()                             { return mPage; }
-	GRSystemSlice *     getFirstGRSystemSlice();
+	GRSystemSlice *     getFirstGRSystemSlice() const;
 	float               getDistance() const                     { return mDistance; }
 	int                 getStaffNumber(const GRStaff * staff ) const;
 	int                 getNewLinePage() const                  { return mNewLinePage; }
@@ -150,6 +150,9 @@ private:
 	const GRStaff*	getStaff (int index) const;
 	void	checkCollisions (TCollisions& state, std::vector<const GRNotationElement*>& elts) const;
 	float	checkCollision (const GRNotationElement* e1, const GRNotationElement* e2) const;
+	void	DrawAccolade( VGDevice & hdc, const GRSystemSlice * slice, const GRStaff * staff) const;
+	void	HandleStaffOnOff (GuidoPos pos, const GRSystemSlice * slice) const;
+	void	patchTempoIssue ();
 
 	GRPage*			mPage;
 	StaffVector*	mStaffs;
