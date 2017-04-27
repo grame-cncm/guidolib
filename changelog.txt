@@ -2,6 +2,8 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.4
+- fix incorrect tempo position at line break
+- fix incorrect barline between a grace note and note
 - crash bug fixed: may occur with \newLine tag followed by a \meter tag
 - new mapping behaviour:
 	- if a rest starts a bar, GuidoGetStaffMap extends its mapping box to the left barline (to keep 
