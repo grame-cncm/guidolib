@@ -195,7 +195,6 @@ void ARMusic::doAutoBreaks()
 
 			tmptp = tp;
 			int ret = vcemgr->Iterate(tmptp,filltagmode);
-
 			if (vcemgr->mCurrVoiceState.curautostate &&
 				vcemgr->mCurrVoiceState.curautostate->getSystemBreakState() == ARAuto::kOff)
 				abreak = false;
@@ -206,11 +205,9 @@ void ARMusic::doAutoBreaks()
 			if (ret != ARVoiceManager::ENDOFVOICE) {
 				ender = false;
 
-				if (ret == ARVoiceManager::CURTPBIGGER_ZEROFOLLOWS || ret == ARVoiceManager::DONE_ZEROFOLLOWS)
-				{
+				if (ret == ARVoiceManager::CURTPBIGGER_ZEROFOLLOWS || ret == ARVoiceManager::DONE_ZEROFOLLOWS) {
 					if (tmptp < minswitchtp)
 						minswitchtp = tmptp;
-
 				}
 
 				if (filltagmode) {
@@ -225,8 +222,7 @@ void ARMusic::doAutoBreaks()
 					else if (ret == ARVoiceManager::DONE_ZEROFOLLOWS)
 						conttagmode = true;
 				}
-				else {
-					// filltagmode == 0;
+				else { // filltagmode == 0;
 					if (ret == ARVoiceManager::DONE ||
 						ret == ARVoiceManager::DONE_EVFOLLOWS ||
 						ret == ARVoiceManager::DONE_ZEROFOLLOWS ||
@@ -236,8 +232,8 @@ void ARMusic::doAutoBreaks()
 						if (tmptp < mintp)
 							mintp = tmptp;
 					}
-				} // else filltagmode == 0
-			} // if != ender
+				}
+			}
 		} // while (pos) mgrlst,
 
 		// now we have worked on a complete slice ...
@@ -267,8 +263,7 @@ void ARMusic::doAutoBreaks()
 					float value = 0.0f;
 					float count =  0.0f;
 					GuidoPos pos = mgrlst.GetHeadPosition();
-					while (pos)
-					{
+					while (pos) {
 						value += mgrlst.GetNext(pos)->CheckBreakPosition(tp);
 						++ count;
 					}
@@ -276,12 +271,10 @@ void ARMusic::doAutoBreaks()
 					assert( count > 0 );
 					value /= count;
 
-					if (value >= 0.0f && abreak)
-					{
+					if (value >= 0.0f && abreak) {
 						// then we are feasable
 						GuidoPos pos = mgrlst.GetHeadPosition();
-						while (pos)
-						{
+						while (pos) {
 							// meaning, possible NewLine  (that is posibleBreak)
 							mgrlst.GetNext(pos)->InsertBreak(tp,3,value);
 						}
@@ -308,20 +301,17 @@ void ARMusic::doAutoBreaks()
 				float value = 0.0f;
 				float count = 0.0f;
 				GuidoPos pos = mgrlst.GetHeadPosition();
-				while (pos)
-				{
+				while (pos) {
 					value += mgrlst.GetNext(pos)->CheckBreakPosition(tp);
 					++ count;
 				}
 
 				assert( count > 0 );
 				value /= count;
-				if (value >= 0.0f && abreak)
-				{
+				if (value >= 0.0f && abreak) {
 					// then we are feasable
 					GuidoPos pos = mgrlst.GetHeadPosition();
-					while (pos)
-					{
+					while (pos) {
 						// meaning, possible NewLine (that is posibleBreak)
 						mgrlst.GetNext(pos)->InsertBreak(tp,3,value);
 					}
