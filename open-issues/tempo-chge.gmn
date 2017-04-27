@@ -3,7 +3,7 @@
 f g a b 
 f g a b 
 f g a b 
-\tempo<"[1/4] = 240","1/4=240"> f g a b 
+\tempo<"[1/4] = 120","1/4=240"> f g a b 
 f g a b
 ]
 }
