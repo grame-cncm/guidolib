@@ -118,4 +118,8 @@ protected:
 	float			mFirstEvXPosition;  // used by the first slice to split the mapping consistently to the next systems
 };
 
+std::ostream& operator<< (std::ostream& os, const GRSystemSlice& slice);
+std::ostream& operator<< (std::ostream& os, const GRSystemSlice* slice);
+
+
 #endif

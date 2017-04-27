@@ -88,12 +88,12 @@ void GRSystemSlice::print(std::ostream& os) const
 	for( int i = mStaffs->GetMinimum(); i <= mStaffs->GetMaximum(); ++i )
 	{
 		GRStaff * staff = mStaffs->Get(i);
-		if (staff) {
-			os << "Staff " << i << endl;
-			staff->print (os);
-		}
+		if (staff)
+			os << "Staff " << i << endl << staff;
 	}
 }
+std::ostream& operator<< (std::ostream& os, const GRSystemSlice& slice)		{ slice.print(os); return os; }
+std::ostream& operator<< (std::ostream& os, const GRSystemSlice* slice)		{ slice->print(os); return os; }
 
 // --------------------------------------------------------------------------
 void GRSystemSlice::checkCollisions (TCollisions& state)
