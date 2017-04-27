@@ -2126,8 +2126,6 @@ void ARMusicalVoice::doAutoBarlines()
 		ARMusicalObject * o = GetAt(pos);
 		ARMusicalEvent * ev = ARMusicalEvent::cast(o);
         ARBar   *bar   = static_cast<ARBar *>(o->isARBar());
-		ARCoda  *coda  = static_cast<ARCoda *>(o->isARCoda());
-		ARSegno *segno = static_cast<ARSegno *>(o->isARSegno());
 
 		// (DF) tests to inhibit auto barlines when a repeat bar is present
 		bool isRepeatBar = false;
@@ -2157,26 +2155,30 @@ void ARMusicalVoice::doAutoBarlines()
 					lastnewsyspagep = currentDate;
 				}
 			}
-			else if (coda || segno || (ev && (ev->getDuration() > DURATION_0))) {
-				// now, we are at the end of the lookahead ...
-				if (!foundbarline) {
-					// insert a barline right before the current event
-					lastbartp = currentDate;
-					ARBar *arbar = new ARBar(lastbartp);
-					arbar->setIsAuto( true );
+			else {
+				bool insertbefore = o->isARTempo() || o->isARGrace() || o->isARCoda() || o->isARSegno() || o->isARNote();
+				bool insertbar = insertbefore || (ev && (ev->getDuration() > DURATION_0));
+				if (insertbar) {
+					// now, we are at the end of the lookahead ...
+					if (!foundbarline) {
+						// insert a barline right before the current event
+						lastbartp = currentDate;
+						ARBar *arbar = new ARBar(lastbartp);
+						arbar->setIsAuto( true );
 
-					GuidoPos barPos = pos;
-					if (newSystemOrPagepos && (lastnewsyspagep == currentDate))
-						barPos = newSystemOrPagepos;
-					// the barline has to go before a potential key tag at this time position!
-					else if( previousKey && (lastkeyp == currentDate ))
-						barPos = previousKey;
-					AddElementAt(barPos,arbar);
+						GuidoPos barPos = pos;
+						if (newSystemOrPagepos && (lastnewsyspagep == currentDate))
+							barPos = newSystemOrPagepos;
+						// the barline has to go before a potential key tag at this time position!
+						else if( previousKey && (lastkeyp == currentDate ))
+							barPos = previousKey;
+						AddElementAt(barPos,arbar);
+					}
+					foundbarline = false;
+					lookahead = false;
+					newSystemOrPagepos = NULL;
+					measuretime = DURATION_0;
 				}
-				foundbarline = false;
-				lookahead = false;
-				newSystemOrPagepos = NULL;
-				measuretime = DURATION_0;
 			}
 		}
 
