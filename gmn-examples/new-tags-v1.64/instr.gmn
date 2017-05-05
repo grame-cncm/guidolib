@@ -1,6 +1,6 @@
 (*
 	the \instr tag supports font attributes
-	and auto position at tag or \auto level
+	and auto position at tag or \auto (or \set) level
 *)
 {
 [
