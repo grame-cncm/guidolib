@@ -12,8 +12,6 @@
 # Compilation option -Oz is discouraged, it provoke undefined results and assertion errors at runtime.
 #
 
-version := 1.63
-
 srcdir := ../../src/engine
 subprojects :=  $(wildcard $(srcdir)/* src/*)
 sources = $(wildcard $(srcdir)/*/*.cpp src/*/*.cpp)
@@ -27,10 +25,8 @@ library = libGUIDOEngine
 
 WASM ?= no
 ifeq ($(WASM), yes)
-#	CXXFLAGS += -s WASM=1
 	target = $(library).wasm.js
 else
-#	CXXFLAGS += -s ASM_JS=1
 	target = $(library).js
 endif
 
