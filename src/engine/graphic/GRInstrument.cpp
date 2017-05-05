@@ -12,25 +12,27 @@
 
 */
 
-#include <string.h>
+#include <string>
 
 #include "GRInstrument.h"
 #include "GRDefine.h"
+#include "GRStaff.h"
 #include "ARMusicalObject.h"
 #include "ARInstrument.h"
+#include "FontManager.h"
+#include "VGDevice.h"
 
-GRInstrument::GRInstrument(ARInstrument * par)
-		: GRTagARNotationElement(par, LSPACE)
+using namespace std;
+
+
+GRInstrument::GRInstrument(ARInstrument * ar, GRStaff* staff)
+		: GRTagARNotationElement(ar, LSPACE)
 {
 	mBoundingBox.left = 0;
 	mBoundingBox.top = 0;
 
 	// No!
 	mNeedsSpring = 1;
-
-
-	// obsolete
-	// spacing = 0;
 
 	// to do: read real text ...
 	const GCoord extent = 100;
@@ -43,22 +45,67 @@ GRInstrument::GRInstrument(ARInstrument * par)
 	mRightSpace = 0;
 
 	// no reference position ...
+	fFont = ar->getFont();
+	string attr = ar->getTextFormat();
+	unsigned int xdir = VGDevice::kAlignLeft;
+	unsigned int ydir = VGDevice::kAlignBase;
+	if (ar->autoPos()) {
+		if( attr.size() == 2 )
+		{
+			switch (attr[0]) {
+				case 'l':	xdir = VGDevice::kAlignLeft; break;
+				case 'c':	xdir = VGDevice::kAlignCenter; break;
+				case 'r':	xdir = VGDevice::kAlignRight; break;
+			}	  
+			switch (attr[1]) {
+				case 't':	ydir = VGDevice::kAlignTop; break;
+				case 'c':	ydir = VGDevice::kAlignBase; break;
+				case 'b':	ydir = VGDevice::kAlignBottom; break;
+			}
+		}
+		fTextFormat = xdir | ydir;
+	}
+	else fTextFormat = xdir | ydir;
+
+    fFontAttributes = ar->getTextAttributes();
+	fSize = ar->getSize();
+	setGRStaff(staff);
+	if (ar->autoPos())
+		fRefPos = NVPoint(-LSPACE*2, (staff->getDredgeSize() + LSPACE) / 2);
+	else
+		fRefPos = NVPoint(0,0);
 }
 
 GRInstrument::~GRInstrument()
 {
 }
 
+const NVPoint& GRInstrument::getReferencePosition() const { return fRefPos; }
+
+const ARInstrument* GRInstrument::getARInstrument() const
+		{ return static_cast<const ARInstrument*>(getAbstractRepresentation()); };
+
+
 void GRInstrument::OnDraw(VGDevice & hdc) const
 {
-	// Now draw something
-	//HFONT hfontold = (HFONT) SelectObject(hdc,hfontscriab);
-	//PS_SELECTSCRIABIN ;
+	if(!mDraw) return;
 
-	const char* nv = static_cast/*dynamic cast*/<ARInstrument *>(mAbstractRepresentation)->getName();
-	if (nv == 0) return;
-	if(!mDraw)
-		return;
-	GRTagARNotationElement::OnDrawText(hdc, nv, (int)strlen(nv));
+	const char* name = getARInstrument()->getName();
+	if (name == 0) return;
+
+	const VGFont* font = FontManager::FindOrCreateFont( fSize, &fFont, &fFontAttributes );
+	hdc.SetTextFont( font );
+	const VGColor prevTextColor = hdc.GetFontColor();
+
+	if( mColRef )
+		hdc.SetFontColor( VGColor( mColRef ));
+	hdc.SetFontAlign( fTextFormat );
+
+	const NVPoint & refpos = getReferencePosition();
+	const NVPoint & offset = getOffset();
+	const NVPoint pos = mPosition;
+	hdc.DrawString(	pos.x + offset.x + refpos.x, pos.y + offset.y + refpos.y, name, strlen(name) );
+	if( mColRef )
+		hdc.SetFontColor( prevTextColor );
 }
 

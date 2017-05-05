@@ -155,6 +155,7 @@ protected:
 	bool				mTagRanged;
 	bool				mVoiceAdded;
 	bool				mAutoLyricsPos;
+	bool				mAutoInstrPos;
 
     NVstring mFilePath;
 };

@@ -24,7 +24,7 @@ class TagParameterString;
 class ARInstrument : public ARMTParameter
 {
 	public:
-				 ARInstrument();	
+				 ARInstrument(bool autopos);
 		virtual ~ARInstrument();	
 
 		virtual void setTagParameterList(TagParameterList & theTagParameterList);
@@ -35,12 +35,23 @@ class ARInstrument : public ARMTParameter
 	    virtual void printParameters(std::ostream& os) const;
 
 		const char* getName() const;
-		const TagParameterString *getTransp() const { return transp; }
+		const TagParameterString *getTransp() const { return fTransp; }
 		virtual bool IsStateTag() const 		    { return true; }
 
-	protected:
-		TagParameterString *name;
-		TagParameterString *transp;
+		const char* getFont() const;
+		const char* getTextFormat() const;
+		const char* getTextAttributes() const;
+		float getSize() const;
+		bool autoPos() const	{ return fAutoPos; }
+
+	private:
+		TagParameterString * fName;
+		TagParameterString * fTransp;
+		TagParameterString * fFont;
+		TagParameterString * fTextFormat;
+		TagParameterString * fTextAttributes;
+		TagParameterFloat *	 fSize;
+		bool fAutoPos;
 
 		static ListOfTPLs ltpls;
 };

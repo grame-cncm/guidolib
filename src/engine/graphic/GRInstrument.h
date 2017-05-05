@@ -15,26 +15,30 @@
 
 */
 
-class ARInstrument;
-
-
 #include "GRTagARNotationElement.h"
 
+class ARInstrument;
+class GRStaff;
 
 /** \brief not yet documented
 */
 class GRInstrument : public GRTagARNotationElement
 {
-public:
+	public:
 
-	GRInstrument(ARInstrument * par);
+			 GRInstrument(ARInstrument * par, GRStaff* staff);
 	virtual ~GRInstrument();
 	
+	const ARInstrument* getARInstrument() const;
 	virtual void OnDraw(VGDevice & hdc ) const;
-
+	virtual const NVPoint & getReferencePosition() const;
 	
-protected:
-
+	private:
+		std::string		fFont;
+		std::string		fFontAttributes;
+		unsigned int	fTextFormat;
+		float			fSize;
+		NVPoint			fRefPos;
 };
 
 #endif

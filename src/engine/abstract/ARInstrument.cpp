@@ -16,21 +16,33 @@
 
 #include "ARInstrument.h"
 #include "TagParameterString.h"
+#include "TagParameterFloat.h"
 #include "TagParameterList.h"
 #include "ListOfStrings.h"
 
 ListOfTPLs ARInstrument::ltpls(1);
 
-ARInstrument::ARInstrument()
+using namespace std;
+
+ARInstrument::ARInstrument(bool autopos)
 {
-	name = 0;
-	transp = 0;
+	fName = 0;
+	fTransp = 0;
+	fTextFormat = 0;
+	fFont = 0;
+	fSize = 0;
+	fTextAttributes = 0;
+	fAutoPos = autopos;
 }
 
 ARInstrument::~ARInstrument()
 {
-	delete name;
-	delete transp;
+	delete fName;
+	delete fTransp;
+	delete fTextFormat;
+	delete fFont;
+	delete fSize;
+	delete fTextAttributes;
 }
 void ARInstrument::setTagParameterList(TagParameterList& tpl)
 {
@@ -39,7 +51,7 @@ void ARInstrument::setTagParameterList(TagParameterList& tpl)
 		// create a list of string ...
 
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail (( "S,name,,r;S,transp,,o"));
+		lstrs.AddTail (( "S,name,,r;S,transp,,o;S,textformat,rc,o;S,font,Times,o;U,fsize,9pt,o;S,fattrib,,o;S,autopos,off,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -51,10 +63,17 @@ void ARInstrument::setTagParameterList(TagParameterList& tpl)
 		// we found a match!
 		if (ret == 0)
 		{
-			name   = TagParameterString::cast(rtpl->RemoveHead());
-			transp = TagParameterString::cast(rtpl->RemoveHead());
+			fName   = TagParameterString::cast(rtpl->RemoveHead());
+			fTransp = TagParameterString::cast(rtpl->RemoveHead());
+			fTextFormat = TagParameterString::cast(rtpl->RemoveHead());
+			fFont	= TagParameterString::cast(rtpl->RemoveHead());
+			fSize	= TagParameterFloat::cast(rtpl->RemoveHead());
+			fTextAttributes	= TagParameterString::cast(rtpl->RemoveHead());
+			TagParameterString* autopos = TagParameterString::cast(rtpl->RemoveHead());
+			string autoStr = autopos->getValue();
+			if (autoStr == "on") fAutoPos = true;
+			delete autopos;
 		}
-
 		delete rtpl;
 	}
 	else
@@ -65,13 +84,11 @@ void ARInstrument::setTagParameterList(TagParameterList& tpl)
 	tpl.RemoveAll();
 }
 
-const char* ARInstrument::getName() const
-{
-	if (!name)
-        return NULL;
-
-	return name->getValue();
-}
+const char* ARInstrument::getName() const			{ return fName ? fName->getValue() : NULL; }
+const char* ARInstrument::getFont() const			{ return fFont ? fFont->getValue() : "Times"; }
+const char* ARInstrument::getTextFormat() const		{ return fTextFormat ? fTextFormat->getValue() : "rc"; }
+const char* ARInstrument::getTextAttributes() const	{ return fTextAttributes ? fTextAttributes->getValue() : ""; }
+float ARInstrument::getSize() const					{ return fSize ? fSize->getValue() : 10; }
 
 void ARInstrument::printName(std::ostream& os) const
 {
@@ -85,11 +102,11 @@ void ARInstrument::printGMNName(std::ostream& os) const
 
 void ARInstrument::printParameters(std::ostream& os) const
 {
-    if (name)
-        os << "name: \"" << name->getValue() << "\"; ";
+    if (fName)
+        os << "name: \"" << fName->getValue() << "\"; ";
 
-    if (transp)
-        os << "transp: " << transp->getValue() << "; ";
+    if (fTransp)
+        os << "transp: " << fTransp->getValue() << "; ";
 
     ARMusicalTag::printParameters(os);
 }

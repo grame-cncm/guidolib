@@ -162,6 +162,7 @@ ARFactory::ARFactory()
 	mCurrentTags(0),
 	mVoiceAdded(false),
 	mAutoLyricsPos(false),
+	mAutoInstrPos(false),
     mFilePath()
 {
 		sMaxTagId = -1;
@@ -1135,7 +1136,7 @@ void ARFactory::createTag( const char * name, int no )
 		case 'i':
 			if (!strcmp(name,"instrument") || !strcmp(name,"instr"))
 			{
-				ARInstrument * tmp = new ARInstrument;
+				ARInstrument * tmp = new ARInstrument(mAutoInstrPos);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
@@ -2066,7 +2067,10 @@ void ARFactory::addTag()
 		tag->setTagParameterList( mTagParameterList );
 
 	const ARAuto * autoTag = dynamic_cast<const ARAuto *>(tag);
-	if (autoTag) mAutoLyricsPos = (autoTag->getAutoLyricsPos() == ARAuto::kOn);
+	if (autoTag) {
+		mAutoLyricsPos = (autoTag->getAutoLyricsPos() == ARAuto::kOn);
+		mAutoInstrPos = (autoTag->getAutoInstrPos() == ARAuto::kOn);
+	}
 
 	mTagParameterList.RemoveAll();
 	assert(mTagParameterList.empty());
