@@ -33,6 +33,7 @@ ARAuto::ARAuto()
 	fStretchLastLineState   = kOff;
 	fStretchFirstLineState  = kOff;
 	fLyricsAutoPos		    = kOff;
+	fInstrAutoPos		    = kOff;
 }
 
 ARAuto::~ARAuto()
@@ -49,13 +50,15 @@ void ARAuto::setTagParameterList(TagParameterList& tpl)
 			"S,clefKeyMeterOrder,on,o;"
 			"S,stretchLastLine,off,o;"
 			"S,stretchFirstLine,off,o;"
-			"S,lyricsAutoPos,off,o"));
+			"S,lyricsAutoPos,off,o;"
+			"S,instrAutoPos,off,o"));
 		lstrs.AddTail(("S,autoEndBar,on,o;"
 			"S,autoPageBreak,on,o;"
 			"S,autoSystemBreak,on,o;"
 			"S,autoClefKeyMeterOrder,on,o;"
 			"S,autoStretchLastLine,off,o;"
 			"S,autoStretchFirstLine,off,o;"
+			"S,autoInstrPos,off,o;"
 			"S,autoLyricsPos,off,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
@@ -98,6 +101,11 @@ void ARAuto::setTagParameterList(TagParameterList& tpl)
 			str =  TagParameterString::cast(rtpl->RemoveHead());
 			if (str->TagIsSet())
 				fStretchFirstLineState = (on == str->getValue()) ? kOn : kOff;
+			delete str;
+
+			str =  TagParameterString::cast(rtpl->RemoveHead());
+			if (str->TagIsSet())
+				fInstrAutoPos = (on == str->getValue()) ? kOn : kOff;
 			delete str;
 
 			str =  TagParameterString::cast(rtpl->RemoveHead());

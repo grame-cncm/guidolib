@@ -38,6 +38,7 @@ public:
 	state getSystemBreakState() const			{ return fSystemBreakState; }
 	state getPageBreakState() const				{ return fPageBreakState; }
 	state getAutoLyricsPos() const				{ return fLyricsAutoPos; }
+	state getAutoInstrPos() const				{ return fInstrAutoPos; }
 
 	virtual void setTagParameterList(TagParameterList & tpl);
 
@@ -55,6 +56,7 @@ protected:
 	state fStretchLastLineState;
 	state fStretchFirstLineState;
 	state fLyricsAutoPos;
+	state fInstrAutoPos;
 
 	static ListOfTPLs ltpls;
 };
