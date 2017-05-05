@@ -112,11 +112,13 @@ const VGFont* FontManager::FindOrCreateFont(VGSystem* sys, int size, const strin
 /** \brief Looks for a font in the font list, and returns it. If the font does not exist, it 
 	is created and added to the font list.
 */
+#warning("change the ugly FindOrCreateFont interface")
 const VGFont* FontManager::FindOrCreateFont( int size, const string * name, const string * attributesStr )
 {
 	VGSystem * sys = 0;
 	if( gGlobalSettings.gDevice)
 		sys = gGlobalSettings.gDevice->getVGSystem();
+//cerr << "FontManager::FindOrCreateFont " << *name << " " << size << endl;
 	const VGFont* font = FindOrCreateFont (sys, size, name, attributesStr);
 	if (!font) {											// font not found
 		if ((*name != "Guido2") && (*name != "guido2")) {	// if not the guido font
