@@ -1139,8 +1139,7 @@ GRStaff::getStaffNumber() const
 */
 GRInstrument * GRStaff::AddInstrument(ARInstrument * arinstr)
 {
-	GRInstrument * tmp = new GRInstrument(arinstr);
-
+	GRInstrument * tmp = new GRInstrument(arinstr, this);
 	addNotationElement(tmp);
 	bool downwards = true;
 
