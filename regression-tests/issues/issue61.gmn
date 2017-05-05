@@ -1,0 +1,11 @@
+{
+[
+	\accol<id=1, range="1-2", type="none">	
+	\auto<autoInstrPos="on">
+	\instr<"Flute"> a b d
+]
+,
+[
+	\instr<"Violin"> d a b
+]
+}

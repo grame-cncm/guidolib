@@ -1,0 +1,17 @@
+{ 
+[ \staff<1>  
+%	\accol<id=0, range="1-2"> \barFormat<style= "system", range="2-3"> 
+%   (* meas. 1 *)  \beamsOff 
+	f/8 a&1/4 g/8 \bar 
+   (* meas. 2 *)  \beam( c1/8 e/8 a&/8  f/8) %\bar 
+ ]
+
+, [ \staff<2>  (* 1st voice *)
+   (* meas. 1 *)   \beamsOff  { f-2/8, f-1/8 } _/8 _/4 %\bar 
+   (* meas. 2 *)   _/8 \clef<"g2"> _/8 _/4 %\bar 
+ ]
+, [ \staff<2> (* 2nd voice *)
+   (* meas. 1 *)  empty/2 \bar 
+   (* meas. 2 *)  empty/2 %\bar 
+  ]
+ }
