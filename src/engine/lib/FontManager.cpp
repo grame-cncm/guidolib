@@ -112,7 +112,9 @@ const VGFont* FontManager::FindOrCreateFont(VGSystem* sys, int size, const strin
 /** \brief Looks for a font in the font list, and returns it. If the font does not exist, it 
 	is created and added to the font list.
 */
+#ifndef WIN32
 #warning("change the ugly FindOrCreateFont interface")
+#endif
 const VGFont* FontManager::FindOrCreateFont( int size, const string * name, const string * attributesStr )
 {
 	VGSystem * sys = 0;
