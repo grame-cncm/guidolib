@@ -90,8 +90,8 @@ void GRInstrument::OnDraw(VGDevice & hdc) const
 {
 	if(!mDraw) return;
 
-	const char* name = getARInstrument()->getName();
-	if (name == 0) return;
+	const string name = getARInstrument()->getName();
+	if (name.empty()) return;
 
 	const VGFont* font = FontManager::FindOrCreateFont( fSize, &fFont, &fFontAttributes );
 	hdc.SetTextFont( font );
@@ -104,7 +104,7 @@ void GRInstrument::OnDraw(VGDevice & hdc) const
 	const NVPoint & refpos = getReferencePosition();
 	const NVPoint & offset = getOffset();
 	const NVPoint pos = mPosition;
-	hdc.DrawString(	pos.x + offset.x + refpos.x, pos.y + offset.y + refpos.y, name, strlen(name) );
+	hdc.DrawString(	pos.x + offset.x + refpos.x, pos.y + offset.y + refpos.y, name.c_str(), name.size() );
 	if( mColRef )
 		hdc.SetFontColor( prevTextColor );
 }
