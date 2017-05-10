@@ -1089,44 +1089,37 @@ void ARFactory::createTag( const char * name, int no )
 			break;
 
 		case 'h':
-			if (!strcmp(name, "harmonic"))
-			{
+			if (!strcmp(name, "harmonic")) {
 				ARHarmonic * tmp = new ARHarmonic;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-            if (!strcmp(name, "harmony"))
-            {
+            if (!strcmp(name, "harmony")) {
                 ARTextHarmony * tmp = new ARTextHarmony;
                 mTags.AddHead(tmp);
                 mCurrentVoice->AddPositionTag(tmp);
             }
-			else if (!strcmp(name,"headsNormal"))
-			{
+			else if (!strcmp(name,"headsNormal")) {
 				ARTHead * tmp = new ARTHead(ARTHead::NORMAL,mCurrentHead);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"headsReverse"))
-			{
+			else if (!strcmp(name,"headsReverse")) {
 				ARTHead * tmp = new ARTHead(ARTHead::REVERSE,mCurrentHead);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"headsCenter"))
-			{
+			else if (!strcmp(name,"headsCenter")) {
 				ARTHead * tmp = new ARTHead(ARTHead::CENTER,mCurrentHead);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"headsLeft"))
-			{
+			else if (!strcmp(name,"headsLeft")) {
 				ARTHead * tmp = new ARTHead(ARTHead::LEFT,mCurrentHead);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"headsRight"))
-			{
+			else if (!strcmp(name,"headsRight")) {
 				ARTHead * tmp = new ARTHead(ARTHead::RIGHT,mCurrentHead);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
@@ -1134,14 +1127,12 @@ void ARFactory::createTag( const char * name, int no )
 			break;
 
 		case 'i':
-			if (!strcmp(name,"instrument") || !strcmp(name,"instr"))
-			{
+			if (!strcmp(name,"instrument") || !strcmp(name,"instr")) {
 				ARInstrument * tmp = new ARInstrument(mAutoInstrPos);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
-			else if (!strcmp(name,"intensity") || !strcmp(name,"intens") || !strcmp(name,"i"))
-			{
+			else if (!strcmp(name,"intensity") || !strcmp(name,"intens") || !strcmp(name,"i")) {
 				ARIntens * tmp = new ARIntens;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
@@ -1152,8 +1143,7 @@ void ARFactory::createTag( const char * name, int no )
 		case 'j':	break;
 
 		case 'k':	
-			if (!strcmp(name,"key"))
-			{
+			if (!strcmp(name,"key")) {
 				assert(mCurrentVoice);
 				assert(!mCurrentEvent);
 				ARKey * tmp = new ARKey;
