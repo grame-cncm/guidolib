@@ -9,16 +9,12 @@
 # Checking memory leaks
 #   requires valgrind
 
-system	 := $(shell uname -s)
-
-ifeq ($(system), MINGW32_NT-6.1)
-$(shell cp ../build/win32/Release/GUIDOEngine.dll .)
-$(shell cp ../src/tools/build/win32/Release/guidogetversion.exe .)
-endif
+system	:= $(shell uname -s)
+# normalizes MINGW versions
+system := $(shell echo $(system) | grep MINGW > /dev/null && echo MINGW || echo $(system))
 
 version	 ?= $(shell cat guidoversion.txt)
 LEAKTOOLS = guidoparse guidoar2gr guidodraw
-
 
 guido2image := guido2image
 guido2svg   := guido2svg
@@ -28,11 +24,16 @@ guido2proll := guido2proll
 ifeq ($(system), Darwin)
   lib =  -F../build/MacOS/Release/ -framework GUIDOEngine
 else
-ifeq ($(system), MINGW32_NT-6.1)
-  libbin   := ../build/win32/Release
-  toolbin  := ../src/tools/build/win32/Release
-  lib       = $(libbin)/GUIDOEngine.lib
-  LEAKTOOLS = GUIDOEngine.dll guidogetversion.exe guido2svg.exe guidoparse.exe guidoar2gr.exe guidodraw.exe guido2image.exe guidogetstaffmap.exe guidogetsystemmap.exe guidogettimemap.exe guidogetvoicemap.exe guido2midi.exe guido2proll.exe
+ifeq ($(system), MINGW)
+  libbin   := ../build/win64/Release
+  toolbin  := ../src/tools/build/win64/Release
+  lib       = $(libbin)/GUIDOEngine64.lib
+  WINTOOLS = GUIDOEngine64.dll guido2svg.exe guidoparse.exe guidoar2gr.exe guidodraw.exe guido2image.exe guidogetstaffmap.exe guidogetsystemmap.exe guidogettimemap.exe guidogetvoicemap.exe guido2midi.exe guido2proll.exe
+  guido2image := ./guido2image.exe
+  guido2svg   := ./guido2svg.exe
+  guido2midi  := ./guido2midi.exe
+  guido2proll := ./guido2proll.exe
+  browser     := C:/Program Files (x86)/Mozilla Firefox/firefox
 else
   lib = -lGUIDOEngine
 endif
@@ -155,27 +156,27 @@ pdfvalidate: $(validpdf)
 	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
 	@[ -f  $(tmp) ] || echo $< : new file
 	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
-ifeq ($(system), MINGW32_NT-6.1)
-	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && C:/Program\ Files\ \(x86\)/Mozilla\ Firefox/firefox -new-tab $(patsubst $(version)/%, $(VERSION)/%, $<) -new-tab $<; true)
+ifeq ($(system), MINGW)
+	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "\"$(browser)\" $(tmp) $<"; true)
 else
-	@[ -f  $(ignored) ] || ./diffcmd $<  $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
+	@[ -f  $(ignored) ] || ./diffcmd $<  $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open $< $(tmp) # to check changes"; true)
 endif
 
 %.outtimemap: %.map
 	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
 	@[ -f  $(tmp) ] || echo $< : new file
 	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
-ifeq ($(system), MINGW32_NT-6.1)
+ifeq ($(system), MINGW)
 	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo $< : differences found)
 else
-	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open -t $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
+	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open -t $< $(tmp) # to check changes"; true)
 endif
 
 %.outpdf: %.pdf
 	$(eval tmp := $(patsubst $(version)/%, $(VERSION)/%, $<))	
 	@[ -f  $(tmp) ] || echo $< : new file
 	$(eval ignored := $(shell grep $< $(version)/ignore.$(VERSION).txt 2>/dev/null || echo _none_))
-	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open $< $(patsubst $(version)/%, $(VERSION)/%, $<) # to check changes"; true)
+	@[ -f  $(ignored) ] || diff $< $(tmp) 2>/dev/null >/dev/null || ([ -f  $(tmp) ] && echo "open $< $(tmp) # to check changes"; true)
 
 #########################################################################
 # pdf output generation
@@ -290,40 +291,44 @@ $(version)/proll/trajectory/voicescolor%.svg: ../%.gmn
 
 #########################################################################
 # windows specific stuff
-win32: $(LEAKTOOLS)
+win64: $(WINTOOLS)
+	@which diff >/dev/null 2>&1 || (echo "### diff is not available from the command line, fix the issue before running the validate target.")
 
-guido2svg.exe:
+GUIDOEngine64.dll: ../build/win64/Release/GUIDOEngine64.dll
+	cp ../build/win64/Release/GUIDOEngine64.dll .
+
+guido2svg.exe: $(toolbin)/guido2svg.exe
 	cp $(toolbin)/guido2svg.exe .
 
-guido2midi.exe:
+guido2midi.exe: $(toolbin)/guido2midi.exe
 	cp $(toolbin)/guido2midi.exe .
 
-guidoparse.exe:
+guidoparse.exe: $(toolbin)/guidoparse.exe
 	cp $(toolbin)/guidoparse.exe .
 
-guidoar2gr.exe:
+guidoar2gr.exe: $(toolbin)/guidoar2gr.exe
 	cp $(toolbin)/guidoar2gr.exe .
 
-guidodraw.exe:
+guidodraw.exe: $(toolbin)/guidodraw.exe
 	cp $(toolbin)/guidodraw.exe .
 
-guidogetstaffmap.exe:
+guidogetstaffmap.exe: $(toolbin)/guidogetstaffmap.exe
 	cp $(toolbin)/guidogetstaffmap.exe .
 
-guidogetsystemmap.exe:
+guidogetsystemmap.exe: $(toolbin)/guidogetsystemmap.exe
 	cp $(toolbin)/guidogetsystemmap.exe .
 
-guidogettimemap.exe:
+guidogettimemap.exe: $(toolbin)/guidogettimemap.exe
 	cp $(toolbin)/guidogettimemap.exe .
 
-guidogetvoicemap.exe:
+guidogetvoicemap.exe: $(toolbin)/guidogetvoicemap.exe
 	cp $(toolbin)/guidogetvoicemap.exe .
 
-guido2proll.exe:
+guido2proll.exe: $(toolbin)/guido2proll.exe
 	cp $(toolbin)/guido2proll.exe .
 
-guido2image.exe:
-	cp ../environments/Qt/bin/guido2image.exe .
+guido2image.exe: ../environments/Qt/apps/guido2image/build/win64/release/guido2image.exe
+	cp ../environments/Qt/apps/guido2image/build/win64/release/guido2image.exe .
 
 #########################################################################
 # tools
