@@ -26,10 +26,10 @@ ifeq ($(system), Darwin)
 else
 ifeq ($(system), MINGW)
   libbin   := ../build/win64/Release
-  toolbin  := ../src/tools/build/win64/Release
+  toolbin  ?= ../src/tools/build/win64/Release
   lib       = $(libbin)/GUIDOEngine64.lib
-  WINTOOLS = GUIDOEngine64.dll guido2svg.exe guidoparse.exe guidoar2gr.exe guidodraw.exe guido2image.exe guidogetstaffmap.exe guidogetsystemmap.exe guidogettimemap.exe guidogetvoicemap.exe guido2midi.exe guido2proll.exe
-  guido2image := ./guido2image.exe
+  WINTOOLS = GUIDOEngine64.dll guido2svg.exe guidoparse.exe guidoar2gr.exe guidodraw.exe # guido2image.exe guidogetstaffmap.exe guidogetsystemmap.exe guidogettimemap.exe guidogetvoicemap.exe guido2midi.exe guido2proll.exe
+#  guido2image := ./guido2image.exe
   guido2svg   := ./guido2svg.exe
   guido2midi  := ./guido2midi.exe
   guido2proll := ./guido2proll.exe
@@ -119,7 +119,8 @@ help:
 	@echo "'midiclean' : removes midi files output"
 	@echo "--------------------------------"
 	@echo "'tools'     : build the tools"
-	@echo "'win32'     : copy the tools and dll to the validate folder"
+	@echo "'win64'     : copy the tools and dll to the validate folder (64 bits version)"
+	@echo "'win62'     : copy the tools and dll to the validate folder (32 bits version)"
 
 #########################################################################
 # tools to validate the graphic output, based on pdf conversion
@@ -291,11 +292,21 @@ $(version)/proll/trajectory/voicescolor%.svg: ../%.gmn
 
 #########################################################################
 # windows specific stuff
-win64: $(WINTOOLS)
+win64: $(WINTOOLS) GUIDOEngine64.dll 
 	@which diff >/dev/null 2>&1 || (echo "### diff is not available from the command line, fix the issue before running the validate target.")
+
+win32:
+	make _win32 toolbin=../src/tools/build/win32/Release
+
+_win32: $(WINTOOLS) GUIDOEngine.dll 
+	@which diff >/dev/null 2>&1 || (echo "### diff is not available from the command line, fix the issue before running the validate target.")
+
 
 GUIDOEngine64.dll: ../build/win64/Release/GUIDOEngine64.dll
 	cp ../build/win64/Release/GUIDOEngine64.dll .
+
+GUIDOEngine.dll: ../build/win32/Release/GUIDOEngine.dll
+	cp ../build/win32/Release/GUIDOEngine64.dll .
 
 guido2svg.exe: $(toolbin)/guido2svg.exe
 	cp $(toolbin)/guido2svg.exe .
