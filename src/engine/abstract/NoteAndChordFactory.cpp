@@ -113,7 +113,7 @@ void NoteAndChordFactory::setRegister(TYPE_REGISTER newRegister)
     mCurrentRegister = newRegister;
     ARNote * note = mCurrentEvent ? dynamic_cast<ARNote*>(mCurrentEvent) : 0;
     if(note)
-        note->setRegister(newRegister);
+        note->setOctave(newRegister);
 }
 
 // ----------------------------------------------------------------------------
@@ -122,7 +122,7 @@ void NoteAndChordFactory::createEvent( const char * name )
     if(mDone)
         return;
     ARNote * note = new ARNote(name, 0, mCurrentRegister, mCurrentNumerator,mCurrentDenominator,mCurrentIntensity);
-    note->setRegister(mCurrentRegister);
+    note->setOctave(mCurrentRegister);
     note->setNumerator(mCurrentNumerator);
     note->setDenominator(mCurrentDenominator);
     mCurrentEvent = note;
