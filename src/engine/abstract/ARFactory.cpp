@@ -439,8 +439,11 @@ void ARFactory::createEvent( const char * name )
 	assert(name);
 	if(!strcmp(name,"_") || !strcmp(name,"rest"))
 		mCurrentEvent = new ARRest(mCurrentNumerator,mCurrentDenominator );
-	else
-		mCurrentEvent = new ARNote(name, 0, mCurrentRegister, mCurrentNumerator,mCurrentDenominator,mCurrentIntensity);
+	else {
+		ARNote* note = new ARNote(name, 0, mCurrentRegister, mCurrentNumerator,mCurrentDenominator,mCurrentIntensity);
+		mCurrentEvent = note; //new ARNote(name, 0, mCurrentRegister, mCurrentNumerator,mCurrentDenominator,mCurrentIntensity);
+		note->setOctava (mCurrentOctava ? mCurrentOctava->getOctava() : 0);
+	}
 	assert(mCurrentEvent);
 	mLastEvent = NULL;
 }
@@ -626,7 +629,7 @@ void ARFactory::setRegister(TYPE_REGISTER newRegister)
 	ARNote * note = static_cast<ARNote*>(mCurrentEvent->isARNote());
 	if( note == 0 ) return;
 	
-	note->setRegister( newRegister );
+	note->setOctave( newRegister );
 	mCurrentRegister = newRegister;
 }
 
