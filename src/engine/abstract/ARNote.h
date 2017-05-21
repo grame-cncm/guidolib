@@ -55,12 +55,13 @@ class ARNote : public ARMusicalEvent
 
     void		 addFlat();
     void	 	 addSharp();
-    void	 	 setRegister( int newRegister );
 
     const ARNoteName & getName() const;
 
     int		     getOctave() const;
     int	    	 getPitch() const;
+	int			 getOctava() const						{ return fOctava; }
+	void		 setOctava(int octava)					{ fOctava = octava; }
 
     void		 setPitch( int newpitch );
     void		 setOctave( int newOctave )				{fOctave = newOctave;}
@@ -122,6 +123,7 @@ class ARNote : public ARMusicalEvent
     TYPE_TIMEPOSITION	fStartPosition;
 
     NVstring   fNoteAppearance;
+	int		   fOctava;			// for octava signs
 };
 
 #endif

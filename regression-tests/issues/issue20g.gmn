@@ -1,0 +1,11 @@
+% this is to illustrate octava bug
+% the notes are shifted one octave lower at each updategr call
+{
+[
+	\oct<1> (a2 b d c) e
+],  
+[
+	\oct<-1> 
+(a1 b d) c e
+]  
+}

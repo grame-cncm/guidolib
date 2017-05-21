@@ -107,7 +107,7 @@ void GRNote::getPitchAndOctave( int * outPitch,
 	const ARNote * ar = getARNote();
 
 	*outPitch = ar->getPitch();
-	*outOctave = ar->getOctave();
+	*outOctave = ar->getOctave() - ar->getOctava();
 	*outAccidentals = ar->getAccidentals();
 }
 

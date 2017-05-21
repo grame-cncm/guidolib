@@ -98,7 +98,7 @@ NVRect GROctava::getExtensionLine (const NEPointerList * assoc, int num) const
 {
 	NVRect outRect;
 	float space = fStaff->getStaffLSPACE();
-	float staffTop		= fStaff->getPosition().y - space * 0.5f;
+	float staffTop		= 0 - space * 0.5f; // fStaff->getPosition().y - space * 0.5f;
 	float staffBottom	= staffTop + fStaff->getDredgeSize() + space * 2.5f;
 	GuidoPos pos = assoc->GetHeadPosition();
 	float currentXPos = 0;

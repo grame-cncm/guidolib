@@ -331,7 +331,7 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 
 	ARNote * arNote = getARNote();
 	const int pitch = arNote->getPitch();
-	const int octave = arNote->getOctave();
+	const int octave = arNote->getOctave() - arNote->getOctava();
 	GDirection tmpdir =  mGrStaff->getDefaultThroatDirection( pitch, octave );
 
 	// the creation of the standard elements ....
