@@ -1,0 +1,13 @@
+[
+	\pageFormat<w=17cm, h=14cm> \meter<"C", autoMeasuresNum="page">
+	(* System 1 *) a b c d a b c d
+	(* System 2 *) a b c d a b c d
+	(* System 3 *) a b c d a b c d
+	(* System 4 *) a b c d
+	\bar<displayMeasNum="false"> % Hiding measure num on the bar after the first bar
+	                             % of the page was abnormally hiding the previous bar
+	                             % in a previous guidolib version
+	a b c d
+	(* System 5 *) a b c d a b c d
+	(* System 6 *) a b c d a b c d
+]

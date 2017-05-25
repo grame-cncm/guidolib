@@ -46,8 +46,9 @@ using namespace std;
 #endif
 #define trace1Method(method)	std::cout << (void*)this << " GRBar::" << method << std::endl
 
-NVPoint GRBar::sRefPos;
-GRPage*	GRBar::fCurrentPage = 0;
+NVPoint     GRBar::sRefPos;
+GRPage*     GRBar::fCurrentPage = 0;
+GRSystem*   GRBar::fCurrentSystem = 0;
 
 // --------------------------------------------------------------------------
 GRBar::GRBar(ARBar * p_arbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float propRender )
@@ -201,19 +202,31 @@ bool GRBar::isSystemSlice() const
 void GRBar::DisplayMeasureNum( VGDevice & hdc ) const
 {
     ARBar *arBar = getARBar();
-	bool pageNumbering = false;
+    const ARBar *analyzedBar = NULL;
+    bool systemNumbering = false;
+    bool pageNumbering = false;
+    
 	if (gCurStaff) {
 		//check for new page
 		GRSystem* system = gCurStaff->getGRSystem();
-		if (system) {
+        if (system) {
+            analyzedBar = arBar->previousBar();
+            
 			GRPage* page = system->getGRPage();
-			bool newPage = !fCurrentPage || (page != fCurrentPage);
-			fCurrentPage = page;
-			pageNumbering = newPage  && (arBar->getMeasureNumberDisplayed() == ARBar::kNumPage) && (arBar->getMeasureNumber() != 2);
+            bool newPage = !fCurrentPage || (page != fCurrentPage);
+            bool newSystem = !fCurrentSystem || (system != fCurrentSystem);
+            
+            fCurrentPage = page;
+            fCurrentSystem = system;
+            
+            if (analyzedBar != NULL && analyzedBar->getMeasureNumber() != 1) {
+                pageNumbering = newPage && (analyzedBar->getMeasureNumberDisplayed() == ARBar::kNumPage);
+                systemNumbering = newSystem && (analyzedBar->getMeasureNumberDisplayed() == ARBar::kNumSystem);
+            }
 		}
 	}
 
-    if (arBar->getMeasureNumberDisplayed() && arBar->getMeasureNumber() != 0) {
+    if ((arBar->getMeasureNumberDisplayed() == ARBar::kNumAll || systemNumbering || pageNumbering) && arBar->getMeasureNumber() != 0) {
         const NVstring fontName("Arial");
         string attr("");
         const VGFont* hmyfont = FontManager::FindOrCreateFont((int) (80.0f * mTagSize), &fontName, &attr);
@@ -221,23 +234,23 @@ void GRBar::DisplayMeasureNum( VGDevice & hdc ) const
 
 		int num = arBar->getMeasureNumber();
 		string barNumberString;
-		if (pageNumbering) {
-			const ARBar *lastbar = arBar->previousBar();
-//			float measureNumDxOffset = lastbar ? lastbar->getMeasureNumberDxOffset() : 0;
-			float measureNumDyOffset = lastbar ? -lastbar->getMeasureNumberDyOffset() : 0;
-//			float x = gCurStaff->getBoundingBox().left + ( 10 * mTagSize) + measureNumDxOffset;
-//			float x = mLeftSpace + measureNumDxOffset;
-			float x = 0; //measureNumDxOffset;
-			float y = mPosition.y - 40 - 110 * (mTagSize - 1) - mDy + measureNumDyOffset;
-			ostringstream barNumberStream;
-			barNumberStream << num - 1;
-			barNumberString = barNumberStream.str();
-			int fontalign = hdc.GetFontAlign();
-			hdc.SetFontAlign (VGDevice::kAlignCenter + VGDevice::kAlignBase);
-			hdc.DrawString(x, y, barNumberString.c_str(), int(barNumberString.size()));
-			hdc.SetFontAlign (fontalign);
+		if (pageNumbering || systemNumbering) {
+            if (analyzedBar->getMeasureNumberDisplayed() != ARBar::kNoNum) {
+                // float measureNumDxOffset = analyzedBar ? analyzedBar->getMeasureNumberDxOffset() : 0;
+                float measureNumDyOffset = analyzedBar ? -analyzedBar->getMeasureNumberDyOffset() : 0;
+                // float x = gCurStaff->getBoundingBox().left + ( 10 * mTagSize) + measureNumDxOffset;
+                // float x = mLeftSpace + measureNumDxOffset;
+                float x = 0; //measureNumDxOffset;
+                float y = mPosition.y - 40 - 110 * (mTagSize - 1) - mDy + measureNumDyOffset;
+                ostringstream barNumberStream;
+                barNumberStream << num - 1;
+                barNumberString = barNumberStream.str();
+                int fontalign = hdc.GetFontAlign();
+                hdc.SetFontAlign (VGDevice::kAlignCenter + VGDevice::kAlignBase);
+                hdc.DrawString(x, y, barNumberString.c_str(), int(barNumberString.size()));
+                hdc.SetFontAlign (fontalign);
+            }
 		}
-
 		ostringstream barNumberStream;
 		barNumberStream << num;
 		barNumberString = barNumberStream.str();
@@ -249,7 +262,7 @@ void GRBar::DisplayMeasureNum( VGDevice & hdc ) const
         float totalXOffset = mPosition.x - 18  - 20 * (mTagSize - 1) + measureNumDxOffset + mDx;
         float totalYOffset = mPosition.y - 40 - 110 * (mTagSize - 1) + measureNumDyOffset - mDy;
 
-		if (arBar->getMeasureNumberDisplayed() != ARBar::kNumPage) {
+		if (arBar->getMeasureNumberDisplayed() == ARBar::kNumAll) {
 			int fontalign = hdc.GetFontAlign();
 			hdc.SetFontAlign (0);
 			hdc.DrawString	 (totalXOffset, totalYOffset, barNumberString.c_str(), (int)barNumberString.size());
