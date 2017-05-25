@@ -58,7 +58,7 @@ class GRBar : public GRTagARNotationElement
 		const ARBar::TRanges getRanges() const				{ return getARBar()->getRanges(); }
 		void				 setRanges(const TRanges& r)	{ fRanges = r; }
 
-		static void reset() { fCurrentPage = 0; }		// required for a new score
+		static void reset() { fCurrentPage = 0; fCurrentSystem = 0; }		// required for a new score
 	
 	protected:
 		void	DisplayMeasureNum( VGDevice & hdc ) const;
@@ -77,7 +77,8 @@ class GRBar : public GRTagARNotationElement
 		TRanges	fRanges;
 
 	private:
-		static GRPage*	fCurrentPage;
+		static GRPage*      fCurrentPage;
+        static GRSystem*    fCurrentSystem;
 		void InitGRBar( const TYPE_TIMEPOSITION & inTimePos, const GRStaff * inStaff );
 };
 

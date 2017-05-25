@@ -26,7 +26,7 @@ class ARBar : // public ARMusicalObject,
  {
  public:
 		typedef std::vector<std::pair<int, int> >	TRanges;
-		enum { kNoNum, kNumAll, kNumPage };
+		enum { kNoNum, kNumAll, kNumPage, kNumSystem };
 		         ARBar(const TYPE_TIMEPOSITION & timeposition);
 		         ARBar();
 		virtual ~ARBar();
