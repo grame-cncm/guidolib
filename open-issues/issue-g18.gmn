@@ -1,3 +1,6 @@
+(*
+	unwanted space before the clef on second staff
+*)
 { 
 [ \staff<1>  
 %	\accol<id=0, range="1-2"> \barFormat<style= "system", range="2-3"> 
