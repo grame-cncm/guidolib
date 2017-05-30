@@ -40,8 +40,8 @@
 	}
   
 	$( document ).ready(function() {
-		// Init guido engine
-		guidoEngine = new Module.GuidoEngineAdapter;
+		var module = GuidoModule();
+		guidoEngine = new module.GuidoEngineAdapter;
 		guidoEngine.init();
 		
 		$("#gmnSandbox").on('keyup', processGMN);
