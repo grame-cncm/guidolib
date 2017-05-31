@@ -91,7 +91,7 @@ class GRMusic : public GREvent
 		virtual float	getPageWidth( int inPageNum ) const;
 		virtual float	getPageHeight( int inPageNum ) const;
 
-		virtual void	OnDraw( VGDevice & hdc, const GuidoOnDrawDesc & inDrawInfos );
+		virtual void	DrawMusic( VGDevice & hdc, const GuidoOnDrawDesc & inDrawInfos );
 		virtual void	GetMap( int inPage, float w, float h, GuidoElementSelector sel, MapCollector& f ) const;
 
 		virtual void	GGSOutputPage( int inPageNum ) const;

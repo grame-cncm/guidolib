@@ -611,7 +611,7 @@ GUIDOAPI(GuidoErrCode) GuidoOnDraw( GuidoOnDrawDesc * desc )
 		desc->hdc->SelectFillColor(myTestColor);
 		desc->hdc->SetFontColor(myTestColor);
 #endif
-		desc->handle->grmusic->OnDraw( *(desc->hdc), *desc );
+		desc->handle->grmusic->DrawMusic( *(desc->hdc), *desc );
 
 		result = guidoNoErr;
 	}
