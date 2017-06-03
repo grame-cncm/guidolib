@@ -31,6 +31,7 @@ ARBar::ARBar(const TYPE_TIMEPOSITION &timeposition)
 	measureNumber               = 0;
     measureNumberDisplayed      = false;
     measureNumberDisplayedIsSet = false;
+    fSkippedMeasureNum          = false;
 
 	numDx = 0;
 	numDy = 0;
@@ -41,7 +42,8 @@ ARBar::ARBar() : ARMTParameter()
 	measureNumber               = 0;
     measureNumberDisplayed      = kNoNum;
     measureNumberDisplayedIsSet = false;
-
+    fSkippedMeasureNum          = false;
+    
 	numDx = 0;
 	numDy = 0;
 }
@@ -75,11 +77,14 @@ void ARBar::setTagParameterList(TagParameterList& tpl)
 			// w, h, ml, mt, mr, mb
 
             TagParameterString *s = TagParameterString::cast(rtpl->RemoveHead());
-			bool display =  s->getBool();
             if (s->TagIsSet()) {
-				measureNumberDisplayed = display ? kNumAll : kNoNum;
+                std::string skipped("skipped");
+                const char* displayMeasNum = s->getValue();
+                
+                fSkippedMeasureNum = (skipped == displayMeasNum);
+                measureNumberDisplayed = (s->getBool() ? kNumAll : kNoNum);
                 measureNumberDisplayedIsSet = true;
-			}
+            }
             delete s;
 
 			// - dx/dy for measure number
@@ -116,6 +121,7 @@ void ARBar::printParameters(std::ostream& os) const
 {
     os << "measureNumber: " << measureNumber << "; ";
     os << "measureNumberDisplayed: " << measureNumberDisplayed << "; ";
+    os << "skipped: " << fSkippedMeasureNum << "; ";
     os << "numDx: " << numDx << "; ";
     os << "numDy: " << numDy << ";";
 
