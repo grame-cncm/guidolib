@@ -2386,6 +2386,8 @@ void ARMusicalVoice::doAutoMeasuresNumbering()
 
 		if (bar)
 		{
+            if (bar->isMeasureNumSkipped())
+                measureNumber--;
 			bar->setMeasureNumber(measureNumber);
 			bar->setPreviousBar (previous);
 
@@ -2412,6 +2414,7 @@ void ARMusicalVoice::doAutoMeasuresNumbering()
                         bar->setMeasureNumberDisplayed(ARBar::kNumSystem);
                 }
             }
+            
             measureNumber++;
 			previous = bar;
 		}

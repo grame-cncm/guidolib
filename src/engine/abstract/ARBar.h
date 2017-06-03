@@ -43,6 +43,8 @@ class ARBar : // public ARMusicalObject,
         void  setMeasureNumberDisplayed(int mode)	  { measureNumberDisplayed = mode; }
         bool  isMeasureNumberDisplayedSet() const     { return measureNumberDisplayedIsSet; }
 
+        bool isMeasureNumSkipped() const                       { return fSkippedMeasureNum; }
+     
 		float getMeasureNumberDxOffset() const        { return numDx; }
 		float getMeasureNumberDyOffset() const        { return numDy; }
 		
@@ -60,6 +62,7 @@ class ARBar : // public ARMusicalObject,
 
 		int   measureNumber;
         int   measureNumberDisplayed;
+        bool  fSkippedMeasureNum;
 		float numDx;
 		float numDy;
 		const ARBar*	fLastBar;
