@@ -28,7 +28,7 @@ class ARMeter : public ARMTParameter
   public:
 
 		enum metertype { NONE, NUMERIC, C, C2  };
-		enum { kNoAutoMeasureNum, kAutoMeasureNum, kAutoMeasureNumPage  };
+		enum { kNoAutoMeasureNum, kAutoMeasureNum, kAutoMeasureNumPage, kAutoMeasureNumSystem };
 
 				ARMeter();
 				ARMeter(int p_numerator, int p_denominator);

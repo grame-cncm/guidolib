@@ -244,7 +244,7 @@ void GRMusic::removeAutoSpace(ARMusic * arm)
 
 	Do nothing if required page can't be found.
 */
-void GRMusic::OnDraw( VGDevice & hdc, const GuidoOnDrawDesc & inDrawInfos )
+void GRMusic::DrawMusic( VGDevice & hdc, const GuidoOnDrawDesc & inDrawInfos )
 {
 	const GRPage * drawpage = getPage(inDrawInfos.page);
 

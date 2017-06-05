@@ -2397,12 +2397,21 @@ void ARMusicalVoice::doAutoMeasuresNumbering()
 					case ARMeter::kAutoMeasureNumPage:
 						bar->setMeasureNumberDisplayed(ARBar::kNumPage);
 						break;
+                    case ARMeter::kAutoMeasureNumSystem:
+                        bar->setMeasureNumberDisplayed(ARBar::kNumSystem);
+                        break;
 					default:
 						bar->setMeasureNumberDisplayed(ARBar::kNoNum);
 				}
 			}
-			else if (currAutoMeasureNum == ARMeter::kAutoMeasureNumPage)
-				bar->setMeasureNumberDisplayed(ARBar::kNumPage);
+            else {
+                if (bar->getMeasureNumberDisplayed()) {
+                    if (currAutoMeasureNum == ARMeter::kAutoMeasureNumPage)
+                        bar->setMeasureNumberDisplayed(ARBar::kNumPage);
+                    else if (currAutoMeasureNum == ARMeter::kAutoMeasureNumSystem)
+                        bar->setMeasureNumberDisplayed(ARBar::kNumSystem);
+                }
+            }
             measureNumber++;
 			previous = bar;
 		}

@@ -1,0 +1,11 @@
+[
+	\pageFormat<w=17cm, h=16cm> \meter<"C", autoMeasuresNum="system">
+	(* System 1 *) a b c d a b c d
+	(* System 2 *) a b c d a b c d
+	(* System 3 *) a b c d a b c d
+	(* System 4 *) a b c d
+  \bar<displayMeasNum="false"> % Hiding measure num on the bar after the first bar
+                               % of the system/page (depending on autoMeasuresNum value)
+                               % was abnormally hiding the previous bar in a previous version
+  a b c d
+]

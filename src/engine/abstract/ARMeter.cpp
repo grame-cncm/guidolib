@@ -179,11 +179,14 @@ void ARMeter::setTagParameterList(TagParameterList& tpl)
 			assert(tps);
 			std::string on("on");
 			std::string page("page");
+            std::string system("system");
 			const char* automeasures = tps->getValue();
 			if (on == automeasures)
 				autoMeasuresNum = kAutoMeasureNum;
 			else if (page == automeasures)
 				autoMeasuresNum = kAutoMeasureNumPage;
+            else if (system == automeasures)
+                autoMeasuresNum = kAutoMeasureNumSystem;
 			else
 				autoMeasuresNum = kNoAutoMeasureNum;
 

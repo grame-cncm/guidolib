@@ -16,7 +16,7 @@ set (GUIDOFWKVERS C)
 set (SOVERS 1)
 
 if(UNIX)
-	add_definitions(-Wall -DGCC)
+	add_definitions(-Wall -Wno-deprecated-register -DGCC)
 endif(UNIX)
 
 #######################################
