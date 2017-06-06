@@ -30,7 +30,6 @@ typedef GuidoErrCode (* GuidoAR2MIDIFilePtr)(const struct NodeAR* ar, const char
 #include "SetupDialog.h"
 #include "QGuidoImporter.h"
 #include "GuidoHighlighter.h"
-#include "GuidoEngine.h"
 #include "CodeEditor.h"
 
 
