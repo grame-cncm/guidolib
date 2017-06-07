@@ -49,17 +49,17 @@ private:
 protected:
 	void init();
 
-	void DrawVoice(ARMusicalVoice* v, DrawParams &drawParams);
-    void DrawNote (int pitch, double date, double dur, DrawParams &drawParams);
-    void DrawLinks(DrawParams &drawParams) const;
-    void DrawFinalEvent(double dur, DrawParams &drawParams);
-    void DrawAllLinksBetweenTwoEvents(DrawParams &drawParams) const;
-    void DrawLinkBetween(PianoRollTrajectory::EventInfos leftEvent, PianoRollTrajectory::EventInfos rightEvent, DrawParams &drawParams) const;
+	void DrawVoice(ARMusicalVoice* v, const DrawParams &drawParams);
+    void DrawNote (int pitch, double date, double dur, const DrawParams &drawParams);
+    void DrawLinks(const DrawParams &drawParams) const;
+    void DrawFinalEvent(double dur, const DrawParams &drawParams);
+    void DrawAllLinksBetweenTwoEvents(const DrawParams &drawParams) const;
+    void DrawLinkBetween(PianoRollTrajectory::EventInfos leftEvent, PianoRollTrajectory::EventInfos rightEvent, const DrawParams &drawParams) const;
 
-	void handleRest (double date, DrawParams &drawParams);
+	void handleRest (double date, const DrawParams &drawParams);
 
 #ifdef MIDIEXPORT
-    void DrawMidiSeq(MidiSeqPtr seq, int tpqn, DrawParams &drawParams);
+    void DrawMidiSeq(MidiSeqPtr seq, int tpqn, const DrawParams &drawParams);
 #endif
 
     double fCurrentDate;

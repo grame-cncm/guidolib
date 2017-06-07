@@ -175,18 +175,12 @@ class DragScrollArea : public QScrollArea
 	
 		QPoint mPreviousPoint;
 	
-		void moveScrollBar(int pixelDelta , QScrollBar * scrollBar)
-		{
-			scrollBar->setValue( scrollBar->value() - pixelDelta );
-		}
+		void moveScrollBar(int pixelDelta , QScrollBar * scrollBar)	{ scrollBar->setValue( scrollBar->value() - pixelDelta ); }
 	
-		void mouseMoveEvent ( QMouseEvent * event )
-		{
-			if ( widget() )
-			{
+		void mouseMoveEvent ( QMouseEvent * event ) {
+			if ( widget() ) {
 				event->accept();
-				if ( !mPreviousPoint.isNull() )
-				{
+				if ( !mPreviousPoint.isNull() ) {
 					int dx = event->pos().x() - mPreviousPoint.x();
 					int dy = event->pos().y() - mPreviousPoint.y();				
 					moveScrollBar( dx , horizontalScrollBar() );
@@ -196,10 +190,8 @@ class DragScrollArea : public QScrollArea
 			}
 		}
 		
-		void mouseReleaseEvent ( QMouseEvent * event )
-		{
-			if ( widget() )
-			{
+		void mouseReleaseEvent ( QMouseEvent * event ) {
+			if ( widget() ) {
 				event->accept();
 //				widget()->setCursor( QCursor( Qt::OpenHandCursor ) );
 				mPreviousPoint.setX(0);
@@ -207,16 +199,13 @@ class DragScrollArea : public QScrollArea
 			}
 		}
 
-		void mousePressEvent ( QMouseEvent * event )
-		{
-			if ( widget() )
-			{
+		void mousePressEvent ( QMouseEvent * event ) {
+			if ( widget() ) {
 				event->accept();
 //				widget()->setCursor( QCursor( Qt::ClosedHandCursor ) );
 				mPreviousPoint = event->pos();
 			}
 		}
-		
 };
 
 class QScoreDockWidget : public QDockWidget 
@@ -227,13 +216,10 @@ class QScoreDockWidget : public QDockWidget
 		QScoreDockWidget( const QString& name , MainWindow* parent ) : QDockWidget(name,parent), mainWindow(parent) {}
 	
 	protected:
-		void resizeEvent ( QResizeEvent * event )
-		{
-			 event->accept();
+		void resizeEvent ( QResizeEvent * event ) {
+			event->accept();
 			if ( mainWindow->mAdjustMode != MainWindow::AdjustNone )
-			{
 				mainWindow->updateWidgetSize();
-			}
 		}
 };
 
@@ -395,8 +381,6 @@ MainWindow::MainWindow() :
 	QWidget * codeDockWidget = new QWidget(this);
 	codeDockWidget->setLayout( codeLayout );
 
-//	statusBar()->insertPermanentWidget( 0, mFindWidget );
-
 	mScoreDock = new QScoreDockWidget("Score" , this);
 	mScoreDock->setWidget( mScrollArea );
 	mScoreDock->setFeatures( QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetClosable );
@@ -414,7 +398,6 @@ MainWindow::MainWindow() :
 	addDockWidget( Qt::TopDockWidgetArea , mCodeDock );
 
 	mPageLabel = new QLabel("" , this);
-
 	mGuidoHighlighter = new GuidoHighlighter( mTextEdit->document() );
 
     createActions();
@@ -423,12 +406,11 @@ MainWindow::MainWindow() :
     createStatusBar();
 
 	mScaleFactor = 100;
-	
+
 	mFileSystemWatcher = new QFileSystemWatcher(this);
 	connect( mFileSystemWatcher , SIGNAL( fileChanged(QString) ) , this , SLOT(fileChanged(QString)) );
-	
+
     newFile();
-	
     readSettings();
 }
 
@@ -458,13 +440,9 @@ const QString MainWindow::filePath() const
 void MainWindow::newFile()
 {
     if (maybeSave()) {
-
 		reinitGuidoWidget();
-		
 		mTextEdit->clear();
-
         setCurrentFile("");
-
         reinitARHandlerPath();
     }
 }
@@ -472,11 +450,7 @@ void MainWindow::newFile()
 //-------------------------------------------------------------------------
 bool MainWindow::save()
 {
-    if (mCurFile.isEmpty()) {
-		return saveAs();
-    } else {
-        return saveFile(mCurFile);
-    }
+    return mCurFile.isEmpty() ? saveAs() : saveFile(mCurFile);
 }
 
 //-------------------------------------------------------------------------
@@ -492,16 +466,13 @@ bool MainWindow::saveAs()
 
     // - To be able to remove ex filePath from ARHandler path list
     std::string exFilePath(mCurFile.toUtf8().data());
-
     bool saveResult = saveFile(fileName);
 
     // - Add path to the AR
-    if (saveResult)
-    {
+    if (saveResult) {
         std::string filePath(fileName.toUtf8().data());
         addFileDirectoryPathToARHandler(filePath, exFilePath);
     }
-
     return saveResult;
 }
  
@@ -551,6 +522,21 @@ void MainWindow::documentWasModified()
 //	mTextEdit->highlightErrorLine( 0 );
 }
 
+#define SHOWTIME 0
+//-------------------------------------------------------------------------
+#if SHOWTIME
+static void showTime (const QGuidoWidget* w)
+{
+	long ptime = GuidoGetParsingTime((const ARHandler)w->getARHandler());
+	long gtime = GuidoGetAR2GRTime  ((const GRHandler)w->getGRHandler());
+	long dtime = GuidoGetOnDrawTime ((const GRHandler)w->getGRHandler());
+	cerr << "parsing time: " << ptime << " ms" << endl;
+	cerr << "ar2gr time  : " << gtime << " ms" << endl;
+	cerr << "drawing time: " << dtime << " ms" << endl;
+	cerr << "total time  : " << (ptime + gtime + dtime) << " ms" << endl;
+}
+#endif
+
 //-------------------------------------------------------------------------
 void MainWindow::updateCode (bool force)
 {
@@ -570,6 +556,9 @@ void MainWindow::updateCode (bool force)
 		setCurrentPage( mGuidoWidget->firstVisiblePage() );
 		updateWidgetSize();
 		mTextEdit->highlightErrorLine( 0 );
+#if SHOWTIME
+	showTime (mGuidoWidget);
+#endif
 	}
 	else
 	{
@@ -1706,13 +1695,13 @@ bool MainWindow::loadFile(const QString &fileName)
 	if ( loadOk )
 	{
 		mBaseSize = mGuidoWidget->pageSizeMM( mGuidoWidget->firstVisiblePage() ) * (this->width() / float(this->widthMM()));
-
 		firstPage();
 		updateWidgetSize();
-		
 		mTextEdit->highlightErrorLine( 0 );
-			
 		statusBar()->showMessage(tr("File loaded"), 2000);
+#if SHOWTIME
+		showTime (mGuidoWidget);
+#endif
 	}
 	else
 	{
