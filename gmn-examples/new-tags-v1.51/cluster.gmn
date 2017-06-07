@@ -21,6 +21,6 @@
     \noteFormat<color="red">
     \cluster<hdx=1, hdy=3>({f,a})
     \cluster<color="purple">({d1, g}) a
-    \cluster<dx=-7>({c,a})
+    \cluster({c,a})
   ]
 }
