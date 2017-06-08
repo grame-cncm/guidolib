@@ -605,7 +605,8 @@ void GDeviceOSX::DrawMusicSymbol( float x, float y, unsigned int inSymbolID )
 	PopFillColor();
 }
 // --------------------------------------------------------------
-#ifndef IOS
+//#ifndef IOS
+#if 0
 void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
 {
 	// this is for macos 10.4 : select a dummy font first 
