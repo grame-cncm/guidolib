@@ -29,117 +29,122 @@
 using namespace std;
 
 //--------------------------------------------------------------------------
-void PianoRollTrajectory::DrawVoice(ARMusicalVoice* v, const DrawParams &drawParams)
-{
-//	int voiceNum = v->getVoiceNum();
-//	std::map<int , VGColor>::iterator it = fVoicesColors.find(voiceNum);
-//	if(fVoicesColors.end() != it) {
-//		fColors.push(it->second);
+//void PianoRollTrajectory::DrawVoice(ARMusicalVoice* v, const DrawParams &drawParams)
+//{
+////	int voiceNum = v->getVoiceNum();
+////	std::map<int , VGColor>::iterator it = fVoicesColors.find(voiceNum);
+////	if(fVoicesColors.end() != it) {
+////		fColors.push(it->second);
+////	}
+////
+////	if (!fColors.empty() || fVoicesAutoColored) {
+////		if (fColors.empty()) {
+////            int r, g, b;
+////
+////            drawParams.colorHue += kGoldenRatio;
+////            drawParams.colorHue  = fmod(drawParams.colorHue, 1);
+////
+////            HSVtoRGB((float) drawParams.colorHue, 0.5f, 0.9f, r, g, b);
+////
+////			fColors.push(VGColor(r, g, b, 255));
+////        }
+////        
+////		drawParams.dev->PushFillColor(fColors.top());
+////    }
+//
+//    fChord              = false;
+//	ObjectList   *ol    = (ObjectList *) v;
+//	GuidoPos      pos   = ol->GetHeadPosition();
+//    TYPE_DURATION finalDur;
+//
+//	while(pos)
+//	{
+//		ARMusicalObject  *e    = ol->GetNext(pos);
+//		TYPE_DURATION     dur  = e->getDuration();
+//		TYPE_TIMEPOSITION date = e->getRelativeTimePosition();
+//
+//        finalDur = (dur ? dur : finalDur);
+//
+//        if (fChord) {
+//            dur   = fChordDuration;
+//            date -= dur;
+//        }
+//
+//		TYPE_TIMEPOSITION end = date + dur;
+//
+//		if (date >= fStartDate) {
+//            if (date < fEndDate) {
+//                if (end > fEndDate)
+//                    dur = fEndDate - date;
+//
+//                DrawMusicalObject(e, date, dur, drawParams);
+//            }
+//		}
+//		else if (end > fStartDate) { // to make the note end appear
+//			date = fStartDate;	
+//			
+//            if (end > fEndDate)
+//                dur = fEndDate - date;
+//			else
+//                dur = end - date;
+//			
+//            DrawMusicalObject(e, date, dur, drawParams);
+//		}
+//
+//        if (static_cast<ARRest *>(e->isARRest())) {
+//            handleRest(date, drawParams);
+//			fChord = false;
+//        }
+//        else if (static_cast<ARChordComma *>(e->isARChordComma()))
+//			fChord = true;
+//        else if (static_cast<ARNoteFormat *>(e->isARNoteFormat()))
+//            handleColor(static_cast<ARNoteFormat *>(e->isARNoteFormat()), drawParams);
+//        else if (static_cast<ARBar *>(e->isARBar()) && fMeasureBarsEnabled)
+//            DrawMeasureBar(date, drawParams);
 //	}
 //
-//	if (!fColors.empty() || fVoicesAutoColored) {
-//		if (fColors.empty()) {
-//            int r, g, b;
+//    DrawLinks(drawParams);                // Draws link to final event
+//    DrawFinalEvent(finalDur, drawParams); // Draws link after final event
 //
-//            drawParams.colorHue += kGoldenRatio;
-//            drawParams.colorHue  = fmod(drawParams.colorHue, 1);
+////	while (!fColors.empty())
+////        popColor(drawParams);
 //
-//            HSVtoRGB((float) drawParams.colorHue, 0.5f, 0.9f, r, g, b);
+//	if (fNoteColor) {		// check for possible color from noteFormat tag
+//		drawParams.dev->PopFillColor();
+//		fNoteColor = false;
+//	}
 //
-//			fColors.push(VGColor(r, g, b, 255));
-//        }
-//        
-//		drawParams.dev->PushFillColor(fColors.top());
-//    }
-
-    fChord              = false;
-	ObjectList   *ol    = (ObjectList *) v;
-	GuidoPos      pos   = ol->GetHeadPosition();
-    TYPE_DURATION finalDur;
-
-	while(pos)
-	{
-		ARMusicalObject  *e    = ol->GetNext(pos);
-		TYPE_DURATION     dur  = e->getDuration();
-		TYPE_TIMEPOSITION date = e->getRelativeTimePosition();
-
-        finalDur = (dur ? dur : finalDur);
-
-        if (fChord) {
-            dur   = fChordDuration;
-            date -= dur;
-        }
-
-		TYPE_TIMEPOSITION end = date + dur;
-
-		if (date >= fStartDate) {
-            if (date < fEndDate) {
-                if (end > fEndDate)
-                    dur = fEndDate - date;
-
-                DrawMusicalObject(e, date, dur, drawParams);
-            }
-		}
-		else if (end > fStartDate) { // to make the note end appear
-			date = fStartDate;	
-			
-            if (end > fEndDate)
-                dur = fEndDate - date;
-			else
-                dur = end - date;
-			
-            DrawMusicalObject(e, date, dur, drawParams);
-		}
-
-        if (static_cast<ARRest *>(e->isARRest())) {
-            handleRest(date, drawParams);
-			fChord = false;
-        }
-        else if (static_cast<ARChordComma *>(e->isARChordComma()))
-			fChord = true;
-        else if (static_cast<ARNoteFormat *>(e->isARNoteFormat()))
-            handleColor(static_cast<ARNoteFormat *>(e->isARNoteFormat()), drawParams);
-        else if (static_cast<ARBar *>(e->isARBar()) && fMeasureBarsEnabled)
-            DrawMeasureBar(date, drawParams);
-	}
-
-    DrawLinks(drawParams);                // Draws link to final event
-    DrawFinalEvent(finalDur, drawParams); // Draws link after final event
-
-//	while (!fColors.empty())
-//        popColor(drawParams);
-
-	if (fNoteColor) {		// check for possible color from noteFormat tag
-		drawParams.dev->PopFillColor();
-		fNoteColor = false;
-	}
-
-	fPreviousEventInfos.clear();
-	fCurrentEventInfos.clear();
-    fCurrentDate = 0;
-}
+//	fPreviousEventInfos.clear();
+//	fCurrentEventInfos.clear();
+//    fCurrentDate = 0;
+//}
 
 //--------------------------------------------------------------------------
-void PianoRollTrajectory::DrawNote(int pitch, double date, double dur, const DrawParams &drawParams)
-{
-    float    x     = date2xpos(date, drawParams.width, drawParams.untimedLeftElementWidth);
-    float    y     = pitch2ypos(pitch, drawParams);
-//	VGColor color = fColors.empty() ? VGColor(0, 0, 0) : fColors.top();
-	VGColor color(0, 0, 0);
+// the code has been commented out
+// was not working probably due to hidden overloaded method
+// incorrect svg output
+//void PianoRollTrajectory::DrawNote(int pitch, double date, double dur, const DrawParams &drawParams)
+//{
+//    float    x     = date2xpos(date, drawParams.width, drawParams.untimedLeftElementWidth);
+//    float    y     = pitch2ypos(pitch, drawParams);
+////	VGColor color = fColors.empty() ? VGColor(0, 0, 0) : fColors.top();
+//	VGColor color(0, 0, 0);
+//
+//    if (fCurrentDate == date)
+//		fCurrentEventInfos.push_back(createNoteInfos(x, y, color));
+//    else {
+//        DrawLinks(drawParams);
+//
+//		fPreviousEventInfos = fCurrentEventInfos;
+//
+//		fCurrentEventInfos.clear();
+//		fCurrentEventInfos.push_back(createNoteInfos(x, y, color));
+//
+//        fCurrentDate = date;
+//    }
+//}
 
-    if (fCurrentDate == date)
-		fCurrentEventInfos.push_back(createNoteInfos(x, y, color));
-    else {
-        DrawLinks(drawParams);
 
-		fPreviousEventInfos = fCurrentEventInfos;
-
-		fCurrentEventInfos.clear();
-		fCurrentEventInfos.push_back(createNoteInfos(x, y, color));
-
-        fCurrentDate = date;
-    }
-}
 
 //--------------------------------------------------------------------------
 void PianoRollTrajectory::DrawLinks(const DrawParams &drawParams) const
@@ -275,43 +280,46 @@ PianoRollTrajectory::EventInfos PianoRollTrajectory::createRestInfos(float x) co
 #ifdef MIDIEXPORT
 
 //--------------------------------------------------------------------------
-void PianoRollTrajectory::DrawMidiSeq(MidiSeqPtr seq, int tpqn, const DrawParams &drawParams)
-{
-	MidiEvPtr ev       = FirstEv(seq);
-	int       tpwn     = tpqn * 4;
-	double    start    = double(fStartDate);
-	double    end      = double(fEndDate);
-    double    finalDur = 0;
-
-	while (ev) {
-		if (EvType(ev) == typeNote) {
-			double date = double(Date(ev)) / tpwn;
-			double dur  = double(Dur(ev))  / tpwn;
-
-            finalDur = (dur > 0 ? dur : finalDur);
-
-			if (date >= start) {
-                if (date < end) {
-                    double remain = end - date;
-                    DrawNote(Pitch(ev), date, (dur > remain ? remain : dur), drawParams);
-                }
-			}
-			else if ((date + dur) > start) {
-				dur -= (start - date);
-				double remain = end - start;
-				DrawNote(Pitch(ev), start, (dur > remain ? remain : dur), drawParams);
-			}
-		}
-
-		ev = Link(ev);
-	}
-
-    DrawLinks(drawParams);                // Draws link to final event
-    DrawFinalEvent(finalDur, drawParams); // Draws link after final event
-
-	fPreviousEventInfos.clear();
-	fCurrentEventInfos.clear();
-    fCurrentDate = 0;
-}
+// the code has been commented out
+// was not working probably due to hidden overloaded method
+// incorrect svg output
+//void PianoRollTrajectory::DrawMidiSeq(MidiSeqPtr seq, int tpqn, const DrawParams &drawParams)
+//{
+//	MidiEvPtr ev       = FirstEv(seq);
+//	int       tpwn     = tpqn * 4;
+//	double    start    = double(fStartDate);
+//	double    end      = double(fEndDate);
+//    double    finalDur = 0;
+//
+//	while (ev) {
+//		if (EvType(ev) == typeNote) {
+//			double date = double(Date(ev)) / tpwn;
+//			double dur  = double(Dur(ev))  / tpwn;
+//
+//            finalDur = (dur > 0 ? dur : finalDur);
+//
+//			if (date >= start) {
+//                if (date < end) {
+//                    double remain = end - date;
+//                    DrawNote(Pitch(ev), date, (dur > remain ? remain : dur), drawParams);
+//                }
+//			}
+//			else if ((date + dur) > start) {
+//				dur -= (start - date);
+//				double remain = end - start;
+//				DrawNote(Pitch(ev), start, (dur > remain ? remain : dur), drawParams);
+//			}
+//		}
+//
+//		ev = Link(ev);
+//	}
+//
+//    DrawLinks(drawParams);                // Draws link to final event
+//    DrawFinalEvent(finalDur, drawParams); // Draws link after final event
+//
+//	fPreviousEventInfos.clear();
+//	fCurrentEventInfos.clear();
+//    fCurrentDate = 0;
+//}
 
 #endif
