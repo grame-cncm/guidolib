@@ -51,51 +51,37 @@ GRIntens::GRIntens( GRStaff * inStaff ,ARIntens* abstractRepresentationOfIntens)
 //	rcount = 0;
 
 	if (!strcmp(cp,"p"))
-	{
 		mSymbol = INTENS_P;
-	}
+
 	else if (!strcmp(cp,"f") )
-	{
 		mSymbol = INTENS_F;
-	}
+
 	else if (!strcmp(cp,"ff"))
-	{
 		mSymbol = INTENS_FF;
-	}
+
 	else if (!strcmp(cp,"fff"))
-	{
 		mSymbol = INTENS_FFF;
-	}
+
 	else if (!strcmp(cp,"ffff"))
-	{
 		mSymbol = INTENS_FFFF;
-	}
+
 	else if (!strcmp(cp,"mf"))
-	{
 		mSymbol = INTENS_MF;
-	}
+
 	else if (!strcmp(cp,"mp"))
-	{
 		mSymbol = INTENS_MP;
-	}
+
 	else if (!strcmp(cp,"sf"))
-	{
 		mSymbol = INTENS_SF;
-	}
+
 	else if (!strcmp(cp,"pp"))
-	{
 		mSymbol = INTENS_PP;
-	}
+
 	else if (!strcmp(cp,"ppp"))
-	{
 		mSymbol = INTENS_PPP;
-//		rcount = 3;
-	}
+
 	else if (!strcmp(cp,"pppp"))
-	{
 		mSymbol = INTENS_PPPP;
-//		rcount = 2;
-	}
 
 	if (mSymbol != 0)
 	{
@@ -132,11 +118,17 @@ GRIntens::~GRIntens()
 {
 }
 
+// -----------------------------------------------------------------------------
+void GRIntens::accept (GRVisitor& visitor)
+{
+	visitor.visitStart (this);
+	visitor.visitEnd (this);
+}
 
 //## Other Operations (implementation)
 void GRIntens::OnDraw(VGDevice & hdc) const
 {
-	if(!mDraw)
+	if(!mDraw || !mShow)
 		return;
 	GRTagARNotationElement::OnDraw( hdc );
 }

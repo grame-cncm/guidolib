@@ -97,7 +97,7 @@ GRRitardando::~GRRitardando()
 
 void GRRitardando::OnDraw(VGDevice & hdc) const
 {
-	if(!mDraw) return;
+	if(!mDraw || !mShow) return;
 	
 	assert( gCurSystem );
 

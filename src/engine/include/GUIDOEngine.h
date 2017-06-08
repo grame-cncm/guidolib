@@ -206,6 +206,7 @@ enum GuidoMapping {
 
 
 enum { kAutoDistrib = 1, kAlwaysDistrib = 2, kNeverDistrib = 3 };
+enum GRElement { kSlur=1, kDynamics, kArticulations, kText, kLyrics };
 
 /**
     Settings for the graphic score layout.
@@ -397,6 +398,15 @@ representations.
 		\return a Guido error code.
     */
     GUIDOAPI(GuidoErrCode)	GuidoUpdateGR( GRHandler gr, const GuidoLayoutSettings* settings);
+
+	/*!
+		Applies new layout settings to an existing Guido graphic representation.
+		\param gr the handler to the graphic representation.
+		\param settings a pointer to the settings for the graphic layout. If null, default
+        settings are applied.
+		\return a Guido error code.
+    */
+    GUIDOAPI(GuidoErrCode)	GuidoShowElement( GRHandler gr, GRElement elt, bool status);
 
 	/*!
 		Gives the notes density.

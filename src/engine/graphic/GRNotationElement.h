@@ -20,6 +20,8 @@
 
 #include "GObject.h"
 #include "defines.h"	// for TYPE_DURATION
+#include "GRVisitable.h"
+#include "GRVisitor.h"
 
 class NEPointerList;
 class GRStaff;
@@ -39,7 +41,7 @@ const float kMinNoteSize = 0.001f;	// minimum size of an element, the element is
 
 /** \brief parent class for all notation elements.
 */
-class GRNotationElement : public GObject  
+class GRNotationElement : public GObject, public GRVisitable
 {
 public:
 					GRNotationElement();
@@ -91,6 +93,8 @@ public:
 			void OnDrawText( VGDevice & hdc, const char * cp, int inCharCount = -1 ) const;
 			void DrawSymbol( VGDevice & hdc, unsigned int inSymbol, float inOffsetX = 0, float inOffsetY = 0,
 								   float inFontSize = 0) const;
+			void Show( bool status )		{ mShow = status; }
+			bool GetShow() const			{ return mShow; }
 
 	virtual void SendMap (const NVRect& r, MapCollector& f, TYPE_TIMEPOSITION date, TYPE_DURATION dur, GuidoElementType type, MapInfos& infos) const;
 	virtual void SendMap (MapCollector& f, TYPE_TIMEPOSITION date, TYPE_DURATION dur, GuidoElementType type, MapInfos& infos) const;
@@ -112,6 +116,7 @@ public:
 	
 	virtual void recalcVerticalPosition();
 	virtual void addAssociation( GRNotationElement * grnot );
+	virtual void accept (GRVisitor& visitor);
 
 	// - Text, streams
     virtual void print(std::ostream& os) const;
@@ -147,7 +152,8 @@ protected:
 	int  		mSpringID;
 	float 		mLeftSpace;		// Can't we deal only with bounding boxes ?
 	float 		mRightSpace;
-	bool		mDraw;
+	bool		mDraw;		 // a flag to show or hide an element (default is true) connected to staff on/off
+	bool		mShow;		 // a flag to show or hide an element (default is true) used by GuidoShowElement
     bool        mIsInHeader; // For proportional rendering
 
 	TYPE_DURATION mDurationOfGR;

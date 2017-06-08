@@ -211,6 +211,13 @@ void GRArticulation::print(ostream& os) const
 	os << "articulation " << mArticulationFlag << endl;
 }
 
+// -----------------------------------------------------------------------------
+void GRArticulation::accept (GRVisitor& visitor)
+{
+	visitor.visitStart (this);
+	visitor.visitEnd (this);
+}
+
 /*----------------initialize ordering map ----------------------------------------*/
 void GRArticulation::initOrder()
 {

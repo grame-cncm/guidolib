@@ -88,7 +88,7 @@ const ARInstrument* GRInstrument::getARInstrument() const
 
 void GRInstrument::OnDraw(VGDevice & hdc) const
 {
-	if(!mDraw) return;
+	if(!mDraw || !mShow) return;
 
 	const string name = getARInstrument()->getName();
 	if (name.empty()) return;

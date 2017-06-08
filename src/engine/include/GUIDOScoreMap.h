@@ -66,7 +66,8 @@ class_export TimeSegment: public std::pair<GuidoDate, GuidoDate>
 				 TimeSegment (const GuidoDate& a, const GuidoDate& b) : std::pair<GuidoDate, GuidoDate>(a, b) {}
 		virtual ~TimeSegment () {}
 
-		void print(std::ostream& out) const;					///< print the time segment 
+		void print(std::ostream& out) const;					///< print the time segment
+		float duration() const;									///< gives the segment duration
 		bool empty() const;										///< check for empty segment
 		bool intersect(const TimeSegment& ts) const;			///< check for segments intersection
 		bool include(const GuidoDate& date) const;				///< check for date inclusion

@@ -134,6 +134,7 @@ class GREvent : public GRARCompositeNotationElement
 		static GREvent * cast( GObject * inObj )	{ return ( inObj->isGREventClass() ? static_cast<GREvent *>(inObj) : 0 ); }
 
 		const GRNEList& getArticulations() const		{ return mArtilist; }
+		GRNEList&		getArticulations()				{ return mArtilist; }
 		virtual bool	stemHasBeenChanged() const		{return stemChanged;}
 		virtual void	setStemChanged()				{stemChanged = true;}
 		virtual const GREvent *	isGREvent() const		{ return this; }

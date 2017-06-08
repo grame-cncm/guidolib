@@ -87,6 +87,7 @@ public:
 	virtual void		setPosition( class NVPoint const & );
 	virtual void		updateBoundingBox();
 	virtual void		print(std::ostream& os) const;
+	virtual void		accept (GRVisitor& visitor);
 
 	void	addSystemTag( GRNotationElement * mytag );
 	void 	addBar( GRBar * mybar, enum GRSystem::BARTYPE btype, GRStaff * inStaff );

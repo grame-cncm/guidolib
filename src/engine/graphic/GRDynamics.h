@@ -19,6 +19,7 @@
 #include <vector>
 
 #include "GRPTagARNotationElement.h"
+#include "GRVisitor.h"
 
 class ARDynamic;
 class GRStaff;
@@ -33,6 +34,7 @@ class GRDynamics : public GRPTagARNotationElement
 		virtual void    addAssociation	(GRNotationElement * el);
 		virtual void    tellPosition	(GObject * caller, const NVPoint & newPosition);
 		virtual void	DrawDynamic		(VGDevice & hdc, bool cresc) const;
+		virtual void	accept			(GRVisitor& visitor);
 
 	protected:
 		typedef struct TXSegment {

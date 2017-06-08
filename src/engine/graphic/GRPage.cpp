@@ -105,6 +105,16 @@ float GRPage::getNotesDensity() const
 }
 
 // ----------------------------------------------------------------------------
+void GRPage::accept (GRVisitor& visitor)
+{
+	visitor.visitStart (this);
+	size_t n = mSystems.size();
+	for (size_t i = 0; i < n; i++)
+		mSystems[i]->accept (visitor);
+	visitor.visitEnd (this);
+}
+
+// ----------------------------------------------------------------------------
 void GRPage::checkCollisions (TCollisions& state, bool lyrics) const
 {
 	size_t n = mSystems.size();

@@ -17,6 +17,7 @@
 
 #include <string>
 
+#include "GRVisitor.h"
 #include "GRPTagARNotationElement.h"
 
 class ARText;
@@ -47,6 +48,7 @@ class GRText : public GRPTagARNotationElement
 						GRText( GRStaff *, ARText * abstractRepresentationOfText );
 		virtual 		~GRText();
 
+		virtual void	accept (GRVisitor& visitor);
 		virtual void 	removeAssociation( GRNotationElement * el );
 		virtual void 	tellPosition( GObject * caller, const NVPoint & inPosition );
 		virtual void 	addAssociation( GRNotationElement * el );

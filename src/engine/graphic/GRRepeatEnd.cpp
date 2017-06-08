@@ -144,7 +144,7 @@ void GRRepeatEnd::DrawDots( VGDevice & hdc ) const
 // --------------------------------------------------------------------------
 void GRRepeatEnd::OnDraw( VGDevice & hdc ) const
 {
-    if (!mDraw || fSize < kMinNoteSize)
+    if (!mDraw || !mShow || fSize < kMinNoteSize)
         return;
 
     VGColor prevColor = hdc.GetFontColor();

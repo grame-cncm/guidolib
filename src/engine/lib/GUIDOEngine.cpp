@@ -66,7 +66,8 @@ using namespace std;
 #include "BinaryFont.h"
 
 #include "guido2.h"
-#include "GMNCodePrintVisitor.h"
+#include "GRShowVisitor.h"
+//#include "GMNCodePrintVisitor.h"
 
 
 // ==========================================================================
@@ -360,6 +361,17 @@ GUIDOAPI(GRHandler) GuidoAR2GRParameterized(ARHandler ar, const GuidoGrParameter
 
 	// - Now create the GRMusic object from  the abstract representation.
 	return CreateGr (ar, &pf, settings);
+}
+
+// --------------------------------------------------------------------------
+GUIDOAPI(GuidoErrCode)	GuidoShowElement( GRHandler gr, GRElement elt, bool status)
+{
+	if ( !gr )			return guidoErrInvalidHandle;
+	if ( !gr->grmusic )	return guidoErrInvalidHandle;
+	
+	GRShowVisitor v(elt, status);
+	gr->grmusic->accept (v);
+	return guidoNoErr;
 }
 
 // --------------------------------------------------------------------------

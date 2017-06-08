@@ -311,7 +311,7 @@ GRNotationElement * GRVolta::getEndElt(GRNotationElement *after) {
 // -----------------------------------------------------------------------------
 void GRVolta::OnDraw( VGDevice & hdc ) const
 {
-	if(!mDraw)
+	if(!mDraw || !mShow)
 		return;
 
     static bool start = true;

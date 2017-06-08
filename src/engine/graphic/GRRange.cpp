@@ -12,9 +12,10 @@
 
 */
 
+#include "ARStaccato.h"
 #include "GRRange.h"
 #include "GRStaff.h"
-#include "GRStaccato.h"
+#include "GRARNotationElement.h"
 #include "GREvent.h"
 
 
@@ -41,10 +42,13 @@ GRRange::~GRRange()
 	//	associated = NULL;
 }
 
-//const ARTFermata * GRTFermata::getARTFermata() const
-//{
-//	return dynamic cast<ARTFermata *>(abstractRepresentation);
-//}
+
+// -----------------------------------------------------------------------------
+void GRRange::accept (GRVisitor& visitor)
+{
+	visitor.visitStart (this);
+	visitor.visitEnd (this);
+}
 
 /** \brief Called when an event is created while a GRRange is active.
 */

@@ -17,6 +17,7 @@
 
 #include "GRTagARNotationElement.h"
 #include "GuidoDefs.h"
+#include "GRVisitor.h"
 
 class ARClef;
 class GRStaff;
@@ -43,6 +44,7 @@ public:
 	virtual bool operator ==(const GRTag & tag) const;
 	virtual bool operator ==(const GRClef & clef) const;
 
+	virtual void accept (GRVisitor& visitor);
 	virtual void OnDraw( VGDevice & hdc ) const;
 	virtual void GGSOutput() const;
 

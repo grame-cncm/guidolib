@@ -16,7 +16,7 @@
 */
 
 #include "PrintVisitor.h"
-#include "Visitable.h"
+#include "ARVisitable.h"
 #include "GUIDOTypes.h"	// For GuidoPos
 
 #define oldv 0
@@ -26,7 +26,7 @@ class ARMusicalObject;
 /** \brief The base class for all range tags.
 */
 
-class ARPositionTag : public Visitable
+class ARPositionTag : public ARVisitable
 {
 	public:
 		ARPositionTag() : pos(0), ep(0), mPositionTag(0)
@@ -108,7 +108,7 @@ class ARPositionTag : public Visitable
         /*****************************************/
 
 		/* Visitor design pattern */
-        virtual void accept(BaseVisitor *visitor) { visitor->visit(*this); }
+        virtual void accept(ARVisitor *visitor) { visitor->visit(*this); }
 
 protected:
 		GuidoPos pos;

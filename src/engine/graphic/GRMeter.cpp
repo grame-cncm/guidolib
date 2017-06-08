@@ -63,6 +63,12 @@ GRMeter::GRMeter( ARMeter * ar, GRStaff * curstaff, bool p_ownsAR )
 			mPosition.y += fCurLSPACE * linesOffset / 2;
 	}
 }
+// -----------------------------------------------------------------------------
+void GRMeter::accept (GRVisitor& visitor)
+{
+	visitor.visitStart (this);
+	visitor.visitEnd (this);
+}
 
 //-------------------------------------------------------------------------------------
 // converts a list of meters to a list of string pairs
@@ -306,7 +312,7 @@ void GRMeter::DrawNumericSeveral(VGDevice & hdc ) const
 //-------------------------------------------------------------------------------------
 void GRMeter::OnDraw(VGDevice & hdc) const
 {
-	if (error || !mDraw)	return;
+	if (error || !mDraw || !mShow)	return;
 
 	const unsigned char * colref = getColRef();
 	const VGColor prevFontColor = hdc.GetFontColor();

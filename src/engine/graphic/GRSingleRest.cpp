@@ -72,21 +72,6 @@ GRSingleRest::GRSingleRest(GRStaff * grstf, ARRest * arrest, const TYPE_TIMEPOSI
 	}
 	createRest(d);
 	
-	
-//	if (p_durtemplate>DURATION_0) {
-//cout << "GRSingleRest::GRSingleRest p_durtemplate " << p_durtemplate << endl;
-//		createRest(p_durtemplate);
-//	}
-//	else {
-//		TYPE_DURATION d = duration;
-//		if (mRestAppearance.size()) {
-//			TYPE_DURATION tmp = appearance2duration(mRestAppearance);
-//cout << "GRSingleRest::GRSingleRest appearance2duration " << tmp << endl;
-//			if (tmp) d = tmp;
-//		}
-//		createRest(d);
-//	}
-
 	if (mDurationOfGR == DURATION_0)
 		mNeedsSpring = 0;
 }
@@ -108,6 +93,14 @@ TYPE_DURATION GRSingleRest::appearance2duration (const NVstring& str) const
 	return TYPE_DURATION(0, 1);
 }
 
+// -----------------------------------------------------------------------------
+void GRSingleRest::accept (GRVisitor& visitor)
+{
+	visitor.visitStart (this);
+	visitor.visitEnd (this);
+}
+
+// -----------------------------------------------------------------------------
 void GRSingleRest::setTypeAndPos(TYPE_DURATION duration)
 {
 	// (JB) changed equal comparaisons (duration == DURATION_xxx) to
@@ -173,55 +166,6 @@ void GRSingleRest::createRest(const TYPE_DURATION & duration)
 	sRefpos.x = 0;
 	setTypeAndPos (duration);
 
-	// (JB) changed equal comparaisons (duration == DURATION_xxx) to
-	// greater or equal: (duration >= DURATION_xxx), to catch dotted durations.
-//	if (duration >= DURATION_1)
-//	{
-//		mType = P1;
-//		mPosition.y = mCurLSPACE;
-//	}
-//	else if (duration >= DURATION_2)
-//	{
-//		mType = P2;
-//		mPosition.y = mCurLSPACE * 2;
-//	}
-//	else if (duration >= DURATION_4)
-//	{
-//		mType = P4;
-//		mPosition.y = (float)(2 * mCurLSPACE);
-//	}
-//	else if (duration >= DURATION_8)
-//	{
-//		mType = P8;
-//		mPosition.y = (float)(1.25f * mCurLSPACE);
-//
-//	}
-//	else if (duration >= DURATION_16)
-//	{
-//		mType = P16;
-//		mPosition.y = (float)(2.25f * mCurLSPACE);
-//	}
-//	else if (duration >= DURATION_32)
-//	{
-//		mType = P32;
-//		mPosition.y = (float)(2.25f * mCurLSPACE);
-//	}
-//	else if (duration >= DURATION_64)
-//	{
-//		mType = P64;
-//		mPosition.y = (float)(3.25f * mCurLSPACE);
-//	}
-//	else  if (duration >= DURATION_128)
-//	{
-//		mType = P128;
-//		mPosition.y = (float)(4.25f * mCurLSPACE);
-//	}
-//	else
-//	{ // Unknown Duration ... what do we do know
-//		mType = P0;
-//		return;
-//	}
-	
 	const float extent = GetSymbolExtent(mType);
 	mLeftSpace = (float)(extent * 0.5f * mSize);
 	mRightSpace = (float)(extent * 0.5f * mSize);
@@ -240,7 +184,7 @@ void GRSingleRest::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& 
 
 void GRSingleRest::OnDraw( VGDevice & hdc ) const
 {
-	if(!mDraw)
+	if(!mDraw || !mShow)
 		return;
 	traceMethod("OnDraw");
 	if (mType == P0) return;		// don't know how to draw it !

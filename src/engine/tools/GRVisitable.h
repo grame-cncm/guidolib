@@ -1,9 +1,6 @@
-#ifndef __BaseVisitor__
-#define __BaseVisitor__
-
 /*
   GUIDO Library
-  Copyright (C) 2014-2017 Grame
+  Copyright (C) 2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,10 +11,17 @@
 
 */
 
-class BaseVisitor
+#ifndef ___GRVisitable___
+#define ___GRVisitable___
+
+class GRVisitor;
+
+class GRVisitable
 {
 	public:
-		virtual ~BaseVisitor() {};
+		virtual ~GRVisitable() {};
+		
+		virtual void accept   (GRVisitor& visitor) {};
 };
 
 #endif

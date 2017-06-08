@@ -1,6 +1,3 @@
-#ifndef __PrintVisitor__
-#define __PrintVisitor__
-
 /*
   GUIDO Library
   Copyright (C) 2014 Grame
@@ -14,18 +11,20 @@
 
 */
 
+#ifndef __PrintVisitor__
+#define __PrintVisitor__
+
+
 #include <ostream>
 
-#include "BaseVisitor.h"
-
+#include "ARVisitor.h"
 #include "defines.h"
-
 
 class ARMusicalObject;
 class ARPositionTag;
 class ARMusicalVoice;
 
-class PrintVisitor : public BaseVisitor
+class PrintVisitor : public ARVisitor
 {
 public:
              PrintVisitor(std::ostream& stream);

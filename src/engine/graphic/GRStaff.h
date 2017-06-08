@@ -213,6 +213,7 @@ class GRStaff : public GRCompositeNotationElement
 		const GRNote *		getFirstNote() const;
 		virtual GRBar *     getLastBar() const;
 		virtual void		print(std::ostream& os) const;
+		virtual void		accept (GRVisitor& visitor);
 
 		virtual void setStaffFormat(ARStaffFormat * staffrmt);
 		void    setStaffState		(GRStaffState * state);

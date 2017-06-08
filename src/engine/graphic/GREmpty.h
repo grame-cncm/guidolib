@@ -16,6 +16,7 @@
 */
 
 #include "GREvent.h"
+#include "GRVisitor.h"
 
 /** \brief An empty (invisible) event.
 */
@@ -34,6 +35,7 @@ class GREmpty : public GREvent
 		
 		virtual ~GREmpty();
 
+		virtual void accept (GRVisitor& visitor);
 		virtual void OnDraw( VGDevice & hdc ) const;
 		virtual void GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
 		virtual void tellPosition( GObject * caller, const NVPoint & newPosition );

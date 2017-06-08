@@ -98,10 +98,17 @@ void GRBeam::GGSOutput() const
 	AddGGSOutput(buffer);
 }
 
+// -----------------------------------------------------------------------------
+void GRBeam::accept (GRVisitor& visitor)
+{
+	visitor.visitStart (this);
+	visitor.visitEnd (this);
+}
+
 void GRBeam::OnDraw( VGDevice & hdc) const
 {
 	if (error) return;
-	if(!mDraw) return;
+	if(!mDraw || !mShow) return;
 
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );
 	if (sse == 0) return;

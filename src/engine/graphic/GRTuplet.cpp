@@ -195,7 +195,7 @@ bool GRTuplet::automaticPosition(GREvent * callerEv, const NVPoint & inPos, cons
 // ----------------------------------------------------------------------------
 void GRTuplet::OnDraw(VGDevice & hdc) const
 { 
-	if(!mDraw) return;
+	if(!mDraw || !mShow) return;
 
 	assert(gCurSystem);
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct(gCurSystem);

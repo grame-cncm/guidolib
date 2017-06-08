@@ -227,10 +227,18 @@ GRClef::~GRClef()
 {
 }
 
+// -----------------------------------------------------------------------------
+void GRClef::accept (GRVisitor& visitor)
+{
+	visitor.visitStart (this);
+	visitor.visitEnd (this);
+}
+
+// -----------------------------------------------------------------------------
 void GRClef::OnDraw(VGDevice & hdc) const
 {
 	if (error)  return;
-	if (!mDraw) return;
+	if (!mDraw || !mShow) return;
 
 	GRTagARNotationElement::OnDraw(hdc);
 	if (mDoubleTreble)

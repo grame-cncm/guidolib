@@ -17,6 +17,7 @@
 
 #include "GRPositionTag.h"
 #include "GRARNotationElement.h"
+#include "GRVisitor.h"
 
 class ARMusicalTag;
 
@@ -31,6 +32,7 @@ class GRRange : public GRARNotationElement,	public GRPositionTag
 						GRRange(GRStaff * pstaff, ARMusicalTag * mtag);
 		virtual 		~GRRange();
 
+		virtual void	accept (GRVisitor& visitor);
 		virtual void 	OnDraw( VGDevice & hdc ) const;
 		// const ARTFermata * getARTFermata() const;
 		virtual void 	addAssociation(GRNotationElement * el);

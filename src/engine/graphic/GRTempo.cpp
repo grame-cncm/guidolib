@@ -92,7 +92,7 @@ TYPE_DURATION GRTempo::getDuration (const char * str) const
 // ----------------------------------------------------------------------------
 void GRTempo::OnDraw( VGDevice & hdc ) const
 {
-	if(!mDraw) return;
+	if(!mDraw || !mShow) return;
 	
     ARTempo *ar = static_cast<ARTempo *>(mAbstractRepresentation);
     if (!ar) return;

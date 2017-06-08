@@ -18,6 +18,7 @@
 class ARRest;
 
 #include "GRRest.h"
+#include "GRVisitor.h"
 
 /** \brief Graphical representation of a rest.
 */
@@ -47,6 +48,7 @@ class GRSingleRest : public GRRest
 	
 		virtual ~GRSingleRest();
 
+		virtual void accept (GRVisitor& visitor);
 		virtual void setFillsBar(bool value,GRNotationElement * bar1, GRNotationElement * bar2, bool filled);
 		
 		virtual void GGSOutput() const;

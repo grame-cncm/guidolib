@@ -131,6 +131,13 @@ GRText::~GRText()
 
 bool GRText::isLyrics() const			{ return getARText()->isLyric(); }
 
+// -----------------------------------------------------------------------------
+void GRText::accept (GRVisitor& visitor)
+{
+	visitor.visitStart (this);
+	visitor.visitEnd (this);
+}
+
 FloatRect GRText::getTextMetrics(VGDevice & hdc, const GRStaff* staff ) const
 {
 	FloatRect r;
@@ -197,7 +204,7 @@ FloatRect GRText::getTextMetrics(VGDevice & hdc, const GRStaff* staff ) const
 */
 void GRText::OnDraw( VGDevice & hdc ) const
 {
-	if(!mDraw) return;
+	if(!mDraw || !mShow) return;
 
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );
 	assert(sse);

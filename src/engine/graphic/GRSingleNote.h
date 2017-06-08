@@ -17,6 +17,7 @@
 
 #include "ARTHead.h"
 #include "GRNote.h"
+#include "GRVisitor.h"
 
 class GRAccidental;
 template <class T> class KF_IPointerList;
@@ -25,7 +26,6 @@ typedef KF_IPointerList<GRAccidental> GRAccidentalList;
 class GRStaff;
 class GRStdNoteHead;
 class GRStem;
-//class GRNoteDot;
 class GRFlag;
 class GRGlobalStem;
 class GRBeam;
@@ -46,14 +46,13 @@ class GRSingleNote : public GRNote
 
 		virtual ~GRSingleNote();
 
+		virtual void	accept (GRVisitor& visitor);
 		virtual void	addToOffset( const NVPoint & pt);
 		virtual ARTHead::HEADSTATE adjustHeadPosition(ARTHead::HEADSTATE sugHeadState = ARTHead::NORMAL);
 
 		virtual void	setHeadState(const ARTHead * headstate);
 		virtual void	setNoteFormat(const ARNoteFormat * frmt);
-
 		virtual int		adjustLength(const TYPE_DURATION & ndur);
-
 		virtual void	addArticulation(ARMusicalTag * mtag);
 
 				void	doCreateNote( const TYPE_DURATION & p_durtemplate /* = DURATION_0*/);

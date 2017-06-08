@@ -173,11 +173,11 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
         void printParameters(std::ostream& os) const;
 
 		/* Visitor design pattern */
-        void goThrough(BaseVisitor *visitor);
-        void goThroughTagsList(BaseVisitor *visitor, GuidoPos& posTag, GuidoPos prevPos, bool addTag) const;
+        void goThrough(ARVisitor *visitor);
+        void goThroughTagsList(ARVisitor *visitor, GuidoPos& posTag, GuidoPos prevPos, bool addTag) const;
 
-        virtual void acceptIn (BaseVisitor *visitor) { visitor->visitIn (*this); }
-        virtual void acceptOut(BaseVisitor *visitor) { visitor->visitOut(*this); }
+        virtual void acceptIn (ARVisitor *visitor) { visitor->visitIn (*this); }
+        virtual void acceptOut(ARVisitor *visitor) { visitor->visitOut(*this); }
         /**************************/
 
 	protected:

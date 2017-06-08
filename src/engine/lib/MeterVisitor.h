@@ -15,12 +15,12 @@
 
 */
 
-#include "BaseVisitor.h"
+#include "ARVisitor.h"
 #include "GUIDOEngine.h"
 #include "defines.h"
 
 //------------------------------------------------------------------------------
-class MeterVisitor : public BaseVisitor
+class MeterVisitor : public ARVisitor
 {
 	enum { kNoLimit = 0xffffffff };
 	TYPE_TIMEPOSITION	fLimit;

@@ -64,6 +64,7 @@ class GRPage : public GREvent
 	
 	virtual void	print(std::ostream& os) const;
 	virtual void	GGSOutput() const;
+	virtual void	accept (GRVisitor& visitor);
 	
 			void	getMarginsCm( float * ml, float * mt, float * mr, float * mb );
 			void	getPageFormat( GuidoPageFormat * outFormat ) const;

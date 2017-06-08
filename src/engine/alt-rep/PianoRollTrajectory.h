@@ -49,8 +49,8 @@ private:
 protected:
 	void init();
 
-	void DrawVoice(ARMusicalVoice* v, const DrawParams &drawParams);
-    void DrawNote (int pitch, double date, double dur, const DrawParams &drawParams);
+//	void DrawVoice(ARMusicalVoice* v, const DrawParams &drawParams);
+//    void DrawNote (int pitch, double date, double dur, const DrawParams &drawParams);
     void DrawLinks(const DrawParams &drawParams) const;
     void DrawFinalEvent(double dur, const DrawParams &drawParams);
     void DrawAllLinksBetweenTwoEvents(const DrawParams &drawParams) const;
@@ -59,7 +59,7 @@ protected:
 	void handleRest (double date, const DrawParams &drawParams);
 
 #ifdef MIDIEXPORT
-    void DrawMidiSeq(MidiSeqPtr seq, int tpqn, const DrawParams &drawParams);
+//    void DrawMidiSeq(MidiSeqPtr seq, int tpqn, const DrawParams &drawParams);
 #endif
 
     double fCurrentDate;

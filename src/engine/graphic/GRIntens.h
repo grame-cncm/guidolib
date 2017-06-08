@@ -17,6 +17,7 @@
 
 #include "GRTagARNotationElement.h"
 #include "MusicalSymbols.h"
+#include "GRVisitor.h"
 
 class ARIntens;
 class GRStaff;
@@ -51,6 +52,7 @@ public:
 	
 	
 	virtual void OnDraw(VGDevice & hdc ) const;
+	virtual void accept (GRVisitor& visitor);
 	
 		
 	const ARIntens* getARIntens() const;

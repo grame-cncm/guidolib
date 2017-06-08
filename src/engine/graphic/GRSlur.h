@@ -17,6 +17,7 @@
 
 #include "ARSlur.h"
 #include "GRBowing.h"
+#include "GRVisitor.h"
 
 /** \brief Graphical representation of a slur.
 */
@@ -31,6 +32,7 @@ class GRSlur : public GRBowing
 		virtual void automaticCurveDirection( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse );
 		virtual void automaticAnchorPoints	( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse );
 		virtual void automaticControlPoints	( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse );
+		virtual void accept (GRVisitor& visitor);
 
 	private:
 		float	getEltOffset (const GRNotationElement* el ) const;

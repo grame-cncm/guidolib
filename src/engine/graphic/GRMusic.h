@@ -20,6 +20,7 @@
 #include "GREvent.h"
 #include "GUIDOEngine.h"		// for GuidoOnDrawDesc
 #include "TCollisions.h"
+#include "GRVisitor.h"
 
 class ARMusic;
 class ARPageFormat;
@@ -123,6 +124,8 @@ class GRMusic : public GREvent
                 float   getStaffSize(int staffNum);
     
 		std::vector<TCollisionInfo> getCollisions() const	{ return fCollisions.list(); }
+
+		virtual void accept   (GRVisitor& visitor);
 
 	protected:
 				void 	addVoiceElement( GRVoice * voice, GRNotationElement * el );

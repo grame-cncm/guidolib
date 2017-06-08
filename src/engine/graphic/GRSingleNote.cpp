@@ -13,6 +13,7 @@
 */
 
 #include <iostream>
+#include <algorithm>
 
 #include "GUIDOEngine.h"
 #include "GUIDOInternal.h"
@@ -82,6 +83,16 @@ GRSingleNote::GRSingleNote( GRStaff* inStaff, ARNote* arnote, const TYPE_TIMEPOS
 
 GRSingleNote::~GRSingleNote()
 {
+}
+
+// -----------------------------------------------------------------------------
+void GRSingleNote::accept (GRVisitor& visitor)
+{
+	visitor.visitStart (this);
+	if (fOrnament) fOrnament->accept(visitor);
+	GRNEList& articulations = getArticulations();
+	for_each(articulations.begin(),  articulations.end(), [&visitor] (GRNotationElement *e) -> void { e->accept(visitor); });
+	visitor.visitEnd (this);
 }
 
 //____________________________________________________________________________________
@@ -202,7 +213,7 @@ void GRSingleNote::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& 
 //____________________________________________________________________________________
 void GRSingleNote::OnDraw( VGDevice & hdc) const
 {
-	if (!mDraw) return;
+	if (!mDraw || !mShow) return;
 
     int numVoice = getAbstractRepresentation()->getVoiceNum();
     float incy = 1;

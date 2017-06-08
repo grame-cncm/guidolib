@@ -36,7 +36,7 @@ GRSpecial::GRSpecial(ARSpecial * arspec, bool p_ownsar)
 
 void GRSpecial::OnDraw(VGDevice & hdc) const
 {
-	if(!mDraw)
+	if(!mDraw || !mShow)
 		return;
 	const ARSpecial * ar = static_cast/*dynamic cast*/<ARSpecial *>(mAbstractRepresentation);
 	

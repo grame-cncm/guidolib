@@ -50,7 +50,7 @@ if(APPLE)
 	 	#######################################
 		if ( C++11 )
 			message (STATUS "Generates project using C++11 - Use -DC++11=no to change.")
-			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++ -std=c++11")
 		else()
 			message (STATUS "Generates project without C++11 - Use -DC++11=yes to change.")
 		endif()

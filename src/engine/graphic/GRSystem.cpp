@@ -669,6 +669,22 @@ void GRSystem::checkCollisions (TCollisions& state, std::vector<const GRNotation
 }
 
 // --------------------------------------------------------------------------
+void GRSystem::accept (GRVisitor& visitor)
+{
+	visitor.visitStart (this);
+	const StaffVector * staves = getStaves();
+	int n = staves->size();
+	for (int i= 1; i <= n; i++) {
+		GRStaff* staff = staves->Get (i);
+		while (staff) {
+			staff->accept (visitor);
+			staff = staff->getNextStaff();
+		}
+	}
+	visitor.visitEnd (this);
+}
+
+// --------------------------------------------------------------------------
 void GRSystem::checkCollisions (TCollisions& state, bool lyrics) const
 {
 	state.reset(false);

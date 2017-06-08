@@ -18,6 +18,7 @@
 #include <map>
 
 #include "GRTagARNotationElement.h"
+#include "GRVisitor.h"
 #include "NVPoint.h"
 
 
@@ -58,6 +59,7 @@ class GRArticulation : public GRTagARNotationElement
 
 		virtual void GGSOutput() const;
 		virtual void OnDraw( VGDevice & hdc ) const;
+		virtual void accept (GRVisitor& visitor);
 
 		
 		int	 getArticulationType() const	{ return mArticulationFlag; }
