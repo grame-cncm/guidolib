@@ -39,6 +39,13 @@ GREmpty::GREmpty( GRStaff * inStaff, ARMusicalEvent * ar, const TYPE_TIMEPOSITIO
 
 GREmpty::~GREmpty()	{}
 
+// -----------------------------------------------------------------------------
+void GREmpty::accept (GRVisitor& visitor)
+{
+	visitor.visitStart (this);
+	visitor.visitEnd (this);
+}
+
 void GREmpty::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const
 {
 	if (sel == kGuidoEvent || sel == kGuidoBarAndEvent) {

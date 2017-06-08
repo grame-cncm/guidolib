@@ -20,6 +20,8 @@
 
 #include "GObject.h"
 #include "defines.h"	// for TYPE_DURATION
+#include "GRVisitable.h"
+#include "GRVisitor.h"
 
 class NEPointerList;
 class GRStaff;
@@ -39,7 +41,7 @@ const float kMinNoteSize = 0.001f;	// minimum size of an element, the element is
 
 /** \brief parent class for all notation elements.
 */
-class GRNotationElement : public GObject  
+class GRNotationElement : public GObject, public GRVisitable
 {
 public:
 					GRNotationElement();
@@ -112,6 +114,7 @@ public:
 	
 	virtual void recalcVerticalPosition();
 	virtual void addAssociation( GRNotationElement * grnot );
+	virtual void accept (GRVisitor& visitor);
 
 	// - Text, streams
     virtual void print(std::ostream& os) const;

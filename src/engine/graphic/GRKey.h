@@ -17,6 +17,7 @@
 
 #include "GRARCompositeNotationElement.h"
 #include "GRTag.h"
+#include "GRVisitor.h"
 #include "GuidoDefs.h" // for NUMNOTES
 
 class ARKey;
@@ -35,6 +36,7 @@ class GRKey : public GRARCompositeNotationElement, public GRTag
 						GRKey( GRStaff * staff, ARKey * arkey, int p_natural, bool ownsAR );
 		virtual 		~GRKey();
 
+		virtual void	accept (GRVisitor& visitor);
 	  	virtual void 	setGRStaff(GRStaff * stf);
 				int 	getKeyArray(float * KeyArray);
 		static 	int 	getNonFreeKeyArray(int pnumkeys, float * KeyArray);

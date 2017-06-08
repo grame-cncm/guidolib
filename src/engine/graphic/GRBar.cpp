@@ -71,7 +71,6 @@ GRBar::GRBar(ARBar * p_arbar, GRSystem * , GRStaff * inStaff, const TYPE_TIMEPOS
 	: GRTagARNotationElement(p_arbar,inStaff->getStaffLSPACE()), mProportionalRender(propRender)
 {
 	mGrStaff = inStaff;
-//	mGrStaff = NULL; //  inStaff // why is grstaff needed?
 	// does not need a spring on its own (it is attached to another
 	// (sometimes invisible) bar that is connected to a staff, and
 	// that one has a spring already)
@@ -79,20 +78,14 @@ GRBar::GRBar(ARBar * p_arbar, GRSystem * , GRStaff * inStaff, const TYPE_TIMEPOS
 	mNeedsSpring = 0;
 	setTagType(GRTag::SYSTEMTAG);
 	InitGRBar( inTimePos, inStaff );
-//	GRSystemSlice * systemslice = mGrStaff ? mGrStaff->getGRSystemSlice() : 0;
-//	if (systemslice) {
-//        StaffVector * staffs = systemslice->getStaves();
-//		if (staffs) {
-//			GRStaff * first = staffs->Get(staffs->GetMinimum());
-//			GRStaff * last = staffs->Get(staffs->GetMaximum());
-//			if (first && last) {
-//				mBoundingBox.top = first.getBoundingBox().top;
-//				mBoundingBox.bottom = last.getBoundingBox().bottom;
-//			}
-//		}
-//	}
-
     fLineNumber = inStaff->getNumlines();
+}
+
+// -----------------------------------------------------------------------------
+void GRBar::accept (GRVisitor& visitor)
+{
+	visitor.visitStart (this);
+	visitor.visitEnd (this);
 }
 
 // --------------------------------------------------------------------------

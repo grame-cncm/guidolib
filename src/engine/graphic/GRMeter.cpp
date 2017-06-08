@@ -63,6 +63,12 @@ GRMeter::GRMeter( ARMeter * ar, GRStaff * curstaff, bool p_ownsAR )
 			mPosition.y += fCurLSPACE * linesOffset / 2;
 	}
 }
+// -----------------------------------------------------------------------------
+void GRMeter::accept (GRVisitor& visitor)
+{
+	visitor.visitStart (this);
+	visitor.visitEnd (this);
+}
 
 //-------------------------------------------------------------------------------------
 // converts a list of meters to a list of string pairs

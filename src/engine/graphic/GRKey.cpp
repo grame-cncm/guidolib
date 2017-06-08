@@ -72,7 +72,14 @@ int GRKey::getNonFreeKeyArray(int pnumkeys, float *KeyArray)
 	return pnumkeys;
 }
 
-/** \brief Determines the accidentals ... 
+// -----------------------------------------------------------------------------
+void GRKey::accept (GRVisitor& visitor)
+{
+	visitor.visitStart (this);
+	visitor.visitEnd (this);
+}
+
+/** \brief Determines the accidentals ...
 */
 int GRKey::getKeyArray(float * KeyArray)
 {

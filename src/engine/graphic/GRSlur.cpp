@@ -25,6 +25,14 @@
 
 using namespace std;
 
+
+// -----------------------------------------------------------------------------
+void GRSlur::accept (GRVisitor& visitor)
+{
+	visitor.visitStart (this);
+	visitor.visitEnd (this);
+}
+
 // -----------------------------------------------------------------------------
 void GRSlur::automaticCurveDirection( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse )
 {

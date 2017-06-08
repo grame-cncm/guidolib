@@ -62,21 +62,6 @@ GRNote::~GRNote()
 	if (fOwnCluster) delete fCluster;
 }
 
-
-/*void GRNote::setHPosition( float nx )
-{
-	// - Call inherited
-	GREvent::setHPosition(nx);
-
-	// - Notify ornament
-	if (mOrnament)
-	{
-		mOrnament->tellPosition(this, getPosition());
-	}
-
-	updateBoundingBox();
-}*/
-
 ARNote * GRNote::getARNote()
 {
 	return /*dynamic*/static_cast<ARNote*>(getAbstractRepresentation());

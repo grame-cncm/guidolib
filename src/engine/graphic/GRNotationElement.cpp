@@ -78,6 +78,13 @@ GRNotationElement::~GRNotationElement()
 }
 
 // --------------------------------------------------------------------------
+void GRNotationElement::accept (GRVisitor& visitor)
+{
+	visitor.visitStart (this);
+	visitor.visitEnd (this);
+}
+
+// --------------------------------------------------------------------------
 void GRNotationElement::SendMap (const NVRect& map, MapCollector& f, TYPE_TIMEPOSITION date, TYPE_DURATION dur, GuidoElementType type, MapInfos& infos) const
 {
 	FloatRect r (map.left, map.top, map.right, map.bottom);

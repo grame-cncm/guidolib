@@ -84,6 +84,16 @@ GRSingleNote::~GRSingleNote()
 {
 }
 
+// -----------------------------------------------------------------------------
+void GRSingleNote::accept (GRVisitor& visitor)
+{
+	visitor.visitStart (this);
+	if (fOrnament) fOrnament->accept(visitor);
+	GRNEList& articulations = getArticulations();
+	for_each(articulations.begin(),  articulations.end(), [&visitor] (GRNotationElement *e) -> void { e->accept(visitor); });
+	visitor.visitEnd (this);
+}
+
 //____________________________________________________________________________________
 /** \brief this acutally creates the note.
 */

@@ -40,12 +40,6 @@ class GRStaccato : public GRARNotationElement
 		virtual void tellPosition(GObject * caller,const NVPoint & pos);
 
 		virtual void OnDraw( VGDevice & hdc ) const;
-
-		
-
-
-
-
 };
 
 #endif

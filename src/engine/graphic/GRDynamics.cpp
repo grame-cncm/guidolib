@@ -31,6 +31,13 @@ extern GRSystem *gCurSystem;
 
 map<const string, unsigned int>	GRDynamics::fDynamic2Symbol;
 
+// -----------------------------------------------------------------------------
+void GRDynamics::accept (GRVisitor& visitor)
+{
+	visitor.visitStart (this);
+	visitor.visitEnd (this);
+}
+
 //----------------------------------------------------------------------
 GRDynamics::GRDynamics(GRStaff * grstaff, ARDynamic* ar) : GRPTagARNotationElement(ar, false)
 {

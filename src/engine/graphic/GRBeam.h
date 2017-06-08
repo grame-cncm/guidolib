@@ -19,6 +19,7 @@
 #include "ARFeatheredBeam.h"
 #include "GRPTagARNotationElement.h"
 #include "GRSystemTagInterface.h"
+#include "GRVisitor.h"
 
 class GRSimpleBeam;
 class GREvent;
@@ -55,6 +56,7 @@ public:
 				 GRBeam(GRStaff * grstf, ARBeam * arbeam);
 	virtual		~GRBeam();
 
+	virtual void	accept (GRVisitor& visitor);
 	virtual void	checkPosition(const GRSystem * grsys);
 	virtual void	ResumeTag(GRStaff * grstaff,GuidoPos assocpos);
 	virtual void	BreakTag(GRStaff * grstaff,GuidoPos &assocpos);

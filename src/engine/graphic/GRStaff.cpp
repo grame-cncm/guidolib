@@ -554,6 +554,21 @@ void GRStaff::checkCollisions (TCollisions& state) const
 	}
 }
 
+// --------------------------------------------------------------------------
+void GRStaff::accept (GRVisitor& visitor)
+{
+	visitor.visitStart (this);
+
+	NEPointerList* elts = getElements();
+	GuidoPos pos = elts->GetHeadPosition();
+	while (pos) {
+		GRNotationElement * e = elts->GetNext(pos);
+		e->accept (visitor);
+	}
+
+	visitor.visitEnd (this);
+}
+
 // ----------------------------------------------------------------------------
 size_t GRStaff::getLyrics (vector<const GRNotationElement*>& list) const
 {

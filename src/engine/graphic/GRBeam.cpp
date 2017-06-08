@@ -98,6 +98,13 @@ void GRBeam::GGSOutput() const
 	AddGGSOutput(buffer);
 }
 
+// -----------------------------------------------------------------------------
+void GRBeam::accept (GRVisitor& visitor)
+{
+	visitor.visitStart (this);
+	visitor.visitEnd (this);
+}
+
 void GRBeam::OnDraw( VGDevice & hdc) const
 {
 	if (error) return;

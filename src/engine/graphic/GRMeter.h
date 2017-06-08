@@ -20,6 +20,7 @@
 #include "ARMeter.h"
 #include "GRTagARNotationElement.h"
 #include "GRDefine.h"
+#include "GRVisitor.h"
 
 class GRStaff;
 
@@ -33,9 +34,10 @@ class GRMeter : public GRTagARNotationElement
 				 GRMeter(ARMeter * ar, GRStaff * curstaff, bool p_ownsAR = false);
 		virtual ~GRMeter() {}
 
-		virtual void			GGSOutput() const;
-		virtual void			OnDraw(VGDevice & hdc ) const;
-		virtual bool			checkCollisionWith() const	{ return true; }
+		virtual void	GGSOutput() const;
+		virtual void	OnDraw(VGDevice & hdc ) const;
+		virtual bool	checkCollisionWith() const	{ return true; }
+		virtual void	accept (GRVisitor& visitor);
 	
 		ARMeter*		getARMeter();
 		const ARMeter*	getARMeter() const;

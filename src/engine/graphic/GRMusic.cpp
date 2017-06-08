@@ -46,6 +46,7 @@
 #include "GRStaff.h"
 #include "kf_ivect.h"
 
+#include "GRPrintVisitor.h"
 #include "TCollisions.h"
 
 using namespace std;
@@ -234,6 +235,16 @@ void GRMusic::removeAutoSpace(ARMusic * arm)
 			}
 		}
 	}
+}
+// --------------------------------------------------------------------------
+void GRMusic::accept (GRVisitor& visitor)
+{
+	visitor.visitStart (this);
+	for (int i= 0; i < getNumPages(); i++) {
+		GRPage * page = mPages[i];
+		page->accept (visitor);
+	}
+	visitor.visitEnd (this);
 }
 
 // --------------------------------------------------------------------------
@@ -469,32 +480,6 @@ void GRMusic::adjustPageSize()
 	}
 }
 
-/** \brief Converts from pixel (device) to virtual (logical) coordinates 
-
-void GRMusic::convertToVirtualSize( VGDevice & hdc, int page, float zoom, 
-											float * pi1, float * pi2 )
-{
-	GRPage * curpage = getPage(page);
-	assert(curpage);
-	curpage->convertToVirtualSize(hdc,zoom,pi1,pi2);
-}
-*/
-/** \brief Converts from virtual (logical) to pixel (device) coordinates. 
-	
-	For example, to calculate, how big an GIF-Image is going to be, just set the
-	parameters pi1 and pi2 to the VirtualSizes (obtained by
-	calling getSizeX() and getSizeY(). After the function
-	call, you get the corresponding pixel-sizes.
-
-void GRMusic::convertToPixelSize( VGDevice & hdc, int page, float zoom, 
-											float * pi1, float * pi2 )
-{
-	GRPage * curpage = getPage(page);
-	assert(curpage);
-	curpage->convertToPixelSize(hdc, zoom, pi1, pi2);
-}
-*/
-
 // --------------------------------------------------------------------------
 /** \brief Not yet implemented.
 */
@@ -669,6 +654,9 @@ void GRMusic::createGR (const ARPageFormat * inPageFormat, const GuidoLayoutSett
 	grsm.createStaves();
 	fLyricsChecked = false;
 
+
+//	GRPrintVisitor grv(cerr);
+//	accept (grv);
 //	float d = getNotesDensity();
 //cerr << "GRMusic::createGR density: " << d << endl;
 
