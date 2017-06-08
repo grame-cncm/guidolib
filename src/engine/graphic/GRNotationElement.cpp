@@ -54,6 +54,7 @@ GRNotationElement::GRNotationElement()
 	mRightSpace = 0;
 	mSymbol =  kNoneSymbol;
 	mDraw = true;
+	mShow = true;
     mIsInHeader = false;
 }
 
@@ -198,7 +199,7 @@ void GRNotationElement::GGSOutputAt( unsigned int tmptype,
 // -------------------------------------------------------------------------
 void GRNotationElement::OnDrawText( VGDevice & hdc, NVPoint pos, const char * text, int inCharCount ) const
 {
-	if(!mDraw) return;
+	if(!mDraw || !mShow) return;
 	
 	const VGFont* hmyfont = FontManager::gFontText;
 	const int size = getFontSize();
@@ -247,7 +248,7 @@ GRNotationElement::OnDrawSymbol( VGDevice & hdc, unsigned int inSymbol,
 								   float inFontSize ) const //, float inScaleX ) const
 {
 	// - Setup colors
-	if(!mDraw)
+	if(!mDraw || !mShow)
 		return;
 
 	const unsigned char * colref = getColRef();
@@ -277,7 +278,7 @@ GRNotationElement::OnDrawSymbol( VGDevice & hdc, unsigned int inSymbol,
 */
 void GRNotationElement::DrawSymbol( VGDevice & hdc, unsigned int inSymbol, float inOffsetX, float inOffsetY, float inFontSize ) const
 {
-	if(!mDraw) return;
+	if(!mDraw || !mShow) return;
 
 	// - Setup font
 	const VGFont* myfont = FontManager::gFontScriab;
@@ -348,7 +349,7 @@ GRNotationElement::DrawExtents( VGDevice & hdc, const VGColor & inColor ) const
 // -------------------------------------------------------------------------
 void GRNotationElement::OnDraw(VGDevice & hdc) const
 {
-	if(!mDraw)
+	if(!mDraw || !mShow)
 		return;
 	
 	if (mSymbol != 0)

@@ -238,7 +238,7 @@ void GRClef::accept (GRVisitor& visitor)
 void GRClef::OnDraw(VGDevice & hdc) const
 {
 	if (error)  return;
-	if (!mDraw) return;
+	if (!mDraw || !mShow) return;
 
 	GRTagARNotationElement::OnDraw(hdc);
 	if (mDoubleTreble)

@@ -93,7 +93,7 @@ GRSystemStartEndStruct * GRGlissando::initGRGlissando( GRStaff * grstaff )
 
 void GRGlissando::OnDraw( VGDevice & hdc ) const
 {
-	if (!mDraw || error)
+	if (!mDraw || !mShow || error)
         return;
 
 	assert(gCurSystem);

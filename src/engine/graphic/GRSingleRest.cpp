@@ -184,7 +184,7 @@ void GRSingleRest::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& 
 
 void GRSingleRest::OnDraw( VGDevice & hdc ) const
 {
-	if(!mDraw)
+	if(!mDraw || !mShow)
 		return;
 	traceMethod("OnDraw");
 	if (mType == P0) return;		// don't know how to draw it !

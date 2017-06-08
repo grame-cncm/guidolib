@@ -204,7 +204,7 @@ FloatRect GRText::getTextMetrics(VGDevice & hdc, const GRStaff* staff ) const
 */
 void GRText::OnDraw( VGDevice & hdc ) const
 {
-	if(!mDraw) return;
+	if(!mDraw || !mShow) return;
 
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );
 	assert(sse);

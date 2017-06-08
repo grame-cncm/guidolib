@@ -99,7 +99,7 @@ unsigned int GRAccelerando::getTextAlign() const
 
 void GRAccelerando::OnDraw( VGDevice & hdc ) const
 {
-	if(!mDraw)
+	if(!mDraw || !mShow)
         return;
 	
 	assert(gCurSystem);

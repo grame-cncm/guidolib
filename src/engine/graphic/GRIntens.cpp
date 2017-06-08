@@ -128,7 +128,7 @@ void GRIntens::accept (GRVisitor& visitor)
 //## Other Operations (implementation)
 void GRIntens::OnDraw(VGDevice & hdc) const
 {
-	if(!mDraw)
+	if(!mDraw || !mShow)
 		return;
 	GRTagARNotationElement::OnDraw( hdc );
 }

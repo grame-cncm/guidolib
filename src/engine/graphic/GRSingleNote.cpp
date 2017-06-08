@@ -13,6 +13,7 @@
 */
 
 #include <iostream>
+#include <algorithm>
 
 #include "GUIDOEngine.h"
 #include "GUIDOInternal.h"
@@ -212,7 +213,7 @@ void GRSingleNote::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& 
 //____________________________________________________________________________________
 void GRSingleNote::OnDraw( VGDevice & hdc) const
 {
-	if (!mDraw) return;
+	if (!mDraw || !mShow) return;
 
     int numVoice = getAbstractRepresentation()->getVoiceNum();
     float incy = 1;

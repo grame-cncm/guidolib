@@ -334,7 +334,7 @@ void GRBar::DrawWithLines( VGDevice & hdc ) const
 // - TODO: draw only one scaled symbol instead of repeating one symbol.
 void GRBar::OnDraw(VGDevice & hdc ) const
 {
-	if(!mDraw)
+	if(!mDraw || !mShow)
 		return;
 	traceMethod("OnDraw");
 #if 1

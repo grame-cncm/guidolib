@@ -162,7 +162,7 @@ const GRDynamics::TXSegment* GRDynamics::getSegment(const GRSystem* system) cons
 //---------------------------------------------------------------------------------
 void GRDynamics::DrawDynamic( VGDevice & hdc, bool cresc) const
 {
-	if (!mDraw) return;
+	if (!mDraw || !mShow) return;
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct(gCurSystem);
 	if (sse == 0) return;
 

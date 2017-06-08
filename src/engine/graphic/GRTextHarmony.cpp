@@ -141,7 +141,7 @@ GRTextHarmony::~GRTextHarmony()
 */
 void GRTextHarmony::OnDraw( VGDevice & hdc ) const
 {
-	if(!mDraw)
+	if(!mDraw || !mShow)
 		return;
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );
 	assert(sse);

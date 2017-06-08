@@ -312,7 +312,7 @@ void GRMeter::DrawNumericSeveral(VGDevice & hdc ) const
 //-------------------------------------------------------------------------------------
 void GRMeter::OnDraw(VGDevice & hdc) const
 {
-	if (error || !mDraw)	return;
+	if (error || !mDraw || !mShow)	return;
 
 	const unsigned char * colref = getColRef();
 	const VGColor prevFontColor = hdc.GetFontColor();

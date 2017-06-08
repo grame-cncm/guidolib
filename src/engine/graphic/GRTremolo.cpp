@@ -64,7 +64,7 @@ GRTremolo::~GRTremolo()
 // -----------------------------------------------------------------------------
 void GRTremolo::OnDraw( VGDevice & hdc ) const
 {
-	if(!mDraw)
+	if(!mDraw || !mShow)
 		return;
 
     const VGColor prevTextColor = hdc.GetFontColor();

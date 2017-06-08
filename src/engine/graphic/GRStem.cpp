@@ -196,7 +196,7 @@ void GRStem::DrawStem( VGDevice & hdc, unsigned int symbol1, unsigned int symbol
 //-------------------------------------------------------------------
 void GRStem::DrawWithGlyph( VGDevice & hdc ) const
 {
-    if(!mDraw)					return;
+    if(!mDraw || !mShow)		return;
 	if (mStemDir == dirOFF)		return;
 	if (mSize < kMinNoteSize)	return;			// size is too small, don't draw
 
@@ -255,7 +255,7 @@ void GRStem::DrawWithGlyph( VGDevice & hdc ) const
 // Not used for now, but use it would avoid some stem length problems (cf. regression-tests/pending/badStemLength.gmn)
 void GRStem::DrawWithLine( VGDevice & hdc ) const
 {
-	if(!mDraw)
+	if(!mDraw || !mShow)
 		return;
 	if (mStemDir == dirOFF)
         return;

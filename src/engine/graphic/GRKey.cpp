@@ -282,7 +282,7 @@ void GRKey::GGSOutput() const
 void GRKey::OnDraw( VGDevice & hdc) const
 {
 	if (error) return;
-	if(!mDraw)
+	if(!mDraw || !mShow)
 		return;
 	DrawSubElements( hdc );
 }
