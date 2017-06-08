@@ -1,6 +1,3 @@
-#ifndef __Visitable__
-#define __Visitable__
-
 /*
   GUIDO Library
   Copyright (C) 2014 Grame
@@ -14,17 +11,20 @@
 
 */
 
-#include "PrintVisitor.h"
+#ifndef ___ARVisitable___
+#define ___ARVisitable___
 
-class Visitable
+//#include "PrintVisitor.h"
+
+class ARVisitable
 {
 public:
-             Visitable() {};
-    virtual ~Visitable() {};
+             ARVisitable() {};
+    virtual ~ARVisitable() {};
     
-    virtual void accept   (BaseVisitor *visitor) {};
-    virtual void acceptIn (BaseVisitor *visitor) {};
-    virtual void acceptOut(BaseVisitor *visitor) {};
+    virtual void accept   (ARVisitor *visitor) {};
+    virtual void acceptIn (ARVisitor *visitor) {};
+    virtual void acceptOut(ARVisitor *visitor) {};
 };
 
 #endif

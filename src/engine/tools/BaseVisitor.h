@@ -3,7 +3,7 @@
 
 /*
   GUIDO Library
-  Copyright (C) 2014 Grame
+  Copyright (C) 2014-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,20 +14,10 @@
 
 */
 
-class ARMusicalObject;
-class ARPositionTag;
-class ARMusicalVoice;
-
 class BaseVisitor
 {
-public:
-             BaseVisitor() {};
-    virtual ~BaseVisitor() {};
-    
-    virtual void visitIn (ARMusicalVoice& voice)   = 0;
-    virtual void visitOut(ARMusicalVoice& voice)   = 0;
-    virtual void visit   (ARMusicalObject &object) = 0;
-    virtual void visit   (ARPositionTag   &tag)    = 0;
+	public:
+		virtual ~BaseVisitor() {};
 };
 
 #endif

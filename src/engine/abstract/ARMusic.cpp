@@ -110,7 +110,7 @@ void ARMusic::getTimeMap (TimeMapCollector& f) const
 	}
 }
 
-void ARMusic::goThrough(BaseVisitor *visitor) const
+void ARMusic::goThrough(ARVisitor *visitor) const
 {
 	GuidoPos pos = GetHeadPosition();
 	while (pos) {

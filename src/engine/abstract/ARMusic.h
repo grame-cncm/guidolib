@@ -62,7 +62,7 @@ class ARMusic : public MusicalVoiceList, public ARMusicalEvent
     static int mRefCount;
 
     /* Visitor design pattern */
-    void goThrough(BaseVisitor *visitor) const;
+    void goThrough (ARVisitor *visitor) const;
 
 protected:
 

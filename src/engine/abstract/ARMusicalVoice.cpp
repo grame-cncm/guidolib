@@ -85,8 +85,6 @@ using namespace std;
 #include "AROctava.h"
 
 #include "ARPossibleBreak.h"
-
-#include "BaseVisitor.h"
 #include "GMNCodePrintVisitor.h"
 
 #include "ARRepeatBegin.h"
@@ -766,7 +764,7 @@ void ARMusicalVoice::printParameters(std::ostream& os) const
     os << "voice number: " << getVoiceNum() << "; duration: " << (float) getDuration() << ";";
 }
 
-void ARMusicalVoice::goThrough(BaseVisitor *visitor)
+void ARMusicalVoice::goThrough(ARVisitor *visitor)
 {
     acceptIn(visitor);
 
@@ -793,7 +791,7 @@ void ARMusicalVoice::goThrough(BaseVisitor *visitor)
     acceptOut(visitor);
 }
 
-void ARMusicalVoice::goThroughTagsList(BaseVisitor *visitor, GuidoPos& posTag, GuidoPos prevPos, bool addTag) const
+void ARMusicalVoice::goThroughTagsList(ARVisitor *visitor, GuidoPos& posTag, GuidoPos prevPos, bool addTag) const
 {
 	if (mPosTagList) {
 		while (posTag) {

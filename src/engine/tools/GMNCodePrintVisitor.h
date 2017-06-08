@@ -1,9 +1,6 @@
-#ifndef __GMNCodePrintVisitor__
-#define __GMNCodePrintVisitor__
-
 /*
   GUIDO Library
-  Copyright (C) 2014 Grame
+  Copyright (C) 2014-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,17 +11,20 @@
 
 */
 
+#ifndef __GMNCodePrintVisitor__
+#define __GMNCodePrintVisitor__
+
 #include <ostream>
 #include <string>
 
-#include "BaseVisitor.h"
+#include "ARVisitor.h"
 #include "defines.h"
 
 class ARMusicalObject;
 class ARPositionTag;
 class ARMusicalVoice;
 
-class GMNCodePrintVisitor : public BaseVisitor
+class GMNCodePrintVisitor : public ARVisitor
 {
 public:
              GMNCodePrintVisitor(std::ostream& stream);

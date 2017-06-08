@@ -18,7 +18,7 @@
 #include "defines.h"	// for TYPE_TIMEPOSITION
 
 #include "PrintVisitor.h"
-#include "Visitable.h"
+#include "ARVisitable.h"
 
 #define MIN_TIMEPOSITION Frac_0
 #define DURATION_7_4  Frac_7_4
@@ -61,7 +61,7 @@ class ARTempo;
 /** \brief The base class for all AR objects. 
 	It contains all musical information : duration and time position.
 */
-class ARMusicalObject : public Visitable
+class ARMusicalObject : public ARVisitable
 {
   public:
 				 ARMusicalObject();
@@ -143,7 +143,7 @@ class ARMusicalObject : public Visitable
 	virtual bool			 isEmptyNote() const  { return false; }
 
     /* Visitor design pattern */
-    virtual void accept(BaseVisitor *visitor) { visitor->visit(*this); }
+    virtual void accept(ARVisitor *visitor) { visitor->visit(*this); }
 	virtual void print(std::ostream & os) const;
 
   protected:
