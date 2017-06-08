@@ -52,6 +52,11 @@ void TimeSegment::print(ostream& out) const
 	out << "[" << this->first << ", " << this->second << "]";
 }
 
+float TimeSegment::duration() const
+{
+	return fdate(second) - fdate(first);
+}
+
 bool TimeSegment::empty() const
 {
 	float d1 = fdate(first);
