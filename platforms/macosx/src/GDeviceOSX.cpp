@@ -792,70 +792,72 @@ void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
         }
     }
  */
-    
-    CTFontRef ctFont = CTFontCreateWithName( CFStringCreateWithCString(kCFAllocatorDefault, iosConvertedFontName.c_str(), kCFStringEncodingUTF8) , mCurrTextFont->GetSize(), NULL);
-    CFAttributedStringSetAttribute(attributedOverlayText,
-                                   CFRangeMake(0, CFAttributedStringGetLength(attributedOverlayText)),
-                                   kCTFontAttributeName,
-                                   ctFont);
-    CFRelease(ctFont);
-    
-    ///Create framesetter with the attributed text
-    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(attributedOverlayText);
-    CGSize suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, /* Framesetter */
-                                                                        CFRangeMake(0, 0), /* String range (entire string) */
-                                                                        NULL, /* Frame attributes */
-                                                                        CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX), /* Constraints (CGFLOAT_MAX indicates unconstrained) */
-                                                                        NULL /* Gives the range of string that fits into the constraints, doesn't matter in your situation */
-                                                                        );
-    
-    /// Set text alignment (paragraph style)
-    CTTextAlignment alignment = kCTTextAlignmentLeft;
-    
-    // - Perform text alignement
-    float baseline = 0.0, h = suggestedSize.height, w = suggestedSize.width;
 
-    if( mTextAlign != ( kAlignLeft | kAlignBase )) {
-        if( mTextAlign & kAlignBottom )	// Vertical align
-            y -= baseline;      // was y -= baseline;
-        else if( mTextAlign & kAlignTop )
-            y += 0.5*h - baseline;    // was  y += h - baseline
-        
-        if( mTextAlign & kAlignRight )	// Horizontal align
-        {
-            alignment = kCTTextAlignmentRight;
-            x -= w;
-        }
-        else if( mTextAlign & kAlignCenter )
-        {
-            alignment = kCTTextAlignmentCenter;
-            x -= (w * 0.5);
-        }else if( mTextAlign & kAlignLeft )
-        {
-            alignment = kCTTextAlignmentLeft;
-        }
-    }
-    
-    CTParagraphStyleSetting settings[] = {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment};
-    CTParagraphStyleRef paragraphStyle = CTParagraphStyleCreate(settings, sizeof(settings) / sizeof(settings[0]));
-    CFAttributedStringSetAttribute(attributedOverlayText,
-                                   CFRangeMake(0, CFAttributedStringGetLength(attributedOverlayText)),
-                                   kCTParagraphStyleAttributeName,
-                                   paragraphStyle);
-    CFRelease(paragraphStyle);
-    
-    // Core Text changes the state of the context, so save it
-    CGContextSaveGState(mContext);
-    
-    /// Draw attributed text using CTFrameDraw
-    CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, 0), CGPathCreateWithRect(CGRectMake(x, y, suggestedSize.width, suggestedSize.height), NULL), NULL);
-    CTFrameDraw(frame, mContext);
-    CFRelease(framesetter);
-    
-    // Restore the state of the contexte
-    CGContextRestoreGState(mContext);
-
-
+#warning ("GDeviceOSX::DrawString is not implemented (deprecated functions and types change)")
+//==================================================================================
+// The code below doesn't compile any more one with on MacOS 10.12 using Xcode 8.3
+//==================================================================================
+//    CTFontRef ctFont = CTFontCreateWithName( CFStringCreateWithCString(kCFAllocatorDefault, iosConvertedFontName.c_str(), kCFStringEncodingUTF8) , mCurrTextFont->GetSize(), NULL);
+//    CFAttributedStringSetAttribute(attributedOverlayText,
+//                                   CFRangeMake(0, CFAttributedStringGetLength(attributedOverlayText)),
+//                                   kCTFontAttributeName,
+//                                   ctFont);
+//    CFRelease(ctFont);
+//    
+//    ///Create framesetter with the attributed text
+//    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString(attributedOverlayText);
+//    CGSize suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, /* Framesetter */
+//                                                                        CFRangeMake(0, 0), /* String range (entire string) */
+//                                                                        NULL, /* Frame attributes */
+//                                                                        CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX), /* Constraints (CGFLOAT_MAX indicates unconstrained) */
+//                                                                        NULL /* Gives the range of string that fits into the constraints, doesn't matter in your situation */
+//                                                                        );
+//    
+//    /// Set text alignment (paragraph style)
+//    CTTextAlignment alignment = kCTTextAlignmentLeft;
+//    
+//    // - Perform text alignement
+//    float baseline = 0.0, h = suggestedSize.height, w = suggestedSize.width;
+//
+//    if( mTextAlign != ( kAlignLeft | kAlignBase )) {
+//        if( mTextAlign & kAlignBottom )	// Vertical align
+//            y -= baseline;      // was y -= baseline;
+//        else if( mTextAlign & kAlignTop )
+//            y += 0.5*h - baseline;    // was  y += h - baseline
+//        
+//        if( mTextAlign & kAlignRight )	// Horizontal align
+//        {
+//            alignment = kCTTextAlignmentRight;
+//            x -= w;
+//        }
+//        else if( mTextAlign & kAlignCenter )
+//        {
+//            alignment = kCTTextAlignmentCenter;
+//            x -= (w * 0.5);
+//        }else if( mTextAlign & kAlignLeft )
+//        {
+//            alignment = kCTTextAlignmentLeft;
+//        }
+//    }
+//    
+//    CTParagraphStyleSetting settings[] = {kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment};
+//    CTParagraphStyleRef paragraphStyle = CTParagraphStyleCreate(settings, sizeof(settings) / sizeof(settings[0]));
+//    CFAttributedStringSetAttribute(attributedOverlayText,
+//                                   CFRangeMake(0, CFAttributedStringGetLength(attributedOverlayText)),
+//                                   kCTParagraphStyleAttributeName,
+//                                   paragraphStyle);
+//    CFRelease(paragraphStyle);
+//    
+//    // Core Text changes the state of the context, so save it
+//    CGContextSaveGState(mContext);
+//    
+//    /// Draw attributed text using CTFrameDraw
+//    CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, 0), CGPathCreateWithRect(CGRectMake(x, y, suggestedSize.width, suggestedSize.height), NULL), NULL);
+//    CTFrameDraw(frame, mContext);
+//    CFRelease(framesetter);
+//    
+//    // Restore the state of the contexte
+//    CGContextRestoreGState(mContext);
 }
 #endif
 
