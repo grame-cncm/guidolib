@@ -51,7 +51,7 @@ void MeterVisitor::visitIn (ARMusicalObject* obj)
 			}
 
 			for (size_t i=0; i < n; i++)
-				fLastMeter.count[i] = mlist[i];
+				fLastMeter.count[i] = mlist[i].getNumerator();
 
 //			vector<int> counts = meter->getNumeratorsVector();
 //			size_t n = counts.size();
