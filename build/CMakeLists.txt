@@ -244,7 +244,7 @@ else(WIN32)
 endif(WIN32)
 
 if(APPLE)
-	set(LINK ${LINK} "-framework Carbon -compatibility_version 1.0.0 -lc++")
+	set(LINK ${LINK} "-framework Carbon -framework CoreText -compatibility_version 1.0.0 -lc++")
 elseif (UNIX)
       EXECUTE_PROCESS ( COMMAND "pkg-config"  "--libs" "cairo"
                 OUTPUT_VARIABLE TMP
