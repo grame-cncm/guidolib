@@ -400,10 +400,10 @@ representations.
     GUIDOAPI(GuidoErrCode)	GuidoUpdateGR( GRHandler gr, const GuidoLayoutSettings* settings);
 
 	/*!
-		Applies new layout settings to an existing Guido graphic representation.
+		Show or hide notation elements.
 		\param gr the handler to the graphic representation.
-		\param settings a pointer to the settings for the graphic layout. If null, default
-        settings are applied.
+		\param elt the target element
+		\param status a boolean value to show (true) or hide (false) the target element
 		\return a Guido error code.
     */
     GUIDOAPI(GuidoErrCode)	GuidoShowElement( GRHandler gr, GRElement elt, bool status);
