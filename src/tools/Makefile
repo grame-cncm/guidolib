@@ -15,7 +15,7 @@ else
 endif
 endif
 
-TOOLS = guidogetversion guidogetpagecount guidogetvoicecount guidogettimemap guidogetpagemap guidogetsystemmap guidogetstaffmap guidogetvoicemap guido2svg guido2svgmap guido2abstract guido2proll guido2rproportional midi2proll midi2rproportional guido2midi guidogetmeter guido2gmn
+TOOLS = guidogetversion guidogetpagecount guidogetvoicecount guidogettimemap guidogetpagemap guidogetsystemmap guidogetstaffmap guidogetvoicemap guido2svg guido2svgmap guido2abstract guido2proll guido2rproportional midi2proll midi2rproportional guido2midi guidogetmeter # guido2gmn
 
 .PHONY: checkall
 
