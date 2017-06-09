@@ -11,6 +11,8 @@
 
 */
 
+#include <iostream>
+
 #include "GRShowVisitor.h"
 
 #include "GRRange.h"
@@ -23,14 +25,14 @@
 using namespace std;
 
 //-------------------------------------------------------------------------------
-void GRShowVisitor::visitStart (GRRange* o)			{ if (fTarget == kArticulations) o->Show(fState); }
-void GRShowVisitor::visitStart (GRSlur* o)			{ if (fTarget == kSlur) o->Show(fState); }
-void GRShowVisitor::visitStart (GRDynamics* o)		{ if (fTarget == kDynamics) o->Show(fState); }
-void GRShowVisitor::visitStart (GRIntens* o)		{ if (fTarget == kDynamics) o->Show(fState); }
-void GRShowVisitor::visitStart (GRArticulation* o)	{ if (fTarget == kArticulations) o->Show(fState); }
+void GRShowVisitor::visitStart (GRRange* o)			{ if (fTarget == kGRArticulations) o->Show(fState); }
+void GRShowVisitor::visitStart (GRSlur* o)			{ if (fTarget == kGRSlur)		o->Show(fState); }
+void GRShowVisitor::visitStart (GRDynamics* o)		{ if (fTarget == kGRDynamics) o->Show(fState); }
+void GRShowVisitor::visitStart (GRIntens* o)		{ if (fTarget == kGRDynamics) o->Show(fState); }
+void GRShowVisitor::visitStart (GRArticulation* o)	{ if (fTarget == kGRArticulations) o->Show(fState); }
 
 void GRShowVisitor::visitStart (GRText* o)
 {
-	if (fTarget == kText) o->Show(fState);
-	else if (fTarget == kLyrics) o->Show(fState);
+	if ((fTarget == kGRText) && !o->isLyrics())		o->Show(fState);
+	else if ((fTarget == kGRLyrics) && o->isLyrics()) o->Show(fState);
 }

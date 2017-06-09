@@ -25,7 +25,7 @@ class GRShowVisitor : public GRVisitor
 	GRElement fTarget;
 
 	public:
-				 GRShowVisitor(GRElement elt, bool state) : fState(state) {}
+				 GRShowVisitor(GRElement elt, bool state) : fState(state), fTarget(elt) {}
 		virtual ~GRShowVisitor() {}
 	
 		virtual void visitStart (GRRange* o);
