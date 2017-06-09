@@ -64,6 +64,7 @@ class GuidoMapCollector: public MapCollector
 		Time2GraphicMap*		fOutMap;
 };
 
+
 //----------------------------------------------------------------------
 /*!
 	\brief a guido map collector filtering voice events
@@ -100,7 +101,8 @@ class GuidoStaffCollector: public GuidoMapCollector
 	void mergelines (const std::vector<TMapElt>& elts, Time2GraphicMap& outmap) const;
 
 	public :
-				 GuidoStaffCollector (CGRHandler gr, int num, bool getRAWdata = false) : GuidoMapCollector(gr, kGuidoStaff), fStaffNum(num), fNoEmpty(true), fGetRAWdata(getRAWdata) { }
+				 GuidoStaffCollector (CGRHandler gr, int num, bool getRAWdata = false)
+					: GuidoMapCollector(gr, kGuidoStaff), fStaffNum(num), fNoEmpty(true), fGetRAWdata(getRAWdata) { }
 		virtual ~GuidoStaffCollector()	{}
 
 		///< overrides the method called by guido for each graphic segment

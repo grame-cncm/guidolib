@@ -20,9 +20,6 @@
 #include "ARVisitor.h"
 #include "defines.h"
 
-class ARMusicalObject;
-class ARPositionTag;
-class ARMusicalVoice;
 
 class GMNCodePrintVisitor : public ARVisitor
 {
@@ -30,17 +27,20 @@ public:
              GMNCodePrintVisitor(std::ostream& stream);
     virtual ~GMNCodePrintVisitor() {};
     
-    void     visitIn (ARMusicalVoice&  voice);
-    void     visitOut(ARMusicalVoice&  voice);
-    void     visit   (ARMusicalObject& object);
-    void     visit   (ARPositionTag&   positionTag);
+    void     visitIn	(ARMusic*  m);
+    void     visitOut	(ARMusic*  m);
+    void     visitIn	(ARMusicalVoice*  voice);
+    void     visitOut	(ARMusicalVoice*  voice);
+    void     visitIn	(ARMusicalObject* object);
+    void     visitIn	(ARPositionTag*   tag);
 
 private:
-    void          printMusicalObject(ARMusicalObject& object) const;
-    void          printPositionTag(ARPositionTag& positionTag);
+    void          printMusicalObject(ARMusicalObject* object) const;
+    void          printPositionTag(ARPositionTag* positionTag);
     std::string  *formatTagName(std::string *tagName) const;
 
-    std::ostream *os;
+	int	fVoicesCount;
+	std::ostream& fOutStream;
 };
 
 #endif

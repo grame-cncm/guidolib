@@ -41,9 +41,9 @@ class ARMusic : public MusicalVoiceList, public ARMusicalEvent
 	  		void 	doAutoStuff();
 
       		GuidoPos AddTail(ARMusicalVoice * newMusicalVoice);
-
       		void 	adjustDuration(TYPE_DURATION newDuration);
 
+    virtual void	accept(ARVisitor& visitor);
 	virtual void 	resetGRRepresentation();
 	virtual void	getTimeMap (TimeMapCollector& f) const;
 			bool	getMeterAt (int voicenum, const GuidoDate &date, GuidoMeter& meter);
@@ -56,13 +56,10 @@ class ARMusic : public MusicalVoiceList, public ARMusicalEvent
     void  setPath( std::vector<std::string> inPaths) { mPaths = inPaths; }
 
     void setParseTime(long time) { mParseTime = time; }
-    long  getParseTime()         { return mParseTime; }
+    long getParseTime() const    { return mParseTime; }
 
     long       mMaxTagId;
     static int mRefCount;
-
-    /* Visitor design pattern */
-    void goThrough (ARVisitor *visitor) const;
 
 protected:
 

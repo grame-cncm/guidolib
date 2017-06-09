@@ -32,13 +32,10 @@ class MeterVisitor : public ARVisitor
 				 MeterVisitor(const TYPE_TIMEPOSITION& limit) : fLimit(limit) { reset(); }
 		virtual ~MeterVisitor() {}
 	
-		void reset();			// reset the last meter value to a default value (no meter)
-		GuidoMeter getMeter() const { return fLastMeter; }
+		void		reset();			// reset the last meter value to a default value (no meter)
+		GuidoMeter	getMeter() const { return fLastMeter; }
 	
-    virtual void visitIn (ARMusicalVoice& voice)   {}
-    virtual void visitOut(ARMusicalVoice& voice)   {}
-    virtual void visit   (ARMusicalObject &object);
-    virtual void visit   (ARPositionTag   &tag)	{}
+    virtual void visitIn  (ARMusicalObject* object);
 };
 
 

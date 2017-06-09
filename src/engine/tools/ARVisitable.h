@@ -16,15 +16,17 @@
 
 //#include "PrintVisitor.h"
 
+class ARVisitor;
+
 class ARVisitable
 {
-public:
+	public:
              ARVisitable() {};
     virtual ~ARVisitable() {};
     
-    virtual void accept   (ARVisitor *visitor) {};
-    virtual void acceptIn (ARVisitor *visitor) {};
-    virtual void acceptOut(ARVisitor *visitor) {};
+    virtual void accept   (ARVisitor& visitor) {};
+//    virtual void acceptIn (ARVisitor *visitor) {};
+//    virtual void acceptOut(ARVisitor *visitor) {};
 };
 
 #endif

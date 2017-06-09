@@ -29,9 +29,9 @@ void MeterVisitor::reset() {
 }
 
 //------------------------------------------------------------------------------
-void MeterVisitor::visit (ARMusicalObject &obj)
+void MeterVisitor::visitIn (ARMusicalObject* obj)
 {
-	const ARMeter* meter = dynamic_cast<ARMeter*>(&obj);
+	const ARMeter* meter = dynamic_cast<ARMeter*>(obj);
 	if (meter) {
 		TYPE_TIMEPOSITION date = meter->getRelativeTimePosition();
 		if (date <= fLimit) {

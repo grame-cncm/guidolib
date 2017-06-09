@@ -91,7 +91,7 @@ bool ARMusic::getMeterAt (int voicenum, const GuidoDate &date, GuidoMeter& meter
 	if (!voice) return false;		// no such voice
 	TYPE_TIMEPOSITION tp (date.num, date.denom);
 	MeterVisitor mv (tp);
-	voice->goThrough(&mv);
+	voice->accept (mv);
 	meter = mv.getMeter();
 	return true;
 }
@@ -110,13 +110,15 @@ void ARMusic::getTimeMap (TimeMapCollector& f) const
 	}
 }
 
-void ARMusic::goThrough(ARVisitor *visitor) const
+void ARMusic::accept(ARVisitor& visitor)
 {
+	visitor.visitIn (this);
 	GuidoPos pos = GetHeadPosition();
 	while (pos) {
 		ARMusicalVoice * e = GetNext(pos);
-		e->goThrough(visitor);
+		e->accept(visitor);
 	}
+	visitor.visitOut (this);
 }
 
 void ARMusic::resetGRRepresentation()
@@ -367,8 +369,7 @@ void ARMusic::doAutoStuff()
 	}
 
 //	GMNCodePrintVisitor v(cerr);
-//	this->goThrough(&v);
-
+//	this->accept (v);
 }
 
 /** \brief Removes tags that were added automatically

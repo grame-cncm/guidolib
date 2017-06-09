@@ -108,7 +108,7 @@ class ARPositionTag : public ARVisitable
         /*****************************************/
 
 		/* Visitor design pattern */
-        virtual void accept(ARVisitor *visitor) { visitor->visit(*this); }
+        virtual void accept(ARVisitor& visitor) { visitor.visitIn(this); visitor.visitOut(this); }
 
 protected:
 		GuidoPos pos;
