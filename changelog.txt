@@ -2,6 +2,7 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.4
+- new GuidoShowElement API
 - the \instr tag supports font attributes (font, size, format...) and auto position 
   using the autopos attribute or using the \auto or \set tag
 - new autoInstrPos attribute for the \set tag
