@@ -18,7 +18,6 @@
 #include <QFont>
 #include <QtDebug>
 
-#include "MainWindow.h"
 #include "SetupDialog.h"
 #include "GuidoHighlighter.h"
 
@@ -80,6 +79,13 @@ SetupDialog::SetupDialog(MainWindow *parent)
 	QObject::connect (fShowAllStaffsCheckBox, SIGNAL(stateChanged(int)), this, SLOT(voiceStaffSetup(int)));
 	QObject::connect (fShowAllVoicesCheckBox, SIGNAL(stateChanged(int)), this, SLOT(voiceStaffSetup(int)));
 
+    QObject::connect (fHideSlurs, SIGNAL(clicked()), this, SLOT(showhide()));
+    QObject::connect (fHideDynamics, SIGNAL(clicked()), this, SLOT(showhide()));
+    QObject::connect (fHideArticulations, SIGNAL(clicked()), this, SLOT(showhide()));
+    QObject::connect (fHideText, SIGNAL(clicked()), this, SLOT(showhide()));
+    QObject::connect (fHideLyrics, SIGNAL(clicked()), this, SLOT(showhide()));
+
+
 	mSavedSettings = mMainWindow->getEngineSettings();
 	mSavedBBMap = mMainWindow->getBBMap();
 	mSavedShowMapping = mMainWindow->getShowMapping();
@@ -89,6 +95,7 @@ SetupDialog::SetupDialog(MainWindow *parent)
 	mSavedStaffNum = mMainWindow->getStaffNum();
 	scoreColorChanged( mMainWindow->getScoreColor() );
 	setState (mSavedSettings, mSavedBBMap, mSavedShowMapping, mSavedRawMapping, mSavedShowBoxes, mSavedVoiceNum, mSavedStaffNum);
+	setDisplayState (parent->getDisplayState());
 
 	mFontColorMap[ GuidoHighlighter::VOICE_SEPARATOR_ELT ]	= fVoiceSeparatorColorButton;
 	mFontColorMap[ GuidoHighlighter::SCORE_SEPARATOR_ELT ]	= fScoreSeparatorColorButton;
@@ -169,6 +176,45 @@ void SetupDialog::setup()
 	bool showBoxes, showMapping, rawMapping;
 	getState (gls, bbmap , showMapping , rawMapping, showBoxes , voiceNum,staffNum);
 	mMainWindow->setEngineSettings (gls, bbmap, showMapping, rawMapping, showBoxes, voiceNum, staffNum);
+}
+
+//-------------------------------------------------------------------------
+void SetupDialog::showhide()
+{
+	THideState state = getDisplayState ();
+	mMainWindow->setDisplayState (state);
+}
+
+//-------------------------------------------------------------------------
+void SetupDialog::resetDisplayState ()
+{
+	fHideSlurs->setCheckState(Qt::Unchecked);
+	fHideArticulations->setCheckState(Qt::Unchecked);
+	fHideDynamics->setCheckState(Qt::Unchecked);
+	fHideText->setCheckState(Qt::Unchecked);
+	fHideLyrics->setCheckState(Qt::Unchecked);
+}
+
+//-------------------------------------------------------------------------
+THideState SetupDialog::getDisplayState()
+{
+	THideState state;
+	state.slurs			= (fHideSlurs->checkState() == Qt::Checked);
+	state.articulations = (fHideArticulations->checkState() == Qt::Checked);
+	state.dynamics		= (fHideDynamics->checkState() == Qt::Checked);
+	state.text			= (fHideText->checkState() == Qt::Checked);
+	state.lyrics		= (fHideLyrics->checkState() == Qt::Checked);
+	return state;
+}
+
+//-------------------------------------------------------------------------
+void SetupDialog::setDisplayState(const THideState& state)
+{
+	fHideSlurs->setCheckState(state.slurs ? Qt::Checked : Qt::Unchecked);
+	fHideArticulations->setCheckState(state.articulations ? Qt::Checked : Qt::Unchecked);
+	fHideDynamics->setCheckState(state.dynamics ? Qt::Checked : Qt::Unchecked);
+	fHideText->setCheckState(state.text ? Qt::Checked : Qt::Unchecked);
+	fHideLyrics->setCheckState(state.lyrics ? Qt::Checked : Qt::Unchecked);
 }
 
 //-------------------------------------------------------------------------

@@ -20,23 +20,26 @@
 #include <QObject>
 #include "ui_setupDialog.h"
 #include "GUIDOEngine.h"
+#include "MainWindow.h"
 
 class QGuidoWidget;
 class MainWindow;
-
 
 class SetupDialog : public QDialog, public Ui::Setup
 {
     Q_OBJECT
 
 public:
-	SetupDialog(MainWindow *parent);
+			 SetupDialog(MainWindow *parent);
 	virtual ~SetupDialog();
+
+	void	setDisplayState(const THideState& state);
 
 private slots:
 	void reject();
 	void reset();
 	void setup();
+	void showhide();
 	void changeColor();
 	void scoreColorChanged(const QColor& c);
 	void fontColorButtonClicked();
@@ -45,6 +48,9 @@ private slots:
 	void voiceStaffSetup(int index);
 
 private:
+	THideState	getDisplayState ();
+	void		resetDisplayState ();
+
 	void getState (GuidoLayoutSettings& gls, int& bbmap, bool& showMapping, bool& rawMapping, bool& showBoxes, int&voiceNum, int&staffNum);
 	void setState (const GuidoLayoutSettings& gls, int bbmap , bool showMapping, bool rawMapping, bool showBoxes , int voiceNum , int staffNum );
 	

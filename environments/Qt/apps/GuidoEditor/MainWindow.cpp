@@ -355,7 +355,7 @@ void MapGuidoWidget::paintEvent(QPaintEvent * event)
 
 //-------------------------------------------------------------------------
 MainWindow::MainWindow() :
-	mGuidoWidget(0)
+	mGuidoWidget(0), mSetup(0)
 {
 	QGuidoPainter::startGuidoEngine();
 
@@ -442,8 +442,11 @@ void MainWindow::newFile()
     if (maybeSave()) {
 		reinitGuidoWidget();
 		mTextEdit->clear();
+		mTextEdit->setPlainText("{\n\n}");
         setCurrentFile("");
         reinitARHandlerPath();
+		mHiddenState.reset();
+		if (mSetup) mSetup->setDisplayState (mHiddenState);
     }
 }
 
@@ -490,6 +493,27 @@ void MainWindow::open()
             mTextEdit->document()->setModified(false);
             setWindowModified(false);
         }
+	}
+}
+
+//-------------------------------------------------------------------------
+void MainWindow::setDisplayState (const THideState& state)
+{
+	mHiddenState = state;
+	updateDisplayState();
+}
+
+//-------------------------------------------------------------------------
+void MainWindow::updateDisplayState ()
+{
+	GRHandler gr = GRHandler(mGuidoWidget->getGRHandler());
+	if (gr) {
+		GuidoShowElement(gr, kGRSlur, !mHiddenState.slurs);
+		GuidoShowElement(gr, kGRDynamics, !mHiddenState.dynamics);
+		GuidoShowElement(gr, kGRArticulations, !mHiddenState.articulations);
+		GuidoShowElement(gr, kGRText, !mHiddenState.text);
+		GuidoShowElement(gr, kGRLyrics, !mHiddenState.lyrics);
+		mGuidoWidget->clearCache();
 	}
 }
 
@@ -713,7 +737,7 @@ void MainWindow::exportToImage(QGuidoPainter * guidoPainter, const QString& file
 //-------------------------------------------------------------------------
 void MainWindow::about()
 {
-	QString guidoeditor_version("2.7");
+	QString guidoeditor_version("2.8");
     int major, minor, sub;
 	GuidoGetVersionNums(&major, &minor, &sub);
 	QString mastr, mistr, substr;
@@ -773,9 +797,10 @@ void MainWindow::docParams()
 //-------------------------------------------------------------------------
 void MainWindow::preferences()
 {
-    SetupDialog * dialog = new SetupDialog(this);
-	dialog->show();
-}
+    if (!mSetup) mSetup = new SetupDialog(this);
+	mSetup->show();
+	mSetup->raise();
+	mSetup->activateWindow();}
 
 //------------------------------------------------------------------------- 
 #ifndef IOS
@@ -1721,9 +1746,9 @@ bool MainWindow::loadFile(const QString &fileName)
     // In order not to make appear the little star next to filename (at the top of the window)
     mTextEdit->document()->setModified( false );
     setWindowModified(false);
-	
+	mHiddenState.reset();
+	if (mSetup) mSetup->setDisplayState (mHiddenState);
 	recentFileListUpdate(fileName);
-
 	return loadOk;
 }
 
