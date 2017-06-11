@@ -375,6 +375,9 @@ void GRSystemSlice::Finish()
             float staffYOffset = theStaff->getStaffState()->getYOffset(); // Y offset doesn't work for first staff
             nextposition.y += staffYOffset;
 
+            //TODO: additional distance attribute \staffFormat<distance=2hs>
+            nextposition.y = (theStaff->getDredgeSize() + 2 * theStaff->getStaffLSPACE()) * (i - 1);
+
 			theStaff->setPosition(nextposition);
 
 			if (first) {
