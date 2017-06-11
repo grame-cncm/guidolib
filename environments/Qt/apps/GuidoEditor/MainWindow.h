@@ -39,10 +39,21 @@
 #include "GUIDOScoreMap.h"
 #include "QFindWidget.h"
 
+typedef struct THideState {
+	bool slurs;
+	bool dynamics;
+	bool articulations;
+	bool text;
+	bool lyrics;
+	THideState() : slurs(false), dynamics(false), articulations(false), text(false), lyrics(false) {}
+	void reset() { slurs = dynamics = articulations = text = lyrics = false; }
+} THideState;
+
 class QAction;
 class QMenu;
 class QScoreDockWidget;
 class CodeEditor;
+class SetupDialog;
 
 #define ALL_STAFF -1000
 #define ALL_VOICE -1000
@@ -97,6 +108,9 @@ public:
 	void				setHighlighter( int syntaxElementId, const QColor& color , int weight );
 	void				setHighlighter( GuidoHighlighter * highlighter );
     void                addFileDirectoryPathToARHandler(const std::string filePath, const std::string exFilePath);
+    void                setDisplayState (const THideState& state);
+    void                updateDisplayState ();
+	const THideState&	getDisplayState() const { return mHiddenState; }
 
 	static QColor	mDefaultFontColors[ GuidoHighlighter::SIZE ];
 	static int		mDefaultFontWeights[ GuidoHighlighter::SIZE ];
@@ -195,7 +209,9 @@ private:
 	
 	int horizontalBorderMargin();
 	int verticalBorderMargin();
-		
+	
+	THideState	    mHiddenState;
+	
     QString			mCurFile;
 	MapGuidoWidget*	mGuidoWidget;
 	QScrollArea *	mScrollArea;
@@ -261,6 +277,8 @@ private:
 	QAction *mFindNextAct;
 	
 	QSpinBox *mZoomSpinBox;
+	
+	SetupDialog* mSetup;
 };
 
 #endif

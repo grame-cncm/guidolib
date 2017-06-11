@@ -14,8 +14,6 @@
 #ifndef ___GRVisitor___
 #define ___GRVisitor___
 
-#include "BaseVisitor.h"
-
 class GRNotationElement;
 class GRArticulation;
 class GRBar;
@@ -36,7 +34,7 @@ class GRStaff;
 class GRSystem;
 class GRText;
 
-class GRVisitor : public BaseVisitor
+class GRVisitor
 {
 	public:
 		virtual ~GRVisitor() {};

@@ -32,13 +32,13 @@
    <item>
     <widget class="QTabWidget" name="fTabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
        <string>Guido Engine</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QVBoxLayout" name="verticalLayout_1">
        <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
@@ -596,6 +596,96 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tab_1">
+      <attribute name="title">
+       <string>Display</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>Hidden elements</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="1" column="0">
+           <widget class="Line" name="line">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0">
+           <widget class="QCheckBox" name="fHideText">
+            <property name="text">
+             <string>Text</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QCheckBox" name="fHideSlurs">
+            <property name="text">
+             <string>Slurs</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QCheckBox" name="fHideDynamics">
+            <property name="text">
+             <string>Dynamics</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QCheckBox" name="fHideArticulations">
+            <property name="text">
+             <string>Articulations</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <widget class="QCheckBox" name="fHideLyrics">
+            <property name="text">
+             <string>Lyrics</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_17">
+            <property name="font">
+             <font>
+              <pointsize>14</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Select elements to hide:</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetMaximumSize</enum>
+         </property>
+        </layout>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
        <string>Syntax highlighter</string>
@@ -948,38 +1038,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>fButtonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>Setup</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>196</x>
-     <y>251</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>199</x>
-     <y>143</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>fButtonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>Setup</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>196</x>
-     <y>251</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>199</x>
-     <y>143</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>fForceBox</sender>
    <signal>valueChanged(int)</signal>
    <receiver>fForceSlider</receiver>
@@ -1088,6 +1146,38 @@
     <hint type="destinationlabel">
      <x>230</x>
      <y>31</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fButtonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>Setup</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>264</x>
+     <y>668</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>143</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fButtonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>Setup</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>264</x>
+     <y>668</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>143</y>
     </hint>
    </hints>
   </connection>

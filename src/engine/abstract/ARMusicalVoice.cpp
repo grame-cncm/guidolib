@@ -764,53 +764,70 @@ void ARMusicalVoice::printParameters(std::ostream& os) const
     os << "voice number: " << getVoiceNum() << "; duration: " << (float) getDuration() << ";";
 }
 
-void ARMusicalVoice::goThrough(ARVisitor *visitor)
+void ARMusicalVoice::accept(ARVisitor& visitor)
 {
-    acceptIn(visitor);
-
-	GuidoPos posInVoice = ObjectList::GetHeadPosition();
-    GuidoPos prevPos    = 0;
-    GuidoPos pTagPos    = 0;
-    if (mPosTagList)
-		pTagPos = mPosTagList->GetHeadPosition();
-
-	while (posInVoice) {
-        prevPos = posInVoice;
-		ARMusicalObject *object = ObjectList::GetNext(posInVoice);
-        goThroughTagsList(visitor, pTagPos, prevPos, true);
+    visitor.visitIn (this);
+	GuidoPos pos = ObjectList::GetHeadPosition();
+	while (pos) {
+		ARMusicalObject *object = ObjectList::GetNext(pos);
         object->accept(visitor);
-        goThroughTagsList(visitor, pTagPos, prevPos, false);
     }
 
-    if (mPosTagList) {
-        while (pTagPos) {
-            ARMusicalObject *object = dynamic_cast<ARMusicalObject *> (mPosTagList->GetNext(pTagPos));
-            if (object) object->accept(visitor);
-        }
-    }
-    acceptOut(visitor);
-}
-
-void ARMusicalVoice::goThroughTagsList(ARVisitor *visitor, GuidoPos& posTag, GuidoPos prevPos, bool addTag) const
-{
-	if (mPosTagList) {
-		while (posTag) {
-            ARPositionTag *positionTag = mPosTagList->GetAt(posTag);
-            ARTagEnd      *artgend     = ARTagEnd::cast(positionTag);
-
-            if ((!addTag && artgend) || (addTag && !artgend)) {
-                if (positionTag && positionTag->getPosition() == prevPos)
-                    positionTag->accept(visitor);
-                else
-                    break;
-
-                mPosTagList->GetNext(posTag);
-            }
-            else
-                break;
-		}
+    GuidoPos pTagPos = mPosTagList ? mPosTagList->GetHeadPosition() : 0;
+    while (pTagPos) {
+		ARPositionTag * tag = mPosTagList->GetNext(pTagPos);
+        tag->accept(visitor);
 	}
+    visitor.visitOut (this);
 }
+
+//void ARMusicalVoice::goThrough(ARVisitor *visitor)
+//{
+//    acceptIn(*visitor);
+//
+//	GuidoPos posInVoice = ObjectList::GetHeadPosition();
+//    GuidoPos prevPos    = 0;
+//    GuidoPos pTagPos    = 0;
+//    if (mPosTagList)
+//		pTagPos = mPosTagList->GetHeadPosition();
+//
+//	while (posInVoice) {
+//        prevPos = posInVoice;
+//		ARMusicalObject *object = ObjectList::GetNext(posInVoice);
+//        goThroughTagsList(visitor, pTagPos, prevPos, true);
+//        object->accept(visitor);
+//        goThroughTagsList(visitor, pTagPos, prevPos, false);
+//    }
+//
+//    if (mPosTagList) {
+//        while (pTagPos) {
+//            ARMusicalObject *object = dynamic_cast<ARMusicalObject *> (mPosTagList->GetNext(pTagPos));
+//            if (object) object->accept(visitor);
+//        }
+//    }
+//    acceptOut(*visitor);
+//}
+
+//void ARMusicalVoice::goThroughTagsList(ARVisitor *visitor, GuidoPos& posTag, GuidoPos prevPos, bool addTag) const
+//{
+//	if (mPosTagList) {
+//		while (posTag) {
+//            ARPositionTag *positionTag = mPosTagList->GetAt(posTag);
+//            ARTagEnd      *artgend     = ARTagEnd::cast(positionTag);
+//
+//            if ((!addTag && artgend) || (addTag && !artgend)) {
+//                if (positionTag && positionTag->getPosition() == prevPos)
+//                    positionTag->accept(visitor);
+//                else
+//                    break;
+//
+//                mPosTagList->GetNext(posTag);
+//            }
+//            else
+//                break;
+//		}
+//	}
+//}
 
 //____________________________________________________________________________________
 void ARMusicalVoice::resetGRRepresentation()

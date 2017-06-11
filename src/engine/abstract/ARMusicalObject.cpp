@@ -17,6 +17,7 @@
 
 #include "ARMusicalObject.h"
 #include "ARMusicalTag.h"
+#include "ARVisitor.h"
 
 #include "GObject.h"	// for GRMultipleGRObject template instanciation. 
 #include "GRMultipleGRObject.h"
@@ -55,6 +56,12 @@ ARMusicalObject::~ARMusicalObject()
 	mGrObject = 0;
 }
 
+
+void ARMusicalObject::accept(ARVisitor& visitor)
+{
+	visitor.visitIn (this);
+	visitor.visitOut(this);
+}
 
 // creates a copy of itself
 ARMusicalObject * ARMusicalObject::Copy() const

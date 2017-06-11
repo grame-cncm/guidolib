@@ -20,6 +20,9 @@
   
 #include <iostream>
 #include <assert.h>
+
+#include <CoreText/CoreText.h>
+
 using namespace std;
 
 #include "GDeviceOSX.h"
@@ -792,7 +795,11 @@ void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
         }
     }
  */
-    
+
+#warning ("GDeviceOSX::DrawString is not implemented (deprecated functions and types change)")
+//==================================================================================
+// The code below doesn't compile any more one with on MacOS 10.12 using Xcode 8.3
+//==================================================================================
     CTFontRef ctFont = CTFontCreateWithName( CFStringCreateWithCString(kCFAllocatorDefault, iosConvertedFontName.c_str(), kCFStringEncodingUTF8) , mCurrTextFont->GetSize(), NULL);
     CFAttributedStringSetAttribute(attributedOverlayText,
                                    CFRangeMake(0, CFAttributedStringGetLength(attributedOverlayText)),
@@ -854,8 +861,6 @@ void GDeviceOSX::DrawString( float x, float y, const char * s, int inCharCount )
     
     // Restore the state of the contexte
     CGContextRestoreGState(mContext);
-
-
 }
 #endif
 

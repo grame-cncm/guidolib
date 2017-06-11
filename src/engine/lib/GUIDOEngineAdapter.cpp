@@ -50,7 +50,8 @@ GuidoErrCode GuidoEngineAdapter::ar2gmn(ARHandler ar, ostream& to)
 		
 	ARMusic* score = ar->armusic;
 	GMNCodePrintVisitor v(to);
-	score->goThrough(&v);
+	score->accept(v);
+//	score->goThrough(&v);
 	return guidoNoErr;
 }
 

@@ -14,21 +14,27 @@
 #ifndef ___ARVisitor___
 #define ___ARVisitor___
 
-#include "BaseVisitor.h"
-
+class ARMusic;
 class ARMusicalObject;
 class ARPositionTag;
 class ARMusicalVoice;
 
-class ARVisitor : public BaseVisitor
+class ARVisitor
 {
 public:
     virtual ~ARVisitor() {};
-    
-    virtual void visitIn (ARMusicalVoice& voice)   = 0;
-    virtual void visitOut(ARMusicalVoice& voice)   = 0;
-    virtual void visit   (ARMusicalObject &object) = 0;
-    virtual void visit   (ARPositionTag   &tag)    = 0;
+
+    virtual void visitIn (ARMusic* ) {};
+    virtual void visitOut(ARMusic* ) {};
+
+    virtual void visitIn (ARMusicalObject* ) {};
+    virtual void visitOut(ARMusicalObject* ) {};
+	
+    virtual void visitIn (ARMusicalVoice* )  {};
+    virtual void visitOut(ARMusicalVoice* )  {};
+	
+    virtual void visitIn (ARPositionTag* )	{};
+    virtual void visitOut(ARPositionTag* )  {};
 };
 
 #endif

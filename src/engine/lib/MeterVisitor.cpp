@@ -29,9 +29,9 @@ void MeterVisitor::reset() {
 }
 
 //------------------------------------------------------------------------------
-void MeterVisitor::visit (ARMusicalObject &obj)
+void MeterVisitor::visitIn (ARMusicalObject* obj)
 {
-	const ARMeter* meter = dynamic_cast<ARMeter*>(&obj);
+	const ARMeter* meter = dynamic_cast<ARMeter*>(obj);
 	if (meter) {
 		TYPE_TIMEPOSITION date = meter->getRelativeTimePosition();
 		if (date <= fLimit) {
@@ -51,7 +51,7 @@ void MeterVisitor::visit (ARMusicalObject &obj)
 			}
 
 			for (size_t i=0; i < n; i++)
-				fLastMeter.count[i] = mlist[i];
+				fLastMeter.count[i] = mlist[i].getNumerator();
 
 //			vector<int> counts = meter->getNumeratorsVector();
 //			size_t n = counts.size();

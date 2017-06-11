@@ -30,15 +30,15 @@ public:
              PrintVisitor(std::ostream& stream);
     virtual ~PrintVisitor() {};
     
-    void     visitIn (ARMusicalVoice&  voice);
-    void     visitOut(ARMusicalVoice&  voice);
-    void     visit   (ARMusicalObject& object);
-    void     visit   (ARPositionTag&   positionTag);
+    void     visitIn (ARMusicalVoice*  voice);
+    void     visitOut(ARMusicalVoice*  voice);
+    void     visitIn (ARMusicalObject* object);
+    void     visitIn (ARPositionTag*   positionTag);
 
 private:
-    void        printMusicalVoice(ARMusicalVoice& voice) const;
-    void        printMusicalObject(ARMusicalObject& object) const;
-    void        printPositionTag(ARPositionTag& positionTag);
+    void        printMusicalVoice	(ARMusicalVoice* voice) const;
+    void        printMusicalObject	(ARMusicalObject* object) const;
+    void        printPositionTag	(ARPositionTag* positionTag);
     void        printHeader(int state = 0) const; // state = -1 : position tag end ("-")
                                                   // state =  1 : position tag beginning ("+")
                                                   // state =  0 : neutral ("x");

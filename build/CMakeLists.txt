@@ -35,6 +35,7 @@ option ( GL "Links to opengl device" off)
 # mac os specific part
 #########################################
 if(APPLE)
+	set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++ -std=c++11")
 #######################################
 #   iOS support
 	if ( IOS )
@@ -43,17 +44,10 @@ if(APPLE)
 		set (CMAKE_OSX_ARCHITECTURES "arm64 armv7 armv7s")
 		set (CMAKE_OSX_SYSROOT "iphoneos")
 		set (libtype STATIC)
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
 		set(IOS_DEPLOYMENT_TARGET 8.0) 
 	else ()
 		message (STATUS "Generates Mac OS project- Use -DIOS=yes to change.")
 	 	#######################################
-		if ( C++11 )
-			message (STATUS "Generates project using C++11 - Use -DC++11=no to change.")
-			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++ -std=c++11")
-		else()
-			message (STATUS "Generates project without C++11 - Use -DC++11=yes to change.")
-		endif()
 		if (DIST)
 			message (STATUS "All architectures will be compiled - Use -DDIST=no to change.")
 			set (CMAKE_OSX_ARCHITECTURES "x86_64 i386")
@@ -250,7 +244,7 @@ else(WIN32)
 endif(WIN32)
 
 if(APPLE)
-	set(LINK ${LINK} "-framework Carbon -compatibility_version 1.0.0 -lc++")
+	set(LINK ${LINK} "-framework Carbon -framework CoreText -compatibility_version 1.0.0 -lc++")
 elseif (UNIX)
       EXECUTE_PROCESS ( COMMAND "pkg-config"  "--libs" "cairo"
                 OUTPUT_VARIABLE TMP

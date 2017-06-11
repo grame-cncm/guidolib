@@ -11,18 +11,12 @@
 
 */
 
-#include <ostream>
-#include <sstream>
-#include <string>
-#include <algorithm>
-#include <cctype>
-
 #include "GMNCodePrintVisitor.h"
 
+#include "ARMusic.h"
 #include "ARMusicalObject.h"
 #include "ARPositionTag.h"
 #include "ARMusicalVoice.h"
-#include "ARMusicalEvent.h"
 #include "ARTagEnd.h"
 
 using namespace std;
@@ -31,52 +25,30 @@ using namespace std;
 // GMNCodePrintVisitor
 //______________________________________________________________________________
 
-GMNCodePrintVisitor::GMNCodePrintVisitor(std::ostream& stream)
+GMNCodePrintVisitor::GMNCodePrintVisitor(std::ostream& stream) : fVoicesCount(0), fOutStream(stream) {}
+
+void GMNCodePrintVisitor::visitIn(ARMusic* music) {
+	fOutStream << "{\n";
+	fVoicesCount = music->countVoices();
+}
+void GMNCodePrintVisitor::visitOut(ARMusic* music)				{ fOutStream << "}\n"; }
+void GMNCodePrintVisitor::visitIn(ARMusicalVoice* voice)		{ fOutStream << "[ (* voice " << voice->getVoiceNum() << " *)\n\t"; }
+void GMNCodePrintVisitor::visitOut(ARMusicalVoice* voice)		{
+	fOutStream << "\n]" << endl;
+	int num = voice->getVoiceNum();
+	if (num < fVoicesCount) fOutStream << "," << endl;
+}
+void GMNCodePrintVisitor::visitIn(ARMusicalObject* object)		{ printMusicalObject(object); }
+void GMNCodePrintVisitor::visitIn(ARPositionTag* tag)			{ printPositionTag(tag); }
+
+void GMNCodePrintVisitor::printMusicalObject(ARMusicalObject* object) const
 {
-    os = &stream;
+	object->printGMNName(fOutStream);
+    fOutStream << " ";
 }
 
-void GMNCodePrintVisitor::visitIn(ARMusicalVoice& voice)
+void GMNCodePrintVisitor::printPositionTag (ARPositionTag* tag)
 {
-    *os << "[ ";
-}
-
-void GMNCodePrintVisitor::visitOut(ARMusicalVoice& voice)
-{
-    *os << "]" << std::endl;
-}
-
-void GMNCodePrintVisitor::visit(ARMusicalObject &object)
-{
-    printMusicalObject(object);
-}
-
-void GMNCodePrintVisitor::visit(ARPositionTag &positionTag)
-{
-    printPositionTag(positionTag);
-}
-
-void GMNCodePrintVisitor::printMusicalObject(ARMusicalObject& object) const
-{
-    ARMusicalEvent *event = dynamic_cast<ARMusicalEvent *>(&object);
-    ARMusicalTag   *tag   = dynamic_cast<ARMusicalTag *>  (&object);
-
-    if (event)
-        event->printGMNName(*os);
-    else if (tag)
-        tag->printGMNName(*os);
-
-    *os << " ";
-}
-
-void GMNCodePrintVisitor::printPositionTag(ARPositionTag& positionTag)
-{
-    ARTagEnd *endTag = ARTagEnd::cast(&positionTag);
-
-    if (!endTag) {
-        positionTag.printGMNName(*os);
-        *os << " ( ";
-    }
-    else
-        *os << ") ";
+	tag->printGMNName(fOutStream);
+	fOutStream << " ";
 }

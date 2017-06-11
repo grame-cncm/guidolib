@@ -17,7 +17,7 @@
 
 #include "defines.h"	// for TYPE_TIMEPOSITION
 
-#include "PrintVisitor.h"
+//#include "PrintVisitor.h"
 #include "ARVisitable.h"
 
 #define MIN_TIMEPOSITION Frac_0
@@ -102,6 +102,7 @@ class ARMusicalObject : public ARVisitable
 		virtual void	browse(TimeUnwrap& mapper) const			{}
 		virtual void	setVoiceNum(int num)						{ fVoiceNum = num; }
 		virtual int		getVoiceNum() const							{ return fVoiceNum; }
+		virtual void	printGMNName(std::ostream& os) const		{}
 
 	static	bool	IsPowerOfTwoDenom(const TYPE_DURATION & dur);
 
@@ -143,7 +144,7 @@ class ARMusicalObject : public ARVisitable
 	virtual bool			 isEmptyNote() const  { return false; }
 
     /* Visitor design pattern */
-    virtual void accept(ARVisitor *visitor) { visitor->visit(*this); }
+    virtual void accept(ARVisitor& visitor);
 	virtual void print(std::ostream & os) const;
 
   protected:
