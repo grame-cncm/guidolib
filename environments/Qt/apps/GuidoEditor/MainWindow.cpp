@@ -546,20 +546,19 @@ void MainWindow::documentWasModified()
 //	mTextEdit->highlightErrorLine( 0 );
 }
 
-#define SHOWTIME 0
 //-------------------------------------------------------------------------
-#if SHOWTIME
-static void showTime (const QGuidoWidget* w)
+void MainWindow::showTime (QGuidoWidget* w)
 {
 	long ptime = GuidoGetParsingTime((const ARHandler)w->getARHandler());
 	long gtime = GuidoGetAR2GRTime  ((const GRHandler)w->getGRHandler());
 	long dtime = GuidoGetOnDrawTime ((const GRHandler)w->getGRHandler());
-	cerr << "parsing time: " << ptime << " ms" << endl;
-	cerr << "ar2gr time  : " << gtime << " ms" << endl;
-	cerr << "drawing time: " << dtime << " ms" << endl;
-	cerr << "total time  : " << (ptime + gtime + dtime) << " ms" << endl;
+	if (mSetup) mSetup->setTimings (ptime, gtime, dtime);
+
+//	cerr << "parsing time: " << ptime << " ms" << endl;
+//	cerr << "ar2gr time  : " << gtime << " ms" << endl;
+//	cerr << "drawing time: " << dtime << " ms" << endl;
+//	cerr << "total time  : " << (ptime + gtime + dtime) << " ms" << endl;
 }
-#endif
 
 //-------------------------------------------------------------------------
 void MainWindow::updateCode (bool force)
@@ -580,9 +579,7 @@ void MainWindow::updateCode (bool force)
 		setCurrentPage( mGuidoWidget->firstVisiblePage() );
 		updateWidgetSize();
 		mTextEdit->highlightErrorLine( 0 );
-#if SHOWTIME
-	showTime (mGuidoWidget);
-#endif
+		showTime (mGuidoWidget);
 	}
 	else
 	{
@@ -1724,9 +1721,7 @@ bool MainWindow::loadFile(const QString &fileName)
 		updateWidgetSize();
 		mTextEdit->highlightErrorLine( 0 );
 		statusBar()->showMessage(tr("File loaded"), 2000);
-#if SHOWTIME
 		showTime (mGuidoWidget);
-#endif
 	}
 	else
 	{
