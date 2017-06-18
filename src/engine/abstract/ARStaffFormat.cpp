@@ -32,6 +32,7 @@ ARStaffFormat::ARStaffFormat(const ARStaffFormat &stffrmt)
 	if (stffrmt.size != NULL)
 		size = TagParameterFloat::cast(stffrmt.size->getCopy());
 	fLineThickness = stffrmt.getLineThickness();
+    fDistance = stffrmt.getDistance();
 }
 
 ARStaffFormat::~ARStaffFormat()
@@ -39,7 +40,7 @@ ARStaffFormat::~ARStaffFormat()
 	delete style;
 }
 
-ARStaffFormat::ARStaffFormat() : fLineThickness(kLineThick)
+ARStaffFormat::ARStaffFormat() : fLineThickness(kLineThick), fDistance(0.0)
 {
 	style = NULL;
 }
@@ -49,7 +50,7 @@ void ARStaffFormat::setTagParameterList(TagParameterList & tpl)
 	if (ltpls.GetCount() == 0) {
 		// create a list of string ...
 		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(("S,style,standard,o;U,size,3pt,o;F,lineThickness,0.08,o"));
+        lstrs.AddTail(("S,style,standard,o;U,size,3pt,o;F,lineThickness,0.08,o;F,distance,0.0,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -101,6 +102,13 @@ void ARStaffFormat::setTagParameterList(TagParameterList & tpl)
 				fLineThickness = (LSPACE * fval->getValue() >= 0 ? LSPACE * fval->getValue() : 0);
 
 			delete fval;
+
+            TagParameterFloat* distance = TagParameterFloat::cast(rtpl->RemoveHead());
+            assert(distance);
+            if (distance->TagIsSet())
+                fDistance = (LSPACE * distance->getValue() >= 0 ? LSPACE * distance->getValue() : 0);
+
+            delete distance;
 		}
 		delete rtpl;
 	}
