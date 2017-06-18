@@ -1721,6 +1721,8 @@ void GRStaff::setStaffFormat(ARStaffFormat * staffrmt)
         
         mStaffState.lineThickness = staffrmt->getLineThickness();
 
+        mStaffState.staffDistance = staffrmt->getDistance();
+
         if (staffrmt->getDY())
             mStaffState.yOffset = - (staffrmt->getDY()->getValue());
 

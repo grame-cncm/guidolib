@@ -35,10 +35,12 @@ public:
 
 	const TagParameterString * getStyle() const		{ return style; }
 	float getLineThickness() const					{ return fLineThickness; }
+    float getDistance() const                       { return fDistance; }
 
 protected:
 	TagParameterString *style;
 	float				fLineThickness;
+    float               fDistance;
 	static ListOfTPLs   ltpls;
 
 };

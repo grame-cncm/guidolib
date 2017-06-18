@@ -114,6 +114,7 @@ class GRStaffState
 		void			reset2key();
 
         float getYOffset() const                                { return yOffset; }
+        float getStaffDistance() const                          { return staffDistance; }
     
         void setStaffLSPACE(float value)                        { staffLSPACE = value * 2; } // Factor 2 to be consistent with GRStaff::setStaffFormat(ARStaffFormat * staffrmt)
 
@@ -153,6 +154,7 @@ class GRStaffState
 		int		numlines;		// Zahl der Notenlinien.
         float   lineThickness;
         float   yOffset;
+        float   staffDistance;
         unsigned char *colRef;
 		float	distance;
 		bool	distanceset;
