@@ -253,6 +253,16 @@ void SetupDialog::reject()
 }
 	
 //-------------------------------------------------------------------------
+void SetupDialog::setTimings (long ar, long ar2gr, long draw)
+{
+	QString str;
+	fARTime->setText(str.setNum(ar));
+	fAR2GRTime->setText(str.setNum(ar2gr));
+	fDrawTime->setText(str.setNum(draw));
+	fTotalTime->setText(str.setNum(ar + ar2gr + draw));
+}
+	
+//-------------------------------------------------------------------------
 void SetupDialog::getState (GuidoLayoutSettings& gls, int& bbmap, bool& showMapping, bool& rawMapping, bool& showBoxes, int&voiceNum, int&staffNum)
 {
 	gls.systemsDistance		  = fSysDistBox->value();

@@ -109,6 +109,7 @@ public:
 	void				setHighlighter( GuidoHighlighter * highlighter );
     void                addFileDirectoryPathToARHandler(const std::string filePath, const std::string exFilePath);
     void                setDisplayState (const THideState& state);
+    void                showTime (QGuidoWidget* w);
     void                updateDisplayState ();
 	const THideState&	getDisplayState() const { return mHiddenState; }
 

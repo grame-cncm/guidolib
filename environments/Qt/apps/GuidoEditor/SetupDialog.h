@@ -34,6 +34,7 @@ public:
 	virtual ~SetupDialog();
 
 	void	setDisplayState(const THideState& state);
+	void	setTimings (long ar, long ar2gr, long draw);
 
 private slots:
 	void reject();
