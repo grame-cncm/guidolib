@@ -41,6 +41,8 @@ using namespace std;
 #include "kf_ivect.h"
 #include "TCollisions.h"
 
+#include "TagParameterFloat.h"
+
 //#define TRACE
 #ifdef TRACE
 #define traceMethod(method)		cout << (void*)this << " GRSystemSlice::" << method << endl
@@ -373,9 +375,11 @@ void GRSystemSlice::Finish()
                 nextposition.y -= myrect.top;
 
             // fixed stave spacing
-            float staffDistance = theStaff->getStaffState()->getStaffDistance();
-            if (staffDistance > 0.0)
-                nextposition.y = (theStaff->getDredgeSize() + staffDistance) * (i - 1);
+            if (theStaff->getStaffState()->getStaffDistance() != NULL) {
+                float staffDistance = theStaff->getStaffState()->getStaffDistance()->getValue(theStaff->getStaffLSPACE());
+                if (staffDistance > 0.0 && !first)
+                    nextposition.y = prev->getPosition().y + prev->getDredgeSize() + staffDistance;
+            }
 
             float staffYOffset = theStaff->getStaffState()->getYOffset(); // Y offset doesn't work for first staff
             nextposition.y += staffYOffset;

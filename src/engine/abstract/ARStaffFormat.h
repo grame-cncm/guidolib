@@ -33,14 +33,14 @@ public:
 	virtual void printGMNName(std::ostream& os) const;
 	virtual void printParameters(std::ostream& os) const;
 
-	const TagParameterString * getStyle() const		{ return style; }
-	float getLineThickness() const					{ return fLineThickness; }
-    float getDistance() const                       { return fDistance; }
+	const TagParameterString * getStyle() const		    { return style; }
+	float getLineThickness() const					    { return fLineThickness; }
+    const TagParameterFloat *  getStaffDistance() const { return staffDistance; }
 
 protected:
 	TagParameterString *style;
 	float				fLineThickness;
-    float               fDistance;
+    TagParameterFloat * staffDistance;
 	static ListOfTPLs   ltpls;
 
 };
