@@ -173,6 +173,7 @@ GRStaffState::GRStaffState()
 
 	curbarfrmt    = NULL;
 	curstaffrmt   = NULL;
+    staffDistance = NULL;
 	staffLSPACE   = LSPACE;
 	numlines      = 5;              // Standard
     lineThickness = LSPACE * 0.08f;
@@ -1721,7 +1722,7 @@ void GRStaff::setStaffFormat(ARStaffFormat * staffrmt)
         
         mStaffState.lineThickness = staffrmt->getLineThickness();
 
-        mStaffState.staffDistance = staffrmt->getDistance();
+        mStaffState.staffDistance = staffrmt->getStaffDistance();
 
         if (staffrmt->getDY())
             mStaffState.yOffset = - (staffrmt->getDY()->getValue());

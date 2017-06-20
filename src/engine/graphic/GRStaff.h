@@ -63,6 +63,8 @@ class GRPossibleBreakState;
 class GROctava;
 class TCollisions;
 
+class TagParameterFloat;
+
 template <class T> class KF_List;
 
 typedef KF_List<float> AccList;
@@ -114,7 +116,7 @@ class GRStaffState
 		void			reset2key();
 
         float getYOffset() const                                { return yOffset; }
-        float getStaffDistance() const                          { return staffDistance; }
+        const TagParameterFloat* getStaffDistance() const       { return staffDistance; }
     
         void setStaffLSPACE(float value)                        { staffLSPACE = value * 2; } // Factor 2 to be consistent with GRStaff::setStaffFormat(ARStaffFormat * staffrmt)
 
@@ -154,7 +156,7 @@ class GRStaffState
 		int		numlines;		// Zahl der Notenlinien.
         float   lineThickness;
         float   yOffset;
-        float   staffDistance;
+        const TagParameterFloat* staffDistance;
         unsigned char *colRef;
 		float	distance;
 		bool	distanceset;

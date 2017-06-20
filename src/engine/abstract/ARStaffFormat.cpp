@@ -32,17 +32,21 @@ ARStaffFormat::ARStaffFormat(const ARStaffFormat &stffrmt)
 	if (stffrmt.size != NULL)
 		size = TagParameterFloat::cast(stffrmt.size->getCopy());
 	fLineThickness = stffrmt.getLineThickness();
-    fDistance = stffrmt.getDistance();
+    staffDistance = NULL;
+    if (stffrmt.staffDistance != NULL)
+        staffDistance = TagParameterFloat::cast(stffrmt.staffDistance->getCopy());
 }
 
 ARStaffFormat::~ARStaffFormat()
 {
 	delete style;
+    delete staffDistance;
 }
 
-ARStaffFormat::ARStaffFormat() : fLineThickness(kLineThick), fDistance(0.0)
+ARStaffFormat::ARStaffFormat() : fLineThickness(kLineThick)
 {
 	style = NULL;
+    staffDistance = NULL;
 }
 
 void ARStaffFormat::setTagParameterList(TagParameterList & tpl)
@@ -50,7 +54,7 @@ void ARStaffFormat::setTagParameterList(TagParameterList & tpl)
 	if (ltpls.GetCount() == 0) {
 		// create a list of string ...
 		ListOfStrings lstrs; // (1); std::vector test impl
-        lstrs.AddTail(("S,style,standard,o;U,size,3pt,o;F,lineThickness,0.08,o;F,distance,0.0,o"));
+        lstrs.AddTail(("S,style,standard,o;U,size,3pt,o;F,lineThickness,0.08,o;U,distance,0hs,o"));
 		CreateListOfTPLs(ltpls,lstrs);
 	}
 
@@ -103,12 +107,12 @@ void ARStaffFormat::setTagParameterList(TagParameterList & tpl)
 
 			delete fval;
 
-            TagParameterFloat* distance = TagParameterFloat::cast(rtpl->RemoveHead());
-            assert(distance);
-            if (distance->TagIsSet())
-                fDistance = (LSPACE * distance->getValue() >= 0 ? LSPACE * distance->getValue() : 0);
-
-            delete distance;
+            staffDistance = TagParameterFloat::cast(rtpl->RemoveHead());
+            assert(staffDistance);
+            if (staffDistance->TagIsSet() == false) {
+                delete staffDistance;
+                staffDistance = NULL;
+            }
 		}
 		delete rtpl;
 	}

@@ -1,0 +1,10 @@
+(*
+	Staff format distance parameter when set makes fixed distance between previous and current staff
+*)
+
+{  
+ [ a b c ],
+ [	\staffFormat<distance=7, dy=-6> a b c ],
+ [	\staffFormat<distance=8> a b c ],
+ [	\staffFormat<distance=5> a b c ]
+}
