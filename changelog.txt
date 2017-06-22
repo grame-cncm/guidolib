@@ -2,6 +2,7 @@ GUIDO Engine history
 
 ----------------------------------------------------------------
   version 1.6.4
+- new staff distance parameter for fixed stave spacing feature (\staffFormat<distance>)
 - new GuidoShowElement API
 - the \instr tag supports font attributes (font, size, format...) and auto position 
   using the autopos attribute or using the \auto or \set tag
