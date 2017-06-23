@@ -10,7 +10,7 @@ many persons have been contributing to the Guido library project.
 I would like to thank them and especially: 
 J. Scott Amort, Jérôme Berthet, Samuel Brochot, Martin Carlé, Yannick Chapuis, Thomas Coffy, 
 Christophe Daudin, Colas Decron, Guillaume Gouilloux, Torben Hohn, Camille Le Roi, 
-François Levy, Arnaud Margaillan, Benjamen Ruprechter, Mike Solomon
+François Levy, Arnaud Margaillan, Benjamen Ruprechter, Mike Solomon, Ivan Vukosav
 and of course, my colleagues and friends Stéphane Letz and Yann Orlarey
 
 Dominique Fober

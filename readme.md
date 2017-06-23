@@ -35,7 +35,8 @@ Camille Le Roy,
 François Levy,
 Arnaud Margaillan,
 Benjamen Ruprechter,
-Mike Solomon
+Mike Solomon,
+Ivan Vukosav
 
 And of course, warmest thanks to my colleagues and friends Stéphane Letz 
 and Yann Orlarey.
