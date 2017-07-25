@@ -49,7 +49,7 @@ class TagParameterFloat : public TagParameter
 		bool			TagIsUnitTag() const 		{ return fUnittag; }
 		void			setUnitTag()				{ fUnittag = true; }
 		const char *	getUnit() const				{ return fUnit.c_str(); }
-		bool			hasUnit() const				{ return fUnit.size(); }
+		bool			hasUnit() const				{ return fUnit.size() ? true : false; }
 
 	static TagParameterFloat * cast( TagParameter * inTag ) 
 					{ return inTag->isFloat() ? static_cast<TagParameterFloat *>(inTag) : 0; }
