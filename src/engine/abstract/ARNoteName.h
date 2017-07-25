@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -16,7 +16,6 @@
 */
 
 #include <string>
-//#include "ARName.h"
 
 //  Provides all possible notenames as copy-template
 // Therefore the string-baseclass (in MFC CString)
@@ -26,18 +25,12 @@
 // representation created in memory, undependend from 
 // the number of created notes
 
-/** \brief not yet documented
-*/
 class ARNoteName : public std::string
 {
   public:
-					 ARNoteName(std::string name);
-					 ARNoteName(const ARNoteName& name);
-		virtual 	~ARNoteName();
-
-		// returns a copy of the stringobject that aquivalent to "name"
-		//	wrong "name" triggers assertion
-		virtual std::string getName(std::string name) const;
+					 ARNoteName(std::string name) : std::string(name)		{}
+					 ARNoteName(const ARNoteName& name): std::string(name)	{}
+		virtual 	~ARNoteName() {}
 
 		static std::string c;
 		static std::string do_;

@@ -4,7 +4,7 @@
 /*
 GUIDO Library
 Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-Copyright (C) 2002-2013 Grame
+Copyright (C) 2002-2017 Grame
 
 This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -17,52 +17,31 @@ research@grame.fr
 
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
-#include "TagParameterString.h"
-#include "TagParameterInt.h"
 #include "ARMusic.h"
-
-
-class TagParameterList;
 
 /** \brief The symbol tag
 */
-class ARSymbol : public ARMTParameter, 
-    public ARPositionTag
+class ARSymbol : public ARMTParameter, public ARPositionTag
 {
 public:
-    ARSymbol();
-    virtual 		~ARSymbol();
+				 ARSymbol();
+    virtual 	~ARSymbol() {}
 
-    virtual void 	setTagParameterList(TagParameterList & theTagParameterList);
+		virtual const char*	getParamsStr() const	{ return kARSymbolParams; };
+		virtual const char*	getTagName() const		{ return "ARSymbol"; };
+		virtual std::string getGMNName() const		{ return "\\symbol"; };
 
-    virtual const char* getSymbolPath() const				{ return filePath ? filePath->getValue() : 0; }
-
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
-
-    float		 getSize() const                    { return size; }
-    const char*  getPositionString() const          { return position ? position->getValue() : NULL; }
-    int          getFixedWidth() const              { return width ? width->getValue() : 0; }
-    int          getFixedHeight() const             { return height ? height->getValue() : 0; }
-    
+    const char*  getSymbolPath() const;
+	const char*  getPositionString() const;
+    int          getFixedWidth() const;
+    int          getFixedHeight() const;
+	
     void setCurrentARMusic(ARMusic *inARMusic)      { currentARMusic = inARMusic; }
 
     const std::vector<std::string> &getPath() const { return currentARMusic->getPath(); }
 
 protected:
-
-    virtual const char *getTagFormat() const;
-
-	TagParameterString *filePath;
-	             float  size;
-    TagParameterString *position;
-    TagParameterInt    *width;
-    TagParameterInt    *height;
-
-               ARMusic *currentARMusic;
-
-	static ListOfTPLs ltpls;
+		ARMusic*	currentARMusic;
 };
 
 #endif

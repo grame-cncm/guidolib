@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -21,22 +21,19 @@
 */
 class ARDummyRangeEnd : public ARTagEnd
 {
-public:
-			 ARDummyRangeEnd(const ARDummyRangeEnd * copy);
-			 ARDummyRangeEnd(const char * txt = 0);
-	virtual ~ARDummyRangeEnd() {}
+	public:
+				 ARDummyRangeEnd(const ARDummyRangeEnd * copy)
+					: ARTagEnd(-1,copy)					{ if (copy) endstr = copy->endstr; }
+				 ARDummyRangeEnd(const char * txt = 0)	{endstr = txt ? txt : ")"; }
 
-	virtual ARMusicalObject * Copy() const;
-        
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual ~ARDummyRangeEnd() {}
 
-  	NVstring endstr;
+		virtual ARMusicalObject * Copy() const		{ return new ARDummyRangeEnd(this); }
+		virtual const char*	getTagName() const		{ return "ARDummyRangeEnd"; };
+		virtual std::string getGMNName() const		{ return endstr; };
 
-    /**** Function to avoid dynamic_cast ****/
-    ARMusicalObject *isARDummyRangeEnd() { return this; }
-    /****************************************/
+	    const ARMusicalObject *isARDummyRangeEnd() const { return this; }
+	  	std::string endstr;
 };
 
 #endif

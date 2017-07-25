@@ -19,7 +19,7 @@
 	\tuplet<"-7:1-", dispNote="/16">
 	( \beam( { c1/24, e } e { c1, e } e { c1, e } e0)) 
 	\tuplet<"-6-", dispNote="/16">
-	( \beam( c2 c c c c)) _/4 \beam(\tuplet(c2/12 c c))
+	( \beam( c2 c c c c)) _/4 \beam(\tuplet<"-3-">(c2/12 c c))
 ]
 ,
 [

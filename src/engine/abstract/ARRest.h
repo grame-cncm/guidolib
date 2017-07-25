@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -21,29 +21,33 @@
 */
 class ARRest : public ARMusicalEvent 
 {
-public:
-			 ARRest (const TYPE_DURATION & durationOfRest);
-			 ARRest (const TYPE_TIMEPOSITION & starttimeOfRest, const TYPE_DURATION & durationOfRest);
-			 ARRest (int theNumerator, int theDenominator);
-		     ARRest (const ARRest &arrest);
-    virtual ~ARRest();
+	public:
+				 ARRest (const TYPE_DURATION & duration)
+					: ARMusicalEvent(MIN_TIMEPOSITION,(TYPE_DURATION) duration) {}
 
-	virtual ARMusicalObject * Copy() const;
+				 ARRest (const TYPE_TIMEPOSITION & date, const TYPE_DURATION & duration)
+					: ARMusicalEvent((TYPE_TIMEPOSITION) date,(TYPE_DURATION) duration) {}
+					
+				 ARRest (int num, int denum) : ARMusicalEvent(num,denum) {}
+	
+				 ARRest (const ARRest &arrest);
+		virtual ~ARRest() {}
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual ARMusicalObject * Copy() const		{ return new ARRest(*this); }
 
-	virtual void browse(TimeUnwrap& mapper) const;
-    virtual void forceNoteAppearance(NVstring appearance) { fAppearance = appearance; };
-    virtual NVstring getAppearance() const				  { return fAppearance; }
+		virtual void print(std::ostream & os) const { os << getGMNName(); }
+		virtual const char*	getParamsStr() const	{ return ""; };
+		virtual const char*	getTagName() const		{ return "ARRest"; };
+		virtual std::string getGMNName() const;
 
-    /**** Function to avoid dynamic_cast ****/
-    ARMusicalObject *isARRest() { return this; }
-    /****************************************/
+		virtual void browse(TimeUnwrap& mapper) const;
+		virtual void forceNoteAppearance(NVstring appearance) { fAppearance = appearance; };
+		virtual NVstring getAppearance() const				  { return fAppearance; }
 
-private:
-	NVstring fAppearance;
+		ARMusicalObject *isARRest() 				{ return this; }
+
+	private:
+		NVstring fAppearance;
 };;
 
 #endif

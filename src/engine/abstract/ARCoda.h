@@ -15,24 +15,22 @@
 */
 
 #include "ARJump.h"
+#include "TimeMapper.h"
 
 /** \brief Coda
 */
 class ARCoda : public ARJump
 {
-public:	
-				 ARCoda();
-	virtual 	~ARCoda();
+	public:	
+					 ARCoda() : ARJump ("[coda] Coda") {}
+		virtual 	~ARCoda() {}
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-    virtual void printParameters(std::ostream& os) const {};
+		virtual const char*	getTagName() const		{ return "ARCoda"; };
+		virtual std::string getGMNName() const		{ return "\\coda"; };
 
-	virtual void browse(TimeUnwrap& mapper) const;
+		virtual void browse(TimeUnwrap& mapper) const { mapper.AtPos (this, TimeUnwrap::kCoda); }
 
-    /**** Function to avoid dynamic_cast ****/
-    ARMusicalObject *isARCoda() { return this; }
-    /*****************************************/
+		ARMusicalObject *isARCoda() 				{ return this; }
 };
 
 #endif

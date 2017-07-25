@@ -16,82 +16,83 @@
 
 #include "ARPageFormat.h"
 #include "TagParameterFloat.h"
+#include "TagParameterStrings.h"
 #include "TagParameterString.h"
-#include "TagParameterList.h"
 #include "GRDefine.h"
-#include "ListOfStrings.h"
+
+using namespace std;
 
 const float MINSIZEX = (float) (5 * kCmToVirtual);	// min size = 5 x 5 cm
 const float MINSIZEY = (float) (5 * kCmToVirtual);	
 const float MAXSIZEX = (float) (400 * kCmToVirtual); // (JB) arbitrary max value. was (32767) (Windows 95-98 GDI limitation ?)
 const float MAXSIZEY = (float) (300 * kCmToVirtual); // (JB) arbitrary max value. was (32767);
 
-ListOfTPLs ARPageFormat::ltpls(1);
+static const TagParameterMap sARPageFormatMap (kARPageFormatParams);
 
 /** \brief Creates a page format, in Guido internal units.
 
 	Size: width height. Margins: left top right bottom
 */
-ARPageFormat::ARPageFormat(float px, float py,
-						   float ml, float mt,
-						   float mr, float mb)
-{
-	// assert, that the given units are
-	// in INTERNAL Coordinates!
-	// parcount = 6;
-	mFormat = "";
-	mSizeX = px; // * kCmToVirtual;
-	mSizeY = py; //  * kCmToVirtual;
-	mLeft = ml; //  * kCmToVirtual;
-	mTop = mt; //  * kCmToVirtual;
-	mRight = mr; //  * kCmToVirtual;
-	mBottom = mb; //  * kCmToVirtual;
-	
-	ClipSize();
-	AdjustMargins();
-}
+//ARPageFormat::ARPageFormat(float px, float py,
+//						   float ml, float mt,
+//						   float mr, float mb)
+//{
+//	// assert, that the given units are
+//	// in INTERNAL Coordinates!
+//	// parcount = 6;
+//	mFormat = "";
+//	mSizeX = px; // * kCmToVirtual;
+//	mSizeY = py; //  * kCmToVirtual;
+//	mLeft = ml; //  * kCmToVirtual;
+//	mTop = mt; //  * kCmToVirtual;
+//	mRight = mr; //  * kCmToVirtual;
+//	mBottom = mb; //  * kCmToVirtual;
+//	
+//	ClipSize();
+//	AdjustMargins();
+//}
 
 /** \brief Creates a page format with parameters as c-strings, in Guido internal units.
 
 	Size: width, height. Margins: left top right bottom
 */
-ARPageFormat::ARPageFormat(char * px, char * py,
-						   char * ml, char * mt,
-						   char * mr, char * mb)
-{
-	// (JB) Shouldn't input values be in cm, then converted into virtual units ?
-	mFormat = ""; // added by jk
+//ARPageFormat::ARPageFormat(char * px, char * py,
+//						   char * ml, char * mt,
+//						   char * mr, char * mb)
+//{
+//	// (JB) Shouldn't input values be in cm, then converted into virtual units ?
+//	mFormat = ""; // added by jk
+//
+//	// this uses features of TagPArameterFloat to set the parameter ...
+//	TagParameterFloat tpf(0);
+//	tpf.setValue(px);
+//	mSizeX = tpf.getValue();
+//
+//	tpf.setValue(py);
+//	mSizeY = tpf.getValue();
+//
+//	tpf.setValue(ml);
+//	mLeft = tpf.getValue();
+//
+//	tpf.setValue(mt);
+//	mTop = tpf.getValue();
+//
+//	tpf.setValue(mr);
+//	mRight = tpf.getValue();
+//
+//	tpf.setValue(mb);
+//	mBottom = tpf.getValue();
+//
+//	ClipSize();
+//	AdjustMargins();
+//}
 
-	// this uses features of TagPArameterFloat to set the parameter ...
-	TagParameterFloat tpf(0);
-	tpf.setValue(px);
-	mSizeX = tpf.getValue();
-
-	tpf.setValue(py);
-	mSizeY = tpf.getValue();
-
-	tpf.setValue(ml);
-	mLeft = tpf.getValue();
-
-	tpf.setValue(mt);
-	mTop = tpf.getValue();
-
-	tpf.setValue(mr);
-	mRight = tpf.getValue();
-
-	tpf.setValue(mb);
-	mBottom = tpf.getValue();
-
-	ClipSize();
-	AdjustMargins();
-}
-
-ARPageFormat::ARPageFormat(const ARPageFormat & arp)
-{
-	(*this) = arp;
-	ClipSize();
-	AdjustMargins();
-}
+//ARPageFormat::ARPageFormat(const ARPageFormat & arp)
+//{
+//	(*this) = arp;
+//	ClipSize();
+//	AdjustMargins();
+//}
 
 void ARPageFormat::operator=(const ARPageFormat& arp)
 {
@@ -111,6 +112,8 @@ void ARPageFormat::operator=(const ARPageFormat& arp)
 */
 ARPageFormat::ARPageFormat()
 {
+	setupTagParameters (sARPageFormatMap);
+
 	mFormat = "";
 	mSizeX = DF_SX * kCmToVirtual;
 	mSizeY = DF_SY * kCmToVirtual;
@@ -121,126 +124,62 @@ ARPageFormat::ARPageFormat()
 	// parcount = 6;
 }
 
-ARPageFormat::~ARPageFormat()
+//--------------------------------------------------------------------------
+void ARPageFormat::getMargins (const TagParameterMap& params)
 {
-
+	mLeft = getParameter<TagParameterFloat>(kLmStr, true)->getValue();
+	mTop = getParameter<TagParameterFloat>(kTmStr, true)->getValue();
+	mRight = getParameter<TagParameterFloat>(kRmStr, true)->getValue();
+	mBottom = getParameter<TagParameterFloat>(kBmStr, true)->getValue();
 }
 
-/** \brief Setup the page size and margins according to input tags.
-*/
-void ARPageFormat::setTagParameterList(	TagParameterList & tpl )
+//--------------------------------------------------------------------------
+TagParameterMap ARPageFormat::checkTagParameters (TagParametersList& params, const std::string pTemplate)
 {
-	if (ltpls.GetCount() == 0)
-	{
-		// create a list of string ...
-
-		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail("U,w,,r;U,h,,r;U,lm,2cm,o;"
-			"U,tm,5cm,o;U,rm,2cm,o;U,bm,3cm,o");
-		
-		lstrs.AddTail("S,type,,r;U,lm,2cm,o;"
-			"U,tm,5cm,o;U,rm,2cm,o;U,bm,3cm,o");
-	
-		CreateListOfTPLs(ltpls, lstrs);
+	string margins = "U,lm,2cm,o;U,tm,5cm,o;U,rm,2cm,o;U,bm,3cm,o";
+	string str = "U,w,,r;U,h,,r;";
+	if (params.size() && params[0]->isString()) {
+		str = "S,type,,r;";
+		clearTagDefaultParameter(kWStr);		// this is to avoid a warning regarding required parameter
+		clearTagDefaultParameter(kHStr);		// this is to avoid a warning regarding required parameter
 	}
+	else clearTagDefaultParameter(kTypeStr);		// this is to avoid a warning regarding required parameter
 
-	TagParameterList * rtpl = 0;
-	int ret = MatchListOfTPLsWithTPL(ltpls, tpl, &rtpl);
+	str += margins;
+	return ARMTParameter::checkTagParameters (params, str);
+}
 
-	if (ret >= 0 && rtpl)
-	{
-		// we found a match!
-		if (ret == 0)
-		{
-			// Then, we now the match for the first ParameterList
-			// w, h, ml, mt, mr, mb
-            GuidoPos pos = rtpl->GetHeadPosition();
-            
-			TagParameterFloat * tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
-			assert(tpf);			
-			mSizeX = tpf->getValue();
+//--------------------------------------------------------------------------
+void ARPageFormat::setTagParameters (const TagParameterMap& params)
+{
+	const TagParameterString* vtype = getParameter<TagParameterString>(kTypeStr);
+	if (vtype) {		// page size is specified by type
+	clearTagDefaultParameter(kTextStr);		// this is to avoid a warning regarding inherited required parameter for ARText
 
-			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
-			assert(tpf);
-			mSizeY = tpf->getValue();
-
-			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
-			assert(tpf);			
-			mLeft = tpf->getValue();
-
-			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
-			assert(tpf);			
-			mTop = tpf->getValue();
-
-			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
-			assert(tpf);			
-			mRight = tpf->getValue();
-
-			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
-			assert(tpf);			
-			mBottom = tpf->getValue();
-
-			mFormat = "";
+		mFormat = vtype->getValue();
+		if (mFormat == "A4") {
+			mSizeX = (float) (21.0f * kCmToVirtual);
+			mSizeY = (float) (29.7f * kCmToVirtual);
 		}
-		else if (ret==1)
-		{
-			// it matches the second parameter list
-			// pagesize, ml, mt, mr, mb
-            GuidoPos pos = rtpl->GetHeadPosition();
-
-			TagParameterString * tps = TagParameterString::cast(rtpl->GetNext(pos));
-			assert(tps);
-			mFormat = tps->getValue();
-
-			if (!strcmp(mFormat.c_str(),"A4")) 
-			{
-				mSizeX = (float) (21.0f * kCmToVirtual);
-				mSizeY = (float) (29.7f * kCmToVirtual);
-			}
-			else if (!strcmp(mFormat.c_str(),"A3"))
-			{
-				mSizeX = (float) (29.7f * kCmToVirtual);
-				mSizeY = (float) (42.0f * kCmToVirtual);
-			}
-			else if (!strcmp(mFormat.c_str(),"letter"))
-			{
-				// this is WRONG
-				mSizeX = (float) ( 18 * kCmToVirtual );
-				mSizeY = (float) ( 31 * kCmToVirtual ) ;
-			}
-
-			TagParameterFloat * tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
-			assert(tpf);
-			mLeft = tpf->getValue();
-
-			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
-			assert(tpf);
-			mTop = tpf->getValue();
-
-			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
-			assert(tpf);
-			mRight = tpf->getValue();
-
-			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
-			assert(tpf);
-			mBottom = tpf->getValue();
+		else if (mFormat == "A3") {
+			mSizeX = (float) (29.7f * kCmToVirtual);
+			mSizeY = (float) (42.0f * kCmToVirtual);
 		}
-
-		// this removes all the elements ...
-		delete rtpl;
+		else if (mFormat == "letter") {
+			mSizeX = (float) ( 18 * kCmToVirtual );
+			mSizeY = (float) ( 31 * kCmToVirtual ) ;
+		}
+		getMargins(params);
 	}
-	else
-	{
-		// failure ..
+	else {		// page size is specified by width and height
+		const TagParameterFloat* vw = getParameter<TagParameterFloat>(kWStr);
+		if (vw) mSizeX = vw->getValue();
+		const TagParameterFloat* vh = getParameter<TagParameterFloat>(kHStr);
+		if (vh) mSizeY = vh->getValue();
+		getMargins(params);
 	}
-
 	ClipSize();
-
     AdjustMargins();
-
-	tpl.RemoveAll();
-
-	return;
 }
 
 /** \brief Returns the size and the margins of the page, in virtual units.
@@ -250,8 +189,7 @@ void ARPageFormat::setTagParameterList(	TagParameterList & tpl )
 
 	\note: returns Guido internal units.
 */
-void ARPageFormat::getPageFormat( float * sx, float * sy, float * ml, float * mt, 
-															float * mr, float * mb )
+void ARPageFormat::getPageFormat( float * sx, float * sy, float * ml, float * mt, float * mr, float * mb ) const
 {
 	*sx = (float)(mSizeX); //  * kVirtualToCm);
 	*sy = (float)(mSizeY);
@@ -289,27 +227,3 @@ void ARPageFormat::AdjustMargins()
 		mTop = mBottom = 0;
 }
 
-void ARPageFormat::printName(std::ostream& os) const
-{
-    os << "ARPageFormat";
-}
-
-void ARPageFormat::printGMNName(std::ostream& os) const
-{
-    os << "\\pageFormat";
-}
-
-void ARPageFormat::printParameters(std::ostream& os) const
-{
-    if (!mFormat.empty())
-        os << "format: " << mFormat << "; ";
-    else
-        os << "width: " << mSizeX << "; height: " << mSizeY << "; ";
-
-    os << "left margin: " << mLeft << "; ";
-    os << "top margin: " << mTop << "; ";
-    os << "right margin: " << mRight << "; ";
-    os << "bottom margin: " << mBottom  << "; ";
-
-    ARMusicalTag::printParameters(os);
-}

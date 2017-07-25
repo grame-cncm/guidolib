@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -13,13 +13,10 @@
 */
 
 #include <iostream>
-#include <string>
 
 #include "ARArticulation.h"
-#include "TagParameterList.h"
+#include "TagParameterStrings.h"
 #include "TagParameterString.h"
-#include "ListOfStrings.h"
-
 #include "TimeUnwrap.h"
 
 using namespace std;
@@ -27,42 +24,23 @@ using namespace std;
 const char* kAboveStr = "above";
 const char* kBelowStr = "below";
 
-ListOfTPLs ARArticulation::ltpls(1);
+static const TagParameterMap sARArticulationMap (kARArticulationParams);
 
-void ARArticulation::setTagParameterList(TagParameterList & tpl)
+ARArticulation::ARArticulation() : fPosition(kDefaultPosition)
 {
-	if (ltpls.empty())
-	{
-		// create a list of string ...
+	setupTagParameters (sARArticulationMap);
+	rangesetting = ONLY;
+}
 
-		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail("S,position,,o");
-		CreateListOfTPLs(ltpls,lstrs);
-
+void ARArticulation::setTagParameters (const TagParameterMap& params)
+{
+	const TagParameterString* pos = getParameter<TagParameterString>(kPositionStr);
+	if (pos) {
+		string posStr = pos->getValue();
+		if (posStr == kAboveStr)		fPosition = kAbove;
+		else if (posStr == kBelowStr)	fPosition = kBelow;
+		else cerr << "Guido Warning: '" << posStr << "': incorrect articulation position";
 	}
-
-	TagParameterList * rtpl = 0;
-	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,& rtpl);
-
-	if (ret==0 && rtpl)
-	{
-		// we found a match!
-		TagParameterString * ppos = TagParameterString::cast(rtpl->RemoveHead());
-		assert(ppos);
-		if (ppos->TagIsSet()) {
-			string posStr = ppos->getValue();
-			if (posStr == kAboveStr) {
-				fPosition = kAbove;
-			}
-			else if (posStr == kBelowStr) {
-				fPosition = kBelow;
-			}
-			else cerr << "Guido Warning: '" << posStr << "': incorrect articulation position" << endl;
-		}
-		delete ppos;
-		delete rtpl;
-	}
-	tpl.RemoveAll();
 }
 
 // --------------------------------------------------------------------------

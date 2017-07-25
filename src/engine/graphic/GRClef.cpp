@@ -39,7 +39,7 @@ NVPoint GRClef::refposBass;
 NVPoint GRClef::refposAlto;
 unsigned int GRClef::sClefTextAlign;
 
-GRClef::GRClef(ARClef * arClef, GRStaff *curstaff, bool ownsAR)
+GRClef::GRClef(const ARClef * arClef, GRStaff *curstaff, bool ownsAR)
  				 : GRTagARNotationElement(arClef, curstaff->getStaffLSPACE(), ownsAR),
     				mOctaveStr(0)
 {
@@ -256,8 +256,10 @@ void GRClef::OnDraw(VGDevice & hdc) const
 		const float octY = mPosition.y +  mOctaveOffset.y;
 
 		hdc.SetTextFont( fontRef );
-		hdc.SetFontAlign( VGDevice::kAlignBottom | VGDevice::kAlignCenter ); 
+		unsigned int savedalign = hdc.GetFontAlign();
+		hdc.SetFontAlign( VGDevice::kAlignBottom | VGDevice::kAlignCenter );
 		hdc.DrawString( octX, octY, mOctaveStr, (int)strlen(mOctaveStr) );
+		hdc.SetFontAlign( savedalign );
 	}
 }
 

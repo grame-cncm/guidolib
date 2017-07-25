@@ -35,7 +35,7 @@ using namespace std;
 
 extern GRStaff * gCurStaff;
 
-GRText::GRText(GRStaff * staff, ARText * ar) : GRPTagARNotationElement(ar)
+GRText::GRText(GRStaff * staff, const ARText * ar) : GRPTagARNotationElement(ar)
 {
 	assert(ar);
 	assert(staff);
@@ -51,20 +51,22 @@ GRText::GRText(GRStaff * staff, ARText * ar) : GRPTagARNotationElement(ar)
 
 	float curLSPACE = staff->getStaffLSPACE();
 	mPosition.y = staff->getDredgeSize();
-	if( ar->getYPos())
-		mPosition.y -= (ar->getYPos()->getValue(curLSPACE));
+//	if( ar->getYPos())
+//		mPosition.y -= (ar->getYPos()->getValue(curLSPACE));
 	if (ar->getDY())
 		mPosition.y -= ar->getDY()->getValue( curLSPACE );
 
 	const VGFont* hmyfont = FontManager::gFontText;
 	const ARText * myar = getARText();
 	if (myar) {
-		mFontSize = myar->getFSize(curLSPACE);
+//		mFontSize = myar->getFSize(curLSPACE);
+		mFontSize = myar->getFSize() * curLSPACE / LSPACE;
 		if (mFontSize == 0)
 			mFontSize = (int)(1.5f * LSPACE);
 		// we do not want that (do we?)
 		font = new NVstring(myar->getFont());
-		fontAttrib = new NVstring(myar->getFAttrib());
+//		fontAttrib = new NVstring(myar->getFAttrib());
+		fontAttrib = new NVstring(myar->getTextAttributes());
 	}
 
 	if (font && font->length() > 0) {
@@ -75,7 +77,7 @@ GRText::GRText(GRStaff * staff, ARText * ar) : GRPTagARNotationElement(ar)
 	// depending on the textformat ...
 	unsigned int xdir = VGDevice::kAlignLeft;
 	unsigned int ydir = VGDevice::kAlignTop;
-	const char* tf = myar->getTextformat();
+	const char* tf = myar->getTextFormat();
 	if (tf && (strlen(tf) == 2))
 	{
 		switch (tf[0]) {
@@ -113,6 +115,7 @@ GRText::GRText(GRStaff * staff, ARText * ar) : GRPTagARNotationElement(ar)
 //	}
 
 	st->boundingBox.bottom = 4 * LSPACE;
+//	mStaffBottom = staff->getStaffBottom();
 	mStaffBottom = 0;
 }
 
@@ -162,10 +165,12 @@ FloatRect GRText::getTextMetrics(VGDevice & hdc, const GRStaff* staff ) const
 			drawPos.y = 0;
 	}
 
+//cerr << (void*)arText << " GRText::getTextMetrics: ARText params" << endl;
+//cerr << arText->getSupportedTagParameters() ;
 	float dx = 0;
 	float dy = 0;
-	if( arText->getYPos())
-		drawPos.y -= (arText->getYPos()->getValue(curLSPACE));
+//	if( arText->getYPos())
+//		drawPos.y -= (arText->getYPos()->getValue(curLSPACE));
 	if (arText->getDY())
 		dy = -arText->getDY()->getValue( curLSPACE );
 	if (arText->getDX())

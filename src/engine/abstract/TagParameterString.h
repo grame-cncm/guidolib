@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -25,12 +25,13 @@
 class TagParameterString : public TagParameter
 {
 	public:
-					TagParameterString( const char * theString );
+					TagParameterString( const char * theString = 0 );
 					TagParameterString( const std::string& theString );
 					TagParameterString( const TagParameterString & tps );
 
 		virtual 	~TagParameterString();
 		
+		virtual void print(std::ostream& out);
 		virtual void set( const TagParameterString & in );
 
 		virtual void setValue(const char * p)		{ fValue = p; }

@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -46,36 +46,3 @@ std::string ARNoteName::b("b");
 std::string ARNoteName::empty("empty");
 
 std::string ARNoteName::unknown("unknown");
-
-ARNoteName::ARNoteName(std::string name) : std::string(name)		{}
-ARNoteName::ARNoteName(const ARNoteName& name) : std::string(name)	{}
-ARNoteName::~ARNoteName()	{}
-
-std::string ARNoteName::getName(std::string name) const
-{
-	if(name==c) return c;
-	else if (name==do_) return do_;
-	else if (name==ut) return ut;
-	else if(name==d) return d;
-	else if (name==re) return re;
-	else if(name==e) return e;
-	else if (name==mi) return mi;
-	else if(name==f) return f;
-	else if (name==fa) return fa;
-	else if(name==g) return g;
-	else if (name==so) return so;
-	else if (name==sol) return sol;
-	else if(name==a) return a;
-	else if (name==la) return la;
-	else if(name==h) return h;
-	else if (name==ti) return ti;
-	else if (name==si) return si;
-    else if(name==b) return b;
-	else if(name==cis) return cis;
-	else if(name==dis) return dis;
-	else if(name==fis) return fis;
-	else if(name==gis) return gis;
-	else if(name==ais) return ais;
-	else if (name == empty) return empty;
-	else { return unknown;} // unknown notename!
-}

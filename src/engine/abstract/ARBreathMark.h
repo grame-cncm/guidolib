@@ -20,18 +20,13 @@
 */
 class ARBreathMark : public ARMTParameter
 {
-public:
-				ARBreathMark();
-	virtual 	~ARBreathMark();
+	public:
+					 ARBreathMark() {}
+		virtual 	~ARBreathMark() {}
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
-
-	virtual void setTagParameterList( TagParameterList & tpl );
-
-protected:
-	static ListOfTPLs ltpls;
+		virtual const char*	getParamsStr() const	{ return ""; };
+		virtual const char*	getTagName() const		{ return "ARBreathMark"; };
+		virtual std::string getGMNName() const		{ return "\\breathMark"; };
 };
 
 #endif

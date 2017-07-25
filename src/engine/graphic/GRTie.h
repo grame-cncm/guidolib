@@ -27,13 +27,12 @@ class GRTie : public GRBowing
 {
 	public:
 	 
-	 			GRTie(GRStaff * grstaff, GRNotationElement * start, 
-	 										GRNotationElement * end = 0);
+	 			GRTie(GRStaff * grstaff, GRNotationElement * start, GRNotationElement * end = 0);
 	 										
 				GRTie(GRStaff * grstaff);
-				GRTie(GRStaff * grstaff, ARTie * abstractRepresentationOfBowing);
+				GRTie(GRStaff * grstaff, const ARTie * abstractRepresentationOfBowing);
 	
-		virtual	~GRTie();
+		virtual	~GRTie() {}
 
 	  	virtual bool IsFull();
 
@@ -43,12 +42,8 @@ class GRTie : public GRBowing
 
 		virtual void updateBow( GRStaff * grstaff );
 
-		virtual void automaticAnchorPoints( GRBowingContext * bowContext, ARBowing * arBow, 
-														GRSystemStartEndStruct * sse );
-														
-		virtual void automaticControlPoints( GRBowingContext * bowContext, 
-										ARBowing * arBow, 
-										GRSystemStartEndStruct * sse );
+		virtual void automaticAnchorPoints( GRBowingContext * bowContext, const ARBowing * arBow, GRSystemStartEndStruct * sse );
+		virtual void automaticControlPoints( GRBowingContext * bowContext, const ARBowing * arBow, GRSystemStartEndStruct * sse );
 
 };
 

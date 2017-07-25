@@ -23,8 +23,8 @@ class ARSegno;
 class GRSegno : public GRJump
 {
 	public:
-						GRSegno( ARSegno * ar );
-		virtual			~GRSegno();
+				 GRSegno( const ARSegno * ar ) : GRJump( ar, false ) {}
+		virtual	~GRSegno() {}
 };
 
 #endif

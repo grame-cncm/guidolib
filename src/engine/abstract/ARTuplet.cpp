@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -17,17 +17,19 @@
 #include "ARTuplet.h"
 #include "ARBase.h"
 #include "FormatStringParser.h"
-
+#include "TagParameterStrings.h"
 #include "TagParameterString.h"
-#include "TagParameterFloat.h"
-#include "TagParameterList.h"
-#include "ListOfStrings.h"
 
-ListOfTPLs ARTuplet::ltpls(1);
+using namespace std;
 
-ARTuplet::ARTuplet() : fTupletFormat(""), fPosition(""), fDy1(0), fDy2(0), fLineThickness(kDefaultThickness),
-    fTextBold(false), fTextSize(1), fDispNote(""), fFormatSet(false), fDy1TagIsSet(false), fDy2TagIsSet(false)
+static const TagParameterMap sARTupletMap (kARTupletParams);
+
+//--------------------------------------------------------------------------
+ARTuplet::ARTuplet() : fTupletFormat(""), fPosition(0), fDy1(0), fDy2(0), fLineThickness(kDefaultThickness),
+    fTextBold(false), fTextSize(1), fDispNote("") /*, fFormatSet(false), fDy1TagIsSet(false), fDy2TagIsSet(false)*/
 {
+	setupTagParameters (sARTupletMap);
+
 	rangesetting = ONLY;
 	setAssociation(ARMusicalTag::RA);
 	
@@ -35,81 +37,29 @@ ARTuplet::ARTuplet() : fTupletFormat(""), fPosition(""), fDy1(0), fDy2(0), fLine
 	fBaseDenominator = 0;	// 0 means: do not display
 	fLeftBrace       = true;
 	fRightBrace      = true;
-	fPositionIsSet	 = false;
 }
 
-void ARTuplet::setTagParameterList(TagParameterList & tpl)
+//--------------------------------------------------------------------------
+void ARTuplet::setTagParameters (const TagParameterMap& params)
 {
-	if (ltpls.GetCount() == 0)
-	{
-		// create a list of string ...
-
-		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(("S,format,,r;S,position,above,o;U,dy1,0,o;U,dy2,0,o;F,lineThickness,0.08,o;S,bold,,o;F,textSize,1,o;S,dispNote,,o"));
-		CreateListOfTPLs(ltpls,lstrs);
+	const TagParameterString* p = getParameter<TagParameterString>(kFormatStr);
+	if (p) {
+		fTupletFormat = p->getValue();
+		parseTupletFormatString();
 	}
+	fPosition = getParameter<TagParameterString>(kPositionStr, true);
+	fDy1 = getParameter<TagParameterFloat>(kDy1Str);
+	fDy2 = getParameter<TagParameterFloat>(kDy2Str);
+	fLineThickness = getParameter<TagParameterFloat>(kLineThicknesStr, true)->getValue();
+	
+	p = getParameter<TagParameterString>(kBoldStr);
+	if (p) fTextBold = p->getBool();
 
-	TagParameterList * rtpl = 0;
-	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
+	const TagParameterFloat* f = getParameter<TagParameterFloat>(kTextSizeStr);
+	if (f) fTextSize = f->getValue();
 
-	if (ret >= 0 && rtpl)
-	{
-		// we found a match!
-		if (ret == 0)
-		{
-			// then, we now the match for  the first ParameterList
-			// w, h, ml, mt, mr, mb
-			GuidoPos pos = rtpl->GetHeadPosition();
-
-			TagParameterString *tps = TagParameterString::cast(rtpl->GetNext(pos));
-			assert(tps);
-
-			if (tps->TagIsSet()) {
-				fTupletFormat = tps->getValue();
-				parseTupletFormatString();
-			}
-
-            tps = TagParameterString::cast(rtpl->GetNext(pos));
-			fPosition = tps->getValue();
-			fPositionIsSet = tps->TagIsSet();
-
-            TagParameterFloat *tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
-            if (tpf->TagIsSet()) {
-				fDy1 = tpf->getValue();
-                fDy1TagIsSet = true;
-			}
-
-			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
-            if (tpf->TagIsSet()) {
-				fDy2 = tpf->getValue();
-                fDy2TagIsSet = true;
-			}
-
-            tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
-            if (tpf->TagIsSet())
-				fLineThickness = tpf->getValue();
-
-            tps = TagParameterString::cast(rtpl->GetNext(pos));
-            if (tps->TagIsSet())
-	            fTextBold = tps->getBool();
-
-            tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
-            if (tpf->TagIsSet())
-				fTextSize = tpf->getValue();
-
-            tps = TagParameterString::cast(rtpl->GetNext(pos));
-            if (tps->TagIsSet())
-				fDispNote = tps->getValue();
-		}
-
-		delete rtpl;
-	}
-	else
-	{
-		// failure
-	}
-
-	tpl.RemoveAll();
+	p = getParameter<TagParameterString>(kDispNoteStr);
+	if (p) fDispNote = p->getValue();
 }
 
 /** \brief Called for auto tuplet.
@@ -121,20 +71,6 @@ void ARTuplet::setupTuplet( ARBase * inBase )
 
 	const int num = baseDur.getNumerator();
 	fBaseNumerator = num;
-
-/* (JB) disabled, don't force the format string of auto tuplets anymore.
-	const int denom = baseDur.getDenominator();
-
-	fBaseDenominator = denom;
-
-	char buffer[32];
-	sprintf( buffer,"-%d:%d", num, denom );
-
-	if( IsPowerOfTwoDenom( inBase->getBaseDuration())) //, 4 ))
-		strcat( buffer, "-");
-
-	setName(buffer);
-*/
 }
 
 /** \brief Parses the format string  of tuplet.
@@ -152,9 +88,6 @@ void ARTuplet::parseTupletFormatString()
 	int  denominator   = 0;
 
 	size_t len = fTupletFormat.length();
-
-	if (len > 0)
-		fFormatSet = true;
 
 	for (size_t pos = 0; pos < len; ++ pos) {
 		const char & c = fTupletFormat[pos];
@@ -180,8 +113,6 @@ void ARTuplet::parseTupletFormatString()
             hasRightBrace = true;
             numerator     = 0;
             denominator   = 0;
-            fFormatSet    = false;
-
             break;
         }
 	}
@@ -193,26 +124,13 @@ void ARTuplet::parseTupletFormatString()
 	fRightBrace      = hasRightBrace;
 }
 
-void ARTuplet::setAuto()		{ fTupletFormat = "-auto-"; }
-
-void ARTuplet::printName(std::ostream& os) const
-{
-    os << "ARTuplet";
-}
-
-void ARTuplet::printGMNName(std::ostream& os) const
-{
-    os << "\\tuplet";
-}
-
-void ARTuplet::printParameters(std::ostream& os) const
-{
-    ARMusicalTag::printParameters(os);
-}
+void ARTuplet::setAuto()								{ fTupletFormat = "-auto-"; }
 
 int ARTuplet::isPositionAbove() const
 {
-	if(fPositionIsSet)
-		return (fPosition == "below" ? -1 : 1);
+	if(fPosition && fPosition->TagIsSet()) {
+		string pos = fPosition->getValue();
+		return (pos == "below" ? -1 : 1);
+	}
 	return 0;
 }

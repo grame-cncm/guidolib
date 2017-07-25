@@ -15,35 +15,36 @@
 */
 
 #include "ARJump.h"
+#include "TimeUnwrap.h"
 
 /** \brief dal segno
 */
 class ARDalSegno : public ARJump
 {
-public:	
-				 ARDalSegno();
-	virtual 	~ARDalSegno();
+	public:	
+					 ARDalSegno() : ARJump ("D.S.") {}
+		virtual 	~ARDalSegno() {}
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-    virtual void printParameters(std::ostream& os) const {};
+		virtual const char*	getTagName() const		{ return "ARDalSegno"; };
+		virtual std::string getGMNName() const		{ return "\\dalSegno"; };
 
-	virtual void browse(TimeUnwrap& mapper) const;
+		virtual void browse(TimeUnwrap& mapper) const
+				{ mapper.AtPos (this, TimeUnwrap::kDalSegno); }
 };
 
 /** \brief dal segno al fine
 */
 class ARDalSegnoAlFine : public ARJump
 {
-public:	
-				 ARDalSegnoAlFine();
-	virtual 	~ARDalSegnoAlFine();
+	public:	
+					 ARDalSegnoAlFine() : ARJump ("D.S. al Fine") {}
+		virtual 	~ARDalSegnoAlFine() {}
 
-	virtual void printName(std::ostream& os) const;
-    virtual void printGMNName(std::ostream& os) const;
-    virtual void printParameters(std::ostream& os) const {};
+		virtual const char*	getTagName() const		{ return "ARDalSegnoAlFine"; };
+		virtual std::string getGMNName() const		{ return "\\dalSegnoAlFine"; };
 
-	virtual void browse(TimeUnwrap& mapper) const;
+		virtual void browse(TimeUnwrap& mapper) const
+				{ mapper.AtPos (this, TimeUnwrap::kDalSegnoAlFine); }
 };
 
 #endif

@@ -14,39 +14,26 @@
 
 */
 
-#include <string>
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
-#include "TagParameterString.h"
 
 /** \brief for different repeat endings
 */
 class ARVolta : public ARMTParameter, public ARPositionTag
 {
-public:	
-				ARVolta();
-	virtual 	~ARVolta();
+	public:	
+					 ARVolta();
+		virtual 	~ARVolta() {}
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual const char*	getParamsStr() const	{ return kARVoltaParams; };
+		virtual const char*	getTagName() const		{ return "ARVolta"; };
+		virtual std::string getGMNName() const		{ return "\\volta"; };
 
-	virtual void browse (TimeUnwrap& mapper) const;
+		virtual void browse (TimeUnwrap& mapper) const;
 
-	virtual void setTagParameterList( TagParameterList & tpl );
-	virtual bool MatchEndTag(const char * s);
-   
-	const char* getPass() const   { return pass   ? pass->getValue() : ""; }
-	const char* getMark() const   { return mark   ? mark->getValue() : ""; }
-	const char* getFormat() const { return format ? format->getValue() : ""; }
-
-protected:
-	static ListOfTPLs ltpls;
-
-private:
-    TagParameterString *pass;   // the pass(es) at which notes are played
-    TagParameterString *mark;   // text to be displayed under the bracket
-    TagParameterString *format; // format string
+		virtual bool MatchEndTag(const char * s);
+  		const char* getMark() const;
+		const char* getFormat() const;
 };
 
 #endif

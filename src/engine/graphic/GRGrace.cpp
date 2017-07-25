@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -17,7 +17,7 @@
 #include "GRStaff.h"
 
 
-GRGrace::GRGrace( GRStaff * stf, ARGrace * argrc )
+GRGrace::GRGrace( GRStaff * stf, const ARGrace * argrc )
 					: GRARCompositeNotationElement(argrc),
 						GRPositionTag(argrc->getEndPosition(), argrc )
 {
@@ -29,10 +29,6 @@ GRGrace::GRGrace( GRStaff * stf, ARGrace * argrc )
 	sse->p = (void *) getNewGRSaveStruct();
 
 	mStartEndList.AddTail(sse);
-}
-
-GRGrace::~GRGrace()
-{
 }
 
 void GRGrace::addAssociation(GRNotationElement *p )

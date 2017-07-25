@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -20,19 +20,29 @@
 
 /** \brief not yet documented
 */
-class ARMerge : // public ARMusicalObject,
-	public ARMusicalTag,
-	public ARPositionTag
+class ARMerge : public ARMusicalTag, public ARPositionTag
 {
-public:
-				 ARMerge()  { rangesetting = ONLY; }
-	virtual	    ~ARMerge()	{ }
+	public:
+					 ARMerge()  { rangesetting = ONLY; }
+		virtual	    ~ARMerge()	{ }
 
-	virtual void setError(int i = 1);
+		virtual void setError(int i = 1)
+		{
+			ARMusicalTag::setError(i);
+			if (i!=0)
+			{
+				setAssociation(ARMusicalTag::ER);
+				ARPositionTag * pt = getCorrespondence();
+				if (pt) {
+					ARMusicalTag * armt = dynamic_cast<ARMusicalTag *>(pt);
+					if (armt) armt->setAssociation(ARMusicalTag::EL);
+				}
+			}
+		}
 
-    virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual const char*	getParamsStr() const	{ return ""; };
+		virtual const char*	getTagName() const		{ return "ARMerge"; };
+		virtual std::string getGMNName() const		{ return "\\merge"; };
 };
 
 #endif

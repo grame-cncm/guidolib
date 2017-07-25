@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -12,25 +12,21 @@
 
 */
 
+#include <cassert>
 #include <iostream>
-#include  "kf_ilist.h"	// for GRMultipleGRObject
 
 #include "ARMusicalObject.h"
 #include "ARMusicalTag.h"
 #include "ARVisitor.h"
 
-#include "GObject.h"	// for GRMultipleGRObject template instanciation. 
-#include "GRMultipleGRObject.h"
-
-// Class ARMusicalObject 
 
 ARMusicalObject::ARMusicalObject()
-		: relativeTimePosition(MIN_TIMEPOSITION), fVoiceNum(0), drawGR(true), mGrObject(NULL), fDuration(DURATION_0)
+		: relativeTimePosition(MIN_TIMEPOSITION), fVoiceNum(0), fDrawGR(true), /* mGrObject(NULL),*/ fDuration(DURATION_0)
 {
 }
 
 ARMusicalObject::ARMusicalObject(const TYPE_TIMEPOSITION & relativeTimeposition)
-		: relativeTimePosition(relativeTimeposition), fVoiceNum(0), drawGR(true), mGrObject(NULL), fDuration(DURATION_0)
+		: relativeTimePosition(relativeTimeposition), fVoiceNum(0), fDrawGR(true), /*mGrObject(NULL),*/ fDuration(DURATION_0)
 {
 	assert(relativeTimePosition >= MIN_TIMEPOSITION);
 }
@@ -43,17 +39,7 @@ ARMusicalObject::ARMusicalObject(const ARMusicalObject & armo)
 	assert(fDuration >= DURATION_0);
 
 	fVoiceNum = 0;
-
-	assert(armo.mGrObject == NULL);
-	mGrObject = NULL;
-	drawGR = armo.drawGR;
-}
-
-
-ARMusicalObject::~ARMusicalObject()
-{
-	delete (GRMultipleGRObject *) mGrObject; // not very nice.
-	mGrObject = 0;
+	fDrawGR = armo.fDrawGR;
 }
 
 
@@ -87,67 +73,11 @@ std::ostream & operator<<(std::ostream& os, const ARMusicalObject* o)
 	return os;
 }
 
-// provides a GUIDO/SALIERI-Conform output of the current object
-//std::ostream & ARMusicalObject::operator<< (std::ostream & ostream) const
-//{
-//	const ARMusicalTag * mt = dynamic_cast<const ARMusicalTag *>(this);
-//	if (mt)
-//	{
-//		return mt->operator <<(ostream);
-//	}
-//	return ostream;
-//}
-
 void ARMusicalObject::setRelativeTimePosition(const TYPE_TIMEPOSITION & newRelativeTimePosition)
 {
 	assert(newRelativeTimePosition>=DURATION_0);
 	relativeTimePosition = newRelativeTimePosition;
 }
-
-void ARMusicalObject::addGRRepresentation(GObject * p_grep)
-{
-	// add something to the grafical representation
-	if (mGrObject == 0)
-		mGrObject = new GRMultipleGRObject;
-
-	((GRMultipleGRObject *) mGrObject)->AddTail(p_grep);
-}
-
-void ARMusicalObject::resetGRRepresentation()
-{
-	delete (GRMultipleGRObject *) mGrObject;
-	mGrObject = 0;
-}
-
-GObject * ARMusicalObject::getFirstGRRepresentation()
-{
-	if (!mGrObject) return 0;
-
-	return ((GRMultipleGRObject * ) mGrObject)->GetHead();
-}
-
-GObject * ARMusicalObject::getLastGRRepresentation()
-{
-	if (!mGrObject) return 0;
-
-	return ((GRMultipleGRObject * ) mGrObject)->GetTail();
-
-}
-
-// void ARMusicalObject::setExport(int p_export)
-//{
-//	export = p_export;
-//}
-
-/** \brief Detaches a GR object from this AR object.
-*/
-void ARMusicalObject::removeGRRepresentation(GObject * p_grep)
-{
-	if (mGrObject == NULL) return;
-	
-	((GRMultipleGRObject *) mGrObject)->RemoveElement(p_grep);
-}
-
 
 /** \brief Determines wether the given fraction
 	has a power of two in the denominator.

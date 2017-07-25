@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,6 +14,7 @@
   research@grame.fr
 
 */
+
 #include "ARMTParameter.h"
 
 /** \brief not yet documented
@@ -21,22 +22,14 @@
 
 class ARNewSystem : public ARMTParameter
 {
-public:
-    ARNewSystem() {}
+	public:
+				 ARNewSystem() {}
+		virtual ~ARNewSystem() {}
 
-    virtual ~ARNewSystem() {}
+		virtual const char*	getTagName() const		{ return "ARNewSystem"; };
+		virtual std::string getGMNName() const		{ return "\\newSystem"; };
 
-    virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-    virtual void printParameters(std::ostream& os) const;
-
-    virtual void setTagParameterList(TagParameterList & tpl);
-
-    /**** Function to avoid dynamic_cast ****/
-    ARMusicalObject *isARNewSystem() { return this; }
-    /*****************************************/
-protected:
-    static ListOfTPLs ltpls;
+		ARMusicalObject *isARNewSystem()			{ return this; }
 };
 
 

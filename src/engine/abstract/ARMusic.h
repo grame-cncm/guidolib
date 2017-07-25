@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -31,9 +31,8 @@ extern ARMusic * gCurArMusic;
 class ARMusic : public MusicalVoiceList, public ARMusicalEvent 
 {
   public:
-
-      					ARMusic();
-     virtual 			~ARMusic();
+					 ARMusic();
+     virtual 		~ARMusic();
 
 	  		void 	MarkVoice(int voicenum,int fromnum, int fromdenom, int lengthnum, int lengthdenom, unsigned char red, unsigned char green, unsigned char blue);
 	 		void 	MarkVoice(int voicenum, float from, float length, unsigned char red, unsigned char green, unsigned char blue);
@@ -44,7 +43,7 @@ class ARMusic : public MusicalVoiceList, public ARMusicalEvent
       		void 	adjustDuration(TYPE_DURATION newDuration);
 
     virtual void	accept(ARVisitor& visitor);
-	virtual void 	resetGRRepresentation();
+//	virtual void 	resetGRRepresentation();
 	virtual void	getTimeMap (TimeMapCollector& f) const;
 			bool	getMeterAt (int voicenum, const GuidoDate &date, GuidoMeter& meter);
 			void 	removeAutoTags();

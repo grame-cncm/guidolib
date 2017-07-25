@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -13,58 +13,21 @@
 */
 
 #include <iostream>
+
 #include "ARCue.h"
+#include "TagParameterStrings.h"
 #include "TagParameterString.h"
-#include "TagParameterList.h"
-#include "ListOfStrings.h"
 
-ListOfTPLs ARCue::fTagParametersList(1);
+static const TagParameterMap sARCueMap (kARCueParams);
 
-ARCue::ARCue() : name (0)		{ rangesetting = ONLY; }
-ARCue::~ARCue()					{ delete name; }
-
-void ARCue::setTagParameterList(TagParameterList& tpl)
+ARCue::ARCue()
 {
-	if (fTagParametersList.GetCount() == 0)
-	{
-		// create a list of string ...
-		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail("S,name,,o");
-		CreateListOfTPLs(fTagParametersList,lstrs);
-	}
-
-	TagParameterList * rtpl = NULL;
-	int ret = MatchListOfTPLsWithTPL(fTagParametersList, tpl, &rtpl);
-	if (ret>=0 && rtpl)
-	{
-		// we found a match!
-		if (ret == 0) {
-			delete name;
-			name = TagParameterString::cast(rtpl->RemoveHead());
-		}
-		delete rtpl;
-	}
-	else
-	{
-		// failure
-	}
-	tpl.RemoveAll();
+	setupTagParameters (sARCueMap);
+	rangesetting = ONLY;
 }
 
-void ARCue::printName(std::ostream& os) const
+const TagParameterString * ARCue::getName() const
 {
-    os << "ARCue";
+	return getParameter<TagParameterString>(kNameStr, true);
 }
 
-void ARCue::printGMNName(std::ostream& os) const
-{
-    os << "\\cue";
-}
-
-void ARCue::printParameters(std::ostream& os) const
-{
-    if (name)
-        os << "name: \"" << name->getValue() << "\"; ";
-
-    ARMusicalTag::printParameters(os);
-}

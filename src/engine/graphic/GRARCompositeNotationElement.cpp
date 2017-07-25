@@ -16,18 +16,10 @@
 #include "NEPointerList.h"
 
 // ----------------------------------------------------------------------------
-GRARCompositeNotationElement::GRARCompositeNotationElement( ARMusicalObject * ar, bool ownsAR )
+GRARCompositeNotationElement::GRARCompositeNotationElement( const ARMusicalObject * ar, bool ownsAR )
 		: GRARNotationElement( ar ,ownsAR ),
 		mCompositeElements( 1 ) // owns elements. Was: new NEPointerList(1))
 {
-}
-
-// ----------------------------------------------------------------------------
-GRARCompositeNotationElement::~GRARCompositeNotationElement()
-{
-// not needed:	mCompositeElements.RemoveAll();
-	// delete mCompositeElements;
-	// mCompositeElements = 0;
 }
 
 // ----------------------------------------------------------------------------

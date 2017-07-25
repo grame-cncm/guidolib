@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -19,29 +19,20 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "ARMTParameter.h"
-// #include "ARMusicalObject.h"
 
 /** \brief not yet documented
 */
-class ARDrRenz :
-	// public ARMusicalObject,
-	public ARMTParameter
+class ARDrRenz : public ARMTParameter
 {
-public:
-	         ARDrRenz(int p_inv = 0);
-	virtual ~ARDrRenz();
+	public:
+				 ARDrRenz();
+		virtual ~ARDrRenz() {}
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual const char*	getParamsStr() const	{ return kARDrRenzParams; };
+		virtual const char*	getTagName() const		{ return "ARDrRenz"; };
+		virtual std::string getGMNName() const		{ return "\\DrRenz"; };
 
-	virtual void setTagParameterList(TagParameterList & tpl);
-
-	int getInverse() const { return inverse; }
-
-protected:
-	static ListOfTPLs ltpls;
-	int inverse;
+		int getInverse() const;
 };
 
 #endif

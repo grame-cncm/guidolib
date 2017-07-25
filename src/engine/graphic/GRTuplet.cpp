@@ -42,7 +42,7 @@
 using namespace std;
 
 // ----------------------------------------------------------------------------
-GRTuplet::GRTuplet ( GRStaff * inStaff, ARTuplet * artuplet )
+GRTuplet::GRTuplet ( GRStaff * inStaff, const ARTuplet * artuplet )
 				   : GRPTagARNotationElement(artuplet)
 {
 	assert(artuplet);
@@ -57,8 +57,10 @@ GRTuplet::GRTuplet ( GRStaff * inStaff, ARTuplet * artuplet )
 
 	mStartEndList.AddTail(sse);
 	mDirection = dirUP;
-	mShowLeftBrace = false;
-	mShowRightBrace = false;
+	mShowLeftBrace  = artuplet->getLeftBrace();
+	mShowRightBrace = artuplet->getRightBrace();
+//	mShowLeftBrace = false;
+//	mShowRightBrace = false;
 	mDirection = (artuplet->isPositionAbove() < 0) ? dirDOWN : dirUP;
 
 	const int numerator = artuplet->getNumerator();
@@ -81,7 +83,7 @@ GRTuplet::~GRTuplet()
 }
 
 // ----------------------------------------------------------------------------
-const ARTuplet * GRTuplet::getARTuplet() const	{ return static_cast<ARTuplet *>(mAbstractRepresentation); }
+const ARTuplet * GRTuplet::getARTuplet() const	{ return static_cast<const ARTuplet *>(mAbstractRepresentation); }
 
 // ----------------------------------------------------------------------------
 void GRTuplet::tellPosition(GObject * caller, const NVPoint & inPos )

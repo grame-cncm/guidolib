@@ -1,0 +1,6 @@
+[
+ \slur<curve="up">(a b c)
+ \slur<curve="down",dy=-1>(a b c)
+ \slur<dx1=0hs, dy1=-3, dy2=-2hs, r3=0.3, h=-6hs>(a b c)
+ \slur<dx1=2hs, dy1=3, dy2=2hs, r3=0.6, h=7hs>(a b c)
+]

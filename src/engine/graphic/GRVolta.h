@@ -28,7 +28,7 @@ class GRVolta : public GRPTagARNotationElement
 	public:
         enum { kDefault, kRightOpened, kLeftOpened, kOpened };
 
-						GRVolta( GRStaff * pstaff, ARVolta * ar );
+						GRVolta( GRStaff * pstaff, const ARVolta * ar );
 		virtual			~GRVolta();
 		
 		virtual void	OnDraw( VGDevice & hdc ) const;

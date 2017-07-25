@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -30,8 +30,8 @@ class GRBar : public GRTagARNotationElement
 	public:
 		typedef std::vector<std::pair<float, float> >	TRanges;
 	
-		GRBar( ARBar * p_arbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float propRender);
-		GRBar( ARBar * p_arbar, GRSystem * p_grsystem, GRStaff * inStaff, const TYPE_TIMEPOSITION &  inTimePos, float propRender);
+		GRBar( const ARBar * p_arbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float propRender);
+		GRBar( const ARBar * p_arbar, GRSystem * p_grsystem, GRStaff * inStaff, const TYPE_TIMEPOSITION &  inTimePos, float propRender);
 
 		virtual ~GRBar();
 
@@ -50,12 +50,13 @@ class GRBar : public GRTagARNotationElement
 		virtual void DrawWithGlyphs( VGDevice & hdc ) const;
 		virtual void DrawWithLines( VGDevice & hdc ) const;
 		virtual void GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const;
-		virtual bool checkCollisionWith() const	{ return true; }
+		virtual bool checkCollisionWith() const				{ return true; }
 		virtual void accept (GRVisitor& visitor);
+		virtual const GRBar * isGRBar() const				{ return this; }
 	
 		virtual const NVPoint & getReferencePosition() const { return sRefPos; }
 		
-		ARBar * getARBar() const;
+		const ARBar *		 getARBar() const;
 		const ARBar::TRanges getRanges() const				{ return getARBar()->getRanges(); }
 		void				 setRanges(const TRanges& r)	{ fRanges = r; }
 

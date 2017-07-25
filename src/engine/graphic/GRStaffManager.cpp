@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -341,6 +341,7 @@ int GRStaffManager::initVoices(int cnt)
 		// This call initializes the GRVoiceManager
 		// ATTENTION: realise the significance of STAFF-Tags at the very start!
 		voiceManager->BeginManageVoice();
+		voice->doAutoCluster();
 	}
 	return cnt;
 }
@@ -599,7 +600,7 @@ int GRStaffManager::getNewLinePage() const
 	
 	return false on error (i.e: input tag was not a staff-state tag)
 */
-bool GRStaffManager::setStaffStateTag( ARMusicalTag * tag, int staffnum )
+bool GRStaffManager::setStaffStateTag( const ARMusicalTag * tag, int staffnum )
 {
 	if (tag == 0) return false;
 
@@ -613,7 +614,7 @@ bool GRStaffManager::setStaffStateTag( ARMusicalTag * tag, int staffnum )
 
 	if (ti == typeid(ARClef))	// we should consider using a dynamic cast only
 	{
-		ARClef * tmp = static_cast<ARClef *>(tag);
+		const ARClef * tmp = static_cast<const ARClef *>(tag);
 		needupdate = true;
 		// now check, wether the curclef is already set for the same timeposition and with different parameters.
 		if (mystate.curclef) {
@@ -623,11 +624,11 @@ bool GRStaffManager::setStaffStateTag( ARMusicalTag * tag, int staffnum )
 		mystate.curclef = tmp;
 	}
 	else if (ti == typeid(ARMeter)) {
-		mystate.curmeter = static_cast<ARMeter *>(tag); // was dynamic cast<ARMeter *>(tag);
+		mystate.curmeter = static_cast<const ARMeter *>(tag); // was dynamic cast<ARMeter *>(tag);
 	}
 	else if (ti == typeid(ARKey)) {
 		needupdate = true;
-		mystate.curkey = static_cast<ARKey *>(tag); // was dynamic cast<ARKey *>(tag);
+		mystate.curkey = static_cast<const ARKey *>(tag); // was dynamic cast<ARKey *>(tag);
 	}
 	else result = false;		// was not a staff-state tag.
 
@@ -1030,7 +1031,7 @@ int GRStaffManager::FinishSyncSlice(const TYPE_TIMEPOSITION & tp)
 			{
 				VoiceEvent * ve = evlist.GetNext(pos);
 				GREvent * grev = ve->ev;
-				ARMusicalEvent * arev = /*dynamic*/static_cast<ARMusicalEvent *>(grev->getAbstractRepresentation());				
+				const ARMusicalEvent * arev = /*dynamic*/static_cast<const ARMusicalEvent *>(grev->getAbstractRepresentation());
 				if (arev->getDuration() < dur)
 					dur = arev->getDuration();
 				spr->addElement(grev,ve->vce);
@@ -1766,14 +1767,14 @@ void GRStaffManager::NewPage( GRPage * newpage )
 
 /** \brief Sets the pageformat for a newPage
 */
-void GRStaffManager::setPageFormat( ARPageFormat * pform )
+void GRStaffManager::setPageFormat( const ARPageFormat * pform )
 {
 	mGrPage->setPageFormat(pform);
 }
 
 /** \brief Sets the systemFormat or a newSystem 
 */
-void GRStaffManager::setSystemFormat(ARSystemFormat * sysfrm)
+void GRStaffManager::setSystemFormat( const ARSystemFormat * sysfrm)
 {
 	// we have to set the system-Format
 	// I need to save this in a variable and remember this setting later ....
@@ -2313,7 +2314,7 @@ void GRStaffManager::setSystemDistance( float distance,
 /** \brief Sets the bar-format -> it determines, how barlines
 	are drawn (depending on the style)
 */
-void GRStaffManager::setBarFormat(ARBarFormat * barfrmt, GRStaff * curstaff)
+void GRStaffManager::setBarFormat(const ARBarFormat * barfrmt, GRStaff * curstaff)
 {
 	// the staffManager (actually mGrSystem) nows about 
 	// accolades and stuff
@@ -2325,7 +2326,7 @@ void GRStaffManager::setBarFormat(ARBarFormat * barfrmt, GRStaff * curstaff)
 	curstaff->setBarFormat(barfrmt);
 }
 
-void GRStaffManager::setAutoTag(ARAuto * p_arauto)
+void GRStaffManager::setAutoTag( const ARAuto * p_arauto)
 {
 	mArAuto = p_arauto;
 }
@@ -2361,9 +2362,9 @@ GRGlobalStem * GRStaffManager::getOtherGlobalStem(GRSystemSlice * psys,
 				{
 					const ARMusicalVoiceState * vstate = vcmgr->getVoiceState();
 					const ARMusicalVoiceState * cvstate = curvcmgr->getVoiceState();
-					if (vstate->fCurdispdur && cvstate->fCurdispdur)
+					if (vstate->curDispDur() && cvstate->curDispDur())
 					{
-						if (vstate->fCurdispdur->getDisplayDuration() == cvstate->fCurdispdur->getDisplayDuration())
+						if (vstate->curDispDur()->getDisplayDuration() == cvstate->curDispDur()->getDisplayDuration())
 							return vcmgr->curglobalstem;
 					}
 					else
@@ -3034,7 +3035,7 @@ traceslice(cout << "GRStaffManager::FindOptimumBreaks  =>  CreateBeginSlice" << 
 		
 		if( ! mCurAccoladeTag.empty() )	
 		{
-			for(std::vector<ARAccolade *>::const_iterator it = mCurAccoladeTag.begin(); it < mCurAccoladeTag.end(); it++)
+			for(std::vector<const ARAccolade *>::const_iterator it = mCurAccoladeTag.begin(); it < mCurAccoladeTag.end(); it++)
 			{
 				mGrSystem->notifyAccoladeTag( *it );	
 			}
@@ -3069,7 +3070,7 @@ traceslice(cout << ">>>> GRStaffManager::FindOptimumBreaks  =>  end pos loop" <<
 		
 		if( ! mCurAccoladeTag.empty() )	
 		{
-			for(std::vector<ARAccolade *>::const_iterator it = mCurAccoladeTag.begin(); it < mCurAccoladeTag.end(); it++)
+			for(std::vector<const ARAccolade *>::const_iterator it = mCurAccoladeTag.begin(); it < mCurAccoladeTag.end(); it++)
 			{
 				mGrSystem->notifyAccoladeTag( *it );	
 			}
@@ -3438,8 +3439,7 @@ void GRStaffManager::ResumeOpenTags( const GRSystemSlice * lastslice, GRSystemSl
 
 // ----------------------------------------------------------------------------
 // (JB) Each system should have a list of accolade tags.
-void	
-GRStaffManager::notifyAccoladeTag( ARAccolade * inAccoladeTag )
+void GRStaffManager::notifyAccoladeTag( const ARAccolade * inAccoladeTag )
 {
 	//	if( mGrSystem )
 	//		mGrSystem->notifyAccoladeTag( inAccoladeTag );

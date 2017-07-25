@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -19,9 +19,9 @@
 #include "GREvent.h"
 
 
-GRRange::GRRange(GRStaff * pstaff,ARMusicalTag * mtag)
+GRRange::GRRange(GRStaff * pstaff, const ARMusicalTag * mtag)
 		: GRARNotationElement(mtag),
-		GRPositionTag(dynamic_cast<ARPositionTag *>(mtag)->getEndPosition(), mtag) //, tinfo(typeid(*mtag))
+		GRPositionTag(dynamic_cast<const ARPositionTag *>(mtag)->getEndPosition(), mtag) //, tinfo(typeid(*mtag))
 {
 	assert(pstaff);
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
@@ -32,16 +32,6 @@ GRRange::GRRange(GRStaff * pstaff,ARMusicalTag * mtag)
 
 	mStartEndList.AddTail(sse);
 }
-
-GRRange::~GRRange()
-{
-		// associated is handled in
-		// GRNotationElement ...
-	//	if (associated)
-	//		delete associated;
-	//	associated = NULL;
-}
-
 
 // -----------------------------------------------------------------------------
 void GRRange::accept (GRVisitor& visitor)
@@ -59,7 +49,7 @@ void GRRange::addAssociation(GRNotationElement * el)
 	// depending on the type...
 	if (grev)
 	{
-		grev->addArticulation( /*dynamic*/ static_cast<ARMusicalTag *>(mAbstractRepresentation));
+		grev->addArticulation( /*dynamic*/ static_cast<const ARMusicalTag *>(mAbstractRepresentation));
 	}
 }
 

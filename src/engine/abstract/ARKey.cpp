@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -13,47 +13,44 @@
 */
 
 #include <iostream>
-#include <string.h>
-#include <ctype.h>
 
 #include "ARKey.h"
+#include "TagParameterStrings.h"
 #include "TagParameterString.h"
 #include "TagParameterInt.h"
-#include "ListOfStrings.h"
-#include "TagParameterList.h"
 
 using namespace std;
 
 int gd_noteName2pc(const char *name);
 
 
-ListOfTPLs ARKey::ltpls(1);
+static const TagParameterMap sARKeyMap (kARKeyParams);
 
 ARKey::ARKey(const TYPE_TIMEPOSITION & timeposition)
-	: ARMTParameter(timeposition), mIsFree(false), fHideAutoNaturalsSet(false)
+	: ARMTParameter(timeposition), fIsFree(false), fHideAutoNaturalsSet(false)
 {
-	fKeyNumber = 0;
-	memset(fOctarray,0,NUMNOTES*(sizeof(int))); // octarray auf 0 setzen;
+	init();
 }
 
 
-ARKey::ARKey(int p_keynumber) : mIsFree(false), fHideAutoNaturalsSet(false)
+ARKey::ARKey(int p_keynumber) : fIsFree(false), fHideAutoNaturalsSet(false)
 {
+	init();
 	fKeyNumber = p_keynumber;
-    fHideAutoNaturals = false;
-	memset(fOctarray,0,NUMNOTES*(sizeof(int))); // octarray auf 0 setzen;
+	STagParameterPtr p (new TagParameterInt (fKeyNumber));
+	addTagParameter(p);
 }
 
-ARKey::ARKey() : mIsFree(false), fHideAutoNaturalsSet(false)
+ARKey::ARKey() : fIsFree(false), fHideAutoNaturalsSet(false)
 {
-	fKeyNumber = 0; // no accidentals
-    fHideAutoNaturals = false;
-	memset(fOctarray,0,NUMNOTES*(sizeof(int))); // octarray auf 0 setzen;
+	init();
 }
 
 ARKey::ARKey(const ARKey & key)
 {
-	mIsFree = key.mIsFree;
+	init();
+	
+	fIsFree = key.fIsFree;
 	fKeyNumber = key.fKeyNumber;
     fHideAutoNaturals = key.fHideAutoNaturals;
 	fHideAutoNaturalsSet = key.fHideAutoNaturalsSet;
@@ -63,13 +60,22 @@ ARKey::ARKey(const ARKey & key)
 
 }
 
+void ARKey::init()
+{
+	setupTagParameters (sARKeyMap);
+	fKeyNumber = 0;
+    fHideAutoNaturals = false;
+	memset(fOctarray,0,NUMNOTES*(sizeof(int))); // octarray auf 0 setzen;
+}
+
+
 bool ARKey::operator ==(const ARKey & k) const
 {
-	if (mIsFree != k.mIsFree)		return false;
+	if (fIsFree != k.fIsFree)		return false;
 	if (fKeyNumber != k.fKeyNumber)	return false;
 	for (int i =0;i<NUMNOTES;i++)
 	{
-		if (fAccarray[i] != k.fAccarray[i])			return false;
+		if (fAccarray[i] != k.fAccarray[i])		return false;
 		if (fOctarray[i] != k.fOctarray[i])		return false;
 	}
 
@@ -78,94 +84,64 @@ bool ARKey::operator ==(const ARKey & k) const
 	
 }
 
-void ARKey::setTagParameterList(TagParameterList & tpl)
+void ARKey::setTagParameters (const TagParameterMap& params)
 {
-	if (ltpls.GetCount() == 0)
-	{
-		// create a list of string ...
-		ListOfStrings lstrs; // (1); std::vector test impl
-
-		// either a key-string ("G") or a key-number key=3
-		lstrs.AddTail(( "S,key,,r;S,hideNaturals,false,o"));
-		lstrs.AddTail(( "I,key,,r;S,hideNaturals,false,o"));
-		CreateListOfTPLs(ltpls,lstrs);
+	const TagParameterString* p = getParameter<TagParameterString>(kKeyStr);
+	if (p) {
+		name2KeyNum (p->getValue());
 	}
-
-	TagParameterList * rtpl = 0;
-	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
-
-	if( ret >= 0 && rtpl )
-	{
-        GuidoPos pos = rtpl->GetHeadPosition();
-		// we found a match!
-		if (ret == 0)
-		{
-			// then, we now the match for the first ParameterList
-			TagParameterString * tps = TagParameterString::cast(rtpl->GetNext(pos));
-			assert(tps);
-
-			NVstring name = tps->getValue();
-			// ist free-Tag gesetzt?
-			if (name.substr(0, 5) == "free=" ) {
-				mIsFree = true;
-				newgetKeyArray (name.substr(5, name.length()-5));
-			}
-			else {
-                if (name.size() == 0)
-                    name = "C"; // C by default
-
-				mIsFree = false;
-				int t = (int)name[0];
-				int major = (t == toupper(t));
-
-				t = toupper(t);				
-				switch (t) 
-				{
-					case 'F': 	fKeyNumber = -1;	break;
-					case 'C': 	fKeyNumber = 0;	break;
-					case 'G': 	fKeyNumber = 1;	break;
-					case 'D': 	fKeyNumber = 2;	break;
-					case 'A': 	fKeyNumber = 3;	break;
-					case 'E': 	fKeyNumber = 4;	break;
-					case 'H':
-					case 'B':	fKeyNumber = 5;	break;
-					default:
-                        major = true;
-                        fKeyNumber = 0;
-				}
-				
-				if (!major)				fKeyNumber -= 3;		// minus 3 accidentals  (A-Major ->  a-minor ...)				
-				if (name.length() > 1)
-				{
-					t = name[1];
-					if (t == '#')		fKeyNumber += 7;
-					else if (t == '&')	fKeyNumber -= 7;
-				}
-			}
-            // FIXME: should tps be deleted?
-		}
-		else if (ret == 1)
-		{
-			// then, we now the match for the first ParameterList
-			// w, h, ml, mt, mr, mb
-			TagParameterInt * tpi = TagParameterInt::cast(rtpl->GetNext(pos));
-			assert(tpi);
-			fKeyNumber = tpi->getValue();
-		}
-        if( pos ){
-            TagParameterString *tps = TagParameterString::cast(rtpl->GetNext(pos));
-            if( tps && tps->TagIsSet()){
-				fHideAutoNaturalsSet = true;
-                fHideAutoNaturals = tps->getBool();
-            }
-        }
-		delete rtpl;
+	else {
+		const TagParameterInt* p = getParameter<TagParameterInt>(kKeyStr);
+		if (p) fKeyNumber = p->getValue();
 	}
-	tpl.RemoveAll();
+    p = getParameter<TagParameterString>(kHideNaturalsStr);
+	if (p){
+		fHideAutoNaturalsSet = true;
+		fHideAutoNaturals = p->getBool();
+	}
 }
 
+void ARKey::name2KeyNum (string name)
+{
+	if (name.substr(0, 5) == "free=" ) {
+		fIsFree = true;
+		getFreeKeyArray (name.substr(5, name.length()-5));
+	}
+	else {
+		if (name.size() == 0)
+			name = "C"; // C by default
 
-float ARKey::getAccidental (const char*& ptr) const
+		fIsFree = false;
+		int t = (int)name[0];
+		int major = (t == toupper(t));
+
+		t = toupper(t);				
+		switch (t) 
+		{
+			case 'F': 	fKeyNumber = -1;	break;
+			case 'C': 	fKeyNumber = 0;	break;
+			case 'G': 	fKeyNumber = 1;	break;
+			case 'D': 	fKeyNumber = 2;	break;
+			case 'A': 	fKeyNumber = 3;	break;
+			case 'E': 	fKeyNumber = 4;	break;
+			case 'H':
+			case 'B':	fKeyNumber = 5;	break;
+			default:
+				major = true;
+				fKeyNumber = 0;
+		}
+		
+		if (!major)				fKeyNumber -= 3;		// minus 3 accidentals  (A-Major ->  a-minor ...)				
+		if (name.length() > 1)
+		{
+			t = name[1];
+			if (t == '#')		fKeyNumber += 7;
+			else if (t == '&')	fKeyNumber -= 7;
+		}
+	}
+}
+
+float ARKey::getAccidental (const char*& ptr)
 {
 	float accidental = 0.f;
 	if (*ptr == '[') {
@@ -186,7 +162,7 @@ float ARKey::getAccidental (const char*& ptr) const
 	return accidental;
 }
 
-int ARKey::getNote (const char*& ptr) const
+int ARKey::getNote (const char*& ptr)
 {
 	string notename;
 	while ((*ptr==' ') || (*ptr=='	')) ptr++;
@@ -211,7 +187,7 @@ bool ARKey::getOctave (const char*& ptr, int& oct) const
 	return false;
 }
 
-void ARKey::newgetKeyArray(const std::string& inString)
+void ARKey::getFreeKeyArray(const std::string& inString)
 {
 	int loop=0;
 	const char* ptr = inString.c_str();
@@ -343,12 +319,3 @@ void ARKey::getOctArray(int * OctArray) const
 	for (int i=0;i<NUMNOTES;i++) OctArray[i]=fOctarray[i];
 }
 
-bool ARKey::IsStateTag() const						{ return true; }
-void ARKey::printName(std::ostream& os) const		{ os << "ARKey"; }
-void ARKey::printGMNName(std::ostream& os) const	{ os << "\\key"; }
-
-void ARKey::printParameters(std::ostream& os) const
-{
-	os << "key: " << fKeyNumber << "; ";
-    ARMusicalTag::printParameters(os);
-}

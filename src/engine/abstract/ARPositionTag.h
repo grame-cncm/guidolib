@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -15,31 +15,19 @@
 
 */
 
-#include "PrintVisitor.h"
-#include "ARVisitable.h"
 #include "GUIDOTypes.h"	// For GuidoPos
 
-#define oldv 0
 
 class ARMusicalObject;
 
 /** \brief The base class for all range tags.
 */
 
-class ARPositionTag : public ARVisitable
+class ARPositionTag
 {
 	public:
-		ARPositionTag() : pos(0), ep(0), mPositionTag(0)
-		{
-#if !oldv
-			mParentCorrespondence=0;
-#endif
-		}
-
-#if oldv
-		virtual ~ARPositionTag()  { }
-#else
-		virtual ~ARPositionTag()  
+				 ARPositionTag() : pos(0), ep(0), mPositionTag(0) { mParentCorrespondence=0; }
+		virtual ~ARPositionTag()
 		{
 			if(mPositionTag) {
 				mPositionTag->setParentCorrespondence(0);
@@ -50,9 +38,8 @@ class ARPositionTag : public ARVisitable
 				mParentCorrespondence = 0;
 			}
 		}
-#endif
-		virtual ARMusicalObject * Copy() const			{ return 0; }
 
+		virtual ARMusicalObject * Copy() const			{ return 0; }
 		virtual void setPosition(GuidoPos p_pos)		{ pos = p_pos ;  }
 		virtual GuidoPos getPosition() const			{ return pos; }
 		virtual GuidoPos getStartPosition() const		{ return pos; }
@@ -79,49 +66,27 @@ class ARPositionTag : public ARVisitable
 		virtual void setCorrespondence(ARPositionTag *p_cor)
 		{
 			mPositionTag = p_cor;
-//			p_cor->mPositionTag = this;
-#if !oldv
 			if(mPositionTag) {
 				mPositionTag->setParentCorrespondence(this);
 			}
-#endif
 		}
 
-		virtual ARPositionTag * getCorrespondence()					{ return mPositionTag; }
-
-#if !oldv
+		virtual ARPositionTag * getCorrespondence()	const			{ return mPositionTag; }
 		virtual void setParentCorrespondence(ARPositionTag *parent)	{ mParentCorrespondence = parent; }
-#endif
 		virtual bool	isEndTagClass() const						{ return false; }
 
-        virtual void	print(std::ostream & os) const
-						{ printName(os); os << ": "; printParameters(os); }
-		virtual void	printGMNName(std::ostream & os)    const = 0;
-		virtual void	printName(std::ostream & os)       const = 0;
-		virtual void	printParameters(std::ostream & os) const = 0;
-
-        /**** Functions to avoid dynamic_cast ****/
         virtual ARMusicalObject *isARDisplayDuration() { return NULL; }
         virtual ARMusicalObject *isARChordTag()        { return NULL; }
         virtual ARMusicalObject *isARGrace()           { return NULL; }
-        virtual ARMusicalObject *isARFeatheredBeam()   { return NULL; }
-        /*****************************************/
+        virtual const ARMusicalObject *isARFeatheredBeam() const    { return NULL; }
 
-		/* Visitor design pattern */
-        virtual void accept(ARVisitor& visitor) { visitor.visitIn(this); visitor.visitOut(this); }
-
-protected:
+	protected:
 		GuidoPos pos;
 		GuidoPos ep;
 
 		ARPositionTag * mPositionTag; // the correspondence.
-#if !oldv
 		ARPositionTag * mParentCorrespondence;
-#endif
 };
-
-inline std::ostream& operator<< (std::ostream& os, const ARPositionTag* e)		{ e->print(os); return os; }
-
 
 #endif
 

@@ -14,108 +14,60 @@
 #include <iostream>
 
 #include "ARCluster.h"
+#include "ARNote.h"
 
-#include "TagParameterList.h"
-#include "TagParameterInt.h"
-#include "TagParameterString.h"
+#include "TagParameterFloat.h"
+#include "TagParameterStrings.h"
 
 using namespace std;
 
-ListOfTPLs ARCluster::ltpls(1);
+static const TagParameterMap sARClusterMap (kARClusterParams);
 
-ARCluster::ARCluster() : ARMTParameter(), hdx(0), hdy(0), noteCount(1),
-    onlyOneNoteInCluster(false)
+ARCluster::ARCluster() : ARMTParameter(), fHdx(0), fHdy(0), fNoteCount(1), fSingleNote(false)
 {
+	setupTagParameters(sARClusterMap);
 	rangesetting = ONLY;
 
-    firstNote = NULL;
-    secondNote = NULL;
+    fFirstNote = NULL;
+    fSecondNote = NULL;
 }
 
 ARCluster::ARCluster(const ARCluster *inCopyCluster) : ARMTParameter(-1, inCopyCluster)
 {
+	setupTagParameters (sARClusterMap);
 	rangesetting = ONLY;
 
     if (inCopyCluster) {
-        hdx = inCopyCluster->getahdx();
-        hdy = inCopyCluster->getahdy();
-        noteCount = inCopyCluster->getNoteCount();
-        onlyOneNoteInCluster = inCopyCluster->getIsThereOnlyOneNoteInCluster();
+		copyParameters(inCopyCluster->getTagParameters());
 
-        firstNote = inCopyCluster->getFirstNote();
-        secondNote = inCopyCluster->getSecondNote();
+        fHdx = inCopyCluster->getahdx();
+        fHdy = inCopyCluster->getahdy();
+        fNoteCount = inCopyCluster->getNoteCount();
+        fSingleNote = inCopyCluster->getIsThereOnlyOneNoteInCluster();
 
+        fFirstNote = inCopyCluster->getFirstNote();
+        fSecondNote = inCopyCluster->getSecondNote();
         setVoiceNum(inCopyCluster->getVoiceNum());
     }
 }
 
-ARCluster::~ARCluster() 
+void ARCluster::setTagParameters (const TagParameterMap& params)
 {
-}
-
-void ARCluster::setTagParameterList(TagParameterList& tpl)
-{
-	if (ltpls.GetCount() == 0) {
-		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail("U,hdx,0hs,o;U,hdy,0hs,o");
-		CreateListOfTPLs(ltpls, lstrs);
-	}
-
-	TagParameterList *rtpl = NULL;
- 	int ret = MatchListOfTPLsWithTPL(ltpls, tpl, &rtpl);
-	if (ret >= 0 && rtpl)
-	{
-		// we found a match!
-		if (ret == 0)
-		{
-            // - dx/dy for cluster head only
-			TagParameterFloat *f = TagParameterFloat::cast(rtpl->RemoveHead());
-			hdx = f->getValue();
-			delete f;
-
-			f = TagParameterFloat::cast(rtpl->RemoveHead());
-			hdy = f->getValue();
-			delete f;
-		}
-
-		delete rtpl;
-	}
-	else
-	{
-		// failure
-	}
-
-	tpl.RemoveAll();
+	const TagParameterFloat *f = getParameter<TagParameterFloat>(kHdxStr, true);
+	if (f) fHdx = f->getValue();
+	f = getParameter<TagParameterFloat>(kHdyStr, true);
+	if (f) fHdy = f->getValue();
 }
 
 void ARCluster::setARNote(ARNote *arNote)
 {
-    if (firstNote == NULL)
-        firstNote = arNote;
-    else if (secondNote == NULL) {
-        secondNote = arNote;
-
-        if (!onlyOneNoteInCluster)
-            noteCount++;
+    if (fFirstNote == NULL)
+        fFirstNote = arNote;
+    else if (fSecondNote == NULL) {
+        fSecondNote = arNote;
+        if (!fSingleNote)
+            fNoteCount++;
     }
-    else
-        noteCount++;
+    else fNoteCount++;
 }
 
-void ARCluster::printName(std::ostream& os) const
-{
-    os << "ARCluster";
-}
-
-void ARCluster::printGMNName(std::ostream& os) const
-{
-    os << "\\cluster";
-}
-
-void ARCluster::printParameters(std::ostream& os) const
-{
-    os << "hdx: " << hdx << "; ";
-    os << "hdy: " << hdy << "; ";
-
-    ARMusicalTag::printParameters(os);
-}

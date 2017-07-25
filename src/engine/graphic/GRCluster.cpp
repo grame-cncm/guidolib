@@ -16,6 +16,7 @@
 #include "GRStaff.h"
 
 #include "ARCluster.h"
+#include "ARNote.h"
 
 #include "VGDevice.h"
 #include "GRTagARNotationElement.h"
@@ -25,7 +26,7 @@
 #include "TagParameterString.h"
 #include "TagParameterFloat.h"
 
-GRCluster::GRCluster(GRStaff * stf, ARCluster * arcls, GRSingleNote *sngNote, ARNoteFormat * curnoteformat) :
+GRCluster::GRCluster(GRStaff * stf, const ARCluster * arcls, GRSingleNote *sngNote, const ARNoteFormat * curnoteformat) :
 						GRARCompositeNotationElement(arcls),
 						GRPositionTag(arcls->getEndPosition(), arcls),
                         fDuration(0),
@@ -232,9 +233,9 @@ void GRCluster::setClusterOrientation(GDirection inStemDir, ARTHead::HEADSTATE i
     fStemDir            = inStemDir;
 }
 
-ARCluster *GRCluster::getARCluster() const
+const ARCluster *GRCluster::getARCluster() const
 {
-	return /*dynamic*/static_cast<ARCluster*>(getAbstractRepresentation());
+	return /*dynamic*/static_cast<const ARCluster*>(getAbstractRepresentation());
 }
 
 void GRCluster::GetMap( GuidoElementSelector sel, MapCollector& f, MapInfos& infos ) const

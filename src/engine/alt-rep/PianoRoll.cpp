@@ -537,14 +537,22 @@ void PianoRoll::DrawVoice(ARMusicalVoice* v, const DrawParams& drawParams)
             DrawMusicalObject(e, date, dur, drawParams);
 		}
 
-        if (dynamic_cast<ARRest *>(e->isARRest()))
+        if (e->isARRest())
 			fChord = false;
-        else if (dynamic_cast<ARChordComma *>(e->isARChordComma()))
+        else if (e->isARChordComma())
 			fChord = true;
-        else if (dynamic_cast<ARNoteFormat *>(e->isARNoteFormat()))
-            handleColor(dynamic_cast<ARNoteFormat *>(e->isARNoteFormat()), drawParams);
-        else if (dynamic_cast<ARBar *>(e->isARBar()) && fMeasureBarsEnabled)
+        else if (e->isARNoteFormat())
+            handleColor(static_cast<const ARNoteFormat *>(e->isARNoteFormat()), drawParams);
+        else if (e->isARBar() && fMeasureBarsEnabled)
             DrawMeasureBar(date, drawParams);
+//        if (dynamic_cast<ARRest *>(e->isARRest()))
+//			fChord = false;
+//        else if (dynamic_cast<const ARChordComma *>(e->isARChordComma()))
+//			fChord = true;
+//        else if (dynamic_cast<ARNoteFormat *>(e->isARNoteFormat()))
+//            handleColor(dynamic_cast<ARNoteFormat *>(e->isARNoteFormat()), drawParams);
+//        else if (dynamic_cast<const ARBar *>(e->isARBar()) && fMeasureBarsEnabled)
+//            DrawMeasureBar(date, drawParams);
 	}
 
 	while (fNoteColor) {		// check for possible color from noteFormat tag
@@ -612,7 +620,7 @@ void PianoRoll::setColor			  (VGDevice* dev, const VGColor& color)	{ dev->PushFi
 void PianoRoll::popColor			  (VGDevice* dev)						{ dev->PopFillColor(); }
 
 //--------------------------------------------------------------------------
-void PianoRoll::handleColor(ARNoteFormat* noteFormat, const DrawParams& drawParams)
+void PianoRoll::handleColor(const ARNoteFormat* noteFormat, const DrawParams& drawParams)
 {
     const TagParameterString   *tps = noteFormat->getColor();
     const TagParameterRGBColor *tpc = noteFormat->getRGBColor();

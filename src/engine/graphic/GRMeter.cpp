@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -23,6 +23,7 @@
 #include "GRStaff.h"
 #include "VGDevice.h"
 #include "VGFont.h"
+#include "TagParameterFloat.h"
 
 #include "GUIDOInternal.h"	// for gGlobalSettings.gDevice
 #include "FontManager.h"
@@ -33,7 +34,7 @@ using namespace std;
 #define GROUPSEVERAL	1		// control several time sign grouping
 
 //-------------------------------------------------------------------------------------
-GRMeter::GRMeter( ARMeter * ar, GRStaff * curstaff, bool p_ownsAR )
+GRMeter::GRMeter( const ARMeter * ar, GRStaff * curstaff, bool p_ownsAR )
   : GRTagARNotationElement(ar, curstaff->getStaffLSPACE(), p_ownsAR),
 	fMeters(ar->getMeters()), fGroupComplex(false)
 {
@@ -44,7 +45,10 @@ GRMeter::GRMeter( ARMeter * ar, GRStaff * curstaff, bool p_ownsAR )
 	sconst = SCONST_METER;
 	fCurLSPACE = curstaff->getStaffLSPACE();
 	fNumericHeight	= fCurLSPACE * 0.85;		// adjust numeric glyph height
-    mTagSize	   *= curstaff->getSizeRatio() * ar->getSize();
+//	const TagParameterFloat* p = ar->getSize();
+//	mTagSize	   *= curstaff->getSizeRatio() * ar->getSize();
+//	mTagSize	   *= curstaff->getSizeRatio() * (p ? p->getValue() : 1.f);
+	mTagSize	   *= curstaff->getSizeRatio();
     mIsInHeader		= ar->isInHeader();
 	fGroupComplex	= ar->groupComplex();
 	fType			= getARMeter()->getMeterType();
@@ -339,6 +343,5 @@ void GRMeter::OnDraw(VGDevice & hdc) const
 }
 
 //-------------------------------------------------------------------------------------
-ARMeter*		GRMeter::getARMeter()			{ return static_cast<ARMeter*>(getAbstractRepresentation()); }
 const ARMeter*	GRMeter::getARMeter() const		{ return static_cast<const ARMeter*>(getAbstractRepresentation()); }
 

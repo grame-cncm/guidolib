@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -25,9 +25,10 @@ class TagParameterInt : public TagParameterFloat
 {
 	public:
 					 TagParameterInt( const TagParameterInt & tpi ) : TagParameterFloat(tpi) { }
-					 TagParameterInt( int val )	: TagParameterFloat((float) val) {}
+					 TagParameterInt( int val=0 )	: TagParameterFloat((float) val) {}
 		virtual 	~TagParameterInt()	{}
 
+		virtual void	print(std::ostream& out);
 		virtual void 	setValue( int i )				{ fValue = (float) i; }
 		virtual void 	setValue( const char * p )		{ fValue = (float) atoi(p); }
 

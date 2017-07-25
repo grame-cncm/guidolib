@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -20,11 +20,6 @@
 #include "TagList.h"		// is a typedef
 #include "defines.h"		// for TYPE_TIMEPOSITION
 #include "GUIDOTypes.h"		// for GuidoPos
-/*
-class ARMusic;
-class ARVoiceManager;
-class GRVoiceManager;
-*/
 
 class ARMusicalTag;
 class ARPositionTag;
@@ -47,7 +42,6 @@ class ARMusicalVoiceState
 	friend class ARMusicalVoice;
 	friend class ARVoiceManager;
 	friend class GRVoiceManager;
-	friend class GRStaffManager;
 
 	public:
 				ARMusicalVoiceState();
@@ -56,7 +50,7 @@ class ARMusicalVoiceState
 
 		virtual ~ARMusicalVoiceState();
 
-        ARMusicalTag * getCurStateTag(const std::type_info & ti);
+        ARMusicalTag * getCurStateTag	(const std::type_info & ti);
 		ARMusicalTag * RemoveCurStateTag(const std::type_info & ti);
 
 		void DeleteAddedAndRemovedPTags();
@@ -65,11 +59,11 @@ class ARMusicalVoiceState
 		const TagList * getCurStateTags() const				{ return curstatetags; }
 		const PositionTagList * getCurPositionTags() const	{ return curpositiontags; }
 
-		void AddStateTag(ARMusicalTag * ntag);
-		void AddTag(ARMusicalTag * ntag);
-		void RemoveTag(ARMusicalTag * ntag);
-		void AddPositionTag(ARPositionTag * ntag, int addtoaddedlist = 1);
-		void RemovePositionTag(ARPositionTag * ntag, int addtoremovedlist = 1);
+		void AddStateTag		(ARMusicalTag * ntag);
+		void AddTag				(ARMusicalTag * ntag);
+		void RemoveTag			(ARMusicalTag * ntag);
+		void AddPositionTag		(ARPositionTag * ntag, int addtoaddedlist = 1);
+		void RemovePositionTag	(ARPositionTag * ntag, int addtoremovedlist = 1);
 
 		void DeleteAll();
 	
@@ -78,11 +72,11 @@ class ARMusicalVoiceState
 		const PositionTagList * currentPTags() const	{ return curpositiontags; }
 	
 		const ARMeter *	curMeter() const				{ return curmeter; }
+		const ARDisplayDuration * curDispDur() const	{ return fCurdispdur; }
 
 	protected:
 		// The timeposition of the last barline.
 		TYPE_TIMEPOSITION curlastbartp;
-
 		GuidoPos curlastbarpos;
 		// ptagpos indicates the current position within the ptaglist.
 		GuidoPos ptagpos;
@@ -103,15 +97,12 @@ class ARMusicalVoiceState
 		// now we save the current meter
 		// which is actually also a state-tag -> this is handled so that autobeaming can be done elegantly
 		ARMeter * curmeter;
-
 		// the current displayduration (if set) ...
 		ARDisplayDuration * fCurdispdur;
 
 		// we also save the beamstate ... makes it more elegant for autobeaming ...
 		ARBeamState * curbeamstate;
-
 		ARAuto * curautostate;
-
 		ARGrace * curgracetag;
 		ARChordTag * curchordtag;
 

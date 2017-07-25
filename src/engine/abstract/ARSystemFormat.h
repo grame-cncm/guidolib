@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,29 +14,22 @@
   research@grame.fr
 
 */
+
 #include "ARMTParameter.h"
 
 /** \brief not yet documented
 */
 class ARSystemFormat : public ARMTParameter
 {
-public:
-					ARSystemFormat();
-	virtual 		~ARSystemFormat();
+	public:
+						 ARSystemFormat() {}
+		virtual 		~ARSystemFormat() {}
 
-	virtual int	 getOrder() const		{ return kSystemFormatOrder; }
-	virtual bool IsStateTag() const { return true; }
+		virtual int	 getOrder() const		{ return kSystemFormatOrder; }
+		virtual bool IsStateTag() const 	{ return true; }
 	
-	virtual void setTagParameterList( TagParameterList & tpl);
-
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
-
-protected:
-	
-	static ListOfTPLs ltpls;
-
+		virtual const char*	getTagName() const		{ return "ARSystemFormat"; };
+		virtual std::string getGMNName() const		{ return "\\systemFormat"; };
 };
 
 #endif 

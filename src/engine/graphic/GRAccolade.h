@@ -31,7 +31,7 @@ class GRAccolade : public GRTagARNotationElement
 public:
     enum { kAccoladeNone, kAccoladeStraight, kAccoladeCurly, kAccoladeThin };
 
-    GRAccolade( ARAccolade *arAccol = NULL);
+					 GRAccolade( const ARAccolade *arAccol = NULL);
     virtual			~GRAccolade();
 
     virtual void	setAccoladeType( int in ) { mAccoladeType = in; }

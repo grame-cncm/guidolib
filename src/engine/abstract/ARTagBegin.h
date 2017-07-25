@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -16,24 +16,18 @@
 */
 
 #include "ARMTParameter.h"
-// #include "ARMusicalObject.h"
 #include "ARPositionTag.h"
-
 
 /** \brief not yet documented
 */
-class ARTagBegin : public ARMTParameter, 
-				   public ARPositionTag 
+class ARTagBegin : public ARMTParameter, public ARPositionTag
 {
-public:
-			 ARTagBegin(int id = 0) : ARMTParameter(id) { }
-	virtual ~ARTagBegin() {}
+	public:
+			 	 ARTagBegin(int id = 0) : ARMTParameter(id) { }
+		virtual ~ARTagBegin() {}
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
-
-	virtual void setTagParameterList(TagParameterList& theTagParameterList);
+		virtual const char*	getTagName() const		{ return "ARTagBegin"; };
+		virtual std::string getGMNName() const		{ return "\\tagBegin"; };
 };
 
 #endif

@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -15,15 +15,12 @@
 
 */
 
-//#include <typeinfo>
 #include <vector>
 
 #include "ObjectList.h"
 #include "ARMusicalEvent.h"
-// #include "ARPositionTag.h"	
 #include "TagList.h"		// is a typedef
 #include  "kf_ilist.h"		// for ObjectList
-//#include "ARNote.h"
 
 class ARAuto;
 class ARMusicalVoiceState;
@@ -96,6 +93,7 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		virtual ARChordTag *BeginChord();
 
 		ARNote        * setTrillChord(CHORD_TYPE & param_type, CHORD_ACCIDENTAL & param_accidental);
+		void			finishTrilledChord();
         void            setClusterChord(ARCluster *inCurrentCluster);
 		
 		int				removeTag(ARMusicalObject * obj);
@@ -112,13 +110,12 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		virtual void	RemovePositionTag( ARPositionTag * ptag);
 		virtual void	AddPositionTag(ARPositionTag *);
 		virtual	PositionTagList * createPositionTagList();
-		virtual GuidoPos getPositionTagPos (ARPositionTag *) const;
+		virtual GuidoPos getPositionTagPos (const ARPositionTag *) const;
 
 		// does Auto-Beaming ...
 		virtual void	doAutoStuff1();
 		virtual void	doAutoStuff2();
 	
-		virtual void doAutoTrill();
         virtual void doAutoCluster();
 
 		// expensive Function!
@@ -141,7 +138,7 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		virtual void browse(TimeUnwrap& mapper, ARMusicalVoiceState& state) const;
 		virtual void browse(TimeUnwrap& mapper, const ARMusicalObject * start, const ARMusicalObject * end=0) const;
 
-		virtual void	resetGRRepresentation();
+//		virtual void	resetGRRepresentation();
 
 		// functions for the voicestate...
 		virtual			GuidoPos			GetHeadPosition(ARMusicalVoiceState & vst) const;
@@ -248,6 +245,7 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		// tags handled are: octava
 		void			checkpbreak();
         std::vector<ARRepeatBegin *> *repeatBeginList;
+		std::vector<ARNote *> getCurrentChordNotes () const;
 };
 
 #endif

@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,35 +14,37 @@
   research@grame.fr
 
 */
+
 #include "ARMTParameter.h"
+#include "TagParameterFloat.h"
+
+class TagParameterString;
 
 /** \brief not yet documented
 */
 class ARStaffFormat : public ARMTParameter
 {
-public:
-	ARStaffFormat();
-	ARStaffFormat(const ARStaffFormat &);
-	virtual ~ARStaffFormat();
+	public:
+				 ARStaffFormat();
+				 ARStaffFormat(const ARStaffFormat &);
+		virtual ~ARStaffFormat() {}
 
-	virtual bool IsStateTag() const		{ return true; }
-	
-	virtual void setTagParameterList( TagParameterList& tpl);
+		virtual bool IsStateTag() const		{ return true; }
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual void setTagParameters (const TagParameterMap& params);
 
-	const TagParameterString * getStyle() const		    { return style; }
-	float getLineThickness() const					    { return fLineThickness; }
-    const TagParameterFloat *  getStaffDistance() const { return staffDistance; }
+		virtual const char*	getParamsStr() const	{ return kARStaffFormatParams; };
+		virtual const char*	getTagName() const		{ return "ARStaffFormat"; };
+		virtual std::string getGMNName() const		{ return "\\staffFormat"; };
+		virtual const TagParameterFloat *	getSize() const;
 
-protected:
-	TagParameterString *style;
-	float				fLineThickness;
-    TagParameterFloat * staffDistance;
-	static ListOfTPLs   ltpls;
+				const TagParameterString *	getStyle() const;
+				const TagParameterFloat *	getStaffDistance() const;
+				float getLineThickness() const		{ return fLineThickness; }
 
+	protected:
+		TagParameterFloat	fSize;
+		float				fLineThickness;
 };
 
 #endif 

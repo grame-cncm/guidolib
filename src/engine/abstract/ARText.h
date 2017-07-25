@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -15,64 +15,38 @@
 
 */
 
+#include <string>
 
-#include "ARMTParameter.h"
 #include "ARPositionTag.h"
-#include "TagParameterString.h"
-
+#include "ARFontAble.h"
 
 class ARLyrics;
-class TagParameterFloat;
 
 /** \brief The text tag
 */
-class ARText : public ARMTParameter, public ARPositionTag
+class ARText : public ARFontAble, public ARPositionTag
 {
 public:
-			            ARText(const NVstring & p_txt, float p_offsety, bool isLyric=false);
+			            ARText(const std::string& p_txt, float p_offsety, bool isLyric=false);
 					    ARText();
-	virtual 	       ~ARText();
+	virtual 	       ~ARText() {}
 
-	virtual void 	    setTagParameterList(TagParameterList & theTagParameterList);
-	
-	virtual const char* getText() const					{ return text ? text->getValue() : 0; }
+	virtual void		setTagParameters (const TagParameterMap& params);
+	virtual const char* getText() const					{ return fText.c_str(); }
 	virtual void		copyLyricsParams(const ARLyrics * lyrics);
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+	virtual const char*	getParamsStr() const	{ return kARTextParams; };
+	virtual const char*	getTagName () const		{ return "ARText"; };
+	virtual std::string getGMNName () const		{ return "\\text"; };
 	
-	virtual int  MatchListOfTPLsWithTPL(const ListOfTPLs & ltpls, TagParameterList & tpl, TagParameterList ** rtpl);
-	virtual void CreateListOfTPLs( ListOfTPLs & ltpl, ListOfStrings & lstrs);
-
-	const char*  getTextformat() const					    { return textformat ? textformat->getValue() : 0; } 
-	void		 setTextformat(const TagParameterString * tf);
-	const char*  getFont() const							{ return font ? font->getValue() : 0; }
-	void		 setFont(const TagParameterString * ft);
-	const char*	 getFAttrib() const						    { return fattrib ? fattrib->getValue() : 0; }
-	void		 setFAttrib(const TagParameterString * fa);
-	int			 getFSize(float curLSPACE) const;
-	void		 setFSize(const TagParameterFloat * fs);
 	void		 setAutoPos(bool state)						{ fIsAutoPos = state; }
 	bool		 isLyric() const							{ return fIsLyric; }
 	bool		 isAutoPos() const							{ return fIsAutoPos; }
 
-	const TagParameterFloat * getYPos() const {	return ypos; }
-
 protected:
-	virtual const char * getTagFormat() const;	 // (JB) new
-
-	TagParameterString * text; // der entsprechende Text ...
-	TagParameterString * textformat;
-	TagParameterString * font;
-	TagParameterFloat  * fsize;
-	TagParameterString * fattrib;
-	TagParameterFloat *  ypos;
-
+	std::string	fText;		// the corresponding text ...
 	bool	fIsLyric;
 	bool	fIsAutoPos;
-
-	static ListOfTPLs ltpls;
 };
 
 #endif

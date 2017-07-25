@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -15,33 +15,19 @@
 
 */
 
-
 #include "ARMTParameter.h"
-// #include "ARMusicalObject.h"
-
-class ARRepeatEnd;
-class ARFactory;
-class TagParameterList;
 
 /** \brief not yet documented
 */
-class ARRepeatEndRangeEnd :  public ARMTParameter // ,public ARMusicalObject
+class ARRepeatEndRangeEnd :  public ARMTParameter
 {
-public:
-	friend class ARRepeatEnd;
-	friend class ARFactory;
+	public:
+				 ARRepeatEndRangeEnd( ARRepeatEnd * in ) {}
+		virtual ~ARRepeatEndRangeEnd() { }
 
-			 ARRepeatEndRangeEnd( ARRepeatEnd * in );
-	virtual ~ARRepeatEndRangeEnd() { }
-
-	virtual void setTagParameterList(TagParameterList & pl);
-
-    virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
-
-protected:
-	ARRepeatEnd * mRepeatEnd;
+		virtual const char*	getParamsStr() const	{ return ""; };
+		virtual const char*	getTagName() const		{ return "ARRepeatEndRangeEnd"; };
+		virtual std::string getGMNName() const		{ return "\\repeatRangeEnd"; };
 };
 
 #endif

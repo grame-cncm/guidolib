@@ -17,7 +17,7 @@
 #include "PrintVisitor.h"
 
 #include "ARMusicalObject.h"
-#include "ARPositionTag.h"
+#include "ARMusicalTag.h"
 #include "ARMusicalVoice.h"
 #include "ARMusicalEvent.h"
 #include "ARTagEnd.h"
@@ -55,9 +55,9 @@ void PrintVisitor::visitIn(ARMusicalObject* object)
     printMusicalObject(object);
 }
 
-void PrintVisitor::visitIn(ARPositionTag* positionTag)
+void PrintVisitor::visitIn(ARMusicalTag* positionTag)
 {
-    printPositionTag(positionTag);
+    printTag(positionTag);
 }
 
 void PrintVisitor::printHeader(int state) const
@@ -97,13 +97,13 @@ void PrintVisitor::printMusicalObject(ARMusicalObject* object) const
     object->print(*os);
 }
 
-void PrintVisitor::printPositionTag(ARPositionTag* positionTag)
+void PrintVisitor::printTag (ARMusicalTag* tag)
 {
-    ARTagEnd *endTag = ARTagEnd::cast(positionTag);
+    ARTagEnd *endTag = dynamic_cast<ARTagEnd *>(tag);
 
     if (endTag) currentIndentNumber--;
     printHeader(endTag ? -1 : 1);
-    positionTag->print(*os);
+    tag->print(*os);
     if (!endTag) currentIndentNumber++;
 }
 

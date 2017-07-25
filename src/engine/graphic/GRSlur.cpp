@@ -34,7 +34,7 @@ void GRSlur::accept (GRVisitor& visitor)
 }
 
 // -----------------------------------------------------------------------------
-void GRSlur::automaticCurveDirection( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse )
+void GRSlur::automaticCurveDirection( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
 	// -- Long phrase positionning rule: choose upward if there is a lot of notes.
 	// in the range.
@@ -87,7 +87,7 @@ float GRSlur::getEltOffset (const GRNotationElement* el ) const
 }
 
 // -----------------------------------------------------------------------------
-void GRSlur::automaticAnchorPoints( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse )
+void GRSlur::automaticAnchorPoints( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
 	const bool upward = (context->curveDir == 1);
 
@@ -154,7 +154,7 @@ void GRSlur::automaticAnchorPoints( GRBowingContext * context, ARBowing * arBow,
 	// - Store results.
 	bowInfos->position = posLeft;
 	bowInfos->offsets[2] = posRight - posLeft; // control points are stored as offsets to the position.
-	arBow->setCurve( context->curveDir, posLeft, posRight ); // (JB) useless ?
+//	arBow->setCurve( context->curveDir, posLeft, posRight ); // (JB) useless ?
 }
 
 // -----------------------------------------------------------------------------
@@ -168,7 +168,7 @@ void GRSlur::automaticAnchorPoints( GRBowingContext * context, ARBowing * arBow,
 	  notation rules) 
 	  
 */
-void GRSlur::automaticControlPoints( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse )
+void GRSlur::automaticControlPoints( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
 	if (mAssociated == 0 ) return;
 

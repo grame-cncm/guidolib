@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -13,59 +13,45 @@
 */
 
 #include <iostream>
+
 #include "ARTHead.h"
-#include "TagParameterList.h"
-#include "ListOfStrings.h"
 
-ListOfTPLs ARTHead::ltpls(1);
+using namespace std;
 
-ARTHead::ARTHead(int st , ARTHead * p_savehead, ARTHead * p_copyhead )
+ARTHead::ARTHead(int st , const ARTHead * p_savehead, const ARTHead * p_copyhead )
 	: ARMTParameter(-1,p_copyhead)
 {
 	rangesetting = RANGEDC;
-	headstate = (ARTHead::HEADSTATE) st;
-	savehead = p_savehead;
+	fHeadState = (ARTHead::HEADSTATE) st;
+	fSavedHead = p_savehead;
 
 	if (p_copyhead)
-	{
-		headstate = p_copyhead->getHeadState();
-	}
+		fHeadState = p_copyhead->getHeadState();
 }
 
 ARTHead::ARTHead(const ARTHead & arthead)
 {
-	headstate = arthead.headstate;
-	
-	savehead = NULL;
+	fHeadState = arthead.fHeadState;
+	fSavedHead = NULL;
 }
 
-ARMusicalObject *ARTHead::Copy() const
+string ARTHead::getGMNName() const
 {
-	return new ARTHead(*this);
-}
-
-void ARTHead::printName(std::ostream& os) const
-{
-    os << "ARTHead";
-}
-
-void ARTHead::printGMNName(std::ostream& os) const
-{
-    os << "\\head";
-}
-
-void ARTHead::printParameters(std::ostream& os) const
-{
-    switch (headstate) {
-		case NORMAL:
-		case NOTSET:	os << "normal";  break;
-		case REVERSE: 	os << "reverse"; break;
-		case CENTER: 	os << "center";  break;
-		case RIGHT: 	os << "right";   break;
-		case LEFT: 		os << "left";    break;
+	string state = "\\heads";
+	switch (fHeadState) {
+		case NORMAL:	state += "Normal";
+			break;
+		case REVERSE:	state += "Reverse";
+			break;
+		case CENTER:	state += "Center";
+			break;
+		case RIGHT:		state += "Right";
+			break;
+		case LEFT:		state += "Left";
+			break;
+		case NOTSET:
+			break;
 	}
-
-    os << ";";
-
-    ARMusicalTag::printParameters(os);
+	return state;
 }
+

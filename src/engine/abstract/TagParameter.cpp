@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,17 +14,19 @@
 
 #include "TagParameter.h"
 
-TagParameter::TagParameter( const TagParameter & tp )
+void TagParameter::set( const TagParameter & in )
 {
-	name = tp.name;
-	pflag = tp.pflag;
-	required = tp.required;
+	fName = in.fName;
+	fFlag = in.fFlag;
+	fRequired = in.fRequired;
 }
 
-void 
-TagParameter::set( const TagParameter & in )
+void TagParameter::print(std::ostream& out)
 {
-	name = in.name;
-	pflag = in.pflag;
-	required = in.required;
+#if 0
+	out << fName << " flag: " << fFlag << " required: " << fRequired;
+#else
+	if (fName.size()) out << fName << "=";
+#endif
 }
+

@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -51,7 +51,7 @@ class GRVoice : public GRARCompositeNotationElement
 	friend class GRVoiceManager;
 
 	public:
-				 GRVoice( ARMusicalObject * arobj, bool ownsar );
+				 GRVoice( const ARMusicalObject * arobj, bool ownsar );
 		virtual ~GRVoice();
 
 				GRPage * getPageNum(int num,int denom);		// must match an existing element date.
@@ -62,15 +62,16 @@ class GRVoice : public GRARCompositeNotationElement
 		virtual GuidoPos AddTail(GRNotationElement * el);
 
 	int updateMSCMatrix(GRSpaceForceFunction2 * sff, GRSpacingMatrix * spm, GRStaffManager * stfmgr, ISpringVector * sprvect, int startspr, int endspr);
-
 	int createNewRods(GRStaffManager * stfmgr, int &startspr, int & endspr, float optForce);
-	virtual void rememberNLinePosition(const TYPE_TIMEPOSITION & tp);
-	virtual void setPossibleNLinePosition(const TYPE_TIMEPOSITION & tp);
-//	void createRods(GRSystem *grsystem,int lastsprid);
 
-	virtual void GGSOutput() const {}
-	virtual void OnDraw( VGDevice & ) const {}
-	ARMusicalVoice * getARMusicalVoice();
+		virtual void rememberNLinePosition(const TYPE_TIMEPOSITION & tp);
+		virtual void setPossibleNLinePosition(const TYPE_TIMEPOSITION & tp);
+		virtual void accept   (GRVisitor& visitor);
+
+		virtual void GGSOutput() const {}
+		virtual void OnDraw( VGDevice & ) const {}
+
+	const ARMusicalVoice * getARMusicalVoice() const;
 	void startNewSystem(GRSystem * grsystem);
 
 	protected:

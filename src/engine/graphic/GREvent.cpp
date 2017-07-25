@@ -36,9 +36,8 @@ using namespace std;
 #include "GuidoDefs.h" // for LSPACE
 
 // ----------------------------------------------------------------------------
-GREvent::GREvent(GRStaff * inStaff,
-				 ARMusicalEvent * abstractRepresentationOfEvent, bool p_ownsAR)
-  : GRARCompositeNotationElement(abstractRepresentationOfEvent,p_ownsAR),
+GREvent::GREvent(GRStaff * inStaff, const ARMusicalEvent * ar, bool p_ownsAR)
+  : GRARCompositeNotationElement(ar,p_ownsAR),
   mGlobalStem(NULL)
 {
 	mFillsBar = false;
@@ -60,15 +59,11 @@ GREvent::GREvent(GRStaff * inStaff,
 }
 
 // ----------------------------------------------------------------------------
-GREvent::GREvent( GRStaff * inStaff,
-				 ARMusicalEvent * abstractRepresentationOfEvent,
-	const TYPE_TIMEPOSITION & theRelativeTimePositionOfGR,
-	const TYPE_DURATION & theDurationOfGR)
-  : GRARCompositeNotationElement(abstractRepresentationOfEvent),
-  mGlobalStem(NULL)
+GREvent::GREvent( GRStaff * inStaff, const ARMusicalEvent * ar, const TYPE_TIMEPOSITION & date, const TYPE_DURATION & duration)
+  : GRARCompositeNotationElement(ar), mGlobalStem(NULL)
 {
-	assert(abstractRepresentationOfEvent);
-	assert(theRelativeTimePositionOfGR>=abstractRepresentationOfEvent->getRelativeTimePosition());
+	assert(ar);
+	assert(date>=ar->getRelativeTimePosition());
 
 	mColRef = 0;
 	mFillsBar = false;
@@ -88,22 +83,17 @@ GREvent::GREvent( GRStaff * inStaff,
 		mSize = float(1.0);
 	}
 
-	setRelativeTimePosition (theRelativeTimePositionOfGR);
-	mDurationOfGR = theDurationOfGR;
+	setRelativeTimePosition (date);
+	mDurationOfGR = duration;
 
 	mNeedsSpring = 1;
 
 // !!! kf ... is important for laenge0.svw (wcht)
 // durations will be treated as fractions in future
-//	assert(theDurationOfGR>0);
 
 	// ATTENTION, this can be bad for Chords ...
 	// Graphical-Elements are longer than the
 	// abstract-representations!
-	
-	// DF - 24/08/2009 - assert commented to avoid spurious exit
-	// due to dynamic score coding or multiple fermata in a chord with variable length notes
-	// assert(getRelativeEndTimePosition()<=abstractRepresentationOfEvent->getRelativeEndTimePosition());
 }
 
 GREvent::~GREvent()
@@ -293,7 +283,7 @@ void GREvent::setHPosition( float nx )
 	GREvent maintains an articulation list that holds all articulations.
 */
 void 
-GREvent::addArticulation( ARMusicalTag * inTag )
+GREvent::addArticulation( const ARMusicalTag * inTag )
 {
 	const float space = mCurLSPACE; // (JB) was LSPACE
 	GRArticulation * newArticulation = new GRArticulation( inTag, space );

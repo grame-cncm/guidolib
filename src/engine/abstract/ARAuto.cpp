@@ -15,17 +15,17 @@
 #include <iostream>
 
 #include "ARAuto.h"
+#include "TagParameterStrings.h"
 #include "TagParameterString.h"
-#include "TagParameterList.h"
-#include "ListOfStrings.h"
 
 using namespace std;
 
-ListOfTPLs ARAuto::ltpls(1);
+static const TagParameterMap sARAutoMap (kARAutoParams);
 
 ARAuto::ARAuto()
 {
-//	fNumparset              = 0;
+	setupTagParameters (sARAutoMap);
+
 	fEndBarState            = kOn;
 	fPageBreakState         = kOn;
 	fSystemBreakState       = kOn;
@@ -36,96 +36,31 @@ ARAuto::ARAuto()
 	fInstrAutoPos		    = kOff;
 }
 
-ARAuto::~ARAuto()
-{ }
-	
-void ARAuto::setTagParameterList(TagParameterList& tpl)
+void ARAuto::setTagParameters (const TagParameterMap& params)
 {
-	if (ltpls.GetCount() == 0)
-	{
-		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(("S,endBar,on,o;"
-			"S,pageBreak,on,o;"
-			"S,systemBreak,on,o;"
-			"S,clefKeyMeterOrder,on,o;"
-			"S,stretchLastLine,off,o;"
-			"S,stretchFirstLine,off,o;"
-			"S,lyricsAutoPos,off,o;"
-			"S,instrAutoPos,off,o"));
-		lstrs.AddTail(("S,autoEndBar,on,o;"
-			"S,autoPageBreak,on,o;"
-			"S,autoSystemBreak,on,o;"
-			"S,autoClefKeyMeterOrder,on,o;"
-			"S,autoStretchLastLine,off,o;"
-			"S,autoStretchFirstLine,off,o;"
-			"S,autoInstrPos,off,o;"
-			"S,autoLyricsPos,off,o"));
-		CreateListOfTPLs(ltpls,lstrs);
-	}
+	const string off("off");
+	const string on("on");
+	const TagParameterString * p = getParameter<TagParameterString>(kAutoEndBarStr, kEndBarStr);
+	if (p && (off == p->getValue())) fEndBarState = kOff;
 
-	TagParameterList * rtpl = NULL;
-	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
+	p = getParameter<TagParameterString>(kAutoPageBreakStr, kPageBreakStr);
+	if (p && (off == p->getValue())) fPageBreakState = kOff;
 
-	if (ret>=0 && rtpl)
-	{
-		// we found a match!
-		if (ret == 0 || ret == 1) {
-			const string off("off");
-			const string on("on");
+	p = getParameter<TagParameterString>(kAutoSystemBreakStr, kSystemBreakStr);
+	if (p && (off == p->getValue())) fSystemBreakState = kOff;
 
-			TagParameterString * str = TagParameterString::cast(rtpl->RemoveHead());
-			if (str->TagIsSet())
-				fEndBarState =  (off == str->getValue()) ? kOff : kOn;
-			delete str;
+	p = getParameter<TagParameterString>(kAutoClefKeyMeterOrderStr, kClefKeyMeterOrderStr);
+	if (p && (off == p->getValue())) fClefKeyMeterOrderState = kOff;
 
-			str =  TagParameterString::cast(rtpl->RemoveHead());
-			if (str->TagIsSet())
-				fPageBreakState = (off == str->getValue()) ? kOff : kOn;
-			delete str;
+	p = getParameter<TagParameterString>(kAutoStretchLastLineStr, kStretchLastLineStr);
+	if (p && (on == p->getValue())) fStretchLastLineState = kOn;
 
-			str =  TagParameterString::cast(rtpl->RemoveHead());
-			if (str->TagIsSet())
-				fSystemBreakState = (off == str->getValue()) ? kOff : kOn;
-			delete str;
+	p = getParameter<TagParameterString>(kAutoStretchFirstLineStr, kStretchFirstLineStr);
+	if (p && (on == p->getValue())) fStretchFirstLineState = kOn;
 
-			str =  TagParameterString::cast(rtpl->RemoveHead());
-			if (str->TagIsSet())
-				fClefKeyMeterOrderState = (off == str->getValue()) ? kOff : kOn;
-			delete str;
+	p = getParameter<TagParameterString>(kAutoInstrPosStr, kInstrAutoPosStr);
+	if (p && (on == p->getValue())) fInstrAutoPos = kOn;
 
-			str =  TagParameterString::cast(rtpl->RemoveHead());
-			if (str->TagIsSet())
-				fStretchLastLineState = (on == str->getValue()) ? kOn : kOff;
-			delete str;
-
-			str =  TagParameterString::cast(rtpl->RemoveHead());
-			if (str->TagIsSet())
-				fStretchFirstLineState = (on == str->getValue()) ? kOn : kOff;
-			delete str;
-
-			str =  TagParameterString::cast(rtpl->RemoveHead());
-			if (str->TagIsSet())
-				fInstrAutoPos = (on == str->getValue()) ? kOn : kOff;
-			delete str;
-
-			str =  TagParameterString::cast(rtpl->RemoveHead());
-			if (str->TagIsSet())
-				fLyricsAutoPos = (on == str->getValue()) ? kOn : kOff;
-			delete str;
-		}
-		delete rtpl;
-	}
-	// all Parameters are ignored ...
-	// issue warning...
-	tpl.RemoveAll();
-	return;
-}
-
-void ARAuto::printName(std::ostream& os) const		{ os << "ARAuto"; }
-void ARAuto::printGMNName(std::ostream& os) const	{ os << "\\auto"; }
-
-void ARAuto::printParameters(std::ostream& os) const
-{
-    os << "autoEndBar: " << (fEndBarState == kOn ? "on" : "off") << "; ";
-    ARMusicalTag::printParameters(os);
+	p = getParameter<TagParameterString>(kAutoLyricsPosStr, kLyricsAutoPosStr);
+	if (p && (on == p->getValue())) fLyricsAutoPos = kOn;
 }

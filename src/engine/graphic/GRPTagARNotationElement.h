@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -26,9 +26,9 @@ class GRPTagARNotationElement :
 		public GRPositionTag, public GRARNotationElement
 {
 public:
-			GRPTagARNotationElement(GuidoPos p_ep, ARMusicalObject * el, bool ownsAR = false);
+			GRPTagARNotationElement(GuidoPos p_ep, const ARMusicalObject * el, bool ownsAR = false);
 
-			GRPTagARNotationElement(ARMusicalObject * el, bool ownsAR = false);
+			GRPTagARNotationElement(const ARMusicalObject * el, bool ownsAR = false);
 
 	virtual ~GRPTagARNotationElement();
 

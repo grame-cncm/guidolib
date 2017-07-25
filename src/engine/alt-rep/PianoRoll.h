@@ -107,7 +107,7 @@ protected:
 	virtual void  DrawMeasureBar      (double date, const DrawParams& drawParams) const;
 
 	virtual float pitch2ypos          (int midipitch, const DrawParams& drawParams) const;
-	virtual void  handleColor         (ARNoteFormat *e, const DrawParams& drawParams);
+	virtual void  handleColor         (const ARNoteFormat *e, const DrawParams& drawParams);
 	virtual void  setColor			  (VGDevice* dev, const VGColor& color);
 	virtual void  popColor			  (VGDevice* dev);
 	

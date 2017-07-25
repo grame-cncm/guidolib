@@ -23,7 +23,7 @@ using namespace std;
 
 extern GRStaff * gCurStaff;
 
-GRMark::GRMark(GRStaff * staff, ARMark * ar) : GRText(staff, ar)
+GRMark::GRMark(GRStaff * staff, const ARMark * ar) : GRText(staff, ar)
 {
 	mPosition.y -= yoffset(staff);
 }

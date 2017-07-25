@@ -31,7 +31,7 @@ class GRCluster : public GRARCompositeNotationElement,
 {
 public:
 
-				 GRCluster(GRStaff * stf, ARCluster * arcls, GRSingleNote *sngNote, ARNoteFormat * curnoteformat);
+				 GRCluster(GRStaff * stf, const ARCluster * arcls, GRSingleNote *sngNote, const ARNoteFormat * curnoteformat);
 	virtual	 	~GRCluster();
 
     virtual void updateBoundingBox();
@@ -47,7 +47,7 @@ public:
     void setSecondGRNote(GRNote *inGRNote) { secondNote = inGRNote; }
     GRNote *getFirstNote() { return firstNote; }
 
-    ARCluster *getARCluster() const;
+    const ARCluster *getARCluster() const;
 
     void GetMap(GuidoElementSelector sel, MapCollector& f, MapInfos& infos) const;
 

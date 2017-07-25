@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -24,7 +24,7 @@
 // construction/deconstruction
 //////////////////////////////////////////////////////////////////////
 
-GRDrRenz::GRDrRenz( ARDrRenz * par )
+GRDrRenz::GRDrRenz( const ARDrRenz * par )
 	: GRTagARNotationElement(/*dynamic cast<ARMusicalObject *>*/(par), LSPACE)
 {
 	mBoundingBox.left = 0;
@@ -63,7 +63,7 @@ void GRDrRenz::OnDraw( VGDevice & hdc) const
 {
 	if (mFace && mDraw)
 	{
-		ARDrRenz * myar = static_cast<ARDrRenz *>(mAbstractRepresentation);
+		const ARDrRenz * myar = static_cast<const ARDrRenz *>(mAbstractRepresentation);
 
 		if (myar && myar->getInverse() == -1)
 		{

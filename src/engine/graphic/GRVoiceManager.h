@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -61,7 +61,7 @@ class GRVoiceManager
 	friend class GRPossibleBreakState;
 
 public:
-			 GRVoiceManager(GRMusic* music, GRStaffManager * p_staffmgr, ARMusicalVoice * p_voice, int p_voicenum);
+			 GRVoiceManager(GRMusic* music, GRStaffManager * p_staffmgr, const ARMusicalVoice * p_voice, int p_voicenum);
 	virtual ~GRVoiceManager();
 
 	float pbreakval;
@@ -106,10 +106,6 @@ protected:
 	void beginOpenTags();
 
 	GRVoice * grvoice;
-	// this remembers the current stemstate in the current voice.
-	ARTStem * curstemstate;
-	ARTHead * curheadstate;
-
 	int voicenum;
 	GREvent * lastev;
 
@@ -119,17 +115,21 @@ protected:
 
 //	virtual void addStartPTags();
 
-	ARMusicalEvent* curev;
 	GRStaff *		mCurGrStaff;
-	ARMusicalVoice* arVoice;
 	GRStaffManager* mStaffMgr;
 
 	GRGrace *		mCurGrace;	
     GRCluster *     mCurCluster;
 	GRGlissando *	mCurGlissando;
-	ARNoteFormat *	curnoteformat;
-	ARDotFormat *	curdotformat;
-	ARRestFormat *	currestformat;
+
+	const ARMusicalEvent*	curev;
+	const ARMusicalVoice*	arVoice;
+	const ARNoteFormat *	curnoteformat;
+	const ARDotFormat *		curdotformat;
+	const ARRestFormat *	currestformat;
+	const ARTStem *			curstemstate;
+	const ARTHead *			curheadstate;
+
 	static bool &	getCurStaffDraw(int index);
 
 	TYPE_TIMEPOSITION curtp;
@@ -147,8 +147,8 @@ protected:
 	GRTagPointerList * nlinegrtags; // remembered for the nline-state ...
 
 	GRNotationElement * parseTag(ARMusicalObject * arOfCompleteObject);
-	void parsePositionTag(ARPositionTag * apt);
-	bool parseStateTag(ARMusicalTag * mtag);
+	void parsePositionTag		(ARPositionTag * apt);
+	bool parseStateTag			(const ARMusicalTag * mtag);
 	bool checkRepeatBeginNext();
 
 	GRTagPointerList * toadd;
@@ -164,6 +164,7 @@ private:
 	GROctava*				fLastOctava;
 	ARMusicalVoiceState *	fVoiceState;
 	GRTagPointerList *		fGRTags;
+	GRTrill*				fCurrentTrill = 0;
 	
 
 	GRSingleNote *	CreateSingleNote	(const TYPE_TIMEPOSITION & tp, ARMusicalObject * arObject, float size=0, bool isGrace=false);
@@ -171,11 +172,13 @@ private:
 	void			organizeGlissando(GRTag * g);
 	void			organizeBeaming(GRTag * grb);
 	void			checkFillBar (GRTagARNotationElement* bar);
+	void			addAssociations (GREvent* ev, bool setnext=true);
 
 	std::vector<GRBeam *> curbeam;
 	typedef std::vector<std::pair<GRRange*, GRSingleNote*> >	TSharedArticulationsList;
 	TSharedArticulationsList fSharedArticulations;
 	void			handleSharedArticulations(const TSharedArticulationsList& list);
+	void			setTrillNext (GRNotationElement* ev);
 };
 
 #endif

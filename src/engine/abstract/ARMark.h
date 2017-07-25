@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -22,26 +22,25 @@
 
 /** \brief not yet documented
 */
-class ARMark : public ARText// public ARMusicalObject,
+class ARMark : public ARText // public ARMusicalObject,
 {
 	int fEnclosure;
 	
 	public:
 		enum { kNoEnclosure, kSquare, kRectangle, kOval, kCircle, kBracket, kTriangle, kDiamond };
 	
-		ARMark();
-		virtual ~ARMark();
+				 ARMark();
+		virtual ~ARMark() {}
 
-				int getEnclosure() const		{ return fEnclosure; }
-	    virtual void printName(std::ostream& os) const;
-	    virtual void printGMNName(std::ostream& os) const;
-	    virtual void printParameters(std::ostream& os) const;
+		int  getEnclosure() const					{ return fEnclosure; }
 
-		virtual void setTagParameterList(TagParameterList & tpl);
+		virtual const char*	getParamsStr() const	{ return kARMarkParams; };
+		virtual const char*	getTagName() const		{ return "ARMark"; };
+		virtual std::string getGMNName() const		{ return "\\mark"; };
+
+		virtual void setTagParameters (const TagParameterMap& params);
 
 	protected:
-		
-		static ListOfTPLs ltpls;
 		static std::map<std::string, int>	fEnclosureShapes;
 };
 

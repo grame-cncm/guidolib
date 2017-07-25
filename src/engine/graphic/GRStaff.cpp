@@ -63,7 +63,6 @@ using namespace std;
 #include "GRBar.h"
 #include "GRBarFormat.h"
 #include "GRClef.h"
-#include "GRCompositeNote.h"
 #include "GRDoubleBar.h"
 #include "GRDummy.h"
 #include "GRFinishBar.h"
@@ -90,6 +89,7 @@ using namespace std;
 #include "GRSystemSlice.h"
 #include "GRText.h"
 #include "GRVoice.h"
+#include "GRStaffOnOffVisitor.h"
 
 #include "kf_ivect.h"
 #include "TCollisions.h"
@@ -559,14 +559,12 @@ void GRStaff::checkCollisions (TCollisions& state) const
 void GRStaff::accept (GRVisitor& visitor)
 {
 	visitor.visitStart (this);
-
 	NEPointerList* elts = getElements();
 	GuidoPos pos = elts->GetHeadPosition();
 	while (pos) {
 		GRNotationElement * e = elts->GetNext(pos);
 		e->accept (visitor);
 	}
-
 	visitor.visitEnd (this);
 }
 
@@ -586,7 +584,7 @@ size_t GRStaff::getLyrics (vector<const GRNotationElement*>& list) const
 }
 
 // ----------------------------------------------------------------------------
-GRClef * GRStaff::AddClef(ARClef * arclef)
+GRClef * GRStaff::AddClef(const ARClef * arclef)
 {
 	// To do: look, whether the clef really is a clef-
 	// change. If not, do nothing!!!!
@@ -636,7 +634,7 @@ void GRStaff::setClefParameters(GRClef * grclef, GRStaffState::clefstate cstate)
 	}
 	else
 	{ // Standard ...
-		ARClef * aclef = /*dynamic*/static_cast<ARClef *>(grclef->getAbstractRepresentation());
+		const ARClef * aclef = /*dynamic*/static_cast<const ARClef *>(grclef->getAbstractRepresentation());
 		mStaffState.curclef = aclef;
 		mStaffState.clefname = aclef->getName();
 		mStaffState.basepit = grclef->getBasePitch() + mStaffState.basepitoffs;
@@ -666,7 +664,7 @@ void GRStaff::setKeyParameters(GRKey * inKey)
 	 else
 	 {
 		mStaffState.keyset = true;
-		mStaffState.curkey = /*dynamic*/static_cast<ARKey *>( inKey->getAbstractRepresentation());
+		mStaffState.curkey = /*dynamic*/static_cast<const ARKey *>( inKey->getAbstractRepresentation());
 		mStaffState.numkeys = inKey->getKeyArray(mStaffState.KeyArray);
 	 }
 	 mStaffState.reset2key();
@@ -1019,7 +1017,7 @@ GRBar * GRStaff::getLastBar() const
 // ----------------------------------------------------------------------------
 /** \brief Adds a Meter at the current position.
 */
-GRMeter * GRStaff::AddMeter(ARMeter * armeter)
+GRMeter * GRStaff::AddMeter(const ARMeter * armeter)
 {
 	// First check, whether this really means
 	// a Change in Meter? If not, do not display anything!
@@ -1036,7 +1034,7 @@ GRMeter * GRStaff::AddMeter(ARMeter * armeter)
 }
 
 // ----------------------------------------------------------------------------
-GROctava * GRStaff::AddOctava(AROctava * aroct)
+GROctava * GRStaff::AddOctava(const AROctava * aroct)
 {
 	const char * s = "";
 	switch (aroct->getOctava()) {
@@ -1074,6 +1072,7 @@ void GRStaff::AddTag(GRNotationElement * grtag)
 GRRepeatBegin * GRStaff::AddRepeatBegin(ARRepeatBegin *arrb)
 {
     assert(arrb);
+	if (mStaffState.curbarfrmt) arrb->setRanges (mStaffState.curbarfrmt->getRanges());
 //	GRRepeatBegin * tmp = new GRRepeatBegin(arrb, this, arrb->getRelativeTimePosition());
 	GRRepeatBegin * tmp = new GRRepeatBegin(arrb);
 	if (mStaffState.curbarfrmt && (mStaffState.curbarfrmt->getStyle() == ARBarFormat::kStyleSystem))
@@ -1095,6 +1094,7 @@ GRRepeatEnd * GRStaff::AddRepeatEnd( ARRepeatEnd * arre )
 //	if (arre->getNumRepeat() == 0 || !arre->getRange())
 	{
         assert (arre);
+		if (mStaffState.curbarfrmt) arre->setRanges(mStaffState.curbarfrmt->getRanges());
 		GRRepeatEnd * tmp = new GRRepeatEnd(arre, this, arre->getRelativeTimePosition(), fProportionnalRendering);
 		if (mStaffState.curbarfrmt && (mStaffState.curbarfrmt->getStyle() == ARBarFormat::kStyleSystem))
 			mGrSystemSlice->addRepeatEnd(tmp, mStaffState.curbarfrmt->getRanges(), this);
@@ -1153,15 +1153,17 @@ GRStaff::getStaffNumber() const
 	It checks the tranps-parameter of the instrument
 	tag and sets a pitch-offset accordingly. 
 */
-GRInstrument * GRStaff::AddInstrument(ARInstrument * arinstr)
+GRInstrument * GRStaff::AddInstrument(const ARInstrument * arinstr)
 {
 	GRInstrument * tmp = new GRInstrument(arinstr, this);
 	addNotationElement(tmp);
 	bool downwards = true;
 
 	// now we need to test, whether the instrument is transposed (e.g. "clarinet in A")
-	const TagParameterString * ts = arinstr->getTransp();
-	if ( ts && ts->TagIsSet())
+//	const TagParameterString * ts = arinstr->getTransp();
+//	if ( ts && ts->TagIsSet())
+	const string& ts = arinstr->getTransp();
+	if ( ts.size() )
 	{
 		// then we have a transposition ....
 		// this is always relative to "C-Major"
@@ -1173,7 +1175,7 @@ GRInstrument * GRStaff::AddInstrument(ARInstrument * arinstr)
 
 		// we have to calculate distance from C ..
 		// so we just interpret this as a notename and change the case 
-		const NVstring & mystr = ts->getValue();
+		const NVstring & mystr = ts; //ts->getValue();
 
 		if (mystr.length() >= 1)
 		{
@@ -1249,6 +1251,7 @@ GRBar * GRStaff::AddBar(ARBar * abar, const TYPE_TIMEPOSITION & date)
 staff_debug("AddBar");
 	newMeasure(date); // erhoeht u.a. mnum!
 
+	if (mStaffState.curbarfrmt) abar->setRanges(mStaffState.curbarfrmt->getRanges());
 	GRBar * bar = new GRBar( abar, this, date, fProportionnalRendering);
 	// depending on current bar Format, we have to tell the staffmanager (or the system) 
 	if (mStaffState.curbarfrmt && (mStaffState.curbarfrmt->getStyle() == ARBarFormat::kStyleSystem))
@@ -1260,9 +1263,9 @@ staff_debug("AddBar");
 }
 
 // ----------------------------------------------------------------------------
-GRKey * GRStaff::AddKey(ARKey * arkey)
+GRKey * GRStaff::AddKey (const ARKey * arkey)
 {
-	ARNaturalKey * natkey = dynamic_cast<ARNaturalKey *>(arkey);
+	const ARNaturalKey * natkey = dynamic_cast<const ARNaturalKey *>(arkey);
 	// it may happen, that the natkey is not needed because a newsystem has occured!
 	if (natkey && mStaffState.curkey)
 	{
@@ -1285,7 +1288,8 @@ GRKey * GRStaff::AddKey(ARKey * arkey)
 	{
 		// then we can change the keynumber if we want to ....
 		if (mStaffState.instrNumKeys != arkey->getKeyNumber() )
-			arkey->setKeyNumber(mStaffState.instrNumKeys);
+cerr << "==============================================>  GRStaff::AddKey auto setKN " << mStaffState.instrNumKeys << endl;
+//			arkey->setKeyNumber(mStaffState.instrNumKeys);
 	}
 
 	GRKey * key = new GRKey(this, arkey, 0, 0);
@@ -1301,7 +1305,7 @@ GRKey * GRStaff::AddKey(ARKey * arkey)
 }
 
 // ----------------------------------------------------------------------------
-GRText * GRStaff::AddText(ARText * atext)
+GRText * GRStaff::AddText(const ARText * atext)
 {
 	GRText * gtext = new GRText(this, atext);
 	addNotationElement(gtext);
@@ -1310,7 +1314,7 @@ GRText * GRStaff::AddText(ARText * atext)
 }
 
 // ----------------------------------------------------------------------------
-GRIntens * GRStaff::AddIntens(ARIntens * aintens)
+GRIntens * GRStaff::AddIntens(const ARIntens * aintens)
 {
 	GRIntens * gintens = new GRIntens(this, aintens);
 	addNotationElement(gintens);
@@ -1397,7 +1401,7 @@ GRDoubleBar * GRStaff::AddDoubleBar(ARDoubleBar * ardbar, const TYPE_TIMEPOSITIO
 {
 staff_debug("AddDoubleBar");
 	newMeasure(date); // erhoeht u.a. mnum!
-
+	if (mStaffState.curbarfrmt) ardbar->setRanges(mStaffState.curbarfrmt->getRanges());
 	GRDoubleBar * ntakt = new GRDoubleBar( ardbar, this, date, fProportionnalRendering);
 	// depending on current bar Format, we have to tell the staffmanager (or the system) 
 	if (mStaffState.curbarfrmt) {
@@ -1413,7 +1417,7 @@ GRFinishBar * GRStaff::AddFinishBar(ARFinishBar * arfbar, const TYPE_TIMEPOSITIO
 {
 staff_debug("AddFinishBar");
 	newMeasure(date); // erhoeht u.a. mnum!
-
+	if (mStaffState.curbarfrmt) arfbar->setRanges(mStaffState.curbarfrmt->getRanges());
 	GRFinishBar * ntakt = new GRFinishBar( arfbar, this, date, fProportionnalRendering);
 
 	// depending on current bar Format, we have to tell the staffmanager (or the system) 
@@ -1697,17 +1701,19 @@ staff_debug("AddSecondGlue");
 }
 
 // ----------------------------------------------------------------------------
-void GRStaff::setStaffFormat(ARStaffFormat * staffrmt)
+void GRStaff::setStaffFormat( const ARStaffFormat * staffrmt)
 {
 	mStaffState.curstaffrmt = staffrmt;
     
 	if (staffrmt) {
-		if (staffrmt->getSize() && staffrmt->getSize()->TagIsSet())
-			mStaffState.staffLSPACE = staffrmt->getSize()->getValue() * 2;
+		const TagParameterFloat* size = staffrmt->getSize();
+		if (size && size->TagIsSet())
+			mStaffState.staffLSPACE = size->getValue() * 2;
 		
-        if (staffrmt->getStyle() && staffrmt->getStyle()->TagIsSet()) {
+		const TagParameterString * style = staffrmt->getStyle();
+		if (style && style->TagIsSet()) {
 			// other than standard? -> rather n-line ....?
-			const NVstring & mystr = staffrmt->getStyle()->getValue();
+			const NVstring & mystr = style->getValue();
 
 			if   (isdigit(mystr[0])
               && (mystr.size() == 6 || mystr.size() == 7)
@@ -1721,23 +1727,19 @@ void GRStaff::setStaffFormat(ARStaffFormat * staffrmt)
 		}
         
         mStaffState.lineThickness = staffrmt->getLineThickness();
-
         mStaffState.staffDistance = staffrmt->getStaffDistance();
-
         if (staffrmt->getDY())
             mStaffState.yOffset = - (staffrmt->getDY()->getValue());
-
         if (staffrmt->getColor()) {
             if (!mStaffState.colRef)
                 mStaffState.colRef = new unsigned char[4];
-
             staffrmt->getColor()->getRGB(mStaffState.colRef);
         }
 	}
 }
 
 // ----------------------------------------------------------------------------
-void GRStaff::setBarFormat(ARBarFormat * barfrmt)
+void GRStaff::setBarFormat(const ARBarFormat * barfrmt)
 {
 	mStaffState.curbarfrmt = barfrmt;
 }
@@ -1801,9 +1803,6 @@ staff_debug("setStaffState");
 GRGlue * GRStaff::getStartGlue() const		{ return startglue; }
 GRGlue * GRStaff::getEndGlue() const		{ return endglue; }
 GRGlue * GRStaff::getSecondGlue() const		{ return secglue; }
-
-// ----------------------------------------------------------------------------
-const GRStaffState * GRStaff::getStaffState()	{ return &mStaffState; }
 
 // ----------------------------------------------------------------------------
 GRSystem * GRStaff::getGRSystem() const
@@ -1909,6 +1908,8 @@ void GRStaff::FinishStaff()
        (*i)->FinishPTag (this);
     }
 	updateBoundingBox();
+//	GRStaffOnOffVisitor v;
+//	accept (v);
 }
 
 // ----------------------------------------------------------------------------
@@ -2222,9 +2223,9 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
         return;
 
 	const float lspace = getStaffLSPACE(); // Space between two lines
-	const NVPoint & staffPos = getPosition();
-	
-	float yPos = staffPos.y;
+//	const NVPoint & staffPos = getPosition();
+//	
+//	float yPos = staffPos.y;
 	
 	/* - Debug ->
 	hdc.PushPen( GColor( 255, 0, 0, 128 ), 10 );
@@ -2238,24 +2239,19 @@ void GRStaff::DrawStaffUsingLines( VGDevice & hdc ) const
 
     hdc.PushPenWidth(currentLineThikness() * getSizeRatio());
 
-    std::map<float,float>::const_iterator it = positions.begin();
-
-    while (it != positions.end()) {
+    std::map<float,float>::const_iterator it = fPositions.begin();
+    while (it != fPositions.end()) {
         float x1 = it->first;
         float x2 = it->second;
-
-        yPos = staffPos.y;
-
+        float yPos = getPosition().y;
         for (int i = 0; i < mStaffState.numlines; i++) {
             hdc.Line(x1, yPos, x2, yPos);
             yPos += lspace;
         }
-
         it++;
     }
 
     hdc.PopPenWidth();
-
     if (mStaffState.colRef)
         hdc.PopPenColor();
 }
@@ -2315,67 +2311,74 @@ void GRStaff::GGSOutput() const
 //-------------------------------------------------
 /** \brief Find the spatial x end position from the time position and the duration
 */
-float GRStaff::getXEndPosition(TYPE_TIMEPOSITION pos, TYPE_DURATION dur)
+float GRStaff::getXEndPosition(TYPE_TIMEPOSITION pos, TYPE_DURATION dur) const
 {
+	float x = 0;
 	TYPE_TIMEPOSITION end = pos + dur;
-	NEPointerList * elmts = getElements();
-	if (elmts)
+	const NEPointerList& elmts = getElements();
+//cerr << "=> GRStaff::getXEndPosition " << end << " " << elmts.size() << endl;
+	if (elmts.size())
     {
-		NEPointerList * elmtsAtEndOfDuration = elmts->getElementsWithTimePosition(end);
+		NEPointerList * elmtsAtEndOfDuration = elmts.getElementsWithTimePosition(end);
 		if(elmtsAtEndOfDuration)
         {
-			GRNotationElement * elmt = elmtsAtEndOfDuration->GetHead();
-			if(elmt)
-            {
+//cerr << "GRStaff::getXEndPosition " << elmtsAtEndOfDuration->size() << endl;
+//GuidoPos pos = elmtsAtEndOfDuration->GetHeadPosition();
+//while (pos) {
+//	const GRNotationElement * elt = elmtsAtEndOfDuration->GetNext(pos);
+//cerr << "GRStaff::getXEndPosition " << elt << endl;
+//}
+			const GRNotationElement * elmt = elmtsAtEndOfDuration->GetHead();
+			if(elmt) {
 				NVPoint position = elmt->getPosition();
-				float X = position.x;
-				GREvent * gevent = dynamic_cast<GREvent *>(elmt);
-				
+				x = position.x;
+				const GREvent * gevent = dynamic_cast<const GREvent *>(elmt);
                 if (gevent)
-					X -= LSPACE;
-                
-                delete elmtsAtEndOfDuration;
-                
-				return X;
+					x -= LSPACE;
+//                delete elmtsAtEndOfDuration;
+//				return X;
 			}
+			delete elmtsAtEndOfDuration;
 		}
 	}
-
-    return 0;
+    return x;
 }
 
-void GRStaff::setOnOff(bool onoff, TYPE_TIMEPOSITION tp)
+void GRStaff::setOnOff(bool on, TYPE_TIMEPOSITION tp)
 {
-	if(isOn.count(tp)>0)
-	{
-		std::map<TYPE_TIMEPOSITION, bool>::iterator it;
-		it = isOn.find(tp);
-		it->second = onoff;
-	}
-	else
-		isOn.insert(std::pair<TYPE_TIMEPOSITION, bool>(tp, onoff));
+//	fOnOffList.push_back (make_pair(tp,on));
+	fOnOffList[tp] = on;
+
+//	if(fOnOffList.count(tp) > 0)
+//	{
+//		std::map<TYPE_TIMEPOSITION, bool>::iterator it;
+//		it = fOnOffList.find(tp);
+//		it->second = on;
+//	}
+//	else
+//		fOnOffList.insert(std::pair<TYPE_TIMEPOSITION, bool>(tp, on));
 }
 
-void GRStaff::setOnOff(bool onoff)
+void GRStaff::setOnOff(bool on)
 {
-	setOnOff(onoff, getRelativeTimePosition());
+	setOnOff(on, getRelativeTimePosition());
 }
 
 bool GRStaff::isStaffEndOn()
 {
-  std::map<TYPE_TIMEPOSITION, bool>::reverse_iterator rit;
-  rit = isOn.rbegin();
-  return (rit == isOn.rend() ? false : rit->second);
+//  std::map<TYPE_TIMEPOSITION, bool>::reverse_iterator rit;
+  auto rit = fOnOffList.rbegin();
+  return (rit == fOnOffList.rend() ? false : rit->second);
 }
 
 bool GRStaff::isStaffBeginOn()
 {
-  std::map<TYPE_TIMEPOSITION, bool>::iterator it;
-  it = isOn.begin();
-  return (it == isOn.end() ? false : it->second);
+//  std::map<TYPE_TIMEPOSITION, bool>::iterator it;
+  auto it = fOnOffList.begin();
+  return (it == fOnOffList.end() ? false : it->second);
 }
 
-
+//--------------------------------------------------------------------
 void GRStaff::generatePositions()
 {
 	//const float lspace = getStaffLSPACE(); // Space between two lines
@@ -2404,7 +2407,7 @@ void GRStaff::generatePositions()
 	float xEnd2 = r.right;
 
 	// Now we have to see if there is one or more \staffOff- \staffOn- tag(s)
-	std::map<TYPE_TIMEPOSITION, bool>::const_iterator it = isOn.begin();
+	auto it = fOnOffList.begin();
 	TYPE_TIMEPOSITION t;
 	TYPE_TIMEPOSITION t2 = it->first;
 	bool draw = it->second;
@@ -2413,7 +2416,7 @@ void GRStaff::generatePositions()
 
 	it++;
 
-	while (it != isOn.end()) {
+	while (it != fOnOffList.end()) {
 		t = t2;
 		t2 = it->first;
 		x = next;
@@ -2421,7 +2424,7 @@ void GRStaff::generatePositions()
 		next = getXEndPosition(t, dur);
 
 		if (draw)
-			positions.insert(std::pair<float,float>(x, next));
+			fPositions.insert(std::pair<float,float>(x, next));
 
 		draw = it->second;
 
@@ -2433,14 +2436,14 @@ void GRStaff::generatePositions()
 
 	// when we arrive to the last element (possibly the same as the first one) we draw
 	// from the last x posititon to the end of the measure
-	if (it == isOn.end() && draw)
-		positions.insert(std::pair<float,float>(next, xEnd2));
+	if (it == fOnOffList.end() && draw)
+		fPositions.insert(std::pair<float,float>(next, xEnd2));
 		
 	// the begining of the next measure has to be drawn by this staff...
 	if (isNextOn && xEnd != xEnd2) {
-		if (positions.count(xEnd2) > 0)
-			positions.erase(xEnd2);
+		if (fPositions.count(xEnd2) > 0)
+			fPositions.erase(xEnd2);
 
-		positions.insert(std::pair<float,float>(xEnd2, xEnd));
+		fPositions.insert(std::pair<float,float>(xEnd2, xEnd));
 	}
 }

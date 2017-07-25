@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -186,7 +186,6 @@ float GRSpring::change_force(float df)
 	fForce = df;
 
 	fX = fForce / fSconst;
-
 	l = long(floor(fX * 1000.0 +0.5));
 	fX = l / 1000.0f;
 	return fX;
@@ -215,7 +214,7 @@ float GRSpring::change_const(float dc)
    if (fIsProportionalElement)
         dc = 1;
 	
-    assert(dc > 0);
+//    assert(dc > 0);
     long l = long(floor(dc * 100000.0+0.5));
     dc = l/100000.0f;
     fSconst = dc;

@@ -28,8 +28,8 @@ class GRBreathMark : public GRTagARNotationElement
 {
 	public:
 
-						GRBreathMark( ARBreathMark * ar );
-		virtual			~GRBreathMark();
+						 GRBreathMark( const ARBreathMark * ar );
+		virtual			~GRBreathMark() {}
 		
 		virtual void	OnDraw( VGDevice & hdc ) const;
 

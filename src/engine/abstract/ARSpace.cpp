@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -16,53 +16,19 @@
 
 #include "ARSpace.h"
 #include "TagParameterFloat.h"
-#include "TagParameterList.h"
-#include "ListOfStrings.h"
-#include "GuidoDefs.h"
+#include "TagParameterStrings.h"
 
-ListOfTPLs ARSpace::ltpls(1);
+static const TagParameterMap sARSpaceMap (kARSpaceParams);
 
-void ARSpace::setTagParameterList(TagParameterList & tpl)
+ARSpace::ARSpace() : fVal(0.0f)
 {
-	if (ltpls.GetCount() == 0)
-	{
-
-		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail( ( "U,dd,,r"));
-		CreateListOfTPLs(ltpls,lstrs);
-
-	}
-	TagParameterList * rtpl = NULL;
-	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
-
-	if (ret>=0 && rtpl)
-	{
-		// we found a match!
-		if (ret == 0)
-		{
-			GuidoPos pos = rtpl->GetHeadPosition();
-			TagParameterFloat * tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
-			assert(tpf);
-			fVal = tpf->getValue();
-		}
-		delete rtpl;
-
-	}
-	tpl.RemoveAll();
+	setupTagParameters (sARSpaceMap);
 }
 
-void ARSpace::printName(std::ostream& os) const
+//--------------------------------------------------------------------------
+void ARSpace::setTagParameters (const TagParameterMap& params)
 {
-    os << "ARSpace";
+	const TagParameterFloat* p	= getParameter<TagParameterFloat>(kDdStr);
+	if (p) fVal = p->getValue();
 }
 
-void ARSpace::printGMNName(std::ostream  &os) const
-{
-    os << "\\space";
-}
-
-void ARSpace::printParameters(std::ostream& os) const
-{
-	os << "dist: " << fVal << "; ";
-    ARMusicalTag::printParameters(os);
-}

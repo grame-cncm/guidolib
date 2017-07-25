@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -25,7 +25,7 @@
 using namespace std;
 
 
-GRInstrument::GRInstrument(ARInstrument * ar, GRStaff* staff)
+GRInstrument::GRInstrument(const ARInstrument * ar, GRStaff* staff)
 		: GRTagARNotationElement(ar, LSPACE)
 {
 	mBoundingBox.left = 0;
@@ -68,7 +68,7 @@ GRInstrument::GRInstrument(ARInstrument * ar, GRStaff* staff)
 	else fTextFormat = xdir | ydir;
 
     fFontAttributes = ar->getTextAttributes();
-	fSize = ar->getSize();
+	fSize = ar->getFSize();
 	setGRStaff(staff);
 	if (ar->autoPos())
 		fRefPos = NVPoint(-LSPACE*2, (staff->getDredgeSize() + LSPACE) / 2);

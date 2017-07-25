@@ -20,7 +20,7 @@
 unsigned int GRBreathMark::sBreathMarkSymbol = kBreathMarkSymbol;
 NVPoint GRBreathMark::refpos;
 
-GRBreathMark::GRBreathMark( ARBreathMark * ar )
+GRBreathMark::GRBreathMark( const ARBreathMark * ar )
 		: GRTagARNotationElement( ar, LSPACE )
 {
 	mNeedsSpring = 1;
@@ -43,10 +43,6 @@ GRBreathMark::GRBreathMark( ARBreathMark * ar )
 	refpos = NVPoint( - extent - float(0.25) * LSPACE, 0 );
 
 	mPosition.y = - float(1.5) * LSPACE;
-}
-
-GRBreathMark::~GRBreathMark()
-{
 }
 
 void GRBreathMark::OnDraw(VGDevice & hdc) const

@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -16,26 +16,27 @@
 #include <sstream>
 
 #include "ARBarFormat.h"
+#include "TagParameterStrings.h"
 #include "TagParameterString.h"
-#include "TagParameterFloat.h"
+//#include "TagParameterFloat.h"
 #include "GRDefine.h"
-#include "TagParameterList.h"
-#include "ListOfStrings.h"
 
 using namespace std;
 
-
-ListOfTPLs ARBarFormat::ltpls(1);
+static const TagParameterMap sARBarFormatMap (kARBarFormatParams);
 
 ARBarFormat::ARBarFormat(const ARBarFormat & barfrmt)
 {
+	setupTagParameters (sARBarFormatMap);
 	fStyle = barfrmt.getStyle();
 	fRanges = barfrmt.getRanges();
 }
 
-ARBarFormat::~ARBarFormat()	{}
-ARBarFormat::ARBarFormat()	{ fStyle = kStyleStaff; }
-
+ARBarFormat::ARBarFormat()
+{
+	setupTagParameters (sARBarFormatMap);
+	fStyle = kStyleStaff;
+}
 
 ARBar::TRanges ARBarFormat::getRanges (const NVstring &str)
 {
@@ -69,65 +70,20 @@ ARBar::TRanges ARBarFormat::getRanges (const NVstring &str)
 	return ranges;
 }
 
-void ARBarFormat::setTagParameterList(TagParameterList & tpl)
+void ARBarFormat::setTagParameters (const TagParameterMap& params)
 {
-	if (ltpls.GetCount() == 0)
-	{
-		// create a list of string ...
-		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(("S,style,staff,o;S,range,,o"));
-		CreateListOfTPLs(ltpls,lstrs);
+    const TagParameterString* p = getParameter<TagParameterString>(kStyleStr);
+	if (p) {
+		const string str = p->getValue();
+		if (str == "system" )
+			fStyle = kStyleSystem;
+		else if (str == "staff" )
+			fStyle = kStyleStaff;
+		else cerr << "\\barFormat: unknown style " << str << endl;
 	}
-
-	TagParameterList * rtpl = NULL;
-	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
-
-	if (ret>=0 && rtpl)
-	{
-		// we found a match!
-		if (ret == 0)
-		{
-			TagParameterString * style = TagParameterString::cast(rtpl->RemoveHead());
-			assert(style);
-			TagParameterString * range = TagParameterString::cast(rtpl->RemoveHead());
-			assert(range);
-
-			if ( style->TagIsSet() ) {
-				const NVstring & str = style->getValue();
-				if (str == "system" )
-					fStyle = kStyleSystem;
-				else if (str == "staff" )
-					fStyle = kStyleStaff;
-				else cerr << "\\barFormat: unknown style " << str << endl;
-			}
-			if ( range->TagIsSet() )
-				fRanges = getRanges(range->getValue());
-			delete style;
-			delete range;
-		}
-
-		delete rtpl;
-	}
-	else
-	{
-		// failure
-	}
-	tpl.RemoveAll();
+	
+	p = getParameter<TagParameterString>(kRangeStr);
+	if (p)
+		fRanges = getRanges(p->getValue());
 }
-
-void ARBarFormat::printName(std::ostream& os) const
-{
-    os << "ARBarFormat";
-}
-
-void ARBarFormat::printGMNName(std::ostream& os) const
-{
-    os << "\\barFormat";
-}
-
-void ARBarFormat::printParameters(std::ostream& os) const
-{
-    ARMusicalTag::printParameters(os);
-}
-
 

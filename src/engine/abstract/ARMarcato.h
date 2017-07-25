@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -22,35 +22,24 @@
 */
 class ARMarcato : public ARMTParameter, public ARPositionTag
 {		
-public:			
-    enum     tPositionMarcato { ABOVE, BELOW, NOTSET };
+	public:			
+		enum     TPosition { ABOVE, BELOW, NOTSET };
 
-             ARMarcato();
-	virtual ~ARMarcato();
+				 ARMarcato();
+		virtual ~ARMarcato() {}
 
-	virtual void setTagParameterList(TagParameterList & tpl);
+		virtual void setTagParameters (const TagParameterMap& params);
 
-    virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
-
-	virtual void browse(TimeUnwrap& mapper) const;
+		virtual const char*	getParamsStr() const	{ return kARMarcatoParams; };
+		virtual const char*	getTagName() const		{ return "ARMarcato"; };
+		virtual std::string getGMNName() const		{ return "\\marcato"; };
+		virtual void browse(TimeUnwrap& mapper) const;
 	
-    tPositionMarcato getPositionMarcato() const {return position;};
+		TPosition getMPosition() const				{ return fPosition;};
 
-protected:
+	protected:
 
-	// TagParameters ..
-	// TagParameterString *textformat;
-	// TagParameterFloat  *fsize;
-	// TagParameterInt	  *fnumber;
-
-
-	// this is important for allowed
-	// TagParameters ....
-	static ListOfTPLs ltpls;
-
-    tPositionMarcato position;
+		TPosition fPosition;
 };
 
 #endif

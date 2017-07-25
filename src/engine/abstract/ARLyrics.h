@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -16,54 +16,33 @@
 */
 
 #include "ARPositionTag.h"
-#include "ARMTParameter.h"
-//#include "ARMusicalObject.h"
-//#include "ARTagBegin.h"
-#include "GuidoDefs.h"		// for LSPACE
+#include "ARFontAble.h"
+//#include "GuidoDefs.h"		// for LSPACE
 
 class ARText;
 
 /** \brief Implement the lyrics Tag
 */
-class ARLyrics : public ARMTParameter, public ARPositionTag
+class ARLyrics : public ARFontAble, public ARPositionTag
 {
-public:
+	public:
 
-	friend class ARText;
+		friend class ARText;
 	
-				 ARLyrics(bool autopos=false);
-	virtual		~ARLyrics(); 
+					 ARLyrics(bool autopos=false);
+		virtual		~ARLyrics() {}
 
-	virtual void setTagParameterList(TagParameterList & theTagParameterList);
+		virtual void setTagParameters (const TagParameterMap& params);
 	
-	virtual const char* getText() const;
+		virtual const char* getText() const			{ return fText.c_str(); }
+		virtual const char*	getParamsStr() const	{ return kARLyricsParams; };
+		virtual const char*	getTagName() const		{ return "ARLyrics"; };
+		virtual std::string getGMNName() const		{ return "\\lyrics"; };
+		bool		autoPos() const					{ return fAutoPos; }
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
-	
-	virtual int MatchListOfTPLsWithTPL(const ListOfTPLs & ltpls,TagParameterList & tpl,
-							TagParameterList ** rtpl);
-
-
-	virtual void  CreateListOfTPLs( ListOfTPLs & ltpl, ListOfStrings & lstrs);
-	
-	const char* getTextformat() const;
-	const char* getFont() const;
-	const char* getFAttrib() const;
-	int			getFSize(float curLSPACE = LSPACE) const;
-	bool		autoPos() const		{ return fAutoPos; }
-
-protected:
-	TagParameterString * mText; // the corresponding text ...
-	TagParameterString * mTextFormat;
-	TagParameterString * mFont;
-	TagParameterFloat  * mFSize;
-	TagParameterString * mFAttrib;
-
-	bool fAutoPos;
-
-	static ListOfTPLs ltpls;
+	protected:
+		std::string	fText;		// the corresponding text ...
+		bool		fAutoPos;
 };
 
 #endif

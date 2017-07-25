@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -15,44 +15,30 @@
 
 */
 
-//#include "ARMTParameter.h"
-// #include "ARMusicalObject.h"
 #include "ARBar.h"
 
 class ARRepeatEnd;
-class ARFactory;
 
 /** \brief The right facing repeat sign.
 */
-class ARRepeatBegin : public ARMTParameter	// ,public ARMusicalObject
-//class ARRepeatBegin : public ARBar
+class ARRepeatBegin : public ARMTParameter
 {
 	public:
-		friend class ARRepeatEnd;
-		friend class ARFactory;
-
 					 ARRepeatBegin() { dur.setNumerator(-1); }
-		virtual		~ARRepeatBegin()	{ }
+		virtual		~ARRepeatBegin() {}
 
-		virtual void	setTagParameterList(TagParameterList & tpl);
-
-	    virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	    virtual void printParameters(std::ostream& os) const;
-
+		virtual const char*	getTagName() const		{ return "ARRepeatBegin"; };
+		virtual std::string getGMNName() const		{ return "\\repeatBegin"; };
 		virtual void browse(TimeUnwrap& mapper) const;
 
 		virtual void setRepeatEnd( const ARRepeatEnd * );
 
-        /**** Function to avoid dynamic_cast ****/
-        ARMusicalObject *isARRepeatBegin() { return this; }
-        /*****************************************/
+        ARMusicalObject *isARRepeatBegin() 							{ return this; }
 		const ARBar::TRanges&	getRanges () const					{ return fRanges; }
 		void					setRanges (const ARBar::TRanges& r)	{ fRanges = r; }
 	
-	protected:
+	private:
 		ARBar::TRanges	fRanges;
-		static ListOfTPLs ltpls;
 		TYPE_DURATION dur;
 };
 

@@ -70,9 +70,7 @@ class GRGlissando : public GRPTagARNotationElement
 
 	public:
 					GRGlissando( GRStaff * grstaff = 0); 
-					GRGlissando( GRStaff * grstaff, ARGlissando * abstractRepresentationOfGlissando );
-
-
+					GRGlissando( GRStaff * grstaff, const ARGlissando * ar );
 		virtual 	~GRGlissando();
 
 		virtual void OnDraw( VGDevice & hdc ) const;

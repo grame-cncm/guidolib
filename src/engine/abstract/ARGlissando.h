@@ -21,38 +21,36 @@
 
 class ARGlissando : public ARMTParameter, public ARPositionTag
 {
-public:
-				ARGlissando();
-                ARGlissando(const ARGlissando * glissando);
-	virtual	   ~ARGlissando() {};
+	public:
+					ARGlissando();
+					ARGlissando(const ARGlissando * glissando);
+		virtual	   ~ARGlissando() {};
 	
-	virtual void setTagParameterList(TagParameterList & tlist);
+		virtual void setTagParameters (const TagParameterMap& params);
 
-	virtual void printName(std::ostream& os) const;
-    virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual const char*	getParamsStr() const	{ return kARGlissandoParams; };
+		virtual const char*	getTagName() const		{ return "ARGlissando"; };
+		virtual std::string getGMNName() const		{ return "\\glissando"; };
 
-	virtual void browse(TimeUnwrap& mapper) const;
-	virtual bool MatchEndTag(const char * s);
+		virtual void browse(TimeUnwrap& mapper) const;
+		virtual bool MatchEndTag(const char * s);
 
-	const float getDx1()       const { return fDx1; }
-	const float getDy1()       const { return fDy1; }
-	const float getDx2()       const { return fDx2; }
-	const float getDy2()       const { return fDy2; }
-	const float getThickness() const { return fThickness; }
-    const bool  isFill()             { return fFill; }
-	//const bool  isWavy()             { return fWavy; }
+		const float getDx1()       const { return fDx1; }
+		const float getDy1()       const { return fDy1; }
+		const float getDx2()       const { return fDx2; }
+		const float getDy2()       const { return fDy2; }
+		const float getThickness() const { return fThickness; }
+		const bool  isFill()	   const { return fFill; }
+		//const bool  isWavy()             { return fWavy; }
 	
-protected:
-	float fDx1;
-	float fDy1;
-	float fDx2;
-	float fDy2;
-	float fThickness;
-    bool  fFill;
-	//bool  fWavy;
-
-	static ListOfTPLs ltpls;
+	protected:
+		float fDx1;
+		float fDy1;
+		float fDx2;
+		float fDy2;
+		float fThickness;
+		bool  fFill;
+		//bool  fWavy;
 };
 
 #endif

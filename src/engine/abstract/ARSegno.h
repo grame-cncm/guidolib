@@ -14,26 +14,24 @@
 
 */
 
-#include <string>
 #include "ARJump.h"
+#include "TimeUnwrap.h"
 
 /** \brief Signa
 */
 class ARSegno : public ARJump
 {
-public:
-				 ARSegno();
-	virtual 	~ARSegno();
+	public:
+					 ARSegno() : ARJump ("[segno]") {}
+		virtual 	~ARSegno() {}
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-    virtual void printParameters(std::ostream& os) const {}
+		virtual const char*	getParamsStr() const	{ return ""; };
+		virtual const char*	getTagName() const		{ return "ARSegno"; };
+		virtual std::string getGMNName() const		{ return "\\segno"; };
+		ARMusicalObject *isARSegno()				{ return this; }
 
-	virtual void browse(TimeUnwrap& mapper) const;
-
-    /**** Function to avoid dynamic_cast ****/
-    ARMusicalObject *isARSegno() { return this; }
-    /*****************************************/
+		virtual void browse(TimeUnwrap& mapper) const
+			{ mapper.AtPos (this, TimeUnwrap::kSegno); }
 };
 
 #endif

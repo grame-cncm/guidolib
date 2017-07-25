@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -13,117 +13,53 @@
 */
 
 #include <iostream>
-// #include "ARFactory.h"
+
 #include "ARBar.h"
-#include "ARMusicalTag.h"
 
+#include "TagParameterStrings.h"
 #include "TagParameterString.h"
-#include "TagParameterInt.h"
 #include "TagParameterFloat.h"
-#include "TagParameterList.h"
-#include "ListOfStrings.h"
 
-ListOfTPLs ARBar::ltpls(1);
+static const TagParameterMap sARBarMap (kARBarParams);
 
 ARBar::ARBar(const TYPE_TIMEPOSITION &timeposition)
 	: ARMTParameter(timeposition)
 {
-	measureNumber               = 0;
-    measureNumberDisplayed      = false;
-    measureNumberDisplayedIsSet = false;
-    fSkippedMeasureNum          = false;
+	setupTagParameters (sARBarMap);
 
-	numDx = 0;
-	numDy = 0;
-}
-
-ARBar::ARBar() : ARMTParameter()
-{
 	measureNumber               = 0;
     measureNumberDisplayed      = kNoNum;
     measureNumberDisplayedIsSet = false;
     fSkippedMeasureNum          = false;
-    
-	numDx = 0;
-	numDy = 0;
+	numDx = numDy = 0;
 }
 
-ARBar::~ARBar() // does nothing
+ARBar::ARBar()
 {
+	setupTagParameters (sARBarMap);
+
+	measureNumber               = 0;
+    measureNumberDisplayed      = kNoNum;
+    measureNumberDisplayedIsSet = false;
+    fSkippedMeasureNum          = false;
+	numDx = numDy = 0;
 }
 
-void ARBar::setTagParameterList(TagParameterList& tpl)
+void ARBar::setTagParameters (const TagParameterMap& params)
 {
-	if (ltpls.GetCount() == 0)
-	{
-		// create a list of string ...
-
-		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(
-			("S,displayMeasNum,false,o;U,numDx,0,o;U,numDy,0,o"));
-		CreateListOfTPLs(ltpls,lstrs);
+    const TagParameterString* p = getParameter<TagParameterString>(kDisplayMeasNumStr);
+	if (p) {
+		std::string skipped("skipped");
+		const char* displayMeasNum = p->getValue();
+		
+		fSkippedMeasureNum = (skipped == displayMeasNum);
+		measureNumberDisplayed = (p->getBool() ? kNumAll : kNoNum);
+		measureNumberDisplayedIsSet = true;
 	}
 
-	TagParameterList * rtpl = NULL;
-	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
-
-	if (ret>=0 && rtpl)
-	{
-		// we found a match!
-		if (ret == 0)
-		{
-			// then, we now the match for
-			// the first ParameterList
-			// w, h, ml, mt, mr, mb
-
-            TagParameterString *s = TagParameterString::cast(rtpl->RemoveHead());
-            if (s->TagIsSet()) {
-                std::string skipped("skipped");
-                const char* displayMeasNum = s->getValue();
-                
-                fSkippedMeasureNum = (skipped == displayMeasNum);
-                measureNumberDisplayed = (s->getBool() ? kNumAll : kNoNum);
-                measureNumberDisplayedIsSet = true;
-            }
-            delete s;
-
-			// - dx/dy for measure number
-			TagParameterFloat *f = TagParameterFloat::cast(rtpl->RemoveHead());
-			numDx = f->TagIsSet() ? f->getValue() : 0;
-            delete f;
-
-			f = TagParameterFloat::cast(rtpl->RemoveHead());
-			numDy = f->TagIsSet() ? f->getValue() : 0;
-            delete f;
-		}
-
-		delete rtpl;
-	}
-	else
-	{
-		// failure
-	}
-
-	tpl.RemoveAll();
+    const TagParameterFloat* num = getParameter<TagParameterFloat>(kNumDxStr);
+	numDx = num ? num->getValue() : 0;
+    num = getParameter<TagParameterFloat>(kNumDyStr);
+	numDy = num ? num->getValue() : 0;
 }
 
-void ARBar::printName(std::ostream& os) const
-{
-    os << "ARBar";
-}
-
-void ARBar::printGMNName(std::ostream& os) const
-{
-    os << "\\bar";
-}
-
-void ARBar::printParameters(std::ostream& os) const
-{
-    os << "measureNumber: " << measureNumber << "; ";
-    os << "measureNumberDisplayed: " << measureNumberDisplayed << "; ";
-    os << "skipped: " << fSkippedMeasureNum << "; ";
-    os << "numDx: " << numDx << "; ";
-    os << "numDy: " << numDy << ";";
-
-    ARMusicalTag::printParameters(os);
-}

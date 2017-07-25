@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -78,50 +78,50 @@ that is, that they have been broken either by newSystem/newPage or by automatic 
 */
 class GRPositionTag : public GRTag
 {
-public:
-	class GRSaveStruct 
-	{
-		public:
-				GRSaveStruct() {};
-		virtual ~GRSaveStruct() {};
-	};
+	public:
+		class GRSaveStruct 
+		{
+			public:
+					GRSaveStruct() {};
+			virtual ~GRSaveStruct() {};
+		};
 
-	void DeleteAllSSEs();
-	virtual void ResumeTag(GRStaff * grstaff, GuidoPos assocpos);
-	virtual void BreakTag(GRStaff * grstaff, GuidoPos & assocpos);
-	virtual void StaffBegin(GRStaff  * grstaff = 0);
-	virtual void StaffFinished(GRStaff * grstaff = 0);
-	virtual void FinishPTag (GRStaff *)     {}
-	virtual void RangeEnd(GRStaff * grstaff = 0);
+				 GRPositionTag(const ARMusicalTag * armt = 0);
+				 GRPositionTag(GuidoPos p_ep, const ARMusicalTag * armt = 0);
+		virtual ~GRPositionTag() {}
 
-	void changeCurrentSystem(GRSystem * psystem);
-	virtual bool DeleteStaff(GRStaff * grstaff);
-	GRPositionTag(ARMusicalTag * armt = 0);
-	GRPositionTag(GuidoPos p_ep, ARMusicalTag * armt = 0);
 
-	GuidoPos getEndPos() const { return ep; }
+		virtual void ResumeTag(GRStaff * grstaff, GuidoPos assocpos);
+		virtual void BreakTag(GRStaff * grstaff, GuidoPos & assocpos);
+		virtual void StaffBegin(GRStaff  * grstaff = 0);
+		virtual void StaffFinished(GRStaff * grstaff = 0);
+		virtual void FinishPTag (GRStaff *)     {}
+		virtual void RangeEnd(GRStaff * grstaff = 0);
+		virtual bool DeleteStaff(GRStaff * grstaff);
 
-	GRSystemStartEndStruct * getSystemStartEndStruct(const GRSystem * grsystem) const;
+		void changeCurrentSystem(GRSystem * psystem);
+		void DeleteAllSSEs();
 
-protected:
+		GuidoPos getEndPos() const { return ep; }
 
-	virtual void setStartElement(const GRStaff * grstaff, 	GRNotationElement * n_element);
-	virtual void setEndElement(const GRStaff * grstaff, GRNotationElement * n_element);
+		GRSystemStartEndStruct * getSystemStartEndStruct(const GRSystem * grsystem) const;
 
-	virtual void addAssociation(GRNotationElement * grnot);
-	virtual void removeAssociation(GRNotationElement * grnot);
+	protected:
 
-	virtual GRPositionTag::GRSaveStruct * getNewGRSaveStruct() 
-			{ return new GRSaveStruct; }
+		virtual void setStartElement(const GRStaff * grstaff, 	GRNotationElement * n_element);
+		virtual void setEndElement(const GRStaff * grstaff, GRNotationElement * n_element);
+		virtual void addAssociation(GRNotationElement * grnot);
+		virtual void removeAssociation(GRNotationElement * grnot);
 
-	GuidoPos ep;
+		virtual GRPositionTag::GRSaveStruct * getNewGRSaveStruct()	{ return new GRSaveStruct; }
 
-	SSEList mStartEndList;	// the Range tag Start-End List
+		GuidoPos ep;
 
-	GRSystemStartEndStruct::setflag lastendflag;
-	GRNotationElement * lastendElement;
-	GuidoPos lastendpos;
+		SSEList mStartEndList;	// the Range tag Start-End List
 
+		GRSystemStartEndStruct::setflag lastendflag;
+		GRNotationElement * lastendElement;
+		GuidoPos lastendpos;
 };
 
 

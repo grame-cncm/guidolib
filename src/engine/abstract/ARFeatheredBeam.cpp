@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -12,33 +12,31 @@
 
 */
 
-#include <cstring>
+
 #include <iostream>
 #include <sstream>
 
 #include "ARFeatheredBeam.h"
-#include "TagParameterInt.h"
 #include "TagParameterString.h"
-#include "TagParameterList.h"
-#include "ListOfStrings.h"
+#include "TagParameterStrings.h"
 
-ListOfTPLs ARFeatheredBeam::ltpls(1);
+using namespace std;
+
+static const TagParameterMap sARFeatheredBeamMap (kARFeatheredBeamParams);
 
 ARFeatheredBeam::ARFeatheredBeam()
 {
-	rangesetting = ONLY;
-	feathered = true;
-	drawDur = false;
-	durationsSet = false;
-	
-	beginDur = 0;
-	endDur = 0;
-	beginTimePos = 0;
-	endTimePos = 0;
-}
+	setupTagParameters (sARFeatheredBeamMap);
 
-ARFeatheredBeam::~ARFeatheredBeam()
-{
+	rangesetting = ONLY;
+	fFeathered = true;
+	fDrawDur = false;
+	fDurationsSet = false;
+	
+	fBeginDur = 0;
+	fEndDur = 0;
+	fBeginTimePos = 0;
+	fEndTimePos = 0;
 }
 
 bool ARFeatheredBeam::MatchEndTag(const char * s)
@@ -50,42 +48,16 @@ bool ARFeatheredBeam::MatchEndTag(const char * s)
 	return false;
 }
 
-void ARFeatheredBeam::setTagParameterList(TagParameterList & tpl)
+//--------------------------------------------------------------------------------------
+void ARFeatheredBeam::setTagParameters(const TagParameterMap & params)
 {
-	if (ltpls.GetCount() == 0)
-	{
-		// create a list of string ...
+	ARBeam::setTagParameters (params);
 
-		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(("S,durations,,o;S,drawDuration,false,o"));
-		CreateListOfTPLs(ltpls,lstrs);
-	}
+	const TagParameterString* durations = getParameter<TagParameterString>(kDurationsStr, true);
+	findPoints(durations->getValue());
 
-	TagParameterList * rtpl = NULL;
-	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
-
-	if (ret>=0 && rtpl)
-	{
-		// we found a match!
-		if (ret == 0)
-		{
-			TagParameterString *durations = TagParameterString::cast(rtpl->RemoveHead());
-			std::string p = durations->getValue();
-			findPoints(p);
-
-			TagParameterString *drawDuration = TagParameterString::cast(rtpl->RemoveHead());
-			drawDur = drawDuration->getBool();
-			delete durations;
-			delete drawDuration;
-		}
-		delete rtpl;
-	}
-	else
-	{
-		// failure
-	}
-
-	tpl.RemoveAll();
+	const TagParameterString* drawDuration = getParameter<TagParameterString>(kDrawDurationStr, true);
+	fDrawDur = drawDuration->getBool();
 }
 
 void ARFeatheredBeam::findPoints(std::string durations)
@@ -98,7 +70,7 @@ void ARFeatheredBeam::findPoints(std::string durations)
 		float valor = 0;
 		float valor2 = 0;
 
-		durationsSet = true;
+		fDurationsSet = true;
 
 		std::string dur = durations.substr(begin, commaPos);
 		std::stringstream stream(dur);
@@ -132,48 +104,32 @@ void ARFeatheredBeam::findPoints(std::string durations)
 void ARFeatheredBeam::findDefaultPoints()
 {
 	//handle the case with no duration parameters
-	float valor = float(beginDur.getNumerator());
-	valor /= beginDur.getDenominator();
-	float valor2 = float(endDur.getNumerator());
-	valor2 /= endDur.getDenominator();
+	float valor = float(fBeginDur.getNumerator());
+	valor /= fBeginDur.getDenominator();
+	float valor2 = float(fEndDur.getNumerator());
+	valor2 /= fEndDur.getDenominator();
 	convertDurationToBeams(valor, valor2);
 }
 
-void ARFeatheredBeam::convertDurationToBeams(float valor, float valor2)
+void ARFeatheredBeam::convertDurationToBeams(float valor, float valor2) 
 {
 		
 	if(valor >= 0.09375) 
-		beams.first=1;
+		fBeams.first=1;
 	else if(valor >= 0.046875)
-		beams.first=2;
+		fBeams.first=2;
 	else if(valor >= 0.0234375)
-		beams.first=3;
+		fBeams.first=3;
 	else
-		beams.first=4;
+		fBeams.first=4;
 
 	if(valor2>=0.09375) 
-		beams.second=1;
+		fBeams.second=1;
 	else if(valor2>=0.046875)
-		beams.second=2;
+		fBeams.second=2;
 	else if(valor2>=0.0234375)
-		beams.second=3;
+		fBeams.second=3;
 	else
-		beams.second=4;
+		fBeams.second=4;
 }
 
-void ARFeatheredBeam::printName(std::ostream& os) const
-{
-    os << "ARFeatheredBeam";
-}
-
-void ARFeatheredBeam::printGMNName(std::ostream& os) const
-{
-    os << "\\featheredBeam";
-}
-
-void ARFeatheredBeam::printParameters(std::ostream& os) const
-{
-    os << "drawDuration: " << drawDur << "; ";
-
-    ARMusicalTag::printParameters(os);
-}

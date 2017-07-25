@@ -39,12 +39,12 @@ void GRDynamics::accept (GRVisitor& visitor)
 }
 
 //----------------------------------------------------------------------
-GRDynamics::GRDynamics(GRStaff * grstaff, ARDynamic* ar) : GRPTagARNotationElement(ar, false)
+GRDynamics::GRDynamics(GRStaff * grstaff, const ARDynamic* ar) : GRPTagARNotationElement(ar, false)
 {
 	assert(grstaff);
 	setGRStaff(grstaff);
 
-	if (fDynamic2Symbol.empty()) initDynamicsMap();
+//	if (fDynamic2Symbol.empty()) initDynamicsMap();
 
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
 	sse->grsystem = grstaff->getGRSystem();
@@ -54,27 +54,27 @@ GRDynamics::GRDynamics(GRStaff * grstaff, ARDynamic* ar) : GRPTagARNotationEleme
 	mStartEndList.AddTail(sse);
 		
 	fThickness = 1.f;
-	fMarkingSymbol = 0;
+//	fMarkingSymbol = 0;
 	fNext = 0;
 }
 
 GRDynamics::~GRDynamics()	{}
 
 //----------------------------------------------------------------------
-void GRDynamics::initDynamicsMap()
-{
-	fDynamic2Symbol["p"]	= kIntensPSymbol;
-	fDynamic2Symbol["f"]	= kIntensFSymbol;
-	fDynamic2Symbol["ff"]	= kIntensFFSymbol;
-	fDynamic2Symbol["fff"]	= kIntensFFFSymbol;
-	fDynamic2Symbol["ffff"]	= kIntensFFFFSymbol;
-	fDynamic2Symbol["mf"]	= kIntensMFSymbol;
-	fDynamic2Symbol["mp"]	= kIntensMPSymbol;
-	fDynamic2Symbol["sf"]	= kIntensSFSymbol;
-	fDynamic2Symbol["pp"]	= kIntensPPSymbol;
-	fDynamic2Symbol["ppp"]	= kIntensPPPSymbol;
-	fDynamic2Symbol["pppp"]	= kIntensPPPPSymbol;
-}
+//void GRDynamics::initDynamicsMap()
+//{
+//	fDynamic2Symbol["p"]	= kIntensPSymbol;
+//	fDynamic2Symbol["f"]	= kIntensFSymbol;
+//	fDynamic2Symbol["ff"]	= kIntensFFSymbol;
+//	fDynamic2Symbol["fff"]	= kIntensFFFSymbol;
+//	fDynamic2Symbol["ffff"]	= kIntensFFFFSymbol;
+//	fDynamic2Symbol["mf"]	= kIntensMFSymbol;
+//	fDynamic2Symbol["mp"]	= kIntensMPSymbol;
+//	fDynamic2Symbol["sf"]	= kIntensSFSymbol;
+//	fDynamic2Symbol["pp"]	= kIntensPPSymbol;
+//	fDynamic2Symbol["ppp"]	= kIntensPPPSymbol;
+//	fDynamic2Symbol["pppp"]	= kIntensPPPPSymbol;
+//}
 
 //---------------------------------------------------------------------------------
 const GRNotationElement * GRDynamics::getNextEvent (const GRStaff* staff, const GRNotationElement * elt) const
@@ -105,7 +105,7 @@ void GRDynamics::tellPosition(GObject *caller, const NVPoint & newPosition)
 
 	float dx1    = arDyn->getDx1();
 	float dx2    = arDyn->getDx2();
-    float dy     = arDyn->getDy();
+    float dy     = arDyn->getDy(staff->getStaffLSPACE());
 	bool autopos = arDyn->autoPos();
 
 	if (empty(fCurrentSegment)) 	// this is the first continuation call
@@ -120,13 +120,13 @@ void GRDynamics::tellPosition(GObject *caller, const NVPoint & newPosition)
 		fCurrentSegment.fx2 = newPosition.x + (sse->endflag == GRSystemStartEndStruct::RIGHTMOST ? dx2 : 0);
 		const float staffLSpace = staff->getStaffLSPACE();
 		const float y = autopos ? staff->getStaffBottom() + staffLSpace : staff->getDredgeSize() + 2 * staffLSpace;
-		fCurrentSegment.fy = y + dy;
+		fCurrentSegment.fy = y - dy;
 		fXPoints[sse->grsystem] = fCurrentSegment;
 		clear (fCurrentSegment);
 	}
 	if ((sse->endflag == GRSystemStartEndStruct::RIGHTMOST) && empty(fCurrentSegment)) {	// this is the last segment
 		fWidth = arDyn->getDeltaY();
-		fMarkingSymbol = fDynamic2Symbol[arDyn->getDynamicMarking()];
+//		fMarkingSymbol = fDynamic2Symbol[arDyn->getDynamicMarking()];
 		fThickness = arDyn->getThickness();
 #if 0
 	cerr << "GRDynamics::tellPosition finalize" << endl;
@@ -166,11 +166,11 @@ void GRDynamics::DrawDynamic( VGDevice & hdc, bool cresc) const
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct(gCurSystem);
 	if (sse == 0) return;
 
-    const VGColor prevTextColor = hdc.GetFontColor();
+//    const VGColor prevTextColor = hdc.GetFontColor();
     if (mColRef) {
         hdc.PushPenColor(VGColor(mColRef));
         hdc.PushFillColor(VGColor(mColRef));
-        hdc.SetFontColor(VGColor(mColRef));
+//        hdc.SetFontColor(VGColor(mColRef));
     }
 
     hdc.PushPenWidth(fThickness);
@@ -197,17 +197,17 @@ void GRDynamics::DrawDynamic( VGDevice & hdc, bool cresc) const
 		}
 		hdc.Line ( segment->fx1, y1, x2, y2);
 		hdc.Line ( segment->fx1, y1+w1, x2, y2+w2);
-		if ((sse->endflag == GRSystemStartEndStruct::RIGHTMOST) && fMarkingSymbol) {
-			const VGFont* font = hdc.GetMusicFont();
-			float fw, fh=0;
-			if (font) font->GetExtent( fMarkingSymbol, &fw, &fh, &hdc);
-			OnDrawSymbol(hdc, fMarkingSymbol, x2 + 30, segment->fy + 24 * mTagSize, mTagSize);
-		}
+//		if ((sse->endflag == GRSystemStartEndStruct::RIGHTMOST) && fMarkingSymbol) {
+//			const VGFont* font = hdc.GetMusicFont();
+//			float fw, fh=0;
+//			if (font) font->GetExtent( fMarkingSymbol, &fw, &fh, &hdc);
+//			OnDrawSymbol(hdc, fMarkingSymbol, x2 + 30, segment->fy + 24 * mTagSize, mTagSize);
+//		}
 	}
 	
     hdc.PopPenWidth();
     if (mColRef) {
-        hdc.SetFontColor(prevTextColor);
+//        hdc.SetFontColor(prevTextColor);
         hdc.PopFillColor();
         hdc.PopPenColor();
     }

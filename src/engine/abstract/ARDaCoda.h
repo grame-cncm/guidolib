@@ -3,7 +3,7 @@
 
 /*
   GUIDO Library
-  Copyright (C) 2004  Grame
+  Copyright (C) 2004-2017  Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -15,20 +15,21 @@
 */
 
 #include "ARJump.h"
+#include "TimeUnwrap.h"
 
 /** \brief to coda (\\daCoda tag)
 */
 class ARDaCoda : public ARJump
 {
-public:	
-				 ARDaCoda();
-	virtual 	~ARDaCoda();
+	public:	
+					 ARDaCoda() : ARJump ("to Coda [coda]") {}
+		virtual 	~ARDaCoda() {}
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-    virtual void printParameters(std::ostream& os) const {};
+		virtual const char*	getTagName() const		{ return "ARDaCoda"; };
+		virtual std::string getGMNName() const		{ return "\\daCoda"; };
 
-	virtual void browse(TimeUnwrap& mapper) const;
+		virtual void browse(TimeUnwrap& mapper) const
+				{ mapper.AtPos (this, TimeUnwrap::kDaCoda); }
 };
 
 #endif

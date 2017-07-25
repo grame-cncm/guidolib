@@ -1,7 +1,7 @@
 /*
  GUIDO Library
  Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
- Copyright (C) 2004	Grame
+ Copyright (C) 2004-2017	Grame
  
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -28,22 +28,23 @@
 
 #include "TagParameterRGBColor.h"
 
-TagParameterRGBColor::TagParameterRGBColor( const unsigned char red, const unsigned char green, const unsigned char blue, const unsigned char alpha )
+TagParameterRGBColor::TagParameterRGBColor()
+    : mRed(0), mGreen(0), mBlue(0), mAlpha(255) {}
+
+TagParameterRGBColor::TagParameterRGBColor( unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha )
     : mRed(red), mGreen(green), mBlue(blue), mAlpha(alpha) {}
 
-TagParameterRGBColor::TagParameterRGBColor( const TagParameterRGBColor & tpRGBColor )
-    : TagParameter(tpRGBColor), mRed(tpRGBColor.getRedChannel()), mGreen(tpRGBColor.getGreenChannel()), mBlue(tpRGBColor.getBlueChannel()), mAlpha(tpRGBColor.getAlphaChannel())
+TagParameterRGBColor::TagParameterRGBColor( const TagParameterRGBColor & c )
+    : TagParameter(c), mRed(c.getRedChannel()), mGreen(c.getGreenChannel()), mBlue(c.getBlueChannel()), mAlpha(c.getAlphaChannel())
 {}
 
-TagParameterRGBColor::~TagParameterRGBColor() {}
-
 bool TagParameterRGBColor::copyValue(const TagParameter *tp ) {
-	const TagParameterRGBColor * tpRGBColor = TagParameterRGBColor::cast(tp);
-	if (tpRGBColor == 0)	return false;
-	mRed = tpRGBColor->getRedChannel();
-    mGreen = tpRGBColor->getGreenChannel();
-    mBlue = tpRGBColor->getBlueChannel();
-    mAlpha = tpRGBColor->getAlphaChannel();
+	const TagParameterRGBColor * c = TagParameterRGBColor::cast(tp);
+	if (c == 0)	return false;
+	mRed = c->getRedChannel();
+    mGreen = c->getGreenChannel();
+    mBlue = c->getBlueChannel();
+    mAlpha = c->getAlphaChannel();
     return true;
 }
 
@@ -55,7 +56,6 @@ bool TagParameterRGBColor::getRGBColor( unsigned char colref[4] ) const {
     colref[3] = mAlpha;
     return true;
 }
-
 
 void TagParameterRGBColor::set( const TagParameterRGBColor & in ) {
 	TagParameter::set( in );

@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -16,38 +16,29 @@
 */
 
 #include "ARMTParameter.h"
-
-class TagParameterInt;
+#include "TagParameterStrings.h"
+#include "TagParameterString.h"
+#include "TagParameterInt.h"
 
 /** \brief Accolade tag to group staves into accolades.
 */
 class ARAccolade : public ARMTParameter
 {
-public:
-	ARAccolade();
-	virtual ~ARAccolade();
+	public:
+				 ARAccolade();
+		virtual ~ARAccolade() {}
 
-	const TagParameterString * getIDString() const   { return sid; }
-	const TagParameterInt * getIDInt() const         { return nid; }
-	const TagParameterString * getAccolRange() const { return range; }
-	const TagParameterString * getType() const       { return type; }
-	virtual bool IsStateTag() const                  { return true; }
-	
-	virtual void setTagParameterList( TagParameterList & tpl);
+		const TagParameterString * getIDString() const   { return getParameter<TagParameterString>(kIDStr); }
+		const TagParameterInt *	   getIDInt() const      { return getParameter<TagParameterInt>(kIDStr); }
+		const TagParameterString * getAccolRange() const { return getParameter<TagParameterString>(kRangeStr); }
+		const TagParameterString * getType() const       { return getParameter<TagParameterString>(kTypeStr); }
 
-	virtual int	 getOrder() const					{ return kAccoladeOrder; }
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual bool IsStateTag() const                  { return true; }
 
-protected:
-	TagParameterInt * 		nid;
-	TagParameterString *	sid;
-
-	TagParameterString *	range;
-	TagParameterString *	type;
-
-	static ListOfTPLs 		ltpls;
+		virtual int	 getOrder() const				{ return kAccoladeOrder; }
+		virtual const char*	getParamsStr() const	{ return kARAccoladeParams; };
+		virtual const char*	getTagName () const		{ return "ARAccolade"; };
+		virtual std::string getGMNName () const		{ return "\\accolade"; };
 };
 
 #endif 

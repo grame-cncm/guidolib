@@ -17,7 +17,7 @@
 #include <sstream>
 
 #include "ARMusic.h"
-#include "ARNoteName.h"
+//#include "ARNoteName.h"
 #include "ARRest.h"
 #include "ARNote.h"
 #include "ARBar.h"

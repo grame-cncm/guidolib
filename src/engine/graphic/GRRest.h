@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -26,30 +26,24 @@ class ARRestFormat;
 class GRRest : public GREvent
 { 
 	public:
-					 GRRest( GRStaff * grstf, const TYPE_DURATION & theDuration );
-					 GRRest( GRStaff * grstf, ARRest * ar, bool p_ownsAR = false );
-					 GRRest( GRStaff * grstf,ARRest * ar, const TYPE_TIMEPOSITION & timepos, const TYPE_DURATION & duration );
+					 GRRest( GRStaff * grstf, const TYPE_DURATION & duration );
+					 GRRest( GRStaff * grstf, const ARRest * ar, bool p_ownsAR = false );
+					 GRRest( GRStaff * grstf, const ARRest * ar, const TYPE_TIMEPOSITION & timepos, const TYPE_DURATION & duration );
 
-		virtual 	~GRRest();
+		virtual 	~GRRest() {}
 
-		virtual void	setRestFormat(ARRestFormat *restfrmt);
-		virtual int		getWholeMeasure() const;
-	  	virtual void	setWholeMeasure(int p);	// ! unused !
+		virtual void	setRestFormat( const  ARRestFormat *restfrmt)	{}
+		virtual int		getWholeMeasure() const					{ return mWholeMeasure; }
+	  	virtual void	setWholeMeasure(int p)					{ mWholeMeasure = p; }
 		virtual void	OnDraw( VGDevice & hdc ) const = 0;
 
-		virtual const GRRest *	isRest() const			{ return this; }
+		virtual const GRRest *	isRest() const					{ return this; }
 
-		ARRest * getARRest() const;
+		const ARRest * getARRest() const;
 	
 	private:
 		int		 mWholeMeasure;
 };
-
-
-inline void GRRest::setRestFormat(ARRestFormat *)	{}
-inline void GRRest::setWholeMeasure(int p)	{ mWholeMeasure = p; }
-inline int  GRRest::getWholeMeasure() const	{ return mWholeMeasure; }
-
 
 #endif
 

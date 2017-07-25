@@ -144,7 +144,7 @@ NVPoint GRArticulation::sRefposBreathMark;
 
 map<int,int> GRArticulation::sOrdering;
 
-GRArticulation::GRArticulation(ARMusicalTag * inTag, float curLSPACE, bool ownsar)
+GRArticulation::GRArticulation(const ARMusicalTag * inTag, float curLSPACE, bool ownsar)
 				: GRTagARNotationElement(inTag, curLSPACE, ownsar)	// , tinfo(typeid(*mtag))
 {
 	// assert(inTag);
@@ -158,9 +158,9 @@ GRArticulation::GRArticulation(ARMusicalTag * inTag, float curLSPACE, bool ownsa
 	else if (tinfo == typeid(ARAccent))			setupAccent();
 	else if (tinfo == typeid(ARMarcato))
     {
-        if ( ((ARMarcato *) inTag)->getPositionMarcato() == ARMarcato::BELOW )
+        if ( ((ARMarcato *) inTag)->getMPosition() == ARMarcato::BELOW )
 			setupMarcatoBelow();
-		else if ( ((ARMarcato *) inTag)->getPositionMarcato() == ARMarcato::ABOVE )
+		else if ( ((ARMarcato *) inTag)->getMPosition() == ARMarcato::ABOVE )
 			setupMarcatoAbove();
         else
             setupMarcato();
@@ -198,12 +198,6 @@ GRArticulation::GRArticulation(ARMusicalTag * inTag, float curLSPACE, bool ownsa
 		else setupLeftHPizz();
 	}
 	else setupStaccato();
-}
-
-GRArticulation::~GRArticulation()
-{
-	// associatons are handled in destructor
-	// of GRNotationElement
 }
 
 void GRArticulation::print(ostream& os) const
@@ -784,7 +778,7 @@ void GRArticulation::placeBreathMark( const GREvent * inParent, NVPoint & ioPos 
 // ----------------------------------------------------------------------------
 // gives the ARArticulation setting
 int GRArticulation::getARPlacement() const {
-	ARArticulation* art = dynamic_cast<ARArticulation*>(getAbstractRepresentation());
+	const ARArticulation* art = dynamic_cast<const ARArticulation*>(getAbstractRepresentation());
 	return art ? art->getArticulationPosition() : ARArticulation::kDefaultPosition;
 }
 

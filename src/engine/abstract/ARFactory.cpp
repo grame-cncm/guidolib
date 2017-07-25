@@ -1,7 +1,7 @@
 /*
     GUIDO Library
     Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-    Copyright (C) 2002-2013 Grame
+    Copyright (C) 2002-2017 Grame
 
     This Source Code Form is subject to the terms of the Mozilla Public
     License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,6 +14,7 @@
 #include <string.h>
 #include <iostream>
 #include <algorithm>
+#include <memory>
 
 #include "defines.h" 
 #include "ARFactory.h"
@@ -131,33 +132,31 @@ using namespace std;
 // ----------------------------------------------------------------------------
 ARFactory::ARFactory()
   :
-	mCurrentVoice(NULL),
-	mCurrentMusic(NULL),
-	mCurrentEvent(NULL),
-	mCurrentRepeatBegin(NULL),
+//	mCurrentVoice(NULL),
+//	mCurrentMusic(NULL),
+//	mCurrentEvent(NULL),
+//	mCurrentRepeatBegin(NULL),
 	mLastEvent(NULL),
-	mTagParameterList(1),
 	mCurrentRegister(DEFAULT_REGISTER),
 	mCurrentNumerator(DEFAULT_NUMERATOR),
 	mCurrentDenominator(DEFAULT_DENOMINATOR),
 	mCurrentIntensity(DEFAULT_INTENSITY),
-//	mBeamState(BEAMSAUTO),
-	mCurrentOctava(NULL),
-	mCurrentGrace(NULL),
-	mCurrentCue(NULL),
-	mCurrentTrill(NULL),
-	mCurrentStem(NULL),
-	mCurrentHead(NULL),
-	mCurrentNoteFormat(NULL),
-	mCurrentRestFormat(NULL),
-	mCurrentDotFormat(NULL),
-	mCurrentAlter(NULL),
-	mSaveCurrentVoice(NULL),
-	mCurrentStaff(NULL),
-	mCurrentCluster(NULL),
-    mCurrentTremolo(NULL),
-    mCurrentChordTag(NULL),
-    mCurrentTuplet(NULL),
+//	mCurrentOctava(NULL),
+//	mCurrentGrace(NULL),
+//	mCurrentCue(NULL),
+//	mCurrentTrill(NULL),
+//	mCurrentStem(NULL),
+//	mCurrentHead(NULL),
+//	mCurrentNoteFormat(NULL),
+//	mCurrentRestFormat(NULL),
+//	mCurrentDotFormat(NULL),
+//	mCurrentAlter(NULL),
+//	mSaveCurrentVoice(NULL),
+//	mCurrentStaff(NULL),
+//	mCurrentCluster(NULL),
+//    mCurrentTremolo(NULL),
+//    mCurrentChordTag(NULL),
+//    mCurrentTuplet(NULL),
 	mVoiceNum(1),
 	mCurrentTags(0),
 	mVoiceAdded(false),
@@ -192,7 +191,7 @@ ARFactory::~ARFactory()
 void ARFactory::createMusic()
 {
 #if ARFTrace
- 	cout << "ARFactory::createMusic " << endl;
+ 	cerr << "ARFactory::createMusic " << endl;
 #endif
 	assert(!mCurrentMusic);
 	mCurrentMusic = new ARMusic;
@@ -219,8 +218,8 @@ ARMusic * ARFactory::getMusic()
     music->mMaxTagId = ARFactory::sMaxTagId + 1;
 
 #if ARTRACE
-    cout << "ARFactory::getMusic before auto stuff: " << endl;
-    music->output(cout, true);
+    cerr << "ARFactory::getMusic before auto stuff: " << endl;
+    music->output(cerr, true);
 #endif
 
     // this call inserts potential Breaks in
@@ -228,9 +227,9 @@ ARMusic * ARFactory::getMusic()
     timebench("ARMusic::doAutoStuff", music->doAutoStuff());
 
 #if ARTRACE
-    cout << "\nARFactory::getMusic after auto stuff: " << endl;
-    music->output(cout, true);
-    cout << "\nARFactory::getMusic - end ----------- " << endl;
+    cerr << "\nARFactory::getMusic after auto stuff: " << endl;
+    music->output(cerr, true);
+    cerr << "\nARFactory::getMusic - end ----------- " << endl;
 #endif
 
     mCurrentMusic = 0;
@@ -251,13 +250,15 @@ ARMusic * ARFactory::getMusic()
 void ARFactory::createVoice()
 {
 #if ARFTrace
- 	cout << "ARFactory::createVoice " << endl;
+ 	cerr << "ARFactory::createVoice " << endl;
 #endif
 	assert(!mCurrentVoice);
 	mCurrentVoice= new ARMusicalVoice;
 	mCurrentVoice->setVoiceNum(mVoiceNum++);
 	mVoiceAdded = false;
 	mAutoLyricsPos = false;
+	mAutoInstrPos = false;
+	mCurrentKey = 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -270,7 +271,7 @@ void ARFactory::createVoice()
 void ARFactory::addVoice()
 {
 #if ARFTrace
- 	cout << "ARFactory::addVoice " << endl;
+ 	cerr << "ARFactory::addVoice " << endl;
 #endif
 	assert(!mCurrentEvent);
 
@@ -318,7 +319,7 @@ void ARFactory::addVoice()
 void ARFactory::createChord()
 {
 #if ARFTrace
- 	cout << "ARFactory::createChord " << endl;
+ 	cerr << "ARFactory::createChord " << endl;
 #endif
 	// now, we have to save the position of the voice...
 	assert(mCurrentVoice);
@@ -358,7 +359,7 @@ void ARFactory::addChord()
 {
 
 #if ARFTrace
- 	cout << "ARFactory::addChord " << endl;
+ 	cerr << "ARFactory::addChord " << endl;
 #endif
     if (!mCurrentVoice)
         return;
@@ -373,34 +374,37 @@ void ARFactory::addChord()
     // was automatically created or already in the GUIDO description.	
     if (mCurrentTrill)
     {
-        ARMusicalVoice::CHORD_TYPE chord_type = ARMusicalVoice::UP_SIMPLE;
-        ARMusicalVoice::CHORD_ACCIDENTAL chord_accidental = ARMusicalVoice::NATURAL;
-        ARNote * FirstNote = mCurrentVoice->setTrillChord(chord_type, chord_accidental);
+		mCurrentVoice->finishTrilledChord();
+		
+//		ARMusicalVoice::CHORD_TYPE chord_type = ARMusicalVoice::UP_SIMPLE;
+//        ARMusicalVoice::CHORD_ACCIDENTAL chord_accidental = ARMusicalVoice::NATURAL;
+//        ARNote * firstNote = mCurrentVoice->setTrillChord(chord_type, chord_accidental);
+//
+//        mCurrentTrill->setChordType(chord_type);
+//        mCurrentTrill->setChordAccidental(chord_accidental);
+//
+//        firstNote->setOrnament(mCurrentTrill);
 
-        mCurrentTrill->setChordType(chord_type);
-        mCurrentTrill->setChordAccidental(chord_accidental);
-
-        FirstNote->setOrnament(mCurrentTrill);
-
-		bool trill = true;
-		if (mCurrentTags) {				// looks for beaming
-			ARMusicalVoiceState vst;
-			GuidoPos pos = mCurrentVoice->GetHeadPosition(vst);
-			while (pos && trill) {
-				mCurrentVoice->GetNext(pos, vst);
-				const PositionTagList * ptags = vst.currentPTags();
-				GuidoPos ppos = ptags ? ptags->GetHeadPosition() : 0;
-				while (ppos) {
-					const ARPositionTag * tag = ptags->GetNext(ppos);
-					const ARBeam* b = dynamic_cast<const ARBeam*>(tag);
-					if (b) {
-						trill = false;
-						break;
-					}
-				}
-			}
-		}
-		mCurrentVoice->FinishChord (trill);
+//		bool trill = true;
+//		if (mCurrentTags) {				// looks for beaming
+//			ARMusicalVoiceState vst;
+//			GuidoPos pos = mCurrentVoice->GetHeadPosition(vst);
+//			while (pos && trill) {
+//				mCurrentVoice->GetNext(pos, vst);
+//				const PositionTagList * ptags = vst.currentPTags();
+//				GuidoPos ppos = ptags ? ptags->GetHeadPosition() : 0;
+//				while (ppos) {
+//					const ARPositionTag * tag = ptags->GetNext(ppos);
+//					const ARBeam* b = dynamic_cast<const ARBeam*>(tag);
+//					if (b) {
+//						trill = false;
+//						break;
+//					}
+//				}
+//			}
+//		}
+//		mCurrentVoice->FinishChord (trill);
+		mCurrentVoice->FinishChord (false);
     }
     else
     {
@@ -409,7 +413,6 @@ void ARFactory::addChord()
 
         mCurrentVoice->FinishChord(false);
     }
-
     mCurrentChordTag = NULL;
 }
 
@@ -423,7 +426,7 @@ void ARFactory::addChord()
 void ARFactory::initChordNote()
 {
 #if ARFTrace
- 	cout << "ARFactory::initChordNote " << endl;
+ 	cerr << "ARFactory::initChordNote " << endl;
 #endif
 	assert(mCurrentVoice);
 	mCurrentVoice->initChordNote();
@@ -433,7 +436,7 @@ void ARFactory::initChordNote()
 void ARFactory::createEvent( const char * name )
 {
 #if ARFTrace
- 	cout << "ARFactory::createEvent " << endl;
+ 	cerr << "ARFactory::createEvent " << endl;
 #endif
 	assert(!mCurrentEvent);
 	assert(name);
@@ -443,6 +446,7 @@ void ARFactory::createEvent( const char * name )
 		ARNote* note = new ARNote(name, 0, mCurrentRegister, mCurrentNumerator,mCurrentDenominator,mCurrentIntensity);
 		mCurrentEvent = note; //new ARNote(name, 0, mCurrentRegister, mCurrentNumerator,mCurrentDenominator,mCurrentIntensity);
 		note->setOctava (mCurrentOctava ? mCurrentOctava->getOctava() : 0);
+		if (mCurrentTrill && !note->isEmptyNote()) note->setOrnament(mCurrentTrill, false);
 	}
 	assert(mCurrentEvent);
 	mLastEvent = NULL;
@@ -458,7 +462,7 @@ void ARFactory::createEvent( const char * name )
 void ARFactory::addEvent()
 {
 #if ARFTrace
- 	cout << "ARFactory::addEvent " << endl;
+ 	cerr << "ARFactory::addEvent " << endl;
 #endif
     if (!mCurrentVoice || !mCurrentEvent)
         return;
@@ -665,7 +669,7 @@ void ARFactory::setDenominator(int newDenominator)
 void ARFactory::createTag( const char * name, int no )
 {
 #if ARFTrace
- 	cout << "ARFactory::createTag " << name << " " << no << endl;
+ 	cerr << "ARFactory::createTag " << name << " " << no << endl;
 #endif
 	assert(mCurrentMusic);
 	assert(mCurrentVoice);
@@ -842,8 +846,7 @@ void ARFactory::createTag( const char * name, int no )
 					ARStaff * tmpstaff ;
 					if (mCurrentStaff)	
 						tmpstaff = new ARStaff(mCurrentStaff);
-					else tmpstaff = 
-						new ARStaff(mSaveCurrentVoice->getVoiceNum());				
+					else tmpstaff = new ARStaff(mSaveCurrentVoice->getVoiceNum());				
 
 					mCurrentVoice->AddTail(tmpstaff);
 
@@ -940,12 +943,6 @@ void ARFactory::createTag( const char * name, int no )
 			}
 			else if (!strcmp(name,"dalSegnoAlFine")) {
 				ARDalSegnoAlFine * tmp = new ARDalSegnoAlFine();
-				mTags.AddHead(tmp);
-				mCurrentVoice->AddTail(tmp);
-			}
-			else if (!strcmp(name,"defineTag")) {
-				// a new tag-definition ...
-				ARDefineTag * tmp = new ARDefineTag();
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
@@ -1150,6 +1147,7 @@ void ARFactory::createTag( const char * name, int no )
 				assert(mCurrentVoice);
 				assert(!mCurrentEvent);
 				ARKey * tmp = new ARKey;
+				mCurrentKey = tmp;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
@@ -1181,7 +1179,7 @@ void ARFactory::createTag( const char * name, int no )
 			}
 			else if (!strcmp(name,"mordent") || !strcmp(name,"mord"))
 			{
-				ARTrill * tmp = new ARTrill(ARTrill::MORD);
+				ARTrill * tmp = new ARTrill(ARTrill::MORD, mCurrentKey);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 
@@ -1518,21 +1516,18 @@ void ARFactory::createTag( const char * name, int no )
 			}
 			else if (!strcmp(name,"trill"))
 			{
-				ARTrill * tmp = new ARTrill(ARTrill::TRILL);
+				ARTrill * tmp = new ARTrill(ARTrill::TRILL, mCurrentKey);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
-
 				mCurrentTrill = tmp;
 			}
 			else if (!strcmp(name,"trillBegin")) // REM: A TESTER
 			{
-				ARTrill * tmp = new ARTrill(ARTrill::TRILL);
+				ARTrill * tmp = new ARTrill(ARTrill::TRILL, mCurrentKey);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
-				
 				tmp->setID(no);
 				tmp->setAllowRange(0);
-
 				mCurrentTrill = tmp;
 			}
 			else if (!strcmp(name,"trillEnd"))
@@ -1544,7 +1539,7 @@ void ARFactory::createTag( const char * name, int no )
 			}
 			else if (!strcmp(name,"turn"))
 			{
-				ARTrill * tmp = new ARTrill(ARTrill::TURN);
+				ARTrill * tmp = new ARTrill(ARTrill::TURN, mCurrentKey);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 
@@ -1677,8 +1672,6 @@ void ARFactory::createTag( const char * name, int no )
 		mTags.AddHead(tmp); // push()
 	}
 
-	assert(mTagParameterList.empty());
-
 	ARMusicalTag * musicalTag = mTags.GetHead();
 	assert(musicalTag);
 
@@ -1724,6 +1717,35 @@ void ARFactory::createTag( const char * name, int no )
 }
 
 // ----------------------------------------------------------------------------
+void ARFactory::checkRange	( const ARMusicalTag* tag, const char* name) const
+{
+	if (!tag->getRange()) {
+		string n (name);
+		string msg = n + " tag without range ignored!";
+		GuidoWarn (msg.c_str());
+	}
+}
+
+// ----------------------------------------------------------------------------
+void ARFactory::checkTagEnd( ARMusicalTag* tag)
+{
+	if (tag == mCurrentGrace) {
+		checkRange (tag, "\\grace");
+		mCurrentGrace = NULL;
+	}
+	else if (tag == mCurrentCluster) {
+		checkRange (tag, "\\cluster");
+		mCurrentCluster = NULL;
+	}
+	else if (tag == mCurrentTrill) {
+		checkRange (tag, "\\trill");
+		mCurrentTrill = NULL;
+	}
+	else if (tag == mCurrentTuplet)
+		mCurrentTuplet = NULL;
+}
+
+// ----------------------------------------------------------------------------
 /** \brief Called when the end of a tag's range has been reached. 
 	
 	If the tag has no range, it must be called directly after the tag
@@ -1734,12 +1756,8 @@ void ARFactory::createTag( const char * name, int no )
 void ARFactory::endTag()
 {
 #if ARFTrace
- 	cout << "ARFactory::endTag " << endl;
+ 	cerr << "ARFactory::endTag " << endl;
 #endif
-//	assert(!mCurrentEvent);
-//	assert(mCurrentVoice);
-//	assert(!mTags.empty());
-	
     if (mCurrentTags)
     {
         mCurrentTags--;
@@ -1747,32 +1765,8 @@ void ARFactory::endTag()
 
         // some of the tags need to be checked. As they end here, the behaviour of ARFactory needs to be "reset"
         // check for range ...
-        if (tag == mCurrentGrace)
-        {
-            if (tag->getRange() == false)
-            {
-                // then we have to delete the grace (it will be ignored completely)
-                GuidoTrace("Grace-tag without range ignored!");
-            }
-            // then we also delete the dispdur-tag ....
-            mCurrentGrace = NULL;
-        }
-        else if (tag == mCurrentCluster)
-        {
-            if (tag->getRange() == false)
-                GuidoTrace("cluster-tag without range ignored!");
-
-            mCurrentCluster = NULL;
-        }
-        else if (tag == mCurrentTrill)
-        {
-            if (tag->getRange() == false)
-                GuidoTrace("trill-tag without range ignored!");
-
-            mCurrentTrill = NULL;
-        }
-        else if (tag == mCurrentCue)
-        {
+		checkTagEnd (tag);
+        if (tag == mCurrentCue) {
             mCurrentVoice->ConvertToNormalForm();
             mCurrentMusic->AddTail(mCurrentVoice);
             mCurrentVoice = mSaveCurrentVoice;
@@ -1785,18 +1779,20 @@ void ARFactory::endTag()
             {
                 // then we have to add the name ....
                 ARText * txt = new ARText(tps->getValue(),0);
-                if (cue->getDY())
-                {
-                    TagParameterFloat * tpf = TagParameterFloat::cast(cue->getDY()->getCopy());
-                    txt->setDY(tpf);
-                }
-                if (cue->getDX())
-                {
-                    TagParameterFloat * tpf = TagParameterFloat::cast(cue->getDX()->getCopy());
-                    txt->setDX(tpf);
-                }
-                if (cue->getColor())		txt->setColor(cue->getColor()->getValue());				
-                if (cue->getSize())			txt->setSize(cue->getSize()->getValue());
+				txt->copyParameters(cue->getTagParameters());
+				txt->setTagParameters(cue->getTagParameters());
+//                if (cue->getDY())
+//                {
+//                    TagParameterFloat * tpf = TagParameterFloat::cast(cue->getDY()->getCopy());
+//                    txt->setDY(tpf);
+//                }
+//                if (cue->getDX())
+//                {
+//                    TagParameterFloat * tpf = TagParameterFloat::cast(cue->getDX()->getCopy());
+//                    txt->setDX(tpf);
+//                }
+//                if (cue->getColor())		txt->setColor(cue->getColor()->getValue());				
+//                if (cue->getSize())			txt->setSize(cue->getSize()->getValue());
                 mCurrentVoice->AddTail(txt);
                 // we need to be able to specify the offset!
             }
@@ -1806,12 +1802,9 @@ void ARFactory::endTag()
         }
         else if (tag == mCurrentTremolo)
         {
-            if (tag->getRange() == false)
-            {
-                // then we have to delete the grace (it will be ignored completely)
-                GuidoTrace("Tremolo-tag without range ignored!");
-            }
-            
+            if (!tag->getRange())
+                GuidoWarn("Tremolo-tag without range ignored!");
+			
             GuidoPos lastEventPos = mCurrentVoice->getLastEventPosition();
             TYPE_TIMEPOSITION timePos;
             bool found = false;
@@ -1852,11 +1845,8 @@ void ARFactory::endTag()
                     mCurrentVoice->setPositionTagEndPos(-1,dummy,tmpdspdur);
                 }
             }
-            
             mCurrentTremolo = NULL;
         }
-        else if (tag == mCurrentTuplet)
-            mCurrentTuplet = NULL;
 
         ARPositionTag * myptag = dynamic_cast<ARPositionTag *>(tag);
 
@@ -1898,11 +1888,7 @@ void ARFactory::endTag()
                 mCurrentVoice->RemovePositionTag(myptag);
                 // sets the Don't Care association 
                 tag->setAssociation(ARMusicalTag::DC);			
-                // redo this so that \text<"bla">(  /i<"p"> ) works in the correct order!
-                if(!mTagParameterList.IsEmpty()) {		// here was an assert
-                    // removed to allow dynamic editing
-                    mTagParameterList.RemoveAll();
-                }
+                mTagParameters.clear();
                 return;
             }
 
@@ -2033,12 +2019,9 @@ void ARFactory::endTag()
             // tag is not set to NULL -> it will be deleted
         }
         else tag = NULL;
-
-	    // now delete tags which are not needed anymore
-        //	assert(mTagParameterList.empty());
-	
         if (tag != NULL)  delete tag;
     }
+	mLastTagParameter = 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -2051,22 +2034,20 @@ void ARFactory::endTag()
 void ARFactory::addTag()
 {
 #if ARFTrace
- 	cout << "ARFactory::addTag " << endl;
+ 	cerr << "ARFactory::addTag " << endl;
 #endif
 	// end of parameter list reached
 	// set the tag parameter
 	ARMTParameter * tag = dynamic_cast<ARMTParameter *>(mTags.GetHead());
 	if (tag)
-		tag->setTagParameterList( mTagParameterList );
+		tag->setTagParameters (mTagParameters);
 
 	const ARAuto * autoTag = dynamic_cast<const ARAuto *>(tag);
 	if (autoTag) {
 		mAutoLyricsPos = (autoTag->getAutoLyricsPos() == ARAuto::kOn);
 		mAutoInstrPos = (autoTag->getAutoInstrPos() == ARAuto::kOn);
 	}
-
-	mTagParameterList.RemoveAll();
-	assert(mTagParameterList.empty());
+	mTagParameters.clear();
 }
 
 // ----------------------------------------------------------------------------
@@ -2075,7 +2056,7 @@ void ARFactory::addTag()
 void ARFactory::tagRange()
 {
 #if ARFTrace
- 	cout << "ARFactory::tagRange " << endl;
+ 	cerr << "ARFactory::tagRange " << endl;
 #endif
 	// this justs informs the tag, that	it has a range.
 	// it is checked in EndTag, whether
@@ -2085,15 +2066,28 @@ void ARFactory::tagRange()
 }
 
 // ----------------------------------------------------------------------------
+void ARFactory::addTagParameter( TagParameter * parameter )
+{
+#if ARFTrace
+ 	 cerr << "ARFactory::addTagParameter " << parameter << endl;
+#endif
+	if (dynamic_cast<ARMTParameter*>(mTags.GetHead())) {
+		parameter->setBySet();
+		mTagParameters.push_back (STagParameterPtr(parameter));
+	}
+}
+
+// ----------------------------------------------------------------------------
 /** \brief Adds a new string parameter to the current tag.
 */
 void ARFactory::addTagParameter(const char * parameter)
 {
 #if ARFTrace
- 	 cout << "ARFactory::addTagParameter TYPE_TAGPARAMETER_STRING " << parameter << endl;
+ 	 cerr << "ARFactory::addTagParameter TYPE_TAGPARAMETER_STRING " << parameter << endl;
 #endif
-	if (dynamic_cast<ARMTParameter*>(mTags.GetHead()))
-		mTagParameterList.AddTail(new TagParameterString(parameter));
+	if (dynamic_cast<ARMTParameter*>(mTags.GetHead())) {
+		mLastTagParameter = new TagParameterString(parameter);
+	}
 }
 
 // ----------------------------------------------------------------------------
@@ -2102,7 +2096,7 @@ void ARFactory::addTagParameter(const char * parameter)
 void ARFactory::addTagParameter(TYPE_TAGPARAMETER_INT parameter)
 {
 #if ARFTrace
-	cout << "ARFactory::addTagParameter TYPE_TAGPARAMETER_INT " << parameter << endl;
+	cerr << "ARFactory::addTagParameter TYPE_TAGPARAMETER_INT " << parameter << endl;
 #endif
 	// we have assume the DEFAULT Unit here....
 	if (dynamic_cast<ARMTParameter*>(mTags.GetHead()))
@@ -2110,7 +2104,7 @@ void ARFactory::addTagParameter(TYPE_TAGPARAMETER_INT parameter)
 		TagParameterInt * ntpi = new TagParameterInt(parameter);
 		// float npar = (float) (parameter * LSPACE/2);
 		ntpi->setValue((int) parameter);
-		mTagParameterList.AddTail(ntpi);
+		mLastTagParameter = new TagParameterInt(parameter);
 	}
 }
 
@@ -2120,43 +2114,24 @@ void ARFactory::addTagParameter(TYPE_TAGPARAMETER_INT parameter)
 void ARFactory::addTagParameter(TYPE_TAGPARAMETER_REAL parameter)
 {
 #if ARFTrace
-	cout << "ARFactory::addTagParameter TYPE_TAGPARAMETER_REAL " << parameter << endl;
+	cerr << "ARFactory::addTagParameter TYPE_TAGPARAMETER_REAL " << parameter << endl;
 #endif
 	if (dynamic_cast<ARMTParameter*>(mTags.GetHead()))
 	{
 		TagParameterFloat * ntpf = new TagParameterFloat((float) parameter);
 		// float npar = (float) (parameter * LSPACE/2);
 		ntpf->setValue((float) parameter);
-		mTagParameterList.AddTail(ntpf);
+		mLastTagParameter = new TagParameterFloat((float) parameter);
 	}
 }
-
-// ----------------------------------------------------------------------------
-/** \brief Not yet implemented.
-*/
-void ARFactory::setTagParameterList(TagParameterList)
-{
-	assert(false); // not implemented
-}
-
 
 // ----------------------------------------------------------------------------
 /** \brief Defines the unit (cm, inch, mm...) of the last added tag-paramater
 */
 void ARFactory::setUnit( const char * s )
 {
-	TagParameter * tpar = /*dynamic cast<TagParameter *>*/(mTagParameterList.GetTail());
-	if (tpar)
-	{
-		// tpar->unit = s;
-		// now we convert the given unit to
-		// internal units (cm and point ...)
-
-		TagParameterFloat * tpf = TagParameterFloat::cast(tpar);
-		assert(tpf);
-
-		tpf->setUnit(s);
-	}
+	TagParameterFloat * tpf = TagParameterFloat::cast(mLastTagParameter);
+	if (tpf) tpf->setUnit (s);
 }
 
 // ----------------------------------------------------------------------------
@@ -2164,9 +2139,10 @@ void ARFactory::setUnit( const char * s )
 */
 void ARFactory::setParameterName( const char * name)
 {
-	TagParameter * tpar =/* dynamic cast<TagParameter *>*/(mTagParameterList.GetTail());
-	if (tpar)
-		tpar->name = name;
+	if (mLastTagParameter) {		// this is to support the old factory api
+		mLastTagParameter->setName(name);			// once the tag is name
+		mTagParameters.push_back(STagParameterPtr(mLastTagParameter));	// we can add it to the map
+	}
 }
 
 // ----------------------------------------------------------------------------

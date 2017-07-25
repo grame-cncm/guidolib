@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -25,18 +25,18 @@ class ARMusicalObject;
 class GRARNotationElement : public GRNotationElement
 {
   public:
-		GRARNotationElement(ARMusicalObject * abstractRepresentationOfNotationElement, bool p_ownsAR = false );
+		GRARNotationElement(const ARMusicalObject * abstractRepresentationOfNotationElement, bool p_ownsAR = false );
 		virtual ~GRARNotationElement();
 
-		virtual ARMusicalObject * getAbstractRepresentation();
-		virtual ARMusicalObject * getAbstractRepresentation() const;
+		virtual const ARMusicalObject * getAbstractRepresentation();
+		virtual const ARMusicalObject * getAbstractRepresentation() const;
 
 		// sets the ownership between abstract and grafical object
 		virtual void setOwnership(bool ownsAR)  { mOwnsAR = ownsAR; }
 		virtual bool isChordComma() const;
 
   protected:
-		ARMusicalObject * mAbstractRepresentation;
+		const ARMusicalObject * mAbstractRepresentation;
 		bool mOwnsAR;   // is 1 if abstract object is owned by the grafical object
                         // In that case the abstract object will be deleted when deleting the grafical object
 };

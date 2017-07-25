@@ -118,16 +118,19 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 31 "guido.y"
+#line 35 "guido.y"
 {         
 	long int		num;
 	float			real;
 	const char*		token;
 	std::string*	str;
 	char			c;
+	TagParameter*	param;
+	ARMusicalTag*	tag;
+//	GuidoParser::ParamsList*	plist;
 }
 /* Line 1529 of yacc.c.  */
-#line 131 "guidoparse.hpp"
+#line 134 "guidoparse.hpp"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

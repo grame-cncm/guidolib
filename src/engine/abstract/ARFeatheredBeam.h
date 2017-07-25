@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -18,10 +18,6 @@
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
 #include "ARBeam.h"
-// #include "ARMusicalEvent.h"
-
-class TagParameterInt;
-//class GRBeam;
 
 /** \brief Abstract representation of a feathered beam.
 */
@@ -29,44 +25,44 @@ class ARFeatheredBeam :  public ARBeam
 {
 //	  friend class GRBeam;
 
-  public:
-					ARFeatheredBeam();
-	virtual 		~ARFeatheredBeam();
+	public:
+						 ARFeatheredBeam();
+		virtual 		~ARFeatheredBeam() {}
 
-	virtual bool MatchEndTag(const char * s);
+		virtual bool MatchEndTag(const char * s);
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual const char*	getParamsStr() const	{ return kARFeatheredBeamParams; };
+		virtual const char*	getTagName() const		{ return "ARFeatheredBeam"; };
+		virtual std::string getGMNName() const		{ return "\\featheredBeam"; };
 
-	virtual void setTagParameterList(TagParameterList & tpl);
+		virtual void setTagParameters (const TagParameterMap& params);
 
-	bool isDurationsSet(){return durationsSet;}
-	bool drawDuration(){return drawDur;}
-	int  getFirstBeaming(){return beams.first;}
-	int  getLastBeaming(){return beams.second;}
-	void setBeginDuration( const TYPE_DURATION b){beginDur = b;}
-	void setEndDuration( const TYPE_DURATION e){endDur = e;}
-	void setBeginTimePosition( const TYPE_TIMEPOSITION bp){beginTimePos = bp;}
-	void setEndTimePosition( const TYPE_TIMEPOSITION ep){endTimePos = ep;}
-	TYPE_TIMEPOSITION getBeginTimePosition (){return beginTimePos;}
-	TYPE_TIMEPOSITION getEndTimePosition (){return endTimePos;}
-	void findDefaultPoints();
+		bool isDurationsSet() const			{ return fDurationsSet;}
+		bool drawDuration() const			{ return fDrawDur;}
+		int  getFirstBeaming() const		{ return fBeams.first;}
+		int  getLastBeaming() const			{ return fBeams.second;}
+		TYPE_TIMEPOSITION getBeginTimePosition () const	{ return fBeginTimePos;}
+		TYPE_TIMEPOSITION getEndTimePosition () const	{ return fEndTimePos;}
 
-    /**** Function to avoid dynamic_cast ****/
-    ARMusicalObject *isARFeatheredBeam() { return this; }
-    /*****************************************/
+		void setBeginDuration( const TYPE_DURATION b)			{ fBeginDur = b;}
+		void setEndDuration( const TYPE_DURATION e)				{ fEndDur = e;}
+		void setBeginTimePosition( const TYPE_TIMEPOSITION bp)	{ fBeginTimePos = bp;}
+		void setEndTimePosition( const TYPE_TIMEPOSITION ep)	{ fEndTimePos = ep;}
 
-	protected:
-		static ListOfTPLs ltpls;
 
-		bool drawDur;
-		bool durationsSet;
-		std::pair<int,int> beams;
-		TYPE_DURATION beginDur;
-		TYPE_DURATION endDur;
-		TYPE_TIMEPOSITION beginTimePos;
-		TYPE_TIMEPOSITION endTimePos;
+		const ARMusicalObject *isARFeatheredBeam() const  { return this; }
+	
+		void findDefaultPoints();
+
+	private:
+
+		bool fDrawDur;
+		bool fDurationsSet;
+		std::pair<int,int>  fBeams;
+		TYPE_DURATION		fBeginDur;
+		TYPE_DURATION		fEndDur;
+		TYPE_TIMEPOSITION	fBeginTimePos;
+		TYPE_TIMEPOSITION	fEndTimePos;
 
 		void findPoints(std::string points); 
 		void convertDurationToBeams(float valor, float valor2);

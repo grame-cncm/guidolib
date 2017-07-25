@@ -25,7 +25,7 @@ class ARSpecial;
 class GRSpecial : public GRARNotationElement, public GRTag
 {
 	public:
-						 GRSpecial( ARSpecial * arspec, bool p_ownsar = false );
+						 GRSpecial( const ARSpecial * arspec, bool p_ownsar = false );
 		virtual 		~GRSpecial() {}
 
 		virtual void 	OnDraw( VGDevice & hdc ) const;

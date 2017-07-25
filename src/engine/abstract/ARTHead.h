@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -15,9 +15,10 @@
 
 */
 
+#include <string>
+
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
-// #include "TagParameterFloat.h"
 
 /** \brief not yet documented
 */
@@ -26,29 +27,22 @@ class ARTHead : public ARMTParameter, public ARPositionTag
 	public:
 		enum HEADSTATE { NOTSET, NORMAL, REVERSE, CENTER,  RIGHT, LEFT };
 
-				 ARTHead(int st = ARTHead::NOTSET, ARTHead * p_savehead = NULL, ARTHead * p_copyhead = NULL);
-
+				 ARTHead(int st = ARTHead::NOTSET, const ARTHead * p_savehead = NULL, const ARTHead * p_copyhead = NULL);
 				 ARTHead(const ARTHead & arthead);
 		virtual ~ARTHead() { }
 
-		ARMusicalObject * Copy() const; 
+		ARMusicalObject * Copy() const				{ return new ARTHead(*this); }
 
-		virtual bool IsStateTag() const { return true; }
+		virtual bool IsStateTag() const				{ return true; }
+		virtual const char*	getTagName() const		{ return "ARTHead"; };
+		virtual std::string getGMNName() const;
 
-	    virtual void printName(std::ostream& os) const;
-	    virtual void printGMNName(std::ostream& os) const;
-	    virtual void printParameters(std::ostream& os) const;
+		virtual const HEADSTATE getHeadState() const	{ return  fHeadState; }
+		virtual ARMusicalObject * getEndTag() const		{ return new ARTHead(NOTSET,NULL,fSavedHead);	}
 
-        virtual void setTagParameterList(TagParameterList& tpl) {};
-
-		virtual const HEADSTATE getHeadState() const { return  headstate; }
-
-		virtual ARMusicalObject * getEndTag() const	{ return new ARTHead(NOTSET,NULL,savehead);	}
-
-	protected:
-		ARTHead * savehead;
-		HEADSTATE headstate;
-		static ListOfTPLs ltpls;
+	private:
+		const ARTHead * fSavedHead;
+		HEADSTATE		fHeadState;
 };
 
 #endif

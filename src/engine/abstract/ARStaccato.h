@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -21,27 +21,26 @@
 */
 class ARStaccato : public ARArticulation
 {		
-public:			
-	enum		tTypeStacc {REGULAR, HEAVY};
+	public:			
+		enum		tTypeStacc {REGULAR, HEAVY};
 
-	virtual bool MatchEndTag(const char * s);
+		virtual bool MatchEndTag(const char * s);
 
-			 ARStaccato() { type = REGULAR; }
-	virtual ~ARStaccato() {};
+				 ARStaccato();
+		virtual ~ARStaccato() {};
 
-	virtual void setTagParameterList(TagParameterList& tpl);
+		virtual void setTagParameters (const TagParameterMap& params);
 
-	virtual void browse(TimeUnwrap& mapper) const;
+		virtual void browse(TimeUnwrap& mapper) const;
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual const char*	getParamsStr() const	{ return kARStaccatoParams; };
+		virtual const char*	getTagName() const		{ return "ARStaccato"; };
+		virtual std::string getGMNName() const		{ return "\\staccato"; };
 	
-	tTypeStacc getType() const {return type;};
+		tTypeStacc getType() const		{ return fType; };
 
-protected:
-	static ListOfTPLs ltpls;
-	tTypeStacc	type;
+	private:
+		tTypeStacc	fType;
 };
 
 #endif

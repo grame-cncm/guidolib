@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -45,13 +45,13 @@ GRBeamSaveStruct::~GRBeamSaveStruct()
 
 pair<float, float> GRBeam::fLastPositionOfBarDuration = make_pair(0, 0);
 
-GRBeam::GRBeam(GRStaff * grstaf,ARBeam * arbeam) : GRPTagARNotationElement(arbeam)
+GRBeam::GRBeam(GRStaff * grstaf,const ARBeam * arbeam) : GRPTagARNotationElement(arbeam)
 {
 	mHasRestInMiddle = false;
 	fIsGraceBeaming = false;
 	fIsFeathered = arbeam->isFeatheredBeam();
 	if(fIsFeathered) {
-        ARFeatheredBeam * ar = static_cast<ARFeatheredBeam *>(arbeam->isARFeatheredBeam());
+        const ARFeatheredBeam * ar = static_cast<const ARFeatheredBeam *>(arbeam->isARFeatheredBeam());
 		fDrawDur = ar->drawDuration();
 	}
 	else fDrawDur = false;
@@ -234,7 +234,7 @@ void GRBeam::addAssociation(GRNotationElement * grnot)
 	if (dynamic_cast<const GRSingleRest *>(grn))
 		return;
 
-	ARMusicalObject* o = grn->getAbstractRepresentation();
+	const ARMusicalObject* o = grn->getAbstractRepresentation();
 	bool allowBeam = isautobeam ? false : o && o->isARNote() && ((o->getDuration() == DURATION_2) || o->isEmptyNote());
 	if ((grn->getNumFaehnchen() == 0) && !allowBeam) {
 		setError(staff,1);
@@ -422,8 +422,7 @@ NVPoint GRBeam::initp0 (GRSystemStartEndStruct * sse, const GREvent * startEl, P
 
 	GRStaff * refStaff;
 	NVPoint offset;
-	if (startEl)
-	{
+	if (startEl) {
 		st->p[0] = startEl->getStemStartPos();
 		if (arBeam && arBeam->isGuidoSpecBeam())
 			st->p[0].y = startEl->getPosition().y;
@@ -443,13 +442,12 @@ NVPoint GRBeam::initp0 (GRSystemStartEndStruct * sse, const GREvent * startEl, P
 	st->p[1] = st->p[0];
 	
 	// -- Adjust point 0
-	if (arBeam->dx1 && arBeam->dx1->TagIsSet())
-		st->p[0].x += (GCoord)(arBeam->dx1->getValue(infos.currentLSPACE));
-	else
-	{
+	const TagParameterFloat * p = arBeam->getDx1();
+	if (p && p->TagIsSet())
+		st->p[0].x += p->getValue(infos.currentLSPACE);
+	else {
 		// This depends on the direction, we do not know this yet (do we?)
-		if (infos.oneNote)
-        {
+		if (infos.oneNote) {
             double result;
             bool conversionOk = TagParameterFloat::convertValue(2.0f, result, "hs", infos.currentLSPACE);
 
@@ -458,8 +456,8 @@ NVPoint GRBeam::initp0 (GRSystemStartEndStruct * sse, const GREvent * startEl, P
 		}
 	}
 
-	if (arBeam->dy1 && arBeam->dy1->TagIsSet())
-		st->p[0].y -= (arBeam->dy1->getValue(infos.currentLSPACE));
+	p = arBeam->getDy1();
+	if (p && p->TagIsSet()) st->p[0].y -= p->getValue(infos.currentLSPACE);
 	return offset;
 }
 
@@ -469,12 +467,11 @@ void GRBeam::initp1 (GRSystemStartEndStruct * sse, PosInfos& infos)
 	// -- Adjust point 1
 	const ARBeam * arBeam = getARBeam();
 	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
-	if (arBeam->dx2 && arBeam->dx2->TagIsSet())
-		st->p[1].x += arBeam->dx2->getValue(infos.currentLSPACE);
-	else
-	{
-		if (infos.oneNote)
-        {
+	const TagParameterFloat * p = arBeam->getDx2();
+	if (p && p->TagIsSet())
+		st->p[1].x += p->getValue(infos.currentLSPACE);
+	else {
+		if (infos.oneNote) {
             double result;
             bool conversionOk = TagParameterFloat::convertValue(2.0f, result, "hs", infos.currentLSPACE);
 			
@@ -482,19 +479,18 @@ void GRBeam::initp1 (GRSystemStartEndStruct * sse, PosInfos& infos)
                 st->p[1].x -= (float)result * infos.currentSize;
         }
 	}
-	if (arBeam->dy2 && arBeam->dy2->TagIsSet())
-		st->p[1].y -= (GCoord)(arBeam->dy2->getValue(infos.currentLSPACE));
+
+	p = arBeam->getDy2();
+	if (p && p->TagIsSet()) st->p[1].y -= p->getValue(infos.currentLSPACE);
 	else {
-		if (infos.stemdir == dirUP)
-        {
+		if (infos.stemdir == dirUP) {
             double result;
             bool conversionOk = TagParameterFloat::convertValue(0.9f, result, "hs", infos.currentLSPACE);
 			
             if (conversionOk)
                 st->p[1].y = st->p[0].y + (float)result * infos.currentSize;
         }
-		else if (infos.stemdir == dirDOWN)
-        {
+		else if (infos.stemdir == dirDOWN) {
             double result;
             bool conversionOk = TagParameterFloat::convertValue(0.9f, result, "hs", infos.currentLSPACE);
 			
@@ -534,14 +530,15 @@ NVPoint GRBeam::initp2 (GRSystemStartEndStruct * sse, const GREvent * endEl, Pos
 	st->p[3] = st->p[2];
 
 	// -- Adjust point 2
-	if (arBeam->dx3)
-		st->p[2].x += arBeam->dx3->getValue(infos.currentLSPACE);
-	if (arBeam->dy3 && arBeam->dy3->TagIsSet())
-		st->p[2].y -= arBeam->dy3->getValue(infos.currentLSPACE);
+	const TagParameterFloat * p = arBeam->getDx3();
+	if (p)					st->p[2].x += p->getValue(infos.currentLSPACE);
+
+	p = arBeam->getDy3();
+	if (p && p->TagIsSet()) st->p[2].y -= p->getValue(infos.currentLSPACE);
 	else {
 		GCoord val = 0;
-		if (arBeam->dy1 && arBeam->dy1->TagIsSet())
-			val = arBeam->dy1->getValue(infos.currentLSPACE);
+		const TagParameterFloat * p = arBeam->getDy1();
+		if (p && p->TagIsSet())	val = p->getValue(infos.currentLSPACE);
 		st->p[2].y -= val;
 	}
 	return offset;
@@ -554,10 +551,11 @@ void GRBeam::initp3 (GRSystemStartEndStruct * sse, PosInfos& infos)
 	const ARBeam * arBeam = getARBeam();
 	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
 
-	if (arBeam->dx4)
-		st->p[3].x += (arBeam->dx4->getValue(infos.currentLSPACE));
-	if (arBeam->dy4 && arBeam->dy4->TagIsSet())
-		st->p[3].y -= (arBeam->dy4->getValue(infos.currentLSPACE));
+	const TagParameterFloat * p = arBeam->getDx4();
+	if (p)					st->p[3].x += (p->getValue(infos.currentLSPACE));
+
+	p = arBeam->getDy4();
+	if (p && p->TagIsSet())	st->p[3].y -= (p->getValue(infos.currentLSPACE));
 	else {
 		if (infos.stemdir == dirUP)
         {
@@ -972,7 +970,7 @@ void GRBeam::adjustFeathered (float yFact1, float yFact2, PosInfos& infos, GRSys
 {
 	GRBeamSaveStruct * st = (GRBeamSaveStruct *)sse->p;
 
-	ARFeatheredBeam * ar = static_cast<ARFeatheredBeam *>(getARBeam()->isARFeatheredBeam());
+	const ARFeatheredBeam * ar = static_cast<const ARFeatheredBeam *>(getARBeam()->isARFeatheredBeam());
 	int begin = 0;
 	int end = 0;
 	const GREvent * stemNoteBegin = mAssociated->GetHead()->isGREvent();
@@ -984,7 +982,6 @@ void GRBeam::adjustFeathered (float yFact1, float yFact2, PosInfos& infos, GRSys
 	
 	// if the user hasn't set the durations as parameters, 
 	// we will take the first and last notes'durations
-	if( !ar->isDurationsSet() ) ar->findDefaultPoints();
 	end = ar->getLastBeaming();
 	begin = ar->getFirstBeaming();
 
@@ -1135,7 +1132,7 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 	const GRStaff * beamstaff = sse->startElement->getGRStaff();	
 	PosInfos infos = { dirUP, LSPACE, 1.0f, (endEl == startEl)};
 	
-	ARBeam * arBeam = getARBeam();
+	const ARBeam * arBeam = getARBeam();
 	const bool isSpecBeam = arBeam->isGuidoSpecBeam();
 
 	if (startEl)	infos.stemdir = startEl->getStemDirection();
@@ -1181,17 +1178,16 @@ void GRBeam::tellPosition( GObject * gobj, const NVPoint & p_pos)
 		// then we have to set the length ... if it is not set otherwise ...
 		GRSingleNote * nt = dynamic_cast<GRSingleNote *>(sse->startElement);
 		if(nt && !nt->getStemLengthSet()) {
-			const float myval = arBeam->dy1->getValue();
+			const float myval = arBeam->getDy1()->getValue();
 			 nt->setStemLength( myval);
 		}
 
 		nt = dynamic_cast<GRSingleNote *>(sse->endElement);
 		if(nt && !nt->getStemLengthSet()) {
 			float myval;
-			if (arBeam->dy3 && arBeam->dy3->TagIsSet())
-				myval = arBeam->dy3->getValue();
-			else
-				myval = arBeam->dy1->getValue();
+			const TagParameterFloat* p = arBeam->getDy3();
+			if (p && p->TagIsSet())		myval = p->getValue();
+			else						myval = arBeam->getDy1()->getValue();
 			nt->setStemLength( myval);
 		}		
 	}

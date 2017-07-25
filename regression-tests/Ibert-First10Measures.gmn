@@ -26,9 +26,9 @@
 , [ \staff<2> \instr<"Piano", dx=-10hs, dy=-5hs> \systemFormat<"", dx=10hs> 
    (* meas. 1 *)  \key<0> \meter<"2/4", autoBarlines="off", autoMeasuresNum="page"> \accol<id=1, range="2-3"> \clef<"g2"> \text<"Allegro", dy=14hs> \space<0> _ \stemsDown { \tieBegin c2 \tieBegin, e \tieBegin, a \tieBegin, c3 } \bar 
    (* meas. 2 *)  { c2/2 \tieEnd, e \tieEnd, a \tieEnd, c3 \tieEnd } \bar 
-   (* meas. 3 *)  _/8 \intens<"p", dy=-3hs> \beam( c2/16 \crescBegin<dy=4hs> d&) \beam( e& e f f#) \bar 
+   (* meas. 3 *)  _/8 \intens<"p", dy=-3hs> \beam( c2/16 \crescBegin d&) \beam( e& e f f#) \bar 
    (* meas. 4 *)  \beam( g a& b& b) \beam( c3 d& d \crescEnd \slurBegin:1 e) \bar 
-   (* meas. 5 *)  f/8 \slurEnd:1 \dimBegin<dy=5hs> \stemsUp \slurBegin:1<curve="down"> a&1/4 \intens<"p", dy=-3hs> \dimEnd \stacc<position="below">( g/8) \slurEnd:1 \bar 
+   (* meas. 5 *)  f/8 \slurEnd:1 \dimBegin<dy=-1hs> \stemsUp \slurBegin:1<curve="down"> a&1/4 \intens<"p", dy=-3hs> \dimEnd \stacc<position="below">( g/8) \slurEnd:1 \bar 
    (* meas. 6 *)  \stemsDown \beam( \stacc<position="below">( f) b&0 \stacc<position="above">( e&1) \stacc<position="above">( b0)) \bar 
    (* meas. 7 *)  \stemsUp \beam( \stacc<position="below">( c1) \stacc<position="below">( e) \stacc<position="below">( a&) \stacc<position="below">( f)) \bar 
    (* meas. 8 *)  _ { b&/4, d&2 } { \tieBegin a&1/8 \tieBegin, c2 } \bar 

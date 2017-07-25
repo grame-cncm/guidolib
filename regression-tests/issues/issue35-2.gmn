@@ -1,10 +1,12 @@
 {
 [
-	\stemsDown \slurBegin:1<curve="up"> \beamBegin:1 f/8 \beamBegin:2 \trill( { e/16 }) \slurEnd:1 d \beamEnd:2 e/8 \beamEnd:1 \bar 
+	\stemsDown \slurBegin:1<curve="up"> \beamBegin:1 f/8 \beamBegin:2 \trill(e/16) 
+	\slurEnd:1 d \beamEnd:2 e/8 \beamEnd:1 \bar 
 ]
 ,
 [
-	\stemsDown \slurBegin:1<curve="up"> \beamBegin:1 f/8 \beamBegin:2 \trill( { e/16 }) \slurEnd:1 d \beamEnd:2 e/8 \beamEnd:1 \bar 
+	\stemsDown \slurBegin:1<curve="up"> \beamBegin:1 f/8 \beamBegin:2 \trill(e/16) 
+	\slurEnd:1 d \beamEnd:2 e/8 \beamEnd:1 \bar 
 ]
 
 }

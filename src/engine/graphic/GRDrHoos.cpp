@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -18,7 +18,7 @@
 
 #include "Bitmap.h"
 
-GRDrHoos::GRDrHoos( ARDrHoos * par )
+GRDrHoos::GRDrHoos( const ARDrHoos * par )
 	: GRTagARNotationElement(/*dynamic cast<ARMusicalObject *>*/(par), LSPACE)
 {
 	mBoundingBox.left = 0;
@@ -61,7 +61,7 @@ void GRDrHoos::OnDraw( VGDevice & hdc) const
 	// Here now will be something painted ...
 	if (face && mDraw)
 	{
-		ARDrHoos * myar = static_cast<ARDrHoos *>(mAbstractRepresentation);
+		const ARDrHoos * myar = static_cast<const ARDrHoos *>(mAbstractRepresentation);
 
 		if (myar && myar->getInverse() == -1)
 		{

@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -33,9 +33,9 @@ ARVoiceManager::ARVoiceManager(ARMusicalVoice * arVoice)
 	mLastBreakTimePos = DURATION_0;
 }
 
-ARVoiceManager::~ARVoiceManager()
-{
-}
+//ARVoiceManager::~ARVoiceManager()
+//{
+//}
 
 /** \brief Iterates through the voice and returns the current time position (tp) and also
 	the status of the current voice.

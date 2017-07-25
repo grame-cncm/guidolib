@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -41,7 +41,7 @@ class GRGlobalStem : // public GRStem,
 	public GRSystemTagInterface
 {
 	public:
-				 GRGlobalStem (GRStaff * inStaff,	ARShareStem * pshare,  ARTStem * stem,  ARDisplayDuration * dur,  ARNoteFormat * format );
+				 GRGlobalStem (GRStaff * inStaff,	const ARShareStem * pshare,  const ARTStem * stem,  const ARDisplayDuration * dur, const ARNoteFormat * format );
         virtual ~GRGlobalStem();
 
 		int		getHighestAndLowestNoteHead( GRStdNoteHead ** highest, GRStdNoteHead ** lowest) const;
@@ -92,7 +92,7 @@ class GRGlobalStem : // public GRStem,
 
 		GRStem *	fStem;
 		GRFlag *	fFlag;
-		ARTStem *	fStemState;
+		const ARTStem *	fStemState;
 		TYPE_DURATION fDispdur;
 
 		// fFirstEl is the first element in  the \shareStem-Range. Only the

@@ -19,7 +19,6 @@
 
 using namespace std;
 
-
 bool ARCrescendo::MatchEndTag(const char * s)
 {
 	if (ARMusicalTag::MatchEndTag(s))
@@ -30,6 +29,3 @@ bool ARCrescendo::MatchEndTag(const char * s)
 		return true;
 	return false;
 }
-
-void ARCrescendo::printName		(ostream& os) const		{ os << "ARCrescendo"; }
-void ARCrescendo::printGMNName	(ostream& os) const		{ os << "\\crescendo"; }

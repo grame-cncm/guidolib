@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -31,37 +31,24 @@ class ARTStem : public ARMTParameter, public ARPositionTag
 
 		virtual bool IsStateTag() const { return true; }
 
-		ARTStem( int st = ARTStem::AUTO,ARTStem * p_savestem = NULL,
-												ARTStem * p_copystem = NULL);
+				 ARTStem( int st = ARTStem::AUTO, const ARTStem * p_savestem = NULL, const ARTStem * p_copystem = NULL);
+				 ARTStem(const ARTStem * tstem);
+		virtual ~ARTStem() {}
 
-		virtual ~ARTStem();
 
-		ARTStem(const ARTStem * tstem);
+		virtual ARMusicalObject * Copy() const		{ return new ARTStem(this); }
 
-		virtual ARMusicalObject * Copy() const;
+		virtual const char*	getParamsStr() const	{ return kARTStemParams; };
+		virtual const char*	getTagName() const		{ return "ARTStem"; };
+		virtual std::string getGMNName() const;
 
-	    virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	    virtual void printParameters(std::ostream& os) const;
+		const TagParameterFloat *	getLength() const; // { return mTpfLength; }
+		virtual const STEMSTATE		getStemState() const	{ return mStemState; }
+		virtual ARMusicalObject *	getEndTag() const		{ return new ARTStem(AUTO, NULL, mSaveStem); }
 
-		virtual void setTagParameterList(TagParameterList & tpl);
-
-		const TagParameterFloat * getLength() const { return mTpfLength; }
-
-		virtual const STEMSTATE getStemState() const { return mStemState; }
-
-		virtual ARMusicalObject * getEndTag() const { return new ARTStem(AUTO, NULL, mSaveStem); }
-
-	protected:
-
-		ARTStem * mSaveStem;
-
+	private:
+		const ARTStem * mSaveStem;
 		STEMSTATE mStemState;
-
-		static ListOfTPLs ltpls;
-
-		TagParameterFloat * mTpfLength;
-
 };
 
 #endif

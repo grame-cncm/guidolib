@@ -26,7 +26,7 @@
 using namespace std;
 
 // --------------------------------------------------------------------------
-GRAccolade::GRAccolade(ARAccolade *arAccol)
+GRAccolade::GRAccolade(const ARAccolade *arAccol)
 		: GRTagARNotationElement(arAccol, LSPACE)
 {
     int accolType = GRAccolade::kAccoladeCurly;

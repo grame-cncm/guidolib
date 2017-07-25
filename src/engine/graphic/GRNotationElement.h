@@ -35,6 +35,8 @@ class GREvent;
 class GRText;
 class GRGlue;
 class GRTempo;
+class GRTrill;
+class GRBar;
 
 
 const float kMinNoteSize = 0.001f;	// minimum size of an element, the element is not drawn when the size is smaller
@@ -101,8 +103,8 @@ public:
 	virtual unsigned int getTextAlign() const;
 	
 	// 
-	virtual ARMusicalObject * getAbstractRepresentation() const		{ return 0; }	
-	virtual const TYPE_DURATION & getDuration() const				{ return mDurationOfGR; }
+	virtual const ARMusicalObject * getAbstractRepresentation() const		{ return 0; }
+	virtual const TYPE_DURATION & getDuration() const						{ return mDurationOfGR; }
 	
 	virtual void setDuration(const TYPE_TIMEPOSITION & dur )					{ mDurationOfGR = dur; }
 	virtual void setRelativeTimePosition(const TYPE_TIMEPOSITION & tp )			{ mRelativeTimePositionOfGR = tp; }
@@ -141,6 +143,8 @@ public:
     virtual const GREvent *		isGREvent() const		{ return 0; }
     virtual const GRGlue *		isGRGlue() const		{ return 0; }
     virtual const GRTempo *		isGRTempo() const		{ return 0; }
+    virtual const GRTrill *		isGRTrill() const		{ return 0; }
+    virtual const GRBar *		isGRBar() const			{ return 0; }
 
 protected:
 	

@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -15,48 +15,53 @@
 
 */
 
+#include <vector>
+#include <string>
+
 #include "ARMTParameter.h"
 
-class GRPage;
+//class GRPage;
 
 /** \brief not yet documented
 */
 class ARPageFormat :  public ARMTParameter
 {
-    friend class GRPage;
+//    friend class GRPage;
 
-public:
-				 ARPageFormat( float px, float py, float ml, float mt, float mr, float mb );
-				 ARPageFormat( char * px, char * py, char * ml, char * mt, char * mr, char * mb );
-				 ARPageFormat( const ARPageFormat & arp );
-				 ARPageFormat();
-	virtual 	~ARPageFormat();
+	public:
+	//				 ARPageFormat( float px, float py, float ml, float mt, float mr, float mb );
+	//				 ARPageFormat( char * px, char * py, char * ml, char * mt, char * mr, char * mb );
+	//				 ARPageFormat( const ARPageFormat & arp );
+					 ARPageFormat();
+		virtual 	~ARPageFormat() {}
 
-	void		 getPageFormat(float * sx, float * sy, float * ml, float * mt, float * mr, float * mb );
-	void		 setPageFormat(float sx, float sy, float ml, float mt, float mr, float mb );
+		void		 getPageFormat(float * sx, float * sy, float * ml, float * mt, float * mr, float * mb ) const;
+		void		 setPageFormat(float sx, float sy, float ml, float mt, float mr, float mb );
 
-	void operator=(const ARPageFormat& format);
-	virtual bool IsStateTag() const { return true; }
+		void operator=(const ARPageFormat& format);
+		virtual bool IsStateTag() const { return true; }
 	
-	virtual void setTagParameterList( TagParameterList & theTagParameterList );
+		virtual TagParameterMap checkTagParameters (TagParametersList& params, const std::string pTemplate);
+		virtual void setTagParameters (const TagParameterMap& params);
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual const char*	getParamsStr() const	{ return kARPageFormatParams; };
+		virtual const char*	getTagName() const		{ return "ARPageFormat"; };
+		virtual std::string getGMNName() const		{ return "\\pageFormat"; };
 
-protected:
-	void  ClipSize();
-	void  AdjustMargins();
+	protected:
+		void  ClipSize();
+		void  AdjustMargins();
 	
-	float mSizeX;		// All sizes are in internal (logical) units.
-	float mSizeY;
-	float mLeft;		
-	float mTop;
-	float mRight;
-	float mBottom;
-	NVstring mFormat;
+		float mSizeX;		// All sizes are in internal (logical) units.
+		float mSizeY;
+		float mLeft;		
+		float mTop;
+		float mRight;
+		float mBottom;
+		std::string mFormat;
 
-	static ListOfTPLs ltpls;
+	private:
+		void getMargins (const TagParameterMap& params);
 };
 
 #endif

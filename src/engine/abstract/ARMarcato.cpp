@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -13,106 +13,39 @@
 */
 
 #include <iostream>
+
 #include "ARMarcato.h"
-#include "TagParameterList.h"
 #include "TagParameterString.h"
-#include "ListOfStrings.h"
+#include "TagParameterStrings.h"
 
 #include "TimeUnwrap.h"
 
-ListOfTPLs ARMarcato::ltpls(1);
+using namespace std;
+
+static const TagParameterMap sARMarcatoMap (kARMarcatoParams);
 
 ARMarcato::ARMarcato()
 {
+	setupTagParameters (sARMarcatoMap);
 	rangesetting = RANGEDC;
-    position = NOTSET;
+    fPosition = NOTSET;
 }
 
-ARMarcato::~ARMarcato()
+//--------------------------------------------------------------------------
+void ARMarcato::setTagParameters (const TagParameterMap& params)
 {
-}
-
-void ARMarcato::setTagParameterList(TagParameterList& tpl)
-{
-	if (ltpls.GetCount() == 0)
-	{
-		// create a list of string ...
-
-		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail("S,position,,o");
-        CreateListOfTPLs(ltpls,lstrs);
+	const TagParameterString* p = getParameter<TagParameterString>(kPositionStr);
+	if (p) {
+		string pos = p->getValue();
+		if (pos == "below") fPosition = BELOW;
+		if (pos == "above") fPosition = ABOVE;
 	}
-
-	TagParameterList * rtpl = NULL;
-	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
-
-	if (ret>=0 && rtpl)
-	{
-		// we found a match!
-		if (ret == 0)
-		{
-            TagParameterString * str = TagParameterString::cast(rtpl->RemoveHead());
-            assert(str);
-
-            std::string below ("below");
-            std::string above ("above");
-
-            if (str->TagIsSet() && (below == str->getValue()))
-				position = BELOW;
-			else if (str->TagIsSet() && (above == str->getValue()))
-                position = ABOVE;
-
-            delete str;
-
-			// Get The TagParameters ...
-			// text = 
-			//	TagParameterString::cast(rtpl->RemoveHead());
-			//assert(text);
-		}
-
-		delete rtpl;
-	}
-	else
-	{
-		// failure
-	}
-
-	tpl.RemoveAll();
 }
 
 // --------------------------------------------------------------------------
 void ARMarcato::browse(TimeUnwrap& mapper) const
 {
 	mapper.AtPos (this, TimeUnwrap::kMarcato);
-}
-
-void ARMarcato::printName(std::ostream& os) const
-{
-    os << "ARMarcato";
-}
-
-void ARMarcato::printGMNName(std::ostream& os) const
-{
-    os << "\\marcato";
-}
-
-void ARMarcato::printParameters(std::ostream& os) const
-{
-    switch (position) {
-    case ABOVE:
-        os << "above";
-        break;
-    case BELOW:
-        os << "below";
-        break;
-    default:
-        os << "notset";
-        break;
-    }
-
-    os << ";";
-
-    ARMusicalTag::printParameters(os);
 }
 
 

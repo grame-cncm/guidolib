@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -13,62 +13,31 @@
 */
 
 #include <iostream>
+
 #include "ARIntens.h"
 
-#include "GRDefine.h"
-
+#include "TagParameterStrings.h"
 #include "TagParameterString.h"
-#include "TagParameterInt.h"
-#include "TagParameterList.h"
-#include "ListOfStrings.h"
-
 #include "TimeUnwrap.h"
 
-ListOfTPLs ARIntens::ltpls(1);
+static const TagParameterMap sARIntensMap (kARIntensParams);
+
+ARIntens::ARIntens() : ARMTParameter()
+{
+	relativeTimePosition.set( -1, 1 );
+	setDuration ( DURATION_0 );
+ }
 
 ARIntens::ARIntens(const char * txt) : ARMTParameter()
 {
-	mIntensText = txt;
+	setupTagParameters (sARIntensMap);
+	fIntens = txt;
 }
 
-void ARIntens::setTagParameterList(TagParameterList & tpl)
+void ARIntens::setTagParameters (const TagParameterMap& params)
 {
-	if (ltpls.GetCount() == 0)
-	{
-		// create a list of string ...
-
-		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(( "S,type,,r"));
-		CreateListOfTPLs(ltpls,lstrs);
-	}
-
-	TagParameterList * rtpl = 0;
-	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
-
-	if (ret>=0 && rtpl)
-	{
-		// we found a match!
-		if (ret == 0)
-		{
-			// then, we now the match for
-			// the first ParameterList
-			// w, h, ml, mt, mr, mb
-			GuidoPos pos = rtpl->GetHeadPosition();
-
-			TagParameterString * tps = TagParameterString::cast(rtpl->GetNext(pos));
-			assert(tps);
-
-			mIntensText = tps->getValue();
-		}
-
-		delete rtpl;
-	}
-	else
-	{
-		// failure
-	}
-
-	tpl.RemoveAll();
+	const TagParameterString* p = getParameter<TagParameterString>(kTypeStr);
+	fIntens = p ? p->getValue() : "";
 }
 
 // --------------------------------------------------------------------------
@@ -76,23 +45,4 @@ void ARIntens::browse(TimeUnwrap& mapper) const
 {
 	mapper.AtPos (this, TimeUnwrap::kIntens);
 }
-
-void ARIntens::printName(std::ostream& os) const
-{
-    os << "ARIntens";
-}
-
-void ARIntens::printGMNName(std::ostream& os) const
-{
-    os << "\\intens";
-}
-
-void ARIntens::printParameters(std::ostream& os) const
-{
-    os << "type: " << mIntensText << ";";
-
-    ARMusicalTag::printParameters(os);
-}
-
-
 

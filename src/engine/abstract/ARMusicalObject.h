@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -16,8 +16,6 @@
 */
 
 #include "defines.h"	// for TYPE_TIMEPOSITION
-
-//#include "PrintVisitor.h"
 #include "ARVisitable.h"
 
 #define MIN_TIMEPOSITION Frac_0
@@ -67,10 +65,9 @@ class ARMusicalObject : public ARVisitable
 				 ARMusicalObject();
 				 ARMusicalObject( const TYPE_TIMEPOSITION & relativeTimepositionOfMusicalObject );
 				 ARMusicalObject( const ARMusicalObject & armo);
-		virtual ~ARMusicalObject();
+		virtual ~ARMusicalObject() {}
 
 		virtual ARMusicalObject * Copy() const;
-		virtual void removeGRRepresentation(GObject * p_grep);
 
 		// should be re-designed!!! Should be put to another place but is needed here for spacing alg.
 		// returns here 0, simple objects have no durations (Clefs, Bars, ...)
@@ -80,8 +77,6 @@ class ARMusicalObject : public ARVisitable
 		// must be re-designed!!! Should be put to another place  but is needed here from several alg.
 		virtual TYPE_TIMEPOSITION getRelativeEndTimePosition() const;
 
-
-	    
 		// introduced to get correct tie pos for notes in chords [DF 2012-03-19]
 		// do nothing at this level
 		virtual void setStartTimePosition(const TYPE_TIMEPOSITION  & pos)	{}
@@ -90,58 +85,50 @@ class ARMusicalObject : public ARVisitable
 		virtual void setRelativeEndTimePosition(const TYPE_TIMEPOSITION & tp)	{ fDuration = tp - relativeTimePosition; }
 		virtual void setDuration(const TYPE_DURATION & dur)						{ fDuration = dur; }
 
-		virtual GObject * getFirstGRRepresentation();
-		virtual GObject * getLastGRRepresentation();
-
-		virtual void *	getGRRepresentation()						{ return mGrObject; }
-		virtual void	addGRRepresentation(GObject * p_grep);
-
-		virtual void	resetGRRepresentation();
 		virtual bool	isEventClass() const						{ return false; }
-
 		virtual void	browse(TimeUnwrap& mapper) const			{}
-		virtual void	setVoiceNum(int num)						{ fVoiceNum = num; }
 		virtual int		getVoiceNum() const							{ return fVoiceNum; }
 		virtual void	printGMNName(std::ostream& os) const		{}
+		virtual std::string	getGMNName() const						{ return "\\musicalObject"; }
+		virtual void	setVoiceNum(int num)						{ fVoiceNum = num; }
 
 	static	bool	IsPowerOfTwoDenom(const TYPE_DURATION & dur);
 
-	virtual void	setDrawGR(bool onoff){drawGR = onoff;}
-	virtual bool	getDrawGR(){return drawGR;}
+	virtual void	setDrawGR(bool on)		{ fDrawGR = on;}
+	virtual bool	getDrawGR() const		{ return fDrawGR;}
 
     /**** Functions to avoid dynamic_cast ****/
     virtual ARMusicalObject  *isARRepeatBegin()   { return NULL; }
-    virtual ARMusicalObject  *isARMusicalTag()    { return NULL; }
     virtual ARNote			 *isARNote()          { return NULL; }
     virtual const ARNote	 *isARNote() const    { return NULL; }
-    virtual ARMusicalObject  *isARBar()           { return NULL; }
     virtual ARMusicalObject  *isARCoda()          { return NULL; }
     virtual ARMusicalObject  *isARSegno()         { return NULL; }
     virtual ARMusicalObject  *isARNewPage()       { return NULL; }
     virtual ARMusicalObject  *isARNewSystem()     { return NULL; }
-    virtual ARMusicalObject  *isARStaff()         { return NULL; }
     virtual ARMusicalObject  *isARKey()           { return NULL; }
     virtual ARMusicalObject  *isARNaturalKey()    { return NULL; }
     virtual ARMusicalObject  *isARBeamState()     { return NULL; }
-    virtual ARMusicalObject  *isARChordComma()    { return NULL; }
     virtual ARMusicalObject  *isARClef()          { return NULL; }
-    virtual ARMusicalObject  *isARDummyRangeEnd() { return NULL; }
     virtual ARMusicalObject  *isARFinishBar()     { return NULL; }
     virtual ARMusicalObject  *isARMeter()         { return NULL; }
-    virtual ARMusicalObject  *isARNoteFormat()    { return NULL; }
     virtual ARMusicalObject  *isARRepeatEnd()     { return NULL; }
     virtual ARMusicalObject  *isARRest()          { return NULL; }
     virtual ARMusicalObject  *isARSecondGlue()    { return NULL; }
-    virtual ARMusicalObject  *isARUserChordTag()  { return NULL; }
-    virtual ARMusicalObject  *isARJump()          { return NULL; }
     virtual ARMusicalObject  *isARPossibleBreak() { return NULL; }
     virtual AROctava		 *isAROctava()		  { return NULL; }
     virtual ARGrace			 *isARGrace()		  { return NULL; }
     virtual ARSpace			 *isARSpace()		  { return NULL; }
     virtual ARTempo			 *isARTempo()		  { return NULL; }
-    /*****************************************/
-	// introduced to detect empty notes
-	virtual bool			 isEmptyNote() const  { return false; }
+
+    virtual const ARMusicalObject  *isARDummyRangeEnd() const	{ return NULL; }
+    virtual const ARMusicalObject  *isARNoteFormat() const		{ return NULL; }
+    virtual const ARMusicalObject  *isARBar() const				{ return NULL; }
+    virtual const ARMusicalObject  *isARStaff() const			{ return NULL; }
+    virtual const ARMusicalObject  *isARMusicalTag() const		{ return NULL; }
+    virtual const ARMusicalObject  *isARJump() const			{ return NULL; }
+    virtual const ARMusicalObject  *isARChordComma() const		{ return NULL; }
+    virtual const ARMusicalObject  *isARUserChordTag() const	{ return NULL; }
+	virtual bool					isEmptyNote() const			{ return false; }
 
     /* Visitor design pattern */
     virtual void accept(ARVisitor& visitor);
@@ -150,12 +137,7 @@ class ARMusicalObject : public ARVisitable
   protected:
 		TYPE_TIMEPOSITION	relativeTimePosition;
 		int					fVoiceNum;		// voice number added for mapping info [DF - 10-11-09]
-		
-		bool	drawGR;
-
-		void * mGrObject;  	// ptr to belonging graphical object or GRMultipleGRObject
-							// There can be multiple graphical objects linked to a single object
-							// (JB) currently, it's always a GRMultipleGRObject *
+		bool	fDrawGR = true;				// a flag that reflects \staffOn/Off sequence
 
   private:
 		TYPE_DURATION		fDuration;

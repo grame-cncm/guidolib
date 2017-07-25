@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -16,28 +16,22 @@
 */
 
 #include "ARMTParameter.h"
-// #include "ARMusicalObject.h"
-
-class ARFactory;
-class TagParameterList;
 
 /** \brief not yet documented
 */
 class ARStaffOff : public ARMTParameter
-	// ,public ARMusicalObject
 {
-public:
-	friend class ARFactory;
+	public:
+//		friend class ARFactory;
 
-				 ARStaffOff() { }
-	virtual	    ~ARStaffOff() { }
+					 ARStaffOff() { }
+		virtual	    ~ARStaffOff() { }
 
-	virtual int	 getOrder() const		{ return kDontMove; }
-	virtual void setTagParameterList(TagParameterList & pl);
+		virtual int	 getOrder() const		{ return kDontMove; }
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual const char*	getParamsStr() const	{ return ""; };
+		virtual const char*	getTagName() const		{ return "ARStaffOff"; };
+		virtual std::string getGMNName() const		{ return "\\staffOff"; };
 };
 
 #endif

@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -24,11 +24,12 @@ typedef float TYPE_FLOATPARAMETER;
 class TagParameterFloat : public TagParameter
 {
 	public:
-
-						 TagParameterFloat( float theFloat );
+						 TagParameterFloat( bool unittag );
+						 TagParameterFloat( float theFloat = 0.f );
 						 TagParameterFloat( const TagParameterFloat & tpf );
 		virtual 		~TagParameterFloat() {}
 
+		virtual void	print(std::ostream& out);
 		virtual void	set( const TagParameterFloat & in );
 				void	reset(float theFloat, const char * inUnit); /// resets value, unit & unittag
 
@@ -46,7 +47,9 @@ class TagParameterFloat : public TagParameter
 		static bool     convertValue(float value, double &toValue, const char * unit, float curLSPACE = 50.0f);
 
 		bool			TagIsUnitTag() const 		{ return fUnittag; }
-		const char *	getUnit() const				{ return fUnit; }
+		void			setUnitTag()				{ fUnittag = true; }
+		const char *	getUnit() const				{ return fUnit.c_str(); }
+		bool			hasUnit() const				{ return fUnit.size(); }
 
 	static TagParameterFloat * cast( TagParameter * inTag ) 
 					{ return inTag->isFloat() ? static_cast<TagParameterFloat *>(inTag) : 0; }
@@ -57,8 +60,8 @@ class TagParameterFloat : public TagParameter
 		bool				fUnittag; // true if the tag is a unit tag (offset or width/height)
 
 	protected:
-		enum { kUnitLen=3 };
-		char				fUnit[kUnitLen];
+//		enum { kUnitLen=3 };
+		std::string			fUnit;
 		TYPE_FLOATPARAMETER fValue;
 		
 	private:

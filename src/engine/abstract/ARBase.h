@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -16,27 +16,22 @@
 */
 #include "ARMusicalTag.h"
 #include "ARPositionTag.h"
-
-class ARMusicalEvent;
+#include "ARMusicalEvent.h"
 
 /** \brief not yet documented
 */
 class ARBase :  public ARMusicalTag, public ARPositionTag
 {
 public:
-			 ARBase();
+			 ARBase() { rangesetting = ONLY; setAssociation(ARMusicalTag::RA); }
 	virtual	~ARBase() {}
-
-    virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
 
 	void setBaseDuration(const TYPE_DURATION & tmp) { dur = tmp; }
 	void setBase(const TYPE_DURATION & tmp)         { base = tmp; }
 	const TYPE_DURATION & getBaseDuration() const   { return dur; }
 	const TYPE_DURATION & getBase() const           { return base; }
 
-	void addEvent(const ARMusicalEvent * ev);
+	void addEvent(const ARMusicalEvent * ev)		{ dur += ev->getDuration(); }
 
 	// called, to finish a base. this calculates
 	// the equivalence ....
@@ -51,8 +46,8 @@ public:
 
 protected:
 	// the parameters ...
-	TYPE_DURATION dur; // the dur of this tuplet
-	TYPE_DURATION base;   // the base of this tuplet
+	TYPE_DURATION dur;		// the dur of this tuplet
+	TYPE_DURATION base;		// the base of this tuplet
 	// that is, a note of duration equiv1 is displayed
 	// as a note of duration equiv2,
 	// sample: 1/6 == 1/4 means, that a note of duration

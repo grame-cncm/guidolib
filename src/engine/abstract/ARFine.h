@@ -15,20 +15,21 @@
 */
 
 #include "ARJump.h"
+#include "TimeUnwrap.h"
 
-/** \brief Coda
+/** \brief Fine
 */
 class ARFine : public ARJump
 {
 public:	
-				 ARFine();
-	virtual 	~ARFine();
+				 ARFine() : ARJump ("Fine") {}
+	virtual 	~ARFine() {}
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-    virtual void printParameters(std::ostream& os) const {};
+		virtual const char*	getTagName() const		{ return "ARFine"; };
+		virtual std::string getGMNName() const		{ return "\\fine"; };
 
-	virtual void browse(TimeUnwrap& mapper) const;
+		virtual void browse (TimeUnwrap& mapper) const
+				{ mapper.AtPos (this, TimeUnwrap::kFine); }
 };
 
 #endif

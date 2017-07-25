@@ -31,13 +31,14 @@
 #include "VGFont.h"
 #include "FontManager.h"
 
+using namespace std;
 
 extern GRStaff * gCurStaff;
 
-GRTextHarmony::GRTextHarmony(GRStaff * p_staff, ARTextHarmony * abstractRepresentationOfText)
-  : GRPTagARNotationElement(abstractRepresentationOfText)
+GRTextHarmony::GRTextHarmony(GRStaff * p_staff, const ARTextHarmony * ar)
+  : GRPTagARNotationElement(ar)
 {
-	assert(abstractRepresentationOfText);
+	assert(ar);
 
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
 	GRTextSaveStruct * st = new GRTextSaveStruct;
@@ -58,12 +59,14 @@ GRTextHarmony::GRTextHarmony(GRStaff * p_staff, ARTextHarmony * abstractRepresen
 	const ARTextHarmony * myar = getARTextHarmony();
 	if (myar)
 	{
-		mFontSize = myar->getFSize(curLSPACE);
+//		mFontSize = myar->getFSize(curLSPACE);
+		mFontSize = myar->getFSize() * curLSPACE / LSPACE;
 		if (mFontSize == 0)
 			mFontSize = (int)(1.5f * LSPACE);
 		// we do not want that (do we?)
 		font = new NVstring(myar->getFont());
-		fontAttrib = new NVstring(myar->getFAttrib());
+		fontAttrib = new NVstring(myar->getTextAttributes());
+//		fontAttrib = new NVstring(myar->getFAttrib());
 	}
 
 	if (font && font->length() > 0)
@@ -76,7 +79,8 @@ GRTextHarmony::GRTextHarmony(GRStaff * p_staff, ARTextHarmony * abstractRepresen
 
 	unsigned int xdir = VGDevice::kAlignLeft;
 	unsigned int ydir = VGDevice::kAlignTop;
-	const char* tf = myar->getTextformat();
+	const char* tf = myar->getTextFormat();
+//	const char* tf = myar->getTextformat();
 	if (tf && (strlen(tf) == 2))
 	{
 		switch (tf[0]) {
@@ -167,8 +171,10 @@ void GRTextHarmony::OnDraw( VGDevice & hdc ) const
 	float dx = 0;
 	float dy = 0;
 
-	if( arText->getYPos()) // && arText->getYPos()->TagIsSet())
-		drawPos.y -= (arText->getYPos()->getValue(curLSPACE));
+//	if( arText->getYPos()) // && arText->getYPos()->TagIsSet())
+//		drawPos.y -= (arText->getYPos()->getValue(curLSPACE));
+//	if( arText->getDY()) // && arText->getYPos()->TagIsSet())
+//		drawPos.y -= (arText->getDY()->getValue(curLSPACE));
 	if (arText->getDY())
 		dy = -arText->getDY()->getValue( curLSPACE );
 	if (arText->getDX())

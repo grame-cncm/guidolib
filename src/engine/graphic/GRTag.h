@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -62,7 +62,6 @@ public:
 	virtual int                     getFontSize() const     { return mFontSize; }
 	virtual const unsigned char *   getColRef() const       { return mColRef; }
 
-	virtual void        print(std::ostream& os) const       {}
 	virtual void        setSConst(float val)                { sconst = val; }
             void		setTagType(TAGTYPE ntyp)            { tagtype = ntyp; }
             void		setError(int p_error);
@@ -87,11 +86,6 @@ protected:
 
 	float mTagSize;
 	NVPoint mTagOffset;
-
-	//int openRightRange;
-	//int openLeftRange;
 };
-
-std::ostream& operator<< (std::ostream& os, const GRTag* tag);
 
 #endif

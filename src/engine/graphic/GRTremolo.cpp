@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -28,7 +28,7 @@
 #include "GRBeam.h"
 #include "FontManager.h"
 
-GRTremolo::GRTremolo( GRStaff * stf, ARTremolo * artrem )
+GRTremolo::GRTremolo( GRStaff * stf, const ARTremolo * artrem )
 					 	: GRPTagARNotationElement(artrem)				
 {
 	assert(stf);
@@ -51,14 +51,9 @@ GRTremolo::GRTremolo( GRStaff * stf, ARTremolo * artrem )
     
     fText = artrem->getText() ? artrem->getText()->getValue() : "";
     fThickness = artrem->getThickness() ? artrem->getThickness()->getValue() : LSPACE/2;
-    dx = artrem->getDx() ? artrem->getDx()->getValue() : 0;
-    dy = artrem->getDy() ? (-1) * artrem->getDy()->getValue() : 0;
+    dx = artrem->getDX() ? artrem->getDX()->getValue() : 0;
+    dy = artrem->getDY() ? (-1) * artrem->getDY()->getValue() : 0;
     
-}
-
-// -----------------------------------------------------------------------------
-GRTremolo::~GRTremolo()
-{
 }
 
 // -----------------------------------------------------------------------------

@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -22,32 +22,23 @@
 */
 class ARNoteFormat :  public ARMTParameter, public ARPositionTag
 {
-public:
-             ARNoteFormat(ARNoteFormat * p_savenf = NULL, ARNoteFormat * copynf = NULL);
-    virtual ~ARNoteFormat();
+	public:
+				 ARNoteFormat(const ARNoteFormat * p_savenf = NULL, const ARNoteFormat * copynf = NULL);
+		virtual ~ARNoteFormat() {}
 
-    const char* getStyle() const;
+		const TagParameterString *	getTPStyle() const; // { return style; }
 
-    const TagParameterString * getTPStyle() const { return style; }
+		virtual const char*	getParamsStr() const	{ return kARNoteFormatParams; };
+		virtual const char*	getTagName() const		{ return "ARNoteFormat"; };
+		virtual std::string getGMNName() const		{ return "\\noteFormat"; };
 
-    virtual bool IsStateTag() const { return true; }
+		virtual ARNoteFormat * getEndTag() const	{ return new ARNoteFormat(NULL,fSaveNF); }
 
-    virtual void setTagParameterList( TagParameterList & tpl);
+		virtual bool IsStateTag() const					{ return true; }
+		const ARMusicalObject *isARNoteFormat() const	{ return this; }
 
-    virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-    virtual void printParameters(std::ostream& os) const;
-
-    virtual ARNoteFormat * getEndTag() const		{ return new ARNoteFormat(NULL,savenf); }
-
-    /**** Function to avoid dynamic_cast ****/
-    ARMusicalObject *isARNoteFormat() { return this; }
-    /****************************************/
-
-protected:
-    ARNoteFormat * savenf;
-    TagParameterString * style;
-    static ListOfTPLs ltpls;
+	private:
+		const ARNoteFormat * fSaveNF;
 };
 
 #endif 

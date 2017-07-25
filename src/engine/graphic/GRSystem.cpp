@@ -260,7 +260,7 @@ GRStaff * GRSystem::ComputeBoundingBox (GRSliceHeight &sliceheight)
 GRSystem::GRSystem(GRStaffManager * staffmgr, GRPage * inPage,
 					const TYPE_TIMEPOSITION & relativeTimePositionOfSystem,
 					SSliceList ** psystemslices, int count,
-					GRSystemSlice * beginslice, ISpringVector ** pvect, ARSystemFormat * sysform, float optForce,
+					GRSystemSlice * beginslice, ISpringVector ** pvect, const ARSystemFormat * sysform, float optForce,
 					float spring, float proportionnalRender,
 					bool islastsystem)
 
@@ -904,9 +904,9 @@ void GRSystem::addStaff( GRStaff * newStaff, int num )
 }
 
 // ----------------------------------------------------------------------------
-ARMusic * GRSystem::getARMusic() const
+const ARMusic * GRSystem::getARMusic() const
 {
-	return /*dynamic*/static_cast<ARMusic *>(getAbstractRepresentation());
+	return /*dynamic*/static_cast<const ARMusic *>(getAbstractRepresentation());
 }
 
 // ----------------------------------------------------------------------------
@@ -1126,7 +1126,7 @@ const GRSpring * GRSystem::getGRSpring( int id ) const
 // ----------------------------------------------------------------------------
 /** \brief Sets the system-format
 */
-void GRSystem::setSystemFormat(ARSystemFormat * sysfrm)
+void GRSystem::setSystemFormat(const ARSystemFormat * sysfrm)
 {
 	traceMethod("setSystemFormat");
 	if( sysfrm == 0 ) return;
@@ -1158,7 +1158,7 @@ void GRSystem::addBar(GRBar * mybar, GRSystem::BARTYPE btype, GRStaff * inStaff 
 	// We have to build a new Barline ...
 	// the barline needs to know that it belongs to a system.
 	// when the distance of staffs is being set, these tags must be updated (for length)
-	ARBar * arbar = mybar->getARBar();
+	const ARBar * arbar = mybar->getARBar();
 	assert(arbar);
 	GRBar * newbar = new GRBar( arbar, this, inStaff, mybar->getRelativeTimePosition(), inStaff->getProportionnalRender());
 
@@ -1210,7 +1210,7 @@ GRSystemSlice * GRSystem::getFirstGRSystemSlice() const
 // GRAccolade mAccolade is now replaced by a std::vector<GRAccolade *>, 
 // as well as mCurAccolade Tag in GRStaffManager (std::vector<ARAccolade *>)
 
-void GRSystem::notifyAccoladeTag( ARAccolade * inAccoladeTag )
+void GRSystem::notifyAccoladeTag( const ARAccolade * inAccoladeTag )
 {
 	traceMethod("notifyAccoladeTag");
 	

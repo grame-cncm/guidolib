@@ -26,19 +26,14 @@
 Bitmap::Bitmap( const char * inName )
 {
     VGDevice *tmpDevice = gGlobalSettings.gDevice;
-
-    if (tmpDevice)
-    {
+    if (tmpDevice) {
         VGSystem *tmpSystem = tmpDevice->getVGSystem();
-
         if (tmpSystem)
             fDevice = tmpSystem->CreateMemoryDevice(inName);
     }
 
     isSVGDevice = false;
-
-    if (fDevice)
-    {
+    if (fDevice) {
         SVGDevice *device = dynamic_cast<SVGDevice *>(fDevice);
         if (device)
             isSVGDevice = true;    

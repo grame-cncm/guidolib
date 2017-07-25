@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -164,7 +164,7 @@ class GRStaffManager
 
 	public:
 
-				GRStaffManager(GRMusic * p_grmusic, ARPageFormat * inPageFormat = 0, const GuidoLayoutSettings * settings = 0);
+				 GRStaffManager(GRMusic * p_grmusic, ARPageFormat * inPageFormat = 0, const GuidoLayoutSettings * settings = 0);
         virtual ~GRStaffManager();
 
 		// this routine is used to get the current beginning_sff
@@ -173,12 +173,12 @@ class GRStaffManager
 		GRBeginSpaceForceFunction2 * getCurrentBegSFF();
 
 		int  IsAutoPageBreak() const;
-		void setAutoTag(ARAuto *p_arauto);
-		void setBarFormat(ARBarFormat * barfrmt,GRStaff * curstaff);
+		void setAutoTag		(const ARAuto *p_arauto);
+		void setBarFormat	(const ARBarFormat * barfrmt,GRStaff * curstaff);
 		void setSystemDistance(float distance, const GRVoiceManager & p_vcmgr);
-		void setPageFormat(ARPageFormat * pform);
-		void setSystemFormat(ARSystemFormat * sysfrm);
-		void NewPage(GRPage *newpage);
+		void setPageFormat	(const ARPageFormat * pform);
+		void setSystemFormat(const ARSystemFormat * sysfrm);
+		void NewPage		(GRPage *newpage);
 
 
 		void addElementToSpring(GRNotationElement *grne,int springid);
@@ -191,7 +191,7 @@ class GRStaffManager
 		int AddPageTag(GRNotationElement * grel, GRStaff * grstaff,int voiceid);
 		int getNewLinePage() const;
 
-		virtual bool	setStaffStateTag(ARMusicalTag * tag, int staffnum);
+		virtual bool	setStaffStateTag(const ARMusicalTag * tag, int staffnum);
 		virtual float	getSystemWidthCm();
 		virtual void	EndPage(ARMusicalVoice * voice, GuidoPos pos);
 		virtual void	EndSystem(ARMusicalVoice * arVoice, GuidoPos pos);
@@ -208,12 +208,7 @@ class GRStaffManager
 		GRMusic * getGRMusic()												{ return mGrMusic; }
 		int getNumVoices() const;
 
-		void	notifyAccoladeTag( ARAccolade * inAccoladeTag );
-
-		// this routine takes care of breaking the positiontags of a new system.
-		// The routine first retrieves the lastslice of the (new, to be created) system and then manages the still open tags of the
-		// system. It saves the open tags in a list, which will then be used to resume the tags in the next line.
-		void TakeCareOfBreakAt(GRSystem * newsys);
+		void	notifyAccoladeTag( const ARAccolade * inAccoladeTag );
 
 	protected:
 
@@ -236,19 +231,6 @@ class GRStaffManager
 		GRClef * mMaxClef;
 		GRKey  * mMaxKey;
 	
-		// this routine takes the current system-slice list and finds the optimum break for it.
-		// it then also creates the systems with the respective systemslices.
-		float			FindOptimumBreaks(int pageorsystembreak, float beginheight = 0 );
-		GRSystemSlice * CreateBeginSlice (const GRSystemSlice * lastslice);
-		void		createNewSystemRods(int startid,int endid);
-		void		BreakAtPBS(GuidoPos pbpos);
-		int			CheckForBarSpring(int sprid);
-		void		MergeSPFs(GRPossibleBreakState * pbs1, GRPossibleBreakState * pbs2 = 0);
-		GRSpaceForceFunction2 * BuildSFF();
-		void		EndStaves(const TYPE_TIMEPOSITION & tp, int lastline = 0);
-		void		handleDeletedElements();
-	
-	
 		NEPointerList * deletedElements;
 		int				mNewLinePage;
 		VStaff *		mMyStaffs;
@@ -259,7 +241,7 @@ class GRStaffManager
 		GRMusic *		mGrMusic;
 		GRPage *		mGrPage;
 
-		ARSystemFormat * mCurSysFormat;
+		const ARSystemFormat * mCurSysFormat;
 		sysslicelist *	 mSystemSlices;
 
 		// this variable holds in a list the sffs for the beginning of a line given the current state information.
@@ -278,7 +260,7 @@ class GRStaffManager
 
 		TYPE_TIMEPOSITION	relativeTimePositionOfGR;
 		TYPE_DURATION		mDurationOfGR;
-		ARMusic *			mArMusic;
+		const ARMusic *		mArMusic;
 
 	
 		SystemHash	systemHash;		// a hash for system-tags
@@ -319,8 +301,8 @@ class GRStaffManager
 		vce_ev_list evlist;
 
 		GRPBList *	pblist;
-		ARAuto *	mArAuto;
-		std::vector<ARAccolade	*> mCurAccoladeTag;
+		const ARAuto *	mArAuto;
+		std::vector<const ARAccolade*> mCurAccoladeTag;
 		GuidoLayoutSettings settings;
 	
 	private:
@@ -337,10 +319,29 @@ class GRStaffManager
 			int		newline;				// this is set if at least one voice has a newSystem/newPage
 			float	pbreakval;
 		} TCreateStavesState;
+
 		bool	nextTimePosition (int nvoices, bool filltagMode, TCreateStavesState& state);
 		float	systemBreak (int newlineMode, float beginheight);
 		int		initVoices(int cnt);
         void    applyStaffSize(GRStaff *staff, int staffNum);
+
+		// this routine takes the current system-slice list and finds the optimum break for it.
+		// it then also creates the systems with the respective systemslices.
+		float			FindOptimumBreaks(int pageorsystembreak, float beginheight = 0 );
+		GRSystemSlice * CreateBeginSlice (const GRSystemSlice * lastslice);
+		void			createNewSystemRods(int startid,int endid);
+		int				CheckForBarSpring(int sprid);
+		void			EndStaves(const TYPE_TIMEPOSITION & tp, int lastline = 0);
+		void			handleDeletedElements();
+
+		void			MergeSPFs(GRPossibleBreakState * pbs1, GRPossibleBreakState * pbs2 = 0);
+		void			BreakAtPBS(GuidoPos pbpos);
+		GRSpaceForceFunction2 * BuildSFF();
+
+		// this routine takes care of breaking the positiontags of a new system.
+		// The routine first retrieves the lastslice of the (new, to be created) system and then manages the still open tags of the
+		// system. It saves the open tags in a list, which will then be used to resume the tags in the next line.
+		void TakeCareOfBreakAt(GRSystem * newsys);
 };
 
 #endif

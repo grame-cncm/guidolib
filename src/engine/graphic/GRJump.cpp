@@ -32,7 +32,7 @@ SymbolMap   GRJump::mSymbols;
 const VGFont*	GRJump::mFont;
 
 //----------------------------------------------------------------------------------
-GRJump::GRJump( ARJump * ar, bool rightJustified )
+GRJump::GRJump( const ARJump * ar, bool rightJustified )
 		: GRTagARNotationElement( ar, LSPACE ), mRightJustified(rightJustified)
 {
 	if (mSymbols.empty()) {				// first time initialization
@@ -100,7 +100,7 @@ const VGFont* GRJump::SelectTextFont( VGDevice & hdc ) const
 //----------------------------------------------------------------------------------
 const ARJump * GRJump::getARJump() const
 {
-	return static_cast<ARJump *>(getAbstractRepresentation()->isARJump());
+	return static_cast<const ARJump *>(getAbstractRepresentation()->isARJump());
 }
 
 //----------------------------------------------------------------------------------

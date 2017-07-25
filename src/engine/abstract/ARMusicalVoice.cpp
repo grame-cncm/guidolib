@@ -1,7 +1,7 @@
 /*
 	GUIDO Library
 	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -23,13 +23,9 @@
 #include <fstream>
 #include <cstring>	// strcat
 #include <vector>
-
-using namespace std;
+#include <map>
 
 #include "TagList.h"
-#include "TagParameterList.h"
-
-//#include "nview.h"		// deprecated
 #include "GUIDOInternal.h"	// for gGlobalSettings.gAutoBarlines
 
 #include "ARMusicalVoice.h"
@@ -78,25 +74,26 @@ using namespace std;
 #include "ARGlissando.h"
 #include "GRTrill.h"
 #include "GRSingleNote.h"
+
 #include "ARCluster.h"
 #include "ARSymbol.h"
 #include "ARFeatheredBeam.h"
 #include "ARTremolo.h"
 #include "AROctava.h"
-
 #include "ARPossibleBreak.h"
-#include "GMNCodePrintVisitor.h"
-
 #include "ARRepeatBegin.h"
 #include "ARCoda.h"
 #include "ARSegno.h"
 
+#include "GMNCodePrintVisitor.h"
 #include "benchtools.h"
 
-#define GLISSANDOEND "\\glissandoEnd"
-#define TIEEND "\\tieEnd"
-#define DISPDUREND "\\dispDurEnd"
-#define SHARESTEMEND "\\shareStemEnd"
+using namespace std;
+
+#define GLISSANDOEND	"\\glissandoEnd"
+#define TIEEND			"\\tieEnd"
+#define DISPDUREND		"\\dispDurEnd"
+#define SHARESTEMEND	"\\shareStemEnd"
 
 
 //____________________________________________________________________________________
@@ -105,8 +102,6 @@ ARMusicalVoice::ARMusicalVoice()	: ObjectList(1), // owns elements ...
   numchordvoice(-1), isInChord(false), voicenum(0),
   endState(NULL), readmode(CHORDMODE), mPosTagList(NULL)
 {
-	// AddHead(new ARVoiceStart);
-
 	mStartPosTagList = new StartPositionTagList(0); // ownsElements
 
 	lastevposition = (GuidoPos) NULL;
@@ -114,7 +109,6 @@ ARMusicalVoice::ARMusicalVoice()	: ObjectList(1), // owns elements ...
 	sum = 0;
 
 	mCurVoiceState = new ARMusicalVoiceState();
-
     repeatBeginList = new std::vector<ARRepeatBegin *>();
 }
 
@@ -417,11 +411,11 @@ ARMusicalObject * ARMusicalVoice::GetNext(GuidoPos &pos, ARMusicalVoiceState &vs
 		if (first == 0) first = obj;
 
         if (obj) {
-            ARMusicalTag *mytag = static_cast<ARMusicalTag *>(obj->isARMusicalTag());
+            ARMusicalTag *mytag = dynamic_cast<ARMusicalTag *>(obj);
 
             if (mytag) {
                 if (mytag->IsStateTag()) {
-                    ARStaff *mynewstf = static_cast<ARStaff *>(mytag->isARStaff());
+                    const ARStaff *mynewstf = static_cast<const ARStaff *>(mytag->isARStaff());
                     if ((mynewstf) != NULL) {
                         ARStaff *tmp = (ARStaff *)(vst.getCurStateTag(typeid(ARStaff)));
                         if (tmp && tmp->getStaffNumber() != mynewstf->getStaffNumber()) {
@@ -767,81 +761,38 @@ void ARMusicalVoice::printParameters(std::ostream& os) const
 void ARMusicalVoice::accept(ARVisitor& visitor)
 {
     visitor.visitIn (this);
-	GuidoPos pos = ObjectList::GetHeadPosition();
+	ARMusicalVoiceState state;
+
+	_readmode oldreadmode = readmode;
+	readmode = EVENTMODE;
+
+	map<const ARMusicalTag*, bool> doneMap;
+	GuidoPos pos = GetHeadPosition(state);
 	while (pos) {
-		ARMusicalObject *object = ObjectList::GetNext(pos);
+		ARMusicalObject *object = GetNext(pos, state);
         object->accept(visitor);
-    }
+ 		const PositionTagList* tags = state.currentPTags();
+		if (tags) {
+			GuidoPos tpos = tags->GetHeadPosition();
+			while (tpos) {
+				ARPositionTag* tag  = tags->GetNext (tpos);
+				ARMusicalTag* mtag  = dynamic_cast<ARMusicalTag*>(tag);
+				if (mtag && (doneMap.find(mtag)==doneMap.end())) {
+					mtag->accept(visitor);
+					doneMap[mtag] = true;
+				}
+			}
+		}
+	}
+	readmode = oldreadmode;
 
     GuidoPos pTagPos = mPosTagList ? mPosTagList->GetHeadPosition() : 0;
     while (pTagPos) {
-		ARPositionTag * tag = mPosTagList->GetNext(pTagPos);
-        tag->accept(visitor);
+		ARMusicalTag * tag = dynamic_cast<ARMusicalTag*>(mPosTagList->GetNext(pTagPos));
+        if (tag && (doneMap.find(tag) == doneMap.end())) tag->accept(visitor);
+//		else cerr << "ARMusicalVoice::accept: pos tag is not a musical tag: ";
 	}
     visitor.visitOut (this);
-}
-
-//void ARMusicalVoice::goThrough(ARVisitor *visitor)
-//{
-//    acceptIn(*visitor);
-//
-//	GuidoPos posInVoice = ObjectList::GetHeadPosition();
-//    GuidoPos prevPos    = 0;
-//    GuidoPos pTagPos    = 0;
-//    if (mPosTagList)
-//		pTagPos = mPosTagList->GetHeadPosition();
-//
-//	while (posInVoice) {
-//        prevPos = posInVoice;
-//		ARMusicalObject *object = ObjectList::GetNext(posInVoice);
-//        goThroughTagsList(visitor, pTagPos, prevPos, true);
-//        object->accept(visitor);
-//        goThroughTagsList(visitor, pTagPos, prevPos, false);
-//    }
-//
-//    if (mPosTagList) {
-//        while (pTagPos) {
-//            ARMusicalObject *object = dynamic_cast<ARMusicalObject *> (mPosTagList->GetNext(pTagPos));
-//            if (object) object->accept(visitor);
-//        }
-//    }
-//    acceptOut(*visitor);
-//}
-
-//void ARMusicalVoice::goThroughTagsList(ARVisitor *visitor, GuidoPos& posTag, GuidoPos prevPos, bool addTag) const
-//{
-//	if (mPosTagList) {
-//		while (posTag) {
-//            ARPositionTag *positionTag = mPosTagList->GetAt(posTag);
-//            ARTagEnd      *artgend     = ARTagEnd::cast(positionTag);
-//
-//            if ((!addTag && artgend) || (addTag && !artgend)) {
-//                if (positionTag && positionTag->getPosition() == prevPos)
-//                    positionTag->accept(visitor);
-//                else
-//                    break;
-//
-//                mPosTagList->GetNext(posTag);
-//            }
-//            else
-//                break;
-//		}
-//	}
-//}
-
-//____________________________________________________________________________________
-void ARMusicalVoice::resetGRRepresentation()
-{
-	ARMusicalEvent::resetGRRepresentation();
-	GuidoPos pos = ObjectList::GetHeadPosition();
-	while (pos)
-	{
-		ARMusicalObject * e = ObjectList::GetNext(pos);
-		e->resetGRRepresentation();
-	}
-
-	delete mCurVoiceState;
-	mCurVoiceState = 0;
 }
 
 //____________________________________________________________________________________
@@ -1055,15 +1006,6 @@ void ARMusicalVoice::doAutoStuff1()
 
 	// introduce mesures numbering	
 	timebench("doAutoMeasuresNumbering", doAutoMeasuresNumbering());
-
-	// this needs to be done just after the global voice-check has been done ...
-	// now we can check, whether newSystem and newPage are followed by correct clef/key
-	// information ...
-	// doAutoCheckStaffStateTags();
-
-	// this routine checks, whether the events can be displayed with single graphical
-	// elements. If not, they are broken and tie-tags are included.
-	// doAutoDisplayCheck();
 	timebench("doMicroTonal", doMicroTonal());
 }
 
@@ -1250,16 +1192,6 @@ void ARMusicalVoice::setPositionTagEndPos(int id, ARMusicalTag * end, ARMusicalT
 	if (arobj)		  arobj->setRelativeTimePosition( getDuration() );
 	mPosTagList->AddTail(artgend);
 }
-
-//____________________________________________________________________________________
-/*
-void ARMusicalVoice::FreezeState(ARMusicalVoiceState * in)
-{
-	assert(false);
-	// no longer needed function ....
-	mCurVoiceState = in;
-}
-*/
 
 //____________________________________________________________________________________
 GuidoPos ARMusicalVoice::getLastEventPosition()
@@ -1787,7 +1719,7 @@ cerr << "==> ARMusicalVoice::doAutoBeaming TIE is true" << endl;
 
 		ARMusicalObject * o = GetAt(pos);
 		ARMusicalEvent * ev = ARMusicalEvent::cast(o);
-        ARBar * arbar = static_cast<ARBar *>(o->isARBar());
+        const ARBar * arbar = static_cast<const ARBar *>(o->isARBar());
 		
 		// is it an event? and there are NO explicit beams and the beamstate is auto?
 		if (!beamcount && bmauto && ev && !vst.curgracetag)
@@ -1919,10 +1851,7 @@ public:
 		position = -1;
 	}
 
-	virtual ~ARDispatchLyricsClass()
-	{
-		delete text;
-	}
+	virtual ~ARDispatchLyricsClass()	{ delete text; }
 
 	NVstring GetNextSubstring()
 	{
@@ -1945,12 +1874,9 @@ public:
 		}
 		size_t length = (size_t)(end-start);
 		char c = '\0';
-		if ((int)text->size() > end)
-			c = (*text)[end];
-		if (c == '-' || c == '_')
-		{
-			++ length;
-		}
+		if ((int)text->size() > end)	c = (*text)[end];
+		if (c == '-' || c == '_')		length++;
+
 		NVstring tmp = text->substr((size_t)start,length);
 		tmp.replace('~',' ');
 		position = end + 1;
@@ -2140,7 +2066,7 @@ void ARMusicalVoice::doAutoBarlines()
 
 		ARMusicalObject * o = GetAt(pos);
 		ARMusicalEvent * ev = ARMusicalEvent::cast(o);
-        ARBar   *bar   = static_cast<ARBar *>(o->isARBar());
+        const ARBar   *bar   = static_cast<const ARBar *>(o->isARBar());
 
 		// (DF) tests to inhibit auto barlines when a repeat bar is present
 		bool isRepeatBar = false;
@@ -2272,7 +2198,8 @@ void ARMusicalVoice::doAutoBarlines()
 					newpos = AddElementAfter(pos,arbar);
 
 					// now we create a new event, that is a copy of ev and has a new duration ...
-					ARMusicalEvent *ev2 = static_cast<ARMusicalEvent *>(ev->Copy());
+					ARNote* note = ev->isARNote();
+					ARMusicalEvent *ev2 = note ? new ARNote (*note, true) : static_cast<ARMusicalEvent *>(ev->Copy());
 					if (ev2) {
 						ev2->setRelativeTimePosition( lastbartp );
 						ev2->setDuration( olddur - newdur );
@@ -2293,17 +2220,17 @@ void ARMusicalVoice::doAutoBarlines()
 						}
 
 						// so we add our tie ...
-						ARTie *artie = new ARTie();
 						ARTie *existingTie = dynamic_cast<ARTie *>(mPosTagList->GetHead());
+						ARTie *artie = existingTie ? new ARTie(*existingTie) : new ARTie;
 						artie->setID(gCurArMusic->mMaxTagId ++);
 						artie->setIsAuto(true);
 						artie->setRelativeTimePosition(ev->getRelativeTimePosition());
 						artie->setPosition(pos);
-						if (existingTie) {
-							TagParameterList *tpl = existingTie->getTagParameterList();
-							artie->setTagParameterList(*tpl);
-							delete tpl;
-						}
+//						if (existingTie) {
+//							TagParameterList *tpl = existingTie->getTagParameterList();
+//							artie->setTagParameterList(*tpl);
+//							delete tpl;
+//						}
 
 						ARDummyRangeEnd *arde = new ARDummyRangeEnd(TIEEND);
 						arde->setID(artie->getID());
@@ -2397,7 +2324,7 @@ void ARMusicalVoice::doAutoMeasuresNumbering()
 		}
 
 		ARMusicalObject * o = GetAt(pos);
-        ARBar * bar = static_cast<ARBar *>(o->isARBar());
+        ARBar * bar = dynamic_cast<ARBar *>(o);
 
 		if (bar)
 		{
@@ -2459,11 +2386,10 @@ public:
 */
 GuidoPos ARMusicalVoice::CopyChord(ARMusicalVoiceState &vst, TYPE_TIMEPOSITION tp, const TYPE_DURATION & newdur)
 {
-    ARStaff * curstaff = static_cast<ARStaff *>( vst.getCurStateTag(typeid(ARStaff)));
+	ARStaff * curstaff = static_cast<ARStaff *>( vst.getCurStateTag(typeid(ARStaff)));
 
 	int staffstatenum = 0;
-	if (!curstaff)
-	{
+	if (!curstaff) {
 		// then what?
 		// we have to remember the voice-num, because the voice is associated with the staff if not set otherwise.
 		staffstatenum = getVoiceNum();
@@ -2489,14 +2415,12 @@ GuidoPos ARMusicalVoice::CopyChord(ARMusicalVoiceState &vst, TYPE_TIMEPOSITION t
 	readmode = EVENTMODE;
 
 	ptclass * mylist = new ptclass(1);
-
 	ARChordTag *savedchordtag = myvst.curchordtag;
 	GuidoPos prevpos = NULL;
 
 	// this puts all objects within the chordtag-range
 	// in a list.
-	while( myvst.vpos && myvst.curchordtag == savedchordtag)
-	{
+	while( myvst.vpos && myvst.curchordtag == savedchordtag) {
 		prevpos = myvst.vpos;
 		ARMusicalObject * tmp = GetNext(myvst.vpos,myvst);
 		PointerClass * pc = new PointerClass();
@@ -2504,25 +2428,17 @@ GuidoPos ARMusicalVoice::CopyChord(ARMusicalVoiceState &vst, TYPE_TIMEPOSITION t
 		pc->pos1 = prevpos;
 		mylist->AddTail( pc );
 	}
-
 	// then we have everything (besides the positiontags ...)
 
 	// this is the position of the last element in the first chord.
 	poslastinfirstchord = prevpos;
 
-
 	// now we have to check, if the voice-state has changed
 	ARStaff * newstafftag = NULL;
 	ARStaff * newstaff = static_cast<ARStaff *>( myvst.getCurStateTag(typeid(ARStaff)));
-	if (curstaff != newstaff)
-	{
-		if ((curstaff &&
-			 curstaff->getStaffNumber() != newstaff->getStaffNumber())
-			 ||
-			 ( staffstatenum != newstaff->getStaffNumber() ) )
-		{
+	if (curstaff != newstaff) {
+		if ((curstaff && curstaff->getStaffNumber() != newstaff->getStaffNumber()) || ( staffstatenum != newstaff->getStaffNumber() ) ) {
 			// then we need a new staff-tag
-
 			newstafftag = new ARStaff(staffstatenum);
 			newstafftag->setRelativeTimePosition(newtp + newdur);
 		}
@@ -2535,18 +2451,15 @@ GuidoPos ARMusicalVoice::CopyChord(ARMusicalVoiceState &vst, TYPE_TIMEPOSITION t
 
 	// this loop actually created copies of the
 	// events and tags within the chord-range.
-
-	while (objpos)
-	{
+	while (objpos) {
 		PointerClass * pc = mylist->GetNext(objpos);
 		ARMusicalObject * obj = pc->pobj;
-		ARMusicalObject * newobj = obj->Copy();
+		ARNote * note = obj->isARNote();
+		ARMusicalObject * newobj = note ? new ARNote (*note, true) : obj->Copy();
 		newobj->setRelativeTimePosition(tp);
-		if (newobj->getDuration() > DURATION_0)
-		{
+		if (newobj->getDuration() > DURATION_0) {
 			newobj->setDuration(newdur);
 			tp += newdur;
-
 			firstafterempty = 1;
 		}
 
@@ -2559,62 +2472,44 @@ GuidoPos ARMusicalVoice::CopyChord(ARMusicalVoiceState &vst, TYPE_TIMEPOSITION t
 			posfirstinnewchord = poslastinnewchord;
 
 		pc->pos2 = poslastinnewchord;
-
-		if (firstafterempty && newstafftag)
-		{
-			if (myvst.vpos)
-				AddElementAt(myvst.vpos,newstafftag);
-			else
-				InsertAtTail(newstafftag);
+		if (firstafterempty && newstafftag) {
+			if (myvst.vpos)	AddElementAt(myvst.vpos,newstafftag);
+			else			InsertAtTail(newstafftag);
 			firstafterempty = 0;
 			newstafftag = NULL;
 		}
-
 	}
 
 	typedef KF_IPointerList<ARPositionTag> typeptaglist;
-
 	typeptaglist * myptaglist = new typeptaglist();
 
 	// about the repointering aspect ....
-	// I know, that myvst.ptagpos points to a position-tag that
-	// is either ending on an event within the range
-	// or points to the beginning of the ending tags of
-	// the first chord-range.
+	// I know, that myvst.ptagpos points to a position-tag that is either ending on an event within the range
+	// or points to the beginning of the ending tags of the first chord-range.
 
-	// first, I have to copy all the tags that are in vst.curpositiontags
-	// and NOT in myvst.curpositiontags ....
-	if (vst.curpositiontags)
-	{
+	// first, I have to copy all the tags that are in vst.curpositiontags and NOT in myvst.curpositiontags ....
+	if (vst.curpositiontags) {
 		GuidoPos tmpcurpos = vst.curpositiontags->GetHeadPosition();
-		while (tmpcurpos)
-		{
+		while (tmpcurpos) {
 			ARPositionTag * ptag = vst.curpositiontags->GetNext(tmpcurpos);
-			if (!myvst.curpositiontags->GetElementPos(ptag))
-			{
+			if (!myvst.curpositiontags->GetElementPos(ptag)) {
 				// then we have a positiontag that is completly
 				// embedded within the chord.
 				// this needs to be copied.
 
 				GuidoPos newstartpos = NULL;
-				//GuidoPos newendpos = NULL;
-
 				GuidoPos mypos = mylist->GetHeadPosition();
-				while (mypos)
-				{
+				while (mypos) {
 					PointerClass * pc = mylist->GetNext(mypos);
-					if ( ptag->getPosition() == pc->pos1 )
-					{
+					if ( ptag->getPosition() == pc->pos1 ) {
 						newstartpos = pc->pos2;
 						break;
 					}
 				}
 
-				if (newstartpos)
-				{
+				if (newstartpos) {
 					// OK, now we have to copy the ptags and repointer them ....
 					// we need other object-functions to handle this !!!!!
-
 					ARMusicalObject * pstart = ptag->Copy();
 					if (pstart)
 					{
@@ -2625,15 +2520,12 @@ GuidoPos ARMusicalVoice::CopyChord(ARMusicalVoiceState &vst, TYPE_TIMEPOSITION t
 
 						TYPE_TIMEPOSITION tagtp (tp);
 						if (newstartpos == posfirstinnewchord)
-						{
 							tagtp = tp - newdur;
-						}
 						newmtag->setRelativeTimePosition(tagtp);
 
 						// this is a HACK: I save the OLD correspondence
 						// to find the correct correspondence when copying the end-tags!
 						newpstart->setCorrespondence(ptag->getCorrespondence());
-
 						myptaglist->AddTail(newpstart);
 					}
 				}
@@ -2649,20 +2541,17 @@ GuidoPos ARMusicalVoice::CopyChord(ARMusicalVoiceState &vst, TYPE_TIMEPOSITION t
 		prevptagpos = myvst.ptagpos;
 		ARPositionTag * ptag = mPosTagList->GetNext(myvst.ptagpos);
 		ARTagEnd * tgend = ARTagEnd::cast(ptag);
-		if (tgend && tgend->getPosition() == poslastinfirstchord)
-		{
+		if (tgend && tgend->getPosition() == poslastinfirstchord) {
 			// this means, we are at the end ....
 			found = 1;
 		}
-		else if (tgend && (tgend->getPosition() != poslastinfirstchord) && found)
-		{
+		else if (tgend && (tgend->getPosition() != poslastinfirstchord) && found) {
 			// we have an endtag, but it does not point to
 			// the last element in the first chord.
 			myvst.ptagpos = prevptagpos;
 			break;
 		}
-		else if (!tgend && found)
-		{
+		else if (!tgend && found) {
 			// we have a beginning tag and have previously
 			// found the end of the chord-range.
 			myvst.ptagpos = prevptagpos;
@@ -2672,26 +2561,19 @@ GuidoPos ARMusicalVoice::CopyChord(ARMusicalVoiceState &vst, TYPE_TIMEPOSITION t
 		if (ptag)
 		{
 			 ARMusicalTag * mtag = dynamic_cast<ARMusicalTag *>(ptag);
-			if (dynamic_cast<ARTie *>(ptag))
-			{
-				// then we have tie-tag that begins at an event
-				// within the chord. I have
-				// to make sure, that this is moved to the copied events
-				// of the new chord ....
+			if (dynamic_cast<ARTie *>(ptag)) {
+				// then we have tie-tag that begins at an event within the chord. I have
+				// to make sure, that this is moved to the copied events of the new chord ....
 				GuidoPos newstartpos = NULL;
-
 				GuidoPos mypos = mylist->GetHeadPosition();
-				while (mypos)
-				{
+				while (mypos) {
 					PointerClass * pc = mylist->GetNext(mypos);
-					if ( ptag->getPosition() == pc->pos1 )
-					{
+					if ( ptag->getPosition() == pc->pos1 ) {
 						newstartpos = pc->pos2;
 						break;
 					}
 				}
-				if (newstartpos)
-				{
+				if (newstartpos) {
 					// now remove the ptag from its position and
 					// out it where it belongs in the mPosTagList ....
 					ptag->setPosition(newstartpos);
@@ -2705,25 +2587,17 @@ GuidoPos ARMusicalVoice::CopyChord(ARMusicalVoiceState &vst, TYPE_TIMEPOSITION t
 
 				}
 			}
-			else
-			{
+			else {
 			  // we need to reset the times of the tags that lie inbetween
 			  if (mtag->getRelativeTimePosition() > newtp)
-			  {
 				mtag->setRelativeTimePosition(newtp);
-			  }
 			}
 
 			// this copies everything, that is not an END-tag
 			// and that does not last over the end of the chord-range ....
-			if (!tgend &&
-				 myvst.curpositiontags &&
-				!myvst.curpositiontags->GetElementPos(ptag))
-			{
-				// then we have a positiontag that is completly
-				// embedded within the chord.
+			if (!tgend && myvst.curpositiontags && !myvst.curpositiontags->GetElementPos(ptag)) {
+				// then we have a positiontag that is completly embedded within the chord.
 				// this needs to be copied.
-
 				GuidoPos newstartpos = NULL;
 				//GuidoPos newendpos = NULL;
 
@@ -2731,22 +2605,15 @@ GuidoPos ARMusicalVoice::CopyChord(ARMusicalVoiceState &vst, TYPE_TIMEPOSITION t
 				while (mypos)
 				{
 					PointerClass * pc = mylist->GetNext(mypos);
-					if ( ptag->getPosition() == pc->pos1 )
-					{
+					if ( ptag->getPosition() == pc->pos1 ) {
 						newstartpos = pc->pos2;
 						break;
 					}
-				//	if ( tgend->getPosition() == pc->pos1 )
-				//	{
-				//		newendpos = pc->pos2;
-				//	}
 				}
 
-				if (newstartpos) //  && newendpos)
-				{
+				if (newstartpos) {
 					// OK, now we have to copy the ptags and repointer them ....
 					// we need other object-functions to handle this !!!!!
-
 					ARMusicalObject * pstart = ptag->Copy();
 					ARPositionTag * newpstart = dynamic_cast<ARPositionTag *>(pstart);
 					if (newpstart) {
@@ -2755,9 +2622,8 @@ GuidoPos ARMusicalVoice::CopyChord(ARMusicalVoiceState &vst, TYPE_TIMEPOSITION t
 
 						TYPE_TIMEPOSITION tagtp = tp;
 						if (newstartpos == posfirstinnewchord)
-						{
 							tagtp = tp - newdur;
-						}
+
 						newmtag->setRelativeTimePosition(tagtp);
 						newpstart->setCorrespondence(ptag->getCorrespondence());
 						myptaglist->AddTail(newpstart);
@@ -2766,106 +2632,74 @@ GuidoPos ARMusicalVoice::CopyChord(ARMusicalVoiceState &vst, TYPE_TIMEPOSITION t
 			}
 		}
 
-		// then we are "clean", we have either already found
-		// the end or are inbetween ...
-		if (tgend)
-		{
+		// then we are "clean", we have either already found the end or are inbetween ...
+		if (tgend) {
 			ARPositionTag * myptag = tgend->getCorrespondence();
-			if (myptag)
-			{
+			if (myptag) {
 				// check whether myptag is in the vst.curpositiontaglist.
-				if (myvst.curpositiontags &&
-					!myvst.curpositiontags->GetElementPos(myptag))
-				{
-					// then this is the end-position, that needs
-					// to be copied as well ....
-
+				if (myvst.curpositiontags && !myvst.curpositiontags->GetElementPos(myptag)) {
+					// then this is the end-position, that needs to be copied as well ....
 					GuidoPos newstartpos = NULL;
 					GuidoPos newendpos = NULL;
 
 					GuidoPos mypos = mylist->GetHeadPosition();
-					while (mypos)
-					{
+					while (mypos) {
 						PointerClass * pc = mylist->GetNext(mypos);
-						if ( myptag->getPosition() == pc->pos1 )
-						{
+						if ( myptag->getPosition() == pc->pos1 ) 
 							newstartpos = pc->pos2;
-						}
-						if ( tgend->getPosition() == pc->pos1 )
-						{
+
+						if ( tgend->getPosition() == pc->pos1 ) {
 							newendpos = pc->pos2;
 							break;
 						}
 					}
 
-					if (newstartpos && newendpos)
-					{
-						// OK, now we have to copy the ptags and
-						// repointer them ....
-						// we need other object-functions
-						// to handle this !!!!!
-
+					if (newstartpos && newendpos) {
+						// OK, now we have to copy the ptags and repointer them ....
+						// we need other object-functions to handle this !!!!!
 						// Just find the corresponding tag ....
 						ARPositionTag *newpstart = NULL;
 						GuidoPos tmppos = myptaglist->GetHeadPosition();
-						while (tmppos)
-						{
+						while (tmppos) {
 							ARPositionTag * pt = myptaglist->GetNext(tmppos);
-							if (pt->getCorrespondence() == tgend)
-							{
+							if (pt->getCorrespondence() == tgend) {
 								newpstart = pt;
 								break;
 							}
 						}
 
-						if (newpstart)
-						{
+						if (newpstart) {
 							ARMusicalObject * pend = tgend->Copy();
 							ARPositionTag * newpend = dynamic_cast<ARPositionTag *>(pend);
 							newpend->setPosition(newendpos);
 							ARMusicalTag * newmtag = dynamic_cast<ARMusicalTag *>(newpend);
 							newmtag->setRelativeTimePosition(tp);
-
 							newpstart->setCorrespondence(newpend);
 							newpend->setCorrespondence(newpstart);
-
-
 							myptaglist->AddTail(newpend);
 						}
-
 					}
-
 				}
-				else if (myvst.curpositiontags)
-				{
-					// OK, now we have a tag that
-					// is not completely embedded ...
-					if (tgend->getPosition() == posfirstinlastchord)
-					{
-						// this tag must be repointered ...
-						// and also moved !!!!!
+				else if (myvst.curpositiontags) {
+					// OK, now we have a tag that is not completely embedded ...
+					if (tgend->getPosition() == posfirstinlastchord) {
+						// this tag must be repointered ... and also moved !!!!!
 						mPosTagList->setOwnership(0);
 						if (vst.ptagpos && vst.ptagpos == prevptagpos)
-						{
 							mPosTagList->GetNext(vst.ptagpos);
-						}
 						mPosTagList->RemoveElementAt(prevptagpos);
 						mPosTagList->setOwnership(1);
 						tgend->setPosition(posfirstinnewchord);
 						// tgend has no time information ....
 						myptaglist->AddTail(tgend);
-
-
 					}
 				}
 			}
 		}
 	}
 
-	if (found)
-	{
-		// if myvst.ptagpos is NULL, we have to add at the
-		// very end ....
+	if (found) {
+		// if myvst.ptagpos is NULL, we have to add at the very end ....
 
 		// then we have the position of the first ptag after the
 		// ending of the last event in the first chord.
@@ -2873,15 +2707,11 @@ GuidoPos ARMusicalVoice::CopyChord(ARMusicalVoiceState &vst, TYPE_TIMEPOSITION t
 		// Tag at this location ....
 
 		// now we need a chord, dispDur and shareStem-tag ....
-		if (myvst.ptagpos)
-		{
-
+		if (myvst.ptagpos) {
 			// at this point we have to add the copied ptags ...
 			GuidoPos tmppos = myptaglist->GetHeadPosition();
-			while (tmppos)
-			{
+			while (tmppos) {
 				ARPositionTag * ptag = myptaglist->GetNext(tmppos);
-
 				ARDisplayDuration * dispdur = dynamic_cast<ARDisplayDuration *>(ptag);
 				if( dispdur )
 					dispdur->setDisplayDuration(newdur);
@@ -2889,12 +2719,10 @@ GuidoPos ARMusicalVoice::CopyChord(ARMusicalVoiceState &vst, TYPE_TIMEPOSITION t
 				mPosTagList->AddElementAt(myvst.ptagpos,ptag);
 			}
 		}
-		else
-		{
+		else {
 			// at this point we have to add the copied ptags ...
 			GuidoPos tmppos = myptaglist->GetHeadPosition();
-			while (tmppos)
-			{
+			while (tmppos) {
 				ARPositionTag * ptag = myptaglist->GetNext(tmppos);
 				ARDisplayDuration * dispdur = dynamic_cast<ARDisplayDuration *>(ptag);
 				if( dispdur )
@@ -2903,21 +2731,15 @@ GuidoPos ARMusicalVoice::CopyChord(ARMusicalVoiceState &vst, TYPE_TIMEPOSITION t
 				mPosTagList->AddTail(ptag);
 			}
 		}
-
 	}
-
 	delete myptaglist;
 	delete mylist;	mylist = 0;
 
 	// now we have to deal with the position tags ...
-	// (the chord-tags and also the other tags that might
-	// have been added inbetween ...
-	// what about repointering?)
-
+	// (the chord-tags and also the other tags that might have been added inbetween ... what about repointering?)
 	delete mystate;
 
-	// OK, here we add the tie-tags by traversing the
-	// voice up until the end of the second chord ....
+	// OK, here we add the tie-tags by traversing the voice up until the end of the second chord ....
 	mystate = new ARMusicalVoiceState(vst);
 	ARMusicalVoiceState & myvst2 = * mystate;
 
@@ -2925,23 +2747,17 @@ GuidoPos ARMusicalVoice::CopyChord(ARMusicalVoiceState &vst, TYPE_TIMEPOSITION t
 
 	// traverse the voice ....
 	int firstchord = 1;
-	while (myvst2.vpos)
-	{
+	while (myvst2.vpos) {
 		GuidoPos prevpos = myvst2.vpos;
 		ARMusicalObject * obj = GetAt(myvst2.vpos);
 
-		if (ARMusicalEvent::cast(obj)
-			&& obj->getDuration() == DURATION_0)
-		{
+		if (ARMusicalEvent::cast(obj) && obj->getDuration() == DURATION_0) {
             ARNote * nt = static_cast<ARNote *>(obj->isARNote());
-			if (nt && nt->getName() == ARNoteName::empty)
-			{
+			if (nt && nt->getName() == ARNoteName::empty) {
 			}
-			else
-			{
+			else {
 				// then we must add a tieBegin or end
-				if (firstchord)
-				{
+				if (firstchord) {
 					// add a tiebegin ....
 					ARTie * ntie = new ARTie();
 					ntie->setIsAuto(true);
@@ -2949,19 +2765,13 @@ GuidoPos ARMusicalVoice::CopyChord(ARMusicalVoiceState &vst, TYPE_TIMEPOSITION t
 					ntie->setPosition(myvst2.vpos);
 					ntie->setRelativeTimePosition(myvst2.curtp);
 					GuidoPos saveptagpos = NULL;
-					if (vst.ptagpos == myvst2.ptagpos)
-					{
-						saveptagpos = vst.ptagpos;
-					}
+					if (vst.ptagpos == myvst2.ptagpos)	saveptagpos = vst.ptagpos;
+
 					GuidoPos newpos = mPosTagList->AddElementAt(myvst2.ptagpos,ntie);
-					if (saveptagpos)
-					{
-						vst.ptagpos = newpos;
-					}
+					if (saveptagpos) 					vst.ptagpos = newpos;
 					myptaglist->AddTail(ntie);
 				}
-				else
-				{
+				else {
 					ARTie *ntie = dynamic_cast<ARTie *>(myptaglist->RemoveHead());
 					ARDummyRangeEnd * end = new ARDummyRangeEnd(TIEEND);
 					end->setID(ntie->getID());
@@ -2982,12 +2792,9 @@ GuidoPos ARMusicalVoice::CopyChord(ARMusicalVoiceState &vst, TYPE_TIMEPOSITION t
 		if (prevpos == poslastinnewchord)
 			break;
 	}
-
 	delete myptaglist;
 	delete mystate;
-
 	readmode = oldreadmode;
-
 	return posfirstinnewchord;
 }
 
@@ -4143,8 +3950,8 @@ void ARMusicalVoice::doAutoCheckStaffStateTags()
 
 		if (!clef && !key && !meter && !sys && !page)
 		{
-            ARMusicalTag *armt = NULL;
-            if (o) armt = static_cast<ARMusicalTag *>(o->isARMusicalTag());
+            const ARMusicalTag *armt = NULL;
+            if (o) armt = static_cast<const ARMusicalTag *>(o->isARMusicalTag());
 			if (armt && armt->IsStateTag()) continue;
 		}
 
@@ -4600,49 +4407,35 @@ void ARMusicalVoice::doAutoTies()
 
 				// now check, whether this tie should be copied.
 				// Questions to ask:
-				// Did the original tie have its origin
-				// in a chord-event? If we are still in the
-				// same chord and have already started an
-				// autotie, then we do not need a new one.
+				// Did the original tie have its origin in a chord-event? If we are still in the
+				// same chord and have already started an  autotie, then we do not need a new one.
 
-				// test first, if the startnote of the tie is
-				// an empty event .... (and if the tie began in a chord!
+				// test first, if the startnote of the tie is an empty event .... and if the tie began in a chord
 				int ischordtie = 0;
-
 				if (tiestruct->curchordtag) {
 					ARNote *nt = tiestruct->startnote;
-
 					if (nt && nt->getName() == ARNoteName::empty) // then, we have a tie that covers the whole chord.
 						ischordtie = 1;
 				}
 
 				int mustcreate = 0;
-
 				// only, if it is not a chordtie!, otherwise
 				// I have to create a tie everywhereelse...
-
-				if (!ischordtie && tiestruct->tie->getPosition() == vst.vpos) // this means, the tie originated at the
-					mustcreate = 1;                                           // current position.
-					                                                          // we build a new one...
+				if (!ischordtie && tiestruct->tie->getPosition() == vst.vpos) // this means, the tie originated at the current position.
+					mustcreate = 1;                                           // we build a new one...
 					                                                          // at least it starts here...
 					                                                          // then we have to create a new one...
 				else if (vst.curchordtag) {
-					// we are inside a chord...
-					// then we have to check two things...
-					// 1. we are not in the chord that has
-					// already been handled by the first
-					// case (vst.vpos is equal)
+					// we are inside a chord... then we have to check two things...
+					// 1. we are not in the chord that has already been handled by the first case (vst.vpos is equal)
 					// 2. the name and position match...
-
 					if (ischordtie && tiestruct->tie->getPosition() != vst.vpos) {
                         ARNote *nt = static_cast<ARNote *>(o->isARNote());
-
 						if (nt && !(nt->getName() == ARNoteName::empty))
 							mustcreate = 1;
 					}
 					else if (tiestruct->curchordtag != vst.curchordtag) {
                         ARNote *nt = static_cast<ARNote *>(o->isARNote());
-
 						if (nt && tiestruct->startnote && nt->CompareNameOctavePitch(*tiestruct->startnote))
 							mustcreate = 1;
 					}
@@ -4650,7 +4443,6 @@ void ARMusicalVoice::doAutoTies()
 				else {
 					// we are not in a chord...
                     ARNote *nt = static_cast<ARNote *>(o->isARNote());
-
 					if (nt && tiestruct->startnote && nt->CompareNameOctavePitch(*tiestruct->startnote))
 						mustcreate = 1;
 				}
@@ -4662,21 +4454,15 @@ void ARMusicalVoice::doAutoTies()
 					//we will need this information for the trill
 					if (tiestruct->tie->getIsAuto())
 						mytie->setIsAuto(true);
+					mytie->copyParameters (tiestruct->tie->getTagParameters());
+					mytie->setTagParameters(tiestruct->tie->getTagParameters());
 
 					mytie->setStartPosition(vst.vpos);
-
-					// now we copy the parameters from the
-					// old tie (if they are set...)
-					TagParameterList * tpl = tiestruct->tie->getTagParameterList();
-					mytie->setTagParameterList(*tpl);
-					delete tpl;
 					mPosTagList->AddElementAt(vst.ptagpos, mytie);
 
 					ARTieStruct *atstruct = new ARTieStruct;
 					atstruct->tie = mytie;
-					// this is needed so that the tie
-					// can remove this autotie when it
-					// is closed...
+					// this is needed so that the tie can remove this autotie when it is closed...
 					atstruct->origtie     = tiestruct->tie;
 					atstruct->curchordtag = vst.curchordtag;
                     atstruct->startnote = static_cast<ARNote *>(o->isARNote());
@@ -4686,41 +4472,30 @@ void ARMusicalVoice::doAutoTies()
 			}
 
 			// here we deal with the events, that need to be closed...
-
-			// then we have to end the autoties that
-			// need to be ended...
+			// then we have to end the autoties that need to be ended...
 			GuidoPos mypos = autotiestructlist.GetHeadPosition();
-
 			while (mypos) {
 				ARTieStruct * tiestruct = autotiestructlist.GetAt(mypos);
-
 				if (tiestruct->tie->getPosition() == vst.vpos) {
-					// his means, we have just created this
-					// autotie at the current position...
+					// his means, we have just created this autotie at the current position...
 					autotiestructlist.GetNext(mypos);
 					continue;
 				}
 
 				int mustclose = 0;
-
                 ARNote *nt = static_cast<ARNote *>(o->isARNote());
-				
                 if (vst.curchordtag) {
 					if (tiestruct->curchordtag != vst.curchordtag) {
-					    // then we are in another chord
-						// check, if the name matches...
+					    // then we are in another chord check, if the name matches...
 						if (nt && tiestruct->startnote && nt->CompareNameOctavePitch(*tiestruct->startnote))
 							mustclose = 1;
 						else {
-							// check, whether the autotie is
-							// in the correct domain...
+							// check, whether the autotie is in the correct domain...
 							if (tiestruct->curchordtag != prevchordtag) {
 								// then we delete it...
 								// then, this is considered an error...
-								// then we have to remove the
-								// autotie from the ptagspos...
+								// then we have to remove the autotie from the ptagspos...
 								mPosTagList->RemoveElement(tiestruct->tie);
-
 								autotiestructlist.RemoveElementAt(mypos);
 								mypos = autotiestructlist.GetHeadPosition();
 							}
@@ -4729,13 +4504,11 @@ void ARMusicalVoice::doAutoTies()
 				}
 				else {
 					// no chords currently...
-
 					if (nt && tiestruct->startnote && nt->CompareNameOctavePitch(*tiestruct->startnote))
 						mustclose = 1;
 					else {
 						// then, this is considered an error...
 						mPosTagList->RemoveElement(tiestruct->tie);
-
 						autotiestructlist.RemoveElementAt(mypos);
 						mypos = autotiestructlist.GetHeadPosition();
 					}
@@ -4756,7 +4529,6 @@ void ARMusicalVoice::doAutoTies()
 						mPosTagList->AddTail(arde);
 
 					// then, this autotie is finished...
-
 					autotiestructlist.RemoveElementAt(mypos);
 					mypos = autotiestructlist.GetHeadPosition();
 				}
@@ -4770,10 +4542,8 @@ void ARMusicalVoice::doAutoTies()
 
 		// go to the next event...
 		GetNext(vst.vpos, vst);
-
 		ARMusicalObject *nexto  = NULL;
 		ARMusicalEvent  *nextev = NULL;
-
 		if (vst.vpos) {
 			nexto  = GetAt(vst.vpos);
 			nextev = ARMusicalEvent::cast(nexto);
@@ -4792,7 +4562,6 @@ void ARMusicalVoice::doAutoTies()
 			
             while (tmppos) {
 				ARTie *tie = dynamic_cast<ARTie *>(vst.removedpositiontags->GetNext(tmppos));
-
 				if (tie) {
 					// remove the tie from the tielist...
 					// find the element in the tiestructlist...
@@ -4800,72 +4569,55 @@ void ARMusicalVoice::doAutoTies()
 
 					while (postiestructlist) {
 						ARTieStruct *tiestruct = tiestructlist.GetAt(postiestructlist);
-
 						if (tiestruct->tie == tie)
 							break;
-
 						tiestructlist.GetNext(postiestructlist);
 					}
 
 					if (postiestructlist) {
 						//ARTieStruct *tiestruct = tiestructlist.GetAt(postiestructlist);
-						// then we have to find the ones in the autostructlist
-						// and remove them...
+						// then we have to find the ones in the autostructlist and remove them...
 						ARTieStruct *atstruct = NULL;
-						
                         do {
 							atstruct = NULL;
 							GuidoPos mypos = autotiestructlist.GetHeadPosition();
-
 							while (mypos) {
 								atstruct = autotiestructlist.GetAt(mypos);
-
 								if (atstruct->origtie == tie)
 									break;
-
 								autotiestructlist.GetNext(mypos);
 							}
 
 							if (mypos) {
 								assert(atstruct);
-								// remove this one (and the
-								// already started autotie...)
+								// remove this one (and the already started autotie...)
 								mPosTagList->RemoveElement(atstruct->tie);
 								autotiestructlist.RemoveElementAt(mypos);
 							}
-							else
-								atstruct = NULL;
+							else atstruct = NULL;
 						}
 						while (atstruct);
-
 						tiestructlist.RemoveElementAt(postiestructlist);
 					}
-
 					deletelist.AddTail(tie);
 				}
 			}
 		}
-
 	} // while (vst.vpos) -> the whole voice.
 
 	if (deletelist.GetCount() > 0) {
 		GuidoPos pos = deletelist.GetHeadPosition();
-
 		while (pos) {
 			ARTie *tie = deletelist.GetNext(pos);
-
-			// then, we delete this tie out
-			// of the positiontags!
+			// then, we delete this tie out of the positiontags!
 			if (tie->getCorrespondence()) // the list owns this one...
 				mPosTagList->RemoveElement(tie->getCorrespondence());
-
 			// the mPosTagList owns the ties!
 			mPosTagList->RemoveElement(tie);
 		}
 	}
 
 	readmode = oldreadmode;
-
 	// now we have the EndState ...
 	delete endState;
 	endState = new ARMusicalVoiceState(vst);
@@ -4895,13 +4647,10 @@ struct ARGlissandoStruct
 void ARMusicalVoice::doAutoGlissando()
 {
 	KF_IPointerList<ARGlissandoStruct> glissStructlist(1);
-
 	KF_IPointerList<ARGlissando> deletelist(0);
-
 	KF_IPointerList<ARGlissandoStruct> autoglissStructlist(1);
 
 	_readmode oldreadmode = readmode;
-
 	readmode = EVENTMODE;
 
 	ARMusicalVoiceState vst;
@@ -5311,7 +5060,7 @@ void ARMusicalVoice::removeAutoTags()
         ARMusicalObject *obj = GetNextObject(pos);
 
         if (obj) {
-            ARMusicalTag *tg = static_cast<ARMusicalTag *>(obj->isARMusicalTag());
+            const ARMusicalTag *tg = static_cast<const ARMusicalTag *>(obj->isARMusicalTag());
 
             if (tg && tg->getIsAuto())
                 RemoveElementAt(tmppos);
@@ -5350,147 +5099,187 @@ ARChordTag *ARMusicalVoice::BeginChord()
 /** \brief this method is called when the chord is an ornament parameter (SB)
 */
 // C.D. optimized 22/10/2014
-ARNote * ARMusicalVoice::setTrillChord (CHORD_TYPE &chord_type, CHORD_ACCIDENTAL &chord_accidental)
+vector<ARNote *> ARMusicalVoice::getCurrentChordNotes () const
 {	
-	const int nbNotes        = 3;
-	int pitches[nbNotes];         // we only need 3 pitches for analysis
-	int accidentals          = 0; // the second note's accidental, needed for the ornament
-	int accidentalsTemp      = 0; //the third note's accidental, needed for the turn in some cases
-
-	for (int i = 0; i < nbNotes; i++)
-		pitches[i] = 0;
-
-	GuidoPos posTmp = mCurVoiceState->vpos;
-
-	for (int i = 0 ; i < 3; i++)
-		ObjectList::GetNext(posTmp); // skip "empty, chordcomma, empty"
-
-	int comptTemp = 0;
-	ARMusicalObject *musicalObject = ObjectList::GetNext(posTmp);
-	ARNote          *firstNote     = static_cast<ARNote *>(musicalObject->isARNote());
-
-	pitches[0]           = firstNote->getPitch();
-	comptTemp++; // the first note is conserved
-
-	while (posTmp && comptTemp < nbNotes) { // we only need to know the first nbNotes notes
-		musicalObject = ObjectList::GetNext(posTmp);
-
-        ARNote *noteTmp = static_cast<ARNote *>(musicalObject->isARNote());
-
-		if (noteTmp && noteTmp->getPitch() != 0) {
-			if (comptTemp == 1)
-				accidentals = noteTmp->getAccidentals();
-			else if (comptTemp == 2)
-				accidentalsTemp = noteTmp->getAccidentals();
-
-			pitches[comptTemp] = noteTmp->getPitch();
-            // we now directly set a flag to tell to the note not to draw itself, rather than hide it behind the first one...
-//			noteTmp->setPitch(EMPTY);
-			noteTmp->setPitch(pitches[0]);
-			noteTmp->setAccidentals(firstNote->getAccidentals());
-			noteTmp->setDrawGR(false);
-			comptTemp++;
-		}
-	}
-
-	while (posTmp) { // "removes" the remaining notes
-		musicalObject = ObjectList::GetNext(posTmp);
-		//musicalObject->print(std::ostream& os);
-		ARNote *noteTmp = static_cast<ARNote *>(musicalObject->isARNote());
-
-		if (noteTmp && noteTmp->getPitch() != 0) {
-			// we now directly set a flag to tell to the note not to draw itself, rather than hide it behind the first one...
-//			noteTmp->setPitch(EMPTY);
-			noteTmp->setPitch(pitches[0]);
-			noteTmp->setAccidentals(firstNote->getAccidentals());
-            noteTmp->setDrawGR(false);
-		}
-	}
-
-	// Analysis ; the second note of the chord must be either the note right above the first one,
-	// or the note right below or the same note.
-	if (pitches[1] - 2 == (pitches[0] - 2 + 1 ) % 7) { // e.g. "c, d"
-		if (pitches[2] == pitches[0])
-			chord_type = UP;
-		else
-			chord_type = UP_SIMPLE;
-	}
-	else if (-(pitches[1]-8) == (-(pitches[0]-8) + 1) % 7) { // e.g. "c, b"
-		if (pitches[2] == pitches[0])
-			chord_type = DOWN;
-		else
-			chord_type = DOWN_SIMPLE;
-	}
-	else if (pitches[1] == pitches[0]) { // e.g. "c, c"
-		if (pitches[2] - 2 == (pitches[1] - 2 + 1 ) % 7) // e.g. "c, c, d"
-			chord_type = UP_COMPLEX;
-		else if (- (pitches[2] - 8) == (- (pitches[1] - 8) + 1) % 7) // e.g. "c, c, b"
-			chord_type = DOWN_COMPLEX;
-		else
-			chord_type = CHORDERROR;
-
-		accidentals = accidentalsTemp;
-	}
-	else if (pitches[0] != 0 && pitches[1] == 0)
-		chord_type = UP_SIMPLE;
-	else
-		chord_type = CHORDERROR;
-
-	// Recupération de l'armure...
-	int keyNumber;
+	vector<ARNote *> outNotes;
 	GuidoPos pos = mCurVoiceState->vpos;
-	ARKey   *key = NULL;
-	while (pos && !key) {
-        ARMusicalObject *obj = ObjectList::GetPrev(pos);
-		key = obj ? static_cast<ARKey *>(obj->isARKey()) : NULL;
-    }
-	keyNumber = key ? key->getKeyNumber() : 0;
+	for (int i = 0 ; i < 3; i++)
+		ObjectList::GetNext(pos); // skip "empty, chordcomma, empty"
 
-
-	// Determination de l'altération sur l'ornementation
-	// s'il y a quelque chose sur la note différent de l'armure, on l'affiche (dièse bémol bécarre)
-
-	//std::cout << "accidentals : " << accidentals << '\n';
-
-	if (accidentals == 0) {
-		if (( pitches[1] == 2 && (keyNumber <= -6 || keyNumber >= 2) ) ||
-			( pitches[1] == 3 && (keyNumber <= -4 || keyNumber >= 4) ) ||
-			( pitches[1] == 4 && (keyNumber <= -2 || keyNumber >= 6) ) ||
-			( pitches[1] == 5 && (keyNumber <= -7 || keyNumber >= 1) ) ||
-			( pitches[1] == 6 && (keyNumber <= -5 || keyNumber >= 3) ) ||
-			( pitches[1] == 7 && (keyNumber <= -3 || keyNumber >= 5) ) ||
-			( pitches[1] == 8 && (keyNumber <= -1 || keyNumber >= 7) ))
-			chord_accidental = NATURAL;
-		else
-			chord_accidental = CAU_NATURAL;
+	while (pos) {
+		ARMusicalObject *obj = ObjectList::GetNext(pos);
+		ARNote * note = static_cast<ARNote *>(obj->isARNote());
+		if (note && !note->isEmptyNote()) outNotes.push_back(note);
 	}
-	else if (accidentals == 1) {
-		if (( pitches[1] == 2 && keyNumber < 2 ) ||
-			( pitches[1] == 3 && keyNumber < 4 ) ||
-			( pitches[1] == 4 && keyNumber < 6 ) ||
-			( pitches[1] == 5 && keyNumber < 1 ) ||
-			( pitches[1] == 6 && keyNumber < 3 ) ||
-			( pitches[1] == 7 && keyNumber < 5 ) || // the sharp is not implied by
-			( pitches[1] == 8 && keyNumber < 7 ))	// the staff key signature
-			chord_accidental = SHARP; // std::cout << "diese" << '\n';
-		else
-			chord_accidental = CAU_SHARP; // std::cout << "(diese)" << '\n';
-	}
-	else if (accidentals == -1) {
-		if (( pitches[1] == 2 && keyNumber > -6 ) ||
-			( pitches[1] == 3 && keyNumber > -4 ) ||
-			( pitches[1] == 4 && keyNumber > -2 ) ||
-			( pitches[1] == 5 && keyNumber > -7 ) ||
-			( pitches[1] == 6 && keyNumber > -5 ) ||
-			( pitches[1] == 7 && keyNumber > -3 ) || // the flat is not implied by
-			( pitches[1] == 8 && keyNumber > -1 ))	 // the staff key signature
-			chord_accidental = FLAT; // std::cout << "bemol" << '\n';
-		else
-			chord_accidental = CAU_FLAT; // std::cout << "(bemol)" << '\n';
-	}
-
-	return firstNote;
+	return outNotes;
 }
+
+//------------------------------------------------------------------------
+// propagate trills inside a chord (lowest and highest notes only)
+// only trills are concerned (do nothing for turn and mordent)
+//------------------------------------------------------------------------
+void ARMusicalVoice::finishTrilledChord ()
+{	
+	vector<ARNote *> notes = getCurrentChordNotes();
+	auto sortbypitch = [] (const ARNote* n1, const ARNote* n2) -> bool { return n1->getMidiPitch() > n2->getMidiPitch(); };
+	// sort notes by descending pitch
+	std::sort (notes.begin(), notes.end(), sortbypitch);
+	size_t n = notes.size();
+	const ARTrill*  trill = (n > 1) ? notes[0]->getOrnament() : 0;
+	for (size_t i=1; i < n; i++)	// preserve the first ornament (higher pitch) and remove the others
+		notes[i]->setOrnament(0);
+	if (trill && (trill->getOrnament() == ARTrill::TRILL)) {	// and for trill only
+		ARTrill* copy = new ARTrill(-1, trill);
+		copy->setTrillPos (ARTrill::BELOW);
+		notes[n-1]->setOrnament (copy);				// set a trill to the lowest note
+//		ARTrill copy(-1, trill);
+//		copy.setTrillPos (ARTrill::BELOW);
+//		notes[n-1]->setOrnament (&copy);			// set a trill to the lowest note
+	}
+}
+
+
+//ARNote * ARMusicalVoice::setTrillChord (CHORD_TYPE &chord_type, CHORD_ACCIDENTAL &chord_accidental)
+//{	
+//	const int nbNotes        = 3;
+//	int pitches[nbNotes];         // we only need 3 pitches for analysis
+//	int accidentals          = 0; // the second note's accidental, needed for the ornament
+//	int accidentalsTemp      = 0; //the third note's accidental, needed for the turn in some cases
+//
+//	for (int i = 0; i < nbNotes; i++)
+//		pitches[i] = 0;
+//
+//	GuidoPos posTmp = mCurVoiceState->vpos;
+//
+//	for (int i = 0 ; i < 3; i++)
+//		ObjectList::GetNext(posTmp); // skip "empty, chordcomma, empty"
+//
+//	int comptTemp = 0;
+//	ARMusicalObject *musicalObject = ObjectList::GetNext(posTmp);
+//	ARNote          *firstNote     = static_cast<ARNote *>(musicalObject->isARNote());
+//
+//	pitches[0]           = firstNote->getPitch();
+//	comptTemp++; // the first note is conserved
+//
+//	while (posTmp && comptTemp < nbNotes) { // we only need to know the first nbNotes notes
+//		musicalObject = ObjectList::GetNext(posTmp);
+//
+//        ARNote *noteTmp = static_cast<ARNote *>(musicalObject->isARNote());
+//
+//		if (noteTmp && noteTmp->getPitch() != 0) {
+//			if (comptTemp == 1)
+//				accidentals = noteTmp->getAccidentals();
+//			else if (comptTemp == 2)
+//				accidentalsTemp = noteTmp->getAccidentals();
+//
+//			pitches[comptTemp] = noteTmp->getPitch();
+//            // we now directly set a flag to tell to the note not to draw itself, rather than hide it behind the first one...
+////			noteTmp->setPitch(EMPTY);
+//			noteTmp->setPitch(pitches[0]);
+//			noteTmp->setAccidentals(firstNote->getAccidentals());
+//			noteTmp->setDrawGR(false);
+//			comptTemp++;
+//		}
+//	}
+//
+//	while (posTmp) { // "removes" the remaining notes
+//		musicalObject = ObjectList::GetNext(posTmp);
+//		//musicalObject->print(std::ostream& os);
+//		ARNote *noteTmp = static_cast<ARNote *>(musicalObject->isARNote());
+//
+//		if (noteTmp && noteTmp->getPitch() != 0) {
+//			// we now directly set a flag to tell to the note not to draw itself, rather than hide it behind the first one...
+////			noteTmp->setPitch(EMPTY);
+//			noteTmp->setPitch(pitches[0]);
+//			noteTmp->setAccidentals(firstNote->getAccidentals());
+//            noteTmp->setDrawGR(false);
+//		}
+//	}
+//
+//	// Analysis ; the second note of the chord must be either the note right above the first one,
+//	// or the note right below or the same note.
+//	if (pitches[1] - 2 == (pitches[0] - 2 + 1 ) % 7) { // e.g. "c, d"
+//		if (pitches[2] == pitches[0])
+//			chord_type = UP;
+//		else
+//			chord_type = UP_SIMPLE;
+//	}
+//	else if (-(pitches[1]-8) == (-(pitches[0]-8) + 1) % 7) { // e.g. "c, b"
+//		if (pitches[2] == pitches[0])
+//			chord_type = DOWN;
+//		else
+//			chord_type = DOWN_SIMPLE;
+//	}
+//	else if (pitches[1] == pitches[0]) { // e.g. "c, c"
+//		if (pitches[2] - 2 == (pitches[1] - 2 + 1 ) % 7) // e.g. "c, c, d"
+//			chord_type = UP_COMPLEX;
+//		else if (- (pitches[2] - 8) == (- (pitches[1] - 8) + 1) % 7) // e.g. "c, c, b"
+//			chord_type = DOWN_COMPLEX;
+//		else
+//			chord_type = CHORDERROR;
+//
+//		accidentals = accidentalsTemp;
+//	}
+//	else if (pitches[0] != 0 && pitches[1] == 0)
+//		chord_type = UP_SIMPLE;
+//	else
+//		chord_type = CHORDERROR;
+//
+//	// Recupération de l'armure...
+//	int keyNumber;
+//	GuidoPos pos = mCurVoiceState->vpos;
+//	ARKey   *key = NULL;
+//	while (pos && !key) {
+//        ARMusicalObject *obj = ObjectList::GetPrev(pos);
+//		key = obj ? static_cast<ARKey *>(obj->isARKey()) : NULL;
+//    }
+//	keyNumber = key ? key->getKeyNumber() : 0;
+//
+//
+//	// Determination de l'altération sur l'ornementation
+//	// s'il y a quelque chose sur la note différent de l'armure, on l'affiche (dièse bémol bécarre)
+//
+//	//std::cout << "accidentals : " << accidentals << '\n';
+//
+//	if (accidentals == 0) {
+//		if (( pitches[1] == 2 && (keyNumber <= -6 || keyNumber >= 2) ) ||
+//			( pitches[1] == 3 && (keyNumber <= -4 || keyNumber >= 4) ) ||
+//			( pitches[1] == 4 && (keyNumber <= -2 || keyNumber >= 6) ) ||
+//			( pitches[1] == 5 && (keyNumber <= -7 || keyNumber >= 1) ) ||
+//			( pitches[1] == 6 && (keyNumber <= -5 || keyNumber >= 3) ) ||
+//			( pitches[1] == 7 && (keyNumber <= -3 || keyNumber >= 5) ) ||
+//			( pitches[1] == 8 && (keyNumber <= -1 || keyNumber >= 7) ))
+//			chord_accidental = NATURAL;
+//		else
+//			chord_accidental = CAU_NATURAL;
+//	}
+//	else if (accidentals == 1) {
+//		if (( pitches[1] == 2 && keyNumber < 2 ) ||
+//			( pitches[1] == 3 && keyNumber < 4 ) ||
+//			( pitches[1] == 4 && keyNumber < 6 ) ||
+//			( pitches[1] == 5 && keyNumber < 1 ) ||
+//			( pitches[1] == 6 && keyNumber < 3 ) ||
+//			( pitches[1] == 7 && keyNumber < 5 ) || // the sharp is not implied by
+//			( pitches[1] == 8 && keyNumber < 7 ))	// the staff key signature
+//			chord_accidental = SHARP; // std::cout << "diese" << '\n';
+//		else
+//			chord_accidental = CAU_SHARP; // std::cout << "(diese)" << '\n';
+//	}
+//	else if (accidentals == -1) {
+//		if (( pitches[1] == 2 && keyNumber > -6 ) ||
+//			( pitches[1] == 3 && keyNumber > -4 ) ||
+//			( pitches[1] == 4 && keyNumber > -2 ) ||
+//			( pitches[1] == 5 && keyNumber > -7 ) ||
+//			( pitches[1] == 6 && keyNumber > -5 ) ||
+//			( pitches[1] == 7 && keyNumber > -3 ) || // the flat is not implied by
+//			( pitches[1] == 8 && keyNumber > -1 ))	 // the staff key signature
+//			chord_accidental = FLAT; // std::cout << "bemol" << '\n';
+//		else
+//			chord_accidental = CAU_FLAT; // std::cout << "(bemol)" << '\n';
+//	}
+//
+//	return firstNote;
+//}
 
 //____________________________________________________________________________________
 /** \brief this method is about clusters
@@ -5928,7 +5717,7 @@ void ARMusicalVoice::initChordNote()
 }
 
 //____________________________________________________________________________________
-GuidoPos ARMusicalVoice::getPositionTagPos (ARPositionTag *tag) const
+GuidoPos ARMusicalVoice::getPositionTagPos (const ARPositionTag *tag) const
 {
 	return mPosTagList->GetElementPos(tag);
 }
@@ -5991,61 +5780,6 @@ void ARMusicalVoice::MarkVoice( int fromnum, int fromdenom, int lengthnum, int l
 			ntformat = new ARNoteFormat;
 			ntformat->setRelativeTimePosition(endtpos);
 			AddElementAfter(endpos,ntformat);
-		}
-	}
-}
-
-//____________________________________________________________________________________
-/** \brief Manage the trills in order to give the information of the trill to tied notes
-*/
-void ARMusicalVoice::doAutoTrill()
-{
-	// We first look for each note and check if it has a trill
-	ARMusicalVoiceState armvs;
-	GuidoPos posObj = GetHeadPosition(armvs);
-
-	while(posObj) {
-		ARMusicalObject *obj  = GetNext(posObj, armvs);
-		ARNote          *note = static_cast<ARNote *>(obj->isARNote());
-
-		if (note) {
-			ARTrill *trill = note->getOrnament();
-			//type = 0 -> is a trill (and not a mord or turn)
-			if(trill && trill->getType() == ARTrill::TRILL) {
-				// if it has, we can check if the note is tied to another
-				// if it is tied, we will let its status as "begin" (default)
-				// and we'll affect an ARtrill to the next note, whose boolean "begin" will be set as false with setContinue()
-				const PositionTagList *ptags = armvs.getCurPositionTags();
-
-				if (ptags) {
-					GuidoPos pos = ptags->GetHeadPosition();
-					while(pos) {
-						ARPositionTag * arpt = ptags->GetNext(pos);
-						if(arpt) {
-							ARTie * tie = dynamic_cast<ARTie *>(arpt);
-
-							int repeat = trill->getRepeat();
-							if (tie && (tie->getIsAuto() || repeat == ARTrill::kOff)) {
-								GuidoPos posNote = posObj;
-								ARNote * nextNote;
-								do {
-								    ARMusicalObject * nextObject = ObjectList::GetNext(posNote);
-									if (!nextObject) break;
-									nextNote = static_cast<ARNote *>(nextObject->isARNote());
-								}
-                                while (posNote && !nextNote);
-
-								if (nextNote) {
-									nextNote->setVoiceNum(note->getVoiceNum());
-									nextNote->setOrnament(note->getOrnament());
-									if (repeat != ARTrill::kOn)
-										nextNote->getOrnament()->setContinue();
-								}
-							}
-						}	
-					}
-				}
-			}
 		}
 	}
 }
@@ -6182,7 +5916,7 @@ void ARMusicalVoice::doAutoFeatheredBeam()
 			while(posTag)
 			{
 				ARPositionTag   *tag      = ptags->GetNext(posTag);
-                ARFeatheredBeam *curfBeam = static_cast<ARFeatheredBeam *>(tag->isARFeatheredBeam());
+                ARFeatheredBeam *curfBeam = dynamic_cast<ARFeatheredBeam *>(tag);
 
 				if (curfBeam) {
 					GuidoPos posBegin = curfBeam->getPosition();
@@ -6202,6 +5936,7 @@ void ARMusicalVoice::doAutoFeatheredBeam()
 						curfBeam->setEndDuration(note->getDuration());
 						curfBeam->setEndTimePosition(note->getRelativeEndTimePosition());
 					}
+					if (!curfBeam->isDurationsSet()) curfBeam->findDefaultPoints();
 				}
 			}
 		}

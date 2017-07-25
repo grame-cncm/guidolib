@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -21,21 +21,20 @@
 
 /** \brief Bar tag
 */
-class ARBar : // public ARMusicalObject, 
-	public ARMTParameter
+class ARBar : public ARMTParameter
  {
  public:
 		typedef std::vector<std::pair<int, int> >	TRanges;
 		enum { kNoNum, kNumAll, kNumPage, kNumSystem };
 		         ARBar(const TYPE_TIMEPOSITION & timeposition);
 		         ARBar();
-		virtual ~ARBar();
+		virtual ~ARBar() {}
 
-	    virtual void printName(std::ostream& os) const;
-	    virtual void printGMNName(std::ostream& os) const;
-	    virtual void printParameters(std::ostream& os) const;
+		virtual const char*	getParamsStr() const	{ return kARBarParams; };
+		virtual const char*	getTagName () const		{ return "ARBar"; };
+		virtual std::string getGMNName () const		{ return "\\bar"; };
 
-		virtual void setTagParameterList(TagParameterList & theTagParameterList);
+		virtual void setTagParameters (const TagParameterMap& params);
 
 		void  setMeasureNumber(int inMeasureNumber)   { measureNumber = inMeasureNumber; }
 		int   getMeasureNumber()          const       { return measureNumber; }
@@ -51,13 +50,11 @@ class ARBar : // public ARMusicalObject,
 		const ARBar* previousBar () const				{ return fLastBar; }
 		void		 setPreviousBar (const ARBar* bar)	{ fLastBar = bar; }
 	 
-        /**** Function to avoid dynamic_cast ****/
-        ARMusicalObject *isARBar()			{ return this; }
-        /*****************************************/
+        const ARMusicalObject *isARBar() const			{ return this; }
 		const TRanges&	getRanges () const				{ return fRanges; }
 		void			setRanges (const TRanges& r)	{ fRanges = r; }
 
-  protected:
+  private:
 		TRanges	fRanges;
 
 		int   measureNumber;
@@ -68,8 +65,6 @@ class ARBar : // public ARMusicalObject,
 		const ARBar*	fLastBar;
 
         bool measureNumberDisplayedIsSet;
-
-		static ListOfTPLs ltpls;
 };
 
 #endif

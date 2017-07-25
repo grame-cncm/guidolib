@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -43,8 +43,8 @@ class ARVoiceManager
 				NEWPAGE = 8,
 				ENDOFVOICE = 9 };
 
-						ARVoiceManager( ARMusicalVoice * arVoice );
-		virtual 		~ARVoiceManager();
+						 ARVoiceManager( ARMusicalVoice * arVoice );
+		virtual 		~ARVoiceManager() {}
 
 		
 				float CheckBreakPosition(const TYPE_TIMEPOSITION & tp) const;
@@ -53,15 +53,11 @@ class ARVoiceManager
 
 				int Iterate( TYPE_TIMEPOSITION &tp, int filltagmode );
 
-
-
 		ARMusicalVoiceState mCurrVoiceState;
 		TYPE_TIMEPOSITION mLastBreakTimePos;
 
 	protected:
-
 		ARMusicalVoice * mVoice;
-
 };
 
 #endif

@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -21,26 +21,23 @@
 */
 class ARComposer : public ARText
 {
-public:
-                 ARComposer();
-    virtual     ~ARComposer();
+	public:
+					 ARComposer();
+		virtual     ~ARComposer() {}
 
-    const char*  getName() const;
-    const char*  getPageFormat() const;
+		const char*  getName() const;
+		const char*  getPageFormat() const;
 
-	virtual int	 getOrder() const		{ return kComposerOrder; }
-    virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-    virtual void printParameters(std::ostream& os) const;
+		virtual int	 getOrder() const				{ return kComposerOrder; }
+		virtual const char*	getParamsStr() const	{ return kARComposerParams; };
+		virtual const char*	getTagName() const		{ return "ARComposer"; };
+		virtual std::string getGMNName() const		{ return "\\composer"; };
 
-    virtual void setTagParameterList(TagParameterList & tpl);
+		virtual void setTagParameters (const TagParameterMap& params);
 
-protected:
-    static ListOfTPLs ltpls;
-
-private:
-    TagParameterString * name;
-    TagParameterString * pageformat;
+	private:
+		const TagParameterString * name;
+		const TagParameterString * pageformat;
 };
 
 

@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -24,7 +24,7 @@ using namespace std;
 
 static const int quint[] = { NOTE_F, NOTE_C, NOTE_G, NOTE_D, NOTE_A, NOTE_E, NOTE_H };
 
-GRKey::GRKey( GRStaff * inStaff, ARKey * key, int p_natural, bool ownsAR )
+GRKey::GRKey( GRStaff * inStaff, const ARKey * key, int p_natural, bool ownsAR )
 		: GRARCompositeNotationElement(key, ownsAR), GRTag(key)
 {
 	// natural is set, it the key needs to be naturlized, that is, this
@@ -83,8 +83,8 @@ void GRKey::accept (GRVisitor& visitor)
 */
 int GRKey::getKeyArray(float * KeyArray)
 {
-	ARKey * mykey = static_cast<ARKey *>(getAbstractRepresentation());
-	if (mykey->mIsFree)
+	const ARKey * mykey = static_cast<const ARKey *>(getAbstractRepresentation());
+	if (mykey->freeKey())
 		mykey->getFreeKeyArray(KeyArray);
 	else
 		getNonFreeKeyArray(mNumKeys,KeyArray);
@@ -94,7 +94,7 @@ int GRKey::getKeyArray(float * KeyArray)
 
 void GRKey::getOctArray(int * OctArray)
 {
-	ARKey * mykey = /*dynamic*/static_cast<ARKey *>(getAbstractRepresentation());
+	const ARKey * mykey = /*dynamic*/static_cast<const ARKey *>(getAbstractRepresentation());
 	mykey->getOctArray(OctArray);
 }
 

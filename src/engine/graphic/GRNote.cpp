@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -22,7 +22,7 @@
 
 using namespace std;
 
-GRNote::GRNote( GRStaff * grstaf, ARNote * note, const TYPE_TIMEPOSITION & date, const TYPE_DURATION & duration)
+GRNote::GRNote( GRStaff * grstaf, const ARNote * note, const TYPE_TIMEPOSITION & date, const TYPE_DURATION & duration)
   : GREvent (grstaf,note,date,duration),
     fOrnament(0), fCluster(NULL), fOwnCluster(false), fClusterNote(false), fClusterHaveToBeDrawn(false)
 {
@@ -48,7 +48,7 @@ GRNote::GRNote(GRStaff * grstaf, const TYPE_DURATION & inDuration )
 	fOwnCluster = fClusterNote = fClusterHaveToBeDrawn = false;
 }
 
-GRNote::GRNote(GRStaff * grstaf, ARNote * note)
+GRNote::GRNote(GRStaff * grstaf, const ARNote * note)
 	: GREvent(grstaf,note), fIsGraceNote(false)
 {
 	assert (note);
@@ -60,11 +60,6 @@ GRNote::~GRNote()
 {
 	delete fOrnament;
 	if (fOwnCluster) delete fCluster;
-}
-
-ARNote * GRNote::getARNote()
-{
-	return /*dynamic*/static_cast<ARNote*>(getAbstractRepresentation());
 }
 
 const ARNote * GRNote::getARNote() const
@@ -135,11 +130,11 @@ inline void GRNote::setDotFormat(const ARDotFormat * frmt)
 }
 */
 
-GRCluster *GRNote::createCluster(ARNoteFormat *inCurnoteformat)
+GRCluster *GRNote::createCluster(const ARNoteFormat *inCurnoteformat)
 {
     GRSingleNote *singleNote = dynamic_cast<GRSingleNote *>(this);
 
-    ARNote *arNote = getARNote();
+    const ARNote *arNote = getARNote();
 
     fCluster = new GRCluster(mGrStaff, arNote->getARCluster(), singleNote, inCurnoteformat);
 	fOwnCluster = true;

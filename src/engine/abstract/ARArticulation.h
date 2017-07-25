@@ -14,6 +14,8 @@
 
 */
 
+#include <string>
+
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
 
@@ -21,21 +23,22 @@
 */
 class ARArticulation : public ARMTParameter,  public ARPositionTag
 {		
-public:
-	enum { kDefaultPosition, kAbove, kBelow };
+	public:
+		enum { kDefaultPosition, kAbove, kBelow };
 
-			 ARArticulation() : fPosition(kDefaultPosition)
-								{ rangesetting = ONLY; }
-	virtual ~ARArticulation()	{ /*delete TagParameterPointer ...*/ };
+				 ARArticulation();
+		virtual ~ARArticulation()	{ /*delete TagParameterPointer ...*/ };
 
-	virtual void	setTagParameterList(TagParameterList & tpl);
-	virtual void	browse(TimeUnwrap& mapper) const;
-	virtual int		getArticulationPosition () const	{ return fPosition; }
+		virtual void	setTagParameters (const TagParameterMap& params);
+		virtual void	browse(TimeUnwrap& mapper) const;
+		virtual int		getArticulationPosition () const	{ return fPosition; }
 
-protected:
-	
-	int fPosition;
-	static ListOfTPLs ltpls;
+		virtual const char*	getParamsStr() const	{ return kARArticulationParams; };
+		virtual const char*	getTagName () const		{ return "ARArticulation"; };
+		virtual std::string getGMNName () const		{ return "\\articulation"; };
+
+	protected:
+		int fPosition;
 };
 
 #endif

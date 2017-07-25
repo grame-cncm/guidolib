@@ -88,7 +88,7 @@ GRBowing::GRBowing(GRStaff * grstaff)
 }
 
 // -----------------------------------------------------------------------------
-GRBowing::GRBowing(GRStaff * grstaff, ARBowing * ar)
+GRBowing::GRBowing(GRStaff * grstaff, const ARBowing * ar)
 				   : GRPTagARNotationElement(ar)
 {
 	assert(ar);
@@ -306,28 +306,25 @@ void GRBowing::updateBow( GRStaff * inStaff )
 	}
 
 	// --- Chooses the best curve direction ---
-	ARBowing * arBow = static_cast<ARBowing *>(getAbstractRepresentation());
+	const ARBowing * arBow = static_cast<const ARBowing *>(getAbstractRepresentation());
 	assert(arBow);
 
 	// - Here, we look if the curve direction has been explicitly
 	// (with the tag "curve") or implicitly (with the tag "h") specified.
-	const TagParameterFloat * paramH = arBow->getH();
-	const TagParameterString * curveParam = arBow->getCurve();
-	if (curveParam && curveParam->TagIsSet()) {
-		if( string(curveParam->getValue()) == "down" )
-			context.curveDir = -1;
-		else
-			context.curveDir = 1;
+	float paramH = arBow->getH();
+	ARBowing::CurveDirection dir = arBow->getCurve();
+	if (dir != ARBowing::kUndefined) {
+		context.curveDir = (dir == ARBowing::kDown) ? -1 : 1;
 	}
-	else if( paramH && paramH->TagIsSet()) {
-		context.curveDir = (paramH->getValue() > 0) ? 1 : -1;
+	else if( paramH != ARBowing::undefined()) {
+		context.curveDir = (paramH > 0) ? 1 : -1;
 	}
 	else automaticCurveDirection( &context, arBow, sse );
 
 	// --- Calculate the start and end anchor points positions --
 	// NOTE: in the futur, offsets could also be applied after automatic
 	// positionning. (tag parameter list for 'curve' would be completed)
-	if( (curveParam && curveParam->TagIsSet()) || arBow->getParSet() == false )
+	if( (dir != ARBowing::kUndefined) || !arBow->getParSet() )
 		automaticAnchorPoints( &context, arBow, sse );
 	else
 	{
@@ -341,8 +338,8 @@ void GRBowing::updateBow( GRStaff * inStaff )
 	// see ARBowing::setCurve(). Code modified to avoid the pb. YC-oct2007
 
 	// --- Calculate the control Points
-	const TagParameterFloat * paramR3 = arBow->getR3();
-	if(( paramH && paramH->TagIsSet()) || (paramR3 && paramR3->TagIsSet()))
+	float paramR3 = arBow->getR3();
+	if ( (paramH != ARBowing::undefined()) || (paramR3 != ARBowing::undefined()))
 	{
 		// A tag for control points has been specified in the guido script.
 		manualControlPoints( &context, arBow, sse );
@@ -354,7 +351,7 @@ void GRBowing::updateBow( GRStaff * inStaff )
 }
 
 // -----------------------------------------------------------------------------
-void GRBowing::automaticAnchorPoints( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse )
+void GRBowing::automaticAnchorPoints( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
 	manualAnchorPoints( context, arBow, sse );
 }
@@ -367,7 +364,7 @@ void GRBowing::automaticAnchorPoints( GRBowingContext * context, ARBowing * arBo
 	Following the guido specification of tie ans slur tags, those reference
 	points are the center of the noteheads.
 */
-void GRBowing::manualAnchorPoints( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse )
+void GRBowing::manualAnchorPoints( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
 	// Careful, we have to deal with chords! what about getStemStartPosition()?
 	NVPoint posLeft;
@@ -404,35 +401,40 @@ void GRBowing::manualAnchorPoints( GRBowingContext * context, ARBowing * arBow, 
 	bowInfos->offsets[2] = posRight - posLeft; // control points are stored as offsets to the position.
 
 	//	if( manualSettings == false )
-	arBow->setCurve( context->curveDir, posLeft, posRight ); // (JB) useless ?
+//	arBow->setCurve( context->curveDir, posLeft, posRight ); // (JB) useless ?
 }
 
 // -----------------------------------------------------------------------------
-void GRBowing::applyAnchorPointsOffsets( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse )
+void GRBowing::applyAnchorPointsOffsets( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
 	GRBowingSaveStruct * bowInfos = (GRBowingSaveStruct *)sse->p;
 	GRStaff * staff = context->staff;
 
 	// -- Applies the offset settings to the start anchor point --
-	const float staffLSpace = staff->getStaffLSPACE();
-	if( arBow->getDX1())
-		bowInfos->offsets[0].x += (arBow->getDX1()->getValue( staffLSpace ));
+	const float spaceRatio = staff->getStaffLSPACE() / LSPACE;
+	bowInfos->offsets[0].x += arBow->getDX1() * spaceRatio;
+	bowInfos->offsets[0].y -= arBow->getDY1() * spaceRatio;
+	bowInfos->offsets[2].x += arBow->getDX2() * spaceRatio;
+	bowInfos->offsets[2].y -= arBow->getDY2() * spaceRatio;
 
-	if( arBow->getDY1())
-		bowInfos->offsets[0].y -= (arBow->getDY1()->getValue( staffLSpace ));
-
-	// -- Applies the offset settings to the end anchor point --
-	if( arBow->getDX2())
-		bowInfos->offsets[2].x += (arBow->getDX2()->getValue( staffLSpace ));
-
-	if( arBow->getDY2())
-		bowInfos->offsets[2].y -= (arBow->getDY2()->getValue( staffLSpace ));
+//	if( arBow->getDX1())
+//		bowInfos->offsets[0].x += arBow->getDX1()->getValue( staffLSpace ));
+//
+//	if( arBow->getDY1())
+//		bowInfos->offsets[0].y -= (arBow->getDY1()->getValue( staffLSpace ));
+//
+//	// -- Applies the offset settings to the end anchor point --
+//	if( arBow->getDX2())
+//		bowInfos->offsets[2].x += (arBow->getDX2()->getValue( staffLSpace ));
+//
+//	if( arBow->getDY2())
+//		bowInfos->offsets[2].y -= (arBow->getDY2()->getValue( staffLSpace ));
 }
 
 // -----------------------------------------------------------------------------
 /** \brief Use tag parameters to calculate the control points position.
 */
-void GRBowing::manualControlPoints( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse )
+void GRBowing::manualControlPoints( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
 	GRBowingSaveStruct * bowInfos = (GRBowingSaveStruct *)sse->p;
 	GRStaff * staff = context->staff;
@@ -445,16 +447,22 @@ void GRBowing::manualControlPoints( GRBowingContext * context, ARBowing * arBow,
 	// If the R3 factor is near zero, the control point will be near the first anchor point
 	// if the R3 factor is near 1, the control point will be near the second anchor point.
 
-	const TagParameterFloat * tagR3 =  arBow->getR3();
-	const TYPE_FLOATPARAMETER valueR3 = tagR3 ? tagR3->getValue() : float(0.5);
+	float tagR3 =  arBow->getR3();
+	const TYPE_FLOATPARAMETER valueR3 = (tagR3 == ARBowing::undefined()) ? 0.5f : tagR3;
+//	const TagParameterFloat * tagR3 =  arBow->getR3();
+//	const TYPE_FLOATPARAMETER valueR3 = tagR3 ? tagR3->getValue() : float(0.5);
 
 	bowInfos->offsets[1].x = (GCoord)(distx * valueR3 );
 	bowInfos->offsets[1].y = (GCoord)(disty * valueR3 * dir);
 
 	// -- Apply the middle control point y-offset.
-	const float staffLSpace = staff->getStaffLSPACE();
-	const TagParameterFloat * tagH = arBow->getH();
-	const TYPE_FLOATPARAMETER valueH = tagH ? tagH->getValue( staffLSpace ) : float(2);
+	const float lspaceRatio = staff->getStaffLSPACE() / LSPACE;
+	float tagH = arBow->getH();
+//	const TYPE_FLOATPARAMETER valueH = (tagH == ARBowing::undefined()) ? 2.f : tagH * lspaceRatio;
+	const TYPE_FLOATPARAMETER valueH = (tagH == ARBowing::undefined() ? LSPACE/2 : tagH) * lspaceRatio;
+//	const float staffLSpace = staff->getStaffLSPACE();
+//	const TagParameterFloat * tagH = arBow->getH();
+//	const TYPE_FLOATPARAMETER valueH = tagH ? tagH->getValue( staffLSpace ) : float(2);
 	bowInfos->offsets[1].y += -dir * ((valueH > 0) ? valueH : -valueH);
 
 	// - Store
@@ -467,7 +475,7 @@ void GRBowing::manualControlPoints( GRBowingContext * context, ARBowing * arBow,
 	This method only implement the basic rule: based on stem directions. Subclasses
 	can override to add their own rules;
 */
-void GRBowing::automaticCurveDirection( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse )
+void GRBowing::automaticCurveDirection( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
 	GRNotationElement * startElement = sse->startElement;
 	GRNotationElement * endElement = sse->endElement;
@@ -514,7 +522,7 @@ void GRBowing::automaticCurveDirection( GRBowingContext * context, ARBowing * ar
 
 	Called after anchor points positionning and after curve direction has been decided.
 */
-void GRBowing::automaticControlPoints( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse )
+void GRBowing::automaticControlPoints( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
 	manualControlPoints( context, arBow, sse );
 }
@@ -599,11 +607,12 @@ GRNotationElement * GRBowing::getEndElement(GRStaff * grstaff) const
 // -----------------------------------------------------------------------------
 void GRBowing::OnDraw( VGDevice & hdc) const
 {
-// DrawBoundingBox( hdc, GColor( 255, 120, 150, 120 )); // DEBUG
 	if(!mDraw || !mShow) return;
-
 	if (error) return;
 	assert( gCurSystem );
+
+//	DrawBoundingBox( hdc, VGColor( 255, 120, 150, 120 )); // DEBUG
+//	hdc.Frame(mBoundingBox.left, mBoundingBox.top, mBoundingBox.right, mBoundingBox.bottom);
 	GRSystemStartEndStruct * sse = getSystemStartEndStruct( gCurSystem );
 	if( sse == 0) return; // don't draw
 

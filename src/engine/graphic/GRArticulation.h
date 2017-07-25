@@ -42,11 +42,8 @@ class GRArticulation : public GRTagARNotationElement
                 kFlagBreathMark = 512, kFlagPizz = 1024, kFlagHarmonic = 2048 };
 
 
-				GRArticulation( ARMusicalTag * inTag,
-								float curLSPACE,	
-								bool ownsar = false );
-
-		virtual ~GRArticulation();
+				 GRArticulation( const ARMusicalTag * inTag, float curLSPACE, bool ownsar = false );
+		virtual ~GRArticulation() {}
 
 		virtual const NVPoint & getReferencePosition() const;
 

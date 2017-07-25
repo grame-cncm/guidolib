@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -17,7 +17,7 @@
 
 #include "GRARCompositeNotationElement.h"
 #include "GRTag.h"
-#include "GRVisitor.h"
+//#include "GRVisitor.h"
 #include "GuidoDefs.h" // for NUMNOTES
 
 class ARKey;
@@ -33,7 +33,7 @@ class GRKey : public GRARCompositeNotationElement, public GRTag
 	  virtual bool operator==(const GRKey & key) const;
 	  virtual bool operator==(const GRTag & tag) const;
 
-						GRKey( GRStaff * staff, ARKey * arkey, int p_natural, bool ownsAR );
+						 GRKey( GRStaff * staff, const ARKey * arkey, int p_natural, bool ownsAR );
 		virtual 		~GRKey();
 
 		virtual void	accept (GRVisitor& visitor);

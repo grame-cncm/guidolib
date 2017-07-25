@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -22,6 +22,8 @@
 #include "ARDefine.h"
 #include "TimeUnwrap.h"
 #include "nvstring.h"
+
+using namespace std;
 
 int gd_noteName2pc(const char * name);
 const char * gd_pc2noteName(int fPitch);
@@ -54,7 +56,7 @@ ARNote::ARNote( const std::string & name, int accidentals, int octave, int numer
 	fPitch = gd_noteName2pc(fName.c_str());
 }
 
-ARNote::ARNote(const ARNote & arnote) 
+ARNote::ARNote(const ARNote & arnote, bool istied)
 	:	ARMusicalEvent( (const ARMusicalEvent &) arnote),
 		fName(arnote.fName), fOrnament(NULL),  fCluster(NULL), fOwnCluster(false), fIsLonelyInCluster(false),
         fClusterHaveToBeDrawn(false), fSubElementsHaveToBeDrawn(true), fAuto(true), fTremolo(0), fStartPosition(-1,1), fOctava(0)
@@ -66,12 +68,20 @@ ARNote::ARNote(const ARNote & arnote)
 	fIntensity = arnote.fIntensity;
     fVoiceNum = arnote.getVoiceNum(); // Added to fix a bug during chord copy (in doAutoBarlines)
 	fOctava = arnote.getOctava();
+//	fAuto = istied;
+	const ARTrill* trill = arnote.getOrnament();
+	if (trill) {
+		ARTrill* copy = new ARTrill(-1, trill);
+		copy->setContinue();
+		if (istied) copy->setIsAuto(true);
+		setOrnament(copy);
+	}
 }
 
 ARNote::~ARNote()
 {
-	delete fOrnament;		// makes the system crash - to be checked
-	if (fOwnCluster) delete fCluster;
+	if (fTrillOwner)	delete fOrnament;
+	if (fOwnCluster)	delete fCluster;
 }
 
 ARMusicalObject * ARNote::Copy() const
@@ -138,10 +148,6 @@ void ARNote::addSharp()
 	assert(fAccidentals<=MAX_ACCIDENTALS);
 }
 
-const ARNoteName &	ARNote::getName() const					{ return fName; }
-TYPE_REGISTER		ARNote::getOctave() const				{ return fOctave; }
-TYPE_PITCH			ARNote::getPitch() const				{ return fPitch; }
-
 void ARNote::offsetpitch(int steps)
 {
   // this just tries to offset the fPitch ...
@@ -185,11 +191,13 @@ void ARNote::setAccidentals(int theAccidentals)
 	fAccidentals=theAccidentals;
 }
 
-void ARNote::setOrnament(ARTrill * newOrnament)
+void ARNote::setOrnament(const ARTrill * newOrnament, bool trillOwner)
 {
-	delete fOrnament;
-//	if (!fOrnament) 
-	fOrnament = new ARTrill(-1, newOrnament);
+	if (fTrillOwner)
+		delete fOrnament;
+//	fOrnament = newOrnament ? new ARTrill(-1, newOrnament) : 0;
+	fOrnament = newOrnament;
+	fTrillOwner = trillOwner;
 }
 
 ARCluster *ARNote::setCluster(ARCluster *inCluster,
@@ -257,52 +265,27 @@ void ARNote::forceNoteAppearance(NVstring noteAppearance) {
 
 void ARNote::print(std::ostream& os) const
 {
-    printName(os);
-	os << " ";
-    printParameters(os);
+	os << getGMNName();
 }
 
-void ARNote::printName(std::ostream& os) const
+string ARNote::getGMNName () const
 {
-    os << "ARNote";
-}
-
-void ARNote::printGMNName(std::ostream& os) const
-{
-    std::string accidentalStr = "";
-
+    const char* accidental = "";
     switch (getAccidentals()) {
-    case -1:
-        accidentalStr = "#";
-        break;
-    case 1:
-        accidentalStr = "b";
-        break;
-    default:
-        /* TODO */
-        break;
+		case -1:
+			accidental = "#";
+			break;
+		case 1:
+			accidental = "b";
+			break;
+		default:
+			break;
     }
-    
-    std::ostringstream durationStream;
-    
-    if (getDuration().getNumerator() != 1)
-        durationStream << "*" << getDuration().getNumerator();
-
-    durationStream << "/" << getDuration().getDenominator();
-    
+	stringstream s;
 	if (isEmptyNote())
-		os << getName() << accidentalStr << getOctave() << durationStream.str();
+		s << getName() << accidental << getOctave() << "*" << getDuration();
     else
-        os << getName() << durationStream.str();
+        s << getName() << "*" << getDuration();
+	return s.str();
 }
 
-void ARNote::printParameters(std::ostream& os) const
-{
-    os << "\"" << getName() << "\" ";
-    os << "pitch: " << getPitch() << " ";
-    os << "oct: " << getOctave() << " ";
-    os << "accidental: " << getAccidentals() << " ";
-    os << "detune: " << getDetune() << " ";
-    os << "duration: " << getDuration() ;
-	if (fAuto) os << " (auto)";
-}

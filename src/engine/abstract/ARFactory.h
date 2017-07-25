@@ -4,7 +4,7 @@
 /*
 	GUIDO Library
 	Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-	Copyright (C) 2003  Grame
+	Copyright (C) 2003-2017  Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -16,11 +16,8 @@
 */
 
 #include "kf_ilist.h"	// required
-// #include "defines.h"
 
 #include "ARDefine.h"
-// #include "GRDefine.h"
-#include "TagParameterList.h"
 #include "ARMusicalTag.h"
 
 class ARMusic;
@@ -49,17 +46,14 @@ class ARTremolo;
 class ARChordTag;
 class ARTuplet;
 class ARAuto;
+class ARKey;
 
-
-// typedef KF_IPointerList<ARMusicalObject> ARMusicalObjectList;
 typedef KF_IPointerList<ARMusicalTag> TagPointerList; // todo: replace by stl container (easy)
 
 
 /** \brief Class used in order to build the abstract representation (AR) structure
 	of music.
 */
-
-
 class ARFactory
 {
  	public:
@@ -102,12 +96,10 @@ class ARFactory
 		virtual void 		endTag();
 		virtual void 		addTag();
 
-
-
+		virtual void 		addTagParameter( TagParameter * parameter );
 		virtual void 		addTagParameter( const char * parameter );
 		virtual void 		addTagParameter( TYPE_TAGPARAMETER_INT parameter );
 		virtual void 		addTagParameter( TYPE_TAGPARAMETER_REAL parameter );
-		virtual void 		setTagParameterList( TagParameterList theTagParameterList );
 
 	  	virtual float 		UndoTransform( const float val );
 	  	virtual void 		setParameterName( const char * name );
@@ -117,39 +109,45 @@ class ARFactory
   	
   private:
 
-		ARMusicalVoice * 	mCurrentVoice;
-		ARMusic * 			mCurrentMusic;
-		ARMusicalEvent * 	mCurrentEvent;
-		ARRepeatBegin *		mCurrentRepeatBegin;
+		ARMusicalVoice * 	mCurrentVoice = NULL;
+		ARMusic * 			mCurrentMusic = NULL;
+		ARMusicalEvent * 	mCurrentEvent = NULL;
+		ARRepeatBegin *		mCurrentRepeatBegin = NULL;
 
-		ARMusicalEvent * 	mLastEvent;
+		ARMusicalEvent * 	mLastEvent = NULL;
 		TagPointerList 		mTags; // todo: replace by stl container
-		TagParameterList 	mTagParameterList;
+		TagParametersList	mTagParameters;
+		TagParameter*		mLastTagParameter = 0;
 
 		int		 			mCurrentRegister;	// (octave)
 		int 				mCurrentNumerator;
 		int 				mCurrentDenominator;
 		int				 	mCurrentIntensity;
+	
+		void	checkTagEnd	( ARMusicalTag* tag);
+		void	checkRange	( const ARMusicalTag* tag, const char* ) const;
 
 		static long sMaxTagId;
 
 protected:
-	AROctava *			mCurrentOctava;
-	ARGrace *			mCurrentGrace;
-	ARCue *				mCurrentCue;
-	ARTrill *			mCurrentTrill;
-	ARTStem *			mCurrentStem;
-	ARTHead *			mCurrentHead;
-	ARNoteFormat *		mCurrentNoteFormat;
-	ARRestFormat *		mCurrentRestFormat;
-	ARDotFormat *		mCurrentDotFormat;
-	ARAlter *			mCurrentAlter;
-	ARMusicalVoice *	mSaveCurrentVoice;
-	ARStaff *			mCurrentStaff;
-	ARCluster *         mCurrentCluster;
-    ARTremolo *         mCurrentTremolo;
-    ARChordTag *        mCurrentChordTag;
-    ARTuplet *          mCurrentTuplet;
+	ARMusicalVoice *	mSaveCurrentVoice = NULL;
+	ARCluster *			mCurrentCluster = NULL;
+    ARTremolo *			mCurrentTremolo = NULL;
+	ARTrill *			mCurrentTrill = NULL;
+
+	const AROctava *	mCurrentOctava = NULL;
+	const ARGrace *		mCurrentGrace = NULL;
+	const ARCue *		mCurrentCue = NULL;
+	const ARTStem *		mCurrentStem = NULL;
+	const ARTHead *		mCurrentHead = NULL;
+	const ARNoteFormat*	mCurrentNoteFormat = NULL;
+	const ARRestFormat*	mCurrentRestFormat = NULL;
+	const ARDotFormat *	mCurrentDotFormat = NULL;
+	const ARAlter *		mCurrentAlter = NULL;
+	const ARStaff *		mCurrentStaff = NULL;
+    const ARChordTag *  mCurrentChordTag = NULL;
+    const ARTuplet *	mCurrentTuplet = NULL;
+    const ARKey *		mCurrentKey = NULL;
 	int					mVoiceNum;
 	int					mCurrentTags;
 	bool				mTagRanged;

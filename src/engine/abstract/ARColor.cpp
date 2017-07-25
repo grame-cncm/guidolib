@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -16,91 +16,24 @@
 
 #include "ARColor.h"
 #include "TagParameterFloat.h"
-#include "TagParameterList.h"
-#include "ListOfStrings.h"
+#include "TagParameterStrings.h"
 
-ListOfTPLs ARColor::ltpls(1);
+static const TagParameterMap sARColorMap (kARColorParams);
 
-void ARColor::setTagParameterList(TagParameterList & tpl)
+ARColor::ARColor() : fR(0), fG(0), fB(0), fA(0)
 {
-	if (ltpls.GetCount() == 0)
-	{
-		// create a list of string ...
-		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(
-			
-			// Was:
-			// ( "F,red,0.0,r;F,green,0.0,r;F,blue,0.0,r" ));
-			
-			// (JB) proposal change: alpha component support (transparency): 
-			( "F,red,0.0,r;F,green,0.0,r;F,blue,0.0,r;F,alpha,0.0,o"));
-		
-		CreateListOfTPLs(ltpls,lstrs);
-	}
-
-	TagParameterList * rtpl = 0;
-	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
-
-	if (ret>=0 && rtpl)
-	{
-		// we found a match!
-		if (ret == 0)
-		{
-			// then, we now the match for
-			// the first ParameterList
-			// w, h, ml, mt, mr, mb
-			GuidoPos pos = rtpl->GetHeadPosition();
-
-			TagParameterFloat * tpf;
-			tpf = TagParameterFloat::cast( rtpl->GetNext(pos));
-			assert(tpf);
-			colorR = tpf->getValue();
-
-			tpf = TagParameterFloat::cast( rtpl->GetNext(pos));
-			assert(tpf);
-			colorG = tpf->getValue();
-
-			tpf = TagParameterFloat::cast( rtpl->GetNext(pos));
-			assert(tpf);
-			colorB = tpf->getValue();
-
-			// - Optional Alpha component.
-			tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
-			if( tpf )
-				colorA = tpf->getValue();
-		}
-
-		delete rtpl;
-	}
-	else
-	{
-		// failure
-	}
-
-	tpl.RemoveAll();
+	setupTagParameters (sARColorMap);
 }
 
-bool ARColor::IsStateTag() const
+void ARColor::setTagParameters (const TagParameterMap& params)
 {
-	return true;
+	const TagParameterFloat * r = getParameter<TagParameterFloat>(kRedStr, true);
+	const TagParameterFloat * g = getParameter<TagParameterFloat>(kGreenStr, true);
+	const TagParameterFloat * b = getParameter<TagParameterFloat>(kBlueStr, true);
+	const TagParameterFloat * a = getParameter<TagParameterFloat>(kAlphaStr, true);
+	fR = r->getValue();
+	fG = g->getValue();
+	fB = b->getValue();
+	fA = a->getValue();
 }
 
-void ARColor::printName(std::ostream& os) const
-{
-    os << "ARColor";
-}
-
-void ARColor::printGMNName(std::ostream& os) const
-{
-    os << "\\color";
-}
-
-void ARColor::printParameters(std::ostream& os) const
-{
-    os << "red: "   << colorR << "; ";
-    os << "green: " << colorG << "; ";
-    os << "blue: "  << colorB << "; ";
-    os << "alpha: " << colorA << "; ";
-
-    ARMusicalTag::printParameters(os);
-}

@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -15,37 +15,36 @@
 #include <iostream>
 #include <sstream>
 #include <regex>
-#include <cctype>
-
-#include "secureio.h"
 
 #include "ARMeter.h"
+#include "TagParameterStrings.h"
 #include "TagParameterString.h"
 #include "TagParameterFloat.h"
-#include "TagParameterList.h"
-#include "ListOfStrings.h"
 
 using namespace std;
 
-ListOfTPLs ARMeter::ltpls(1);
+static const TagParameterMap sARMeterMap (kARMeterParams);
 
 //--------------------------------------------------------------------------------------
 ARMeter::ARMeter() : fMeterDuration(0,1), fSingleUnit(true), fGroupComplex(false)
 {
+	setupTagParameters (sARMeterMap);
 	fType = NONE;
-	autoBarlines    = true;
-	autoMeasuresNum = false;
+	fAutoBarlines    = true;
+	fAutoMeasuresNum = kNoAutoMeasureNum;
 }
 
 //--------------------------------------------------------------------------------------
 ARMeter::ARMeter(int num, int dnum) : fMeterDuration(num, dnum), fSingleUnit(true)
 {
+	setupTagParameters (sARMeterMap);
+	
     std::stringstream bufferSStream;
     bufferSStream << fMeterDuration;
-	mMeterName = bufferSStream.str().c_str();
+	fMeterName = bufferSStream.str().c_str();
 	fType = NUMERIC;
-	autoBarlines    = true;
-	autoMeasuresNum = false;
+	fAutoBarlines    = true;
+	fAutoMeasuresNum = kNoAutoMeasureNum;
 }
 
 //--------------------------------------------------------------------------------------
@@ -113,11 +112,7 @@ const vector<Fraction> ARMeter::parseMeters(std::string str)  const
 		meters.push_back(str2meter (match));
 		str = m.suffix().str();
 	}
-	meters = finalizeMeters (meters);
-//cerr << "ARMeter::parseMeters" << endl;
-//for (size_t i=0; i<meters.size(); i++) {
-//cerr << " -> " << meters[i] << endl;
-//}
+	if (meters.size()) meters = finalizeMeters (meters);
 	return meters;
 }
 
@@ -141,88 +136,49 @@ Fraction ARMeter::metersDuration (const std::vector<Fraction>& meters)  const
 	return out;
 }
 
-//--------------------------------------------------------------------------------------
-void ARMeter::setTagParameterList(TagParameterList& tpl)
-{
-	if (ltpls.GetCount() == 0)
-	{
-		// create a list of string ...
-		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail("S,type,4/4,r;F,size,1.0,o;S,autoBarlines,on,o;S,autoMeasuresNum,off,o;S,group,off,o");
-		CreateListOfTPLs(ltpls,lstrs);
+ //--------------------------------------------------------------------------------------
+ void ARMeter::setMeter (const string& meter)
+ {
+	fMeterName = meter;
+	if ((meter == "C") || (meter == "c")) {
+		fType = C;
+		fMetersVector.push_back(Fraction(4,4));
 	}
-
-	TagParameterList * rtpl = NULL;
-	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
-
-	if (ret>=0 && rtpl)
-	{
-		// we found a match!
-		if (ret == 0)
-		{
-			// then, we now the match for the first ParameterList
-			GuidoPos pos = rtpl->GetHeadPosition();
-
-			TagParameterString * tps = TagParameterString::cast(rtpl->GetNext(pos));
-			assert(tps);
-			mMeterName = tps->getValue();
-
-			TagParameterFloat * tpf = TagParameterFloat::cast(rtpl->GetNext(pos));
-			assert(tpf);
-			size = tpf->getValue();
-
-			tps = TagParameterString::cast(rtpl->GetNext(pos));
-			assert(tps);
-			autoBarlines = tps->getBool();
-
-			tps = TagParameterString::cast(rtpl->GetNext(pos));
-			assert(tps);
-			std::string on("on");
-			std::string page("page");
-            std::string system("system");
-			const char* automeasures = tps->getValue();
-			if (on == automeasures)
-				autoMeasuresNum = kAutoMeasureNum;
-			else if (page == automeasures)
-				autoMeasuresNum = kAutoMeasureNumPage;
-            else if (system == automeasures)
-                autoMeasuresNum = kAutoMeasureNumSystem;
-			else
-				autoMeasuresNum = kNoAutoMeasureNum;
-
-			tps = TagParameterString::cast(rtpl->GetNext(pos));
-			assert(tps);
-			fGroupComplex =  tps->getBool();
-
-            /**** Meter type analysis ****/
-            if ((mMeterName == "C") || (mMeterName == "c")) {
-                fType = C;
-				fMetersVector.push_back(Fraction(4,4));
-            }
-            else if ((mMeterName == "C/") || (mMeterName == "c/")) {
-                fType = C2;
-				fMetersVector.push_back(Fraction(2,2));
-            }
-            else if ((mMeterName == "") || !isNumeric(mMeterName)) {
-                fType = NONE;
-				fMetersVector.push_back(Fraction(4,4));
-            }
-            else {
-                fType       = NUMERIC;
-				fMetersVector	= parseMeters(mMeterName);
-				fSingleUnit		= singleUnit (fMetersVector);
-				fMeterDuration	= metersDuration(fMetersVector);
-            }
-		}
-		delete rtpl;
+	else if ((meter == "C/") || (meter == "c/")) {
+		fType = C2;
+		fMetersVector.push_back(Fraction(2,2));
 	}
-	else {
+	else if ((meter == "") || !isNumeric(meter)) {
 		fType = NONE;
 		fMetersVector.push_back(Fraction(4,4));
 	}
+	else {
+		fType       = NUMERIC;
+		fMetersVector	= parseMeters(meter);
+		fSingleUnit		= singleUnit (fMetersVector);
+		fMeterDuration	= metersDuration(fMetersVector);
+	}
+	if (fMetersVector.empty()) {
+		fType = NONE;
+		fMetersVector.push_back(Fraction(4,4));
+	}
+}
 
-	fMeterDuration = metersDuration(fMetersVector);
-    tpl.RemoveAll();
+//--------------------------------------------------------------------------------------
+void ARMeter::setTagParameters (const TagParameterMap& params)
+{
+	const TagParameterString* p = getParameter<TagParameterString>(kTypeStr);
+	if (p) setMeter (p->getValue());
+	else return;
+
+	string am = getParameter<TagParameterString>(kAutoMeasNumStr, true)->getValue();
+	if (am == "on")				fAutoMeasuresNum = kAutoMeasureNum;
+	else if (am == "page")		fAutoMeasuresNum = kAutoMeasureNumPage;
+	else if (am == "system")	fAutoMeasuresNum = kAutoMeasureNumSystem;
+
+	fAutoBarlines	= getParameter<TagParameterString>(kAutoBarlinesStr, true)->getBool();
+	fGroupComplex	= getParameter<TagParameterString>(kGroupStr, true)->getBool();
+	fMeterDuration	= metersDuration(fMetersVector);
 }
 
 //--------------------------------------------------------------------------------------
@@ -236,17 +192,4 @@ bool ARMeter::isNumeric	(const std::string& meter)  const
 	return true;
 }
 
-//--------------------------------------------------------------------------------------
-bool ARMeter::IsStateTag() const					{ return true; }
 
-void ARMeter::printName(std::ostream& os) const		{ os << "ARMeter"; }
-void ARMeter::printGMNName(std::ostream& os) const	{ os << "\\meter"; }
-
-void ARMeter::printParameters(std::ostream& os) const
-{
-    os << "name: \"" << mMeterName << "\"; ";
-    os << "autoBarlines: " << (autoBarlines ? "true" : "false") << "; ";
-    os << "autoMeasuresNum: " << (autoMeasuresNum ? "true" : "false") << "; ";
-
-    ARMusicalTag::printParameters(os);
-}

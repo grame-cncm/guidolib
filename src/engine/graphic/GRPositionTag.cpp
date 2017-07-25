@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -22,59 +22,46 @@
 #include "GRSystemSlice.h"
 #include "GRGlue.h"
 
-GRPositionTag::GRPositionTag(ARMusicalTag * armt) : GRTag(armt), mStartEndList(1)
+GRPositionTag::GRPositionTag(const ARMusicalTag * armt) : GRTag(armt), mStartEndList(1)
 {
 	ep = NULL;
-
 	if (armt)
 	{
-		ARPositionTag * arpt = dynamic_cast<ARPositionTag *>(armt);
-		if (arpt)
-		{
-			ep = arpt->getEndPosition();
-		}
+		const ARPositionTag * arpt = dynamic_cast<const ARPositionTag *>(armt);
+		if (arpt) ep = arpt->getEndPosition();
 	}
 	lastendflag = GRSystemStartEndStruct::NOTKNOWN;
 	lastendElement = NULL;
 	lastendpos = NULL;
 }
 
-GRPositionTag::GRPositionTag(GuidoPos p_ep, ARMusicalTag * armt)
+GRPositionTag::GRPositionTag(GuidoPos p_ep, const ARMusicalTag * armt)
 	: GRTag(armt), ep(p_ep), mStartEndList(1)
 {
-
 	lastendflag = GRSystemStartEndStruct::NOTKNOWN;
 	lastendElement = NULL;
 	lastendpos = NULL;
 }
 
-GRSystemStartEndStruct * 
-GRPositionTag::getSystemStartEndStruct(const GRSystem * grsystem) const
+GRSystemStartEndStruct * GRPositionTag::getSystemStartEndStruct(const GRSystem * grsystem) const
 {
 	if (mStartEndList.GetCount() == 1)
 	{
 		GRSystemStartEndStruct * sse = mStartEndList.GetHead();
 		if (sse && sse->grsystem == NULL)
-		{
 			return sse;
-		}
 
 		if (sse && sse->grsystem == grsystem)
 			return sse;
-
 		return NULL;
-
 	}
 	GuidoPos pos = mStartEndList.GetHeadPosition();
 	while (pos)
 	{
 		GRSystemStartEndStruct * sse = mStartEndList.GetNext(pos);
 		if (sse->grsystem == grsystem || sse->grsystem == NULL)
-		{
 			return sse;
-		}
 	}
-
 	return NULL;
 }
 

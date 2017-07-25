@@ -13,34 +13,28 @@
 */
 
 #include <iostream>
-#include <string.h>
+#include <string>
 
-#include "secureio.h"
 #include "ARTempo.h"
+#include "TagParameterStrings.h"
 #include "TagParameterString.h"
-#include "TagParameterList.h"
 #include "TagParameterFloat.h"
-#include "ListOfStrings.h"
 
 #include "TimeUnwrap.h"
 
-ListOfTPLs ARTempo::ltpls(1);
+using namespace std;
 
+static const TagParameterMap sARTempoMap (kARTempoParams);
 
 // --------------------------------------------------------------------------
 ARTempo::ARTempo()
 {
-	// mType = kString;
+	setupTagParameters (sARTempoMap);
 
 	mBpmUnit.set( 1, 4 );		// arbitrary default value
 	mBpmValue.set( 120 );		// idem
 	mBpmNoteEquiv = false;
 	mHasBpmInfos = false;
-}
-
-// --------------------------------------------------------------------------
-ARTempo::~ARTempo()
-{
 }
 
 // --------------------------------------------------------------------------
@@ -61,67 +55,26 @@ float ARTempo::getQpmValue() const
 }
 
 // --------------------------------------------------------------------------
-void ARTempo::setTagParameterList( TagParameterList & tpl )
+void ARTempo::setTagParameters(const TagParameterMap& map)
 {
-	if( ltpls.GetCount() == 0 ) {
-		ListOfStrings lstrs;
-		// A required tempo string and an optional bpm string.
-		lstrs.AddTail( "S,tempo,,r;S,bpm,,o;U,dy,0,o" );
-		CreateListOfTPLs( ltpls, lstrs );
-	}
-
-	TagParameterList * rtpl = 0;
-	const int ret = MatchListOfTPLsWithTPL( ltpls, tpl, &rtpl );
-
-	/*
-		We may have :
-		\tempo <s1, s2>		// s1 is pure graphical, s2 (optional) pure musical
-		\tempo <"Andante [1/4]=60">					will be the kString type
-		\tempo <"Andante","1/4=60">					will be the kBPM type
-		\tempo <"Andante [1/4]=[1/8]","1/4=1/8">	will be the kNoteEquiv type
-	*/
-	if( ret >= 0 && rtpl )
-	{
-		// we found a match!
-		if( ret == 0 )
-		{
-			// - extract tempo mark informations.
-			TagParameterString * tps = TagParameterString::cast(rtpl->RemoveHead());
-			if (tps && strlen(tps->getValue())) {
-				FormatStringParser p;
-				mTempoMark.clear();
-				p.parse (tps->getValue(), mTempoMark);
-			}
-			delete tps;
-//			ParseTempoMark( tps );
-
-			// - extract bpm informations
-			tps = TagParameterString::cast(rtpl->RemoveHead());
-			ParseBpm(tps);
-			delete tps;
-
-			delete mDy;
-			mDy = TagParameterFloat::cast(rtpl->RemoveHead());
+	const TagParameterString * tempo = getParameter<TagParameterString>(kTempoStr);
+	if (tempo) {
+		std::string value (tempo->getValue());
+		if (value.size()) {
+			FormatStringParser p;
+			mTempoMark.clear();
+			p.parse (value.c_str(), mTempoMark);
 		}
-		delete rtpl;
 	}
-	tpl.RemoveAll();
+	const TagParameterString * bpm = getParameter<TagParameterString>(kBPMStr);
+	if (bpm) ParseBpm (bpm);
 }
 
 // --------------------------------------------------------------------------
-/*
-void ARTempo::ParseTempoMark( TagParameterString * inTag )
-{
-	if( inTag )
-		mTempoMark = inTag->getValue();
-}
-*/
-
-// --------------------------------------------------------------------------
-void ARTempo::ParseBpm( TagParameterString * inTag )
+void ARTempo::ParseBpm(const TagParameterString * inTag )
 {
 	if( inTag == 0 ) return;
-	if( inTag->pflag == TagParameter::NOTSET ) return;
+	if( inTag->TagIsNotSet() ) return;
 
 	const NVstring & bpmString = inTag->getValue();
 
@@ -147,21 +100,4 @@ void ARTempo::ParseBpm( TagParameterString * inTag )
 	}
 }
 
-// --------------------------------------------------------------------------
-void ARTempo::printName(std::ostream& os) const
-{
-    os << "ARTempo";
-}
-
-void ARTempo::printGMNName(std::ostream& os) const
-{
-    os << "\\tempo";
-}
-
-void ARTempo::printParameters(std::ostream& os) const
-{
-    /* TODO */
-
-    ARMusicalTag::printParameters(os);
-}
 

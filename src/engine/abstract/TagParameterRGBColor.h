@@ -3,7 +3,7 @@
 
 /*
  GUIDO Library
-  Copyright (C) 2013  Grame
+  Copyright (C) 2013-2017  Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -26,44 +26,45 @@
 
 #include "TagParameter.h"
 
-
 /** \brief RGB Color tag parameter.
  */
 class TagParameterRGBColor : public TagParameter
 {
-public:
-	using TagParameter::setValue;    TagParameterRGBColor( const unsigned char red, const unsigned char green, const unsigned char blue, const unsigned char alpha = 255 );
-    TagParameterRGBColor( const TagParameterRGBColor & tpRGBColor );
-    
-    virtual 	~TagParameterRGBColor();
-    
-    virtual void set( const TagParameterRGBColor & in );
-    
-    virtual void setValue(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
-        { mRed = red, mGreen = green, mBlue = blue, mAlpha = alpha; }
-    
-    virtual TagParameter * getCopy() const		{ return new TagParameterRGBColor(*this); }
-    virtual bool		copyValue(const TagParameter *tp);
-	virtual bool        isRGBValue() const { return true; }
-    
-    static TagParameterRGBColor * cast( TagParameter * inTag )
-        { return inTag->isRGBValue() ? static_cast<TagParameterRGBColor *>(inTag) : 0; }
-    static const TagParameterRGBColor * cast( const TagParameter * inTag )
-        { return inTag->isRGBValue() ? static_cast<const TagParameterRGBColor *>(inTag) : 0; }
+	public:
+		using TagParameter::setValue;
 
-    
-    bool            getRGBColor( unsigned char colref[4] ) const; 	// returns 1 if successful
-    unsigned char   getRedChannel()   const { return mRed; };
-    unsigned char   getGreenChannel() const { return mGreen; };
-    unsigned char   getBlueChannel()  const { return mBlue; };
-    unsigned char   getAlphaChannel() const { return mAlpha; };
-    
-private:
-    unsigned char mRed;
-    unsigned char mGreen;
-    unsigned char mBlue;
-    unsigned char mAlpha;
-    using TagParameter::set;
+				 TagParameterRGBColor();
+				 TagParameterRGBColor( unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255 );
+				 TagParameterRGBColor( const TagParameterRGBColor & tpRGBColor );
+		virtual ~TagParameterRGBColor() {}
+		
+		virtual void set( const TagParameterRGBColor & in );
+		
+		virtual void setValue(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+			{ mRed = red, mGreen = green, mBlue = blue, mAlpha = alpha; }
+		
+		virtual TagParameter * getCopy() const		{ return new TagParameterRGBColor(*this); }
+		virtual bool		copyValue(const TagParameter *tp);
+		virtual bool        isRGBValue() const		{ return true; }
+		
+		static TagParameterRGBColor * cast( TagParameter * inTag )
+			{ return inTag->isRGBValue() ? static_cast<TagParameterRGBColor *>(inTag) : 0; }
+		static const TagParameterRGBColor * cast( const TagParameter * inTag )
+			{ return inTag->isRGBValue() ? static_cast<const TagParameterRGBColor *>(inTag) : 0; }
+
+		
+		bool            getRGBColor( unsigned char colref[4] ) const; 	// returns 1 if successful
+		unsigned char   getRedChannel()   const { return mRed; };
+		unsigned char   getGreenChannel() const { return mGreen; };
+		unsigned char   getBlueChannel()  const { return mBlue; };
+		unsigned char   getAlphaChannel() const { return mAlpha; };
+		
+	private:
+		unsigned char mRed;
+		unsigned char mGreen;
+		unsigned char mBlue;
+		unsigned char mAlpha;
+		using TagParameter::set;
 };
 
 

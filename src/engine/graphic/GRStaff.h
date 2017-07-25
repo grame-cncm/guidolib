@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -124,14 +124,14 @@ class GRStaffState
 		// Meter-Parameters
 		bool	meterset;		// flag if meter-sig is given . TRUE, FALSE
 
-		ARMeter * curmeter;
+		const ARMeter * curmeter;
 		// Noteparameter
 		bool	keyset;							// flag for if key-sig is given
 		int		numkeys;						// number of accidentals, neede for GRKey.
 		float	KeyArray[NUMNOTES];
 		MeasureAccidentals	fMeasureAccidentals;
 
-		ARKey * curkey;
+		const ARKey * curkey;
 		// clef-Parameter
 		clefstate	clefset;			// CLEFINTERN, CLEFEXPLICIT, CLEFAUTO, [ CLEFOFF ]
 		std::string	clefname;			// clef name (same as for ARClef ...)
@@ -148,9 +148,9 @@ class GRStaffState
 		int octava;
 		int baseline;
 
-		ARClef *		curclef;
-		ARBarFormat *	curbarfrmt;
-		ARStaffFormat * curstaffrmt;
+		const ARClef *		curclef;
+		const ARBarFormat *	curbarfrmt;
+		const ARStaffFormat * curstaffrmt;
 
 		float	staffLSPACE;	// distance between two lines
 		int		numlines;		// Zahl der Notenlinien.
@@ -182,7 +182,7 @@ class GRStaff : public GRCompositeNotationElement
 	friend class GRVoiceManager;
 
 	public:
-						GRStaff(GRSystemSlice * systemslice, float propRender);
+						 GRStaff(GRSystemSlice * systemslice, float propRender);
 		virtual 		~GRStaff();
 
 		float           getDistance() const;
@@ -195,21 +195,21 @@ class GRStaff : public GRCompositeNotationElement
 		GRGlue *        getStartGlue() const;
 		GRGlue *        getSecondGlue() const;
 		int             getFontSize() const;
-		float           getStaffLSPACE() const      { return mStaffState.staffLSPACE; }
-		float           getSizeRatio() const        { return mStaffState.staffLSPACE / LSPACE; }
-		const GRStaffState *    getStaffState();
-		GRStaffState &          getGRStaffState() { return mStaffState; }
+		float           getStaffLSPACE() const			{ return mStaffState.staffLSPACE; }
+		float           getSizeRatio() const			{ return mStaffState.staffLSPACE / LSPACE; }
+		const GRStaffState *    getStaffState() const	{ return &mStaffState; }
+		GRStaffState &          getGRStaffState()		{ return mStaffState; }
 		const GRStaffState &    getGRStaffState() const { return mStaffState; }
-		float			getXEndPosition(TYPE_TIMEPOSITION pos, TYPE_DURATION dur);
-        ARMeter        *getCurMeter() const { return mStaffState.curmeter; }
+		float					getXEndPosition(TYPE_TIMEPOSITION pos, TYPE_DURATION dur) const;
+        const ARMeter *			getCurMeter() const		{ return mStaffState.curmeter; }
 
 		virtual float       getNotePosition(TYPE_PITCH pit, TYPE_REGISTER oct) const;
 		virtual GDirection  getDefaultThroatDirection(TYPE_PITCH pit, TYPE_REGISTER oct) const;
 		virtual int         getNumHelplines(TYPE_PITCH pit, TYPE_REGISTER oct) const;
 		virtual VGColor     getNoteColor(TYPE_PITCH pit) const;
-		virtual int         getNumlines() const { return mStaffState.numlines; }
+		virtual int         getNumlines() const			{ return mStaffState.numlines; }
         virtual unsigned char* getStffrmtColRef() const { return mStaffState.colRef; }
-        virtual float       getLineThickness() const { return mStaffState.lineThickness; }
+        virtual float       getLineThickness() const	{ return mStaffState.lineThickness; }
 		virtual	float       getDredgeSize() const;
         virtual float       getMappingDredgeSize() const;
 		virtual float       getKeyPosition(TYPE_PITCH pitch, int numkeys = 1) const;
@@ -219,31 +219,31 @@ class GRStaff : public GRCompositeNotationElement
 		virtual void		print(std::ostream& os) const;
 		virtual void		accept (GRVisitor& visitor);
 
-		virtual void setStaffFormat(ARStaffFormat * staffrmt);
+		virtual void setStaffFormat (const ARStaffFormat * staffrmt);
 		void    setStaffState		(GRStaffState * state);
 		void    setInstrumentFormat	(const GRStaffState & state);
-		void    setBarFormat		(ARBarFormat * barfrmt);
+		void    setBarFormat		(const ARBarFormat * barfrmt);
 		void    setNoteParameters	(const GRNote * inNote );
 		void    setKeyParameters	(GRKey * inKey);
 		void    setDistance			(float distance)	{ mStaffState.distanceset = true; mStaffState.distance = distance; }
 		void    setEndPosition		(float newendpos)	{ mLength = newendpos - mPosition.x; }
 		void    setLength			(float newlength)	{ mLength = newlength; }
 
-		GROctava *			AddOctava(AROctava * aroct);
-		void                AddSecondGlue(GRGlue * myglue);
-		void                AddElementAt(GuidoPos pos,GRNotationElement * el);
-		GRRepeatBegin *     AddRepeatBegin(ARRepeatBegin *);
-		GRRepeatEnd *       AddRepeatEnd(ARRepeatEnd *);
-		GRDoubleBar *       AddDoubleBar(ARDoubleBar * ardbar,const TYPE_TIMEPOSITION & tp);
-		GRFinishBar *       AddFinishBar(ARFinishBar * arfbar,const TYPE_TIMEPOSITION & tp);
-		GRIntens *          AddIntens(ARIntens * aintens);
-		GRText *            AddText(ARText * atext);
-		GRKey *             AddKey(ARKey * arkey);
-		GRBar *             AddBar(ARBar * abar, const TYPE_TIMEPOSITION & von);
-		GRMeter *           AddMeter(ARMeter * armeter);
-		void                AddTag(GRNotationElement * grtag);
-		GRClef *            AddClef(ARClef *); // adds a clef to the staff at the current position.
-		GRInstrument *      AddInstrument(ARInstrument *);
+		GROctava *			AddOctava		(const AROctava * aroct);
+		void                AddSecondGlue	(GRGlue * myglue);
+		void                AddElementAt	(GuidoPos pos,GRNotationElement * el);
+		GRRepeatBegin *     AddRepeatBegin	(ARRepeatBegin *);
+		GRRepeatEnd *       AddRepeatEnd	(ARRepeatEnd *);
+		GRDoubleBar *       AddDoubleBar	(ARDoubleBar * ardbar,const TYPE_TIMEPOSITION & tp);
+		GRFinishBar *       AddFinishBar	(ARFinishBar * arfbar,const TYPE_TIMEPOSITION & tp);
+		GRIntens *          AddIntens		(const ARIntens * aintens);
+		GRText *            AddText			(const ARText * atext);
+		GRKey *             AddKey			(const ARKey * arkey);
+		GRBar *             AddBar			(ARBar * abar, const TYPE_TIMEPOSITION & von);
+		GRMeter *           AddMeter		(const ARMeter * armeter);
+		void                AddTag			(GRNotationElement * grtag);
+		GRClef *            AddClef			(const ARClef *);
+		GRInstrument *      AddInstrument	(const ARInstrument *);
 
 		virtual AccList * askAccidentals(TYPE_PITCH p_pit, TYPE_REGISTER p_oct, int p_acc, float detune=0.f);
 
@@ -326,8 +326,8 @@ class GRStaff : public GRCompositeNotationElement
 		TYPE_TIMEPOSITION	fLastSystemBarChecked;
 		void newMeasure(const TYPE_TIMEPOSITION & tp);
 		
-		std::map<TYPE_TIMEPOSITION, bool> isOn;
-		std::map<float, float> positions;
+		std::map<TYPE_TIMEPOSITION, bool> fOnOffList;
+		std::map<float, float> fPositions;
 		bool			isNextOn;
 		bool			firstOnOffSetting;
 

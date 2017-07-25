@@ -515,9 +515,9 @@ void GRPage::setSpringParameter(float npar)
 }
 
 // ----------------------------------------------------------------------------
-ARMusic * GRPage::getARMusic() const
+const ARMusic * GRPage::getARMusic() const
 {
-	return /*dynamic*/static_cast<ARMusic*>(getAbstractRepresentation());
+	return /*dynamic*/static_cast<const ARMusic*>(getAbstractRepresentation());
 }
 
 // ----------------------------------------------------------------------------
@@ -603,7 +603,7 @@ void GRPage::finishPage( bool islastpage )
 	
 	\param arp the new page format description.
 */
-void GRPage::setPageFormat( ARPageFormat * arp )
+void GRPage::setPageFormat( const ARPageFormat * arp )
 {
 	arp->getPageFormat( &mWidth, &mHeight, &mLeftMargin, &mTopMargin, &mRightMargin, &mBottomMargin );
 }

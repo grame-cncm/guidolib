@@ -25,13 +25,13 @@ class GRSlur : public GRBowing
 {
 	public:
 	 		  GRSlur (GRStaff * grstaff)					: GRBowing(grstaff) {}
-	 		  GRSlur (GRStaff * grstaff, ARSlur * inAR )	: GRBowing(grstaff, inAR ) {}
+	 		  GRSlur (GRStaff * grstaff, const ARSlur * inAR )	: GRBowing(grstaff, inAR ) {}
 	 virtual ~GRSlur() {}
 
 	protected:
-		virtual void automaticCurveDirection( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse );
-		virtual void automaticAnchorPoints	( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse );
-		virtual void automaticControlPoints	( GRBowingContext * context, ARBowing * arBow, GRSystemStartEndStruct * sse );
+		virtual void automaticCurveDirection( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse );
+		virtual void automaticAnchorPoints	( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse );
+		virtual void automaticControlPoints	( GRBowingContext * context, const ARBowing * arBow, GRSystemStartEndStruct * sse );
 		virtual void accept (GRVisitor& visitor);
 
 	private:

@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -15,17 +15,21 @@
 // #include "defines.h"
 
 #include <iostream>
+
 #include "secureio.h"
 #include "ARUserChordTag.h"
 #include "TagParameterString.h"
 #include "TagParameterInt.h"
-#include "TagParameterList.h"
-#include "ListOfStrings.h"
 
-ListOfTPLs ARUserChordTag::ltpls(1);
+using namespace std;
 
 ARUserChordTag::ARUserChordTag(const ARUserChordTag * uct)
 {
+#ifndef WIN32
+#warning ("check if ARUserChordTag is obsolete")
+#endif
+
+cerr << "====>>>>>>>   ARUserChordTag::ARUserChordTag" << endl;
 	rangesetting = ONLY;
 
 	labels = NULL;
@@ -73,60 +77,3 @@ const char* ARUserChordTag::getLabelValue() const
 	return "";
 }
 
-void ARUserChordTag::setTagParameterList(TagParameterList& tpl)
-{
-	if (ltpls.GetCount() == 0)
-	{
-		// create a list of string ...
-
-		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(("S,label,,o"));
-		lstrs.AddTail(("I,label,,o"));
-		CreateListOfTPLs(ltpls,lstrs);
-	}
-
-	TagParameterList *rtpl = NULL;
-	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
-
-	if (ret>=0 && rtpl)
-	{
-		// we found a match!
-		if (ret == 0)
-		{
-			// then, we now the match for the first ParameterList
-			// GuidoPos pos = rtpl->GetHeadPosition();
-			labels = TagParameterString::cast(rtpl->RemoveHead());
-		}
-		else if (ret == 1)
-		{
-			labeli = TagParameterInt::cast(rtpl->RemoveHead());
-			labelistr = new NVstring("intlabel");
-
-			char buf[100];			
-			snprintf(buf, 100, "%d", labeli->getValue()); 
-			labelistr->append(buf);
-		}
-		delete rtpl;
-	}
-	tpl.RemoveAll();
-}
-
-void ARUserChordTag::printName(std::ostream& os) const
-{
-    os << "ARUserChordTag";
-}
-
-void ARUserChordTag::printGMNName(std::ostream& os) const
-{
-    os << "\\userChordTag";
-}
-
-void ARUserChordTag::printParameters(std::ostream& os) const
-{
-    if (labels)
-        os << "label: \"" << labels->getValue() << "\"; ";
-    else if (labeli)
-        os << "label: " << labeli->getValue() << "; ";
-
-    ARMusicalTag::printParameters(os);
-}

@@ -61,8 +61,8 @@ typedef std::vector<GRArticulation *> GRNEList;
 class GREvent : public GRARCompositeNotationElement
 {
 	public:
-				 GREvent( GRStaff * inStaff, ARMusicalEvent * ar, bool p_ownsAR = false );
-				 GREvent(GRStaff * inStaff, ARMusicalEvent * ar, const TYPE_TIMEPOSITION & date, const TYPE_DURATION & dur);
+				 GREvent( GRStaff * inStaff, const ARMusicalEvent * ar, bool p_ownsAR = false );
+				 GREvent(GRStaff * inStaff, const ARMusicalEvent * ar, const TYPE_TIMEPOSITION & date, const TYPE_DURATION & dur);
 
 		virtual ~GREvent();
 
@@ -80,7 +80,7 @@ class GREvent : public GRARCompositeNotationElement
 
 		virtual void	setSize(float nsize)  { mSize = nsize; }
 		
-		virtual void	addArticulation( ARMusicalTag * inTag );
+		virtual void	addArticulation( const ARMusicalTag * inTag );
 				bool	hasArticulation( int inArticulationFlag ) const;
 
 		virtual int		adjustLength (const TYPE_DURATION & ndur );

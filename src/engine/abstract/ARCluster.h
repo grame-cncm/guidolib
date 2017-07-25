@@ -16,51 +16,46 @@
 
 #include <string>
 
-#include "ARNote.h"
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
 
-class TagParameterInt;
-class TagParameterString;
+class ARNote;
 
 /** \brief not yet documented
 */
-
 class ARCluster : public ARMTParameter, public ARPositionTag
 {		
-public:
-                     ARCluster();
-	                 ARCluster(const ARCluster *inCopyCluster);
-	virtual		 	~ARCluster();
+	public:
+						 ARCluster();
+						 ARCluster(const ARCluster *inCopyCluster);
+		virtual		 	~ARCluster() {}
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual const char*	getParamsStr() const	{ return kARClusterParams; };
+		virtual const char*	getTagName() const		{ return "ARCluster"; };
+		virtual std::string getGMNName() const		{ return "\\cluster"; };
 
-	virtual void    setTagParameterList(TagParameterList & tpl);
+		virtual void	setTagParameters (const TagParameterMap& params);
 
-    void setARNote(ARNote *arNote);
+		ARNote *getFirstNote()  const { return fFirstNote; }
+		ARNote *getSecondNote() const { return fSecondNote; }
 
-    ARNote *getFirstNote()  const { return firstNote; }
-    ARNote *getSecondNote() const { return secondNote; }
+		float getahdx() const                        { return fHdx; }
+		float getahdy() const                        { return fHdy; }
+		int   getNoteCount() const                   { return fNoteCount; }
+		bool  getIsThereOnlyOneNoteInCluster() const { return fSingleNote; }
 
-    float getahdx() const                        { return hdx; }
-    float getahdy() const                        { return hdy; }
-    int   getNoteCount() const                   { return noteCount; }
-    bool  getIsThereOnlyOneNoteInCluster() const { return onlyOneNoteInCluster; }
+		void  setOnlyOneNoteInCluster() { fSingleNote = true;}
+		void  setARNote(ARNote *arNote);
 
-    void  setOnlyOneNoteInCluster() {onlyOneNoteInCluster = true;}
+	protected:
+		float fHdx;
+		float fHdy;
+		int   fNoteCount;
+		bool  fSingleNote;
 
-protected:
-    float hdx;
-    float hdy;
-    int   noteCount;
-    bool  onlyOneNoteInCluster;
 
-    static ListOfTPLs ltpls;
-
-    ARNote *firstNote;
-    ARNote *secondNote;
+		ARNote *fFirstNote;
+		ARNote *fSecondNote;
 };
 
 #endif

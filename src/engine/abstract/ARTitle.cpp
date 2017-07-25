@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -13,115 +13,30 @@
 */
 
 #include <iostream>
+
 #include "ARTitle.h"
+#include "TagParameterStrings.h"
 #include "TagParameterString.h"
-#include "TagParameterList.h"
-#include "TagParameterFloat.h"
-#include "ListOfStrings.h"
 
+using namespace std;
 
-ListOfTPLs ARTitle::ltpls(1);
-
+static const TagParameterMap sARTitleMap (kARTitleParams);
 
 ARTitle::ARTitle()
 {
-	name         = NULL;
-	pageformat   = NULL;
+	setupTagParameters (sARTitleMap);
+	clearTagDefaultParameter(kTextStr);		// this is to avoid a warning regarding inherited required parameter for ARText
 	rangesetting = NO;
 }
 
-ARTitle::~ARTitle()
-{
-	delete name;
-	delete pageformat;
-}
-
-const char * ARTitle::getName() 
+const char * ARTitle::getName() const
 { 
-	if (name == NULL)
-		return NULL;
-	else
-		return name->getValue();
+	const TagParameterString* name = getParameter<TagParameterString>(kNameStr);
+	return name ? name->getValue() : 0;
 }
 
-const char * ARTitle::getPageFormat()
+const char * ARTitle::getPageFormat() const
 {
-	if (pageformat == NULL)
-		return NULL;
-	else
-		return pageformat->getValue();
-}
-
-void ARTitle::setTagParameterList(TagParameterList & tpl)
-{
-	if (ltpls.GetCount() == 0)
-	{
-		// create a list of string ...
-		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail((
-			"S,name,,r;"
-			"S,pageformat,c2,o;S,textformat,cc,o"));
-		CreateListOfTPLs(ltpls,lstrs);
-	}
-
-	TagParameterList *rtpl = NULL;
-	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
-
-	if (ret>=0 && rtpl)
-	{
-		// we found a match!
-		if (ret == 0)
-		{
-			// then, we now the match for the first ParameterList name
-			delete name;
-			delete pageformat;
-			delete textformat;
-
-			name = TagParameterString::cast(rtpl->RemoveHead());
-			assert(name);
-
-			// pageformat
-			pageformat = TagParameterString::cast(rtpl->RemoveHead());
-			assert(pageformat);	
-
-			textformat = TagParameterString::cast(rtpl->RemoveHead());
-			assert(textformat);
-		}
-
-		if (fsize && fsize->TagIsNotSet())
-		{
-			fsize->setValue(24);
-			fsize->setUnit("pt");
-		}
-		delete rtpl;
-	}
-	else
-	{
-		// failure
-	}
-	tpl.RemoveAll();
-}
-
-void ARTitle::printName(std::ostream& os) const
-{
-    os << "ARTitle";
-}
-
-void ARTitle::printGMNName(std::ostream& os) const
-{
-    os << "\\title";
-}
-
-void ARTitle::printParameters(std::ostream& os) const
-{
-    if (name)
-        os << "name: \"" << name->getValue() << "\"; ";
-
-    if (pageformat)
-        os << "pageformat: " << pageformat->getValue() << "; ";
-
-    if (textformat)
-        os << "textformat" << textformat->getValue() << ";";
-
-    ARMusicalTag::printParameters(os);
+	const TagParameterString* pf = getParameter<TagParameterString>(kPageFormatStr, true);
+	return pf ? pf->getValue() : 0;
 }

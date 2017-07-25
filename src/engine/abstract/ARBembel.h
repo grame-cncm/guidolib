@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -21,21 +21,18 @@
 */
 class ARBembel : public ARMTParameter
 {
-public:
-				 ARBembel(int p_inv = 0);
-	virtual 	~ARBembel();
+	public:
+					 ARBembel();
+		virtual 	~ARBembel() {}
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual const char*	getParamsStr() const	{ return kARBembelParams; };
+		virtual const char*	getTagName() const		{ return "ARBembel"; };
+		virtual std::string getGMNName() const		{ return "\\bembel"; };
 
-	virtual void setTagParameterList(TagParameterList & tpl);
+		int getInverse() const;
 
-	int getInverse() const { return inverse; }
-
-protected:
-	int inverse;
-	static ListOfTPLs ltpls;
+	protected:
+	//	int inverse;
 };
 
 #endif

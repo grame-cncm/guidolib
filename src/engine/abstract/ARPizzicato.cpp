@@ -14,9 +14,8 @@
 #include <iostream>
 
 #include "ARPizzicato.h"
-#include "TagParameterList.h"
+#include "TagParameterStrings.h"
 #include "TagParameterString.h"
-#include "ListOfStrings.h"
 
 using namespace std;
 
@@ -24,87 +23,29 @@ extern const char* kAboveStr;
 extern const char* kBelowStr;
 
 
-ListOfTPLs ARPizzicato::ltpls(1);
+static const TagParameterMap sARPizzicatoMap (kARPizzicatoParams);
 
-void ARPizzicato::setTagParameterList(TagParameterList & tpl)
+ARPizzicato::ARPizzicato()
 {
-	if (ltpls.GetCount() == 0)
-	{
-		ListOfStrings lstrs;
-		lstrs.AddTail("S,type,lefthand,o;S,position,,o");
-		CreateListOfTPLs(ltpls, lstrs);
+	setupTagParameters (sARPizzicatoMap);
+
+	rangesetting = ONLY;
+	fType = LEFTHAND;
+	fPosition = kAbove;
+}
+
+//--------------------------------------------------------------------------
+void ARPizzicato::setTagParameters (const TagParameterMap& params)
+{
+	ARArticulation::setTagParameters (params);
+	const TagParameterString* p = getParameter<TagParameterString>(kTypeStr);
+	if (p) {
+		string type = p->getValue();
+		if (type == "buzz")
+			fType = BUZZ;
+		else if (type == "snap" || type == "bartok")
+			fType = SNAP;
+		else if (type == "fingernail")
+			fType = FINGERNAIL;
 	}
-	
-	TagParameterList * rtpl = NULL;
-	int ret = MatchListOfTPLsWithTPL(ltpls, tpl, &rtpl);
-	
-	if (ret>=0 && rtpl)
-	{
-		//we found a match !
-		if (ret == 0)
-		{
-			TagParameterString * str = TagParameterString::cast(rtpl->RemoveHead());
-			assert(str);
-			if (str->TagIsSet())
-			{
-				std::string val(str->getValue());
-				if (val == "buzz")
-					fType = BUZZ;
-				else if (val == "snap" || val == "bartok")
-					fType = SNAP;
-				else if (val == "fingernail")
-					fType = FINGERNAIL;
-				else
-                    fType = LEFTHAND;
-			}
-			else fType = LEFTHAND;
-			delete str;
-
-			TagParameterString * ppos = TagParameterString::cast(rtpl->RemoveHead());
-			assert(ppos);
-			if (ppos->TagIsSet()) {
-				string posStr = ppos->getValue();
-				if (posStr == kAboveStr)
-					fPosition = kAbove;
-				else if (posStr == kBelowStr)
-					fPosition = kBelow;
-				else cerr << posStr << ": incorrect articulation position" << endl;
-			}
-			delete ppos;
-		}
-		delete rtpl;
-	}
-	tpl.RemoveAll();
-}
-
-void ARPizzicato::printName(std::ostream& os) const
-{
-    os << "ARPizzicato";
-}
-
-void ARPizzicato::printGMNName(std::ostream& os) const
-{
-    os << "\\pizzicato";
-}
-
-void ARPizzicato::printParameters(std::ostream& os) const
-{
-    switch (fType) {
-    case BUZZ:
-        os << "buzz";
-        break;
-    case SNAP:
-        os << "snap";
-        break;
-    case FINGERNAIL:
-        os << "fingernail";
-        break;
-    default:
-        os << "lefthand";
-        break;
-    }
-
-    os << ";";
-
-    ARMusicalTag::printParameters(os);
 }

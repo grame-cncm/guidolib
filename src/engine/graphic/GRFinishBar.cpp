@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -26,7 +26,7 @@ using namespace std;
 
 NVPoint GRFinishBar::refpos;
 
-GRFinishBar::GRFinishBar( ARFinishBar * p_ardbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & p_tp, float proportionnalRender)
+GRFinishBar::GRFinishBar( const ARFinishBar * p_ardbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & p_tp, float proportionnalRender)
 				: GRBar(p_ardbar,inStaff ,p_tp, proportionnalRender)
 {
 	mSymbol = kFinishBarSymbol;
@@ -46,7 +46,7 @@ GRFinishBar::GRFinishBar( ARFinishBar * p_ardbar, GRStaff * inStaff, const TYPE_
 	updateBoundingBox();
 }
 
-GRFinishBar::GRFinishBar(ARFinishBar * p_arbar, GRSystem * p_grsystem, GRStaff * inStaff,
+GRFinishBar::GRFinishBar( const ARFinishBar * p_arbar, GRSystem * p_grsystem, GRStaff * inStaff,
 														const TYPE_TIMEPOSITION & p_timeposition, float proportionnalRender )
 			: GRBar(p_arbar,p_grsystem,inStaff,p_timeposition, proportionnalRender)
 {
@@ -65,10 +65,6 @@ GRFinishBar::GRFinishBar(ARFinishBar * p_arbar, GRSystem * p_grsystem, GRStaff *
     fSize = inStaff->getSizeRatio();
 
 	updateBoundingBox();
-}
-
-GRFinishBar::~GRFinishBar()
-{
 }
 
 // --------------------------------------------------------------------------
@@ -125,7 +121,7 @@ void GRFinishBar::DrawWithLines( VGDevice & hdc ) const
         hdc.PopFillColor();
 }
 
-ARFinishBar * GRFinishBar::getARFinishBar()
+const ARFinishBar * GRFinishBar::getARFinishBar() const
 {
-	return static_cast/*dynamic cast*/<ARFinishBar *>(mAbstractRepresentation);
+	return static_cast/*dynamic cast*/<const ARFinishBar *>(mAbstractRepresentation);
 }

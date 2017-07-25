@@ -14,12 +14,17 @@
 
 */
 
+#include <vector>
+
 #include "GRPTagARNotationElement.h"
 #include "ARTrill.h"
 
 class GRStaff;
 class GREvent;
 class GRAccidental;
+class GRSingleNote;
+class GRSystem;
+class GRVisitor;
 
 
 /** \brief GRTrill tag
@@ -27,19 +32,32 @@ class GRAccidental;
 class GRTrill : public GRPTagARNotationElement
 {
 	private:
-		GRAccidental * createAccidental (ARMusicalVoice::CHORD_ACCIDENTAL acc, bool cautionary) const;
+		GRNotationElement* fNextEvent = 0;
+
+//		GRAccidental * createAccidental (ARMusicalVoice::CHORD_ACCIDENTAL acc, bool cautionary) const;
+		GRAccidental * createAccidental (const ARTrill * ar) const;
 
 	public:
-					 GRTrill( GRStaff * stf, ARTrill * arTrill );
+					 GRTrill( GRStaff * stf, const ARTrill * arTrill );
 		virtual		~GRTrill();
 
+		virtual void accept   (GRVisitor& visitor);
 		virtual void OnDraw( VGDevice & hdc) const;
 		virtual void OnDraw( VGDevice & hdc, float pos, float noteY, int numVoice) const;
+//        virtual void tellNoteX( const GRSingleNote * note, float x );
+//        virtual void tellNoteY( const GRSingleNote * note, float y );
         virtual void tellPosition( GObject * caller, const NVPoint & np );
 	  	NVRect		 getEnclosingBox() const;		// gives a rect that enclose the ornament including accidentals
 
 		virtual unsigned int getTextAlign() const;
 		virtual const NVPoint & getReferencePosition() const;
+	
+		void setNextEvent(GRNotationElement* ev)			{ fNextEvent = ev; }
+		void setStartOffset (float offset)					{ fStartOffset = offset; }
+		bool getBegin() const								{ return fBegin; }
+		virtual const GRTrill *		isGRTrill() const		{ return this; }
+
+		ARTrill::POS getTrillPos() const					{ return fPosition; }
 
 		
 	protected:
@@ -48,8 +66,8 @@ class GRTrill : public GRPTagARNotationElement
 		void setupTrill();
 		void setupTurn();
 		void setupInvertedTurn();
-		void setupTurnComplex();
-		void setupInvertedTurnComplex();
+//		void setupTurnComplex();
+//		void setupInvertedTurnComplex();
 		void setupMord();
 		void setupInvertedMord();
 		void setupPrallMordent();
@@ -61,13 +79,21 @@ class GRTrill : public GRPTagARNotationElement
 		GDirection chooseDirection (GREvent * inParent ) const;
 
 		GRAccidental *	fAccidental;		
-		ARTrill::TYPE	fType;
+		ARTrill::ORNAMENT fType;
 		NVPoint			sRefPos;
-		bool			begin;
+		bool			fBegin;
 		bool			fShowTR;
-		bool			fDrawOnNoteHead;
-        float			widthOfTilde;
-		
-		static float &	getLastPosX(int i);
+        float			fTildeWidth;
+		float			fStartOffset = 0;
+		ARTrill::POS	fPosition;
+	
+	private:
+		typedef std::vector<std::pair<const GRSystem*, NVRect> > TDrawRects;
+		TDrawRects	getAssociatedBoundingBox (const NEPointerList * assoc, const GRStaff* staff) const;
+		NVRect		getCurrentRect (const GRSystem* sys) const;
+
+		TDrawRects	fDrawRects;
+
+	static float &	getLastPosX(int i);
 };
 #endif

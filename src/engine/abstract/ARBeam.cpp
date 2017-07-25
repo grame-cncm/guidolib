@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -18,29 +18,17 @@
 #include "ARBeam.h"
 #include "TagParameterFloat.h"
 #include "TagParameterString.h"
-#include "TagParameterList.h"
-#include "ListOfStrings.h"
+#include "TagParameterStrings.h"
 
-ListOfTPLs ARBeam::ltpls(1);
+static const TagParameterMap sARBeamMap (kARBeamParams);
 
 ARBeam::ARBeam()
 {
+	setupTagParameters (sARBeamMap);
 	rangesetting = ONLY;
 	dx1 = dx2 = dx3 = dx4 = NULL;
 	dy1 = dy2 = dy3 = dy4 = NULL;
-	feathered = false;
-}
-
-ARBeam::~ARBeam()
-{
-	delete dx1;
-	delete dx2;
-	delete dx3;
-	delete dx4;
-	delete dy1;
-	delete dy2;
-	delete dy3;
-	delete dy4;
+	fFeathered = false;
 }
 
 bool ARBeam::MatchEndTag(const char * s)
@@ -52,108 +40,43 @@ bool ARBeam::MatchEndTag(const char * s)
 	return false;
 }
 
-void ARBeam::setTagParameterList(TagParameterList & tpl)
+void ARBeam::setTagParameters (const TagParameterMap& params)
 {
-	if (ltpls.GetCount() == 0)
-	{
-		// create a list of string ...
-
-		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(
-			(
-			"U,dy,7hs,o"));
-		lstrs.AddTail(
-			(
-			"U,dy1,7hs,o;U,dy2,7hs,o"));
-		lstrs.AddTail(
-			(
-			"U,dx1,0hs,o;U,dy1,0hs,o;U,dx2,0hs,o;U,dy2,1hs,o;"
-			"U,dx3,0hs,o;U,dy3,0hs,o;U,dx4,0hs,o;U,dy4,1hs,o"));
-		CreateListOfTPLs(ltpls,lstrs);
-	}
-
-	TagParameterList * rtpl = NULL;
-	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
-
-	if (ret>=0 && rtpl)
-	{
-		// we found a match!
-		if (ret == 0)
-		{
-			// this is the simple dy match 
-			dy1 = TagParameterFloat::cast(rtpl->RemoveHead());
+	size_t n = params.size();
+	bool hasdy1 = params.find(kDy1Str) != params.end();
+	bool hasdy2 = params.find(kDy2Str) != params.end();
+	if (n == 1) {
+		if (params.find(kDyStr) != params.end())
+			dy1 = getParameter<TagParameterFloat>(kDyStr);
+		else if (hasdy1 || hasdy2) {
+			dy1 = getParameter<TagParameterFloat>(kDy1Str, true);
+			dy3 = getParameter<TagParameterFloat>(kDy2Str, true);
 		}
-		else if (ret == 1)
-		{
-			// this is simple dy1 and dy2 match
-			dy1 = TagParameterFloat::cast(rtpl->RemoveHead());
-			dy3 = TagParameterFloat::cast(rtpl->RemoveHead());
-		}
-		else if (ret == 2)
-		{
-			// then, we now the match for
-			// the first ParameterList
-			// GuidoPos pos = rtpl->GetHeadPosition();
-
-			dx1 = TagParameterFloat::cast(rtpl->RemoveHead());
-			assert(dx1);
-	
-			dy1 = TagParameterFloat::cast(rtpl->RemoveHead());
-			assert(dy1);
-	
-			dx2 = TagParameterFloat::cast(rtpl->RemoveHead());
-			assert(dx2);
-	
-			dy2 = TagParameterFloat::cast(rtpl->RemoveHead());
-			assert(dy2);
-	
-			dx3 = TagParameterFloat::cast(rtpl->RemoveHead());
-			assert(dx3);
-	
-			dy3 = TagParameterFloat::cast(rtpl->RemoveHead());
-			assert(dy3);
-	
-			dx4 = TagParameterFloat::cast(rtpl->RemoveHead());
-			assert(dx4);
-	
-			dy4 = TagParameterFloat::cast(rtpl->RemoveHead());
-			assert(dy4);
-		}
-		delete rtpl;
 	}
-	else
-	{
-		// failure
+	else if ((n == 2) && hasdy1 && hasdy2) {
+		dy1 = getParameter<TagParameterFloat>(kDy1Str, true);
+		dy3 = getParameter<TagParameterFloat>(kDy2Str, true);
 	}
+	else {
+		dx1 = getParameter<TagParameterFloat>(kDx1Str, true);
+		dx2 = getParameter<TagParameterFloat>(kDx2Str, true);
+		dx3 = getParameter<TagParameterFloat>(kDx3Str, true);
+		dx4 = getParameter<TagParameterFloat>(kDx4Str, true);
 
-	// this sets the parameters ...
-	tpl.RemoveAll();
+		dy1 = getParameter<TagParameterFloat>(kDy1Str, true);
+		dy2 = getParameter<TagParameterFloat>(kDy2Str, true);
+		dy3 = getParameter<TagParameterFloat>(kDy3Str, true);
+		dy4 = getParameter<TagParameterFloat>(kDy4Str, true);
+	}
 }
 
 bool ARBeam::isGuidoSpecBeam() const
 {
 	const bool oneset = (dy1 && dy1->TagIsSet());
 	const bool twoset = (dy2 && dy2->TagIsSet());
-//	int threeset =  (dy3 && dy3->TagIsSet());
 	const bool fourset = (dy4 && dy4->TagIsSet());
 	if (oneset && !twoset && !fourset)	// threeset ? 
 		return true;
 	return false;
 }
 
-void ARBeam::printName(std::ostream& os) const
-{
-    os << "ARBeam";
-}
-
-void ARBeam::printGMNName(std::ostream& os) const
-{
-    os << "\\beam";
-}
-
-void ARBeam::printParameters(std::ostream& os) const
-{
-    /* TODO */
-
-    ARMusicalTag::printParameters(os);
-}

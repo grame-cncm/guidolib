@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -23,42 +23,31 @@ class TagParameterInt;
 
 /** \brief not yet documented
 */
-class ARUserChordTag : 
-	// public ARMusicalObject,
-	public ARMTParameter,
-	public ARPositionTag
+class ARUserChordTag : 	public ARMTParameter, public ARPositionTag
 {
-public:
-	ARUserChordTag(const ARUserChordTag * uct);
-	ARUserChordTag() 
-	{
-		rangesetting = ONLY;
-		labels = NULL;
-		labeli = NULL;
-		labelistr = NULL;
-	}
-	virtual ~ARUserChordTag();
+	public:
+				ARUserChordTag(const ARUserChordTag * uct);
+				ARUserChordTag() 
+				{
+					rangesetting = ONLY;
+					labels = NULL;
+					labeli = NULL;
+					labelistr = NULL;
+				}
+		virtual ~ARUserChordTag();
 
-	virtual ARMusicalObject * Copy() const;
+		virtual ARMusicalObject * Copy() const;
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual const char*	getTagName () const		{ return "ARUserChordTag"; };
+		virtual std::string getGMNName () const		{ return "\\userChordTag"; };
 
-	const char* getLabelValue() const;
+		const char* getLabelValue() const;
+		const ARMusicalObject *isARUserChordTag() const  { return this; }
 
-	virtual void setTagParameterList(TagParameterList & tpl);
-
-    /**** Function to avoid dynamic_cast ****/
-    ARMusicalObject *isARUserChordTag() { return this; }
-    /****************************************/
-
-protected:
-	static ListOfTPLs ltpls;
-
-	TagParameterString *labels;
-	TagParameterInt *labeli;
-	NVstring * labelistr;
+	protected:
+		TagParameterString *labels;
+		TagParameterInt *labeli;
+		NVstring * labelistr;
 };
 
 

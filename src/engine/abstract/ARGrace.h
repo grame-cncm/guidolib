@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -20,29 +20,21 @@
 #include "ARPositionTag.h"
 
 class TagParameterInt;
-// #include "TagParameterInt.h"
 
 /** \brief not yet documented
 */
 class ARGrace : public ARMTParameter, public ARPositionTag
 {
-public:
-				 ARGrace();
-	virtual 	~ARGrace();
+	public:
+					 ARGrace();
+		virtual 	~ARGrace() {}
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual const char*	getParamsStr() const	{ return kARGraceParams; };
+		virtual const char*	getTagName() const		{ return "ARGrace"; };
+		virtual std::string getGMNName() const		{ return "\\grace"; };
+		virtual ARGrace *isARGrace()				{ return this; }
 
-	virtual void setTagParameterList(TagParameterList& tpl);
-    
-    /**** Function to avoid dynamic_cast ****/
-    virtual ARGrace *isARGrace() { return this; }
-    /*****************************************/
-
-protected:
-	TagParameterInt * num;
-	static ListOfTPLs ltpls;
+		const TagParameterInt * getNum() const;
 };
 
 #endif

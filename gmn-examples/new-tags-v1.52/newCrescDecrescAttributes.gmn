@@ -1,32 +1,21 @@
 % New \cresc / \decresc-tag attributes :
 %
-% - dm            (dynamic marking) sets the intensity at the crescendo's right
-%					          default value is ""
 % - dx1            defines the horizontal offset of the symbol's left
 %					           default value is 0
 % - dx2            defines the horizontal offset of the symbol's right
-%					           default value is 0
-% - dy              defines the vertical offset of the symbol
 %					           default value is 0
 % - deltaY        defines the vertical spacing (between the end of the two lines) of the symbol's right
 %					           default value is 3
 % - color          defines the symbol's color
 %                         value type : string
 %                         default value is "black"
-% - size            defines the marking's size
-%                         default value is 1
 % - thickness    defines the line's thickness
 %                         default value is 0.16
-%
-% Remark : when dx1 (or (-dx2)) is higher than crescendo/decrescendo's horizontal size,
-% crescendo/decrescendo doesn't into a decrescendo/crescendo, but dx1 and dx2 are reset
-% to default.
-%
 {
     [
-        \cresc<dm="ff", dx1=2, dx2=-4, dy=1.5, deltaY=5, color="red", size=1.5> (a b e)
+        \cresc<dx1=2, dx2=-2, dy=-1.5, deltaY=5, color="red"> (a b e)
     ],
     [
-        \decresc<thickness=0.16> (a f/2 f/4 empty)
+        \decresc<thickness=0.3> (a f/2 f/4 empty)
     ]
 }

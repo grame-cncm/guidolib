@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -26,7 +26,7 @@
 #include <iostream>
 using namespace std;
 
-GRDoubleBar::GRDoubleBar(ARDoubleBar * ardbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float propRender)
+GRDoubleBar::GRDoubleBar(const ARDoubleBar * ardbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float propRender)
 				: GRBar(ardbar, inStaff ,inTimePos, propRender)
 {
 	mSymbol = kDoubleBarSymbol;
@@ -39,7 +39,7 @@ GRDoubleBar::GRDoubleBar(ARDoubleBar * ardbar, GRStaff * inStaff, const TYPE_TIM
     fStaffThickness = inStaff->getLineThickness();
 }
 
-GRDoubleBar::GRDoubleBar(ARDoubleBar * ardbar, GRSystem * p_grsystem, GRStaff * inStaff,
+GRDoubleBar::GRDoubleBar(const ARDoubleBar * ardbar, GRSystem * p_grsystem, GRStaff * inStaff,
 														const TYPE_TIMEPOSITION & inTimePos, float propRender)
 			: GRBar(ardbar,p_grsystem,inStaff,inTimePos, propRender)
 {
@@ -51,10 +51,6 @@ GRDoubleBar::GRDoubleBar(ARDoubleBar * ardbar, GRSystem * p_grsystem, GRStaff * 
 
     fLineNumber = inStaff->getNumlines();
     fStaffThickness = inStaff->getLineThickness();
-}
-
-GRDoubleBar::~GRDoubleBar()
-{
 }
 
 // --------------------------------------------------------------------------
@@ -98,4 +94,4 @@ void GRDoubleBar::DrawWithLines( VGDevice & hdc ) const
         hdc.PopPenColor();
 }
 
-ARDoubleBar * GRDoubleBar::getARDoubleBar()	{ return static_cast<ARDoubleBar *>(mAbstractRepresentation); }
+const ARDoubleBar * GRDoubleBar::getARDoubleBar() const	{ return static_cast<const ARDoubleBar *>(mAbstractRepresentation); }

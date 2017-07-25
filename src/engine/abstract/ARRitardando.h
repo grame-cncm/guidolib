@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -15,48 +15,35 @@
 
 */
 
-#include "ARMTParameter.h"
+#include "ARFontAble.h"
 #include "ARPositionTag.h"
-#include "TagParameterString.h"
-#include "TagParameterFloat.h"
 
 class TagParameterString;
 
 /** \brief Ritardando tag
 */
 
-class ARRitardando : public ARMTParameter,  public ARPositionTag
+class ARRitardando : public ARFontAble,  public ARPositionTag
 {		
-public:			
+	public:			
 
-	virtual bool MatchEndTag(const char * s);
+		virtual bool MatchEndTag(const char * s);
 
-					ARRitardando();
-	virtual 		~ARRitardando();
+						 ARRitardando();
+		virtual 		~ARRitardando() {}
 
-	virtual void setTagParameterList(TagParameterList & tpl);
+		virtual void setTagParameters (const TagParameterMap& params);
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual const char*	getParamsStr() const	{ return kARRitardandoParams; };
+		virtual const char*	getTagName() const		{ return "ARRitardando"; };
+		virtual std::string getGMNName() const		{ return "\\ritardando"; };
 
-	TagParameterString * getTempo()             { return tempo; }
-	TagParameterString * getAbsTempo()          { return abstempo; }
-	const char* getFont() const	                { return font ? font->getValue() : 0; }
-	const char*	getFAttrib() const              { return fattrib ? fattrib->getValue() : 0; }
-	int			getFSize(float curLSPACE) const { return fsize ? (int) fsize->getValue(curLSPACE) : 0; }
+		const TagParameterString * getTempo() const       { return tempo; }
+		const TagParameterString * getAbsTempo() const    { return abstempo; }
 
-protected:
-	// TagParameters ..
-	TagParameterString *tempo;
-	TagParameterString *abstempo;
-	TagParameterString *font;
-	TagParameterString *fattrib;
-	TagParameterFloat  *fsize;
-
-	// this is important for allowed
-	// TagParameters ....
-	static ListOfTPLs ltpls;
+	protected:
+		const TagParameterString *tempo;
+		const TagParameterString *abstempo;
 };
 
 #endif

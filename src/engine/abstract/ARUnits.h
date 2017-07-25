@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,33 +14,32 @@
   research@grame.fr
 
 */
+
+#include <string>
+
 #include "ARMTParameter.h"
-// #include "GRDefine.h"
-//#include "defines.h"
 
 /** \brief not yet documented
 */
 
 class ARUnits : public ARMTParameter
 {
-public:
-				 ARUnits() {};
-	virtual 	~ARUnits();
+	public:
+					 ARUnits();
+		virtual 	~ARUnits() {}
 
-	static const NVstring & getUnit()  { return sType; }
+		static const char* getUnit()				{ return sType; }
 
-	virtual bool IsStateTag() const { return true; }
-	
-	virtual void setTagParameterList( TagParameterList & tpl );
+		virtual bool IsStateTag() const				{ return true; }
+		
+		virtual void setTagParameters (const TagParameterMap& params);
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual const char*	getParamsStr() const	{ return kARUnitsParams; };
+		virtual const char*	getTagName() const		{ return "ARUnits"; };
+		virtual std::string getGMNName() const		{ return "\\unit"; };
 
-protected:
-	static NVstring sType;
-
-	static ListOfTPLs ltpls;
+	protected:
+		static const char* sType;
 };
 
 #endif 

@@ -15,21 +15,21 @@
 
 #include "ARGlissando.h"
 
-#include "TagParameterList.h"
 #include "TagParameterFloat.h"
 #include "TagParameterString.h"
-#include "ListOfStrings.h"
+#include "TagParameterStrings.h"
 #include "TimeUnwrap.h"
 
 using namespace std;
 
-ListOfTPLs ARGlissando::ltpls(1);
+static const TagParameterMap sARGlissandoMap (kARGlissandoParams);
 
 ARGlissando::ARGlissando()
 {
+	setupTagParameters (sARGlissandoMap);
+
 	rangesetting = ONLY;
 	setAssociation(ARMusicalTag::RA);
-	
 	fDx1       = 0;
     fDy1       = 0;
     fDx2       = 0;
@@ -41,6 +41,9 @@ ARGlissando::ARGlissando()
 
 ARGlissando::ARGlissando(const ARGlissando * glissando)	: ARMTParameter(-1, glissando)
 {
+	setupTagParameters (sARGlissandoMap);
+	copyParameters (glissando->getTagParameters());
+
 	rangesetting = ONLY;
 	setAssociation(ARMusicalTag::RA);
 	
@@ -51,76 +54,19 @@ ARGlissando::ARGlissando(const ARGlissando * glissando)	: ARMTParameter(-1, glis
     fThickness = glissando->fThickness;
     fFill      = glissando->fFill;
 	//fWavy      = glissando->fWavy;
-
-//    if (glissando->color)
-//        color = TagParameterString::cast(glissando->color->getCopy());
-
-    // dx/dy ?
 }
 
-void ARGlissando::setTagParameterList(TagParameterList & tpl)
+
+void ARGlissando::setTagParameters (const TagParameterMap& params)
 {
-	if (ltpls.GetCount() == 0)
-	{
-		ListOfStrings lstrs; // (1); std::vector test impl
-		
-		lstrs.AddTail( "U,dx1,0,o;U,dy1,0,o;"
-			"U,dx2,0,o;U,dy2,0,o;"
-			"S,fill,false,o;U,thickness,0.3,o"
-			//";S,lineStyle,line,o"
-            );
-		
-		CreateListOfTPLs(ltpls,lstrs);
-	}
-
-	TagParameterList * rtpl = 0;
-	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
-	if (ret>=0 && rtpl)
-	{
-		// we found a match!
-		if (ret == 0)
-		{
-			TagParameterFloat *f = TagParameterFloat::cast(rtpl->RemoveHead());
-            fDx1 = f->getValue();
-            delete f;
-
-			f = TagParameterFloat::cast(rtpl->RemoveHead());
-            fDy1 = f->getValue();
-            delete f;
-
-			f = TagParameterFloat::cast(rtpl->RemoveHead());
-            fDx2 = f->getValue();
-            delete f;
-
-			f = TagParameterFloat::cast(rtpl->RemoveHead());
-            fDy2 = f->getValue();
-            delete f;
-
-            TagParameterString *s = TagParameterString::cast(rtpl->RemoveHead());
-            fFill = s->getBool();
-            delete s;
-
-			f = TagParameterFloat::cast(rtpl->RemoveHead());
-            fThickness = f->getValue();
-            delete f;
-
-			/*s = TagParameterString::cast(rtpl->RemoveHead());
-			string wavyLine("wavy");
-			if (wavyLine == s->getValue())
-				fWavy = true;*/
-		}
-
-		delete rtpl;
-	}
-	else
-	{
-		// failure
-	}
-
-	tpl.RemoveAll();
-
-	return;
+	fDx1 = getParameter<TagParameterFloat>(kDx1Str, true)->getValue();
+	fDy1 = getParameter<TagParameterFloat>(kDy1Str, true)->getValue();
+	fDx2 = getParameter<TagParameterFloat>(kDx2Str, true)->getValue();
+	fDy2 = getParameter<TagParameterFloat>(kDy2Str, true)->getValue();
+	fFill = getParameter<TagParameterString>(kFillStr, true)->getBool();
+	fThickness = getParameter<TagParameterFloat>(kThicknesStr, true)->getValue();
 }
+
 
 void ARGlissando::browse(TimeUnwrap& mapper) const
 {
@@ -137,24 +83,3 @@ bool ARGlissando::MatchEndTag(const char * s)
 	return 0;
 }
 
-void ARGlissando::printName(std::ostream& os) const
-{
-    os << "ARGlissando";
-}
-
-void ARGlissando::printGMNName(std::ostream& os) const
-{
-    os << "\\glissando";
-}
-
-void ARGlissando::printParameters(std::ostream& os) const
-{
-    os << "dx1: "       << fDx1       << "; ";
-    os << "dy1: "       << fDy1       << "; ";
-    os << "dx2: "       << fDx2       << "; ";
-    os << "dy2: "       << fDy2       << "; ";
-    os << "fill: "      << fFill      << "; ";
-    os << "thickness: " << fThickness << "; ";
-
-    ARMusicalTag::printParameters(os);
-}

@@ -50,17 +50,16 @@ GRSingleRest::GRSingleRest(GRStaff * grstf,const TYPE_DURATION & theDuration )
 	mCurLSPACE = grstf->getStaffLSPACE();
 }
 
-GRSingleRest::GRSingleRest(GRStaff *grstf, ARRest* arrest) : GRRest(grstf,arrest)
+GRSingleRest::GRSingleRest(GRStaff *grstf, const ARRest* arrest) : GRRest(grstf,arrest)
 {
 	assert(arrest);
 	firstbar = secondbar = 0;
 	createRest(DURATION_1);
 }
 
-GRSingleRest::GRSingleRest(GRStaff * grstf, ARRest * arrest, const TYPE_TIMEPOSITION & date,
+GRSingleRest::GRSingleRest(GRStaff * grstf, const ARRest * arrest, const TYPE_TIMEPOSITION & date,
 			const TYPE_DURATION & duration, const TYPE_DURATION p_durtemplate)
 			: GRRest(grstf, arrest, date, duration), mRestAppearance(arrest->getAppearance())
-
 {
 	assert(arrest);
 	firstbar = secondbar = NULL;
@@ -318,7 +317,7 @@ const NVPoint & GRSingleRest::getReferencePosition() const
 	return sRefpos;
 }
 
-void GRSingleRest::setRestFormat( ARRestFormat * restfrmt )
+void GRSingleRest::setRestFormat( const ARRestFormat * restfrmt )
 {
 	traceMethod("setRestFormat");
 	if (restfrmt != 0) {

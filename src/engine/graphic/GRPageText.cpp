@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -25,7 +25,7 @@
 #include "FontManager.h"
 
 
-GRPageText::GRPageText ( ARMusicalTag * o, GRPage * p_grpage,
+GRPageText::GRPageText ( const ARMusicalTag * o, GRPage * p_grpage,
 				 const char* p_txt, const char* p_pageformat,
 				 const char* p_textformat, const char* p_textfont,
 				 int p_textsize, const char* p_textattrib)
@@ -113,10 +113,6 @@ GRPageText::GRPageText ( ARMusicalTag * o, GRPage * p_grpage,
 		mBoundingBox.top = (GCoord)(-height);
 		mBoundingBox.bottom = 0;
 	}
-}
-
-GRPageText::~GRPageText()
-{
 }
 
 void GRPageText::OnDraw(VGDevice & hdc) const

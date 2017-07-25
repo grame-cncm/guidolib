@@ -16,7 +16,7 @@
 */
 
 #include "GREvent.h"
-#include "GRVisitor.h"
+//#include "GRVisitor.h"
 
 /** \brief An empty (invisible) event.
 */
@@ -24,12 +24,8 @@ class GREmpty : public GREvent
 {
 	public:
 
-				GREmpty( GRStaff * inStaff,
-							ARMusicalEvent * abstractRepresentationOfEmpty,
-							bool p_ownsAR = false );
-
-				GREmpty( GRStaff * inStaff,
-							ARMusicalEvent * abstractRepresentationOfEmpty,
+				GREmpty( GRStaff * inStaff, const ARMusicalEvent * ar, bool p_ownsAR = false );
+				GREmpty( GRStaff * inStaff, const ARMusicalEvent * ar,
 							const TYPE_TIMEPOSITION theRelativeTimePositionOfGR,
 							const TYPE_DURATION theDurationOfGR);
 		

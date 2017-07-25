@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -15,7 +15,6 @@
 #include "ARUserChordTag.h"
 
 #include "GRStaff.h"
-// #include "GREmpty.h"
 #include "GRSpring.h"
 #include "GRSystem.h"
 #include "GRSystemTag.h"
@@ -23,7 +22,7 @@
 #include "GRVoice.h"
 
 
-GRChordTag::GRChordTag(GRStaff * grstaff, ARUserChordTag * pchordtag )
+GRChordTag::GRChordTag(GRStaff * grstaff, const ARUserChordTag * pchordtag )
 						: GRPTagARNotationElement(pchordtag)
 {
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
@@ -37,10 +36,6 @@ GRChordTag::GRChordTag(GRStaff * grstaff, ARUserChordTag * pchordtag )
 	mStartEndList.AddTail(sse);
 }
 
-GRChordTag::~GRChordTag()
-{
-}
-
 void GRChordTag::addAssociation(GRNotationElement * grnot)
 {
 //	GRPTagARNotationElement::addAssociation(grnot);
@@ -49,14 +44,6 @@ void GRChordTag::addAssociation(GRNotationElement * grnot)
 void GRChordTag::removeAssociation(GRNotationElement * grnot)
 {
 //	GRPTagARNotationElement::removeAssociation(grnot);
-}
-
-void GRChordTag::RangeEnd(GRStaff * grstaff)
-{
-}
-
-void GRChordTag::tellPosition(GObject * obj, const NVPoint & pt)
-{
 }
 
 /** \brief Called when the linked GRSystemTag gets a position-update

@@ -4,7 +4,7 @@
   	\stemsDown  
 	\beam( 
 	g/8 
-	\trill( { d, e& })
+	\trill<"e&">(d)
 	)
 
 	{a1/8, f} { c, e }

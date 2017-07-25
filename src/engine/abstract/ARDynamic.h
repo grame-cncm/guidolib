@@ -23,32 +23,29 @@
 */
 class ARDynamic : public ARMTParameter, public ARPositionTag
 {
-public:
-				 ARDynamic();
-				 ARDynamic(const ARDynamic* dynamic);
-    virtual		~ARDynamic() {}
+	public:
+					 ARDynamic();
+					 ARDynamic(const ARDynamic* dynamic);
+		virtual		~ARDynamic() {}
 
-    virtual void setTagParameterList(TagParameterList & tlist);
-	virtual void printParameters(std::ostream& os) const;
+		virtual void setTagParameters (const TagParameterMap& params);
 
-    const NVstring &getDynamicMarking() const { return dynamicMarking; }
-    const float     getDx1()            const { return dx1; }
-	const float     getDx2()            const { return dx2; }
-    const float     getDy()             const { return dy; }
-	const float     getDeltaY()         const { return deltaY; }
-    const float     getThickness()      const { return thickness; }
-	bool			autoPos()			const { return fAutoPos; }
+		virtual const char*	getParamsStr() const	{ return kARDynamicParams; };
+		virtual const char*	getTagName() const		{ return "ARDynamic"; };
 
-protected:
-    NVstring dynamicMarking;
-    float    dx1;
-	float    dx2;
-    float    dy;
-	float    deltaY;
-    float    thickness;
-	bool	 fAutoPos;
+		float     getDx1()				const { return fDx1; }
+		float     getDx2()				const { return fDx2; }
+		float     getDy(float curlspace) const;
+		float     getDeltaY()			const { return fDeltaY; }
+		float     getThickness()		const { return fThickness; }
+		bool	  autoPos()				const { return fAutoPos; }
 
-    static ListOfTPLs ltpls;
+	private:
+		float    fDx1;
+		float    fDx2;
+		float    fDeltaY;
+		float    fThickness;
+		bool	 fAutoPos;
 };
 
 #endif

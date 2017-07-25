@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -21,19 +21,18 @@
 */
 class ARSlur : public ARBowing
 {
-public:
-             ARSlur();
-             ARSlur(const ARSlur * slr);
-    virtual ~ARSlur();
+	public:
+				 ARSlur() {}
+				 ARSlur(const ARSlur * slr) : ARBowing(slr) {}
+		virtual ~ARSlur() {}
 
-    virtual ARMusicalObject * Copy() const;
-    virtual bool MatchEndTag(const char *s);
+		virtual ARMusicalObject * Copy() const		{ return new ARSlur(this); }
+		virtual bool MatchEndTag(const char *s);
 
-    virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-    virtual void printParameters(std::ostream& os) const;
+		virtual const char*	getTagName() const		{ return "ARSlur"; };
+		virtual std::string getGMNName() const		{ return "\\slur"; };
 
-    virtual void browse(TimeUnwrap& mapper) const;
+    	virtual void browse(TimeUnwrap& mapper) const;
 };
 
 

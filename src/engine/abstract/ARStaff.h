@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -16,15 +16,10 @@
 */
 
 #include "ARMTParameter.h"
-class TagParameterInt;
-
-class TagParameterString;
-class ARMusicalObject;
 
 /** \brief not yet documented
 */
-class ARStaff : // public ARMusicalObject,
- 	public ARMTParameter
+class ARStaff : public ARMTParameter
 {
   public:
 				 ARStaff(const TYPE_TIMEPOSITION & timeposition);
@@ -32,30 +27,23 @@ class ARStaff : // public ARMusicalObject,
 				 ARStaff();
 			 	 ARStaff(const ARStaff * stf);
 
-		virtual ~ARStaff();
+		virtual ~ARStaff() {}
 
-		virtual ARMusicalObject * Copy() const;
-	    virtual bool IsStateTag() const;
+		virtual ARMusicalObject * Copy() const		{ return new ARStaff(this); }
+	    virtual bool IsStateTag() const				{ return true; }
 
-		virtual int	 getOrder() const		{ return kStaffOrder; }
-	    virtual void printName(std::ostream& os) const;
-	    virtual void printGMNName(std::ostream& os) const;
-	    virtual void printParameters(std::ostream& os) const;
-	
-		virtual void setTagParameterList(TagParameterList & theTagParameterList);
+		virtual int			getOrder() const		{ return kStaffOrder; }
+		virtual const char*	getParamsStr() const	{ return kARStaffParams; };
+		virtual const char*	getTagName() const		{ return "ARStaff"; };
+		virtual std::string getGMNName() const		{ return "\\staff"; };
 
 		int			getStaffNumber() const;
 		const char* getStaffID() const;
         
-    /**** Function to avoid dynamic_cast ****/
-    ARMusicalObject *isARStaff() { return this; }
-    /*****************************************/
+		const ARMusicalObject *isARStaff() const	{ return this; }
 
-  protected:
-	  TagParameterString * ids;
-	  TagParameterInt * idi;
-
-	  static ListOfTPLs ltpls;
+	private:
+		void init();
   };
 
 

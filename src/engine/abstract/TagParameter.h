@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -18,45 +18,56 @@
 /** \brief The base class for all guido tags.
 */
 
-#include "nvstring.h"
+#include <string>
+#include <iostream>
 
 class TagParameter 
 {
 	public:
-	  		enum PARSEFLAG { SETBYPOSITION, SETBYNAME, SETBYAUTO, NOTSET };
+	  		enum PARSEFLAG { SETBYPOSITION, SETBYNAME, SETBYAUTO, NOTSET, SET };
 	
-					 TagParameter() : pflag( NOTSET ), required(false) { }
-					 TagParameter(const TagParameter & tp );
+					 TagParameter() : fFlag( NOTSET ), fRequired(false) { }
 		virtual 	~TagParameter() { }
 
-		virtual void		set( const TagParameter & in );
+		virtual void			set ( const TagParameter & in );
 
-		virtual TagParameter *	getCopy() const = 0;
-		virtual bool			copyValue(const TagParameter *tp) = 0;
+		virtual TagParameter *	getCopy() const						{ return 0; }
+		virtual bool			copyValue(const TagParameter *tp)	{ return false; }
 
-				void 	setRequired(bool i)			{ required = i; }
-	  			void 	setIsAuto()  		 		{ pflag = SETBYAUTO; }
+		virtual void 	print(std::ostream& out);
+
+				void 	setRequired(bool i)			{ fRequired = i; }
+	  			void 	setIsAuto()  		 		{ fFlag = SETBYAUTO; }
+	  			void 	setByName()  		 		{ fFlag = SETBYNAME; }
+	  			void 	setNoSet()  		 		{ fFlag = NOTSET; }
+	  			void 	setByPos()  		 		{ fFlag = SETBYPOSITION; }
+	  			void 	setBySet()  		 		{ fFlag = SET; }
 	  	virtual void 	setValue(const char *)		{ }
-	  			void 	setName(const char *p)  	{ name = p; }
+	  			void 	setName(const std::string& p) { fName = p; }
 
-			  	bool TagIsRequired() const 			{ return required; }
-			  	bool TagIsSet() const  				{ return pflag != NOTSET; };
-			  	bool TagIsSetByPosition() const  	{ return pflag == SETBYPOSITION; }
-			  	bool TagIsSetByName() const 		{ return pflag == SETBYNAME; }
-			  	bool TagIsSetByAuto() const  		{ return pflag == SETBYAUTO; }
-			  	bool TagIsNotSet() const 			{ return pflag == NOTSET; }
+				const std::string& 	getName() const { return fName; }
+			  	bool TagIsRequired() const 			{ return fRequired; }
+			  	bool TagIsSet() const  				{ return fFlag != NOTSET; };
+			  	bool TagIsSetByPosition() const  	{ return fFlag == SETBYPOSITION; }
+			  	bool TagIsSetByName() const 		{ return fFlag == SETBYNAME; }
+			  	bool TagIsSetByAuto() const  		{ return fFlag == SETBYAUTO; }
+			  	bool TagIsNotSet() const 			{ return fFlag == NOTSET; }
 
 		virtual bool isString() const	{ return false; }
 		virtual bool isInt() const		{ return false; }
 		virtual bool isFloat() const	{ return false; }
         virtual bool isRGBValue() const { return false; }
 	  	
-	  	
-		NVstring name;
-		PARSEFLAG pflag;
-		bool required; 			// is 1, if the tagparameter is  required.
+	private:
+		std::string fName;
+		PARSEFLAG	fFlag;
+		bool		fRequired;
 };
 
+inline std::ostream& operator << ( std::ostream & os, TagParameter* p) { p->print(os); return os; }
+
+typedef std::shared_ptr<TagParameter>	STagParameterPtr;
+typedef std::vector<STagParameterPtr>	TagParametersList;
 
 #endif
 

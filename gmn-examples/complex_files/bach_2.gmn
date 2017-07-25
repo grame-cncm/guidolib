@@ -67,7 +67,7 @@
           e/4 \slurEnd 
          \tie<dy1=2.4hs,dx2=-1hs,dy2=2.4hs,h=1.75hs>( 
 		 \fingering<text="4 5",dy=8hs,fsize=7pt>( \stemsUp<5hs> d) d ) 
-		  \tieBegin<dy1=2hs,dy2=2hs,dx2=0hs>
+		  \tieBegin<"up">
 		      \fingering<text="4 5",dy=8hs,fsize=7pt>(c#) 
  %measure 5 (voice 1)
           \bm( \stemsUp<8hs> c#/16 \stemsUp 
@@ -75,15 +75,11 @@
 			 \stemsUp<7.5hs> c# \stemsUp ) 
           \bm( \fingering<text="2",dy=12.5hs,fsize=7pt>( 
 		  \stemsUp<8hs> h1/8 ) \acc( \stemsUp<5hs> g#2 \stemsUp)) 
-		  \slurBegin % <dy2=2hs,dx2=0hs>
+		  \slurBegin<dy1=2hs,dy2=2hs,h=5>
 		      \fingering<text="5",dy=5hs,fsize=7pt>( \stemsUp<4hs> a/2)
-%			  empty*0/4 \slurEnd
-%		  \newSystem<dy=4.15cm>
 % measure 6 (voice 1)
           \staff<1> % ,dy=1.08cm> 
-%		  \slurBegin<dx1=-2hs,dy1=4hs,dx2=0hs,dy2=2hs,h=0.75hs> 
-%		       empty*0/4 \space<2hs> 
-\bm( \stemsUp<5.5hs> a/16 \stemsUp 
+			\bm( \stemsUp<5.5hs> a/16 \stemsUp 
 			     \slurEnd \fingering<text="2",dy=13hs,fsize=7pt>( c# ) 
 				 \fingering<text="1",dy=11.25hs,fsize=7pt>(d) 
 				 \stemsUp<6hs> \fingering<text="3",dy=9.5hs,fsize=7pt>(e)  
@@ -102,18 +98,13 @@
 		 \fingering<text="4",fsize=7pt,dy=9.25hs>(d)
 		   \stemsUp e d \stemsUp<7hs> c# \stemsUp )
          \stemsUp<5.5hs> \fingering<text="5",fsize=7pt,dy=8hs>(h1/4)
-		  \tieBegin 
-%<dy1=2.5hs,dx2=0,dy2=1.5hs,h=1.25hs> 
+		  \tieBegin<"up"> 
 		\stemsUp<4.5hs> e2
-%		  empty*0/4 \tieEnd
-% \newSystem<dy=4.25cm>
 % measure 8 (voice 1)
 	      \staff<1> % ,dy=1.02cm>
-%		  \tieBegin<dx1=-2hs,dy1=1.5hs,dx2=-0.5hs,dy2=2.5hs,h=0.75hs> 
-%		  empty*0/4 \space<2hs>
           \bm( e/8 \tieEnd \stemsUp<6.5hs> 
 		      \fingering<text="3",fsize=7pt,dy=12hs>(a1) \stemsUp)
-		\dotFormat<dy=1hs>
+			\dotFormat<dy=1hs>
            \bm( d2/8. e/16)
            \bm(c# h1 a h )
            \bm( c#2 h1 c#2 d# )

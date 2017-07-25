@@ -35,10 +35,10 @@ using namespace std;
 extern GRStaff * gCurStaff;
 
 //_______________________________________________________________________
-GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
-  : GRPTagARNotationElement(abstractRepresentationOfSymbol), haveToDisplayWarningMsg(false)
+GRSymbol::GRSymbol(GRStaff * p_staff, const ARSymbol * ar)
+  : GRPTagARNotationElement(ar), haveToDisplayWarningMsg(false)
 {
-    assert(abstractRepresentationOfSymbol);
+    assert(ar);
 
 	GRSystemStartEndStruct * sse = new GRSystemStartEndStruct;
 	GRSymbolSaveStruct * st = new GRSymbolSaveStruct;
@@ -51,23 +51,25 @@ GRSymbol::GRSymbol(GRStaff * p_staff, ARSymbol * abstractRepresentationOfSymbol)
     st->bitmap = NULL;
 
 	// first, look for an existing file using a list of access paths
-	string filepath = findFile( abstractRepresentationOfSymbol->getSymbolPath(), abstractRepresentationOfSymbol->getPath() );
+	string filepath = findFile( ar->getSymbolPath(), ar->getPath() );
 
 	// when file exists
 	if (filepath.size()) {
 		st->bitmap = new Bitmap(filepath.c_str());
         
         if (st->bitmap->getDevice()) {
-            st->positionString = abstractRepresentationOfSymbol->getPositionString();
+            st->positionString = ar->getPositionString();
 
-            int symbolFixedWidth  = abstractRepresentationOfSymbol->getFixedWidth();
-            int symbolFixedHeight = abstractRepresentationOfSymbol->getFixedHeight();
+            int symbolFixedWidth  = ar->getFixedWidth();
+            int symbolFixedHeight = ar->getFixedHeight();
 
             float sizex, sizey;
             symbolFixedWidth  ? sizex = float(symbolFixedWidth)  : sizex = (float)st->bitmap->GetWidth();
             symbolFixedHeight ? sizey = float(symbolFixedHeight) : sizey = (float)st->bitmap->GetHeight();
 
-            float symbolSize = abstractRepresentationOfSymbol->getSize();
+            const TagParameterFloat* p = ar->getSize();
+            float symbolSize = p ? p->getValue() : 1.0;
+//            float symbolSize = ar->getSize();
 
             st->boundingBox.right = sizex * symbolSize * kVirtualToPx;
             st->boundingBox.top = sizey * symbolSize * kVirtualToPx;
@@ -175,7 +177,9 @@ void GRSymbol::OnDraw( VGDevice & hdc ) const
         symbolFixedHeight ? sizey = float(symbolFixedHeight) : sizey = (float)st->bitmap->GetHeight();
         // --------------------------------
 
-        float currentSize = arSymbol->getSize();
+		const TagParameterFloat* p = arSymbol->getSize();
+		float currentSize = p ? p->getValue() : 1.0;
+//        float currentSize = arSymbol->getSize();
         float positionStringDy;
 
         if (!st->positionString.compare("top"))

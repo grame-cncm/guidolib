@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -56,7 +56,7 @@ class NEPointerList : public NEList
 		void setZeroSpacing(const TYPE_TIMEPOSITION & timePosition, 
 			NVPoint &position, int addspace = 1);
 
-		NEPointerList* getElementsWithTimePosition(const TYPE_TIMEPOSITION & timePosition);
+		NEPointerList* getElementsWithTimePosition(const TYPE_TIMEPOSITION & timePosition) const;
 
 		TYPE_TIMEPOSITION getNextTimePosition(const TYPE_TIMEPOSITION & timePosition);
 

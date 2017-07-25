@@ -51,7 +51,7 @@ GRPage*     GRBar::fCurrentPage = 0;
 GRSystem*   GRBar::fCurrentSystem = 0;
 
 // --------------------------------------------------------------------------
-GRBar::GRBar(ARBar * p_arbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float propRender )
+GRBar::GRBar(const ARBar * p_arbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float propRender )
 	: GRTagARNotationElement(p_arbar,inStaff->getStaffLSPACE()), mProportionalRender(propRender)
 {
 	mGrStaff = inStaff;
@@ -67,7 +67,7 @@ GRBar::GRBar(ARBar * p_arbar, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTim
 
 // --------------------------------------------------------------------------
 // this constructor uses a GRSystem (it is a system (or accolade)-bar)
-GRBar::GRBar(ARBar * p_arbar, GRSystem * , GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float propRender  )
+GRBar::GRBar(const ARBar * p_arbar, GRSystem * , GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float propRender  )
 	: GRTagARNotationElement(p_arbar,inStaff->getStaffLSPACE()), mProportionalRender(propRender)
 {
 	mGrStaff = inStaff;
@@ -194,7 +194,7 @@ bool GRBar::isSystemSlice() const
 // --------------------------------------------------------------------------
 void GRBar::DisplayMeasureNum( VGDevice & hdc ) const
 {
-    ARBar *arBar = getARBar();
+    const ARBar *arBar = getARBar();
     const ARBar *analyzedBar = NULL;
     bool systemNumbering = false;
     bool pageNumbering = false;
@@ -349,9 +349,9 @@ void GRBar::OnDraw(VGDevice & hdc ) const
 }
 
 // --------------------------------------------------------------------------
-ARBar * GRBar::getARBar() const
+const ARBar * GRBar::getARBar() const
 {
-	return /*dynamic*/static_cast<ARBar *>(getAbstractRepresentation());
+	return /*dynamic*/static_cast<const ARBar *>(getAbstractRepresentation());
 }
 
 // --------------------------------------------------------------------------

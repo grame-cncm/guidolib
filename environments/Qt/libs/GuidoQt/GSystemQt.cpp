@@ -45,10 +45,13 @@ VGDevice * GSystemQt::CreateDisplayDevice()
 }
 
 //------------------------------------------------------------------------
-VGDevice*		GSystemQt::CreateMemoryDevice( int, int )
+VGDevice*		GSystemQt::CreateMemoryDevice( int w, int h)
 {
-	assert(0);	//Not implemented.
-	return 0;
+    GDeviceQt *memDevice = 0;
+	QPainter * mQPainter = new QPainter(new QImage (w, h, QImage::Format_ARGB32_Premultiplied));
+	mQPainter->setRenderHints (QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+	memDevice = new GDeviceQt(mQPainter, this);
+	return memDevice;
 }
 
 //------------------------------------------------------------------------

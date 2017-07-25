@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -39,11 +39,11 @@ class GRSingleRest : public GRRest
 			P128 	= kP128Symbol	// 47 // SCR_128REST '\x2F'
 		};
 	
-				GRSingleRest(GRStaff * grstf, const TYPE_DURATION & theDuration);
-				GRSingleRest(GRStaff * grstf, ARRest * abstractRepresentationOfRest);
-				GRSingleRest(GRStaff * grstf, ARRest * abstractRepresentationOfRest,
-								const TYPE_TIMEPOSITION & relativeTimePositionOfGRRest,
-								const TYPE_DURATION & durationOfGRRest,
+				GRSingleRest(GRStaff * grstf, const TYPE_DURATION & duration);
+				GRSingleRest(GRStaff * grstf, const ARRest * ar);
+				GRSingleRest(GRStaff * grstf, const ARRest * ar,
+								const TYPE_TIMEPOSITION & date,
+								const TYPE_DURATION & duration,
 								const TYPE_DURATION p_durtemplate = DURATION_0);
 	
 		virtual ~GRSingleRest();
@@ -68,7 +68,7 @@ class GRSingleRest : public GRRest
 
 		virtual int adjustLength(const TYPE_DURATION & ndur);
 
-		void setRestFormat(ARRestFormat * restfrmt);
+		void setRestFormat(const ARRestFormat * restfrmt);
 	
 		virtual void forceNoteAppearance(NVstring appearance)	{ mRestAppearance = appearance; };
 		TYPE_DURATION appearance2duration (const NVstring& str) const;

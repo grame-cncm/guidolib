@@ -30,8 +30,8 @@ typedef std::map<std::string, unsigned int> SymbolMap;
 class GRJump : public GRTagARNotationElement
 {
 	public:
-						GRJump( ARJump * ar, bool rightJustified=true );
-		virtual			~GRJump();
+					 GRJump( const ARJump * ar, bool rightJustified=true );
+		virtual		~GRJump();
 		
 		virtual const ARJump * getARJump() const;
 

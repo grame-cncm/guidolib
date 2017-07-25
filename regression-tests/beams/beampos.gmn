@@ -23,7 +23,7 @@
    \beam(a1/16 a a a) \beam<dy1=8hs>(a a a a)
   
   (* these beamings are now corrected *)
-  \stemsUp \beam<dy3=3hs>(d1/16 e/8 \stemsDown a2/16)
+  \stemsUp \beam<dy2=3hs>(d1/16 e/8 \stemsDown a2/16)
   \stemsDown a2/16 \stemsUp d1/8 e/16 
   \beam (a1/8 e/16 \newLine d/16 e/8 e ) 
   \staff<1>  \beam (\stemsDown d1/8 \staff<2> \stemsUp a0/16 f f/8 \stemsDown \staff<1> c1/16 e)

@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -18,30 +18,21 @@
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
 
-class TagParameterInt;
-
 /** \brief not yet documented
 */
-class ARShareLocation : 
-	// public ARMusicalObject,
-	public ARMTParameter,
-	public ARPositionTag
+class ARShareLocation : public ARMTParameter, public ARPositionTag
 {
-public:
-	         ARShareLocation(const ARShareLocation * sloc);
-	         ARShareLocation() { rangesetting = ONLY; }
-	virtual ~ARShareLocation();
+	public:
+				 ARShareLocation(const ARShareLocation * sloc)
+					 : ARMTParameter(-1,sloc)	{ rangesetting = ONLY; }
 
-	virtual ARMusicalObject * Copy() const;
+				 ARShareLocation() { rangesetting = ONLY; }
+		virtual ~ARShareLocation() {}
 
-    virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
-
-	virtual void setTagParameterList(TagParameterList & tpl);
-
-protected:
-	static ListOfTPLs ltpls;
+		virtual ARMusicalObject * Copy() const		{ return new ARShareLocation(this); }
+		virtual const char*	getParamsStr() const	{ return ""; };
+		virtual const char*	getTagName() const		{ return "ARShareLocation"; };
+		virtual std::string getGMNName() const		{ return "\\shareLocation"; };
 };
 
 #endif

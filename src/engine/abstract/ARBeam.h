@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -17,45 +17,48 @@
 
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
-// #include "ARMusicalEvent.h"
-
-class GRBeam;
 
 /** \brief Abstract representation of a beam.
 */
 class ARBeam :  public ARMTParameter, public ARPositionTag
 {
-    friend class GRBeam;
+	public:
+				 ARBeam();
+		virtual ~ARBeam() {}
 
-public:
-             ARBeam();
-	virtual ~ARBeam();
+		bool isGuidoSpecBeam() const;
+		bool isFeatheredBeam() const		{return fFeathered;}
 
-	bool isGuidoSpecBeam() const;
-	bool isFeatheredBeam() const {return feathered;}
-	virtual bool isFullBeaming() const { return true;}
+		virtual bool isFullBeaming() const	{ return true;}
+		virtual bool MatchEndTag(const char * s);
 
-	virtual bool MatchEndTag(const char * s);
+		virtual const char*	getParamsStr() const	{ return kARBeamParams; };
+		virtual const char*	getTagName() const		{ return "ARBeam"; };
+		virtual std::string getGMNName() const		{ return "\\beam"; };
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual void setTagParameters (const TagParameterMap& params);
 
-	virtual void setTagParameterList(TagParameterList & tpl);
-		
-protected:
-    static ListOfTPLs ltpls;
+		const TagParameterFloat * getDx1() const	{ return dx1; }
+		const TagParameterFloat * getDy1() const	{ return dy1; }
+		const TagParameterFloat * getDx2() const	{ return dx2; }
+		const TagParameterFloat * getDy2() const	{ return dy2; }
+		const TagParameterFloat * getDx3() const	{ return dx3; }
+		const TagParameterFloat * getDy3() const	{ return dy3; }
+		const TagParameterFloat * getDx4() const	{ return dx4; }
+		const TagParameterFloat * getDy4() const	{ return dy4; }
 
-    TagParameterFloat * dx1;
-    TagParameterFloat * dy1;
-    TagParameterFloat * dx2;
-    TagParameterFloat * dy2;
-    TagParameterFloat * dx3;
-    TagParameterFloat * dy3;
-    TagParameterFloat * dx4;
-    TagParameterFloat * dy4;
-
-    bool feathered;
+	protected:
+		bool fFeathered;
+	
+	private:
+		const TagParameterFloat * dx1;
+		const TagParameterFloat * dy1;
+		const TagParameterFloat * dx2;
+		const TagParameterFloat * dy2;
+		const TagParameterFloat * dx3;
+		const TagParameterFloat * dy3;
+		const TagParameterFloat * dx4;
+		const TagParameterFloat * dy4;
 };
 
 #endif

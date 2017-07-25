@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -15,8 +15,9 @@
 
 */
 
+#include <cassert>
+
 #include "ARMTParameter.h"
-// #include "ARMusicalObject.h"
 #include "ARPositionTag.h"
 
 class ARMusicalObject;
@@ -26,21 +27,19 @@ class ARMusicalObject;
 class ARTagEnd : public ARMTParameter, public ARPositionTag
 {
 	public:
-					 ARTagEnd(int id = -1,const ARTagEnd * copy = 0);
+					 ARTagEnd(int id = -1,const ARTagEnd * copy = 0)
+						 : ARMTParameter(id,copy) { setAssociation(ARMusicalTag::LA); }
 		virtual		~ARTagEnd() {}
 		
 		virtual ARMusicalObject * Copy() const 	{ return 0; }
 
-	    virtual void printName(std::ostream& os) const;
-	    virtual void printGMNName(std::ostream& os) const;
-	    virtual void printParameters(std::ostream& os) const;
+		virtual const char*	getTagName() const		{ return "ARTagEnd"; };
+		virtual std::string getGMNName() const		{ return "\\tagEnd"; };
 
-		virtual void setTagParameterList(TagParameterList & theTagParameterList);
-
-		virtual void setEndPosition(GuidoPos p_pos);
-		virtual GuidoPos getEndPosition() const;
+		virtual void		setEndPosition(GuidoPos p_pos)			{ assert(false); }
+		virtual GuidoPos	getEndPosition() const					{ return (GuidoPos)0; }
 		
-		virtual bool isEndTagClass() const { return true; }
+		virtual bool		isEndTagClass() const { return true; }
 		
 		static ARTagEnd * cast( ARPositionTag * inTag )
 					{ return ( inTag && inTag->isEndTagClass() ? static_cast<ARTagEnd *>( inTag ) : 0 ); }

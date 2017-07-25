@@ -1,9 +1,9 @@
-{ [ \staff<1> \systemFormat<"", dx=26hs>  
+{ [ \staff<1> 
    (* meas. 1 *)  \clef<"g2"> \key<4> \meter<"2/4", autoBarlines="off", autoMeasuresNum="page">  _/2 \bar 
    (* meas. 2 *)  _/2 \bar 
    (* meas. 3 *)  _/8 \oct<1> \beamsOff g3 \beamsOff \accent<position="above">( \tieBegin b/4) \bar 
    (* meas. 4 *)  \text<"Rall",fattrib="i", dx=2.2hs, dy=18hs> \space<0> \intens<"f", dy=-2.6hs> \beamsOff b/8 \tieEnd \beam( f# \slurBegin:1 { f#, b } { e, a }) \slurEnd:1 \bar 
-   (* meas. 5 *)  \dimBegin<dy=3.8hs> \beam( { d#, g# } { c#, f# } { a2, d#3 } \dimEnd { a2, b }) \bar 
+   (* meas. 5 *)  \dimBegin<dy=-3.8hs> \beam( { d#, g# } { c#, f# } { a2, d#3 } \dimEnd { a2, b }) \bar 
    (* meas. 6 *)  \key<4> \text<"a tempo",fattrib="i", dx=1.2hs, dy=17.6hs> \space<0> _/16 \intens<"pp", dy=-5hs> \slurBegin:1 \beam( b e3 c#) \beamsOff d#/4 \slurEnd:1 \bar 
    (* meas. 7 *)  _/16 \slurBegin:1 \beam( b2 e3 c#) \beamsOff d#/4 \slurEnd:1 \bar 
    (* meas. 8 *)  _/16 \slurBegin:1 \beam( b2 e3 c#) \beamsOff d#/4 \slurEnd:1 \bar 

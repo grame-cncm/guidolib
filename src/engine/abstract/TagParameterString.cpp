@@ -12,21 +12,25 @@
 
 */
 
-//#include <iostream>
 #include <cstring>
 #include <cassert>
 
 #include "secureio.h"
+#include "nvstring.h"
 #include "TagParameterString.h"
 #include "HtmlColors.h"
 
-TagParameterString::TagParameterString(const char * theString)			: fValue(theString)	{}
+TagParameterString::TagParameterString(const char * theString)			: fValue(theString ? theString : "")	{}
 TagParameterString::TagParameterString(const std::string& theString)	: fValue(theString) {}
 TagParameterString::TagParameterString( const TagParameterString & tps ) 
-	: TagParameter( tps ), 	fValue(tps.getValue())
-{
-}
+	: TagParameter( tps ), 	fValue(tps.getValue()) {}
 TagParameterString::~TagParameterString()	{}
+
+void TagParameterString::print(std::ostream& out)
+{
+	TagParameter::print (out);
+	out << '"' << getValue() << '"';
+}
 
 void TagParameterString::set( const TagParameterString & in )
 {

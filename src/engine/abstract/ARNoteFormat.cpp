@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -13,86 +13,30 @@
 */
 
 #include <iostream>
+
 #include "ARNoteFormat.h"
+#include "TagParameterStrings.h"
 #include "TagParameterString.h"
-#include "TagParameterInt.h"
-#include "TagParameterList.h"
-#include "ListOfStrings.h"
 
-ListOfTPLs ARNoteFormat::ltpls(1);
+static const TagParameterMap sARNoteFormatMap (kARNoteFormatParams);
 
-ARNoteFormat::ARNoteFormat(ARNoteFormat *p_savenf,ARNoteFormat *copynf)
+ARNoteFormat::ARNoteFormat(const ARNoteFormat *p_savenf, const ARNoteFormat *copynf)
 	: ARMTParameter(-1,copynf)
-//const ARNoteFormat *curnf)
-//: savenf(curnf)
 {
+	setupTagParameters (sARNoteFormatMap);
+
 	// this probably should be changed to RANGEDC
 	// but then we have to take care of saving state-information ....
 	rangesetting = ARMusicalTag::RANGEDC;
-	savenf = p_savenf;
-	style = NULL;
+	fSaveNF = p_savenf;
 	if (copynf) {
-		if (copynf->getTPStyle())
-			style = TagParameterString::cast(copynf->getTPStyle()->getCopy());
+		copyParameters(copynf->getTagParameters());
+		setTagParameters(copynf->getTagParameters());
 	}
 }
 
-
-ARNoteFormat::~ARNoteFormat()
+const TagParameterString * ARNoteFormat::getTPStyle() const
 {
-	delete style;
+	return getParameter<TagParameterString>(kStyleStr, true);
 }
 
-void ARNoteFormat::setTagParameterList(TagParameterList &tpl)
-{
-	if (ltpls.GetCount() == 0)
-	{
-		// create a list of string ...
-		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(("S,style,standard,o"));
-		CreateListOfTPLs(ltpls,lstrs);
-	}
-
-	TagParameterList *rtpl = NULL;
-	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
-	if (ret>=0 && rtpl)
-	{
-		// we found a match!
-		if (ret == 0)
-		{
-			style = TagParameterString::cast(rtpl->RemoveHead());
-			assert(style);
-		}
-		delete rtpl;
-	}
-	else
-	{
-		// failure
-	}
-	tpl.RemoveAll();
-}
-
-const char* ARNoteFormat::getStyle() const
-{
-	if (style)
-		return style->getValue();
-	return "";		
-}
-
-void ARNoteFormat::printName(std::ostream& os) const
-{
-    os << "ARNoteFormat";
-}
-
-void ARNoteFormat::printGMNName(std::ostream& os) const
-{
-    os << "\\noteFormat";
-}
-
-void ARNoteFormat::printParameters(std::ostream& os) const
-{
-    if (style)
-        os << "style: " << style->getValue() << "; ";
-
-    ARMusicalTag::printParameters(os);
-}

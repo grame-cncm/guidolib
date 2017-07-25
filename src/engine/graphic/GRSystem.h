@@ -58,7 +58,7 @@ public:
 	
 				 GRSystem(GRStaffManager * stfmgr, GRPage * inPage, const TYPE_TIMEPOSITION & relativeTimePositionOfSystem,
 							SSliceList ** systemslices, int count, GRSystemSlice * beginslice, ISpringVector ** pvect,
-							ARSystemFormat * sysform, float force, float spring, float proportionnalRender,
+							const ARSystemFormat * sysform, float force, float spring, float proportionnalRender,
 							bool islastsystem = false);
 	virtual 	~GRSystem();
 
@@ -69,14 +69,14 @@ public:
 	int                 getStaffNumber(const GRStaff * staff ) const;
 	int                 getNewLinePage() const                  { return mNewLinePage; }
 	float               getCurPosX() const                      { return mCurPosX; }							
-	ARMusic *           getARMusic() const;
+	const ARMusic *     getARMusic() const;
 	GRSpring *          getSpring( int id ) const;
 	const GRSpring *    getGRSpring( int id ) const;
     const StaffVector * getStaves() const;
 	const SSliceList *  getSlices() const						{ return &mSystemSlices; }
 
 	void        setSpringParameter(float nconst);
-	void        setSystemFormat( ARSystemFormat * sysfrm );
+	void        setSystemFormat( const ARSystemFormat * sysfrm );
 	void        setDistance( float inDistance )					{ mDistanceSet = true; mDistance = inDistance; }
 	void        setGRPage( GRPage * inNewPage )					{ mPage = inNewPage; }
 	void        setMeterOfStaffs( int num, int denom );
@@ -95,7 +95,7 @@ public:
 	void	addStaff( GRStaff * newStaff, int num );
 
 	bool 	IsDistanceSet() const								{ return mDistanceSet; }
-	void	notifyAccoladeTag( ARAccolade * inAccoladeTag );
+	void	notifyAccoladeTag( const ARAccolade * inAccoladeTag );
 
 	void 	FinishSystem();
 	void 	FinishSystem( ISpringVector * pvect, IRodList * prods1, IRodList * prods2,

@@ -3,7 +3,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -18,25 +18,25 @@
 
 /** \brief not yet documented
 */
-class ARSpecial : // public ARMusicalObject,
-	public ARMTParameter  
+class ARSpecial :  public ARMTParameter
 {
-public:
-             ARSpecial();
-    virtual ~ARSpecial();
+	public:
+				 ARSpecial();
+		virtual ~ARSpecial() {}
 
-    virtual void setTagParameterList(TagParameterList &tlist);
+		virtual void setTagParameters (const TagParameterMap& params);
 
-    virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-    virtual void printParameters(std::ostream& os) const;
+		virtual const char*	getParamsStr() const	{ return kARSpecialParams; };
+		virtual const char*	getTagName() const		{ return "ARSpecial"; };
+		virtual std::string getGMNName() const		{ return "\\special"; };
 
-    unsigned char getDrawChar() const { return mDrawChar; }
+    	unsigned char getDrawChar() const { return mDrawChar; }
 
-protected:
-    unsigned char mDrawChar; // may become int...
+	protected:
+		unsigned char mDrawChar; // may become int...
 
-    static ListOfTPLs ltpls;
+	private:
+		unsigned char string2char (const char* str) const;
 };
 
 #endif

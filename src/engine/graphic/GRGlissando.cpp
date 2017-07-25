@@ -50,15 +50,15 @@ GRGlissando::GRGlissando(GRStaff * grstaff)
 }
 
 // -----------------------------------------------------------------------------
-GRGlissando::GRGlissando(GRStaff * grstaff, ARGlissando * abstractRepresentationOfGlissando)
-				   : GRPTagARNotationElement(abstractRepresentationOfGlissando)
+GRGlissando::GRGlissando(GRStaff * grstaff, const ARGlissando * ar)
+				   : GRPTagARNotationElement(ar)
 {
-	assert(abstractRepresentationOfGlissando);
+	assert(ar);
 	initGRGlissando( grstaff );
 	flaststartElement = NULL;
 	prevGRGlissando = NULL;
-	//wavy = abstractRepresentationOfGlissando->isWavy();
-	fill = abstractRepresentationOfGlissando->isFill();
+	//wavy = ar->isWavy();
+	fill = ar->isFill();
 	hidden = false;
 	filled = false;
 }
@@ -246,7 +246,7 @@ void GRGlissando::updateGlissando( GRStaff * inStaff )
 	getGlissandoBeginningContext( &fglissContext, sse );
 	getGlissandoEndingContext( &fglissContext, sse );
 
-	ARGlissando * arGliss = static_cast<ARGlissando *>(getAbstractRepresentation());
+	const ARGlissando * arGliss = static_cast<const ARGlissando *>(getAbstractRepresentation());
 	assert(arGliss);
 	
 
@@ -472,8 +472,8 @@ void GRGlissando::compareAccidentals(GRSystemStartEndStruct * sse, bool * isUp, 
 	GRSingleNote * endnote = dynamic_cast<GRSingleNote *>(endElement);
 
 	if (startnote && endnote) {
-		ARNote * arstartnote = startnote->getARNote();
-		ARNote * arendnote   = endnote->getARNote();
+		const ARNote * arstartnote = startnote->getARNote();
+		const ARNote * arendnote   = endnote->getARNote();
 
 		if (arstartnote && arendnote) {
 			int startnoteAcc = arstartnote->getAccidentals() + int(arstartnote->getDetune());

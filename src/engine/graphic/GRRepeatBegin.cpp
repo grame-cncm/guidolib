@@ -27,7 +27,7 @@ using namespace std;
 NVPoint GRRepeatBegin::refpos;
 
 // --------------------------------------------------------------------------
-GRRepeatBegin::GRRepeatBegin(ARRepeatBegin *arrb, bool p_ownsar)
+GRRepeatBegin::GRRepeatBegin(const ARRepeatBegin *arrb, bool p_ownsar)
 					: GRTagARNotationElement(arrb, LSPACE, p_ownsar) 
 //GRRepeatBegin::GRRepeatBegin( ARRepeatBegin * arrb, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos )
 //					: GRBar(arrb, inStaff, inTimePos) 
@@ -46,19 +46,14 @@ GRRepeatBegin::GRRepeatBegin(ARRepeatBegin *arrb, bool p_ownsar)
 }
 
 // --------------------------------------------------------------------------
-GRRepeatBegin::~GRRepeatBegin()
-{
-}
-
-// --------------------------------------------------------------------------
 const ARBar::TRanges GRRepeatBegin::getRanges() const	{ return getARRepeatBegin()->getRanges(); }
 
 // --------------------------------------------------------------------------
 void GRRepeatBegin::setPosFrom(GCoord posy)		{ mBoundingBox.top = posy; }
 void GRRepeatBegin::setPosTo(GCoord posy)		{ mBoundingBox.bottom = posy; }
 
-ARRepeatBegin* GRRepeatBegin::getARRepeatBegin() const {
-	return dynamic_cast<ARRepeatBegin*>(getAbstractRepresentation());
+const ARRepeatBegin* GRRepeatBegin::getARRepeatBegin() const {
+	return dynamic_cast<const ARRepeatBegin*>(getAbstractRepresentation());
 }
 
 // --------------------------------------------------------------------------

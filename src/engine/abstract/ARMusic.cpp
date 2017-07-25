@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -98,7 +98,6 @@ bool ARMusic::getMeterAt (int voicenum, const GuidoDate &date, GuidoMeter& meter
 
 void ARMusic::getTimeMap (TimeMapCollector& f) const
 {
-//	TYPE_DURATION duration = getDuration();
 	GuidoPos pos = GetHeadPosition();
     if(pos)
     {
@@ -121,17 +120,17 @@ void ARMusic::accept(ARVisitor& visitor)
 	visitor.visitOut (this);
 }
 
-void ARMusic::resetGRRepresentation()
-{
-	ARMusicalEvent::resetGRRepresentation();
-	GuidoPos pos = GetHeadPosition();
-	ARMusicalVoice * e;
-	while(pos)
-	{
-		e=GetNext(pos);
-		e->resetGRRepresentation();
-	}
-}
+//void ARMusic::resetGRRepresentation()
+//{
+//	ARMusicalEvent::resetGRRepresentation();
+//	GuidoPos pos = GetHeadPosition();
+//	ARMusicalVoice * e;
+//	while(pos)
+//	{
+//		e=GetNext(pos);
+//		e->resetGRRepresentation();
+//	}
+//}
 
 /** \brief Introduces potential Breakpoints
 	in the first voice of a piece of music.

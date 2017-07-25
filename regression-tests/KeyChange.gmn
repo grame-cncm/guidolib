@@ -1,4 +1,4 @@
-{ [ \staff<1> \systemFormat<"", dx=26hs> \barFormat<style= "system", range="1"> 
+{ [ \staff<1>
    \clef<"g2"> \key<2> \meter<"4/4", autoBarlines="off", autoMeasuresNum="page"> 
    \stemsDown d2 e f# g \bar 
    \key<3> c#3 b2 a g# \bar 

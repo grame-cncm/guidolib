@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -27,7 +27,7 @@
 #include "kf_list.h"
 
 // ----------------------------------------------------------------------------
-GRVoice::GRVoice(ARMusicalObject * arobj, bool ownsar)
+GRVoice::GRVoice(const ARMusicalObject * arobj, bool ownsar)
 			: GRARCompositeNotationElement(arobj,ownsar)
 {
 	GetCompositeElements().setOwnership(0);
@@ -53,6 +53,18 @@ GRVoice::~GRVoice()
 	mSysNodeList = 0;
 }
 
+// --------------------------------------------------------------------------
+void GRVoice::accept (GRVisitor& visitor)
+{
+	visitor.visitStart (this);
+	GuidoPos first = First();
+	GuidoPos last = Last();
+	while (first != last) {
+		GRNotationElement * e = GetNext(first);
+		e->accept (visitor);
+	}
+	visitor.visitEnd (this);
+}
 
 /** \brief Indicates, that a new system has started.
  	this must be reflected by a new entry into the sysvect.
@@ -115,9 +127,9 @@ GuidoPos GRVoice::getSystemStartPos(GRSystem * in)
 	return (GuidoPos) 0;
 }
 
-ARMusicalVoice * GRVoice::getARMusicalVoice() 
+const ARMusicalVoice * GRVoice::getARMusicalVoice() const
 {
-	return static_cast/*dynamic cast*/<ARMusicalVoice *>(mAbstractRepresentation);
+	return static_cast/*dynamic cast*/<const ARMusicalVoice *>(mAbstractRepresentation);
 }
 
 

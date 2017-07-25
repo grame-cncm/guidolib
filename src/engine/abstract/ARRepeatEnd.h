@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -15,44 +15,26 @@
 
 */
 
-// #include <iosfwd>
-
-#include "ARPositionTag.h"
 #include "ARBar.h"
-//#include "ARMTParameter.h"
-// #include "ARMusicalObject.h"
+#include "TimeUnwrap.h"
 
-class ARFactory;
 class ARRepeatBegin;
 
 /** \brief not yet documented
 */
-//class ARRepeatEnd : public ARMTParameter, public ARPositionTag
-//class ARRepeatEnd : public ARBar, public ARPositionTag
 class ARRepeatEnd : public ARBar
 {
-		friend class ARFactory;
-		friend class ARRepeatBegin;
-
 	public:
-					ARRepeatEnd(ARRepeatBegin * curbeg = 0);
+					 ARRepeatEnd(ARRepeatBegin * curbeg = 0) { rangesetting = RANGEDC; }
 		virtual		~ARRepeatEnd() { }
 
-		virtual void setTagParameterList( TagParameterList & tpl);
+		virtual const char*	getTagName() const		{ return "ARRepeatEnd"; };
+		virtual std::string getGMNName() const		{ return "\\repeatEnd"; };
 
-	    virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	    virtual void printParameters(std::ostream& os) const;
+        ARMusicalObject *isARRepeatEnd() 			{ return this; }
 
-		virtual void browse(TimeUnwrap& mapper) const;
-
-        /**** Function to avoid dynamic_cast ****/
-        ARMusicalObject *isARRepeatEnd() { return this; }
-        /****************************************/
-
-	protected:
-		static ListOfTPLs ltpls;
-		ARRepeatBegin * repbeg;
+		virtual void browse(TimeUnwrap& mapper) const
+				{ mapper.AtPos (this, TimeUnwrap::kRepeatEnd); }
 };
 
 #endif

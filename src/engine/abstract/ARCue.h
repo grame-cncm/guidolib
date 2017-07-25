@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -17,28 +17,23 @@
 
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
+#include "ARFontAble.h"
 
 class TagParameterString;
 
 /** \brief not yet documented
 */
-class ARCue : public ARMTParameter, public ARPositionTag
+class ARCue : public ARFontAble, public ARPositionTag
 {
-public:
-			 ARCue();
-	virtual ~ARCue();
+	public:
+				 ARCue();
+		virtual ~ARCue() {}
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual const char*	getParamsStr() const	{ return kARCueParams; };
+		virtual const char*	getTagName() const		{ return "ARCue"; };
+		virtual std::string getGMNName() const		{ return "\\cue"; };
 
-	virtual void setTagParameterList(TagParameterList & tpl);
-
-	const TagParameterString * getName() const		{ return name; }
-
-protected:	
-	TagParameterString * name;
-	static ListOfTPLs fTagParametersList;
+		const TagParameterString * getName() const;
 };
 
 #endif

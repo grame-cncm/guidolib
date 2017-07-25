@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -24,12 +24,9 @@
 class ARKey : public ARMTParameter
 {
 	void	getKeyArray		(std::string inString);
-	void	newgetKeyArray	(const std::string& inString);
-	int		getNote			(const char*& ptr) const;
 	bool	getOctave		(const char*& ptr, int& oct) const;
-	float	getAccidental	(const char*& ptr) const;
 
-public:
+	public:
 					 ARKey(const TYPE_TIMEPOSITION & timeposition);
       				 ARKey(int p_keynumber);
 					 ARKey();
@@ -37,39 +34,41 @@ public:
 		virtual 	~ARKey() {}
 
 	  	virtual bool operator==(const ARKey & k) const;
-	  	virtual bool IsStateTag() const;
 
-		virtual int	 getOrder() const		{ return kKeyOrder; }
-	    virtual void printName(std::ostream& os) const;
-	    virtual void printGMNName(std::ostream& os) const;
-	    virtual void printParameters(std::ostream& os) const;
+	  	virtual bool IsStateTag() const				{ return true; }
+		virtual int	 getOrder() const				{ return kKeyOrder; }
+		virtual const char*	getParamsStr() const	{ return kARKeyParams; };
+		virtual const char*	getTagName() const		{ return "ARKey"; };
+		virtual std::string getGMNName() const		{ return "\\key"; };
 
-		virtual void setTagParameterList(TagParameterList & theTagParameterList);
+		virtual void setTagParameters (const TagParameterMap& params);
 
 				int	 getKeyNumber() const		 { return fKeyNumber; }
 				void setKeyNumber(int newnumber) { fKeyNumber = newnumber; }
                 bool hideAutoNaturals() const	 { return fHideAutoNaturals; }
-                bool isHideAutoNaturalsSet() const	 { return fHideAutoNaturalsSet; }
-
-		bool mIsFree; // True if accidental free specified
+                bool isHideAutoNaturalsSet() const	{ return fHideAutoNaturalsSet; }
+                bool freeKey() const				{ return fIsFree; }
 
 		virtual void getOctArray(int *) const;
 		virtual void getFreeKeyArray(float *) const;
-        
+		ARMusicalObject *isARKey()					{ return this; }
 
-        /**** Function to avoid dynamic_cast ****/
-        ARMusicalObject *isARKey() { return this; }
-        /****************************************/
+	static float	getAccidental	(const char*& ptr);
+	static int		getNote			(const char*& ptr);
 
-  protected:
-	
-	static ListOfTPLs ltpls;
+	protected:
         ///  if true -> don't show auto generated naturals at key signature changes
         bool    fHideAutoNaturals;
-        bool    fHideAutoNaturalsSet;
+		bool	fIsFree; // True if accidental free specified
+        bool    fHideAutoNaturalsSet = false;
 		int		fKeyNumber; // >0 = nr of #, < 0 = nr of &
 		float	fAccarray [NUMNOTES];
 		int		fOctarray [NUMNOTES];
+	
+	private:
+		void	init();
+		void	name2KeyNum (std::string name);
+		void	getFreeKeyArray	(const std::string& inString);
 };
 
 #endif

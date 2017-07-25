@@ -21,7 +21,7 @@
 #include <iostream>
 using namespace std;
 
-GREmpty::GREmpty(GRStaff * inStaff, ARMusicalEvent * ar, bool p_ownsAR )
+GREmpty::GREmpty(GRStaff * inStaff, const ARMusicalEvent * ar, bool p_ownsAR )
 				: GREvent( inStaff, ar,p_ownsAR )
 {
 	mNeedsSpring = 1;
@@ -29,7 +29,7 @@ GREmpty::GREmpty(GRStaff * inStaff, ARMusicalEvent * ar, bool p_ownsAR )
 	mRightSpace = 0;
 }
 
-GREmpty::GREmpty( GRStaff * inStaff, ARMusicalEvent * ar, const TYPE_TIMEPOSITION timePos, const TYPE_DURATION dur )
+GREmpty::GREmpty( GRStaff * inStaff, const ARMusicalEvent * ar, const TYPE_TIMEPOSITION timePos, const TYPE_DURATION dur )
 				: GREvent( inStaff, ar, timePos, dur)
 {
 	mNeedsSpring = 1;

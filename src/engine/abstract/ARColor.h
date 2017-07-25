@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -22,27 +22,27 @@
 
 class ARColor : public ARMTParameter 
 {
-public:
-    ARColor() : colorR(0), colorG(0), colorB(0), colorA(0) { }
+	public:
+				 ARColor();
+		virtual ~ARColor() {}
 
-    virtual bool IsStateTag() const;
-    virtual void setTagParameterList( TagParameterList & tpl );
+		virtual void setTagParameters (const TagParameterMap& params);
 
-    virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-    virtual void printParameters(std::ostream& os) const;
+		virtual bool IsStateTag() const				{ return true; }
+		virtual const char*	getParamsStr() const	{ return kARColorParams; };
+		virtual const char*	getTagName() const		{ return "ARColor"; };
+		virtual std::string getGMNName() const		{ return "\\color"; };
 
-    float getColorR() const { return colorR; }
-    float getColorG() const { return colorG; }
-    float getColorB() const { return colorB; }
-    float getColorA() const { return colorA; }
+		float getColorR() const { return fR; }
+		float getColorG() const { return fG; }
+		float getColorB() const { return fB; }
+		float getColorA() const { return fA; }
 
-protected:
-    static ListOfTPLs ltpls;
-    float colorR;			// (JB) should be unsigned char components ?
-    float colorG;
-    float colorB;
-    float colorA;
+	protected:
+		float fR;			// (JB) should be unsigned char components ?
+		float fG;
+		float fB;
+		float fA;
 };
 
 #endif

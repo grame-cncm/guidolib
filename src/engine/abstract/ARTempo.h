@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -16,6 +16,7 @@
 */
 
 #include "ARMTParameter.h"
+//#include "ARFontAble.h"
 #include "FormatStringParser.h"
 
 /** \brief The tempo tag parameter.
@@ -43,65 +44,61 @@
 	\\tempo<"Moderato [1/4]=120">
 
 */
-class ARTempo : public ARMTParameter
+class ARTempo : public ARMTParameter //, public ARFontAble
 {
-public:
-             ARTempo();
-    virtual ~ARTempo();
+	public:
+				 ARTempo();
+		virtual ~ARTempo() {}
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual const char*	getParamsStr() const	{ return kARTempoParams; };
+		virtual const char*	getTagName() const		{ return "ARTempo"; };
+		virtual std::string getGMNName() const		{ return "\\tempo"; };
 
-    virtual void setTagParameterList(TagParameterList & tpl);
+		virtual void setTagParameters(const TagParameterMap& map);
 
-    //! Gives the tempo information strings vector.
-    const FormatStringParserResult& getTempoMark() const { return mTempoMark; }		
+		//! Gives the tempo information strings vector.
+		const FormatStringParserResult& getTempoMark() const { return mTempoMark; }		
 
-    //! Tells if the optional bpm informations have been specified.
-    bool hasBpmInfos() const { return mHasBpmInfos; }
+		//! Tells if the optional bpm informations have been specified.
+		bool hasBpmInfos() const { return mHasBpmInfos; }
 
-    /** Tells if bpm is in "note equivalent" format.
-
-    \return true when we have a/b=c/d, false for a/b=c.
-    */
-    bool isNoteEquiv() const { return mBpmNoteEquiv; }
-
-
-    /** Gives the unit of the bpm tempo.
-
-    example: for 1/4=120, 1/4 is the unit.
-    \return a musical duration, (1/4 is a quarter note)
-    */
-    TYPE_DURATION getBpmUnit() const { return mBpmUnit; }	
+		/** Tells if bpm is in "note equivalent" format.
+		\return true when we have a/b=c/d, false for a/b=c.
+		*/
+		bool isNoteEquiv() const { return mBpmNoteEquiv; }
 
 
-    /** Gives the value of the bpm tempo.
+		/** Gives the unit of the bpm tempo.
 
-    example: for 1/4=120, 120 is the value.
-    \return a tempo as bpm or as a note equivalent.
-    */
-    TYPE_DURATION getBpmValue() const { return mBpmValue; }	
+		example: for 1/4=120, 1/4 is the unit.
+		\return a musical duration, (1/4 is a quarter note)
+		*/
+		TYPE_DURATION getBpmUnit() const { return mBpmUnit; }	
 
-    /** Gives the value of the tempo in quarters per minute.
-    */
-    float getQpmValue() const;	
 
-    virtual void browse(TimeUnwrap& mapper) const;
-    virtual ARTempo	*isARTempo()		  { return this; }
+		/** Gives the value of the bpm tempo.
 
-protected:
-    static ListOfTPLs ltpls;
+		example: for 1/4=120, 120 is the value.
+		\return a tempo as bpm or as a note equivalent.
+		*/
+		TYPE_DURATION getBpmValue() const { return mBpmValue; }	
 
-private:
-    void		ParseBpm( TagParameterString * inTag );
+		/** Gives the value of the tempo in quarters per minute.
+		*/
+		float getQpmValue() const;	
 
-    FormatStringParserResult	mTempoMark;
+		virtual void browse(TimeUnwrap& mapper) const;
+		virtual ARTempo	*isARTempo()		  { return this; }
 
-    TYPE_DURATION	mBpmUnit;			// bpm="mBpmUnit=mBpmValue">
-    TYPE_DURATION	mBpmValue;
-    bool			mBpmNoteEquiv;	// true if bpm value is a note equivalent.
-    bool			mHasBpmInfos;
+	private:
+		void		ParseBpm(const TagParameterString * inTag );
+
+		FormatStringParserResult	mTempoMark;
+
+		TYPE_DURATION	mBpmUnit;			// bpm="mBpmUnit=mBpmValue">
+		TYPE_DURATION	mBpmValue;
+		bool			mBpmNoteEquiv;	// true if bpm value is a note equivalent.
+		bool			mHasBpmInfos;
 };
 
 

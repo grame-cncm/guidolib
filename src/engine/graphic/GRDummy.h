@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -23,21 +23,18 @@ class GRPositionTag;
 */
 class GRDummy : public GRNotationElement
 {
-public:
+	public:
 
-	GRPositionTag *getPositionTag() 
-	{ return myptag; }
-	GRDummy(GRPositionTag *p_myptag);
-	virtual ~GRDummy();
-	
-	virtual void OnDraw(VGDevice & hdc ) const;
+				 GRDummy(GRPositionTag *p_myptag);
+		virtual ~GRDummy();
 
-	
-	virtual void tellPosition(GObject *caller,const NVPoint &newPosition);
+		GRPositionTag *getPositionTag()		{ return myptag; }
+		
+		virtual void OnDraw(VGDevice & hdc ) const;
+		virtual void tellPosition(GObject *caller,const NVPoint &newPosition);
 
-protected:
-	GRPositionTag *myptag;
-
+	protected:
+		GRPositionTag *myptag;
 };
 
 #endif

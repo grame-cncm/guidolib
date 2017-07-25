@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -17,45 +17,36 @@
 
 #include <vector>
 
-
 #include "ARMTParameter.h"
 #include "ARBar.h"
-class TagParameterString;
 
 /** \brief the bar format tag parameter.
 */
 class ARBarFormat : public ARMTParameter
 {
-	
-public:
-	typedef std::vector<std::pair<int, int> >	TRanges;
-	enum style { kStyleStaff, kStyleSystem, kStyleRange };
+	public:
+		typedef std::vector<std::pair<int, int> >	TRanges;
+		enum style { kStyleStaff, kStyleSystem, kStyleRange };
 
-	ARBarFormat();
-	ARBarFormat(const ARBarFormat&);
-	virtual ~ARBarFormat();
+				 ARBarFormat();
+				 ARBarFormat(const ARBarFormat&);
+		virtual ~ARBarFormat() {}
 
-	virtual bool IsStateTag() const { return true; }
-	
-	virtual void setTagParameterList( TagParameterList & tpl);
+		virtual void setTagParameters (const TagParameterMap& params);
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual const char*	getParamsStr() const	{ return kARBarFormatParams; };
+		virtual const char*	getTagName() const		{ return "ARBarFormat"; };
+		virtual std::string getGMNName() const		{ return "\\barFormat"; };
 
-	style					getStyle() const	{ return fStyle; }
-	const ARBar::TRanges&	getRanges() const	{ return fRanges; }
+		style					getStyle() const	{ return fStyle; }
+		const ARBar::TRanges&	getRanges() const	{ return fRanges; }
+		virtual bool			IsStateTag() const	{ return true; }
 
-//	const TagParameterString *getStyle() const { return style; }
+	protected:
+		ARBar::TRanges getRanges (const NVstring &str);
 
-protected:
-	ARBar::TRanges getRanges (const NVstring &str);
-
-	style			fStyle;
-	ARBar::TRanges	fRanges;
-	
-//	TagParameterString *	style;
-	static ListOfTPLs 		ltpls;
+		style			fStyle;
+		ARBar::TRanges	fRanges;
 };
 
 #endif 

@@ -5,7 +5,7 @@
 %  Parameters for dy now conform to GUIDO specification:
 %  positive values are upwards, negative values are downwards
 %
-[ \pageFormat<w=20cm,h=14cm,mt=3cm>
+[ \pageFormat<w=20cm,h=14cm,tm=3cm>
   \title<name="A New Piece",font="Architecture",fsize=1cm,
            fattrib="b", textformat="cc",pageformat="c2",color="0xffff00"> 
 \composer<name="Kai Renz, Op. 1",font="Swiss",dy=4hs> 

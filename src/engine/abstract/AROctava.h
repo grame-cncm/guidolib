@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -25,28 +25,24 @@ class TagParameterInt;
 class AROctava : public ARMTParameter, public ARPositionTag
 {
 	public:
-						AROctava(AROctava * p_saveoct = NULL, AROctava * copyoct = NULL);
-		virtual			~AROctava();
+					 AROctava(const AROctava * p_saveoct = NULL, const AROctava * copyoct = NULL);
+		virtual		~AROctava() {}
 
-		virtual bool IsStateTag() const { return true; }
+		virtual bool IsStateTag() const				{ return true; }
 
 		virtual ARMusicalObject * getEndTag() const { return new AROctava(NULL, fSaveoct); }
 
-		virtual const TagParameterInt * getTPOctava() const { return fOctave; }
-
+		virtual const TagParameterInt * getTPOctava() const; // { return fOctave; }
 		virtual int getOctava() const;
 
-	    virtual void printName(std::ostream& os) const;
-	    virtual void printGMNName(std::ostream& os) const;
-	    virtual void printParameters(std::ostream& os) const;
+		virtual const char*	getParamsStr() const	{ return kAROctavaParams; };
+		virtual const char*	getTagName() const		{ return "AROctava"; };
+		virtual std::string getGMNName() const		{ return "\\octava"; };
 
-		virtual void setTagParameterList(TagParameterList& tpl);
 		virtual AROctava*	isAROctava()		  { return this; }
 
-	protected:
-		AROctava *			fSaveoct; // this is required to save the current octava state ...
-		TagParameterInt  *	fOctave;
-		static ListOfTPLs ltpls;
+	private:
+		const AROctava *			fSaveoct; // this is required to save the current octava state ...
 };
 
 #endif

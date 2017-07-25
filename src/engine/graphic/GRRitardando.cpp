@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -30,7 +30,7 @@ extern GRSystem * gCurSystem;
 
 // extern GFontRef hfonttext;
 
-GRRitardando::GRRitardando( GRStaff * stf, ARRitardando * artrem )
+GRRitardando::GRRitardando( GRStaff * stf, const ARRitardando * artrem )
 					 : GRPTagARNotationElement(artrem)			
 {
 	assert(stf);
@@ -79,12 +79,14 @@ GRRitardando::GRRitardando( GRStaff * stf, ARRitardando * artrem )
 	  curLSPACE = stf->getStaffLSPACE();
   }
 
-  mFontSize = artrem->getFSize(curLSPACE);
+//  mFontSize = artrem->getFSize(curLSPACE);
+  mFontSize = artrem->getFSize() * curLSPACE / LSPACE;
   if (mFontSize == 0)
 	  mFontSize = (int)(1.5f * LSPACE);
   
   font = new NVstring(artrem->getFont());
-  fontAttrib = new NVstring(artrem->getFAttrib());
+  fontAttrib = new NVstring(artrem->getTextAttributes());
+//  fontAttrib = new NVstring(artrem->getFAttrib());
 
 }
 

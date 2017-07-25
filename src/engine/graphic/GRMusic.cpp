@@ -47,6 +47,7 @@
 #include "kf_ivect.h"
 
 #include "GRPrintVisitor.h"
+#include "GRTrillsLinker.h"
 #include "TCollisions.h"
 
 using namespace std;
@@ -56,7 +57,7 @@ long ggsoffsetx = 0L;
 long ggsoffsety = 0L;
 
 // --------------------------------------------------------------------------
-GRMusic::GRMusic(ARMusic * ar, ARPageFormat * inFormat, const GuidoLayoutSettings *settings, bool ownsAR )
+GRMusic::GRMusic(const ARMusic * ar, const ARPageFormat * inFormat, const GuidoLayoutSettings *settings, bool ownsAR )
   : GREvent( 0, ar, ownsAR )
 {	
 	assert( ar );
@@ -115,13 +116,15 @@ float GRMusic::getNotesDensity () const
 }
 
 // --------------------------------------------------------------------------
-void GRMusic::checkLyricsCollisions()
+bool GRMusic::checkLyricsCollisions()
 {
 	size_t n = checkCollisions(true);
 	if (n) {
 		resolveCollisions (getCollisions());
 		fLyricsChecked = true;
+		return true;
 	}
+	return false;
 }
 
 // --------------------------------------------------------------------------
@@ -198,7 +201,7 @@ void GRMusic::resolveCollisions (vector<TCollisionInfo> list)
 				else voice->AddElementAfter (pos, ci.fSpace);		// add the space tag
 			}
 			else {		// colliding position not found, maybe in the position tags list
-				pos = voice->getPositionTagPos(dynamic_cast<ARPositionTag*>(ci.fARObject));
+				pos = voice->getPositionTagPos(dynamic_cast<const ARPositionTag*>(ci.fARObject));
 				if (pos) {
 					TYPE_TIMEPOSITION d = ci.fARObject->getRelativeTimePosition();
 					pos = voice->GetHeadPosition();
@@ -236,13 +239,22 @@ void GRMusic::removeAutoSpace(ARMusic * arm)
 		}
 	}
 }
+
 // --------------------------------------------------------------------------
 void GRMusic::accept (GRVisitor& visitor)
 {
 	visitor.visitStart (this);
-	for (int i= 0; i < getNumPages(); i++) {
-		GRPage * page = mPages[i];
-		page->accept (visitor);
+	if (visitor.voiceMode()) {
+		for (size_t i = 0; i<mVoiceList.size(); i++) {
+			GRVoice* voice = mVoiceList[i];
+			if (voice) voice->accept(visitor);
+		}
+	}
+	else {
+		for (int i= 0; i < getNumPages(); i++) {
+			GRPage * page = mPages[i];
+			page->accept (visitor);
+		}
 	}
 	visitor.visitEnd (this);
 }
@@ -357,9 +369,9 @@ void GRMusic::addPage(GRPage * newPage)
 }
 
 // --------------------------------------------------------------------------
-ARMusic * GRMusic::getARMusic()
+const ARMusic * GRMusic::getARMusic() const
 {
-	return /*dynamic*/static_cast<ARMusic*>(getAbstractRepresentation());
+	return /*dynamic*/static_cast<const ARMusic*>(getAbstractRepresentation());
 }
 
 // --------------------------------------------------------------------------
@@ -511,7 +523,7 @@ GRVoice * GRMusic::getVoice(int num)
 // --------------------------------------------------------------------------
 /** \brief Returns the GRVoice corresponding to input musical voice.
 */
-GRVoice * GRMusic::getVoice(ARMusicalVoice * arv)
+GRVoice * GRMusic::getVoice(const ARMusicalVoice * arv)
 {
 	for( VoiceList::iterator ptr = mVoiceList.begin(); ptr != mVoiceList.end(); ++ptr )
 	{
@@ -533,7 +545,7 @@ void GRMusic::addVoiceElement( int num, GRNotationElement * el )
 // --------------------------------------------------------------------------
 /** \brief Adds a notation element to a voice of music.
 */
-void GRMusic::addVoiceElement(ARMusicalVoice * arv, GRNotationElement * el )
+void GRMusic::addVoiceElement(const ARMusicalVoice * arv, GRNotationElement * el )
 {
 	addVoiceElement( getVoice( arv ), el );
 }
@@ -576,7 +588,7 @@ int GRMusic::getNumVoices() const
 	a voice to prepare itself for the possibility of
 	 a newline at the current position.
 */
-void GRMusic::setPossibleVoiceNLinePosition(ARMusicalVoice * arv, const TYPE_TIMEPOSITION & tp)
+void GRMusic::setPossibleVoiceNLinePosition(const ARMusicalVoice * arv, const TYPE_TIMEPOSITION & tp)
 {
 	GRVoice * voice = getVoice(arv);
 	if (voice)
@@ -586,7 +598,7 @@ void GRMusic::setPossibleVoiceNLinePosition(ARMusicalVoice * arv, const TYPE_TIM
 // --------------------------------------------------------------------------
 /** \brief Called to remember a previously saved NLine-Position.
 */
-void GRMusic::rememberVoiceNLinePosition(ARMusicalVoice * arv, const TYPE_TIMEPOSITION & tp)
+void GRMusic::rememberVoiceNLinePosition(const ARMusicalVoice * arv, const TYPE_TIMEPOSITION & tp)
 {
 	GRVoice * voice = getVoice(arv);
 	if (voice)
@@ -629,18 +641,12 @@ void GRMusic::createGR (const ARPageFormat * inPageFormat, const GuidoLayoutSett
 		if(fInFormat) delete fInFormat;
 		fInFormat = new ARPageFormat(*inPageFormat);
 	}
-	if (settings)
-		fSettings = *settings;
+	if (settings) fSettings = *settings;
 
 	// - Reset the previous GR
-	ARMusic * arm = getARMusic();
-	arm->resetGRRepresentation();	// (JB) this may conflicts with the new 
-									// "multi GR -> one AR" scheme.
+	const ARMusic * arm = getARMusic();
 	DeleteContent( &mPages );
 	DeleteContent( &mVoiceList );
-
-	if (fLyricsChecked && (!settings || !settings->checkLyricsCollisions))
-		removeAutoSpace(arm);
 
 	// - Creates new voices
 	GuidoPos pos = arm->GetHeadPosition();
@@ -655,12 +661,13 @@ void GRMusic::createGR (const ARPageFormat * inPageFormat, const GuidoLayoutSett
 	fLyricsChecked = false;
 
 
-//	GRPrintVisitor grv(cerr);
-//	accept (grv);
+//cerr << "GRMusic: ---------- visit ---------" << endl;
+	GRTrillLinker v;
+	accept (v);
 //	float d = getNotesDensity();
 //cerr << "GRMusic::createGR density: " << d << endl;
 
-//cerr << "---------- voices ---------" << endl;
+//cerr << "GRMusic: ---------- voices ---------" << endl;
 //printVoices(cerr);
 //cerr << "\n---------- pages ----------" << endl;
 //print(cerr);
@@ -715,7 +722,7 @@ float GRMusic::getStaffSize(int staffNum) {
 //-------------------------------------------------------------------------------
 ARMusicalVoice* GRMusic::getARVoice (int n)
 {
-	ARMusic * arm = getARMusic();
+	const ARMusic * arm = getARMusic();
 	GuidoPos pos = arm->GetHeadPosition();
 	while (pos) {
 		ARMusicalVoice * voice = arm->GetNext(pos);
@@ -766,103 +773,103 @@ int GRMusic::GGSInputPage(int page, const char * str)
 	// write our own parser for handling stuff ?
 	// this is a very dumm/first approach to handling GGS-input
 
-	printf("Inside GGSInput: %s\n",str);
-  
-	char type[250];
-	type[0] = 0;
-	int xpos = 0, ypos = 0, staffid = 0;
-	long int id=0;
-	int isadd = 0;
-	if (!(strncmp(&str[1],"add",3)))
-	{
-		// this is an add-command ...
-		printf("is an add\n");
-		isadd = 1;
-		// try to read the parameters ...
-		// syntax \add<"type",xpos,ypos,staffid>
-
-		int ret = sscanf(&str[6],"%249[^\"]\",%d,%d,%d>",type, &xpos,&ypos,&staffid);
-		printf("ret returnd %d, %s,%d,%d,%d\n",ret,type,xpos,ypos,staffid);
-	}
-	else if (!strncmp(&str[1],"move",4))
-    {
-		// it is a move ...
-		printf("is a move\n");
-		// syntax \move<id,dx,dy>
-		int ret = sscanf(&str[6],"%ld,%d,%d>",&id,&xpos,&ypos);
-		printf("ret returned %d, %ld, %d, %d\n",ret,id,xpos,ypos);
-
-		// now, we try to really move the object ....
-		// this should work quite easily ...
-		// first try: do it with an offset, next really change the height of notes 
-		GRSingleNote * nt = dynamic_cast<GRSingleNote *>((GObject *) id);
-		GREvent * ev = GREvent::cast((GObject *) id);
-		GRNotationElement *el = dynamic_cast<GRNotationElement *>((GObject *) id);
-		if (nt)
-		{
-			// we have a real note ....
-			// offset is only set in x-direction, y-offset changes note-height
-			nt->addToOffset(NVPoint(float(xpos), 0));
-
-			// y-pos changes note-height ...
-			ARNote * arnote = nt->getARNote();
-			arnote->resetGRRepresentation();
-
-			// this removes the elements from the note ...
-			nt->removeElements();
-
-			// the y-difference is calcualted to real half-steps ...
-			int steps =  (int)(- ypos * 2 / LSPACE);
-			printf("number of steps : %d\n",steps);
-
-			// this sets the new pitch ...
-			arnote->offsetpitch(steps);
-
-			// this creates the new elements ...
-			// a new stem, a new stemdirection and all that ...
-			nt->doCreateNote(nt->getDuration());
-		}
-		else if (ev)
-		{
-			// we really have an element ...
-			NVPoint position = ev->getPosition();
-			printf("Name of object : %s\n",typeid(ev).name());
-			ev->addToOffset(NVPoint(float(xpos), float(ypos)));
-		}
-		else if (el)
-		{
-			el->addToOffset(NVPoint(float(xpos), float(ypos)));
-		}
-	}
-	else if (!strncmp(&str[1], "remove_image", 12))
-	{
-		// it is a delete ...
-		printf("is a remove_image\n");
-		// syntax \remove_image<id>
-		int ret = sscanf(&str[14],"%ld>",&id);
-		printf("ret returned %d, %ld\n",ret,id);
-	}
-
-	if (!isadd) return guidoErrActionFailed;  // (jb) why ? Only Adds can be successful ?
-  											// (was: return 0; );
-
-	// first dummy: we always add a quarter note at the end of the abstract representation:
-	ARMusic * arm = getARMusic();
-	arm->resetGRRepresentation();
-	arm->removeAutoTags();
-
-	// - Release all pages and voices
-	DeleteContent( &mPages );
-	DeleteContent( &mVoiceList );
-
-	// - Adds a note to the end
-	assert(arm);
-	ARMusicalVoice * vc = arm->GetHead();
-	assert(vc);
-	ARNote * nt = new ARNote(ARNoteName("c"),0,1,1,4,80);
-	vc->AddTail(nt);
-	arm->doAutoStuff();
-	createGR( 0 );
+//	printf("Inside GGSInput: %s\n",str);
+//  
+//	char type[250];
+//	type[0] = 0;
+//	int xpos = 0, ypos = 0, staffid = 0;
+//	long int id=0;
+//	int isadd = 0;
+//	if (!(strncmp(&str[1],"add",3)))
+//	{
+//		// this is an add-command ...
+//		printf("is an add\n");
+//		isadd = 1;
+//		// try to read the parameters ...
+//		// syntax \add<"type",xpos,ypos,staffid>
+//
+//		int ret = sscanf(&str[6],"%249[^\"]\",%d,%d,%d>",type, &xpos,&ypos,&staffid);
+//		printf("ret returnd %d, %s,%d,%d,%d\n",ret,type,xpos,ypos,staffid);
+//	}
+//	else if (!strncmp(&str[1],"move",4))
+//    {
+//		// it is a move ...
+//		printf("is a move\n");
+//		// syntax \move<id,dx,dy>
+//		int ret = sscanf(&str[6],"%ld,%d,%d>",&id,&xpos,&ypos);
+//		printf("ret returned %d, %ld, %d, %d\n",ret,id,xpos,ypos);
+//
+//		// now, we try to really move the object ....
+//		// this should work quite easily ...
+//		// first try: do it with an offset, next really change the height of notes 
+//		GRSingleNote * nt = dynamic_cast<GRSingleNote *>((GObject *) id);
+//		GREvent * ev = GREvent::cast((GObject *) id);
+//		GRNotationElement *el = dynamic_cast<GRNotationElement *>((GObject *) id);
+//		if (nt)
+//		{
+//			// we have a real note ....
+//			// offset is only set in x-direction, y-offset changes note-height
+//			nt->addToOffset(NVPoint(float(xpos), 0));
+//
+//			// y-pos changes note-height ...
+//			ARNote * arnote = nt->getARNote();
+//			arnote->resetGRRepresentation();
+//
+//			// this removes the elements from the note ...
+//			nt->removeElements();
+//
+//			// the y-difference is calcualted to real half-steps ...
+//			int steps =  (int)(- ypos * 2 / LSPACE);
+//			printf("number of steps : %d\n",steps);
+//
+//			// this sets the new pitch ...
+//			arnote->offsetpitch(steps);
+//
+//			// this creates the new elements ...
+//			// a new stem, a new stemdirection and all that ...
+//			nt->doCreateNote(nt->getDuration());
+//		}
+//		else if (ev)
+//		{
+//			// we really have an element ...
+//			NVPoint position = ev->getPosition();
+//			printf("Name of object : %s\n",typeid(ev).name());
+//			ev->addToOffset(NVPoint(float(xpos), float(ypos)));
+//		}
+//		else if (el)
+//		{
+//			el->addToOffset(NVPoint(float(xpos), float(ypos)));
+//		}
+//	}
+//	else if (!strncmp(&str[1], "remove_image", 12))
+//	{
+//		// it is a delete ...
+//		printf("is a remove_image\n");
+//		// syntax \remove_image<id>
+//		int ret = sscanf(&str[14],"%ld>",&id);
+//		printf("ret returned %d, %ld\n",ret,id);
+//	}
+//
+//	if (!isadd) return guidoErrActionFailed;  // (jb) why ? Only Adds can be successful ?
+//  											// (was: return 0; );
+//
+//	// first dummy: we always add a quarter note at the end of the abstract representation:
+//	ARMusic * arm = getARMusic();
+//	arm->resetGRRepresentation();
+//	arm->removeAutoTags();
+//
+//	// - Release all pages and voices
+//	DeleteContent( &mPages );
+//	DeleteContent( &mVoiceList );
+//
+//	// - Adds a note to the end
+//	assert(arm);
+//	ARMusicalVoice * vc = arm->GetHead();
+//	assert(vc);
+//	ARNote * nt = new ARNote(ARNoteName("c"),0,1,1,4,80);
+//	vc->AddTail(nt);
+//	arm->doAutoStuff();
+//	createGR( 0 );
 	return guidoNoErr;	// (JB) was: return 1;
 }
 

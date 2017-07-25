@@ -18,14 +18,12 @@ using namespace std;
 #include "GRCoda.h"
 
 //----------------------------------------------------------------------------------
-GRCoda::GRCoda( ARCoda * ar ) : GRJump( ar, false ) 
+GRCoda::GRCoda( const ARCoda * ar ) : GRJump( ar, false )
 {
 	const float extent = GetSymbolExtent( kCodaSymbol );
 	const float adjust = extent * ( getSymbolSize() - 1);
 	mBoundingBox.right += adjust;
 }
-
-GRCoda::~GRCoda()   {}
 
 //----------------------------------------------------------------------------------
 float GRCoda::getSymbolSize () const	{ return 1.3333f; }

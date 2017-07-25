@@ -16,11 +16,9 @@
 */
 
 #include "kf_ilist.h"	// required
-// #include "defines.h"
 
 #include "ARDefine.h"
-// #include "GRDefine.h"
-#include "TagParameterList.h"
+//#include "TagParameterList.h"
 #include "ARMusicalTag.h"
 #include "ARFactory.h"
 
@@ -60,7 +58,7 @@ class NoteAndChordFactory : public ARFactory
 		virtual void 		addTagParameter( const char * parameter ){}
 		virtual void 		addTagParameter( TYPE_TAGPARAMETER_INT parameter ){}
 		virtual void 		addTagParameter( TYPE_TAGPARAMETER_REAL parameter ){}
-		virtual void 		setTagParameterList( TagParameterList theTagParameterList ){}
+//		virtual void 		setTagParameterList( TagParameterList theTagParameterList ){}
 
 	  	virtual void 		setParameterName( const char * name ){}
 	  	virtual void 		setUnit( const char * s ){}

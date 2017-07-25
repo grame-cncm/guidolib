@@ -24,29 +24,22 @@
 */
 class ARJump : public ARMTParameter
 {
-public:
-				ARJump(std::string mark = "");
-	virtual 	~ARJump();
+	public:
+					 ARJump(std::string mark = "");
+		virtual 	~ARJump() {}
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual const char*	getParamsStr() const	{ return kARJumpParams; };
+		virtual const char*	getTagName() const		{ return "ARJump"; };
 
-	virtual void setTagParameterList( TagParameterList & tpl );
+		virtual void setTagParameters (const TagParameterMap& params);
 
-    const FormatStringParserResult&   getMark() const     { return mMark; }
-    int								  getID() const       { return mID; }
+		const FormatStringParserResult&   getMark() const   { return mMark; }
+		int								  getID() const     { return mID; }
+		const ARMusicalObject *			  isARJump() const	{ return this; }
 
-    /**** Function to avoid dynamic_cast ****/
-    ARMusicalObject *isARJump() { return this; }
-    /****************************************/
-
-protected:
-    static ListOfTPLs ltpls;
-
-private:
-	FormatStringParserResult	mMark;
-    int							mID;             // the tag ID
+	private:
+		FormatStringParserResult	mMark;
+		int							mID;             // the tag ID
 };
 
 #endif

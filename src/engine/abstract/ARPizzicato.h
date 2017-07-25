@@ -17,32 +17,24 @@
 #include "ARArticulation.h"
 
 /*brief	The pizzicato articulation tag */
-
 class ARPizzicato : public ARArticulation
 {
-public :
-	enum	tTypePizz {SNAP, BUZZ, FINGERNAIL, LEFTHAND};
+	public :
+		enum	tTypePizz {SNAP, BUZZ, FINGERNAIL, LEFTHAND};
 
-	ARPizzicato() {
-		rangesetting = ONLY;
-		fType = LEFTHAND;
-		fPosition = kAbove;
-	}
-
-	virtual		~ARPizzicato() { };
+					 ARPizzicato();
+		virtual		~ARPizzicato() { };
 	
-	virtual void setTagParameterList(TagParameterList & tpl);
+		virtual void setTagParameters (const TagParameterMap& params);
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual const char*	getParamsStr() const	{ return kARPizzicatoParams; };
+		virtual const char*	getTagName() const		{ return "ARPizzicato"; };
+		virtual std::string getGMNName() const		{ return "\\pizzicato"; };
 	
-	tTypePizz	 getType() const {return fType;}
+		tTypePizz	 getType() const				{ return fType;}
 	
-protected:
-
-	static ListOfTPLs ltpls;
-	tTypePizz fType;	
+	private:
+		tTypePizz fType;
 };
 
 #endif

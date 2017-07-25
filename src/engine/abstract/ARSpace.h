@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,32 +14,31 @@
   research@grame.fr
 
 */
+
 #include "ARMTParameter.h"
-#include "GuidoDefs.h"
+//#include "GuidoDefs.h"
 
 /** \brief not yet documented
 */
 class ARSpace :  public ARMTParameter 
 {
-public:
-    virtual float getValue() const { return fVal; }
+	public:
+				 ARSpace();
+				 ARSpace(float val) : fVal(val) {}
+		virtual ~ARSpace() {};
 
-			 ARSpace() : fVal(0.0f) { }
-			 ARSpace(float val) : fVal(val) { }
+		virtual int	 getOrder() const				{ return kDontMove; }
+		virtual const char*	getParamsStr() const	{ return kARSpaceParams; };
+		virtual const char*	getTagName() const		{ return "ARSpace"; };
+		virtual std::string getGMNName() const		{ return "\\space"; };
 
-    virtual ~ARSpace() {};
+		virtual void setTagParameters (const TagParameterMap& params);
+		virtual float getValue() const 				{ return fVal; }
 
-	virtual int	 getOrder() const		{ return kDontMove; }
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual ARSpace*	isARSpace()				{ return this; }
 
-    virtual void setTagParameterList(TagParameterList & tpl);
-    virtual ARSpace		*isARSpace()		  { return this; }
-
-private:
-    float fVal;
-    static ListOfTPLs ltpls;
+	private:
+		float fVal;
 };
 
 #endif

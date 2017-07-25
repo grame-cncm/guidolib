@@ -15,32 +15,33 @@
 
 */
 
+#include <string>
+
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
 #include "TagParameterFloat.h"
-#include "TagParameterString.h"
-#include <cstring>
 
 class ARBase;
+class TagParameterString;
 
 #define kDefaultThickness	4.f
 /** \brief Abstract representation of a tuplet.
 */
 class ARTuplet :  public ARMTParameter, public ARPositionTag
 {
-public:
-                    ARTuplet(); 
-    virtual 	   ~ARTuplet() {}
+	public:
+						ARTuplet(); 
+		virtual 	   ~ARTuplet() {}
 
-            void    setAuto();
-    const NVstring& getName() const { return fTupletFormat; }
+				void		setAuto();
+		const std::string	getName() const { return fTupletFormat; }
 
-    virtual void  setTagParameterList(TagParameterList & tl);
+		virtual void  setTagParameters (const TagParameterMap& params);
 
-    virtual void  printName(std::ostream& os) const;
-    virtual void  printGMNName(std::ostream& os) const;
-    virtual void  printParameters(std::ostream& os) const;
-
+		virtual const char*	getParamsStr() const	{ return kARTupletParams; };
+		virtual const char*	getTagName() const		{ return "ARTuplet"; };
+		virtual std::string getGMNName() const		{ return "\\tuplet"; };
+ 
             void  setupTuplet( ARBase * inBase );
             void  parseTupletFormatString();
 
@@ -52,41 +53,31 @@ public:
 			 * \return 0 if position is not explicitely set in the tag or -1 if set below or 1 if set above.
 			 */
 			int  isPositionAbove() const;
-            float getDy1()          const { return fDy1; }
-            float getDy2()          const { return fDy2; }
+            float getDy1()          const { return fDy1 ? fDy1->getValue() : 0.f; }
+            float getDy2()          const { return fDy2 ? fDy2->getValue() : 0.f; }
             float getThickness()    const { return fLineThickness; }
             float defaultThickness()const { return kDefaultThickness; }
             bool  isTextBold()      const { return fTextBold; }
             float getTextSize()     const { return fTextSize; }
             bool  getLeftBrace()    const { return fLeftBrace; }
             bool  getRightBrace()   const { return fRightBrace; }
-            NVstring getDispNote()  const { return fDispNote; }
+            const std::string& getDispNote()  const { return fDispNote; }
+            bool  isDySet()         const { return (fDy1 && fDy1->TagIsSet()) || (fDy2 && fDy2->TagIsSet()); }
 
-            bool  isFormatSet()     const { return fFormatSet; } 
-            bool  isDySet()         const { return (fDy1TagIsSet || fDy2TagIsSet); }
+	protected:
+		std::string fTupletFormat;	// format string <"-x:y-">
+		const TagParameterString* fPosition;
+		const TagParameterFloat* fDy1;
+		const TagParameterFloat* fDy2;
+		float		fLineThickness;
+		bool		fTextBold;
+		float		fTextSize;
+		std::string fDispNote;
 
-protected:
-    NVstring fTupletFormat;	// format string <"-x:y-">
-    NVstring fPosition;
-	bool	 fPositionIsSet;
-    float    fDy1;
-    float    fDy2;
-    float    fLineThickness;
-    bool     fTextBold;
-    float    fTextSize;
-    NVstring fDispNote;
-
-    int	  fBaseNumerator;
-    int	  fBaseDenominator;
-    bool  fLeftBrace;
-    bool  fRightBrace;
-
-    bool  fFormatSet;
-    bool  fDy1TagIsSet;
-    bool  fDy2TagIsSet;
-
-    static ListOfTPLs ltpls;
-    // a string ...
+		int	  fBaseNumerator;
+		int	  fBaseDenominator;
+		bool  fLeftBrace;
+		bool  fRightBrace;
 };
 
 #endif

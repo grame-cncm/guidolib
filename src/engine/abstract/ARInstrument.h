@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -15,45 +15,34 @@
 
 */
 
-#include "ARMTParameter.h"
+#include <string>
 
-class TagParameterString;
+#include "ARFontAble.h"
 
 /** \brief not yet documented
 */
-class ARInstrument : public ARMTParameter
+class ARInstrument : public ARFontAble
 {
 	public:
 				 ARInstrument(bool autopos);
-		virtual ~ARInstrument();	
+		virtual ~ARInstrument() {}
 
-		virtual void setTagParameterList(TagParameterList & theTagParameterList);
+		virtual void setTagParameters (const TagParameterMap& params);
 
-		virtual int	 getOrder() const		{ return kInstrumentOrder; }
-	    virtual void printName(std::ostream& os) const;
-	    virtual void printGMNName(std::ostream& os) const;
-	    virtual void printParameters(std::ostream& os) const;
+		virtual int	 getOrder() const				{ return kInstrumentOrder; }
+		virtual const char*	getParamsStr() const	{ return kARInstrumentParams; };
+		virtual const char*	getTagName() const		{ return "ARInstrument"; };
+		virtual std::string getGMNName() const		{ return "\\instrument"; };
+		virtual bool IsStateTag() const				{ return true; }
 
-		const char* getName() const;
-		const TagParameterString *getTransp() const { return fTransp; }
-		virtual bool IsStateTag() const 		    { return true; }
-
-		const char* getFont() const;
-		const char* getTextFormat() const;
-		const char* getTextAttributes() const;
-		float getSize() const;
-		bool autoPos() const	{ return fAutoPos; }
+		const std::string& getName() const			{ return fName; }
+		const std::string& getTransp() const		{ return fTransp; }
+		bool			   autoPos() const			{ return fAutoPos; }
 
 	private:
-		TagParameterString * fName;
-		TagParameterString * fTransp;
-		TagParameterString * fFont;
-		TagParameterString * fTextFormat;
-		TagParameterString * fTextAttributes;
-		TagParameterFloat *	 fSize;
-		bool fAutoPos;
-
-		static ListOfTPLs ltpls;
+		std::string fName;
+		std::string fTransp;
+		bool		fAutoPos;
 };
 
 #endif

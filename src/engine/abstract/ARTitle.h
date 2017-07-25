@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -21,26 +21,17 @@
 */
 class ARTitle : public ARText
 {
-public:
-                 ARTitle();
-    virtual     ~ARTitle();
+	public:
+					 ARTitle();
+		virtual     ~ARTitle() {}
 
-	virtual int	 getOrder() const			{ return kTitleOrder; }
-    virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-    virtual void printParameters(std::ostream& os) const;
+		virtual int			getOrder() const		{ return kTitleOrder; }
+		virtual const char*	getParamsStr() const	{ return kARTitleParams; };
+		virtual const char*	getTagName() const		{ return "ARTitle"; };
+		virtual std::string getGMNName() const		{ return "\\title"; };
 
-    virtual void setTagParameterList(TagParameterList & tpl);
-
-    const char*  getName();
-    const char*  getPageFormat();
-
-protected:
-    static ListOfTPLs ltpls;
-
-private:
-    TagParameterString  * name;
-    TagParameterString * pageformat;
+		const char*  getName() const;
+		const char*  getPageFormat() const;
 };
 
 #endif

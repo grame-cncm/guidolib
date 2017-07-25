@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -23,29 +23,20 @@
 
 class ARAccidental : public ARMTParameter, public ARPositionTag
 {
-public:
-	enum Style { kUnknown, kNone, kCautionary };
-	
-			 ARAccidental(const ARAccidental & acc);
-			 ARAccidental();
-	virtual ~ARAccidental();
+	public:
+		enum Style { kUnknown, kNone, kCautionary };
+		
+				 ARAccidental(const ARAccidental & acc);
+				 ARAccidental();
+		virtual ~ARAccidental() {}
 
+		virtual ARMusicalObject * Copy() const	{ return new ARAccidental(*this); }
 
+		virtual const char*	getParamsStr() const	{ return kARAccidentalParams; };
+		virtual const char*	getTagName () const		{ return "ARAccidental"; };
+		virtual std::string getGMNName () const		{ return "\\accidental"; };
 
-	virtual ARMusicalObject * Copy() const	{ return new ARAccidental(*this); }
-
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
-
-	virtual void setTagParameterList(TagParameterList & tpl);
-
-	Style		getStyle() const;
-
-protected:
-
-	TagParameterString *mStyle;
-	static ListOfTPLs ltpls;
+		Style		getStyle() const;
 };
 
 #endif

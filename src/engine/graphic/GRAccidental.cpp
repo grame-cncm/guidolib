@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -43,6 +43,30 @@ GRAccidental::GRAccidental( GREvent * sngnot, float notebreite, float inAccident
 {
 	initialize(sngnot, p_size);
  	setAccidental( inAccidentalID, notebreite, curLSPACE);
+}
+
+//____________________________________________________________________________________
+GRAccidental::GRAccidental( float detune, bool cautionnary, float p_size )
+	: offsetset(false)
+{
+	initialize(0, p_size);
+	float n = detune / 0.5;		// count of quarter tone in detune
+	int id = int(n);
+	float remain = n - id;
+	if (remain > 0.25) id += 1;
+	else if ((detune < 0) && (remain < -0.25)) id -= 1;
+	mSymbol = quarters2symbol (id);
+	if (cautionnary) mSymbol = getCautionary(mSymbol);
+	setAccidentalLayout (0, LSPACE);
+}
+
+//____________________________________________________________________________________
+GRAccidental::GRAccidental()
+	: offsetset(false)
+{
+	initialize(0, 1);
+	mSymbol = kNoneSymbol;
+	setAccidentalLayout (0, LSPACE);
 }
 
 //____________________________________________________________________________________

@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -31,7 +31,7 @@ public:
              ARMusicalEvent(const TYPE_TIMEPOSITION & relativeTimePositionOfEvent, const TYPE_DURATION & durationOfEvent);
              ARMusicalEvent(const TYPE_DURATION & durationOfEvent);
              ARMusicalEvent(const ARMusicalEvent &armev);
-    virtual	~ARMusicalEvent();
+    virtual	~ARMusicalEvent() {}
 
     virtual bool	CanBeMerged(const ARMusicalEvent * ev2);
             void    setPointsNoDurationChange( int pointCount );
@@ -52,9 +52,10 @@ public:
     static ARMusicalEvent * cast( ARMusicalObject * inObj ) { return (inObj->isEventClass() ? static_cast<ARMusicalEvent *>(inObj) : 0 ); }
 
     virtual void print(std::ostream& os) const;
-    virtual void printName(std::ostream& os) const       { os << "ARMusicalEvent "; }
-    virtual void printGMNName(std::ostream& os) const    { os << "\\musicalEvent "; }
-    virtual void printParameters(std::ostream& os) const { os << "params "; }
+    virtual void printName(std::ostream& os) const		{ os << "ARMusicalEvent "; }
+    virtual void printGMNName(std::ostream& os) const	{ os << "\\musicalEvent "; }
+    virtual const char*	getTagName() const				{ return "ARMusicalEvent "; }
+    virtual std::string getGMNName() const				{ return "\\musicalEvent "; }
 
     virtual void forceNoteAppearance(NVstring noteAppearance)	{};
     virtual NVstring getAppearance() const						{ return ""; };

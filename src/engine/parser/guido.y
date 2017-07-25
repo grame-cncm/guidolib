@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <vector>
 
 #include "GuidoParser.h"
 #include "guido.h"
@@ -14,6 +15,9 @@ int guidoerror (YYLTYPE* locp, GuidoParser* context, const char*s);
 int yylex(YYSTYPE* lvalp, YYLTYPE* llocp, void* scanner);
 
 #define scanner context->fScanner
+
+class TagParameter;
+class ARMusicalTag;
 
 using namespace std;
 
@@ -34,6 +38,9 @@ using namespace std;
 	const char*		token;
 	std::string*	str;
 	char			c;
+	TagParameter*	param;
+	ARMusicalTag*	tag;
+//	GuidoParser::ParamsList*	plist;
 }
 
 /*------------------------------ numbers ------------------------------*/
@@ -91,7 +98,8 @@ using namespace std;
 
 %type <str>		notename noteid tagname id 
 %type <num>		number pnumber nnumber signednumber
-
+%type<param>	tagarg tagparam
+// %type<plist>	tagparams
 
 %%
 
@@ -135,21 +143,37 @@ tagid		: tagname										{ context->tagStart ( $1->c_str(), 0); delete $1; }
 			| BAR											{ context->tagStart ( "\\bar", 0); }
 			;
 
-tagarg		: signednumber									{ context->tagIntArg   ($1) }
-			| floatn										{ context->tagFloatArg ($1) }
-			| signednumber UNIT								{ context->tagIntArg   ($1); context->tagArgUnit (context->fText.c_str() ) }
-			| floatn UNIT									{ context->tagFloatArg ($1); context->tagArgUnit (context->fText.c_str() ) }
-			| STRING										{ context->tagStrArg   (context->fText.c_str() ) }
-			| id											{ /* unused */ delete $1; }
+tagarg		: signednumber									{ $$ = context->intParam   ($1) }
+			| floatn										{ $$ = context->floatParam ($1) }
+			| signednumber UNIT								{ $$ = context->intParam   ($1, context->fText.c_str() ) }
+			| floatn UNIT									{ $$ = context->floatParam ($1, context->fText.c_str() ) }
+			| STRING										{ $$ = context->strParam   (context->fText.c_str() ) }
+			| id											{ /* unused */ $$ = 0; delete $1; }
 			;
 
-tagparam	: tagarg										{ context->tagAddArg ( ""); }
-			| id EQUAL tagarg								{ context->tagAddArg ( $1->c_str()); delete $1; }
+tagparam	: tagarg										{ $$ = $1; }
+			| id EQUAL tagarg								{ if($3) $3->setName($1->c_str()); $$ = $3; delete $1; }
 			;
 
-tagparams	: tagparam
-			| tagparams SEP tagparam
+tagparams	: tagparam										{ context->tagParameter ($1); }
+			| tagparams SEP tagparam						{ context->tagParameter ($3) ; } 
 			;
+
+// tagarg		: signednumber									{ context->tagIntArg   ($1) }
+//			| floatn										{ context->tagFloatArg ($1) }
+//			| signednumber UNIT								{ context->tagIntArg   ($1); context->tagArgUnit (context->fText.c_str() ) }
+//			| floatn UNIT									{ context->tagFloatArg ($1); context->tagArgUnit (context->fText.c_str() ) }
+//			| STRING										{ context->tagStrArg   (context->fText.c_str() ) }
+//			| id											{ /* unused */ delete $1; }
+//			;
+
+//tagparam	: tagarg										{ context->tagAddArg ( ""); }
+//			| id EQUAL tagarg								{ context->tagAddArg ( $1->c_str()); delete $1; }
+//			;
+
+//tagparams	: tagparam
+//			| tagparams SEP tagparam
+//			;
 
 //_______________________________________________
 // chord description

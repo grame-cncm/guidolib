@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -13,75 +13,20 @@
 */
 
 #include <iostream>
+
 #include "ARBembel.h"
-// #include "ARFactory.h"
+#include "TagParameterStrings.h"
 #include "TagParameterInt.h"
-#include "ListOfStrings.h"
-#include "TagParameterList.h"
 
-ListOfTPLs ARBembel::ltpls(1);
+static const TagParameterMap sARBembelMap (kARBembelParams);
 
-ARBembel::ARBembel(int p_inv)
+ARBembel::ARBembel()
 {
-	inverse = p_inv;
+	setupTagParameters (sARBembelMap);
 }
 
-ARBembel::~ARBembel()
-{
+int ARBembel::getInverse() const {
+	const TagParameterInt* p = getParameter<TagParameterInt>(kInverseStr, true);
+	return p->getValue();
 }
 
-void ARBembel::setTagParameterList(TagParameterList & tpl)
-{
-	if (ltpls.GetCount() == 0)
-	{
-		// create a list of string ...
-
-		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(("I,inverse,0,o"));
-		CreateListOfTPLs(ltpls,lstrs);
-	}
-
-	TagParameterList * rtpl = NULL;
-	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
-
-	if (ret>=0 && rtpl)
-	{
-		// we found a match!
-		if (ret == 0)
-		{
-			// then, we now the match for
-			// the first ParameterList
-			// w, h, ml, mt, mr, mb
-			GuidoPos pos = rtpl->GetHeadPosition();
-
-			TagParameterInt * tpi = TagParameterInt::cast(rtpl->GetNext(pos));
-			assert(tpi);
-
-			if (tpi->pflag != TagParameter::NOTSET)
-				inverse = tpi->getValue();
-		}
-
-		delete rtpl;
-	}
-	else
-	{
-		// failure
-	}
-
-	tpl.RemoveAll();
-}
-
-void ARBembel::printName(std::ostream& os) const
-{
-    os << "ARBembel";
-}
-
-void ARBembel::printGMNName(std::ostream& os) const
-{
-    os << "\\bembel";
-}
-
-void ARBembel::printParameters(std::ostream& os) const
-{
-    ARMusicalTag::printParameters(os);
-}

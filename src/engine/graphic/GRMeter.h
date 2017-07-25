@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -20,7 +20,7 @@
 #include "ARMeter.h"
 #include "GRTagARNotationElement.h"
 #include "GRDefine.h"
-#include "GRVisitor.h"
+//#include "GRVisitor.h"
 
 class GRStaff;
 
@@ -31,7 +31,7 @@ class GRMeter : public GRTagARNotationElement
 {
 
   public:
-				 GRMeter(ARMeter * ar, GRStaff * curstaff, bool p_ownsAR = false);
+				 GRMeter(const ARMeter * ar, GRStaff * curstaff, bool p_ownsAR = false);
 		virtual ~GRMeter() {}
 
 		virtual void	GGSOutput() const;
@@ -39,7 +39,7 @@ class GRMeter : public GRTagARNotationElement
 		virtual bool	checkCollisionWith() const	{ return true; }
 		virtual void	accept (GRVisitor& visitor);
 	
-		ARMeter*		getARMeter();
+//		ARMeter*		getARMeter();
 		const ARMeter*	getARMeter() const;
 
 

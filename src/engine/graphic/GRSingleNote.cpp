@@ -43,7 +43,6 @@
 #include "GRStem.h"
 #include "GRGlobalStem.h"
 #include "GRFlag.h"
-#include "GRCompositeNote.h"
 #include "GRStaff.h"
 #include "GRSpecial.h"
 #include "GRSystem.h"
@@ -66,7 +65,7 @@ using namespace std;
 
 
 //____________________________________________________________________________________
-GRSingleNote::GRSingleNote( GRStaff* inStaff, ARNote* arnote, const TYPE_TIMEPOSITION& pos, const TYPE_DURATION& dur)
+GRSingleNote::GRSingleNote( GRStaff* inStaff, const ARNote* arnote, const TYPE_TIMEPOSITION& pos, const TYPE_DURATION& dur)
   : GRNote( inStaff, arnote, pos, dur), mNumHelpLines(0),
   mStemDir(dirAUTO), mStemDirSet(false), mHeadState(ARTHead::NOTSET), mNoteAppearance(arnote->getAppearance())
 {
@@ -81,15 +80,11 @@ GRSingleNote::GRSingleNote( GRStaff* inStaff, ARNote* arnote, const TYPE_TIMEPOS
 	// the note is NOT created!
 }
 
-GRSingleNote::~GRSingleNote()
-{
-}
-
 // -----------------------------------------------------------------------------
 void GRSingleNote::accept (GRVisitor& visitor)
 {
 	visitor.visitStart (this);
-	if (fOrnament) fOrnament->accept(visitor);
+//	if (fOrnament) fOrnament->accept(visitor);
 	GRNEList& articulations = getArticulations();
 	for_each(articulations.begin(),  articulations.end(), [&visitor] (GRNotationElement *e) -> void { e->accept(visitor); });
 	visitor.visitEnd (this);
@@ -261,12 +256,13 @@ void GRSingleNote::OnDraw( VGDevice & hdc) const
 		el->OnDraw(hdc);
 	}
 
-	if (fOrnament) {
-        float X = mGrStaff->getXEndPosition(getARNote()->getRelativeTimePosition(), getARNote()->getDuration());
-		// to draw the trill line...
-		float Y = getPosition().y + getBoundingBox().Height() / 2;
-		fOrnament->OnDraw(hdc, X, Y, numVoice);
-	}
+//	if (fOrnament) {
+//        float X = mGrStaff->getXEndPosition(getARNote()->getRelativeTimePosition(), getARNote()->getDuration());
+//		// to draw the trill line...
+////		float Y = getPosition().y + getBoundingBox().Height() / 2;
+////		fOrnament->OnDraw(hdc, X, Y, numVoice);
+//		fOrnament->OnDraw(hdc, X, getPosition().y, numVoice);
+//	}
 
 	// - Restore
 	if (mColRef)
@@ -340,7 +336,7 @@ void GRSingleNote::createNote(const TYPE_DURATION & p_durtemplate)
 		return;		// this just does nothing more
 	}
 
-	ARNote * arNote = getARNote();
+	const ARNote * arNote = getARNote();
 	const int pitch = arNote->getPitch();
 	const int octave = arNote->getOctave() - arNote->getOctava();
 	GDirection tmpdir =  mGrStaff->getDefaultThroatDirection( pitch, octave );
@@ -503,8 +499,9 @@ void GRSingleNote::forceAppearance()
 
             if (!mGlobalStem)
                 getFlag()->configureForSingleNote(this, dur);
-            else
+            else {
                 getFlag()->configureForChord(mGlobalStem, dur);
+			}
         }
     }
 }
@@ -528,37 +525,29 @@ ARTHead::HEADSTATE GRSingleNote::adjustHeadPosition(ARTHead::HEADSTATE sugHeadSt
 	GDirection stemdir = dirOFF;
 	if (mGlobalStem)
 		stemdir = mGlobalStem->getStemDir();			// we have a shared stem
-	else
-	{
+	else {
 		GRStem * stem = getStem();
 		if (stem) stemdir = stem->getStemDir();
 	}
 
-	if (useheadstate == ARTHead::NORMAL)
-	{
+	if (useheadstate == ARTHead::NORMAL) {
 		if (stemdir == dirUP || stemdir == dirOFF)	retstate = ARTHead::LEFT;
 		else if (stemdir == dirDOWN)				retstate = ARTHead::RIGHT;
 	}
-	else if (useheadstate == ARTHead::REVERSE)
-	{
-		if (stemdir == dirUP || stemdir == dirOFF)
-		{
+	else if (useheadstate == ARTHead::REVERSE) {
+		if (stemdir == dirUP || stemdir == dirOFF) {
 			head->addToOffset(NVPoint((GCoord)offsetx,0));
 			retstate = ARTHead::RIGHT;
 		}
-		else if (stemdir == dirDOWN)
-		{
+		else if (stemdir == dirDOWN) {
 			head->addToOffset(NVPoint((GCoord)-offsetx,0));
             retstate = ARTHead::LEFT;
         }
-
         if (GRCluster *grcluster = this->getGRCluster())
             grcluster->setClusterOrientation(stemdir, retstate);
     }
-	else if (useheadstate == ARTHead::LEFT)
-	{
-		if (stemdir == dirUP || stemdir == dirOFF)
-		{
+	else if (useheadstate == ARTHead::LEFT) {
+		if (stemdir == dirUP || stemdir == dirOFF) {
 		}
 		else if (stemdir == dirDOWN)
 			head->addToOffset(NVPoint((GCoord)-offsetx,0));
@@ -567,20 +556,17 @@ ARTHead::HEADSTATE GRSingleNote::adjustHeadPosition(ARTHead::HEADSTATE sugHeadSt
         if (GRCluster *grcluster = this->getGRCluster())
             grcluster->setClusterOrientation(stemdir, retstate);
     }
-	else if (useheadstate == ARTHead::RIGHT )
-	{
+	else if (useheadstate == ARTHead::RIGHT ) {
 		if (stemdir == dirUP || stemdir == dirOFF)
 			head->addToOffset(NVPoint((GCoord)offsetx,0));
-		else if (stemdir == dirDOWN)
-		{
+		else if (stemdir == dirDOWN) {
 		}
         retstate = ARTHead::RIGHT;
 
         if (GRCluster *grcluster = this->getGRCluster())
             grcluster->setClusterOrientation(stemdir, retstate);
 	}
-	else if (useheadstate == ARTHead::CENTER)
-	{
+	else if (useheadstate == ARTHead::CENTER) {
 		if (stemdir == dirUP || stemdir == dirOFF)
 			head->addToOffset(NVPoint((GCoord)(offsetx * 0.5f) ,0));
 		else if (stemdir == dirDOWN)
@@ -595,12 +581,11 @@ ARTHead::HEADSTATE GRSingleNote::adjustHeadPosition(ARTHead::HEADSTATE sugHeadSt
     this->getNoteHead()->adjustPositionForChords(retstate, stemdir);
 
     mHeadState = retstate;
-
 	return mHeadState;
 }
 
 //____________________________________________________________________________________
-NVRect GRSingleNote::getEnclosingBox(bool includeAccidentals, bool includeSlurs) const
+NVRect GRSingleNote::getEnclosingBox(bool includeAccidentals, bool includeSlurs, bool includeTrills) const
 {
 	NVRect outrect = getBoundingBox();
 	outrect += getPosition();
@@ -623,27 +608,28 @@ NVRect GRSingleNote::getEnclosingBox(bool includeAccidentals, bool includeSlurs)
 		outrect.Merge (r);
 	}
 
-	if (fOrnament) {
-		NVRect r = fOrnament->getEnclosingBox();
-		outrect.Merge (r);
-	}
+//	if (fOrnament) {
+//		NVRect r = fOrnament->getEnclosingBox();
+//		outrect.Merge (r);
+//	}
 	// not all the ornaments are stored in the fOrnament field
 	const NEPointerList * assoc = getAssociations();
 	GuidoPos pos = assoc ? assoc->GetHeadPosition() : 0;
 	while (pos) {
 		const GRNotationElement* el = getAssociations()->GetNext(pos);
-		const GRTrill * trill = dynamic_cast<const GRTrill *>(el);
-		if (trill) {
-			NVRect r = trill->getEnclosingBox();
-			outrect.Merge (r);
+		if (includeTrills) {
+			const GRTrill * trill = el->isGRTrill();
+			if (trill) {
+				NVRect r = trill->getEnclosingBox();
+				outrect.Merge (r);
+			}
 		}
-		else if (includeSlurs) {
+		if (includeSlurs) {
 			const GRSlur * slur = dynamic_cast<const GRSlur *>(el);
 			if (slur) {
 				NVRect r = slur->getBoundingBox();
 				if (r.top < outrect.top) outrect.top = r.top;
 				if (r.bottom > outrect.bottom) outrect.bottom = r.bottom;
-//				outrect.Merge (r);
 			}
 		}
 	}
@@ -654,9 +640,6 @@ NVRect GRSingleNote::getEnclosingBox(bool includeAccidentals, bool includeSlurs)
 void GRSingleNote::setHPosition( GCoord nx )
 {
 	GRNote::setHPosition(nx);
-	// - Notify ornament
-	if (fOrnament)
-		fOrnament->tellPosition(this, getPosition());
     // - Notify cluster
     if (fCluster)
 		fCluster->tellPosition(this, getPosition());
@@ -669,9 +652,6 @@ void GRSingleNote::setPosition( const NVPoint & inPos )
 	// - Call inherited
 	GRNote::setPosition( inPos );
 
-	// - Notify Ornament
-	if (fOrnament)
-		fOrnament->tellPosition(this, getPosition());
     // - Notify cluster
     if (fCluster)
         fCluster->tellPosition(this, getPosition());
@@ -878,8 +858,7 @@ void GRSingleNote::setBeamStem(GRBeam * beam, GCoord pos)
 //____________________________________________________________________________________
 float GRSingleNote::setStemLength( float inLen )
 {
-	if (mGlobalStem)
-	{
+	if (mGlobalStem) {
 		mGlobalStem->setNoteStemLength( this, inLen);
 		return (float)mGlobalStem->getStemLength();
 	}
@@ -1163,7 +1142,7 @@ void GRSingleNote::handleAccidental (const ARAccidental* acc)
 	// the note has been created already ... ? has it?
 	// Attention: here we do not have to look for the Accidentals that have been
 	// created, but rather to the original accidentals set with the note
-	ARNote * arnote = this->getARNote();
+	const ARNote * arnote = this->getARNote();
 	GRAccidentalList accList;
 	extractAccidentals( &accList );
 	GuidoPos pos = accList.GetHeadPosition();
@@ -1225,9 +1204,9 @@ void GRSingleNote::handleAccidental (const ARAccidental* acc)
 }
 
 //____________________________________________________________________________________
-void GRSingleNote::addArticulation(ARMusicalTag * mtag)
+void GRSingleNote::addArticulation(const ARMusicalTag * mtag)
 {
-	ARAccidental * acc =  dynamic_cast<ARAccidental *>(mtag);
+	const ARAccidental * acc =  dynamic_cast<const ARAccidental *>(mtag);
 	if( acc )		{ handleAccidental (acc); return; }
 	GRNote::addArticulation(mtag);
 }

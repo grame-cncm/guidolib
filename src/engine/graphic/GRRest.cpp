@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -21,32 +21,27 @@
 #include "GRDefine.h"
 
 
-GRRest::GRRest(GRStaff * grstf,const TYPE_DURATION & theDuration)
-  		: GREvent(grstf, new ARRest(theDuration), true) // ownsAR
+GRRest::GRRest(GRStaff * grstf,const TYPE_DURATION & duration)
+  		: GREvent(grstf, new ARRest(duration), true) // ownsAR
 {
 	mWholeMeasure = 0;
 }
 
-GRRest::GRRest(GRStaff * grstf,ARRest * arrest, bool p_ownsAR)
+GRRest::GRRest(GRStaff * grstf, const ARRest * arrest, bool p_ownsAR)
   : GREvent(grstf,arrest,p_ownsAR)
 {
 	mWholeMeasure = 0;
 }
 
-GRRest::GRRest(GRStaff *grstf,ARRest* arrest, const TYPE_TIMEPOSITION & date, const TYPE_DURATION & duration)
+GRRest::GRRest(GRStaff *grstf, const  ARRest* arrest, const TYPE_TIMEPOSITION & date, const TYPE_DURATION & duration)
   : GREvent(grstf, arrest, date, duration)
 {
 	mWholeMeasure = 0;
 }
 
 
-GRRest::~GRRest()
+const ARRest * GRRest::getARRest() const
 {
-}
-
-
-ARRest * GRRest::getARRest() const
-{
-	return /*dynamic*/static_cast<ARRest*>(getAbstractRepresentation());
+	return /*dynamic*/static_cast<const ARRest*>(getAbstractRepresentation());
 }
 

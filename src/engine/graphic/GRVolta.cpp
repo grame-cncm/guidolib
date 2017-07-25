@@ -46,7 +46,7 @@ std::map<int, GRVolta *> GRVolta::mPrevious;
 
 NVPoint GRVolta::refpos;
 
-GRVolta::GRVolta( GRStaff * inStaff, ARVolta * ar )
+GRVolta::GRVolta( GRStaff * inStaff, const ARVolta * ar )
 		: GRPTagARNotationElement( ar )
 {
 	mPrevious.clear();

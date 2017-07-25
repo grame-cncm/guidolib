@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -20,14 +20,11 @@
 unsigned int GRBembel::sBembelSymbol = kBembelSymbol; // SCR_BEMBEL	was 164
 NVPoint GRBembel::refpos;
 
-GRBembel::GRBembel(ARBembel * par)
+GRBembel::GRBembel(const ARBembel * par)
 		: GRTagARNotationElement(/*dynamic cast<ARMusicalObject *>*/(par), LSPACE)
 {
 	// No!
 	mNeedsSpring = 1;
-
-	// obsolete
-	// spacing = 0;
 	mSymbol = sBembelSymbol;
 
 	const float extent = (float)GetSymbolExtent( mSymbol );
@@ -41,14 +38,10 @@ GRBembel::GRBembel(ARBembel * par)
 	mLeftSpace = (GCoord)(extent * 0.5f);
 	mRightSpace = (GCoord)(extent * 0.5f); // extent;
 
-
 	// no referencePosition?
 	refpos = NVPoint( (GCoord)(-extent * 0.5f) ,0);
 }
 
-GRBembel::~GRBembel()
-{
-}
 
 void GRBembel::OnDraw(VGDevice & hdc) const
 {

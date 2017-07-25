@@ -28,7 +28,7 @@ using namespace std;
 // ===========================================================================
 // 		GRSpecial
 // ===========================================================================
-GRSpecial::GRSpecial(ARSpecial * arspec, bool p_ownsar)
+GRSpecial::GRSpecial(const ARSpecial * arspec, bool p_ownsar)
 					: GRARNotationElement(arspec, p_ownsar)
 {
 	mNeedsSpring = 1;		// ????
@@ -38,7 +38,7 @@ void GRSpecial::OnDraw(VGDevice & hdc) const
 {
 	if(!mDraw || !mShow)
 		return;
-	const ARSpecial * ar = static_cast/*dynamic cast*/<ARSpecial *>(mAbstractRepresentation);
+	const ARSpecial * ar = static_cast/*dynamic cast*/<const ARSpecial *>(mAbstractRepresentation);
 	
 	// try to get the correctly scaled musical font ...
 	// TODO: scale the graphic context instead.

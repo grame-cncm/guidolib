@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,6 +14,7 @@
   research@grame.fr
 
 */
+
 #include "ARMusicalTag.h"
 
 class TagParameterList;
@@ -24,22 +25,11 @@ class ARMTParameter : public ARMusicalTag
 {
 	public:
 	
-	  	ARMTParameter( const TYPE_TIMEPOSITION & tp, const ARMTParameter * copy = 0 )
-		  					: ARMusicalTag( tp, copy )
-	 	{ }
-
-		ARMTParameter( int pid = -1, const ARMTParameter * copy = 0 ) 
-						: ARMusicalTag( pid, copy )
-		{ }
-	
-		virtual ~ARMTParameter();
-
-
-		virtual void setTagParameterList(TagParameterList & theTagParameterList) = 0;
-
-		virtual TagParameterList * getTagParameterList() const
-		{ return 0; }
-
+				 ARMTParameter( const TYPE_TIMEPOSITION & tp, const ARMTParameter * copy = 0 )
+		  					: ARMusicalTag( tp, copy ) { }
+				 ARMTParameter( int pid = -1, const ARMTParameter * copy = 0 )
+							: ARMusicalTag( pid, copy ) { }
+		virtual ~ARMTParameter() {}
 };
 
 #endif

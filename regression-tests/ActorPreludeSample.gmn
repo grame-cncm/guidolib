@@ -3,7 +3,8 @@
   using libmusicxml v.2.1.0
   and the embedded xml2guido converter v.2.0.0
 *)
-{ [ \staff<1> \title<"Prelude to a Tragedy"> \composer<"Lee Actor", dy=4hs> \instr<"Piccolo", dx=-14hs, dy=-5hs> \systemFormat<"", dx=14hs> 
+{ [ \staff<1> \title<"Prelude to a Tragedy"> \composer<"Lee Actor", dy=4hs> \instr<"Piccolo", dx=-14hs, dy=-5hs> 
+	\systemFormat<dx=6hs> 
    (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"g2"> \tempo<tempo="[1/4] = 85"> _*3/4 \bar 
    (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
    (* meas. 3 *)  _ \bar 
@@ -45,7 +46,7 @@
    (* meas. 39 *)  \intens<"ff"> \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \bar 
    (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
    (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> \intens<"ff"> \slurBegin:1 \beam( f#/16 g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 _/4 ]
-, [ \staff<2> \instr<"Flutes", dx=-12hs, dy=-5hs> \systemFormat<"", dx=12hs> 
+, [ \staff<2> \instr<"Flutes", dx=-12hs, dy=-5hs>
    (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"g2"> _*3/4 \bar 
    (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
    (* meas. 3 *)  _ \bar 
@@ -87,7 +88,7 @@
    (* meas. 39 *)  \intens<"ff"> \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \bar 
    (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
    (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> \intens<"ff"> \slurBegin:1 \beam( f#/16 g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 _/4 ]
-, [ \staff<3> \instr<"Oboes", dx=-10hs, dy=-5hs> \systemFormat<"", dx=10hs> 
+, [ \staff<3> \instr<"Oboes", dx=-10hs, dy=-5hs> 
    (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"g2"> _*3/4 \bar 
    (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
    (* meas. 3 *)  _ \bar 
@@ -129,7 +130,7 @@
    (* meas. 39 *)  \intens<"ff"> \slurBegin:1 \beam( { f#2, f#3 } { g2, g3 } { f#2, f#3 } { g2, g3 }) \slurEnd:1 \slurBegin:1 \beam( { f#2, f#3 } { g2, g3 } { f#2, f#3 } { g2, g3 }) \slurEnd:1 \slurBegin:1 \beam( { f#2, f#3 } { g2, g3 } { f#2, f#3 } { g2, g3 }) \slurEnd:1 \bar 
    (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
    (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> \intens<"ff"> \slurBegin:1 \beam( { f#2/16, f#3 } { g2, g3 } { f#2, f#3 } { g2, g3 }) \slurEnd:1 \slurBegin:1 \beam( { f#2, f#3 } { g2, g3 } { f#2, f#3 } { g2, g3 }) \slurEnd:1 _/4 ]
-, [ \staff<4> \instr<"English Horn", dx=-24hs, dy=-5hs> \systemFormat<"", dx=24hs> 
+, [ \staff<4> \instr<"English Horn", dx=-24hs, dy=-5hs> 
    (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"g2"> _*3/4 \bar 
    (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
    (* meas. 3 *)  _ \bar 
@@ -171,7 +172,7 @@
    (* meas. 39 *)  \intens<"ff"> \slurBegin:1 \beam( c# d c# d) \slurEnd:1 \slurBegin:1 \beam( c# d c# d) \slurEnd:1 \slurBegin:1 \beam( c# d c# d) \slurEnd:1 \bar 
    (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
    (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> \intens<"ff"> \slurBegin:1 \beam( c#/16 d c# d) \slurEnd:1 \slurBegin:1 \beam( c# d c# d) \slurEnd:1 _/4 ]
-, [ \staff<5> \instr<"Clarinets in Bb", dx=-30hs, dy=-5hs> \systemFormat<"", dx=30hs> 
+, [ \staff<5> \instr<"Clarinets in Bb", dx=-30hs, dy=-5hs> 
    (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"g2"> _*3/4 \bar 
    (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
    (* meas. 3 *)  _ \bar 
@@ -213,7 +214,7 @@
    (* meas. 39 *)  \intens<"ff"> \slurBegin:1 \beam( { g#2, g#3 } { a2, a3 } { g#2, g#3 } { a2, a3 }) \slurEnd:1 \slurBegin:1 \beam( { g#2, g#3 } { a2, a3 } { g#2, g#3 } { a2, a3 }) \slurEnd:1 \slurBegin:1 \beam( { g#2, g#3 } { a2, a3 } { g#2, g#3 } { a2, a3 }) \slurEnd:1 \bar 
    (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
    (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> \intens<"ff"> \slurBegin:1 \beam( { g#2/16, g#3 } { a2, a3 } { g#2, g#3 } { a2, a3 }) \slurEnd:1 \slurBegin:1 \beam( { g#2, g#3 } { a2, a3 } { g#2, g#3 } { a2, a3 }) \slurEnd:1 _/4 ]
-, [ \staff<6> \instr<"Bass Clarinet in Bb", dx=-38hs, dy=-5hs> \systemFormat<"", dx=38hs> 
+, [ \staff<6> \instr<"Bass Clarinet in Bb", dx=-38hs, dy=-5hs> 
    (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"g2"> _*3/4 \bar 
    (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
    (* meas. 3 *)  _ \bar 
@@ -255,7 +256,7 @@
    (* meas. 39 *)  \intens<"ff"> \slurBegin:1 \beam( g# a g# a) \slurEnd:1 \slurBegin:1 \beam( g# a g# a) \slurEnd:1 \slurBegin:1 \beam( g# a g# a) \slurEnd:1 \bar 
    (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
    (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> \intens<"ff"> \slurBegin:1 \beam( g#/16 a g# a) \slurEnd:1 \slurBegin:1 \beam( g# a g# a) \slurEnd:1 _/4 ]
-, [ \staff<7> \instr<"Bassoons", dx=-16hs, dy=-5hs> \systemFormat<"", dx=16hs> 
+, [ \staff<7> \instr<"Bassoons", dx=-16hs, dy=-5hs>
    (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"f4"> _*3/4 \bar 
    (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
    (* meas. 3 *)  _ \bar 
@@ -298,7 +299,7 @@
    (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> { \tieBegin f#-1/2 \tieEnd \tieBegin, f#0 \tieEnd } \bar 
    (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> { f#-1/2. \tieEnd, f#0. \tieEnd } ]
 , [ \staff<8> \instr<"1
-2", dx=-8hs, dy=-5hs> \systemFormat<"", dx=8hs> 
+2", dx=-8hs, dy=-5hs>
    (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"g2"> _*3/4 \bar 
    (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
    (* meas. 3 *)  _ \bar 
@@ -341,7 +342,7 @@
    (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> { \tieBegin a1/2 \tieEnd \tieBegin, f#2 \tieEnd } \bar 
    (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> { a1/2. \tieEnd, f#2. \tieEnd } ]
 , [ \staff<9> \instr<"3
-4", dx=-8hs, dy=-5hs> \systemFormat<"", dx=8hs> 
+4", dx=-8hs, dy=-5hs>
    (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"g2"> _*3/4 \bar 
    (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
    (* meas. 3 *)  _ \bar 
@@ -383,7 +384,7 @@
    (* meas. 39 *)  \intens<"ff"> { \tieBegin d/2. \tieBegin, d2. } \bar 
    (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> { \tieBegin d1/2 \tieEnd \tieBegin, d2 \tieEnd } \bar 
    (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> { d1/2. \tieEnd, d2. \tieEnd } ]
-, [ \staff<10> \instr<"Trumpets in C", dx=-26hs, dy=-5hs> \systemFormat<"", dx=26hs> 
+, [ \staff<10> \instr<"Trumpets in C", dx=-26hs, dy=-5hs>
    (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"g2"> _*3/4 \bar 
    (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
    (* meas. 3 *)  _ \bar 
@@ -426,7 +427,7 @@
    (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> { \tieBegin d/2 \tieEnd \tieBegin, g \tieEnd } \bar 
    (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> { d/2. \tieEnd, g. \tieEnd } ]
 , [ \staff<11> \instr<"1
-2", dx=-8hs, dy=-5hs> \systemFormat<"", dx=8hs> 
+2", dx=-8hs, dy=-5hs>
    (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"f4"> _*3/4 \bar 
    (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
    (* meas. 3 *)  _ \bar 
@@ -468,7 +469,7 @@
    (* meas. 39 *)  \intens<"ff"> { \tieBegin d/2. \tieBegin, g. } \bar 
    (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> { \tieBegin d/2 \tieEnd \tieBegin, g \tieEnd } \bar 
    (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> { d/2. \tieEnd, g. \tieEnd } ]
-, [ \staff<12> \instr<"3", dx=-2hs, dy=-5hs> \systemFormat<"", dx=2hs> 
+, [ \staff<12> \instr<"3", dx=-2hs, dy=-5hs>
    (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"f4"> _*3/4 \bar 
    (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
    (* meas. 3 *)  _ \bar 
@@ -510,7 +511,7 @@
    (* meas. 39 *)  \intens<"ff"> \tieBegin f#/2. \bar 
    (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> \tieBegin f#/2 \tieEnd \bar 
    (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> f#/2. \tieEnd ]
-, [ \staff<13> \instr<"Tuba", dx=-8hs, dy=-5hs> \systemFormat<"", dx=8hs> 
+, [ \staff<13> \instr<"Tuba", dx=-8hs, dy=-5hs>
    (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"f4"> _*3/4 \bar 
    (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
    (* meas. 3 *)  _ \bar 
@@ -552,7 +553,7 @@
    (* meas. 39 *)  \intens<"ff"> \tieBegin f#/2. \bar 
    (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> \tieBegin f#/2 \tieEnd \bar 
    (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> f#/2. \tieEnd ]
-, [ \staff<14> \instr<"Timpani", dx=-14hs, dy=-5hs> \systemFormat<"", dx=14hs> 
+, [ \staff<14> \instr<"Timpani", dx=-14hs, dy=-5hs>
    (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"f4"> _*3/4 \bar 
    (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
    (* meas. 3 *)  _ \bar 
@@ -636,7 +637,7 @@
    (* meas. 39 *)  empty \bar 
    (* meas. 40 *)  empty/2 \bar 
    (* meas. 41 *)  empty*3/4 ]
-, [ \staff<15> \instr<"1", dx=-2hs, dy=-5hs> \systemFormat<"", dx=2hs> 
+, [ \staff<15> \instr<"1", dx=-2hs, dy=-5hs>
    (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"perc"> _*3/4 \bar 
    (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
    (* meas. 3 *)  _ \bar 
@@ -720,7 +721,7 @@
    (* meas. 39 *)  empty*3/4 \bar 
    (* meas. 40 *)  empty/2 \bar 
    (* meas. 41 *)  empty*3/4 ]
-, [ \staff<16> \instr<"2", dx=-2hs, dy=-5hs> \systemFormat<"", dx=2hs> 
+, [ \staff<16> \instr<"2", dx=-2hs, dy=-5hs>
    (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"perc"> _*3/4 \bar 
    (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
    (* meas. 3 *)  _ \bar 
@@ -804,7 +805,7 @@
    (* meas. 39 *)  empty*3/4 \bar 
    (* meas. 40 *)  empty/2 \bar 
    (* meas. 41 *)  empty*3/4 ]
-, [ \staff<17> \instr<"Harp", dx=-8hs, dy=-5hs> \systemFormat<"", dx=8hs> 
+, [ \staff<17> \instr<"Harp", dx=-8hs, dy=-5hs>
    (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"g2"> \intens<"mf"> \stemsDown { b2, b3 } _ _ \bar 
    (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
    (* meas. 3 *)  _ \bar 
@@ -888,7 +889,7 @@
    (* meas. 39 *)  _ \bar 
    (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
    (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> _*3/4 ]
-, [ \staff<19> \instr<"Violin I", dx=-16hs, dy=-5hs> \systemFormat<"", dx=16hs> 
+, [ \staff<19> \instr<"Violin I", dx=-16hs, dy=-5hs>
    (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"g2"> \tempo<tempo="[1/4] = 85"> \intens<"p"> \stemsDown { \tieBegin e2/2. \tieBegin, b. } \bar 
    (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> \stemsAuto { \tieBegin e/1 \tieEnd \tieBegin, b \tieEnd } \bar 
    (* meas. 3 *)  { \tieBegin e \tieEnd \tieBegin, b \tieEnd } \bar 
@@ -930,7 +931,7 @@
    (* meas. 39 *)  \intens<"ff"> \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \bar 
    (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
    (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> \intens<"ff"> \slurBegin:1 \beam( f#/16 g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 _/4 ]
-, [ \staff<20> \instr<"Violin II", dx=-18hs, dy=-5hs> \systemFormat<"", dx=18hs> 
+, [ \staff<20> \instr<"Violin II", dx=-18hs, dy=-5hs>
    (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"g2"> \intens<"mf"> \stemsDown b2 _ _ \bar 
    (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
    (* meas. 3 *)  _ \bar 
@@ -972,7 +973,7 @@
    (* meas. 39 *)  \intens<"ff"> \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \bar 
    (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
    (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> \intens<"ff"> \slurBegin:1 \beam( f#/16 g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 _/4 ]
-, [ \staff<21> \instr<"Viola", dx=-10hs, dy=-5hs> \systemFormat<"", dx=10hs> 
+, [ \staff<21> \instr<"Viola", dx=-10hs, dy=-5hs>
    (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"c3"> \intens<"p"> \stemsUp \slurBegin:1<curve="down"> \beam( b0/16 c1 b0 c1) \beam( b0 c1 b0 c1) \beam( b0 c1 b0 c1) \slurEnd:1 \bar 
    (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> \slurBegin:1 \beam( b0 c1 b0 c1) \stemsDown \beam( b0 c1 d e&) \slurEnd:1 \stemsUp \slurBegin:1 \beam( b0 c1 b0 c1) \stemsDown \beam( b0 c1 d e&) \slurEnd:1 \bar 
    (* meas. 3 *)  \slurBegin:1 \beam( f g& f g&) \beam( f g& f g&) \slurEnd:1 \slurBegin:1 \beam( f g& f e&) \beam( d e& d c) \slurEnd:1 \bar 
@@ -1014,7 +1015,7 @@
    (* meas. 39 *)  \intens<"ff"> \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \bar 
    (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
    (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> \intens<"ff"> \slurBegin:1 \beam( f#/16 g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 _/4 ]
-, [ \staff<22> \instr<"Violoncello", dx=-22hs, dy=-5hs> \systemFormat<"", dx=22hs> 
+, [ \staff<22> \instr<"Violoncello", dx=-22hs, dy=-5hs>
    (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"f4"> _*3/4 \bar 
    (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
    (* meas. 3 *)  _ \bar 
@@ -1056,7 +1057,7 @@
    (* meas. 39 *)  \intens<"ff"> \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 \bar 
    (* meas. 40 *)  \meter<"2/4", autoBarlines="off"> _/2 \bar 
    (* meas. 41 *)  \meter<"3/4", autoBarlines="off"> \intens<"ff"> \slurBegin:1 \beam( f#/16 g f# g) \slurEnd:1 \slurBegin:1 \beam( f# g f# g) \slurEnd:1 _/4 ]
-, [ \staff<23> \instr<"Contrabass", dx=-20hs, dy=-5hs> \systemFormat<"", dx=20hs> 
+, [ \staff<23> \instr<"Contrabass", dx=-20hs, dy=-5hs>
    (* meas. 1 *)  \key<0> \meter<"3/4", autoBarlines="off"> \clef<"f4"> _*3/4 \bar 
    (* meas. 2 *)  \meter<"4/4", autoBarlines="off"> _/1 \bar 
    (* meas. 3 *)  _ \bar 

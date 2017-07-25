@@ -18,20 +18,19 @@
 
 #include "ARDynamic.h"
 
-
 /** \brief not yet documented
 */
 class ARCrescendo : public ARDynamic
 {
-public:
-				 ARCrescendo()	{}
-				 ARCrescendo(const ARCrescendo* crescendo) : ARDynamic (crescendo) {}
-    virtual		~ARCrescendo() {}
+	public:
+					 ARCrescendo()	{}
+					 ARCrescendo(const ARCrescendo* crescendo) : ARDynamic (crescendo) {}
+		virtual		~ARCrescendo() {}
 
-    virtual bool MatchEndTag(const char * s);
+	    virtual bool MatchEndTag(const char * s);
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
+		virtual const char*	getTagName() const		{ return "ARCrescendo"; };
+		virtual std::string getGMNName() const		{ return "\\crescendo"; };
 };
 
 #endif

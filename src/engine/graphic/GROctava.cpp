@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -32,7 +32,7 @@ using namespace std;
 
 extern GRSystem * gCurSystem;
 
-GROctava::GROctava( GRStaff * staff, const NVstring & text, AROctava* ar, bool bassa)
+GROctava::GROctava( GRStaff * staff, const NVstring & text, const AROctava* ar, bool bassa)
 	: GRARNotationElement(ar),
 	fStaff(staff), fText (text), fBassa(bassa), fSegmentsCount(0) //, fElement(0)
 {
@@ -108,7 +108,7 @@ NVRect GROctava::getExtensionLine (const NEPointerList * assoc, int num) const
 		if (bb.Height()) {
 			if (bb.right < currentXPos) {		// there is a line break
 				if (!num) {						// and it is the required segment
-					outRect.right = gCurSystem->getPosition().x + gCurSystem->getBoundingBox().Width();
+					outRect.right = /*gCurSystem->getPosition().x +*/ gCurSystem->getBoundingBox().Width();
 					return outRect;
 				}
 				num--;

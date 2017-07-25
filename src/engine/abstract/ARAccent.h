@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -16,22 +16,20 @@
 */
 
 #include "ARArticulation.h"
+#include "TimeUnwrap.h"
 
 /** \brief not yet documented
 */
 class ARAccent : public ARArticulation
 {		
-public:			
+	public:
+				 ARAccent()  {}
+		virtual ~ARAccent()  {};
 
-//			 ARAccent() : ARMTParameter() { rangesetting = ONLY; }
-			 ARAccent()  {}
-	virtual ~ARAccent()  { /*delete TagParameterPointer ...*/ };
+		virtual const char*	getTagName () const		{ return "ARAccent"; };
+		virtual std::string getGMNName () const		{ return "\\accent"; };
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
-
-	virtual void	browse(TimeUnwrap& mapper) const;
+		virtual void	browse(TimeUnwrap& mapper) const { mapper.AtPos (this, TimeUnwrap::kAccent); }
 };
 
 #endif

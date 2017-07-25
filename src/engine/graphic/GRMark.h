@@ -35,7 +35,7 @@ class GRMark : public GRText
 	void		toBracket (const FloatRect& r, VGDevice & hdc) const;
 
 	public:
-						 GRMark( GRStaff *, ARMark * abstractRepresentationOfText );
+						 GRMark( GRStaff *, const ARMark * abstractRepresentationOfText );
 		virtual 		~GRMark();
 
 		virtual void		OnDraw( VGDevice & hdc ) const;

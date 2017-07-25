@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -101,10 +101,10 @@ void GRNotationElement::SendMap (const NVRect& map, MapCollector& f, TYPE_TIMEPO
 	inf.staffNum = getStaffNumber();
 	if (inf.staffNum < 0) inf.staffNum = 0;
 
-	ARMusicalObject * ar = getAbstractRepresentation();
+	const ARMusicalObject * ar = getAbstractRepresentation();
 	inf.voiceNum = ar ? ar->getVoiceNum() : 0;
 
-    ARNote *arNote = dynamic_cast<ARNote *>(ar);
+    const ARNote *arNote = dynamic_cast<const ARNote *>(ar);
     inf.midiPitch = (arNote ? arNote->getMidiPitch() : -1);
 
 	f.Graph2TimeMap (r, dates, inf);
@@ -119,16 +119,14 @@ void GRNotationElement::SendMap (MapCollector& f, TYPE_TIMEPOSITION date, TYPE_D
 // -------------------------------------------------------------------------
 void GRNotationElement::print(ostream& os) const
 {
-	ARMusicalObject * ar = getAbstractRepresentation();
+	const ARMusicalObject * ar = getAbstractRepresentation();
 	os << "GRNotationElement at " << getRelativeTimePosition() << " - ";
 	if (ar) {
-        ARMusicalTag * tag = static_cast<ARMusicalTag *>(ar->isARMusicalTag());
+        const ARMusicalTag * tag = static_cast<const ARMusicalTag *>(ar->isARMusicalTag());
         if (tag) {
-            tag->printGMNName (os);
-			os << " ";
-            tag->printParameters (os);
+			os << tag->getGMNName() << tag->getTagParameters();
         }
-		else ar->print(os);
+		else os << ar->getGMNName();
 	}
 	else
         os << "=> no ARMusicalObject";
@@ -242,10 +240,7 @@ void GRNotationElement::OnDrawText( VGDevice & hdc,  const char * text, int inCh
 /** \brief Draws a musical symbol glyph at given position into input graphic device context.
 	It possible to scale the symbol, by specifying a font height and a x-scale.
 */
-void 
-GRNotationElement::OnDrawSymbol( VGDevice & hdc, unsigned int inSymbol,
-								   float inOffsetX, float inOffsetY,
-								   float inFontSize ) const //, float inScaleX ) const
+void GRNotationElement::OnDrawSymbol( VGDevice & hdc, unsigned int inSymbol, float x, float y, float fSize ) const
 {
 	// - Setup colors
 	if(!mDraw || !mShow)
@@ -256,17 +251,11 @@ GRNotationElement::OnDrawSymbol( VGDevice & hdc, unsigned int inSymbol,
   	if (colref)
 		hdc.SetFontColor( VGColor( colref ));
 
-		// 	int nBackmode = hdc.GetBackgroundMode();
-		// 	hdc.SetBackgroundMode( VGDevice::kModeTransparent );
-
 	// - Setup text align 
 	hdc.SetFontAlign(getTextAlign());
-
 	// - Draw
-	DrawSymbol( hdc, inSymbol, inOffsetX, inOffsetY, inFontSize );
-
+	DrawSymbol( hdc, inSymbol, x, y, fSize );
 //	DrawBoundingBox( hdc, VGColor(0,0,200)); // debug 
-
 
 	// - Restore context
 	if (colref)

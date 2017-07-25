@@ -1,0 +1,12 @@
+% Release 1.6.5
+% turn.gmn
+{
+% The regular turn ; the accidental can be moved with adx et ady
+[\turn(g) \turn(g) \turn<"a&">(g)  \turn<"a&",dy=2.5,  ady=-5.5, adx=-0.3>(g2) ],
+
+% the "complex" turn
+[\turn<type="inverted">(g/2) \turn<"a&",dx=5, dy=-1>(g/2)],
+
+% The cautionary accidentals can be shown with "cautionary"
+[\key<3> \turn<"e", accidental="cautionary">(c) \turn<"f#", accidental="cautionary">(e) ]
+}

@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -26,14 +26,11 @@ class GRStaff;
 class GRTremolo : public GRPTagARNotationElement
 {
 	public:
-                        GRTremolo( GRStaff * stf, ARTremolo * artrem );
-
-        virtual 		~GRTremolo();
+					 GRTremolo( GRStaff * stf, const ARTremolo * artrem );
+        virtual 	~GRTremolo() {}
 
         virtual void 	OnDraw( VGDevice & hdc ) const;
-
         virtual void 	tellPosition(GObject * caller, const NVPoint & np );
-
         virtual unsigned int getTextAlign() const;
     
         bool    isTwoNotesTremolo() { return fIsTwoNotesTremolo; }

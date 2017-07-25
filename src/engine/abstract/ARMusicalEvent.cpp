@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -15,16 +15,11 @@
 #include <typeinfo>
 #include <cassert>
 #include <iostream>
-using namespace std;
 
 #include "ARMusicalEvent.h"
-
-
-// ATTENTION kf has changed MUSICAL_MIN_NUMERATOR to 0 !
 #include "ARDefine.h"
-// #include "defines.h"
 
-// Class ARMusicalEvent
+using namespace std;
 
 ARMusicalEvent::ARMusicalEvent(int theNumerator, int theDenominator) : mPoints(0)
 {
@@ -33,14 +28,8 @@ ARMusicalEvent::ARMusicalEvent(int theNumerator, int theDenominator) : mPoints(0
 	else if (theNumerator > MUSICAL_MAX_NUMERATOR)
 		theNumerator = MUSICAL_MAX_NUMERATOR;
 
-
 	if (theDenominator < MUSICAL_MIN_DENOMINATOR)
 		theDenominator = 1;
-
-//	assert(theNumerator>=MUSICAL_MIN_NUMERATOR); //(JB) useless !?
-//	assert(theDenominator>=MUSICAL_MIN_DENOMINATOR);
-//	assert(theNumerator<=MUSICAL_MAX_NUMERATOR);
-
 	setDuration ( Fraction(theNumerator,theDenominator) );
 }
 
@@ -74,10 +63,6 @@ ARMusicalObject * ARMusicalEvent::Copy() const
 	return new ARMusicalEvent(*this);
 }
 
-ARMusicalEvent::~ARMusicalEvent()
-{
-}
-
 std::ostream & operator << ( std::ostream & os, const ARMusicalEvent* ev )
 {
 	ev->print(os);
@@ -88,7 +73,6 @@ void ARMusicalEvent::print(std::ostream& os) const
 {
     printName(os);
     os << ": " << "date: " << getRelativeTimePosition() << " ";
-    printParameters(os);
 }
 
 void ARMusicalEvent::setDenominator(int newDenominator)
@@ -106,23 +90,13 @@ void ARMusicalEvent::setDenominator(int newDenominator)
 void ARMusicalEvent::setNumerator(int newNumerator)
 {
 	if (newNumerator<MUSICAL_MIN_NUMERATOR)
-	{
 		newNumerator = MUSICAL_MIN_NUMERATOR;
-	}
 	else if (newNumerator>MUSICAL_MAX_NUMERATOR)
-	{
 		newNumerator = MUSICAL_MAX_NUMERATOR;
-	}
-//	assert(newNumerator>=MUSICAL_MIN_NUMERATOR);
-//	assert(newNumerator<=MUSICAL_MAX_NUMERATOR);
 
 	TYPE_DURATION d (getDuration());
 	d.setNumerator(newNumerator);
 	setDuration(d);
-
-// ACHTUNG modified by  kf for WCHT ...
-//	assert(duration>MIN_DURATION);
-  //## end ARMusicalEvent::setNumerator%858535960.body
 }
 
 void ARMusicalEvent::setPoints( int pointCount )

@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -18,31 +18,25 @@
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
 
-class ARDotFormat;
-
-extern const ARDotFormat defaultARDotFormat;
-
 /** \brief not yet documented
 */
 class ARDotFormat : public ARMTParameter, public ARPositionTag
 {
-public:
-	         ARDotFormat(ARDotFormat * p_savedf = NULL,ARDotFormat * copydf = NULL); 
-	virtual ~ARDotFormat();
+	public:
+				 ARDotFormat(const ARDotFormat * p_savedf = NULL, const ARDotFormat * copydf = NULL);
+		virtual ~ARDotFormat()	{}
 
-	virtual bool IsStateTag() const { return true; }
-	
-	virtual void setTagParameterList( TagParameterList & tpl);
+		virtual bool		IsStateTag() const		{ return true; }
+		virtual const char*	getParamsStr() const	{ return ""; };
+		virtual const char*	getTagName() const		{ return "ARDotFormat"; };
+		virtual std::string getGMNName() const		{ return "\\dotFormat"; };
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual ARDotFormat * getEndTag() const		{ return new ARDotFormat(NULL, fSaveDF); }
 
-	virtual ARDotFormat * getEndTag() const	{ return new ARDotFormat(NULL, savedf); }
-
-protected:
-	ARDotFormat *		savedf;
-	static ListOfTPLs 	ltpls;
+	protected:
+		const ARDotFormat *	fSaveDF;
 };
+
+extern const ARDotFormat defaultARDotFormat;
 
 #endif 

@@ -35,7 +35,7 @@ using namespace std;
 const VGFont* GRTempo::mFont = 0;
 
 // ----------------------------------------------------------------------------
-GRTempo::GRTempo( GRStaff * staff, ARTempo * inAR )
+GRTempo::GRTempo( GRStaff * staff, const ARTempo * inAR )
 					: GRTagARNotationElement( inAR, LSPACE )
 {
 	assert(inAR);
@@ -94,7 +94,7 @@ void GRTempo::OnDraw( VGDevice & hdc ) const
 {
 	if(!mDraw || !mShow) return;
 	
-    ARTempo *ar = static_cast<ARTempo *>(mAbstractRepresentation);
+    const ARTempo *ar = static_cast<const ARTempo *>(mAbstractRepresentation);
     if (!ar) return;
 
     VGColor prevFontColor = hdc.GetFontColor();

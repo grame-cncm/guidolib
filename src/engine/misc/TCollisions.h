@@ -33,7 +33,7 @@ class GRSystemSlice;
 // TCollisionInfo provides the information required to solve a collision ar AR level
 class  TCollisionInfo {
 	public:
-		TCollisionInfo (ARMusicalObject* ar, int voice, ARSpace* space)
+		TCollisionInfo (const ARMusicalObject* ar, int voice, ARSpace* space)
 			: fSpace(space), fARObject(ar), fVoice(voice) {}
 	
 		void print(std::ostream& os) const;
@@ -42,8 +42,8 @@ class  TCollisionInfo {
 		float				space() const	{ return fSpace->getValue(); }
 
 		ARSpace*		 fSpace;		// a space element intended to solve the collision
-		ARMusicalObject* fARObject;		// the ar object after which the space should be inserted
-		int				 fVoice;		// the corresponding ARVoice number
+		const ARMusicalObject* fARObject;	// the ar object after which the space should be inserted
+		int				 fVoice;			// the corresponding ARVoice number
 };
 
 std::ostream& operator<< (std::ostream& os, const TCollisionInfo* ci);
@@ -76,7 +76,7 @@ class  TCollisions {
 		void	clear ();
 		void	print (std::ostream& out) const;
 
-		void	resolve (ARMusicalObject* ar, float gap);
+		void	resolve (const ARMusicalObject* ar, float gap);
 
 	private:
 		bool	checkElement (const NVRect& r);

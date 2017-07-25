@@ -25,25 +25,23 @@
 
 class ARFermata : public ARArticulation
 {
-public:
-	enum			 tTypeFermata {SHORT, REGULAR, LONG};
+	public:
+		enum			 tTypeFermata {SHORT, REGULAR, LONG};
 
-					 ARFermata();
-	virtual 		 ~ARFermata();
-	virtual void 	 setTagParameterList(TagParameterList & theTagParameterList);
+						  ARFermata();
+		virtual 		 ~ARFermata() {}
 
-	virtual void     printName(std::ostream& os) const;
-    virtual void     printGMNName(std::ostream& os) const;
-	virtual void     printParameters(std::ostream& os) const;
+		virtual void	 setTagParameters (const TagParameterMap& params);
 
-	virtual void	 browse(TimeUnwrap& mapper) const;
+		virtual const char*	getParamsStr() const	{ return kARFermataParams; };
+		virtual const char*	getTagName() const		{ return "ARFermata"; };
+		virtual std::string getGMNName() const		{ return "\\fermata"; };
 
-	tTypeFermata	 getType() const {return fType;};
+		virtual void	 browse(TimeUnwrap& mapper) const;
+		tTypeFermata	 getType() const {return fType;};
 
-protected:
-
-	static ListOfTPLs ltpls;
-	tTypeFermata fType;
+	protected:
+		tTypeFermata fType;
 };
 
 #endif

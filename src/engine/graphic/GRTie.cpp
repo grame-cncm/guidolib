@@ -30,14 +30,10 @@ GRTie::GRTie(GRStaff * grstaff) : GRBowing(grstaff)
 }
 
 
-GRTie::GRTie(GRStaff * grstaff, ARTie * abstractRepresentationOfBowing)
-		: GRBowing(grstaff, abstractRepresentationOfBowing)
+GRTie::GRTie(GRStaff * grstaff, const ARTie * ar) : GRBowing(grstaff, ar)
 {
 }
 
-GRTie::~GRTie()
-{
-}
 
 GRTie::GRTie(GRStaff * grstaff,GRNotationElement * start, GRNotationElement * end)
 	: GRBowing(grstaff, start, end)
@@ -71,8 +67,7 @@ void GRTie::addAssociation(GRNotationElement * el)
 	-> startElement->getTieEnd().y ) * dx3 +  ...
 
 */
-void 
-GRTie::updateBow( GRStaff * inStaff )
+void GRTie::updateBow( GRStaff * inStaff )
 {
 	GRBowing::updateBow( inStaff );
 }
@@ -80,9 +75,7 @@ GRTie::updateBow( GRStaff * inStaff )
 // -----------------------------------------------------------------------------
 /**
 */
-void
-GRTie::automaticAnchorPoints( GRBowingContext * bowContext, ARBowing * arBow, 
-													GRSystemStartEndStruct * sse )
+void GRTie::automaticAnchorPoints( GRBowingContext * bowContext, const ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
 	// Careful, we have to deal with chords! what about getStemStartPosition()?
 	NVPoint posLeft;
@@ -168,15 +161,13 @@ GRTie::automaticAnchorPoints( GRBowingContext * bowContext, ARBowing * arBow,
 	bowInfos->offsets[2] = posRight - posLeft; // control points are stored as offsets to the position.
 
 	//	if( manualSettings == false )
-	arBow->setCurve( bowContext->curveDir, posLeft, posRight ); // (JB) useless ?
+//	arBow->setCurve( bowContext->curveDir, posLeft, posRight ); // (JB) useless ?
 }
 
 // -----------------------------------------------------------------------------
 /** \brief Try to minimize collisions.
 */
-void
-GRTie::automaticControlPoints( GRBowingContext * bowContext, ARBowing * arBow, 
-												GRSystemStartEndStruct * sse )
+void GRTie::automaticControlPoints( GRBowingContext * bowContext, const ARBowing * arBow, GRSystemStartEndStruct * sse )
 {
 	// Do not cross staff lines, of clearly cross staff lines if the 
 	// distance between the two tied note is large.

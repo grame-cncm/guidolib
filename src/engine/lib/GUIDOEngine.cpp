@@ -75,8 +75,8 @@ using namespace std;
 // ==========================================================================
 const int GUIDOENGINE_MAJOR_VERSION = 1;
 const int GUIDOENGINE_MINOR_VERSION = 6;
-const int GUIDOENGINE_SUB_VERSION   = 4;
-const char* GUIDOENGINE_VERSION_STR = "1.6.4";
+const int GUIDOENGINE_SUB_VERSION   = 5;
+const char* GUIDOENGINE_VERSION_STR = "1.6.5";
 
 ARPageFormat gARPageFormat;
 
@@ -380,9 +380,14 @@ GUIDOAPI(GuidoErrCode) GuidoUpdateGR( GRHandler gr, const GuidoLayoutSettings * 
 	if ( !gr )			return guidoErrInvalidHandle;
 	if ( !gr->grmusic )	return guidoErrInvalidHandle;
 
-	gr->grmusic->createGR(&gARPageFormat, settings);
-	if (settings && settings->checkLyricsCollisions)
-		gr->grmusic->checkLyricsCollisions();
+	GRMusic* music = gr->grmusic;
+	if (music->lyricsChecked() && (!settings || !settings->checkLyricsCollisions)) {
+		music->removeAutoSpace(gr->arHandle->armusic);
+	}
+	music->createGR(&gARPageFormat, settings);
+	if (settings && settings->checkLyricsCollisions) {
+		music->checkLyricsCollisions();
+	}
 	return guidoNoErr;
 }
 

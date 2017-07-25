@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -26,14 +26,14 @@ GRTag::GRTag( const ARMusicalTag * artag, float curLSPACE ) :
 			isautotag(0),
 			sconst(SCONST_DEFAULT)
 {
-	
-	if (artag && artag->IsStateTag())
-		tagtype = STAFFTAG;
-	if (artag && artag->getIsAuto())
-		isautotag = 1;
-	if (artag && artag->getError())
-		error = artag->getError();
-	
+	if (artag) {
+		if (artag->IsStateTag())
+			tagtype = STAFFTAG;
+		if (artag->getIsAuto())
+			isautotag = 1;
+		if (artag->getError())
+			error = artag->getError();
+	}
 	mColRef = NULL;
 	font = NULL;
 	fontAttrib = NULL;
@@ -41,7 +41,6 @@ GRTag::GRTag( const ARMusicalTag * artag, float curLSPACE ) :
 	
 	if (artag) {
 		const TagParameterString *color = artag->getColor();
-
 		if (color) {
 			mColRef = new unsigned char [4];
 			color->getRGB(mColRef);
@@ -49,19 +48,11 @@ GRTag::GRTag( const ARMusicalTag * artag, float curLSPACE ) :
 
 		const TagParameterFloat * dx = artag->getDX();
 		const TagParameterFloat * dy = artag->getDY();
-
-		if (dx)
-			mTagOffset.x = (GCoord) dx->getValue(curLSPACE);
-
-		if (dy)
-			mTagOffset.y -= (GCoord) dy->getValue(curLSPACE);
+		if (dx)	mTagOffset.x = (GCoord) dx->getValue(curLSPACE);
+		if (dy)	mTagOffset.y -= (GCoord) dy->getValue(curLSPACE);
 
 		const TagParameterFloat * tps = artag->getSize();
-
-		if (tps)
-			mTagSize = tps->getValue();
-		else 
-			mTagSize = 1.0f;
+		mTagSize = tps ? tps->getValue() : 1.0f;
 	}
 }
 
@@ -73,19 +64,12 @@ GRTag::~GRTag()
 	delete fontAttrib;
 }
 
-std::ostream& operator<< (std::ostream& os, const GRTag* tag)
-{
-	tag->print(os);
-	return os;
-}
-
 void GRTag::RangeEnd(GRStaff * grstaff)			{}
 void GRTag::StaffFinished(GRStaff * grstaff)	{}
 void GRTag::StaffBegin(GRStaff * grstaff)		{}
 int GRTag::getError() const						{ return error; }
 
-// changed: the abstract representation
-// is no longer notified ....
+// changed: the abstract representation is no longer notified ....
 // errors are not brought back from graphics ...
 void GRTag::setError(int p_error)		{ error = p_error; }
 bool GRTag::IsStateTag() const			{ return (tagtype == STAFFTAG); }

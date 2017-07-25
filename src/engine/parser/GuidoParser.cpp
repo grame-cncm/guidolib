@@ -18,6 +18,9 @@
 
 #include "GuidoParser.h"
 #include "ARFactory.h"
+#include "TagParameterFloat.h"
+#include "TagParameterInt.h"
+#include "TagParameterString.h"
 
 //--------------------------------------------------------------------------
 GuidoParser::GuidoParser()
@@ -170,6 +173,25 @@ void GuidoParser::tagAdd ()						{ fFactory->addTag(); }
 void GuidoParser::tagAddArg	(const char *s)		{ fFactory->setParameterName(s); }
 void GuidoParser::tagEnd ()						{ fFactory->endTag(); }
 void GuidoParser::tagRange ()					{ fFactory->tagRange(); }
+
+
+//--------------------------------------------------------------------------
+void GuidoParser::tagParameter (TagParameter* param)					{ if (param) fFactory->addTagParameter(param); }
+TagParameter* GuidoParser::floatParam	(float val)						{ return new TagParameterFloat (val); }
+TagParameter* GuidoParser::intParam		(int val)						{ return new TagParameterInt (val); }
+TagParameter* GuidoParser::strParam		(const char* val)				{ return new TagParameterString (val); }
+TagParameter* GuidoParser::floatParam	(float val, const char* unit)
+{
+	TagParameterFloat* p  = new TagParameterFloat (val);
+	p->setUnit (unit);
+	return p;
+}
+TagParameter* GuidoParser::intParam	(int val, const char* unit)
+{
+	TagParameterInt* p  = new TagParameterInt (val);
+	p->setUnit (unit);
+	return p;
+}
 
 //--------------------------------------------------------------------------
 ARHandler GuidoParser::parse()

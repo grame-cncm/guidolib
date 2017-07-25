@@ -21,7 +21,7 @@
 #include "defines.h"
 
 class ARMusicalObject;
-class ARPositionTag;
+class ARMusicalTag;
 class ARMusicalVoice;
 
 class PrintVisitor : public ARVisitor
@@ -33,12 +33,12 @@ public:
     void     visitIn (ARMusicalVoice*  voice);
     void     visitOut(ARMusicalVoice*  voice);
     void     visitIn (ARMusicalObject* object);
-    void     visitIn (ARPositionTag*   positionTag);
+    void     visitIn (ARMusicalTag*   tag);
 
 private:
     void        printMusicalVoice	(ARMusicalVoice* voice) const;
     void        printMusicalObject	(ARMusicalObject* object) const;
-    void        printPositionTag	(ARPositionTag* positionTag);
+    void        printTag			(ARMusicalTag* tag);
     void        printHeader(int state = 0) const; // state = -1 : position tag end ("-")
                                                   // state =  1 : position tag beginning ("+")
                                                   // state =  0 : neutral ("x");

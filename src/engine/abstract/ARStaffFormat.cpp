@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -13,129 +13,55 @@
 */
 
 #include <iostream>
+
 #include "ARStaffFormat.h"
+#include "TagParameterStrings.h"
 #include "TagParameterString.h"
-#include "TagParameterFloat.h"
-#include "TagParameterList.h"
-#include "ListOfStrings.h"
 
 #include "GRDefine.h"
 #include "gmntools.h" // for gd_convertUnits
 
-ListOfTPLs ARStaffFormat::ltpls(1);
 
-ARStaffFormat::ARStaffFormat(const ARStaffFormat &stffrmt)
-{
-	style = NULL;
-	if (stffrmt.style!= NULL)
-		style = TagParameterString::cast(stffrmt.style->getCopy());
-	if (stffrmt.size != NULL)
-		size = TagParameterFloat::cast(stffrmt.size->getCopy());
-	fLineThickness = stffrmt.getLineThickness();
-    staffDistance = NULL;
-    if (stffrmt.staffDistance != NULL)
-        staffDistance = TagParameterFloat::cast(stffrmt.staffDistance->getCopy());
-}
-
-ARStaffFormat::~ARStaffFormat()
-{
-	delete style;
-    delete staffDistance;
-}
+static const TagParameterMap sARStaffFormatMap (kARStaffFormatParams);
 
 ARStaffFormat::ARStaffFormat() : fLineThickness(kLineThick)
 {
-	style = NULL;
-    staffDistance = NULL;
+	setupTagParameters (sARStaffFormatMap);	
 }
 
-void ARStaffFormat::setTagParameterList(TagParameterList & tpl)
+ARStaffFormat::ARStaffFormat(const ARStaffFormat &stffrmt)
 {
-	if (ltpls.GetCount() == 0) {
-		// create a list of string ...
-		ListOfStrings lstrs; // (1); std::vector test impl
-        lstrs.AddTail(("S,style,standard,o;U,size,3pt,o;F,lineThickness,0.08,o;U,distance,0hs,o"));
-		CreateListOfTPLs(ltpls,lstrs);
-	}
+	setupTagParameters (sARStaffFormatMap);
+	copyParameters(stffrmt.getTagParameters());
+	setTagParameters (stffrmt.getTagParameters());
+	fSize = stffrmt.fSize;
+	fLineThickness = stffrmt.getLineThickness();
+}
 
-	TagParameterList * rtpl = 0;
-	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
-	if (ret >= 0 && rtpl)
-	{
-		// we found a match!
-		if (ret == 0) {
-			// then, we now the match for the first ParameterList
-			// w, h, ml, mt, mr, mb
-			style = TagParameterString::cast(rtpl->RemoveHead());
-			assert(style);
-			if (style->TagIsSet() == false) {
-				delete style;
-				style = NULL;
-			}
+const TagParameterString * ARStaffFormat::getStyle() const			{ return getParameter<TagParameterString>(kStyleStr); }
+const TagParameterFloat * ARStaffFormat::getStaffDistance() const	{ return getParameter<TagParameterFloat>(kDistanceStr); }
+const TagParameterFloat * ARStaffFormat::getSize() const
+{
+	return fSize.TagIsSet() ? &fSize : ARMTParameter::getSize();
+}
 
-			size = TagParameterFloat::cast(rtpl->RemoveHead());
-			assert(size);
-			if (size->TagIsSet() == false) {
-				delete size;
-				size = NULL;
-			}
-			else
-			{
-				// one idea is to adjust the size, so that it matches an integer (internally)
-				float intunits = size->getValue();		// per halfspace ...
-				// Integer internal units 
-				const int Iintunits  = (int)(intunits + 0.5);
-				const double cmunits = Iintunits * kVirtualToCm;
-				const char *unit     = size->getUnit();
+void ARStaffFormat::setTagParameters (const TagParameterMap& params)
+{
+	const TagParameterFloat* thickness =  getParameter<TagParameterFloat>(kLineThicknesStr);
+	if (thickness) fLineThickness = (LSPACE * thickness->getValue() >= 0 ? LSPACE * thickness->getValue() : 0);
+	const TagParameterFloat * size = getParameter<TagParameterFloat>(kSizeStr);
+	if (size) {
+		// one idea is to adjust the size, so that it matches an integer (internally) per halfspace ...
+		// Integer internal units 
+		const int val  = (int)(size->getValue() + 0.5);
+		const double cmunits = val * kVirtualToCm;
 
-                double result;
-				bool conversionOk    = gd_convertUnits(cmunits, "cm", unit, result);
-
-                if (conversionOk)
-				    size->setValue((float)result);
-                else
-                {
-                    delete size;
-                    size = NULL;
-                }
-			}
-
-			TagParameterFloat* fval =  TagParameterFloat::cast(rtpl->RemoveHead());
-			assert(fval);
-			if (fval->TagIsSet())
-				fLineThickness = (LSPACE * fval->getValue() >= 0 ? LSPACE * fval->getValue() : 0);
-
-			delete fval;
-
-            staffDistance = TagParameterFloat::cast(rtpl->RemoveHead());
-            assert(staffDistance);
-            if (staffDistance->TagIsSet() == false) {
-                delete staffDistance;
-                staffDistance = NULL;
-            }
+		double result;
+		if (gd_convertUnits(cmunits, "cm", size->getUnit(), result)) {
+			fSize.setValue ((float)result);
+			fSize.setUnit(size->getUnit());
+			fSize.setBySet();
 		}
-		delete rtpl;
 	}
-	else {
-		// failure
-	}
-	tpl.RemoveAll();
 }
 
-void ARStaffFormat::printName(std::ostream& os) const
-{
-    os << "ARStaffFormat";
-}
-
-void ARStaffFormat::printGMNName(std::ostream& os) const
-{
-    os << "\\staffFormat";
-}
-
-void ARStaffFormat::printParameters(std::ostream& os) const
-{
-    if (style)
-        os << "style:" << style->getValue() << "; ";
-
-    ARMusicalTag::printParameters(os);
-}

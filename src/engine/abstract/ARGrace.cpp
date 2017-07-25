@@ -1,7 +1,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -13,69 +13,21 @@
 */
 
 #include <iostream>
-#include "ARGrace.h"
-// #include "ARFactory.h"
-#include "TagParameterInt.h"
-#include "ListOfStrings.h"
-#include "TagParameterList.h"
 
-ListOfTPLs ARGrace::ltpls(1);
+#include "ARGrace.h"
+#include "TagParameterInt.h"
+#include "TagParameterStrings.h"
+
+static const TagParameterMap sARGraceMap (kARGraceParams);
 
 ARGrace::ARGrace()
 {
-	num = NULL;
+	setupTagParameters (sARGraceMap);
 	rangesetting = ONLY;
 }
 
-ARGrace::~ARGrace()
+const TagParameterInt * ARGrace::getNum() const
 {
-	delete num;
+	return getParameter<TagParameterInt>(kIStr, true);
 }
 
-void ARGrace::setTagParameterList(TagParameterList& tpl)
-{
-	if (ltpls.GetCount() == 0)
-	{
-		// create a list of string ...
-
-		ListOfStrings lstrs; // (1); std::vector test impl
-		lstrs.AddTail(( "I,i,,o"));
-		CreateListOfTPLs(ltpls,lstrs);
-	}
-
-	TagParameterList * rtpl = 0;
-	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
-
-	if (ret>=0 && rtpl)
-	{
-		// we found a match!
-		if (ret == 0)
-		{
-			num = TagParameterInt::cast(rtpl->RemoveHead());
-			assert(num);
-		}
-
-		delete rtpl;
-	}
-	else
-	{
-		// failure
-	}
-
-	tpl.RemoveAll();
-}
-
-void ARGrace::printName(std::ostream& os) const
-{
-    os << "ARGrace";
-}
-
-void ARGrace::printGMNName(std::ostream& os) const
-{
-    os << "\\grace";
-}
-
-void ARGrace::printParameters(std::ostream& os) const
-{
-    ARMusicalTag::printParameters(os);
-}

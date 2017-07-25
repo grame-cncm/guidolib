@@ -11,69 +11,32 @@
 
 */
 
-#include <string.h>
 #include <iostream>
-using namespace std;
 
 #include "ARJump.h"
 
-#include "TagParameterInt.h"
+#include "TagParameterStrings.h"
 #include "TagParameterString.h"
-#include "ListOfStrings.h"
-#include "TagParameterList.h"
+#include "TagParameterInt.h"
 
-ListOfTPLs ARJump::ltpls(1);
+using namespace std;
+
+static const TagParameterMap sARJumpMap (kARJumpParams);
 
 ARJump::ARJump(string mark) {
+	setupTagParameters (sARJumpMap);
+
 	FormatStringParser p;
 	p.parse (mark.c_str(), mMark);
 }
 
-ARJump::~ARJump()   {}
-
-void ARJump::setTagParameterList(TagParameterList & tpl)
+void ARJump::setTagParameters (const TagParameterMap& params)
 {
-	if (ltpls.empty()) {
-		ListOfStrings lstrs;
-		lstrs.AddTail( "S,m,,o;I,id,0,o" );
-		CreateListOfTPLs(ltpls,lstrs);
+	string mark = getParameter<TagParameterString>(kMStr, true)->getValue();
+	if (mark.size()) {
+		FormatStringParser p;
+		mMark.clear();
+		p.parse (mark.c_str(), mMark);
 	}
-	TagParameterList * rtpl = NULL;
-	int ret = MatchListOfTPLsWithTPL(ltpls,tpl,&rtpl);
-	if( ret >= 0 && rtpl ) {
-		if( ret == 0 ) {
-			TagParameterString * tps = TagParameterString::cast(rtpl->RemoveHead());
-			if (tps && strlen(tps->getValue())) {
-				FormatStringParser p;
-				mMark.clear();
-				p.parse (tps->getValue(), mMark);
-			}
-			delete tps;
-
-			TagParameterInt * tpi = TagParameterInt::cast(rtpl->RemoveHead());
-			if (tpi) mID = tpi->getValue();
-			delete tpi;
-		}
-		delete rtpl;
-	}
-	tpl.RemoveAll();
+	mID = getParameter<TagParameterInt>(kIDStr, true)->getValue();
 }
-
-void ARJump::printName(std::ostream& os) const
-{
-    os << "ARJump";
-}
-
-void ARJump::printGMNName(std::ostream& os) const
-{
-    os << "\\jump";
-}
-
-void ARJump::printParameters(std::ostream& os) const
-{
-    /* TODO */
-
-    ARMusicalTag::printParameters(os);
-}
-
-

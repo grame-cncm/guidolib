@@ -19,14 +19,12 @@
 /*brief		The harmonic tag */
 class ARHarmonic : public ARArticulation
 {
-public :
-//			 ARHarmonic() : ARMTParameter() { rangesetting = ONLY; }
-			 ARHarmonic() { fPosition = kAbove; }
-	virtual ~ARHarmonic() {};
+	public :
+				 ARHarmonic() { fPosition = kAbove; }
+		virtual ~ARHarmonic() {};
 			
-    virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	virtual void printParameters(std::ostream& os) const;
+		virtual const char*	getTagName() const		{ return "ARHarmonic"; };
+		virtual std::string getGMNName() const		{ return "\\harmonic"; };
 };
 
 #endif

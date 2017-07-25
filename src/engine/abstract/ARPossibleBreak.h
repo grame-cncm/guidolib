@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -16,30 +16,26 @@
 */
 
 #include "ARMusicalTag.h"
-// #include "ARMusicalObject.h"
 
 /** \brief not yet documented
 */
-class ARPossibleBreak :  public ARMusicalTag // , public ARMusicalObject
+class ARPossibleBreak :  public ARMusicalTag
 {
-public:
-                 ARPossibleBreak() { }
-    virtual     ~ARPossibleBreak() { }
+	public:
+					 ARPossibleBreak() {}
+		virtual     ~ARPossibleBreak() {}
 
-    virtual void printName(std::ostream& os) const { os << "ARPossibleBreak"; }
-    virtual void printGMNName(std::ostream& os) const { os << "\\pbreak"; }
-    virtual void printParameters(std::ostream& os) const {}
+		virtual const char*	getParamsStr() const	{ return ""; };
+		virtual const char*	getTagName() const		{ return "ARPossibleBreak"; };
+		virtual std::string getGMNName() const		{ return "\\pBreak"; };
 
-    virtual float getValue()                { return value; }
-    virtual void  setValue(float newValue) { value = newValue; }
+		virtual float getValue() const              { return value; }
+		virtual void  setValue(float newValue)		{ value = newValue; }
 
-    /**** Function to avoid dynamic_cast ****/
-    ARMusicalObject *isARPossibleBreak() { return this; }
-    /****************************************/
+		ARMusicalObject *isARPossibleBreak()		{ return this; }
 
-protected:
-    float value;
+	private:
+		float value;
 };
-
 
 #endif

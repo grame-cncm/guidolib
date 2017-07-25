@@ -23,6 +23,7 @@
 #include "GUIDOFactory.h"
 
 class ARFactory;
+class TagParameter;
 
 /* \brief a class for reading gmn streams
 */
@@ -52,6 +53,8 @@ class GuidoParser {
 		std::istream      *fStream;    // input stream
 		ARFactory         *fFactory;
 		std::string	       fText;      // the current text
+	
+		typedef std::vector<TagParameter*> ParamsList;
 
 				 GuidoParser();
 		virtual ~GuidoParser();
@@ -92,6 +95,13 @@ class GuidoParser {
 		virtual void tagAddArg		(const char *s);
 		virtual void tagEnd			();
 		virtual void tagRange		();
+
+		virtual void tagParameter (TagParameter* param);
+		virtual TagParameter* floatParam (float val);
+		virtual TagParameter* floatParam (float val, const char* unit);
+		virtual TagParameter* intParam (int val);
+		virtual TagParameter* intParam (int val, const char* unit);
+		virtual TagParameter* strParam (const char*);
 
 		virtual void setError(int line, int column, const char *msg)
 					{ fErrorLine = line; fErrorColumn = column; fErrorMsg = msg; }

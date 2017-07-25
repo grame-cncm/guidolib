@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -26,11 +26,12 @@ class ARMusicalObject;
 class GRTagARNotationElement : public GRTag, public GRARNotationElement
 {
 public:
-	GRTagARNotationElement (ARMusicalObject * el, float curLSPACE, bool ownsAR = false )
-        : GRTag(static_cast<ARMusicalTag *>(el->isARMusicalTag()), curLSPACE), GRARNotationElement(el, ownsAR)
-	{}
+			 GRTagARNotationElement (const ARMusicalObject * el, float curLSPACE, bool ownsAR = false )
+				: GRTag(static_cast<const ARMusicalTag *>(el->isARMusicalTag()), curLSPACE),
+				  GRARNotationElement(el, ownsAR)
+				{}
 
-	virtual ~GRTagARNotationElement();
+	virtual ~GRTagARNotationElement() {}
 
 	virtual const NVPoint &     getOffset() const       { return GRTag::getOffset(); }
 	virtual float               getSize() const         { return GRTag::getSize(); }

@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -22,14 +22,14 @@
 
 class ARNaturalKey : public ARKey
 {
-public:
-				 ARNaturalKey() {};
-	virtual 	~ARNaturalKey() {};
+	public:
+					 ARNaturalKey() {};
+		virtual 	~ARNaturalKey() {};
 
-    virtual void printName(std::ostream& os) const { os << "ARNaturalKey"; }
-    virtual void printParameters(std::ostream& os) const {}
-    virtual ARMusicalObject  *isARNaturalKey()    { return this; }
+		virtual const char*	getParamsStr() const	{ return ""; };
+		virtual const char*	getTagName() const		{ return "ARNaturalKey"; };
 
+		virtual ARMusicalObject  *isARNaturalKey()    { return this; }
 };
 
 #endif

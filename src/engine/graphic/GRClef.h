@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -37,8 +37,7 @@ public:
 					BRATSCHE = 66 // SCR_BCLEF 
 				};*/
 
-					GRClef( ARClef * arClef, GRStaff * curstaff, bool ownsAR = false );
-	
+					 GRClef(const ARClef * arClef, GRStaff * curstaff, bool ownsAR = false );
 	virtual 		~GRClef();
 	
 	virtual bool operator ==(const GRTag & tag) const;

@@ -35,7 +35,7 @@ GRRepeatEnd::GRRepeatEnd( ARRepeatEnd * ar, bool ownsar )
 				: GRTagARNotationElement( ar, LSPACE, ownsar )
 //				: GRPTagARNotationElement( ar, ownsar )
 */
-GRRepeatEnd::GRRepeatEnd( ARRepeatEnd * arre, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float proportionnalRender )
+GRRepeatEnd::GRRepeatEnd( const ARRepeatEnd * arre, GRStaff * inStaff, const TYPE_TIMEPOSITION & inTimePos, float proportionnalRender )
 					: GRBar(arre, inStaff, inTimePos, proportionnalRender)
 {
 	InitRepeatEnd();
@@ -51,13 +51,8 @@ GRRepeatEnd::GRRepeatEnd( ARRepeatEndRangeEnd * ar, bool ownsar )
 } 
 */
 
-// --------------------------------------------------------------------------
-GRRepeatEnd::~GRRepeatEnd()
-{
-}
-
-ARRepeatEnd* GRRepeatEnd::getARRepeatEnd() {
-	return dynamic_cast<ARRepeatEnd*>(getAbstractRepresentation());
+const ARRepeatEnd* GRRepeatEnd::getARRepeatEnd() {
+	return dynamic_cast<const ARRepeatEnd*>(getAbstractRepresentation());
 }
 
 // --------------------------------------------------------------------------

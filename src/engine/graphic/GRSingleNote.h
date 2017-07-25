@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -40,11 +40,9 @@ class GRSingleNote : public GRNote
 {
  
  public:
-		GRSingleNote( GRStaff *, ARNote * abstractRepresentationOfNote,
-						const TYPE_TIMEPOSITION & relativeTimePositionOfGRNote,
-						const TYPE_DURATION & durationOfGRNote );
+		GRSingleNote( GRStaff *, const ARNote * ar, const TYPE_TIMEPOSITION& date, const TYPE_DURATION& duration );
 
-		virtual ~GRSingleNote();
+		virtual ~GRSingleNote() {}
 
 		virtual void	accept (GRVisitor& visitor);
 		virtual void	addToOffset( const NVPoint & pt);
@@ -53,7 +51,7 @@ class GRSingleNote : public GRNote
 		virtual void	setHeadState(const ARTHead * headstate);
 		virtual void	setNoteFormat(const ARNoteFormat * frmt);
 		virtual int		adjustLength(const TYPE_DURATION & ndur);
-		virtual void	addArticulation(ARMusicalTag * mtag);
+		virtual void	addArticulation(const ARMusicalTag * mtag);
 
 				void	doCreateNote( const TYPE_DURATION & p_durtemplate /* = DURATION_0*/);
 
@@ -118,15 +116,16 @@ class GRSingleNote : public GRNote
 
 	  	GRStdNoteHead *	getNoteHead() const;
 	  	void			extractAccidentals( GRAccidentalList * outList ) const;
-	  	NVRect			getEnclosingBox(bool includeAccidentals=true, bool includeSlurs = true) const;		// gives a rect that enclose the note, accidentals and articulations
+	  	NVRect			getEnclosingBox(bool includeAccidentals=true, bool includeSlurs = true, bool includeTrills=true) const;		// gives a rect that enclose the note, accidentals and articulations
 
         ARTHead::HEADSTATE getHeadState() { return mHeadState; }
 
         void forceAppearance();
+		const GRStem *getStem() const;
+		float getNoteWidth() const			{ return mNoteBreite; }
 
 protected:
 	GRStem *	  getStem();
-	const GRStem *getStem() const;
 	GRFlag *	  getFlag();
 	const GRFlag *getFlag() const;
 

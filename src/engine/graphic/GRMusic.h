@@ -46,7 +46,7 @@ class GRMusic : public GREvent
 	public:
 		using GObject::GetMap;
 		
-				GRMusic(ARMusic * inARMusic, ARPageFormat * inFormat, const GuidoLayoutSettings *settings, bool ownsAR );
+				GRMusic(const ARMusic * inARMusic, const ARPageFormat * inFormat, const GuidoLayoutSettings *settings, bool ownsAR );
 		virtual ~GRMusic();
 
 				void 		startNewSystem( GRSystem * grsystem );
@@ -56,7 +56,7 @@ class GRMusic : public GREvent
 
 				void 		createGR (const ARPageFormat * inPageFormat = 0 , const GuidoLayoutSettings *settings = 0);
 
-				ARMusic * 	getARMusic();
+				const ARMusic * getARMusic() const;
 	     		const ARMusic * getconstARMusic() const;
 
 		// - Page related
@@ -73,18 +73,18 @@ class GRMusic : public GREvent
 		// - Voice related
 		void MarkVoice(int voicenum,int numfrom,int denomfrom,
 			int numlength,int denomlength, unsigned char red, unsigned char green, unsigned char blue);
-		virtual void rememberVoiceNLinePosition(ARMusicalVoice * arv, const TYPE_TIMEPOSITION & tp);
-		virtual void setPossibleVoiceNLinePosition(ARMusicalVoice * arv, const TYPE_TIMEPOSITION & tp);
+		virtual void rememberVoiceNLinePosition		(const ARMusicalVoice * arv, const TYPE_TIMEPOSITION & tp);
+		virtual void setPossibleVoiceNLinePosition	(const ARMusicalVoice * arv, const TYPE_TIMEPOSITION & tp);
 		
 		void	removeVoiceElement(ARMusicalVoice * arv,GRNotationElement * el);
 		int		getNumVoices() const;
 		void	setSpringParameter(float npar);
 
 	  	GRVoice * getVoice( int num );
-	 	GRVoice * getVoice( ARMusicalVoice * arv );
+	 	GRVoice * getVoice( const ARMusicalVoice * arv );
 	  
 	  	void addVoiceElement( int num, GRNotationElement * el );
-	  	void addVoiceElement( ARMusicalVoice * arv, GRNotationElement * el );
+	  	void addVoiceElement( const ARMusicalVoice * arv, GRNotationElement * el );
 
 		// - Graphic and sizes
 		virtual void	updateBoundingBox();
@@ -113,9 +113,9 @@ class GRMusic : public GREvent
                 long    getDrawTime()           { return mDrawTime; }
 
 				float	getNotesDensity () const;
-				void	checkLyricsCollisions ();		// checks lyrics collisions and resolves the collisions if any
-				bool	collides () const		{ return !fCollisions.list().empty(); }
-				bool	lyricsChecked () const	{ return fLyricsChecked; }
+				bool	checkLyricsCollisions ();		// checks lyrics collisions and resolves the collisions if any
+				bool	collides () const					{ return !fCollisions.list().empty(); }
+				bool	lyricsChecked () const				{ return fLyricsChecked; }
 				void	removeAutoSpace (ARMusic * arm);// removes space tags inserted by checkLyricsCollisions()
 
 				void	printVoices (std::ostream& os) const;

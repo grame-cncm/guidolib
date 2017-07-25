@@ -23,8 +23,8 @@ class ARCoda;
 class GRCoda : public GRJump
 {
 	public:
-						GRCoda( ARCoda * ar );
-		virtual			~GRCoda();
+						 GRCoda( const ARCoda * ar );
+		virtual			~GRCoda() {}
 	protected:
 		virtual float	getSymbolSize () const;
 };

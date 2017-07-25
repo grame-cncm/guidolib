@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -26,12 +26,12 @@ class GRFinishBar: public GRBar
 {
 public:
 
-	GRFinishBar(ARFinishBar *p_arbar,GRStaff * inStaff, const TYPE_TIMEPOSITION & p_timeposition, float proportionnalRender);
-	GRFinishBar(ARFinishBar *p_arbar,GRSystem *p_grsystem,GRStaff * inStaff, const TYPE_TIMEPOSITION &p_timeposition, float proportionnalRender);
+	GRFinishBar( const ARFinishBar *p_arbar,GRStaff * inStaff, const TYPE_TIMEPOSITION & p_timeposition, float proportionnalRender);
+	GRFinishBar( const ARFinishBar *p_arbar,GRSystem *p_grsystem,GRStaff * inStaff, const TYPE_TIMEPOSITION &p_timeposition, float proportionnalRender);
 
-    virtual ~GRFinishBar();
+    virtual ~GRFinishBar() {}
 
-    ARFinishBar * getARFinishBar();
+    const ARFinishBar * getARFinishBar() const;
 
     virtual const NVPoint & getReferencePosition() const	{ return refpos; }
     virtual void  DrawWithLines( VGDevice & hdc ) const;

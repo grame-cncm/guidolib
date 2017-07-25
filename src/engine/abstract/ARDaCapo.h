@@ -15,35 +15,36 @@
 */
 
 #include "ARJump.h"
+#include "TimeUnwrap.h"
 
 /** \brief da capo
 */
 class ARDaCapo : public ARJump
 {
-public:	
-				 ARDaCapo();
-	virtual 	~ARDaCapo();
+	public:	
+					 ARDaCapo() : ARJump ("D.C.") {}
+		virtual 	~ARDaCapo() {}
 
-	virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-    virtual void printParameters(std::ostream& os) const {};
+		virtual const char*	getTagName() const		{ return "ARDaCapo"; };
+		virtual std::string getGMNName() const		{ return "\\daCapo"; };
 
-	virtual void browse(TimeUnwrap& mapper) const;
+		virtual void browse(TimeUnwrap& mapper) const
+					{ mapper.AtPos (this, TimeUnwrap::kDaCapo); }
 };
 
 /** \brief da capo al fine
 */
 class ARDaCapoAlFine : public ARJump
 {
-public:	
-				 ARDaCapoAlFine();
-	virtual 	~ARDaCapoAlFine();
+	public:	
+					 ARDaCapoAlFine() : ARJump ("D.C. al Fine") {}
+		virtual 	~ARDaCapoAlFine() {}
 
-	virtual void printName(std::ostream& os) const;
-    virtual void printGMNName(std::ostream& os) const;
-    virtual void printParameters(std::ostream& os) const {};
+		virtual const char*	getTagName() const		{ return "ARDaCapoAlFine"; };
+		virtual std::string getGMNName() const		{ return "\\daCapoAlFine"; };
 
-	virtual void browse(TimeUnwrap& mapper) const;
+		virtual void browse(TimeUnwrap& mapper) const
+					{ mapper.AtPos (this, TimeUnwrap::kDaCapoAlFine); }
 };
 
 #endif

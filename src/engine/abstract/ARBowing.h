@@ -4,7 +4,7 @@
 /*
   GUIDO Library
   Copyright (C) 2002  Holger Hoos, Juergen Kilian, Kai Renz
-  Copyright (C) 2002-2013 Grame
+  Copyright (C) 2002-2017 Grame
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -14,10 +14,6 @@
   research@grame.fr
 
 */
-class NVPoint;
-
-// #include "ARNote.h"
-// #include "ARMusicalTag.h"
 
 #include "ARMTParameter.h"
 #include "ARPositionTag.h"
@@ -26,45 +22,38 @@ class NVPoint;
 */
 class ARBowing : public ARMTParameter, public ARPositionTag
 {
-  public:
-			// should be used by ARFactory. It must
-			// also be ensured, that begin/end are set correctly
+	public:
+		enum CurveDirection { kUndefined, kUp, kDown, kPUndefined=9999 };
+
 				ARBowing();
 				ARBowing(const ARBowing * bowing);
+	   virtual ~ARBowing() {}
 
-	   virtual ~ARBowing();
+		static float undefined() { return float(kPUndefined); }
 
-		const TagParameterFloat * getDX1() const	{ return dx1; }
-		const TagParameterFloat * getDY1() const	{ return dy1; }
-		const TagParameterFloat * getDX2() const	{ return dx2; }
-		const TagParameterFloat * getDY2() const	{ return dy2; }
-		const TagParameterFloat * getR3() const		{ return r3; }
-		const TagParameterFloat * getH() const		{ return h; }
-	
-		const TagParameterString * getCurve() const	{ return mCurve; }
+		float getDX1() const	{ return fDx1; }
+		float getDX2() const	{ return fDx2; }
+		float getDY1() const	{ return fDy1; }
+		float getDY2() const	{ return fDy2; }
+		float getR3() const		{ return fCtrlPoint; }
+		float getH() const		{ return fCtrlPointOffset; }
+		bool getParSet() const	{ return fParSet; }
+		CurveDirection getCurve() const	{ return fCurveDir; }
 
-		bool getParSet() const	{ return mParSet; }
-		virtual void setTagParameterList(TagParameterList & tlist);
-		virtual TagParameterList * getTagParameterList() const;
+		virtual void setTagParameters (const TagParameterMap& params);
 
-	    virtual void printName(std::ostream& os) const;
-	virtual void printGMNName(std::ostream& os) const;
-	    virtual void printParameters(std::ostream& os) const;
+		virtual const char*	getParamsStr() const	{ return kARBowingParams; };
+		virtual const char*	getTagName() const		{ return "ARBowing"; };
+		virtual std::string getGMNName() const		{ return "\\bowing"; };
 
-		virtual void setCurve(int curve, const NVPoint & p1, const NVPoint & p2);
+  private:
+	  float fDx1, fDy1;			// offset to the first control point
+	  float fDx2, fDy2;			// offset to the last control point
+	  float fCtrlPoint;			// factor defining the position of the middle control point (default is 0.5).
+	  float fCtrlPointOffset;	// y offset to the middle control point (expressed in hs).
+	  CurveDirection fCurveDir;
 
-  protected:
-	  TagParameterFloat * dx1;	// offset to the first control point
-	  TagParameterFloat * dy1;
-	  TagParameterFloat * dx2;	// offset to the last control point
-	  TagParameterFloat * dy2;
-	  TagParameterFloat * r3;	// factor defining the position of the middle control point (default is 0.5).
-	  TagParameterFloat * h;	// y offset to the middle control point.
-	  TagParameterString * mCurve;	// <curve= "down" or "up">
-
-	  bool mParSet;	// true if at least one of the 6 params has been set.
-
-	  static ListOfTPLs ltpls;
+	  bool fParSet;				// true if at least one of the 6 params has been set.
 };
 
 #endif

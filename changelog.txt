@@ -1,6 +1,14 @@
 GUIDO Engine history
 
 ----------------------------------------------------------------
+  version 1.6.5
+- dm parameter removed from \cresc and \decresc tags (redundant with \i)
+- fix ignored dx parameter for \systemFormat tag
+- fix inverted dy for dynamics (\cresc, \decresc)
+- ornaments syntax change (affects \trill, \mordent, \turn): they don't use a chord for 
+  specification any more, but can be applied to (real) chord. Tag parameters have been redesigned.
+
+-----------------------------
   version 1.6.4
 - new staff distance parameter for fixed stave spacing feature (\staffFormat<distance>)
 - new GuidoShowElement API
