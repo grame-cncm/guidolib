@@ -126,11 +126,11 @@ void GuidoVoiceAndBarCollector::Graph2TimeMap( const FloatRect& box, const TimeS
         // We check if we're after a line break
         if (box.left < fPrevBarX[infos.staffNum]) {
             // TODO: After a line break, we have to set the correct left rect value
-            fPrevBarX[infos.staffNum] = box.left; // For now, we don't change the olf rect left value
+            fPrevBarX[infos.staffNum] = int(box.left); // For now, we don't change the olf rect left value
         }
         
         // We adjust new rect according to stored fPrevBarX and add new element
-        FloatRect newRect (fPrevBarX[infos.staffNum], box.top, box.right, box.bottom);
+        FloatRect newRect ((float)fPrevBarX[infos.staffNum], box.top, box.right, box.bottom);
         add (dates, newRect);
     }
     // Otherwise, if element is not a bar, we directly add current dates/box to the list
@@ -138,7 +138,7 @@ void GuidoVoiceAndBarCollector::Graph2TimeMap( const FloatRect& box, const TimeS
         add (dates, box);
     
     // We set fPrevBarX if current element is a bar, otherwise we reset it
-    fPrevBarX[infos.staffNum] = (isBar ? box.right : 0);
+    fPrevBarX[infos.staffNum] = (isBar ? (int)box.right : 0);
 }
 
 //----------------------------------------------------------------------

@@ -256,7 +256,7 @@ GRTrill::TDrawRects GRTrill::getAssociatedBoundingBox (const NEPointerList * ass
 			NVRect r = note->getEnclosingBox(false, true, false);
 //			NVRect r = getElementBoundingBox(note);
 			r.top -= lspace;
-			r.bottom += lspace*1.5;
+			r.bottom += lspace*1.5f;
 			r.left += note->getNoteWidth()/2;
 			bb.Merge (r);
 		}
@@ -292,7 +292,7 @@ void GRTrill::tellPosition( GObject * caller, const NVPoint & np )
 		else mDraw = false;
 
 		if (fPosition == ARTrill::BELOW) {
-			float miny = staff->getDredgeSize() + staffLSpace * 2.5;
+			float miny = staff->getDredgeSize() + staffLSpace * 2.5f;
 			for_each(fDrawRects.begin(), fDrawRects.end(), [miny] (pair<const GRSystem*, NVRect>& e)
 				-> void { if (e.second.bottom < miny) e.second.bottom = miny; });
 		}

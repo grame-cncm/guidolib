@@ -1093,7 +1093,7 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 	{
 		ARTitle * artitle = static_cast<ARTitle *>(arOfCompleteObject);
 		grne = new GRPageText (artitle, NULL, artitle->getName(), artitle->getPageFormat(), artitle->getTextFormat(),
-			artitle->getFont(), artitle->getFSize(), artitle->getTextAttributes());
+			artitle->getFont(), (int)artitle->getFSize(), artitle->getTextAttributes());
 	}
 	else if (tinf == typeid(ARComposer))
 	{
@@ -1105,7 +1105,7 @@ GRNotationElement * GRVoiceManager::parseTag(ARMusicalObject * arOfCompleteObjec
 			arcomp->getPageFormat(),
 			arcomp->getTextFormat(),
 			arcomp->getFont(),
-			arcomp->getFSize(),
+			(int)arcomp->getFSize(),
 			arcomp->getTextAttributes());
 
 		grne = tmp;

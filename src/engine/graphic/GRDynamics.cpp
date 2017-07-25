@@ -181,11 +181,11 @@ void GRDynamics::DrawDynamic( VGDevice & hdc, bool cresc) const
 		if (cresc) {
 			w2 = fWidth;
 			if (sse->startflag == GRSystemStartEndStruct::OPENLEFT) w1 = fWidth/4;
-			if (sse->endflag == GRSystemStartEndStruct::OPENRIGHT)  w2 = fWidth/1.7;
+			if (sse->endflag == GRSystemStartEndStruct::OPENRIGHT)  w2 = fWidth/1.7f;
 		}
 		else {
 			w1 = fWidth;
-			if (sse->startflag == GRSystemStartEndStruct::OPENLEFT) w1 = fWidth/1.7 ;
+			if (sse->startflag == GRSystemStartEndStruct::OPENLEFT) w1 = fWidth/1.7f ;
 			if (sse->endflag == GRSystemStartEndStruct::OPENRIGHT)  w2 = fWidth/4;
 		}
 		float y1 = segment->fy - w1/2;

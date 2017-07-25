@@ -75,7 +75,7 @@ GRAccelerando::GRAccelerando( GRStaff * inStaff, const ARAccelerando * artrem )
 	  curLSPACE = inStaff->getStaffLSPACE();
 
 //  mFontSize = artrem->getFSize(curLSPACE);
-  mFontSize = artrem->getFSize() * curLSPACE / LSPACE;
+  mFontSize = int(artrem->getFSize() * curLSPACE / LSPACE);
 
   if (mFontSize == 0)
 	  mFontSize = (int)(1.5f * LSPACE);

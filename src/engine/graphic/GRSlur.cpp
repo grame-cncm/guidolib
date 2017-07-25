@@ -210,7 +210,7 @@ void GRSlur::automaticControlPoints( GRBowingContext * context, const ARBowing *
 //    float endA = (upward ? minSlope : -minSlope)+baseSlope;
 
     float startA = upward ? tan(-minBaseAngle + baseAngle) : tan(minBaseAngle + baseAngle);
-    float endA =   upward ? tan( minBaseAngle + M_PI + baseAngle) : tan( - minBaseAngle + M_PI + baseAngle);
+    float endA =   upward ? tan( minBaseAngle + float(M_PI) + baseAngle) : tan( - minBaseAngle + float(M_PI) + baseAngle);
 	
     if(upward){
         startA = min(startA, -tan(minHorizontalAngle));

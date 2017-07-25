@@ -50,7 +50,7 @@ GRAccidental::GRAccidental( float detune, bool cautionnary, float p_size )
 	: offsetset(false)
 {
 	initialize(0, p_size);
-	float n = detune / 0.5;		// count of quarter tone in detune
+	float n = detune / 0.5f;		// count of quarter tone in detune
 	int id = int(n);
 	float remain = n - id;
 	if (remain > 0.25) id += 1;

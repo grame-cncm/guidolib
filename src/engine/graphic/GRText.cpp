@@ -60,7 +60,7 @@ GRText::GRText(GRStaff * staff, const ARText * ar) : GRPTagARNotationElement(ar)
 	const ARText * myar = getARText();
 	if (myar) {
 //		mFontSize = myar->getFSize(curLSPACE);
-		mFontSize = myar->getFSize() * curLSPACE / LSPACE;
+		mFontSize = int(myar->getFSize() * curLSPACE / LSPACE);
 		if (mFontSize == 0)
 			mFontSize = (int)(1.5f * LSPACE);
 		// we do not want that (do we?)

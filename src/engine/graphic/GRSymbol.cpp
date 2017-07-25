@@ -68,7 +68,7 @@ GRSymbol::GRSymbol(GRStaff * p_staff, const ARSymbol * ar)
             symbolFixedHeight ? sizey = float(symbolFixedHeight) : sizey = (float)st->bitmap->GetHeight();
 
             const TagParameterFloat* p = ar->getSize();
-            float symbolSize = p ? p->getValue() : 1.0;
+            float symbolSize = p ? p->getValue() : 1.0f;
 //            float symbolSize = ar->getSize();
 
             st->boundingBox.right = sizex * symbolSize * kVirtualToPx;
@@ -178,7 +178,7 @@ void GRSymbol::OnDraw( VGDevice & hdc ) const
         // --------------------------------
 
 		const TagParameterFloat* p = arSymbol->getSize();
-		float currentSize = p ? p->getValue() : 1.0;
+		float currentSize = p ? p->getValue() : 1.0f;
 //        float currentSize = arSymbol->getSize();
         float positionStringDy;
 

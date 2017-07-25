@@ -85,7 +85,7 @@ bool ARMeter::singleUnit (const std::vector<Fraction>& meters)  const
 const vector<Fraction> ARMeter::finalizeMeters(const std::vector<Fraction>& meters)  const
 {
 	vector<Fraction> out;
-	int n = meters.size() - 1;
+	int n = int(meters.size() - 1);
 	int lastdnum = 4;		// default denominator
 	while (n >= 0) {
 		Fraction m = meters[n--];

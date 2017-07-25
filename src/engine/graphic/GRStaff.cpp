@@ -439,7 +439,7 @@ std::ostream& operator<< (std::ostream& os, const GRStaff* staff)			{ staff->pri
 class TXInterval : public std::pair<float, float>
 {
 	public:
-		TXInterval () : std::pair<float, float>(0,0) {}
+		TXInterval () : std::pair<float, float>(0.f,0.f) {}
 		TXInterval (float a, float b) : std::pair<float, float>(a, b) {}
 		void	clear ()					{ second = first = 0; }
 		bool	empty () const				{ return (second - first) <= 0; }

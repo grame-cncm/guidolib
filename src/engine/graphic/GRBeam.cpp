@@ -43,7 +43,7 @@ GRBeamSaveStruct::~GRBeamSaveStruct()
 	delete simpleBeams;
 }
 
-pair<float, float> GRBeam::fLastPositionOfBarDuration = make_pair(0, 0);
+pair<float, float> GRBeam::fLastPositionOfBarDuration = make_pair(0.f, 0.f);
 
 GRBeam::GRBeam(GRStaff * grstaf,const ARBeam * arbeam) : GRPTagARNotationElement(arbeam)
 {

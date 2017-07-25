@@ -77,7 +77,7 @@ void RProportional::onDraw(int width, int height, VGDevice *dev)
 //-------------------------------------------------------------------
 float RProportional::staffTopPos (int i) const
 {
-	float offset = (kStaffSpacing + (kStaffLines-1)) * i;
+	int offset = (kStaffSpacing + (kStaffLines-1)) * i;
 	return (kStaffBorder + offset) * fLineHeight;
 }
 
@@ -92,7 +92,7 @@ void RProportional::DrawStaff (int n, int w, VGDevice* dev) const
 {
 	float y = staffTopPos (n);
 	for (int i=0; i<kStaffLines; i++) {
-		dev->Line( 0, y, w, y);
+		dev->Line( 0, y, float(w), y);
 		y += fLineHeight;
 	}
 }
