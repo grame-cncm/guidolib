@@ -14,5 +14,6 @@
 % The cautionary accidentals can be shown with "cautionary"
 [	
 	\key<3> \mord<"d",accidental="cautionary">(c) \mord<"f#",accidental="cautionary">(e) 
+	\mordent({d/2, b})
 ]
 }

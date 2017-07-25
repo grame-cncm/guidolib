@@ -5,5 +5,5 @@
 [\trill(g) \trill<"a&">(g) \trill<"a&",ady=0.5, adx=-2>(g) ],
 
 % The cautionary accidentals can be shown with "cautionary"
-[\key<3> \trill<"d", accidental="cautionary">(c) \trill<"f#", accidental="cautionary">(e) ]
+[\key<3> \trill<"d", accidental="cautionary">(c) \trill<"f#", accidental="cautionary">(e) _ ]
 }
