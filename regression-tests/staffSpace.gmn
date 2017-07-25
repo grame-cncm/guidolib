@@ -1,0 +1,9 @@
+{
+[ 
+	\clef<"c0"> \meter<"4/4"> c d e f g a 
+]
+,
+[
+	\staffFormat<dy=8.9> \clef<""> \meter<"4/4"> a2 g f e d c
+]
+}
