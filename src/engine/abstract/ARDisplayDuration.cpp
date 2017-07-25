@@ -13,6 +13,7 @@
 */
 
 #include <iostream>
+#include <string.h>
 
 #include "ARDisplayDuration.h"
 #include "TagParameterStrings.h"

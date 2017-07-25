@@ -15,6 +15,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <string.h>
 
 #include "ARFeatheredBeam.h"
 #include "TagParameterString.h"

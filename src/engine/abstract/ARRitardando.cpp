@@ -13,6 +13,7 @@
 */
 
 #include <iostream>
+#include <string.h>
 
 #include "ARRitardando.h"
 #include "TagParameterStrings.h"

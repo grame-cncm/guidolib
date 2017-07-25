@@ -13,6 +13,7 @@
 */
 
 #include <iostream>
+#include <string.h>
 
 #include "ARStaccato.h"
 #include "TagParameterStrings.h"

@@ -89,7 +89,6 @@ using namespace std;
 #include "GRSystemSlice.h"
 #include "GRText.h"
 #include "GRVoice.h"
-#include "GRStaffOnOffVisitor.h"
 
 #include "kf_ivect.h"
 #include "TCollisions.h"

@@ -18,7 +18,9 @@
 /** \brief The base class for all guido tags.
 */
 
+#include <memory>
 #include <string>
+#include <vector>
 #include <iostream>
 
 class TagParameter 

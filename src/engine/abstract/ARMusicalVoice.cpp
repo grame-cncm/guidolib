@@ -24,6 +24,7 @@
 #include <cstring>	// strcat
 #include <vector>
 #include <map>
+#include <algorithm>
 
 #include "TagList.h"
 #include "GUIDOInternal.h"	// for gGlobalSettings.gAutoBarlines

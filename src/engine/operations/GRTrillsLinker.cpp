@@ -12,6 +12,7 @@
 */
 
 #include <iostream>
+#include <algorithm>
 
 #include "GRTrillsLinker.h"
 

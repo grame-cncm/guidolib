@@ -13,6 +13,7 @@
 */
 
 #include <iostream>
+#include <string.h>
 
 #include "ARTrill.h"
 #include "ARKey.h"

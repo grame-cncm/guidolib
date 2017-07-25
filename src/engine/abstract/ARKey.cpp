@@ -13,6 +13,7 @@
 */
 
 #include <iostream>
+#include <string.h>
 
 #include "ARKey.h"
 #include "TagParameterStrings.h"
