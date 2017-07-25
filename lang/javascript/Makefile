@@ -18,7 +18,7 @@ sources = $(wildcard $(srcdir)/*/*.cpp src/*/*.cpp)
 objects = $(patsubst src%, obj/src%, $(patsubst ../../src/engine%,obj%, $(patsubst %.cpp,%.o,$(sources))))
 
 GCC = emcc
-CXXFLAGS += $(addprefix -I, $(subprojects)) -DINDEPENDENTSVG -DJSON_ONLY -DCANVASSYSTEM -O3
+CXXFLAGS += $(addprefix -I, $(subprojects)) -DINDEPENDENTSVG -DJSON_ONLY -DCANVASSYSTEM -O3 -std=c++11
 
 
 library = libGUIDOEngine
@@ -71,6 +71,10 @@ obj/src/binding/%.o: src/binding/%.cpp
 obj/src/device/%.o: src/device/%.cpp
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	$(GCC) -c $(CXXFLAGS) $< -o $@	
+
+obj/parser/guidolex.o : $(srcdir)/parser/guidolex.cpp
+	@[ -d $(@D) ] || mkdir -p $(@D)
+	$(GCC) -c $(CXXFLAGS) -Wno-deprecated-register $< -o $@	
 
 # DO NOT DELETE
 
