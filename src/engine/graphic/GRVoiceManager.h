@@ -173,7 +173,9 @@ private:
 	void			organizeBeaming(GRTag * grb);
 	void			checkFillBar (GRTagARNotationElement* bar);
 	void			addAssociations (GREvent* ev, bool setnext=true);
-
+	int				endIteration (bool checkEndTag);
+	void			checkCluster(GREvent *ev);
+	
 	std::vector<GRBeam *> curbeam;
 	typedef std::vector<std::pair<GRRange*, GRSingleNote*> >	TSharedArticulationsList;
 	TSharedArticulationsList fSharedArticulations;
