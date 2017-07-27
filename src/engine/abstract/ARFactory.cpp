@@ -116,6 +116,7 @@
 #include "NoteAndChordFactory.h"
 #include "NoteAndChordParser.h"
 
+#include "Tags.h"
 #include "TagParameterString.h"
 #include "TagParameterInt.h"
 #include "TagParameterFloat.h"
@@ -372,47 +373,9 @@ void ARFactory::addChord()
     // we also have to add the \chord \dispDur and \shareStem tags...
     // one thought: these Tags need one additional parameter (not only auto) but also for saving if the chord
     // was automatically created or already in the GUIDO description.	
-    if (mCurrentTrill)
-    {
-		mCurrentVoice->finishTrilledChord();
-		
-//		ARMusicalVoice::CHORD_TYPE chord_type = ARMusicalVoice::UP_SIMPLE;
-//        ARMusicalVoice::CHORD_ACCIDENTAL chord_accidental = ARMusicalVoice::NATURAL;
-//        ARNote * firstNote = mCurrentVoice->setTrillChord(chord_type, chord_accidental);
-//
-//        mCurrentTrill->setChordType(chord_type);
-//        mCurrentTrill->setChordAccidental(chord_accidental);
-//
-//        firstNote->setOrnament(mCurrentTrill);
-
-//		bool trill = true;
-//		if (mCurrentTags) {				// looks for beaming
-//			ARMusicalVoiceState vst;
-//			GuidoPos pos = mCurrentVoice->GetHeadPosition(vst);
-//			while (pos && trill) {
-//				mCurrentVoice->GetNext(pos, vst);
-//				const PositionTagList * ptags = vst.currentPTags();
-//				GuidoPos ppos = ptags ? ptags->GetHeadPosition() : 0;
-//				while (ppos) {
-//					const ARPositionTag * tag = ptags->GetNext(ppos);
-//					const ARBeam* b = dynamic_cast<const ARBeam*>(tag);
-//					if (b) {
-//						trill = false;
-//						break;
-//					}
-//				}
-//			}
-//		}
-//		mCurrentVoice->FinishChord (trill);
-		mCurrentVoice->FinishChord (false);
-    }
-    else
-    {
-        if (mCurrentCluster)
-            mCurrentVoice->setClusterChord(mCurrentCluster);
-
-        mCurrentVoice->FinishChord(false);
-    }
+    if (mCurrentTrill)			mCurrentVoice->finishTrilledChord();
+    else if (mCurrentCluster)	mCurrentVoice->setClusterChord(mCurrentCluster);
+	mCurrentVoice->FinishChord ();
     mCurrentChordTag = NULL;
 }
 
@@ -685,19 +648,19 @@ void ARFactory::createTag( const char * name, int no )
 	switch( c )
 	{
 		case 'a':
-			if (!strcmp(name,"accelerando") || !strcmp(name,"accel"))
+			if (!strcmp(name, kTagAccelerando ) || !strcmp(name, kTagAccel ))
 			{
 				ARAccelerando * tmp = new ARAccelerando();
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if(!strcmp(name,"accent"))
+			else if(!strcmp(name, kTagAccent ))
 			{
 				ARAccent * tmp = new ARAccent;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"accelBegin"))
+			else if (!strcmp(name, kTagAccelBegin ))
 			{
 				ARAccelerando * tmp = new ARAccelerando();
 				tmp->setID(no);
@@ -705,32 +668,32 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if(!strcmp(name,"alter"))
+			else if(!strcmp(name, kTagAlter ))
 			{
 				ARAlter * tmp = new ARAlter(mCurrentAlter);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}	
-			else if (!strcmp(name,"auto"))
+			else if (!strcmp(name, kTagAuto ))
 			{
 				ARAuto * tmp = new ARAuto();
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
-			else if (!strcmp(name,"accolade") || !strcmp(name,"accol"))
+			else if (!strcmp(name, kTagAccolade ) || !strcmp(name, kTagAccol ))
 			{
 				ARAccolade * tmp = new ARAccolade;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 				
 			}
-			else if (!strcmp(name,"acc") || !strcmp(name,"accidental"))
+			else if (!strcmp(name, kTagAcc ) || !strcmp(name, kTagAccidental ))
 			{
 				ARAccidental * tmp = new ARAccidental();
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"accelEnd"))
+			else if (!strcmp(name, kTagAccelEnd ))
 			{
 				ARDummyRangeEnd * tmp = new ARDummyRangeEnd("\\accelEnd");
 				tmp->setID(no); // no ist die ID
@@ -740,13 +703,13 @@ void ARFactory::createTag( const char * name, int no )
 			break;
 
 		case 'b':
-			if(!strcmp(name,"beam") || !strcmp(name,"bm") || !strcmp(name,"b")) // ATTENTION needs to be removed later
+			if(!strcmp(name, kTagBeam ) || !strcmp(name, kTagBm ) || !strcmp(name, kTagB )) // ATTENTION needs to be removed later
 			{
 				ARBeam * tmp = new ARBeam();
 				mTags.AddHead(tmp); // push();
 				mCurrentVoice->AddPositionTag(tmp);				
 			}
-			else if (!strcmp(name,"beamBegin"))
+			else if (!strcmp(name, kTagBeamBegin ))
 			{
 				ARBeam * tmp = new ARBeam;
 				tmp->setID(no);
@@ -754,14 +717,14 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"beamEnd"))
+			else if (!strcmp(name, kTagBeamEnd ))
 			{
 				ARDummyRangeEnd * tmp = new ARDummyRangeEnd("\\beamEnd");
 				tmp->setID(no);
 				mCurrentVoice->setPositionTagEndPos(no, tmp);
 				mTags.AddHead(tmp);
 			}
-			else if (!strcmp(name,"beamsAuto"))
+			else if (!strcmp(name, kTagBeamsAuto ))
 			{
 				ARBeamState * tmp = new ARBeamState(ARBeamState::AUTO);
 				mTags.AddHead(tmp);
@@ -769,21 +732,21 @@ void ARFactory::createTag( const char * name, int no )
 				mCurrentVoice->AddTail(tmp);
 				
 			}
-			else if (!strcmp(name,"beamsFull"))
+			else if (!strcmp(name, kTagBeamsFull ))
 			{
 				ARBeamState * tmp = new ARBeamState(ARBeamState::FULL);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 				
 			}
-			else if (!strcmp(name,"beamsOff"))
+			else if (!strcmp(name, kTagBeamsOff ))
 			{
 				ARBeamState * tmp = new ARBeamState(ARBeamState::OFF);
 				mTags.AddHead(tmp);
 //				mBeamState = BEAMSOFF;
 				mCurrentVoice->AddTail(tmp);				
 			}
-			else if(!strcmp(name,"bar"))
+			else if(!strcmp(name, kTagBar ))
 			{
 				assert(!mCurrentEvent);
 				assert(mCurrentVoice);
@@ -791,19 +754,19 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp); // push()
 				mCurrentVoice->AddTail(tmp);				
 			}
-			else if (!strcmp(name,"barFormat"))
+			else if (!strcmp(name, kTagBarFormat ))
 			{
 				ARBarFormat * tmp = new ARBarFormat;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
-			else if (!strcmp(name,"bembel"))
+			else if (!strcmp(name, kTagBembel ))
 			{
 				ARBembel * tmp = new ARBembel;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);				
 			}
-			else if(!strcmp(name,"breathMark"))	
+			else if(!strcmp(name, kTagBreathMark ))	
 			{
 				ARBreathMark * tmp = new ARBreathMark;
 				mTags.AddHead(tmp);
@@ -813,17 +776,13 @@ void ARFactory::createTag( const char * name, int no )
 
 		case 'c':
 			// (JB) experimental implementation of Coda
-			if(!strcmp(name,"coda"))	
+			if(!strcmp(name, kTagCoda ))	
 			{
 				ARCoda * tmp = new ARCoda;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
-			else if (!strcmp(name,"chord"))	// same as "splitChord"
-			{
-				GuidoTrace("chord-Tag is no longer supported!");
-			}
-			else if (!strcmp(name,"cue"))
+			else if (!strcmp(name, kTagCue ))
 			{
 				if (mCurrentCue)
 				{
@@ -867,13 +826,13 @@ void ARFactory::createTag( const char * name, int no )
 					mCurrentVoice->AddTail(tmpnf);
 				}
 			}
-			else if (!strcmp(name,"composer"))
+			else if (!strcmp(name, kTagComposer ))
 			{
 				ARComposer * tmp = new ARComposer();
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
-			else if(!strcmp(name,"clef"))
+			else if(!strcmp(name, kTagClef ))
 			{
 				assert(!mCurrentEvent);
 				assert(mCurrentVoice);
@@ -881,19 +840,19 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp); // push()
 				mCurrentVoice->AddTail(tmp);
 			}
-			else if (!strcmp(name,"color") || !strcmp(name,"colour"))
+			else if (!strcmp(name, kTagColor ) || !strcmp(name, kTagColour ))
 			{
 				ARColor * tmp = new ARColor;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
-            else if (!strcmp(name,"cresc") || !strcmp(name,"crescendo"))
+            else if (!strcmp(name, kTagCresc ) || !strcmp(name, kTagCrescendo ))
 			{
 				ARCrescendo * tmp = new ARCrescendo();
 				mTags.AddHead(tmp); // push()
 				mCurrentVoice->AddPositionTag(tmp);
             }
-			else if (!strcmp(name,"crescBegin"))
+			else if (!strcmp(name, kTagCrescBegin ))
 			{
 				ARCrescendo * tmp = new ARCrescendo();
                 tmp->setAssociation(ARMusicalTag::ER);
@@ -903,14 +862,14 @@ void ARFactory::createTag( const char * name, int no )
 
 				mCurrentVoice->AddPositionTag(tmp);		
 			}
-			else if (!strcmp(name,"crescEnd"))
+			else if (!strcmp(name, kTagCrescEnd ))
 			{
 				ARDummyRangeEnd * tmp = new ARDummyRangeEnd("\\crescEnd");
 				tmp->setID(no);
                 mCurrentVoice->setPositionTagEndPos(no, tmp);
 				mTags.AddHead(tmp);
 			}
-			else if (!strcmp(name,"cluster"))
+			else if (!strcmp(name, kTagCluster ))
 			{
                 ARCluster *tmp = new ARCluster();
                 mTags.AddHead(tmp);
@@ -921,54 +880,54 @@ void ARFactory::createTag( const char * name, int no )
 			break;
 
 		case 'd':
-			if (!strcmp(name,"daCapo")) {
+			if (!strcmp(name, kTagDaCapo )) {
 				ARDaCapo * tmp = new ARDaCapo();
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
-			else if (!strcmp(name,"daCapoAlFine")) {
+			else if (!strcmp(name, kTagDaCapoAlFine )) {
 				ARDaCapoAlFine * tmp = new ARDaCapoAlFine();
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
-			else if (!strcmp(name,"daCoda")) {
+			else if (!strcmp(name, kTagDaCoda )) {
 				ARDaCoda * tmp = new ARDaCoda();
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
-			else if (!strcmp(name,"dalSegno")) {
+			else if (!strcmp(name, kTagDalSegno )) {
 				ARDalSegno * tmp = new ARDalSegno();
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
-			else if (!strcmp(name,"dalSegnoAlFine")) {
+			else if (!strcmp(name, kTagDalSegnoAlFine )) {
 				ARDalSegnoAlFine * tmp = new ARDalSegnoAlFine();
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
-			else if (!strcmp(name,"dispDur") || !strcmp(name,"displayDuration")) {
+			else if (!strcmp(name, kTagDispDur ) || !strcmp(name, kTagDisplayDuration )) {
 				ARDisplayDuration * tmp = new ARDisplayDuration();
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"dotFormat")) {
+			else if (!strcmp(name, kTagDotFormat )) {
 				ARDotFormat * tmp = new ARDotFormat(mCurrentDotFormat);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);				
 			}
-			else if (!strcmp(name,"doubleBar")) {
+			else if (!strcmp(name, kTagDoubleBar )) {
 				assert(!mCurrentEvent);
 				assert(mCurrentVoice);
 				ARDoubleBar * tmp = new ARDoubleBar;
 				mTags.AddHead(tmp); // push()
 				mCurrentVoice->AddTail(tmp);				
 			}
-			else if (!strcmp(name,"decresc") || !strcmp(name,"decrescendo") || !strcmp(name,"dim") || !strcmp(name,"diminuendo")) {
+			else if (!strcmp(name, kTagDecresc ) || !strcmp(name, kTagDecrescendo ) || !strcmp(name, kTagDim ) || !strcmp(name, kTagDiminuendo )) {
 				ARDiminuendo * tmp = new ARDiminuendo;
 				mTags.AddHead(tmp); // push();
 				mCurrentVoice->AddPositionTag(tmp);			
 			}
-			else if (!strcmp(name,"decrescBegin") || !strcmp(name,"dimBegin") || !strcmp(name,"diminuendoBegin")) {
+			else if (!strcmp(name, kTagDecrescBegin ) || !strcmp(name, kTagDimBegin ) || !strcmp(name, kTagDiminuendoBegin )) {
 				ARDiminuendo * tmp = new ARDiminuendo;
                 tmp->setAssociation(ARMusicalTag::ER);
 				tmp->setAllowRange(0);
@@ -976,8 +935,8 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"decrescEnd") || !strcmp(name,"dimEnd") || !strcmp(name,"diminuendoBegin")) {
-				ARDummyRangeEnd * tmp = new ARDummyRangeEnd("\\dimEnd");			
+			else if (!strcmp(name, kTagDecrescEnd ) || !strcmp(name, kTagDimEnd ) || !strcmp(name, kTagDiminuendoEnd )) {
+				ARDummyRangeEnd * tmp = new ARDummyRangeEnd( makeTag(kTagDimEnd) );			
 				tmp->setID(no);
 				mCurrentVoice->setPositionTagEndPos( no, tmp );
 				mTags.AddHead(tmp);
@@ -985,7 +944,7 @@ void ARFactory::createTag( const char * name, int no )
 			break;
 
 		case 'e':
-			if (!strcmp(name,"endBar"))
+			if (!strcmp(name, kTagEndBar ))
 			{
 				ARFinishBar * tmp = new ARFinishBar;
 				mTags.AddHead(tmp);
@@ -994,19 +953,19 @@ void ARFactory::createTag( const char * name, int no )
 			break;
 
 		case 'f':
-			if (!strcmp(name,"fingering"))
+			if (!strcmp(name, kTagFingering ))
 			{
 				ARFingering * tmp = new ARFingering;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"fine"))
+			else if (!strcmp(name, kTagFine ))
 			{
 				ARFine * tmp = new ARFine;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
-			else if (!strcmp(name,"fermata"))
+			else if (!strcmp(name, kTagFermata ))
 			{
 				// Fermata-Tag
 				assert(mCurrentVoice);
@@ -1015,13 +974,13 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if(!strcmp(name,"fBeam"))
+			else if(!strcmp(name, kTagFBeam ))
 			{
 				ARFeatheredBeam * tmp = new ARFeatheredBeam();
 				mTags.AddHead(tmp); // push();
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if(!strcmp(name,"fBeamBegin"))
+			else if(!strcmp(name, kTagFBeamBegin ))
 			{
 				ARFeatheredBeam * tmp = new ARFeatheredBeam();
 				tmp->setID(no);
@@ -1029,9 +988,9 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if(!strcmp(name,"fBeamEnd"))
+			else if(!strcmp(name, kTagFBeamEnd ))
 			{
-				ARDummyRangeEnd * tmp = new ARDummyRangeEnd("\\fBeamEnd");
+				ARDummyRangeEnd * tmp = new ARDummyRangeEnd( makeTag(kTagFBeamEnd) );
 				tmp->setID(no);
 				mCurrentVoice->setPositionTagEndPos(no, tmp);
 				mTags.AddHead(tmp);
@@ -1039,7 +998,7 @@ void ARFactory::createTag( const char * name, int no )
 			break;
 
 		case 'g':
-			if (!strcmp(name,"grace"))
+			if (!strcmp(name, kTagGrace ))
 			{
 				// this is somewhat different  from the other tags ....
 				// when a grace-tag is active, the time is not increased,
@@ -1062,13 +1021,13 @@ void ARFactory::createTag( const char * name, int no )
 					mCurrentGrace = tmp;
 				}
 			}
-			else if (!strcmp(name,"glissando"))
+			else if (!strcmp(name, kTagGlissando ))
 			{
 				ARGlissando * tmp = new ARGlissando();
 				mTags.AddHead(tmp); // push()
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"glissandoBegin"))
+			else if (!strcmp(name, kTagGlissandoBegin ))
 			{
 				// this is the id-number!
 				ARGlissando * tmp = new ARGlissando;
@@ -1078,9 +1037,9 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);				
 			}
-			else if (!strcmp(name,"glissandoEnd"))
+			else if (!strcmp(name, kTagGlissandoEnd ))
 			{
-				ARDummyRangeEnd * tmp = new ARDummyRangeEnd("\\glissandoEnd");
+				ARDummyRangeEnd * tmp = new ARDummyRangeEnd( makeTag(kTagGlissandoEnd) );
 				tmp->setID(no);
 				mCurrentVoice->setPositionTagEndPos(no, tmp);
 				mTags.AddHead(tmp);				
@@ -1089,37 +1048,37 @@ void ARFactory::createTag( const char * name, int no )
 			break;
 
 		case 'h':
-			if (!strcmp(name, "harmonic")) {
+			if (!strcmp(name,  kTagHarmonic )) {
 				ARHarmonic * tmp = new ARHarmonic;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-            if (!strcmp(name, "harmony")) {
+            if (!strcmp(name,  kTagHarmony )) {
                 ARTextHarmony * tmp = new ARTextHarmony;
                 mTags.AddHead(tmp);
                 mCurrentVoice->AddPositionTag(tmp);
             }
-			else if (!strcmp(name,"headsNormal")) {
+			else if (!strcmp(name, kTagHeadsNormal )) {
 				ARTHead * tmp = new ARTHead(ARTHead::NORMAL,mCurrentHead);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"headsReverse")) {
+			else if (!strcmp(name, kTagHeadsReverse )) {
 				ARTHead * tmp = new ARTHead(ARTHead::REVERSE,mCurrentHead);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"headsCenter")) {
+			else if (!strcmp(name, kTagHeadsCenter )) {
 				ARTHead * tmp = new ARTHead(ARTHead::CENTER,mCurrentHead);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"headsLeft")) {
+			else if (!strcmp(name, kTagHeadsLeft )) {
 				ARTHead * tmp = new ARTHead(ARTHead::LEFT,mCurrentHead);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"headsRight")) {
+			else if (!strcmp(name, kTagHeadsRight )) {
 				ARTHead * tmp = new ARTHead(ARTHead::RIGHT,mCurrentHead);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
@@ -1127,12 +1086,12 @@ void ARFactory::createTag( const char * name, int no )
 			break;
 
 		case 'i':
-			if (!strcmp(name,"instrument") || !strcmp(name,"instr")) {
+			if (!strcmp(name, kTagInstrument ) || !strcmp(name, kTagInstr )) {
 				ARInstrument * tmp = new ARInstrument(mAutoInstrPos);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
-			else if (!strcmp(name,"intensity") || !strcmp(name,"intens") || !strcmp(name,"i")) {
+			else if (!strcmp(name, kTagIntensity ) || !strcmp(name, kTagIntens ) || !strcmp(name, kTagI )) {
 				ARIntens * tmp = new ARIntens;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
@@ -1143,7 +1102,7 @@ void ARFactory::createTag( const char * name, int no )
 		case 'j':	break;
 
 		case 'k':	
-			if (!strcmp(name,"key")) {
+			if (!strcmp(name, kTagKey )) {
 				assert(mCurrentVoice);
 				assert(!mCurrentEvent);
 				ARKey * tmp = new ARKey;
@@ -1154,7 +1113,7 @@ void ARFactory::createTag( const char * name, int no )
 			break;
 
 		case 'l':	
-			if (!strcmp(name,"lyrics"))
+			if (!strcmp(name, kTagLyrics ))
 			{
 				assert(mCurrentVoice);
 				assert(!mCurrentEvent);
@@ -1162,7 +1121,7 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"label"))
+			else if (!strcmp(name, kTagLabel ))
 			{
 				ARLabel * tmp = new ARLabel;
 				mTags.AddHead(tmp);
@@ -1171,13 +1130,13 @@ void ARFactory::createTag( const char * name, int no )
 			break;
 			
 		case 'm':	
-			if(!strcmp(name,"marcato"))
+			if(!strcmp(name, kTagMarcato ))
 			{
 				ARMarcato * tmp = new ARMarcato;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"mordent") || !strcmp(name,"mord"))
+			else if (!strcmp(name, kTagMordent ) || !strcmp(name, kTagMord ))
 			{
 				ARTrill * tmp = new ARTrill(ARTrill::MORD, mCurrentKey);
 				mTags.AddHead(tmp);
@@ -1185,7 +1144,7 @@ void ARFactory::createTag( const char * name, int no )
 
 				mCurrentTrill = tmp;
 			}
-			else if(!strcmp(name,"meter"))
+			else if(!strcmp(name, kTagMeter ))
 			{
 				assert(!mCurrentEvent);
 				assert(mCurrentVoice);
@@ -1194,13 +1153,13 @@ void ARFactory::createTag( const char * name, int no )
 				mCurrentVoice->AddTail(tmp);
 				
 			}
-			else if (!strcmp(name,"mark"))
+			else if (!strcmp(name, kTagMark ))
 			{
 				ARMark * tmp = new ARMark;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
-			else if (!strcmp(name,"merge"))
+			else if (!strcmp(name, kTagMerge ))
 			{
 				ARMerge * tmp = new ARMerge;
 				mTags.AddHead(tmp);
@@ -1210,21 +1169,21 @@ void ARFactory::createTag( const char * name, int no )
 			break;
 
 		case 'n':	
-			if (!strcmp(name,"newLine") || !strcmp(name,"newSystem"))
+			if (!strcmp(name, kTagNewLine ) || !strcmp(name, kTagNewSystem ))
 			{
 				ARNewSystem * tmp = new ARNewSystem;
 				mTags.AddHead(tmp); // push();
 				mCurrentVoice->AddTail(tmp);
 				
 			}
-			else if (!strcmp(name,"newPage") )
+			else if (!strcmp(name, kTagNewPage ) )
 			{
 				ARNewPage * tmp = new ARNewPage;
 				mTags.AddHead(tmp); // push()
 				mCurrentVoice->AddTail(tmp);
 				
 			}
-			else if (!strcmp(name,"noteFormat"))
+			else if (!strcmp(name, kTagNoteFormat ))
 			{
 				ARNoteFormat * tmp = new ARNoteFormat(mCurrentNoteFormat);
 				mTags.AddHead(tmp);
@@ -1233,7 +1192,7 @@ void ARFactory::createTag( const char * name, int no )
 			break;
 
 		case 'o':	
-			if (!strcmp(name,"oct") || !strcmp(name,"octava"))
+			if (!strcmp(name, kTagOct ) || !strcmp(name, kTagOctava ))
 			{
 				AROctava * tmp = new AROctava(mCurrentOctava);
 				mTags.AddHead(tmp);
@@ -1242,19 +1201,19 @@ void ARFactory::createTag( const char * name, int no )
 			break;
 
 		case 'p':	
-			if (!strcmp(name,"pageFormat"))
+			if (!strcmp(name, kTagPageFormat ))
 			{
 				ARPageFormat * tmp = new ARPageFormat;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
-			else if (!strcmp(name, "pizzicato") || !strcmp(name, "pizz"))
+			else if (!strcmp(name,  kTagPizzicato ) || !strcmp(name,  kTagPizz ))
 			{
 				ARPizzicato * tmp = new ARPizzicato;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if(!strcmp(name,"port"))
+			else if(!strcmp(name, kTagPort ))
 			{
 				ARTDummy * tmp = new ARTDummy;
 				mTags.AddHead(tmp); // push()
@@ -1264,20 +1223,20 @@ void ARFactory::createTag( const char * name, int no )
 		case 'q':		break;
 	
 		case 'r':		
-			if (!strcmp(name,"restFormat"))
+			if (!strcmp(name, kTagRestFormat ))
 			{
 				ARRestFormat * tmp = new ARRestFormat(mCurrentRestFormat);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 				
 			}
-			else if (!strcmp(name,"ritardando") || !strcmp(name,"rit"))
+			else if (!strcmp(name, kTagRitardando ) || !strcmp(name, kTagRit ))
 			{
 				ARRitardando * tmp = new ARRitardando;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"ritBegin"))
+			else if (!strcmp(name, kTagRitBegin ))
 			{
 				ARRitardando * tmp = new ARRitardando;
 				tmp->setID(no);
@@ -1286,16 +1245,16 @@ void ARFactory::createTag( const char * name, int no )
 				mCurrentVoice->AddPositionTag(tmp);
 
 			}
-			else if (!strcmp(name,"ritEnd"))
+			else if (!strcmp(name, kTagRitEnd ))
 			{
-				ARDummyRangeEnd * tmp = new ARDummyRangeEnd("\\ritEnd");
+				ARDummyRangeEnd * tmp = new ARDummyRangeEnd( makeTag(kTagRitEnd) );
 				tmp->setID(no);
 
 				// no ist die ID
 				mCurrentVoice->setPositionTagEndPos(no, tmp);
 				mTags.AddHead(tmp);
 			}
-			else if (!strcmp(name,"repeatBegin"))
+			else if (!strcmp(name, kTagRepeatBegin ))
 			{
 				// right now, IDs are ignored for this!
 				// think about it?
@@ -1306,7 +1265,7 @@ void ARFactory::createTag( const char * name, int no )
 				// only one nesting allowed
 				mCurrentRepeatBegin = tmp;				
 			}
-			else if (!strcmp(name,"repeatEnd"))
+			else if (!strcmp(name, kTagRepeatEnd ))
 			{
 				ARRepeatEnd * tmp = new ARRepeatEnd( mCurrentRepeatBegin );
 				mTags.AddHead(tmp);
@@ -1318,7 +1277,7 @@ void ARFactory::createTag( const char * name, int no )
 			break;
 
 		case 's':	
-			if(!strcmp(name,"slur") || !strcmp(name,"sl"))
+			if(!strcmp(name, kTagSlur ) || !strcmp(name, kTagSl ))
 			{
 				ARSlur * tmp = new ARSlur;
 				// ARTSlurBegin * tmp = new ARTSlurBegin;
@@ -1328,7 +1287,7 @@ void ARFactory::createTag( const char * name, int no )
 				mCurrentVoice->AddPositionTag(tmp);
 				// mCurrentVoice->AddTail(tmp);				
 			}
-			/*else if (!strcmp(name,"shortFermata"))
+			/*else if (!strcmp(name, kTagShortFermata ))
 			{
 				// Fermata-Tag
 				assert(mCurrentVoice);
@@ -1337,7 +1296,7 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}*/
-			else if (!strcmp(name,"slurBegin"))
+			else if (!strcmp(name, kTagSlurBegin ))
 			{
 				ARSlur * slur = new ARSlur;
 				slur->setID(no);
@@ -1345,20 +1304,20 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(slur);
 				mCurrentVoice->AddPositionTag(slur);
 			}
-			else if (!strcmp(name,"slurEnd"))
+			else if (!strcmp(name, kTagSlurEnd ))
 			{
-				ARDummyRangeEnd * slend = new ARDummyRangeEnd("\\slurEnd");
+				ARDummyRangeEnd * slend = new ARDummyRangeEnd( makeTag(kTagSlurEnd));
 				slend->setID(no);
 				mCurrentVoice->setPositionTagEndPos( no, slend );
 				mTags.AddHead(slend);
 			}
-            else if(!strcmp(name,"set"))
+            else if(!strcmp(name, kTagSet ))
             {
 				ARAuto * tmp = new ARAuto();
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
-			else if(!strcmp(name,"staccato") || !strcmp(name,"stacc"))
+			else if(!strcmp(name, kTagStaccato ) || !strcmp(name, kTagStacc ))
 			{
 				ARStaccato * tmp = new ARStaccato;
 				mTags.AddHead(tmp);
@@ -1366,7 +1325,7 @@ void ARFactory::createTag( const char * name, int no )
 				// it is a position-Tag (or it should be one)
 				mCurrentVoice->AddPositionTag(tmp);				
 			}
-			else if (!strcmp(name,"staccBegin"))
+			else if (!strcmp(name, kTagStaccBegin ))
 			{
 				ARStaccato * tmp = new ARStaccato;
 				tmp->setID(no);
@@ -1374,16 +1333,16 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"staccEnd"))
+			else if (!strcmp(name, kTagStaccEnd ))
 			{
-				ARDummyRangeEnd * tmp = new ARDummyRangeEnd("\\staccEnd");
+				ARDummyRangeEnd * tmp = new ARDummyRangeEnd( makeTag(kTagStaccEnd) );
 				tmp->setID(no);
 
 				// no ist die ID
 				mCurrentVoice->setPositionTagEndPos(no, tmp);
 				mTags.AddHead(tmp);
 			}
-			else if (!strcmp(name,"staff"))
+			else if (!strcmp(name, kTagStaff ))
 			{
 				// das Staff-Tag
 				assert(mCurrentVoice);
@@ -1393,86 +1352,82 @@ void ARFactory::createTag( const char * name, int no )
 				mCurrentVoice->AddTail(tmp);
 				mCurrentStaff = tmp;				
 			}
-			else if (!strcmp(name,"stemsUp"))
+			else if (!strcmp(name, kTagStemsUp ))
 			{
 				ARTStem * tmp = new ARTStem(ARTStem::UP,mCurrentStem);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);				
 			}
-			else if (!strcmp(name,"stemsDown"))
+			else if (!strcmp(name, kTagStemsDown ))
 			{
 				ARTStem * tmp = new ARTStem(ARTStem::DOWN,mCurrentStem);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);				
 			}
-			else if (!strcmp(name,"stemsAuto"))
+			else if (!strcmp(name, kTagStemsAuto ))
 			{
 				ARTStem * tmp = new ARTStem(ARTStem::AUTO,mCurrentStem);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 				
 			}
-			else if (!strcmp(name,"stemsOff"))
+			else if (!strcmp(name, kTagStemsOff ))
 			{
 				ARTStem * tmp = new ARTStem(ARTStem::OFF,mCurrentStem);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);			
 			}
-			else if (!strcmp(name,"space") )
+			else if (!strcmp(name, kTagSpace ) )
 			{
 				ARSpace * tmp = new ARSpace;
 				mTags.AddHead(tmp); // push();
 				mCurrentVoice->AddTail(tmp);				
 			}
-			else if (!strcmp(name,"staffOff"))
+			else if (!strcmp(name, kTagStaffOff ))
 			{
 				ARStaffOff * tmp = new ARStaffOff;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);				
 			}
-			else if (!strcmp(name,"staffOn"))
+			else if (!strcmp(name, kTagStaffOn ))
 			{
 				ARStaffOn * tmp = new ARStaffOn;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);				
 			}
-			else if (!strcmp(name,"special"))
+			else if (!strcmp(name, kTagSpecial ))
 			{
 				ARSpecial * tmp = new ARSpecial;
 				mTags.AddHead(tmp);
 				// this is NOT a position-Tag!
 				mCurrentVoice->AddTail(tmp);				
 			}
-			else if (!strcmp(name,"systemFormat"))
+			else if (!strcmp(name, kTagSystemFormat ))
 			{
 				ARSystemFormat * tmp = new ARSystemFormat;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);				
 			}
-			else if (!strcmp(name,"staffFormat"))
+			else if (!strcmp(name, kTagStaffFormat ))
 			{
 				ARStaffFormat * tmp = new ARStaffFormat;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);				
 			}
-			else if (!strcmp(name,"shareLocation"))
+			else if (!strcmp(name, kTagShareLocation ))
 			{
 				ARShareLocation * tmp = new ARShareLocation;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"splitChord"))	// same as "chord"
-			{
-				GuidoTrace("splitChord-Tag is no longer supported!");
-			}
 			// (JB) experimental implementation of Signa
-			else if (!strcmp(name,"segno"))	
+			else if (!strcmp(name, kTagSegno ))	
 			{
 				ARSegno * tmp = new ARSegno;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddTail(tmp);
 			}
-            else if(!strcmp(name,"symbol") || !strcmp(name,"s"))
+            else if(!strcmp(name, kTagSymbol ) || !strcmp(name, kTagS ))
 			{
 				assert(mCurrentVoice);
 				assert(!mCurrentEvent);
@@ -1485,13 +1440,13 @@ void ARFactory::createTag( const char * name, int no )
 			break;
 
 		case 't':	
-			if(!strcmp(name,"tie"))
+			if(!strcmp(name, kTagTie ))
 			{
 				ARTie * tmp = new ARTie;
 				mTags.AddHead(tmp); // push()
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"tieBegin"))
+			else if (!strcmp(name, kTagTieBegin ))
 			{
 				// this is the id-number!
 				ARTie * tmp = new ARTie;
@@ -1501,27 +1456,27 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);				
 			}
-			else if (!strcmp(name,"tieEnd"))
+			else if (!strcmp(name, kTagTieEnd ))
 			{
-				ARDummyRangeEnd * tmp = new ARDummyRangeEnd("\\tieEnd");
+				ARDummyRangeEnd * tmp = new ARDummyRangeEnd( makeTag(kTagTieEnd) );
 				tmp->setID(no);
 				mCurrentVoice->setPositionTagEndPos(no, tmp);
 				mTags.AddHead(tmp);				
 			} 
-			else if(!strcmp(name,"tenuto") || !strcmp(name,"ten"))
+			else if(!strcmp(name, kTagTenuto ) || !strcmp(name, kTagTen ))
 			{
 				ARTenuto * tmp = new ARTenuto;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"trill"))
+			else if (!strcmp(name, kTagTrill ))
 			{
 				ARTrill * tmp = new ARTrill(ARTrill::TRILL, mCurrentKey);
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 				mCurrentTrill = tmp;
 			}
-			else if (!strcmp(name,"trillBegin")) // REM: A TESTER
+			else if (!strcmp(name, kTagTrillBegin )) // REM: A TESTER
 			{
 				ARTrill * tmp = new ARTrill(ARTrill::TRILL, mCurrentKey);
 				mTags.AddHead(tmp);
@@ -1530,14 +1485,14 @@ void ARFactory::createTag( const char * name, int no )
 				tmp->setAllowRange(0);
 				mCurrentTrill = tmp;
 			}
-			else if (!strcmp(name,"trillEnd"))
+			else if (!strcmp(name, kTagTrillEnd ))
 			{
-				ARDummyRangeEnd * tmp = new ARDummyRangeEnd("\\trillEnd");
+				ARDummyRangeEnd * tmp = new ARDummyRangeEnd( makeTag(kTagTrillEnd) );
 				tmp->setID(no);
 				mCurrentVoice->setPositionTagEndPos(no, tmp);
 				mTags.AddHead(tmp);
 			}
-			else if (!strcmp(name,"turn"))
+			else if (!strcmp(name, kTagTurn ))
 			{
 				ARTrill * tmp = new ARTrill(ARTrill::TURN, mCurrentKey);
 				mTags.AddHead(tmp);
@@ -1545,7 +1500,7 @@ void ARFactory::createTag( const char * name, int no )
 
 				mCurrentTrill = tmp;
 			}
-			else if(!strcmp(name,"tremolo") || !strcmp(name,"trem"))
+			else if(!strcmp(name, kTagTremolo ) || !strcmp(name, kTagTrem ))
 			{
 				ARTremolo * tmp = new ARTremolo;
 				mTags.AddHead(tmp);
@@ -1555,7 +1510,7 @@ void ARFactory::createTag( const char * name, int no )
 					mCurrentTremolo = tmp;
 				else delete tmp;
 			}
-			else if (!strcmp(name,"tremoloBegin") || !strcmp(name,"tremBegin"))
+			else if (!strcmp(name, kTagTremoloBegin ) || !strcmp(name, kTagTremBegin ))
 			{
 				// this is the id-number!
 				ARTremolo * tmp = new ARTremolo;
@@ -1568,14 +1523,14 @@ void ARFactory::createTag( const char * name, int no )
 					mCurrentTremolo = tmp;
 				else delete tmp;
 			}
-			else if (!strcmp(name,"tremoloEnd") || !strcmp(name,"tremEnd"))
+			else if (!strcmp(name, kTagTremoloEnd ) || !strcmp(name, kTagTremEnd ))
 			{
-				ARDummyRangeEnd * tmp = new ARDummyRangeEnd("\\tremoloEnd");
+				ARDummyRangeEnd * tmp = new ARDummyRangeEnd( makeTag(kTagTremoloEnd) );
 				tmp->setID(no);
 				mCurrentVoice->setPositionTagEndPos(no, tmp);
 				mTags.AddHead(tmp);				
 			} 
-			else if(!strcmp(name,"tempo"))
+			else if(!strcmp(name, kTagTempo ))
 			{
 				assert(mCurrentVoice); //...and also it must be the first voice 
 
@@ -1584,7 +1539,7 @@ void ARFactory::createTag( const char * name, int no )
 				mCurrentVoice->AddTail(tmp);
 				
 			}
-			else if(!strcmp(name,"text") || !strcmp(name,"t"))
+			else if(!strcmp(name, kTagText ) || !strcmp(name, kTagT ))
 			{ // Text-Tag
 				assert(mCurrentVoice);
 				assert(!mCurrentEvent);
@@ -1592,14 +1547,14 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);		
 			}
-			else if (!strcmp(name,"tuplet"))
+			else if (!strcmp(name, kTagTuplet ))
 			{
 				ARTuplet * tmp = new ARTuplet;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
                 mCurrentTuplet = tmp;
 			}
-			else if (!strcmp(name,"title"))
+			else if (!strcmp(name, kTagTitle ))
 			{
 				ARTitle * tmp = new ARTitle;
 				mTags.AddHead(tmp);
@@ -1609,7 +1564,7 @@ void ARFactory::createTag( const char * name, int no )
 			break;
 		
 		case 'u':
-			if (!strcmp(name,"units"))
+			if (!strcmp(name, kTagUnits ))
 			{
 				ARUnits * tmp = new ARUnits;
 				mTags.AddHead(tmp);
@@ -1618,13 +1573,13 @@ void ARFactory::createTag( const char * name, int no )
 			break;
 
 		case 'v':
-			if (!strcmp(name,"volta"))
+			if (!strcmp(name, kTagVolta ))
 			{
 				ARVolta * tmp = new ARVolta;
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"voltaBegin"))
+			else if (!strcmp(name, kTagVoltaBegin ))
 			{
 				ARVolta * tmp = new ARVolta;
 				tmp->setID(no);
@@ -1632,9 +1587,9 @@ void ARFactory::createTag( const char * name, int no )
 				mTags.AddHead(tmp);
 				mCurrentVoice->AddPositionTag(tmp);
 			}
-			else if (!strcmp(name,"voltaEnd"))
+			else if (!strcmp(name, kTagVoltaEnd ))
 			{
-				ARDummyRangeEnd * tmp = new ARDummyRangeEnd("\\voltaEnd");
+				ARDummyRangeEnd * tmp = new ARDummyRangeEnd( makeTag(kTagVoltaEnd) );
 				tmp->setID(no);
 				mCurrentVoice->setPositionTagEndPos( no, tmp );
 				mTags.AddHead(tmp);
@@ -1717,7 +1672,7 @@ void ARFactory::createTag( const char * name, int no )
 }
 
 // ----------------------------------------------------------------------------
-void ARFactory::checkRange	( const ARMusicalTag* tag, const char* name) const
+void ARFactory::checkRange	( const ARMusicalTag* tag, const string& name) const
 {
 	if (!tag->getRange()) {
 		string n (name);
@@ -1730,15 +1685,15 @@ void ARFactory::checkRange	( const ARMusicalTag* tag, const char* name) const
 void ARFactory::checkTagEnd( ARMusicalTag* tag)
 {
 	if (tag == mCurrentGrace) {
-		checkRange (tag, "\\grace");
+		checkRange (tag,  makeTag(kTagGrace) );
 		mCurrentGrace = NULL;
 	}
 	else if (tag == mCurrentCluster) {
-		checkRange (tag, "\\cluster");
+		checkRange (tag,  makeTag(kTagCluster) );
 		mCurrentCluster = NULL;
 	}
 	else if (tag == mCurrentTrill) {
-		checkRange (tag, "\\trill");
+		checkRange (tag,  makeTag(kTagTrill) );
 		mCurrentTrill = NULL;
 	}
 	else if (tag == mCurrentTuplet)
@@ -1781,20 +1736,7 @@ void ARFactory::endTag()
                 ARText * txt = new ARText(tps->getValue(),0);
 				txt->copyParameters(cue->getTagParameters());
 				txt->setTagParameters(cue->getTagParameters());
-//                if (cue->getDY())
-//                {
-//                    TagParameterFloat * tpf = TagParameterFloat::cast(cue->getDY()->getCopy());
-//                    txt->setDY(tpf);
-//                }
-//                if (cue->getDX())
-//                {
-//                    TagParameterFloat * tpf = TagParameterFloat::cast(cue->getDX()->getCopy());
-//                    txt->setDX(tpf);
-//                }
-//                if (cue->getColor())		txt->setColor(cue->getColor()->getValue());				
-//                if (cue->getSize())			txt->setSize(cue->getSize()->getValue());
                 mCurrentVoice->AddTail(txt);
-                // we need to be able to specify the offset!
             }
             delete tag;
             tag = NULL;
