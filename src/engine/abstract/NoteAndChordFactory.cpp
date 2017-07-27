@@ -91,7 +91,7 @@ void NoteAndChordFactory::addChord()
     if (!mCurrentVoice || mDone)
         return;
 
-    mCurrentVoice->FinishChord(false);
+    mCurrentVoice->FinishChord();
     mDone = true;
 }
 
