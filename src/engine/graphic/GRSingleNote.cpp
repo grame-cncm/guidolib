@@ -1076,7 +1076,8 @@ void GRSingleNote::setNoteFormat(const ARNoteFormat * frmt)
 		mOffset.y -= tpf2->getValue();
 
 	const TagParameterFloat * tpf = frmt->getSize();
-	mSize = tpf ? tpf->getValue() : float(1.0);
+    if (tpf) mSize = tpf->getValue();
+//    mSize = tpf ? tpf->getValue() : float(1.0);
 
 	// - Get the head style (standard, diamond, square...)
 	const TagParameterString * paramStyle = frmt->getTPStyle();
