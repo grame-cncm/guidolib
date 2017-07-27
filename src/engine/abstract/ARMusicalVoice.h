@@ -89,7 +89,7 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		void			MarkVoice(int fromnum,int fromdenom, int lengthnum, int lengthdenom, unsigned char red, unsigned char green, unsigned char blue);
 
 		virtual void	    initChordNote();
-		virtual void	    FinishChord(bool trill);
+		virtual void	    FinishChord();
 		virtual ARChordTag *BeginChord();
 
 		ARNote        * setTrillChord(CHORD_TYPE & param_type, CHORD_ACCIDENTAL & param_accidental);
@@ -223,8 +223,8 @@ class ARMusicalVoice : public ObjectList, public ARMusicalEvent
 		StartPositionTagList *	mStartPosTagList;
 	
 	private:
-        void        finishChordWithOneChordGroup     (TYPE_DURATION &chorddur, bool trill);
-        void        finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur, bool trill);
+        void        finishChordWithOneChordGroup     (TYPE_DURATION &chorddur);
+        void        finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur);
 
 		GuidoPos	CopyChord( ARMusicalVoiceState & vst, TYPE_TIMEPOSITION tp, const TYPE_DURATION & newdur);
 		ARClef*		newAutoClef(ARClef* oldclef, const TYPE_TIMEPOSITION& tp);

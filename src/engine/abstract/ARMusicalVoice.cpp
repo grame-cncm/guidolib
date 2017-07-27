@@ -5133,154 +5133,8 @@ void ARMusicalVoice::finishTrilledChord ()
 		ARTrill* copy = new ARTrill(-1, trill);
 		copy->setTrillPos (ARTrill::BELOW);
 		notes[n-1]->setOrnament (copy);				// set a trill to the lowest note
-//		ARTrill copy(-1, trill);
-//		copy.setTrillPos (ARTrill::BELOW);
-//		notes[n-1]->setOrnament (&copy);			// set a trill to the lowest note
 	}
 }
-
-
-//ARNote * ARMusicalVoice::setTrillChord (CHORD_TYPE &chord_type, CHORD_ACCIDENTAL &chord_accidental)
-//{	
-//	const int nbNotes        = 3;
-//	int pitches[nbNotes];         // we only need 3 pitches for analysis
-//	int accidentals          = 0; // the second note's accidental, needed for the ornament
-//	int accidentalsTemp      = 0; //the third note's accidental, needed for the turn in some cases
-//
-//	for (int i = 0; i < nbNotes; i++)
-//		pitches[i] = 0;
-//
-//	GuidoPos posTmp = mCurVoiceState->vpos;
-//
-//	for (int i = 0 ; i < 3; i++)
-//		ObjectList::GetNext(posTmp); // skip "empty, chordcomma, empty"
-//
-//	int comptTemp = 0;
-//	ARMusicalObject *musicalObject = ObjectList::GetNext(posTmp);
-//	ARNote          *firstNote     = static_cast<ARNote *>(musicalObject->isARNote());
-//
-//	pitches[0]           = firstNote->getPitch();
-//	comptTemp++; // the first note is conserved
-//
-//	while (posTmp && comptTemp < nbNotes) { // we only need to know the first nbNotes notes
-//		musicalObject = ObjectList::GetNext(posTmp);
-//
-//        ARNote *noteTmp = static_cast<ARNote *>(musicalObject->isARNote());
-//
-//		if (noteTmp && noteTmp->getPitch() != 0) {
-//			if (comptTemp == 1)
-//				accidentals = noteTmp->getAccidentals();
-//			else if (comptTemp == 2)
-//				accidentalsTemp = noteTmp->getAccidentals();
-//
-//			pitches[comptTemp] = noteTmp->getPitch();
-//            // we now directly set a flag to tell to the note not to draw itself, rather than hide it behind the first one...
-////			noteTmp->setPitch(EMPTY);
-//			noteTmp->setPitch(pitches[0]);
-//			noteTmp->setAccidentals(firstNote->getAccidentals());
-//			noteTmp->setDrawGR(false);
-//			comptTemp++;
-//		}
-//	}
-//
-//	while (posTmp) { // "removes" the remaining notes
-//		musicalObject = ObjectList::GetNext(posTmp);
-//		//musicalObject->print(std::ostream& os);
-//		ARNote *noteTmp = static_cast<ARNote *>(musicalObject->isARNote());
-//
-//		if (noteTmp && noteTmp->getPitch() != 0) {
-//			// we now directly set a flag to tell to the note not to draw itself, rather than hide it behind the first one...
-////			noteTmp->setPitch(EMPTY);
-//			noteTmp->setPitch(pitches[0]);
-//			noteTmp->setAccidentals(firstNote->getAccidentals());
-//            noteTmp->setDrawGR(false);
-//		}
-//	}
-//
-//	// Analysis ; the second note of the chord must be either the note right above the first one,
-//	// or the note right below or the same note.
-//	if (pitches[1] - 2 == (pitches[0] - 2 + 1 ) % 7) { // e.g. "c, d"
-//		if (pitches[2] == pitches[0])
-//			chord_type = UP;
-//		else
-//			chord_type = UP_SIMPLE;
-//	}
-//	else if (-(pitches[1]-8) == (-(pitches[0]-8) + 1) % 7) { // e.g. "c, b"
-//		if (pitches[2] == pitches[0])
-//			chord_type = DOWN;
-//		else
-//			chord_type = DOWN_SIMPLE;
-//	}
-//	else if (pitches[1] == pitches[0]) { // e.g. "c, c"
-//		if (pitches[2] - 2 == (pitches[1] - 2 + 1 ) % 7) // e.g. "c, c, d"
-//			chord_type = UP_COMPLEX;
-//		else if (- (pitches[2] - 8) == (- (pitches[1] - 8) + 1) % 7) // e.g. "c, c, b"
-//			chord_type = DOWN_COMPLEX;
-//		else
-//			chord_type = CHORDERROR;
-//
-//		accidentals = accidentalsTemp;
-//	}
-//	else if (pitches[0] != 0 && pitches[1] == 0)
-//		chord_type = UP_SIMPLE;
-//	else
-//		chord_type = CHORDERROR;
-//
-//	// Recupération de l'armure...
-//	int keyNumber;
-//	GuidoPos pos = mCurVoiceState->vpos;
-//	ARKey   *key = NULL;
-//	while (pos && !key) {
-//        ARMusicalObject *obj = ObjectList::GetPrev(pos);
-//		key = obj ? static_cast<ARKey *>(obj->isARKey()) : NULL;
-//    }
-//	keyNumber = key ? key->getKeyNumber() : 0;
-//
-//
-//	// Determination de l'altération sur l'ornementation
-//	// s'il y a quelque chose sur la note différent de l'armure, on l'affiche (dièse bémol bécarre)
-//
-//	//std::cout << "accidentals : " << accidentals << '\n';
-//
-//	if (accidentals == 0) {
-//		if (( pitches[1] == 2 && (keyNumber <= -6 || keyNumber >= 2) ) ||
-//			( pitches[1] == 3 && (keyNumber <= -4 || keyNumber >= 4) ) ||
-//			( pitches[1] == 4 && (keyNumber <= -2 || keyNumber >= 6) ) ||
-//			( pitches[1] == 5 && (keyNumber <= -7 || keyNumber >= 1) ) ||
-//			( pitches[1] == 6 && (keyNumber <= -5 || keyNumber >= 3) ) ||
-//			( pitches[1] == 7 && (keyNumber <= -3 || keyNumber >= 5) ) ||
-//			( pitches[1] == 8 && (keyNumber <= -1 || keyNumber >= 7) ))
-//			chord_accidental = NATURAL;
-//		else
-//			chord_accidental = CAU_NATURAL;
-//	}
-//	else if (accidentals == 1) {
-//		if (( pitches[1] == 2 && keyNumber < 2 ) ||
-//			( pitches[1] == 3 && keyNumber < 4 ) ||
-//			( pitches[1] == 4 && keyNumber < 6 ) ||
-//			( pitches[1] == 5 && keyNumber < 1 ) ||
-//			( pitches[1] == 6 && keyNumber < 3 ) ||
-//			( pitches[1] == 7 && keyNumber < 5 ) || // the sharp is not implied by
-//			( pitches[1] == 8 && keyNumber < 7 ))	// the staff key signature
-//			chord_accidental = SHARP; // std::cout << "diese" << '\n';
-//		else
-//			chord_accidental = CAU_SHARP; // std::cout << "(diese)" << '\n';
-//	}
-//	else if (accidentals == -1) {
-//		if (( pitches[1] == 2 && keyNumber > -6 ) ||
-//			( pitches[1] == 3 && keyNumber > -4 ) ||
-//			( pitches[1] == 4 && keyNumber > -2 ) ||
-//			( pitches[1] == 5 && keyNumber > -7 ) ||
-//			( pitches[1] == 6 && keyNumber > -5 ) ||
-//			( pitches[1] == 7 && keyNumber > -3 ) || // the flat is not implied by
-//			( pitches[1] == 8 && keyNumber > -1 ))	 // the staff key signature
-//			chord_accidental = FLAT; // std::cout << "bemol" << '\n';
-//		else
-//			chord_accidental = CAU_FLAT; // std::cout << "(bemol)" << '\n';
-//	}
-//
-//	return firstNote;
-//}
 
 //____________________________________________________________________________________
 /** \brief this method is about clusters
@@ -5354,7 +5208,7 @@ void ARMusicalVoice::setClusterChord(ARCluster *inCurrentCluster)
 	it involves setting all the event-times and stuff !?
 */
 // C.D. method optimized 22/10/14
-void ARMusicalVoice::FinishChord(bool trill)
+void ARMusicalVoice::FinishChord()
 {
     if (!currentChord)
         return;
@@ -5372,10 +5226,10 @@ void ARMusicalVoice::FinishChord(bool trill)
 
         /* Separated for performance improvement */
         if (chordgrouplist->GetCount() == 1)
-            finishChordWithOneChordGroup(chorddur, trill);
+            finishChordWithOneChordGroup(chorddur);
         else {
             GuidoPos vposBackup = mCurVoiceState->vpos;
-            finishChordWithSeveralChordGroups(chorddur, trill);
+            finishChordWithSeveralChordGroups(chorddur);
             mCurVoiceState->vpos = vposBackup;
         }
         mCurVoiceState->ptagpos = ptagposBackup;
@@ -5513,7 +5367,7 @@ void ARMusicalVoice::FinishChord(bool trill)
 /** \brief Called by FinishChord(), to finish chords which have only one chord group. This function
            has been implemented for optimization.
 */
-void ARMusicalVoice::finishChordWithOneChordGroup(TYPE_DURATION &chorddur, bool trill)
+void ARMusicalVoice::finishChordWithOneChordGroup(TYPE_DURATION &chorddur)
 {
     mPosTagList->GetNext(mCurVoiceState->ptagpos);
     ARChordGroup *group = chordgrouplist->GetAt(chordgrouplist->GetHeadPosition());
@@ -5559,46 +5413,35 @@ void ARMusicalVoice::finishChordWithOneChordGroup(TYPE_DURATION &chorddur, bool 
     ARShareStem     *shrstem = 0;
     ARDummyRangeEnd *shrdum  = 0;
 
-    if (!trill) {
-        shrstem = new ARShareStem();
-        shrdum = new ARDummyRangeEnd(SHARESTEMEND);
-        shrstem->setIsAuto(true);
-        shrstem->setPosition(group->startpos);
-        shrstem->setAssociation(ARMusicalTag::RA);
-        shrdum->setIsAuto(true);
-        shrdum->setPosition(group->endpos);
-        shrdum->setCorrespondence(shrstem);
-        shrdum->setAssociation(ARMusicalTag::LA);
-        shrstem->setCorrespondence(shrdum);
-    }
+	shrstem = new ARShareStem();
+	shrdum = new ARDummyRangeEnd(SHARESTEMEND);
+	shrstem->setIsAuto(true);
+	shrstem->setPosition(group->startpos);
+	shrstem->setAssociation(ARMusicalTag::RA);
+	shrdum->setIsAuto(true);
+	shrdum->setPosition(group->endpos);
+	shrdum->setCorrespondence(shrstem);
+	shrdum->setAssociation(ARMusicalTag::LA);
+	shrstem->setCorrespondence(shrdum);
 
     if (mCurVoiceState->ptagpos) {
         if (dispdur)
             mPosTagList->AddElementAt(mCurVoiceState->ptagpos, dispdur);
-
-        if (!trill)
-            mPosTagList->AddElementAt(mCurVoiceState->ptagpos, shrstem);
+		mPosTagList->AddElementAt(mCurVoiceState->ptagpos, shrstem);
     }
     else {
-        if (dispdur)
-            mPosTagList->AddTail(dispdur);
-
-        if (!trill)
-            mPosTagList->AddTail(shrstem);
+        if (dispdur)	mPosTagList->AddTail(dispdur);
+        mPosTagList->AddTail(shrstem);
     }
-
-    if (!trill)
-        mPosTagList->AddTail(shrdum);
-
-    if (dispdum)
-        mPosTagList->AddTail(dispdum);
+    mPosTagList->AddTail(shrdum);
+    if (dispdum)	mPosTagList->AddTail(dispdum);
 }
 
 //____________________________________________________________________________________
 /** \brief Called by FinishChord(), to finish chords which have several chord groups. This function
            has been implemented for optimization.
 */
-void ARMusicalVoice::finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur, bool trill) {
+void ARMusicalVoice::finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur) {
     mPosTagList->GetNext(mCurVoiceState->ptagpos);
 
     GuidoPos pos = chordgrouplist->GetHeadPosition();
@@ -5643,18 +5486,16 @@ void ARMusicalVoice::finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur, 
         ARShareStem     *shrstem = 0;
         ARDummyRangeEnd *shrdum  = 0;
 
-        if (!trill) {
-            shrstem = new ARShareStem();
-            shrdum = new ARDummyRangeEnd(SHARESTEMEND);
-            shrstem->setIsAuto(true);
-            shrstem->setPosition(group->startpos);
-            shrstem->setAssociation(ARMusicalTag::RA);
-            shrdum->setIsAuto(true);
-            shrdum->setPosition(group->endpos);
-            shrdum->setCorrespondence(shrstem);
-            shrdum->setAssociation(ARMusicalTag::LA);
-            shrstem->setCorrespondence(shrdum);
-        }
+		shrstem = new ARShareStem();
+		shrdum = new ARDummyRangeEnd(SHARESTEMEND);
+		shrstem->setIsAuto(true);
+		shrstem->setPosition(group->startpos);
+		shrstem->setAssociation(ARMusicalTag::RA);
+		shrdum->setIsAuto(true);
+		shrdum->setPosition(group->endpos);
+		shrdum->setCorrespondence(shrstem);
+		shrdum->setAssociation(ARMusicalTag::LA);
+		shrstem->setCorrespondence(shrdum);
 
         while (mCurVoiceState->vpos && mCurVoiceState->vpos != group->startpos)
             GetNext(mCurVoiceState->vpos, *mCurVoiceState);
@@ -5662,9 +5503,7 @@ void ARMusicalVoice::finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur, 
         if (mCurVoiceState->ptagpos) {
             if (dispdur)
                 mPosTagList->AddElementAt(mCurVoiceState->ptagpos, dispdur);
-
-            if (!trill)
-                mPosTagList->AddElementAt(mCurVoiceState->ptagpos, shrstem);
+			mPosTagList->AddElementAt(mCurVoiceState->ptagpos, shrstem);
 
             // this adds the tags to the curpositiontags
             // this is needed, because we traverse the voice later (GetNext) and then,
@@ -5673,15 +5512,11 @@ void ARMusicalVoice::finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur, 
             if (dispdur)
                 mCurVoiceState->AddPositionTag(dispdur, 0);
 
-            if (!trill)
-                mCurVoiceState->AddPositionTag(shrstem, 0);
+            mCurVoiceState->AddPositionTag(shrstem, 0);
         }
         else {
-            if (dispdur)
-                mPosTagList->AddTail(dispdur);
-
-            if(!trill)
-                mPosTagList->AddTail(shrstem);
+            if (dispdur) mPosTagList->AddTail(dispdur);
+            mPosTagList->AddTail(shrstem);
         }
 
         if (pos != NULL) {
@@ -5689,11 +5524,8 @@ void ARMusicalVoice::finishChordWithSeveralChordGroups(TYPE_DURATION &chorddur, 
                 GetNext(mCurVoiceState->vpos, *mCurVoiceState);
         }
 
-        if(!trill)
-            mPosTagList->AddTail(shrdum);
-
-        if (dispdum)
-            mPosTagList->AddTail(dispdum);
+        mPosTagList->AddTail(shrdum);
+        if (dispdum) mPosTagList->AddTail(dispdum);
     }
 }
 
