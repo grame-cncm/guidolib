@@ -125,7 +125,7 @@ class ARFactory
 		int				 	mCurrentIntensity;
 	
 		void	checkTagEnd	( ARMusicalTag* tag);
-		void	checkRange	( const ARMusicalTag* tag, const char* ) const;
+		void	checkRange	( const ARMusicalTag* tag, const std::string& ) const;
 
 		static long sMaxTagId;
 
