@@ -24,7 +24,7 @@ class ARDummyRangeEnd : public ARTagEnd
 	public:
 				 ARDummyRangeEnd(const ARDummyRangeEnd * copy)
 					: ARTagEnd(-1,copy)					{ if (copy) endstr = copy->endstr; }
-				 ARDummyRangeEnd(const char * txt = 0)	{endstr = txt ? txt : ")"; }
+				 ARDummyRangeEnd(std::string txt = "")	{ endstr = txt.size() ? txt : ")"; }
 
 		virtual ~ARDummyRangeEnd() {}
 
