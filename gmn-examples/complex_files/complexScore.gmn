@@ -25,7 +25,7 @@
     ],
     [
         \staff<id=2>
-        \staffFormat<"1-line"> \staffOff \clef \meter<"2+3/8">
+        \staffFormat<"1-line"> \staffOff \clef<"g"> \meter<"2+3/8">
         empty*5/8 \staffOn
         \clef<"perc"> \intens<"ff", dy=2, dx=2> \beam<dy2=1.5>(g/28 \noteFormat<"x">(\accent(g)) g 
 			\noteFormat<"x">(\accent(g)) g g g \noteFormat<"x">(\accent(g/8)))
