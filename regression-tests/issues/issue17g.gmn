@@ -1,0 +1,20 @@
+{ [
+	%* with Grace, with noteFormat
+	{ e/8, \noteFormat<"diamond">( a/8) } 
+	\slurBegin 
+	\grace( { e/8, \noteFormat<"diamond">(a/8) }) 
+	{ f/8, \noteFormat<"diamond">( b&/8) } \slurEnd  
+]
+,
+[
+	% without Grace, with noteFormat
+	{ e/8, \noteFormat<"diamond">( a/8) } 
+	\slurBegin { e/8, \noteFormat<"diamond">( a/8) }  
+	{ f/8, \noteFormat<"diamond">( b&/8) } \slurEnd
+],
+[
+	% with Grace, without noteFormat
+	{ e/8, \noteFormat<"diamond">( a/8) } 
+	\slurBegin \grace( { e/16,a })  { f/8, \noteFormat<"diamond">( b&/8) } \slurEnd
+] 
+}
