@@ -27,7 +27,7 @@ static const TagParameterMap sARMarcatoMap (kARMarcatoParams);
 ARMarcato::ARMarcato()
 {
 	setupTagParameters (sARMarcatoMap);
-	rangesetting = RANGEDC;
+	rangesetting = ONLY; //RANGEDC;
     fPosition = NOTSET;
 }
 
