@@ -34,8 +34,6 @@ class GREvent;
 class GRArticulation : public GRTagARNotationElement
 {
   public:
-	//  enum { STACCATO, ACCENT, MARCATO, TENUTO, FERMATA, BREATHMARK };
-	
 		enum {  kFlagStaccato = 1, kFlagStaccmo = 2, kFlagTenuto = 4,
 				kFlagAccent = 8, kFlagMarcato = 16, kFlagMarcatoUp = 32,
                 kFlagMarcatoDown = 64, kFlagFermataUp = 128, kFlagFermataDown = 256,
