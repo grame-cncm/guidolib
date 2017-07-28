@@ -30,11 +30,8 @@ class GRGrace : public GRARCompositeNotationElement,
 					GRGrace( GRStaff * grstf, const ARGrace * argrc );
 		virtual 	~GRGrace() {}
 
-//		virtual void setHPosition( float inX );
-//		virtual void setPosition( const NVPoint & inPos );
 		virtual void tellPosition( GObject * caller,const NVPoint & inPos );
-
-        		virtual void addAssociation( GRNotationElement * p );
+//		virtual void addAssociation( GRNotationElement * p );
 
 		virtual GuidoPos AddTail( GRNotationElement * el );
 };
