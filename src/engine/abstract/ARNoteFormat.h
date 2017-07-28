@@ -20,7 +20,7 @@
 
 /** \brief not yet documented
 */
-class ARNoteFormat :  public ARMTParameter, public ARPositionTag
+class ARNoteFormat :  public ARMTParameter //, public ARPositionTag
 {
 	public:
 				 ARNoteFormat(const ARNoteFormat * p_savenf = NULL, const ARNoteFormat * copynf = NULL);
