@@ -121,6 +121,8 @@
 #include "TagParameterInt.h"
 #include "TagParameterFloat.h"
 
+#include "GMNCodePrintVisitor.h"
+
 #include "benchtools.h"
 
 long ARFactory::sMaxTagId = -1;
@@ -375,6 +377,7 @@ void ARFactory::addChord()
     // was automatically created or already in the GUIDO description.	
     if (mCurrentTrill)			mCurrentVoice->finishTrilledChord();
     else if (mCurrentCluster)	mCurrentVoice->setClusterChord(mCurrentCluster);
+
 	mCurrentVoice->FinishChord ();
     mCurrentChordTag = NULL;
 }
@@ -1187,7 +1190,8 @@ void ARFactory::createTag( const char * name, int no )
 			{
 				ARNoteFormat * tmp = new ARNoteFormat(mCurrentNoteFormat);
 				mTags.AddHead(tmp);
-				mCurrentVoice->AddPositionTag(tmp);				
+//				mCurrentVoice->AddPositionTag(tmp);				
+				mCurrentVoice->AddTail(tmp);
 			}
 			break;
 
@@ -1655,8 +1659,10 @@ void ARFactory::createTag( const char * name, int no )
 		else if ((temp = dynamic_cast<ARTHead *>(musicalTag)) != 0 )
 			mCurrentHead = static_cast<ARTHead *>(temp);
 
-		else if ((temp = dynamic_cast<ARNoteFormat *>(musicalTag)) != 0 )
+		else if ((temp = dynamic_cast<ARNoteFormat *>(musicalTag)) != 0 ) {
 			mCurrentNoteFormat = static_cast<ARNoteFormat *>(temp);
+			fNoteFormats.push (mCurrentNoteFormat);
+		}
 
 		else if ((temp = dynamic_cast<ARAlter *>(musicalTag)) != 0 )
 			mCurrentAlter = static_cast<ARAlter *>(temp);
@@ -1701,6 +1707,74 @@ void ARFactory::checkTagEnd( ARMusicalTag* tag)
 }
 
 // ----------------------------------------------------------------------------
+void ARFactory::endTremolo (ARMusicalTag * tag)
+{
+	if (!tag->getRange())
+		GuidoWarn("Tremolo-tag without range ignored!");
+	
+	GuidoPos lastEventPos = mCurrentVoice->getLastEventPosition();
+	TYPE_TIMEPOSITION timePos;
+	bool found = false;
+	int oct;
+	
+	// In order to create the possible second pitch, we look for the main note of the tremolo (or one of the main notes, in the case of chord)
+	while(lastEventPos && mCurrentTremolo->isSecondPitchCorrect() && !found)
+	{
+		ARMusicalObject *obj = mCurrentVoice->GetPrev(lastEventPos);
+		ARNote * n = obj ? static_cast<ARNote*>(obj->isARNote()) : NULL;
+		if(n && n->getPitch())
+			oct = n->getOctave();
+		if(n && n->getDuration())
+		{
+			found = true;
+			Fraction totalDuration = Fraction(n->getDuration().getNumerator()*2, n->getDuration().getDenominator());
+			mCurrentTremolo->setDuration(totalDuration);
+			ARDisplayDuration * tmpdspdur = new ARDisplayDuration;
+			tmpdspdur->setDisplayDuration( totalDuration);
+			mCurrentVoice->AddPositionTag(tmpdspdur);
+			
+			NoteAndChordFactory * newFactory = new NoteAndChordFactory();
+			newFactory->setVoice(mCurrentVoice);
+			newFactory->setRegister(oct);
+			newFactory->setNumerator(n->getDuration().getNumerator());
+			newFactory->setDenominator(n->getDuration().getDenominator());
+			
+			NoteAndChordParser * newParser = new NoteAndChordParser();
+			newParser->setFactory(newFactory);
+			std::string pitch = mCurrentTremolo->getPitch() ? mCurrentTremolo->getPitch()->getValue() : 0;
+			pitch.insert(pitch.begin(), 1, '[');
+			std::stringstream pitchStr(pitch);
+			newParser->setStream(&pitchStr);
+			newParser->parseNoteOrChord();
+			delete newParser;
+			
+			ARDummyRangeEnd * dummy = new ARDummyRangeEnd("\\dispDurEnd");
+			mCurrentVoice->setPositionTagEndPos(-1,dummy,tmpdspdur);
+		}
+	}
+}
+
+// ----------------------------------------------------------------------------
+void ARFactory::endCue ( ARMusicalTag * tag )
+{
+	mCurrentVoice->ConvertToNormalForm();
+	mCurrentMusic->AddTail(mCurrentVoice);
+	mCurrentVoice = mSaveCurrentVoice;
+	mSaveCurrentVoice = NULL;
+	mCurrentCue = NULL;
+
+	ARCue * cue = dynamic_cast<ARCue *>(tag);
+	const TagParameterString * tps = cue->getName();
+	if (tps) {
+		// then we have to add the name ....
+		ARText * txt = new ARText(tps->getValue(),0);
+		txt->copyParameters(cue->getTagParameters());
+		txt->setTagParameters(cue->getTagParameters());
+		mCurrentVoice->AddTail(txt);
+	}
+}
+
+// ----------------------------------------------------------------------------
 /** \brief Called when the end of a tag's range has been reached. 
 	
 	If the tag has no range, it must be called directly after the tag
@@ -1722,76 +1796,31 @@ void ARFactory::endTag()
         // check for range ...
 		checkTagEnd (tag);
         if (tag == mCurrentCue) {
-            mCurrentVoice->ConvertToNormalForm();
-            mCurrentMusic->AddTail(mCurrentVoice);
-            mCurrentVoice = mSaveCurrentVoice;
-            mSaveCurrentVoice = NULL;
-            mCurrentCue = NULL;
-
-            ARCue * cue = dynamic_cast<ARCue *>(tag);
-            const TagParameterString * tps = cue->getName();
-            if (tps)
-            {
-                // then we have to add the name ....
-                ARText * txt = new ARText(tps->getValue(),0);
-				txt->copyParameters(cue->getTagParameters());
-				txt->setTagParameters(cue->getTagParameters());
-                mCurrentVoice->AddTail(txt);
-            }
-            delete tag;
-            tag = NULL;
-            return;
+			endCue (tag);
+			return;
         }
-        else if (tag == mCurrentTremolo)
-        {
-            if (!tag->getRange())
-                GuidoWarn("Tremolo-tag without range ignored!");
-			
-            GuidoPos lastEventPos = mCurrentVoice->getLastEventPosition();
-            TYPE_TIMEPOSITION timePos;
-            bool found = false;
-            int oct;
-            
-            // In order to create the possible second pitch, we look for the main note of the tremolo (or one of the main notes, in the case of chord)
-            while(lastEventPos && mCurrentTremolo->isSecondPitchCorrect() && !found)
-            {
-                ARMusicalObject *obj = mCurrentVoice->GetPrev(lastEventPos);
-                ARNote * n = obj ? static_cast<ARNote*>(obj->isARNote()) : NULL;
-                if(n && n->getPitch())
-                    oct = n->getOctave();
-                if(n && n->getDuration())
-                {
-                    found = true;
-                    Fraction totalDuration = Fraction(n->getDuration().getNumerator()*2, n->getDuration().getDenominator());
-                    mCurrentTremolo->setDuration(totalDuration);
-                    ARDisplayDuration * tmpdspdur = new ARDisplayDuration;
-                    tmpdspdur->setDisplayDuration( totalDuration);
-                    mCurrentVoice->AddPositionTag(tmpdspdur);
-                    
-                    NoteAndChordFactory * newFactory = new NoteAndChordFactory();
-                    newFactory->setVoice(mCurrentVoice);
-                    newFactory->setRegister(oct);
-                    newFactory->setNumerator(n->getDuration().getNumerator());
-                    newFactory->setDenominator(n->getDuration().getDenominator());
-                    
-                    NoteAndChordParser * newParser = new NoteAndChordParser();
-                    newParser->setFactory(newFactory);
-                    std::string pitch = mCurrentTremolo->getPitch() ? mCurrentTremolo->getPitch()->getValue() : 0;
-                    pitch.insert(pitch.begin(), 1, '[');
-                    std::stringstream pitchStr(pitch);
-                    newParser->setStream(&pitchStr);
-                    newParser->parseNoteOrChord();
-					delete newParser;
-                    
-                    ARDummyRangeEnd * dummy = new ARDummyRangeEnd("\\dispDurEnd");
-                    mCurrentVoice->setPositionTagEndPos(-1,dummy,tmpdspdur);
-                }
-            }
+        if (tag == mCurrentNoteFormat) {
+			if (mCurrentNoteFormat->getRange()) {
+				fNoteFormats.pop();
+				if (fNoteFormats.size()) {
+					mCurrentNoteFormat = fNoteFormats.top();
+					mCurrentVoice->AddTail(new ARNoteFormat(0, mCurrentNoteFormat));
+				}
+				else {
+					ARNoteFormat * nnf  = endStateTag<ARNoteFormat>(static_cast<ARNoteFormat*>(tag));
+					nnf->setIsAuto(true);
+					mCurrentNoteFormat = nnf;
+				}
+			}
+			else tag->setRange(0);
+			return;
+        }
+        else if (tag == mCurrentTremolo) {
+			endTremolo(tag);
             mCurrentTremolo = NULL;
         }
 
         ARPositionTag * myptag = dynamic_cast<ARPositionTag *>(tag);
-
         if (tag->getRange() && tag->getRangeSetting() == ARMusicalTag::NO) {
             GuidoWarn("Tag range ignored (1)");
             tag->setRange( false );	
@@ -1834,7 +1863,7 @@ void ARFactory::endTag()
                 return;
             }
 
-            if (/*alter ||*/ (tag->getRange() && (dynamic_cast<ARTagEnd *>(tag) == 0)))
+            if (tag->getRange() && (dynamic_cast<ARTagEnd *>(tag) == 0))
             {
                 if (tag->IsStateTag())
                 {
@@ -1852,56 +1881,20 @@ void ARFactory::endTag()
                     ARAlter * myal;
 
                     if ((myoct = dynamic_cast<AROctava *>(tag)) != 0 )
-                    {
-                        AROctava * noct = dynamic_cast<AROctava *>( myoct->getEndTag());
-                        mCurrentOctava = noct;
-                        mCurrentVoice->AddTail(noct);
-                    }
+						mCurrentOctava = endStateTag<AROctava>(myoct);
                     else if ((mystem = dynamic_cast<ARTStem *>(tag)) != 0 )
-                    {
-                        ARTStem * nstem = dynamic_cast<ARTStem *>(mystem->getEndTag());
-                        mCurrentStem = nstem;
-                        mCurrentVoice->AddTail(nstem);
-                    }
+                        mCurrentStem = endStateTag<ARTStem>(mystem);
                     else if ((myhead = dynamic_cast<ARTHead *>(tag)) != 0 )
-                    {
-                        ARTHead * nhead = dynamic_cast<ARTHead *>(myhead->getEndTag());
-                        mCurrentHead = nhead;
-                        mCurrentVoice->AddTail(nhead);
-
-                    }
-                    else if ((mynf = dynamic_cast<ARNoteFormat *>(tag)) != 0 )
-                    {
-                        ARNoteFormat * nnf = dynamic_cast<ARNoteFormat *>(mynf->getEndTag());
-                        nnf->setIsAuto(true);
-                        mCurrentNoteFormat = nnf;
-                        mCurrentVoice->AddTail(nnf);
-                    }
+                       mCurrentHead = endStateTag<ARTHead>(myhead);
                     else if ((mydf = dynamic_cast<ARDotFormat *>(tag)) != 0 )
-                    {
-                        ARDotFormat * ndf = dynamic_cast<ARDotFormat *>(mydf->getEndTag());
-                        mCurrentDotFormat = ndf;
-                        mCurrentVoice->AddTail(ndf);
-                    }
+                        mCurrentDotFormat = endStateTag<ARDotFormat>(mydf);
                     else if ((myrf = dynamic_cast<ARRestFormat *>(tag)) != 0 )
-                    {
-                        ARRestFormat * nrf = dynamic_cast<ARRestFormat *>(myrf->getEndTag());
-                        mCurrentRestFormat = nrf;
-                        mCurrentVoice->AddTail(nrf);
-                    }
+                         mCurrentRestFormat = endStateTag<ARRestFormat>(myrf);
                     else if ((myal = dynamic_cast<ARAlter *>(tag)) != 0 )
-                    {
-                        ARAlter * nal = dynamic_cast<ARAlter *>(myal->getEndTag());
-                        mCurrentAlter = nal;
-                        mCurrentVoice->AddTail(nal);
-                    }
-                    else
-                    {
-                        assert(false);
-                    }
+                        mCurrentAlter = endStateTag<ARAlter>(myal);
+                    else { assert(false); }
                 }
-                else
-                {
+                else {
                     // in this case we can just close the range .. the position is set ...
                     // Introduce a dummy RangeEnd ..
                     // That is a ")" ...
@@ -1930,25 +1923,11 @@ void ARFactory::endTag()
             
             tag = NULL;
         }
-        else if(( asymbol = dynamic_cast<ARSymbol *>(tag)) != 0 )
-        {
+        else if(( asymbol = dynamic_cast<ARSymbol *>(tag)) != 0 ) {
             asymbol->setRelativeEndTimePosition(mCurrentVoice->getDuration());
             tag = NULL;
         }
-        else if ((arre = dynamic_cast<ARRepeatEnd *>(tag)) != 0 )
-        {
-            /*if (arre->repbeg) // a repeat-end
-            {
-                TYPE_DURATION dur (arre->repbeg->dur);
-                int numrepeat = arre->numrepeat;
-                if (numrepeat == 0) numrepeat = 1;
-
-                ++numrepeat;
-                dur.setNumerator(dur.getNumerator() * numrepeat);
-                dur.normalize();
-                //mCurrentVoice->setDuration(arre->repbeg->getRelativeTimePosition() + dur);
-            }*/
-
+        else if ((arre = dynamic_cast<ARRepeatEnd *>(tag)) != 0 ) {
             if (arre->getRange()) // the tag has a range ...
             {
                 ARRepeatEndRangeEnd * tmp = new ARRepeatEndRangeEnd(arre); // !
@@ -2004,6 +1983,7 @@ void ARFactory::tagRange()
 	// it is checked in EndTag, whether
 	// the tag can actually use the range or not ...
 	ARMusicalTag * tag = mTags.GetHead();
+	if (!tag) return;
 	tag->setRange(1);
 }
 

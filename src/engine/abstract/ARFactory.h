@@ -15,10 +15,13 @@
 
 */
 
+#include <stack>
+
 #include "kf_ilist.h"	// required
 
 #include "ARDefine.h"
 #include "ARMusicalTag.h"
+#include "ARMusicalVoice.h"
 
 class ARMusic;
 class ARMusicalVoice;
@@ -126,7 +129,14 @@ class ARFactory
 	
 		void	checkTagEnd	( ARMusicalTag* tag);
 		void	checkRange	( const ARMusicalTag* tag, const std::string& ) const;
-
+		void	endTremolo	( ARMusicalTag * tag );
+		void	endCue		( ARMusicalTag * tag );
+		template <typename T> T* endStateTag (T * tag ) {
+			T * tmp = dynamic_cast<T *>(tag->getEndTag());
+			mCurrentVoice->AddTail(tmp);
+			return tmp;
+		}
+	
 		static long sMaxTagId;
 
 protected:
@@ -141,6 +151,7 @@ protected:
 	const ARTStem *		mCurrentStem = NULL;
 	const ARTHead *		mCurrentHead = NULL;
 	const ARNoteFormat*	mCurrentNoteFormat = NULL;
+	std::stack<const ARNoteFormat*>	fNoteFormats;
 	const ARRestFormat*	mCurrentRestFormat = NULL;
 	const ARDotFormat *	mCurrentDotFormat = NULL;
 	const ARAlter *		mCurrentAlter = NULL;
