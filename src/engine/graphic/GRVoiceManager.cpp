@@ -533,7 +533,6 @@ void GRVoiceManager::AddRegularEvent (GREvent * ev)
 
 int GRVoiceManager::Iterate(TYPE_TIMEPOSITION &timepos, int filltagmode)
 {
-//cerr << "GRVoiceManager::Iterate : " << timepos << " " << filltagmode << " " << fVoiceState->vpos << endl;
 	if (fVoiceState->vpos == NULL)
         return ENDOFVOICE;
 	
@@ -549,7 +548,6 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION &timepos, int filltagmode)
 	
 	if (filltagmode) {
 		ARMusicalObject *o = arVoice->GetAt(fVoiceState->vpos);
-//cerr << "GRVoiceManager::Iterate 1 : " << o << endl;
         ARNewSystem *tmp = static_cast<ARNewSystem *>(o->isARNewSystem());
 		if (tmp) {
 			if (tmp->getDY() && tmp->getDY()->TagIsSet()) // then we have a distance to the next system...
@@ -607,7 +605,7 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION &timepos, int filltagmode)
 						checkCluster(ev);
                     }
 				}
-				return endIteration(true);
+				return endIteration();
 			}
 			else {
 				GRNotationElement *grne = parseTag(o);
@@ -630,7 +628,7 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION &timepos, int filltagmode)
 								firstEl = curgloballocation->getFirstEl();
 							else if (curglobalstem)
 								firstEl = curglobalstem->getFirstEl();
-							
+
 							grne->setNeedsSpring(-1);
 							mStaffMgr->AddGRSyncElement(grne, mCurGrStaff, firstEl->getSpringID(), grvoice, firstEl);
 						}
@@ -647,14 +645,13 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION &timepos, int filltagmode)
 			}
 
 			// increment the position...
-			return endIteration(true);
+			return endIteration();
 		}
 		else		// duration > 0,
 			return MODEERROR;
 	}
 	else {			// filltagmode == 0
 		ARMusicalObject *o = arVoice->GetAt(fVoiceState->vpos);
-//cerr << "GRVoiceManager::Iterate 0 : " << o << endl;
 		// We give to the object the information about the state on-off of the staff
 		o->setDrawGR(GRVoiceManager::getCurStaffDraw(staffnum) && o->getDrawGR());
 
@@ -692,7 +689,7 @@ int GRVoiceManager::Iterate(TYPE_TIMEPOSITION &timepos, int filltagmode)
 			}
 			AddRegularEvent(grev);
 			timepos = arev->getRelativeEndTimePosition();
-			return endIteration(true);
+			return endIteration();
 		}
 	}
 	return MODEERROR;
@@ -726,7 +723,7 @@ void GRVoiceManager::checkCluster(GREvent *ev)
 }
 
 //-----------------------------------------------------------------------------------------
-int GRVoiceManager::endIteration (bool checkEndTag)
+int GRVoiceManager::endIteration ()
 {
 		GuidoPos prevpos = fVoiceState->vpos;
 		// increment the curvoice... increment the position...
@@ -1599,9 +1596,6 @@ void GRVoiceManager::checkEndPTags(GuidoPos tstpos)
 		g = fGRTags->GetNext(mpos);
 		GRPositionTag * gpt = dynamic_cast<GRPositionTag *>(g);
 		if( gpt ) {
-//GRNotationElement* elt = dynamic_cast<GRNotationElement*>(gpt);
-//if (elt) cerr << __PRETTY_FUNCTION__ << " " << elt << " pos: " << tstpos << " endpos: " << gpt->getEndPos() << endl;
-
 			if (gpt->getEndPos() == tstpos) {
 				if (dynamic_cast<GRGrace *>(g)) {
 					// does not own the tags...
@@ -1638,9 +1632,6 @@ void GRVoiceManager::checkEndPTags(GuidoPos tstpos)
 
 				g->RangeEnd(mCurGrStaff);
 				fGRTags->RemoveElementAt(curpos);
-				// now remove the special nlinestuff
-				// removeNLineTag(g);
-				
 				mpos = fGRTags->GetHeadPosition();
 			}
 		}
@@ -1902,11 +1893,9 @@ void GRVoiceManager::setTrillNext(GRNotationElement* ev)
 		fCurrentTrill->setNextEvent (ev);
 	else if (fLastbar && (fLastbar->getAbstractRepresentation()->getRelativeTimePosition() == evdate)) {
 		fCurrentTrill->setNextEvent (fLastbar);
-//cerr << "GRVoiceManager::setTrillNext  " << (GRNotationElement*)fLastbar << endl;
 	}
 	else {
 		fCurrentTrill->setNextEvent (ev);
-//cerr << "GRVoiceManager::setTrillNext  " << ev << endl;
 	}
 	fCurrentTrill = 0;
 }

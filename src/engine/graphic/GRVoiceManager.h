@@ -173,7 +173,7 @@ private:
 	void			organizeBeaming(GRTag * grb);
 	void			checkFillBar (GRTagARNotationElement* bar);
 	void			addAssociations (GREvent* ev, bool setnext=true);
-	int				endIteration (bool checkEndTag);
+	int				endIteration ();
 	void			checkCluster(GREvent *ev);
 	
 	std::vector<GRBeam *> curbeam;
