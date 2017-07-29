@@ -67,6 +67,8 @@ using namespace std;
 
 #include "guido2.h"
 #include "GRShowVisitor.h"
+#include "TagParametersMaps.h"
+
 //#include "GMNCodePrintVisitor.h"
 
 
@@ -78,7 +80,8 @@ const int GUIDOENGINE_MINOR_VERSION = 6;
 const int GUIDOENGINE_SUB_VERSION   = 5;
 const char* GUIDOENGINE_VERSION_STR = "1.6.5";
 
-ARPageFormat gARPageFormat;
+ARPageFormat* gARPageFormat;
+const TagParametersMaps* gMaps = 0;
 
 
 //#define SHOW_SPRINGS_RODS
@@ -147,6 +150,9 @@ GUIDOAPI(GuidoErrCode) GuidoInit( GuidoInitDesc * desc )
 	    // gets the standard Text-Font..
 		NVstring textFontStr ( textFont );
 		FontManager::gFontText = FontManager::FindOrCreateFont((int)(1.5f * LSPACE), &textFontStr );
+		
+		gMaps = new TagParametersMaps;
+		gARPageFormat = new ARPageFormat;
 
 		gInited = true;
 	}
@@ -157,8 +163,14 @@ GUIDOAPI(GuidoErrCode) GuidoInit( GuidoInitDesc * desc )
 // ------------------------------------------------------------------------
 GUIDOAPI(void) GuidoShutdown()
 {
-	FontManager::ReleaseAllFonts();
-	gInited = false;
+	if (gInited) {
+		FontManager::ReleaseAllFonts();
+		delete gMaps;
+		gMaps = 0;
+		delete gARPageFormat;
+		gARPageFormat = 0;
+		gInited = false;
+	}
 }
 
 
@@ -322,7 +334,7 @@ GUIDOAPI(GuidoErrCode) GuidoAR2GR( ARHandler ar, const GuidoLayoutSettings * set
 	ARMusic * arMusic = ar->armusic; // (JB) was guido_PopARMusic()
 	if (arMusic == 0) return guidoErrInvalidHandle;
 
-	GRHandler grh = CreateGr (ar, &gARPageFormat, settings);
+	GRHandler grh = CreateGr (ar, gARPageFormat, settings);
 	if (!gr) return guidoErrMemory;
 	*gr = grh;
 	return guidoNoErr;
@@ -356,7 +368,7 @@ GUIDOAPI(GRHandler) GuidoAR2GRParameterized(ARHandler ar, const GuidoGrParameter
 							  gp->pageFormat.marginright, gp->pageFormat.marginbottom);
 	} else {
 		// Copy of the default page format.
-		pf = gARPageFormat;
+		pf = *gARPageFormat;
 	}
 
 	// - Now create the GRMusic object from  the abstract representation.
@@ -384,7 +396,7 @@ GUIDOAPI(GuidoErrCode) GuidoUpdateGR( GRHandler gr, const GuidoLayoutSettings * 
 	if (music->lyricsChecked() && (!settings || !settings->checkLyricsCollisions)) {
 		music->removeAutoSpace(gr->arHandle->armusic);
 	}
-	music->createGR(&gARPageFormat, settings);
+	music->createGR(gARPageFormat, settings);
 	if (settings && settings->checkLyricsCollisions) {
 		music->checkLyricsCollisions();
 	}
@@ -416,7 +428,7 @@ GUIDOAPI(GuidoErrCode)	GuidoUpdateGRParameterized( GRHandler gr, const GuidoGrPa
 		settings = &gp->layoutSettings;
 	} else {
 		// Copy of the default page format.
-		pf = gARPageFormat;
+		pf = *gARPageFormat;
 	}
 
 	gr->grmusic->createGR(&pf, settings);
@@ -799,7 +811,7 @@ GUIDOAPI(void) 	GuidoSetDefaultPageFormat( const GuidoPageFormat * inFormat)
 {
 	if( inFormat ) {
 		const GuidoPageFormat & pf = *inFormat;
-		gARPageFormat.setPageFormat( pf.width, pf.height, pf.marginleft, pf.margintop, pf.marginright, pf.marginbottom );
+		gARPageFormat->setPageFormat( pf.width, pf.height, pf.marginleft, pf.margintop, pf.marginright, pf.marginbottom );
 	}
 }
 
@@ -811,7 +823,7 @@ GUIDOAPI(void) 	GuidoGetDefaultPageFormat( GuidoPageFormat * outFormat )
 	if( outFormat == 0 ) return;
 
 	float osx, osy, oml, omt, omr, omb;
-	gARPageFormat.getPageFormat( &osx, &osy, &oml, &omt, &omr, &omb );
+	gARPageFormat->getPageFormat( &osx, &osy, &oml, &omt, &omr, &omb );
 
 	outFormat->width = osx;
 	outFormat->height = osy;
