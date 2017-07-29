@@ -37,6 +37,6 @@ class ARDotFormat : public ARMTParameter, public ARPositionTag
 		const ARDotFormat *	fSaveDF;
 };
 
-extern const ARDotFormat defaultARDotFormat;
+//extern const ARDotFormat defaultARDotFormat;
 
 #endif 

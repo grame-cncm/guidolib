@@ -16,7 +16,7 @@
 
 #include "ARDotFormat.h"
 
-const ARDotFormat defaultARDotFormat(NULL,NULL);
+//const ARDotFormat defaultARDotFormat(NULL,NULL);
 
 ARDotFormat::ARDotFormat(const ARDotFormat *p_savedf, const ARDotFormat *copydf)
 	: ARMTParameter(-1,copydf)

@@ -1775,7 +1775,10 @@ GRSingleNote * GRVoiceManager::CreateSingleNote( const TYPE_TIMEPOSITION & tp, A
 	grnote->doCreateNote(dtempl);
 
 	if (curdotformat != NULL)		grnote->setDotFormat(curdotformat);
-	else							grnote->setDotFormat(&defaultARDotFormat);
+	else {
+		ARDotFormat defaultARDotFormat (0,0);
+		grnote->setDotFormat(&defaultARDotFormat);
+	}
 
 
 	// Associate the note with the current tags...
@@ -1872,7 +1875,10 @@ GREvent * GRVoiceManager::CreateRest( const TYPE_TIMEPOSITION & tp, ARMusicalObj
 	
 		// - We need to take care of dots !
 		if (curdotformat != 0)	grrest->setDotFormat(curdotformat);
-		else					grrest->setDotFormat(&defaultARDotFormat);
+		else {
+			ARDotFormat defaultARDotFormat (0,0);
+			grrest->setDotFormat(&defaultARDotFormat);
+		}
 		
 		// Associate the rest with the current tags...
 		addAssociations(grrest);
