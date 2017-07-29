@@ -20,11 +20,10 @@
 
 using namespace std;
 
-static const TagParameterMap sARInstrumentMap (kARInstrumentParams);
 
 ARInstrument::ARInstrument(bool autopos)
 {
-	setupTagParameters (sARInstrumentMap);
+	setupTagParameters (gMaps->sARInstrumentMap);
 	fAutoPos = autopos;
 }
 

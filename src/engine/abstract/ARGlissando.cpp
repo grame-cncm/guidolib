@@ -22,11 +22,10 @@
 
 using namespace std;
 
-static const TagParameterMap sARGlissandoMap (kARGlissandoParams);
 
 ARGlissando::ARGlissando()
 {
-	setupTagParameters (sARGlissandoMap);
+	setupTagParameters (gMaps->sARGlissandoMap);
 
 	rangesetting = ONLY;
 	setAssociation(ARMusicalTag::RA);
@@ -41,7 +40,7 @@ ARGlissando::ARGlissando()
 
 ARGlissando::ARGlissando(const ARGlissando * glissando)	: ARMTParameter(-1, glissando)
 {
-	setupTagParameters (sARGlissandoMap);
+	setupTagParameters (gMaps->sARGlissandoMap);
 	copyParameters (glissando->getTagParameters());
 
 	rangesetting = ONLY;

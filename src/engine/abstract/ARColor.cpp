@@ -18,11 +18,10 @@
 #include "TagParameterFloat.h"
 #include "TagParameterStrings.h"
 
-static const TagParameterMap sARColorMap (kARColorParams);
 
 ARColor::ARColor() : fR(0), fG(0), fB(0), fA(0)
 {
-	setupTagParameters (sARColorMap);
+	setupTagParameters (gMaps->sARColorMap);
 }
 
 void ARColor::setTagParameters (const TagParameterMap& params)

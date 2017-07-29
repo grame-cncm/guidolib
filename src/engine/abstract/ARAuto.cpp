@@ -20,11 +20,10 @@
 
 using namespace std;
 
-static const TagParameterMap sARAutoMap (kARAutoParams);
 
 ARAuto::ARAuto()
 {
-	setupTagParameters (sARAutoMap);
+	setupTagParameters (gMaps->sARAutoMap);
 
 	fEndBarState            = kOn;
 	fPageBreakState         = kOn;

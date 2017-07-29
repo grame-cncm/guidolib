@@ -22,11 +22,10 @@
 using namespace std;
 
 extern const char* kBelowStr;
-static const TagParameterMap sARFermataMap (kARFermataParams);
 
 ARFermata::ARFermata()
 {
-	setupTagParameters (sARFermataMap);
+	setupTagParameters (gMaps->sARFermataMap);
 
 	rangesetting = RANGEDC;
 	fType = REGULAR;

@@ -22,12 +22,11 @@
 
 using namespace std;
 
-static const TagParameterMap sARAlterMap (kARAlterParams);
 
 ARAlter::ARAlter(const ARAlter * p_savealter, const ARAlter * copyalter )
 	: ARMTParameter(-1,copyalter) 
 {
-	setupTagParameters (sARAlterMap);
+	setupTagParameters (gMaps->sARAlterMap);
 	relativeTimePosition = TYPE_TIMEPOSITION(-1,1);
 	setDuration (DURATION_0);
 	rangesetting = RANGEDC;	// RANGEDC replaced by ONLY while impl. finalzed [DF 2001-04-20];

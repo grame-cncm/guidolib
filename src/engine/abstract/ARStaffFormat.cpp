@@ -22,16 +22,15 @@
 #include "gmntools.h" // for gd_convertUnits
 
 
-static const TagParameterMap sARStaffFormatMap (kARStaffFormatParams);
 
 ARStaffFormat::ARStaffFormat() : fLineThickness(kLineThick)
 {
-	setupTagParameters (sARStaffFormatMap);	
+	setupTagParameters (gMaps->sARStaffFormatMap);	
 }
 
 ARStaffFormat::ARStaffFormat(const ARStaffFormat &stffrmt)
 {
-	setupTagParameters (sARStaffFormatMap);
+	setupTagParameters (gMaps->sARStaffFormatMap);
 	copyParameters(stffrmt.getTagParameters());
 	setTagParameters (stffrmt.getTagParameters());
 	fSize = stffrmt.fSize;

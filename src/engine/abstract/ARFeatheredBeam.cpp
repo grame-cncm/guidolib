@@ -23,11 +23,10 @@
 
 using namespace std;
 
-static const TagParameterMap sARFeatheredBeamMap (kARFeatheredBeamParams);
 
 ARFeatheredBeam::ARFeatheredBeam()
 {
-	setupTagParameters (sARFeatheredBeamMap);
+	setupTagParameters (gMaps->sARFeatheredBeamMap);
 
 	rangesetting = ONLY;
 	fFeathered = true;

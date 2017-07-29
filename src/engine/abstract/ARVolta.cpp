@@ -21,11 +21,10 @@
 
 using namespace std;
 
-static const TagParameterMap sARVoltaMap (kARVoltaParams);
 
 ARVolta::ARVolta()
 {
-	setupTagParameters (sARVoltaMap);
+	setupTagParameters (gMaps->sARVoltaMap);
 	rangesetting = ONLY;
 }
 

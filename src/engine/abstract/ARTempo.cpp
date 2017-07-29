@@ -28,12 +28,11 @@
 
 using namespace std;
 
-static const TagParameterMap sARTempoMap (kARTempoParams);
 
 // --------------------------------------------------------------------------
 ARTempo::ARTempo()
 {
-	setupTagParameters (sARTempoMap);
+	setupTagParameters (gMaps->sARTempoMap);
 
 	mBpmUnit.set( 1, 4 );		// arbitrary default value
 	mBpmValue.set( 120 );		// idem

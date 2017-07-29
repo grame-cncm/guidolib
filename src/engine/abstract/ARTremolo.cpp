@@ -21,7 +21,6 @@
 #include "TagParameterString.h"
 #include "TagParameterStrings.h"
 
-static const TagParameterMap sARTremoloMap (kARTremoloParams);
 
 ARTremolo::ARTremolo()
 {
@@ -39,7 +38,7 @@ ARTremolo::ARTremolo(const ARTremolo * tremolo)	: ARMTParameter(-1, tremolo)
 // -----------------------------------------------------------------------------
 void ARTremolo::init()
 {
-	setupTagParameters (sARTremoloMap);
+	setupTagParameters (gMaps->sARTremoloMap);
 	rangesetting = ONLY;
 	setAssociation(ARMusicalTag::RA);
 }

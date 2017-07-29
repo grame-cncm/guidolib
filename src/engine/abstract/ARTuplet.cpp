@@ -22,13 +22,12 @@
 
 using namespace std;
 
-static const TagParameterMap sARTupletMap (kARTupletParams);
 
 //--------------------------------------------------------------------------
 ARTuplet::ARTuplet() : fTupletFormat(""), fPosition(0), fDy1(0), fDy2(0), fLineThickness(kDefaultThickness),
     fTextBold(false), fTextSize(1), fDispNote("") /*, fFormatSet(false), fDy1TagIsSet(false), fDy2TagIsSet(false)*/
 {
-	setupTagParameters (sARTupletMap);
+	setupTagParameters (gMaps->sARTupletMap);
 
 	rangesetting = ONLY;
 	setAssociation(ARMusicalTag::RA);

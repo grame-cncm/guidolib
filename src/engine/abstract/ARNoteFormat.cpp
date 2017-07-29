@@ -18,12 +18,11 @@
 #include "TagParameterStrings.h"
 #include "TagParameterString.h"
 
-static const TagParameterMap sARNoteFormatMap (kARNoteFormatParams);
 
 ARNoteFormat::ARNoteFormat(const ARNoteFormat *p_savenf, const ARNoteFormat *copynf)
 	: ARMTParameter(-1,copynf)
 {
-	setupTagParameters (sARNoteFormatMap);
+	setupTagParameters (gMaps->sARNoteFormatMap);
 
 	// this probably should be changed to RANGEDC
 	// but then we have to take care of saving state-information ....

@@ -26,12 +26,11 @@ extern const char* kAboveStr;
 extern const char* kBelowStr;
 
 
-static const TagParameterMap sARStaccatoMap (kARStaccatoParams);
 
 //--------------------------------------------------------------------------
 ARStaccato::ARStaccato()
 {
-	setupTagParameters (sARStaccatoMap);
+	setupTagParameters (gMaps->sARStaccatoMap);
 	fType = REGULAR;
 }
 

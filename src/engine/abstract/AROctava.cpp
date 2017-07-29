@@ -18,12 +18,11 @@
 #include "TagParameterStrings.h"
 #include "TagParameterInt.h"
 
-static const TagParameterMap sAROctavaMap (kAROctavaParams);
 
 AROctava::AROctava(const AROctava * p_saveoct, const AROctava * copyoct)
 				: ARMTParameter(-1, copyoct), fSaveoct(p_saveoct)
 {
-	setupTagParameters (sAROctavaMap);
+	setupTagParameters (gMaps->sAROctavaMap);
 
 	rangesetting = RANGEDC;
 	if (copyoct)

@@ -21,7 +21,7 @@
 #include "TagParameterMap.h"
 #include "ARVisitable.h"
 #include "ARVisitor.h"
-#include "TagParameterStrings.h"
+#include "TagParametersMaps.h"
 #include "TagParameterRGBColor.h"
 
 class TagParameterString;

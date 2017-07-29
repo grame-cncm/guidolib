@@ -19,11 +19,10 @@
 #include "TagParameterString.h"
 
 
-static const TagParameterMap sARComposerMap (kARComposerParams);
 
 ARComposer::ARComposer()
 {
-	setupTagParameters (sARComposerMap);
+	setupTagParameters (gMaps->sARComposerMap);
 	clearTagDefaultParameter(kTextStr);		// this is to avoid a warning regarding inherited required parameter for ARText
 	name         = 0;
     pageformat   = 0;

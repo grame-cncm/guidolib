@@ -21,10 +21,9 @@
 
 using namespace std;
 
-static const TagParameterMap sARJumpMap (kARJumpParams);
 
 ARJump::ARJump(string mark) {
-	setupTagParameters (sARJumpMap);
+	setupTagParameters (gMaps->sARJumpMap);
 
 	FormatStringParser p;
 	p.parse (mark.c_str(), mMark);

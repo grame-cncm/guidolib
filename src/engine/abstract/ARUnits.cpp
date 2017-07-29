@@ -20,11 +20,10 @@
 
 const char* ARUnits::sType = "hs";
 
-static const TagParameterMap sARUnitsMap (kARUnitsParams);
 
 ARUnits::ARUnits()
 {
-	setupTagParameters (sARUnitsMap);
+	setupTagParameters (gMaps->sARUnitsMap);
     sType = "hs";
 }
 

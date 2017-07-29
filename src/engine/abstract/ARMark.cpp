@@ -30,12 +30,11 @@ static const char* kTriangleStr	= "triangle";
 static const char* kDiamondStr	= "diamond";
 
 map<std::string, int>	ARMark::fEnclosureShapes;
-static const TagParameterMap sARMarkMap (kARMarkParams);
 
 //--------------------------------------------------------------------------
 ARMark::ARMark() : fEnclosure(kNoEnclosure)
 {
-	setupTagParameters (sARMarkMap);
+	setupTagParameters (gMaps->sARMarkMap);
 	rangesetting = NO;
 	if (!fEnclosureShapes.size()) {
 		fEnclosureShapes[kNoneStr]		= kNoEnclosure;

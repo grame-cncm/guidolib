@@ -20,13 +20,12 @@
 
 using namespace std;
 
-static const TagParameterMap sARTStemMap (kARTStemParams);
 
 ARTStem::ARTStem(int st, const ARTStem * p_savestem, const ARTStem * p_copystem )
 									: ARMTParameter(-1, p_copystem)
 {
 	TagParameterMap map (kARTStemParams);
-	setupTagParameters (sARTStemMap);
+	setupTagParameters (gMaps->sARTStemMap);
 
 	rangesetting = RANGEDC;
 	mStemState = (ARTStem::STEMSTATE) st;
@@ -43,7 +42,7 @@ ARTStem::ARTStem(int st, const ARTStem * p_savestem, const ARTStem * p_copystem 
 
 ARTStem::ARTStem(const ARTStem * tstem) : ARMTParameter(-1,tstem)
 {
-	setupTagParameters (sARTStemMap);
+	setupTagParameters (gMaps->sARTStemMap);
 	mSaveStem = NULL;
 	mStemState = tstem->mStemState;
 	copyParameters (tstem->getTagParameters());

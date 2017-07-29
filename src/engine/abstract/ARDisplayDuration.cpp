@@ -19,12 +19,11 @@
 #include "TagParameterStrings.h"
 #include "TagParameterInt.h"
 
-static const TagParameterMap sARDisplayDurationMap (kARDisplayDurationParams);
 
 ARDisplayDuration::ARDisplayDuration(const ARDisplayDuration * dspdur)
 						: ARMTParameter(-1,dspdur)
 {
-	setupTagParameters (sARDisplayDurationMap);
+	setupTagParameters (gMaps->sARDisplayDurationMap);
 	rangesetting = ONLY;
 
 	copyParameters (dspdur->getTagParameters());
@@ -33,7 +32,7 @@ ARDisplayDuration::ARDisplayDuration(const ARDisplayDuration * dspdur)
 
 ARDisplayDuration::ARDisplayDuration() 
 {
-	setupTagParameters (sARDisplayDurationMap);
+	setupTagParameters (gMaps->sARDisplayDurationMap);
     rangesetting = ONLY;
     fDots = 0;
 }

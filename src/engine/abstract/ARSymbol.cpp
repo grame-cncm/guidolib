@@ -20,11 +20,10 @@
 #include "TagParameterStrings.h"
 #include "TagParameterInt.h"
 
-static const TagParameterMap sARSymbolMap (kARSymbolParams);
 
 ARSymbol::ARSymbol() : ARMTParameter() //, size(1)
 {
-	setupTagParameters (sARSymbolMap);
+	setupTagParameters (gMaps->sARSymbolMap);
 
     rangesetting = RANGEDC;
 	relativeTimePosition = TYPE_TIMEPOSITION(-1, 1);

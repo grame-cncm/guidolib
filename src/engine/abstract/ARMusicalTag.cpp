@@ -29,7 +29,7 @@ using namespace std;
 
 TagParameterMap ARMusicalTag::fCommonParams;
 
-//static const TagParameterMap sARMusicalTagMap (kCommonParams);
+//static const TagParameterMapgMaps-> sARMusicalTagMap (kCommonParams);
 
 ARMusicalTag::ARMusicalTag(const TYPE_TIMEPOSITION & tp, const ARMusicalTag * copy)
   	: ARMusicalObject(tp), id(-1), isAuto(0), rangesetting(NO), error(0), mHasRange(false), mIsInHeader(false)

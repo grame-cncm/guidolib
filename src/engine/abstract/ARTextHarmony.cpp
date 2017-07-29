@@ -19,11 +19,10 @@
 
 using namespace std;
 
-static const TagParameterMap sARTextHarmonyMap (kARTextHarmonyParams);
 
 ARTextHarmony::ARTextHarmony()
 {
-	setupTagParameters (sARTextHarmonyMap);
+	setupTagParameters (gMaps->sARTextHarmonyMap);
 	
 	relativeTimePosition = TYPE_TIMEPOSITION(-1,1);
     setDuration( DURATION_0 );

@@ -21,11 +21,10 @@
 
 using namespace std;
 
-static const TagParameterMap sARBowingMap (kARBowingParams);
 
 ARBowing::ARBowing()
 {
-	setupTagParameters (sARBowingMap);
+	setupTagParameters (gMaps->sARBowingMap);
 
 	rangesetting = ONLY;
 	setAssociation(ARMusicalTag::RA);
@@ -38,7 +37,7 @@ ARBowing::ARBowing()
 
 ARBowing::ARBowing(const ARBowing * bowing) : ARMTParameter(-1,bowing)
 {
-	setupTagParameters (sARBowingMap);
+	setupTagParameters (gMaps->sARBowingMap);
 	copyParameters(bowing->getTagParameters());
 	setTagParameters ( bowing->getTagParameters());
 

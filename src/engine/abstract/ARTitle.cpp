@@ -20,11 +20,10 @@
 
 using namespace std;
 
-static const TagParameterMap sARTitleMap (kARTitleParams);
 
 ARTitle::ARTitle()
 {
-	setupTagParameters (sARTitleMap);
+	setupTagParameters (gMaps->sARTitleMap);
 	clearTagDefaultParameter(kTextStr);		// this is to avoid a warning regarding inherited required parameter for ARText
 	rangesetting = NO;
 }

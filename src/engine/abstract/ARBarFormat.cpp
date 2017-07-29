@@ -23,18 +23,17 @@
 
 using namespace std;
 
-static const TagParameterMap sARBarFormatMap (kARBarFormatParams);
 
 ARBarFormat::ARBarFormat(const ARBarFormat & barfrmt)
 {
-	setupTagParameters (sARBarFormatMap);
+	setupTagParameters (gMaps->sARBarFormatMap);
 	fStyle = barfrmt.getStyle();
 	fRanges = barfrmt.getRanges();
 }
 
 ARBarFormat::ARBarFormat()
 {
-	setupTagParameters (sARBarFormatMap);
+	setupTagParameters (gMaps->sARBarFormatMap);
 	fStyle = kStyleStaff;
 }
 

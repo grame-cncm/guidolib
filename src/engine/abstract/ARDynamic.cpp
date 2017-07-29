@@ -22,12 +22,11 @@
 
 using namespace std;
 
-static const TagParameterMap sARDynamicMap (kARDynamicParams);
 
 //--------------------------------------------------------------------------------------
 ARDynamic::ARDynamic() : fDx1(0), fDx2(0), /*fDy(0),*/ fDeltaY(75), fThickness(4), fAutoPos(false)
 {
-	setupTagParameters (sARDynamicMap);	
+	setupTagParameters (gMaps->sARDynamicMap);	
 	rangesetting = ONLY;
 	setAssociation(ARMusicalTag::RA);
 }
@@ -36,7 +35,7 @@ ARDynamic::ARDynamic() : fDx1(0), fDx2(0), /*fDy(0),*/ fDeltaY(75), fThickness(4
 ARDynamic::ARDynamic(const ARDynamic * dyn) : ARMTParameter(-1, dyn),
 	fDx1(0), fDx2(0), fDeltaY(75), fThickness(4), fAutoPos(false)
 {
-	setupTagParameters (sARDynamicMap);
+	setupTagParameters (gMaps->sARDynamicMap);
 
 	rangesetting = ONLY;
 	setAssociation(ARMusicalTag::RA);

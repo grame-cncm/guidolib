@@ -16,11 +16,10 @@
 
 #include "ARAccolade.h"
 
-static const TagParameterMap sARAccoladeMap (kARAccoladeParams);
 
 ARAccolade::ARAccolade()
 {
-	setupTagParameters (sARAccoladeMap);
+	setupTagParameters (gMaps->sARAccoladeMap);
 }
 
 

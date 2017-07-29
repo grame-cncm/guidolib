@@ -20,17 +20,16 @@
 
 using namespace std;
 
-static const TagParameterMap sARAccidentalMap (kARAccidentalParams);
 
 ARAccidental::ARAccidental()
 {
-	setupTagParameters (sARAccidentalMap);
+	setupTagParameters (gMaps->sARAccidentalMap);
 	rangesetting = ONLY;
 }
 
 ARAccidental::ARAccidental(const ARAccidental & acc)
 {
-	setupTagParameters (sARAccidentalMap);
+	setupTagParameters (gMaps->sARAccidentalMap);
 	copyParameters (acc.getTagParameters());
 	setTagParameters (acc.getTagParameters());
 }

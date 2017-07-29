@@ -20,7 +20,6 @@
 
 using namespace std;
 
-static const TagParameterMap sARClefMap (kARClefParams);
 
 std::map<std::string, std::pair<ARClef::cleftype,int> > ARClef::fClefsMap;
 
@@ -29,7 +28,7 @@ ARClef::ARClef(const string& theName)  : ARMTParameter(), fName (theName)				{}
 
 ARClef::ARClef()
 {
-	setupTagParameters (sARClefMap);
+	setupTagParameters (gMaps->sARClefMap);
 	if (fClefsMap.empty()) buildMap();
 
 	fClef = VIOLIN;
@@ -39,7 +38,7 @@ ARClef::ARClef()
 
 ARClef::ARClef(const ARClef & clef)
 {
-	setupTagParameters (sARClefMap);
+	setupTagParameters (gMaps->sARClefMap);
 	if (fClefsMap.empty()) buildMap();
 
 	this->fClef = clef.fClef;

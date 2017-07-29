@@ -20,7 +20,6 @@
 #include "TagParameterString.h"
 #include "TimeUnwrap.h"
 
-static const TagParameterMap sARIntensMap (kARIntensParams);
 
 ARIntens::ARIntens() : ARMTParameter()
 {
@@ -30,7 +29,7 @@ ARIntens::ARIntens() : ARMTParameter()
 
 ARIntens::ARIntens(const char * txt) : ARMTParameter()
 {
-	setupTagParameters (sARIntensMap);
+	setupTagParameters (gMaps->sARIntensMap);
 	fIntens = txt;
 }
 

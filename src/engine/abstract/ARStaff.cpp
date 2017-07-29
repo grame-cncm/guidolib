@@ -19,7 +19,6 @@
 #include "TagParameterString.h"
 #include "TagParameterStrings.h"
 
-static const TagParameterMap sARStaffMap (kARStaffParams);
 
 ARStaff::ARStaff(const TYPE_TIMEPOSITION & timeposition)
 	: ARMTParameter(timeposition) /*, idi(0), ids(0)*/	{ init(); }
@@ -45,7 +44,7 @@ ARStaff::ARStaff(const ARStaff *stff)
 
 void ARStaff::init()
 {
-	setupTagParameters (sARStaffMap);
+	setupTagParameters (gMaps->sARStaffMap);
 }
 
 const char* ARStaff::getStaffID() const

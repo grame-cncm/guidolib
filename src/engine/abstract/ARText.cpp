@@ -23,14 +23,12 @@
 
 using namespace std;
 
-static const TagParameterMap sARTextMap (kARTextParams);
-static const TagParameterMap sARLyricsMap (kARLyricsParams);
 
 
 ARText::ARText (const std::string& p_txt, float, bool isLyric)
 	: fIsLyric(isLyric), fIsAutoPos(false)
 {
-	setupTagParameters (isLyric ? sARLyricsMap : sARTextMap);
+	setupTagParameters (isLyric ? gMaps->sARLyricsMap : gMaps->sARTextMap);
 	fText = p_txt;
 	STagParameterPtr p (new TagParameterString (fText));
 	p->setName(kTextStr);
@@ -43,7 +41,7 @@ ARText::ARText (const std::string& p_txt, float, bool isLyric)
 
 ARText::ARText() : fIsLyric(false), fIsAutoPos(false)
 {
-	setupTagParameters (sARTextMap);
+	setupTagParameters (gMaps->sARTextMap);
 
 	relativeTimePosition = TYPE_TIMEPOSITION(-1,1);
 	setDuration( DURATION_0 );

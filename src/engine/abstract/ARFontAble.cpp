@@ -18,12 +18,11 @@
 
 using namespace std;
 
-static const TagParameterMap sARFontAbleMap (kARFontAbleParams);
 
 //--------------------------------------------------------------------------
 ARFontAble::ARFontAble()
 {
-	setupTagParameters (sARFontAbleMap);
+	setupTagParameters (gMaps->sARFontAbleMap);
 }
 
 //--------------------------------------------------------------------------

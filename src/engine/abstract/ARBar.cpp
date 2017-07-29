@@ -20,12 +20,11 @@
 #include "TagParameterString.h"
 #include "TagParameterFloat.h"
 
-static const TagParameterMap sARBarMap (kARBarParams);
 
 ARBar::ARBar(const TYPE_TIMEPOSITION &timeposition)
 	: ARMTParameter(timeposition)
 {
-	setupTagParameters (sARBarMap);
+	setupTagParameters (gMaps->sARBarMap);
 
 	measureNumber               = 0;
     measureNumberDisplayed      = kNoNum;
@@ -36,7 +35,7 @@ ARBar::ARBar(const TYPE_TIMEPOSITION &timeposition)
 
 ARBar::ARBar()
 {
-	setupTagParameters (sARBarMap);
+	setupTagParameters (gMaps->sARBarMap);
 
 	measureNumber               = 0;
     measureNumberDisplayed      = kNoNum;

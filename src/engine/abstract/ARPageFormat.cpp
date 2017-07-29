@@ -27,7 +27,6 @@ const float MINSIZEY = (float) (5 * kCmToVirtual);
 const float MAXSIZEX = (float) (400 * kCmToVirtual); // (JB) arbitrary max value. was (32767) (Windows 95-98 GDI limitation ?)
 const float MAXSIZEY = (float) (300 * kCmToVirtual); // (JB) arbitrary max value. was (32767);
 
-static const TagParameterMap sARPageFormatMap (kARPageFormatParams);
 
 /** \brief Creates a page format, in Guido internal units.
 
@@ -112,7 +111,7 @@ void ARPageFormat::operator=(const ARPageFormat& arp)
 */
 ARPageFormat::ARPageFormat()
 {
-	setupTagParameters (sARPageFormatMap);
+	setupTagParameters (gMaps->sARPageFormatMap);
 
 	mFormat = "";
 	mSizeX = DF_SX * kCmToVirtual;

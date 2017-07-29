@@ -18,11 +18,10 @@
 #include "TagParameterStrings.h"
 #include "TagParameterInt.h"
 
-static const TagParameterMap sARDrRenzMap (kARDrRenzParams);
 
 ARDrRenz::ARDrRenz()
 {
-	setupTagParameters (sARDrRenzMap);
+	setupTagParameters (gMaps->sARDrRenzMap);
 }
 
 int ARDrRenz::getInverse() const {

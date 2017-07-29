@@ -21,11 +21,10 @@
 
 using namespace std;
 
-static const TagParameterMap sARClusterMap (kARClusterParams);
 
 ARCluster::ARCluster() : ARMTParameter(), fHdx(0), fHdy(0), fNoteCount(1), fSingleNote(false)
 {
-	setupTagParameters(sARClusterMap);
+	setupTagParameters(gMaps->sARClusterMap);
 	rangesetting = ONLY;
 
     fFirstNote = NULL;
@@ -34,7 +33,7 @@ ARCluster::ARCluster() : ARMTParameter(), fHdx(0), fHdy(0), fNoteCount(1), fSing
 
 ARCluster::ARCluster(const ARCluster *inCopyCluster) : ARMTParameter(-1, inCopyCluster)
 {
-	setupTagParameters (sARClusterMap);
+	setupTagParameters (gMaps->sARClusterMap);
 	rangesetting = ONLY;
 
     if (inCopyCluster) {

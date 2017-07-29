@@ -25,7 +25,6 @@ using namespace std;
 int gd_noteName2pc(const char *name);
 
 
-static const TagParameterMap sARKeyMap (kARKeyParams);
 
 ARKey::ARKey(const TYPE_TIMEPOSITION & timeposition)
 	: ARMTParameter(timeposition), fIsFree(false), fHideAutoNaturalsSet(false)
@@ -63,7 +62,7 @@ ARKey::ARKey(const ARKey & key)
 
 void ARKey::init()
 {
-	setupTagParameters (sARKeyMap);
+	setupTagParameters (gMaps->sARKeyMap);
 	fKeyNumber = 0;
     fHideAutoNaturals = false;
 	memset(fOctarray,0,NUMNOTES*(sizeof(int))); // octarray auf 0 setzen;

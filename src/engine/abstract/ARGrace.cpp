@@ -18,11 +18,10 @@
 #include "TagParameterInt.h"
 #include "TagParameterStrings.h"
 
-static const TagParameterMap sARGraceMap (kARGraceParams);
 
 ARGrace::ARGrace()
 {
-	setupTagParameters (sARGraceMap);
+	setupTagParameters (gMaps->sARGraceMap);
 	rangesetting = ONLY;
 }
 

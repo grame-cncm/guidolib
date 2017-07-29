@@ -18,11 +18,10 @@
 #include "TagParameterStrings.h"
 #include "TagParameterInt.h"
 
-static const TagParameterMap sARBembelMap (kARBembelParams);
 
 ARBembel::ARBembel()
 {
-	setupTagParameters (sARBembelMap);
+	setupTagParameters (gMaps->sARBembelMap);
 }
 
 int ARBembel::getInverse() const {

@@ -23,11 +23,10 @@ extern const char* kAboveStr;
 extern const char* kBelowStr;
 
 
-static const TagParameterMap sARPizzicatoMap (kARPizzicatoParams);
 
 ARPizzicato::ARPizzicato()
 {
-	setupTagParameters (sARPizzicatoMap);
+	setupTagParameters (gMaps->sARPizzicatoMap);
 
 	rangesetting = ONLY;
 	fType = LEFTHAND;

@@ -20,11 +20,10 @@
 
 using namespace std;
 
-static const TagParameterMap sARLyricsMap (kARLyricsParams);
 
 ARLyrics::ARLyrics(bool autopos) : ARFontAble()
 {
-	setupTagParameters (sARLyricsMap);
+	setupTagParameters (gMaps->sARLyricsMap);
 
 	relativeTimePosition.set(-1,1);
 	setDuration ( DURATION_0 );

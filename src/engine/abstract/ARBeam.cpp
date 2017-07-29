@@ -20,11 +20,10 @@
 #include "TagParameterString.h"
 #include "TagParameterStrings.h"
 
-static const TagParameterMap sARBeamMap (kARBeamParams);
 
 ARBeam::ARBeam()
 {
-	setupTagParameters (sARBeamMap);
+	setupTagParameters (gMaps->sARBeamMap);
 	rangesetting = ONLY;
 	dx1 = dx2 = dx3 = dx4 = NULL;
 	dy1 = dy2 = dy3 = dy4 = NULL;

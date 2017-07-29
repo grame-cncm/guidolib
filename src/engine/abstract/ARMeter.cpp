@@ -23,12 +23,11 @@
 
 using namespace std;
 
-static const TagParameterMap sARMeterMap (kARMeterParams);
 
 //--------------------------------------------------------------------------------------
 ARMeter::ARMeter() : fMeterDuration(0,1), fSingleUnit(true), fGroupComplex(false)
 {
-	setupTagParameters (sARMeterMap);
+	setupTagParameters (gMaps->sARMeterMap);
 	fType = NONE;
 	fAutoBarlines    = true;
 	fAutoMeasuresNum = kNoAutoMeasureNum;
@@ -37,7 +36,7 @@ ARMeter::ARMeter() : fMeterDuration(0,1), fSingleUnit(true), fGroupComplex(false
 //--------------------------------------------------------------------------------------
 ARMeter::ARMeter(int num, int dnum) : fMeterDuration(num, dnum), fSingleUnit(true)
 {
-	setupTagParameters (sARMeterMap);
+	setupTagParameters (gMaps->sARMeterMap);
 	
     std::stringstream bufferSStream;
     bufferSStream << fMeterDuration;

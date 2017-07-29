@@ -22,11 +22,10 @@
 #include "TagParameterStrings.h"
 #include "TagParameterString.h"
 
-static const TagParameterMap sARSpecialMap (kARSpecialParams);
 
 ARSpecial::ARSpecial() : mDrawChar (0)
 {
-	setupTagParameters (sARSpecialMap);
+	setupTagParameters (gMaps->sARSpecialMap);
 }
 
 //--------------------------------------------------------------------------

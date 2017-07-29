@@ -19,11 +19,10 @@
 
 using namespace std;
 
-static const TagParameterMap sARAccelerandoMap (kARAccelerandoParams);
 
 ARAccelerando::ARAccelerando()
 {
-	setupTagParameters (sARAccelerandoMap);
+	setupTagParameters (gMaps->sARAccelerandoMap);
     rangesetting = ONLY;
 }
 

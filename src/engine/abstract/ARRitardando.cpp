@@ -19,11 +19,10 @@
 #include "TagParameterStrings.h"
 #include "TagParameterString.h"
 
-static const TagParameterMap sARRitardandoMap (kARRitardandoParams);
 
 ARRitardando::ARRitardando()
 {
-	setupTagParameters (sARRitardandoMap);
+	setupTagParameters (gMaps->sARRitardandoMap);
 	rangesetting = ONLY;
     tempo    = 0;
     abstempo = 0;

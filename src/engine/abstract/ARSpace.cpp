@@ -18,11 +18,10 @@
 #include "TagParameterFloat.h"
 #include "TagParameterStrings.h"
 
-static const TagParameterMap sARSpaceMap (kARSpaceParams);
 
 ARSpace::ARSpace() : fVal(0.0f)
 {
-	setupTagParameters (sARSpaceMap);
+	setupTagParameters (gMaps->sARSpaceMap);
 }
 
 //--------------------------------------------------------------------------

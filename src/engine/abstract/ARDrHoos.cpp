@@ -18,11 +18,10 @@
 #include "TagParameterStrings.h"
 #include "TagParameterInt.h"
 
-static const TagParameterMap sARDrHoosMap (kARDrHoosParams);
 
 ARDrHoos::ARDrHoos()
 {
-	setupTagParameters (sARDrHoosMap);
+	setupTagParameters (gMaps->sARDrHoosMap);
 }
 
 int ARDrHoos::getInverse() const {

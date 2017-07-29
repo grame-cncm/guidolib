@@ -18,11 +18,10 @@
 #include "TagParameterStrings.h"
 #include "TagParameterString.h"
 
-static const TagParameterMap sARCueMap (kARCueParams);
 
 ARCue::ARCue()
 {
-	setupTagParameters (sARCueMap);
+	setupTagParameters (gMaps->sARCueMap);
 	rangesetting = ONLY;
 }
 

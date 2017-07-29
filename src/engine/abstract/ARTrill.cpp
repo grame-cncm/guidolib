@@ -25,12 +25,11 @@
 
 using namespace std;
 
-static const TagParameterMap sARTrillMap (kARTrillParams);
 
 
 ARTrill::ARTrill(ORNAMENT typ, const ARKey* currentKey) : ARMTParameter(), fCurrentKey(currentKey), fTrillType(typ)
 {
-	setupTagParameters (sARTrillMap);
+	setupTagParameters (gMaps->sARTrillMap);
 
 	rangesetting            = ONLY;
 	fChordType				= ARMusicalVoice::UP_SIMPLE;
@@ -47,7 +46,7 @@ ARTrill::ARTrill(ORNAMENT typ, const ARKey* currentKey) : ARMTParameter(), fCurr
 
 ARTrill::ARTrill(int pid, const ARTrill* copy) : ARMTParameter(pid, copy)
 {
-	setupTagParameters (sARTrillMap);
+	setupTagParameters (gMaps->sARTrillMap);
 	copyParameters (copy->getTagParameters());
 	fCurrentKey					= copy->fCurrentKey;
 

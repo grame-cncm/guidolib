@@ -24,11 +24,10 @@ using namespace std;
 const char* kAboveStr = "above";
 const char* kBelowStr = "below";
 
-static const TagParameterMap sARArticulationMap (kARArticulationParams);
 
 ARArticulation::ARArticulation() : fPosition(kDefaultPosition)
 {
-	setupTagParameters (sARArticulationMap);
+	setupTagParameters (gMaps->sARArticulationMap);
 	rangesetting = ONLY;
 }
 
