@@ -24,6 +24,7 @@ endif
 
 OUT  := GUIDOEngine.framework GUIDOEngine.tgz libGUIDOEngine.a
 MAC  ?= MacOS
+MAKE ?= make
 IOS  := ios
 
 # try to detect Visual Studio version used
@@ -46,9 +47,9 @@ C++11 ?= yes
 CMAKEOPT ?= -DMIDIEXPORT=yes -DC++11=$(C++11)
 
 all :
-	make $(TARGET)
-	make tools
-	make Qt
+	$(MAKE) $(TARGET)
+	$(MAKE) tools
+	$(MAKE) Qt
 
 undefined:
 	$(error System is undefined, not target available)
@@ -78,8 +79,8 @@ help :
 .PHONY : macos mac11 $(IOS) $(MAC)/Release/GUIDOEngine.framework $(IOS)/Release-iphoneos/libGUIDOEngine.a
 
 mac : 
-	make macos
-	make $(IOS)	
+	$(MAKE) macos
+	$(MAKE) $(IOS)	
 
 macos : $(MAC)/guidolib.xcodeproj GUIDOEngine.framework GUIDOEngine.tgz
 
@@ -98,7 +99,7 @@ GUIDOEngine.tgz : GUIDOEngine.framework
 	tar czf GUIDOEngine.tgz GUIDOEngine.framework
 
 mac11:
-	make macos MAC=mac11 C++11=yes
+	$(MAKE) macos MAC=mac11 C++11=yes
 	cp -R $(MAC)/Release/GUIDOEngine.framework mac11
 	cd mac11 && tar czf GUIDOEngine.tgz GUIDOEngine.framework
 
@@ -130,8 +131,8 @@ iosclean :
 .PHONY : win32 win64 win32/Release/GUIDOEngine.dll win64/Release/GUIDOEngine64.dll
 
 windows :
-	make win32
-	make win64
+	$(MAKE) win32
+	$(MAKE) win64
 
 win32 : win32/guidolib.sln GUIDOEngine.dll GUIDOEngine.lib 
 
@@ -178,11 +179,11 @@ linux : $(LINUX)/Makefile libGUIDOEngine.so
 
 libGUIDOEngine.so :  $(LINUX)/Makefile  $(LINUX)/libGUIDOEngine.so
 	rm -rf GUIDOEngine*.so*
-	make -C $(LINUX)
+	$(MAKE) -C $(LINUX)
 	cp -R $(LINUX)/libGUIDOEngine*.so* .
 
 $(LINUX)/libGUIDOEngine.so : 
-	make -C $(LINUX)
+	$(MAKE) -C $(LINUX)
 	
 linuxcmake:
 $(LINUX)/Makefile : CMakeLists.txt
@@ -196,37 +197,40 @@ linuxclean:
 # building the javascript engine
 #===============================================================
 js:
-	make -C ../lang/javascript -j 4
+	$(MAKE) -C ../lang/javascript -j 4
 
+
+#===============================================================
+# clean the project
+#===============================================================
+clean :
+	$(MAKE) macclean
+	$(MAKE) winclean
+	$(MAKE) linuxclean
+	$(MAKE) -C ../src/tools/build clean
+	$(MAKE) -C ../environments/Qt clean
+	$(MAKE) -C ../lang/java/build clean
 
 #===============================================================
 # building the Guido tools
 #===============================================================
-clean :
-	make macclean
-	make winclean
-	make linuxclean
-	make -C ../src/tools/build clean
-	make -C ../environments/Qt clean
-	make -C ../lang/java/build clean
-
 tools :
-	make -C ../src/tools/build
+	$(MAKE) -C ../src/tools/build
 
 #===============================================================
 # building the Qt resources
 #===============================================================
 Qt :
-	make -C ../environments/Qt
+	$(MAKE) -C ../environments/Qt
 
 #===============================================================
 # building the jni and java library
 #===============================================================
 java :
-	make -C ../lang/java/build
+	$(MAKE) -C ../lang/java/build
 
 #===============================================================
 # building the library for Android
 #===============================================================
 android :
-	make -C ../platforms/android/
+	$(MAKE) -C ../platforms/android/
