@@ -22,61 +22,61 @@ TOOLS = guidogetversion guidogetpagecount guidogetvoicecount guidogettimemap gui
 all: $(TOOLS)
 
 guido2gmn : guido2gmn.cpp
-	g++ guido2gmn.cpp  $(INC) $(lib) -o guido2gmn
+	$(CXX) guido2gmn.cpp  $(INC) $(lib) -o guido2gmn
 
 guidogetversion : guidogetversion.cpp
-	g++ guidogetversion.cpp -I../engine/include $(lib) -o guidogetversion
+	$(CXX) guidogetversion.cpp -I../engine/include $(lib) -o guidogetversion
 
 midi2proll : midi2proll.cpp
-	g++ midi2proll.cpp $(INC) $(lib) -o midi2proll
+	$(CXX) midi2proll.cpp $(INC) $(lib) -o midi2proll
 
 guido2proll : guido2proll.cpp
-	g++ guido2proll.cpp $(INC) $(lib) -o guido2proll
+	$(CXX) guido2proll.cpp $(INC) $(lib) -o guido2proll
 
 midi2rproportional : midi2rproportional.cpp
-	g++ midi2rproportional.cpp $(INC) $(lib) -o midi2rproportional
+	$(CXX) midi2rproportional.cpp $(INC) $(lib) -o midi2rproportional
 
 guido2rproportional : guido2rproportional.cpp
-	g++ guido2rproportional.cpp $(INC) $(lib) -o guido2rproportional
+	$(CXX) guido2rproportional.cpp $(INC) $(lib) -o guido2rproportional
 
 guido2midi : guido2midi.cpp
-	g++ guido2midi.cpp $(INC) $(lib) -o guido2midi
+	$(CXX) guido2midi.cpp $(INC) $(lib) -o guido2midi
 
 midi2guido : midi2guido.cpp
-	g++ midi2guido.cpp $(INC) $(lib) -o midi2guido
+	$(CXX) midi2guido.cpp $(INC) $(lib) -o midi2guido
 
 guido2svg : guido2svg.cpp
-	g++ guido2svg.cpp $(INC) $(lib) -o guido2svg
+	$(CXX) guido2svg.cpp $(INC) $(lib) -o guido2svg
 
 guido2abstract : guido2abstract.cpp
-	g++ guido2abstract.cpp $(INC) $(lib) -o guido2abstract
+	$(CXX) guido2abstract.cpp $(INC) $(lib) -o guido2abstract
 
 guido2svgmap : guido2svgmap.cpp
-	g++ guido2svgmap.cpp $(INC) $(lib) -o guido2svgmap
+	$(CXX) guido2svgmap.cpp $(INC) $(lib) -o guido2svgmap
 
 guidogetpagecount : guidogetpagecount.cpp
-	g++ guidogetpagecount.cpp $(INC) $(lib) -o guidogetpagecount
+	$(CXX) guidogetpagecount.cpp $(INC) $(lib) -o guidogetpagecount
 
 guidogetvoicecount : guidogetvoicecount.cpp
-	g++ guidogetvoicecount.cpp $(INC) $(lib) -o guidogetvoicecount
+	$(CXX) guidogetvoicecount.cpp $(INC) $(lib) -o guidogetvoicecount
 
 guidogetmeter : guidogetmeter.cpp
-	g++ guidogetmeter.cpp $(INC) $(lib) -o guidogetmeter
+	$(CXX) guidogetmeter.cpp $(INC) $(lib) -o guidogetmeter
 
 guidogettimemap : guidogettimemap.cpp
-	g++ guidogettimemap.cpp $(INC) $(lib) -o guidogettimemap
+	$(CXX) guidogettimemap.cpp $(INC) $(lib) -o guidogettimemap
 
 guidogetpagemap : guidogetpagemap.cpp
-	g++ guidogetpagemap.cpp $(INC) $(lib) -o guidogetpagemap
+	$(CXX) guidogetpagemap.cpp $(INC) $(lib) -o guidogetpagemap
 
 guidogetsystemmap : guidogetsystemmap.cpp
-	g++ guidogetsystemmap.cpp $(INC) $(lib) -o guidogetsystemmap
+	$(CXX) guidogetsystemmap.cpp $(INC) $(lib) -o guidogetsystemmap
 
 guidogetstaffmap : guidogetstaffmap.cpp
-	g++ guidogetstaffmap.cpp $(INC) $(lib) -o guidogetstaffmap
+	$(CXX) guidogetstaffmap.cpp $(INC) $(lib) -o guidogetstaffmap
 
 guidogetvoicemap : guidogetvoicemap.cpp
-	g++ guidogetvoicemap.cpp $(INC) $(lib) -o guidogetvoicemap
+	$(CXX) guidogetvoicemap.cpp $(INC) $(lib) -o guidogetvoicemap
 
 install:
 	cp $(TOOLS) $(HOME)/bin
