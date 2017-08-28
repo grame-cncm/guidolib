@@ -41,14 +41,14 @@ ROOT    := ..
 .PHONY : macos ios $(DEST) linux
 
 all:
-	make -f ../../Make.shared $(TARGET)
+	$(MAKE) -f ../../Make.shared $(TARGET)
 
 undefined:
 	$(error System is undefined, not target available: $(system))
 
 mac:
-	make -f ../../Make.shared macos
-	make -f ../../Make.shared ios
+	$(MAKE) -f ../../Make.shared macos
+	$(MAKE) -f ../../Make.shared ios
 
 
 windows: $(DEST)/$(PROJECT).vcxproj  $(PROJECT).exe 
@@ -113,7 +113,7 @@ linux/$(PROJECT).makefile : $(ROOT)/$(PROJECT).pro $(ROOT)/../GUIDOEngine.shared
 	cd linux && $(QMAKE) $(SPEC) $(ROOT)/.. -o $(PROJECT).makefile
 
 linux/$(PROJECT):
-	make -C linux -f $(PROJECT).makefile
+	$(MAKE) -C linux -f $(PROJECT).makefile
 	cp -R linux/$(PROJECT) $(DEST)
 
 

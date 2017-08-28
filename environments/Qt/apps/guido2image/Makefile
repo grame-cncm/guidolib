@@ -113,10 +113,10 @@ endif
 #########################################################################
 # tools to generate svg files
 images:
-	make png
-	make jpeg
-	make bmp
-	make pdf
+	$(MAKE) png
+	$(MAKE) jpeg
+	$(MAKE) bmp
+	$(MAKE) pdf
 	
 png:
 	@[ -d $(version)/png ] || mkdir -p $(version)/png
@@ -169,7 +169,7 @@ pdf:
 	-$(guido2image) -f $(gmntestfile2) -b off -o "$(version)/pdf/test8.pdf"
 	-$(guido2image) -s $(gmnteststring) -r off -o "$(version)/pdf/test9.pdf"
 	-$(guido2image) -f $(gmntestfile) -c 200 -o "$(version)/pdf/test10.pdf"
-	make forcedate
+	$(MAKE) forcedate
 
 forcedate: forcepdfdate $(allpdf)
 	@./forcepdfdate 20100101120000 $(allpdf)

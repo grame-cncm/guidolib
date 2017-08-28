@@ -3,13 +3,13 @@ PROJECT := GraphicsSceneMainWindow
 OPTIONS := -f ../../Make.shared PROJECT=$(PROJECT)
 
 all:
-	make $(OPTIONS)
+	$(MAKE) $(OPTIONS)
 
 macos:
-	make $(OPTIONS) macos
+	$(MAKE) $(OPTIONS) macos
 
 ios:
-	make $(OPTIONS) ios
+	$(MAKE) $(OPTIONS) ios
 
 clean:
-	make $(OPTIONS) clean
+	$(MAKE) $(OPTIONS) clean

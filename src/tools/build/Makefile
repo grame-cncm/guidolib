@@ -38,7 +38,7 @@ ifeq ($(TARGET), windows)
 endif
 
 all :
-	make $(TARGET)
+	$(MAKE) $(TARGET)
 
 undefined:
 	$(error System is undefined, not target available)
@@ -59,8 +59,8 @@ macos/guidotools.xcodeproj : CMakeLists.txt
 # building the tools on windows
 #===============================================================
 windows :
-	make win32
-	make win64
+	$(MAKE) win32
+	$(MAKE) win64
 
 win32 : win32/guidotool.sln win32tools 
 win64 : win64/guidotool.sln win64tools 
@@ -85,7 +85,7 @@ win64tools : win64/guidotool.sln
 linux : linux/Makefile linuxtools
 
 linuxtools : linux/Makefile
-	make -C linux
+	$(MAKE) -C linux
 
 linux/Makefile : CMakeLists.txt
 	[ -d linux ] || mkdir linux

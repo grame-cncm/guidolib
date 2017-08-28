@@ -8,17 +8,17 @@ endif
 PROJECT := GuidoSceneComposer
 
 all:
-	make -f ../../Make.shared PROJECT=$(PROJECT) $(OPT)
+	$(MAKE) -f ../../Make.shared PROJECT=$(PROJECT) $(OPT)
 
 mac:
-	make -f ../../Make.shared PROJECT=$(PROJECT) APP=.app TARGET=mac
+	$(MAKE) -f ../../Make.shared PROJECT=$(PROJECT) APP=.app TARGET=mac
 
 macos:
-	make -f ../../Make.shared PROJECT=$(PROJECT) APP=.app macos
+	$(MAKE) -f ../../Make.shared PROJECT=$(PROJECT) APP=.app macos
 
 ios:
-	make -f ../../Make.shared PROJECT=$(PROJECT) APP=.app ios
+	$(MAKE) -f ../../Make.shared PROJECT=$(PROJECT) APP=.app ios
 
 clean:
-	make -f ../../Make.shared PROJECT=$(PROJECT) clean
+	$(MAKE) -f ../../Make.shared PROJECT=$(PROJECT) clean
 	

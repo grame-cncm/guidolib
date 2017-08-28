@@ -2,9 +2,9 @@
 .PHONY: apps libs tools
 
 all:
-	make libs
-	make apps
-	make tools
+	$(MAKE) libs
+	$(MAKE) apps
+	$(MAKE) tools
 	
 help:
 	@ echo " 'all'   :  build all the Qt resources (default)"
@@ -14,15 +14,15 @@ help:
 	@ echo " 'clean' :  clean all the Qt projects"
 
 libs:
-	make -C libs
+	$(MAKE) -C libs
 
 apps:
-	make -C apps
+	$(MAKE) -C apps
 
 tools:
-	make -C tools
+	$(MAKE) -C tools
 
 clean:
-	make -C libs clean
-	make -C apps clean
-	make -C tools clean
+	$(MAKE) -C libs clean
+	$(MAKE) -C apps clean
+	$(MAKE) -C tools clean

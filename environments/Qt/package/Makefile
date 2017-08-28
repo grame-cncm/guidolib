@@ -49,9 +49,9 @@ macapp:
 macos:
 	[ -d $(MACOSX_NAME) ] || mkdir $(MACOSX_NAME) && rm -rf $(MACOSX_NAME)/*
 	[ -h $(ROOT)/build/MacOS/lib ] || ( cd $(ROOT)/build/MacOS && ln -s Release lib )
-	make common PACKAGE_NAME=$(MACOSX_NAME)
-	make macapp APPL=GuidoEditor
-	make macapp APPL=GuidoSceneComposer
+	$(MAKE) common PACKAGE_NAME=$(MACOSX_NAME)
+	$(MAKE) macapp APPL=GuidoEditor
+	$(MAKE) macapp APPL=GuidoSceneComposer
 	cp $(MACTOOLS) $(MACOSX_NAME)
 	cp -r $(ROOT)/build/MacOS/Release/GUIDOEngine.framework $(MACOSX_NAME)
 	cp $(ROOT)/src/guido2.ttf $(MACOSX_NAME)
@@ -73,7 +73,7 @@ samples:
 	tar czf gmn-examples.tgz gmn-examples
 
 linux:
-	make version=$(VERSION) -f makedeb
+	$(MAKE) version=$(VERSION) -f makedeb
 
 win64: 
 	@make -s check
@@ -92,7 +92,7 @@ win64:
 	cp 	$(WIN32QTPLUGS) $(WIN32_NAME)/plugins/imageformats
 	cp 	$(WIN32QTPLATFORMS) $(WIN32_NAME)/plugins/platforms
 	cp 	$(WIN32QTPRINT) $(WIN32_NAME)/plugins/printsupport
-	make common PACKAGE_NAME=$(WIN32_NAME)
+	$(MAKE) common PACKAGE_NAME=$(WIN32_NAME)
 
 common:
 	cp -R $(ROOT)/package/doc $(PACKAGE_NAME)
