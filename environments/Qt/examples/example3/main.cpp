@@ -19,7 +19,7 @@
 #include "QGuidoWidget.h"
 
 //#define __UseOldGUIDOFactory__
-#include "GuidoFactory.h"
+#include "GUIDOFactory.h"
 
 static void alter (ARFactoryHandler f, float detune)
 {

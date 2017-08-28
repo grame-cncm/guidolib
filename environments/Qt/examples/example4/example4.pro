@@ -7,9 +7,9 @@ DESTDIR = ./bin
 # GuidoQt library link for each platform
 win32:LIBS += ../GuidoQt/GuidoQt.lib
 unix:LIBS += -L.. -lGuidoQt
-INCLUDEPATH += ../GuidoQt/include
+INCLUDEPATH += ../../libs/GuidoQt/include ../../../../src/engine/include
 
 QT += widgets printsupport
 
 
-include( ../GUIDOEngineLink.pri )
+include( ../../GuidoServer/GUIDOEngineLink.pri )
