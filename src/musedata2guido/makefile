@@ -7,7 +7,7 @@ OBJ = $(patsubst %.cpp, %.o, $(SRC))
 all : $(APP)
 
 $(APP) : main.cpp $(OBJ)
-	g++ $(CXXFLAGS) $(OBJ) -o $(APP)
+	$(CXX) $(CXXFLAGS) $(OBJ) -o $(APP)
 
 dep:
 	makedepend -- $(CXXFLAGS) -- $(SRC)

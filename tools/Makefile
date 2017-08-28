@@ -19,7 +19,7 @@ TOOLS = sizedebug
 all: $(TOOLS)
 
 sizedebug : sizedebug.cpp
-	g++ sizedebug.cpp $(INC) $(lib) -o sizedebug
+	$(CXX) sizedebug.cpp $(INC) $(lib) -o sizedebug
 
 
 clean:

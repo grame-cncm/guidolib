@@ -7,5 +7,5 @@ CXXFLAGS = $(shell pkg-config --cflags gtk+-2.0) -I../src -I ../../src/include
 LIBS = $(shell pkg-config --libs gtk+-2.0)
 
 fontviewer : fontviewer.cpp ../src/CairoDevlib.o
-	g++ fontviewer.cpp $(CXXFLAGS) $(LIBS) ../src/CairoDevlib.o -o fontviewer
+	$(CXX) fontviewer.cpp $(CXXFLAGS) $(LIBS) ../src/CairoDevlib.o -o fontviewer
 	
