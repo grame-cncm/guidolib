@@ -355,14 +355,14 @@ cleantools:
 	rm -f $(LEAKTOOLS)
 
 guidodraw : guidodraw.cpp
-	g++ guidodraw.cpp -I$(SRC)/include -I$(SRC)/tools $(lib) -o guidodraw
+	$(CXX) guidodraw.cpp -I$(SRC)/include -I$(SRC)/tools $(lib) -o guidodraw
 
 guidoar2gr : guidoar2gr.cpp
-	g++ guidoar2gr.cpp -I$(SRC)/include -I$(SRC)/tools $(lib) -o guidoar2gr
+	$(CXX) guidoar2gr.cpp -I$(SRC)/include -I$(SRC)/tools $(lib) -o guidoar2gr
 
 guidoparse : guidoparse.cpp
-	g++ guidoparse.cpp -I$(SRC)/include $(lib) -o guidoparse
+	$(CXX) guidoparse.cpp -I$(SRC)/include $(lib) -o guidoparse
 
 forcepdfdate: forcepdfdate.cpp
-	g++ forcepdfdate.cpp -o forcepdfdate
+	$(CXX) forcepdfdate.cpp -o forcepdfdate
 

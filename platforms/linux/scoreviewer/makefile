@@ -11,7 +11,7 @@ CXXFLAGS = $(shell pkg-config --cflags gtk+-2.0) -I../src -I ../../src/include
 LIBS = $(shell pkg-config --libs gtk+-2.0) -L../../cmake/Release -lGUIDOEngine
 
 scoreviewer : scoreviewer.cpp ../src/CairoDevlib.o
-	g++ scoreviewer.cpp $(CXXFLAGS) $(LIBS) ../src/CairoDevlib.o -o scoreviewer
+	$(CXX) scoreviewer.cpp $(CXXFLAGS) $(LIBS) ../src/CairoDevlib.o -o scoreviewer
 
 ../src/CairoDevlib.o : $(CAIRO)
 	make -C ../src

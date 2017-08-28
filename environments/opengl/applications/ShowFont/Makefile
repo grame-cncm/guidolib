@@ -14,4 +14,4 @@ endif
 endif
 
 fonttest : main.cpp
-	g++ -o fonttest main.cpp $(INC) $(lib)
+	$(CXX) -o fonttest main.cpp $(INC) $(lib)

@@ -197,5 +197,5 @@ cleantools:
 	rm -f $(TOOLS)
 
 forcepdfdate: forcepdfdate.cpp
-	g++ forcepdfdate.cpp -o forcepdfdate
+	$(CXX) forcepdfdate.cpp -o forcepdfdate
 
