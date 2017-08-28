@@ -2,8 +2,8 @@
 PROJECT := guido2image
 
 all:
-	make -f ../../Make.shared PROJECT=$(PROJECT)
+	$(MAKE) -f ../../Make.shared PROJECT=$(PROJECT)
 
 clean:
-	make -f ../../Make.shared PROJECT=$(PROJECT) clean
+	$(MAKE) -f ../../Make.shared PROJECT=$(PROJECT) clean
 	

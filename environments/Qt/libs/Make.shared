@@ -40,14 +40,14 @@ ROOT    := ..
 .PHONY : macos ios $(DEST) linux
 
 all:
-	make  -f ../../Make.shared $(TARGET)
+	$(MAKE)  -f ../../Make.shared $(TARGET)
 
 undefined:
 	$(error System is undefined, not target available)
 
 mac:
-	make  -f ../../Make.shared macos
-	make  -f ../../Make.shared ios
+	$(MAKE)  -f ../../Make.shared macos
+	$(MAKE)  -f ../../Make.shared ios
 
 macos: macos/$(PROJECT).xcodeproj  lib$(PROJECT).a 
 	@echo ===================================
@@ -108,7 +108,7 @@ linux/$(PROJECT).makefile : $(ROOT)/$(PROJECT).pro
 	cd linux && $(QMAKE) $(SPEC) $(ROOT)/.. -o $(PROJECT).makefile
 
 lib$(PROJECT)-linux.a:
-	make -C linux -f $(PROJECT).makefile
+	$(MAKE) -C linux -f $(PROJECT).makefile
 	
 clean:
 	rm -rf ../../lib$(PROJECT)*.a ../../$(PROJECT).lib ios macos $(DEST) linux

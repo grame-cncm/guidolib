@@ -7,14 +7,14 @@ endif
 
 
 all: $(LIB)
-	make -C guido2image/build
-	make -C GuidoEditor/build
-	make -C GuidoSceneComposer/build
+	$(MAKE) -C guido2image/build
+	$(MAKE) -C GuidoEditor/build
+	$(MAKE) -C GuidoSceneComposer/build
 
 GUIDOEngine.dll: ../../../build/GUIDOEngine.dll
 	cp ../../../build/GUIDOEngine.dll .
 
 clean:
-	make -C guido2image/build clean
-	make -C GuidoEditor/build clean
-	make -C GuidoSceneComposer/build clean
+	$(MAKE) -C guido2image/build clean
+	$(MAKE) -C GuidoEditor/build clean
+	$(MAKE) -C GuidoSceneComposer/build clean

@@ -2,12 +2,12 @@
 
 
 all:
-	make -C FontMetrics/build
-	make -C GuidoFontMetrics/build
-	make -C GuidoQtFontViewer/build
+	$(MAKE) -C FontMetrics/build
+	$(MAKE) -C GuidoFontMetrics/build
+	$(MAKE) -C GuidoQtFontViewer/build
 
 
 clean:
-	make -C FontMetrics/build clean
-	make -C GuidoFontMetrics/build clean
-	make -C GuidoQtFontViewer/build clean
+	$(MAKE) -C FontMetrics/build clean
+	$(MAKE) -C GuidoFontMetrics/build clean
+	$(MAKE) -C GuidoQtFontViewer/build clean
