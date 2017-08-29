@@ -124,7 +124,7 @@ const char* Guido2Image::getErrorString( Guido2ImageErrorCodes err )
 		case GUIDO_2_IMAGE_INVALID_PAGE_INDEX:		 return "invalid page index";
 		case GUIDO_2_IMAGE_INVALID_GMN_CODE:		 return "invalid gmn code";
 		case GUIDO_2_IMAGE_GUIDO_ENGINE_NOT_STARTED: return "Guido Engine not started";
-		case GUIDO_2_IMAGE_INVALID_IMAGE_FORMAT:	 return "invalid image format";
+		case GUIDO_2_IMAGE_INVALID_IMAGE_FORMAT:	 return "invalid or unsupported image format";
         case GUIDO_2_IMAGE_OUTPUT_FILE_OVERSIZED:	 return "output size is too big";
         case GUIDO_2_IMAGE_OUTPUT_FILE_UNDERSIZED:	 return "output size is too small";
         case GUIDO_2_IMAGE_UNSPECIFIED_ERROR:        return "unspecified error";
