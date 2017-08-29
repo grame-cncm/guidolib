@@ -124,7 +124,7 @@ const char* Guido2Image::getErrorString( Guido2ImageErrorCodes err )
 		case GUIDO_2_IMAGE_INVALID_PAGE_INDEX:		 return "invalid page index";
 		case GUIDO_2_IMAGE_INVALID_GMN_CODE:		 return "invalid gmn code";
 		case GUIDO_2_IMAGE_GUIDO_ENGINE_NOT_STARTED: return "Guido Engine not started";
-		case GUIDO_2_IMAGE_INVALID_IMAGE_FORMAT:	 return "invalid image format";
+		case GUIDO_2_IMAGE_INVALID_IMAGE_FORMAT:	 return "invalid or unsupported image format";
         case GUIDO_2_IMAGE_OUTPUT_FILE_OVERSIZED:	 return "output size is too big";
         case GUIDO_2_IMAGE_OUTPUT_FILE_UNDERSIZED:	 return "output size is too small";
         case GUIDO_2_IMAGE_UNSPECIFIED_ERROR:        return "unspecified error";
@@ -358,7 +358,7 @@ Guido2ImageErrorCodes Guido2Image::writeImage( QGuidoPainter * guidoPainter, con
 //		}
 //	}
 	painter.end();
-	Guido2Image::save (&image, p);
+	if( !Guido2Image::save (&image, p)) return GUIDO_2_IMAGE_INVALID_IMAGE_FORMAT;
 
     return GUIDO_2_IMAGE_SUCCESS;
 }
@@ -385,7 +385,7 @@ Guido2ImageErrorCodes Guido2Image::writePianoRollImage(QGuidoPainter * guidoPain
 	GuidoErrCode result = guidoPainter->drawPianoRoll(&painter, QRect(0, 0, size.width(), size.height()), pianoRoll);
 
 	painter.end();
-	Guido2Image::save(&image, p);
+	if (!Guido2Image::save(&image, p)) return GUIDO_2_IMAGE_INVALID_IMAGE_FORMAT;
 
     if (result != guidoNoErr)
         return GUIDO_2_IMAGE_UNSPECIFIED_ERROR;
@@ -407,14 +407,14 @@ QSizeF Guido2Image::size2constrainedsize(const QSizeF& size, const QSize& constr
 }
 
 //----------------------------------------------------------------------------
-void Guido2Image::save(QPaintDevice * paintDevice, const Params& p)
+bool Guido2Image::save(QPaintDevice * paintDevice, const Params& p)
 {
 	QImage * pic = dynamic_cast<QImage*>( paintDevice );
 	assert(pic);
 	if (p.output) {
 		QString imageFileName (p.output);
-		pic->save( imageFileName + "." + imageFormatToStr(p.format) );
+		return pic->save( imageFileName + "." + imageFormatToStr(p.format) );
 	}
 	else if (p.device)
-		pic->save( p.device, imageFormatToStr(p.format) );
+		return pic->save( p.device, imageFormatToStr(p.format) );
 }

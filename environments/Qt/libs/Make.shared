@@ -49,22 +49,22 @@ mac:
 	$(MAKE)  -f ../../Make.shared macos
 	$(MAKE)  -f ../../Make.shared ios
 
-macos: macos/$(PROJECT).xcodeproj  lib$(PROJECT).a 
+macos: lib$(PROJECT).a 
 	@echo ===================================
 	@echo Build $(PROJECT) for mac os done
 	@echo ===================================
 
-ios: ios/$(PROJECT)-iOS.xcodeproj lib$(PROJECT)-iOS.a
+ios: lib$(PROJECT)-iOS.a
 	@echo ===================================
 	@echo Build $(PROJECT) for ios done
 	@echo ===================================
 
-windows: $(DEST)/$(PROJECT).vcxproj $(PROJECT).lib
+windows: $(PROJECT).lib
 	@echo ===================================
 	@echo Build $(PROJECT) for $(DEST) done
 	@echo ===================================
 
-linux: linux/$(PROJECT).makefile  lib$(PROJECT)-linux.a
+linux: lib$(PROJECT)-linux.a
 	@echo ===================================
 	@echo Build $(PROJECT) for linux done
 	@echo ===================================
@@ -76,7 +76,7 @@ macos/$(PROJECT).xcodeproj : $(ROOT)/$(PROJECT).pro
 	[ -d macos ] || mkdir macos
 	cd macos && $(QMAKE) $(SPEC) $(ROOT)/..
 
-lib$(PROJECT).a:
+lib$(PROJECT).a: macos/$(PROJECT).xcodeproj  
 	xcodebuild -jobs 8 -project  macos/$(PROJECT).xcodeproj -target $(PROJECT) -configuration Release
 
 ###################
@@ -86,7 +86,7 @@ ios/$(PROJECT)-iOS.xcodeproj : $(ROOT)/$(PROJECT).pro
 	[ -d ios ] || mkdir ios
 	cd ios && $(QMAKEIOS) $(SPEC) $(ROOT)/..
 
-lib$(PROJECT)-iOS.a:
+lib$(PROJECT)-iOS.a: ios/$(PROJECT)-iOS.xcodeproj 
 	xcodebuild -jobs 8 -project  ios/$(PROJECT)-iOS.xcodeproj -target $(PROJECT)-iOS -configuration Release
 
 
@@ -97,7 +97,7 @@ $(DEST)/$(PROJECT).vcxproj : $(ROOT)/$(PROJECT).pro
 	[ -d $(DEST) ] || mkdir $(DEST)
 	cd $(DEST) && $(QMAKEWIN) $(SPEC) $(ROOT)/..
 
-$(PROJECT).lib:
+$(PROJECT).lib: $(DEST)/$(PROJECT).vcxproj 
 	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild $(DEST)/$(PROJECT).vcxproj /maxcpucount:4 /p:Configuration=Release /p:Platform=$(PLATFORM)"
 
 ###################
@@ -107,7 +107,7 @@ linux/$(PROJECT).makefile : $(ROOT)/$(PROJECT).pro
 	[ -d linux ] || mkdir linux
 	cd linux && $(QMAKE) $(SPEC) $(ROOT)/.. -o $(PROJECT).makefile
 
-lib$(PROJECT)-linux.a:
+lib$(PROJECT)-linux.a: linux/$(PROJECT).makefile  
 	$(MAKE) -C linux -f $(PROJECT).makefile
 	
 clean:

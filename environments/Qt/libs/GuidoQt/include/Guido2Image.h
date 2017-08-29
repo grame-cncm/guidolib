@@ -149,7 +149,7 @@ class Guido2Image
 		static Guido2ImageErrorCodes	writePianoRollPDF	( QGuidoPainter * guidoPainter, const char * fileName, PianoRoll *pianoRoll, int width, int height );
 		
 		static QRectF			getPictureRect(QGuidoPainter * guidoPainter, int pageIndex, const QSize& outputSizeConstraint, float zoom);
-		static void				save(QPaintDevice * paintDevice, const Params& p);
+		static bool				save(QPaintDevice * paintDevice, const Params& p);
 		static QSizeF			size2constrainedsize(const QSizeF& size, const QSize& constraint);
 };
 
