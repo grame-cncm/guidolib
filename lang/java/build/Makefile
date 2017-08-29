@@ -51,10 +51,10 @@ endif
 
 
 all :
-	make jar
-	make $(TARGET)
-	make jar-engine-android
-#	make headers
+	$(MAKE) jar
+	$(MAKE) $(TARGET)
+	$(MAKE) jar-engine-android
+#	$(MAKE) headers
 
 undefined:
 	$(error System is undefined, not target available)
@@ -105,7 +105,7 @@ factorysample : ../factorysample.class
 
 clean :
 	rm -f $(CLASS) ../*.class ../guidoengine/*.class ../drawcommand/*.class ../drawcommand.jar ../guidoengine.jar ../guidoengine-android.jar
-	make $(TARGET)clean
+	$(MAKE) $(TARGET)clean
 
 doc:
 	[ -d ../doc ] || mkdir ../doc
@@ -141,7 +141,7 @@ libjniGUIDOEngine.so :  linux/Makefile  linux/libjniGUIDOEngine.so
 	cp -R linux/libjniGUIDOEngine*.so* .
 
 linux/libjniGUIDOEngine.so : CMakeLists.txt
-	make -C linux
+	$(MAKE) -C linux
 	
 linux/Makefile : CMakeLists.txt
 	[ -d linux ] || mkdir linux
@@ -154,8 +154,8 @@ linuxclean:
 # building the tools on windows
 #===============================================================
 windows :
-	make win32
-	make win64
+	$(MAKE) win32
+	$(MAKE) win64
 
 win32 : win32/guidojni.sln jniGUIDOEngine32 
 win64 : win64/guidojni.sln jniGUIDOEngine64 

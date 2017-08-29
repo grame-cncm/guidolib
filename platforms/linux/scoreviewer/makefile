@@ -14,7 +14,7 @@ scoreviewer : scoreviewer.cpp ../src/CairoDevlib.o
 	$(CXX) scoreviewer.cpp $(CXXFLAGS) $(LIBS) ../src/CairoDevlib.o -o scoreviewer
 
 ../src/CairoDevlib.o : $(CAIRO)
-	make -C ../src
+	$(MAKE) -C ../src
 
 clean :
 	rm -f scoreviewer

@@ -135,8 +135,8 @@ help:
 validate: $(validsvg)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
 	@echo Validating version $(version) with $(VERSION) $(tmp)
-	make validtimemap
-	make validproll
+	$(MAKE) validtimemap
+	$(MAKE) validproll
 
 validsvg: $(validsvg)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
@@ -157,7 +157,7 @@ validproll: $(validproll)
 pdfvalidate: $(validpdf)
 	@$(eval tmp := $(shell [ -f $(version)/ignore.$(VERSION).txt ] && echo "using $(version)/ignore.$(VERSION).txt"))	
 	@echo Validating version $(version) with $(VERSION) $(tmp)
-	make validmap
+	$(MAKE) validmap
 	
 #########################################################################
 # rules
@@ -214,7 +214,7 @@ $(version)/%.mid: ../%.gmn
 #########################################################################
 # leaks check tools
 checkleaks: $(LEAKTOOLS) $(leaksout)
-	make showleaks TOOL=$(TOOL)
+	$(MAKE) showleaks TOOL=$(TOOL)
 
 showleaks: $(leaksfiles)
 

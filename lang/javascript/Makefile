@@ -34,7 +34,7 @@ OPTIONS :=  -s ALLOW_MEMORY_GROWTH=0 -s TOTAL_MEMORY=134217728 -s DISABLE_EXCEPT
 
 
 all:
-	make $(target)
+	$(MAKE) $(target)
 
 ##############################################################
 # building the library as asm.js

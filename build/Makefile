@@ -24,7 +24,6 @@ endif
 
 OUT  := GUIDOEngine.framework GUIDOEngine.tgz libGUIDOEngine.a
 MAC  ?= MacOS
-MAKE ?= make
 IOS  := ios
 
 # try to detect Visual Studio version used
@@ -240,8 +239,8 @@ android :
 # install target - linux only
 #===============================================================
 install: 
-	[ $(TARGET) = "linux" ] && make linuxinstall
+	[ $(TARGET) = "linux" ] && $(MAKE) linuxinstall
 
 linuxinstall:
-	make -C linux install
+	$(MAKE) -C linux install
 
