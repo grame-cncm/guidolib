@@ -7,18 +7,18 @@ usage:
 	@echo This makefile builds the Guido java package.
 	@echo It should be run on every supported platform.
 	@echo usage:
-	@echo "  make macosx   # on Mac OS X"
-	@echo "  make win32    # on Windows"
+	@echo "  $(MAKE) macosx   # on Mac OS X"
+	@echo "  $(MAKE) win32    # on Windows"
 
 macosx :
-	make common
+	$(MAKE) common
 	cp ../libjniGUIDOEngine.dylib $(PACK)
 	cd  $(PACK) && ../localize libjniGUIDOEngine.dylib
 	rm -rf $(PACK)/GUIDOEngine.framework
 	cp -R ../../../build/GUIDOEngine.framework $(PACK)
 
 win32 :
-	make common
+	$(MAKE) common
 	cp ../build/jniGUIDOEngine.dll $(PACK)
 	cp ../../../build/GUIDOEngine.dll $(PACK)
 	cp ../build/jniGUIDOEngine64.dll $(PACK)
@@ -26,7 +26,7 @@ win32 :
 #	cp msvcr80.dll $(PACK)
 
 common: 
-	make update
+	$(MAKE) update
 	[ -d $(PACK) ] || mkdir $(PACK)
 	cp -Rf ../doc $(PACK)
 	[ -d $(PACK)/guidoengine ] || mkdir $(PACK)/guidoengine
@@ -41,7 +41,7 @@ clean :
 	rm -rf $(PACK)
 
 update :
-	make -C ../build doc
-	make -C ../build jar
+	$(MAKE) -C ../build doc
+	$(MAKE) -C ../build jar
 
 

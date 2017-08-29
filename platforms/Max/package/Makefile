@@ -11,7 +11,7 @@ menu:
 
 
 macos:
-	make common DEST=$(MACTARGET)
+	$(MAKE) common DEST=$(MACTARGET)
 	cp -R ../guido.mxo	$(MACTARGET)
 	cp -R ../../cmake/Release/GUIDOEngine.framework $(MACTARGET)
 	cp -R libmusicxml2.framework $(MACTARGET)
@@ -19,7 +19,7 @@ macos:
 	hdiutil create -srcfolder $(MACTARGET) -format UDZO $(MACTARGET).dmg
 
 windows:
-	make common DEST=$(WINTARGET)
+	$(MAKE) common DEST=$(WINTARGET)
 	cp -R ../guido.mxe	$(WINTARGET)
 	cp ../../cmake/release/GUIDOEngine.dll $(WINTARGET)
 	cp libmusicxml2.dll $(WINTARGET)

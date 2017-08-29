@@ -11,7 +11,7 @@ Guido-Java-Report.pdf : Guido-Java-Report.bib Guido-Java-Report.bbl
 GUIDO-JNI.pdf :
 	doxygen
 	cp doxygen.sty latex
-	-make -C latex
+	-$(MAKE) -C latex
 	-mv latex/refman.pdf GUIDO-JNI.pdf
 
 clean:

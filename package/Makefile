@@ -72,11 +72,11 @@ help:
 	@ echo "  'python' : builds the pyguido package"
 
 doc:
-	make -C ../doc/doxygen
-	make -C ../environments/Qt/doc
+	$(MAKE) -C ../doc/doxygen
+	$(MAKE) -C ../environments/Qt/doc
 
 docpack:
-	make commondoc DEST=.
+	$(MAKE) commondoc DEST=.
 	cp -r doc $(DOCPACK)
 	tar czf $(DOCPACK).tgz $(DOCPACK)
 	
@@ -88,20 +88,20 @@ srcpack:
 
 macos:
 	[ -d $(MACOSLIB) ] || mkdir $(MACOSLIB)
-	make common DEST=$(MACOSLIB)
+	$(MAKE) common DEST=$(MACOSLIB)
 	rm -rf $(MACOSLIB)/GUIDOEngine.framework
 	cp -R $(bin)/GUIDOEngine.framework $(MACOSLIB)
 	tar czf $(MACOSLIB).tgz $(MACOSLIB)
 
 linux:
-	make version=$(VERSION) -f makedeb
+	$(MAKE) version=$(VERSION) -f makedeb
 
 windows:
 	[ -d $(WINLIB) ] || mkdir $(WINLIB)
 	cp -r doc $(WINLIB)
-	make samples DEST=$(WINLIB)
+	$(MAKE) samples DEST=$(WINLIB)
 	cp -f $(files) $(WINLIB)
-	make incl DEST=$(WINLIB) SYSINC="$(win32inc)"
+	$(MAKE) incl DEST=$(WINLIB) SYSINC="$(win32inc)"
 	cp $(bin)/GUIDOEngine*.dll $(WINLIB)
 	cp $(bin)/GUIDOEngine*.lib $(WINLIB)
 
@@ -111,7 +111,7 @@ python:
 qt:
 	rm -Rf $(QTLIB)
 	#### Doc
-	make commondoc DEST=$(QTLIB)
+	$(MAKE) commondoc DEST=$(QTLIB)
 	mkdir -p $(QTLIB)/doc/Qt/html 
 	cp -Rf ../environments/Qt/doc/html $(QTLIB)/doc/Qt
 	cp "../environments/Qt/doc/Guido Qt-Binding manual.pdf" $(QTLIB)/doc/Qt/
@@ -130,8 +130,8 @@ qt:
 	tar czf $(QTLIB).tgz $(QTLIB)
 
 common:
-	make commondoc DEST=$(DEST)
-	make samples DEST=$(DEST)
+	$(MAKE) commondoc DEST=$(DEST)
+	$(MAKE) samples DEST=$(DEST)
 	cp  $(files) $(DEST)
 
 commondoc:

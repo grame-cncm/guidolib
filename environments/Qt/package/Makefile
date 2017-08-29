@@ -64,7 +64,7 @@ check:
 	@ echo "Checking WIN32QTPATH..."
 	@[ -d "$(WIN32QTPATH)" ] || echo Invalid path to Qt: $(WIN32QTPATH)
 	-@[ -d "$(WIN32QTPATH)" ] && echo Make package using Qt path: $(WIN32QTPATH)
-	@echo Type 'make win32 WIN32QTPATH=/your/path' to change or edit this makefile.
+	@echo Type '$(MAKE) win32 WIN32QTPATH=/your/path' to change or edit this makefile.
 	@echo ----------------------------------------------------------------
 	@[ -d "$(WIN32QTPATH)" ]
 
@@ -76,7 +76,7 @@ linux:
 	$(MAKE) version=$(VERSION) -f makedeb
 
 win64: 
-	@make -s check
+	@$(MAKE) -s check
 	[ -d $(WIN32_NAME)/plugins/imageformats ] || mkdir -p $(WIN32_NAME)/plugins/imageformats
 	[ -d $(WIN32_NAME)/plugins/platforms ] || mkdir -p $(WIN32_NAME)/plugins/platforms
 	[ -d $(WIN32_NAME)/plugins/printsupport ] || mkdir -p $(WIN32_NAME)/plugins/printsupport
