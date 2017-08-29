@@ -64,6 +64,7 @@ help :
 	@echo "   java         : build the jni and java libraries"	
 	@echo "   js           : build the javascript library (requires emscripten)"	
 	@echo "   android      : build the GUIDOEngine static library for Android"	
+	@echo "   install      : install the Guido library and public headers (linux only)"	
 	@echo 
 	@echo "Platform targets to build the GUIDOEngine library are:"	
 	@echo "   macos [C++11=yes/no (default to no)]"	
@@ -234,3 +235,13 @@ java :
 #===============================================================
 android :
 	$(MAKE) -C ../platforms/android/
+
+#===============================================================
+# install target - linux only
+#===============================================================
+install: 
+	[ $(TARGET) = "linux" ] && make linuxinstall
+
+linuxinstall:
+	make -C linux install
+
