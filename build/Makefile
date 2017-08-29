@@ -175,14 +175,14 @@ winclean:
 #===============================================================
 .PHONY : $(LINUX) libGUIDOEngine.so
 
-linux : $(LINUX)/Makefile libGUIDOEngine.so
+linux : libGUIDOEngine.so
 
-libGUIDOEngine.so :  $(LINUX)/Makefile  $(LINUX)/libGUIDOEngine.so
+libGUIDOEngine.so :  $(LINUX)/libGUIDOEngine.so
 	rm -rf GUIDOEngine*.so*
 	$(MAKE) -C $(LINUX)
 	cp -R $(LINUX)/libGUIDOEngine*.so* .
 
-$(LINUX)/libGUIDOEngine.so : 
+$(LINUX)/libGUIDOEngine.so : $(LINUX)/Makefile 
 	$(MAKE) -C $(LINUX)
 	
 linuxcmake:
