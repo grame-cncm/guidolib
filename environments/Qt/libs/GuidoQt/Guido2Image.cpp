@@ -358,7 +358,7 @@ Guido2ImageErrorCodes Guido2Image::writeImage( QGuidoPainter * guidoPainter, con
 //		}
 //	}
 	painter.end();
-	Guido2Image::save (&image, p);
+	if( !Guido2Image::save (&image, p)) return GUIDO_2_IMAGE_INVALID_IMAGE_FORMAT;
 
     return GUIDO_2_IMAGE_SUCCESS;
 }
@@ -385,7 +385,7 @@ Guido2ImageErrorCodes Guido2Image::writePianoRollImage(QGuidoPainter * guidoPain
 	GuidoErrCode result = guidoPainter->drawPianoRoll(&painter, QRect(0, 0, size.width(), size.height()), pianoRoll);
 
 	painter.end();
-	Guido2Image::save(&image, p);
+	if (!Guido2Image::save(&image, p)) return GUIDO_2_IMAGE_INVALID_IMAGE_FORMAT;
 
     if (result != guidoNoErr)
         return GUIDO_2_IMAGE_UNSPECIFIED_ERROR;
@@ -407,14 +407,14 @@ QSizeF Guido2Image::size2constrainedsize(const QSizeF& size, const QSize& constr
 }
 
 //----------------------------------------------------------------------------
-void Guido2Image::save(QPaintDevice * paintDevice, const Params& p)
+bool Guido2Image::save(QPaintDevice * paintDevice, const Params& p)
 {
 	QImage * pic = dynamic_cast<QImage*>( paintDevice );
 	assert(pic);
 	if (p.output) {
 		QString imageFileName (p.output);
-		pic->save( imageFileName + "." + imageFormatToStr(p.format) );
+		return pic->save( imageFileName + "." + imageFormatToStr(p.format) );
 	}
 	else if (p.device)
-		pic->save( p.device, imageFormatToStr(p.format) );
+		return pic->save( p.device, imageFormatToStr(p.format) );
 }
