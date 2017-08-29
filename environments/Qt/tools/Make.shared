@@ -46,17 +46,17 @@ all:
 undefined:
 	$(error System is undefined, not target available)
 
-macos: macos/$(PROJECT).xcodeproj  $(PROJECT)
+macos: $(PROJECT)
 	@echo ===================================
 	@echo Build $(PROJECT) for mac os done
 	@echo ===================================
 
-windows: $(DEST)/$(PROJECT).vcxproj  $(PROJECT).exe 
+windows: $(PROJECT).exe 
 	@echo ===================================
 	@echo Build $(PROJECT) for $(DEST) done
 	@echo ===================================
 
-linux: linux/$(PROJECT).makefile  $(PROJECT)-linux
+linux: $(PROJECT)-linux
 	@echo ===================================
 	@echo Build $(PROJECT) for linux done
 	@echo ===================================
@@ -68,7 +68,7 @@ macos/$(PROJECT).xcodeproj : $(ROOT)/$(PROJECT).pro
 	[ -d macos ] || mkdir macos
 	cd macos && $(QMAKE) $(SPEC) $(ROOT)/..
 
-$(PROJECT):
+$(PROJECT): macos/$(PROJECT).xcodeproj  
 	xcodebuild -jobs 8 -project  macos/$(PROJECT).xcodeproj -target $(PROJECT) -configuration Release
 	cp -R macos/Release/$(PROJECT)$(APP)  $(DEST) 
 
@@ -79,7 +79,7 @@ $(DEST)/$(PROJECT).vcxproj : $(ROOT)/$(PROJECT).pro
 	[ -d $(DEST) ] || mkdir $(DEST)
 	cd $(DEST) && $(QMAKEWIN) $(SPEC) $(ROOT)/..
 
-$(PROJECT).exe:
+$(PROJECT).exe: $(DEST)/$(PROJECT).vcxproj  
 	cmd /c "\"$(MSVC)\VC\vcvarsall.bat\" && msbuild $(DEST)/$(PROJECT).vcxproj /maxcpucount:4 /p:Configuration=Release /p:Platform=$(PLATFORM)"
 	cp  $(DEST)/Release/$(PROJECT).exe $(COPY)
 
@@ -90,7 +90,7 @@ linux/$(PROJECT).makefile : $(ROOT)/$(PROJECT).pro
 	[ -d linux ] || mkdir linux
 	cd linux && $(QMAKE) $(SPEC) $(ROOT)/.. -o $(PROJECT).makefile
 
-$(PROJECT)-linux:
+$(PROJECT)-linux: linux/$(PROJECT).makefile  
 	$(MAKE) -C linux -f $(PROJECT).makefile
 	cp -R linux/$(PROJECT)  $(DEST) 
 
