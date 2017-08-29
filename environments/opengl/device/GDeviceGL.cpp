@@ -41,7 +41,7 @@ using namespace std;
 // - Callback def
 #ifdef WIN32
 typedef GLvoid (__stdcall *CallBackFunc)(void);
-#elif defined(linux)
+#elif defined(__linux__) || defined(__FreeBSD__)
 typedef void (*CallBackFunc)();
 #else
 //typedef GLvoid (*CallBackFunc)(...);

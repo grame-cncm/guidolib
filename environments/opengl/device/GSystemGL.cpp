@@ -35,7 +35,7 @@ using namespace std;
 
 #if defined(__APPLE__) || defined(MACOSX)
 #define SysFontPath		"/Library/Fonts/"
-#elif defined(linux)
+#elif defined(__linux__) || defined(__FreeBSD__)
 #define SysFontPath		"/usr/X11R6/lib/X11/fonts/TTF/"
 #elif defined(WIN32)
 #define SysFontPath		"c:\\windows\\fonts\\"
